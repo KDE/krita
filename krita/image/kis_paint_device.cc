@@ -39,8 +39,7 @@
 #include <KoMixColorsOp.h>
 
 
-#include "kis_global.h"
-#include "kis_types.h"
+#include "kis_image.h"
 #include "kis_random_sub_accessor.h"
 #include "kis_selection.h"
 #include "kis_node.h"
@@ -1217,8 +1216,8 @@ void KisPaintDevice::convertFromQImage(const QImage& _image, const KoColorProfil
             KoColorSpaceRegistry::instance()
                     ->colorSpace(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), profile)
                     ->convertPixelsTo(image.constBits(), dstData, colorSpace(), image.width() * image.height(),
-                                      KoColorConversionTransformation::InternalRenderingIntent,
-                                      KoColorConversionTransformation::InternalConversionFlags);
+                                      KoColorConversionTransformation::internalRenderingIntent(),
+                                      KoColorConversionTransformation::internalConversionFlags());
 
             writeBytes(dstData, offsetX, offsetY, image.width(), image.height());
             delete[] dstData;
@@ -1576,8 +1575,8 @@ KisPaintDeviceSP KisPaintDevice::createCompositionSourceDevice(KisPaintDeviceSP 
     KisPaintDeviceSP clone = new KisPaintDevice(*cloneSource);
     clone->setDefaultBounds(defaultBounds());
     clone->convertTo(compositionSourceColorSpace(),
-                     KoColorConversionTransformation::InternalRenderingIntent,
-                     KoColorConversionTransformation::InternalConversionFlags);
+                     KoColorConversionTransformation::internalRenderingIntent(),
+                     KoColorConversionTransformation::internalConversionFlags());
     return clone;
 }
 
@@ -1587,8 +1586,8 @@ KisPaintDeviceSP KisPaintDevice::createCompositionSourceDevice(KisPaintDeviceSP 
     clone->setDefaultBounds(defaultBounds());
     clone->makeCloneFromRough(cloneSource, roughRect);
     clone->convertTo(compositionSourceColorSpace(),
-                     KoColorConversionTransformation::InternalRenderingIntent,
-                     KoColorConversionTransformation::InternalConversionFlags);
+                     KoColorConversionTransformation::internalRenderingIntent(),
+                     KoColorConversionTransformation::internalConversionFlags());
     return clone;
 }
 

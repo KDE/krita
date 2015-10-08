@@ -25,7 +25,6 @@
 #include "kis_layer_style_filter.h"
 
 struct psd_layer_effects_stroke;
-struct psd_layer_effects_context;
 
 
 class KRITAIMAGE_EXPORT KisLsStrokeFilter : public KisLayerStyleFilter

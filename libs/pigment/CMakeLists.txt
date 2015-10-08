@@ -23,6 +23,7 @@ set(LINK_VC_LIB)
 if(HAVE_VC)
     include_directories(${Vc_INCLUDE_DIR})
     set(LINK_VC_LIB ${Vc_LIBRARIES})
+    kde_enable_exceptions()
     ko_compile_for_all_implementations_no_scalar(__per_arch_factory_objs compositeops/KoOptimizedCompositeOpFactoryPerArch.cpp)
 
     message("Following objects are generated from the per-arch lib")
@@ -133,15 +134,15 @@ generate_export_header(pigmentcms
 )
 
 if (HAVE_VC)
-    target_link_libraries(pigmentcms KF5::I18n KF5::KDELibs4Support)
-    target_link_libraries(pigmentcms LINK_INTERFACE_LIBRARIES KF5::I18n KF5::KDELibs4Support)
+    target_link_libraries(pigmentcms KF5::I18n )
+    target_link_libraries(pigmentcms LINK_INTERFACE_LIBRARIES KF5::I18n )
 endif()
 
 target_link_libraries(
     pigmentcms
     koplugin
     ${EXTRA_LIBRARIES}
-    KF5::I18n KF5::KDELibs4Support
+    KF5::I18n 
     Qt5::Gui
     Qt5::Xml
     ${WIN32_PLATFORM_NET_LIBS}

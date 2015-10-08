@@ -18,7 +18,7 @@
 
 #include "kis_kra_saver_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QBitArray>
 
@@ -319,4 +319,4 @@ void KisKraSaverTest::testRoundTripAnimation()
 
 }
 
-QTEST_KDEMAIN(KisKraSaverTest, GUI)
+QTEST_MAIN(KisKraSaverTest, GUI)

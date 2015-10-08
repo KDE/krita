@@ -20,12 +20,11 @@
 #ifndef KIS_LOCKED_PROPERTIES_SERVER_H
 #define KIS_LOCKED_PROPERTIES_SERVER_H
 
-#include "kis_locked_properties.h"
 #include "kis_locked_properties_proxy.h"
 #include "kis_properties_configuration.h"
-#include "kglobal.h"
 
 class KisLockedPropertiesProxy;
+class KisLockedProperties;
 
 /**
  * The KisLockedPropertiesServer class
@@ -36,7 +35,8 @@ class KisLockedPropertiesProxy;
 class KRITAIMAGE_EXPORT KisLockedPropertiesServer: public QObject
 {
 public:
-
+    KisLockedPropertiesServer();
+    ~KisLockedPropertiesServer();
     static KisLockedPropertiesServer* instance();
 
     KisLockedProperties* lockedProperties();
@@ -47,11 +47,7 @@ public:
     KisLockedPropertiesProxy* createLockedPropertiesProxy(const KisPropertiesConfiguration*);
     bool hasProperty(const QString &p);
 
-
 private:
-
-    KisLockedPropertiesServer();
-    ~KisLockedPropertiesServer();
 
     KisLockedProperties *m_lockedProperties;
     bool m_propertiesFromLocked;

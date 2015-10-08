@@ -173,11 +173,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QDoubleSpinBox</class>
-   <extends>QWidget</extends>
-   <header>knuminput.h</header>
-  </customwidget>
-  <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>

@@ -32,7 +32,7 @@
 #include <QTextDocument>
 #include <QTextBlock>
 #include <QTextCursor>
-#include <kdebug.h>
+#include "TextDebug.h"
 
 // Include Q_UNSUSED classes, for building on Windows
 #include <KoShapeLoadingContext.h>
@@ -92,7 +92,7 @@ bool KoAnnotation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
         return false;
     }
 
-    //kDebug(32500) << "****** Start Load odf ******";
+    //debugText << "****** Start Load odf ******";
     QString annotationName = element.attribute("name");
 
     if (manager()) {
@@ -114,7 +114,7 @@ bool KoAnnotation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
                 inlineRdf = 0;
             }
         }
-        //kDebug(32500) << "****** End Load ******";
+        //debugText << "****** End Load ******";
 
         return true;
     }

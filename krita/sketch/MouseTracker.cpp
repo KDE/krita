@@ -80,13 +80,7 @@ bool MouseTracker::eventFilter(QObject* target, QEvent* event)
             }
             case QEvent::TouchUpdate: {
                 QTouchEvent* tevent = static_cast<QTouchEvent*>(event);
-                QTouchEvent::TouchPoint primary;
-                Q_FOREACH(const QTouchEvent::TouchPoint& point, tevent->touchPoints()) {
-                    if (point.isPrimary()) {
-                        primary = point;
-                        break;
-                    }
-                }
+                QTouchEvent::TouchPoint primary = tevent->touchPoints().at(0);
                 Q_FOREACH(const TrackedItem& item, d->trackedItems) {
                     item.item->setPos(primary.scenePos() + item.offset);
                 }

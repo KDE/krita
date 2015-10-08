@@ -19,7 +19,7 @@
  */
 
 #include "ArtisticTextRange.h"
-#include <kdebug.h>
+#include <QDebug>
 
 ArtisticTextRange::ArtisticTextRange(const QString &text, const QFont &font)
     : m_text(text), m_font(font), m_letterSpacing(0.0), m_wordSpacing(0.0)
@@ -210,23 +210,23 @@ qreal ArtisticTextRange::subAndSuperScriptSizeFactor()
 
 void ArtisticTextRange::printDebug() const
 {
-    kDebug() << "text:" << m_text;
-    kDebug() << "font:" << m_font;
+    qDebug() << "text:" << m_text;
+    qDebug() << "font:" << m_font;
     switch(m_xOffsetType) {
     case AbsoluteOffset:
-        kDebug() << "x:" << m_xOffsets;
+        qDebug() << "x:" << m_xOffsets;
         break;
     case RelativeOffset:
-        kDebug() << "dx:" << m_xOffsets;
+        qDebug() << "dx:" << m_xOffsets;
         break;
     }
     switch(m_yOffsetType) {
     case AbsoluteOffset:
-        kDebug() << "y:" << m_yOffsets;
+        qDebug() << "y:" << m_yOffsets;
         break;
     case RelativeOffset:
-        kDebug() << "dy:" << m_yOffsets;
+        qDebug() << "dy:" << m_yOffsets;
         break;
     }
-    kDebug() << "rotate:" << m_rotations;
+    qDebug() << "rotate:" << m_rotations;
 }

@@ -18,7 +18,7 @@
 
 #include "kis_crash_filter_test.h"
 #include <KoColorProfile.h>
-#include <qtest_kde.h>
+#include <QTest>
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
 #include "kis_selection.h"
@@ -94,4 +94,4 @@ void KisCrashFilterTest::testCrashFilters()
     }
 }
 
-QTEST_KDEMAIN(KisCrashFilterTest, GUI)
+QTEST_MAIN(KisCrashFilterTest)

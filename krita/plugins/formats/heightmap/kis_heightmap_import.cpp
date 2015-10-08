@@ -92,7 +92,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteA
         return KisImportExportFilter::FileNotFound;
     }
 
-    QUrl url(filename);
+    QUrl url = QUrl::fromLocalFile(filename);
 
 
     dbgFile << "Import: " << url;

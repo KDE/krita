@@ -36,6 +36,7 @@
 #include <QGroupBox>
 #include <QStandardPaths>
 #include <QApplication>
+#include <QInputDialog>
 
 #include <QTemporaryFile>
 #include <QLineEdit>
@@ -47,12 +48,11 @@
 #include <KoTemplateGroup.h>
 #include <KoTemplate.h>
 #include <kicondialog.h>
-#include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <QUrl>
 #include <kdebug.h>
-#include <kio/netaccess.h>
+#include <KoNetAccess.h>
 #include <kiconloader.h>
 #include <k4aboutdata.h>
 #include <kconfiggroup.h>
@@ -432,7 +432,8 @@ void KoTemplateCreateDia::slotNameChanged(const QString &name) {
 
 void KoTemplateCreateDia::slotAddGroup() {
     bool ok=false;
-    const QString name ( KInputDialog::getText( i18n("Add Group"), i18n("Enter group name:"), QString(), &ok, this ) );
+    const QString name = QInputDialog::getText(this, i18n("Add Group"), i18n("Enter group name:"),
+                                               QLineEdit::Normal, QString(), &ok);
     if(!ok)
         return;
     KoTemplateGroup *group=d->m_tree->find(name);

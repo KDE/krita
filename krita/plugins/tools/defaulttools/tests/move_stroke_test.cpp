@@ -18,7 +18,7 @@
 
 #include "move_stroke_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "stroke_testing_utils.h"
 #include "kis_image.h"
@@ -88,4 +88,4 @@ void MoveStrokeTest::testMoveStroke()
     tester.test();
 }
 
-QTEST_KDEMAIN(MoveStrokeTest, GUI)
+QTEST_MAIN(MoveStrokeTest)

@@ -24,7 +24,7 @@
 #include "WmfParser.h"
 #include "WmfAbstractBackend.h"
 
-#include <kdebug.h>
+#include <VectorImageDebug.h>
 
 #include <QImage>
 #include <QMatrix>
@@ -242,14 +242,14 @@ bool WmfParser::load(const QByteArray& array)
     mMaxHeight = 0;
 
 #if DEBUG_RECORDS
-    kDebug(31000) << "--------------------------- Starting parsing WMF ---------------------------";
+    debugVectorImage << "--------------------------- Starting parsing WMF ---------------------------";
 #endif
     stream >> pheader.key;
     if (pheader.key == (quint32)APMHEADER_KEY) {
         //----- Read placeable metafile header
         mPlaceable = true;
 #if DEBUG_RECORDS
-        kDebug(31000) << "Placeable header!  Yessss!";
+        debugVectorImage << "Placeable header!  Yessss!";
 #endif
 
         stream >> pheader.handle;
@@ -262,7 +262,7 @@ bool WmfParser::load(const QByteArray& array)
         stream >> pheader.checksum;
         checksum = calcCheckSum(&pheader);
         if (pheader.checksum != checksum) {
-            kWarning() << "Checksum for placeable metafile header is incorrect ( actual checksum" << pheader.checksum << ", expected checksum" << checksum << ")";
+            warnVectorImage << "Checksum for placeable metafile header is incorrect ( actual checksum" << pheader.checksum << ", expected checksum" << checksum << ")";
             return false;
         }
         stream >> header.fileType;
@@ -281,7 +281,7 @@ bool WmfParser::load(const QByteArray& array)
         mBBoxRight  = pheader.right;
         mBBoxBottom = pheader.bottom;
 #if DEBUG_RECORDS
-        kDebug(31000) << "bounding box in header: " << mBBoxLeft << mBBoxTop << mBBoxRight << mBBoxBottom
+        debugVectorImage << "bounding box in header: " << mBBoxLeft << mBBoxTop << mBBoxRight << mBBoxBottom
                       << "width, height: " << mBBoxRight - mBBoxLeft << mBBoxBottom - mBBoxTop;
 #endif
         mMaxWidth   = abs(pheader.right - pheader.left);
@@ -339,7 +339,7 @@ bool WmfParser::load(const QByteArray& array)
         // valid wmf file
         mValid = true;
     } else {
-        kDebug(31000) << "WmfParser : incorrect file format !";
+        debugVectorImage << "WmfParser : incorrect file format !";
     }
 
     // check bounding rectangle for standard meta file
@@ -348,7 +348,7 @@ bool WmfParser::load(const QByteArray& array)
         createBoundingBox(stream);
 
 #if DEBUG_RECORDS
-        kDebug(31000) << "bounding box created by going through all records: "
+        debugVectorImage << "bounding box created by going through all records: "
                       << mBBoxLeft << mBBoxTop << mBBoxRight << mBBoxBottom
                       << "width, height: " << mBBoxRight - mBBoxLeft << mBBoxBottom - mBBoxTop;
 #endif
@@ -361,22 +361,22 @@ bool WmfParser::load(const QByteArray& array)
 bool WmfParser::play(WmfAbstractBackend* backend)
 {
     if (!(mValid)) {
-        kDebug(31000) << "WmfParser::play : invalid WMF file";
+        debugVectorImage << "WmfParser::play : invalid WMF file";
         return false;
     }
 
     if (mNbrFunc) {
 #if DEBUG_RECORDS
         if ((mStandard)) {
-            kDebug(31000) << "Standard :" << mBBoxLeft << ""  << mBBoxTop << ""  << mBBoxRight - mBBoxLeft << ""  << mBBoxBottom - mBBoxTop;
+            debugVectorImage << "Standard :" << mBBoxLeft << ""  << mBBoxTop << ""  << mBBoxRight - mBBoxLeft << ""  << mBBoxBottom - mBBoxTop;
         } else {
-            kDebug(31000) << "DPI :" << mDpi;
-            kDebug(31000) << "size (inch):" << (mBBoxRight - mBBoxLeft) / mDpi
+            debugVectorImage << "DPI :" << mDpi;
+            debugVectorImage << "size (inch):" << (mBBoxRight - mBBoxLeft) / mDpi
                           << "" << (mBBoxBottom - mBBoxTop) / mDpi;
-            kDebug(31000) << "size (mm):" << (mBBoxRight - mBBoxLeft) * 25.4 / mDpi
+            debugVectorImage << "size (mm):" << (mBBoxRight - mBBoxLeft) * 25.4 / mDpi
                           << "" << (mBBoxBottom - mBBoxTop) * 25.4 / mDpi;
         }
-        kDebug(31000) << mValid << "" << mStandard << "" << mPlaceable;
+        debugVectorImage << mValid << "" << mStandard << "" << mPlaceable;
 #endif
     }
 
@@ -425,7 +425,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
             }
             
 #if DEBUG_RECORDS
-            kDebug(31000) << "Record = " << koWmfFunc[ index ].name
+            debugVectorImage << "Record = " << koWmfFunc[ index ].name
                           << " (" << hex << recordType
                           << ", index" << dec << index << ")";
 #endif
@@ -437,12 +437,12 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     int offBuff = mBuffer->pos();
                     quint16 param;
 
-                    kDebug(31000) <<  j << " :" << index << " :";
+                    debugVectorImage <<  j << " :" << index << " :";
                     for (quint16 i = 0 ; i < (size - 3) ; i++) {
                         stream >> param;
-                        kDebug(31000) <<  param << "";
+                        debugVectorImage <<  param << "";
                     }
-                    kDebug(31000);
+                    debugVectorImage;
                     mBuffer->seek(offBuff);
                 }
                 if (j >= mNbrFunc) {
@@ -470,7 +470,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     quint16 bkMode;
 
                     stream >> bkMode;
-                    //kDebug(31000) << "New bkMode: " << bkMode;
+                    //debugVectorImage << "New bkMode: " << bkMode;
 
                     mDeviceContext.bgMixMode = bkMode;
                     mDeviceContext.changedItems |= DCBgMixMode;
@@ -479,7 +479,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
             case (META_SETMAPMODE & 0xff):
                 {
                     stream >> mMapMode;
-                    //kDebug(31000) << "New mapmode: " << mMapMode;
+                    //debugVectorImage << "New mapmode: " << mMapMode;
 
                     //mDeviceContext.FontMapMode = mMapMode;Not defined yet
                     mDeviceContext.changedItems |= DCFontMapMode;
@@ -526,7 +526,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     m_backend->setWindowOrg(left, top);
                     mDeviceContext.windowOrg = QPoint(left, top);
 #if DEBUG_RECORDS
-                    kDebug(31000) <<"Org: (" << left <<","  << top <<")";
+                    debugVectorImage <<"Org: (" << left <<","  << top <<")";
 #endif
                 }
                 break;
@@ -537,7 +537,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     // negative value allowed for width and height
                     stream >> height >> width;
 #if DEBUG_RECORDS
-                    kDebug(31000) <<"Ext: (" << width <<","  << height <<")";
+                    debugVectorImage <<"Ext: (" << width <<","  << height <<")";
 #endif
 
                     m_backend->setWindowExt(width, height);
@@ -553,7 +553,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     mDeviceContext.viewportOrg = QPoint(left, top);
 
 #if DEBUG_RECORDS
-                    kDebug(31000) <<"Org: (" << left <<","  << top <<")";
+                    debugVectorImage <<"Org: (" << left <<","  << top <<")";
 #endif
                 }
                 break;
@@ -564,7 +564,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     // Negative value allowed for width and height
                     stream >> height >> width;
 #if DEBUG_RECORDS
-                    kDebug(31000) <<"Ext: (" << width <<","  << height <<")";
+                    debugVectorImage <<"Ext: (" << width <<","  << height <<")";
 #endif
 
                     m_backend->setViewportExt(width, height);
@@ -596,7 +596,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                         m_backend->setWindowExt(width, height);
                         mDeviceContext.windowExt = QSize(width, height);
                     }
-                    //kDebug(31000) <<"WmfParser::ScaleWindowExt :" << widthDenum <<"" << heightDenum;
+                    //debugVectorImage <<"WmfParser::ScaleWindowExt :" << widthDenum <<"" << heightDenum;
                 }
                 break;
             case (META_OFFSETVIEWPORTORG & 0xff):
@@ -623,7 +623,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                         m_backend->setViewportExt(width, height);
                         mDeviceContext.viewportExt = QSize(width, height);
                     }
-                    //kDebug(31000) <<"WmfParser::ScaleWindowExt :" << widthDenum <<"" << heightDenum;
+                    //debugVectorImage <<"WmfParser::ScaleWindowExt :" << widthDenum <<"" << heightDenum;
                 }
                 break;
 
@@ -736,7 +736,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     qint16 top, left, right, bottom;
 
                     stream >> bottom >> right >> top >> left;
-                    //kDebug(31000) << left << top << right << bottom;
+                    //debugVectorImage << left << top << right << bottom;
                     m_backend->drawRect(mDeviceContext, left, top, right - left, bottom - top);
                 }
                 break;
@@ -769,7 +769,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     stream >> height >> width;
                     stream >> y >> x;
 
-                    //kDebug(31000) << "patBlt record" << hex << rasterOperation << dec
+                    //debugVectorImage << "patBlt record" << hex << rasterOperation << dec
                     //              << x << y << width << height;
 
                     m_backend->patBlt(mDeviceContext, x, y, width, height, rasterOperation);
@@ -864,7 +864,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     if ((idx < mNbrObject) && (mObjHandleTab[ idx ] != 0))
                         mObjHandleTab[ idx ]->apply(&mDeviceContext);
                     else
-                        kDebug(31000) << "WmfParser::selectObject : selection of an empty object";
+                        debugVectorImage << "WmfParser::selectObject : selection of an empty object";
                 }
                 break;
             case (META_SETTEXTALIGN & 0xff):
@@ -919,11 +919,11 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     }
 
 #if DEBUG_RECORDS
-                    kDebug(31000) << "text at" << x << y << "length" << stringLength
+                    debugVectorImage << "text at" << x << y << "length" << stringLength
                                   << ':' << text;
-                    //kDebug(31000) << "flags:" << hex << fwOpts << dec;
-                    kDebug(31000) << "flags:" << fwOpts;
-                    kDebug(31000) << "record length:" << size;
+                    //debugVectorImage << "flags:" << hex << fwOpts << dec;
+                    debugVectorImage << "flags:" << fwOpts;
+                    debugVectorImage << "record length:" << size;
 #endif
                     m_backend->drawText(mDeviceContext, x, y, text);
                 }
@@ -991,7 +991,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                             m_backend->restore();
                         }
                     } else {
-                        kDebug(31000) << "WmfParser::dibBitBlt without image not implemented";
+                        debugVectorImage << "WmfParser::dibBitBlt without image not implemented";
                     }
                 }
                 break;
@@ -1042,7 +1042,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                             handle->image = bmpSrc;
                             handle->brush.setTextureImage(handle->image);
                         } else {
-                            kDebug(31000) << "WmfParser::dibCreatePatternBrush : incorrect DIB image";
+                            debugVectorImage << "WmfParser::dibCreatePatternBrush : incorrect DIB image";
                         }
                     }
                 }
@@ -1090,7 +1090,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     // negative value allowed for width and height
                     stream >> layout >> reserved;
 #if DEBUG_RECORDS
-                    kDebug(31000) << "layout=" << layout;
+                    debugVectorImage << "layout=" << layout;
 #endif
                     mLayout = (WmfLayout)layout;
 
@@ -1138,23 +1138,23 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                         if (penStyle < 7)
                             handle->pen.setStyle(koWmfStylePen[ penStyle ]);
                         else
-                            kDebug(31000) << "WmfParser::createPenIndirect: invalid pen" << style;
+                            debugVectorImage << "WmfParser::createPenIndirect: invalid pen" << style;
 
                         quint16 capStyle = (style & PenCapMask) >> 8;
                         if (capStyle < 3)
                             handle->pen.setCapStyle(koWmfCapStylePen[ capStyle ]);
                         else
-                            kDebug(31000) << "WmfParser::createPenIndirect: invalid pen cap style" << style;
+                            debugVectorImage << "WmfParser::createPenIndirect: invalid pen cap style" << style;
 
                         quint16 joinStyle = (style & PenJoinMask) >> 12;
                         if (joinStyle < 3)
                             handle->pen.setJoinStyle(koWmfJoinStylePen[ joinStyle ]);
                         else
-                            kDebug(31000) << "WmfParser::createPenIndirect: invalid pen join style" << style;
+                            debugVectorImage << "WmfParser::createPenIndirect: invalid pen join style" << style;
 
                         handle->pen.setColor(qtColor(color));
                         handle->pen.setWidth(width);
-                        kDebug(31000) << "Creating pen" << handle->pen;
+                        debugVectorImage << "Creating pen" << handle->pen;
                     }
                 }
                 break;
@@ -1174,14 +1174,14 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                         stream >> weight >> property >> arg >> arg;
                         stream >> fixedPitch;
 
-                        //kDebug(31000) << height << width << weight << property;
+                        //debugVectorImage << height << width << weight << property;
                         // text rotation (in 1/10 degree)
                         handle->font.setFixedPitch(((fixedPitch & 0x01) == 0));
                         handle->escapement = escapement;
                         handle->orientation = orientation;
 
                         // A negative height means to use device units.
-                        //kDebug(31000) << "Font height:" << height;
+                        //debugVectorImage << "Font height:" << height;
                         handle->height = height;
 
                         // FIXME: For some reason this value needs to be multiplied by
@@ -1229,14 +1229,14 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                             if (arg2 < 6)
                                 style = koWmfHatchedStyleBrush[ arg2 ];
                             else {
-                                kDebug(31000) << "WmfParser::createBrushIndirect: invalid hatched brush" << arg2;
+                                debugVectorImage << "WmfParser::createBrushIndirect: invalid hatched brush" << arg2;
                                 style = Qt::SolidPattern;
                             }
                         } else {
                             if (sty < 9)
                                 style = koWmfStyleBrush[ sty ];
                             else {
-                                kDebug(31000) << "WmfParser::createBrushIndirect: invalid brush" << sty;
+                                debugVectorImage << "WmfParser::createBrushIndirect: invalid brush" << sty;
                                 style = Qt::SolidPattern;
                             }
                         }
@@ -1256,7 +1256,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                break;
             default:
                 // function outside WMF specification
-                kError(31000) << "BROKEN WMF file: Record number" << hex << recordType << dec
+                errorVectorImage << "BROKEN WMF file: Record number" << hex << recordType << dec
                               << " index " << index;
                 mValid = false;
                 break;
@@ -1316,7 +1316,7 @@ void WmfParser::createBoundingBox(QDataStream &stream)
         stream >> size >> recordType;
 
         if (size == 0) {
-            kDebug(31000) << "WmfParser: incorrect file!";
+            debugVectorImage << "WmfParser: incorrect file!";
             mValid = 0;
             return;
         }
@@ -1331,7 +1331,7 @@ void WmfParser::createBoundingBox(QDataStream &stream)
             {
                 stream >> windowOrgY >> windowOrgX;
 #if DEBUG_BBOX
-                kDebug(31000) << "setWindowOrg" << windowOrgX << windowOrgY;
+                debugVectorImage << "setWindowOrg" << windowOrgX << windowOrgY;
 #endif
                 if (!windowExtIsSet)
                     break;
@@ -1365,7 +1365,7 @@ void WmfParser::createBoundingBox(QDataStream &stream)
                 bboxRecalculated = false;
 
 #if DEBUG_BBOX
-                kDebug(31000) << "setWindowExt" << windowWidth << windowHeight
+                debugVectorImage << "setWindowExt" << windowWidth << windowHeight
                               << "(viewportOrg = " << viewportOrgX << viewportOrgY << ")";
 #endif
 
@@ -1395,7 +1395,7 @@ void WmfParser::createBoundingBox(QDataStream &stream)
                 bboxRecalculated = false;
 
 #if DEBUG_BBOX
-                kDebug(31000) << "setViewportOrg" << viewportOrgX << viewportOrgY;
+                debugVectorImage << "setViewportOrg" << viewportOrgX << viewportOrgY;
 #endif
                 orgX = viewportOrgX;
                 orgY = viewportOrgY;
@@ -1425,7 +1425,7 @@ void WmfParser::createBoundingBox(QDataStream &stream)
                 bboxRecalculated = false;
 
 #if DEBUG_BBOX
-                kDebug(31000) << "setViewportExt" << viewportWidth << viewportHeight;
+                debugVectorImage << "setViewportExt" << viewportWidth << viewportHeight;
 #endif
                 orgX = viewportOrgX;
                 orgY = viewportOrgY;
@@ -1471,7 +1471,7 @@ void WmfParser::createBoundingBox(QDataStream &stream)
         case 67: // stretchDib
         case 72: // extFloodFill
 #if DEBUG_BBOX
-            kDebug(31000) << "drawing record: " << (recordType & 0xff);
+            debugVectorImage << "drawing record: " << (recordType & 0xff);
 #endif
             doRecalculateBBox = true;
             break;
@@ -1483,7 +1483,7 @@ void WmfParser::createBoundingBox(QDataStream &stream)
         // Recalculate the BBox if it was indicated above that it should be.
         if (doRecalculateBBox && !bboxRecalculated) {
 #if DEBUG_BBOX
-            kDebug(31000) << "Recalculating BBox";
+            debugVectorImage << "Recalculating BBox";
 #endif
             // If we have a viewport, always use that one.
             if (viewportExtIsSet) {
@@ -1514,7 +1514,7 @@ void WmfParser::createBoundingBox(QDataStream &stream)
 
             // At this point, the ext is always >= 0, i.e. org <= org+ext
 #if DEBUG_BBOX
-            kDebug(31000) << orgX << orgY << extX << extY;
+            debugVectorImage << orgX << orgY << extX << extY;
 #endif
             if (orgX < mBBoxLeft)          mBBoxLeft = orgX;
             if (orgY < mBBoxTop)           mBBoxTop  = orgY;
@@ -1526,10 +1526,10 @@ void WmfParser::createBoundingBox(QDataStream &stream)
 
 #if DEBUG_BBOX
         if (isOrgOrExt) {
-            kDebug(31000) << "              mBBoxTop = " << mBBoxTop;
-            kDebug(31000) << "mBBoxLeft = " << mBBoxLeft << "  mBBoxRight = " << mBBoxRight;
-            kDebug(31000) << "           MBBoxBotton = " << mBBoxBottom;
-            kDebug(31000) << "Max width,height = " << mMaxWidth << mMaxHeight;
+            debugVectorImage << "              mBBoxTop = " << mBBoxTop;
+            debugVectorImage << "mBBoxLeft = " << mBBoxLeft << "  mBBoxRight = " << mBBoxRight;
+            debugVectorImage << "           MBBoxBotton = " << mBBoxBottom;
+            debugVectorImage << "Max width,height = " << mMaxWidth << mMaxHeight;
         }
 #endif
 
@@ -1587,7 +1587,7 @@ bool WmfParser::addHandle(KoWmfHandle* handle)
     } else {
         delete handle;
         mStackOverflow = true;
-        kDebug(31000) << "WmfParser::addHandle : stack overflow = broken file !";
+        debugVectorImage << "WmfParser::addHandle : stack overflow = broken file !";
         return false;
     }
 }
@@ -1599,7 +1599,7 @@ void WmfParser::deleteHandle(int idx)
         delete mObjHandleTab[ idx ];
         mObjHandleTab[ idx ] = 0;
     } else {
-        kDebug(31000) << "WmfParser::deletehandle() : bad index number";
+        debugVectorImage << "WmfParser::deletehandle() : bad index number";
     }
 }
 
@@ -1683,7 +1683,7 @@ bool WmfParser::dibToBmp(QImage& bmp, QDataStream& stream, quint32 size)
 
 //    if ( !bmp.loadFromData( (const uchar*)bmpHeader, pattern.size(), "BMP" ) ) {
     if (!bmp.loadFromData(pattern, "BMP")) {
-        kDebug(31000) << "WmfParser::dibToBmp: invalid bitmap";
+        debugVectorImage << "WmfParser::dibToBmp: invalid bitmap";
         return false;
     } else {
         return true;

@@ -21,12 +21,11 @@
 #include "KisDocumentSectionDelegate.h"
 #include "KisDocumentSectionModel.h"
 
-#include <kglobal.h>
+
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kiconloader.h>
 #include <ksharedconfig.h>
-#include <ksharedptr.h>
 
 #include <QtDebug>
 #include <QContextMenuEvent>

@@ -20,7 +20,7 @@
 
 #include <QDomElement>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <klocalizedstring.h>
 
 #include <KoIntegerMaths.h>
@@ -33,7 +33,7 @@ GrayF32ColorSpace::GrayF32ColorSpace(const QString &name, KoColorProfile *p)
 {
     const IccColorProfile* icc_p = dynamic_cast<const IccColorProfile*>(p);
     Q_ASSERT(icc_p);
-    QVector<KoChannelInfo::DoubleRange> uiRanges(icc_p->GetFloatUIMinMax());
+    QVector<KoChannelInfo::DoubleRange> uiRanges(icc_p->getFloatUIMinMax());
     Q_ASSERT(uiRanges.size() == 1);
 
     addChannel(new KoChannelInfo(i18n("Gray"), 0 * sizeof(float), 0, KoChannelInfo::COLOR, KoChannelInfo::FLOAT32, sizeof(float), Qt::gray, uiRanges[0]));

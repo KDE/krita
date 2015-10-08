@@ -28,7 +28,8 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kglobal.h>
+#include <ksharedconfig.h>
+
 #include <kis_debug.h>
 
 #include <KoCanvasResourceManager.h>

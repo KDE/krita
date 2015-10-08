@@ -24,7 +24,6 @@
 
 #include <kis_types.h>
 
-class KisFilter;
 class KisViewManager;
 class KisFilterManager;
 

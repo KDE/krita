@@ -117,7 +117,7 @@ public:
     KisPrescaledProjectionSP prescaledProjection;
     bool vastScrolling;
 
-    KisSignalCompressor *updateSignalCompressor;
+    KisSignalCompressor updateSignalCompressor;
     QRect savedUpdateRect;
 
     QBitArray channelFlags;
@@ -188,8 +188,10 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
     connect(kritaShapeController, SIGNAL(currentLayerChanged(const KoShapeLayer*)),
             globalShapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 
-    m_d->updateSignalCompressor = new KisSignalCompressor(10 /*ms*/, KisSignalCompressor::FIRST_ACTIVE, this);
-    connect(m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDoCanvasUpdate()));
+
+    m_d->updateSignalCompressor.setDelay(10);
+    m_d->updateSignalCompressor.setMode(KisSignalCompressor::FIRST_ACTIVE);
+    connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDoCanvasUpdate()));
 }
 
 KisCanvas2::~KisCanvas2()
@@ -612,11 +614,11 @@ void KisCanvas2::slotDoCanvasUpdate()
 
 void KisCanvas2::updateCanvasWidgetImpl(const QRect &rc)
 {
-    if (!m_d->updateSignalCompressor->isActive() ||
+    if (!m_d->updateSignalCompressor.isActive() ||
         !m_d->savedUpdateRect.isEmpty()) {
         m_d->savedUpdateRect |= rc;
     }
-    m_d->updateSignalCompressor->start();
+    m_d->updateSignalCompressor.start();
 }
 
 void KisCanvas2::updateCanvas()

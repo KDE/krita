@@ -20,9 +20,8 @@
 
 #include <QLabel>
 #include <QVBoxLayout>
-
+#include <QStatusBar>
 #include <klocalizedstring.h>
-#include <kstatusbar.h>
 
 #include "kis_canvas2.h"
 #include <KisViewManager.h>

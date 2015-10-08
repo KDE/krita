@@ -26,6 +26,7 @@
 #include <QPainter>
 #include <QTimer>
 #include <QStyleOption>
+#include <QPointer>
 
 #define ARROWSIZE 8
 
@@ -36,11 +37,12 @@ struct Q_DECL_HIDDEN KoColorSlider::Private
     KoColor maxColor;
     QPixmap pixmap;
     bool upToDate;
-    KoColorDisplayRendererInterface *displayRenderer;
+    QPointer<KoColorDisplayRendererInterface> displayRenderer;
 };
 
 KoColorSlider::KoColorSlider(QWidget* parent, KoColorDisplayRendererInterface *displayRenderer)
-  : KSelector(parent), d(new Private)
+  : KSelector(parent)
+  , d(new Private)
 {
     setMaximum(255);
     d->displayRenderer = displayRenderer;
@@ -105,7 +107,12 @@ void KoColorSlider::drawContents( QPainter *painter )
 
                 mixOp->mixColors(colors, colorWeights, 2, c.data());
 
-                color = d->displayRenderer->toQColor(c);
+                if (d->displayRenderer) {
+                    color = d->displayRenderer->toQColor(c);
+                }
+                else {
+                    color = c.toQColor();
+                }
 
                 for (int y = 0; y < contentsRect_.height(); y++)
                 image.setPixel(x, y, color.rgba());
@@ -122,7 +129,12 @@ void KoColorSlider::drawContents( QPainter *painter )
 
                 mixOp->mixColors(colors, colorWeights, 2, c.data());
 
-                color = d->displayRenderer->toQColor(c);
+                if (d->displayRenderer) {
+                    color = d->displayRenderer->toQColor(c);
+                }
+                else {
+                    color = c.toQColor();
+                }
 
                 for (int x = 0; x < contentsRect_.width(); x++)
                 image.setPixel(x, y, color.rgba());

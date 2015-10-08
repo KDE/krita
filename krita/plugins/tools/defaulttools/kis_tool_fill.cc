@@ -24,15 +24,16 @@
 
 #include <kis_debug.h>
 #include <klocalizedstring.h>
-#include <kglobal.h>
+
 #include <QLabel>
 #include <QLayout>
 #include <QCheckBox>
 #include <QComboBox>
-
 #include <QVector>
 #include <QRect>
 #include <QColor>
+
+#include <ksharedconfig.h>
 
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>

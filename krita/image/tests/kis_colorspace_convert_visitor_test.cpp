@@ -18,7 +18,7 @@
 
 #include "kis_colorspace_convert_visitor_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <KoColorTransformation.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -36,11 +36,11 @@ void KisColorSpaceConvertVisitorTest::testCreation()
     KisImageSP image = new KisImage(0, 100, 100, lab, "test");
     KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8, lab);
     KisColorSpaceConvertVisitor test(image, lab, rgb,
-                                     KoColorConversionTransformation::InternalRenderingIntent,
-                                     KoColorConversionTransformation::InternalConversionFlags);
+                                     KoColorConversionTransformation::internalRenderingIntent(),
+                                     KoColorConversionTransformation::internalConversionFlags());
     layer->accept(test);
     QVERIFY(layer->colorSpace()->colorModelId() == rgb->colorModelId());
 }
 
 
-QTEST_KDEMAIN(KisColorSpaceConvertVisitorTest, GUI)
+QTEST_MAIN(KisColorSpaceConvertVisitorTest)

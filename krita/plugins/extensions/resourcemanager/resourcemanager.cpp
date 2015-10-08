@@ -26,9 +26,10 @@
 #include <QThread>
 
 #include <QMessageBox>
+#include <QGlobalStatic>
+
 #include <klocalizedstring.h>
-#include <kglobal.h>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 #include <kpluginfactory.h>
 
 #include <KoFileDialog.h>
@@ -47,11 +48,13 @@
 #include "dlg_bundle_manager.h"
 #include "dlg_create_bundle.h"
 
+Q_GLOBAL_STATIC(ResourceBundleServerProvider, s_instance)
+
 ResourceBundleServerProvider::ResourceBundleServerProvider()
 {
     // user-local
-    KGlobal::dirs()->addResourceType("kis_resourcebundles", "data", "krita/bundles/");
-    KGlobal::dirs()->addResourceDir("kis_resourcebundles", QDir::homePath() + QString("/.create/bundles"));
+    KoResourcePaths::addResourceType("kis_resourcebundles", "data", "krita/bundles/");
+    KoResourcePaths::addResourceDir("kis_resourcebundles", QDir::homePath() + QString("/.create/bundles"));
     m_resourceBundleServer = new KoResourceServerSimpleConstruction<ResourceBundle>("kis_resourcebundles", "*.bundle");
     if (!QFileInfo(m_resourceBundleServer->saveLocation()).exists()) {
         QDir().mkpath(m_resourceBundleServer->saveLocation());
@@ -61,7 +64,6 @@ ResourceBundleServerProvider::ResourceBundleServerProvider()
 
 ResourceBundleServerProvider *ResourceBundleServerProvider::instance()
 {
-    K_GLOBAL_STATIC(ResourceBundleServerProvider, s_instance);
     return s_instance;
 }
 

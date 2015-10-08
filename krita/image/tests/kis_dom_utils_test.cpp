@@ -18,7 +18,7 @@
 
 #include "kis_dom_utils_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kis_dom_utils.h"
 #include "kis_debug.h"
@@ -155,4 +155,4 @@ void KisDomUtilsTest::testG2R()
     checkLoadData(xmlData);
 }
 
-QTEST_KDEMAIN(KisDomUtilsTest, GUI)
+QTEST_MAIN(KisDomUtilsTest)

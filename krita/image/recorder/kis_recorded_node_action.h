@@ -20,6 +20,7 @@
 #define _KIS_RECORDED_NODE_ACTION_H_
 
 #include "kis_recorded_action.h"
+class KisNodeQueryPath;
 
 /**
  * Used for action that applys on nodes that are 

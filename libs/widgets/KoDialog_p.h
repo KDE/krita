@@ -27,7 +27,7 @@
 #include <QtCore/QHash>
 
 class QBoxLayout;
-class KPushButton;
+class QPushButton;
 class KUrlLabel;
 class KSeparator;
 class QDialogButtonBox;
@@ -75,7 +75,7 @@ protected:
     KoDialog::ButtonCode mEscapeButton;
 
     QDialogButtonBox *mButtonBox;
-    QHash<int, KPushButton *> mButtonList;
+    QHash<int, QPushButton *> mButtonList;
     QSignalMapper mButtonSignalMapper;
 
 protected Q_SLOTS:

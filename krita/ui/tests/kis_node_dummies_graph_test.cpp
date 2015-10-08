@@ -18,7 +18,7 @@
 
 #include "kis_node_dummies_graph_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kis_node_dummies_graph.h"
 #include "node_shapes_utils.h"
@@ -198,4 +198,4 @@ void KisNodeDummiesGraphTest::testReverseTraversing()
     QCOMPARE(reverseGraph, forwardGraph);
 }
 
-QTEST_KDEMAIN(KisNodeDummiesGraphTest, GUI)
+QTEST_MAIN(KisNodeDummiesGraphTest)

@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <config-vc.h>
 #ifdef HAVE_VC
@@ -75,4 +75,4 @@ void KisMaskGeneratorBenchmark::benchmarkSquare()
     }
 }
 
-QTEST_KDEMAIN(KisMaskGeneratorBenchmark, GUI)
+QTEST_MAIN(KisMaskGeneratorBenchmark)

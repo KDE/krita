@@ -66,7 +66,7 @@ namespace
             return true;
         }
         if (cs->id() == "LABA") {
-            color_type = PHOTOMETRIC_CIELAB;
+            color_type = PHOTOMETRIC_ICCLAB;
             return true;
         }
 
@@ -86,11 +86,6 @@ KisTIFFWriterVisitor::~KisTIFFWriterVisitor()
 {
 }
 
-bool KisTIFFWriterVisitor::saveAlpha()
-{
-    return m_options->alpha;
-}
-
 bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it, tdata_t buff, uint8 depth, uint16 sample_format, uint8 nbcolorssamples, quint8* poses)
 {
     if (depth == 32) {
@@ -102,7 +97,7 @@ bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it, tdata_t 
             for (i = 0; i < nbcolorssamples; i++) {
                 *(dst++) = d[poses[i]];
             }
-            if (saveAlpha()) *(dst++) = d[poses[i]];
+            if (m_options->alpha) *(dst++) = d[poses[i]];
         } while (it->nextPixel());
         return true;
     }
@@ -116,7 +111,7 @@ bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it, tdata_t 
                 for (i = 0; i < nbcolorssamples; i++) {
                     *(dst++) = d[poses[i]];
                 }
-                if (saveAlpha()) *(dst++) = d[poses[i]];
+                if (m_options->alpha) *(dst++) = d[poses[i]];
 
             } while (it->nextPixel());
             return true;
@@ -130,7 +125,7 @@ bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it, tdata_t 
                 for (i = 0; i < nbcolorssamples; i++) {
                     *(dst++) = d[poses[i]];
                 }
-                if (saveAlpha()) *(dst++) = d[poses[i]];
+                if (m_options->alpha) *(dst++) = d[poses[i]];
 
             } while (it->nextPixel());
             return true;
@@ -144,7 +139,7 @@ bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it, tdata_t 
             for (i = 0; i < nbcolorssamples; i++) {
                 *(dst++) = d[poses[i]];
             }
-            if (saveAlpha()) *(dst++) = d[poses[i]];
+            if (m_options->alpha) *(dst++) = d[poses[i]];
             
         } while (it->nextPixel());
         return true;
@@ -187,7 +182,7 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer * layer)
     int depth = 8 * pd->pixelSize() / pd->channelCount();
     TIFFSetField(image(), TIFFTAG_BITSPERSAMPLE, depth);
     // Save number of samples
-    if (saveAlpha()) {
+    if (m_options->alpha) {
         TIFFSetField(image(), TIFFTAG_SAMPLESPERPIXEL, pd->channelCount());
         uint16 sampleinfo[1] = { EXTRASAMPLE_UNASSALPHA };
         TIFFSetField(image(), TIFFTAG_EXTRASAMPLES, 1, sampleinfo);
@@ -222,10 +217,12 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer * layer)
     TIFFSetField(image(), TIFFTAG_ROWSPERSTRIP, 8);
 
     // Save profile
-    const KoColorProfile* profile = pd->colorSpace()->profile();
-    if (profile && profile->type() == "icc" && !profile->rawData().isEmpty()) {
-        QByteArray ba = profile->rawData();
-        TIFFSetField(image(), TIFFTAG_ICCPROFILE, ba.size(), ba.data());
+    if (m_options->saveProfile) {
+        const KoColorProfile* profile = pd->colorSpace()->profile();
+        if (profile && profile->type() == "icc" && !profile->rawData().isEmpty()) {
+            QByteArray ba = profile->rawData();
+            TIFFSetField(image(), TIFFTAG_ICCPROFILE, ba.size(), ba.constData());
+        }
     }
     tsize_t stripsize = TIFFStripSize(image());
     tdata_t buff = _TIFFmalloc(stripsize);
@@ -255,7 +252,7 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer * layer)
                 r = copyDataToStrips(it, buff, depth, sample_format, 4, poses);
             }
             break;
-        case PHOTOMETRIC_CIELAB: {
+        case PHOTOMETRIC_ICCLAB: {
                 quint8 poses[] = { 0, 1, 2, 3 };
                 r = copyDataToStrips(it, buff, depth, sample_format, 3, poses);
             }

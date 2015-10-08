@@ -22,6 +22,7 @@
 #include "kis_default_bounds.h"
 #include "kis_paint_device.h"
 #include "kis_image_animation_interface.h"
+#include "kis_image.h"
 
 
 const QRect KisDefaultBounds::infiniteRect =

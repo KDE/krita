@@ -33,7 +33,7 @@
 #include <KoXmlNS.h>
 #include <KoElementReference.h>
 // KDE
-#include <kdebug.h>
+#include "TextDebug.h"
 // Qt
 #include <QTextCursor>
 #include <QTextDocument>
@@ -175,7 +175,7 @@ KoTextInlineRdf::KoTextInlineRdf(const QTextDocument *doc, KoSection *s)
 
 KoTextInlineRdf::~KoTextInlineRdf()
 {
-    kDebug(30015) << " this:" << (void*)this;
+    debugText << " this:" << (void*)this;
     delete d;
 }
 
@@ -198,7 +198,7 @@ bool KoTextInlineRdf::loadOdf(const KoXmlElement &e)
 
 bool KoTextInlineRdf::saveOdf(KoShapeSavingContext &context, KoXmlWriter *writer, KoElementReference id) const
 {
-    kDebug(30015) << " this:" << (void*)this << " xmlid:" << d->id << "passed id" << id.toString();
+    debugText << " this:" << (void*)this << " xmlid:" << d->id << "passed id" << id.toString();
     QString oldID = d->id;
 
     if (!id.isValid()) {
@@ -210,7 +210,7 @@ bool KoTextInlineRdf::saveOdf(KoShapeSavingContext &context, KoXmlWriter *writer
             dynamic_cast<KoTextSharedSavingData *>(context.sharedData(KOTEXT_SHARED_SAVING_ID))) {
         sharedData->addRdfIdMapping(oldID, newID);
     }
-    kDebug(30015) << "oldID:" << oldID << " newID:" << newID;
+    debugText << "oldID:" << oldID << " newID:" << newID;
     writer->addAttribute("xml:id", newID);
     if (!d->subject.isEmpty()) {
         writer->addAttribute("xhtml:about", d->subject);
@@ -224,7 +224,7 @@ bool KoTextInlineRdf::saveOdf(KoShapeSavingContext &context, KoXmlWriter *writer
     if (d->isObjectAttributeUsed) {
         writer->addAttribute("xhtml:content", d->object);
     }
-    kDebug(30015) << "done..";
+    debugText << "done..";
     return true;
 }
 
@@ -259,7 +259,7 @@ QPair<int, int>  KoTextInlineRdf::findExtent() const
         if (!e) {
             return QPair<int, int>(0, 0);
         }
-        // kDebug(30015) << "(Semantic)meta... start:" << d->kotextmeta.data()->position() << " end:" << e->position();
+        // debugText << "(Semantic)meta... start:" << d->kotextmeta.data()->position() << " end:" << e->position();
         return QPair<int, int>(d->kotextmeta.data()->position(), e->position());
     }
     if (d->cell.isValid() && d->document) {
@@ -291,7 +291,7 @@ QString KoTextInlineRdf::object() const
         // FIXME: Need to do something with endAnnotation?
         KoTextMeta *e = d->kotextmeta.data()->endBookmark();
         if (!e) {
-            kDebug(30015) << "Broken KoTextMeta, no end tag found!";
+            debugText << "Broken KoTextMeta, no end tag found!";
             return QString();
         } else {
             KoTextEditor *editor = textDocument.textEditor();

@@ -23,7 +23,7 @@
 //#include <QRect> // also provides QSize
 //#include <QString>
 
-#include <kdebug.h>
+#include <VectorImageDebug.h>
 
 
 namespace Libemf
@@ -59,13 +59,13 @@ BitmapHeader::BitmapHeader( QDataStream &stream, int size )
     stream >> m_colorImportant;
 
 #if 0
-    kDebug(33100) << "Width:" << m_width;
-    kDebug(33100) << "Height:" << m_height;
-    kDebug(33100) << "planes:" << m_planes;
-    kDebug(33100) << "BitCount:" << m_bitCount;
-    kDebug(33100) << "Compression:" << m_compression;
-    kDebug(33100) << "ImageSize:" << m_imageSize;
-    kDebug(33100) << "Colors used:" << m_colorUsed;
+    debugVectorImage << "Width:" << m_width;
+    debugVectorImage << "Height:" << m_height;
+    debugVectorImage << "planes:" << m_planes;
+    debugVectorImage << "BitCount:" << m_bitCount;
+    debugVectorImage << "Compression:" << m_compression;
+    debugVectorImage << "ImageSize:" << m_imageSize;
+    debugVectorImage << "Colors used:" << m_colorUsed;
 #endif
     // BitmapV4Header (size 40+68 = 108)
     if (size >= 108) {
@@ -99,9 +99,9 @@ BitmapHeader::BitmapHeader( QDataStream &stream, int size )
     }
 
 #if 0
-    kDebug(33100) << "header type:" << m_headerType;
-    kDebug(33100) << "header size:" << size;
-    kDebug(33100) << "read bytes: " << read;
+    debugVectorImage << "header type:" << m_headerType;
+    debugVectorImage << "header size:" << size;
+    debugVectorImage << "read bytes: " << read;
 #endif
     // Read away the overshot from the size parameter;
     if (size > read)

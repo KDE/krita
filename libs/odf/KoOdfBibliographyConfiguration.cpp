@@ -18,7 +18,7 @@
  */
 #include "KoOdfBibliographyConfiguration.h"
 
-#include <kdebug.h>
+#include <OdfDebug.h>
 #include "KoXmlNS.h"
 #include "KoXmlWriter.h"
 

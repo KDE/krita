@@ -36,10 +36,10 @@
 #include <KoShapePaintingContext.h>
 #include <KoStrokeConfigWidget.h>
 
-#include <knuminput.h>
 #include <klocalizedstring.h>
-#include <kcombobox.h>
 
+#include <QDoubleSpinBox>
+#include <QComboBox>
 #include <QStackedWidget>
 #include <QGroupBox>
 #include <QCheckBox>
@@ -284,7 +284,7 @@ QList<QPointer<QWidget> > KoPencilTool::createOptionWidgets()
     QHBoxLayout *modeLayout = new QHBoxLayout;
     modeLayout->setSpacing(3);
     QLabel *modeLabel = new QLabel(i18n("Precision:"), optionWidget);
-    KComboBox * modeBox = new KComboBox(optionWidget);
+    QComboBox * modeBox = new QComboBox(optionWidget);
     modeBox->addItem(i18nc("The raw line data", "Raw"));
     modeBox->addItem(i18n("Curve"));
     modeBox->addItem(i18n("Straight"));

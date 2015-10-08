@@ -28,6 +28,7 @@ class QTextDocument;
 class QTextBlock;
 class QTextBlockFormat;
 class QTextCharFormat;
+class QString;
 
 class KoDocumentRdfBase;
 

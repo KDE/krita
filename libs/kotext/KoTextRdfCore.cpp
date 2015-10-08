@@ -19,7 +19,7 @@
 
 #include "KoTextRdfCore.h"
 
-#include <kdebug.h>
+#include "TextDebug.h"
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
 #include <QFile>
@@ -48,11 +48,11 @@ bool KoTextRdfCore::saveRdf( QSharedPointer<Soprano::Model> model, Soprano::Stat
         if (serializer->serialize(triples, tss, Soprano::SerializationRdfXml)) {
             tss.flush();
             oss << data;
-            kDebug(30015) << "fileName:" << fileName << " data.sz:" << data.size();
-            kDebug(30015) << "model.sz:" << model->statementCount();
+            debugText << "fileName:" << fileName << " data.sz:" << data.size();
+            debugText << "model.sz:" << model->statementCount();
             ok = true;
         } else {
-            kDebug(30015) << "serialization of Rdf failed!";
+            debugText << "serialization of Rdf failed!";
         }
     }
     oss.flush();
@@ -69,7 +69,7 @@ bool KoTextRdfCore::createAndSaveManifest(QSharedPointer<Soprano::Model> docmode
     for (; iditer != idend; ++iditer) {
         QString oldID = iditer.key();
         QString newID = iditer.value();
-        kDebug(30015) << "oldID:" << oldID << " newID:" << newID;
+        debugText << "oldID:" << oldID << " newID:" << newID;
         QString sparqlQuery;
         QTextStream queryss(&sparqlQuery);
         queryss << ""
@@ -89,14 +89,14 @@ bool KoTextRdfCore::createAndSaveManifest(QSharedPointer<Soprano::Model> docmode
             Soprano::Node pred = it.binding("p");
             Soprano::Node obj  = it.binding("o");
             if (pred.toString() == "http://docs.oasis-open.org/ns/office/1.2/meta/pkg#idref") {
-                kDebug(30015) << "changing idref, oldID:" << oldID << " newID:" << newID;
+                debugText << "changing idref, oldID:" << oldID << " newID:" << newID;
                 obj = Node::createLiteralNode(newID);
             }
             Statement s(it.binding("s"), pred, obj);
             tmpmodel->addStatement(s);
         }
     }
-    kDebug(30015) << "exporting triples model.sz:" << tmpmodel->statementCount();
+    debugText << "exporting triples model.sz:" << tmpmodel->statementCount();
     // save tmpmodel as manifest.rdf in C+P ODF file.
     Soprano::StatementIterator triples = tmpmodel->listStatements();
     bool ret = saveRdf(tmpmodel, triples, store, manifestWriter, "manifest.rdf");
@@ -108,12 +108,12 @@ bool KoTextRdfCore::loadManifest(KoStore *store, QSharedPointer<Soprano::Model> 
     bool ok = true;
     QString fileName = "manifest.rdf";
     if (!store->open(fileName)) {
-        kDebug(30003) << "Entry " << fileName << " not found!";
+        debugText << "Entry " << fileName << " not found!";
         return false;
     }
     Soprano::Node context(QUrl("http://www.calligra.org/Rdf/path/" + fileName));
     QUrl BaseURI = QUrl("");
-    kDebug(30015) << "Loading external Rdf/XML from:" << fileName;
+    debugText << "Loading external Rdf/XML from:" << fileName;
 
     QString rdfxmlData(store->device()->readAll());
     const Soprano::Parser *parser =
@@ -123,12 +123,12 @@ bool KoTextRdfCore::loadManifest(KoStore *store, QSharedPointer<Soprano::Model> 
                                     BaseURI,
                                     Soprano::SerializationRdfXml);
     QList<Statement> allStatements = it.allElements();
-    kDebug(30015) << "Found " << allStatements.size() << " triples...";
+    debugText << "Found " << allStatements.size() << " triples...";
     foreach (const Soprano::Statement &s, allStatements) {
         Error::ErrorCode err = model->addStatement(s.subject(), s.predicate(),
                 s.object(), context);
         if (err != Error::ErrorNone) {
-            kDebug(30015) << "Error adding triple! s:" << s.subject()
+            debugText << "Error adding triple! s:" << s.subject()
                 << " p:" << s.predicate()
                 << " o:" << s.object();
             ok = false;
@@ -143,9 +143,9 @@ void KoTextRdfCore::dumpModel(const QString &msg, QSharedPointer<Soprano::Model>
 {
 #ifndef NDEBUG
     QList<Soprano::Statement> allStatements = m->listStatements().allElements();
-    kDebug(30015) << "----- " << msg << " ----- model size:" << allStatements.size() << endl;
+    debugText << "----- " << msg << " ----- model size:" << allStatements.size() << endl;
     foreach (const Soprano::Statement &s, allStatements) {
-        kDebug(30015) << s;
+        debugText << s;
     }
 #else
     Q_UNUSED(msg);
@@ -161,12 +161,12 @@ QList<Soprano::Statement> KoTextRdfCore::loadList(QSharedPointer<Soprano::Model>
 
     Soprano::Node listBNode = ListHeadSubject;
     QList<Statement> ret;
-    kDebug(30015) << "finding all nodes in the list...";
+    debugText << "finding all nodes in the list...";
     while (true) {
         ret << model->listStatements(listBNode, rdfFirst, Node()).allElements();
         Soprano::Node obj = KoTextRdfCore::getObject(model, listBNode, rdfRest);
-        kDebug(30015) << "ret:" << ret;
-        kDebug(30015) << "rest:" << obj;
+        debugText << "ret:" << ret;
+        debugText << "rest:" << obj;
         if (!obj.isValid()) {
             break;
         }
@@ -203,9 +203,9 @@ void KoTextRdfCore::saveList(QSharedPointer<Soprano::Model> model, Soprano::Node
     Node rdfFirst = Node::createResourceNode(QUrl("http://www.w3.org/1999/02/22-rdf-syntax-ns#first"));
     Node rdfRest = Node::createResourceNode(QUrl("http://www.w3.org/1999/02/22-rdf-syntax-ns#rest"));
 
-    kDebug(30015) << "header:" << ListHeadSubject.toString();
-    kDebug(30015) << "list.sz:" << dataBNodeList.size();
-    kDebug(30015) << "context:" << context.toString();
+    debugText << "header:" << ListHeadSubject.toString();
+    debugText << "list.sz:" << dataBNodeList.size();
+    debugText << "context:" << context.toString();
 
     removeList(model, ListHeadSubject);
 
@@ -216,14 +216,14 @@ void KoTextRdfCore::saveList(QSharedPointer<Soprano::Model> model, Soprano::Node
         // Link the list in Rdf
         model->addStatement(listBNode, rdfFirst, dataBNode, context);
         if (prevListBNode.isValid()) {
-            kDebug(30015) << "prev:" << prevListBNode << " current:" << listBNode;
+            debugText << "prev:" << prevListBNode << " current:" << listBNode;
             model->addStatement(prevListBNode, rdfRest, listBNode, context);
         }
         prevListBNode = listBNode;
         listBNode = model->createBlankNode();
     }
 
-    kDebug(30015) << "at end, prev.isValid:" << prevListBNode.isValid();
+    debugText << "at end, prev.isValid:" << prevListBNode.isValid();
     if (prevListBNode.isValid()) {
         model->addStatement(prevListBNode, rdfRest, listBNode, context);
     }
@@ -236,7 +236,7 @@ void KoTextRdfCore::removeStatementsIfTheyExist( QSharedPointer<Soprano::Model> 
         StatementIterator it = m->listStatements(s.subject(), s.predicate(), s.object(), s.context());
         QList<Statement> allStatements = it.allElements();
         foreach(const Soprano::Statement &z, allStatements) {
-            kDebug(30015) << "found:" << z;
+            debugText << "found:" << z;
             m->removeStatement(z);
         }
     }

@@ -31,8 +31,6 @@
 #include <QTimer>
 #include <QRegExp>
 
-#include <kwindowsystem.h>
-
 #include <kis_icon_utils.h>
 #include <kis_debug.h>
 #include "kis_global.h"
@@ -138,8 +136,6 @@ KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent, 
     setAttribute(Qt::WA_ShowWithoutActivating);
 
     setFont(QFont("sans-serif"));
-
-    KWindowSystem::setType( winId(), NET::Notification );
 
     m_timer.setSingleShot( true );
     connect(&m_timer, SIGNAL(timeout()), SLOT(startFade()));

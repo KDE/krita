@@ -22,7 +22,7 @@
 #include <KoXmlWriter.h>
 #include <QDateTime>
 
-#include <kdebug.h>
+#include <OdfDebug.h>
 
 // Returns -1, 0 (equal) or 1
 static int compareMap(const QMap<QString, QString> &map1, const QMap<QString, QString> &map2)

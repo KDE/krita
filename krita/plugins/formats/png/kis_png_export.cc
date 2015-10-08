@@ -82,6 +82,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
+    QUrl url = QUrl::fromLocalFile(filename);
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
@@ -215,9 +216,6 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
     }
 
     delete kdb;
-
-    QUrl url;
-    url.setPath(filename);
 
     KisPNGConverter kpc(input);
 

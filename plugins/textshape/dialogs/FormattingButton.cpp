@@ -26,7 +26,7 @@
 #include <QGridLayout>
 #include <QWidgetAction>
 
-#include <kdebug.h>
+#include <QDebug>
 
 //This class is a helper to add a label
 class LabelAction : public QWidgetAction

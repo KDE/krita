@@ -23,14 +23,16 @@
 
 #include "flake_export.h"
 
+
 class KoShape;
 class KoXmlElement;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoShapeAnchorPrivate;
+
 class QTextDocument;
 class QPointF;
-
+class QString;
 
 /**
  * This class is the object that explains how a shape is anchored to something.

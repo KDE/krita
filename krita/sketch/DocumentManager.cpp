@@ -131,7 +131,7 @@ void DocumentManager::delayedNewDocument()
 
         if (ok) {
             QMimeDatabase db;
-            db.mimeTypeForFile( url.path(), QMimeDatabase::MatchExtension).name();
+            QString mimeType = db.mimeTypeForFile( url.path(), QMimeDatabase::MatchExtension).name();
             // in case this is a open document template remove the -template from the end
             mimeType.remove( QRegExp( "-template$" ) );
             d->document->setMimeTypeAfterLoading(mimeType);
@@ -245,7 +245,7 @@ void DocumentManager::saveAs(const QString &filename, const QString &mimetype)
 
 void DocumentManager::delayedSaveAs()
 {
-    d->document->saveAs(d->saveAsFilename);
+    d->document->saveAs(QUrl::fromLocalFile(d->saveAsFilename));
     d->settingsManager->setCurrentFile(d->saveAsFilename);
     d->recentFileManager->addRecent(d->saveAsFilename);
     emit documentSaved();

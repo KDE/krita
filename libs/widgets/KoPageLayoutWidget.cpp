@@ -222,7 +222,7 @@ void KoPageLayoutWidget::marginsChanged()
         d->pageLayout.bindingSide = left;
         d->pageLayout.pageEdge = right;
     }
-    // kDebug() << "  " << d->pageLayout.left <<"|"<< d->pageLayout.bindingSide << "," <<
+    // debugWidgets << "  " << d->pageLayout.left <<"|"<< d->pageLayout.bindingSide << "," <<
     //    d->pageLayout.right << "|"<< d->pageLayout.pageEdge;
     emit layoutChanged(d->pageLayout);
     d->allowSignals = true;

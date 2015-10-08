@@ -28,7 +28,7 @@
 #include <KoTextLayoutRootArea.h>
 #include <KoAnchorTextRange.h>
 
-#include <kdebug.h>
+#include <TextLayoutDebug.h>
 
 #include <QTextLayout>
 #include <QTextBlock>
@@ -243,7 +243,7 @@ bool FloatingAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, cons
         break;
     }
     default :
-        kDebug(32002) << "horizontal-rel not handled";
+        warnTextLayout << "horizontal-rel not handled";
     }
     return true;
 }
@@ -288,7 +288,7 @@ void FloatingAnchorStrategy::countHorizontalPos(QPointF &newPosition, const QRec
         break;
     }
     default :
-        kDebug(32002) << "horizontal-pos not handled";
+        warnTextLayout << "horizontal-pos not handled";
     }
 }
 
@@ -357,7 +357,7 @@ bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, const 
      }
      break;
     default :
-     kDebug(32002) << "vertical-rel not handled";
+     warnTextLayout << "vertical-rel not handled";
     }
     return true;
 }
@@ -382,7 +382,7 @@ void FloatingAnchorStrategy::countVerticalPos(QPointF &newPosition, const QRectF
         break;
 
     default :
-        kDebug(32002) << "vertical-pos not handled";
+        warnTextLayout << "vertical-pos not handled";
     }
 
 }

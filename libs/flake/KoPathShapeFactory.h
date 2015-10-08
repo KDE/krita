@@ -28,7 +28,7 @@
 class KoShape;
 
 /// Factory for path shapes.
-class FLAKE_TEST_EXPORT KoPathShapeFactory : public KoShapeFactoryBase
+class FLAKE_EXPORT KoPathShapeFactory : public KoShapeFactoryBase
 {
 public:
     /// constructor

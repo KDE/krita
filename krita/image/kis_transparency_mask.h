@@ -20,7 +20,6 @@
 #define _KIS_TRANSPARENCY_MASK_
 
 #include "kis_types.h"
-#include "kis_mask.h"
 #include "kis_effect_mask.h"
 
 class QRect;

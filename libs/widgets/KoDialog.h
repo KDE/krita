@@ -313,15 +313,6 @@ public:
     void setButtonGuiItem(ButtonCode id, const KGuiItem &item);
 
     /**
-     * Sets the menu of any button.
-     *
-     * @param id The button identifier.
-     * @param menu The menu.
-     * @param popupmode Choose if QPushButton setMenu or setDelayedMenu is used
-     */
-    void setButtonMenu(ButtonCode id, QMenu *menu, ButtonPopupMode popupmode = InstantPopup);
-
-    /**
      * Sets the focus to the button of the passed @p id.
      */
     void setButtonFocus(ButtonCode id);

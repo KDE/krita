@@ -38,7 +38,7 @@ class FLAKE_EXPORT KoEventActionRegistry
 {
 public:
     class Singleton;
-
+    KoEventActionRegistry();
     ~KoEventActionRegistry();
 
     /**
@@ -72,7 +72,7 @@ public:
     QList<KoEventActionFactoryBase *> scriptEventActions();
 
 private:
-    KoEventActionRegistry();
+
     KoEventActionRegistry(const KoEventActionRegistry &);
     KoEventActionRegistry operator=(const KoEventActionRegistry &);
 

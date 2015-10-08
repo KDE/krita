@@ -23,7 +23,6 @@
 #include <KoColorSpace.h>
 
 #include <kritaimage_export.h>
-#include "kis_global.h"
 #include "kis_types.h"
 #include "kis_node_visitor.h"
 

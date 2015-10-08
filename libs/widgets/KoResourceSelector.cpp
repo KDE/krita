@@ -29,7 +29,7 @@
 #include <QMouseEvent>
 #include <QStyledItemDelegate>
 
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 
 class Q_DECL_HIDDEN KoResourceSelector::Private
 {

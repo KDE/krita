@@ -18,7 +18,7 @@
 
 #include "kis_clone_layer_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -391,4 +391,4 @@ void KisCloneLayerTest::testCyclingGroupLayer()
     testCyclingCase(t, t.cloneOfGroup2, t.cloneOfGroup1, false);
 }
 
-QTEST_KDEMAIN(KisCloneLayerTest, GUI)
+QTEST_MAIN(KisCloneLayerTest)

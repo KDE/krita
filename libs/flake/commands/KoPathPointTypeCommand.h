@@ -30,7 +30,7 @@
 #include "flake_export.h"
 
 /// The undo / redo command for changing the path point type.
-class FLAKE_TEST_EXPORT KoPathPointTypeCommand : public KoPathBaseCommand
+class FLAKE_EXPORT KoPathPointTypeCommand : public KoPathBaseCommand
 {
 public:
     /// The type of the point

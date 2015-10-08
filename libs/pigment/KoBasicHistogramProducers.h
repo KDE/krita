@@ -156,11 +156,11 @@ public:
     }
     virtual ~KoBasicHistogramProducerFactory() {}
 
-    virtual KoHistogramProducerSP generate() {
-        KoHistogramProducerSP producer;
+    virtual KoHistogramProducer *generate() {
+        KoHistogramProducer *producer;
         const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(m_modelId, m_depthId, 0);
         if (cs) {
-            producer = KoHistogramProducerSP(new T(KoID(id(), name()), cs));
+            producer = new T(KoID(id(), name()), cs);
         }
         return producer;
 
@@ -198,13 +198,17 @@ class  PIGMENTCMS_EXPORT KoGenericRGBHistogramProducerFactory : public KoHistogr
 {
 public:
     KoGenericRGBHistogramProducerFactory();
+
     virtual ~KoGenericRGBHistogramProducerFactory() {}
-    virtual KoHistogramProducerSP generate() {
-        return KoHistogramProducerSP(new KoGenericRGBHistogramProducer());
+
+    virtual KoHistogramProducer *generate() {
+        return new KoGenericRGBHistogramProducer();
     }
+
     virtual bool isCompatibleWith(const KoColorSpace*) const {
         return true;
     }
+
     virtual float preferrednessLevelWith(const KoColorSpace*) const {
         return 0.0;
     }
@@ -235,12 +239,15 @@ class /*PIGMENTCMS_EXPORT*/ KoGenericLabHistogramProducerFactory : public KoHist
 public:
     KoGenericLabHistogramProducerFactory();
     virtual ~KoGenericLabHistogramProducerFactory() {}
-    virtual KoHistogramProducerSP generate() {
-        return KoHistogramProducerSP(new KoGenericLabHistogramProducer());
+
+    virtual KoHistogramProducer *generate() {
+        return new KoGenericLabHistogramProducer();
     }
+
     virtual bool isCompatibleWith(const KoColorSpace*) const {
         return true;
     }
+
     virtual float preferrednessLevelWith(const KoColorSpace*) const {
         return 0.0;
     }

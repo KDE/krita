@@ -21,6 +21,8 @@
 
 #include "kis_time_range.h"
 #include <QRect>
+#include <QtGlobal>
+
 
 struct Q_DECL_HIDDEN KisNodeGraphListener::Private
 {

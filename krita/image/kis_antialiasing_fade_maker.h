@@ -19,6 +19,7 @@
 #ifndef __KIS_ANTIALIASING_FADE_MAKER_H
 #define __KIS_ANTIALIASING_FADE_MAKER_H
 
+#include "kis_global.h"
 
 template <class BaseFade>
 class KisAntialiasingFadeMaker1D

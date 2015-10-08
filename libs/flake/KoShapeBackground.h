@@ -22,6 +22,8 @@
 
 #include "flake_export.h"
 
+#include <QtGlobal>
+
 class QSizeF;
 class QPainter;
 class QPainterPath;

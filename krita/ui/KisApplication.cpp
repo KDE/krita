@@ -21,28 +21,13 @@
 
 #include "KisApplication.h"
 
-#include <KoPluginLoader.h>
-#include <KoShapeRegistry.h>
-#include <KoDpi.h>
-#include "KoGlobal.h"
-#include "KoConfig.h"
-#include <KoHashGeneratorProvider.h>
-#include <kis_icon_utils.h>
+#include <stdlib.h>
+#ifdef Q_OS_WIN
+#include <windows.h>
+#include <tchar.h>
+#endif
 
-#include <kcrash.h>
-#include <klocalizedstring.h>
-#include <kcmdlineargs.h>
-#include <kdesktopfile.h>
 #include <QMessageBox>
-#include <kstandarddirs.h>
-#include <kiconloader.h>
-#include <kis_debug.h>
-
-#include <kconfig.h>
-#include <kglobal.h>
-#include <kconfiggroup.h>
-#include <krecentdirs.h>
-
 #include <QFile>
 #include <QWidget>
 #include <QSysInfo>
@@ -51,13 +36,26 @@
 #include <QProcessEnvironment>
 #include <QDir>
 #include <QDesktopWidget>
+#include <QMimeDatabase>
+#include <QMimeType>
+#include <QTimer>
+#include <QStyle>
+#include <QStyleFactory>
 
-#include <stdlib.h>
+#include <klocalizedstring.h>
+#include <kdesktopfile.h>
+#include <kiconloader.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <krecentdirs.h>
 
-#ifdef Q_OS_WIN
-#include <windows.h>
-#include <tchar.h>
-#endif
+#include <KoPluginLoader.h>
+#include <KoShapeRegistry.h>
+#include <KoDpi.h>
+#include "KoGlobal.h"
+#include "KoConfig.h"
+#include <KoHashGeneratorProvider.h>
+#include <KoResourcePaths.h>
 
 #include "KisPrintJob.h"
 #include "KisDocumentEntry.h"
@@ -65,27 +63,26 @@
 #include "KisMainWindow.h"
 #include "KisAutoSaveRecoveryDialog.h"
 #include "KisPart.h"
-
+#include <kis_icon_utils.h>
 #include "kis_md5_generator.h"
 #include "kis_config.h"
 #include "flake/kis_shape_selection.h"
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
+#include <filter/kis_filter_configuration.h>
 #include <generator/kis_generator_registry.h>
 #include <generator/kis_generator.h>
 #include <kis_paintop_registry.h>
 #include <metadata/kis_meta_data_io_backend.h>
 #include "kisexiv2/kis_exiv2.h"
+#include "KisApplicationArguments.h"
+#include <kis_debug.h>
 
 #ifdef HAVE_OPENGL
 #include "opengl/kis_opengl.h"
 #endif
 
-#include <calligraversion.h>
-#include <calligragitversion.h>
-#include <QMimeDatabase>
-#include <QMimeType>
-#include "KisApplicationArguments.h"
+#include <CalligraVersionWrapper.h>
 
 namespace {
 const QTime appStartTime(QTime::currentTime());
@@ -118,7 +115,7 @@ public:
                 m_splash->hide();
             }
             else {
-                m_splash->setWindowFlags(Qt::Tool | Qt::FramelessWindowHint);
+                m_splash->setWindowFlags(Qt::Tool | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
                 QRect r(QPoint(), m_splash->size());
                 m_splash->move(QApplication::desktop()->availableGeometry().center() - r.center());
                 m_splash->setWindowTitle(qAppName());
@@ -146,14 +143,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     setApplicationDisplayName("Krita");
     setApplicationName("krita");
 
-    QString calligraVersion(CALLIGRA_VERSION_STRING);
-    QString version;
-#ifdef CALLIGRA_GIT_SHA1_STRING
-    QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
-    version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion);
-#else
-    version = calligraVersion;
-#endif
+    QString version = CalligraVersionWrapper::versionString(true);
     setApplicationVersion(version);
 
     // Tell the iconloader about share/apps/calligra/icons
@@ -163,12 +153,12 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     KoGlobal::initialize();
 
     // for cursors
-    KGlobal::dirs()->addResourceType("kis_pics", "data", "krita/pics/");
+    KoResourcePaths::addResourceType("kis_pics", "data", "krita/pics/");
 
     // for images in the paintop box
-    KGlobal::dirs()->addResourceType("kis_images", "data", "krita/images/");
+    KoResourcePaths::addResourceType("kis_images", "data", "krita/images/");
 
-    KGlobal::dirs()->addResourceType("icc_profiles", "data", "krita/profiles/");
+    KoResourcePaths::addResourceType("icc_profiles", "data", "krita/profiles/");
 
     setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
 
@@ -187,14 +177,19 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     setAttribute(Qt::AA_DontShowIconsInMenus, true);
 #endif
 
-
-    if (applicationName() == "krita" && qgetenv("KDE_FULL_SESSION").isEmpty()) {
-        // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
-        setStyle("Plastique");
-        setStyle("Breeze");
-        setStyle("Oxygen");
-        setStyle("Fusion");
+    qDebug() << "Available styles:" << QStyleFactory::keys();
+    QStringList styles = QStringList() << "Breeze" << "Oxygen" << "Plastique" << "Fusion";
+    foreach(const QString & style, styles) {
+        if (!setStyle(style)) {
+            qDebug() << "No" << style << "available.";
+        }
+        else {
+            break;
+        }
     }
+    qDebug() << "Style:" << QApplication::style();
+
+
 
     KoHashGeneratorProvider::instance()->setGenerator("MD5", new KisMD5Generator());
 }
@@ -240,9 +235,9 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
         QString desktopName(fileName);
         const QString templatesResourcePath = KisPart::instance()->templatesResourcePath();
 
-        QStringList paths = KGlobal::dirs()->findAllResources("data", templatesResourcePath + "*/" + desktopName);
+        QStringList paths = KoResourcePaths::findAllResources("data", templatesResourcePath + "*/" + desktopName);
         if (paths.isEmpty()) {
-            paths = KGlobal::dirs()->findAllResources("data", templatesResourcePath + desktopName);
+            paths = KoResourcePaths::findAllResources("data", templatesResourcePath + desktopName);
         }
 
         if (paths.isEmpty()) {
@@ -290,7 +285,7 @@ void KisApplication::clearConfig()
 
     // find user settings file
     bool createDir = false;
-    QString kritarcPath = KStandardDirs::locateLocal("config", "kritarc", createDir);
+    QString kritarcPath = KoResourcePaths::locateLocal("config", "kritarc", createDir);
 
     QFile configFile(kritarcPath);
     if (configFile.exists()) {
@@ -350,8 +345,8 @@ bool KisApplication::start(const KisApplicationArguments &args)
     QDir appdir(applicationDirPath());
     appdir.cdUp();
 
-    KGlobal::dirs()->addXdgDataPrefix(appdir.absolutePath() + "/share");
-    KGlobal::dirs()->addPrefix(appdir.absolutePath());
+    KoResourcePaths::addXdgDataPrefix(appdir.absolutePath() + "/share");
+    KoResourcePaths::addPrefix(appdir.absolutePath());
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     // If there's no kdehome, set it and restart the process.
@@ -433,7 +428,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
         mainWindow = KisPart::instance()->createMainWindow();
 
         if (showmainWindow) {
-            mainWindow->show();
+            QTimer::singleShot(1, mainWindow, SLOT(show()));
         }
     }
     short int numberOfOpenDocuments = 0; // number of documents open
@@ -562,7 +557,7 @@ bool KisApplication::notify(QObject *receiver, QEvent *event)
 }
 
 
-void KisApplication::remoteArguments(QByteArray &message, QObject *socket)
+void KisApplication::remoteArguments(QByteArray message, QObject *socket)
 {
     Q_UNUSED(socket);
 

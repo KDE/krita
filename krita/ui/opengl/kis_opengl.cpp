@@ -97,6 +97,7 @@ int KisOpenGL::initializeContext(QOpenGLContext* s) {
     QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
 
     QFile log(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-opengl.txt");
+    dbgUI << "Writing OpenGL log to" << log.fileName();
     log.open(QFile::WriteOnly);
     QString vendor((const char*)f->glGetString(GL_VENDOR));
     log.write(vendor.toLatin1());

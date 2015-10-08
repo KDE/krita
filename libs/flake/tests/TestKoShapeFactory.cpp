@@ -26,7 +26,7 @@
 #include <KoShape.h>
 #include <KoShapeFactoryBase.h>
 #include <KoXmlNS.h>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 void TestKoShapeFactory::testCreateFactory()
 {

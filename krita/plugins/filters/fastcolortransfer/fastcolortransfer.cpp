@@ -98,7 +98,7 @@ void KisFilterFastColorTransfer::processImpl(KisPaintDeviceSP device,
     const KoColorSpace* oldCS = device->colorSpace();
     KisPaintDeviceSP srcLAB = new KisPaintDevice(*device.data());
     dbgPlugins << "srcLab : " << srcLAB->extent();
-    KUndo2Command* cmd = srcLAB->convertTo(labCS, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+    KUndo2Command* cmd = srcLAB->convertTo(labCS, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
     delete cmd;
 
     if (progressUpdater) {

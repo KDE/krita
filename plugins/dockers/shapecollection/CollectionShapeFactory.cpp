@@ -31,8 +31,7 @@
 #include <KoXmlNS.h>
 #include <KoShapeRegistry.h>
 
-#include <kdebug.h>
-
+#include <QDebug>
 #include <QMimeData>
 #include <QBuffer>
 
@@ -52,8 +51,6 @@ KoShape *CollectionShapeFactory::createDefaultShape(KoDocumentResourceManager *d
 
     shapes << m_shape;
 
-    //kDebug() << m_shape->shapeId();
-
     KoDrag drag;
     KoShapeOdfSaveHelper saveHelper(shapes);
     drag.setOdf(KoOdf::mimeType(KoOdf::Graphics), saveHelper);
@@ -69,7 +66,7 @@ KoShape *CollectionShapeFactory::createDefaultShape(KoDocumentResourceManager *d
 
         QString errorMessage;
         if ( ! odfStore.loadAndParse( errorMessage ) ) {
-            kError() << "loading and parsing failed:" << errorMessage << endl;
+            qCritical() << "loading and parsing failed:" << errorMessage << endl;
             delete store;
             return 0;
         }
@@ -78,7 +75,7 @@ KoShape *CollectionShapeFactory::createDefaultShape(KoDocumentResourceManager *d
         KoXmlElement realBody( KoXml::namedItemNS( content, KoXmlNS::office, "body" ) );
 
         if ( realBody.isNull() ) {
-            kError() << "No body tag found!" << endl;
+            qCritical() << "No body tag found!" << endl;
             delete store;
             return 0;
         }
@@ -86,7 +83,7 @@ KoShape *CollectionShapeFactory::createDefaultShape(KoDocumentResourceManager *d
         KoXmlElement body = KoXml::namedItemNS( realBody, KoXmlNS::office, KoOdf::bodyContentElement( KoOdf::Text, false ) );
 
         if ( body.isNull() ) {
-            kError() << "No" << KoOdf::bodyContentElement(KoOdf::Text, true ) << "tag found!" << endl;
+            qCritical() << "No" << KoOdf::bodyContentElement(KoOdf::Text, true ) << "tag found!" << endl;
             delete store;
             return 0;
         }

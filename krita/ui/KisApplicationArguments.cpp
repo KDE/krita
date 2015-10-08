@@ -56,8 +56,6 @@ struct Q_DECL_HIDDEN KisApplicationArguments::Private
 KisApplicationArguments::KisApplicationArguments(const QApplication &app)
     : d(new Private)
 {
-    qDebug() << "Going to parse" << app.arguments();
-
     QCommandLineParser parser;
     parser.addVersionOption();
     parser.addHelpOption();
@@ -95,9 +93,6 @@ KisApplicationArguments::KisApplicationArguments(const QApplication &app)
     d->exportAsPdf = parser.isSet("export-pdf");
     d->exportFileName = parser.value("export-filename");
     d->profileFileName = parser.value("profile-filename");
-
-    qDebug() << d->filenames;
-
 }
 
 KisApplicationArguments::KisApplicationArguments(const KisApplicationArguments &rhs)

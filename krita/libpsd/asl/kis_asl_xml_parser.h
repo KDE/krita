@@ -22,7 +22,6 @@
 #include "kritapsd_export.h"
 
 class QDomDocument;
-class QIODevice;
 class KisAslObjectCatcher;
 
 

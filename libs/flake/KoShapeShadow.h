@@ -23,6 +23,8 @@
 
 #include "flake_export.h"
 
+#include <QtGlobal>
+
 class KoShape;
 class KoGenStyle;
 class KoShapeSavingContext;

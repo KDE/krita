@@ -17,7 +17,7 @@
  */
 
 #include "kis_painter_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 
 #include <kis_debug.h>
@@ -517,6 +517,6 @@ void KisPainterTest::benchmarkBitBltOldData()
     }
 }
 
-QTEST_KDEMAIN(KisPainterTest, NoGUI)
+QTEST_MAIN(KisPainterTest)
 
 

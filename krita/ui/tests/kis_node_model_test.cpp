@@ -19,7 +19,7 @@
 
 #include "kis_node_model_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <kis_debug.h>
 
 #include "KisDocument.h"
@@ -109,6 +109,6 @@ void KisNodeModelTest::testSubstituteRootNode()
     m_image->flatten();
 }
 
-QTEST_KDEMAIN(KisNodeModelTest, GUI)
+QTEST_MAIN(KisNodeModelTest)
 
 

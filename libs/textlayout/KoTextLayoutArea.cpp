@@ -52,7 +52,7 @@
 #include <KoTextSoftPageBreak.h>
 #include <KoInlineTextObjectManager.h>
 
-#include <kdebug.h>
+#include <TextLayoutDebug.h>
 
 #include <QTextFrame>
 #include <QTextTable>
@@ -925,7 +925,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                         break;
 
                     const qreal adjustment = diff * (f.pointSizeF() / rect.height());
-                    // kDebug() << "adjusting with" << adjustment;
+                    // warnTextLayout << "adjusting with" << adjustment;
                     f.setPointSizeF(f.pointSizeF() + adjustment);
                 }
 

@@ -18,7 +18,7 @@
 
 #include "kis_histogram_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoHistogramProducer.h>
@@ -36,13 +36,14 @@ void KisHistogramTest::testCreation()
         if (id.contains("YCBCR")) {
             continue;
         }
-        KoHistogramProducerSP producer = KoHistogramProducerFactoryRegistry::instance()->get(id)->generate();
+        KoHistogramProducer *producer = KoHistogramProducerFactoryRegistry::instance()->get(id)->generate();
         if (producer) {
             KisHistogram test(dev, QRect(0, 0, 100, 100), producer, LINEAR);
             Q_UNUSED(test);
         }
+        delete producer;
     }
 }
 
 
-QTEST_KDEMAIN(KisHistogramTest, GUI)
+QTEST_MAIN(KisHistogramTest)

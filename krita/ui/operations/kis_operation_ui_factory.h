@@ -19,8 +19,11 @@
 #ifndef KIS_OPERATION_UI_FACTORY_H
 #define KIS_OPERATION_UI_FACTORY_H
 
-#include "kis_operation_configuration.h"
+#include "kritaui_export.h"
+#include <QString>
+
 class KisViewManager;
+class KisOperationConfiguration;
 
 class KRITAUI_EXPORT KisOperationUIFactory
 {

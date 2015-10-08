@@ -22,7 +22,7 @@
 #include <QCoreApplication>
 
 #include <kactioncollection.h>
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 
 #include "KoCanvasControllerWidget.h"
 #include "KoZoomHandler.h"

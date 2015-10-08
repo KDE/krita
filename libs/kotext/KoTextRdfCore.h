@@ -65,7 +65,7 @@ bool createAndSaveManifest(QSharedPointer<Soprano::Model> model,
 bool loadManifest(KoStore *store, QSharedPointer<Soprano::Model> model);
 
 /**
- * For debugging, dump the model to kDebug() along with the
+ * For debugging, dump the model to debugText along with the
  * given header message for identification
  */
 void dumpModel(const QString &message, QSharedPointer<Soprano::Model> model);

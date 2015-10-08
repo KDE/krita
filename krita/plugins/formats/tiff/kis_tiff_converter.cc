@@ -151,13 +151,13 @@ QPair<QString, QString> getColorSpaceForColorType(uint16 sampletype, uint16 colo
     else if (color_type == PHOTOMETRIC_CIELAB || color_type == PHOTOMETRIC_ICCLAB) {
         destDepth = 16;
         if (nbchannels == 0) nbchannels = 3;
-        extrasamplescount = nbchannels - 3; // FIX the extrasamples count in case of
+        extrasamplescount = nbchannels - 3; // FIX the extrasamples count
         return QPair<QString, QString>(LABAColorModelID.id(), Integer16BitsColorDepthID.id());
     }
     else if (color_type ==  PHOTOMETRIC_PALETTE) {
         destDepth = 16;
         if (nbchannels == 0) nbchannels = 2;
-        extrasamplescount = nbchannels - 2; // FIX the extrasamples count in case of
+        extrasamplescount = nbchannels - 2; // FIX the extrasamples count
         // <-- we will convert the index image to RGBA16 as the palette is always on 16bits colors
         return QPair<QString, QString>(RGBAColorModelID.id(), Integer16BitsColorDepthID.id());
     }
@@ -313,7 +313,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     KoColorTransformation* transform = 0;
     if (profile && !profile->isSuitableForOutput()) {
         dbgFile << "The profile can't be used in krita, need conversion";
-        transform = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId.first, colorSpaceId.second, profile)->createColorConverter(cs, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+        transform = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId.first, colorSpaceId.second, profile)->createColorConverter(cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
     }
 
     // Check if there is an alpha channel
@@ -397,7 +397,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
         break;
     case PHOTOMETRIC_CIELAB: {
         poses[0] = 0; poses[1] = 1; poses[2] = 2; poses[3] = 3;
-        postprocessor = new KisTIFFPostProcessorICCLABtoCIELAB(nbcolorsamples);
+        postprocessor = new KisTIFFPostProcessorCIELABtoICCLAB(nbcolorsamples);
     }
         break;
     case PHOTOMETRIC_ICCLAB: {

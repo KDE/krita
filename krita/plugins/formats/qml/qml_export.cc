@@ -61,8 +61,7 @@ KisImportExportFilter::ConversionStatus QMLExport::convert(const QByteArray& fro
         return KisImportExportFilter::FileNotFound;
     }
 
-    QUrl url;
-    url.setPath(filename);
+    QUrl url = QUrl::fromLocalFile(filename);
 
     KisImageWSP image = input->image();
 

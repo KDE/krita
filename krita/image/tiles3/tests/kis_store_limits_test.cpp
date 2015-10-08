@@ -17,7 +17,7 @@
  */
 
 #include "kis_store_limits_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kis_debug.h"
 
@@ -46,5 +46,5 @@ void KisStoreLimitsTest::testLimits()
     QCOMPARE(limits.softLimit(), quarterRAMMetric * 7 / 8);
 }
 
-QTEST_KDEMAIN(KisStoreLimitsTest, NoGUI)
+QTEST_MAIN(KisStoreLimitsTest)
 

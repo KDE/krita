@@ -114,24 +114,28 @@ void KisImageFromClipboard::clipboardDataChanged()
 void KisImageFromClipboard::createClipboardPreview()
 {
     QClipboard *cb = QApplication::clipboard();
-    QImage qimage = cb->image();
     const QMimeData *cbData = cb->mimeData();
-    QByteArray mimeType("application/x-krita-selection");
-    
-    if ((cbData && cbData->hasFormat(mimeType)) || !qimage.isNull()) {
-        QImage* clipboardImage = new QImage(qimage); // qimage needs to be on the heap
-        QGraphicsPixmapItem *item = new QGraphicsPixmapItem( QPixmap::fromImage(*clipboardImage));
-        
-        QGraphicsScene *clipboardScene = new QGraphicsScene();      
-        clipboardScene->addItem(item);
-        
-        clipPreview->setScene(clipboardScene);
-        clipPreview->show();             
-        createButton->setEnabled(true);
-        
-        doubleWidth->setValue(clipboardImage->width());
-        doubleHeight->setValue(clipboardImage->height());
-    } else {
+    if (cbData->hasImage()) {
+        QImage qimage = cb->image();
+
+        QByteArray mimeType("application/x-krita-selection");
+
+        if ((cbData && cbData->hasFormat(mimeType)) || !qimage.isNull()) {
+            QImage* clipboardImage = new QImage(qimage); // qimage needs to be on the heap
+            QGraphicsPixmapItem *item = new QGraphicsPixmapItem( QPixmap::fromImage(*clipboardImage));
+
+            QGraphicsScene *clipboardScene = new QGraphicsScene();
+            clipboardScene->addItem(item);
+
+            clipPreview->setScene(clipboardScene);
+            clipPreview->show();
+            createButton->setEnabled(true);
+
+            doubleWidth->setValue(clipboardImage->width());
+            doubleHeight->setValue(clipboardImage->height());
+        }
+    }
+    else {
         createButton->setEnabled(false);
         clipPreview->setScene(new QGraphicsScene(this));
     }

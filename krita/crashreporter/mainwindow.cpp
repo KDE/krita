@@ -21,9 +21,9 @@
 #include <QtGui>
 #include <QtNetwork>
 
-#include <kglobal.h>
+
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 
 #include <calligraversion.h>
 #include <calligragitversion.h>
@@ -98,11 +98,11 @@ void doRestart(MainWindow* mainWindow, bool resetConfig)
             configDir.remove("kritarc");
         }
         {
-            QDir inputDir(KGlobal::dirs()->saveLocation("data", "krita/input/"));
+            QDir inputDir(KoResourcePaths::saveLocation("data", "krita/input/"));
             foreach(QString entry, inputDir.entryList(QStringList("*.profile"))) {
                 inputDir.remove(entry);
             }
-            QDir configDir(KGlobal::dirs()->saveLocation("config"));
+            QDir configDir(KoResourcePaths::saveLocation("config"));
             configDir.remove("kritarc");
         }
     }
@@ -224,7 +224,7 @@ MainWindow::MainWindow(const QString &dumpPath, const QString &id, QWidget *pare
     setupUi(this);
     progressBar->hide();
 
-    lblKiki->setPixmap(QPixmap(KGlobal::dirs()->findResource("data", "krita/pics/KikiNurse_sm.png")));
+    lblKiki->setPixmap(QPixmap(KoResourcePaths::findResource("data", "krita/pics/KikiNurse_sm.png")));
 
     setWindowFlags(Qt::WindowStaysOnTopHint | windowFlags());
 
@@ -321,7 +321,7 @@ void MainWindow::startUpload()
 #endif
 
     QFile f(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-opengl.txt");
-    dbgKrita << KGlobal::dirs()->saveLocation("config") + "/krita-opengl.txt" << f.exists();
+    dbgKrita << KoResourcePaths::saveLocation("config") + "/krita-opengl.txt" << f.exists();
 
     if (f.exists()) {
         f.open(QFile::ReadOnly);

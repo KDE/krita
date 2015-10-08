@@ -263,14 +263,14 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
             m_displayFilter->filter(originalBytes.data(), numPixels);
         } else {
             QScopedArrayPointer<quint8> dst(new quint8[floatCs->pixelSize() * numPixels]);
-            projectionCs->convertPixelsTo(originalBytes.data(), dst.data(), floatCs, numPixels, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+            projectionCs->convertPixelsTo(originalBytes.data(), dst.data(), floatCs, numPixels, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
             m_displayFilter->filter(dst.data(), numPixels);
             originalBytes.swap(dst);
         }
 
         {
             QScopedArrayPointer<quint8> dst(new quint8[modifiedMonitorCs->pixelSize() * numPixels]);
-            floatCs->convertPixelsTo(originalBytes.data(), dst.data(), modifiedMonitorCs, numPixels, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+            floatCs->convertPixelsTo(originalBytes.data(), dst.data(), modifiedMonitorCs, numPixels, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
             originalBytes.swap(dst);
         }
 #endif

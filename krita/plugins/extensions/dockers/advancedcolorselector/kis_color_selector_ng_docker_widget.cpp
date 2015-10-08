@@ -23,8 +23,8 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
-#include <kglobal.h>
 #include <QAction>
 #include <kactioncollection.h>
 

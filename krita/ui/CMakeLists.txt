@@ -456,7 +456,7 @@ QT5_WRAP_CPP(kritaui_HEADERS_MOC KisDocumentSectionPropertyAction_p.h)
 add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS} )
 generate_export_header(kritaui BASE_NAME kritaui)
 
-target_link_libraries(kritaui KF5::GlobalAccel KF5::I18n KF5::KDELibs4Support)
+target_link_libraries(kritaui KF5::CoreAddons KF5::GlobalAccel KF5::I18n KF5::ItemViews KF5::KIOCore KF5::KIOFileWidgets)
 if (NOT WIN32)
   target_link_libraries(kritaui ${X11_X11_LIB} ${X11_Xinput_LIB})
 endif()
@@ -466,9 +466,9 @@ if(APPLE)
 endif ()
 
 if(GHNS)
-    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritacolor kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} KF5::NewStuff)
+    target_link_libraries(kritaui  kritacolor kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} KF5::NewStuff)
 else()
-    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritacolor kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
+    target_link_libraries(kritaui  kritacolor kritaimage kritalibbrush kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
 endif ()
 
 if(HAVE_OPENGL)
@@ -486,7 +486,7 @@ if(X11_FOUND)
     target_link_libraries(kritaui Qt5::X11Extras ${X11_LIBRARIES})
 endif()
 
-target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush pigmentcms KF5::I18n KF5::KDELibs4Support ${GL_INTERFACE_LIBRARIES} )
+target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush pigmentcms KF5::I18n  ${GL_INTERFACE_LIBRARIES})
 
 set_target_properties(kritaui
     PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
@@ -500,7 +500,6 @@ if (APPLE)
 endif ()
 
 install( FILES
-    kritaui_export.h
     canvas/kis_canvas2.h
     canvas/kis_canvas_decoration.h
     canvas/kis_coordinates_converter.h

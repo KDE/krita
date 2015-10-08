@@ -19,7 +19,6 @@
 #ifndef kis_multipliers_double_slider_spinbox_p_h
 #define kis_multipliers_double_slider_spinbox_p_h
 
-#include "kis_multipliers_double_slider_spinbox.h"
 
 #include "ui_wdgmultipliersdoublesliderspinbox.h"
 

@@ -18,10 +18,12 @@
 
 #define GL_GLEXT_PROTOTYPES
 #include "kis_texture_tile.h"
+#include "kis_texture_tile_update_info.h"
 
 #ifdef HAVE_OPENGL
 #include <kis_debug.h>
 #include <QOpenGLFunctions>
+
 
 #ifndef GL_BGRA
 #define GL_BGRA 0x814F

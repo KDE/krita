@@ -105,12 +105,12 @@ public:
     };
 
     KisHistogram(KisPaintLayerSP layer,
-                 KoHistogramProducerSP producer,
+                 KoHistogramProducer *producer,
                  const enumHistogramType type);
 
     KisHistogram(KisPaintDeviceSP paintdev,
                  const QRect &bounds,
-                 KoHistogramProducerSP producer,
+                 KoHistogramProducer *producer,
                  const enumHistogramType type);
 
     virtual ~KisHistogram();
@@ -139,7 +139,7 @@ public:
     inline void setHistogramType(enumHistogramType type) {
         m_type = type;
     }
-    inline void setProducer(KoHistogramProducerSP producer) {
+    inline void setProducer(KoHistogramProducer *producer) {
         m_channel = 0;
         m_producer = producer;
     }
@@ -147,7 +147,7 @@ public:
         Q_ASSERT(m_channel < m_completeCalculations.size());
         m_channel = channel;
     }
-    inline KoHistogramProducerSP producer() {
+    inline KoHistogramProducer *producer() {
         return m_producer;
     }
     inline qint32 channel() {
@@ -180,7 +180,7 @@ private:
 
     const KisPaintDeviceSP m_paintDevice;
     QRect m_bounds;
-    KoHistogramProducerSP m_producer;
+    KoHistogramProducer *m_producer;
     enumHistogramType m_type;
 
     qint32 m_channel;

@@ -135,9 +135,9 @@ class PIGMENTCMS_EXPORT KoCompositeOpRegistry
 {
     typedef QMultiMap<KoID,KoID> KoIDMap;
     typedef QList<KoID>          KoIDList;
-    KoCompositeOpRegistry();
 
 public:
+    KoCompositeOpRegistry();
     static const KoCompositeOpRegistry& instance();
 
     KoID     getDefaultCompositeOp() const;

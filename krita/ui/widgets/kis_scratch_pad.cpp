@@ -38,6 +38,7 @@
 #include <kis_canvas_resource_provider.h>
 
 #include "kis_config.h"
+#include "kis_image.h"
 #include "kis_undo_stores.h"
 #include "kis_update_scheduler.h"
 #include "kis_post_execution_undo_adapter.h"
@@ -47,6 +48,7 @@
 #include "kis_image_patch.h"
 #include "kis_canvas_widget_base.h"
 #include "kis_layer_projection_plane.h"
+#include "kis_node_graph_listener.h"
 
 
 class KisScratchPadNodeListener : public KisNodeGraphListener
@@ -307,8 +309,8 @@ void KisScratchPad::paintEvent ( QPaintEvent * event ) {
                                                alignedImageRect.y(),
                                                alignedImageRect.width(),
                                                alignedImageRect.height(),
-                                               KoColorConversionTransformation::InternalRenderingIntent,
-                                               KoColorConversionTransformation::InternalConversionFlags);
+                                               KoColorConversionTransformation::internalRenderingIntent(),
+                                               KoColorConversionTransformation::internalConversionFlags());
 
     QPainter gc(this);
     gc.fillRect(event->rect(), m_checkBrush);
@@ -367,7 +369,7 @@ QImage KisScratchPad::cutoutOverlay() const
     KisPaintDeviceSP paintDevice = m_paintLayer->paintDevice();
 
     QRect rc = widgetToDocument().mapRect(m_cutoutOverlay);
-    QImage rawImage = paintDevice->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height(), KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+    QImage rawImage = paintDevice->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
 
     QImage scaledImage = rawImage.scaled(m_cutoutOverlay.size(),
                                          Qt::IgnoreAspectRatio,

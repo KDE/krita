@@ -52,7 +52,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KIntNumInput" name="intQuality">
+      <widget class="QSpinBox" name="intQuality">
        <property name="value">
         <number>100</number>
        </property>
@@ -108,13 +108,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KIntNumInput</class>
-   <extends>QWidget</extends>
-   <header>knuminput.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections>
   <connection>

@@ -6,7 +6,7 @@ include_directories(
     ${TEXTLAYOUT_INCLUDES} # needed because ConnectionTool.cpp includes TextShape.h to get the id
     ${CMAKE_SOURCE_DIR}/libs/widgets
     ${FLAKE_INCLUDES}
-    
+    ${TEXTLAYOUT_INCLUDES}
 )
 
 add_subdirectory(pics)
@@ -53,5 +53,5 @@ ki18n_wrap_ui(defaulttools_SRCS
 
 add_library(calligra_tool_defaults MODULE ${defaulttools_SRCS})
 kcoreaddons_desktop_to_json(calligra_tool_defaults calligra_tool_defaults.desktop)
-target_link_libraries(calligra_tool_defaults flake kowidgets)
+target_link_libraries(calligra_tool_defaults flake kowidgets KF5::IconThemes )
 install(TARGETS calligra_tool_defaults DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

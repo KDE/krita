@@ -40,6 +40,8 @@
 #include "KoApplication.h"
 #include <KoIcon.h>
 #include <KoConfig.h>
+#include <KoDockRegistry.h>
+#include "calligraversion.h"
 
 #include <krecentdirs.h>
 #include <khelpmenu.h>
@@ -48,7 +50,7 @@
 #include <ktoggleaction.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kio/netaccess.h>
+#include <KoNetAccess.h>
 #include <kedittoolbar.h>
 #include <QTemporaryFile>
 #include <krecentdocument.h>
@@ -89,8 +91,6 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QFontDatabase>
-
-#include "calligraversion.h"
 
 class KoMainWindowPrivate
 {
@@ -617,11 +617,11 @@ void KoMainWindow::addRecentURL(const QUrl &url)
                 if (path.contains(*it))
                     ok = false; // it's in the tmp resource
             if (ok) {
-                KRecentDocument::add(path);
+                KRecentDocument::add(QUrl::fromLocalFile(path));
                 KRecentDirs::add(":OpenDialog", QFileInfo(path).dir().canonicalPath());
             }
         } else {
-            KRecentDocument::add(url.url(QUrl::StripTrailingSlash), true);
+            KRecentDocument::add(url.adjusted(QUrl::StripTrailingSlash));
         }
         if (ok) {
             d->recent->addUrl(url);
@@ -1894,15 +1894,10 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
         dockWidget = d->dockWidgetsMap[ factory->id()];
     }
 
-    KConfigGroup group( KSharedConfig::openConfig(), "GUI");
-    QFont dockWidgetFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
-    qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
-    pointSize = qMax(pointSize, QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF());
-    dockWidgetFont.setPointSizeF(pointSize);
 #ifdef Q_OS_MAC
     dockWidget->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
-    dockWidget->setFont(dockWidgetFont);
+    dockWidget->setFont(KoDockRegistry::dockFont());
 
     connect(dockWidget, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(forceDockTabFonts()));
 
@@ -1914,10 +1909,7 @@ void KoMainWindow::forceDockTabFonts()
     QObjectList chis = children();
     for (int i = 0; i < chis.size(); ++i) {
         if (chis.at(i)->inherits("QTabBar")) {
-            QFont dockWidgetFont  = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
-            qreal pointSize = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF();
-            dockWidgetFont.setPointSizeF(pointSize);
-            ((QTabBar *)chis.at(i))->setFont(dockWidgetFont);
+            ((QTabBar *)chis.at(i))->setFont(KoDockRegistry::dockFont());
         }
     }
 }

@@ -17,7 +17,7 @@
  */
 
 #include "kis_tile_data_store_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kis_debug.h"
 
@@ -181,5 +181,5 @@ void KisTileDataStoreTest::testSwapping()
     }
 }
 
-QTEST_KDEMAIN(KisTileDataStoreTest, NoGUI)
+QTEST_MAIN(KisTileDataStoreTest)
 

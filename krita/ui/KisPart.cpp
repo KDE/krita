@@ -34,7 +34,6 @@
 #include <kis_icon_utils.h>
 
 #include "KisApplication.h"
-#include "KisMainWindow.h"
 #include "KisDocument.h"
 #include "KisView.h"
 #include "KisViewManager.h"
@@ -43,13 +42,11 @@
 #include "dialogs/KisShortcutsDialog.h"
 
 #include <kis_debug.h>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 #include <kxmlguifactory.h>
-#include <knotification.h>
 #include <KoDialog.h>
 #include <kdesktopfile.h>
 #include <QMessageBox>
-
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <kconfig.h>
@@ -62,6 +59,7 @@
 #include <QGraphicsProxyWidget>
 #include <QDomDocument>
 #include <QDomElement>
+#include <QGlobalStatic>
 
 #include "KisView.h"
 #include "KisDocument.h"
@@ -80,6 +78,9 @@
 #include "kis_color_manager.h"
 
 #include "kis_action.h"
+
+Q_GLOBAL_STATIC(KisPart, s_instance)
+
 
 class Q_DECL_HIDDEN KisPart::Private
 {
@@ -120,8 +121,8 @@ void KisPart::Private::loadActions()
 {
     actionCollection = new KActionCollection(part, "krita");
 
-    KGlobal::dirs()->addResourceType("kis_actions", "data", "krita/actions/");
-    QStringList actionDefinitions = KGlobal::dirs()->findAllResources("kis_actions", "*.action", KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
+    KoResourcePaths::addResourceType("kis_actions", "data", "krita/actions/");
+    QStringList actionDefinitions = KoResourcePaths::findAllResources("kis_actions", "*.action", KoResourcePaths::Recursive | KoResourcePaths::NoDuplicates);
 
     foreach(const QString &actionDefinition, actionDefinitions)  {
         QDomDocument doc;
@@ -158,7 +159,7 @@ void KisPart::Private::loadActions()
                 action->setToolTip(toolTip);
                 action->setStatusTip(statusTip);
                 action->setIconText(iconText);
-                action->setShortcut(shortcut);
+                action->setDefaultShortcut(shortcut);
                 action->setCheckable(isCheckable);
 
                 if (!actionCollection->action(name)) {
@@ -192,7 +193,6 @@ void KisPart::Private::loadActions()
 
 KisPart* KisPart::instance()
 {
-    K_GLOBAL_STATIC(KisPart, s_instance)
     return s_instance;
 }
 
@@ -565,9 +565,9 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
             QFileInfo fi(url.toLocalFile());
             if (!fi.exists()) {
                 const QString templatesResourcePath = this->templatesResourcePath();
-                QString desktopfile = KGlobal::dirs()->findResource("data", templatesResourcePath + "*/" + fullTemplateName);
+                QString desktopfile = KoResourcePaths::findResource("data", templatesResourcePath + "*/" + fullTemplateName);
                 if (desktopfile.isEmpty()) {
-                    desktopfile = KGlobal::dirs()->findResource("data", templatesResourcePath + fullTemplateName);
+                    desktopfile = KoResourcePaths::findResource("data", templatesResourcePath + fullTemplateName);
                 }
                 if (desktopfile.isEmpty()) {
                     fullTemplateName.clear();

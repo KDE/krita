@@ -36,7 +36,6 @@
 #include "kis_locked_properties_proxy.h"
 #include "kis_locked_properties_server.h"
 #include "kis_locked_properties.h"
-#include "kis_config.h"
 #include "kritaui_export.h"
 
 
@@ -58,7 +57,6 @@ class KisPaintOpConfigWidget;
 class KisCompositeOpComboBox;
 class KisWidgetChooser;
 class KisFavoriteResourceManager;
-class KisLockedProperties;
 class KisAction;
 
 /**
@@ -191,7 +189,8 @@ private:
     QMap<KoID, KisPaintOpConfigWidget*> m_paintopOptionWidgets;
     KisFavoriteResourceManager*         m_favoriteResourceManager;
     QToolButton*                        m_reloadButton;
-
+    KisAction*                          m_eraseAction;
+    KisAction*                          m_reloadAction;
 
     QString             m_prevCompositeOpID;
     QString             m_currCompositeOpID;

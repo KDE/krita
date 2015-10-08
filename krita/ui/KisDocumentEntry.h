@@ -26,7 +26,6 @@
 #include "kritaui_export.h"
 
 class QStringList;
-class KisDocument;
 class QPluginLoader;
 
 /**

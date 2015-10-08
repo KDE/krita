@@ -21,7 +21,7 @@ ki18n_wrap_ui(kritabmpimport_PART_SRCS )
 add_library(kritabmpimport MODULE ${kritabmpimport_PART_SRCS})
 kcoreaddons_desktop_to_json(kritabmpimport krita_bmp_import.desktop)
 
-target_link_libraries(kritabmpimport kritaui ${KDE4_KIO_LIBS} )
+target_link_libraries(kritabmpimport kritaui)
 
 install(TARGETS kritabmpimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 

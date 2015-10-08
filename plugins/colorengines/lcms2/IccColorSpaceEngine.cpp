@@ -26,7 +26,7 @@
 
 #include "LcmsColorSpace.h"
 
-#include <kdebug.h>
+#include <QDebug>
 
 // -- KoLcmsColorConversionTransformation --
 
@@ -125,10 +125,10 @@ void IccColorSpaceEngine::addProfile(const QString &filename)
     }
 
     if (profile->valid()) {
-        kDebug(31000) << "Valid profile : " << profile->fileName() << profile->name();
+        qDebug() << "Valid profile : " << profile->fileName() << profile->name();
         registry->addProfile(profile);
     } else {
-        kDebug(31000) << "Invalid profile : " << profile->fileName() << profile->name();
+        qDebug() << "Invalid profile : " << profile->fileName() << profile->name();
         delete profile;
     }
 

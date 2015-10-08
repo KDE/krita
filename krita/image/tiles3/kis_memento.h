@@ -28,9 +28,8 @@
 #include <kis_shared.h>
 #include <kis_shared_ptr.h>
 
-#include "kis_memento_manager.h"
 
-class KisTile;
+class KisMementoManager;
 
 class KisMemento;
 typedef KisSharedPtr<KisMemento> KisMementoSP;

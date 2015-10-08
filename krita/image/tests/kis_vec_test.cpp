@@ -18,7 +18,7 @@
 
 #include "kis_vec_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "kis_vec.h"
 
 void KisVecTest::testCreation()
@@ -44,4 +44,4 @@ void KisVecTest::testVec3D()
 }
 
 
-QTEST_KDEMAIN(KisVecTest, NoGUI)
+QTEST_MAIN(KisVecTest)

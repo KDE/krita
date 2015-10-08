@@ -28,8 +28,8 @@
 #include <KoColorSpace.h>
 
 #include "kis_types.h"
-#include "kis_paint_device.h"
 #include <new>
+#include "kis_paint_device.h"
 
 #ifdef _MSC_VER
 #pragma warning(disable: 4290) // disable "C++ exception specification ignored" warning
@@ -151,13 +151,12 @@ class KRITAIMAGE_EXPORT KisMathToolboxRegistry
 {
 
 public:
-
+    KisMathToolboxRegistry();
     virtual ~KisMathToolboxRegistry();
     static KisMathToolboxRegistry * instance();
 
 private:
 
-    KisMathToolboxRegistry();
     KisMathToolboxRegistry(const KisMathToolboxRegistry&);
     KisMathToolboxRegistry operator=(const KisMathToolboxRegistry&);
 };

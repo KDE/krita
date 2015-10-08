@@ -27,9 +27,8 @@
 #include <QDateTime>
 #include <QTime>
 
-#include <kglobal.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <OdfDebug.h>
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -424,13 +423,13 @@ QPair<QString, NumericStyleFormat> loadOdfNumberStyle(const KoXmlElement &parent
             format += e.text();
         } else if (localName == "suffix") {
             suffix = e.text();
-            kDebug(30003) << " suffix :" << suffix;
+            debugOdf << " suffix :" << suffix;
         } else if (localName == "prefix") {
             prefix = e.text();
-            kDebug(30003) << " prefix :" << prefix;
+            debugOdf << " prefix :" << prefix;
         } else if (localName == "currency-symbol") {
             dataStyle.currencySymbol = e.text();
-            kDebug(30003) << " currency-symbol:" << dataStyle.currencySymbol;
+            debugOdf << " currency-symbol:" << dataStyle.currencySymbol;
             format += e.text();
             //TODO
             // number:language="de" number:country="DE">€</number:currency-symbol>
@@ -588,18 +587,18 @@ QPair<QString, NumericStyleFormat> loadOdfNumberStyle(const KoXmlElement &parent
 
     const QString styleName = parent.attributeNS(KoXmlNS::style, "name", QString());
 
-kDebug()<<"99 *****************************************************************************";
+debugOdf<<"99 *****************************************************************************";
 //Q_ASSERT(false);
-    kDebug(30003) << "data style:" << styleName << " qt format=" << format;
+    debugOdf << "data style:" << styleName << " qt format=" << format;
     if (!prefix.isEmpty()) {
-        kDebug(30003) << " format.left( prefix.length() ) :" << format.left(prefix.length()) << " prefix :" << prefix;
+        debugOdf << " format.left( prefix.length() ) :" << format.left(prefix.length()) << " prefix :" << prefix;
         if (format.left(prefix.length()) == prefix) {
             format = format.right(format.length() - prefix.length());
         } else
             prefix.clear();
     }
     if (!suffix.isEmpty()) {
-        kDebug(30003) << "format.right( suffix.length() ) :" << format.right(suffix.length()) << " suffix :" << suffix;
+        debugOdf << "format.right( suffix.length() ) :" << format.right(suffix.length()) << " suffix :" << suffix;
         if (format.right(suffix.length()) == suffix) {
             format = format.left(format.length() - suffix.length());
         } else
@@ -611,7 +610,7 @@ kDebug()<<"99 ******************************************************************
     dataStyle.suffix = suffix;
     dataStyle.precision = precision;
     dataStyle.thousandsSep = thousandsSep;
-    kDebug(30003) << " finish insert format :" << format << " prefix :" << prefix << " suffix :" << suffix;
+    debugOdf << " finish insert format :" << format << " prefix :" << prefix << " suffix :" << suffix;
     return QPair<QString, NumericStyleFormat>(styleName, dataStyle);
 }
 
@@ -662,7 +661,7 @@ void addTextNumber(QString& text, KoXmlWriter &elementWriter)
 
 void parseOdfTimelocale(KoXmlWriter &elementWriter, QString &format, QString &text)
 {
-    kDebug(30003) << "parseOdfTimelocale(KoXmlWriter &elementWriter, QString & format, QString & text ) :" << format;
+    debugOdf << "parseOdfTimelocale(KoXmlWriter &elementWriter, QString & format, QString & text ) :" << format;
     do {
         if (!saveOdflocaleTimeFormat(elementWriter, format, text)) {
             text += format[0];
@@ -779,7 +778,7 @@ QString saveOdfTimeStyle(KoGenStyles &mainStyles, const QString &_format, bool l
 {
     Q_UNUSED(_prefix);
     Q_UNUSED(_suffix);
-    //kDebug(30003) << "QString KoOdfNumberStyles::saveOdfTimeStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
+    //debugOdf << "QString KoOdfNumberStyles::saveOdfTimeStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
     QString format(_format);
     KoGenStyle currentStyle(KoGenStyle::NumericTimeStyle);
     QBuffer buffer;
@@ -812,7 +811,7 @@ QString saveOdfTimeStyle(KoGenStyles &mainStyles, const QString &_format, bool l
 //convert locale string to good format
 void parseOdfDatelocale(KoXmlWriter &elementWriter, QString &format, QString &text)
 {
-    kDebug(30003) << format;
+    debugOdf << format;
     do {
         if (format.startsWith("%Y")) {
             addTextNumber(text, elementWriter);
@@ -890,7 +889,7 @@ QString saveOdfDateStyle(KoGenStyles &mainStyles, const QString &_format, bool l
 {
     Q_UNUSED(_prefix);
     Q_UNUSED(_suffix);
-    //kDebug(30003) << _format;
+    //debugOdf << _format;
     QString format(_format);
 
     // Not supported into Qt: "era" "week-of-year" "quarter"
@@ -1017,7 +1016,7 @@ QString saveOdfDateStyle(KoGenStyles &mainStyles, const QString &_format, bool l
 QString saveOdfFractionStyle(KoGenStyles &mainStyles, const QString &_format,
         const QString &_prefix, const QString &_suffix)
 {
-    //kDebug(30003) << "QString saveOdfFractionStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
+    //debugOdf << "QString saveOdfFractionStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
     QString format(_format);
 
     KoGenStyle currentStyle(KoGenStyle::NumericFractionStyle);
@@ -1077,7 +1076,7 @@ QString saveOdfFractionStyle(KoGenStyles &mainStyles, const QString &_format,
 QString saveOdfNumberStyle(KoGenStyles &mainStyles, const QString &_format,
         const QString &_prefix, const QString &_suffix, bool thousandsSep)
 {
-    //kDebug(30003) << "QString saveOdfNumberStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
+    //debugOdf << "QString saveOdfNumberStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
     QString format(_format);
 
     KoGenStyle currentStyle(KoGenStyle::NumericNumberStyle);
@@ -1096,13 +1095,13 @@ QString saveOdfNumberStyle(KoGenStyles &mainStyles, const QString &_format,
         else if (format[0] == '0' && !beforeSeparator)
             decimalplaces++;
         else
-            kDebug(30003) << " error format 0";
+            debugOdf << " error format 0";
         format.remove(0, 1);
     } while (format.length() > 0);
     text = _prefix ;
     addTextNumber(text, elementWriter);
     number_number number(&elementWriter);
-    //kDebug(30003) << " decimalplaces :" << decimalplaces << " integerdigits :" << integerdigits;
+    //debugOdf << " decimalplaces :" << decimalplaces << " integerdigits :" << integerdigits;
     if (!beforeSeparator) {
         number.set_number_decimal_places(decimalplaces);
     }
@@ -1149,7 +1148,7 @@ QString saveOdfPercentageStyle(KoGenStyles &mainStyles, const QString &_format,
     //<number:text>%</number:text>
     //</number:percentage-style>
 
-    //kDebug(30003) << "QString saveOdfPercentageStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
+    //debugOdf << "QString saveOdfPercentageStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
     QString format(_format);
 
     KoGenStyle currentStyle(KoGenStyle::NumericPercentageStyle);
@@ -1168,7 +1167,7 @@ QString saveOdfPercentageStyle(KoGenStyles &mainStyles, const QString &_format,
         else if (format[0] == '0' && !beforeSeparator)
             decimalplaces++;
         else
-            kDebug(30003) << " error format 0";
+            debugOdf << " error format 0";
         format.remove(0, 1);
     } while (format.length() > 0);
     text = _prefix ;
@@ -1201,7 +1200,7 @@ QString saveOdfScientificStyle(KoGenStyles &mainStyles, const QString &_format,
     //</number:number-style>
 
     //example 000,000e+0000
-    //kDebug(30003) << "QString saveOdfScientificStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
+    //debugOdf << "QString saveOdfScientificStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
     QString format(_format);
 
     KoGenStyle currentStyle(KoGenStyle::NumericScientificStyle);
@@ -1230,7 +1229,7 @@ QString saveOdfScientificStyle(KoGenStyles &mainStyles, const QString &_format,
                 else if (format[0] == '-')
                     positive = false;
                 else
-                    kDebug(30003) << "Error into scientific number";
+                    debugOdf << "Error into scientific number";
                 exponential = true;
             }
         } else {
@@ -1239,7 +1238,7 @@ QString saveOdfScientificStyle(KoGenStyles &mainStyles, const QString &_format,
             else if (format[0] == '0' && !positive)
                 exponentdigits--;
             else
-                kDebug(30003) << " error into scientific number exponential value";
+                debugOdf << " error into scientific number exponential value";
         }
         format.remove(0, 1);
     } while (format.length() > 0);
@@ -1247,7 +1246,7 @@ QString saveOdfScientificStyle(KoGenStyles &mainStyles, const QString &_format,
     addTextNumber(text, elementWriter);
 
     number_scientific_number number(&elementWriter);
-    //kDebug(30003) << " decimalplace :" << decimalplace << " integerdigits :" << integerdigits << " exponentdigits :" << exponentdigits;
+    //debugOdf << " decimalplace :" << decimalplace << " integerdigits :" << integerdigits << " exponentdigits :" << exponentdigits;
     if (!beforeSeparator) {
         number.set_number_decimal_places(decimalplace);
     }
@@ -1278,7 +1277,7 @@ QString saveOdfCurrencyStyle(KoGenStyles &mainStyles,
     //<number:currency-symbol>VEB</number:currency-symbol>
     //</number:currency-style>
 
-    //kDebug(30003) << "QString saveOdfCurrencyStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
+    //debugOdf << "QString saveOdfCurrencyStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
     QString format(_format);
 
     KoGenStyle currentStyle(KoGenStyle::NumericCurrencyStyle);
@@ -1297,7 +1296,7 @@ QString saveOdfCurrencyStyle(KoGenStyles &mainStyles,
         else if (format[0] == '0' && !beforeSeparator)
             decimalplaces++;
         else
-            kDebug(30003) << " error format 0";
+            debugOdf << " error format 0";
         format.remove(0, 1);
     } while (format.length() > 0);
 
@@ -1305,7 +1304,7 @@ QString saveOdfCurrencyStyle(KoGenStyles &mainStyles,
     addTextNumber(text, elementWriter);
 
     number_number number(&elementWriter);
-    //kDebug(30003) << " decimalplaces :" << decimalplaces << " integerdigits :" << integerdigits;
+    //debugOdf << " decimalplaces :" << decimalplaces << " integerdigits :" << integerdigits;
     if (!beforeSeparator) {
         number.set_number_decimal_places(decimalplaces);
     }
@@ -1317,7 +1316,7 @@ QString saveOdfCurrencyStyle(KoGenStyles &mainStyles,
     addCalligraNumericStyleExtension(elementWriter, _suffix, _prefix);
 
     number_currency_symbol sym(&elementWriter);
-    //kDebug(30003) << " currency-symbol:" << symbol;
+    //debugOdf << " currency-symbol:" << symbol;
     sym.addTextNode(symbol.toUtf8());
     sym.end();
 
@@ -1334,7 +1333,7 @@ QString saveOdfTextStyle(KoGenStyles &mainStyles, const QString &_format, const 
     //<number:text-content/>
     ///</number:text-style>
 
-    //kDebug(30003) << "QString saveOdfTextStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
+    //debugOdf << "QString saveOdfTextStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
 
     KoGenStyle currentStyle(KoGenStyle::NumericTextStyle);
     QBuffer buffer;

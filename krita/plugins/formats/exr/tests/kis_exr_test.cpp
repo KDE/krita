@@ -23,7 +23,7 @@
 #include <QTest>
 #include <QCoreApplication>
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <half.h>
 #include <QMimeDatabase>
 #include <QMimeType>
@@ -97,6 +97,6 @@ void KisExrTest::testRoundTrip()
 
 }
 
-QTEST_KDEMAIN(KisExrTest, GUI)
+QTEST_MAIN(KisExrTest)
 
 

@@ -37,10 +37,10 @@
 #include <QMimeData>
 
 #include <klocalizedstring.h>
-#include <kpushbutton.h>
+#include <ksharedconfig.h>
 #include <kis_debug.h>
 #include <QUrl>
-#include <kglobal.h>
+
 
 #include <KoFileDialog.h>
 #include <KoIcon.h>

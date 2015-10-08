@@ -21,7 +21,7 @@
 #include <QTest>
 #include <QCoreApplication>
 #include <klocalizedstring.h>
-#include <qtest_kde.h>
+#include <QTest>
 #include "../../../../libpsd/psd.h"
 #include "../psd_header.h"
 #include "../psd_colormode_block.h"
@@ -76,5 +76,5 @@ void PSDColorModeBlockTest::testLoadingIndexed()
 }
 
 
-QTEST_KDEMAIN(PSDColorModeBlockTest, GUI)
+QTEST_MAIN(PSDColorModeBlockTest)
 

@@ -26,7 +26,7 @@
 #include <KoCanvasResourceManager.h>
 #include <KoTextDocument.h>
 
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 
 #include <QVariant>
 #include <QTextOption>
@@ -143,7 +143,7 @@ public:
                 currentTabIndex = tabList.count();
                 tabList << currentTab;
             } else {
-                kWarning(32500) << "Unexpected input from tabChanged signal";
+                warnWidgets << "Unexpected input from tabChanged signal";
                 Q_ASSERT(false);
                 return;
             }

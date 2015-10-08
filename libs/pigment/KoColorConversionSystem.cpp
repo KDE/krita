@@ -289,10 +289,10 @@ void KoColorConversionSystem::createColorConverters(const KoColorSpace* colorSpa
     }
     Q_ASSERT(bestPath);
     const KoColorSpace* endColorSpace = defaultColorSpaceForNode(bestPath->endNode());
-    fromCS = createTransformationFromPath(bestPath, colorSpace, endColorSpace, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+    fromCS = createTransformationFromPath(bestPath, colorSpace, endColorSpace, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
     Path* returnPath = findBestPath(bestPath->endNode(), csNode);
     Q_ASSERT(returnPath);
-    toCS = createTransformationFromPath(returnPath, endColorSpace, colorSpace, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+    toCS = createTransformationFromPath(returnPath, endColorSpace, colorSpace, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
     Q_ASSERT(*toCS->dstColorSpace() == *fromCS->srcColorSpace());
     Q_ASSERT(*fromCS->dstColorSpace() == *toCS->srcColorSpace());
 }

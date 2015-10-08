@@ -23,7 +23,7 @@
 #include <QTextBlock>
 #include <QTextCursor>
 
-#include <kdebug.h>
+#include "TextDebug.h"
 
 class Q_DECL_HIDDEN KoTextEditingPlugin::Private
 {

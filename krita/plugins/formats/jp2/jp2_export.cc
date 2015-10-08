@@ -108,8 +108,7 @@ KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& fro
 
     KisConfig().setExportConfiguration("JP2", cfg);
 
-    QUrl url;
-    url.setPath(filename);
+    QUrl url = QUrl::fromLocalFile(filename);
 
     image->refreshGraph();
     image->lock();

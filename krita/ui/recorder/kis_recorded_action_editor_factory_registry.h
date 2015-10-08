@@ -33,10 +33,9 @@ class KisRecordedActionEditorFactory;
  */
 class KRITAUI_EXPORT KisRecordedActionEditorFactoryRegistry
 {
-private:
+public:
     KisRecordedActionEditorFactoryRegistry();
     ~KisRecordedActionEditorFactoryRegistry();
-public:
     static KisRecordedActionEditorFactoryRegistry* instance();
     /**
      * Add a factory of action editor.

@@ -19,8 +19,7 @@
 #ifndef __KIS_CROSS_DEVICE_COLOR_PICKER_H
 #define __KIS_CROSS_DEVICE_COLOR_PICKER_H
 
-#include "kis_paint_device.h"
-#include "kis_fixed_paint_device.h"
+#include "KoColorSpace.h"
 #include "kis_random_sub_accessor.h"
 
 
@@ -122,8 +121,8 @@ private:
         Traits::template sampleData<useOldData>(m_accessor, m_data, m_srcCS);
 
         m_srcCS->convertPixelsTo(m_data, dst, m_dstCS, 1,
-                                 KoColorConversionTransformation::InternalRenderingIntent,
-                                 KoColorConversionTransformation::InternalConversionFlags);
+                                 KoColorConversionTransformation::internalRenderingIntent(),
+                                 KoColorConversionTransformation::internalConversionFlags());
     }
 
 private:

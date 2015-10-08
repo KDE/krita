@@ -24,7 +24,7 @@
 #include "dcolorarrow.xbm"
 #include "dcolorreset.xpm"
 
-#include <kcolordialog.h>
+#include <QColorDialog>
 
 #include <QBitmap>
 #include <QBrush>
@@ -271,7 +271,8 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
         if(d->tmpSelection == Foreground ) {
             if( d->popDialog) {
                 QColor c = d->displayRenderer->toQColor(d->foregroundColor);
-                if (KColorDialog::getColor(c, this) == KColorDialog::Accepted) {
+                c = QColorDialog::getColor(c, this) ;
+                if (c.isValid()) {
                     d->foregroundColor = d->displayRenderer->approximateFromRenderedQColor(c);
                     emit foregroundColorChanged(d->foregroundColor);
                 }
@@ -287,7 +288,8 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
         if(d->tmpSelection == Background ) {
             if( d->popDialog) {
                 QColor c = d->displayRenderer->toQColor(d->backgroundColor);
-                if (KColorDialog::getColor(c, this) == KColorDialog::Accepted) {
+                c = QColorDialog::getColor(c, this);
+                if (c.isValid()) {
                     d->backgroundColor = d->displayRenderer->approximateFromRenderedQColor(c);
                     emit backgroundColorChanged(d->backgroundColor);
                 }

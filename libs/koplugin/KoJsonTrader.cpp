@@ -104,7 +104,7 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
             QJsonObject json = loader->metaData().value("MetaData").toObject();
 
             if (json.isEmpty()) {
-                qDebug() << dirIter.filePath() << "has no json!";
+                //qDebug() << dirIter.filePath() << "has no json!";
             }
             if (!json.isEmpty()) {
                 QJsonObject pluginData = json.value("KPlugin").toObject();

@@ -20,7 +20,7 @@
 
 #include <math.h>
 
-#include <kdebug.h>
+#include <VectorImageDebug.h>
 
 #include "EmfObjects.h"
 
@@ -101,16 +101,16 @@ void OutputPainterStrategy::init( const Header *header )
     QSize  headerBoundsSize = header->bounds().size();
 
 #if DEBUG_EMFPAINT
-    kDebug(31000) << "----------------------------------------------------------------------";
-    kDebug(31000) << "Shape size               =" << m_outputSize.width() << m_outputSize.height() << " pt";
-    kDebug(31000) << "----------------------------------------------------------------------";
-    kDebug(31000) << "Boundary box (dev units) =" << header->bounds().x() << header->bounds().y()
+    debugVectorImage << "----------------------------------------------------------------------";
+    debugVectorImage << "Shape size               =" << m_outputSize.width() << m_outputSize.height() << " pt";
+    debugVectorImage << "----------------------------------------------------------------------";
+    debugVectorImage << "Boundary box (dev units) =" << header->bounds().x() << header->bounds().y()
                   << header->bounds().width() << header->bounds().height();
-    kDebug(31000) << "Frame (phys size)        =" << header->frame().x() << header->frame().y()
+    debugVectorImage << "Frame (phys size)        =" << header->frame().x() << header->frame().y()
                   << header->frame().width() << header->frame().height() << " *0.01 mm";
 
-    kDebug(31000) << "Device =" << header->device().width() << header->device().height();
-    kDebug(31000) << "Millimeters =" << header->millimeters().width()
+    debugVectorImage << "Device =" << header->device().width() << header->device().height();
+    debugVectorImage << "Millimeters =" << header->millimeters().width()
                   << header->millimeters().height();
 #endif
 
@@ -134,7 +134,7 @@ void OutputPainterStrategy::init( const Header *header )
             scaleY = scaleX;
     }
 #if DEBUG_EMFPAINT
-    kDebug(31000) << "scale = " << scaleX << ", " << scaleY;
+    debugVectorImage << "scale = " << scaleX << ", " << scaleY;
 #endif
 
     // Transform the EMF object so that it fits in the shape.  The
@@ -181,7 +181,7 @@ void OutputPainterStrategy::cleanup( const Header *header )
 
 #if DEBUG_EMFPAINT
     if (m_painterSaves > 0)
-        kDebug(33100) << "WARNING: UNRESTORED DC's:" << m_painterSaves;
+        debugVectorImage << "WARNING: UNRESTORED DC's:" << m_painterSaves;
 #endif
 
     // Restore all the save()s that were done during the processing.
@@ -204,7 +204,7 @@ void OutputPainterStrategy::setPixelV( QPoint &point, quint8 red, quint8 green, 
     Q_UNUSED( reserved );
 
 #if DEBUG_EMFPAINT
-    kDebug(31000) << point << red << green << blue;
+    debugVectorImage << point << red << green << blue;
 #endif
 
     m_painter->save();
@@ -221,7 +221,7 @@ void OutputPainterStrategy::setPixelV( QPoint &point, quint8 red, quint8 green, 
 void OutputPainterStrategy::beginPath()
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000);
+    debugVectorImage;
 #endif
 
     delete( m_path );
@@ -232,7 +232,7 @@ void OutputPainterStrategy::beginPath()
 void OutputPainterStrategy::closeFigure()
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000);
+    debugVectorImage;
 #endif
 
     m_path->closeSubpath();
@@ -241,7 +241,7 @@ void OutputPainterStrategy::closeFigure()
 void OutputPainterStrategy::endPath()
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000);
+    debugVectorImage;
 #endif
 
     m_path->setFillRule( m_fillRule );
@@ -251,7 +251,7 @@ void OutputPainterStrategy::endPath()
 void OutputPainterStrategy::saveDC()
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000);
+    debugVectorImage;
 #endif
 
     // A little trick here: Save the worldTransform in the painter.
@@ -272,7 +272,7 @@ void OutputPainterStrategy::saveDC()
 void OutputPainterStrategy::restoreDC( const qint32 savedDC )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << savedDC;
+    debugVectorImage << savedDC;
 #endif
 
     // Note that savedDC is always negative
@@ -282,7 +282,7 @@ void OutputPainterStrategy::restoreDC( const qint32 savedDC )
             --m_painterSaves;
         }
         else {
-            kDebug(33100) << "restoreDC(): try to restore painter without save" << savedDC - i;
+            debugVectorImage << "restoreDC(): try to restore painter without save" << savedDC - i;
             break;
         }
     }
@@ -296,7 +296,7 @@ void OutputPainterStrategy::restoreDC( const qint32 savedDC )
 
 void OutputPainterStrategy::setMetaRgn()
 {
-    kDebug(33100) << "EMR_SETMETARGN not yet implemented";
+    debugVectorImage << "EMR_SETMETARGN not yet implemented";
 }
 
 
@@ -381,11 +381,11 @@ void OutputPainterStrategy::recalculateWorldTransform()
         flip = true;
     }
     if (flip) {
-        //kDebug(31000) << "Flipping" << midpointX << midpointY << scaleX << scaleY;
+        //debugVectorImage << "Flipping" << midpointX << midpointY << scaleX << scaleY;
         m_worldTransform.translate(midpointX, midpointY);
         m_worldTransform.scale(scaleX, scaleY);
         m_worldTransform.translate(-midpointX, -midpointY);
-        //kDebug(31000) << "After flipping for window" << mWorldTransform;
+        //debugVectorImage << "After flipping for window" << mWorldTransform;
     }
 
     // Update the world transform if both window and viewport are set...
@@ -413,12 +413,12 @@ void OutputPainterStrategy::recalculateWorldTransform()
 void OutputPainterStrategy::setWindowOrgEx( const QPoint &origin )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << origin;
+    debugVectorImage << origin;
 #endif
 
     // FIXME: See unanswered question at the start of this section.
     if (m_windowOrg == origin) {
-        //kDebug(31000) << "same origin as before";
+        //debugVectorImage << "same origin as before";
         return;
     }
 
@@ -430,12 +430,12 @@ void OutputPainterStrategy::setWindowOrgEx( const QPoint &origin )
 void OutputPainterStrategy::setWindowExtEx( const QSize &size )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << size;
+    debugVectorImage << size;
 #endif
 
     // FIXME: See unanswered question at the start of this section.
     if (m_windowExt == size) {
-        //kDebug(31000) << "same extension as before";
+        //debugVectorImage << "same extension as before";
         return;
     }
 
@@ -448,12 +448,12 @@ void OutputPainterStrategy::setWindowExtEx( const QSize &size )
 void OutputPainterStrategy::setViewportOrgEx( const QPoint &origin )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << origin;
+    debugVectorImage << origin;
 #endif
 
     // FIXME: See unanswered question at the start of this section.
     if (m_viewportOrg == origin) {
-        //kDebug(31000) << "same origin as before";
+        //debugVectorImage << "same origin as before";
         return;
     }
 
@@ -465,12 +465,12 @@ void OutputPainterStrategy::setViewportOrgEx( const QPoint &origin )
 void OutputPainterStrategy::setViewportExtEx( const QSize &size )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << size;
+    debugVectorImage << size;
 #endif
 
     // FIXME: See unanswered question at the start of this section.
     if (m_viewportExt == size) {
-        //kDebug(31000) << "same extension as before";
+        //debugVectorImage << "same extension as before";
         return;
     }
 
@@ -487,9 +487,9 @@ void OutputPainterStrategy::modifyWorldTransform( quint32 mode, float M11, float
 {
 #if DEBUG_EMFPAINT
     if (mode == MWT_IDENTITY)
-        kDebug(31000) << "Identity matrix";
+        debugVectorImage << "Identity matrix";
     else
-        kDebug(31000) << mode << M11 << M12 << M21 << M22 << Dx << Dy;
+        debugVectorImage << mode << M11 << M12 << M21 << M22 << Dx << Dy;
 #endif
 
     QTransform matrix( M11, M12, M21, M22, Dx, Dy);
@@ -503,7 +503,7 @@ void OutputPainterStrategy::modifyWorldTransform( quint32 mode, float M11, float
     } else if ( mode == MWT_SET ) {
         m_worldTransform = matrix;
     } else {
-	qWarning() << "Unimplemented transform mode" << mode;
+	warnVectorImage << "Unimplemented transform mode" << mode;
     }
 
     // Apply the output transform.
@@ -515,7 +515,7 @@ void OutputPainterStrategy::setWorldTransform( float M11, float M12, float M21,
                                                float M22, float Dx, float Dy )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << M11 << M12 << M21 << M22 << Dx << Dy;
+    debugVectorImage << M11 << M12 << M21 << M22 << Dx << Dy;
 #endif
 
     QTransform matrix( M11, M12, M21, M22, Dx, Dy);
@@ -538,7 +538,7 @@ void OutputPainterStrategy::createPen( quint32 ihPen, quint32 penStyle, quint32 
     Q_UNUSED( reserved );
 
 #if DEBUG_EMFPAINT
-    kDebug(31000) << ihPen << hex << penStyle << dec << x << y
+    debugVectorImage << ihPen << hex << penStyle << dec << x << y
                   << red << green << blue << reserved;
 #endif
 
@@ -575,15 +575,15 @@ void OutputPainterStrategy::createPen( quint32 ihPen, quint32 penStyle, quint32 
         pen.setStyle( Qt::SolidLine );
         break;
     case PS_USERSTYLE:
-        kDebug(33100) << "UserStyle pen not yet supported, using SolidLine";
+        debugVectorImage << "UserStyle pen not yet supported, using SolidLine";
         pen.setStyle( Qt::SolidLine );
         break;
     case PS_ALTERNATE:
-        kDebug(33100) << "Alternate pen not yet supported, using DashLine";
+        debugVectorImage << "Alternate pen not yet supported, using DashLine";
         pen.setStyle( Qt::DashLine );
         break;
     default:
-        kDebug(33100) << "unexpected pen type, using SolidLine" << (penStyle & 0xF);
+        debugVectorImage << "unexpected pen type, using SolidLine" << (penStyle & 0xF);
         pen.setStyle( Qt::SolidLine );
     }
 
@@ -598,7 +598,7 @@ void OutputPainterStrategy::createPen( quint32 ihPen, quint32 penStyle, quint32 
         pen.setCapStyle( Qt::FlatCap );
         break;
     default:
-        kDebug(33100) << "unexpected cap style, using SquareCap" << (penStyle & PS_ENDCAP_FLAT);
+        debugVectorImage << "unexpected cap style, using SquareCap" << (penStyle & PS_ENDCAP_FLAT);
         pen.setCapStyle( Qt::SquareCap );
     }
     pen.setWidthF(x * m_outputScale);
@@ -615,7 +615,7 @@ void OutputPainterStrategy::createBrushIndirect( quint32 ihBrush, quint32 brushS
     Q_UNUSED( brushHatch );
 
 #if DEBUG_EMFPAINT
-    kDebug(31000) << ihBrush << hex << brushStyle << dec
+    debugVectorImage << ihBrush << hex << brushStyle << dec
                   << red << green << blue << reserved << brushHatch;
 #endif
 
@@ -700,7 +700,7 @@ void OutputPainterStrategy::extCreateFontIndirectW( const ExtCreateFontIndirectW
 void OutputPainterStrategy::selectStockObject( const quint32 ihObject )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << ihObject;
+    debugVectorImage << ihObject;
 #endif
 
     switch ( ihObject ) {
@@ -762,14 +762,14 @@ void OutputPainterStrategy::selectStockObject( const quint32 ihObject )
         // FIXME
 	break;
     default:
-	qWarning() << "Unexpected stock object:" << ( ihObject & 0x8000000 );
+	warnVectorImage << "Unexpected stock object:" << ( ihObject & 0x8000000 );
     }
 }
 
 void OutputPainterStrategy::selectObject( const quint32 ihObject )
 {
 #if DEBUG_EMFPAINT
-    kDebug(33100) << hex << ihObject << dec;
+    debugVectorImage << hex << ihObject << dec;
 #endif
 
     if ( ihObject & 0x80000000 ) {
@@ -788,7 +788,7 @@ void OutputPainterStrategy::selectObject( const quint32 ihObject )
 	    m_painter->setFont( obj.value<QFont>() );
 	    break;
 	default:
-	    kDebug(33100) << "Unexpected type:" << obj.typeName();
+	    debugVectorImage << "Unexpected type:" << obj.typeName();
 	}
     }
 }
@@ -801,7 +801,7 @@ void OutputPainterStrategy::deleteObject( const quint32 ihObject )
 void OutputPainterStrategy::arc( const QRect &box, const QPoint &start, const QPoint &end )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << box << start << end;
+    debugVectorImage << box << start << end;
 #endif
 
     QPoint centrePoint = box.center();
@@ -816,7 +816,7 @@ void OutputPainterStrategy::arc( const QRect &box, const QPoint &start, const QP
 void OutputPainterStrategy::chord( const QRect &box, const QPoint &start, const QPoint &end )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << box << start << end;
+    debugVectorImage << box << start << end;
 #endif
 
     QPoint centrePoint = box.center();
@@ -831,7 +831,7 @@ void OutputPainterStrategy::chord( const QRect &box, const QPoint &start, const 
 void OutputPainterStrategy::pie( const QRect &box, const QPoint &start, const QPoint &end )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << box << start << end;
+    debugVectorImage << box << start << end;
 #endif
 
     QPoint centrePoint = box.center();
@@ -846,7 +846,7 @@ void OutputPainterStrategy::pie( const QRect &box, const QPoint &start, const QP
 void OutputPainterStrategy::ellipse( const QRect &box )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << box;
+    debugVectorImage << box;
 #endif
 
     m_painter->drawEllipse( box );
@@ -855,7 +855,7 @@ void OutputPainterStrategy::ellipse( const QRect &box )
 void OutputPainterStrategy::rectangle( const QRect &box )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << box;
+    debugVectorImage << box;
 #endif
 
     m_painter->drawRect( box );
@@ -864,7 +864,7 @@ void OutputPainterStrategy::rectangle( const QRect &box )
 void OutputPainterStrategy::setMapMode( const quint32 mapMode )
 {
 #if DEBUG_EMFPAINT
-    kDebug(33100) << "Set map mode:" << mapMode;
+    debugVectorImage << "Set map mode:" << mapMode;
 #endif
 
     m_mapMode = (MapMode)mapMode;
@@ -873,7 +873,7 @@ void OutputPainterStrategy::setMapMode( const quint32 mapMode )
 void OutputPainterStrategy::setBkMode( const quint32 backgroundMode )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << backgroundMode;
+    debugVectorImage << backgroundMode;
 #endif
 
     if ( backgroundMode == TRANSPARENT ) {
@@ -881,7 +881,7 @@ void OutputPainterStrategy::setBkMode( const quint32 backgroundMode )
     } else if ( backgroundMode == OPAQUE ) {
         m_painter->setBackgroundMode( Qt::OpaqueMode );
     } else {
-        kDebug(33100) << "EMR_SETBKMODE: Unexpected value -" << backgroundMode;
+        debugVectorImage << "EMR_SETBKMODE: Unexpected value -" << backgroundMode;
         Q_ASSERT( 0 );
     }
 }
@@ -889,7 +889,7 @@ void OutputPainterStrategy::setBkMode( const quint32 backgroundMode )
 void OutputPainterStrategy::setPolyFillMode( const quint32 polyFillMode )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << polyFillMode;
+    debugVectorImage << polyFillMode;
 #endif
 
     if ( polyFillMode == ALTERNATE ) {
@@ -897,7 +897,7 @@ void OutputPainterStrategy::setPolyFillMode( const quint32 polyFillMode )
     } else if ( polyFillMode == WINDING ) {
 	m_fillRule = Qt::WindingFill;
     } else {
-	kDebug(33100) << "EMR_SETPOLYFILLMODE: Unexpected value -" << polyFillMode;
+	debugVectorImage << "EMR_SETPOLYFILLMODE: Unexpected value -" << polyFillMode;
 	Q_ASSERT( 0 );
     }
 }
@@ -905,7 +905,7 @@ void OutputPainterStrategy::setPolyFillMode( const quint32 polyFillMode )
 void OutputPainterStrategy::setLayout( const quint32 layoutMode )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << layoutMode;
+    debugVectorImage << layoutMode;
 #endif
 
     if ( layoutMode == LAYOUT_LTR ) {
@@ -913,7 +913,7 @@ void OutputPainterStrategy::setLayout( const quint32 layoutMode )
     } else if ( layoutMode == LAYOUT_RTL ) {
         m_painter->setLayoutDirection( Qt::RightToLeft );
     } else {
-        kDebug(33100) << "EMR_SETLAYOUT: Unexpected value -" << layoutMode;
+        debugVectorImage << "EMR_SETLAYOUT: Unexpected value -" << layoutMode;
         Q_ASSERT( 0 );
     }
 }
@@ -921,7 +921,7 @@ void OutputPainterStrategy::setLayout( const quint32 layoutMode )
 void OutputPainterStrategy::setTextAlign( const quint32 textAlignMode )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << textAlignMode;
+    debugVectorImage << textAlignMode;
 #endif
 
     m_textAlignMode = textAlignMode;
@@ -933,7 +933,7 @@ void OutputPainterStrategy::setTextColor( const quint8 red, const quint8 green, 
     Q_UNUSED( reserved );
 
 #if DEBUG_EMFPAINT
-    kDebug(31000) << red << green << blue << reserved;
+    debugVectorImage << red << green << blue << reserved;
 #endif
 
     m_textPen.setColor( QColor( red, green, blue ) );
@@ -945,7 +945,7 @@ void OutputPainterStrategy::setBkColor( const quint8 red, const quint8 green, co
     Q_UNUSED( reserved );
 
 #if DEBUG_EMFPAINT
-    kDebug(31000) << red << green << blue << reserved;
+    debugVectorImage << red << green << blue << reserved;
 #endif
 
     m_painter->setBackground( QBrush( QColor( red, green, blue ) ) );
@@ -960,7 +960,7 @@ void OutputPainterStrategy::extTextOut( const QRect &bounds, const EmrTextObject
     const QString &text = textObject.textString();
 
 #if DEBUG_EMFPAINT
-    kDebug(31000) << "Ref point: " << referencePoint
+    debugVectorImage << "Ref point: " << referencePoint
                   << "options: " << hex << textObject.options() << dec
                   << "rectangle: " << textObject.rectangle()
                   << "text: " << textObject.textString();
@@ -973,7 +973,7 @@ void OutputPainterStrategy::extTextOut( const QRect &bounds, const EmrTextObject
     if (m_textAlignMode & TA_UPDATECP) {
         // (left, top) position = current logical position
 #if DEBUG_EMFPAINT
-        kDebug(31000) << "TA_UPDATECP: use current logical position";
+        debugVectorImage << "TA_UPDATECP: use current logical position";
 #endif
         x = m_currentCoords.x();
         y = m_currentCoords.y();
@@ -1002,14 +1002,14 @@ void OutputPainterStrategy::extTextOut( const QRect &bounds, const EmrTextObject
     }
 
 #if DEBUG_EMFPAINT
-    kDebug(31000) << "textWidth = " << textWidth << "height = " << textHeight;
+    debugVectorImage << "textWidth = " << textWidth << "height = " << textHeight;
 
-    kDebug(31000) << "font = " << m_painter->font()
+    debugVectorImage << "font = " << m_painter->font()
                   << "pointSize = " << m_painter->font().pointSize()
                   << "ascent = " << fm.ascent() << "descent = " << fm.descent()
                   << "height = " << fm.height()
                   << "leading = " << fm.leading();
-    kDebug(31000) << "actual point = " << x << y;
+    debugVectorImage << "actual point = " << x << y;
 #endif
 
     // Debug code that paints a rectangle around the output area.
@@ -1029,14 +1029,14 @@ void OutputPainterStrategy::extTextOut( const QRect &bounds, const EmrTextObject
     // when fonts are switched, the replacement fonts are sometimes
     // wider than the original fonts.
     QRect  worldRect(m_worldTransform.mapRect(QRect(x, y, textWidth, textHeight)));
-    //kDebug(31000) << "rects:" << QRect(x, y, textWidth, textHeight) << worldRect;
+    //debugVectorImage << "rects:" << QRect(x, y, textWidth, textHeight) << worldRect;
     qreal  scaleX = qreal(1.0);
     qreal  scaleY = qreal(1.0);
     if (bounds.width() < worldRect.width())
         scaleX = qreal(bounds.width()) / qreal(worldRect.width());
     if (bounds.height() < worldRect.height())
         scaleY = qreal(bounds.height()) / qreal(worldRect.height());
-    //kDebug(31000) << "scale:" << scaleX << scaleY;
+    //debugVectorImage << "scale:" << scaleX << scaleY;
 
     if (scaleX < qreal(1.0) || scaleY < qreal(1.0)) {
         m_painter->translate(-x, -y);
@@ -1057,7 +1057,7 @@ void OutputPainterStrategy::extTextOut( const QRect &bounds, const EmrTextObject
 void OutputPainterStrategy::moveToEx( const qint32 x, const qint32 y )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << x << y;
+    debugVectorImage << x << y;
 #endif
 
     if ( m_currentlyBuildingPath )
@@ -1069,7 +1069,7 @@ void OutputPainterStrategy::moveToEx( const qint32 x, const qint32 y )
 void OutputPainterStrategy::lineTo( const QPoint &finishPoint )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << finishPoint;
+    debugVectorImage << finishPoint;
 #endif
 
     if ( m_currentlyBuildingPath )
@@ -1083,7 +1083,7 @@ void OutputPainterStrategy::lineTo( const QPoint &finishPoint )
 void OutputPainterStrategy::arcTo( const QRect &box, const QPoint &start, const QPoint &end )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << box << start << end;
+    debugVectorImage << box << start << end;
 #endif
 
     QPoint centrePoint = box.center();
@@ -1100,7 +1100,7 @@ void OutputPainterStrategy::polygon16( const QRect &bounds, const QList<QPoint> 
     Q_UNUSED( bounds );
 
 #if DEBUG_EMFPAINT
-    kDebug(31000) << bounds << points;
+    debugVectorImage << bounds << points;
 #endif
 
     QVector<QPoint> pointVector = points.toVector();
@@ -1112,7 +1112,7 @@ void OutputPainterStrategy::polyLine( const QRect &bounds, const QList<QPoint> p
     Q_UNUSED( bounds );
 
 #if DEBUG_EMFPAINT
-    kDebug(31000) << bounds << points;
+    debugVectorImage << bounds << points;
 #endif
 
     QVector<QPoint> pointVector = points.toVector();
@@ -1122,7 +1122,7 @@ void OutputPainterStrategy::polyLine( const QRect &bounds, const QList<QPoint> p
 void OutputPainterStrategy::polyLine16( const QRect &bounds, const QList<QPoint> points )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << bounds << points;
+    debugVectorImage << bounds << points;
 #endif
 
     polyLine( bounds, points );
@@ -1133,7 +1133,7 @@ void OutputPainterStrategy::polyPolygon16( const QRect &bounds, const QList< QVe
     Q_UNUSED( bounds );
 
 #if DEBUG_EMFPAINT
-    kDebug(31000) << bounds << points;
+    debugVectorImage << bounds << points;
 #endif
 
     for ( int i = 0; i < points.size(); ++i ) {
@@ -1146,7 +1146,7 @@ void OutputPainterStrategy::polyPolyLine16( const QRect &bounds, const QList< QV
     Q_UNUSED( bounds );
 
 #if DEBUG_EMFPAINT
-    kDebug(31000) << bounds << points;
+    debugVectorImage << bounds << points;
 #endif
 
     for ( int i = 0; i < points.size(); ++i ) {
@@ -1159,7 +1159,7 @@ void OutputPainterStrategy::polyLineTo16( const QRect &bounds, const QList<QPoin
     Q_UNUSED( bounds );
 
 #if DEBUG_EMFPAINT
-    kDebug(31000) << bounds << points;
+    debugVectorImage << bounds << points;
 #endif
 
     for ( int i = 0; i < points.count(); ++i ) {
@@ -1170,7 +1170,7 @@ void OutputPainterStrategy::polyLineTo16( const QRect &bounds, const QList<QPoin
 void OutputPainterStrategy::polyBezier16( const QRect &bounds, const QList<QPoint> points )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << bounds << points;
+    debugVectorImage << bounds << points;
 #endif
 
     Q_UNUSED( bounds );
@@ -1185,7 +1185,7 @@ void OutputPainterStrategy::polyBezier16( const QRect &bounds, const QList<QPoin
 void OutputPainterStrategy::polyBezierTo16( const QRect &bounds, const QList<QPoint> points )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << bounds << points;
+    debugVectorImage << bounds << points;
 #endif
 
     Q_UNUSED( bounds );
@@ -1197,7 +1197,7 @@ void OutputPainterStrategy::polyBezierTo16( const QRect &bounds, const QList<QPo
 void OutputPainterStrategy::fillPath( const QRect &bounds )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << bounds;
+    debugVectorImage << bounds;
 #endif
 
     Q_UNUSED( bounds );
@@ -1207,7 +1207,7 @@ void OutputPainterStrategy::fillPath( const QRect &bounds )
 void OutputPainterStrategy::strokeAndFillPath( const QRect &bounds )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << bounds;
+    debugVectorImage << bounds;
 #endif
 
     Q_UNUSED( bounds );
@@ -1217,7 +1217,7 @@ void OutputPainterStrategy::strokeAndFillPath( const QRect &bounds )
 void OutputPainterStrategy::strokePath( const QRect &bounds )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << bounds;
+    debugVectorImage << bounds;
 #endif
 
     Q_UNUSED( bounds );
@@ -1227,7 +1227,7 @@ void OutputPainterStrategy::strokePath( const QRect &bounds )
 void OutputPainterStrategy::setClipPath( const quint32 regionMode )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << hex << regionMode << dec;
+    debugVectorImage << hex << regionMode << dec;
 #endif
 
     switch ( regionMode ) {
@@ -1242,7 +1242,7 @@ void OutputPainterStrategy::setClipPath( const quint32 regionMode )
         m_painter->setClipPath( *m_path, Qt::ReplaceClip );
         break;
     default:
-        qWarning() <<  "Unexpected / unsupported clip region mode:" << regionMode;
+        warnVectorImage <<  "Unexpected / unsupported clip region mode:" << regionMode;
         Q_ASSERT( 0 );
     }
 }
@@ -1250,7 +1250,7 @@ void OutputPainterStrategy::setClipPath( const quint32 regionMode )
 void OutputPainterStrategy::bitBlt( BitBltRecord &bitBltRecord )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << bitBltRecord.xDest() << bitBltRecord.yDest()
+    debugVectorImage << bitBltRecord.xDest() << bitBltRecord.yDest()
                   << bitBltRecord.cxDest() << bitBltRecord.cyDest()
                   << hex << bitBltRecord.rasterOperation() << dec
                   << bitBltRecord.bkColorSrc();
@@ -1276,38 +1276,38 @@ void OutputPainterStrategy::bitBlt( BitBltRecord &bitBltRecord )
 void OutputPainterStrategy::setStretchBltMode( const quint32 stretchMode )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << hex << stretchMode << dec;
+    debugVectorImage << hex << stretchMode << dec;
 #endif
 
     switch ( stretchMode ) {
     case 0x01:
-        kDebug(33100) << "EMR_STRETCHBLTMODE: STRETCH_ANDSCANS";
+        debugVectorImage << "EMR_STRETCHBLTMODE: STRETCH_ANDSCANS";
         break;
     case 0x02:
-        kDebug(33100) << "EMR_STRETCHBLTMODE: STRETCH_ORSCANS";
+        debugVectorImage << "EMR_STRETCHBLTMODE: STRETCH_ORSCANS";
         break;
     case 0x03:
-        kDebug(33100) << "EMR_STRETCHBLTMODE: STRETCH_DELETESCANS";
+        debugVectorImage << "EMR_STRETCHBLTMODE: STRETCH_DELETESCANS";
         break;
     case 0x04:
-        kDebug(33100) << "EMR_STRETCHBLTMODE: STRETCH_HALFTONE";
+        debugVectorImage << "EMR_STRETCHBLTMODE: STRETCH_HALFTONE";
         break;
     default:
-        kDebug(33100) << "EMR_STRETCHBLTMODE - unknown stretch mode:" << stretchMode;
+        debugVectorImage << "EMR_STRETCHBLTMODE - unknown stretch mode:" << stretchMode;
     }
 }
 
 void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord &record )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << "Bounds:    " << record.bounds();
-    kDebug(31000) << "Dest rect: "
+    debugVectorImage << "Bounds:    " << record.bounds();
+    debugVectorImage << "Dest rect: "
                   << record.xDest() << record.yDest() << record.cxDest() << record.cyDest();
-    kDebug(31000) << "Src rect:  "
+    debugVectorImage << "Src rect:  "
                   << record.xSrc() << record.ySrc() << record.cxSrc() << record.cySrc();
-    kDebug(31000) << "Raster op: " << hex << record.rasterOperation() << dec;
+    debugVectorImage << "Raster op: " << hex << record.rasterOperation() << dec;
                   //<< record.bkColorSrc();
-    kDebug(31000) << "usageSrc: " << record.usageSrc();
+    debugVectorImage << "usageSrc: " << record.usageSrc();
 #endif
 
     QPoint targetPosition( record.xDest(), record.yDest() );
@@ -1326,10 +1326,10 @@ void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord &record )
     QRect target( targetPosition, targetSize );
     QRect source( sourcePosition, sourceSize );
 #if DEBUG_EMFPAINT
-    //kDebug(31000) << "image size" << record.image()->size();
-    kDebug(31000) << "Before transformation:";
-    kDebug(31000) << "    target" << target;
-    kDebug(31000) << "    source" << source;
+    //debugVectorImage << "image size" << record.image()->size();
+    debugVectorImage << "Before transformation:";
+    debugVectorImage << "    target" << target;
+    debugVectorImage << "    source" << source;
 #endif
     if ( source.width() < 0 && target.width() > 0 ) {
         sourceSize.rwidth() *= -1;
@@ -1352,11 +1352,11 @@ void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord &record )
         target = QRect( targetPosition, targetSize );
     }
 #if DEBUG_EMFPAINT
-    kDebug(31000) << "After transformation:";
-    kDebug(31000) << "    target" << target;
-    kDebug(31000) << "    source" << source;
+    debugVectorImage << "After transformation:";
+    debugVectorImage << "    target" << target;
+    debugVectorImage << "    source" << source;
     QImage image = record.image();
-    kDebug(31000) << "Image" << image.size();
+    debugVectorImage << "Image" << image.size();
 
 #endif
 
@@ -1380,7 +1380,7 @@ void OutputPainterStrategy::printPainterTransform(const char *leadText)
 
     recalculateWorldTransform();
 
-    kDebug(31000) << leadText << "world transform " << m_worldTransform
+    debugVectorImage << leadText << "world transform " << m_worldTransform
                   << "incl output transform: " << m_painter->transform();
 }
 

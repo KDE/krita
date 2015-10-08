@@ -22,7 +22,7 @@
 #include "KoTextShapeDataBase.h"
 #include "KoTosContainer.h"
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 #include <QSizeF>
 
 KoTosContainerModel::KoTosContainerModel()
@@ -100,17 +100,17 @@ QList<KoShape*> KoTosContainerModel::shapes() const
 
 void KoTosContainerModel::containerChanged(KoShapeContainer *container, KoShape::ChangeType type)
 {
-    kDebug(30006) << "change type:" << type << KoShape::SizeChanged << KoShape::ContentChanged;
+    debugFlake << "change type:" << type << KoShape::SizeChanged << KoShape::ContentChanged;
     if (type != KoShape::SizeChanged && type != KoShape::ContentChanged) {
         return;
     }
     KoTosContainer *tosContainer = dynamic_cast<KoTosContainer*>(container);
-    kDebug(30006) << "tosContainer" << tosContainer;
+    debugFlake << "tosContainer" << tosContainer;
     if (tosContainer) {
-        kDebug(30006) << "behaviour" << tosContainer->resizeBehavior() << KoTosContainer::TextFollowsPreferredTextRect;
+        debugFlake << "behaviour" << tosContainer->resizeBehavior() << KoTosContainer::TextFollowsPreferredTextRect;
     }
     if ( m_textShape && tosContainer && tosContainer->resizeBehavior() != KoTosContainer::TextFollowsPreferredTextRect ) {
-        kDebug(30006) << "change type setSize";
+        debugFlake << "change type setSize";
         m_textShape->setSize(tosContainer->size());
     }
 }

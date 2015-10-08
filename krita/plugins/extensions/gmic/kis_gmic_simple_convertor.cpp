@@ -552,8 +552,8 @@ void KisGmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev, gmic_image
     int blueOffset = greenOffset * 2;
     int alphaOffset = greenOffset * 3;
 
-    KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::InternalRenderingIntent;
-    KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags;
+    KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent();
+    KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags();
 
     const KoColorSpace * colorSpace = dev->colorSpace();
     KisRandomConstAccessorSP it = dev->createRandomConstAccessorNG(0,0);
@@ -615,8 +615,8 @@ void KisGmicSimpleConvertor::convertFromGmicImage(gmic_image<float>& gmicImage, 
     quint8 * floatRGBApixel = new quint8[rgbaFloat32bitcolorSpace->pixelSize() * optimalBufferSize];
     quint32 pixelSize = rgbaFloat32bitcolorSpace->pixelSize();
 
-    KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::InternalRenderingIntent;
-    KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags;
+    KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent();
+    KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags();
 
     // Krita needs rgba in 0.0...1.0
     float multiplied = KoColorSpaceMathsTraits<float>::unitValue / gmicMaxChannelValue;

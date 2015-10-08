@@ -52,7 +52,7 @@
 #include <KoChangeTrackerElement.h>
 #include <KoImageData.h>
 
-#include <kdebug.h>
+#include <TextLayoutDebug.h>
 #include <KoSection.h>
 #include <KoSectionEnd.h>
 #include <KoSectionUtils.h>
@@ -82,7 +82,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
     struct Timer {
         QTime d->time;
         Timer() { d->time.start(); }
-        ~Timer() { kDebug() << "elapsed=" << d->time.elapsed(); }
+        ~Timer() { warnTextLayout << "elapsed=" << d->time.elapsed(); }
     };
     Timer timer;
     */

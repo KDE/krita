@@ -48,7 +48,7 @@
 #include <kdebug.h>
 #include <QUrl>
 #include <kmessagebox.h>
-#include <kio/netaccess.h>
+#include <KoNetAccess.h>
 #include <kselectaction.h>
 #include <kconfiggroup.h>
 #include <kdeprintdialog.h>

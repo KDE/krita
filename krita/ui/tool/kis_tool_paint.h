@@ -23,11 +23,7 @@
 
 #include <QCursor>
 #include <QLayout>
-#include <QLabel>
 #include <QGridLayout>
-#include <QKeyEvent>
-#include <QEvent>
-#include <QPaintEvent>
 #include <QVariant>
 #include <QTimer>
 
@@ -46,12 +42,7 @@
 #include "kis_tool.h"
 #include <QCheckBox>
 
-class QEvent;
-class QKeyEvent;
-class QPaintEvent;
 class QGridLayout;
-class QLabel;
-class QPoint;
 class KoCompositeOp;
 
 

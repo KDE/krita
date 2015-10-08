@@ -37,7 +37,7 @@
 #include "Styles_p.h"
 #include "KoTextDocument.h"
 
-#include <kdebug.h>
+#include "TextDebug.h"
 
 #include <QTextBlock>
 #include <QTextBlockFormat>
@@ -203,7 +203,7 @@ QTextLength KoParagraphStyle::propertyLength(int key) const
             return QTextLength(QTextLength::FixedLength, variant.toReal());
         }
 
-        kWarning(32500) << "This should never happen : requested property can't be converted to QTextLength";
+        warnText << "This should never happen : requested property can't be converted to QTextLength";
         return QTextLength(QTextLength::FixedLength, 0.0);
     }
     return variant.value<QTextLength>();
@@ -1487,7 +1487,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
             // Tab position
             KoText::Tab tab;
             tab.position = KoUnit::parseValue(tabStop.attributeNS(KoXmlNS::style, "position", QString()));
-            //kDebug(32500) << "tab position " << tab.position;
+            //debugText << "tab position " << tab.position;
 
             // Tab stop positions in the XML are relative to the left-margin
             // Equivalently, relative to the left end of our textshape

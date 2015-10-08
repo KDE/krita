@@ -20,7 +20,7 @@
 #ifndef KISWHEELINPUTEDITOR_H
 #define KISWHEELINPUTEDITOR_H
 
-#include <KPushButton>
+#include <QPushButton>
 
 #include "input/kis_shortcut_configuration.h"
 
@@ -32,7 +32,7 @@ class KisWheelInputEditor;
 /**
  * \brief An editor widget for mouse wheel input with modifiers.
  */
-class KisWheelInputEditor : public KPushButton
+class KisWheelInputEditor : public QPushButton
 {
     Q_OBJECT
 public:

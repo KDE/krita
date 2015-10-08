@@ -26,8 +26,6 @@
 #include <KoGenStyle.h>
 #include "Styles_p.h"
 
-#include <kdebug.h>
-
 #include <QTextTable>
 #include <QTextTableFormat>
 
@@ -37,6 +35,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
 
+#include "TextDebug.h"
 
 class Q_DECL_HIDDEN KoTableStyle::Private
 {
@@ -135,7 +134,7 @@ QTextLength KoTableStyle::propertyLength(int key) const
             return QTextLength(QTextLength::FixedLength, variant.toReal());
         }
         
-        kWarning(32500) << "This should never happen : requested property can't be converted to QTextLength";
+        warnText << "This should never happen : requested property can't be converted to QTextLength";
         return QTextLength(QTextLength::FixedLength, 0.0);
     }
     return variant.value<QTextLength>();

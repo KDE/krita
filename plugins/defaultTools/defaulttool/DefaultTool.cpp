@@ -62,7 +62,7 @@
 #include <QAction>
 #include <QKeyEvent>
 #include <QClipboard>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 
 #include <math.h>
 
@@ -155,9 +155,9 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas)
     setupActions();
 
     QPixmap rotatePixmap, shearPixmap;
-    rotatePixmap.load(KStandardDirs::locate("data", "calligra/icons/cursor_rotate.png"));
+    rotatePixmap.load(KoResourcePaths::locate("data", "calligra/icons/cursor_rotate.png"));
     Q_ASSERT(!rotatePixmap.isNull());
-    shearPixmap.load(KStandardDirs::locate("data", "calligra/icons/cursor_shear.png"));
+    shearPixmap.load(KoResourcePaths::locate("data", "calligra/icons/cursor_shear.png"));
     Q_ASSERT(!shearPixmap.isNull());
 
     m_rotateCursors[0] = QCursor(rotatePixmap.transformed(QTransform().rotate(45)));

@@ -22,9 +22,6 @@
 
 #include "KoInlineTextObjectManager.h"
 #include "KoNamedVariable.h"
-
-#include <kdebug.h>
-
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -132,6 +129,8 @@ QList<QString> KoVariableManager::userVariables() const
     return d->userVariableNames;
 }
 
+#include "TextDebug.h"
+
 void KoVariableManager::loadOdf(const KoXmlElement &bodyElement)
 {
     KoXmlElement element = KoXml::namedItemNS(bodyElement, KoXmlNS::text, "user-field-decls", KoXmlTextContentPrelude);
@@ -167,7 +166,7 @@ void KoVariableManager::loadOdf(const KoXmlElement &bodyElement)
             type = "formula";
             value = e.attributeNS(KoXmlNS::text, "formula");
         } else {
-            kWarning(32500) << "Unknown user-field-decl value-type=" << type;
+            warnText << "Unknown user-field-decl value-type=" << type;
             continue;
         }
         setValue(name, value, type);

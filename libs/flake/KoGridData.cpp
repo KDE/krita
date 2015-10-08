@@ -31,7 +31,7 @@
 #include <klocalizedstring.h>
 #include <QPainter>
 #include <QRectF>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 #define DEFAULT_GRID_SIZE_MM 5.0
 

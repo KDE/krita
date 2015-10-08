@@ -25,7 +25,7 @@
 #include <QBuffer>
 
 // KDE
-#include <kdebug.h>
+#include <VectorImageDebug.h>
 
 // LibEmf
 #include "EmfRecords.h"
@@ -60,14 +60,14 @@ bool Parser::load( const QString &fileName )
     QFile *file = new QFile( fileName );
 
     if ( ! file->exists() ) {
-        qWarning( "Request to load file (%s) that does not exist",
-		  qPrintable(file->fileName()) );
+        warnVectorImage << "Request to load file (%s) that does not exist"
+          << qPrintable(file->fileName());
 	delete file;
         return false;
     }
 
     if ( ! file->open( QIODevice::ReadOnly ) ) {
-        qWarning() << "Request to load file (" << file->fileName()
+        warnVectorImage << "Request to load file (" << file->fileName()
 		   << ") that cannot be opened";
         delete file;
         return false;
@@ -106,7 +106,7 @@ bool Parser::loadFromStream( QDataStream &stream )
 
     Header *header = new Header( stream );
     if ( ! header->isValid() ) {
-        kWarning() << "Failed to parse header, perhaps not an EMF file";
+        warnVectorImage << "Failed to parse header, perhaps not an EMF file";
         delete header;
         return false;
     }
@@ -114,12 +114,12 @@ bool Parser::loadFromStream( QDataStream &stream )
     mOutput->init( header );
 
 #if DEBUG_EMFPARSER
-    kDebug(31000) << "========================================================== Starting EMF";
+    debugVectorImage << "========================================================== Starting EMF";
 #endif
 
     int numRecords = header->recordCount();
     for ( int i = 1; i < numRecords; ++i ) {
-        // kDebug(33100) << "Record" << i << "of" << numRecords;
+        // debugVectorImage << "Record" << i << "of" << numRecords;
         if ( ! readRecord( stream ) ) {
             break;
         }
@@ -361,7 +361,7 @@ static const struct {
 bool Parser::readRecord( QDataStream &stream )
 {
     if ( ! mOutput ) {
-        qWarning() << "Output device not set";
+        warnVectorImage << "Output device not set";
         return false;
     }
     quint32 type;
@@ -377,7 +377,7 @@ bool Parser::readRecord( QDataStream &stream )
         else
             name = "(out of bounds)";
 #if DEBUG_EMFPARSER
-        kDebug(31000) << "Record length" << size << "type " << hex << type << "(" << dec << type << ")" << name;
+        debugVectorImage << "Record length" << size << "type " << hex << type << "(" << dec << type << ")" << name;
 #endif
     }
 
@@ -406,7 +406,7 @@ bool Parser::readRecord( QDataStream &stream )
             //stream >> size;
             qint32 width, height;
             stream >> width >> height;
-            //kDebug(31000) << "SETWINDOWEXTEX" << width << height;
+            //debugVectorImage << "SETWINDOWEXTEX" << width << height;
             size = QSize(width, height);
             mOutput->setWindowExtEx( size );
         }
@@ -437,7 +437,7 @@ bool Parser::readRecord( QDataStream &stream )
             QPoint origin;
             stream >> origin;
 #if DEBUG_EMFPARSER
-            kDebug(33100) << "EMR_SETBRUSHORGEX" << origin;
+            debugVectorImage << "EMR_SETBRUSHORGEX" << origin;
 #endif
         }
         break;
@@ -482,7 +482,7 @@ bool Parser::readRecord( QDataStream &stream )
         {
             quint32 ROP2Mode;
             stream >> ROP2Mode;
-            //kDebug(33100) << "EMR_SETROP2" << ROP2Mode;
+            //debugVectorImage << "EMR_SETROP2" << ROP2Mode;
         }
         break;
         case EMR_SETSTRETCHBLTMODE:
@@ -519,7 +519,7 @@ bool Parser::readRecord( QDataStream &stream )
 	    qint32 x, y;
 	    stream >> x >> y;
 	    mOutput->moveToEx( x, y );
-            //kDebug(33100) << "xx EMR_MOVETOEX" << x << y;
+            //debugVectorImage << "xx EMR_MOVETOEX" << x << y;
 	}
 	break;
         case EMR_SETMETARGN:
@@ -532,14 +532,14 @@ bool Parser::readRecord( QDataStream &stream )
     {
         QRect clip;
         stream >> clip;
-        //kDebug(33100) << "EMR_EXCLUDECLIPRECT" << clip;
+        //debugVectorImage << "EMR_EXCLUDECLIPRECT" << clip;
     }
     break;
     case EMR_INTERSECTCLIPRECT:
     {
         QRect clip;
         stream >> clip;
-        //kDebug(33100) << "EMR_INTERSECTCLIPRECT" << clip;
+        //debugVectorImage << "EMR_INTERSECTCLIPRECT" << clip;
     }
     break;
     case EMR_SAVEDC:
@@ -564,7 +564,7 @@ bool Parser::readRecord( QDataStream &stream )
 	    stream >> M22;
 	    stream >> Dx;
 	    stream >> Dy;
-            //kDebug(31000) << "Set world transform" << M11 << M12 << M21 << M22 << Dx << Dy;
+            //debugVectorImage << "Set world transform" << M11 << M12 << M21 << M22 << Dx << Dy;
 	    mOutput->setWorldTransform( M11, M12, M21, M22, Dx, Dy );
 	}
 	break;
@@ -578,7 +578,7 @@ bool Parser::readRecord( QDataStream &stream )
 	    stream >> M22;
 	    stream >> Dx;
 	    stream >> Dy;
-            //kDebug(31000) << "stream position after the matrix: " << stream.device()->pos();
+            //debugVectorImage << "stream position after the matrix: " << stream.device()->pos();
 	    quint32 ModifyWorldTransformMode;
 	    stream >> ModifyWorldTransformMode;
 	    mOutput->modifyWorldTransform( ModifyWorldTransformMode, M11, M12,
@@ -648,7 +648,7 @@ bool Parser::readRecord( QDataStream &stream )
             QRect box;
             stream >> box;
             mOutput->rectangle( box );
-            //kDebug(33100) << "xx EMR_RECTANGLE" << box;
+            //debugVectorImage << "xx EMR_RECTANGLE" << box;
         }
         break;
     case EMR_ARC:
@@ -683,7 +683,7 @@ bool Parser::readRecord( QDataStream &stream )
         quint32 ihPal;
         stream >> ihPal;
 #if DEBUG_EMFPARSER
-        kDebug(33100) << "EMR_SELECTPALLETTE" << ihPal;
+        debugVectorImage << "EMR_SELECTPALLETTE" << ihPal;
 #endif
     }
     break;
@@ -693,7 +693,7 @@ bool Parser::readRecord( QDataStream &stream )
             float miterLimit;
             stream >> miterLimit;
 #if DEBUG_EMFPARSER
-            kDebug(33100) << "EMR_SETMITERLIMIT" << miterLimit;
+            debugVectorImage << "EMR_SETMITERLIMIT" << miterLimit;
 #endif
         }
 	break;
@@ -721,7 +721,7 @@ bool Parser::readRecord( QDataStream &stream )
                 soakBytes(stream, size - 8);
 
 	    mOutput->fillPath( bounds );
-            //kDebug(33100) << "xx EMR_FILLPATH" << bounds;
+            //debugVectorImage << "xx EMR_FILLPATH" << bounds;
 	}
 	break;
     case EMR_STROKEANDFILLPATH:
@@ -729,7 +729,7 @@ bool Parser::readRecord( QDataStream &stream )
             QRect bounds;
             stream >> bounds;
             mOutput->strokeAndFillPath( bounds );
-            //kDebug(33100) << "xx EMR_STROKEANDFILLPATHPATH" << bounds;
+            //debugVectorImage << "xx EMR_STROKEANDFILLPATHPATH" << bounds;
         }
         break;
     case EMR_STROKEPATH:
@@ -737,7 +737,7 @@ bool Parser::readRecord( QDataStream &stream )
 	    QRect bounds;
 	    stream >> bounds;
 	    mOutput->strokePath( bounds );
-            //kDebug(33100) << "xx EMR_STROKEPATH" << bounds;
+            //debugVectorImage << "xx EMR_STROKEPATH" << bounds;
 	}
 	break;
     case EMR_SETCLIPPATH:
@@ -753,7 +753,7 @@ bool Parser::readRecord( QDataStream &stream )
 	    stream >> x >> y;
 	    QPoint finishPoint( x, y );
 	    mOutput->lineTo( finishPoint );
-            //kDebug(33100) << "xx EMR_LINETO" << x << y;
+            //debugVectorImage << "xx EMR_LINETO" << x << y;
 	}
 	break;
     case EMR_ARCTO:
@@ -777,37 +777,37 @@ bool Parser::readRecord( QDataStream &stream )
 
             switch (commentIdentifier) {
             case EMR_COMMENT_EMFSPOOL:
-                kDebug(31000) << "EMR_COMMENT_EMFSPOOL";
+                debugVectorImage << "EMR_COMMENT_EMFSPOOL";
                 soakBytes( stream, size-16 ); // because we already took 16.
                 break;
             case EMR_COMMENT_EMFPLUS:
-                kDebug(31000) << "EMR_COMMENT_EMFPLUS";
+                debugVectorImage << "EMR_COMMENT_EMFPLUS";
                 soakBytes( stream, size-16 ); // because we already took 16.
                 break;
             case EMR_COMMENT_PUBLIC:
                 quint32 commentType;
                 stream >> commentType;
-                kDebug(31000) << "EMR_COMMENT_PUBLIC type" << commentType;
+                debugVectorImage << "EMR_COMMENT_PUBLIC type" << commentType;
                 soakBytes( stream, size-20 ); // because we already took 20.
                 break;
             case EMR_COMMENT_MSGR:
-                kDebug(31000) << "EMR_COMMENT_MSGR";
+                debugVectorImage << "EMR_COMMENT_MSGR";
                 soakBytes( stream, size-16 ); // because we already took 16.
                 break;
             default:
-                kDebug(31000) << "EMR_COMMENT unknown type" << hex << commentIdentifier << dec
+                debugVectorImage << "EMR_COMMENT unknown type" << hex << commentIdentifier << dec
                               << "datasize =" << dataSize;
                 soakBytes( stream, size-16 ); // because we already took 16.
             }
         }
 	break;
     case EMR_EXTSELECTCLIPRGN:
-	kDebug(33100) << "EMR_EXTSELECTCLIPRGN";
+	debugVectorImage << "EMR_EXTSELECTCLIPRGN";
 	soakBytes( stream, size-8 ); // because we already took 8.
 	break;
     case EMR_BITBLT:
 	{
-            //kDebug(31000) << "Found BitBlt record";
+            //debugVectorImage << "Found BitBlt record";
 	    BitBltRecord bitBltRecord( stream, size );
 	    mOutput->bitBlt( bitBltRecord );
 	}
@@ -839,23 +839,23 @@ bool Parser::readRecord( QDataStream &stream )
 	    quint32 exScale;
 	    quint32 eyScale;
 
-	    //kDebug(33100) << "size:" << size;
+	    //debugVectorImage << "size:" << size;
 	    size -= 8;
 
             stream >> bounds;
-	    //kDebug(31000) << "bounds:" << bounds;
+	    //debugVectorImage << "bounds:" << bounds;
 	    size -= 16;
 
             stream >> iGraphicsMode;
-	    //kDebug(31000) << "graphics mode:" << iGraphicsMode;
+	    //debugVectorImage << "graphics mode:" << iGraphicsMode;
 	    size -= 4;
 
 	    stream >> exScale;
 	    stream >> eyScale;
 #if DEBUG_EMFPARSER
             if (iGraphicsMode == GM_COMPATIBLE) {
-                kDebug(31000) << "exScale:" << exScale;
-                kDebug(31000) << "eyScale:" << eyScale;
+                debugVectorImage << "exScale:" << exScale;
+                debugVectorImage << "eyScale:" << eyScale;
             }
 #endif
 	    size -= 8;
@@ -1009,7 +1009,7 @@ bool Parser::readRecord( QDataStream &stream )
         // MS-EMF 2.3.7.5: EMR_CREATEMONOBRUSH Record
         {
 #if DEBUG_EMFPARSER
-            kDebug(31000) << "EMR_CREATEMONOBRUSH ============================";
+            debugVectorImage << "EMR_CREATEMONOBRUSH ============================";
 #endif
 
             quint32 ihBrush;    // Index in the EMF Object Table
@@ -1026,12 +1026,12 @@ bool Parser::readRecord( QDataStream &stream )
             stream >> cbBits;
 
 #if DEBUG_EMFPARSER
-            kDebug(31000) << "index:" << ihBrush;
-            kDebug(31000) << "DIBColors enum:" << usage;
-            kDebug(31000) << "header offset:" << offBmi;
-            kDebug(31000) << "header size:  " << cbBmi;
-            kDebug(31000) << "bitmap offset:" << offBits;
-            kDebug(31000) << "bitmap size:  " << cbBits;
+            debugVectorImage << "index:" << ihBrush;
+            debugVectorImage << "DIBColors enum:" << usage;
+            debugVectorImage << "header offset:" << offBmi;
+            debugVectorImage << "header size:  " << cbBmi;
+            debugVectorImage << "bitmap offset:" << offBits;
+            debugVectorImage << "bitmap size:  " << cbBits;
 #endif
 
             // FIXME: Handle the usage DIBColors info.
@@ -1074,12 +1074,12 @@ bool Parser::readRecord( QDataStream &stream )
         {
             quint32 icmMode;
             stream >> icmMode;
-            //kDebug(33100) << "EMR_SETICMMODE:" << icmMode;
+            //debugVectorImage << "EMR_SETICMMODE:" << icmMode;
         }
         break;
     default:
 #if DEBUG_EMFPARSER
-        kDebug(31000) << "unknown record type:" << type;
+        debugVectorImage << "unknown record type:" << type;
 #endif
 	soakBytes(stream, size - 8); // because we already took 8.
     }

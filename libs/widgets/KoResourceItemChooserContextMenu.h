@@ -24,9 +24,10 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <QLabel>
+
+class KLineEdit;
 class KoResource;
 
-class QLineEdit;
 
 class ContextMenuExistingTagAction : public QAction
 {
@@ -72,7 +73,7 @@ protected Q_SLOTS:
 private:
     bool m_closeParentOnTrigger;
     QLabel * m_label;
-    QLineEdit * m_editBox;
+    KLineEdit * m_editBox;
 };
 
 class NewTagAction : public KoLineEditAction

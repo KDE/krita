@@ -30,6 +30,9 @@ class KRITAUI_EXPORT KisConfigNotifier : public QObject
 {
     Q_OBJECT
 public:
+    KisConfigNotifier();
+    ~KisConfigNotifier();
+
     /**
      * @return the KisConfigNotifier singleton
      */
@@ -48,8 +51,6 @@ Q_SIGNALS:
     void configChanged(void);
 
 private:
-    KisConfigNotifier();
-    ~KisConfigNotifier();
     KisConfigNotifier(const KisConfigNotifier&);
     KisConfigNotifier operator=(const KisConfigNotifier&);
 };

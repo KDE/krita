@@ -55,8 +55,8 @@
 
 #include <QAction>
 #include <klocalizedstring.h>
-#include <kdebug.h>
-#include <kstandarddirs.h>
+#include <QDebug>
+#include <KoResourcePaths.h>
 #include <kundo2command.h>
 
 
@@ -71,7 +71,7 @@ ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
     , m_resetPaint(true)
 {
     QPixmap connectPixmap;
-    connectPixmap.load(KStandardDirs::locate("data", "calligra/icons/cursor_connect.png"));
+    connectPixmap.load(KoResourcePaths::locate("data", "calligra/icons/cursor_connect.png"));
     m_connectCursor = QCursor(connectPixmap, 4, 1);
 
     m_editConnectionPoint = new QAction(i18n("Edit connection points"), this);

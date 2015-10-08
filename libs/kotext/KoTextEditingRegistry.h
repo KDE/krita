@@ -40,11 +40,12 @@ public:
      * Return an instance of the KoTextEditingRegistry
      * Creates an instance if that has never happened before and returns the singleton instance.
      */
+    KoTextEditingRegistry() {}
+    virtual ~KoTextEditingRegistry();
     static KoTextEditingRegistry *instance();
 
 private:
-    KoTextEditingRegistry() {}
-    virtual ~KoTextEditingRegistry();
+
     void init();
 };
 

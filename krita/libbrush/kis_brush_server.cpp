@@ -20,8 +20,8 @@
 #include <QDir>
 #include <QApplication>
 
-#include <kglobal.h>
-#include <kstandarddirs.h>
+#include <QGlobalStatic>
+#include <KoResourcePaths.h>
 
 #include <KoResource.h>
 #include <KoResourceServerProvider.h>
@@ -34,6 +34,9 @@
 #include "kis_imagepipe_brush.h"
 #include "kis_png_brush.h"
 #include "kis_svg_brush.h"
+
+Q_GLOBAL_STATIC(KisBrushServer, s_instance)
+
 
 class BrushResourceServer : public KisBrushResourceServer
 {
@@ -118,9 +121,9 @@ private:
 
 KisBrushServer::KisBrushServer()
 {
-    KGlobal::dirs()->addResourceType("kis_brushes", "data", "krita/brushes/");
-    KGlobal::dirs()->addResourceDir("kis_brushes", "/usr/share/create/brushes/gimp");
-    KGlobal::dirs()->addResourceDir("kis_brushes", QDir::homePath() + QString("/.create/brushes/gimp"));
+    KoResourcePaths::addResourceType("kis_brushes", "data", "krita/brushes/");
+    KoResourcePaths::addResourceDir("kis_brushes", "/usr/share/create/brushes/gimp");
+    KoResourcePaths::addResourceDir("kis_brushes", QDir::homePath() + QString("/.create/brushes/gimp"));
 
     m_brushServer = new BrushResourceServer();
     if (!QFileInfo(m_brushServer->saveLocation()).exists()) {
@@ -144,7 +147,6 @@ KisBrushServer::~KisBrushServer()
 
 KisBrushServer* KisBrushServer::instance()
 {
-    K_GLOBAL_STATIC(KisBrushServer, s_instance);
     return s_instance;
 }
 

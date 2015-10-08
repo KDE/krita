@@ -17,7 +17,7 @@
  */
 
 #include "kis_memory_pool_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kis_debug.h"
 
@@ -146,5 +146,5 @@ void KisMemoryPoolTest::benchmarkAlloc()
 }
 
 
-QTEST_KDEMAIN(KisMemoryPoolTest, NoGUI)
+QTEST_MAIN(KisMemoryPoolTest)
 

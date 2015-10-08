@@ -88,7 +88,7 @@
 #include <QAction>
 #include <kstatusbar.h>
 #include <kmessagebox.h>
-#include <kio/netaccess.h>
+#include <KoNetAccess.h>
 #include <QTemporaryFile>
 #include <QUrl>
 

@@ -109,15 +109,15 @@ public:
      * Furthermore, then only apply to the floating point uses of this profile,
      * and not the integer variants.
      */
-    const QVector<KoChannelInfo::DoubleRange> & GetFloatUIMinMax(void) const;
+    const QVector<KoChannelInfo::DoubleRange> & getFloatUIMinMax(void) const;
 
 protected:
     void setRawData(const QByteArray& rawData);
 public:
     LcmsColorProfileContainer* asLcms() const;
 protected:
-    virtual bool init();
-    void CalculateFloatUIMinMax(void);
+    bool init();
+    void calculateFloatUIMinMax(void);
 private:
     struct Private;
     QScopedPointer<Private> d;

@@ -20,7 +20,6 @@ Boston, MA 02110-1301, USA.
 #include <QMetaMethod>
 #include <QPluginLoader>
 #include <QTemporaryFile>
-#include <kmimetype.h>
 #include <kis_debug.h>
 #include "KisFilterEntry.h"
 #include "KisImportExportManager.h"
@@ -51,7 +50,7 @@ namespace
 
 namespace CalligraFilter {
 
-    ChainLink::ChainLink(KisFilterChain *chain, KisFilterEntry::Ptr filterEntry,
+    ChainLink::ChainLink(KisFilterChain *chain, KisFilterEntrySP filterEntry,
                          const QByteArray& from, const QByteArray& to)
         : m_chain(chain)
         , m_filterEntry(filterEntry)

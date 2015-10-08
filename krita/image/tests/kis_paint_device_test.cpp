@@ -17,7 +17,7 @@
  */
 
 #include "kis_paint_device_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QTime>
 
@@ -1996,4 +1996,4 @@ void KisPaintDeviceTest::testCompositionAssociativity()
     }
 }
 
-QTEST_KDEMAIN(KisPaintDeviceTest, GUI)
+QTEST_MAIN(KisPaintDeviceTest, GUI)

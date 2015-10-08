@@ -21,6 +21,7 @@
 #define __KIS_BRUSH_MASK_APPLICATORS_H
 
 #include "kis_brush_mask_applicator_base.h"
+#include "kis_global.h"
 
 // 3x3 supersampling
 #define SUPERSAMPLING 3

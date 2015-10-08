@@ -25,10 +25,9 @@
 #include <QPushButton>
 #include <QAction>
 #include <QToolTip>
-
+#include <QStatusBar>
 
 #include <ksqueezedtextlabel.h>
-#include <kstatusbar.h>
 #include <klocalizedstring.h>
 
 #include <KoColorProfile.h>
@@ -73,7 +72,6 @@ KisStatusBar::KisStatusBar(KisViewManager * view)
 
     view->addStatusBarItem(m_selectionStatus);
 
-    // XXX: Use the KStatusbar fixed size labels!
     m_statusBarStatusLabel = new KSqueezedTextLabel();
     m_statusBarStatusLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     m_statusBarStatusLabel->setContentsMargins(5, 5, 5, 5);
@@ -179,11 +177,11 @@ void KisStatusBar::updateSelectionIcon()
 {
     QIcon icon;
     if (!m_view->selectionManager()->displaySelection()) {
-        icon = KisIconUtils::loadIcon("selection-mode_invisible.png");
+        icon = KisIconUtils::loadIcon("selection-mode_invisible");
     } else if (m_view->selectionManager()->showSelectionAsMask()) {
-        icon = KisIconUtils::loadIcon("selection-mode_mask.png");
+        icon = KisIconUtils::loadIcon("selection-mode_mask");
     } else /* if (!m_view->selectionManager()->showSelectionAsMask()) */ {
-        icon = KisIconUtils::loadIcon("selection-mode_ants.png");
+        icon = KisIconUtils::loadIcon("selection-mode_ants");
     }
     m_selectionStatus->setIcon(icon);
 }

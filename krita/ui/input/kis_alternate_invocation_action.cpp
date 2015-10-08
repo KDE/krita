@@ -25,7 +25,6 @@
 #include <kis_canvas2.h>
 
 #include "kis_input_manager.h"
-#include "kis_tool.h"
 #include "kis_cursor.h"
 
 struct KisAlternateInvocationAction::Private
@@ -140,7 +139,7 @@ void KisAlternateInvocationAction::end(QEvent *event)
 
 void KisAlternateInvocationAction::inputEvent(QEvent* event)
 {
-    if (!event || ((event->type() != QEvent::MouseMove) && (event->type() != QEvent::TabletMove))) {
+    if (event && ((event->type() == QEvent::MouseMove) || (event->type() == QEvent::TabletMove))) {
         Qt::KeyboardModifiers modifiers;
         switch (m_d->savedAction) {
         case KisTool::AlternatePickFgNode:

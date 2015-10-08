@@ -87,20 +87,22 @@ QT5_WRAP_CPP(komain_HEADERS_MOC KoDocumentSectionPropertyAction_p.h)
 add_library(komain SHARED ${komain_HEADERS_MOC}  ${komain_LIB_SRCS})
 
 target_link_libraries(komain
+PUBLIC
     kowidgets
     kotextlayout
+    koversion
+    KF5::KDELibs4Support
+PRIVATE
+    KF5::ItemViews
 )
 
 if( KF5_Activities_FOUND )
-    target_link_libraries(komain KF5::Activities)
-    target_link_libraries(komain LINK_INTERFACE_LIBRARIES  KF5::Activities)
+    target_link_libraries(komain PUBLIC KF5::Activities)
 endif()
 
 if (APPLE)
-    target_link_libraries(komain ${FOUNDATION_LIBRARY})
+    target_link_libraries(komain PRIVATE ${FOUNDATION_LIBRARY})
 endif ()
-
-target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets ${KDE4_KIO_LIBS})
 
 set_target_properties(komain PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

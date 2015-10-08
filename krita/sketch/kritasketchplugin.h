@@ -28,6 +28,7 @@
 class KritaSketchPlugin : public QDeclarativeExtensionPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.krita.KritaSketchPlugin")
 
 public:
     virtual void registerTypes(const char* uri);
@@ -36,7 +37,5 @@ public:
 private:
 
 };
-
-Q_EXPORT_PLUGIN2(kritasketchplugin, KritaSketchPlugin)
 
 #endif // KRITASKETCHPLUGIN_H

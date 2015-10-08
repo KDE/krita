@@ -33,9 +33,10 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QGroupBox>
-
+#include <QInputDialog>
 #include <QTemporaryFile>
 #include <QLineEdit>
+
 #include <klocalizedstring.h>
 #include <kis_icon_utils.h>
 #include <KisDocument.h>
@@ -44,13 +45,14 @@
 #include <KisTemplateGroup.h>
 #include <KisTemplate.h>
 #include <kicondialog.h>
-#include <kinputdialog.h>
 #include <QMessageBox>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 #include <kis_debug.h>
 #include <kiconloader.h>
 #include <kconfiggroup.h>
 #include <QUrl>
+
+#include <ksharedconfig.h>
 
 // ODF thumbnail extent
 static const int thumbnailExtent = 128;
@@ -273,7 +275,7 @@ void KisTemplateCreateDia::slotOk() {
     }
 
     // copy the tmp file and the picture the app provides
-    QString dir = KGlobal::dirs()->saveLocation("data", d->m_tree->templatesResourcePath());
+    QString dir = KoResourcePaths::saveLocation("data", d->m_tree->templatesResourcePath());
     dir+=group->name();
     QString templateDir=dir+"/.source/";
     QString iconDir=dir+"/.icon/";
@@ -325,7 +327,8 @@ void KisTemplateCreateDia::slotOk() {
         }
     }
 
-    if (!KStandardDirs::makeDir(templateDir) || !KStandardDirs::makeDir(iconDir)) {
+    QDir path;
+    if (!path.mkpath(templateDir) || !path.mkpath(iconDir)) {
         d->m_tree->writeTemplateTree();
         slotButtonClicked( KoDialog::Cancel );
         return;
@@ -423,17 +426,14 @@ void KisTemplateCreateDia::slotNameChanged(const QString &name) {
 }
 
 void KisTemplateCreateDia::slotAddGroup() {
-    bool ok=false;
-    const QString name ( KInputDialog::getText( i18n("Add Group"), i18n("Enter group name:"), QString(), &ok, this ) );
-    if(!ok)
-        return;
-    KisTemplateGroup *group=d->m_tree->find(name);
-    if(group && !group->isHidden())
-    {
+
+    const QString name = QInputDialog::getText(this, i18n("Add Group"), i18n("Enter group name:"));
+    KisTemplateGroup *group = d->m_tree->find(name);
+    if (group && !group->isHidden()) {
         QMessageBox::information( this, i18n("This name is already used."), i18n("Add Group") );
         return;
     }
-    QString dir = KGlobal::dirs()->saveLocation("data", d->m_tree->templatesResourcePath());
+    QString dir = KoResourcePaths::saveLocation("data", d->m_tree->templatesResourcePath());
     dir+=name;
     KisTemplateGroup *newGroup=new KisTemplateGroup(name, dir, 0, true);
     d->m_tree->add(newGroup);
@@ -531,5 +531,3 @@ void KisTemplateCreateDia::fillGroupTree() {
         }
     }
 }
-
-#include <KisTemplateCreateDia.moc>

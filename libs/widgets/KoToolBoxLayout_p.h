@@ -21,7 +21,7 @@
 #ifndef _KO_TOOLBOX_LAYOUT_H_
 #define _KO_TOOLBOX_LAYOUT_H_
 
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 #include <QLayout>
 #include <QMap>
 #include <QRect>

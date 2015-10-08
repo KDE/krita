@@ -21,7 +21,7 @@
 
 #include "KoFontFace.h"
 #include <KoXmlWriter.h>
-#include <kdebug.h>
+#include <OdfDebug.h>
 
 class KoFontFacePrivate : public QSharedData
 {
@@ -146,7 +146,7 @@ void KoFontFace::saveOdf(KoXmlWriter* xmlWriter) const
 {
     Q_ASSERT(!isNull());
     if (isNull()) {
-        kWarning() << "This font face is null and will not be saved: set at least the name";
+        warnOdf << "This font face is null and will not be saved: set at least the name";
         return;
     }
     d->saveOdf(xmlWriter);

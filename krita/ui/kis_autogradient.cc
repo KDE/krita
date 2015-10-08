@@ -20,8 +20,8 @@
 #include "kis_autogradient.h"
 #include <QPainter>
 #include <QComboBox>
-
-#include <knuminput.h>
+#include <QSpinBox>
+#include <QDoubleSpinBox>
 
 #include <KoColorSpace.h>
 #include <KoSegmentGradient.h>

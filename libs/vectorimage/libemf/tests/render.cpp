@@ -28,10 +28,10 @@ bool testOneFile( const QString &filename )
     PainterOutput output;
     parser.setOutput( &output );
     if( parser.load( filename ) == false ) {
-        qDebug() << "failed to load" << filename;
+        debugVectorImage() << "failed to load" << filename;
         return false;
     } else {
-        qDebug() << "successfully loaded" << filename;
+        debugVectorImage() << "successfully loaded" << filename;
         return true;
     }
 }

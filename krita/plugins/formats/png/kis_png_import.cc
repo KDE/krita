@@ -60,7 +60,7 @@ KisImportExportFilter::ConversionStatus KisPNGImport::convert(const QByteArray&,
 
     if (!filename.isEmpty()) {
 
-        QUrl url(filename);
+        QUrl url = QUrl::fromLocalFile(filename);
 
         if (url.isEmpty())
             return KisImportExportFilter::FileNotFound;
@@ -78,6 +78,7 @@ KisImportExportFilter::ConversionStatus KisPNGImport::convert(const QByteArray&,
             return KisImportExportFilter::BadMimeType;
             break;
         case KisImageBuilder_RESULT_NO_URI:
+        case KisImageBuilder_RESULT_NOT_EXIST:
         case KisImageBuilder_RESULT_NOT_LOCAL:
             return KisImportExportFilter::FileNotFound;
             break;
@@ -91,6 +92,7 @@ KisImportExportFilter::ConversionStatus KisPNGImport::convert(const QByteArray&,
         case KisImageBuilder_RESULT_OK:
             doc -> setCurrentImage(ib.image());
             return KisImportExportFilter::OK;
+            break;
         default:
             break;
         }

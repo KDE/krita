@@ -30,6 +30,26 @@
 
 class KisPropertiesConfiguration;
 class KisPressureSpacingOption;
+class KisDabCache;
+
+/// Internal
+class TextBrushInitializationWorkaround
+{
+public:
+    TextBrushInitializationWorkaround();
+    ~TextBrushInitializationWorkaround();
+    static TextBrushInitializationWorkaround* instance();
+
+    void preinitialize(const KisPropertiesConfiguration *settings);
+
+    KisBrushSP tryGetBrush(const KisPropertiesConfiguration *settings);
+
+
+private:
+    KisBrushSP m_brush;
+    const KisPropertiesConfiguration *m_settings;
+};
+
 
 /**
  * This is a base class for paintops that use a KisBrush or derived

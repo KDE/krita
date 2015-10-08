@@ -25,10 +25,7 @@
 
 class KisMainWindow;
 class KisApplicationPrivate;
-class KCmdLineArgs;
 class QWidget;
-class QStringList;
-class QCommandLineParser;
 class KisApplicationArguments;
 
 #include <KisImportExportManager.h>
@@ -93,7 +90,7 @@ public:
 
 public Q_SLOTS:
 
-    void remoteArguments(QByteArray &message, QObject*socket);
+    void remoteArguments(QByteArray message, QObject*socket);
     void fileOpenRequested(const QString & url);
 
 private:

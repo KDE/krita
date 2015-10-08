@@ -18,7 +18,7 @@
 
 #include "kis_recorded_action_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <kis_node.h>
 #include "recorder/kis_recorded_action.h"
 #include <recorder/kis_node_query_path.h>
@@ -47,4 +47,4 @@ void KisRecordedActionTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisRecordedActionTest, GUI)
+QTEST_MAIN(KisRecordedActionTest)

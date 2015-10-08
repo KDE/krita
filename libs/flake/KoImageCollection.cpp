@@ -27,7 +27,7 @@
 #include <KoXmlWriter.h>
 
 #include <QMap>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 #include <QMimeDatabase>
 #include <QMimeType>
 
@@ -74,17 +74,13 @@ bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWrit
     while (imagesToSaveIter != imagesToSave.end()) {
         if (knownImagesIter == d->images.end()) {
             // this should not happen
-            kWarning(30006) << "image not found";
+            warnFlake << "image not found";
             Q_ASSERT(0);
             break;
         }
         else if (knownImagesIter.key() == imagesToSaveIter.key()) {
             KoImageDataPrivate *imageData = knownImagesIter.value();
-            if (imageData->imageLocation.isValid()) {
-                // TODO store url
-                Q_ASSERT(0); // not implemented yet
-            }
-            else if (store->open(imagesToSaveIter.value())) {
+            if (store->open(imagesToSaveIter.value())) {
                 KoStoreDevice device(store);
                 bool ok = imageData->saveData(device);
                 store->close();
@@ -94,10 +90,10 @@ bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWrit
                     const QString mimetype(db.mimeTypeForFile(imagesToSaveIter.value(), QMimeDatabase::MatchExtension).name());
                     manifestWriter->addManifestEntry(imagesToSaveIter.value(), mimetype);
                 } else {
-                    kWarning(30006) << "saving image" << imagesToSaveIter.value() << "failed";
+                    warnFlake << "saving image" << imagesToSaveIter.value() << "failed";
                 }
             } else {
-                kWarning(30006) << "saving image failed: open store failed";
+                warnFlake << "saving image failed: open store failed";
             }
             ++knownImagesIter;
             ++imagesToSaveIter;
@@ -105,7 +101,7 @@ bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWrit
             ++knownImagesIter;
         } else {
             // this should not happen
-            kWarning(30006) << "image not found";
+            warnFlake << "image not found";
             abort();
             Q_ASSERT(0);
         }
@@ -120,23 +116,6 @@ KoImageData *KoImageCollection::createImageData(const QImage &image)
     data->setImage(image);
 
     data = cacheImage(data);
-    return data;
-}
-
-KoImageData *KoImageCollection::createExternalImageData(const QUrl &url)
-{
-    Q_ASSERT(!url.isEmpty() && url.isValid());
-
-    QCryptographicHash md5(QCryptographicHash::Md5);
-    md5.addData(url.toEncoded());
-    qint64 key = KoImageDataPrivate::generateKey(md5.result());
-    if (d->images.contains(key))
-        return new KoImageData(d->images.value(key));
-    KoImageData *data = new KoImageData();
-    data->setExternalImage(url);
-    data->priv()->collection = this;
-    Q_ASSERT(data->key() == key);
-    d->images.insert(key, data->priv());
     return data;
 }
 

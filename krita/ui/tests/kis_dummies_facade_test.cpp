@@ -18,7 +18,7 @@
 
 #include "kis_dummies_facade_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kis_dummies_facade.h"
 
@@ -37,4 +37,4 @@ void KisDummiesFacadeTest::destroyDummiesFacade(KisDummiesFacadeBase *dummiesFac
     delete dummiesFacade;
 }
 
-QTEST_KDEMAIN(KisDummiesFacadeTest, GUI)
+QTEST_MAIN(KisDummiesFacadeTest)

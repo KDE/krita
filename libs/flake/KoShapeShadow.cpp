@@ -30,7 +30,7 @@
 #include "KoPathShape.h"
 #include <KoGenStyle.h>
 #include <KoViewConverter.h>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 #include <QPainter>
 #include <QAtomicInt>
 #include <QImage>

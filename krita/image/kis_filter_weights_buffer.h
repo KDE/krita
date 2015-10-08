@@ -21,6 +21,7 @@
 
 #include "kis_fixed_point_maths.h"
 #include "kis_filter_strategy.h"
+#include "kis_debug.h"
 
 #ifdef SANITY_CHECKS_ENABLED
 static bool checkForAsymmetricZeros = false;

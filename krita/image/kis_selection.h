@@ -22,7 +22,7 @@
 
 #include "kis_types.h"
 #include "kritaimage_export.h"
-#include "kis_paint_device.h"
+#include "kis_default_bounds.h"
 
 enum SelectionMode {
     PIXEL_SELECTION,
@@ -41,6 +41,7 @@ enum SelectionAction {
 
 
 class KisSelectionComponent;
+class QPainterPath;
 
 /**
  * KisSelection is a composite object. It may contain an instance

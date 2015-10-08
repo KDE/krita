@@ -28,6 +28,7 @@
 
 #include <KoColorSpace.h>
 #include <KoChannelInfo.h>
+#include <KoColor.h>
 
 #include <kis_debug.h>
 #include <kis_types.h>

@@ -52,8 +52,8 @@ int KisAbstractShortcut::shortcutIndex() const
     return m_d->shortcutIndex;
 }
 
-bool KisAbstractShortcut::compareKeys(const QList<Qt::Key> &keys1,
-                                      const QList<Qt::Key> &keys2)
+bool KisAbstractShortcut::compareKeys(const QSet<Qt::Key> &keys1,
+                                      const QSet<Qt::Key> &keys2)
 {
     if (keys1.size() != keys2.size()) return false;
 

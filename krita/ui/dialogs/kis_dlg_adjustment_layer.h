@@ -22,8 +22,6 @@
 #include <KoDialog.h>
 #include <QLabel>
 
-class KisFilter;
-class QLabel;
 class KisFilterConfiguration;
 class KisNodeFilterInterface;
 class KisViewManager;

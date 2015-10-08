@@ -18,7 +18,7 @@
 
 #include "kis_brushop_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <qimage_based_test.h>
 #include <stroke_testing_utils.h>
 #include <kis_paint_information.h>
@@ -235,4 +235,4 @@ void KisBrushOpTest::testMagicSeven()
     t.test();
 }
 
-QTEST_KDEMAIN(KisBrushOpTest, GUI)
+QTEST_MAIN(KisBrushOpTest)

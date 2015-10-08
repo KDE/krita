@@ -17,9 +17,11 @@
  */
 #include "kis_config_notifier.h"
 
-#include <kglobal.h>
+#include <QGlobalStatic>
 
 #include <kis_debug.h>
+
+Q_GLOBAL_STATIC(KisConfigNotifier, s_instance)
 
 KisConfigNotifier::KisConfigNotifier()
 {
@@ -32,7 +34,6 @@ KisConfigNotifier::~KisConfigNotifier()
 
 KisConfigNotifier *KisConfigNotifier::instance()
 {
-    K_GLOBAL_STATIC(KisConfigNotifier, s_instance);
     return s_instance;
 }
 

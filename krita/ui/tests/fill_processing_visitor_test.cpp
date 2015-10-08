@@ -18,7 +18,7 @@
 
 #include "fill_processing_visitor_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kis_undo_stores.h"
 #include "kis_processing_applicator.h"
@@ -143,4 +143,4 @@ void FillProcessingVisitorTest::testFillPatternHaveSelectionSelectionOnly()
     tester.test("fill_pattern_have_selection_selection_only", true, true, true);
 }
 
-QTEST_KDEMAIN(FillProcessingVisitorTest, GUI)
+QTEST_MAIN(FillProcessingVisitorTest)

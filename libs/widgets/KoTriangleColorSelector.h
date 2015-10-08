@@ -22,7 +22,6 @@
 #include <QWidget>
 
 #include "kowidgets_export.h"
-#include <kdemacros.h>
 
 class KoColor;
 class KoColorDisplayRendererInterface;
@@ -47,7 +46,7 @@ class KOWIDGETS_EXPORT KoTriangleColorSelector : public QWidget {
         KoColor realColor() const;
 
         // please use realColor() instead!
-        KDE_DEPRECATED QColor color() const;
+        Q_DECL_DEPRECATED QColor color() const;
 
     public Q_SLOTS:
         void setHue(int h);
@@ -56,7 +55,7 @@ class KOWIDGETS_EXPORT KoTriangleColorSelector : public QWidget {
         void setHSV(int h, int s, int v);
 
         // please use setRealColor() instead!
-        KDE_DEPRECATED void setQColor(const QColor& );
+        Q_DECL_DEPRECATED void setQColor(const QColor& );
 
         void setRealColor(const KoColor& );
     Q_SIGNALS:

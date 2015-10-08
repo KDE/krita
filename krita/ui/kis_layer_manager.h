@@ -25,11 +25,9 @@
 #include "kis_adjustment_layer.h"
 #include "kis_types.h"
 #include "KisView.h"
-
-class QAction;
+#include <filter/kis_filter_configuration.h>
 
 class KisViewManager;
-class KisFilterConfiguration;
 class KisNodeCommandsAdapter;
 class KisAction;
 class KisActionManager;

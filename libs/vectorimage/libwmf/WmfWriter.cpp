@@ -23,7 +23,7 @@
 #include "WmfStructs.h"
 #include "WmfParser.h"
 
-#include <kdebug.h>
+#include <VectorImageDebug.h>
 
 #include <QFile>
 #include <QDataStream>
@@ -87,7 +87,7 @@ bool WmfWriter::begin()
 {
 
     if (!d->mFileOut.open(QIODevice::WriteOnly)) {
-        kDebug() << "Cannot open file" << QFile::encodeName(d->mFileOut.fileName());
+        debugVectorImage << "Cannot open file" << QFile::encodeName(d->mFileOut.fileName());
         return false;
     }
     d->mSt.setDevice(&d->mFileOut);

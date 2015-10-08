@@ -20,7 +20,7 @@
 #include "Settings.h"
 #include <QApplication>
 
-#include <kglobal.h>
+
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 
@@ -42,7 +42,7 @@ public:
 Settings::Settings( QObject* parent )
     : QObject( parent ), d( new Private )
 {
-    QString theme = KGlobal::config()->group("General").readEntry<QString>("theme", "default");
+    QString theme = KSharedConfig::openConfig()->group("General").readEntry<QString>("theme", "default");
     d->theme = Theme::load(theme, this);
     connect(d->theme, SIGNAL(fontCacheRebuilt()), SIGNAL(themeChanged()));
 }
@@ -115,7 +115,7 @@ void Settings::setThemeID(const QString& id)
         }
 
         d->theme = Theme::load(id, this);
-        KGlobal::config()->group("General").writeEntry<QString>("theme", id);
+        KSharedConfig::openConfig()->group("General").writeEntry<QString>("theme", id);
 
         emit themeChanged();
     }

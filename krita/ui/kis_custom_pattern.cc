@@ -28,7 +28,7 @@
 #include <QPixmap>
 #include <QShowEvent>
 
-#include <kglobal.h>
+
 #include <QTemporaryFile>
 
 #include "KisDocument.h"
@@ -168,8 +168,8 @@ void KisCustomPattern::createPattern()
 
     QString dir = KoResourceServerProvider::instance()->patternServer()->saveLocation();
     m_pattern = new KoPattern(dev->createThumbnail(size.width(), size.height(), rc,
-                                                    KoColorConversionTransformation::InternalRenderingIntent,
-                                                    KoColorConversionTransformation::InternalConversionFlags), name, dir);
+                                                    KoColorConversionTransformation::internalRenderingIntent(),
+                                                    KoColorConversionTransformation::internalConversionFlags()), name, dir);
 }
 
 

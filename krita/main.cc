@@ -30,8 +30,6 @@
 #include <QDate>
 #include <QLoggingCategory>
 
-#include <kis_debug.h>
-
 #include <KisApplication.h>
 #include <KoConfig.h>
 
@@ -70,17 +68,17 @@ extern "C" int main(int argc, char **argv)
     Q_UNUSED(crashHandler);
 #endif
 
-#if defined Q_OS_WIN
-    SetProcessDPIAware(); // The n-trig wintab driver needs this to report the correct dimensions
-#endif
-
-    // Disable all debug output by default
+    // Disable most debug output by default.
+    // krita.input is kept on for tablet debugging.
     // You can re-enable debug output by starting Krita like "QT_LOGGING_RULES="krita*=true" krita"
     // See: http://doc.qt.io/qt-5/qloggingcategory.html
-    QLoggingCategory::setFilterRules("*=false");
+    QLoggingCategory::setFilterRules("calligra*=false\n"
+                                     "krita*=false\n"
+                                     "krita.input=true");
+
 
     // A per-user unique string, without /, because QLocalServer cannot use names with a / in it
-    QString key = "Krita" +
+    QString key = "Krita3" +
                   QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");
     key = key.replace(":", "_").replace("\\","_");
 
@@ -95,9 +93,14 @@ extern "C" int main(int argc, char **argv)
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
 #endif
+    QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+
+
+    KLocalizedString::setApplicationDomain("krita");
 
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
+
     // If we should clear the config, it has to be done as soon as possible after
     // KisApplication has been created. Otherwise the config file may have been read
     // and stored in a KConfig object we have no control over.

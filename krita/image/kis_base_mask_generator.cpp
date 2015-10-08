@@ -20,6 +20,7 @@
 
 #include "kis_brush_mask_applicator_factories.h"  // vc.h must come first
 #include "kis_mask_generator.h"
+#include "kis_brush_mask_applicator_base.h"
 
 #include <cmath>
 

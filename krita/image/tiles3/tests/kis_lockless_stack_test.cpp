@@ -17,7 +17,7 @@
  */
 
 #include "kis_lockless_stack_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kis_debug.h"
 
@@ -289,5 +289,5 @@ void KisLocklessStackTest::stressTestClear()
     QVERIFY(stack.isEmpty());
 }
 
-QTEST_KDEMAIN(KisLocklessStackTest, NoGUI)
+QTEST_MAIN(KisLocklessStackTest)
 

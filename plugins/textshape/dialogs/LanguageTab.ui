@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>LanguageTab</class>
- <widget class="QWidget" name="LanguageTab" >
-  <property name="geometry" >
+ <widget class="QWidget" name="LanguageTab">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,37 +10,37 @@
     <height>386</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" >
+  <layout class="QVBoxLayout">
    <item>
-    <layout class="QHBoxLayout" >
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel" name="filterLabel" >
-       <property name="text" >
+      <widget class="QLabel" name="filterLabel">
+       <property name="text">
         <string>Quick search:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="KListWidgetSearchLine" name="languageListSearchLine" />
+      <widget class="KListWidgetSearchLine" name="languageListSearchLine"/>
      </item>
     </layout>
    </item>
    <item>
-    <widget class="KListWidget" name="languageList" />
+    <widget class="QListWidget" name="languageList"/>
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
-  <customwidgets>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
   <customwidget>
    <class>KListWidgetSearchLine</class>
-   <extends>QLineEdit</extends>
+   <extends>KLineEdit</extends>
    <header>klistwidgetsearchline.h</header>
   </customwidget>
   <customwidget>
-   <class>KListWidget</class>
-   <extends>QListWidget</extends>
-   <header>klistwidget.h</header>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

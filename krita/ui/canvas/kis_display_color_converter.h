@@ -49,6 +49,7 @@ class KRITAUI_EXPORT KisDisplayColorConverter : public QObject
     Q_OBJECT
 
 public:
+    KisDisplayColorConverter();
     KisDisplayColorConverter(KoCanvasResourceManager *resourceManager, QObject *parent);
     virtual ~KisDisplayColorConverter();
 
@@ -96,9 +97,6 @@ private:
     // is not possible to implement!
     KoColor toKoColor(const QColor &c);
 
-private:
-    // hidden from the outer observer
-    KisDisplayColorConverter();
 
 private:
     Q_PRIVATE_SLOT(m_d, void slotCanvasResourceChanged(int key, const QVariant &v));

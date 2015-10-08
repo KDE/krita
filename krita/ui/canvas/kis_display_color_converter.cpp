@@ -18,7 +18,8 @@
 
 #include "kis_display_color_converter.h"
 
-#include <kglobal.h>
+#include <QGlobalStatic>
+#include <QPointer>
 
 #include <KoColor.h>
 #include <KoColorDisplayRendererInterface.h>
@@ -40,6 +41,8 @@
 #include "kis_paint_device.h"
 #include "kis_iterator_ng.h"
 
+Q_GLOBAL_STATIC(KisDisplayColorConverter, s_instance)
+
 
 struct KisDisplayColorConverter::Private
 {
@@ -50,15 +53,15 @@ struct KisDisplayColorConverter::Private
           paintingColorSpace(0),
           monitorColorSpace(0),
           monitorProfile(0),
-          renderingIntent(KoColorConversionTransformation::InternalRenderingIntent),
-          conversionFlags(KoColorConversionTransformation::InternalConversionFlags),
+          renderingIntent(KoColorConversionTransformation::internalRenderingIntent()),
+          conversionFlags(KoColorConversionTransformation::internalConversionFlags()),
           displayFilter(0),
           intermediateColorSpace(0),
           displayRenderer(new DisplayRenderer(_q, _resourceManager))
     {
     }
 
-    KisDisplayColorConverter * const q;
+    KisDisplayColorConverter *const q;
 
     KoCanvasResourceManager *resourceManager;
 
@@ -140,7 +143,7 @@ struct KisDisplayColorConverter::Private
 
     private:
         KisDisplayColorConverter *m_parent;
-        KoCanvasResourceManager *m_resourceManager;
+        QPointer<KoCanvasResourceManager> m_resourceManager;
     };
 
     QScopedPointer<KoColorDisplayRendererInterface> displayRenderer;
@@ -181,7 +184,6 @@ KisDisplayColorConverter::~KisDisplayColorConverter()
 
 KisDisplayColorConverter* KisDisplayColorConverter::dumbConverterInstance()
 {
-    K_GLOBAL_STATIC(KisDisplayColorConverter, s_instance);
     return s_instance;
 }
 

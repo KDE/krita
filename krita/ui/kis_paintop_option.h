@@ -29,6 +29,7 @@ class QWidget;
 class QString;
 class KisPaintopLodLimitations;
 
+
 /**
  * Base interface for paintop options. A paintop option
  * can be enabled/disabled, has a configuration page

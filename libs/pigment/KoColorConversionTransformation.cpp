@@ -21,13 +21,6 @@
 
 #include "KoColorSpace.h"
 
-KoColorConversionTransformation::Intent KoColorConversionTransformation::InternalRenderingIntent = IntentPerceptual;
-KoColorConversionTransformation::ConversionFlags KoColorConversionTransformation::InternalConversionFlags = BlackpointCompensation;
-
-KoColorConversionTransformation::Intent KoColorConversionTransformation::AdjustmentRenderingIntent = IntentPerceptual;
-KoColorConversionTransformation::ConversionFlags KoColorConversionTransformation::AdjustmentConversionFlags = BlackpointCompensation | NoWhiteOnWhiteFixup;
-
-
 struct Q_DECL_HIDDEN KoColorConversionTransformation::Private {
     const KoColorSpace* srcColorSpace;
     const KoColorSpace* dstColorSpace;

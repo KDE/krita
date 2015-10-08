@@ -27,7 +27,7 @@
 #include "KoDocumentInfo.h"
 #include "KoDocumentInfoDlg.h"
 #include <QUrl>
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 
 class KoDocumentInfoPropsPage::KoDocumentInfoPropsPagePrivate
 {

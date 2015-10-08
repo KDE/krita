@@ -26,7 +26,7 @@
 #include <KoOdfGraphicStyles.h>
 #include <KoShapeSavingContext.h>
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 #include <QSharedPointer>
 #include <QBrush>

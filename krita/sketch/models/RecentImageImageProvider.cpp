@@ -23,7 +23,6 @@
 
 #include <KoStore.h>
 #include <KisDocument.h>
-#include <KMimeType>
 #include <kio/previewjob.h>
 
 RecentImageImageProvider::RecentImageImageProvider()

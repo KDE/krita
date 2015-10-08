@@ -24,6 +24,9 @@
 
 #include "kis_selection_component.h"
 #include "kis_pixel_selection.h"
+#include "kis_node_graph_listener.h"
+#include "kis_node.h"
+#include "kis_image.h"
 
 #include "kis_default_bounds.h"
 #include "kis_iterator_ng.h"

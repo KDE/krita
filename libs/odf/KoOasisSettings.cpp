@@ -19,7 +19,7 @@
 
 #include "KoOasisSettings.h"
 #include "KoXmlNS.h"
-#include <kdebug.h>
+#include <OdfDebug.h>
 
 class Q_DECL_HIDDEN KoOasisSettings::Private
 {
@@ -32,7 +32,7 @@ KoOasisSettings::KoOasisSettings(const KoXmlDocument& doc)
 {
     const KoXmlElement contents = doc.documentElement();
     if (m_settingsElement.isNull())
-        kDebug(30003) << " document doesn't have tag 'office:settings'";
+        debugOdf << " document doesn't have tag 'office:settings'";
 }
 
 KoOasisSettings::KoOasisSettings(const KoXmlDocument& doc, const char* officeNSURI, const char* configNSURI)
@@ -42,7 +42,7 @@ KoOasisSettings::KoOasisSettings(const KoXmlDocument& doc, const char* officeNSU
 {
     const KoXmlElement contents = doc.documentElement();
     if (m_settingsElement.isNull())
-        kDebug(30003) << " document doesn't have tag 'office:settings'";
+        debugOdf << " document doesn't have tag 'office:settings'";
 }
 
 KoOasisSettings::~KoOasisSettings()

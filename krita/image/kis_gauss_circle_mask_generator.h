@@ -22,7 +22,6 @@
 
 #include "kritaimage_export.h"
 
-#include "kis_mask_generator.h"
 
 
 /**

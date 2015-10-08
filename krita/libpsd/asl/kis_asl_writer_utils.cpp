@@ -20,7 +20,6 @@
 
 #include <QUuid>
 #include "KoPattern.h"
-#include "kis_debug.h"
 
 
 namespace KisAslWriterUtils {

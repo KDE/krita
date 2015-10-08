@@ -44,7 +44,12 @@
 #include <QSignalMapper>
 #include <QTabBar>
 #include <QMoveEvent>
-#include <QFontDatabase>
+#include <QUrl>
+#include <QMessageBox>
+#include <QTemporaryFile>
+#include <QStatusBar>
+#include <QMenu>
+#include <QMenuBar>
 
 #include <krecentdirs.h>
 #include <kactioncollection.h>
@@ -54,22 +59,15 @@
 #include <kdiroperator.h>
 #include <kedittoolbar.h>
 #include <kfileitem.h>
-#include <kglobalsettings.h>
 #include <khelpmenu.h>
 #include <klocalizedstring.h>
-#include <kmenubar.h>
-#include <kmenu.h>
-#include <QMessageBox>
 
 #include <krecentdocument.h>
 #include <krecentfilesaction.h>
-#include <kstandarddirs.h>
-#include <kstatusbar.h>
-#include <QTemporaryFile>
+#include <KoResourcePaths.h>
 #include <ktoggleaction.h>
 #include <ktoolbar.h>
 #include <kurlcombobox.h>
-#include <QUrl>
 #include <kmainwindow.h>
 #include <kxmlguiwindow.h>
 #include <kxmlguifactory.h>
@@ -105,7 +103,6 @@
 #include "kis_canvas2.h"
 #include "KisViewManager.h"
 #include "KisDocument.h"
-#include "KisView.h"
 #include "dialogs/kis_dlg_preferences.h"
 #include "kis_config_notifier.h"
 #include "kis_canvas_resource_provider.h"
@@ -125,8 +122,6 @@
 #include "kis_icon_utils.h"
 #include <KisImportExportFilter.h>
 #include <KisDocumentEntry.h>
-
-#include "calligraversion.h"
 
 class ToolDockerFactory : public KoDockFactoryBase
 {
@@ -339,11 +334,9 @@ KisMainWindow::KisMainWindow()
     d->mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     d->mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     d->mdiArea->setTabPosition(QTabWidget::North);
-
     d->mdiArea->setTabsClosable(true);
 
     setCentralWidget(d->mdiArea);
-    d->mdiArea->show();
 
     connect(d->mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(subWindowActivated()));
     connect(d->windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
@@ -414,11 +407,11 @@ KisMainWindow::KisMainWindow()
     configChanged();
 
     QString doc;
-    QStringList allFiles = KGlobal::dirs()->findAllResources("data", "krita/krita.rc");
+    QStringList allFiles = KoResourcePaths::findAllResources("data", "krita/krita.rc");
     KIS_ASSERT(allFiles.size() > 0); // We need at least one krita.rc file!
 
     setXMLFile(findMostRecentXMLFile(allFiles, doc));
-    setLocalXMLFile(KStandardDirs::locateLocal("data", "krita/krita.rc"));
+    setLocalXMLFile(KoResourcePaths::locateLocal("data", "krita/krita.rc"));
 
     guiFactory()->addClient(this);
 
@@ -574,6 +567,7 @@ void KisMainWindow::slotPreferences()
 
 void KisMainWindow::slotThemeChanged()
 {
+
     // save theme changes instantly
     KConfigGroup group( KSharedConfig::openConfig(), "theme");
     group.writeEntry("Theme", d->themeManager->currentThemeName());
@@ -609,7 +603,7 @@ void KisMainWindow::addRecentURL(const QUrl &url)
         bool ok = true;
         if (url.isLocalFile()) {
             QString path = url.adjusted(QUrl::StripTrailingSlash).toLocalFile();
-            const QStringList tmpDirs = KGlobal::dirs()->resourceDirs("tmp");
+            const QStringList tmpDirs = KoResourcePaths::resourceDirs("tmp");
             for (QStringList::ConstIterator it = tmpDirs.begin() ; ok && it != tmpDirs.end() ; ++it)
                 if (path.contains(*it))
                     ok = false; // it's in the tmp resource
@@ -1663,12 +1657,14 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         }
 
         KoDockWidgetTitleBar *titleBar = dynamic_cast<KoDockWidgetTitleBar*>(dockWidget->titleBarWidget());
+
         // Check if the dock widget is supposed to be collapsable
         if (!dockWidget->titleBarWidget()) {
             titleBar = new KoDockWidgetTitleBar(dockWidget);
             dockWidget->setTitleBarWidget(titleBar);
             titleBar->setCollapsable(factory->isCollapsable());
         }
+        titleBar->setFont(KoDockRegistry::dockFont());
 
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent(this);
@@ -1716,22 +1712,20 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 
         if (titleBar && collapsed)
             titleBar->setCollapsed(true);
+
         if (titleBar && locked)
             titleBar->setLocked(true);
 
         d->dockWidgetsMap.insert(factory->id(), dockWidget);
-    } else {
+    }
+    else {
         dockWidget = d->dockWidgetsMap[factory->id()];
     }
 
-    KConfigGroup group( KSharedConfig::openConfig(), "GUI");
-    QFont dockWidgetFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
-    qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
-    dockWidgetFont.setPointSizeF(qMax(pointSize,QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF()));
 #ifdef Q_OS_MAC
     dockWidget->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
-    dockWidget->setFont(dockWidgetFont);
+    dockWidget->setFont(KoDockRegistry::dockFont());
 
     connect(dockWidget, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(forceDockTabFonts()));
 
@@ -1742,11 +1736,7 @@ void KisMainWindow::forceDockTabFonts()
 {
     foreach(QObject *child, children()) {
         if (child->inherits("QTabBar")) {
-            KConfigGroup group( KSharedConfig::openConfig(), "GUI");
-            QFont dockWidgetFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
-            qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
-            dockWidgetFont.setPointSizeF(qMax(pointSize, QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF()));
-            ((QTabBar *)child)->setFont(dockWidgetFont);
+            ((QTabBar *)child)->setFont(KoDockRegistry::dockFont());
         }
     }
 }
@@ -1997,18 +1987,11 @@ QPointer<KisView>KisMainWindow::activeKisView()
 
 void KisMainWindow::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList)
 {
-
-    KConfigGroup group( KSharedConfig::openConfig(), "GUI");
-    QFont dockWidgetFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
-    qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
-    dockWidgetFont.setPointSizeF(qMax(pointSize, QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF()));
-    dockWidgetFont.setPointSizeF(pointSize);
-
     foreach(QWidget *w, optionWidgetList) {
 #ifdef Q_OS_MAC
         w->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
-        w->setFont(dockWidgetFont);
+        w->setFont(KoDockRegistry::dockFont());
     }
 
     if (d->toolOptionsDocker) {
@@ -2090,7 +2073,7 @@ void KisMainWindow::createActions()
 
     d->closeAll = new KisAction(i18nc("@action:inmenu", "Close All"));
     d->closeAll->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    d->closeAll->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_W));
+    d->closeAll->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_W));
     actionManager->addAction("file_close_all", d->closeAll);
     connect(d->closeAll, SIGNAL(triggered()), this, SLOT(slotFileCloseAll()));
 

@@ -24,7 +24,7 @@
 #include "KoPathPointData.h"
 
 #include <QTest>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 void TestPointMergeCommand::closeSingleLinePath()
 {

@@ -21,7 +21,7 @@
 #include "TextTool.h"
 
 #include <QAction>
-#include <kdebug.h>
+#include <QDebug>
 
 #include <QWidget>
 

@@ -16,52 +16,51 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_brush_based_paintop.h"
-#include "kis_brush.h"
 #include "kis_properties_configuration.h"
+#include "kis_paintop_settings.h"
 #include "kis_brush_option.h"
 #include <kis_pressure_spacing_option.h>
-
 #include "kis_painter.h"
 
-#include <kglobal.h>
+#include <QGlobalStatic>
 
 #include <QImage>
 #include <QPainter>
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
 
-class TextBrushInitializationWorkaround
-{
-public:
-    static TextBrushInitializationWorkaround* instance() {
-        K_GLOBAL_STATIC(TextBrushInitializationWorkaround, s_instance);
-        return s_instance;
+Q_GLOBAL_STATIC(TextBrushInitializationWorkaround, s_instance)
+
+
+TextBrushInitializationWorkaround *TextBrushInitializationWorkaround::instance() {
+    return s_instance;
+}
+
+void TextBrushInitializationWorkaround::preinitialize(const KisPropertiesConfiguration *settings) {
+    if (KisBrushOption::isTextBrush(settings)) {
+        KisBrushOption brushOption;
+        brushOption.readOptionSetting(settings);
+        m_brush = brushOption.brush();
+        m_settings = settings;
     }
-
-    void preinitialize(const KisPropertiesConfiguration *settings) {
-        if (KisBrushOption::isTextBrush(settings)) {
-            KisBrushOption brushOption;
-            brushOption.readOptionSetting(settings);
-            m_brush = brushOption.brush();
-            m_settings = settings;
-        }
-        else {
-            m_brush = 0;
-            m_settings = 0;
-        }
+    else {
+        m_brush = 0;
+        m_settings = 0;
     }
+}
 
-    KisBrushSP tryGetBrush(const KisPropertiesConfiguration *settings) {
-        return settings && settings == m_settings ? m_brush : 0;
-    }
+KisBrushSP TextBrushInitializationWorkaround::tryGetBrush(const KisPropertiesConfiguration *settings) {
+    return settings && settings == m_settings ? m_brush : 0;
+}
 
-private:
-    TextBrushInitializationWorkaround() : m_settings(0) {}
+TextBrushInitializationWorkaround::TextBrushInitializationWorkaround()
+    : m_settings(0)
+{}
 
-private:
-    KisBrushSP m_brush;
-    const KisPropertiesConfiguration *m_settings;
-};
+TextBrushInitializationWorkaround::~TextBrushInitializationWorkaround()
+{}
+
+
 
 void KisBrushBasedPaintOp::preinitializeOpStatically(const KisPaintOpSettingsSP settings)
 {
@@ -79,7 +78,7 @@ KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPropertiesConfiguration* set
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
     m_brush =
-        TextBrushInitializationWorkaround::instance()->tryGetBrush(settings);
+            TextBrushInitializationWorkaround::instance()->tryGetBrush(settings);
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
     if (!m_brush) {

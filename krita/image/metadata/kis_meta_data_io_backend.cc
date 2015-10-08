@@ -20,8 +20,11 @@
 
 using namespace KisMetaData;
 
-#include <kglobal.h>
+#include <QGlobalStatic>
 #include "kis_debug.h"
+
+Q_GLOBAL_STATIC(IOBackendRegistry, s_instance)
+
 
 IOBackendRegistry::IOBackendRegistry()
 {
@@ -37,7 +40,6 @@ IOBackendRegistry::~IOBackendRegistry()
 
 IOBackendRegistry* IOBackendRegistry::instance()
 {
-    K_GLOBAL_STATIC(IOBackendRegistry, s_instance);
     // XXX: load backend plugins
     return s_instance;
 }

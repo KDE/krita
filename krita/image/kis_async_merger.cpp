@@ -25,7 +25,6 @@
 #include <KoChannelInfo.h>
 #include <KoCompositeOpRegistry.h>
 
-#include "kis_paint_device.h"
 #include "kis_node_visitor.h"
 #include "kis_painter.h"
 #include "kis_layer.h"

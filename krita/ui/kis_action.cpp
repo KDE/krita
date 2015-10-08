@@ -31,6 +31,7 @@ public:
     QStringList excludedNodeTypes;
     QString operationID;
     KisActionManager* actionManager;
+    QKeySequence defaultShortcut;
 };
 
 KisAction::KisAction(QObject* parent)
@@ -60,6 +61,16 @@ KisAction::KisAction(const QIcon &icon, const QString& text, QObject* parent)
 KisAction::~KisAction()
 {
     delete d;
+}
+
+void KisAction::setDefaultShortcut(const QKeySequence &shortcut)
+{
+    d->defaultShortcut = shortcut;
+}
+
+QKeySequence KisAction::defaultShortcut() const
+{
+    return d->defaultShortcut;
 }
 
 void KisAction::setActivationFlags(KisAction::ActivationFlags flags)

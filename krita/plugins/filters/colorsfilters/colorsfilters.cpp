@@ -102,7 +102,7 @@ void KisAutoContrast::processImpl(KisPaintDeviceSP device,
     Q_ASSERT(device != 0);
     Q_UNUSED(config);
     // initialize
-    KoHistogramProducerSP producer = KoHistogramProducerSP(new KoGenericLabHistogramProducer());
+    KoHistogramProducer *producer = new KoGenericLabHistogramProducer();
     KisHistogram histogram(device, applyRect, producer, LINEAR);
     int minvalue = int(255 * histogram.calculations().getMin() + 0.5);
     int maxvalue = int(255 * histogram.calculations().getMax() + 0.5);

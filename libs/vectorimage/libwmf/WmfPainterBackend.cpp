@@ -24,7 +24,7 @@
 #include <QPrinter>
 #include <QFontMetrics>
 
-#include <kdebug.h>
+#include <VectorImageDebug.h>
 
 #include "WmfEnums.h"
 #include "WmfParser.h"
@@ -114,7 +114,7 @@ bool WmfPainterBackend::begin(const QRect &boundingBox)
     //mPainter->setBrush(QBrush(Qt::NoBrush));
 
 #if DEBUG_WMFPAINT
-    kDebug(31000) << "Using QPainter: " << mPainter->pen() << mPainter->brush() 
+    debugVectorImage << "Using QPainter: " << mPainter->pen() << mPainter->brush() 
                   << "Background: " << mPainter->background() << " " << mPainter->backgroundMode();
 #endif
 
@@ -175,7 +175,7 @@ void WmfPainterBackend::restore()
         mSaveCount--;
     }
     else {
-        kDebug(31000) << "restore(): try to restore painter without save";
+        debugVectorImage << "restore(): try to restore painter without save";
     }
 
     // We used a trick in save() and stored the worldTransform in
@@ -188,7 +188,7 @@ void WmfPainterBackend::restore()
 void WmfPainterBackend::setCompositionMode(QPainter::CompositionMode mode)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << mode << "(ignored)";
+    debugVectorImage << mode << "(ignored)";
 #endif
 
     // FIXME: This doesn't work.  I don't understand why, but when I
@@ -248,7 +248,7 @@ void WmfPainterBackend::recalculateWorldTransform()
         windowViewportScaleX = qreal(mViewportExt.width()) / qreal(mWindowExt.width());
         windowViewportScaleY = qreal(mViewportExt.height()) / qreal(mWindowExt.height());
 #if DEBUG_WMFPAINT
-        kDebug(31000) << "Scale for Window -> Viewport"
+        debugVectorImage << "Scale for Window -> Viewport"
                       << windowViewportScaleX << windowViewportScaleY;
 #endif
     }
@@ -257,7 +257,7 @@ void WmfPainterBackend::recalculateWorldTransform()
         windowViewportScaleX = qreal(1.0);
         windowViewportScaleY = qreal(1.0);
 #if DEBUG_WMFPAINT
-        kDebug(31000) << "Only one of Window or Viewport set: scale window -> viewport = 1";
+        debugVectorImage << "Only one of Window or Viewport set: scale window -> viewport = 1";
 #endif
     }
 
@@ -278,11 +278,11 @@ void WmfPainterBackend::recalculateWorldTransform()
         flip = true;
     }
     if (flip) {
-        //kDebug(31000) << "Flipping round midpoint" << midpointX << midpointY << scaleX << scaleY;
+        //debugVectorImage << "Flipping round midpoint" << midpointX << midpointY << scaleX << scaleY;
         mWorldTransform.translate(midpointX, midpointY);
         mWorldTransform.scale(scaleX, scaleY);
         mWorldTransform.translate(-midpointX, -midpointY);
-        //kDebug(31000) << "After flipping for window" << mWorldTransform;
+        //debugVectorImage << "After flipping for window" << mWorldTransform;
     }
 
     // Calculate the world transform.
@@ -301,7 +301,7 @@ void WmfPainterBackend::recalculateWorldTransform()
         if (mWindowExt.height() < 0) 
             mWorldTransform.translate(qreal(0.0), mWindowOrg.y() + mWindowExt.height());
     }
-    //kDebug(31000) << "After window viewport calculation" << mWorldTransform;
+    //debugVectorImage << "After window viewport calculation" << mWorldTransform;
 
     // FIXME: also handle negative viewport extensions?  If so, do it here.
 
@@ -311,8 +311,8 @@ void WmfPainterBackend::recalculateWorldTransform()
     // Apply the output transform.
     QTransform currentMatrix = mPainter->worldTransform();
     QTransform newMatrix = currentMatrix * mOutputTransform;
-    //kDebug(31000) << "Output transform" << mOutputTransform;
-    //kDebug(31000) << "Total  transform" << newMatrix;
+    //debugVectorImage << "Output transform" << mOutputTransform;
+    //debugVectorImage << "Total  transform" << newMatrix;
     mPainter->setWorldTransform( newMatrix );
 }
 
@@ -322,7 +322,7 @@ void WmfPainterBackend::recalculateWorldTransform()
 void WmfPainterBackend::setWindowOrg(int left, int top)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << left << " " << top;
+    debugVectorImage << left << " " << top;
 #endif
 
     // Only set WindowOrg if it changes.  See the Unanswered Question in libemf.
@@ -354,8 +354,8 @@ void WmfPainterBackend::setWindowOrg(int left, int top)
 #endif
     mPainter->restore();
 
-    kDebug(31000) << "Window rect: " << windowRect;
-    kDebug(31000) << "Bounding rect: " << boundingRect();
+    debugVectorImage << "Window rect: " << windowRect;
+    debugVectorImage << "Bounding rect: " << boundingRect();
 #endif
 }
 
@@ -363,7 +363,7 @@ void WmfPainterBackend::setWindowOrg(int left, int top)
 void WmfPainterBackend::setWindowExt(int width, int height)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << width << " " << height;
+    debugVectorImage << width << " " << height;
 #endif
 
     // Only set WindowExt if it changes.  See the Unanswered Question in libemf.
@@ -394,15 +394,15 @@ void WmfPainterBackend::setWindowExt(int width, int height)
     mPainter->drawLine(boundingRect().topLeft(), QPoint(0, 0));
     mPainter->restore();
 
-    kDebug(31000) << "Window rect: " << windowRect;
-    kDebug(31000) << "Bounding rect: " << boundingRect();
+    debugVectorImage << "Window rect: " << windowRect;
+    debugVectorImage << "Bounding rect: " << boundingRect();
 #endif
 }
 
 void WmfPainterBackend::setViewportOrg( int left, int top )
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << left << top;
+    debugVectorImage << left << top;
 #endif
 
     // Only set ViewportOrg if it changes.  See the Unanswered Question in libemf.
@@ -417,7 +417,7 @@ void WmfPainterBackend::setViewportOrg( int left, int top )
 void WmfPainterBackend::setViewportExt( int width, int height )
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << width << height;
+    debugVectorImage << width << height;
 #endif
 
     // Only set ViewportOrg if it changes.  See the Unanswered Question in libemf.
@@ -435,7 +435,7 @@ void WmfPainterBackend::setMatrix(WmfDeviceContext &context, const QMatrix &wm, 
 {
     Q_UNUSED(context);
 #if DEBUG_WMFPAINT
-    kDebug(31000) << wm << " " << combine;
+    debugVectorImage << wm << " " << combine;
 #endif
     mPainter->setMatrix(wm, combine);
 
@@ -450,7 +450,7 @@ void WmfPainterBackend::setMatrix(WmfDeviceContext &context, const QMatrix &wm, 
 void WmfPainterBackend::setPixel(WmfDeviceContext &context, int x, int y, QColor color)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << x << y << color;
+    debugVectorImage << x << y << color;
 #endif
 
     updateFromDeviceContext(context);
@@ -469,7 +469,7 @@ void WmfPainterBackend::lineTo(WmfDeviceContext &context, int x, int y)
     updateFromDeviceContext(context);
 
 #if DEBUG_WMFPAINT
-    kDebug(31000) << x << ", " << y << " using " << mPainter->pen();
+    debugVectorImage << x << ", " << y << " using " << mPainter->pen();
 #endif
 
     QPoint newPoint(x, y);
@@ -483,8 +483,8 @@ void WmfPainterBackend::drawRect(WmfDeviceContext &context, int x, int y, int w,
     updateFromDeviceContext(context);
 
 #if DEBUG_WMFPAINT
-    kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
-    kDebug(31000) << "Using QPainter: " << mPainter->pen() << mPainter->brush();
+    debugVectorImage << x << ", " << y << ", " << w << ", " << h;
+    debugVectorImage << "Using QPainter: " << mPainter->pen() << mPainter->brush();
 #endif
 
     mPainter->drawRect(x, y, w, h);
@@ -495,7 +495,7 @@ void WmfPainterBackend::drawRoundRect(WmfDeviceContext &context, int x, int y, i
                                       int roudw, int roudh)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
+    debugVectorImage << x << ", " << y << ", " << w << ", " << h;
 #endif
 
     updateFromDeviceContext(context);
@@ -506,7 +506,7 @@ void WmfPainterBackend::drawRoundRect(WmfDeviceContext &context, int x, int y, i
 void WmfPainterBackend::drawEllipse(WmfDeviceContext &context, int x, int y, int w, int h)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
+    debugVectorImage << x << ", " << y << ", " << w << ", " << h;
 #endif
     updateFromDeviceContext(context);
     mPainter->drawEllipse(x, y, w, h);
@@ -517,7 +517,7 @@ void WmfPainterBackend::drawArc(WmfDeviceContext &context, int x, int y, int w, 
                                 int a, int alen)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
+    debugVectorImage << x << ", " << y << ", " << w << ", " << h;
 #endif
     updateFromDeviceContext(context);
     mPainter->drawArc(x, y, w, h, a, alen);
@@ -528,7 +528,7 @@ void WmfPainterBackend::drawPie(WmfDeviceContext &context, int x, int y, int w, 
                                 int a, int alen)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
+    debugVectorImage << x << ", " << y << ", " << w << ", " << h;
 #endif
     updateFromDeviceContext(context);
     mPainter->drawPie(x, y, w, h, a, alen);
@@ -539,7 +539,7 @@ void WmfPainterBackend::drawChord(WmfDeviceContext &context, int x, int y, int w
                                   int a, int alen)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << x << ", " << y << ", " << w << ", " << h
+    debugVectorImage << x << ", " << y << ", " << w << ", " << h
                   << ", " << a << ", " << alen;
 #endif
     updateFromDeviceContext(context);
@@ -550,7 +550,7 @@ void WmfPainterBackend::drawChord(WmfDeviceContext &context, int x, int y, int w
 void WmfPainterBackend::drawPolyline(WmfDeviceContext &context, const QPolygon &pa)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << pa;
+    debugVectorImage << pa;
 #endif
     updateFromDeviceContext(context);
     mPainter->drawPolyline(pa);
@@ -560,8 +560,8 @@ void WmfPainterBackend::drawPolyline(WmfDeviceContext &context, const QPolygon &
 void WmfPainterBackend::drawPolygon(WmfDeviceContext &context, const QPolygon &pa)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << pa;
-    kDebug(31000) << "Using QPainter: " << mPainter->pen() << mPainter->brush();
+    debugVectorImage << pa;
+    debugVectorImage << "Using QPainter: " << mPainter->pen() << mPainter->brush();
 #endif
 
     updateFromDeviceContext(context);
@@ -575,7 +575,7 @@ void WmfPainterBackend::drawPolygon(WmfDeviceContext &context, const QPolygon &p
 void WmfPainterBackend::drawPolyPolygon(WmfDeviceContext &context, QList<QPolygon>& listPa)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000);
+    debugVectorImage;
 #endif
 
     updateFromDeviceContext(context);
@@ -592,7 +592,7 @@ void WmfPainterBackend::drawPolyPolygon(WmfDeviceContext &context, QList<QPolygo
 
     // fill polygons
     if (brush != Qt::NoBrush) {
-        //kDebug(31000) << "Filling polygon with " << brush;
+        //debugVectorImage << "Filling polygon with " << brush;
         mPainter->fillRect(region.boundingRect(), brush);
     }
 
@@ -602,7 +602,7 @@ void WmfPainterBackend::drawPolyPolygon(WmfDeviceContext &context, QList<QPolygo
         mPainter->setBrush(Qt::NoBrush);
         foreach(const QPolygon & pa, listPa) {
 #if DEBUG_WMFPAINT
-            kDebug(31000) << pa;
+            debugVectorImage << pa;
 #endif
             if (context.polyFillMode == WINDING)
                 mPainter->drawPolygon(pa, Qt::WindingFill);
@@ -620,7 +620,7 @@ void WmfPainterBackend::drawImage(WmfDeviceContext &context, int x, int y, const
                                   int sx, int sy, int sw, int sh)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << x << " " << y << " " << sx << " " << sy << " " << sw << " " << sh;
+    debugVectorImage << x << " " << y << " " << sx << " " << sy << " " << sw << " " << sh;
 #endif
     updateFromDeviceContext(context);
     mPainter->drawImage(x, y, img, sx, sy, sw, sh);
@@ -631,7 +631,7 @@ void WmfPainterBackend::patBlt(WmfDeviceContext &context, int x, int y, int widt
                                quint32 rasterOperation)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << x << y << width << height << hex << rasterOperation << dec;
+    debugVectorImage << x << y << width << height << hex << rasterOperation << dec;
 #endif
 
     updateFromDeviceContext(context);
@@ -652,7 +652,7 @@ void WmfPainterBackend::patBlt(WmfDeviceContext &context, int x, int y, int widt
 void WmfPainterBackend::drawText(WmfDeviceContext &context, int x, int y, const QString& text)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << x << y << hex << dec << text;
+    debugVectorImage << x << y << hex << dec << text;
 #endif
 
     updateFromDeviceContext(context);
@@ -663,7 +663,7 @@ void WmfPainterBackend::drawText(WmfDeviceContext &context, int x, int y, const 
         x = context.currentPosition.x();
         y = context.currentPosition.y();
 #if DEBUG_WMFPAINT
-        kDebug(31000) << "Using current position:" << x << y;
+        debugVectorImage << "Using current position:" << x << y;
 #endif
     }
 
@@ -685,7 +685,7 @@ void WmfPainterBackend::drawText(WmfDeviceContext &context, int x, int y, const 
     }
 
 #if DEBUG_WMFPAINT
-    kDebug(31000) << "font = " << mPainter->font() << " pointSize = " << mPainter->font().pointSize()
+    debugVectorImage << "font = " << mPainter->font() << " pointSize = " << mPainter->font().pointSize()
                   << "ascent = " << fm.ascent() << " height = " << fm.height()
                   << "leading = " << fm.leading();
 #endif
@@ -697,7 +697,7 @@ void WmfPainterBackend::drawText(WmfDeviceContext &context, int x, int y, const 
     // If the actual height is < 0, we should use device units.  This
     // means that if the text is currently upside-down due to some
     // transformations, we should un-upside-down it before painting.
-    //kDebug(31000) << "fontheight:" << context.height << "height:" << height << "y" << y;
+    //debugVectorImage << "fontheight:" << context.height << "height:" << height << "y" << y;
     if (context.height < 0 && mPainter->worldTransform().m22() < 0) {
         mPainter->translate(0, -(y - height / 2));
         mPainter->scale(qreal(1.0), qreal(-1.0));
@@ -730,20 +730,20 @@ void WmfPainterBackend::updateFromDeviceContext(WmfDeviceContext &context)
     if (context.changedItems & DCBrush) {
         mPainter->setBrush(context.brush);
 #if DEBUG_WMFPAINT
-        kDebug(31000) << "*** Setting fill brush to" << context.brush;
+        debugVectorImage << "*** Setting fill brush to" << context.brush;
 #endif
     }
     // FIXME: context.image
     if (context.changedItems & DCFont) {
         mPainter->setFont(context.font);
 #if DEBUG_WMFPAINT
-        kDebug(31000) << "*** Setting font to" << context.font;
+        debugVectorImage << "*** Setting font to" << context.font;
 #endif
     }
     if (context.changedItems & DCPalette) {
         // NYI
 #if DEBUG_WMFPAINT
-        kDebug(31000) << "*** Setting palette (NYI)";
+        debugVectorImage << "*** Setting palette (NYI)";
 #endif
     }
     if (context.changedItems & DCPen) {
@@ -781,13 +781,13 @@ void WmfPainterBackend::updateFromDeviceContext(WmfDeviceContext &context)
         p.setWidth(width);
         mPainter->setPen(p);
 #if DEBUG_WMFPAINT
-        kDebug(31000) << "*** Setting pen to" << p;
+        debugVectorImage << "*** Setting pen to" << p;
 #endif
     }
     if (context.changedItems & DCClipRegion) {
         // Not used until SETCLIPREGION is used
 #if DEBUG_WMFPAINT
-        //kDebug(31000) << "*** region changed to" << context.region;
+        //debugVectorImage << "*** region changed to" << context.region;
 #endif
     }
 
@@ -795,7 +795,7 @@ void WmfPainterBackend::updateFromDeviceContext(WmfDeviceContext &context)
     if (context.changedItems & DCBgTextColor) {
         mPainter->setBackground(QBrush(context.backgroundColor));
 #if DEBUG_WMFPAINT
-        kDebug(31000) << "*** Setting background text color to" << context.backgroundColor;
+        debugVectorImage << "*** Setting background text color to" << context.backgroundColor;
 #endif
     }
     //----------------------------------------------------------------
@@ -813,7 +813,7 @@ void WmfPainterBackend::updateFromDeviceContext(WmfDeviceContext &context)
         mPainter->setBackgroundMode(context.bgMixMode == TRANSPARENT ? Qt::TransparentMode
                                                                      : Qt::OpaqueMode);
 #if DEBUG_WMFPAINT
-        kDebug(31000) << "*** Setting background mode to" << context.bgMixMode;
+        debugVectorImage << "*** Setting background mode to" << context.bgMixMode;
 #endif
     }
     //Break extra space NYI
@@ -826,7 +826,7 @@ void WmfPainterBackend::updateFromDeviceContext(WmfDeviceContext &context)
         mPainter->setCompositionMode(compMode);
 
 #if DEBUG_WMFPAINT
-        kDebug(31000) << "*** Setting composition mode to" << context.rop;
+        debugVectorImage << "*** Setting composition mode to" << context.rop;
 #endif
     }
     //layoutMode not necessary to handle here

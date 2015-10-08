@@ -27,7 +27,6 @@
 #include <KoColor.h>
 
 
-#include "kis_types.h"
 #include "kis_node_visitor.h"
 #include "kis_processing_visitor.h"
 #include "kis_debug.h"
@@ -185,8 +184,8 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
 
         m_d->paintDevice->colorSpace()->
             convertPixelsTo(m_d->paintDevice->defaultPixel(), defaultPixel, colorSpace, 1,
-                            KoColorConversionTransformation::InternalRenderingIntent,
-                            KoColorConversionTransformation::InternalConversionFlags);
+                            KoColorConversionTransformation::internalRenderingIntent(),
+                            KoColorConversionTransformation::internalConversionFlags());
         dev->setDefaultPixel(defaultPixel);
         delete[] defaultPixel;
         m_d->paintDevice = dev;

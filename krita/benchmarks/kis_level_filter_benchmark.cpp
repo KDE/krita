@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kis_level_filter_benchmark.h"
 #include "kis_benchmark_values.h"
@@ -101,4 +101,4 @@ void KisLevelFilterBenchmark::benchmarkFilter()
 
 
 
-QTEST_KDEMAIN(KisLevelFilterBenchmark, GUI)
+QTEST_MAIN(KisLevelFilterBenchmark)

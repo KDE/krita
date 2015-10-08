@@ -25,7 +25,7 @@
 #include <KoTextEditor.h>
 
 #include <QAction>
-#include <kdebug.h>
+#include <QDebug>
 
 #include <QWidget>
 #include <QSignalMapper>

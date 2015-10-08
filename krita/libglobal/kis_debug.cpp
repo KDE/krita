@@ -97,7 +97,7 @@ Q_LOGGING_CATEGORY(_41008, "krita.file")
 Q_LOGGING_CATEGORY(_41009, "krita.math")
 Q_LOGGING_CATEGORY(_41010, "krita.render")
 Q_LOGGING_CATEGORY(_41011, "krita.scripting")
-Q_LOGGING_CATEGORY(_41012, "krita.tablet")
+Q_LOGGING_CATEGORY(_41012, "krita.input")
 
 
 

@@ -32,7 +32,7 @@
 #include "KoShapeShadow.h"
 #include "KoInsets.h"
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 #include <QPainter>
 
@@ -57,7 +57,7 @@ public:
     virtual void childChanged(KoShape *shape, KoShape::ChangeType type)
     {
         SimpleShapeContainerModel::childChanged(shape, type);
-        //kDebug(30006) << type;
+        //debugFlake << type;
         switch (type) {
         case KoShape::PositionChanged:
         case KoShape::RotationChanged:
@@ -119,7 +119,7 @@ bool KoShapeGroup::hitTest(const QPointF &position) const
 QSizeF KoShapeGroup::size() const
 {
     Q_D(const KoShapeGroup);
-    //kDebug(30006) << "size" << d->size;
+    //debugFlake << "size" << d->size;
     if (!d->sizeCached) {
         QRectF bound;
         foreach(KoShape *shape, shapes()) {
@@ -130,7 +130,7 @@ QSizeF KoShapeGroup::size() const
         }
         d->size = bound.size();
         d->sizeCached = true;
-        kDebug(30006) << "recalculated size" << d->size;
+        debugFlake << "recalculated size" << d->size;
     }
 
     return d->size;

@@ -22,7 +22,7 @@
 #ifndef KOCONFIGMISCPAGE_H
 #define KOCONFIGMISCPAGE_H
 
-#include <kvbox.h>
+#include <KoVBox.h>
 
 #include "komain_export.h"
 
@@ -30,7 +30,7 @@ class KoUnit;
 class KoDocument;
 class KoDocumentResourceManager;
 
-class KOMAIN_EXPORT KoConfigMiscPage : public KVBox
+class KOMAIN_EXPORT KoConfigMiscPage : public KoVBox
 {
     Q_OBJECT
 

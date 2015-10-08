@@ -38,7 +38,7 @@
 #include <QTextFormat>
 #include <QTextList>
 
-#include <kdebug.h>
+#include "TextDebug.h"
 #include "KoTextDebug.h"
 
 

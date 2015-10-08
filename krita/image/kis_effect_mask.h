@@ -19,7 +19,6 @@
 #ifndef _KIS_EFFECT_MASK_
 #define _KIS_EFFECT_MASK_
 
-#include "kis_types.h"
 #include "kis_mask.h"
 /**
  * An effect mask is a single channel mask that applies a particular

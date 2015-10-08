@@ -23,12 +23,13 @@ set(vectorimage_LIB_SRCS
     libwmf/WmfPainterBackend.cpp
     libwmf/WmfWriter.cpp
 
+    VectorImageDebug.cpp
 )
 
 add_library(kovectorimage SHARED ${vectorimage_LIB_SRCS})
 generate_export_header(kovectorimage BASE_NAME kovectorimage)
 
-target_link_libraries(kovectorimage  KF5::I18n KF5::KDELibs4Support Qt5::Gui Qt5::PrintSupport)
+target_link_libraries(kovectorimage  KF5::I18n Qt5::Gui Qt5::PrintSupport)
 target_link_libraries(kovectorimage LINK_INTERFACE_LIBRARIES )
 
 set_target_properties(kovectorimage PROPERTIES

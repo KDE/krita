@@ -25,7 +25,6 @@
 #include <QDomDocument>
 
 #include "abr_struct_parser.h"
-#include "kis_abr_translator.h"
 
 
 AbrStructParser::AbrStructParser()

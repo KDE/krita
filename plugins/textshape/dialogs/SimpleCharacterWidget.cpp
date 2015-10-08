@@ -37,7 +37,7 @@
 #include <KoZoomHandler.h>
 #include <KoStyleManager.h>
 
-#include <kdebug.h>
+#include <QDebug>
 
 #include <QTextLayout>
 #include <QComboBox>

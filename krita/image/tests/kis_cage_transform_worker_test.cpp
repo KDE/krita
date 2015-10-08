@@ -18,7 +18,7 @@
 
 #include "kis_cage_transform_worker_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
@@ -327,4 +327,4 @@ void KisCageTransformWorkerTest::testAngleBetweenVectors()
     QCOMPARE(t.map(b1), b2);
 }
 
-QTEST_KDEMAIN(KisCageTransformWorkerTest, GUI)
+QTEST_MAIN(KisCageTransformWorkerTest)

@@ -52,19 +52,17 @@
 
 
 #include <kfileitem.h>
-#include <kio/netaccess.h>
+#include <KoNetAccess.h>
 #include <kio/job.h>
 #include <klocalizedstring.h>
-#include <ksavefile.h>
 #include <kis_debug.h>
-#include <kstandarddirs.h>
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
 #include <kfileitem.h>
 #include <kfileitem.h>
 #include <kdirnotify.h>
 #include <QTemporaryFile>
-#include "kundo2stack.h"
+#include <kbackup.h>
 
 #include <QApplication>
 #include <QBuffer>
@@ -258,6 +256,14 @@ public:
         storeInternal(false),
         isLoading(false),
         undoStack(0),
+        m_job(0),
+        m_statJob(0),
+        m_uploadJob(0),
+        m_saveOk(false),
+        m_waitForSave(false),
+        m_duringSaveAs(false),
+        m_bTemp(false),
+        m_bAutoDetectedMime(false),
         modified(false),
         readwrite(true),
         disregardAutosaveFailure(false),
@@ -266,17 +272,6 @@ public:
         imageIdleWatcher(2000 /*ms*/),
         kraLoader(0)
     {
-        m_job = 0;
-        m_statJob = 0;
-        m_uploadJob = 0;
-        m_saveOk = false;
-        m_waitForSave = false;
-        m_duringSaveAs = false;
-        m_bTemp = false;
-        m_bAutoDetectedMime = false;
-
-        confirmNonNativeSave[0] = true;
-        confirmNonNativeSave[1] = true;
         if (QLocale().measurementSystem() == QLocale::ImperialSystem) {
             unit = KoUnit::Inch;
         } else {
@@ -304,7 +299,7 @@ public:
 
     QByteArray mimeType; // The actual mimetype of the document
     QByteArray outputMimeType; // The mimetype to use when saving
-    bool confirmNonNativeSave [2]; // used to pop up a dialog when saving for the
+    bool confirmNonNativeSave [2] = {true, true}; // used to pop up a dialog when saving for the
     // first time if the file is in a foreign format
     // (Save/Save As, Export)
     int specialOutputFlag; // See KoFileDialog in koMainWindow.cc
@@ -739,6 +734,7 @@ bool KisDocument::saveFile()
         KisImportExportFilter::ConversionStatus status = d->filterManager->exportDocument(localFilePath(), outputMimeType);
         ret = status == KisImportExportFilter::OK;
         suppressErrorDialog = (status == KisImportExportFilter::UserCancelled || status == KisImportExportFilter::BadConversionGraph);
+        dbgFile << "Export status was" << status;
     } else {
         // Native format => normal save
         Q_ASSERT(!localFilePath().isEmpty());
@@ -1290,7 +1286,7 @@ bool KisDocument::openFile()
     d->specialOutputFlag = 0;
     QByteArray _native_format = nativeFormatMimeType();
 
-    QUrl u(localFilePath());
+    QUrl u = QUrl::fromLocalFile(localFilePath());
     QString typeName = mimeType();
 
     if (typeName.isEmpty()) {
@@ -1793,7 +1789,7 @@ void KisDocument::setModified(bool mod)
         return;
 
     if ( !d->readwrite && d->modified ) {
-        kError(1000) << "Can't set a read-only document to 'modified' !" << endl;
+        errKrita << "Can't set a read-only document to 'modified' !" << endl;
         return;
     }
 
@@ -2299,7 +2295,7 @@ bool KisDocument::saveAs( const QUrl &kurl )
 {
     if (!kurl.isValid())
     {
-        kError(1000) << "saveAs: Malformed URL " << kurl.url() << endl;
+        errKrita << "saveAs: Malformed URL " << kurl.url() << endl;
         return false;
     }
     d->m_duringSaveAs = true;

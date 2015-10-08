@@ -22,7 +22,6 @@
 
 #include <KoColor.h>
 
-#include "kis_global.h"
 #include "kis_types.h"
 #include "kis_painter.h"
 

@@ -18,7 +18,7 @@
 
 #include "filter_stroke_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "stroke_testing_utils.h"
 #include "strokes/kis_filter_stroke_strategy.h"
 #include "kis_resources_snapshot.h"
@@ -90,4 +90,4 @@ void FilterStrokeTest::testBlurFilter()
     tester.test();
 }
 
-QTEST_KDEMAIN(FilterStrokeTest, GUI)
+QTEST_MAIN(FilterStrokeTest)

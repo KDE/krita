@@ -35,7 +35,7 @@
 #include <KoUnit.h>
 #include <QPainter>
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 KoConnectionShapePrivate::KoConnectionShapePrivate(KoConnectionShape *q)
     : KoParameterShapePrivate(q),
@@ -395,18 +395,18 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
     if (element.hasAttributeNS(KoXmlNS::draw, "start-shape")) {
         d->connectionPointId1 = element.attributeNS(KoXmlNS::draw, "start-glue-point", QString()).toInt();
         QString shapeId1 = element.attributeNS(KoXmlNS::draw, "start-shape", QString());
-        kDebug(30006) << "references start-shape" << shapeId1 << "at glue-point" << d->connectionPointId1;
+        debugFlake << "references start-shape" << shapeId1 << "at glue-point" << d->connectionPointId1;
         d->shape1 = context.shapeById(shapeId1);
         if (d->shape1) {
-            kDebug(30006) << "start-shape was already loaded";
+            debugFlake << "start-shape was already loaded";
             d->shape1->addDependee(this);
             if (d->shape1->hasConnectionPoint(d->connectionPointId1)) {
-                kDebug(30006) << "connecting to start-shape";
+                debugFlake << "connecting to start-shape";
                 d->handles[StartHandle] = d->shape1->absoluteTransformation(0).map(d->shape1->connectionPoint(d->connectionPointId1).position);
-                kDebug(30006) << "start handle position =" << d->handles[StartHandle];
+                debugFlake << "start handle position =" << d->handles[StartHandle];
             }
         } else {
-            kDebug(30006) << "start-shape not loaded yet, deferring connection";
+            debugFlake << "start-shape not loaded yet, deferring connection";
             context.updateShape(shapeId1, new KoConnectionShapeLoadingUpdater(this, KoConnectionShapeLoadingUpdater::First));
         }
     } else {
@@ -417,18 +417,18 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
     if (element.hasAttributeNS(KoXmlNS::draw, "end-shape")) {
         d->connectionPointId2 = element.attributeNS(KoXmlNS::draw, "end-glue-point", "").toInt();
         QString shapeId2 = element.attributeNS(KoXmlNS::draw, "end-shape", "");
-        kDebug(30006) << "references end-shape " << shapeId2 << "at glue-point" << d->connectionPointId2;
+        debugFlake << "references end-shape " << shapeId2 << "at glue-point" << d->connectionPointId2;
         d->shape2 = context.shapeById(shapeId2);
         if (d->shape2) {
-            kDebug(30006) << "end-shape was already loaded";
+            debugFlake << "end-shape was already loaded";
             d->shape2->addDependee(this);
             if (d->shape2->hasConnectionPoint(d->connectionPointId2)) {
-                kDebug(30006) << "connecting to end-shape";
+                debugFlake << "connecting to end-shape";
                 d->handles[EndHandle] = d->shape2->absoluteTransformation(0).map(d->shape2->connectionPoint(d->connectionPointId2).position);
-                kDebug(30006) << "end handle position =" << d->handles[EndHandle];
+                debugFlake << "end handle position =" << d->handles[EndHandle];
             }
         } else {
-            kDebug(30006) << "end-shape not loaded yet, deferring connection";
+            debugFlake << "end-shape not loaded yet, deferring connection";
             context.updateShape(shapeId2, new KoConnectionShapeLoadingUpdater(this, KoConnectionShapeLoadingUpdater::Second));
         }
     } else {

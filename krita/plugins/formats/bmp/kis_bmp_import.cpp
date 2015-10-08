@@ -66,7 +66,7 @@ KisImportExportFilter::ConversionStatus KisBMPImport::convert(const QByteArray& 
     doc->prepareForImport();
 
     if (!filename.isEmpty()) {
-        QUrl url(filename);
+        QUrl url = QUrl::fromLocalFile(filename);
 
         if (url.isEmpty() || !url.isLocalFile()) {
             return KisImportExportFilter::FileNotFound;

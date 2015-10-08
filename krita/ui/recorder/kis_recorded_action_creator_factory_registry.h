@@ -22,7 +22,6 @@
 #include <kritaui_export.h>
 #include <KoID.h>
 
-class KisRecordedAction;
 class KisRecordedActionCreatorFactory;
 
 /**
@@ -31,10 +30,9 @@ class KisRecordedActionCreatorFactory;
  */
 class KRITAUI_EXPORT KisRecordedActionCreatorFactoryRegistry
 {
-private:
+public:
     KisRecordedActionCreatorFactoryRegistry();
     ~KisRecordedActionCreatorFactoryRegistry();
-public:
     static KisRecordedActionCreatorFactoryRegistry* instance();
     /**
      * Add a factory of action creator.

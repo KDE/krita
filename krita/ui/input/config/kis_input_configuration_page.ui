@@ -37,7 +37,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KPushButton" name="editProfilesButton">
+      <widget class="QPushButton" name="editProfilesButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -76,8 +76,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>665</width>
-        <height>434</height>
+        <width>677</width>
+        <height>446</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout">
@@ -95,11 +95,6 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KPushButton</class>
-   <extends>QPushButton</extends>
-   <header>kpushbutton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

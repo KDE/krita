@@ -46,8 +46,7 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, const KComponentData &_compone
 {
     setFocusProxy(m_documentList);
 
-    KGuiItem openGItem(i18n("Use This Template"));
-    m_openButton->setGuiItem(openGItem);
+    m_openButton->setText(i18n("Use This Template"));
     KConfigGroup cfgGrp(componentData().config(), "TemplateChooserDialog");
     QString fullTemplateName = cfgGrp.readPathEntry("FullTemplateName", QString());
     d->m_alwaysUseTemplate = cfgGrp.readPathEntry("AlwaysUseTemplate", QString());

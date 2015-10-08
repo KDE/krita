@@ -20,13 +20,19 @@
 #define __KIS_STROKES_QUEUE_H
 
 #include "kritaimage_export.h"
+#include "kundo2magicstring.h"
 #include "kis_types.h"
 #include "kis_stroke_job_strategy.h"
 #include "kis_stroke_strategy.h"
 #include "kis_stroke_strategy_factory.h"
 
+
+
 class KisUpdaterContext;
 class KisStroke;
+class KisStrokeStrategy;
+class KisStrokeJobData;
+
 
 class KRITAIMAGE_EXPORT KisStrokesQueue
 {

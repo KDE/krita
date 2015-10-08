@@ -20,7 +20,7 @@
 #ifndef KISMOUSEINPUTEDITOR_H
 #define KISMOUSEINPUTEDITOR_H
 
-#include <KPushButton>
+#include <QPushButton>
 
 namespace Ui
 {
@@ -30,7 +30,7 @@ class KisMouseInputEditor;
 /**
  * \brief An editor widget for mouse buttons with modifiers.
  */
-class KisMouseInputEditor : public KPushButton
+class KisMouseInputEditor : public QPushButton
 {
     Q_OBJECT
 public:

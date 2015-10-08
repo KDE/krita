@@ -16,12 +16,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kglobal.h>
+#include <QGlobalStatic>
 
 #include "kis_color_manager.h"
 #include "colord/KisColord.h"
 
 #include <kis_debug.h>
+
+Q_GLOBAL_STATIC(KisColorManager, s_instance)
 
 class KisColorManager::Private {
 public:
@@ -74,6 +76,5 @@ QByteArray KisColorManager::displayProfile(const QString &device, int profile) c
 
 KisColorManager *KisColorManager::instance()
 {
-    K_GLOBAL_STATIC(KisColorManager, s_instance);
     return s_instance;
 }

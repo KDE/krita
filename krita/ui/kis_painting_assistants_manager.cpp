@@ -19,9 +19,9 @@
 
 #include "kis_painting_assistants_manager.h"
 #include "kis_painting_assistants_decoration.h"
-#include "KisView.h"
 #include "KisViewManager.h"
 #include "kis_action_manager.h"
+#include "kis_action.h"
 
 #include <klocalizedstring.h>
 #include <kguiitem.h>

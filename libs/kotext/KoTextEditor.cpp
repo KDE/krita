@@ -83,7 +83,7 @@
 #include <QTextTableCell>
 #include <kundo2command.h>
 
-#include <kdebug.h>
+#include "TextDebug.h"
 #include "KoTextDebug.h"
 
 Q_DECLARE_METATYPE(QTextFrame*)

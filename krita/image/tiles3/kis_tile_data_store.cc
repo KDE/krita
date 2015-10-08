@@ -16,17 +16,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
-#include <kglobal.h>
-
 // to disable assert when the leak tracker is active
 #include "config-memory-leak-tracker.h"
+
+#include <QGlobalStatic>
 
 #include "kis_tile_data_store.h"
 #include "kis_tile_data.h"
 #include "kis_debug.h"
 
 #include "kis_tile_data_store_iterators.h"
+
+Q_GLOBAL_STATIC(KisTileDataStore, s_instance)
 
 //#define DEBUG_PRECLONE
 
@@ -91,7 +92,6 @@ KisTileDataStore::~KisTileDataStore()
 
 KisTileDataStore* KisTileDataStore::instance()
 {
-    K_GLOBAL_STATIC(KisTileDataStore, s_instance);
     return s_instance;
 }
 

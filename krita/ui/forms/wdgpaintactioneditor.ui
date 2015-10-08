@@ -94,7 +94,7 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="KIntNumInput" name="opacity" native="true">
+        <widget class="QSpinBox" name="opacity" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -179,12 +179,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KIntNumInput</class>
-   <extends>QWidget</extends>
-   <header>knuminput.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>KisPresetChooser</class>
    <extends>QWidget</extends>

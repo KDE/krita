@@ -26,9 +26,9 @@
 #include <QImage>
 #include <QMessageBox>
 #include <QBuffer>
+#include <QGlobalStatic>
 
 #include <klocalizedstring.h>
-#include <kglobal.h>
 
 #include "KoColorSpace.h"
 #include "KoStore.h"
@@ -44,6 +44,8 @@
 // local
 #include "kis_config.h"
 #include "kis_store_paintdevice_writer.h"
+
+Q_GLOBAL_STATIC(KisClipboard, s_instance)
 
 KisClipboard::KisClipboard()
 {
@@ -67,8 +69,6 @@ KisClipboard::~KisClipboard()
 
 KisClipboard* KisClipboard::instance()
 {
-    K_GLOBAL_STATIC(KisClipboard, s_instance);
-    qAddPostRoutine(s_instance.destroy); // make sure we get destroyed first.
     return s_instance;
 }
 
@@ -146,7 +146,7 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
     QImage qimage;
     KisConfig cfg;
     const KoColorProfile *monitorProfile = cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow()));
-    qimage = dev->convertToQImage(monitorProfile, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+    qimage = dev->convertToQImage(monitorProfile, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
     if (!qimage.isNull() && mimeData) {
         mimeData->setImageData(qimage);
     }
@@ -297,15 +297,17 @@ void KisClipboard::clipboardDataChanged()
     if (!m_pushedClipboard) {
         m_hasClip = false;
         QClipboard *cb = QApplication::clipboard();
-        QImage qimage = cb->image();
-        const QMimeData *cbData = cb->mimeData();
-        QByteArray mimeType("application/x-krita-selection");
+        if (cb->mimeData()->hasImage()) {
+            QImage qimage = cb->image();
+            const QMimeData *cbData = cb->mimeData();
+            QByteArray mimeType("application/x-krita-selection");
 
-        if (cbData && cbData->hasFormat(mimeType))
-            m_hasClip = true;
+            if (cbData && cbData->hasFormat(mimeType))
+                m_hasClip = true;
 
-        if (!qimage.isNull())
-            m_hasClip = true;
+            if (!qimage.isNull())
+                m_hasClip = true;
+        }
     }
     if (m_hasClip) {
         emit clipCreated();
@@ -371,8 +373,11 @@ QSize KisClipboard::clipSize() const
 
         return clip->exactBounds().size();
     } else {
-        QImage qimage = cb->image();
-        return qimage.size();
+        if (cb->mimeData()->hasImage()) {
+            QImage qimage = cb->image();
+            return qimage.size();
+        }
     }
+    return QSize();
 }
 

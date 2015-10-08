@@ -23,9 +23,11 @@
 #include <math.h>
 
 #include <klocalizedstring.h>
-#include <kglobal.h>
+#include <QGlobalStatic>
 
 #include "kis_debug.h"
+
+Q_GLOBAL_STATIC(KisFilterStrategyRegistry, s_instance)
 
 qreal KisHermiteFilterStrategy::valueAt(qreal t) const
 {
@@ -190,7 +192,6 @@ KisFilterStrategyRegistry::~KisFilterStrategyRegistry()
 
 KisFilterStrategyRegistry* KisFilterStrategyRegistry::instance()
 {
-    K_GLOBAL_STATIC(KisFilterStrategyRegistry, s_instance);
     if (!s_instance.exists()) {
         // s_instance->add(new KisHermiteFilterStrategy);
         s_instance->add(new KisBicubicFilterStrategy);

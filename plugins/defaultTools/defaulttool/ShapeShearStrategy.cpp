@@ -35,7 +35,7 @@
 #include <QPointF>
 
 #include <math.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <klocalizedstring.h>
 
 ShapeShearStrategy::ShapeShearStrategy( KoToolBase *tool, const QPointF &clicked, KoFlake::SelectionHandle direction )
@@ -111,7 +111,7 @@ ShapeShearStrategy::ShapeShearStrategy( KoToolBase *tool, const QPointF &clicked
     qreal currentAngle = atan2( edge.y(), edge.x() ) / M_PI * 180;
     m_initialSelectionAngle = currentAngle - angle;
 
-    kDebug(30006) <<" PREsol.x=" << m_solidPoint.x() <<" sol.y=" << m_solidPoint.y();
+    qDebug() <<" PREsol.x=" << m_solidPoint.x() <<" sol.y=" << m_solidPoint.y();
     m_solidPoint = tool->canvas()->shapeManager()->selection()->absoluteTransformation(0).map( m_solidPoint );
 
     // use crossproduct of top edge and left edge of selection bounding rect

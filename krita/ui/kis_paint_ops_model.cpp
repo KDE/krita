@@ -23,9 +23,9 @@
 #include "kis_debug.h"
 #include <kis_paintop_registry.h>
 #include <kis_paintop_factory.h>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 
-#include <kglobal.h>
+
 
 KisPaintOpListModel::KisPaintOpListModel(QObject *parent)
     : BasePaintOpCategorizedListModel(parent)
@@ -57,7 +57,7 @@ QVariant KisPaintOpListModel::data(const QModelIndex& idx, int role) const
 void KisPaintOpListModel::fill(const QList<KisPaintOpFactory*>& list)
 {
     foreach (KisPaintOpFactory *factory, list) {
-        QString fileName = KGlobal::dirs()->findResource("kis_images", factory->pixmap());
+        QString fileName = KoResourcePaths::findResource("kis_images", factory->pixmap());
         QPixmap pixmap(fileName);
 
         if(pixmap.isNull()){

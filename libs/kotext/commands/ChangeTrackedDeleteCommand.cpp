@@ -42,8 +42,8 @@
 
 #include <klocalizedstring.h>
 
-#include <kdebug.h>
-#include <QDebug>
+#include "TextDebug.h"
+#include "TextDebug.h"
 
 //A convenience function to get a ListIdType from a format
 

@@ -18,7 +18,7 @@
 
 #include "kis_model_index_converter_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kis_node_model.h"
 #include "kis_dummies_facade.h"
@@ -448,4 +448,4 @@ void KisModelIndexConverterTest::testRowCountShowAll()
     checkRowCount(m_layer4, 0);
 }
 
-QTEST_KDEMAIN(KisModelIndexConverterTest, GUI)
+QTEST_MAIN(KisModelIndexConverterTest)

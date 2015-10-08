@@ -209,7 +209,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const QUrl &uri)
 
     KoColorTransformation* transform = 0;
     if (profile && !profile->isSuitableForOutput()) {
-        transform = KoColorSpaceRegistry::instance()->colorSpace(modelId, Integer8BitsColorDepthID.id(), profile)->createColorConverter(cs, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+        transform = KoColorSpaceRegistry::instance()->colorSpace(modelId, Integer8BitsColorDepthID.id(), profile)->createColorConverter(cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
     }
     // Apparently an invalid transform was created from the profile. See bug https://bugs.kde.org/show_bug.cgi?id=255451.
     // After 2.3: warn the user!
@@ -473,7 +473,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const QUrl &uri, KisPaintLaye
         if (!m_batchMode) {
             QMessageBox::information(0, i18nc("@title:window", "Krita"), i18n("Cannot export images in %1.\nWill save as RGB.", cs->name()));
         }
-        KUndo2Command *tmp = layer->paintDevice()->convertTo(KoColorSpaceRegistry::instance()->rgb8(), KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+        KUndo2Command *tmp = layer->paintDevice()->convertTo(KoColorSpaceRegistry::instance()->rgb8(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
         delete tmp;
         cs = KoColorSpaceRegistry::instance()->rgb8();
         color_type = JCS_RGB;
@@ -632,8 +632,6 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const QUrl &uri, KisPaintLaye
         }
     }
 
-    const KoColorProfile* colorProfile = layer->colorSpace()->profile();
-    QByteArray colorProfileData = colorProfile->rawData();
 
     KisPaintDeviceSP dev = new KisPaintDevice(layer->colorSpace());
     KoColor c(options.transparencyFillColor, layer->colorSpace());
@@ -642,7 +640,12 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const QUrl &uri, KisPaintLaye
     gc.bitBlt(QPoint(0, 0), layer->paintDevice(), QRect(0, 0, width, height));
     gc.end();
 
-    write_icc_profile(& cinfo, (uchar*) colorProfileData.data(), colorProfileData.size());
+
+    if (options.saveProfile) {
+        const KoColorProfile* colorProfile = layer->colorSpace()->profile();
+        QByteArray colorProfileData = colorProfile->rawData();
+        write_icc_profile(& cinfo, (uchar*) colorProfileData.data(), colorProfileData.size());
+    }
 
     // Write data information
 

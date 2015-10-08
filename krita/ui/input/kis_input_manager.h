@@ -23,7 +23,6 @@
 #include <kritaui_export.h>
 
 class QPointF;
-class QTabletEvent;
 class QTouchEvent;
 class KisToolProxy;
 class KisCanvas2;

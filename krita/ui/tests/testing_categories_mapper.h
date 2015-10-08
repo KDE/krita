@@ -20,7 +20,7 @@
 #define __TESTING_CATEGORIES_MAPPER_H
 
 #include "kis_categories_mapper.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 struct QStringConverter {
     QString operator() (const QString &entry) {

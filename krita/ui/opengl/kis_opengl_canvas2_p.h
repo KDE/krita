@@ -61,10 +61,10 @@ namespace VSyncWorkaround {
 
         bool triedDisable = false;
         Display *dpy = QX11Info::display();
-        dbgKrita << "OpenGL architecture is" << gl_library_name();
+        dbgUI << "OpenGL architecture is" << gl_library_name();
 
         if (ctx->hasExtension("GLX_EXT_swap_control")) {
-            dbgKrita << "Swap control extension found.";
+            dbgUI << "Swap control extension found.";
             typedef WId (*k_glXGetCurrentDrawable)(void);
             typedef void (*kis_glXSwapIntervalEXT)(Display*, WId, int);
             k_glXGetCurrentDrawable kis_glXGetCurrentDrawable = (k_glXGetCurrentDrawable)ctx->getProcAddress("glXGetCurrentDrawable");
@@ -85,10 +85,10 @@ namespace VSyncWorkaround {
 
                 result = !swap;
             } else {
-                dbgKrita << "Couldn't load glXSwapIntervalEXT extension function";
+                dbgUI << "Couldn't load glXSwapIntervalEXT extension function";
             }
         } else if (ctx->hasExtension("GLX_MESA_swap_control")) {
-            dbgKrita << "MESA swap control extension found.";
+            dbgUI << "MESA swap control extension found.";
             typedef int (*kis_glXSwapIntervalMESA)(unsigned int);
             typedef int (*kis_glXGetSwapIntervalMESA)(void);
 
@@ -104,24 +104,24 @@ namespace VSyncWorkaround {
                 if (glXGetSwapIntervalMESA) {
                     swap = glXGetSwapIntervalMESA();
                 } else {
-                    dbgKrita << "Couldn't load glXGetSwapIntervalMESA extension function";
+                    dbgUI << "Couldn't load glXGetSwapIntervalMESA extension function";
                 }
 
                 result = !retval && !swap;
             } else {
-                dbgKrita << "Couldn't load glXSwapIntervalMESA extension function";
+                dbgUI << "Couldn't load glXSwapIntervalMESA extension function";
             }
         } else {
-            dbgKrita << "There is neither GLX_EXT_swap_control or GLX_MESA_swap_control extension supported";
+            dbgUI << "There is neither GLX_EXT_swap_control or GLX_MESA_swap_control extension supported";
         }
 
         if (triedDisable && !result) {
-            errKrita;
-            errKrita << "CRITICAL: Your video driver forbids disabling VSync!";
-            errKrita << "CRITICAL: Try toggling some VSync- or VBlank-related options in your driver configuration dialog.";
-            errKrita << "CRITICAL: NVIDIA users can do:";
-            errKrita << "CRITICAL: sudo nvidia-settings  >  (tab) OpenGL settings > Sync to VBlank  ( unchecked )";
-            errKrita;
+            errUI;
+            errUI << "CRITICAL: Your video driver forbids disabling VSync!";
+            errUI << "CRITICAL: Try toggling some VSync- or VBlank-related options in your driver configuration dialog.";
+            errUI << "CRITICAL: NVIDIA users can do:";
+            errUI << "CRITICAL: sudo nvidia-settings  >  (tab) OpenGL settings > Sync to VBlank  ( unchecked )";
+            errUI;
         }
         return result;
     }
@@ -139,12 +139,12 @@ namespace VSyncWorkaround {
             int interval = ((wglGetSwapIntervalEXT)ctx->getProcAddress("wglGetSwapIntervalEXT"))();
 
             if (interval) {
-                warnKrita << "Failed to disable VSync with WGL_EXT_swap_control";
+                warnUI << "Failed to disable VSync with WGL_EXT_swap_control";
             }
 
             retval = !interval;
         } else {
-            warnKrita << "WGL_EXT_swap_control extension is not available. Found extensions" << ctx->extensions();
+            warnUI << "WGL_EXT_swap_control extension is not available. Found extensions" << ctx->extensions();
         }
         return retval;
     }
@@ -191,8 +191,7 @@ namespace Sync {
 
     //Initialise the function pointers for glFenceSync and glGetSynciv
     //Note: Assumes a current OpenGL context.
-    void init() {
-        QOpenGLContext* ctx = QOpenGLContext::currentContext();
+    void init(QOpenGLContext* ctx) {
 #if defined Q_OS_WIN
         if (KisOpenGL::supportsFenceSync()) {
 #ifdef ENV64BIT
@@ -216,7 +215,7 @@ namespace Sync {
 #endif
         if (k_glFenceSync  == 0 || k_glGetSynciv      == 0 ||
             k_glDeleteSync == 0 || k_glClientWaitSync == 0) {
-            qWarning("Could not find sync functions, disabling sync notification.");
+            warnUI << "Could not find sync functions, disabling sync notification.";
         }
     }
 

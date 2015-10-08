@@ -21,7 +21,7 @@
 #include <MockShapes.h>
 
 #include <KoSelection.h>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 #include <QTest>
 

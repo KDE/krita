@@ -256,13 +256,13 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
     action = new KisAction(i18n("Activate next layer"), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
-    action->setShortcut(QKeySequence(Qt::Key_PageUp));
+    action->setDefaultShortcut(QKeySequence(Qt::Key_PageUp));
     actionManager->addAction("activateNextLayer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(activateNextNode()));
 
     action = new KisAction(i18n("Activate previous layer"), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
-    action->setShortcut(QKeySequence(Qt::Key_PageDown));
+    action->setDefaultShortcut(QKeySequence(Qt::Key_PageDown));
     actionManager->addAction("activatePreviousLayer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(activatePreviousNode()));
 
@@ -273,7 +273,7 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
     action = new KisAction(KisIconUtils::loadIcon("edit-copy"), i18n("&Duplicate Layer or Mask"), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
-    action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::Key_J));
+    action->setDefaultShortcut(QKeySequence(Qt::ControlModifier + Qt::Key_J));
     actionManager->addAction("duplicatelayer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(duplicateActiveNode()));
 

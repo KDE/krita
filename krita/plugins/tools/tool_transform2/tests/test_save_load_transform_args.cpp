@@ -18,7 +18,7 @@
 
 #include "test_save_load_transform_args.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QDomDocument>
 
@@ -124,4 +124,4 @@ void TestSaveLoadTransformArgs::testLiquify()
     QCOMPARE(newArgs, args);
 }
 
-QTEST_KDEMAIN(TestSaveLoadTransformArgs, GUI)
+QTEST_MAIN(TestSaveLoadTransformArgs)

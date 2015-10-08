@@ -23,14 +23,9 @@
 
 #include <KoShape.h>
 #include <KoSelection.h>
-#include <kstandarddirs.h>
-#include <kglobal.h>
+#include <KoResourcePaths.h>
 
 #define HANDLE_DISTANCE 10
-
-#if 0
-K_GLOBAL_STATIC(QImage, s_rotateCursor)
-#endif
 
 KoFlake::Position SelectionDecorator::m_hotPosition = KoFlake::TopLeftCorner;
 
@@ -44,7 +39,7 @@ SelectionDecorator::SelectionDecorator(KoFlake::SelectionHandle arrows,
 {
 #if 0
     if(s_rotateCursor == 0) {
-        s_rotateCursor->load(KStandardDirs::locate("data", "calligra/icons/cursor_rotate.png"));
+        s_rotateCursor->load(KoResourcePaths::locate("data", "calligra/icons/cursor_rotate.png"));
     }
 #endif
 }

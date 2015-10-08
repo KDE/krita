@@ -29,6 +29,7 @@
 #include <QBrush>
 #include <QPainter>
 #include <QPaintEvent>
+#include <QPainterPath>
 #include <QPoint>
 #include <QPainter>
 #include <QMatrix>
@@ -43,8 +44,8 @@
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
 
-#include <kstandarddirs.h>
-#include <kglobal.h>
+#include <KoResourcePaths.h>
+
 
 #include "KoToolProxy.h"
 
@@ -81,6 +82,11 @@ namespace
 const GLuint NO_PROGRAM = 0;
 }
 
+
+typedef void (*kis_glLogicOp)(int);
+static kis_glLogicOp ptr_glLogicOp = 0;
+
+
 struct KisOpenGLCanvas2::Private
 {
 public:
@@ -88,28 +94,25 @@ public:
         : canvasInitialized(false)
         , displayShader(0)
         , checkerShader(0)
+        , cursorShader(0)
         , glSyncObject(0)
         , wrapAroundMode(false)
 
     {
-        vertices = new QVector3D[6];
-        texCoords = new QVector2D[6];
     }
 
     ~Private() {
         delete displayShader;
         delete checkerShader;
-
-        delete[] vertices;
-        delete[] texCoords;
+        delete cursorShader;
 
         Sync::deleteSync(glSyncObject);
     }
 
     bool canvasInitialized;
 
-    QVector3D *vertices;
-    QVector2D *texCoords;
+    QVector3D vertices[6];
+    QVector2D texCoords[6];
 
     KisOpenGLImageTexturesSP openGLImageTextures;
 
@@ -126,6 +129,11 @@ public:
 
     int checkerUniformLocationModelViewProjection;
     int checkerUniformLocationTextureMatrix;
+
+    QOpenGLShaderProgram *cursorShader;
+    int cursorShaderModelViewProjectionUniform;
+
+
 
     KisDisplayFilter* displayFilter;
     KisTextureTile::FilterMode filterMode;
@@ -247,39 +255,41 @@ void KisOpenGLCanvas2::initializeGL()
 //    KisConfig cfg;
 //    if (cfg.disableVSync()) {
 //        if (!VSyncWorkaround::tryDisableVSync(this)) {
-//            warnKrita;
-//            warnKrita << "WARNING: We didn't manage to switch off VSync on your graphics adapter.";
-//            warnKrita << "WARNING: It means either your hardware or driver doesn't support it,";
-//            warnKrita << "WARNING: or we just don't know about this hardware. Please report us a bug";
-//            warnKrita << "WARNING: with the output of \'glxinfo\' for your card.";
-//            warnKrita;
-//            warnKrita << "WARNING: Trying to workaround it by disabling Double Buffering.";
-//            warnKrita << "WARNING: You may see some flickering when painting with some tools. It doesn't";
-//            warnKrita << "WARNING: affect the quality of the final image, though.";
-//            warnKrita;
+//            warnUI;
+//            warnUI << "WARNING: We didn't manage to switch off VSync on your graphics adapter.";
+//            warnUI << "WARNING: It means either your hardware or driver doesn't support it,";
+//            warnUI << "WARNING: or we just don't know about this hardware. Please report us a bug";
+//            warnUI << "WARNING: with the output of \'glxinfo\' for your card.";
+//            warnUI;
+//            warnUI << "WARNING: Trying to workaround it by disabling Double Buffering.";
+//            warnUI << "WARNING: You may see some flickering when painting with some tools. It doesn't";
+//            warnUI << "WARNING: affect the quality of the final image, though.";
+//            warnUI;
 
 //            if (cfg.disableDoubleBuffering() && QOpenGLContext::currentContext()->format().swapBehavior() == QSurfaceFormat::DoubleBuffer) {
-//                errKrita << "CRITICAL: Failed to disable Double Buffering. Lines may look \"bended\" on your image.";
-//                errKrita << "CRITICAL: Your graphics card or driver does not fully support Krita's OpenGL canvas.";
-//                errKrita << "CRITICAL: For an optimal experience, please disable OpenGL";
-//                errKrita;
+//                errUI << "CRITICAL: Failed to disable Double Buffering. Lines may look \"bended\" on your image.";
+//                errUI << "CRITICAL: Your graphics card or driver does not fully support Krita's OpenGL canvas.";
+//                errUI << "CRITICAL: For an optimal experience, please disable OpenGL";
+//                errUI;
 //            }
 //        }
 //    }
 
     KisConfig cfg;
-    dbgKrita << "OpenGL: Preparing to initialize OpenGL for KisCanvas";
+    dbgUI << "OpenGL: Preparing to initialize OpenGL for KisCanvas";
     int glVersion = KisOpenGL::initializeContext(context());
-    dbgKrita << "OpenGL: Version found" << glVersion;
+    dbgUI << "OpenGL: Version found" << glVersion;
     initializeOpenGLFunctions();
     VSyncWorkaround::tryDisableVSync(context());
 
-    d->openGLImageTextures->initGL((QOpenGLFunctions *)this);
+    d->openGLImageTextures->initGL(context()->functions());
     d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
     initializeCheckerShader();
     initializeDisplayShader();
 
-    Sync::init();
+    ptr_glLogicOp = (kis_glLogicOp)(context()->getProcAddress("glLogicOp"));
+
+    Sync::init(context());
 
 
 
@@ -338,6 +348,75 @@ void KisOpenGLCanvas2::paintGL()
         cfg.writeEntry("canvasState", "OPENGL_SUCCESS");
         OPENGL_SUCCESS = true;
     }
+}
+
+QOpenGLShaderProgram *KisOpenGLCanvas2::getCursorShader()
+{
+    if (d->cursorShader == 0) {
+        d->cursorShader = new QOpenGLShaderProgram();
+        d->cursorShader->addShaderFromSourceFile(QOpenGLShader::Vertex, KoResourcePaths::findResource("data", "krita/shaders/cursor.vert"));
+        d->cursorShader->addShaderFromSourceFile(QOpenGLShader::Fragment, KoResourcePaths::findResource("data", "krita/shaders/cursor.frag"));
+        d->cursorShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
+        if (! d->cursorShader->link()) {
+            dbgUI << "OpenGL error" << glGetError();
+            qFatal("Failed linking cursor shader");
+        }
+        Q_ASSERT(d->cursorShader->isLinked());
+        d->cursorShaderModelViewProjectionUniform = d->cursorShader->uniformLocation("modelViewProjection");
+    }
+
+    return d->cursorShader;
+}
+
+void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
+{
+
+    QOpenGLShaderProgram *cursorShader = getCursorShader();
+    cursorShader->bind();
+
+    // setup the mvp transformation
+    KisCoordinatesConverter *converter = coordinatesConverter();
+
+    QMatrix4x4 projectionMatrix;
+    projectionMatrix.setToIdentity();
+    projectionMatrix.ortho(0, width(), height(), 0, NEAR_VAL, FAR_VAL);
+
+    // Set view/projection matrices
+    QMatrix4x4 modelMatrix(converter->flakeToWidgetTransform());
+    modelMatrix.optimize();
+    modelMatrix = projectionMatrix * modelMatrix;
+    cursorShader->setUniformValue(d->cursorShaderModelViewProjectionUniform, modelMatrix);
+
+    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+
+    // XXX: glLogicOp not in ES 2.0 -- in that case, it would be better to use another method.
+    // It is defined in 3.1 core profile onward.
+    glEnable(GL_COLOR_LOGIC_OP);
+    if (ptr_glLogicOp) {
+        ptr_glLogicOp(GL_XOR);
+    }
+
+    // setup the array of vertices
+    QVector<QVector3D> vertices;
+    QList<QPolygonF> subPathPolygons = path.toSubpathPolygons();
+    for (int i=0; i<subPathPolygons.size(); i++) {
+        const QPolygonF& polygon = subPathPolygons.at(i);
+        for (int j=0; j < polygon.count(); j++) {
+            QPointF p = polygon.at(j);
+            vertices << QVector3D(p.x(), p.y(), 0.f);
+        }
+        cursorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
+        cursorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
+
+        glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
+
+        vertices.clear();
+    }
+
+    glDisable(GL_COLOR_LOGIC_OP);
+
+    cursorShader->release();
+
 }
 
 bool KisOpenGLCanvas2::isBusy() const
@@ -507,7 +586,7 @@ void KisOpenGLCanvas2::drawImage()
                     d->openGLImageTextures->getTextureTileCR(effectiveCol, effectiveRow);
 
             if (!tile) {
-                warnKrita << "OpenGL: Trying to paint texture tile but it has not been created yet.";
+                warnUI << "OpenGL: Trying to paint texture tile but it has not been created yet.";
                 continue;
             }
 
@@ -584,7 +663,7 @@ void KisOpenGLCanvas2::reportShaderLinkFailedAndExit(bool result, const QString 
     KisConfig cfg;
 
     if (cfg.useVerboseOpenGLDebugOutput()) {
-        dbgKrita << "GL-log:" << context << log;
+        dbgUI << "GL-log:" << context << log;
     }
 
     if (result) return;
@@ -608,11 +687,11 @@ void KisOpenGLCanvas2::initializeCheckerShader()
     QString fragmentShaderName;
 
     if (KisOpenGL::supportsGLSL13()) {
-        vertexShaderName = KGlobal::dirs()->findResource("data", "krita/shaders/matrix_transform.vert");
-        fragmentShaderName = KGlobal::dirs()->findResource("data", "krita/shaders/simple_texture.frag");
+        vertexShaderName = KoResourcePaths::findResource("data", "krita/shaders/matrix_transform.vert");
+        fragmentShaderName = KoResourcePaths::findResource("data", "krita/shaders/simple_texture.frag");
     } else {
-        vertexShaderName = KGlobal::dirs()->findResource("data", "krita/shaders/matrix_transform_legacy.vert");
-        fragmentShaderName = KGlobal::dirs()->findResource("data", "krita/shaders/simple_texture_legacy.frag");
+        vertexShaderName = KoResourcePaths::findResource("data", "krita/shaders/matrix_transform_legacy.vert");
+        fragmentShaderName = KoResourcePaths::findResource("data", "krita/shaders/simple_texture_legacy.frag");
     }
 
     bool result;
@@ -671,7 +750,7 @@ QByteArray KisOpenGLCanvas2::buildFragmentShader()
     }
 
     {
-        QFile prefaceFile(KGlobal::dirs()->findResource("data", fileKey));
+        QFile prefaceFile(KoResourcePaths::findResource("data", fileKey));
         prefaceFile.open(QIODevice::ReadOnly);
         shaderText.append(prefaceFile.readAll());
     }
@@ -690,9 +769,9 @@ void KisOpenGLCanvas2::initializeDisplayShader()
     reportShaderLinkFailedAndExit(result, "Display fragment shader", d->displayShader->log());
 
     if (KisOpenGL::supportsGLSL13()) {
-        result = d->displayShader->addShaderFromSourceFile(QOpenGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/matrix_transform.vert"));
+        result = d->displayShader->addShaderFromSourceFile(QOpenGLShader::Vertex, KoResourcePaths::findResource("data", "krita/shaders/matrix_transform.vert"));
     } else {
-        result = d->displayShader->addShaderFromSourceFile(QOpenGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/matrix_transform_legacy.vert"));
+        result = d->displayShader->addShaderFromSourceFile(QOpenGLShader::Vertex, KoResourcePaths::findResource("data", "krita/shaders/matrix_transform_legacy.vert"));
     }
     reportShaderLinkFailedAndExit(result, "Display vertex shader", d->displayShader->log());
 
@@ -776,7 +855,9 @@ void KisOpenGLCanvas2::channelSelectionChanged(QBitArray channelFlags)
 
 void KisOpenGLCanvas2::finishResizingImage(qint32 w, qint32 h)
 {
-    d->openGLImageTextures->slotImageSizeChanged(w, h);
+    if (d->canvasInitialized) {
+        d->openGLImageTextures->slotImageSizeChanged(w, h);
+    }
 }
 
 KisUpdateInfoSP KisOpenGLCanvas2::startUpdateCanvasProjection(const QRect & rc, QBitArray channelFlags)

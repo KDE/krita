@@ -18,7 +18,7 @@
 
 #include "kis_random_generator_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "kis_random_generator.h"
 
 #include <math.h>
@@ -119,4 +119,4 @@ void KisRandomGeneratorTest::testEvolution()
     QVERIFY(counter == 0);
 }
 
-QTEST_KDEMAIN(KisRandomGeneratorTest, GUI)
+QTEST_MAIN(KisRandomGeneratorTest)

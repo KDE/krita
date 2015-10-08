@@ -24,12 +24,12 @@
 #include <QByteArray>
 #include <QBuffer>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 void KisPSDLayerStyleTest::testRoundTrip()
 {
     KisPSDLayerStyle layerStyle;
 }
 
-QTEST_KDEMAIN(KisPSDLayerStyleTest, GUI)
+QTEST_MAIN(KisPSDLayerStyleTest)
 

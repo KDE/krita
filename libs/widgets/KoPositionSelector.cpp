@@ -24,7 +24,7 @@
 #include <QGridLayout>
 #include <QButtonGroup>
 #include <QPainter>
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 #include <QStyleOption>
 
 #define GAP 0

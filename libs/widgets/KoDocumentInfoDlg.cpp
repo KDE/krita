@@ -33,7 +33,7 @@
 
 
 #include <klocalizedstring.h>
-#include <kglobal.h>
+
 #include <kmessagebox.h>
 #include <kmainwindow.h>
 #include <KoDialog.h>

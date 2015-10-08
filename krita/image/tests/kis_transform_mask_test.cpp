@@ -18,7 +18,7 @@
 
 #include "kis_transform_mask_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <KoColor.h>
 
@@ -986,4 +986,4 @@ void KisTransformMaskTest::testTransformHiddenPartsOfTheGroup()
     //KIS_DUMP_DEVICE_2(p.image->projection(), imageRect, "image_proj_mask", "dd");
 }
 
-QTEST_KDEMAIN(KisTransformMaskTest, GUI)
+QTEST_MAIN(KisTransformMaskTest)

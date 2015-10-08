@@ -20,14 +20,16 @@
 #include "KoEventActionRegistry.h"
 
 #include <QHash>
-#include <KoPluginLoader.h>
-#include <kglobal.h>
-#include <kdebug.h>
+#include <QGlobalStatic>
+
+#include <FlakeDebug.h>
 
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include "KoEventActionFactoryBase.h"
 #include "KoEventAction.h"
+#include <KoPluginLoader.h>
+
 
 class KoEventActionRegistry::Singleton
 {
@@ -39,7 +41,7 @@ public:
     bool initDone;
 };
 
-K_GLOBAL_STATIC(KoEventActionRegistry::Singleton, singleton)
+Q_GLOBAL_STATIC(KoEventActionRegistry::Singleton, singleton)
 
 class Q_DECL_HIDDEN KoEventActionRegistry::Private
 {
@@ -132,19 +134,19 @@ QSet<KoEventAction*> KoEventActionRegistry::createEventActionsFromOdf(const KoXm
                             }
                         }
                     } else {
-                        kWarning(30006) << "presentation:event-listerer action = " << action << "not supported";
+                        warnFlake << "presentation:event-listerer action = " << action << "not supported";
                     }
                 } else if (element.namespaceURI() == KoXmlNS::script) {
                     // TODO
                 } else {
-                    kWarning(30006) << "element" << e.namespaceURI() << e.tagName() << "not supported";
+                    warnFlake << "element" << e.namespaceURI() << e.tagName() << "not supported";
                 }
             } else {
-                kWarning(30006) << "element" << e.namespaceURI() << e.tagName() << "not supported";
+                warnFlake << "element" << e.namespaceURI() << e.tagName() << "not supported";
             }
         }
     } else {
-        kWarning(30006) << "office:event-listeners not found got:" << e.namespaceURI() << e.tagName();
+        warnFlake << "office:event-listeners not found got:" << e.namespaceURI() << e.tagName();
     }
 
     return eventActions;

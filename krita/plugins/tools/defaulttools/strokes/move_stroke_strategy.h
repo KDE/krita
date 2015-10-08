@@ -23,17 +23,18 @@
 
 #include "kis_stroke_strategy_undo_command_based.h"
 #include "kis_types.h"
-#include "../kritadefaulttools_export.h"
+#include "kritadefaulttools_export.h"
 #include "kis_lod_transform.h"
+
 
 class KisUpdatesFacade;
 class KisPostExecutionUndoAdapter;
 
 
-class KRITADEFAULTTOOLS_TEST_EXPORT MoveStrokeStrategy : public KisStrokeStrategyUndoCommandBased
+class KRITADEFAULTTOOLS_EXPORT MoveStrokeStrategy : public KisStrokeStrategyUndoCommandBased
 {
 public:
-    class KRITADEFAULTTOOLS_TEST_EXPORT Data : public KisStrokeJobData {
+    class KRITADEFAULTTOOLS_EXPORT Data : public KisStrokeJobData {
     public:
         Data(QPoint _offset)
             : KisStrokeJobData(SEQUENTIAL, EXCLUSIVE),

@@ -25,9 +25,9 @@
 #include <KoStore.h>
 #include <KoResourceServerProvider.h>
 
-#include <kglobal.h>
 
-#include <kstandarddirs.h>
+
+#include <KoResourcePaths.h>
 
 #include <QScopedPointer>
 #include <QProcessEnvironment>
@@ -49,8 +49,8 @@
 #include <kis_brush_server.h>
 #include <kis_debug.h>
 
-#include <calligraversion.h>
-#include <calligragitversion.h>
+#include <CalligraVersionWrapper.h>
+
 
 #include "resourcemanager.h"
 
@@ -60,17 +60,7 @@ ResourceBundle::ResourceBundle(QString const& fileName)
       m_bundleVersion("1")
 {
     setName(QFileInfo(fileName).baseName());
-
-    QString calligraVersion(CALLIGRA_VERSION_STRING);
-    QString version;
-
-#ifdef CALLIGRA_GIT_SHA1_STRING
-    QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
-    version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion).toLatin1();
-#else
-    version = calligraVersion;
-#endif
-    m_metadata["generator"] = "Krita (" + version + ")";
+    m_metadata["generator"] = "Krita (" + CalligraVersionWrapper::versionString(true) + ")";
 }
 
 ResourceBundle::~ResourceBundle()
@@ -298,7 +288,7 @@ bool ResourceBundle::save()
 
     addMeta("updated", QDate::currentDate().toString("dd/MM/yyyy"));
 
-    QDir bundleDir = KGlobal::dirs()->saveLocation("data", "krita/bundles");
+    QDir bundleDir = KoResourcePaths::saveLocation("data", "krita/bundles");
     bundleDir.cdUp();
 
     QScopedPointer<KoStore> store(KoStore::createStore(filename(), KoStore::Write, "application/x-krita-resourcebundle", KoStore::Zip));

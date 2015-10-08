@@ -40,7 +40,6 @@ class KActionMenu;
 namespace Digikam
 {
 
-class Theme;
 
 class ThemeManager : public QObject
 {

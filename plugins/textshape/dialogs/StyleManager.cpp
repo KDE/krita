@@ -35,7 +35,7 @@
 #include <QMessageBox>
 #include <QInputDialog>
 
-#include <kdebug.h>
+#include <QDebug>
 
 StyleManager::StyleManager(QWidget *parent)
         : QWidget(parent)

@@ -26,8 +26,8 @@
 #include <QShowEvent>
 #include <QPushButton>
 
-#include <kglobal.h>
-#include <kstandarddirs.h>
+
+#include <KoResourcePaths.h>
 
 #include <kis_debug.h>
 #include "kis_image.h"
@@ -120,7 +120,7 @@ void KisClipboardBrushWidget::slotAddPredefined()
     if(!m_brush)
         return;
 
-    QString dir = KGlobal::dirs()->saveLocation("data", "krita/brushes");
+    QString dir = KoResourcePaths::saveLocation("data", "krita/brushes");
     QString extension = ".gbr";
     QString name = nameEdit->text();
 

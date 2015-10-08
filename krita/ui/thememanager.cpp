@@ -36,21 +36,22 @@
 #include <QPixmap>
 #include <QDate>
 #include <QDesktopWidget>
+#include <QApplication>
+#include <QMenu>
+#include <QMenuBar>
+#include <QStatusBar>
 
 // KDE includes
 
-#include <kmenu.h>
 #include <QMessageBox>
-#include <kglobal.h>
+
 #include <klocalizedstring.h>
 #include <kcolorscheme.h>
 #include <kactioncollection.h>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 #include <kactionmenu.h>
-#include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kxmlguiwindow.h>
 #include <QAction>
 
 // Calligra
@@ -214,7 +215,7 @@ void ThemeManager::populateThemeMenu()
     action->setCheckable(true);
     d->themeMenuAction->addAction(action);
 
-    const QStringList schemeFiles = KGlobal::dirs()->findAllResources("data", "color-schemes/*.colors", KStandardDirs::NoDuplicates);
+    const QStringList schemeFiles = KoResourcePaths::findAllResources("data", "color-schemes/*.colors", KoResourcePaths::NoDuplicates);
 
     QMap<QString, QAction*> actionMap;
     for (int i = 0; i < schemeFiles.size(); ++i)

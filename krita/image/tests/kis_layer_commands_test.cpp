@@ -18,7 +18,7 @@
 
 #include "kis_layer_commands_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "commands/kis_layer_commands.h"
 
 void KisLayerCommandsTest::testCreation()
@@ -26,4 +26,4 @@ void KisLayerCommandsTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisLayerCommandsTest, GUI)
+QTEST_MAIN(KisLayerCommandsTest)

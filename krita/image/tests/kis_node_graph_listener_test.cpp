@@ -18,7 +18,7 @@
 
 #include "kis_node_graph_listener_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "kis_node_graph_listener.h"
 #include "kis_node_facade.h"
 #include "testutil.h"
@@ -108,4 +108,4 @@ void KisNodeGraphListenerTest::testSequenceNumber()
     QVERIFY(seqno != listener.graphSequenceNumber());
 }
 
-QTEST_KDEMAIN(KisNodeGraphListenerTest, NoGUI)
+QTEST_MAIN(KisNodeGraphListenerTest)

@@ -21,7 +21,7 @@
 #include <QTest>
 #include <QCoreApplication>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kis_debug.h"
 #include "kis_meta_data_entry.h"
@@ -105,5 +105,5 @@ void KisExiv2Test::testExifLoader()
     QCOMPARE(store->getEntry(mknSchema, "RawData").value(), Value("SFBNZXQ="));
 }
 
-QTEST_KDEMAIN(KisExiv2Test, GUI)
+QTEST_MAIN(KisExiv2Test)
 

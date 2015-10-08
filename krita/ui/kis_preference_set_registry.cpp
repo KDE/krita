@@ -17,7 +17,9 @@
  */
 #include "kis_preference_set_registry.h"
 
-#include <kglobal.h>
+#include <QGlobalStatic>
+
+Q_GLOBAL_STATIC(KisPreferenceSetRegistry, s_instance)
 
 KisPreferenceSetRegistry ::KisPreferenceSetRegistry ()
 {
@@ -30,7 +32,6 @@ KisPreferenceSetRegistry ::~KisPreferenceSetRegistry ()
 
 KisPreferenceSetRegistry * KisPreferenceSetRegistry ::instance()
 {
-    K_GLOBAL_STATIC(KisPreferenceSetRegistry, s_instance);
     return s_instance;
 }
 

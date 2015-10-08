@@ -17,7 +17,7 @@
  */
 
 #include "kis_simple_update_queue_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -277,5 +277,5 @@ void KisSimpleUpdateQueueTest::testSpontaneousJobsCompression()
     QCOMPARE(jobsList[0], job3);
 }
 
-QTEST_KDEMAIN(KisSimpleUpdateQueueTest, NoGUI)
+QTEST_MAIN(KisSimpleUpdateQueueTest)
 

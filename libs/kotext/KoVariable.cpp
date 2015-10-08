@@ -26,7 +26,7 @@
 #include <QFontMetricsF>
 #include <QTextDocument>
 #include <QTextInlineObject>
-#include <QDebug>
+#include "TextDebug.h"
 
 class KoVariablePrivate : public KoInlineObjectPrivate
 {

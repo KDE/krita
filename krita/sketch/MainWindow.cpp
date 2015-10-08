@@ -35,9 +35,12 @@
 #include <QTimer>
 
 #include <QUrl>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 #include <KoDialog.h>
 #include <kis_debug.h>
+
+#include <kstandarddirs.h>
+#include <kglobal.h>
 
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_registry.h"
@@ -122,8 +125,12 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     view->engine()->addImportPath(appdir.canonicalPath() + "/lib64/calligra/imports");
     QString mainqml = appdir.canonicalPath() + "/share/apps/kritasketch/kritasketch.qml";
 #else
-    view->engine()->addImportPath(KGlobal::dirs()->findDirs("lib", "calligra/imports").value(0));
-    QString mainqml = KGlobal::dirs()->findResource("data", "kritasketch/kritasketch.qml");
+    const QStringList qmlImportDirs = KGlobal::dirs()->findDirs("lib", "calligra/imports");
+    foreach(const QString &dir, qmlImportDirs) {
+        view->engine()->addImportPath(dir);
+    }
+//     QString mainqml = KGlobal::dirs()->findResource("data", "kritasketch/kritasketch.qml");
+    QString mainqml = KoResourcePaths::findResource("data", "kritasketch/kritasketch.qml");
 #endif
 
     Q_ASSERT(QFile::exists(mainqml));
@@ -146,10 +153,9 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
 void MainWindow::resetWindowTitle()
 {
-    QUrl url(DocumentManager::instance()->settingsManager()->currentFile());
-    QString fileName = url.fileName();
-    if(url.scheme() == "temp")
-        fileName = i18n("Untitled");
+    const QString currentFile = DocumentManager::instance()->settingsManager()->currentFile();
+    const QString fileName =
+        currentFile.startsWith(QLatin1String("temp://")) ? i18n("Untitled") : QFileInfo(currentFile).fileName();
 
     KoDialog::CaptionFlags flags = KoDialog::HIGCompliantCaption;
     KisDocument* document = DocumentManager::instance()->document();

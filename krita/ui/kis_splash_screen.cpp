@@ -31,7 +31,7 @@
 
 #include <klocalizedstring.h>
 #include <kconfig.h>
-#include <kglobal.h>
+#include <ksharedconfig.h>
 #include <kconfiggroup.h>
 #include <QIcon>
 
@@ -74,7 +74,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
 
                            "<p><a href=\"http://store.steampowered.com/app/280680/\"><span style=\" text-decoration: underline; color:%1;\">Krita on Steam</span></a></p>"
                            "</body>"
-                           "</html>").arg(color));
+                           "</html>", color));
 
     lblVersion->setText(i18n("Version: %1", version));
     lblVersion->setStyleSheet("color:" + color);
@@ -85,7 +85,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     QString recent = i18n("<html>"
                           "<head/>"
                           "<body>"
-                          "<p align=\"center\"><b><span style=\" color:%1;\">Recent Files</span></b></p>").arg(color);
+                          "<p align=\"center\"><b><span style=\" color:%1;\">Recent Files</span></b></p>", color);
 
     QString path;
     QStringList recentfiles;

@@ -7,4 +7,4 @@ macro_add_unittest_definitions()
 
 set(test_save_load_transform_args_SRCS test_save_load_transform_args.cpp )
 kde4_add_unit_test(TestSaveLoadTransformArgs TESTNAME krita-ui-TestSaveLoadTransformArgs  ${test_save_load_transform_args_SRCS})
-target_link_libraries(TestSaveLoadTransformArgs  ${KDE4_KDEUI_LIBS}  kritatooltransform kritaui kritaimage Qt5::Test)
+target_link_libraries(TestSaveLoadTransformArgs    kritatooltransform kritaui kritaimage Qt5::Test)

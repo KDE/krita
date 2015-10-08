@@ -22,7 +22,7 @@
 #include "SvgGraphicContext.h"
 
 #include <KoXmlReader.h>
-#include <kdebug.h>
+#include <QDebug>
 
 #include <math.h>
 
@@ -235,27 +235,27 @@ void ArtisticTextLoadingContext::printDebug()
 {
     QString indent;
     foreach(const CharTransformState &state, CharTransformStack(m_absolutePosX) << m_currentAbsolutePosX) {
-        kDebug() << indent << state.data << state.hasData << state.lastTransform;
+        qDebug() << indent << state.data << state.hasData << state.lastTransform;
         indent.append("  ");
     }
     indent.clear();
     foreach(const CharTransformState &state, CharTransformStack(m_absolutePosY) << m_currentAbsolutePosY) {
-        kDebug() << indent << state.data << state.hasData << state.lastTransform;
+        qDebug() << indent << state.data << state.hasData << state.lastTransform;
         indent.append("  ");
     }
     indent.clear();
     foreach(const CharTransformState &state, CharTransformStack(m_relativePosX) << m_currentRelativePosX) {
-        kDebug() << indent << state.data << state.hasData << state.lastTransform;
+        qDebug() << indent << state.data << state.hasData << state.lastTransform;
         indent.append("  ");
     }
     indent.clear();
     foreach(const CharTransformState &state, CharTransformStack(m_relativePosY) << m_currentRelativePosY) {
-        kDebug() << indent << state.data << state.hasData << state.lastTransform;
+        qDebug() << indent << state.data << state.hasData << state.lastTransform;
         indent.append("  ");
     }
     indent.clear();
     foreach(const CharTransformState &state, CharTransformStack(m_rotations) << m_currentRotations) {
-        kDebug() << indent << state.data << state.hasData << state.lastTransform;
+        qDebug() << indent << state.data << state.hasData << state.lastTransform;
         indent.append("  ");
     }
     indent.clear();

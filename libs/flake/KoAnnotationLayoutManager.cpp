@@ -32,7 +32,7 @@
 #include <QLine>
 #include <QLineF>
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 int compare(const QPair < QPointF, KoShape * > &a, const QPair < QPointF, KoShape * > &b)
 {

@@ -38,7 +38,7 @@
 #include <QScrollArea>
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 
 #include <KoColorSet.h>
 

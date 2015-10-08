@@ -29,7 +29,7 @@
 #include <kglobal.h>
 #include <kconfiggroup.h>
 #include <kcalendarsystem.h>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 #include <kdebug.h>
 
 Autocorrect::Autocorrect()
@@ -744,13 +744,13 @@ void Autocorrect::readAutocorrectXmlEntries()
     Q_FOREACH(const QString& path, folders)
     {
         if (!m_autocorrectLang.isEmpty())
-            fname = KGlobal::dirs()->findResource("data", path + "autocorrect/" + m_autocorrectLang + ".xml");
+            fname = KoResourcePaths::findResource("data", path + "autocorrect/" + m_autocorrectLang + ".xml");
         if (m_autocorrectLang != "all_languages") {
             if (fname.isEmpty() && !kdelang.isEmpty())
-                fname = KGlobal::dirs()->findResource("data", path + "autocorrect/" + kdelang + ".xml");
+                fname = KoResourcePaths::findResource("data", path + "autocorrect/" + kdelang + ".xml");
             if (fname.isEmpty() && kdelang.contains('_')) {
                 kdelang.remove( QRegExp( "_.*" ) );
-                fname = KGlobal::dirs()->findResource("data", path + "autocorrect/" + kdelang + ".xml");
+                fname = KoResourcePaths::findResource("data", path + "autocorrect/" + kdelang + ".xml");
             }
         }
 
@@ -763,7 +763,7 @@ void Autocorrect::readAutocorrectXmlEntries()
     if (m_autocorrectLang.isEmpty())
         m_autocorrectLang = kdelang;
 
-    fname = KGlobal::dirs()->findResource("data", "autocorrect/custom-" + m_autocorrectLang + ".xml");
+    fname = KoResourcePaths::findResource("data", "autocorrect/custom-" + m_autocorrectLang + ".xml");
     if(!fname.isEmpty()) {
         readAutocorrectXmlEntry(fname, true);
     }
@@ -878,7 +878,7 @@ void Autocorrect::readAutocorrectXmlEntry(const QString &fname, bool onlyCustomi
 
 void Autocorrect::writeAutocorrectXmlEntry()
 {
-    const QString fname = KStandardDirs::locateLocal("data", "autocorrect/custom-" + m_autocorrectLang + ".xml");
+    const QString fname = KoResourcePaths::locateLocal("data", "autocorrect/custom-" + m_autocorrectLang + ".xml");
     QFile file(fname);
     if( !file.open( QIODevice::WriteOnly | QIODevice::Text ) ) {
         qDebug()<<"We can't save in file :"<<fname;

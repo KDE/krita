@@ -18,7 +18,7 @@
 
 #include "kis_convolution_painter_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QBitArray>
 
@@ -27,7 +27,6 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>
 
-#include "kis_types.h"
 #include "kis_paint_device.h"
 #include "kis_convolution_painter.h"
 #include "kis_convolution_kernel.h"
@@ -437,4 +436,4 @@ void KisConvolutionPainterTest::testGaussianDetailsFFTW()
     testGaussianDetails(true);
 }
 
-QTEST_KDEMAIN(KisConvolutionPainterTest, GUI)
+QTEST_MAIN(KisConvolutionPainterTest)

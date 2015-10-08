@@ -24,10 +24,10 @@
 #include <QScrollArea>
 #include <QHBoxLayout>
 #include <QFileInfo>
+#include <QColorDialog>
+#include <QInputDialog>
 
 #include <klocalizedstring.h>
-#include <kcolordialog.h>
-#include <kinputdialog.h>
 #include <kmessagebox.h>
 
 #include <KoColorSet.h>
@@ -36,7 +36,7 @@
 #include <KoFileDialog.h>
 
 // debug
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 
 KoEditColorSetWidget::KoEditColorSetWidget(const QList<KoColorSet *> &palettes, const QString &activePalette, QWidget *parent)
     : QWidget(parent),
@@ -151,11 +151,12 @@ void KoEditColorSetWidget::setTextLabel(KoColorPatch *patch)
 void KoEditColorSetWidget::addColor()
 {
     QColor color;
-    int result = KColorDialog::getColor(color);
-    if (result == KColorDialog::Accepted) {
+
+    color = QColorDialog::getColor(color);
+    if (color.isValid()) {
         KoColorSetEntry newEntry;
         newEntry.color = KoColor(color, KoColorSpaceRegistry::instance()->rgb8());
-        newEntry.name = KInputDialog::getText(i18n("Add Color To Palette"), i18n("Color name:"));
+        newEntry.name = QInputDialog::getText(this, i18n("Add Color To Palette"), i18n("Color name:"));
         KoColorPatch *patch = new KoColorPatch(widget.patchesFrame);
         patch->setColor(newEntry.color);
         connect(patch, SIGNAL(triggered(KoColorPatch *)), this, SLOT(setTextLabel(KoColorPatch *)));

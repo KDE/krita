@@ -36,7 +36,7 @@
 #include <QTextList>
 #include <QTextTableCell>
 
-#include <kdebug.h>
+#include "TextDebug.h"
 
 KoTextWriter::KoTextWriter(KoShapeSavingContext &context, KoDocumentRdfBase *rdfData)
     : d(new Private(context))
@@ -52,7 +52,7 @@ KoTextWriter::KoTextWriter(KoShapeSavingContext &context, KoDocumentRdfBase *rdf
         if (!sharedData) {
             context.addSharedData(KOTEXT_SHARED_SAVING_ID, d->sharedData);
         } else {
-            kWarning(32500) << "A different type of sharedData was found under the" << KOTEXT_SHARED_SAVING_ID;
+            warnText << "A different type of sharedData was found under the" << KOTEXT_SHARED_SAVING_ID;
             Q_ASSERT(false);
         }
     }

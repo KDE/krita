@@ -23,7 +23,6 @@
 
 #include <klocalizedstring.h>
 
-#include "kis_types.h"
 #include "KoGenericRegistry.h"
 #include "KoID.h"
 #include "kritaimage_export.h"
@@ -181,6 +180,8 @@ class KRITAIMAGE_EXPORT KisFilterStrategyRegistry : public KoGenericRegistry<Kis
 
 public:
 
+    KisFilterStrategyRegistry();
+    ~KisFilterStrategyRegistry();
     static KisFilterStrategyRegistry* instance();
 
     /**
@@ -197,8 +198,6 @@ public:
 
 private:
 
-    KisFilterStrategyRegistry();
-    ~KisFilterStrategyRegistry();
     KisFilterStrategyRegistry(const KisFilterStrategyRegistry&);
     KisFilterStrategyRegistry operator=(const KisFilterStrategyRegistry&);
 

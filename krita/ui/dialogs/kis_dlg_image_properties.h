@@ -24,7 +24,6 @@
 #include "ui_wdgimageproperties.h"
 
 class KoColorSpace;
-class KoColor;
 class KoColorPopupAction;
 
 class WdgImageProperties : public QWidget, public Ui::WdgImageProperties

@@ -28,7 +28,7 @@
 #include <QImageWriter>
 #include <QCryptographicHash>
 #include <QFileInfo>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 #include <QBuffer>
 
 KoImageDataPrivate::KoImageDataPrivate(KoImageData *q)
@@ -54,12 +54,12 @@ KoImageDataPrivate::~KoImageDataPrivate()
 // called from the collection
 bool KoImageDataPrivate::saveData(QIODevice &device)
 {
-    // if we have a temp file save that to the store. This is needed as to not loose data when
-    // saving lossy formats. Also wrinting out gif is not supported by qt so saving temp file
-    // also fixes the problem that gif images are empty after saving-
+    // if we have a temp file save that to the store. This is needed as to not lose data when
+    // saving lossy formats. Also writing out gif is not supported by qt so saving temp file
+    // also fixes the problem that gif images are empty after saving.
     if (temporaryFile) {
         if (!temporaryFile->open()) {
-            kWarning(30006) << "Read file from temporary store failed";
+            warnFlake << "Read file from temporary store failed";
             return false;
         }
         char buf[4096];
@@ -103,10 +103,8 @@ bool KoImageDataPrivate::saveData(QIODevice &device)
 
 void KoImageDataPrivate::setSuffix(const QString &name)
 {
-    QRegExp rx("\\.([^/]+$)"); // TODO does this work on windows or do we have to use \ instead of / for a path separator?
-    if (rx.indexIn(name) != -1) {
-        suffix = rx.cap(1);
-    }
+    QFileInfo fi(name);
+    suffix = fi.suffix();
 }
 
 void KoImageDataPrivate::copyToTemporary(QIODevice &device)
@@ -114,7 +112,7 @@ void KoImageDataPrivate::copyToTemporary(QIODevice &device)
     delete temporaryFile;
     temporaryFile = new QTemporaryFile(QDir::tempPath() + "/" + qAppName() + QLatin1String("_XXXXXX"));
     if (!temporaryFile->open()) {
-        kWarning(30006) << "open temporary file for writing failed";
+        warnFlake << "open temporary file for writing failed";
         errorCode = KoImageData::StorageFailed;
         return;
     }
@@ -134,7 +132,6 @@ void KoImageDataPrivate::copyToTemporary(QIODevice &device)
 
     temporaryFile->close();
 
-    //QFileInfo fi(*temporaryFile);
     dataStoreState = StateNotLoaded;
 }
 

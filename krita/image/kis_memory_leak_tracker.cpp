@@ -19,18 +19,19 @@
 #include "kis_memory_leak_tracker.h"
 
 #include <QMutex>
+#include <QGlobalStatic>
 
-#include <kglobal.h>
 #include "kis_debug.h"
 
 // Those defines are used to ignore classes that are often leaked due to a KisPaintDevice leak
 #define IGNORE_MEMENTO_ITEM
 #define IGNORE_TILE
 
+Q_GLOBAL_STATIC(KisMemoryLeakTracker, s_instance)
+
 // Common function
 KisMemoryLeakTracker* KisMemoryLeakTracker::instance()
 {
-    K_GLOBAL_STATIC(KisMemoryLeakTracker, s_instance);
     return s_instance;
 }
 

@@ -758,8 +758,8 @@ QImage KisLayer::createThumbnail(qint32 w, qint32 h)
 
     return originalDevice ?
            originalDevice->createThumbnail(w, h,
-                                           KoColorConversionTransformation::InternalRenderingIntent,
-                                           KoColorConversionTransformation::InternalConversionFlags) : QImage();
+                                           KoColorConversionTransformation::internalRenderingIntent(),
+                                           KoColorConversionTransformation::internalConversionFlags()) : QImage();
 }
 
 qint32 KisLayer::x() const

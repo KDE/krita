@@ -20,16 +20,7 @@
    <string>TIFF Options</string>
   </property>
   <layout class="QVBoxLayout">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
+   <property name="margin">
     <number>0</number>
    </property>
    <item>
@@ -188,6 +179,16 @@ You can uncheck the box if you are not using transparency and you want to make t
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QCheckBox" name="chkSaveProfile">
+        <property name="text">
+         <string>Save ICC Profile</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -196,21 +197,12 @@ You can uncheck the box if you are not using transparency and you want to make t
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
-     <widget class="QWidget">
+     <widget class="QWidget" name="widget1">
       <layout class="QHBoxLayout">
        <property name="spacing">
         <number>0</number>
        </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>0</number>
        </property>
        <item>
@@ -225,21 +217,12 @@ You can uncheck the box if you are not using transparency and you want to make t
        </item>
       </layout>
      </widget>
-     <widget class="QWidget">
+     <widget class="QWidget" name="widget2">
       <layout class="QHBoxLayout">
        <property name="spacing">
         <number>0</number>
        </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>0</number>
        </property>
        <item>
@@ -334,21 +317,12 @@ You can uncheck the box if you are not using transparency and you want to make t
        </item>
       </layout>
      </widget>
-     <widget class="QWidget">
+     <widget class="QWidget" name="widget3">
       <layout class="QHBoxLayout">
        <property name="spacing">
         <number>0</number>
        </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>0</number>
        </property>
        <item>
@@ -456,21 +430,12 @@ You can uncheck the box if you are not using transparency and you want to make t
        </item>
       </layout>
      </widget>
-     <widget class="QWidget">
+     <widget class="QWidget" name="widget4">
       <layout class="QHBoxLayout">
        <property name="spacing">
         <number>0</number>
        </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>0</number>
        </property>
        <item>
@@ -519,21 +484,12 @@ You can uncheck the box if you are not using transparency and you want to make t
        </item>
       </layout>
      </widget>
-     <widget class="QWidget">
+     <widget class="QWidget" name="widget5">
       <layout class="QHBoxLayout">
        <property name="spacing">
         <number>0</number>
        </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>0</number>
        </property>
        <item>

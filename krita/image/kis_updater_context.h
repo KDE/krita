@@ -24,13 +24,14 @@
 #include <QReadWriteLock>
 #include <QThreadPool>
 
-#include "kis_stroke_job.h"
 #include "kis_base_rects_walker.h"
 #include "kis_async_merger.h"
 #include "kis_lock_free_lod_counter.h"
 
+
 class KisUpdateJobItem;
 class KisSpontaneousJob;
+class KisStrokeJob;
 
 class KRITAIMAGE_EXPORT KisUpdaterContext : public QObject
 {

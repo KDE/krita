@@ -19,7 +19,7 @@
 #include "kis_properties_configuration_test.h"
 
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "kis_properties_configuration.h"
 
 KisPropertiesConfigurationTest::KisPropertiesConfigurationTest() :
@@ -95,5 +95,5 @@ void KisPropertiesConfigurationTest::testNotSavedValues()
     delete config;   
 }
 
-QTEST_KDEMAIN(KisPropertiesConfigurationTest, NoGUI)
+QTEST_MAIN(KisPropertiesConfigurationTest)
 

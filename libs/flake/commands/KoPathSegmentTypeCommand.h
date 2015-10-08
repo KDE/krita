@@ -29,7 +29,7 @@
 #include "flake_export.h"
 
 /// The undo / redo command for changing segments to curves/lines
-class FLAKE_TEST_EXPORT KoPathSegmentTypeCommand : public KUndo2Command
+class FLAKE_EXPORT KoPathSegmentTypeCommand : public KUndo2Command
 {
 public:
     /// Segment Types

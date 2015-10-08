@@ -29,9 +29,7 @@
 #include <KoOdf.h>
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
-#include <kmimetype.h>
-#include <kurl.h>
+#include <QDebug>
 
 #include <QTimer>
 #include <QDir>
@@ -74,7 +72,7 @@ void OdfCollectionLoader::load()
 
     if(m_fileList.isEmpty())
     {
-        kError() << "Found no shapes in the collection!" << m_path;
+        qCritical() << "Found no shapes in the collection!" << m_path;
         emit loadingFailed(i18n("Found no shapes in the collection! %1", m_path));
         return;
     }
@@ -84,7 +82,7 @@ void OdfCollectionLoader::load()
 
 void OdfCollectionLoader::loadShape()
 {
-    //kDebug() << m_shape.tagName();
+    //qDebug() << m_shape.tagName();
     KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(m_shape, *m_shapeLoadingContext);
 
     if (shape) {
@@ -168,7 +166,7 @@ void OdfCollectionLoader::loadNativeFile(const QString& path)
     KoXmlElement realBody ( KoXml::namedItemNS( content, KoXmlNS::office, "body" ) );
 
     if (realBody.isNull()) {
-        kError() << "No body tag found!" << endl;
+        qCritical() << "No body tag found!" << endl;
         emit loadingFailed(i18n("No body tag found in file: %1", path));
         return;
     }
@@ -176,7 +174,7 @@ void OdfCollectionLoader::loadNativeFile(const QString& path)
     m_body = KoXml::namedItemNS(realBody, KoXmlNS::office, "drawing");
 
     if (m_body.isNull()) {
-        kError() << "No office:drawing tag found!" << endl;
+        qCritical() << "No office:drawing tag found!" << endl;
         emit loadingFailed(i18n("No office:drawing tag found in file: %1", path));
         return;
     }
@@ -184,7 +182,7 @@ void OdfCollectionLoader::loadNativeFile(const QString& path)
     m_page = m_body.firstChild().toElement();
 
     if (m_page.isNull()) {
-        kError() << "No shapes found!" << endl;
+        qCritical() << "No shapes found!" << endl;
         emit loadingFailed(i18n("No shapes found in file: %1", path));
         return;
     }
@@ -192,7 +190,7 @@ void OdfCollectionLoader::loadNativeFile(const QString& path)
     m_shape = m_page.firstChild().toElement();
 
     if (m_shape.isNull()) {
-        kError() << "No shapes found!" << endl;
+        qCritical() << "No shapes found!" << endl;
         emit loadingFailed(i18n("No shapes found in file: %1", path));
         return;
     }

@@ -51,7 +51,7 @@
 #include <QWidgetAction>
 #include <QSignalMapper>
 
-#include <kdebug.h>
+#include <QDebug>
 
 SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
         : QWidget(parent)

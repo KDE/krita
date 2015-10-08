@@ -25,7 +25,6 @@
 
 #include <QScopedPointer>
 
-class KisPSDLayerStyle;
 class KisLayerStyleFilterEnvironment;
 class KisMultipleProjection;
 

@@ -40,6 +40,7 @@ class KoShapeLoadingContext;
 class KOTEXT_EXPORT KoInlineObjectRegistry : public KoGenericRegistry<KoInlineObjectFactoryBase*>
 {
 public:
+    KoInlineObjectRegistry();
     ~KoInlineObjectRegistry();
 
     /**
@@ -70,7 +71,6 @@ public:
     KoInlineObject *createFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
 private:
-    KoInlineObjectRegistry();
     KoInlineObjectRegistry(const KoInlineObjectRegistry&);
     KoInlineObjectRegistry operator=(const KoInlineObjectRegistry&);
 

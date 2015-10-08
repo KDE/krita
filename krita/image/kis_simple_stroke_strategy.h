@@ -21,6 +21,7 @@
 
 #include <QVector>
 #include "kis_stroke_strategy.h"
+#include "kis_stroke_job_strategy.h"
 
 
 class KRITAIMAGE_EXPORT KisSimpleStrokeStrategy : public KisStrokeStrategy

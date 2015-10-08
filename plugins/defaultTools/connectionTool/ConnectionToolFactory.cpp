@@ -23,7 +23,7 @@
 
 #include <KoIcon.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <QDebug>
 
 ConnectionToolFactory::ConnectionToolFactory()
     : KoToolFactoryBase(ConnectionTool_ID)

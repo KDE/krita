@@ -63,8 +63,6 @@ public:
 
     static KisPart *instance();
 
-private:
-
     /**
      * Constructor.
      *
@@ -73,7 +71,6 @@ private:
      */
     explicit KisPart();
 
-public:
     /**
      *  Destructor.
      *

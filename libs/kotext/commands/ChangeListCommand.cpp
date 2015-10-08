@@ -27,7 +27,7 @@
 #include <KoList.h>
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include "TextDebug.h"
 
 #define MARGIN_DEFAULT 18 // we consider it the default value
 

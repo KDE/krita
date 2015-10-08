@@ -25,7 +25,9 @@
 #include "kis_node_progress_proxy.h"
 #include "kis_node_visitor.h"
 #include "kis_image.h"
+#include "kis_types.h"
 #include "commands_new/kis_node_move_command2.h"
+#include "kis_default_bounds.h"
 
 
 KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QString &filename, ScalingMethod scaleToImageResolution, const QString &name, quint8 opacity)

@@ -590,7 +590,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     // Create the cmsTransform if needed
     KoColorTransformation* transform = 0;
     if (profile && !profile->isSuitableForOutput()) {
-        transform = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, profile)->createColorConverter(cs, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+        transform = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, profile)->createColorConverter(cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
     }
 
     // Creating the KisImageWSP
@@ -782,7 +782,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(const QUrl &uri)
         return KisImageBuilder_RESULT_NO_URI;
 
     if (!uri.isLocalFile()) {
-        return KisImageBuilder_RESULT_NOT_EXIST;
+        return KisImageBuilder_RESULT_NOT_LOCAL;
     }
 
     m_path = uri.toDisplayString();

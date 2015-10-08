@@ -27,6 +27,7 @@
 #include <QPoint>
 
 #include <klocalizedstring.h>
+#include <ksharedconfig.h>
 
 #include <kis_debug.h>
 #include <kpluginfactory.h>

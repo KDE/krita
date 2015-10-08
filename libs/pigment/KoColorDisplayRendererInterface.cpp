@@ -19,11 +19,12 @@
 
 #include "KoColorDisplayRendererInterface.h"
 
-#include "kglobal.h"
-#include <KoColorSpaceRegistry.h>
+#include <QGlobalStatic>
 
+#include <KoColorSpaceRegistry.h>
 #include <KoChannelInfo.h>
 
+Q_GLOBAL_STATIC(KoDumbColorDisplayRenderer, s_instance)
 
 KoColorDisplayRendererInterface::KoColorDisplayRendererInterface()
 {
@@ -63,7 +64,6 @@ void KoDumbColorDisplayRenderer::getHsv(const KoColor &srcColor, int *h, int *s,
 
 KoColorDisplayRendererInterface* KoDumbColorDisplayRenderer::instance()
 {
-    K_GLOBAL_STATIC(KoDumbColorDisplayRenderer, s_instance);
     return s_instance;
 }
 

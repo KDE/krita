@@ -21,46 +21,52 @@
 #include <QTimer>
 
 
+KisSignalCompressor::KisSignalCompressor()
+    : QObject(0)
+    , m_gotSignals(false)
+{
+    m_timer.setSingleShot(true);
+    connect(&m_timer, SIGNAL(timeout()), SLOT(slotTimerExpired()));
+}
+
 KisSignalCompressor::KisSignalCompressor(int delay, Mode mode, QObject *parent)
     : QObject(parent),
-      m_timer(new QTimer(this)),
       m_mode(mode),
       m_gotSignals(false)
 {
-    m_timer->setSingleShot(true);
-    m_timer->setInterval(delay);
-
-    connect(m_timer, SIGNAL(timeout()), SLOT(slotTimerExpired()));
+    m_timer.setSingleShot(true);
+    m_timer.setInterval(delay);
+    connect(&m_timer, SIGNAL(timeout()), SLOT(slotTimerExpired()));
 }
 
 void KisSignalCompressor::setDelay(int delay)
 {
-    m_timer->setInterval(delay);
+    m_timer.setInterval(delay);
 }
 
 void KisSignalCompressor::start()
 {
     switch (m_mode) {
     case POSTPONE:
-        m_timer->start();
+        m_timer.start();
         break;
     case FIRST_ACTIVE:
-        if (!m_timer->isActive()) {
+        if (!m_timer.isActive()) {
             m_gotSignals = false;
-            m_timer->start();
+            m_timer.start();
             emit timeout();
         } else {
             m_gotSignals = true;
         }
         break;
     case FIRST_INACTIVE:
-        if (!m_timer->isActive()) {
-            m_timer->start();
+        if (!m_timer.isActive()) {
+            m_timer.start();
         }
     };
 
-    if (m_mode == POSTPONE || !m_timer->isActive()) {
-        m_timer->start();
+    if (m_mode == POSTPONE || !m_timer.isActive()) {
+        m_timer.start();
     }
 }
 
@@ -74,10 +80,15 @@ void KisSignalCompressor::slotTimerExpired()
 
 void KisSignalCompressor::stop()
 {
-    m_timer->stop();
+    m_timer.stop();
 }
 
 bool KisSignalCompressor::isActive() const
 {
-    return m_timer->isActive() && (m_mode != FIRST_ACTIVE || m_gotSignals);
+    return m_timer.isActive() && (m_mode != FIRST_ACTIVE || m_gotSignals);
+}
+
+void KisSignalCompressor::setMode(KisSignalCompressor::Mode mode)
+{
+    m_mode = mode;
 }

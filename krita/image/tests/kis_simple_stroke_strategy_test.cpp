@@ -17,7 +17,7 @@
  */
 
 #include "kis_simple_stroke_strategy_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kis_image.h"
 #include "kis_simple_stroke_strategy.h"
@@ -92,4 +92,4 @@ void KisSimpleStrokeStrategyTest::testCancel()
     image->waitForDone();
 }
 
-QTEST_KDEMAIN(KisSimpleStrokeStrategyTest, NoGUI)
+QTEST_MAIN(KisSimpleStrokeStrategyTest)

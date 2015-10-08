@@ -22,7 +22,7 @@
 #include "KoCanvasResourceManager.h"
 
 #include <QVariant>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 #include "KoShape.h"
 #include "KoShapeStroke.h"

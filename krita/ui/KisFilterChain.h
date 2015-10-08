@@ -24,16 +24,21 @@ Boston, MA 02110-1301, USA.
 #include <QList>
 #include <QStringList>
 
+#include <KoStoreDevice.h>
+
 #include "KisImportExportFilter.h"
 #include "KisFilterEntry.h"
-#include <KoStoreDevice.h>
-#include "kritaui_export.h"
 #include "KisFilterChainLinkList.h"
+
+#include "kis_shared.h"
+#include "kis_shared_ptr.h"
+
+#include "kritaui_export.h"
+
 
 class QTemporaryFile;
 class KisImportExportManager;
 class KisDocument;
-
 
 namespace CalligraFilter
 {
@@ -46,13 +51,10 @@ namespace CalligraFilter
 /**
  * @brief This class represents a chain of plain @ref KisImportExportFilter instances.
  *
- * Instances of this class are shared, so please just hold
- * KisFilterChain::Ptr pointers to it.
- *
  * @author Werner Trobin <trobin@kde.org>
  * @todo the class has no constructor and therefore cannot initialize its private class
  */
-class KRITAUI_EXPORT KisFilterChain : public KShared
+class KRITAUI_EXPORT KisFilterChain : public KisShared
 {
     // Only Calligra::Graph is allowed to construct instances and
     // add chain links.
@@ -60,7 +62,6 @@ class KRITAUI_EXPORT KisFilterChain : public KShared
     friend class KisImportExportManager;
 
 public:
-    typedef KSharedPtr<KisFilterChain> Ptr;
 
     virtual ~KisFilterChain();
 
@@ -139,8 +140,8 @@ private:
 
     explicit KisFilterChain(const KisImportExportManager* manager);
 
-    void appendChainLink(KisFilterEntry::Ptr filterEntry, const QByteArray& from, const QByteArray& to);
-    void prependChainLink(KisFilterEntry::Ptr filterEntry, const QByteArray& from, const QByteArray& to);
+    void appendChainLink(KisFilterEntrySP filterEntry, const QByteArray& from, const QByteArray& to);
+    void prependChainLink(KisFilterEntrySP filterEntry, const QByteArray& from, const QByteArray& to);
 
     // These methods are friends of KisFilterManager and provide access
     // to a private part of its API. As I don't want to include
@@ -209,5 +210,7 @@ private:
     class Private;
     Private * const d;
 };
+
+typedef KisSharedPtr<KisFilterChain> KisFilterChainSP;
 
 #endif // __KO_FILTER_CHAIN_H__

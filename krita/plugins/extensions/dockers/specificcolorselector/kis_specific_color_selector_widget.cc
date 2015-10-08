@@ -25,7 +25,7 @@
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
 #include <kconfig.h>
-#include <kglobal.h>
+#include <ksharedconfig.h>
 
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>
@@ -96,8 +96,12 @@ void KisSpecificColorSelectorWidget::setDisplayRenderer(KoColorDisplayRendererIn
 void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
 {
     Q_ASSERT(cs);
-
     dbgPlugins << cs->id() << " " << cs->profile()->name();
+
+    if (cs == m_colorSpace) {
+        return;
+    }
+
     m_colorSpace = KoColorSpaceRegistry::instance()->colorSpace(cs->colorModelId().id(), cs->colorDepthId().id(), cs->profile());
     Q_ASSERT(m_colorSpace);
     Q_ASSERT(*m_colorSpace == *cs);

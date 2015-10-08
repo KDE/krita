@@ -31,6 +31,7 @@ class QVariant;
 
 class KisCoordinatesConverter;
 class KisDisplayFilter;
+class KisCanvas2;
 
 #include "kritaui_export.h"
 

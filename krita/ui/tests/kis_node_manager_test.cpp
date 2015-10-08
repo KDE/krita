@@ -18,7 +18,7 @@
 
 #include "kis_node_manager_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "ui_manager_test.h"
 
@@ -288,4 +288,4 @@ void KisNodeManagerTest::testConvertBlurToSelectionMask()
     testConvertToSelectionMask(false);
 }
 
-QTEST_KDEMAIN(KisNodeManagerTest, GUI)
+QTEST_MAIN(KisNodeManagerTest)

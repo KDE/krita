@@ -27,8 +27,6 @@
 #include <kis_types.h>
 #include <QPointF>
 
-#include "kis_duplicateop_settings_widget.h"
-
 class QDomElement;
 class KisDuplicateOpSettings : public KisBrushBasedPaintOpSettings
 {

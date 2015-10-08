@@ -20,7 +20,7 @@
 
 #include "testutil.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "kis_fill_painter.h"
 
 #include <floodfill/kis_scanline_fill.h>
@@ -150,4 +150,4 @@ void KisFillPainterTest::benchmarkFillingScanlineSelection()
 }
 
 
-QTEST_KDEMAIN(KisFillPainterTest, GUI)
+QTEST_MAIN(KisFillPainterTest)

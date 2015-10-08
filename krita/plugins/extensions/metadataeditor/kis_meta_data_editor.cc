@@ -22,8 +22,8 @@
 #include <QFile>
 
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
-#include <kglobal.h>
+#include <KoResourcePaths.h>
+
 
 #include <kis_debug.h>
 
@@ -51,7 +51,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
     d->originalStore = originalStore;
     d->store = new KisMetaData::Store(*originalStore);
 
-    QStringList files = KGlobal::dirs()->findAllResources("data", "kritaplugins/metadataeditor/*.rc");
+    QStringList files = KoResourcePaths::findAllResources("data", "kritaplugins/metadataeditor/*.rc");
 
     QMap<QString, QWidget*> widgets;
     widgets["dublincore.ui"] = new WdgDublinCore(this);

@@ -24,7 +24,6 @@
 #define ppVar( var ) #var << "=" << var
 //#define DEBUG_TOC_STRUCTURE
 
-#include <QDebug>
 #include <QList>
 #include <QString>
 

@@ -30,6 +30,7 @@
 #include <kis_config.h>
 #include <kis_cursor.h>
 #include <KisViewManager.h>
+#include "kis_canvas_decoration.h"
 
 
 KisToolGrid::KisToolGrid(KoCanvasBase * canvas)

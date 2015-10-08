@@ -17,7 +17,7 @@
  */
 
 #include "kis_transaction_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
@@ -286,6 +286,6 @@ void KisTransactionTest::testUndoWithUnswitchedFrames()
     QCOMPARE(dev->exactBounds(), QRect(10,10,20,20));
 }
 
-QTEST_KDEMAIN(KisTransactionTest, GUI)
+QTEST_MAIN(KisTransactionTest, GUI)
 
 

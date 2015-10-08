@@ -29,7 +29,7 @@
 #include "KoDocumentResourceManager.h"
 #include "KoLoadingShapeUpdater.h"
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 uint qHash(const KoShapeLoadingContext::AdditionalAttributeData & attributeData)
 {
@@ -169,7 +169,7 @@ void KoShapeLoadingContext::addSharedData(const QString & id, KoSharedLoadingDat
     if (it == d->sharedData.end()) {
         d->sharedData.insert(id, data);
     } else {
-        kWarning(30006) << "The id" << id << "is already registered. Data not inserted";
+        warnFlake << "The id" << id << "is already registered. Data not inserted";
         Q_ASSERT(it == d->sharedData.end());
     }
 }

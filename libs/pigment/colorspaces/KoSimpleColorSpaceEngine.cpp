@@ -36,8 +36,8 @@ class KoSimpleColorConversionTransformation : public KoColorConversionTransforma
 public:
     KoSimpleColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs)
         : KoColorConversionTransformation(srcCs, dstCs,
-                                          KoColorConversionTransformation::InternalRenderingIntent,
-                                          KoColorConversionTransformation::InternalConversionFlags) {
+                                          KoColorConversionTransformation::internalRenderingIntent(),
+                                          KoColorConversionTransformation::internalConversionFlags()) {
     }
 
     ~KoSimpleColorConversionTransformation() {

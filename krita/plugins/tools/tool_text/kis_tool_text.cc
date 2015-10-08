@@ -19,8 +19,7 @@
 
 #include "kis_tool_text.h"
 
-
-#include <kglobal.h>
+#include <ksharedconfig.h>
 
 #include <KoShapeRegistry.h>
 #include <KoShapeController.h>

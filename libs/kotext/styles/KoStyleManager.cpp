@@ -48,7 +48,7 @@
 
 #include <QUrl>
 #include <QBuffer>
-#include <kdebug.h>
+#include "TextDebug.h"
 #include <klocalizedstring.h>
 
 class Q_DECL_HIDDEN KoStyleManager::Private
@@ -687,7 +687,7 @@ void KoStyleManager::alteredStyle(const KoParagraphStyle *newStyle)
 
     int id = newStyle->styleId();
     if (id <= 0) {
-        kWarning(32500) << "alteredStyle received from a non registered style!";
+        warnText << "alteredStyle received from a non registered style!";
         return;
     }
     KoParagraphStyle *style = paragraphStyle(id);
@@ -709,7 +709,7 @@ void KoStyleManager::alteredStyle(const KoCharacterStyle *newStyle)
 
     int id = newStyle->styleId();
     if (id <= 0) {
-        kWarning(32500) << "alteredStyle received from a non registered style!";
+        warnText << "alteredStyle received from a non registered style!";
         return;
     }
     KoCharacterStyle *style = characterStyle(id);
@@ -731,7 +731,7 @@ void KoStyleManager::alteredStyle(const KoListStyle *style)
 
     int id = style->styleId();
     if (id <= 0) {
-        kWarning(32500) << "alteredStyle received from a non registered style!";
+        warnText << "alteredStyle received from a non registered style!";
         return;
     }
     emit styleHasChanged(id);
@@ -746,7 +746,7 @@ void KoStyleManager::alteredStyle(const KoTableStyle *style)
 
     int id = style->styleId();
     if (id <= 0) {
-        kWarning(32500) << "alteredStyle received from a non registered style!";
+        warnText << "alteredStyle received from a non registered style!";
         return;
     }
     emit styleHasChanged(id);
@@ -761,7 +761,7 @@ void KoStyleManager::alteredStyle(const KoTableColumnStyle *style)
 
     int id = style->styleId();
     if (id <= 0) {
-        kWarning(32500) << "alteredStyle received from a non registered style!";
+        warnText << "alteredStyle received from a non registered style!";
         return;
     }
     emit styleHasChanged(id);
@@ -776,7 +776,7 @@ void KoStyleManager::alteredStyle(const KoTableRowStyle *style)
 
     int id = style->styleId();
     if (id <= 0) {
-        kWarning(32500) << "alteredStyle received from a non registered style!";
+        warnText << "alteredStyle received from a non registered style!";
         return;
     }
     emit styleHasChanged(id);
@@ -791,7 +791,7 @@ void KoStyleManager::alteredStyle(const KoTableCellStyle *style)
 
     int id = style->styleId();
     if (id <= 0) {
-        kWarning(32500) << "alteredStyle received from a non registered style!";
+        warnText << "alteredStyle received from a non registered style!";
         return;
     }
     emit styleHasChanged(id);
@@ -802,7 +802,7 @@ void KoStyleManager::alteredStyle(const KoSectionStyle *style)
     Q_ASSERT(style);
     int id = style->styleId();
     if (id <= 0) {
-        kWarning(32500) << "alteredStyle received from a non registered style!";
+        warnText << "alteredStyle received from a non registered style!";
         return;
     }
     emit styleHasChanged(id);

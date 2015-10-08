@@ -89,8 +89,7 @@ KisImportExportFilter::ConversionStatus OraExport::convert(const QByteArray& fro
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    QUrl url;
-    url.setPath(filename);
+    QUrl url = QUrl::fromLocalFile(filename);
 
     KisImageWSP image = input->image();
     Q_CHECK_PTR(image);

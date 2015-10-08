@@ -19,7 +19,7 @@
 #ifndef _PSD_COLORMODE_BLOCK_TEST_H_
 #define _PSD_COLORMODE_BLOCK_TEST_H_
 
-#include <QObject>
+#include <QtTest>
 
 class PSDColorModeBlockTest : public QObject
 {

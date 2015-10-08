@@ -26,7 +26,7 @@
 #include "KoInlineTextObjectManager.h"
 #include "KoTextRangeManager.h"
 
-#include <kdebug.h>
+#include "TextDebug.h"
 
 bool sortAnchor(KoAnchorInlineObject *a1, KoAnchorInlineObject *a2)
 {

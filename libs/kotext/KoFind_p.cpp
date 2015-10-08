@@ -23,7 +23,7 @@
 
 #include <KoCanvasResourceManager.h>
 
-#include <KWindowSystem>
+#include <kwindowsystem.h>
 #include <kfinddialog.h>
 #include <kfind.h>
 #include <klocalizedstring.h>
@@ -32,7 +32,7 @@
 #include <QTextCursor>
 #include <QTimer>
 #include <QAction>
-#include <kdebug.h>
+#include "TextDebug.h"
 
 #include "KoFind.h"
 #include "KoText.h"
@@ -217,7 +217,7 @@ void KoFindPrivate::parseSettingsAndFind()
             endPosition = lastKnownPosition;
             startPosition = lastKnownPosition;
         }
-        //kDebug() << "start" << lastKnownPosition.position();
+        //debugText << "start" << lastKnownPosition.position();
     }
 
     QRegExp regExp;
@@ -233,7 +233,7 @@ void KoFindPrivate::parseSettingsAndFind()
         cursor = document->find(pattern, lastKnownPosition, flags);
     }
 
-    //kDebug() << "r" << restarted << "c > e" << ( document == startDocument && cursor > endPosition ) << ( startDocument == document && findDirection->positionReached(  cursor, endPosition ) )<< "e" << cursor.atEnd() << "n" << cursor.isNull();
+    //debugText << "r" << restarted << "c > e" << ( document == startDocument && cursor > endPosition ) << ( startDocument == document && findDirection->positionReached(  cursor, endPosition ) )<< "e" << cursor.atEnd() << "n" << cursor.isNull();
     if ((((document == startDocument) && restarted) || selectedText)
             && (cursor.isNull() || findDirection->positionReached(cursor, endPosition))) {
         restarted = false;

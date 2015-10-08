@@ -30,7 +30,7 @@
 
 #include <QTextInlineObject>
 #include <QFontMetricsF>
-#include <kdebug.h>
+#include "TextDebug.h"
 
 // #define DEBUG_PAINTING
 

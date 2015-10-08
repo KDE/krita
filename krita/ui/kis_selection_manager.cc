@@ -57,7 +57,6 @@
 #include "KisDocument.h"
 #include "kis_fill_painter.h"
 #include "kis_group_layer.h"
-#include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_statusbar.h"
 #include "kis_paint_device.h"
@@ -137,7 +136,7 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
 
     m_pasteNew = new KisAction(i18n("Paste into &New Image"), this);
     actionManager->addAction("paste_new", m_pasteNew);
-    m_pasteNew->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_N));
+    m_pasteNew->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_N));
     connect(m_pasteNew, SIGNAL(triggered()), this, SLOT(pasteNew()));
 
     m_pasteAt = new KisAction(i18n("Paste at cursor"), this);
@@ -147,29 +146,29 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_copyMerged = new KisAction(i18n("Copy merged"), this);
     m_copyMerged->setActivationFlags(KisAction::PIXELS_SELECTED);
     actionManager->addAction("copy_merged", m_copyMerged);
-    m_copyMerged->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
+    m_copyMerged->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
     connect(m_copyMerged, SIGNAL(triggered()), this, SLOT(copyMerged()));
 
     m_selectAll = new KisAction(KisIconUtils::loadIcon("select-all"), i18n("Select &All"), this);
     actionManager->addAction("select_all", m_selectAll);
-    m_selectAll->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_A));
+    m_selectAll->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::Key_A));
     connect(m_selectAll, SIGNAL(triggered()), this, SLOT(selectAll()));
 
     m_deselect = new KisAction(KisIconUtils::loadIcon("select-clear"), i18n("Deselect"), this);
     m_deselect->setActivationFlags(KisAction::PIXELS_SELECTED | KisAction::SHAPES_SELECTED);
     actionManager->addAction("deselect", m_deselect);
-    m_deselect->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A));
+    m_deselect->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A));
     connect(m_deselect, SIGNAL(triggered()), this, SLOT(deselect()));
 
     m_clear = new KisAction(KisIconUtils::loadIcon("select-clear"), i18n("Clear"), this);
     m_clear->setActivationFlags(KisAction::ACTIVE_IMAGE);
     actionManager->addAction("clear", m_clear);
-    m_clear->setShortcut(QKeySequence((Qt::Key_Delete)));
+    m_clear->setDefaultShortcut(QKeySequence((Qt::Key_Delete)));
     connect(m_clear, SIGNAL(triggered()), SLOT(clear()));
 
     m_reselect  = new KisAction(i18n("&Reselect"), this);
     actionManager->addAction("reselect", m_reselect);
-    m_reselect->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_D));
+    m_reselect->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_D));
     connect(m_reselect, SIGNAL(triggered()), this, SLOT(reselect()));
 
     m_invert  = new KisAction(i18n("&Invert Selection"), this);
@@ -179,35 +178,35 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_invert->setToolTip("foo");
 
     actionManager->addAction("invert", m_invert);
-    m_invert->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_I));
+    m_invert->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_I));
 
     actionManager->registerOperation(new KisInvertSelectionOperaton);
     
     m_copyToNewLayer  = new KisAction(i18n("Copy Selection to New Layer"), this);
     m_copyToNewLayer->setActivationFlags(KisAction::PIXELS_SELECTED);
     actionManager->addAction("copy_selection_to_new_layer", m_copyToNewLayer);
-    m_copyToNewLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_J));
+    m_copyToNewLayer->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_J));
     connect(m_copyToNewLayer, SIGNAL(triggered()), this, SLOT(copySelectionToNewLayer()));
 
     m_cutToNewLayer  = new KisAction(i18n("Cut Selection to New Layer"), this);
     m_cutToNewLayer->setActivationFlags(KisAction::PIXELS_SELECTED);
     m_cutToNewLayer->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     actionManager->addAction("cut_selection_to_new_layer", m_cutToNewLayer);
-    m_cutToNewLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_J));
+    m_cutToNewLayer->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_J));
     connect(m_cutToNewLayer, SIGNAL(triggered()), this, SLOT(cutToNewLayer()));
 
     m_fillForegroundColor  = new KisAction(i18n("Fill with Foreground Color"), this);
     m_fillForegroundColor->setActivationFlags(KisAction::ACTIVE_DEVICE);
     m_fillForegroundColor->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     actionManager->addAction("fill_selection_foreground_color", m_fillForegroundColor);
-    m_fillForegroundColor->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Backspace));
+    m_fillForegroundColor->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Backspace));
     connect(m_fillForegroundColor, SIGNAL(triggered()), this, SLOT(fillForegroundColor()));
 
     m_fillBackgroundColor  = new KisAction(i18n("Fill with Background Color"), this);
     m_fillBackgroundColor->setActivationFlags(KisAction::ACTIVE_DEVICE);
     m_fillBackgroundColor->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     actionManager->addAction("fill_selection_background_color", m_fillBackgroundColor);
-    m_fillBackgroundColor->setShortcut(QKeySequence(Qt::Key_Backspace));
+    m_fillBackgroundColor->setDefaultShortcut(QKeySequence(Qt::Key_Backspace));
     connect(m_fillBackgroundColor, SIGNAL(triggered()), this, SLOT(fillBackgroundColor()));
 
     m_fillPattern  = new KisAction(i18n("Fill with Pattern"), this);
@@ -220,14 +219,14 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_fillForegroundColorOpacity->setActivationFlags(KisAction::ACTIVE_DEVICE);
     m_fillForegroundColorOpacity->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     actionManager->addAction("fill_selection_foreground_color_opacity", m_fillForegroundColorOpacity);
-    m_fillForegroundColorOpacity->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Backspace));
+    m_fillForegroundColorOpacity->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Backspace));
     connect(m_fillForegroundColorOpacity, SIGNAL(triggered()), this, SLOT(fillForegroundColorOpacity()));
 
     m_fillBackgroundColorOpacity  = new KisAction(i18n("Fill with Background Color (Opacity)"), this);
     m_fillBackgroundColorOpacity->setActivationFlags(KisAction::ACTIVE_DEVICE);
     m_fillBackgroundColorOpacity->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     actionManager->addAction("fill_selection_background_color_opacity", m_fillBackgroundColorOpacity);
-    m_fillBackgroundColorOpacity->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Backspace));
+    m_fillBackgroundColorOpacity->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::Key_Backspace));
     connect(m_fillBackgroundColorOpacity, SIGNAL(triggered()), this, SLOT(fillBackgroundColorOpacity()));
 
     m_fillPatternOpacity  = new KisAction(i18n("Fill with Pattern (Opacity)"), this);
@@ -246,7 +245,7 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_toggleDisplaySelection->setActivationFlags(KisAction::ACTIVE_NODE);
 
     actionManager->addAction("toggle_display_selection", m_toggleDisplaySelection);
-    m_toggleDisplaySelection->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
+    m_toggleDisplaySelection->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
     connect(m_toggleDisplaySelection, SIGNAL(triggered()), this, SLOT(toggleDisplaySelection()));
 
     m_toggleDisplaySelection->setChecked(true);

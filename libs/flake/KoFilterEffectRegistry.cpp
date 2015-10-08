@@ -18,11 +18,16 @@
  */
 
 #include "KoFilterEffectRegistry.h"
+
+#include <QGlobalStatic>
+
 #include "KoFilterEffect.h"
 #include <KoPluginLoader.h>
-#include <kglobal.h>
-#include <kdebug.h>
+
+#include <FlakeDebug.h>
 #include <KoXmlReader.h>
+
+Q_GLOBAL_STATIC(KoFilterEffectRegistry, s_instance)
 
 KoFilterEffectRegistry::KoFilterEffectRegistry()
   : d(0)
@@ -48,7 +53,6 @@ KoFilterEffectRegistry::~KoFilterEffectRegistry()
 
 KoFilterEffectRegistry* KoFilterEffectRegistry::instance()
 {
-    K_GLOBAL_STATIC(KoFilterEffectRegistry, s_instance)
     if (!s_instance.exists()) {
         s_instance->init();
     }

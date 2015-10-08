@@ -31,7 +31,6 @@
 #include <KoOdfGraphicStyles.h>
 #include "KoParagraphStyle.h"
 
-#include <kdebug.h>
 #include <KoTextDebug.h>
 
 #include <QTextTableFormat>
@@ -41,6 +40,8 @@
 #include <KoStyleStack.h>
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
+
+#include "TextDebug.h"
 
 #include <cfloat>
 

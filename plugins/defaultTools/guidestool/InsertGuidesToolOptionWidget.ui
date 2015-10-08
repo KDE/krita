@@ -20,31 +20,28 @@
    <item>
     <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel">
+      <widget class="QLabel" name="label1">
        <property name="text">
         <string>Horizontal</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="KIntNumInput" name="m_horizontalSpinBox">
+      <widget class="QSpinBox" name="m_horizontalSpinBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="specialValueText">
-        <string>None</string>
+       <property name="toolTip">
+        <string>Insert this number of horizontal equally spaced guides.</string>
        </property>
        <property name="minimum">
         <number>0</number>
        </property>
        <property name="maximum">
         <number>100</number>
-       </property>
-       <property name="toolTip">
-        <string>Insert this number of horizontal equally spaced guides.</string>
        </property>
       </widget>
      </item>
@@ -63,31 +60,28 @@
    <item>
     <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel">
+      <widget class="QLabel" name="label">
        <property name="text">
         <string>Vertical</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="KIntNumInput" name="m_verticalSpinBox">
+      <widget class="QSpinBox" name="m_verticalSpinBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="specialValueText">
-        <string>None</string>
+       <property name="toolTip">
+        <string>Insert this number of vertical equally spaced guides.</string>
        </property>
        <property name="minimum">
         <number>0</number>
        </property>
        <property name="maximum">
         <number>100</number>
-       </property>
-       <property name="toolTip">
-        <string>Insert this number of vertical equally spaced guides.</string>
        </property>
       </widget>
      </item>
@@ -113,7 +107,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KPushButton" name="m_createButton">
+      <widget class="QPushButton" name="m_createButton">
        <property name="text">
         <string>Create</string>
        </property>
@@ -129,22 +123,16 @@
      <property name="sizeType">
       <enum>QSizePolicy::MinimumExpanding</enum>
      </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
     </spacer>
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KPushButton</class>
-   <extends>QPushButton</extends>
-   <header>kpushbutton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KIntNumInput</class>
-   <extends>QWidget</extends>
-   <header>knuminput.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -28,6 +28,7 @@ set(textlayout_LIB_SRCS
     DummyDocumentLayout.cpp
     IndexGeneratorManager.cpp
     KoStyleThumbnailer.cpp
+    TextLayoutDebug.cpp
 )
 
 
@@ -50,7 +51,6 @@ install(
     KoTextShapeData.h
     KoPointedAt.h
     KoStyleThumbnailer.h
-    kotextlayout_export.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
 )

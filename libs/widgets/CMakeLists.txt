@@ -9,6 +9,9 @@ if (LIBATTICA_FOUND)
 endif ()
 
 set(kowidgets_LIB_SRCS
+    KoGradientEditWidget.cpp
+    KoResourcePaths.cpp
+    KoVBox.cpp
     KoDialog.cpp
     KoGlobal.cpp
     KoZoomWidget.cpp
@@ -34,7 +37,6 @@ set(kowidgets_LIB_SRCS
     KoZoomMode.cpp
     KoDpi.cpp
     KoGlobal.cpp
-    KoFileDialog.cpp
     KoColorPatch.cpp
     KoColorPopupAction.cpp
     KoColorSetWidget.cpp
@@ -90,6 +92,9 @@ set(kowidgets_LIB_SRCS
     KoTableView.cpp
     
     KoIconUtils.cpp
+
+    WidgetsDebug.cpp
+
 )
 
 ki18n_wrap_ui( kowidgets_LIB_SRCS
@@ -105,8 +110,7 @@ ki18n_wrap_ui( kowidgets_LIB_SRCS
 
 add_library(kowidgets SHARED ${kowidgets_LIB_SRCS})
 generate_export_header(kowidgets BASE_NAME kowidgets)
-
-target_link_libraries(kowidgets kotext pigmentcms kowidgetutils)
+target_link_libraries(kowidgets kotext pigmentcms kowidgetutils KF5::GuiAddons KF5::WidgetsAddons KF5::ConfigCore KF5::Codecs KF5::IconThemes KF5::Completion)
 
 if(GHNS)
     target_link_libraries(kowidgets KF5::NewStuff)
@@ -117,7 +121,7 @@ if(X11_FOUND)
 endif()
 
 
-target_link_libraries(kowidgets LINK_INTERFACE_LIBRARIES kotext pigmentcms kowidgetutils )
+target_link_libraries(kowidgets LINK_INTERFACE_LIBRARIES kotext pigmentcms kowidgetutils)
 
 set_target_properties(kowidgets PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
@@ -141,7 +145,6 @@ install( FILES
     KoZoomHandler.h
     KoZoomMode.h
     KoGlobal.h
-    KoFileDialog.h
     KoColorPatch.h
     KoStrokeConfigWidget.h
     KoFillConfigWidget.h
@@ -170,14 +173,3 @@ install( FILES
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/calligra
 COMPONENT Devel)
-
-set(filedialogtester_SRCS
-    KoFileDialogTester.cpp
-    main.cpp
-)
-ki18n_wrap_ui(filedialogtester_SRCS
-    KoFileDialogTester.ui
-)
-
-add_executable(filedialogtester ${filedialogtester_SRCS})
-target_link_libraries(filedialogtester kowidgets)

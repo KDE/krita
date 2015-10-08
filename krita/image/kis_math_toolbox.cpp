@@ -27,14 +27,16 @@
 #endif
 
 #include <QVector>
+#include <QGlobalStatic>
 
 #include <KoColorSpaceMaths.h>
-#include <kglobal.h>
 
 #include <kis_debug.h>
 
 #include "kis_basic_math_toolbox.h"
 #include "kis_iterator_ng.h"
+
+Q_GLOBAL_STATIC(KisMathToolboxRegistry, s_instance)
 
 KisMathToolbox::KisMathToolbox(KoID id) : m_id(id)
 {
@@ -46,7 +48,6 @@ KisMathToolbox::~KisMathToolbox()
 
 KisMathToolboxRegistry * KisMathToolboxRegistry::instance()
 {
-    K_GLOBAL_STATIC(KisMathToolboxRegistry, s_instance);
     return s_instance;
 }
 

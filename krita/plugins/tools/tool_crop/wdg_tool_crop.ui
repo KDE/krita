@@ -310,19 +310,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QDoubleSpinBox</class>
-   <extends>QWidget</extends>
-   <header>knuminput.h</header>
-  </customwidget>
-  <customwidget>
-   <class>QSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>knuminput.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <tabstops>
   <tabstop>intX</tabstop>
   <tabstop>intY</tabstop>

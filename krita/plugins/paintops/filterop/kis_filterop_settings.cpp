@@ -24,7 +24,6 @@
 
 #include <QDomDocument>
 
-#include "kis_filterop_settings_widget.h"
 
 #include <kis_filter_option.h>
 #include <filter/kis_filter.h>

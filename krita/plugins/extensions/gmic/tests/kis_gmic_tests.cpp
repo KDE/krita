@@ -25,7 +25,7 @@
 #include <KoColor.h>
 #include <kis_surrogate_undo_adapter.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <QImage>
 #include <QTextDocument>
 
@@ -39,8 +39,8 @@
 #include <kis_input_output_mapper.h>
 #include <kis_gmic_applicator.h>
 
-#include <kglobal.h>
-#include <kstandarddirs.h>
+
+#include <KoResourcePaths.h>
 #include <QDomDocument>
 
 #include <kis_group_layer.h>
@@ -76,11 +76,11 @@ const static QString BLACKLIST("gmic_def.gmic.blacklist");
 
 void KisGmicTests::initTestCase()
 {
-    KGlobal::dirs()->addResourceType("gmic_definitions", "data", "krita/gmic/");
+    KoResourcePaths::addResourceType("gmic_definitions", "data", "krita/gmic/");
 
     QString standardSettings("gmic_def.gmic");
-    QString definitionFilePath = KGlobal::dirs()->findResource("gmic_definitions", STANDARD_SETTINGS);
-    m_blacklistFilePath = KGlobal::dirs()->findResource("gmic_definitions", STANDARD_SETTINGS + ".blacklist");
+    QString definitionFilePath = KoResourcePaths::findResource("gmic_definitions", STANDARD_SETTINGS);
+    m_blacklistFilePath = KoResourcePaths::findResource("gmic_definitions", STANDARD_SETTINGS + ".blacklist");
 
     QStringList filePaths;
     filePaths << definitionFilePath;
@@ -631,7 +631,7 @@ void KisGmicTests::testFilterOnlySelection()
 
 void KisGmicTests::testLoadingGmicCommands()
 {
-    QString definitionFilePath = KGlobal::dirs()->findResource("gmic_definitions", STANDARD_SETTINGS);
+    QString definitionFilePath = KoResourcePaths::findResource("gmic_definitions", STANDARD_SETTINGS);
     QByteArray data = KisGmicParser::extractGmicCommandsOnly(definitionFilePath);
     QVERIFY(data.size() > 0);
 }
@@ -965,5 +965,5 @@ void KisGmicTests::testFindFilterByName()
 
 
 
-QTEST_KDEMAIN(KisGmicTests, NoGUI)
+QTEST_MAIN(KisGmicTests)
 

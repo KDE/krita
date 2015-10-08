@@ -26,9 +26,9 @@
 #include <QApplication>
 #include <QPalette>
 #include <QColor>
+#include <QIcon>
 
 // KDE
-#include <QIcon>
 #include <kiconloader.h>
 
 /**
@@ -39,7 +39,7 @@
  * still considered in the extraction.
  *
  * The naming pattern of the macros is like this:
- * * koIcon* returns a KIcon object
+ * * koIcon* returns a QIcon object
  * * koIconName* returns a QLatin1String (aligned with usual API where "iconName" property is of type QString)
  * * koIconNameCStr* returns a const char*
  */

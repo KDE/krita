@@ -25,7 +25,7 @@ inline double drand48()
 }
 #endif
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QImage>
 #include <kis_debug.h>
@@ -275,4 +275,4 @@ void KisPainterBenchmark::benchmarkDrawScanLine()
 #endif
 }
 
-QTEST_KDEMAIN(KisPainterBenchmark, NoGUI)
+QTEST_MAIN(KisPainterBenchmark)

@@ -61,6 +61,7 @@ struct KisTIFFOptions {
     quint16 deflateCompress;
     quint16 faxMode;
     quint16 pixarLogCompress;
+    bool saveProfile;
 };
 
 class KisTIFFConverter : public QObject

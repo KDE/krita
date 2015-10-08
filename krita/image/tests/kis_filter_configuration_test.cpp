@@ -18,7 +18,7 @@
 
 #include "kis_filter_configuration_test.h"
 #include <QApplication>
-#include <qtest_kde.h>
+#include <QTest>
 #include <kis_debug.h>
 #include <KoID.h>
 #include <kis_paint_device.h>
@@ -68,4 +68,4 @@ void KisFilterConfigurationTest::testSetGetProperty()
 }
 
 
-QTEST_KDEMAIN(KisFilterConfigurationTest, NoGUI)
+QTEST_MAIN(KisFilterConfigurationTest)

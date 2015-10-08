@@ -35,9 +35,8 @@
 #include <QPointer>
 #include <QScrollArea>
 
-#include <kglobal.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <ksharedconfig.h>
 
 #include <KoColorSet.h>
 #include <KoColorPatch.h>

@@ -28,7 +28,6 @@
 #include <kis_paintop_factory.h>
 
 class QString;
-class KisPaintOpPreset;
 class KisCanvasResourceProvider;
 class KoResource;
 
@@ -83,7 +82,7 @@ public Q_SLOTS:
     void hideScratchPad();
     void showScratchPad();
     void resourceSelected(KoResource* resource);
-    void slotUpdateThemedIcons();
+    void updateThemedIcons();
 
     void slotUpdateLodAvailability();
 

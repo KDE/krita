@@ -24,7 +24,7 @@
 
 #include <KoCanvasBase.h>
 
-#include <kdebug.h>
+#include "TextDebug.h"
 
 InsertInlineObjectActionBase::InsertInlineObjectActionBase(KoCanvasBase *canvas, const QString &name)
         : QAction(name, canvas->canvasWidget()),

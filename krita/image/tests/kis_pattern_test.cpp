@@ -18,7 +18,7 @@
 
 #include "kis_pattern_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "KoPattern.h"
 
 #include <QCryptographicHash>
@@ -70,4 +70,4 @@ void KoPatternTest::testRoundTripMd5()
 }
 
 
-QTEST_KDEMAIN(KoPatternTest, GUI)
+QTEST_MAIN(KoPatternTest)

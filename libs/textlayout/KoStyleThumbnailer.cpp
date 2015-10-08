@@ -44,7 +44,7 @@
 #include <QTextCursor>
 #include <QTextLength>
 
-#include <kdebug.h>
+#include <TextLayoutDebug.h>
 
 extern int qt_defaultDpiX();
 extern int qt_defaultDpiY();

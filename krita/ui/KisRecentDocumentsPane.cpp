@@ -21,13 +21,15 @@
 #include "KisRecentDocumentsPane.h"
 
 #include <QFile>
+#include <QUrl>
 #include <QStandardItemModel>
 
-#include <kglobal.h>
 #include <kfileitem.h>
 #include <kio/previewjob.h>
 #include <kconfiggroup.h>
-#include <QUrl>
+#include <ksharedconfig.h>
+#include <kguiitem.h>
+
 #include <KoIcon.h>
 #include <kis_icon_utils.h>
 
@@ -81,7 +83,7 @@ KisRecentDocumentsPane::KisRecentDocumentsPane(QWidget* parent,
 {
     setFocusProxy(m_documentList);
     KGuiItem openGItem(i18n("Open This Document"), koIconName("document-open"));
-    m_openButton->setGuiItem(openGItem);
+    KGuiItem::assign(m_openButton, openGItem);
     m_alwaysUseCheckBox->hide();
 
     model()->setSortRole(0); // Disable sorting
@@ -105,7 +107,7 @@ KisRecentDocumentsPane::KisRecentDocumentsPane(QWidget* parent,
                 name = url.fileName();
 
             if (!url.isLocalFile() || QFile::exists(url.toLocalFile())) {
-                KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, url);
+                KFileItem fileItem(url);
                 fileList.prepend(fileItem);
                 const QIcon icon = QIcon::fromTheme(fileItem.iconName());
                 KoFileListItem* item = new KoFileListItem(icon, name, fileItem);

@@ -1,4 +1,4 @@
-include_directories(${KOMAIN_INCLUDES}
+include_directories(${KOTEXT_INCLUDES}
                     ${FONTCONFIG_INCLUDE_DIR}/fontconfig
                     ${FREETYPE_INCLUDE_DIRS})
 
@@ -124,6 +124,8 @@ set(kotext_LIB_SRCS
 
     KoTextDrag.cpp
     KoTextCommandBase.cpp
+
+    TextDebug.cpp
 )
 
 if( SHOULD_BUILD_FEATURE_RDF )
@@ -133,13 +135,13 @@ if( SHOULD_BUILD_FEATURE_RDF )
 endif()
 
 add_library(kotext SHARED ${kotext_LIB_SRCS})
-# generate_export_header(kotext BASE_NAME kotext)
+generate_export_header(kotext BASE_NAME kotext)
 
-target_link_libraries(kotext flake)
+target_link_libraries(kotext flake KF5::TextWidgets KF5::XmlGui KF5::WindowSystem)
 if( SHOULD_BUILD_FEATURE_RDF )
     target_link_libraries(kotext ${SOPRANO_LIBRARIES})
 endif()
-target_link_libraries(kotext LINK_INTERFACE_LIBRARIES flake)
+target_link_libraries(kotext LINK_INTERFACE_LIBRARIES flake KF5::TextWidgets)
 
 if( FONTCONFIG_FOUND )
     target_link_libraries(kotext ${FONTCONFIG_LIBRARIES})
@@ -161,7 +163,6 @@ install( FILES texteditingplugin.desktop inlinetextobject.desktop DESTINATION ${
 
 install(
     FILES
-    kotext_export.h
     KoDocumentRdfBase.h
     KoInlineObject.h
     KoTextEditor.h

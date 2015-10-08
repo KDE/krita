@@ -30,7 +30,7 @@
 #include "KoOdfWriteStore.h"
 #include "KoFontFace.h"
 #include <float.h>
-#include <kdebug.h>
+#include <OdfDebug.h>
 
 static const struct {
     KoGenStyle::Type m_type;
@@ -340,12 +340,12 @@ QString KoGenStyles::insert(const KoGenStyle& style, const QString& baseName, In
             KoGenStyle testStyle(style);
             const KoGenStyle* parentStyle = this->style(style.parentName(), style.familyName());   // ## linear search
             if (!parentStyle) {
-                kDebug(30003) << "baseName=" << baseName << "parent style" << style.parentName()
+                debugOdf << "baseName=" << baseName << "parent style" << style.parentName()
                               << "not found in collection";
             } else {
                 // TODO remove
                 if (testStyle.m_familyName != parentStyle->m_familyName) {
-                    kWarning(30003) << "baseName=" << baseName << "family=" << testStyle.m_familyName
+                    warnOdf << "baseName=" << baseName << "family=" << testStyle.m_familyName
                                     << "parent style" << style.parentName() << "has a different family:"
                                     << parentStyle->m_familyName;
                 }
@@ -436,7 +436,7 @@ void KoGenStyles::insertFontFace(const KoFontFace &face)
 {
     Q_ASSERT(!face.isNull());
     if (face.isNull()) {
-        kWarning() << "This font face is null and will not be added to styles: set at least the name";
+        warnOdf << "This font face is null and will not be added to styles: set at least the name";
         return;
     }
     d->fontFaces.insert(face.name(), face); // replaces prev item

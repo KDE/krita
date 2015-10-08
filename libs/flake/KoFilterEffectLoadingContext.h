@@ -26,6 +26,8 @@ class QRectF;
 class QString;
 class QPointF;
 
+#include <QtGlobal>
+
 /// This class provides a loading context for filter effects
 class FLAKE_EXPORT KoFilterEffectLoadingContext
 {

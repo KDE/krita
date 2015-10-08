@@ -19,7 +19,6 @@
 #ifndef __KIS_IMAGE_BARRIER_LOCKER_H
 #define __KIS_IMAGE_BARRIER_LOCKER_H
 
-#include "kis_image.h"
 
 
 template <typename ImagePointer>

@@ -18,7 +18,7 @@
 
 #include "kis_brush_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <QString>
 #include <QDir>
 #include <KoColor.h>
@@ -342,4 +342,4 @@ void KisBrushTest::testQPainterTransformationBorder()
     }
 }
 
-QTEST_KDEMAIN(KisBrushTest, GUI)
+QTEST_MAIN(KisBrushTest)

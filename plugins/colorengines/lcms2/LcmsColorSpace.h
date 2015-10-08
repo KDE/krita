@@ -201,15 +201,15 @@ protected:
                                                                     TYPE_BGR_8,
                                                                     d->profile->lcmsProfile(),
                                                                     this->colorSpaceType(),
-                                                                    KoColorConversionTransformation::InternalRenderingIntent,
-                                                                    KoColorConversionTransformation::InternalConversionFlags);
+                                                                    KoColorConversionTransformation::internalRenderingIntent(),
+                                                                    KoColorConversionTransformation::internalConversionFlags());
             Q_ASSERT(d->defaultTransformations->fromRGB);
             d->defaultTransformations->toRGB = cmsCreateTransform(d->profile->lcmsProfile(),
                                                                   this->colorSpaceType(),
                                                                   KoLcmsDefaultTransformations::s_RGBProfile,
                                                                   TYPE_BGR_8,
-                                                                  KoColorConversionTransformation::InternalRenderingIntent,
-                                                                  KoColorConversionTransformation::InternalConversionFlags);
+                                                                  KoColorConversionTransformation::internalRenderingIntent(),
+                                                                  KoColorConversionTransformation::internalConversionFlags());
             Q_ASSERT(d->defaultTransformations->toRGB);
             KoLcmsDefaultTransformations::s_transformations[ this->id()][ d->profile ] = d->defaultTransformations;
         }
@@ -247,8 +247,8 @@ public:
                                                     TYPE_BGR_8,
                                                     d->profile->lcmsProfile(),
                                                     this->colorSpaceType(),
-                                                    KoColorConversionTransformation::InternalRenderingIntent,
-                                                    KoColorConversionTransformation::InternalConversionFlags);
+                                                    KoColorConversionTransformation::internalRenderingIntent(),
+                                                    KoColorConversionTransformation::internalConversionFlags());
                 d->lastRGBProfile = profile->lcmsProfile();
 
             }
@@ -268,8 +268,8 @@ public:
             if (d->lastToRGB == 0 || (d->lastToRGB != 0 && d->lastRGBProfile != profile->lcmsProfile())) {
                 d->lastToRGB = cmsCreateTransform(d->profile->lcmsProfile(), this->colorSpaceType(),
                                                   profile->lcmsProfile(), TYPE_BGR_8,
-                                                  KoColorConversionTransformation::InternalRenderingIntent,
-                                                  KoColorConversionTransformation::InternalConversionFlags);
+                                                  KoColorConversionTransformation::internalRenderingIntent(),
+                                                  KoColorConversionTransformation::internalConversionFlags());
                 d->lastRGBProfile = profile->lcmsProfile();
             }
             cmsDoTransform(d->lastToRGB, const_cast <quint8 *>(src), d->qcolordata, 1);
@@ -293,8 +293,8 @@ public:
         adj->profiles[0] = d->profile->lcmsProfile();
         adj->profiles[2] = d->profile->lcmsProfile();
         adj->cmstransform  = cmsCreateMultiprofileTransform(adj->profiles, 3, this->colorSpaceType(), this->colorSpaceType(),
-                                                            KoColorConversionTransformation::AdjustmentRenderingIntent,
-                                                            KoColorConversionTransformation::AdjustmentConversionFlags);
+                                                            KoColorConversionTransformation::adjustmentRenderingIntent(),
+                                                            KoColorConversionTransformation::adjustmentConversionFlags());
         adj->csProfile = d->profile->lcmsProfile();
         return adj;
     }
@@ -322,12 +322,12 @@ public:
         adj->profiles[2] = NULL;
         adj->csProfile = d->profile->lcmsProfile();
         adj->cmstransform  = cmsCreateTransform(adj->profiles[0], this->colorSpaceType(), NULL, this->colorSpaceType(),
-                                                KoColorConversionTransformation::AdjustmentRenderingIntent,
-                                                KoColorConversionTransformation::AdjustmentConversionFlags);
+                                                KoColorConversionTransformation::adjustmentRenderingIntent(),
+                                                KoColorConversionTransformation::adjustmentConversionFlags());
         
         adj->cmsAlphaTransform  = cmsCreateTransform(adj->profiles[1], TYPE_GRAY_DBL, NULL, TYPE_GRAY_DBL,
-                                                     KoColorConversionTransformation::AdjustmentRenderingIntent,
-                                                     KoColorConversionTransformation::AdjustmentConversionFlags);
+                                                     KoColorConversionTransformation::adjustmentRenderingIntent(),
+                                                     KoColorConversionTransformation::adjustmentConversionFlags());
 
         delete [] transferFunctions;
         delete [] alphaTransferFunctions;

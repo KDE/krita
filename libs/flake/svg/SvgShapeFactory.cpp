@@ -77,12 +77,12 @@ KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShap
 {
     const KoXmlElement & imageElement(KoXml::namedItemNS(element, KoXmlNS::draw, "image"));
     if (imageElement.isNull()) {
-        kError(30006) << "svg image element not found";
+        errorFlake << "svg image element not found";
         return 0;
     }
 
     if (imageElement.tagName() == "image") {
-        kDebug(30006) << "trying to create shapes form svg image";
+        debugFlake << "trying to create shapes form svg image";
         QString href = imageElement.attribute("href");
         if (href.isEmpty())
             return 0;
@@ -92,7 +92,7 @@ KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShap
             href.remove(0,2);
         }
         QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);
-        kDebug(30006) << mimetype;
+        debugFlake << mimetype;
         if (mimetype != "image/svg+xml")
             return 0;
 
@@ -110,7 +110,7 @@ KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShap
         context.odfLoadingContext().store()->close();
 
         if (! parsed) {
-            kError(30006) << "Error while parsing file: "
+            errorFlake << "Error while parsing file: "
             << "at line " << line << " column: " << col
             << " message: " << errormessage << endl;
             return 0;

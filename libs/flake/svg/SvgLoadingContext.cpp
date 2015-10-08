@@ -25,7 +25,7 @@
 
 #include <KoDocumentResourceManager.h>
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 #include <QStack>
 #include <QFileInfo>
@@ -42,7 +42,7 @@ public:
     ~Private()
     {
         if (! gcStack.isEmpty())
-            kWarning() << "the context stack is not empty (current count" << gcStack.size() << ", expected 0)";
+            warnFlake << "the context stack is not empty (current count" << gcStack.size() << ", expected 0)";
         qDeleteAll(gcStack);
         gcStack.clear();
         delete styleParser;

@@ -24,7 +24,7 @@
 
 #include <QTextBlock>
 
-#include <kdebug.h>
+#include <TextLayoutDebug.h>
 
 // ------------------- DummyDocumentLayout --------------------
 DummyDocumentLayout::DummyDocumentLayout(QTextDocument *doc)

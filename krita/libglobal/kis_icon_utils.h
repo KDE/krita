@@ -21,7 +21,6 @@
 
 #include "kritaglobal_export.h"
 
-class QIcon;
 class QAbstractButton;
 class QComboBox;
 class QAction;

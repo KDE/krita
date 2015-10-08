@@ -22,7 +22,7 @@
 #include "KoAnnotation.h"
 #include "KoBookmark.h"
 
-#include <kdebug.h>
+#include "TextDebug.h"
 
 KoTextRangeManager::KoTextRangeManager(QObject *parent)
     : QObject(parent)

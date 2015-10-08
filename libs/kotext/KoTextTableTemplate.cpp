@@ -32,7 +32,7 @@
 
 #include "Styles_p.h"
 
-#include <kdebug.h>
+#include "TextDebug.h"
 
 static const struct {
     KoTextTableTemplate::Property m_property;
@@ -240,11 +240,11 @@ void KoTextTableTemplate::loadOdf(const KoXmlElement *element, KoShapeLoadingCon
                         if (!styleName.isEmpty()) {
                             cs = textSharedData->tableCellStyle(styleName, true);
                             if (!cs) {
-                                kWarning(32500) << "Missing KoTableCellStyle!";
+                                warnText << "Missing KoTableCellStyle!";
                             }
                             else {
-                                //                kDebug(32500) << "==> cs.name:" << cs->name();
-                                //                kDebug(32500) << "==> cs.styleId:" << cs->styleId();
+                                //                debugText << "==> cs.name:" << cs->name();
+                                //                debugText << "==> cs.styleId:" << cs->styleId();
                                 d->stylesPrivate.add(templateStyles[index].m_property, cs->styleId());
                             }
                         }

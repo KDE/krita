@@ -17,7 +17,7 @@
  */
 
 #include "kis_tile_compressors_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "tiles3/kis_tiled_data_manager.h"
 #include "tiles3/swap/kis_legacy_tile_compressor.h"
@@ -180,5 +180,5 @@ void KisTileCompressorsTest::testLowLevelRoundTripIncompressible2()
 }
 
 
-QTEST_KDEMAIN(KisTileCompressorsTest, NoGUI)
+QTEST_MAIN(KisTileCompressorsTest)
 

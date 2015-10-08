@@ -18,7 +18,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_abr_brush.h"
-#include "kis_brush.h"
+#include "kis_abr_brush_collection.h"
 
 #include <QDomElement>
 #include <QFile>

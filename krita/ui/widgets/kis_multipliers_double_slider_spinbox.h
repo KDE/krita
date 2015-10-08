@@ -24,7 +24,6 @@
 
 #include <kritaui_export.h>
 
-class KisDoubleSliderSpinBox;
 
 /**
  * This class add a combobox to a \ref KisDoubleSliderSpinBox which

@@ -18,7 +18,7 @@
 
 #include "kis_basic_math_toolbox_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "kis_basic_math_toolbox.h"
 
 void KisBasicMathToolboxTest::testCreation()
@@ -27,4 +27,4 @@ void KisBasicMathToolboxTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisBasicMathToolboxTest, GUI)
+QTEST_MAIN(KisBasicMathToolboxTest)

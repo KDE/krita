@@ -24,7 +24,6 @@
 #include <QPointer>
 
 #include <KisMainWindow.h>
-#include <KisView.h>
 #include <KoProgressUpdater.h>
 #include <KoToolManager.h>
 
@@ -32,18 +31,15 @@
 #include <kis_types.h>
 
 #include "kis_floating_message.h"
-#include "KisView.h"
 
-class KisAction;
 class QPoint;
-
+class KisView;
 
 class KisCanvas2;
 class KisCanvasResourceProvider;
 class KisDocument;
 class KisFilterManager;
 class KisGridManager;
-class KisImage;
 class KisImageManager;
 class KisNodeManager;
 class KisPaintingAssistantsManager;
@@ -110,10 +106,6 @@ public:  // Krita specific interfaces
       * KisView will take care of removing the items when the view GUI is deactivated
       * and readding them when it is reactivated.
       * The parameters are the same as QStatusBar::addWidget().
-      *
-      * Note that you can't use KStatusBar methods (inserting text items by id).
-      * But you can create a KStatusBarLabel with a dummy id instead, and use
-      * it directly, to get the same look and feel.
       */
     void addStatusBarItem(QWidget * widget, int stretch = 0, bool permanent = false);
 

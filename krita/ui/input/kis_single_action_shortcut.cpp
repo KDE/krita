@@ -23,7 +23,7 @@
 class Q_DECL_HIDDEN KisSingleActionShortcut::Private
 {
 public:
-    QList<Qt::Key> modifiers;
+    QSet<Qt::Key> modifiers;
     Qt::Key key;
     bool useWheel;
     WheelAction wheelAction;
@@ -46,27 +46,27 @@ int KisSingleActionShortcut::priority() const
     return m_d->modifiers.size() * 2 + 1 + action()->priority();
 }
 
-void KisSingleActionShortcut::setKey(const QList<Qt::Key> &modifiers, Qt::Key key)
+void KisSingleActionShortcut::setKey(const QSet<Qt::Key> &modifiers, Qt::Key key)
 {
     m_d->modifiers = modifiers;
     m_d->key = key;
     m_d->useWheel = false;
 }
 
-void KisSingleActionShortcut::setWheel(const QList<Qt::Key> &modifiers, WheelAction wheelAction)
+void KisSingleActionShortcut::setWheel(const QSet<Qt::Key> &modifiers, WheelAction wheelAction)
 {
     m_d->modifiers = modifiers;
     m_d->wheelAction = wheelAction;
     m_d->useWheel = true;
 }
 
-bool KisSingleActionShortcut::match(const QList<Qt::Key> &modifiers, Qt::Key key)
+bool KisSingleActionShortcut::match(const QSet<Qt::Key> &modifiers, Qt::Key key)
 {
     return !m_d->useWheel && key == m_d->key &&
         compareKeys(modifiers, m_d->modifiers);
 }
 
-bool KisSingleActionShortcut::match(const QList<Qt::Key> &modifiers, WheelAction wheelAction)
+bool KisSingleActionShortcut::match(const QSet<Qt::Key> &modifiers, WheelAction wheelAction)
 {
     return m_d->useWheel && wheelAction == m_d->wheelAction &&
         compareKeys(modifiers, m_d->modifiers);

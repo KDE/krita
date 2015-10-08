@@ -18,7 +18,7 @@
 
 #include "kis_shape_controller_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "KisPart.h"
 #include "KisDocument.h"
@@ -46,4 +46,4 @@ void KisShapeControllerTest::destroyDummiesFacade(KisDummiesFacadeBase *dummiesF
     delete m_doc;
 }
 
-QTEST_KDEMAIN(KisShapeControllerTest, GUI)
+QTEST_MAIN(KisShapeControllerTest)

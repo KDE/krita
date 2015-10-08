@@ -21,7 +21,7 @@
 #include <QTest>
 #include <QCoreApplication>
 
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 
 #include "KoZoomHandler.h"
 #include "KoDpi.h"

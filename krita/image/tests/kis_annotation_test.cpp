@@ -18,7 +18,7 @@
 
 #include "kis_annotation_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "kis_annotation.h"
 
 void KisAnnotationTest::testCreation()
@@ -29,4 +29,4 @@ void KisAnnotationTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisAnnotationTest, GUI)
+QTEST_MAIN(KisAnnotationTest)

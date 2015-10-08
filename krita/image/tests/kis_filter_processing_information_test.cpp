@@ -18,7 +18,7 @@
 
 #include "kis_filter_processing_information_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include "kis_paint_device.h"
@@ -34,4 +34,4 @@ void KisProcessingInformationTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisProcessingInformationTest, GUI)
+QTEST_MAIN(KisProcessingInformationTest)

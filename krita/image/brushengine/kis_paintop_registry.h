@@ -45,6 +45,7 @@ class KRITAIMAGE_EXPORT KisPaintOpRegistry : public QObject, public KoGenericReg
     Q_OBJECT
 
 public:
+    KisPaintOpRegistry();
     virtual ~KisPaintOpRegistry();
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
@@ -85,7 +86,6 @@ public:
 
 private:
 
-    KisPaintOpRegistry();
     KisPaintOpRegistry(const KisPaintOpRegistry&);
     KisPaintOpRegistry operator=(const KisPaintOpRegistry&);
 

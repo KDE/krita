@@ -18,7 +18,7 @@
 
 #include "kis_meta_data_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "kis_meta_data_entry.h"
 #include "kis_meta_data_filter_registry.h"
 #include "kis_meta_data_value.h"
@@ -581,4 +581,4 @@ void KisMetaDataTest::testValidator()
 
 }
 
-QTEST_KDEMAIN(KisMetaDataTest, GUI)
+QTEST_MAIN(KisMetaDataTest)

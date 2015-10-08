@@ -21,7 +21,7 @@
 #include <QColor>
 #include <QMouseEvent>
 
-#include <kglobal.h>
+#include <ksharedconfig.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>

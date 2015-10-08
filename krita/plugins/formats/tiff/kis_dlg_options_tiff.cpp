@@ -62,6 +62,7 @@ KisDlgOptionsTIFF::KisDlgOptionsTIFF(QWidget *parent)
     optionswdg->compressionLevelDeflate->setValue(cfg.getInt("deflate", 6));
     optionswdg->kComboBoxFaxMode->setCurrentIndex(cfg.getInt("faxmode", 0));
     optionswdg->compressionLevelPixarLog->setValue(cfg.getInt("pixarlog", 6));
+    optionswdg->chkSaveProfile->setChecked(cfg.getBool("saveProfile", true));
 }
 
 KisDlgOptionsTIFF::~KisDlgOptionsTIFF()
@@ -71,26 +72,18 @@ KisDlgOptionsTIFF::~KisDlgOptionsTIFF()
 
 void KisDlgOptionsTIFF::activated(int index)
 {
-    /*    optionswdg->groupBoxJPEG->hide();
-        optionswdg->groupBoxDeflate->hide();
-        optionswdg->groupBoxCCITGroupCCITG3->hide();
-        optionswdg->groupBoxPixarLog->hide();*/
     switch (index) {
     case 1:
         optionswdg->codecsOptionsStack->setCurrentIndex(1);
-//             optionswdg->groupBoxJPEG->show();
         break;
     case 2:
         optionswdg->codecsOptionsStack->setCurrentIndex(2);
-//             optionswdg->groupBoxDeflate->show();
         break;
     case 6:
         optionswdg->codecsOptionsStack->setCurrentIndex(3);
-//             optionswdg->groupBoxCCITGroupCCITG3->show();
         break;
     case 8:
         optionswdg->codecsOptionsStack->setCurrentIndex(4);
-//             optionswdg->groupBoxPixarLog->show();
         break;
     default:
         optionswdg->codecsOptionsStack->setCurrentIndex(0);
@@ -147,8 +140,7 @@ KisTIFFOptions KisDlgOptionsTIFF::options()
     options.deflateCompress = optionswdg->compressionLevelDeflate->value();
     options.faxMode = optionswdg->kComboBoxFaxMode->currentIndex() + 1;
     options.pixarLogCompress = optionswdg->compressionLevelPixarLog->value();
-
-    dbgKrita << options.compressionType << options.predictor << options.alpha << options.jpegQuality << options.deflateCompress << options.faxMode << options.pixarLogCompress;
+    options.saveProfile = optionswdg->chkSaveProfile->isChecked();
 
     KisPropertiesConfiguration cfg;
     cfg.setProperty("compressiontype", optionswdg->kComboBoxCompressionType->currentIndex());
@@ -159,6 +151,7 @@ KisTIFFOptions KisDlgOptionsTIFF::options()
     cfg.setProperty("deflate", options.deflateCompress);
     cfg.setProperty("faxmode", options.faxMode - 1);
     cfg.setProperty("pixarlog", options.pixarLogCompress);
+    cfg.setProperty("saveProfile", options.saveProfile);
 
     KisConfig().setExportConfiguration("TIFF", cfg);
 

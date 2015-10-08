@@ -18,8 +18,9 @@
 
 #include "kis_exposure_gamma_correction_interface.h"
 
-#include <kglobal.h>
+#include <QGlobalStatic>
 
+Q_GLOBAL_STATIC(KisDumbExposureGammaCorrectionInterface, s_instance)
 
 KisExposureGammaCorrectionInterface::~KisExposureGammaCorrectionInterface()
 {
@@ -28,7 +29,6 @@ KisExposureGammaCorrectionInterface::~KisExposureGammaCorrectionInterface()
 KisDumbExposureGammaCorrectionInterface*
 KisDumbExposureGammaCorrectionInterface::instance()
 {
-    K_GLOBAL_STATIC(KisDumbExposureGammaCorrectionInterface, s_instance);
     return s_instance;
 }
 

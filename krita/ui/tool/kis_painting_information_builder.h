@@ -27,7 +27,6 @@
 #include "kis_paint_information.h"
 
 class KoPointerEvent;
-class KisTool;
 class KisToolFreehand;
 class KisCoordinatesConverter;
 class KisSpeedSmoother;

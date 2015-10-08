@@ -60,7 +60,7 @@
     </layout>
    </item>
    <item>
-    <widget class="KTabWidget" name="advancedColorSelectorOptions">
+    <widget class="QTabWidget" name="advancedColorSelectorOptions">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -1354,17 +1354,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>QDoubleSpinBox</class>
-   <extends>QWidget</extends>
-   <header>knuminput.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KTabWidget</class>
-   <extends>QTabWidget</extends>
-   <header>ktabwidget.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>KisColorSpaceSelector</class>
    <extends>QWidget</extends>

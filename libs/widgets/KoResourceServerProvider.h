@@ -26,7 +26,7 @@
 
 #include <QThread>
 
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 
 #include "KoResourceServer.h"
 #include "KoPattern.h"
@@ -75,6 +75,7 @@ class KOWIDGETS_EXPORT KoResourceServerProvider : public QObject
     Q_OBJECT
 
 public:
+    KoResourceServerProvider();
     virtual ~KoResourceServerProvider();
 
     static KoResourceServerProvider* instance();
@@ -84,7 +85,6 @@ public:
     KoResourceServer<KoColorSet>* paletteServer(bool block = true);
 
 private:
-    KoResourceServerProvider();
     KoResourceServerProvider(const KoResourceServerProvider&);
     KoResourceServerProvider operator=(const KoResourceServerProvider&);
 

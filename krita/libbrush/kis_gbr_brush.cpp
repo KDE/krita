@@ -26,8 +26,6 @@
 
 #include "kis_gbr_brush.h"
 
-#include "kis_brush.h"
-
 #include <QDomElement>
 #include <QFile>
 #include <QImage>
@@ -304,7 +302,7 @@ bool KisGbrBrush::initFromPaintDev(KisPaintDeviceSP image, int x, int y, int w, 
 {
     // Forcefully convert to RGBA8
     // XXX profile and exposure?
-    setBrushTipImage(image->convertToQImage(0, x, y, w, h, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags));
+    setBrushTipImage(image->convertToQImage(0, x, y, w, h, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags()));
     setName(image->objectName());
 
     setHasColor(true);

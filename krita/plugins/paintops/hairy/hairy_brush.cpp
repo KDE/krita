@@ -17,7 +17,6 @@
  */
 
 #include "hairy_brush.h"
-#include "trajectory.h"
 
 #include <KoColor.h>
 #include <KoColorSpace.h>

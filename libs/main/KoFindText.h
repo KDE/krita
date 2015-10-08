@@ -26,7 +26,7 @@
 #include "KoFindBase.h"
 #include "komain_export.h"
 
-#include <QMetaTypeId>
+#include <QMetaType>
 #include <QTextCursor>
 
 class QTextDocument;

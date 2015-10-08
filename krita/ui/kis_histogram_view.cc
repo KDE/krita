@@ -38,9 +38,7 @@
 #include "KoBasicHistogramProducers.h"
 #include "KoColorSpace.h"
 
-#include "kis_histogram.h"
 #include "kis_global.h"
-#include "kis_types.h"
 #include "kis_layer.h"
 
 #include "kis_paint_device.h"
@@ -112,7 +110,7 @@ void KisHistogramView::setView(double from, double size)
     updateHistogram();
 }
 
-KoHistogramProducerSP KisHistogramView::currentProducer()
+KoHistogramProducer *KisHistogramView::currentProducer()
 {
     return m_currentProducer;
 }
@@ -136,7 +134,7 @@ void KisHistogramView::setCurrentChannels(const KoID& producerID, QList<KoChanne
         channels);
 }
 
-void KisHistogramView::setCurrentChannels(KoHistogramProducerSP producer, QList<KoChannelInfo *> channels)
+void KisHistogramView::setCurrentChannels(KoHistogramProducer *producer, QList<KoChannelInfo *> channels)
 {
     m_currentProducer = producer;
     m_currentProducer->setView(m_from, m_width);
@@ -183,7 +181,7 @@ void KisHistogramView::setColor(bool set)
 void KisHistogramView::setActiveChannel(int channel)
 {
     ComboboxInfo info = m_comboInfo.at(channel);
-    if (info.producer.data() != m_currentProducer.data()) {
+    if (info.producer != m_currentProducer) {
         m_currentProducer = info.producer;
         m_currentProducer->setView(m_from, m_width);
         m_histogram->setProducer(m_currentProducer);
@@ -241,7 +239,7 @@ void KisHistogramView::setChannels()
         addProducerChannels(f.generate());
     } else {
         foreach (const QString &id, list) {
-            KoHistogramProducerSP producer = KoHistogramProducerFactoryRegistry::instance()->value(id)->generate();
+            KoHistogramProducer *producer = KoHistogramProducerFactoryRegistry::instance()->value(id)->generate();
             if (producer) {
                 addProducerChannels(producer);
             }
@@ -255,7 +253,7 @@ void KisHistogramView::setChannels()
     m_channelToOffset.append(0);
 }
 
-void KisHistogramView::addProducerChannels(KoHistogramProducerSP producer)
+void KisHistogramView::addProducerChannels(KoHistogramProducer *producer)
 {
     if (!producer) return;
 

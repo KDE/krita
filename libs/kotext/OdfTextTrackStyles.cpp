@@ -24,7 +24,7 @@
 #include "KoCharacterStyle.h"
 
 #include <QTextDocument>
-#include <kdebug.h>
+#include "TextDebug.h"
 
 
 QMap<QObject *, OdfTextTrackStyles *> OdfTextTrackStyles::instances;

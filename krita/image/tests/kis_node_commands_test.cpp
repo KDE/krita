@@ -18,7 +18,7 @@
 
 #include "kis_node_commands_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "commands/kis_node_commands.h"
 
 void KisNodeCommandsTest::testCreation()
@@ -26,4 +26,4 @@ void KisNodeCommandsTest::testCreation()
 }
 
 
-QTEST_KDEMAIN(KisNodeCommandsTest, GUI)
+QTEST_MAIN(KisNodeCommandsTest)

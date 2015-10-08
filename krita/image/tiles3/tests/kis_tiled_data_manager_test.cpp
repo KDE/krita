@@ -17,7 +17,7 @@
  */
 
 #include "kis_tiled_data_manager_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "tiles3/kis_tiled_data_manager.h"
 
@@ -803,5 +803,5 @@ void KisTiledDataManagerTest::stressTest()
     pool.waitForDone();
 }
 
-QTEST_KDEMAIN(KisTiledDataManagerTest, NoGUI)
+QTEST_MAIN(KisTiledDataManagerTest)
 

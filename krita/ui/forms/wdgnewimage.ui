@@ -444,7 +444,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KIntNumInput" name="intNumLayers">
+       <widget class="QSpinBox" name="intNumLayers">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -588,11 +588,6 @@
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KIntNumInput</class>
-   <extends>QWidget</extends>
-   <header>knuminput.h</header>
   </customwidget>
   <customwidget>
    <class>KisColorSpaceSelector</class>

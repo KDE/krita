@@ -29,7 +29,7 @@
 
 
 /// The undo / redo command for path point moving.
-class FLAKE_TEST_EXPORT KoPathControlPointMoveCommand : public KUndo2Command
+class FLAKE_EXPORT KoPathControlPointMoveCommand : public KUndo2Command
 {
 public:
     /**

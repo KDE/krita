@@ -25,7 +25,7 @@
 #include <KoTextDocument.h>
 #include <KoOdfBibliographyConfiguration.h>
 #include <KoStyleManager.h>
-#include <kdebug.h>
+#include "TextDebug.h"
 
 #include <QTextDocument>
 #include <QTextInlineObject>

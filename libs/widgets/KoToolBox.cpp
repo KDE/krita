@@ -35,9 +35,9 @@
 #include <QAction>
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 #include <kconfiggroup.h>
-#include <kglobal.h>
+#include <ksharedconfig.h>
 
 #include <KoCanvasController.h>
 #include <KoShapeLayer.h>
@@ -171,7 +171,7 @@ void KoToolBox::setActiveTool(KoCanvasController *canvas, int id)
         button->setChecked(true);
     }
     else {
-        kWarning(30004) << "KoToolBox::setActiveTool(" << id << "): no such button found";
+        warnWidgets << "KoToolBox::setActiveTool(" << id << "): no such button found";
     }
 }
 

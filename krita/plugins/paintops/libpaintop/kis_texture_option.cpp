@@ -52,6 +52,7 @@
 #include "kis_lod_transform.h"
 #include "kis_paintop_lod_limitations.h"
 
+
 #include <time.h>
 
 class KisTextureOptionWidget : public QWidget

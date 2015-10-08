@@ -30,7 +30,6 @@
 #include "changetracker/KoChangeTracker.h"
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
 #include <kundo2magicstring.h>
 
 #include <QStack>

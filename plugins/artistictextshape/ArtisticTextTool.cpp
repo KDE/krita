@@ -47,7 +47,7 @@
 #include <klocalizedstring.h>
 #include <kstandardaction.h>
 #include <QAction>
-#include <kdebug.h>
+#include <QDebug>
 
 #include <QAction>
 #include <QGridLayout>

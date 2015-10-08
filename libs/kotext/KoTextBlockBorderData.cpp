@@ -22,7 +22,7 @@
 
 #include <QPainter>
 
-#include <kdebug.h>
+#include "TextDebug.h"
 
 struct Edge {
     Edge() : distance(0.0) { }

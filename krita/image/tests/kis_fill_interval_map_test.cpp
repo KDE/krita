@@ -18,7 +18,7 @@
 
 #include "kis_fill_interval_map_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <floodfill/kis_fill_interval_map.h>
 #include <floodfill/kis_fill_interval_map_p.h>
@@ -57,4 +57,4 @@ void KisFillIntervalMapTest::test()
     QCOMPARE(range.beginIt->end, 30);
 }
 
-QTEST_KDEMAIN(KisFillIntervalMapTest, GUI)
+QTEST_MAIN(KisFillIntervalMapTest)

@@ -21,10 +21,8 @@
 
 #include "kis_fixed_point_maths.h"
 #include "kis_filter_weights_buffer.h"
-
 #include "kis_iterator_ng.h"
-#include "kis_random_accessor_ng.h"
-#include "kis_paint_device.h"
+
 
 #include <KoColorSpace.h>
 #include <KoMixColorsOp.h>

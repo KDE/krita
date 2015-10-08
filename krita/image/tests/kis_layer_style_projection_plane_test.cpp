@@ -18,7 +18,7 @@
 
 #include "kis_layer_style_projection_plane_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "testutil.h"
 
@@ -498,4 +498,4 @@ void KisLayerStyleProjectionPlaneTest::testBevel()
     style->bevelAndEmboss()->setSoften(3);
     test(style, "bevel_pillow_up_soft");
 }
-QTEST_KDEMAIN(KisLayerStyleProjectionPlaneTest, GUI)
+QTEST_MAIN(KisLayerStyleProjectionPlaneTest)

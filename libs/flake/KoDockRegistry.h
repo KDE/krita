@@ -20,8 +20,11 @@
 #ifndef KODOCKREGISTRY_
 #define KODOCKREGISTRY_
 
+#include <QFont>
+
 #include "KoGenericRegistry.h"
 #include "KoDockFactoryBase.h"
+
 #include "flake_export.h"
 
 /**
@@ -36,6 +39,7 @@
 class FLAKE_EXPORT KoDockRegistry : public KoGenericRegistry<KoDockFactoryBase*>
 {
 public:
+    KoDockRegistry();
     ~KoDockRegistry();
 
     /**
@@ -44,8 +48,15 @@ public:
      */
     static KoDockRegistry *instance();
 
+
+    /**
+     * @brief dockFontSize calculates a smallish font size for dock widgets to use
+     * @return the point size in floating point.
+     */
+    static QFont dockFont();
+
 private:
-    KoDockRegistry();
+
     KoDockRegistry(const KoDockRegistry&);
     KoDockRegistry operator=(const KoDockRegistry&);
     void init();

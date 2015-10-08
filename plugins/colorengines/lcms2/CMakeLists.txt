@@ -31,6 +31,7 @@ include_directories(
 
 if (HAVE_LCMS24 AND OPENEXR_FOUND)
 include_directories( 
+    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/gray_f16
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/rgb_f16
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/xyz_f16
 )
@@ -80,6 +81,7 @@ set ( lcmsengine_SRCS
 if (HAVE_LCMS24 AND OPENEXR_FOUND)
     set ( lcmsengine_SRCS
         ${lcmsengine_SRCS}
+        colorspaces/gray_f16/GrayF16ColorSpace.cpp
         colorspaces/rgb_f16/RgbF16ColorSpace.cpp
         colorspaces/xyz_f16/XyzF16ColorSpace.cpp
     )
@@ -90,6 +92,6 @@ endif ()
 add_library(kolcmsengine MODULE ${lcmsengine_SRCS})
 kcoreaddons_desktop_to_json(kolcmsengine kolcmsengine.desktop)
 
-target_link_libraries(kolcmsengine pigmentcms KF5::I18n KF5::KDELibs4Support ${LCMS2_LIBRARIES}  ${LINK_OPENEXR_LIB})
+target_link_libraries(kolcmsengine pigmentcms kowidgets KF5::I18n  ${LCMS2_LIBRARIES}  ${LINK_OPENEXR_LIB})
 install(TARGETS kolcmsengine DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 

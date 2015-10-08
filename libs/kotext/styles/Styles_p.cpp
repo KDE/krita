@@ -20,7 +20,7 @@
 
 #include "Styles_p.h"
 
-#include <kdebug.h>
+#include "TextDebug.h"
 
 StylePrivate::StylePrivate()
 {

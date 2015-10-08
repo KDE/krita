@@ -18,7 +18,7 @@
 
 #include "kis_processing_applicator_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <KoColor.h>
 #include <KoColorSpaceRegistry.h>
@@ -207,4 +207,4 @@ void KisProcessingApplicatorTest::testNoUIUpdates()
     QCOMPARE(uiSignalsCounter.size(), 0);
 }
 
-QTEST_KDEMAIN(KisProcessingApplicatorTest, GUI)
+QTEST_MAIN(KisProcessingApplicatorTest)

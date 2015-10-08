@@ -24,7 +24,6 @@
 #include <kis_canvas_resource_provider.h>
 #include <kis_canvas2.h>
 #include <kis_paintop_box.h>
-#include <kis_factory2.h>
 #include <image/brushengine/kis_paintop_preset.h>
 #include <kis_paintop_factory.h>
 #include <kis_paintop_registry.h>
@@ -46,7 +45,7 @@ public:
     KisPaintOpPresetSP defaultPreset(const KoID& paintOp)
     {
         QString defaultName = paintOp.id() + ".kpp";
-        QString path = KGlobal::mainComponent().dirs()->findResource("kis_defaultpresets", defaultName);
+        QString path = KoResourcePaths::findResource("kis_defaultpresets", defaultName);
 
         KisPaintOpPresetSP preset = new KisPaintOpPreset(path);
 
@@ -71,7 +70,7 @@ public:
         preset->settings()->setNode(view->resourceProvider()->currentNode());
 #endif
         KisPaintOpFactory* paintOp     = KisPaintOpRegistry::instance()->get(paintop.id());
-        QString            pixFilename = KisFactory::componentData().dirs()->findResource("kis_images", paintOp->pixmap());
+        QString            pixFilename = KoResourcePaths::findResource("kis_images", paintOp->pixmap());
 
         view->resourceProvider()->setPaintOpPreset(preset);
     }

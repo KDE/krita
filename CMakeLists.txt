@@ -196,14 +196,32 @@ include(KDECMakeSettings)
 include(KDECompilerSettings)
 include(FeatureSummary)
 
-find_package(KF5 5.7.0 REQUIRED COMPONENTS Archive Codecs Config CoreAddons
-                                     GuiAddons I18n ItemModels ItemViews
-                                     WidgetsAddons ThreadWeaver
-                                     Completion IconThemes Sonnet
-                                     Parts KIO
-                                     XmlGui Kross Wallet GlobalAccel
-                                     Emoticons ConfigWidgets KDELibs4Support
-                                     TextWidgets TextEditor KIO
+find_package(KF5 5.7.0 REQUIRED COMPONENTS 
+        Archive 
+        Codecs 
+        Completion
+        Config 
+        ConfigWidgets 
+        CoreAddons
+        Emoticons 
+        GlobalAccel
+        GuiAddons 
+        I18n 
+        IconThemes 
+        ItemModels 
+        ItemViews
+        KDELibs4Support
+        KIO 
+        Kross 
+        Parts 
+        Sonnet
+        TextEditor 
+        TextWidgets 
+        ThreadWeaver
+        Wallet 
+        WidgetsAddons 
+        WindowSystem
+        XmlGui 
     OPTIONAL_COMPONENTS
         NotifyConfig
         Activities
@@ -269,6 +287,7 @@ add_definitions(
   -DQT_NO_SIGNALS_SLOTS_KEYWORDS
   -DQT_USE_FAST_OPERATOR_PLUS
   -DQT_USE_FAST_CONCATENATION
+  -DQT_NO_URL_CAST_FROM_STRING
 )
 
 # only with this definition will all the FOO_TEST_EXPORT macro do something
@@ -521,7 +540,11 @@ if(HAVE_VC)
 
     include (VcMacros)
 
-    set(ADDITIONAL_VC_FLAGS "-Wabi -fabi-version=0 -ffp-contract=fast")
+    if(Vc_COMPILER_IS_CLANG)
+        set(ADDITIONAL_VC_FLAGS "-Wabi -ffp-contract=fast")
+    else()
+        set(ADDITIONAL_VC_FLAGS "-Wabi -fabi-version=0 -ffp-contract=fast")
+    endif()
 
     #Handle Vc master
     if(Vc_VERSION_MAJOR GREATER 0 OR Vc_VERSION_MINOR GREATER 7)
@@ -588,12 +611,7 @@ endif()
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 
 if(WIN32)
-    # detect oxygen icon dir at configure time based on KDEDIRS - there may be different package installation locations
-    execute_process(COMMAND "${KDE4_KDECONFIG_EXECUTABLE}" --path icon OUTPUT_VARIABLE _dir ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
-    file(TO_CMAKE_PATH "${_dir}" __dir)
-    find_path(KDE4_ICON_DIR oxygen PATHS
-        ${__dir}
-    )
+    set(KDE4_ICON_DIR ${KDE_INSTALL_FULL_ICONDIR})
     message(STATUS "using oxygen application icons from ${KDE4_ICON_DIR}")
 
     set(LIB_INSTALL_DIR ${LIB_INSTALL_DIR}
@@ -800,11 +818,14 @@ include_directories(${KOVERSION_INCLUDES})
 # koplugin is at the bottom of the stack
 set(KOPLUGIN_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koplugin)
 
-set(KUNDO2_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kundo2)
+set(KUNDO2_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kundo2
+                    ${CMAKE_BINARY_DIR}/libs/kundo2)
 
 # koodf is at the bottom of the stack
 set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf
+                   ${CMAKE_SOURCE_DIR}/libs/store
                    ${CMAKE_BINARY_DIR}/libs/odf
+                   ${CMAKE_BINARY_DIR}/libs/store
                    ${KOVERSION_INCLUDES} 
                    )
 
@@ -849,7 +870,8 @@ set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
 
 # TextLayout depends on kotext
 set(TEXTLAYOUT_INCLUDES ${KOTEXT_INCLUDES}
-                   ${CMAKE_SOURCE_DIR}/libs/textlayout)
+                   ${CMAKE_SOURCE_DIR}/libs/textlayout
+                   ${CMAKE_BINARY_DIR}/libs/textlayout)
 
 # Widgets depends on kotext and flake
 set(KOWIDGETS_INCLUDES ${KOTEXT_INCLUDES}

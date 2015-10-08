@@ -20,6 +20,7 @@
 #define __KIS_PROGRESS_UPDATE_HELPER_H
 
 #include <KoUpdater.h>
+#include <kis_types.h>
 
 class KisProgressUpdateHelper {
 public:

@@ -24,7 +24,7 @@
 #include <KoColorModelStandardIds.h>
 #include <KoColor.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QImage>
 #include <QColor>
@@ -200,5 +200,5 @@ void KisGmicBenchmarks::testConversion()
     }
 }
 
-QTEST_KDEMAIN(KisGmicBenchmarks, GUI)
+QTEST_MAIN(KisGmicBenchmarks)
 

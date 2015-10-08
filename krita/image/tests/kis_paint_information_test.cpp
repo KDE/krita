@@ -19,7 +19,7 @@
 
 #include "kis_paint_information_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "kis_paint_information.h"
 #include "kis_debug.h"
 
@@ -78,4 +78,4 @@ void KisPaintInformationTest::benchmarkTausRandomGeneration()
 }
 
 
-QTEST_KDEMAIN(KisPaintInformationTest, GUI)
+QTEST_MAIN(KisPaintInformationTest)

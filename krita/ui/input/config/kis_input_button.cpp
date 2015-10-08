@@ -23,10 +23,10 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <KLocalizedString>
+#include <QPushButton>
 
 #include "kis_icon_utils.h"
 
-#include "input/kis_shortcut_configuration.h"
 
 class KisInputButton::Private
 {
@@ -47,7 +47,7 @@ public:
 };
 
 KisInputButton::KisInputButton(QWidget *parent)
-    : KPushButton(parent), d(new Private(this))
+    : QPushButton(parent), d(new Private(this))
 {
     setIcon(KisIconUtils::loadIcon("configure"));
     setText(i18nc("No input for this button", "None"));

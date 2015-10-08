@@ -20,8 +20,9 @@
 #include "KoTextEditingRegistry.h"
 
 #include <KoPluginLoader.h>
+#include <QGlobalStatic>
 
-#include <kglobal.h>
+Q_GLOBAL_STATIC(KoTextEditingRegistry, s_instance)
 
 void KoTextEditingRegistry::init()
 {
@@ -35,7 +36,6 @@ void KoTextEditingRegistry::init()
 
 KoTextEditingRegistry* KoTextEditingRegistry::instance()
 {
-    K_GLOBAL_STATIC(KoTextEditingRegistry, s_instance)
     if (!s_instance.exists()) {
         s_instance->init();
     }

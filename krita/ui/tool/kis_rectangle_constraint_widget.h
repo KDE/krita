@@ -18,7 +18,9 @@
 #define KISRECTANGLECONSTRAINTWIDGET_H
 
 #include "ui_wdgrectangleconstraints.h"
-#include "kis_tool_rectangle_base.h"
+#include <kritaui_export.h>
+
+class KisToolRectangleBase;
 
 class KRITAUI_EXPORT KisRectangleConstraintWidget : public QWidget, public Ui::WdgRectangleConstraints
 {

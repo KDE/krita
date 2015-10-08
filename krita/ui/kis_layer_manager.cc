@@ -69,7 +69,6 @@
 #include <QMimeDatabase>
 #include <QMimeType>
 
-#include "KisView.h"
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "dialogs/kis_dlg_adj_layer_props.h"
@@ -296,13 +295,13 @@ void KisLayerManager::setup(KisActionManager* actionManager)
     m_imageFlatten = new KisAction(i18n("&Flatten image"), this);
     m_imageFlatten->setActivationFlags(KisAction::ACTIVE_LAYER);
     actionManager->addAction("flatten_image", m_imageFlatten);
-    m_imageFlatten->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_E));
+    m_imageFlatten->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_E));
     connect(m_imageFlatten, SIGNAL(triggered()), this, SLOT(flattenImage()));
 
     m_imageMergeLayer = new KisAction(i18n("&Merge with Layer Below"), this);
     m_imageMergeLayer->setActivationFlags(KisAction::ACTIVE_LAYER);
     actionManager->addAction("merge_layer", m_imageMergeLayer);
-    m_imageMergeLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
+    m_imageMergeLayer->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
     connect(m_imageMergeLayer, SIGNAL(triggered()), this, SLOT(mergeLayer()));
 
     m_flattenLayer = new KisAction(i18n("&Flatten Layer"), this);
@@ -313,7 +312,7 @@ void KisLayerManager::setup(KisActionManager* actionManager)
     KisAction * action = new KisAction(i18n("Rename current layer"), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
     actionManager->addAction("RenameCurrentLayer", action);
-    action->setShortcut(QKeySequence(Qt::Key_F2));
+    action->setDefaultShortcut(QKeySequence(Qt::Key_F2));
     connect(action, SIGNAL(triggered()), this, SLOT(layerProperties()));
 
     m_rasterizeLayer = new KisAction(i18n("Rasterize Layer"), this);

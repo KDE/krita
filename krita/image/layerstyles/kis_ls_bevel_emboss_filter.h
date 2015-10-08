@@ -25,7 +25,6 @@
 #include <kritaimage_export.h>
 
 struct psd_layer_effects_bevel_emboss;
-struct psd_layer_effects_context;
 
 
 class KRITAIMAGE_EXPORT KisLsBevelEmbossFilter : public KisLayerStyleFilter

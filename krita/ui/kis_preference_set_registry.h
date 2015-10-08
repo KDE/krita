@@ -63,12 +63,11 @@ public:
 class KRITAUI_EXPORT KisPreferenceSetRegistry : public QObject, public KoGenericRegistry<KisAbstractPreferenceSetFactory*>
 {
 public:
-
+    KisPreferenceSetRegistry();
     virtual ~KisPreferenceSetRegistry();
     static KisPreferenceSetRegistry * instance();
 
 private:
-    KisPreferenceSetRegistry();
     Q_DISABLE_COPY(KisPreferenceSetRegistry)
 };
 

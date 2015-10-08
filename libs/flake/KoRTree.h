@@ -22,8 +22,6 @@
 #ifndef KORTREE_H
 #define KORTREE_H
 
-#include <kdebug.h>
-
 #include <QPair>
 #include <QMap>
 #include <QList>
@@ -31,6 +29,8 @@
 #include <QPointF>
 #include <QRectF>
 #include <QVarLengthArray>
+
+#include <QDebug>
 
 // #define CALLIGRA_RTREE_DEBUG
 #ifdef CALLIGRA_RTREE_DEBUG
@@ -362,7 +362,7 @@ void KoRTree<T>::insertHelper(const QRectF& bb, const T& data, int id)
     if (nbb.isNull()) {
         nbb.setWidth(0.0001);
         nbb.setHeight(0.0001);
-        kWarning(30003) <<  "KoRTree::insert boundingBox isNull setting size to" << nbb.size();
+        qWarning() <<  "KoRTree::insert boundingBox isNull setting size to" << nbb.size();
     }
     else {
         // This has to be done as QRectF::intersects() return false if the rect does not have any area overlapping.
@@ -424,7 +424,7 @@ void KoRTree<T>::remove(const T&data)
     //qDebug() << "KoRTree remove";
     LeafNode * leaf = m_leafMap[data];
     if (leaf == 0) {
-        kWarning(30006) << "KoRTree<T>::remove( const T&data) data not found";
+        qWarning() << "KoRTree<T>::remove( const T&data) data not found";
         return;
     }
     m_leafMap.remove(data);
@@ -988,7 +988,7 @@ void KoRTree<T>::LeafNode::remove(const T& data)
         }
     }
     if (old_counter == this->m_counter) {
-        kWarning(30003) << "LeafNode::remove( const T&data) data not found";
+        qWarning() << "LeafNode::remove( const T&data) data not found";
     }
 }
 

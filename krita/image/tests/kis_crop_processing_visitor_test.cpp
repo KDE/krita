@@ -18,7 +18,7 @@
 
 #include "kis_crop_processing_visitor_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <KoColorSpaceRegistry.h>
 #include "processing/kis_crop_processing_visitor.h"
 #include "commands_new/kis_processing_command.h"
@@ -29,6 +29,7 @@
 #include "testutil.h"
 #include "kis_surrogate_undo_adapter.h"
 #include "kis_image.h"
+#include "kis_pixel_selection.h"
 
 void KisCropProcessingVisitorTest::testUndo()
 {
@@ -127,4 +128,4 @@ void KisCropProcessingVisitorTest::testWrappedInCommand()
     QCOMPARE(image1, image5);
 }
 
-QTEST_KDEMAIN(KisCropProcessingVisitorTest, GUI)
+QTEST_MAIN(KisCropProcessingVisitorTest)

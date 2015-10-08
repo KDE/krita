@@ -22,11 +22,13 @@
 
 #include <QCheckBox>
 #include <QDoubleSpinBox>
+#include <QLabel>
 
 #include <klocalizedstring.h>
-#include <kglobal.h>
+#include <ksharedconfig.h>
 
 #include "KoPointerEvent.h"
+#include "kundo2magicstring.h"
 
 #include "kis_cursor.h"
 #include <kis_slider_spin_box.h>

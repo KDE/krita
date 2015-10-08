@@ -21,7 +21,6 @@
 #ifndef KIS_GRID_MANAGER_H
 #define KIS_GRID_MANAGER_H
 
-#include "kis_canvas_decoration.h"
 #include <QPainter>
 
 #include "kis_types.h"

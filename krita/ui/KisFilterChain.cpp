@@ -21,7 +21,6 @@ Boston, MA 02110-1301, USA.
 
 #include "KisImportExportManager.h"  // KisImportExportManager::filterAvailable, private API
 #include "KisDocumentEntry.h"
-#include "KisFilterEntry.h"
 #include "KisDocument.h"
 #include "KisPart.h"
 
@@ -45,11 +44,21 @@ Boston, MA 02110-1301, USA.
 using namespace CalligraFilter;
 
 
-KisFilterChain::KisFilterChain(const KisImportExportManager* manager) :
-        m_manager(manager), m_state(Beginning), m_inputStorage(0),
-        m_inputStorageDevice(0), m_outputStorage(0), m_outputStorageDevice(0),
-        m_inputDocument(0), m_outputDocument(0), m_inputTempFile(0),
-        m_outputTempFile(0), m_inputQueried(Nil), m_outputQueried(Nil), d(0)
+KisFilterChain::KisFilterChain(const KisImportExportManager* manager)
+    : KisShared()
+    , m_manager(manager)
+    , m_state(Beginning)
+    , m_inputStorage(0),
+      m_inputStorageDevice(0)
+    , m_outputStorage(0)
+    , m_outputStorageDevice(0)
+    , m_inputDocument(0)
+    , m_outputDocument(0)
+    , m_inputTempFile(0),
+      m_outputTempFile(0)
+    , m_inputQueried(Nil)
+    , m_outputQueried(Nil)
+    , d(0)
 {
 }
 
@@ -78,7 +87,7 @@ KisImportExportFilter::ConversionStatus KisFilterChain::invokeChain()
     // No iterator here, as we need m_chainLinks.current() in outputDocument()
     m_chainLinks.first();
     for (; count > 1 && m_chainLinks.current() && status == KisImportExportFilter::OK;
-            m_chainLinks.next(), --count) {
+         m_chainLinks.next(), --count) {
         status = m_chainLinks.current()->invokeFilter(parentChainLink);
         m_state = Middle;
         manageIO();
@@ -178,7 +187,7 @@ KoStoreDevice* KisFilterChain::storageFile(const QString& name, KoStore::Mode mo
                              &m_outputStorage, &m_outputStorageDevice);
     else {
         warnFile << "Oooops, how did we get here? You already asked for a"
-        << " different source/destination?" << endl;
+                 << " different source/destination?" << endl;
         return 0;
     }
 }
@@ -241,12 +250,12 @@ void KisFilterChain::dump()
     dbgFile << "########## KisFilterChain (done) ##########";
 }
 
-void KisFilterChain::appendChainLink(KisFilterEntry::Ptr filterEntry, const QByteArray& from, const QByteArray& to)
+void KisFilterChain::appendChainLink(KisFilterEntrySP filterEntry, const QByteArray& from, const QByteArray& to)
 {
     m_chainLinks.append(new ChainLink(this, filterEntry, from, to));
 }
 
-void KisFilterChain::prependChainLink(KisFilterEntry::Ptr filterEntry, const QByteArray& from, const QByteArray& to)
+void KisFilterChain::prependChainLink(KisFilterEntrySP filterEntry, const QByteArray& from, const QByteArray& to)
 {
     m_chainLinks.prepend(new ChainLink(this, filterEntry, from, to));
 }
@@ -419,7 +428,7 @@ void KisFilterChain::outputFileHelper(bool autoDelete)
 }
 
 KoStoreDevice* KisFilterChain::storageNewStreamHelper(KoStore** storage, KoStoreDevice** device,
-        const QString& name)
+                                                      const QString& name)
 {
     delete *device;
     *device = 0;
@@ -435,8 +444,8 @@ KoStoreDevice* KisFilterChain::storageNewStreamHelper(KoStore** storage, KoStore
 }
 
 KoStoreDevice* KisFilterChain::storageHelper(const QString& file, const QString& streamName,
-        KoStore::Mode mode, KoStore** storage,
-        KoStoreDevice** device)
+                                             KoStore::Mode mode, KoStore** storage,
+                                             KoStoreDevice** device)
 {
     if (file.isEmpty())
         return 0;
@@ -477,7 +486,7 @@ void KisFilterChain::storageInit(const QString& file, KoStore::Mode mode, KoStor
 }
 
 KoStoreDevice* KisFilterChain::storageCreateFirstStream(const QString& streamName, KoStore** storage,
-        KoStoreDevice** device)
+                                                        KoStoreDevice** device)
 {
     if (!(*storage)->open(streamName))
         return 0;
@@ -503,8 +512,7 @@ KoStoreDevice* KisFilterChain::storageCleanupHelper(KoStore** storage)
 
 KisDocument* KisFilterChain::createDocument(const QString& file)
 {
-    QUrl url;
-    url.setPath(file);
+    QUrl url = QUrl::fromLocalFile(file);
     QMimeDatabase db;
     QMimeType t = db.mimeTypeForFile(url.path(), QMimeDatabase::MatchExtension);
     if (t.isDefault()) {

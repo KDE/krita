@@ -17,7 +17,7 @@
  */
 
 #include "kis_stroke_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kis_stroke.h"
 #include "scheduler_utils.h"
@@ -190,4 +190,4 @@ void KisStrokeTest::testCancelStrokeCase6()
     stroke.clearQueueOnCancel();
 }
 
-QTEST_KDEMAIN(KisStrokeTest, NoGUI)
+QTEST_MAIN(KisStrokeTest)

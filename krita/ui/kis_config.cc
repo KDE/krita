@@ -27,7 +27,7 @@
 #include <QThread>
 #include <QStringList>
 
-#include <kglobal.h>
+
 #include <kconfig.h>
 
 #include <KisDocument.h>
@@ -39,7 +39,6 @@
 #include <kis_debug.h>
 
 #include "kis_canvas_resource_provider.h"
-#include "kis_global.h"
 #include "kis_config_notifier.h"
 
 #include <config-ocio.h>

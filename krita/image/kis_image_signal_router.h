@@ -21,9 +21,9 @@
 
 #include <QObject>
 #include <QVector>
+#include <QRectF>
 #include "kritaimage_export.h"
 #include "kis_types.h"
-#include "kis_group_layer.h"
 
 
 class KoColorSpace;

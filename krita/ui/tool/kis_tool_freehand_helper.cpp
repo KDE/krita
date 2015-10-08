@@ -31,7 +31,6 @@
 #include "kis_recording_adapter.h"
 #include "kis_image.h"
 #include "kis_painter.h"
-#include "kis_smoothing_options.h"
 #include "kis_paintop_preset.h"
 #include "kis_paintop_utils.h"
 

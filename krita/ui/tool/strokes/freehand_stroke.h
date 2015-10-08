@@ -27,7 +27,6 @@
 #include "kis_paint_information.h"
 #include "kis_lod_transform.h"
 
-class KisPainter;
 
 
 class KRITAUI_EXPORT FreehandStrokeStrategy : public KisPainterBasedStrokeStrategy

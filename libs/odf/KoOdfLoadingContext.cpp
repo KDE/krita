@@ -22,7 +22,7 @@
 #include "KoOdfLoadingContext.h"
 
 // KDE
-#include <kdebug.h>
+#include <OdfDebug.h>
 
 
 // Calligra
@@ -93,16 +93,16 @@ KoOdfLoadingContext::KoOdfLoadingContext(KoOdfStylesReader &stylesReader, KoStor
                 d->defaultStylesReader.createStyleMap( d->doc, true );
             }
             else {
-                kWarning(30010) << "reading of defaultstyles.xml failed:" << errorMessage;
+                warnOdf << "reading of defaultstyles.xml failed:" << errorMessage;
             }
         }
         else {
-            kWarning(30010) << "defaultstyles.xml not found";
+            warnOdf << "defaultstyles.xml not found";
         }
     }
 
     if (!parseManifest(d->manifestDoc)) {
-        kDebug(30010) << "could not parse manifest document";
+        debugOdf << "could not parse manifest document";
     }
 }
 
@@ -116,7 +116,7 @@ void KoOdfLoadingContext::setManifestFile(const QString& fileName) {
     QString dummy;
     (void)oasisStore.loadAndParse(fileName, d->manifestDoc, dummy);
     if (!parseManifest(d->manifestDoc)) {
-        kDebug(30010) << "could not parse manifest document";
+        debugOdf << "could not parse manifest document";
     }
 }
 
@@ -130,7 +130,7 @@ void KoOdfLoadingContext::fillStyleStack(const KoXmlElement& object, const QStri
         if (style)
             addStyles(style, family, d->useStylesAutoStyles);
         else
-            kWarning(32500) << "style" << styleName << "not found in" << (d->useStylesAutoStyles ? "styles.xml" : "content.xml");
+            warnOdf << "style" << styleName << "not found in" << (d->useStylesAutoStyles ? "styles.xml" : "content.xml");
     }
 }
 
@@ -147,7 +147,7 @@ void KoOdfLoadingContext::addStyles(const KoXmlElement* style, const QString &fa
         if (parentStyle)
             addStyles(parentStyle, family, usingStylesAutoStyles);
         else {
-            kWarning(32500) << "Parent style not found: " << family << parentStyleName << usingStylesAutoStyles;
+            warnOdf << "Parent style not found: " << family << parentStyleName << usingStylesAutoStyles;
             //we are handling a non compliant odf file. let's at the very least load the application default, and the eventual odf default
             if (!family.isEmpty()) {
                 const KoXmlElement* def = d->stylesReader.defaultStyle(family);
@@ -163,7 +163,7 @@ void KoOdfLoadingContext::addStyles(const KoXmlElement* style, const QString &fa
         }
     }
 
-    //kDebug(32500) <<"pushing style" << style->attributeNS( KoXmlNS::style,"name", QString() );
+    //debugOdf <<"pushing style" << style->attributeNS( KoXmlNS::style,"name", QString() );
     d->styleStack.push(*style);
 }
 
@@ -302,27 +302,27 @@ bool KoOdfLoadingContext::parseManifest(const KoXmlDocument &manifestDocument)
 {
     // First find the manifest:manifest node.
     KoXmlNode  n = manifestDocument.firstChild();
-    kDebug(30006) << "Searching for manifest:manifest " << n.toElement().nodeName();
+    debugOdf << "Searching for manifest:manifest " << n.toElement().nodeName();
     for (; !n.isNull(); n = n.nextSibling()) {
         if (!n.isElement()) {
-            kDebug(30006) << "NOT element";
+            debugOdf << "NOT element";
             continue;
         } else {
-            kDebug(30006) << "element";
+            debugOdf << "element";
         }
 
-        kDebug(30006) << "name:" << n.toElement().localName()
+        debugOdf << "name:" << n.toElement().localName()
                       << "namespace:" << n.toElement().namespaceURI();
 
         if (n.toElement().localName() == "manifest"
             && n.toElement().namespaceURI() == KoXmlNS::manifest)
         {
-            kDebug(30006) << "found manifest:manifest";
+            debugOdf << "found manifest:manifest";
             break;
         }
     }
     if (n.isNull()) {
-        kDebug(30006) << "Could not find manifest:manifest";
+        debugOdf << "Could not find manifest:manifest";
         return false;
     }
 

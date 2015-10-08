@@ -25,7 +25,7 @@
 
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <WidgetsDebug.h>
 
 #include <KoZoomHandler.h>
 #include <KoCanvasBase.h>
@@ -198,9 +198,9 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resoluti
 
 #ifdef DEBUG
     if(! d->documentSize.isValid())
-        kWarning(30004) << "Setting zoom while there is no document size set, this will fail";
+        warnWidgets << "Setting zoom while there is no document size set, this will fail";
     else if (d->pageSize.width() > d->documentSize.width() || d->pageSize.height() > d->documentSize.height())
-        kWarning(30004) << "ZoomController; Your page size is larger than your document size (" <<
+        warnWidgets << "ZoomController; Your page size is larger than your document size (" <<
             d->pageSize << " > " << d->documentSize << ")\n";
 #endif
 

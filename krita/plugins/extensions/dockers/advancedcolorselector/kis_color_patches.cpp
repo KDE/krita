@@ -22,10 +22,11 @@
 #include <QWheelEvent>
 #include <QMouseEvent>
 #include <QDrag>
+#include <QMimeData>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kglobal.h>
+#include <ksharedconfig.h>
 
 #include "kis_canvas2.h"
 #include "KoCanvasResourceManager.h"

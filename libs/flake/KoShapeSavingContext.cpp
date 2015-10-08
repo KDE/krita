@@ -34,7 +34,7 @@
 #include <KoElementReference.h>
 
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 #include <QUuid>
 #include <QImage>
 #include <QMimeDatabase>
@@ -282,7 +282,7 @@ bool KoShapeSavingContext::saveDataCenter(KoStore *store, KoXmlWriter* manifestW
     bool ok = true;
     foreach(KoDataCenterBase *dataCenter, d->dataCenters) {
         ok = ok && dataCenter->completeSaving(store, manifestWriter, this);
-        //kDebug() << "ok" << ok;
+        //debugFlake << "ok" << ok;
     }
 
     // Save images
@@ -298,12 +298,12 @@ bool KoShapeSavingContext::saveDataCenter(KoStore *store, KoXmlWriter* manifestW
                 manifestWriter->addManifestEntry(it.key(), mimetype);
             }
             else {
-                kWarning(30006) << "saving image failed";
+                warnFlake << "saving image failed";
             }
         }
         else {
             ok = false;
-            kWarning(30006) << "saving image failed: open store failed";
+            warnFlake << "saving image failed: open store failed";
         }
     }
     return ok;
@@ -316,7 +316,7 @@ void KoShapeSavingContext::addSharedData(const QString &id, KoSharedSavingData *
     if (it == d->sharedData.end()) {
         d->sharedData.insert(id, data);
     } else {
-        kWarning(30006) << "The id" << id << "is already registered. Data not inserted";
+        warnFlake << "The id" << id << "is already registered. Data not inserted";
         Q_ASSERT(it == d->sharedData.end());
     }
 }

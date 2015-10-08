@@ -20,12 +20,12 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
-
 #include <QUrl>
-#include <kglobal.h>
+
 #include <kconfiggroup.h>
 #include <kconfig.h>
 #include <klocalizedstring.h>
+#include <ksharedconfig.h>
 
 // Much of this is a gui-less clone of KRecentFilesAction, so the format of
 // storing recent files is compatible.
@@ -33,7 +33,7 @@ class RecentFileManager::Private {
 public:
     Private()
     {
-        KConfigGroup grp(KGlobal::config(), "RecentFiles");
+        KConfigGroup grp = KSharedConfig::openConfig()->group("RecentFiles");
         maxItems = grp.readEntry("maxRecentFileItems", 100);
 
         loadEntries(grp);
@@ -117,7 +117,7 @@ RecentFileManager::RecentFileManager(QObject *parent)
 
 RecentFileManager::~RecentFileManager()
 {
-    KConfigGroup grp(KGlobal::config(), "RecentFiles");
+    KConfigGroup grp = KSharedConfig::openConfig()->group("RecentFiles");
     grp.writeEntry("maxRecentFileItems", d->maxItems);
     delete d;
 }
@@ -154,7 +154,7 @@ void RecentFileManager::addRecent(const QString &_url)
     d->recentFiles.insert(0, localFile);
     d->recentFilesIndex.insert(0, fileName);
 
-    d->saveEntries(KConfigGroup(KGlobal::config(), "RecentFiles"));
+    d->saveEntries(KSharedConfig::openConfig()->group("RecentFiles"));
     emit recentFilesListChanged();
 }
 

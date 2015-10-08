@@ -26,7 +26,7 @@
 #include "TextTool.h"
 #include <KoListLevelProperties.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <QDebug>
 
 #include <QTextCursor>
 #include <QHash>

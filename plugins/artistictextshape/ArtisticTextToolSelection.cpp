@@ -23,7 +23,7 @@
 #include <KoCanvasBase.h>
 #include <KoViewConverter.h>
 
-#include <kdebug.h>
+#include <QDebug>
 
 #include <QPainter>
 #include <QFontMetrics>

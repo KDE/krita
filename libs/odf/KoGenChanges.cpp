@@ -26,7 +26,7 @@
 #include <QMap>
 #include <QString>
 
-#include <kdebug.h>
+#include <OdfDebug.h>
 
 class Q_DECL_HIDDEN KoGenChanges::Private
 {

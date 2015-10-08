@@ -24,10 +24,10 @@
 #include "kis_types.h"
 #include "kritaui_export.h"
 #include "kis_paint_information.h"
-#include "strokes/freehand_stroke.h"
 #include "kis_default_bounds.h"
 #include "kis_paintop_settings.h"
 #include "kis_smoothing_options.h"
+#include "strokes/freehand_stroke.h"
 
 class KoPointerEvent;
 class KoCanvasResourceManager;

@@ -17,7 +17,7 @@
  */
 
 #include "kis_tile_data_pooler_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "tiles3/kis_tiled_data_manager.h"
 
@@ -107,4 +107,4 @@ void KisTileDataPoolerTest::testCycles()
     KisTileDataStore::instance()->debugClear();
 }
 
-QTEST_KDEMAIN(KisTileDataPoolerTest, NoGUI)
+QTEST_MAIN(KisTileDataPoolerTest)

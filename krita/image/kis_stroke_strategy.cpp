@@ -18,6 +18,7 @@
 
 #include "kis_stroke_strategy.h"
 #include <KoCompositeOpRegistry.h>
+#include "kis_stroke_job_strategy.h"
 
 
 KisStrokeStrategy::KisStrokeStrategy(QString id, const KUndo2MagicString &name)

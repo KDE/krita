@@ -23,7 +23,7 @@
 
 #include <KoColor.h>
 #include <KoColorPopupAction.h>
-#include <kglobal.h>
+
 
 #include "recorder/kis_recorded_paint_action.h"
 #include <kis_paintop_preset.h>
@@ -32,7 +32,7 @@
 
 #include "ui_wdgpaintactioneditor.h"
 #include <KoColorSpaceRegistry.h>
-#include <kstandarddirs.h>
+#include <KoResourcePaths.h>
 #include "kis_node_query_path_editor.h"
 #include <recorder/kis_node_query_path.h>
 
@@ -70,7 +70,7 @@ KisRecordedPaintActionEditor::KisRecordedPaintActionEditor(QWidget* parent, KisR
 
         QPixmap pm;
         if (!pixmapName.isEmpty()) {
-            QString fname = KGlobal::dirs()->findResource("kis_images", pixmapName);
+            QString fname = KoResourcePaths::findResource("kis_images", pixmapName);
             pm = QPixmap(fname);
         }
 

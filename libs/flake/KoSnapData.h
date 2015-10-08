@@ -34,7 +34,7 @@
  * So the shape can put that data in form of points or segments into
  * that class which the snap guide can retrieve and use accordingly.
  */
-class FLAKE_TEST_EXPORT KoSnapData
+class FLAKE_EXPORT KoSnapData
 {
 public:
     KoSnapData();

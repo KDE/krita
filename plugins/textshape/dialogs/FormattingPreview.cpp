@@ -44,7 +44,7 @@
 #include <math.h>
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <QDebug>
 
 FormattingPreview::FormattingPreview(QWidget* parent)
         : QFrame(parent),

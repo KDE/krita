@@ -19,7 +19,6 @@
 #include "kis_action_manager.h"
 
 #include <QList>
-#include <kstandarddirs.h>
 #include <kactioncollection.h>
 
 #include <kis_icon_utils.h>
@@ -76,6 +75,7 @@ void KisActionManager::addAction(const QString& name, KisAction* action)
     d->viewManager->actionCollection()->addAction(name, action);
     action->setObjectName(name);
     action->setParent(d->viewManager->actionCollection());
+    d->viewManager->actionCollection()->setDefaultShortcut(action, action->defaultShortcut());
     d->actions.append(action);
     action->setActionManager(this);
 }
@@ -235,7 +235,7 @@ KisAction *KisActionManager::createStandardAction(KStandardAction::StandardActio
 
     const QList<QKeySequence> defaultShortcuts = standardAction->property("defaultShortcuts").value<QList<QKeySequence> >();
     const QKeySequence defaultShortcut = defaultShortcuts.isEmpty() ? QKeySequence() : defaultShortcuts.at(0);
-    action->setShortcut(standardAction->shortcut());
+    action->setDefaultShortcut(standardAction->shortcut());
 #ifdef Q_OS_WIN
     if (actionType == KStandardAction::SaveAs && defaultShortcuts.isEmpty()) {
         action->setShortcut(QKeySequence("CTRL+SHIFT+S"));

@@ -20,7 +20,7 @@
 #ifndef KISKEYINPUTEDITOR_H
 #define KISKEYINPUTEDITOR_H
 
-#include <KPushButton>
+#include <QPushButton>
 
 namespace Ui
 {
@@ -30,7 +30,7 @@ class KisKeyInputEditor;
 /**
  * \brief An editor widget for a list of keys.
  */
-class KisKeyInputEditor : public KPushButton
+class KisKeyInputEditor : public QPushButton
 {
     Q_OBJECT
 public:

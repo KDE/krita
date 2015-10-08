@@ -33,7 +33,6 @@ class QWidget;
 
 #include <kritaui_export.h>
 
-class SqueezedComboBox;
 
 
 /** @class SqueezedComboBox

@@ -23,7 +23,7 @@
 #include "KoTextDocument.h"
 #include "KoTextRangeManager.h"
 
-#include <kdebug.h>
+#include "TextDebug.h"
 
 DeleteAnnotationsCommand::DeleteAnnotationsCommand(const QList<KoAnnotation *> &annotations, QTextDocument *document, KUndo2Command *parent)
     : KUndo2Command(parent)

@@ -19,16 +19,14 @@
 #ifndef __KIS_SHORTCUT_MATCHER_H
 #define __KIS_SHORTCUT_MATCHER_H
 
-#include "kis_abstract_shortcut.h"
 
 #include <QList>
 #include "kis_single_action_shortcut.h"
 
 class QEvent;
-class QMouseEvent;
-class QKeyEvent;
 class QWheelEvent;
 class QTouchEvent;
+class QString;
 
 class KisStrokeShortcut;
 class KisTouchShortcut;
@@ -208,10 +206,10 @@ private:
     friend class KisInputManagerTest;
 
     void reset();
+    void reset(QString msg);
 
-    bool tryRunKeyShortcut(Qt::Key key, QKeyEvent *event);
     bool tryRunWheelShortcut(KisSingleActionShortcut::WheelAction wheelAction, QWheelEvent *event);
-    template<typename T, typename U> bool tryRunSingleActionShortcutImpl(T param, U *event, const QList<Qt::Key> &keysState);
+    template<typename T, typename U> bool tryRunSingleActionShortcutImpl(T param, U *event, const QSet<Qt::Key> &keysState);
 
     void prepareReadyShortcuts();
 

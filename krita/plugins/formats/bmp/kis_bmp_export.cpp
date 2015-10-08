@@ -57,8 +57,7 @@ KisImportExportFilter::ConversionStatus KisBMPExport::convert(const QByteArray& 
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    QUrl url;
-    url.setPath(filename);
+    QUrl url = QUrl::fromLocalFile(filename);
 
     qApp->processEvents(); // For vector layers to be updated
     input->image()->waitForDone();
@@ -66,7 +65,7 @@ KisImportExportFilter::ConversionStatus KisBMPExport::convert(const QByteArray& 
     QRect rc = input->image()->bounds();
     input->image()->refreshGraph();
     input->image()->lock();
-    QImage image = input->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+    QImage image = input->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
     input->image()->unlock();
     image.save(url.toLocalFile());
     return KisImportExportFilter::OK;

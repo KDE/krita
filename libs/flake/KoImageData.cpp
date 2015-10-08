@@ -29,7 +29,7 @@
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 #include <QBuffer>
 #include <QCryptographicHash>
@@ -143,8 +143,11 @@ QImage KoImageData::image() const
     if (d->dataStoreState == KoImageDataPrivate::StateNotLoaded) {
         // load image
         if (d->temporaryFile) {
-            d->temporaryFile->open();
-            if (d->errorCode == Success && !d->image.load(d->temporaryFile->fileName())) {
+            bool r = d->temporaryFile->open();
+            if (!r) {
+                d->errorCode = OpenFailed;
+            }
+            else if (d->errorCode == Success && !d->image.load(d->temporaryFile->fileName(), d->suffix.toLatin1())) {
                 d->errorCode = OpenFailed;
             }
             d->temporaryFile->close();
@@ -192,7 +195,7 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
             QBuffer buffer;
             buffer.open(QIODevice::WriteOnly);
             if (!image.save(&buffer, d->suffix.toLatin1())) {
-                kWarning(30006) << "Write temporary file failed";
+                warnFlake << "Write temporary file failed";
                 d->errorCode = StorageFailed;
                 delete d->temporaryFile;
                 d->temporaryFile = 0;
@@ -219,34 +222,6 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
 
     }
 
-}
-
-void KoImageData::setExternalImage(const QUrl &location, KoImageCollection *collection)
-{
-    if (collection) {
-        // let the collection first check if it already has one. If it doesn't it'll call this method
-        // again and we'll go to the other clause
-        KoImageData *other = collection->createExternalImageData(location);
-        this->operator=(*other);
-        delete other;
-    } else {
-        if (d == 0) {
-            d = new KoImageDataPrivate(this);
-            d->refCount.ref();
-        } else {
-            d->clear();
-        }
-        d->imageLocation = location;
-        d->setSuffix(location.toEncoded());
-        QCryptographicHash md5(QCryptographicHash::Md5);
-        md5.addData(location.toEncoded());
-        qint64 oldKey = d->key;
-        d->key = KoImageDataPrivate::generateKey(md5.result());
-        if (oldKey != 0 && d->collection) {
-            d->collection->update(oldKey, d->key);
-        }
-        d->dataStoreState = KoImageDataPrivate::StateNotLoaded;
-    }
 }
 
 void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection *collection)
@@ -291,13 +266,13 @@ void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection
                 }
             }
             if (!device.open(QIODevice::ReadOnly)) {
-                kWarning(30006) << "open file from store " << url << "failed";
+                warnFlake << "open file from store " << url << "failed";
                 d->errorCode = OpenFailed;
                 return;
             }
             d->copyToTemporary(device);
         } else {
-            kWarning(30006) << "Find file in store " << url << "failed";
+            warnFlake << "Find file in store " << url << "failed";
             d->errorCode = OpenFailed;
             return;
         }
@@ -312,15 +287,15 @@ void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *colle
         KoImageData *other = collection->createImageData(imageData);
         this->operator=(*other);
         delete other;
-    } else {
+    }
+    else {
         if (d == 0) {
             d = new KoImageDataPrivate(this);
             d->refCount.ref();
         }
-        delete d->temporaryFile;
-        d->temporaryFile = 0;
-        d->clear();
+
         d->suffix = "png"; // good default for non-lossy storage.
+
         if (imageData.size() <= MAX_MEMORY_IMAGESIZE) {
             QImage image;
             if (!image.loadFromData(imageData)) {
@@ -332,6 +307,7 @@ void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *colle
             d->image = image;
             d->dataStoreState = KoImageDataPrivate::StateImageOnly;
         }
+
         if (imageData.size() > MAX_MEMORY_IMAGESIZE
                 || d->errorCode == OpenFailed) {
             d->image = QImage();
@@ -341,6 +317,7 @@ void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *colle
             buffer.open(QIODevice::ReadOnly);
             d->copyToTemporary(buffer);
         }
+
         QCryptographicHash md5(QCryptographicHash::Md5);
         md5.addData(imageData);
         qint64 oldKey = d->key;

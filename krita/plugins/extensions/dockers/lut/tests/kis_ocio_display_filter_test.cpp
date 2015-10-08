@@ -18,7 +18,7 @@
 
 #include "kis_ocio_display_filter_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QFile>
 
@@ -76,7 +76,7 @@ void KisOcioDisplayFilterTest::test()
                 KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), 0);
 
     KisImageSP image = utils::createImage(0, QSize(100, 100));
-    image->convertImageColorSpace(paintingCS, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+    image->convertImageColorSpace(paintingCS, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
     image->waitForDone();
 
 dbgKrita << ppVar(paintingCS) << ppVar(image->root()->firstChild()->colorSpace());
@@ -116,4 +116,4 @@ dbgKrita << ppVar(paintingCS) << ppVar(image->root()->firstChild()->colorSpace()
 
 }
 
-QTEST_KDEMAIN(KisOcioDisplayFilterTest, GUI)
+QTEST_MAIN(KisOcioDisplayFilterTest)

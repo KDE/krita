@@ -129,7 +129,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KIntNumInput" name="shift" native="true">
+       <widget class="QSpinBox" name="shift" native="true">
         <property name="minimum" stdset="0">
          <number>0</number>
         </property>
@@ -142,7 +142,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="KIntNumInput" name="cutoff" native="true">
+       <widget class="QSpinBox" name="cutoff" native="true">
         <property name="value" stdset="0">
          <number>255</number>
         </property>
@@ -207,7 +207,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
       <item row="0" column="0">
-       <widget class="KIntNumInput" name="seed1" native="true">
+       <widget class="QSpinBox" name="seed1" native="true">
         <property name="minimum" stdset="0">
          <number>0</number>
         </property>
@@ -217,7 +217,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KIntNumInput" name="seed2" native="true">
+       <widget class="QSpinBox" name="seed2" native="true">
         <property name="minimum" stdset="0">
          <number>0</number>
         </property>
@@ -227,7 +227,7 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="KIntNumInput" name="seed3" native="true">
+       <widget class="QSpinBox" name="seed3" native="true">
         <property name="minimum" stdset="0">
          <number>0</number>
         </property>
@@ -237,7 +237,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="KIntNumInput" name="seed4" native="true">
+       <widget class="QSpinBox" name="seed4" native="true">
         <property name="minimum" stdset="0">
          <number>0</number>
         </property>
@@ -274,11 +274,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KIntNumInput</class>
-   <extends>QWidget</extends>
-   <header>knuminput.h</header>
-  </customwidget>
   <customwidget>
    <class>KImageFrame</class>
    <extends>QWidget</extends>

@@ -22,8 +22,14 @@
 #include <QMessageBox>
 
 #include <kis_debug.h>
-#include <kglobal.h>
+
+#include <QGlobalStatic>
 #include <QMessageBox>
+
+#include <klocalizedstring.h>
+
+Q_GLOBAL_STATIC(KisTabletDebugger, s_instance)
+
 
 inline QString button(const QWheelEvent &ev) {
     Q_UNUSED(ev);
@@ -85,7 +91,6 @@ KisTabletDebugger::KisTabletDebugger()
 
 KisTabletDebugger* KisTabletDebugger::instance()
 {
-    K_GLOBAL_STATIC(KisTabletDebugger, s_instance);
     return s_instance;
 }
 
@@ -96,10 +101,10 @@ void KisTabletDebugger::toggleDebugging()
                              i18n("Tablet Event Logging Enabled") :
                              i18n("Tablet Event Logging Disabled"));
     if (m_debugEnabled) {
-        dbgKrita << "vvvvvvvvvvvvvvvvvvvvvvv START TABLET EVENT LOG vvvvvvvvvvvvvvvvvvvvvvv";
+        dbgInput << "vvvvvvvvvvvvvvvvvvvvvvv START TABLET EVENT LOG vvvvvvvvvvvvvvvvvvvvvvv";
     }
     else {
-        dbgKrita << "^^^^^^^^^^^^^^^^^^^^^^^ START TABLET EVENT LOG ^^^^^^^^^^^^^^^^^^^^^^^";
+        dbgInput << "^^^^^^^^^^^^^^^^^^^^^^^ START TABLET EVENT LOG ^^^^^^^^^^^^^^^^^^^^^^^";
     }
 }
 

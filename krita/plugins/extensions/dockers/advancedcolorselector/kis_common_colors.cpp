@@ -26,7 +26,7 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kglobal.h>
+
 #include <klocalizedstring.h>
 
 #include <kis_icon_utils.h>
@@ -131,7 +131,7 @@ void KisCommonColors::recalculate()
 
     KisImageWSP kisImage = m_canvas->image();
 
-    QImage image = kisImage->projection()->createThumbnail(1024, 1024, kisImage->bounds(), KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+    QImage image = kisImage->projection()->createThumbnail(1024, 1024, kisImage->bounds(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
 
     KisCommonColorsRecalculationRunner* runner = new KisCommonColorsRecalculationRunner(image, patchCount(), this);
     QThreadPool::globalInstance()->start(runner);

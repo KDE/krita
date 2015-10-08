@@ -84,3 +84,4 @@ endif()
 #add_subdirectory( commentshape )
 
 add_subdirectory( staging )
+add_subdirectory( karbonplugins )

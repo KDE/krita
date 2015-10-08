@@ -24,11 +24,12 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <QAction>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kglobal.h>
-#include <QAction>
+#include <ksharedconfig.h>
+
 #include <kactioncollection.h>
 
 #include "KisViewManager.h"

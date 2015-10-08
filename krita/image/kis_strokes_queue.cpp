@@ -23,6 +23,8 @@
 #include <QMutexLocker>
 #include "kis_stroke.h"
 #include "kis_updater_context.h"
+#include "kis_stroke_job_strategy.h"
+#include "kis_stroke_strategy.h"
 
 typedef QQueue<KisStrokeSP> StrokesQueue;
 typedef QQueue<KisStrokeSP>::iterator StrokesQueueIterator;

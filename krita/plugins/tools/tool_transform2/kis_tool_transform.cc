@@ -768,14 +768,14 @@ void KisToolTransform::initThumbnailImage(KisPaintDeviceSP previewDevice)
             createThumbnail(thumbRect.width(),
                             thumbRect.height(),
                             srcRect,
-                            KoColorConversionTransformation::InternalRenderingIntent,
-                            KoColorConversionTransformation::InternalConversionFlags);
+                            KoColorConversionTransformation::internalRenderingIntent(),
+                            KoColorConversionTransformation::internalConversionFlags());
         thumbToImageTransform = scaleTransform.inverted();
 
     } else {
         origImg = m_selectedPortionCache->convertToQImage(0, x, y, w, h,
-                                                            KoColorConversionTransformation::InternalRenderingIntent,
-                                                            KoColorConversionTransformation::InternalConversionFlags);
+                                                            KoColorConversionTransformation::internalRenderingIntent(),
+                                                            KoColorConversionTransformation::internalConversionFlags());
         thumbToImageTransform = QTransform();
     }
 

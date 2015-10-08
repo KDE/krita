@@ -28,12 +28,10 @@
 #include <kcmdlineargs.h>
 #include <kdesktopfile.h>
 #include <QMessageBox>
-#include <kstandarddirs.h>
 #include <kiconloader.h>
 #include <kis_debug.h>
-#include <kmimetype.h>
 #include <kconfig.h>
-#include <kglobal.h>
+
 #include <kconfiggroup.h>
 #include <krecentdirs.h>
 
@@ -52,7 +50,6 @@
 #include "KisDocumentEntry.h"
 #include "KisDocument.h"
 #include "KisMainWindow.h"
-#include "kis_factory2.h"
 #include "KisAutoSaveRecoveryDialog.h"
 #include "KisPart.h"
 

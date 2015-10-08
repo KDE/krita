@@ -23,7 +23,6 @@
 #include <QComboBox>
 #include <QLabel>
 #include <QGridLayout>
-#include <kglobal.h>
 
 #include <KoShape.h>
 #include <KoGradientBackground.h>
@@ -32,10 +31,12 @@
 #include <KoColorBackground.h>
 #include <KoPatternBackground.h>
 #include <KoDocumentResourceManager.h>
-#include <kis_debug.h>
-#include <klocalizedstring.h>
 #include <KoPathShape.h>
 
+#include <klocalizedstring.h>
+#include <ksharedconfig.h>
+
+#include <kis_debug.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_paintop_registry.h>
 #include <kis_paint_layer.h>

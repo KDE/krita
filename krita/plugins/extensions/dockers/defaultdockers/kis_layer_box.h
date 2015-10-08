@@ -36,6 +36,7 @@
 
 #include <kis_types.h>
 
+#include "kis_action.h"
 #include "KisViewManager.h"
 #include "kis_mainwindow_observer.h"
 
@@ -45,7 +46,6 @@ typedef QList<QModelIndex> QModelIndexList;
 
 class QMenu;
 class QAbstractButton;
-class KMenu;
 class KoCompositeOp;
 class KisCanvas2;
 class KisNodeModel;
@@ -121,8 +121,8 @@ private:
 private:
 
     KisCanvas2* m_canvas;
-    KMenu *m_viewModeMenu;
-    KMenu *m_newLayerMenu;
+    QMenu *m_viewModeMenu;
+    QMenu *m_newLayerMenu;
     KisImageWSP m_image;
     QPointer<KisNodeModel> m_nodeModel;
     QPointer<KisNodeManager> m_nodeManager;

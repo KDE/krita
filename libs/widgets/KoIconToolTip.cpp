@@ -26,7 +26,7 @@
 
 #include <KoResourceModel.h>
 
-// #include <kdebug.h>
+// #include <WidgetsDebug.h>
 
 QTextDocument *KoIconToolTip::createDocument( const QModelIndex &index )
 {

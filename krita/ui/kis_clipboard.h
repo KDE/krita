@@ -25,7 +25,6 @@
 #include "kis_types.h"
 #include <kritaui_export.h>
 
-class QImage;
 class QRect;
 
 enum enumPasteBehaviour {
@@ -45,7 +44,7 @@ class KRITAUI_EXPORT KisClipboard : public QObject
     Q_PROPERTY(bool clip READ hasClip NOTIFY clipChanged)
 
 public:
-
+    KisClipboard();
     virtual ~KisClipboard();
 
     static KisClipboard* instance();
@@ -80,7 +79,6 @@ private Q_SLOTS:
 
 private:
 
-    KisClipboard();
     KisClipboard(const KisClipboard &);
     KisClipboard operator=(const KisClipboard &);
 

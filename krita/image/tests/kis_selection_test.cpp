@@ -17,7 +17,7 @@
  */
 
 #include "kis_selection_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 
 #include <kis_debug.h>
@@ -59,14 +59,14 @@ void KisSelectionTest::testGrayColorspaceConversion()
     quint8 color2[2] = {64,32};
 
     csA->convertPixelsTo(color2, color1, csNoA, 1,
-                         KoColorConversionTransformation::InternalRenderingIntent,
-                         KoColorConversionTransformation::InternalConversionFlags);
+                         KoColorConversionTransformation::internalRenderingIntent(),
+                         KoColorConversionTransformation::internalConversionFlags());
 
     QCOMPARE((int)color1[0], 8);
 
     csNoA->convertPixelsTo(color1, color2, csA, 1,
-                           KoColorConversionTransformation::InternalRenderingIntent,
-                           KoColorConversionTransformation::InternalConversionFlags);
+                           KoColorConversionTransformation::internalRenderingIntent(),
+                           KoColorConversionTransformation::internalConversionFlags());
 
     QCOMPARE((int)color2[0], 8);
     QCOMPARE((int)color2[1], 255);
@@ -105,8 +105,8 @@ void KisSelectionTest::testGrayColorspaceOverComposition()
     params.flow = 1.0;
 
     csA->bitBlt(csA, params, csA->compositeOp(COMPOSITE_OVER),
-                KoColorConversionTransformation::InternalRenderingIntent,
-                KoColorConversionTransformation::InternalConversionFlags);
+                KoColorConversionTransformation::internalRenderingIntent(),
+                KoColorConversionTransformation::internalConversionFlags());
 
     QCOMPARE((int)color0[0], 56);
     QCOMPARE((int)color0[1], 255);
@@ -114,8 +114,8 @@ void KisSelectionTest::testGrayColorspaceOverComposition()
     params.dstRowStart = color3;
 
     csNoA->bitBlt(csA, params, csNoA->compositeOp(COMPOSITE_OVER),
-                  KoColorConversionTransformation::InternalRenderingIntent,
-                  KoColorConversionTransformation::InternalConversionFlags);
+                  KoColorConversionTransformation::internalRenderingIntent(),
+                  KoColorConversionTransformation::internalConversionFlags());
 
     QCOMPARE((int)color3[0], 56);
 }
@@ -335,6 +335,6 @@ void KisSelectionTest::testOutlineGeneration()
     QVERIFY(isClosed);
 }
 
-QTEST_KDEMAIN(KisSelectionTest, NoGUI)
+QTEST_MAIN(KisSelectionTest)
 
 

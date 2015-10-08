@@ -20,7 +20,7 @@
 #include "KoFrameShape.h"
 
 #include <KoXmlReader.h>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 class Q_DECL_HIDDEN KoFrameShape::Private
 {
@@ -47,7 +47,7 @@ bool KoFrameShape::loadOdfFrame(const KoXmlElement & element, KoShapeLoadingCont
 {
     const KoXmlElement & frameElement(KoXml::namedItemNS(element, d->ns, d->tag));
     if (frameElement.isNull()) {
-        kError(30006) << "frame element" << d->tag << "not found";
+        errorFlake << "frame element" << d->tag << "not found";
         return false;
     }
 

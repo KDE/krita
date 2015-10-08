@@ -24,7 +24,7 @@
 #include <KoCanvasBase.h>
 #include <KoToolProxy.h>
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 #include <QAction>
 
 class Q_DECL_HIDDEN KoPasteController::Private
@@ -34,7 +34,7 @@ public:
     }
 
     void paste() {
-        kDebug(30004) <<"Paste!";
+        debugFlake <<"Paste!";
         canvas->toolProxy()->paste();
     }
 

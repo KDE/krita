@@ -30,13 +30,11 @@
 
 #include "kis_painter.h"
 #include "kis_layer.h"
-#include "kis_types.h"
 
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_global.h"
 #include "kis_datamanager.h"
-#include "kis_paintop_settings.h"
 #include "kis_paintop_preset.h"
 #include "kis_paint_information.h"
 #include "kis_vec.h"

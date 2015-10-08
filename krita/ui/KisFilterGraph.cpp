@@ -30,7 +30,6 @@ Boston, MA 02110-1301, USA.
 
 #include <QMetaMethod>
 #include <QTemporaryFile>
-#include <kmimetype.h>
 #include <kis_debug.h>
 
 #include <limits.h> // UINT_MAX
@@ -70,22 +69,22 @@ void Graph::setSourceMimeType(const QByteArray& from)
     shortestPaths();
 }
 
-KisFilterChain::Ptr Graph::chain(const KisImportExportManager* manager, QByteArray& to) const
+KisFilterChainSP Graph::chain(const KisImportExportManager* manager, QByteArray& to) const
 {
     if (!isValid() || !manager)
-        return KisFilterChain::Ptr();
+        return KisFilterChainSP();
 
     if (to.isEmpty()) {    // if the destination is empty we search the closest Calligra part
         to = findCalligraPart();
         if (to.isEmpty())    // still empty? strange stuff...
-            return KisFilterChain::Ptr();
+            return KisFilterChainSP();
     }
 
     const Vertex* vertex = m_vertices.value(to);
     if (!vertex || vertex->key() == UINT_MAX)
-        return KisFilterChain::Ptr();
+        return KisFilterChainSP();
 
-    KisFilterChain::Ptr ret(new KisFilterChain(manager));
+    KisFilterChainSP ret(new KisFilterChain(manager));
 
     // Fill the filter chain with all filters on the path
     const Vertex* tmp = vertex->predecessor();
@@ -131,9 +130,9 @@ void Graph::buildGraph()
     }
 
     // no constraint here - we want *all* :)
-    const QList<KisFilterEntry::Ptr> filters(KisFilterEntry::query());
+    const QList<KisFilterEntrySP> filters(KisFilterEntry::query());
 
-    foreach(KisFilterEntry::Ptr filter, filters) {
+    foreach(KisFilterEntrySP filter, filters) {
 
         // First add the "starting points" to the dict
         foreach (const QString& import, filter->import) {

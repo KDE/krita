@@ -26,7 +26,7 @@
 #include <QBuffer>
 #include <QPen>
 
-#include <kdebug.h>
+#include <OdfDebug.h>
 
 #include <KoGenStyles.h>
 #include <KoStyleStack.h>
@@ -504,24 +504,24 @@ QBrush KoOdfGraphicStyles::loadOdfFillStyle(const KoStyleStack &styleStack, cons
                 tmpBrush.setStyle(Qt::Dense7Pattern);
 
             } else
-                kDebug(30003) << " transparency is not defined into kpresenter :" << transparency;
+                debugOdf << " transparency is not defined into kpresenter :" << transparency;
         }
     } else if (fill == "hatch") {
         QString style = styleStack.property(KoXmlNS::draw, "fill-hatch-name");
-        kDebug(30003) << " hatch style is  :" << style;
+        debugOdf << " hatch style is  :" << style;
 
         //type not defined by default
         //try to use style.
         KoXmlElement* draw = stylesReader.drawStyles("hatch")[style];
         if (draw) {
-            kDebug(30003) << "We have a style";
+            debugOdf << "We have a style";
             int angle = 0;
             if (draw->hasAttributeNS(KoXmlNS::draw, "rotation")) {
                 angle = (draw->attributeNS(KoXmlNS::draw, "rotation", QString()).toInt()) / 10;
-                kDebug(30003) << "angle :" << angle;
+                debugOdf << "angle :" << angle;
             }
             if (draw->hasAttributeNS(KoXmlNS::draw, "color")) {
-                //kDebug(30003)<<" draw:color :"<<draw->attributeNS( KoXmlNS::draw,"color", QString() );
+                //debugOdf<<" draw:color :"<<draw->attributeNS( KoXmlNS::draw,"color", QString() );
                 tmpBrush.setColor(draw->attributeNS(KoXmlNS::draw, "color", QString()));
             }
             if (draw->hasAttributeNS(KoXmlNS::draw, "distance")) {
@@ -553,7 +553,7 @@ QBrush KoOdfGraphicStyles::loadOdfFillStyle(const KoStyleStack &styleStack, cons
                         break;
                     default:
                         //todo fixme when we will have a kopaint
-                        kDebug(30003) << " draw:rotation 'angle' :" << angle;
+                        debugOdf << " draw:rotation 'angle' :" << angle;
                         break;
                     }
                 } else if (styleHash == "double") {
@@ -572,12 +572,12 @@ QBrush KoOdfGraphicStyles::loadOdfFillStyle(const KoStyleStack &styleStack, cons
                         break;
                     default:
                         //todo fixme when we will have a kopaint
-                        kDebug(30003) << " draw:rotation 'angle' :" << angle;
+                        debugOdf << " draw:rotation 'angle' :" << angle;
                         break;
                     }
 
                 } else if (styleHash == "triple") {
-                    kDebug(30003) << " it is not implemented :(";
+                    debugOdf << " it is not implemented :(";
                 }
             }
         }

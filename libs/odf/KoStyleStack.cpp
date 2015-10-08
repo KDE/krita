@@ -22,7 +22,7 @@
 #include "KoUnit.h"
 #include "KoXmlNS.h"
 
-#include <kdebug.h>
+#include <OdfDebug.h>
 
 //#define DEBUG_STYLESTACK
 
@@ -52,7 +52,7 @@ void KoStyleStack::clear()
 {
     m_stack.clear();
 #ifdef DEBUG_STYLESTACK
-    kDebug(30003) << "clear!";
+    debugOdf << "clear!";
 #endif
 }
 
@@ -60,7 +60,7 @@ void KoStyleStack::save()
 {
     m_marks.push(m_stack.count());
 #ifdef DEBUG_STYLESTACK
-    kDebug(30003) << "save (level" << m_marks.count() << ") -> index" << m_stack.count();
+    debugOdf << "save (level" << m_marks.count() << ") -> index" << m_stack.count();
 #endif
 }
 
@@ -69,7 +69,7 @@ void KoStyleStack::restore()
     Q_ASSERT(!m_marks.isEmpty());
     int toIndex = m_marks.pop();
 #ifdef DEBUG_STYLESTACK
-    kDebug(30003) << "restore (level" << m_marks.count() + 1 << ") -> to index" << toIndex;
+    debugOdf << "restore (level" << m_marks.count() + 1 << ") -> to index" << toIndex;
 #endif
     Q_ASSERT(toIndex > -1);
     Q_ASSERT(toIndex <= (int)m_stack.count());   // If equal, nothing to remove. If greater, bug.
@@ -82,7 +82,7 @@ void KoStyleStack::pop()
     Q_ASSERT(!m_stack.isEmpty());
     m_stack.pop_back();
 #ifdef DEBUG_STYLESTACK
-    kDebug(30003) << "pop -> count=" << m_stack.count();
+    debugOdf << "pop -> count=" << m_stack.count();
 #endif
 }
 
@@ -90,7 +90,7 @@ void KoStyleStack::push(const KoXmlElement& style)
 {
     m_stack.append(style);
 #ifdef DEBUG_STYLESTACK
-    kDebug(30003) << "pushed" << style.attributeNS(m_styleNSURI, "name", QString()) << " -> count=" << m_stack.count();
+    debugOdf << "pushed" << style.attributeNS(m_styleNSURI, "name", QString()) << " -> count=" << m_stack.count();
 #endif
 }
 
@@ -229,7 +229,7 @@ bool KoStyleStack::isUserStyle(const KoXmlElement& e, const QString& family) con
     if (e.attributeNS(m_styleNSURI, "family", QString()) != family)
         return false;
     const KoXmlElement parent = e.parentNode().toElement();
-    //kDebug(30003) <<"tagName=" << e.tagName() <<" parent-tagName=" << parent.tagName();
+    //debugOdf <<"tagName=" << e.tagName() <<" parent-tagName=" << parent.tagName();
     return parent.localName() == "styles" /*&& parent.namespaceURI() == KoXmlNS::office*/;
 }
 
@@ -238,7 +238,7 @@ QString KoStyleStack::userStyleName(const QString& family) const
     QList<KoXmlElement>::ConstIterator it = m_stack.end();
     while (it != m_stack.begin()) {
         --it;
-        //kDebug(30003) << (*it).attributeNS( m_styleNSURI,"name", QString());
+        //debugOdf << (*it).attributeNS( m_styleNSURI,"name", QString());
         if (isUserStyle(*it, family))
             return (*it).attributeNS(m_styleNSURI, "name", QString());
     }
@@ -251,7 +251,7 @@ QString KoStyleStack::userStyleDisplayName(const QString& family) const
     QList<KoXmlElement>::ConstIterator it = m_stack.end();
     while (it != m_stack.begin()) {
         --it;
-        //kDebug(30003) << (*it).attributeNS( m_styleNSURI,"display-name");
+        //debugOdf << (*it).attributeNS( m_styleNSURI,"display-name");
         if (isUserStyle(*it, family))
             return (*it).attributeNS(m_styleNSURI, "display-name", QString());
     }

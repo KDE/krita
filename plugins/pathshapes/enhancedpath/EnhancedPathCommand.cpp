@@ -23,8 +23,7 @@
 #include "EnhancedPathShape.h"
 #include <KoPathPoint.h>
 #include <math.h>
-
-#include <kdebug.h>
+#include <QDebug>
 
 // radian to degree factor
 const qreal rad2deg = 180.0/M_PI;
@@ -231,7 +230,7 @@ QList<QPointF> EnhancedPathCommand::pointsFromParameters()
         mod = 2;
     }
     if ((points.count() % mod) != 0) { // invalid command
-        kWarning(31000) << "Invalid point count for command" << m_command << "ignoring" << "count:" << points.count() << "mod:" << mod;
+        qWarning() << "Invalid point count for command" << m_command << "ignoring" << "count:" << points.count() << "mod:" << mod;
         return QList<QPointF>();
     }
 

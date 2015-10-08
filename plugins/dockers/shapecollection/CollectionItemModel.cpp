@@ -21,7 +21,7 @@
 #include <KoProperties.h>
 #include <KoShapeFactoryBase.h>
 
-#include <kdebug.h>
+#include <QDebug>
 
 #include <QMimeData>
 

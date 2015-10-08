@@ -18,7 +18,7 @@
 
 #include "kis_filter_strategy_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "kis_filter_strategy.h"
 
 void KisFilterStrategyTest::testCreation()
@@ -34,4 +34,4 @@ void KisFilterStrategyTest::testCreation()
     KisMitchellFilterStrategy  mitchell;
 }
 
-QTEST_KDEMAIN(KisFilterStrategyTest, GUI)
+QTEST_MAIN(KisFilterStrategyTest)

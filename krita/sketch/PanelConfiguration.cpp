@@ -21,7 +21,7 @@
 #include <QDeclarativeItem>
 #include <QSettings>
 #include <QCoreApplication>
-#include <KStandardDirs>
+#include <KoResourcePaths.h>
 
 #include <kis_config.h>
 
@@ -47,7 +47,7 @@ PanelConfiguration::~PanelConfiguration()
 
 void PanelConfiguration::componentComplete()
 {
-    QString configFile = KStandardDirs::locate("config", "kritasketchpanelsrc");
+    QString configFile = KoResourcePaths::locate("config", "kritasketchpanelsrc");
     QSettings panelConfig(configFile, QSettings::IniFormat);
 
     int count = panelConfig.beginReadArray("Panels");
@@ -99,7 +99,7 @@ void PanelConfiguration::restore()
 
 void PanelConfiguration::save()
 {
-    QString configFile = KStandardDirs::locateLocal("config", "kritasketchpanelsrc");
+    QString configFile = KoResourcePaths::locateLocal("config", "kritasketchpanelsrc");
     QSettings panelConfig(configFile, QSettings::IniFormat);
 
     panelConfig.beginWriteArray("Panels");

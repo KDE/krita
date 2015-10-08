@@ -37,7 +37,7 @@
 #include <kactioncollection.h>
 #include <kacceleratormanager.h>
 #include <QKeySequence>
-#include <kglobal.h>
+
 
 #include <kis_icon_utils.h>
 #include <KoColorSpace.h>
@@ -78,6 +78,7 @@
 #include "widgets/kis_widget_chooser.h"
 #include "tool/kis_tool.h"
 #include "kis_signals_blocker.h"
+#include "kis_action_manager.h"
 
 typedef KoResourceServerSimpleConstruction<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
 typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
@@ -100,7 +101,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 {
     Q_ASSERT(view != 0);
 
-    KGlobal::dirs()->addResourceType("kis_defaultpresets", "data", "krita/defaultpresets/");
+    KoResourcePaths::addResourceType("kis_defaultpresets", "data", "krita/defaultpresets/");
 
     setObjectName(name);
     KisConfig cfg;
@@ -135,13 +136,13 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_eraseModeButton->setFixedSize(iconsize, iconsize);
     m_eraseModeButton->setCheckable(true);
 
-    KisAction* eraseAction = new KisAction(i18n("Set eraser mode"), m_eraseModeButton);
-    eraseAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    eraseAction->setIcon(KisIconUtils::loadIcon("draw-eraser"));
-    eraseAction->setShortcut(Qt::Key_E);
-    eraseAction->setCheckable(true);
-    m_eraseModeButton->setDefaultAction(eraseAction);
-    m_viewManager->actionCollection()->addAction("erase_action", eraseAction);
+    m_eraseAction = new KisAction(i18n("Set eraser mode"), m_eraseModeButton);
+    m_eraseAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
+    m_eraseAction->setIcon(KisIconUtils::loadIcon("draw-eraser"));
+    m_eraseAction->setDefaultShortcut(Qt::Key_E);
+    m_eraseAction->setCheckable(true);
+    m_eraseModeButton->setDefaultAction(m_eraseAction);
+    m_viewManager->actionCollection()->addAction("erase_action", m_eraseAction);
 
     eraserBrushSize = 0; // brush size changed when using erase mode
 
@@ -149,11 +150,11 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_reloadButton->setFixedSize(iconsize, iconsize);
     m_reloadButton->setCheckable(true);
 
-    KisAction* reloadAction = new KisAction(i18n("Reload Original Preset"), m_reloadButton);
-    reloadAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    reloadAction->setIcon(KisIconUtils::loadIcon("view-refresh"));
-    m_reloadButton->setDefaultAction(reloadAction);
-    m_viewManager->actionCollection()->addAction("reload_preset_action", reloadAction);
+    m_reloadAction = new KisAction(i18n("Reload Original Preset"), m_reloadButton);
+    m_reloadAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
+    m_reloadAction->setIcon(KisIconUtils::loadIcon("view-refresh"));
+    m_reloadButton->setDefaultAction(m_reloadAction);
+    m_viewManager->actionCollection()->addAction("reload_preset_action", m_reloadAction);
 
     m_alphaLockButton = new QToolButton(this);
     m_alphaLockButton->setFixedSize(iconsize, iconsize);
@@ -246,8 +247,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     m_cmbCompositeOp = new KisCompositeOpComboBox();
     m_cmbCompositeOp->setFixedHeight(iconsize);
-    foreach(QAction * a, m_cmbCompositeOp->blendmodeActions()) {
-        m_viewManager->actionCollection()->addAction(a->text(), a);
+    foreach(KisAction * a, m_cmbCompositeOp->blendmodeActions()) {
+        m_viewManager->actionManager()->addAction(a->text(), a);
     }
 
     m_workspaceWidget = new KisPopupButton(this);
@@ -294,58 +295,59 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     view->actionCollection()->addAction("brushslider1", action);
     action->setDefaultWidget(m_sliderChooser[0]);
     connect(action, SIGNAL(triggered()), m_sliderChooser[0], SLOT(showPopupWidget()));
-    connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_sliderChooser[0], SLOT(updateKisIconUtils::loadIcons()));
+    connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_sliderChooser[0], SLOT(updateThemedIcons()));
 
     action = new QWidgetAction(this);
     action->setText(i18n("Brush option slider 2"));
     view->actionCollection()->addAction("brushslider2", action);
     action->setDefaultWidget(m_sliderChooser[1]);
     connect(action, SIGNAL(triggered()), m_sliderChooser[1], SLOT(showPopupWidget()));
-    connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_sliderChooser[1], SLOT(updateKisIconUtils::loadIcons()));
+    connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_sliderChooser[1], SLOT(updateThemedIcons()));
 
     action = new QWidgetAction(this);
     action->setText(i18n("Brush option slider 3"));
     view->actionCollection()->addAction("brushslider3", action);
     action->setDefaultWidget(m_sliderChooser[2]);
     connect(action, SIGNAL(triggered()), m_sliderChooser[2], SLOT(showPopupWidget()));
-        connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_sliderChooser[2], SLOT(updateKisIconUtils::loadIcons()));
+        connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_sliderChooser[2], SLOT(updateThemedIcons()));
 
     action = new QWidgetAction(this);
     action->setText(i18n("Next Favourite Preset"));
     view->actionCollection()->addAction("next_favorite_preset", action);
-    action->setShortcut(QKeySequence(Qt::Key_Comma));
+    view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_Comma));
     connect(action, SIGNAL(triggered()), this, SLOT(slotNextFavoritePreset()));
 
     action = new QWidgetAction(this);
     action->setText(i18n("Previous Favourite Preset"));
     view->actionCollection()->addAction("previous_favorite_preset", action);
-    action->setShortcut(QKeySequence(Qt::Key_Period));
+    view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_Period));
     connect(action, SIGNAL(triggered()), this, SLOT(slotPreviousFavoritePreset()));
 
     action = new QWidgetAction(this);
     action->setText(i18n("Switch to Previous Preset"));
     view->actionCollection()->addAction("previous_preset", action);
-    action->setShortcut(QKeySequence(Qt::Key_Slash));
+    view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_Slash));
+
     connect(action, SIGNAL(triggered()), this, SLOT(slotSwitchToPreviousPreset()));
 
     if (!cfg.toolOptionsInDocker()) {
         action = new QWidgetAction(this);
         action->setText(i18n("Show Tool Options"));
         view->actionCollection()->addAction("show_tool_options", action);
-        action->setShortcut(Qt::Key_Backslash);
+        view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_Backslash));
         connect(action, SIGNAL(triggered()), m_toolOptionsPopupButton, SLOT(showPopupWidget()));
     }
 
     action = new QWidgetAction(this);
     action->setText(i18n("Show Brush Editor"));
     view->actionCollection()->addAction("show_brush_editor", action);
-    action->setShortcut(Qt::Key_F5);
+    view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_F5));
     connect(action, SIGNAL(triggered()), m_brushEditorPopupButton, SLOT(showPopupWidget()));
 
     action = new QWidgetAction(this);
     action->setText(i18n("Show Brush Presets"));
     view->actionCollection()->addAction("show_brush_presets", action);
-    action->setShortcut(Qt::Key_F6);
+    view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_F6));
     connect(action, SIGNAL(triggered()), m_presetSelectorPopupButton, SLOT(showPopupWidget()));
 
     QWidget* mirrorActions = new QWidget(this);
@@ -372,9 +374,9 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     }
 
     m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider);
-    m_brushEditorPopupButton->setPopupWidget(m_presetsPopup);       
+    m_brushEditorPopupButton->setPopupWidget(m_presetsPopup);
     m_presetsPopup->switchDetached(false);
-    connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_presetsPopup, SLOT(slotUpdateKisIconUtils::loadIcons()));
+    connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_presetsPopup, SLOT(updateThemedIcons()));
 
     m_presetsChooserPopup = new KisPaintOpPresetsChooserPopup();
     m_presetsChooserPopup->setFixedSize(500, 600);
@@ -404,11 +406,11 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*))      , SLOT(resourceSelected(KoResource*)));
     connect(m_resourceProvider   , SIGNAL(sigNodeChanged(const KisNodeSP))    , SLOT(slotNodeChanged(const KisNodeSP)));
     connect(m_cmbCompositeOp     , SIGNAL(currentIndexChanged(int))           , SLOT(slotSetCompositeMode(int)));
-    connect(eraseAction          , SIGNAL(triggered(bool))                    , SLOT(slotToggleEraseMode(bool)));
+    connect(m_eraseAction          , SIGNAL(triggered(bool))                    , SLOT(slotToggleEraseMode(bool)));
     connect(alphaLockAction      , SIGNAL(triggered(bool))                    , SLOT(slotToggleAlphaLockMode(bool)));
     connect(m_hMirrorAction        , SIGNAL(triggered(bool))                    , SLOT(slotHorizontalMirrorChanged(bool)));
     connect(m_vMirrorAction        , SIGNAL(triggered(bool))                    , SLOT(slotVerticalMirrorChanged(bool)));
-    connect(reloadAction         , SIGNAL(triggered())                        , SLOT(slotReloadPreset()));
+    connect(m_reloadAction         , SIGNAL(triggered())                        , SLOT(slotReloadPreset()));
 
     connect(m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("opacity"), SIGNAL(valueChanged(qreal)), SLOT(slotSlider1Changed()));
     connect(m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("flow")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider1Changed()));
@@ -499,7 +501,7 @@ QPixmap KisPaintopBox::paintopPixmap(const KoID& paintop)
     if (pixmapName.isEmpty())
         return QPixmap();
 
-    return QPixmap(KGlobal::dirs()->findResource("kis_images", pixmapName));
+    return QPixmap(KoResourcePaths::findResource("kis_images", pixmapName));
 }
 
 KoID KisPaintopBox::currentPaintop()
@@ -561,7 +563,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
 
 
     KisPaintOpFactory* paintOp = KisPaintOpRegistry::instance()->get(paintop.id());
-    QString pixFilename = KGlobal::dirs()->findResource("kis_images", paintOp->pixmap());
+    QString pixFilename = KoResourcePaths::findResource("kis_images", paintOp->pixmap());
 
     m_brushEditorPopupButton->setIcon(QIcon(pixFilename));
     m_resourceProvider->setPaintOpPreset(preset);
@@ -589,7 +591,7 @@ KoID KisPaintopBox::defaultPaintOp()
 KisPaintOpPresetSP KisPaintopBox::defaultPreset(const KoID& paintOp)
 {
     QString defaultName = paintOp.id() + ".kpp";
-    QString path = KGlobal::dirs()->findResource("kis_defaultpresets", defaultName);
+    QString path = KoResourcePaths::findResource("kis_defaultpresets", defaultName);
 
     KisPaintOpPresetSP preset = new KisPaintOpPreset(path);
 
@@ -1187,5 +1189,6 @@ void KisPaintopBox::slotUpdateSelectionIcon()
     m_brushEditorPopupButton->setIcon(KisIconUtils::loadIcon("paintop_settings_02"));
     m_workspaceWidget->setIcon(KisIconUtils::loadIcon("view-choose"));
 
-
+    m_eraseAction->setIcon(KisIconUtils::loadIcon("draw-eraser"));
+    m_reloadAction->setIcon(KisIconUtils::loadIcon("view-refresh"));
 }

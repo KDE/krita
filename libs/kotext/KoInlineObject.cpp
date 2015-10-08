@@ -22,8 +22,7 @@
 #include "KoInlineTextObjectManager.h"
 #include "KoTextInlineRdf.h"
 
-#include <kdebug.h>
-#include <QDebug>
+#include "TextDebug.h"
 
 QDebug KoInlineObjectPrivate::printDebug(QDebug dbg) const
 {

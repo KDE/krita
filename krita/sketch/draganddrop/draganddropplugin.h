@@ -28,6 +28,7 @@
 class DragAndDropPlugin : public QDeclarativeExtensionPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.krita.DragAndDropPlugin")
 
 public:
     void registerTypes(const char *uri);

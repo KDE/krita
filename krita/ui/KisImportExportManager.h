@@ -25,11 +25,12 @@ Boston, MA 02110-1301, USA.
 #include <QObject>
 #include <QMap>
 #include <QByteArray>
+#include <QUrl>
 
-#include "KisFilterChain.h"
 #include "KisFilterGraph.h"
 
 #include "kritaui_export.h"
+class KisFilterChain;
 class KisDocument;
 class KoProgressUpdater;
 
@@ -69,11 +70,11 @@ public:
 
     /**
      * Create a filter manager for a filter which wants to embed something.
-     * The url it passes is the file to convert, obviously. You cannot use
+     * The path it passes is the file to convert. You cannot use
      * the @ref importDocument() method -- use @ref exportDocument() to convert
      * the file to the destination mimetype you prefer.
      *
-     * @param url The file you want to export
+     * @param path The location you want to export
      * @param mimetypeHint The mimetype of the file you want to export. You have
      *        to specify this information only if the automatic detection will
      *        fail because e.g. you saved an embedded stream to a *.tmp file.
@@ -81,21 +82,22 @@ public:
      * @param parentChain The parent filter chain of this filter manager. Used
      *        to allow embedding for filters. Most likely you do not have to care.
      */
-    explicit KisImportExportManager(const QString& url, const QByteArray& mimetypeHint = QByteArray(),
+    explicit KisImportExportManager(const QString& location, const QByteArray& mimetypeHint = QByteArray(),
                              KisFilterChain * const parentChain = 0);
 
     virtual ~KisImportExportManager();
 
     /**
-     * Imports the passed URL and returns the resultant filename
+     * Imports the specified document and returns the resultant filename
      * (most likely some file in /tmp).
+     * @p path can be either a URL or a filename.
      * @p documentMimeType gives importDocument a hint about what type
      * the document may be. It can be left empty.
-     * The @p status variable signals the success/error of the conversion
+     * @p status signals the success/error of the conversion.
      * If the QString which is returned isEmpty() and the status is OK,
      * then we imported the file directly into the document.
      */
-    QString importDocument(const QString& url,
+    QString importDocument(const QString& location,
                            const QString& documentMimeType,
                            KisImportExportFilter::ConversionStatus& status);
 
@@ -106,7 +108,7 @@ public:
      * and when the method returns @p mimeType contains this mimetype.
      * Oh, well, export is a C++ keyword ;)
      */
-    KisImportExportFilter::ConversionStatus exportDocument(const QString& url, QByteArray& mimeType);
+    KisImportExportFilter::ConversionStatus exportDocument(const QString& location, QByteArray& mimeType);
 
     ///@name Static API
     //@{
@@ -132,7 +134,7 @@ public:
      * Method used to check if that filter is available at all.
      * @note Slow, but cached
      */
-    static bool filterAvailable(KisFilterEntry::Ptr entry);
+    static bool filterAvailable(KisFilterEntrySP entry);
 
     //@}
 
@@ -160,11 +162,11 @@ private:
     // pretty safe.
     friend QString KisFilterChain::filterManagerImportFile() const;
     QString importFile() const {
-        return m_importUrl;
+        return m_importUrl.toLocalFile();
     }
     friend QString KisFilterChain::filterManagerExportFile() const;
     QString exportFile() const {
-        return m_exportUrl;
+        return m_exportUrl.toLocalFile();
     }
     friend KisDocument *KisFilterChain::filterManagerKisDocument() const;
     KisDocument *document() const {
@@ -183,11 +185,15 @@ private:
     KisImportExportManager(const KisImportExportManager& rhs);
     KisImportExportManager &operator=(const KisImportExportManager& rhs);
 
+    // Convert file path string or URL string into QUrl
+    QUrl locationToUrl(QString location) const;
+
     void importErrorHelper(const QString& mimeType, const bool suppressDialog = false);
 
     KisDocument *m_document;
     KisFilterChain *const m_parentChain;
-    QString m_importUrl, m_exportUrl;
+    QUrl m_importUrl;
+    QUrl m_exportUrl;
     QByteArray m_importUrlMimetypeHint;  ///< suggested mimetype
     CalligraFilter::Graph m_graph;
     Direction m_direction;

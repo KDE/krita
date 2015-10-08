@@ -27,11 +27,11 @@
 #include <KoToolManager.h>
 #include <KoShapeLayer.h>
 
-#include <kdebug.h>
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 #include <kselectaction.h>
-#include <kglobal.h>
+#include <ksharedconfig.h>
+
 #include <QIcon>
 
 #include <QMap>
@@ -50,6 +50,8 @@
 #include <QMenu>
 #include <QScrollBar>
 #include <QFontDatabase>
+
+#include <WidgetsDebug.h>
 
 class KoModeBox::Private
 {

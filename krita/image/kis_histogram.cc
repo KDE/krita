@@ -21,7 +21,6 @@
 
 #include <QVector>
 
-#include "kis_types.h"
 #include "kis_image.h"
 #include "kis_paint_layer.h"
 #include "kis_paint_device.h"
@@ -30,7 +29,7 @@
 #include "kis_iterator_ng.h"
 
 KisHistogram::KisHistogram(const KisPaintLayerSP layer,
-                           KoHistogramProducerSP producer,
+                           KoHistogramProducer *producer,
                            const enumHistogramType type)
     : m_paintDevice(layer->projection())
 {
@@ -47,7 +46,7 @@ KisHistogram::KisHistogram(const KisPaintLayerSP layer,
 
 KisHistogram::KisHistogram(const KisPaintDeviceSP paintdev,
                            const QRect &bounds,
-                           KoHistogramProducerSP producer,
+                           KoHistogramProducer *producer,
                            const enumHistogramType type)
     : m_paintDevice(paintdev)
 {
@@ -66,6 +65,7 @@ KisHistogram::KisHistogram(const KisPaintDeviceSP paintdev,
 
 KisHistogram::~KisHistogram()
 {
+    delete m_producer;
 }
 
 void KisHistogram::updateHistogram()

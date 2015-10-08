@@ -18,7 +18,7 @@
 
 #include "kis_categories_mapper_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "testing_categories_mapper.h"
 
 
@@ -231,4 +231,4 @@ void KisCategoriesMapperTest::testChangingItem()
     mapper.checkRowChangedIndices(QVector<int>() << 0 << 1 << 2 << 3);
 }
 
-QTEST_KDEMAIN(KisCategoriesMapperTest, GUI)
+QTEST_MAIN(KisCategoriesMapperTest)

@@ -20,7 +20,6 @@
 
 #include <kritaimage_export.h>
 #include <KoColorSpace.h>
-#include "kis_global.h"
 #include "kis_shared.h"
 #include <kis_shared_ptr.h>
 
@@ -116,8 +115,8 @@ public:
      *   Converts the paint device to a different colorspace
      */
     void convertTo(const KoColorSpace * dstColorSpace = 0,
-                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::InternalRenderingIntent,
-                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags);
+                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
+                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags());
     /**
      * Fill this paint device with the data from image
      *
@@ -137,8 +136,8 @@ public:
      * like sRGB).
      */
     virtual QImage convertToQImage(const KoColorProfile *dstProfile, qint32 x, qint32 y, qint32 w, qint32 h,
-                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::InternalRenderingIntent,
-                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags) const;
+                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags()) const;
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device. The
@@ -149,8 +148,8 @@ public:
      * like sRGB).
      */
     virtual QImage convertToQImage(const KoColorProfile *dstProfile,
-                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::InternalRenderingIntent,
-                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags) const;
+                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags()) const;
 
     /**
      * Clear the given rectangle to transparent black.

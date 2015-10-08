@@ -23,12 +23,13 @@
 #include <QScopedPointer>
 #include <QtGlobal>
 
+#include "kis_input_manager.h"
 #include "kis_config.h"
 #include "kis_abstract_input_action.h"
+#include "kis_tool_invocation_action.h"
 #include "kis_stroke_shortcut.h"
 #include "kis_touch_shortcut.h"
 #include "kis_input_profile_manager.h"
-#include "input/kis_tablet_debugger.h"
 
 
 
@@ -47,7 +48,7 @@ public:
             if (KisTabletDebugger::instance()->debugEnabled()) {
                 QString pre = QString("[BLOCKED]");
                 QMouseEvent *ev = static_cast<QMouseEvent*>(event);
-                dbgTablet << KisTabletDebugger::instance()->eventToString(*ev,pre);
+                dbgInput << KisTabletDebugger::instance()->eventToString(*ev,pre);
             }
             peckish = false;
             return true;
@@ -58,14 +59,14 @@ public:
     void activate()
     {
         if (!hungry && (KisTabletDebugger::instance()->debugEnabled()))
-            dbgTablet << "Ignoring mouse events.";
+            dbgInput << "Ignoring mouse events.";
         hungry = true;
     }
 
     void deactivate()
     {
         if (!hungry && (KisTabletDebugger::instance()->debugEnabled()))
-            dbgTablet << "Accepting mouse events.";
+            dbgInput << "Accepting mouse events.";
         hungry = false;
     }
 
@@ -256,7 +257,7 @@ void KisInputManager::Private::addStrokeShortcut(KisAbstractInputAction* action,
     }
 
     if (buttonList.size() > 0) {
-        strokeShortcut->setButtons(modifiers, buttonList);
+        strokeShortcut->setButtons(QSet<Qt::Key>::fromList(modifiers), QSet<Qt::MouseButton>::fromList(buttonList));
         matcher.addShortcut(strokeShortcut);
     }
 }
@@ -273,8 +274,9 @@ void KisInputManager::Private::addKeyShortcut(KisAbstractInputAction* action, in
     //which is the reason we use the last key here since most users will enter
     //shortcuts as "Shift + V". Ideally this should not happen, but this is
     //the way the shortcut matcher is currently implemented.
-    QList<Qt::Key> modifiers = keys;
-    Qt::Key key = modifiers.takeLast();
+    QList<Qt::Key> allKeys = keys;
+    Qt::Key key = allKeys.takeLast();
+    QSet<Qt::Key> modifiers = QSet<Qt::Key>::fromList(allKeys);
     keyShortcut->setKey(modifiers, key);
     matcher.addShortcut(keyShortcut);
 }
@@ -304,7 +306,7 @@ void KisInputManager::Private::addWheelShortcut(KisAbstractInputAction* action, 
         return;
     }
 
-    keyShortcut->setWheel(modifiers, a);
+    keyShortcut->setWheel(QSet<Qt::Key>::fromList(modifiers), a);
     matcher.addShortcut(keyShortcut);
 }
 
@@ -417,7 +419,7 @@ bool KisInputManager::Private::handleCompressedTabletEvent(QObject *object, QTab
     retval = q->eventFilter(object, tevent);
 
     if (!retval && !tevent->isAccepted()) {
-        dbgTablet << "Rejected a compressed tablet event.";
+        dbgInput << "Rejected a compressed tablet event.";
     }
 
     return retval;

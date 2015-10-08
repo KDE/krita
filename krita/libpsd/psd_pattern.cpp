@@ -131,13 +131,14 @@ bool psd_read_pattern(QIODevice *io)
         }
 
         if (written > 0) {
+            // Note: channel_number is not read from the file, so always equals 0.
+            // Other behavior may be implemented later.
             if (pattern.channel_number == 0) {
                 psdread(io, &pixel_depth1);
             }
             else {
                 quint32 d;
                 psdread(io, &d);
-                Q_ASSERT(d == pixel_depth1);
             }
         }
         else {

@@ -25,9 +25,8 @@
 
 #include <opengl/kis_opengl.h>
 #include <kritaui_export.h>
-#include "kis_exposure_gamma_correction_interface.h"
 
-
+class KisExposureGammaCorrectionInterface;
 
 /**
  * @brief The KisDisplayFilter class is the base class for filters that

@@ -17,7 +17,7 @@
  */
 
 #include "kis_update_scheduler_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -411,5 +411,5 @@ void KisUpdateSchedulerTest::testTimeMonitor()
     KisUpdateTimeMonitor::instance()->endStrokeMeasure();
 }
 
-QTEST_KDEMAIN(KisUpdateSchedulerTest, NoGUI)
+QTEST_MAIN(KisUpdateSchedulerTest)
 

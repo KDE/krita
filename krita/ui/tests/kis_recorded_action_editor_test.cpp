@@ -18,7 +18,7 @@
 
 #include "kis_recorded_action_editor_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <QTest>
 #include <QCoreApplication>
@@ -45,5 +45,5 @@ void KisRecordedActionEditorTest::testFilterEditorCreation()
 }
 
 
-QTEST_KDEMAIN(KisRecordedActionEditorTest, GUI)
+QTEST_MAIN(KisRecordedActionEditorTest)
 

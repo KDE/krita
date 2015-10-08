@@ -18,8 +18,8 @@
 
 #include "kis_types_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include "kis_types.h"
 
 
-QTEST_KDEMAIN(KisTypesTest, GUI)
+QTEST_MAIN(KisTypesTest)

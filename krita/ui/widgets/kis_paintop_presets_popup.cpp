@@ -35,6 +35,8 @@
 #include <kconfig.h>
 #include <klocalizedstring.h>
 
+#include <KoDockRegistry.h>
+
 #include <kis_icon_utils.h>
 #include <kis_icon_utils.h>
 #include <kis_paintop_preset.h>
@@ -76,12 +78,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     , m_d(new Private())
 {
     setObjectName("KisPaintOpPresetsPopup");
-    KConfigGroup group( KSharedConfig::openConfig(), "GUI");
-    m_d->smallFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
-    qreal pointSize = group.readEntry("palettefontsize", m_d->smallFont.pointSize() * 0.75);
-    pointSize = qMax(pointSize, QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSizeF());
-    m_d->smallFont.setPointSizeF(pointSize);
-    setFont(m_d->smallFont);
+    setFont(KoDockRegistry::dockFont());
 
     m_d->resourceProvider = resourceProvider;
 
@@ -399,7 +396,7 @@ void KisPaintOpPresetsPopup::updateViewSettings()
     m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->updateViewSettings();
 }
 
-void KisPaintOpPresetsPopup::slotUpdateThemedIcons()
+void KisPaintOpPresetsPopup::updateThemedIcons()
  {
     m_d->uiWdgPaintOpPresetSettings.fillLayer->setIcon(KisIconUtils::loadIcon("document-new"));
     m_d->uiWdgPaintOpPresetSettings.fillLayer->hide();

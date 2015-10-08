@@ -22,7 +22,7 @@
 #include "KoResourceManager_p.h"
 
 #include <QVariant>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 #include "KoShape.h"
 

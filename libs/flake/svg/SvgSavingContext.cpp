@@ -26,11 +26,7 @@
 #include <KoShapeLayer.h>
 #include <KoImageData.h>
 
-
 #include <QTemporaryFile>
-#include <KIO/NetAccess>
-#include <KIO/CopyJob>
-#include <QUrl>
 
 #include <QImage>
 #include <QTransform>
@@ -206,12 +202,13 @@ QString SvgSavingContext::saveImage(const QImage &image)
 
             QString dstFilename = createFileName(ext);
 
-            // move the temp file to the destination directory
-            KIO::Job * job = KIO::move(QUrl(imgFile.fileName()), QUrl(dstFilename));
-            if (job && KIO::NetAccess::synchronousRun(job, 0))
+            if (QFile::copy(imgFile.fileName(), dstFilename)) {
                 return dstFilename;
-            else
-                KIO::NetAccess::removeTempFile(imgFile.fileName());
+            }
+            else {
+                QFile f(imgFile.fileName());
+                f.remove();
+            }
         }
     }
 
@@ -247,11 +244,13 @@ QString SvgSavingContext::saveImage(KoImageData *image)
             QString dstFilename = createFileName(ext);
 
             // move the temp file to the destination directory
-            KIO::Job * job = KIO::move(QUrl(imgFile.fileName()), QUrl(dstFilename));
-            if (job && KIO::NetAccess::synchronousRun(job, 0))
+            if (QFile::copy(imgFile.fileName(), dstFilename)) {
                 return dstFilename;
-            else
-                KIO::NetAccess::removeTempFile(imgFile.fileName());
+            }
+            else {
+                QFile f(imgFile.fileName());
+                f.remove();
+            }
         }
     }
     return QString();

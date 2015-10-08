@@ -18,7 +18,7 @@
 
 #include "freehand_stroke_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <KoCompositeOpRegistry.h>
 #include <KoColor.h>
 #include "stroke_testing_utils.h"
@@ -183,4 +183,4 @@ void FreehandStrokeTest::testPredefinedBrushStrokeLod()
     tester.testSimpleStroke();
 }
 
-QTEST_KDEMAIN(FreehandStrokeTest, GUI)
+QTEST_MAIN(FreehandStrokeTest, GUI)

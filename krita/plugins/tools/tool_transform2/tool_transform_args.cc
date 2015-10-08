@@ -22,7 +22,7 @@
 
 #include <QDomElement>
 
-#include <kglobal.h>
+#include <ksharedconfig.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 

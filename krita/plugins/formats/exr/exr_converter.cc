@@ -57,6 +57,8 @@
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_value.h>
 
+// Do not translate!
+#define HDR_LAYER "HDR Layer"
 
 template<typename _T_>
 struct Rgba {
@@ -89,16 +91,21 @@ enum ImageType {
 };
 
 struct ExrPaintLayerInfo : public ExrLayerInfoBase {
-    ExrPaintLayerInfo() : imageType(IT_UNKNOWN) {
+    ExrPaintLayerInfo()
+        : imageType(IT_UNKNOWN)
+    {
     }
+
     ImageType imageType;
     QMap< QString, QString> channelMap; ///< first is either R, G, B or A second is the EXR channel name
+
     struct Remap {
         Remap(const QString& _original, const QString& _current) : original(_original), current(_current) {
         }
         QString original;
         QString current;
     };
+
     QList< Remap > remappedChannels; ///< this is used to store in the metadata the mapping between exr channel name, and channels used in Krita
     void updateImageType(ImageType channelType);
 };
@@ -107,7 +114,8 @@ void ExrPaintLayerInfo::updateImageType(ImageType channelType)
 {
     if (imageType == IT_UNKNOWN) {
         imageType = channelType;
-    } else if (imageType != channelType) {
+    }
+    else if (imageType != channelType) {
         imageType = IT_UNSUPPORTED;
     }
 }
@@ -121,7 +129,7 @@ struct ExrPaintLayerSaveInfo {
 
 struct exrConverter::Private {
     Private() : doc(0), warnedAboutChangedAlpha(false),
-                showNotifications(false) {}
+        showNotifications(false) {}
 
     KisImageSP image;
     KisDocument *doc;
@@ -226,9 +234,9 @@ struct RgbPixelWrapper
         const T alpha = pixel.a;
 
         return alpha >= alphaNoiseThreshold<T>() ||
-            (pixel.r * alpha == mult.r &&
-             pixel.g * alpha == mult.g &&
-             pixel.b * alpha == mult.b);
+                (pixel.r * alpha == mult.r &&
+                 pixel.g * alpha == mult.g &&
+                 pixel.b * alpha == mult.b);
     }
 
     inline void setUnmultiplied(const Rgba<T> &mult, qreal newAlpha) {
@@ -262,7 +270,7 @@ struct GrayPixelWrapper
         const T alpha = pixel.alpha;
 
         return alpha >= alphaNoiseThreshold<T>() ||
-            pixel.gray * alpha == mult.gray;
+                pixel.gray * alpha == mult.gray;
     }
 
     inline void setUnmultiplied(const pixel_type &mult, qreal newAlpha) {
@@ -307,20 +315,20 @@ void exrConverter::Private::unmultiplyAlpha(typename WrapperType::pixel_type *pi
         *pixel = dstPixel.pixel;
 
         if (alphaWasModified &&
-            !this->warnedAboutChangedAlpha) {
+                !this->warnedAboutChangedAlpha) {
 
             QString msg =
-                i18nc("@info",
-                      "The image contains pixels with zero alpha channel and non-zero "
-                      "color channels. Krita will have to modify those pixels to have "
-                      "at least some alpha. The initial values will <emphasis>not</emphasis> "
-                      "be reverted on saving the image back."
-                      "<nl/><nl/>"
-                      "This will hardly make any visual difference just keep it in mind."
-                      "<nl/><nl/>"
-                      "<note>Modified alpha will have a range from <numid>%1</numid> to <numid>%2</numid></note>",
-                      alphaEpsilon<channel_type>(),
-                      alphaNoiseThreshold<channel_type>());
+                    i18nc("@info",
+                          "The image contains pixels with zero alpha channel and non-zero "
+                          "color channels. Krita will have to modify those pixels to have "
+                          "at least some alpha. The initial values will <emphasis>not</emphasis> "
+                          "be reverted on saving the image back."
+                          "<nl/><nl/>"
+                          "This will hardly make any visual difference just keep it in mind."
+                          "<nl/><nl/>"
+                          "<note>Modified alpha will have a range from <numid>%1</numid> to <numid>%2</numid></note>",
+                          alphaEpsilon<channel_type>(),
+                          alphaNoiseThreshold<channel_type>());
 
             if (this->showNotifications) {
                 QMessageBox::information(0, i18nc("@title:window", "EXR image will be modified"), msg);
@@ -365,22 +373,22 @@ void exrConverter::Private::decodeData4(Imf::InputFile& file, ExrPaintLayerInfo&
         Imf::FrameBuffer frameBuffer;
         Rgba* frameBufferData = (pixels.data()) - xstart - (ystart + y) * width;
         frameBuffer.insert(info.channelMap["R"].toLatin1().constData(),
-                           Imf::Slice(ptype, (char *) &frameBufferData->r,
-                                      sizeof(Rgba) * 1,
-                                      sizeof(Rgba) * width));
+                Imf::Slice(ptype, (char *) &frameBufferData->r,
+                           sizeof(Rgba) * 1,
+                           sizeof(Rgba) * width));
         frameBuffer.insert(info.channelMap["G"].toLatin1().constData(),
-                           Imf::Slice(ptype, (char *) &frameBufferData->g,
-                                      sizeof(Rgba) * 1,
-                                      sizeof(Rgba) * width));
+                Imf::Slice(ptype, (char *) &frameBufferData->g,
+                           sizeof(Rgba) * 1,
+                           sizeof(Rgba) * width));
         frameBuffer.insert(info.channelMap["B"].toLatin1().constData(),
-                           Imf::Slice(ptype, (char *) &frameBufferData->b,
-                                      sizeof(Rgba) * 1,
-                                      sizeof(Rgba) * width));
+                Imf::Slice(ptype, (char *) &frameBufferData->b,
+                           sizeof(Rgba) * 1,
+                           sizeof(Rgba) * width));
         if (hasAlpha) {
             frameBuffer.insert(info.channelMap["A"].toLatin1().constData(),
-                               Imf::Slice(ptype, (char *) &frameBufferData->a,
-                                          sizeof(Rgba) * 1,
-                                          sizeof(Rgba) * width));
+                    Imf::Slice(ptype, (char *) &frameBufferData->a,
+                               sizeof(Rgba) * 1,
+                               sizeof(Rgba) * width));
         }
 
         file.setFrameBuffer(frameBuffer);
@@ -418,7 +426,7 @@ void exrConverter::Private::decodeData1(Imf::InputFile& file, ExrPaintLayerInfo&
     typedef typename GrayPixelWrapper<_T_>::pixel_type pixel_type;
 
     KIS_ASSERT_RECOVER_RETURN(
-        layer->paintDevice()->colorSpace()->colorModelId() == GrayAColorModelID);
+                layer->paintDevice()->colorSpace()->colorModelId() == GrayAColorModelID);
 
     QVector<pixel_type> pixels(width);
 
@@ -433,15 +441,15 @@ void exrConverter::Private::decodeData1(Imf::InputFile& file, ExrPaintLayerInfo&
         Imf::FrameBuffer frameBuffer;
         pixel_type* frameBufferData = (pixels.data()) - xstart - (ystart + y) * width;
         frameBuffer.insert(info.channelMap["G"].toLatin1().constData(),
-                           Imf::Slice(ptype, (char *) &frameBufferData->gray,
-                                      sizeof(pixel_type) * 1,
-                                      sizeof(pixel_type) * width));
+                Imf::Slice(ptype, (char *) &frameBufferData->gray,
+                           sizeof(pixel_type) * 1,
+                           sizeof(pixel_type) * width));
 
         if (hasAlpha) {
             frameBuffer.insert(info.channelMap["A"].toLatin1().constData(),
-                               Imf::Slice(ptype, (char *) &frameBufferData->alpha,
-                                          sizeof(pixel_type) * 1,
-                                          sizeof(pixel_type) * width));
+                    Imf::Slice(ptype, (char *) &frameBufferData->alpha,
+                               sizeof(pixel_type) * 1,
+                               sizeof(pixel_type) * width));
         }
 
         file.setFrameBuffer(frameBuffer);
@@ -497,7 +505,7 @@ ExrGroupLayerInfo* searchGroup(QList<ExrGroupLayerInfo>* groups, QStringList lis
 QDomDocument exrConverter::Private::loadExtraLayersInfo(const Imf::Header &header)
 {
     const Imf::StringAttribute *layersInfoAttribute =
-        header.findTypedAttribute<Imf::StringAttribute>(EXR_KRITA_LAYERS);
+            header.findTypedAttribute<Imf::StringAttribute>(EXR_KRITA_LAYERS);
 
     if (!layersInfoAttribute) return QDomDocument();
 
@@ -521,11 +529,14 @@ bool exrConverter::Private::checkExtraLayersInfoConsistent(const QDomDocument &d
 
     while(!el.isNull()) {
         KIS_ASSERT_RECOVER(el.hasAttribute(EXR_NAME)) { return false; };
-        extraInfoLayers.insert(el.attribute(EXR_NAME).toUtf8().constData());
+        QString layerName = el.attribute(EXR_NAME).toUtf8();
+        if (layerName != QString(HDR_LAYER)) {
+            extraInfoLayers.insert(el.attribute(EXR_NAME).toUtf8().constData());
+        }
         el = el.nextSiblingElement();
     }
 
-    bool result = extraInfoLayers == exrLayerNames;
+    bool result = (extraInfoLayers == exrLayerNames);
 
     if (!result) {
         dbgKrita << "WARINING: Krita EXR extra layers info is inconsistent!";
@@ -549,6 +560,7 @@ bool exrConverter::Private::checkExtraLayersInfoConsistent(const QDomDocument &d
 KisImageBuilder_Result exrConverter::decode(const QUrl &uri)
 {
     dbgFile << "Load exr: " << uri << " " << QFile::encodeName(uri.toLocalFile());
+
     Imf::InputFile file(QFile::encodeName(uri.toLocalFile()));
 
     Imath::Box2i dw = file.header().dataWindow();
@@ -559,7 +571,7 @@ KisImageBuilder_Result exrConverter::decode(const QUrl &uri)
 
     // Display the attributes of a file
     for (Imf::Header::ConstIterator it = file.header().begin();
-            it != file.header().end(); ++it) {
+         it != file.header().end(); ++it) {
         dbgFile << "Attribute: " << it.name() << " type: " << it.attribute().typeName();
     }
 
@@ -578,70 +590,84 @@ KisImageBuilder_Result exrConverter::decode(const QUrl &uri)
     channels.layers(layerNames);
 
     if (!extraLayersInfo.isNull() &&
-        !m_d->checkExtraLayersInfoConsistent(extraLayersInfo, layerNames)) {
+            !m_d->checkExtraLayersInfoConsistent(extraLayersInfo, layerNames)) {
 
         // it is inconsistent anyway
         extraLayersInfo = QDomDocument();
     }
 
-    // Test if it is a multilayer EXR or singlelayer
-    if (layerNames.empty()) {
-        dbgFile << "Single layer:";
-        ExrPaintLayerInfo info;
-        info.name = i18n("HDR Layer");
-        for (Imf::ChannelList::ConstIterator i = channels.begin(); i != channels.end(); ++i) {
-            const Imf::Channel &channel = i.channel();
-            dbgFile << "Channel name = " << i.name() << " type = " << channel.type;
+    // Check if there are A, R, G, B channels
+
+    dbgFile << "Checking for ARGB channels, they can occur in single-layer _or_ multi-layer images:";
+    ExrPaintLayerInfo info;
+    bool topLevelRGBFound = false;
+    info.name = HDR_LAYER;
+
+    for (Imf::ChannelList::ConstIterator i = channels.begin(); i != channels.end(); ++i) {
+        const Imf::Channel &channel = i.channel();
+        dbgFile << "Channel name = " << i.name() << " type = " << channel.type;
+
+        QString qname = i.name();
+        QStringList topLevelChannelNames = QStringList() << "A" << "R" << "G" << "B"  << ".A" << ".R" << ".G" << ".B"  << "A." << "R." << "G." << "B.";;
+        if (topLevelChannelNames.contains(qname)) {
+            topLevelRGBFound = true;
+            dbgFile << "Found top-level channel" << qname;
+            info.channelMap[qname] = qname;
+            info.updateImageType(imfTypeToKisType(channel.type));
+        }
+        // Channel names that don't contain a "." or that contain a
+        // "." only at the beginning or at the end are not considered
+        // to be part of any layer.
+        else if (!qname.contains('.')
+                 || !qname.mid(1).contains('.')
+                 || !qname.left(qname.size() - 1).contains('.')) {
+            warnFile << "Found a top-level channel that is not part of the rendered image" << qname << ". Krita will not load this channel.";
+        }
+    }
+    if (topLevelRGBFound) {
+        dbgFile << "Toplevel layer" << info.name << ":Image type:" << imageType << "Layer type" << info.imageType;
+        informationObjects.push_back(info);
+        imageType = info.imageType;
+    }
+
+    dbgFile << "Extra layers:" << layerNames.size();
+
+    for (std::set<std::string>::const_iterator i = layerNames.begin();i != layerNames.end(); ++i) {
+
+        info = ExrPaintLayerInfo();
+
+        dbgFile << "layer name = " << i->c_str();
+        info.name = i->c_str();
+        Imf::ChannelList::ConstIterator layerBegin, layerEnd;
+        channels.channelsInLayer(*i, layerBegin, layerEnd);
+        for (Imf::ChannelList::ConstIterator j = layerBegin;
+             j != layerEnd; ++j) {
+            const Imf::Channel &channel = j.channel();
+            dbgFile << "\tchannel " << j.name() << " type = " << channel.type;
 
             info.updateImageType(imfTypeToKisType(channel.type));
 
-            QString qname = i.name();
-            if (qname != "A" && qname != "R" && qname != "G" && qname != "B") {
-                dbgFile << "Unknow: " << i.name();
-                info.imageType = IT_UNSUPPORTED;
-            } else {
-                info.channelMap[qname] = qname;
+            QString qname = j.name();
+            QStringList list = qname.split('.');
+            QString layersuffix = list.last();
+
+            if (list.size() > 1) {
+                info.name = list[list.size()-2];
+                info.parent = searchGroup(&groups, list, 0, list.size() - 3);
             }
+
+            info.channelMap[layersuffix] = qname;
         }
-        informationObjects.push_back(info);
-        imageType = info.imageType;
-    } else {
-        dbgFile << "Multi layers:";
-        for (std::set<std::string>::const_iterator i = layerNames.begin();
-                i != layerNames.end(); ++i) {
-            ExrPaintLayerInfo info;
-            dbgFile << "layer name = " << i->c_str();
-            info.name = i->c_str();
-            Imf::ChannelList::ConstIterator layerBegin, layerEnd;
-            channels.channelsInLayer(*i, layerBegin, layerEnd);
-            for (Imf::ChannelList::ConstIterator j = layerBegin;
-                    j != layerEnd; ++j) {
-                const Imf::Channel &channel = j.channel();
-                dbgFile << "\tchannel " << j.name() << " type = " << channel.type;
-
-                info.updateImageType(imfTypeToKisType(channel.type));
-
-                QString qname = j.name();
-                QStringList list = qname.split('.');
-                QString layersuffix = list.last();
-
-                if (list.size() > 1) {
-                    info.name = list[list.size()-2];
-                    info.parent = searchGroup(&groups, list, 0, list.size() - 3);
-                }
-
-                info.channelMap[layersuffix] = qname;
-            }
-            if (info.imageType != IT_UNKNOWN && info.imageType != IT_UNSUPPORTED) {
-                informationObjects.push_back(info);
-                if (imageType < info.imageType) {
-                    imageType = info.imageType;
-                }
+        if (info.imageType != IT_UNKNOWN && info.imageType != IT_UNSUPPORTED) {
+            informationObjects.push_back(info);
+            if (imageType < info.imageType) {
+                imageType = info.imageType;
             }
         }
     }
 
-    dbgFile << "File has " << informationObjects.size() << " layers";
+    dbgFile << "File has" << informationObjects.size() << "layer(s)";
+
     // Set the colorspaces
     for (int i = 0; i < informationObjects.size(); ++i) {
         ExrPaintLayerInfo& info = informationObjects[i];
@@ -656,7 +682,8 @@ KisImageBuilder_Result exrConverter::decode(const QUrl &uri)
                 info.channelMap.clear();
                 info.channelMap["G"] = channel;
             }
-        } else if (info.channelMap.size() == 2) {
+        }
+        else if (info.channelMap.size() == 2) {
             modelId = GrayAColorModelID.id();
 
             QMap<QString,QString>::iterator it = info.channelMap.begin();
@@ -672,13 +699,14 @@ KisImageBuilder_Result exrConverter::decode(const QUrl &uri)
             }
 
             info.remappedChannels.push_back(
-                ExrPaintLayerInfo::Remap(failingChannelKey, "G"));
+                        ExrPaintLayerInfo::Remap(failingChannelKey, "G"));
 
             QString failingChannelValue = info.channelMap[failingChannelKey];
             info.channelMap.remove(failingChannelKey);
             info.channelMap["G"] = failingChannelValue;
 
-        } else if (info.channelMap.size() == 3 || info.channelMap.size() == 4) {
+        }
+        else if (info.channelMap.size() == 3 || info.channelMap.size() == 4) {
 
             if (info.channelMap.contains("R") && info.channelMap.contains("G") && info.channelMap.contains("B")) {
                 modelId = RGBAColorModelID.id();
@@ -722,6 +750,9 @@ KisImageBuilder_Result exrConverter::decode(const QUrl &uri)
                 info.channelMap = newChannelMap;
             }
         }
+        else {
+            dbgFile << info.name << "has" << info.channelMap.size() << "channels, and we don't know what to do.";
+        }
         if (!modelId.isEmpty()) {
             info.colorSpace = kisTypeToColorSpace(modelId, info.imageType);
         }
@@ -763,7 +794,7 @@ KisImageBuilder_Result exrConverter::decode(const QUrl &uri)
     }
 
     // Load the layers
-    for (int i = 0; i < informationObjects.size(); ++i) {
+    for (int i = informationObjects.size() - 1; i >= 0; --i) {
         ExrPaintLayerInfo& info = informationObjects[i];
         if (info.colorSpace) {
             dbgFile << "Decoding " << info.name << " with " << info.channelMap.size() << " channels, and color space " << info.colorSpace->id();
@@ -919,7 +950,7 @@ void EncoderImpl<_T_, size, alphaPos>::encodeData(int line)
 
 Encoder* encoder(Imf::OutputFile& file, const ExrPaintLayerSaveInfo& info, int width)
 {
-//     bool hasAlpha = info.layer->colorSpace()->channelCount() != info.layer->colorSpace()->colorChannelCount();
+    dbgFile << "Create encoder for" << info.layer->name() << info.channels << info.layer->colorSpace()->channelCount();
     switch (info.layer->colorSpace()->channelCount()) {
     case 1: {
         if (info.layer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
@@ -1009,9 +1040,9 @@ KisImageBuilder_Result exrConverter::buildFile(const QUrl &uri, KisPaintLayerSP 
     
     if(pixelType >= Imf::NUM_PIXELTYPES)
     {
-      return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+        return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
-      
+
 
     header.channels().insert("R", Imf::Channel(pixelType));
     header.channels().insert("G", Imf::Channel(pixelType));
@@ -1070,9 +1101,9 @@ void exrConverter::Private::makeLayerNamesUnique(QList<ExrPaintLayerSaveInfo>& i
 
             for (; it != end; ++it) {
                 QString newName =
-                    QString("%1_%2.")
-                    .arg(strippedName)
-                    .arg(nameCounter++);
+                        QString("%1_%2.")
+                        .arg(strippedName)
+                        .arg(nameCounter++);
 
                 it.value()->name = newName;
 
@@ -1094,55 +1125,80 @@ void exrConverter::Private::recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveIn
 
     for (uint i = 0; i < parent->childCount(); ++i) {
         KisNodeSP node = parent->at(i);
+
         if (KisPaintLayerSP paintLayer = dynamic_cast<KisPaintLayer*>(node.data())) {
             QMap<QString, QString> current2original;
+
             if (paintLayer->metaData()->containsEntry(KisMetaData::SchemaRegistry::instance()->create("http://krita.org/exrchannels/1.0/" , "exrchannels"), "channelsmap")) {
+
                 const KisMetaData::Entry& entry = paintLayer->metaData()->getEntry(KisMetaData::SchemaRegistry::instance()->create("http://krita.org/exrchannels/1.0/" , "exrchannels"), "channelsmap");
                 QList< KisMetaData::Value> values = entry.value().asArray();
+
                 foreach(const KisMetaData::Value& value, values) {
                     QMap<QString, KisMetaData::Value> map = value.asStructure();
                     if (map.contains("original") && map.contains("current")) {
                         current2original[map["current"].toString()] = map["original"].toString();
                     }
                 }
+
             }
+
             ExrPaintLayerSaveInfo info;
             info.name = name + paintLayer->name() + '.';
             info.layer = paintLayer;
-            if (paintLayer->colorSpace()->colorModelId() == RGBAColorModelID) {
-                info.channels.push_back(info.name + remap(current2original, "R"));
-                info.channels.push_back(info.name + remap(current2original, "G"));
-                info.channels.push_back(info.name + remap(current2original, "B"));
-                info.channels.push_back(info.name + remap(current2original, "A"));
-            } else if (paintLayer->colorSpace()->colorModelId() == GrayAColorModelID) {
-                info.channels.push_back(info.name + remap(current2original, "G"));
-                info.channels.push_back(info.name + remap(current2original, "A"));
-            } else if (paintLayer->colorSpace()->colorModelId() == GrayColorModelID) {
-                info.channels.push_back(info.name + remap(current2original, "G"));
-            } else if (paintLayer->colorSpace()->colorModelId() == XYZAColorModelID) {
-                info.channels.push_back(info.name + remap(current2original, "X"));
-                info.channels.push_back(info.name + remap(current2original, "Y"));
-                info.channels.push_back(info.name + remap(current2original, "Z"));
-                info.channels.push_back(info.name + remap(current2original, "A"));
+
+            if (info.name == QString(HDR_LAYER) + ".") {
+                info.channels.push_back("R");
+                info.channels.push_back("G");
+                info.channels.push_back("B");
+                info.channels.push_back("A");
             }
-            if (paintLayer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
+            else {
+
+                if (paintLayer->colorSpace()->colorModelId() == RGBAColorModelID) {
+                    info.channels.push_back(info.name + remap(current2original, "R"));
+                    info.channels.push_back(info.name + remap(current2original, "G"));
+                    info.channels.push_back(info.name + remap(current2original, "B"));
+                    info.channels.push_back(info.name + remap(current2original, "A"));
+                }
+                else if (paintLayer->colorSpace()->colorModelId() == GrayAColorModelID) {
+                    info.channels.push_back(info.name + remap(current2original, "G"));
+                    info.channels.push_back(info.name + remap(current2original, "A"));
+                }
+                else if (paintLayer->colorSpace()->colorModelId() == GrayColorModelID) {
+                    info.channels.push_back(info.name + remap(current2original, "G"));
+                }
+                else if (paintLayer->colorSpace()->colorModelId() == XYZAColorModelID) {
+                    info.channels.push_back(info.name + remap(current2original, "X"));
+                    info.channels.push_back(info.name + remap(current2original, "Y"));
+                    info.channels.push_back(info.name + remap(current2original, "Z"));
+                    info.channels.push_back(info.name + remap(current2original, "A"));
+                }
+
+            }            if (paintLayer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
                 info.pixelType = Imf::HALF;
-            } else if (paintLayer->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
+            }
+            else if (paintLayer->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
                 info.pixelType = Imf::FLOAT;
-            } else {
+            }
+            else {
                 info.pixelType = Imf::NUM_PIXELTYPES;
             }
 
-            if(info.pixelType < Imf::NUM_PIXELTYPES)
-            {
+            if (info.pixelType < Imf::NUM_PIXELTYPES) {
+                dbgFile << "Going to save layer" << info.name;
                 informationObjects.push_back(info);
-            } else {
-                // TODO should probably inform that one of the layer cannot be saved.
+            }
+            else {
+                warnFile << "Will not save layer" << info.name;
+                layersNotSaved << node;
             }
 
-        } else if (KisGroupLayerSP groupLayer = dynamic_cast<KisGroupLayer*>(node.data())) {
+        }
+        else if (KisGroupLayerSP groupLayer = dynamic_cast<KisGroupLayer*>(node.data())) {
             recBuildPaintLayerSaveInfo(informationObjects, name + groupLayer->name() + '.', groupLayer);
-        } else {
+        }
+        else {
             /**
              * The EXR can store paint and group layers only. The rest will
              * go to /dev/null :(
@@ -1167,10 +1223,10 @@ void exrConverter::Private::reportLayersNotSaved(const QSet<KisNodeSP> &layersNo
     }
 
     QString msg =
-        i18nc("@info",
-              "<para>The following layers have a type that is not supported by EXR format:</para>"
-              "<para><list>%1</list></para>"
-              "<para><warning>these layers will NOT be saved to the final EXR file</warning></para>", layersList);
+            i18nc("@info",
+                  "<para>The following layers have a type that is not supported by EXR format:</para>"
+                  "<para><list>%1</list></para>"
+                  "<para><warning>these layers will NOT be saved to the final EXR file</warning></para>", layersList);
 
     if (this->showNotifications) {
         QMessageBox::information(0, i18nc("@title:window", "Layers will be lost"), msg);
@@ -1184,13 +1240,16 @@ QString exrConverter::Private::fetchExtraLayersInfo(QList<ExrPaintLayerSaveInfo>
 {
     KIS_ASSERT_RECOVER_NOOP(!informationObjects.isEmpty());
 
+    if (informationObjects.size() == 1 && informationObjects[0].name == QString(HDR_LAYER) + ".") {
+        return QString();
+    }
+
     QDomDocument doc("krita-extra-layers-info");
     doc.appendChild(doc.createElement("root"));
     QDomElement rootElement = doc.documentElement();
 
     for (int i = 0; i < informationObjects.size(); i++) {
         ExrPaintLayerSaveInfo &info = informationObjects[i];
-
         quint32 unused;
         KisSaveXmlVisitor visitor(doc, rootElement, unused, QString(), false);
         QDomElement el = visitor.savePaintLayerAttributes(info.layer.data(), doc);
@@ -1235,10 +1294,10 @@ KisImageBuilder_Result exrConverter::buildFile(const QUrl &uri, KisGroupLayerSP 
     m_d->makeLayerNamesUnique(informationObjects);
 
     QByteArray extraLayersInfo = m_d->fetchExtraLayersInfo(informationObjects).toUtf8();
-    header.insert(EXR_KRITA_LAYERS, Imf::StringAttribute(extraLayersInfo.constData()));
-
-
-    dbgFile << informationObjects.size() << " layers to save";
+    if (!extraLayersInfo.isNull()) {
+        header.insert(EXR_KRITA_LAYERS, Imf::StringAttribute(extraLayersInfo.constData()));
+    }
+     dbgFile << informationObjects.size() << " layers to save";
 
     foreach(const ExrPaintLayerSaveInfo& info, informationObjects) {
         if (info.pixelType < Imf::NUM_PIXELTYPES) {

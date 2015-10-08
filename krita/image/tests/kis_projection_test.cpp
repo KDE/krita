@@ -17,7 +17,7 @@
  */
 
 #include "kis_projection_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 
 
 #include <KoColor.h>
@@ -56,6 +56,6 @@ void KisProjectionTest::testDirty()
     } while (it.nextPixel());
 }
 
-QTEST_KDEMAIN(KisProjectionTest, NoGUI)
+QTEST_MAIN(KisProjectionTest)
 
 

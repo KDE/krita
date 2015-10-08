@@ -24,7 +24,7 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoTextRangeManager.h>
 
-#include <kdebug.h>
+#include <TextLayoutDebug.h>
 
 #include <QTextCursor>
 

@@ -35,7 +35,7 @@
 #include <QVariant>
 #include <QTest>
 
-#include <kdebug.h>
+#include <TextLayoutDebug.h>
 
 #define FRAME_SPACING 10.0
 
@@ -723,7 +723,7 @@ void TestBlockLayout::testTabs()
         if (pos==0)
             QCOMPARE(blockLayout->lineAt(0).cursorToX(pos*2), leftMargin + textIndent);
         else {
-            kDebug() << blockLayout->lineAt(0).cursorToX(pos*2) << expected+(pos-1)*tabSpacing;
+            warnTextLayout << blockLayout->lineAt(0).cursorToX(pos*2) << expected+(pos-1)*tabSpacing;
             QVERIFY(qAbs(blockLayout->lineAt(0).cursorToX(pos*2) - (expected+(pos-1)*tabSpacing)) < 1.0);
         }
     }
@@ -860,7 +860,7 @@ void TestBlockLayout::testParagraphBorders()
     QCOMPARE(blockLayout->lineAt(0).width(), 200.0 - 8.0 - 11.0);
     block = block.next();
     blockLayout = block.layout();
-    //kDebug() << "blockLayout->lineAt(0).y() "<<blockLayout->lineAt(0).y();
+    //warnTextLayout << "blockLayout->lineAt(0).y() "<<blockLayout->lineAt(0).y();
     QVERIFY(qAbs(blockLayout->lineAt(0).y() - (9.0 + 14.4 + 10.0 + 100.0)) < ROUNDING);  // 14.4 is 12 pt font + 20% linespacing
 
     // borders + padding create the total inset.

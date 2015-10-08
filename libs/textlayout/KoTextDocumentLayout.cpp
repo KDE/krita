@@ -49,7 +49,7 @@
 #include <KoParagraphStyle.h>
 #include <KoTableStyle.h>
 
-#include <kdebug.h>
+#include <TextLayoutDebug.h>
 #include <QTextBlock>
 #include <QTextTable>
 #include <QTimer>

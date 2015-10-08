@@ -29,7 +29,6 @@
 
 #include <kcomponentdata.h>
 #include <kcombobox.h>
-#include <knuminput.h>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -38,6 +37,7 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QCheckBox>
+#include <QSpinBox>
 
 class Q_DECL_HIDDEN KoConfigMiscPage::Private
 {
@@ -52,9 +52,9 @@ public:
 
     KoUnit oldUnit;
     QComboBox *unit;
-    KIntNumInput * handleRadius;
+    QSpinBox *handleRadius;
     uint oldHandleRadius;
-    KIntNumInput * grabSensitivity;
+    QSpinBox *grabSensitivity;
     uint oldGrabSensitivity;
     KoUnitDoubleSpinBox* pasteOffset;
     qreal oldPasteOffset;
@@ -90,14 +90,16 @@ KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, KoDocumentResourceManager *d
     d->oldUnit = documentUnit;
     d->unit->setCurrentIndex(d->oldUnit.indexInListForUi(KoUnit::HidePixel));
 
-    d->handleRadius = new KIntNumInput(miscGroupBox);
-    d->handleRadius->setRange(3, 20, 1);
+    d->handleRadius = new QSpinBox(miscGroupBox);
+    d->handleRadius->setRange(3, 20);
+    d->handleRadius->setSingleStep(1);
     d->handleRadius->setSuffix(" px");
     d->handleRadius->setValue(d->oldHandleRadius);
     miscLayout->addRow(i18n("Handle radius:"), d->handleRadius);
 
-    d->grabSensitivity = new KIntNumInput(miscGroupBox);
-    d->grabSensitivity->setRange(3, 20, 1);
+    d->grabSensitivity = new QSpinBox(miscGroupBox);
+    d->grabSensitivity->setRange(3, 20);
+    d->grabSensitivity->setSingleStep(1);
     d->grabSensitivity->setSuffix(" px");
     d->grabSensitivity->setValue(d->oldGrabSensitivity);
     miscLayout->addRow(i18n("Grab sensitivity:"), d->grabSensitivity);

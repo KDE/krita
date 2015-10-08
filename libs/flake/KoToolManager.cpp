@@ -53,13 +53,16 @@
 #include <QStringList>
 #include <QApplication>
 #include <kactioncollection.h>
-#include <kdebug.h>
-#include <kglobal.h>
+#include <FlakeDebug.h>
+
 #include <QAction>
 #include <klocalizedstring.h>
 #include <QKeySequence>
 #include <QStack>
 #include <QLabel>
+#include <QGlobalStatic>
+
+Q_GLOBAL_STATIC(KoToolManager, s_instance)
 
 class Q_DECL_HIDDEN KoToolAction::Private
 {
@@ -185,7 +188,7 @@ public:
                 foreach(QAction *a, canvasActionCollection->actions()) {
                     QAction *canvasAction = dynamic_cast<QAction*>(a);
                     if (canvasAction && canvasAction->shortcut().toString() != "" && canvasAction->shortcut() == toolAction->shortcut()) {
-                        kWarning() << activeToolId << ": action" << toolActionID << "conflicts with canvas action" << canvasAction->objectName() << "shortcut:" << canvasAction->shortcut().toString();
+                        warnFlake << activeToolId << ": action" << toolActionID << "conflicts with canvas action" << canvasAction->objectName() << "shortcut:" << canvasAction->shortcut().toString();
                         disabledCanvasShortcuts[canvasAction] = canvasAction->shortcut().toString();
                         canvasAction->setShortcut(QKeySequence());
                     }
@@ -391,9 +394,9 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
         bool first = true;
         foreach(CanvasData *data, list) {
             if (first) {
-                kDebug(30006) << "Canvas" << canvasCount++;
+                debugFlake << "Canvas" << canvasCount++;
             }
-            kDebug(30006) << "  +- Tool:" << data->activeToolId  << (data == canvasData ? " *" : "");
+            debugFlake << "  +- Tool:" << data->activeToolId  << (data == canvasData ? " *" : "");
             first = false;
         }
     }
@@ -720,7 +723,7 @@ void KoToolManager::Private::currentLayerChanged(const KoShapeLayer *layer)
     layerExplicitlyDisabled = layer && !layer->isEditable();
     updateToolForProxy();
 
-    kDebug(30006) << "Layer changed to" << layer << "explicitly disabled:" << layerExplicitlyDisabled;
+    debugFlake << "Layer changed to" << layer << "explicitly disabled:" << layerExplicitlyDisabled;
 }
 
 void KoToolManager::Private::updateToolForProxy()
@@ -1077,7 +1080,7 @@ QPair<QString, KoToolBase*> KoToolManager::createTools(KoCanvasController *contr
         return QPair<QString, KoToolBase*>(tool->id(), origHash.value(tool->id()));
     }
 
-    kDebug(30006) << "Creating tool" << tool->id() << ". Activated on:" << tool->activationShapeId() << ", prio:" << tool->priority();
+    debugFlake << "Creating tool" << tool->id() << ". Activated on:" << tool->activationShapeId() << ", prio:" << tool->priority();
 
     KoToolBase *tl = tool->createTool(controller->canvas());
     if (tl) {
@@ -1107,7 +1110,6 @@ QPair<QString, KoToolBase*> KoToolManager::createTools(KoCanvasController *contr
 
 KoToolManager* KoToolManager::instance()
 {
-    K_GLOBAL_STATIC(KoToolManager, s_instance)
     return s_instance;
 }
 

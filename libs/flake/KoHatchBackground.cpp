@@ -29,7 +29,7 @@
 #include <KoXmlNS.h>
 #include <KoUnit.h>
 
-#include <kdebug.h>
+#include <FlakeDebug.h>
 
 #include <QColor>
 #include <QString>
@@ -177,11 +177,11 @@ bool KoHatchBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF &sh
     QString fillStyle = styleStack.property(KoXmlNS::draw, "fill");
     if (fillStyle == "hatch") {
         QString style = styleStack.property(KoXmlNS::draw, "fill-hatch-name");
-        kDebug(30003) << " hatch style is  :" << style;
+        debugFlake << " hatch style is  :" << style;
 
         KoXmlElement* draw = context.stylesReader().drawStyles("hatch")[style];
         if (draw) {
-            kDebug(30003) << "Hatch style found for:" << style;
+            debugFlake << "Hatch style found for:" << style;
 
             QString angle = draw->attributeNS(KoXmlNS::draw, "rotation", QString("0"));
             if (angle.at(angle.size()-1).isLetter()) {
@@ -192,7 +192,7 @@ bool KoHatchBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF &sh
                 d->angle = int(angle.toInt() / 10);
             }
 
-            kDebug(30003) << "angle :" << d->angle;
+            debugFlake << "angle :" << d->angle;
 
             d->name = draw->attributeNS(KoXmlNS::draw, "display-name");
 

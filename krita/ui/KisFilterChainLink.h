@@ -22,7 +22,6 @@ Boston, MA 02110-1301, USA.
 #include <KisFilterChain.h>
 
 class QByteArray;
-class KoUpdater;
 
 namespace CalligraFilter {
 
@@ -35,7 +34,7 @@ class ChainLink
 {
 
 public:
-    ChainLink(KisFilterChain *chain, KisFilterEntry::Ptr filterEntry,
+    ChainLink(KisFilterChain *chain, KisFilterEntrySP filterEntry,
               const QByteArray& from, const QByteArray& to);
 
     ~ChainLink();
@@ -64,7 +63,7 @@ private:
     void setupConnections(const KisImportExportFilter *sender, const KisImportExportFilter *receiver) const;
 
     KisFilterChain *m_chain;
-    KisFilterEntry::Ptr m_filterEntry;
+    KisFilterEntrySP m_filterEntry;
     QByteArray m_from, m_to;
 
     // This hack is only needed due to crappy Microsoft design and

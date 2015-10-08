@@ -29,7 +29,7 @@
 #include <KoText.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
-#include <kdebug.h>
+#include "TextDebug.h"
 #include <writeodf/writeodftext.h>
 #include <writeodf/writeodfoffice.h>
 #include <writeodf/writeodfdc.h>

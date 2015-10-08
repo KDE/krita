@@ -32,10 +32,10 @@ class QString;
  */
 class PIGMENTCMS_EXPORT KoUniqueNumberForIdServer
 {
-private:
+public:
     KoUniqueNumberForIdServer();
     ~KoUniqueNumberForIdServer();
-public:
+
     static KoUniqueNumberForIdServer* instance();
     /**
      * @return an unique number for the given \p _id , for two different call to this function

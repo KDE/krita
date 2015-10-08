@@ -25,7 +25,7 @@
 #include <QComboBox>
 
 #include <kconfiggroup.h>
-#include <kglobal.h>
+
 
 #include <kis_icon_utils.h>
 #include "KoColorSpace.h"

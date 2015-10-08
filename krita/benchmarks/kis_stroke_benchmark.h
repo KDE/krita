@@ -27,7 +27,6 @@
 #include <kis_image.h>
 #include <kis_layer.h>
 
-class KoColorSpace;
 
 const QString PRESET_FILE_NAME = "hairy-benchmark1.kpp";
 

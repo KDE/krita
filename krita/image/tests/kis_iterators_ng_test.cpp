@@ -20,7 +20,7 @@
 #include "kis_iterators_ng_test.h"
 #include <QApplication>
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -31,6 +31,7 @@
 
 #include "kis_paint_device.h"
 #include <kis_iterator_ng.h>
+#include "kis_global.h"
 
 
 void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)(const KoColorSpace*cs))
@@ -418,4 +419,4 @@ void KisIteratorTest::randomAccessor()
     allCsApplicator(&KisIteratorTest::randomAccessor);
 }
 
-QTEST_KDEMAIN(KisIteratorTest, NoGUI)
+QTEST_MAIN(KisIteratorTest)

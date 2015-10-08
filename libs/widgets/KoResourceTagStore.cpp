@@ -22,11 +22,12 @@
 
 #include <QDebug>
 #include <QStringList>
-#include <kstandarddirs.h>
 #include <QFile>
 #include <QDir>
-#include <KoResourceServer.h>
+#include <QStandardPaths>
 #include <QDomDocument>
+
+#include <KoResourceServer.h>
 
 
 class Q_DECL_HIDDEN KoResourceTagStore::Private
@@ -174,7 +175,7 @@ QStringList KoResourceTagStore::searchTag(const QString& query) const
 
 void KoResourceTagStore::loadTags()
 {
-    QStringList tagFiles = KGlobal::dirs()->findAllResources("data", "krita/tags/" + d->resourceServer->type() + "_tags.xml");
+    QStringList tagFiles = QStandardPaths::locateAll(QStandardPaths::AppDataLocation, "tags/" + d->resourceServer->type() + "_tags.xml");
     foreach(const QString &tagFile, tagFiles) {
         readXMLFile(tagFile);
     }
@@ -184,7 +185,7 @@ void KoResourceTagStore::writeXMLFile(const QString &tagstore)
 {
     QFile f(tagstore);
     if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        kWarning() << "Cannot write meta information to '" << tagstore << "'.";
+        warnWidgets << "Cannot write meta information to '" << tagstore << "'.";
         return;
     }
     QDomDocument doc;
@@ -252,7 +253,7 @@ void KoResourceTagStore::readXMLFile(const QString &tagstore)
     if (QFile::exists(tagstore)) {
         inputFile = tagstore;
     } else {
-        inputFile = KStandardDirs::locateLocal("data", "krita/tags.xml");
+        inputFile = QStandardPaths::locate(QStandardPaths::AppDataLocation, "tags.xml");
     }
 
     QFile f(inputFile);
@@ -262,13 +263,13 @@ void KoResourceTagStore::readXMLFile(const QString &tagstore)
 
     QDomDocument doc;
     if (!doc.setContent(&f)) {
-        kWarning() << "The file could not be parsed.";
+        warnWidgets << "The file could not be parsed.";
         return;
     }
 
     QDomElement root = doc.documentElement();
     if (root.tagName() != "tags") {
-        kWarning() << "The file doesn't seem to be of interest.";
+        warnWidgets << "The file doesn't seem to be of interest.";
         return;
     }
 
@@ -320,7 +321,7 @@ void KoResourceTagStore::readXMLFile(const QString &tagstore)
                 KoResource *res = 0;
 
                 if (resByMd5 && resByFileName && (resByMd5 != resByFileName)) {
-                    kWarning() << "MD5sum and filename point to different resources -- was the resource renamed? We go with md5";
+                    warnWidgets << "MD5sum and filename point to different resources -- was the resource renamed? We go with md5";
                     res = resByMd5;
                 }
                 else if (!resByMd5 && resByFileName) {
@@ -380,5 +381,5 @@ QStringList KoResourceTagStore::removeAdjustedFileNames(QStringList fileNamesLis
 
 void KoResourceTagStore::serializeTags()
 {
-    writeXMLFile(KStandardDirs::locateLocal("data", "krita/tags/" + d->resourceServer->type() + "_tags.xml"));
+    writeXMLFile(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/tags/" + d->resourceServer->type() + "_tags.xml");
 }

@@ -53,7 +53,7 @@
 #include <KoIcon.h>
 
 #include <QAction>
-#include <kdebug.h>
+#include <FlakeDebug.h>
 #include <klocalizedstring.h>
 #include <QPainter>
 #include <QBitmap>
@@ -951,7 +951,7 @@ void KoPathTool::pointSelectionChanged()
 void KoPathTool::repaint(const QRectF &repaintRect)
 {
     Q_D(KoToolBase);
-    //kDebug(30006) <<"KoPathTool::repaint(" << repaintRect <<")" << m_handleRadius;
+    //debugFlake <<"KoPathTool::repaint(" << repaintRect <<")" << m_handleRadius;
     // widen border to take antialiasing into account
     qreal radius = m_handleRadius + 1;
     d->canvas->updateCanvas(repaintRect.adjusted(-radius, -radius, radius, radius));

@@ -22,8 +22,8 @@
 #include "KoTextRangeManager.h"
 #include "KoTextInlineRdf.h"
 
-#include <kdebug.h>
-#include <QDebug>
+#include "TextDebug.h"
+#include "TextDebug.h"
 #include <QTextCursor>
 
 class KoTextRangePrivate

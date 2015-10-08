@@ -26,8 +26,8 @@
 #include "kis_input_profile_model.h"
 #include "kis_input_configuration_page_item.h"
 #include <QDir>
-#include <KStandardDirs>
-#include <kglobal.h>
+#include <KoResourcePaths.h>
+
 
 #include "kis_icon_utils.h"
 
@@ -66,7 +66,7 @@ void KisInputConfigurationPage::revertChanges()
 
 void KisInputConfigurationPage::setDefaults()
 {
-    QDir profileDir(KGlobal::dirs()->saveLocation("data", "krita/input/", false));
+    QDir profileDir(KoResourcePaths::saveLocation("data", "krita/input/", false));
 
     if (profileDir.exists()) {
         QStringList entries = profileDir.entryList(QStringList() << "*.profile", QDir::NoDot | QDir::NoDotDot);

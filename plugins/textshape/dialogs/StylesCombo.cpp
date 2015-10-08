@@ -27,7 +27,7 @@
 #include <QMouseEvent>
 #include <QStyleOptionViewItemV4>
 
-#include <kdebug.h>
+#include <QDebug>
 
 StylesCombo::StylesCombo(QWidget *parent)
     : QComboBox(parent),

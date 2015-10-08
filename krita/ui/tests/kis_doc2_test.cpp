@@ -21,7 +21,7 @@
 #include <KisDocumentEntry.h>
 #include <KisMainWindow.h>
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "KisDocument.h"
 #include "kis_image.h"
@@ -49,5 +49,5 @@ void KisDocumentTest::testOpenImageTwiceInSameDoc()
 }
 
 
-QTEST_KDEMAIN(KisDocumentTest, GUI)
+QTEST_MAIN(KisDocumentTest)
 

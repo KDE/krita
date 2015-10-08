@@ -26,7 +26,7 @@
 #include <KoShapeContainerModel.h>
 #include <QPainter>
 #include "KoShapeManager.h"
-#include "kdebug.h"
+#include "FlakeDebug.h"
 #include "KoSnapData.h"
 #include "KoUnit.h"
 

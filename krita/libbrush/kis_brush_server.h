@@ -28,7 +28,6 @@
 #include "kritabrush_export.h"
 #include "kis_brush.h"
 
-class KoResource;
 class KoResourceLoaderThread;
 
 typedef KoResourceServer<KisBrush, SharedPointerStoragePolicy<KisBrushSP> > KisBrushResourceServer;
@@ -43,7 +42,7 @@ class BRUSH_EXPORT KisBrushServer : public QObject
     Q_OBJECT
 
 public:
-
+    KisBrushServer();
     virtual ~KisBrushServer();
     KisBrushResourceServer* brushServer(bool block = true);
 
@@ -54,7 +53,7 @@ public Q_SLOTS:
 
 private:
 
-    KisBrushServer();
+
     KisBrushServer(const KisBrushServer&);
     KisBrushServer operator=(const KisBrushServer&);
 

@@ -22,7 +22,6 @@
 
 #include "KoDialog.h"
 #include "KoDialog_p.h"
-#include <kglobal.h> // remove KGlobal::caption once done by QPA
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -35,20 +34,16 @@
 #include <QVBoxLayout>
 #include <QWhatsThis>
 #include <QDebug>
+#include <QPushButton>
 
 #include <kconfig.h>
 #include <klocalizedstring.h>
-#include <kpushbutton.h>
+
 #include <kseparator.h>
 #include <kstandardguiitem.h>
 #include <khelpclient.h>
 #include <kurllabel.h>
 #include <kwindowconfig.h>
-
-#if HAVE_X11
-#include <qx11info_x11.h>
-#include <netwm.h>
-#endif
 
 void KoDialogPrivate::setupLayout()
 {
@@ -157,7 +152,7 @@ void KoDialogPrivate::appendButton(KoDialog::ButtonCode key, const KGuiItem &ite
         return;
     }
 
-    KPushButton *button = new KPushButton;
+    QPushButton *button = new QPushButton;
     KGuiItem::assign(button, item);
     mButtonBox->addButton(button, role);
 
@@ -184,7 +179,7 @@ void KoDialogPrivate::init(KoDialog *q)
 
     q->connect(&mButtonSignalMapper, SIGNAL(mapped(int)), q, SLOT(slotButtonClicked(int)));
 
-    q->setPlainCaption(KGlobal::caption()); // set appropriate initial window title for case it gets not set later
+    q->setPlainCaption(qApp->applicationDisplayName()); // set appropriate initial window title for case it gets not set later
 }
 
 void KoDialogPrivate::helpLinkClicked()
@@ -350,7 +345,7 @@ void KoDialog::setDefaultButton(ButtonCode newDefaultButton)
 KoDialog::ButtonCode KoDialog::defaultButton() const
 {
     Q_D(const KoDialog);
-    QHashIterator<int, KPushButton *> it(d->mButtonList);
+    QHashIterator<int, QPushButton *> it(d->mButtonList);
     while (it.hasNext()) {
         it.next();
         if (it.value()->isDefault()) {
@@ -474,7 +469,7 @@ QString KoDialog::makeStandardCaption(const QString &userCaption,
                                      CaptionFlags flags)
 {
     Q_UNUSED(window);
-    QString caption = KGlobal::caption();
+    QString caption = qApp->applicationDisplayName();
     QString captionString = userCaption.isEmpty() ? caption : userCaption;
 
     // If the document is modified, add '[modified]'.
@@ -519,12 +514,6 @@ void KoDialog::setPlainCaption(const QString &caption)
 {
     if (QWidget *win = window()) {
         win->setWindowTitle(caption);
-#if HAVE_X11
-        if (QGuiApplication::platformName() == QStringLiteral("xcb")) {
-            NETWinInfo info(QX11Info::connection(), win->winId(), QX11Info::appRootWindow(), 0);
-            info.setName(caption.toUtf8().constData());
-        }
-#endif
     }
 }
 
@@ -593,14 +582,6 @@ void KoDialog::centerOnScreen(QWidget *widget, int screen)
     if (!widget) {
         return;
     }
-
-#if HAVE_X11
-    if (QGuiApplication::platformName() == QStringLiteral("xcb")
-            && !(widget->windowFlags() & Qt::X11BypassWindowManagerHint) && widget->windowType() != Qt::Popup
-            && NETRootInfo(QX11Info::connection(), NET::Supported).isSupported(NET::WM2FullPlacement)) {
-        return; // the WM can handle placement much better
-    }
-#endif
 
     QRect rect = screenRect(widget, screen);
 
@@ -752,18 +733,6 @@ void KoDialog::setButtonGuiItem(ButtonCode id, const KGuiItem &item)
     }
 
     KGuiItem::assign(button, item);
-}
-
-void KoDialog::setButtonMenu(ButtonCode id, QMenu *menu, ButtonPopupMode popupmode)
-{
-    KPushButton *button = static_cast<KPushButton *>(this->button(id));
-    if (button) {
-        if (popupmode == InstantPopup) {
-            button->setMenu(menu);
-        } else {
-            button->setDelayedMenu(menu);
-        }
-    }
 }
 
 void KoDialog::setButtonText(ButtonCode id, const QString &text)

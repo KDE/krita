@@ -24,7 +24,6 @@
 
 #include "kis_brush.h"
 #include "kritabrush_export.h"
-#include "kis_gbr_brush.h"
 
 class KisTextBrushesPipe;
 

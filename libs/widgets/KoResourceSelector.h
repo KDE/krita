@@ -20,7 +20,7 @@
 #ifndef KORESOURCESELECTOR_H
 #define KORESOURCESELECTOR_H
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 #include <QComboBox>
 
 class QMouseEvent;
@@ -30,7 +30,7 @@ class KoResource;
 /**
  * A custom combobox widget for selecting resource items like gradients or patterns.
  */
-class KOWIDGETS_EXPORT KoResourceSelector : public QComboBox
+class KRITAWIDGETS_EXPORT KoResourceSelector : public QComboBox
 {
     Q_OBJECT
 public:

@@ -199,8 +199,6 @@ public:
 
     void initDesktopView()
     {
-        // Tell the iconloader about share/apps/calligra/icons
-        KIconLoader::global()->addAppDir("calligra");
         // Initialize all Calligra directories etc.
         KoGlobal::initialize();
 

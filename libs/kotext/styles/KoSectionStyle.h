@@ -24,7 +24,7 @@
 
 #include "KoColumns.h"
 #include "KoText.h"
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 #include <QObject>
 #include <QTextFormat>
@@ -45,7 +45,7 @@ class QVariant;
  * a specific KoSectionStyle.
  * @see KoStyleManager
  */
-class KOTEXT_EXPORT KoSectionStyle : public QObject
+class KRITATEXT_EXPORT KoSectionStyle : public QObject
 {
     Q_OBJECT
 public:

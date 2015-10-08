@@ -7,10 +7,10 @@ macro_add_unittest_definitions()
 
 set(move_stroke_test_SRCS move_stroke_test.cpp ${CMAKE_SOURCE_DIR}/krita/sdk/tests/stroke_testing_utils.cpp)
 kde4_add_unit_test(MoveStrokeTest TESTNAME krita-ui-MoveStrokeTest  ${move_stroke_test_SRCS})
-target_link_libraries(MoveStrokeTest basicflakes kritadefaulttools kritaui kritaimage Qt5::Test)
+target_link_libraries(MoveStrokeTest kritabasicflakes kritadefaulttools kritaui kritaimage Qt5::Test)
 
 ########### next target ###############
 
 set(move_selection_stroke_test_SRCS move_selection_stroke_test.cpp ${CMAKE_SOURCE_DIR}/krita/sdk/tests/stroke_testing_utils.cpp)
 kde4_add_unit_test(MoveSelectionStrokeTest TESTNAME krita-ui-MoveSelectionStrokeTest  ${move_selection_stroke_test_SRCS})
-target_link_libraries(MoveSelectionStrokeTest basicflakes kritadefaulttools kritaui kritaimage Qt5::Test)
+target_link_libraries(MoveSelectionStrokeTest kritabasicflakes kritadefaulttools kritaui kritaimage Qt5::Test)

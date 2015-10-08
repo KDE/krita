@@ -68,7 +68,7 @@
 #include <QVector>
 
 
-#include "kundo2_export.h"
+#include "kritaundo2_export.h"
 
 class QAction;
 class KUndo2CommandPrivate;
@@ -81,7 +81,7 @@ class KActionCollection;
 #include "kundo2commandextradata.h"
 
 
-class KUNDO2_EXPORT KUndo2Command
+class KRITAUNDO2_EXPORT KUndo2Command
 {
     KUndo2CommandPrivate *d;
     int timedID;
@@ -149,7 +149,7 @@ private:
 
 #ifndef QT_NO_UNDOSTACK
 
-class KUNDO2_EXPORT KUndo2QStack : public QObject
+class KRITAUNDO2_EXPORT KUndo2QStack : public QObject
 {
     Q_OBJECT
 //    Q_DECLARE_PRIVATE(KUndo2QStack)
@@ -243,7 +243,7 @@ private:
     friend class KUndo2Group;
 };
 
-class KUNDO2_EXPORT KUndo2Stack : public KUndo2QStack
+class KRITAUNDO2_EXPORT KUndo2Stack : public KUndo2QStack
 {
 public:
     explicit KUndo2Stack(QObject *parent = 0);

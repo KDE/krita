@@ -23,12 +23,12 @@
 
 #include "KoShapeGroupCommand.h"
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <kundo2command.h>
 
 /// The undo / redo command for ungrouping shapes
-class FLAKE_EXPORT KoShapeUngroupCommand : public KoShapeGroupCommand
+class KRITAFLAKE_EXPORT KoShapeUngroupCommand : public KoShapeGroupCommand
 {
 public:
     /**

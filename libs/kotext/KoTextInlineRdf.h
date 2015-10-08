@@ -20,7 +20,7 @@
 #ifndef KO_TEXT_INLINE_RDF_H
 #define KO_TEXT_INLINE_RDF_H
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 // komain
 #include <KoXmlReaderForward.h>
 #include <KoElementReference.h>
@@ -77,7 +77,7 @@ class QTextTableCell;
  * FIXME: createXmlId() should consult with the Calligra codebase when
  * generating new xml:id values during save.
  */
-class KOTEXT_EXPORT KoTextInlineRdf : public QObject
+class KRITATEXT_EXPORT KoTextInlineRdf : public QObject
 {
     Q_OBJECT
 

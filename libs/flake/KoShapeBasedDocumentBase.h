@@ -23,7 +23,7 @@
 #ifndef KOSHAPEBASEDDOCUMENTBASE_H
 #define KOSHAPEBASEDDOCUMENTBASE_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QList>
 
@@ -37,7 +37,7 @@ class KUndo2Command;
  * that owns the shapes should implement. This tends to be the document.
  * @see KoShapeDeleteCommand, KoShapeCreateCommand
  */
-class FLAKE_EXPORT KoShapeBasedDocumentBase
+class KRITAFLAKE_EXPORT KoShapeBasedDocumentBase
 {
 public:
     KoShapeBasedDocumentBase();

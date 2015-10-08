@@ -20,7 +20,7 @@
 #define KOTEXTLOCATOR_H
 
 #include "KoInlineObject.h"
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 class KoTextReference;
 
@@ -29,7 +29,7 @@ class KoTextReference;
  * After inserting this locator you can request things like pageNumber() and chapter() for the
  * place where the locator has been positioned in the document.
  */
-class KOTEXT_EXPORT KoTextLocator : public KoInlineObject
+class KRITATEXT_EXPORT KoTextLocator : public KoInlineObject
 {
     Q_OBJECT
 public:

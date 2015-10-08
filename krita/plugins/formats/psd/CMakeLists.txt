@@ -54,7 +54,4 @@ else ()
 endif ()	
 install(TARGETS kritapsdexport DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
-install( FILES krita_psd_import.desktop 
-               krita_psd_export.desktop  
-DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( PROGRAMS  krita_psd.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

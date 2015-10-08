@@ -23,7 +23,7 @@
 #ifndef _CALLIGRA_VERSION_H_
 #define _CALLIGRA_VERSION_H_
 
-#include "koversion_export.h"
+#include "kritaversion_export.h"
 
 // -- WARNING: do not edit values below, instead edit CALLIGRA_* in /CMakeLists.txt --
 
@@ -204,34 +204,34 @@ namespace Calligra
  * installed when the program was compiled.
  * @return the version number, encoded in a single uint
  */
-KOVERSION_EXPORT unsigned int version();
+KRITAVERSION_EXPORT unsigned int version();
 
 /**
  * Returns the major number of Calligra's version, e.g.
  * 1 for Calligra 1.2.3.
  * @return the major version number
  */
-KOVERSION_EXPORT unsigned int versionMajor();
+KRITAVERSION_EXPORT unsigned int versionMajor();
 
 /**
  * Returns the minor number of Calligra's version, e.g.
  * 2 for Calligra 1.2.3.
  * @return the minor version number
  */
-KOVERSION_EXPORT unsigned int versionMinor();
+KRITAVERSION_EXPORT unsigned int versionMinor();
 
 /**
  * Returns the release of Calligra's version, e.g.
  * 3 for Calligra 1.2.3.
  * @return the release number
  */
-KOVERSION_EXPORT unsigned int versionRelease();
+KRITAVERSION_EXPORT unsigned int versionRelease();
 
 /**
  * Returns the Calligra version as string, e.g. "1.2.3".
  * @return the Calligra version. You can keep the string forever.
  */
-KOVERSION_EXPORT const char *versionString();
+KRITAVERSION_EXPORT const char *versionString();
 }
 
 #endif // _CALLIGRA_VERSION_H_

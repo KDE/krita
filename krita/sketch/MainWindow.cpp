@@ -20,33 +20,20 @@
 
 #include "MainWindow.h"
 
-#include "opengl/kis_opengl.h"
-
 #include <QApplication>
-#include <QResizeEvent>
-#include <QDeclarativeView>
 #include <QDeclarativeContext>
 #include <QDeclarativeEngine>
-#include <QDir>
-#include <QFile>
-#include <QMessageBox>
 #include <QFileInfo>
-#include <QGLWidget>
-#include <QTimer>
-
-#include <QUrl>
-#include <KoResourcePaths.h>
-#include <KoDialog.h>
-#include <kis_debug.h>
 
 #include <kstandarddirs.h>
 #include <kglobal.h>
 
-#include "filter/kis_filter.h"
-#include "filter/kis_filter_registry.h"
-#include "kis_paintop.h"
-#include "kis_paintop_registry.h"
+#include <KoResourcePaths.h>
+#include <KoDialog.h>
 #include <KoZoomController.h>
+
+#include "filter/kis_filter_registry.h"
+#include "kis_paintop_registry.h"
 #include <kis_icon_utils.h>
 
 #include "KisViewManager.h"
@@ -153,9 +140,10 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
 void MainWindow::resetWindowTitle()
 {
-    const QString currentFile = DocumentManager::instance()->settingsManager()->currentFile();
-    const QString fileName =
-        currentFile.startsWith(QLatin1String("temp://")) ? i18n("Untitled") : QFileInfo(currentFile).fileName();
+    QUrl url(DocumentManager::instance()->settingsManager()->currentFile());
+    QString fileName = url.fileName();
+    if(url.scheme() == "temp")
+        fileName = i18n("Untitled");
 
     KoDialog::CaptionFlags flags = KoDialog::HIGCompliantCaption;
     KisDocument* document = DocumentManager::instance()->document();

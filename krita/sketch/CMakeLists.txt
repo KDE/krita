@@ -123,7 +123,7 @@ target_link_libraries(kritasketchlib
     Qt5::Declarative
     Qt5::Gui
     Qt5::Core
-    kowidgets
+    kritawidgets
     kritaui
 )
 
@@ -142,7 +142,6 @@ target_link_libraries(kritasketch
     Qt5::Declarative
     Qt5::Gui
     Qt5::Core
-    KF5::KDELibs4Support
     kritaui
     kritasketchlib
 )
@@ -162,7 +161,7 @@ target_link_libraries(kritasketchplugin
     Qt5::Declarative
     Qt5::Gui
     Qt5::Core
-    kowidgets
+    kritawidgets
     kritaui
     kritasketchlib
 )

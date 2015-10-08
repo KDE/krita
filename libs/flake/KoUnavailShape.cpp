@@ -152,7 +152,7 @@ KoUnavailShape::Private::Private(KoUnavailShape* qq)
 , q(qq)
 {
     // Get the question mark "icon".
-    questionMark.load(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligra/icons/questionmark.png"));
+    questionMark.load(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "krita/icons/questionmark.png"));
 }
 
 KoUnavailShape::Private::~Private()
@@ -235,7 +235,7 @@ void KoUnavailShape::Private::draw(QPainter &painter) const
         // Get the question mark "icon".
         // FIXME: We should be able to use d->questionMark here.
         QPixmap questionMark;
-        questionMark.load(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligra/icons/questionmark.png"));
+        questionMark.load(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "krita/icons/questionmark.png"));
 
         // The size of the image is:
         //  - the size of the shape if  shapesize < 2cm

@@ -26,7 +26,7 @@ const int INVALID_OUTLINE_LEVEL = 0;
 
 class KoXmlWriter;
 
-class KOTEXT_EXPORT IndexEntry
+class KRITATEXT_EXPORT IndexEntry
 {
 public:
     enum IndexEntryName {UNKNOWN, LINK_START, CHAPTER, SPAN, TEXT, TAB_STOP, PAGE_NUMBER, LINK_END, BIBLIOGRAPHY};
@@ -62,7 +62,7 @@ public:
 };
 
 
-class  KOTEXT_EXPORT IndexEntrySpan : public IndexEntry
+class  KRITATEXT_EXPORT IndexEntrySpan : public IndexEntry
 {
 public:
     explicit IndexEntrySpan(const QString &_styleName);
@@ -81,7 +81,7 @@ public:
 };
 
 
-class KOTEXT_EXPORT IndexEntryTabStop : public IndexEntry
+class KRITATEXT_EXPORT IndexEntryTabStop : public IndexEntry
 {
 public:
     explicit IndexEntryTabStop(const QString &_styleName);
@@ -111,7 +111,7 @@ public:
     IndexEntry *clone();
 };
 
-class KOTEXT_EXPORT TocEntryTemplate
+class KRITATEXT_EXPORT TocEntryTemplate
 {
 public:
     TocEntryTemplate();
@@ -125,7 +125,7 @@ public:
 };
 
 
-class KOTEXT_EXPORT IndexTitleTemplate
+class KRITATEXT_EXPORT IndexTitleTemplate
 {
 public:
     void saveOdf(KoXmlWriter * writer) const;
@@ -136,7 +136,7 @@ public:
 };
 
 
-class KOTEXT_EXPORT IndexSourceStyle
+class KRITATEXT_EXPORT IndexSourceStyle
 {
 public:
     IndexSourceStyle(const IndexSourceStyle& indexSourceStyle);
@@ -148,7 +148,7 @@ public:
 };
 
 
-class KOTEXT_EXPORT IndexSourceStyles
+class KRITATEXT_EXPORT IndexSourceStyles
 {
 public:
     IndexSourceStyles();
@@ -159,7 +159,7 @@ public:
     QList<IndexSourceStyle> styles;
 };
 
-class KOTEXT_EXPORT IndexEntryBibliography : public IndexEntry
+class KRITATEXT_EXPORT IndexEntryBibliography : public IndexEntry
 {
 public:
     explicit IndexEntryBibliography(const QString &_styleName);
@@ -169,7 +169,7 @@ public:
     QString dataField;
 };
 
-class KOTEXT_EXPORT BibliographyEntryTemplate
+class KRITATEXT_EXPORT BibliographyEntryTemplate
 {
 public:
     BibliographyEntryTemplate();

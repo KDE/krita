@@ -20,9 +20,9 @@
 
 #include <QDebug>
 #include <QLoggingCategory>
-#include <kovectorimage_export.h>
+#include <kritavectorimage_export.h>
 
-extern const KOVECTORIMAGE_EXPORT QLoggingCategory &VECTOR_IMAGE_LOG();
+extern const KRITAVECTORIMAGE_EXPORT QLoggingCategory &VECTOR_IMAGE_LOG();
 
 #define debugVectorImage qCDebug(VECTOR_IMAGE_LOG)
 #define warnVectorImage qCWarning(VECTOR_IMAGE_LOG)

@@ -21,7 +21,7 @@
 #define KOGRADIENTBACKGROUND_H
 
 #include "KoShapeBackground.h"
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QTransform>
 
@@ -29,7 +29,7 @@ class QGradient;
 class KoGradientBackgroundPrivate;
 
 /// A gradient shape background
-class FLAKE_EXPORT KoGradientBackground : public KoShapeBackground
+class KRITAFLAKE_EXPORT KoGradientBackground : public KoShapeBackground
 {
 public:
     /**

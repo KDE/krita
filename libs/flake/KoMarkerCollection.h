@@ -20,7 +20,7 @@
 #ifndef KOMARKERCOLLECTION_H
 #define KOMARKERCOLLECTION_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QObject>
 #include <QList>
@@ -31,7 +31,7 @@ class KoMarker;
 class KoXmlElement;
 class KoShapeLoadingContext;
 
-class FLAKE_EXPORT KoMarkerCollection : public QObject
+class KRITAFLAKE_EXPORT KoMarkerCollection : public QObject
 {
     Q_OBJECT
 public:

@@ -20,7 +20,7 @@
 #ifndef _KO_SHAPE_CONFIG_FACTORY_
 #define _KO_SHAPE_CONFIG_FACTORY_
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QString>
 
@@ -35,7 +35,7 @@ class KoShapeConfigWidgetBase;
  * @see KoShapeFactoryBase::panelFactories()
  * @see KoShapeConfigWidgetBase
  */
-class FLAKE_EXPORT KoShapeConfigFactoryBase
+class KRITAFLAKE_EXPORT KoShapeConfigFactoryBase
 {
 public:
     /// default constructor

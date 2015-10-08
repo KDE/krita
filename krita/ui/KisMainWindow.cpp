@@ -22,6 +22,8 @@
 
 #include "KisMainWindow.h"
 
+#include <KoConfig.h>
+
 // qt includes
 #include <QApplication>
 #include <QByteArray>
@@ -51,30 +53,27 @@
 #include <QMenu>
 #include <QMenuBar>
 
-#include <krecentdirs.h>
 #include <kactioncollection.h>
 #include <QAction>
 #include <kactionmenu.h>
 #include <kis_debug.h>
-#include <kdiroperator.h>
 #include <kedittoolbar.h>
-#include <kfileitem.h>
 #include <khelpmenu.h>
 #include <klocalizedstring.h>
 
+#ifdef HAVE_KIO
 #include <krecentdocument.h>
+#endif
 #include <krecentfilesaction.h>
 #include <KoResourcePaths.h>
 #include <ktoggleaction.h>
 #include <ktoolbar.h>
-#include <kurlcombobox.h>
 #include <kmainwindow.h>
 #include <kxmlguiwindow.h>
 #include <kxmlguifactory.h>
 #include <kxmlguiclient.h>
 #include <kguiitem.h>
 
-#include <KoConfig.h>
 #include "KoDockFactoryBase.h"
 #include "KoDockWidgetTitleBar.h"
 #include "KoDocumentInfoDlg.h"
@@ -607,13 +606,17 @@ void KisMainWindow::addRecentURL(const QUrl &url)
             for (QStringList::ConstIterator it = tmpDirs.begin() ; ok && it != tmpDirs.end() ; ++it)
                 if (path.contains(*it))
                     ok = false; // it's in the tmp resource
+#ifdef HAVE_KIO
             if (ok) {
                 KRecentDocument::add(path);
-                KRecentDirs::add(":OpenDialog", QFileInfo(path).dir().canonicalPath());
             }
-        } else {
+#endif
+        }
+#ifdef HAVE_KIO
+        else {
             KRecentDocument::add(url.url(QUrl::StripTrailingSlash), true);
         }
+#endif
         if (ok) {
             d->recentFiles->addUrl(url);
         }
@@ -703,6 +706,11 @@ bool KisMainWindow::openDocument(const QUrl &url)
 
 bool KisMainWindow::openDocumentInternal(const QUrl &url, KisDocument *newdoc)
 {
+    if (!url.isLocalFile()) {
+        qDebug() << "KisMainWindow::openDocumentInternal. Not a local file:" << url;
+        return false;
+    }
+
     if (!newdoc) {
         newdoc = KisPart::instance()->createDocument();
     }
@@ -720,8 +728,7 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, KisDocument *newdoc)
     KisPart::instance()->addDocument(newdoc);
     updateReloadFileAction(newdoc);
 
-    KFileItem file(url, newdoc->mimeType(), KFileItem::Unknown);
-    if (!file.isWritable()) {
+    if (!QFileInfo(url.toLocalFile()).isWritable()) {
         setReadWrite(false);
     }
     return true;
@@ -1202,10 +1209,8 @@ void KisMainWindow::slotFileOpen()
     }
 }
 
-void KisMainWindow::slotFileOpenRecent(const QUrl & url)
+void KisMainWindow::slotFileOpenRecent(const QUrl &url)
 {
-    // Create a copy, because the original QUrl in the map of recent files in
-    // KRecentFilesAction may get deleted.
     (void) openDocument(QUrl(url));
 }
 
@@ -1388,7 +1393,7 @@ KisPrintJob* KisMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFile
         QString defaultDir = group.readEntry("SavePdfDialog");
         if (defaultDir.isEmpty())
             defaultDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
-        QUrl startUrl = QUrl(defaultDir);
+        QUrl startUrl = QUrl::fromLocalFile(defaultDir);
         KisDocument* pDoc = d->activeView->document();
         /** if document has a file name, take file name and replace extension with .pdf */
         if (pDoc && pDoc->url().isValid()) {

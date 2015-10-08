@@ -1,14 +1,14 @@
 add_subdirectory( tests )
 add_subdirectory( pics )
 
-include_directories(${KOTEXT_INCLUDES} ${KOODF_INCLUDES} ${PIGMENT_INCLUDES})
+include_directories(${KOWIDGETS_INCLUDES})
 include_directories(${CMAKE_SOURCE_DIR}/libs/widgetutils)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 if (LIBATTICA_FOUND)
     include_directories(${LIBATTICA_INCLUDE_DIR})
 endif ()
 
-set(kowidgets_LIB_SRCS
+set(kritawidgets_LIB_SRCS
     KoGradientEditWidget.cpp
     KoResourcePaths.cpp
     KoVBox.cpp
@@ -21,7 +21,6 @@ set(kowidgets_LIB_SRCS
     KoResourceTaggingManager.cpp
     KoResourceItemChooserContextMenu.cpp
     KoAspectButton.cpp
-    KoCsvImportDialog.cpp
     KoPageLayoutDialog.cpp
     KoPageLayoutWidget.cpp
     KoPagePreviewWidget.cpp
@@ -86,8 +85,6 @@ set(kowidgets_LIB_SRCS
     KoModeBoxFactory.cpp
 
     KoDocumentInfoDlg.cpp
-    KoDocumentInfoPropsPage.cpp
-
     KoGlobal.cpp
     KoTableView.cpp
     
@@ -95,81 +92,33 @@ set(kowidgets_LIB_SRCS
 
     WidgetsDebug.cpp
 
+    kis_url_requester.cpp
 )
 
-ki18n_wrap_ui( kowidgets_LIB_SRCS
+ki18n_wrap_ui( kritawidgets_LIB_SRCS
     KoConfigAuthorPage.ui
-    KoCsvImportDialog.ui
     koDocumentInfoAboutWidget.ui
     koDocumentInfoAuthorWidget.ui
     KoEditColorSet.ui
     KoPageLayoutWidget.ui
     KoShadowConfigWidget.ui
+    wdg_url_requester.ui
 )
 
 
-add_library(kowidgets SHARED ${kowidgets_LIB_SRCS})
-generate_export_header(kowidgets BASE_NAME kowidgets)
-target_link_libraries(kowidgets kotext pigmentcms kowidgetutils KF5::GuiAddons KF5::WidgetsAddons KF5::ConfigCore KF5::Codecs KF5::IconThemes KF5::Completion)
-
-if(GHNS)
-    target_link_libraries(kowidgets KF5::NewStuff)
-endif ()
+add_library(kritawidgets SHARED ${kritawidgets_LIB_SRCS})
+generate_export_header(kritawidgets BASE_NAME kritawidgets)
+target_link_libraries(kritawidgets kritatext kritapigment kritawidgetutils KF5::GuiAddons KF5::WidgetsAddons KF5::ConfigCore KF5::IconThemes KF5::Completion)
 
 if(X11_FOUND)
-    target_link_libraries(kowidgets Qt5::X11Extras ${X11_LIBRARIES})
+    target_link_libraries(kritawidgets Qt5::X11Extras ${X11_LIBRARIES})
 endif()
 
 
-target_link_libraries(kowidgets LINK_INTERFACE_LIBRARIES kotext pigmentcms kowidgetutils)
+target_link_libraries(kritawidgets LINK_INTERFACE_LIBRARIES kritatext kritapigment kritawidgetutils)
 
-set_target_properties(kowidgets PROPERTIES
+set_target_properties(kritawidgets PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
-install(TARGETS kowidgets  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-install( FILES
-    KoGlobal.h
-    KoResourceItemChooserContextMenu.h
-    KoGenericRegistryModel.h
-    KoPageLayoutDialog.h
-    KoPageLayoutWidget.h
-    KoPagePreviewWidget.h
-    KoPositionSelector.h
-    ${CMAKE_CURRENT_BINARY_DIR}/kowidgets_export.h
-    KoZoomAction.h
-    KoZoomController.h
-    KoZoomInput.h
-    KoDpi.h
-    KoZoomHandler.h
-    KoZoomMode.h
-    KoGlobal.h
-    KoColorPatch.h
-    KoStrokeConfigWidget.h
-    KoFillConfigWidget.h
-    KoShadowConfigWidget.h
-    KoColorPopupAction.h
-    KoColorSetWidget.h
-    KoColorSlider.h
-    KoDualColorButton.h
-    KoEditColorSetDialog.h
-    KoTriangleColorSelector.h
-    KoResourceItemChooser.h
-    KoResourceSelector.h
-    KoResourceServer.h
-    KoResourceServerAdapter.h
-    KoResourceServerObserver.h
-    KoResourceServerProvider.h
-    KoResourceTagStore.h
-    KoLineStyleSelector.h
-    KoDockWidgetTitleBar.h
-    KoDockWidgetTitleBarButton.h
-
-    KoResourceModelBase.h
-
-    KoGlobal.h
-
-    DESTINATION
-    ${INCLUDE_INSTALL_DIR}/calligra
-COMPONENT Devel)
+install(TARGETS kritawidgets  ${INSTALL_TARGETS_DEFAULT_ARGS})

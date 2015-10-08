@@ -24,9 +24,9 @@
 
 #include <QWidget>
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
-class KOWIDGETS_EXPORT KoConfigAuthorPage : public QWidget
+class KRITAWIDGETS_EXPORT KoConfigAuthorPage : public QWidget
 {
     Q_OBJECT
 

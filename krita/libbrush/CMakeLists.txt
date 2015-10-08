@@ -24,9 +24,9 @@ add_library(kritalibbrush SHARED ${kritalibbrush_LIB_SRCS} )
 generate_export_header(kritalibbrush BASE_NAME kritabrush EXPORT_MACRO_NAME BRUSH_EXPORT)
 
 if (WIN32)
-    target_link_libraries(kritalibbrush kritaimage kowidgets Qt5::Svg ${WIN32_PLATFORM_NET_LIBS})
+    target_link_libraries(kritalibbrush kritaimage kritawidgets Qt5::Svg ${WIN32_PLATFORM_NET_LIBS})
 else ()
-    target_link_libraries(kritalibbrush kritaimage kowidgets Qt5::Svg)
+    target_link_libraries(kritalibbrush kritaimage kritawidgets Qt5::Svg)
 endif ()
 
 
@@ -36,7 +36,7 @@ if(HAVE_VC)
 #  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
 endif()
 
-target_link_libraries(kritalibbrush LINK_INTERFACE_LIBRARIES kritaimage kowidgets Qt5::Svg)
+target_link_libraries(kritalibbrush LINK_INTERFACE_LIBRARIES kritaimage kritawidgets Qt5::Svg)
 
 set_target_properties(kritalibbrush PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

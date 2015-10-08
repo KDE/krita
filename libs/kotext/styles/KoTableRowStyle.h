@@ -24,7 +24,7 @@
 #define KOTABLEROWSTYLE_H
 
 #include "KoText.h"
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 #include <KoXmlReaderForward.h>
 
@@ -45,7 +45,7 @@ class QVariant;
  * @see KoStyleManager
  * @see KoTableRowAndColumnStyleManager
  */
-class KOTEXT_EXPORT KoTableRowStyle
+class KRITATEXT_EXPORT KoTableRowStyle
 {
 public:
     enum Property {

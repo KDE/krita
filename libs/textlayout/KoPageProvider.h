@@ -21,13 +21,13 @@
 #ifndef KOPAGEPROVIDER_H
 #define KOPAGEPROVIDER_H
 
-#include "kotextlayout_export.h"
+#include "kritatextlayout_export.h"
 
 class KoShape;
 class KoTextPage;
 
 /// \internal  this is a hack for kpresenter
-class KOTEXTLAYOUT_EXPORT KoPageProvider
+class KRITATEXTLAYOUT_EXPORT KoPageProvider
 {
 public:
     KoPageProvider();

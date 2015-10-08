@@ -20,7 +20,7 @@
 #ifndef KOTEXTLAYOUTROOTAREAPROVIDER_H
 #define KOTEXTLAYOUTROOTAREAPROVIDER_H
 
-#include "kotextlayout_export.h"
+#include "kritatextlayout_export.h"
 
 #include <QList>
 #include <QString>
@@ -45,7 +45,7 @@ struct RootAreaConstraint {
  * When laying out text we need an area where upon the text will be placed.
  * A KoTextLayoutRootAreaProvider provides the layout process with such areas
  */
-class KOTEXTLAYOUT_EXPORT KoTextLayoutRootAreaProvider
+class KRITATEXTLAYOUT_EXPORT KoTextLayoutRootAreaProvider
 {
 public:
     /// constructor

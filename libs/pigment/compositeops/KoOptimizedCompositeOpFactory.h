@@ -20,7 +20,7 @@
 #ifndef KOOPTIMIZEDCOMPOSITEOPFACTORY_H
 #define KOOPTIMIZEDCOMPOSITEOPFACTORY_H
 
-#include "pigment_export.h"
+#include "kritapigment_export.h"
 
 class KoCompositeOp;
 class KoColorSpace;
@@ -37,7 +37,7 @@ class KoColorSpace;
  *    that causes 60% performance degradation.
  */
 
-class PIGMENTCMS_EXPORT KoOptimizedCompositeOpFactory
+class KRITAPIGMENT_EXPORT KoOptimizedCompositeOpFactory
 {
 public:
     static KoCompositeOp* createAlphaDarkenOp32(const KoColorSpace *cs);

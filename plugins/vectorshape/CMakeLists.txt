@@ -1,8 +1,8 @@
-project( vectorshape)
+project(vectorshape)
 
-add_definitions(-DTRANSLATION_DOMAIN=\"calligra_shape_vector\")
+add_definitions(-DTRANSLATION_DOMAIN=\"krita_shape_vector\")
 
-include_directories(${FLAKE_INCLUDES} ${VECTORIMAGE_INCLUDES})
+include_directories(${KOWIDGETS_INCLUDES} ${VECTORIMAGE_INCLUDES})
 
 set ( VectorShape_SRCS
     VectorShapePlugin.cpp
@@ -19,17 +19,17 @@ set ( VectorShape_SRCS
 #ki18n_wrap_ui(VectorShape_SRCS
 #)
 
-add_library(calligra_shape_vector MODULE ${VectorShape_SRCS})
-kcoreaddons_desktop_to_json(calligra_shape_vector calligra_shape_vector.desktop)
+add_library(krita_shape_vector MODULE ${VectorShape_SRCS})
+kcoreaddons_desktop_to_json(krita_shape_vector calligra_shape_vector.desktop)
 
-target_link_libraries(calligra_shape_vector flake kovectorimage KF5::I18n KF5::KDELibs4Support Qt5::Svg)
+target_link_libraries(krita_shape_vector kritaflake kritawidgets kritavectorimage KF5::I18n Qt5::Svg)
 
-install(TARGETS calligra_shape_vector DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS krita_shape_vector DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
 if (SHARED_MIME_INFO_FOUND)
-    install(FILES calligra_svm.xml DESTINATION ${XDG_MIME_INSTALL_DIR})
+    install(FILES krita_svm.xml DESTINATION ${XDG_MIME_INSTALL_DIR})
     update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})
 endif ()
 

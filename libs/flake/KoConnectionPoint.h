@@ -21,12 +21,12 @@
 #ifndef KOCONNECTIONPOINT_H
 #define KOCONNECTIONPOINT_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include <QPointF>
 #include <QMap>
 
 /// Data of a single connection point
-struct FLAKE_EXPORT KoConnectionPoint
+struct KRITAFLAKE_EXPORT KoConnectionPoint
 {
     /// Default connection point ids
     enum PointId {

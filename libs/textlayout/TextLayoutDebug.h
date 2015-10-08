@@ -20,9 +20,9 @@
 
 #include <QDebug>
 #include <QLoggingCategory>
-#include <kotextlayout_export.h>
+#include <kritatextlayout_export.h>
 
-extern const KOTEXTLAYOUT_EXPORT QLoggingCategory &TEXT_LAYOUT_LOG();
+extern const KRITATEXTLAYOUT_EXPORT QLoggingCategory &TEXT_LAYOUT_LOG();
 
 #define debugTextLayout qCDebug(TEXT_LAYOUT_LOG)
 #define warnTextLayout qCWarning(TEXT_LAYOUT_LOG)

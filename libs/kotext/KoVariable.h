@@ -22,7 +22,7 @@
 
 // Calligra libs
 #include "KoInlineObject.h"
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 class KoProperties;
 class QWidget;
@@ -36,7 +36,7 @@ class KoVariablePrivate;
  * is used as text.  This class is pretty boring in that it has just a setValue() to alter the
  * text shown; we depend on plugin writers to create more exciting ways to update variables.
  */
-class KOTEXT_EXPORT KoVariable : public KoInlineObject
+class KRITATEXT_EXPORT KoVariable : public KoInlineObject
 {
     Q_OBJECT
 public:

@@ -21,7 +21,7 @@
 
 #include "styles/KoParagraphStyle.h"
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 class QRectF;
 class QPainter;
@@ -34,7 +34,7 @@ class QPainter;
  * to allow multiple paragraphs to share one border.
  *
  */
-class KOTEXT_EXPORT KoTextBlockBorderData
+class KRITATEXT_EXPORT KoTextBlockBorderData
 {
 public:
     /// Enum used to differentiate between the 4 types of borders this class maintains

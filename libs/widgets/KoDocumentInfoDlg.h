@@ -27,7 +27,7 @@ class KoDocumentInfo;
 class KPageWidgetItem;
 class KoPageWidgetItem;
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 /**
  * @short The dialog that shows information about the document
@@ -47,7 +47,7 @@ class KoPageWidgetItem;
  * KPageDialog and uses the face type Tabbed.
  */
 
-class KOWIDGETS_EXPORT KoDocumentInfoDlg : public KPageDialog
+class KRITAWIDGETS_EXPORT KoDocumentInfoDlg : public KPageDialog
 {
     Q_OBJECT
 
@@ -81,8 +81,6 @@ protected:  // QWidget API
 private Q_SLOTS:
     /** Connected with clicked() from pbReset - Reset parts of the metadata */
     void slotResetMetaData();
-    /** Connected with clicked() from pbEncrypt - Toggle the encryption of the document */
-    void slotToggleEncryption();
 
 Q_SIGNALS:
     void saveRequested();
@@ -94,8 +92,6 @@ private:
     void initAuthorTab();
     /** Saves the changed data back to the KoDocumentInfo class */
     void saveAboutData();
-    /** Saves the document with changed encryption */
-    void saveEncryption();
 
     class KoDocumentInfoDlgPrivate;
     KoDocumentInfoDlgPrivate * const d;

@@ -37,6 +37,6 @@ Name[zh_CN]=滤镜效果
 Name[zh_TW]=過濾器效果
 X-KDE-ServiceTypes=Calligra/FilterEffect
 Type=Service
-X-KDE-Library=karbon_filtereffects
+X-KDE-Library=krita_filtereffects
 X-Flake-MinVersion=28
 X-Flake-PluginVersion=28

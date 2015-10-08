@@ -39,7 +39,7 @@ SelectionDecorator::SelectionDecorator(KoFlake::SelectionHandle arrows,
 {
 #if 0
     if(s_rotateCursor == 0) {
-        s_rotateCursor->load(KoResourcePaths::locate("data", "calligra/icons/cursor_rotate.png"));
+        s_rotateCursor->load(KoResourcePaths::locate("data", "krita/icons/cursor_rotate.png"));
     }
 #endif
 }

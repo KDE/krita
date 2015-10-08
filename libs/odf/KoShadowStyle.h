@@ -21,7 +21,7 @@
 #ifndef KOSHADOWSTYLE_H
 #define KOSHADOWSTYLE_H
 
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 
 #include <QColor>
 #include <QMetaType>
@@ -40,7 +40,7 @@ class KoShadowStylePrivate;
  * - paragraphs,
  * - tables and table cells.
  */
-class KOODF_EXPORT KoShadowStyle
+class KRITAODF_EXPORT KoShadowStyle
 {
 public:
     /// Default constructor, constructs an empty shadow
@@ -51,7 +51,7 @@ public:
 
 
     // Holds data about one of the shadow this shadow contains
-    struct KOODF_EXPORT ShadowData {
+    struct KRITAODF_EXPORT ShadowData {
         ShadowData();
         bool operator==(const ShadowData &other) const;
         QColor color;

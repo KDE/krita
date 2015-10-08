@@ -22,7 +22,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #define KOTEXTSHAREDSAVINGDATA_H
 
 #include <KoSharedSavingData.h>
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 #include <QMap>
 #include <QSharedPointer>
@@ -39,7 +39,7 @@ class Model;
 class QString;
 
 
-class KOTEXT_EXPORT KoTextSharedSavingData : public KoSharedSavingData
+class KRITATEXT_EXPORT KoTextSharedSavingData : public KoSharedSavingData
 {
 public:
     KoTextSharedSavingData();

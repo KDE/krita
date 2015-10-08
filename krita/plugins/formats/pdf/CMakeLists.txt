@@ -15,5 +15,4 @@ target_link_libraries(kritapdfimport kritaui  ${POPPLER_LIBRARY} )
 install(TARGETS kritapdfimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
-install( FILES  krita_pdf_import.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( PROGRAMS  krita_pdf.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

@@ -22,12 +22,12 @@
 #include <QFrame>
 
 #include <KoColor.h>
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 /**
  *  The small widget showing the selected color
  */
-class KOWIDGETS_EXPORT KoColorPatch : public QFrame
+class KRITAWIDGETS_EXPORT KoColorPatch : public QFrame
 {
   Q_OBJECT
 public:

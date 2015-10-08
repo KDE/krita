@@ -1,8 +1,11 @@
-project(calligra)
+project(krita)
 
 message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 
 cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
+
+set(MIN_QT_VERSION 5.3.0)
+set(MIN_FRAMEWORKS_VERSION 5.7.0)
 
 cmake_policy(SET CMP0002 OLD)
 #cmake_policy CMP0017 was introduced in version 2.8.4
@@ -76,7 +79,7 @@ set(GENERIC_CALLIGRA_LIB_SOVERSION "${GENERIC_CALLIGRA_LIB_VERSION_MAJOR}")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
                       "${CMAKE_SOURCE_DIR}/cmake/modules")
-LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/transitional")
+LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/kde_macro")
 
 message("Module path:" ${CMAKE_MODULE_PATH})
 
@@ -118,14 +121,8 @@ option(USEOPENGL "Allow the use of OpenGL for Krita" ON)
 if (WIN32)
     option(USE_BREAKPAD "Build the crash handler for Krita (only on windows)" OFF)
 endif ()
-option(GHNS "support Get Hot New Stuff" OFF)
-# TODO: orthogonal setting, results in minimal features, yet needs to be defined
-# option(TINY "compile a tiny Calligra" OFF)
 
-option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only." ON)
-
-# TODO: remove option and migration code below before 3.0 release
-option(CREATIVEONLY "compile only Karbon and Krita" OFF)
+option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only." OFF)
 
  #######################
 ########################
@@ -195,83 +192,68 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings)
 include(FeatureSummary)
+include(KDE4Macros)
 
-find_package(KF5 5.7.0 REQUIRED COMPONENTS 
+find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
         Archive 
-        Codecs 
         Completion
         Config 
-        ConfigWidgets 
         CoreAddons
-        Emoticons 
-        GlobalAccel
         GuiAddons 
         I18n 
         IconThemes 
         ItemModels 
         ItemViews
-        KDELibs4Support
-        KIO 
-        Kross 
-        Parts 
-        Sonnet
-        TextEditor 
-        TextWidgets 
-        ThreadWeaver
-        Wallet 
         WidgetsAddons 
-        WindowSystem
         XmlGui 
     OPTIONAL_COMPONENTS
-        NotifyConfig
-        Activities
-        KHtml
+        KIO
 )
-if(KF5_Activities_FOUND)
-    set(HAVE_KACTIVITIES TRUE)
-endif()
 
-find_package(Qt5 5.3.0 REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport
-                                           Script Svg Test Concurrent)
-find_package(Qt5 5.3.0 COMPONENTS UiTools Sql WebKit WebKitWidgets DBus Declarative Qml Quick X11Extras)
 
-set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
-set(QT_QTWEBKIT_FOUND ${Qt5WebKit_FOUND})
-set(QT_QTDECLARATIVE_FOUND ${Qt5Declarative_FOUND})
+find_package(Qt5 ${MIN_QT_VERSION} REQUIRED COMPONENTS
+        Core 
+        Gui 
+        Widgets 
+        Xml 
+        Network 
+        PrintSupport
+        Script 
+        Svg 
+        Test 
+        Concurrent
+    OPTIONAL_COMPONENTS
+        UiTools
+        Qml
+        Quick
+        X11Extras
+        DBus
+)
+
 set(QT_QTQUICK_FOUND ${Qt5Quick_FOUND})
 
 set(QT_QTTEST_LIBRARY Qt5::Test)
 
 if (USEOPENGL)
-    find_package(Qt5 5.3.0 REQUIRED OpenGL)
+    find_package(Qt5 ${MIN_QT_VERSION} REQUIRED OpenGL)
     set(QT_QTOPENGL_FOUND ${Qt5OpenGL_FOUND})
+    if (NOT WIN32)
+        find_package(Qt5 ${MIN_QT_VERSION} REQUIRED X11Extras)
+    endif()
 endif ()
-
-
-
 
 include (MacroLibrary)
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
 include (ECMInstallIcons)
 
-if (GHNS)
-    find_package(Attica)
-    find_package(NewStuff)
-    macro_log_feature(LIBATTICA_FOUND "LibAttica" "Attica is used for Get Hot New Stuff." "https://projects.kde.org/projects/kdesupport/attica" FALSE "" "You need at least version 3.0 for uploading of resources to work.")
-
-    if (NOT LIBATTICA_FOUND)
-        set(GHNS FALSE)
-    else ()
-        message(STATUS "WARNING: You are compiling with Get Hot New Stuff enabled. Do not do that when building distribution packages. GHNS is unusable these days until someone starts maintaining it again.")
-    endif ()
-endif ()
-
 macro_ensure_out_of_source_build("Compiling Calligra inside the source directory is not possible. Please refer to the build instruction http://community.kde.org/Calligra/Building/Building_Calligra")
+
+macro_bool_to_01(KF5KIO_FOUND HAVE_KIO)
 
 find_package(X11)
 if(X11_FOUND)
-    find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
+    find_package(Qt5 ${MIN_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
                  X11Extras
     )
     set(HAVE_X11 TRUE)
@@ -288,7 +270,9 @@ add_definitions(
   -DQT_USE_FAST_OPERATOR_PLUS
   -DQT_USE_FAST_CONCATENATION
   -DQT_NO_URL_CAST_FROM_STRING
+  -DQT_DISABLE_DEPRECATED_BEFORE=0
 )
+
 
 # only with this definition will all the FOO_TEST_EXPORT macro do something
 # TODO: check if this can be moved to only those places which make use of it,
@@ -306,14 +290,8 @@ if(WIN32)
     set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
 endif()
 
-# set custom calligra plugin installdir
-set(CALLIGRA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/calligra)
-
-# TEMPORARY: for initial Qt5/KF5 build porting phase deprecation warnings are only annoying noise
-# remove once code porting phase starts, perhaps first locally in product subdirs
-if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
-    add_definitions(-Wno-deprecated -Wno-deprecated-declarations)
-endif ()
+# set custom krita plugin installdir
+set(CALLIGRA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/krita)
 
  ###########################
 ############################
@@ -384,82 +362,10 @@ macro_bool_to_01(GSL_FOUND HAVE_GSL)
 configure_file(config-gsl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gsl.h )
 
 ##
-## Test for Phonon4Qt5
-##
-find_package(Phonon4Qt5)
-macro_log_feature(Phonon4Qt5_FOUND "Phonon4Qt5" "Abstraction lib for multimedia applications" "http://www.kde.org/" FALSE "" "Required by Stage event actions and Videoshape plugin")
-
-##
-## Test for KF5CalendarCore
-##
-find_package(KF5CalendarCore CONFIG)
-macro_log_feature(KF5CalendarCore_FOUND "KF5CalendarCore" "KDE Calendar Library" "http://www.kde.org/" FALSE "" "Required by Plan Ical export and optionally used by semantic item Event")
-
-##
-## Test for KF5Contacts
-##
-find_package(KF5Contacts CONFIG)
-macro_log_feature(KF5Contacts_FOUND "KF5Contacts" "KDE Address book Library" "http://www.kde.org/" FALSE "" "Optionally used by semantic item Contact")
-
-##
-## Test for KF5AkonadiContact
-##
-find_package(KF5AkonadiContact CONFIG)
-macro_log_feature(KF5AkonadiContact_FOUND "KF5AkonadiContact" "Library for Accessing Contacts stored in Akonadi" "http://www.kde.org/" FALSE "" "Optionally used by Plan")
-
-##
-## Test for KF5AkonadiCore
-##
-find_package(KF5Akonadi CONFIG)
-macro_log_feature(KF5Akonadi_FOUND "KF5Akonadi" "Library for general Access to Akonadi" "http://www.kde.org/" FALSE "" "Optionally used by semantic items Event and Contact")
-
-##
-## Test for KGantt
-##
-macro_optional_find_package(KGantt 2.6.0)
-macro_log_feature(KGantt_FOUND "KGantt" "Library for creating Gantt diagrams (part of KDiagram)" "http://www.kde.org/" FALSE "" "Required by Plan")
-
-##
-## Test for KChart
-##
-macro_optional_find_package(KChart 2.6.0)
-macro_log_feature(KChart_FOUND "KChart" "Library for creating business charts (part of KDiagram)" "http://www.kde.org/" FALSE "" "Required by Chart shape and Plan")
-
-##
-## Test for KDb
-##
-macro_optional_find_package(KDb 1.0.0)
-macro_log_feature(KDb_FOUND "KDb" "A database connectivity and creation framework"
-                            "http://community.kde.org/KDb" FALSE "" "Required by Kexi and its plugins")
-
-##
-## Test for KReport
-##
-macro_optional_find_package(KReport 2.96.1)
-if (KReport_FOUND AND KREPORT_SCRIPTING)
-    set(KReport_WITH_SCRIPTING_FOUND TRUE)
-endif()
-macro_log_feature(KReport_WITH_SCRIPTING_FOUND "KReport" "A framework for the creation and generation of reports in multiple formats (scripting support required)"
-                                               "http://community.kde.org/KReport" FALSE "" "Required by Kexi and Plan")
-
-##
-## Test for KProperty
-##
-macro_optional_find_package(KProperty 2.96.0)
-macro_log_feature(KProperty_FOUND "KProperty" "A property editing framework with editor widget"
-                                  "http://community.kde.org/KProperty" FALSE "" "Required by Kexi")
-
-##
 ## Test for eigen3
 ##
 macro_optional_find_package(Eigen3)
 macro_log_feature(EIGEN3_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "3.0" "Required by Calligra Sheets and Krita")
-
-##
-## Test for QCA2
-##
-macro_optional_find_package(Qca-qt5 2.1.0)
-macro_log_feature(Qca-qt5_FOUND "QCA" "Qt Cryptographic Architecture" "http:/download.kde.org/stable/qca-qt5" FALSE "2.0" "Required for encrypted OpenDocument files and encrypted xls files support (available as a module in kdesupport)")
 
 ##
 ## Test for exiv2
@@ -468,45 +374,6 @@ set(EXIV2_MIN_VERSION "0.16")
 macro_optional_find_package(Exiv2)
 macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata library and tools" "http://www.exiv2.org" FALSE "0.16" "Required by Krita")
 
-##
-## Test for soprano
-##
-# QT5TODO: push for released (and maintained) Qt5 version of Soprano, T462, T461
-# macro_optional_find_package(Soprano)
-set(Soprano_FOUND FALSE)
-macro_log_feature(Soprano_FOUND "Soprano" "RDF handling library" "http://soprano.sourceforge.net/" FALSE "" "Required to handle RDF metadata in ODF")
-if(NOT Soprano_FOUND)
-    set(SOPRANO_INCLUDE_DIR "")
-endif()
-
-
-##
-## Test for marble
-##
-set(MARBLE_MIN_VERSION "0.19.2")
-macro_optional_find_package(CalligraMarble)
-if(NOT MARBLE_FOUND)
-    set(CAN_USE_MARBLE FALSE)
-    set(MARBLE_INCLUDE_DIR "")
-else()
-    set(CAN_USE_MARBLE TRUE)
-    add_definitions( -DCAN_USE_MARBLE )
-    ##
-    ## Marble changed addMarbleWidget to setMarbleWidget in MarbleControlBox.h
-    ## with commit ea177ca. This is for compatibility with older versions.
-    ##
-    find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR} PATH_SUFFIXES marble)
-    if( MARBLECONTROLBOX_H )
-    file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
-    string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
-        if( SETMARBLEWIDGET )
-            add_definitions(-DHAVE_SETMARBLEWIDGET)
-        endif()
-    else()
-        message( WARNING "MarbleControlBox.h not found, could not properly set the SETMARBLEWIDGET define." )
-    endif()
-endif()
-macro_log_feature(MARBLE_FOUND "Marble" "KDE4 World Globe Widget library" "http://techbase.kde.org/Projects/Marble/" FALSE "${MARBLE_MIN_VERSION}" "Required by RDF, Kexi Forms and Reports to show locations on a map")
 ##
 ## Test for lcms
 ##
@@ -523,7 +390,6 @@ endif()
 ##
 ## Test for Vc
 ##
-
 set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 macro_optional_find_package(Vc 0.6.70)
@@ -606,8 +472,6 @@ else()
   set(REQUIRED_Xinput_FOUND TRUE)
 endif()
 
-#Set the build of TextShape changetraker
-
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 
 if(WIN32)
@@ -625,52 +489,6 @@ else()
 endif()
 
 ##
-## Test for Fontconfig
-##
-## Only test if on non-Windows system
-if(NOT WIN32 AND NOT APPLE)
-    macro_optional_find_package(Fontconfig)
-    macro_log_feature(FONTCONFIG_FOUND "Fontconfig" "Library for configuring and customizing font access" "http://fontconfig.org" FALSE "" "Required to handle exact font size")
-endif()
-
-##
-## Test for Freetype
-##
-## Only test if on non-Windows system
-if(NOT WIN32 AND NOT APPLE)
-    macro_optional_find_package(Freetype)
-    macro_log_feature(FREETYPE_FOUND "Freetype" "A Free, High-Quality, and Portable Font Engine" "http://www.freetype.org/" FALSE "" "Required to handle exact font size")
-endif()
-
-if(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
-    set(FONTCONFIG_INCLUDE_DIR "")
-    set(FREETYPE_INCLUDE_DIRS "")
-else()
-    add_definitions( -DSHOULD_BUILD_FONT_CONVERSION )
-endif()
-
-##
-## Test for Qt WebKitWidgets
-##
-macro_log_feature(Qt5Sql_FOUND "Qt Sql"
-                  "Qt SQL module."
-                  "http://qt.io" FALSE ""
-                  "Optional for Sheets database connection")
-
-##
-## Test for Qt Webkit
-##
-macro_log_feature(QT_QTWEBKIT_FOUND "Qt Webkit" "Qt binding for Webkit, the HTML engine." "http://qt.io" FALSE "" "Required for the web shape, web Kexi widget and web report element")
-if(QT_QTWEBKIT_FOUND)
-    add_definitions( -DCAN_USE_QTWEBKIT )
-endif()
-
-##
-## Test for Qt WebKitWidgets
-##
-macro_log_feature(Qt5WebKitWidgets_FOUND "Qt WebkitWidgets" "QWidgets module for Webkit, the HTML engine." "http://qt.io" FALSE "" "Required for Stage")
-
-##
 ## Test endianess
 ##
 include (TestBigEndian)
@@ -680,83 +498,7 @@ test_big_endian(CMAKE_WORDS_BIGENDIAN)
 ## Test SharedMimeInfo
 ##
 macro_optional_find_package(SharedMimeInfo)
-macro_log_feature(SHARED_MIME_INFO_FOUND "SharedMimeInfo" "Shared Mime Info" "http://freedesktop.org/wiki/Software/shared-mime-info" FALSE "" "Required to determine file types OpenRaster (Krita default format), SVM or all of MSOOXML.")
-
-##
-## Test for Okular
-##
-macro_optional_find_package(Okular5 1.0.0)
-macro_log_feature(Okular5_FOUND "Okular" "A unified document viewer" "http://okular.kde.org/" FALSE "" "Required to build the plugins for Okular")
-
-##
-## Test for librevenge
-##
-macro_optional_find_package(LibRevenge)
-macro_log_feature(LIBREVENGE_FOUND "LibRevenge"
-                  "A base library for writing document import filters"
-                  "http://sf.net/p/libwpd/librevenge/" FALSE ""
-                  "Required by various import filters"
-)
-
-##
-## Test for libodfgen
-##
-macro_optional_find_package(LibOdfGen)
-macro_log_feature(LIBODFGEN_FOUND "LibOdfGen"
-                  "Open Document Format Generation Library"
-                  "http://sf.net/p/libwpd/libodfgen/" FALSE ""
-                  "Required by various import filters"
-)
-
-##
-## Test for WordPerfect Document Library
-##
-macro_optional_find_package(LibWpd)
-macro_log_feature(LIBWPD_FOUND "LibWpd"
-                  "WordPerfect Document Library"
-                  "http://libwpd.sourceforge.net/" FALSE ""
-                  "Required by the Words WPD import filter"
-)
-
-##
-## Test for WordPerfect Graphics Library
-##
-macro_optional_find_package(LibWpg)
-macro_log_feature(LIBWPG_FOUND "LibWpg"
-                  "WordPerfect Graphics Library"
-                  "http://libwpg.sourceforge.net/" FALSE ""
-                  "Required by the Karbon WPG import filter"
-)
-
-##
-## Test for Microsoft Works Document Library
-##
-macro_optional_find_package(LibWps)
-macro_log_feature(LIBWPS_FOUND "LibWps"
-                  "Microsoft Works Document Library"
-                  "http://libwps.sourceforge.net/" FALSE ""
-                  "Required by the Words WPS import filter"
-)
-
-##
-## Test for Microsoft Visio Document Library
-##
-macro_optional_find_package(LibVisio)
-macro_log_feature(LIBVISIO_FOUND "LibVisio"
-                  "Visio Import Filter Library"
-                  "https://wiki.documentfoundation.org/DLP/Libraries/libvisio" FALSE ""
-                  "Required by the Flow visio import filter"
-)
-
-##
-## Test for Apple Keynote Document Library
-##
-macro_optional_find_package(LibEtonyek)
-macro_log_feature(LIBETONYEK_FOUND "LibEtonyek"
-                  "Apple Keynote Document Library"
-                  "https://wiki.documentfoundation.org/DLP/Libraries/libetonyek" FALSE ""
-                  "Required by the Stage keynote import filter"
-)
+macro_log_feature(SHARED_MIME_INFO_FOUND "SharedMimeInfo" "Shared Mime Info" "http://freedesktop.org/wiki/Software/shared-mime-info" FALSE "" "Required to determine file types OpenRaster (Krita default format).")
 
 ##
 ## Test for qt-poppler
@@ -764,24 +506,6 @@ macro_log_feature(LIBETONYEK_FOUND "LibEtonyek"
 macro_optional_find_package(Poppler)
 macro_log_feature( POPPLER_FOUND "Poppler-Qt5" "A PDF rendering library" "http://poppler.freedesktop.org" FALSE "" "Required by the Krita PDF filter, Karbon PDF import filter and CSTester PDF feature")
 
-## The Karbon pdf-importer needs the not-officially-supported XPDF Headers
-## Installing these is off by default in poppler sources, so lets make
-## sure they're really there before trying to build the pdf import
-if(POPPLER_FOUND)
-    find_path(POPPLER_XPDF_HEADERS poppler-config.h
-    HINTS ${POPPLER_INCLUDE_DIR} )
-    if(POPPLER_XPDF_HEADERS)
-        set(POPPLER_XPDF_HEADERS_FOUND TRUE)
-    endif()
-    macro_log_feature( POPPLER_XPDF_HEADERS_FOUND "poppler-qt5-xpdf-headers" "XPDF headers in the Poppler Qt5 interface library" "http://poppler.freedesktop.org" FALSE "" "Required by the Karbon PDF import filter")
-endif()
-
-
-##
-## Test for libgit2 and Libqgit2
-##
-macro_optional_find_package(Libgit2)
-macro_optional_find_package(Libqgit2)
 
 ##
 ## Generate a file for prefix information
@@ -801,9 +525,6 @@ include(MacroCalligraAddTest)
 ## Define includes ##
 #####################
 ####################
-
-# WARNING: make sure that QT_INCLUDES is the first directory to be added to include_directory before
-#          any other include directory
 
 # for config.h and <toplevel/foo.h> includes (if any?)
 include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/interfaces )
@@ -846,6 +567,7 @@ set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake
                    ${PIGMENT_INCLUDES}
                    ${KUNDO2_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/widgetutils
+                   ${CMAKE_SOURCE_DIR}/libs/widgetutils/config
                    ${CMAKE_SOURCE_DIR}/libs/flake/commands
                    ${CMAKE_SOURCE_DIR}/libs/flake/tools
                    ${CMAKE_SOURCE_DIR}/libs/flake/svg
@@ -864,7 +586,6 @@ set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
                    ${CMAKE_SOURCE_DIR}/libs/kotext/changetracker
                    ${CMAKE_SOURCE_DIR}/libs/kotext/styles
                    ${CMAKE_SOURCE_DIR}/libs/kotext/opendocument
-                   ${SOPRANO_INCLUDE_DIR}
                    ${FLAKE_INCLUDES}
                    ${KOODF_INCLUDES})
 
@@ -873,7 +594,7 @@ set(TEXTLAYOUT_INCLUDES ${KOTEXT_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/textlayout
                    ${CMAKE_BINARY_DIR}/libs/textlayout)
 
-# Widgets depends on kotext and flake
+# Widgets depends on kritatext and flake
 set(KOWIDGETS_INCLUDES ${KOTEXT_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/widgetutils
                    ${CMAKE_BINARY_DIR}/libs/widgetutils
@@ -883,49 +604,8 @@ set(KOWIDGETS_INCLUDES ${KOTEXT_INCLUDES}
 # BasicFlakes depends on flake, widgets
 set(BASICFLAKES_INCLUDES ${KOWIDGETS_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/basicflakes
+                   ${CMAKE_BINARY_DIR}/libs/basicflakes
                    ${CMAKE_SOURCE_DIR}/libs/basicflakes/tools)
-
-
-# komain depends on kotext & flake
-set(KOMAIN_INCLUDES 
-                    ${KOWIDGETS_INCLUDES}
-                    ${TEXTLAYOUT_INCLUDES}
-                    ${CMAKE_SOURCE_DIR}/libs/main
-                    ${CMAKE_BINARY_DIR}/libs/main
-                    ${CMAKE_SOURCE_DIR}/libs/main/config)
-
-set(KORDF_INCLUDES ${KOMAIN_INCLUDES}
-                   ${CMAKE_SOURCE_DIR}/libs/rdf
-)
-set(KORDF_LIBS kordf)
-
-if(SHOULD_BUILD_FEATURE_SCRIPTING)
-  set(KOKROSS_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kokross ${CMAKE_BINARY_DIR}/libs/kokross)
-endif()
-
-# kopageapp
-set(KOPAGEAPP_INCLUDES ${TEXTLAYOUT_INCLUDES}
-                    ${PIGMENT_INCLUDES}
-                    ${KOMAIN_INCLUDES}
-                    ${CMAKE_SOURCE_DIR}/libs/widgets
-                    ${CMAKE_SOURCE_DIR}/libs/kopageapp
-                    ${CMAKE_SOURCE_DIR}/libs/kopageapp/commands
-                    ${CMAKE_BINARY_DIR}/libs/kopageapp )
-
-#############################################
-####           filter libraries          ####
-#############################################
-
-# libodf2
-set(KOODF2_INCLUDES
-    ${CMAKE_SOURCE_DIR}/filters/libodf2
-    ${CMAKE_SOURCE_DIR}/filters/libodf2/chart
-)
-
-# libodfreader
-set(KOODFREADER_INCLUDES
-    ${CMAKE_SOURCE_DIR}/filters/libodfreader
-)
 
  ###################################################
 ####################################################
@@ -940,22 +620,6 @@ if (NOT QT_MAC_USE_COCOA)
     set(NOT_COCOA TRUE)
 endif()
 
-calligra_drop_product_on_bad_condition( LIB_KOMSOOXML
-    SHARED_MIME_INFO_FOUND "SharedMimeInfo not found (needed to install mimetypes)"
-)
-
-calligra_drop_product_on_bad_condition( FEATURE_RDF
-    Soprano_FOUND "Soprano not found"
-)
-
-calligra_drop_product_on_bad_condition( PART_STAGE
-    Qt5WebKitWidgets_FOUND "Qt5WebKitWidgets devel not found"
-)
-
-calligra_drop_product_on_bad_condition( PART_SHEETS
-    EIGEN3_FOUND "Eigen devel not found"
-)
-
 calligra_drop_product_on_bad_condition( APP_KRITA
     EIGEN3_FOUND "Eigen devel not found"
     EXIV2_FOUND "libexiv2 devel not found"
@@ -965,134 +629,13 @@ calligra_drop_product_on_bad_condition( APP_KRITA
     REQUIRED_Xinput_FOUND "Xinput devel not found "
 )
 
-calligra_drop_product_on_bad_condition( APP_KEXI
-    KDb_FOUND "KDb not found"
-    KReport_WITH_SCRIPTING_FOUND "KReport with scripting support not found"
-    KProperty_FOUND "KProperty not found"
-    Qt5UiTools_FOUND "Qt5UiTools not found"
-)
-
-calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODP
-    Okular5_FOUND "Okular devel not found"
-)
-
-calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODT
-    Okular5_FOUND "Okular devel not found"
-)
-
-calligra_drop_product_on_bad_condition( PLUGIN_CHARTSHAPE
-    KChart_FOUND "KChart devel not found"
-)
-
-calligra_drop_product_on_bad_condition( PLUGIN_VIDEOSHAPE
-    Phonon4Qt5_FOUND "Phonon4Qt5 devel not found"
-)
-
-calligra_drop_product_on_bad_condition( FILTER_KEY_TO_ODP
-    LIBODFGEN_FOUND "libodfgen devel not found"
-    LIBETONYEK_FOUND "libetonyek devel not found"
-    LIBREVENGE_FOUND "librevenge devel not found"
-)
-
-calligra_drop_product_on_bad_condition( FILTER_VISIO_TO_ODG
-    LIBODFGEN_FOUND "libodfgen devel not found"
-    LIBVISIO_FOUND "libvisio devel not found"
-    LIBREVENGE_FOUND "librevenge devel not found"
-)
-
-calligra_drop_product_on_bad_condition( FILTER_WORDPERFECT_TO_ODT
-    LIBODFGEN_FOUND "libodfgen devel not found"
-    LIBWPD_FOUND "libwpd devel not found"
-    LIBWPG_FOUND "libwpg devel not found"
-    LIBREVENGE_FOUND "librevenge devel not found"
-)
-
-calligra_drop_product_on_bad_condition( FILTER_WORKS_TO_ODT
-    LIBODFGEN_FOUND "libodfgen devel not found"
-    LIBWPS_FOUND "libwps devel not found"
-    LIBREVENGE_FOUND "librevenge devel not found"
-)
-
-calligra_drop_product_on_bad_condition( FILTER_WPG_TO_SVG
-    LIBWPG_FOUND "libwpg devel not found"
-    LIBREVENGE_FOUND "librevenge devel not found"
-)
-
-calligra_drop_product_on_bad_condition( FILTER_WPG_TO_ODG
-    LIBODFGEN_FOUND "libodfgen devel not found"
-    LIBWPG_FOUND "libwpg devel not found"
-    LIBREVENGE_FOUND "librevenge devel not found"
-)
-
-calligra_drop_product_on_bad_condition( FILTER_PDF_TO_SVG
-    NOT_WIN "not supported on Windows"
-    POPPLER_XPDF_HEADERS_FOUND "poppler xpdf headers not found"
-)
-
-calligra_drop_product_on_bad_condition( FILTER_HTML_TO_ODS
-    NOT_WIN "not supported on Windows"
-    NOT_COCOA "not supported with Qt Cocoa"
-    KF5_KHtml_FOUND "KF5KHtml devel not found"
-)
-
-calligra_drop_product_on_bad_condition( FILTER_SHEETS_TO_HTML
-    NOT_WIN "not supported on Windows"
-    NOT_COCOA "not supported with Qt Cocoa"
-)
-
-calligra_drop_product_on_bad_condition( FILTER_KSPREAD_TO_LATEX
-    NOT_WIN "not supported on Windows"
-    NOT_COCOA "not supported with Qt Cocoa"
-)
-
-calligra_drop_product_on_bad_condition( APP_BRAINDUMP
-    NOT_WIN "unmaintained on Windows"
-)
-
-calligra_drop_product_on_bad_condition( APP_PLAN
-    KGantt_FOUND "KGantt devel not found"
-    KChart_FOUND "KChart devel not found"
-    KReport_FOUND "KReport not found"
-    KProperty_FOUND "KProperty not found"
-)
-
-calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT
-    LIBGIT2_FOUND  "libgit2 devel not found"
-    LIBQGIT2_FOUND "libqgit2 devel not found"
-)
-
-calligra_drop_product_on_bad_condition( PART_QTQUICK
-    USEOPENGL "USEOPENGL set to FALSE"
-    QT_QTOPENGL_FOUND "Qt OpenGL not found"
-    QT_QTDECLARATIVE_FOUND "QtDeclarative not found"
-)
-
-calligra_drop_product_on_bad_condition( PART_COMPONENTS
-    USEOPENGL "USEOPENGL set to FALSE"
-    QT_QTOPENGL_FOUND "Qt OpenGL not found"
-    QT_QTQUICK_FOUND "QtQuick not found"
-)
-
-calligra_drop_product_on_bad_condition( APP_GEMINI
-    USEOPENGL "USEOPENGL set to FALSE"
-    QT_QTOPENGL_FOUND "Qt OpenGL not found"
-)
-
 #############################################
 ####  Backward compatibility BUILD_x=off ####
 #############################################
 
 # workaround: disable directly all products which might be activated by internal
 # dependencies, but belong to scope of old flag
-calligra_drop_products_on_old_flag(braindump APP_BRAINDUMP)
-calligra_drop_products_on_old_flag(flow APP_FLOW)
-calligra_drop_products_on_old_flag(karbon APP_KARBON)
-calligra_drop_products_on_old_flag(kexi APP_KEXI)
 calligra_drop_products_on_old_flag(krita APP_KRITA)
-calligra_drop_products_on_old_flag(plan  APP_PLAN)
-calligra_drop_products_on_old_flag(sheets PART_SHEETS APP_SHEETS)
-calligra_drop_products_on_old_flag(stage  PART_STAGE APP_STAGE)
-calligra_drop_products_on_old_flag(words  PART_WORDS APP_WORDS)
 
 #############################################
 ####      Temporarily broken products    ####
@@ -1109,79 +652,22 @@ calligra_drop_products_on_old_flag(words  PART_WORDS APP_WORDS)
 
 calligra_drop_unbuildable_products()
 
-
-#############################################
-####     Setup product-depending vars    ####
-#############################################
-
-if(SHOULD_BUILD_FEATURE_RDF)
-   add_definitions( -DSHOULD_BUILD_RDF )
-endif()
-
  ###################
 ####################
 ## Subdirectories ##
 ####################
 ###################
 
-add_subdirectory(words)
-
-if (SHOULD_BUILD_APP_FLOW)
-    add_subdirectory(flow)
-endif ()
-
-add_subdirectory(stage)
-
-if(SHOULD_BUILD_APP_KEXI)
-    add_subdirectory(kexi)
-endif()
-
-if(SHOULD_BUILD_APP_PLAN)
-    add_subdirectory(plan)
-endif()
-
-add_subdirectory(sheets)
-
 if(SHOULD_BUILD_APP_KRITA)
   add_subdirectory(krita)
-endif()
-
-if(SHOULD_BUILD_APP_KARBON)
-  add_subdirectory(karbon)
-endif()
-
-if(SHOULD_BUILD_APP_BRAINDUMP)
-  add_subdirectory(braindump)
-endif()
-
-if(SHOULD_BUILD_DOC)
-    add_subdirectory(doc)
-endif()
-
-if(SHOULD_BUILD_PART_QTQUICK)
-    add_subdirectory(qtquick)
-endif()
-
-if(SHOULD_BUILD_PART_COMPONENTS)
-    add_subdirectory(components)
-endif()
-
-if(SHOULD_BUILD_GEMINI)
-    add_subdirectory(gemini)
 endif()
 
 # non-app directories are moved here because they can depend on SHOULD_BUILD_{appname} variables set above
 add_subdirectory(libs)
 add_subdirectory(3rdparty)
 add_subdirectory(interfaces)
-add_subdirectory(cmake)
 add_subdirectory(pics)
 add_subdirectory(plugins)
-add_subdirectory(servicetypes)
-add_subdirectory(devtools)
-add_subdirectory(extras)
-add_subdirectory(filters)
-add_subdirectory(data)
 
 macro_display_feature_log()
 
@@ -1191,7 +677,6 @@ calligra_log_should_build()
 add_custom_target(apidox doc/api/gendocs.pl WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 configure_file(KoConfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h )
-install( FILES  ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
 
 ## temporary warning
 if (WARN_ABOUT_CREATIVEONLY)

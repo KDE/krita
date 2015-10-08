@@ -1,6 +1,6 @@
 project( artistictextshape )
 
-add_definitions(-DTRANSLATION_DOMAIN=\"calligra_shape_artistictext\")
+add_definitions(-DTRANSLATION_DOMAIN=\"krita_shape_artistictext\")
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/libs/widgets
@@ -37,10 +37,10 @@ ki18n_wrap_ui( ArtisticTextShape_SRCS
     ArtisticTextShapeOnPathWidget.ui
 )
 
-add_library(calligra_shape_artistictext MODULE ${ArtisticTextShape_SRCS} )
+add_library(krita_shape_artistictext MODULE ${ArtisticTextShape_SRCS} )
 
-kcoreaddons_desktop_to_json(calligra_shape_artistictext calligra_shape_artistictext.desktop)
+kcoreaddons_desktop_to_json(krita_shape_artistictext calligra_shape_artistictext.desktop)
 
-target_link_libraries(calligra_shape_artistictext flake)
+target_link_libraries(krita_shape_artistictext kritaflake)
 
-install( TARGETS calligra_shape_artistictext DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR} )
+install( TARGETS krita_shape_artistictext DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR} )

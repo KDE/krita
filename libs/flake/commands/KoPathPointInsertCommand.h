@@ -24,13 +24,13 @@
 #include <kundo2command.h>
 #include <QList>
 #include "KoPathPointData.h"
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoPathPointInsertCommandPrivate;
 class KoPathPoint;
 
 /// The undo / redo command for inserting path points
-class FLAKE_EXPORT KoPathPointInsertCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoPathPointInsertCommand : public KUndo2Command
 {
 public:
     /**

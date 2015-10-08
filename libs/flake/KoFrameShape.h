@@ -20,7 +20,7 @@
 #ifndef KOFRAMESHAPE_H
 #define KOFRAMESHAPE_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoShapeLoadingContext;
 class KoXmlElement;
@@ -52,7 +52,7 @@ class QString;
  * }
  * @endcode
  */
-class FLAKE_EXPORT KoFrameShape
+class KRITAFLAKE_EXPORT KoFrameShape
 {
 public:
 

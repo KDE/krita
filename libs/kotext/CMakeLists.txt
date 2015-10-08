@@ -6,7 +6,7 @@ add_subdirectory( tests )
 add_subdirectory( styles/tests )
 
 ########### next target ###############
-set(kotext_LIB_SRCS
+set(kritatext_LIB_SRCS
     KoDocumentRdfBase.cpp
     KoText.cpp
     KoTextBlockData.cpp
@@ -54,11 +54,6 @@ set(kotext_LIB_SRCS
     KoInlineNote.cpp
     KoInlineCite.cpp
     KoTextSoftPageBreak.cpp
-    FindDirection_p.cpp
-    KoFindStrategy.cpp
-    KoReplaceStrategy.cpp
-    KoFind_p.cpp
-    KoFind.cpp
     KoTextDebug.cpp
     KoTextPage.cpp
     KoPageProvider.cpp
@@ -128,106 +123,13 @@ set(kotext_LIB_SRCS
     TextDebug.cpp
 )
 
-if( SHOULD_BUILD_FEATURE_RDF )
-    set(kotext_LIB_SRCS ${kotext_LIB_SRCS}
-        KoTextRdfCore.cpp
-    )
-endif()
+add_library(kritatext SHARED ${kritatext_LIB_SRCS})
+generate_export_header(kritatext BASE_NAME kritatext)
 
-add_library(kotext SHARED ${kotext_LIB_SRCS})
-generate_export_header(kotext BASE_NAME kotext)
+target_link_libraries(kritatext kritaflake Qt5::Gui KF5::XmlGui )
+target_link_libraries(kritatext LINK_INTERFACE_LIBRARIES kritaflake Qt5::Gui )
 
-target_link_libraries(kotext flake KF5::TextWidgets KF5::XmlGui KF5::WindowSystem)
-if( SHOULD_BUILD_FEATURE_RDF )
-    target_link_libraries(kotext ${SOPRANO_LIBRARIES})
-endif()
-target_link_libraries(kotext LINK_INTERFACE_LIBRARIES flake KF5::TextWidgets)
-
-if( FONTCONFIG_FOUND )
-    target_link_libraries(kotext ${FONTCONFIG_LIBRARIES})
-endif()
-
-if( FREETYPE_FOUND )
-    target_link_libraries(kotext ${FREETYPE_LIBRARIES})
-endif()
-
-
-set_target_properties(kotext PROPERTIES
+set_target_properties(kritatext PROPERTIES
    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS kotext  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-########### install files ###############
-
-install( FILES texteditingplugin.desktop inlinetextobject.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
-
-install(
-    FILES
-    KoDocumentRdfBase.h
-    KoInlineObject.h
-    KoTextEditor.h
-    KoTextEditingFactory.h
-    KoTextEditingPlugin.h
-    KoTextEditingRegistry.h
-    KoInlineObjectRegistry.h
-    KoInlineObjectFactoryBase.h
-    KoBookmark.h
-    KoBookmarkManager.h
-    KoAnnotationManager.h
-    KoInlineTextObjectManager.h
-    KoAnchorInlineObject.h
-    KoAnchorTextRange.h
-    KoTextBlockBorderData.h
-    KoTextBlockData.h
-    KoTextDocument.h
-    KoText.h
-    KoTextRange.h
-    KoTextRangeManager.h
-    KoList.h
-    KoTextLocator.h
-    KoTextPage.h
-    KoTextPaste.h
-    KoVariable.h
-    KoVariableManager.h
-    KoTextRdfCore.h
-    KoTextInlineRdf.h
-    KoTextMeta.h
-    KoTextSoftPageBreak.cpp
-    KoSection.h
-    KoSectionEnd.h
-    KoSectionUtils.h
-    KoSectionModel.h
-    KoTextCommandBase.h
-    KoTextTableTemplate.h
-
-    DESTINATION
-    ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
-)
-
-install(
-    FILES
-    styles/KoCharacterStyle.h
-    styles/KoListLevelProperties.h
-    styles/KoListStyle.h
-    styles/KoParagraphStyle.h
-    styles/KoTableColumnStyle.h
-    styles/KoTableRowStyle.h
-    styles/KoTableCellStyle.h
-    styles/KoSectionStyle.h
-    styles/KoStyleManager.h
-    styles/KoTableStyle.h
-    DESTINATION
-    ${INCLUDE_INSTALL_DIR}/calligra/styles COMPONENT Devel
-)
-
-install(
-    FILES
-    changetracker/KoChangeTracker.h
-    changetracker/KoChangeTrackerElement.h
-    changetracker/KoDeletedRowColumnDataStore.h
-    changetracker/KoDeletedRowData.cpp
-    changetracker/KoDeletedColumnData.cpp
-    changetracker/KoDeletedCellData.cpp
-    DESTINATION
-    ${INCLUDE_INSTALL_DIR}/calligra/changetracker COMPONENT Devel
-)
+install(TARGETS kritatext  ${INSTALL_TARGETS_DEFAULT_ARGS})

@@ -18,64 +18,32 @@
  */
 #include "KisSketchView.h"
 
-#include <QTimer>
 #include <QApplication>
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QClipboard>
-#include <QGraphicsSceneMouseEvent>
-#include <QMouseEvent>
 #include <QScrollBar>
-#include <QHoverEvent>
 
-#include <kis_debug.h>
 #include <kactioncollection.h>
 
-
-#include <KoZoomHandler.h>
 #include <KoZoomController.h>
-#include <KoToolProxy.h>
-#include <KoCanvasController.h>
-#include <KisImportExportManager.h>
-#include <KoShapeController.h>
-#include <KoDocumentResourceManager.h>
-#include <KoCanvasResourceManager.h>
 #include <KoToolManager.h>
-#include <KoGridData.h>
 
-#include <kundo2stack.h>
-
-#include "ProgressProxy.h"
-
-#include "kis_painter.h"
-#include "kis_layer.h"
-#include "kis_paint_device.h"
 #include "KisDocument.h"
 #include "kis_canvas2.h"
 #include <kis_canvas_controller.h>
-#include <kis_qpainter_canvas.h>
-#include "kis_config.h"
-#include <KisView.h>
 #include "KisViewManager.h"
-#include "kis_image.h"
 #include <kis_image_signal_router.h>
-#include "kis_clipboard.h"
 #include <input/kis_input_manager.h>
 #include <input/kis_tablet_event.h>
 #include <kis_canvas_resource_provider.h>
-#include <kis_zoom_manager.h>
 #include <kis_selection_manager.h>
-#include <kis_paint_device.h>
-#include <kis_layer.h>
-#include <kis_qpainter_canvas.h>
 #include <KisPart.h>
-#include <kis_canvas_decoration.h>
 #include <kis_tool_freehand.h>
 #include "KisSelectionExtras.h"
-#include "Settings.h"
+
+#include "krita/gemini/ViewModeSwitchEvent.h"
+
+#include "ProgressProxy.h"
 #include "DocumentManager.h"
 #include "SketchDeclarativeView.h"
-#include "krita/gemini/ViewModeSwitchEvent.h"
 
 class KisSketchView::Private
 {

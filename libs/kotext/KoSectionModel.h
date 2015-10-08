@@ -59,7 +59,7 @@
  *
  * This object is created for QTextDocument on the first query of it.
  */
-class KOTEXT_EXPORT KoSectionModel : public QAbstractItemModel
+class KRITATEXT_EXPORT KoSectionModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:

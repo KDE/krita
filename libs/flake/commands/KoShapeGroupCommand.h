@@ -21,7 +21,7 @@
 #ifndef KOSHAPEGROUPCOMMAND_H
 #define KOSHAPEGROUPCOMMAND_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QList>
 #include <kundo2command.h>
@@ -32,7 +32,7 @@ class KoShapeContainer;
 class KoShapeGroupCommandPrivate;
 
 /// The undo / redo command for grouping shapes
-class FLAKE_EXPORT KoShapeGroupCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoShapeGroupCommand : public KUndo2Command
 {
 public:
     /**

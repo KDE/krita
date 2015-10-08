@@ -19,11 +19,9 @@
 #include "RecentImageImageProvider.h"
 #include <QFile>
 #include <QImage>
-#include <QImageReader>
 
 #include <KoStore.h>
 #include <KisDocument.h>
-#include <kio/previewjob.h>
 
 RecentImageImageProvider::RecentImageImageProvider()
     : QDeclarativeImageProvider(QDeclarativeImageProvider::Image)

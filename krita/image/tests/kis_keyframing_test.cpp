@@ -17,7 +17,7 @@
  */
 
 #include "kis_keyframing_test.h"
-#include <qtest_kde.h>
+#include <QTest>
 #include <qsignalspy.h>
 
 #include "kis_paint_device_frames_interface.h"
@@ -374,5 +374,5 @@ void KisKeyframingTest::testAffectedFrames()
 
 }
 
-QTEST_KDEMAIN(KisKeyframingTest, NoGUI)
+QTEST_MAIN(KisKeyframingTest)
 #include "kis_keyframing_test.moc"

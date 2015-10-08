@@ -20,7 +20,7 @@
 #ifndef KOTEXTEDITINGFACTORY_H
 #define KOTEXTEDITINGFACTORY_H
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 class KoTextEditingPlugin;
 class QString;
@@ -30,7 +30,7 @@ class QString;
  * allow the creation of the text-editing-class from that plugin.
  * @see KoTextEditingRegistry
  */
-class KOTEXT_EXPORT KoTextEditingFactory
+class KRITATEXT_EXPORT KoTextEditingFactory
 {
 public:
     /**

@@ -20,7 +20,7 @@
 #ifndef KOTEXTLAYOUTAREA_H
 #define KOTEXTLAYOUTAREA_H
 
-#include "kotextlayout_export.h"
+#include "kritatextlayout_export.h"
 
 #include <KoText.h>
 #include <KoTextDocumentLayout.h>
@@ -51,7 +51,7 @@ class QRectF;
  * the RootArea, but it may also be set by, for example, a row in a table with
  * fixed height.
  */
-class KOTEXTLAYOUT_EXPORT KoTextLayoutArea
+class KRITATEXTLAYOUT_EXPORT KoTextLayoutArea
 {
 public:
     /// constructor

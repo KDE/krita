@@ -17,7 +17,7 @@ set_tests_properties(krita-image-KisLowMemoryTests PROPERTIES TIMEOUT 180)
 ########### next target ###############
 set(kis_tile_compressors_test_SRCS kis_tile_compressors_test.cpp )
 kde4_add_unit_test(KisTileCompressorsTest TESTNAME krita-image-KisTileCompressorsTest  ${kis_tile_compressors_test_SRCS})
-target_link_libraries(KisTileCompressorsTest   koodf kritaimage Qt5::Test)
+target_link_libraries(KisTileCompressorsTest   kritaodf kritaimage Qt5::Test)
 
 ########### next target ###############
 set(kis_compression_tests_SRCS kis_compression_tests.cpp )

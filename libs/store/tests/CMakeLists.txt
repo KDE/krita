@@ -17,6 +17,6 @@ target_link_libraries(TestKoXmlVector Qt5::Test)
 
 set(storedroptest_SRCS storedroptest.cpp )
 kde4_add_executable(storedroptest TEST ${storedroptest_SRCS})
-target_link_libraries(storedroptest kostore KF5::I18n Qt5::Widgets)
+target_link_libraries(storedroptest kritastore Qt5::Widgets)
 
 

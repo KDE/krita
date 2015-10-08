@@ -29,7 +29,7 @@
 #ifndef SVGWRITER_H
 #define SVGWRITER_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include <QList>
 #include <QSizeF>
 
@@ -42,7 +42,7 @@ class QIODevice;
 class QString;
 
 /// Implements exporting shapes to SVG
-class FLAKE_EXPORT SvgWriter
+class KRITAFLAKE_EXPORT SvgWriter
 {
 public:
     /// Creates svg writer to export specified layers

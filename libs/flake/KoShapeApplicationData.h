@@ -20,7 +20,7 @@
 #ifndef KOSHAPEAPPLICATIONDATA_H
 #define KOSHAPEAPPLICATIONDATA_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 /**
  * The KoShapeAppliationData class is used to associate application specific data with a shape.
@@ -36,7 +36,7 @@
  * Each subclass should provide a reimplementation of the destructor to ensure that
  * any private data is automatically cleaned up when user data objects are deleted.
  */
-class FLAKE_EXPORT KoShapeApplicationData
+class KRITAFLAKE_EXPORT KoShapeApplicationData
 {
 public:
     virtual ~KoShapeApplicationData();

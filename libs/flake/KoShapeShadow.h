@@ -21,7 +21,7 @@
 #ifndef KOSHAPESHADOW_H
 #define KOSHAPESHADOW_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QtGlobal>
 
@@ -34,7 +34,7 @@ class QColor;
 class KoViewConverter;
 struct KoInsets;
 
-class FLAKE_EXPORT KoShapeShadow
+class KRITAFLAKE_EXPORT KoShapeShadow
 {
 public:
     KoShapeShadow();

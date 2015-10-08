@@ -20,14 +20,14 @@
 #ifndef KOFILTEREFFECTFACTORY_H
 #define KOFILTEREFFECTFACTORY_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoFilterEffect;
 class KoFilterEffectConfigWidgetBase;
 class QString;
 
 /// API docs go here
-class FLAKE_EXPORT KoFilterEffectFactoryBase
+class KRITAFLAKE_EXPORT KoFilterEffectFactoryBase
 {
 public:
 

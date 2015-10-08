@@ -12,11 +12,3 @@ kcoreaddons_desktop_to_json(kritadodgeburn kritadodgeburn.desktop)
 target_link_libraries(kritadodgeburn kritaui)
 
 install(TARGETS kritadodgeburn  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  kritadodgeburn.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-
-
-

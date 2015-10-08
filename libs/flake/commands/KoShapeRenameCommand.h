@@ -20,14 +20,14 @@
 #ifndef KOSHAPERENAMECOMMAND_H
 #define KOSHAPERENAMECOMMAND_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include <kundo2command.h>
 
 class QString;
 class KoShape;
 
 /// API docs go here
-class FLAKE_EXPORT KoShapeRenameCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoShapeRenameCommand : public KUndo2Command
 {
 public:
     KoShapeRenameCommand(KoShape *shape, const QString &newName, KUndo2Command *parent = 0);

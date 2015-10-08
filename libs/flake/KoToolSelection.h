@@ -19,7 +19,7 @@
 #ifndef KOTOOLSELECTION_H
 #define KOTOOLSELECTION_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include <QObject>
 
 /**
@@ -28,7 +28,7 @@
  * This object is provided for applications to operate on that selection.  Copy paste
  * come to mind, but also marking the selected text bold.
  */
-class FLAKE_EXPORT KoToolSelection : public QObject
+class KRITAFLAKE_EXPORT KoToolSelection : public QObject
 {
     Q_OBJECT
 public:

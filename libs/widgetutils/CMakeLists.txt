@@ -1,6 +1,8 @@
 add_subdirectory(tests)
 
-set(kowidgetutils_LIB_SRCS
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/config)
+
+set(kritawidgetutils_LIB_SRCS
     KoGroupButton.cpp
     KoProgressBar.cpp
     KoProgressUpdater.cpp
@@ -8,13 +10,20 @@ set(kowidgetutils_LIB_SRCS
     KoUpdaterPrivate_p.cpp
     KoProperties.cpp
     KoFileDialog.cpp
+
+    config/kcolorscheme.cpp         
+    config/kcolorschememanager.cpp  
+    config/khelpclient.cpp      
+    config/klanguagebutton.cpp  
+    config/krecentfilesaction.cpp
+    config/kstandardaction.cpp
+
 )
 
+add_library(kritawidgetutils SHARED ${kritawidgetutils_LIB_SRCS})
+generate_export_header(kritawidgetutils BASE_NAME kritawidgetutils)
 
-add_library(kowidgetutils SHARED ${kowidgetutils_LIB_SRCS})
-generate_export_header(kowidgetutils BASE_NAME kowidgetutils)
-
-target_link_libraries(kowidgetutils
+target_link_libraries(kritawidgetutils
     PUBLIC
         Qt5::Widgets
         Qt5::Gui
@@ -23,23 +32,13 @@ target_link_libraries(kowidgetutils
     PRIVATE
         KF5::I18n
         KF5::ConfigCore
+        KF5::ConfigGui
+        KF5::GuiAddons
+        KF5::WidgetsAddons
 )
 
-set_target_properties(kowidgetutils
+set_target_properties(kritawidgetutils
     PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
-install(TARGETS kowidgetutils ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-install(FILES
-    KoGroupButton.h
-    KoProgressBar.h
-    KoProgressProxy.h
-    KoProgressUpdater.h
-    KoUpdater.h
-    KoProperties.h
-    KoFileDialog.h
-    ${CMAKE_CURRENT_BINARY_DIR}/kowidgetutils_export.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/calligra
-    COMPONENT Devel
-)
+install(TARGETS kritawidgetutils ${INSTALL_TARGETS_DEFAULT_ARGS})

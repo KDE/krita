@@ -20,7 +20,7 @@
 #ifndef KO_DOCUMENT_Rdf_Base_H
 #define KO_DOCUMENT_Rdf_Base_H
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 #include <QObject>
 #include <QMap>
@@ -52,7 +52,7 @@ namespace Soprano
  * because the base class interface is here and will be valid, even
  * if impotent when Soprano support is not built.
  */
-class KOTEXT_EXPORT KoDocumentRdfBase : public QObject, public KoDataCenterBase
+class KRITATEXT_EXPORT KoDocumentRdfBase : public QObject, public KoDataCenterBase
 {
     Q_OBJECT
 

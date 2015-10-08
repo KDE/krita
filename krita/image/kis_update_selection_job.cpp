@@ -17,6 +17,7 @@
  */
 
 #include "kis_update_selection_job.h"
+#include "kis_image.h"
 
 
 KisUpdateSelectionJob::KisUpdateSelectionJob(KisSelectionSP selection, const QRect &updateRect)

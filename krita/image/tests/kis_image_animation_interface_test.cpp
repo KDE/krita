@@ -18,7 +18,7 @@
 
 #include "kis_image_animation_interface_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include <testutil.h>
 #include <KoColor.h>
@@ -256,4 +256,4 @@ void KisImageAnimationInterfaceTest::testSwitchFrameWithUndo()
     QCOMPARE(i->currentTime(), 0);
 }
 
-QTEST_KDEMAIN(KisImageAnimationInterfaceTest, GUI)
+QTEST_MAIN(KisImageAnimationInterfaceTest)

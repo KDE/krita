@@ -22,7 +22,7 @@
 
 #include "KoInlineObject.h"
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 /**
  * This class defines a soft page break as defined in odf
@@ -30,7 +30,7 @@
  *
  * The class does not have members as it's presence is enough.
  */
-class KOTEXT_EXPORT KoTextSoftPageBreak : public KoInlineObject
+class KRITATEXT_EXPORT KoTextSoftPageBreak : public KoInlineObject
 {
     Q_OBJECT
 public:

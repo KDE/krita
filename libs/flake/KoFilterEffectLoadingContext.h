@@ -20,7 +20,7 @@
 #ifndef KOFILTEREFFECTLOADINGCONTEXT_H
 #define KOFILTEREFFECTLOADINGCONTEXT_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class QRectF;
 class QString;
@@ -29,7 +29,7 @@ class QPointF;
 #include <QtGlobal>
 
 /// This class provides a loading context for filter effects
-class FLAKE_EXPORT KoFilterEffectLoadingContext
+class KRITAFLAKE_EXPORT KoFilterEffectLoadingContext
 {
 public:
     /**

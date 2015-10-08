@@ -21,7 +21,7 @@
 #define KOPATTERNBACKGROUND_H
 
 #include "KoShapeBackground.h"
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoImageCollection;
 class KoOdfLoadingContext;
@@ -34,7 +34,7 @@ class QPointF;
 class QRectF;
 
 /// A pattern shape background
-class FLAKE_EXPORT KoPatternBackground : public KoShapeBackground
+class KRITAFLAKE_EXPORT KoPatternBackground : public KoShapeBackground
 {
 public:
     /// Pattern rendering style

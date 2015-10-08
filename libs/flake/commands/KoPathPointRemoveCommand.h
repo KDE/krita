@@ -24,13 +24,13 @@
 #include <kundo2command.h>
 #include <QList>
 #include "KoPathPointData.h"
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoShapeController;
 class KoPathPointRemoveCommandPrivate;
 
 /// The undo / redo command for removing path points.
-class FLAKE_EXPORT KoPathPointRemoveCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoPathPointRemoveCommand : public KUndo2Command
 {
 public:
     /**

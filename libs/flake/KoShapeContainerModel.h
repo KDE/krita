@@ -20,7 +20,7 @@
 #ifndef KOSHAPECONTAINERMODEL_H
 #define KOSHAPECONTAINERMODEL_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <KoShape.h>
 
@@ -37,7 +37,7 @@ class KoShapeContainer;
  * for the KoShapeContainer.
  * @see KoShapeContainer, KoShapeContainerDefaultModel
  */
-class FLAKE_EXPORT KoShapeContainerModel
+class KRITAFLAKE_EXPORT KoShapeContainerModel
 {
 public:
     /// default constructor

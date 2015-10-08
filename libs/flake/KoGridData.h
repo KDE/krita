@@ -21,7 +21,7 @@
 #ifndef KOGRIDDATA_H
 #define KOGRIDDATA_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include <KoXmlReaderForward.h>
 #include <QColor>
 #include <QWidget>
@@ -37,7 +37,7 @@ class KToggleAction;
  * Things like grid colors, distances and snap to grid are saved here.
  * \sa KoDocument::gridData()
  */
-class FLAKE_EXPORT KoGridData
+class KRITAFLAKE_EXPORT KoGridData
 {
 public:
     KoGridData();

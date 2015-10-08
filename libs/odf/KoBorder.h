@@ -24,7 +24,7 @@
 #ifndef KOBORDER_H
 #define KOBORDER_H
 
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 
 #include <QPen>
 #include <QSharedData>
@@ -50,7 +50,7 @@ class QColor;
  *
  */
 
-class KOODF_EXPORT KoBorder
+class KRITAODF_EXPORT KoBorder
 {
 public:
 
@@ -93,7 +93,7 @@ public:
     };
 
     /// Holds data about one border line.
-    struct KOODF_EXPORT BorderData {
+    struct KRITAODF_EXPORT BorderData {
         BorderData();
 
         /// Compare the border data with another one

@@ -20,7 +20,7 @@
 #define KORULERCONTROLLER_H
 
 #include <QObject>
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 class KoRuler;
 class KoCanvasResourceManager;
@@ -32,7 +32,7 @@ class KoCanvasResourceManager;
  * The code to do this is pretty trivial; just instantiate this class and you can
  * forget about it.  It'll do what you want.
  */
-class KOWIDGETS_EXPORT KoRulerController : public QObject
+class KRITAWIDGETS_EXPORT KoRulerController : public QObject
 {
     Q_OBJECT
 public:

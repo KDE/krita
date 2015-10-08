@@ -22,7 +22,7 @@
 #ifndef KORESOURCESERVERPROVIDER_H
 #define KORESOURCESERVERPROVIDER_H
 
-#include <kowidgets_export.h>
+#include <kritawidgets_export.h>
 
 #include <QThread>
 
@@ -36,7 +36,7 @@
 /**
  * KoResourceLoaderThread allows threaded loading of the resources of a resource server
  */
-class KOWIDGETS_EXPORT KoResourceLoaderThread : public QThread {
+class KRITAWIDGETS_EXPORT KoResourceLoaderThread : public QThread {
 
     Q_OBJECT
 public:
@@ -70,7 +70,7 @@ private:
 /**
  * Provides default resource servers for gradients, patterns and palettes
  */
-class KOWIDGETS_EXPORT KoResourceServerProvider : public QObject
+class KRITAWIDGETS_EXPORT KoResourceServerProvider : public QObject
 {
     Q_OBJECT
 

@@ -24,9 +24,3 @@ if(HAVE_OPENGL)
 endif()
 
 install(TARGETS kritalutdocker  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  krita_lutdocker.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-

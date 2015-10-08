@@ -22,9 +22,9 @@
 #include <QString>
 #include <QStringList>
 
-#include <kowidgets_export.h>
+#include <kritawidgets_export.h>
 
-class KOWIDGETS_EXPORT KoResourcePaths
+class KRITAWIDGETS_EXPORT KoResourcePaths
 {
 public:
 

@@ -20,7 +20,8 @@
 
 #include <QImage>
 #include <QFile>
-
+#include <KisImportExportManager.h>
+#include <kis_url_requester.h>
 
 #include "ui_wdgsprayshapeoptions.h"
 
@@ -30,6 +31,7 @@ public:
     KisShapeOptionsWidget(QWidget *parent = 0)
         : QWidget(parent) {
         setupUi(this);
+        imageUrl->setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
     }
 
 };

@@ -21,7 +21,7 @@
 #ifndef KOVARIABLEMANAGER_H
 #define KOVARIABLEMANAGER_H
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 #include <QObject>
 #include <QString>
@@ -44,7 +44,7 @@ class KoVariableManagerPrivate;
  * @see KoInlineTextObjectManager::createInsertVariableActions()
  * @see KoInlineTextObjectManager::variableManager()
  */
-class KOTEXT_EXPORT KoVariableManager : public QObject
+class KRITATEXT_EXPORT KoVariableManager : public QObject
 {
 	Q_OBJECT
 public:

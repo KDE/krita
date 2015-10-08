@@ -28,7 +28,7 @@
 
 #include <QWidget>
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 class QModelIndex;
 class QAbstractProxyModel;
@@ -43,11 +43,11 @@ class KoResource;
  * A widget that contains a KoResourceChooser as well
  * as an import/export button
  */
-class KOWIDGETS_EXPORT KoResourceItemChooser : public QWidget
+class KRITAWIDGETS_EXPORT KoResourceItemChooser : public QWidget
 {
     Q_OBJECT
 public:
-    enum Buttons { Button_Import, Button_Remove, Button_GhnsDownload, Button_GhnsUpload };
+    enum Buttons { Button_Import, Button_Remove };
 
     /// \p usePreview shows the aside preview with the resource's image
     explicit KoResourceItemChooser(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent = 0, bool usePreview = false);
@@ -93,15 +93,12 @@ public:
     /// shows the preview converted to grayscale
     void setGrayscalePreview(bool grayscale);
 
-
-    void showGetHotNewStuff(bool showDownload, bool showUpload);
     /// sets the visibilty of tagging KlineEdits.
     void showTaggingBar(bool show);
 
     ///Set a proxy model with will be used to filter the resources
     void setProxyModel(QAbstractProxyModel *proxyModel);
 
-    void setKnsrcFile(const QString &knsrcFileArg);
     QSize viewSize() const;
 
     KoResourceItemView *itemView() const;

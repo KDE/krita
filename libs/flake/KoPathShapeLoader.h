@@ -20,7 +20,7 @@
 #ifndef _KOPATHSHAPELOADER_H_
 #define _KOPATHSHAPELOADER_H_
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoPathShape;
 class KoPathShapeLoaderPrivate;
@@ -30,7 +30,7 @@ class QString;
  * Parser for svg path data, passed by argument in the parseSvg() method
  * A helper class for parsing path data when loading from svg/odf
  */
-class FLAKE_EXPORT KoPathShapeLoader
+class KRITAFLAKE_EXPORT KoPathShapeLoader
 {
 public:
     explicit KoPathShapeLoader(KoPathShape *path);

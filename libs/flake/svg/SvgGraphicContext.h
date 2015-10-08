@@ -21,12 +21,12 @@
 #ifndef SVGGRAPHICCONTEXT_H
 #define SVGGRAPHICCONTEXT_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include <KoShapeStroke.h>
 #include <QFont>
 #include <QTransform>
 
-class FLAKE_EXPORT SvgGraphicsContext
+class KRITAFLAKE_EXPORT SvgGraphicsContext
 {
 public:
     // Fill/stroke styles

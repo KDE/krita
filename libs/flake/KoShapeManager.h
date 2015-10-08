@@ -27,7 +27,7 @@
 #include <QSet>
 
 #include "KoFlake.h"
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoShape;
 class KoSelection;
@@ -51,7 +51,7 @@ class QRectF;
  *
  * The selection in the different views can be different.
  */
-class FLAKE_EXPORT KoShapeManager : public QObject
+class KRITAFLAKE_EXPORT KoShapeManager : public QObject
 {
     Q_OBJECT
 

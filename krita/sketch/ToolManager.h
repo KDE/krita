@@ -20,7 +20,7 @@
 #ifndef TOOLMANAGER_H
 #define TOOLMANAGER_H
 
-#include <qdeclarativeitem.h>
+#include <QDeclarativeItem>
 
 class KoCanvasController;
 

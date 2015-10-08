@@ -22,7 +22,7 @@
 #ifndef KOPATHPOINTMOVECOMMAND_H
 #define KOPATHPOINTMOVECOMMAND_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <kundo2command.h>
 
@@ -32,7 +32,7 @@ class KoPathPointMoveCommandPrivate;
 class QPointF;
 
 /// The undo / redo command for path point moving.
-class FLAKE_EXPORT KoPathPointMoveCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoPathPointMoveCommand : public KUndo2Command
 {
 public:
     /**

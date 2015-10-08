@@ -49,7 +49,6 @@
 #include "KisTemplate.h"
 #include "KisDetailsPane.h"
 #include "KisTemplatesPane.h"
-#include "KisRecentDocumentsPane.h"
 #include "ui_KisOpenPaneBase.h"
 
 #include <limits.h>
@@ -156,7 +155,6 @@ KisOpenPane::KisOpenPane(QWidget *parent, const QStringList& mimeFilter, const Q
    
    connect(d->cancelButton,SIGNAL(clicked()),this,SLOT(close()));
 
-    initRecentDocs();
     initTemplates(templatesResourcePath);
 
     d->m_freeCustomWidgetIndex = 4;
@@ -215,22 +213,6 @@ void KisOpenPane::openFileDialog()
     dialog.setHideNameFilterDetailsOption();
     foreach(const QString &filename, dialog.filenames()) {
         emit openExistingFile(QUrl::fromUserInput(filename));
-    }
-}
-
-void KisOpenPane::initRecentDocs()
-{
-    QString header = i18n("Recent Documents");
-    KisRecentDocumentsPane* recentDocPane = new KisRecentDocumentsPane(this, header);
-    connect(recentDocPane, SIGNAL(openUrl(const QUrl&)), this, SIGNAL(openExistingFile(const QUrl&)));
-    QTreeWidgetItem* item = addPane(header, koIconName("document-open"), recentDocPane, 0);
-    connect(recentDocPane, SIGNAL(splitterResized(KisDetailsPane*, const QList<int>&)),
-            this, SIGNAL(splitterResized(KisDetailsPane*, const QList<int>&)));
-    connect(this, SIGNAL(splitterResized(KisDetailsPane*, const QList<int>&)),
-            recentDocPane, SLOT(resizeSplitter(KisDetailsPane*, const QList<int>&)));
-
-    if ( KSharedConfig::openConfig()->hasGroup("RecentFiles")) {
-        d->m_sectionList->setCurrentItem(item, 0, QItemSelectionModel::ClearAndSelect);
     }
 }
 

@@ -17,7 +17,6 @@ install(TARGETS kritatoolperspectivegrid  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_
 ########### install files ###############
 
 install( FILES  tool_perspectivegrid_cursor.png  DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
-install( FILES  kritatoolperspectivegrid.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 
 install( FILES

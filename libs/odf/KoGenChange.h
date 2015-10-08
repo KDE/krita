@@ -22,7 +22,7 @@
 
 #include <QMap>
 #include <QString>
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 
 #include <OdfDebug.h>
 
@@ -36,7 +36,7 @@ class KoXmlWriter;
  *
  * Derived from code from KoGenStyle
  */
-class KOODF_EXPORT KoGenChange
+class KRITAODF_EXPORT KoGenChange
 {
 public:
     /**

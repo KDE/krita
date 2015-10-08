@@ -17,8 +17,3 @@ kcoreaddons_desktop_to_json(kritaunsharpfilter kritaunsharpfilter.desktop)
 target_link_libraries(kritaunsharpfilter kritaui)
 
 install(TARGETS kritaunsharpfilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  kritaunsharpfilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

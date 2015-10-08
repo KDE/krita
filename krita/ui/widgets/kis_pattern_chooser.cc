@@ -46,9 +46,6 @@ KisPatternChooser::KisPatternChooser(QWidget *parent)
     m_itemChooser = new KoResourceItemChooser(adapter, this, true);
     m_itemChooser->setPreviewTiled(true);
     m_itemChooser->setPreviewOrientation(Qt::Horizontal);
-    QString knsrcFile = "kritapatterns.knsrc";
-    m_itemChooser->setKnsrcFile(knsrcFile);
-    m_itemChooser->showGetHotNewStuff(true, true);
     m_itemChooser->showTaggingBar(true);
     m_itemChooser->setSynced(true);
 

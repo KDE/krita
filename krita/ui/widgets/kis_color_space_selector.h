@@ -51,9 +51,6 @@ private Q_SLOTS:
     void fillCmbProfiles();
     void colorSpaceChanged();
     void installProfile();
-    void uploadProfile();
-    void downloadProfile();
-    void buttonUpdate();
     void slotOpenAdvancedSelector();
     void slotProfileValid(bool valid);
 private:

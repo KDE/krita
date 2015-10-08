@@ -19,7 +19,7 @@
 #ifndef __KO_ICON_UTILS_H
 #define __KO_ICON_UTILS_H
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 class QIcon;
 class QString;
@@ -30,7 +30,7 @@ namespace KoIconUtils
      * Load a themed icon using its base name. Use it in
      * Krita instead of previous themedIcon()
      */
-    KOWIDGETS_EXPORT QIcon themedIcon(const QString &name);
+    KRITAWIDGETS_EXPORT QIcon themedIcon(const QString &name);
 }
 
 #endif /* __KIS_ICON_UTILS_H */

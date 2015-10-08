@@ -15,4 +15,3 @@ install(TARGETS kritaclonesarray  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  clonesarray.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
-install( FILES  kritaclonesarray.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

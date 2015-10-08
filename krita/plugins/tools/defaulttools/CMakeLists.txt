@@ -28,7 +28,7 @@ add_library(kritadefaulttools MODULE ${kritadefaulttools_PART_SRCS})
 generate_export_header(kritadefaulttools BASE_NAME kritadefaulttools)
 kcoreaddons_desktop_to_json(kritadefaulttools kritadefaulttools.desktop)
 
-target_link_libraries(kritadefaulttools kritaui basicflakes)
+target_link_libraries(kritadefaulttools kritaui kritabasicflakes)
 target_link_libraries(kritadefaulttools ${Boost_SYSTEM_LIBRARY})
 
 install(TARGETS kritadefaulttools  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
@@ -45,8 +45,6 @@ install( FILES
     tool_fill_cursor.png
     tool_gradient_cursor.png
     DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
-
-install( FILES  kritadefaulttools.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 install( FILES
     KisToolPath.action

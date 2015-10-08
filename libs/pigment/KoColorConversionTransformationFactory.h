@@ -29,7 +29,7 @@ class KoColorConversionTransformation;
 /**
  * Factory to create a color transformation between two colorsapces.
  */
-class PIGMENTCMS_EXPORT KoColorConversionTransformationFactory : public KoColorConversionTransformationAbstractFactory
+class KRITAPIGMENT_EXPORT KoColorConversionTransformationFactory : public KoColorConversionTransformationAbstractFactory
 {
 public:
     /**

@@ -23,7 +23,7 @@
 #include <QObject>
 #include <QStringList>
 
-#include "koplugin_export.h"
+#include "kritaplugin_export.h"
 
 /**
  * The pluginloader singleton is responsible for loading the plugins
@@ -59,7 +59,7 @@ MyPlugin::MyPlugin( QObject *parent, const QVariantList& ) : QObject(parent) {
 #include <MyPlugin.moc>
 @endcode
  */
-class KOPLUGIN_EXPORT KoPluginLoader : public QObject
+class KRITAPLUGIN_EXPORT KoPluginLoader : public QObject
 {
 
     Q_OBJECT

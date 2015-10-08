@@ -1,15 +1,6 @@
 project( textPlugin)
 
-add_definitions(-DTRANSLATION_DOMAIN=\"calligra_shape_text\")
-
-# only build the textdocument inspector in non-release builds
-if(NOT RELEASE_BUILD)
-    set(BUILD_TEXTDOCUMENT_INSPECTOR TRUE)
-    add_definitions(-DCREATE_TEXTDOCUMENT_INSPECTOR)
-else()
-    set(BUILD_TEXTDOCUMENT_INSPECTOR FALSE)
-endif()
-
+add_definitions(-DTRANSLATION_DOMAIN=\"krita_shape_text\")
 
 add_subdirectory( pics )
 #add_subdirectory( tests )
@@ -120,17 +111,6 @@ set ( textshape_SRCS
     commands/AutoResizeCommand.cpp
 )
 
-if(BUILD_TEXTDOCUMENT_INSPECTOR)
-    set ( textshape_SRCS
-        ${textshape_SRCS}
-        TextDocumentStructureModel.cpp
-        TextDocumentInspectionDocker.cpp
-        TextDocumentInspectionDockerFactory.cpp
-        TextDocumentInspectionPlugin.cpp
-    )
-endif()
-
-
 ki18n_wrap_ui(textshape_SRCS
     dialogs/SimpleCharacterWidget.ui
     dialogs/SimpleParagraphWidget.ui
@@ -174,27 +154,21 @@ ki18n_wrap_ui(textshape_SRCS
 
 )
 
-add_library(calligra_shape_text MODULE ${textshape_SRCS})
+add_library(krita_shape_text MODULE ${textshape_SRCS})
 
-kcoreaddons_desktop_to_json(calligra_shape_text calligra_shape_text.desktop)
+kcoreaddons_desktop_to_json(krita_shape_text calligra_shape_text.desktop)
 
-target_link_libraries(calligra_shape_text kotext kotextlayout kowidgets KF5::KIOCore KF5::KIOFileWidgets KF5::KIOWidgets KF5::ItemViews KF5::WidgetsAddons
+target_link_libraries(krita_shape_text kritatext kritatextlayout kritawidgets Qt5::Network KF5::Completion KF5::ItemViews KF5::WidgetsAddons
 )
 
 if( SHOULD_BUILD_FEATURE_RDF )
-    target_link_libraries(calligra_shape_text ${SOPRANO_LIBRARIES})
+    target_link_libraries(krita_shape_text ${SOPRANO_LIBRARIES})
 endif()
 
 
-install(TARGETS calligra_shape_text DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS krita_shape_text DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-#ecm_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
+#ecm_install_icons( ${DATA_INSTALL_DIR}/krita/icons )
 
-if(BUILD_TEXTDOCUMENT_INSPECTOR)
-    # workaround: to avoid translations the real desktop file is only generated
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/calligra_docker_textdocumentinspection.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/calligra_docker_textdocumentinspection.desktop)
-
-    install( FILES ${CMAKE_CURRENT_BINARY_DIR}/calligra_docker_textdocumentinspection.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-endif()

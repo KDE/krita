@@ -23,7 +23,7 @@
 #include <kselectaction.h>
 #include <KoZoomMode.h>
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 /**
  * Class KoZoomAction implements an action to provide zoom values.
@@ -34,7 +34,7 @@
  * In a statusbar it provides a scale (slider) plus an editable value plus
  * some buttons for special zoommodes
  */
-class KOWIDGETS_EXPORT KoZoomAction : public KSelectAction
+class KRITAWIDGETS_EXPORT KoZoomAction : public KSelectAction
 {
     Q_OBJECT
     Q_PROPERTY(qreal effectiveZoom READ effectiveZoom NOTIFY zoomChanged)

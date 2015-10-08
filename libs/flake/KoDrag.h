@@ -20,7 +20,7 @@
 #ifndef KODRAG_H
 #define KODRAG_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class QMimeData;
 class QString;
@@ -36,7 +36,7 @@ class KoDragPrivate;
  * setOdf takes care of saving styles and all the other
  * common stuff.
  */
-class FLAKE_EXPORT KoDrag
+class KRITAFLAKE_EXPORT KoDrag
 {
 public:
     KoDrag();

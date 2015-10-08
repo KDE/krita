@@ -23,7 +23,7 @@
 #define KOINTERACTIONTOOL_H
 
 #include "KoToolBase.h"
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoInteractionStrategy;
 class KoInteractionToolPrivate;
@@ -52,7 +52,7 @@ class KoInteractionToolPrivate;
  * @endcode
  * Whereas your strategy (MyStrategy in the example) will contain the interaction code.
  */
-class FLAKE_EXPORT KoInteractionTool : public KoToolBase
+class KRITAFLAKE_EXPORT KoInteractionTool : public KoToolBase
 {
     Q_OBJECT
 public:

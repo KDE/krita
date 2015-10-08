@@ -33,8 +33,6 @@
 
 // KDE
 #include <klocalizedstring.h>
-#include <kdebug.h>
-
 
 VectorShapeFactory::VectorShapeFactory()
     : KoShapeFactoryBase(VectorShape_SHAPEID, i18n("Vector image"))

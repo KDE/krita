@@ -36,9 +36,6 @@
 #include <QThreadPool>
 #include <QSvgRenderer>
 
-// KDE
-#include <kdebug.h>
-
 // Calligra
 #include "KoUnit.h"
 #include "KoStore.h"
@@ -129,7 +126,7 @@ void RenderThread::run()
     image->fill(0);
     QPainter painter;
     if (!painter.begin(image)) {
-        kWarning(31000) << "Failed to create image-cache";
+        //kWarning(31000) << "Failed to create image-cache";
         delete image;
         image = 0;
     } else {
@@ -357,7 +354,7 @@ bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
     m_contents = store->read(size);
     store->close();
     if (m_contents.count() < size) {
-        kDebug(31000) << "Too few bytes read: " << m_contents.count() << " instead of " << size;
+        //kDebug(31000) << "Too few bytes read: " << m_contents.count() << " instead of " << size;
         return false;
     }
 
@@ -430,7 +427,7 @@ VectorShape::VectorType VectorShape::vectorType(const QByteArray &newContents)
 
 bool VectorShape::isWmf(const QByteArray &bytes)
 {
-    kDebug(31000) << "Check for WMF";
+    //kDebug(31000) << "Check for WMF";
 
     const char *data = bytes.constData();
     const int   size = bytes.count();
@@ -442,19 +439,19 @@ bool VectorShape::isWmf(const QByteArray &bytes)
     if (data[0] == '\327' && data[1] == '\315' && data[2] == '\306' && data[3] == '\232')
     {
         // FIXME: Is this a compressed wmf?  Check it up.
-        kDebug(31000) << "WMF identified: header 1";
+        //kDebug(31000) << "WMF identified: header 1";
         return true;
     }
 
     if (data[0] == '\002' && data[1] == '\000' && data[2] == '\011' && data[3] == '\000')
     {
-        kDebug(31000) << "WMF identified: header 2";
+        //kDebug(31000) << "WMF identified: header 2";
         return true;
     }
 
     if (data[0] == '\001' && data[1] == '\000' && data[2] == '\011' && data[3] == '\000')
     {
-        kDebug(31000) << "WMF identified: header 3";
+        //kDebug(31000) << "WMF identified: header 3";
         return true;
     }
 
@@ -463,7 +460,7 @@ bool VectorShape::isWmf(const QByteArray &bytes)
 
 bool VectorShape::isEmf(const QByteArray &bytes)
 {
-    kDebug(31000) << "Check for EMF";
+    //kDebug(31000) << "Check for EMF";
 
     const char *data = bytes.constData();
     const int   size = bytes.count();
@@ -480,7 +477,7 @@ bool VectorShape::isEmf(const QByteArray &bytes)
     if (size > 44
         && data[40] == ' ' && data[41] == 'E' && data[42] == 'M' && data[43] == 'F')
     {
-        kDebug(31000) << "EMF identified";
+        //kDebug(31000) << "EMF identified";
         return true;
     }
 
@@ -489,11 +486,11 @@ bool VectorShape::isEmf(const QByteArray &bytes)
 
 bool VectorShape::isSvm(const QByteArray &bytes)
 {
-    kDebug(31000) << "Check for SVM";
+    //kDebug(31000) << "Check for SVM";
 
     // Check the SVM signature.
     if (bytes.startsWith("VCLMTF")) {
-        kDebug(31000) << "SVM identified";
+        //kDebug(31000) << "SVM identified";
         return true;
     }
 
@@ -502,6 +499,6 @@ bool VectorShape::isSvm(const QByteArray &bytes)
 
 bool VectorShape::isSvg(const QByteArray &bytes)
 {
-    kDebug(31000) << "Check for SVG";
+    //kDebug(31000) << "Check for SVG";
     return (bytes.contains("svg"));
 }

@@ -19,7 +19,7 @@
 #ifndef KOCOPYCONTROLLER_H
 #define KOCOPYCONTROLLER_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QObject>
 
@@ -34,7 +34,7 @@ class KoCopyControllerPrivate;
  * Additionally; when the tool does not allow copying (KoToolBase::hasSelection() returns false)
  * the signal copyRequested will be emitted for applications to connect to.
  */
-class FLAKE_EXPORT KoCopyController : public QObject
+class KRITAFLAKE_EXPORT KoCopyController : public QObject
 {
     Q_OBJECT
 public:

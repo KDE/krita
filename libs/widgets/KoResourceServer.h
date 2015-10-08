@@ -40,7 +40,7 @@
 #include "KoResourceTagStore.h"
 #include "KoResourcePaths.h"
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 #include "WidgetsDebug.h"
 
 class KoResource;
@@ -48,7 +48,7 @@ class KoResource;
 /**
  * KoResourceServerBase is the base class of all resource servers
  */
-class KOWIDGETS_EXPORT KoResourceServerBase {
+class KRITAWIDGETS_EXPORT KoResourceServerBase {
 
 public:
     /**

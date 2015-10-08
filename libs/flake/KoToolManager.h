@@ -22,7 +22,7 @@
 #define KO_TOOL_MANAGER
 
 #include "KoInputDevice.h"
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QObject>
 #include <QList>
@@ -51,7 +51,7 @@ class QCursor;
  * KoToolAction objects are indirectly owned by the KoToolManager singleton
  * and live until the end of its lifetime.
  */
-class FLAKE_EXPORT KoToolAction : public QObject
+class KRITAFLAKE_EXPORT KoToolAction : public QObject
 {
     Q_OBJECT
 public:
@@ -138,7 +138,7 @@ private:
    the tool stuff.)
 
  */
-class FLAKE_EXPORT KoToolManager : public QObject
+class KRITAFLAKE_EXPORT KoToolManager : public QObject
 {
     Q_OBJECT
 

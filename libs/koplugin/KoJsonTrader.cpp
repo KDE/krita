@@ -63,9 +63,9 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
                 if (info.isDir() && info.fileName().contains("lib")) {
                     QDir libDir(info.absoluteFilePath());
 
-                    // on many systems this will be the actual lib dir (and calligra subdir contains plugins)
-                    if (libDir.entryList(QStringList() << "calligra").size() > 0) {
-                        m_pluginPath = info.absoluteFilePath() + "/calligra";
+                    // on many systems this will be the actual lib dir (and krita subdir contains plugins)
+                    if (libDir.entryList(QStringList() << "krita").size() > 0) {
+                        m_pluginPath = info.absoluteFilePath() + "/krita";
                         break;
                     }
 
@@ -74,8 +74,8 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
                     foreach(QString subEntry, libDir.entryList()) {
                         QFileInfo subInfo(libDir, subEntry);
                         if (subInfo.isDir()) {
-                            if (QDir(subInfo.absoluteFilePath()).entryList(QStringList() << "calligra").size() > 0) {
-                                m_pluginPath = subInfo.absoluteFilePath() + "/calligra";
+                            if (QDir(subInfo.absoluteFilePath()).entryList(QStringList() << "krita").size() > 0) {
+                                m_pluginPath = subInfo.absoluteFilePath() + "/krita";
                                 break; // will only break inner loop so we need the extra check below
                             }
                         }

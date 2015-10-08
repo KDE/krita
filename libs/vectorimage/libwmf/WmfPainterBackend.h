@@ -20,7 +20,7 @@
 #ifndef _WMFPAINTERBACKEND_H_
 #define _WMFPAINTERBACKEND_H_
 
-#include "kovectorimage_export.h"
+#include "kritavectorimage_export.h"
 #include "WmfAbstractBackend.h"
 
 #include <QPainter>
@@ -55,7 +55,7 @@ class WmfDeviceContext;
  *
  */
 
-class KOVECTORIMAGE_EXPORT WmfPainterBackend : public WmfAbstractBackend
+class KRITAVECTORIMAGE_EXPORT WmfPainterBackend : public WmfAbstractBackend
 {
 public:
     WmfPainterBackend(QPainter *painter, const QSizeF &outputSize);

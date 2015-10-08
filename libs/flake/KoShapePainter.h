@@ -21,7 +21,7 @@
 #ifndef KOSHAPEPAINTER_H
 #define KOSHAPEPAINTER_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QList>
 #include <QRectF>
@@ -38,7 +38,7 @@ class QImage;
  * the shapeManager and all its caching every time.  If at all possible use
  * a shapeManager directly and avoid loosing the cache between usages.
  */
-class FLAKE_EXPORT KoShapePainter
+class KRITAFLAKE_EXPORT KoShapePainter
 {
 public:
     explicit KoShapePainter(KoShapeManagerPaintingStrategy *strategy = 0);

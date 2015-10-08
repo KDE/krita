@@ -24,12 +24,12 @@
 #include <QVector>
 #include <QVariant>
 
-#include "pigment_export.h"
+#include "kritapigment_export.h"
 
 /**
  * Contains information needed for color transformation.
  */
-class PIGMENTCMS_EXPORT KoColorProfile
+class KRITAPIGMENT_EXPORT KoColorProfile
 {
 
 public:

@@ -22,6 +22,7 @@
 #include "kis_paint_device.h"
 #include "kis_paint_device_frames_interface.h"
 #include "kis_datamanager.h"
+#include "kis_image.h"
 
 #include <config-tiles.h> // For the next define
 

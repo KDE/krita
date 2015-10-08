@@ -12,4 +12,3 @@ install(TARGETS kritaoffsetimage  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  offsetimage.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
-install( FILES  kritaoffsetimage.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

@@ -18,11 +18,14 @@
  */
 #ifndef LINKINSERTDIALOG
 #define LINKINSERTDIALOG
+
 #include <ui_LinkInsertionDialog.h>
+
 #include <QDialog>
-#include <qnetworkreply.h>
-#include <qnetworkaccessmanager.h>
+#include <QNetworkReply>
+#include <QNetworkAccessManager>
 #include <QWidget>
+
 #include <KoBookmarkManager.h>
 #include <KoTextRangeManager.h>
 #include <KoTextDocument.h>

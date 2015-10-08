@@ -20,14 +20,14 @@
 #ifndef KOSHAPECREATECOMMAND_H
 #define KOSHAPECREATECOMMAND_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include <kundo2command.h>
 
 class KoShape;
 class KoShapeBasedDocumentBase;
 
 /// The undo / redo command for creating shapes
-class FLAKE_EXPORT KoShapeCreateCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoShapeCreateCommand : public KUndo2Command
 {
 public:
     /**

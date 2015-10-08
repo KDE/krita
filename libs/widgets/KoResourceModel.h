@@ -24,13 +24,13 @@
 #include <QSharedPointer>
 
 #include "KoResourceModelBase.h"
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 class KoAbstractResourceServerAdapter;
 class KoResource;
 
 /// The resource model managing the resource data
-class KOWIDGETS_EXPORT KoResourceModel : public KoResourceModelBase
+class KRITAWIDGETS_EXPORT KoResourceModel : public KoResourceModelBase
 {
     Q_OBJECT
 public:

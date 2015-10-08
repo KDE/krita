@@ -20,7 +20,7 @@
 #include "ProgressProxy.h"
 #include "Settings.h"
 #include "RecentFileManager.h"
-#include <libs/pigment/KoColor.h>
+#include <KoColor.h>
 #include <KisPart.h>
 
 

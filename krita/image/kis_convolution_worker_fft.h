@@ -104,8 +104,8 @@ public:
         QList<KoChannelInfo*> convChannelList = this->convolvableChannelList(src);
 
         m_channelFFT.resize(convChannelList.count());
-        for (quint32 i = 0; i < m_channelFFT.size(); ++i) {
-            m_channelFFT[i] = (fftw_complex *)fftw_malloc(sizeof(fftw_complex) * m_fftLength);
+        for (auto i = m_channelFFT.begin(); i != m_channelFFT.end(); ++i) {
+            *i = (fftw_complex *)fftw_malloc(sizeof(fftw_complex) * m_fftLength);
         }
 
         const double kernelFactor = kernel->factor() ? kernel->factor() : 1;
@@ -140,15 +140,15 @@ public:
         addToProgress(progressPerFFT);
         if (isInterrupted()) return;
 
-        for (quint32 k = 0; k < m_channelFFT.size(); ++k)
+        for (auto k = m_channelFFT.begin(); k != m_channelFFT.end(); ++k)
         {
-            fftw_execute_dft_r2c(fftwPlanForward, (double*)(m_channelFFT[k]), m_channelFFT[k]);
+            fftw_execute_dft_r2c(fftwPlanForward, (double*)(*k), *k);
             addToProgress(progressPerFFT);
             if (isInterrupted()) return;
 
-            fftMultiply(m_channelFFT[k], m_kernelFFT);
+            fftMultiply(*k, m_kernelFFT);
 
-            fftw_execute_dft_c2r(fftwPlanBackward, m_channelFFT[k], (double*)m_channelFFT[k]);
+            fftw_execute_dft_c2r(fftwPlanBackward, *k, (double*)*k);
             addToProgress(progressPerFFT);
             if (isInterrupted()) return;
         }
@@ -231,21 +231,21 @@ public:
 
         QVector<double*> channelPtr(info.numChannels());
 
-        for (quint32 k = 0; k < channelPtr.size(); ++k) {
+        for (int k = 0; k < channelPtr.size(); ++k) {
             channelPtr[k] = (double*)m_channelFFT[k];
         }
 
-        for (quint32 y = 0; y < rect.height(); ++y) {
+        for (int y = 0; y < rect.height(); ++y) {
             QVector<double*> cacheRowStart(channelPtr);
 
-            for (quint32 x = 0; x < rect.width(); ++x) {
+            for (int x = 0; x < rect.width(); ++x) {
                 const quint8 *data = hitSrc->oldRawData();
 
                 // no alpha is a rare case, so just multiply by 1.0 in that case
                 double alphaValue = info.alphaRealPos >= 0 ?
                     info.toDoubleFuncPtr[info.alphaCachePos](data, info.alphaRealPos) : 1.0;
 
-                for (quint32 k = 0; k < channelPtr.size(); ++k) {
+                for (int k = 0; k < channelPtr.size(); ++k) {
                     if (k != info.alphaCachePos) {
                         const quint32 channelPos = info.convChannelList[k]->pos();
                         *channelPtr[k] = info.toDoubleFuncPtr[k](data, channelPos) * alphaValue;
@@ -259,7 +259,7 @@ public:
                 hitSrc->nextPixel();
             }
 
-            for (quint32 k = 0; k < channelPtr.size(); ++k) {
+            for (int k = 0; k < channelPtr.size(); ++k) {
                 channelPtr[k] = cacheRowStart[k] + cacheRowStride;
             }
 
@@ -315,14 +315,14 @@ public:
 
         QVector<double*> channelPtr(info.numChannels());
 
-        for (quint32 k = 0; k < channelPtr.size(); ++k) {
+        for (int k = 0; k < channelPtr.size(); ++k) {
             channelPtr[k] = (double*)m_channelFFT[k] + initialOffset;
         }
 
-        for (quint32 y = 0; y < rect.height(); ++y) {
+        for (int y = 0; y < rect.height(); ++y) {
             QVector<double*> cacheRowStart(channelPtr);
 
-            for (quint32 x = 0; x < rect.width(); ++x) {
+            for (int x = 0; x < rect.width(); ++x) {
                 quint8 *dstPtr = hitDst->rawData();
 
                 if (info.alphaCachePos >= 0) {
@@ -334,7 +334,7 @@ public:
                                                         channelPtr);
                     qreal alphaValueInv = 1.0 / alphaValue;
 
-                    for (quint32 k = 0; k < channelPtr.size(); ++k) {
+                    for (int k = 0; k < channelPtr.size(); ++k) {
                         if (k != info.alphaCachePos) {
                             writeOneChannelFromCache<true>(dstPtr,
                                                            k,
@@ -346,7 +346,7 @@ public:
                         ++channelPtr[k];
                     }
                 } else {
-                    for (quint32 k = 0; k < channelPtr.size(); ++k) {
+                    for (int k = 0; k < channelPtr.size(); ++k) {
                         writeOneChannelFromCache<false>(dstPtr,
                                                         k,
                                                         info.convChannelList[k]->pos(),
@@ -359,7 +359,7 @@ public:
                 hitDst->nextPixel();
             }
 
-            for (quint32 k = 0; k < channelPtr.size(); ++k) {
+            for (int k = 0; k < channelPtr.size(); ++k) {
                 channelPtr[k] = cacheRowStart[k] + cacheRowStride;
             }
 

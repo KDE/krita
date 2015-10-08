@@ -21,7 +21,7 @@
 #ifndef KOZOOMHANDLER_H
 #define KOZOOMHANDLER_H
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 #include <KoZoomMode.h>
 #include <KoViewConverter.h>
 
@@ -34,7 +34,7 @@
  * An instance of KoZoomHandler operates at a given zoom  and resolution
  * so there is usually one instance of KoZoomHandler per view.
  */
-class KOWIDGETS_EXPORT KoZoomHandler : public KoViewConverter
+class KRITAWIDGETS_EXPORT KoZoomHandler : public KoViewConverter
 {
 public:
 

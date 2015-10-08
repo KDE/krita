@@ -22,7 +22,7 @@
 #ifndef KOTEXTDOCUMENTLAYOUT_H
 #define KOTEXTDOCUMENTLAYOUT_H
 
-#include "kotextlayout_export.h"
+#include "kritatextlayout_export.h"
 
 #include <QAbstractTextDocumentLayout>
 #include <QList>
@@ -43,7 +43,7 @@ class KoTextLayoutObstruction;
 class QRectF;
 class QSizeF;
 
-class KOTEXTLAYOUT_EXPORT KoInlineObjectExtent
+class KRITATEXTLAYOUT_EXPORT KoInlineObjectExtent
 {
 public:
     explicit KoInlineObjectExtent(qreal ascent = 0, qreal descent = 0);
@@ -56,7 +56,7 @@ public:
  * Text layouter that allows text to flow in multiple root area and around
  * obstructions.
  */
-class KOTEXTLAYOUT_EXPORT KoTextDocumentLayout : public QAbstractTextDocumentLayout
+class KRITATEXTLAYOUT_EXPORT KoTextDocumentLayout : public QAbstractTextDocumentLayout
 {
     Q_OBJECT
 public:

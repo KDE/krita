@@ -24,14 +24,14 @@
 #include <QObject>
 #include <QScopedPointer>
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 /**
  * KoResourceItemChooserSync is a singleton that sync the size of entries in the
  * resource item choosers between differnt choosers
  * To use the syncing it has to be turned on in the KoResourceItemChooser
  */
-class KOWIDGETS_EXPORT KoResourceItemChooserSync : public QObject
+class KRITAWIDGETS_EXPORT KoResourceItemChooserSync : public QObject
 {
     Q_OBJECT
 public:

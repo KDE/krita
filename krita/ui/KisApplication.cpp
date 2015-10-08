@@ -47,7 +47,6 @@
 #include <kiconloader.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <krecentdirs.h>
 
 #include <KoPluginLoader.h>
 #include <KoShapeRegistry.h>
@@ -146,9 +145,6 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     QString version = CalligraVersionWrapper::versionString(true);
     setApplicationVersion(version);
 
-    // Tell the iconloader about share/apps/calligra/icons
-    KIconLoader::global()->addAppDir("calligra");
-
     // Initialize all Calligra directories etc.
     KoGlobal::initialize();
 
@@ -178,7 +174,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
 #endif
 
     qDebug() << "Available styles:" << QStyleFactory::keys();
-    QStringList styles = QStringList() << "Breeze" << "Oxygen" << "Plastique" << "Fusion";
+    QStringList styles = QStringList() /*<< "Breeze"*/ << "Oxygen" << "Plastique" << "Fusion";
     foreach(const QString & style, styles) {
         if (!setStyle(style)) {
             qDebug() << "No" << style << "available.";

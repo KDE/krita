@@ -21,6 +21,7 @@
 #include "kis_paint_device.h"
 #include "kis_transaction.h"
 #include "kis_node.h"
+#include "kis_image.h"
 
 #include "kis_transform_worker.h"
 #include "processing/kis_transform_processing_visitor.h"

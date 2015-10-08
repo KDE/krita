@@ -25,7 +25,7 @@
 #include <QMultiMap>
 #include <QBitArray>
 
-#include "pigment_export.h"
+#include "kritapigment_export.h"
 
 class KoColorSpace;
 #include <KoID.h>
@@ -131,7 +131,7 @@ const QString COMPOSITE_LIGHTER_COLOR = "lighter color";
 const QString COMPOSITE_UNDEF        = "undefined";
 
 
-class PIGMENTCMS_EXPORT KoCompositeOpRegistry
+class KRITAPIGMENT_EXPORT KoCompositeOpRegistry
 {
     typedef QMultiMap<KoID,KoID> KoIDMap;
     typedef QList<KoID>          KoIDList;

@@ -23,7 +23,7 @@
 #include "KoBookmarkManager.h"
 #include "KoAnnotationManager.h"
 #include "KoTextRange.h"
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 // Qt + kde
 #include <QMetaType>
@@ -34,7 +34,7 @@
 /**
  * A container to register all the text ranges with.
  */
-class KOTEXT_EXPORT KoTextRangeManager : public QObject
+class KRITATEXT_EXPORT KoTextRangeManager : public QObject
 {
     Q_OBJECT
 public:

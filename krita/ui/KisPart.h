@@ -25,10 +25,7 @@
 
 #include <QList>
 #include <QPointer>
-
-
 #include <QUrl>
-#include <kxmlguiclient.h>
 
 #include "kritaui_export.h"
 

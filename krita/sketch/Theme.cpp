@@ -31,9 +31,7 @@
 #include <QWidget>
 #include <QDeclarativeComponent>
 
-
 #include <KoResourcePaths.h>
-#include <QUrl>
 
 #include "QmlGlobalEngine.h"
 

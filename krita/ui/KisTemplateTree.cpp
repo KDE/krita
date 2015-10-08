@@ -29,7 +29,6 @@
 
 
 #include <KoResourcePaths.h>
-#include <KoNetAccess.h>
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
 
@@ -83,7 +82,8 @@ void KisTemplateTree::writeTemplateTree()
                 //dbgUI <<"hidden";
                 if (group->dirs().count() == 1 && group->dirs().contains(localDir)) {
                     //dbgUI <<"local only";
-                    KIO::NetAccess::del(QUrl::fromLocalFile(group->dirs().first()), 0);
+                    QFile f(group->dirs().first());
+                    f.remove();
                     //dbgUI <<"removing:" << group->dirs().first();
                 } else {
                     //dbgUI <<"global";

@@ -21,7 +21,7 @@
 #define KOODFPASTE_H
 
 #include "KoOdf.h"
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 #include "KoXmlReaderForward.h"
 
 class QMimeData;
@@ -31,7 +31,7 @@ class KoOdfReadStore;
 /**
  * This is a helper class to help you paste odf snippets.
  */
-class KOODF_EXPORT KoOdfPaste
+class KRITAODF_EXPORT KoOdfPaste
 {
 public:
     KoOdfPaste();

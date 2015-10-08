@@ -19,7 +19,7 @@
 #ifndef KOANNOTATIONLAYOUTMANAGER_H
 #define KOANNOTATIONLAYOUTMANAGER_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QObject>
 
@@ -31,7 +31,7 @@ class QPointF;
 
 class KoShape;
 
-class FLAKE_EXPORT KoAnnotationLayoutManager: public QObject
+class KRITAFLAKE_EXPORT KoAnnotationLayoutManager: public QObject
 {
     Q_OBJECT
 public:

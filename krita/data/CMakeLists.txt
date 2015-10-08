@@ -13,28 +13,9 @@ add_subdirectory( themes )
 add_subdirectory( predefined_image_sizes )
 add_subdirectory( input )
 add_subdirectory( paintoppresets )
+add_subdirectory( palettes )
 
 ########### install files ###############
-
-install( FILES  
-    krita_filter.desktop      
-    krita_filefilter.desktop
-    krita_brush.desktop      
-    krita_paintop.desktop      
-    krita_plugin.desktop      
-    krita_tool.desktop
-    krita_generator.desktop
-    krita_dock.desktop
-    DESTINATION ${SERVICETYPES_INSTALL_DIR})
-
-install( FILES
-    kritarc
-    kritapresets.knsrc
-    kritabrushes.knsrc
-    kritapatterns.knsrc
-    kritagradients.knsrc
-    kritaiccprofiles.knsrc
-    DESTINATION ${CONFIG_INSTALL_DIR} )
 
 install( FILES
     krita.xml

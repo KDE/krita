@@ -43,7 +43,6 @@
 
 #include <kis_debug.h>
 #include <KoResourcePaths.h>
-#include <kxmlguifactory.h>
 #include <KoDialog.h>
 #include <kdesktopfile.h>
 #include <QMessageBox>
@@ -437,9 +436,15 @@ KisAnimationCachePopulator* KisPart::cachePopulator() const
 
 void KisPart::openExistingFile(const QUrl &url)
 {
+    Q_ASSERT(url.isLocalFile());
     qApp->setOverrideCursor(Qt::BusyCursor);
     KisDocument *document = createDocument();
     if (!document->openUrl(url)) {
+        delete document;
+        return;
+    }
+    if (!document->image()) {
+        delete document;
         return;
     }
     document->setModified(false);

@@ -33,5 +33,4 @@ target_link_libraries(kritapngexport kritaui ${PNG_LIBRARIES})
 
 install(TARGETS kritapngexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
-install( FILES  krita_png_import.desktop krita_png_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( PROGRAMS  krita_png.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

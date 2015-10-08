@@ -21,7 +21,7 @@
 #ifndef KOTEXT_H
 #define KOTEXT_H
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 #include <KoDocumentResourceManager.h>
 #include <styles/KoCharacterStyle.h>
@@ -37,12 +37,12 @@ class QStringList;
  */
 namespace KoText
 {
-KOTEXT_EXPORT QStringList underlineTypeList();
-KOTEXT_EXPORT QStringList underlineStyleList();
-KOTEXT_EXPORT Qt::Alignment alignmentFromString(const QString &align);
-KOTEXT_EXPORT QString alignmentToString(Qt::Alignment align);
-KOTEXT_EXPORT Qt::Alignment valignmentFromString(const QString &align);
-KOTEXT_EXPORT QString valignmentToString(Qt::Alignment align);
+KRITATEXT_EXPORT QStringList underlineTypeList();
+KRITATEXT_EXPORT QStringList underlineStyleList();
+KRITATEXT_EXPORT Qt::Alignment alignmentFromString(const QString &align);
+KRITATEXT_EXPORT QString alignmentToString(Qt::Alignment align);
+KRITATEXT_EXPORT Qt::Alignment valignmentFromString(const QString &align);
+KRITATEXT_EXPORT QString valignmentToString(Qt::Alignment align);
 
 /// This enum contains values to be used as keys in KoCanvasResourceManager
 enum CanvasResource {
@@ -55,7 +55,7 @@ enum CanvasResource {
 };
 
 /// For paragraphs each tab definition is represented by this struct.
-struct KOTEXT_EXPORT Tab {
+struct KRITATEXT_EXPORT Tab {
     Tab();
     qreal position;    ///< distance in ps-points from the edge of the text-shape
     QTextOption::TabType type;       ///< Determine which type is used.
@@ -106,9 +106,9 @@ enum Direction {
 };
 
 /// convert the string version of directions (as specified in XSL and ODF) to the Direction enum
-KOTEXT_EXPORT Direction directionFromString(const QString &direction);
+KRITATEXT_EXPORT Direction directionFromString(const QString &direction);
 /// convert the Direction enum to the string version of directions (as specified in XSL and ODF)
-KOTEXT_EXPORT QString directionToString(Direction direction);
+KRITATEXT_EXPORT QString directionToString(Direction direction);
 
 /// There are several possible text breaks
 enum KoTextBreakProperty {
@@ -118,12 +118,12 @@ enum KoTextBreakProperty {
 };
 
 /// convert the string version of text break (as specified in ODF) to the KoTextBreakProperty enum
-KOTEXT_EXPORT KoTextBreakProperty textBreakFromString(const QString &textBreak);
+KRITATEXT_EXPORT KoTextBreakProperty textBreakFromString(const QString &textBreak);
 /// convert the KoTextBreakProperty enum to the string version of text break (as specified in ODF)
-KOTEXT_EXPORT QString textBreakToString (KoTextBreakProperty textBreak);
+KRITATEXT_EXPORT QString textBreakToString (KoTextBreakProperty textBreak);
 
 ///@TODO: move to KoUnit ?
-KOTEXT_EXPORT QTextLength parseLength (const QString &length);
+KRITATEXT_EXPORT QTextLength parseLength (const QString &length);
 }
 
 Q_DECLARE_METATYPE(KoText::Tab)

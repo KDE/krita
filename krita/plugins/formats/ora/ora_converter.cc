@@ -53,7 +53,7 @@ KisImageBuilder_Result OraConverter::buildImage(const QUrl &uri)
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
 
-    KoStore* store = KoStore::createStore(QApplication::activeWindow(), uri, KoStore::Read, "image/openraster", KoStore::Zip);
+    KoStore* store = KoStore::createStore(uri, KoStore::Read, "image/openraster", KoStore::Zip);
     if (!store) {
         delete store;
         return KisImageBuilder_RESULT_FAILURE;
@@ -89,7 +89,7 @@ KisImageBuilder_Result OraConverter::buildFile(const QUrl &uri, KisImageWSP imag
         return KisImageBuilder_RESULT_NOT_LOCAL;
 
     // Open file for writing
-    KoStore* store = KoStore::createStore(QApplication::activeWindow(), uri, KoStore::Write, "image/openraster", KoStore::Zip);
+    KoStore* store = KoStore::createStore(uri, KoStore::Write, "image/openraster", KoStore::Zip);
     if (!store) {
         return KisImageBuilder_RESULT_FAILURE;
     }

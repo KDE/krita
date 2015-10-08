@@ -21,13 +21,13 @@
 
 #include <QAbstractButton>
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 /**
  * This button gives a visual indication of weather the 'aspect ratio' is locked.
  * Typically you would use this alongside 2 spinboxes with a value like a width and height.
  */
-class KOWIDGETS_EXPORT KoAspectButton : public QAbstractButton {
+class KRITAWIDGETS_EXPORT KoAspectButton : public QAbstractButton {
     Q_OBJECT
 public:
     /// constructor

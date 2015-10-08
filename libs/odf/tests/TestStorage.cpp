@@ -56,14 +56,8 @@ void TestStorage::storage_data()
     QTest::addColumn<int>("type");
     QTest::addColumn<QString>("testFile");
 
-    QTest::newRow("tar") << (int) KoStore::Tar << "test.tgz";
     QTest::newRow("directory") << (int) KoStore::Directory << "testdir";
     QTest::newRow("zip") << (int) KoStore::Zip <<"test.zip";
-#ifdef QCA2
-    if (KoEncryptionChecker::isEncryptionSupported()) {
-        QTest::newRow("Encrypted") << (int) KoStore::Encrypted << "testEncrypted.zip";
-    }
-#endif
 }
 
 void TestStorage::storage()
@@ -204,7 +198,6 @@ void TestStorage::storage2_data()
     QTest::addColumn<int>("type");
     QTest::addColumn<QString>("testFile");
 
-    QTest::newRow("tar") << (int) KoStore::Tar << "test.tgz";
     QTest::newRow("directory") << (int) KoStore::Directory << "testdir";
     QTest::newRow("zip") << (int) KoStore::Zip <<"test.zip";
 }

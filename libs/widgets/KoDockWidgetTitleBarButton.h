@@ -19,7 +19,7 @@
 #ifndef KODOCKWIDGETTITLEBARBUTTON_H_
 #define KODOCKWIDGETTITLEBARBUTTON_H_
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 #include <QAbstractButton>
 
 class QEvent;
@@ -31,7 +31,7 @@ class QPaintEvent;
  * Used in KoDockWidgetTitleBar but can be also used for similar
  * purposes inside other parents.
  */
-class KOWIDGETS_EXPORT KoDockWidgetTitleBarButton : public QAbstractButton
+class KRITAWIDGETS_EXPORT KoDockWidgetTitleBarButton : public QAbstractButton
 {
     Q_OBJECT
 

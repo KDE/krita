@@ -30,9 +30,6 @@
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
 #include "TextDebug.h"
-#include <writeodf/writeodftext.h>
-#include <writeodf/writeodfoffice.h>
-#include <writeodf/writeodfdc.h>
 
 #include <QTextDocument>
 #include <QTextFrame>
@@ -41,8 +38,6 @@
 #include <QFontMetricsF>
 #include <QTextOption>
 #include <QDateTime>
-
-using namespace writeodf;
 
 class Q_DECL_HIDDEN KoInlineNote::Private
 {
@@ -268,30 +263,44 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
     KoXmlWriter *writer = &context.xmlWriter();
 
     if (d->type == Footnote || d->type == Endnote) {
-        text_note note(writer, (d->type == Footnote) ?"footnote" :"endnote");
-        text_note_citation cite(note.add_text_note_citation());
-        if (!autoNumbering()) {
-            cite.set_text_label(d->label);
+        writer->startElement("text:note", false);
+        if (d->type == Footnote) {
+            writer->addAttribute("text:note-class", "footnote");
+        } else {
+            writer->addAttribute("text:note-class", "endnote");
         }
-        cite.addTextNode(d->label);
 
-        text_note_body body(note.add_text_note_body());
+        writer->startElement("text:note-citation", false);
+        if (!autoNumbering()) {
+            writer->addAttribute("text:label", d->label);
+        }
+        writer->addTextNode(d->label);
+        writer->endElement();
+
+        writer->startElement("text:note-body", false);
         KoTextWriter textWriter(context);
         textWriter.write(d->document, d->textFrame->firstPosition(), d->textFrame->lastPosition());
+        writer->endElement();
+
+        writer->endElement();
     }
     else if (d->type == Annotation) {
-        office_annotation annotation(writer);
+        writer->startElement("office:annotation");
         if (!d->author.isEmpty()) {
-            dc_creator creator(annotation.add_dc_creator());
-            creator.addTextNode(d->author);
+            writer->startElement("dc:creator");
+            writer->addTextNode(d->author);
+            writer->endElement();
         }
         if (d->date.isValid()) {
-            dc_date date(annotation.add_dc_date());
-            date.addTextNode(d->date.toString(Qt::ISODate));
+            writer->startElement("dc:date");
+            writer->addTextSpan(d->date.toString(Qt::ISODate));
+            writer->endElement();
         }
 
         KoTextWriter textWriter(context);
         textWriter.write(d->document, d->textFrame->firstPosition(),d->textFrame->lastPosition());
+
+        writer->endElement();
     }
 }
 

@@ -68,6 +68,6 @@ ecm_install_icons(
         sc-actions-artistictext-detach-path.svg
         sc-actions-artistictext-tool.svg
         sc-actions-send_backward.svgz
-    DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
+    DESTINATION ${DATA_INSTALL_DIR}/krita/icons
 )
 

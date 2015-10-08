@@ -38,7 +38,7 @@ class QPainter;
 * This class handles the selection of points. It makes sure
 * the canvas is repainted when the selection changes.
 */
-class FLAKE_EXPORT KoPathToolSelection : public KoToolSelection
+class KRITAFLAKE_EXPORT KoPathToolSelection : public KoToolSelection
 {
     Q_OBJECT
 

@@ -18,7 +18,7 @@
 
 #include "kis_onion_skin_compositor_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 
 #include "kis_onion_skin_compositor.h"
 #include "kis_paint_device.h"
@@ -189,5 +189,5 @@ void KisOnionSkinCompositorTest::testSettings()
     QVERIFY(result == expected);
 }
 
-QTEST_KDEMAIN(KisOnionSkinCompositorTest, NoGUI)
+QTEST_MAIN(KisOnionSkinCompositorTest)
 #include "kis_onion_skin_compositor_test.moc"

@@ -25,14 +25,14 @@
 
 #include "KoParameterShape.h"
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #define KOCONNECTIONSHAPEID "KoConnectionShape"
 
 class KoConnectionShapePrivate;
 
 /// API docs go here
-class FLAKE_EXPORT KoConnectionShape : public KoParameterShape
+class KRITAFLAKE_EXPORT KoConnectionShape : public KoParameterShape
 {
 public:
     enum Type {

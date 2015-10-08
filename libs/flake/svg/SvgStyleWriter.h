@@ -29,7 +29,7 @@
 #ifndef SVGSTYLEWRITER_H
 #define SVGSTYLEWRITER_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include <QGradientStops>
 #include <QSharedPointer>
 
@@ -40,7 +40,7 @@ class QTransform;
 class QGradient;
 
 /// Helper class to save svg styles
-class FLAKE_EXPORT SvgStyleWriter
+class KRITAFLAKE_EXPORT SvgStyleWriter
 {
 public:
     /// Saves the style of the specified shape

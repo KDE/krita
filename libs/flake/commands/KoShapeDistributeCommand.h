@@ -22,7 +22,7 @@
 #define KOSHAPEDISTRIBUTECOMMAND_H
 
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <kundo2command.h>
 #include <QList>
@@ -30,7 +30,7 @@
 class KoShape;
 
 /// The undo / redo command for distributing shapes
-class FLAKE_EXPORT KoShapeDistributeCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoShapeDistributeCommand : public KUndo2Command
 {
 public:
     /// The different options to ditribute with this command

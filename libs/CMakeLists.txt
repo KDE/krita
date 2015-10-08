@@ -23,22 +23,6 @@ if (SHOULD_BUILD_LIB_CALLIGRA)
     add_subdirectory( kundo2 )
 endif ()
 
-if (SHOULD_BUILD_LIB_KOMAIN)
-    add_subdirectory( main )
-endif ()
-
-if (SHOULD_BUILD_FEATURE_SCRIPTING)
-    add_subdirectory( kokross )
-endif ()
-
 if (SHOULD_BUILD_LIB_KOVECTORIMAGE)
     add_subdirectory( vectorimage )
-endif ()
-
-if (SHOULD_BUILD_LIB_KOPAGEAPP)
-    add_subdirectory( kopageapp )
-endif ()
-
-if (SHOULD_BUILD_FEATURE_RDF)
-    add_subdirectory( rdf )
 endif ()

@@ -148,15 +148,13 @@ Collapsed=false
 Collapsed=false
 
 [KoShapeCollection]
-QuickShapes=ArtisticText,TextShapeID,DivineProportionShapeID,EllipseShape,RectangleShape
+QuickShapes=ArtisticText,TextShapeID,EllipseShape,RectangleShape
 
 [calligra]
-FlakePluginsDisabled=formulashape,divineproportionshape,kexirelationdesignshape,vectorshape
-ShapePluginsDisabled=musicshape,pictureshape,videoshape,chartshape,spreadsheetshape,pluginshape,treeshape,commentshape,stateshape,webshape
-TextEditingPluginsDisabled=thesaurustool,changecase,autocorrect,spellcheck
-TextInlinePluginsDisabled=textvariables,kprvariables
+FlakePluginsDisabled=
+ShapePluginsDisabled=
 ToolPluginsDisabled=paragraphtool
-ToolsBlacklist=CreatePathTool,ConnectionTool,KarbonFilterEffectsTool,PanTool,KoZoomToolId
+ToolsBlacklist=CreatePathTool,ConnectionTool,KarbonFilterEffectsTool
 
 [favoriteList]
 favoriteBrushes=paintbrush,deformbrush,hairybrush,hatchingbrush,sketchbrush,smudge,spraybrush,

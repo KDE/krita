@@ -22,7 +22,7 @@
 #ifndef KO_PATH_CONNECTION_POINT_STRATEGY
 #define KO_PATH_CONNECTION_POINT_STRATEGY
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include "KoParameterChangeStrategy.h"
 
 class KoConnectionShape;
@@ -32,7 +32,7 @@ class KoPathConnectionPointStrategyPrivate;
 /**
  * @brief Strategy for moving end points of a connection shape.
  */
-class FLAKE_EXPORT KoPathConnectionPointStrategy : public KoParameterChangeStrategy
+class KRITAFLAKE_EXPORT KoPathConnectionPointStrategy : public KoParameterChangeStrategy
 {
 public:
     KoPathConnectionPointStrategy(KoToolBase *tool, KoConnectionShape *parameterShape, int handleId);

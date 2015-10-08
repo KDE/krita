@@ -27,6 +27,7 @@
 #include "kis_filter_mask.h"
 #include "kis_transform_mask.h"
 #include "kis_selection_mask.h"
+#include "kis_image.h"
 
 #include "kis_selection.h"
 

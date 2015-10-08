@@ -22,14 +22,14 @@
 
 #include <QString>
 
-#include "kostore_export.h"
+#include "kritastore_export.h"
 /**
  * Repository of XML namespaces used for ODF documents.
  * 
  * Please make sure that you do not use the variables provided by this class in
  * the destructor of a static object.
  */
-class KOSTORE_EXPORT KoXmlNS
+class KRITASTORE_EXPORT KoXmlNS
 {
 public:
     static const QString office;

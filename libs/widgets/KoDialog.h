@@ -28,7 +28,7 @@ class QPushButton;
 class QMenu;
 class KoDialogPrivate;
 
-#include <kowidgets_export.h>
+#include <kritawidgets_export.h>
 #include <kconfiggroup.h>
 #include <kguiitem.h>
 
@@ -125,7 +125,7 @@ class KoDialogPrivate;
  * @author Olivier Goffart <ogoffart at kde.org>
  * @author Tobias Koenig <tokoe@kde.org>
  */
-class KOWIDGETS_EXPORT KoDialog : public QDialog //krazy:exclude=qclasses
+class KRITAWIDGETS_EXPORT KoDialog : public QDialog //krazy:exclude=qclasses
 {
     Q_OBJECT
     Q_ENUMS(ButtonCode)

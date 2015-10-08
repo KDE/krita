@@ -26,11 +26,6 @@ target_link_libraries(kritadefaultpaintops kritalibpaintop)
 kcoreaddons_desktop_to_json(kritadefaultpaintops kritadefaultpaintops.desktop)
 
 install(TARGETS kritadefaultpaintops  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  kritadefaultpaintops.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( FILES
     krita-paintbrush.png
     krita-eraser.png

@@ -20,13 +20,13 @@
 #define KOINLINECITE_H
 
 #include "KoInlineObject.h"
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 /**
  * This object is an inline object, which means it is anchored in the text-flow and it can hold
  * bibliography-mark(citation).
  */
-class KOTEXT_EXPORT KoInlineCite : public KoInlineObject
+class KRITATEXT_EXPORT KoInlineCite : public KoInlineObject
 {
     Q_OBJECT
 public:

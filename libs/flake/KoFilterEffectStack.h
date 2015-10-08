@@ -20,7 +20,7 @@
 #ifndef KOFILTEREFFECTSTACK
 #define KOFILTEREFFECTSTACK
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QList>
 
@@ -30,7 +30,7 @@ class KoXmlWriter;
 class QRectF;
 
 /// This class manages a stack of filter effects
-class FLAKE_EXPORT KoFilterEffectStack
+class KRITAFLAKE_EXPORT KoFilterEffectStack
 {
 public:
     /// Creates an empty filter effect stack

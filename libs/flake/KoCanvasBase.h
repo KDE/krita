@@ -25,7 +25,7 @@
 
 #include <QPoint>
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class QGraphicsObject;
 class KUndo2Command;
@@ -53,7 +53,7 @@ class QRectF;
  * should implement. Flake tools know about the canvas, so they can
  * do things like scroll, redraw, set a cursor etc.
  */
-class FLAKE_EXPORT KoCanvasBase
+class KRITAFLAKE_EXPORT KoCanvasBase
 {
 
 public:

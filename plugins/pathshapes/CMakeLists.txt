@@ -1,4 +1,4 @@
-add_definitions(-DTRANSLATION_DOMAIN=\"calligra_shape_paths\")
+add_definitions(-DTRANSLATION_DOMAIN=\"krita_shape_paths\")
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/libs/widgets
@@ -39,9 +39,9 @@ ki18n_wrap_ui(pathshapes_PART_SRCS
     ellipse/EllipseShapeConfigWidget.ui
     spiral/SpiralShapeConfigWidget.ui
 )
-add_library(calligra_shape_paths MODULE ${pathshapes_PART_SRCS})
-kcoreaddons_desktop_to_json(calligra_shape_paths calligra_shape_paths.desktop)
+add_library(krita_shape_paths MODULE ${pathshapes_PART_SRCS})
+kcoreaddons_desktop_to_json(krita_shape_paths calligra_shape_paths.desktop)
 
-target_link_libraries(calligra_shape_paths flake kowidgets KF5::IconThemes)
+target_link_libraries(krita_shape_paths kritaflake kritawidgets KF5::IconThemes)
 
-install(TARGETS calligra_shape_paths  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS krita_shape_paths  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

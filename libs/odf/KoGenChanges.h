@@ -21,7 +21,7 @@
 #ifndef KOGENCHANGES_H
 #define KOGENCHANGES_H
 
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 
 #include <KoGenChange.h>
 
@@ -36,7 +36,7 @@ class KoXmlWriter;
  * We use a container outside the changeTracker, as the change tracker is linked to the document of a TextShapeData and is then not aware of the other TextShapeData.
  *
  */
-class KOODF_EXPORT KoGenChanges
+class KRITAODF_EXPORT KoGenChanges
 {
 public:
     KoGenChanges();

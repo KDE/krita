@@ -26,12 +26,12 @@
 #include <QFont>
 #include <QMap>
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 /**
  * Singleton to store user-overwritten DPI information.
  */
-class KOWIDGETS_EXPORT KoDpi
+class KRITAWIDGETS_EXPORT KoDpi
 {
 public:
     KoDpi();

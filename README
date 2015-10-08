@@ -1,86 +1,16 @@
-                          README for Calligra Suite
+Krita
 
-Calligra Suite is a collection of office applications linked together by a
-common base.  This common base assures that all office application can
-work together and also share a common look and feel.
+Krita is a paint application for raster images. It's also, according to
+the Dictionary of Phrase and Fable:
 
-Calligra Suite is free software, mostly under LGPL 2+ but also under the GPL.
-See COPYING and COPYING.LIB for the details.  See also copyright and
-licensing notices in individual files.
+The first of four Hindu periods contained in the great Yuga, when the
+genius of Truth and Right, in the form of bull, stood firm on his four
+feet, and man gained nothing by iniquity.
 
+In the Mahabharata, the name 'krita' is used in a context where this
+can be translated with 'perfect' - the perfect age.
 
-Contents
---------
-
-The applications currently included in Calligra Suite (version 2.1) are:
-
-Office productivity:
-- Words      -  Word processor
-- Sheets     -  Spreadsheet calculator
-- Stage      -  Presentation program
-
-Graphics:
-- Karbon     -  Vector graphics 
-- Krita      -  Digital painting for artists
-
-More information about Krita can be found at http://www.krita.org
-
-Management:
-- Plan       -  Project planning
-- Kexi       -  Visual database applications creator
-
-Advanced plugins:
-- Chart     -  Graphic data visualization
-- KFormula   -  Mathematical formulas
-
-The applications not yet part of the official release, but will
-be included in a next version:
-
-- Flow      -  Flowcharting program
-
-More information can be found at http://www.calligra.org
+Krita is Swedish for chalk and rita means "to draw".
 
 
-Building and running
---------------------
-
-Calligra Suite is based on the KDE libraries ( http://www.kde.org ) which are
-needed to run Calligra Suite.  Note that you don't have to actually run the
-KDE desktop environment in order to use Calligra Suite.  Calligra Suite works fine
-on any desktop or platform.
-
-You will need kdesupport, kdelibs and kdebase/runtime
-installed if you want to compile and run Calligra Suite. Installing kdepimlibs
-gives more functionality.
-For importing some external file formats or other plugins, you may
-also need some other dependencies.  For more details on how to build
-Calligra Suite from the sources, see:
-
-http://community.kde.org/Calligra/Building
-
-
-Contact info
-------------
-
-Developer and User mailing list: mailto:calligra-devel@kde.org
-Kexi User mailing list:          mailto:kexi@kde.org
-Kexi Developer mailing list:     mailto:kexi-devel@kde.org
-Krita mailing list:              mailto:kimageshop@kde.org
-
-Subscribing and list information: http://www.kde.org/mailinglists
-Archives: http://lists.kde.org
-
-IRC channel for developers:  #calligra on irc.freenode.org
-IRC channel for Kexi:        #kexi on irc.freenode.org
-IRC channel for Krita:       #krita on irc.freenode.org
-
-Calligra Suite forums:       http://forum.kde.org/calligra
-Kexi forums:                 http://forum.kde.org/kexi
-Krita forums:                http://forum.kde.org/krita
-
-If you have questions about this README file or about Calligra Suite in general,
-please mail to the Calligra Suite mailing list: mailto:calligra-devel@kde.org
-
-
-Inge Wallin
-Boudewijn Rempt
+You can find more information at: http://www.krita.org

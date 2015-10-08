@@ -41,8 +41,6 @@
 #include <FlakeDebug.h>
 #include <klocalizedstring.h>
 #include <QUrl>
-#include <KoNetAccess.h>
-#include <kmessagebox.h>
 
 #include <QTimer>
 #include <QApplication>
@@ -517,7 +515,6 @@ bool KoToolProxy::hasSelection() const
 
 void KoToolProxy::cut()
 {
-    // TODO maybe move checking the active layer to KoPasteController ?
     if (d->activeTool && d->isActiveLayerEditable())
         d->activeTool->cut();
 }
@@ -533,7 +530,6 @@ bool KoToolProxy::paste()
     bool success = false;
     KoCanvasBase *canvas = d->controller->canvas();
 
-    // TODO maybe move checking the active layer to KoPasteController ?
     if (d->activeTool && d->isActiveLayerEditable())
         success = d->activeTool->paste();
 
@@ -562,23 +558,13 @@ bool KoToolProxy::paste()
 
         if (!image.isNull()) {
             imageList << image;
-        } else if (data->hasUrls()) {
+        }
+        // QT5TODO: figure out how to download data synchronously, which is deprecated in frameworks.
+        else if (data->hasUrls()) {
             QList<QUrl> urls = QApplication::clipboard()->mimeData()->urls();
             foreach (const QUrl &url, urls) {
                 QImage image;
-                // make sure we download the files before inserting them
-                if (!url.isLocalFile()) {
-                    QString tmpFile;
-                    if (KIO::NetAccess::download(url, tmpFile, canvas->canvasWidget())) {
-                        image.load(tmpFile);
-                        KIO::NetAccess::removeTempFile(tmpFile);
-                    } else {
-                        KMessageBox::error(canvas->canvasWidget(), KIO::NetAccess::lastErrorString());
-                    }
-                }
-                else {
-                    image.load(url.toLocalFile());
-                }
+                image.load(url.toLocalFile());
                 if (!image.isNull()) {
                     imageList << image;
                 }

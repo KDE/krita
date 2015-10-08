@@ -20,7 +20,7 @@
 #ifndef KOFILTEREFFECTRENDERCONTEXT_H
 #define KOFILTEREFFECTRENDERCONTEXT_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QtGlobal>
 
@@ -29,7 +29,7 @@ class QPointF;
 class KoViewConverter;
 
 /// This class provides the render context for filter effects
-class FLAKE_EXPORT KoFilterEffectRenderContext
+class KRITAFLAKE_EXPORT KoFilterEffectRenderContext
 {
 public:
     explicit KoFilterEffectRenderContext(const KoViewConverter &converter);

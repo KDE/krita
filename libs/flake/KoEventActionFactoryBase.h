@@ -22,7 +22,7 @@
 
 #include <QString>
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoEventAction;
 class QWidget;
@@ -33,7 +33,7 @@ class QWidget;
  * This is the base class for event action plugins. Each plugin that ships a KoEventAction should
  * also ship a factory.
  */
-class FLAKE_EXPORT KoEventActionFactoryBase
+class KRITAFLAKE_EXPORT KoEventActionFactoryBase
 {
 public:
     /**

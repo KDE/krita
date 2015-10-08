@@ -16,7 +16,7 @@ include_directories(    ${CMAKE_SOURCE_DIR}/krita/image/metadata ${CMAKE_SOURCE_
 macro_add_unittest_definitions()
 
 set(KisRandomGeneratorDemoSources kis_random_generator_demo.cpp kimageframe.cpp)
-kde4_add_ui_files(KisRandomGeneratorDemoSources kis_random_generator_demo.ui)
+ki18n_wrap_ui(KisRandomGeneratorDemoSources kis_random_generator_demo.ui)
 kde4_add_executable(KisRandomGeneratorDemo ${KisRandomGeneratorDemoSources})
 target_link_libraries(KisRandomGeneratorDemo  kritaimage )
 
@@ -48,7 +48,7 @@ target_link_libraries(KisNodeFacadeTest   kritaimage Qt5::Test)
 
 set(kis_paint_device_test_SRCS kis_paint_device_test.cpp )
 kde4_add_unit_test(KisPaintDeviceTest TESTNAME krita-image-KisPaintDeviceTest ${kis_paint_device_test_SRCS})
-target_link_libraries(KisPaintDeviceTest   kritaimage koodf Qt5::Test)
+target_link_libraries(KisPaintDeviceTest   kritaimage kritaodf Qt5::Test)
 
 ########### next target ###############
 

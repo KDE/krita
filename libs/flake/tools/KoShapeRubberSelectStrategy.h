@@ -26,7 +26,7 @@
 
 #include <QRectF>
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoToolBase;
 class KoShapeRubberSelectStrategyPrivate;
@@ -34,7 +34,7 @@ class KoShapeRubberSelectStrategyPrivate;
 /**
  * Implement the rubber band selection of flake objects.
  */
-class FLAKE_EXPORT KoShapeRubberSelectStrategy : public KoInteractionStrategy
+class KRITAFLAKE_EXPORT KoShapeRubberSelectStrategy : public KoInteractionStrategy
 {
 public:
     /**

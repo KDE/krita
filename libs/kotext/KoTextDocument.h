@@ -50,7 +50,7 @@ class QTextCharFormat;
  * using QTextDocument::resource().
  *
  */
-class KOTEXT_EXPORT KoTextDocument
+class KRITATEXT_EXPORT KoTextDocument
 {
 public:
     /// Constructor

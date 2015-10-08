@@ -20,14 +20,14 @@
 #ifndef SVGSHAPE_H
 #define SVGSHAPE_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class SvgSavingContext;
 class SvgLoadingContext;
 class KoXmlElement;
 
 /// An interface providing svg loading and saving routines
-class FLAKE_EXPORT SvgShape
+class KRITAFLAKE_EXPORT SvgShape
 {
 public:
     virtual ~SvgShape();

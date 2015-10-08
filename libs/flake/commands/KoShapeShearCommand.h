@@ -21,7 +21,7 @@
 #ifndef KOSHAPESHEARCOMMAND_H
 #define KOSHAPESHEARCOMMAND_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <kundo2command.h>
 #include <QList>
@@ -30,7 +30,7 @@ class KoShape;
 class KoShapeShearCommandPrivate;
 
 /// The undo / redo command for shape shearing.
-class FLAKE_EXPORT KoShapeShearCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoShapeShearCommand : public KUndo2Command
 {
 public:
     /**

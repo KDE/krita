@@ -119,7 +119,7 @@ void BibliographyGenerator::generate()
     {
         KoParagraphStyle *bibTemplateStyle = 0;
         BibliographyEntryTemplate bibEntryTemplate;
-        if (m_bibInfo->m_entryTemplate.keys().contains(cite->bibliographyType())) {
+        if (m_bibInfo->m_entryTemplate.contains(cite->bibliographyType())) {
 
             bibEntryTemplate = m_bibInfo->m_entryTemplate[cite->bibliographyType()];
 

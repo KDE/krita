@@ -20,7 +20,7 @@ ki18n_wrap_ui(kritarulerassistanttool_PART_SRCS AssistantsToolOptions.ui )
 add_library(kritarulerassistanttool MODULE ${kritarulerassistanttool_PART_SRCS})
 kcoreaddons_desktop_to_json(kritarulerassistanttool kritarulerassistanttool.desktop)
 
-target_link_libraries(kritarulerassistanttool kritaui flake   )
+target_link_libraries(kritarulerassistanttool kritaui kritaflake   )
 
 install(TARGETS kritarulerassistanttool  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
@@ -28,4 +28,3 @@ install(TARGETS kritarulerassistanttool  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_D
 ########### install files ###############
 
 install( FILES krita_tool_ruler_assistant.png dark_krita_tool_ruler_assistant.png light_krita_tool_ruler_assistant.png DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
-install( FILES  kritarulerassistanttool.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

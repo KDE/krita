@@ -44,9 +44,9 @@ class KoStore;
  *
  * @author: David Faure <faure@kde.org>
  */
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 
-class KOODF_EXPORT KoOdfWriteStore
+class KRITAODF_EXPORT KoOdfWriteStore
 {
 public:
     /// @param store recontents the property of the caller

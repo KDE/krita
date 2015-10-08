@@ -20,7 +20,7 @@
 #define KOCUTCONTROLLER_H
 
 #include "KoCopyController.h"
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 /**
  * This class takes care of the cut actions integration into flake.
@@ -29,7 +29,7 @@
  * Additionally; when the tool does not allow copying (KoToolBase::hasSelection() returns false)
  * the signal copyRequested will be emitted for applications to connect to.
  */
-class FLAKE_EXPORT KoCutController : public KoCopyController
+class KRITAFLAKE_EXPORT KoCutController : public KoCopyController
 {
     Q_OBJECT
 public:

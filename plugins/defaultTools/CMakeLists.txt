@@ -1,6 +1,6 @@
 project( defaulttools )
 
-add_definitions(-DTRANSLATION_DOMAIN=\"calligra-defaulttools\")
+add_definitions(-DTRANSLATION_DOMAIN=\"krita_flaketools\")
 
 include_directories(
     ${TEXTLAYOUT_INCLUDES} # needed because ConnectionTool.cpp includes TextShape.h to get the id
@@ -51,7 +51,7 @@ ki18n_wrap_ui(defaulttools_SRCS
     connectionTool/ConnectionPointWidget.ui
 )
 
-add_library(calligra_tool_defaults MODULE ${defaulttools_SRCS})
-kcoreaddons_desktop_to_json(calligra_tool_defaults calligra_tool_defaults.desktop)
-target_link_libraries(calligra_tool_defaults flake kowidgets KF5::IconThemes )
-install(TARGETS calligra_tool_defaults DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+add_library(krita_flaketools MODULE ${defaulttools_SRCS})
+kcoreaddons_desktop_to_json(krita_flaketools calligra_tool_defaults.desktop)
+target_link_libraries(krita_flaketools kritaflake kritawidgets KF5::IconThemes )
+install(TARGETS krita_flaketools DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

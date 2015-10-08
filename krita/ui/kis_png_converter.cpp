@@ -853,8 +853,6 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const QUrl &uri, const QRect &
     KisImageBuilder_Result result = buildFile(fp, imageRect, xRes, yRes, device, annotationsStart, annotationsEnd, options, metaData);
     delete fp;
     return result;
-    // TODO: if failure do            KIO::del(uri); // async
-
 }
 
 KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)

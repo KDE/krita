@@ -9,10 +9,3 @@ kcoreaddons_desktop_to_json(kritaexample kritaexample.desktop)
 target_link_libraries(kritaexample kritaui)
 
 install(TARGETS kritaexample  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  kritaexample.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-
-

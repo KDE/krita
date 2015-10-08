@@ -1,5 +1,0 @@
-if (NOT KEXI_MOBILE)
-  if (SHOULD_BUILD_PLUGIN_KEXI_SPREADSHEETMIGRATION)
-    add_subdirectory(spreadsheet)
-  endif ()
-endif ()

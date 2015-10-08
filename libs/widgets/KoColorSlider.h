@@ -21,12 +21,12 @@
 #define KO_COLORSLIDER_H
 
 #include <kselector.h>
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 #include "KoColorDisplayRendererInterface.h"
 
 class KoColor;
 
-class KOWIDGETS_EXPORT KoColorSlider : public KSelector
+class KRITAWIDGETS_EXPORT KoColorSlider : public KSelector
 {
     Q_OBJECT
 public:

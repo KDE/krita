@@ -29,7 +29,7 @@ class KoFilterEffectRenderContext;
 class KoFilterEffectLoadingContext;
 class KoXmlElement;
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include <QList>
 
 /**
@@ -43,7 +43,7 @@ class KoXmlElement;
  * Using object bounding box coordinates internally makes it easy to share effects
  * between shapes or even between users via the filter effect resources.
  */
-class FLAKE_EXPORT KoFilterEffect
+class KRITAFLAKE_EXPORT KoFilterEffect
 {
 public:
     KoFilterEffect(const QString &id, const QString &name);

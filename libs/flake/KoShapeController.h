@@ -22,7 +22,7 @@
 #ifndef KOSHAPECONTROLLER_H
 #define KOSHAPECONTROLLER_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QList>
 #include <QMetaType>
@@ -42,7 +42,7 @@ class KoDocumentResourceManager;
  * from this class for maintaining the list of shapes in the document. So no tool gets
  * to access the application directly.
  */
-class FLAKE_EXPORT KoShapeController
+class KRITAFLAKE_EXPORT KoShapeController
 {
 public:
     /**

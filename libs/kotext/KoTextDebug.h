@@ -21,7 +21,7 @@
 #ifndef KOTEXTDEBUG_H
 #define KOTEXTDEBUG_H
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 class QTextDocument;
 class QTextFrame;
@@ -89,7 +89,7 @@ class KoTableCellStyle;
  *
  * @sa dumpDocument(), dumpFrame(), dumpBlock()
  */
-class KOTEXT_EXPORT KoTextDebug
+class KRITATEXT_EXPORT KoTextDebug
 {
 public:
     /**

@@ -28,9 +28,6 @@
 #cmakedefine WORDS_BIGENDIAN ${CMAKE_WORDS_BIGENDIAN}
 #endif
 
-/* Defines if you Get Hot New Stuff support */
-#cmakedefine GHNS 1
-
 /* Defines if the krita crash handler is built */
 #cmakedefine USE_BREAKPAD 1
 
@@ -54,8 +51,8 @@
 /* Defines if we use lcms2.4 */
 #cmakedefine HAVE_LCMS24 1
 
-/* Defines if we use KActivities */
-#cmakedefine HAVE_KACTIVITIES 1
+/* Defines if KIO is present */
+#cmakedefine HAVE_KIO 1
 
 /* This file contains all the paths that change when changing the installation prefix */
 #define CALLIGRAPREFIX "${CMAKE_INSTALL_PREFIX}"

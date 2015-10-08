@@ -23,7 +23,7 @@
 #ifndef KOSHAPESTROKECOMMAND_H
 #define KOSHAPESTROKECOMMAND_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <kundo2command.h>
 #include <QList>
@@ -32,7 +32,7 @@ class KoShape;
 class KoShapeStrokeModel;
 
 /// The undo / redo command for setting the shape stroke
-class FLAKE_EXPORT KoShapeStrokeCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoShapeStrokeCommand : public KUndo2Command
 {
 public:
     /**

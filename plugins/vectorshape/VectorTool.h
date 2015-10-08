@@ -21,7 +21,6 @@
 #define VECTOR_TOOL
 
 #include <KoToolBase.h>
-#include <kjob.h>
 
 class VectorShape;
 
@@ -53,7 +52,6 @@ protected:
 
 private Q_SLOTS:
     void changeUrlPressed();
-    void setImageData(KJob *job);
 
 private:
     VectorShape *m_shape;

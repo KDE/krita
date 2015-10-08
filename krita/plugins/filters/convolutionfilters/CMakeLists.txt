@@ -11,9 +11,3 @@ kcoreaddons_desktop_to_json(kritaconvolutionfilters kritaconvolutionfilters.desk
 target_link_libraries(kritaconvolutionfilters kritaui)
 
 install(TARGETS kritaconvolutionfilters  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  kritaconvolutionfilters.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-

@@ -22,12 +22,12 @@
 
 #include <kundo2command.h>
 #include <QList>
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoPathShape;
 
 /// The undo / redo command for reversing path directions
-class FLAKE_EXPORT KoPathReverseCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoPathReverseCommand : public KUndo2Command
 {
 public:
     /**

@@ -32,11 +32,6 @@
 #include <KoConfig.h>
 #include <kis_icon_utils.h>
 
-#ifdef GHNS
-#include <knewstuff3/downloaddialog.h>
-#include <knewstuff3/uploaddialog.h>
-#endif
-
 #include <QDesktopServices>
 #include <QTextBrowser>
 #include <QScrollBar>
@@ -66,23 +61,9 @@ KisAdvancedColorSpaceSelector::KisAdvancedColorSpaceSelector(QWidget* parent, co
     d->colorSpaceSelector->cmbColorModels->setIDList(KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::OnlyUserVisible));
     fillCmbDepths(d->colorSpaceSelector->cmbColorModels->currentItem());
 
-    d->colorSpaceSelector->bnDownloadProfile->setIcon(KisIconUtils::loadIcon("download"));
-    d->colorSpaceSelector->bnDownloadProfile->setToolTip( i18n("Download Color Profile") );
-    d->colorSpaceSelector->bnDownloadProfile->setEnabled( true );
-    d->colorSpaceSelector->bnDownloadProfile->hide();
-
-    d->colorSpaceSelector->bnUploadProfile->setIcon(KisIconUtils::loadIcon("arrow-up"));
-    d->colorSpaceSelector->bnUploadProfile->setToolTip( i18n("Share Color Profile") );
-    d->colorSpaceSelector->bnUploadProfile->setEnabled( false );
-    d->colorSpaceSelector->bnUploadProfile->hide();
-
-#ifdef GHNS
-    d->colorSpaceSelector->bnUploadProfile->show();
-    d->colorSpaceSelector->bnDownloadProfile->show();
-#endif
-
     d->colorSpaceSelector->bnInstallProfile->setIcon(KisIconUtils::loadIcon("document-open"));
     d->colorSpaceSelector->bnInstallProfile->setToolTip( i18n("Open Color Profile") );
+
     connect(d->colorSpaceSelector->cmbColorModels, SIGNAL(activated(const KoID &)),
             this, SLOT(fillCmbDepths(const KoID &)));
     connect(d->colorSpaceSelector->cmbColorDepth, SIGNAL(activated(const KoID &)),
@@ -98,13 +79,10 @@ KisAdvancedColorSpaceSelector::KisAdvancedColorSpaceSelector(QWidget* parent, co
     connect(this, SIGNAL(selectionChanged(bool)), d->colorSpaceSelector->TongueWidget, SLOT(repaint()));
 
     connect(d->colorSpaceSelector->bnInstallProfile, SIGNAL(clicked()), this, SLOT(installProfile()));
-    connect(d->colorSpaceSelector->bnDownloadProfile, SIGNAL(clicked()), this, SLOT(downloadProfile()));
-    connect(d->colorSpaceSelector->bnUploadProfile, SIGNAL(clicked()), this, SLOT(uploadProfile()));
 
     connect(d->colorSpaceSelector->bnOK, SIGNAL(accepted()), this, SLOT(accept()));
     connect(d->colorSpaceSelector->bnOK, SIGNAL(rejected()), this, SLOT(reject()));
 
-    d->knsrcFile = "kritaiccprofiles.knsrc";
     fillLstProfiles();
 }
 
@@ -694,56 +672,3 @@ void KisAdvancedColorSpaceSelector::installProfile()
 
     fillLstProfiles();
 }
-
-void KisAdvancedColorSpaceSelector::downloadProfile()
-{
-#ifdef GHNS
-    KNS3::DownloadDialog dialog( "kritaiccprofiles.knsrc", this);
-    dialog.exec();
-    KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
-    Q_ASSERT(iccEngine);
-    foreach (const KNS3::Entry& e, dialog.changedEntries()) {
-        foreach(const QString &file, e.installedFiles()) {
-            QFileInfo fi(file);
-            iccEngine->addProfile( fi.absolutePath() + '/' + fi.fileName());
-        }
-        foreach(const QString &file, e.uninstalledFiles()) {
-            QFileInfo fi(file);
-            iccEngine->removeProfile( fi.absolutePath() + '/' + fi.fileName());
-        }
-    }
-    fillLstProfiles();
-#endif
-}
-
-void KisAdvancedColorSpaceSelector::uploadProfile()
-{
-#ifdef GHNS
-    KNS3::UploadDialog dialog("kritaiccprofiles.knsrc", this);
-    const KoColorProfile *  profile = KoColorSpaceRegistry::instance()->profileByName(d->colorSpaceSelector->lstProfile->currentText());
-    if (!profile)  return;
-    dialog.setUploadFile(QUrl::fromLocalFile(profile->fileName()));
-    dialog.setUploadName(profile->name());
-    dialog.exec();
-#endif
-}
-
-void KisAdvancedColorSpaceSelector::buttonUpdate()
-{
-    QString check = "";
-    if (d->colorSpaceSelector->lstProfile->currentItem()) {
-        check = d->colorSpaceSelector->lstProfile->currentItem()->text();
-    } else {
-        check = d->colorSpaceSelector->lstProfile->item(0)->text();
-    }
-    const KoColorProfile *  profile = KoColorSpaceRegistry::instance()->profileByName(check);
-    if (!profile)  return;
-
-    QFileInfo fileInfo(profile->fileName());
-    if (fileInfo.isWritable()) {
-        d->colorSpaceSelector->bnUploadProfile->setEnabled( true );
-        return;
-    }
-    d->colorSpaceSelector->bnUploadProfile->setEnabled( false );
-}
-

@@ -23,7 +23,7 @@
 
 #include <QByteArray>
 #include <QIODevice>
-#include "kostore_export.h"
+#include "kritastore_export.h"
 
 class QWidget;
 class QUrl;
@@ -31,16 +31,16 @@ class KoStorePrivate;
 
 /**
  * Saves and loads Calligra documents using various backends. Currently supported
- * backends are ZIP, tar and directory.
+ * backends are zip and directory.
  * We call a "store" the file on the hard disk (the one the users sees)
  * and call a "file" a file inside the store.
  */
-class KOSTORE_EXPORT KoStore
+class KRITASTORE_EXPORT KoStore
 {
 public:
 
     enum Mode { Read, Write };
-    enum Backend { Auto, Tar, Zip, Directory, Encrypted };
+    enum Backend { Auto, Zip, Directory };
 
     /**
      * Open a store (i.e. the representation on disk of a Calligra document).
@@ -77,7 +77,6 @@ public:
     /**
      * Open a store (i.e. the representation on disk of a Calligra document).
      *
-     * @param window associated window (for the progress bar dialog and authentication)
      * @param url URL of the file to open
      * @param mode if KoStore::Read, open an existing store to read it.
      *             if KoStore::Write, create or replace a store.
@@ -98,20 +97,13 @@ public:
      *
      * @bug saving not completely implemented (fixed temporary file)
      */
-    static KoStore *createStore(QWidget *window, const QUrl &url, Mode mode,
+    static KoStore *createStore(const QUrl &url, Mode mode,
                                 const QByteArray &appIdentification = QByteArray(), Backend backend = Auto, bool writeMimetype = true);
 
     /**
      * Destroys the store (i.e. closes the file on the hard disk)
      */
     virtual ~KoStore();
-
-    /**
-     * Returns the url of the store. It can be a filename or a remote url.
-     * it can also be empty, if the store is a bytearray
-     * @return the url of the store as supplied in the createStore calls
-     */
-    QUrl urlOfStore() const;
 
     /**
      * Open a new file inside the store

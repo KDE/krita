@@ -24,14 +24,14 @@
 #include <QString>
 #include <QVariant>
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoCanvasBase;
 
 /**
  * Context passed to shapes during painting.
  */
-class FLAKE_EXPORT KoShapePaintingContext
+class KRITAFLAKE_EXPORT KoShapePaintingContext
 {
 public:
     KoShapePaintingContext();

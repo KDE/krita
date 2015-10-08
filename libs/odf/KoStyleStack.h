@@ -26,7 +26,7 @@
 #include <QStack>
 #include <QPair>
 
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 #include <KoXmlReader.h>
 
 /**
@@ -55,7 +55,7 @@
  *  or KoOdfLoadingContext::addStyles to automatically push a style and all its
  *  parent styles onto the stack.
  */
-class KOODF_EXPORT KoStyleStack
+class KRITAODF_EXPORT KoStyleStack
 {
 public:
     /**

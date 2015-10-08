@@ -23,7 +23,7 @@
 #define KOOASISSETTINGS_H
 
 #include <QDomDocument>
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 #include "KoXmlReader.h"
 
 /**
@@ -68,7 +68,7 @@
  * or item-map once, and then lookup multiple items inside it.
  * It also allows "drilling down" inside the tree in case of nesting.
  */
-class KOODF_EXPORT KoOasisSettings
+class KRITAODF_EXPORT KoOasisSettings
 {
 public:
     /**
@@ -93,7 +93,7 @@ public:
     class IndexedMap;
     class NamedMap;
     /// Represents a collection of items (config-item or maps).
-    class KOODF_EXPORT Items
+    class KRITAODF_EXPORT Items
     {
         friend class KoOasisSettings;
         friend class IndexedMap;
@@ -151,7 +151,7 @@ public:
         const KoOasisSettings *m_settings;
     };
 
-    class KOODF_EXPORT IndexedMap : public Map
+    class KRITAODF_EXPORT IndexedMap : public Map
     {
         friend class Items;
         IndexedMap(const KoXmlElement& elem, const KoOasisSettings* settings)
@@ -161,7 +161,7 @@ public:
         Items entry(int entryIndex) const;
     };
 
-    class KOODF_EXPORT NamedMap : public Map
+    class KRITAODF_EXPORT NamedMap : public Map
     {
         friend class Items;
         NamedMap(const KoXmlElement &elem, const KoOasisSettings *settings)

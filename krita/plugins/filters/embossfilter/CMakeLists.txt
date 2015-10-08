@@ -9,9 +9,3 @@ kcoreaddons_desktop_to_json(kritaembossfilter kritaembossfilter.desktop)
 target_link_libraries(kritaembossfilter kritaui)
 
 install(TARGETS kritaembossfilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  kritaembossfilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-

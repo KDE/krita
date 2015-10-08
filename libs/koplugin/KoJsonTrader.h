@@ -23,14 +23,14 @@
 
 #include <QList>
 #include <QString>
-#include "koplugin_export.h"
+#include "kritaplugin_export.h"
 
 class QPluginLoader;
 
 /**
  *  Support class to fetch a list of relevant plugins
  */
-class KOPLUGIN_EXPORT KoJsonTrader
+class KRITAPLUGIN_EXPORT KoJsonTrader
 {
 
 private:

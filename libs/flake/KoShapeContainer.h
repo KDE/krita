@@ -25,7 +25,7 @@
 
 #include <QList>
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class QPainter;
 class KoShapeContainerModel;
@@ -66,7 +66,7 @@ class KoShapeContainerPrivate;
  * and the width of the individual columns gets too small, the model can choose to
  * remove a child or add one when the width allows another column.
  */
-class FLAKE_EXPORT KoShapeContainer : public KoShape
+class KRITAFLAKE_EXPORT KoShapeContainer : public KoShape
 {
 public:
 

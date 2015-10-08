@@ -22,7 +22,7 @@
 #ifndef SVGSTYLEPARSER_H
 #define SVGSTYLEPARSER_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include <QMap>
 
 typedef QMap<QString, QString> SvgStyles;
@@ -33,7 +33,7 @@ class KoXmlElement;
 class QColor;
 class QGradient;
 
-class FLAKE_EXPORT SvgStyleParser
+class KRITAFLAKE_EXPORT SvgStyleParser
 {
 public:
     explicit SvgStyleParser(SvgLoadingContext &context);

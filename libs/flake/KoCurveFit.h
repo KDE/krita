@@ -24,7 +24,7 @@
 #include <QList>
 #include <QPointF>
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoPathShape;
 
@@ -43,7 +43,7 @@ class KoPathShape;
  * @return a path shape representing the fitted curve
  */
 
-FLAKE_EXPORT KoPathShape * bezierFit(const QList<QPointF> &points, float error);
+KRITAFLAKE_EXPORT KoPathShape * bezierFit(const QList<QPointF> &points, float error);
 
 #endif
 

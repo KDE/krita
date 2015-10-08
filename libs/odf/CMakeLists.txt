@@ -1,11 +1,10 @@
 add_subdirectory( tests )
-add_subdirectory( writeodf )
 
 include_directories( ${KOODF_INCLUDES} )
 
-########### libkoodf ###############
+########### libkritaodf ###############
 
-set(koodf_LIB_SRCS
+set(kritaodf_LIB_SRCS
     KoOdf.cpp
     KoOdfManifestEntry.cpp
     KoDocumentInfo.cpp
@@ -37,55 +36,17 @@ set(koodf_LIB_SRCS
     KoOdfNumberDefinition.cpp
     KoOdfLineNumberingConfiguration.cpp
     KoElementReference.cpp
-    writeodf/helpers.cpp
 
     OdfDebug.cpp
 )
 
-add_library(koodf SHARED ${koodf_LIB_SRCS})
-add_dependencies(koodf writeodf.h-target)
-generate_export_header(koodf BASE_NAME koodf)
+add_library(kritaodf SHARED ${kritaodf_LIB_SRCS})
+generate_export_header(kritaodf BASE_NAME kritaodf)
 
-target_link_libraries(koodf koversion kostore KF5::Archive KF5::Wallet KF5::KIOWidgets KF5::I18n Qt5::PrintSupport Qt5::Gui Qt5::Xml)
-target_link_libraries(koodf LINK_INTERFACE_LIBRARIES kostore KF5::I18n Qt5::PrintSupport Qt5::Gui Qt5::Xml)
+target_link_libraries(kritaodf kritaversion kritastore KF5::CoreAddons KF5::ConfigCore KF5::I18n Qt5::PrintSupport Qt5::Gui Qt5::Xml)
+target_link_libraries(kritaodf LINK_INTERFACE_LIBRARIES kritastore KF5::CoreAddons KF5::I18n Qt5::PrintSupport Qt5::Gui Qt5::Xml)
 
-set_target_properties(koodf PROPERTIES
+set_target_properties(kritaodf PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS koodf ${INSTALL_TARGETS_DEFAULT_ARGS} )
-
-
-install( FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/koodf_export.h
-    KoOdf.h
-    KoOdfManifestEntry.h
-    KoGenStyle.h
-    KoGenStyles.h
-    KoFontFace.h
-    KoOdfLoadingContext.h
-    KoOasisSettings.h
-    KoOdfStylesReader.h
-    KoOdfNotesConfiguration.h
-    KoOdfBibliographyConfiguration.h
-    KoOdfNumberStyles.h
-    KoOdfNumberDefinition.h
-    KoOdfLineNumberingConfiguration.h
-    KoOdfPaste.h
-    KoOdfReadStore.h
-    KoOdfWriteStore.h
-    KoStyleStack.h
-    KoOdfGraphicStyles.h
-    KoDocumentBase.h
-    KoGenChange.h
-    KoGenChanges.h
-    KoEmbeddedDocumentSaver.h
-    KoBorder.h
-    Ko3dScene.h
-    KoShadowStyle.h
-    KoPageLayout.h
-    KoPageFormat.h
-    KoColumns.h
-    KoUnit.h
-    KoElementReference.h
-    KoTableTemplate.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
+install(TARGETS kritaodf ${INSTALL_TARGETS_DEFAULT_ARGS} )

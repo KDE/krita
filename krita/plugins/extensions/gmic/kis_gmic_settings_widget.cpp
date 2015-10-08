@@ -33,6 +33,8 @@
 // kritaui lib
 #include <kis_slider_spin_box.h>
 #include <kis_properties_configuration.h>
+#include <kis_url_requester.h>
+#include <KisImportExportManager.h>
 
 //
 #include "widgets/kis_url_requester.h"
@@ -41,7 +43,6 @@
 #include <kseparator.h>
 
 #include <KoFileDialog.h>
-#include <kfiledialog.h> // For kisurlrequester...
 
 const static int DELAY = 250;
 
@@ -313,6 +314,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                 if (role == CreateRole)
                 {
                     urlRequester = new KisUrlRequester;
+                    urlRequester.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
                     urlRequester->setMode(KoFileDialog::OpenDirectory);
 
                     m_widgetToParameterIndexMapper[ urlRequester ] = i;

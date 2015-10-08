@@ -27,10 +27,10 @@
 #include <KoResource.h>
 #include <KoResourceFiltering.h>
 
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 
 /// The resource server adapter provides a adapter pattern for a templated resource server
-class KOWIDGETS_EXPORT KoAbstractResourceServerAdapter : public QObject
+class KRITAWIDGETS_EXPORT KoAbstractResourceServerAdapter : public QObject
 {
     Q_OBJECT
 public:

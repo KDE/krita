@@ -14,8 +14,3 @@ kcoreaddons_desktop_to_json(kritacolorgenerator kritacolorgenerator.desktop)
 target_link_libraries(kritacolorgenerator kritaui)
 
 install(TARGETS kritacolorgenerator  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  kritacolorgenerator.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

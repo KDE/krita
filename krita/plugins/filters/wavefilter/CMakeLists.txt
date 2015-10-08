@@ -18,7 +18,3 @@ target_link_libraries(kritawavefilter kritaui)
 
 install(TARGETS kritawavefilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
-
-########### install files ###############
-
-install( FILES  kritawavefilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

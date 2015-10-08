@@ -21,7 +21,7 @@
 #ifndef KOFLAKE_H
 #define KOFLAKE_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class QGradient;
 class QPointF;
@@ -80,7 +80,7 @@ namespace KoFlake
     };
 
     /// clones the given gradient
-    FLAKE_EXPORT QGradient *cloneGradient(const QGradient *gradient);
+    KRITAFLAKE_EXPORT QGradient *cloneGradient(const QGradient *gradient);
 
     /**
      * Convert absolute to relative position
@@ -90,7 +90,7 @@ namespace KoFlake
      *
      * @return relative position
      */
-    FLAKE_EXPORT QPointF toRelative(const QPointF &absolute, const QSizeF &size);
+    KRITAFLAKE_EXPORT QPointF toRelative(const QPointF &absolute, const QSizeF &size);
 
     /**
      * Convert relative size to absolute size
@@ -100,7 +100,7 @@ namespace KoFlake
      *
      * @return absolute position
      */
-    FLAKE_EXPORT QPointF toAbsolute(const QPointF &relative, const QSizeF &size);
+    KRITAFLAKE_EXPORT QPointF toAbsolute(const QPointF &relative, const QSizeF &size);
 }
 
 #endif

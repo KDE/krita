@@ -32,7 +32,7 @@
 
 #include <QObject>
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 #include <KoXmlReaderForward.h>
 
 class QTextCursor;
@@ -53,7 +53,7 @@ class KoShape;
  *
  * Don't forget to unset it if you later want to load text that needs content.xml.
  */
-class KOTEXT_EXPORT KoTextLoader : public QObject
+class KRITATEXT_EXPORT KoTextLoader : public QObject
 {
     Q_OBJECT
 public:

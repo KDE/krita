@@ -143,7 +143,7 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
         file.flush();
         file.close();
 
-        return QUrl(temporaryPath).toEncoded();
+        return QUrl::fromLocalFile(temporaryPath).toEncoded();
     }
     else if (mimetype == "application/x-krita-node-internal-pointer") {
 

@@ -19,7 +19,7 @@
 #ifndef KoVBOX_H
 #define KoVBOX_H
 
-#include <kowidgets_export.h>
+#include <kritawidgets_export.h>
 
 #include <QFrame>
 
@@ -36,7 +36,7 @@ class QChildEvent;
  *
  * @see KVBox
  */
-class KOWIDGETS_EXPORT KoVBox : public QFrame
+class KRITAWIDGETS_EXPORT KoVBox : public QFrame
 {
     Q_OBJECT
 

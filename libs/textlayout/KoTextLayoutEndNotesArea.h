@@ -20,7 +20,7 @@
 #ifndef KOTEXTLAYOUTENDNOTESAREA_H
 #define KOTEXTLAYOUTENDNOTESAREA_H
 
-#include "kotextlayout_export.h"
+#include "kritatextlayout_export.h"
 
 #include "KoTextLayoutArea.h"
 
@@ -30,7 +30,7 @@ class QRectF;
 /**
  * When laying out text it happens in areas that can occupy space of various size.
  */
-class KOTEXTLAYOUT_EXPORT KoTextLayoutEndNotesArea : public KoTextLayoutArea
+class KRITATEXTLAYOUT_EXPORT KoTextLayoutEndNotesArea : public KoTextLayoutArea
 {
 public:
     /// constructor

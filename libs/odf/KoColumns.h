@@ -24,7 +24,7 @@
 #ifndef KOCOLUMNS_H
 #define KOCOLUMNS_H
 
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 
 #include <QtGlobal>
 #include <QColor>
@@ -99,21 +99,21 @@ struct KoColumns {
      * Construct a columns with the default column count 1,
      * default margins (2 cm), and portrait orientation.
      */
-    KOODF_EXPORT KoColumns();
+    KRITAODF_EXPORT KoColumns();
 
-    KOODF_EXPORT void reset();
-    KOODF_EXPORT bool operator==(const KoColumns &l) const;
-    KOODF_EXPORT bool operator!=(const KoColumns &l) const;
+    KRITAODF_EXPORT void reset();
+    KRITAODF_EXPORT bool operator==(const KoColumns &l) const;
+    KRITAODF_EXPORT bool operator!=(const KoColumns &l) const;
 
     /**
      * Save this columns to ODF.
      */
-    KOODF_EXPORT void saveOdf(KoGenStyle &style) const;
+    KRITAODF_EXPORT void saveOdf(KoGenStyle &style) const;
 
     /**
      * Load this columns from ODF
      */
-    KOODF_EXPORT void loadOdf(const KoXmlElement &style);
+    KRITAODF_EXPORT void loadOdf(const KoXmlElement &style);
 
     qreal totalRelativeWidth() const
     {
@@ -124,13 +124,13 @@ struct KoColumns {
         return result;
     }
 
-    KOODF_EXPORT static const char * separatorStyleString(KoColumns::SeparatorStyle separatorStyle);
-    KOODF_EXPORT static const char * separatorVerticalAlignmentString(KoColumns::SeparatorVerticalAlignment separatorVerticalAlignment);
-    KOODF_EXPORT static KoColumns::SeparatorVerticalAlignment parseSeparatorVerticalAlignment(const QString &value);
-    KOODF_EXPORT static QColor parseSeparatorColor(const QString &value);
-    KOODF_EXPORT static int parseSeparatorHeight(const QString &value);
-    KOODF_EXPORT static KoColumns::SeparatorStyle parseSeparatorStyle(const QString &value);
-    KOODF_EXPORT static int parseRelativeWidth(const QString &value);
+    KRITAODF_EXPORT static const char * separatorStyleString(KoColumns::SeparatorStyle separatorStyle);
+    KRITAODF_EXPORT static const char * separatorVerticalAlignmentString(KoColumns::SeparatorVerticalAlignment separatorVerticalAlignment);
+    KRITAODF_EXPORT static KoColumns::SeparatorVerticalAlignment parseSeparatorVerticalAlignment(const QString &value);
+    KRITAODF_EXPORT static QColor parseSeparatorColor(const QString &value);
+    KRITAODF_EXPORT static int parseSeparatorHeight(const QString &value);
+    KRITAODF_EXPORT static KoColumns::SeparatorStyle parseSeparatorStyle(const QString &value);
+    KRITAODF_EXPORT static int parseRelativeWidth(const QString &value);
 };
 
 #endif /* KOCOLUMNS_H */

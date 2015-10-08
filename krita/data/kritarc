@@ -154,16 +154,13 @@ Collapsed=false
 ToolButtonStyle=IconOnly
 
 [KoShapeCollection]
-QuickShapes=ArtisticText,TextShapeID,DivineProportionShapeID,EllipseShape,RectangleShape
+QuickShapes=ArtisticText,TextShapeID,EllipseShape,RectangleShape
 
 [calligra]
 DockerPluginsDisabled=textdocumentinspection
-FlakePluginsDisabled=formulashape,divineproportionshape,kexirelationdesignshape
-ShapePluginsDisabled=musicshape,pictureshape,videoshape,chartshape,spreadsheetshape,pluginshape,treeshape,commentshape,stateshape,webshape
-TextEditingPluginsDisabled=thesaurustool,changecase,autocorrect,spellcheck
-TextInlinePluginsDisabled=textvariables,kprvariables
-ToolPluginsDisabled=paragraphtool
-ToolsBlacklist=CreatePathTool,KoPencilTool,ConnectionTool,KarbonFilterEffectsTool,PanTool,KoZoomToolId,GuidesTool_ID
+FlakePluginsDisabled=
+ShapePluginsDisabled=
+ToolsBlacklist=CreatePathTool,KoPencilTool,ConnectionTool,KarbonFilterEffectsTool
 
 [favoriteList]
 favoritePresets=Basic_tip_default,Basic_circle_wet,Block_basic,Bristles_hairy,Eraser_circle,Eraser_hard,Eraser_soft,Mix_dull,Mix_smear_soft,Ink_gpen_10

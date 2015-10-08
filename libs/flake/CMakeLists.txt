@@ -1,4 +1,4 @@
-project(flake)
+project(kritaflake)
 
 include_directories(${FLAKE_INCLUDES} )
 
@@ -6,7 +6,7 @@ add_subdirectory(styles)
 add_subdirectory(tests)
 add_subdirectory(pics)
 
-set(flake_SRCS
+set(kritaflake_SRCS
     KoGradientHelper.cpp
     KoFlake.cpp
     KoCanvasBase.cpp
@@ -21,7 +21,6 @@ set(flake_SRCS
     KoDockRegistry.cpp
     KoDataCenterBase.cpp
     KoInsets.cpp
-    KoPasteController.cpp
     KoGuidesData.cpp
     KoGridData.cpp
     KoPathShape.cpp
@@ -46,8 +45,6 @@ set(flake_SRCS
     KoMarker.cpp
     KoMarkerCollection.cpp
     KoMarkerSharedLoadingData.cpp
-    #KoUnavailData.cpp
-    #KoUnavailCollection.cpp
     KoToolBase.cpp
     KoCanvasController.cpp
     KoCanvasControllerWidget.cpp
@@ -208,140 +205,25 @@ set(flake_SRCS
     FlakeDebug.cpp
 )
 
-ki18n_wrap_ui(flake_SRCS
+ki18n_wrap_ui(kritaflake_SRCS
     tools/PathToolOptionWidgetBase.ui
     KoConnectionShapeConfigWidget.ui
     SnapGuideConfigWidget.ui
     tools/KoZoomToolWidget.ui
 )
 
-add_library(flake SHARED ${flake_SRCS})
-generate_export_header(flake BASE_NAME flake)
+add_library(kritaflake SHARED ${kritaflake_SRCS})
+generate_export_header(kritaflake BASE_NAME kritaflake)
 
-target_link_libraries(flake pigmentcms kowidgetutils koodf kundo2 KF5::IconThemes Qt5::Svg)
-target_link_libraries(flake LINK_INTERFACE_LIBRARIES pigmentcms kowidgetutils koodf kundo2)
+target_link_libraries(kritaflake kritapigment kritawidgetutils kritaodf kritaundo2 KF5::WidgetsAddons KF5::IconThemes Qt5::Svg)
+target_link_libraries(kritaflake LINK_INTERFACE_LIBRARIES kritapigment kritawidgetutils kritaodf kritaundo2 KF5::WidgetsAddons )
 
 if(HAVE_OPENGL)
-    target_link_libraries(flake ${OPENGL_LIBRARIES} Qt5::OpenGL)
+    target_link_libraries(kritaflake ${OPENGL_LIBRARIES} Qt5::OpenGL)
 endif()
 
-set_target_properties(flake PROPERTIES
+set_target_properties(kritaflake PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
-########### install files ###############
-
-install(TARGETS flake  ${INSTALL_TARGETS_DEFAULT_ARGS})
-install( FILES
-    flake.desktop
-    flaketool.desktop
-    flakeshape.desktop
-    flakedevice.desktop
-    presentationeventaction.desktop
-    scripteventaction.desktop
-    filtereffect.desktop
-    DESTINATION ${SERVICETYPES_INSTALL_DIR})
-
-install(
-    FILES
-    KoCanvasBase.h
-    KoCanvasController.h
-    KoCanvasControllerWidget.h
-    KoCanvasObserverBase.h
-    KoCanvasSupervisor.h
-    KoCanvasResourceManager.h
-    KoDocumentResourceManager.h
-    KoConnectionPoint.h
-    KoCopyController.h
-    KoCutController.h
-    KoDataCenterBase.h
-    KoDockFactoryBase.h
-    KoDockRegistry.h
-    KoDeferredShapeFactoryBase.h
-    KoDrag.h
-    KoDragOdfSaveHelper.h
-    KoFlake.h
-    KoFrameShape.h
-    KoGuidesData.h
-    KoGridData.h
-    KoImageCollection.h
-    KoImageData.h
-    KoInputDevice.h
-    KoInsets.h
-    KoPathSegment.h
-    KoPointerEvent.h
-    KoRTree.h
-    KoSelection.h
-    KoShape.h
-    KoShapeAnchor.h
-    KoShapeStrokeModel.h
-    KoToolSelection.h
-    KoShapeContainer.h
-    KoShapeContainerModel.h
-    KoShapeContainerDefaultModel.h
-    KoShapeController.h
-    KoShapeBasedDocumentBase.h
-    KoShapeFactoryBase.h
-    KoShapeGroup.h
-    KoShapeLayer.h
-    KoShapePainter.h
-    KoShapeLoadingContext.h
-    KoShapeOdfSaveHelper.h
-    KoLoadingShapeUpdater.h
-    KoShapeConfigWidgetBase.h
-    KoShapeManager.h
-    KoShapeManagerPaintingStrategy.h
-    KoShapeRegistry.h
-    KoShapeSavingContext.h
-    KoShapeUserData.h
-    KoShapeApplicationData.h
-    KoSharedSavingData.h
-    KoTextShapeDataBase.h
-    KoToolBase.h
-    KoToolManager.h
-    KoToolFactoryBase.h
-    KoToolProxy.h
-    KoToolRegistry.h
-    KoFilterEffect.h
-    KoFilterEffectStack.h
-    KoFilterEffectFactoryBase.h
-    KoFilterEffectRegistry.h
-    KoFilterEffectConfigWidgetBase.h
-    KoFilterEffectRenderContext.h
-    KoFilterEffectLoadingContext.h
-    commands/KoEventActionAddCommand.h
-    commands/KoEventActionRemoveCommand.h
-    commands/KoParameterToPathCommand.h
-    commands/KoPathCombineCommand.h
-    commands/KoPathControlPointMoveCommand.h
-    commands/KoPathFillRuleCommand.h
-    commands/KoPathPointInsertCommand.h
-    commands/KoPathPointMergeCommand.h
-    commands/KoPathPointMoveCommand.h
-    commands/KoPathPointRemoveCommand.h
-    commands/KoPathPointTypeCommand.h
-    commands/KoPathReverseCommand.h
-    commands/KoPathSegmentTypeCommand.h
-    commands/KoShapeAlignCommand.h
-    commands/KoShapeBackgroundCommand.h
-    commands/KoShapeStrokeCommand.h
-    commands/KoShapeCreateCommand.h
-    commands/KoShapeDeleteCommand.h
-    commands/KoShapeDistributeCommand.h
-    commands/KoShapeGroupCommand.h
-    commands/KoShapeMoveCommand.h
-    commands/KoShapeRenameCommand.h
-    commands/KoShapeReorderCommand.h
-    commands/KoShapeShadowCommand.h
-    commands/KoShapeShearCommand.h
-    commands/KoShapeSizeCommand.h
-    commands/KoShapeTransformCommand.h
-    commands/KoShapeUngroupCommand.h
-    commands/KoSubpathRemoveCommand.h
-    commands/KoPathShapeMarkerCommand.h
-    tools/KoInteractionTool.h
-    tools/KoPanTool.h
-    KoViewConverter.h
-    DESTINATION
-    ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
-)
+install(TARGETS kritaflake  ${INSTALL_TARGETS_DEFAULT_ARGS})

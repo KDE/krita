@@ -22,7 +22,7 @@
 #define KOZOOMCONTROLLER_H
 
 #include "KoZoomAction.h"
-#include "kowidgets_export.h"
+#include "kritawidgets_export.h"
 #include <KoZoomMode.h>
 #include <QObject>
 #include <QSizeF>
@@ -57,7 +57,7 @@ class QSize;
  * except emit the aspectModeChanged signal.
  *
  */
-class KOWIDGETS_EXPORT KoZoomController : public QObject {
+class KRITAWIDGETS_EXPORT KoZoomController : public QObject {
 Q_OBJECT
 public:
     /**

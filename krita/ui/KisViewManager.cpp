@@ -50,13 +50,10 @@
 #include <QUrl>
 #include <QWidget>
 
-
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
-#include <kservice.h>
 #include <KoResourcePaths.h>
 #include <kselectaction.h>
-#include <kxmlguifactory.h>
 
 #include <KoCanvasController.h>
 #include <KoCompositeOp.h>

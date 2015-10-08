@@ -18,7 +18,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_brush_mask_applicator_factories.h"  // vc.h must come first
+#include "KoVcMultiArchBuildSupport.h" //vc.h must come first
+
+#include "kis_brush_mask_applicator_factories.h"
 #include "kis_mask_generator.h"
 #include "kis_brush_mask_applicator_base.h"
 

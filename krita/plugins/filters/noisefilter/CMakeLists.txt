@@ -17,8 +17,3 @@ kcoreaddons_desktop_to_json(kritanoisefilter kritanoisefilter.desktop)
 target_link_libraries(kritanoisefilter kritaui)
 
 install(TARGETS kritanoisefilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  kritanoisefilter.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

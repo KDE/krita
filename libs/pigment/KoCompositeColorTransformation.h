@@ -41,7 +41,7 @@
  * KoCompositeColorTransformation. Please note that this mode IS NOT
  * IMPLEMENTED YET!
  */
-class PIGMENTCMS_EXPORT KoCompositeColorTransformation : public KoColorTransformation
+class KRITAPIGMENT_EXPORT KoCompositeColorTransformation : public KoColorTransformation
 {
 public:
     enum Mode {

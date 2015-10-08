@@ -21,7 +21,7 @@
 #ifndef KOODFLOADINGCONTEXT_H
 #define KOODFLOADINGCONTEXT_H
 
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 #include "KoOdfStylesReader.h"
 
 
@@ -35,7 +35,7 @@ class KoStyleStack;
  *
  * @author David Faure <faure@kde.org>
  */
-class KOODF_EXPORT KoOdfLoadingContext
+class KRITAODF_EXPORT KoOdfLoadingContext
 {
 public:
     enum GeneratorType { Unknown, Calligra, OpenOffice, MicrosoftOffice };

@@ -20,7 +20,7 @@
 #ifndef KOTEXTLAYOUTTABLEAREA_H
 #define KOTEXTLAYOUTTABLEAREA_H
 
-#include "kotextlayout_export.h"
+#include "kritatextlayout_export.h"
 
 #include "KoTextLayoutArea.h"
 
@@ -34,7 +34,7 @@ class QLineF;
 /**
  * This class represent a (full width) piece of a table
  */
-class KOTEXTLAYOUT_EXPORT KoTextLayoutTableArea : public KoTextLayoutArea
+class KRITATEXTLAYOUT_EXPORT KoTextLayoutTableArea : public KoTextLayoutArea
 {
 public:
     /// constructor

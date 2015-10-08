@@ -24,8 +24,6 @@
 
 #include <KoToolManager.h>
 
-#include <QToolButton>
-
 class ToolManager::Private
 {
 public:

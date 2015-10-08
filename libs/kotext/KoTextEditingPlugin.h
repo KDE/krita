@@ -21,7 +21,7 @@
 
 #include <QObject>
 #include <QHash>
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 class QAction;
 class QTextDocument;
@@ -39,7 +39,7 @@ class QString;
  * a word and then moves the cursor out of the word, a similar approach happens with the
  * finishedParagraph(), it will only be called after the cursor has been moved out of the paragraph.
  */
-class KOTEXT_EXPORT KoTextEditingPlugin : public QObject
+class KRITATEXT_EXPORT KoTextEditingPlugin : public QObject
 {
     Q_OBJECT
 public:

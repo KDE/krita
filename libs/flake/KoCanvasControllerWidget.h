@@ -24,7 +24,7 @@
 #ifndef KOCANVASCONTROLLERWIDGET_H
 #define KOCANVASCONTROLLERWIDGET_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QAbstractScrollArea>
 #include <QPointer>
@@ -36,7 +36,7 @@ class KoCanvasBase;
 /**
  * KoCanvasController implementation for QWidget based canvases
  */
-class FLAKE_EXPORT KoCanvasControllerWidget : public QAbstractScrollArea, public KoCanvasController
+class KRITAFLAKE_EXPORT KoCanvasControllerWidget : public QAbstractScrollArea, public KoCanvasController
 {
     Q_OBJECT
 public:

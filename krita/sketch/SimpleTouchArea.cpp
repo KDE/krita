@@ -18,8 +18,8 @@
 
 #include "SimpleTouchArea.h"
 #include <input/kis_tablet_event.h>
-#include <QTouchEvent>
-#include <QApplication>
+#include <QEvent>
+
 
 SimpleTouchArea::SimpleTouchArea(QDeclarativeItem* parent)
     : QDeclarativeItem(parent)

@@ -29,7 +29,7 @@
 
 #include <QObject>
 #include <QTextCharFormat>
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 class QTextBlock;
 class KoShapeLoadingContext;
@@ -50,7 +50,7 @@ class QVariant;
  * equals styleId() of that style.
  * @see KoStyleManager
  */
-class KOTEXT_EXPORT KoCharacterStyle : public QObject
+class KRITATEXT_EXPORT KoCharacterStyle : public QObject
 {
     Q_OBJECT
 public:

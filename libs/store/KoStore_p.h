@@ -35,7 +35,6 @@ class KoStorePrivate
 public:
     explicit KoStorePrivate(KoStore *qq, KoStore::Mode _mode, bool _writeMimetype)
         : q(qq),
-        fileMode(Local),
         window(0),
         mode(_mode),
         size(0),
@@ -46,8 +45,6 @@ public:
         writeMimetype(_writeMimetype)
     {
     }
-
-    enum FileMode { /*Bad=0,*/ Local = 1, RemoteRead, RemoteWrite };
 
     /**
      * Conversion routine
@@ -78,7 +75,6 @@ public:
      * (undefined for a local file)
      */
     QUrl url;
-    FileMode fileMode;
     QString localFileName;
     QWidget *window;
 

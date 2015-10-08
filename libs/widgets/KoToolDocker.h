@@ -26,13 +26,13 @@
 
 class QWidget;
 
-#include <kowidgets_export.h>
+#include <kritawidgets_export.h>
 #include <KoCanvasObserverBase.h>
 /**
  * The tool docker shows the tool option widget associated with the
  * current tool and the current canvas.
  */
-class KOWIDGETS_EXPORT KoToolDocker : public QDockWidget, public KoCanvasObserverBase
+class KRITAWIDGETS_EXPORT KoToolDocker : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:

@@ -26,7 +26,7 @@
 
 class KoInlineNote;
 
-class KOTEXTLAYOUT_EXPORT KoTextLayoutNoteArea : public KoTextLayoutArea
+class KRITATEXTLAYOUT_EXPORT KoTextLayoutNoteArea : public KoTextLayoutArea
 {
 public:
     explicit KoTextLayoutNoteArea(KoInlineNote *note, KoTextLayoutArea *parent, KoTextDocumentLayout *documentLayout);

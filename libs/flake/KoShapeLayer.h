@@ -21,7 +21,7 @@
 #define __KOSHAPELAYER_H__
 
 #include "KoShapeContainer.h"
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoShapeLayerPrivate;
 
@@ -31,7 +31,7 @@ class KoShapeLayerPrivate;
  * in a document.
  * A layer is always invisible and unselectable.
  */
-class FLAKE_EXPORT KoShapeLayer : public KoShapeContainer
+class KRITAFLAKE_EXPORT KoShapeLayer : public KoShapeContainer
 {
 public:
     /// The default constructor

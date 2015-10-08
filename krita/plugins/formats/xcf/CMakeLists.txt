@@ -31,8 +31,4 @@ if (WIN32)
 endif ()
 
 install(TARGETS kritaxcfimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-########### install files ###############
-
-install( FILES  krita_xcf_import.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( PROGRAMS  krita_xcf.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

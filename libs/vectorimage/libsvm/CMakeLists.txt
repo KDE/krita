@@ -1,6 +1,4 @@
-
-
-include_directories( ${KOMAIN_INCLUDES} )
+include_directories( ${KOWIDGETS_INCLUDES} )
 
 #add_subdirectory(demo)
 
@@ -17,15 +15,3 @@ set(libsvm_LIB_SRCS
 
 #set_target_properties(libsvm PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
-
-########### install files ###############
-
-#install(TARGETS libsvm  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-#install(
-#    FILES
-#    SvmEnums.h
-#    SvmStructs.h
-#    svm_export.h
-#    DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel
-#)

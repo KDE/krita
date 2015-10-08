@@ -25,14 +25,14 @@ class KoShape;
 class KoPathSegment;
 class KoCanvasBase;
 #include <QList>
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class QPointF;
 class QRectF;
 /**
  * This class provides access to different shape related snap targets to snap strategies.
  */
-class FLAKE_EXPORT KoSnapProxy
+class KRITAFLAKE_EXPORT KoSnapProxy
 {
 public:
     KoSnapProxy(KoSnapGuide *snapGuide);

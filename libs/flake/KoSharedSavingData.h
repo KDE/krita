@@ -20,14 +20,14 @@
 #ifndef KOSHAREDSAVINGDATA_H
 #define KOSHAREDSAVINGDATA_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 /**
  * The KoSharedSavingData class is used to share data between shapes during saving.
  * These data can be added to the KoShapeSavingContext using KoShapeSavingContext::addSharedData().
  * A different shape can then get the data from the context using KoShapeSavingContext::sharedData().
  */
-class FLAKE_EXPORT KoSharedSavingData
+class KRITAFLAKE_EXPORT KoSharedSavingData
 {
 public:
     KoSharedSavingData();

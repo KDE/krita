@@ -7,9 +7,3 @@ kcoreaddons_desktop_to_json(kritachanneldocker krita_channeldocker.desktop)
 target_link_libraries(kritachanneldocker kritaui)
 
 install(TARGETS kritachanneldocker  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  krita_channeldocker.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-

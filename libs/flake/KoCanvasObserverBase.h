@@ -23,7 +23,7 @@
 class KoCanvasBase;
 class KoCanvasObserverBasePrivate;
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include <QString>
 
 /**
@@ -32,7 +32,7 @@ class KoCanvasObserverBasePrivate;
  * should implement that interface so that the tool controller
  * can give them the active canvas.
  */
-class FLAKE_EXPORT KoCanvasObserverBase
+class KRITAFLAKE_EXPORT KoCanvasObserverBase
 {
 public:
     KoCanvasObserverBase();

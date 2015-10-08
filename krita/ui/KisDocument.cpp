@@ -21,11 +21,8 @@
 #include "KisMainWindow.h" // XXX: remove
 #include <QMessageBox> // XXX: remove
 
-#include "KisApplication.h"
-#include "KisDocument.h"
-#include "KisImportExportManager.h"
-#include "KisPart.h"
-#include "KisView.h"
+#include <QMimeDatabase>
+#include <QMimeType>
 
 #include <KoCanvasBase.h>
 #include <KoColor.h>
@@ -50,17 +47,10 @@
 #include <KoUpdater.h>
 #include <KoXmlWriter.h>
 
-
-#include <kfileitem.h>
-#include <KoNetAccess.h>
-#include <kio/job.h>
 #include <klocalizedstring.h>
 #include <kis_debug.h>
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
-#include <kfileitem.h>
-#include <kfileitem.h>
-#include <kdirnotify.h>
 #include <QTemporaryFile>
 #include <kbackup.h>
 
@@ -114,6 +104,12 @@
 #include "kis_resource_server_provider.h"
 #include "kis_node_manager.h"
 #include "KisPart.h"
+#include "KisApplication.h"
+#include "KisDocument.h"
+#include "KisImportExportManager.h"
+#include "KisPart.h"
+#include "KisView.h"
+
 
 static const char CURRENT_DTD_VERSION[] = "2.0";
 
@@ -256,9 +252,6 @@ public:
         storeInternal(false),
         isLoading(false),
         undoStack(0),
-        m_job(0),
-        m_statJob(0),
-        m_uploadJob(0),
         m_saveOk(false),
         m_waitForSave(false),
         m_duringSaveAs(false),
@@ -329,9 +322,6 @@ public:
 
     KoPageLayout pageLayout;
 
-    KIO::FileCopyJob * m_job;
-    KIO::StatJob * m_statJob;
-    KIO::FileCopyJob * m_uploadJob;
     QUrl m_originalURL; // for saveAs
     QString m_originalFilePath; // for saveAs
     bool m_saveOk : 1;
@@ -409,30 +399,6 @@ public:
         return ret;
     }
 
-    void openRemoteFile()
-    {
-        m_bTemp = true;
-        // Use same extension as remote file. This is important for mimetype-determination (e.g. koffice)
-        QString fileName = m_url.fileName();
-        QFileInfo fileInfo(fileName);
-        QString ext = fileInfo.completeSuffix();
-        QString extension;
-        if (!ext.isEmpty() && m_url.query().isNull()) // not if the URL has a query, e.g. cgi.pl?something
-            extension = '.'+ext; // keep the '.'
-        QTemporaryFile tempFile(QDir::tempPath() + QLatin1String("/krita_XXXXXX") + extension);
-        tempFile.setAutoRemove(false);
-        tempFile.open();
-        m_file = tempFile.fileName();
-
-        QUrl destURL;
-        destURL.setPath( m_file );
-        KIO::JobFlags flags = KIO::DefaultFlags;
-        flags |= KIO::Overwrite;
-        m_job = KIO::file_copy(m_url, destURL, 0600, flags);
-        QObject::connect(m_job, SIGNAL(result(KJob*)), document, SLOT(_k_slotJobFinished(KJob*)));
-        QObject::connect(m_job, SIGNAL(mimetype(KIO::Job*,QString)), document, SLOT(_k_slotGotMimeType(KIO::Job*,QString)));
-    }
-
     // Set m_file correctly for m_url
     void prepareSaving()
     {
@@ -445,93 +411,6 @@ public:
                 m_bTemp = false;
             }
             m_file = m_url.toLocalFile();
-        }
-        else
-        { // Remote file
-            // We haven't saved yet, or we did but locally - provide a temp file
-            if ( m_file.isEmpty() || !m_bTemp )
-            {
-                QTemporaryFile tempFile;
-                tempFile.setAutoRemove(false);
-                tempFile.open();
-                m_file = tempFile.fileName();
-                m_bTemp = true;
-            }
-            // otherwise, we already had a temp file
-        }
-    }
-
-
-    void _k_slotJobFinished( KJob * job )
-    {
-        Q_ASSERT( job == m_job );
-        m_job = 0;
-        if (job->error())
-            emit document->canceled( job->errorString() );
-        else {
-            if ( openFile() ) {
-                emit document->completed();
-            }
-            else {
-                emit document->canceled(QString());
-            }
-        }
-    }
-
-    void _k_slotStatJobFinished(KJob * job)
-    {
-        Q_ASSERT(job == m_statJob);
-        m_statJob = 0;
-
-        // this could maybe confuse some apps? So for now we'll just fallback to KIO::get
-        // and error again. Well, maybe this even helps with wrong stat results.
-        if (!job->error()) {
-            const QUrl localUrl = static_cast<KIO::StatJob*>(job)->url();
-            if (localUrl.isLocalFile()) {
-                m_file = localUrl.toLocalFile();
-                openLocalFile();
-                return;
-            }
-        }
-        openRemoteFile();
-    }
-
-
-    void _k_slotGotMimeType(KIO::Job *job, const QString &mime)
-    {
-        dbgFile << mime;
-        Q_ASSERT(job == m_job); Q_UNUSED(job);
-        // set the mimetype only if it was not already set (for example, by the host application)
-        if (mimeType.isEmpty()) {
-            mimeType = mime.toLocal8Bit();
-            m_bAutoDetectedMime = true;
-        }
-    }
-
-    void _k_slotUploadFinished( KJob * )
-    {
-        if (m_uploadJob->error())
-        {
-            QFile::remove(m_uploadJob->srcUrl().toLocalFile());
-            m_uploadJob = 0;
-            if (m_duringSaveAs) {
-                document->setUrl(m_originalURL);
-                m_file = m_originalFilePath;
-            }
-        }
-        else
-        {
-            ::org::kde::KDirNotify::emitFilesAdded(QUrl::fromLocalFile(m_url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path()));
-            m_uploadJob = 0;
-            document->setModified( false );
-            emit document->completed();
-            m_saveOk = true;
-        }
-        m_duringSaveAs = false;
-        m_originalURL = QUrl();
-        m_originalFilePath.clear();
-        if (m_waitForSave) {
-            m_eventLoop.quit();
         }
     }
 
@@ -702,26 +581,8 @@ bool KisDocument::saveFile()
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     if (backupFile()) {
-        if (url().isLocalFile())
-            KBackup::backupFile(url().toLocalFile(), d->backupPath);
-        else {
-            KIO::UDSEntry entry;
-            if (KIO::NetAccess::stat(url(),
-                                     entry,
-                                     KisPart::instance()->currentMainwindow())) {     // this file exists => backup
-                emit statusBarMessage(i18n("Making backup..."));
-                QUrl backup;
-                if (d->backupPath.isEmpty())
-                    backup = url();
-                else
-                    backup = QUrl::fromLocalFile(d->backupPath + '/' + url().fileName());
-                backup.setPath(backup.path() + QString::fromLatin1("~"));
-                KFileItem item(entry, url());
-                Q_ASSERT(item.name() == url().fileName());
-                KIO::FileCopyJob *job = KIO::file_copy(url(), backup, item.permissions(), KIO::Overwrite | KIO::HideProgressInfo);
-                job->exec();
-            }
-        }
+        Q_ASSERT(url().isLocalFile());
+        KBackup::backupFile(url().toLocalFile(), d->backupPath);
     }
 
     emit statusBarMessage(i18n("Saving..."));
@@ -1211,6 +1072,10 @@ bool KisDocument::importDocument(const QUrl &_url)
 
 bool KisDocument::openUrl(const QUrl &_url, KisDocument::OpenUrlFlags flags)
 {
+    if (!_url.isLocalFile()) {
+        qDebug() << "not a local file" << _url;
+        return false;
+    }
     dbgUI << "url=" << _url.url();
     d->lastErrorMessage.clear();
 
@@ -1261,9 +1126,9 @@ bool KisDocument::openUrl(const QUrl &_url, KisDocument::OpenUrlFlags flags)
         }
 
         if (ret) {
-            // Detect readonly local-files; remote files are assumed to be writable, unless we add a KIO::stat here (async).
-            KFileItem file(url, mimeType(), KFileItem::Unknown);
-            setReadWrite(file.isWritable());
+            // Detect readonly local-files; remote files are assumed to be writable
+            QFileInfo fi(url.toLocalFile());
+            setReadWrite(fi.isWritable());
         }
     }
     return ret;
@@ -2356,15 +2221,6 @@ bool KisDocument::save()
 
 bool KisDocument::waitSaveComplete()
 {
-    if (!d->m_uploadJob)
-        return d->m_saveOk;
-
-    d->m_waitForSave = true;
-
-    d->m_eventLoop.exec(QEventLoop::ExcludeUserInputEvents);
-
-    d->m_waitForSave = false;
-
     return d->m_saveOk;
 }
 
@@ -2398,31 +2254,7 @@ bool KisDocument::saveToUrl()
         d->m_originalFilePath.clear();
         return true; // Nothing to do
     }
-#ifndef Q_OS_WIN
-    else {
-        if (d->m_uploadJob) {
-            QFile::remove(d->m_uploadJob->srcUrl().toLocalFile());
-            d->m_uploadJob->kill();
-            d->m_uploadJob = 0;
-        }
-        QTemporaryFile *tempFile = new QTemporaryFile();
-        tempFile->open();
-        QString uploadFile = tempFile->fileName();
-        delete tempFile;
-        QUrl uploadUrl;
-        uploadUrl.setPath( uploadFile );
-        // Create hardlink
-        if (::link(QFile::encodeName(d->m_file), QFile::encodeName(uploadFile)) != 0) {
-            // Uh oh, some error happened.
-            return false;
-        }
-        d->m_uploadJob = KIO::file_move( uploadUrl, d->m_url, -1, KIO::Overwrite );
-        connect( d->m_uploadJob, SIGNAL(result(KJob*)), this, SLOT(_k_slotUploadFinished(KJob*)) );
-        return true;
-    }
-#else
     return false;
-#endif
 }
 
 
@@ -2450,10 +2282,8 @@ bool KisDocument::openUrlInternal(const QUrl &url)
         d->m_file = d->m_url.toLocalFile();
         return d->openLocalFile();
     }
-    else {
-        d->openRemoteFile();
-        return true;
-    }
+
+    return false;
 }
 
 KisImageWSP KisDocument::newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace* colorspace)
@@ -2504,7 +2334,7 @@ bool KisDocument::newImage(const QString& name,
     image->assignImageProfile(cs->profile());
     documentInfo()->setAboutInfo("title", name);
     if (name != i18n("Unnamed") && !name.isEmpty()) {
-        setUrl(QUrl(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) + '/' + name + ".kra"));
+        setUrl(QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) + '/' + name + ".kra"));
     }
     documentInfo()->setAboutInfo("comments", description);
 
@@ -2649,8 +2479,4 @@ KisUndoStore* KisDocument::createUndoStore()
 {
     return new KisDocumentUndoStore(this);
 }
-
-#include <moc_KisDocument.cpp>
-#include <QMimeDatabase>
-#include <QMimeType>
 

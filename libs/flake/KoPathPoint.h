@@ -22,7 +22,7 @@
 #ifndef KOPATHPOINT_H
 #define KOPATHPOINT_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QFlags>
 
@@ -41,7 +41,7 @@ class QPainter;
  * bezier ending at the point. controlPoint2 is used to describe the
  * first point of a cubic bezier curve starting at the point.
  */
-class FLAKE_EXPORT KoPathPoint
+class KRITAFLAKE_EXPORT KoPathPoint
 {
 public:
     /// property enum

@@ -32,25 +32,13 @@ set(textlayout_LIB_SRCS
 )
 
 
-add_library(kotextlayout SHARED ${textlayout_LIB_SRCS})
-generate_export_header(kotextlayout BASE_NAME kotextlayout)
+add_library(kritatextlayout SHARED ${textlayout_LIB_SRCS})
+generate_export_header(kritatextlayout BASE_NAME kritatextlayout)
 
-target_link_libraries(kotextlayout kotext)
-target_link_libraries(kotextlayout LINK_INTERFACE_LIBRARIES kotext)
+target_link_libraries(kritatextlayout kritatext)
+target_link_libraries(kritatextlayout LINK_INTERFACE_LIBRARIES kritatext)
 
-set_target_properties(kotextlayout PROPERTIES
+set_target_properties(kritatextlayout PROPERTIES
    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS kotextlayout  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-install(
-    FILES
-    KoTextDocumentLayout.h
-    KoTextLayoutArea.h
-    KoTextLayoutRootArea.h
-    KoTextShapeData.h
-    KoPointedAt.h
-    KoStyleThumbnailer.h
-    DESTINATION
-    ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
-)
+install(TARGETS kritatextlayout  ${INSTALL_TARGETS_DEFAULT_ARGS})

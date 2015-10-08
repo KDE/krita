@@ -83,7 +83,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::addRemoveColors()
     if (dlg->exec() == KoDialog::Accepted ) { // always reload the color set
         KoColorSet * cs = dlg->activeColorSet();
         // check if the selected colorset is predefined
-        if( !palettes.contains( cs ) ) {
+        if( cs && !palettes.contains( cs ) ) {
             int i = 1;
             QFileInfo fileInfo;
             QString savePath = srv->saveLocation();

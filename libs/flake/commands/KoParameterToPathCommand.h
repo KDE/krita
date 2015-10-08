@@ -24,13 +24,13 @@
 #include <kundo2command.h>
 #include <QList>
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoParameterShape;
 class KoParameterToPathCommandPrivate;
 
 /// The undo / redo command for changing a KoParameterShape into a KoPathShape
-class FLAKE_EXPORT KoParameterToPathCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoParameterToPathCommand : public KUndo2Command
 {
 public:
     /**

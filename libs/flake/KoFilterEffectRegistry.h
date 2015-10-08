@@ -23,12 +23,12 @@
 #include <KoGenericRegistry.h>
 #include <KoFilterEffectFactoryBase.h>
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoXmlElement;
 class KoFilterEffectLoadingContext;
 
-class FLAKE_EXPORT KoFilterEffectRegistry : public KoGenericRegistry<KoFilterEffectFactoryBase*>
+class KRITAFLAKE_EXPORT KoFilterEffectRegistry : public KoGenericRegistry<KoFilterEffectFactoryBase*>
 {
 public:
     KoFilterEffectRegistry();

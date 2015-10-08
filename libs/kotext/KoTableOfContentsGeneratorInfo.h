@@ -32,7 +32,7 @@
 class KoTextSharedLoadingData;
 class KoXmlWriter;
 
-class KOTEXT_EXPORT KoTableOfContentsGeneratorInfo
+class KRITATEXT_EXPORT KoTableOfContentsGeneratorInfo
 {
 public:
     explicit KoTableOfContentsGeneratorInfo(bool generateEntryTemplate = true);

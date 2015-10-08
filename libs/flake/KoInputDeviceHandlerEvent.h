@@ -20,7 +20,7 @@
 #ifndef KOINPUTDEVICEHANDLEREVENT_H
 #define KOINPUTDEVICEHANDLEREVENT_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QInputEvent>
 
@@ -29,7 +29,7 @@ class KoPointerEvent;
 /**
  * Base class for events from custom input devices.
  */
-class FLAKE_EXPORT KoInputDeviceHandlerEvent : public QInputEvent
+class KRITAFLAKE_EXPORT KoInputDeviceHandlerEvent : public QInputEvent
 {
 public:
     enum Type {

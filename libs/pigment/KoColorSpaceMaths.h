@@ -23,7 +23,7 @@
 #include <cmath>
 #include <limits>
 
-#include "pigment_export.h"
+#include "kritapigment_export.h"
 #include <KoIntegerMaths.h>
 #include "KoChannelInfo.h"
 #include "KoLut.h"
@@ -53,7 +53,7 @@ public:
 };
 
 template<>
-class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<quint8>
+class KRITAPIGMENT_EXPORT KoColorSpaceMathsTraits<quint8>
 {
 public:
     typedef qint32 compositetype;
@@ -68,7 +68,7 @@ public:
 };
 
 template<>
-class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<quint16>
+class KRITAPIGMENT_EXPORT KoColorSpaceMathsTraits<quint16>
 {
 public:
     typedef qint64 compositetype;
@@ -83,7 +83,7 @@ public:
 };
 
 template<>
-class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<qint16>
+class KRITAPIGMENT_EXPORT KoColorSpaceMathsTraits<qint16>
 {
 public:
     typedef qint64 compositetype;
@@ -98,7 +98,7 @@ public:
 };
 
 template<>
-class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<quint32>
+class KRITAPIGMENT_EXPORT KoColorSpaceMathsTraits<quint32>
 {
 public:
     typedef qint64 compositetype;
@@ -117,7 +117,7 @@ public:
 #include <half.h>
 
 template<>
-class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<half>
+class KRITAPIGMENT_EXPORT KoColorSpaceMathsTraits<half>
 {
 public:
     typedef double compositetype;
@@ -133,7 +133,7 @@ public:
 #endif
 
 template<>
-class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<float>
+class KRITAPIGMENT_EXPORT KoColorSpaceMathsTraits<float>
 {
 public:
     typedef double compositetype;
@@ -148,7 +148,7 @@ public:
 };
 
 template<>
-class PIGMENTCMS_EXPORT KoColorSpaceMathsTraits<double>
+class KRITAPIGMENT_EXPORT KoColorSpaceMathsTraits<double>
 {
 public:
     typedef double compositetype;
@@ -211,8 +211,8 @@ struct KoIntegerToFloat {
 
 struct KoLuts {
 
-  static PIGMENTCMS_EXPORT const Ko::FullLut< KoIntegerToFloat<quint16>, float, quint16> Uint16ToFloat;
-  static PIGMENTCMS_EXPORT const Ko::FullLut< KoIntegerToFloat<quint8>, float, quint8> Uint8ToFloat;
+  static KRITAPIGMENT_EXPORT const Ko::FullLut< KoIntegerToFloat<quint16>, float, quint16> Uint16ToFloat;
+  static KRITAPIGMENT_EXPORT const Ko::FullLut< KoIntegerToFloat<quint8>, float, quint8> Uint8ToFloat;
 };
 
 /**

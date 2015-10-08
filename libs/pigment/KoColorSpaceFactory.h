@@ -23,7 +23,7 @@
 #include "KoColorSpaceConstants.h"
 #include "KoColorConversionTransformation.h"
 #include <KoID.h>
-#include "pigment_export.h"
+#include "kritapigment_export.h"
 
 class KoColorProfile;
 class KoColorConversionTransformationFactory;
@@ -31,7 +31,7 @@ class KoColorConversionTransformationFactory;
 /**
  * This class is used to create color spaces.
  */
-class PIGMENTCMS_EXPORT KoColorSpaceFactory
+class KRITAPIGMENT_EXPORT KoColorSpaceFactory
 {
 protected:
     KoColorSpaceFactory();

@@ -20,7 +20,7 @@
 #ifndef KOSHAPESHADOWCOMMAND_H
 #define KOSHAPESHADOWCOMMAND_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include <kundo2command.h>
 #include <QList>
 
@@ -28,7 +28,7 @@ class KoShape;
 class KoShapeShadow;
 
 /// The undo / redo command for setting the shape shadow
-class FLAKE_EXPORT KoShapeShadowCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoShapeShadowCommand : public KUndo2Command
 {
 public:
     /**

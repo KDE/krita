@@ -20,7 +20,7 @@
 #ifndef KOTABLECOLUMNANDROWSTYLEMANAGER_H
 #define KOTABLECOLUMNANDROWSTYLEMANAGER_H
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 #include <QMetaType>
 #include <QExplicitlySharedDataPointer>
@@ -43,7 +43,7 @@ class QTextTable;
  * TODO:
  *  - Eliminate duplicates.
  */
-class KOTEXT_EXPORT KoTableColumnAndRowStyleManager
+class KRITATEXT_EXPORT KoTableColumnAndRowStyleManager
 {
 public:
     /// constructor @see getManager for how to create a class the correct way

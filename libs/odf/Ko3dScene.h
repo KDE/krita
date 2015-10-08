@@ -45,10 +45,10 @@ class KoXmlElement;
  */
 
 
-#include "koodf_export.h"
+#include "kritaodf_export.h"
 
 
-class KOODF_EXPORT Ko3dScene
+class KRITAODF_EXPORT Ko3dScene
 {
 public:
     enum Projection {
@@ -135,7 +135,7 @@ Q_DECLARE_TYPEINFO(Ko3dScene::Lightsource, Q_MOVABLE_TYPE);
 /** Try to load a 3d scene from an element and return a pointer to a
  * Ko3dScene if it succeeded.
  */
-KOODF_EXPORT Ko3dScene *load3dScene(const KoXmlElement &element);
+KRITAODF_EXPORT Ko3dScene *load3dScene(const KoXmlElement &element);
 
 
 #endif

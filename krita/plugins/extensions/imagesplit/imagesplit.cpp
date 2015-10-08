@@ -63,7 +63,7 @@ Imagesplit::~Imagesplit()
 {
 }
 
-void Imagesplit::saveAsImage(QRect imgSize, QString mimeType, QUrl url)
+void Imagesplit::saveAsImage(const QRect &imgSize, const QString &mimeType, const QString &url)
 {
     KisImageWSP image = m_view->image();
 
@@ -81,7 +81,7 @@ void Imagesplit::saveAsImage(QRect imgSize, QString mimeType, QUrl url)
     dst->addNode(paintLayer, KisNodeSP(0));
     dst->refreshGraph();
     d->setOutputMimeType(mimeType.toLatin1());
-    d->exportDocument(url);
+    d->exportDocument(QUrl::fromLocalFile(url));
 
     delete d;
 }
@@ -130,10 +130,9 @@ void Imagesplit::slotImagesplit()
                 for (int j = 0; j < (numHorizontalLines + 1); j++, k++) {
                     QMimeDatabase db;
                     QMimeType mimeTypeSelected = db.mimeTypeForName(listMimeFilter.at(dlgImagesplit->cmbIndex));
-                    QUrl url(QDir::homePath());
+                    QString homepath = QDir::homePath();
                     QString fileName = dlgImagesplit->suffix() + '_' + QString::number(k) + mimeTypeSelected.preferredSuffix();
-                    url = url.adjusted(QUrl::StripTrailingSlash);
-                    url.setPath(url.path() + '/' + (fileName));
+                    QString url = homepath  + '/' + fileName;
                     saveAsImage(QRect((i * img_width), (j * img_height), img_width, img_height), listMimeFilter.at(dlgImagesplit->cmbIndex), url);
                 }
             }
@@ -154,7 +153,7 @@ void Imagesplit::slotImagesplit()
 
                     if (url.isEmpty())
                         return;
-                    saveAsImage(QRect((i * img_width), (j * img_height), img_width, img_height), mimefilter, url);
+                    saveAsImage(QRect((i * img_width), (j * img_height), img_width, img_height), mimefilter, url.toLocalFile());
                 }
             }
 

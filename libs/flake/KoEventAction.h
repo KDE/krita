@@ -20,7 +20,7 @@
 #ifndef KOEVENTACTION_H
 #define KOEVENTACTION_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include "KoXmlReaderForward.h"
 
 class QString;
@@ -45,7 +45,7 @@ class KoShapeSavingContext;
  * with a macro that is executed whenever the condition occurs, that is, whenever a user places the
  * cursor over a graphic.
  */
-class FLAKE_EXPORT KoEventAction
+class KRITAFLAKE_EXPORT KoEventAction
 {
 public:
     /**

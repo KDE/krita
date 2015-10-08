@@ -31,7 +31,7 @@
 #include "KoColorConversionTransformation.h"
 #include "KoCompositeOp.h"
 #include <KoID.h>
-#include "pigment_export.h"
+#include "kritapigment_export.h"
 
 class QDomDocument;
 class QDomElement;
@@ -83,7 +83,7 @@ class KoConvolutionOp;
  * Some subclasses implement only some parts and are named Traits
  *
  */
-class PIGMENTCMS_EXPORT KoColorSpace
+class KRITAPIGMENT_EXPORT KoColorSpace
 {
     friend class KoColorSpaceRegistry;
     friend class KoColorSpaceFactory;

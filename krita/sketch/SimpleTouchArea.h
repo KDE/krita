@@ -19,7 +19,7 @@
 #ifndef SIMPLETOUCHAREA_H
 #define SIMPLETOUCHAREA_H
 
-#include <qdeclarativeitem.h>
+#include <QDeclarativeItem>
 
 class SimpleTouchArea : public QDeclarativeItem
 {

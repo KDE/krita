@@ -30,6 +30,7 @@
 #include "kis_selection.h"
 
 #include "kis_iterator_ng.h"
+#include "kis_image.h"
 #include "kis_random_accessor_ng.h"
 #include "kis_progress_update_helper.h"
 #include "kis_gradient_shape_strategy.h"

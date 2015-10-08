@@ -26,10 +26,10 @@
 #include <QPointF>
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 /// The undo / redo command for changing segments to curves/lines
-class FLAKE_EXPORT KoPathSegmentTypeCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoPathSegmentTypeCommand : public KUndo2Command
 {
 public:
     /// Segment Types

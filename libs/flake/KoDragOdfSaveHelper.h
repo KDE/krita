@@ -20,7 +20,7 @@
 #ifndef KODRAGODFSAVEHELPER_H
 #define KODRAGODFSAVEHELPER_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <QtGlobal>
 
@@ -30,7 +30,7 @@ class KoGenStyles;
 class KoEmbeddedDocumentSaver;
 class KoDragOdfSaveHelperPrivate;
 
-class FLAKE_EXPORT KoDragOdfSaveHelper
+class KRITAFLAKE_EXPORT KoDragOdfSaveHelper
 {
 public:
     KoDragOdfSaveHelper();

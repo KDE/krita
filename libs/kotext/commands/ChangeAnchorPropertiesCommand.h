@@ -21,7 +21,7 @@
 #define CHANGEANCHORPROPERTIESCOMMAND_H
 
 #include <kundo2command.h>
-#include "kotext_export.h"
+#include "kritatext_export.h"
 #include "KoShapeAnchor.h"
 
 #include <QPointF>
@@ -29,7 +29,7 @@
 class KoShapeContainer;
 
 
-class KOTEXT_EXPORT ChangeAnchorPropertiesCommand : public KUndo2Command
+class KRITATEXT_EXPORT ChangeAnchorPropertiesCommand : public KUndo2Command
 {
 public:
     ChangeAnchorPropertiesCommand(KoShapeAnchor *anchor, const KoShapeAnchor &newAnchorData, KoShapeContainer *newParent, KUndo2Command *parent);

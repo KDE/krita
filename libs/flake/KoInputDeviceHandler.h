@@ -20,13 +20,13 @@
 #ifndef KOINPUTDEVICEHANDLER_H
 #define KOINPUTDEVICEHANDLER_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include <QObject>
 
 /**
  * Base class for all custom input devices.
  */
-class FLAKE_EXPORT KoInputDeviceHandler : public QObject
+class KRITAFLAKE_EXPORT KoInputDeviceHandler : public QObject
 {
     Q_OBJECT
 public:

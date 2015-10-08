@@ -33,7 +33,7 @@ class KoInputDeviceHandlerEvent;
 class QGraphicsSceneMouseEvent;
 class QGraphicsSceneWheelEvent;
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 struct KoTouchPoint
 {
@@ -51,7 +51,7 @@ struct KoTouchPoint
  * (canvas based) position as well as the normalized position, that is,
  * the position of the event _in_ the document coordinates.
  */
-class FLAKE_EXPORT KoPointerEvent
+class KRITAFLAKE_EXPORT KoPointerEvent
 {
 public:
     /**

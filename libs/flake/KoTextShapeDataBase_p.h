@@ -25,7 +25,7 @@
 class QTextDocument;
 
 /// \internal
-class FLAKE_EXPORT KoTextShapeDataBasePrivate
+class KRITAFLAKE_EXPORT KoTextShapeDataBasePrivate
 {
 public:
     KoTextShapeDataBasePrivate();

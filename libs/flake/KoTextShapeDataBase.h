@@ -20,7 +20,7 @@
 #ifndef KOTEXTSHAPEDATABASE_H
 #define KOTEXTSHAPEDATABASE_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include "KoShapeUserData.h"
 
@@ -36,7 +36,7 @@ class QTextDocument;
 /**
  * \internal
  */
-class FLAKE_EXPORT KoTextShapeDataBase : public KoShapeUserData
+class KRITAFLAKE_EXPORT KoTextShapeDataBase : public KoShapeUserData
 {
     Q_OBJECT
 public:

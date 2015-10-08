@@ -23,7 +23,7 @@
 #include <QList>
 #include <QSet>
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include "KoXmlReaderForward.h"
 class KoEventAction;
 class KoEventActionFactoryBase;
@@ -34,7 +34,7 @@ class KoShapeLoadingContext;
  *
  * It creates the event actions when loaded from odf.
  */
-class FLAKE_EXPORT KoEventActionRegistry
+class KRITAFLAKE_EXPORT KoEventActionRegistry
 {
 public:
     class Singleton;

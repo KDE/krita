@@ -19,7 +19,7 @@
 #ifndef KOTEXTRANGE_H
 #define KOTEXTRANGE_H
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 #include <QObject>
 #include <KoXmlReaderForward.h>
@@ -40,7 +40,7 @@ class KoShapeLoadingContext;
  *
  * @see KoTextRangeManager
  */
-class KOTEXT_EXPORT KoTextRange : public QObject
+class KRITATEXT_EXPORT KoTextRange : public QObject
 {
     Q_OBJECT
 public:
@@ -123,6 +123,6 @@ private:
     Q_DECLARE_PRIVATE(KoTextRange)
 };
 
-KOTEXT_EXPORT QDebug operator<<(QDebug dbg, const KoTextRange *o);
+KRITATEXT_EXPORT QDebug operator<<(QDebug dbg, const KoTextRange *o);
 
 #endif

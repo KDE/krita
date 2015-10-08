@@ -20,14 +20,14 @@
 #ifndef SVGUTIL_H
 #define SVGUTIL_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 #include <QRectF>
 
 class QString;
 class SvgGraphicsContext;
 class QTransform;
 
-class FLAKE_EXPORT SvgUtil
+class KRITAFLAKE_EXPORT SvgUtil
 {
 public:
     /**

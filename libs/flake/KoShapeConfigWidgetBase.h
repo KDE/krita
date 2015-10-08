@@ -24,7 +24,7 @@
 
 #include <QWidget>
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoShape;
 class KUndo2Command;
@@ -43,7 +43,7 @@ class KoUnit;
  * the param shape.  After the user ok-ed the dialog the save() will be called
  * to allow the widget to apply all settings from the widget to the shape.
  */
-class FLAKE_EXPORT KoShapeConfigWidgetBase : public QWidget
+class KRITAFLAKE_EXPORT KoShapeConfigWidgetBase : public QWidget
 {
     Q_OBJECT
 public:

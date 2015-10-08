@@ -20,7 +20,7 @@
 #ifndef KOSECTIONEND_H
 #define KOSECTIONEND_H
 
-#include "kotext_export.h"
+#include "kritatext_export.h"
 
 #include <QMetaType>
 #include <QList>
@@ -34,7 +34,7 @@ class KoSectionEndPrivate;
 /**
  * Marks the end of the section
  */
-class KOTEXT_EXPORT KoSectionEnd {
+class KRITATEXT_EXPORT KoSectionEnd {
 public:
     ~KoSectionEnd(); // this is needed for QScopedPointer
 

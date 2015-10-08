@@ -124,7 +124,14 @@ protected:
     virtual void setupPaintAction(KisRecordedPaintAction* action);
 
     qreal pressureToCurve(qreal pressure){
-        return m_pressureSamples.at( qRound(pressure * LEVEL_OF_PRESSURE_RESOLUTION) );
+        qreal p =  qRound(pressure * LEVEL_OF_PRESSURE_RESOLUTION);
+        if (p < 0) {
+            return m_pressureSamples.first();
+        }
+        else if (p < m_pressureSamples.size()) {
+            return m_pressureSamples.at(p);
+        }
+        return m_pressureSamples.last();
     }
 
     enum NodePaintAbility {

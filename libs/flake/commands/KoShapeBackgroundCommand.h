@@ -21,7 +21,7 @@
 #ifndef KOSHAPEBACKGROUNDCOMMAND_H
 #define KOSHAPEBACKGROUNDCOMMAND_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 #include <kundo2command.h>
 #include <QList>
@@ -31,7 +31,7 @@ class KoShape;
 class KoShapeBackground;
 
 /// The undo / redo command for setting the shape background
-class FLAKE_EXPORT KoShapeBackgroundCommand : public KUndo2Command
+class KRITAFLAKE_EXPORT KoShapeBackgroundCommand : public KUndo2Command
 {
 public:
     /**

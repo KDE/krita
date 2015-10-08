@@ -26,6 +26,7 @@
 #include "KoColor.h"
 #include "kis_selection.h"
 #include "kis_painter.h"
+#include "kis_image.h"
 
 #ifdef Q_OS_WIN
 #include <float.h>

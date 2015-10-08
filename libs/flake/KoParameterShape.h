@@ -22,7 +22,7 @@
 #define KOPARAMETERSHAPE_H
 
 #include "KoPathShape.h"
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 class KoParameterShapePrivate;
 
@@ -43,7 +43,7 @@ class KoParameterShapePrivate;
  * the shape like a path shape, so that modifying the single path points
  * is possible.
  */
-class FLAKE_EXPORT KoParameterShape : public KoPathShape
+class KRITAFLAKE_EXPORT KoParameterShape : public KoPathShape
 {
 public:
     KoParameterShape();

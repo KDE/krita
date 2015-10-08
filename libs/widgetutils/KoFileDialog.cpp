@@ -28,7 +28,6 @@
 #include <ksharedconfig.h>
 #include <klocalizedstring.h>
 
-#include <QUrl>
 #include <QMimeDatabase>
 #include <QMimeType>
 

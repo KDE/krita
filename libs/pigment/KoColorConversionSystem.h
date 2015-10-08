@@ -31,7 +31,7 @@ class KoID;
 #include <QList>
 #include <QPair>
 
-#include "pigment_export.h"
+#include "kritapigment_export.h"
 
 /**
  * This class hold the logic related to pigment's Color Conversion System. It's
@@ -42,7 +42,7 @@ class KoID;
  *
  * This class is not part of public API, and can be changed without notice.
  */
-class PIGMENTCMS_EXPORT KoColorConversionSystem
+class KRITAPIGMENT_EXPORT KoColorConversionSystem
 {
 public:
     struct Node;

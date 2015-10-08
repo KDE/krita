@@ -23,7 +23,7 @@
 #include <QBitArray>
 
 #include "DebugPigment.h"
-#include "pigment_export.h"
+#include "kritapigment_export.h"
 
 #include "KoColorSpaceAbstract.h"
 #include "KoColorSpaceTraits.h"
@@ -37,7 +37,7 @@ typedef KoColorSpaceTrait<quint8, 1, 0> AlphaU8Traits;
  * The alpha mask is a special color strategy that treats all pixels as
  * alpha value with a color common to the mask. The default color is white.
  */
-class PIGMENTCMS_EXPORT KoAlphaColorSpace : public KoColorSpaceAbstract<AlphaU8Traits>
+class KRITAPIGMENT_EXPORT KoAlphaColorSpace : public KoColorSpaceAbstract<AlphaU8Traits>
 {
 
 public:

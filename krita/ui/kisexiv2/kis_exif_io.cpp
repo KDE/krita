@@ -430,11 +430,13 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
                 } else if (exivKey == "Exif.Photo.ComponentsConfiguration") {
                     v = kmdIntOrderedArrayToExifArray(entry.value());
                 } else if (exivKey == "Exif.Image.Artist") { // load as dc:creator
-                    KisMetaData::Value creator = entry.value().asArray()[0];
+                    if (entry.value().asArray().size() > 0) {
+                        KisMetaData::Value creator = entry.value().asArray()[0];
 #if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 20
-                    v = kmdValueToExivValue(creator, Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId()));
+                        v = kmdValueToExivValue(creator, Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId()));
 #else
-                    v = kmdValueToExivValue(creator, exifKey.defaultTypeId());
+                        v = kmdValueToExivValue(creator, exifKey.defaultTypeId());
+                    }
 #endif
                 } else if (exivKey == "Exif.Photo.OECF") {
                     v = kmdOECFStructureToExifOECF(entry.value());

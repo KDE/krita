@@ -31,8 +31,10 @@
         <file>pics/tool_screenshot.png</file>
         <file>pics/transparency-locked.png</file>
         <file>pics/transparency-unlocked.png</file>
-        <file>pics/passthrough-enabled.png</file>
-        <file>pics/passthrough-disabled.png</file>
+        <file>pics/light_passthrough-enabled.png</file>
+        <file>pics/dark_passthrough-enabled.png</file>
+        <file>pics/light_passthrough-disabled.png</file>
+        <file>pics/dark_passthrough-disabled.png</file>
         <file>pics/layer-style-enabled.png</file>
         <file>pics/layer-style-disabled.png</file>
         <file>pics/unlinked.png</file>

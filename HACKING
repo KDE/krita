@@ -7,6 +7,26 @@ consistency, these are the rules new code should adhere to:
 See also http://techbase.kde.org/Policies/Kdelibs_Coding_Style -- that document
 is leading.
 
+Qt vs STD vs Boost:
+
+    In general, use the Qt classes wherever possible, even if someone tells you
+    that the STD class is better or whatever. We're dealing with a big project
+    with lots of developers here and we should keep the code as consistent and
+    easy to grasp as possible. Since people need to know Qt in the first place,
+    keep to Qt. Discuss deviations on #krita
+
+C++11 and C++14
+
+    Yes, but. Avoid lambdas. Avoid the new sig/slot connection syntax _unless_
+    you are porting all of Krita to the new syntax. Sure, it has some advantages,
+    but having two different ways of doing the same thing is begging for trouble
+    and comprehension problems. For now, keep using foreach, we're using it all
+    over the place. auto is fine, when using in for loops. Don't go overboard
+    using it in other places. 
+
+    Before using other new features, discuss on #krita so we can expand this list.
+
+
 Indentation
 
 	With four spaces. Use the default kdelibs indentation 

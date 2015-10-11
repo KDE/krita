@@ -95,11 +95,17 @@ CompositionDockerDock::~CompositionDockerDock()
 
 void CompositionDockerDock::setCanvas(KoCanvasBase * canvas)
 {
+    if (m_canvas && m_canvas->viewManager()) {
+        foreach(KisAction *action, m_actions) {
+            m_canvas->viewManager()->actionManager()->takeAction(action);
+        }
+    }
+
     unsetCanvas();
     setEnabled(canvas != 0);
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    if (m_canvas) {
+    if (m_canvas && m_canvas->viewManager()) {
         foreach(KisAction *action, m_actions) {
             m_canvas->viewManager()->actionManager()->addAction(action->objectName(), action);
         }
@@ -110,11 +116,6 @@ void CompositionDockerDock::setCanvas(KoCanvasBase * canvas)
 void CompositionDockerDock::unsetCanvas()
 {
     setEnabled(false);
-    if (m_canvas) {
-        foreach(KisAction *action, m_actions) {
-            m_canvas->viewManager()->actionManager()->takeAction(action);
-        }
-    }
     m_canvas = 0;
     m_model->setCompositions(QList<KisLayerComposition*>());
 }

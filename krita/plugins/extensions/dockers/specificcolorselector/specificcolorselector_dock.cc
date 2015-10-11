@@ -67,10 +67,7 @@ void SpecificColorSelectorDock::setCanvas(KoCanvasBase * canvas)
 void SpecificColorSelectorDock::unsetCanvas()
 {
     setEnabled(false);
-
-    m_canvas->image()->disconnect(m_colorSelector);
     m_canvas = 0;
-
     m_colorSelector->setDisplayRenderer(0);
 }
 

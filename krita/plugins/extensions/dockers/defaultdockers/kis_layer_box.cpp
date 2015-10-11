@@ -405,7 +405,14 @@ void KisLayerBox::unsetCanvas()
     if (m_canvas) {
         m_newLayerMenu->clear();
     }
-    setCanvas(0);
+
+    disconnect(m_image, 0, this, 0);
+    disconnect(m_nodeManager, 0, this, 0);
+    disconnect(m_nodeModel, 0, m_nodeManager, 0);
+    disconnect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), this, SLOT(updateUI()));
+    m_nodeManager->setSelectedNodes(QList<KisNodeSP>());
+
+    m_canvas = 0;
 }
 
 void KisLayerBox::notifyImageDeleted()

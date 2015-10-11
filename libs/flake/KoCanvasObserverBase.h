@@ -66,9 +66,13 @@ protected:
     virtual void setCanvas(KoCanvasBase *canvas) = 0;
 
     /**
-     * re-implement to notify the observer that its canvas is no longer
+     * Re-implement to notify the observer that its canvas is no longer
      * among the living. The daisies, it is pushing up. This means you
      * don't have to unconnect, it's dead.
+     *
+     * The old canvas should be deleted already, so if you stored a
+     * pointer to it, don't touch!
+     *
      * Note that currently there is a bug where in certain specific
      * circumstances unsetCanvas can be called when it shouldn't, see for
      * example KWStatisticsDocker for a workaround for this problem.

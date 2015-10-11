@@ -231,7 +231,7 @@ private Q_SLOTS:
 
 private:
     void createActions();
-    void createManagers();
+    void setupManagers();
 
     /// The zoommanager handles everything action-related to zooming
     KisZoomManager * zoomManager();

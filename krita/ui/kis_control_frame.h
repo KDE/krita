@@ -50,6 +50,7 @@ public:
 
     KisControlFrame(KisViewManager *view, QWidget *parent = 0, const char *name = 0);
     virtual ~KisControlFrame() {}
+    void setup(QWidget *parent);
 
     KisPaintopBox* paintopBox() {
         return m_paintopBox;

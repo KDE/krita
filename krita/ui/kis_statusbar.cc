@@ -60,38 +60,42 @@ KisStatusBar::KisStatusBar(KisViewManager * view)
         : m_view(view)
         , m_imageView(0)
 {
+}
+
+void KisStatusBar::setup()
+{
     m_selectionStatus = new QToolButton();
     m_selectionStatus->setIconSize(QSize(16,16));
     m_selectionStatus->setAutoRaise(true);
     m_selectionStatus->setEnabled(false);   
     updateSelectionIcon();
 
-    connect(m_selectionStatus, SIGNAL(clicked()), view->selectionManager(), SLOT(slotToggleSelectionDecoration()));
-    connect(view->selectionManager(), SIGNAL(displaySelectionChanged()), SLOT(updateSelectionToolTip()));
-    connect(view->mainWindow(), SIGNAL(themeChanged()), this, SLOT(updateSelectionIcon()));
+    connect(m_selectionStatus, SIGNAL(clicked()), m_view->selectionManager(), SLOT(slotToggleSelectionDecoration()));
+    connect(m_view->selectionManager(), SIGNAL(displaySelectionChanged()), SLOT(updateSelectionToolTip()));
+    connect(m_view->mainWindow(), SIGNAL(themeChanged()), this, SLOT(updateSelectionIcon()));
 
-    view->addStatusBarItem(m_selectionStatus);
+    m_view->addStatusBarItem(m_selectionStatus);
 
     m_statusBarStatusLabel = new KSqueezedTextLabel();
     m_statusBarStatusLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     m_statusBarStatusLabel->setContentsMargins(5, 5, 5, 5);
     connect(KoToolManager::instance(), SIGNAL(changedStatusText(const QString &)),
             m_statusBarStatusLabel, SLOT(setText(const QString &)));
-    view->addStatusBarItem(m_statusBarStatusLabel, 2);
+    m_view->addStatusBarItem(m_statusBarStatusLabel, 2);
 
     m_statusBarProfileLabel = new KSqueezedTextLabel();
     m_statusBarProfileLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     m_statusBarProfileLabel->setContentsMargins(5, 5, 5, 5);
-    view->addStatusBarItem(m_statusBarProfileLabel, 3);
+    m_view->addStatusBarItem(m_statusBarProfileLabel, 3);
 
     m_progress = new KisProgressWidget();
-    view->addStatusBarItem(m_progress);
+    m_view->addStatusBarItem(m_progress);
 
     m_memoryReportBox = new QPushButton();
     m_memoryReportBox->setFlat(true);
     m_memoryReportBox->setContentsMargins(5, 5, 5, 5);
     m_memoryReportBox->setMinimumWidth(120);
-    view->addStatusBarItem(m_memoryReportBox);
+    m_view->addStatusBarItem(m_memoryReportBox);
 
     connect(m_memoryReportBox, SIGNAL(clicked()), SLOT(showMemoryInfoToolTip()));
 
@@ -99,7 +103,7 @@ KisStatusBar::KisStatusBar(KisViewManager * view)
     m_pointerPositionLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_pointerPositionLabel->setMinimumWidth(100);
     m_pointerPositionLabel->setContentsMargins(5,5, 5, 5);
-    view->addStatusBarItem(m_pointerPositionLabel);
+    m_view->addStatusBarItem(m_pointerPositionLabel);
     m_pointerPositionLabel->setVisible(false);
 
     connect(KisMemoryStatisticsServer::instance(),

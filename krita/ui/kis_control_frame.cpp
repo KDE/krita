@@ -81,52 +81,61 @@ KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const ch
     m_patternWidget->setText(i18n("Fill Patterns"));
     m_patternWidget->setToolTip(i18n("Fill Patterns"));
     m_patternWidget->setFixedSize(26, 26);
-    QWidgetAction *action  = new QWidgetAction(this);
-    action->setText(i18n("&Patterns"));
-    view->actionCollection()->addAction("patterns", action);
-    action->setDefaultWidget(m_patternWidget);
 
     m_gradientWidget = new KisIconWidget(parent, "gradients");
     m_gradientWidget->setText(i18n("Gradients"));
     m_gradientWidget->setToolTip(i18n("Gradients"));
     m_gradientWidget->setFixedSize(26, 26);
-    action = new QWidgetAction(this);
-    action->setText(i18n("&Gradients"));
-    view->actionCollection()->addAction("gradients", action);
-    action->setDefaultWidget(m_gradientWidget);
 
     KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer(false);
     QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoAbstractGradient>(rserver));
     m_gradientWidget->setResourceAdapter(adapter);
 
-    // XXX: KOMVC we don't have a canvas here yet, needs a setImageView
-    const KoColorDisplayRendererInterface *displayRenderer = KisDisplayColorConverter::dumbConverterInstance()->displayRendererInterface();
-    KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->bgColor(), displayRenderer,
-                                                     view->mainWindow(), view->mainWindow());
-    dual->setPopDialog(true);
-    action = new QWidgetAction(this);
-    action->setText(i18n("&Color"));
-    view->actionCollection()->addAction("dual", action);
-    action->setDefaultWidget(dual);
-    connect(dual, SIGNAL(foregroundColorChanged(KoColor)), view->resourceProvider(), SLOT(slotSetFGColor(KoColor)));
-    connect(dual, SIGNAL(backgroundColorChanged(KoColor)), view->resourceProvider(), SLOT(slotSetBGColor(KoColor)));
-    connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), dual, SLOT(setForegroundColor(KoColor)));
-    connect(view->resourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), dual, SLOT(setBackgroundColor(KoColor)));
-    dual->setFixedSize(26, 26);
-
-    createPatternsChooser(m_viewManager);
-    createGradientsChooser(m_viewManager);
-
     m_patternWidget->setPopupWidget(m_patternChooserPopup);
     m_gradientWidget->setPopupWidget(m_gradientChooserPopup);
 
-    m_paintopBox = new KisPaintopBox(view, parent, "paintopbox");
-    action = new QWidgetAction(this);
-    action->setText(i18n("&Painter's Tools"));
-    view->actionCollection()->addAction("paintops", action);
-    action->setDefaultWidget(m_paintopBox);
 }
 
+void KisControlFrame::setup(QWidget *parent)
+{
+    createPatternsChooser(m_viewManager);
+    createGradientsChooser(m_viewManager);
+
+    QWidgetAction *action  = new QWidgetAction(this);
+    action->setText(i18n("&Patterns"));
+    m_viewManager->actionCollection()->addAction("patterns", action);
+    action->setDefaultWidget(m_patternWidget);
+
+    action = new QWidgetAction(this);
+    action->setText(i18n("&Gradients"));
+    m_viewManager->actionCollection()->addAction("gradients", action);
+    action->setDefaultWidget(m_gradientWidget);
+
+
+    // XXX: KOMVC we don't have a canvas here yet, needs a setImageView
+    const KoColorDisplayRendererInterface *displayRenderer = \
+        KisDisplayColorConverter::dumbConverterInstance()->displayRendererInterface();
+    KoDualColorButton * dual = new KoDualColorButton(m_viewManager->resourceProvider()->fgColor(),
+                                                     m_viewManager->resourceProvider()->bgColor(), displayRenderer,
+                                                     m_viewManager->mainWindow(), m_viewManager->mainWindow());
+    dual->setPopDialog(true);
+    action = new QWidgetAction(this);
+    action->setText(i18n("&Color"));
+    m_viewManager->actionCollection()->addAction("dual", action);
+    action->setDefaultWidget(dual);
+    connect(dual, SIGNAL(foregroundColorChanged(KoColor)), m_viewManager->resourceProvider(), SLOT(slotSetFGColor(KoColor)));
+    connect(dual, SIGNAL(backgroundColorChanged(KoColor)), m_viewManager->resourceProvider(), SLOT(slotSetBGColor(KoColor)));
+    connect(m_viewManager->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), dual, SLOT(setForegroundColor(KoColor)));
+    connect(m_viewManager->resourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), dual, SLOT(setBackgroundColor(KoColor)));
+    dual->setFixedSize(26, 26);
+
+    m_paintopBox = new KisPaintopBox(m_viewManager, parent, "paintopbox");
+
+    action = new QWidgetAction(this);
+    action->setText(i18n("&Painter's Tools"));
+    m_viewManager->actionCollection()->addAction("paintops", action);
+    action->setDefaultWidget(m_paintopBox);
+}
 
 void KisControlFrame::slotSetPattern(KoPattern * pattern)
 {

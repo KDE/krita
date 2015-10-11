@@ -44,6 +44,7 @@ public:
     KisStatusBar(KisViewManager * view);
     ~KisStatusBar();
 
+    void setup();
     void setView(QPointer<KisView> imageView);
 
     KisProgressWidget *progress();

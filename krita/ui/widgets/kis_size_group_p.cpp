@@ -101,8 +101,16 @@ void KisSizeGroupPrivate::addWidget(QWidget *widget)
                     return;
                 }
 
-                // TODO support QBoxLayout when QBoxLayout::insertItem method are made public
-                // TODO support QStackedLayout
+                // Widget within a QBoxLayout
+                QBoxLayout *boxLayout = qobject_cast<QBoxLayout*>(layout);
+                if (boxLayout) {
+                    boxLayout->removeItem(layoutItem);
+                    delete layoutItem;
+                    boxLayout->insertItem(layoutWidgetIndex, groupItem);
+                    m_groupItems.append(groupItem);
+
+                    return;
+                }
             }
         }
     }
@@ -160,8 +168,16 @@ void KisSizeGroupPrivate::removeWidget(QWidget *widget)
                     return;
                 }
 
-                // TODO support QBoxLayout when QBoxLayout::insertItem method are made public
-                // TODO support QStackedLayout
+                // Widget within a QBoxLayout
+                QBoxLayout *boxLayout = qobject_cast<QBoxLayout*>(layout);
+                if (boxLayout) {
+                    boxLayout->removeItem(widgetGroupItem);
+                    delete widgetGroupItem;
+                    QWidgetItem *widgetItem = new QWidgetItem(widget);
+                    boxLayout->insertItem(layoutWidgetIndex, widgetItem);
+
+                    return;
+                }
             }
         }
     }

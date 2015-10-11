@@ -8,12 +8,14 @@ set(KRITA_ANIMATIONDOCKER_PART_SRCS
     kis_onion_skin_dialog.cpp
 )
 
-kde4_add_ui_files(KRITA_ANIMATIONDOCKER_PART_SRCS
+ki18n_wrap_ui(KRITA_ANIMATIONDOCKER_PART_SRCS
     wdg_animation.ui
     kis_onion_skin_dialog.ui
 )
 
-kde4_add_plugin(kritaanimationdocker ${KRITA_ANIMATIONDOCKER_PART_SRCS})
+add_library(kritaanimationdocker ${KRITA_ANIMATIONDOCKER_PART_SRCS})
+
+kcoreaddons_desktop_to_json(kritaanimationdocker krita_animationdocker.desktop)
 
 target_link_libraries(kritaanimationdocker kritaui)
 

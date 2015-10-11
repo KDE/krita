@@ -39,7 +39,6 @@ class KisInputManager::Private
 {
 public:
     Private(KisInputManager *qq);
-    ~Private();
     bool tryHidePopupPalette();
     void addStrokeShortcut(KisAbstractInputAction* action, int index, const QList< Qt::Key >& modifiers, Qt::MouseButtons buttons);
     void addKeyShortcut(KisAbstractInputAction* action, int index,const QList<Qt::Key> &keys);
@@ -53,25 +52,25 @@ public:
 
     KisInputManager *q;
 
-    KisCanvas2 *canvas;
-    KisToolProxy *toolProxy;
+    KisCanvas2 *canvas = 0;
+    KisToolProxy *toolProxy = 0;
 
-    bool forwardAllEventsToTool;
+    bool forwardAllEventsToTool = false;
     bool ignoreQtCursorEvents();
 
-    bool disableTouchOnCanvas;
-    bool touchHasBlockedPressEvents;
+    bool disableTouchOnCanvas = false;
+    bool touchHasBlockedPressEvents = false;
 
     KisShortcutMatcher matcher;
-    QTouchEvent *lastTouchEvent;
+    QTouchEvent *lastTouchEvent = 0;
 
-    KisToolInvocationAction *defaultInputAction;
+    KisToolInvocationAction *defaultInputAction = 0;
 
-    QObject *eventsReceiver;
+    QObject *eventsReceiver = 0;
     KisSignalCompressor moveEventCompressor;
     QScopedPointer<QTabletEvent> compressedMoveEvent;
-    bool testingAcceptCompressedTabletEvents;
-    bool testingCompressBrushEvents;
+    bool testingAcceptCompressedTabletEvents = false;
+    bool testingCompressBrushEvents = false;
 
 
     QSet<QPointer<QObject> > priorityEventFilter;
@@ -110,8 +109,9 @@ public:
         QMap<QObject*, KisCanvas2*> canvasResolver;
         int eatOneMouseStroke;
     };
-    QPointer<CanvasSwitcher> canvasSwitcher;
 
-    bool focusOnEnter;
-    bool containsPointer;
+    CanvasSwitcher canvasSwitcher;
+
+    bool focusOnEnter = true;
+    bool containsPointer = true;
 };

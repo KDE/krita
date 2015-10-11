@@ -95,12 +95,12 @@ KisInputManager::~KisInputManager()
 
 void KisInputManager::addTrackedCanvas(KisCanvas2 *canvas)
 {
-    d->canvasSwitcher->addCanvas(canvas);
+    d->canvasSwitcher.addCanvas(canvas);
 }
 
 void KisInputManager::removeTrackedCanvas(KisCanvas2 *canvas)
 {
-    d->canvasSwitcher->removeCanvas(canvas);
+    d->canvasSwitcher.removeCanvas(canvas);
 }
 
 void KisInputManager::toggleTabletLogger()

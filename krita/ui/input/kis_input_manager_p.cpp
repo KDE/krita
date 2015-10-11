@@ -94,19 +94,8 @@ bool KisInputManager::Private::ignoreQtCursorEvents()
 
 KisInputManager::Private::Private(KisInputManager *qq)
     : q(qq)
-    , canvas(0)
-    , toolProxy(0)
-    , forwardAllEventsToTool(false)
-    , disableTouchOnCanvas(false)
-    , touchHasBlockedPressEvents(false)
-    , lastTouchEvent(0)
-    , defaultInputAction(0)
-    , eventsReceiver(0)
     , moveEventCompressor(10 /* ms */, KisSignalCompressor::FIRST_ACTIVE)
-    , testingAcceptCompressedTabletEvents(false)
-    , testingCompressBrushEvents(false)
-    , focusOnEnter(true)
-    , containsPointer(true)
+    , canvasSwitcher(this, q)
 {
     KisConfig cfg;
     disableTouchOnCanvas = cfg.disableTouchOnCanvas();
@@ -115,16 +104,10 @@ KisInputManager::Private::Private(KisInputManager *qq)
     testingAcceptCompressedTabletEvents = cfg.testingAcceptCompressedTabletEvents();
     testingCompressBrushEvents = cfg.testingCompressBrushEvents();
     setupActions();
-    canvasSwitcher = new CanvasSwitcher(this, q);
+
     qApp->installEventFilter(globalEventEater);
 }
 
-
-
-KisInputManager::Private::~Private()
-{
-    delete canvasSwitcher;
-}
 
 KisInputManager::Private::CanvasSwitcher::CanvasSwitcher(Private *_d, QObject *p)
     : QObject(p),

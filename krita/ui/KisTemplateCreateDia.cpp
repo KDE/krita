@@ -59,34 +59,24 @@ static const int thumbnailExtent = 128;
 
 class KisTemplateCreateDiaPrivate {
 public:
-    KisTemplateCreateDiaPrivate(const QString &filePath, const QPixmap &thumbnail)
-         : m_filePath(filePath)
-         , m_thumbnail(thumbnail)
-    {
-        m_tree=0;
-        m_name=0;
-        m_default=0;
-        m_custom=0;
-        m_select=0;
-        m_preview=0;
-        m_groups=0;
-        m_add=0;
-        m_remove=0;
-        m_defaultTemplate=0;
-    }
-    ~KisTemplateCreateDiaPrivate() {
-        delete m_tree;
-    }
+    KisTemplateCreateDiaPrivate(const QString &templatesResourcePath,
+                                const QString &filePath, const QPixmap &thumbnail)
+        : m_tree(templatesResourcePath, true)
+        , m_filePath(filePath)
+        , m_thumbnail(thumbnail)
+    { }
 
-    KisTemplateTree *m_tree;
+    KisTemplateTree m_tree;
     QLineEdit *m_name;
-    QRadioButton *m_default, *m_custom;
+    QRadioButton *m_default;
+    QRadioButton *m_custom;
     QPushButton *m_select;
     QLabel *m_preview;
     QString m_customFile;
     QPixmap m_customPixmap;
     QTreeWidget *m_groups;
-    QPushButton *m_add, *m_remove;
+    QPushButton *m_add;
+    QPushButton *m_remove;
     QCheckBox *m_defaultTemplate;
     QString m_filePath;
     QPixmap m_thumbnail;
@@ -96,14 +86,14 @@ public:
 
 /****************************************************************************
  *
- * Class: koTemplateCreateDia
+ * Class: KisTemplateCreateDia
  *
  ****************************************************************************/
 
 KisTemplateCreateDia::KisTemplateCreateDia(const QString &templatesResourcePath,
                                            const QString &filePath, const QPixmap &thumbnail, QWidget *parent)
   : KoDialog(parent)
-  , d(new KisTemplateCreateDiaPrivate(filePath, thumbnail))
+  , d(new KisTemplateCreateDiaPrivate(templatesResourcePath, filePath, thumbnail))
 {
 
     setButtons( KoDialog::Ok|KoDialog::Cancel );
@@ -112,7 +102,7 @@ KisTemplateCreateDia::KisTemplateCreateDia(const QString &templatesResourcePath,
     setModal( true );
     setObjectName( "template create dia" );
 
-    QWidget *mainwidget=mainWidget();
+    QWidget *mainwidget = mainWidget();
     QHBoxLayout *mbox=new QHBoxLayout( mainwidget );
     QVBoxLayout* leftbox = new QVBoxLayout();
     mbox->addLayout( leftbox );
@@ -136,7 +126,6 @@ KisTemplateCreateDia::KisTemplateCreateDia(const QString &templatesResourcePath,
     d->m_groups->setRootIsDecorated(true);
     d->m_groups->setSortingEnabled(true);
 
-    d->m_tree = new KisTemplateTree(templatesResourcePath, true);
     fillGroupTree();
     d->m_groups->sortItems(0, Qt::AscendingOrder);
 
@@ -248,7 +237,7 @@ void KisTemplateCreateDia::slotOk() {
     if(!item)
         item = d->m_groups->topLevelItem(0);
     if(!item) {    // safe :)
-        d->m_tree->writeTemplateTree();
+        d->m_tree.writeTemplateTree();
         slotButtonClicked( KoDialog::Cancel );
         return;
     }
@@ -256,26 +245,26 @@ void KisTemplateCreateDia::slotOk() {
     if(item->parent() != NULL)
         item=item->parent();
     if(!item) {    // *very* safe :P
-        d->m_tree->writeTemplateTree();
+        d->m_tree.writeTemplateTree();
         slotButtonClicked( KoDialog::Cancel );
         return;
     }
 
-    KisTemplateGroup *group=d->m_tree->find(item->text(0));
+    KisTemplateGroup *group=d->m_tree.find(item->text(0));
     if(!group) {    // even safer
-        d->m_tree->writeTemplateTree();
+        d->m_tree.writeTemplateTree();
         slotButtonClicked( KoDialog::Cancel );
         return;
     }
 
     if(d->m_name->text().isEmpty()) {
-        d->m_tree->writeTemplateTree();
+        d->m_tree.writeTemplateTree();
         slotButtonClicked( KoDialog::Cancel );
         return;
     }
 
     // copy the tmp file and the picture the app provides
-    QString dir = KoResourcePaths::saveLocation("data", d->m_tree->templatesResourcePath());
+    QString dir = KoResourcePaths::saveLocation("data", d->m_tree.templatesResourcePath());
     dir+=group->name();
     QString templateDir=dir+"/.source/";
     QString iconDir=dir+"/.icon/";
@@ -329,7 +318,7 @@ void KisTemplateCreateDia::slotOk() {
 
     QDir path;
     if (!path.mkpath(templateDir) || !path.mkpath(iconDir)) {
-        d->m_tree->writeTemplateTree();
+        d->m_tree.writeTemplateTree();
         slotButtonClicked( KoDialog::Cancel );
         return;
     }
@@ -369,7 +358,7 @@ void KisTemplateCreateDia::slotOk() {
         }
     }
 
-    d->m_tree->writeTemplateTree();
+    d->m_tree.writeTemplateTree();
 
     if ( d->m_defaultTemplate->isChecked() )
     {
@@ -428,15 +417,15 @@ void KisTemplateCreateDia::slotNameChanged(const QString &name) {
 void KisTemplateCreateDia::slotAddGroup() {
 
     const QString name = QInputDialog::getText(this, i18n("Add Group"), i18n("Enter group name:"));
-    KisTemplateGroup *group = d->m_tree->find(name);
+    KisTemplateGroup *group = d->m_tree.find(name);
     if (group && !group->isHidden()) {
         QMessageBox::information( this, i18n("This name is already used."), i18n("Add Group") );
         return;
     }
-    QString dir = KoResourcePaths::saveLocation("data", d->m_tree->templatesResourcePath());
+    QString dir = KoResourcePaths::saveLocation("data", d->m_tree.templatesResourcePath());
     dir+=name;
     KisTemplateGroup *newGroup=new KisTemplateGroup(name, dir, 0, true);
-    d->m_tree->add(newGroup);
+    d->m_tree.add(newGroup);
     QTreeWidgetItem *item = new QTreeWidgetItem(d->m_groups, QStringList() << name);
     d->m_groups->setCurrentItem(item);
     d->m_groups->sortItems(0, Qt::AscendingOrder);
@@ -470,13 +459,13 @@ void KisTemplateCreateDia::slotRemove() {
     }
 
     if(item->parent() == NULL) {
-        KisTemplateGroup *group=d->m_tree->find(item->text(0));
+        KisTemplateGroup *group=d->m_tree.find(item->text(0));
         if(group)
             group->setHidden(true);
     }
     else {
         bool done=false;
-        QList<KisTemplateGroup*> groups = d->m_tree->groups();
+        QList<KisTemplateGroup*> groups = d->m_tree.groups();
         QList<KisTemplateGroup*>::const_iterator it = groups.constBegin();
         for(; it != groups.constEnd() && !done; ++it) {
             KisTemplate *t = (*it)->find(item->text(0));
@@ -519,7 +508,7 @@ void KisTemplateCreateDia::updatePixmap() {
 
 void KisTemplateCreateDia::fillGroupTree() {
 
-    foreach(KisTemplateGroup *group, d->m_tree->groups()) {
+    foreach(KisTemplateGroup *group, d->m_tree.groups()) {
         if(group->isHidden())
             continue;
         QTreeWidgetItem *groupItem=new QTreeWidgetItem(d->m_groups, QStringList() << group->name());

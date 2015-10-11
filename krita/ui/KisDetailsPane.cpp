@@ -26,18 +26,9 @@
 // class KisDetailsPane
 ///////////////////////////////////
 
-class KisDetailsPanePrivate
+struct KisDetailsPanePrivate
 {
-public:
-    KisDetailsPanePrivate()
-    {
-        m_model = new QStandardItemModel;
-    }
-    ~KisDetailsPanePrivate() {
-        delete m_model;
-    }
-
-    QStandardItemModel* m_model;
+    QStandardItemModel m_model;
 };
 
 KisDetailsPane::KisDetailsPane(QWidget* parent, const QString& header)
@@ -45,14 +36,14 @@ KisDetailsPane::KisDetailsPane(QWidget* parent, const QString& header)
         Ui_KisDetailsPaneBase(),
         d(new KisDetailsPanePrivate())
 {
-    d->m_model->setHorizontalHeaderItem(0, new QStandardItem(header));
+    d->m_model.setHorizontalHeaderItem(0, new QStandardItem(header));
 
     setupUi(this);
 
     m_previewLabel->installEventFilter(this);
     m_documentList->installEventFilter(this);
     m_documentList->setIconSize(QSize(IconExtent, IconExtent));
-    m_documentList->setModel(d->m_model);
+    m_documentList->setModel(&d->m_model);
     m_splitter->setSizes(QList<int>() << 2 << 1);
 
     changePalette();
@@ -118,7 +109,7 @@ void KisDetailsPane::changePalette()
 
 QStandardItemModel* KisDetailsPane::model() const
 {
-    return d->m_model;
+    return &d->m_model;
 }
 
 #include <KisDetailsPane.moc>

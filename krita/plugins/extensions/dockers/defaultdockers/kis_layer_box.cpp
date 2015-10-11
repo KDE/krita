@@ -135,11 +135,15 @@ KisLayerBox::KisLayerBox()
     m_wdgLayerBox->listLayers->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
     m_wdgLayerBox->listLayers->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-    connect(m_wdgLayerBox->listLayers, SIGNAL(contextMenuRequested(const QPoint&, const QModelIndex&)),
+    connect(m_wdgLayerBox->listLayers,
+            SIGNAL(contextMenuRequested(const QPoint&, const QModelIndex&)),
             this, SLOT(slotContextMenuRequested(const QPoint&, const QModelIndex&)));
-    connect(m_wdgLayerBox->listLayers, SIGNAL(collapsed(const QModelIndex&)), SLOT(slotCollapsed(const QModelIndex &)));
-    connect(m_wdgLayerBox->listLayers, SIGNAL(expanded(const QModelIndex&)), SLOT(slotExpanded(const QModelIndex &)));
-    connect(m_wdgLayerBox->listLayers, SIGNAL(selectionChanged(const QModelIndexList&)), SLOT(selectionChanged(const QModelIndexList&)));
+    connect(m_wdgLayerBox->listLayers,
+            SIGNAL(collapsed(const QModelIndex&)), SLOT(slotCollapsed(const QModelIndex &)));
+    connect(m_wdgLayerBox->listLayers,
+            SIGNAL(expanded(const QModelIndex&)), SLOT(slotExpanded(const QModelIndex &)));
+    connect(m_wdgLayerBox->listLayers,
+            SIGNAL(selectionChanged(const QModelIndexList&)), SLOT(selectionChanged(const QModelIndexList&)));
 
     m_viewModeMenu = new QMenu(this);
     QActionGroup *group = new QActionGroup(this);
@@ -189,7 +193,8 @@ KisLayerBox::KisLayerBox()
     m_wdgLayerBox->bnDuplicate->setIcon(KisIconUtils::loadIcon("duplicatelayer"));
     m_wdgLayerBox->bnDuplicate->setIconSize(QSize(22, 22));
 
-    m_removeAction  = new ButtonAction(m_wdgLayerBox->bnDelete, KisIconUtils::loadIcon("deletelayer"), i18n("&Remove Layer"), this);
+    m_removeAction  = new ButtonAction(m_wdgLayerBox->bnDelete,
+                                       KisIconUtils::loadIcon("deletelayer"), i18n("&Remove Layer"), this);
     m_removeAction->setActivationFlags(KisAction::ACTIVE_NODE);
     m_removeAction->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     m_removeAction->setObjectName("remove_layer");
@@ -212,7 +217,8 @@ KisLayerBox::KisLayerBox()
     connect(action, SIGNAL(triggered()), this, SLOT(slotRightClicked()));
     m_actions.append(action);
 
-    m_propertiesAction  = new ButtonAction(m_wdgLayerBox->bnProperties, KisIconUtils::loadIcon("properties"), i18n("&Properties..."),this);
+    m_propertiesAction  = new ButtonAction(m_wdgLayerBox->bnProperties,
+                                           KisIconUtils::loadIcon("properties"), i18n("&Properties..."),this);
     m_propertiesAction->setActivationFlags(KisAction::ACTIVE_NODE);
     m_propertiesAction->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     m_propertiesAction->setObjectName("layer_properties");
@@ -346,8 +352,10 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         connect(m_image, SIGNAL(sigImageUpdated(QRect)), SLOT(updateThumbnail()));
 
         KisDocument* doc = static_cast<KisDocument*>(m_canvas->imageView()->document());
-        KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(doc->shapeController());
-        KisDummiesFacadeBase *kritaDummiesFacade = static_cast<KisDummiesFacadeBase*>(kritaShapeController);
+        KisShapeController *kritaShapeController =
+            dynamic_cast<KisShapeController*>(doc->shapeController());
+        KisDummiesFacadeBase *kritaDummiesFacade =
+            static_cast<KisDummiesFacadeBase*>(kritaShapeController);
         m_nodeModel->setDummiesFacade(kritaDummiesFacade, m_image, kritaShapeController);
 
         connect(m_image, SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
@@ -362,15 +370,18 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         }
 
         // Connection KisNodeManager -> KisLayerBox
-        connect(m_nodeManager, SIGNAL(sigUiNeedChangeActiveNode(KisNodeSP)), this, SLOT(setCurrentNode(KisNodeSP)));
+        connect(m_nodeManager, SIGNAL(sigUiNeedChangeActiveNode(KisNodeSP)),
+                this, SLOT(setCurrentNode(KisNodeSP)));
 
         // Connection KisLayerBox -> KisNodeManager
         // The order of these connections is important! See comment in the ctor
-        connect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), m_nodeManager, SLOT(slotUiActivatedNode(KisNodeSP)));
+        connect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)),
+                m_nodeManager, SLOT(slotUiActivatedNode(KisNodeSP)));
         connect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), SLOT(updateUI()));
 
         // Connection KisLayerBox -> KisNodeManager (isolate layer)
-        connect(m_nodeModel, SIGNAL(toggleIsolateActiveNode()), m_nodeManager, SLOT(toggleIsolateActiveNode()));
+        connect(m_nodeModel, SIGNAL(toggleIsolateActiveNode()),
+                m_nodeManager, SLOT(toggleIsolateActiveNode()));
 
         // Node manipulation methods are forwarded to the node manager
         connect(m_nodeModel, SIGNAL(requestAddNode(KisNodeSP, KisNodeSP, KisNodeSP)),
@@ -538,7 +549,8 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
             addActionToMenu(&menu, "flatten_layer");
 
             // TODO: missing icon "edit-merge"
-            QAction* mergeLayerDown = menu.addAction(i18n("&Merge with Layer Below"), this, SLOT(slotMergeLayer()));
+            QAction* mergeLayerDown = menu.addAction(i18n("&Merge with Layer Below"),
+                                                     this, SLOT(slotMergeLayer()));
             if (!index.sibling(index.row() + 1, 0).isValid()) mergeLayerDown->setEnabled(false);
             menu.addSeparator();
 

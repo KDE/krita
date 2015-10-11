@@ -40,11 +40,10 @@ PaletteModel::~PaletteModel()
 
 void PaletteModel::setDisplayRenderer(KoColorDisplayRendererInterface *displayRenderer)
 {
-    if (m_displayRenderer) {
-        disconnect(m_displayRenderer, 0, this, 0);
-    }
-
     if (displayRenderer) {
+        if (m_displayRenderer) {
+            disconnect(m_displayRenderer, 0, this, 0);
+        }
         m_displayRenderer = displayRenderer;
         connect(m_displayRenderer, SIGNAL(displayConfigurationChanged()),
                 SLOT(slotDisplayConfigurationChanged()));

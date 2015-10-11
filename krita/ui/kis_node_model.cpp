@@ -53,30 +53,19 @@
 
 struct KisNodeModel::Private
 {
-public:
-    Private() : shapeController(0),
-                showRootLayer(false),
-                showGlobalSelection(false),
-                indexConverter(0),
-                dummiesFacade(0),
-                needFinishRemoveRows(false),
-                needFinishInsertRows(false),
-                parentOfRemovedNode(0)
-    {}
-
     KisImageWSP image;
-    KisShapeController *shapeController;
-    bool showRootLayer;
-    bool showGlobalSelection;
+    KisShapeController *shapeController = 0;
     QList<KisNodeDummy*> updateQueue;
-    QTimer* updateTimer;
+    QTimer updateTimer;
 
-    KisModelIndexConverterBase *indexConverter;
-    KisDummiesFacadeBase *dummiesFacade;
-    bool needFinishRemoveRows;
-    bool needFinishInsertRows;
+    KisModelIndexConverterBase *indexConverter = 0;
+    KisDummiesFacadeBase *dummiesFacade = 0;
+    bool needFinishRemoveRows = false;
+    bool needFinishInsertRows = false;
+    bool showRootLayer = false;
+    bool showGlobalSelection = false;
 
-    KisNodeDummy* parentOfRemovedNode;
+    KisNodeDummy* parentOfRemovedNode = 0;
 };
 
 KisNodeModel::KisNodeModel(QObject * parent)
@@ -85,9 +74,9 @@ KisNodeModel::KisNodeModel(QObject * parent)
 {
     updateSettings();
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(updateSettings()));
-    m_d->updateTimer = new QTimer(this);
-    m_d->updateTimer->setSingleShot(true);
-    connect(m_d->updateTimer, SIGNAL(timeout()), SLOT(processUpdateQueue()));
+
+    m_d->updateTimer.setSingleShot(true);
+    connect(&m_d->updateTimer, SIGNAL(timeout()), SLOT(processUpdateQueue()));
 }
 
 KisNodeModel::~KisNodeModel()
@@ -250,9 +239,9 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImag
 
     m_d->shapeController = shapeController;
 
-    if(m_d->dummiesFacade) {
+    if(oldDummiesFacade && m_d->image) {
         m_d->image->disconnect(this);
-        m_d->dummiesFacade->disconnect(this);
+        oldDummiesFacade->disconnect(this);
         connectDummies(m_d->dummiesFacade->rootDummy(), false);
     }
 
@@ -319,7 +308,7 @@ void KisNodeModel::slotBeginRemoveDummy(KisNodeDummy *dummy)
     if (!dummy) return;
 
     // FIXME: is it really what we want?
-    m_d->updateTimer->stop();
+    m_d->updateTimer.stop();
     m_d->updateQueue.clear();
 
     m_d->parentOfRemovedNode = dummy->parent();
@@ -351,7 +340,7 @@ void KisNodeModel::slotDummyChanged(KisNodeDummy *dummy)
     if (!m_d->updateQueue.contains(dummy)) {
         m_d->updateQueue.append(dummy);
     }
-    m_d->updateTimer->start(1000);
+    m_d->updateTimer.start(1000);
 }
 
 void KisNodeModel::processUpdateQueue()

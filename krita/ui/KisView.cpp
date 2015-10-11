@@ -103,37 +103,21 @@ bool KisView::s_firstView = true;
 class Q_DECL_HIDDEN KisView::Private
 {
 public:
-    Private()
-        : undo(0)
-        , redo(0)
-        , viewConverter(0)
-        , canvasController(0)
-        , canvas(0)
-        , zoomManager(0)
-        , viewManager(0)
-        , actionCollection(0)
-        , paintingAssistantsDecoration(0)
-        , isCurrent(false)
-        , showFloatingMessage(true)
+    Private(KisView *_q, KisDocument *document,
+            KoCanvasResourceManager *resourceManager,
+            KActionCollection *actionCollection)
+        : actionCollection(actionCollection)
+        , viewConverter()
+        , canvasController(_q, actionCollection)
+        , canvas(&viewConverter, resourceManager, _q, document->shapeController())
+        , zoomManager(_q, &this->viewConverter, &this->canvasController)
+        , paintingAssistantsDecoration(_q)
         , floatingMessageCompressor(100, KisSignalCompressor::POSTPONE)
     {
-        tempActiveWidget = 0;
-        documentDeleted = false;
     }
 
-    ~Private() {
-        if (canvasController) {
-            KoToolManager::instance()->removeCanvasController(canvasController);
-        }
-
-        delete zoomManager;
-        delete canvasController;
-        delete canvas;
-        delete viewConverter;
-    }
-
-    KisUndoStackAction *undo;
-    KisUndoStackAction *redo;
+    KisUndoStackAction *undo = 0;
+    KisUndoStackAction *redo = 0;
 
     class StatusBarItem;
 
@@ -141,21 +125,26 @@ public:
     bool inOperation; //in the middle of an operation (no screen refreshing)?
 
     QPointer<KisDocument> document; // our KisDocument
-    QWidget *tempActiveWidget;
-    bool documentDeleted; // true when document gets deleted [can't use document==0
-    // since this only happens in ~QObject, and views
-    // get deleted by ~KisDocument].
+    QWidget *tempActiveWidget = 0;
 
-    KisCoordinatesConverter *viewConverter;
-    KisCanvasController *canvasController;
-    KisCanvas2 *canvas;
-    KisZoomManager *zoomManager;
-    KisViewManager *viewManager;
-    KisNodeSP currentNode;
+    /**
+     * Signals the document has been deleted. Can't use document==0 since this
+     * only happens in ~QObject, and views get deleted by ~KisDocument.
+     * XXX: either provide a better justification to do things this way, or
+     * rework the mechanism.
+     */
+    bool documentDeleted = false;
+
     KActionCollection* actionCollection;
-    KisPaintingAssistantsDecoration *paintingAssistantsDecoration;
-    bool isCurrent;
-    bool showFloatingMessage;
+    KisCoordinatesConverter viewConverter;
+    KisCanvasController canvasController;
+    KisCanvas2 canvas;
+    KisZoomManager zoomManager;
+    KisViewManager *viewManager = 0;
+    KisNodeSP currentNode;
+    KisPaintingAssistantsDecoration paintingAssistantsDecoration;
+    bool isCurrent = false;
+    bool showFloatingMessage = false;
     QPointer<KisFloatingMessage> savedFloatingMessage;
     KisSignalCompressor floatingMessageCompressor;
 
@@ -164,10 +153,6 @@ public:
     class StatusBarItem
     {
     public:
-        StatusBarItem() // for QValueList
-            : m_widget(0),
-              m_connected(false),
-              m_hidden(false) {}
 
         StatusBarItem(QWidget * widget, int stretch, bool permanent)
             : m_widget(widget),
@@ -211,11 +196,11 @@ public:
             }
         }
     private:
-        QWidget * m_widget;
+        QWidget * m_widget = 0;
         int m_stretch;
         bool m_permanent;
-        bool m_connected;
-        bool m_hidden;
+        bool m_connected = false;
+        bool m_hidden = false;
 
     };
 
@@ -223,14 +208,13 @@ public:
 
 KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager, KActionCollection *actionCollection, QWidget *parent)
     : QWidget(parent)
-    , d(new Private)
+    , d(new Private(this, document, resourceManager, actionCollection))
 {
     Q_ASSERT(document);
     connect(document, SIGNAL(titleModified(QString,bool)), this, SIGNAL(titleModified(QString,bool)));
     setObjectName(newObjectName());
 
     d->document = document;
-    d->actionCollection = actionCollection;
 
     setFocusPolicy(Qt::StrongFocus);
 
@@ -245,47 +229,27 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
                 this, SLOT(slotClearStatusText()));
     }
 
-    d->viewConverter = new KisCoordinatesConverter();
+    d->canvas.setup(static_cast<KisShapeController*>(document->shapeController()), this);
 
     KisConfig cfg;
 
-    d->canvasController = new KisCanvasController(this, d->actionCollection);
+    d->canvasController.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    d->canvasController.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    d->canvasController.setDrawShadow(false);
+    d->canvasController.setCanvasMode(KoCanvasController::Infinite);
+    d->canvasController.setVastScrolling(cfg.vastScrolling());
+    d->canvasController.setCanvas(&d->canvas);
 
-    d->canvasController->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    d->canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    d->canvasController->setDrawShadow(false);
-    d->canvasController->setCanvasMode(KoCanvasController::Infinite);
-    d->canvasController->setVastScrolling(cfg.vastScrolling());
+    d->zoomManager.setup(d->actionCollection);
 
-    KConfigGroup grp( KSharedConfig::openConfig(), "krita/crashprevention");
-    if (grp.readEntry("CreatingCanvas", false)) {
-        cfg.setUseOpenGL(false);
-    }
-    if (cfg.canvasState() == "OPENGL_FAILED") {
-        cfg.setUseOpenGL(false);
-    }
-    grp.writeEntry("CreatingCanvas", true);
-    grp.sync();
-    d->canvas = new KisCanvas2(d->viewConverter, resourceManager, this, document->shapeController());
 
-    grp.writeEntry("CreatingCanvas", false);
-    grp.sync();
-
-    d->canvasController->setCanvas(d->canvas);
-
-    Q_ASSERT(d->canvasController);
-
-    d->zoomManager = new KisZoomManager(this, d->viewConverter, d->canvasController);
-    d->zoomManager->setup(d->actionCollection);
-
-    connect(d->canvasController, SIGNAL(documentSizeChanged()), d->zoomManager, SLOT(slotScrollAreaSizeChanged()));
+    connect(&d->canvasController, SIGNAL(documentSizeChanged()), &d->zoomManager, SLOT(slotScrollAreaSizeChanged()));
     setAcceptDrops(true);
 
     connect(d->document, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
     connect(d->document, SIGNAL(sigSavingFinished()), this, SLOT(slotSavingFinished()));
 
-    d->paintingAssistantsDecoration = new KisPaintingAssistantsDecoration(this);
-    d->canvas->addDecoration(d->paintingAssistantsDecoration);
+    d->canvas.addDecoration(&d->paintingAssistantsDecoration);
 
     d->showFloatingMessage = cfg.showCanvasMessages();
 }
@@ -298,6 +262,7 @@ KisView::~KisView()
     }
 
     KisPart::instance()->removeView(this);
+    KoToolManager::instance()->removeCanvasController(&d->canvasController);
     delete d;
 }
 
@@ -339,9 +304,9 @@ void KisView::setViewManager(KisViewManager *view)
 
     connect(canvasController(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), d->viewManager->mainWindow(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
 
-    KoToolManager::instance()->addController(d->canvasController);
-    KoToolManager::instance()->registerTools(d->actionCollection, d->canvasController);
-    dynamic_cast<KisShapeController*>(d->document->shapeController())->setInitialShapeForCanvas(d->canvas);
+    KoToolManager::instance()->addController(&d->canvasController);
+    KoToolManager::instance()->registerTools(d->actionCollection, &d->canvasController);
+    dynamic_cast<KisShapeController*>(d->document->shapeController())->setInitialShapeForCanvas(&d->canvas);
 
     if (resourceProvider()) {
         resourceProvider()->slotImageSizeChanged();
@@ -386,17 +351,17 @@ QAction *KisView::redoAction() const
 
 KoZoomController *KisView::zoomController() const
 {
-    return d->zoomManager->zoomController();
+    return d->zoomManager.zoomController();
 }
 
 KisZoomManager *KisView::zoomManager() const
 {
-    return d->zoomManager;
+    return &d->zoomManager;
 }
 
 KisCanvasController *KisView::canvasController() const
 {
-    return d->canvasController;
+    return &d->canvasController;
 }
 
 KisCanvasResourceProvider *KisView::resourceProvider() const
@@ -414,7 +379,7 @@ KisInputManager* KisView::globalInputManager() const
 
 KisCanvas2 *KisView::canvasBase() const
 {
-    return d->canvas;
+    return &d->canvas;
 }
 
 KisImageWSP KisView::image() const
@@ -427,7 +392,7 @@ KisImageWSP KisView::image() const
 
 KisCoordinatesConverter *KisView::viewConverter() const
 {
-    return d->viewConverter;
+    return &d->viewConverter;
 }
 
 void KisView::dragEnterEvent(QDragEnterEvent *event)
@@ -642,7 +607,7 @@ bool KisView::event(QEvent *event)
     case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
         ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
 
-        d->canvasController->setFocus();
+        d->canvasController.setFocus();
         qApp->processEvents();
 
         KisCanvasResourceProvider* provider = resourceProvider();
@@ -658,7 +623,7 @@ bool KisView::event(QEvent *event)
         syncObject->opacity = provider->opacity();
         syncObject->globalAlphaLock = provider->globalAlphaLock();
 
-        syncObject->documentOffset = d->canvasController->scrollBarValue() - pos();
+        syncObject->documentOffset = d->canvasController.scrollBarValue() - pos();
         syncObject->zoomLevel = zoomController()->zoomAction()->effectiveZoom();
         syncObject->rotationAngle = canvasBase()->rotationAngle();
 
@@ -691,7 +656,7 @@ bool KisView::event(QEvent *event)
     }
     case ViewModeSwitchEvent::SwitchedToDesktopModeEvent: {
         ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
-        d->canvasController->setFocus();
+        d->canvasController.setFocus();
         qApp->processEvents();
 
         if(syncObject->initialized) {
@@ -753,11 +718,11 @@ bool KisView::event(QEvent *event)
             }
 
             zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, syncObject->zoomLevel);
-            d->canvasController->rotateCanvas(syncObject->rotationAngle - canvasBase()->rotationAngle());
+            d->canvasController.rotateCanvas(syncObject->rotationAngle - canvasBase()->rotationAngle());
 
             QPoint newOffset = syncObject->documentOffset + pos();
             qApp->processEvents();
-            d->canvasController->setScrollBarValue(newOffset);
+            d->canvasController.setScrollBarValue(newOffset);
 
             KisToolFreehand* tool = qobject_cast<KisToolFreehand*>(KoToolManager::instance()->toolById(canvasBase(), syncObject->activeToolId));
             if(tool && syncObject->smoothingOptions) {
@@ -848,9 +813,9 @@ void KisView::resetImageSizeAndScroll(bool changeCentering,
                                       const QPointF oldImageStillPoint,
                                       const QPointF newImageStillPoint)
 {
-    const KisCoordinatesConverter *converter = d->canvas->coordinatesConverter();
+    const KisCoordinatesConverter *converter = d->canvas.coordinatesConverter();
 
-    QPointF oldPreferredCenter = d->canvasController->preferredCenter();
+    QPointF oldPreferredCenter = d->canvasController.preferredCenter();
 
     /**
      * Calculating the still point in old coordinates depending on the
@@ -864,7 +829,7 @@ void KisView::resetImageSizeAndScroll(bool changeCentering,
                 converter->imageToWidget(oldImageStillPoint) +
                 converter->documentOffset();
     } else {
-        QSize oldDocumentSize = d->canvasController->documentSize();
+        QSize oldDocumentSize = d->canvasController.documentSize();
         oldStillPoint = QPointF(0.5 * oldDocumentSize.width(), 0.5 * oldDocumentSize.height());
     }
 
@@ -873,7 +838,7 @@ void KisView::resetImageSizeAndScroll(bool changeCentering,
      */
 
     QSizeF size(image()->width() / image()->xRes(), image()->height() / image()->yRes());
-    KoZoomController *zc = d->zoomManager->zoomController();
+    KoZoomController *zc = d->zoomManager.zoomController();
     zc->setZoom(KoZoomMode::ZOOM_CONSTANT, zc->zoomAction()->effectiveZoom());
     zc->setPageSize(size);
     zc->setDocumentSize(size, true);
@@ -890,11 +855,11 @@ void KisView::resetImageSizeAndScroll(bool changeCentering,
                 converter->imageToWidget(newImageStillPoint) +
                 converter->documentOffset();
     } else {
-        QSize newDocumentSize = d->canvasController->documentSize();
+        QSize newDocumentSize = d->canvasController.documentSize();
         newStillPoint = QPointF(0.5 * newDocumentSize.width(), 0.5 * newDocumentSize.height());
     }
 
-    d->canvasController->setPreferredCenter(oldPreferredCenter - oldStillPoint + newStillPoint);
+    d->canvasController.setPreferredCenter(oldPreferredCenter - oldStillPoint + newStillPoint);
 }
 
 void KisView::setCurrentNode(KisNodeSP node)
@@ -953,19 +918,17 @@ void KisView::slotLoadingFinished()
         image()->unlock();
     }
 
-    if (d->paintingAssistantsDecoration){
-        foreach(KisPaintingAssistant* assist, document()->preLoadedAssistants()){
-            d->paintingAssistantsDecoration->addAssistant(assist);
-        }
-        d->paintingAssistantsDecoration->setVisible(true);
+    foreach(KisPaintingAssistant* assist, document()->preLoadedAssistants()) {
+        d->paintingAssistantsDecoration.addAssistant(assist);
     }
+    d->paintingAssistantsDecoration.setVisible(true);
 
     canvasBase()->initializeImage();
 
     /**
      * Dirty hack alert
      */
-    d->zoomManager->zoomController()->setAspectMode(true);
+    d->zoomManager.zoomController()->setAspectMode(true);
 
     if (viewConverter()) {
         viewConverter()->setZoomMode(KoZoomMode::ZOOM_PAGE);
@@ -1008,7 +971,7 @@ void KisView::slotImageResolutionChanged()
     // update KoUnit value for the document
     if (resourceProvider()) {
         resourceProvider()->resourceManager()->
-                setResource(KoCanvasResourceManager::Unit, d->canvas->unit());
+                setResource(KoCanvasResourceManager::Unit, d->canvas.unit());
     }
 }
 

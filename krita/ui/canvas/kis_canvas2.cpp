@@ -138,7 +138,7 @@ public:
     }
 };
 
-KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, QPointer<KisView>view, KoShapeBasedDocumentBase *sc)
+KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, KisView *view, KoShapeBasedDocumentBase *sc)
     : KoCanvasBase(sc, resourceManager)
     , m_d(new KisCanvas2Private(this, coordConverter, view, resourceManager))
 {
@@ -151,6 +151,10 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
     connect(view->mainWindow(), SIGNAL(guiLoadingFinished()),
             SLOT(bootstrapFinished()));
 
+}
+
+void KisCanvas2::setup(KisShapeController *kritaShapeController, KisView *view)
+{
     // a bit of duplication from slotConfigChanged()
     KisConfig cfg;
     m_d->vastScrolling = cfg.vastScrolling();
@@ -180,7 +184,6 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
      * globalShapeManager.selection()
      */
 
-    KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(sc);
     connect(kritaShapeController, SIGNAL(selectionChanged()),
             this, SLOT(slotSelectionChanged()));
     connect(kritaShapeController, SIGNAL(selectionContentChanged()),

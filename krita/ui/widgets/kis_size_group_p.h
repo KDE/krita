@@ -45,8 +45,8 @@ public:
     /// Schedules an update of all widgets size
     void scheduleSizeUpdate();
 
-    /// Returns the current maximunt size hint of all widgets inside the size group.
-    const QSize getMaxSizeHint() const { return m_maxSizeHint; }
+    /// Returns the size hint for the widgets contained in the size group.
+    const QSize getSizeHint() const { return m_sizeHint; }
 
 
 private Q_SLOTS:
@@ -60,7 +60,7 @@ public:
 private:
     QTimer* m_updateTimer; // used to filter multiple calls to scheduleSizeUpdate() into one single updateSize()
     QList<GroupItem*> m_groupItems;
-    QSize m_maxSizeHint;
+    QSize m_sizeHint;
 };
 
 

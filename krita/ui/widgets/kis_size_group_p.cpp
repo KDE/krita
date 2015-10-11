@@ -32,7 +32,7 @@ KisSizeGroupPrivate::KisSizeGroupPrivate(KisSizeGroup *q_ptr, KisSizeGroup::mode
     , m_mode(mode)
     , m_ignoreHidden(ignoreHidden)
     , m_updateTimer(new QTimer(q))
-    , m_maxSizeHint(0, 0)
+    , m_sizeHint(0, 0)
 {
     Q_ASSERT(q_ptr);
 
@@ -209,8 +209,8 @@ void KisSizeGroupPrivate::updateSize()
             height = qMax(widget->sizeHint().height(), height);
         }
 
-        m_maxSizeHint.setWidth(width);
-        m_maxSizeHint.setHeight(height);
+        m_sizeHint.setWidth(width);
+        m_sizeHint.setHeight(height);
 
         // update groupItem size
         Q_FOREACH(GroupItem *groupItem, m_groupItems) {
@@ -261,7 +261,7 @@ QSize GroupItem::minimumSize() const
 {
     QSize size = QWidgetItem::minimumSize();
     if (m_group->m_mode != KisSizeGroup::KIS_SIZE_GROUP_NONE) {
-        size = m_group->getMaxSizeHint();
+        size = m_group->getSizeHint();
     }
     return size;
 }
@@ -291,8 +291,6 @@ bool GroupItem::eventFilter(QObject*, QEvent *event)
     default:
         break;
     }
-
-
 
     return false;
 }

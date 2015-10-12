@@ -1,0 +1,327 @@
+{"InstallationInfo" : [
+
+    {
+        "dir": "lib\\plugins",
+        "msg": "Copying plugins",
+        "comment": "Hmm",
+        "files": [
+            "lib\\plugins\\calligradocinfopropspage.dll",
+            "lib\\plugins\\kritapresethistory.dll",
+            "lib\\plugins\\kritathumbnail.dll"
+        ]
+    },
+
+    {
+        "dir": "lib\\plugins\\imageformats",
+        "msg": "Copying image format plugins",
+        "files": [
+            "lib\\plugins\\imageformats\\kimg_kra.dll",
+            "lib\\plugins\\imageformats\\kimg_ora.dll"
+        ]
+    },
+
+    {
+        "dir": "lib\\calligra",
+        "msg": "Copying Calligra libraries",
+        "comment": "Double check these, this list was compiled without all modules built.",
+        "files": [
+            "lib\\calligra\\calligra_docker_defaults.dll",
+            "lib\\calligra\\calligra_shape_artistictext.dll",
+            "lib\\calligra\\calligra_shape_paths.dll",
+            "lib\\calligra\\calligra_shape_picture.dll",
+            "lib\\calligra\\calligra_shape_text.dll",
+            "lib\\calligra\\calligra_shape_vector.dll",
+            "lib\\calligra\\calligra_textediting_autocorrect.dll",
+            "lib\\calligra\\calligra_textediting_changecase.dll",
+            "lib\\calligra\\calligra_textediting_spellcheck.dll",
+            "lib\\calligra\\calligra_textediting_thesaurus.dll",
+            "lib\\calligra\\calligra_tool_basicflakes.dll",
+            "lib\\calligra\\calligra_tool_defaults.dll",
+            "lib\\calligra\\kolcmsengine.dll",
+            "lib\\calligra\\krita_colorspaces_extensions.dll",
+            "lib\\calligra\\krita_raw_import.dll",
+            "lib\\calligra\\kritaartisticcolorselector.dll",
+            "lib\\calligra\\kritabigbrother.dll",
+            "lib\\calligra\\kritablurfilter.dll",
+            "lib\\calligra\\kritabmpexport.dll",
+            "lib\\calligra\\kritabmpimport.dll",
+            "lib\\calligra\\kritachalkpaintop.dll",
+            "lib\\calligra\\kritachanneldocker.dll",
+            "lib\\calligra\\kritacolorgenerator.dll",
+            "lib\\calligra\\kritacolorrange.dll",
+            "lib\\calligra\\kritacolorselectorng.dll",
+            "lib\\calligra\\kritacolorsfilters.dll",
+            "lib\\calligra\\kritacolorslider.dll",
+            "lib\\calligra\\kritacolorsmudgepaintop.dll",
+            "lib\\calligra\\kritacolorspaceconversion.dll",
+            "lib\\calligra\\kritacompositiondocker.dll",
+            "lib\\calligra\\kritaconvolutionfilters.dll",
+            "lib\\calligra\\kritacurvepaintop.dll",
+            "lib\\calligra\\kritadefaultdockers.dll",
+            "lib\\calligra\\kritadefaultpaintops.dll",
+            "lib\\calligra\\kritadefaulttools.dll",
+            "lib\\calligra\\kritadeformpaintop.dll",
+            "lib\\calligra\\kritadigitalmixer.dll",
+            "lib\\calligra\\kritadodgeburn.dll",
+            "lib\\calligra\\kritadynapaintop.dll",
+            "lib\\calligra\\kritaembossfilter.dll",
+            "lib\\calligra\\kritaexample.dll",
+            "lib\\calligra\\kritaexperimentpaintop.dll",
+            "lib\\calligra\\kritaextensioncolorsfilters.dll",
+            "lib\\calligra\\kritafastcolortransferfilter.dll",
+            "lib\\calligra\\kritafilterop.dll",
+            "lib\\calligra\\kritagridpaintop.dll",
+            "lib\\calligra\\kritahairypaintop.dll",
+            "lib\\calligra\\kritahatchingpaintop.dll",
+            "lib\\calligra\\kritaheightmapexport.dll",
+            "lib\\calligra\\kritaheightmapimport.dll",
+            "lib\\calligra\\kritahistogram.dll",
+            "lib\\calligra\\kritahistorydocker.dll",
+            "lib\\calligra\\kritaimagedocker.dll",
+            "lib\\calligra\\kritaimageenhancement.dll",
+            "lib\\calligra\\kritaimagesize.dll",
+            "lib\\calligra\\kritaimagesplit.dll",
+            "lib\\calligra\\kritaindexcolors.dll",
+            "lib\\calligra\\kritajpegexport.dll",
+            "lib\\calligra\\kritajpegimport.dll",
+            "lib\\calligra\\kritalayergroupswitcher.dll",
+            "lib\\calligra\\kritalayersplit.dll",
+            "lib\\calligra\\kritalevelfilter.dll",
+            "lib\\calligra\\kritametadataeditor.dll",
+            "lib\\calligra\\kritamodifyselection.dll",
+            "lib\\calligra\\kritanoisefilter.dll",
+            "lib\\calligra\\kritanormalize.dll",
+            "lib\\calligra\\kritaodgimport.dll",
+            "lib\\calligra\\kritaoffsetimage.dll",
+            "lib\\calligra\\kritaoilpaintfilter.dll",
+            "lib\\calligra\\kritaoraexport.dll",
+            "lib\\calligra\\kritaoraimport.dll",
+            "lib\\calligra\\kritaoverviewdocker.dll",
+            "lib\\calligra\\kritapalettedocker.dll",
+            "lib\\calligra\\kritaparticlepaintop.dll",
+            "lib\\calligra\\kritapatterndocker.dll",
+            "lib\\calligra\\kritapatterngenerator.dll",
+            "lib\\calligra\\kritaphongbumpmap.dll",
+            "lib\\calligra\\kritapixelizefilter.dll",
+            "lib\\calligra\\kritapngexport.dll",
+            "lib\\calligra\\kritapngimport.dll",
+            "lib\\calligra\\kritaposterize.dll",
+            "lib\\calligra\\kritappmexport.dll",
+            "lib\\calligra\\kritappmimport.dll",
+            "lib\\calligra\\kritapresetdocker.dll",
+            "lib\\calligra\\kritapsdexport.dll",
+            "lib\\calligra\\kritapsdimport.dll",
+            "lib\\calligra\\kritaqmlexport.dll",
+            "lib\\calligra\\kritaraindropsfilter.dll",
+            "lib\\calligra\\kritarandompickfilter.dll",
+            "lib\\calligra\\kritaresourcemanager.dll",
+            "lib\\calligra\\kritarotateimage.dll",
+            "lib\\calligra\\kritaroundcornersfilter.dll",
+            "lib\\calligra\\kritarulerassistanttool.dll",
+            "lib\\calligra\\kritaselectiontools.dll",
+            "lib\\calligra\\kritaseparatechannels.dll",
+            "lib\\calligra\\kritashearimage.dll",
+            "lib\\calligra\\kritasketchpaintop.dll",
+            "lib\\calligra\\kritasmallcolorselector.dll",
+            "lib\\calligra\\kritasmalltilesfilter.dll",
+            "lib\\calligra\\kritasobelfilter.dll",
+            "lib\\calligra\\kritaspecificcolorselector.dll",
+            "lib\\calligra\\kritaspraypaintop.dll",
+            "lib\\calligra\\kritatangentnormalpaintop.dll",
+            "lib\\calligra\\kritatasksetdocker.dll",
+            "lib\\calligra\\kritatgaexport.dll",
+            "lib\\calligra\\kritatgaimport.dll",
+            "lib\\calligra\\kritatiffexport.dll",
+            "lib\\calligra\\kritatiffimport.dll",
+            "lib\\calligra\\kritatoolcrop.dll",
+            "lib\\calligra\\kritatooldyna.dll",
+            "lib\\calligra\\kritatoolgrid.dll",
+            "lib\\calligra\\kritatoolperspectivegrid.dll",
+            "lib\\calligra\\kritatoolpolygon.dll",
+            "lib\\calligra\\kritatoolpolyline.dll",
+            "lib\\calligra\\kritatooltext.dll",
+            "lib\\calligra\\kritatooltransform.dll",
+            "lib\\calligra\\kritaunsharpfilter.dll",
+            "lib\\calligra\\kritawavefilter.dll",
+            "lib\\calligra\\kritaxcfimport.dll"
+        ]
+
+    },
+
+    {
+        "dir" : "lib\\plugins",
+        "comment" : "Update this missing part?",
+        "files" : ["lib\\calligra\\kstyle_oxygen_config.dll"]
+    },
+
+    {
+        "dir" : "lib\\styles",
+        "files" : ["lib\\plugins\\styles\\oxygen.dll"]
+    },
+
+    {
+        "msg" : "Copying Shared Libraries",
+        "dir" : "bin\\",
+        "files" : ["bin\\*dll"]
+    },
+
+    {
+        "msg" : "Copying Executables",
+        "dir" : "bin\\",
+        "files" : [
+            "bin\\dbus-daemon.exe",
+            "bin\\dbus-launch.exe",
+            "bin\\drkonqi.exe",
+            "bin\\kbuildsycoca5.exe",
+            "bin\\kconf_update.exe",
+            "bin\\kconfig_compiler_kf5.exe",
+            "bin\\kf5-config.exe",
+            "bin\\kdebugdialog5.exe",
+            "bin\\kdeinit5.exe",
+            "bin\\kioexec.exe",
+            "bin\\kioslave.exe",
+            "bin\\klauncher.exe",
+            "bin\\kquitapp.exe",
+            "bin\\krita.exe",
+            "bin\\kwalletd.exe",
+            "bin\\kwrapper5.exe",
+            "bin\\update-mime-database.exe"
+        ]
+    },
+
+    {
+        "msg" : "Copying directory /etc/dbus-1",
+        "dir": "etc\\dbus-1",
+        "files": ["etc\\"]
+    },
+    {
+        "msg" : "Copying Qt plugins",
+        "dir" : "plugins",
+        "files" : [
+            "plugins\\imageformats",
+            "plugins\\iconengines"]
+    },
+
+
+    {
+        "msg" : "Copying directory /share/applications",
+        "dir" : "share\\applications",
+        "files" : [
+            "share\\applications\\krita.desktop",
+            "share\\applications\\krita_bmp.desktop",
+            "share\\applications\\krita_flipbook.desktop",
+            "share\\applications\\krita_heightmap.desktop",
+            "share\\applications\\krita_jp2.desktop",
+            "share\\applications\\krita_jpeg.desktop",
+            "share\\applications\\krita_odg.desktop",
+            "share\\applications\\krita_ora.desktop",
+            "share\\applications\\krita_pdf.desktop",
+            "share\\applications\\krita_png.desktop",
+            "share\\applications\\krita_png.desktop",
+            "share\\applications\\krita_ppm.desktop",
+            "share\\applications\\krita_psd.desktop",
+            "share\\applications\\krita_qml.desktop",
+            "share\\applications\\krita_raw.desktop",
+            "share\\applications\\krita_tga.desktop",
+            "share\\applications\\krita_tiff.desktop",
+            "share\\applications\\krita_xcf.desktop"
+        ]
+    },
+
+    {
+        "msg": "Copying directory /share",
+        "dir" : "share",
+        "files" : [
+            "share\\calligra",
+            "share\\color-schemes",
+            "share\\apps\\desktoptheme",
+            "share\\krita",
+            "share\\kritaanimation",
+            "share\\kritaplugins",
+            "share\\kstyle",
+            "share\\mime",
+            "share\\xdg",
+            "share\\color"]
+    },
+
+    {
+        "msg": "Copying directory /share/kf5",
+        "dir" : "share\\kf5",
+        "files" : [
+            "share\\kf5\\kauth",
+            "share\\kf5\\kdeui",
+            "share\\kf5\\widgets",
+            "share\\kf5\\knewstuff",
+            "share\\kf5\\kssl"
+        ]
+    },
+
+    {
+        "msg" : "Copying directory /etc/xdg",
+        "dir" : "etc\\xdg",
+        "files" : [
+            "etc\\xdg\\colors",
+            "etc\\xdg\\ui",
+            "etc\\xdg\\krita*",
+            "etc\\xdg\\kdebug*",
+            "etc\\xdg\\khot*",
+            "etc\\xdg\\kdebugrc",
+            "etc\\xdg\\kdeglobals"]
+    },
+
+    {
+        "msg" : "Copying dbus interfaces",
+        "dir" : "share\\dbus-1\\interfaces",
+        "files" : [
+            "share\\dbus-1\\interfaces\\kf5_org.kde.*",
+            "share\\dbus-1\\services\\kf5_org.kde.*"]
+    },
+
+    {
+        "msg" : "Copying directory /share/icons. Please double check this.",
+        "dir" : "share\\",
+        "files" : ["share\\icons"]
+    },
+
+    {
+        "msg": "Copying directory share/kservices5",
+        "comment" : "Make sure calligra directory works properly",
+        "dir" : "share\\kde4\\services",
+        "files" : [
+            "share\\kservices5\\calligra",
+            "share\\kservices5\\kglobalaccel.desktop",
+            "share\\kservices5\\krita_kra_thumbnail.desktop",
+            "share\\kservices5\\kshorturifilter.desktop",
+            "share\\kservices5\\kuriikwsfilter.desktop",
+            "share\\kservices5\\kurisearchfilter.desktop",
+            "share\\kservices5\\localdomainurifilter.desktop",
+            "share\\kservices5\\*.protocol"]
+    },
+
+    {
+        "msg": "Copying directory share/kservicetypes5",
+        "dir" : "share\\kservicestypes5",
+        "files" : [
+            "share\\kservicetypes5\\application.desktop",
+            "share\\kservicetypes5\\calligra*.desktop",
+            "share\\kservicetypes5\\filtereffect.desktop",
+            "share\\kservicetypes5\\flake.desktop",
+            "share\\kservicetypes5\\flakedevice.desktop",
+            "share\\kservicetypes5\\flakeshape.desktop",
+            "share\\kservicetypes5\\flaketool.desktop",
+            "share\\kservicetypes5\\inlinetextobject.desktop",
+            "share\\kservicetypes5\\kfileitemactionplugin.desktop",
+            "share\\kservicetypes5\\kfilewrite.desktop",
+            "share\\kservicetypes5\\knotificationplugin.desktop",
+            "share\\kservicetypes5\\kpart.desktop",
+            "share\\kservicetypes5\\kplugininfo.desktop",
+            "share\\kservicetypes5\\krita*.desktop",
+            "share\\kservicetypes5\\kurifilterplugin.desktop",
+            "share\\kservicetypes5\\pigment.desktop",
+            "share\\kservicetypes5\\pigmentextension.desktop",
+            "share\\kservicetypes5\\qimageio_plugin.desktop",
+            "share\\kservicetypes5\\texteditingplugin.desktop"
+        ]
+    }
+
+]}

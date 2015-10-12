@@ -18,12 +18,12 @@
 #ifndef SKETCHAPPLICATION_H
 #define SKETCHAPPLICATION_H
 
-#include <kapplication.h>
+#include <QApplication>
 
-class SketchApplication : public KApplication
+class SketchApplication : public QApplication
 {
 public:
-    SketchApplication();
+    SketchApplication(int &argc, char **argv);
     void start();
 };
 

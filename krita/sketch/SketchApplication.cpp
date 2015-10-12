@@ -27,8 +27,8 @@
 #include "kisexiv2/kis_exiv2.h"
 
 
-SketchApplication::SketchApplication()
-    : KApplication()
+SketchApplication::SketchApplication(int &argc, char **argv)
+    : QApplication(argc, argv)
 {
 }
 

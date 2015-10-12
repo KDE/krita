@@ -23,9 +23,10 @@
 #include <QProcessEnvironment>
 #include <QDir>
 #include <QMessageBox>
+#include <QCommandLineParser>
 
-#include <k4aboutdata.h>
-#include <kcmdlineargs.h>
+#include <KAboutData>
+#include <KLocalizedString>
 
 #include "KoGlobal.h"
 #include <KoResourcePaths.h>
@@ -62,38 +63,42 @@ int main( int argc, char** argv )
     version = calligraVersion;
 #endif
 
-    K4AboutData aboutData("kritasketch",
-                         "krita",
-                         ki18n("Krita Sketch"),
-                         "0.1",
-                         ki18n("Krita Sketch: Painting on the Go for Artists"),
-                         K4AboutData::License_GPL,
-                         ki18n("(c) 1999-%1 The Krita team.\n").subs(CALLIGRA_YEAR),
-                         KLocalizedString(),
-                         "http://www.krita.org",
-                         "submit@bugs.kde.org");
+    KLocalizedString::setApplicationDomain("krita");
 
-    KCmdLineArgs::init (argc, argv, &aboutData);
+    KAboutData aboutData(QStringLiteral("kritasketch"),
+                         i18n("Krita Sketch"),
+                         QStringLiteral("0.1"),
+                         i18n("Krita Sketch: Painting on the Go for Artists"),
+                         KAboutLicense::GPL,
+                         i18n("(c) 1999-%1 The Krita team.\n").arg(CALLIGRA_YEAR),
+                         QString(),
+                         QStringLiteral("https://www.krita.org"),
+                         QStringLiteral("submit@bugs.kde.org"));
 
-    KCmdLineOptions options;
-    options.add( "+[files]", ki18n( "Images to open" ) );
-    options.add( "vkb", ki18n( "Use the virtual keyboard" ) );
-    options.add( "windowed", ki18n( "Open sketch in a window, otherwise defaults to full-screen" ) );
-    KCmdLineArgs::addCmdLineOptions( options );
+    SketchApplication app(argc, argv);
+    KAboutData::setApplicationData( aboutData );
 
-    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+    QCommandLineParser parser;
+    aboutData.setupCommandLine(&parser);
+    parser.addHelpOption();
+    parser.addVersionOption();
+
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("vkb"), i18n("Use the virtual keyboard")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("windowed"), i18n("Open sketch in a window, otherwise defaults to full-screen")));
+
+    parser.addPositionalArgument(QStringLiteral("[file(s)]"), i18n("Images to open to open"));
+
+    parser.process(app);
+
+    aboutData.processCommandLine(&parser);
+
     QStringList fileNames;
-    if (args->count() > 0) {
-        for (int i = 0; i < args->count(); ++i) {
-            QString fileName = args->arg(i);
-            if (QFile::exists(fileName)) {
-                fileNames << fileName;
-            }
+    foreach (const QString &fileName, parser.positionalArguments()) {
+        if (QFile::exists(fileName)) {
+            fileNames << fileName;
         }
     }
 
-    SketchApplication app;
-    app.setApplicationName("kritasketch");
     KIconLoader::global()->addAppDir("krita");
 
     // Initialize all Calligra directories etc.
@@ -150,19 +155,22 @@ int main( int argc, char** argv )
 #endif
 
 #if defined HAVE_X11
-    QApplication::setAttribute(Qt::AA_X11InitThreads);
+    QCoreApplication::setAttribute(Qt::AA_X11InitThreads);
 #endif
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
+    QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
+    QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
     app.start();
 
     MainWindow window(fileNames);
 
 // QT5TODO
-//     if (args->isSet("vkb")) {
+//     if (parser.isSet("vkb")) {
 //         app.setInputContext(new SketchInputContext(&app));
 //     }
 
-    if (args->isSet("windowed")) {
+    if (parser.isSet("windowed")) {
         window.show();
     } else {
         window.showFullScreen();

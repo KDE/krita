@@ -14,9 +14,6 @@ include_directories(
         
 )
 
-qt4_automoc(${declarativedragdrop_SRCS})
-
-
 add_library(draganddropplugin SHARED ${declarativedragdrop_SRCS})
 target_link_libraries(draganddropplugin Qt5::Core Qt5::Gui Qt5::Declarative)
 

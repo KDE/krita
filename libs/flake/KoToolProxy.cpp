@@ -151,7 +151,7 @@ QPointF KoToolProxy::widgetToDocument(const QPointF &widgetPoint) const
 {
     QPoint offset = QPoint(d->controller->canvasOffsetX(), d->controller->canvasOffsetY());
     QPoint origin = d->controller->canvas()->documentOrigin();
-    QPoint viewPoint = widgetPoint.toPoint() - origin - offset;
+    QPointF viewPoint = widgetPoint.toPoint() - QPointF(origin - offset);
 
     return d->controller->canvas()->viewConverter()->viewToDocument(viewPoint);
 }

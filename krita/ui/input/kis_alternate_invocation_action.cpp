@@ -107,7 +107,7 @@ void KisAlternateInvocationAction::begin(int shortcut, QEvent *event)
 
     KisAbstractInputAction::begin(shortcut, event);
 
-    QMouseEvent targetEvent(QEvent::MouseButtonPress, eventPos(event), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier); // There must be a better way
+    QMouseEvent targetEvent(QEvent::MouseButtonPress, eventPosF(event), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier); // There must be a better way
 
     m_d->savedAction = shortcutToToolAction(shortcut);
 
@@ -131,7 +131,7 @@ void KisAlternateInvocationAction::end(QEvent *event)
         ;
     }
 
-    QMouseEvent targetEvent = QMouseEvent(QEvent::MouseButtonRelease, eventPos(event), Qt::LeftButton, Qt::LeftButton, modifiers);
+    QMouseEvent targetEvent = QMouseEvent(QEvent::MouseButtonRelease, eventPosF(event), Qt::LeftButton, Qt::LeftButton, modifiers);
     inputManager()->toolProxy()->forwardEvent(KisToolProxy::END, m_d->savedAction, &targetEvent, event);
 
     KisAbstractInputAction::end(event);
@@ -152,7 +152,7 @@ void KisAlternateInvocationAction::inputEvent(QEvent* event)
             modifiers = Qt::ShiftModifier;
         }
 
-        QMouseEvent targetEvent(QEvent::MouseMove, eventPos(event), Qt::LeftButton, Qt::LeftButton, modifiers);
+        QMouseEvent targetEvent(QEvent::MouseMove, eventPosF(event), Qt::LeftButton, Qt::LeftButton, modifiers);
         inputManager()->toolProxy()->forwardEvent(KisToolProxy::CONTINUE, m_d->savedAction, &targetEvent, event);
     }
 

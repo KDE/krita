@@ -62,7 +62,7 @@ void KisChangePrimarySettingAction::begin(int shortcut, QEvent *event)
     KisAbstractInputAction::begin(shortcut, event);
 
     if (event) {
-        QMouseEvent targetEvent(QEvent::MouseButtonPress, eventPos(event), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
+        QMouseEvent targetEvent(QEvent::MouseButtonPress, eventPosF(event), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
 
         inputManager()->toolProxy()->forwardEvent(KisToolProxy::BEGIN, KisTool::AlternateChangeSize, &targetEvent, event);
     }
@@ -71,7 +71,7 @@ void KisChangePrimarySettingAction::begin(int shortcut, QEvent *event)
 void KisChangePrimarySettingAction::end(QEvent *event)
 {
     if (event) {
-        QMouseEvent targetEvent(QEvent::MouseButtonRelease, eventPos(event), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
+        QMouseEvent targetEvent(QEvent::MouseButtonRelease, eventPosF(event), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
         inputManager()->toolProxy()->forwardEvent(KisToolProxy::END, KisTool::AlternateChangeSize, &targetEvent, event);
     }
 

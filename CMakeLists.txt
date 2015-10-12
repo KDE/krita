@@ -62,7 +62,7 @@ if(NOT DEFINED CALLIGRA_ALPHA AND NOT DEFINED CALLIGRA_BETA AND NOT DEFINED CALL
     set(CALLIGRA_STABLE 1) # do not edit
 endif()
 
-message(STATUS "Calligra version: ${CALLIGRA_VERSION_STRING}")
+message(STATUS "Krita version: ${CALLIGRA_VERSION_STRING}")
 
 # Define the generic version of the Calligra libraries here
 # This makes it easy to advance it when the next Calligra release comes.

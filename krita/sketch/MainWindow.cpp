@@ -25,9 +25,6 @@
 #include <QDeclarativeEngine>
 #include <QFileInfo>
 
-#include <kstandarddirs.h>
-#include <kglobal.h>
-
 #include <KoResourcePaths.h>
 #include <KoDialog.h>
 #include <KoZoomController.h>
@@ -108,15 +105,11 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     // for now, the app in bin/ and we still use the env.bat script
     appdir.cdUp();
 
+    // QT5TODO: adapt to QML_IMPORT_PATH usage and install to ${QML_INSTALL_DIR}
     view->engine()->addImportPath(appdir.canonicalPath() + "/lib/calligra/imports");
     view->engine()->addImportPath(appdir.canonicalPath() + "/lib64/calligra/imports");
     QString mainqml = appdir.canonicalPath() + "/share/apps/kritasketch/kritasketch.qml";
 #else
-    const QStringList qmlImportDirs = KGlobal::dirs()->findDirs("lib", "calligra/imports");
-    foreach(const QString &dir, qmlImportDirs) {
-        view->engine()->addImportPath(dir);
-    }
-//     QString mainqml = KGlobal::dirs()->findResource("data", "kritasketch/kritasketch.qml");
     QString mainqml = KoResourcePaths::findResource("data", "kritasketch/kritasketch.qml");
 #endif
 

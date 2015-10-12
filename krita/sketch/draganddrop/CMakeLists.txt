@@ -17,6 +17,6 @@ include_directories(
 add_library(draganddropplugin SHARED ${declarativedragdrop_SRCS})
 target_link_libraries(draganddropplugin Qt5::Core Qt5::Gui Qt5::Declarative)
 
-install(TARGETS draganddropplugin DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/draganddrop)
+install(TARGETS draganddropplugin DESTINATION ${QML_INSTALL_DIR}/org/krita/draganddrop)
 
-install(FILES qmldir DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/draganddrop)
+install(FILES qmldir DESTINATION ${QML_INSTALL_DIR}/org/krita/draganddrop)

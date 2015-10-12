@@ -160,13 +160,15 @@ add_library(kritasketchplugin SHARED ${kritasketchplugin_SRCS} ${kritasketch_kri
 target_link_libraries(kritasketchplugin
     Qt5::Declarative
     Qt5::Gui
+    Qt5::Network
     Qt5::Core
+    KF5::KIOCore
     kritawidgets
     kritaui
     kritasketchlib
 )
 
-install(TARGETS   kritasketchplugin DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch)
+install(TARGETS   kritasketchplugin DESTINATION ${QML_INSTALL_DIR}/org/krita/sketch)
 install(FILES
                  qmldir
                  qml/HelpPage.qml
@@ -177,10 +179,10 @@ install(FILES
                  qml/SettingsPage.qml
                  qml/WelcomePage.qml
                  qml/CustomImagePage.qml
-                                    DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch)
-install(DIRECTORY qml/components    DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
-install(DIRECTORY qml/images        DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
-install(DIRECTORY qml/panels        DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
+                                    DESTINATION ${QML_INSTALL_DIR}/org/krita/sketch)
+install(DIRECTORY qml/components    DESTINATION ${QML_INSTALL_DIR}/org/krita/sketch PATTERN "*~" EXCLUDE)
+install(DIRECTORY qml/images        DESTINATION ${QML_INSTALL_DIR}/org/krita/sketch PATTERN "*~" EXCLUDE)
+install(DIRECTORY qml/panels        DESTINATION ${QML_INSTALL_DIR}/org/krita/sketch PATTERN "*~" EXCLUDE)
 
 install(DIRECTORY themes DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
 

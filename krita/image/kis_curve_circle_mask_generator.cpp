@@ -103,20 +103,10 @@ inline quint8 KisCurveCircleMaskGenerator::Private::value(qreal dist) const
 
 quint8 KisCurveCircleMaskGenerator::valueAt(qreal x, qreal y) const
 {
+    if (isEmpty()) return 255;
     qreal xr = x;
     qreal yr = qAbs(y);
-    if (KisMaskGenerator::d->spikes > 2) {
-        double angle = (KisFastMath::atan2(yr, xr));
-
-        while (angle > KisMaskGenerator::d->cachedSpikesAngle ){
-            double sx = xr, sy = yr;
-
-            xr = KisMaskGenerator::d->cs * sx - KisMaskGenerator::d->ss * sy;
-            yr = KisMaskGenerator::d->ss * sx + KisMaskGenerator::d->cs * sy;
-
-            angle -= 2 * KisMaskGenerator::d->cachedSpikesAngle;
-        }
-    }
+    fixRotation(xr, yr);
 
     qreal dist = norme(xr * d->xcoef, yr * d->ycoef);
 

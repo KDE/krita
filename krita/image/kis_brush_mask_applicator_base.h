@@ -59,8 +59,9 @@ struct MaskProcessingData {
     qint32 pixelSize;
 };
 
-struct KisBrushMaskApplicatorBase
+class KisBrushMaskApplicatorBase
 {
+public:
     virtual ~KisBrushMaskApplicatorBase() {}
     virtual void process(const QRect &rect) = 0;
 

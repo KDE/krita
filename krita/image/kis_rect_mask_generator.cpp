@@ -46,10 +46,10 @@ struct Q_DECL_HIDDEN KisRectangleMaskGenerator::Private {
 KisRectangleMaskGenerator::KisRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges)
     : KisMaskGenerator(radius, ratio, fh, fv, spikes, antialiasEdges, RECTANGLE, DefaultId), d(new Private)
 {
-    if (KisMaskGenerator::d->fv == 0 && KisMaskGenerator::d->fh == 0) {
+    if (fv == 0 && fh == 0) {
         d->m_c = 0;
     } else {
-        d->m_c = (KisMaskGenerator::d->fv / KisMaskGenerator::d->fh);
+        d->m_c = (fv / fh);
 #ifdef Q_CC_MSVC
         Q_ASSERT(!isnan(d->m_c));
 #else
@@ -67,8 +67,8 @@ void KisRectangleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
 
     d->xcoeff = 2.0 / effectiveSrcWidth();
     d->ycoeff = 2.0 / effectiveSrcHeight();
-    d->xfadecoeff = (KisMaskGenerator::d->fh == 0) ? 1 : (1.0 / (KisMaskGenerator::d->fh * effectiveSrcWidth()));
-    d->yfadecoeff = (KisMaskGenerator::d->fv == 0) ? 1 : (1.0 / (KisMaskGenerator::d->fv * effectiveSrcHeight()));
+    d->xfadecoeff = (horizontalFade() == 0) ? 1 : (2.0 / (horizontalFade() * effectiveSrcWidth()));
+    d->yfadecoeff = (verticalFade() == 0)   ? 1 : (2.0 / (verticalFade() * effectiveSrcHeight()));
     setSoftness(this->softness());
 }
 
@@ -93,24 +93,10 @@ bool KisRectangleMaskGenerator::shouldSupersample() const
 
 quint8 KisRectangleMaskGenerator::valueAt(qreal x, qreal y) const
 {
-    if (KisMaskGenerator::d->empty) return 255;
-
-    double xr = qAbs(x /*- m_xcenter*/);
-    double yr = qAbs(y /*- m_ycenter*/);
-
-    if (KisMaskGenerator::d->spikes > 2) {
-        double angle = (KisFastMath::atan2(yr, xr));
-
-        while (angle > KisMaskGenerator::d->cachedSpikesAngle ){
-            double sx = xr;
-            double sy = yr;
-
-            xr = KisMaskGenerator::d->cs * sx - KisMaskGenerator::d->ss * sy;
-            yr = KisMaskGenerator::d->ss * sx + KisMaskGenerator::d->cs * sy;
-
-            angle -= 2 * KisMaskGenerator::d->cachedSpikesAngle;
-        }
-    }
+    if (isEmpty()) return 255;
+    qreal xr = qAbs(x /*- m_xcenter*/);
+    qreal yr = qAbs(y /*- m_ycenter*/);
+    fixRotation(xr, yr);
 
     xr = qAbs(xr);
     yr = qAbs(yr);
@@ -120,7 +106,7 @@ quint8 KisRectangleMaskGenerator::valueAt(qreal x, qreal y) const
 
     if (nxr > 1.0 || nyr > 1.0) return 255;
 
-    if (KisMaskGenerator::d->antialiasEdges) {
+    if (antialiasEdges()) {
         xr += 1.0;
         yr += 1.0;
     }

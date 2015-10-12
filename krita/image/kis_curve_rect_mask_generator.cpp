@@ -99,27 +99,10 @@ quint8 KisCurveRectangleMaskGenerator::Private::value(qreal xr, qreal yr) const
 
 quint8 KisCurveRectangleMaskGenerator::valueAt(qreal x, qreal y) const
 {
-
-    if (KisMaskGenerator::d->empty) {
-        return 255;
-    }
-
-    double xr = x;
-    double yr = qAbs(y);
-
-    if (KisMaskGenerator::d->spikes > 2) {
-        double angle = (KisFastMath::atan2(yr, xr));
-
-        while (angle > KisMaskGenerator::d->cachedSpikesAngle ){
-            double sx = xr;
-            double sy = yr;
-
-            xr = KisMaskGenerator::d->cs * sx - KisMaskGenerator::d->ss * sy;
-            yr = KisMaskGenerator::d->ss * sx + KisMaskGenerator::d->cs * sy;
-
-            angle -= 2 * KisMaskGenerator::d->cachedSpikesAngle;
-        }
-    }
+    if (isEmpty()) return 255;
+    qreal xr = x;
+    qreal yr = qAbs(y);
+    fixRotation(xr, yr);
 
     quint8 value;
     if (d->fadeMaker.needFade(xr, yr, &value)) {

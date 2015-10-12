@@ -70,8 +70,8 @@ void KisGaussRectangleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
     qreal width = effectiveSrcWidth();
     qreal height = effectiveSrcHeight();
 
-    qreal xfade = (1.0 - KisMaskGenerator::d->fh) * width * 0.1;
-    qreal yfade = (1.0 - KisMaskGenerator::d->fv) * height * 0.1;
+    qreal xfade = (1.0 - horizontalFade()/2.0) * width * 0.1;
+    qreal yfade = (1.0 - verticalFade()/2.0) * height * 0.1;
     d->xfade = 1.0 / (M_SQRT_2 * xfade);
     d->yfade = 1.0 / (M_SQRT_2 * yfade);
     d->halfWidth = width * 0.5 - 2.5 * xfade;
@@ -94,20 +94,10 @@ inline quint8 KisGaussRectangleMaskGenerator::Private::value(qreal xr, qreal yr)
 
 quint8 KisGaussRectangleMaskGenerator::valueAt(qreal x, qreal y) const
 {
+    if (isEmpty()) return 255;
     qreal xr = x;
     qreal yr = qAbs(y);
-    if (KisMaskGenerator::d->spikes > 2) {
-        double angle = KisFastMath::atan2(yr, xr);
-
-        while (angle > KisMaskGenerator::d->cachedSpikesAngle) {
-            double sx = xr, sy = yr;
-
-            xr = KisMaskGenerator::d->cs * sx - KisMaskGenerator::d->ss * sy;
-            yr = KisMaskGenerator::d->ss * sx + KisMaskGenerator::d->cs * sy;
-
-            angle -= 2 * KisMaskGenerator::d->cachedSpikesAngle;
-        }
-    }
+    fixRotation(xr, yr);
 
     quint8 value;
     if (d->fadeMaker.needFade(xr, yr, &value)) {

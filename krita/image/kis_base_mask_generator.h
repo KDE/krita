@@ -93,6 +93,8 @@ public:
     qreal verticalFade() const;
     int spikes() const;
     Type type() const;
+    bool isEmpty() const;
+    void fixRotation(qreal &xr, qreal &yr) const;
     
     inline QString id() const { return m_id.id(); }
     inline QString name() const { return m_id.name(); }
@@ -112,27 +114,9 @@ protected:
     qreal effectiveSrcWidth() const;
     qreal effectiveSrcHeight() const;
 
-protected:
-
-    struct Private {
-        qreal diameter, ratio;
-        qreal softness;
-        qreal fh, fv;
-        int spikes;
-        qreal cachedSpikesAngle;
-        qreal cs, ss;
-        bool empty;
-        Type type;
-        QString curveString;
-        bool antialiasEdges;
-        qreal scaleX;
-        qreal scaleY;
-        KisBrushMaskApplicatorBase *defaultMaskProcessor;
-    };
-
-    Private* const d;
-    
 private:
+    struct Private;
+    Private* d;
     const KoID& m_id;
 };
 

@@ -57,10 +57,10 @@ void KisCircleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
 
     d->xcoef = 2.0 / effectiveSrcWidth();
     d->ycoef = 2.0 / effectiveSrcHeight();
-    d->xfadecoef = (KisMaskGenerator::d->fh == 0) ? 1 : (1.0 / (KisMaskGenerator::d->fh * effectiveSrcWidth()));
-    d->yfadecoef = (KisMaskGenerator::d->fv == 0) ? 1 : (1.0 / (KisMaskGenerator::d->fv * effectiveSrcHeight()));
-    d->transformedFadeX = d->xfadecoef * softness();
-    d->transformedFadeY = d->yfadecoef * softness();
+    d->xfadecoef = (horizontalFade() == 0) ? 1 : (2.0 / (horizontalFade() * effectiveSrcWidth()));
+    d->yfadecoef = (verticalFade() == 0)   ? 1 : (2.0 / (verticalFade() * effectiveSrcHeight()));
+    d->transformedFadeX = KisMaskGenerator::softness() * d->xfadecoef;
+    d->transformedFadeY = KisMaskGenerator::softness() * d->yfadecoef;
 }
 
 KisCircleMaskGenerator::~KisCircleMaskGenerator()
@@ -86,29 +86,16 @@ KisBrushMaskApplicatorBase* KisCircleMaskGenerator::applicator()
 
 quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const
 {
-    if (KisMaskGenerator::d->empty) return 255;
-    double xr = (x /*- m_xcenter*/);
-    double yr = fabs(y /*- m_ycenter*/);
-
-    if (KisMaskGenerator::d->spikes > 2) {
-        double angle = (KisFastMath::atan2(yr, xr));
-
-        while (angle > KisMaskGenerator::d->cachedSpikesAngle ){
-            double sx = xr;
-            double sy = yr;
-
-            xr = KisMaskGenerator::d->cs * sx - KisMaskGenerator::d->ss * sy;
-            yr = KisMaskGenerator::d->ss * sx + KisMaskGenerator::d->cs * sy;
-
-            angle -= 2 * KisMaskGenerator::d->cachedSpikesAngle;
-        }
-    }
+    if (isEmpty()) return 255;
+    qreal xr = (x /*- m_xcenter*/);
+    qreal yr = qAbs(y /*- m_ycenter*/);
+    fixRotation(xr, yr);
 
     qreal n = norme(xr * d->xcoef, yr * d->ycoef);
     if (n > 1.0) return 255;
 
     // we add +1.0 to ensure correct antialising on the border
-    if (KisMaskGenerator::d->antialiasEdges) {
+    if (antialiasEdges()) {
         xr = qAbs(xr) + 1.0;
         yr = qAbs(yr) + 1.0;
     }

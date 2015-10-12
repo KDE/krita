@@ -59,7 +59,7 @@ struct Q_DECL_HIDDEN KisGaussCircleMaskGenerator::Private
 KisGaussCircleMaskGenerator::KisGaussCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges)
     : KisMaskGenerator(diameter, ratio, fh, fv, spikes, antialiasEdges, CIRCLE, GaussId), d(new Private(antialiasEdges))
 {
-    d->ycoef = 1.0 / KisMaskGenerator::d->ratio;
+    d->ycoef = 1.0 / ratio;
     d->fade = 1.0 - (fh + fv) / 2.0;
     if (d->fade == 0.0) d->fade = 1e-6;
     else if (d->fade == 1.0) d->fade = 1.0 - 1e-6; // would become undefined for fade == 0 or 1
@@ -89,20 +89,10 @@ inline quint8 KisGaussCircleMaskGenerator::Private::value(qreal dist) const
 
 quint8 KisGaussCircleMaskGenerator::valueAt(qreal x, qreal y) const
 {
+    if (isEmpty()) return 255;
     qreal xr = x;
     qreal yr = qAbs(y);
-    if (KisMaskGenerator::d->spikes > 2) {
-        double angle = KisFastMath::atan2(yr, xr);
-
-        while (angle > KisMaskGenerator::d->cachedSpikesAngle) {
-            double sx = xr, sy = yr;
-
-            xr = KisMaskGenerator::d->cs * sx - KisMaskGenerator::d->ss * sy;
-            yr = KisMaskGenerator::d->ss * sx + KisMaskGenerator::d->cs * sy;
-
-            angle -= 2 * KisMaskGenerator::d->cachedSpikesAngle;
-        }
-    }
+    fixRotation(xr, yr);
 
     qreal dist = sqrt(norme(xr, yr * d->ycoef));
 

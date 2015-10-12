@@ -25,6 +25,7 @@
 #include "kis_brush_mask_applicator_base.h"
 
 #include <cmath>
+#include "kis_fast_math.h"
 
 #include <QDomDocument>
 
@@ -37,7 +38,25 @@
 #include "kis_curve_rect_mask_generator.h"
 
 
-KisMaskGenerator::KisMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges, Type type, const KoID& id) : d(new Private), m_id(id)
+struct KisMaskGenerator::Private {
+    qreal diameter, ratio;
+    qreal softness;
+    qreal fh, fv;
+    qreal cs, ss;
+    qreal cachedSpikesAngle;
+    int spikes;
+    bool empty;
+    bool antialiasEdges;
+    Type type;
+    QString curveString;
+    qreal scaleX;
+    qreal scaleY;
+    KisBrushMaskApplicatorBase *defaultMaskProcessor;
+};
+
+
+KisMaskGenerator::KisMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges, Type type, const KoID& id)
+    : d(new Private), m_id(id)
 {
     d->diameter = diameter;
     d->ratio = ratio;
@@ -75,6 +94,12 @@ bool KisMaskGenerator::shouldSupersample() const
 bool KisMaskGenerator::shouldVectorize() const
 {
     return false;
+}
+
+
+bool KisMaskGenerator::isEmpty() const
+{
+    return d->empty;
 }
 
 KisBrushMaskApplicatorBase* KisMaskGenerator::applicator()
@@ -264,4 +289,21 @@ void KisMaskGenerator::setScale(qreal scaleX, qreal scaleY)
 {
     d->scaleX = scaleX;
     d->scaleY = scaleY;
+}
+
+void KisMaskGenerator::fixRotation(qreal &xr, qreal &yr) const
+{
+    if (d->spikes > 2) {
+        double angle = (KisFastMath::atan2(yr, xr));
+
+        while (angle > d->cachedSpikesAngle){
+            double sx = xr;
+            double sy = yr;
+
+            xr = d->cs * sx - d->ss * sy;
+            yr = d->ss * sx + d->cs * sy;
+
+            angle -= 2 * d->cachedSpikesAngle;
+        }
+    }
 }

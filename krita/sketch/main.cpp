@@ -86,7 +86,7 @@ int main( int argc, char** argv )
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("vkb"), i18n("Use the virtual keyboard")));
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("windowed"), i18n("Open sketch in a window, otherwise defaults to full-screen")));
 
-    parser.addPositionalArgument(QStringLiteral("[file(s)]"), i18n("Images to open to open"));
+    parser.addPositionalArgument(QStringLiteral("[file(s)]"), i18n("Images to open"));
 
     parser.process(app);
 

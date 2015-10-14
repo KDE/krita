@@ -170,6 +170,9 @@ public:
      */
     KisKeyframeChannel *getKeyframeChannel(const QString &id) const;
 
+    bool useInTimeline() const;
+    void setUseInTimeline(bool value);
+
     bool isAnimated() const;
     virtual void enableAnimation();
 
@@ -351,11 +354,6 @@ public:
     KisNodeProgressProxy* nodeProgressProxy() const;
 
     KisBusyProgressIndicator* busyProgressIndicator() const;
-
-Q_SIGNALS:
-
-    void animatedAboutToChange(bool);
-    void animatedChanged(bool);
 
 private:
 

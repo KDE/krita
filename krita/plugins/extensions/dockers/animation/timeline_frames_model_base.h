@@ -19,21 +19,26 @@
 #ifndef __TIMELINE_FRAMES_MODEL_BASE_H
 #define __TIMELINE_FRAMES_MODEL_BASE_H
 
-#include <QAbstractTableModel>
-
 #include <QScopedPointer>
 #include <QIcon>
 
 #include "kritaanimationdocker_export.h"
 #include "KisDocumentSectionModel.h"
+#include "kis_types.h"
+#include "timeline_node_list_keeper.h"
+
+class KisNodeDummy;
+class KisDummiesFacadeBase;
 
 
-class KRITAANIMATIONDOCKER_EXPORT TimelineFramesModelBase : public QAbstractTableModel
+class KRITAANIMATIONDOCKER_EXPORT TimelineFramesModelBase : public TimelineNodeListKeeper::ModelWithExternalNotifications
 {
     Q_OBJECT
 public:
     TimelineFramesModelBase(QObject *parent);
     ~TimelineFramesModelBase();
+
+    void setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageSP image);
 
     bool canDropFrameData(const QMimeData *data, const QModelIndex &index);
     bool insertOtherLayer(int index, int dstRow);
@@ -42,6 +47,8 @@ public:
     bool createFrame(const QModelIndex &dstIndex);
     bool copyFrame(const QModelIndex &dstIndex);
     bool removeFrame(const QModelIndex &dstIndex);
+
+    void setLastVisibleFrame(int time);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -62,10 +69,11 @@ public:
 
     enum ItemDataRole
     {
-        ActiveLayerRole = Qt::UserRole + 1,
+        ActiveLayerRole = Qt::UserRole + 101,
         ActiveFrameRole,
+        FrameExistsRole,
         FrameCachedRole,
-        PropertiesRole,
+        TimelinePropertiesRole,
         OtherLayersRole,
         FrameEditableRole
     };
@@ -74,18 +82,16 @@ public:
     typedef KisDocumentSectionModel::Property Property;
     typedef KisDocumentSectionModel::PropertyList PropertyList;
 
-    struct OtherLayer {
-        OtherLayer(const QString &_name) : name(_name) {}
-        QString name;
-    };
+    typedef TimelineNodeListKeeper::OtherLayer OtherLayer;
+    typedef TimelineNodeListKeeper::OtherLayersList OtherLayersList;
 
-    typedef QList<OtherLayer> OtherLayersList;
+private Q_SLOTS:
+    void slotDummyChanged(KisNodeDummy *dummy);
+    void processUpdateQueue();
 
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };
-
-Q_DECLARE_METATYPE( TimelineFramesModelBase::OtherLayersList )
 
 #endif /* __TIMELINE_FRAMES_MODEL_BASE_H */

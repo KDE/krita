@@ -18,6 +18,9 @@ set(KRITA_ANIMATIONDOCKER_PART_SRCS
     timeline_frames_model_base.cpp
     timeline_frames_model.cpp
     timeline_frames_model_testing.cpp
+
+    timeline_frames_index_converter.cpp
+    timeline_node_list_keeper.cpp
 )
 
 ki18n_wrap_ui(KRITA_ANIMATIONDOCKER_PART_SRCS

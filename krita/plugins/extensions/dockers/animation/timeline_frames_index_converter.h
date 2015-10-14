@@ -16,32 +16,27 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __TIMELINE_MODEL_TEST_H
-#define __TIMELINE_MODEL_TEST_H
+#ifndef __TIMELINE_FRAMES_INDEX_CONVERTER_H
+#define __TIMELINE_FRAMES_INDEX_CONVERTER_H
 
-#include <QtTest>
-#include "empty_nodes_test.h"
+#include "kritaanimationdocker_export.h"
 
-class KisDocument;
-class KisNameServer;
-class KisShapeController;
+class KisNodeDummy;
 
+class KisDummiesFacadeBase;
 
-class TimelineModelTest : public QObject, public TestUtil::EmptyNodesTest
+class KRITAANIMATIONDOCKER_EXPORT TimelineFramesIndexConverter
 {
-    Q_OBJECT
-private Q_SLOTS:
-    void init();
-    void cleanup();
+public:
+    TimelineFramesIndexConverter(KisDummiesFacadeBase *dummiesFacade);
+    ~TimelineFramesIndexConverter();
 
-    void testConverter();
-    void testModel();
-    void testView();
+    KisNodeDummy* dummyFromRow(int row);
+    int rowForDummy(KisNodeDummy *dummy);
+    int rowCount();
 
 private:
-    KisDocument *m_doc;
-    KisNameServer *m_nameServer;
-    KisShapeController *m_shapeController;
+    KisDummiesFacadeBase *m_dummiesFacade;
 };
 
-#endif /* __TIMELINE_MODEL_TEST_H */
+#endif /* __TIMELINE_FRAMES_INDEX_CONVERTER_H */

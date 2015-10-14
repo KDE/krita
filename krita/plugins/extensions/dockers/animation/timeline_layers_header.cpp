@@ -35,6 +35,8 @@ struct TimelineLayersHeader::Private
     int numIcons(int logicalIndex) const;
     QRect iconRect(int logicalIndex, int iconIndex) const;
     int iconAt(int logicalIndex, const QPoint &pt);
+
+    TimelineFramesModelBase::Property* getPropertyAt(TimelineFramesModelBase::PropertyList &props, int index);
 };
 
 
@@ -49,14 +51,36 @@ TimelineLayersHeader::~TimelineLayersHeader()
 {
 }
 
+TimelineFramesModelBase::Property*
+TimelineLayersHeader::Private::getPropertyAt(TimelineFramesModelBase::PropertyList &props, int index)
+{
+    int logical = 0;
+    for (int i = 0; i < props.size(); i++) {
+        if (props[i].isMutable) {
+            if (logical == index) {
+                return &props[i];
+            }
+
+            logical++;
+        }
+    }
+
+    return 0;
+}
+
 int TimelineLayersHeader::Private::numIcons(int logicalIndex) const
 {
     int result = 0;
 
-    QVariant value =  q->model()->headerData(logicalIndex, q->orientation(), TimelineFramesModelBase::PropertiesRole);
+    QVariant value =  q->model()->headerData(logicalIndex, q->orientation(), TimelineFramesModelBase::TimelinePropertiesRole);
     if (value.isValid()) {
         TimelineFramesModelBase::PropertyList props = value.value<TimelineFramesModelBase::PropertyList>();
-        result = props.size();
+
+        foreach (const TimelineFramesModelBase::Property &p, props) {
+            if (p.isMutable) {
+                result++;
+            }
+        }
     }
 
     return result;
@@ -73,8 +97,6 @@ QSize TimelineLayersHeader::sectionSizeFromContents(int logicalIndex) const
 
 QRect TimelineLayersHeader::Private::iconRect(int logicalIndex, int iconIndex) const
 {
-    KIS_ASSERT_RECOVER(iconIndex >= 0 && iconIndex < 5) { return QRect(); }
-
     QSize sectionSize(q->viewport()->width(), q->sectionSize(logicalIndex));
 
     const int iconWidth = 16;
@@ -86,7 +108,6 @@ QRect TimelineLayersHeader::Private::iconRect(int logicalIndex, int iconIndex) c
 
 
     return QRect(x, y, iconWidth, iconHeight);
-
 }
 
 void TimelineLayersHeader::paintSection(QPainter *painter, const QRect &rect, int logicalIndex) const
@@ -95,13 +116,16 @@ void TimelineLayersHeader::paintSection(QPainter *painter, const QRect &rect, in
     QHeaderView::paintSection(painter, rect, logicalIndex);
     painter->restore();
 
-    QVariant value =  model()->headerData(logicalIndex, orientation(), TimelineFramesModelBase::PropertiesRole);
+    QVariant value =  model()->headerData(logicalIndex, orientation(), TimelineFramesModelBase::TimelinePropertiesRole);
     TimelineFramesModelBase::PropertyList props = value.value<TimelineFramesModelBase::PropertyList>();
 
-    for (int i = 0; i < props.size(); i++) {
-        const bool isActive = props[i].state.toBool();
+    const int numIcons = m_d->numIcons(logicalIndex);
+    for (int i = 0; i < numIcons; i++) {
+        TimelineFramesModelBase::Property *p =
+            m_d->getPropertyAt(props, i);
 
-        QIcon icon = isActive ? props[i].onIcon : props[i].offIcon;
+        const bool isActive = p->state.toBool();
+        QIcon icon = isActive ? p->onIcon : p->offIcon;
         QRect rc = m_d->iconRect(logicalIndex, i).translated(rect.topLeft());
         icon.paint(painter, rc);
     }
@@ -139,12 +163,15 @@ bool TimelineLayersHeader::viewportEvent(QEvent *e)
             const int iconIndex = m_d->iconAt(logical, he->pos());
             if (iconIndex != -1) {
 
-                QVariant value =  model()->headerData(logical, orientation(), TimelineFramesModelBase::PropertiesRole);
+                QVariant value =  model()->headerData(logical, orientation(), TimelineFramesModelBase::TimelinePropertiesRole);
                 TimelineFramesModelBase::PropertyList props = value.value<TimelineFramesModelBase::PropertyList>();
 
+                TimelineFramesModelBase::Property *p =
+                    m_d->getPropertyAt(props, iconIndex);
+
                 QString text = QString("%1 (%2)")
-                    .arg(props[iconIndex].name)
-                    .arg(props[iconIndex].state.toBool() ? "on" : "off");
+                    .arg(p->name)
+                    .arg(p->state.toBool() ? "on" : "off");
 
                 QToolTip::showText(he->globalPos(), text, this);
                 return true;
@@ -166,15 +193,18 @@ void TimelineLayersHeader::mousePressEvent(QMouseEvent *e)
         const int iconIndex = m_d->iconAt(logical, e->pos());
         if (iconIndex != -1) {
 
-            QVariant value =  model()->headerData(logical, orientation(), TimelineFramesModelBase::PropertiesRole);
+            QVariant value =  model()->headerData(logical, orientation(), TimelineFramesModelBase::TimelinePropertiesRole);
             TimelineFramesModelBase::PropertyList props = value.value<TimelineFramesModelBase::PropertyList>();
 
-            bool currentState = props[iconIndex].state.toBool();
-            props[iconIndex].state = !currentState;
+            TimelineFramesModelBase::Property *p =
+                m_d->getPropertyAt(props, iconIndex);
+
+            bool currentState = p->state.toBool();
+            p->state = !currentState;
 
             value.setValue(props);
 
-            model()->setHeaderData(logical, orientation(), value, TimelineFramesModelBase::PropertiesRole);
+            model()->setHeaderData(logical, orientation(), value, TimelineFramesModelBase::TimelinePropertiesRole);
             return;
 
         } else if (e->button() == Qt::RightButton) {

@@ -26,98 +26,284 @@
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_smallint.hpp>
 
+#include <KoColorSpace.h>
+#include <KoCompositeOpRegistry.h>
+#include "kis_paint_layer.h"
+#include "commands/kis_image_layer_add_command.h"
+#include "commands/kis_image_layer_remove_command.h"
+
 #include "kis_debug.h"
+#include "kis_image.h"
+#include "kis_image_animation_interface.h"
+#include "kis_node_dummies_graph.h"
+#include "kis_dummies_facade_base.h"
+#include "kis_signal_compressor.h"
+#include "kis_keyframe_channel.h"
+#include "kundo2command.h"
+#include "kis_post_execution_undo_adapter.h"
 
-
-static const int numFrames = 200;
-
-struct Layer {
-    QString name;
-    QVector<int> frames;
-    bool visible;
-    bool locked;
-    bool alphaLocked;
-    bool inheritAlpha;
-    bool onionSkins;
-};
 
 struct TimelineFramesModelBase::Private
 {
-    Private() : activeLayerIndex(0), activeFrameIndex(0) {}
+    Private()
+        : activeLayerIndex(0),
+          activeFrameIndex(0),
+          dummiesFacade(0),
+          needFinishInsertRows(false),
+          needFinishRemoveRows(false),
+          numFramesOverride(0),
+          updateTimer(200, KisSignalCompressor::FIRST_INACTIVE),
+          parentOfRemovedNode(0)
+    {}
 
-    QVector<Layer> layers;
+    // TODO!!!!
     QVector<bool> cachedFrames;
 
     int activeLayerIndex;
     int activeFrameIndex;
 
-    QVector<Layer> otherLayers;
+    KisDummiesFacadeBase *dummiesFacade;
+    KisImageWSP image;
+    bool needFinishInsertRows;
+    bool needFinishRemoveRows;
+
+    int numFramesOverride;
+
+    QList<KisNodeDummy*> updateQueue;
+    KisSignalCompressor updateTimer;
+
+    KisNodeDummy* parentOfRemovedNode;
+    QScopedPointer<TimelineNodeListKeeper> converter;
+
+    QVariant layerName(int row) const {
+        KisNodeDummy *dummy = converter->dummyFromRow(row);
+        if (!dummy) return QVariant();
+        return dummy->node()->name();
+    }
+
+    bool layerEditable(int row) const {
+        KisNodeDummy *dummy = converter->dummyFromRow(row);
+        if (!dummy) return true;
+        return dummy->node()->isEditable();
+    }
+
+    bool frameExists(int row, int column) const {
+        KisNodeDummy *dummy = converter->dummyFromRow(row);
+        if (!dummy) return false;
+
+        KisKeyframeChannel *content =
+            dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+
+        if (!content) return false;
+
+        KisKeyframe *frame = content->keyframeAt(column);
+        return frame;
+    }
+
+    int baseNumFrames() const {
+        KisImageAnimationInterface *i = image->animationInterface();
+        if (!i) return 1;
+
+        return i->totalLength();
+    }
+
+    int effectiveNumFrames() const {
+        return qMax(baseNumFrames(), numFramesOverride);
+    }
+
+    QVariant layerProperties(int row) const {
+        KisNodeDummy *dummy = converter->dummyFromRow(row);
+        if (!dummy) return QVariant();
+
+        PropertyList props = dummy->node()->sectionModelProperties();
+        return QVariant::fromValue(props);
+    }
+
+    bool setLayerProperties(int row, PropertyList props) {
+        KisNodeDummy *dummy = converter->dummyFromRow(row);
+        if (!dummy) return false;
+
+        dummy->node()->setSectionModelProperties(props);
+        return true;
+    }
+
+    bool addKeyframe(int row, int column, bool copy) {
+        KisNodeDummy *dummy = converter->dummyFromRow(row);
+        if (!dummy) return false;
+
+        KisKeyframeChannel *content =
+            dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+
+        if (!content) {
+            dummy->node()->enableAnimation();
+            content =
+                dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+            if (!content) return false;
+        }
+
+        if (copy) {
+            if (content->keyframeAt(column)) return false;
+
+            KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Copy Keyframe"));
+            KisKeyframeSP srcFrame = content->activeKeyframeAt(column);
+            content->copyKeyframe(srcFrame.data(), column, cmd);
+            image->postExecutionUndoAdapter()->addCommand(toQShared(cmd));
+        } else {
+            KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Add Keyframe"));
+            content->addKeyframe(column, cmd);
+            image->postExecutionUndoAdapter()->addCommand(toQShared(cmd));
+        }
+
+        return true;
+    }
+
+    bool removeKeyframe(int row, int column) {
+        KisNodeDummy *dummy = converter->dummyFromRow(row);
+        if (!dummy) return false;
+
+        KisKeyframeChannel *content =
+            dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+
+        if (!content) return false;
+
+        KisKeyframe *keyframe = content->keyframeAt(column);
+
+        if (!keyframe) return false;
+
+        KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Remove Keyframe"));
+        content->deleteKeyframe(keyframe, cmd);
+        image->postExecutionUndoAdapter()->addCommand(toQShared(cmd));
+
+        return true;
+    }
+
+    bool moveKeyframe(int srcRow, int srcColumn, int dstRow, int dstColumn) {
+        if (srcRow != dstRow) return false;
+
+        KisNodeDummy *dummy = converter->dummyFromRow(srcRow);
+        if (!dummy) return false;
+
+        KisKeyframeChannel *content =
+            dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+
+        if (!content) return false;
+
+        KisKeyframe *srcKeyframe = content->keyframeAt(srcColumn);
+        KisKeyframe *dstKeyframe = content->keyframeAt(dstColumn);
+
+        if (!srcKeyframe || dstKeyframe) return false;
+
+        KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Move Keyframe"));
+        content->moveKeyframe(srcKeyframe, dstColumn, cmd);
+        image->postExecutionUndoAdapter()->addCommand(toQShared(cmd));
+
+        return true;
+    }
+
+    bool addNewLayer(int row) {
+        KisNodeDummy *dummy = converter->dummyFromRow(row);
+        if (!dummy) return false;
+
+        KisPaintLayerSP layer =
+            new KisPaintLayer(image.data(),
+                              image->nextLayerName(),
+                              OPACITY_OPAQUE_U8,
+                              image->colorSpace());
+
+        image->undoAdapter()->addCommand(
+            new KisImageLayerAddCommand(image, layer,
+                                        dummy->parent()->node(),
+                                        dummy->node(),
+                                        false, false));
+
+        layer->setUseInTimeline(true);
+
+        return true;
+    }
+
+    bool removeLayer(int row) {
+        KisNodeDummy *dummy = converter->dummyFromRow(row);
+        if (!dummy) return false;
+
+        image->undoAdapter()->addCommand(
+            new KisImageLayerRemoveCommand(image, dummy->node()));
+
+        return true;
+    }
 };
 
 TimelineFramesModelBase::TimelineFramesModelBase(QObject *parent)
-    : QAbstractTableModel(parent),
+    : ModelWithExternalNotifications(parent),
       m_d(new Private)
 {
-    boost::uniform_smallint<int> smallint(1,4);
-    boost::mt11213b rnd;
-
-
-    for (int i = 0; i < 5; i++) {
-        Layer l;
-        l.name = QString("Layer %1").arg(i);
-        l.frames.resize(numFrames);
-        for (int j = i; j < numFrames; j += smallint(rnd)) {
-            l.frames[j] = j / 3;
-        }
-        l.visible = smallint(rnd) != 1;
-        l.locked = smallint(rnd) == 1;
-        l.alphaLocked = smallint(rnd) == 1;
-        l.inheritAlpha = smallint(rnd) == 1;
-        l.onionSkins = smallint(rnd) == 1;
-        m_d->layers << l;
-    }
-
-    for (int i = 0; i < 7; i++) {
-        Layer l;
-        l.name = QString("Ext Layer %1").arg(i);
-        l.frames.resize(numFrames);
-        for (int j = i; j < numFrames; j += smallint(rnd)) {
-            l.frames[j] = j / 3;
-        }
-        l.visible = smallint(rnd) != 1;
-        l.locked = smallint(rnd) == 1;
-        l.alphaLocked = smallint(rnd) == 1;
-        l.inheritAlpha = smallint(rnd) == 1;
-        l.onionSkins = smallint(rnd) == 1;
-        m_d->otherLayers << l;
-    }
-
-    m_d->cachedFrames.resize(numFrames);
-    for (int j = 0; j < numFrames; j += smallint(rnd) / 2) {
-        m_d->cachedFrames[j] = true;
-    }
+    connect(&m_d->updateTimer, SIGNAL(timeout()), SLOT(processUpdateQueue()));
 }
 
 TimelineFramesModelBase::~TimelineFramesModelBase()
 {
 }
 
+void TimelineFramesModelBase::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageSP image)
+{
+    KisDummiesFacadeBase *oldDummiesFacade = m_d->dummiesFacade;
+
+    if(m_d->dummiesFacade) {
+        m_d->image->disconnect(this);
+        m_d->dummiesFacade->disconnect(this);
+    }
+
+    m_d->image = image;
+    m_d->dummiesFacade = dummiesFacade;
+    m_d->converter.reset();
+
+    if(m_d->dummiesFacade) {
+        m_d->converter.reset(new TimelineNodeListKeeper(this, m_d->dummiesFacade));
+        connect(m_d->dummiesFacade, SIGNAL(sigDummyChanged(KisNodeDummy*)),
+                SLOT(slotDummyChanged(KisNodeDummy*)));
+    }
+
+    if(m_d->dummiesFacade != oldDummiesFacade) {
+        reset();
+    }
+}
+
+void TimelineFramesModelBase::slotDummyChanged(KisNodeDummy *dummy)
+{
+    if (!m_d->updateQueue.contains(dummy)) {
+        m_d->updateQueue.append(dummy);
+    }
+    m_d->updateTimer.start();
+}
+
+void TimelineFramesModelBase::processUpdateQueue()
+{
+    foreach(KisNodeDummy *dummy, m_d->updateQueue) {
+        int row = m_d->converter->rowForDummy(dummy);
+
+        if (row >= 0) {
+            emit headerDataChanged (Qt::Vertical, row, row);
+            emit dataChanged(this->index(row, 0), this->index(row, columnCount() - 1));
+        }
+    }
+    m_d->updateQueue.clear();
+}
+
 int TimelineFramesModelBase::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return m_d->layers.size();
+    if(!m_d->dummiesFacade) return 0;
+
+    return m_d->converter->rowCount();
 }
 
 int TimelineFramesModelBase::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return numFrames;
+    return m_d->effectiveNumFrames();
 }
 
 QVariant TimelineFramesModelBase::data(const QModelIndex &index, int role) const
 {
-    //if (index.row() > m_d->layers.size()) return QVariant();
-
     switch (role) {
     case ActiveLayerRole: {
         return index.row() == m_d->activeLayerIndex;
@@ -126,23 +312,18 @@ QVariant TimelineFramesModelBase::data(const QModelIndex &index, int role) const
         return index.column() == m_d->activeFrameIndex;
     }
     case FrameEditableRole: {
-        const Layer &layer = m_d->layers[index.row()];
-        return layer.visible && !layer.locked;
+        return m_d->layerEditable(index.row());
+    }
+    case FrameExistsRole: {
+        return m_d->frameExists(index.row(), index.column());
     }
     case Qt::DisplayRole: {
-        int frameId = m_d->layers[index.row()].frames[index.column()];
-
-        return frameId > 0 ? QString::number(frameId) : "";
-
+        return QVariant();
     }
     case Qt::BackgroundRole: {
-        const Layer &layer = m_d->layers[index.row()];
-        int frameId = layer.frames[index.column()];
-
         QColor baseColor = QColor(200, 220, 150);
         bool active = data(index, ActiveLayerRole).toBool();
-
-        bool present = frameId > 0;
+        bool present = m_d->frameExists(index.row(), index.column());
 
         QColor color = Qt::transparent;
 
@@ -200,7 +381,7 @@ bool TimelineFramesModelBase::setData(const QModelIndex &index, const QVariant &
     }
     }
 
-    return QAbstractTableModel::setData(index, value, role);
+    return ModelWithExternalNotifications::setData(index, value, role);
 }
 
 QVariant TimelineFramesModelBase::headerData(int section, Qt::Orientation orientation, int role) const
@@ -211,14 +392,16 @@ QVariant TimelineFramesModelBase::headerData(int section, Qt::Orientation orient
             return section == m_d->activeFrameIndex;
         }
         case FrameCachedRole:
-            return m_d->cachedFrames[section];
+            return false && m_d->cachedFrames[section];
         }
 
     } else {
         switch (role) {
         case Qt::DisplayRole: {
-            QString name = m_d->layers[section].name;
+            QVariant value = headerData(section, orientation, Qt::ToolTipRole);
+            if (!value.isValid()) return value;
 
+            QString name = value.toString();
             const int maxNameSize = 13;
 
             if (name.size() > maxNameSize) {
@@ -228,46 +411,19 @@ QVariant TimelineFramesModelBase::headerData(int section, Qt::Orientation orient
             return name;
         }
         case Qt::ToolTipRole: {
-            return m_d->layers[section].name;
+            return m_d->layerName(section);
         }
-        case PropertiesRole: {
-            const Layer &l = m_d->layers[section];
+        case TimelinePropertiesRole: {
+            KisNodeDummy *dummy = m_d->converter->dummyFromRow(section);
+            if (!dummy) return QVariant();
 
-            PropertyList props;
-            props << Property("Visible",
-                             QIcon::fromTheme("system-lock-screen"),
-                             QIcon::fromTheme("window-close"),
-                             l.visible);
-
-            props << Property("Locked",
-                             QIcon::fromTheme("system-lock-screen"),
-                             QIcon::fromTheme("window-close"),
-                             l.locked);
-
-            props << Property("Alpha Locked",
-                             QIcon::fromTheme("system-lock-screen"),
-                             QIcon::fromTheme("window-close"),
-                             l.alphaLocked);
-
-            props << Property("Inherit Alpha",
-                             QIcon::fromTheme("system-lock-screen"),
-                             QIcon::fromTheme("window-close"),
-                             l.inheritAlpha);
-
-            props << Property("Onion Skins",
-                             QIcon::fromTheme("system-lock-screen"),
-                             QIcon::fromTheme("window-close"),
-                             l.onionSkins);
-
+            PropertyList props = dummy->node()->sectionModelProperties();
             return QVariant::fromValue(props);
 
         }
         case OtherLayersRole: {
-            OtherLayersList list;
-
-            foreach (const Layer &l, m_d->otherLayers) {
-                list << OtherLayer(l.name);
-            }
+            TimelineNodeListKeeper::OtherLayersList list =
+                m_d->converter->otherLayersList();
 
             return QVariant::fromValue(list);
         }
@@ -287,23 +443,17 @@ bool TimelineFramesModelBase::setHeaderData(int section, Qt::Orientation orienta
             setData(index(section, 0), value, role);
             break;
         }
-        case PropertiesRole: {
+        case TimelinePropertiesRole: {
             TimelineFramesModelBase::PropertyList props = value.value<TimelineFramesModelBase::PropertyList>();
 
-            Layer &l = m_d->layers[section];
-            l.visible = props[0].state.toBool();
-            l.locked = props[1].state.toBool();
-            l.alphaLocked = props[2].state.toBool();
-            l.inheritAlpha = props[3].state.toBool();
-            l.onionSkins = props[4].state.toBool();
-
+            int result = m_d->setLayerProperties(section, props);
             emit headerDataChanged (Qt::Vertical, section, section);
-            break;
+            return result;
         }
         }
     }
 
-    return QAbstractTableModel::setHeaderData(section, orientation, value, role);
+    return ModelWithExternalNotifications::setHeaderData(section, orientation, value, role);
 }
 
 Qt::DropActions TimelineFramesModelBase::supportedDragActions() const
@@ -370,27 +520,21 @@ bool TimelineFramesModelBase::dropMimeData(const QMimeData *data, Qt::DropAction
 
     if (srcRow != parent.row()) return false;
 
-    // fake part
+    bool result = m_d->moveKeyframe(srcRow, srcColumn, parent.row(), parent.column());
+    if (result) {
+        emit dataChanged(this->index(srcRow, srcColumn), this->index(srcRow, srcColumn));
+        emit dataChanged(parent, parent);
+    }
 
-    int *src = &m_d->layers[srcRow].frames[srcColumn];
-    int *dst = &m_d->layers[parent.row()].frames[parent.column()];
-    qSwap(*src, *dst);
-
-    emit dataChanged(this->index(srcRow, srcColumn), this->index(srcRow, srcColumn));
-    emit dataChanged(parent, parent);
-
-    return true;
+    return result;
 }
 
 Qt::ItemFlags TimelineFramesModelBase::flags(const QModelIndex &index) const
 {
-    Qt::ItemFlags flags = QAbstractTableModel::flags(index);
+    Qt::ItemFlags flags = ModelWithExternalNotifications::flags(index);
     if (!index.isValid()) return flags;
 
-    const Layer &layer = m_d->layers[index.row()];
-    int frameId = layer.frames[index.column()];
-
-    if (frameId > 0) {
+    if (m_d->frameExists(index.row(), index.column())) {
         if (index.column() > 0 &&
             data(index, FrameEditableRole).toBool()) {
 
@@ -405,75 +549,49 @@ Qt::ItemFlags TimelineFramesModelBase::flags(const QModelIndex &index) const
 
 bool TimelineFramesModelBase::insertRows(int row, int count, const QModelIndex &parent)
 {
+    Q_UNUSED(parent);
+
     KIS_ASSERT_RECOVER(count == 1) { return false; }
 
-    if (row < 0 || row > m_d->layers.size()) return false;
+    if (row < 0 || row > rowCount()) return false;
 
-    Layer l;
-    l.name = QString("New Layer %1").arg(m_d->layers.size());
-    l.frames.resize(numFrames);
-
-    boost::uniform_smallint<int> smallint(1,4);
-    boost::mt11213b rnd;
-
-    for (int j = 0; j < numFrames; j += smallint(rnd)) {
-        l.frames[j] = j / 3;
-    }
-    l.visible = true;
-    l.locked = false;
-    l.alphaLocked = false;
-    l.inheritAlpha = false;
-    l.onionSkins = true;
-
-    beginInsertRows(parent, row, row);
-    m_d->layers.insert(row, l);
-    endInsertRows();
-
-    setData(index(row, 0), true, ActiveLayerRole);
-
-    return true;
-}
-
-bool TimelineFramesModelBase::insertOtherLayer(int index, int dstRow)
-{
-    if (index < 0 || index >= m_d->otherLayers.size()) return false;
-    if (dstRow < 0 || dstRow > m_d->layers.size()) return false;
-
-    const Layer &l = m_d->otherLayers[index];
-
-    beginInsertRows(QModelIndex(), dstRow, dstRow);
-    m_d->layers.insert(dstRow, l);
-    endInsertRows();
-
-    setData(this->index(dstRow, 0), true, ActiveLayerRole);
-
-    m_d->otherLayers.remove(index);
-
-    return true;
+    bool result = m_d->addNewLayer(row);
+    return result;
 }
 
 bool TimelineFramesModelBase::removeRows(int row, int count, const QModelIndex &parent)
 {
+    Q_UNUSED(parent);
     KIS_ASSERT_RECOVER(count == 1) { return false; }
 
-    if (row < 0 || row >= m_d->layers.size()) return false;
+    if (row < 0 || row >= rowCount()) return false;
 
-    beginRemoveRows(parent, row, row);
-    m_d->layers.remove(row);
-    endRemoveRows();
+    bool result = m_d->removeLayer(row);
+    return result;
+}
+
+bool TimelineFramesModelBase::insertOtherLayer(int index, int dstRow)
+{
+    Q_UNUSED(dstRow);
+
+    TimelineNodeListKeeper::OtherLayersList list =
+        m_d->converter->otherLayersList();
+
+    if (index < 0 || index >= list.size()) return false;
+
+    list[index].dummy->node()->setUseInTimeline(true);
+    dstRow = m_d->converter->rowForDummy(list[index].dummy);
+    setData(this->index(dstRow, 0), true, ActiveLayerRole);
 
     return true;
 }
 
 bool TimelineFramesModelBase::hideLayer(int row)
 {
-    if (row < 0 || row >= m_d->layers.size()) return false;
+    KisNodeDummy *dummy = m_d->converter->dummyFromRow(row);
+    if (!dummy) return false;
 
-    m_d->otherLayers.append(m_d->layers[row]);
-
-    beginRemoveRows(QModelIndex(), row, row);
-    m_d->layers.remove(row);
-    endRemoveRows();
+    dummy->node()->setUseInTimeline(false);
 
     return true;
 }
@@ -481,46 +599,56 @@ bool TimelineFramesModelBase::hideLayer(int row)
 bool TimelineFramesModelBase::createFrame(const QModelIndex &dstIndex)
 {
     if (!dstIndex.isValid()) return false;
-    Layer &l = m_d->layers[dstIndex.row()];
 
-    if (l.frames[dstIndex.column()] != 0) return false;
-    l.frames[dstIndex.column()] = l.frames.size();
-    emit dataChanged(dstIndex, dstIndex);
+    bool result = m_d->addKeyframe(dstIndex.row(), dstIndex.column(), false);
+    if (result) {
+        emit dataChanged(dstIndex, dstIndex);
+    }
 
-    return true;
+    return result;
 }
 
 bool TimelineFramesModelBase::copyFrame(const QModelIndex &dstIndex)
 {
     if (!dstIndex.isValid()) return false;
-    Layer &l = m_d->layers[dstIndex.row()];
 
-    if (l.frames[dstIndex.column()] != 0) return false;
-
-    int newValue = l.frames.size();
-
-    for (int i = dstIndex.column() - 1; i >= 0; i--) {
-        if (l.frames[i] > 0) {
-            newValue = l.frames[i];
-            break;
-        }
+    bool result = m_d->addKeyframe(dstIndex.row(), dstIndex.column(), false);
+    if (result) {
+        emit dataChanged(dstIndex, dstIndex);
     }
 
-    l.frames[dstIndex.column()] = newValue;
-    emit dataChanged(dstIndex, dstIndex);
-
-    return true;
+    return result;
 }
 
 bool TimelineFramesModelBase::removeFrame(const QModelIndex &dstIndex)
 {
     if (!dstIndex.isValid()) return false;
-    Layer &l = m_d->layers[dstIndex.row()];
 
-    if (l.frames[dstIndex.column()] == 0) return false;
-    l.frames[dstIndex.column()] = 0;
-    emit dataChanged(dstIndex, dstIndex);
+    bool result = m_d->removeKeyframe(dstIndex.row(), dstIndex.column());
+    if (result) {
+        emit dataChanged(dstIndex, dstIndex);
+    }
 
-    return true;
+    return result;
 }
 
+void TimelineFramesModelBase::setLastVisibleFrame(int time)
+{
+    const int growThreshold = m_d->effectiveNumFrames() - 2;
+    const int growValue = time + 5;
+
+    const int shrinkThreshold = m_d->effectiveNumFrames() - 3;
+    const int shrinkValue = qMax(m_d->baseNumFrames(), qMin(growValue, shrinkThreshold));
+    const bool canShrink = m_d->effectiveNumFrames() > m_d->baseNumFrames();
+
+    if (time >= growThreshold) {
+        beginInsertColumns(QModelIndex(), m_d->effectiveNumFrames(), growValue - 1);
+        m_d->numFramesOverride = growValue;
+        endInsertColumns();
+    } else if (time < shrinkThreshold && canShrink) {
+
+        beginRemoveColumns(QModelIndex(), shrinkValue, m_d->effectiveNumFrames() - 1);
+        m_d->numFramesOverride = shrinkValue;
+        endRemoveColumns();
+    }
+}

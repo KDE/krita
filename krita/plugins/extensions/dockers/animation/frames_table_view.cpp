@@ -27,6 +27,7 @@
 #include <QDropEvent>
 #include <QToolButton>
 #include <QMenu>
+#include <QScrollBar>
 
 
 #include "kis_debug.h"
@@ -97,6 +98,9 @@ FramesTableView::FramesTableView(QWidget *parent)
 
     this->setVerticalHeader(m_d->layersHeader);
 
+    connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), SLOT(slotUpdateInfiniteFramesCount()));
+    connect(horizontalScrollBar(), SIGNAL(sliderReleased()), SLOT(slotUpdateInfiniteFramesCount()));
+
     m_d->addLayersButton = new QToolButton(this);
     m_d->addLayersButton->setAutoRaise(true);
     m_d->addLayersButton->setIcon(QIcon::fromTheme("window-close"));
@@ -162,6 +166,9 @@ void FramesTableView::setModel(QAbstractItemModel *model)
 
     connect(m_d->model, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
             this, SLOT(slotDataChanged(QModelIndex,QModelIndex)));
+
+    connect(m_d->model, SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
+            this, SLOT(slotReselectCurrentIndex()));
 }
 
 void FramesTableView::setFramesPerSecond(int fps)
@@ -186,11 +193,22 @@ void FramesTableView::setZoom(qreal zoom)
     // For some reason simple update doesn't work here,
     // so reset the whole header
     m_d->horizontalRuler->reset();
+    slotUpdateInfiniteFramesCount();
 }
 
 void FramesTableView::setZoomDouble(double zoom)
 {
     setZoom(zoom);
+}
+
+void FramesTableView::slotUpdateInfiniteFramesCount()
+{
+    if (horizontalScrollBar()->isSliderDown()) return;
+
+    const int sectionWidth = m_d->horizontalRuler->defaultSectionSize();
+    const int calculatedIndex = (horizontalScrollBar()->value() * sectionWidth + m_d->horizontalRuler->width() - 1) / sectionWidth;
+
+    m_d->model->setLastVisibleFrame(calculatedIndex);
 }
 
 void FramesTableView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
@@ -202,6 +220,12 @@ void FramesTableView::currentChanged(const QModelIndex &current, const QModelInd
 
     m_d->model->setData(previous, false, TimelineFramesModelBase::ActiveFrameRole);
     m_d->model->setData(current, true, TimelineFramesModelBase::ActiveFrameRole);
+}
+
+void FramesTableView::slotReselectCurrentIndex()
+{
+    QModelIndex index = currentIndex();
+    currentChanged(index, index);
 }
 
 void FramesTableView::slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
@@ -301,7 +325,7 @@ void FramesTableView::mousePressEvent(QMouseEvent *event)
         model()->setData(index, true, TimelineFramesModelBase::ActiveLayerRole);
         model()->setData(index, true, TimelineFramesModelBase::ActiveFrameRole);
 
-        if (model()->data(index, Qt::DisplayRole).toInt()) {
+        if (model()->data(index, TimelineFramesModelBase::FrameExistsRole).toBool()) {
             m_d->frameEditingMenu->exec(event->globalPos());
         } else {
             m_d->frameCreationMenu->exec(event->globalPos());
@@ -340,7 +364,7 @@ void FramesTableView::slotAddNewLayer()
     QModelIndex index = currentIndex();
     if (!index.isValid()) return;
 
-    const int newRow = index.row() + 1;
+    const int newRow = index.row();
     model()->insertRow(newRow);
 }
 

@@ -29,14 +29,85 @@
 #include <QSpinBox>
 #include <QVBoxLayout>
 
+#include "KisDocument.h"
+#include "KisPart.h"
+#include "kis_name_server.h"
+#include "flake/kis_shape_controller.h"
 
 #include "frames_table_view.h"
-#include "timeline_frames_model_testing.h"
+#include "timeline_frames_model_base.h"
+
+#include "kis_node_dummies_graph.h"
+
+
+void TimelineModelTest::init()
+{
+    m_doc = KisPart::instance()->createDocument();
+
+    m_nameServer = new KisNameServer();
+    m_shapeController = new KisShapeController(m_doc, m_nameServer);
+    //m_nodeModel = new KisNodeModel(0);
+
+    initBase();
+}
+
+void TimelineModelTest::cleanup()
+{
+    cleanupBase();
+
+    //delete m_nodeModel;
+    delete m_shapeController;
+    delete m_nameServer;
+    delete m_doc;
+}
+
+#include "timeline_frames_index_converter.h"
+
+void TimelineModelTest::testConverter()
+{
+    constructImage();
+    addSelectionMasks();
+    m_shapeController->setImage(m_image);
+
+    m_layer1->enableAnimation();
+
+    m_layer1->setUseInTimeline(true);
+    m_layer2->setUseInTimeline(true);
+    m_sel3->setUseInTimeline(true);
+
+    TimelineFramesIndexConverter converter(m_shapeController);
+
+    QCOMPARE(converter.rowCount(), 3);
+    QCOMPARE(converter.rowForDummy(m_shapeController->dummyForNode(m_layer1)), 2);
+    QCOMPARE(converter.rowForDummy(m_shapeController->dummyForNode(m_layer2)), 1);
+    QCOMPARE(converter.rowForDummy(m_shapeController->dummyForNode(m_sel3)), 0);
+
+    QCOMPARE(converter.dummyFromRow(2), m_shapeController->dummyForNode(m_layer1));
+    QCOMPARE(converter.dummyFromRow(1), m_shapeController->dummyForNode(m_layer2));
+    QCOMPARE(converter.dummyFromRow(0), m_shapeController->dummyForNode(m_sel3));
+
+    TimelineNodeListKeeper keeper(0, m_shapeController);
+
+    QCOMPARE(keeper.rowCount(), 3);
+    QCOMPARE(keeper.rowForDummy(m_shapeController->dummyForNode(m_layer1)), 2);
+    QCOMPARE(keeper.rowForDummy(m_shapeController->dummyForNode(m_layer2)), 1);
+    QCOMPARE(keeper.rowForDummy(m_shapeController->dummyForNode(m_sel3)), 0);
+
+    QCOMPARE(keeper.dummyFromRow(2), m_shapeController->dummyForNode(m_layer1));
+    QCOMPARE(keeper.dummyFromRow(1), m_shapeController->dummyForNode(m_layer2));
+    QCOMPARE(keeper.dummyFromRow(0), m_shapeController->dummyForNode(m_sel3));
+
+    TimelineNodeListKeeper::OtherLayersList list = keeper.otherLayersList();
+
+    foreach (const TimelineNodeListKeeper::OtherLayer &l, list) {
+        qDebug() << ppVar(l.name) << ppVar(l.dummy->node()->name());
+    }
+
+}
 
 void TimelineModelTest::testModel()
 {
-    QScopedPointer<TimelineFramesModelBase> model(new TimelineFramesModelTesting(0));
-
+    QScopedPointer<TimelineFramesModelBase> model(new TimelineFramesModelBase(0));
 }
 
 void TimelineModelTest::testView()
@@ -56,7 +127,17 @@ void TimelineModelTest::testView()
 
     FramesTableView *framesTable = new FramesTableView(&dlg);
 
-    TimelineFramesModelBase *model = new TimelineFramesModelTesting(&dlg);
+    TimelineFramesModelBase *model = new TimelineFramesModelBase(&dlg);
+
+    constructImage();
+    addSelectionMasks();
+    m_shapeController->setImage(m_image);
+
+    m_layer1->enableAnimation();
+    m_layer1->setUseInTimeline(true);
+
+    model->setDummiesFacade(m_shapeController, m_image);
+
     framesTable->setModel(model);
 
     connect(dblZoom, SIGNAL(valueChanged(double)), framesTable, SLOT(setZoomDouble(double)));

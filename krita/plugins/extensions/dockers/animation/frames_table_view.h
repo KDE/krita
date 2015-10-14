@@ -62,6 +62,10 @@ private Q_SLOTS:
     void slotCopyFrame();
     void slotRemoveFrame();
 
+    void slotReselectCurrentIndex();
+
+    void slotUpdateInfiniteFramesCount();
+
 protected:
     void currentChanged(const QModelIndex &current, const QModelIndex &previous);
     void dragEnterEvent(QDragEnterEvent *event);

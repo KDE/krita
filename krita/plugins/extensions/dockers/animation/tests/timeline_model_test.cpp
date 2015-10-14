@@ -35,7 +35,7 @@
 #include "flake/kis_shape_controller.h"
 
 #include "frames_table_view.h"
-#include "timeline_frames_model_base.h"
+#include "timeline_frames_model.h"
 
 #include "kis_node_dummies_graph.h"
 
@@ -107,7 +107,7 @@ void TimelineModelTest::testConverter()
 
 void TimelineModelTest::testModel()
 {
-    QScopedPointer<TimelineFramesModelBase> model(new TimelineFramesModelBase(0));
+    QScopedPointer<TimelineFramesModel> model(new TimelineFramesModel(0));
 }
 
 void TimelineModelTest::testView()
@@ -127,7 +127,7 @@ void TimelineModelTest::testView()
 
     FramesTableView *framesTable = new FramesTableView(&dlg);
 
-    TimelineFramesModelBase *model = new TimelineFramesModelBase(&dlg);
+    TimelineFramesModel *model = new TimelineFramesModel(&dlg);
 
     constructImage();
     addSelectionMasks();

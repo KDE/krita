@@ -19,22 +19,75 @@
 #ifndef __TIMELINE_FRAMES_MODEL_H
 #define __TIMELINE_FRAMES_MODEL_H
 
-#include <QAbstractTableModel>
-
 #include <QScopedPointer>
 #include <QIcon>
 
 #include "kritaanimationdocker_export.h"
+#include "KisDocumentSectionModel.h"
+#include "kis_types.h"
+#include "timeline_node_list_keeper.h"
 
-#include "timeline_frames_model_base.h"
+class KisNodeDummy;
+class KisDummiesFacadeBase;
 
 
-class KRITAANIMATIONDOCKER_EXPORT TimelineFramesModel : public TimelineFramesModelBase
+class KRITAANIMATIONDOCKER_EXPORT TimelineFramesModel : public TimelineNodeListKeeper::ModelWithExternalNotifications
 {
     Q_OBJECT
 public:
     TimelineFramesModel(QObject *parent);
     ~TimelineFramesModel();
+
+    void setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageSP image);
+
+    bool canDropFrameData(const QMimeData *data, const QModelIndex &index);
+    bool insertOtherLayer(int index, int dstRow);
+    bool hideLayer(int row);
+
+    bool createFrame(const QModelIndex &dstIndex);
+    bool copyFrame(const QModelIndex &dstIndex);
+    bool removeFrame(const QModelIndex &dstIndex);
+
+    void setLastVisibleFrame(int time);
+
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    QVariant data(const QModelIndex &index, int role) const;
+    bool setData(const QModelIndex &index, const QVariant &value, int role);
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role);
+
+    Qt::DropActions supportedDragActions() const;
+    Qt::DropActions supportedDropActions() const;
+    QStringList mimeTypes() const;
+    QMimeData * mimeData(const QModelIndexList &indexes) const;
+    bool dropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent);
+    Qt::ItemFlags flags(const QModelIndex &index) const;
+
+    bool insertRows(int row, int count, const QModelIndex &parent);
+    bool removeRows(int row, int count, const QModelIndex &parent);
+
+    enum ItemDataRole
+    {
+        ActiveLayerRole = Qt::UserRole + 101,
+        ActiveFrameRole,
+        FrameExistsRole,
+        FrameCachedRole,
+        TimelinePropertiesRole,
+        OtherLayersRole,
+        FrameEditableRole
+    };
+
+    // metatype is added by the original implementation
+    typedef KisDocumentSectionModel::Property Property;
+    typedef KisDocumentSectionModel::PropertyList PropertyList;
+
+    typedef TimelineNodeListKeeper::OtherLayer OtherLayer;
+    typedef TimelineNodeListKeeper::OtherLayersList OtherLayersList;
+
+private Q_SLOTS:
+    void slotDummyChanged(KisNodeDummy *dummy);
+    void processUpdateQueue();
 
 private:
     struct Private;

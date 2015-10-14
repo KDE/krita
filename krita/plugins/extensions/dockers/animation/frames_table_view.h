@@ -25,7 +25,7 @@
 #include "kritaanimationdocker_export.h"
 
 class TimelineWidget;
-class FramesTableModel;
+
 
 class KRITAANIMATIONDOCKER_EXPORT FramesTableView : public QTableView
 {

@@ -21,7 +21,7 @@
 #include <QPainter>
 #include <QPaintEvent>
 
-#include "timeline_frames_model_base.h"
+#include "timeline_frames_model.h"
 #include "frames_item_delegate.h"
 
 #include "kis_debug.h"
@@ -250,10 +250,10 @@ void TimelineRulerHeader::paintSection1(QPainter *painter, const QRect &rect, in
         QBrush fillColor = palette().brush(QPalette::Button);
 
         QVariant activeValue = model()->headerData(logicalIndex, orientation(),
-                                                   TimelineFramesModelBase::ActiveFrameRole);
+                                                   TimelineFramesModel::ActiveFrameRole);
 
         QVariant cachedValue = model()->headerData(logicalIndex, orientation(),
-                                                   TimelineFramesModelBase::FrameCachedRole);
+                                                   TimelineFramesModel::FrameCachedRole);
 
         if (activeValue.isValid() && activeValue.toBool()) {
             QColor baseColor = QColor(200, 220, 150);

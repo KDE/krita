@@ -21,7 +21,7 @@
 #include <QPen>
 #include <QPainter>
 
-#include "timeline_frames_model_base.h"
+#include "timeline_frames_model.h"
 
 
 FramesItemDelegate::FramesItemDelegate(QObject *parent)
@@ -60,7 +60,7 @@ void FramesItemDelegate::paint(QPainter *painter,
 {
     QItemDelegate::paint(painter, option, index);
 
-    QVariant value = index.data(TimelineFramesModelBase::ActiveFrameRole);
+    QVariant value = index.data(TimelineFramesModel::ActiveFrameRole);
     if (value.isValid() && value.toBool()) {
         paintActiveFrameSelector(painter, option.rect);
     }

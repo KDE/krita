@@ -15,9 +15,7 @@ set(KRITA_ANIMATIONDOCKER_PART_SRCS
     timeline_layers_header.cpp
     timeline_ruler_header.cpp
 
-    timeline_frames_model_base.cpp
     timeline_frames_model.cpp
-    timeline_frames_model_testing.cpp
 
     timeline_frames_index_converter.cpp
     timeline_node_list_keeper.cpp

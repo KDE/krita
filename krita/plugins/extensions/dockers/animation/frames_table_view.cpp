@@ -18,7 +18,7 @@
 
 #include "frames_table_view.h"
 
-#include "timeline_frames_model_base.h"
+#include "timeline_frames_model.h"
 
 #include "timeline_ruler_header.h"
 #include "timeline_layers_header.h"
@@ -38,7 +38,7 @@ struct FramesTableView::Private
 {
     Private() : fps(1), dragInProgress(false) {}
 
-    TimelineFramesModelBase *model;
+    TimelineFramesModel *model;
     TimelineRulerHeader *horizontalRuler;
     TimelineLayersHeader *layersHeader;
     int fps;
@@ -159,7 +159,7 @@ void FramesTableView::updateGeometries()
 
 void FramesTableView::setModel(QAbstractItemModel *model)
 {
-    TimelineFramesModelBase *framesModel = qobject_cast<TimelineFramesModelBase*>(model);
+    TimelineFramesModel *framesModel = qobject_cast<TimelineFramesModel*>(model);
     m_d->model = framesModel;
 
     QTableView::setModel(model);
@@ -215,11 +215,11 @@ void FramesTableView::currentChanged(const QModelIndex &current, const QModelInd
 {
     QTableView::currentChanged(current, previous);
 
-    m_d->model->setData(previous, false, TimelineFramesModelBase::ActiveLayerRole);
-    m_d->model->setData(current, true, TimelineFramesModelBase::ActiveLayerRole);
+    m_d->model->setData(previous, false, TimelineFramesModel::ActiveLayerRole);
+    m_d->model->setData(current, true, TimelineFramesModel::ActiveLayerRole);
 
-    m_d->model->setData(previous, false, TimelineFramesModelBase::ActiveFrameRole);
-    m_d->model->setData(current, true, TimelineFramesModelBase::ActiveFrameRole);
+    m_d->model->setData(previous, false, TimelineFramesModel::ActiveFrameRole);
+    m_d->model->setData(current, true, TimelineFramesModel::ActiveFrameRole);
 }
 
 void FramesTableView::slotReselectCurrentIndex()
@@ -236,7 +236,7 @@ void FramesTableView::slotDataChanged(const QModelIndex &topLeft, const QModelIn
     for (int i = topLeft.row(); i <= bottomRight.row(); i++) {
         QVariant value = m_d->model->data(
             m_d->model->index(i, topLeft.column()),
-            TimelineFramesModelBase::ActiveLayerRole);
+            TimelineFramesModel::ActiveLayerRole);
 
         if (value.isValid() && value.toBool()) {
             selectedRow = i;
@@ -247,7 +247,7 @@ void FramesTableView::slotDataChanged(const QModelIndex &topLeft, const QModelIn
     for (int j = topLeft.column(); j <= bottomRight.column(); j++) {
         QVariant value = m_d->model->data(
             m_d->model->index(topLeft.row(), j),
-            TimelineFramesModelBase::ActiveFrameRole);
+            TimelineFramesModel::ActiveFrameRole);
 
         if (value.isValid() && value.toBool()) {
             selectedColumn = j;
@@ -320,12 +320,12 @@ void FramesTableView::mousePressEvent(QMouseEvent *event)
 
     if (index.isValid() &&
         event->button() == Qt::RightButton &&
-        m_d->model->data(index, TimelineFramesModelBase::FrameEditableRole).toBool()) {
+        m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
 
-        model()->setData(index, true, TimelineFramesModelBase::ActiveLayerRole);
-        model()->setData(index, true, TimelineFramesModelBase::ActiveFrameRole);
+        model()->setData(index, true, TimelineFramesModel::ActiveLayerRole);
+        model()->setData(index, true, TimelineFramesModel::ActiveFrameRole);
 
-        if (model()->data(index, TimelineFramesModelBase::FrameExistsRole).toBool()) {
+        if (model()->data(index, TimelineFramesModel::FrameExistsRole).toBool()) {
             m_d->frameEditingMenu->exec(event->globalPos());
         } else {
             m_d->frameCreationMenu->exec(event->globalPos());
@@ -342,12 +342,12 @@ void FramesTableView::slotUpdateLayersMenu()
 
     m_d->existingLayersMenu->clear();
 
-    QVariant value = model()->headerData(0, Qt::Vertical, TimelineFramesModelBase::OtherLayersRole);
+    QVariant value = model()->headerData(0, Qt::Vertical, TimelineFramesModel::OtherLayersRole);
     if (value.isValid()) {
-        TimelineFramesModelBase::OtherLayersList list = value.value<TimelineFramesModelBase::OtherLayersList>();
+        TimelineFramesModel::OtherLayersList list = value.value<TimelineFramesModel::OtherLayersList>();
 
         int i = 0;
-        foreach (const TimelineFramesModelBase::OtherLayer &l, list) {
+        foreach (const TimelineFramesModel::OtherLayer &l, list) {
             action = m_d->existingLayersMenu->addAction(l.name);
             action->setData(i++);
         }
@@ -401,7 +401,7 @@ void FramesTableView::slotNewFrame()
 {
     QModelIndex index = currentIndex();
     if (!index.isValid() ||
-        !m_d->model->data(index, TimelineFramesModelBase::FrameEditableRole).toBool()) {
+        !m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
 
         return;
     }
@@ -413,7 +413,7 @@ void FramesTableView::slotCopyFrame()
 {
     QModelIndex index = currentIndex();
     if (!index.isValid() ||
-        !m_d->model->data(index, TimelineFramesModelBase::FrameEditableRole).toBool()) {
+        !m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
 
         return;
     }
@@ -425,7 +425,7 @@ void FramesTableView::slotRemoveFrame()
 {
     QModelIndex index = currentIndex();
     if (!index.isValid() ||
-        !m_d->model->data(index, TimelineFramesModelBase::FrameEditableRole).toBool()) {
+        !m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
 
         return;
     }

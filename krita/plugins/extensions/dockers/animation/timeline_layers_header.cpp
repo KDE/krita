@@ -24,7 +24,7 @@
 #include <QHelpEvent>
 #include <QToolTip>
 
-#include "timeline_frames_model_base.h"
+#include "timeline_frames_model.h"
 
 struct TimelineLayersHeader::Private
 {
@@ -36,7 +36,7 @@ struct TimelineLayersHeader::Private
     QRect iconRect(int logicalIndex, int iconIndex) const;
     int iconAt(int logicalIndex, const QPoint &pt);
 
-    TimelineFramesModelBase::Property* getPropertyAt(TimelineFramesModelBase::PropertyList &props, int index);
+    TimelineFramesModel::Property* getPropertyAt(TimelineFramesModel::PropertyList &props, int index);
 };
 
 
@@ -51,8 +51,8 @@ TimelineLayersHeader::~TimelineLayersHeader()
 {
 }
 
-TimelineFramesModelBase::Property*
-TimelineLayersHeader::Private::getPropertyAt(TimelineFramesModelBase::PropertyList &props, int index)
+TimelineFramesModel::Property*
+TimelineLayersHeader::Private::getPropertyAt(TimelineFramesModel::PropertyList &props, int index)
 {
     int logical = 0;
     for (int i = 0; i < props.size(); i++) {
@@ -72,11 +72,11 @@ int TimelineLayersHeader::Private::numIcons(int logicalIndex) const
 {
     int result = 0;
 
-    QVariant value =  q->model()->headerData(logicalIndex, q->orientation(), TimelineFramesModelBase::TimelinePropertiesRole);
+    QVariant value =  q->model()->headerData(logicalIndex, q->orientation(), TimelineFramesModel::TimelinePropertiesRole);
     if (value.isValid()) {
-        TimelineFramesModelBase::PropertyList props = value.value<TimelineFramesModelBase::PropertyList>();
+        TimelineFramesModel::PropertyList props = value.value<TimelineFramesModel::PropertyList>();
 
-        foreach (const TimelineFramesModelBase::Property &p, props) {
+        foreach (const TimelineFramesModel::Property &p, props) {
             if (p.isMutable) {
                 result++;
             }
@@ -116,12 +116,12 @@ void TimelineLayersHeader::paintSection(QPainter *painter, const QRect &rect, in
     QHeaderView::paintSection(painter, rect, logicalIndex);
     painter->restore();
 
-    QVariant value =  model()->headerData(logicalIndex, orientation(), TimelineFramesModelBase::TimelinePropertiesRole);
-    TimelineFramesModelBase::PropertyList props = value.value<TimelineFramesModelBase::PropertyList>();
+    QVariant value =  model()->headerData(logicalIndex, orientation(), TimelineFramesModel::TimelinePropertiesRole);
+    TimelineFramesModel::PropertyList props = value.value<TimelineFramesModel::PropertyList>();
 
     const int numIcons = m_d->numIcons(logicalIndex);
     for (int i = 0; i < numIcons; i++) {
-        TimelineFramesModelBase::Property *p =
+        TimelineFramesModel::Property *p =
             m_d->getPropertyAt(props, i);
 
         const bool isActive = p->state.toBool();
@@ -163,10 +163,10 @@ bool TimelineLayersHeader::viewportEvent(QEvent *e)
             const int iconIndex = m_d->iconAt(logical, he->pos());
             if (iconIndex != -1) {
 
-                QVariant value =  model()->headerData(logical, orientation(), TimelineFramesModelBase::TimelinePropertiesRole);
-                TimelineFramesModelBase::PropertyList props = value.value<TimelineFramesModelBase::PropertyList>();
+                QVariant value =  model()->headerData(logical, orientation(), TimelineFramesModel::TimelinePropertiesRole);
+                TimelineFramesModel::PropertyList props = value.value<TimelineFramesModel::PropertyList>();
 
-                TimelineFramesModelBase::Property *p =
+                TimelineFramesModel::Property *p =
                     m_d->getPropertyAt(props, iconIndex);
 
                 QString text = QString("%1 (%2)")
@@ -193,10 +193,10 @@ void TimelineLayersHeader::mousePressEvent(QMouseEvent *e)
         const int iconIndex = m_d->iconAt(logical, e->pos());
         if (iconIndex != -1) {
 
-            QVariant value =  model()->headerData(logical, orientation(), TimelineFramesModelBase::TimelinePropertiesRole);
-            TimelineFramesModelBase::PropertyList props = value.value<TimelineFramesModelBase::PropertyList>();
+            QVariant value =  model()->headerData(logical, orientation(), TimelineFramesModel::TimelinePropertiesRole);
+            TimelineFramesModel::PropertyList props = value.value<TimelineFramesModel::PropertyList>();
 
-            TimelineFramesModelBase::Property *p =
+            TimelineFramesModel::Property *p =
                 m_d->getPropertyAt(props, iconIndex);
 
             bool currentState = p->state.toBool();
@@ -204,11 +204,11 @@ void TimelineLayersHeader::mousePressEvent(QMouseEvent *e)
 
             value.setValue(props);
 
-            model()->setHeaderData(logical, orientation(), value, TimelineFramesModelBase::TimelinePropertiesRole);
+            model()->setHeaderData(logical, orientation(), value, TimelineFramesModel::TimelinePropertiesRole);
             return;
 
         } else if (e->button() == Qt::RightButton) {
-            model()->setHeaderData(logical, orientation(), true, TimelineFramesModelBase::ActiveLayerRole);
+            model()->setHeaderData(logical, orientation(), true, TimelineFramesModel::ActiveLayerRole);
             emit sigRequestContextMenu(e->globalPos());
             return;
         }
@@ -219,7 +219,7 @@ void TimelineLayersHeader::mousePressEvent(QMouseEvent *e)
 
 void TimelineLayersHeader::slotActivateSection(int logicalIndex)
 {
-    model()->setHeaderData(logicalIndex, orientation(), true, TimelineFramesModelBase::ActiveLayerRole);
+    model()->setHeaderData(logicalIndex, orientation(), true, TimelineFramesModel::ActiveLayerRole);
 }
 
 

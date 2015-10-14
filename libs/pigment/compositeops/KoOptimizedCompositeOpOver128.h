@@ -73,7 +73,7 @@ struct OverCompositor128 {
         Vc::float_v src_c2;
         Vc::float_v src_c3;
 
-        const Vc::uint_v indexes(Vc::int_v::IndexesFromZero());
+        const Vc::float_v::IndexType indexes(Vc::IndexesFromZero);
         Vc::InterleavedMemoryWrapper<Pixel, Vc::float_v> data(const_cast<Pixel*>(sp));
         (src_c1, src_c2, src_c3, src_alpha) = data[indexes];
 

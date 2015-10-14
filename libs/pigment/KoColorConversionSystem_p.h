@@ -163,6 +163,11 @@ struct KoColorConversionSystem::Path {
         return (vertexes.first())->srcNode;
     }
 
+    bool operator==(const Path &other) {
+      return other.vertexes == vertexes;
+    }
+
+
     const Node* startNode() const {
         return (vertexes.first())->srcNode;
     }
@@ -173,6 +178,10 @@ struct KoColorConversionSystem::Path {
 
     const Node* endNode() const {
         return (vertexes.last())->dstNode;
+    }
+
+    bool isEmpty() const {
+        return vertexes.isEmpty();
     }
 
     void appendVertex(Vertex* v) {
@@ -227,13 +236,8 @@ struct KoColorConversionSystem::Path {
     int cost;
 };
 
-class Node2PathHash : public QHash<KoColorConversionSystem::Node*, KoColorConversionSystem::Path*>
-{
-public:
-    ~Node2PathHash() {
-        qDeleteAll(*this);
-    }
-};
+typedef QHash<KoColorConversionSystem::Node*, KoColorConversionSystem::Path > Node2PathHash;
+
 
 uint qHash(const KoColorConversionSystem::NodeKey &key)
 {
@@ -248,11 +252,11 @@ struct Q_DECL_HIDDEN KoColorConversionSystem::Private {
 };
 
 #define CHECK_ONE_AND_NOT_THE_OTHER(name) \
-    if(path1-> name && !path2-> name) \
+    if(path1. name && !path2. name) \
 { \
     return true; \
     } \
-    if(!path1-> name && path2-> name) \
+    if(!path1. name && path2. name) \
 { \
     return false; \
     }
@@ -266,17 +270,17 @@ struct PathQualityChecker {
     {}
 
     /// @return true if the path maximize all the criterions (except length)
-    inline bool isGoodPath(KoColorConversionSystem::Path* path) const {
+    inline bool isGoodPath(const KoColorConversionSystem::Path & path) const {
 
-        return (path->respectColorCorrectness || ignoreColorCorrectness) &&
-                (path->referenceDepth >= referenceDepth) &&
-                (path->keepDynamicRange || ignoreHdr);
+        return (path.respectColorCorrectness || ignoreColorCorrectness) &&
+                (path.referenceDepth >= referenceDepth) &&
+                (path.keepDynamicRange || ignoreHdr);
     }
 
     /**
      * Compare two paths.
      */
-    inline bool lessWorseThan(KoColorConversionSystem::Path* path1, KoColorConversionSystem::Path* path2) const {
+    inline bool lessWorseThan(KoColorConversionSystem::Path &path1, KoColorConversionSystem::Path &path2) const {
         // There is no point in comparing two paths which doesn't start from the same node or doesn't end at the same node
         if (!ignoreHdr) {
             CHECK_ONE_AND_NOT_THE_OTHER(keepDynamicRange)
@@ -284,10 +288,10 @@ struct PathQualityChecker {
         if (!ignoreColorCorrectness) {
             CHECK_ONE_AND_NOT_THE_OTHER(respectColorCorrectness)
         }
-        if (path1->referenceDepth == path2->referenceDepth) {
-            return path1->cost < path2->cost; // if they have the same cost, well anyway you have to choose one, and there is no point in keeping one and not the other
+        if (path1.referenceDepth == path2.referenceDepth) {
+            return path1.cost < path2.cost; // if they have the same cost, well anyway you have to choose one, and there is no point in keeping one and not the other
         }
-        return path1->referenceDepth > path2->referenceDepth;
+        return path1.referenceDepth > path2.referenceDepth;
     }
     int referenceDepth;
     bool ignoreHdr;

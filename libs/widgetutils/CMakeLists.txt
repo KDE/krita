@@ -61,12 +61,11 @@ if (HAVE_DBUS)
     )
 endif()
 
-set(kritawidgetutils_UI
+ki18n_wrap_ui(kritawidgetutils_LIB_SRCS 
     xmlgui/kshortcutsdialog.ui
     xmlgui/kshortcutwidget.ui
 )
 
-ki18n_wrap_ui(kritiwidgetutils_LIB_SRCS ${kritawidgetutils_UI})
 qt5_add_resources(kritiwidgetutils_LIB_SRCS xmlgui/kxmlgui.qrc)
 
 

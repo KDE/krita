@@ -228,7 +228,7 @@ find_package(Qt5 ${MIN_QT_VERSION} REQUIRED COMPONENTS
         DBus
 )
 
-set(HAVE_DBUS QT5DBus_FOUND)
+set(HAVE_DBUS Qt5DBus_FOUND)
 
 set(QT_QTTEST_LIBRARY Qt5::Test)
 

@@ -2,12 +2,14 @@
 Name=Animation Docker
 Name[nl]=Animatievastzetter
 Name[pt]=Área de Animação
+Name[sk]=Animačný panel
 Name[sv]=Animeringsdockningsfönster
 Name[uk]=Бічна панель анімації
 Name[x-test]=xxAnimation Dockerxx
 Comment=Docker for animating
 Comment[nl]=Vastzetten voor animatie
 Comment[pt]=Acoplador para execução de animações
+Comment[sk]=Panel pre animácie
 Comment[sv]=Dockningsfönster för animering
 Comment[uk]=Бічна панель для анімацій
 Comment[x-test]=xxDocker for animatingxx

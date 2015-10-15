@@ -1,0 +1,219 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="standard_containers" version="17" translationDomain="kxmlgui5">
+<MenuBar>
+  <MergeLocal name="first_menu"/>
+  <Menu name="file"><text>&amp;File</text>
+    <Action name="file_new"/>
+    <MergeLocal name="new_merge"/>
+    <Action name="file_open"/>
+    <Action name="file_open_recent"/>
+    <MergeLocal name="open_merge"/>
+    <Separator/>
+    <Action name="file_save"/>
+    <Action name="file_save_as"/>
+    <Action name="file_save_all"/>
+    <MergeLocal name="save_merge"/>
+    <Action name="file_revert"/>
+    <Action name="file_revert_all"/>
+    <MergeLocal name="revert_merge"/>
+    <Separator/>
+    <Action name="file_print"/>
+    <Action name="file_print_preview"/>
+    <MergeLocal name="print_merge"/>
+    <Action name="file_mail"/>
+    <MergeLocal name="mail_merge"/>
+    <Separator/>
+    <MergeLocal/>
+    <Separator/>
+    <Action name="file_close"/>
+    <Action name="file_close_all"/>
+    <MergeLocal name="close_merge"/>
+    <Separator/>
+    <Action name="file_quit"/>
+  </Menu>
+  <Menu name="game"><text>&amp;Game</text>
+    <Action name="game_new"/>
+    <Action name="game_load"/>
+    <Action name="game_load_recent"/>
+    <Action name="game_restart"/>
+    <MergeLocal name="new_merge"/>
+    <Separator/>
+    <Action name="game_save"/>
+    <Action name="game_save_as"/>
+    <MergeLocal name="save_merge"/>
+    <Separator/>
+    <Action name="game_end"/>
+    <MergeLocal name="end_merge"/>
+    <Separator/>
+    <Action name="game_pause"/>
+    <Action name="game_highscores"/>
+    <Action name="game_clear_highscores"/>
+    <Action name="game_statistics"/>
+    <Action name="game_clear_statistics"/>
+    <Action name="game_print"/>
+    <Action name="game_print_preview"/>
+    <MergeLocal name="misc_merge"/>
+    <Separator/>
+    <MergeLocal/>
+    <Separator/>
+    <Action name="game_quit"/>
+  </Menu>
+  <Menu name="edit"><text>&amp;Edit</text>
+    <Action name="edit_undo"/>
+    <Action name="edit_redo"/>
+    <MergeLocal name="edit_undo_merge"/>
+    <Separator/>
+    <Action name="edit_cut"/>
+    <Action name="edit_copy"/>
+    <Action name="edit_paste"/>
+    <MergeLocal name="edit_paste_merge"/>
+    <Action name="edit_clear"/>
+    <Separator/>
+    <Action name="edit_select_all"/>
+    <Action name="edit_deselect"/>
+    <MergeLocal name="edit_select_merge"/>
+    <Separator/>
+    <Action name="edit_find"/>
+    <Action name="edit_find_next"/>
+    <Action name="edit_find_prev"/>
+    <Action name="edit_replace"/>
+    <MergeLocal name="edit_find_merge"/>
+    <Separator/>
+    <MergeLocal/>
+  </Menu>
+  <Menu name="move"><text context="@title:menu Game move">&amp;Move</text>
+    <Action name="move_repeat"/>
+    <Action name="move_undo"/>
+    <Action name="move_redo"/>
+    <MergeLocal name="move_undo_merge"/>
+    <Separator/>
+    <Action name="move_roll"/>
+    <Action name="move_end_turn"/>
+    <MergeLocal name="move_turn_merge"/>
+    <Separator/>
+    <Action name="move_hint"/>
+    <Action name="move_demo"/>
+    <Action name="move_solve"/>
+    <MergeLocal name="move_solve_merge"/>
+    <Separator/>
+    <MergeLocal/>
+  </Menu>
+  <Menu name="view"><text>&amp;View</text>
+    <Action name="view_actual_size"/>
+    <Action name="view_fit_to_page"/>
+    <Action name="view_fit_to_width"/>
+    <Action name="view_fit_to_height"/>
+    <Separator/>
+    <MergeLocal name="view_zoom_merge"/>
+    <Action name="view_zoom_in"/>
+    <Action name="view_zoom_out"/>
+    <Action name="view_zoom"/>
+    <Separator/>
+    <Action name="view_redisplay"/>
+    <Separator/>
+    <MergeLocal/>
+  </Menu>
+  <MergeLocal name="before_go"/>
+  <Menu name="go"><text>&amp;Go</text>
+    <Action name="go_up"/>
+    <Action name="go_back"/>
+    <Action name="go_forward"/>
+    <Action name="go_home"/>
+    <Separator/>
+    <Action name="go_previous"/>
+    <Action name="go_next"/>
+    <Action name="go_goto_page"/>
+    <Action name="go_goto_line"/>
+    <Action name="go_goto"/>
+    <Separator/>
+    <Action name="go_first"/>
+    <Action name="go_last"/>
+    <Separator/>
+    <Action name="go_document_back"/>
+    <Action name="go_document_forward"/>
+    <Separator/>
+    <MergeLocal/>
+  </Menu>
+  <MergeLocal/>
+  <Menu name="bookmarks"><text>&amp;Bookmarks</text>
+    <Action name="bookmark_add"/>
+    <Action name="bookmark_edit"/>
+    <Separator/>
+    <MergeLocal/>
+  </Menu>
+  <Menu name="tools"><text>&amp;Tools</text>
+    <Action name="tools_spelling"/>
+    <MergeLocal/>
+  </Menu>
+  <Menu name="settings"><text>&amp;Settings</text>
+    <MergeLocal/>
+    <Separator/>
+    <Action name="options_show_menubar"/>
+    <Action name="options_show_toolbar"/>
+    <Merge name="StandardToolBarMenuHandler" />
+    <Merge name="KMDIViewActions"/>
+    <MergeLocal name="show_toolbar_merge"/>
+    <Action name="options_show_statusbar"/>
+    <MergeLocal name="show_merge"/>
+    <Separator/>
+    <Action name="fullscreen"/>
+    <MergeLocal name="fullscreen_merge"/>
+    <Separator/>
+    <Action name="options_save_options"/>
+    <Action name="options_choose_game_type"/>
+    <Action name="options_game_difficulty"/>
+    <MergeLocal name="save_merge"/>
+    <Separator/>
+    <Action name="options_configure_keybinding"/>
+    <Action name="options_configure_toolbars"/>
+    <Action name="options_configure_notifications"/>
+    <Action name="options_configure_carddecks"/>
+    <Action name="options_configure_highscores"/>
+    <MergeLocal name="configure_merge"/>
+    <Action name="options_configure"/>
+  </Menu>
+  <MergeLocal name="settings_merge"/>
+  <Separator/>
+  <Menu name="help"><text>&amp;Help</text>
+    <Action name="help_contents"/>
+    <Action name="help_whats_this"/>
+    <MergeLocal name="help_whats_this_merge"/>
+    <Separator/>
+    <MergeLocal/>
+    <Action name="help_show_tip"/>
+    <Separator/>
+    <Action name="help_report_bug"/>
+    <Separator/>
+    <Action name="switch_application_language"/>
+    <Separator/>
+    <MergeLocal name="about_merge"/>
+    <Action name="help_about_app"/>
+    <Action name="help_about_kde"/>
+  </Menu>
+</MenuBar>
+<ToolBar name="mainToolBar"><text>Main Toolbar</text>
+  <Action name="file_new"/>
+  <Action name="file_open"/>
+  <Action name="file_save"/>
+  <Action name="file_print"/>
+  <Action name="file_print_preview"/>
+  <Action name="file_mail"/>
+  <Separator/>
+  <Action name="edit_undo"/>
+  <Action name="edit_redo"/>
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <Separator/>
+  <Action name="edit_find"/>
+  <Action name="view_zoom"/>
+  <Separator/>
+  <Action name="go_previous"/>
+  <Action name="go_next"/>
+  <Action name="go_home"/>
+  <Separator/>
+  <MergeLocal/>
+  <Action name="help"/>
+</ToolBar>
+<StatusBar/>
+</kpartgui>

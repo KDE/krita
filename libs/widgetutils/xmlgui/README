@@ -1,0 +1,64 @@
+# Overall summary of global shortcut implementation
+
+## KAction, KGlobalAccel and KdedGlobalAccel
+
+[Basic functionality]
+- You call KAction::setGlobalShortcut() to set a shortcut for an action. 
+KAction then calls KGlobalAccel which is, among other things, the interface 
+to KdedGlobalAccel (communication via DBus). KdedGlobalAccel is a KDED module 
+as you might have guessed.
+- KdedGlobalAccel then grabs the shortcut key in a platform-specific way and 
+makes an entry of the mapping key<->action where actions are identified by 
+their main component name and their own name.
+- When a key grab triggers, KdedGlobalAccel calls (via DBus) KGlobalAccel 
+which tells the action to trigger.
+
+The KdedGlobalAccel is responsible for actually handling the shortcuts,
+loading and saving the shortcut keys to kglobalshortcutrc. It doesn't
+really know the actions, it just know what KGlobalAccel gave it.
+
+[Conflict resolution]
+KdedGlobalAccel has a list of all global shortcuts. If you try to assign a key 
+twice, it will tell the appropriate KdedGlobalAccel/KGlobalAccel that the 
+corresponding shortcut was changed to an empty one, which goes back to the 
+KAction.
+When manually assigning shortcuts, the config widget asks 
+KGlobalAccel/KdedGlobalAccel for conflicts and presents options to the user 
+to fix them.
+To prevent all clashes as good as possible, KdedGlobalAccel remembers key<-> 
+action mappings even after the corresponding application shuts down.
+
+[More details]
+KAction instances talk to the KGlobalAccel singleton to make it aware of global
+shortcuts changes via KGlobalAccel::updateGlobalShortcuts() (to define the shortcut)
+KGlobalAccel::updateGlobalShortcutsAllowed() (to enable/disable the shortcut)
+
+These two methods do the following:
+- Create an action "id" which is a QStringList of two items: the application
+component and the action text (this is bound to cause trouble with i18n)
+
+- Convert the KAction shortcuts to a QList<int>
+
+- Pass all this via DBus to the KdedGlobalAccel instance, which lives in the
+kded4 process.
+
+KGlobalAccel::updateGlobalShortcutsAllowed(true) sets the "SetPresent" flag when calling
+kglobalaccel, which makes kglobalaccel actually grab the key shortcut
+(so that the grab is done after the action has been defined, and only if it is enabled).
+kglobalaccel must know about inactive global shortcuts too (e.g. those defined in
+applications not running at the moment), for conflict resolution.
+
+## kdebase side: keyboard shortcuts KCM
+
+The keyboard shortcuts KCM can be found in kdebase/workspace/kcontrol/keys/
+
+The KCM gets the global shortcut info from the KdedGlobalAccel instance via
+DBus. It uses KShortcutsEditor to let the user edit the shortcuts. Since
+KShortcutsEditor manipulates KAction instances, the kcm creates "fake" actions.
+
+--
+
+Aurélien Gâteau, 2008.02.01
+aurelien.gateau@free.fr
+David Faure, 2008.02.05
+faure@kde.org

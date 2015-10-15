@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--  kxmlgui XSD v1.0 -->
+<xsd:schema
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://www.kde.org/standards/kxmlgui/1.0"
+	targetNamespace="http://www.kde.org/standards/kxmlgui/1.0"
+	version="1.0"
+	elementFormDefault="qualified" >
+    
+    <xsd:annotation>
+        <xsd:documentation>
+            * Originally Copyright        (c) 2000 Federico David Sacerdoti &gt;tech@slinuxmachines.com&lt;
+            * Modifications/Extensions    Simon Hausmann &gt;hausmann@kde.org&lt;
+            * Minor updates               Richard J. Moore &gt;rich@kde.org&lt;
+            * Conversion to XSD           (c) 2004 Frans Englich &lt;frans.englich@telia.com&gt;
+            
+            Permission to use, copy, modify and distribute this XSD
+            and its accompanying documentation for any purpose and without fee
+            is hereby granted in perpetuity, provided that the above copyright
+            notice and this paragraph appear in all copies.  The copyright
+            holders make no representation about the suitability of the XSD for
+            any purpose. It is provided "as is" without expressed or implied
+            warranty.
+            
+        </xsd:documentation>
+    </xsd:annotation>
+    <xsd:annotation>
+        <xsd:documentation>
+            
+            This is the XML Schema for KDE's XMLGUI framework, a way of describing a 
+	    application's Graphical User Interface in an XML file.
+            
+            A document of this Schema should have a declaration
+            looking like this:
+            
+            <![CDATA[
+
+		<?xml version="1.0" encoding="UTF-8" ?>
+		<gui name=""
+		     version=""
+		     xmlns="http://www.kde.org/standards/kxmlgui/1.0"
+		     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		     xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0
+		                         http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd" >
+		<!-- the content -->
+		</gui>
+
+	    ]]>
+
+	    Where the name and version tag is of your taste.
+            
+        </xsd:documentation>
+    </xsd:annotation>
+    
+    <xsd:simpleType name="identifier">
+        <xsd:annotation>
+            <xsd:documentation>
+                
+                The name used for every name and group attribute. Maps to QObject::name() in most cases. 
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:Name">
+	<!-- TODO Restrict harder, perhaps? -->
+	</xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:element name="Separator">
+        <xsd:annotation>
+            <xsd:documentation>
+                
+                Inserts a separator item into a menubar or toolbar.
+                
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:attribute name="lineSeparator" default="true" type="xsd:boolean"/>
+            <xsd:attribute name="weakSeparator" default="true" type="xsd:boolean"/>
+            <xsd:attribute name="group" type="identifier"/>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="Merge">
+        <xsd:complexType>
+            <xsd:attribute name="name" type="identifier" use="optional" />
+        </xsd:complexType>
+	<!-- Merge, MergeLocal and other more exotic elements are everywhere. Cannot more than one(etc.) occur in the various places, such as Menu? Needs fixing then - better restriction on how many of those elements that can appear where. -->
+    </xsd:element>
+    
+    <xsd:element name="MergeLocal">
+        <xsd:annotation>
+            <xsd:documentation>
+                
+                Specifies an entry index for merging application defined actions into
+                those with positions fixed by the style guide and ui_standards.rc. This
+                tag should not be used anywhere except ui_standards.rc.
+                
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:attribute name="name" type="identifier" use="optional" />
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="DefineGroup">
+        <xsd:annotation>
+            <xsd:documentation>
+                
+                Specifies a entry index for merging, similar to the Merge tag, but with a
+                global scope and accessible via the group attribute of other tags.
+                
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:attribute name="name" type="identifier" />
+        </xsd:complexType>
+	<!-- TODO: Needs to be checked if it is allowed proper amounts of times, in those places it's used. -->
+    </xsd:element>
+    
+    <xsd:complexType name="caption">
+        <xsd:simpleContent>
+            <xsd:annotation>
+                <xsd:documentation>
+                    
+                    The user visible string shown as titles.
+                    
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute name="translationDomain" type="identifier" use="optional" />
+                <xsd:attribute name="context" type="xsd:string" use="optional" />
+            </xsd:extension>
+        </xsd:simpleContent>
+        
+        
+    </xsd:complexType>
+    
+    <xsd:element name="Action" >
+        <xsd:complexType >
+            <xsd:annotation>
+                <xsd:documentation>
+                    
+                    Defines both Standard and app-specific actions. An action can appear
+                    in a menu, a toolbar or in a menubar.  
+                    Attributes: 
+                    - name of the action: this is matched with the KAction name.
+                    - group: this is used to control the placement of the action when
+                    merging e.g. a part, it matches the name of a DefineGroup in the
+                    mainwindow's rc file.
+                    - append: this is used to control the placement of the action during
+                    the merging with ui_standards.rc. This is mapped to MergeLocal tags
+                    there.  Note that this feature is currently only available for the
+                    mainwindow, not for parts/plugins.  
+                    - text, whatsThis, toolTip, iconText, shortcut, icon, priority: all those are
+                    mapped to KAction properties.
+                    
+                    
+                </xsd:documentation>
+            </xsd:annotation>
+            
+            <xsd:attribute name="name" type="identifier"/>
+            <xsd:attribute name="group" type="identifier" use="optional" />
+            <xsd:attribute name="append" type="identifier" use="optional" />
+            <xsd:attribute name="text" type="xsd:string" use="optional"/>
+            <xsd:attribute name="whatsThis" type="xsd:string" use="optional"/>
+            <xsd:attribute name="toolTip" type="xsd:string" use="optional"/>
+            <xsd:attribute name="iconText" type="xsd:string" use="optional"/>
+            <xsd:attribute name="shortcut" type="xsd:string" use="optional">
+                <!-- TODO: Restrict the possible values with enumeration, or regexp -->
+            </xsd:attribute>
+            <xsd:attribute name="icon" type="xsd:string" use="optional" />
+            <xsd:attribute name="priority" use="optional">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:nonNegativeInteger">
+                        <xsd:enumeration value="0" />
+                        <xsd:enumeration value="128" />
+                        <xsd:enumeration value="256" />
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="ActionList">
+        <xsd:annotation>
+            <xsd:documentation>
+                
+                Specifies a dynamic list of actions, each of which can be changed by
+                plugging/unplugging it
+                
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:attribute name="name" type="identifier"/>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:complexType name="state">
+        <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" ref="Action"/>
+        </xsd:sequence>
+        <xsd:attribute name="name" type="identifier" />
+    </xsd:complexType>
+
+    <xsd:element name="Menu">
+        <xsd:complexType>
+            <xsd:annotation>
+                <xsd:documentation>
+                    
+                    A Menu such as the &quot;File&quot; or &quot;Edit&quot; menu. Can be used to define popup
+                    menus as well.
+                    
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:choice maxOccurs="unbounded" >
+                <!-- TODO: What's the difference between text and title? Which one(s) are required? The whole Menu is a mess. Fix maxOccurs, minOccurs for all of them.  -->
+                <xsd:element minOccurs="0" name="text" type="caption" />
+                <xsd:element minOccurs="0" name="title" type="caption" />
+
+                <xsd:element ref="Action" maxOccurs="unbounded" />
+                <xsd:element ref="ActionList" maxOccurs="unbounded" />
+
+                <xsd:element minOccurs="0" maxOccurs="unbounded" name="TearOffHandle">
+                    <xsd:complexType>
+                        <xsd:attribute name="group" type="identifier"/>
+                    </xsd:complexType>
+                </xsd:element>
+
+                <xsd:element minOccurs="0" maxOccurs="unbounded" name="DefineGroup">
+                    <xsd:complexType>
+                        <xsd:attribute name="name" type="identifier"/>
+                    </xsd:complexType>
+                </xsd:element>
+                <xsd:element minOccurs="0" maxOccurs="unbounded" name="MergeLocal">
+                    <xsd:complexType>
+                        <xsd:attribute name="name" type="identifier" use="optional" />
+                    </xsd:complexType>
+                </xsd:element>
+                <xsd:element minOccurs="0" maxOccurs="unbounded" ref="Separator" />
+                <xsd:element minOccurs="0" maxOccurs="unbounded" ref="Menu" />
+                <xsd:element minOccurs="0" maxOccurs="unbounded" name="Merge" />
+                
+            </xsd:choice>
+            <xsd:attribute name="name" type="identifier"/>
+            <xsd:attribute name="append" type="identifier" use="optional" />
+            <xsd:attribute name="group" type="identifier" use="optional" />
+            <xsd:attribute name="icon" type="xsd:string" use="optional" />
+            <!-- noMerge: if true, the standard menu layout from ui_standards.rc won't be used. -->
+            <xsd:attribute name="noMerge" type="xsd:boolean" use="optional" />
+            <!-- deleted: if true, the menu will not be created, even if ui_standards.rc mentions it -->
+            <xsd:attribute name="deleted" type="xsd:boolean" use="optional" />
+        </xsd:complexType>
+    </xsd:element>
+    
+    
+    <xsd:element name="gui">
+        <xsd:annotation>
+            <xsd:documentation>
+                
+                The root element that must enclose all other tags in the document. This
+                element replaces the kpartgui element used previously.  
+                Note: do not forget to increase the version attribute for each change in
+                your file, otherwise the changes will not be taken into account.
+                
+                
+            </xsd:documentation>
+        </xsd:annotation>
+	
+        <xsd:complexType>
+            <xsd:sequence>
+
+		<!-- Menu is allowed in gui, for popup menus. TODO: Probably different complexTypes be used for popup menus and regular menus, if it's possible to separate the two. Perhaps a popupMenu element in gui could be allowed, which is no where else. -->
+		<xsd:element ref="Menu" maxOccurs="unbounded" minOccurs="0"/>
+                <xsd:element name="MenuBar">
+                    <xsd:complexType>
+                        
+                        <xsd:sequence>
+                            <xsd:element ref="Menu" minOccurs="0" maxOccurs="unbounded"/>
+                            <xsd:element ref="Separator" minOccurs="0" maxOccurs="1" />
+                            <xsd:element ref="Action" minOccurs="0" maxOccurs="unbounded" />
+                            <xsd:element ref="ActionList" minOccurs="0" maxOccurs="unbounded" />
+                            <xsd:element ref="Merge" minOccurs="0" maxOccurs="unbounded"/>
+                            <xsd:element ref="MergeLocal" minOccurs="0" maxOccurs="unbounded"/>
+                            <xsd:element ref="DefineGroup" minOccurs="0" maxOccurs="unbounded"/>
+                            <!-- TODO: 
+			        - Why is ActionList and Action in MenuBar? 
+				- Check that min/maxOccurs is correct 
+			    -->
+                        </xsd:sequence>
+                        
+                        <xsd:attribute name="name" type="identifier" use="optional" />
+                        <xsd:attribute name="group" type="identifier" use="optional" />
+                    </xsd:complexType>
+                </xsd:element>
+                
+                
+                <xsd:element name="ToolBar" minOccurs="0" maxOccurs="unbounded" >
+                    <xsd:annotation>
+                        <xsd:documentation>
+                            
+                            A tool bar. Attributes: 
+
+                            - name: a unique name for the toolbar, use mainToolBar for
+                                    the main one
+
+                            - position: the position of the toolbar in the window 
+                            - iconText: whether to show icon or text or both 
+                            - iconSize: the size of the icons (0 for default, or usually
+                                        22 or 32) 
+
+                            - index: the index in the toolbar dock (see
+                                     QMainWindow::moveToolBar) 
+
+                            - offset: the X offset in the toolbar dock (see
+                                     QMainWindow::moveToolBar) 
+
+                            TODO: Those APIs are obsolete, are the attribute too?
+
+                            - newline: if true, this toolbar will start a new line (i.e.
+                                     under the ones before it).  
+
+                            - group: optional group name, for named merging (?) 
+
+                            - hidden: if true, the toolbar is initially hidden. There
+                                     should be a menu entry for showing it.  
+
+                            - noEdit: if true, the toolbar won't appear in the toolbar
+                                     editor
+                            
+                        </xsd:documentation>
+                    </xsd:annotation>
+                    <xsd:complexType>
+                        <xsd:choice maxOccurs="unbounded" >
+                            <xsd:element name="text" type="caption" />
+                            <xsd:element ref="Action" minOccurs="0" maxOccurs="unbounded" />
+			    <!-- Should 0 ActionS really be allowed? konqueror.rc does it.. -->
+                            <xsd:element ref="Separator" minOccurs="0" maxOccurs="unbounded" />
+                            <xsd:element ref="ActionList" minOccurs="0" maxOccurs="unbounded" />
+                            <xsd:element ref="Merge" minOccurs="0" />
+                            <xsd:element ref="MergeLocal" minOccurs="0" />
+                            <xsd:element ref="DefineGroup" minOccurs="0" />
+                        </xsd:choice>
+                        
+                        <xsd:attribute name="name" type="identifier" />
+                        <xsd:attribute name="position" use="optional" >
+                            <xsd:simpleType>
+                                <xsd:restriction base="xsd:string">
+                                    <xsd:enumeration value="top" />
+                                    <xsd:enumeration value="bottom" />
+                                    <xsd:enumeration value="left" />
+                                    <xsd:enumeration value="right" />
+                                </xsd:restriction>
+                            </xsd:simpleType>
+                        </xsd:attribute>
+                        <xsd:attribute name="iconText" use="optional" >
+                            <xsd:simpleType>
+                                <xsd:restriction base="xsd:string">
+                                    <xsd:enumeration value="icontextright" />
+                                    <xsd:enumeration value="icontextbottom" />
+                                    <xsd:enumeration value="textonly" />
+                                    <xsd:enumeration value="icononly" />
+                                </xsd:restriction>
+                            </xsd:simpleType>
+                        </xsd:attribute>
+                        <xsd:attribute name="iconSize" use="optional" >
+                            <xsd:simpleType>
+                                <xsd:restriction base="xsd:nonNegativeInteger">
+                                    <!-- TODO: This restriction is correct, right? -->
+                                    <xsd:enumeration value="0" /><!-- Implies default -->
+                                    <xsd:enumeration value="16" />
+                                    <xsd:enumeration value="22" />
+                                    <xsd:enumeration value="32" />
+                                    <xsd:enumeration value="48" />
+                                    <xsd:enumeration value="64" />
+                                    <xsd:enumeration value="128" />
+                                </xsd:restriction>
+                            </xsd:simpleType>
+                        </xsd:attribute>
+                        
+                        <!-- TODO: Since these are positiveInteger, and not nonNegativeInteger, they can't be 0 -->
+                        <xsd:attribute name="index" use="optional" type="xsd:positiveInteger"/>
+                        <xsd:attribute name="offset" use="optional" type="xsd:positiveInteger"/>
+                        <xsd:attribute name="newline" use="optional" default="false" type="xsd:boolean" />
+                        <xsd:attribute name="hidden" use="optional" default="false" type="xsd:boolean"/>
+                        <xsd:attribute name="noEdit" use="optional" default="false" type="xsd:boolean"/>
+                        <!-- noMerge: if true, the standard toolbar layout from ui_standards.rc won't be used. -->
+                        <xsd:attribute name="noMerge" type="xsd:boolean" use="optional" />
+                        <!-- deleted: if true, the toolbar will not be created, even if ui_standards.rc mentions it -->
+                        <xsd:attribute name="deleted" type="xsd:boolean" use="optional" />
+                    </xsd:complexType>
+                </xsd:element>
+                <xsd:element minOccurs="0" maxOccurs="unbounded" name="State">
+		<!-- Where should this be? -->
+                    <xsd:annotation>
+                        <xsd:documentation>
+                            
+                            Defines a GUI state, esp. which actions to enable and which
+                            ones to disable on entering this state (see
+                            KXMLGUIClient::stateChanged()).
+                            
+                            Actions listed in &quot;disable&quot; are disabled, and vice
+                            versa for &quot;enable&quot;.
+                            
+                        </xsd:documentation>
+                    </xsd:annotation>
+                    <xsd:complexType>
+                        <xsd:choice>
+			<!-- ( enable, disable? ) | ( disable, enable? ) -->
+                            <xsd:sequence>
+                                <xsd:element name="enable" type="state" />
+                                <xsd:element minOccurs="0" name="disable" type="state" />
+                            </xsd:sequence>
+                            <xsd:sequence>
+                                <xsd:element  name="disable" type="state" />
+                                <xsd:element minOccurs="0" name="enable" type="state" />
+                            </xsd:sequence>
+                        </xsd:choice>
+                        <xsd:attribute name="name" type="identifier"/>
+                    </xsd:complexType>
+                </xsd:element>
+                
+                <xsd:element name="ActionProperties" minOccurs="0" >
+                    <xsd:annotation>
+                        <xsd:documentation>
+                            
+                            Allows standard actions to be customized.
+                            
+                        </xsd:documentation>
+                    </xsd:annotation>
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="Action" maxOccurs="unbounded" />
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+                
+            </xsd:sequence>
+
+            <!-- Not used nor referenced. Yet.
+	    <xsd:element name="MainWindow"/>
+	    <xsd:element name="StatusBar" />
+	    -->
+            
+            <xsd:attribute name="name" type="identifier"/>
+            <xsd:attribute name="version" type="xsd:positiveInteger" />
+            <xsd:attribute name="library" type="identifier" use="optional" />
+            <xsd:attribute name="translationDomain" type="identifier" use="optional" />
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>
+

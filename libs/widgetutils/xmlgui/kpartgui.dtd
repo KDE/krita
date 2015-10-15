@@ -1,0 +1,192 @@
+<!-- Originally Copyright (c) 2000 Federico David Sacerdoti <tech@slinuxmachines.com>
+     Modifications/Extensions by Simon Hausmann <hausmann@kde.org>
+     Minor updates by Richard J. Moore <rich@kde.org>
+
+  This DTD module is identified by the PUBLIC and SYSTEM
+  identifiers:
+  PUBLIC  "-//KDE Project//KPartGUI DTD//EN"
+  SYSTEM "kpartgui.dtd"
+
+  This DTD should be included at the head of an xmlguibuilder XML file like this:
+  <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+-->
+
+<!--The root element that must enclose all other tags in the document. This element
+  replaces the kpartgui element used previously.
+  
+  NOTE: do not forget to increase the version attribute for each change in
+  your file or the changes will not be taken!!
+  -->
+<!ELEMENT gui ((ActionProperties | MenuBar | ToolBar | Merge | MergeLocal | DefineGroup | MainWindow | StatusBar | Menu | State)*)>
+<!ATTLIST gui
+  name CDATA #REQUIRED
+  version CDATA #REQUIRED
+  library CDATA #IMPLIED
+  translationDomain CDATA #IMPLIED
+>
+
+<!-- DEPRECATED: The old root element that must enclose all other tags in the document. -->
+<!ELEMENT kpartgui ((ActionProperties | MenuBar | ToolBar | Merge | MergeLocal | DefineGroup | MainWindow | StatusBar | Menu | State)*)>
+<!ATTLIST kpartgui
+  name CDATA #REQUIRED
+  version CDATA #REQUIRED
+  library CDATA #IMPLIED
+  translationDomain CDATA #IMPLIED
+>
+
+<!-- Allows standard actions to be customized -->
+<!ELEMENT ActionProperties (Action+)>
+
+<!-- A menu bar -->
+<!ELEMENT MenuBar ((Menu | Separator | Action | ActionList | Merge | MergeLocal | DefineGroup )*)>
+<!ATTLIST MenuBar
+  name CDATA #IMPLIED
+  group CDATA #IMPLIED
+>
+
+<!-- A tool bar
+  - Attributes: name: a unique name for the toolbar, use mainToolBar for the main one
+  -             position: the position of the toolbar in the window (only effective if the user
+                          has never used the application before)
+  -             iconText: whether to show icon or text or both
+  -             iconSize: the size of the icons (0 for default, or usually 22 or 32)
+  -             index: the index in the toolbar dock (see QMainWindow::moveToolBar; starts at 0)
+  -             offset: the X offset in the toolbar dock (see QMainWindow::moveToolBar)
+  -             newline: if true, this toolbar will start a new line (i.e. under the ones before it).
+  -             group: optional group name, for named merging (?)
+  -             hidden: if true, the toolbar is initially hidden. There should be a menu entry for showing it.
+  -             noEdit: if true, the toolbar won't appear in the toolbar editor
+  -             noMerge: if true, the standard toolbar layout from ui_standards.rc won't be used.
+  -             deleted: if true, the toolbar will not be created, even if ui_standards.rc mentions it
+  -->
+<!ELEMENT ToolBar (text?, (Action | Separator | ActionList | Merge | MergeLocal | DefineGroup)*)>
+<!ATTLIST ToolBar
+  name CDATA #REQUIRED
+  position (top|bottom|left|right) "top"
+  iconText (icononly|textonly|icontextright|icontextbottom) #IMPLIED
+  iconSize CDATA #IMPLIED
+  index CDATA #IMPLIED
+  offset CDATA #IMPLIED
+  newline (true|false) "false"
+  group CDATA #IMPLIED
+  hidden (true|false) "false"
+  noEdit (true|false) "false"
+  noMerge (0|1) "0"
+  deleted (true|false) "false"
+>
+
+<!-- A Menu such as the "File" or "Edit" menu. Can be used to define popup menus as well.
+  -             noMerge: if true, the standard menu layout from ui_standards.rc won't be used.
+  -             deleted: if true, the menu will not be created, even if ui_standards.rc mentions it
+-->
+<!ELEMENT Menu (text?, (title | Action | ActionList | Separator | TearOffHandle | Merge | MergeLocal | DefineGroup | Menu )*)>
+<!ATTLIST Menu
+  append CDATA #IMPLIED
+  name CDATA #REQUIRED
+  group CDATA #IMPLIED
+  icon CDATA #IMPLIED
+  noMerge (0|1) "0"
+  deleted (true|false) "false"
+>
+
+<!-- Defines both Standard and app-specific actions. An action can appear in a menu, a toolbar or in a
+     menubar.
+     Attributes:
+     - name of the action: this is matched with the KAction name.
+     - group: this is used to control the placement of the action when merging 
+              e.g. a part, it matches the name of a DefineGroup in the mainwindow's rc file.
+     - append: this is used to control the placement of the action during the
+               merging with ui_standards.rc. This is mapped to MergeLocal tags there.
+               Note that this feature is currently only available for the mainwindow, not for parts/plugins.
+     - text, whatsThis, toolTip, iconText, shortcut, icon, priority: all those are mapped
+       to KAction properties.
+ -->
+<!ELEMENT Action EMPTY>
+<!-- We defined only a few standard KAction properties here. Theoritically we can have
+     any property here -->
+<!ATTLIST Action
+  name CDATA #REQUIRED
+  group CDATA #IMPLIED
+  append CDATA #IMPLIED
+  text CDATA #IMPLIED
+  whatsThis CDATA #IMPLIED
+  toolTip CDATA #IMPLIED
+  iconText CDATA #IMPLIED
+  shortcut CDATA #IMPLIED
+  icon CDATA #IMPLIED
+  priority CDATA #IMPLIED
+>
+
+<!-- Inserts a separator item into a menubar or toolbar -->
+<!ELEMENT Separator EMPTY>
+<!ATTLIST Separator
+  lineSeparator (true|false) "true"
+  weakSeparator (true|false) "true"
+  group CDATA #IMPLIED
+>
+
+<!-- Inserts a tear-off handle into a menu -->
+<!ELEMENT TearOffHandle EMPTY>
+<!ATTLIST TearOffHandle
+  group CDATA #IMPLIED
+>
+
+<!-- Used to insert titles, only for popup menus -->
+<!ELEMENT title (#PCDATA)>
+<!ATTLIST title
+  translationDomain CDATA #IMPLIED
+  icon CDATA #IMPLIED
+>
+
+<!-- Used to name a menu, the first letter in is generally preceded by an '&' to specify
+  the menu's shortcut key -->
+<!ELEMENT text (#PCDATA)>
+<!ATTLIST text
+  translationDomain CDATA #IMPLIED
+  context CDATA #IMPLIED
+>
+
+<!-- Specifies a dynamic list of actions, each of which can be changed by plugging/unplugging it -->
+<!ELEMENT ActionList EMPTY>
+<!ATTLIST ActionList
+  name CDATA #REQUIRED
+>
+
+<!-- Not explicitly defined or in widely used yet. -->
+<!ELEMENT MainWindow (ANY)>
+
+<!-- Not explicitly defined or in widely used yet. -->
+<!ELEMENT StatusBar (ANY)>
+
+<!-- Specifies the entry index for merging in a gui client -->
+<!ELEMENT Merge EMPTY>
+<!ATTLIST Merge
+  name CDATA #IMPLIED
+>
+
+<!-- Specifies an entry index for merging application defined actions into
+     those with positions fixed by the style guide and ui_standards.rc. This
+     tag should not be used anywhere except ui_standards.rc. -->
+<!ELEMENT MergeLocal EMPTY>
+<!ATTLIST MergeLocal
+  name CDATA #IMPLIED
+>
+
+<!-- Specifies a entry index for merging, similar to the Merge tag, but with a global scope and
+     accessible via the group attribute of other tags -->
+<!ELEMENT DefineGroup EMPTY>
+<!ATTLIST DefineGroup
+  name CDATA #REQUIRED
+>
+
+<!-- Defines a GUI state, esp. which actions to enable and which ones to -->
+<!-- disable on entering this state (see KXMLGUIClient::stateChanged())  -->
+<!ELEMENT State ( (enable, disable?) | disable )>
+<!ATTLIST State
+  name CDATA #REQUIRED
+>
+
+<!-- used in State to collect actions to be enabled and disabled, resp., -->
+<!-- on entering the state -->
+<!ELEMENT enable (Action+)>
+<!ELEMENT disable (Action+)>

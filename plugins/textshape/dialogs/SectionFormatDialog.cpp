@@ -26,7 +26,7 @@
 
 #include <QIdentityProxyModel>
 #include <QToolTip>
-#include <KColorScheme>
+#include <kcolorscheme.h>
 #include <klocalizedstring.h>
 
 class SectionFormatDialog::ProxyModel : public QIdentityProxyModel

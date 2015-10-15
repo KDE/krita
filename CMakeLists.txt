@@ -205,7 +205,7 @@ find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
         ItemModels 
         ItemViews
         WidgetsAddons 
-        XmlGui 
+        WindowSystem
     OPTIONAL_COMPONENTS
         KIO
 )
@@ -230,6 +230,7 @@ find_package(Qt5 ${MIN_QT_VERSION} REQUIRED COMPONENTS
         DBus
 )
 
+set(HAVE_DBUS QT5DBus_FOUND)
 set(QT_QTQUICK_FOUND ${Qt5Quick_FOUND})
 
 set(QT_QTTEST_LIBRARY Qt5::Test)
@@ -540,7 +541,11 @@ include_directories(${KOVERSION_INCLUDES})
 set(KOPLUGIN_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koplugin)
 
 set(KUNDO2_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kundo2
-                    ${CMAKE_BINARY_DIR}/libs/kundo2)
+                    ${CMAKE_BINARY_DIR}/libs/kundo2
+                    ${CMAKE_SOURCE_DIR}/libs/widgetutils
+                    ${CMAKE_SOURCE_DIR}/libs/widgetutils/config
+                    ${CMAKE_SOURCE_DIR}/libs/widgetutils/xmlgui
+)
 
 # koodf is at the bottom of the stack
 set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf
@@ -566,8 +571,6 @@ set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake
                    ${KOODF_INCLUDES}
                    ${PIGMENT_INCLUDES}
                    ${KUNDO2_INCLUDES}
-                   ${CMAKE_SOURCE_DIR}/libs/widgetutils
-                   ${CMAKE_SOURCE_DIR}/libs/widgetutils/config
                    ${CMAKE_SOURCE_DIR}/libs/flake/commands
                    ${CMAKE_SOURCE_DIR}/libs/flake/tools
                    ${CMAKE_SOURCE_DIR}/libs/flake/svg

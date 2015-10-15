@@ -1,0 +1,79 @@
+<ui version="4.0" >
+ <class>KShortcutsDialog</class>
+ <widget class="QWidget" name="KShortcutsDialog" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>761</width>
+    <height>549</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout" >
+   <item>
+    <widget class="KTreeWidgetSearchLineWidget" name="searchFilter" >
+     <property name="whatsThis" >
+      <string>Search interactively for shortcut names (e.g. Copy) or combination of keys (e.g. Ctrl+C) by typing them here.</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTreeWidget" name="list" >
+     <property name="whatsThis" >
+      <string>Here you can see a list of key bindings, i.e. associations between actions (e.g. 'Copy') shown in the left column and keys or combination of keys (e.g. Ctrl+V) shown in the right column.</string>
+     </property>
+     <property name="rootIsDecorated" >
+      <bool>true</bool>
+     </property>
+     <property name="sortingEnabled" >
+      <bool>true</bool>
+     </property>
+     <column>
+      <property name="text" >
+       <string>Action</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Shortcut</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Alternate</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Global</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Global Alternate</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Mouse Button Gesture</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Mouse Shape Gesture</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KTreeWidgetSearchLineWidget</class>
+   <extends>QWidget</extends>
+   <header>ktreewidgetsearchlinewidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

@@ -12,7 +12,15 @@ set(kritaundo2_LIB_SRCS
 add_library(kritaundo2 SHARED ${kritaundo2_LIB_SRCS})
 generate_export_header(kritaundo2 BASE_NAME kritaundo2)
 
-target_link_libraries(kritaundo2 kritawidgetutils KF5::IconThemes KF5::I18n KF5::XmlGui Qt5::Core Qt5::Widgets)
+target_link_libraries(kritaundo2 
+    PUBLIC
+        kritawidgetutils 
+        KF5::IconThemes 
+        KF5::I18n 
+        KF5::ConfigGui
+        Qt5::Core 
+        Qt5::Widgets
+)
 
 set_target_properties(kritaundo2 PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

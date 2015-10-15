@@ -1,6 +1,9 @@
 add_subdirectory(tests)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/config)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/xmlgui)
+
+configure_file(xmlgui/config-xmlgui.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-xmlgui.h )
 
 set(kritawidgetutils_LIB_SRCS
     KoGroupButton.cpp
@@ -18,10 +21,61 @@ set(kritawidgetutils_LIB_SRCS
     config/krecentfilesaction.cpp
     config/kstandardaction.cpp
 
+    xmlgui/kaboutkdedialog_p.cpp
+    xmlgui/kactioncategory.cpp
+    xmlgui/kactioncollection.cpp
+    xmlgui/kactionconflictdetector.cpp
+    xmlgui/kbugreport.cpp
+    xmlgui/kcheckaccelerators.cpp
+    xmlgui/kedittoolbar.cpp
+    xmlgui/kgesture.cpp
+    xmlgui/kgesturemap.cpp
+    xmlgui/khelpmenu.cpp
+    xmlgui/kkeysequencewidget.cpp
+    xmlgui/kmainwindow.cpp
+    xmlgui/kmenumenuhandler_p.cpp
+    xmlgui/kshortcuteditwidget.cpp
+    xmlgui/kshortcutschemeseditor.cpp
+    xmlgui/kshortcutschemeshelper.cpp
+    xmlgui/kshortcutsdialog.cpp
+    xmlgui/kshortcutseditor.cpp
+    xmlgui/kshortcutseditordelegate.cpp
+    xmlgui/kshortcutseditoritem.cpp
+    xmlgui/kshortcutwidget.cpp
+    xmlgui/kswitchlanguagedialog_p.cpp
+    xmlgui/ktoggletoolbaraction.cpp
+    xmlgui/ktoolbar.cpp
+    xmlgui/ktoolbarhandler.cpp
+    xmlgui/kundoactions.cpp
+    xmlgui/kxmlguibuilder.cpp
+    xmlgui/kxmlguiclient.cpp
+    xmlgui/kxmlguifactory.cpp
+    xmlgui/kxmlguifactory_p.cpp
+    xmlgui/kxmlguiversionhandler.cpp
+    xmlgui/kxmlguiwindow.cpp
 )
+
+if (HAVE_DBUS)
+    set(kritawidgetutils_LIB_SRCS ${kritawidgetutils_LIB_SRCS}
+        xmlgui/kmainwindowiface.cpp
+    )
+endif()
+
+set(kritawidgetutils_UI
+    xmlgui/kshortcutsdialog.ui
+    xmlgui/kshortcutwidget.ui
+)
+
+ki18n_wrap_ui(kritiwidgetutils_LIB_SRCS ${kritawidgetutils_UI})
+qt5_add_resources(kritiwidgetutils_LIB_SRCS xmlgui/kxmlgui.qrc)
+
 
 add_library(kritawidgetutils SHARED ${kritawidgetutils_LIB_SRCS})
 generate_export_header(kritawidgetutils BASE_NAME kritawidgetutils)
+
+if (HAVE_DBUS)
+   set (KRITA_WIDGET_UTILS_EXTRA_LIBS ${KRITA_WIDGET_UTILS_EXTRA_LIBS} Qt5::DBus)
+endif ()
 
 target_link_libraries(kritawidgetutils
     PUBLIC
@@ -30,11 +84,16 @@ target_link_libraries(kritawidgetutils
         Qt5::Xml
         Qt5::Core
     PRIVATE
+        Qt5::PrintSupport
         KF5::I18n
         KF5::ConfigCore
+        KF5::CoreAddons
+        KF5::ItemViews
         KF5::ConfigGui
         KF5::GuiAddons
         KF5::WidgetsAddons
+        KF5::WindowSystem
+        ${KRITA_WIDGET_UTILS_EXTRA_LIBS}
 )
 
 set_target_properties(kritawidgetutils

@@ -3,9 +3,6 @@ add_subdirectory( tests )
 include_directories(${KOWIDGETS_INCLUDES})
 include_directories(${CMAKE_SOURCE_DIR}/libs/widgetutils)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
-if (LIBATTICA_FOUND)
-    include_directories(${LIBATTICA_INCLUDE_DIR})
-endif ()
 
 set(kritawidgets_LIB_SRCS
     KoGradientEditWidget.cpp

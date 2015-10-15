@@ -54,6 +54,8 @@ struct FramesTableView::Private
     int fps;
     qreal zoom;
     qreal initialDragZoomValue;
+    QPoint initialDragPanValue;
+    QPoint startZoomPanDragPos;
 
     QToolButton *addLayersButton;
     QMenu *layerEditingMenu;
@@ -62,7 +64,7 @@ struct FramesTableView::Private
     QMenu *frameCreationMenu;
     QMenu *frameEditingMenu;
 
-    QToolButton *zoomDragButton;
+    KisDraggableToolButton *zoomDragButton;
 
     bool dragInProgress;
 };
@@ -390,7 +392,18 @@ void FramesTableView::mousePressEvent(QMouseEvent *event)
 {
     QPersistentModelIndex index = indexAt(event->pos());
 
-    if (index.isValid() &&
+    if (event->modifiers() & Qt::ControlModifier) {
+        m_d->startZoomPanDragPos = event->pos();
+        if (event->button() == Qt::RightButton) {
+            slotZoomButtonPressed();
+        } else if (event->button() == Qt::LeftButton) {
+            m_d->initialDragPanValue =
+                QPoint(horizontalScrollBar()->value(),
+                       verticalScrollBar()->value());
+        }
+        event->accept();
+
+    } else if (index.isValid() &&
         event->button() == Qt::RightButton &&
         m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
 
@@ -407,6 +420,40 @@ void FramesTableView::mousePressEvent(QMouseEvent *event)
         QAbstractItemView::mousePressEvent(event);
     }
 }
+
+void FramesTableView::mouseMoveEvent(QMouseEvent *e)
+{
+    if (e->modifiers() & Qt::ControlModifier) {
+        QPoint diff = e->pos() - m_d->startZoomPanDragPos;
+
+        if (e->buttons() & Qt::RightButton) {
+            slotZoomButtonChanged(m_d->zoomDragButton->calculateValue(diff));
+        } else if (e->buttons() & Qt::LeftButton) {
+
+            const int w = m_d->horizontalRuler->defaultSectionSize();
+            const int h = m_d->layersHeader->defaultSectionSize();
+
+            QPoint offset = QPoint(m_d->initialDragPanValue.x() - diff.x() / w,
+                                   m_d->initialDragPanValue.y() - diff.y() / h);
+
+            horizontalScrollBar()->setValue(offset.x());
+            verticalScrollBar()->setValue(offset.y());
+        }
+        e->accept();
+    } else {
+        QTableView::mouseMoveEvent(e);
+    }
+}
+
+void FramesTableView::mouseReleaseEvent(QMouseEvent *e)
+{
+    if (e->modifiers() & Qt::ControlModifier) {
+        e->accept();
+    } else {
+        QTableView::mouseReleaseEvent(e);
+    }
+}
+
 
 void FramesTableView::slotUpdateLayersMenu()
 {

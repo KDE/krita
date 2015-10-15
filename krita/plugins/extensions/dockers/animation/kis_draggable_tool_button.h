@@ -34,6 +34,8 @@ public:
 
     static int unitRadius();
 
+    int calculateValue(const QPoint &diff);
+
 Q_SIGNALS:
     void valueChanged(int value);
 

@@ -164,6 +164,9 @@ void FramesTableView::setModel(QAbstractItemModel *model)
 
     QTableView::setModel(model);
 
+    connect(m_d->model, SIGNAL(headerDataChanged(Qt::Orientation, int, int)),
+            this, SLOT(slotHeaderDataChanged(Qt::Orientation, int, int)));
+
     connect(m_d->model, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
             this, SLOT(slotDataChanged(QModelIndex,QModelIndex)));
 
@@ -176,14 +179,10 @@ void FramesTableView::setFramesPerSecond(int fps)
     m_d->fps = fps;
     m_d->horizontalRuler->setFramePerSecond(fps);
 
-    // For some reason simple update doesn't work here,
-    // so reset the whole header
-    m_d->horizontalRuler->reset();
-}
-
-int FramesTableView::framesPerSecond() const
-{
-    return m_d->fps;
+    // For some reason simple update sometimes doesn't work here, so
+    // reset the whole header
+    //
+    // m_d->horizontalRuler->reset();
 }
 
 void FramesTableView::setZoom(qreal zoom)
@@ -272,6 +271,17 @@ void FramesTableView::slotDataChanged(const QModelIndex &topLeft, const QModelIn
 
         if (!m_d->dragInProgress) {
             setCurrentIndex(m_d->model->index(selectedRow, selectedColumn));
+        }
+    }
+}
+
+void FramesTableView::slotHeaderDataChanged(Qt::Orientation orientation, int first, int last)
+{
+    if (orientation == Qt::Horizontal) {
+        const int newFps = m_d->model->headerData(0, Qt::Horizontal, TimelineFramesModel::FramesPerSecondRole).toInt();
+
+        if (newFps != m_d->fps) {
+            setFramesPerSecond(newFps);
         }
     }
 }

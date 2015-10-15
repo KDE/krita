@@ -100,8 +100,11 @@ public:
     const KisTimeRange &currentRange() const;
     void setRange(const KisTimeRange range);
 
-    float framerate();
-    void setFramerate(float fps);
+    int framerate();
+
+public Q_SLOTS:
+    void setFramerate(int fps);
+public:
 
     KisImageWSP image() const;
 
@@ -123,6 +126,8 @@ Q_SIGNALS:
     void sigFramesChanged(const KisTimeRange &range, const QRect &rect);
 
     void sigInternalRequestTimeSwitch(int frameId);
+
+    void sigFramerateChanged();
 
 private:
     struct Private;

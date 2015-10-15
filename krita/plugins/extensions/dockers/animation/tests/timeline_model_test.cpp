@@ -29,6 +29,7 @@
 #include <QSpinBox>
 #include <QVBoxLayout>
 
+#include "kis_image_animation_interface.h"
 #include "KisDocument.h"
 #include "KisPart.h"
 #include "kis_name_server.h"
@@ -141,7 +142,8 @@ void TimelineModelTest::testView()
     framesTable->setModel(model);
 
     connect(dblZoom, SIGNAL(valueChanged(double)), framesTable, SLOT(setZoomDouble(double)));
-    connect(intFps, SIGNAL(valueChanged(int)), framesTable, SLOT(setFramesPerSecond(int)));
+    connect(intFps, SIGNAL(valueChanged(int)),
+            m_image->animationInterface(), SLOT(setFramerate(int)));
 
     QVBoxLayout *layout = new QVBoxLayout(&dlg);
 

@@ -47,7 +47,7 @@ struct KisImageAnimationInterface::Private
     bool frameInvalidationBlocked;
 
     KisTimeRange currentRange;
-    float framerate;
+    int framerate;
 };
 
 
@@ -85,14 +85,15 @@ void KisImageAnimationInterface::setRange(const KisTimeRange range) {
     m_d->currentRange = range;
 }
 
-float KisImageAnimationInterface::framerate()
+int KisImageAnimationInterface::framerate()
 {
     return m_d->framerate;
 }
 
-void KisImageAnimationInterface::setFramerate(float fps)
+void KisImageAnimationInterface::setFramerate(int fps)
 {
     m_d->framerate = fps;
+    emit sigFramerateChanged();
 }
 
 KisImageWSP KisImageAnimationInterface::image() const

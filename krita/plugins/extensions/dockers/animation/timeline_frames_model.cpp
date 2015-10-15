@@ -230,6 +230,10 @@ struct TimelineFramesModel::Private
 
         return true;
     }
+
+    int framesPerSecond() {
+        return image->animationInterface()->framerate();
+    }
 };
 
 TimelineFramesModel::TimelineFramesModel(QObject *parent)
@@ -260,6 +264,8 @@ void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, 
         m_d->converter.reset(new TimelineNodeListKeeper(this, m_d->dummiesFacade));
         connect(m_d->dummiesFacade, SIGNAL(sigDummyChanged(KisNodeDummy*)),
                 SLOT(slotDummyChanged(KisNodeDummy*)));
+        connect(m_d->image->animationInterface(),
+                SIGNAL(sigFramerateChanged()), SLOT(slotFramerateChanged()));
     }
 
     if(m_d->dummiesFacade != oldDummiesFacade) {
@@ -286,6 +292,11 @@ void TimelineFramesModel::processUpdateQueue()
         }
     }
     m_d->updateQueue.clear();
+}
+
+void TimelineFramesModel::slotFramerateChanged()
+{
+    emit headerDataChanged(Qt::Horizontal, 0, columnCount() - 1);
 }
 
 int TimelineFramesModel::rowCount(const QModelIndex &parent) const
@@ -388,11 +399,12 @@ QVariant TimelineFramesModel::headerData(int section, Qt::Orientation orientatio
 {
     if (orientation == Qt::Horizontal) {
         switch (role) {
-        case ActiveFrameRole: {
+        case ActiveFrameRole:
             return section == m_d->activeFrameIndex;
-        }
         case FrameCachedRole:
             return false && m_d->cachedFrames[section];
+        case TimelineFramesModel::FramesPerSecondRole:
+            return m_d->framesPerSecond();
         }
 
     } else {

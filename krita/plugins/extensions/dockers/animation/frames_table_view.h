@@ -36,13 +36,9 @@ public:
 
     void setModel(QAbstractItemModel *model);
 
-
-    int framesPerSecond() const;
-
     void updateGeometries();
 
 public Q_SLOTS:
-    void setFramesPerSecond(int fps);
     void setZoom(qreal zoom);
     void setZoomDouble(double zoom);
 
@@ -65,6 +61,11 @@ private Q_SLOTS:
     void slotReselectCurrentIndex();
 
     void slotUpdateInfiniteFramesCount();
+
+    void slotHeaderDataChanged(Qt::Orientation orientation, int first, int last);
+
+private:
+    void setFramesPerSecond(int fps);
 
 protected:
     void currentChanged(const QModelIndex &current, const QModelIndex &previous);

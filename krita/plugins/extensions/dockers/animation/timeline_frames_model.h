@@ -75,7 +75,8 @@ public:
         FrameCachedRole,
         TimelinePropertiesRole,
         OtherLayersRole,
-        FrameEditableRole
+        FrameEditableRole,
+        FramesPerSecondRole
     };
 
     // metatype is added by the original implementation
@@ -88,6 +89,7 @@ public:
 private Q_SLOTS:
     void slotDummyChanged(KisNodeDummy *dummy);
     void processUpdateQueue();
+    void slotFramerateChanged();
 
 private:
     struct Private;

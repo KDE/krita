@@ -178,6 +178,10 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
     m_colorspaceSelector->blockSignals(true);
     m_colorspaceSelector->setCurrentColorSpace(cs);
     m_colorspaceSelector->blockSignals(false);
+
+    m_updateAllowed = false;
+    emit(updated());
+    m_updateAllowed = true;
 }
 
 void KisSpecificColorSelectorWidget::update()

@@ -23,6 +23,8 @@
 #include <KoXmlNS.h>
 #include <KoColorBackground.h>
 
+#include <QColor>
+
 #include <KoIcon.h>
 #include <klocalizedstring.h>
 

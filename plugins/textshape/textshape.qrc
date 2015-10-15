@@ -1,0 +1,14 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource>
+        <file alias="edit-table-cell-merge.png">pics/22-actions-edit-table-cell-merge.png</file>
+        <file alias="table-cell-split.png">pics/22-actions-edit-table-cell-split.png</file>
+        <file alias="tool_references.png">pics/22-actions-tool_references.png</file>
+        <file alias="tool_review.png">pics/22-actions-tool_review.png</file>
+        <file alias="tool-text.png">pics/22-actions-tool-text.png</file>
+        <file alias="settings-icon1_1.png">pics/settings-icon1_1.png</file>
+        <file alias="tool_references.svg">pics/tool_references.svg</file>
+        <file alias="tool_review.svg">pics/tool_review.svg</file>
+        <file alias="tool-text.svg">pics/tool-text.svg</file>
+    </qresource>
+</RCC>

@@ -15,7 +15,6 @@ generate_export_header(kritaundo2 BASE_NAME kritaundo2)
 target_link_libraries(kritaundo2 
     PUBLIC
         kritawidgetutils 
-        KF5::IconThemes 
         KF5::I18n 
         KF5::ConfigGui
         Qt5::Core 

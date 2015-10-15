@@ -95,7 +95,6 @@ extern "C" int main(int argc, char **argv)
 #endif
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
-
     KLocalizedString::setApplicationDomain("krita");
 
     // first create the application so we can create a pixmap

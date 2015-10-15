@@ -1,4 +1,14 @@
-ecm_install_icons(${DATA_INSTALL_DIR}/krita/icons )
+ecm_install_icons(
+ICONS
+128-actions-template_DIN_A3_landscape.png
+128-actions-template_DIN_A4_portrait.png
+128-actions-template_ratio_1610.png
+128-actions-template_ratio_2391.png
+128-actions-template_ratio_43.png
+128-actions-template_web_design.png
+DESTINATION
+${DATA_INSTALL_DIR}/krita/icons )
+
 install( FILES  
     Designcinema16_10_2484x1200_96dpiRGB_8bit_.kra
     Designcinema2.39_1_2484x1040_96dpiRGB_8bit_.kra

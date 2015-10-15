@@ -24,7 +24,7 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kiconloader.h>
+#include <KoIconUtils.h>
 #include <ksharedconfig.h>
 
 #include <QtDebug>
@@ -297,11 +297,11 @@ QPixmap KisDocumentSectionView::createDragPixmap() const
     int size = 96;
     if (itemCount > 9) {
         xCount = 4;
-        size = KIconLoader::SizeLarge;
+        size = KoIconUtils::SizeLarge;
     }
     else if (itemCount > 4) {
         xCount = 3;
-        size = KIconLoader::SizeHuge;
+        size = KoIconUtils::SizeHuge;
     }
     else if (itemCount < xCount) {
         xCount = itemCount;

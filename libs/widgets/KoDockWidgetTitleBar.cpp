@@ -63,7 +63,7 @@ KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
     d->closeButton->setStyleSheet("border: 0"); // border makes the header busy looking (appears on some OSs)
 
     d->openIcon = KoIconUtils::themedIcon("docker_collapse_a");
-    d->closeIcon = KoIconUtils::themedIcon("docker_collapsed_b");
+    d->closeIcon = KoIconUtils::themedIcon("docker_collapse_b");
     d->collapseButton = new KoDockWidgetTitleBarButton(this);
     d->collapseButton->setIcon(d->openIcon);
     connect(d->collapseButton, SIGNAL(clicked()), SLOT(toggleCollapsed()));

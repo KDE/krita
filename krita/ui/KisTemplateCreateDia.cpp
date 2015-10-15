@@ -44,11 +44,10 @@
 #include <KisTemplateTree.h>
 #include <KisTemplateGroup.h>
 #include <KisTemplate.h>
-#include <kicondialog.h>
 #include <QMessageBox>
 #include <KoResourcePaths.h>
 #include <kis_debug.h>
-#include <kiconloader.h>
+#include <KoIconUtils.h>
 #include <kconfiggroup.h>
 #include <QUrl>
 
@@ -330,7 +329,6 @@ void KisTemplateCreateDia::slotOk() {
     {
         QFile::copy(d->m_filePath, dest.toLocalFile());
         // save the picture as icon
-        // (needs to be square, otherwise KIconLoader dpes nasty changes)
         if(d->m_default->isChecked() && !d->m_thumbnail.isNull()) {
             saveAsQuadraticPng(d->m_thumbnail, icon);
         } else if(!d->m_customPixmap.isNull()) {
@@ -392,17 +390,19 @@ void KisTemplateCreateDia::slotSelect() {
     d->m_default->setChecked(false);
     d->m_custom->setChecked(true);
 
-    QString name = KIconDialog::getIcon();
-    if( name.isEmpty() ) {
-        if(d->m_customFile.isEmpty()) {
-            d->m_default->setChecked(true);
-            d->m_custom->setChecked(false);
-        }
-        return;
-    }
-    const QString path = KIconLoader::global()->iconPath(name, -thumbnailExtent);
-    d->m_customFile = path;
-    d->m_customPixmap=QPixmap();
+    // QT5TODO
+//    QString name = KIconDialog::getIcon();
+//    if( name.isEmpty() ) {
+//        if(d->m_customFile.isEmpty()) {
+//            d->m_default->setChecked(true);
+//            d->m_custom->setChecked(false);
+//        }
+//        return;
+//    }
+
+//    const QString path = KIconLoader::global()->iconPath(name, -thumbnailExtent);
+    d->m_customFile = QString();// path;
+    d->m_customPixmap = QPixmap();
     updatePixmap();
 }
 

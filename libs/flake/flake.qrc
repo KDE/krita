@@ -1,0 +1,30 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource>
+        <file alias="snap-boundingbox.png">pics/16-actions-snap-boundingbox.png</file>
+        <file alias="snap-extension.png">pics/16-actions-snap-extension.png</file>
+        <file alias="convert-to-path.png">pics/22-actions-convert-to-path.png</file>
+        <file alias="createpath.png">pics/22-actions-createpath.png</file>
+        <file alias="editpath.png">pics/22-actions-editpath.png</file>
+        <file alias="hand.png">pics/22-actions-hand.png</file>
+        <file alias="path-break-point.png">pics/22-actions-path-break-point.png</file>
+        <file alias="path-break-segment.png">pics/22-actions-path-break-segment.png</file>
+        <file alias="pathpoint-corner.png">pics/22-actions-pathpoint-corner.png</file>
+        <file alias="pathpoint-curve.png">pics/22-actions-pathpoint-curve.png</file>
+        <file alias="pathpoint-insert.png">pics/22-actions-pathpoint-insert.png</file>
+        <file alias="pathpoint-join.png">pics/22-actions-pathpoint-join.png</file>
+        <file alias="pathpoint-line.png">pics/22-actions-pathpoint-line.png</file>
+        <file alias="pathpoint-merge.png">pics/22-actions-pathpoint-merge.png</file>
+        <file alias="pathpoint-remove.png">pics/22-actions-pathpoint-remove.png</file>
+        <file alias="pathpoint-smooth.png">pics/22-actions-pathpoint-smooth.png</file>
+        <file alias="pathpoint-symmetric.png">pics/22-actions-pathpoint-symmetric.png</file>
+        <file alias="pathsegment-curve.png">pics/22-actions-pathsegment-curve.png</file>
+        <file alias="pathsegment-line.png">pics/22-actions-pathsegment-line.png</file>
+        <file alias="pathshape.png">pics/22-actions-pathshape.png</file>
+        <file alias="questionmark.png">pics/questionmark.png</file>
+        <file alias="snap-boundingbox.svg">pics/sc-actions-snap-boundingbox.svg</file>
+        <file alias="snap-extension.svg">pics/sc-actions-snap-extension.svg</file>
+        <file alias="zoom_in_cursor.png">pics/zoom_in_cursor.png</file>
+        <file alias="zoom_out_cursor.png">pics/zoom_out_cursor.png</file>
+    </qresource>
+</RCC>

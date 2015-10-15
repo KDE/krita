@@ -134,7 +134,7 @@ add_subdirectory( dtd )
 add_subdirectory( plugins )
 add_subdirectory( data )
 add_subdirectory( integration )
-add_subdirectory( pics )
+add_subdirectory( pics/app )
 
 if (WIN32 AND USE_BREAKPAD)
         add_subdirectory( crashreporter )
@@ -151,10 +151,21 @@ if(WIN32 AND USE_BREAKPAD)
     set(BREAKPAD_LIBS breakpad)
 endif()
 
-file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-apps-calligrakrita.png")
+file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/*-apps-calligrakrita.png")
 ecm_add_app_icon(krita_SRCS ICONS ${ICONS_SRCS})
 
-qt5_add_resources(krita_SRCS krita.qrc)
+qt5_add_resources(krita_SRCS krita.qrc 
+                             pics/Breeze-dark/breeze-dark-icons.qrc
+                             pics/Breeze-light/breeze-light-icons.qrc
+                             pics/layerbox/layerbox-icons.qrc
+                             pics/layerbox/svg/layerbox-svg-icons.qrc
+                             pics/misc-light/misc-light-icons.qrc
+                             pics/misc-dark/misc-dark-icons.qrc
+                             pics/tools/16/tools-16-icons.qrc
+                             pics/tools/SVG/16/tools-svg-16-icons.qrc
+                             pics/tool_transform/tool-transform-icons.qrc
+                             pics/svg/svg-icons.qrc
+)
 
 add_executable(krita ${krita_SRCS})
 target_link_libraries(krita kritaui ${BREAKPAD_LIBS})

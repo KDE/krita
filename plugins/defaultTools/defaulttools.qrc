@@ -1,0 +1,15 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource>
+       <file alias="escape-direction-all.png">pics/16-actions-escape-direction-all.png</file>
+       <file alias="escape-direction-down.png">pics/16-actions-escape-direction-down.png</file>
+       <file alias="escape-direction-horizontal.png">pics/16-actions-escape-direction-horizontal.png</file>
+       <file alias="escape-direction-left.png">pics/16-actions-escape-direction-left.png</file>
+       <file alias="escape-direction-right.png">pics/16-actions-escape-direction-right.png</file>
+       <file alias="escape-direction-up.png">pics/16-actions-escape-direction-up.png</file>
+       <file alias="escape-direction-vertical.png">pics/16-actions-escape-direction-vertical.png</file>
+       <file alias="cursor_connect.png">pics/cursor_connect.png</file>
+       <file alias="cursor_rotate.png">pics/cursor_rotate.png</file>
+       <file alias="cursor_shear.png">pics/cursor_shear.png</file>
+    </qresource>
+</RCC>

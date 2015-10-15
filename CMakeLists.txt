@@ -194,14 +194,13 @@ include(KDECompilerSettings)
 include(FeatureSummary)
 include(KDE4Macros)
 
-find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
+find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED 
         Archive 
         Completion
         Config 
         CoreAddons
         GuiAddons 
         I18n 
-        IconThemes 
         ItemModels 
         ItemViews
         WidgetsAddons 
@@ -211,7 +210,7 @@ find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
 )
 
 
-find_package(Qt5 ${MIN_QT_VERSION} REQUIRED COMPONENTS
+find_package(Qt5 ${MIN_QT_VERSION} REQUIRED 
         Core 
         Gui 
         Widgets 
@@ -223,10 +222,10 @@ find_package(Qt5 ${MIN_QT_VERSION} REQUIRED COMPONENTS
         Concurrent
     OPTIONAL_COMPONENTS
         Qml
-        Declarative
         X11Extras
         DBus
 )
+find_package(Qt5::Declarative ${MIN_QT_VERSION})
 
 set(HAVE_DBUS Qt5DBus_FOUND)
 
@@ -666,7 +665,6 @@ endif()
 add_subdirectory(libs)
 add_subdirectory(3rdparty)
 add_subdirectory(interfaces)
-add_subdirectory(pics)
 add_subdirectory(plugins)
 
 macro_display_feature_log()

@@ -1,4 +1,8 @@
-ecm_install_icons(${DATA_INSTALL_DIR}/krita/icons )
+ecm_install_icons(
+ICONS
+128-actions-template_texture.png
+DESTINATION
+${DATA_INSTALL_DIR}/krita/icons )
 install( FILES  
 
 Texture1024x10248bitsrgb.kra

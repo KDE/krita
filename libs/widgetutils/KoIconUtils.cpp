@@ -24,38 +24,33 @@
 #include <QDebug>
 #include <QFile>
 
-#include <kiconloader.h>
-#include <kiconengine.h>
-
-void initWidgetIcons()
-{
-    Q_INIT_RESOURCE(kritawidgets);
-}
-
 namespace KoIconUtils
 {
 
 QIcon themedIcon(const QString &name) {
-
-    initWidgetIcons();
-
-    QString realName;
 
     // try load themed icon
     QColor background = qApp->palette().background().color();
     bool useDarkIcons = background.value() > 100;
     const char * const prefix = useDarkIcons ? "dark_" : "light_";
 
-    realName = QLatin1String(prefix) + name;
+    QString  realName = QLatin1String(prefix) + name;
 
 
-    QStringList names = QStringList() << ":/pics/" + realName + ".svg"
-                                      << ":/pics/" + realName + ".png"
-                                      << ":/" + name
-                                      << ":/" + name + ".svg"
-                                      << ":/" + name + ".png"
+    QStringList names = QStringList() << ":/pics/" + realName + ".png"
+                                      << ":/pics/" + realName + ".svg"
+                                      << ":/pics/" + realName + ".svgz"
+                                      << ":/pics/" + name + ".png"
                                       << ":/pics/" + name + ".svg"
-                                      << ":/pics/" + name + ".png";
+                                      << ":/pics/" + name + ".svz"
+                                      << ":/" + realName + ".png"
+                                      << ":/" + realName + ".svg"
+                                      << ":/" + realName + ".svz"
+                                      << ":/" + name
+                                      << ":/" + name + ".png"
+                                      << ":/" + name + ".svg"
+                                      << ":/" + name + ".svgz"
+                                         ;
 
     foreach(const QString &resname, names) {
         if (QFile(resname).exists()) {
@@ -65,21 +60,9 @@ QIcon themedIcon(const QString &name) {
     }
 
 
-//    qDebug() << ">>>>>>>" << realName << KIconLoader::global()->iconPath(realName, KIconLoader::User, true) << "\n\t"
-//             << name  << KIconLoader::global()->iconPath(name, KIconLoader::User, true);
-
-    if (KIconLoader::global()->iconPath(realName, KIconLoader::User, true).isEmpty()) {
-        realName = name;
-    }
-
-    QIcon icon = QIcon(new KIconEngine(realName, KIconLoader::global()));
-
-    // fallback
-    if (icon.isNull())
-        icon = QIcon::fromTheme(name);
-
+    QIcon icon = QIcon::fromTheme(name);
+    qDebug() << "\tfalling back on QIcon::FromTheme:" << name;
     return icon;
-
 }
 
 }

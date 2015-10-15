@@ -6,6 +6,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/xmlgui)
 configure_file(xmlgui/config-xmlgui.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-xmlgui.h )
 
 set(kritawidgetutils_LIB_SRCS
+
+    KoIconUtils.cpp
     KoGroupButton.cpp
     KoProgressBar.cpp
     KoProgressUpdater.cpp

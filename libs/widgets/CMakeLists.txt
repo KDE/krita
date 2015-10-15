@@ -65,8 +65,6 @@ set(kritawidgets_LIB_SRCS
     KoMarkerSelector.cpp
     KoDockWidgetTitleBar.cpp
     KoDockWidgetTitleBarButton.cpp
-    KoViewItemContextBar.cpp
-    KoContextBarButton.cpp
     KoResourceFiltering.cpp
     KoResourceModelBase.cpp
 
@@ -80,8 +78,6 @@ set(kritawidgets_LIB_SRCS
     KoGlobal.cpp
     KoTableView.cpp
     
-    KoIconUtils.cpp
-
     WidgetsDebug.cpp
 
     kis_url_requester.cpp
@@ -101,7 +97,7 @@ qt5_add_resources(kritawidgets_LIB_SRCS kritawidgets.qrc)
 
 add_library(kritawidgets SHARED ${kritawidgets_LIB_SRCS})
 generate_export_header(kritawidgets BASE_NAME kritawidgets)
-target_link_libraries(kritawidgets kritatext kritapigment kritawidgetutils KF5::GuiAddons KF5::WidgetsAddons KF5::ConfigCore KF5::IconThemes KF5::Completion)
+target_link_libraries(kritawidgets kritatext kritapigment kritawidgetutils KF5::GuiAddons KF5::WidgetsAddons KF5::ConfigCore KF5::Completion)
 
 if(X11_FOUND)
     target_link_libraries(kritawidgets Qt5::X11Extras ${X11_LIBRARIES})

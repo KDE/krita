@@ -26,6 +26,6 @@ set(calligradockers_SRCS
 add_library(krita_docker_defaults MODULE ${calligradockers_SRCS})
 kcoreaddons_desktop_to_json(krita_docker_defaults calligra_docker_defaults.desktop)
 
-target_link_libraries(krita_docker_defaults kritawidgets KF5::IconThemes )
+target_link_libraries(krita_docker_defaults kritawidgets)
 
 install(TARGETS krita_docker_defaults DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

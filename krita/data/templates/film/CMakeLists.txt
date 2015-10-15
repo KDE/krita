@@ -1,4 +1,8 @@
-ecm_install_icons(${DATA_INSTALL_DIR}/krita/icons )
+ecm_install_icons(
+ICONS
+128-action-template_film.png
+DESTINATION
+${DATA_INSTALL_DIR}/krita/icons )
 install( FILES  
     1K_super35_fullAp_1024x778.kra
     2K_super35_fullAp_2048x1556.kra

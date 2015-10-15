@@ -451,9 +451,6 @@ public:
 
     void selectActiveItem(const QString &);
 
-    void slotChangeIcon();
-    void slotChangeIconText();
-
     void slotDropped(ToolBarListWidget *list, int index, ToolBarItem *item, bool sourceIsActiveList);
 
     void setupLayout();
@@ -550,8 +547,6 @@ public:
     QLabel     *m_comboLabel;
     KSeparator *m_comboSeparator;
     QLabel *m_helpArea;
-    QPushButton *m_changeIcon;
-    QPushButton *m_changeIconText;
     bool m_isPart : 1;
     bool m_loadedOnce : 1;
 };
@@ -1017,10 +1012,10 @@ void KEditToolBarWidgetPrivate::setupLayout()
                      m_widget,       SLOT(slotToolBarSelected(int)));
 
 //  QPushButton *new_toolbar = new QPushButton(i18n("&New"), this);
-//  new_toolbar->setPixmap(BarIcon("document-new", KIconLoader::SizeSmall));
+//  new_toolbar->setPixmap(BarIcon("document-new", KoIconUtils::SizeSmall));
 //  new_toolbar->setEnabled(false); // disabled until implemented
 //  QPushButton *del_toolbar = new QPushButton(i18n("&Delete"), this);
-//  del_toolbar->setPixmap(BarIcon("edit-delete", KIconLoader::SizeSmall));
+//  del_toolbar->setPixmap(BarIcon("edit-delete", KoIconUtils::SizeSmall));
 //  del_toolbar->setEnabled(false); // disabled until implemented
 
     // our list of inactive actions
@@ -1060,24 +1055,6 @@ void KEditToolBarWidgetPrivate::setupLayout()
     KListWidgetSearchLine *activeListSearchLine = new KListWidgetSearchLine(m_widget, m_activeList);
     activeListSearchLine->setPlaceholderText(i18n("Filter"));
 
-    // "change icon" button
-    m_changeIcon = new QPushButton(i18n("Change &Icon..."), m_widget);
-    m_changeIcon->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-icons")));
-    m_changeIcon->setEnabled(m_activeList->currentItem());
-
-    QObject::connect(m_changeIcon, SIGNAL(clicked()),
-                     m_widget, SLOT(slotChangeIcon()));
-#ifndef HAVE_ICONTHEMES
-    m_changeIcon->hide();
-#endif
-    // "change icon text" button
-    m_changeIconText = new QPushButton(i18n("Change Te&xt..."), m_widget);
-    m_changeIconText->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename")));
-    m_changeIconText->setEnabled(m_activeList->currentItem() != 0);
-
-    QObject::connect(m_changeIconText, SIGNAL(clicked()),
-                     m_widget, SLOT(slotChangeIconText()));
-
     // The buttons in the middle
 
     m_upAction     = new QToolButton(m_widget);
@@ -1114,7 +1091,6 @@ void KEditToolBarWidgetPrivate::setupLayout()
 
     QVBoxLayout *inactive_layout = new QVBoxLayout();
     QVBoxLayout *active_layout = new QVBoxLayout();
-    QHBoxLayout *changeIcon_layout = new QHBoxLayout();
 
     QGridLayout *button_layout = new QGridLayout();
 
@@ -1138,11 +1114,6 @@ void KEditToolBarWidgetPrivate::setupLayout()
     active_layout->addWidget(active_label);
     active_layout->addWidget(activeListSearchLine);
     active_layout->addWidget(m_activeList, 1);
-    active_layout->addLayout(changeIcon_layout);
-
-    changeIcon_layout->addWidget(m_changeIcon);
-    changeIcon_layout->addStretch(1);
-    changeIcon_layout->addWidget(m_changeIconText);
 
     list_layout->addLayout(inactive_layout);
     list_layout->addLayout(button_layout);
@@ -1370,12 +1341,6 @@ void KEditToolBarWidgetPrivate::slotActiveSelectionChanged()
 
     m_removeAction->setEnabled(toolitem);
 
-    m_changeIcon->setEnabled(toolitem &&
-                             toolitem->internalTag() == QStringLiteral("Action"));
-
-    m_changeIconText->setEnabled(toolitem &&
-                                 toolitem->internalTag() == QStringLiteral("Action"));
-
     if (toolitem) {
         m_upAction->setEnabled(toolitem->index() != 0);
         m_downAction->setEnabled(toolitem->index() != toolitem->listWidget()->count() - 1);
@@ -1599,89 +1564,6 @@ void KEditToolBarWidgetPrivate::updateLocal(QDomElement &elem)
     }
 }
 
-void KEditToolBarWidgetPrivate::slotChangeIcon()
-{
-#ifdef HAVE_ICONTHEMES
-    m_currentXmlData->dump();
-    Q_ASSERT(m_currentXmlData->type() != XmlData::Merged);
-
-    QString icon = KIconDialog::getIcon(KIconLoader::Toolbar,
-            KIconLoader::Action,
-            false, 0, false, // all defaults
-            m_widget,
-            i18n("Change Icon"));
-
-    if (icon.isEmpty()) {
-        return;
-    }
-
-    ToolBarItem *item = m_activeList->currentItem();
-    //qDebug() << item;
-    if (item) {
-        item->setIcon(QIcon::fromTheme(icon));
-
-        m_currentXmlData->m_isModified = true;
-
-        // Get hold of ActionProperties tag
-        QDomElement elem = KXMLGUIFactory::actionPropertiesElement(m_currentXmlData->domDocument());
-        // Find or create an element for this action
-        QDomElement act_elem = KXMLGUIFactory::findActionByName(elem, item->internalName(), true /*create*/);
-        Q_ASSERT(!act_elem.isNull());
-        act_elem.setAttribute(QStringLiteral("icon"), icon);
-
-        // we're modified, so let this change
-        emit m_widget->enableOk(true);
-    }
-#endif
-}
-
-void KEditToolBarWidgetPrivate::slotChangeIconText()
-{
-    m_currentXmlData->dump();
-    ToolBarItem *item = m_activeList->currentItem();
-
-    if (item) {
-        QString iconText = item->text();
-        bool hidden = item->isTextAlongsideIconHidden();
-
-        IconTextEditDialog dialog(m_widget);
-        dialog.setIconText(iconText);
-        dialog.setTextAlongsideIconHidden(hidden);
-
-        bool ok = dialog.exec() == QDialog::Accepted;
-        iconText = dialog.iconText();
-        hidden = dialog.textAlongsideIconHidden();
-
-        bool hiddenChanged = hidden != item->isTextAlongsideIconHidden();
-        bool iconTextChanged = iconText != item->text();
-
-        if (!ok || (!hiddenChanged && !iconTextChanged)) {
-            return;
-        }
-
-        item->setText(iconText);
-        item->setTextAlongsideIconHidden(hidden);
-
-        Q_ASSERT(m_currentXmlData->type() != XmlData::Merged);
-
-        m_currentXmlData->m_isModified = true;
-
-        // Get hold of ActionProperties tag
-        QDomElement elem = KXMLGUIFactory::actionPropertiesElement(m_currentXmlData->domDocument());
-        // Find or create an element for this action
-        QDomElement act_elem = KXMLGUIFactory::findActionByName(elem, item->internalName(), true /*create*/);
-        Q_ASSERT(!act_elem.isNull());
-        if (iconTextChanged) {
-            act_elem.setAttribute(QString::fromLatin1("iconText"), iconText);
-        }
-        if (hiddenChanged) {
-            act_elem.setAttribute(QString::fromLatin1("priority"), hidden ? QAction::LowPriority : QAction::NormalPriority);
-        }
-
-        // we're modified, so let this change
-        emit m_widget->enableOk(true);
-    }
-}
 
 void KEditToolBarWidgetPrivate::slotDropped(ToolBarListWidget *list, int index, ToolBarItem *item, bool sourceIsActiveList)
 {

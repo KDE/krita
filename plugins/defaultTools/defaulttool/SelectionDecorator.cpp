@@ -30,18 +30,13 @@
 KoFlake::Position SelectionDecorator::m_hotPosition = KoFlake::TopLeftCorner;
 
 SelectionDecorator::SelectionDecorator(KoFlake::SelectionHandle arrows,
-        bool rotationHandles, bool shearHandles)
-: m_rotationHandles(rotationHandles)
-, m_shearHandles(shearHandles)
-, m_arrows(arrows)
-, m_handleRadius( 3 )
-, m_lineWidth( 1 )
+                                       bool rotationHandles, bool shearHandles)
+    : m_rotationHandles(rotationHandles)
+    , m_shearHandles(shearHandles)
+    , m_arrows(arrows)
+    , m_handleRadius( 3 )
+    , m_lineWidth( 1 )
 {
-#if 0
-    if(s_rotateCursor == 0) {
-        s_rotateCursor->load(KoResourcePaths::locate("data", "krita/icons/cursor_rotate.png"));
-    }
-#endif
 }
 
 void SelectionDecorator::setSelection(KoSelection *selection) {
@@ -159,80 +154,5 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     painter.drawRect(rect);
 
     painter.restore();
-
-#if 0
-    // draw the move arrow(s)
-    if(m_arrows != KoFlake::NoHandle && bounds.width() > 45 && bounds.height() > 45) {
-        qreal x1,x2,y1,y2; // 2 is where the arrow head is
-        switch(m_arrows) {
-            case KoFlake::TopMiddleHandle:
-                x1=bounds.center().x(); x2=x1; y2=bounds.y()+8; y1=y2+20;
-                break;
-            case KoFlake::TopRightHandle:
-                x2=bounds.right()-8; x1=x2-20; y2=bounds.y()+8; y1=y2+20;
-                break;
-            case KoFlake::RightMiddleHandle:
-                x2=bounds.right()-8; x1=x2-20; y1=bounds.center().y(); y2=y1;
-                break;
-            case KoFlake::BottomRightHandle:
-                x2=bounds.right()-8; x1=x2-20; y2=bounds.bottom()-8; y1=y2-20;
-                break;
-            case KoFlake::BottomMiddleHandle:
-                x1=bounds.center().x(); x2=x1; y2=bounds.bottom()-8; y1=y2-20;
-                break;
-            case KoFlake::BottomLeftHandle:
-                x2=bounds.left()+8; x1=x2+20; y2=bounds.bottom()-8; y1=y2-20;
-                break;
-            case KoFlake::LeftMiddleHandle:
-                x2=bounds.left()+8; x1=x2+20; y1=bounds.center().y(); y2=y1;
-                break;
-            default:
-            case KoFlake::TopLeftHandle:
-                x2=bounds.left()+8; x1=x2+20; y2=bounds.y()+8; y1=y2+20;
-                break;
-        }
-        painter.drawLine(QLineF(x1, y1, x2, y2));
-        //pen.setColor(Qt::white);
-        //painter.setPen(pen);
-        //painter.drawLine(QLineF(x1-1, y1-1, x2-1, y2-1));
-    }
-
-    QPointF border(HANDLE_DISTANCE, HANDLE_DISTANCE);
-    bounds.adjust(-border.x(), -border.y(), border.x(), border.y());
-
-    if(m_rotationHandles) {
-        painter.save();
-        painter.translate(bounds.x(), bounds.y());
-        QRectF rect(QPointF(0,0), QSizeF(22, 22));
-        painter.drawImage(rect, *s_rotateCursor, rect);
-        painter.translate(bounds.width(), 0);
-        painter.rotate(90);
-        if(bounds.width() > 45 && bounds.height() > 45)
-            painter.drawImage(rect, *s_rotateCursor, rect);
-        painter.translate(bounds.height(), 0);
-        painter.rotate(90);
-        painter.drawImage(rect, *s_rotateCursor, rect);
-        painter.translate(bounds.width(), 0);
-        painter.rotate(90);
-        if(bounds.width() > 45 && bounds.height() > 45)
-            painter.drawImage(rect, *s_rotateCursor, rect);
-        painter.restore();
-    }
-
-    /*if(m_shearHandles) {
-        pen.setWidthF(0);
-        painter.setPen(pen);
-        QRectF rect(bounds.topLeft(), QSizeF(6, 6));
-        rect.moveLeft(bounds.x() + bounds.width() /2 -3);
-        painter.drawRect(rect);
-        rect.moveBottom(bounds.bottom());
-        painter.drawRect(rect);
-        rect.moveLeft(bounds.left());
-        rect.moveTop(bounds.top() + bounds.width() / 2 -3);
-        painter.drawRect(rect);
-        rect.moveRight(bounds.right());
-        painter.drawRect(rect);
-    } */
-#endif
 }
 

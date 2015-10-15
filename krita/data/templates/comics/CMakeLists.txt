@@ -1,4 +1,10 @@
-ecm_install_icons(${DATA_INSTALL_DIR}/krita/icons )
+ecm_install_icons(
+ICONS 
+128-actions-template_comics_empty.png
+DESTINATION
+${DATA_INSTALL_DIR}/krita/icons 
+)
+
 install( FILES  
     a4_waffle_grid.kra   
     BD-EuroTemplate.kra

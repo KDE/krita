@@ -1,0 +1,28 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource>
+        <file>dark_draw-eraser.svg</file>
+        <file alias="dark_object-align-horizontal-center-calligra.svg">dark_ox16-action-object-align-horizontal-center-calligra.svg</file>
+        <file alias="dark_object-align-horizontal-right-calligra.svg">dark_ox16-action-object-align-horizontal-left-calligra.svg</file>
+        <file alias="dark_object-align-horizontal-right-calligra.svg">dark_ox16-action-object-align-horizontal-right-calligra.svg</file>
+        <file alias="dark_object-align-vertical-bottom-calligra.svg">dark_ox16-action-object-align-vertical-bottom-calligra.svg</file>
+        <file alias="dark_object-align-vertical-center-calligra.svg">dark_ox16-action-object-align-vertical-center-calligra.svg</file>
+        <file alias="dark_object-align-vertical-calligra.svg">dark_ox16-action-object-align-vertical-top-calligra.svg</file>
+        <file alias="dark_object-order-group-calligra.svg">dark_ox16-action-object-group-calligra.svg</file>
+        <file alias="dark_object-order-back-calligra.svg">dark_ox16-action-object-order-back-calligra.svg</file>
+        <file alias="dark_object-order-front-calligra.svg">dark_ox16-action-object-order-front-calligra.svg</file>
+        <file alias="dark_object-order-lower-calligra.svg">dark_ox16-action-object-order-lower-calligra.svg</file>
+        <file alias="dark_object-order-raise-calligra.svg">dark_ox16-action-object-order-raise-calligra.svg</file>
+        <file alias="dark_object-ungroup-calligra.svg">dark_ox16-action-object-ungroup-calligra.svg</file>
+        <file>dark_paintop_settings_01.svg</file>
+        <file>dark_paintop_settings_02.svg</file>
+        <file>dark_stroke-cap-butt.svg</file>
+        <file>dark_stroke-cap-round.svg</file>
+        <file>dark_stroke-cap-square.svg</file>
+        <file>dark_stroke-join-bevel.svg</file>
+        <file>dark_stroke-join-miter.svg</file>
+        <file>dark_stroke-join-round.svg</file>
+        <file>dark_symmetry-horizontal.svg</file>
+        <file>dark_symmetry-vertical.svg</file>
+    </qresource>
+</RCC>

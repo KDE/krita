@@ -275,10 +275,6 @@ void KToolBar::Private::init(bool readConfig, bool _isMainToolBar)
     QDBusConnection::sessionBus().connect(QString(), QStringLiteral("/KToolBar"), QStringLiteral("org.kde.KToolBar"),
                                           QStringLiteral("styleChanged"), q, SLOT(slotAppearanceChanged()));
 #endif
-#ifdef HAVE_ICONTHEMES
-    connect(KIconLoader::global(), SIGNAL(iconLoaderSettingsChanged()),
-            q, SLOT(slotAppearanceChanged()));
-#endif
 }
 
 QString KToolBar::Private::getPositionAsString() const
@@ -340,15 +336,8 @@ QMenu *KToolBar::Private::contextMenu(const QPoint &globalPos)
                                 iconSizeSettings.defaultValue());
 
         QList<int> avSizes;
-#ifdef HAVE_ICONTHEME
-        // Query the current theme for available sizes
-        KIconTheme *theme = KIconLoader::global()->theme();
-        if (theme) {
-            avSizes = theme->querySizes(isMainToolBar ? KIconLoader::MainToolbar : KIconLoader::Toolbar);
-        }
-#else
-        avSizes << 16 << 22 << 24 << 32 << 48 << 64;
-#endif
+        avSizes << 16 << 22 << 24 << 32 << 48 << 64 << 128 << 256;
+
         qSort(avSizes);
 
         if (avSizes.count() < 10) {
@@ -1071,11 +1060,7 @@ void KToolBar::setIconDimensions(int size)
 
 int KToolBar::iconSizeDefault() const
 {
-#ifdef HAVE_ICONTHEMES
-    return KIconLoader::global()->currentSize(d->isMainToolBar ? KIconLoader::MainToolbar : KIconLoader::Toolbar);
-#else
     return 22;
-#endif
 }
 
 void KToolBar::slotMovableChanged(bool movable)

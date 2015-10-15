@@ -243,9 +243,6 @@ private:
     Q_PRIVATE_SLOT(d, void slotUpButton())
     Q_PRIVATE_SLOT(d, void slotDownButton())
 
-    Q_PRIVATE_SLOT(d, void slotChangeIcon())
-    Q_PRIVATE_SLOT(d, void slotChangeIconText())
-
     Q_PRIVATE_SLOT(d, void slotDropped(ToolBarListWidget *, int, ToolBarItem *, bool))
 
 private:

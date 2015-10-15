@@ -20,6 +20,7 @@
 
 #include "kis_debug.h"
 
+#include <QApplication>
 #include <QAction>
 #include <QAbstractButton>
 #include <QComboBox>
@@ -34,40 +35,6 @@ namespace KisIconUtils
 
 QIcon loadIcon(const QString &name)
 {
-    QString realName;
-
-    // try load themed icon
-    QColor background = qApp->palette().background().color();
-    bool useDarkIcons = background.value() > 100;
-    const char * const prefix = useDarkIcons ? "dark" : "light";
-
-    realName = QLatin1String(prefix) + '_' + name;
-
-    QStringList names = QStringList() << ":/pics/" + realName + ".svg"
-                                      << ":/pics/" + realName + ".png"
-                                      << ":/pics/layerbox/" + realName + ".svg"
-                                      << ":/pics/layerbox/" + realName + ".png"
-                                      << ":/pics/misc-" + QLatin1String(prefix) + '/' + realName + ".svg"
-                                      << ":/pics/misc-" + QLatin1String(prefix) + '/' + realName + ".png"
-                                      << ":/pics/tools/16/" + realName + ".svg"
-                                      << ":/pics/tools/16/" + realName + ".png"
-                                      << ":/pics/tool_transform/16/" + realName + ".svg"
-                                      << ":/pics/tool_transform/16/" + realName + ".png"
-                                      << ":/pics/Breeze-" + QLatin1String(prefix) + '/' + realName + ".svg"
-                                      << ":/pics/Breeze-" + QLatin1String(prefix) + '/' + realName + ".png"
-                                      << ":/" + name
-                                      << ":/" + name + ".png"
-                                      << ":/pics/" + name + ".svg"
-                                      << ":/pics/" + name + ".png"
-                                         ;
-
-    foreach(const QString &resname, names) {
-        if (QFile(resname).exists()) {
-            QIcon icon(resname);
-            return icon;
-        }
-    }
-    //qDebug() << "\tfailed to retrieve icon" << name;
     return KoIconUtils::themedIcon(name);
 }
 

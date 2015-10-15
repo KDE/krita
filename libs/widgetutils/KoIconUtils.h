@@ -19,18 +19,37 @@
 #ifndef __KO_ICON_UTILS_H
 #define __KO_ICON_UTILS_H
 
-#include "kritawidgets_export.h"
+#include "kritawidgetutils_export.h"
 
 class QIcon;
 class QString;
 
 namespace KoIconUtils
 {
-    /**
-     * Load a themed icon using its base name. Use it in
-     * Krita instead of previous themedIcon()
-     */
-    KRITAWIDGETS_EXPORT QIcon themedIcon(const QString &name);
+
+enum StdSizes {
+    SizeSmall = 16, SizeSmallMedium = 22, SizeMedium = 32, SizeLarge = 48,
+    SizeHuge = 64, SizeEnormous = 128
+};
+
+enum Group {
+    NoGroup = -1,
+    Desktop = 0,
+    FirstGroup = 0,
+    Toolbar,
+    MainToolbar,
+    Small,
+    Panel,
+    Dialog,
+    LastGroup,
+    User
+};
+
+/**
+ * Load a themed icon using its base name. Use it in
+ * Krita instead of previous themedIcon()
+ */
+KRITAWIDGETUTILS_EXPORT QIcon themedIcon(const QString &name);
 }
 
 #endif /* __KIS_ICON_UTILS_H */

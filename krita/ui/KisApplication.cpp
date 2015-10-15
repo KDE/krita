@@ -44,7 +44,6 @@
 
 #include <klocalizedstring.h>
 #include <kdesktopfile.h>
-#include <kiconloader.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
@@ -157,7 +156,6 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     KoResourcePaths::addResourceType("icc_profiles", "data", "krita/profiles/");
 
     setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
-
 
 #ifdef HAVE_OPENGL
     KisOpenGL::initialize();

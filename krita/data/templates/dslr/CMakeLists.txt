@@ -1,4 +1,9 @@
-ecm_install_icons(${DATA_INSTALL_DIR}/krita/icons )
+ecm_install_icons(
+ICONS
+128-actions-template_dslr.png
+DESTINATION
+${DATA_INSTALL_DIR}/krita/icons )
+
 install( FILES  
     Canon_550D_5184x3456.kra
     Canon_5Dmk3_5760x3840.kra

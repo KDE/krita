@@ -2,7 +2,6 @@ project( textPlugin)
 
 add_definitions(-DTRANSLATION_DOMAIN=\"krita_shape_text\")
 
-add_subdirectory( pics )
 #add_subdirectory( tests )
 
 include_directories(
@@ -155,6 +154,9 @@ ki18n_wrap_ui(textshape_SRCS
 
 )
 
+qt5_add_resources(textshape_SRCS textshape.qrc)
+
+
 add_library(krita_shape_text MODULE ${textshape_SRCS})
 
 kcoreaddons_desktop_to_json(krita_shape_text calligra_shape_text.desktop)
@@ -168,8 +170,3 @@ endif()
 
 
 install(TARGETS krita_shape_text DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-########### install files ###############
-
-#ecm_install_icons( ${DATA_INSTALL_DIR}/krita/icons )
-

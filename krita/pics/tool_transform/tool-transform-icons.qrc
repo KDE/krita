@@ -1,0 +1,33 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource>
+        <file>dark_transform_icons_cage.png</file>
+        <file>dark_transform_icons_liquify_erase.png</file>
+        <file>dark_transform_icons_liquify_main.png</file>
+        <file>dark_transform_icons_liquify_move.png</file>
+        <file>dark_transform_icons_liquify_offset.png</file>
+        <file>dark_transform_icons_liquify_resize.png</file>
+        <file>dark_transform_icons_liquify_rotate.png</file>
+        <file>dark_transform_icons_liquify_rotateCCW.png</file>
+        <file>dark_transform_icons_main.png</file>
+        <file>dark_transform_icons_perspective.png</file>
+        <file>dark_transform_icons_warp.png</file>
+        <file>dark_transform_icons_penPressure.png</file>
+        <file>dark_krita_tool_transform_recursive.png</file>
+
+        <file>light_transform_icons_cage.png</file>
+        <file>light_transform_icons_liquify_erase.png</file>
+        <file>light_transform_icons_liquify_main.png</file>
+        <file>light_transform_icons_liquify_move.png</file>
+        <file>light_transform_icons_liquify_offset.png</file>
+        <file>light_transform_icons_liquify_resize.png</file>
+        <file>light_transform_icons_liquify_rotate.png</file>
+        <file>light_transform_icons_liquify_rotateCCW.png</file>
+        <file>light_transform_icons_main.png</file>
+        <file>light_transform_icons_perspective.png</file>
+        <file>light_transform_icons_warp.png</file>
+        <file>light_transform_icons_penPressure.png</file>
+        <file>light_krita_tool_transform_recursive.png</file>
+
+    </qresource>
+</RCC>

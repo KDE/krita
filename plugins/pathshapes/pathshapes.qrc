@@ -1,0 +1,18 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource>
+        <file alias="callout-shape.png">pics/22-actions-callout-shape.png</file>
+        <file alias="circular-arrow-shape.png">pics/22-actions-circular-arrow-shape.png</file>
+        <file alias="cross-shape.png">pics/22-actions-cross-shape.png</file>
+        <file alias="ellipse-shape.png">pics/22-actions-ellipse-shape.png</file>
+        <file alias="flower-shape.png">pics/22-actions-flower-shape.png</file>
+        <file alias="gearhead-shape.png">pics/22-actions-gearhead-shape.png</file>
+        <file alias="hexagon-shape.png">pics/22-actions-hexagon-shape.png</file>
+        <file alias="pentagon-shape.png">pics/22-actions-pentagon-shape.png</file>
+        <file alias="polygon-shape.png">pics/22-actions-polygon-shape.png</file>
+        <file alias="rectangle-shape.png">pics/22-actions-rectangle-shape.png</file>
+        <file alias="smiley-shape.png">pics/22-actions-smiley-shape.png</file>
+        <file alias="spiral-shape.png">pics/22-actions-spiral-shape.png</file>
+        <file alias="star-shape.png">pics/22-actions-star-shape.png</file>
+    </qresource>
+</RCC>

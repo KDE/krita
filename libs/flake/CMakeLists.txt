@@ -4,7 +4,6 @@ include_directories(${FLAKE_INCLUDES} )
 
 add_subdirectory(styles)
 add_subdirectory(tests)
-add_subdirectory(pics)
 
 set(kritaflake_SRCS
     KoGradientHelper.cpp
@@ -212,10 +211,12 @@ ki18n_wrap_ui(kritaflake_SRCS
     tools/KoZoomToolWidget.ui
 )
 
+qt5_add_resources(kritaiflake_SRCS flake.qrc)
+
 add_library(kritaflake SHARED ${kritaflake_SRCS})
 generate_export_header(kritaflake BASE_NAME kritaflake)
 
-target_link_libraries(kritaflake kritapigment kritawidgetutils kritaodf kritaundo2 KF5::WidgetsAddons KF5::IconThemes Qt5::Svg)
+target_link_libraries(kritaflake kritapigment kritawidgetutils kritaodf kritaundo2 KF5::WidgetsAddons Qt5::Svg)
 target_link_libraries(kritaflake LINK_INTERFACE_LIBRARIES kritapigment kritawidgetutils kritaodf kritaundo2 KF5::WidgetsAddons )
 
 if(HAVE_OPENGL)

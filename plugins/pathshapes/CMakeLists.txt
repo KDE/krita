@@ -5,8 +5,6 @@ include_directories(
     ${FLAKE_INCLUDES}
 )
 
-add_subdirectory(pics)
-
 set(pathshapes_PART_SRCS
     ellipse/EllipseShape.cpp
     ellipse/EllipseShapeFactory.cpp
@@ -39,9 +37,12 @@ ki18n_wrap_ui(pathshapes_PART_SRCS
     ellipse/EllipseShapeConfigWidget.ui
     spiral/SpiralShapeConfigWidget.ui
 )
+
+qt5_add_resources(pathshapes_PART_SRCS pathshapes.qrc)
+
 add_library(krita_shape_paths MODULE ${pathshapes_PART_SRCS})
 kcoreaddons_desktop_to_json(krita_shape_paths calligra_shape_paths.desktop)
 
-target_link_libraries(krita_shape_paths kritaflake kritawidgets KF5::IconThemes)
+target_link_libraries(krita_shape_paths kritaflake kritawidgets)
 
 install(TARGETS krita_shape_paths  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

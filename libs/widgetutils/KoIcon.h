@@ -21,15 +21,7 @@
 #ifndef KOICON_H
 #define KOICON_H
 
-// Qt
-
-#include <QApplication>
-#include <QPalette>
-#include <QColor>
-#include <QIcon>
-
-
-
+#include <KoIconUtils.h>
 /**
  * Macros to support collecting the icons in use.
  *
@@ -44,7 +36,7 @@
  */
 
 /// Use these macros for icons without any issues
-#define koIcon(name) (QIcon::fromTheme(QLatin1String(name)))
+#define koIcon(name) (KoIconUtils::themedIcon(QLatin1String(name)))
 #define koIconName(name) (QLatin1String(name))
 #define koIconNameCStr(name) (name)
 

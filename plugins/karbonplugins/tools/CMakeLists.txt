@@ -44,6 +44,8 @@ ki18n_wrap_ui(karbon_tools_PART_SRCS
     KarbonPatternOptionsWidget.ui
 )
 
+qt5_add_resources(karbon_tools_PART_SRCS karbontools.qrc)
+
 add_library(krita_karbontools MODULE ${karbon_tools_PART_SRCS})
 
 kcoreaddons_desktop_to_json(krita_karbontools karbon_tools.desktop)
@@ -52,12 +54,3 @@ target_link_libraries(krita_karbontools kritawidgets KF5::Completion)
 
 install(TARGETS krita_karbontools DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
-ecm_install_icons( ICONS
-    22-actions-calligraphy.png
-    22-actions-gradient.png
-    22-actions-pattern.png
-    32-actions-tool_imageeffects.png
-
-    DESTINATION ${DATA_INSTALL_DIR}/krita/icons
-    THEME hicolor
-)

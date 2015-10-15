@@ -21,10 +21,11 @@
 
 #include <QImage>
 #include <QPixmap>
+#include <QIcon>
 
 #include <kis_debug.h>
 
-#include <kiconloader.h>
+#include <KoIconUtils.h>
 
 
 KisTemplate::KisTemplate(const QString &name, const QString &description, const QString &file,
@@ -54,7 +55,7 @@ const QPixmap &KisTemplate::loadPicture()
         m_pixmap = QPixmap::fromImage(img);
         return m_pixmap;
     } else { // relative path
-        m_pixmap = KIconLoader::global()->loadIcon(m_picture, KIconLoader::Desktop, 128);
+        m_pixmap = KoIconUtils::themedIcon(m_picture).pixmap(KoIconUtils::SizeEnormous);
         return m_pixmap;
     }
 }

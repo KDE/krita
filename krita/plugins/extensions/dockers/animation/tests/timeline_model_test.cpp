@@ -119,10 +119,6 @@ void TimelineModelTest::testView()
     font.setPointSizeF(9);
     dlg.setFont(font);
 
-    QDoubleSpinBox *dblZoom = new QDoubleSpinBox(&dlg);
-    dblZoom->setValue(1.0);
-    dblZoom->setSingleStep(0.1);
-
     QSpinBox *intFps = new QSpinBox(&dlg);
     intFps->setValue(12);
 
@@ -141,19 +137,16 @@ void TimelineModelTest::testView()
 
     framesTable->setModel(model);
 
-    connect(dblZoom, SIGNAL(valueChanged(double)), framesTable, SLOT(setZoomDouble(double)));
     connect(intFps, SIGNAL(valueChanged(int)),
             m_image->animationInterface(), SLOT(setFramerate(int)));
 
     QVBoxLayout *layout = new QVBoxLayout(&dlg);
 
-    layout->addWidget(dblZoom);
     layout->addWidget(intFps);
     layout->addWidget(framesTable);
 
     layout->setStretch(0, 0);
-    layout->setStretch(1, 0);
-    layout->setStretch(2, 1);
+    layout->setStretch(1, 1);
 
     dlg.resize(600, 400);
 

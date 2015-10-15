@@ -23,6 +23,8 @@
 #include "timeline_ruler_header.h"
 #include "timeline_layers_header.h"
 
+#include <cmath>
+
 #include <QHeaderView>
 #include <QDropEvent>
 #include <QToolButton>
@@ -33,15 +35,25 @@
 #include "kis_debug.h"
 #include "frames_item_delegate.h"
 
+#include "kis_draggable_tool_button.h"
+
+#include "kicon.h"
+#include "kis_icon_utils.h"
 
 struct FramesTableView::Private
 {
-    Private() : fps(1), dragInProgress(false) {}
+    Private()
+        : fps(1),
+          zoom(1.0),
+          initialDragZoomValue(1.0),
+          dragInProgress(false) {}
 
     TimelineFramesModel *model;
     TimelineRulerHeader *horizontalRuler;
     TimelineLayersHeader *layersHeader;
     int fps;
+    qreal zoom;
+    qreal initialDragZoomValue;
 
     QToolButton *addLayersButton;
     QMenu *layerEditingMenu;
@@ -49,6 +61,8 @@ struct FramesTableView::Private
 
     QMenu *frameCreationMenu;
     QMenu *frameEditingMenu;
+
+    QToolButton *zoomDragButton;
 
     bool dragInProgress;
 };
@@ -103,7 +117,7 @@ FramesTableView::FramesTableView(QWidget *parent)
 
     m_d->addLayersButton = new QToolButton(this);
     m_d->addLayersButton->setAutoRaise(true);
-    m_d->addLayersButton->setIcon(QIcon::fromTheme("window-close"));
+    m_d->addLayersButton->setIcon(KisIconUtils::loadIcon("addlayer"));
     m_d->addLayersButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     m_d->addLayersButton->setPopupMode(QToolButton::InstantPopup);
 
@@ -128,11 +142,28 @@ FramesTableView::FramesTableView(QWidget *parent)
     m_d->frameEditingMenu = new QMenu(this);
     m_d->frameEditingMenu->addAction("Remove Frame", this, SLOT(slotRemoveFrame()));
 
+
+    m_d->zoomDragButton = new KisDraggableToolButton(this);
+    m_d->zoomDragButton->setAutoRaise(true);
+    m_d->zoomDragButton->setIcon(KisIconUtils::loadIcon("zoom-in"));
+    m_d->zoomDragButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    m_d->zoomDragButton->setPopupMode(QToolButton::InstantPopup);
+    connect(m_d->zoomDragButton, SIGNAL(valueChanged(int)), SLOT(slotZoomButtonChanged(int)));
+    connect(m_d->zoomDragButton, SIGNAL(pressed()), SLOT(slotZoomButtonPressed()));
+
     setFramesPerSecond(12);
 }
 
 FramesTableView::~FramesTableView()
 {
+}
+
+void resizeToMinimalSize(QAbstractButton *w, int minimalSize) {
+    QSize buttonSize = w->sizeHint();
+    if (buttonSize.height() > minimalSize) {
+        buttonSize = QSize(minimalSize, minimalSize);
+    }
+    w->resize(buttonSize);
 }
 
 void FramesTableView::updateGeometries()
@@ -143,18 +174,17 @@ void FramesTableView::updateGeometries()
     const int margin = 2;
     const int minimalSize = availableHeight - 2 * margin;
 
-    QSize buttonSize = m_d->addLayersButton->sizeHint();
-
-    if (buttonSize.height() > minimalSize) {
-        buttonSize = QSize(minimalSize, minimalSize);
-    }
-
-    m_d->addLayersButton->resize(buttonSize);
+    resizeToMinimalSize(m_d->addLayersButton, minimalSize);
+    resizeToMinimalSize(m_d->zoomDragButton, minimalSize);
 
     int x = 2 * margin;
-    int y = (availableHeight - buttonSize.height()) / 2;
+    int y = (availableHeight - minimalSize) / 2;
+    m_d->addLayersButton->move(x, 2 * y);
 
-    m_d->addLayersButton->move(x, y);
+    const int availableWidth = m_d->layersHeader->width();
+
+    x = availableWidth - margin - minimalSize;
+    m_d->zoomDragButton->move(x, 2 * y);
 }
 
 void FramesTableView::setModel(QAbstractItemModel *model)
@@ -185,19 +215,48 @@ void FramesTableView::setFramesPerSecond(int fps)
     // m_d->horizontalRuler->reset();
 }
 
+qreal FramesTableView::zoom() const
+{
+    return m_d->zoom;
+}
+
 void FramesTableView::setZoom(qreal zoom)
 {
-    m_d->horizontalRuler->setDefaultSectionSize(18 * zoom);
+    const int minSectionSize = 4;
+    const int unitSectionSize = 18;
 
-    // For some reason simple update doesn't work here,
-    // so reset the whole header
-    m_d->horizontalRuler->reset();
-    slotUpdateInfiniteFramesCount();
+    int newSectionSize = zoom * unitSectionSize;
+
+    if (newSectionSize < minSectionSize) {
+        newSectionSize = minSectionSize;
+        zoom = qreal(newSectionSize) / unitSectionSize;
+    }
+
+    if (!qFuzzyCompare(m_d->zoom, zoom)) {
+        m_d->zoom = zoom;
+        m_d->horizontalRuler->setDefaultSectionSize(newSectionSize);
+
+        // For some reason simple update doesn't work here,
+        // so reset the whole header
+        m_d->horizontalRuler->reset();
+        slotUpdateInfiniteFramesCount();
+    }
 }
 
 void FramesTableView::setZoomDouble(double zoom)
 {
     setZoom(zoom);
+}
+
+void FramesTableView::slotZoomButtonPressed()
+{
+    m_d->initialDragZoomValue = zoom();
+}
+
+void FramesTableView::slotZoomButtonChanged(int value)
+{
+    qreal zoomCoeff = std::pow(2.0, qreal(value) / KisDraggableToolButton::unitRadius());
+    setZoom(m_d->initialDragZoomValue * zoomCoeff);
 }
 
 void FramesTableView::slotUpdateInfiniteFramesCount()
@@ -277,6 +336,9 @@ void FramesTableView::slotDataChanged(const QModelIndex &topLeft, const QModelIn
 
 void FramesTableView::slotHeaderDataChanged(Qt::Orientation orientation, int first, int last)
 {
+    Q_UNUSED(first);
+    Q_UNUSED(last);
+
     if (orientation == Qt::Horizontal) {
         const int newFps = m_d->model->headerData(0, Qt::Horizontal, TimelineFramesModel::FramesPerSecondRole).toInt();
 

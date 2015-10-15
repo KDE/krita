@@ -38,6 +38,8 @@ public:
 
     void updateGeometries();
 
+    qreal zoom() const;
+
 public Q_SLOTS:
     void setZoom(qreal zoom);
     void setZoomDouble(double zoom);
@@ -63,6 +65,9 @@ private Q_SLOTS:
     void slotUpdateInfiniteFramesCount();
 
     void slotHeaderDataChanged(Qt::Orientation orientation, int first, int last);
+
+    void slotZoomButtonPressed();
+    void slotZoomButtonChanged(int value);
 
 private:
     void setFramesPerSecond(int fps);

@@ -223,13 +223,12 @@ find_package(Qt5 ${MIN_QT_VERSION} REQUIRED COMPONENTS
         Concurrent
     OPTIONAL_COMPONENTS
         Qml
-        Quick
+        Declarative
         X11Extras
         DBus
 )
 
 set(HAVE_DBUS QT5DBus_FOUND)
-set(QT_QTQUICK_FOUND ${Qt5Quick_FOUND})
 
 set(QT_QTTEST_LIBRARY Qt5::Test)
 

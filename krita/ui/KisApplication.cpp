@@ -638,8 +638,7 @@ QList<QUrl> KisApplication::checkAutosaveFiles()
     if (autoSaveFiles.size() > 0) {
 
         foreach(const QString &autoSaveFile, autoSaveFiles) {
-            QUrl url;
-            url.setPath(dir.absolutePath() + "/" + autoSaveFile);
+            const QUrl url = QUrl::fromLocalFile(dir.absolutePath() + QLatin1Char('/') + autoSaveFile);
             autosaveUrls << url;
         }
     }

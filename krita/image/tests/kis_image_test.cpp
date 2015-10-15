@@ -305,8 +305,8 @@ struct FlattenTestImage
 
         layer7 = new KisPaintLayer(p.image, "paint7", OPACITY_OPAQUE_U8);
         layer8 = new KisPaintLayer(p.image, "paint8", OPACITY_OPAQUE_U8);
-        layer7->setCompositeOp(COMPOSITE_ADD);
-        layer8->setCompositeOp(COMPOSITE_ADD);
+        layer7->setCompositeOpId(COMPOSITE_ADD);
+        layer8->setCompositeOpId(COMPOSITE_ADD);
 
         QRect rect1(100, 100, 100, 100);
         QRect rect2(150, 150, 150, 150);
@@ -346,8 +346,8 @@ struct FlattenTestImage
         style->dropShadow()->setOpacity(80.0);
         layer2->setLayerStyle(style);
 
-        layer2->setCompositeOp(COMPOSITE_ADD);
-        group1->setCompositeOp(COMPOSITE_ADD);
+        layer2->setCompositeOpId(COMPOSITE_ADD);
+        group1->setCompositeOpId(COMPOSITE_ADD);
 
         p.image->addNode(layer5);
 

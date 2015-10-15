@@ -133,33 +133,33 @@ void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLa
 
     QString compop = elem.attribute("composite-op");
     if (compop.startsWith("svg:")) {
-        if (compop == "svg:clear") layer->setCompositeOp(COMPOSITE_CLEAR);
-        if (compop == "svg:src-over") layer->setCompositeOp(COMPOSITE_OVER);
-        if (compop == "svg:add") layer->setCompositeOp(COMPOSITE_ADD);
-        if (compop == "svg:multiply") layer->setCompositeOp(COMPOSITE_MULT);
-        if (compop == "svg:screen") layer->setCompositeOp(COMPOSITE_SCREEN);
-        if (compop == "svg:overlay") layer->setCompositeOp(COMPOSITE_OVERLAY);
-        if (compop == "svg:darken") layer->setCompositeOp(COMPOSITE_DARKEN);
-        if (compop == "svg:lighten") layer->setCompositeOp(COMPOSITE_LIGHTEN);
-        if (compop == "svg:color-dodge") layer->setCompositeOp(COMPOSITE_DODGE);
-        if (compop == "svg:color-burn") layer->setCompositeOp(COMPOSITE_BURN);
-        if (compop == "svg:hard-light") layer->setCompositeOp(COMPOSITE_HARD_LIGHT);
-        if (compop == "svg:soft-light") layer->setCompositeOp(COMPOSITE_SOFT_LIGHT_SVG);
-        if (compop == "svg:difference") layer->setCompositeOp(COMPOSITE_DIFF);
-        if (compop == "svg:color") layer->setCompositeOp(COMPOSITE_COLOR);
-        if (compop == "svg:luminosity") layer->setCompositeOp(COMPOSITE_LUMINIZE);
-        if (compop == "svg:hue") layer->setCompositeOp(COMPOSITE_HUE);
-        if (compop == "svg:saturation") layer->setCompositeOp(COMPOSITE_SATURATION);
-        if (compop == "svg:exclusion") layer->setCompositeOp(COMPOSITE_EXCLUSION);
+        if (compop == "svg:clear") layer->setCompositeOpId(COMPOSITE_CLEAR);
+        if (compop == "svg:src-over") layer->setCompositeOpId(COMPOSITE_OVER);
+        if (compop == "svg:add") layer->setCompositeOpId(COMPOSITE_ADD);
+        if (compop == "svg:multiply") layer->setCompositeOpId(COMPOSITE_MULT);
+        if (compop == "svg:screen") layer->setCompositeOpId(COMPOSITE_SCREEN);
+        if (compop == "svg:overlay") layer->setCompositeOpId(COMPOSITE_OVERLAY);
+        if (compop == "svg:darken") layer->setCompositeOpId(COMPOSITE_DARKEN);
+        if (compop == "svg:lighten") layer->setCompositeOpId(COMPOSITE_LIGHTEN);
+        if (compop == "svg:color-dodge") layer->setCompositeOpId(COMPOSITE_DODGE);
+        if (compop == "svg:color-burn") layer->setCompositeOpId(COMPOSITE_BURN);
+        if (compop == "svg:hard-light") layer->setCompositeOpId(COMPOSITE_HARD_LIGHT);
+        if (compop == "svg:soft-light") layer->setCompositeOpId(COMPOSITE_SOFT_LIGHT_SVG);
+        if (compop == "svg:difference") layer->setCompositeOpId(COMPOSITE_DIFF);
+        if (compop == "svg:color") layer->setCompositeOpId(COMPOSITE_COLOR);
+        if (compop == "svg:luminosity") layer->setCompositeOpId(COMPOSITE_LUMINIZE);
+        if (compop == "svg:hue") layer->setCompositeOpId(COMPOSITE_HUE);
+        if (compop == "svg:saturation") layer->setCompositeOpId(COMPOSITE_SATURATION);
+        if (compop == "svg:exclusion") layer->setCompositeOpId(COMPOSITE_EXCLUSION);
     }
     else if (compop.startsWith("krita:")) {
         compop = compop.remove(0, 6);
-        layer->setCompositeOp(compop);
+        layer->setCompositeOpId(compop);
     }
     else {
         // to fix old bugs in krita's ora export
-        if (compop == "color-dodge") layer->setCompositeOp(COMPOSITE_DODGE);
-        if (compop == "difference") layer->setCompositeOp(COMPOSITE_DIFF);
+        if (compop == "color-dodge") layer->setCompositeOpId(COMPOSITE_DODGE);
+        if (compop == "difference") layer->setCompositeOpId(COMPOSITE_DIFF);
     }
 
 }

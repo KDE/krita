@@ -253,7 +253,7 @@ KisImportExportFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* 
         }
 
         // Set some properties
-        kisLayer->setCompositeOp(layerModeG2K(xcflayer.mode));
+        kisLayer->setCompositeOpId(layerModeG2K(xcflayer.mode));
         kisLayer->setVisible(xcflayer.isVisible);
         kisLayer->disableAlphaChannel(xcflayer.mode != GIMP_NORMAL_MODE);
 

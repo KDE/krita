@@ -30,6 +30,9 @@
 class KoColorSpace;
 #include <KoID.h>
 
+// TODO : convert this data blob into a modern design with an enum class.
+// This will reduce the need for runtime string comparisons.
+
 const QString COMPOSITE_OVER         = "normal";
 const QString COMPOSITE_ERASE        = "erase";
 const QString COMPOSITE_IN           = "in";

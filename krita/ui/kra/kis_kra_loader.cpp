@@ -659,7 +659,7 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
         QString   compositeOpName = element.attribute(COMPOSITE_OP, "normal");
 
         layer->setChannelFlags(channelFlags);
-        layer->setCompositeOp(compositeOpName);
+        layer->setCompositeOpId(compositeOpName);
 
         if (element.hasAttribute(LAYER_STYLE_UUID)) {
             QString uuidString = element.attribute(LAYER_STYLE_UUID);

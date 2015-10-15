@@ -59,7 +59,7 @@ KisLayerPropsCommand::~KisLayerPropsCommand()
 void KisLayerPropsCommand::redo()
 {
     m_layer->setOpacity(m_newOpacity);
-    m_layer->setCompositeOp(m_newCompositeOp);
+    m_layer->setCompositeOpId(m_newCompositeOp);
     m_layer->setName(m_newName);
     if (m_undoChannelFlags) {
         m_layer->setChannelFlags(m_newChannelFlags);
@@ -70,7 +70,7 @@ void KisLayerPropsCommand::redo()
 void KisLayerPropsCommand::undo()
 {
     m_layer->setOpacity(m_oldOpacity);
-    m_layer->setCompositeOp(m_oldCompositeOp);
+    m_layer->setCompositeOpId(m_oldCompositeOp);
     m_layer->setName(m_oldName);
     if (m_undoChannelFlags) {
         m_layer->setChannelFlags(m_oldChannelFlags);

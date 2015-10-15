@@ -94,7 +94,7 @@ KisLayerSP KisCloneLayer::reincarnateAsPaintLayer() const
     KisPaintLayerSP newLayer = new KisPaintLayer(image(), name(), opacity(), newOriginal);
     newLayer->setX(newLayer->x() + x());
     newLayer->setY(newLayer->y() + y());
-    newLayer->setCompositeOp(compositeOpId());
+    newLayer->setCompositeOpId(compositeOpId());
     newLayer->mergeNodeProperties(nodeProperties());
 
     return newLayer;

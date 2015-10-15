@@ -126,10 +126,7 @@ const QString& KisBaseNode::compositeOpId() const
     return m_d->compositeOp;
 }
 
-/**
- * FIXME: Rename this function to setCompositeOpId()
- */
-void KisBaseNode::setCompositeOp(const QString& compositeOp)
+void KisBaseNode::setCompositeOpId(const QString& compositeOp)
 {
     m_d->compositeOp = compositeOp;
     baseNodeChangedCallback();

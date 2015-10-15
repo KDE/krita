@@ -518,7 +518,7 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
                                          source->name(),
                                          source->opacity(),
                                          clone);
-    layer->setCompositeOp(source->compositeOpId());
+    layer->setCompositeOpId(source->compositeOpId());
 
     KisNodeSP parent = source->parent();
     KisNodeSP above = source;

@@ -222,14 +222,14 @@ KisImageBuilder_Result PSDLoader::decode(const QUrl &uri)
                     groupLayer->setPassThroughMode(true);
                 }
 
-                groupLayer->setCompositeOp(compositeOp);
+                groupLayer->setCompositeOpId(compositeOp);
 
                 newLayer = groupLayer;
             }
         }
         else {
             KisPaintLayerSP layer = new KisPaintLayer(m_image, layerRecord->layerName, layerRecord->opacity);
-            layer->setCompositeOp(psd_blendmode_to_composite_op(layerRecord->blendModeKey));
+            layer->setCompositeOpId(psd_blendmode_to_composite_op(layerRecord->blendModeKey));
 
             const QDomDocument &styleXml = layerRecord->infoBlocks.layerStyleXml;
 

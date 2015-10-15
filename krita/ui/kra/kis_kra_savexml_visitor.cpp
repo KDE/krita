@@ -286,7 +286,7 @@ void KisSaveXmlVisitor::loadLayerAttributes(const QDomElement &el, KisLayer *lay
     }
 
     if (el.hasAttribute(COMPOSITE_OP)) {
-        layer->setCompositeOp(el.attribute(COMPOSITE_OP));
+        layer->setCompositeOpId(el.attribute(COMPOSITE_OP));
     }
 
     if (el.hasAttribute(VISIBLE)) {

@@ -1302,7 +1302,7 @@ KisLayerSP KisImage::flattenLayer(KisLayerSP layer)
     KisPaintLayerSP newLayer = new KisPaintLayer(this, layer->name(), layer->opacity(), mergedDevice);
 
     if (!resetComposition) {
-        newLayer->setCompositeOp(layer->compositeOp()->id());
+        newLayer->setCompositeOpId(layer->compositeOp()->id());
         newLayer->setChannelFlags(layer->channelFlags());
     }
 

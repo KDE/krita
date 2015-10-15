@@ -34,12 +34,12 @@ KisNodeCompositeOpCommand::KisNodeCompositeOpCommand(KisNodeSP node, const QStri
 
 void KisNodeCompositeOpCommand::redo()
 {
-    m_node->setCompositeOp(m_newCompositeOp);
+    m_node->setCompositeOpId(m_newCompositeOp);
     m_node->setDirty();
 }
 
 void KisNodeCompositeOpCommand::undo()
 {
-    m_node->setCompositeOp(m_oldCompositeOp);
+    m_node->setCompositeOpId(m_oldCompositeOp);
     m_node->setDirty();
 }

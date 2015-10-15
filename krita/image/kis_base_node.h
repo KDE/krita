@@ -133,7 +133,7 @@ public:
      * Set a new composite op for this layer. The layer will be marked
      * dirty.
      */
-    void setCompositeOp(const QString& compositeOpId);
+    void setCompositeOpId(const QString& compositeOpId);
 
     /**
      * @return unique id, which is now used by clone layers.

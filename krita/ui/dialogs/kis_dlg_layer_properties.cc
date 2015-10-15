@@ -155,7 +155,7 @@ void KisDlgLayerProperties::updatePreview()
 
     if (d->page->checkBoxPreview->isChecked()) {
         d->layer->setOpacity(getOpacity());
-        d->layer->setCompositeOp(getCompositeOp());
+        d->layer->setCompositeOpId(getCompositeOp());
         d->layer->setName(getName());
         d->layer->setChannelFlags(getChannelFlags());
         d->doc->setModified(true);
@@ -209,7 +209,7 @@ void KisDlgLayerProperties::cleanPreviewChanges()
     d->layer->setChannelFlags(d->channelFlags);
 
     if (d->compositeOp) {
-        d->layer->setCompositeOp(d->compositeOp->id());
+        d->layer->setCompositeOpId(d->compositeOp->id());
     }
 }
 

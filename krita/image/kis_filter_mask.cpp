@@ -39,7 +39,7 @@ KisFilterMask::KisFilterMask()
     : KisEffectMask(),
       KisNodeFilterInterface(0, false)
 {
-    setCompositeOp(COMPOSITE_COPY);
+    setCompositeOpId(COMPOSITE_COPY);
 }
 
 KisFilterMask::~KisFilterMask()

@@ -800,7 +800,7 @@ KisImageBuilder_Result exrConverter::decode(const QUrl &uri)
             dbgFile << "Decoding " << info.name << " with " << info.channelMap.size() << " channels, and color space " << info.colorSpace->id();
             KisPaintLayerSP layer = new KisPaintLayer(m_d->image, info.name, OPACITY_OPAQUE_U8, info.colorSpace);
 
-            layer->setCompositeOp(COMPOSITE_OVER);
+            layer->setCompositeOpId(COMPOSITE_OVER);
 
             if (!layer) {
                 return KisImageBuilder_RESULT_FAILURE;

@@ -377,7 +377,7 @@ KisLayerSP KisLayer::createMergedLayer(KisLayerSP prevLayer)
     KisLayerSP newLayer = new KisPaintLayer(my_image, prevLayer->name(), OPACITY_OPAQUE_U8, mergedDevice);
 
     if (keepBlendingOptions) {
-        newLayer->setCompositeOp(compositeOpId());
+        newLayer->setCompositeOpId(compositeOpId());
         newLayer->setOpacity(opacity());
         newLayer->setChannelFlags(channelFlags());
     }

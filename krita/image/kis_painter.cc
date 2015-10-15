@@ -2543,6 +2543,9 @@ const KoCompositeOp * KisPainter::compositeOp()
     return d->compositeOp;
 }
 
+/**
+ * TODO: Rename this setCompositeOpId().  See KoCompositeOpRegistry.h
+ */
 void KisPainter::setCompositeOp(const QString& op)
 {
     d->compositeOp = d->colorSpace->compositeOp(op);

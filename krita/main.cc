@@ -121,10 +121,6 @@ extern "C" int main(int argc, char **argv)
         }
     }
 
-#if defined HAVE_OPENGL
-    KisOpenGL::initialize();
-#endif
-
     if (!runningInKDE) {
         // Icons in menus are ugly and distracting
         app.setAttribute(Qt::AA_DontShowIconsInMenus);

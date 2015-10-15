@@ -218,12 +218,10 @@ find_package(Qt5 ${MIN_QT_VERSION} REQUIRED COMPONENTS
         Xml 
         Network 
         PrintSupport
-        Script 
         Svg 
         Test 
         Concurrent
     OPTIONAL_COMPONENTS
-        UiTools
         Qml
         Quick
         X11Extras

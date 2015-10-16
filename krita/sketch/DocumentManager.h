@@ -70,6 +70,9 @@ private Q_SLOTS:
     void delayedNewDocument();
     void delayedSaveAs();
     void delayedOpenDocument();
+
+    void onLoadCompleted();
+    void onLoadCanceled(const QString &errMsg);
 };
 
 #endif // DOCUMENTMANAGER_H

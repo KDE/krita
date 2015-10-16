@@ -195,19 +195,44 @@ void DocumentManager::delayedOpenDocument()
         d->document->setSaveInBatchMode(true);
     }
 
+    connect(d->document, SIGNAL(completed()), this, SLOT(onLoadCompleted()));
+    connect(d->document, SIGNAL(canceled(QString)), this, SLOT(onLoadCanceled(QString)));
 
+    // TODO: still needed?
     d->document->setModified(false);
     if (d->importingDocument)
         d->document->importDocument(QUrl::fromLocalFile(d->openDocumentFilename));
     else
         d->document->openUrl(QUrl::fromLocalFile(d->openDocumentFilename));
+    // TODO: handle fail of open/import
     d->recentFileManager->addRecent(d->openDocumentFilename);
 
     KisPart::instance()->addDocument(d->document);
 
     d->temporaryFile = false;
+}
+
+// Separate from openDocument to handle async loading (remote URLs)
+void DocumentManager::onLoadCompleted()
+{
+    KisDocument *newdoc = qobject_cast<KisDocument*>(sender());
+
+    disconnect(newdoc, SIGNAL(completed()), this, SLOT(onLoadCompleted()));
+    disconnect(newdoc, SIGNAL(canceled(QString)), this, SLOT(onLoadCanceled(QString)));
 
     emit documentChanged();
+}
+
+void DocumentManager::onLoadCanceled(const QString &errMsg)
+{
+//     if (!errMsg.isEmpty())   // empty when canceled by user
+//         QMessageBox::critical(this, i18nc("@title:window", "Krita"), errMsg);
+    // ... can't delete the document, it's the one who emitted the signal...
+
+    KisDocument* newdoc = qobject_cast<KisDocument*>(sender());
+    Q_ASSERT(newdoc);
+    disconnect(newdoc, SIGNAL(completed()), this, SLOT(onLoadCompleted()));
+    disconnect(newdoc, SIGNAL(canceled(QString)), this, SLOT(onLoadCanceled(QString)));
 }
 
 void DocumentManager::closeDocument()

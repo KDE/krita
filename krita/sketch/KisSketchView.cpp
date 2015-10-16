@@ -37,6 +37,7 @@
 #include <kis_selection_manager.h>
 #include <KisPart.h>
 #include <kis_tool_freehand.h>
+#include <kis_paintop_box.h>
 #include "KisSelectionExtras.h"
 
 #include "krita/gemini/ViewModeSwitchEvent.h"
@@ -297,7 +298,6 @@ void KisSketchView::documentChanged()
     d->doc = DocumentManager::instance()->document();
 	if (!d->doc) return;
     if (!d->viewManager) return;
-    if (!d->viewManager->canvasBase()) return;
 
     connect(d->doc, SIGNAL(modified(bool)), SIGNAL(modifiedChanged()));
 
@@ -305,15 +305,20 @@ void KisSketchView::documentChanged()
                                                                                     d->viewManager->resourceProvider()->resourceManager(),
                                                                                     d->viewManager->actionCollection(),
                                                                                     QApplication::activeWindow()));
+    view->setViewManager(d->viewManager);
+    view->canvasBase()->setFavoriteResourceManager(d->viewManager->paintOpBox()->favoriteResourcesManager());
+    view->slotLoadingFinished();
+
     d->view = view;
+    d->canvas = d->view->canvasBase();
     d->view->setShowFloatingMessage(false);
-    KisCanvasController *controller = dynamic_cast<KisCanvasController*>(d->viewManager->canvasBase()->canvasController());
+    d->viewManager->setCurrentView(view);
+    KisCanvasController *controller = static_cast<KisCanvasController*>(d->canvas->canvasController());
 
     connect(d->view, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));
     
     controller->setGeometry(x(), y(), width(), height());
     d->view->hide();
-    d->canvas = d->view->canvasBase();
 
     d->undoStack = d->doc->undoStack();
     d->undoAction = d->viewManager->actionCollection()->action("edit_undo");

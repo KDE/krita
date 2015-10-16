@@ -68,37 +68,49 @@ Page {
         view: sketchView.view;
     }
 
-    LayerModel {
-        id: layerModel;
-        // Notice - the model needs to know about the engine before the view, hence it is set first
-        // This could be rectified, but for now know that the order here is important.
-        engine: QMLEngine;
-        view: sketchView.view;
-    }
+//     LayerModel {
+//         id: layerModel;
+//         // Notice - the model needs to know about the engine before the view, hence it is set first
+//         // This could be rectified, but for now know that the order here is important.
+//         engine: QMLEngine;
+//         view: sketchView.view;
+//     }
 
-    PanelBar {
+    Panel {
         id: panelBar;
-        panelHeight: parent.height;
-        width: parent.width;
+        function collapse() {}
     }
+//     PanelBar {
+//         id: panelBar;
+//         panelHeight: parent.height;
+//         width: parent.width;
+//     }
 
-    NewImagePanel {
+    Panel {
         id: newPanel;
-        anchors.left: parent.left;
-        width: Constants.GridWidth * 4;
-        height: parent.height;
-
-        onClicked: d.beginCreateNewFile(options);
+        property bool collapsed: true;
     }
+//     NewImagePanel {
+//         id: newPanel;
+//         anchors.left: parent.left;
+//         width: Constants.GridWidth * 4;
+//         height: parent.height;
+// 
+//         onClicked: d.beginCreateNewFile(options);
+//     }
 
-    OpenImagePanel {
+    Panel {
         id: openPanel;
-        anchors.left: parent.left;
-        width: Constants.GridWidth * 4;
-        height: parent.height;
-
-        onClicked: d.beginOpenFile(file);
+        property bool collapsed: true;
     }
+//     OpenImagePanel {
+//         id: openPanel;
+//         anchors.left: parent.left;
+//         width: Constants.GridWidth * 4;
+//         height: parent.height;
+// 
+//         onClicked: d.beginOpenFile(file);
+//     }
 
     MenuPanel {
         id: menuPanel;
@@ -180,17 +192,17 @@ Page {
         }
     }
 
-    ToolOverlayPanel {
-        id: toolOverlay;
-        anchors {
-            left: menuPanel.left;
-            leftMargin: (Constants.IsLandscape ? Constants.GridWidth * 4: Constants.GridWidth * 2) + Constants.DefaultMargin;
-            right: menuPanel.right;
-            rightMargin: (Constants.IsLandscape ? 0 : Constants.GridWidth * 2) + Constants.DefaultMargin;
-            bottom: menuPanel.top;
-            bottomMargin: Constants.DefaultMargin;
-        }
-    }
+//     ToolOverlayPanel {
+//         id: toolOverlay;
+//         anchors {
+//             left: menuPanel.left;
+//             leftMargin: (Constants.IsLandscape ? Constants.GridWidth * 4: Constants.GridWidth * 2) + Constants.DefaultMargin;
+//             right: menuPanel.right;
+//             rightMargin: (Constants.IsLandscape ? 0 : Constants.GridWidth * 2) + Constants.DefaultMargin;
+//             bottom: menuPanel.top;
+//             bottomMargin: Constants.DefaultMargin;
+//         }
+//     }
 
     Dialog {
         id: loadingDialog;
@@ -291,7 +303,8 @@ Page {
 
     Component.onCompleted: {
         Krita.Window.allowClose = false;
-        loadingDialog.show("Please wait...");
+        // QT5TODO: for unknown reasons results in some unknown busy loop
+//         loadingDialog.show("Please wait...");
 
         if(Settings.currentFile.indexOf("temp") == -1) {
             sketchView.file = Settings.currentFile;

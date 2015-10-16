@@ -27,11 +27,14 @@
 
 #include <KAboutData>
 #include <KLocalizedString>
+#include <KIconLoader>
 
 #include "KoGlobal.h"
 #include <KoResourcePaths.h>
 
-#include <kiconloader.h>
+#include <calligraversion.h>
+#include <calligragitversion.h>
+#include <opengl/kis_opengl.h>
 
 #include "MainWindow.h"
 
@@ -47,8 +50,6 @@
 #include <ui/input/wintab/kis_tablet_support_x11.h>
 #endif
 
-#include <calligraversion.h>
-#include <calligragitversion.h>
 
 int main( int argc, char** argv )
 {
@@ -74,6 +75,13 @@ int main( int argc, char** argv )
                          QString(),
                          QStringLiteral("https://www.krita.org"),
                          QStringLiteral("submit@bugs.kde.org"));
+
+#if defined HAVE_X11
+    QCoreApplication::setAttribute(Qt::AA_X11InitThreads);
+#endif
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
+    QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
+    QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
     SketchApplication app(argc, argv);
     KAboutData::setApplicationData( aboutData );
@@ -111,6 +119,8 @@ int main( int argc, char** argv )
     KoResourcePaths::addResourceType("kis_images", "data", "krita/images/");
 
     KoResourcePaths::addResourceType("icc_profiles", "data", "krita/profiles/");
+
+    KisOpenGL::initialize();
 
     QDir appdir(app.applicationDirPath());
     appdir.cdUp();
@@ -153,13 +163,6 @@ int main( int argc, char** argv )
     // TODO: who owns the filter object?
     app.installNativeEventFilter(new KisTabletSupportX11());
 #endif
-
-#if defined HAVE_X11
-    QCoreApplication::setAttribute(Qt::AA_X11InitThreads);
-#endif
-    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
-    QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
-    QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
     app.start();
 

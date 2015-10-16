@@ -66,7 +66,7 @@ ki18n_wrap_ui(kritawidgetutils_LIB_SRCS
     xmlgui/kshortcutwidget.ui
 )
 
-qt5_add_resources(kritiwidgetutils_LIB_SRCS xmlgui/kxmlgui.qrc)
+qt5_add_resources(kritawidgetutils_LIB_SRCS xmlgui/kxmlgui.qrc)
 
 
 add_library(kritawidgetutils SHARED ${kritawidgetutils_LIB_SRCS})

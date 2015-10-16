@@ -25,7 +25,8 @@
 #include <KisTemplateGroup.h>
 #include <KisTemplate.h>
 #include <KisPart.h>
-#include <kiconloader.h>
+#include <KoIconUtils.h>
+
 #include <QApplication>
 #include <QTimer>
 
@@ -169,7 +170,8 @@ void TemplatesModel::populate()
             item->name = t->name();
             item->description = t->description();
             item->file = QString("template://").append(t->file());
-            item->icon = KIconLoader::global()->iconPath(t->picture(), KIconLoader::Desktop);
+            // QT5TODO: support custom pictures and icon symbol ids again
+            // item->icon = KIconLoader::global()->iconPath(t->picture(), KIconLoader::Desktop);
             item->groupName = group->name();
             item->groupFolded = true; // default hide groups
             d->items << item;

@@ -27,7 +27,6 @@
 
 #include <KAboutData>
 #include <KLocalizedString>
-#include <KIconLoader>
 
 #include "KoGlobal.h"
 #include <KoResourcePaths.h>
@@ -107,7 +106,10 @@ int main( int argc, char** argv )
         }
     }
 
-    KIconLoader::global()->addAppDir("krita");
+    // QT5TODO: untested replacement of KIconLoader::global()->addAppDir("krita");
+    QStringList themeSearchPaths = QIcon::themeSearchPaths();
+    themeSearchPaths.append(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "krita/pics", QStandardPaths::LocateDirectory));
+    QIcon::setThemeSearchPaths(themeSearchPaths);
 
     // Initialize all Calligra directories etc.
     KoGlobal::initialize();

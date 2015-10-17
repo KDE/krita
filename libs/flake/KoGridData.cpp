@@ -38,28 +38,13 @@
 class Q_DECL_HIDDEN KoGridData::Private
 {
 public:
-    Private()
-        : snapToGrid(false),
-        showGrid(false),
-        paintGridInBackground(false),
-        gridX(MM_TO_POINT(DEFAULT_GRID_SIZE_MM)),
-        gridY(MM_TO_POINT(DEFAULT_GRID_SIZE_MM)),
-        gridColor(Qt::lightGray),
-        toggleGridAction(0)
-    {
-    }
-
-    ~Private()
-    {
-        delete toggleGridAction;
-    }
-
-    bool snapToGrid;
-    bool showGrid;
-    bool paintGridInBackground;
-    qreal gridX, gridY;
-    QColor gridColor;
-    KToggleAction *toggleGridAction;
+    bool snapToGrid{false};
+    bool showGrid{false};
+    bool paintGridInBackground{false};
+    qreal gridX{MM_TO_POINT(DEFAULT_GRID_SIZE_MM)};
+    qreal gridY{MM_TO_POINT(DEFAULT_GRID_SIZE_MM)};
+    QColor gridColor{Qt::lightGray};
+    QScopedPointer<KToggleAction> toggleGridAction;
 };
 
 KoGridData::KoGridData()
@@ -217,14 +202,14 @@ void KoGridData::saveOdfSettings(KoXmlWriter &settingsWriter)
     }
 }
 
-KToggleAction *KoGridData::gridToggleAction(QWidget* canvas)
+const KToggleAction *KoGridData::gridToggleAction(QWidget* canvas)
 {
-    if (! d->toggleGridAction) {
-        d->toggleGridAction = new KToggleAction(koIcon("view-grid"), i18n("Show Grid"), 0);
+    if (!d->toggleGridAction) {
+        d->toggleGridAction.reset(new KToggleAction(koIcon("view-grid"), i18n("Show Grid"), 0));
         d->toggleGridAction->setToolTip(i18n("Shows or hides grid"));
         d->toggleGridAction->setChecked(d->showGrid);
     }
     if (canvas)
-        QObject::connect(d->toggleGridAction, SIGNAL(toggled(bool)), canvas, SLOT(update()));
-    return d->toggleGridAction;
+        QObject::connect(d->toggleGridAction.data(), SIGNAL(toggled(bool)), canvas, SLOT(update()));
+    return d->toggleGridAction.data();
 }

@@ -135,12 +135,12 @@ QIcon KisGeneratorLayer::icon() const
     return KisIconUtils::loadIcon("krita_tool_color_fill");
 }
 
-KisDocumentSectionModel::PropertyList KisGeneratorLayer::sectionModelProperties() const
+KisNodeModel::PropertyList KisGeneratorLayer::sectionModelProperties() const
 {
     KisSafeFilterConfigurationSP filterConfig = filter();
 
-    KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
-    l << KisDocumentSectionModel::Property(i18n("Generator"),
+    KisNodeModel::PropertyList l = KisLayer::sectionModelProperties();
+    l << KisNodeModel::Property(i18n("Generator"),
                                           KisGeneratorRegistry::instance()->value(filterConfig->name())->name());
     return l;
 }

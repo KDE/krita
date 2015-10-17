@@ -72,7 +72,7 @@ public:
     bool needProjection() const;
 
     QIcon icon() const;
-    KisDocumentSectionModel::PropertyList sectionModelProperties() const;
+    KisNodeModel::PropertyList sectionModelProperties() const;
 
     qint32 x() const;
     qint32 y() const;

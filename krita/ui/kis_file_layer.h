@@ -49,7 +49,7 @@ public:
 
     KisPaintDeviceSP original() const;
     KisPaintDeviceSP paintDevice() const;
-    KisDocumentSectionModel::PropertyList sectionModelProperties() const;
+    KisNodeModel::PropertyList sectionModelProperties() const;
 
     void setFileName(const QString &basePath, const QString &filename);
     QString fileName() const;

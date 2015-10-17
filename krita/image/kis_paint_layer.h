@@ -89,8 +89,8 @@ public:
     QIcon icon() const;
     void setImage(KisImageWSP image);
 
-    KisDocumentSectionModel::PropertyList sectionModelProperties() const;
-    void setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties);
+    KisNodeModel::PropertyList sectionModelProperties() const;
+    void setSectionModelProperties(const KisNodeModel::PropertyList &properties);
 
 public:
 

@@ -21,22 +21,24 @@
 #define KIS_DOCUMENT_SECTION_DELEGATE_H
 
 #include <QAbstractItemDelegate>
-class KisDocumentSectionView;
+class KisNodeView;
 
-class KisDocumentSectionModel;
+class KisNodeModel;
 
 /**
- * The KisDocumentSectionDelegate is the gui pendant of a
- * KisDocumentSectionModel: the graphical representation of one item in
- * a KisDocumentSectionView.
+ * See KisNodeModel and KisNodeView.
+ * 
+ * A delegate provides the gui machinery, using Qt's model/view terminology.
+ * This class is owned by KisNodeView to do the work of generating the 
+ * graphical representation of each item.
  */
-class KisDocumentSectionDelegate: public QAbstractItemDelegate
+class KisNodeDelegate: public QAbstractItemDelegate
 {
     Q_OBJECT
 
 public:
-    explicit KisDocumentSectionDelegate(KisDocumentSectionView *view, QObject *parent = 0);
-    virtual ~KisDocumentSectionDelegate();
+    explicit KisNodeDelegate(KisNodeView *view, QObject *parent = 0);
+    virtual ~KisNodeDelegate();
 
     virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     virtual QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
@@ -52,8 +54,8 @@ protected:
 
 
 private:
-    typedef KisDocumentSectionModel Model;
-    typedef KisDocumentSectionView View;
+    typedef KisNodeModel Model;
+    typedef KisNodeView View;
     class Private;
     Private* const d;
 

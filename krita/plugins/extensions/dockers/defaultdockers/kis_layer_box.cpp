@@ -47,7 +47,7 @@
 #include <klocalizedstring.h>
 
 #include <kis_icon.h>
-#include <KisDocumentSectionView.h>
+#include <KisNodeView.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
 #include <KisDocument.h>
@@ -287,28 +287,28 @@ KisLayerBox::~KisLayerBox()
 }
 
 
-void expandNodesRecursively(KisNodeSP root, QPointer<KisNodeModel> nodeModel, KisDocumentSectionView *sectionView)
+void expandNodesRecursively(KisNodeSP root, QPointer<KisNodeModel> nodeModel, KisNodeView *nodeView)
 {
     if (!root) return;
     if (nodeModel.isNull()) return;
-    if (!sectionView) return;
+    if (!nodeView) return;
 
-    sectionView->blockSignals(true);
+    nodeView->blockSignals(true);
 
     KisNodeSP node = root->firstChild();
     while (node) {
         QModelIndex idx = nodeModel->indexFromNode(node);
         if (idx.isValid()) {
             if (node->collapsed()) {
-                sectionView->collapse(idx);
+                nodeView->collapse(idx);
             }
         }
         if (node->childCount() > 0) {
-            expandNodesRecursively(node, nodeModel, sectionView);
+            expandNodesRecursively(node, nodeModel, nodeView);
         }
         node = node->nextSibling();
     }
-    sectionView->blockSignals(false);
+    nodeView->blockSignals(false);
 }
 
 void KisLayerBox::setMainWindow(KisViewManager* kisview)
@@ -589,17 +589,17 @@ void KisLayerBox::slotMergeLayer()
 
 void KisLayerBox::slotMinimalView()
 {
-    m_wdgLayerBox->listLayers->setDisplayMode(KisDocumentSectionView::MinimalMode);
+    m_wdgLayerBox->listLayers->setDisplayMode(KisNodeView::MinimalMode);
 }
 
 void KisLayerBox::slotDetailedView()
 {
-    m_wdgLayerBox->listLayers->setDisplayMode(KisDocumentSectionView::DetailedMode);
+    m_wdgLayerBox->listLayers->setDisplayMode(KisNodeView::DetailedMode);
 }
 
 void KisLayerBox::slotThumbnailView()
 {
-    m_wdgLayerBox->listLayers->setDisplayMode(KisDocumentSectionView::ThumbnailMode);
+    m_wdgLayerBox->listLayers->setDisplayMode(KisNodeView::ThumbnailMode);
 }
 
 void KisLayerBox::slotRmClicked()

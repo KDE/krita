@@ -23,7 +23,7 @@
 #include "commands/kis_node_property_list_command.h"
 
 
-KisNodePropertyListCommand::KisNodePropertyListCommand(KisNodeSP node, KisDocumentSectionModel::PropertyList newPropertyList)
+KisNodePropertyListCommand::KisNodePropertyListCommand(KisNodeSP node, KisNodeModel::PropertyList newPropertyList)
     : KisNodeCommand(kundo2_i18n("Property Changes"), node),
       m_newPropertyList(newPropertyList),
       m_oldPropertyList(node->sectionModelProperties())
@@ -47,19 +47,19 @@ void KisNodePropertyListCommand::undo()
     doUpdate(m_newPropertyList, m_oldPropertyList);
 }
 
-void KisNodePropertyListCommand::doUpdate(const KisDocumentSectionModel::PropertyList &oldPropertyList,
-                                          const KisDocumentSectionModel::PropertyList &newPropertyList)
+void KisNodePropertyListCommand::doUpdate(const KisNodeModel::PropertyList &oldPropertyList,
+                                          const KisNodeModel::PropertyList &newPropertyList)
 {
     bool oldPassThroughValue = false;
     bool newPassThroughValue = false;
 
-    foreach(const KisDocumentSectionModel::Property &prop, oldPropertyList) {
+    foreach(const KisNodeModel::Property &prop, oldPropertyList) {
         if (prop.name == i18n("Pass Through")) {
             oldPassThroughValue = prop.state.toBool();
         }
     }
 
-    foreach(const KisDocumentSectionModel::Property &prop, newPropertyList) {
+    foreach(const KisNodeModel::Property &prop, newPropertyList) {
         if (prop.name == i18n("Pass Through")) {
             newPassThroughValue = prop.state.toBool();
         }

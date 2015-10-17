@@ -296,9 +296,9 @@ set(kritaui_LIB_SRCS
     KisDetailsPane.cpp
     KisDocument.cpp
     KisDocumentEntry.cpp
-    KisDocumentSectionDelegate.cpp
-    KisDocumentSectionToolTip.cpp
-    KisDocumentSectionView.cpp
+    KisNodeDelegate.cpp
+    KisNodeToolTip.cpp
+    KisNodeView.cpp
     KisFilterChain.cpp
     KisFilterChainLink.cpp
     KisFilterChainLinkList.cpp
@@ -447,7 +447,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
 )
 
 
-QT5_WRAP_CPP(kritaui_HEADERS_MOC KisDocumentSectionPropertyAction_p.h)
+QT5_WRAP_CPP(kritaui_HEADERS_MOC KisNodePropertyAction_p.h)
 
 add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS} )
 generate_export_header(kritaui BASE_NAME kritaui)

@@ -16,10 +16,10 @@
   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
   Boston, MA 02110-1301, USA.
 */
-#include "KisDocumentSectionView.h"
-#include "KisDocumentSectionPropertyAction_p.h"
-#include "KisDocumentSectionDelegate.h"
-#include "KisDocumentSectionModel.h"
+#include "KisNodeView.h"
+#include "KisNodePropertyAction_p.h"
+#include "KisNodeDelegate.h"
+#include "kis_node_model.h"
 
 
 #include <kconfig.h>
@@ -52,10 +52,10 @@
 #endif
 
 
-class Q_DECL_HIDDEN KisDocumentSectionView::Private
+class Q_DECL_HIDDEN KisNodeView::Private
 {
 public:
-    Private(KisDocumentSectionView* _q)
+    Private(KisNodeView* _q)
         : delegate(_q, _q)
 	, mode(DetailedMode)
 #ifdef DRAG_WHILE_DRAG_WORKAROUND
@@ -63,10 +63,10 @@ public:
 #endif
     {
         KSharedConfigPtr config =  KSharedConfig::openConfig();
-        KConfigGroup group = config->group("DocumentSectionView");
-        mode = (DisplayMode) group.readEntry("DocumentSectionViewMode", (int)DetailedMode);
+        KConfigGroup group = config->group("NodeView");
+        mode = (DisplayMode) group.readEntry("NodeViewMode", (int)DetailedMode);
     }
-    KisDocumentSectionDelegate delegate;
+    KisNodeDelegate delegate;
     DisplayMode mode;
     QPersistentModelIndex hovered;
     QPoint lastPos;
@@ -76,7 +76,7 @@ public:
 #endif
 };
 
-KisDocumentSectionView::KisDocumentSectionView(QWidget *parent)
+KisNodeView::KisNodeView(QWidget *parent)
     : QTreeView(parent)
     , m_draggingFlag(false)
     , d(new Private(this))
@@ -92,28 +92,28 @@ KisDocumentSectionView::KisDocumentSectionView(QWidget *parent)
     setDropIndicatorShown(true);
 }
 
-KisDocumentSectionView::~KisDocumentSectionView()
+KisNodeView::~KisNodeView()
 {
     delete d;
 }
 
-void KisDocumentSectionView::setDisplayMode(DisplayMode mode)
+void KisNodeView::setDisplayMode(DisplayMode mode)
 {
     if (d->mode != mode) {
         d->mode = mode;
         KSharedConfigPtr config =  KSharedConfig::openConfig();
-        KConfigGroup group = config->group("DocumentSectionView");
-        group.writeEntry("DocumentSectionViewMode", (int)mode);
+        KConfigGroup group = config->group("NodeView");
+        group.writeEntry("NodeViewMode", (int)mode);
         scheduleDelayedItemsLayout();
     }
 }
 
-KisDocumentSectionView::DisplayMode KisDocumentSectionView::displayMode() const
+KisNodeView::DisplayMode KisNodeView::displayMode() const
 {
     return d->mode;
 }
 
-void KisDocumentSectionView::addPropertyActions(QMenu *menu, const QModelIndex &index)
+void KisNodeView::addPropertyActions(QMenu *menu, const QModelIndex &index)
 {
     Model::PropertyList list = index.data(Model::PropertiesRole).value<Model::PropertyList>();
     for (int i = 0, n = list.count(); i < n; ++i) {
@@ -126,12 +126,12 @@ void KisDocumentSectionView::addPropertyActions(QMenu *menu, const QModelIndex &
     }
 }
 
-void KisDocumentSectionView::updateNode(const QModelIndex &index)
+void KisNodeView::updateNode(const QModelIndex &index)
 {
     dataChanged(index, index);
 }
 
-bool KisDocumentSectionView::viewportEvent(QEvent *e)
+bool KisNodeView::viewportEvent(QEvent *e)
 {
     if (model()) {
         switch(e->type()) {
@@ -201,7 +201,7 @@ bool KisDocumentSectionView::viewportEvent(QEvent *e)
     return QTreeView::viewportEvent(e);
 }
 
-void KisDocumentSectionView::contextMenuEvent(QContextMenuEvent *e)
+void KisNodeView::contextMenuEvent(QContextMenuEvent *e)
 {
     QTreeView::contextMenuEvent(e);
     QModelIndex i = indexAt(e->pos());
@@ -210,12 +210,12 @@ void KisDocumentSectionView::contextMenuEvent(QContextMenuEvent *e)
     showContextMenu(e->globalPos(), i);
 }
 
-void KisDocumentSectionView::showContextMenu(const QPoint &globalPos, const QModelIndex &index)
+void KisNodeView::showContextMenu(const QPoint &globalPos, const QModelIndex &index)
 {
     emit contextMenuRequested(globalPos, index);
 }
 
-void KisDocumentSectionView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
+void KisNodeView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
 {
     QTreeView::currentChanged(current, previous);
     if (current != previous) {
@@ -224,7 +224,7 @@ void KisDocumentSectionView::currentChanged(const QModelIndex &current, const QM
     }
 }
 
-void KisDocumentSectionView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &/*roles*/)
+void KisNodeView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &/*roles*/)
 {
     QTreeView::dataChanged(topLeft, bottomRight);
     for (int x = topLeft.row(); x <= bottomRight.row(); ++x) {
@@ -237,21 +237,21 @@ void KisDocumentSectionView::dataChanged(const QModelIndex &topLeft, const QMode
     }
 }
 
-void KisDocumentSectionView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+void KisNodeView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
     QTreeView::selectionChanged(selected, deselected);
     emit selectionChanged(selectedIndexes());
 
 }
 
-void KisDocumentSectionView::slotActionToggled(bool on, const QPersistentModelIndex &index, int num)
+void KisNodeView::slotActionToggled(bool on, const QPersistentModelIndex &index, int num)
 {
     Model::PropertyList list = index.data(Model::PropertiesRole).value<Model::PropertyList>();
     list[num].state = on;
     const_cast<QAbstractItemModel*>(index.model())->setData(index, QVariant::fromValue(list), Model::PropertiesRole);
 }
 
-QStyleOptionViewItem KisDocumentSectionView::optionForIndex(const QModelIndex &index) const
+QStyleOptionViewItem KisNodeView::optionForIndex(const QModelIndex &index) const
 {
     QStyleOptionViewItem option = viewOptions();
     option.rect = visualRect(index);
@@ -260,11 +260,11 @@ QStyleOptionViewItem KisDocumentSectionView::optionForIndex(const QModelIndex &i
     return option;
 }
 
-void KisDocumentSectionView::startDrag(Qt::DropActions supportedActions)
+void KisNodeView::startDrag(Qt::DropActions supportedActions)
 {
     DRAG_WHILE_DRAG_WORKAROUND_START();
 
-    if (displayMode() == KisDocumentSectionView::ThumbnailMode) {
+    if (displayMode() == KisNodeView::ThumbnailMode) {
         const QModelIndexList indexes = selectionModel()->selectedIndexes();
         if (!indexes.isEmpty()) {
             QMimeData *data = model()->mimeData(indexes);
@@ -283,7 +283,7 @@ void KisDocumentSectionView::startDrag(Qt::DropActions supportedActions)
     }
 }
 
-QPixmap KisDocumentSectionView::createDragPixmap() const
+QPixmap KisNodeView::createDragPixmap() const
 {
     const QModelIndexList selectedIndexes = selectionModel()->selectedIndexes();
     Q_ASSERT(!selectedIndexes.isEmpty());
@@ -339,13 +339,13 @@ QPixmap KisDocumentSectionView::createDragPixmap() const
     return dragPixmap;
 }
 
-void KisDocumentSectionView::paintEvent(QPaintEvent *event)
+void KisNodeView::paintEvent(QPaintEvent *event)
 {
     event->accept();
     QTreeView::paintEvent(event);
 
     // Paint the line where the slide should go
-    if (isDragging() && (displayMode() == KisDocumentSectionView::ThumbnailMode)) {
+    if (isDragging() && (displayMode() == KisNodeView::ThumbnailMode)) {
         QSize size(visualRect(model()->index(0, 0, QModelIndex())).width(), visualRect(model()->index(0, 0, QModelIndex())).height());
         int numberRow = cursorPageIndex();
         int scrollBarValue = verticalScrollBar()->value();
@@ -363,9 +363,9 @@ void KisDocumentSectionView::paintEvent(QPaintEvent *event)
     }
 }
 
-void KisDocumentSectionView::dropEvent(QDropEvent *ev)
+void KisNodeView::dropEvent(QDropEvent *ev)
 {
-    if (displayMode() == KisDocumentSectionView::ThumbnailMode) {
+    if (displayMode() == KisNodeView::ThumbnailMode) {
         setDraggingFlag(false);
         ev->accept();
         clearSelection();
@@ -383,7 +383,7 @@ void KisDocumentSectionView::dropEvent(QDropEvent *ev)
     DRAG_WHILE_DRAG_WORKAROUND_STOP();
 }
 
-int KisDocumentSectionView::cursorPageIndex() const
+int KisNodeView::cursorPageIndex() const
 {
     QSize size(visualRect(model()->index(0, 0, QModelIndex())).width(), visualRect(model()->index(0, 0, QModelIndex())).height());
     int scrollBarValue = verticalScrollBar()->value();
@@ -405,17 +405,17 @@ int KisDocumentSectionView::cursorPageIndex() const
     return numberRow;
 }
 
-void KisDocumentSectionView::dragEnterEvent(QDragEnterEvent *ev)
+void KisNodeView::dragEnterEvent(QDragEnterEvent *ev)
 {
     DRAG_WHILE_DRAG_WORKAROUND_START();
     QTreeView::dragEnterEvent(ev);
 }
 
-void KisDocumentSectionView::dragMoveEvent(QDragMoveEvent *ev)
+void KisNodeView::dragMoveEvent(QDragMoveEvent *ev)
 {
     DRAG_WHILE_DRAG_WORKAROUND_START();
 
-    if (displayMode() == KisDocumentSectionView::ThumbnailMode) {
+    if (displayMode() == KisNodeView::ThumbnailMode) {
         ev->accept();
         if (!model()) {
             return;
@@ -428,9 +428,9 @@ void KisDocumentSectionView::dragMoveEvent(QDragMoveEvent *ev)
     QTreeView::dragMoveEvent(ev);
 }
 
-void KisDocumentSectionView::dragLeaveEvent(QDragLeaveEvent *e)
+void KisNodeView::dragLeaveEvent(QDragLeaveEvent *e)
 {
-    if (displayMode() == KisDocumentSectionView::ThumbnailMode) {
+    if (displayMode() == KisNodeView::ThumbnailMode) {
         setDraggingFlag(false);
     } else {
         QTreeView::dragLeaveEvent(e);
@@ -439,14 +439,14 @@ void KisDocumentSectionView::dragLeaveEvent(QDragLeaveEvent *e)
     DRAG_WHILE_DRAG_WORKAROUND_STOP();
 }
 
-bool KisDocumentSectionView::isDragging() const
+bool KisNodeView::isDragging() const
 {
     return m_draggingFlag;
 }
 
-void KisDocumentSectionView::setDraggingFlag(bool flag)
+void KisNodeView::setDraggingFlag(bool flag)
 {
     m_draggingFlag = flag;
 }
 
-#include <KisDocumentSectionView.moc>
+#include <KisNodeView.moc>

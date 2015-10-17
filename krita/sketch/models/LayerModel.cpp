@@ -573,12 +573,12 @@ void LayerModel::setOpacity(int index, float newOpacity)
 void LayerModel::setVisible(int index, bool newVisible)
 {
     if (index > -1 && index < d->layers.count()) {
-        KisDocumentSectionModel::PropertyList props = d->layers[index]->sectionModelProperties();
-        KisDocumentSectionModel::Property prop = props[0];
+        KisNodeModel::PropertyList props = d->layers[index]->sectionModelProperties();
+        KisNodeModel::Property prop = props[0];
         if(props[0].state == newVisible)
             return;
-        props[0] = KisDocumentSectionModel::Property(prop.name, prop.onIcon, prop.offIcon, newVisible);
-        d->nodeModel->setData( d->nodeModel->indexFromNode(d->layers[index]), QVariant::fromValue<KisDocumentSectionModel::PropertyList>(props), KisDocumentSectionModel::PropertiesRole );
+        props[0] = KisNodeModel::Property(prop.name, prop.onIcon, prop.offIcon, newVisible);
+        d->nodeModel->setData( d->nodeModel->indexFromNode(d->layers[index]), QVariant::fromValue<KisNodeModel::PropertyList>(props), KisNodeModel::PropertiesRole );
         d->layers[index]->setDirty(d->layers[index]->extent());
         QModelIndex idx = createIndex(index, 0);
         dataChanged(idx, idx);

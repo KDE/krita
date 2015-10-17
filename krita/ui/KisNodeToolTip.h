@@ -22,25 +22,25 @@
 
 #include "KoItemToolTip.h"
 
-class KisDocumentSectionModel;
+class KisNodeModel;
 
 /**
- * A default tooltip for a KisDocumentSection that shows a thumbnail
- * image and the list of properties associated with the document model.
+ * A default tooltip for a KisNodeView that shows a thumbnail
+ * image and the list of properties associated with a node.
  */
-class KisDocumentSectionToolTip: public KoItemToolTip
+class KisNodeToolTip: public KoItemToolTip
 {
     Q_OBJECT
 
 public:
-    KisDocumentSectionToolTip();
-    virtual ~KisDocumentSectionToolTip();
+    KisNodeToolTip();
+    virtual ~KisNodeToolTip();
 
 protected:
     virtual QTextDocument *createDocument(const QModelIndex &index);
 
 private:
-    typedef KisDocumentSectionModel Model;
+    typedef KisNodeModel Model;
 };
 
 #endif

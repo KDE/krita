@@ -53,6 +53,9 @@ class Ui_WdgLayerBox;
 
 /**
  * A widget that shows a visualization of the layer structure.
+ * 
+ * The center of the layer box is KisNodeModel, which shows the actual layers.
+ * This widget adds docking functionality and command buttons.
  *
  */
 class KisLayerBox : public QDockWidget, public KisMainwindowObserver

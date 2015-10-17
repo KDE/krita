@@ -280,16 +280,16 @@ void KisGroupLayer::setPassThroughMode(bool value)
     m_d->passThroughMode = value;
 }
 
-KisDocumentSectionModel::PropertyList KisGroupLayer::sectionModelProperties() const
+KisNodeModel::PropertyList KisGroupLayer::sectionModelProperties() const
 {
-    KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
-    l << KisDocumentSectionModel::Property(i18n("Pass Through"), KisIconUtils::loadIcon("passthrough-enabled"), KisIconUtils::loadIcon("passthrough-disabled"), passThroughMode());
+    KisNodeModel::PropertyList l = KisLayer::sectionModelProperties();
+    l << KisNodeModel::Property(i18n("Pass Through"), KisIconUtils::loadIcon("passthrough-enabled"), KisIconUtils::loadIcon("passthrough-disabled"), passThroughMode());
     return l;
 }
 
-void KisGroupLayer::setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties)
+void KisGroupLayer::setSectionModelProperties(const KisNodeModel::PropertyList &properties)
 {
-    foreach (const KisDocumentSectionModel::Property &property, properties) {
+    foreach (const KisNodeModel::Property &property, properties) {
         if (property.name == i18n("Pass Through")) {
             setPassThroughMode(property.state.toBool());
         }

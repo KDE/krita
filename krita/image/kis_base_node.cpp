@@ -29,7 +29,7 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
     QString compositeOp;
     KoProperties properties;
     bool systemLocked;
-    KisDocumentSectionModel::Property hack_visible; //HACK
+    KisNodeModel::Property hack_visible; //HACK
     QUuid id;
     bool collapsed;
     bool supportsLodMoves;
@@ -132,15 +132,15 @@ void KisBaseNode::setCompositeOpId(const QString& compositeOp)
     baseNodeChangedCallback();
 }
 
-KisDocumentSectionModel::PropertyList KisBaseNode::sectionModelProperties() const
+KisNodeModel::PropertyList KisBaseNode::sectionModelProperties() const
 {
-    KisDocumentSectionModel::PropertyList l;
-    l << KisDocumentSectionModel::Property(i18n("Visible"), KisIconUtils::loadIcon("visible"), KisIconUtils::loadIcon("novisible"), visible(), m_d->hack_visible.isInStasis, m_d->hack_visible.stateInStasis);
-    l << KisDocumentSectionModel::Property(i18n("Locked"), KisIconUtils::loadIcon("layer-locked"), KisIconUtils::loadIcon("layer-unlocked"), userLocked());
+    KisNodeModel::PropertyList l;
+    l << KisNodeModel::Property(i18n("Visible"), KisIconUtils::loadIcon("visible"), KisIconUtils::loadIcon("novisible"), visible(), m_d->hack_visible.isInStasis, m_d->hack_visible.stateInStasis);
+    l << KisNodeModel::Property(i18n("Locked"), KisIconUtils::loadIcon("layer-locked"), KisIconUtils::loadIcon("layer-unlocked"), userLocked());
     return l;
 }
 
-void KisBaseNode::setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties)
+void KisBaseNode::setSectionModelProperties(const KisNodeModel::PropertyList &properties)
 {
     setVisible(properties.at(0).state.toBool());
     m_d->hack_visible = properties.at(0);

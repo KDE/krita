@@ -205,29 +205,29 @@ void KisLayer::setLayerStyle(KisPSDLayerStyleSP layerStyle)
     }
 }
 
-KisDocumentSectionModel::PropertyList KisLayer::sectionModelProperties() const
+KisNodeModel::PropertyList KisLayer::sectionModelProperties() const
 {
-    KisDocumentSectionModel::PropertyList l = KisBaseNode::sectionModelProperties();
-    l << KisDocumentSectionModel::Property(i18n("Opacity"), i18n("%1%", percentOpacity()));
+    KisNodeModel::PropertyList l = KisBaseNode::sectionModelProperties();
+    l << KisNodeModel::Property(i18n("Opacity"), i18n("%1%", percentOpacity()));
 
     if (compositeOp()) {
-        l << KisDocumentSectionModel::Property(i18n("Composite Mode"), compositeOp()->description());
+        l << KisNodeModel::Property(i18n("Composite Mode"), compositeOp()->description());
     }
 
     if (m_d->layerStyle && !m_d->layerStyle->isEmpty()) {
-        l << KisDocumentSectionModel::Property(i18n("Layer Style"), KisIconUtils::loadIcon("layer-style-enabled"), KisIconUtils::loadIcon("layer-style-disabled"), m_d->layerStyle->isEnabled());
+        l << KisNodeModel::Property(i18n("Layer Style"), KisIconUtils::loadIcon("layer-style-enabled"), KisIconUtils::loadIcon("layer-style-disabled"), m_d->layerStyle->isEnabled());
     }
 
-    l << KisDocumentSectionModel::Property(i18n("Inherit Alpha"), KisIconUtils::loadIcon("transparency-disabled"), KisIconUtils::loadIcon("transparency-enabled"), alphaChannelDisabled());
+    l << KisNodeModel::Property(i18n("Inherit Alpha"), KisIconUtils::loadIcon("transparency-disabled"), KisIconUtils::loadIcon("transparency-enabled"), alphaChannelDisabled());
 
     return l;
 }
 
-void KisLayer::setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties)
+void KisLayer::setSectionModelProperties(const KisNodeModel::PropertyList &properties)
 {
     KisBaseNode::setSectionModelProperties(properties);
 
-    foreach (const KisDocumentSectionModel::Property &property, properties) {
+    foreach (const KisNodeModel::Property &property, properties) {
         if (property.name == i18n("Inherit Alpha")) {
             disableAlphaChannel(property.state.toBool());
         }

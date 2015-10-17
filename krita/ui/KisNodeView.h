@@ -24,23 +24,23 @@
 #include "kritaui_export.h"
 
 class QStyleOptionViewItem;
-class KisDocumentSectionModel;
+class KisNodeModel;
 
 /**
- * A View widget on document sections (for example, layers, pages,
- * sheets...). The widget can show the document sections as big
- * thumbnails, in a listview with two rows of informative text and
- * icons per document section or as single rows of text and property
- * icons.
+ * A widget displaying the Krita nodes (layers, masks, local selections, etc.)
+ * 
+ * The widget can show the document sections as big thumbnails, 
+ * in a listview with two rows of informative text and icons,
+ * or as single rows of text and property icons.
  *
- * The KisDocumentSectionView is designed as a Qt4 model-view widget.
- * See the relevant (extensive) Qt documentation about the design
- * basis for this widget.
+ * This class is designed as a Qt model-view widget.
+ * 
+ * The Qt documentation explains the design and terminology for these classes:
+ * http://doc.qt.io/qt-5/model-view-programming.html
  *
- * Usage: simply use this widget in your designer .ui file. Krita's
- * and karbon's layerboxes are KisDocumentSectionView based.
+ * This widget should work correctly in your Qt designer .ui file.
  */
-class KRITAUI_EXPORT KisDocumentSectionView: public QTreeView
+class KRITAUI_EXPORT KisNodeView: public QTreeView
 {
     Q_OBJECT
 Q_SIGNALS:
@@ -54,10 +54,10 @@ Q_SIGNALS:
 public:
 
     /**
-     * Create a new KisDocumentSectionView.
+     * Create a new KisNodeView.
      */
-    explicit KisDocumentSectionView(QWidget *parent = 0);
-    virtual ~KisDocumentSectionView();
+    explicit KisNodeView(QWidget *parent = 0);
+    virtual ~KisNodeView();
 
     /// how items should be displayed
     enum DisplayMode {
@@ -84,7 +84,7 @@ public:
     /**
      * Set the display mode of the view to one of the options.
      *
-     * @param mode The KisDocumentSectionView::DisplayMode mode
+     * @param mode The KisNodeView::DisplayMode mode
      */
     void setDisplayMode(DisplayMode mode);
 
@@ -104,8 +104,8 @@ public:
      *
      * For instance
      @code
-     KisDocumentSectionView * sectionView;
-     QModelIndex index = getCurrentDocumentSection();
+     KisNodeView * nodeView;
+     QModelIndex index = getCurrentNode();
      QMenu menu;
      if (index.isValid()) {
          sectionView->addPropertyActions(&menu, index);
@@ -163,7 +163,7 @@ private:
     bool m_draggingFlag;
 
     QStyleOptionViewItem optionForIndex(const QModelIndex &index) const;
-    typedef KisDocumentSectionModel Model;
+    typedef KisNodeModel Model;
     class PropertyAction;
     class Private;
     Private* const d;

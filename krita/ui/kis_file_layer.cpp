@@ -92,10 +92,10 @@ KisPaintDeviceSP KisFileLayer::paintDevice() const
     return 0;
 }
 
-KisDocumentSectionModel::PropertyList KisFileLayer::sectionModelProperties() const
+KisNodeModel::PropertyList KisFileLayer::sectionModelProperties() const
 {
-    KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
-    l << KisDocumentSectionModel::Property(i18n("File"), m_filename);
+    KisNodeModel::PropertyList l = KisLayer::sectionModelProperties();
+    l << KisNodeModel::Property(i18n("File"), m_filename);
     return l;
 }
 

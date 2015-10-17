@@ -19,10 +19,10 @@
   Boston, MA 02110-1301, USA.
 */
 #include "kis_config.h"
-#include "KisDocumentSectionDelegate.h"
-#include "KisDocumentSectionModel.h"
-#include "KisDocumentSectionToolTip.h"
-#include "KisDocumentSectionView.h"
+#include "KisNodeDelegate.h"
+#include "kis_node_model.h"
+#include "KisNodeToolTip.h"
+#include "KisNodeView.h"
 #include "KisPart.h"
 #include "input/kis_input_manager.h"
 
@@ -39,23 +39,23 @@
 
 #include <klocalizedstring.h>
 
-class KisDocumentSectionDelegate::Private
+class KisNodeDelegate::Private
 {
 public:
     Private() : view(0), edit(0) { }
 
-    KisDocumentSectionView *view;
+    KisNodeView *view;
     QPointer<QWidget> edit;
-    KisDocumentSectionToolTip tip;
+    KisNodeToolTip tip;
     static const int margin = 1;
 };
 
-void KisDocumentSectionDelegate::slotOnCloseEditor()
+void KisNodeDelegate::slotOnCloseEditor()
 {
     KisPart::currentInputManager()->slotFocusOnEnter(true);
 }
 
-KisDocumentSectionDelegate::KisDocumentSectionDelegate(KisDocumentSectionView *view, QObject *parent)
+KisNodeDelegate::KisNodeDelegate(KisNodeView *view, QObject *parent)
     : QAbstractItemDelegate(parent)
     , d(new Private)
 {
@@ -66,12 +66,12 @@ KisDocumentSectionDelegate::KisDocumentSectionDelegate(KisDocumentSectionView *v
     connect(this, SIGNAL(closeEditor(QWidget*)), this, SLOT(slotOnCloseEditor()));
 }
 
-KisDocumentSectionDelegate::~KisDocumentSectionDelegate()
+KisNodeDelegate::~KisNodeDelegate()
 {
     delete d;
 }
 
-QSize KisDocumentSectionDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+QSize KisNodeDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     switch(d->view->displayMode()) {
     case View::ThumbnailMode: {
@@ -88,7 +88,7 @@ QSize KisDocumentSectionDelegate::sizeHint(const QStyleOptionViewItem &option, c
     }
 }
 
-void KisDocumentSectionDelegate::paint(QPainter *p, const QStyleOptionViewItem &o, const QModelIndex &index) const
+void KisNodeDelegate::paint(QPainter *p, const QStyleOptionViewItem &o, const QModelIndex &index) const
 {
     p->save();
     {
@@ -108,7 +108,7 @@ void KisDocumentSectionDelegate::paint(QPainter *p, const QStyleOptionViewItem &
     p->restore();
 }
 
-bool KisDocumentSectionDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
+bool KisNodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
     if ((event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonDblClick)
         && (index.flags() & Qt::ItemIsEnabled))
@@ -206,15 +206,15 @@ bool KisDocumentSectionDelegate::editorEvent(QEvent *event, QAbstractItemModel *
     return false;
 }
 
-QWidget *KisDocumentSectionDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem&, const QModelIndex&) const
+QWidget *KisNodeDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem&, const QModelIndex&) const
 {
     KisPart::currentInputManager()->slotFocusOnEnter(false);
     d->edit = new QLineEdit(parent);
-    d->edit->installEventFilter(const_cast<KisDocumentSectionDelegate*>(this)); //hack?
+    d->edit->installEventFilter(const_cast<KisNodeDelegate*>(this)); //hack?
     return d->edit;
 }
 
-void KisDocumentSectionDelegate::setEditorData(QWidget *widget, const QModelIndex &index) const
+void KisNodeDelegate::setEditorData(QWidget *widget, const QModelIndex &index) const
 {
     QLineEdit *edit = qobject_cast<QLineEdit*>(widget);
     Q_ASSERT(edit);
@@ -222,7 +222,7 @@ void KisDocumentSectionDelegate::setEditorData(QWidget *widget, const QModelInde
     edit->setText(index.data(Qt::DisplayRole).toString());
 }
 
-void KisDocumentSectionDelegate::setModelData(QWidget *widget, QAbstractItemModel *model, const QModelIndex &index) const
+void KisNodeDelegate::setModelData(QWidget *widget, QAbstractItemModel *model, const QModelIndex &index) const
 {
     QLineEdit *edit = qobject_cast<QLineEdit*>(widget);
     Q_ASSERT(edit);
@@ -230,7 +230,7 @@ void KisDocumentSectionDelegate::setModelData(QWidget *widget, QAbstractItemMode
     model->setData(index, edit->text(), Qt::DisplayRole);
 }
 
-void KisDocumentSectionDelegate::updateEditorGeometry(QWidget *widget, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void KisNodeDelegate::updateEditorGeometry(QWidget *widget, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     widget->setGeometry(textRect(option, index).translated(option.rect.topLeft()));
 }
@@ -239,7 +239,7 @@ void KisDocumentSectionDelegate::updateEditorGeometry(QWidget *widget, const QSt
 // PROTECTED
 
 
-bool KisDocumentSectionDelegate::eventFilter(QObject *object, QEvent *event)
+bool KisNodeDelegate::eventFilter(QObject *object, QEvent *event)
 {
     switch (event->type()) {
     case QEvent::MouseButtonPress: {
@@ -291,7 +291,7 @@ bool KisDocumentSectionDelegate::eventFilter(QObject *object, QEvent *event)
 // PRIVATE
 
 
-QStyleOptionViewItemV4 KisDocumentSectionDelegate::getOptions(const QStyleOptionViewItem &o, const QModelIndex &index)
+QStyleOptionViewItemV4 KisNodeDelegate::getOptions(const QStyleOptionViewItem &o, const QModelIndex &index)
 {
     QStyleOptionViewItemV4 option = o;
     QVariant v = index.data(Qt::FontRole);
@@ -312,7 +312,7 @@ QStyleOptionViewItemV4 KisDocumentSectionDelegate::getOptions(const QStyleOption
    return option;
 }
 
-int KisDocumentSectionDelegate::thumbnailHeight(const QStyleOptionViewItem &option, const QModelIndex &index) const
+int KisNodeDelegate::thumbnailHeight(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     const QSize size = index.data(Qt::SizeHintRole).toSize();
     int width = option.rect.width();
@@ -324,17 +324,17 @@ int KisDocumentSectionDelegate::thumbnailHeight(const QStyleOptionViewItem &opti
         return int(width / (qreal(size.width()) / size.height()));
 }
 
-int KisDocumentSectionDelegate::availableWidth() const
+int KisNodeDelegate::availableWidth() const
 {
     return d->view->width(); // not viewport()->width(), otherwise we get infinite scrollbar addition/removal!
 }
 
-int KisDocumentSectionDelegate::textBoxHeight(const QStyleOptionViewItem &option) const
+int KisNodeDelegate::textBoxHeight(const QStyleOptionViewItem &option) const
 {
     return qMax(option.fontMetrics.height(), option.decorationSize.height());
 }
 
-QRect KisDocumentSectionDelegate::textRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
+QRect KisNodeDelegate::textRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     if (d->view->displayMode() == View::ThumbnailMode) {
         const QRect r = decorationRect(option, index);
@@ -359,7 +359,7 @@ QRect KisDocumentSectionDelegate::textRect(const QStyleOptionViewItem &option, c
     }
 }
 
-QRect KisDocumentSectionDelegate::iconsRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
+QRect KisNodeDelegate::iconsRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     if (d->view->displayMode() == View::ThumbnailMode)
         return QRect();
@@ -378,7 +378,7 @@ QRect KisDocumentSectionDelegate::iconsRect(const QStyleOptionViewItem &option, 
     return QRect(x, y, iconswidth, option.decorationSize.height());
 }
 
-QRect KisDocumentSectionDelegate::thumbnailRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
+QRect KisNodeDelegate::thumbnailRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     if (d->view->displayMode() == View::ThumbnailMode)
         return QRect(0, 0, option.rect.width(), thumbnailHeight(option, index));
@@ -386,7 +386,7 @@ QRect KisDocumentSectionDelegate::thumbnailRect(const QStyleOptionViewItem &opti
         return QRect(0, 0, option.rect.height(), option.rect.height());
 }
 
-QRect KisDocumentSectionDelegate::decorationRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
+QRect KisNodeDelegate::decorationRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     int width = option.decorationSize.width();
     if (index.data(Qt::DecorationRole).value<QIcon>().isNull())
@@ -414,7 +414,7 @@ QRect KisDocumentSectionDelegate::decorationRect(const QStyleOptionViewItem &opt
     }
 }
 
-QRect KisDocumentSectionDelegate::progressBarRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
+QRect KisNodeDelegate::progressBarRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     if (d->view->displayMode() == View::ThumbnailMode)
         return QRect();
@@ -430,7 +430,7 @@ QRect KisDocumentSectionDelegate::progressBarRect(const QStyleOptionViewItem &op
     }
 }
 
-void KisDocumentSectionDelegate::drawText(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void KisNodeDelegate::drawText(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     const QRect r = textRect(option, index).translated(option.rect.topLeft());
 
@@ -455,7 +455,7 @@ void KisDocumentSectionDelegate::drawText(QPainter *p, const QStyleOptionViewIte
     p->restore();
 }
 
-void KisDocumentSectionDelegate::drawIcons(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void KisNodeDelegate::drawIcons(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     const QRect r = iconsRect(option, index).translated(option.rect.topLeft());
 
@@ -476,7 +476,7 @@ void KisDocumentSectionDelegate::drawIcons(QPainter *p, const QStyleOptionViewIt
     p->restore();
 }
 
-void KisDocumentSectionDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void KisNodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     const QRect r = thumbnailRect(option, index).translated(option.rect.topLeft());
 
@@ -506,7 +506,7 @@ void KisDocumentSectionDelegate::drawThumbnail(QPainter *p, const QStyleOptionVi
     p->restore();
 }
 
-void KisDocumentSectionDelegate::drawDecoration(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void KisNodeDelegate::drawDecoration(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     const QRect r = decorationRect(option, index).translated(option.rect.topLeft());
 
@@ -520,9 +520,9 @@ void KisDocumentSectionDelegate::drawDecoration(QPainter *p, const QStyleOptionV
     p->restore();
 }
 
-void KisDocumentSectionDelegate::drawProgressBar(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void KisNodeDelegate::drawProgressBar(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    QVariant value = index.data(KisDocumentSectionModel::ProgressRole);
+    QVariant value = index.data(KisNodeModel::ProgressRole);
     if (!value.isNull() && (value.toInt() >= 0 && value.toInt() <= 100)) {
         const QRect r = progressBarRect(option, index).translated(option.rect.topLeft());
         p->save();
@@ -547,4 +547,4 @@ void KisDocumentSectionDelegate::drawProgressBar(QPainter *p, const QStyleOption
 }
 
 
-#include <KisDocumentSectionDelegate.moc>
+#include <KisNodeDelegate.moc>

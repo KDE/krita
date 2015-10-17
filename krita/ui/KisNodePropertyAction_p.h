@@ -20,20 +20,20 @@
 #ifndef KIS_DOCUMENT_SECTION_PROPERTY_ACTION_P_H
 #define KIS_DOCUMENT_SECTION_PROPERTY_ACTION_P_H
 
-#include "KisDocumentSectionModel.h"
-#include "KisDocumentSectionView.h"
+#include "kis_node_model.h"
+#include "KisNodeView.h"
 
 #include <QPersistentModelIndex>
 #include <QAction>
 
 /**
- * Internal class for the KisDocumentSectionView widget. Provides a
+ * Internal class for the KisNodeView widget. Provides a
  * toggle action for a particular property associated with a document
  * section, such as visible, selected, locked. Property actions have
  * associated on/off icons to show their state in the
- * KisDocumentSectionView.
+ * KisNodeView.
  */
-class KisDocumentSectionView::PropertyAction: public QAction
+class KisNodeView::PropertyAction: public QAction
 {
     typedef QAction super;
     Q_OBJECT

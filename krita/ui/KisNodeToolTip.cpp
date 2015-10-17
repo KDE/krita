@@ -16,8 +16,8 @@
   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
   Boston, MA 02110-1301, USA.
 */
-#include "KisDocumentSectionToolTip.h"
-#include "KisDocumentSectionModel.h"
+#include "KisNodeToolTip.h"
+#include "kis_node_model.h"
 
 #include <QImage>
 #include <QModelIndex>
@@ -25,15 +25,15 @@
 #include <QUrl>
 #include <klocalizedstring.h>
 
-KisDocumentSectionToolTip::KisDocumentSectionToolTip()
+KisNodeToolTip::KisNodeToolTip()
 {
 }
 
-KisDocumentSectionToolTip::~KisDocumentSectionToolTip()
+KisNodeToolTip::~KisNodeToolTip()
 {
 }
 
-QTextDocument *KisDocumentSectionToolTip::createDocument(const QModelIndex &index)
+QTextDocument *KisNodeToolTip::createDocument(const QModelIndex &index)
 {
     QTextDocument *doc = new QTextDocument(this);
 
@@ -67,4 +67,4 @@ QTextDocument *KisDocumentSectionToolTip::createDocument(const QModelIndex &inde
     return doc;
 }
 
-#include <KisDocumentSectionToolTip.moc>
+#include <KisNodeToolTip.moc>

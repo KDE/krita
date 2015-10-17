@@ -300,11 +300,11 @@ QIcon KisCloneLayer::icon() const
     return KisIconUtils::loadIcon("edit-copy");
 }
 
-KisDocumentSectionModel::PropertyList KisCloneLayer::sectionModelProperties() const
+KisNodeModel::PropertyList KisCloneLayer::sectionModelProperties() const
 {
-    KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
+    KisNodeModel::PropertyList l = KisLayer::sectionModelProperties();
     if (m_d->copyFrom)
-        l << KisDocumentSectionModel::Property(i18n("Copy From"), m_d->copyFrom->name());
+        l << KisNodeModel::Property(i18n("Copy From"), m_d->copyFrom->name());
     return l;
 }
 

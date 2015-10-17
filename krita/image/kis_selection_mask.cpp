@@ -111,14 +111,14 @@ void KisSelectionMask::accept(KisProcessingVisitor &visitor, KisUndoAdapter *und
     return visitor.visit(this, undoAdapter);
 }
 
-KisDocumentSectionModel::PropertyList KisSelectionMask::sectionModelProperties() const
+KisNodeModel::PropertyList KisSelectionMask::sectionModelProperties() const
 {
-    KisDocumentSectionModel::PropertyList l = KisBaseNode::sectionModelProperties();
-    l << KisDocumentSectionModel::Property(i18n("Active"), KisIconUtils::loadIcon("local_selection_active"), KisIconUtils::loadIcon("local_selection_inactive"), active());
+    KisNodeModel::PropertyList l = KisBaseNode::sectionModelProperties();
+    l << KisNodeModel::Property(i18n("Active"), KisIconUtils::loadIcon("local_selection_active"), KisIconUtils::loadIcon("local_selection_inactive"), active());
     return l;
 }
 
-void KisSelectionMask::setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties)
+void KisSelectionMask::setSectionModelProperties(const KisNodeModel::PropertyList &properties)
 {
     setVisible(properties.at(0).state.toBool());
     setUserLocked(properties.at(1).state.toBool());

@@ -160,23 +160,23 @@ void KisPaintLayer::setImage(KisImageWSP image)
     KisLayer::setImage(image);
 }
 
-KisDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() const
+KisNodeModel::PropertyList KisPaintLayer::sectionModelProperties() const
 {
-    KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
+    KisNodeModel::PropertyList l = KisLayer::sectionModelProperties();
 
     // XXX: get right icons
-    l << KisDocumentSectionModel::Property(i18n("Alpha Locked"), KisIconUtils::loadIcon("transparency-locked"), KisIconUtils::loadIcon("transparency-unlocked"), alphaLocked());
+    l << KisNodeModel::Property(i18n("Alpha Locked"), KisIconUtils::loadIcon("transparency-locked"), KisIconUtils::loadIcon("transparency-unlocked"), alphaLocked());
 
     if (isAnimated()) {
-        l << KisDocumentSectionModel::Property(i18n("Onion skin"), koIcon("onionOn"), koIcon("onionOff"), onionSkinEnabled());
+        l << KisNodeModel::Property(i18n("Onion skin"), koIcon("onionOn"), koIcon("onionOff"), onionSkinEnabled());
     }
 
     return l;
 }
 
-void KisPaintLayer::setSectionModelProperties(const KisDocumentSectionModel::PropertyList &properties)
+void KisPaintLayer::setSectionModelProperties(const KisNodeModel::PropertyList &properties)
 {
-    foreach (const KisDocumentSectionModel::Property &property, properties) {
+    foreach (const KisNodeModel::Property &property, properties) {
         if (property.name == i18n("Alpha Locked")) {
             setAlphaLocked(property.state.toBool());
         }

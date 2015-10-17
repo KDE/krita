@@ -40,22 +40,22 @@ class QStringList;
 // 1 pt = 1/12 pi
 // 1 pt ^= 0.0077880997 cc
 // 1 cc = 12 dd
-// Note: I don't use division but multiplication with the inverse value
-// because it's faster ;p (Werner)
-#define POINT_TO_MM(px) qreal((px)*0.352777167)
-#define MM_TO_POINT(mm) qreal((mm)*2.83465058)
-#define POINT_TO_CM(px) qreal((px)*0.0352777167)
-#define CM_TO_POINT(cm) qreal((cm)*28.3465058)
-#define POINT_TO_DM(px) qreal((px)*0.00352777167)
-#define DM_TO_POINT(dm) qreal((dm)*283.465058)
-#define POINT_TO_INCH(px) qreal((px)*0.01388888888889)
-#define INCH_TO_POINT(inch) qreal((inch)*72.0)
-#define MM_TO_INCH(mm) qreal((mm)*0.039370147)
-#define INCH_TO_MM(inch) qreal((inch)*25.399956)
-#define POINT_TO_PI(px) qreal((px)*0.083333333)
-#define POINT_TO_CC(px) qreal((px)*0.077880997)
-#define PI_TO_POINT(pi) qreal((pi)*12)
-#define CC_TO_POINT(cc) qreal((cc)*12.840103)
+
+constexpr qreal POINT_TO_MM(qreal px) {return (px)*0.352777167;}
+constexpr qreal MM_TO_POINT(qreal mm) {return mm*2.83465058;}
+constexpr qreal POINT_TO_CM(qreal px) {return (px)*0.0352777167;}
+constexpr qreal CM_TO_POINT(qreal cm) {return (cm)*28.3465058;}
+constexpr qreal POINT_TO_DM(qreal px) {return (px)*0.00352777167;}
+constexpr qreal DM_TO_POINT(qreal dm) {return (dm)*283.465058;}
+constexpr qreal POINT_TO_INCH(qreal px) {return (px)*0.01388888888889;}
+constexpr qreal INCH_TO_POINT(qreal inch) {return (inch)*72.0;}
+constexpr qreal MM_TO_INCH(qreal mm) {return (mm)*0.039370147;}
+constexpr qreal INCH_TO_MM(qreal inch) {return (inch)*25.399956;}
+constexpr qreal POINT_TO_PI(qreal px) {return (px)*0.083333333;}
+constexpr qreal POINT_TO_CC(qreal px) {return (px)*0.077880997;}
+constexpr qreal PI_TO_POINT(qreal pi) {return (pi)*12;}
+constexpr qreal CC_TO_POINT(qreal cc) {return (cc)*12.840103;}
+
 /**
  * %Calligra stores everything in pt (using "qreal") internally.
  * When displaying a value to the user, the value is converted to the user's unit

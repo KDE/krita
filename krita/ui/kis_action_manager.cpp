@@ -294,9 +294,7 @@ void KisActionManager::runOperationFromConfiguration(KisOperationConfiguration* 
 {
     KisOperation* operation = d->operationRegistry.get(config->id());
     Q_ASSERT(operation);
-    if (operation) {
-        operation->runFromXML(d->viewManager, *config);
-    }
+    operation->runFromXML(d->viewManager, *config);
     delete config;
 }
 

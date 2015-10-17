@@ -44,7 +44,7 @@ QIcon loadIcon(const QString &name)
 
 
     const QStringList names = { ":/pics/" + realName + ".png",
-        ":/pics/" + realName + ".svg",
+                                ":/pics/" + realName + ".svg",
                                 ":/pics/" + realName + ".svgz",
                                 ":/pics/" + name + ".png",
                                 ":/pics/" + name + ".svg",
@@ -66,7 +66,7 @@ QIcon loadIcon(const QString &name)
 
 
     QIcon icon = QIcon::fromTheme(name);
-    qDebug() << "\tfalling back on QIcon::FromTheme:" << name;
+    dbgKrita << "\tfalling back on QIcon::FromTheme:" << name;
     return icon;
 }
 

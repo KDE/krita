@@ -46,7 +46,7 @@
 #include <kis_debug.h>
 #include <klocalizedstring.h>
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <KisDocumentSectionView.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>

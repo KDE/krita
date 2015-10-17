@@ -27,7 +27,7 @@
 #include <QAction>
 #include <kactioncollection.h>
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
 #include <KoCanvasBase.h>

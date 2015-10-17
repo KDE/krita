@@ -21,7 +21,7 @@
 #define __KIS_TOOL_MULTIHAND_H
 
 #include "kis_tool_brush.h"
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 class QPushButton;
 class QCheckBox;

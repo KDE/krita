@@ -24,7 +24,7 @@
 #include <QVBoxLayout>
 #include <QLayout>
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include "kis_types.h"
 #include "kis_layer.h"
 #include "kis_image.h"

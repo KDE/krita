@@ -38,7 +38,7 @@
 
 #include <kis_debug.h>
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColorProfile.h>
 #include <KoID.h>

@@ -7,14 +7,13 @@ include_directories(${KOWIDGETS_INCLUDES})
 set(kritaglobal_LIB_SRCS
   kis_assert.cpp
   kis_debug.cpp
-  kis_icon_utils.cpp
 )
 
 add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS} )
 generate_export_header(kritaglobal BASE_NAME kritaglobal)
 
-target_link_libraries(kritaglobal kritawidgets Qt5::Concurrent Qt5::Core Qt5::Gui)
-target_link_libraries(kritaglobal LINK_INTERFACE_LIBRARIES kritawidgets Qt5::Concurrent Qt5::Concurrent Qt5::Core Qt5::Gui)
+target_link_libraries(kritaglobal Qt5::Concurrent Qt5::Core Qt5::Gui Qt5::Widgets KF5::I18n)
+target_link_libraries(kritaglobal LINK_INTERFACE_LIBRARIES Qt5::Concurrent Qt5::Core Qt5::Gui KF5::I18n)
 
 set_target_properties(kritaglobal PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

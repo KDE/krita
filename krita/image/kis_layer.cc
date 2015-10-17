@@ -29,7 +29,7 @@
 #include <QMutexLocker>
 
 #include <KoIcon.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <KoProperties.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>

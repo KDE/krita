@@ -26,7 +26,7 @@
 #include "KoToolFactoryBase.h"
 
 #include <flake/kis_node_shape.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <QKeySequence>
 
 #include <kconfig.h>

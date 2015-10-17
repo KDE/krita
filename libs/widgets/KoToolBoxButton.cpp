@@ -23,7 +23,7 @@
 #include <QIcon>
 #include <klocalizedstring.h>
 #include <QKeySequence>
-#include <KoIconUtils.h>
+#include <KoIcon.h>
 
 KoToolBoxButton::KoToolBoxButton(KoToolAction *toolAction, QWidget *parent)
     : QToolButton(parent)
@@ -33,7 +33,7 @@ KoToolBoxButton::KoToolBoxButton(KoToolAction *toolAction, QWidget *parent)
     // ensure same L&F
     setCheckable(true);
     setAutoRaise(true);
-    setIcon(KoIconUtils::themedIcon(m_toolAction->iconName()));
+    setIcon(kisIcon(m_toolAction->iconName()));
 
     setDataFromToolAction();
 

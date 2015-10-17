@@ -23,7 +23,7 @@
 #include <kis_perspective_grid.h>
 #include <kis_tool.h>
 #include <KoToolFactoryBase.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 class KisPerspectiveGridDecoration;
 class KisCanvas2;

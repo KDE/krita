@@ -61,7 +61,7 @@
 #include "KisMainWindow.h"
 #include "KisAutoSaveRecoveryDialog.h"
 #include "KisPart.h"
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include "kis_md5_generator.h"
 #include "kis_config.h"
 #include "flake/kis_shape_selection.h"

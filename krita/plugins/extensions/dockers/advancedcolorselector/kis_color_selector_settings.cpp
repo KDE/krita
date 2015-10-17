@@ -27,7 +27,7 @@
 #include <kconfiggroup.h>
 
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColorProfile.h"

@@ -31,7 +31,7 @@
 #include <KoToolManager.h>
 #include <KoShapeBasedDocumentBase.h>
 #include <KoResourceServerProvider.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 #include "KisApplication.h"
 #include "KisDocument.h"

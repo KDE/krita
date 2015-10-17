@@ -56,7 +56,7 @@
 #include <KisImportExportManager.h>
 #include <KoToolManager.h>
 #include <KoIcon.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_registry.h"

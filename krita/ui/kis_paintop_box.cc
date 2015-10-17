@@ -39,7 +39,7 @@
 #include <QKeySequence>
 
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoResourceSelector.h>

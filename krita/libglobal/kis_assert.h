@@ -20,11 +20,11 @@
 #define __KIS_ASSERT_H
 
 #include <QtGlobal>
-#include <kritaimage_export.h>
+#include <kritaglobal_export.h>
 
-KRITAIMAGE_EXPORT void kis_assert_exception(const char *assertion, const char *file, int line);
-KRITAIMAGE_EXPORT void kis_assert_recoverable(const char *assertion, const char *file, int line);
-KRITAIMAGE_EXPORT void kis_assert_x_exception(const char *assertion, const char *where, const char *what, const char *file, int line);
+KRITAGLOBAL_EXPORT void kis_assert_exception(const char *assertion, const char *file, int line);
+KRITAGLOBAL_EXPORT void kis_assert_recoverable(const char *assertion, const char *file, int line);
+KRITAGLOBAL_EXPORT void kis_assert_x_exception(const char *assertion, const char *where, const char *what, const char *file, int line);
 
 
 /**

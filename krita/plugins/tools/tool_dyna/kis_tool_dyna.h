@@ -25,7 +25,7 @@
 #include "KoPointerEvent.h"
 
 #include <flake/kis_node_shape.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 

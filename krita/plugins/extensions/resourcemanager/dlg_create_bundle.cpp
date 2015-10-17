@@ -31,7 +31,7 @@
 #include <KisImportExportManager.h>
 #include <KoDocumentInfo.h>
 #include <KoFileDialog.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <KoResource.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>

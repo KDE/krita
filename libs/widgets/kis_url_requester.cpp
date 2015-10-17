@@ -21,7 +21,7 @@
 
 #include <QDesktopServices>
 
-#include "KoIconUtils.h"
+#include "KoIcon.h"
 
 KisUrlRequester::KisUrlRequester(QWidget *parent)
     : QWidget(parent)
@@ -30,7 +30,7 @@ KisUrlRequester::KisUrlRequester(QWidget *parent)
 {
     m_ui->setupUi(this);
 
-    m_ui->btnSelectFile->setIcon(KoIconUtils::themedIcon("folder"));
+    m_ui->btnSelectFile->setIcon(kisIcon("folder"));
 
     connect(m_ui->btnSelectFile, SIGNAL(clicked()), SLOT(slotSelectFile()));
     connect(m_ui->txtFileName, SIGNAL(textChanged(const QString&)), SIGNAL(textChanged(const QString&)));

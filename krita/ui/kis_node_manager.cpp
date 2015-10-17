@@ -25,7 +25,7 @@
 
 #include <QKeySequence>
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoShape.h>

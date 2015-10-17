@@ -31,7 +31,7 @@
 #include <QTimer>
 #include <QRegExp>
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <kis_debug.h>
 #include "kis_global.h"
 

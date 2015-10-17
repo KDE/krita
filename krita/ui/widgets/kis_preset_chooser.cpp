@@ -45,7 +45,7 @@
 #include "kis_slider_spin_box.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 /// The resource item delegate for rendering the resource preview
 class KisPresetDelegate : public QAbstractItemDelegate

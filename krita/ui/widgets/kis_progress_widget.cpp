@@ -24,7 +24,7 @@
 #include <QHBoxLayout>
 #include <QKeyEvent>
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 #include <KoProgressUpdater.h>
 #include <KoProgressBar.h>

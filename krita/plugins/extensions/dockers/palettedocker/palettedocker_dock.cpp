@@ -31,7 +31,7 @@
 #include <KoResourceServerProvider.h>
 #include <KoColorSpaceRegistry.h>
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <kis_layer.h>
 #include <kis_node_manager.h>
 #include <kis_config.h>

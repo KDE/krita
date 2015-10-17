@@ -45,7 +45,7 @@
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include <KoToolProxy.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 #include "kis_adjustment_layer.h"
 #include "kis_node_manager.h"

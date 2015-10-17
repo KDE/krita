@@ -31,7 +31,7 @@
 #include <QMessageBox>
 
 #include <KoIcon.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <KoFileDialog.h>
 #include <KoViewConverter.h>
 #include <KoPointerEvent.h>

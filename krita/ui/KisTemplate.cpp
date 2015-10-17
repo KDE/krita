@@ -25,7 +25,7 @@
 
 #include <kis_debug.h>
 
-#include <KoIconUtils.h>
+#include <kis_icon.h>
 
 
 KisTemplate::KisTemplate(const QString &name, const QString &description, const QString &file,
@@ -55,7 +55,7 @@ const QPixmap &KisTemplate::loadPicture()
         m_pixmap = QPixmap::fromImage(img);
         return m_pixmap;
     } else { // relative path
-        m_pixmap = KoIconUtils::themedIcon(m_picture).pixmap(KoIconUtils::SizeEnormous);
+        m_pixmap = kisIcon(m_picture).pixmap(KisIconUtils::SizeEnormous);
         return m_pixmap;
     }
 }

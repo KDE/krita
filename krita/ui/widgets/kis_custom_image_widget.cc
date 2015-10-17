@@ -39,7 +39,7 @@
 
 #include <kis_debug.h>
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <KoCompositeOp.h>
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>

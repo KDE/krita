@@ -27,7 +27,7 @@
 #include <kis_debug.h>
 #include <klocalizedstring.h>
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <KoCanvasController.h>
 
 #include <kis_config.h>

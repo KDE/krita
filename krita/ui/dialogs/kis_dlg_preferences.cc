@@ -50,7 +50,7 @@
 #include <KoFileDialog.h>
 #include <KisPart.h>
 #include <KoColorSpaceEngine.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <KoConfig.h>
 #include "KoID.h"
 #include <KoConfigAuthorPage.h>

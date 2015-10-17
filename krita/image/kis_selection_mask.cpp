@@ -32,7 +32,7 @@
 #include "kis_pixel_selection.h"
 #include "kis_undo_adapter.h"
 #include <KoIcon.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include "kis_thread_safe_signal_compressor.h"
 
 

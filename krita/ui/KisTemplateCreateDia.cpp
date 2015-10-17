@@ -38,7 +38,7 @@
 #include <QLineEdit>
 
 #include <klocalizedstring.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <KisDocument.h>
 #include <KisTemplates.h>
 #include <KisTemplateTree.h>
@@ -47,7 +47,7 @@
 #include <QMessageBox>
 #include <KoResourcePaths.h>
 #include <kis_debug.h>
-#include <KoIconUtils.h>
+#include <kis_icon.h>
 #include <kconfiggroup.h>
 #include <QUrl>
 

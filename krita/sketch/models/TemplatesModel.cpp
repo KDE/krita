@@ -25,7 +25,7 @@
 #include <KisTemplateGroup.h>
 #include <KisTemplate.h>
 #include <KisPart.h>
-#include <KoIconUtils.h>
+#include <kis_icon.h>
 
 #include <QApplication>
 #include <QTimer>

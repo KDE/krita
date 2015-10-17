@@ -7,7 +7,7 @@ configure_file(xmlgui/config-xmlgui.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-x
 
 set(kritawidgetutils_LIB_SRCS
 
-    KoIconUtils.cpp
+    kis_icon_utils.cpp
     KoGroupButton.cpp
     KoProgressBar.cpp
     KoProgressUpdater.cpp
@@ -84,6 +84,7 @@ target_link_libraries(kritawidgetutils
         Qt5::Gui
         Qt5::Xml
         Qt5::Core
+        kritaglobal
     PRIVATE
         Qt5::PrintSupport
         KF5::I18n

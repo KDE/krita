@@ -24,7 +24,7 @@
 
 #include <klocalizedstring.h>
 #include <kis_debug.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 DlgRotateImage::DlgRotateImage(QWidget *  parent,
                                const char * name)

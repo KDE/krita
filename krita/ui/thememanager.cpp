@@ -55,7 +55,7 @@
 #include <QAction>
 
 // Calligra
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 #ifdef __APPLE__
 #include <QStyle>

@@ -29,7 +29,7 @@
 
 #include <klocalizedstring.h>
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include "KoColor.h"
 #include "kis_canvas2.h"
 #include "kis_image.h"

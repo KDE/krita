@@ -27,7 +27,7 @@
 #include <KisPart.h>
 #include <KisApplication.h>
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 #include <klocalizedstring.h>
 #include <kconfig.h>

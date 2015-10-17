@@ -33,7 +33,7 @@
 #include <kis_debug.h>
 
 #include <KoCanvasResourceManager.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 #include "kis_color_selector_ring.h"
 #include "kis_color_selector_triangle.h"

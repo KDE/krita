@@ -25,7 +25,7 @@
 #include <QApplication>
 #include <QMessageBox>
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 #include <QMetaType>
 #include <klocalizedstring.h>

@@ -43,7 +43,7 @@
 #include <kactioncollection.h>
 #include <QAction>
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <KoShape.h>
 #include <KoCanvasResourceManager.h>
 #include <KoColorSpace.h>

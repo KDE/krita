@@ -18,7 +18,7 @@
  */
 
 #include <KoIcon.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <KoCompositeOpRegistry.h>
 
 #include "kis_layer.h"

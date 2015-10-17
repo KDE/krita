@@ -24,7 +24,7 @@
 #include <QShowEvent>
 #include <kconfig.h>
 #include <klocalizedstring.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 
 KisCategorizedListView::KisCategorizedListView(bool useCheckBoxHack, QWidget* parent):

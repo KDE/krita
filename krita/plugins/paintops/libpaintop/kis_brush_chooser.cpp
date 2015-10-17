@@ -35,7 +35,7 @@
 
 #include <KoResourceItemChooser.h>
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include "kis_brush_registry.h"
 #include "kis_brush_server.h"
 #include "widgets/kis_slider_spin_box.h"

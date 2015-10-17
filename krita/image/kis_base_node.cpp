@@ -19,7 +19,7 @@
 #include "kis_base_node.h"
 #include <klocalizedstring.h>
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <KoProperties.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>

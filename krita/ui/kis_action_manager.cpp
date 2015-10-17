@@ -21,7 +21,7 @@
 #include <QList>
 #include <kactioncollection.h>
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include "KisPart.h"
 #include "kis_action.h"
 #include "KisViewManager.h"

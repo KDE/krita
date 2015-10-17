@@ -25,7 +25,7 @@
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 #include "kis_coordinates_converter.h"
 #include "kis_config.h"

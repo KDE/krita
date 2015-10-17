@@ -18,7 +18,7 @@
 
 #include "kis_tool_transform_config_widget.h"
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include "rotation_icons.h"
 #include "kis_canvas2.h"
 #include <QSignalMapper>

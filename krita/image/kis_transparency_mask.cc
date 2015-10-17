@@ -21,7 +21,7 @@
 #include "kis_debug.h"
 
 #include <KoIcon.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>

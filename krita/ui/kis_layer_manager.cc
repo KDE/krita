@@ -33,7 +33,7 @@
 #include <QUrl>
 
 #include <kis_url_requester.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <KisImportExportManager.h>
 #include <KisDocument.h>
 #include <KoColorSpace.h>

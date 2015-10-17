@@ -20,7 +20,7 @@
 #include "kis_effect_mask.h"
 
 #include <KoIcon.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 
 KisEffectMask::KisEffectMask()

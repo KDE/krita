@@ -25,7 +25,7 @@
 #include <klocalizedstring.h>
 
 #include <KoIcon.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <KoUpdater.h>
 #include <KoResourceServerProvider.h>
 #include <KoFileDialog.h>

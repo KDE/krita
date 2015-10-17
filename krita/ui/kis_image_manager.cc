@@ -32,7 +32,7 @@
 
 #include <kis_types.h>
 #include <kis_image.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <KisImportExportManager.h>
 #include "kis_import_catcher.h"
 #include "KisViewManager.h"

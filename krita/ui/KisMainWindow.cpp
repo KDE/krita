@@ -80,7 +80,7 @@
 #include "KoDocumentInfoDlg.h"
 #include "KoDocumentInfo.h"
 #include "KoFileDialog.h"
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <KoPageLayoutDialog.h>
 #include <KoPageLayoutWidget.h>
 #include <KoToolManager.h>

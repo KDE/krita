@@ -25,7 +25,7 @@
 #include <klocalizedstring.h>
 
 #include <KoIcon.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KoCompositeOpRegistry.h>

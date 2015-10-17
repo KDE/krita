@@ -18,7 +18,7 @@
 
 #include "kis_widget_chooser.h"
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 #include <QGridLayout>
 #include <QHBoxLayout>
@@ -31,7 +31,7 @@
 #include <QStylePainter>
 #include <QStyleOption>
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 #include "kis_config.h"
 

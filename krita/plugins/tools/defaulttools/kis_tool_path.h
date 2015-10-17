@@ -25,7 +25,7 @@
 #include "flake/kis_node_shape.h"
 #include "kis_tool_shape.h"
 #include "kis_delegated_tool.h"
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 class KoCanvasBase;
 class KisToolPath;

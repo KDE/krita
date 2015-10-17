@@ -28,7 +28,7 @@
 #include "KoPageLayout.h"
 #include <KoToolManager.h>
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 #include <kactioncollection.h>
 #include <klocalizedstring.h>

@@ -17,7 +17,7 @@
 
 #include "image_strip_scene.h"
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 #include <QApplication>
 #include <QDir>

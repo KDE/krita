@@ -21,7 +21,7 @@
 #include "ui_wdgnodequerypatheditor.h"
 #include <QWhatsThis>
 #include <recorder/kis_node_query_path.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 struct KisNodeQueryPathEditor::Private
 {

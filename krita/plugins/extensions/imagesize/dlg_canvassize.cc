@@ -22,7 +22,7 @@
 #include "kcanvaspreview.h"
 
 #include <KoUnit.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <kis_size_group.h>
 #include <klocalizedstring.h>
 

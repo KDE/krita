@@ -49,7 +49,7 @@ wavelength, and thus define the outline of the CIE "tongue" diagram.
 #include <klocalizedstring.h>
 #include <kpixmapsequence.h>
 
-#include <KoIconUtils.h>
+#include <kis_icon.h>
 #include <KoColorSpaceRegistry.h>
 
 #include "kis_cie_tongue_widget.h"
@@ -159,7 +159,7 @@ public:
         whitePoint(3)
         
     {
-        progressPix = KPixmapSequence("process-working", KoIconUtils::SizeSmallMedium);
+        progressPix = KPixmapSequence("process-working", KisIconUtils::SizeSmallMedium);
     }
     
     bool            profileDataAvailable;

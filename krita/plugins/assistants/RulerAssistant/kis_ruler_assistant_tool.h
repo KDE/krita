@@ -23,7 +23,7 @@
 #include "kis_painting_assistant.h"
 #include "ui_AssistantsToolOptions.h"
 #include <KoIcon.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 
 class KisCanvas2;

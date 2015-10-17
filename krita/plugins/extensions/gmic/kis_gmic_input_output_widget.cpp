@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA. */
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 #include <kis_gmic_input_output_widget.h>
 

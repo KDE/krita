@@ -19,7 +19,7 @@
 
 #include "kistoolcropconfigwidget.h"
 #include "kis_tool_crop.h"
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <kis_acyclic_signal_connector.h>
 
 

@@ -32,7 +32,7 @@
 #include <kis_meta_data_value.h>
 #include <kis_meta_data_schema.h>
 #include <kis_meta_data_schema_registry.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include "kis_entry_editor.h"
 #include <QTableView>
 #include "kis_meta_data_model.h"

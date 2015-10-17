@@ -18,7 +18,7 @@
 #include "kis_compositeop_option.h"
 
 #include <klocalizedstring.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 #include <kis_cmb_composite.h>
 #include <KoCompositeOpRegistry.h>

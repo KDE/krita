@@ -20,7 +20,7 @@
 #include "kis_dlg_blacklist_cleanup.h"
 #include <kis_resource_server_provider.h>
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <KoResourceServerProvider.h>
 
 #include <kis_paintop_preset.h>

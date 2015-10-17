@@ -19,7 +19,7 @@
 
 #include <QAction>
 #include <klocalizedstring.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 TasksetModel::TasksetModel(QObject* parent): QAbstractTableModel(parent)
 {

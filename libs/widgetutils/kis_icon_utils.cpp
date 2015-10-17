@@ -27,7 +27,6 @@
 #include <QIcon>
 #include <QFile>
 
-#include <KoIconUtils.h>
 #include <KoIcon.h>
 
 namespace KisIconUtils
@@ -35,7 +34,40 @@ namespace KisIconUtils
 
 QIcon loadIcon(const QString &name)
 {
-    return KoIconUtils::themedIcon(name);
+
+    // try load themed icon
+    QColor background = qApp->palette().background().color();
+    bool useDarkIcons = background.value() > 100;
+    const char * const prefix = useDarkIcons ? "dark_" : "light_";
+
+    QString  realName = QLatin1String(prefix) + name;
+
+
+    const QStringList names = { ":/pics/" + realName + ".png",
+        ":/pics/" + realName + ".svg",
+                                ":/pics/" + realName + ".svgz",
+                                ":/pics/" + name + ".png",
+                                ":/pics/" + name + ".svg",
+                                ":/pics/" + name + ".svz",
+                                ":/" + realName + ".png",
+                                ":/" + realName + ".svg",
+                                ":/" + realName + ".svz",
+                                ":/" + name,
+                                ":/" + name + ".png",
+                                ":/" + name + ".svg",
+                                ":/" + name + ".svgz"};
+
+    for (const QString &resname : names) {
+        if (QFile(resname).exists()) {
+            QIcon icon(resname);
+            return icon;
+        }
+    }
+
+
+    QIcon icon = QIcon::fromTheme(name);
+    qDebug() << "\tfalling back on QIcon::FromTheme:" << name;
+    return icon;
 }
 
 bool adjustIcon(QIcon *icon)

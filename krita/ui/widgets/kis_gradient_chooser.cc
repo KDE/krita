@@ -31,7 +31,7 @@
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerProvider.h>
 #include <KoResourceServerAdapter.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 #include "KisViewManager.h"
 #include "kis_global.h"

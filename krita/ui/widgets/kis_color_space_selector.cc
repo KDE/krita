@@ -32,7 +32,7 @@
 #include <KoID.h>
 
 #include <KoConfig.h>
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 #include <QDesktopServices>
 

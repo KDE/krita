@@ -37,7 +37,7 @@
  */
 
 /// Use these macros for icons without any issues
-#define koIcon(name) (KisIconUtils::loadIcon(QLatin1String(name)))  // Can be used
+#define koIcon(name) (KisIconUtils::loadIcon(QLatin1String(name)))
 #define kisIcon(name) (KisIconUtils::loadIcon(name))
 #define koIconName(name) (QLatin1String(name))
 #define koIconNameCStr(name) (name)

@@ -29,7 +29,7 @@
 #include <QPixmap>
 #include <QMessageBox>
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include "kis_action.h"
 
 #define ICON_SIZE 48

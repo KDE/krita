@@ -20,7 +20,7 @@
 
 #include "KisUndoStackAction.h"
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 #include <kundo2stack.h>
 #include <klocalizedstring.h>

@@ -31,7 +31,7 @@
 
 #include "filter/kis_filter_registry.h"
 #include "kis_paintop_registry.h"
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 #include "KisViewManager.h"
 #include <kis_canvas_controller.h>

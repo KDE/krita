@@ -37,7 +37,7 @@
 #include <QTemporaryFile>
 #include <kis_debug.h>
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 #include <KoElementReference.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>

@@ -28,7 +28,7 @@
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 #include "kis_canvas_resource_provider.h"
 #include "KisViewManager.h"

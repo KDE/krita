@@ -54,7 +54,7 @@
 #include <limits.h>
 #include <kconfiggroup.h>
 
-#include <kis_icon_utils.h>
+#include <kis_icon.h>
 
 class KoSectionListItem : public QTreeWidgetItem
 {

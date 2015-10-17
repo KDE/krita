@@ -649,8 +649,8 @@ void KisViewManager::createActions()
     d->saveIncrementalBackup->setEnabled(false);
 
     KisAction *tabletDebugger = new KisAction(i18n("Toggle Tablet Debugger"), this);
-    actionManager()->addAction("tablet_debugger", tabletDebugger );
     tabletDebugger->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_T));
+    actionManager()->addAction("tablet_debugger", tabletDebugger );
     connect(tabletDebugger, SIGNAL(triggered()), this, SLOT(toggleTabletLogger()));
 
     d->createTemplate = new KisAction( i18n( "&Create Template From Image..." ), this);
@@ -670,26 +670,26 @@ void KisViewManager::createActions()
     connect(d->openResourcesDirectory, SIGNAL(triggered()), SLOT(openResourcesDirectory()));
 
     d->rotateCanvasRight = new KisAction(i18n("Rotate Canvas Right"), this);
+    d->rotateCanvasRight->setDefaultShortcut(QKeySequence("Ctrl+]"));
     actionManager()->addAction("rotate_canvas_right", d->rotateCanvasRight);
     d->rotateCanvasRight->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    d->rotateCanvasRight->setDefaultShortcut(QKeySequence("Ctrl+]"));
 
     d->rotateCanvasLeft = new KisAction(i18n("Rotate Canvas Left"), this);
+    d->rotateCanvasLeft->setDefaultShortcut(QKeySequence("Ctrl+["));
     actionManager()->addAction("rotate_canvas_left", d->rotateCanvasLeft);
     d->rotateCanvasLeft->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    d->rotateCanvasLeft->setDefaultShortcut(QKeySequence("Ctrl+["));
 
     d->wrapAroundAction = new KisAction(i18n("Wrap Around Mode"), this);
     d->wrapAroundAction->setCheckable(true);
     d->wrapAroundAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    actionManager()->addAction("wrap_around_mode", d->wrapAroundAction);
     d->wrapAroundAction->setDefaultShortcut(QKeySequence(Qt::Key_W));
+    actionManager()->addAction("wrap_around_mode", d->wrapAroundAction);
 
     d->levelOfDetailAction = new KisAction(i18n("Fast Preview Mode (LOD)"), this);
     d->levelOfDetailAction->setCheckable(true);
     d->levelOfDetailAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    d->levelOfDetailAction->setDefaultShortcut(QKeySequence("Shift+L"));
     actionManager()->addAction("level_of_detail_mode", d->levelOfDetailAction);
-    d->levelOfDetailAction->setShortcut(QKeySequence("Shift+L"));
 
     KisAction *tAction = new KisAction(i18n("Show Status Bar"), this);
     tAction->setCheckable(true);
@@ -740,8 +740,8 @@ void KisViewManager::createActions()
 
     d->zoomTo100pct = new KisAction(i18n("Reset zoom"), this);
     d->zoomTo100pct->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    actionManager()->addAction("zoom_to_100pct", d->zoomTo100pct);
     d->zoomTo100pct->setDefaultShortcut( QKeySequence( Qt::CTRL + Qt::Key_0 ) );
+    actionManager()->addAction("zoom_to_100pct", d->zoomTo100pct);
 
     d->zoomIn = actionManager()->createStandardAction(KStandardAction::ZoomIn, 0, "");
     d->zoomOut = actionManager()->createStandardAction(KStandardAction::ZoomOut, 0, "");

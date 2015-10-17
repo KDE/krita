@@ -35,16 +35,16 @@ EmfViewer::EmfViewer( QSize &size )
     QMenu *fileMenu = menuBar()->addMenu( "&File" );
 
     // The "Open" action
+    m_fileOpenAction->setShortcut( Qt::CTRL + Qt::Key_O );
     m_fileOpenAction = fileMenu->addAction( "&Open", this,
                                             SLOT( slotOpenFile() ) );
-    m_fileOpenAction->setShortcut( Qt::CTRL + Qt::Key_O );
 
     fileMenu->addSeparator();
 
     // The "Quit" action
+    m_fileQuitAction->setShortcut( Qt::CTRL + Qt::Key_Q );
     m_fileQuitAction = fileMenu->addAction( "&Quit", qApp,
                                             SLOT( closeAllWindows() ) );
-    m_fileQuitAction->setShortcut( Qt::CTRL + Qt::Key_Q );
 
     // Set a suitably large size.
     resize( m_size + QSize( 50, 50 ) );

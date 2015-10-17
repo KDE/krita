@@ -140,8 +140,8 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
     connect(m_actionCurveSegment, SIGNAL(triggered()), this, SLOT(segmentToCurve()));
 
     m_actionAddPoint = new QAction(koIcon("pathpoint-insert"), i18n("Insert point"), this);
-    addAction("pathpoint-insert", m_actionAddPoint);
     m_actionAddPoint->setShortcut(Qt::Key_Insert);
+    addAction("pathpoint-insert", m_actionAddPoint);
     connect(m_actionAddPoint, SIGNAL(triggered()), this, SLOT(insertPoints()));
 
     m_actionRemovePoint = new QAction(koIcon("pathpoint-remove"), i18n("Remove point"), this);

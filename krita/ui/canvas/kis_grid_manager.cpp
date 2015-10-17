@@ -58,6 +58,7 @@ void KisGridManager::setup(KisActionManager* actionManager)
     m_toggleSnapToGrid->setCheckable(true);
     m_toggleSnapToGrid->setActivationFlags(KisAction::ACTIVE_NODE);
     m_toggleSnapToGrid->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Semicolon));
+    // XXX: Why is this disabled?
     //actionManager->addAction("view_snap_to_grid", m_toggleSnapToGrid);
     connect(m_toggleSnapToGrid, SIGNAL(triggered()), this, SLOT(toggleSnapToGrid()));
 }

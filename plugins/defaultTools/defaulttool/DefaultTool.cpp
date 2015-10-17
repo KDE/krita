@@ -213,24 +213,24 @@ void DefaultTool::setupActions()
 {
     QAction * actionBringToFront = new QAction(koIcon("object-order-front-calligra"),
                                                i18n("Bring to &Front"), this);
-    addAction("object_order_front", actionBringToFront);
     actionBringToFront->setShortcut(QKeySequence("Ctrl+Shift+]"));
+    addAction("object_order_front", actionBringToFront);
     connect(actionBringToFront, SIGNAL(triggered()), this, SLOT(selectionBringToFront()));
 
     QAction * actionRaise = new QAction(koIcon("object-order-raise-calligra"), i18n("&Raise"), this);
-    addAction("object_order_raise", actionRaise);
     actionRaise->setShortcut(QKeySequence("Ctrl+]"));
+    addAction("object_order_raise", actionRaise);
     connect(actionRaise, SIGNAL(triggered()), this, SLOT(selectionMoveUp()));
 
     QAction * actionLower = new QAction(koIcon("object-order-lower-calligra"), i18n("&Lower"), this);
-    addAction("object_order_lower", actionLower);
     actionLower->setShortcut(QKeySequence("Ctrl+["));
+    addAction("object_order_lower", actionLower);
     connect(actionLower, SIGNAL(triggered()), this, SLOT(selectionMoveDown()));
 
     QAction * actionSendToBack = new QAction(koIcon("object-order-back-calligra"),
                                              i18n("Send to &Back"), this);
-    addAction("object_order_back", actionSendToBack);
     actionSendToBack->setShortcut(QKeySequence("Ctrl+Shift+["));
+    addAction("object_order_back", actionSendToBack);
     connect(actionSendToBack, SIGNAL(triggered()), this, SLOT(selectionSendToBack()));
 
     QAction * actionAlignLeft = new QAction(koIcon("object-align-horizontal-left-calligra"),

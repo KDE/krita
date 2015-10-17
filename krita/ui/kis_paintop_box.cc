@@ -313,41 +313,41 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     action = new QWidgetAction(this);
     action->setText(i18n("Next Favourite Preset"));
-    view->actionCollection()->addAction("next_favorite_preset", action);
     view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_Comma));
+    view->actionCollection()->addAction("next_favorite_preset", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotNextFavoritePreset()));
 
     action = new QWidgetAction(this);
     action->setText(i18n("Previous Favourite Preset"));
-    view->actionCollection()->addAction("previous_favorite_preset", action);
     view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_Period));
+    view->actionCollection()->addAction("previous_favorite_preset", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotPreviousFavoritePreset()));
 
     action = new QWidgetAction(this);
     action->setText(i18n("Switch to Previous Preset"));
-    view->actionCollection()->addAction("previous_preset", action);
     view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_Slash));
+    view->actionCollection()->addAction("previous_preset", action);
 
     connect(action, SIGNAL(triggered()), this, SLOT(slotSwitchToPreviousPreset()));
 
     if (!cfg.toolOptionsInDocker()) {
         action = new QWidgetAction(this);
         action->setText(i18n("Show Tool Options"));
-        view->actionCollection()->addAction("show_tool_options", action);
         view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_Backslash));
+        view->actionCollection()->addAction("show_tool_options", action);
         connect(action, SIGNAL(triggered()), m_toolOptionsPopupButton, SLOT(showPopupWidget()));
     }
 
     action = new QWidgetAction(this);
     action->setText(i18n("Show Brush Editor"));
-    view->actionCollection()->addAction("show_brush_editor", action);
     view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_F5));
+    view->actionCollection()->addAction("show_brush_editor", action);
     connect(action, SIGNAL(triggered()), m_brushEditorPopupButton, SLOT(showPopupWidget()));
 
     action = new QWidgetAction(this);
     action->setText(i18n("Show Brush Presets"));
-    view->actionCollection()->addAction("show_brush_presets", action);
     view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_F6));
+    view->actionCollection()->addAction("show_brush_presets", action);
     connect(action, SIGNAL(triggered()), m_presetSelectorPopupButton, SLOT(showPopupWidget()));
 
     QWidget* mirrorActions = new QWidget(this);
@@ -359,8 +359,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     action = new QWidgetAction(this);
     action->setText(i18n("Mirror"));
-    view->actionCollection()->addAction("mirror_actions", action);
     action->setDefaultWidget(mirrorActions);
+    view->actionCollection()->addAction("mirror_actions", action);
 
     action = new QWidgetAction(this);
     action->setText(i18n("Workspaces"));

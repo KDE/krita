@@ -31,6 +31,7 @@ class QKeySequence;
 
 /**
  * A factory for KoToolBase objects.
+ *
  * The baseclass for all tool plugins. Each plugin that ships a KoToolBase should also
  * ship a factory. That factory will extend this class and set variable data like
  * a toolTip and icon in the constructor of that extending class.
@@ -148,6 +149,8 @@ public:
     /**
      * Return the default keyboard shortcut for activation of this tool (if
      * the shape this tool belongs to is active).
+     *
+     * See KoToolManager for use.
      *
      * @return the shortcut
      */

@@ -72,6 +72,8 @@
 #include "kis_tool_utils.h"
 #include <kis_paintop.h>
 #include <kis_paintop_preset.h>
+#include <kis_action_manager.h>
+#include <kis_action.h>
 
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     : KisTool(canvas, cursor),
@@ -101,25 +103,25 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
         m_standardBrushSizes.push_back(maxSize);
     }
 
-
-    KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
-
-    if (!collection->action("increase_brush_size")) {
-        QAction *increaseBrushSize = new QAction(i18n("Increase Brush Size"), collection);
-        increaseBrushSize->setShortcut(Qt::Key_BracketRight);
-        collection->addAction("increase_brush_size", increaseBrushSize);
-    }
-
-    if (!collection->action("decrease_brush_size")) {
-        QAction *decreaseBrushSize = new QAction(i18n("Decrease Brush Size"), collection);
-        decreaseBrushSize->setShortcut(Qt::Key_BracketLeft);
-        collection->addAction("decrease_brush_size", decreaseBrushSize);
-    }
-
-    addAction("increase_brush_size", dynamic_cast<QAction *>(collection->action("increase_brush_size")));
-    addAction("decrease_brush_size", dynamic_cast<QAction *>(collection->action("decrease_brush_size")));
-
     KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas);
+    KisActionManager *actionManager = kiscanvas->viewManager()->actionManager();
+
+    // XXX: Perhaps a better place for these?
+    if (!actionManager->actionByName("increase_brush_size")) {
+        KisAction *increaseBrushSize = new KisAction(i18n("Increase Brush Size"));
+        increaseBrushSize->setShortcut(Qt::Key_BracketRight);
+        actionManager->addAction("increase_brush_size", increaseBrushSize);
+    }
+
+    if (!actionManager->actionByName("decrease_brush_size")) {
+        KisAction *decreaseBrushSize = new KisAction(i18n("Decrease Brush Size"));
+        decreaseBrushSize->setShortcut(Qt::Key_BracketLeft);
+        actionManager->addAction("decrease_brush_size", decreaseBrushSize);
+    }
+
+    addAction("increase_brush_size", dynamic_cast<QAction *>(actionManager->actionByName("increase_brush_size")));
+    addAction("decrease_brush_size", dynamic_cast<QAction *>(actionManager->actionByName("decrease_brush_size")));
+
     if (kiscanvas && kiscanvas->viewManager()) {
         connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->viewManager()->resourceProvider(), SLOT(slotPainting()));
     }

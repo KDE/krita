@@ -55,9 +55,9 @@
 class Q_DECL_HIDDEN KisDocumentSectionView::Private
 {
 public:
-    Private()
-        : delegate(0)
-        , mode(DetailedMode)
+    Private(KisDocumentSectionView* _q)
+        : delegate(_q, _q)
+	, mode(DetailedMode)
 #ifdef DRAG_WHILE_DRAG_WORKAROUND
         , isDragging(false)
 #endif
@@ -66,7 +66,7 @@ public:
         KConfigGroup group = config->group("DocumentSectionView");
         mode = (DisplayMode) group.readEntry("DocumentSectionViewMode", (int)DetailedMode);
     }
-    KisDocumentSectionDelegate *delegate;
+    KisDocumentSectionDelegate delegate;
     DisplayMode mode;
     QPersistentModelIndex hovered;
     QPoint lastPos;
@@ -79,9 +79,8 @@ public:
 KisDocumentSectionView::KisDocumentSectionView(QWidget *parent)
     : QTreeView(parent)
     , m_draggingFlag(false)
-    , d(new Private)
+    , d(new Private(this))
 {
-    d->delegate = new KisDocumentSectionDelegate(this, this);
     setMouseTracking(true);
     setVerticalScrollMode(ScrollPerPixel);
     setSelectionMode(SingleSelection);
@@ -145,13 +144,13 @@ bool KisDocumentSectionView::viewportEvent(QEvent *e)
                 return QTreeView::viewportEvent(e);
             }
             QModelIndex index = model()->buddy(indexAt(pos));
-            if (d->delegate->editorEvent(e, model(), optionForIndex(index), index)) {
+            if (d->delegate.editorEvent(e, model(), optionForIndex(index), index)) {
                 return true;
             }
         } break;
         case QEvent::Leave: {
             QEvent e(QEvent::Leave);
-            d->delegate->editorEvent(&e, model(), optionForIndex(d->hovered), d->hovered);
+            d->delegate.editorEvent(&e, model(), optionForIndex(d->hovered), d->hovered);
             d->hovered = QModelIndex();
         } break;
         case QEvent::MouseMove: {
@@ -166,11 +165,11 @@ bool KisDocumentSectionView::viewportEvent(QEvent *e)
             if (hovered != d->hovered) {
                 if (d->hovered.isValid()) {
                     QEvent e(QEvent::Leave);
-                    d->delegate->editorEvent(&e, model(), optionForIndex(d->hovered), d->hovered);
+                    d->delegate.editorEvent(&e, model(), optionForIndex(d->hovered), d->hovered);
                 }
                 if (hovered.isValid()) {
                     QEvent e(QEvent::Enter);
-                    d->delegate->editorEvent(&e, model(), optionForIndex(hovered), hovered);
+                    d->delegate.editorEvent(&e, model(), optionForIndex(hovered), hovered);
                 }
                 d->hovered = hovered;
             }
@@ -190,7 +189,7 @@ bool KisDocumentSectionView::viewportEvent(QEvent *e)
                 return QTreeView::viewportEvent(e);
             }
             QModelIndex index = model()->buddy(indexAt(pos));
-            return d->delegate->editorEvent(e, model(), optionForIndex(index), index);
+            return d->delegate.editorEvent(e, model(), optionForIndex(index), index);
         } break;
         case QEvent::Resize: {
             scheduleDelayedItemsLayout();

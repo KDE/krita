@@ -39,7 +39,7 @@ KisBaseNode::KisBaseNode()
     : m_d(new Private())
 {
     /**
-     * Be cautions! These two calls are vital to warm-up KoProperties.
+     * Be cautious! These two calls are vital to warm-up KoProperties.
      * We use it and its QMap in a threaded environment. This is not
      * officially suported by Qt, but our environment guarantees, that
      * there will be the only writer and several readers. Whilst the

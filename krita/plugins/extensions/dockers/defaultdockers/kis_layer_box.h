@@ -52,7 +52,7 @@ class KisNodeModel;
 class Ui_WdgLayerBox;
 
 /**
- * A widget that visualized the layer structure.
+ * A widget that shows a visualization of the layer structure.
  *
  */
 class KisLayerBox : public QDockWidget, public KisMainwindowObserver

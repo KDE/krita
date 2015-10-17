@@ -70,62 +70,63 @@
 
 namespace ActionHelper {
 
-    void copyFromDevice(KisViewManager *view, KisPaintDeviceSP device, bool makeSharpClip = false) {
-    KisImageWSP image = view->image();
-    if (!image) return;
+    void copyFromDevice(KisViewManager *view, KisPaintDeviceSP device, bool makeSharpClip = false)
+    {
+        KisImageWSP image = view->image();
+        if (!image) return;
 
-    KisSelectionSP selection = view->selection();
+        KisSelectionSP selection = view->selection();
 
-    QRect rc = (selection) ? selection->selectedExactRect() : image->bounds();
+        QRect rc = (selection) ? selection->selectedExactRect() : image->bounds();
 
-    KisPaintDeviceSP clip = new KisPaintDevice(device->colorSpace());
-    Q_CHECK_PTR(clip);
+        KisPaintDeviceSP clip = new KisPaintDevice(device->colorSpace());
+        Q_CHECK_PTR(clip);
 
-    const KoColorSpace *cs = clip->colorSpace();
+        const KoColorSpace *cs = clip->colorSpace();
 
-    // TODO if the source is linked... copy from all linked layers?!?
+        // TODO if the source is linked... copy from all linked layers?!?
 
-    // Copy image data
-    KisPainter::copyAreaOptimized(QPoint(), device, clip, rc);
+        // Copy image data
+        KisPainter::copyAreaOptimized(QPoint(), device, clip, rc);
 
-    if (selection) {
-        // Apply selection mask.
-        KisPaintDeviceSP selectionProjection = selection->projection();
-        KisHLineIteratorSP layerIt = clip->createHLineIteratorNG(0, 0, rc.width());
-        KisHLineConstIteratorSP selectionIt = selectionProjection->createHLineIteratorNG(rc.x(), rc.y(), rc.width());
+        if (selection) {
+            // Apply selection mask.
+            KisPaintDeviceSP selectionProjection = selection->projection();
+            KisHLineIteratorSP layerIt = clip->createHLineIteratorNG(0, 0, rc.width());
+            KisHLineConstIteratorSP selectionIt = selectionProjection->createHLineIteratorNG(rc.x(), rc.y(), rc.width());
 
-        const KoColorSpace *selCs = selection->projection()->colorSpace();
+            const KoColorSpace *selCs = selection->projection()->colorSpace();
 
-        for (qint32 y = 0; y < rc.height(); y++) {
+            for (qint32 y = 0; y < rc.height(); y++) {
 
-            for (qint32 x = 0; x < rc.width(); x++) {
+                for (qint32 x = 0; x < rc.width(); x++) {
 
-                /**
-                 * Sharp method is an exact reverse of COMPOSITE_OVER
-                 * so if you cover the cut/copied piece over its source
-                 * you get an exactly the same image without any seams
-                 */
-                if (makeSharpClip) {
-                    qreal dstAlpha = cs->opacityF(layerIt->rawData());
-                    qreal sel = selCs->opacityF(selectionIt->oldRawData());
-                    qreal newAlpha = sel * dstAlpha / (1.0 - dstAlpha + sel * dstAlpha);
-                    float mask = newAlpha / dstAlpha;
+                    /**
+                     * Sharp method is an exact reverse of COMPOSITE_OVER
+                     * so if you cover the cut/copied piece over its source
+                     * you get an exactly the same image without any seams
+                     */
+                    if (makeSharpClip) {
+                        qreal dstAlpha = cs->opacityF(layerIt->rawData());
+                        qreal sel = selCs->opacityF(selectionIt->oldRawData());
+                        qreal newAlpha = sel * dstAlpha / (1.0 - dstAlpha + sel * dstAlpha);
+                        float mask = newAlpha / dstAlpha;
 
-                    cs->applyAlphaNormedFloatMask(layerIt->rawData(), &mask, 1);
-                } else {
-                    cs->applyAlphaU8Mask(layerIt->rawData(), selectionIt->oldRawData(), 1);
+                        cs->applyAlphaNormedFloatMask(layerIt->rawData(), &mask, 1);
+                    } else {
+                        cs->applyAlphaU8Mask(layerIt->rawData(), selectionIt->oldRawData(), 1);
+                    }
+
+                    layerIt->nextPixel();
+                    selectionIt->nextPixel();
                 }
-
-                layerIt->nextPixel();
-                selectionIt->nextPixel();
+                layerIt->nextRow();
+                selectionIt->nextRow();
             }
-            layerIt->nextRow();
-            selectionIt->nextRow();
         }
-    }
 
-    KisClipboard::instance()->setClip(clip, rc.topLeft());
-}
+        KisClipboard::instance()->setClip(clip, rc.topLeft());
+    }
 
 }
 
@@ -133,7 +134,7 @@ void KisSelectAllActionFactory::run(KisViewManager *view)
 {
     KisImageWSP image = view->image();
     if (!image) return;
-    
+
     KisProcessingApplicator *ap = beginAction(view, kundo2_i18n("Select All"));
 
     if (!image->globalSelection()) {
@@ -164,7 +165,7 @@ void KisDeselectActionFactory::run(KisViewManager *view)
 {
     KisImageWSP image = view->image();
     if (!image) return;
-    
+
     KUndo2Command *cmd = new KisDeselectGlobalSelectionCommand(image);
 
     KisProcessingApplicator *ap = beginAction(view, cmd->text());
@@ -176,7 +177,7 @@ void KisReselectActionFactory::run(KisViewManager *view)
 {
     KisImageWSP image = view->image();
     if (!image) return;
-    
+
     KUndo2Command *cmd = new KisReselectGlobalSelectionCommand(image);
 
     KisProcessingApplicator *ap = beginAction(view, cmd->text());
@@ -191,13 +192,13 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
 
     KisSelectionSP selection = view->selection();
     QRect selectedRect = selection ?
-                selection->selectedRect() : view->image()->bounds();
+                         selection->selectedRect() : view->image()->bounds();
     Q_UNUSED(selectedRect);
     KisPaintDeviceSP filled = node->paintDevice()->createCompositionSourceDevice();
     Q_UNUSED(filled);
     bool usePattern = false;
     bool useBgColor = false;
-    
+
     if (fillSource.contains("pattern")) {
         usePattern = true;
     } else if (fillSource.contains("bg")) {
@@ -210,23 +211,23 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
                                        kundo2_i18n("Flood Fill Layer"));
 
     KisResourcesSnapshotSP resources =
-            new KisResourcesSnapshot(view->image(), node, 0, view->resourceProvider()->resourceManager());
+        new KisResourcesSnapshot(view->image(), node, 0, view->resourceProvider()->resourceManager());
     if (!fillSource.contains("opacity")) {
         resources->setOpacity(1.0);
     }
 
     KisProcessingVisitorSP visitor =
-            new FillProcessingVisitor(QPoint(0, 0), // start position
-                                      selection,
-                                      resources,
-                                      false, // fast mode
-                                      usePattern,
-                                      true, // fill only selection,
-                                      0, // feathering radius
-                                      0, // sizemod
-                                      80, // threshold,
-                                      false, // unmerged
-                                      useBgColor);
+        new FillProcessingVisitor(QPoint(0, 0), // start position
+                                  selection,
+                                  resources,
+                                  false, // fast mode
+                                  usePattern,
+                                  true, // fill only selection,
+                                  0, // feathering radius
+                                  0, // sizemod
+                                  80, // threshold,
+                                  false, // unmerged
+                                  useBgColor);
 
     applicator.applyVisitor(visitor,
                             KisStrokeJobData::SEQUENTIAL,
@@ -256,7 +257,7 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
 {
     KisImageSP image = view->image();
     if (!image) return;
-    
+
     bool haveShapesSelected = view->selectionManager()->haveShapesSelected();
 
     if (haveShapesSelected) {
@@ -343,8 +344,8 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
             }
 
             KUndo2MagicString actionName = willCut ?
-                        kundo2_i18n("Cut") :
-                        kundo2_i18n("Copy");
+                                           kundo2_i18n("Cut") :
+                                           kundo2_i18n("Copy");
             KisProcessingApplicator *ap = beginAction(view, actionName);
 
             if (command) {
@@ -364,7 +365,7 @@ void KisCopyMergedActionFactory::run(KisViewManager *view)
 {
     KisImageWSP image = view->image();
     if (!image) return;
-    
+
     image->barrierLock();
     KisPaintDeviceSP dev = image->root()->projection();
     ActionHelper::copyFromDevice(view, dev);
@@ -378,7 +379,7 @@ void KisPasteActionFactory::run(KisViewManager *view)
 {
     KisImageWSP image = view->image();
     if (!image) return;
-    
+
     KisPaintDeviceSP clip = KisClipboard::instance()->clip(image->bounds(), true);
 
     if (clip) {
@@ -414,8 +415,8 @@ void KisPasteNewActionFactory::run(KisViewManager *viewManager)
                                     clip->colorSpace(),
                                     i18n("Pasted"));
     KisPaintLayerSP layer =
-            new KisPaintLayer(image.data(), clip->objectName(),
-                              OPACITY_OPAQUE_U8, clip->colorSpace());
+        new KisPaintLayer(image.data(), clip->objectName(),
+                          OPACITY_OPAQUE_U8, clip->colorSpace());
 
     KisPainter::copyAreaOptimized(QPoint(), clip, layer->paintDevice(), rect);
 
@@ -438,7 +439,7 @@ void KisSelectionToVectorActionFactory::run(KisViewManager *view)
     KisSelectionSP selection = view->selection();
 
     if (selection->hasShapeSelection() ||
-            !selection->outlineCacheValid()) {
+        !selection->outlineCacheValid()) {
 
         return;
     }
@@ -527,11 +528,10 @@ void KisSelectionToShapeActionFactory::run(KisViewManager *view)
 
     KoShape *shape = KoPathShape::createShapeFromPainterPath(transform.map(selectionOutline));
     shape->setShapeId(KoPathShapeId);
-    
+
     KoColor fgColor = view->canvasBase()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     KoShapeStroke* border = new KoShapeStroke(1.0, fgColor.toQColor());
     shape->setStroke(border);
 
     view->document()->shapeController()->addShape(shape);
 }
-

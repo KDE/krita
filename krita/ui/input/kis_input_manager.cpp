@@ -461,8 +461,10 @@ void KisInputManager::profileChanged()
 
     KisInputProfile *profile = KisInputProfileManager::instance()->currentProfile();
     if (profile) {
-        QList<KisShortcutConfiguration*> shortcuts = profile->allShortcuts();
-        foreach(KisShortcutConfiguration *shortcut, shortcuts) {
+        const QList<KisShortcutConfiguration*> shortcuts = profile->allShortcuts();
+
+        for (KisShortcutConfiguration * const shortcut : shortcuts) {
+            dbgUI << "Adding shortcut" << shortcut->keys() << "for action" << shortcut->action()->name();
             switch(shortcut->type()) {
             case KisShortcutConfiguration::KeyCombinationType:
                 d->addKeyShortcut(shortcut->action(), shortcut->mode(), shortcut->keys());

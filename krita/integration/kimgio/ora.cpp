@@ -48,19 +48,15 @@ bool OraHandler::read(QImage *image)
 bool OraHandler::canRead(QIODevice *device)
 {
     if (!device) {
-        qWarning("KraHandler::canRead() called with no device");
+        qWarning("OraHandler::canRead() called with no device");
         return false;
     }
 
-    KZip zip(device);
-    if (!zip.open(QIODevice::ReadOnly)) return false;
+    char buff[54];
+    if (device->peek(buff, sizeof(buff)) == sizeof(buff))
+        return qstrcmp(buff + 0x26, "image/openraster") == 0;
 
-    const KArchiveEntry *entry = zip.directory()->entry("mimetype");
-    if (!entry || !entry->isFile()) return false;
-
-    const KZipFileEntry* fileZipEntry = static_cast<const KZipFileEntry*>(entry);
-
-    return (qstrcmp(fileZipEntry->data().constData(), "image/openraster") == 0);
+    return false;
 }
 
 QImageIOPlugin::Capabilities OraPlugin::capabilities(QIODevice *device, const QByteArray &format) const

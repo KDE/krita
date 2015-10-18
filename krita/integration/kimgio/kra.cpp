@@ -53,17 +53,12 @@ bool KraHandler::canRead(QIODevice *device)
         return false;
     }
 
-    KZip zip(device);
-    if (!zip.open(QIODevice::ReadOnly)) return false;
+    char buff[57];
+    if (device->peek(buff, sizeof(buff)) == sizeof(buff))
+        return qstrcmp(buff + 0x26, "application/x-krita") == 0;
 
-    const KArchiveEntry *entry = zip.directory()->entry("mimetype");
-    if (!entry || !entry->isFile()) return false;
-
-    const KZipFileEntry* fileZipEntry = static_cast<const KZipFileEntry*>(entry);
-
-    return (qstrcmp(fileZipEntry->data().constData(), "application/x-krita") == 0);
+    return false;
 }
-
 
 QImageIOPlugin::Capabilities KraPlugin::capabilities(QIODevice *device, const QByteArray &format) const
 {

@@ -351,7 +351,7 @@ void KisFavoriteResourceManager::init()
         QStringList oldFavoritePresets = (group.readEntry("favoritePresets")).split(',', QString::SkipEmptyParts);
 
         KisConfig cfg;
-        m_currentTag = cfg.readEntry<QString>("favoritePresetsTag", QString());
+        m_currentTag = cfg.readEntry<QString>("favoritePresetsTag", "Block");
 
         if (!oldFavoritePresets.isEmpty() && m_currentTag.isEmpty()) {
             m_currentTag = i18n("Favorite Presets");

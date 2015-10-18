@@ -165,6 +165,8 @@ ToolsBlacklist=CreatePathTool,KoPencilTool,ConnectionTool,KarbonFilterEffectsToo
 [favoriteList]
 favoritePresets=Basic_tip_default,Basic_circle_wet,Block_basic,Bristles_hairy,Eraser_circle,Eraser_hard,Eraser_soft,Mix_dull,Mix_smear_soft,Ink_gpen_10
 
+favoritePresetsTag=Block
+
 
 [advancedColorSelector]
 allowHorizontalLayout=true

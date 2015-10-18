@@ -1,5 +1,8 @@
 [Desktop Entry]
 Name=Animation Docker
+Name[ca]=Acoblador d'animació
+Name[en_GB]=Animation Docker
+Name[fi]=Animointitelakka
 Name[nl]=Animatievastzetter
 Name[pl]=Dokowanie animacji
 Name[pt]=Área de Animação
@@ -9,6 +12,9 @@ Name[sv]=Animeringsdockningsfönster
 Name[uk]=Бічна панель анімації
 Name[x-test]=xxAnimation Dockerxx
 Comment=Docker for animating
+Comment[ca]=Acoblador per animar
+Comment[en_GB]=Docker for animating
+Comment[fi]=Animointitelakka
 Comment[nl]=Vastzetten voor animatie
 Comment[pl]=Dokowanie dla animacji
 Comment[pt]=Acoplador para execução de animações

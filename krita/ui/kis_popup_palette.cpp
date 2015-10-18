@@ -458,6 +458,12 @@ void KisPopupPalette::mousePressEvent(QMouseEvent* event)
     }
 }
 
+
+
+void KisPopupPalette::tabletEvent(QTabletEvent* event) {
+}
+
+
 void KisPopupPalette::mouseReleaseEvent(QMouseEvent * event)
 {
     QPointF point = event->posF();

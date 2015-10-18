@@ -54,6 +54,8 @@ public:
     void setSelectedColor(int x);
     int selectedColor() const;
 
+    virtual void tabletEvent(QTabletEvent * event);
+
 protected:
 
     void paintEvent(QPaintEvent*);

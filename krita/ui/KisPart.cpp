@@ -90,6 +90,7 @@ public:
         , startupWidget(0)
         , actionCollection(0)
         , idleWatcher(2500)
+        , animationCachePopulator(_part)
     {
     }
 
@@ -110,7 +111,7 @@ public:
     KActionCollection *actionCollection;
 
     KisIdleWatcher idleWatcher;
-    QScopedPointer<KisAnimationCachePopulator> animationCachePopulator;
+    KisAnimationCachePopulator animationCachePopulator;
 
     void loadActions();
 };
@@ -212,12 +213,10 @@ KisPart::KisPart()
     connect(this, SIGNAL(documentClosed(QString)),
             this, SLOT(updateIdleWatcherConnections()));
 
-    d->animationCachePopulator.reset(new KisAnimationCachePopulator(this));
-
     connect(&d->idleWatcher, SIGNAL(startedIdleMode()),
-            d->animationCachePopulator.data(), SLOT(slotRequestRegeneration()));
+            &d->animationCachePopulator, SLOT(slotRequestRegeneration()));
 
-    d->animationCachePopulator->slotRequestRegeneration();
+    d->animationCachePopulator.slotRequestRegeneration();
 }
 
 KisPart::~KisPart()
@@ -441,7 +440,7 @@ KisIdleWatcher* KisPart::idleWatcher() const
 
 KisAnimationCachePopulator* KisPart::cachePopulator() const
 {
-    return d->animationCachePopulator.data();
+    return &d->animationCachePopulator;
 }
 
 void KisPart::openExistingFile(const QUrl &url)

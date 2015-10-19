@@ -107,7 +107,7 @@
   <customwidget>
    <class>KDcrawIface::DcrawSettingsWidget</class>
    <extends>QWidget</extends>
-   <header>kdcraw/dcrawsettingswidget.h</header>
+   <header>3rdparty/libkdcraw/src/dcrawsettingswidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -286,7 +286,8 @@ KisMainWindow *KisPart::createMainWindow()
 {
     KisMainWindow *mw = new KisMainWindow();
 
-    addMainWindow(mw);
+    dbgUI <<"mainWindow" << (void*)mw << "added to view" << this;
+    d->mainWindows.append(mw);
 
     return mw;
 }
@@ -396,16 +397,6 @@ QGraphicsItem *KisPart::createCanvasItem(KisDocument *document)
     QWidget *canvasController = view->findChild<KoCanvasControllerWidget*>();
     proxy->setWidget(canvasController);
     return proxy;
-}
-
-void KisPart::addMainWindow(KisMainWindow *mainWindow)
-{
-    if (!mainWindow) return;
-    if (d->mainWindows.contains(mainWindow)) return;
-
-    dbgUI <<"mainWindow" << (void*)mainWindow <<"added to doc" << this;
-    d->mainWindows.append(mainWindow);
-
 }
 
 void KisPart::removeMainWindow(KisMainWindow *mainWindow)

@@ -111,10 +111,6 @@ public:
     KisMainWindow *createMainWindow();
 
     /**
-     * Appends the mainwindow to the list of mainwindows which this part manages.
-     */
-    void addMainWindow(KisMainWindow *mainWindow);
-
      * Removes a main window from the list of managed windows.
      *
      * This is called by the MainWindow after it finishes its shutdown routine.

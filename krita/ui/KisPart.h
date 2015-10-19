@@ -43,14 +43,17 @@ class KisAnimationCachePopulator;
 
 
 /**
- * Override this class in your application. It's the main entry point that
- * should provide the document, the view and the component data to the calligra
- * system.
+ * KisPart is the Great Deku Tree of Krita.
  *
- * There is/will be a single KisPart instance for an application that will manage
- * the list of documents, views and mainwindows.
+ * It is a singleton class which provides the main entry point to the application.
+ * Krita supports multiple documents, multiple main windows, and multiple
+ * components.  KisPart manages these resources and provides them to the rest of
+ * Krita.  It manages lists QActions and shortcuts, as well.
  *
- * It hasn't got much to do with kparts anymore.
+ * The terminology comes from KParts, which is a system allowing one KDE app
+ * to be run from inside another, like pressing F4 inside dophin to run konsole.
+ *
+ * Needless to say, KisPart hasn't got much to do with KParts anymore.
  */
 class KRITAUI_EXPORT KisPart : public QObject
 {
@@ -76,7 +79,7 @@ public:
      */
     ~KisPart();
 
-    // ----------------- mainwindow management -----------------
+    // ----------------- Document management -----------------
 
     /**
      * create an empty document. The document is not automatically registered with the part.
@@ -100,10 +103,10 @@ public:
 
     void removeDocument(KisDocument *document);
 
-    // ----------------- mainwindow management -----------------
+    // ----------------- MainWindow management -----------------
 
     /**
-     * Create a new main window, but does not add it to the current set of managed main windows.
+     * Create a new main window.
      */
     KisMainWindow *createMainWindow();
 
@@ -112,8 +115,9 @@ public:
      */
     void addMainWindow(KisMainWindow *mainWindow);
 
-    /**
-     * Removes the mainwindow from the list.
+     * Removes a main window from the list of managed windows.
+     *
+     * This is called by the MainWindow after it finishes its shutdown routine.
      */
     void removeMainWindow(KisMainWindow *mainWindow);
 
@@ -129,9 +133,20 @@ public:
 
     void addRecentURLToAllMainWindows(QUrl url);
 
+    /**
+     * @return the currently active main window.
+     */
     KisMainWindow *currentMainwindow() const;
 
+
+    /**
+     * @return the application-wide KisIdleWatcher.
+     */
     KisIdleWatcher *idleWatcher() const;
+
+    /**
+     * @return the application-wide AnimationCachePopulator.
+     */
     KisAnimationCachePopulator *cachePopulator() const;
 
 public Q_SLOTS:
@@ -185,13 +200,16 @@ public:
 
     static KisInputManager *currentInputManager();
 
-    //------------------ view management ------------------
+    //------------------ View management ------------------
 
     /**
      * Create a new view for the document. The view is added to the list of
      * views, and if the document wasn't known yet, it's registered as well.
      */
-    KisView *createView(KisDocument *document, KoCanvasResourceManager *resourceManager, KActionCollection *actionCollection, QWidget *parent);
+    KisView *createView(KisDocument *document,
+                        KoCanvasResourceManager *resourceManager,
+                        KActionCollection *actionCollection,
+                        QWidget *parent);
 
     /**
      * Adds a view to the document. If the part doesn't know yet about
@@ -226,7 +244,7 @@ public:
      */
     QGraphicsItem *canvasItem(KisDocument *document, bool create = true);
 
-    // ------- startup/openpane etc ---------------
+    // ------- Startup/openpane etc ---------------
 
     /**
      * Template resource path used. This is used by the start up widget to show
@@ -263,13 +281,22 @@ protected:
     };
 
     /**
-     * Override this method in your derived class to show a widget in the startup 'dialog'.
-     * This widget should allow the user to set settings for a custom document (i.e. one
-     * not based on a template).
-     * The returned widget should provide its own button (preferably 'Create') and
-     * implement the logic to implement the document instance correctly.
-     * After initializing the widget should emit a signal called 'documentSelected(KisDocument*)' which
-     * will remove the startupWidget and show the document.
+     * This generates widgets for the startup dialog. It populates the dialog
+     * with widgets providing different ways to load new documents.
+     *
+     * (For example, "blank document", "create from clipboard", "open file")
+     *
+     * Each widget returned from this function should follow a certain format.
+     * The returned widget should provide its own button (preferably 'Create')
+     * and implement the logic to implement the document instance correctly.
+     * The widget should use the signal 'documentSelected(KisDocument*)' to
+     * notify that the startup dialog should close and KisPart should load the
+     * new document.
+     *
+     * @see KisPart::showStartUpWidget()
+     * @see KisDocument::createCustomDocumentWidget()
+     * @see KisOpenPane::createCustomDocumentWidget()
+     *
      * @param parent the parent of the to be created widget.
      * @return a list of KisDocument::CustomDocumentWidgetItem.
      */

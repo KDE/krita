@@ -291,7 +291,10 @@ KisMainWindow *KisPart::createMainWindow()
     return mw;
 }
 
-KisView *KisPart::createView(KisDocument *document, KoCanvasResourceManager *resourceManager, KActionCollection *actionCollection, QWidget *parent)
+KisView *KisPart::createView(KisDocument *document,
+                             KoCanvasResourceManager *resourceManager,
+                             KActionCollection *actionCollection,
+                             QWidget *parent)
 {
     // If creating the canvas fails, record this and disable OpenGL next time
     KisConfig cfg;
@@ -496,29 +499,30 @@ void KisPart::configureShortcuts()
     // of KShortcutsDialog, where the schemes editor is disabled directly.
     // Not nice, but then soon custom Krita-specific shortcut handling is
     // planned anyway.
+
+    // WidgetAction + WindowAction + ApplicationAction leaves only GlobalAction excluded
     KisShortcutsDialog dlg(KShortcutsEditor::WidgetAction | KShortcutsEditor::WindowAction | KShortcutsEditor::ApplicationAction);
     dlg.addCollection(d->actionCollection);
-    dlg.configure();
+    dlg.configure();  // Show the dialog.
 
     foreach(KisMainWindow *mainWindow, d->mainWindows) {
         KActionCollection *ac = mainWindow->actionCollection();
         ac->readSettings();
 
-        // append shortcuts to tooltips if they exist
-        foreach( QAction* tempAction, ac->actions())
+        // Loop through mainWindow->actionCollections() to modify tooltips
+        // so that they list shortcuts at the end in parentheses
+        foreach( QAction* action, ac->actions())
         {
-            // find the shortcut pattern and delete (note the preceding space in the RegEx)
-            QString strippedTooltip = tempAction->toolTip().remove(QRegExp("\\s\\(.*\\)"));
+            // Remove any existing suffixes from the tooltips.
+            // Note this regexp starts with a space, e.g. " (Ctrl-a)"
+            QString strippedTooltip = action->toolTip().remove(QRegExp("\\s\\(.*\\)"));
 
-            // append shortcut if it exists for action
-            if(tempAction->shortcut() == QKeySequence(0))
-                 tempAction->setToolTip( strippedTooltip);
+            // Now update the tooltips with the new shortcut info.
+            if(action->shortcut() == QKeySequence(0))
+                 action->setToolTip(strippedTooltip);
             else
-                 tempAction->setToolTip( strippedTooltip + " (" + tempAction->shortcut().toString() + ")");
-
+                 action->setToolTip( strippedTooltip + " (" + action->shortcut().toString() + ")");
         }
-
-
     }
 }
 

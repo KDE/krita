@@ -56,6 +56,8 @@ int KisDraggableToolButton::calculateValue(const QPoint &diff)
         value = -diff.y();
     }
 
+    value = diff.x() - diff.y();
+
     return value;
 }
 

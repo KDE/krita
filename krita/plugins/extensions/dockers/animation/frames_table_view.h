@@ -71,6 +71,7 @@ private Q_SLOTS:
 
 private:
     void setFramesPerSecond(int fps);
+    void slotZoomButtonPressedImpl();
 
 protected:
     void currentChanged(const QModelIndex &current, const QModelIndex &previous);

@@ -286,15 +286,16 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
         }
     }
     if(event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::TabletRelease) {
+
+         QApplication::restoreOverrideCursor();
+
         if(d->xActive) {
             d->xActive = false;
-            QApplication::restoreOverrideCursor();
             event->accept();
             return true;
         }
         if(d->yActive) {
             d->yActive = false;
-            QApplication::restoreOverrideCursor();
             event->accept();
             return true;
         }

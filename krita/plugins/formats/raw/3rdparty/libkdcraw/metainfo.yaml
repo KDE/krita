@@ -1,0 +1,9 @@
+maintainer: agateua
+description: A thread-safe wrapper around libraw
+tier: 4
+type: integration
+platforms:
+    - name: All
+portingAid: false
+deprecated: false
+release: false

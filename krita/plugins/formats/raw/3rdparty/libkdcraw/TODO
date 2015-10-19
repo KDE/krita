@@ -1,0 +1,14 @@
+- Add DNG writting mode support using Adobe DNG sdk
+
+- Libraw 0.13.0 features to support :
+
+1) Green channel local averaging. All interpolation methods, but may conflict with green_matching option, so it is safer to use only one green averaging.
+
+   int cfa_green; Boolean, default is 0 (off)
+   float green_threshold;  - Sensitivity of method (green is averaged if difference less than this value in percent).  Usable range between 0.01 and 0.1, commonly 0.03
+
+This filtering is applied *before* demosaic.
+
+The problem is simple: on some cameras (for example, Olympus E-xxx) two green channels are different (in sensitivity and, may be, in spectral response). 
+As a result, it produces 'maze artifacts' on flat surfaces (like sky).
+The solution is simple: if two channels are *slightly* different in some local area, it is better to equalize it.

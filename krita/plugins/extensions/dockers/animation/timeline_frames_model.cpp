@@ -313,6 +313,23 @@ void TimelineFramesModel::slotCurrentTimeChanged(int time)
     }
 }
 
+void TimelineFramesModel::slotCurrentNodeChanged(KisNodeSP node)
+{
+    KisNodeDummy *dummy = m_d->dummiesFacade->dummyForNode(node);
+    KIS_ASSERT_RECOVER_RETURN(dummy);
+
+    m_d->converter->updateActiveDummy(dummy);
+
+    const int row = m_d->converter->rowForDummy(dummy);
+    if (row < 0) {
+        qWarning() << "WARNING: TimelineFramesModel::slotCurrentNodeChanged: node not found!";
+    }
+
+    if (row >= 0 && m_d->activeLayerIndex != row) {
+        setData(index(row, 0), true, ActiveLayerRole);
+    }
+}
+
 int TimelineFramesModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
@@ -382,12 +399,21 @@ bool TimelineFramesModel::setData(const QModelIndex &index, const QVariant &valu
 
     switch (role) {
     case ActiveLayerRole: {
-        if (value.toBool()) {
+        if (value.toBool() &&
+            index.row() != m_d->activeLayerIndex) {
+
             int prevLayer = m_d->activeLayerIndex;
             m_d->activeLayerIndex = index.row();
 
             emit dataChanged(this->index(prevLayer, 0), this->index(prevLayer, columnCount() - 1));
             emit dataChanged(this->index(m_d->activeLayerIndex, 0), this->index(m_d->activeLayerIndex, columnCount() - 1));
+
+            qDebug() << ppVar(m_d->activeLayerIndex);
+
+            KisNodeDummy *dummy = m_d->converter->dummyFromRow(m_d->activeLayerIndex);
+            KIS_ASSERT_RECOVER(dummy) { return true; }
+
+            emit requestCurrentNodeChanged(dummy->node());
         }
         break;
     }

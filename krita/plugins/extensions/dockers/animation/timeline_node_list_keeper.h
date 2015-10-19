@@ -49,6 +49,8 @@ public:
 
     OtherLayersList otherLayersList() const;
 
+    void updateActiveDummy(KisNodeDummy *dummy);
+
 private Q_SLOTS:
     void slotEndInsertDummy(KisNodeDummy *dummy);
     void slotBeginRemoveDummy(KisNodeDummy *dummy);

@@ -86,11 +86,29 @@ int TimelineNodeListKeeper::rowCount()
     return m_d->dummiesList.size();
 }
 
+void TimelineNodeListKeeper::updateActiveDummy(KisNodeDummy *dummy)
+{
+    bool oldRemoved = false;
+    bool newAdded = false;
+
+    KisNodeDummy *oldActiveDummy = m_d->converter.activeDummy();
+    m_d->converter.updateActiveDummy(dummy, &oldRemoved, &newAdded);
+
+
+    if (oldRemoved) {
+        slotBeginRemoveDummy(oldActiveDummy);
+    }
+
+    if (newAdded) {
+        slotEndInsertDummy(dummy);
+    }
+}
+
 void TimelineNodeListKeeper::slotEndInsertDummy(KisNodeDummy *dummy)
 {
     KIS_ASSERT_RECOVER_RETURN(!m_d->dummiesList.contains(dummy));
 
-    if (dummy->node()->useInTimeline()) {
+    if (m_d->converter.isDummyVisible(dummy)) {
         int pos = m_d->converter.rowForDummy(dummy);
 
         m_d->model->callBeginInsertRows(QModelIndex(), pos, pos);
@@ -113,7 +131,7 @@ void TimelineNodeListKeeper::slotBeginRemoveDummy(KisNodeDummy *dummy)
 void TimelineNodeListKeeper::slotDummyChanged(KisNodeDummy *dummy)
 {
     const bool present = m_d->dummiesList.contains(dummy);
-    const bool shouldBe = dummy->node()->useInTimeline();
+    const bool shouldBe = m_d->converter.isDummyVisible(dummy);
 
     if (!present && shouldBe) {
         slotEndInsertDummy(dummy);

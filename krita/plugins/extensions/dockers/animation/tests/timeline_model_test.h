@@ -40,6 +40,11 @@ private Q_SLOTS:
 
 private Q_SLOTS:
     void setCurrentTime(int time);
+    void setCurrentLayer(int row);
+    void slotGuiChangedNode(KisNodeSP node);
+
+Q_SIGNALS:
+    void sigRequestNodeChange(KisNodeSP node);
 
 private:
     KisDocument *m_doc;

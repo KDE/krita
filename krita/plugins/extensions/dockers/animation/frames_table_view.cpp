@@ -429,7 +429,7 @@ void FramesTableView::mousePressEvent(QMouseEvent *event)
             // TODO: try calculate index under mouse cursor even when
             //       it is outside any visible row
             m_d->zoomStillPointIndex =
-                index.isValid() ? index.column() : -1;
+                index.isValid() ? index.column() : currentIndex().column();
 
             slotZoomButtonPressedImpl();
         } else if (event->button() == Qt::LeftButton) {

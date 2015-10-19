@@ -35,8 +35,18 @@ public:
     int rowForDummy(KisNodeDummy *dummy);
     int rowCount();
 
+    KisNodeDummy* activeDummy() const;
+    void updateActiveDummy(KisNodeDummy *dummy, bool *oldRemoved, bool *newAdded);
+
+    bool isDummyVisible(KisNodeDummy *dummy) const;
+
+private:
+    KisNodeDummy* findNodeFromRow(KisNodeDummy *root, int &startCount);
+    bool calcNodesInPath(KisNodeDummy *root, int &startCount, KisNodeDummy *endDummy);
+
 private:
     KisDummiesFacadeBase *m_dummiesFacade;
+    KisNodeDummy *m_activeDummy;
 };
 
 #endif /* __TIMELINE_FRAMES_INDEX_CONVERTER_H */

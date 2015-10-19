@@ -23,7 +23,8 @@
 
 
 TimelineFramesIndexConverter::TimelineFramesIndexConverter(KisDummiesFacadeBase *dummiesFacade)
-    : m_dummiesFacade(dummiesFacade)
+    : m_dummiesFacade(dummiesFacade),
+      m_activeDummy(0)
 {
 }
 
@@ -31,9 +32,9 @@ TimelineFramesIndexConverter::~TimelineFramesIndexConverter()
 {
 }
 
-bool calcNodesInPath(KisNodeDummy *root, int &startCount, KisNodeDummy *endDummy)
+bool TimelineFramesIndexConverter::calcNodesInPath(KisNodeDummy *root, int &startCount, KisNodeDummy *endDummy)
 {
-    if (root->node()->useInTimeline()) {
+    if (isDummyVisible(root)) {
         if (endDummy && root == endDummy) {
             return true;
         }
@@ -53,9 +54,9 @@ bool calcNodesInPath(KisNodeDummy *root, int &startCount, KisNodeDummy *endDummy
     return false;
 }
 
-KisNodeDummy* findNodeFromRow(KisNodeDummy *root, int &startCount)
+KisNodeDummy* TimelineFramesIndexConverter::findNodeFromRow(KisNodeDummy *root, int &startCount)
 {
-    if (root->node()->useInTimeline()) {
+    if (isDummyVisible(root)) {
         if (!startCount) {
             return root;
         }
@@ -101,4 +102,31 @@ int TimelineFramesIndexConverter::rowCount()
     int count = 0;
     calcNodesInPath(root, count, 0);
     return count;
+}
+
+KisNodeDummy* TimelineFramesIndexConverter::activeDummy() const
+{
+    return m_activeDummy;
+}
+
+void TimelineFramesIndexConverter::updateActiveDummy(KisNodeDummy *dummy,
+                                                     bool *oldRemoved,
+                                                     bool *newAdded)
+{
+    if (m_activeDummy == dummy) return;
+
+    if (m_activeDummy && !m_activeDummy->node()->useInTimeline()) {
+        *oldRemoved = true;
+    }
+
+    m_activeDummy = dummy;
+
+    if (m_activeDummy && !m_activeDummy->node()->useInTimeline()) {
+        *newAdded = true;
+    }
+}
+
+bool TimelineFramesIndexConverter::isDummyVisible(KisNodeDummy *dummy) const
+{
+    return dummy->node()->useInTimeline() || dummy == m_activeDummy;
 }

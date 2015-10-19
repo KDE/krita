@@ -126,6 +126,10 @@ void TimelineModelTest::testView()
     intTime->setValue(0);
     intTime->setMaximum(10000);
 
+    QSpinBox *intLayer = new QSpinBox(&dlg);
+    intLayer->setValue(0);
+    intLayer->setMaximum(100);
+
     FramesTableView *framesTable = new FramesTableView(&dlg);
 
     TimelineFramesModel *model = new TimelineFramesModel(&dlg);
@@ -150,15 +154,26 @@ void TimelineModelTest::testView()
     connect(m_image->animationInterface(), SIGNAL(sigTimeChanged(int)),
             intTime, SLOT(setValue(int)));
 
+    connect(intLayer, SIGNAL(valueChanged(int)),
+            SLOT(setCurrentLayer(int)));
+
+    connect(this, SIGNAL(sigRequestNodeChange(KisNodeSP)),
+            model, SLOT(slotCurrentNodeChanged(KisNodeSP)));
+
+    connect(model, SIGNAL(requestCurrentNodeChanged(KisNodeSP)),
+            this, SLOT(slotGuiChangedNode(KisNodeSP)));
+
     QVBoxLayout *layout = new QVBoxLayout(&dlg);
 
     layout->addWidget(intFps);
     layout->addWidget(intTime);
+    layout->addWidget(intLayer);
     layout->addWidget(framesTable);
 
     layout->setStretch(0, 0);
     layout->setStretch(1, 0);
-    layout->setStretch(2, 1);
+    layout->setStretch(2, 0);
+    layout->setStretch(3, 1);
 
     dlg.resize(600, 400);
 
@@ -168,6 +183,44 @@ void TimelineModelTest::testView()
 void TimelineModelTest::setCurrentTime(int time)
 {
     m_image->animationInterface()->requestTimeSwitchWithUndo(time);
+}
+
+KisNodeDummy* findNodeFromRowAny(KisNodeDummy *root, int &startCount)
+{
+    if (!startCount) {
+        return root;
+    }
+    startCount--;
+
+    KisNodeDummy *dummy = root->lastChild();
+    while (dummy) {
+        KisNodeDummy *found = findNodeFromRowAny(dummy, startCount);
+        if (found) return found;
+
+        dummy = dummy->prevSibling();
+    }
+
+    return 0;
+}
+
+
+void TimelineModelTest::setCurrentLayer(int row)
+{
+    KisNodeDummy *root = m_shapeController->rootDummy();
+    KisNodeDummy *dummy = findNodeFromRowAny(root, row);
+    if (!dummy) {
+        qDebug() << "WARNING: Cannot find a node at pos" << row;
+        return;
+    } else {
+        qDebug() << "NonGUI changed active node: " << dummy->node()->name();
+    }
+
+    emit sigRequestNodeChange(dummy->node());
+}
+
+void TimelineModelTest::slotGuiChangedNode(KisNodeSP node)
+{
+    qDebug() << "GUI changed active node:" << node->name();
 }
 
 QTEST_KDEMAIN(TimelineModelTest, GUI)

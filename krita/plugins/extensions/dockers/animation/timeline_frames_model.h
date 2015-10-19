@@ -25,6 +25,7 @@
 #include "kritaanimationdocker_export.h"
 #include "KisDocumentSectionModel.h"
 #include "kis_types.h"
+#include "kis_node.h"
 #include "timeline_node_list_keeper.h"
 
 class KisNodeDummy;
@@ -96,6 +97,10 @@ private Q_SLOTS:
 public Q_SLOTS:
     void slotFramerateChanged();
     void slotCurrentTimeChanged(int time);
+    void slotCurrentNodeChanged(KisNodeSP node);
+
+Q_SIGNALS:
+    void requestCurrentNodeChanged(KisNodeSP node);
 
 private:
     struct Private;

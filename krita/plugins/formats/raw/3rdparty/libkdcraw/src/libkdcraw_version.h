@@ -1,0 +1,11 @@
+
+#ifndef KDCRAW_VERSION_H
+#define KDCRAW_VERSION_H
+
+#define KDCRAW_VERSION_STRING "5.0.0"
+#define KDCRAW_VERSION_MAJOR 5
+#define KDCRAW_VERSION_MINOR 0
+#define KDCRAW_VERSION_PATCH 0
+#define KDCRAW_VERSION ((5<<16)|(0<<8)|(0))
+
+#endif

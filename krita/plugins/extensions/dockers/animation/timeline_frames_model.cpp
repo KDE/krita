@@ -41,6 +41,7 @@
 #include "kis_keyframe_channel.h"
 #include "kundo2command.h"
 #include "kis_post_execution_undo_adapter.h"
+#include "kis_animation_frame_cache.h"
 
 
 struct TimelineFramesModel::Private
@@ -58,7 +59,6 @@ struct TimelineFramesModel::Private
           scrubStartFrame(-1)
     {}
 
-    // TODO!!!!
     QVector<bool> cachedFrames;
 
     int activeLayerIndex;
@@ -79,6 +79,8 @@ struct TimelineFramesModel::Private
 
     bool scrubInProgress;
     int scrubStartFrame;
+
+    KisAnimationFrameCacheSP framesCache;
 
     QVariant layerName(int row) const {
         KisNodeDummy *dummy = converter->dummyFromRow(row);
@@ -252,6 +254,21 @@ TimelineFramesModel::~TimelineFramesModel()
 {
 }
 
+void TimelineFramesModel::setFrameCache(KisAnimationFrameCacheSP cache)
+{
+    if (m_d->framesCache == cache) return;
+
+    if (m_d->framesCache) {
+        m_d->framesCache->disconnect(this);
+    }
+
+    m_d->framesCache = cache;
+
+    if (m_d->framesCache) {
+        connect(m_d->framesCache, SIGNAL(changed()), SLOT(slotCacheChanged()));
+    }
+}
+
 void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageSP image)
 {
     KisDummiesFacadeBase *oldDummiesFacade = m_d->dummiesFacade;
@@ -328,6 +345,19 @@ void TimelineFramesModel::slotCurrentNodeChanged(KisNodeSP node)
     if (row >= 0 && m_d->activeLayerIndex != row) {
         setData(index(row, 0), true, ActiveLayerRole);
     }
+}
+
+void TimelineFramesModel::slotCacheChanged()
+{
+    const int numFrames = columnCount();
+    m_d->cachedFrames.resize(numFrames);
+
+    for (int i = 0; i < numFrames; i++) {
+        m_d->cachedFrames[i] =
+            m_d->framesCache->frameStatus(i) == KisAnimationFrameCache::Cached;
+    }
+
+    emit headerDataChanged(Qt::Horizontal, 0, numFrames);
 }
 
 int TimelineFramesModel::rowCount(const QModelIndex &parent) const
@@ -446,7 +476,7 @@ QVariant TimelineFramesModel::headerData(int section, Qt::Orientation orientatio
         case ActiveFrameRole:
             return section == m_d->activeFrameIndex;
         case FrameCachedRole:
-            return false && m_d->cachedFrames[section];
+            return m_d->cachedFrames.size() > section ? m_d->cachedFrames[section] : false;
         case TimelineFramesModel::FramesPerSecondRole:
             return m_d->framesPerSecond();
         }

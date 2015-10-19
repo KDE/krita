@@ -39,6 +39,8 @@ public:
     TimelineFramesModel(QObject *parent);
     ~TimelineFramesModel();
 
+    void setFrameCache(KisAnimationFrameCacheSP cache);
+
     void setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageSP image);
 
     bool canDropFrameData(const QMimeData *data, const QModelIndex &index);
@@ -93,6 +95,7 @@ public:
 private Q_SLOTS:
     void slotDummyChanged(KisNodeDummy *dummy);
     void processUpdateQueue();
+    void slotCacheChanged();
 
 public Q_SLOTS:
     void slotFramerateChanged();

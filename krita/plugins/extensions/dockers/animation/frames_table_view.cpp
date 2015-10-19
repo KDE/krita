@@ -353,12 +353,15 @@ void FramesTableView::slotHeaderDataChanged(Qt::Orientation orientation, int fir
 void FramesTableView::dragEnterEvent(QDragEnterEvent *event)
 {
     m_d->dragInProgress = true;
+    m_d->model->setScrubState(true);
+
     QTableView::dragEnterEvent(event);
 }
 
 void FramesTableView::dragMoveEvent(QDragMoveEvent *event)
 {
     m_d->dragInProgress = true;
+    m_d->model->setScrubState(true);
 
     QTableView::dragMoveEvent(event);
 
@@ -375,6 +378,7 @@ void FramesTableView::dragMoveEvent(QDragMoveEvent *event)
 void FramesTableView::dropEvent(QDropEvent *event)
 {
     m_d->dragInProgress = false;
+    m_d->model->setScrubState(false);
 
     QAbstractItemView::dropEvent(event);
     setCurrentIndex(currentIndex());
@@ -383,6 +387,7 @@ void FramesTableView::dropEvent(QDropEvent *event)
 void FramesTableView::dragLeaveEvent(QDragLeaveEvent *event)
 {
     m_d->dragInProgress = false;
+    m_d->model->setScrubState(false);
 
     QAbstractItemView::dragLeaveEvent(event);
     setCurrentIndex(currentIndex());
@@ -441,6 +446,7 @@ void FramesTableView::mouseMoveEvent(QMouseEvent *e)
         }
         e->accept();
     } else {
+        m_d->model->setScrubState(true);
         QTableView::mouseMoveEvent(e);
     }
 }
@@ -450,6 +456,7 @@ void FramesTableView::mouseReleaseEvent(QMouseEvent *e)
     if (e->modifiers() & Qt::ControlModifier) {
         e->accept();
     } else {
+        m_d->model->setScrubState(false);
         QTableView::mouseReleaseEvent(e);
     }
 }

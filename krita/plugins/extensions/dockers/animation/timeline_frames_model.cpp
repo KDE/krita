@@ -53,7 +53,9 @@ struct TimelineFramesModel::Private
           needFinishRemoveRows(false),
           numFramesOverride(0),
           updateTimer(200, KisSignalCompressor::FIRST_INACTIVE),
-          parentOfRemovedNode(0)
+          parentOfRemovedNode(0),
+          scrubInProgress(false),
+          scrubStartFrame(-1)
     {}
 
     // TODO!!!!
@@ -74,6 +76,9 @@ struct TimelineFramesModel::Private
 
     KisNodeDummy* parentOfRemovedNode;
     QScopedPointer<TimelineNodeListKeeper> converter;
+
+    bool scrubInProgress;
+    int scrubStartFrame;
 
     QVariant layerName(int row) const {
         KisNodeDummy *dummy = converter->dummyFromRow(row);
@@ -266,6 +271,8 @@ void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, 
                 SLOT(slotDummyChanged(KisNodeDummy*)));
         connect(m_d->image->animationInterface(),
                 SIGNAL(sigFramerateChanged()), SLOT(slotFramerateChanged()));
+        connect(m_d->image->animationInterface(),
+                SIGNAL(sigTimeChanged(int)), SLOT(slotCurrentTimeChanged(int)));
     }
 
     if(m_d->dummiesFacade != oldDummiesFacade) {
@@ -297,6 +304,13 @@ void TimelineFramesModel::processUpdateQueue()
 void TimelineFramesModel::slotFramerateChanged()
 {
     emit headerDataChanged(Qt::Horizontal, 0, columnCount() - 1);
+}
+
+void TimelineFramesModel::slotCurrentTimeChanged(int time)
+{
+    if (time != m_d->activeFrameIndex) {
+        setData(index(m_d->activeLayerIndex, time), true, ActiveFrameRole);
+    }
 }
 
 int TimelineFramesModel::rowCount(const QModelIndex &parent) const
@@ -378,9 +392,13 @@ bool TimelineFramesModel::setData(const QModelIndex &index, const QVariant &valu
         break;
     }
     case ActiveFrameRole: {
-        if (value.toBool()) {
+        if (value.toBool() &&
+            index.column() != m_d->activeFrameIndex) {
+
             int prevFrame = m_d->activeFrameIndex;
             m_d->activeFrameIndex = index.column();
+
+            scrubTo(m_d->activeFrameIndex, m_d->scrubInProgress);
 
             emit dataChanged(this->index(0, prevFrame), this->index(rowCount() - 1, prevFrame));
             emit dataChanged(this->index(0, m_d->activeFrameIndex), this->index(rowCount() - 1, m_d->activeFrameIndex));
@@ -662,5 +680,35 @@ void TimelineFramesModel::setLastVisibleFrame(int time)
         beginRemoveColumns(QModelIndex(), shrinkValue, m_d->effectiveNumFrames() - 1);
         m_d->numFramesOverride = shrinkValue;
         endRemoveColumns();
+    }
+}
+
+void TimelineFramesModel::setScrubState(bool active)
+{
+    if (!m_d->scrubInProgress && active) {
+        m_d->scrubStartFrame = m_d->activeFrameIndex;
+        m_d->scrubInProgress = true;
+    }
+
+    if (m_d->scrubInProgress && !active &&
+        m_d->scrubStartFrame > 0 &&
+        m_d->scrubStartFrame != m_d->activeFrameIndex) {
+
+        m_d->scrubStartFrame = -1;
+        m_d->scrubInProgress = false;
+
+        scrubTo(m_d->activeFrameIndex, false);
+    }
+}
+
+void TimelineFramesModel::scrubTo(int time, bool preview)
+{
+    KIS_ASSERT_RECOVER_RETURN(m_d->image);
+
+    if (preview) {
+        // TODO:
+        // m_canvas->animationPlayer()->displayFrame(time);
+    } else {
+        m_d->image->animationInterface()->requestTimeSwitchWithUndo(time);
     }
 }

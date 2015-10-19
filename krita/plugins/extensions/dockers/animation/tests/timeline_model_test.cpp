@@ -122,6 +122,10 @@ void TimelineModelTest::testView()
     QSpinBox *intFps = new QSpinBox(&dlg);
     intFps->setValue(12);
 
+    QSpinBox *intTime = new QSpinBox(&dlg);
+    intTime->setValue(0);
+    intTime->setMaximum(10000);
+
     FramesTableView *framesTable = new FramesTableView(&dlg);
 
     TimelineFramesModel *model = new TimelineFramesModel(&dlg);
@@ -140,17 +144,30 @@ void TimelineModelTest::testView()
     connect(intFps, SIGNAL(valueChanged(int)),
             m_image->animationInterface(), SLOT(setFramerate(int)));
 
+    connect(intTime, SIGNAL(valueChanged(int)),
+            SLOT(setCurrentTime(int)));
+
+    connect(m_image->animationInterface(), SIGNAL(sigTimeChanged(int)),
+            intTime, SLOT(setValue(int)));
+
     QVBoxLayout *layout = new QVBoxLayout(&dlg);
 
     layout->addWidget(intFps);
+    layout->addWidget(intTime);
     layout->addWidget(framesTable);
 
     layout->setStretch(0, 0);
-    layout->setStretch(1, 1);
+    layout->setStretch(1, 0);
+    layout->setStretch(2, 1);
 
     dlg.resize(600, 400);
 
     dlg.exec();
+}
+
+void TimelineModelTest::setCurrentTime(int time)
+{
+    m_image->animationInterface()->requestTimeSwitchWithUndo(time);
 }
 
 QTEST_KDEMAIN(TimelineModelTest, GUI)

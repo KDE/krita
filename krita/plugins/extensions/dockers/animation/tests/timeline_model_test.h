@@ -38,6 +38,9 @@ private Q_SLOTS:
     void testModel();
     void testView();
 
+private Q_SLOTS:
+    void setCurrentTime(int time);
+
 private:
     KisDocument *m_doc;
     KisNameServer *m_nameServer;

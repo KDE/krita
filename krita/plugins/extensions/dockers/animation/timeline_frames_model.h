@@ -50,6 +50,9 @@ public:
 
     void setLastVisibleFrame(int time);
 
+    void setScrubState(bool active);
+    void scrubTo(int time, bool preview);
+
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;
@@ -89,7 +92,10 @@ public:
 private Q_SLOTS:
     void slotDummyChanged(KisNodeDummy *dummy);
     void processUpdateQueue();
+
+public Q_SLOTS:
     void slotFramerateChanged();
+    void slotCurrentTimeChanged(int time);
 
 private:
     struct Private;

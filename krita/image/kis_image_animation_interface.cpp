@@ -228,5 +228,8 @@ int KisImageAnimationInterface::totalLength()
 {
     int lastKey = findLastKeyframeTimeRecursive(m_d->image->root());
 
-    return std::max(lastKey, m_d->currentRange.end()) + 1;
+    lastKey  = std::max(lastKey, m_d->currentRange.end());
+    lastKey  = std::max(lastKey, m_d->currentUITime);
+
+    return lastKey + 1;
 }

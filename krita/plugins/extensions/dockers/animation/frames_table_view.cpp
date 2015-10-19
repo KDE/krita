@@ -46,6 +46,8 @@ struct FramesTableView::Private
         : fps(1),
           zoom(1.0),
           initialDragZoomValue(1.0),
+          zoomStillPointIndex(0),
+          zoomStillPointOriginalOffset(0),
           dragInProgress(false) {}
 
     TimelineFramesModel *model;
@@ -54,6 +56,8 @@ struct FramesTableView::Private
     int fps;
     qreal zoom;
     qreal initialDragZoomValue;
+    int zoomStillPointIndex;
+    int zoomStillPointOriginalOffset;
     QPoint initialDragPanValue;
     QPoint startZoomPanDragPos;
 
@@ -154,6 +158,7 @@ FramesTableView::FramesTableView(QWidget *parent)
     connect(m_d->zoomDragButton, SIGNAL(pressed()), SLOT(slotZoomButtonPressed()));
 
     setFramesPerSecond(12);
+    setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 }
 
 FramesTableView::~FramesTableView()
@@ -240,7 +245,10 @@ void FramesTableView::setZoom(qreal zoom)
 
         // For some reason simple update doesn't work here,
         // so reset the whole header
+        QPersistentModelIndex index = currentIndex();
         m_d->horizontalRuler->reset();
+        setCurrentIndex(index);
+
         slotUpdateInfiniteFramesCount();
     }
 }
@@ -266,7 +274,9 @@ void FramesTableView::slotUpdateInfiniteFramesCount()
     if (horizontalScrollBar()->isSliderDown()) return;
 
     const int sectionWidth = m_d->horizontalRuler->defaultSectionSize();
-    const int calculatedIndex = (horizontalScrollBar()->value() * sectionWidth + m_d->horizontalRuler->width() - 1) / sectionWidth;
+    const int calculatedIndex =
+        (horizontalScrollBar()->value() +
+         m_d->horizontalRuler->width() - 1) / sectionWidth;
 
     m_d->model->setLastVisibleFrame(calculatedIndex);
 }
@@ -399,7 +409,19 @@ void FramesTableView::mousePressEvent(QMouseEvent *event)
 
     if (event->modifiers() & Qt::ControlModifier) {
         m_d->startZoomPanDragPos = event->pos();
+
         if (event->button() == Qt::RightButton) {
+            // TODO: try calculate index under mouse cursor even when
+            //       it is outside any visible row
+            m_d->zoomStillPointIndex =
+                index.isValid() ? index.column() : currentIndex().column();
+
+            const int w = m_d->horizontalRuler->defaultSectionSize();
+
+            m_d->zoomStillPointOriginalOffset =
+                w * m_d->zoomStillPointIndex -
+                horizontalScrollBar()->value();
+
             slotZoomButtonPressed();
         } else if (event->button() == Qt::LeftButton) {
             m_d->initialDragPanValue =
@@ -433,13 +455,14 @@ void FramesTableView::mouseMoveEvent(QMouseEvent *e)
 
         if (e->buttons() & Qt::RightButton) {
             slotZoomButtonChanged(m_d->zoomDragButton->calculateValue(diff));
-        } else if (e->buttons() & Qt::LeftButton) {
 
             const int w = m_d->horizontalRuler->defaultSectionSize();
-            const int h = m_d->layersHeader->defaultSectionSize();
+            horizontalScrollBar()->setValue(w * m_d->zoomStillPointIndex - m_d->zoomStillPointOriginalOffset);
 
-            QPoint offset = QPoint(m_d->initialDragPanValue.x() - diff.x() / w,
-                                   m_d->initialDragPanValue.y() - diff.y() / h);
+        } else if (e->buttons() & Qt::LeftButton) {
+
+            QPoint offset = QPoint(m_d->initialDragPanValue.x() - diff.x(),
+                                   m_d->initialDragPanValue.y() - diff.y());
 
             horizontalScrollBar()->setValue(offset.x());
             verticalScrollBar()->setValue(offset.y());

@@ -664,10 +664,10 @@ bool TimelineFramesModel::removeFrame(const QModelIndex &dstIndex)
 
 void TimelineFramesModel::setLastVisibleFrame(int time)
 {
-    const int growThreshold = m_d->effectiveNumFrames() - 2;
-    const int growValue = time + 5;
+    const int growThreshold = m_d->effectiveNumFrames() - 3;
+    const int growValue = time + 8;
 
-    const int shrinkThreshold = m_d->effectiveNumFrames() - 3;
+    const int shrinkThreshold = m_d->effectiveNumFrames() - 12;
     const int shrinkValue = qMax(m_d->baseNumFrames(), qMin(growValue, shrinkThreshold));
     const bool canShrink = m_d->effectiveNumFrames() > m_d->baseNumFrames();
 
@@ -676,7 +676,6 @@ void TimelineFramesModel::setLastVisibleFrame(int time)
         m_d->numFramesOverride = growValue;
         endInsertColumns();
     } else if (time < shrinkThreshold && canShrink) {
-
         beginRemoveColumns(QModelIndex(), shrinkValue, m_d->effectiveNumFrames() - 1);
         m_d->numFramesOverride = shrinkValue;
         endRemoveColumns();

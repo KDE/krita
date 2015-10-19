@@ -149,7 +149,7 @@ void KisPart::Private::loadActions()
                 QKeySequence defaultShortcut = QKeySequence(e.attribute("defaultShortcut"));
 
                 if (name.isEmpty()) {
-                    dbgKrita << text << "has no name! From:" << actionDefinition;
+                    dbgUI << text << "has no name! From:" << actionDefinition;
                 }
 
                 KisAction *action = new KisAction(KisIconUtils::loadIcon(icon.toLatin1()), text);
@@ -181,7 +181,7 @@ void KisPart::Private::loadActions()
             continue;
         }
         if (existingShortcuts.contains(action->shortcut())) {
-            dbgKrita << "action" << action->text() << "and" <<  existingShortcuts[action->shortcut()]->text() << "have the same shortcut:" << action->shortcut();
+            dbgUI << "action" << action->text() << "and" <<  existingShortcuts[action->shortcut()]->text() << "have the same shortcut:" << action->shortcut();
         }
         else {
             existingShortcuts[action->shortcut()] = action;
@@ -250,7 +250,7 @@ void KisPart::updateIdleWatcherConnections()
 
 void KisPart::addDocument(KisDocument *document)
 {
-    //dbgKrita << "Adding document to part list" << document;
+    //dbgUI << "Adding document to part list" << document;
     Q_ASSERT(document);
     if (!d->documents.contains(document)) {
         d->documents.append(document);

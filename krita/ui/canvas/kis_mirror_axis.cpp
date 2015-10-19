@@ -226,7 +226,7 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
 
 bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
 {
-    if(event->type() == QEvent::MouseButtonPress) {
+    if(event->type() == QEvent::MouseButtonPress || event->type() == QEvent::TabletPress) {
         QMouseEvent* me = static_cast<QMouseEvent*>(event);
         if(d->mirrorHorizontal && d->horizontalHandle.contains(me->posF())) {
             d->xActive = true;
@@ -242,7 +242,7 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
             return true;
         }
     }
-    if(event->type() == QEvent::MouseMove) {
+    if(event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove) {
         QMouseEvent* me = static_cast<QMouseEvent*>(event);
         if(d->xActive) {
             float axisX = view()->viewConverter()->widgetToImage<QPoint>(me->pos()).x();
@@ -285,7 +285,7 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
             }
         }
     }
-    if(event->type() == QEvent::MouseButtonRelease) {
+    if(event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::TabletRelease) {
         if(d->xActive) {
             d->xActive = false;
             QApplication::restoreOverrideCursor();
@@ -299,6 +299,7 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
             return true;
         }
     }
+
     return QObject::eventFilter(target, event);
 }
 

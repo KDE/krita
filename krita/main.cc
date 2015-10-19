@@ -68,10 +68,15 @@ extern "C" int main(int argc, char **argv)
     Q_UNUSED(crashHandler);
 #endif
 
-    // Disable most debug output by default.
-    // krita.input is kept on for tablet debugging.
-    // You can re-enable debug output by starting Krita like "QT_LOGGING_RULES="krita*=true" krita"
-    // See: http://doc.qt.io/qt-5/qloggingcategory.html
+    /**
+     * Disable debug output by default. (krita.input enables tablet debugging.)
+     * Debug logs can be controlled by an environment variable QT_LOGGING_RULES.
+     *
+     * As an example, to get full debug output, run the following:
+     * export QT_LOGGING_RULES="krita*=true"; krita
+     *
+     * See: http://doc.qt.io/qt-5/qloggingcategory.html
+     */
     QLoggingCategory::setFilterRules("calligra*=false\n"
                                      "krita*=false\n"
                                      "krita.input=true");

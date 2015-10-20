@@ -37,7 +37,7 @@
     <Action name="other_filters" icon="" text="Other" whatsThis="" toolTip="Other" iconText="Other" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="krita_filter_wave" icon="" text="&amp;Wave..." whatsThis="" toolTip="Wave" iconText="Wave" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="krita_filter_motion blur" icon="" text="&amp;Motion Blur..." whatsThis="" toolTip="Motion Blur" iconText="Motion Blur" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
-    <Action name="krita_filter_perchannel" icon="" text="&amp;Color Adjustment curves..." whatsThis="" toolTip="Color Adjustment curves" iconText="Color Adjustment curves" shortcut="Ctrl+M" defaultShortcut="Ctrl+Ms" isCheckable="false" statusTip=""/>
+    <Action name="krita_filter_perchannel" icon="" text="&amp;Color Adjustment curves..." whatsThis="" toolTip="Color Adjustment curves" iconText="Color Adjustment curves" shortcut="Ctrl+M" defaultShortcut="Ctrl+M" isCheckable="false" statusTip=""/>
     <Action name="krita_filter_pixelize" icon="" text="&amp;Pixelize..." whatsThis="" toolTip="Pixelize" iconText="Pixelize" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="krita_filter_emboss laplascian" icon="" text="Emboss (Laplacian)" whatsThis="" toolTip="Emboss (Laplacian)" iconText="Emboss (Laplacian)" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>
     <Action name="krita_filter_left edge detections" icon="" text="Left Edge Detection" whatsThis="" toolTip="Left Edge Detection" iconText="Left Edge Detection" shortcut="" defaultShortcut="" isCheckable="false" statusTip=""/>

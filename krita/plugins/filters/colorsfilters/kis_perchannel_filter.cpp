@@ -455,6 +455,7 @@ void KisPerChannelFilterConfiguration::toXML(QDomDocument& doc, QDomElement& roo
 
 KisPerChannelFilter::KisPerChannelFilter() : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Color Adjustment curves..."))
 {
+    setShortcut(KShortcut(QKeySequence(Qt::CTRL + Qt::Key_M)));
     setSupportsPainting(true);
     setColorSpaceIndependence(TO_LAB16);
 }

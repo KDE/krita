@@ -93,7 +93,7 @@ void KoColorSlider::drawContents( QPainter *painter )
         colors[1] = d->maxColor.data();
 
         KoMixColorsOp * mixOp = c.colorSpace()->mixColorsOp();
-
+        Q_ASSERT(mixOp);
         QImage image(contentsRect_.width(), contentsRect_.height(), QImage::Format_ARGB32 );
 
         if( orientation() == Qt::Horizontal ) {

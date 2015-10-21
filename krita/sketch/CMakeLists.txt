@@ -162,7 +162,6 @@ target_link_libraries(kritasketchplugin
     Qt5::Gui
     Qt5::Network
     Qt5::Core
-    KF5::KIOCore
     kritawidgets
     kritaui
     kritasketchlib

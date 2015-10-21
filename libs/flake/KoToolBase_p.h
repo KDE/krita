@@ -80,10 +80,9 @@ public:
 
     QList<QPointer<QWidget> > optionWidgets; ///< the optionwidgets associated with this tool
     QCursor currentCursor;
-    QHash<QString, QAction *> actionCollection;
+    QHash<QString, QAction *> actions;
     QString toolId;
     QList<QAction*> popupActionList;
-    QSet<QAction *> readOnlyActions;
     KoToolBase *q;
     KoCanvasBase *canvas; ///< the canvas interface this tool will work for.
     bool isInTextMode;

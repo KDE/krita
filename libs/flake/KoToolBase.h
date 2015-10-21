@@ -37,7 +37,6 @@ class KoToolBasePrivate;
 class KoShapeBasedDocumentBase;
 
 class QAction;
-class QAction;
 class QKeyEvent;
 class QWidget;
 class QCursor;

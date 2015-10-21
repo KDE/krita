@@ -60,7 +60,7 @@ KoToolBase::~KoToolBase()
     Q_D(const KoToolBase);
 
 // Enable this to easily generate action files for tools
-//    if (d->actionCollection.size() > 0) {
+//    if (d->actions.size() > 0) {
 
 //        QDomDocument doc;
 //        QDomElement e = doc.createElement("Actions");
@@ -68,7 +68,7 @@ KoToolBase::~KoToolBase()
 //        e.setAttribute("version", "1");
 //        doc.appendChild(e);
 
-//        foreach(QAction *ac, d->actionCollection.values()) {
+//        foreach(QAction *ac, d->actions.values()) {
 //            QAction *action = qobject_cast<QAction*>(ac);
 //            if (action) {
 //                QDomElement a = doc.createElement("Action");
@@ -231,19 +231,19 @@ void KoToolBase::addAction(const QString &name, QAction *action)
     if (action->objectName().isEmpty()) {
         action->setObjectName(name);
     }
-    d->actionCollection.insert(name, action);
+    d->actions.insert(name, action);
 }
 
 QHash<QString, QAction *> KoToolBase::actions() const
 {
     Q_D(const KoToolBase);
-    return d->actionCollection;
+    return d->actions;
 }
 
 QAction *KoToolBase::action(const QString &name) const
 {
     Q_D(const KoToolBase);
-    return d->actionCollection.value(name);
+    return d->actions.value(name);
 }
 
 QWidget * KoToolBase::createOptionWidget()

@@ -20,8 +20,9 @@
 
 #include "FileSystemModel.h"
 
-#include <kfileitem.h>
-
+#include <QDateTime>
+#include <QMimeDatabase>
+#include <QFileInfo>
 #include <QDir>
 #include <QDesktopServices>
 
@@ -60,25 +61,22 @@ FileSystemModel::~FileSystemModel()
 QVariant FileSystemModel::data(const QModelIndex& index, int role) const
 {
     if (index.isValid()) {
-        const QUrl absoluteFilePath = QUrl::fromLocalFile(d->list.at(index.row()).absoluteFilePath());
-        KFileItem item(KFileItem::Unknown, KFileItem::Unknown, absoluteFilePath, false);
-        if (!item.isNull()) {
-            switch(role) {
-                case FileNameRole:
-                    return item.name();
-                    break;
-                case FilePathRole:
-                    return item.mostLocalUrl().toLocalFile();
-                    break;
-                case FileIconRole:
-                     return item.mimetype() == "inode/directory" ? "image://icon/inode-directory" : QString("image://recentimage/%1").arg(item.url().toLocalFile());
-                    break;
-                case FileTypeRole:
-                    return item.mimetype();
-                    break;
-                case FileDateRole:
-                    return item.time(KFileItem::ModificationTime).toString(Qt::SystemLocaleShortDate);
-            }
+        const QFileInfo &fileInfo = d->list.at(index.row());
+        switch(role) {
+            case FileNameRole:
+                return fileInfo.fileName();
+                break;
+            case FilePathRole:
+                return fileInfo.absoluteFilePath();
+                break;
+            case FileIconRole:
+                    return fileInfo.isDir() ? "image://icon/inode-directory" : QString("image://recentimage/%1").arg(fileInfo.absoluteFilePath());
+                break;
+            case FileTypeRole:
+                return QMimeDatabase().mimeTypeForFile(fileInfo).name();
+                break;
+            case FileDateRole:
+                return fileInfo.lastModified().toString(Qt::SystemLocaleShortDate);
         }
     }
     return QVariant();

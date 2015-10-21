@@ -169,6 +169,10 @@ void KisToolText::styleIndexChanged(int index)
 
 void KisToolText::slotActivateTextTool()
 {
+    // This activationShapeId stuff is how we signal to the tool manager whether
+    // it needs to switch to TextTool or ArtisticTextTool.
+
+    // XXX: Merge the setActivationShapeId() constants in a single header
     KisCanvas2* kiscanvas = dynamic_cast<KisCanvas2 *>(canvas());
     QString tool = KoToolManager::instance()->preferredToolForSelection(kiscanvas->shapeManager()->selection()->selectedShapes());
     KoToolManager::instance()->switchToolRequested(tool);

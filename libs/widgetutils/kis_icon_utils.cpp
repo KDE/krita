@@ -103,7 +103,7 @@ QIcon loadIcon(const QString &name)
     }
 
     QIcon icon = KisIconUtils::loadIcon(name);
-    dbgKrita << "\tfalling back on QIcon::FromTheme:" << name;
+    qWarning() << "\tfalling back on QIcon::FromTheme:" << name;
     return icon;
 }
 

@@ -36,6 +36,8 @@
 
 #include <QDebug>
 
+#include <kis_icon_utils.h>
+
 /*!
     A DragArea is used to make an item draggable.
 */

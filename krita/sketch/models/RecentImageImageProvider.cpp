@@ -24,7 +24,7 @@
 #include <KisDocument.h>
 
 RecentImageImageProvider::RecentImageImageProvider()
-    : QDeclarativeImageProvider(QDeclarativeImageProvider::Image)
+    : QQuickImageProvider(QQuickImageProvider::Image)
 {
 }
 

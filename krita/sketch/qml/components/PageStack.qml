@@ -105,7 +105,8 @@ Methods:
 
 **/
 
-import QtQuick 1.1
+import QtQuick 2.3
+import org.krita.sketch 1.0
 import "."
 import "PageStack.js" as Engine
 

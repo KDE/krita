@@ -31,44 +31,44 @@
 #include "KisSketchView.h"
 #include "krita/gemini/ViewModeSwitchEvent.h"
 
-SketchDeclarativeView::SketchDeclarativeView(QWidget *parent)
-    : QDeclarativeView(parent)
+SketchDeclarativeView::SketchDeclarativeView(QWindow *parent)
+    : QQuickView(parent)
     , m_drawCanvas(false)
     , m_canvasWidget(0)
     , m_GLInitialized(false)
-    , m_sketchView(0)
 {
-    setCacheMode(QGraphicsView::CacheNone);
-    setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-
-    setViewport(new QGLWidget(this));
-
-    setAttribute(Qt::WA_AcceptTouchEvents);
-    setAttribute(Qt::WA_OpaquePaintEvent);
-    setAttribute(Qt::WA_NoSystemBackground);
-    viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
-    viewport()->setAttribute(Qt::WA_NoSystemBackground);
-    viewport()->installEventFilter(this);
+    // QT5TODO
+//     setCacheMode(QGraphicsView::CacheNone);
+//     setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+// 
+//     setViewport(new QGLWidget(this));
+// 
+//     setAttribute(Qt::WA_AcceptTouchEvents);
+//     setAttribute(Qt::WA_OpaquePaintEvent);
+//     setAttribute(Qt::WA_NoSystemBackground);
+//     viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
+//     viewport()->setAttribute(Qt::WA_NoSystemBackground);
+//     viewport()->installEventFilter(this);
 }
 
-SketchDeclarativeView::SketchDeclarativeView(const QUrl &url, QWidget *parent)
-    : QDeclarativeView(url, parent)
+SketchDeclarativeView::SketchDeclarativeView(const QUrl &url, QWindow *parent)
+    : QQuickView(url, parent)
     , m_drawCanvas(false)
     , m_canvasWidget(0)
     , m_GLInitialized(false)
-    , m_sketchView(0)
 {
-    setCacheMode(QGraphicsView::CacheNone);
-    setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-
-    setViewport(new QGLWidget(this));
-
-    setAttribute(Qt::WA_AcceptTouchEvents);
-    setAttribute(Qt::WA_OpaquePaintEvent);
-    setAttribute(Qt::WA_NoSystemBackground);
-    viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
-    viewport()->setAttribute(Qt::WA_NoSystemBackground);
-    viewport()->installEventFilter(this);
+    // QT5TODO
+//     setCacheMode(QGraphicsView::CacheNone);
+//     setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+// 
+//     setViewport(new QGLWidget(this));
+// 
+//     setAttribute(Qt::WA_AcceptTouchEvents);
+//     setAttribute(Qt::WA_OpaquePaintEvent);
+//     setAttribute(Qt::WA_NoSystemBackground);
+//     viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
+//     viewport()->setAttribute(Qt::WA_NoSystemBackground);
+//     viewport()->installEventFilter(this);
 }
 
 SketchDeclarativeView::~SketchDeclarativeView()
@@ -125,7 +125,8 @@ void SketchDeclarativeView::drawBackground(QPainter *painter, const QRectF &rect
         m_canvasWidget->renderDecorations(painter);
     }
     else {
-        QDeclarativeView::drawBackground(painter, rect);
+        // QT5TODO
+//         QQuickView::drawBackground(painter, rect);
     }
 
 }
@@ -137,7 +138,7 @@ void SketchDeclarativeView::resizeEvent(QResizeEvent *event)
         m_canvasWidget->coordinatesConverter()->setCanvasWidgetSize(event->size());
     }
 
-    QDeclarativeView::resizeEvent(event);
+    QQuickView::resizeEvent(event);
 }
 
 bool SketchDeclarativeView::event( QEvent* event )
@@ -156,22 +157,23 @@ bool SketchDeclarativeView::event( QEvent* event )
             {
                 //QGraphicsScene is silly and will not forward unknown events to its items, so emulate that
                 //functionality.s
-                QList<QGraphicsItem*> items = scene()->items();
-                Q_FOREACH(QGraphicsItem* item, items) {
-                    if (item == m_sketchView || qobject_cast<KisSketchView*>((item))) {
-                        if (item != m_sketchView)
-                            m_sketchView = item;
-                        scene()->sendEvent(item, event);
-                        break;
-                    }
-                }
+                // QT5TODO:
+//                 QList<QGraphicsItem*> items = scene()->items();
+//                 Q_FOREACH(QGraphicsItem* item, items) {
+//                     if (item == m_sketchView || qobject_cast<KisSketchView*>((item))) {
+//                         if (item != m_sketchView)
+//                             m_sketchView = item;
+//                         scene()->sendEvent(item, event);
+//                         break;
+//                     }
+//                 }
             }
             break;
         }
         default:
             break;
     }
-    return QGraphicsView::event( event );
+    return QQuickView::event( event );
 }
 
 bool SketchDeclarativeView::eventFilter(QObject* watched, QEvent* e)
@@ -185,12 +187,13 @@ bool SketchDeclarativeView::eventFilter(QObject* watched, QEvent* e)
                 //QGraphicsScene is silly and will not forward unknown events to its items, so emulate that
                 //functionality.s
                 KisTabletEvent* ev = static_cast<KisTabletEvent*>(e);
-                QList<QGraphicsItem*> items = scene()->items(ev->pos());
-                Q_FOREACH(QGraphicsItem* item, items)
-                {
-                    if(scene()->sendEvent(item, e))
-                        return true;
-                }
+                // QT5TODO
+//                 QList<QGraphicsItem*> items = scene()->items(ev->pos());
+//                 Q_FOREACH(QGraphicsItem* item, items)
+//                 {
+//                     if(scene()->sendEvent(item, e))
+//                         return true;
+//                 }
             }
             break;
         }
@@ -199,5 +202,5 @@ bool SketchDeclarativeView::eventFilter(QObject* watched, QEvent* e)
     }
 
 
-    return QDeclarativeView::eventFilter(watched, e);
+    return QQuickView::eventFilter(watched, e);
 }

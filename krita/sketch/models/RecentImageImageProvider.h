@@ -19,9 +19,9 @@
 #ifndef RECENTIMAGEIMAGEPROVIDER_H
 #define RECENTIMAGEIMAGEPROVIDER_H
 
-#include <QDeclarativeImageProvider>
+#include <QQuickImageProvider>
 
-class RecentImageImageProvider : public QDeclarativeImageProvider
+class RecentImageImageProvider : public QQuickImageProvider
 {
 public:
     explicit RecentImageImageProvider();

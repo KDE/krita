@@ -21,12 +21,12 @@
 
 QmlGlobalEngine* QmlGlobalEngine::sm_instance = 0;
 
-QDeclarativeEngine* QmlGlobalEngine::engine() const
+QQmlEngine* QmlGlobalEngine::engine() const
 {
     return m_engine;
 }
 
-void QmlGlobalEngine::setEngine(QDeclarativeEngine* engine)
+void QmlGlobalEngine::setEngine(QQmlEngine* engine)
 {
     m_engine = engine;
 }

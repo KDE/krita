@@ -23,7 +23,7 @@
 
 #include "kis_curve_widget.h"
 #include <QPainter>
-#include <QGraphicsSceneMouseEvent>
+#include <QMouseEvent>
 #include <kis_debug.h>
 
 class CurveEditorItem::Private
@@ -46,11 +46,11 @@ public:
 
 };
 
-CurveEditorItem::CurveEditorItem(QDeclarativeItem* parent)
-    : QDeclarativeItem(parent)
+CurveEditorItem::CurveEditorItem(QQuickItem* parent)
+    : QQuickPaintedItem(parent)
     , d(new Private(this))
 {
-    setFlag( QGraphicsItem::ItemHasNoContents, false );
+    setFlag(QQuickItem::ItemHasContents, true);
     setAcceptedMouseButtons( Qt::LeftButton | Qt::RightButton | Qt::MidButton );
     connect(d->curveWidget, SIGNAL(pointSelectedChanged()), SIGNAL(pointSelectedChanged()));
     connect(d->curveWidget, SIGNAL(modified()), SIGNAL(curveChanged()));
@@ -62,7 +62,7 @@ CurveEditorItem::~CurveEditorItem()
     delete d;
 }
 
-void CurveEditorItem::paint(QPainter* p, const QStyleOptionGraphicsItem*, QWidget*)
+void CurveEditorItem::paint(QPainter* p)
 {
     p->drawImage(boundingRect(), d->contents);
 }
@@ -104,12 +104,12 @@ void CurveEditorItem::Private::repaint()
 void CurveEditorItem::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
     d->repaint();
-    QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
+    QQuickPaintedItem::geometryChanged(newGeometry, oldGeometry);
 }
 
-void CurveEditorItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
+void CurveEditorItem::mousePressEvent(QMouseEvent* event)
 {
-    QMouseEvent* mouseEvent = new QMouseEvent(event->type(), event->pos().toPoint(), event->button(), event->buttons(), event->modifiers());
+    QMouseEvent* mouseEvent = new QMouseEvent(event->type(), event->pos(), event->button(), event->buttons(), event->modifiers());
     d->curveWidget->mousePressEvent(mouseEvent);
     if(mouseEvent->isAccepted()) {
         event->accept();
@@ -117,9 +117,9 @@ void CurveEditorItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
     d->repaint();
 }
 
-void CurveEditorItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+void CurveEditorItem::mouseMoveEvent(QMouseEvent* event)
 {
-    QMouseEvent* mouseEvent = new QMouseEvent(event->type(), event->pos().toPoint(), event->button(), event->buttons(), event->modifiers());
+    QMouseEvent* mouseEvent = new QMouseEvent(event->type(), event->pos(), event->button(), event->buttons(), event->modifiers());
     d->curveWidget->mouseMoveEvent(mouseEvent);
     if(mouseEvent->isAccepted()) {
         event->accept();
@@ -127,9 +127,9 @@ void CurveEditorItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
     d->repaint();
 }
 
-void CurveEditorItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
+void CurveEditorItem::mouseReleaseEvent(QMouseEvent* event)
 {
-    QMouseEvent* mouseEvent = new QMouseEvent(event->type(), event->pos().toPoint(), event->button(), event->buttons(), event->modifiers());
+    QMouseEvent* mouseEvent = new QMouseEvent(event->type(), event->pos(), event->button(), event->buttons(), event->modifiers());
     d->curveWidget->mouseReleaseEvent(mouseEvent);
     if(mouseEvent->isAccepted()) {
         event->accept();

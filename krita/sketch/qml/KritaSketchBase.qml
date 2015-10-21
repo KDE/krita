@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 1.1
+import QtQuick 2.3
 import org.krita.sketch 1.0
 import org.krita.sketch.components 1.0
 
@@ -68,24 +68,6 @@ Item {
         }
     }
 
-    // This component is used to get around the fact that MainPage takes a very long time to initialise in some cases
-    Dialog {
-        id: baseLoadingDialog;
-        title: "Loading";
-        message: "Please wait...";
-        textAlign: Text.AlignHCenter;
-        modalBackgroundColor: "#ffffff";
-        opacity: 1;
-        progress: 0;
-        visible: false;
-        function hideMe() { timer.start(); }
-        Timer {
-            id: timer;
-            interval: 500; running: false; repeat: false;
-            onTriggered: { parent.visible = false; baseLoadingDialog.progress = -1; }
-        }
-    }
-
     VirtualKeyboard {
         id: keyboard;
         onKeyboardVisibleChanged: if (keyboardVisible) screenScroller.ensureVisible(Settings.focusItem);
@@ -95,13 +77,5 @@ Item {
         target: Settings;
 
         onFocusItemChanged: if (keyboard.keyboardVisible) screenScroller.ensureVisible(Settings.focusItem);
-    }
-
-    function openFile(file)
-    {
-        if(mainPageStack.currentPage.pageName == "WelcomePage") {
-            baseLoadingDialog.visible = true;
-            Settings.currentFile = file;
-        }
     }
 }

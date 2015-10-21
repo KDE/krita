@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 1.1
+import QtQuick 2.3
 import org.krita.sketch 1.0 as Krita
 import org.krita.sketch.components 1.0
 
@@ -43,15 +43,15 @@ Page {
         background: "images/header_krita_sketch.png";
 
         leftArea: Button {
-            width: Constants.GridWidth;
-            height: Constants.GridHeight;
+            width: Krita.Constants.GridWidth;
+            height: Krita.Constants.GridHeight;
             image: Settings.theme.icon("back");
             onClicked: pageStack.pop();
         }
 
         rightArea: Button {
-            width: Constants.GridWidth;
-            height: Constants.GridHeight;
+            width: Krita.Constants.GridWidth;
+            height: Krita.Constants.GridHeight;
             image: Settings.theme.icon("up");
             onClicked: view.model.path = view.model.parentFolder;
         }
@@ -99,8 +99,8 @@ Page {
         model: Krita.FileSystemModel { filter: "*.png *.jpg *.jpeg *.bmp *.kra *.psd *.ora *.tif *.tiff *.exr" }
         delegate: delegate;
 
-        cellWidth: Constants.GridWidth * 4;
-        cellHeight: Constants.GridHeight * 1.75;
+        cellWidth: Krita.Constants.GridWidth * 4;
+        cellHeight: Krita.Constants.GridHeight * 1.75;
 
         clip: true;
 

@@ -1,4 +1,5 @@
-import QtQuick 1.1
+import QtQuick 2.3
+import org.krita.sketch 1.0
 import org.krita.sketch.components 1.0
 
 Column {

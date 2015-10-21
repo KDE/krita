@@ -22,12 +22,12 @@
 
 #include "krita_sketch_export.h"
 
-class QDeclarativeEngine;
+class QQmlEngine;
 class KRITA_SKETCH_EXPORT QmlGlobalEngine
 {
 public:
-    QDeclarativeEngine* engine() const;
-    void setEngine(QDeclarativeEngine* engine);
+    QQmlEngine* engine() const;
+    void setEngine(QQmlEngine* engine);
 
     static QmlGlobalEngine* instance();
 
@@ -35,7 +35,7 @@ private:
     QmlGlobalEngine();
     ~QmlGlobalEngine();
 
-    QDeclarativeEngine* m_engine;
+    QQmlEngine* m_engine;
 
     static QmlGlobalEngine* sm_instance;
 };

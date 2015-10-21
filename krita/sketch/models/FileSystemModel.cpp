@@ -22,6 +22,9 @@
 
 #include <kfileitem.h>
 
+#include <QDir>
+#include <QDesktopServices>
+
 
 class FileSystemModel::Private
 {

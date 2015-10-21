@@ -20,11 +20,11 @@
 #ifndef LAYERTHUMBPROVIDER_H
 #define LAYERTHUMBPROVIDER_H
 
-#include <QDeclarativeImageProvider>
+#include <QQuickImageProvider>
 
 class LayerModel;
 
-class LayerThumbProvider : public QDeclarativeImageProvider
+class LayerThumbProvider : public QQuickImageProvider
 {
 
 public:

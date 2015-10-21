@@ -30,7 +30,7 @@ public:
 };
 
 PageThumbnailProvider::PageThumbnailProvider()
-    : QDeclarativeImageProvider(QDeclarativeImageProvider::Image)
+    : QQuickImageProvider(QQuickImageProvider::Image)
     , d(new Private)
 {
 

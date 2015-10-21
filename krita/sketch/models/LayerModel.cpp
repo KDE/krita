@@ -40,7 +40,7 @@
 #include <filter/kis_filter_registry.h>
 #include <KoShapeBasedDocumentBase.h>
 #include <KoProperties.h>
-#include <QDeclarativeEngine>
+#include <QQmlEngine>
 
 struct LayerModelMetaInfo {
     LayerModelMetaInfo()
@@ -96,7 +96,7 @@ public:
     QPointer<KisNodeManager> nodeManager;
     KisImageWSP image;
     KisNodeSP activeNode;
-    QDeclarativeEngine* declarativeEngine;
+    QQmlEngine* declarativeEngine;
     LayerThumbProvider* thumbProvider;
     QHash<QString, const KisFilter*> filters;
 
@@ -318,7 +318,7 @@ QObject* LayerModel::engine() const
 
 void LayerModel::setEngine(QObject* newEngine)
 {
-    d->declarativeEngine = qobject_cast<QDeclarativeEngine*>(newEngine);
+    d->declarativeEngine = qobject_cast<QQmlEngine*>(newEngine);
     emit engineChanged();
 }
 

@@ -29,6 +29,11 @@
     This is a wrapper class around QMimeData, with a few extensions to provide better support for in-qml drag & drops.
 */
 
+DeclarativeMimeData::DeclarativeMimeData()
+    : QMimeData(),
+    m_source(0)
+{}
+
 /*!
     \internal
     \class DeclarativeMimeData
@@ -48,7 +53,7 @@ DeclarativeMimeData::DeclarativeMimeData(const QMimeData* copy)
 {
     // Copy the standard MIME data
     foreach(QString format, copy->formats()) {
-            this->setData(format, copy->data(format));
+        QMimeData::setData(format, copy->data(format));
     }
 
     // If the object we are copying actually is a DeclarativeMimeData, copy our extended properties as well
@@ -57,7 +62,6 @@ DeclarativeMimeData::DeclarativeMimeData(const QMimeData* copy)
         this->setSource(declarativeMimeData->source());
     }
 }
-
 
 /*!
     \qmlproperty url MimeData::url
@@ -83,16 +87,16 @@ void DeclarativeMimeData::setUrl(const QUrl &url)
     emit urlChanged();
 }
 
-QVariantList DeclarativeMimeData::urls() const
+QJsonArray DeclarativeMimeData::urls() const
 {
-    QVariantList varUrls;
+    QJsonArray varUrls;
     foreach (const QUrl &url, QMimeData::urls()) {
-        varUrls << url;
+        varUrls.append(url.toString());
     }
     return varUrls;
 }
 
-void DeclarativeMimeData::setUrls(const QVariantList &urls)
+void DeclarativeMimeData::setUrls(const QJsonArray &urls)
 {
     QList<QUrl> urlList;
     foreach (const QVariant &varUrl, urls) {
@@ -105,11 +109,18 @@ void DeclarativeMimeData::setUrls(const QVariantList &urls)
 // color
 QColor DeclarativeMimeData::color() const
 {
-    if ( this->hasColor()) {
+    if (this->hasColor()) {
          return qvariant_cast<QColor>(this->colorData());
      }
     return QColor();
 }
+
+bool DeclarativeMimeData::hasColor() const
+{
+    //qDebug() << " hasColor " << (QMimeData::hasColor() ? color().name() : "false");
+    return QMimeData::hasColor();
+}
+
 void DeclarativeMimeData::setColor(const QColor &color)
 {
     if (this->color() != color) {
@@ -118,9 +129,13 @@ void DeclarativeMimeData::setColor(const QColor &color)
     }
 }
 
-void DeclarativeMimeData::setData(const QString &mimeType, const QString &data)
+void DeclarativeMimeData::setData(const QString &mimeType, const QVariant &data)
 {
-    QMimeData::setData(mimeType, data.toLatin1());
+    if (data.type() == QVariant::ByteArray) {
+        QMimeData::setData(mimeType, data.toByteArray());
+    } else if (data.canConvert(QVariant::String)) {
+        QMimeData::setData(mimeType, data.toString().toLatin1());
+    }
 }
 
 /*!
@@ -132,14 +147,20 @@ void DeclarativeMimeData::setData(const QString &mimeType, const QString &data)
   In the case of inter-application drag and drop operations, the source will not be available, and will be 0.
   Be sure to test it in your QML code, before using it, or it will generate errors in the console.
 */
-QDeclarativeItem* DeclarativeMimeData::source() const
+QQuickItem* DeclarativeMimeData::source() const
 {
     return m_source;
 }
-void DeclarativeMimeData::setSource(QDeclarativeItem* source)
+void DeclarativeMimeData::setSource(QQuickItem* source)
 {
     if (m_source != source) {
         m_source = source;
         emit sourceChanged();
     }
 }
+
+QByteArray DeclarativeMimeData::getDataAsByteArray(const QString& format)
+{
+    return data(format);
+}
+

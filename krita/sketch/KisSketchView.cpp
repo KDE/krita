@@ -99,20 +99,22 @@ public:
     unsigned char tabletEventCount;
 };
 
-KisSketchView::KisSketchView(QDeclarativeItem* parent)
-    : QDeclarativeItem(parent)
+KisSketchView::KisSketchView(QQuickItem* parent)
+    : QQuickItem(parent)
     , d(new Private(this))
 {
     // this is just an interaction overlay, the contents are painted on the sceneview background
-    setFlag(QGraphicsItem::ItemHasNoContents, true);
-    setAcceptTouchEvents(true);
+    setFlag(QQuickItem::ItemHasContents, false);
+    // QT5TODO
+//     setAcceptTouchEvents(true);
     setAcceptedMouseButtons(Qt::LeftButton | Qt::MiddleButton | Qt::RightButton);
     setAcceptHoverEvents(true);
 
     d->actionCollection = new KActionCollection(this, "krita");
     d->viewManager = new KisViewManager(qApp->activeWindow(), d->actionCollection);
 
-    grabGesture(Qt::PanGesture);
+    // QT5TODO
+//     grabGesture(Qt::PanGesture);
     //grabGesture(Qt::PinchGesture);
 
     KoZoomMode::setMinimumZoom(0.1);
@@ -148,11 +150,12 @@ KisSketchView::~KisSketchView()
         DocumentManager::instance()->closeDocument();
     }
     if (d->canvasWidget) {
-        SketchDeclarativeView *v = qobject_cast<SketchDeclarativeView*>(scene()->views().at(0));
-        if (v) {
-            v->setCanvasWidget(0);
-            v->setDrawCanvas(false);
-        }
+    // QT5TODO
+//         SketchDeclarativeView *v = qobject_cast<SketchDeclarativeView*>(scene()->views().at(0));
+//         if (v) {
+//             v->setCanvasWidget(0);
+//             v->setDrawCanvas(false);
+//         }
     }
 
     delete d;
@@ -340,13 +343,14 @@ void KisSketchView::documentChanged()
     connect(d->doc->image()->signalRouter(), SIGNAL(sigRemoveNodeAsync(KisNodeSP)), SLOT(removeNodeAsync(KisNodeSP)));
     connect(d->doc->image()->signalRouter(), SIGNAL(sigSizeChanged(QPointF,QPointF)), SIGNAL(imageSizeChanged()));
 
-    if(scene()) {
-        SketchDeclarativeView *v = qobject_cast<SketchDeclarativeView*>(scene()->views().at(0));
-        if (v) {
-            v->setCanvasWidget(d->canvasWidget);
-            v->setDrawCanvas(true);
-        }
-    }
+    // QT5TODO
+//     if(scene()) {
+//         SketchDeclarativeView *v = qobject_cast<SketchDeclarativeView*>(scene()->views().at(0));
+//         if (v) {
+//             v->setCanvasWidget(d->canvasWidget);
+//             v->setDrawCanvas(true);
+//         }
+//     }
 
     d->imageUpdated(d->canvas->image()->bounds());
 
@@ -505,9 +509,11 @@ bool KisSketchView::event( QEvent* event )
             break;
     }
 
-    return QDeclarativeItem::event( event );
+    return QQuickItem::event( event );
 }
 
+    // QT5TODO
+#if 0
 bool KisSketchView::sceneEvent(QEvent* event)
 {    
     if (d->canvas && d->canvasWidget) {
@@ -572,9 +578,9 @@ bool KisSketchView::sceneEvent(QEvent* event)
             }
         }
     }
-    return QDeclarativeItem::sceneEvent(event);
+    return QQuickItem::sceneEvent(event);
 }
-
+#endif
 void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
     if (d->canvasWidget && !newGeometry.isEmpty()) {
@@ -610,18 +616,20 @@ void KisSketchView::centerDoc()
 
 void KisSketchView::Private::imageUpdated(const QRect &updated)
 {
-    if (q->scene()) {
-        q->scene()->views().at(0)->update(updated);
-        q->scene()->invalidate( 0, 0, q->width(), q->height() );
-    }
+    // QT5TODO
+//     if (q->scene()) {
+//         q->scene()->views().at(0)->update(updated);
+//         q->scene()->invalidate( 0, 0, q->width(), q->height() );
+//     }
 }
 
 void KisSketchView::Private::documentOffsetMoved()
 {
-    if (q->scene()) {
-        q->scene()->views().at(0)->update();
-        q->scene()->invalidate( 0, 0, q->width(), q->height() );
-    }
+    // QT5TODO
+//     if (q->scene()) {
+//         q->scene()->views().at(0)->update();
+//         q->scene()->invalidate( 0, 0, q->width(), q->height() );
+//     }
 }
 
 void KisSketchView::Private::resetDocumentPosition()
@@ -653,21 +661,23 @@ void KisSketchView::Private::removeNodeAsync(KisNodeSP removedNode)
 
 void KisSketchView::Private::zoomChanged()
 {
-    if (q->scene()) {
-        q->scene()->views().at(0)->update();
-        q->scene()->invalidate( 0, 0, q->width(), q->height() );
-    }
+    // QT5TODO
+//     if (q->scene()) {
+//         q->scene()->views().at(0)->update();
+//         q->scene()->invalidate( 0, 0, q->width(), q->height() );
+//     }
 }
 
 void KisSketchView::activate()
 {
     if (d->canvasWidget != d->canvas->canvasWidget()) {
         d->canvasWidget = d->canvas->canvasWidget();
-		SketchDeclarativeView *v = qobject_cast<SketchDeclarativeView*>(scene()->views().at(0));
-		if (v) {
-			v->setCanvasWidget(d->canvasWidget);
-			v->setDrawCanvas(true);
-		}
+    // QT5TODO
+// 		SketchDeclarativeView *v = qobject_cast<SketchDeclarativeView*>(scene()->views().at(0));
+// 		if (v) {
+// 			v->setCanvasWidget(d->canvasWidget);
+// 			v->setDrawCanvas(true);
+// 		}
     }
     d->canvasWidget->setFocus();
     Q_ASSERT(d->viewManager);

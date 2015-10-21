@@ -120,7 +120,7 @@ set_target_properties(kritasketchlib
 
 
 target_link_libraries(kritasketchlib
-    Qt5::Declarative
+    Qt5::Quick
     Qt5::Gui
     Qt5::Core
     kritawidgets
@@ -139,7 +139,7 @@ install(TARGETS kritasketchlib ${INSTALL_TARGETS_DEFAULT_ARGS})
 add_executable(kritasketch ${kritasketch_SRCS})
 
 target_link_libraries(kritasketch
-    Qt5::Declarative
+    Qt5::Quick
     Qt5::Gui
     Qt5::Core
     kritaui
@@ -158,7 +158,7 @@ install(FILES     kritasketch.rc                    DESTINATION ${DATA_INSTALL_D
 add_library(kritasketchplugin SHARED ${kritasketchplugin_SRCS} ${kritasketch_kritaintegrationmodels_SRCS} ${KRITA_COLORSELECTORNG_PART_SRCS})
 
 target_link_libraries(kritasketchplugin
-    Qt5::Declarative
+    Qt5::Quick
     Qt5::Gui
     Qt5::Network
     Qt5::Core

@@ -22,7 +22,7 @@
 #include <QObject>
 #include <QPointF>
 
-class QDeclarativeItem;
+class QQuickItem;
 
 /**
  * Helper class for tracking global mouse position from within QML.
@@ -35,8 +35,8 @@ public:
     virtual ~MouseTracker();
 
 public Q_SLOTS:
-    void addItem(QDeclarativeItem* item, const QPointF& offset = QPointF());
-    void removeItem(QDeclarativeItem* item);
+    void addItem(QQuickItem* item, const QPointF& offset = QPointF());
+    void removeItem(QQuickItem* item);
 
 protected:
     virtual bool eventFilter(QObject* target, QEvent* event);

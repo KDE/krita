@@ -24,11 +24,11 @@
 #ifndef DECLARATIVEDROPAREA_H
 #define DECLARATIVEDROPAREA_H
 
-#include <QDeclarativeItem>
+#include <QQuickItem>
 
 class DeclarativeDragDropEvent;
 
-class DeclarativeDropArea : public QDeclarativeItem
+class DeclarativeDropArea : public QQuickItem
 {
     Q_OBJECT
 
@@ -37,10 +37,21 @@ class DeclarativeDropArea : public QDeclarativeItem
      */
     Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled NOTIFY enabledChanged)
 
+    /**
+     * 
+     */
+    Q_PROPERTY(bool preventStealing READ preventStealing WRITE setPreventStealing NOTIFY preventStealingChanged)
+
+    Q_PROPERTY(bool containsDrag READ containsDrag NOTIFY containsDragChanged )
+
 public:
-    DeclarativeDropArea(QDeclarativeItem *parent = 0);
+    DeclarativeDropArea(QQuickItem *parent=0);
     bool isEnabled() const;
     void setEnabled(bool enabled);
+
+    bool preventStealing() const;
+    void setPreventStealing(bool prevent);
+    bool containsDrag() const;
 
 Q_SIGNALS:
     /**
@@ -58,22 +69,45 @@ Q_SIGNALS:
     void dragLeave(DeclarativeDragDropEvent* event);
 
     /**
+     * Emitted when the mouse cursor dragging something moves over the drag area
+     * @arg DeclarativeDragDropEvent description of the dragged content
+     * @see DeclarativeDragDropEvent
+     */
+    void dragMove(DeclarativeDragDropEvent *event);
+
+    /**
      * Emitted when the user drops something in the area
      * @arg DeclarativeDragDropEvent description of the dragged content
      * @see DeclarativeDragDropEvent
      */
     void drop(DeclarativeDragDropEvent* event);
 
+    //Notifiers
     void enabledChanged();
 
+    void preventStealingChanged();
+
+    void containsDragChanged(bool contained);
+
 protected:
-    void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
-    void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
-    void dropEvent(QGraphicsSceneDragDropEvent *event);
+    void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
+    void dragLeaveEvent(QDragLeaveEvent *event) Q_DECL_OVERRIDE;
+    void dragMoveEvent(QDragMoveEvent *event) Q_DECL_OVERRIDE;
+    void dropEvent(QDropEvent *event) Q_DECL_OVERRIDE;
+
+private Q_SLOTS:
+    void temporaryInhibitParent(bool inhibit);
 
 private:
-    bool m_enabled;
+    void setContainsDrag(bool dragging);
+
+    bool m_enabled : 1;
+    bool m_preventStealing : 1;
+    bool m_temporaryInhibition : 1;
+    bool m_containsDrag : 1;
+    QPoint m_oldDragMovePos;
 };
 
 #endif
+
 

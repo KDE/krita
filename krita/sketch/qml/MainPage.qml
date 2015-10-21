@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 1.1
+import QtQuick 2.3
 import org.krita.sketch 1.0
 import org.krita.sketch.components 1.0
 import "panels"
@@ -72,6 +72,8 @@ Page {
 //         id: layerModel;
 //         // Notice - the model needs to know about the engine before the view, hence it is set first
 //         // This could be rectified, but for now know that the order here is important.
+    // QT5TODO: check how this hack can be prevented, QMLEngine not set currently,
+    // but usage also disabled currently in LayerModel::setView
 //         engine: QMLEngine;
 //         view: sketchView.view;
 //     }

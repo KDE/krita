@@ -69,7 +69,7 @@ Properties:
         Defines the toolbar contents for the page. If the page stack is set up using a toolbar instance, it automatically shows the currently active page's toolbar contents in the toolbar. The default value is null resulting in the page's toolbar to be invisible when the page is active.
 **/
 
-import QtQuick 1.1
+import QtQuick 2.3
 
 import "."
 

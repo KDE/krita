@@ -32,7 +32,7 @@ class KRITA_SKETCH_EXPORT Settings : public QObject
     Q_OBJECT
     Q_PROPERTY(QString currentFile READ currentFile WRITE setCurrentFile NOTIFY currentFileChanged)
     Q_PROPERTY(bool temporaryFile READ isTemporaryFile WRITE setTemporaryFile NOTIFY temporaryFileChanged)
-    Q_PROPERTY(QDeclarativeItem* focusItem READ focusItem WRITE setFocusItem NOTIFY focusItemChanged)
+    Q_PROPERTY(QQuickItem* focusItem READ focusItem WRITE setFocusItem NOTIFY focusItemChanged)
     Q_PROPERTY(QObject* theme READ theme NOTIFY themeChanged)
     Q_PROPERTY(QString themeID READ themeID WRITE setThemeID NOTIFY themeChanged)
     Q_PROPERTY(QObject* customImageSettings READ customImageSettings NOTIFY customImageSettingsChanged)
@@ -51,8 +51,8 @@ public Q_SLOTS:
     bool isTemporaryFile() const;
     void setTemporaryFile(bool temp);
 
-    QDeclarativeItem *focusItem();
-    void setFocusItem(QDeclarativeItem *item);
+    QQuickItem *focusItem();
+    void setFocusItem(QQuickItem *item);
 
     QObject* theme() const;
 

@@ -28,7 +28,7 @@
 #include <kis_canvas_resource_provider.h>
 #include <KoCanvasResourceManager.h>
 #include <QPainter>
-#include <QGraphicsSceneMouseEvent>
+#include <QMouseEvent>
 #include <QTimer>
 #include "kis_display_color_converter.h"
 
@@ -116,11 +116,11 @@ void ColorSelectorItem::Private::commitColor(const KoColor& color, Acs::ColorRol
     colorUpdateAllowed = true;
 }
 
-ColorSelectorItem::ColorSelectorItem(QDeclarativeItem* parent)
-    : QDeclarativeItem(parent)
+ColorSelectorItem::ColorSelectorItem(QQuickItem* parent)
+    : QQuickPaintedItem(parent)
     , d(new Private(this))
 {
-    setFlag( QGraphicsItem::ItemHasNoContents, false );
+    setFlag(QQuickItem::ItemHasContents, true);
     setAcceptedMouseButtons( Qt::LeftButton | Qt::RightButton );
 }
 
@@ -129,12 +129,10 @@ ColorSelectorItem::~ColorSelectorItem()
     delete d;
 }
 
-void ColorSelectorItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+void ColorSelectorItem::paint(QPainter* painter)
 {
     if(!d->shown)
         return;
-    Q_UNUSED(option)
-    Q_UNUSED(widget)
     painter->drawImage(boundingRect(), d->paintedItem);
 
 }
@@ -203,10 +201,10 @@ void ColorSelectorItem::geometryChanged(const QRectF& newGeometry, const QRectF&
     }
 
     d->repaintTimer->start();
-    QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
+    QQuickPaintedItem::geometryChanged(newGeometry, oldGeometry);
 }
 
-void ColorSelectorItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
+void ColorSelectorItem::mousePressEvent(QMouseEvent* event)
 {
     d->colorRole = d->changeBackground ?
         Acs::Background : Acs::buttonToRole(event->button());
@@ -220,17 +218,17 @@ void ColorSelectorItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
     mouseEvent(event);
 }
 
-void ColorSelectorItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+void ColorSelectorItem::mouseMoveEvent(QMouseEvent* event)
 {
     mouseEvent(event);
 }
 
-void ColorSelectorItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* /*event*/)
+void ColorSelectorItem::mouseReleaseEvent(QMouseEvent* /*event*/)
 {
     d->grabbingComponent=0;
 }
 
-void ColorSelectorItem::mouseEvent(QGraphicsSceneMouseEvent* event)
+void ColorSelectorItem::mouseEvent(QMouseEvent* event)
 {
     if (d->grabbingComponent && (event->buttons()&Qt::LeftButton || event->buttons()&Qt::RightButton))
     {

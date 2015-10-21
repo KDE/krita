@@ -19,9 +19,9 @@
 #ifndef COLORIMAGEPROVIDER_H
 #define COLORIMAGEPROVIDER_H
 
-#include <QDeclarativeImageProvider>
+#include <QQuickImageProvider>
 
-class ColorImageProvider : public QDeclarativeImageProvider
+class ColorImageProvider : public QQuickImageProvider
 {
 public:
     explicit ColorImageProvider();

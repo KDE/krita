@@ -19,7 +19,7 @@
 #include "ColorImageProvider.h"
 
 ColorImageProvider::ColorImageProvider()
-    : QDeclarativeImageProvider(QDeclarativeImageProvider::Pixmap)
+    : QQuickImageProvider(QQuickImageProvider::Pixmap)
 {
 }
 

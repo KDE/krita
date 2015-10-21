@@ -19,11 +19,11 @@
 #ifndef KRITA_SKETCH_VIEW_H
 #define KRITA_SKETCH_VIEW_H
 
-#include <QDeclarativeItem>
+#include <QQuickItem>
 
 #include "krita_sketch_export.h"
 
-class KRITA_SKETCH_EXPORT KisSketchView : public QDeclarativeItem
+class KRITA_SKETCH_EXPORT KisSketchView : public QQuickItem
 {
     Q_OBJECT
     Q_PROPERTY(QObject* selectionManager READ selectionManager NOTIFY viewChanged)
@@ -40,7 +40,7 @@ class KRITA_SKETCH_EXPORT KisSketchView : public QDeclarativeItem
     Q_PROPERTY(int imageWidth READ imageWidth NOTIFY imageSizeChanged)
 
 public:
-    KisSketchView(QDeclarativeItem* parent = 0);
+    explicit KisSketchView(QQuickItem* parent = 0);
     virtual ~KisSketchView();
 
     QObject* selectionManager() const;
@@ -97,7 +97,8 @@ Q_SIGNALS:
 
 protected:
     virtual bool event(QEvent* event);
-    virtual bool sceneEvent(QEvent* event);
+    // QT5TODO
+//     virtual bool sceneEvent(QEvent* event);
 
 private:
     class Private;

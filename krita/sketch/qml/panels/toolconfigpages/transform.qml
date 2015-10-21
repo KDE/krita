@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 1.1
+import QtQuick 2.3
 import org.krita.sketch 1.0 as Krita
 import org.krita.sketch.components 1.0
 
@@ -29,24 +29,24 @@ Column {
         toolManager.currentTool.applyTransform();
     }
 
-    height: buttonRow.height + freeModeOptions.height + Constants.DefaultMargin * 5
-    anchors.margins: Constants.DefaultMargin;
-    spacing: Constants.DefaultMargin;
+    height: buttonRow.height + freeModeOptions.height + Krita.Constants.DefaultMargin * 5
+    anchors.margins: Krita.Constants.DefaultMargin;
+    spacing: Krita.Constants.DefaultMargin;
 
     Item {
-        height: Constants.DefaultMargin;
+        height: Krita.Constants.DefaultMargin;
         width: parent.width;
     }
     Row {
         id: buttonRow;
         anchors.horizontalCenter: parent.horizontalCenter;
-        spacing: Constants.DefaultMargin;
+        spacing: Krita.Constants.DefaultMargin;
 
         Button {
             id: freeModeButton;
 
             width: base.width * 0.4;
-            height: textSize + Constants.DefaultMargin * 2
+            height: textSize + Krita.Constants.DefaultMargin * 2
 
             textColor: "black";
             color: "#63ffffff";
@@ -54,7 +54,7 @@ Column {
             border.width: 1;
             border.color: "silver";
 
-            radius: Constants.DefaultMargin;
+            radius: Krita.Constants.DefaultMargin;
 
             checkable: true;
             checked: true;
@@ -77,7 +77,7 @@ Column {
             id: warpModeButton;
 
             width: base.width * 0.4;
-            height: textSize + Constants.DefaultMargin * 2
+            height: textSize + Krita.Constants.DefaultMargin * 2
 
             textColor: "black";
             color: "#63ffffff";
@@ -85,7 +85,7 @@ Column {
             border.width: 1;
             border.color: "silver";
 
-            radius: Constants.DefaultMargin;
+            radius: Krita.Constants.DefaultMargin;
 
             checkable: true;
             onCheckedChanged: {
@@ -116,12 +116,12 @@ Column {
             opacity: freeModeButton.checked ? 1.0 : 0.0;
             Behavior on opacity { NumberAnimation { } }
 
-            Label { height: font.pixelSize + Constants.DefaultMargin; text: "Translation" }
+            Label { height: font.pixelSize + Krita.Constants.DefaultMargin; text: "Translation" }
 
             PanelTextField { id: translateX; onTextChanged: { parent.preventUpdateText = true; parent.updateTransform(); parent.preventUpdateText = false; } placeholder: "X" }
             PanelTextField { id: translateY; onTextChanged: { parent.preventUpdateText = true; parent.updateTransform(); parent.preventUpdateText = false; } placeholder: "Y" }
 
-            Label { height: font.pixelSize + Constants.DefaultMargin; text: "Rotation" }
+            Label { height: font.pixelSize + Krita.Constants.DefaultMargin; text: "Rotation" }
 
 //             ExpandingListView {
 //                 width: parent.width;
@@ -143,12 +143,12 @@ Column {
             PanelTextField { id: rotateY; onTextChanged: { parent.preventUpdateText = true; parent.updateTransform(); parent.preventUpdateText = false; } placeholder: "Y" }
             PanelTextField { id: rotateZ; onTextChanged: { parent.preventUpdateText = true; parent.updateTransform(); parent.preventUpdateText = false; } placeholder: "Z" }
 
-            Label { height: font.pixelSize + Constants.DefaultMargin; text: "Scaling" }
+            Label { height: font.pixelSize + Krita.Constants.DefaultMargin; text: "Scaling" }
 
             PanelTextField { id: scaleX; onTextChanged: { parent.preventUpdateText = true; parent.updateTransform(); parent.preventUpdateText = false; } placeholder: "X" }
             PanelTextField { id: scaleY; onTextChanged: { parent.preventUpdateText = true; parent.updateTransform(); parent.preventUpdateText = false; } placeholder: "Y" }
 
-            Label { height: font.pixelSize + Constants.DefaultMargin; text: "Shear" }
+            Label { height: font.pixelSize + Krita.Constants.DefaultMargin; text: "Shear" }
 
             PanelTextField { id: shearX; onTextChanged: { parent.preventUpdateText = true; parent.updateTransform(); parent.preventUpdateText = false; } placeholder: "X" }
             PanelTextField { id: shearY; onTextChanged: { parent.preventUpdateText = true; parent.updateTransform(); parent.preventUpdateText = false; } placeholder: "Y" }
@@ -225,7 +225,7 @@ Column {
             id: warpModeOptions;
 
             width: parent.width;
-            spacing: Constants.DefaultMargin;
+            spacing: Krita.Constants.DefaultMargin;
 
             opacity: warpModeButton.checked ? 1.0 : 0.0;
             Behavior on opacity { NumberAnimation { } }
@@ -234,7 +234,7 @@ Column {
                 id: warpTypeCombo;
 
                 width: parent.width;
-                expandedHeight: Constants.GridHeight * 2
+                expandedHeight: Krita.Constants.GridHeight * 2
 
                 onCurrentIndexChanged: { parent.preventUpdateText = true; parent.updateTransform(); parent.preventUpdateText = false; }
 

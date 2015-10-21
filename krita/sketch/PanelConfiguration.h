@@ -20,17 +20,17 @@
 #define PANELCONFIGURATION_H
 
 #include <QObject>
-#include <QDeclarativeParserStatus>
-#include <QDeclarativeListProperty>
+#include <QQmlParserStatus>
+#include <QQmlListProperty>
 
-class QDeclarativeItem;
+class QQuickItem;
 
-class PanelConfiguration : public QObject, public QDeclarativeParserStatus
+class PanelConfiguration : public QObject, public QQmlParserStatus
 {
     Q_OBJECT
-    Q_PROPERTY(QDeclarativeListProperty<QDeclarativeItem> panels READ panels)
-    Q_PROPERTY(QDeclarativeListProperty<QDeclarativeItem> panelAreas READ panelAreas)
-    Q_INTERFACES(QDeclarativeParserStatus)
+    Q_PROPERTY(QQmlListProperty<QQuickItem> panels READ panels)
+    Q_PROPERTY(QQmlListProperty<QQuickItem> panelAreas READ panelAreas)
+    Q_INTERFACES(QQmlParserStatus)
 
 public:
     explicit PanelConfiguration(QObject* parent = 0);
@@ -39,8 +39,8 @@ public:
     virtual void componentComplete();
     virtual void classBegin();
 
-    QDeclarativeListProperty<QDeclarativeItem> panels();
-    QDeclarativeListProperty<QDeclarativeItem> panelAreas();
+    QQmlListProperty<QQuickItem> panels();
+    QQmlListProperty<QQuickItem> panelAreas();
 
 public Q_SLOTS:
     void restore();

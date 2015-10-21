@@ -25,20 +25,21 @@
 #define DECLARATIVEDRAGDROPEVENT_H
 
 #include <QObject>
-#include <QGraphicsSceneDragDropEvent>
-#include "DeclarativeMimeData.h"
+#include "DeclarativeDropArea.h"
+
+class DeclarativeMimeData;
 
 class DeclarativeDragDropEvent : public QObject
 {
     Q_OBJECT
 
     /**
-     * The mouse X position of the event relative to the view that sent the event.
+     * The mouse X position of the event relative to the DropArea that is receiving the event.
      */
     Q_PROPERTY(int x READ x)
 
     /**
-     * The mouse Y position of the event relative to the view that sent the event.
+     * The mouse Y position of the event relative to the DropArea that is receiving the event.
      */
     Q_PROPERTY(int y READ y)
 
@@ -78,7 +79,7 @@ class DeclarativeDragDropEvent : public QObject
      *  Qt.CopyAction  0x1  Copy the data to the target.
      *  Qt.MoveAction  0x2  Move the data from the source to the target.
      *  Qt.LinkAction  0x4  Create a link from the source to the target.
-     *  Qt.ActionMask  0xff
+     *  Qt.ActionMask  0xff   
      *  Qt.IgnoreAction  0x0  Ignore the action (do nothing with the data).
      *  Qt.TargetMoveAction  0x8002  On Windows, this value is used when the ownership of the D&D data should be taken over by the target application, i.e., the source application should not delete the data.
      *  On X11 this value is used to do a move.
@@ -94,41 +95,28 @@ class DeclarativeDragDropEvent : public QObject
 
 public:
 
-    DeclarativeDragDropEvent(QGraphicsSceneDragDropEvent* e, QObject* parent = 0);
+    DeclarativeDragDropEvent(QDropEvent* e, DeclarativeDropArea* parent = 0);
+    DeclarativeDragDropEvent(QDragLeaveEvent* e, DeclarativeDropArea* parent = 0);
 
-    int x() const {
-        return m_x;
-    }
-    int y() const {
-        return m_y;
-    }
-    int buttons() const {
-        return m_buttons;
-    }
-    int modifiers() const {
-        return m_modifiers;
-    }
-    DeclarativeMimeData* mimeData() {
-        return &m_data;
-    }
-    Qt::DropAction proposedAction() const {
-        return m_event->proposedAction();
-    }
-    Qt::DropActions possibleActions() const {
-        return m_event->possibleActions();
-    }
+    int x() const { return m_x; }
+    int y() const { return m_y; }
+    int buttons() const { return m_buttons; }
+    int modifiers() const { return m_modifiers; }
+    DeclarativeMimeData* mimeData();
+    Qt::DropAction proposedAction() const { return m_event->proposedAction(); }
+    Qt::DropActions possibleActions() const { return m_event->possibleActions(); }
 
 public Q_SLOTS:
     void accept(int action);
-    void reject();
 
 private:
     int m_x;
     int m_y;
     Qt::MouseButtons m_buttons;
     Qt::KeyboardModifiers m_modifiers;
-    DeclarativeMimeData m_data;
-    QGraphicsSceneDragDropEvent* m_event;
+    DeclarativeMimeData* m_data;
+    QDropEvent* m_event;
 };
 
 #endif // DECLARATIVEDRAGDROPEVENT_H
+

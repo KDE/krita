@@ -21,8 +21,8 @@
 #include "MainWindow.h"
 
 #include <QApplication>
-#include <QDeclarativeContext>
-#include <QDeclarativeEngine>
+#include <QQmlContext>
+#include <QQmlEngine>
 #include <QFileInfo>
 
 #include <KoResourcePaths.h>
@@ -87,7 +87,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(resetWindowTitle()));
     connect(DocumentManager::instance(), SIGNAL(documentSaved()), SLOT(resetWindowTitle()));
 
-    QDeclarativeView* view = new SketchDeclarativeView();
+    QQuickView* view = new SketchDeclarativeView();
     QmlGlobalEngine::instance()->setEngine(view->engine());
     view->engine()->rootContext()->setContextProperty("mainWindow", this);
 
@@ -120,15 +120,16 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     QFileInfo fi(mainqml);
 
     view->setSource(QUrl::fromLocalFile(fi.canonicalFilePath()));
-    view->setResizeMode( QDeclarativeView::SizeRootObjectToView );
+    view->setResizeMode( QQuickView::SizeRootObjectToView );
 
     if (view->errors().count() > 0) {
-        foreach(const QDeclarativeError &error, view->errors()) {
+        foreach(const QQmlError &error, view->errors()) {
             dbgKrita << error.toString();
         }
     }
 
-    setCentralWidget(view);
+    QWidget* container = QWidget::createWindowContainer(view);
+    setCentralWidget(container);
 }
 
 void MainWindow::resetWindowTitle()

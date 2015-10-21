@@ -18,7 +18,7 @@
 #ifndef SKETCHDECLARATIVEVIEW_H
 #define SKETCHDECLARATIVEVIEW_H
 
-#include <QDeclarativeView>
+#include <QQuickView>
 #include <QPointer>
 #include <opengl/kis_opengl_canvas2.h>
 
@@ -27,7 +27,7 @@
 /**
  * @brief The SketchDeclarativeView class overrides QGraphicsView's drawBackground
  */
-class KRITA_SKETCH_EXPORT SketchDeclarativeView : public QDeclarativeView
+class KRITA_SKETCH_EXPORT SketchDeclarativeView : public QQuickView
 {
     Q_OBJECT
 
@@ -35,8 +35,8 @@ class KRITA_SKETCH_EXPORT SketchDeclarativeView : public QDeclarativeView
     Q_PROPERTY(QWidget* canvasWidget READ canvasWidget WRITE setCanvasWidget NOTIFY canvasWidgetChanged);
 
 public:
-    SketchDeclarativeView(QWidget *parent = 0);
-    SketchDeclarativeView(const QUrl &url, QWidget *parent = 0);
+    explicit SketchDeclarativeView(QWindow *parent = 0);
+    explicit SketchDeclarativeView(const QUrl &url, QWindow *parent = 0);
     virtual ~SketchDeclarativeView();
 
     QWidget* canvasWidget() const;
@@ -60,7 +60,6 @@ private:
     bool m_drawCanvas;
     QPointer<KisOpenGLCanvas2> m_canvasWidget;
     bool m_GLInitialized;
-    QGraphicsItem* m_sketchView;
     Q_SLOT void resetInitialized();
 };
 

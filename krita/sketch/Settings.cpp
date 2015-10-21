@@ -31,20 +31,23 @@
 class Settings::Private
 {
 public:
-    Private() : temporaryFile(false), focusItem(0) { }
+    Private() : temporaryFile(false), focusItem(0), theme(0){ }
 
     QString currentFile;
     bool temporaryFile;
-    QDeclarativeItem *focusItem;
+    QQuickItem *focusItem;
     Theme* theme;
 };
 
 Settings::Settings( QObject* parent )
     : QObject( parent ), d( new Private )
 {
-    QString theme = KSharedConfig::openConfig()->group("General").readEntry<QString>("theme", "default");
-    d->theme = Theme::load(theme, this);
-    connect(d->theme, SIGNAL(fontCacheRebuilt()), SIGNAL(themeChanged()));
+    // QT5TODO: Settings object is constructed in KritaSketchPlugin::initializeEngine(), where
+    // creation of other qml components is not possible. But Theme::load() does that.
+    // This needs some refactoring to resolve the deps. For now creating lazily in Settings::theme(), error-prone.
+//     QString theme = KSharedConfig::openConfig()->group("General").readEntry<QString>("theme", "default");
+//     d->theme = Theme::load(theme, this);
+//     connect(d->theme, SIGNAL(fontCacheRebuilt()), SIGNAL(themeChanged()));
 }
 
 Settings::~Settings()
@@ -80,12 +83,12 @@ void Settings::setTemporaryFile(bool temp)
     }
 }
 
-QDeclarativeItem* Settings::focusItem()
+QQuickItem* Settings::focusItem()
 {
     return d->focusItem;
 }
 
-void Settings::setFocusItem(QDeclarativeItem* item)
+void Settings::setFocusItem(QQuickItem* item)
 {
     if (item != d->focusItem) {
         d->focusItem = item;
@@ -95,6 +98,12 @@ void Settings::setFocusItem(QDeclarativeItem* item)
 
 QObject* Settings::theme() const
 {
+    // create lazily for now, see constructor notes
+    if (!d->theme) {
+    QString theme = KSharedConfig::openConfig()->group("General").readEntry<QString>("theme", "default");
+    d->theme = Theme::load(theme, const_cast<Settings*>(this));
+    connect(d->theme, SIGNAL(fontCacheRebuilt()), SIGNAL(themeChanged()));
+    }
     return d->theme;
 }
 

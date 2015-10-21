@@ -221,11 +221,10 @@ find_package(Qt5 ${MIN_QT_VERSION} REQUIRED
         Test 
         Concurrent
     OPTIONAL_COMPONENTS
-        Qml
+        Quick
         X11Extras
         DBus
 )
-find_package(Qt5Declarative ${MIN_QT_VERSION})
 
 set(HAVE_DBUS Qt5DBus_FOUND)
 

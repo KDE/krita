@@ -19,10 +19,10 @@
 #ifndef KRITA_SKETCH_PAGETHUMBNAILPROVIDER_H
 #define KRITA_SKETCH_PAGETHUMBNAILPROVIDER_H
 
-#include <QDeclarativeImageProvider>
+#include <QQuickImageProvider>
 #include <QObject>
 
-class PageThumbnailProvider : public QObject, public QDeclarativeImageProvider
+class PageThumbnailProvider : public QObject, public QQuickImageProvider
 {
     Q_OBJECT
 public:

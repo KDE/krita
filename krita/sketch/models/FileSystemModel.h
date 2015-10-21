@@ -23,15 +23,14 @@
 #ifndef CALLIGRAMOBILE_FILESYSTEMMODEL_H
 #define CALLIGRAMOBILE_FILESYSTEMMODEL_H
 
-#include <QDeclarativeParserStatus>
-#include <QtDeclarative>
+#include <QQmlParserStatus>
 
 #include <QAbstractListModel>
 
-class FileSystemModel : public QAbstractListModel, public QDeclarativeParserStatus
+class FileSystemModel : public QAbstractListModel, public QQmlParserStatus
 {
     Q_OBJECT
-    Q_INTERFACES(QDeclarativeParserStatus)
+    Q_INTERFACES(QQmlParserStatus)
 
     Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
     Q_PROPERTY(QString parentFolder READ parentFolder)

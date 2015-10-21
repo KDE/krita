@@ -20,17 +20,17 @@
 #ifndef TOOLMANAGER_H
 #define TOOLMANAGER_H
 
-#include <QDeclarativeItem>
+#include <QQuickItem>
 
 class KoCanvasController;
 
-class ToolManager : public QDeclarativeItem
+class ToolManager : public QQuickItem
 {
     Q_OBJECT
     Q_PROPERTY(QObject* view READ view WRITE setView NOTIFY viewChanged)
     Q_PROPERTY(QObject* currentTool READ currentTool NOTIFY currentToolChanged);
 public:
-    ToolManager(QDeclarativeItem* parent = 0);
+    explicit ToolManager(QQuickItem* parent = 0);
     virtual ~ToolManager();
 
     QObject* view() const;

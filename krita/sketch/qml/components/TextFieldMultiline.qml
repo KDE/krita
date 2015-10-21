@@ -17,7 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 1.1
+import QtQuick 2.3
+import org.krita.sketch 1.0
 
 Item {
     id: base;
@@ -95,7 +96,7 @@ Item {
                         font: Settings.theme.font("application");
                         onFocusChanged: {
                             if (focus === false) {
-                                closeSoftwareInputPanel();
+                                Qt.inputMethod.hide()
                                 Settings.focusItem = null;
                                 base.focusLost();
                             } else {

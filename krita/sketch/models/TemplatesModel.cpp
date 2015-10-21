@@ -27,8 +27,6 @@
 #include <KisPart.h>
 #include <kis_icon.h>
 
-#include <QApplication>
-#include <QTimer>
 
 struct TemplatesModel::ItemData {
 public:
@@ -92,7 +90,7 @@ TemplatesModel::TemplatesModel(QObject* parent)
     a4lItem->icon = "A4landscape-black";
     d->items << a4lItem;
 
-    QTimer::singleShot(100, this, SLOT(populate()));
+    populate();
 }
 
 TemplatesModel::~TemplatesModel()
@@ -172,10 +170,10 @@ void TemplatesModel::populate()
             item->file = QString("template://").append(t->file());
             // QT5TODO: support custom pictures and icon symbol ids again
             // item->icon = KIconLoader::global()->iconPath(t->picture(), KIconLoader::Desktop);
+            item->icon = "filenew-black";
             item->groupName = group->name();
             item->groupFolded = true; // default hide groups
             d->items << item;
-            qApp->processEvents();
         }
     }
 }

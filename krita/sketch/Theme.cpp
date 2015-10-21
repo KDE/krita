@@ -29,7 +29,7 @@
 #include <QFontDatabase>
 #include <QApplication>
 #include <QWidget>
-#include <QDeclarativeComponent>
+#include <QQmlComponent>
 
 #include <KoResourcePaths.h>
 
@@ -365,8 +365,8 @@ Theme* Theme::load(const QString& id, QObject* parent)
     qml = KoResourcePaths::findResource("data", QString("kritasketch/themes/%1/theme.qml").arg(id));
 #endif
 
-    QDeclarativeComponent themeComponent(QmlGlobalEngine::instance()->engine(), parent);
-    themeComponent.loadUrl(QUrl::fromLocalFile(qml));
+    QQmlComponent themeComponent(QmlGlobalEngine::instance()->engine(), parent);
+    themeComponent.loadUrl(QUrl::fromLocalFile(qml), QQmlComponent::PreferSynchronous);
 
     if(themeComponent.isError()) {
         warnKrita << themeComponent.errorString();

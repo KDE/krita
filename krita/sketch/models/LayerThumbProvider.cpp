@@ -33,7 +33,7 @@ public:
 };
 
 LayerThumbProvider::LayerThumbProvider()
-    : QDeclarativeImageProvider(QDeclarativeImageProvider::Image)
+    : QQuickImageProvider(QQuickImageProvider::Image)
     , d(new Private)
 {
 }

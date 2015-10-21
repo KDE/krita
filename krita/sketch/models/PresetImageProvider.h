@@ -19,9 +19,9 @@
 #ifndef PRESETIMAGEPROVIDER_H
 #define PRESETIMAGEPROVIDER_H
 
-#include <QDeclarativeImageProvider>
+#include <QQuickImageProvider>
 
-class PresetImageProvider : public QDeclarativeImageProvider
+class PresetImageProvider : public QQuickImageProvider
 {
 public:
     explicit PresetImageProvider();

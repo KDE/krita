@@ -56,7 +56,37 @@
 #include "DocumentManager.h"
 #include "kis_clipboard.h"
 
-#include <QDeclarativeEngine>
+#include <QQmlEngine>
+#include <QQmlContext>
+
+
+static QObject *provideConstantsObject(QQmlEngine *engine, QJSEngine *scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    return new Constants;
+}
+
+static QObject *provideKritaNamespaceObject(QQmlEngine *engine, QJSEngine *scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    return new KritaNamespace;
+}
+
+static QObject *provideKritaRssModelObject(QQmlEngine *engine, QJSEngine *scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    Welcome::MultiFeedRssModel *rssModel = new Welcome::MultiFeedRssModel;
+    rssModel->addFeed(QLatin1String("https://krita.org/feed/"));
+
+    return rssModel;
+}
+
 
 void KritaSketchPlugin::registerTypes(const char* uri)
 {
@@ -84,16 +114,22 @@ void KritaSketchPlugin::registerTypes(const char* uri)
     qmlRegisterType<Theme>("org.krita.sketch", 1, 0, "Theme");
     qmlRegisterType<TemplatesModel>("org.krita.sketch", 1, 0, "TemplatesModel");
 
+    qmlRegisterSingletonType<Constants>("org.krita.sketch", 1, 0, "Constants", provideConstantsObject);
+    qmlRegisterSingletonType<KritaNamespace>("org.krita.sketch", 1, 0, "Krita", provideKritaNamespaceObject);
+    // QT5TODO: somehow results in welcome screen all white
+//     qmlRegisterSingletonType<Welcome::MultiFeedRssModel>("org.krita.sketch", 1, 0, "KritaFeedRssModel", provideKritaRssModelObject);
+
     qmlRegisterUncreatableType<LayerCompositeDetails>("org.krita.sketch", 1, 0, "LayerCompositeDetails", "This type is returned by the LayerModel class");
 }
 
-void KritaSketchPlugin::initializeEngine(QDeclarativeEngine* engine, const char* uri)
+void KritaSketchPlugin::initializeEngine(QQmlEngine* engine, const char* uri)
 {
     Q_UNUSED(uri)
     Q_ASSERT(uri == QLatin1String("org.krita.sketch"));
-
-    Constants *constants = new Constants( this );
-    Settings *settings = new Settings( this );
+    // QT5TODO: seems to be run in thread other than the one of KritaSketchPlugin, so parenting directly not possible
+    // TODO: constants and other things are expected by the components, which results in circular dependency
+    // Use singletons instead, in the right namespace
+    Settings *settings = new Settings;//( this );
     DocumentManager::instance()->setSettingsManager( settings );
     RecentFileManager *recentFileManager = DocumentManager::instance()->recentFileManager();
 
@@ -101,19 +137,12 @@ void KritaSketchPlugin::initializeEngine(QDeclarativeEngine* engine, const char*
     engine->addImageProvider(QLatin1String("color"), new ColorImageProvider);
     engine->addImageProvider(QLatin1String("recentimage"), new RecentImageImageProvider);
 
-    KritaNamespace *nameSpace = new KritaNamespace(this);
-    engine->rootContext()->setContextProperty("Krita", nameSpace);
-
-    engine->rootContext()->setContextProperty("Constants", constants);
     engine->rootContext()->setContextProperty("Settings", settings);
     engine->rootContext()->setContextProperty("RecentFileManager", recentFileManager);
     engine->rootContext()->setContextProperty("KisClipBoard", KisClipboard::instance());
-    engine->rootContext()->setContextProperty("QMLEngine", engine);
+    // QT5TODO: check how this hack can be prevented
+//     engine->rootContext()->setContextProperty("QMLEngine", engine);
     // This would be a problem, but doesn't seem to be used...
 //    engine->rootContext()->setContextProperty("View", d->view);
-
-    Welcome::MultiFeedRssModel *rssModel = new Welcome::MultiFeedRssModel(this);
-    rssModel->addFeed(QLatin1String("https://krita.org/feed/"));
-    engine->rootContext()->setContextProperty("aggregatedFeedsModel", rssModel);
 }
 

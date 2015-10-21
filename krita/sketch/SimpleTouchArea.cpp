@@ -21,10 +21,10 @@
 #include <QEvent>
 
 
-SimpleTouchArea::SimpleTouchArea(QDeclarativeItem* parent)
-    : QDeclarativeItem(parent)
+SimpleTouchArea::SimpleTouchArea(QQuickItem* parent)
+    : QQuickItem(parent)
 {
-    setAcceptTouchEvents(true);
+    setAcceptedMouseButtons(Qt::AllButtons);
 }
 
 SimpleTouchArea::~SimpleTouchArea()
@@ -34,18 +34,18 @@ SimpleTouchArea::~SimpleTouchArea()
 bool SimpleTouchArea::event(QEvent* event)
 {
     switch(static_cast<int>(event->type())) {
-        case KisTabletEvent::TabletPressEx:
-        case KisTabletEvent::TabletReleaseEx:
-        case KisTabletEvent::TabletMoveEx:
-            event->ignore();
-            return true;
+//         case KisTabletEvent::TabletPressEx:
+//         case KisTabletEvent::TabletReleaseEx:
+//         case KisTabletEvent::TabletMoveEx:
+//             event->ignore();
+//             return true;
         default:
             break;
     }
-    return QDeclarativeItem::event(event);
+    return QQuickItem::event(event);
 }
 
-bool SimpleTouchArea::sceneEvent(QEvent* event)
+void SimpleTouchArea::touchEvent(QTouchEvent* event)
 {
     switch (event->type())
     {
@@ -53,13 +53,11 @@ bool SimpleTouchArea::sceneEvent(QEvent* event)
     case QEvent::TouchUpdate:
     case QEvent::TouchEnd:
     case QEvent::TabletPress:
-    case QEvent::GraphicsSceneMousePress:
         event->accept();
-        return true;
+        return;
     default:
         break;
     }
 
-    return QDeclarativeItem::sceneEvent(event);
+    QQuickItem::touchEvent(event);
 }
-

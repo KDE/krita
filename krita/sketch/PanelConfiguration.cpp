@@ -18,7 +18,7 @@
 
 #include "PanelConfiguration.h"
 
-#include <QDeclarativeItem>
+#include <QQuickItem>
 #include <QSettings>
 #include <QCoreApplication>
 #include <KoResourcePaths.h>
@@ -28,8 +28,8 @@
 class PanelConfiguration::Private
 {
 public:
-    QList<QDeclarativeItem*> panels;
-    QList<QDeclarativeItem*> panelAreas;
+    QList<QQuickItem*> panels;
+    QList<QQuickItem*> panelAreas;
 
     QHash<QString, QString> panelAreaMap;
 };
@@ -66,24 +66,24 @@ void PanelConfiguration::classBegin()
 
 }
 
-QDeclarativeListProperty< QDeclarativeItem > PanelConfiguration::panels()
+QQmlListProperty< QQuickItem > PanelConfiguration::panels()
 {
-    return QDeclarativeListProperty<QDeclarativeItem>(this, d->panels);
+    return QQmlListProperty<QQuickItem>(this, d->panels);
 }
 
-QDeclarativeListProperty< QDeclarativeItem > PanelConfiguration::panelAreas()
+QQmlListProperty< QQuickItem > PanelConfiguration::panelAreas()
 {
-    return QDeclarativeListProperty<QDeclarativeItem>(this, d->panelAreas);
+    return QQmlListProperty<QQuickItem>(this, d->panelAreas);
 }
 
 void PanelConfiguration::restore()
 {
     if (d->panelAreaMap.count() == d->panels.count()) {
-        foreach(QDeclarativeItem* panel, d->panels) {
+        foreach(QQuickItem* panel, d->panels) {
             QString panelName = panel->objectName();
             QString area = d->panelAreaMap.value(panelName);
 
-            foreach(QDeclarativeItem* panelArea, d->panelAreas) {
+            foreach(QQuickItem* panelArea, d->panelAreas) {
                 if (panelArea->objectName() == area) {
                     panel->setParentItem(panelArea);
                     break;
@@ -104,7 +104,7 @@ void PanelConfiguration::save()
 
     panelConfig.beginWriteArray("Panels");
     int index = 0;
-    foreach(QDeclarativeItem* panel, d->panels) {
+    foreach(QQuickItem* panel, d->panels) {
         panelConfig.setArrayIndex(index++);
 
         panelConfig.setValue("panel", panel->objectName());

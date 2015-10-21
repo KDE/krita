@@ -24,17 +24,17 @@
 
 #include "kis_cubic_curve.h"
 
-#include <QDeclarativeItem>
+#include <QQuickPaintedItem>
 
-class CurveEditorItem : public QDeclarativeItem
+class CurveEditorItem : public QQuickPaintedItem
 {
     Q_OBJECT
     Q_PROPERTY(KisCubicCurve curve READ curve WRITE setCurve NOTIFY curveChanged);
     Q_PROPERTY(bool pointSelected READ pointSelected NOTIFY pointSelectedChanged);
 public:
-    CurveEditorItem(QDeclarativeItem* parent = 0);
+    explicit CurveEditorItem(QQuickItem* parent = 0);
     virtual ~CurveEditorItem();
-    virtual void paint(QPainter* p, const QStyleOptionGraphicsItem* o, QWidget* w);
+    virtual void paint(QPainter* p);
 
     KisCubicCurve curve() const;
     void setCurve(KisCubicCurve curve);
@@ -48,9 +48,9 @@ Q_SIGNALS:
 
 protected:
     virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
-    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
+    virtual void mousePressEvent(QMouseEvent* event);
+    virtual void mouseMoveEvent(QMouseEvent* event);
+    virtual void mouseReleaseEvent(QMouseEvent* event);
 
 private:
     class Private;

@@ -121,7 +121,7 @@ public:
         void deactivate();
         bool isActive();
 
-        QEvent *savedEvent;
+        QEvent *savedEvent{0};
         QObject *savedTarget; // More storage
     private:
         bool hungry{false};   // Continue eating mouse strokes

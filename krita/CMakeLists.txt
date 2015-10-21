@@ -182,7 +182,7 @@ install(FILES  krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
 install(FILES  krita.action DESTINATION ${DATA_INSTALL_DIR}/krita/actions)
 install(FILES  krita.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/ )
 
-if (NOT APPLE AND HAVE_OPENGL AND Qt5Quick_FOUND)
+if (NOT APPLE AND HAVE_OPENGL AND Qt5Quick_FOUND AND KF5KIO_FOUND)
    add_subdirectory(sketch)
 #    add_subdirectory(gemini)
 endif ()

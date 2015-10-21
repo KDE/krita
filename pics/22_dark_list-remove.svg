@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24"
+   height="24"
+   id="svg3760"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="edit-delete.svg">
+  <defs
+     id="defs3762" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="22.627417"
+     inkscape:cx="19.488295"
+     inkscape:cy="12.115534"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1864"
+     inkscape:window-height="1060"
+     inkscape:window-x="54"
+     inkscape:window-y="-3"
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="false">
+    <sodipodi:guide
+       position="-1.4433594e-05,24.000012"
+       orientation="24,0"
+       id="guide4115" />
+    <sodipodi:guide
+       position="-1.4433594e-05,1.1816406e-05"
+       orientation="0,24"
+       id="guide4117" />
+    <sodipodi:guide
+       position="23.999986,1.1816406e-05"
+       orientation="-24,0"
+       id="guide4119" />
+    <sodipodi:guide
+       position="23.999986,24.000012"
+       orientation="0,-24"
+       id="guide4121" />
+    <sodipodi:guide
+       position="2.9999856,21.000012"
+       orientation="18,0"
+       id="guide4123" />
+    <sodipodi:guide
+       position="2.9999856,3.0000118"
+       orientation="0,18"
+       id="guide4125" />
+    <sodipodi:guide
+       position="20.999986,3.0000118"
+       orientation="-18,0"
+       id="guide4127" />
+    <sodipodi:guide
+       position="20.999986,21.000012"
+       orientation="0,-18"
+       id="guide4129" />
+    <sodipodi:guide
+       position="3.9999856,20.000012"
+       orientation="16,0"
+       id="guide4131" />
+    <sodipodi:guide
+       position="3.9999856,4.0000118"
+       orientation="0,16"
+       id="guide4133" />
+    <sodipodi:guide
+       position="19.999986,4.0000118"
+       orientation="-16,0"
+       id="guide4135" />
+    <sodipodi:guide
+       position="19.999986,20.000012"
+       orientation="0,-16"
+       id="guide4137" />
+    <inkscape:grid
+       type="xygrid"
+       id="grid4139" />
+    <sodipodi:guide
+       position="5.9999856,18.000012"
+       orientation="12,0"
+       id="guide4207" />
+    <sodipodi:guide
+       position="5.9999856,6.0000118"
+       orientation="0,12"
+       id="guide4209" />
+    <sodipodi:guide
+       position="17.999986,6.0000118"
+       orientation="-12,0"
+       id="guide4211" />
+    <sodipodi:guide
+       position="17.999986,18.000012"
+       orientation="0,-12"
+       id="guide4213" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata3765">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-550.28572,-606.6479)">
+    <path
+       style="fill:#da4453;fill-opacity:1;stroke:none"
+       d="M 12 4 C 9.9724023 4 8.1286798 4.7566937 6.71875 6 C 6.592511 6.1113202 6.4627201 6.2247799 6.34375 6.34375 L 6 6.71875 C 4.7566937 8.1286798 4 9.9724023 4 12 C 4 16.41828 7.58172 20 12 20 C 14.027598 20 15.87132 19.243306 17.28125 18 L 17.65625 17.65625 C 17.77522 17.53728 17.88868 17.407489 18 17.28125 C 19.243306 15.87132 20 14.027598 20 12 C 20 7.58172 16.41828 4 12 4 z M 12 5 C 15.86599 5 19 8.13401 19 12 C 19 13.75366 18.346785 15.334268 17.28125 16.5625 L 7.4375 6.71875 C 8.6657315 5.6532151 10.24634 5 12 5 z M 6.71875 7.4375 L 16.5625 17.28125 C 15.334268 18.346785 13.75366 19 12 19 C 8.13401 19 5 15.86599 5 12 C 5 10.24634 5.6532151 8.6657315 6.71875 7.4375 z "
+       transform="translate(550.28572,606.6479)"
+       id="rect4203" />
+  </g>
+</svg>

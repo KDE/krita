@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="22"
+   height="22"
+   id="svg3813"
+   version="1.1"
+   inkscape:version="0.48+devel r"
+   sodipodi:docname="character-set.svg">
+  <defs
+     id="defs3815" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="32.625"
+     inkscape:cx="9.7370461"
+     inkscape:cy="12.001128"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1366"
+     inkscape:window-height="668"
+     inkscape:window-x="-2"
+     inkscape:window-y="23"
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="false"
+     showguides="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4109" />
+    <sodipodi:guide
+       position="2.0000072,19.999993"
+       orientation="18,0"
+       id="guide4115" />
+    <sodipodi:guide
+       position="2.0000072,1.9999929"
+       orientation="0,18"
+       id="guide4117" />
+    <sodipodi:guide
+       position="20.000007,1.9999929"
+       orientation="-18,0"
+       id="guide4119" />
+    <sodipodi:guide
+       position="20.000007,19.999993"
+       orientation="0,-18"
+       id="guide4121" />
+    <sodipodi:guide
+       position="3.0000072,18.999993"
+       orientation="16,0"
+       id="guide4123" />
+    <sodipodi:guide
+       position="3.0000072,2.9999929"
+       orientation="0,16"
+       id="guide4125" />
+    <sodipodi:guide
+       position="19.000007,2.9999929"
+       orientation="-16,0"
+       id="guide4127" />
+    <sodipodi:guide
+       position="19.000007,18.999993"
+       orientation="0,-16"
+       id="guide4129" />
+    <sodipodi:guide
+       position="10.000007,2.9999929"
+       orientation="0,1"
+       id="guide4112" />
+    <sodipodi:guide
+       position="11.000007,2.9999929"
+       orientation="-8,0"
+       id="guide4114" />
+    <sodipodi:guide
+       position="16,11"
+       orientation="0,-1"
+       id="guide4116" />
+    <sodipodi:guide
+       position="7.0000072,18.999993"
+       orientation="16,0"
+       id="guide4183" />
+    <sodipodi:guide
+       position="7.0000072,2.9999929"
+       orientation="0,8"
+       id="guide4185" />
+    <sodipodi:guide
+       position="15.000007,2.9999929"
+       orientation="-16,0"
+       id="guide4187" />
+    <sodipodi:guide
+       position="15.000007,18.999993"
+       orientation="0,-8"
+       id="guide4189" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata3818">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-378.85714,-540.07647)">
+    <path
+       style="opacity:1;fill:#f2f2f2;fill-opacity:1;stroke:none"
+       d="M 4.5 3 C 3.669002 3 3 3.669002 3 4.5 C 3 5.1542387 3.4180788 5.7021979 4 5.9082031 L 4 19 L 5 19 L 5 13 L 12 13 L 12 14 L 19 14 L 19 13 L 19 8 L 19 7 L 13 7 L 13 6 L 5 6 L 5 5.9082031 C 5.5819212 5.7021979 6 5.1542387 6 4.5 C 6 3.669002 5.330998 3 4.5 3 z M 6 7 L 12 7 L 12 8 L 12 12 L 6 12 L 6 7 z M 13 8 L 18 8 L 18 13 L 13 13 L 13 8 z "
+       transform="translate(378.85714,540.07647)"
+       id="rect4117" />
+  </g>
+</svg>

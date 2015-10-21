@@ -32,6 +32,8 @@
 #include "krecentfilesaction.h"
 #include "ktogglefullscreenaction.h"
 
+#include <kis_icon_utils.h>
+
 namespace KStandardAction
 {
 AutomaticAction::AutomaticAction(const QIcon &icon, const QString &text, const QList<QKeySequence> &shortcut, const char *slot,
@@ -130,7 +132,7 @@ QAction *create(StandardAction id, const QObject *recvr, const char *slot, QObje
             }
         }
 
-        QIcon icon = iconName.isEmpty() ? QIcon() : QIcon::fromTheme(iconName);
+        QIcon icon = iconName.isEmpty() ? QIcon() : KisIconUtils::loadIcon(iconName);
 
         switch (id) {
         case OpenRecent:
@@ -470,7 +472,7 @@ static QAction *buildAutomaticAction(QObject *parent, StandardAction id, const c
     }
 
     AutomaticAction *action = new AutomaticAction(
-        QIcon::fromTheme(p->psIconName),
+        KisIconUtils::loadIcon(p->psIconName),
         i18n(p->psLabel),
         KStandardShortcut::shortcut(p->idAccel),
         slot,
@@ -517,7 +519,7 @@ KToggleAction *showMenubar(const QObject *recvr, const char *slot, QObject *pare
 {
     KToggleAction *ret = new KToggleAction(i18n("Show &Menubar"), parent);
     ret->setObjectName(name(ShowMenubar));
-    ret->setIcon(QIcon::fromTheme("show-menu"));
+    ret->setIcon(KisIconUtils::loadIcon("show-menu"));
 
     // emulate KActionCollection::setDefaultShortcuts to allow the use of "configure shortcuts"
     ret->setShortcuts(KStandardShortcut::shortcut(KStandardShortcut::ShowMenubar));

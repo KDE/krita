@@ -39,6 +39,8 @@
 #endif
 #include "kactioncollection.h"
 
+#include <kis_icon_utils.h>
+
 uint qHash(const QKeySequence &seq)
 {
     return qHash(seq.toString());
@@ -271,7 +273,7 @@ void KKeySequenceWidgetPrivate::init()
 
     keyButton = new KKeySequenceButton(this, q);
     keyButton->setFocusPolicy(Qt::StrongFocus);
-    keyButton->setIcon(QIcon::fromTheme(QStringLiteral("configure")));
+    keyButton->setIcon(KisIconUtils::loadIcon(QStringLiteral("configure")));
     keyButton->setToolTip(i18n("Click on the button, then enter the shortcut like you would in the program.\nExample for Ctrl+A: hold the Ctrl key and press A."));
     layout->addWidget(keyButton);
 
@@ -279,9 +281,9 @@ void KKeySequenceWidgetPrivate::init()
     layout->addWidget(clearButton);
 
     if (qApp->isLeftToRight()) {
-        clearButton->setIcon(QIcon::fromTheme(QStringLiteral("edit-clear-locationbar-rtl")));
+        clearButton->setIcon(KisIconUtils::loadIcon(QStringLiteral("edit-clear-locationbar-rtl")));
     } else {
-        clearButton->setIcon(QIcon::fromTheme(QStringLiteral("edit-clear-locationbar-ltr")));
+        clearButton->setIcon(KisIconUtils::loadIcon(QStringLiteral("edit-clear-locationbar-ltr")));
     }
 }
 

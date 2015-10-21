@@ -374,7 +374,7 @@ public Q_SLOTS:
      * Example (adding a help button to the first toolbar):
      *
      * \code
-     * toolBar(0)->addAction(QIcon::fromTheme("help-contents"), i18n("Help"),
+     * toolBar(0)->addAction(KisIconUtils::loadIcon("help-contents"), i18n("Help"),
      *                       this, SLOT(appHelpActivated()));
      * \endcode
      *

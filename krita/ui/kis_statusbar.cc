@@ -255,7 +255,7 @@ void KisStatusBar::updateMemoryStatus()
     if (stats.imageSize > warnLevel ||
         stats.realMemorySize > warnLevel) {
 
-        icon = QIcon::fromTheme("dialog-warning");
+        icon = KisIconUtils::loadIcon("dialog-warning");
         QString suffix =
             i18nc("tooltip on statusbar memory reporting button",
                   "\n\nWARNING:\tOut of memory! Swapping has been started.\n"

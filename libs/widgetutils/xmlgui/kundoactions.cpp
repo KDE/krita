@@ -29,6 +29,8 @@
 #include <kstandardshortcut.h>
 #include <klocalizedstring.h>
 
+#include <kis_icon_utils.h>
+
 QAction *KUndoActions::createRedoAction(QUndoStack *undoStack, KActionCollection *actionCollection, const QString &actionName)
 {
     QAction *action = undoStack->createRedoAction(actionCollection);
@@ -39,7 +41,7 @@ QAction *KUndoActions::createRedoAction(QUndoStack *undoStack, KActionCollection
         action->setObjectName(actionName);
     }
 
-    action->setIcon(QIcon::fromTheme(QStringLiteral("edit-redo")));
+    action->setIcon(KisIconUtils::loadIcon(QStringLiteral("edit-redo")));
     action->setIconText(i18n("Redo"));
     action->setShortcuts(KStandardShortcut::redo());
 
@@ -58,7 +60,7 @@ QAction *KUndoActions::createUndoAction(QUndoStack *undoStack, KActionCollection
         action->setObjectName(actionName);
     }
 
-    action->setIcon(QIcon::fromTheme(QStringLiteral("edit-undo")));
+    action->setIcon(KisIconUtils::loadIcon(QStringLiteral("edit-undo")));
     action->setIconText(i18n("Undo"));
     action->setShortcuts(KStandardShortcut::undo());
 

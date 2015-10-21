@@ -47,6 +47,8 @@
 
 #include "rsliderspinbox.h"
 
+#include <kis_icon_utils.h>
+
 namespace KDcrawIface
 {
 
@@ -78,7 +80,7 @@ RIntNumInput::RIntNumInput(QWidget* const parent)
     d->resetButton           = new QToolButton(this);
     d->resetButton->setAutoRaise(true);
     d->resetButton->setFocusPolicy(Qt::NoFocus);
-    d->resetButton->setIcon(QIcon::fromTheme("document-revert").pixmap(16, 16));
+    d->resetButton->setIcon(KisIconUtils::loadIcon("document-revert").pixmap(16, 16));
     d->resetButton->setToolTip(i18nc("@info:tooltip", "Reset to default value"));
 
     hlay->addWidget(d->input);
@@ -177,7 +179,7 @@ RDoubleNumInput::RDoubleNumInput(QWidget* const parent)
     d->resetButton           = new QToolButton(this);
     d->resetButton->setAutoRaise(true);
     d->resetButton->setFocusPolicy(Qt::NoFocus);
-    d->resetButton->setIcon(QIcon::fromTheme("document-revert").pixmap(16, 16));
+    d->resetButton->setIcon(KisIconUtils::loadIcon("document-revert").pixmap(16, 16));
     d->resetButton->setToolTip(i18nc("@info:tooltip", "Reset to default value"));
 
     hlay->addWidget(d->input);

@@ -288,7 +288,7 @@ void DeclarativeDragArea::mouseMoveEvent(QMouseEvent *event)
                     QPainter p(&pm);
                     int i = 0;
                     foreach (const QString &ic, icons) {
-                        p.drawPixmap(QPoint(i*_w, 0), QIcon::fromTheme(ic).pixmap(_w, _w));
+                        p.drawPixmap(QPoint(i*_w, 0), KisIconUtils::loadIcon(ic).pixmap(_w, _w));
                         i++;
                     }
                     p.end();

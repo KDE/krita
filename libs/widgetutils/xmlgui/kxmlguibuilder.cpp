@@ -38,6 +38,8 @@
 #include <QStatusBar>
 #include <QDebug>
 
+#include <kis_icon_utils.h>
+
 using namespace KDEPrivate;
 
 class KXMLGUIBuilderPrivate
@@ -206,7 +208,7 @@ QWidget *KXMLGUIBuilder::createContainer(QWidget *parent, int index, const QDomE
         const QString icon = element.attribute(d->attrIcon);
         QIcon pix;
         if (!icon.isEmpty()) {
-            pix = QIcon::fromTheme(icon);
+            pix = KisIconUtils::loadIcon(icon);
         }
 
         if (parent) {
@@ -365,7 +367,7 @@ QAction *KXMLGUIBuilder::createCustomElement(QWidget *parent, int index, const Q
             QIcon pix;
 
             if (!icon.isEmpty()) {
-                pix = QIcon::fromTheme(icon);
+                pix = KisIconUtils::loadIcon(icon);
             }
 
             if (!icon.isEmpty()) {

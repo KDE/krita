@@ -48,6 +48,8 @@
 #include <kglobalaccel.h>
 #endif
 
+#include <kis_icon_utils.h>
+
 Q_DECLARE_METATYPE(QList<QKeySequence>)
 
 using namespace KXMLGUI;
@@ -663,7 +665,7 @@ void KXMLGUIFactoryPrivate::configureAction(QAction *action, const QDomAttr &att
     }
 
     if (equals(attrName, "icon")) {
-        action->setIcon(QIcon::fromTheme(attribute.value()));
+        action->setIcon(KisIconUtils::loadIcon(attribute.value()));
         return;
     }
 

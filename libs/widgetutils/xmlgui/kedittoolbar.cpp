@@ -53,6 +53,8 @@
 #include "kxmlguifactory.h"
 #include "ktoolbar.h"
 
+#include <kis_icon_utils.h>
+
 static const char separatorstring[] = I18N_NOOP("--- separator ---");
 
 #define SEPARATORSTRING i18n(separatorstring)
@@ -1056,23 +1058,23 @@ void KEditToolBarWidgetPrivate::setupLayout()
     // The buttons in the middle
 
     m_upAction     = new QToolButton(m_widget);
-    m_upAction->setIcon(QIcon::fromTheme(QStringLiteral("go-up")));
+    m_upAction->setIcon(KisIconUtils::loadIcon(QStringLiteral("go-up")));
     m_upAction->setEnabled(false);
     m_upAction->setAutoRepeat(true);
     QObject::connect(m_upAction, SIGNAL(clicked()), m_widget, SLOT(slotUpButton()));
 
     m_insertAction = new QToolButton(m_widget);
-    m_insertAction->setIcon(QIcon::fromTheme(QApplication::isRightToLeft() ? QStringLiteral("go-previous") : QLatin1String("go-next")));
+    m_insertAction->setIcon(KisIconUtils::loadIcon(QApplication::isRightToLeft() ? QStringLiteral("go-previous") : QLatin1String("go-next")));
     m_insertAction->setEnabled(false);
     QObject::connect(m_insertAction, SIGNAL(clicked()), m_widget, SLOT(slotInsertButton()));
 
     m_removeAction = new QToolButton(m_widget);
-    m_removeAction->setIcon(QIcon::fromTheme(QApplication::isRightToLeft() ? QStringLiteral("go-next") : QLatin1String("go-previous")));
+    m_removeAction->setIcon(KisIconUtils::loadIcon(QApplication::isRightToLeft() ? QStringLiteral("go-next") : QLatin1String("go-previous")));
     m_removeAction->setEnabled(false);
     QObject::connect(m_removeAction, SIGNAL(clicked()), m_widget, SLOT(slotRemoveButton()));
 
     m_downAction   = new QToolButton(m_widget);
-    m_downAction->setIcon(QIcon::fromTheme(QStringLiteral("go-down")));
+    m_downAction->setIcon(KisIconUtils::loadIcon(QStringLiteral("go-down")));
     m_downAction->setEnabled(false);
     m_downAction->setAutoRepeat(true);
     QObject::connect(m_downAction, SIGNAL(clicked()), m_widget, SLOT(slotDownButton()));

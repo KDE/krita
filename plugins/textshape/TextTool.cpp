@@ -306,14 +306,14 @@ void TextTool::createActions()
     const char* const increaseIndentActionIconName =
         QApplication::isRightToLeft() ? koIconNameCStr("format-indent-less") : koIconNameCStr("format-indent-more");
     m_actionFormatIncreaseIndent = new QAction(
-        QIcon::fromTheme(QLatin1String(increaseIndentActionIconName)),
+        KisIconUtils::loadIcon(QLatin1String(increaseIndentActionIconName)),
         i18n("Increase Indent"), this);
     addAction("format_increaseindent", m_actionFormatIncreaseIndent);
     connect(m_actionFormatIncreaseIndent, SIGNAL(triggered()), this, SLOT(increaseIndent()));
 
     const char* const decreaseIndentActionIconName =
         QApplication::isRightToLeft() ? koIconNameCStr("format-indent-more") : koIconNameCStr("format-indent-less");
-    m_actionFormatDecreaseIndent = new QAction(QIcon::fromTheme(QLatin1String(decreaseIndentActionIconName)),
+    m_actionFormatDecreaseIndent = new QAction(KisIconUtils::loadIcon(QLatin1String(decreaseIndentActionIconName)),
                                                i18n("Decrease Indent"), this);
     addAction("format_decreaseindent", m_actionFormatDecreaseIndent);
     connect(m_actionFormatDecreaseIndent, SIGNAL(triggered()), this, SLOT(decreaseIndent()));

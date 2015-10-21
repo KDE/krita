@@ -60,6 +60,8 @@
 #include "kxmlguifactory.h"
 #include "kxmlguiwindow.h"
 
+#include <kis_icon_utils.h>
+
 /*
  Toolbar settings (e.g. icon size or toolButtonStyle)
  =====================================================
@@ -394,7 +396,7 @@ QMenu *KToolBar::Private::contextMenu(const QPoint &globalPos)
         }
 
         delete contextLockAction;
-        contextLockAction = new KToggleAction(QIcon::fromTheme(QStringLiteral("system-lock-screen")), i18n("Lock Toolbar Positions"), q);
+        contextLockAction = new KToggleAction(KisIconUtils::loadIcon(QStringLiteral("system-lock-screen")), i18n("Lock Toolbar Positions"), q);
         contextLockAction->setChecked(q->toolBarsLocked());
         connect(contextLockAction, SIGNAL(toggled(bool)), q, SLOT(slotLockToolBars(bool)));
 

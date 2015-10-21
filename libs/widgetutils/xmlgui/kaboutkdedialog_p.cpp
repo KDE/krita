@@ -31,6 +31,8 @@
 #include <klocalizedstring.h>
 #include <ktitlewidget.h>
 
+#include <kis_icon_utils.h>
+
 namespace KDEPrivate
 {
 
@@ -42,7 +44,7 @@ KAboutKdeDialog::KAboutKdeDialog(QWidget *parent)
 
     KTitleWidget *titleWidget = new KTitleWidget(this);
     titleWidget->setText(i18n("<html><font size=\"5\">KDE - Be Free!</font></html>"));
-    titleWidget->setPixmap(QIcon::fromTheme(QStringLiteral("kde")).pixmap(48), KTitleWidget::ImageLeft);
+    titleWidget->setPixmap(KisIconUtils::loadIcon(QStringLiteral("kde")).pixmap(48), KTitleWidget::ImageLeft);
 
     QLabel *about = new QLabel;
     about->setMargin(10);

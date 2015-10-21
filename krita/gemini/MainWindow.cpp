@@ -213,7 +213,7 @@ public:
         toSketch = new QAction(desktopWindow);
         toSketch->setEnabled(false);
         toSketch->setText(tr("Switch to Sketch"));
-        toSketch->setIcon(QIcon::fromTheme("system-reboot"));
+        toSketch->setIcon(KisIconUtils::loadIcon("system-reboot"));
         toSketch->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
         //connect(toSketch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchSketchForced()));
         connect(toSketch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchToSketch()));
@@ -221,7 +221,7 @@ public:
         switcher = new QToolButton();
         switcher->setEnabled(false);
         switcher->setText(tr("Switch to Sketch"));
-        switcher->setIcon(QIcon::fromTheme("system-reboot"));
+        switcher->setIcon(KisIconUtils::loadIcon("system-reboot"));
         switcher->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
         //connect(switcher, SIGNAL(clicked(bool)), q, SLOT(switchDesktopForced()));
         connect(switcher, SIGNAL(clicked(bool)), q, SLOT(switchToSketch()));

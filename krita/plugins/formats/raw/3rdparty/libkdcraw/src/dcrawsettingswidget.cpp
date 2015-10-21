@@ -56,6 +56,8 @@
 #include "rexpanderbox.h"
 #include "libkdcraw_debug.h"
 
+#include <kis_icon_utils.h>
+
 namespace KDcrawIface
 {
 
@@ -408,7 +410,7 @@ void DcrawSettingsWidget::setup(int advSettings)
         d->refineInterpolationBox->setEnabled(false);
     }
 
-    addItem(d->demosaicingSettings, QIcon::fromTheme("kdcraw").pixmap(16, 16), i18nc("@label", "Demosaicing"), QString("demosaicing"), true);
+    addItem(d->demosaicingSettings, KisIconUtils::loadIcon("kdcraw").pixmap(16, 16), i18nc("@label", "Demosaicing"), QString("demosaicing"), true);
 
     // ---------------------------------------------------------------
     // WHITE BALANCE Settings Panel
@@ -577,7 +579,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     whiteBalanceLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     whiteBalanceLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
-    addItem(d->whiteBalanceSettings, QIcon::fromTheme("kdcraw").pixmap(16, 16), i18nc("@label", "White Balance"), QString("whitebalance"), true);
+    addItem(d->whiteBalanceSettings, KisIconUtils::loadIcon("kdcraw").pixmap(16, 16), i18nc("@label", "White Balance"), QString("whitebalance"), true);
 
     // ---------------------------------------------------------------
     // CORRECTIONS Settings panel
@@ -665,7 +667,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     correctionsLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     correctionsLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
-    addItem(d->correctionsSettings, QIcon::fromTheme("kdcraw").pixmap(16, 16), i18nc("@label", "Corrections"), QString("corrections"), false);
+    addItem(d->correctionsSettings, KisIconUtils::loadIcon("kdcraw").pixmap(16, 16), i18nc("@label", "Corrections"), QString("corrections"), false);
 
     // ---------------------------------------------------------------
     // COLOR MANAGEMENT Settings panel
@@ -736,7 +738,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     colormanLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     colormanLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
-    addItem(d->colormanSettings, QIcon::fromTheme("kdcraw").pixmap(16, 16), i18nc("@label", "Color Management"), QString("colormanagement"), false);
+    addItem(d->colormanSettings, KisIconUtils::loadIcon("kdcraw").pixmap(16, 16), i18nc("@label", "Color Management"), QString("colormanagement"), false);
 
     if (! (advSettings & COLORSPACE))
         removeItem(COLORMANAGEMENT);

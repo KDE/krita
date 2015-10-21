@@ -50,7 +50,7 @@ public:
       , m_item(item)
     {
         setHeader(item->name());
-        setIcon(QIcon::fromTheme(item->iconName()));
+        setIcon(KisIconUtils::loadIcon(item->iconName()));
     }
     ~KoPageWidgetItemAdapter() { delete m_item; }
 
@@ -105,7 +105,7 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
         QMimeDatabase db;
         QMimeType mime = db.mimeTypeForName(doc->mimeType());
         if (mime.isValid()) {
-            page->setIcon(QIcon::fromTheme(mime.iconName()));
+            page->setIcon(KisIconUtils::loadIcon(mime.iconName()));
         }
     } else {
         // hide all entries not used in pages for KoDocumentInfoPropsPage

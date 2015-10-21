@@ -51,6 +51,8 @@
 
 #include "config-xmlgui.h"
 
+#include <kis_icon_utils.h>
+
 class KBugReportPrivate
 {
 public:
@@ -104,7 +106,7 @@ KBugReport::KBugReport(const KAboutData &aboutData, QWidget *_parent)
 
     KTitleWidget *title = new KTitleWidget(this);
     title->setText(i18n("Submit Bug Report"));
-    title->setPixmap(QIcon::fromTheme(QStringLiteral("tools-report-bug")).pixmap(32));
+    title->setPixmap(KisIconUtils::loadIcon(QStringLiteral("tools-report-bug")).pixmap(32));
     lay->addWidget(title);
 
     QGridLayout *glay = new QGridLayout();
@@ -186,7 +188,7 @@ KBugReport::KBugReport(const KAboutData &aboutData, QWidget *_parent)
 
     QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
     okButton->setText(i18n("&Launch Bug Report Wizard"));
-    okButton->setIcon(QIcon::fromTheme(QStringLiteral("tools-report-bug")));
+    okButton->setIcon(KisIconUtils::loadIcon(QStringLiteral("tools-report-bug")));
     lay->addWidget(buttonBox);
     setMinimumHeight(sizeHint().height() + 20);   // WORKAROUND: prevent "cropped" qcombobox
 }

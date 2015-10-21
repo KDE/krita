@@ -258,7 +258,7 @@ void ShapeCollectionDocker::loadDefaultShapes()
             temp.id = shapeTemplate.id;
             temp.name = shapeTemplate.name;
             temp.toolTip = shapeTemplate.toolTip;
-            temp.icon = QIcon::fromTheme(shapeTemplate.iconName);
+            temp.icon = KisIconUtils::loadIcon(shapeTemplate.iconName);
             temp.properties = shapeTemplate.properties;
             if(shapeTemplate.family == "funny")
                 funnyList.append(temp);
@@ -285,7 +285,7 @@ void ShapeCollectionDocker::loadDefaultShapes()
             temp.id = factory->id();
             temp.name = factory->name();
             temp.toolTip = factory->toolTip();
-            temp.icon = QIcon::fromTheme(factory->iconName());
+            temp.icon = KisIconUtils::loadIcon(factory->iconName());
             temp.properties = 0;
             if(factory->family() == "funny")
                 funnyList.append(temp);

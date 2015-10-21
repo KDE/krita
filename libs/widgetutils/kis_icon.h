@@ -43,8 +43,8 @@
 #define koIconNameCStr(name) (name)
 
 /// Use these macros if there is a proper icon missing
-#define koIconNeeded(comment, neededName) (QIcon::fromTheme(QLatin1String(neededName)))
-#define koIconNeededWithSubs(comment, neededName, substituteName) (QIcon::fromTheme(QLatin1String(substituteName)))
+#define koIconNeeded(comment, neededName) (KisIconUtils::loadIcon(QLatin1String(neededName)))
+#define koIconNeededWithSubs(comment, neededName, substituteName) (KisIconUtils::loadIcon(QLatin1String(substituteName)))
 #define koIconNameNeeded(comment, neededName) (QLatin1String(neededName))
 #define koIconNameNeededWithSubs(comment, neededName, substituteName) (QLatin1String(substituteName))
 #define koIconNameCStrNeeded(comment, neededName) (neededName)

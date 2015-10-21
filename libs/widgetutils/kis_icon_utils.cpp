@@ -102,7 +102,7 @@ QIcon loadIcon(const QString &name)
         return icon;
     }
 
-    QIcon icon = QIcon::fromTheme(name);
+    QIcon icon = KisIconUtils::loadIcon(name);
     dbgKrita << "\tfalling back on QIcon::FromTheme:" << name;
     return icon;
 }

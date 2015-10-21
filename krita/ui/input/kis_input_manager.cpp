@@ -157,19 +157,29 @@ void KisInputManager::slotFocusOnEnter(bool value)
 
 bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 {
-    bool retval = false;
-    if (object != d->eventsReceiver) return retval;
+    if (object != d->eventsReceiver) return false;
 
-    if (true) {
 
-        foreach (QPointer<QObject> filter, d->priorityEventFilter) {
-            if (filter.isNull()) {
-                d->priorityEventFilter.remove(filter);
-                continue;
-            }
-
-            if (filter->eventFilter(object, event)) return true;
+    // If we have saved an event, take care of it now, horribly breaking encapsulation with eventEater
+    if (d->eventEater.savedEvent) {
+        if (event->type() != QEvent::TabletPress) {
+            // Unless things are screwed up beyond hope, the old event was the real deal.
+            qDebug() << "Emitting a pocketed event";
+            this->eventFilterImpl(d->eventEater.savedEvent);
         }
+        d->eventEater.savedEvent = 0;
+    }
+
+    if (d->eventEater.eventFilter(object, event)) return false;
+
+
+    foreach (QPointer<QObject> filter, d->priorityEventFilter) {
+        if (filter.isNull()) {
+            d->priorityEventFilter.remove(filter);
+            continue;
+        }
+
+        if (filter->eventFilter(object, event)) return true;
     }
 
     // KoToolProxy needs to pre-process some events to ensure the
@@ -178,7 +188,15 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     // tool is in text editing, preventing shortcut triggering
     d->toolProxy->processEvent(event);
 
+    // Continue with the actual switch statement...
+    return eventFilterImpl(event);
+}
+
+bool KisInputManager::eventFilterImpl(QEvent * event)
+{
     // TODO: Handle touch events correctly.
+    bool retval = false;
+
     switch (event->type()) {
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonDblClick: {
@@ -317,7 +335,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
             Qt::KeyboardModifiers modifiers = mapper.queryStandardModifiers();
             foreach (Qt::Key key, mapper.queryExtendedModifiers()) {
                 QKeyEvent kevent(QEvent::KeyPress, key, modifiers);
-                eventFilter(object, &kevent);
+                eventFilterImpl(&kevent);
             }
         }
 

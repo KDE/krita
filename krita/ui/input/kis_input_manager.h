@@ -81,6 +81,7 @@ public:
      * Event filter method. Overridden from QObject.
      */
     bool eventFilter(QObject* object, QEvent* event );
+    bool eventFilterImpl(QEvent * event);
 
     void attachPriorityEventFilter(QObject *filter);
     void detachPriorityEventFilter(QObject *filter);

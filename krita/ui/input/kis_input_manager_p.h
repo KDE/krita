@@ -110,7 +110,26 @@ public:
         int eatOneMouseStroke;
     };
 
+    class EventEater
+    {
+    public:
+        bool eventFilter(QObject* target, QEvent* event);
+
+        // This should be called after we're certain a tablet stroke has started.
+        void activate();
+        // This should be called after a tablet stroke has ended.
+        void deactivate();
+        bool isActive();
+
+        QEvent *savedEvent;
+        QObject *savedTarget; // More storage
+    private:
+        bool hungry{false};   // Continue eating mouse strokes
+        bool peckish{false};  // Eat a single mouse press event
+    };
+
     CanvasSwitcher canvasSwitcher;
+    EventEater eventEater;
 
     bool focusOnEnter = true;
     bool containsPointer = true;

@@ -703,9 +703,7 @@ void KisViewManager::createActions()
     tAction->setActivationFlags(KisAction::NONE);
     tAction->setCheckable(true);
     tAction->setToolTip(i18n("Shows just the canvas or the whole window"));
-    QList<QKeySequence> shortcuts;
-    shortcuts << QKeySequence(Qt::Key_Tab);
-    tAction->setShortcuts(shortcuts);
+    tAction->setDefaultShortcut(QKeySequence(Qt::Key_Tab));
     tAction->setChecked(false);
     actionManager()->addAction("view_show_just_the_canvas", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showJustTheCanvas(bool)));

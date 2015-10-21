@@ -164,7 +164,6 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     if (d->eventEater.savedEvent) {
         if (event->type() != QEvent::TabletPress) {
             // Unless things are screwed up beyond hope, the old event was the real deal.
-            qDebug() << "Emitting a pocketed event";
             this->eventFilterImpl(d->eventEater.savedEvent);
         }
         d->eventEater.savedEvent = 0;

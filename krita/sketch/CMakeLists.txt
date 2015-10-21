@@ -104,9 +104,8 @@ set(KRITA_COLORSELECTORNG_PART_SRCS
 if (WIN32)
     set(kritasketch_SRCS ${kritasketch_SRCS} KritaSketchWin.rc)
 else ()
-    file(GLOB ICONS_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kritasketch.png")
-    #QT5TODO
-    #     ecm_add_app_icon(kritasketch_SRCS ICONS ${ICONS_SRCS})
+    file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/icon/*-apps-kritasketch.png")
+    ecm_add_app_icon(kritasketch_SRCS ICONS ${ICONS_SRCS})
 endif ()
 
 # Krita Sketch library with shared things needed in both plugin and application

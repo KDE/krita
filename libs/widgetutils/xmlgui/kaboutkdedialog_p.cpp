@@ -31,8 +31,6 @@
 #include <klocalizedstring.h>
 #include <ktitlewidget.h>
 
-#include "../kxmlgui_version.h"
-
 namespace KDEPrivate
 {
 

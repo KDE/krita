@@ -165,6 +165,7 @@ qt5_add_resources(krita_SRCS krita.qrc
                              pics/tools/SVG/16/tools-svg-16-icons.qrc
                              pics/tool_transform/tool-transform-icons.qrc
                              pics/svg/svg-icons.qrc
+                             ${CMAKE_SOURCE_DIR}/pics/icons.qrc
 )
 
 add_executable(krita ${krita_SRCS})

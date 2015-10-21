@@ -130,7 +130,8 @@ public:
                                QTransform *textureTransform,
                                QTransform *modelTransform,
                                QRectF *textureRect,
-                               QRectF *modelRect) const;
+                               QRectF *modelRect,
+                               bool scrollCheckers) const;
 
     QPointF imageCenterInWidgetPixel() const;
     QRectF imageRectInWidgetPixels() const;

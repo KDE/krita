@@ -90,47 +90,36 @@ static kis_glLogicOp ptr_glLogicOp = 0;
 struct KisOpenGLCanvas2::Private
 {
 public:
-    Private()
-        : canvasInitialized(false)
-        , displayShader(0)
-        , checkerShader(0)
-        , cursorShader(0)
-        , glSyncObject(0)
-        , wrapAroundMode(false)
-
-    {
-    }
-
     ~Private() {
         delete displayShader;
         delete checkerShader;
         delete cursorShader;
-
         Sync::deleteSync(glSyncObject);
     }
 
-    bool canvasInitialized;
+    bool canvasInitialized{false};
 
     QVector3D vertices[6];
     QVector2D texCoords[6];
 
     KisOpenGLImageTexturesSP openGLImageTextures;
 
-    QOpenGLShaderProgram *displayShader;
+    QOpenGLShaderProgram *displayShader{0};
     int displayUniformLocationModelViewProjection;
     int displayUniformLocationTextureMatrix;
     int displayUniformLocationViewPortScale;
     int displayUniformLocationTexelSize;
     int displayUniformLocationTexture0;
     int displayUniformLocationTexture1;
-
     int displayUniformLocationFixedLodLevel;
-    QOpenGLShaderProgram *checkerShader;
 
+    QOpenGLShaderProgram *checkerShader{0};
+    GLfloat checkSizeScale;
+    bool scrollCheckers;
     int checkerUniformLocationModelViewProjection;
     int checkerUniformLocationTextureMatrix;
 
-    QOpenGLShaderProgram *cursorShader;
+    QOpenGLShaderProgram *cursorShader{0};
     int cursorShaderModelViewProjectionUniform;
 
 
@@ -138,12 +127,12 @@ public:
     KisDisplayFilter* displayFilter;
     KisTextureTile::FilterMode filterMode;
 
-    GLsync glSyncObject;
+    GLsync glSyncObject{0};
 
     bool firstDrawImage;
     qreal scaleX, scaleY;
 
-    bool wrapAroundMode;
+    bool wrapAroundMode{false};
 
     int xToColWithWrapCompensation(int x, const QRect &imageRect) {
         int firstImageColumn = openGLImageTextures->xToCol(imageRect.left());
@@ -169,7 +158,11 @@ public:
 
 };
 
-KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent, KisImageWSP image, KisDisplayColorConverter *colorConverter)
+KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
+                                   KisCoordinatesConverter *coordinatesConverter,
+                                   QWidget *parent,
+                                   KisImageWSP image,
+                                   KisDisplayColorConverter *colorConverter)
     : QOpenGLWidget(parent)
     , KisCanvasWidgetBase(canvas, coordinatesConverter)
     , d(new Private())
@@ -182,10 +175,11 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
     KisConfig cfg;
     cfg.writeEntry("canvasState", "OPENGL_STARTED");
 
-    d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(image,
-                                                                      colorConverter->monitorProfile(),
-                                                                      colorConverter->renderingIntent(),
-                                                                      colorConverter->conversionFlags());
+    d->openGLImageTextures =
+        KisOpenGLImageTextures::getImageTextures(image,
+                                                 colorConverter->monitorProfile(),
+                                                 colorConverter->renderingIntent(),
+                                                 colorConverter->conversionFlags());
     setAcceptDrops(true);
     setFocusPolicy(Qt::StrongFocus);
     setAttribute(Qt::WA_NoSystemBackground);
@@ -389,7 +383,7 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
 
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
-    // XXX: glLogicOp not in ES 2.0 -- in that case, it would be better to use another method.
+    // XXX: glLogicOp not in ES 2.0 -- it would be better to use another method.
     // It is defined in 3.1 core profile onward.
     glEnable(GL_COLOR_LOGIC_OP);
     if (ptr_glLogicOp) {
@@ -461,14 +455,10 @@ void KisOpenGLCanvas2::drawCheckers()
         converter->widgetToViewport(this->rect());
 
     converter->getOpenGLCheckersInfo(viewportRect,
-                                     &textureTransform, &modelTransform, &textureRect, &modelRect);
+                                     &textureTransform, &modelTransform, &textureRect, &modelRect, d->scrollCheckers);
 
-    // XXX: getting a config object every time we draw the checkers is bad for performance!
-    KisConfig cfg;
-    GLfloat checkSizeScale = KisOpenGLImageTextures::BACKGROUND_TEXTURE_CHECK_SIZE / static_cast<GLfloat>(cfg.checkSize());
-
-    textureTransform *= QTransform::fromScale(checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE,
-                                              checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE);
+    textureTransform *= QTransform::fromScale(d->checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE,
+                                              d->checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE);
 
     d->checkerShader->bind();
 
@@ -805,6 +795,9 @@ void KisOpenGLCanvas2::initializeDisplayShader()
 void KisOpenGLCanvas2::slotConfigChanged()
 {
     KisConfig cfg;
+    d->checkSizeScale = KisOpenGLImageTextures::BACKGROUND_TEXTURE_CHECK_SIZE / static_cast<GLfloat>(cfg.checkSize());
+    d->scrollCheckers = cfg.scrollCheckers();
+
     d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
     d->openGLImageTextures->updateConfig(cfg.useOpenGLTextureBuffer(), cfg.numMipmapLevels());
     d->filterMode = (KisTextureTile::FilterMode) cfg.openGLFilteringMode();

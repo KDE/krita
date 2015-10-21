@@ -333,11 +333,10 @@ void KisCoordinatesConverter::getOpenGLCheckersInfo(const QRectF &viewportRect,
                                                     QTransform *textureTransform,
                                                     QTransform *modelTransform,
                                                     QRectF *textureRect,
-                                                    QRectF *modelRect) const
+                                                    QRectF *modelRect,
+                                                    const bool scrollCheckers) const
 {
-    KisConfig cfg;
-
-    if(cfg.scrollCheckers()) {
+    if(scrollCheckers) {
         *textureTransform = QTransform();
         *textureRect = QRectF(0, 0, viewportRect.width(),viewportRect.height());
     }

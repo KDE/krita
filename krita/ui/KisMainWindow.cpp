@@ -263,6 +263,10 @@ public:
 
     QByteArray lastExportedFormat;
     int lastExportSpecialOutputFlag;
+
+    KisActionManager * actionManager() {
+        return viewManager->actionManager();
+    }
 };
 
 KisMainWindow::KisMainWindow()
@@ -355,7 +359,9 @@ KisMainWindow::KisMainWindow()
     if (isHelpMenuEnabled() && !d->helpMenu) {
         d->helpMenu = new KHelpMenu(this, "Dummy Text That Is Not Used In Frameworks 5", false);
 
-        KActionCollection *actions = actionCollection();
+        // The difference between using KActionCollection->addAction() is that
+        // these actions do not get tied to the MainWindow.  What does this all do?
+        KActionCollection *actions = d->viewManager->actionCollection();
         QAction *helpContentsAction = d->helpMenu->action(KHelpMenu::menuHelpContents);
         QAction *whatsThisAction = d->helpMenu->action(KHelpMenu::menuWhatsThis);
         QAction *reportBugAction = d->helpMenu->action(KHelpMenu::menuReportBug);
@@ -1820,7 +1826,7 @@ void KisMainWindow::subWindowActivated()
     }
 
     updateCaption();
-    d->viewManager->actionManager()->updateGUI();
+    d->actionManager()->updateGUI();
 }
 
 void KisMainWindow::updateWindowMenu()
@@ -1898,7 +1904,7 @@ void KisMainWindow::setActiveSubWindow(QWidget *window)
         d->activeSubWindow = subwin;
     }
     updateWindowMenu();
-    d->viewManager->actionManager()->updateGUI();
+    d->actionManager()->updateGUI();
 }
 
 void KisMainWindow::configChanged()
@@ -1913,7 +1919,7 @@ void KisMainWindow::configChanged()
 
     KConfigGroup group( KSharedConfig::openConfig(), "theme");
     d->themeManager->setCurrentTheme(group.readEntry("Theme", "Krita dark"));
-    d->viewManager->actionManager()->updateGUI();
+    d->actionManager()->updateGUI();
 
     QBrush brush(cfg.getMDIBackgroundColor());
     d->mdiArea->setBackground(brush);
@@ -1933,7 +1939,7 @@ void KisMainWindow::newView(QObject *document)
     KisDocument *doc = qobject_cast<KisDocument*>(document);
     KisView *view = KisPart::instance()->createView(doc, resourceManager(), actionCollection(), this);
     addView(view);
-    d->viewManager->actionManager()->updateGUI();
+    d->actionManager()->updateGUI();
 }
 
 void KisMainWindow::newWindow()
@@ -1944,7 +1950,7 @@ void KisMainWindow::newWindow()
 void KisMainWindow::closeCurrentWindow()
 {
     d->mdiArea->currentSubWindow()->close();
-    d->viewManager->actionManager()->updateGUI();
+    d->actionManager()->updateGUI();
 }
 
 void KisMainWindow::checkSanity()
@@ -2036,10 +2042,14 @@ void KisMainWindow::applyDefaultSettings(QPrinter &printer) {
 
 void KisMainWindow::createActions()
 {
-    KisActionManager *actionManager = d->viewManager->actionManager();
+    KisActionManager *actionManager = d->actionManager();
 
     actionManager->createStandardAction(KStandardAction::New, this, SLOT(slotFileNew()));
     actionManager->createStandardAction(KStandardAction::Open, this, SLOT(slotFileOpen()));
+    actionManager->createStandardAction(KStandardAction::Quit, this, SLOT(slotFileQuit()));
+    actionManager->createStandardAction(KStandardAction::KeyBindings, this, SLOT(slotConfigureKeys()));
+    actionManager->createStandardAction(KStandardAction::ConfigureToolbars, this, SLOT(slotConfigureToolbars()));
+    actionManager->createStandardAction(KStandardAction::FullScreen, this, SLOT(viewFullscreen(bool)));
 
     d->recentFiles = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(QUrl)), actionCollection());
     connect(d->recentFiles, SIGNAL(recentListCleared()), this, SLOT(saveRecentFiles()));
@@ -2075,7 +2085,6 @@ void KisMainWindow::createActions()
     actionManager->addAction("file_export_animation", d->exportAnimation);
     connect(d->exportAnimation, SIGNAL(triggered()), this, SLOT(exportAnimation()));
 
-    actionManager->createStandardAction(KStandardAction::Quit, this, SLOT(slotFileQuit()));
 
     d->closeAll = new KisAction(i18nc("@action:inmenu", "Close All"));
     d->closeAll->setActivationFlags(KisAction::ACTIVE_IMAGE);
@@ -2088,7 +2097,8 @@ void KisMainWindow::createActions()
 //    actionManager->addAction("file_reload_file", d->reloadFile);
 //    connect(d->reloadFile, SIGNAL(triggered(bool)), this, SLOT(slotReloadFile()));
 
-    d->importFile  = new KisAction(KisIconUtils::loadIcon("document-import"), i18nc("@action:inmenu", "Open ex&isting Document as Untitled Document..."));
+    d->importFile  = new KisAction(KisIconUtils::loadIcon("document-import"),
+                                   i18nc("@action:inmenu", "Open ex&isting Document as Untitled Document..."));
     actionManager->addAction("file_import_file", d->importFile);
     connect(d->importFile, SIGNAL(triggered(bool)), this, SLOT(slotImportFile()));
 
@@ -2099,19 +2109,17 @@ void KisMainWindow::createActions()
 
     /* The following entry opens the document information dialog.  Since the action is named so it
         intends to show data this entry should not have a trailing ellipses (...).  */
-    d->showDocumentInfo  = new KisAction(KisIconUtils::loadIcon("configure"), i18nc("@action:inmenu", "Document Information"));
+    d->showDocumentInfo  = new KisAction(KisIconUtils::loadIcon("configure"),
+                                         i18nc("@action:inmenu", "Document Information"));
     d->showDocumentInfo->setActivationFlags(KisAction::ACTIVE_IMAGE);
     actionManager->addAction("file_documentinfo", d->showDocumentInfo);
     connect(d->showDocumentInfo, SIGNAL(triggered(bool)), this, SLOT(slotDocumentInfo()));
 
-    actionManager->createStandardAction(KStandardAction::KeyBindings, this, SLOT(slotConfigureKeys()));
-    actionManager->createStandardAction(KStandardAction::ConfigureToolbars, this, SLOT(slotConfigureToolbars()));
 
     d->themeManager->setThemeMenuAction(new KActionMenu(i18nc("@action:inmenu", "&Themes"), this));
     d->themeManager->registerThemeActions(actionCollection());
     connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SLOT(slotThemeChanged()));
 
-    actionManager->createStandardAction(KStandardAction::FullScreen, this, SLOT(viewFullscreen(bool)));
 
     d->toggleDockers = new KisAction(i18nc("@action:inmenu", "Show Dockers"));
     d->toggleDockers->setCheckable(true);
@@ -2121,8 +2129,10 @@ void KisMainWindow::createActions()
 
     d->toggleDockerTitleBars = new KisAction(i18nc("@action:inmenu", "Show Docker Titlebars"));
     d->toggleDockerTitleBars->setCheckable(true);
-    KisConfig cfg;
-    d->toggleDockerTitleBars->setChecked(cfg.showDockerTitleBars());
+    {
+        KisConfig cfg;
+        d->toggleDockerTitleBars->setChecked(cfg.showDockerTitleBars());
+    }
     actionManager->addAction("view_toggledockertitlebars", d->toggleDockerTitleBars);
     connect(d->toggleDockerTitleBars, SIGNAL(toggled(bool)), SLOT(showDockerTitleBars(bool)));
 

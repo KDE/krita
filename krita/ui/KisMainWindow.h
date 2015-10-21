@@ -54,9 +54,10 @@ class KisDockerManager;
 /**
  * @brief Main window for Krita
  *
- * This class is used to represent a main window
- * of a Krita. Each main window contains
- * a menubar and some toolbars.
+ * This class is used to represent a main window within a Krita session. Each
+ * main window contains a menubar and some toolbars, and potentially several
+ * views of several canvases.
+ *
  */
 class KRITAUI_EXPORT KisMainWindow : public KXmlGuiWindow, public KoCanvasSupervisor
 {

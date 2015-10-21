@@ -194,16 +194,18 @@ include(KDECompilerSettings)
 include(FeatureSummary)
 include(KDE4Macros)
 
+# do not reorder to be alphabetical: this is the order in which the frameworks
+# depend on each other.
 find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED 
         Archive 
-        Completion
         Config 
+        WidgetsAddons 
+        Completion
         CoreAddons
         GuiAddons 
         I18n 
         ItemModels 
         ItemViews
-        WidgetsAddons 
         WindowSystem
     OPTIONAL_COMPONENTS
         KIO

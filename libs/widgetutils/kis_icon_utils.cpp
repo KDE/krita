@@ -26,6 +26,7 @@
 #include <QComboBox>
 #include <QIcon>
 #include <QFile>
+#include <QPair>
 
 #include <KoIcon.h>
 
@@ -43,6 +44,7 @@ QIcon loadIcon(const QString &name)
     QString  realName = QLatin1String(prefix) + name;
 
 
+    // Dark and light, no size specified
     const QStringList names = { ":/pics/" + realName + ".png",
                                 ":/pics/" + realName + ".svg",
                                 ":/pics/" + realName + ".svgz",
@@ -64,6 +66,41 @@ QIcon loadIcon(const QString &name)
         }
     }
 
+    // Now check for icons with sizes
+    QStringList sizes = QStringList() << "16_" << "22_" << "32_" << "48_" << "64_" << "128_" << "256_" << "512_" << "1048_";
+    QVector<QPair<QString, QString> > icons;
+    foreach(const QString &size, sizes) {
+        const QStringList names = { ":/pics/" + size + realName + ".png",
+                                    ":/pics/" + size + realName + ".svg",
+                                    ":/pics/" + size + realName + ".svgz",
+                                    ":/pics/" + size + name + ".png",
+                                    ":/pics/" + size + name + ".svg",
+                                    ":/pics/" + size + name + ".svz",
+                                    ":/" + size + realName + ".png",
+                                    ":/" + size + realName + ".svg",
+                                    ":/" + size + realName + ".svz",
+                                    ":/" + size + name,
+                                    ":/" + size + name + ".png",
+                                    ":/" + size + name + ".svg",
+                                    ":/" + size + name + ".svgz"};
+
+        for (const QString &resname : names) {
+            if (QFile(resname).exists()) {
+                icons << qMakePair(size, resname);
+            }
+        }
+    }
+
+    if (!icons.isEmpty()) {
+        QIcon icon;
+        foreach(auto p, icons) {
+            QString sz = p.first;
+            sz.chop(1);
+            int size = sz.toInt();
+            icon.addFile(p.second, QSize(size, size));
+        }
+        return icon;
+    }
 
     QIcon icon = QIcon::fromTheme(name);
     dbgKrita << "\tfalling back on QIcon::FromTheme:" << name;

@@ -199,8 +199,8 @@ public Q_SLOTS:
     void setShowFloatingMessage(bool show);
     void showHideScrollbars();
 
-    /// Go to all managers and enable or disable all actions and other
-    /// gui elements
+    /// Visit all managers to update gui elements, e.g. enable / disable actions.
+    /// This is heavy-duty call, so it uses a compressor.
     void updateGUI();
 
     /// Update the style of all the icons

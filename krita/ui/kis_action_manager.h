@@ -35,8 +35,18 @@ class KisOperation;
 class KisOperationConfiguration;
 
 /**
- * @brief The KisActionManager class keeps track of (nearly) all actions in krita, and enables
- * and disables the action depending on the state of the application.
+ * @brief A KisActionManager class keeps track of KisActions.
+ * These actions are always associated with the GUI. That means each MainWindow
+ * will create its own duplicate of these actions.
+ *
+ * KisActionManager enables and disables actions, to grey out buttons according
+ * to the state of the application.
+ *
+ * Some of the primitive actions (load/save and so on) are not defined as
+ * KisActions, but instead KActions, automacially registered through KXMLGUI.
+ * It tracks these actions through the KActionCollection owned by the window.
+ * Ultimately it would be nice to unify these things more fully.
+ *
  */
 class KRITAUI_EXPORT KisActionManager
 {
@@ -59,7 +69,10 @@ public:
     void runOperation(const QString &id);
 
     void runOperationFromConfiguration(KisOperationConfiguration* config);
-    
+
+
+    /// Update actions handled by kis_action_manager to set enabled/disabled.
+    /// This is used to grey out buttons that can't be pressed.
     void updateGUI();
 
     /// Create a KisAction based on a KStandardAction. The KStandardAction is deleted.

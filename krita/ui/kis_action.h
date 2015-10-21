@@ -25,6 +25,22 @@
 #include <QIcon>
 class KisActionManager;
 
+
+
+/**
+ *  KisAction, inheriting from QWidgetAction, is a convenience class for GUI
+ *  actions, with Krita's configuration system and GUI states. A widget like a
+ *  "save" button may be enabled/disabled, hidden or shown depending on the
+ *  state of the application, e.g. whether the image currently being viewed was
+ *  modified since it was opened.
+ *
+ *  Copies of these actions are created for each MainWindow instance. They are
+ *  owned by a KisActionManager, of which there is one for each MainWindow. Most
+ *  of these instantiations happen inside the constructor for KisMainWindow as
+ *  well as the various functions called in KisViewManager::setupManagers().
+ *
+ **/
+
 class KRITAUI_EXPORT KisAction : public QWidgetAction
 {
     Q_OBJECT

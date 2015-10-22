@@ -322,6 +322,8 @@ void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, 
                 SIGNAL(sigFramerateChanged()), SLOT(slotFramerateChanged()));
         connect(m_d->image->animationInterface(),
                 SIGNAL(sigTimeChanged(int)), SLOT(slotCurrentTimeChanged(int)));
+        connect(m_d->image->animationInterface(),
+                SIGNAL(sigRangeChanged()), SIGNAL(sigInfiniteTimelineUpdateNeeded()));
     }
 
     if(m_d->dummiesFacade != oldDummiesFacade) {

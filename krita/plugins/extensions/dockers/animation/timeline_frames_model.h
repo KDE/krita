@@ -109,6 +109,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void requestCurrentNodeChanged(KisNodeSP node);
+    void sigInfiniteTimelineUpdateNeeded();
 
 private:
     struct Private;

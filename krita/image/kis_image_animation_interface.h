@@ -128,6 +128,7 @@ Q_SIGNALS:
     void sigInternalRequestTimeSwitch(int frameId);
 
     void sigFramerateChanged();
+    void sigRangeChanged();
 
 private:
     struct Private;

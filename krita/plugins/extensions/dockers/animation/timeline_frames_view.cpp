@@ -210,6 +210,9 @@ void TimelineFramesView::setModel(QAbstractItemModel *model)
 
     connect(m_d->model, SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
             this, SLOT(slotReselectCurrentIndex()));
+
+    connect(m_d->model, SIGNAL(sigInfiniteTimelineUpdateNeeded()),
+            this, SLOT(slotUpdateInfiniteFramesCount()));
 }
 
 void TimelineFramesView::setFramesPerSecond(int fps)

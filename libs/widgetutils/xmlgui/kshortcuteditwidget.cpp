@@ -36,7 +36,7 @@
 #endif
 #include "kkeysequencewidget.h"
 
-void TabConnectedWidget::paintEvent(QPaintEvent *e)
+void ShortcutEditWidget::paintEvent(QPaintEvent *e)
 {
     QWidget::paintEvent(e);
     QPainter p(this);
@@ -53,7 +53,7 @@ void TabConnectedWidget::paintEvent(QPaintEvent *e)
 
 ShortcutEditWidget::ShortcutEditWidget(QWidget *viewport, const QKeySequence &defaultSeq,
                                        const QKeySequence &activeSeq, bool allowLetterShortcuts)
-    : TabConnectedWidget(viewport),
+    : QWidget(viewport),
       m_defaultKeySequence(defaultSeq),
       m_isUpdating(false),
       m_action(Q_NULLPTR)

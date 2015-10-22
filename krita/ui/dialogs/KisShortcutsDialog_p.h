@@ -24,14 +24,17 @@
 
 #include "kshortcutseditor.h"
 #include "kkeysequencewidget.h"
+#include "KisShortcutsDialog.h"
 
 #define NOSCHEMESPLEASEFORKRITA 0
+
 #if 0
 #include <kgesture.h>
 #endif
 
 #include <kextendableitemdelegate.h>
 #include <klocalizedstring.h>
+#include <kmessagebox.h>
 
 #include <QKeySequence>
 #include <QMetaType>
@@ -81,17 +84,42 @@ enum ItemTypes {
 QKeySequence primarySequence(const QList<QKeySequence> &sequences);
 QKeySequence alternateSequence(const QList<QKeySequence> &sequences);
 
+
+
+class KisShortcutsDialog::KisShortcutsDialogPrivate
+{
+public:
+    KisShortcutsDialogPrivate(KisShortcutsDialog *q);
+    void changeShortcutScheme(const QString &scheme);
+    void undoChanges();
+    void save();
+
+    QList<KActionCollection *> m_collections;
+    KisShortcutsDialog *q;
+    KShortcutsEditor *m_keyChooser{0}; // ### move
+    QPushButton *m_detailsButton{0};
+    bool m_saveSettings{false};
+
+#ifndef NOSCHEMESPLEASEFORKRITA
+    void toggleDetails();
+    KShortcutSchemesEditor *m_schemeEditor{0};
+#endif
+};
+
+
 /**
- * Mixes the KShortcutWidget into the treeview used by KShortcutsEditor. When selecting an shortcut
- * it changes the display from "CTRL-W" to the Widget.
+ * Mixes the KShortcutWidget into the treeview used by KShortcutsEditor. When
+ * selecting an shortcut it changes the display from "CTRL-W" to the Widget.
  *
- * @bug That delegate uses KExtendableItemDelegate. That means a cell can be expanded. When selected
- * a cell is replaced by a KShortcutsEditor. When painting the widget KExtendableItemDelegate
- * reparents the widget to the viewport of the itemview it belongs to. The widget is destroyed when
- * the user selects another shortcut or explicitly issues a contractItem event. But when the user
- * clears the model the delegate misses that event and doesn't delete the KShortcutseditor. And
- * remains as a visible artefact in your treeview. Additionally when closing your application you get
- * an assertion failure from KExtendableItemDelegate.
+ * @bug That delegate uses KExtendableItemDelegate. That means a cell can be
+ * expanded. When selected a cell is replaced by a KShortcutsEditor. When
+ * painting the widget KExtendableItemDelegate reparents the widget to the
+ * viewport of the itemview it belongs to. The widget is destroyed when the user
+ * selects another shortcut or explicitly issues a contractItem event. But when
+ * the user clears the model the delegate misses that event and doesn't delete
+ * the KShortcutseditor. And remains as a visible artefact in your treeview.
+ * Additionally when closing your application you get an assertion failure from
+ * KExtendableItemDelegate.
  *
  * @internal
  */
@@ -110,12 +138,6 @@ public:
      * @see KKeySequenceWidget::setCheckActionCollections
      */
     void setCheckActionCollections(const QList<KActionCollection *> checkActionCollections);
-
-Q_SIGNALS:
-    void shortcutChanged(QVariant, const QModelIndex &);
-public Q_SLOTS:
-    void hiddenBySearchLine(QTreeWidgetItem *, bool);
-protected:
     bool eventFilter(QObject *, QEvent *) Q_DECL_OVERRIDE;
 private:
     mutable QPersistentModelIndex m_editingIndex;
@@ -124,6 +146,13 @@ private:
 
     //! List of actionCollections to check for conflicts.
     QList<KActionCollection *> m_checkActionCollections;
+
+
+Q_SIGNALS:
+  void shortcutChanged(QVariant, const QModelIndex &);
+
+public Q_SLOTS:
+  void hiddenBySearchLine(QTreeWidgetItem *, bool);
 
 private Q_SLOTS:
     void itemActivated(QModelIndex index);
@@ -149,27 +178,13 @@ private Q_SLOTS:
 
 };
 
-/**
- * That widget draws the decoration for KShortCutWidget. That widget is currently the only user.
- *
- * @internal
- */
-class TabConnectedWidget : public QWidget
-{
-    Q_OBJECT
-public:
-    TabConnectedWidget(QWidget *parent)
-        : QWidget(parent) {}
-protected:
-    void paintEvent(QPaintEvent *pe) Q_DECL_OVERRIDE;
-};
 
 /**
  * Edit a shortcut. Let you select between using the default shortcut and configuring your own.
  *
  * @internal
  */
-class ShortcutEditWidget : public TabConnectedWidget
+class ShortcutEditWidget : public QWidget
 {
     Q_OBJECT
 public:
@@ -195,24 +210,26 @@ public:
     void setComponentName(const QString componentName);
 
     void setAction(QObject *action);
+    void paintEvent(QPaintEvent *pe) Q_DECL_OVERRIDE;
 
-public Q_SLOTS:
-
-    //! Set the displayed sequences
-    void setKeySequence(const QKeySequence &activeSeq);
 
 Q_SIGNALS:
-
     //! Emitted when the key sequence is changed.
     void keySequenceChanged(const QKeySequence &);
 
     //! @see KKeySequenceWidget::stealShortcut()
     void stealShortcut(const QKeySequence &seq, QAction *action);
 
-private Q_SLOTS:
 
+public Q_SLOTS:
+  //! Set the displayed sequences
+  void setKeySequence(const QKeySequence &activeSeq);
+
+private Q_SLOTS:
     void defaultToggled(bool);
     void setCustom(const QKeySequence &);
+
+
 
 private:
     QLabel *m_defaultLabel;

@@ -70,6 +70,7 @@ set(kritaui_LIB_SRCS
     dialogs/KisShortcutEditWidget.cpp
     dialogs/KisShortcutsEditorDelegate.cpp
     dialogs/KisShortcutsDialog.cpp
+    dialogs/KisShortcutsDialog_p.cpp
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
     flake/kis_dummies_facade.cpp

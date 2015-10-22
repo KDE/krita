@@ -513,6 +513,8 @@ void KisPart::configureShortcuts()
     dlg.addCollection(d->actionCollection);
     dlg.configure();  // Show the dialog.
 
+
+    // Now update the widget tooltips in the UI.
     foreach(KisMainWindow *mainWindow, d->mainWindows) {
         KActionCollection *ac = mainWindow->actionCollection();
         ac->readSettings();

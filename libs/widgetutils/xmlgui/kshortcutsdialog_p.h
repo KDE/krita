@@ -149,26 +149,11 @@ private Q_SLOTS:
 };
 
 /**
- * That widget draws the decoration for KShortCutWidget. That widget is currently the only user.
- *
- * @internal
- */
-class TabConnectedWidget : public QWidget
-{
-    Q_OBJECT
-public:
-    TabConnectedWidget(QWidget *parent)
-        : QWidget(parent) {}
-protected:
-    void paintEvent(QPaintEvent *pe) Q_DECL_OVERRIDE;
-};
-
-/**
  * Edit a shortcut. Let you select between using the default shortcut and configuring your own.
  *
  * @internal
  */
-class ShortcutEditWidget : public TabConnectedWidget
+class ShortcutEditWidget : public QWidget
 {
     Q_OBJECT
 public:
@@ -194,6 +179,8 @@ public:
     void setComponentName(const QString componentName);
 
     void setAction(QObject *action);
+
+    void paintEvent(QPaintEvent *pe) Q_DECL_OVERRIDE;
 
 public Q_SLOTS:
 

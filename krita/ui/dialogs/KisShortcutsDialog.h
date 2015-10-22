@@ -122,8 +122,8 @@ public:
     QList<KActionCollection *> actionCollections() const;
 
     /**
-     * Run the dialog and call writeSettings() on the action collections
-     * that were added if @p bSaveSettings is true.
+     * Run the dialog and call writeSettings() on the action collections that
+     * were added if @p bSaveSettings is true.
      */
     bool configure(bool saveSettings = true);
 
@@ -131,7 +131,7 @@ public:
     QSize sizeHint() const Q_DECL_OVERRIDE;
 
     /**
-     * Pops up a modal dialog for configuring key settings. The new
+     * Pops up a modal (blocking) dialog for configuring key settings. The new
      * shortcut settings will become active if the user presses OK.
      *
      * @param collection the KActionCollection to configure
@@ -143,8 +143,9 @@ public:
      *
      * @return Accept if the dialog was closed with OK, Reject otherwise.
      */
-    static int configure(KActionCollection *collection, KShortcutsEditor::LetterShortcuts allowLetterShortcuts =
-                             KShortcutsEditor::LetterShortcutsAllowed, QWidget *parent = 0, bool bSaveSettings = true);
+    static int configure(KActionCollection *collection,
+                         KShortcutsEditor::LetterShortcuts allowLetterShortcuts = KShortcutsEditor::LetterShortcutsAllowed,
+                         QWidget *parent = 0, bool bSaveSettings = true);
 
 public Q_SLOTS:
     /**
@@ -161,10 +162,12 @@ Q_SIGNALS:
 private:
     Q_PRIVATE_SLOT(d, void changeShortcutScheme(const QString &))
     Q_PRIVATE_SLOT(d, void undoChanges())
-    Q_PRIVATE_SLOT(d, void toggleDetails())
+
+#ifdef NOSCHEMESPLEASEFORKRITA
+    // Q_PRIVATE_SLOT(d, void toggleDetails())
+#endif
 
     class KisShortcutsDialogPrivate;
-    friend class KisShortcutsDialogPrivate;
     class KisShortcutsDialogPrivate *const d;
 
     Q_DISABLE_COPY(KisShortcutsDialog)

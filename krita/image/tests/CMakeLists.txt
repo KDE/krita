@@ -5,9 +5,10 @@
 # extend range of affected cmake versions as needed
 if(NOT ${CMAKE_VERSION} VERSION_LESS 3.1.3 AND
    NOT ${CMAKE_VERSION} VERSION_GREATER 3.2.3)
-    message(WARNING "Skipping krita/image/tests, CMake in at least versions 3.1.3 - 3.2.3 seems to have a problem with automoc")
+    message(WARNING "Skipping krita/image/tests, CMake in at least versions 3.1.3 - 3.2.3 seems to have a problem with automoc.  \n(FRIENDLY REMINDER: PLEASE DON'T BREAK THE TESTS!)")
     return()
 endif()
+
 
 
 # set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )

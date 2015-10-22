@@ -1,6 +1,9 @@
-/* This file is part of the KDE libraries Copyright (C) 1998 Mark Donohoe <donohoe@kde.org>
+/* This file is part of the KDE libraries
+    Copyright (C) 1998 Mark Donohoe <donohoe@kde.org>
     Copyright (C) 1997 Nicolas Hadacek <hadacek@kde.org>
+    Copyright (C) 1998 Mark Donohoe <donohoe@kde.org>
     Copyright (C) 1998 Matthias Ettrich <ettrich@kde.org>
+    Copyright (C) 1999 Espen Sand <espen@kde.org>
     Copyright (C) 2001 Ellis Whitehead <ellis@kde.org>
     Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
     Copyright (C) 2007 Roberto Raggi <roberto@kdevelop.org>
@@ -37,121 +40,17 @@
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
 #include <ksharedconfig.h>
-
 #include "kxmlguiclient.h"
 #include "kxmlguifactory.h"
 #include "kactioncollection.h"
 
-/************************************************************************/
-/* KisShortcutsDialog                                                     */
-/*                                                                      */
-/* Originally by Nicolas Hadacek <hadacek@via.ecp.fr>                   */
-/*                                                                      */
-/* Substantially revised by Mark Donohoe <donohoe@kde.org>              */
-/*                                                                      */
-/* And by Espen Sand <espen@kde.org> 1999-10-19                         */
-/* (by using KoDialog there is almost no code left ;)                    */
-/*                                                                      */
-/************************************************************************/
-
-QKeySequence primarySequence(const QList<QKeySequence> &sequences)
+KisShortcutsDialog::KisShortcutsDialog(KShortcutsEditor::ActionTypes types,
+                                       KShortcutsEditor::LetterShortcuts allowLetterShortcuts,
+                                       QWidget *parent)
+    : QDialog(parent)
+    , d(new KisShortcutsDialogPrivate(this))
 {
-    return sequences.isEmpty() ? QKeySequence() : sequences.at(0);
-}
-
-QKeySequence alternateSequence(const QList<QKeySequence> &sequences)
-{
-    return sequences.size() <= 1 ? QKeySequence() : sequences.at(1);
-}
-
-class KisShortcutsDialog::KisShortcutsDialogPrivate
-{
-public:
-
-    KisShortcutsDialogPrivate(KisShortcutsDialog *q)
-        : q(q),
-          m_keyChooser(0),
-#ifndef NOSCHEMESPLEASEFORKRITA
-          m_schemeEditor(0),
-#endif
-          m_detailsButton(0),
-          m_saveSettings(false)
-    {
-    }
-
-    QList<KActionCollection *> m_collections;
-
-    void changeShortcutScheme(const QString &scheme)
-    {
-        if (m_keyChooser->isModified() && KMessageBox::questionYesNo(q,
-                i18n("The current shortcut scheme is modified. Save before switching to the new one?")) == KMessageBox::Yes) {
-            m_keyChooser->save();
-        } else {
-            m_keyChooser->undoChanges();
-        }
-
-        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-        m_keyChooser->clearCollections();
-
-        foreach (KActionCollection *collection, m_collections) {
-            // passing an empty stream forces the clients to reread the XML
-            KXMLGUIClient *client = const_cast<KXMLGUIClient *>(collection->parentGUIClient());
-            if (client) {
-                client->setXMLGUIBuildDocument(QDomDocument());
-            }
-        }
-
-        //get xmlguifactory
-        if (!m_collections.isEmpty()) {
-            const KXMLGUIClient *client = m_collections.first()->parentGUIClient();
-            if (client) {
-                KXMLGUIFactory *factory = client->factory();
-                if (factory) {
-                    factory->changeShortcutScheme(scheme);
-                }
-            }
-        }
-
-        foreach (KActionCollection *collection, m_collections) {
-            m_keyChooser->addCollection(collection);
-        }
-
-        QApplication::restoreOverrideCursor();
-    }
-
-    void undoChanges()
-    {
-        m_keyChooser->undoChanges();
-    }
-
-    void toggleDetails()
-    {
-#ifndef NOSCHEMESPLEASEFORKRITA
-        const bool isVisible = m_schemeEditor->isVisible();
-
-        m_schemeEditor->setVisible(!isVisible);
-        m_detailsButton->setText(i18n("&Details") + (isVisible ? QStringLiteral(" >>") : QLatin1String(" <<")));
-#endif
-    }
-
-    void save()
-    {
-        m_keyChooser->save();
-        emit q->saved();
-    }
-
-    KisShortcutsDialog *q;
-    KShortcutsEditor *m_keyChooser; // ### move
-#ifndef NOSCHEMESPLEASEFORKRITA
-    KShortcutSchemesEditor *m_schemeEditor;
-#endif
-    QPushButton *m_detailsButton;
-    bool m_saveSettings;
-};
-
-KisShortcutsDialog::KisShortcutsDialog(KShortcutsEditor::ActionTypes types, KShortcutsEditor::LetterShortcuts allowLetterShortcuts, QWidget *parent)
-    : QDialog(parent), d(new KisShortcutsDialogPrivate(this))
-{
+    /*  Set up UI layout  */
     setWindowTitle(i18n("Configure Shortcuts"));
     setModal(true);
 
@@ -187,14 +86,14 @@ KisShortcutsDialog::KisShortcutsDialog(KShortcutsEditor::ActionTypes types, KSho
 
     connect(buttonBox->button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked()),
             d->m_keyChooser, SLOT(allDefault()));
-#ifndef NOSCHEMESPLEASEFORKRITA
-    connect(d->m_detailsButton, SIGNAL(clicked()), this, SLOT(toggleDetails()));
-#endif
     connect(printButton, SIGNAL(clicked()), d->m_keyChooser, SLOT(printShortcuts()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(undoChanges()));
-
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
+#ifndef NOSCHEMESPLEASEFORKRITA
+    // connect(d->m_detailsButton, &clicked(), this, &toggleDetails());
+#endif
 
     KConfigGroup group(KSharedConfig::openConfig(), "KisShortcutsDialog Settings");
     resize(group.readEntry("Dialog Size", sizeHint()));
@@ -254,5 +153,3 @@ int KisShortcutsDialog::configure(KActionCollection *collection, KShortcutsEdito
 }
 
 #include "moc_KisShortcutsDialog.cpp"
-#include "moc_KisShortcutsDialog_p.cpp"
-

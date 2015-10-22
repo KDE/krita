@@ -21,6 +21,7 @@ import org.krita.sketch 1.0
 
 Item {
     id: base;
+    enabled: (visible && opacity > 0.0);
 
     property alias title: dialogTitle.text;
     property alias message: dialogText.text;

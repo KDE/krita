@@ -373,10 +373,10 @@ void KisStrokesQueueTest::testStrokesLevelOfDetail()
     KisStrokesQueue queue;
 
     queue.setSuspendUpdatesStrokeStrategyFactory(
-        [](){return new KisTestingStrokeStrategy("susp_u_", false, true, true);};
+        [](){return new KisTestingStrokeStrategy("susp_u_", false, true, true);});
 
     queue.setResumeUpdatesStrokeStrategyFactory(
-        [](){return new KisTestingStrokeStrategy("resu_u_", false, true, true);};
+        [](){return new KisTestingStrokeStrategy("resu_u_", false, true, true);});
 
     // create a stroke with LOD0 + LOD2
     queue.setDesiredLevelOfDetail(2);

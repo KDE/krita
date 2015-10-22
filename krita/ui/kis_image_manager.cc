@@ -214,7 +214,7 @@ void KisImageManager::slotImageColor()
 
     KisSignalCompressor compressor(200, KisSignalCompressor::FIRST_INACTIVE);
 
-    boost::function<void ()> updateCall(boost::bind(updateImageBackgroundColor, image, &dlg));
+    std::function<void ()> updateCall(std::bind(updateImageBackgroundColor, image, &dlg));
     SignalToFunctionProxy proxy(updateCall);
 
     connect(&dlg, SIGNAL(colorSelected(const QColor&)), &compressor, SLOT(start()));

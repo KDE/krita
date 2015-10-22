@@ -92,8 +92,11 @@ LutDockerDock::LutDockerDock()
     , m_canvas(0)
     , m_draggingSlider(false)
 {
-    m_exposureCompressor.reset(new KisSignalCompressorWithParam<qreal>(40, boost::bind(&LutDockerDock::setCurrentExposureImpl, this, _1)));
-    m_gammaCompressor.reset(new KisSignalCompressorWithParam<qreal>(40, boost::bind(&LutDockerDock::setCurrentGammaImpl, this, _1)));
+    using namespace std::placeholders; // For _1
+    m_exposureCompressor.reset(
+        new KisSignalCompressorWithParam<qreal>(40, std::bind(&LutDockerDock::setCurrentExposureImpl, this, _1)));
+    m_gammaCompressor.reset(
+        new KisSignalCompressorWithParam<qreal>(40, std::bind(&LutDockerDock::setCurrentGammaImpl, this, _1)));
 
     m_page = new QWidget(this);
     setupUi(m_page);

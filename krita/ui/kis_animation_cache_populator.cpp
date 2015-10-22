@@ -18,7 +18,7 @@
 
 #include "kis_animation_cache_populator.h"
 
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <QTimer>
 #include <QMutex>
@@ -101,8 +101,8 @@ struct KisAnimationCachePopulator::Private
 
         QFuture<void> requestFuture =
             QtConcurrent::run(
-                boost::bind(&KisAnimationCachePopulator::Private::processFrameInfo,
-                            requestInfo));
+                std::bind(&KisAnimationCachePopulator::Private::processFrameInfo,
+                          requestInfo));
 
         infoConversionWatcher.setFuture(requestFuture);
 

@@ -88,8 +88,6 @@
 
 #include "kis_suspend_projection_updates_stroke_strategy.h"
 #include "kis_sync_lod_cache_stroke_strategy.h"
-#include <boost/functional/factory.hpp>
-#include <boost/bind.hpp>
 
 #include "kis_projection_updates_filter.h"
 
@@ -99,7 +97,8 @@
 #include "kis_image_barrier_locker.h"
 
 #include <QtCore>
-#include <boost/bind.hpp>
+
+#include <functional>
 
 #include "kis_time_range.h"
 
@@ -210,12 +209,13 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
             m_d->scheduler.setProgressProxy(&m_d->compositeProgressProxy);
         }
 
+        // Each of these lambdas defines a new factory function.
         m_d->scheduler.setLod0ToNStrokeStrategyFactory(
-            boost::bind(boost::factory<KisSyncLodCacheStrokeStrategy*>(), KisImageWSP(this)));
+            [=](){return new KisSyncLodCacheStrokeStrategy(KisImageWSP(this));});
         m_d->scheduler.setSuspendUpdatesStrokeStrategyFactory(
-            boost::bind(boost::factory<KisSuspendProjectionUpdatesStrokeStrategy*>(), KisImageWSP(this), true));
+            [=](){return new KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP(this), true);});
         m_d->scheduler.setResumeUpdatesStrokeStrategyFactory(
-            boost::bind(boost::factory<KisSuspendProjectionUpdatesStrokeStrategy*>(), KisImageWSP(this), false));
+            [=](){return new KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP(this), false);});
     }
 
     setRootLayer(new KisGroupLayer(this, "root", OPACITY_OPAQUE_U8));
@@ -1608,7 +1608,7 @@ void KisImage::KisImagePrivate::notifyProjectionUpdatedInPatches(const QRect &rc
             QRect patchRect(x, y, patchWidth, patchHeight);
             patchRect &= rc;
 
-            QtConcurrent::run(boost::bind(&KisImage::notifyProjectionUpdated, q, patchRect));
+            QtConcurrent::run(std::bind(&KisImage::notifyProjectionUpdated, q, patchRect));
         }
     }
 }

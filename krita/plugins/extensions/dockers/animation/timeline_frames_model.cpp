@@ -42,6 +42,7 @@
 #include "kundo2command.h"
 #include "kis_post_execution_undo_adapter.h"
 #include "kis_animation_frame_cache.h"
+#include "kis_animation_player.h"
 
 
 struct TimelineFramesModel::Private
@@ -56,7 +57,8 @@ struct TimelineFramesModel::Private
           updateTimer(200, KisSignalCompressor::FIRST_INACTIVE),
           parentOfRemovedNode(0),
           scrubInProgress(false),
-          scrubStartFrame(-1)
+          scrubStartFrame(-1),
+          animationPlayer(0)
     {}
 
     QVector<bool> cachedFrames;
@@ -81,6 +83,7 @@ struct TimelineFramesModel::Private
     int scrubStartFrame;
 
     KisAnimationFrameCacheSP framesCache;
+    KisAnimationPlayer *animationPlayer;
 
     QVariant layerName(int row) const {
         KisNodeDummy *dummy = converter->dummyFromRow(row);
@@ -153,6 +156,7 @@ struct TimelineFramesModel::Private
 
             KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Copy Keyframe"));
             KisKeyframeSP srcFrame = content->activeKeyframeAt(column);
+
             content->copyKeyframe(srcFrame.data(), column, cmd);
             image->postExecutionUndoAdapter()->addCommand(toQShared(cmd));
         } else {
@@ -208,8 +212,18 @@ struct TimelineFramesModel::Private
     }
 
     bool addNewLayer(int row) {
+        KisNodeSP parentNode;
+        KisNodeSP afterNode;
+
         KisNodeDummy *dummy = converter->dummyFromRow(row);
-        if (!dummy) return false;
+        if (!dummy) {
+            parentNode = dummiesFacade->rootDummy()->node();
+            KisNodeDummy *tmp = dummiesFacade->rootDummy()->lastChild();
+            afterNode = tmp ? tmp->node() : 0;
+        } else {
+            parentNode = dummy->parent()->node();
+            afterNode = dummy->node();
+        }
 
         KisPaintLayerSP layer =
             new KisPaintLayer(image.data(),
@@ -219,8 +233,8 @@ struct TimelineFramesModel::Private
 
         image->undoAdapter()->addCommand(
             new KisImageLayerAddCommand(image, layer,
-                                        dummy->parent()->node(),
-                                        dummy->node(),
+                                        parentNode,
+                                        afterNode,
                                         false, false));
 
         layer->setUseInTimeline(true);
@@ -266,6 +280,22 @@ void TimelineFramesModel::setFrameCache(KisAnimationFrameCacheSP cache)
 
     if (m_d->framesCache) {
         connect(m_d->framesCache, SIGNAL(changed()), SLOT(slotCacheChanged()));
+    }
+}
+
+void TimelineFramesModel::setAnimationPlayer(KisAnimationPlayer *player)
+{
+    if (m_d->animationPlayer == player) return;
+
+    if (m_d->animationPlayer) {
+        m_d->animationPlayer->disconnect(this);
+    }
+
+    m_d->animationPlayer = player;
+
+    if (m_d->animationPlayer) {
+        connect(m_d->animationPlayer, SIGNAL(sigPlaybackStopped()), SLOT(slotPlaybackStopped()));
+        connect(m_d->animationPlayer, SIGNAL(sigFrameChanged()), SLOT(slotPlaybackFrameChanged()));
     }
 }
 
@@ -371,11 +401,15 @@ int TimelineFramesModel::rowCount(const QModelIndex &parent) const
 int TimelineFramesModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
+    if(!m_d->dummiesFacade) return 0;
+
     return m_d->effectiveNumFrames();
 }
 
 QVariant TimelineFramesModel::data(const QModelIndex &index, int role) const
 {
+    if(!m_d->dummiesFacade) return QVariant();
+
     switch (role) {
     case ActiveLayerRole: {
         return index.row() == m_d->activeLayerIndex;
@@ -425,7 +459,7 @@ QVariant TimelineFramesModel::data(const QModelIndex &index, int role) const
 
 bool TimelineFramesModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if (!index.isValid()) return false;
+    if (!index.isValid() || !m_d->dummiesFacade) return false;
 
     switch (role) {
     case ActiveLayerRole: {
@@ -437,8 +471,6 @@ bool TimelineFramesModel::setData(const QModelIndex &index, const QVariant &valu
 
             emit dataChanged(this->index(prevLayer, 0), this->index(prevLayer, columnCount() - 1));
             emit dataChanged(this->index(m_d->activeLayerIndex, 0), this->index(m_d->activeLayerIndex, columnCount() - 1));
-
-            qDebug() << ppVar(m_d->activeLayerIndex);
 
             KisNodeDummy *dummy = m_d->converter->dummyFromRow(m_d->activeLayerIndex);
             KIS_ASSERT_RECOVER(dummy) { return true; }
@@ -471,6 +503,8 @@ bool TimelineFramesModel::setData(const QModelIndex &index, const QVariant &valu
 
 QVariant TimelineFramesModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+    if(!m_d->dummiesFacade) return QVariant();
+
     if (orientation == Qt::Horizontal) {
         switch (role) {
         case ActiveFrameRole:
@@ -521,6 +555,8 @@ QVariant TimelineFramesModel::headerData(int section, Qt::Orientation orientatio
 
 bool TimelineFramesModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
 {
+    if (!m_d->dummiesFacade) return false;
+
     if (orientation == Qt::Horizontal) {
         // noop...
     } else {
@@ -698,7 +734,7 @@ bool TimelineFramesModel::copyFrame(const QModelIndex &dstIndex)
 {
     if (!dstIndex.isValid()) return false;
 
-    bool result = m_d->addKeyframe(dstIndex.row(), dstIndex.column(), false);
+    bool result = m_d->addKeyframe(dstIndex.row(), dstIndex.column(), true);
     if (result) {
         emit dataChanged(dstIndex, dstIndex);
     }
@@ -758,12 +794,29 @@ void TimelineFramesModel::setScrubState(bool active)
 
 void TimelineFramesModel::scrubTo(int time, bool preview)
 {
+    if (m_d->animationPlayer && m_d->animationPlayer->isPlaying()) return;
+
     KIS_ASSERT_RECOVER_RETURN(m_d->image);
 
     if (preview) {
-        // TODO:
-        // m_canvas->animationPlayer()->displayFrame(time);
+        if (m_d->animationPlayer) {
+            m_d->animationPlayer->displayFrame(time);
+        }
     } else {
         m_d->image->animationInterface()->requestTimeSwitchWithUndo(time);
     }
 }
+
+void TimelineFramesModel::slotPlaybackFrameChanged()
+{
+    if (!m_d->animationPlayer->isPlaying()) return;
+    setData(index(0, m_d->animationPlayer->currentTime()), true, ActiveFrameRole);
+}
+
+void TimelineFramesModel::slotPlaybackStopped()
+{
+    setData(index(0, m_d->image->animationInterface()->currentUITime()), true, ActiveFrameRole);
+}
+
+
+

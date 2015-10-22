@@ -108,6 +108,7 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
 #endif
 
     m_d->layersHeader->setDefaultSectionSize(24);
+    m_d->layersHeader->setMinimumWidth(60);
     m_d->layersHeader->setHighlightSections(true);
 
 #if QT_VERSION < 0x050000
@@ -516,21 +517,18 @@ void TimelineFramesView::slotLayerContextMenuRequested(const QPoint &globalPos)
 void TimelineFramesView::slotAddNewLayer()
 {
     QModelIndex index = currentIndex();
-    if (!index.isValid()) return;
-
-    const int newRow = index.row();
+    const int newRow = index.isValid() ? index.row() : 0;
     model()->insertRow(newRow);
 }
 
 void TimelineFramesView::slotAddExistingLayer(QAction *action)
 {
-    QModelIndex index = currentIndex();
-    if (!index.isValid()) return;
-
     QVariant value = action->data();
 
     if (value.isValid()) {
-        const int newRow = index.row() + 1;
+        QModelIndex index = currentIndex();
+        const int newRow = index.isValid() ? index.row() + 1 : 0;
+
         m_d->model->insertOtherLayer(value.toInt(), newRow);
     }
 }

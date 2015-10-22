@@ -30,6 +30,7 @@
 
 class KisNodeDummy;
 class KisDummiesFacadeBase;
+class KisAnimationPlayer;
 
 
 class KRITAANIMATIONDOCKER_EXPORT TimelineFramesModel : public TimelineNodeListKeeper::ModelWithExternalNotifications
@@ -40,6 +41,7 @@ public:
     ~TimelineFramesModel();
 
     void setFrameCache(KisAnimationFrameCacheSP cache);
+    void setAnimationPlayer(KisAnimationPlayer *player);
 
     void setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageSP image);
 
@@ -96,6 +98,9 @@ private Q_SLOTS:
     void slotDummyChanged(KisNodeDummy *dummy);
     void processUpdateQueue();
     void slotCacheChanged();
+
+    void slotPlaybackFrameChanged();
+    void slotPlaybackStopped();
 
 public Q_SLOTS:
     void slotFramerateChanged();

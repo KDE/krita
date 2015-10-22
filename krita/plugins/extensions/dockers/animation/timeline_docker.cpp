@@ -29,69 +29,80 @@
 #include "kis_action.h"
 #include "kis_action_manager.h"
 
+#include "timeline_frames_model.h"
+#include "timeline_frames_view.h"
+#include "kis_animation_frame_cache.h"
+#include "kis_signal_auto_connection.h"
+#include "kis_node_manager.h"
+
+
+struct TimelineDocker::Private
+{
+    Private(QWidget *parent)
+        : model(new TimelineFramesModel(parent)),
+          view(new TimelineFramesView(parent)),
+          canvas(0)
+    {
+        view->setModel(model);
+    }
+
+    TimelineFramesModel *model;
+    TimelineFramesView *view;
+
+    KisCanvas2 *canvas;
+
+    KisSignalAutoConnectionsStore canvasConnections;
+};
+
 TimelineDocker::TimelineDocker()
     : QDockWidget(i18n("Timeline"))
-    , m_canvas(0)
-    , m_timelineWidget(new TimelineWidget(this))
+    , m_d(new Private(this))
 {
-    setWidget(m_timelineWidget);
-
-    m_model = new KisTimelineModel(this);
-    m_timelineWidget->setModel(m_model);
-
-    m_toggleOnionSkinAction = new KisAction(i18n("Toggle onion skin"), this);
-    m_toggleOnionSkinAction->setActivationFlags(KisAction::ACTIVE_LAYER);
-
-    connect(m_toggleOnionSkinAction, SIGNAL(triggered()), this, SLOT(toggleOnionSkin()));
+    setWidget(m_d->view);
 }
 
 void TimelineDocker::setCanvas(KoCanvasBase * canvas)
 {
-    if (m_canvas == canvas) return;
+    if (m_d->canvas == canvas) return;
 
-    if (m_canvas) {
-        m_canvas->disconnectCanvasObserver(this);
-        m_model->setDummiesFacade(0, 0, 0);
+    if (m_d->canvas) {
+        m_d->canvasConnections.clear();
+        m_d->model->setDummiesFacade(0, 0);
+        m_d->model->setFrameCache(0);
+        m_d->model->setAnimationPlayer(0);
+        m_d->canvas->disconnectCanvasObserver(this);
     }
 
-    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    setEnabled(canvas != 0);
-    m_timelineWidget->setCanvas(m_canvas);
+    m_d->canvas = dynamic_cast<KisCanvas2*>(canvas);
+    setEnabled(m_d->canvas != 0);
 
-    if(m_canvas) {
-        KisDocument *doc = static_cast<KisDocument*>(m_canvas->imageView()->document());
+    if(m_d->canvas) {
+        KisDocument *doc = static_cast<KisDocument*>(m_d->canvas->imageView()->document());
         KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(doc->shapeController());
-        KisDummiesFacadeBase *kritaDummiesFacade = static_cast<KisDummiesFacadeBase*>(kritaShapeController);
-        m_model->setDummiesFacade(kritaDummiesFacade, m_canvas->image(), kritaShapeController);
+        m_d->model->setDummiesFacade(kritaShapeController, m_d->canvas->image());
+        m_d->model->setFrameCache(m_d->canvas->frameCache());
+        m_d->model->setAnimationPlayer(m_d->canvas->animationPlayer());
+
+        m_d->canvasConnections.addConnection(
+            m_d->canvas->viewManager()->nodeManager(), SIGNAL(sigNodeActivated(KisNodeSP)),
+            m_d->model, SLOT(slotCurrentNodeChanged(KisNodeSP)));
+
+        m_d->canvasConnections.addConnection(
+            m_d->model, SIGNAL(requestCurrentNodeChanged(KisNodeSP)),
+            m_d->canvas->viewManager()->nodeManager(), SLOT(slotNonUiActivatedNode(KisNodeSP)));
     }
 }
 
 void TimelineDocker::unsetCanvas()
 {
-    setEnabled(false);
-    m_canvas = 0;
-    m_model->setDummiesFacade(0, 0, 0);
-    m_timelineWidget->setCanvas(0);
+    setCanvas(0);
 }
 
 void TimelineDocker::setMainWindow(KisViewManager *view)
 {
-    KisActionManager *actionManager = view->actionManager();
-    actionManager->addAction("toggle_onion_skin", m_toggleOnionSkinAction);
-}
-
-void TimelineDocker::toggleOnionSkin()
-{
-    if (!m_canvas) return;
-
-    KisNodeSP node = m_canvas->viewManager()->activeNode();
-    if (!node) return;
-
-    if (node->inherits("KisPaintLayer")) {
-        KisPaintLayer *layer = qobject_cast<KisPaintLayer*>(node.data());
-        layer->setOnionSkinEnabled(!layer->onionSkinEnabled());
-        m_canvas->image()->refreshGraphAsync();
-    }
+    Q_UNUSED(view);
+    //KisActionManager *actionManager = view->actionManager();
+    //actionManager->addAction("toggle_onion_skin", m_toggleOnionSkinAction);
 }
 
 #include "timeline_docker.moc"

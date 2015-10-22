@@ -24,14 +24,13 @@
 #include <QDockWidget>
 #include <kis_mainwindow_observer.h>
 
-#include "kis_timeline_model.h"
-#include "timeline_widget.h"
+#include <QScopedPointer>
 
 class KisCanvas2;
-class Ui_WdgTimeline;
 class KisAction;
 
-class TimelineDocker : public QDockWidget, public KisMainwindowObserver {
+class TimelineDocker : public QDockWidget, public KisMainwindowObserver
+{
     Q_OBJECT
 public:
     TimelineDocker();
@@ -40,17 +39,9 @@ public:
     virtual void unsetCanvas();
     void setMainWindow(KisViewManager *kisview);
 
-private Q_SLOTS:
-    void toggleOnionSkin();
-
 private:
-
-    KisCanvas2 *m_canvas;
-
-    KisTimelineModel *m_model;
-    TimelineWidget *m_timelineWidget;
-
-    KisAction *m_toggleOnionSkinAction;
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
 

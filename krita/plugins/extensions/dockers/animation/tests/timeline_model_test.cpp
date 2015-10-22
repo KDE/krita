@@ -138,12 +138,12 @@ void TimelineModelTest::testView()
     addSelectionMasks();
     m_shapeController->setImage(m_image);
 
-    m_layer1->enableAnimation();
-    m_layer1->setUseInTimeline(true);
+    framesTable->setModel(model);
 
     model->setDummiesFacade(m_shapeController, m_image);
 
-    framesTable->setModel(model);
+    m_layer1->enableAnimation();
+    m_layer1->setUseInTimeline(true);
 
     connect(intFps, SIGNAL(valueChanged(int)),
             m_image->animationInterface(), SLOT(setFramerate(int)));

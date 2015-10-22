@@ -1,2 +1,1 @@
-- KActionCollection::addAction with a previously added action should replace the old one. For consistency with
-  the Qt associative containers (and remember to add an autotest :)
+- Clean and remove as much of this stuff as appears useful.

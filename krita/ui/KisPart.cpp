@@ -40,7 +40,7 @@
 #include "KisViewManager.h"
 #include "KisOpenPane.h"
 #include "KisImportExportManager.h"
-#include "dialogs/KisShortcutsDialog.h"
+#include <KisShortcutsDialog.h>
 
 #include <kis_debug.h>
 #include <KoResourcePaths.h>

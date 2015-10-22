@@ -29,18 +29,6 @@
 #include <QTreeWidgetItem>
 #include <kis_debug.h>
 
-// KRITAIMPORT: copied here from kshortcutseditor.cpp to be available
-//static
-KShortcutsEditorItem *KShortcutsEditorPrivate::itemFromIndex(QTreeWidget *const w,
-        const QModelIndex &index)
-{
-    QTreeWidgetItem *item = static_cast<QTreeWidgetHack *>(w)->itemFromIndex(index);
-    if (item && item->type() == ActionItem) {
-        return static_cast<KShortcutsEditorItem *>(item);
-    }
-    return 0;
-}
-
 #if 0
 #include <kgesturemap.h>
 #endif

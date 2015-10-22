@@ -22,19 +22,41 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSHORTCUTSDIALOG_H
-#define KSHORTCUTSDIALOG_H
-
-#include <kritawidgetutils_export.h>
+#ifndef KISSHORTCUTSDIALOG_H
+#define KISSHORTCUTSDIALOG_H
 
 #include <QDialog>
 
-#include "kshortcutseditor.h"
+#include <kshortcutseditor.h>
+
+// This class and some classes it uses are here as plain copy from KF5 XmlGui.
+// Needed as a workaround to allow KisPart::configureShortcuts()
+// to use the dialog, but without its shortcut scheme editor support.
+// As that one is incompatible with Krita.
+//
+// The files are copied from KF5 XmlGui, at version 5.12.0
+//     dialogs/KisShortcutsEditorItem.cpp       <- kshortcutseditoritem.cpp
+//     dialogs/KisShortcutEditWidget.cpp        <- kshortcuteditwidget.cpp
+//     dialogs/KisShortcutsEditorDelegate.cpp   <- kshortcutseditordelegate.cpp
+//     dialogs/KisShortcutsDialog.cpp           <- kshortcutsdialog.cpp
+//     dialogs/KisShortcutsDialog.h             <- kshortcutsdialog.h
+//     dialogs/KisShortcutsDialog_p.h           <- kshortcutsdialog_p.h
+//     forms/KisShortcutsDialog.ui              <- kshortcutsdialog.ui
+//
+// Changes that have been done to the files:
+// * Adapt of includes
+// * Disabling unwanted parts with NOSCHEMESPLEASEFORKRITA define
+// * Renamed KShortcutsDialog to KisShortcutsDialog
+// * Removed symbol export macro from KisShortcutsDialog
+// * Copied KShortcutsEditorPrivate::itemFromIndex() implmentation from
+//   KF5 XmlGui's kshortcutseditor.cpp to begin of KisShortcutsEditorItem.cpp
+
+#define NOSCHEMESPLEASEFORKRITA 0
 
 /**
  * @short Dialog for configuration of KActionCollection and KGlobalAccel.
  *
- * The KShortcutsDialog class is used for configuring dictionaries of key/action
+ * The KisShortcutsDialog class is used for configuring dictionaries of key/action
  * associations for KActionCollection and KGlobalAccel. It uses the KShortcutsEditor widget
  * and offers buttons to set all keys to defaults and invoke on-line help.
  *
@@ -42,7 +64,7 @@
  * to the dialog. The most common and most encouraged use is with KActionCollection.
  *
  * \code
- * KShortcutsDialog::configure( actionCollection() );
+ * KisShortcutsDialog::configure( actionCollection() );
  * \endcode
  *
  * @since 4.3
@@ -54,7 +76,7 @@
  *
  * example:
  * \code
- * KShortcutsDialog dlg;
+ * KisShortcutsDialog dlg;
  * dlg.addCollection(myActions);
  * dlg.setModal(false);
  * connect(&dlg, SIGNAL(saved()), this, SLOT(doExtraStuff()));
@@ -67,31 +89,30 @@
  * @author Hamish Rodda <rodda@kde.org> (KDE 4 porting)
  * @author Michael Jansen <kde@michael-jansen.biz>
  */
-class KRITAWIDGETUTILS_EXPORT KShortcutsDialog : public QDialog
+class KRITAWIDGETUTILS_EXPORT KisShortcutsDialog : public QDialog
 {
     Q_OBJECT
 
 public:
     /**
-     * Constructs a KShortcutsDialog as a child of @p parent.
+     * Constructs a KisShortcutsDialog as a child of @p parent.
      * Set @p allowLetterShortcuts to false if unmodified alphanumeric
      * keys ('A', '1', etc.) are not permissible shortcuts.
      */
-    explicit KShortcutsDialog(KShortcutsEditor::ActionTypes types = KShortcutsEditor::AllActions,
+    explicit KisShortcutsDialog(KShortcutsEditor::ActionTypes types = KShortcutsEditor::AllActions,
                               KShortcutsEditor::LetterShortcuts allowLetterShortcuts = KShortcutsEditor::LetterShortcutsAllowed,
                               QWidget *parent = 0);
 
     /**
-     * Destructor. Deletes all resources used by a KShortcutsDialog object.
+     * Destructor. Deletes all resources used by a KisShortcutsDialog object.
      */
-    virtual ~KShortcutsDialog();
+    virtual ~KisShortcutsDialog();
 
     /**
      * Add all actions of the collection to the ones displayed and configured
      * by the dialog.
      *
-     * @param title the title associated with the collection (if null, the
-     * KAboutData::progName() of the collection's componentData is used)
+     * @param title the title associated with the collection.
      */
     void addCollection(KActionCollection *, const QString &title = QString());
 
@@ -101,8 +122,8 @@ public:
     QList<KActionCollection *> actionCollections() const;
 
     /**
-     * Run the dialog and call writeSettings() on the action collections
-     * that were added if @p bSaveSettings is true.
+     * Run the dialog and call writeSettings() on the action collections that
+     * were added if @p bSaveSettings is true.
      */
     bool configure(bool saveSettings = true);
 
@@ -110,7 +131,7 @@ public:
     QSize sizeHint() const Q_DECL_OVERRIDE;
 
     /**
-     * Pops up a modal dialog for configuring key settings. The new
+     * Pops up a modal (blocking) dialog for configuring key settings. The new
      * shortcut settings will become active if the user presses OK.
      *
      * @param collection the KActionCollection to configure
@@ -122,22 +143,9 @@ public:
      *
      * @return Accept if the dialog was closed with OK, Reject otherwise.
      */
-    static int configure(KActionCollection *collection, KShortcutsEditor::LetterShortcuts allowLetterShortcuts =
-                             KShortcutsEditor::LetterShortcutsAllowed, QWidget *parent = 0, bool bSaveSettings = true);
-
-    /**
-     * Imports a shortcuts set up from @p path
-     *
-     * @since 5.15
-     */
-    void importConfiguration(const QString &path);
-
-    /**
-     * Exports a shortcuts set up from @p path
-     *
-     * @since 5.15
-     */
-    void exportConfiguration(const QString &path) const;
+    static int configure(KActionCollection *collection,
+                         KShortcutsEditor::LetterShortcuts allowLetterShortcuts = KShortcutsEditor::LetterShortcutsAllowed,
+                         QWidget *parent = 0, bool bSaveSettings = true);
 
 public Q_SLOTS:
     /**
@@ -154,14 +162,16 @@ Q_SIGNALS:
 private:
     Q_PRIVATE_SLOT(d, void changeShortcutScheme(const QString &))
     Q_PRIVATE_SLOT(d, void undoChanges())
+
+#ifdef NOSCHEMESPLEASEFORKRITA
     // Q_PRIVATE_SLOT(d, void toggleDetails())
+#endif
 
-    class KShortcutsDialogPrivate;
-    friend class KShortcutsDialogPrivate;
-    class KShortcutsDialogPrivate *const d;
+    class KisShortcutsDialogPrivate;
+    class KisShortcutsDialogPrivate *const d;
 
-    Q_DISABLE_COPY(KShortcutsDialog)
+    Q_DISABLE_COPY(KisShortcutsDialog)
 };
 
-#endif // KSHORTCUTSDIALOG_H
+#endif // KISSHORTCUTSDIALOG_H
 

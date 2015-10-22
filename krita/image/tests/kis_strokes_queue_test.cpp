@@ -367,20 +367,16 @@ void KisStrokesQueueTest::testAsyncCancelWhileOpenedStroke()
     VERIFY_EMPTY(jobs[2]);
 }
 
-#include <boost/functional/factory.hpp>
-#include <boost/bind.hpp>
 
 void KisStrokesQueueTest::testStrokesLevelOfDetail()
 {
     KisStrokesQueue queue;
 
     queue.setSuspendUpdatesStrokeStrategyFactory(
-        boost::bind(
-        boost::factory<KisTestingStrokeStrategy*>(), "susp_u_", false, true, true));
+        [](){return new KisTestingStrokeStrategy("susp_u_", false, true, true);};
 
     queue.setResumeUpdatesStrokeStrategyFactory(
-        boost::bind(
-        boost::factory<KisTestingStrokeStrategy*>(), "resu_u_", false, true, true));
+        [](){return new KisTestingStrokeStrategy("resu_u_", false, true, true);};
 
     // create a stroke with LOD0 + LOD2
     queue.setDesiredLevelOfDetail(2);

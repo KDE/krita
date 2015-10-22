@@ -18,9 +18,9 @@
 
 #include "kis_asl_patterns_writer.h"
 
-#include <boost/bind.hpp>
 
 #include <KoPattern.h>
+#include <functional>
 
 #include "kis_asl_callback_object_catcher.h"
 #include "kis_asl_xml_parser.h"
@@ -41,7 +41,7 @@ KisAslPatternsWriter::KisAslPatternsWriter(const QDomDocument &doc, QIODevice *d
 void KisAslPatternsWriter::writePatterns()
 {
     KisAslCallbackObjectCatcher c;
-    c.subscribePattern("/Patterns/KisPattern", boost::bind(&KisAslPatternsWriter::addPattern, this, _1));
+    c.subscribePattern("/Patterns/KisPattern", std::bind(&KisAslPatternsWriter::addPattern, this, std::placeholders::_1));
 
     KisAslXmlParser parser;
     parser.parseXML(m_doc, c);

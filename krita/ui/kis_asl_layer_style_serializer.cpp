@@ -18,9 +18,6 @@
 
 #include "kis_asl_layer_style_serializer.h"
 
-#include <boost/function.hpp>
-#include <boost/bind.hpp>
-
 #include <QDomDocument>
 
 #include <KoResourceServerProvider.h>
@@ -42,6 +39,8 @@
 #include "asl/kis_asl_xml_writer.h"
 #include "asl/kis_asl_writer.h"
 
+#include <functional>
+using namespace std::placeholders;
 
 KisAslLayerStyleSerializer::KisAslLayerStyleSerializer()
 {
@@ -814,44 +813,44 @@ inline QString _prepaddr(const QString &pref, const QString &addr) {
     return pref + addr;
 }
 
-#define CONN_TEXT_RADDR(addr, method, object, type) m_catcher.subscribeText(addr, boost::bind(&type::method, object, _1))
-#define CONN_COLOR(addr, method, object, type, prefix) m_catcher.subscribeColor(_prepaddr(prefix, addr), boost::bind(&type::method, object, _1))
-#define CONN_UNITF(addr, unit, method, object, type, prefix) m_catcher.subscribeUnitFloat(_prepaddr(prefix, addr), unit, boost::bind(&type::method, object, _1))
-#define CONN_BOOL(addr, method, object, type, prefix) m_catcher.subscribeBoolean(_prepaddr(prefix, addr), boost::bind(&type::method, object, _1))
+#define CONN_TEXT_RADDR(addr, method, object, type) m_catcher.subscribeText(addr, std::bind(&type::method, object, _1))
+#define CONN_COLOR(addr, method, object, type, prefix) m_catcher.subscribeColor(_prepaddr(prefix, addr), std::bind(&type::method, object, _1))
+#define CONN_UNITF(addr, unit, method, object, type, prefix) m_catcher.subscribeUnitFloat(_prepaddr(prefix, addr), unit, std::bind(&type::method, object, _1))
+#define CONN_BOOL(addr, method, object, type, prefix) m_catcher.subscribeBoolean(_prepaddr(prefix, addr), std::bind(&type::method, object, _1))
 
-#define CONN_POINT(addr, method, object, type, prefix) m_catcher.subscribePoint(_prepaddr(prefix, addr), boost::bind(&type::method, object, _1))
+#define CONN_POINT(addr, method, object, type, prefix) m_catcher.subscribePoint(_prepaddr(prefix, addr), std::bind(&type::method, object, _1))
 
 #define CONN_COMPOSITE_OP(addr, method, object, type, prefix)                   \
     {                                                                   \
         boost::function<void (const QString&)> setter =                 \
-            boost::bind(&type::method, object, _1);                     \
-        m_catcher.subscribeEnum(_prepaddr(prefix, addr), "BlnM", boost::bind(convertAndSetBlendMode, _1, setter)); \
+            std::bind(&type::method, object, _1);                     \
+        m_catcher.subscribeEnum(_prepaddr(prefix, addr), "BlnM", std::bind(convertAndSetBlendMode, _1, setter)); \
     }
 
 #define CONN_CURVE(addr, method, object, type, prefix)                          \
     {                                                                   \
         boost::function<void (const quint8*)> setter =                  \
-            boost::bind(&type::method, object, _1);                     \
-        m_catcher.subscribeCurve(_prepaddr(prefix, addr), boost::bind(convertAndSetCurve, _1, _2, setter)); \
+            std::bind(&type::method, object, _1);                     \
+        m_catcher.subscribeCurve(_prepaddr(prefix, addr), std::bind(convertAndSetCurve, _1, _2, setter)); \
     }
 
 #define CONN_ENUM(addr, tag, method, map, mapped_type, object, type, prefix)                       \
     {                                                                   \
         boost::function<void (mapped_type)> setter =                  \
-            boost::bind(&type::method, object, _1);                     \
-        m_catcher.subscribeEnum(_prepaddr(prefix, addr), tag, boost::bind(convertAndSetEnum<mapped_type>, _1, map, setter)); \
+            std::bind(&type::method, object, _1);                     \
+        m_catcher.subscribeEnum(_prepaddr(prefix, addr), tag, std::bind(convertAndSetEnum<mapped_type>, _1, map, setter)); \
     }
 
 #define CONN_GRADIENT(addr, method, object, type, prefix)                      \
     {                                                                  \
-        m_catcher.subscribeGradient(_prepaddr(prefix, addr), boost::bind(&type::method, object, _1)); \
+        m_catcher.subscribeGradient(_prepaddr(prefix, addr), std::bind(&type::method, object, _1)); \
     }
 
 #define CONN_PATTERN(addr, method, object, type, prefix)                       \
     {                                                                  \
         boost::function<void (KoPattern*)> setter =    \
-            boost::bind(&type::method, object, _1);                     \
-        m_catcher.subscribePatternRef(_prepaddr(prefix, addr), boost::bind(&KisAslLayerStyleSerializer::assignPatternObject, this, _1, _2, setter)); \
+            std::bind(&type::method, object, _1);                     \
+        m_catcher.subscribePatternRef(_prepaddr(prefix, addr), std::bind(&KisAslLayerStyleSerializer::assignPatternObject, this, _1, _2, setter)); \
     }
 
 void KisAslLayerStyleSerializer::registerPatternObject(const KoPattern *pattern) {
@@ -1185,8 +1184,8 @@ void KisAslLayerStyleSerializer::readFromDevice(QIODevice *device)
 {
     m_stylesVector.clear();
 
-    m_catcher.subscribePattern("/Patterns/KisPattern", boost::bind(&KisAslLayerStyleSerializer::registerPatternObject, this, _1));
-    m_catcher.subscribeNewStyleStarted(boost::bind(&KisAslLayerStyleSerializer::newStyleStarted, this, false));
+    m_catcher.subscribePattern("/Patterns/KisPattern", std::bind(&KisAslLayerStyleSerializer::registerPatternObject, this, _1));
+    m_catcher.subscribeNewStyleStarted(std::bind(&KisAslLayerStyleSerializer::newStyleStarted, this, false));
 
     KisAslReader reader;
     QDomDocument doc = reader.readFile(device);
@@ -1206,7 +1205,7 @@ void KisAslLayerStyleSerializer::readFromDevice(QIODevice *device)
 void KisAslLayerStyleSerializer::registerPSDPattern(const QDomDocument &doc)
 {
     KisAslCallbackObjectCatcher catcher;
-    catcher.subscribePattern("/Patterns/KisPattern", boost::bind(&KisAslLayerStyleSerializer::registerPatternObject, this, _1));
+    catcher.subscribePattern("/Patterns/KisPattern", std::bind(&KisAslLayerStyleSerializer::registerPatternObject, this, _1));
 
     //KisAslObjectCatcher c2;
     KisAslXmlParser parser;
@@ -1222,8 +1221,8 @@ void KisAslLayerStyleSerializer::readFromPSDXML(const QDomDocument &doc)
 
     m_stylesVector.clear();
 
-    //m_catcher.subscribePattern("/Patterns/KisPattern", boost::bind(&KisAslLayerStyleSerializer::registerPatternObject, this, _1));
-    m_catcher.subscribeNewStyleStarted(boost::bind(&KisAslLayerStyleSerializer::newStyleStarted, this, true));
+    //m_catcher.subscribePattern("/Patterns/KisPattern", std::bind(&KisAslLayerStyleSerializer::registerPatternObject, this, _1));
+    m_catcher.subscribeNewStyleStarted(std::bind(&KisAslLayerStyleSerializer::newStyleStarted, this, true));
 
     //KisAslObjectCatcher c2;
     KisAslXmlParser parser;

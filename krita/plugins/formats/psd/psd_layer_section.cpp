@@ -17,7 +17,6 @@
  */
 #include "psd_layer_section.h"
 
-#include <boost/bind.hpp>
 
 #include <QIODevice>
 
@@ -278,7 +277,7 @@ bool PSDLayerMaskSection::readImpl(QIODevice* io)
      * Here we pass the callback which should be used when such
      * additional section is recognized.
      */
-    globalInfoSection.setExtraLayerInfoBlockHandler(boost::bind(&PSDLayerMaskSection::readLayerInfoImpl, this, _1));
+    globalInfoSection.setExtraLayerInfoBlockHandler(std::bind(&PSDLayerMaskSection::readLayerInfoImpl, this, std::placeholders::_1));
 
     globalInfoSection.read(io);
 

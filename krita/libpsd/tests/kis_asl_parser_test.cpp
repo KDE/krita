@@ -22,8 +22,6 @@
 
 #include "testutil.h"
 
-#include <boost/bind.hpp>
-
 #include <QDomDocument>
 
 #include "KoPattern.h"
@@ -99,6 +97,7 @@ struct CallbackVerifier {
 
 void KisAslParserTest::testWithCallbacks()
 {
+    using namespace std::placeholders;
     QString fileName(TestUtil::fetchDataFileLazy("asl/freebie.asl"));
     QFile aslFile(fileName);
     aslFile.open(QIODevice::ReadOnly);
@@ -111,12 +110,12 @@ void KisAslParserTest::testWithCallbacks()
 
     CallbackVerifier verifier;
 
-    c.subscribeColor("/Styl/Lefx/IrGl/Clr ", boost::bind(&CallbackVerifier::setColor, &verifier, _1));
-    c.subscribeUnitFloat("/Styl/Lefx/IrGl/Opct", "#Prc", boost::bind(&CallbackVerifier::setOpacity, &verifier, _1));
-    c.subscribeEnum("/Styl/Lefx/IrGl/Md  ", "BlnM", boost::bind(&CallbackVerifier::setBlendingMode, &verifier, _1));
-    c.subscribeBoolean("/Styl/Lefx/IrGl/enab", boost::bind(&CallbackVerifier::setEnabled, &verifier, _1));
-    c.subscribeCurve("/Styl/Lefx/OrGl/TrnS", boost::bind(&CallbackVerifier::setCurve, &verifier, _1, _2));
-    c.subscribeText("/null/Idnt", boost::bind(&CallbackVerifier::setText, &verifier, _1));
+    c.subscribeColor("/Styl/Lefx/IrGl/Clr ", std::bind(&CallbackVerifier::setColor, &verifier, _1));
+    c.subscribeUnitFloat("/Styl/Lefx/IrGl/Opct", "#Prc", std::bind(&CallbackVerifier::setOpacity, &verifier, _1));
+    c.subscribeEnum("/Styl/Lefx/IrGl/Md  ", "BlnM", std::bind(&CallbackVerifier::setBlendingMode, &verifier, _1));
+    c.subscribeBoolean("/Styl/Lefx/IrGl/enab", std::bind(&CallbackVerifier::setEnabled, &verifier, _1));
+    c.subscribeCurve("/Styl/Lefx/OrGl/TrnS", std::bind(&CallbackVerifier::setCurve, &verifier, _1, _2));
+    c.subscribeText("/null/Idnt", std::bind(&CallbackVerifier::setText, &verifier, _1));
 
     KisAslXmlParser parser;
     parser.parseXML(doc, c);
@@ -317,7 +316,7 @@ void KisAslParserTest::testParserWithPatterns()
         CallbackVerifier verifier;
         KisAslCallbackObjectCatcher c;
 
-        c.subscribePattern("/Patterns/KisPattern", boost::bind(&CallbackVerifier::setPattern, &verifier, _1));
+        c.subscribePattern("/Patterns/KisPattern", std::bind(&CallbackVerifier::setPattern, &verifier, std::placeholders::_1));
 
         KisAslXmlParser parser;
         parser.parseXML(doc, c);

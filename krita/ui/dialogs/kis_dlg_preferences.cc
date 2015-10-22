@@ -42,8 +42,6 @@
 #include <QDesktopWidget>
 #include <QFileDialog>
 
-#include <boost/bind.hpp>
-
 #include <KisDocument.h>
 #include <KoColorProfile.h>
 #include <KisApplication.h>
@@ -534,7 +532,7 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     SliderAndSpinBoxSync *sync2 =
         new SliderAndSpinBoxSync(sliderPoolLimit,
                                  intPoolLimit,
-                                 boost::bind(&QSpinBox::value,
+                                 std::bind(&QSpinBox::value,
                                              intMemoryLimit));
 
 
@@ -545,7 +543,7 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     SliderAndSpinBoxSync *sync3 =
         new SliderAndSpinBoxSync(sliderUndoLimit,
                                  intUndoLimit,
-                                 boost::bind(&PerformanceTab::realTilesRAM,
+                                 std::bind(&PerformanceTab::realTilesRAM,
                                              this));
 
 

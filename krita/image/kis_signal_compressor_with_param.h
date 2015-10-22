@@ -28,7 +28,7 @@
  *
  * Example:
  *
- * std::function<void ()> destinationFunctionCall(boost::bind(someNiceFunc, firstParam, secondParam));
+ * std::function<void ()> destinationFunctionCall(std::bind(someNiceFunc, firstParam, secondParam));
  * SignalToFunctionProxy proxy(destinationFunctionCall);
  * connect(srcObject, SIGNAL(sigSomethingChanged()), &proxy, SLOT(start()));
  *

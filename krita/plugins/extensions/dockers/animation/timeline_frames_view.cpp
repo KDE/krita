@@ -33,7 +33,7 @@
 
 
 #include "kis_debug.h"
-#include "frames_item_delegate.h"
+#include "timeline_frames_item_delegate.h"
 
 #include "kis_draggable_tool_button.h"
 
@@ -81,7 +81,7 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     setSelectionBehavior(QAbstractItemView::SelectItems);
     setSelectionMode(QAbstractItemView::SingleSelection);
 
-    setItemDelegate(new FramesItemDelegate(this));
+    setItemDelegate(new TimelineFramesItemDelegate(this));
 
     setDragEnabled(true);
     setDragDropMode(QAbstractItemView::InternalMove);

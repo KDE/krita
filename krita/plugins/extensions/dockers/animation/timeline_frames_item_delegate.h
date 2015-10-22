@@ -16,21 +16,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __FRAMES_ITEM_DELEGATE_H
-#define __FRAMES_ITEM_DELEGATE_H
+#ifndef __TIMELINE_FRAMES_ITEM_DELEGATE_H
+#define __TIMELINE_FRAMES_ITEM_DELEGATE_H
 
 #include <QItemDelegate>
 
 
-class FramesItemDelegate : public QItemDelegate
+class TimelineFramesItemDelegate : public QItemDelegate
 {
 public:
-    FramesItemDelegate(QObject *parent);
-    ~FramesItemDelegate();
+    TimelineFramesItemDelegate(QObject *parent);
+    ~TimelineFramesItemDelegate();
 
     static void paintActiveFrameSelector(QPainter *painter, const QRect &rc);
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
 
-#endif /* __FRAMES_ITEM_DELEGATE_H */
+#endif /* __TIMELINE_FRAMES_ITEM_DELEGATE_H */

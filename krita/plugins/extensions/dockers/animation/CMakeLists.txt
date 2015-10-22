@@ -9,13 +9,12 @@ set(KRITA_ANIMATIONDOCKER_PART_SRCS
     keyframe_channel_delegate.cpp
     kis_onion_skin_dialog.cpp
 
-    frames_item_delegate.cpp
-
     timeline_layers_header.cpp
     timeline_ruler_header.cpp
 
     timeline_frames_model.cpp
     timeline_frames_view.cpp
+    timeline_frames_item_delegate.cpp
 
     timeline_frames_index_converter.cpp
     timeline_node_list_keeper.cpp

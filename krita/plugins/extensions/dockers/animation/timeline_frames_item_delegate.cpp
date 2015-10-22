@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "frames_item_delegate.h"
+#include "timeline_frames_item_delegate.h"
 
 #include <QPen>
 #include <QPainter>
@@ -24,16 +24,16 @@
 #include "timeline_frames_model.h"
 
 
-FramesItemDelegate::FramesItemDelegate(QObject *parent)
+TimelineFramesItemDelegate::TimelineFramesItemDelegate(QObject *parent)
     : QItemDelegate(parent)
 {
 }
 
-FramesItemDelegate::~FramesItemDelegate()
+TimelineFramesItemDelegate::~TimelineFramesItemDelegate()
 {
 }
 
-void FramesItemDelegate::paintActiveFrameSelector(QPainter *painter, const QRect &rc)
+void TimelineFramesItemDelegate::paintActiveFrameSelector(QPainter *painter, const QRect &rc)
 {
     QColor baseColor = QColor(200, 220, 150);
     QColor colorDark = baseColor.darker(130);
@@ -54,7 +54,7 @@ void FramesItemDelegate::paintActiveFrameSelector(QPainter *painter, const QRect
     painter->setPen(oldPen);
 }
 
-void FramesItemDelegate::paint(QPainter *painter,
+void TimelineFramesItemDelegate::paint(QPainter *painter,
                                const QStyleOptionViewItem &option,
                                const QModelIndex &index) const
 {

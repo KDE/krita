@@ -22,7 +22,6 @@
 #include <QPaintEvent>
 
 #include "timeline_frames_model.h"
-#include "frames_item_delegate.h"
 
 #include "kis_debug.h"
 

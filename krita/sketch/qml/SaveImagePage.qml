@@ -226,20 +226,19 @@ Page {
         buttons: [ "Overwrite", "Cancel" ];
         onButtonClicked: {
             switch(button) {
-                case 0: {
+                case 0:
                     var filePath = "%1/%2.%3".arg(view.model.path).arg(fileNameField.text).arg(fileType.model.get(fileType.currentIndex).type);
                     base.finished( filePath, fileType.model.get(fileType.currentIndex).mime );
-                }
-                case 1: {
+                    break;
+                case 1:
                     // do nothing, just dismiss dialog
-                }
-                default: {
+                    break;
+                default:
                     console.debug("Nope, shouldn't be here. How did you press a button that doesn't exist?");
                     break;
-                }
-                confirmOverwrite.hide();
-                pageStack.pop();
             }
+            confirmOverwrite.hide();
+            pageStack.pop();
         }
     }
 }

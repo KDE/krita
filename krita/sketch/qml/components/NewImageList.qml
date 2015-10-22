@@ -96,56 +96,55 @@ ListView {
 
             onClicked: {
                 switch(model.file) {
-                    case "a5p": {
+                    case "a5p":
                         base.clicked({
                             width: 600,
                             height: 875,
                             resolution: 150,
                         });
-                    }
-                    case "a5l": {
+                        break;
+                    case "a5l":
                         base.clicked({
                             width: 875,
                             height: 600,
                             resolution: 150,
                         });
-                    }
-                    case "a4p": {
+                        break;
+                    case "a4p":
                         base.clicked({
                             width: 1200,
                             height: 1750,
                             resolution: 150,
                         });
-                    }
-                    case "a4l": {
+                        break;
+                    case "a4l":
                         base.clicked({
                             width: 1750,
                             height: 1200,
                             resolution: 150,
                         });
-                    }
-                    case "screen": {
+                        break;
+                    case "screen":
                         base.clicked({
                             width: Krita.Window.width,
                             height: Krita.Window.height,
                             resolution: 72.0
                         });
-                    }
-                    case "custom": {
-                        base.clicked(null);
-                    }
-                    case "clip": {
+                        break;
+                    case "custom":
+                        base.clicked(undefined);
+                        break;
+                    case "clip":
                         base.clicked({ source: "clipboard" });
-                    }
-                    case "webcam": {
+                        break;
+                    case "webcam":
                         base.clicked({ source: "webcam" });
-                    }
-                    default: {
+                        break;
+                    default:
                         console.debug(model.file);
                         if(model.file.indexOf("template://") === 0) {
                             base.clicked({ template: model.file });
                         }
-                    }
                 }
             }
         }

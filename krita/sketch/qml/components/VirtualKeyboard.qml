@@ -137,27 +137,33 @@ Rectangle {
                     switch(model.keyType) {
                         case KeyboardModel.BackspaceKey:
                             Settings.focusItem.text = Settings.focusItem.text.substring(0, Settings.focusItem.text.length - 1);
+                            break;
                         case KeyboardModel.EnterKey:
                             base.state = "";
+                            break;
                         case KeyboardModel.ShiftKey:
                             keys.mode = keys.mode != KeyboardModel.CapitalMode ? KeyboardModel.CapitalMode : KeyboardModel.NormalMode;
+                            break;
                         case KeyboardModel.LeftArrowKey:
                             Settings.focusItem.cursorPosition -= 1;
+                            break;
                         case KeyboardModel.RightArrowKey:
                             Settings.focusItem.cursorPosition += 1;
+                            break;
                         case KeyboardModel.NumericModeKey:
                             keys.mode = keys.mode != KeyboardModel.NumericMode ? KeyboardModel.NumericMode : KeyboardModel.NormalMode;
-                        case KeyboardModel.NormalKey: {
+                            break;
+                        case KeyboardModel.NormalKey:
                             Settings.focusItem.text += model.text;
                             if (keys.mode == KeyboardModel.CapitalMode) {
                                 keys.mode = KeyboardModel.NormalMode;
                             }
-                            return;
-                        }
+                            break;
                         case KeyboardModel.CloseKey:
                             base.state = "";
+                            break;
                         default:
-                            return;
+                            break;
                     }
                 }
             }

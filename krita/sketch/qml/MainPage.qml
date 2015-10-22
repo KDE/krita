@@ -132,16 +132,16 @@ Page {
 
         onButtonClicked: {
             switch( button ) {
-                case "new": {
+                case "new":
                     d.previousFile = Settings.currentFile;
                     newPanel.collapsed = !newPanel.collapsed;
                     openPanel.collapsed = true;
-                }
-                case "open": {
+                    break;
+                case "open":
                     d.previousFile = Settings.currentFile;
                     openPanel.collapsed = !openPanel.collapsed;
                     newPanel.collapsed = true;
-                }
+                    break;
                 case "save":
                     if (!Settings.temporaryFile) {
                         savingDialog.show("Saving file...");
@@ -149,26 +149,37 @@ Page {
                     } else {
                         pageStack.push( saveAsPage, { view: sketchView } );
                     }
+                    break;
                 case "saveAs":
                     pageStack.push( saveAsPage, { view: sketchView } );
+                    break;
                 case "settings":
                     pageStack.push( settingsPage );
+                    break;
                 case "help":
                     pageStack.push( helpPage );
+                    break;
                 case "undo":
                     sketchView.undo();
+                    break;
                 case "redo":
                     sketchView.redo();
+                    break;
                 case "minimize":
                     Krita.Window.minimize();
+                    break;
                 case "close":
                     Krita.Window.close();
+                    break;
                 case "zoomIn":
                     sketchView.zoomIn();
+                    break;
                 case "zoomOut":
                     sketchView.zoomOut();
+                    break;
                 case "switchToDesktop":
                     switchToDesktopAction.trigger();
+                    break;
             }
         }
     }
@@ -239,7 +250,7 @@ Page {
 
         onButtonClicked: {
             switch(button) {
-                case 0: {
+                case 0:
                     if (Settings.temporaryFile) {
                         d.saveRequested = true;
                         pageStack.push( saveAsPage, { view: sketchView, updateCurrentFile: false } );
@@ -253,19 +264,18 @@ Page {
                             d.loadNewFile();
                         }
                     }
-                }
-                case 1: {
+                    break;
+                case 1:
                     if (d.closeRequested) {
                         d.closeWindow();
                     } else {
                         d.loadNewFile();
                     }
-                }
-                default: {
+                    break;
+                default:
                     Settings.currentFile = d.previousFile;
                     d.saveRequested = false;
                     d.closeRequested = false;
-                }
             }
         }
 

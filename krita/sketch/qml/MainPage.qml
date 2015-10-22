@@ -315,8 +315,7 @@ Page {
 
     Component.onCompleted: {
         Krita.Window.allowClose = false;
-        // QT5TODO: for unknown reasons results in some unknown busy loop
-//         loadingDialog.show("Please wait...");
+        loadingDialog.show("Please wait...");
 
         if(Settings.currentFile.indexOf("temp") == -1) {
             sketchView.file = Settings.currentFile;

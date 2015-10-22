@@ -750,13 +750,13 @@ void KUndo2QStack::push(KUndo2Command *cmd)
             m_lastMergedSetCount = 0;
             m_lastMergedIndex = m_index-1;
         }
-        if(lastcmd->timedId()==-1){
+        if (lastcmd->timedId() == -1){
             m_lastMergedSetCount = 0;
             m_lastMergedIndex = m_index;
         }
         if (m_lastMergedSetCount > m_strokesN) { 
             KUndo2Command* toMerge = m_command_list.at(m_lastMergedIndex);
-            if (toMerge && m_command_list.at(m_lastMergedIndex + 1)) {
+            if (toMerge && m_command_list.size() >= m_lastMergedIndex + 1 && m_command_list.at(m_lastMergedIndex + 1)) {
                 if(toMerge->timedMergeWith(m_command_list.at(m_lastMergedIndex + 1))){
                     m_command_list.removeAt(m_lastMergedIndex + 1);
                 }

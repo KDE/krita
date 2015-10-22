@@ -96,6 +96,7 @@ Page {
             bottom: parent.bottom;
         }
 
+        // TODO: get filter from code, to get all supported types
         model: Krita.FileSystemModel { filter: "*.png *.jpg *.jpeg *.bmp *.kra *.psd *.ora *.tif *.tiff *.exr" }
         delegate: delegate;
 

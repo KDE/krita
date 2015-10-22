@@ -10,12 +10,12 @@ set(KRITA_ANIMATIONDOCKER_PART_SRCS
     kis_onion_skin_dialog.cpp
 
     frames_item_delegate.cpp
-    frames_table_view.cpp
 
     timeline_layers_header.cpp
     timeline_ruler_header.cpp
 
     timeline_frames_model.cpp
+    timeline_frames_view.cpp
 
     timeline_frames_index_converter.cpp
     timeline_node_list_keeper.cpp

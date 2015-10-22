@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __FRAMES_TABLE_VIEW_H
-#define __FRAMES_TABLE_VIEW_H
+#ifndef __TIMELINE_FRAMES_VIEW_H
+#define __TIMELINE_FRAMES_VIEW_H
 
 #include <QScopedPointer>
 #include <QTableView>
@@ -27,12 +27,12 @@
 class TimelineWidget;
 
 
-class KRITAANIMATIONDOCKER_EXPORT FramesTableView : public QTableView
+class KRITAANIMATIONDOCKER_EXPORT TimelineFramesView : public QTableView
 {
     Q_OBJECT
 public:
-    FramesTableView(QWidget *parent);
-    ~FramesTableView();
+    TimelineFramesView(QWidget *parent);
+    ~TimelineFramesView();
 
     void setModel(QAbstractItemModel *model);
 
@@ -88,4 +88,4 @@ private:
     const QScopedPointer<Private> m_d;
 };
 
-#endif /* __FRAMES_TABLE_VIEW_H */
+#endif /* __TIMELINE_FRAMES_VIEW_H */

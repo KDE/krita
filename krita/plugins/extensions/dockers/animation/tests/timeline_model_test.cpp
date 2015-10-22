@@ -35,7 +35,7 @@
 #include "kis_name_server.h"
 #include "flake/kis_shape_controller.h"
 
-#include "frames_table_view.h"
+#include "timeline_frames_view.h"
 #include "timeline_frames_model.h"
 
 #include "kis_node_dummies_graph.h"
@@ -130,7 +130,7 @@ void TimelineModelTest::testView()
     intLayer->setValue(0);
     intLayer->setMaximum(100);
 
-    FramesTableView *framesTable = new FramesTableView(&dlg);
+    TimelineFramesView *framesTable = new TimelineFramesView(&dlg);
 
     TimelineFramesModel *model = new TimelineFramesModel(&dlg);
 

@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "frames_table_view.h"
+#include "timeline_frames_view.h"
 
 #include "timeline_frames_model.h"
 
@@ -40,7 +40,7 @@
 #include "kicon.h"
 #include "kis_icon_utils.h"
 
-struct FramesTableView::Private
+struct TimelineFramesView::Private
 {
     Private()
         : fps(1),
@@ -73,7 +73,7 @@ struct FramesTableView::Private
     bool dragInProgress;
 };
 
-FramesTableView::FramesTableView(QWidget *parent)
+TimelineFramesView::TimelineFramesView(QWidget *parent)
     : QTableView(parent),
       m_d(new Private)
 {
@@ -161,7 +161,7 @@ FramesTableView::FramesTableView(QWidget *parent)
     setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 }
 
-FramesTableView::~FramesTableView()
+TimelineFramesView::~TimelineFramesView()
 {
 }
 
@@ -173,7 +173,7 @@ void resizeToMinimalSize(QAbstractButton *w, int minimalSize) {
     w->resize(buttonSize);
 }
 
-void FramesTableView::updateGeometries()
+void TimelineFramesView::updateGeometries()
 {
     QTableView::updateGeometries();
 
@@ -194,7 +194,7 @@ void FramesTableView::updateGeometries()
     m_d->zoomDragButton->move(x, 2 * y);
 }
 
-void FramesTableView::setModel(QAbstractItemModel *model)
+void TimelineFramesView::setModel(QAbstractItemModel *model)
 {
     TimelineFramesModel *framesModel = qobject_cast<TimelineFramesModel*>(model);
     m_d->model = framesModel;
@@ -211,7 +211,7 @@ void FramesTableView::setModel(QAbstractItemModel *model)
             this, SLOT(slotReselectCurrentIndex()));
 }
 
-void FramesTableView::setFramesPerSecond(int fps)
+void TimelineFramesView::setFramesPerSecond(int fps)
 {
     m_d->fps = fps;
     m_d->horizontalRuler->setFramePerSecond(fps);
@@ -222,12 +222,12 @@ void FramesTableView::setFramesPerSecond(int fps)
     // m_d->horizontalRuler->reset();
 }
 
-qreal FramesTableView::zoom() const
+qreal TimelineFramesView::zoom() const
 {
     return m_d->zoom;
 }
 
-void FramesTableView::setZoom(qreal zoom)
+void TimelineFramesView::setZoom(qreal zoom)
 {
     const int minSectionSize = 4;
     const int unitSectionSize = 18;
@@ -253,18 +253,18 @@ void FramesTableView::setZoom(qreal zoom)
     }
 }
 
-void FramesTableView::setZoomDouble(double zoom)
+void TimelineFramesView::setZoomDouble(double zoom)
 {
     setZoom(zoom);
 }
 
-void FramesTableView::slotZoomButtonPressed()
+void TimelineFramesView::slotZoomButtonPressed()
 {
     m_d->zoomStillPointIndex = currentIndex().column();
     slotZoomButtonPressedImpl();
 }
 
-void FramesTableView::slotZoomButtonPressedImpl()
+void TimelineFramesView::slotZoomButtonPressedImpl()
 {
     const int w = m_d->horizontalRuler->defaultSectionSize();
 
@@ -275,7 +275,7 @@ void FramesTableView::slotZoomButtonPressedImpl()
     m_d->initialDragZoomValue = zoom();
 }
 
-void FramesTableView::slotZoomButtonChanged(int value)
+void TimelineFramesView::slotZoomButtonChanged(int value)
 {
     qreal zoomCoeff = std::pow(2.0, qreal(value) / KisDraggableToolButton::unitRadius());
     setZoom(m_d->initialDragZoomValue * zoomCoeff);
@@ -284,7 +284,7 @@ void FramesTableView::slotZoomButtonChanged(int value)
     horizontalScrollBar()->setValue(w * m_d->zoomStillPointIndex - m_d->zoomStillPointOriginalOffset);
 }
 
-void FramesTableView::slotUpdateInfiniteFramesCount()
+void TimelineFramesView::slotUpdateInfiniteFramesCount()
 {
     if (horizontalScrollBar()->isSliderDown()) return;
 
@@ -296,7 +296,7 @@ void FramesTableView::slotUpdateInfiniteFramesCount()
     m_d->model->setLastVisibleFrame(calculatedIndex);
 }
 
-void FramesTableView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
+void TimelineFramesView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
 {
     QTableView::currentChanged(current, previous);
 
@@ -307,13 +307,13 @@ void FramesTableView::currentChanged(const QModelIndex &current, const QModelInd
     m_d->model->setData(current, true, TimelineFramesModel::ActiveFrameRole);
 }
 
-void FramesTableView::slotReselectCurrentIndex()
+void TimelineFramesView::slotReselectCurrentIndex()
 {
     QModelIndex index = currentIndex();
     currentChanged(index, index);
 }
 
-void FramesTableView::slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
+void TimelineFramesView::slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
     int selectedRow = -1;
     int selectedColumn = -1;
@@ -361,7 +361,7 @@ void FramesTableView::slotDataChanged(const QModelIndex &topLeft, const QModelIn
     }
 }
 
-void FramesTableView::slotHeaderDataChanged(Qt::Orientation orientation, int first, int last)
+void TimelineFramesView::slotHeaderDataChanged(Qt::Orientation orientation, int first, int last)
 {
     Q_UNUSED(first);
     Q_UNUSED(last);
@@ -375,7 +375,7 @@ void FramesTableView::slotHeaderDataChanged(Qt::Orientation orientation, int fir
     }
 }
 
-void FramesTableView::dragEnterEvent(QDragEnterEvent *event)
+void TimelineFramesView::dragEnterEvent(QDragEnterEvent *event)
 {
     m_d->dragInProgress = true;
     m_d->model->setScrubState(true);
@@ -383,7 +383,7 @@ void FramesTableView::dragEnterEvent(QDragEnterEvent *event)
     QTableView::dragEnterEvent(event);
 }
 
-void FramesTableView::dragMoveEvent(QDragMoveEvent *event)
+void TimelineFramesView::dragMoveEvent(QDragMoveEvent *event)
 {
     m_d->dragInProgress = true;
     m_d->model->setScrubState(true);
@@ -400,7 +400,7 @@ void FramesTableView::dragMoveEvent(QDragMoveEvent *event)
     }
 }
 
-void FramesTableView::dropEvent(QDropEvent *event)
+void TimelineFramesView::dropEvent(QDropEvent *event)
 {
     m_d->dragInProgress = false;
     m_d->model->setScrubState(false);
@@ -409,7 +409,7 @@ void FramesTableView::dropEvent(QDropEvent *event)
     setCurrentIndex(currentIndex());
 }
 
-void FramesTableView::dragLeaveEvent(QDragLeaveEvent *event)
+void TimelineFramesView::dragLeaveEvent(QDragLeaveEvent *event)
 {
     m_d->dragInProgress = false;
     m_d->model->setScrubState(false);
@@ -418,7 +418,7 @@ void FramesTableView::dragLeaveEvent(QDragLeaveEvent *event)
     setCurrentIndex(currentIndex());
 }
 
-void FramesTableView::mousePressEvent(QMouseEvent *event)
+void TimelineFramesView::mousePressEvent(QMouseEvent *event)
 {
     QPersistentModelIndex index = indexAt(event->pos());
 
@@ -457,7 +457,7 @@ void FramesTableView::mousePressEvent(QMouseEvent *event)
     }
 }
 
-void FramesTableView::mouseMoveEvent(QMouseEvent *e)
+void TimelineFramesView::mouseMoveEvent(QMouseEvent *e)
 {
     if (e->modifiers() & Qt::ControlModifier) {
         QPoint diff = e->pos() - m_d->startZoomPanDragPos;
@@ -479,7 +479,7 @@ void FramesTableView::mouseMoveEvent(QMouseEvent *e)
     }
 }
 
-void FramesTableView::mouseReleaseEvent(QMouseEvent *e)
+void TimelineFramesView::mouseReleaseEvent(QMouseEvent *e)
 {
     if (e->modifiers() & Qt::ControlModifier) {
         e->accept();
@@ -490,7 +490,7 @@ void FramesTableView::mouseReleaseEvent(QMouseEvent *e)
 }
 
 
-void FramesTableView::slotUpdateLayersMenu()
+void TimelineFramesView::slotUpdateLayersMenu()
 {
     QAction *action = 0;
 
@@ -508,12 +508,12 @@ void FramesTableView::slotUpdateLayersMenu()
     }
 }
 
-void FramesTableView::slotLayerContextMenuRequested(const QPoint &globalPos)
+void TimelineFramesView::slotLayerContextMenuRequested(const QPoint &globalPos)
 {
     m_d->layerEditingMenu->exec(globalPos);
 }
 
-void FramesTableView::slotAddNewLayer()
+void TimelineFramesView::slotAddNewLayer()
 {
     QModelIndex index = currentIndex();
     if (!index.isValid()) return;
@@ -522,7 +522,7 @@ void FramesTableView::slotAddNewLayer()
     model()->insertRow(newRow);
 }
 
-void FramesTableView::slotAddExistingLayer(QAction *action)
+void TimelineFramesView::slotAddExistingLayer(QAction *action)
 {
     QModelIndex index = currentIndex();
     if (!index.isValid()) return;
@@ -535,7 +535,7 @@ void FramesTableView::slotAddExistingLayer(QAction *action)
     }
 }
 
-void FramesTableView::slotRemoveLayer()
+void TimelineFramesView::slotRemoveLayer()
 {
     QModelIndex index = currentIndex();
     if (!index.isValid()) return;
@@ -543,7 +543,7 @@ void FramesTableView::slotRemoveLayer()
     model()->removeRow(index.row());
 }
 
-void FramesTableView::slotHideLayerFromTimeline()
+void TimelineFramesView::slotHideLayerFromTimeline()
 {
     QModelIndex index = currentIndex();
     if (!index.isValid()) return;
@@ -551,7 +551,7 @@ void FramesTableView::slotHideLayerFromTimeline()
     m_d->model->hideLayer(index.row());
 }
 
-void FramesTableView::slotNewFrame()
+void TimelineFramesView::slotNewFrame()
 {
     QModelIndex index = currentIndex();
     if (!index.isValid() ||
@@ -563,7 +563,7 @@ void FramesTableView::slotNewFrame()
     m_d->model->createFrame(index);
 }
 
-void FramesTableView::slotCopyFrame()
+void TimelineFramesView::slotCopyFrame()
 {
     QModelIndex index = currentIndex();
     if (!index.isValid() ||
@@ -575,7 +575,7 @@ void FramesTableView::slotCopyFrame()
     m_d->model->copyFrame(index);
 }
 
-void FramesTableView::slotRemoveFrame()
+void TimelineFramesView::slotRemoveFrame()
 {
     QModelIndex index = currentIndex();
     if (!index.isValid() ||

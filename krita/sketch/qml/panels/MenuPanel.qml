@@ -54,7 +54,6 @@ Item {
         }
 
         MouseArea {
-            id: mousearea1
             anchors.fill: parent;
             onClicked: base.collapsed = !base.collapsed;
         }

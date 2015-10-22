@@ -258,7 +258,7 @@ void TimelineRulerHeader::paintSection1(QPainter *painter, const QRect &rect, in
             QColor baseColor = QColor(200, 220, 150);
             fillColor = baseColor.darker(130);
         } else if (cachedValue.isValid() && cachedValue.toBool()) {
-            fillColor = fillColor.color().darker(110);
+            fillColor = fillColor.color().darker(115);
         }
 
         painter->fillRect(frameRect, fillColor);

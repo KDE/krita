@@ -69,8 +69,8 @@ public:
     qint32 defImageHeight(bool defaultValue = false) const;
     void defImageHeight(qint32 height) const;
 
-    double defImageResolution(bool defaultValue = false) const;
-    void defImageResolution(double res) const;
+    qreal defImageResolution(bool defaultValue = false) const;
+    void defImageResolution(qreal res) const;
 
     /**
      * @return the id of the default color model used for creating new images.

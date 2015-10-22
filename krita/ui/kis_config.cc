@@ -111,7 +111,7 @@ void KisConfig::setCumulativeUndoRedo(bool value)
     m_cfg.writeEntry("useCumulativeUndoRedo", value);
 }
 
-double KisConfig::stackT1(bool defaultValue) const
+qreal KisConfig::stackT1(bool defaultValue) const
 {
      return (defaultValue ? 5 : m_cfg.readEntry("stackT1",5));
 }
@@ -121,7 +121,7 @@ void KisConfig::setStackT1(int T1)
     m_cfg.writeEntry("stackT1", T1);
 }
 
-double KisConfig::stackT2(bool defaultValue) const
+qreal KisConfig::stackT2(bool defaultValue) const
 {
      return (defaultValue ? 1 : m_cfg.readEntry("stackT2",1));
 }
@@ -151,7 +151,7 @@ qint32 KisConfig::defImageHeight(bool defaultValue) const
     return (defaultValue ? 1200 : m_cfg.readEntry("imageHeightDef", 1200));
 }
 
-double KisConfig::defImageResolution(bool defaultValue) const
+qreal KisConfig::defImageResolution(bool defaultValue) const
 {
     return (defaultValue ? 100.0 : m_cfg.readEntry("imageResolutionDef", 100.0)) / 72.0;
 }
@@ -200,7 +200,7 @@ void KisConfig::defImageHeight(qint32 height) const
     m_cfg.writeEntry("imageHeightDef", height);
 }
 
-void KisConfig::defImageResolution(double res) const
+void KisConfig::defImageResolution(qreal res) const
 {
     m_cfg.writeEntry("imageResolutionDef", res*72.0);
 }

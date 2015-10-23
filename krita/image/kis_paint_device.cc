@@ -357,9 +357,11 @@ private:
 
         if (defaultBounds->currentLevelOfDetail()) {
             if (!m_lodData) {
+                Data *srcData = currentNonLodData();
+
                 QMutexLocker l(&m_dataSwitchLock);
                 if (!m_lodData) {
-                    m_lodData.reset(new Data(m_data, false));
+                    m_lodData.reset(new Data(srcData, false));
                 }
             }
             data = m_lodData.data();

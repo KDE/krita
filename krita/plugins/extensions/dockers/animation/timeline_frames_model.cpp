@@ -90,7 +90,7 @@ struct TimelineFramesModel::Private
     bool layerEditable(int row) const {
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return true;
-        return dummy->node()->isEditable();
+        return dummy->node()->visible() && !dummy->node()->userLocked();
     }
 
     bool frameExists(int row, int column) const {

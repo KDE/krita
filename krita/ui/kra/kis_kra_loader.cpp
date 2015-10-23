@@ -690,6 +690,9 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
 
         bool onionEnabled = element.attribute(ONION_SKIN_ENABLED, "0") == "0" ? false : true;
         layer->setOnionSkinEnabled(onionEnabled);
+
+        bool timelineEnabled = element.attribute(VISIBLE_IN_TIMELINE, "0") == "0" ? false : true;
+        layer->setUseInTimeline(timelineEnabled);
     }
 
     if (element.attribute(FILE_NAME).isNull()) {

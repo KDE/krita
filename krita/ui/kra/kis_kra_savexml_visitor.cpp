@@ -116,6 +116,7 @@ QDomElement KisSaveXmlVisitor::savePaintLayerAttributes(KisPaintLayer *layer, QD
 
     if (layer->isAnimated()) {
         element.setAttribute(ONION_SKIN_ENABLED, layer->onionSkinEnabled());
+        element.setAttribute(VISIBLE_IN_TIMELINE, layer->useInTimeline());
     }
 
     return element;

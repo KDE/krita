@@ -511,6 +511,16 @@ void KisNodeManager::createNode(const QString & nodeType, bool quiet, KisPaintDe
 
 }
 
+KisLayerSP KisNodeManager::createPaintLayer()
+{
+    KisNodeSP activeNode = this->activeNode();
+    if (!activeNode) {
+        activeNode = m_d->view->image()->root();
+    }
+
+    return m_d->layerManager->addLayer(activeNode);
+}
+
 void KisNodeManager::convertNode(const QString &nodeType)
 {
     KisNodeSP activeNode = this->activeNode();

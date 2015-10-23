@@ -38,6 +38,9 @@
 
 #include "kis_node_dummies_graph.h"
 
+#include "commands/kis_image_layer_add_command.h"
+#include "commands/kis_image_layer_remove_command.h"
+
 
 void TimelineModelTest::init()
 {
@@ -109,6 +112,39 @@ void TimelineModelTest::testModel()
     QScopedPointer<TimelineFramesModel> model(new TimelineFramesModel(0));
 }
 
+struct TestingInterface : TimelineFramesModel::NodeManipulationInterface
+{
+    TestingInterface(KisImageSP image) : m_image(image) {}
+
+    KisLayerSP addPaintLayer() const {
+        KisNodeSP parent = m_image->root();
+        KisNodeSP after = parent->lastChild();
+
+
+        KisPaintLayerSP layer =
+            new KisPaintLayer(const_cast<KisImage*>(m_image.data()),
+                              m_image->nextLayerName(),
+                              OPACITY_OPAQUE_U8,
+                              m_image->colorSpace());
+
+        m_image->undoAdapter()->addCommand(
+            new KisImageLayerAddCommand(m_image, layer,
+                                        parent,
+                                        after,
+                                        false, false));
+
+        return layer;
+    }
+
+    void removeNode(KisNodeSP node) const {
+        m_image->undoAdapter()->addCommand(
+            new KisImageLayerRemoveCommand(m_image, node));
+    }
+
+private:
+    KisImageSP m_image;
+};
+
 void TimelineModelTest::testView()
 {
     QDialog dlg;
@@ -139,6 +175,7 @@ void TimelineModelTest::testView()
     framesTable->setModel(model);
 
     model->setDummiesFacade(m_shapeController, m_image);
+    model->setNodeManipulationInterface(new TestingInterface(m_image));
 
     m_layer1->enableAnimation();
     m_layer1->setUseInTimeline(true);

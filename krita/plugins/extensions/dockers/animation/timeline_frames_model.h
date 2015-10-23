@@ -94,6 +94,19 @@ public:
     typedef TimelineNodeListKeeper::OtherLayer OtherLayer;
     typedef TimelineNodeListKeeper::OtherLayersList OtherLayersList;
 
+
+    struct NodeManipulationInterface {
+        virtual ~NodeManipulationInterface() {};
+        virtual KisLayerSP addPaintLayer() const = 0;
+        virtual void removeNode(KisNodeSP node) const = 0;
+    };
+
+    /**
+     * NOTE: the model has an ownership over the interface, that is it'll
+     *       be deleted automatically later
+     */
+    void setNodeManipulationInterface(NodeManipulationInterface *iface);
+
 private Q_SLOTS:
     void slotDummyChanged(KisNodeDummy *dummy);
     void processUpdateQueue();

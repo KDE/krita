@@ -22,15 +22,7 @@
 #include <QColor>
 #include <QMimeData>
 
-
-#include <boost/random/mersenne_twister.hpp>
-#include <boost/random/uniform_smallint.hpp>
-
-#include <KoColorSpace.h>
-#include <KoCompositeOpRegistry.h>
-#include "kis_paint_layer.h"
-#include "commands/kis_image_layer_add_command.h"
-#include "commands/kis_image_layer_remove_command.h"
+#include "kis_layer.h"
 
 #include "kis_global.h"
 #include "kis_debug.h"
@@ -86,6 +78,8 @@ struct TimelineFramesModel::Private
 
     KisAnimationFrameCacheSP framesCache;
     KisAnimationPlayer *animationPlayer;
+
+    QScopedPointer<NodeManipulationInterface> nodeInterface;
 
     QVariant layerName(int row) const {
         KisNodeDummy *dummy = converter->dummyFromRow(row);
@@ -214,32 +208,12 @@ struct TimelineFramesModel::Private
     }
 
     bool addNewLayer(int row) {
-        KisNodeSP parentNode;
-        KisNodeSP afterNode;
+        Q_UNUSED(row);
 
-        KisNodeDummy *dummy = converter->dummyFromRow(row);
-        if (!dummy) {
-            parentNode = dummiesFacade->rootDummy()->node();
-            KisNodeDummy *tmp = dummiesFacade->rootDummy()->lastChild();
-            afterNode = tmp ? tmp->node() : 0;
-        } else {
-            parentNode = dummy->parent()->node();
-            afterNode = dummy->node();
+        if (nodeInterface) {
+            KisLayerSP layer = nodeInterface->addPaintLayer();
+            layer->setUseInTimeline(true);
         }
-
-        KisPaintLayerSP layer =
-            new KisPaintLayer(image.data(),
-                              image->nextLayerName(),
-                              OPACITY_OPAQUE_U8,
-                              image->colorSpace());
-
-        image->undoAdapter()->addCommand(
-            new KisImageLayerAddCommand(image, layer,
-                                        parentNode,
-                                        afterNode,
-                                        false, false));
-
-        layer->setUseInTimeline(true);
 
         return true;
     }
@@ -248,8 +222,9 @@ struct TimelineFramesModel::Private
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return false;
 
-        image->undoAdapter()->addCommand(
-            new KisImageLayerRemoveCommand(image, dummy->node()));
+        if (nodeInterface) {
+            nodeInterface->removeNode(dummy->node());
+        }
 
         return true;
     }
@@ -299,6 +274,11 @@ void TimelineFramesModel::setAnimationPlayer(KisAnimationPlayer *player)
         connect(m_d->animationPlayer, SIGNAL(sigPlaybackStopped()), SLOT(slotPlaybackStopped()));
         connect(m_d->animationPlayer, SIGNAL(sigFrameChanged()), SLOT(slotPlaybackFrameChanged()));
     }
+}
+
+void TimelineFramesModel::setNodeManipulationInterface(NodeManipulationInterface *iface)
+{
+    m_d->nodeInterface.reset(iface);
 }
 
 void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageSP image)
@@ -366,6 +346,11 @@ void TimelineFramesModel::slotCurrentTimeChanged(int time)
 
 void TimelineFramesModel::slotCurrentNodeChanged(KisNodeSP node)
 {
+    if (!node) {
+        m_d->activeLayerIndex = -1;
+        return;
+    }
+
     KisNodeDummy *dummy = m_d->dummiesFacade->dummyForNode(node);
     KIS_ASSERT_RECOVER_RETURN(dummy);
 

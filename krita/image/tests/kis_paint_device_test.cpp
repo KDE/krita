@@ -1912,6 +1912,46 @@ void KisPaintDeviceTest::testFramesUndoRedoWithChannel()
     QVERIFY(o.m_currentData == o.m_frames.begin().value());
 }
 
+#include "kis_surrogate_undo_adapter.h"
+
+void KisPaintDeviceTest::testLazyFrameCreation()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();
+    dev->setDefaultBounds(bounds);
+
+    KisRasterKeyframeChannel *channel = dev->createKeyframeChannel(KisKeyframeChannel::Content, 0);
+    QVERIFY(channel);
+
+    KisPaintDeviceFramesInterface *i = dev->framesInterface();
+    QVERIFY(i);
+
+    QCOMPARE(i->frames().size(), 1);
+
+    bounds->testingSetTime(10);
+
+    QCOMPARE(i->frames().size(), 1);
+
+    KisSurrogateUndoAdapter undoAdapter;
+
+    {
+        KisTransaction transaction1(dev);
+        transaction1.commit(&undoAdapter);
+    }
+
+    QCOMPARE(i->frames().size(), 2);
+
+    undoAdapter.undoAll();
+
+    QCOMPARE(i->frames().size(), 1);
+
+    undoAdapter.redoAll();
+
+    QCOMPARE(i->frames().size(), 2);
+}
+
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/variance.hpp>

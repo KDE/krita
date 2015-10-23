@@ -5,6 +5,8 @@
     Copyright (C) 2007 Roberto Raggi <roberto@kdevelop.org>
     Copyright (C) 2007 Andreas Hartmetz <ahartmetz@gmail.com>
     Copyright (C) 2008 Michael Jansen <kde@michael-jansen.biz>
+    Copyright (c) 2015 Michael Abrahams <miabraha@gmail.com>
+
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -22,8 +24,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSHORTCUTSEDITOR_H
-#define KSHORTCUTSEDITOR_H
+#ifndef KISSHORTCUTSEDITOR_H
+#define KISSHORTCUTSEDITOR_H
 
 #include <kritawidgetutils_export.h>
 
@@ -38,11 +40,17 @@ class KConfig;
 class KConfigBase;
 class KConfigGroup;
 class KGlobalAccel;
-class KShortcutsEditorPrivate;
+class KisShortcutsEditorPrivate;
 
-// KShortcutsEditor expects that the list of existing shortcuts is already
-// free of conflicts. If it is not, nothing will crash, but your users
-// won't like the resulting behavior.
+
+/**
+ * WARNING: KisShortcutsEditor expects that the list of existing shortcuts is
+ * already free of conflicts. If it is not, nothing will crash, but your users
+ * won't like the resulting behavior.
+ *
+ * TODO: What exactly is the problem?
+ */
+
 
 /**
  * @short Widget for configuration of KAccel and KGlobalAccel.
@@ -60,7 +68,7 @@ class KShortcutsEditorPrivate;
  * @author Hamish Rodda <rodda@kde.org> (KDE 4 porting)
  * @author Michael Jansen <kde@michael-jansen.biz>
  */
-class KRITAWIDGETUTILS_EXPORT KShortcutsEditor : public QWidget
+class KRITAWIDGETUTILS_EXPORT KisShortcutsEditor : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(ActionTypes actionTypes READ actionTypes WRITE setActionTypes)
@@ -99,7 +107,7 @@ public:
      * @param allowLetterShortcuts set to LetterShortcutsDisallowed if unmodified alphanumeric
      *  keys ('A', '1', etc.) are not permissible shortcuts.
      */
-    KShortcutsEditor(KActionCollection *collection, QWidget *parent, ActionTypes actionTypes = AllActions, LetterShortcuts allowLetterShortcuts = LetterShortcutsAllowed);
+    KisShortcutsEditor(KActionCollection *collection, QWidget *parent, ActionTypes actionTypes = AllActions, LetterShortcuts allowLetterShortcuts = LetterShortcutsAllowed);
 
     /**
      * \overload
@@ -111,10 +119,10 @@ public:
      * @param allowLetterShortcuts set to LetterShortcutsDisallowed if unmodified alphanumeric
      *  keys ('A', '1', etc.) are not permissible shortcuts.
      */
-    explicit KShortcutsEditor(QWidget *parent, ActionTypes actionTypes = AllActions, LetterShortcuts allowLetterShortcuts = LetterShortcutsAllowed);
+    explicit KisShortcutsEditor(QWidget *parent, ActionTypes actionTypes = AllActions, LetterShortcuts allowLetterShortcuts = LetterShortcutsAllowed);
 
     /// Destructor
-    virtual ~KShortcutsEditor();
+    virtual ~KisShortcutsEditor();
 
     /**
      * Are the unsaved changes?
@@ -128,7 +136,7 @@ public:
 
     /**
      * Insert an action collection, i.e. add all its actions to the ones
-     * already associated with the KShortcutsEditor object.
+     * already associated with the KisShortcutsEditor object.
      * @param title subtree title of this collection of shortcut.
      */
     void addCollection(KActionCollection *, const QString &title = QString());
@@ -222,12 +230,12 @@ private:
     Q_PRIVATE_SLOT(d, void capturedShortcut(QVariant, const QModelIndex &))
 
 private:
-    friend class KShortcutsDialog;
-    friend class KShortcutsEditorPrivate;
-    KShortcutsEditorPrivate *const d;
-    Q_DISABLE_COPY(KShortcutsEditor)
+    friend class KisShortcutsDialog;
+    friend class KisShortcutsEditorPrivate;
+    KisShortcutsEditorPrivate *const d;
+    Q_DISABLE_COPY(KisShortcutsEditor)
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KShortcutsEditor::ActionTypes)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisShortcutsEditor::ActionTypes)
 
-#endif // KSHORTCUTSEDITOR_H
+#endif // KISSHORTCUTSEDITOR_H

@@ -44,56 +44,47 @@
 #include "kxmlguifactory.h"
 #include "kactioncollection.h"
 
-KisShortcutsDialog::KisShortcutsDialog(KShortcutsEditor::ActionTypes types,
-                                       KShortcutsEditor::LetterShortcuts allowLetterShortcuts,
+KisShortcutsDialog::KisShortcutsDialog(KisShortcutsEditor::ActionTypes types,
+                                       KisShortcutsEditor::LetterShortcuts allowLetterShortcuts,
                                        QWidget *parent)
     : QDialog(parent)
     , d(new KisShortcutsDialogPrivate(this))
 {
-    /*  Set up UI layout  */
+
+    d->m_shortcutsEditor = new KisShortcutsEditor(this, types, allowLetterShortcuts);
+
+
+
+    /*  Construct & Connect UI  */
     setWindowTitle(i18n("Configure Shortcuts"));
     setModal(true);
 
     QVBoxLayout *layout = new QVBoxLayout;
     setLayout(layout);
-
-    d->m_keyChooser = new KShortcutsEditor(this, types, allowLetterShortcuts);
-    layout->addWidget(d->m_keyChooser);
-
-#ifndef NOSCHEMESPLEASEFORKRITA
-    d->m_schemeEditor = new KShortcutSchemesEditor(this);
-    connect(d->m_schemeEditor, SIGNAL(shortcutsSchemeChanged(QString)),
-            this, SLOT(changeShortcutScheme(QString)));
-    d->m_schemeEditor->hide();
-    layout->addWidget(d->m_schemeEditor);
-    d->m_detailsButton = new QPushButton;
-    d->m_detailsButton->setText(i18n("&Details") + QStringLiteral(" >>"));
-#endif
+    layout->addWidget(d->m_shortcutsEditor);
 
     QPushButton *printButton = new QPushButton;
     KGuiItem::assign(printButton, KStandardGuiItem::print());
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(this);
-#ifndef NOSCHEMESPLEASEFORKRITA
-    buttonBox->addButton(d->m_detailsButton, QDialogButtonBox::ActionRole);
-#endif
     buttonBox->addButton(printButton, QDialogButtonBox::ActionRole);
-    buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults);
-    KGuiItem::assign(buttonBox->button(QDialogButtonBox::Ok), KStandardGuiItem::ok());
-    KGuiItem::assign(buttonBox->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
-    KGuiItem::assign(buttonBox->button(QDialogButtonBox::RestoreDefaults), KStandardGuiItem::defaults());
+    buttonBox->setStandardButtons(QDialogButtonBox::Ok |
+                                  QDialogButtonBox::Cancel |
+                                  QDialogButtonBox::RestoreDefaults);
+    KGuiItem::assign(buttonBox->button(QDialogButtonBox::Ok),
+                     KStandardGuiItem::ok());
+    KGuiItem::assign(buttonBox->button(QDialogButtonBox::Cancel),
+                     KStandardGuiItem::cancel());
+    KGuiItem::assign(buttonBox->button(QDialogButtonBox::RestoreDefaults),
+                     KStandardGuiItem::defaults());
     layout->addWidget(buttonBox);
 
     connect(buttonBox->button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked()),
-            d->m_keyChooser, SLOT(allDefault()));
-    connect(printButton, SIGNAL(clicked()), d->m_keyChooser, SLOT(printShortcuts()));
+            d->m_shortcutsEditor, SLOT(allDefault()));
+    connect(printButton, SIGNAL(clicked()), d->m_shortcutsEditor, SLOT(printShortcuts()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(undoChanges()));
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-
-#ifndef NOSCHEMESPLEASEFORKRITA
-    // connect(d->m_detailsButton, &clicked(), this, &toggleDetails());
-#endif
 
     KConfigGroup group(KSharedConfig::openConfig(), "KisShortcutsDialog Settings");
     resize(group.readEntry("Dialog Size", sizeHint()));
@@ -108,7 +99,7 @@ KisShortcutsDialog::~KisShortcutsDialog()
 
 void KisShortcutsDialog::addCollection(KActionCollection *collection, const QString &title)
 {
-    d->m_keyChooser->addCollection(collection, title);
+    d->m_shortcutsEditor->addCollection(collection, title);
     d->m_collections << collection;
 }
 
@@ -117,7 +108,6 @@ QList<KActionCollection *> KisShortcutsDialog::actionCollections() const
     return d->m_collections;
 }
 
-//FIXME should there be a setSaveSettings method?
 bool KisShortcutsDialog::configure(bool saveSettings)
 {
     d->m_saveSettings = saveSettings;
@@ -143,12 +133,12 @@ QSize KisShortcutsDialog::sizeHint() const
     return QSize(600, 480);
 }
 
-int KisShortcutsDialog::configure(KActionCollection *collection, KShortcutsEditor::LetterShortcuts allowLetterShortcuts,
-                                QWidget *parent, bool saveSettings)
+int KisShortcutsDialog::configure(KActionCollection *collection,
+                                  KisShortcutsEditor::LetterShortcuts allowLetterShortcuts,
+                                  QWidget *parent, bool saveSettings)
 {
-    //qDebug(125) << "KisShortcutsDialog::configureKeys( KActionCollection*, " << saveSettings << " )";
-    KisShortcutsDialog dlg(KShortcutsEditor::AllActions, allowLetterShortcuts, parent);
-    dlg.d->m_keyChooser->addCollection(collection);
+    KisShortcutsDialog dlg(KisShortcutsEditor::AllActions, allowLetterShortcuts, parent);
+    dlg.d->m_shortcutsEditor->addCollection(collection);
     return dlg.configure(saveSettings);
 }
 

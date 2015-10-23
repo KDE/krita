@@ -28,6 +28,10 @@ set(kritawidgetutils_LIB_SRCS
     xmlgui/KisShortcutsEditorDelegate.cpp
     xmlgui/KisShortcutsDialog.cpp
     xmlgui/KisShortcutsDialog_p.cpp
+    xmlgui/KisShortcutsEditor.cpp
+
+    # xmlgui/kshortcutschemeseditor.cpp
+    # xmlgui/kshortcutschemeshelper.cpp
 
     xmlgui/kaboutkdedialog_p.cpp
     xmlgui/kactioncategory.cpp
@@ -42,9 +46,6 @@ set(kritawidgetutils_LIB_SRCS
     xmlgui/kkeysequencewidget.cpp
     xmlgui/kmainwindow.cpp
     xmlgui/kmenumenuhandler_p.cpp
-    # xmlgui/kshortcutschemeseditor.cpp
-    # xmlgui/kshortcutschemeshelper.cpp
-    xmlgui/kshortcutseditor.cpp
     xmlgui/kshortcutwidget.cpp
     xmlgui/kswitchlanguagedialog_p.cpp
     xmlgui/ktoggletoolbaraction.cpp

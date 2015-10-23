@@ -48,7 +48,7 @@ class QAction;
 class KActionCollection;
 class QPushButton;
 class QComboBox;
-class KShortcutsDialog;
+class KisShortcutsDialog;
 
 enum ColumnDesignation {
     Name = 0,
@@ -81,11 +81,11 @@ QKeySequence primarySequence(const QList<QKeySequence> &sequences);
 QKeySequence alternateSequence(const QList<QKeySequence> &sequences);
 
 /**
- * Mixes the KShortcutWidget into the treeview used by KShortcutsEditor. When selecting an shortcut
+ * Mixes the KShortcutWidget into the treeview used by KisShortcutsEditor. When selecting an shortcut
  * it changes the display from "CTRL-W" to the Widget.
  *
  * @bug That delegate uses KExtendableItemDelegate. That means a cell can be expanded. When selected
- * a cell is replaced by a KShortcutsEditor. When painting the widget KExtendableItemDelegate
+ * a cell is replaced by a KisShortcutsEditor. When painting the widget KExtendableItemDelegate
  * reparents the widget to the viewport of the itemview it belongs to. The widget is destroyed when
  * the user selects another shortcut or explicitly issues a contractItem event. But when the user
  * clears the model the delegate misses that event and doesn't delete the KShortcutseditor. And
@@ -94,11 +94,11 @@ QKeySequence alternateSequence(const QList<QKeySequence> &sequences);
  *
  * @internal
  */
-class KShortcutsEditorDelegate : public KExtendableItemDelegate
+class KisShortcutsEditorDelegate : public KExtendableItemDelegate
 {
     Q_OBJECT
 public:
-    KShortcutsEditorDelegate(QTreeWidget *parent, bool allowLetterShortcuts);
+    KisShortcutsEditorDelegate(QTreeWidget *parent, bool allowLetterShortcuts);
     //reimplemented to have some extra height
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const Q_DECL_OVERRIDE;
 
@@ -219,7 +219,7 @@ class KShortcutSchemesEditor: public QGroupBox
 {
     Q_OBJECT
 public:
-    KShortcutSchemesEditor(KShortcutsDialog *parent);
+    KShortcutSchemesEditor(KisShortcutsDialog *parent);
 
     /** @return the currently selected scheme in the editor (may differ from current app's scheme.*/
     QString currentScheme();
@@ -243,7 +243,7 @@ private:
     QPushButton *m_exportScheme;
     QComboBox *m_schemesList;
 
-    KShortcutsDialog *m_dialog;
+    KisShortcutsDialog *m_dialog;
 };
 
 class QAction;
@@ -260,18 +260,18 @@ class KRockerGesture;
  *
  * @internal
  */
-class KShortcutsEditorItem : public QTreeWidgetItem
+class KisShortcutsEditorItem : public QTreeWidgetItem
 {
 public:
 
-    KShortcutsEditorItem(QTreeWidgetItem *parent, QAction *action);
+    KisShortcutsEditorItem(QTreeWidgetItem *parent, QAction *action);
 
     /**
      * Destructor
      *
      * Will undo pending changes. If you don't want that. Call commitChanges before
      */
-    virtual ~KShortcutsEditorItem();
+    virtual ~KisShortcutsEditorItem();
 
     //! Undo the changes since the last commit.
     void undo();
@@ -298,7 +298,7 @@ public:
     }
 
 private:
-    friend class KShortcutsEditorPrivate;
+    friend class KisShortcutsEditorPrivate;
 
     //! Recheck modified status - could have changed back to initial value
     void updateModified();
@@ -330,11 +330,11 @@ private:
 
 };
 
-// NEEDED FOR KShortcutsEditorPrivate
+// NEEDED FOR KisShortcutsEditorPrivate
 #include "ui_kshortcutsdialog.h"
 
 // Hack to make two protected methods public.
-// Used by both KShortcutsEditorPrivate and KShortcutsEditorDelegate
+// Used by both KisShortcutsEditorPrivate and KisShortcutsEditorDelegate
 class QTreeWidgetHack : public QTreeWidget
 {
 public:
@@ -354,18 +354,18 @@ public:
  *
  * @internal
  */
-class KShortcutsEditorPrivate
+class KisShortcutsEditorPrivate
 {
 public:
 
-    KShortcutsEditorPrivate(KShortcutsEditor *q);
+    KisShortcutsEditorPrivate(KisShortcutsEditor *q);
 
-    void initGUI(KShortcutsEditor::ActionTypes actionTypes, KShortcutsEditor::LetterShortcuts allowLetterShortcuts);
+    void initGUI(KisShortcutsEditor::ActionTypes actionTypes, KisShortcutsEditor::LetterShortcuts allowLetterShortcuts);
     void appendToView(uint nList, const QString &title = QString());
     //used in appendToView
     QTreeWidgetItem *findOrMakeItem(QTreeWidgetItem *parent, const QString &name);
 
-    static KShortcutsEditorItem *itemFromIndex(QTreeWidget *const w, const QModelIndex &index);
+    static KisShortcutsEditorItem *itemFromIndex(QTreeWidget *const w, const QModelIndex &index);
 
     // Set all shortcuts to their default values (bindings).
     void allDefault();
@@ -378,15 +378,15 @@ public:
 
 #if 0
     //helper functions for conflict resolution
-    bool stealShapeGesture(KShortcutsEditorItem *item, const KShapeGesture &gest);
-    bool stealRockerGesture(KShortcutsEditorItem *item, const KRockerGesture &gest);
+    bool stealShapeGesture(KisShortcutsEditorItem *item, const KShapeGesture &gest);
+    bool stealRockerGesture(KisShortcutsEditorItem *item, const KRockerGesture &gest);
 #endif
 
     //conflict resolution functions
-    void changeKeyShortcut(KShortcutsEditorItem *item, uint column, const QKeySequence &capture);
+    void changeKeyShortcut(KisShortcutsEditorItem *item, uint column, const QKeySequence &capture);
 #if 0
-    void changeShapeGesture(KShortcutsEditorItem *item, const KShapeGesture &capture);
-    void changeRockerGesture(KShortcutsEditorItem *item, const KRockerGesture &capture);
+    void changeShapeGesture(KisShortcutsEditorItem *item, const KShapeGesture &capture);
+    void changeRockerGesture(KisShortcutsEditorItem *item, const KRockerGesture &capture);
 #endif
 
 // private slots
@@ -406,20 +406,19 @@ public:
 
     void printShortcuts() const;
 
-    void setActionTypes(KShortcutsEditor::ActionTypes actionTypes);
+    void setActionTypes(KisShortcutsEditor::ActionTypes actionTypes);
 
 // members
     QList<KActionCollection *> actionCollections;
-    KShortcutsEditor *q;
+    KisShortcutsEditor *q;
 
-    Ui::KShortcutsDialog ui;
+    Ui::KisShortcutsDialog ui;
 
-    KShortcutsEditor::ActionTypes actionTypes;
-    KShortcutsEditorDelegate *delegate;
+    KisShortcutsEditor::ActionTypes actionTypes;
+    KisShortcutsEditorDelegate *delegate;
 
 };
 
-Q_DECLARE_METATYPE(KShortcutsEditorItem *)
+Q_DECLARE_METATYPE(KisShortcutsEditorItem *)
 
 #endif /* KSHORTCUTSDIALOG_P_H */
-

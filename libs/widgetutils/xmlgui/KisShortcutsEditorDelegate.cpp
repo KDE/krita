@@ -32,7 +32,7 @@
 #include <QPainter>
 #include <QTreeWidgetItemIterator>
 
-KShortcutsEditorDelegate::KShortcutsEditorDelegate(QTreeWidget *parent, bool allowLetterShortcuts)
+KisShortcutsEditorDelegate::KisShortcutsEditorDelegate(QTreeWidget *parent, bool allowLetterShortcuts)
     : KExtendableItemDelegate(parent),
       m_allowLetterShortcuts(allowLetterShortcuts),
       m_editor(0)
@@ -66,7 +66,7 @@ KShortcutsEditorDelegate::KShortcutsEditorDelegate(QTreeWidget *parent, bool all
     connect(parent, SIGNAL(collapsed(QModelIndex)), this, SLOT(itemCollapsed(QModelIndex)));
 }
 
-void KShortcutsEditorDelegate::stealShortcut(
+void KisShortcutsEditorDelegate::stealShortcut(
     const QKeySequence &seq,
     QAction *action)
 {
@@ -76,7 +76,7 @@ void KShortcutsEditorDelegate::stealShortcut(
     QTreeWidgetItemIterator it(view, QTreeWidgetItemIterator::NoChildren);
 
     for (; (*it); ++it) {
-        KShortcutsEditorItem *item = dynamic_cast<KShortcutsEditorItem *>(*it);
+        KisShortcutsEditorItem *item = dynamic_cast<KisShortcutsEditorItem *>(*it);
         if (item && item->data(0, ObjectRole).value<QObject *>() == action) {
 
             // We found the action, snapshot the current state. Steal the
@@ -100,7 +100,7 @@ void KShortcutsEditorDelegate::stealShortcut(
 
 }
 
-QSize KShortcutsEditorDelegate::sizeHint(const QStyleOptionViewItem &option,
+QSize KisShortcutsEditorDelegate::sizeHint(const QStyleOptionViewItem &option,
         const QModelIndex &index) const
 {
     QSize ret(KExtendableItemDelegate::sizeHint(option, index));
@@ -109,12 +109,12 @@ QSize KShortcutsEditorDelegate::sizeHint(const QStyleOptionViewItem &option,
 }
 
 //slot
-void KShortcutsEditorDelegate::itemActivated(QModelIndex index)
+void KisShortcutsEditorDelegate::itemActivated(QModelIndex index)
 {
     //As per our constructor our parent *is* a QTreeWidget
     QTreeWidget *view = static_cast<QTreeWidget *>(parent());
 
-    KShortcutsEditorItem *item = KShortcutsEditorPrivate::itemFromIndex(view, index);
+    KisShortcutsEditorItem *item = KisShortcutsEditorPrivate::itemFromIndex(view, index);
     if (!item) {
         //that probably was a non-leaf (type() !=ActionItem) item
         return;
@@ -143,9 +143,9 @@ void KShortcutsEditorDelegate::itemActivated(QModelIndex index)
     if (!isExtended(index)) {
         //we only want maximum ONE extender open at any time.
         if (m_editingIndex.isValid()) {
-            KShortcutsEditorItem *oldItem = KShortcutsEditorPrivate::itemFromIndex(view,
+            KisShortcutsEditorItem *oldItem = KisShortcutsEditorPrivate::itemFromIndex(view,
                                             m_editingIndex);
-            Q_ASSERT(oldItem); //here we really expect nothing but a real KShortcutsEditorItem
+            Q_ASSERT(oldItem); //here we really expect nothing but a real KisShortcutsEditorItem
 
             oldItem->setNameBold(false);
             contractItem(m_editingIndex);
@@ -211,7 +211,7 @@ void KShortcutsEditorDelegate::itemActivated(QModelIndex index)
 }
 
 //slot
-void KShortcutsEditorDelegate::itemCollapsed(QModelIndex index)
+void KisShortcutsEditorDelegate::itemCollapsed(QModelIndex index)
 {
     if (!m_editingIndex.isValid()) {
         return;
@@ -230,19 +230,19 @@ void KShortcutsEditorDelegate::itemCollapsed(QModelIndex index)
 }
 
 //slot
-void KShortcutsEditorDelegate::hiddenBySearchLine(QTreeWidgetItem *item, bool hidden)
+void KisShortcutsEditorDelegate::hiddenBySearchLine(QTreeWidgetItem *item, bool hidden)
 {
     if (!hidden || !item) {
         return;
     }
     QTreeWidget *view = static_cast<QTreeWidget *>(parent());
-    QTreeWidgetItem *editingItem = KShortcutsEditorPrivate::itemFromIndex(view, m_editingIndex);
+    QTreeWidgetItem *editingItem = KisShortcutsEditorPrivate::itemFromIndex(view, m_editingIndex);
     if (editingItem == item) {
         itemActivated(m_editingIndex); //this will *close* the item's editor because it's already open
     }
 }
 
-bool KShortcutsEditorDelegate::eventFilter(QObject *o, QEvent *e)
+bool KisShortcutsEditorDelegate::eventFilter(QObject *o, QEvent *e)
 {
     if (o == m_editor) {
         //Prevent clicks in the empty part of the editor widget from closing the editor
@@ -301,13 +301,13 @@ bool KShortcutsEditorDelegate::eventFilter(QObject *o, QEvent *e)
 }
 
 //slot
-void KShortcutsEditorDelegate::keySequenceChanged(const QKeySequence &seq)
+void KisShortcutsEditorDelegate::keySequenceChanged(const QKeySequence &seq)
 {
     QVariant ret = QVariant::fromValue(seq);
     emit shortcutChanged(ret, m_editingIndex);
 }
 
-void KShortcutsEditorDelegate::setCheckActionCollections(
+void KisShortcutsEditorDelegate::setCheckActionCollections(
     const QList<KActionCollection *> checkActionCollections)
 {
     m_checkActionCollections = checkActionCollections;
@@ -315,7 +315,7 @@ void KShortcutsEditorDelegate::setCheckActionCollections(
 
 #if 0
 //slot
-void KShortcutsEditorDelegate::shapeGestureChanged(const KShapeGesture &gest)
+void KisShortcutsEditorDelegate::shapeGestureChanged(const KShapeGesture &gest)
 {
     //this is somewhat verbose because the gesture types are not "built in" to QVariant
     QVariant ret = QVariant::fromValue(gest);
@@ -325,7 +325,7 @@ void KShortcutsEditorDelegate::shapeGestureChanged(const KShapeGesture &gest)
 
 #if 0
 //slot
-void KShortcutsEditorDelegate::rockerGestureChanged(const KRockerGesture &gest)
+void KisShortcutsEditorDelegate::rockerGestureChanged(const KRockerGesture &gest)
 {
     QVariant ret = QVariant::fromValue(gest);
     emit shortcutChanged(ret, m_editingIndex);

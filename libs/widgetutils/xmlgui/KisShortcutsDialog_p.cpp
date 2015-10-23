@@ -44,15 +44,15 @@ KisShortcutsDialog::KisShortcutsDialogPrivate::KisShortcutsDialogPrivate(KisShor
 void KisShortcutsDialog::KisShortcutsDialogPrivate::changeShortcutScheme(const QString &scheme)
 {
     QString dialogText = i18n("The current shortcut scheme is modified. Save before switching to the new one?");
-    if (m_keyChooser->isModified() &&
+    if (m_shortcutsEditor->isModified() &&
         KMessageBox::questionYesNo( q,dialogText ) == KMessageBox::Yes) {
-        m_keyChooser->save();
+        m_shortcutsEditor->save();
     } else {
-        m_keyChooser->undoChanges();
+        m_shortcutsEditor->undoChanges();
     }
 
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-    m_keyChooser->clearCollections();
+    m_shortcutsEditor->clearCollections();
 
     foreach (KActionCollection *collection, m_collections) {
         // passing an empty stream forces the clients to reread the XML
@@ -74,7 +74,7 @@ void KisShortcutsDialog::KisShortcutsDialogPrivate::changeShortcutScheme(const Q
     }
 
     foreach (KActionCollection *collection, m_collections) {
-        m_keyChooser->addCollection(collection);
+        m_shortcutsEditor->addCollection(collection);
     }
 
     QApplication::restoreOverrideCursor();
@@ -82,24 +82,14 @@ void KisShortcutsDialog::KisShortcutsDialogPrivate::changeShortcutScheme(const Q
 
 void KisShortcutsDialog::KisShortcutsDialogPrivate::undoChanges()
 {
-    m_keyChooser->undoChanges();
+    m_shortcutsEditor->undoChanges();
 }
 
 void KisShortcutsDialog::KisShortcutsDialogPrivate::save()
 {
-    m_keyChooser->save();
+    m_shortcutsEditor->save();
     emit q->saved();
 };
 
-
-#ifndef NOSCHEMESPLEASEFORKRITA
-void KisShortcutsDialog::KisShortcutsDialogPrivate::toggleDetails()
-{
-    const bool isVisible = m_schemeEditor->isVisible();
-
-    m_schemeEditor->setVisible(!isVisible);
-    m_detailsButton->setText(i18n("&Details") + (isVisible ? QStringLiteral(" >>") : QLatin1String(" <<")));
-}
-#endif
 
 #include "moc_KisShortcutsDialog_p.cpp"

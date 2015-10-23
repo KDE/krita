@@ -509,7 +509,7 @@ void KisPart::configureShortcuts()
     // planned anyway.
 
     // WidgetAction + WindowAction + ApplicationAction leaves only GlobalAction excluded
-    KisShortcutsDialog dlg(KShortcutsEditor::WidgetAction | KShortcutsEditor::WindowAction | KShortcutsEditor::ApplicationAction);
+    KisShortcutsDialog dlg;
     dlg.addCollection(d->actionCollection);
     dlg.configure();  // Show the dialog.
 

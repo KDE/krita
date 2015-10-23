@@ -35,7 +35,7 @@
 
 //#include <kglobalaccel.h>
 
-KShortcutsEditorItem::KShortcutsEditorItem(QTreeWidgetItem *parent, QAction *action)
+KisShortcutsEditorItem::KisShortcutsEditorItem(QTreeWidgetItem *parent, QAction *action)
     : QTreeWidgetItem(parent, ActionItem)
     , m_action(action)
     , m_isNameBold(false)
@@ -58,7 +58,7 @@ KShortcutsEditorItem::KShortcutsEditorItem(QTreeWidgetItem *parent, QAction *act
     m_collator.setCaseSensitivity(Qt::CaseSensitive);
 }
 
-KShortcutsEditorItem::~KShortcutsEditorItem()
+KisShortcutsEditorItem::~KisShortcutsEditorItem()
 {
     delete m_oldLocalShortcut;
     delete m_oldGlobalShortcut;
@@ -68,7 +68,7 @@ KShortcutsEditorItem::~KShortcutsEditorItem()
 #endif
 }
 
-bool KShortcutsEditorItem::isModified() const
+bool KisShortcutsEditorItem::isModified() const
 {
 #if 0
     return m_oldLocalShortcut || m_oldGlobalShortcut || m_oldShapeGesture || m_oldRockerGesture;
@@ -77,7 +77,7 @@ bool KShortcutsEditorItem::isModified() const
 #endif
 }
 
-QVariant KShortcutsEditorItem::data(int column, int role) const
+QVariant KisShortcutsEditorItem::data(int column, int role) const
 {
     switch (role) {
     case Qt::DisplayRole:
@@ -205,13 +205,13 @@ QVariant KShortcutsEditorItem::data(int column, int role) const
     return QVariant();
 }
 
-bool KShortcutsEditorItem::operator<(const QTreeWidgetItem &other) const
+bool KisShortcutsEditorItem::operator<(const QTreeWidgetItem &other) const
 {
     const int column = treeWidget() ? treeWidget()->sortColumn() : 0;
     return m_collator.compare(text(column), other.text(column)) < 0;
 }
 
-QKeySequence KShortcutsEditorItem::keySequence(uint column) const
+QKeySequence KisShortcutsEditorItem::keySequence(uint column) const
 {
     QList<QKeySequence> shortcuts = m_action->shortcuts();
 //    QList<QKeySequence> globalShortcuts = KGlobalAccel::self()->shortcut(m_action);
@@ -230,7 +230,7 @@ QKeySequence KShortcutsEditorItem::keySequence(uint column) const
     }
 }
 
-void KShortcutsEditorItem::setKeySequence(uint column, const QKeySequence &seq)
+void KisShortcutsEditorItem::setKeySequence(uint column, const QKeySequence &seq)
 {
     QList<QKeySequence> ks;
     if (column == GlobalPrimary || column == GlobalAlternate) {
@@ -274,7 +274,7 @@ void KShortcutsEditorItem::setKeySequence(uint column, const QKeySequence &seq)
 }
 
 #if 0
-void KShortcutsEditorItem::setShapeGesture(const KShapeGesture &gst)
+void KisShortcutsEditorItem::setShapeGesture(const KShapeGesture &gst)
 {
     if (!m_oldShapeGesture) {
         m_oldShapeGesture = new KShapeGesture(gst);
@@ -286,7 +286,7 @@ void KShortcutsEditorItem::setShapeGesture(const KShapeGesture &gst)
 #endif
 
 #if 0
-void KShortcutsEditorItem::setRockerGesture(const KRockerGesture &gst)
+void KisShortcutsEditorItem::setRockerGesture(const KRockerGesture &gst)
 {
     if (!m_oldRockerGesture) {
         m_oldRockerGesture = new KRockerGesture(gst);
@@ -298,7 +298,7 @@ void KShortcutsEditorItem::setRockerGesture(const KRockerGesture &gst)
 #endif
 
 //our definition of modified is "modified since the chooser was shown".
-void KShortcutsEditorItem::updateModified()
+void KisShortcutsEditorItem::updateModified()
 {
     if (m_oldLocalShortcut && *m_oldLocalShortcut == m_action->shortcuts()) {
         delete m_oldLocalShortcut;
@@ -320,7 +320,7 @@ void KShortcutsEditorItem::updateModified()
 #endif
 }
 
-bool KShortcutsEditorItem::isModified(uint column) const
+bool KisShortcutsEditorItem::isModified(uint column) const
 {
     switch (column) {
     case Name:
@@ -356,7 +356,7 @@ bool KShortcutsEditorItem::isModified(uint column) const
     }
 }
 
-void KShortcutsEditorItem::undo()
+void KisShortcutsEditorItem::undo()
 {
 #ifndef NDEBUG
 #if 0
@@ -389,7 +389,7 @@ void KShortcutsEditorItem::undo()
     updateModified();
 }
 
-void KShortcutsEditorItem::commit()
+void KisShortcutsEditorItem::commit()
 {
 #ifndef NDEBUG
 #if 0

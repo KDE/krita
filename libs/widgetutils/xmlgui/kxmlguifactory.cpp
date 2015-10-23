@@ -739,8 +739,8 @@ void KXMLGUIFactoryPrivate::applyShortcutScheme(KXMLGUIClient *client, const QLi
 
 int KXMLGUIFactory::configureShortcuts(bool letterCutsOk, bool bSaveSettings)
 {
-    KisShortcutsDialog dlg(KShortcutsEditor::AllActions,
-                         letterCutsOk ? KShortcutsEditor::LetterShortcutsAllowed : KShortcutsEditor::LetterShortcutsDisallowed,
+    KisShortcutsDialog dlg(KisShortcutsEditor::AllActions,
+                         letterCutsOk ? KisShortcutsEditor::LetterShortcutsAllowed : KisShortcutsEditor::LetterShortcutsDisallowed,
                          qobject_cast<QWidget *>(parent()));
     Q_FOREACH (KXMLGUIClient *client, d->m_clients) {
         if (client) {

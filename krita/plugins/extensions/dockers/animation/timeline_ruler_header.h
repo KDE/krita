@@ -46,6 +46,7 @@ private:
     void paintSpan(QPainter *painter, int userFrameId,
                    const QRect &spanRect,
                    bool isIntegralLine,
+                   bool isPrevIntegralLine,
                    QStyle *style,
                    const QPalette &palette,
                    const QPen &gridPen) const;

@@ -134,6 +134,7 @@ void TimelineRulerHeader::paintSection(QPainter *painter, const QRect &rect, int
 void TimelineRulerHeader::paintSpan(QPainter *painter, int userFrameId,
                                     const QRect &spanRect,
                                     bool isIntegralLine,
+                                    bool isPrevIntegralLine,
                                     QStyle *style,
                                     const QPalette &palette,
                                     const QPen &gridPen) const
@@ -147,6 +148,11 @@ void TimelineRulerHeader::paintSpan(QPainter *painter, int userFrameId,
 
     int adjustedTop = spanRect.top() + (!isIntegralLine ? spanRect.height() / 2 : 0);
     painter->drawLine(safeRight, adjustedTop, safeRight, spanRect.bottom());
+
+    if (isPrevIntegralLine) {
+        painter->drawLine(spanRect.left() + 1, spanRect.top(), spanRect.left() + 1, spanRect.bottom());
+    }
+
     painter->setPen(oldPen);
 
     QString frameIdText = QString::number(userFrameId);
@@ -242,7 +248,8 @@ void TimelineRulerHeader::paintSection1(QPainter *painter, const QRect &rect, in
 
     if (!internalIndex) {
         bool isIntegralLine = (logicalIndex + spanWidth) % m_d->fps == 0;
-        paintSpan(painter, userFrameId, spanRect, isIntegralLine, style(), palette(), gridPen);
+        bool isPrevIntegralLine = logicalIndex % m_d->fps == 0;
+        paintSpan(painter, userFrameId, spanRect, isIntegralLine, isPrevIntegralLine, style(), palette(), gridPen);
     }
 
     {

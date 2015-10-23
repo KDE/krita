@@ -76,10 +76,14 @@ KisTransactionData::KisTransactionData(const KUndo2MagicString& name, KisPaintDe
 }
 
 #include "kis_raster_keyframe_channel.h"
+#include "kis_image_config.h"
 
 void KisTransactionData::Private::tryCreateNewFrame(KisPaintDeviceSP device, int time)
 {
     if (!device->framesInterface()) return;
+
+    KisImageConfig cfg(true);
+    if (!cfg.lazyFrameCreationEnabled()) return;
 
     KisRasterKeyframeChannel *channel = device->keyframeChannel();
     KIS_ASSERT_RECOVER(channel) { return; }

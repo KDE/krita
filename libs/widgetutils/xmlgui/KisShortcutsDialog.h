@@ -30,25 +30,29 @@
 
 #include <KisShortcutsEditor.h>
 
-// This class and some classes it uses are here as plain copy from KF5 XmlGui.
-// Needed as a workaround to allow KisPart::configureShortcuts() to use the
-// dialog, but without its shortcut scheme editor support, since it's
-// incompatible with Krita.
+// Altering this class and some classes it uses was one major impetus behind
+// forking XmlGui. The first major workaround was to allow
+// KisPart::configureShortcuts() to pull up the dialog, and to remote the scheme
+// editor support, since it's incompatible with Krita.
 //
 // The files were forked from KF5 XmlGui version 5.12.0
 //     dialogs/KisShortcutsEditorItem.cpp       <- kshortcutseditoritem.cpp
 //     dialogs/KisShortcutEditWidget.cpp        <- kshortcuteditwidget.cpp
 //     dialogs/KisShortcutsEditorDelegate.cpp   <- kshortcutseditordelegate.cpp
-//     dialogs/KisShortcutsDialog.cpp           <- kshortcutsdialog.cpp
+//     dialogs/KisShortcutsDialog.cpp           <- kshortcutsdialog.cpp, , kshortcutsdialog_p.cpp
 //     dialogs/KisShortcutsDialog.h             <- kshortcutsdialog.h
-//     dialogs/KisShortcutsDialog_p.h           <- kshortcutsdialog_p.h
+//     dialogs/KisShortcutsDialog_p.h           <- kshortcutsdialog_p.h, kshortcutseditor_p.h
 //     forms/KisShortcutsDialog.ui              <- kshortcutsdialog.ui
+//
+// These files were forked from KF5 WidgetViews
+//
 //
 // Changes that have been done to the files:
 // * Adapt of includes
 // * Removing unwanted parts related to schemes
-// * Renamed KShortcutsDialog to KisShortcutsDialog
-// * Removed symbol export macro from KisShortcutsDialog
+// * Renamed KShortcutsDialog/Editor to KisShortcutsDialog/Editor
+// * Add export macro
+// * Split apart kshortcutseditor_p
 // * Copied KShortcutsEditorPrivate::itemFromIndex() implmentation from
 //   KF5 XmlGui's kshortcutseditor.cpp to begin of KisShortcutsEditorItem.cpp
 
@@ -172,7 +176,7 @@ Q_SIGNALS:
 
 private:
     Q_PRIVATE_SLOT(d, void changeShortcutScheme(const QString &))
-    Q_PRIVATE_SLOT(d, void undoChanges())
+    Q_PRIVATE_SLOT(d, void undo())
 
     class KisShortcutsDialogPrivate;
     class KisShortcutsDialogPrivate *const d;

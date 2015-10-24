@@ -33,7 +33,6 @@
 #include <QKeySequence>
 #include <QMetaType>
 #include <QModelIndex>
-#include <QTreeWidget>
 #include <QtCore/QList>
 #include <QtCore/QCollator>
 #include <QGroupBox>
@@ -92,7 +91,7 @@ class KisShortcutsDialog::KisShortcutsDialogPrivate
 public:
     KisShortcutsDialogPrivate(KisShortcutsDialog *q);
     void changeShortcutScheme(const QString &scheme);
-    void undoChanges();
+    void undo();
     void save();
 
     QList<KActionCollection *> m_collections;
@@ -232,156 +231,5 @@ private:
 };
 
 
-
-/**
- * A QTreeWidgetItem that can handle QActions.
- *
- * It provides undo, commit functionality for changes made. Changes are effective immediately. You
- * have to commit them or they will be undone when deleting the item.
- *
- * @internal
- */
-class KisShortcutsEditorItem : public QTreeWidgetItem
-{
-public:
-
-    KisShortcutsEditorItem(QTreeWidgetItem *parent, QAction *action);
-
-    /**
-     * Destructor
-     *
-     * Will undo pending changes. If you don't want that. Call commitChanges before
-     */
-    virtual ~KisShortcutsEditorItem();
-
-    //! Undo the changes since the last commit.
-    void undo();
-
-    //! Commit the changes.
-    void commit();
-
-    QVariant data(int column, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
-    bool operator<(const QTreeWidgetItem &other) const Q_DECL_OVERRIDE;
-
-    QKeySequence keySequence(uint column) const;
-    void setKeySequence(uint column, const QKeySequence &seq);
-    bool isModified(uint column) const;
-    bool isModified() const;
-
-    void setNameBold(bool flag)
-    {
-        m_isNameBold = flag;
-    }
-
-private:
-    friend class KisShortcutsEditorPrivate;
-
-    //! Recheck modified status - could have changed back to initial value
-    void updateModified();
-
-    //! The action this item is responsible for
-    QAction *m_action;
-
-    //! Should the Name column be painted in bold?
-    bool m_isNameBold;
-
-    //@{
-    //! The original shortcuts before user changes. 0 means no change.
-    QList<QKeySequence> *m_oldLocalShortcut;
-    QList<QKeySequence> *m_oldGlobalShortcut;
-    //@}
-
-    //! The localized action name
-    QString m_actionNameInTable;
-
-    //! The action id. Needed for exporting and importing
-    QString m_id;
-
-    //! The collator, for sorting
-    QCollator m_collator;
-
-};
-
-// NEEDED FOR KisShortcutsEditorPrivate
-#include "ui_KisShortcutsDialog.h"
-
-// Hack to make two protected methods public.
-// Used by both KisShortcutsEditorPrivate and KisShortcutsEditorDelegate
-class QTreeWidgetHack : public QTreeWidget
-{
-public:
-    QTreeWidgetItem *itemFromIndex(const QModelIndex &index) const
-    {
-        return QTreeWidget::itemFromIndex(index);
-    }
-    QModelIndex indexFromItem(QTreeWidgetItem *item, int column) const
-    {
-        return QTreeWidget::indexFromItem(item, column);
-    }
-};
-
-/**
- * This class should belong into kshortcutseditor.cpp. But kshortcutseditordelegate uses a static
- * function of this class. So for now it's here. But i will remove it later.
- *
- * @internal
- */
-class KisShortcutsEditorPrivate
-{
-public:
-
-    KisShortcutsEditorPrivate(KisShortcutsEditor *q);
-
-    void initGUI(KisShortcutsEditor::ActionTypes actionTypes, KisShortcutsEditor::LetterShortcuts allowLetterShortcuts);
-    void appendToView(uint nList, const QString &title = QString());
-    //used in appendToView
-    QTreeWidgetItem *findOrMakeItem(QTreeWidgetItem *parent, const QString &name);
-
-    static KisShortcutsEditorItem *itemFromIndex(QTreeWidget *const w, const QModelIndex &index);
-
-    // Set all shortcuts to their default values (bindings).
-    void allDefault();
-
-    // clear all shortcuts
-    void clearConfiguration();
-
-    // Import shortcuts from file
-    void importConfiguration(KConfigBase *config);
-
-
-    //conflict resolution functions
-    void changeKeyShortcut(KisShortcutsEditorItem *item, uint column, const QKeySequence &capture);
-
-// private slots
-    //this invokes the appropriate conflict resolution function
-    void capturedShortcut(const QVariant &, const QModelIndex &);
-
-    //! Represents the three hierarchies the dialog handles.
-    enum hierarchyLevel {Root = 0, Program, Action};
-
-    /**
-     * Add @a action at @a level. Checks for QActions and unnamed actions
-     * before adding.
-     *
-     * @return true if the actions was really added, false if not
-     */
-    bool addAction(QAction *action, QTreeWidgetItem *hier[], hierarchyLevel level);
-
-    void printShortcuts() const;
-
-    void setActionTypes(KisShortcutsEditor::ActionTypes actionTypes);
-
-// members
-    QList<KActionCollection *> actionCollections;
-    KisShortcutsEditor *q;
-
-    Ui::KisShortcutsDialog ui;
-
-    KisShortcutsEditor::ActionTypes actionTypes;
-    KisShortcutsEditorDelegate *delegate;
-
-};
-
-Q_DECLARE_METATYPE(KisShortcutsEditorItem *)
 
 #endif /* KISSHORTCUTSDIALOG_P_H */

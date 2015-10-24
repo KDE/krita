@@ -23,7 +23,8 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
-#include "KisShortcutsDialog_p.h"
+
+#include "KisShortcutsEditor_p.h"
 
 #include <QApplication>
 #include <QHeaderView>
@@ -31,6 +32,19 @@
 #include <QLabel>
 #include <QPainter>
 #include <QTreeWidgetItemIterator>
+#include <QAction>
+
+namespace {
+    KisShortcutsEditorItem *itemFromIndex(QTreeWidget *const w, const QModelIndex &index)
+    {
+        QTreeWidgetItem *item = static_cast<QTreeWidgetHack *>(w)->itemFromIndex(index);
+        if (item && item->type() == ActionItem) {
+            return static_cast<KisShortcutsEditorItem *>(item);
+        }
+        return 0;
+    }
+}
+
 
 KisShortcutsEditorDelegate::KisShortcutsEditorDelegate(QTreeWidget *parent, bool allowLetterShortcuts)
     : KExtendableItemDelegate(parent),
@@ -77,7 +91,7 @@ void KisShortcutsEditorDelegate::stealShortcut(
 
     for (; (*it); ++it) {
         KisShortcutsEditorItem *item = dynamic_cast<KisShortcutsEditorItem *>(*it);
-        if (item && item->data(0, ObjectRole).value<QObject *>() == action) {
+        if (item && (item->data(0, ObjectRole).value<QObject*>() == dynamic_cast<QObject*>(action))) {
 
             // We found the action, snapshot the current state. Steal the
             // shortcut. We will save the change later.
@@ -114,7 +128,7 @@ void KisShortcutsEditorDelegate::itemActivated(QModelIndex index)
     //As per our constructor our parent *is* a QTreeWidget
     QTreeWidget *view = static_cast<QTreeWidget *>(parent());
 
-    KisShortcutsEditorItem *item = KisShortcutsEditorPrivate::itemFromIndex(view, index);
+    KisShortcutsEditorItem *item = ::itemFromIndex(view, index);
     if (!item) {
         //that probably was a non-leaf (type() !=ActionItem) item
         return;
@@ -143,8 +157,7 @@ void KisShortcutsEditorDelegate::itemActivated(QModelIndex index)
     if (!isExtended(index)) {
         //we only want maximum ONE extender open at any time.
         if (m_editingIndex.isValid()) {
-            KisShortcutsEditorItem *oldItem = KisShortcutsEditorPrivate::itemFromIndex(view,
-                                            m_editingIndex);
+            KisShortcutsEditorItem *oldItem = ::itemFromIndex(view, m_editingIndex);
             Q_ASSERT(oldItem); //here we really expect nothing but a real KisShortcutsEditorItem
 
             oldItem->setNameBold(false);
@@ -229,7 +242,7 @@ void KisShortcutsEditorDelegate::hiddenBySearchLine(QTreeWidgetItem *item, bool 
         return;
     }
     QTreeWidget *view = static_cast<QTreeWidget *>(parent());
-    QTreeWidgetItem *editingItem = KisShortcutsEditorPrivate::itemFromIndex(view, m_editingIndex);
+    QTreeWidgetItem *editingItem = ::itemFromIndex(view, m_editingIndex);
     if (editingItem == item) {
         itemActivated(m_editingIndex); //this will *close* the item's editor because it's already open
     }

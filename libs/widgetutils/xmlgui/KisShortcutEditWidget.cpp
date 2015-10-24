@@ -29,6 +29,7 @@
 #include <QGridLayout>
 #include <QRadioButton>
 #include <QLabel>
+#include <QApplication>
 
 #include <klocalizedstring.h>
 //#include <kglobalaccel.h>

@@ -24,6 +24,7 @@
 */
 
 #include "KisShortcutsDialog_p.h"
+#include "KisShortcutsEditor_p.h"
 
 #include <QAction>
 #include <QTreeWidgetItem>
@@ -31,16 +32,15 @@
 
 //#include <kglobalaccel.h>
 
+
 KisShortcutsEditorItem::KisShortcutsEditorItem(QTreeWidgetItem *parent, QAction *action)
     : QTreeWidgetItem(parent, ActionItem)
     , m_action(action)
-    , m_isNameBold(false)
-    , m_oldLocalShortcut(0)
-    , m_oldGlobalShortcut(0)
 {
     // Filtering message requested by translators (scripting).
     m_id = m_action->objectName();
-    m_actionNameInTable = i18nc("@item:intable Action name in shortcuts configuration", "%1", KLocalizedString::removeAcceleratorMarker(m_action->text()));
+    m_actionNameInTable = i18nc("@item:intable Action name in shortcuts configuration",
+                                "%1", KLocalizedString::removeAcceleratorMarker(m_action->text()));
     if (m_actionNameInTable.isEmpty()) {
         warnKrita << "Action without text!" << m_action->objectName();
         m_actionNameInTable = m_id;

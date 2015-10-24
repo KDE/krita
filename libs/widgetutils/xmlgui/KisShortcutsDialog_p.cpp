@@ -22,6 +22,8 @@
 #include <QDomDocument>
 #include "kactioncollection.h"
 #include "kxmlguifactory.h"
+#include <QAction>
+#include <QApplication>
 
 
 
@@ -48,7 +50,7 @@ void KisShortcutsDialog::KisShortcutsDialogPrivate::changeShortcutScheme(const Q
         KMessageBox::questionYesNo( q,dialogText ) == KMessageBox::Yes) {
         m_shortcutsEditor->save();
     } else {
-        m_shortcutsEditor->undoChanges();
+        m_shortcutsEditor->undo();
     }
 
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
@@ -80,9 +82,9 @@ void KisShortcutsDialog::KisShortcutsDialogPrivate::changeShortcutScheme(const Q
     QApplication::restoreOverrideCursor();
 }
 
-void KisShortcutsDialog::KisShortcutsDialogPrivate::undoChanges()
+void KisShortcutsDialog::KisShortcutsDialogPrivate::undo()
 {
-    m_shortcutsEditor->undoChanges();
+    m_shortcutsEditor->undo();
 }
 
 void KisShortcutsDialog::KisShortcutsDialogPrivate::save()

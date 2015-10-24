@@ -35,6 +35,7 @@
 #include <QApplication>
 #include <QDialogButtonBox>
 #include <QDomDocument>
+#include <QVBoxLayout>
 
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
@@ -82,7 +83,7 @@ KisShortcutsDialog::KisShortcutsDialog(KisShortcutsEditor::ActionTypes types,
     connect(buttonBox->button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked()),
             d->m_shortcutsEditor, SLOT(allDefault()));
     connect(printButton, SIGNAL(clicked()), d->m_shortcutsEditor, SLOT(printShortcuts()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(undoChanges()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(undo()));
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 

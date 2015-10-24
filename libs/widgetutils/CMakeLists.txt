@@ -29,6 +29,7 @@ set(kritawidgetutils_LIB_SRCS
     xmlgui/KisShortcutsDialog.cpp
     xmlgui/KisShortcutsDialog_p.cpp
     xmlgui/KisShortcutsEditor.cpp
+    xmlgui/KisShortcutsEditor_p.cpp
 
     # xmlgui/kshortcutschemeseditor.cpp
     # xmlgui/kshortcutschemeshelper.cpp
@@ -87,13 +88,13 @@ target_link_libraries(kritawidgetutils
         Qt5::Gui
         Qt5::Xml
         Qt5::Core
+        KF5::ItemViews
         kritaglobal
     PRIVATE
         Qt5::PrintSupport
         KF5::I18n
         KF5::ConfigCore
         KF5::CoreAddons
-        KF5::ItemViews
         KF5::ConfigGui
         KF5::GuiAddons
         KF5::WidgetsAddons

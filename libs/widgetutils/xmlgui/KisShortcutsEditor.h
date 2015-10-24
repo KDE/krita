@@ -70,6 +70,14 @@ class KRITAWIDGETUTILS_EXPORT KisShortcutsEditor : public QWidget
     Q_PROPERTY(ActionTypes actionTypes READ actionTypes WRITE setActionTypes)
 
 public:
+    /*
+     * These attempt to build some sort of characterization of all actions. The
+     * idea is to determine which sorts of actions will be configured in the
+     * dialog.
+     *
+     * Enumerating all possible actions is a sorrowful, pitiable endeavor,
+     * useless for Krita. We should do something about this.
+     */
     enum ActionType {
         /// Actions which are triggered by any keypress in a widget which has the action added to it
         WidgetAction      = Qt::WidgetShortcut      /*0*/,
@@ -85,10 +93,9 @@ public:
     Q_DECLARE_FLAGS(ActionTypes, ActionType)
 
     enum LetterShortcuts {
-        /// Shortcuts without a modifier are not allowed,
-        /// so 'A' would not be valid, whereas 'Ctrl+A' would be.
-        /// This only applies to printable characters, however.
-        /// 'F1', 'Insert' etc. could still be used.
+        /// Shortcuts without a modifier are not allowed, so 'A' would not be
+        /// valid, whereas 'Ctrl+A' would be. This only applies to printable
+        /// characters, however. 'F1', 'Insert' etc. could still be used.
         LetterShortcutsDisallowed = 0,
         /// Letter shortcuts are allowed
         LetterShortcutsAllowed
@@ -103,7 +110,10 @@ public:
      * @param allowLetterShortcuts set to LetterShortcutsDisallowed if unmodified alphanumeric
      *  keys ('A', '1', etc.) are not permissible shortcuts.
      */
-    KisShortcutsEditor(KActionCollection *collection, QWidget *parent, ActionTypes actionTypes = AllActions, LetterShortcuts allowLetterShortcuts = LetterShortcutsAllowed);
+    KisShortcutsEditor(KActionCollection *collection,
+                       QWidget *parent,
+                       ActionTypes actionTypes = AllActions,
+                       LetterShortcuts allowLetterShortcuts = LetterShortcutsAllowed);
 
     /**
      * \overload
@@ -115,13 +125,14 @@ public:
      * @param allowLetterShortcuts set to LetterShortcutsDisallowed if unmodified alphanumeric
      *  keys ('A', '1', etc.) are not permissible shortcuts.
      */
-    explicit KisShortcutsEditor(QWidget *parent, ActionTypes actionTypes = AllActions, LetterShortcuts allowLetterShortcuts = LetterShortcutsAllowed);
+    explicit KisShortcutsEditor(QWidget *parent,
+                                ActionTypes actionTypes = AllActions, LetterShortcuts allowLetterShortcuts = LetterShortcutsAllowed);
 
     /// Destructor
     virtual ~KisShortcutsEditor();
 
     /**
-     * Are the unsaved changes?
+     * @ret true if there are unsaved changes.
      */
     bool isModified() const;
 
@@ -131,8 +142,14 @@ public:
     void clearCollections();
 
     /**
+     * Note: the reason this is so damn complicated is because it's supposed to
+     * support having multiple applications running inside of each other through
+     * KisParts. That means we have to be able to separate sections within each
+     * configuration file.
+     *
      * Insert an action collection, i.e. add all its actions to the ones
      * already associated with the KisShortcutsEditor object.
+     *
      * @param title subtree title of this collection of shortcut.
      */
     void addCollection(KActionCollection *, const QString &title = QString());
@@ -140,7 +157,7 @@ public:
     /**
      * Undo all change made since the last commit().
      */
-    void undoChanges();
+    void undo();
 
     /**
      * Save the changes.

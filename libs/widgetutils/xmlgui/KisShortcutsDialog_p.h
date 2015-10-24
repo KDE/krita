@@ -26,10 +26,6 @@
 #include "kkeysequencewidget.h"
 #include "KisShortcutsDialog.h"
 
-#if 0
-#include <kgesture.h>
-#endif
-
 #include <kextendableitemdelegate.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
@@ -61,12 +57,10 @@ enum ColumnDesignation {
     LocalAlternate,
     GlobalPrimary,
     GlobalAlternate,
-    RockerGesture,
-    ShapeGesture,
     Id
 };
 
-// WTF?
+// XXX: Hmm
 enum MyRoles {
     ShortcutRole = Qt::UserRole,
     DefaultShortcutRole,
@@ -172,11 +166,6 @@ private Q_SLOTS:
 
     void keySequenceChanged(const QKeySequence &);
 
-#if 0
-    void shapeGestureChanged(const KShapeGesture &);
-    void rockerGestureChanged(const KRockerGesture &);
-#endif
-
 };
 
 
@@ -242,15 +231,7 @@ private:
     QObject *m_action;
 };
 
-#if 0
-Q_DECLARE_METATYPE(KShapeGesture)
-Q_DECLARE_METATYPE(KRockerGesture)
-#endif
 
-#if 0
-class KShapeGesture;
-class KRockerGesture;
-#endif
 
 /**
  * A QTreeWidgetItem that can handle QActions.
@@ -284,11 +265,6 @@ public:
 
     QKeySequence keySequence(uint column) const;
     void setKeySequence(uint column, const QKeySequence &seq);
-#if 0
-    void setShapeGesture(const KShapeGesture &gst);
-    void setRockerGesture(const KRockerGesture &gst);
-#endif
-
     bool isModified(uint column) const;
     bool isModified() const;
 
@@ -313,10 +289,6 @@ private:
     //! The original shortcuts before user changes. 0 means no change.
     QList<QKeySequence> *m_oldLocalShortcut;
     QList<QKeySequence> *m_oldGlobalShortcut;
-#if 0
-    KShapeGesture *m_oldShapeGesture;
-    KRockerGesture *m_oldRockerGesture;
-#endif
     //@}
 
     //! The localized action name
@@ -376,18 +348,9 @@ public:
     // Import shortcuts from file
     void importConfiguration(KConfigBase *config);
 
-#if 0
-    //helper functions for conflict resolution
-    bool stealShapeGesture(KisShortcutsEditorItem *item, const KShapeGesture &gest);
-    bool stealRockerGesture(KisShortcutsEditorItem *item, const KRockerGesture &gest);
-#endif
 
     //conflict resolution functions
     void changeKeyShortcut(KisShortcutsEditorItem *item, uint column, const QKeySequence &capture);
-#if 0
-    void changeShapeGesture(KisShortcutsEditorItem *item, const KShapeGesture &capture);
-    void changeRockerGesture(KisShortcutsEditorItem *item, const KRockerGesture &capture);
-#endif
 
 // private slots
     //this invokes the appropriate conflict resolution function
@@ -422,4 +385,3 @@ public:
 Q_DECLARE_METATYPE(KisShortcutsEditorItem *)
 
 #endif /* KISSHORTCUTSDIALOG_P_H */
-

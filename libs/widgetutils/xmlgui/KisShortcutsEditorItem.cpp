@@ -29,10 +29,6 @@
 #include <QTreeWidgetItem>
 #include <kis_debug.h>
 
-#if 0
-#include <kgesturemap.h>
-#endif
-
 //#include <kglobalaccel.h>
 
 KisShortcutsEditorItem::KisShortcutsEditorItem(QTreeWidgetItem *parent, QAction *action)
@@ -41,10 +37,6 @@ KisShortcutsEditorItem::KisShortcutsEditorItem(QTreeWidgetItem *parent, QAction 
     , m_isNameBold(false)
     , m_oldLocalShortcut(0)
     , m_oldGlobalShortcut(0)
-#if 0
-    , m_oldShapeGesture(0)
-    , m_oldRockerGesture(0)
-#endif
 {
     // Filtering message requested by translators (scripting).
     m_id = m_action->objectName();
@@ -62,19 +54,11 @@ KisShortcutsEditorItem::~KisShortcutsEditorItem()
 {
     delete m_oldLocalShortcut;
     delete m_oldGlobalShortcut;
-#if 0
-    delete m_oldShapeGesture;
-    delete m_oldRockerGesture;
-#endif
 }
 
 bool KisShortcutsEditorItem::isModified() const
 {
-#if 0
-    return m_oldLocalShortcut || m_oldGlobalShortcut || m_oldShapeGesture || m_oldRockerGesture;
-#else
     return m_oldLocalShortcut || m_oldGlobalShortcut;
-#endif
 }
 
 QVariant KisShortcutsEditorItem::data(int column, int role) const
@@ -91,12 +75,6 @@ QVariant KisShortcutsEditorItem::data(int column, int role) const
         case GlobalPrimary:
         case GlobalAlternate:
             return qVariantFromValue(keySequence(column));
-#if 0
-        case ShapeGesture:
-            return qVariantFromValue(KGestureMap::self()->shapeGesture(m_action).shapeName());
-        case RockerGesture:
-            return qVariantFromValue(KGestureMap::self()->rockerGesture(m_action).rockerName());
-#endif
         default:
             break;
         }
@@ -146,18 +124,6 @@ QVariant KisShortcutsEditorItem::data(int column, int role) const
         case GlobalPrimary:
         case GlobalAlternate:
             return qVariantFromValue(keySequence(column));
-#if 0
-        case ShapeGesture: { //scoping for "ret"
-            QVariant ret;
-            ret.setValue(KGestureMap::self()->shapeGesture(m_action));
-            return ret;
-        }
-        case RockerGesture: {
-            QVariant ret;
-            ret.setValue(KGestureMap::self()->rockerGesture(m_action));
-            return ret;
-        }
-#endif
         default:
             // Column not valid for this role
             Q_ASSERT(false);
@@ -177,18 +143,6 @@ QVariant KisShortcutsEditorItem::data(int column, int role) const
 //            return qVariantFromValue(primarySequence(defaultGlobalShortcuts));
 //        case GlobalAlternate:
 //            return qVariantFromValue(alternateSequence(defaultGlobalShortcuts));
-#if 0
-        case ShapeGesture: {
-            QVariant ret;
-            ret.setValue(KGestureMap::self()->defaultShapeGesture(m_action));
-            return ret;
-        }
-        case RockerGesture: {
-            QVariant ret;
-            ret.setValue(KGestureMap::self()->defaultRockerGesture(m_action));
-            return ret;
-        }
-#endif
         default:
             // Column not valid for this role
             Q_ASSERT(false);
@@ -273,30 +227,6 @@ void KisShortcutsEditorItem::setKeySequence(uint column, const QKeySequence &seq
     updateModified();
 }
 
-#if 0
-void KisShortcutsEditorItem::setShapeGesture(const KShapeGesture &gst)
-{
-    if (!m_oldShapeGesture) {
-        m_oldShapeGesture = new KShapeGesture(gst);
-    }
-    KGestureMap::self()->setShapeGesture(m_action, gst);
-    KGestureMap::self()->setDefaultShapeGesture(m_action, gst);
-    updateModified();
-}
-#endif
-
-#if 0
-void KisShortcutsEditorItem::setRockerGesture(const KRockerGesture &gst)
-{
-    if (!m_oldRockerGesture) {
-        m_oldRockerGesture = new KRockerGesture(gst);
-    }
-    KGestureMap::self()->setRockerGesture(m_action, gst);
-    KGestureMap::self()->setDefaultRockerGesture(m_action, gst);
-    updateModified();
-}
-#endif
-
 //our definition of modified is "modified since the chooser was shown".
 void KisShortcutsEditorItem::updateModified()
 {
@@ -308,16 +238,6 @@ void KisShortcutsEditorItem::updateModified()
 //        delete m_oldGlobalShortcut;
 //        m_oldGlobalShortcut = 0;
 //    }
-#if 0
-    if (m_oldShapeGesture && *m_oldShapeGesture == KGestureMap::self()->shapeGesture(m_action)) {
-        delete m_oldShapeGesture;
-        m_oldShapeGesture = 0;
-    }
-    if (m_oldRockerGesture && *m_oldRockerGesture == KGestureMap::self()->rockerGesture(m_action)) {
-        delete m_oldRockerGesture;
-        m_oldRockerGesture = 0;
-    }
-#endif
 }
 
 bool KisShortcutsEditorItem::isModified(uint column) const
@@ -337,20 +257,14 @@ bool KisShortcutsEditorItem::isModified(uint column) const
         }
     case GlobalPrimary:
     case GlobalAlternate:
-        if (!m_oldGlobalShortcut) {
-            return false;
-        }
-//        if (column == GlobalPrimary) {
-//            return primarySequence(*m_oldGlobalShortcut) != primarySequence(KGlobalAccel::self()->shortcut(m_action));
-//        } else {
-//            return alternateSequence(*m_oldGlobalShortcut) != alternateSequence(KGlobalAccel::self()->shortcut(m_action));
-//        }
-#if 0
-    case ShapeGesture:
-        return static_cast<bool>(m_oldShapeGesture);
-    case RockerGesture:
-        return static_cast<bool>(m_oldRockerGesture);
-#endif
+        // if (!m_oldGlobalShortcut) {
+        //     return false;
+        // }
+        // if (column == GlobalPrimary) {
+        //     return primarySequence(*m_oldGlobalShortcut) != primarySequence(KGlobalAccel::self()->shortcut(m_action));
+        // } else {
+        //     return alternateSequence(*m_oldGlobalShortcut) != alternateSequence(KGlobalAccel::self()->shortcut(m_action));
+        // }
     default:
         return false;
     }
@@ -358,13 +272,8 @@ bool KisShortcutsEditorItem::isModified(uint column) const
 
 void KisShortcutsEditorItem::undo()
 {
-#ifndef NDEBUG
-#if 0
-    if (m_oldLocalShortcut || m_oldGlobalShortcut || m_oldShapeGesture || m_oldRockerGesture) {
-        //dbgKrita << "Undoing changes for " << data(Name, Qt::DisplayRole).toString();
-    }
-#endif
-#endif
+    //dbgKrita << "Undoing changes for " << data(Name, Qt::DisplayRole).toString();
+
     if (m_oldLocalShortcut) {
         // We only ever reset the active Shortcut
         m_action->setShortcuts(*m_oldLocalShortcut);
@@ -374,39 +283,17 @@ void KisShortcutsEditorItem::undo()
 //        KGlobalAccel::self()->setShortcut(m_action, *m_oldGlobalShortcut, KGlobalAccel::NoAutoloading);
 //    }
 
-#if 0
-    if (m_oldShapeGesture) {
-        KGestureMap::self()->setShapeGesture(m_action, *m_oldShapeGesture);
-        KGestureMap::self()->setDefaultShapeGesture(m_action, *m_oldShapeGesture);
-    }
-
-    if (m_oldRockerGesture) {
-        KGestureMap::self()->setRockerGesture(m_action, *m_oldRockerGesture);
-        KGestureMap::self()->setDefaultRockerGesture(m_action, *m_oldRockerGesture);
-    }
-#endif
-
     updateModified();
 }
 
 void KisShortcutsEditorItem::commit()
 {
-#ifndef NDEBUG
-#if 0
-    if (m_oldLocalShortcut || m_oldGlobalShortcut || m_oldShapeGesture || m_oldRockerGesture) {
-        //dbgKrita << "Committing changes for " << data(Name, Qt::DisplayRole).toString();
+    if (m_oldLocalShortcut || m_oldGlobalShortcut) { // || m_oldShapeGesture || m_oldRockerGesture) {
+       dbgUI << "Committing changes for " << data(Name, Qt::DisplayRole).toString();
     }
-#endif
-#endif
 
     delete m_oldLocalShortcut;
     m_oldLocalShortcut = 0;
     delete m_oldGlobalShortcut;
     m_oldGlobalShortcut = 0;
-#if 0
-    delete m_oldShapeGesture;
-    m_oldShapeGesture = 0;
-    delete m_oldRockerGesture;
-    m_oldRockerGesture = 0;
-#endif
 }

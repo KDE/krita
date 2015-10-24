@@ -195,7 +195,7 @@ void KMainWindowPrivate::init(KMainWindow *_q)
     helpMenu = 0;
 
     //actionCollection()->setWidget( this );
-#if 0
+#ifdef HAVE_GLOBALACCEL
     QObject::connect(KGlobalSettings::self(), SIGNAL(settingsChanged(int)),
                      q, SLOT(_k_slotSettingsChanged(int)));
 #endif

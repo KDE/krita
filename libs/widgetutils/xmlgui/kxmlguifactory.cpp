@@ -43,9 +43,6 @@
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
-#ifdef HAVE_GLOBALACCEL
-#include <kglobalaccel.h>
-#endif
 
 #include <kis_icon_utils.h>
 
@@ -671,16 +668,12 @@ void KXMLGUIFactoryPrivate::configureAction(QAction *action, const QDomAttr &att
     } else if (propertyType == QVariant::UInt) {
         propertyValue = QVariant(attribute.value().toUInt());
     } else if (isShortcut) {
-        // Setting the shortcut by property also sets the default shortcut (which is incorrect), so we have to do it directly
-#ifdef HAVE_GLOBALACCEL
-        if (attrName == QStringLiteral("globalShortcut")) {
-            KGlobalAccel::self()->setShortcut(action, QKeySequence::listFromString(attribute.value()));
-        } else
-#else
-            action->setShortcuts(QKeySequence::listFromString(attribute.value()));
-#endif
+        // Setting the shortcut by property also sets the default shortcut
+        // (which is incorrect), so we have to do it directly
+        action->setShortcuts(QKeySequence::listFromString(attribute.value()));
         if (shortcutOption & KXMLGUIFactoryPrivate::SetDefaultShortcut) {
-            action->setProperty("defaultShortcuts", QVariant::fromValue(QKeySequence::listFromString(attribute.value())));
+            action->setProperty("defaultShortcuts",
+                                QVariant::fromValue(QKeySequence::listFromString(attribute.value())));
         }
     } else {
         propertyValue = QVariant(attribute.value());
@@ -690,8 +683,9 @@ void KXMLGUIFactoryPrivate::configureAction(QAction *action, const QDomAttr &att
     }
 }
 
-
-void KXMLGUIFactoryPrivate::applyShortcutScheme(KXMLGUIClient *client, const QList<QAction *> &actions /*, const QDomDocument &scheme */)
+void KXMLGUIFactoryPrivate::applyShortcutScheme(KXMLGUIClient *client,
+                                                const QList<QAction *> &actions
+                                                /*, const QDomDocument &scheme */)
 {
 #if 0
     Q_UNUSED(client)

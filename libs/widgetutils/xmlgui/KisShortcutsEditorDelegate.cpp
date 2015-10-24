@@ -136,12 +136,9 @@ void KisShortcutsEditorDelegate::itemActivated(QModelIndex index)
 
     int column = index.column();
     if (column == Name) {
-        // If user click in the name column activate the (Global|Local)Primary
-        // column if possible.
+        // If clicking the name try to activate the Primary column
         if (!view->header()->isSectionHidden(LocalPrimary)) {
             column = LocalPrimary;
-        } else if (!view->header()->isSectionHidden(GlobalPrimary)) {
-            column = GlobalPrimary;
         } else {
             // do nothing.
         }
@@ -167,30 +164,13 @@ void KisShortcutsEditorDelegate::itemActivated(QModelIndex index)
         m_editingIndex = index;
         QWidget *viewport = static_cast<QAbstractItemView *>(parent())->viewport();
 
-        if (column >= LocalPrimary && column <= GlobalAlternate) {
+        if (column >= LocalPrimary && column <= Id) {
             ShortcutEditWidget *editor = new ShortcutEditWidget(viewport,
                     index.data(DefaultShortcutRole).value<QKeySequence>(),
                     index.data(ShortcutRole).value<QKeySequence>(),
                     m_allowLetterShortcuts);
-            if (column == GlobalPrimary) {
-                QObject *action = index.data(ObjectRole).value<QObject *>();
-                editor->setAction(action);
-                editor->setMultiKeyShortcutsAllowed(false);
-                QString componentName = action->property("componentName").toString();
-                if (componentName.isEmpty()) {
-                    componentName = QCoreApplication::applicationName();
-                }
-                editor->setComponentName(componentName);
-            }
 
             m_editor = editor;
-            // For global shortcuts check against the kde standard shortcuts
-            if (column == GlobalPrimary || column == GlobalAlternate) {
-                editor->setCheckForConflictsAgainst(
-                    KKeySequenceWidget::LocalShortcuts
-                    | KKeySequenceWidget::GlobalShortcuts
-                    | KKeySequenceWidget::StandardShortcuts);
-            }
 
             editor->setCheckActionCollections(m_checkActionCollections);
 

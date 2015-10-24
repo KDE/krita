@@ -54,8 +54,6 @@ enum ColumnDesignation {
     Name = 0,
     LocalPrimary,
     LocalAlternate,
-    GlobalPrimary,
-    GlobalAlternate,
     Id
 };
 

@@ -43,9 +43,6 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#ifdef HAVE_GLOBALACCEL
-#include <kglobalaccel.h>
-#endif
 #include <kmessagebox.h>
 #include "kactioncollection.h"
 #include "kactioncategory.h"
@@ -190,14 +187,7 @@ void KisShortcutsEditor::exportConfiguration(KConfigBase *config) const
         return;
     }
 
-    if (d->actionTypes & KisShortcutsEditor::GlobalAction) {
-        QString groupName(QStringLiteral("Global Shortcuts"));
-        KConfigGroup group(config, groupName);
-        foreach (KActionCollection *collection, d->actionCollections) {
-            collection->exportGlobalShortcuts(&group, true);
-        }
-    }
-    if (d->actionTypes & ~KisShortcutsEditor::GlobalAction) {
+    if (d->actionTypes) {
         QString groupName(QStringLiteral("Shortcuts"));
         KConfigGroup group(config, groupName);
         foreach (KActionCollection *collection, d->actionCollections) {
@@ -243,9 +233,8 @@ void KisShortcutsEditor::save()
     commit();
 }
 
-//This function used to crash sometimes when invoked by clicking on "cancel"
-//with Qt 4.2.something. Apparently items were deleted too early by Qt.
-//It seems to work with 4.3-ish Qt versions. Keep an eye on this.
+//From 2007-ish:
+// There was once a crash where these items were deleted too early by Qt.
 void KisShortcutsEditor::undo()
 {
     for (QTreeWidgetItemIterator it(d->ui.list); (*it); ++it) {

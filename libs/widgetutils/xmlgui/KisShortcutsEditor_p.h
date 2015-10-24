@@ -89,9 +89,10 @@ public:
 
     void printShortcuts() const;
 
+    // TODO: Is this necessary w/o global actions?
     void setActionTypes(KisShortcutsEditor::ActionTypes actionTypes);
 
-// members
+    // Members
     QList<KActionCollection *> actionCollections;
     KisShortcutsEditor *q;
 
@@ -170,7 +171,6 @@ private:
     //@{
     //! The original shortcuts before user changes. 0 means no change.
     QList<QKeySequence> *m_oldLocalShortcut{0};
-    QList<QKeySequence> *m_oldGlobalShortcut{0};
     //@}
 
     //! The localized action name

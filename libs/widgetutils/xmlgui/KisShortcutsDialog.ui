@@ -43,26 +43,6 @@
        <string>Alternate</string>
       </property>
      </column>
-     <column>
-      <property name="text" >
-       <string>Global</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Global Alternate</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Mouse Button Gesture</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Mouse Shape Gesture</string>
-      </property>
-     </column>
     </widget>
    </item>
   </layout>

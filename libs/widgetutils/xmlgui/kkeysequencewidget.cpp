@@ -59,6 +59,8 @@ public:
     /**
      * Conflicts the key sequence @a seq with a current standard
      * shortcut?
+     *
+     * Pops up a dialog asking overriding the conflict is OK.
      */
     bool conflictWithStandardShortcuts(const QKeySequence &seq);
 
@@ -69,8 +71,7 @@ public:
     bool conflictWithLocalShortcuts(const QKeySequence &seq);
 
     /**
-     * Conflicts the key sequence @a seq with a current global
-     * shortcut?
+     * Conflicts the key sequence @a seq conflict with Windows shortcut keys?
      */
     bool conflictWithGlobalShortcuts(const QKeySequence &seq);
 
@@ -286,11 +287,23 @@ void KKeySequenceWidget::setModifierlessAllowed(bool allow)
 bool KKeySequenceWidget::isKeySequenceAvailable(const QKeySequence &keySequence) const
 {
     if (keySequence.isEmpty()) {
+        // qDebug() << "Key sequence" << keySequence.toString() << "is empty and available.";
         return true;
     }
-    return !(d->conflictWithLocalShortcuts(keySequence)
-             || d->conflictWithGlobalShortcuts(keySequence)
-             || d->conflictWithStandardShortcuts(keySequence));
+
+    bool hasConflict = (d->conflictWithLocalShortcuts(keySequence)
+                        || d->conflictWithGlobalShortcuts(keySequence)
+                        || d->conflictWithStandardShortcuts(keySequence));
+
+    if (hasConflict) {
+        /* qInfo() << "Key sequence" << keySequence.toString() << "has an unresolvable conflict." <<
+            QString("Local conflict: %1. Windows conflict: %2.  Standard Shortcut conflict: %3") \
+            .arg(d->conflictWithLocalShortcuts(keySequence))            \
+            .arg(d->conflictWithGlobalShortcuts(keySequence))           \
+            .arg(d->conflictWithStandardShortcuts(keySequence)); */
+    }
+    return !(hasConflict);
+
 }
 
 bool KKeySequenceWidget::isModifierlessAllowed()
@@ -416,21 +429,15 @@ void KKeySequenceWidgetPrivate::doneRecording(bool validate)
 
 bool KKeySequenceWidgetPrivate::conflictWithGlobalShortcuts(const QKeySequence &keySequence)
 {
+    // This could hold some OS-specific stuff, or it could be linked back with
+    // the KDE global shortcut code at some point in the future.
+
 #ifdef Q_OS_WIN
-    //on windows F12 is reserved by the debugger at all times, so we can't use it for a global shortcut
-    if (KKeySequenceWidget::GlobalShortcuts && keySequence.toString().contains(QStringLiteral("F12"))) {
-        QString title = i18n("Reserved Shortcut");
-        QString message = i18n("The F12 key is reserved on Windows, so cannot be used for a global shortcut.\n"
-                               "Please choose another one.");
-
-        KMessageBox::sorry(q, message, title);
-        return false;
-    }
 #else
-    Q_UNUSED(keySequence);
 #endif
+    Q_UNUSED(keySequence);
 
-    return true;
+    return false;
 }
 
 bool shortcutsConflictWith(const QList<QKeySequence> &shortcuts, const QKeySequence &needle)
@@ -512,8 +519,8 @@ bool KKeySequenceWidgetPrivate::conflictWithLocalShortcuts(const QKeySequence &k
 
     if (stealShortcuts(conflictingActions, keySequence)) {
         stealActions = conflictingActions;
-        // Announce that the user
-        // agreed
+
+        // Announce that the user agreed to override the other shortcut
         Q_FOREACH (QAction *stealAction, stealActions) {
             emit q->stealShortcut(
                 keySequence,

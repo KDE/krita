@@ -72,7 +72,7 @@ public:
         SELECTION_EDITABLE = 0x4
     };
     Q_DECLARE_FLAGS(ActivationConditions, ActivationCondition)
-    
+
     explicit KisAction(QObject* parent = 0);
     KisAction(const QString& text, QObject* parent = 0);
     KisAction(const QIcon& icon, const QString& text, QObject* parent = 0);

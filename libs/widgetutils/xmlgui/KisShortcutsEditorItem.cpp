@@ -47,7 +47,7 @@ KisShortcutsEditorItem::KisShortcutsEditorItem(QTreeWidgetItem *parent, QAction 
     m_collator.setNumericMode(true);
     m_collator.setCaseSensitivity(Qt::CaseSensitive);
 
-    // qDebug() << "Adding new action" << m_id << "with shortcut" << primarySequence(shortcuts);
+    // qDebug() << "Adding new action" << m_id << "with shortcut" << keySequence(LocalPrimary).toString();
 }
 
 KisShortcutsEditorItem::~KisShortcutsEditorItem()
@@ -86,8 +86,7 @@ QVariant KisShortcutsEditorItem::data(int column, int role) const
     case Qt::WhatsThisRole:
         return m_action->whatsThis();
     case Qt::ToolTipRole:
-        // There is no such thing as a QAction::description(). So we have
-        // nothing to display here.
+        // TODO: show command descriptions/tooltips in the shortcut editor
         return QVariant();
     case Qt::FontRole:
         if (column == Name && m_isNameBold) {
@@ -121,7 +120,7 @@ QVariant KisShortcutsEditorItem::data(int column, int role) const
 
     case DefaultShortcutRole: {
 
-        // WHOA 
+        // Note: we are using the QMetaObject system to store this property.
         QList<QKeySequence> defaultShortcuts = m_action->property("defaultShortcuts").value<QList<QKeySequence> >();
 
         switch (column) {

@@ -102,15 +102,15 @@ void ShortcutEditWidget::defaultToggled(bool checked)
 
     m_isUpdating = true;
     if (checked) {
-        // The default key sequence should be activated. We check first if this is
-        // possible.
+        // The default key sequence should be activated. We check first if this
+        // is possible.
         if (m_customEditor->isKeySequenceAvailable(m_defaultKeySequence)) {
             // Clear the customs widget
             m_customEditor->clearKeySequence();
             emit keySequenceChanged(m_defaultKeySequence);
         } else {
-            // We tried to switch to the default key sequence and failed. Go
-            // back.
+            // We tried to switch to the default key sequence and failed.
+            // Go back.
             m_customRadio->setChecked(true);
         }
     } else {

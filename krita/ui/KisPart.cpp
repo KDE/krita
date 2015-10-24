@@ -178,6 +178,7 @@ void KisPart::Private::loadActions()
                 action->setStatusTip(statusTip);
                 action->setIconText(iconText);
                 action->setDefaultShortcut(shortcut);
+                action->setShortcut(shortcut);  //TODO: Make this configurable from custom settings
                 action->setCheckable(isCheckable);
 
                 if (!actionCollection->action(name)) {

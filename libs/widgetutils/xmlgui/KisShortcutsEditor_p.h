@@ -81,7 +81,7 @@ public:
     /**
      * Add @p action at hierchy level @p level.
      *
-     * Filters out QActions and unnamed actions before adding. (TODO: UHHH, OKAY)
+     * Filters out QActions (TODO: hmm) and unnamed actions before adding.
      *
      * @return true if the actions was successfully added
      */

@@ -167,7 +167,12 @@ private Q_SLOTS:
 
 
 /**
- * Edit a shortcut. Let you select between using the default shortcut and configuring your own.
+ * Edit a shortcut. This widget is displayed when a user clicks on a shortcut
+ * from the list. It contains radio buttons choosing between default and custom
+ * shortcuts, and a button to configure the custom shortcut.
+ *
+ * @see KisShortcutsEditorDeligate::itemActivated
+ * @see KisShortcutWidget.cpp
  *
  * @internal
  */

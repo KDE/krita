@@ -33,6 +33,7 @@
 #include <QPainter>
 #include <QTreeWidgetItemIterator>
 #include <QAction>
+#include <QDebug>
 
 namespace {
     KisShortcutsEditorItem *itemFromIndex(QTreeWidget *const w, const QModelIndex &index)
@@ -165,10 +166,12 @@ void KisShortcutsEditorDelegate::itemActivated(QModelIndex index)
         QWidget *viewport = static_cast<QAbstractItemView *>(parent())->viewport();
 
         if (column >= LocalPrimary && column <= Id) {
-            ShortcutEditWidget *editor = new ShortcutEditWidget(viewport,
-                    index.data(DefaultShortcutRole).value<QKeySequence>(),
-                    index.data(ShortcutRole).value<QKeySequence>(),
-                    m_allowLetterShortcuts);
+            ShortcutEditWidget *editor =
+                new ShortcutEditWidget(viewport,
+                                       index.data(DefaultShortcutRole).value<QKeySequence>(),
+                                       index.data(ShortcutRole).value<QKeySequence>(),
+                                       m_allowLetterShortcuts);
+
 
             m_editor = editor;
 

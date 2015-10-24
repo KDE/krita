@@ -31,7 +31,6 @@ public:
     QStringList excludedNodeTypes;
     QString operationID;
     KisActionManager* actionManager;
-    QKeySequence defaultShortcut;
 };
 
 KisAction::KisAction(QObject* parent)
@@ -63,14 +62,28 @@ KisAction::~KisAction()
     delete d;
 }
 
+
+// Using a dynamic QObject property is done for compatibility with KAction and
+// XmlGui. We may merge KisAction into the XmlGui code to make this unnecessary,
+// but that is probably a lot of work for little benefit. We currently store a
+// single default shortcut, but the old system used a list (to store default
+// primary/alternate shortcuts for local and global settings) so we marshal it
+// for compatibility.
 void KisAction::setDefaultShortcut(const QKeySequence &shortcut)
 {
-    d->defaultShortcut = shortcut;
+    QList<QKeySequence> listifiedShortcut;
+    listifiedShortcut.append(shortcut);
+    setProperty("defaultShortcuts", qVariantFromValue(listifiedShortcut));
 }
 
 QKeySequence KisAction::defaultShortcut() const
 {
-    return d->defaultShortcut;
+    auto listifiedShortcut = property("defaultShortcuts").value<QList<QKeySequence> >();
+    if (listifiedShortcut.isEmpty()) {
+        return QKeySequence();
+    } else {
+        return listifiedShortcut.first();
+    }
 }
 
 void KisAction::setActivationFlags(KisAction::ActivationFlags flags)

@@ -29,7 +29,7 @@
 
 #include <QPainter>
 
-#include <math.h>
+#include <cmath>
 
 #if defined(_MSC_VER) && (_MSC_VER < 1800)
 #define isfinite(x) (double)(x)

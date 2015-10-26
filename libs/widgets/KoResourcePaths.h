@@ -24,6 +24,22 @@
 
 #include <kritawidgets_export.h>
 
+
+/**
+ * DEBUGGING KoResourcePaths:
+ *
+ * The usual place to look for resources is Qt's GenericDataLocation.
+ * This corresponds to XDG_DATA_DIRS on Linux. To ensure your installation and
+ * path are configured correctly, ensure your files are located in the directories
+ * contained in this variable:
+ *
+ * QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
+ *
+ * There are many debug lines that can be uncommented for more specific installation
+ * checks. In the future these should be converted to qloggingcategory to enable
+ * convenient enable/disable functionality.
+ */
+
 class KRITAWIDGETS_EXPORT KoResourcePaths
 {
 public:

@@ -68,10 +68,6 @@ public:
      // Note: this should not be used
      KoJsonTrader();
 
-
-     // Note: this should not be used
-     KoJsonTrader();
-
 private:
      QString m_pluginPath;
 };

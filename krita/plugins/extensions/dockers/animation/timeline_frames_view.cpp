@@ -40,6 +40,9 @@
 
 #include "kis_icon_utils.h"
 
+#include "kis_animation_utils.h"
+
+
 struct TimelineFramesView::Private
 {
     Private()
@@ -143,11 +146,11 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->addLayersButton->setMenu(m_d->layerEditingMenu);
 
     m_d->frameCreationMenu = new QMenu(this);
-    m_d->frameCreationMenu->addAction("New Frame", this, SLOT(slotNewFrame()));
-    m_d->frameCreationMenu->addAction("Copy Frame", this, SLOT(slotCopyFrame()));
+    m_d->frameCreationMenu->addAction(KisAnimationUtils::addFrameActionName, this, SLOT(slotNewFrame()));
+    m_d->frameCreationMenu->addAction(KisAnimationUtils::duplicateFrameActionName, this, SLOT(slotCopyFrame()));
 
     m_d->frameEditingMenu = new QMenu(this);
-    m_d->frameEditingMenu->addAction("Remove Frame", this, SLOT(slotRemoveFrame()));
+    m_d->frameEditingMenu->addAction(KisAnimationUtils::removeFrameActionName, this, SLOT(slotRemoveFrame()));
 
 
     m_d->zoomDragButton = new KisDraggableToolButton(this);

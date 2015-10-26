@@ -17,6 +17,7 @@ set(KRITA_ANIMATIONDOCKER_PART_SRCS
     timeline_node_list_keeper.cpp
 
     kis_draggable_tool_button.cpp
+    kis_animation_utils.cpp
 )
 
 ki18n_wrap_ui(KRITA_ANIMATIONDOCKER_PART_SRCS

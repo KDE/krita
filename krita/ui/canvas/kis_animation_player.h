@@ -42,9 +42,13 @@ public:
     bool isPlaying();
     int currentTime();
 
+    qreal playbackSpeed();
+
 public Q_SLOTS:
     void slotUpdate();
     void slotCancelPlayback();
+    void slotUpdatePlaybackSpeed(double value);
+    void slotUpdatePlaybackTimer();
 
 Q_SIGNALS:
     void sigFrameChanged();

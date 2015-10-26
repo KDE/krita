@@ -88,10 +88,10 @@ void KisTransactionData::Private::tryCreateNewFrame(KisPaintDeviceSP device, int
     KisRasterKeyframeChannel *channel = device->keyframeChannel();
     KIS_ASSERT_RECOVER(channel) { return; }
 
-    KisKeyframe *keyframe = channel->keyframeAt(time);
+    KisKeyframeSP keyframe = channel->keyframeAt(time);
 
     if (!keyframe) {
-        keyframe = channel->activeKeyframeAt(time).data();
+        keyframe = channel->activeKeyframeAt(time);
         channel->copyKeyframe(keyframe, time, &newFrameCommand);
     }
 }

@@ -1615,7 +1615,7 @@ void KisPaintDeviceTest::testFramesLeaking()
     QVERIFY(o.m_currentData == o.m_frames[1]);
     QCOMPARE(o.m_frames.size(), 3);
 
-    KisKeyframe* key;
+    KisKeyframeSP key;
 
     // deletion of frame 0 is forbidden
     key = channel->keyframeAt(0);
@@ -1623,7 +1623,7 @@ void KisPaintDeviceTest::testFramesLeaking()
     QVERIFY(!channel->deleteKeyframe(key));
 
     // delete keyframe at position 11
-    key = channel->activeKeyframeAt(11).data();
+    key = channel->activeKeyframeAt(11);
     QVERIFY(key);
     QCOMPARE(key->time(), 10);
     QVERIFY(channel->deleteKeyframe(key));
@@ -1637,7 +1637,7 @@ void KisPaintDeviceTest::testFramesLeaking()
     QCOMPARE(o.m_frames.size(), 2);
 
     // deletion of frame 0 is forbidden
-    key = channel->activeKeyframeAt(11).data();
+    key = channel->activeKeyframeAt(11);
     QVERIFY(key);
     QCOMPARE(key->time(), 0);
     QVERIFY(!channel->deleteKeyframe(key));
@@ -1651,7 +1651,7 @@ void KisPaintDeviceTest::testFramesLeaking()
     QCOMPARE(o.m_frames.size(), 2);
 
     // delete keyframe at position 20
-    key = channel->activeKeyframeAt(20).data();
+    key = channel->activeKeyframeAt(20);
     QVERIFY(key);
     QCOMPARE(key->time(), 20);
     QVERIFY(channel->deleteKeyframe(key));
@@ -1794,7 +1794,7 @@ void KisPaintDeviceTest::testFramesUndoRedoWithChannel()
 
     KUndo2Command cmdAdd;
 
-    KisKeyframe *frame = channel->addKeyframe(10, &cmdAdd);
+    KisKeyframeSP frame = channel->addKeyframe(10, &cmdAdd);
 
     QVERIFY(channel->keyframeAt(10));
 

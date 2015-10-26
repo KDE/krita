@@ -42,6 +42,13 @@ public:
 private Q_SLOTS:
     void slotPreviousFrame();
     void slotNextFrame();
+
+    void slotPreviousKeyFrame();
+    void slotNextKeyFrame();
+
+    void slotFirstFrame();
+    void slotLastFrame();
+
     void slotPlayPause();
 
     void slotAddBlankFrame();
@@ -55,7 +62,13 @@ private Q_SLOTS:
 
     void slotOnionSkinOptions();
 
-    void slotTimeChanged();
+    void slotGlobalTimeChanged();
+    void slotTimeSpinBoxChanged();
+
+    void updatePlayPauseIcon();
+    void updateLazyFrameIcon();
+
+    void slotLazyFrameChanged(bool value);
 
 private:
 
@@ -66,11 +79,19 @@ private:
 
     KisAction *m_previousFrameAction;
     KisAction *m_nextFrameAction;
+
+    KisAction *m_previousKeyFrameAction;
+    KisAction *m_nextKeyFrameAction;
+
+    KisAction *m_firstFrameAction;
+    KisAction *m_lastFrameAction;
+
     KisAction *m_playPauseAction;
 
     KisAction *m_addBlankFrameAction;
     KisAction *m_addDuplicateFrameAction;
     KisAction *m_deleteKeyframeAction;
+    KisAction *m_lazyFrameAction;
 
 };
 

@@ -40,7 +40,8 @@ public:
 
     int firstFrame;
     int lastFrame;
-    float fps;
+    int fps;
+    qreal playbackSpeed;
 
     KisCanvas2 *canvas;
 
@@ -53,6 +54,7 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
     m_d->playing = false;
     m_d->fps = 15;
     m_d->canvas = canvas;
+    m_d->playbackSpeed = 1.0;
 
     m_d->timer = new QTimer(this);
 
@@ -78,6 +80,33 @@ void KisAnimationPlayer::connectCancelSignals()
         toQShared(new KisSignalAutoConnection(
                       m_d->canvas->image().data(), SIGNAL(sigStrokeEndRequested()),
                       this, SLOT(slotCancelPlayback()))));
+
+    m_d->cancelStrokeConnections.append(
+        toQShared(new KisSignalAutoConnection(
+                      m_d->canvas->image()->animationInterface(), SIGNAL(sigFramerateChanged()),
+                      this, SLOT(slotUpdatePlaybackTimer()))));
+
+    m_d->cancelStrokeConnections.append(
+        toQShared(new KisSignalAutoConnection(
+                      m_d->canvas->image()->animationInterface(), SIGNAL(sigRangeChanged()),
+                      this, SLOT(slotUpdatePlaybackTimer()))));
+
+}
+
+void KisAnimationPlayer::slotUpdatePlaybackTimer()
+{
+    m_d->timer->stop();
+
+    const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
+    const KisTimeRange &range = animation->currentRange();
+    if (!range.isValid()) return;
+
+    m_d->fps = animation->framerate();
+    m_d->firstFrame = range.start();
+    m_d->lastFrame = range.end();
+    m_d->currentFrame = qBound(m_d->firstFrame, m_d->currentFrame, m_d->lastFrame);
+
+    m_d->timer->start(qreal(1000) / m_d->fps / m_d->playbackSpeed);
 }
 
 void KisAnimationPlayer::disconnectCancelSignals()
@@ -87,16 +116,10 @@ void KisAnimationPlayer::disconnectCancelSignals()
 
 void KisAnimationPlayer::play()
 {
-    const KisTimeRange &range = m_d->canvas->image()->animationInterface()->currentRange();
-    if (!range.isValid()) return;
-
-    m_d->fps = m_d->canvas->image()->animationInterface()->framerate();
-    m_d->firstFrame = range.start();
-    m_d->lastFrame = range.end();
-    m_d->currentFrame = m_d->firstFrame;
-
     m_d->playing = true;
-    m_d->timer->start(1000 / m_d->fps);
+
+    slotUpdatePlaybackTimer();
+    m_d->currentFrame = m_d->firstFrame;
 
     connectCancelSignals();
 }
@@ -147,4 +170,17 @@ void KisAnimationPlayer::uploadFrame(int frame)
 void KisAnimationPlayer::slotCancelPlayback()
 {
     stop();
+}
+
+qreal KisAnimationPlayer::playbackSpeed()
+{
+    return m_d->playbackSpeed;
+}
+
+void KisAnimationPlayer::slotUpdatePlaybackSpeed(double value)
+{
+    m_d->playbackSpeed = value;
+    if (m_d->playing) {
+        slotUpdatePlaybackTimer();
+    }
 }

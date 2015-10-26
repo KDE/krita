@@ -86,7 +86,7 @@ void KisImageAnimationInterface::setRange(const KisTimeRange range) {
     emit sigRangeChanged();
 }
 
-int KisImageAnimationInterface::framerate()
+int KisImageAnimationInterface::framerate() const
 {
     return m_d->framerate;
 }

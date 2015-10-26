@@ -100,7 +100,7 @@ public:
     const KisTimeRange &currentRange() const;
     void setRange(const KisTimeRange range);
 
-    int framerate();
+    int framerate() const;
 
 public Q_SLOTS:
     void setFramerate(int fps);

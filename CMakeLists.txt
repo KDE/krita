@@ -18,7 +18,7 @@ if (NOT ${CMAKE_VERSION} VERSION_LESS 2.8.12)
 endif ()
 
 if (NOT ${CMAKE_VERSION} VERSION_LESS 3.0.0)
-    cmake_policy(SET CMP0026 OLD) 
+    cmake_policy(SET CMP0026 OLD)
     cmake_policy(SET CMP0046 OLD)
 endif ()
 
@@ -196,36 +196,37 @@ include(KDE4Macros)
 
 # do not reorder to be alphabetical: this is the order in which the frameworks
 # depend on each other.
-find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED 
-        Archive 
-        Config 
-        WidgetsAddons 
+find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
+        Archive
+        Config
+        WidgetsAddons
         Completion
         CoreAddons
-        GuiAddons 
-        I18n 
-        ItemModels 
+        GuiAddons
+        I18n
+        ItemModels
         ItemViews
         WindowSystem
 )
 find_package(KF5KIO ${MIN_QT_VERSION})
 
-find_package(Qt5 ${MIN_QT_VERSION} REQUIRED 
-        Core 
-        Gui 
-        Widgets 
-        Xml 
-        Network 
+find_package(Qt5 ${MIN_QT_VERSION}
+        REQUIRED COMPONENTS
+        Core
+        Gui
+        Widgets
+        Xml
+        Network
         PrintSupport
-        Svg 
-        Test 
+        Svg
+        Test
         Concurrent
+        OPTIONAL_COMPONENTS
+        DBus
+        Quick
 )
 
-find_package(Qt5Quick ${MIN_QT_VERSION})
-find_package(Qt5Dbus ${MIN_QT_VERSION})
 set(HAVE_DBUS ${Qt5DBus_FOUND})
-
 set(QT_QTTEST_LIBRARY Qt5::Test)
 
 if (USEOPENGL)
@@ -525,8 +526,8 @@ include(MacroCalligraAddTest)
 include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/interfaces )
 
 
-set(KOVERSION_INCLUDES ${CMAKE_SOURCE_DIR}/libs/version 
-                       ${CMAKE_BINARY_DIR}/libs/version 
+set(KOVERSION_INCLUDES ${CMAKE_SOURCE_DIR}/libs/version
+                       ${CMAKE_BINARY_DIR}/libs/version
 )
 
 include_directories(${KOVERSION_INCLUDES})
@@ -546,18 +547,18 @@ set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf
                    ${CMAKE_SOURCE_DIR}/libs/store
                    ${CMAKE_BINARY_DIR}/libs/odf
                    ${CMAKE_BINARY_DIR}/libs/store
-                   ${KOVERSION_INCLUDES} 
+                   ${KOVERSION_INCLUDES}
                    )
 
 # pigment depends on koplugin and lcms
 set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}
-                   ${KOVERSION_INCLUDES} 
+                   ${KOVERSION_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/pigment
                    ${CMAKE_BINARY_DIR}/libs/pigment
                    ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
                    ${CMAKE_SOURCE_DIR}/libs/pigment/resources
                    ${Boost_INCLUDE_DIRS}
-                   
+
                    )
 
 # flake depends on koodf and pigment

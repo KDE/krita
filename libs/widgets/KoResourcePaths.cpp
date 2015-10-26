@@ -26,6 +26,7 @@
 #include <QFileInfo>
 #include <QDebug>
 #include <QSet>
+#include <QApplication>
 
 Q_GLOBAL_STATIC(KoResourcePaths, s_instance);
 

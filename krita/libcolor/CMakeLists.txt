@@ -1,4 +1,4 @@
-if (UNIX AND NOT APPLE) 
+if (UNIX AND NOT APPLE AND HAVE_DBUS)
     add_subdirectory(colord)
     set(kritacolor_LIB_SRCS kis_color_manager.h linux/kis_color_manager.cpp)
     set(kritacolor_EXTRA_LIBRARIES kritacolord)

@@ -207,10 +207,8 @@ find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED
         ItemModels 
         ItemViews
         WindowSystem
-    OPTIONAL_COMPONENTS
-        KIO
 )
-
+find_package(KF5KIO ${MIN_QT_VERSION})
 
 find_package(Qt5 ${MIN_QT_VERSION} REQUIRED 
         Core 
@@ -222,20 +220,18 @@ find_package(Qt5 ${MIN_QT_VERSION} REQUIRED
         Svg 
         Test 
         Concurrent
-    OPTIONAL_COMPONENTS
-        Quick
-        X11Extras
-        DBus
 )
 
-set(HAVE_DBUS Qt5DBus_FOUND)
+find_package(Qt5Quick ${MIN_QT_VERSION})
+find_package(Qt5Dbus ${MIN_QT_VERSION})
+set(HAVE_DBUS ${Qt5DBus_FOUND})
 
 set(QT_QTTEST_LIBRARY Qt5::Test)
 
 if (USEOPENGL)
     find_package(Qt5 ${MIN_QT_VERSION} REQUIRED OpenGL)
     set(QT_QTOPENGL_FOUND ${Qt5OpenGL_FOUND})
-    if (NOT WIN32)
+    if (NOT WIN32 AND NOT APPLE)
         find_package(Qt5 ${MIN_QT_VERSION} REQUIRED X11Extras)
     endif()
 endif ()
@@ -311,9 +307,9 @@ if (NOT Boost_FOUND)
     message(FATAL_ERROR "Did not find Boost. Boost is required for the core libraries, stage, sheets and krita.")
 endif ()
 
-if (APPLE)
-   find_package(Carbon REQUIRED)
-endif ()
+#if (APPLE)
+#   find_package(Carbon REQUIRED)
+#endif ()
 
  ###########################
 ############################

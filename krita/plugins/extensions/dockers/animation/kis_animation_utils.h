@@ -32,6 +32,7 @@ namespace KisAnimationUtils
     extern const QString addFrameActionName;
     extern const QString duplicateFrameActionName;
     extern const QString removeFrameActionName;
+    extern const QString lazyFrameCreationActionName;
 };
 
 #endif /* __KIS_ANIMATION_UTILS_H */

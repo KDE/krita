@@ -62,6 +62,8 @@ namespace KritaUtils
 
     quint8 KRITAIMAGE_EXPORT mergeOpacity(quint8 opacity, quint8 parentOpacity);
     QBitArray KRITAIMAGE_EXPORT mergeChannelFlags(const QBitArray &flags, const QBitArray &parentFlags);
+
+    QString KRITAIMAGE_EXPORT toLocalizedOnOff(bool value);
 }
 
 #endif /* __KRITA_UTILS_H */

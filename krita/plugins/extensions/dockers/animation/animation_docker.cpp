@@ -33,6 +33,7 @@
 #include "kis_post_execution_undo_adapter.h"
 #include "kis_keyframe_channel.h"
 #include "kis_animation_utils.h"
+#include "krita_utils.h"
 #include "kis_image_config.h"
 
 
@@ -90,7 +91,7 @@ AnimationDocker::AnimationDocker()
     m_deleteKeyframeAction->setActivationFlags(KisAction::ACTIVE_LAYER);
     m_animationWidget->btnDeleteKeyframe->setDefaultAction(m_deleteKeyframeAction);
 
-    m_lazyFrameAction = new KisAction("Lazy Frame Creation", m_animationWidget->btnLazyFrame);
+    m_lazyFrameAction = new KisAction(KisAnimationUtils::lazyFrameCreationActionName, m_animationWidget->btnLazyFrame);
     m_lazyFrameAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
     m_lazyFrameAction->setCheckable(true);
 
@@ -403,9 +404,15 @@ void AnimationDocker::updateLazyFrameIcon()
 {
     KisImageConfig cfg;
 
-    m_lazyFrameAction->setIcon(cfg.lazyFrameCreationEnabled() ?
+    const bool value = cfg.lazyFrameCreationEnabled();
+
+    m_lazyFrameAction->setIcon(value ?
                                KisIconUtils::loadIcon("lazyframeOn") :
                                KisIconUtils::loadIcon("lazyframeOff"));
+
+    m_lazyFrameAction->setText(QString("%1 (%2)")
+                               .arg(KisAnimationUtils::lazyFrameCreationActionName)
+                               .arg(KritaUtils::toLocalizedOnOff(value)));
 }
 
 void AnimationDocker::slotUpdateIcons()

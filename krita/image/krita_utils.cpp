@@ -341,4 +341,8 @@ namespace KritaUtils
         return flags;
     }
 
+    QString KRITAIMAGE_EXPORT toLocalizedOnOff(bool value) {
+        return value ? i18n("on") : i18n("off");
+    }
+
 }

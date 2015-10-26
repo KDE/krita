@@ -13,7 +13,7 @@ ki18n_wrap_ui(KRITA_ANIMATIONDOCKER_PART_SRCS
     kis_onion_skin_dialog.ui
 )
 
-add_library(kritaanimationdocker ${KRITA_ANIMATIONDOCKER_PART_SRCS})
+add_library(kritaanimationdocker MODULE ${KRITA_ANIMATIONDOCKER_PART_SRCS})
 
 kcoreaddons_desktop_to_json(kritaanimationdocker krita_animationdocker.desktop)
 
@@ -21,8 +21,4 @@ target_link_libraries(kritaanimationdocker kritaui)
 
 install(TARGETS kritaanimationdocker  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-
-########### install files ###############
-
-install( FILES  krita_animationdocker.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 

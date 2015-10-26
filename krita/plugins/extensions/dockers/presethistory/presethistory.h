@@ -21,10 +21,8 @@
 #include <QObject>
 #include <QVariant>
 
-class KisViewManager;
-
 /**
- * Template of view plugin
+ * Shows the last used presets
  */
 class PresetHistoryPlugin : public QObject
 {

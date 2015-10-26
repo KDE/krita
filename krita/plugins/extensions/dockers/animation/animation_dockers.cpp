@@ -20,14 +20,14 @@
 #include "animation_docker.h"
 #include "timeline_docker.h"
 
-#include <QVariantList>
 #include <kpluginfactory.h>
+
 #include <KoDockFactoryBase.h>
-#include "KisViewManager.h"
 #include <KoDockRegistry.h>
 
-K_PLUGIN_FACTORY(AnimationDockersPluginFactory, registerPlugin<AnimationDockersPlugin>();)
-K_EXPORT_PLUGIN(AnimationDockersPluginFactory( "krita" ) )
+#include "KisViewManager.h"
+
+K_PLUGIN_FACTORY_WITH_JSON(AnimationDockersPluginFactory, "krita_animationdocker.json", registerPlugin<AnimationDockersPlugin>();)
 
 class AnimationDockerFactory : public KoDockFactoryBase {
 public:

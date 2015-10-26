@@ -21,7 +21,6 @@
 
 #include <QTimer>
 
-
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <klocalizedstring.h>

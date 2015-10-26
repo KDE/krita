@@ -307,9 +307,10 @@ if (NOT Boost_FOUND)
     message(FATAL_ERROR "Did not find Boost. Boost is required for the core libraries, stage, sheets and krita.")
 endif ()
 
-#if (APPLE)
+if (APPLE)
+    SET(CMAKE_CXX_FLAGS "-stdlib=libstdc++ -std=c++11")
 #   find_package(Carbon REQUIRED)
-#endif ()
+endif ()
 
  ###########################
 ############################

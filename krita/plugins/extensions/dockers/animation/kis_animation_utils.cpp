@@ -23,6 +23,8 @@
 #include "kis_node.h"
 #include "kis_keyframe_channel.h"
 #include "kis_post_execution_undo_adapter.h"
+#include "kis_global.h"
+
 
 
 namespace KisAnimationUtils {

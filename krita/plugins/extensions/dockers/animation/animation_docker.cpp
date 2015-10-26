@@ -386,8 +386,8 @@ void AnimationDocker::updatePlayPauseIcon()
     bool isPlaying = m_canvas && m_canvas->animationPlayer() && m_canvas->animationPlayer()->isPlaying();
 
     m_playPauseAction->setIcon(isPlaying ?
-                               themedIcon("animation_pause") :
-                               themedIcon("animation_play"));
+                               KisIconUtils::loadIcon("animation_pause") :
+                               KisIconUtils::loadIcon("animation_play"));
 }
 
 void AnimationDocker::updateLazyFrameIcon()
@@ -395,8 +395,8 @@ void AnimationDocker::updateLazyFrameIcon()
     KisImageConfig cfg;
 
     m_lazyFrameAction->setIcon(cfg.lazyFrameCreationEnabled() ?
-                               themedIcon("quickopen") :
-                               themedIcon("quickopen-function"));
+                               KisIconUtils::loadIcon("quickopen") :
+                               KisIconUtils::loadIcon("quickopen-function"));
 }
 
 void AnimationDocker::slotUpdateIcons()

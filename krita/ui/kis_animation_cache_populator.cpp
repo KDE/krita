@@ -99,16 +99,11 @@ struct KisAnimationCachePopulator::Private
         imageRequestConnection.reset();
         requestInfo = requestCache->fetchFrameData(frame);
 
-        QFuture<void> requestFuture =
-            QtConcurrent::run(
-                std::bind(&KisAnimationCachePopulator::Private::processFrameInfo,
-                          requestInfo));
-
-        infoConversionWatcher.setFuture(requestFuture);
-
         /**
          * This method is called from the context of the image worker
-         * threads, so we cannot modify timers here.
+         * threads, so we cannot modify timers here. Therefore the
+         * timers reset and the conversion request will be issued in
+         * the main GUI thread.
          */
         emit q->sigPrivateStartWaitingForConvertedFrame();
     }
@@ -274,6 +269,30 @@ struct KisAnimationCachePopulator::Private
         return true;
     }
 
+    QString debugStateToString(State newState) {
+        QString str = "<unknown>";
+
+        switch (state) {
+        case WaitingForIdle:
+            str = "WaitingForIdle";
+            break;
+        case WaitingForFrame:
+            str = "WaitingForFrame";
+            break;
+        case NotWaitingForAnything:
+            str = "NotWaitingForAnything";
+            break;
+        case WaitingForConvertedFrame:
+            str = "WaitingForConvertedFrame";
+            break;
+        case BetweenFrames:
+            str = "BetweenFrames";
+            break;
+        }
+
+        return str;
+    }
+
     void enterState(State newState)
     {
         state = newState;
@@ -347,7 +366,16 @@ void KisAnimationCachePopulator::slotRequestRegeneration()
 
 void KisAnimationCachePopulator::slotPrivateStartWaitingForConvertedFrame()
 {
+    KIS_ASSERT_RECOVER_RETURN(m_d->requestInfo);
+
     m_d->enterState(Private::WaitingForConvertedFrame);
+
+    QFuture<void> requestFuture =
+        QtConcurrent::run(
+            std::bind(&KisAnimationCachePopulator::Private::processFrameInfo,
+                        m_d->requestInfo));
+
+    m_d->infoConversionWatcher.setFuture(requestFuture);
 }
 
 #include "kis_animation_cache_populator.moc"

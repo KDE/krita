@@ -174,12 +174,12 @@ void ThemeManager::slotChangePalette()
     if (theme == defaultThemeName() || theme.isEmpty()) {
 #ifdef __APPLE__
         qApp->setStyle("Macintosh");
-        qApp->style()->polish(kapp);
+        qApp->style()->polish(qApp);
 #endif
     } else {
 #ifdef __APPLE__
-        qApp->setStyle("Plastique");
-        qApp->style()->polish(kapp);
+        qApp->setStyle("Fusion");
+        qApp->style()->polish(qApp);
 #endif
     }
 

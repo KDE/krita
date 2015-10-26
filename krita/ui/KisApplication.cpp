@@ -339,8 +339,8 @@ bool KisApplication::start(const KisApplicationArguments &args)
     QDir appdir(applicationDirPath());
     appdir.cdUp();
 
-    KoResourcePaths::addXdgDataPrefix(appdir.absolutePath() + "/share");
-    KoResourcePaths::addPrefix(appdir.absolutePath());
+    //KoResourcePaths::addXdgDataPrefix(appdir.absolutePath() + "/share");
+    //KoResourcePaths::addPrefix(appdir.absolutePath());
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     // If there's no kdehome, set it and restart the process.

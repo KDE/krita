@@ -460,7 +460,7 @@ if (HAVE_KIO)
     target_link_libraries(kritaui KF5::KIOCore)
 endif() 
 
-if (NOT WIN32)
+if (NOT WIN32 AND NOT APPLE)
   target_link_libraries(kritaui ${X11_X11_LIB} ${X11_Xinput_LIB})
 endif()
 
@@ -473,7 +473,7 @@ if(HAVE_OPENGL)
     target_link_libraries(kritaui ${OPENGL_LIBRARIES} Qt5::OpenGL ${OPENEXR_LIBRARIES})
 
     # Add VSync disable workaround
-    if(NOT WIN32)
+    if(NOT WIN32 AND NOT APPLE)
       target_link_libraries(kritaui ${CMAKE_DL_LIBS} Qt5::X11Extras)
     endif()
 

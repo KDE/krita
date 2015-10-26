@@ -221,10 +221,12 @@ find_package(Qt5 ${MIN_QT_VERSION}
         Svg
         Test
         Concurrent
-        OPTIONAL_COMPONENTS
-        DBus
-        Quick
 )
+
+
+# Note: OPTIONAL_COMPONENTS does not seem to be reliable (Oct. 2015)
+find_package(Qt5Quick ${MIN_QT_VERSION})
+find_package(Qt5Dbus ${MIN_QT_VERSION})
 
 set(HAVE_DBUS ${Qt5DBus_FOUND})
 set(QT_QTTEST_LIBRARY Qt5::Test)

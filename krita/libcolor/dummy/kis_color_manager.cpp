@@ -18,25 +18,23 @@
 
 #include "kis_color_manager.h"
 
-#include <QGlobalStatic>
-
 Q_GLOBAL_STATIC(KisColorManager, s_instance)
-
 
 class KisColorManager::Private {
 public:
-    // we are too dumb for that :)
+    Private(QObject *parent)
+    {}
 };
-
 
 KisColorManager::KisColorManager()
     : QObject()
-    , d(new Private())
+    , d(new Private(this))
 {
 }
 
 KisColorManager::~KisColorManager()
 {
+    delete d;
 }
 
 QString KisColorManager::deviceName(const QString &id)

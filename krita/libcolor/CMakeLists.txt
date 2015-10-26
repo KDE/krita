@@ -5,7 +5,7 @@ if (UNIX AND NOT APPLE)
 elseif (MSVC)
     set(kritacolor_LIB_SRCS kis_color_manager.h dummy/kis_color_manager.cpp ${CMAKE_CURRENT_BINARY_DIR}/kritacolor_export.h)
 else ()
-    set(kritacolor_LIB_SRCS dummy/kis_color_manager.cpp)
+    set(kritacolor_LIB_SRCS kis_color_manager.h dummy/kis_color_manager.cpp)
 endif () 
 
 add_library(kritacolor SHARED ${kritacolor_LIB_SRCS} )

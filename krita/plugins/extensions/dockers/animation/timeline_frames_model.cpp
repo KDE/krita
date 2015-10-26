@@ -732,14 +732,17 @@ void TimelineFramesModel::setScrubState(bool active)
         m_d->scrubInProgress = true;
     }
 
-    if (m_d->scrubInProgress && !active &&
-        m_d->scrubStartFrame > 0 &&
-        m_d->scrubStartFrame != m_d->activeFrameIndex) {
+    if (m_d->scrubInProgress && !active) {
 
-        m_d->scrubStartFrame = -1;
         m_d->scrubInProgress = false;
 
-        scrubTo(m_d->activeFrameIndex, false);
+        if (m_d->scrubStartFrame > 0 &&
+            m_d->scrubStartFrame != m_d->activeFrameIndex) {
+
+            scrubTo(m_d->activeFrameIndex, false);
+        }
+
+        m_d->scrubStartFrame = -1;
     }
 }
 

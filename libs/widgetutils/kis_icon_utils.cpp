@@ -18,8 +18,6 @@
 
 #include "kis_icon_utils.h"
 
-#include "kis_debug.h"
-
 #include <QApplication>
 #include <QAction>
 #include <QAbstractButton>
@@ -27,6 +25,7 @@
 #include <QIcon>
 #include <QFile>
 #include <QPair>
+#include <QDebug>
 
 #include <KoIcon.h>
 

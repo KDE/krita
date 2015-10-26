@@ -330,11 +330,11 @@ int KisImageConfig::totalRAM()
     errno = 0;
     if (sysctl(mib, namelen, &size, &len, NULL, 0) >= 0) {
         totalMemory = size >> 20;
-        kDebug() << "sysctl(\"hw.memsize\") returned size=" << size << " =>" << totalMemory << "MiB";
+        dbgKrita << "sysctl(\"hw.memsize\") returned size=" << size << " =>" << totalMemory << "MiB";
         error = 0;
     }
     else {
-        kDebug() << "sysctl(\"hw.memsize\") raised error" << strerror(errno);
+        dbgKrita << "sysctl(\"hw.memsize\") raised error" << strerror(errno);
     }
 #endif
 

@@ -247,7 +247,7 @@ void KoShapeFactoryBase::getDeferredPlugin()
     QMutexLocker(&d->pluginLoadingMutex);
     if (d->deferredFactory) return;
 
-    const QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Calligra/Deferred", QString());
+    const QList<QPluginLoader *> offers = KoJsonTrader::instance()->query("Calligra/Deferred", QString());
     Q_ASSERT(offers.size() > 0);
 
     foreach(QPluginLoader *pluginLoader, offers) {

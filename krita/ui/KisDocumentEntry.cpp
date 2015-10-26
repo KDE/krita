@@ -119,7 +119,7 @@ QList<KisDocumentEntry> KisDocumentEntry::query(const QString & mimetype)
     QList<KisDocumentEntry> lst;
 
     // Query the trader
-    const QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Calligra/Part", mimetype);
+    const QList<QPluginLoader *> offers = KoJsonTrader::instance()->query("Calligra/Part", mimetype);
 
     foreach(QPluginLoader *pluginLoader, offers) {
         lst.append(KisDocumentEntry(pluginLoader));

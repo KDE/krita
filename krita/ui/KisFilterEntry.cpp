@@ -46,7 +46,7 @@ QList<KisFilterEntrySP> KisFilterEntry::query()
 {
     QList<KisFilterEntrySP> lst;
 
-    QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Krita/FileFilter", QString());
+    QList<QPluginLoader *> offers = KoJsonTrader::instance()->query("Krita/FileFilter", QString());
 
     QList<QPluginLoader *>::ConstIterator it = offers.constBegin();
     unsigned int max = offers.count();

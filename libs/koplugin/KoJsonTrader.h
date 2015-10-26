@@ -28,16 +28,18 @@
 class QPluginLoader;
 
 /**
- *  Support class to fetch a list of relevant plugins
+ * Support class to fetch a list of relevant plugins
+ *
+ * Static singleton
  */
 class KRITAPLUGIN_EXPORT KoJsonTrader
 {
-
-private:
-    explicit KoJsonTrader();
-
 public:
-    static KoJsonTrader *self();
+
+    /**
+     * Returns the instance of this class.
+     */
+    static KoJsonTrader *instance();
 
     /**
      * The main function in the KoJsonTrader class.
@@ -67,8 +69,11 @@ public:
      */
      QList<QPluginLoader *> query(const QString &servicetype, const QString &constraint);
 
+
+     // Note: this should not be used
+     KoJsonTrader();
+
 private:
-     KoJsonTrader *m_service;
      QString m_pluginPath;
 };
 

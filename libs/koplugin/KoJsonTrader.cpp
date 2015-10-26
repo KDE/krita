@@ -28,16 +28,17 @@
 #include <QJsonArray>
 #include <QDirIterator>
 #include <QDir>
+#include <QProcessEnvironment>
+#include <QGlobalStatic>
 
 KoJsonTrader::KoJsonTrader()
 {
 }
 
-KoJsonTrader* KoJsonTrader::self()
+Q_GLOBAL_STATIC(KoJsonTrader, s_instance)
+
+KoJsonTrader* KoJsonTrader::instance()
 {
-    static KoJsonTrader *s_instance = 0;
-    if (!s_instance)
-        s_instance = new KoJsonTrader();
     return s_instance;
 }
 

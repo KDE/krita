@@ -66,7 +66,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         query += QString::fromLatin1(" and (%1)").arg(versionString);
     }
 
-    QList<QPluginLoader *> offers = KoJsonTrader::self()->query(serviceType, QString());
+    QList<QPluginLoader *> offers = KoJsonTrader::instance()->query(serviceType, QString());
     QList<QPluginLoader *> plugins;
     bool configChanged = false;
     QList<QString> blacklist; // what we will save out afterwards

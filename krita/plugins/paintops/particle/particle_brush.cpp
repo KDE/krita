@@ -24,6 +24,8 @@
 #include <KoColorSpace.h>
 #include <KoColor.h>
 
+#include <math.h>
+
 const qreal TIME = 0.000030;
 
 ParticleBrush::ParticleBrush()

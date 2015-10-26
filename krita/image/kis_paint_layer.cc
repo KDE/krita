@@ -136,7 +136,11 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
         gc.bitBlt(rect.topLeft(), temporaryTarget(), rect);
     }
 
-    if (m_d->contentChannel && m_d->contentChannel->keyframeCount() > 1 && onionSkinEnabled()) {
+    if (m_d->contentChannel &&
+        m_d->contentChannel->keyframeCount() > 1 &&
+        onionSkinEnabled() &&
+        !m_d->paintDevice->defaultBounds()->externalFrameActive()) {
+
         KisOnionSkinCompositor *compositor = KisOnionSkinCompositor::instance();
         compositor->composite(m_d->paintDevice, projection, rect);
     }

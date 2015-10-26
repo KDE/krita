@@ -16,6 +16,7 @@ Name[uk]=Фільтр нормалізації
 Name[x-test]=xxNormalize Filterxx
 Comment=Normalize the color channels.
 Comment[ca]=Normalitza els canals de color.
+Comment[de]=Normalisiert die Farbkanäle.
 Comment[en_GB]=Normalise the colour channels.
 Comment[es]=Normalizar los canales de color.
 Comment[et]=Värvikanalite normaliseerimine.

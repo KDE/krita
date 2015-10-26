@@ -256,6 +256,15 @@ void AnimationDocker::slotGlobalTimeChanged()
                 m_canvas->image()->animationInterface()->currentUITime();
 
     m_animationWidget->intCurrentTime->setValue(time);
+
+    const int frameRate = m_canvas->image()->animationInterface()->framerate();
+    const int msec = 1000 * time / frameRate;
+
+    QTime realTime;
+    realTime = realTime.addMSecs(msec);
+
+    QString realTimeString = realTime.toString("hh:mm:ss.zzz");
+    m_animationWidget->intCurrentTime->setToolTip(realTimeString);
 }
 
 void AnimationDocker::slotTimeSpinBoxChanged()

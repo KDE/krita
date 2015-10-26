@@ -349,7 +349,11 @@ void TimelineFramesView::slotDataChanged(const QModelIndex &topLeft, const QMode
 
     QModelIndex index = currentIndex();
 
-    if (!index.isValid()) return;
+    if (!index.isValid() &&
+        (selectedRow < 0 || selectedColumn < 0)) {
+
+        return;
+    }
 
     if (selectedRow == -1) {
         selectedRow = index.row();

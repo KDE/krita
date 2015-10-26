@@ -174,6 +174,8 @@ void TimelineModelTest::testView()
     addSelectionMasks();
     m_shapeController->setImage(m_image);
 
+    m_image->animationInterface()->requestTimeSwitchWithUndo(4);
+
     framesTable->setModel(model);
 
     model->setDummiesFacade(m_shapeController, m_image);

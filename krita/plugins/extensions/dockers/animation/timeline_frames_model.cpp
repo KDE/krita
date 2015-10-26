@@ -237,7 +237,7 @@ void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, 
 {
     KisDummiesFacadeBase *oldDummiesFacade = m_d->dummiesFacade;
 
-    if(m_d->dummiesFacade) {
+    if (m_d->dummiesFacade) {
         m_d->image->disconnect(this);
         m_d->dummiesFacade->disconnect(this);
     }
@@ -246,7 +246,7 @@ void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, 
     m_d->dummiesFacade = dummiesFacade;
     m_d->converter.reset();
 
-    if(m_d->dummiesFacade) {
+    if (m_d->dummiesFacade) {
         m_d->converter.reset(new TimelineNodeListKeeper(this, m_d->dummiesFacade));
         connect(m_d->dummiesFacade, SIGNAL(sigDummyChanged(KisNodeDummy*)),
                 SLOT(slotDummyChanged(KisNodeDummy*)));
@@ -258,8 +258,12 @@ void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, 
                 SIGNAL(sigRangeChanged()), SIGNAL(sigInfiniteTimelineUpdateNeeded()));
     }
 
-    if(m_d->dummiesFacade != oldDummiesFacade) {
+    if (m_d->dummiesFacade != oldDummiesFacade) {
         reset();
+    }
+
+    if (m_d->dummiesFacade) {
+        slotCurrentTimeChanged(m_d->image->animationInterface()->currentUITime());
     }
 }
 
@@ -292,7 +296,13 @@ void TimelineFramesModel::slotFramerateChanged()
 void TimelineFramesModel::slotCurrentTimeChanged(int time)
 {
     if (time != m_d->activeFrameIndex) {
-        setData(index(m_d->activeLayerIndex, time), true, ActiveFrameRole);
+
+        QModelIndex newIndex = index(m_d->activeLayerIndex, time);
+        if (newIndex.isValid()) {
+            setData(newIndex, true, ActiveFrameRole);
+        } else {
+            m_d->activeFrameIndex = time;
+        }
     }
 }
 

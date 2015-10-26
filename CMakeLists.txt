@@ -620,7 +620,6 @@ calligra_drop_product_on_bad_condition( APP_KRITA
     EIGEN3_FOUND "Eigen devel not found"
     EXIV2_FOUND "libexiv2 devel not found"
     HAVE_REQUIRED_LCMS_VERSION "lcms devel not found"
-    SHARED_MIME_INFO_FOUND "SharedMimeInfo not found"
     Boost_SYSTEM_FOUND "boost-system devel not found"
     REQUIRED_Xinput_FOUND "Xinput devel not found "
 )

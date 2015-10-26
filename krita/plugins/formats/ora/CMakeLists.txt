@@ -42,4 +42,6 @@ endif()
 
 
 install(FILES krita_ora.xml DESTINATION ${XDG_MIME_INSTALL_DIR})
-update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})
+if (SHARED_MIME_INFO_FOUND)
+    update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})
+endif()

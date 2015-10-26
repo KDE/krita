@@ -19,6 +19,6 @@ kcoreaddons_desktop_to_json(kritaanimationdocker krita_animationdocker.desktop)
 
 target_link_libraries(kritaanimationdocker kritaui)
 
-install(TARGETS kritaanimationdocker  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritaanimationdocker  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 

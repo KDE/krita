@@ -42,32 +42,27 @@ public:
     static KoJsonTrader *instance();
 
     /**
-     * The main function in the KoJsonTrader class.
+     * The main function in the KoJsonTrader class. It tries to automatically
+     * locate the base path containing Krita plugins. It attempts to do so in
+     * the current application directory qApp->applicationDirPath().
      *
-     * It will return a list of QPluginLoader that match your
-     * specifications.  The only required parameter is the service
-     * type.  This is something like 'text/plain' or 'text/html'.  The
-     * constraint parameter is used to limit the possible choices
-     * returned based on the constraints you give it.
+     * The environment variable KRITA_PLUGIN_PATH overrides the automatic search
+     * path when the algorithm is insufficient. Try setting this if the
+     * "LittleCMS color management plugin is not installed" error appears.
      *
-     * The @p constraint language is rather full.  The most common
-     * keywords are AND, OR, NOT, IN, and EXIST, all used in an
-     * almost spoken-word form.  An example is:
-     * \code
-     * (Type == 'Service') and (('KParts/ReadOnlyPart' in ServiceTypes) or (exist Exec))
-     * \endcode
-     *
-     * The keys used in the query (Type, ServiceType, Exec) are all
-     * fields found in the .desktop files.
+     * A better algorithm or another solution could be a welcome alternative.
+     * One thing that might help would be to build all Krita plugins in a single
+     * `plugins` folder, so that an installation step is unnecessary to put them
+     * together in a single folder here. Another solution might be to construct
+     * several QPluginLoaders.
      *
      * @param servicetype A service type like 'KMyApp/Plugin' or 'KFilePlugin'.
-     * @param constraint  A constraint to limit the choices returned, QString() to
-     *                    get all services of the given @p servicetype
+     * @param mimetype    A MimeType to constrain the search.
+     *
      *
      * @return A list of QPluginLoader that satisfy the query
-     * @see http://techbase.kde.org/Development/Tutorials/Services/Traders#The_KTrader_Query_Language
      */
-     QList<QPluginLoader *> query(const QString &servicetype, const QString &constraint);
+     QList<QPluginLoader *> query(const QString &servicetype, const QString &mimetype);
 
 
      // Note: this should not be used

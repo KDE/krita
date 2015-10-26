@@ -14,9 +14,9 @@
    width="22"
    height="22"
    id="svg6190"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="dark_nextframe.svg"
-   inkscape:export-filename="/home/tyyppi/krita/animation/calligra/krita/pics/dark_nextframe.png"
+   inkscape:export-filename="../dark_nextframe.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <sodipodi:namedview
@@ -28,15 +28,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="1004"
+     inkscape:window-width="1878"
+     inkscape:window-height="1048"
      id="namedview4440"
-     showgrid="false"
+     showgrid="true"
      inkscape:zoom="21.454545"
-     inkscape:cx="7.3221365"
-     inkscape:cy="12.213488"
+     inkscape:cx="-1.7668467"
+     inkscape:cy="12.236793"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg6190"
      inkscape:snap-bbox="true"
@@ -53,7 +53,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -1294,16 +1294,6 @@
          style="stop-color:#aaaaaa;stop-opacity:1;" />
     </linearGradient>
     <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient6935-7-2-0"
-       id="linearGradient9525"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.0672276,0,0,1.0672276,-1967.8218,-936.1461)"
-       x1="1847.6807"
-       y1="880.63397"
-       x2="1860.6599"
-       y2="893.61328" />
-    <linearGradient
        id="linearGradient6935-7-2-0">
       <stop
          style="stop-color:#666666;stop-opacity:1"
@@ -1326,7 +1316,7 @@
        inkscape:collect="always" />
   </defs>
   <path
-     style="color:#000000;fill:url(#linearGradient9525);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     style="color:#000000;fill:#373737;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
      d="M 6,3 6,19 8,19 8,3 z m 3,0 0,16 8,-7.9883 z"
      id="path3308"
      inkscape:connector-curvature="0"

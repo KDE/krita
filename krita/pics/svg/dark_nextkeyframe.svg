@@ -14,8 +14,8 @@
    height="22"
    id="svg6190"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="dark_animation_play.svg"
-   inkscape:export-filename="../light_animation_play.png"
+   sodipodi:docname="dark_nextkeyframe.svg"
+   inkscape:export-filename="/home/tyyppi/krita/animation/calligra/krita/pics/dark_nextframe.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <sodipodi:namedview
@@ -31,9 +31,9 @@
      inkscape:window-height="1048"
      id="namedview4440"
      showgrid="true"
-     inkscape:zoom="10.727273"
-     inkscape:cx="-14.648987"
-     inkscape:cy="12.815824"
+     inkscape:zoom="21.454545"
+     inkscape:cx="-1.7668467"
+     inkscape:cy="12.236793"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -59,12 +59,9 @@
   <defs
      id="defs6194" />
   <path
-     style="color:#000000;fill:#373737;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-     d="M 7,1 7,21 17,11.0117 z"
+     style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#373737;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
+     d="m 4.0463786,3 0,16 2,0 0,-16 z m 3,0 0,16 8.0000004,-7.988281 z m 8.9538534,2 0,12 2,0 0,-12 z"
      id="path3308"
      inkscape:connector-curvature="0"
-     inkscape:export-filename="/home/tyyppi/krita/animation/calligra/krita/pics/dark_playpause.png"
-     inkscape:export-xdpi="90"
-     inkscape:export-ydpi="90"
-     sodipodi:nodetypes="cccc" />
+     sodipodi:nodetypes="cccccccccccccc" />
 </svg>

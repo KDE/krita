@@ -15,8 +15,8 @@
    height="22"
    id="svg6190"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="light_nextframe.svg"
-   inkscape:export-filename="../light_nextframe.png"
+   sodipodi:docname="light_nextkeyframe.svg"
+   inkscape:export-filename="../light_nextkeyframe.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <sodipodi:namedview
@@ -1316,12 +1316,17 @@
        inkscape:collect="always" />
   </defs>
   <path
-     style="color:#000000;fill:#cacaca;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-     d="M 6,3 6,19 8,19 8,3 z m 3,0 0,16 8,-7.9883 z"
+     style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#cacaca;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
+     d="M 4,3 4,19 6,19 6,3 Z m 3,0 0,16 8,-7.9883 z"
      id="path3308"
      inkscape:connector-curvature="0"
      inkscape:export-filename="/home/tyyppi/krita/mockup/symbols.png"
      inkscape:export-xdpi="90"
      inkscape:export-ydpi="90"
      sodipodi:nodetypes="ccccccccc" />
+  <path
+     style="fill:#cacaca;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
+     d="m 16,5 2,0 0,12 -2,0 z"
+     id="path4452"
+     inkscape:connector-curvature="0" />
 </svg>

@@ -35,6 +35,29 @@ static const Qt::CaseSensitivity cs = Qt::CaseInsensitive;
 static const Qt::CaseSensitivity cs = Qt::CaseSensitive;
 #endif
 
+#ifdef Q_OS_MAC
+#include <ApplicationServices/ApplicationServices.h>
+#include <CoreFoundation/CoreFoundation.h>
+#include <CoreServices/CoreServices.h>
+#endif
+
+QString getInstallationPrefix() {
+#ifdef Q_OS_MAC
+     CFURLRef appUrlRef = CFBundleCopyBundleURL(CFBundleGetMainBundle());
+     CFStringRef macPath = CFURLCopyFileSystemPath(appUrlRef,
+                                            kCFURLPOSIXPathStyle);
+     const char *pathPtr = CFStringGetCStringPtr(macPath,
+                                            CFStringGetSystemEncoding());
+     QString bundlePath = QString::fromLatin1(pathPtr);
+     bundlePath += QString::fromLatin1("/Contents/MacOS/");
+     CFRelease(appUrlRef);
+     CFRelease(macPath);
+     return bundlePath;
+ #else
+     return qApp->applicationDirPath() + QLatin1String("/");
+ #endif
+}
+
 class Q_DECL_HIDDEN KoResourcePaths::Private {
 public:
     QMap<QString, QStringList> absolutes; // For each resource type, the list of absolute paths, from most local (most priority) to most global
@@ -252,7 +275,7 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
                                                       SearchOptions options) const
 {
     //qDebug() << "=====================================================";
-
+    //qDebug() << type << _filter << QStandardPaths::standardLocations(d->mapTypeToQStandardPaths(type));
     bool noDuplicates = options & KoResourcePaths::NoDuplicates;
     bool recursive = options & KoResourcePaths::Recursive;
 
@@ -273,12 +296,14 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
         resources << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), filter, QStandardPaths::LocateFile);
     }
 
-    ////qDebug() << "\tresources from qstandardpaths:" << resources.size();
+    //qDebug() << "\tresources from qstandardpaths:" << resources.size();
 
 
     foreach(const QString &alias, aliases) {
         //qDebug() << "\t\talias:" << alias;
-        const QStringList dirs = QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias, QStandardPaths::LocateDirectory);
+        
+        const QStringList dirs = QStringList() << getInstallationPrefix() + "../share/" + alias + "/"
+                                               << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias, QStandardPaths::LocateDirectory);
         QSet<QString> s = QSet<QString>::fromList(dirs);
 
         //qDebug() << "\t\tdirs:" << dirs;
@@ -287,26 +312,35 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
         }
     }
 
+    //qDebug() << "\tresources also from aliases:" << resources.size();
+    
+    if (resources.isEmpty()) {
+        QFileInfo fi(filter);
+        resources << filesInDir(getInstallationPrefix() + "../share/" + fi.path(), fi.fileName(), noDuplicates, false);
+    }
+    
+    //qDebug() << "\tresources from installation:" << resources.size();
+    
     if (noDuplicates) {
         QSet<QString> s = QSet<QString>::fromList(resources);
         resources = s.toList();
     }
 
-    //qDebug() << "\tresources also from aliases:" << resources.size();
     //qDebug() << "=====================================================";
 
-    //Q_ASSERT(!resources.isEmpty());
-
+    
     return resources;
 }
 
 QStringList KoResourcePaths::resourceDirsInternal(const QString &type)
 {
-    //return KGlobal::dirs()->resourceDirs(type.toLatin1());
     QStringList resourceDirs;
     QStringList aliases = d->aliases(type);
 
     foreach(const QString &alias, aliases) {
+        resourceDirs << getInstallationPrefix() + "../share/" + alias + "/"
+                                               << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias, QStandardPaths::LocateDirectory);
+
         resourceDirs << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias, QStandardPaths::LocateDirectory);
     }
 

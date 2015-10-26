@@ -103,6 +103,10 @@ if(X11_FOUND)
     target_link_libraries(kritawidgets Qt5::X11Extras ${X11_LIBRARIES})
 endif()
 
+if (APPLE)
+    find_library(FOUNDATION_LIBRARY Foundation)
+    target_link_libraries(kritawidgets ${FOUNDATION_LIBRARY})
+endif ()
 
 target_link_libraries(kritawidgets LINK_INTERFACE_LIBRARIES kritatext kritapigment kritawidgetutils)
 

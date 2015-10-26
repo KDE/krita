@@ -25,7 +25,7 @@
 #include "presethistory_dock.h"
 
 K_PLUGIN_FACTORY(PresetHistoryPluginFactory, registerPlugin<PresetHistoryPlugin>();)
-K_EXPORT_PLUGIN(PresetHistoryPluginFactory( "krita" ) )
+K_EXPORT_PLUGIN(PresetHistoryPluginFactory( "krita" ) );
 
 class PresetHistoryDockFactory : public KoDockFactoryBase
 {

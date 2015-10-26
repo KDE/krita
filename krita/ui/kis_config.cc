@@ -1590,9 +1590,14 @@ const KoColorSpace* KisConfig::customColorSelectorColorSpace(bool defaultValue) 
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
     if (defaultValue || cfg.readEntry("useCustomColorSpace", true)) {
         KoColorSpaceRegistry* csr = KoColorSpaceRegistry::instance();
-        cs = csr->colorSpace(cfg.readEntry("customColorSpaceModel", "RGBA"),
-                             cfg.readEntry("customColorSpaceDepthID", "U8"),
-                             cfg.readEntry("customColorSpaceProfile", "sRGB built-in - (lcms internal)"));
+        QString modelID = cfg.readEntry("customColorSpaceModel", "RGBA");
+        QString depthID = cfg.readEntry("customColorSpaceDepthID", "U8");
+        QString profile = cfg.readEntry("customColorSpaceProfile", "sRGB built-in - (lcms internal)");
+        if (profile == "default") {
+          // qDebug() << "Falling back to default color profile.";
+          profile = "sRGB built-in - (lcms internal)";
+        }
+        cs = csr->colorSpace(modelID, depthID, profile);
     }
 
     return cs;

@@ -151,8 +151,10 @@ if(WIN32 AND USE_BREAKPAD)
     set(BREAKPAD_LIBS breakpad)
 endif()
 
-file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/*-apps-calligrakrita.png")
-ecm_add_app_icon(krita_SRCS ICONS ${ICONS_SRCS})
+if (NOT APPLE)
+    file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/*-apps-calligrakrita.png")
+    ecm_add_app_icon(krita_SRCS ICONS ${ICONS_SRCS})
+endif()
 
 qt5_add_resources(krita_SRCS krita.qrc 
                              pics/Breeze-dark/breeze-dark-icons.qrc

@@ -62,11 +62,10 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
 #ifdef CMAKE_INSTALL_PREFIX
         searchDirs << QDir(CMAKE_INSTALL_PREFIX);
 #endif
-
         foreach(const QDir& dir, searchDirs) {
             foreach(QString entry, dir.entryList()) {
                 QFileInfo info(dir, entry);
-                if (info.isDir() && info.fileName().contains("lib")) {
+                if (info.isDir() && (info.fileName().contains("lib") || info.fileName().contains("PlugIns"))) {
                     QDir libDir(info.absoluteFilePath());
 
                     // on many systems this will be the actual lib dir (and krita subdir contains plugins)
@@ -97,7 +96,7 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
                 break;
             }
         }
-        //qDebug() << "KoJsonTrader will load its plugins from" << m_pluginPath;
+        qDebug() << "KoJsonTrader will load its plugins from" << m_pluginPath;
 
     }
 
@@ -110,7 +109,7 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
             QJsonObject json = loader->metaData().value("MetaData").toObject();
 
             if (json.isEmpty()) {
-                //qDebug() << dirIter.filePath() << "has no json!";
+                qDebug() << dirIter.filePath() << "has no json!";
             }
             if (!json.isEmpty()) {
                 QJsonObject pluginData = json.value("KPlugin").toObject();

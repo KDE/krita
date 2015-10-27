@@ -144,6 +144,7 @@ KisLayer::KisLayer(const KisLayer& rhs)
     if (this != &rhs) {
         m_d->image = rhs.m_d->image;
         m_d->metaDataStore = new KisMetaData::Store(*rhs.m_d->metaDataStore);
+        m_d->channelFlags = rhs.m_d->channelFlags;
 
         setName(rhs.name());
         m_d->projectionPlane = toQShared(new KisLayerProjectionPlane(this));

@@ -211,8 +211,6 @@ ki18n_wrap_ui(kritaflake_SRCS
     tools/KoZoomToolWidget.ui
 )
 
-qt5_add_resources(kritaiflake_SRCS flake.qrc)
-
 add_library(kritaflake SHARED ${kritaflake_SRCS})
 generate_export_header(kritaflake BASE_NAME kritaflake)
 

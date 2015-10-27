@@ -3036,7 +3036,7 @@
     <isCheckable>false</isCheckable>
     <statusTip></statusTip>
   </Action>
-  <Action name="ReferencesToolFactory_ID">
+  <Action name="ReferencesTool">
     <icon></icon>
     <text>References</text>
     <whatsThis></whatsThis>
@@ -3091,7 +3091,7 @@
     <isCheckable>false</isCheckable>
     <statusTip></statusTip>
   </Action>
-  <Action name="TextToolFactory_ID">
+  <Action name="TextTool">
     <icon></icon>
     <text>Text editing</text>
     <whatsThis></whatsThis>
@@ -3113,7 +3113,7 @@
     <isCheckable>false</isCheckable>
     <statusTip></statusTip>
   </Action>
-  <Action name="ArtisticTextToolFactoryID">
+  <Action name="ArtisticTextTool">
     <icon></icon>
     <text>Artistic text editing</text>
     <whatsThis></whatsThis>
@@ -3256,7 +3256,7 @@
     <isCheckable>false</isCheckable>
     <statusTip></statusTip>
   </Action>
-  <Action name="ReviewToolFactory_ID">
+  <Action name="ReviewTool">
     <icon></icon>
     <text>Review</text>
     <whatsThis></whatsThis>
@@ -3333,7 +3333,7 @@
     <isCheckable>false</isCheckable>
     <statusTip></statusTip>
   </Action>
-  <Action name="VectorToolFactoryId">
+  <Action name="VectorTool">
     <icon></icon>
     <text>Vector Image (EMF/WMF/SVM/SVG) tool</text>
     <whatsThis></whatsThis>
@@ -3355,7 +3355,7 @@
     <isCheckable>false</isCheckable>
     <statusTip></statusTip>
   </Action>
-  <Action name="PathToolFactoryId">
+  <Action name="PathTool">
     <icon></icon>
     <text>Path editing</text>
     <whatsThis></whatsThis>

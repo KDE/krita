@@ -25,7 +25,7 @@
 #include <klocalizedstring.h>
 
 KoPathToolFactory::KoPathToolFactory()
-        : KoToolFactoryBase("PathToolFactoryId")
+        : KoToolFactoryBase("PathTool")
 {
     setToolTip(i18n("Path editing"));
     setToolType(dynamicToolType());

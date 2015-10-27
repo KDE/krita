@@ -1,6 +1,6 @@
 install( FILES
-    ArtisticTextToolFactoryID.action
+    ArtisticTextTool.action
     InteractionTool.action
-    PathToolFactoryId.action
-    TextToolFactory_ID.action
+    PathTool.action
+    TextTool.action
 DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)

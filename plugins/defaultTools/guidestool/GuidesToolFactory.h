@@ -23,7 +23,7 @@
 #include <KoToolFactoryBase.h>
 
 // Warn; used in KoRuler.cpp too, keep in sync.
-#define GuidesToolId "GuidesTool_ID"
+#define GuidesTool_ID "GuidesTool"
 
 /// The factory for the KoGuidesTool
 class GuidesToolFactory : public KoToolFactoryBase

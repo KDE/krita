@@ -26,7 +26,7 @@
 #include <klocalizedstring.h>
 
 TextToolFactory::TextToolFactory()
-        : KoToolFactoryBase("TextToolFactory_ID")
+        : KoToolFactoryBase("TextTool")
 {
     setToolTip(i18n("Text editing"));
     setToolType(dynamicToolType()+",calligrawords,calligraauthor");

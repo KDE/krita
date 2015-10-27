@@ -25,7 +25,7 @@
 #include <klocalizedstring.h>
 
 KoZoomToolFactory::KoZoomToolFactory()
-        : KoToolFactoryBase("KoZoomToolId")
+        : KoToolFactoryBase("ZoomTool")
 {
     setToolTip(i18n("Zoom"));
     setToolType(navigationToolType());

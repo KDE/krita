@@ -22,7 +22,7 @@
 #include <klocalizedstring.h>
 
 GuidesToolFactory::GuidesToolFactory()
-    : KoToolFactoryBase(GuidesToolId)
+    : KoToolFactoryBase(GuidesTool_ID)
 {
     setToolTip(i18n("Edit guidelines"));
     setToolType("never");

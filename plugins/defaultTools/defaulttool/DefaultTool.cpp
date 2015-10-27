@@ -548,7 +548,7 @@ void DefaultTool::mouseMoveEvent(KoPointerEvent *event)
             m_mouseWasInsideHandles = false;
 
             if (m_guideLine->isSelected()) {
-                GuidesTool *guidesTool = dynamic_cast<GuidesTool*>(KoToolManager::instance()->toolById(canvas(), GuidesToolId));
+                GuidesTool *guidesTool = dynamic_cast<GuidesTool*>(KoToolManager::instance()->toolById(canvas(), GuidesTool_ID));
                 if (guidesTool) {
                     guidesTool->moveGuideLine(m_guideLine->orientation(), m_guideLine->index());
                     activateTemporary(guidesTool->toolId());
@@ -559,7 +559,7 @@ void DefaultTool::mouseMoveEvent(KoPointerEvent *event)
         }
     } else {
         if (m_guideLine->isSelected()) {
-            GuidesTool *guidesTool = dynamic_cast<GuidesTool*>(KoToolManager::instance()->toolById(canvas(), GuidesToolId));
+            GuidesTool *guidesTool = dynamic_cast<GuidesTool*>(KoToolManager::instance()->toolById(canvas(), GuidesTool_ID));
             if (guidesTool) {
                 guidesTool->moveGuideLine(m_guideLine->orientation(), m_guideLine->index());
                 activateTemporary(guidesTool->toolId());
@@ -641,7 +641,7 @@ void DefaultTool::mouseDoubleClickEvent(KoPointerEvent *event)
         if (shape) {
             shapes.append(shape);
         } else if (m_guideLine->isSelected()) {
-            GuidesTool *guidesTool = dynamic_cast<GuidesTool*>(KoToolManager::instance()->toolById(canvas(), GuidesToolId));
+            GuidesTool *guidesTool = dynamic_cast<GuidesTool*>(KoToolManager::instance()->toolById(canvas(), GuidesTool_ID));
             if (guidesTool) {
                 guidesTool->editGuideLine(m_guideLine->orientation(), m_guideLine->index());
                 activateTool(guidesTool->toolId());

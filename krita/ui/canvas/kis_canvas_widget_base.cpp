@@ -117,7 +117,7 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
 
     // Draw text shape over canvas while editing it, that's needs to show the text selection correctly
     QString toolId = KoToolManager::instance()->activeToolId();
-    if (toolId == "ArtisticTextToolFactoryID" || toolId == "TextToolFactory_ID") {
+    if (toolId == "ArtisticTextTool" || toolId == "TextTool") {
         gc.save();
         gc.setPen(Qt::NoPen);
         gc.setBrush(Qt::NoBrush);

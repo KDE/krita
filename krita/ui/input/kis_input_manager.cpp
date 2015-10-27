@@ -456,7 +456,7 @@ QTouchEvent *KisInputManager::lastTouchEvent() const
 void KisInputManager::slotToolChanged()
 {
     QString toolId = KoToolManager::instance()->activeToolId();
-    if (toolId == "ArtisticTextToolFactoryID" || toolId == "TextToolFactory_ID") {
+    if (toolId == "ArtisticTextTool" || toolId == "TextTool") {
         d->forwardAllEventsToTool = true;
         d->matcher.suppressAllActions(true);
     } else {

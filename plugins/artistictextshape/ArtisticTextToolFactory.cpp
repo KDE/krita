@@ -25,7 +25,7 @@
 #include <klocalizedstring.h>
 
 ArtisticTextToolFactory::ArtisticTextToolFactory()
-    : KoToolFactoryBase("ArtisticTextToolFactoryID")
+    : KoToolFactoryBase("ArtisticTextTool")
 {
     setToolTip( i18n("Artistic text editing") );
     setToolType( dynamicToolType() );

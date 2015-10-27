@@ -240,7 +240,7 @@ void GuidesTool::createGuideLine(Qt::Orientation orientation, qreal position)
     m_position = position;
     m_mode = AddGuide;
 
-    KoToolManager::instance()->switchToolRequested(GuidesToolId);
+    KoToolManager::instance()->switchToolRequested(GuidesTool_ID);
 
     // grab the mouse so we get mouse events as the dragging started on a ruler
     canvas()->canvasWidget()->grabMouse();

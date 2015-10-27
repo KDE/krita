@@ -27,7 +27,7 @@
 #include <klocalizedstring.h>
 
 ReferencesToolFactory::ReferencesToolFactory()
-        : KoToolFactoryBase("ReferencesToolFactory_ID")
+        : KoToolFactoryBase("ReferencesTool")
 {
     setToolTip(i18n("References"));
     setToolType("calligrawords,calligraauthor");

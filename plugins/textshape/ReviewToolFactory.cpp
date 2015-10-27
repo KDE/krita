@@ -32,7 +32,7 @@
 #include <QDebug>
 
 ReviewToolFactory::ReviewToolFactory()
-        : KoToolFactoryBase("ReviewToolFactory_ID")
+        : KoToolFactoryBase("ReviewTool")
 {
     setToolTip(i18n("Review"));
     setToolType(dynamicToolType()+",calligrawords,calligraauthor");

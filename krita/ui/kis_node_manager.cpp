@@ -572,7 +572,7 @@ void KisNodeManager::slotUiActivatedNode(KisNodeSP node)
                 << "KarbonGradientTool"
                 << "KarbonCalligraphyTool"
                 << "CreateShapesTool"
-                << "PathToolFactoryId";
+                << "PathTool";
 
         QStringList pixelTools = QStringList()
                 << "KritaShape/KisToolBrush"

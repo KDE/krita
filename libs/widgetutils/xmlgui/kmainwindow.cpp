@@ -131,6 +131,7 @@ KMWSessionManager::~KMWSessionManager()
 
 bool KMWSessionManager::saveState(QSessionManager &sm)
 {
+#if 0
     KConfigGui::setSessionConfig(sm.sessionId(), sm.sessionKey());
 
     KConfig *config = KConfigGui::sessionConfig();
@@ -160,7 +161,7 @@ bool KMWSessionManager::saveState(QSessionManager &sm)
         discard << localFilePath;
         sm.setDiscardCommand(discard);
     }
-
+#endif
     return true;
 }
 
@@ -374,6 +375,8 @@ bool KMainWindow::canBeRestored(int number)
 
 const QString KMainWindow::classNameOfToplevel(int number)
 {
+    return QString();
+#if 0
     if (!qApp->isSessionRestored()) {
         return QString();
     }
@@ -388,10 +391,12 @@ const QString KMainWindow::classNameOfToplevel(int number)
     } else {
         return group.readEntry("ClassName");
     }
+#endif
 }
 
 bool KMainWindow::restore(int number, bool show)
 {
+#if 0
     if (!canBeRestored(number)) {
         return false;
     }
@@ -402,6 +407,7 @@ bool KMainWindow::restore(int number, bool show)
         }
         return false;
     }
+#endif
     return false;
 }
 

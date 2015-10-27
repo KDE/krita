@@ -368,6 +368,7 @@ protected:
     KisBaseNodeSP parentCallback() const;
     void notifyParentVisibilityChanged(bool value);
     void baseNodeChangedCallback();
+    void baseNodeInvalidateAllFramesCallback();
 private:
 
     friend class KisNodeFacade;

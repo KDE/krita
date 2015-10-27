@@ -358,6 +358,13 @@ void KisNode::baseNodeChangedCallback()
     }
 }
 
+void KisNode::baseNodeInvalidateAllFramesCallback()
+{
+    if(m_d->graphListener) {
+        m_d->graphListener->invalidateAllFrames();
+    }
+}
+
 KisNodeSP KisNode::firstChild() const
 {
     QReadLocker l(&m_d->nodeSubgraphLock);

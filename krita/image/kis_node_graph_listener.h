@@ -79,6 +79,8 @@ public:
 
     virtual void nodeChanged(KisNode * node);
 
+    virtual void invalidateAllFrames();
+
     /**
      * Inform the model that one of the selections in the graph is
      * changed. The sender is not passed to the function (at least for

@@ -51,6 +51,8 @@
 #include "kis_layer_projection_plane.h"
 #include "layerstyles/kis_layer_style_projection_plane.h"
 
+#include "krita_utils.h"
+
 
 class KisSafeProjection {
 public:
@@ -235,8 +237,13 @@ void KisLayer::setSectionModelProperties(const KisNodeModel::PropertyList &prope
         }
 
         if (property.name == i18n("Layer Style")) {
-            if (m_d->layerStyle) {
+            if (m_d->layerStyle &&
+                m_d->layerStyle->isEnabled() != property.state.toBool()) {
+
                 m_d->layerStyle->setEnabled(property.state.toBool());
+
+                baseNodeChangedCallback();
+                baseNodeInvalidateAllFramesCallback();
             }
         }
     }
@@ -268,6 +275,11 @@ void KisLayer::setChannelFlags(const QBitArray & channelFlags)
 {
     Q_ASSERT(channelFlags.isEmpty() ||((quint32)channelFlags.count() == colorSpace()->channelCount()));
 
+    if (KritaUtils::compareChannelFlags(channelFlags,
+                                        this->channelFlags())) {
+        return;
+    }
+
     if (!channelFlags.isEmpty() &&
         channelFlags == QBitArray(channelFlags.size(), true)) {
 
@@ -275,6 +287,9 @@ void KisLayer::setChannelFlags(const QBitArray & channelFlags)
     } else {
         m_d->channelFlags = channelFlags;
     }
+
+    baseNodeChangedCallback();
+    baseNodeInvalidateAllFramesCallback();
 }
 
 QBitArray & KisLayer::channelFlags() const

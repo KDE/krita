@@ -87,9 +87,6 @@ class Q_DECL_HIDDEN KisPart::Private
 public:
     Private(KisPart *_part)
         : part(_part)
-        , canvasItem(0)
-        , startupWidget(0)
-        , actionCollection(0)
         , idleWatcher(2500)
         , animationCachePopulator(_part)
     {
@@ -105,11 +102,11 @@ public:
     QList<QPointer<KisView> > views;
     QList<QPointer<KisMainWindow> > mainWindows;
     QList<QPointer<KisDocument> > documents;
-    QGraphicsItem *canvasItem;
     QString templatesResourcePath;
-    KisOpenPane *startupWidget;
 
-    KActionCollection *actionCollection;
+    QGraphicsItem *canvasItem{0};
+    KisOpenPane *startupWidget{0};
+    KActionCollection *actionCollection{0};
 
     KisIdleWatcher idleWatcher;
     KisAnimationCachePopulator animationCachePopulator;

@@ -66,7 +66,7 @@ class KisToolPencilFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolPencilFactory(const QStringList&)
+    KisToolPencilFactory()
             : KoToolFactoryBase("KisToolPencil") {
         setToolTip(i18n("Freehand Path Tool"));
         setToolType(TOOL_TYPE_SHAPE);

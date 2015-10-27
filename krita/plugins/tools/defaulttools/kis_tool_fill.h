@@ -95,7 +95,7 @@ class KisToolFillFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolFillFactory(const QStringList&)
+    KisToolFillFactory()
             : KoToolFactoryBase("KritaFill/KisToolFill") {
         setToolTip(i18n("Fill Tool"));
         setToolType(TOOL_TYPE_FILL);

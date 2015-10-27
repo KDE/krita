@@ -38,8 +38,7 @@ K_PLUGIN_FACTORY_WITH_JSON(GridFactory, "kritatoolgrid.json", registerPlugin<Gri
 GridPlugin::GridPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    KoToolRegistry * r = KoToolRegistry::instance();
-    r->add(new KisToolGridFactory(QStringList()));
+    KoToolRegistry::instance()->add(new KisToolGridFactory());
 }
 
 GridPlugin::~GridPlugin()

@@ -90,7 +90,7 @@ class KisToolPerspectiveGridFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolPerspectiveGridFactory(const QStringList&)
+    KisToolPerspectiveGridFactory()
             : KoToolFactoryBase("KisToolPerspectiveGrid") {
         setToolTip(i18n("Perspective Grid Tool"));
         setToolType(TOOL_TYPE_VIEW);

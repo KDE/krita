@@ -140,7 +140,7 @@ class KisToolBrushFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolBrushFactory(const QStringList&)
+    KisToolBrushFactory()
             : KoToolFactoryBase("KritaShape/KisToolBrush") {
 
         setToolTip(i18n("Freehand Brush Tool"));

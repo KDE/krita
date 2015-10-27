@@ -109,7 +109,7 @@ class KisToolGradientFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolGradientFactory(const QStringList&)
+    KisToolGradientFactory()
             : KoToolFactoryBase("KritaFill/KisToolGradient") {
         setToolTip(i18n("Gradient Tool"));
         setToolType(TOOL_TYPE_FILL);

@@ -42,9 +42,7 @@ K_PLUGIN_FACTORY_WITH_JSON(ToolPolylineFactory, "kritatoolpolyline.json", regist
 ToolPolyline::ToolPolyline(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    KoToolRegistry * r = KoToolRegistry::instance();
-    r->add(new KisToolPolylineFactory(QStringList()));
-
+    KoToolRegistry::instance()->add(new KisToolPolylineFactory());
 }
 
 ToolPolyline::~ToolPolyline()

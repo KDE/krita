@@ -92,7 +92,7 @@ class KisToolMultiBrushFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolMultiBrushFactory(const QStringList&)
+    KisToolMultiBrushFactory()
             : KoToolFactoryBase("KritaShape/KisToolMultiBrush") {
 
         setToolTip(i18n("Multibrush Tool"));

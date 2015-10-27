@@ -105,7 +105,7 @@ class KisToolMeasureFactory : public KoToolFactoryBase
 
 public:
 
-    KisToolMeasureFactory(const QStringList&)
+    KisToolMeasureFactory()
             : KoToolFactoryBase("KritaShape/KisToolMeasure") {
         setToolType(TOOL_TYPE_TRANSFORM);
         setToolTip(i18n("Measure Tool"));

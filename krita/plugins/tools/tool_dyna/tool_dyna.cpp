@@ -44,8 +44,7 @@ K_PLUGIN_FACTORY_WITH_JSON(ToolDynaFactory, "kritatooldyna.json", registerPlugin
 ToolDyna::ToolDyna(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    KoToolRegistry * r = KoToolRegistry::instance();
-    r->add(new KisToolDynaFactory(QStringList()));
+    KoToolRegistry::instance()->add(new KisToolDynaFactory());
 }
 
 ToolDyna::~ToolDyna()

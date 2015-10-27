@@ -86,7 +86,7 @@ protected:
 class KisToolSelectPathFactory : public KoToolFactoryBase
 {
 public:
-    KisToolSelectPathFactory(const QStringList&)
+    KisToolSelectPathFactory()
             : KoToolFactoryBase("KisToolSelectPath") {
         setToolTip(i18n("Bezier Curve Selection Tool"));
         setToolType(TOOL_TYPE_SELECTED);

@@ -88,7 +88,7 @@ class KisToolTextFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolTextFactory(const QStringList&)
+    KisToolTextFactory()
             : KoToolFactoryBase("KritaShape/KisToolText") {
         setToolTip(i18n("Text Tool"));
 

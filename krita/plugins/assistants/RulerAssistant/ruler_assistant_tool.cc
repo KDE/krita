@@ -37,8 +37,7 @@ K_PLUGIN_FACTORY_WITH_JSON(RulerAssistantToolFactory, "kritarulerassistanttool.j
 RulerAssistantToolPlugin::RulerAssistantToolPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    KoToolRegistry * r = KoToolRegistry::instance();
-    r->add(new KisRulerAssistantToolFactory());
+    KoToolRegistry::instance()->add(new KisRulerAssistantToolFactory());
 
     KisPaintingAssistantFactoryRegistry::instance()->add(new RulerAssistantFactory);
     KisPaintingAssistantFactoryRegistry::instance()->add(new EllipseAssistantFactory);

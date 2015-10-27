@@ -37,7 +37,7 @@
 #include "kis_image.h"
 #include "kis_paintop_config_widget.h"
 
-Q_GLOBAL_STATIC(KisPaintOpRegistry, s_instance)
+Q_GLOBAL_STATIC(KisPaintOpRegistry, s_registryInstance)
 
 KisPaintOpRegistry::KisPaintOpRegistry()
 {
@@ -51,27 +51,33 @@ KisPaintOpRegistry::~KisPaintOpRegistry()
     dbgRegistry << "Deleting KisPaintOpRegistry";
 }
 
+
+void KisPaintOpRegistry::initRegistry()
+{
+    KoPluginLoader::instance()->load("Krita/Paintop", "(Type == 'Service') and ([X-Krita-Version] == 28)");
+
+    QStringList toBeRemoved;
+
+    foreach(const QString & id, keys()) {
+        KisPaintOpFactory *factory = get(id);
+        if (!factory->settings()) {
+            toBeRemoved << id;
+        } else {
+            factory->processAfterLoading();
+        }
+    }
+    foreach(const QString & id, toBeRemoved) {
+        remove(id);
+    }
+}
+
 KisPaintOpRegistry* KisPaintOpRegistry::instance()
 {
 
-    if (!s_instance.exists()) {
-        KoPluginLoader::instance()->load("Krita/Paintop", "(Type == 'Service') and ([X-Krita-Version] == 28)");
-
-        QStringList toBeRemoved;
-
-        foreach(const QString & id, s_instance->keys()) {
-            KisPaintOpFactory *factory = s_instance->get(id);
-            if (!factory->settings()) {
-                toBeRemoved << id;
-            } else {
-                factory->processAfterLoading();
-            }
-        }
-        foreach(const QString & id, toBeRemoved) {
-            s_instance->remove(id);
-        }
+    if (!s_registryInstance.exists()) {
+        s_registryInstance->initRegistry();
     }
-    return s_instance;
+    return s_registryInstance;
 }
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND

@@ -88,6 +88,7 @@ private:
 
     KisPaintOpRegistry(const KisPaintOpRegistry&);
     KisPaintOpRegistry operator=(const KisPaintOpRegistry&);
+    void initRegistry();
 
 
     // So the settings can get a paintop to render their sample image

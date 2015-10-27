@@ -505,13 +505,17 @@ bool KActionCollectionPrivate::writeKXMLGUIConfigFile()
     return true;
 }
 
-void KActionCollection::writeSettings(KConfigGroup *config, bool writeAll, QAction *oneAction) const
+void KActionCollection::writeSettings(KConfigGroup *config,
+                                      bool writeAll,
+                                      QAction *oneAction) const
 {
     // If the caller didn't provide a config group we try to save the KXMLGUI
-    // Configuration file. If that succeeds we are finished.
+    // Configuration file. (This will work if the parentGUI was set and has a
+    // valid configuration file.)
     if (config == 0 && d->writeKXMLGUIConfigFile()) {
         return;
     }
+
 
     KConfigGroup cg(KSharedConfig::openConfig(), configGroup());
     if (!config) {
@@ -538,7 +542,8 @@ void KActionCollection::writeSettings(KConfigGroup *config, bool writeAll, QActi
         // If the action name starts with unnamed- spit out a warning and ignore
         // it. That name will change at will and will break loading writing
         if (actionName.startsWith(QLatin1String("unnamed-"))) {
-            qCritical() << "Skipped saving Shortcut for action without name " << action->text() << "!";
+            qCritical() << "Skipped saving shortcut for action without name " \
+                        << action->text() << "!";
             continue;
         }
 
@@ -547,7 +552,7 @@ void KActionCollection::writeSettings(KConfigGroup *config, bool writeAll, QActi
             bool bConfigHasAction = !config->readEntry(actionName, QString()).isEmpty();
             bool bSameAsDefault = (action->shortcuts() == defaultShortcuts(action));
             // If we're using a global config (no) or this setting
-            //  differs from the default, then we want to write.
+            // differs from the default, then we want to write.
             KConfigGroup::WriteConfigFlags flags = KConfigGroup::Persistent;
 
             if (writeAll || !bSameAsDefault) {

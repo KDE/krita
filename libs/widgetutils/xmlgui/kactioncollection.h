@@ -136,11 +136,13 @@ public:
     void readSettings(KConfigGroup *config = 0);
 
     /**
-      * Write the current configurable key associations to @a config. What the
-      * function does if @a config is zero depends. If this action collection
-      * belongs to a KXMLGuiClient the setting are saved to the kxmlgui
-      * definition file. If not the settings are written to the applications
-      * config file.
+      * Write the current configurable key associations. If @a is nonzero, use
+      * that configuration group.
+      *
+      * Otherwise, the output file is determined as follows. If this action
+      * collection belongs to a KXMLGuiClient the setting are saved to the
+      * kxmlgui definition file. If not the settings are written to the
+      * applications config file.
       *
       * \note oneAction() and writeDefaults() have no meaning for the kxmlgui
       * configuration file.

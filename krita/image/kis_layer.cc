@@ -64,6 +64,7 @@ public:
            !(*m_projection->colorSpace() == *prototype->colorSpace())) {
             m_projection = m_reusablePaintDevice;
             m_projection->makeCloneFromRough(prototype, prototype->extent());
+            m_projection->setProjectionDevice(true);
         }
 
         return m_projection;

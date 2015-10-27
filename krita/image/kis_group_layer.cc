@@ -70,6 +70,7 @@ KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) :
     m_d->x = rhs.m_d->x;
     m_d->y = rhs.m_d->y;
     m_d->paintDevice->setDefaultPixel(const_cast<KisGroupLayer*>(&rhs)->m_d->paintDevice->defaultPixel());
+    m_d->paintDevice->setProjectionDevice(true);
 }
 
 KisGroupLayer::~KisGroupLayer()
@@ -174,6 +175,7 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
         dev->setX(this->x());
         dev->setY(this->y());
         m_d->paintDevice = dev;
+        m_d->paintDevice->setProjectionDevice(true);
     }
     else if(!(*m_d->paintDevice->colorSpace() == *colorSpace)) {
 
@@ -189,6 +191,7 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
         dev->setDefaultPixel(defaultPixel);
         delete[] defaultPixel;
         m_d->paintDevice = dev;
+        m_d->paintDevice->setProjectionDevice(true);
     } else {
 
         m_d->paintDevice->clear();

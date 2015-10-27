@@ -88,6 +88,7 @@ public:
     QScopedPointer<KisPaintDeviceStrategy> basicStrategy;
     QScopedPointer<KisPaintDeviceWrappedStrategy> wrappedStrategy;
     QScopedPointer<KisPaintDeviceFramesInterface> framesInterface;
+    bool isProjectionDevice;
 
     KisPaintDeviceStrategy* currentStrategy();
 
@@ -339,7 +340,7 @@ private:
             // sanity check!
             KIS_ASSERT_RECOVER_NOOP(!m_data);
 
-        } else if (defaultBounds->externalFrameActive()) {
+        } else if (isProjectionDevice && defaultBounds->externalFrameActive()) {
             if (!m_externalFrameData) {
                 QMutexLocker l(&m_dataSwitchLock);
                 if (!m_externalFrameData) {
@@ -429,7 +430,8 @@ KisPaintDevice::Private::Private(KisPaintDevice *paintDevice)
     : q(paintDevice),
       basicStrategy(new KisPaintDeviceStrategy(paintDevice, this)),
       m_data(new Data(paintDevice)),
-      nextFreeFrameId(0)
+      nextFreeFrameId(0),
+      isProjectionDevice(false)
 {
 }
 
@@ -787,6 +789,11 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs, bool copyFrames)
 KisPaintDevice::~KisPaintDevice()
 {
     delete m_d;
+}
+
+void KisPaintDevice::setProjectionDevice(bool value)
+{
+    m_d->isProjectionDevice = value;
 }
 
 void KisPaintDevice::prepareClone(KisPaintDeviceSP src)

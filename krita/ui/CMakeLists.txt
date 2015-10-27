@@ -66,10 +66,6 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_blacklist_cleanup.cpp
     dialogs/kis_dlg_layer_style.cpp
     dialogs/kis_dlg_png_import.cpp
-    dialogs/KisShortcutsEditorItem.cpp
-    dialogs/KisShortcutEditWidget.cpp
-    dialogs/KisShortcutsEditorDelegate.cpp
-    dialogs/KisShortcutsDialog.cpp
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
     flake/kis_dummies_facade.cpp
@@ -420,7 +416,6 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgrectangleconstraints.ui
     forms/KisDetailsPaneBase.ui
     forms/KisOpenPaneBase.ui
-    forms/KisShortcutsDialog.ui
     input/config/kis_input_configuration_page.ui
     input/config/kis_edit_profiles_dialog.ui
     input/config/kis_input_configuration_page_item.ui

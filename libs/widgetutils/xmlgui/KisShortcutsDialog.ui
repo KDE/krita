@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>KShortcutsDialog</class>
- <widget class="QWidget" name="KShortcutsDialog" >
+ <class>KisShortcutsDialog</class>
+ <widget class="QWidget" name="KisShortcutsDialog" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -41,26 +41,6 @@
      <column>
       <property name="text" >
        <string>Alternate</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Global</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Global Alternate</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Mouse Button Gesture</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Mouse Shape Gesture</string>
       </property>
      </column>
     </widget>

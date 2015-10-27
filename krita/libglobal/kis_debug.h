@@ -123,6 +123,8 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41012();
 KRITAGLOBAL_EXPORT QString kisBacktrace();
 
 /**
+ * Please pretty print my variable
+ *
  * Use this macro to display in the output stream the name of a variable followed by its value.
  */
 #define ppVar( var ) #var << "=" << var

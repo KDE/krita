@@ -1,9 +1,10 @@
 /* This file is part of the KDE project
- * Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- * Copyright (C) 2000-2005 David Faure <faure@kde.org>
+ * Copyright (C) 1998-1999 Torben Weis       <weis@kde.org>
+ * Copyright (C) 2000-2005 David Faure       <faure@kde.org>
  * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2010-2012 Boudewijn Rempt <boud@kogmbh.com>
- * Copyright (C) 2011 Inge Wallin <ingwa@kogmbh.com>
+ * Copyright (C) 2010-2012 Boudewijn Rempt   <boud@kogmbh.com>
+ * Copyright (C) 2011 Inge Wallin            <ingwa@kogmbh.com>
+ * Copyright (C) 2015 Michael Abrahams       <miabraha@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -39,7 +40,7 @@
 #include "KisViewManager.h"
 #include "KisOpenPane.h"
 #include "KisImportExportManager.h"
-#include "dialogs/KisShortcutsDialog.h"
+#include <KisShortcutsDialog.h>
 
 #include <kis_debug.h>
 #include <KoResourcePaths.h>
@@ -121,37 +122,54 @@ void KisPart::Private::loadActions()
 {
     actionCollection = new KActionCollection(part, "krita");
 
-    KoResourcePaths::addResourceType("kis_actions", "data", "krita/actions/");
+    KoResourcePaths::addResourceType("kis_actions", "data", "krita/actions");
     QStringList actionDefinitions = KoResourcePaths::findAllResources("kis_actions", "*.action", KoResourcePaths::Recursive | KoResourcePaths::NoDuplicates);
 
+    // Loop is a routine to extract text from an XML .action file.
     foreach(const QString &actionDefinition, actionDefinitions)  {
         QDomDocument doc;
         QFile f(actionDefinition);
         f.open(QFile::ReadOnly);
         doc.setContent(f.readAll());
 
-        QDomElement e = doc.documentElement(); // Actions
-        QString collection = e.attribute("name");
+        QDomElement actions = doc.documentElement(); // Top level document node
+        QString collection  = actions.attribute("name");
+        QDomElement action  = actions.firstChild().toElement(); // Action
 
-        e = e.firstChild().toElement(); // Action
+        while (!action.isNull()) {
+            if (action.tagName() == "Action") {
 
-        while (!e.isNull()) {
-            if (e.tagName() == "Action") {
-                QString name = e.attribute("name");
+                // This is the global identifier, so we give it special syntax
+                QString name      = action.attribute("name");
 
-                QString icon = e.attribute("icon");
-                QString text = i18n(e.attribute("text").toUtf8().constData());
-                QString whatsthis = i18n(e.attribute("whatsThis").toUtf8().constData());
-                QString toolTip = i18n(e.attribute("toolTip").toUtf8().constData());
-                QString statusTip = i18n(e.attribute("statusTip").toUtf8().constData());
-                QString iconText = i18n(e.attribute("iconText").toUtf8().constData());
-                QKeySequence shortcut = QKeySequence(e.attribute("shortcut"));
-                bool isCheckable = e.attribute("isCheckable") == "true" ? true : false;
-                QKeySequence defaultShortcut = QKeySequence(e.attribute("defaultShortcut"));
+                // Convenience macro to extract text of a child node.
+                auto getChildContent      = [=](QString node){return action.firstChildElement(node).text();};
+                // i18n requires converting format from QString.
+                auto getChildContent_i18n = [=](QString node) {
+                    if (getChildContent(node).isEmpty()) {
+                        // dbgUI << "Found empty string to translate for property" << node;
+                        return QString();
+                    }
+                    return i18n(getChildContent(node).toUtf8().constData());
+                };
+
+                QString icon      = getChildContent("icon");
+                QString text      = getChildContent("text");
+
+                // Note: these fields in the .action definitions are marked for translation.
+                QString whatsthis = getChildContent_i18n("whatsThis");
+                QString toolTip   = getChildContent_i18n("toolTip");
+                QString statusTip = getChildContent_i18n("statusTip");
+                QString iconText  = getChildContent_i18n("iconText");
+
+                bool isCheckable             = getChildContent("isCheckable") == QString("true");
+                QKeySequence shortcut        = QKeySequence(getChildContent("shortcut"));
+                QKeySequence defaultShortcut = QKeySequence(getChildContent("defaultShortcut"));
 
                 if (name.isEmpty()) {
-                    dbgUI << text << "has no name! From:" << actionDefinition;
+                    errUI << text << "has no name! From:" << actionDefinition;
                 }
+                qDebug() << "default shortcut for" << name << " - " << defaultShortcut << " - from text" << getChildContent("defaultShortcut");
 
                 KisAction *action = new KisAction(KisIconUtils::loadIcon(icon.toLatin1()), text);
                 action->setObjectName(name);
@@ -160,17 +178,18 @@ void KisPart::Private::loadActions()
                 action->setStatusTip(statusTip);
                 action->setIconText(iconText);
                 action->setDefaultShortcut(shortcut);
+                action->setShortcut(shortcut);  //TODO: Make this configurable from custom settings
                 action->setCheckable(isCheckable);
 
                 if (!actionCollection->action(name)) {
                     actionCollection->addAction(name, action);
                 }
-//                else {
-//                    dbgKrita << "duplicate action" << name << action << "from" << collection;
-//                    delete action;
-//                }
+                else {
+                    dbgUI << "duplicate action" << name << action << "from" << collection;
+                    // delete action;
+                }
             }
-            e = e.nextSiblingElement();
+            action = action.nextSiblingElement();
         }
         actionCollection->readSettings();
     }
@@ -491,10 +510,12 @@ void KisPart::configureShortcuts()
     // planned anyway.
 
     // WidgetAction + WindowAction + ApplicationAction leaves only GlobalAction excluded
-    KisShortcutsDialog dlg(KShortcutsEditor::WidgetAction | KShortcutsEditor::WindowAction | KShortcutsEditor::ApplicationAction);
+    KisShortcutsDialog dlg;
     dlg.addCollection(d->actionCollection);
     dlg.configure();  // Show the dialog.
 
+
+    // Now update the widget tooltips in the UI.
     foreach(KisMainWindow *mainWindow, d->mainWindows) {
         KActionCollection *ac = mainWindow->actionCollection();
         ac->readSettings();
@@ -627,12 +648,21 @@ QList<KisPart::CustomDocumentWidgetItem> KisPart::createCustomDocumentWidgets(QW
 
     int w = cfg.defImageWidth();
     int h = cfg.defImageHeight();
+    const double resolution = cfg.defImageResolution();
+    const QString colorModel = cfg.defColorModel();
+    const QString colorDepth = cfg.defaultColorDepth();
+    const QString colorProfile = cfg.defColorProfile();
 
     QList<KisPart::CustomDocumentWidgetItem> widgetList;
     {
         KisPart::CustomDocumentWidgetItem item;
         item.widget = new KisCustomImageWidget(parent,
-                                               w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defaultColorDepth(), cfg.defColorProfile(),
+                                               w,
+                                               h,
+                                               resolution,
+                                               colorModel,
+                                               colorDepth,
+                                               colorProfile,
                                                i18n("Unnamed"));
 
         item.icon = "application-x-krita";
@@ -648,14 +678,18 @@ QList<KisPart::CustomDocumentWidgetItem> KisPart::createCustomDocumentWidgets(QW
 
         KisPart::CustomDocumentWidgetItem item;
         item.widget = new KisImageFromClipboard(parent,
-                                                w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defaultColorDepth(), cfg.defColorProfile(),
+                                                w,
+                                                h,
+                                                resolution,
+                                                colorModel,
+                                                colorDepth,
+                                                colorProfile,
                                                 i18n("Unnamed"));
 
         item.title = i18n("Create from Clipboard");
         item.icon = "klipper";
 
         widgetList << item;
-
 
     }
 

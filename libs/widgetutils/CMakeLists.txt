@@ -16,12 +16,23 @@ set(kritawidgetutils_LIB_SRCS
     KoProperties.cpp
     KoFileDialog.cpp
 
-    config/kcolorscheme.cpp         
-    config/kcolorschememanager.cpp  
-    config/khelpclient.cpp      
-    config/klanguagebutton.cpp  
+    config/kcolorscheme.cpp
+    config/kcolorschememanager.cpp
+    config/khelpclient.cpp
+    config/klanguagebutton.cpp
     config/krecentfilesaction.cpp
     config/kstandardaction.cpp
+
+    xmlgui/KisShortcutsEditorItem.cpp
+    xmlgui/KisShortcutEditWidget.cpp
+    xmlgui/KisShortcutsEditorDelegate.cpp
+    xmlgui/KisShortcutsDialog.cpp
+    xmlgui/KisShortcutsDialog_p.cpp
+    xmlgui/KisShortcutsEditor.cpp
+    xmlgui/KisShortcutsEditor_p.cpp
+
+    # xmlgui/kshortcutschemeseditor.cpp
+    # xmlgui/kshortcutschemeshelper.cpp
 
     xmlgui/kaboutkdedialog_p.cpp
     xmlgui/kactioncategory.cpp
@@ -36,13 +47,6 @@ set(kritawidgetutils_LIB_SRCS
     xmlgui/kkeysequencewidget.cpp
     xmlgui/kmainwindow.cpp
     xmlgui/kmenumenuhandler_p.cpp
-    xmlgui/kshortcuteditwidget.cpp
-    xmlgui/kshortcutschemeseditor.cpp
-    xmlgui/kshortcutschemeshelper.cpp
-    xmlgui/kshortcutsdialog.cpp
-    xmlgui/kshortcutseditor.cpp
-    xmlgui/kshortcutseditordelegate.cpp
-    xmlgui/kshortcutseditoritem.cpp
     xmlgui/kshortcutwidget.cpp
     xmlgui/kswitchlanguagedialog_p.cpp
     xmlgui/ktoggletoolbaraction.cpp
@@ -63,8 +67,8 @@ if (HAVE_DBUS)
     )
 endif()
 
-ki18n_wrap_ui(kritawidgetutils_LIB_SRCS 
-    xmlgui/kshortcutsdialog.ui
+ki18n_wrap_ui(kritawidgetutils_LIB_SRCS
+    xmlgui/KisShortcutsDialog.ui
     xmlgui/kshortcutwidget.ui
 )
 
@@ -84,13 +88,13 @@ target_link_libraries(kritawidgetutils
         Qt5::Gui
         Qt5::Xml
         Qt5::Core
+        KF5::ItemViews
         kritaglobal
     PRIVATE
         Qt5::PrintSupport
         KF5::I18n
         KF5::ConfigCore
         KF5::CoreAddons
-        KF5::ItemViews
         KF5::ConfigGui
         KF5::GuiAddons
         KF5::WidgetsAddons

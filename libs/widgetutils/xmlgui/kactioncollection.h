@@ -58,7 +58,6 @@ class KRITAWIDGETUTILS_EXPORT KActionCollection : public QObject
     Q_OBJECT
 
     Q_PROPERTY(QString configGroup READ configGroup WRITE setConfigGroup)
-    Q_PROPERTY(bool configIsGlobal READ configIsGlobal WRITE setConfigGlobal)
 
 public:
     /**
@@ -123,21 +122,9 @@ public:
     QString configGroup() const;
 
     /**
-     * Returns whether this action collection's configuration should be global to KDE ( \e true ),
-     * or specific to the application ( \e false ).
-     */
-    bool configIsGlobal() const;
-
-    /**
      * Sets \a group as the KConfig group with which settings will be loaded and saved.
      */
     void setConfigGroup(const QString &group);
-
-    /**
-     * Set whether this action collection's configuration should be global to KDE ( \e true ),
-     * or specific to the application ( \e false ).
-     */
-    void setConfigGlobal(bool global);
 
     /**
       * Read all key associations from @p config.
@@ -147,25 +134,6 @@ public:
       * in the group set by setConfigGroup().
       */
     void readSettings(KConfigGroup *config = 0);
-
-    /**
-      * Import from @p config all configurable global key associations.
-      *
-      * \since 4.1
-      *
-      * \param config Config object to read from
-      */
-    void importGlobalShortcuts(KConfigGroup *config);
-
-    /**
-      * Export the current configurable global key associations to @p config.
-      *
-      * \since 4.1
-      *
-      * \param config Config object to save to
-      * \param writeDefaults set to true to write settings which are already at defaults.
-      */
-    void exportGlobalShortcuts(KConfigGroup *config, bool writeDefaults = false) const;
 
     /**
       * Write the current configurable key associations to @a config. What the

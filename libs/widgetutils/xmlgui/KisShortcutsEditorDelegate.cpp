@@ -23,7 +23,8 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
-#include "kshortcutsdialog_p.h"
+
+#include "KisShortcutsEditor_p.h"
 
 #include <QApplication>
 #include <QHeaderView>
@@ -31,8 +32,22 @@
 #include <QLabel>
 #include <QPainter>
 #include <QTreeWidgetItemIterator>
+#include <QAction>
+#include <QDebug>
 
-KShortcutsEditorDelegate::KShortcutsEditorDelegate(QTreeWidget *parent, bool allowLetterShortcuts)
+namespace {
+    KisShortcutsEditorItem *itemFromIndex(QTreeWidget *const w, const QModelIndex &index)
+    {
+        QTreeWidgetItem *item = static_cast<QTreeWidgetHack *>(w)->itemFromIndex(index);
+        if (item && item->type() == ActionItem) {
+            return static_cast<KisShortcutsEditorItem *>(item);
+        }
+        return 0;
+    }
+}
+
+
+KisShortcutsEditorDelegate::KisShortcutsEditorDelegate(QTreeWidget *parent, bool allowLetterShortcuts)
     : KExtendableItemDelegate(parent),
       m_allowLetterShortcuts(allowLetterShortcuts),
       m_editor(0)
@@ -66,7 +81,7 @@ KShortcutsEditorDelegate::KShortcutsEditorDelegate(QTreeWidget *parent, bool all
     connect(parent, SIGNAL(collapsed(QModelIndex)), this, SLOT(itemCollapsed(QModelIndex)));
 }
 
-void KShortcutsEditorDelegate::stealShortcut(
+void KisShortcutsEditorDelegate::stealShortcut(
     const QKeySequence &seq,
     QAction *action)
 {
@@ -76,8 +91,8 @@ void KShortcutsEditorDelegate::stealShortcut(
     QTreeWidgetItemIterator it(view, QTreeWidgetItemIterator::NoChildren);
 
     for (; (*it); ++it) {
-        KShortcutsEditorItem *item = dynamic_cast<KShortcutsEditorItem *>(*it);
-        if (item && item->data(0, ObjectRole).value<QObject *>() == action) {
+        KisShortcutsEditorItem *item = dynamic_cast<KisShortcutsEditorItem *>(*it);
+        if (item && (item->data(0, ObjectRole).value<QObject*>() == dynamic_cast<QObject*>(action))) {
 
             // We found the action, snapshot the current state. Steal the
             // shortcut. We will save the change later.
@@ -100,7 +115,7 @@ void KShortcutsEditorDelegate::stealShortcut(
 
 }
 
-QSize KShortcutsEditorDelegate::sizeHint(const QStyleOptionViewItem &option,
+QSize KisShortcutsEditorDelegate::sizeHint(const QStyleOptionViewItem &option,
         const QModelIndex &index) const
 {
     QSize ret(KExtendableItemDelegate::sizeHint(option, index));
@@ -109,12 +124,12 @@ QSize KShortcutsEditorDelegate::sizeHint(const QStyleOptionViewItem &option,
 }
 
 //slot
-void KShortcutsEditorDelegate::itemActivated(QModelIndex index)
+void KisShortcutsEditorDelegate::itemActivated(QModelIndex index)
 {
     //As per our constructor our parent *is* a QTreeWidget
     QTreeWidget *view = static_cast<QTreeWidget *>(parent());
 
-    KShortcutsEditorItem *item = KShortcutsEditorPrivate::itemFromIndex(view, index);
+    KisShortcutsEditorItem *item = ::itemFromIndex(view, index);
     if (!item) {
         //that probably was a non-leaf (type() !=ActionItem) item
         return;
@@ -122,12 +137,9 @@ void KShortcutsEditorDelegate::itemActivated(QModelIndex index)
 
     int column = index.column();
     if (column == Name) {
-        // If user click in the name column activate the (Global|Local)Primary
-        // column if possible.
+        // If clicking the name try to activate the Primary column
         if (!view->header()->isSectionHidden(LocalPrimary)) {
             column = LocalPrimary;
-        } else if (!view->header()->isSectionHidden(GlobalPrimary)) {
-            column = GlobalPrimary;
         } else {
             // do nothing.
         }
@@ -143,9 +155,8 @@ void KShortcutsEditorDelegate::itemActivated(QModelIndex index)
     if (!isExtended(index)) {
         //we only want maximum ONE extender open at any time.
         if (m_editingIndex.isValid()) {
-            KShortcutsEditorItem *oldItem = KShortcutsEditorPrivate::itemFromIndex(view,
-                                            m_editingIndex);
-            Q_ASSERT(oldItem); //here we really expect nothing but a real KShortcutsEditorItem
+            KisShortcutsEditorItem *oldItem = ::itemFromIndex(view, m_editingIndex);
+            Q_ASSERT(oldItem); //here we really expect nothing but a real KisShortcutsEditorItem
 
             oldItem->setNameBold(false);
             contractItem(m_editingIndex);
@@ -154,30 +165,15 @@ void KShortcutsEditorDelegate::itemActivated(QModelIndex index)
         m_editingIndex = index;
         QWidget *viewport = static_cast<QAbstractItemView *>(parent())->viewport();
 
-        if (column >= LocalPrimary && column <= GlobalAlternate) {
-            ShortcutEditWidget *editor = new ShortcutEditWidget(viewport,
-                    index.data(DefaultShortcutRole).value<QKeySequence>(),
-                    index.data(ShortcutRole).value<QKeySequence>(),
-                    m_allowLetterShortcuts);
-            if (column == GlobalPrimary) {
-                QObject *action = index.data(ObjectRole).value<QObject *>();
-                editor->setAction(action);
-                editor->setMultiKeyShortcutsAllowed(false);
-                QString componentName = action->property("componentName").toString();
-                if (componentName.isEmpty()) {
-                    componentName = QCoreApplication::applicationName();
-                }
-                editor->setComponentName(componentName);
-            }
+        if (column >= LocalPrimary && column <= Id) {
+            ShortcutEditWidget *editor =
+                new ShortcutEditWidget(viewport,
+                                       index.data(DefaultShortcutRole).value<QKeySequence>(),
+                                       index.data(ShortcutRole).value<QKeySequence>(),
+                                       m_allowLetterShortcuts);
+
 
             m_editor = editor;
-            // For global shortcuts check against the kde standard shortcuts
-            if (column == GlobalPrimary || column == GlobalAlternate) {
-                editor->setCheckForConflictsAgainst(
-                    KKeySequenceWidget::LocalShortcuts
-                    | KKeySequenceWidget::GlobalShortcuts
-                    | KKeySequenceWidget::StandardShortcuts);
-            }
 
             editor->setCheckActionCollections(m_checkActionCollections);
 
@@ -185,13 +181,6 @@ void KShortcutsEditorDelegate::itemActivated(QModelIndex index)
                     this, SLOT(keySequenceChanged(QKeySequence)));
             connect(m_editor, SIGNAL(stealShortcut(QKeySequence,QAction*)),
                     this, SLOT(stealShortcut(QKeySequence,QAction*)));
-
-        } else if (column == RockerGesture) {
-            m_editor = new QLabel(QStringLiteral("A lame placeholder"), viewport);
-
-        } else if (column == ShapeGesture) {
-            m_editor = new QLabel(QStringLiteral("<i>A towel</i>"), viewport);
-
         } else {
             return;
         }
@@ -211,7 +200,7 @@ void KShortcutsEditorDelegate::itemActivated(QModelIndex index)
 }
 
 //slot
-void KShortcutsEditorDelegate::itemCollapsed(QModelIndex index)
+void KisShortcutsEditorDelegate::itemCollapsed(QModelIndex index)
 {
     if (!m_editingIndex.isValid()) {
         return;
@@ -230,19 +219,19 @@ void KShortcutsEditorDelegate::itemCollapsed(QModelIndex index)
 }
 
 //slot
-void KShortcutsEditorDelegate::hiddenBySearchLine(QTreeWidgetItem *item, bool hidden)
+void KisShortcutsEditorDelegate::hiddenBySearchLine(QTreeWidgetItem *item, bool hidden)
 {
     if (!hidden || !item) {
         return;
     }
     QTreeWidget *view = static_cast<QTreeWidget *>(parent());
-    QTreeWidgetItem *editingItem = KShortcutsEditorPrivate::itemFromIndex(view, m_editingIndex);
+    QTreeWidgetItem *editingItem = ::itemFromIndex(view, m_editingIndex);
     if (editingItem == item) {
         itemActivated(m_editingIndex); //this will *close* the item's editor because it's already open
     }
 }
 
-bool KShortcutsEditorDelegate::eventFilter(QObject *o, QEvent *e)
+bool KisShortcutsEditorDelegate::eventFilter(QObject *o, QEvent *e)
 {
     if (o == m_editor) {
         //Prevent clicks in the empty part of the editor widget from closing the editor
@@ -301,34 +290,14 @@ bool KShortcutsEditorDelegate::eventFilter(QObject *o, QEvent *e)
 }
 
 //slot
-void KShortcutsEditorDelegate::keySequenceChanged(const QKeySequence &seq)
+void KisShortcutsEditorDelegate::keySequenceChanged(const QKeySequence &seq)
 {
     QVariant ret = QVariant::fromValue(seq);
     emit shortcutChanged(ret, m_editingIndex);
 }
 
-void KShortcutsEditorDelegate::setCheckActionCollections(
+void KisShortcutsEditorDelegate::setCheckActionCollections(
     const QList<KActionCollection *> checkActionCollections)
 {
     m_checkActionCollections = checkActionCollections;
 }
-
-#if 0
-//slot
-void KShortcutsEditorDelegate::shapeGestureChanged(const KShapeGesture &gest)
-{
-    //this is somewhat verbose because the gesture types are not "built in" to QVariant
-    QVariant ret = QVariant::fromValue(gest);
-    emit shortcutChanged(ret, m_editingIndex);
-}
-#endif
-
-#if 0
-//slot
-void KShortcutsEditorDelegate::rockerGestureChanged(const KRockerGesture &gest)
-{
-    QVariant ret = QVariant::fromValue(gest);
-    emit shortcutChanged(ret, m_editingIndex);
-}
-#endif
-

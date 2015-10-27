@@ -22,21 +22,21 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include "kshortcutsdialog_p.h"
-#include "config-xmlgui.h"
+#include "KisShortcutsDialog_p.h"
+
 #include <QPainter>
 #include <QPen>
 #include <QGridLayout>
 #include <QRadioButton>
 #include <QLabel>
+#include <QApplication>
 
 #include <klocalizedstring.h>
-#ifdef HAVE_GLOBALACCEL
-#include <kglobalaccel.h>
-#endif
+//#include <kglobalaccel.h>
+
 #include "kkeysequencewidget.h"
 
-void TabConnectedWidget::paintEvent(QPaintEvent *e)
+void ShortcutEditWidget::paintEvent(QPaintEvent *e)
 {
     QWidget::paintEvent(e);
     QPainter p(this);
@@ -53,7 +53,7 @@ void TabConnectedWidget::paintEvent(QPaintEvent *e)
 
 ShortcutEditWidget::ShortcutEditWidget(QWidget *viewport, const QKeySequence &defaultSeq,
                                        const QKeySequence &activeSeq, bool allowLetterShortcuts)
-    : TabConnectedWidget(viewport),
+    : QWidget(viewport),
       m_defaultKeySequence(defaultSeq),
       m_isUpdating(false),
       m_action(Q_NULLPTR)
@@ -86,16 +86,6 @@ ShortcutEditWidget::ShortcutEditWidget(QWidget *viewport, const QKeySequence &de
             this, SLOT(setCustom(QKeySequence)));
     connect(m_customEditor, SIGNAL(stealShortcut(QKeySequence,QAction*)),
             this, SIGNAL(stealShortcut(QKeySequence,QAction*)));
-#ifdef HAVE_GLOBALACCEL
-    connect(KGlobalAccel::self(), &KGlobalAccel::globalShortcutChanged,
-        [this](QAction *action, const QKeySequence &seq) {
-            if (action != m_action) {
-                return;
-            }
-            setKeySequence(seq);
-        }
-    );
-#endif
 }
 
 KKeySequenceWidget::ShortcutTypes ShortcutEditWidget::checkForConflictsAgainst() const
@@ -112,15 +102,15 @@ void ShortcutEditWidget::defaultToggled(bool checked)
 
     m_isUpdating = true;
     if (checked) {
-        // The default key sequence should be activated. We check first if this is
-        // possible.
+        // The default key sequence should be activated. We check first if this
+        // is possible.
         if (m_customEditor->isKeySequenceAvailable(m_defaultKeySequence)) {
             // Clear the customs widget
             m_customEditor->clearKeySequence();
             emit keySequenceChanged(m_defaultKeySequence);
         } else {
-            // We tried to switch to the default key sequence and failed. Go
-            // back.
+            // We tried to switch to the default key sequence and failed.
+            // Go back.
             m_customRadio->setChecked(true);
         }
     } else {

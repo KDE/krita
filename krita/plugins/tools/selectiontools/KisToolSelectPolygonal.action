@@ -1,6 +1,46 @@
-<Actions version="1" name="KisToolSelectPolygonal">
- <Action iconText="Reset Foreground and Background Color" shortcut="D" toolTip="Reset Foreground and Background Color" icon="" whatsThis="" statusTip="" name="reset_fg_bg" isCheckable="false" text="Reset Foreground and Background Color" defaultShortcut="D"/>
- <Action iconText="Swap Foreground and Background Color" shortcut="X" toolTip="Swap Foreground and Background Color" icon="" whatsThis="" statusTip="" name="toggle_fg_bg" isCheckable="false" text="Swap Foreground and Background Color" defaultShortcut="X"/>
- <Action iconText="Decrease Brush Size" shortcut="[" toolTip="Decrease Brush Size" icon="" whatsThis="" statusTip="" name="decrease_brush_size" isCheckable="false" text="Decrease Brush Size" defaultShortcut="["/>
- <Action iconText="Increase Brush Size" shortcut="]" toolTip="Increase Brush Size" icon="" whatsThis="" statusTip="" name="increase_brush_size" isCheckable="false" text="Increase Brush Size" defaultShortcut="]"/>
+<Actions version="2" name="KisToolSelectPolygonal">
+  <Action name="reset_fg_bg">
+    <iconText>Reset Foreground and Background Color</iconText>
+    <shortcut>D</shortcut>
+    <toolTip>Reset Foreground and Background Color</toolTip>
+    <icon></icon>
+    <whatsThis></whatsThis>
+    <statusTip></statusTip>
+    <isCheckable>false</isCheckable>
+    <text>Reset Foreground and Background Color</text>
+    <defaultShortcut>D</defaultShortcut>
+  </Action>
+  <Action name="toggle_fg_bg">
+    <iconText>Swap Foreground and Background Color</iconText>
+    <shortcut>X</shortcut>
+    <toolTip>Swap Foreground and Background Color</toolTip>
+    <icon></icon>
+    <whatsThis></whatsThis>
+    <statusTip></statusTip>
+    <isCheckable>false</isCheckable>
+    <text>Swap Foreground and Background Color</text>
+    <defaultShortcut>X</defaultShortcut>
+  </Action>
+  <Action name="decrease_brush_size">
+    <iconText>Decrease Brush Size</iconText>
+    <shortcut>[</shortcut>
+    <toolTip>Decrease Brush Size</toolTip>
+    <icon></icon>
+    <whatsThis></whatsThis>
+    <statusTip></statusTip>
+    <isCheckable>false</isCheckable>
+    <text>Decrease Brush Size</text>
+    <defaultShortcut>[</defaultShortcut>
+  </Action>
+  <Action name="increase_brush_size">
+    <iconText>Increase Brush Size</iconText>
+    <shortcut>]</shortcut>
+    <toolTip>Increase Brush Size</toolTip>
+    <icon></icon>
+    <whatsThis></whatsThis>
+    <statusTip></statusTip>
+    <isCheckable>false</isCheckable>
+    <text>Increase Brush Size</text>
+    <defaultShortcut>]</defaultShortcut>
+  </Action>
 </Actions>

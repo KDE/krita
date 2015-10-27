@@ -32,9 +32,6 @@
 
 #include <kauthorized.h>
 #include <kconfiggroup.h>
-#ifdef HAVE_GLOBALACCEL
-#include <kglobalaccel.h>
-#endif
 #include <ksharedconfig.h>
 
 #include <QDebug>
@@ -54,7 +51,6 @@ public:
     KActionCollectionPrivate()
         : m_parentGUIClient(0L),
           configGroup(QStringLiteral("Shortcuts")),
-          configIsGlobal(false),
           connectTriggered(false),
           connectHovered(false),
           q(0)
@@ -64,14 +60,7 @@ public:
 
     void setComponentForAction(QAction *action)
     {
-#ifdef HAVE_GLOBALACCEL
-        if (!KGlobalAccel::self()->hasShortcut(action)) {
-            action->setProperty("componentName", m_componentName);
-            action->setProperty("componentDisplayName", m_componentDisplayName);
-        }
-#else
         Q_UNUSED(action)
-#endif
     }
 
     static QList<KActionCollection *> s_allCollections;
@@ -252,30 +241,12 @@ QAction *KActionCollection::addAction(const QString &name, QAction *action)
         indexName = objectName;
 
     } else {
-
-        // A name was provided. Check against objectName.
-        if ((!objectName.isEmpty()) && (objectName != indexName)) {
-            // The user specified a new name and the action already has a
-            // different one. The objectName is used for saving shortcut
-            // settings to disk. Both for local and global shortcuts.
-            // If there is a global shortcuts it's a very bad idea.
-#ifdef HAVE_GLOBALACCEL
-            if (KGlobalAccel::self()->hasShortcut(action)) {
-                // In debug mode assert
-                Q_ASSERT(!KGlobalAccel::self()->hasShortcut(action));
-                // In release mode keep the old name
-                qCritical() << "Changing action name from " << objectName << " to " << indexName << "\nignored because of active global shortcut.";
-                indexName = objectName;
-            }
-#endif
-        }
-
         // Set the new name
         action->setObjectName(indexName);
     }
 
     // No name provided and the action had no name. Make one up. This will not
-    // work when trying to save shortcuts. Both local and global shortcuts.
+    // work when trying to save shortcuts.
     if (indexName.isEmpty()) {
         indexName = indexName.sprintf("unnamed-%p", (void *)action);
         action->setObjectName(indexName);
@@ -440,48 +411,6 @@ void KActionCollection::setConfigGroup(const QString &group)
     d->configGroup = group;
 }
 
-bool KActionCollection::configIsGlobal() const
-{
-    return d->configIsGlobal;
-}
-
-void KActionCollection::setConfigGlobal(bool global)
-{
-    d->configIsGlobal = global;
-}
-
-void KActionCollection::importGlobalShortcuts(KConfigGroup *config)
-{
-#ifdef HAVE_GLOBALACCEL
-    Q_ASSERT(config);
-    if (!config || !config->exists()) {
-        return;
-    }
-
-    for (QMap<QString, QAction *>::ConstIterator it = d->actionByName.constBegin();
-            it != d->actionByName.constEnd(); ++it) {
-        QAction *action = it.value();
-        if (!action) {
-            continue;
-        }
-
-        QString actionName = it.key();
-
-        if (isShortcutsConfigurable(action)) {
-            QString entry = config->readEntry(actionName, QString());
-            if (!entry.isEmpty()) {
-                KGlobalAccel::self()->setShortcut(action, QKeySequence::listFromString(entry), KGlobalAccel::NoAutoloading);
-            } else {
-                QList<QKeySequence> defaultShortcut = KGlobalAccel::self()->defaultShortcut(action);
-                KGlobalAccel::self()->setShortcut(action, defaultShortcut, KGlobalAccel::NoAutoloading);
-            }
-        }
-    }
-#else
-    Q_UNUSED(config)
-#endif
-}
-
 void KActionCollection::readSettings(KConfigGroup *config)
 {
     KConfigGroup cg(KSharedConfig::openConfig(), configGroup());
@@ -513,60 +442,6 @@ void KActionCollection::readSettings(KConfigGroup *config)
 
 }
 
-void KActionCollection::exportGlobalShortcuts(KConfigGroup *config, bool writeAll) const
-{
-    Q_ASSERT(config);
-    if (!config) {
-        return;
-    }
-
-    QList<QAction *> writeActions = actions();
-
-    for (QMap<QString, QAction *>::ConstIterator it = d->actionByName.constBegin();
-            it != d->actionByName.constEnd(); ++it) {
-
-        QAction *action = it.value();
-        if (!action) {
-            continue;
-        }
-        QString actionName = it.key();
-
-        // If the action name starts with unnamed- spit out a warning. That name
-        // will change at will and will break loading writing
-        if (actionName.startsWith(QLatin1String("unnamed-"))) {
-            qCritical() << "Skipped exporting Shortcut for action without name " << action->text() << "!";
-            continue;
-        }
-#ifdef HAVE_GLOBALACCEL
-        if (isShortcutsConfigurable(action) && KGlobalAccel::self()->hasShortcut(action)) {
-            bool bConfigHasAction = !config->readEntry(actionName, QString()).isEmpty();
-            bool bSameAsDefault = (KGlobalAccel::self()->shortcut(action) == KGlobalAccel::self()->defaultShortcut(action));
-            // If we're using a global config or this setting
-            //  differs from the default, then we want to write.
-            KConfigGroup::WriteConfigFlags flags = KConfigGroup::Persistent;
-            if (configIsGlobal()) {
-                flags |= KConfigGroup::Global;
-            }
-            if (writeAll || !bSameAsDefault) {
-                QString s = QKeySequence::listToString(KGlobalAccel::self()->shortcut(action));
-                if (s.isEmpty()) {
-                    s = QStringLiteral("none");
-                }
-                config->writeEntry(actionName, s, flags);
-            }
-            // Otherwise, this key is the same as default
-            //  but exists in config file.  Remove it.
-            else if (bConfigHasAction) {
-                config->deleteEntry(actionName, flags);
-            }
-        }
-#else
-        Q_UNUSED(writeAll)
-#endif
-    }
-
-    config->sync();
-}
 
 bool KActionCollectionPrivate::writeKXMLGUIConfigFile()
 {
@@ -671,14 +546,9 @@ void KActionCollection::writeSettings(KConfigGroup *config, bool writeAll, QActi
         if (isShortcutsConfigurable(action)) {
             bool bConfigHasAction = !config->readEntry(actionName, QString()).isEmpty();
             bool bSameAsDefault = (action->shortcuts() == defaultShortcuts(action));
-            // If we're using a global config or this setting
+            // If we're using a global config (no) or this setting
             //  differs from the default, then we want to write.
             KConfigGroup::WriteConfigFlags flags = KConfigGroup::Persistent;
-
-            // Honor the configIsGlobal() setting
-            if (configIsGlobal()) {
-                flags |= KConfigGroup::Global;
-            }
 
             if (writeAll || !bSameAsDefault) {
                 // We are instructed to write all shortcuts or the shortcut is

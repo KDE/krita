@@ -1,8 +1,9 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 2000-2005 David Faure <faure@kde.org>
+   Copyright (C) 2000-2005 David Faure  <faure@kde.org>
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+   Copyright (C) 2010 Boudewijn Rempt   <boud@kogmbh.com>
+   Copyright (C) 2015 Michael Abrahams  <miabraha@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -48,7 +49,7 @@ class KisAnimationCachePopulator;
  * It is a singleton class which provides the main entry point to the application.
  * Krita supports multiple documents, multiple main windows, and multiple
  * components.  KisPart manages these resources and provides them to the rest of
- * Krita.  It manages lists QActions and shortcuts, as well.
+ * Krita.  It manages lists of Actions and shortcuts as well.
  *
  * The terminology comes from KParts, which is a system allowing one KDE app
  * to be run from inside another, like pressing F4 inside dophin to run konsole.

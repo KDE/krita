@@ -26,11 +26,13 @@
 #include "kis_image_config.h"
 #include "kis_onion_skin_compositor.h"
 
+
 static const int MAX_SKIN_COUNT = 10;
 
 KisOnionSkinDialog::KisOnionSkinDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::KisOnionSkinDialog)
+    ui(new Ui::KisOnionSkinDialog),
+    m_updatesCompressor(1000, KisSignalCompressor::FIRST_INACTIVE)
 {
     KisImageConfig config;
     ui->setupUi(this);
@@ -95,6 +97,8 @@ KisOnionSkinDialog::KisOnionSkinDialog(QWidget *parent) :
     connect(ui->btnBackwardColor, SIGNAL(changed(QColor)), this, SLOT(changed()));
     connect(ui->btnForwardColor, SIGNAL(changed(QColor)), this, SLOT(changed()));
     connect(ui->doubleTintFactor, SIGNAL(valueChanged(qreal)), this, SLOT(changed()));
+    connect(&m_updatesCompressor, SIGNAL(timeout()),
+            KisOnionSkinCompositor::instance(), SLOT(configChanged()));
 }
 
 KisOnionSkinDialog::~KisOnionSkinDialog()
@@ -117,5 +121,5 @@ void KisOnionSkinDialog::changed()
     config.setOnionSkinTintColorBackward(ui->btnBackwardColor->color());
     config.setOnionSkinTintColorForward(ui->btnForwardColor->color());
 
-    KisOnionSkinCompositor::instance()->configChanged();
+    m_updatesCompressor.start();
 }

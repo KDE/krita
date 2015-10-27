@@ -176,4 +176,5 @@ QRect KisOnionSkinCompositor::calculateExtent(const KisPaintDeviceSP device)
 void KisOnionSkinCompositor::configChanged()
 {
     m_d->refreshConfig();
+    emit sigOnionSkinChanged();
 }

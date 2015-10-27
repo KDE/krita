@@ -21,7 +21,7 @@
 
 #include "kis_types.h"
 
-class KRITAIMAGE_EXPORT KisOnionSkinCompositor : QObject
+class KRITAIMAGE_EXPORT KisOnionSkinCompositor : public QObject
 {
     Q_OBJECT
 
@@ -36,6 +36,9 @@ public:
 
 public Q_SLOTS:
     void configChanged();
+
+Q_SIGNALS:
+    void sigOnionSkinChanged();
 
 private:
     struct Private;

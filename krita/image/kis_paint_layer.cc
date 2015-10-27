@@ -41,12 +41,15 @@
 #include "kis_onion_skin_compositor.h"
 #include "kis_raster_keyframe_channel.h"
 
+#include "kis_signal_auto_connection.h"
+
 struct Q_DECL_HIDDEN KisPaintLayer::Private
 {
 public:
     KisPaintDeviceSP paintDevice;
     QBitArray        paintChannelFlags;
     KisRasterKeyframeChannel *contentChannel;
+    KisSignalAutoConnectionsStore onionSkinConnection;
 };
 
 KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, KisPaintDeviceSP dev)
@@ -258,14 +261,37 @@ bool KisPaintLayer::onionSkinEnabled() const
 
 void KisPaintLayer::setOnionSkinEnabled(bool state)
 {
-    if (state == false && onionSkinEnabled()) {
+    int oldState = onionSkinEnabled();
+    if (oldState == state) return;
+
+    if (state == false && oldState) {
+        // FIXME: change ordering! race condition possible!
+
         // Turning off onionskins shrinks our extent. Let's clean up the onion skins first
         setDirty(KisOnionSkinCompositor::instance()->calculateExtent(m_d->paintDevice));
+    }
+
+    if (state) {
+        m_d->onionSkinConnection.addConnection(KisOnionSkinCompositor::instance(),
+                                               SIGNAL(sigOnionSkinChanged()),
+                                               this,
+                                               SLOT(slotExternalUpdateOnionSkins()));
+    } else {
+        m_d->onionSkinConnection.clear();
     }
 
     nodeProperties().setProperty("onionskin", state);
 
     baseNodeChangedCallback();
+}
+
+void KisPaintLayer::slotExternalUpdateOnionSkins()
+{
+    // here we update the whole image because the number of onion
+    // skins could have been reduced and the compositor will not be
+    // able to calculate the correct area
+    const QRect dirtyRect = m_d->paintDevice->defaultBounds()->bounds();
+    setDirty(dirtyRect);
 }
 
 void KisPaintLayer::enableAnimation()

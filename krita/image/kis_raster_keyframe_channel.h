@@ -60,6 +60,9 @@ public:
     QDomElement toXML(QDomDocument doc, const QString &layerFilename);
     void loadXML(const QDomElement &channelNode);
 
+    void setOnionSkinsEnabled(bool value);
+    bool onionSkinsEnabled() const;
+
 protected:
     KisKeyframeSP createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand);
     bool canDeleteKeyframe(KisKeyframeSP key);

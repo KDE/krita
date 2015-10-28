@@ -24,16 +24,19 @@
 #include "kis_paint_device_frames_interface.h"
 #include "kis_time_range.h"
 #include "kundo2command.h"
+#include "kis_onion_skin_compositor.h"
 
 
 struct KisRasterKeyframeChannel::Private
 {
   Private(KisPaintDeviceWSP paintDevice)
-      : paintDevice(paintDevice)
+      : paintDevice(paintDevice),
+        onionSkinsEnabled(false)
   {}
 
   KisPaintDeviceWSP paintDevice;
   QMap<int, QString> frameFilenames;
+  bool onionSkinsEnabled;
 };
 
 KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KoID &id, const KisNodeWSP node, const KisPaintDeviceWSP paintDevice)
@@ -139,6 +142,12 @@ QRect KisRasterKeyframeChannel::affectedRect(KisKeyframeSP key)
 
     rect |= m_d->paintDevice->framesInterface()->frameBounds(key->value());
 
+    if (m_d->onionSkinsEnabled) {
+        const QRect dirtyOnionSkinsRect =
+            KisOnionSkinCompositor::instance()->calculateFullExtent(m_d->paintDevice);
+        rect |= dirtyOnionSkinsRect;
+    }
+
     return rect;
 }
 
@@ -239,4 +248,14 @@ void KisRasterKeyframeChannel::setScalarValue(KisKeyframeSP keyframe, qreal valu
     Q_UNUSED(keyframe);
     Q_UNUSED(value);
     Q_UNUSED(parentCommand);
+}
+
+void KisRasterKeyframeChannel::setOnionSkinsEnabled(bool value)
+{
+    m_d->onionSkinsEnabled = value;
+}
+
+bool KisRasterKeyframeChannel::onionSkinsEnabled() const
+{
+    return m_d->onionSkinsEnabled;
 }

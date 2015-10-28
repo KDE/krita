@@ -143,6 +143,8 @@ QRect KisOnionSkinCompositor::calculateFullExtent(const KisPaintDeviceSP device)
     QRect rect;
 
     KisRasterKeyframeChannel *channel = device->keyframeChannel();
+    if (!channel) return rect;
+
     KisKeyframeSP keyframe = channel->firstKeyframe();
 
     while (keyframe) {

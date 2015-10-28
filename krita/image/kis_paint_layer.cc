@@ -281,12 +281,15 @@ void KisPaintLayer::setOnionSkinEnabled(bool state)
     }
 
     nodeProperties().setProperty("onionskin", state);
+    m_d->contentChannel->setOnionSkinsEnabled(state);
 
     baseNodeChangedCallback();
 }
 
 void KisPaintLayer::slotExternalUpdateOnionSkins()
 {
+    if (!onionSkinEnabled()) return;
+
     const QRect dirtyRect =
         KisOnionSkinCompositor::instance()->calculateFullExtent(m_d->paintDevice);
 

@@ -429,9 +429,9 @@ const KisDefaultBoundsSP KisPaintDevice::Private::transitionalDefaultBounds = ne
 KisPaintDevice::Private::Private(KisPaintDevice *paintDevice)
     : q(paintDevice),
       basicStrategy(new KisPaintDeviceStrategy(paintDevice, this)),
+      isProjectionDevice(false),
       m_data(new Data(paintDevice)),
-      nextFreeFrameId(0),
-      isProjectionDevice(false)
+      nextFreeFrameId(0)
 {
 }
 

@@ -23,6 +23,7 @@
 #include "KoColor.h"
 #include "KoColorSpace.h"
 #include "KoCompositeOpRegistry.h"
+#include "KoColorSpaceConstants.h"
 
 #include "kis_image_config.h"
 #include "kis_config_notifier.h"
@@ -42,21 +43,10 @@ struct KisOnionSkinCompositor::Private
 
     int skinOpacity(int offset)
     {
-        KisImageConfig cfg;
+        const QVector<int> &bo = backwardOpacities;
+        const QVector<int> &fo = forwardOpacities;
 
-        if (offset < 0) {
-            while (backwardOpacities.count() < -offset) {
-                backwardOpacities.append(cfg.onionSkinOpacity(-(backwardOpacities.count() + 1)));
-            }
-
-            return backwardOpacities.at(-offset - 1);
-        } else {
-           while (forwardOpacities.count() < offset) {
-                forwardOpacities.append(cfg.onionSkinOpacity(forwardOpacities.count() + 1));
-            }
-
-            return forwardOpacities.at(offset - 1);
-        }
+        return offset > 0 ? fo[qAbs(offset) - 1] : bo[qAbs(offset) - 1];
     }
 
     KisPaintDeviceSP setUpTintDevice(const QColor &tintColor, const KoColorSpace *colorSpace)
@@ -69,7 +59,7 @@ struct KisOnionSkinCompositor::Private
 
     void compositeFrame(KisRasterKeyframeChannel *keyframes, KisKeyframeSP keyframe, KisPainter &gcFrame, KisPainter &gcDest, KisPaintDeviceSP tintSource, int opacity, const QRect &rect)
     {
-        if (keyframe.isNull()) return;
+        if (keyframe.isNull() || opacity == OPACITY_TRANSPARENT_U8) return;
 
         keyframes->fetchFrame(keyframe, gcFrame.device());
 
@@ -88,8 +78,13 @@ struct KisOnionSkinCompositor::Private
         backwardTintColor = config.onionSkinTintColorBackward();
         forwardTintColor = config.onionSkinTintColorForward();
 
-        backwardOpacities.clear();
-        forwardOpacities.clear();
+        backwardOpacities.resize(numberOfSkins);
+        forwardOpacities.resize(numberOfSkins);
+
+        for (int i = 0; i < numberOfSkins; i++) {
+            backwardOpacities[i] = config.onionSkinOpacity(-(i + 1));
+            forwardOpacities[i] = config.onionSkinOpacity(i + 1);
+        }
     }
 };
 
@@ -141,6 +136,21 @@ void KisOnionSkinCompositor::composite(const KisPaintDeviceSP sourceDevice, KisP
         }
     }
 
+}
+
+QRect KisOnionSkinCompositor::calculateFullExtent(const KisPaintDeviceSP device)
+{
+    QRect rect;
+
+    KisRasterKeyframeChannel *channel = device->keyframeChannel();
+    KisKeyframeSP keyframe = channel->firstKeyframe();
+
+    while (keyframe) {
+        rect |= channel->frameExtents(keyframe);
+        keyframe = channel->nextKeyframe(keyframe);
+    }
+
+    return rect;
 }
 
 QRect KisOnionSkinCompositor::calculateExtent(const KisPaintDeviceSP device)

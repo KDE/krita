@@ -211,10 +211,10 @@ KisKeyframeSP KisKeyframeChannel::copyKeyframe(const KisKeyframeSP keyframe, int
     return insertKeyframe(newTime, keyframe, parentCommand);
 }
 
-KisKeyframeSP KisKeyframeChannel::keyframeAt(int time)
+KisKeyframeSP KisKeyframeChannel::keyframeAt(int time) const
 {
-    KeyframesMap::iterator i = m_d->keys.find(time);
-    if (i != m_d->keys.end()) {
+    KeyframesMap::const_iterator i = m_d->keys.constFind(time);
+    if (i != m_d->keys.constEnd()) {
         return i.value();
     }
 
@@ -224,6 +224,11 @@ KisKeyframeSP KisKeyframeChannel::keyframeAt(int time)
 KisKeyframeSP KisKeyframeChannel::activeKeyframeAt(int time) const
 {
     return activeKeyIterator(time).value();
+}
+
+KisKeyframeSP KisKeyframeChannel::firstKeyframe() const
+{
+    return keyframeAt(0);
 }
 
 KisKeyframeSP KisKeyframeChannel::nextKeyframe(KisKeyframeSP keyframe) const

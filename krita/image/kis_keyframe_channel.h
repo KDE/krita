@@ -53,9 +53,10 @@ public:
     bool moveKeyframe(KisKeyframeSP keyframe, int newTime, KUndo2Command *parentCommand = 0);
     KisKeyframeSP copyKeyframe(const KisKeyframeSP keyframe, int newTime, KUndo2Command *parentCommand = 0);
 
-    KisKeyframeSP keyframeAt(int time);
+    KisKeyframeSP keyframeAt(int time) const;
     KisKeyframeSP activeKeyframeAt(int time) const;
 
+    KisKeyframeSP firstKeyframe() const;
     KisKeyframeSP nextKeyframe(KisKeyframeSP keyframe) const;
     KisKeyframeSP previousKeyframe(KisKeyframeSP keyframe) const;
     KisKeyframeSP lastKeyframe() const;

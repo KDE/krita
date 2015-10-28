@@ -25,7 +25,6 @@
 #endif
 
 #include <QApplication>
-#include <QOffscreenSurface>
 #include <QDir>
 #include <QFile>
 #include <QDesktopServices>
@@ -39,8 +38,6 @@
 namespace
 {
 #ifdef HAVE_OPENGL
-    QOffscreenSurface *SharedSurface = 0;
-    QOpenGLContext *SharedContext = 0;
 #endif
     bool NeedsFenceWorkaround = false;
     int glVersion = 0;
@@ -79,20 +76,6 @@ int KisOpenGL::initializeContext(QOpenGLContext* s) {
     // Double check we were given the version we requested
     QSurfaceFormat format = s->format();
     glVersion = 100 * format.majorVersion() + format.minorVersion();
-
-    if (!SharedSurface) {
-        SharedSurface = new QOffscreenSurface();
-        SharedSurface->setFormat(format);
-        SharedSurface->create();
-    }
-
-    if (!SharedContext) {
-        SharedContext = new QOpenGLContext;
-        SharedContext->setFormat(format);
-        SharedContext->setShareContext(s);
-        SharedContext->create();
-        SharedContext->makeCurrent(SharedSurface);
-    }
 
     QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
 

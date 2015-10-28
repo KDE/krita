@@ -31,7 +31,7 @@ namespace KisAnimationUtils {
     const QString addFrameActionName = i18n("New Frame");
     const QString duplicateFrameActionName = i18n("Copy Frame");
     const QString removeFrameActionName = i18n("Remove Frame");
-    const QString lazyFrameCreationActionName = i18n("Lazy Frame Creation");
+    const QString lazyFrameCreationActionName = i18n("Auto Frame Mode");
 
     bool createKeyframeLazy(KisImageSP image, KisNodeSP node, int time, bool copy) {
         KisKeyframeChannel *content =

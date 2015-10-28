@@ -287,10 +287,9 @@ void KisPaintLayer::setOnionSkinEnabled(bool state)
 
 void KisPaintLayer::slotExternalUpdateOnionSkins()
 {
-    // here we update the whole image because the number of onion
-    // skins could have been reduced and the compositor will not be
-    // able to calculate the correct area
-    const QRect dirtyRect = m_d->paintDevice->defaultBounds()->bounds();
+    const QRect dirtyRect =
+        KisOnionSkinCompositor::instance()->calculateFullExtent(m_d->paintDevice);
+
     setDirty(dirtyRect);
 }
 

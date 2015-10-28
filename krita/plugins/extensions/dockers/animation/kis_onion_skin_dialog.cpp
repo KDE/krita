@@ -32,7 +32,7 @@ static const int MAX_SKIN_COUNT = 10;
 KisOnionSkinDialog::KisOnionSkinDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::KisOnionSkinDialog),
-    m_updatesCompressor(1000, KisSignalCompressor::FIRST_INACTIVE)
+    m_updatesCompressor(300, KisSignalCompressor::FIRST_INACTIVE)
 {
     KisImageConfig config;
     ui->setupUi(this);

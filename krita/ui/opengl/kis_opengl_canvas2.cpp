@@ -77,12 +77,6 @@
 
 static bool OPENGL_SUCCESS = false;
 
-namespace
-{
-const GLuint NO_PROGRAM = 0;
-}
-
-
 typedef void (*kis_glLogicOp)(int);
 static kis_glLogicOp ptr_glLogicOp = 0;
 
@@ -122,15 +116,10 @@ public:
     QOpenGLShaderProgram *cursorShader{0};
     int cursorShaderModelViewProjectionUniform;
 
-
-
     KisDisplayFilter* displayFilter;
     KisTextureTile::FilterMode filterMode;
 
     GLsync glSyncObject{0};
-
-    bool firstDrawImage;
-    qreal scaleX, scaleY;
 
     bool wrapAroundMode{false};
 

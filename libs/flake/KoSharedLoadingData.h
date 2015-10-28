@@ -20,14 +20,14 @@
 #ifndef KOSHAREDLOADINGDATA_H
 #define KOSHAREDLOADINGDATA_H
 
-#include "flake_export.h"
+#include "kritaflake_export.h"
 
 /**
  * The KoSharedLoadingData class is used to share data between shapes during loading.
  * These data can be added to the KoShapeLoadingContext using KoShapeLoadingContext::addSharedData().
  * A different shape can then get the data from the context using KoShapeLoadingContext::sharedData().
  */
-class FLAKE_EXPORT KoSharedLoadingData
+class KRITAFLAKE_EXPORT KoSharedLoadingData
 {
 public:
     KoSharedLoadingData();

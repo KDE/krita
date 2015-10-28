@@ -126,6 +126,13 @@ void TimelineFramesIndexConverter::updateActiveDummy(KisNodeDummy *dummy,
     }
 }
 
+void TimelineFramesIndexConverter::notifyDummyRemoved(KisNodeDummy *dummy)
+{
+    if (m_activeDummy && m_activeDummy == dummy) {
+        m_activeDummy = 0;
+    }
+}
+
 bool TimelineFramesIndexConverter::isDummyVisible(KisNodeDummy *dummy) const
 {
     return dummy->node()->useInTimeline() || dummy == m_activeDummy;

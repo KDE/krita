@@ -126,6 +126,8 @@ void TimelineNodeListKeeper::slotBeginRemoveDummy(KisNodeDummy *dummy)
         m_d->dummiesList.remove(pos);
         m_d->model->callEndRemoveRows();
     }
+
+    m_d->converter.notifyDummyRemoved(dummy);
 }
 
 void TimelineNodeListKeeper::slotDummyChanged(KisNodeDummy *dummy)

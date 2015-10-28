@@ -37,6 +37,8 @@ public:
 
     KisNodeDummy* activeDummy() const;
     void updateActiveDummy(KisNodeDummy *dummy, bool *oldRemoved, bool *newAdded);
+    void notifyDummyRemoved(KisNodeDummy *dummy);
+
 
     bool isDummyVisible(KisNodeDummy *dummy) const;
 

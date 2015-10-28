@@ -65,7 +65,7 @@ public:
     virtual void setWrapAroundViewingMode(bool value) = 0;
 
     // Called from KisCanvas2::channelSelectionChanged
-    virtual void channelSelectionChanged(QBitArray channelFlags) = 0;
+    virtual void channelSelectionChanged(const QBitArray &channelFlags) = 0;
 
     // Called from KisCanvas2::slotSetDisplayProfile
     virtual void setDisplayProfile(KisDisplayColorConverter *colorConverter) = 0;
@@ -77,7 +77,7 @@ public:
     virtual void finishResizingImage(qint32 w, qint32 h) = 0;
 
     // Called from KisCanvas2::startUpdateProjection
-    virtual KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc, QBitArray channelFlags) = 0;
+    virtual KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags) = 0;
 
     // Called from KisCanvas2::updateCanvasProjection
     virtual QRect updateCanvasProjection(KisUpdateInfoSP info) = 0;

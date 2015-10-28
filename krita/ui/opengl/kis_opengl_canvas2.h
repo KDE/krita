@@ -80,11 +80,11 @@ public:
 public: // Implement kis_abstract_canvas_widget interface
     void setDisplayFilter(KisDisplayFilter* displayFilter);
     void setWrapAroundViewingMode(bool value);
-    void channelSelectionChanged(QBitArray channelFlags);
+    void channelSelectionChanged(const QBitArray &channelFlags);
     void setDisplayProfile(KisDisplayColorConverter *colorConverter);
     void disconnectCurrentCanvas();
     void finishResizingImage(qint32 w, qint32 h);
-    KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc, QBitArray channelFlags);
+    KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags);
     QRect updateCanvasProjection(KisUpdateInfoSP info);
 
     QWidget *widget() {

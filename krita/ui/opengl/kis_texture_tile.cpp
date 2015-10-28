@@ -55,7 +55,7 @@ inline QRectF relativeRect(const QRect &br /* baseRect */,
 }
 
 
-KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,
+KisTextureTile::KisTextureTile(const QRect &imageRect, const KisGLTexturesInfo *texturesInfo,
                                const QByteArray &fillData, FilterMode filter,
                                bool useBuffer, int numMipmapLevels, QOpenGLFunctions *fcn)
 

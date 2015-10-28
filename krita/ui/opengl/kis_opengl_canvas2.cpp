@@ -840,7 +840,7 @@ void KisOpenGLCanvas2::setDisplayProfile(KisDisplayColorConverter *colorConverte
                                               colorConverter->conversionFlags());
 }
 
-void KisOpenGLCanvas2::channelSelectionChanged(QBitArray channelFlags)
+void KisOpenGLCanvas2::channelSelectionChanged(const QBitArray &channelFlags)
 {
     d->openGLImageTextures->setChannelFlags(channelFlags);
 }
@@ -853,7 +853,7 @@ void KisOpenGLCanvas2::finishResizingImage(qint32 w, qint32 h)
     }
 }
 
-KisUpdateInfoSP KisOpenGLCanvas2::startUpdateCanvasProjection(const QRect & rc, QBitArray channelFlags)
+KisUpdateInfoSP KisOpenGLCanvas2::startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags)
 {
     d->openGLImageTextures->setChannelFlags(channelFlags);
     return d->openGLImageTextures->updateCache(rc);

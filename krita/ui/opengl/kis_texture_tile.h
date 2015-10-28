@@ -67,7 +67,7 @@ public:
         HighQualityFiltering // Mipmaps + custom shader
     };
 
-    KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,
+    KisTextureTile(const QRect &imageRect, const KisGLTexturesInfo *texturesInfo,
                    const QByteArray &fillData, FilterMode mode,
                    bool useBuffer, int numMipmapLevels, QOpenGLFunctions *f);
     ~KisTextureTile();

@@ -171,7 +171,7 @@ void KisQPainterCanvas::inputMethodEvent(QInputMethodEvent *event)
     processInputMethodEvent(event);
 }
 
-void KisQPainterCanvas::channelSelectionChanged(QBitArray channelFlags)
+void KisQPainterCanvas::channelSelectionChanged(const QBitArray &channelFlags)
 {
     Q_ASSERT(m_d->prescaledProjection);
     m_d->prescaledProjection->setChannelFlags(channelFlags);
@@ -209,7 +209,7 @@ void KisQPainterCanvas::finishResizingImage(qint32 w, qint32 h)
     m_d->prescaledProjection->slotImageSizeChanged(w, h);
 }
 
-KisUpdateInfoSP KisQPainterCanvas::startUpdateCanvasProjection(const QRect & rc, QBitArray channelFlags)
+KisUpdateInfoSP KisQPainterCanvas::startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags)
 {
     Q_UNUSED(channelFlags);
 

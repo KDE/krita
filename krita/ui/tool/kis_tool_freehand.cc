@@ -191,7 +191,13 @@ void KisToolFreehand::beginPrimaryAction(KoPointerEvent *event)
 
     requestUpdateOutline(event->point, event);
 
-    if (!nodeEditable() || nodePaintAbility() != PAINT) {
+    NodePaintAbility paintability = nodePaintAbility();
+    if (!nodeEditable() || paintability != PAINT) {
+        if(paintability == KisToolPaint::VECTOR){
+            KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+            QString message = i18n("The brush tool cannot paint on this layer.  Please select a paint layer or mask.");
+            kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
+        }
         event->ignore();
 
         return;

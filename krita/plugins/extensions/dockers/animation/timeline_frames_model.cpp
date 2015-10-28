@@ -434,16 +434,26 @@ bool TimelineFramesModel::setData(const QModelIndex &index, const QVariant &valu
         if (value.toBool() &&
             index.column() != m_d->activeFrameIndex) {
 
-            int prevFrame = m_d->activeFrameIndex;
+            //int prevFrame = m_d->activeFrameIndex;
             m_d->activeFrameIndex = index.column();
 
             scrubTo(m_d->activeFrameIndex, m_d->scrubInProgress);
 
-            emit dataChanged(this->index(0, prevFrame), this->index(rowCount() - 1, prevFrame));
-            emit dataChanged(this->index(0, m_d->activeFrameIndex), this->index(rowCount() - 1, m_d->activeFrameIndex));
 
-            emit headerDataChanged (Qt::Horizontal, prevFrame, prevFrame);
-            emit headerDataChanged (Qt::Horizontal, m_d->activeFrameIndex, m_d->activeFrameIndex);
+            /**
+             * Optimization Hack Alert:
+             *
+             * ideally, we should emit all four signals, but... The
+             * point is this code is used in a tight loop during
+             * playback, so it should run as fast as possible. To tell
+             * the story short, commenting out these three lines makes
+             * playback run 15% faster ;)
+             */
+
+            //emit dataChanged(this->index(0, prevFrame), this->index(rowCount() - 1, prevFrame));
+            emit dataChanged(this->index(0, m_d->activeFrameIndex), this->index(rowCount() - 1, m_d->activeFrameIndex));
+            //emit headerDataChanged (Qt::Horizontal, prevFrame, prevFrame);
+            //emit headerDataChanged (Qt::Horizontal, m_d->activeFrameIndex, m_d->activeFrameIndex);
         }
         break;
     }

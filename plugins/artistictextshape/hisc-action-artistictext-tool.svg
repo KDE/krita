@@ -1,0 +1,18 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created using Karbon14, part of calligra: http://www.calligra.org/karbon -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="62.3623pt" height="62.3623pt">
+  <defs>
+    <linearGradient id="defitem3" gradientUnits="userSpaceOnUse"  x1="22.833" y1="1.90365" x2="49.8333" y2="41.3398" spreadMethod="pad" >
+      <stop stop-color="#ffffff" offset="0" stop-opacity="1" />
+      <stop stop-color="#00458a" offset="0.813271" stop-opacity="1" />
+    </linearGradient>
+      <path id="defitem4" d="M2.68883 75.1618C52.8486 74.9774 75.1697 53.6004 74.9359 2.9129"  />
+  </defs>
+  <g id="defitem0">
+    <path id="defitem1" fill="none" stroke="#000000" stroke-opacity="1" stroke-width="5.31497" stroke-linecap="square" stroke-linejoin="bevel" d="M0 72.2489C50.1598 72.0645 72.4809 50.6875 72.2471 0"  transform="translate(2.68883, 2.9129)" />
+    <text id="defitem2" fill="url(#defitem3)" font-family="Liberation Serif" font-size="46pt" font-weight="bold"      >
+<textPath xlink:href="#defitem4">T x t</textPath>
+    </text>
+  </g>
+</svg>

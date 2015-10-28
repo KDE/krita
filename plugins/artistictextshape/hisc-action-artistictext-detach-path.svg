@@ -1,0 +1,23 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created using Karbon14, part of calligra: http://www.calligra.org/karbon -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="62.3623pt" height="62.3623pt">
+  <defs>
+    <linearGradient id="defitem41" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.90778 0 0 1.36505 0 0)" x1="22.5575" y1="44.6835" x2="9.68552" y2="14.2279" spreadMethod="pad" >
+      <stop stop-color="#ffffff" offset="0" stop-opacity="1" />
+      <stop stop-color="#bf0303" offset="1" stop-opacity="1" />
+    </linearGradient>
+    <linearGradient id="defitem43" gradientUnits="userSpaceOnUse"  x1="20.7557" y1="1.02987" x2="48.166" y2="41.9868" spreadMethod="pad" >
+      <stop stop-color="#ffffff" offset="0" stop-opacity="1" />
+      <stop stop-color="#00458a" offset="0.813271" stop-opacity="1" />
+    </linearGradient>
+      <path id="defitem44" d="M2.68883 74.9116C52.6748 74.7278 74.9186 53.4249 74.6857 2.9129"  />
+  </defs>
+  <g id="defitem38">
+    <path id="defitem39" fill="none" stroke="#000000" stroke-opacity="1" stroke-width="5.31497" stroke-linecap="square" stroke-linejoin="bevel" d="M0 71.9987C49.986 71.8149 72.2298 50.512 71.9969 0"  transform="translate(2.68883, 2.9129)" />
+    <path id="defitem40" fill="url(#defitem41)" fill-rule="evenodd" d="M38.5927 20.4877C36.5008 28.9275 35.1819 41.0605 38.2388 49.9995C27.3057 46.2574 15.626 41.4945 4.69528 30.4547C10.4121 32.2785 16.7943 30.9449 20.2548 30.2333C7.35707 21.2797 2.17127 6.27255 0 0.455287C6.07615 2.52393 18.0512 0.587709 23.9224 0C24.2325 4.15371 17.4062 15.4153 26.7009 28.9043C30.7129 27.6871 33.489 27.5582 38.5927 20.4877Z"  transform="matrix(-0.916533 0.399959 -0.399959 -0.916533 56.7877 32.7505)" />
+    <text id="defitem42" fill="url(#defitem43)" font-family="Liberation Serif" font-size="46pt" font-weight="bold"      >
+<textPath xlink:href="#defitem44">T x t</textPath>
+    </text>
+  </g>
+</svg>

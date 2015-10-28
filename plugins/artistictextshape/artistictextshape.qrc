@@ -1,0 +1,8 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource>
+        <file alias="artisttext-attach-path.png">hi22-action-artistictext-attach-path.png</file>
+        <file alias="artistictext-detach-path.png">hi22-action-artistictext-detach-path.png</file>
+        <file alias="artistictext-tool.png">hi22-action-artistictext-tool.png</file>
+    </qresource>
+</RCC>

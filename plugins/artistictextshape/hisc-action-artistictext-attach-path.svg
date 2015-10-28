@@ -1,0 +1,21 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created using Karbon14, part of calligra: http://www.calligra.org/karbon -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="62.3623pt" height="62.3623pt">
+  <defs>
+    <linearGradient id="defitem21" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.90778 0 0 1.36505 0 0)" x1="-6.44091" y1="11.8111" x2="21.2862" y2="23.2188" spreadMethod="pad" >
+      <stop stop-color="#ffffff" offset="0" stop-opacity="1" />
+      <stop stop-color="#bf0303" offset="1" stop-opacity="1" />
+    </linearGradient>
+    <linearGradient id="defitem23" gradientUnits="userSpaceOnUse"  x1="-5.04873" y1="16.9134" x2="39.9685" y2="17.0332" spreadMethod="pad" >
+      <stop stop-color="#ffffff" offset="0" stop-opacity="1" />
+      <stop stop-color="#00458a" offset="0.813271" stop-opacity="1" />
+    </linearGradient>
+  </defs>
+  <g id="defitem18">
+    <path id="defitem19" fill="none" stroke="#000000" stroke-opacity="1" stroke-width="5.31497" stroke-linecap="square" stroke-linejoin="bevel" d="M0 71.9987C49.986 71.8149 72.2298 50.512 71.9969 0"  transform="translate(2.68883, 2.9129)" />
+    <path id="defitem20" fill="url(#defitem21)" fill-rule="evenodd" d="M38.5927 20.4877C36.5008 28.9275 34.9738 36.7688 40.5932 45.1837C30.9656 45.3823 15.626 41.4945 4.69528 30.4547C10.4121 32.2785 16.7943 30.9449 20.2548 30.2333C7.35707 21.2797 2.17127 6.27255 0 0.455287C6.07615 2.52393 18.0512 0.587709 23.9224 0C24.2325 4.15371 17.4062 15.4153 26.7009 28.9043C30.7129 27.6871 33.489 27.5582 38.5927 20.4877Z"  transform="translate(7.14255, 18.8217)" />
+    <text id="defitem22" fill="url(#defitem23)" font-family="Liberation Serif" font-size="30pt" font-weight="bold"       x="0pt" y="19.6406pt" transform="matrix(1.02495 0 0 1.23786 -0.0730813 0.650024)">
+Txt    </text>
+  </g>
+</svg>

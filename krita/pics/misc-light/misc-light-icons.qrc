@@ -2,18 +2,18 @@
 <RCC version="1.0">
     <qresource>
         <file>light_draw-eraser.svg</file>
-        <file alias="light_object-alight-horizontal-center-calligra.svg">light_ox16-action-object-align-horizontal-center-calligra.svg</file>
-        <file alias="light_object-align-horizontal-right-calligra.svg">light_ox16-action-object-align-horizontal-left-calligra.svg</file>
-        <file alias="light_object-align-horizontal-right-calligra.svg">light_ox16-action-object-align-horizontal-right-calligra.svg</file>
-        <file alias="light_object-align-vertical-bottom-calligra.svg">light_ox16-action-object-align-vertical-bottom-calligra.svg</file>
-        <file alias="light_object-align-vertical-center-calligra.svg">light_ox16-action-object-align-vertical-center-calligra.svg</file>
-        <file alias="light_object-align-vertical-calligra.svg">light_ox16-action-object-align-vertical-top-calligra.svg</file>
-        <file alias="light_object-order-group-calligra.svg">light_ox16-action-object-group-calligra.svg</file>
-        <file alias="light_object-order-back-calligra.svg">light_ox16-action-object-order-back-calligra.svg</file>
-        <file alias="light_object-order-front-calligra.svg">light_ox16-action-object-order-front-calligra.svg</file>
-        <file alias="light_object-order-lower-calligra.svg">light_ox16-action-object-order-lower-calligra.svg</file>
-        <file alias="light_object-order-raise-calligra.svg">light_ox16-action-object-order-raise-calligra.svg</file>
-        <file alias="light_object-ungroup-calligra.svg">light_ox16-action-object-ungroup-calligra.svg</file>
+        <file alias="light_alight-horizontal-center-calligra.svg">light_ox16-action-object-align-horizontal-center-calligra.svg</file>
+        <file alias="light_align-horizontal-right-calligra.svg">light_ox16-action-object-align-horizontal-left-calligra.svg</file>
+        <file alias="light_align-horizontal-right-calligra.svg">light_ox16-action-object-align-horizontal-right-calligra.svg</file>
+        <file alias="light_align-vertical-bottom-calligra.svg">light_ox16-action-object-align-vertical-bottom-calligra.svg</file>
+        <file alias="light_align-vertical-center-calligra.svg">light_ox16-action-object-align-vertical-center-calligra.svg</file>
+        <file alias="light_align-vertical-calligra.svg">light_ox16-action-object-align-vertical-top-calligra.svg</file>
+        <file alias="light_order-group-calligra.svg">light_ox16-action-object-group-calligra.svg</file>
+        <file alias="light_order-back-calligra.svg">light_ox16-action-object-order-back-calligra.svg</file>
+        <file alias="light_order-front-calligra.svg">light_ox16-action-object-order-front-calligra.svg</file>
+        <file alias="light_order-lower-calligra.svg">light_ox16-action-object-order-lower-calligra.svg</file>
+        <file alias="light_order-raise-calligra.svg">light_ox16-action-object-order-raise-calligra.svg</file>
+        <file alias="light_ungroup-calligra.svg">light_ox16-action-object-ungroup-calligra.svg</file>
         <file>light_paintop_settings_01.svg</file>
         <file>light_paintop_settings_02.svg</file>
         <file>light_stroke-cap-butt.svg</file>

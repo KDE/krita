@@ -37,6 +37,8 @@ ki18n_wrap_ui( ArtisticTextShape_SRCS
     ArtisticTextShapeOnPathWidget.ui
 )
 
+qt5_add_resources(ArtisticTextShape_SRCS artistictextshape.qrc)
+
 add_library(krita_shape_artistictext MODULE ${ArtisticTextShape_SRCS} )
 
 kcoreaddons_desktop_to_json(krita_shape_artistictext calligra_shape_artistictext.desktop)

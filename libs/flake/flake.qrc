@@ -26,5 +26,7 @@
         <file alias="snap-extension.svg">pics/sc-actions-snap-extension.svg</file>
         <file alias="zoom_in_cursor.png">pics/zoom_in_cursor.png</file>
         <file alias="zoom_out_cursor.png">pics/zoom_out_cursor.png</file>
+        <file alias="x-shape-connection.png">pics/ox32-mimetype-x-shape-connection.png</file>
+        <file alias="x-shape-text.png">pics/ox32-mimetype-x-shape-text.png</file>
     </qresource>
 </RCC>

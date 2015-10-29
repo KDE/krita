@@ -411,7 +411,7 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
 {
     QPersistentModelIndex index = indexAt(event->pos());
 
-    if (event->modifiers() & Qt::ControlModifier) {
+    if (event->modifiers() & Qt::AltModifier) {
         m_d->startZoomPanDragPos = event->pos();
 
         if (event->button() == Qt::RightButton) {
@@ -449,7 +449,7 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
 
 void TimelineFramesView::mouseMoveEvent(QMouseEvent *e)
 {
-    if (e->modifiers() & Qt::ControlModifier) {
+    if (e->modifiers() & Qt::AltModifier) {
         QPoint diff = e->pos() - m_d->startZoomPanDragPos;
 
         if (e->buttons() & Qt::RightButton) {
@@ -471,7 +471,7 @@ void TimelineFramesView::mouseMoveEvent(QMouseEvent *e)
 
 void TimelineFramesView::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->modifiers() & Qt::ControlModifier) {
+    if (e->modifiers() & Qt::AltModifier) {
         e->accept();
     } else {
         m_d->model->setScrubState(false);

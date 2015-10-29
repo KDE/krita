@@ -76,7 +76,9 @@ KisShapeSelection::KisShapeSelection(KisImageWSP image, KisSelectionWSP selectio
     m_canvas = new KisShapeSelectionCanvas();
     m_canvas->shapeManager()->addShape(this);
 
+    m_model->setObjectName("KisShapeSelectionModel");
     m_model->moveToThread(image->thread());
+    m_canvas->setObjectName("KisShapeSelectionCanvas");
     m_canvas->moveToThread(image->thread());
 }
 

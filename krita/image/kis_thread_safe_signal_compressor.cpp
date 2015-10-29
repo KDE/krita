@@ -28,6 +28,7 @@ KisThreadSafeSignalCompressor::KisThreadSafeSignalCompressor(int delay, KisSigna
     connect(m_compressor, SIGNAL(timeout()), SIGNAL(timeout()));
 
     // due to this line the object *must not* be deleted explicitly!
+    this->setObjectName("KisThreadSafeSignalCompressor");
     this->moveToThread(QApplication::instance()->thread());
 }
 

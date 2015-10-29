@@ -152,7 +152,7 @@ public: // KoCanvasBase implementation
      */
     KisInputManager* globalInputManager() const;
 
-    KisPaintingAssistantsDecoration* paintingAssistantsDecoration();
+    KisPaintingAssistantsDecoration* paintingAssistantsDecoration() const;
 
 
 public: // KisCanvas2 methods
@@ -173,8 +173,8 @@ public: // KisCanvas2 methods
 
     void setCursor(const QCursor &cursor);
 
-    KisAnimationFrameCacheSP frameCache();
-    KisAnimationPlayer *animationPlayer();
+    KisAnimationFrameCacheSP frameCache() const;
+    KisAnimationPlayer *animationPlayer() const;
 
     void refetchDataFromImage();
 
@@ -240,7 +240,7 @@ private Q_SLOTS:
 
 public:
 
-    bool isPopupPaletteVisible();
+    bool isPopupPaletteVisible() const;
     void slotShowPopupPalette(const QPoint& = QPoint(0,0));
 
     // interface for KisCanvasController only

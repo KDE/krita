@@ -791,12 +791,12 @@ void KisCanvas2::setCursor(const QCursor &cursor)
     canvasWidget()->setCursor(cursor);
 }
 
-KisAnimationFrameCacheSP KisCanvas2::frameCache()
+KisAnimationFrameCacheSP KisCanvas2::frameCache() const
 {
     return m_d->frameCache;
 }
 
-KisAnimationPlayer *KisCanvas2::animationPlayer()
+KisAnimationPlayer *KisCanvas2::animationPlayer() const
 {
     return m_d->animationPlayer;
 }
@@ -813,7 +813,7 @@ void KisCanvas2::slotSelectionChanged()
     }
 }
 
-bool KisCanvas2::isPopupPaletteVisible()
+bool KisCanvas2::isPopupPaletteVisible() const
 {
     if (!m_d->popupPalette) {
         return false;
@@ -896,7 +896,7 @@ void KisCanvas2::slotShowPopupPalette(const QPoint &p)
     m_d->popupPalette->showPopupPalette(p);
 }
 
-KisPaintingAssistantsDecoration* KisCanvas2::paintingAssistantsDecoration()
+KisPaintingAssistantsDecoration* KisCanvas2::paintingAssistantsDecoration() const
 {
     KisCanvasDecoration* deco = decoration("paintingAssistantsDecoration");
     return qobject_cast<KisPaintingAssistantsDecoration*>(deco);

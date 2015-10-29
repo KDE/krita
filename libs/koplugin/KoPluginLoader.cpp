@@ -127,7 +127,8 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         QObject *plugin = factory->create<QObject>(owner ? owner : this, QVariantList());
         if (plugin) {
             QJsonObject json = loader->metaData().value("MetaData").toObject();
-            const QString pluginName = json.value("X-KDE-PluginInfo-Name").toString();
+            json = json.value("KPlugin").toObject();
+            const QString pluginName = json.value("Id").toString();
             whiteList << pluginName;
 //             qDebug() << "Loaded plugin" << loader->fileName() << owner;
             if (!owner) {

@@ -34,6 +34,8 @@ class TimelineDocker : public QDockWidget, public KisMainwindowObserver
     Q_OBJECT
 public:
     TimelineDocker();
+    ~TimelineDocker();
+
     QString observerName() { return "TimelineDocker"; }
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();

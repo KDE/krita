@@ -32,9 +32,11 @@
 #include "commands/kis_image_layer_add_command.h"
 #include "commands/kis_image_layer_remove_command.h"
 
+#include "kis_global.h"
 #include "kis_debug.h"
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
+#include "kis_undo_adapter.h"
 #include "kis_node_dummies_graph.h"
 #include "kis_dummies_facade_base.h"
 #include "kis_signal_compressor.h"

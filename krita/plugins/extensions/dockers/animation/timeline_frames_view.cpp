@@ -30,6 +30,7 @@
 #include <QToolButton>
 #include <QMenu>
 #include <QScrollBar>
+#include <QIcon>
 
 
 #include "kis_debug.h"
@@ -37,7 +38,6 @@
 
 #include "kis_draggable_tool_button.h"
 
-#include "kicon.h"
 #include "kis_icon_utils.h"
 
 struct TimelineFramesView::Private
@@ -93,7 +93,7 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
 #if QT_VERSION < 0x050000
     m_d->horizontalRuler->setResizeMode(QHeaderView::Fixed);
 #else
-    m_d->horizontalRuler->setSectionsResizeMode(QHeaderView::Fixed);
+    m_d->horizontalRuler->setSectionResizeMode(QHeaderView::Fixed);
 #endif
 
     m_d->horizontalRuler->setDefaultSectionSize(18);
@@ -104,7 +104,7 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
 #if QT_VERSION < 0x050000
     m_d->layersHeader->setResizeMode(QHeaderView::Fixed);
 #else
-    m_d->layersHeader->setSectionsResizeMode(QHeaderView::Fixed);
+    m_d->layersHeader->setSectionResizeMode(QHeaderView::Fixed);
 #endif
 
     m_d->layersHeader->setDefaultSectionSize(24);

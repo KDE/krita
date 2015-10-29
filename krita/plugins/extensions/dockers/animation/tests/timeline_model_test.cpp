@@ -18,8 +18,6 @@
 
 #include "timeline_model_test.h"
 
-#include <qtest_kde.h>
-
 #include "kis_image.h"
 #include "kis_node.h"
 #include "kis_paint_device.h"
@@ -223,4 +221,4 @@ void TimelineModelTest::slotGuiChangedNode(KisNodeSP node)
     qDebug() << "GUI changed active node:" << node->name();
 }
 
-QTEST_KDEMAIN(TimelineModelTest, GUI)
+QTEST_MAIN(TimelineModelTest)

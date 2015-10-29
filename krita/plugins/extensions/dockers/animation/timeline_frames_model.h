@@ -23,7 +23,7 @@
 #include <QIcon>
 
 #include "kritaanimationdocker_export.h"
-#include "KisDocumentSectionModel.h"
+#include "kis_node_model.h"
 #include "kis_types.h"
 #include "kis_node.h"
 #include "timeline_node_list_keeper.h"
@@ -88,8 +88,8 @@ public:
     };
 
     // metatype is added by the original implementation
-    typedef KisDocumentSectionModel::Property Property;
-    typedef KisDocumentSectionModel::PropertyList PropertyList;
+    typedef KisNodeModel::Property Property;
+    typedef KisNodeModel::PropertyList PropertyList;
 
     typedef TimelineNodeListKeeper::OtherLayer OtherLayer;
     typedef TimelineNodeListKeeper::OtherLayersList OtherLayersList;

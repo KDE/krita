@@ -25,6 +25,7 @@ ki18n_wrap_ui(KRITA_ANIMATIONDOCKER_PART_SRCS
 )
 
 add_library(kritaanimationdocker MODULE ${KRITA_ANIMATIONDOCKER_PART_SRCS})
+generate_export_header(kritaanimationdocker BASE_NAME kritaanimationdocker EXPORT_MACRO_NAME KRITAANIMATIONDOCKER_EXPORT)
 
 kcoreaddons_desktop_to_json(kritaanimationdocker krita_animationdocker.desktop)
 

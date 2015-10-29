@@ -61,6 +61,10 @@ TimelineDocker::TimelineDocker()
     setWidget(m_d->view);
 }
 
+TimelineDocker::~TimelineDocker()
+{
+}
+
 void TimelineDocker::setCanvas(KoCanvasBase * canvas)
 {
     if (m_d->canvas == canvas) return;

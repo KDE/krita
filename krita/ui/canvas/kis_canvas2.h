@@ -48,12 +48,6 @@ class KisView;
 class KisInputManager;
 class KisAnimationPlayer;
 class KisShapeController;
-
-enum KisCanvasType {
-    QPAINTER,
-    OPENGL
-};
-
 class KisCoordinatesConverter;
 class KoViewConverter;
 

@@ -19,7 +19,6 @@
 #include "kis_idle_watcher.h"
 
 #include <QTimer>
-#include "KisDocument.h"
 #include "kis_image.h"
 #include "kis_signal_auto_connection.h"
 #include "kis_signal_compressor.h"

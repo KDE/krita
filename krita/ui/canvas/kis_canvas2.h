@@ -261,7 +261,6 @@ private:
 
     void connectCurrentCanvas();
     void disconnectCurrentCanvas();
-    void pan(QPoint shift);
     void createCanvas(bool useOpenGL);
     void createQPainterCanvas();
     void createOpenGLCanvas();

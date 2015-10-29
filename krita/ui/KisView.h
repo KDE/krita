@@ -185,8 +185,8 @@ public:
     KisCoordinatesConverter *viewConverter() const;
 
     void resetImageSizeAndScroll(bool changeCentering,
-                                 const QPointF oldImageStillPoint = QPointF(),
-                                 const QPointF newImageStillPoint = QPointF());
+                                 const QPointF &oldImageStillPoint = QPointF(),
+                                 const QPointF &newImageStillPoint = QPointF());
 
     void setCurrentNode(KisNodeSP node);
     KisNodeSP currentNode() const;
@@ -201,7 +201,7 @@ public:
     void notifyCurrentStateChanged(bool isCurrent);
 
     void setShowFloatingMessage(bool show);
-    void showFloatingMessageImpl(const QString message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment);
+    void showFloatingMessageImpl(const QString &message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment);
 
 public Q_SLOTS:
 

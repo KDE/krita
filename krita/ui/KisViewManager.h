@@ -177,7 +177,7 @@ public:
 
 
     /// shows a floating message in the top right corner of the canvas
-    void showFloatingMessage(const QString message, const QIcon& icon, int timeout = 4500,
+    void showFloatingMessage(const QString &message, const QIcon& icon, int timeout = 4500,
                              KisFloatingMessage::Priority priority = KisFloatingMessage::Medium,
                              int alignment = Qt::AlignCenter | Qt::TextWordWrap);
 
@@ -211,7 +211,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-    void floatingMessageRequested(QString message, QString iconName);
+    void floatingMessageRequested(const QString &message, const QString &iconName);
 
 private Q_SLOTS:
 

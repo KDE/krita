@@ -280,7 +280,7 @@ void KisView::setShowFloatingMessage(bool show)
     d->showFloatingMessage = show;
 }
 
-void KisView::showFloatingMessageImpl(const QString message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment)
+void KisView::showFloatingMessageImpl(const QString &message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment)
 {
     if (!d->viewManager) return;
 
@@ -810,8 +810,8 @@ bool KisView::queryClose()
 }
 
 void KisView::resetImageSizeAndScroll(bool changeCentering,
-                                      const QPointF oldImageStillPoint,
-                                      const QPointF newImageStillPoint)
+                                      const QPointF &oldImageStillPoint,
+                                      const QPointF &newImageStillPoint)
 {
     const KisCoordinatesConverter *converter = d->canvas.coordinatesConverter();
 

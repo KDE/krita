@@ -87,7 +87,7 @@ Q_SIGNALS:
     void viewChanged();
     void fileChanged();
     void modifiedChanged();
-    void floatingMessageRequested(QString message, QString iconName);
+    void floatingMessageRequested(const QString &message, const QString &iconName);
     void interactionStarted();
     void loadingFinished();
     void savingFinished();

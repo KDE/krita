@@ -251,8 +251,6 @@ public:
     bool lodAllowedInCanvas() const;
 
     void initializeImage();
-    // interface for KisViewManager only
-    void resetCanvas(bool useOpenGL);
 
     void setFavoriteResourceManager(KisFavoriteResourceManager* favoriteResourceManager);
 
@@ -266,6 +264,7 @@ private:
     void createOpenGLCanvas();
     void updateCanvasWidgetImpl(const QRect &rc = QRect());
     void setCanvasWidget(QWidget *widget);
+    void resetCanvas(bool useOpenGL);
 
     void notifyLevelOfDetailChange();
 

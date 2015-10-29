@@ -82,8 +82,6 @@ public:
 
     void setup(KisShapeController *kritaShapeController, KisView *view);
 
-    void setCanvasWidget(QWidget * widget);
-
     void notifyZoomChanged();
 
     virtual void disconnectCanvasObserver(QObject *object);
@@ -268,6 +266,7 @@ private:
     void createQPainterCanvas();
     void createOpenGLCanvas();
     void updateCanvasWidgetImpl(const QRect &rc = QRect());
+    void setCanvasWidget(QWidget *widget);
 
     void notifyLevelOfDetailChange();
 

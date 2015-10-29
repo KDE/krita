@@ -1,8 +1,7 @@
-ecm_install_icons(
-ICONS 
-128-actions-template_comics_empty.png
+install( FILES 
+template_comics_empty.png
 DESTINATION
-${DATA_INSTALL_DIR}/krita/icons 
+${DATA_INSTALL_DIR}/krita/pics
 )
 
 install( FILES  

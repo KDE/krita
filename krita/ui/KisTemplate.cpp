@@ -22,9 +22,9 @@
 #include <QImage>
 #include <QPixmap>
 #include <QIcon>
-
+#include <QFile>
 #include <kis_debug.h>
-
+#include <KoResourcePaths.h>
 #include <kis_icon.h>
 
 
@@ -55,7 +55,8 @@ const QPixmap &KisTemplate::loadPicture()
         m_pixmap = QPixmap::fromImage(img);
         return m_pixmap;
     } else { // relative path
-        m_pixmap = kisIcon(m_picture).pixmap(KisIconUtils::SizeEnormous);
+        QString filename = KoResourcePaths::findResource("kis_pics", m_picture + ".png");
+        m_pixmap = QPixmap(filename);
         return m_pixmap;
     }
 }

@@ -170,8 +170,7 @@ void AnimationDocker::setCanvas(KoCanvasBase * canvas)
 
 void AnimationDocker::unsetCanvas()
 {
-    setEnabled(false);
-    m_canvas = 0;
+    setCanvas(0);
 }
 
 void AnimationDocker::setMainWindow(KisViewManager *view)

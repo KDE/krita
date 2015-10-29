@@ -39,6 +39,10 @@
 struct KisAnimationPlayer::Private
 {
 public:
+    Private(KisAnimationPlayer *_q) : q(_q) {}
+
+    KisAnimationPlayer *q;
+
     bool playing;
     int currentFrame;
 
@@ -57,10 +61,12 @@ public:
 #ifdef DEBUG_FRAMERATE
     QTime frameRateTimer;
 #endif /* DEBUG_FRAMERATE */
+
+    void stopImpl(bool doUpdates);
 };
 
 KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
-    : m_d(new Private())
+    : m_d(new Private(this))
 {
     m_d->playing = false;
     m_d->fps = 15;
@@ -128,16 +134,28 @@ void KisAnimationPlayer::play()
     connectCancelSignals();
 }
 
+void KisAnimationPlayer::Private::stopImpl(bool doUpdates)
+{
+    q->disconnectCancelSignals();
+
+    timer->stop();
+    playing = false;
+
+    if (doUpdates) {
+        canvas->refetchDataFromImage();
+    }
+
+    emit q->sigPlaybackStopped();
+}
+
 void KisAnimationPlayer::stop()
 {
-    disconnectCancelSignals();
+    m_d->stopImpl(true);
+}
 
-    m_d->timer->stop();
-    m_d->playing = false;
-
-    m_d->canvas->refetchDataFromImage();
-
-    emit sigPlaybackStopped();
+void KisAnimationPlayer::forcedStopOnExit()
+{
+    m_d->stopImpl(false);
 }
 
 bool KisAnimationPlayer::isPlaying()

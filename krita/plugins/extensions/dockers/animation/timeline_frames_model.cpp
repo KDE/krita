@@ -712,6 +712,8 @@ bool TimelineFramesModel::removeFrame(const QModelIndex &dstIndex)
 
 void TimelineFramesModel::setLastVisibleFrame(int time)
 {
+    if (!m_d->dummiesFacade) return;
+
     const int growThreshold = m_d->effectiveNumFrames() - 3;
     const int growValue = time + 8;
 

@@ -190,6 +190,10 @@ void KisCanvas2::setup(KisShapeController *kritaShapeController, KisView *view)
 
 KisCanvas2::~KisCanvas2()
 {
+    if (m_d->animationPlayer->isPlaying()) {
+        m_d->animationPlayer->forcedStopOnExit();
+    }
+
     delete m_d;
 }
 

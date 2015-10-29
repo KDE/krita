@@ -44,6 +44,8 @@ public:
 
     qreal playbackSpeed();
 
+    void forcedStopOnExit();
+
 public Q_SLOTS:
     void slotUpdate();
     void slotCancelPlayback();

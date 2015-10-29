@@ -3598,7 +3598,7 @@
   </Action>
   <Action name="previous_frame">
     <icon></icon>
-    <text>Move to previous frame</text>
+    <text>Previous frame</text>
     <whatsThis></whatsThis>
     <toolTip>Move to previous frame</toolTip>
     <iconText></iconText>
@@ -3609,7 +3609,7 @@
   </Action>
   <Action name="next_frame">
     <icon></icon>
-    <text>Move to next frame</text>
+    <text>Next frame</text>
     <whatsThis></whatsThis>
     <toolTip>Move to next frame</toolTip>
     <iconText></iconText>
@@ -3671,6 +3671,61 @@
     <shortcut></shortcut>
     <defaultShortcut></defaultShortcut>
     <isCheckable>false</isCheckable>
+    <statusTip></statusTip>
+  </Action>
+  <Action name="previous_keyframe">
+    <icon></icon>
+    <text>Previous Keyframe</text>
+    <whatsThis></whatsThis>
+    <toolTip></toolTip>
+    <iconText></iconText>
+    <shortcut></shortcut>
+    <defaultShortcut></defaultShortcut>
+    <isCheckable>false</isCheckable>
+    <statusTip></statusTip>
+  </Action>
+  <Action name="next_keyframe">
+    <icon></icon>
+    <text>Next Keyframe</text>
+    <whatsThis></whatsThis>
+    <toolTip></toolTip>
+    <iconText></iconText>
+    <shortcut></shortcut>
+    <defaultShortcut></defaultShortcut>
+    <isCheckable>false</isCheckable>
+    <statusTip></statusTip>
+  </Action>
+  <Action name="first_frame">
+    <icon></icon>
+    <text>First Frame</text>
+    <whatsThis></whatsThis>
+    <toolTip></toolTip>
+    <iconText></iconText>
+    <shortcut></shortcut>
+    <defaultShortcut></defaultShortcut>
+    <isCheckable>false</isCheckable>
+    <statusTip></statusTip>
+  </Action>
+  <Action name="last_frame">
+    <icon></icon>
+    <text>Last Frame</text>
+    <whatsThis></whatsThis>
+    <toolTip></toolTip>
+    <iconText></iconText>
+    <shortcut></shortcut>
+    <defaultShortcut></defaultShortcut>
+    <isCheckable>false</isCheckable>
+    <statusTip></statusTip>
+  </Action>
+  <Action name="lazy_frame">
+    <icon></icon>
+    <text>Auto Frame Mode</text>
+    <whatsThis></whatsThis>
+    <toolTip></toolTip>
+    <iconText></iconText>
+    <shortcut></shortcut>
+    <defaultShortcut></defaultShortcut>
+    <isCheckable>true</isCheckable>
     <statusTip></statusTip>
   </Action>
   <Action name="show_tool_options">

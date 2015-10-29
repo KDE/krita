@@ -187,6 +187,8 @@ void AnimationDocker::setMainWindow(KisViewManager *view)
     actionManager->addAction("first_frame", m_firstFrameAction);
     actionManager->addAction("last_frame", m_lastFrameAction);
 
+    actionManager->addAction("lazy_frame", m_lazyFrameAction);
+
     actionManager->addAction("toggle_playback", m_playPauseAction);
     actionManager->addAction("add_blank_frame", m_addBlankFrameAction);
     actionManager->addAction("add_duplicate_frame", m_addDuplicateFrameAction);

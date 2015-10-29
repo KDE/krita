@@ -47,9 +47,14 @@
 struct Q_DECL_HIDDEN KisPaintLayer::Private
 {
 public:
+    Private() : contentChannel(0) {}
+
     KisPaintDeviceSP paintDevice;
     QBitArray        paintChannelFlags;
+
+    // the real pointer is owned by the paint device
     KisRasterKeyframeChannel *contentChannel;
+
     KisSignalAutoConnectionsStore onionSkinConnection;
 };
 

@@ -307,11 +307,10 @@ void TimelineFramesView::currentChanged(const QModelIndex &current, const QModel
 {
     QTableView::currentChanged(current, previous);
 
-    m_d->model->setData(previous, false, TimelineFramesModel::ActiveLayerRole);
-    m_d->model->setData(current, true, TimelineFramesModel::ActiveLayerRole);
-
-    m_d->model->setData(previous, false, TimelineFramesModel::ActiveFrameRole);
-    m_d->model->setData(current, true, TimelineFramesModel::ActiveFrameRole);
+    if (previous.column() != current.column()) {
+        m_d->model->setData(previous, false, TimelineFramesModel::ActiveFrameRole);
+        m_d->model->setData(current, true, TimelineFramesModel::ActiveFrameRole);
+    }
 }
 
 void TimelineFramesView::slotReselectCurrentIndex()
@@ -322,19 +321,7 @@ void TimelineFramesView::slotReselectCurrentIndex()
 
 void TimelineFramesView::slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
-    int selectedRow = -1;
     int selectedColumn = -1;
-
-    for (int i = topLeft.row(); i <= bottomRight.row(); i++) {
-        QVariant value = m_d->model->data(
-            m_d->model->index(i, topLeft.column()),
-            TimelineFramesModel::ActiveLayerRole);
-
-        if (value.isValid() && value.toBool()) {
-            selectedRow = i;
-            break;
-        }
-    }
 
     for (int j = topLeft.column(); j <= bottomRight.column(); j++) {
         QVariant value = m_d->model->data(
@@ -349,26 +336,17 @@ void TimelineFramesView::slotDataChanged(const QModelIndex &topLeft, const QMode
 
     QModelIndex index = currentIndex();
 
-    if (!index.isValid() &&
-        (selectedRow < 0 || selectedColumn < 0)) {
-
+    if (!index.isValid() && selectedColumn < 0) {
         return;
     }
 
-    if (selectedRow == -1) {
-        selectedRow = index.row();
-    }
 
     if (selectedColumn == -1) {
         selectedColumn = index.column();
     }
 
-    if (selectedRow != index.row() ||
-        selectedColumn != index.column()) {
-
-        if (!m_d->dragInProgress) {
-            setCurrentIndex(m_d->model->index(selectedRow, selectedColumn));
-        }
+    if (selectedColumn != index.column() && !m_d->dragInProgress) {
+        setCurrentIndex(m_d->model->index(index.row(), selectedColumn));
     }
 }
 
@@ -456,6 +434,7 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
 
         model()->setData(index, true, TimelineFramesModel::ActiveLayerRole);
         model()->setData(index, true, TimelineFramesModel::ActiveFrameRole);
+        setCurrentIndex(index);
 
         if (model()->data(index, TimelineFramesModel::FrameExistsRole).toBool()) {
             m_d->frameEditingMenu->exec(event->globalPos());

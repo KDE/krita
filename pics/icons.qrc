@@ -4,152 +4,306 @@
 		<file>16_light_align-horizontal-center.svg</file>
 		<file>22_light_align-horizontal-center.svg</file>
 		<file>24_light_align-horizontal-center.svg</file>
+		<file>16_dark_align-horizontal-center.svg</file>
+		<file>22_dark_align-horizontal-center.svg</file>
+		<file>24_dark_align-horizontal-center.svg</file>
 		<file>16_light_align-horizontal-left.svg</file>
 		<file>22_light_align-horizontal-left.svg</file>
 		<file>24_light_align-horizontal-left.svg</file>
+		<file>16_dark_align-horizontal-left.svg</file>
+		<file>22_dark_align-horizontal-left.svg</file>
+		<file>24_dark_align-horizontal-left.svg</file>
 		<file>16_light_align-horizontal-right.svg</file>
 		<file>22_light_align-horizontal-right.svg</file>
 		<file>24_light_align-horizontal-right.svg</file>
+		<file>16_dark_align-horizontal-right.svg</file>
+		<file>22_dark_align-horizontal-right.svg</file>
+		<file>24_dark_align-horizontal-right.svg</file>
 		<file>16_light_align-vertical-bottom.svg</file>
 		<file>22_light_align-vertical-bottom.svg</file>
 		<file>24_light_align-vertical-bottom.svg</file>
+		<file>16_dark_align-vertical-bottom.svg</file>
+		<file>22_dark_align-vertical-bottom.svg</file>
+		<file>24_dark_align-vertical-bottom.svg</file>
 		<file>16_light_align-vertical-center.svg</file>
 		<file>22_light_align-vertical-center.svg</file>
 		<file>24_light_align-vertical-center.svg</file>
+		<file>16_dark_align-vertical-center.svg</file>
+		<file>22_dark_align-vertical-center.svg</file>
+		<file>24_dark_align-vertical-center.svg</file>
 		<file>16_light_align-vertical-top.svg</file>
 		<file>22_light_align-vertical-top.svg</file>
 		<file>24_light_align-vertical-top.svg</file>
+		<file>16_dark_align-vertical-top.svg</file>
+		<file>22_dark_align-vertical-top.svg</file>
+		<file>24_dark_align-vertical-top.svg</file>
 		<file>16_light_application-x-krita.svg</file>
 		<file>22_light_application-x-krita.svg</file>
 		<file>32_light_application-x-krita.svg</file>
 		<file>64_light_application-x-krita.svg</file>
+		<file>16_dark_application-x-krita.svg</file>
+		<file>22_dark_application-x-krita.svg</file>
+		<file>32_dark_application-x-krita.svg</file>
+		<file>64_dark_application-x-krita.svg</file>
 		<file>16_light_application-x-wmf.svg</file>
 		<file>22_light_application-x-wmf.svg</file>
 		<file>32_light_application-x-wmf.svg</file>
 		<file>64_light_application-x-wmf.svg</file>
+		<file>16_dark_application-x-wmf.svg</file>
+		<file>22_dark_application-x-wmf.svg</file>
+		<file>32_dark_application-x-wmf.svg</file>
+		<file>64_dark_application-x-wmf.svg</file>
 		<file>48_light_calligrakrita.svg</file>
+		<file>48_dark_calligrakrita.svg</file>
 		<file>16_light_character-set.svg</file>
 		<file>22_light_character-set.svg</file>
 		<file>24_light_character-set.svg</file>
+		<file>16_dark_character-set.svg</file>
+		<file>22_dark_character-set.svg</file>
+		<file>24_dark_character-set.svg</file>
 		<file>16_light_draw-arrow-back.svg</file>
 		<file>22_light_draw-arrow-back.svg</file>
 		<file>24_light_draw-arrow-back.svg</file>
+		<file>16_dark_draw-arrow-back.svg</file>
+		<file>22_dark_draw-arrow-back.svg</file>
+		<file>24_dark_draw-arrow-back.svg</file>
 		<file>16_light_draw-arrow-down.svg</file>
 		<file>22_light_draw-arrow-down.svg</file>
 		<file>24_light_draw-arrow-down.svg</file>
+		<file>16_dark_draw-arrow-down.svg</file>
+		<file>22_dark_draw-arrow-down.svg</file>
+		<file>24_dark_draw-arrow-down.svg</file>
 		<file>16_light_draw-arrow-forward.svg</file>
 		<file>22_light_draw-arrow-forward.svg</file>
 		<file>24_light_draw-arrow-forward.svg</file>
+		<file>16_dark_draw-arrow-forward.svg</file>
+		<file>22_dark_draw-arrow-forward.svg</file>
+		<file>24_dark_draw-arrow-forward.svg</file>
 		<file>16_light_draw-arrow-up.svg</file>
 		<file>22_light_draw-arrow-up.svg</file>
 		<file>24_light_draw-arrow-up.svg</file>
+		<file>16_dark_draw-arrow-up.svg</file>
+		<file>22_dark_draw-arrow-up.svg</file>
+		<file>24_dark_draw-arrow-up.svg</file>
 		<file>16_light_draw-freehand.svg</file>
 		<file>22_light_draw-freehand.svg</file>
 		<file>24_light_draw-freehand.svg</file>
+		<file>16_dark_draw-freehand.svg</file>
+		<file>22_dark_draw-freehand.svg</file>
+		<file>24_dark_draw-freehand.svg</file>
 		<file>16_light_edit-rename.svg</file>
 		<file>22_light_edit-rename.svg</file>
 		<file>24_light_edit-rename.svg</file>
+		<file>16_dark_edit-rename.svg</file>
+		<file>22_dark_edit-rename.svg</file>
+		<file>24_dark_edit-rename.svg</file>
 		<file>16_light_edit-select-all.svg</file>
 		<file>22_light_edit-select-all.svg</file>
 		<file>24_light_edit-select-all.svg</file>
+		<file>16_dark_edit-select-all.svg</file>
+		<file>22_dark_edit-select-all.svg</file>
+		<file>24_dark_edit-select-all.svg</file>
 		<file>16_light_format-indent-less.svg</file>
 		<file>22_light_format-indent-less.svg</file>
 		<file>24_light_format-indent-less.svg</file>
+		<file>16_dark_format-indent-less.svg</file>
+		<file>22_dark_format-indent-less.svg</file>
+		<file>24_dark_format-indent-less.svg</file>
 		<file>16_light_format-indent-more.svg</file>
 		<file>22_light_format-indent-more.svg</file>
 		<file>24_light_format-indent-more.svg</file>
+		<file>16_dark_format-indent-more.svg</file>
+		<file>22_dark_format-indent-more.svg</file>
+		<file>24_dark_format-indent-more.svg</file>
 		<file>16_light_format-justify-center.svg</file>
 		<file>22_light_format-justify-center.svg</file>
 		<file>24_light_format-justify-center.svg</file>
+		<file>16_dark_format-justify-center.svg</file>
+		<file>22_dark_format-justify-center.svg</file>
+		<file>24_dark_format-justify-center.svg</file>
 		<file>16_light_format-justify-fill.svg</file>
 		<file>22_light_format-justify-fill.svg</file>
 		<file>24_light_format-justify-fill.svg</file>
+		<file>16_dark_format-justify-fill.svg</file>
+		<file>22_dark_format-justify-fill.svg</file>
+		<file>24_dark_format-justify-fill.svg</file>
 		<file>16_light_format-justify-left.svg</file>
 		<file>22_light_format-justify-left.svg</file>
 		<file>24_light_format-justify-left.svg</file>
+		<file>16_dark_format-justify-left.svg</file>
+		<file>22_dark_format-justify-left.svg</file>
+		<file>24_dark_format-justify-left.svg</file>
 		<file>16_light_format-justify-right.svg</file>
 		<file>22_light_format-justify-right.svg</file>
 		<file>24_light_format-justify-right.svg</file>
+		<file>16_dark_format-justify-right.svg</file>
+		<file>22_dark_format-justify-right.svg</file>
+		<file>24_dark_format-justify-right.svg</file>
 		<file>16_light_format-list-ordered.svg</file>
 		<file>22_light_format-list-ordered.svg</file>
 		<file>24_light_format-list-ordered.svg</file>
+		<file>16_dark_format-list-ordered.svg</file>
+		<file>22_dark_format-list-ordered.svg</file>
+		<file>24_dark_format-list-ordered.svg</file>
 		<file>16_light_format-stroke-color.svg</file>
 		<file>22_light_format-stroke-color.svg</file>
 		<file>24_light_format-stroke-color.svg</file>
+		<file>16_dark_format-stroke-color.svg</file>
+		<file>22_dark_format-stroke-color.svg</file>
+		<file>24_dark_format-stroke-color.svg</file>
 		<file>16_light_format-text-bold.svg</file>
 		<file>22_light_format-text-bold.svg</file>
 		<file>24_light_format-text-bold.svg</file>
+		<file>16_dark_format-text-bold.svg</file>
+		<file>22_dark_format-text-bold.svg</file>
+		<file>24_dark_format-text-bold.svg</file>
 		<file>16_light_format-text-color.svg</file>
 		<file>22_light_format-text-color.svg</file>
 		<file>24_light_format-text-color.svg</file>
+		<file>16_dark_format-text-color.svg</file>
+		<file>22_dark_format-text-color.svg</file>
+		<file>24_dark_format-text-color.svg</file>
 		<file>16_light_format-text-direction-rtl.svg</file>
 		<file>22_light_format-text-direction-rtl.svg</file>
 		<file>24_light_format-text-direction-rtl.svg</file>
+		<file>16_dark_format-text-direction-rtl.svg</file>
+		<file>22_dark_format-text-direction-rtl.svg</file>
+		<file>24_dark_format-text-direction-rtl.svg</file>
 		<file>16_light_format-text-italic.svg</file>
 		<file>22_light_format-text-italic.svg</file>
 		<file>24_light_format-text-italic.svg</file>
+		<file>16_dark_format-text-italic.svg</file>
+		<file>22_dark_format-text-italic.svg</file>
+		<file>24_dark_format-text-italic.svg</file>
 		<file>16_light_format-text-strikethrough.svg</file>
 		<file>22_light_format-text-strikethrough.svg</file>
 		<file>24_light_format-text-strikethrough.svg</file>
+		<file>16_dark_format-text-strikethrough.svg</file>
+		<file>22_dark_format-text-strikethrough.svg</file>
+		<file>24_dark_format-text-strikethrough.svg</file>
 		<file>16_light_format-text-subscript.svg</file>
 		<file>22_light_format-text-subscript.svg</file>
 		<file>24_light_format-text-subscript.svg</file>
+		<file>16_dark_format-text-subscript.svg</file>
+		<file>22_dark_format-text-subscript.svg</file>
+		<file>24_dark_format-text-subscript.svg</file>
 		<file>16_light_format-text-superscript.svg</file>
 		<file>22_light_format-text-superscript.svg</file>
 		<file>24_light_format-text-superscript.svg</file>
+		<file>16_dark_format-text-superscript.svg</file>
+		<file>22_dark_format-text-superscript.svg</file>
+		<file>24_dark_format-text-superscript.svg</file>
 		<file>16_light_format-text-underline.svg</file>
 		<file>22_light_format-text-underline.svg</file>
 		<file>24_light_format-text-underline.svg</file>
+		<file>16_dark_format-text-underline.svg</file>
+		<file>22_dark_format-text-underline.svg</file>
+		<file>24_dark_format-text-underline.svg</file>
 		<file>16_light_insert-text.svg</file>
 		<file>22_light_insert-text.svg</file>
 		<file>24_light_insert-text.svg</file>
+		<file>16_dark_insert-text.svg</file>
+		<file>22_dark_insert-text.svg</file>
+		<file>24_dark_insert-text.svg</file>
 		<file>48_light_klipper.svg</file>
+		<file>48_dark_klipper.svg</file>
 		<file>16_light_list-remove.svg</file>
 		<file>22_light_list-remove.svg</file>
 		<file>24_light_list-remove.svg</file>
+		<file>16_dark_list-remove.svg</file>
+		<file>22_dark_list-remove.svg</file>
+		<file>24_dark_list-remove.svg</file>
 		<file>16_light_media-floppy.svg</file>
 		<file>22_light_media-floppy.svg</file>
+		<file>16_dark_media-floppy.svg</file>
+		<file>22_dark_media-floppy.svg</file>
 		<file>16_light_object-align-horizontal-center-calligra.svg</file>
 		<file>22_light_object-align-horizontal-center-calligra.svg</file>
+		<file>16_dark_object-align-horizontal-center-calligra.svg</file>
+		<file>22_dark_object-align-horizontal-center-calligra.svg</file>
 		<file>16_light_object-align-horizontal-left-calligra.svg</file>
 		<file>22_light_object-align-horizontal-left-calligra.svg</file>
+		<file>16_dark_object-align-horizontal-left-calligra.svg</file>
+		<file>22_dark_object-align-horizontal-left-calligra.svg</file>
 		<file>16_light_object-align-vertical-top-calligra.svg</file>
 		<file>22_light_object-align-vertical-top-calligra.svg</file>
+		<file>16_dark_object-align-vertical-top-calligra.svg</file>
+		<file>22_dark_object-align-vertical-top-calligra.svg</file>
 		<file>16_light_object-group-calligra.svg</file>
 		<file>22_light_object-group-calligra.svg</file>
+		<file>16_dark_object-group-calligra.svg</file>
+		<file>22_dark_object-group-calligra.svg</file>
 		<file>16_light_shape-choose.svg</file>
 		<file>22_light_shape-choose.svg</file>
+		<file>16_dark_shape-choose.svg</file>
+		<file>22_dark_shape-choose.svg</file>
 		<file>16_light_snap-extension.svg</file>
 		<file>22_light_snap-extension.svg</file>
 		<file>24_light_snap-extension.svg</file>
+		<file>16_dark_snap-extension.svg</file>
+		<file>22_dark_snap-extension.svg</file>
+		<file>24_dark_snap-extension.svg</file>
 		<file>16_light_snap-guideline.svg</file>
 		<file>22_light_snap-guideline.svg</file>
 		<file>24_light_snap-guideline.svg</file>
+		<file>16_dark_snap-guideline.svg</file>
+		<file>22_dark_snap-guideline.svg</file>
+		<file>24_dark_snap-guideline.svg</file>
 		<file>16_light_snap-intersection.svg</file>
 		<file>22_light_snap-intersection.svg</file>
 		<file>24_light_snap-intersection.svg</file>
+		<file>16_dark_snap-intersection.svg</file>
+		<file>22_dark_snap-intersection.svg</file>
+		<file>24_dark_snap-intersection.svg</file>
 		<file>16_light_snap-node.svg</file>
 		<file>22_light_snap-node.svg</file>
 		<file>24_light_snap-node.svg</file>
+		<file>16_dark_snap-node.svg</file>
+		<file>22_dark_snap-node.svg</file>
+		<file>24_dark_snap-node.svg</file>
 		<file>22_light_snap-orthogonal.svg</file>
 		<file>24_light_snap-orthogonal.svg</file>
+		<file>22_dark_snap-orthogonal.svg</file>
+		<file>24_dark_snap-orthogonal.svg</file>
 		<file>16_light_split.svg</file>
 		<file>22_light_split.svg</file>
 		<file>24_light_split.svg</file>
+		<file>16_dark_split.svg</file>
+		<file>22_dark_split.svg</file>
+		<file>24_dark_split.svg</file>
 		<file>16_light_tab-close.svg</file>
 		<file>22_light_tab-close.svg</file>
 		<file>24_light_tab-close.svg</file>
+		<file>16_dark_tab-close.svg</file>
+		<file>22_dark_tab-close.svg</file>
+		<file>24_dark_tab-close.svg</file>
 		<file>16_light_tab-new.svg</file>
 		<file>22_light_tab-new.svg</file>
 		<file>24_light_tab-new.svg</file>
+		<file>16_dark_tab-new.svg</file>
+		<file>22_dark_tab-new.svg</file>
+		<file>24_dark_tab-new.svg</file>
 		<file>16_light_transform-move.svg</file>
 		<file>22_light_transform-move.svg</file>
 		<file>24_light_transform-move.svg</file>
+		<file>16_dark_transform-move.svg</file>
+		<file>22_dark_transform-move.svg</file>
+		<file>24_dark_transform-move.svg</file>
 		<file>16_light_trash-empty.svg</file>
 		<file>22_light_trash-empty.svg</file>
 		<file>24_light_trash-empty.svg</file>
+		<file>16_dark_trash-empty.svg</file>
+		<file>22_dark_trash-empty.svg</file>
+		<file>24_dark_trash-empty.svg</file>
 		<file>16_light_zoom-fit-best.svg</file>
 		<file>22_light_zoom-fit-best.svg</file>
 		<file>24_light_zoom-fit-best.svg</file>
+		<file>16_dark_zoom-fit-best.svg</file>
+		<file>22_dark_zoom-fit-best.svg</file>
+		<file>24_dark_zoom-fit-best.svg</file>
+		<file>16_light_media-floppy.svg</file>
+		<file>22_light_media-floppy.svg</file>
+		<file>16_dark_media-floppy.svg</file>
+		<file>22_dark_media-floppy.svg</file>
 	</qresource>
 </RCC>

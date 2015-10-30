@@ -118,10 +118,12 @@ KisImportExportFilter::ConversionStatus KisODGImport::convert(const QByteArray& 
     if (master) {
         const KoXmlElement *style = odfStore.styles().findStyle(
                                         master->attributeNS(KoXmlNS::style, "page-layout-name", QString()));
-        KoPageLayout pageLayout;
-        pageLayout.loadOdf(*style);
-        width = pageLayout.width;
-        height = pageLayout.height;
+        if (style) {
+            KoPageLayout pageLayout;
+            pageLayout.loadOdf(*style);
+            width = pageLayout.width;
+            height = pageLayout.height;
+        }
     }
     // We work fine without a master page
 

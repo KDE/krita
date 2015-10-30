@@ -24,7 +24,6 @@
 #include "kis_canvas_widget_base.h"
 #include "kis_ui_types.h"
 
-class QImage;
 class QPaintEvent;
 class KisCanvas2;
 class KisDisplayColorConverter;
@@ -90,8 +89,6 @@ private Q_SLOTS:
     void slotConfigChanged();
 
 private:
-    QImage m_buffer;
-
     class Private;
     Private * const m_d;
 };

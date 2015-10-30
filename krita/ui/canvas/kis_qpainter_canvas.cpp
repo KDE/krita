@@ -66,6 +66,7 @@ class KisQPainterCanvas::Private
 public:
     KisPrescaledProjectionSP prescaledProjection;
     QBrush checkBrush;
+    QImage buffer;
 };
 
 KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget * parent)
@@ -101,11 +102,11 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
 
     setAutoFillBackground(false);
 
-    if (m_buffer.size() != size()) {
-        m_buffer = QImage(size(), QImage::Format_ARGB32_Premultiplied);
+    if (m_d->buffer.size() != size()) {
+        m_d->buffer = QImage(size(), QImage::Format_ARGB32_Premultiplied);
     }
 
-    QPainter gc(&m_buffer);
+    QPainter gc(&m_d->buffer);
 
     // we double buffer, so we paint on an image first, then from the image onto the canvas,
     // so copy the clip region since otherwise we're filling the whole buffer every time with
@@ -143,7 +144,7 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
     gc.end();
 
     QPainter painter(this);
-    painter.drawImage(ev->rect(), m_buffer, ev->rect());
+    painter.drawImage(ev->rect(), m_d->buffer, ev->rect());
 }
 
 void KisQPainterCanvas::drawImage(QPainter & gc, const QRect &updateWidgetRect) const

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <Actions version="2" name="KisToolPerspectiveGrid">
   <Action name="reset_fg_bg">
     <iconText>Reset Foreground and Background Color</iconText>

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <Actions version="2" name="PathToolFactoryId">
   <Action name="convert-to-path">
     <iconText>To Path</iconText>

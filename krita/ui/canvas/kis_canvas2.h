@@ -74,8 +74,6 @@ public:
 
     virtual ~KisCanvas2();
 
-    void setup(KisShapeController *kritaShapeController, KisView *view);
-
     void notifyZoomChanged();
 
     virtual void disconnectCanvasObserver(QObject *object);
@@ -262,8 +260,14 @@ private:
 
     void notifyLevelOfDetailChange();
 
-private:
+    // Completes construction of canvas.
+    // To be called by KisView in its constructor, once it has been setup enough
+    // (to be defined what that means) for things KisCanvas2 expects from KisView
+    // TODO: see to avoid that
+    void setup();
 
+private:
+    friend class KisView; // calls setup()
     class KisCanvas2Private;
     KisCanvas2Private * const m_d;
 };

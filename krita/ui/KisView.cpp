@@ -229,7 +229,7 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
                 this, SLOT(slotClearStatusText()));
     }
 
-    d->canvas.setup(static_cast<KisShapeController*>(document->shapeController()), this);
+    d->canvas.setup();
 
     KisConfig cfg;
 

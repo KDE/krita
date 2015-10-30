@@ -37,6 +37,7 @@
 #include <KoCanvasControllerWidget.h>
 #include <KisDocument.h>
 #include <KoSelection.h>
+#include <KoShapeController.h>
 
 #include "kis_tool_proxy.h"
 #include "kis_coordinates_converter.h"
@@ -144,7 +145,7 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
 
 }
 
-void KisCanvas2::setup(KisShapeController *kritaShapeController, KisView *view)
+void KisCanvas2::setup()
 {
     // a bit of duplication from slotConfigChanged()
     KisConfig cfg;
@@ -157,7 +158,7 @@ void KisCanvas2::setup(KisShapeController *kritaShapeController, KisView *view)
 
     m_d->animationPlayer = new KisAnimationPlayer(this);
 
-    connect(view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved(QPoint)));
+    connect(m_d->view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved(QPoint)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
 
     /**
@@ -175,6 +176,7 @@ void KisCanvas2::setup(KisShapeController *kritaShapeController, KisView *view)
      * globalShapeManager.selection()
      */
 
+    KisShapeController *kritaShapeController = static_cast<KisShapeController*>(shapeController()->documentBase());
     connect(kritaShapeController, SIGNAL(selectionChanged()),
             this, SLOT(slotSelectionChanged()));
     connect(kritaShapeController, SIGNAL(selectionContentChanged()),

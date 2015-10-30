@@ -318,7 +318,7 @@ void KisSketchView::documentChanged()
     d->viewManager->setCurrentView(view);
     KisCanvasController *controller = static_cast<KisCanvasController*>(d->canvas->canvasController());
 
-    connect(d->view, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));
+    connect(d->viewManager, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));
     
     controller->setGeometry(x(), y(), width(), height());
     d->view->hide();

@@ -94,7 +94,7 @@ KisShortcutsDialog::KisShortcutsDialog(KisShortcutsEditor::ActionTypes types,
 KisShortcutsDialog::~KisShortcutsDialog()
 {
     KConfigGroup group(KSharedConfig::openConfig(), "KisShortcutsDialog Settings");
-    group.writeEntry("Dialog Size", size(), KConfigGroup::Persistent | KConfigGroup::Global);
+    group.writeEntry("Dialog Size", size());
     delete d;
 }
 

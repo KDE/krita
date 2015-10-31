@@ -50,6 +50,8 @@ public:
     /// reimplemented
     virtual void mouseReleaseEvent( KoPointerEvent *event );
     /// reimplemented
+    virtual void shortcutOverrideEvent(QKeyEvent *event);
+    /// reimplemented
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
     /// reimplemented
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);

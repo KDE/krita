@@ -62,6 +62,15 @@
 
 const int BlinkInterval = 500;
 
+static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut shortcut)
+{
+    foreach (const QKeySequence & ks, KStandardShortcut::shortcut(shortcut).toList()) {
+        if (input == ks)
+            return true;
+    }
+    return false;
+}
+
 ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
     : KoToolBase(canvas), m_selection(canvas, this), m_currentShape(0), m_hoverText(0), m_hoverPath(0), m_hoverHandle(false)
     , m_textCursor( -1 ), m_showCursor( true ), m_currentStrategy(0)
@@ -327,6 +336,15 @@ void ArtisticTextTool::mouseReleaseEvent( KoPointerEvent *event )
         m_currentStrategy = 0;
     }
     updateActions();
+}
+
+void ArtisticTextTool::shortcutOverrideEvent(QKeyEvent *event)
+{
+    QKeySequence item(event->key() | ((Qt::ControlModifier | Qt::AltModifier) & event->modifiers()));
+    if (hit(item, KStandardShortcut::Begin) ||
+        hit(item, KStandardShortcut::End)) {
+        event->accept();
+    }
 }
 
 void ArtisticTextTool::mouseDoubleClickEvent(KoPointerEvent */*event*/)

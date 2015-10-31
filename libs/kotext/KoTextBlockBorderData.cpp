@@ -25,7 +25,7 @@
 #include "TextDebug.h"
 
 struct Edge {
-    Edge() : distance(0.0) { }
+    Edge() : distance(0.0) { innerPen.setWidthF(0.); outerPen.setWidthF(0.); }
     QPen innerPen;
     QPen outerPen;
     qreal distance;

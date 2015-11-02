@@ -118,12 +118,6 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->layersHeader->setMinimumWidth(60);
     m_d->layersHeader->setHighlightSections(true);
 
-#if QT_VERSION < 0x050000
-    m_d->layersHeader->setClickable(true);
-#else
-    m_d->layersHeader->setSectionsClickable(true);
-#endif
-
     this->setVerticalHeader(m_d->layersHeader);
 
     connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), SLOT(slotUpdateInfiniteFramesCount()));

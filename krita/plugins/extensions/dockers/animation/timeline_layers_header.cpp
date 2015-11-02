@@ -44,7 +44,6 @@ TimelineLayersHeader::TimelineLayersHeader(QWidget *parent)
    : QHeaderView(Qt::Vertical, parent),
      m_d(new Private(this))
 {
-    connect(this, SIGNAL(sectionPressed(int)), SLOT(slotActivateSection(int)));
 }
 
 TimelineLayersHeader::~TimelineLayersHeader()
@@ -211,6 +210,8 @@ void TimelineLayersHeader::mousePressEvent(QMouseEvent *e)
             model()->setHeaderData(logical, orientation(), true, TimelineFramesModel::ActiveLayerRole);
             emit sigRequestContextMenu(e->globalPos());
             return;
+        } else if (e->button() == Qt::LeftButton) {
+            slotActivateSection(logical);
         }
     }
 

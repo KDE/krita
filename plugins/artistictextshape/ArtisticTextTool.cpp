@@ -64,7 +64,7 @@ const int BlinkInterval = 500;
 
 static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut shortcut)
 {
-    foreach (const QKeySequence & ks, KStandardShortcut::shortcut(shortcut).toList()) {
+    foreach (const QKeySequence & ks, KStandardShortcut::shortcut(shortcut)) {
         if (input == ks)
             return true;
     }

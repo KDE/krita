@@ -104,7 +104,8 @@ namespace KisAnimationUtils {
 
     bool moveKeyframes(KisImageSP image,
                        const FrameItemList &srcFrames,
-                       const FrameItemList &dstFrames) {
+                       const FrameItemList &dstFrames,
+                       bool copy) {
 
         if (srcFrames.size() != dstFrames.size()) return false;
 
@@ -136,7 +137,11 @@ namespace KisAnimationUtils {
 
             KisKeyframeSP srcKeyframe = content->keyframeAt(srcTime);
             if (srcKeyframe) {
-                content->moveKeyframe(srcKeyframe, dstTime, cmd.data());
+                if (copy) {
+                    content->copyKeyframe(srcKeyframe, dstTime, cmd.data());
+                } else {
+                    content->moveKeyframe(srcKeyframe, dstTime, cmd.data());
+                }
             }
 
             result = true;

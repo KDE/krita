@@ -40,7 +40,8 @@ namespace KisAnimationUtils
     bool removeKeyframe(KisImageSP image, KisNodeSP node, int time);
     bool moveKeyframes(KisImageSP image,
                        const FrameItemList &srcFrames,
-                       const FrameItemList &dstFrames);
+                       const FrameItemList &dstFrames,
+                       bool copy = false);
     bool moveKeyframe(KisImageSP image, KisNodeSP node, int srcTime, int dstTime);
 
 

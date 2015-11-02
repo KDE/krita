@@ -522,12 +522,12 @@ bool TimelineFramesModel::setHeaderData(int section, Qt::Orientation orientation
 
 Qt::DropActions TimelineFramesModel::supportedDragActions() const
 {
-    return Qt::MoveAction;
+    return Qt::MoveAction | Qt::CopyAction;
 }
 
 Qt::DropActions TimelineFramesModel::supportedDropActions() const
 {
-    return Qt::MoveAction;
+    return Qt::MoveAction | Qt::CopyAction;
 }
 
 QStringList TimelineFramesModel::mimeTypes() const
@@ -590,7 +590,12 @@ bool TimelineFramesModel::dropMimeData(const QMimeData *data, Qt::DropAction act
 
     bool result = false;
 
-    if (action != Qt::MoveAction || !parent.isValid()) return result;
+    qDebug() << ppVar((action == Qt::MoveAction)) << ppVar((action == Qt::CopyAction));
+
+    if ((action != Qt::MoveAction &&
+         action != Qt::CopyAction) || !parent.isValid()) return result;
+
+    const bool copyFrames = action == Qt::CopyAction;
 
     QByteArray encoded = data->data("application/x-krita-frame");
     QDataStream stream(&encoded, QIODevice::ReadOnly);
@@ -622,11 +627,18 @@ bool TimelineFramesModel::dropMimeData(const QMimeData *data, Qt::DropAction act
 
         srcFrameItems << KisAnimationUtils::FrameItem(srcDummy->node(), srcColumn);
         dstFrameItems << KisAnimationUtils::FrameItem(dstDummy->node(), dstColumn);
-        updateIndexes << index(srcRow, srcColumn);
+
+        if (!copyFrames) {
+            updateIndexes << index(srcRow, srcColumn);
+        }
+
         updateIndexes << index(dstRow, dstColumn);
     }
 
-    result = KisAnimationUtils::moveKeyframes(m_d->image, srcFrameItems, dstFrameItems);
+    result = KisAnimationUtils::moveKeyframes(m_d->image,
+                                              srcFrameItems,
+                                              dstFrameItems,
+                                              copyFrames);
 
     foreach (const QModelIndex &index, updateIndexes) {
         emit dataChanged(index, index);
@@ -646,9 +658,14 @@ Qt::ItemFlags TimelineFramesModel::flags(const QModelIndex &index) const
 
             flags |= Qt::ItemIsDragEnabled;
         }
-    } else {
-        flags |= Qt::ItemIsDropEnabled;
     }
+
+    /**
+     * Basically we should forbid overrides only if we D&D a single frame
+     * and allow it when we D&D multiple frames. But we cannot distinguish
+     * it here... So allow all the time.
+     */
+    flags |= Qt::ItemIsDropEnabled;
 
     return flags;
 }

@@ -90,9 +90,10 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     setItemDelegate(new TimelineFramesItemDelegate(this));
 
     setDragEnabled(true);
-    setDragDropMode(QAbstractItemView::InternalMove);
+    setDragDropMode(QAbstractItemView::DragDrop);
     setAcceptDrops(true);
     setDropIndicatorShown(true);
+    setDefaultDropAction(Qt::MoveAction);
 
     m_d->horizontalRuler = new TimelineRulerHeader(this);
 

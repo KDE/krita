@@ -50,6 +50,7 @@ namespace KisAnimationUtils
     extern const QString removeFrameActionName;
     extern const QString removeFramesActionName;
     extern const QString lazyFrameCreationActionName;
+    extern const QString showLayerActionName;
 };
 
 #endif /* __KIS_ANIMATION_UTILS_H */

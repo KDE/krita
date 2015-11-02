@@ -489,6 +489,11 @@ QVariant TimelineFramesModel::headerData(int section, Qt::Orientation orientatio
 
             return QVariant::fromValue(list);
         }
+        case LayerUsedInTimelineRole: {
+            KisNodeDummy *dummy = m_d->converter->dummyFromRow(section);
+            if (!dummy) return QVariant();
+            return dummy->node()->useInTimeline();
+        }
         }
     }
 
@@ -513,6 +518,12 @@ bool TimelineFramesModel::setHeaderData(int section, Qt::Orientation orientation
             int result = m_d->setLayerProperties(section, props);
             emit headerDataChanged (Qt::Vertical, section, section);
             return result;
+        }
+        case LayerUsedInTimelineRole: {
+            KisNodeDummy *dummy = m_d->converter->dummyFromRow(section);
+            if (!dummy) return false;
+            dummy->node()->setUseInTimeline(value.toBool());
+            return true;
         }
         }
     }
@@ -709,14 +720,9 @@ bool TimelineFramesModel::insertOtherLayer(int index, int dstRow)
     return true;
 }
 
-bool TimelineFramesModel::hideLayer(int row)
+int TimelineFramesModel::activeLayerRow() const
 {
-    KisNodeDummy *dummy = m_d->converter->dummyFromRow(row);
-    if (!dummy) return false;
-
-    dummy->node()->setUseInTimeline(false);
-
-    return true;
+    return m_d->activeLayerIndex;
 }
 
 bool TimelineFramesModel::createFrame(const QModelIndex &dstIndex)

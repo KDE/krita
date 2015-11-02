@@ -47,7 +47,7 @@ public:
 
     bool canDropFrameData(const QMimeData *data, const QModelIndex &index);
     bool insertOtherLayer(int index, int dstRow);
-    bool hideLayer(int row);
+    int activeLayerRow() const;
 
     bool createFrame(const QModelIndex &dstIndex);
     bool copyFrame(const QModelIndex &dstIndex);
@@ -85,7 +85,8 @@ public:
         TimelinePropertiesRole,
         OtherLayersRole,
         FrameEditableRole,
-        FramesPerSecondRole
+        FramesPerSecondRole,
+        LayerUsedInTimelineRole
     };
 
     // metatype is added by the original implementation

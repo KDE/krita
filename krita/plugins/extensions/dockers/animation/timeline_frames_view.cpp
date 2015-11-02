@@ -65,6 +65,7 @@ struct TimelineFramesView::Private
     QPoint startZoomPanDragPos;
 
     QToolButton *addLayersButton;
+    QAction *showHideLayerAction;
     QMenu *layerEditingMenu;
     QMenu *existingLayersMenu;
 
@@ -133,7 +134,8 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->layerEditingMenu->addAction("New Layer", this, SLOT(slotAddNewLayer()));
     m_d->existingLayersMenu = m_d->layerEditingMenu->addMenu("Add Existing Layer");
     m_d->layerEditingMenu->addSeparator();
-    m_d->layerEditingMenu->addAction("Hide from Timeline", this, SLOT(slotHideLayerFromTimeline()));
+    m_d->showHideLayerAction = m_d->layerEditingMenu->addAction(KisAnimationUtils::showLayerActionName, this, SLOT(slotHideLayerFromTimeline()));
+    m_d->showHideLayerAction->setCheckable(true);
     m_d->layerEditingMenu->addAction("Remove Layer", this, SLOT(slotRemoveLayer()));
 
     connect(m_d->existingLayersMenu, SIGNAL(aboutToShow()), SLOT(slotUpdateLayersMenu()));
@@ -511,6 +513,10 @@ void TimelineFramesView::slotUpdateLayersMenu()
 
 void TimelineFramesView::slotLayerContextMenuRequested(const QPoint &globalPos)
 {
+    const int row = m_d->model->activeLayerRow();
+    const bool status = m_d->model->headerData(row, Qt::Vertical, TimelineFramesModel::LayerUsedInTimelineRole).toBool();
+
+    m_d->showHideLayerAction->setChecked(status);
     m_d->layerEditingMenu->exec(globalPos);
 }
 
@@ -543,10 +549,9 @@ void TimelineFramesView::slotRemoveLayer()
 
 void TimelineFramesView::slotHideLayerFromTimeline()
 {
-    QModelIndex index = currentIndex();
-    if (!index.isValid()) return;
-
-    m_d->model->hideLayer(index.row());
+    const int row = m_d->model->activeLayerRow();
+    const bool status = m_d->model->headerData(row, Qt::Vertical, TimelineFramesModel::LayerUsedInTimelineRole).toBool();
+    m_d->model->setHeaderData(row, Qt::Vertical, !status, TimelineFramesModel::LayerUsedInTimelineRole);
 }
 
 void TimelineFramesView::slotNewFrame()

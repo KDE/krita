@@ -71,6 +71,9 @@ struct TimelineFramesView::Private
     QMenu *frameCreationMenu;
     QMenu *frameEditingMenu;
 
+    QMenu *multipleFrameEditingMenu;
+
+
     KisDraggableToolButton *zoomDragButton;
 
     bool dragInProgress;
@@ -82,7 +85,7 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
 {
     setCornerButtonEnabled(false);
     setSelectionBehavior(QAbstractItemView::SelectItems);
-    setSelectionMode(QAbstractItemView::SingleSelection);
+    setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     setItemDelegate(new TimelineFramesItemDelegate(this));
 
@@ -152,6 +155,8 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->frameEditingMenu = new QMenu(this);
     m_d->frameEditingMenu->addAction(KisAnimationUtils::removeFrameActionName, this, SLOT(slotRemoveFrame()));
 
+    m_d->multipleFrameEditingMenu = new QMenu(this);
+    m_d->multipleFrameEditingMenu->addAction(KisAnimationUtils::removeFramesActionName, this, SLOT(slotRemoveFrame()));
 
     m_d->zoomDragButton = new KisDraggableToolButton(this);
     m_d->zoomDragButton->setAutoRaise(true);
@@ -428,21 +433,32 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
         }
         event->accept();
 
-    } else if (index.isValid() &&
-        event->button() == Qt::RightButton &&
-        m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
+    } else if (event->button() == Qt::RightButton) {
 
-        model()->setData(index, true, TimelineFramesModel::ActiveLayerRole);
-        model()->setData(index, true, TimelineFramesModel::ActiveFrameRole);
-        setCurrentIndex(index);
+        int numSelectedItems = selectionModel()->selectedIndexes().size();
 
-        if (model()->data(index, TimelineFramesModel::FrameExistsRole).toBool()) {
-            m_d->frameEditingMenu->exec(event->globalPos());
-        } else {
-            m_d->frameCreationMenu->exec(event->globalPos());
+        if (index.isValid() &&
+            numSelectedItems <= 1 &&
+            m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
+
+            model()->setData(index, true, TimelineFramesModel::ActiveLayerRole);
+            model()->setData(index, true, TimelineFramesModel::ActiveFrameRole);
+            setCurrentIndex(index);
+
+            if (model()->data(index, TimelineFramesModel::FrameExistsRole).toBool()) {
+                m_d->frameEditingMenu->exec(event->globalPos());
+            } else {
+                m_d->frameCreationMenu->exec(event->globalPos());
+            }
+        } else if (numSelectedItems > 1) {
+            m_d->multipleFrameEditingMenu->exec(event->globalPos());
         }
 
     } else {
+        if (index.isValid()) {
+            m_d->model->setLastClickedIndex(index);
+        }
+
         QAbstractItemView::mousePressEvent(event);
     }
 }
@@ -564,12 +580,20 @@ void TimelineFramesView::slotCopyFrame()
 
 void TimelineFramesView::slotRemoveFrame()
 {
-    QModelIndex index = currentIndex();
-    if (!index.isValid() ||
-        !m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
+    QModelIndexList indexes = selectionModel()->selectedIndexes();
 
-        return;
+    QModelIndexList::iterator it = indexes.begin();
+    QModelIndexList::iterator end = indexes.end();
+
+    while (it != end) {
+        if (!m_d->model->data(*it, TimelineFramesModel::FrameEditableRole).toBool()) {
+            it = indexes.erase(it);
+        } else {
+            ++it;
+        }
     }
 
-    m_d->model->removeFrame(index);
+    if (!indexes.isEmpty()) {
+        m_d->model->removeFrames(indexes);
+    }
 }

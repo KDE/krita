@@ -31,6 +31,7 @@ namespace KisAnimationUtils {
     const QString addFrameActionName = i18n("New Frame");
     const QString duplicateFrameActionName = i18n("Copy Frame");
     const QString removeFrameActionName = i18n("Remove Frame");
+    const QString removeFramesActionName = i18n("Remove Frames");
     const QString lazyFrameCreationActionName = i18n("Auto Frame Mode");
 
     bool createKeyframeLazy(KisImageSP image, KisNodeSP node, int time, bool copy) {
@@ -63,39 +64,99 @@ namespace KisAnimationUtils {
         return true;
     }
 
+    bool removeKeyframes(KisImageSP image, const FrameItemList &frames) {
+        bool result = false;
+
+        QScopedPointer<KUndo2Command> cmd(
+            new KUndo2Command(kundo2_i18np("Remove Keyframe",
+                                           "Remove Keyframes",
+                                           frames.size()))); // lisp-lovers present ;)
+
+        foreach (const FrameItem &item, frames) {
+            const int time = item.time;
+            KisNodeSP node = item.node;
+
+            KisKeyframeChannel *content =
+                node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+
+            if (!content) continue;
+
+            KisKeyframeSP keyframe = content->keyframeAt(time);
+            if (!keyframe) continue;
+
+            content->deleteKeyframe(keyframe, cmd.data());
+
+            result = true;
+        }
+
+        if (result) {
+            image->postExecutionUndoAdapter()->addCommand(toQShared(cmd.take()));
+        }
+
+        return result;
+    }
+
     bool removeKeyframe(KisImageSP image, KisNodeSP node, int time) {
-        KisKeyframeChannel *content =
-            node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        QVector<FrameItem> frames;
+        frames << FrameItem(node, time);
+        return removeKeyframes(image, frames);
+    }
 
-        if (!content) return false;
+    bool moveKeyframes(KisImageSP image,
+                       const FrameItemList &srcFrames,
+                       const FrameItemList &dstFrames) {
 
-        KisKeyframeSP keyframe = content->keyframeAt(time);
+        if (srcFrames.size() != dstFrames.size()) return false;
 
-        if (!keyframe) return false;
+        bool result = false;
 
-        KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Remove Keyframe"));
-        content->deleteKeyframe(keyframe, cmd);
-        image->postExecutionUndoAdapter()->addCommand(toQShared(cmd));
+        QScopedPointer<KUndo2Command> cmd(
+            new KUndo2Command(kundo2_i18np("Move Keyframe",
+                                           "Move Keyframes",
+                                           srcFrames.size()))); // lisp-lovers present ;)
 
-        return true;
+        for (int i = 0; i < srcFrames.size(); i++) {
+            const int srcTime = srcFrames[i].time;
+            KisNodeSP srcNode = srcFrames[i].node;
+
+            const int dstTime = dstFrames[i].time;
+            KisNodeSP dstNode = dstFrames[i].node;
+
+            if (srcNode != dstNode) continue;
+
+            KisKeyframeChannel *content =
+                srcNode->getKeyframeChannel(KisKeyframeChannel::Content.id());
+
+            if (!content) continue;
+
+            KisKeyframeSP dstKeyframe = content->keyframeAt(dstTime);
+            if (dstKeyframe) {
+                content->deleteKeyframe(dstKeyframe, cmd.data());
+            }
+
+            KisKeyframeSP srcKeyframe = content->keyframeAt(srcTime);
+            if (srcKeyframe) {
+                content->moveKeyframe(srcKeyframe, dstTime, cmd.data());
+            }
+
+            result = true;
+        }
+
+        if (result) {
+            image->postExecutionUndoAdapter()->addCommand(toQShared(cmd.take()));
+        }
+
+        return result;
     }
 
     bool moveKeyframe(KisImageSP image, KisNodeSP node, int srcTime, int dstTime) {
-        KisKeyframeChannel *content =
-            node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        QVector<FrameItem> srcFrames;
+        srcFrames << FrameItem(node, srcTime);
 
-        if (!content) return false;
+        QVector<FrameItem> dstFrames;
+        dstFrames << FrameItem(node, dstTime);
 
-        KisKeyframeSP srcKeyframe = content->keyframeAt(srcTime);
-        KisKeyframeSP dstKeyframe = content->keyframeAt(dstTime);
-
-        if (!srcKeyframe || dstKeyframe) return false;
-
-        KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Move Keyframe"));
-        content->moveKeyframe(srcKeyframe, dstTime, cmd);
-        image->postExecutionUndoAdapter()->addCommand(toQShared(cmd));
-
-        return true;
+        return moveKeyframes(image, srcFrames, dstFrames);
     }
 }
 

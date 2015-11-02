@@ -25,13 +25,29 @@
 namespace KisAnimationUtils
 {
     bool createKeyframeLazy(KisImageSP image, KisNodeSP node, int time, bool copy);
+
+    struct FrameItem {
+        FrameItem() : time(-1) {}
+        FrameItem(KisNodeSP _node, int _time) : node(_node), time(_time) {}
+
+        KisNodeSP node;
+        int time;
+    };
+
+    typedef QVector<FrameItem> FrameItemList;
+
+    bool removeKeyframes(KisImageSP image, const FrameItemList &frames);
     bool removeKeyframe(KisImageSP image, KisNodeSP node, int time);
+    bool moveKeyframes(KisImageSP image,
+                       const FrameItemList &srcFrames,
+                       const FrameItemList &dstFrames);
     bool moveKeyframe(KisImageSP image, KisNodeSP node, int srcTime, int dstTime);
 
 
     extern const QString addFrameActionName;
     extern const QString duplicateFrameActionName;
     extern const QString removeFrameActionName;
+    extern const QString removeFramesActionName;
     extern const QString lazyFrameCreationActionName;
 };
 

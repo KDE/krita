@@ -84,6 +84,8 @@ struct TimelineFramesModel::Private
 
     QScopedPointer<NodeManipulationInterface> nodeInterface;
 
+    QPersistentModelIndex lastClickedIndex;
+
     QVariant layerName(int row) const {
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return QVariant();
@@ -141,22 +143,6 @@ struct TimelineFramesModel::Private
         if (!dummy) return false;
 
         return KisAnimationUtils::createKeyframeLazy(image, dummy->node(), column, copy);
-    }
-
-    bool removeKeyframe(int row, int column) {
-        KisNodeDummy *dummy = converter->dummyFromRow(row);
-        if (!dummy) return false;
-
-        return KisAnimationUtils::removeKeyframe(image, dummy->node(), column);
-    }
-
-    bool moveKeyframe(int srcRow, int srcColumn, int dstRow, int dstColumn) {
-        if (srcRow != dstRow) return false;
-
-        KisNodeDummy *dummy = converter->dummyFromRow(srcRow);
-        if (!dummy) return false;
-
-        return KisAnimationUtils::moveKeyframe(image, dummy->node(), srcColumn, dstColumn);
     }
 
     bool addNewLayer(int row) {
@@ -551,27 +537,39 @@ QStringList TimelineFramesModel::mimeTypes() const
     return types;
 }
 
+void TimelineFramesModel::setLastClickedIndex(const QModelIndex &index)
+{
+    m_d->lastClickedIndex = index;
+}
+
 QMimeData* TimelineFramesModel::mimeData(const QModelIndexList &indexes) const
 {
-    QModelIndex index = indexes.first();
-
     QMimeData *data = new QMimeData();
 
     QByteArray encoded;
     QDataStream stream(&encoded, QIODevice::WriteOnly);
-    stream << index.row() << index.column();
-    data->setData("application/x-krita-frame", encoded);
 
-    QString text = QString("frame_%1_%2").arg(index.row(), index.column());
-    data->setText(text);
+    const int baseRow = m_d->lastClickedIndex.row();
+    const int baseColumn = m_d->lastClickedIndex.column();
+
+    stream << indexes.size();
+    stream << baseRow << baseColumn;
+
+    foreach (const QModelIndex &index, indexes) {
+        stream << index.row() - baseRow << index.column() - baseColumn;
+    }
+
+    data->setData("application/x-krita-frame", encoded);
 
     return data;
 }
 
-inline void decodeFrameId(QByteArray *encoded, int *row, int *col)
+inline void decodeBaseIndex(QByteArray *encoded, int *row, int *col)
 {
+    int size_UNUSED = 0;
+
     QDataStream stream(encoded, QIODevice::ReadOnly);
-    stream >> *row >> *col;
+    stream >> size_UNUSED >> *row >> *col;
 }
 
 bool TimelineFramesModel::canDropFrameData(const QMimeData *data, const QModelIndex &index)
@@ -579,10 +577,10 @@ bool TimelineFramesModel::canDropFrameData(const QMimeData *data, const QModelIn
     if (!index.isValid()) return false;
 
     QByteArray encoded = data->data("application/x-krita-frame");
-    int srcRow, srcColumn;
-    decodeFrameId(&encoded, &srcRow, &srcColumn);
+    int baseRow, baseColumn;
+    decodeBaseIndex(&encoded, &baseRow, &baseColumn);
 
-    return srcRow == index.row();
+    return baseRow == index.row();
 }
 
 bool TimelineFramesModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
@@ -590,18 +588,48 @@ bool TimelineFramesModel::dropMimeData(const QMimeData *data, Qt::DropAction act
     Q_UNUSED(row);
     Q_UNUSED(column);
 
-    if (action != Qt::MoveAction || !parent.isValid()) return false;
+    bool result = false;
+
+    if (action != Qt::MoveAction || !parent.isValid()) return result;
 
     QByteArray encoded = data->data("application/x-krita-frame");
-    int srcRow, srcColumn;
-    decodeFrameId(&encoded, &srcRow, &srcColumn);
+    QDataStream stream(&encoded, QIODevice::ReadOnly);
 
-    if (srcRow != parent.row()) return false;
 
-    bool result = m_d->moveKeyframe(srcRow, srcColumn, parent.row(), parent.column());
-    if (result) {
-        emit dataChanged(this->index(srcRow, srcColumn), this->index(srcRow, srcColumn));
-        emit dataChanged(parent, parent);
+    int size, baseRow, baseColumn;
+    stream >> size >> baseRow >> baseColumn;
+
+    if (baseRow != parent.row()) return result;
+
+    KisAnimationUtils::FrameItemList srcFrameItems;
+    KisAnimationUtils::FrameItemList dstFrameItems;
+    QModelIndexList updateIndexes;
+
+
+    for (int i = 0; i < size; i++) {
+        int relRow, relColumn;
+        stream >> relRow >> relColumn;
+
+        int srcRow = baseRow + relRow;
+        int srcColumn = baseColumn + relColumn;
+
+        int dstRow = parent.row() + relRow;
+        int dstColumn = parent.column() + relColumn;
+
+        KisNodeDummy *srcDummy = m_d->converter->dummyFromRow(srcRow);
+        KisNodeDummy *dstDummy = m_d->converter->dummyFromRow(dstRow);
+        if (!srcDummy || !dstDummy) continue;
+
+        srcFrameItems << KisAnimationUtils::FrameItem(srcDummy->node(), srcColumn);
+        dstFrameItems << KisAnimationUtils::FrameItem(dstDummy->node(), dstColumn);
+        updateIndexes << index(srcRow, srcColumn);
+        updateIndexes << index(dstRow, dstColumn);
+    }
+
+    result = KisAnimationUtils::moveKeyframes(m_d->image, srcFrameItems, dstFrameItems);
+
+    foreach (const QModelIndex &index, updateIndexes) {
+        emit dataChanged(index, index);
     }
 
     return result;
@@ -698,16 +726,29 @@ bool TimelineFramesModel::copyFrame(const QModelIndex &dstIndex)
     return result;
 }
 
-bool TimelineFramesModel::removeFrame(const QModelIndex &dstIndex)
+bool TimelineFramesModel::removeFrames(const QModelIndexList &indexes)
 {
-    if (!dstIndex.isValid()) return false;
+    KisAnimationUtils::FrameItemList frameItems;
 
-    bool result = m_d->removeKeyframe(dstIndex.row(), dstIndex.column());
-    if (result) {
-        emit dataChanged(dstIndex, dstIndex);
+    foreach (const QModelIndex &index, indexes) {
+        KisNodeDummy *dummy = m_d->converter->dummyFromRow(index.row());
+        if (!dummy) continue;
+
+        frameItems << KisAnimationUtils::FrameItem(dummy->node(), index.column());
     }
 
-    return result;
+    if (frameItems.isEmpty()) return false;
+
+
+    KisAnimationUtils::removeKeyframes(m_d->image, frameItems);
+
+    foreach (const QModelIndex &index, indexes) {
+        if (index.isValid()) {
+            emit dataChanged(index, index);
+        }
+    }
+
+    return true;
 }
 
 void TimelineFramesModel::setLastVisibleFrame(int time)

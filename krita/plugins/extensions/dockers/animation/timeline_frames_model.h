@@ -51,8 +51,9 @@ public:
 
     bool createFrame(const QModelIndex &dstIndex);
     bool copyFrame(const QModelIndex &dstIndex);
-    bool removeFrame(const QModelIndex &dstIndex);
+    bool removeFrames(const QModelIndexList &indexes);
 
+    void setLastClickedIndex(const QModelIndex &index);
     void setLastVisibleFrame(int time);
 
     void setScrubState(bool active);

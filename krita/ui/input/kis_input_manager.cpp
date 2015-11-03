@@ -227,7 +227,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         d->debugEvent<QKeyEvent, false>(event);
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
 
-        Qt::Key key = d->workaroundShiftAltMetaHell(keyEvent);
+        Qt::Key key = KisExtendedModifiersMapper::workaroundShiftAltMetaHell(keyEvent);
 
         if (!keyEvent->isAutoRepeat()) {
             retval = d->matcher.keyPressed(key);
@@ -251,7 +251,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
 
         if (!keyEvent->isAutoRepeat()) {
-            Qt::Key key = d->workaroundShiftAltMetaHell(keyEvent);
+            Qt::Key key = KisExtendedModifiersMapper::workaroundShiftAltMetaHell(keyEvent);
             retval = d->matcher.keyReleased(key);
         }
         break;

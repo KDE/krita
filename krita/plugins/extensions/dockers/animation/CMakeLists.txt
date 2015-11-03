@@ -18,6 +18,7 @@ set(KRITA_ANIMATIONDOCKER_PART_SRCS
 
     kis_draggable_tool_button.cpp
     kis_animation_utils.cpp
+    kis_custom_modifiers_catcher.cpp
 )
 
 ki18n_wrap_ui(KRITA_ANIMATIONDOCKER_PART_SRCS

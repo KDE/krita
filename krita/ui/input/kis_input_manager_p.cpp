@@ -389,19 +389,6 @@ bool KisInputManager::Private::processUnhandledEvent(QEvent *event)
     return retval && !forwardAllEventsToTool;
 }
 
-Qt::Key KisInputManager::Private::workaroundShiftAltMetaHell(const QKeyEvent *keyEvent)
-{
-    Qt::Key key = (Qt::Key)keyEvent->key();
-
-    if (keyEvent->key() == Qt::Key_Meta &&
-        keyEvent->modifiers().testFlag(Qt::ShiftModifier)) {
-
-        key = Qt::Key_Alt;
-    }
-
-    return key;
-}
-
 bool KisInputManager::Private::tryHidePopupPalette()
 {
     if (canvas->isPopupPaletteVisible()) {

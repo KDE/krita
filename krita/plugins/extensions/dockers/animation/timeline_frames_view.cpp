@@ -24,6 +24,9 @@
 #include "timeline_layers_header.h"
 
 #include <cmath>
+#include <limits>
+
+#include <QPainter>
 
 #include <QHeaderView>
 #include <QDropEvent>
@@ -41,17 +44,25 @@
 #include "kis_icon_utils.h"
 
 #include "kis_animation_utils.h"
+#include "kis_custom_modifiers_catcher.h"
 
+typedef QPair<QRect, QModelIndex> QItemViewPaintPair;
+typedef QList<QItemViewPaintPair> QItemViewPaintPairs;
 
 struct TimelineFramesView::Private
 {
-    Private()
-        : fps(1),
+    Private(TimelineFramesView *_q)
+        : q(_q),
+          fps(1),
           zoom(1.0),
           initialDragZoomValue(1.0),
           zoomStillPointIndex(-1),
           zoomStillPointOriginalOffset(0),
-          dragInProgress(false) {}
+          dragInProgress(false),
+          modifiersCatcher(0)
+    {}
+
+    TimelineFramesView *q;
 
     TimelineFramesModel *model;
     TimelineRulerHeader *horizontalRuler;
@@ -78,12 +89,25 @@ struct TimelineFramesView::Private
     KisDraggableToolButton *zoomDragButton;
 
     bool dragInProgress;
+
+    KisCustomModifiersCatcher *modifiersCatcher;
+    QPoint lastPressedPosition;
+
+
+    QStyleOptionViewItemV4 viewOptionsV4() const;
+    QItemViewPaintPairs draggablePaintPairs(const QModelIndexList &indexes, QRect *r) const;
+    QPixmap renderToPixmap(const QModelIndexList &indexes, QRect *r) const;
+
 };
 
 TimelineFramesView::TimelineFramesView(QWidget *parent)
     : QTableView(parent),
-      m_d(new Private)
+      m_d(new Private(this))
 {
+    m_d->modifiersCatcher = new KisCustomModifiersCatcher(this);
+    m_d->modifiersCatcher->addModifier("pan-zoom", Qt::Key_Space);
+    m_d->modifiersCatcher->addModifier("offset-frame", Qt::Key_Alt);
+
     setCornerButtonEnabled(false);
     setSelectionBehavior(QAbstractItemView::SelectItems);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -366,6 +390,110 @@ void TimelineFramesView::slotHeaderDataChanged(Qt::Orientation orientation, int 
     }
 }
 
+inline bool isIndexDragEnabled(QAbstractItemModel *model, const QModelIndex &index) {
+    return (model->flags(index) & Qt::ItemIsDragEnabled);
+}
+
+QStyleOptionViewItemV4 TimelineFramesView::Private::viewOptionsV4() const
+{
+    QStyleOptionViewItemV4 option = q->viewOptions();
+    option.locale = q->locale();
+    option.locale.setNumberOptions(QLocale::OmitGroupSeparator);
+    option.widget = q;
+    return option;
+}
+
+QItemViewPaintPairs TimelineFramesView::Private::draggablePaintPairs(const QModelIndexList &indexes, QRect *r) const
+{
+    Q_ASSERT(r);
+    QRect &rect = *r;
+    const QRect viewportRect = q->viewport()->rect();
+    QItemViewPaintPairs ret;
+    for (int i = 0; i < indexes.count(); ++i) {
+        const QModelIndex &index = indexes.at(i);
+        const QRect current = q->visualRect(index);
+        if (current.intersects(viewportRect)) {
+            ret += qMakePair(current, index);
+            rect |= current;
+        }
+    }
+    rect &= viewportRect;
+    return ret;
+}
+
+QPixmap TimelineFramesView::Private::renderToPixmap(const QModelIndexList &indexes, QRect *r) const
+{
+    Q_ASSERT(r);
+    QItemViewPaintPairs paintPairs = draggablePaintPairs(indexes, r);
+    if (paintPairs.isEmpty())
+        return QPixmap();
+    QPixmap pixmap(r->size());
+    pixmap.fill(Qt::transparent);
+    QPainter painter(&pixmap);
+    QStyleOptionViewItemV4 option = viewOptionsV4();
+    option.state |= QStyle::State_Selected;
+    for (int j = 0; j < paintPairs.count(); ++j) {
+        option.rect = paintPairs.at(j).first.translated(-r->topLeft());
+        const QModelIndex &current = paintPairs.at(j).second;
+        //adjustViewOptionsForIndex(&option, current);
+        q->itemDelegate(current)->paint(&painter, option, current);
+    }
+    return pixmap;
+}
+
+void TimelineFramesView::startDrag(Qt::DropActions supportedActions)
+{
+    QModelIndexList indexes = selectionModel()->selectedIndexes();
+
+    if (!indexes.isEmpty() && m_d->modifiersCatcher->modifierPressed("offset-frame")) {
+        QVector<int> rows;
+        int leftmostColumn = std::numeric_limits<int>::max();
+
+        foreach (const QModelIndex &index, indexes) {
+            leftmostColumn = qMin(leftmostColumn, index.column());
+            if (!rows.contains(index.row())) {
+                rows.append(index.row());
+            }
+        }
+
+        const int lastColumn = m_d->model->columnCount() - 1;
+
+        selectionModel()->clear();
+        foreach (const int row, rows) {
+            QItemSelection sel(m_d->model->index(row, leftmostColumn), m_d->model->index(row, lastColumn));
+            selectionModel()->select(sel, QItemSelectionModel::Select);
+        }
+
+        supportedActions = Qt::MoveAction;
+
+        {
+            QModelIndexList indexes = selectedIndexes();
+            for(int i = indexes.count() - 1 ; i >= 0; --i) {
+                if (!isIndexDragEnabled(m_d->model, indexes.at(i)))
+                    indexes.removeAt(i);
+            }
+
+            selectionModel()->clear();
+
+            if (indexes.count() > 0) {
+                QMimeData *data = m_d->model->mimeData(indexes);
+                if (!data)
+                    return;
+                QRect rect;
+                QPixmap pixmap = m_d->renderToPixmap(indexes, &rect);
+                rect.adjust(horizontalOffset(), verticalOffset(), 0, 0);
+                QDrag *drag = new QDrag(this);
+                drag->setPixmap(pixmap);
+                drag->setMimeData(data);
+                drag->setHotSpot(m_d->lastPressedPosition - rect.topLeft());
+                drag->exec(supportedActions, Qt::MoveAction);
+            }
+        }
+    } else {
+        QAbstractItemView::startDrag(supportedActions);
+    }
+}
+
 void TimelineFramesView::dragEnterEvent(QDragEnterEvent *event)
 {
     m_d->dragInProgress = true;
@@ -413,7 +541,7 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
 {
     QPersistentModelIndex index = indexAt(event->pos());
 
-    if (event->modifiers() & Qt::AltModifier) {
+    if (m_d->modifiersCatcher->modifierPressed("pan-zoom")) {
         m_d->startZoomPanDragPos = event->pos();
 
         if (event->button() == Qt::RightButton) {
@@ -456,13 +584,16 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
             m_d->model->setLastClickedIndex(index);
         }
 
+        m_d->lastPressedPosition =
+            QPoint(horizontalOffset(), verticalOffset()) + event->pos();
+
         QAbstractItemView::mousePressEvent(event);
     }
 }
 
 void TimelineFramesView::mouseMoveEvent(QMouseEvent *e)
 {
-    if (e->modifiers() & Qt::AltModifier) {
+    if (m_d->modifiersCatcher->modifierPressed("pan-zoom")) {
         QPoint diff = e->pos() - m_d->startZoomPanDragPos;
 
         if (e->buttons() & Qt::RightButton) {
@@ -486,7 +617,7 @@ void TimelineFramesView::mouseMoveEvent(QMouseEvent *e)
 
 void TimelineFramesView::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->modifiers() & Qt::AltModifier) {
+    if (m_d->modifiersCatcher->modifierPressed("pan-zoom")) {
         e->accept();
     } else {
         m_d->model->setScrubState(false);

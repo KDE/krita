@@ -75,6 +75,7 @@ private:
 
 protected:
     void currentChanged(const QModelIndex &current, const QModelIndex &previous);
+    void startDrag(Qt::DropActions supportedActions);
     void dragEnterEvent(QDragEnterEvent *event);
     void dragMoveEvent(QDragMoveEvent *event);
     void dropEvent(QDropEvent *event);

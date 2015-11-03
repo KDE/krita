@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,34 +16,27 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_EXTENDED_MODIFIERS_MAPPER_H
-#define __KIS_EXTENDED_MODIFIERS_MAPPER_H
+#ifndef __KIS_CUSTOM_MODIFIERS_CATCHER_H
+#define __KIS_CUSTOM_MODIFIERS_CATCHER_H
 
-#include <Qt>
-#include <QVector>
 #include <QScopedPointer>
-
-#include <kritaui_export.h>
-
-class QKeyEvent;
+#include <QObject>
 
 
-class KRITAUI_EXPORT KisExtendedModifiersMapper
+class KisCustomModifiersCatcher : public QObject
 {
 public:
-    KisExtendedModifiersMapper();
-    ~KisExtendedModifiersMapper();
+    KisCustomModifiersCatcher(QObject *parent);
+    ~KisCustomModifiersCatcher();
 
-    typedef QVector<Qt::Key> ExtendedModifiers;
+    bool eventFilter(QObject* object, QEvent* event);
 
-    ExtendedModifiers queryExtendedModifiers();
-    Qt::KeyboardModifiers queryStandardModifiers();
-
-    static Qt::Key workaroundShiftAltMetaHell(const QKeyEvent *keyEvent);
+    void addModifier(const QString &id, Qt::Key modifier);
+    bool modifierPressed(const QString &id);
 
 private:
     struct Private;
-    QScopedPointer<Private> m_d;
+    const QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_EXTENDED_MODIFIERS_MAPPER_H */
+#endif /* __KIS_CUSTOM_MODIFIERS_CATCHER_H */

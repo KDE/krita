@@ -601,8 +601,6 @@ bool TimelineFramesModel::dropMimeData(const QMimeData *data, Qt::DropAction act
 
     bool result = false;
 
-    qDebug() << ppVar((action == Qt::MoveAction)) << ppVar((action == Qt::CopyAction));
-
     if ((action != Qt::MoveAction &&
          action != Qt::CopyAction) || !parent.isValid()) return result;
 

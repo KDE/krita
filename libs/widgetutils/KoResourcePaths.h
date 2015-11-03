@@ -22,7 +22,7 @@
 #include <QString>
 #include <QStringList>
 
-#include <kritawidgets_export.h>
+#include <kritawidgetutils_export.h>
 
 
 /**
@@ -40,7 +40,7 @@
  * convenient enable/disable functionality.
  */
 
-class KRITAWIDGETS_EXPORT KoResourcePaths
+class KRITAWIDGETUTILS_EXPORT KoResourcePaths
 {
 public:
 

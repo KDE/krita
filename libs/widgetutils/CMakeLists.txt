@@ -8,6 +8,7 @@ configure_file(xmlgui/config-xmlgui.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-x
 set(kritawidgetutils_LIB_SRCS
 
     kis_icon_utils.cpp
+    kis_action_registry.cpp
     KoGroupButton.cpp
     KoProgressBar.cpp
     KoProgressUpdater.cpp
@@ -15,6 +16,7 @@ set(kritawidgetutils_LIB_SRCS
     KoUpdaterPrivate_p.cpp
     KoProperties.cpp
     KoFileDialog.cpp
+    KoResourcePaths.cpp
 
     config/kcolorscheme.cpp
     config/kcolorschememanager.cpp

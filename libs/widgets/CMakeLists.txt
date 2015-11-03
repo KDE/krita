@@ -6,7 +6,6 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 set(kritawidgets_LIB_SRCS
     KoGradientEditWidget.cpp
-    KoResourcePaths.cpp
     KoVBox.cpp
     KoDialog.cpp
     KoGlobal.cpp

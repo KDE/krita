@@ -286,6 +286,8 @@ public:
 
     KisSignalAutoConnectionsStore viewConnections;
     KSelectAction *actionAuthor; // Select action for author profile.
+
+    QByteArray canvasState;
 };
 
 
@@ -1123,9 +1125,23 @@ void KisViewManager::showJustTheCanvas(bool toggled)
         return;
     }
 
+    if (toggled) {
+        d->canvasState = qtMainWindow()->saveState();
+    }
+
     if (cfg.hideStatusbarFullscreen()) {
-        if(main->statusBar() && main->statusBar()->isVisible() == toggled) {
-            main->statusBar()->setVisible(!toggled);
+        if (main->statusBar()) {
+            if (!toggled) {
+                if (main->statusBar()->dynamicPropertyNames().contains("wasvisible")) {
+                    if (main->statusBar()->property("wasvisible").toBool()) {
+                        main->statusBar()->setVisible(true);
+                    }
+                }
+            }
+            else {
+                main->statusBar()->setProperty("wasvisible", main->statusBar()->isVisible());
+                main->statusBar()->setVisible(false);
+            }
         }
     }
 
@@ -1146,8 +1162,16 @@ void KisViewManager::showJustTheCanvas(bool toggled)
     }
 
     if (cfg.hideMenuFullscreen()) {
-        if (main->menuBar()->isVisible() == toggled) {
-            main->menuBar()->setVisible(!toggled);
+        if (!toggled) {
+            if (main->menuBar()->dynamicPropertyNames().contains("wasvisible")) {
+                if (main->menuBar()->property("wasvisible").toBool()) {
+                    main->menuBar()->setVisible(true);
+                }
+            }
+        }
+        else {
+            main->menuBar()->setProperty("wasvisible", main->menuBar()->isVisible());
+            main->menuBar()->setVisible(false);
         }
     }
 
@@ -1176,6 +1200,10 @@ void KisViewManager::showJustTheCanvas(bool toggled)
         showFloatingMessage(i18n("Going into Canvas-Only mode.\nPress %1 to go back.",
                                  actionCollection()->action("view_show_just_the_canvas")->shortcut().toString()), QIcon());
     }
+    else {
+        main->restoreState(d->canvasState);
+    }
+
 }
 
 void KisViewManager::toggleTabletLogger()

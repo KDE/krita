@@ -34,7 +34,13 @@ public:
 
     void setFramePerSecond(int fps);
 
+    void setModel(QAbstractItemModel *model);
+
 protected:
+    void mousePressEvent(QMouseEvent *e);
+    void mouseMoveEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
+
     void paintEvent(QPaintEvent *e);
     void paintSection(QPainter *painter, const QRect &rect, int logicalIndex) const;
     void paintSection1(QPainter *painter, const QRect &rect, int logicalIndex) const;
@@ -50,6 +56,12 @@ private:
                    QStyle *style,
                    const QPalette &palette,
                    const QPen &gridPen) const;
+
+private Q_SLOTS:
+    void slotInsertColumnLeft();
+    void slotInsertColumnRight();
+    void slotClearColumns(bool removeColumns = false);
+    void slotRemoveColumns();
 
 private:
     struct Private;

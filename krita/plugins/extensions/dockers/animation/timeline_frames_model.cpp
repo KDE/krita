@@ -420,7 +420,7 @@ bool TimelineFramesModel::setData(const QModelIndex &index, const QVariant &valu
         if (value.toBool() &&
             index.column() != m_d->activeFrameIndex) {
 
-            //int prevFrame = m_d->activeFrameIndex;
+            int prevFrame = m_d->activeFrameIndex;
             m_d->activeFrameIndex = index.column();
 
             scrubTo(m_d->activeFrameIndex, m_d->scrubInProgress);
@@ -436,10 +436,17 @@ bool TimelineFramesModel::setData(const QModelIndex &index, const QVariant &valu
              * playback run 15% faster ;)
              */
 
-            //emit dataChanged(this->index(0, prevFrame), this->index(rowCount() - 1, prevFrame));
-            emit dataChanged(this->index(0, m_d->activeFrameIndex), this->index(rowCount() - 1, m_d->activeFrameIndex));
-            //emit headerDataChanged (Qt::Horizontal, prevFrame, prevFrame);
-            //emit headerDataChanged (Qt::Horizontal, m_d->activeFrameIndex, m_d->activeFrameIndex);
+            if (m_d->scrubInProgress) {
+                //emit dataChanged(this->index(0, prevFrame), this->index(rowCount() - 1, prevFrame));
+                emit dataChanged(this->index(0, m_d->activeFrameIndex), this->index(rowCount() - 1, m_d->activeFrameIndex));
+                //emit headerDataChanged (Qt::Horizontal, prevFrame, prevFrame);
+                //emit headerDataChanged (Qt::Horizontal, m_d->activeFrameIndex, m_d->activeFrameIndex);
+            } else {
+                emit dataChanged(this->index(0, prevFrame), this->index(rowCount() - 1, prevFrame));
+                emit dataChanged(this->index(0, m_d->activeFrameIndex), this->index(rowCount() - 1, m_d->activeFrameIndex));
+                emit headerDataChanged (Qt::Horizontal, prevFrame, prevFrame);
+                emit headerDataChanged (Qt::Horizontal, m_d->activeFrameIndex, m_d->activeFrameIndex);
+            }
         }
         break;
     }
@@ -505,7 +512,12 @@ bool TimelineFramesModel::setHeaderData(int section, Qt::Orientation orientation
     if (!m_d->dummiesFacade) return false;
 
     if (orientation == Qt::Horizontal) {
-        // noop...
+        switch (role) {
+        case ActiveFrameRole: {
+            setData(index(0, section), value, role);
+            break;
+        }
+        }
     } else {
         switch (role) {
         case ActiveLayerRole: {
@@ -594,45 +606,16 @@ bool TimelineFramesModel::canDropFrameData(const QMimeData *data, const QModelIn
     return baseRow == index.row();
 }
 
-bool TimelineFramesModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
+bool TimelineFramesModel::offsetFrames(QVector<QPoint> srcIndexes, const QPoint &offset, bool copyFrames)
 {
-    Q_UNUSED(row);
-    Q_UNUSED(column);
-
     bool result = false;
+    if (srcIndexes.isEmpty()) return result;
 
-    if ((action != Qt::MoveAction &&
-         action != Qt::CopyAction) || !parent.isValid()) return result;
-
-    const bool copyFrames = action == Qt::CopyAction;
-
-    QByteArray encoded = data->data("application/x-krita-frame");
-    QDataStream stream(&encoded, QIODevice::ReadOnly);
-
-
-    int size, baseRow, baseColumn;
-    stream >> size >> baseRow >> baseColumn;
-
-    if (baseRow != parent.row()) return result;
+    KisAnimationUtils::sortPointsForSafeMove(&srcIndexes, offset);
 
     KisAnimationUtils::FrameItemList srcFrameItems;
     KisAnimationUtils::FrameItemList dstFrameItems;
     QModelIndexList updateIndexes;
-
-    QVector<QPoint> srcIndexes;
-
-    for (int i = 0; i < size; i++) {
-        int relRow, relColumn;
-        stream >> relRow >> relColumn;
-
-        int srcRow = baseRow + relRow;
-        int srcColumn = baseColumn + relColumn;
-
-        srcIndexes << QPoint(srcColumn, srcRow);
-    }
-
-    const QPoint offset(parent.column() - baseColumn, parent.row() - baseRow);
-    KisAnimationUtils::sortPointsForSafeMove(&srcIndexes, offset);
 
     foreach (const QPoint &point, srcIndexes) {
         int srcRow = point.y();
@@ -665,6 +648,44 @@ bool TimelineFramesModel::dropMimeData(const QMimeData *data, Qt::DropAction act
     }
 
     return result;
+}
+
+bool TimelineFramesModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
+{
+    Q_UNUSED(row);
+    Q_UNUSED(column);
+
+    bool result = false;
+
+    if ((action != Qt::MoveAction &&
+         action != Qt::CopyAction) || !parent.isValid()) return result;
+
+    const bool copyFrames = action == Qt::CopyAction;
+
+    QByteArray encoded = data->data("application/x-krita-frame");
+    QDataStream stream(&encoded, QIODevice::ReadOnly);
+
+
+    int size, baseRow, baseColumn;
+    stream >> size >> baseRow >> baseColumn;
+
+    if (baseRow != parent.row()) return result;
+
+    QVector<QPoint> srcIndexes;
+
+    for (int i = 0; i < size; i++) {
+        int relRow, relColumn;
+        stream >> relRow >> relColumn;
+
+        int srcRow = baseRow + relRow;
+        int srcColumn = baseColumn + relColumn;
+
+        srcIndexes << QPoint(srcColumn, srcRow);
+    }
+
+    const QPoint offset(parent.column() - baseColumn, parent.row() - baseRow);
+
+    return offsetFrames(srcIndexes, offset, copyFrames);
 }
 
 Qt::ItemFlags TimelineFramesModel::flags(const QModelIndex &index) const

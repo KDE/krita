@@ -18,6 +18,11 @@
 
 #include "timeline_ruler_header.h"
 
+#include <limits>
+#include <klocale.h>
+
+#include <QMenu>
+#include <QAction>
 #include <QPainter>
 #include <QPaintEvent>
 
@@ -27,17 +32,33 @@
 
 struct TimelineRulerHeader::Private
 {
-    Private() : fps(12) {}
+    Private() : fps(12), lastPressSectionIndex(-1) {}
 
     int fps;
 
+    QMenu *columnEditingMenu;
+    QAction *insertLeftAction;
+    QAction *insertRightAction;
+    QAction *removeAction;
+    QAction *clearAction;
+
+    TimelineFramesModel *model;
+    int lastPressSectionIndex;
+
     int calcSpanWidth(const int sectionWidth);
+    QVector<QPoint> prepareFramesSlab(int startCol, int endCol);
 };
 
 TimelineRulerHeader::TimelineRulerHeader(QWidget *parent)
     : QHeaderView(Qt::Horizontal, parent),
       m_d(new Private)
 {
+    m_d->columnEditingMenu = new QMenu(this);
+    m_d->insertLeftAction = m_d->columnEditingMenu->addAction("Insert 1 Left", this, SLOT(slotInsertColumnLeft()));
+    m_d->insertRightAction = m_d->columnEditingMenu->addAction("Insert 1 Right", this, SLOT(slotInsertColumnRight()));
+    m_d->clearAction = m_d->columnEditingMenu->addAction("Clear Columns", this, SLOT(slotClearColumns()));
+    m_d->removeAction = m_d->columnEditingMenu->addAction("Remove Columns", this, SLOT(slotRemoveColumns()));
+
 }
 
 TimelineRulerHeader::~TimelineRulerHeader()
@@ -301,4 +322,163 @@ void TimelineRulerHeader::updateMinimumSize()
     const int textHeight = metrics.height();
 
     setMinimumSize(0, 1.5 * textHeight);
+}
+
+void TimelineRulerHeader::setModel(QAbstractItemModel *model)
+{
+    TimelineFramesModel *framesModel = qobject_cast<TimelineFramesModel*>(model);
+    m_d->model = framesModel;
+
+    QHeaderView::setModel(model);
+}
+
+int getColumnCount(const QModelIndexList &indexes, int *leftmostCol, int *rightmostCol)
+{
+    QVector<int> columns;
+    int leftmost = std::numeric_limits<int>::max();
+    int rightmost = std::numeric_limits<int>::min();
+
+    foreach (const QModelIndex &index, indexes) {
+        leftmost = qMin(leftmost, index.column());
+        rightmost = qMax(rightmost, index.column());
+        if (!columns.contains(index.column())) {
+            columns.append(index.column());
+        }
+    }
+
+    if (leftmostCol) *leftmostCol = leftmost;
+    if (rightmostCol) *rightmostCol = rightmost;
+
+    return columns.size();
+}
+
+void TimelineRulerHeader::mousePressEvent(QMouseEvent *e)
+{
+    int logical = logicalIndexAt(e->pos());
+    if (logical != -1) {
+        QModelIndexList selectedIndexes = selectionModel()->selectedIndexes();
+        int numSelectedColumns = getColumnCount(selectedIndexes, 0, 0);
+
+        if (e->button() == Qt::RightButton) {
+            if (numSelectedColumns <= 1) {
+                model()->setHeaderData(logical, orientation(), true, TimelineFramesModel::ActiveFrameRole);
+            }
+
+            m_d->insertLeftAction->setText(i18n("Insert %1 left", numSelectedColumns));
+            m_d->insertRightAction->setText(i18n("Insert %1 right", numSelectedColumns));
+            m_d->clearAction->setText(i18n("Clear %1 columns", numSelectedColumns));
+            m_d->removeAction->setText(i18n("Remove %1 columns", numSelectedColumns));
+
+            m_d->columnEditingMenu->exec(e->globalPos());
+            return;
+
+        } else if (e->button() == Qt::LeftButton) {
+            m_d->lastPressSectionIndex = logical;
+            model()->setHeaderData(logical, orientation(), true, TimelineFramesModel::ActiveFrameRole);
+        }
+    }
+
+    QHeaderView::mousePressEvent(e);
+}
+
+void TimelineRulerHeader::mouseMoveEvent(QMouseEvent *e)
+{
+    int logical = logicalIndexAt(e->pos());
+    if (logical != -1) {
+        if (e->buttons() & Qt::LeftButton) {
+            m_d->model->setScrubState(true);
+            model()->setHeaderData(logical, orientation(), true, TimelineFramesModel::ActiveFrameRole);
+
+            if (m_d->lastPressSectionIndex >= 0 &&
+                logical != m_d->lastPressSectionIndex &&
+                e->modifiers() & Qt::ShiftModifier) {
+
+                const int minCol = qMin(m_d->lastPressSectionIndex, logical);
+                const int maxCol = qMax(m_d->lastPressSectionIndex, logical);
+
+                QItemSelection sel(m_d->model->index(0, minCol), m_d->model->index(0, maxCol));
+                selectionModel()->select(sel,
+                                         QItemSelectionModel::Columns |
+                                         QItemSelectionModel::SelectCurrent);
+            }
+
+        }
+    }
+
+    QHeaderView::mouseMoveEvent(e);
+}
+
+void TimelineRulerHeader::mouseReleaseEvent(QMouseEvent *e)
+{
+    if (e->button() == Qt::LeftButton) {
+        m_d->model->setScrubState(false);
+    }
+    QHeaderView::mouseReleaseEvent(e);
+}
+
+QVector<QPoint> TimelineRulerHeader::Private::prepareFramesSlab(int startCol, int endCol)
+{
+    QVector<QPoint> frames;
+
+    const int numRows = model->rowCount();
+
+    for (int i = 0; i < numRows; i++) {
+        for (int j = startCol; j <= endCol; j++) {
+            const bool exists = model->data(model->index(i, j), TimelineFramesModel::FrameExistsRole).toBool();
+            if (exists) {
+                frames << QPoint(j, i);
+            }
+        }
+    }
+
+    return frames;
+}
+
+void TimelineRulerHeader::slotInsertColumnLeft()
+{
+    QModelIndexList selectedIndexes = selectionModel()->selectedIndexes();
+    int leftmostCol = 0, rightmostCol = 0;
+    int numColumns = getColumnCount(selectedIndexes, &leftmostCol, &rightmostCol);
+
+    QVector<QPoint> movingFrames = m_d->prepareFramesSlab(leftmostCol, m_d->model->columnCount() - 1);
+    m_d->model->offsetFrames(movingFrames, QPoint(numColumns, 0), false);
+}
+
+void TimelineRulerHeader::slotInsertColumnRight()
+{
+    QModelIndexList selectedIndexes = selectionModel()->selectedIndexes();
+    int leftmostCol = 0, rightmostCol = 0;
+    int numColumns = getColumnCount(selectedIndexes, &leftmostCol, &rightmostCol);
+
+    QVector<QPoint> movingFrames = m_d->prepareFramesSlab(rightmostCol + 1, m_d->model->columnCount() - 1);
+    m_d->model->offsetFrames(movingFrames, QPoint(numColumns, 0), false);
+}
+
+void TimelineRulerHeader::slotClearColumns(bool removeColumns)
+{
+    QModelIndexList selectedIndexes = selectionModel()->selectedIndexes();
+    int leftmostCol = 0, rightmostCol = 0;
+    int numColumns = getColumnCount(selectedIndexes, &leftmostCol, &rightmostCol);
+
+    QVector<QPoint> movingFrames = m_d->prepareFramesSlab(leftmostCol, rightmostCol);
+
+    QModelIndexList framesToRemove;
+    foreach (const QPoint &pt, movingFrames) {
+        QModelIndex index = m_d->model->index(pt.y(), pt.x());
+        if (index.isValid()) {
+            framesToRemove << index;
+        }
+    }
+
+    m_d->model->removeFrames(framesToRemove);
+
+    if (removeColumns) {
+        QVector<QPoint> movingFrames = m_d->prepareFramesSlab(rightmostCol + 1, m_d->model->columnCount() - 1);
+        m_d->model->offsetFrames(movingFrames, QPoint(-numColumns, 0), false);
+    }
+}
+
+void TimelineRulerHeader::slotRemoveColumns()
+{
+    slotClearColumns(true);
 }

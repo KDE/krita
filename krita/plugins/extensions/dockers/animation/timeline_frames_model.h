@@ -52,6 +52,7 @@ public:
     bool createFrame(const QModelIndex &dstIndex);
     bool copyFrame(const QModelIndex &dstIndex);
     bool removeFrames(const QModelIndexList &indexes);
+    bool offsetFrames(QVector<QPoint> srcIndexes, const QPoint &offset, bool copyFrames);
 
     void setLastClickedIndex(const QModelIndex &index);
     void setLastVisibleFrame(int time);

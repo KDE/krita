@@ -472,8 +472,10 @@ void TimelineFramesView::mouseMoveEvent(QMouseEvent *e)
             QPoint offset = QPoint(m_d->initialDragPanValue.x() - diff.x(),
                                    m_d->initialDragPanValue.y() - diff.y());
 
+            const int height = m_d->layersHeader->defaultSectionSize();
+
             horizontalScrollBar()->setValue(offset.x());
-            verticalScrollBar()->setValue(offset.y());
+            verticalScrollBar()->setValue(offset.y() / height);
         }
         e->accept();
     } else {

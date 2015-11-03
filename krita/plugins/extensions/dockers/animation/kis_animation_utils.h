@@ -38,6 +38,8 @@ namespace KisAnimationUtils
 
     bool removeKeyframes(KisImageSP image, const FrameItemList &frames);
     bool removeKeyframe(KisImageSP image, KisNodeSP node, int time);
+
+    void sortPointsForSafeMove(QVector<QPoint> *points, const QPoint &offset);
     bool moveKeyframes(KisImageSP image,
                        const FrameItemList &srcFrames,
                        const FrameItemList &dstFrames,

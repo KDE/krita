@@ -19,6 +19,7 @@
 #include "kis_animation_utils.h"
 
 #include "kundo2command.h"
+#include "kis_algebra_2d.h"
 #include "kis_image.h"
 #include "kis_node.h"
 #include "kis_keyframe_channel.h"
@@ -102,6 +103,30 @@ namespace KisAnimationUtils {
         QVector<FrameItem> frames;
         frames << FrameItem(node, time);
         return removeKeyframes(image, frames);
+    }
+
+
+    struct LessOperator {
+        LessOperator(const QPoint &offset)
+            : m_columnCoeff(-KisAlgebra2D::signPZ(offset.x())),
+              m_rowCoeff(-1000000 * KisAlgebra2D::signZZ(offset.y()))
+        {
+        }
+
+        bool operator()(const QPoint &lhs, const QPoint &rhs) {
+            return
+                m_columnCoeff * lhs.x() + m_rowCoeff * lhs.y() <
+                m_columnCoeff * rhs.x() + m_rowCoeff * rhs.y();
+        }
+
+    private:
+        int m_columnCoeff;
+        int m_rowCoeff;
+    };
+
+    void sortPointsForSafeMove(QVector<QPoint> *points, const QPoint &offset)
+    {
+        qSort(points->begin(), points->end(), LessOperator(offset));
     }
 
     bool moveKeyframes(KisImageSP image,

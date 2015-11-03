@@ -619,6 +619,7 @@ bool TimelineFramesModel::dropMimeData(const QMimeData *data, Qt::DropAction act
     KisAnimationUtils::FrameItemList dstFrameItems;
     QModelIndexList updateIndexes;
 
+    QVector<QPoint> srcIndexes;
 
     for (int i = 0; i < size; i++) {
         int relRow, relColumn;
@@ -627,8 +628,18 @@ bool TimelineFramesModel::dropMimeData(const QMimeData *data, Qt::DropAction act
         int srcRow = baseRow + relRow;
         int srcColumn = baseColumn + relColumn;
 
-        int dstRow = parent.row() + relRow;
-        int dstColumn = parent.column() + relColumn;
+        srcIndexes << QPoint(srcColumn, srcRow);
+    }
+
+    const QPoint offset(parent.column() - baseColumn, parent.row() - baseRow);
+    KisAnimationUtils::sortPointsForSafeMove(&srcIndexes, offset);
+
+    foreach (const QPoint &point, srcIndexes) {
+        int srcRow = point.y();
+        int srcColumn = point.x();
+
+        int dstRow = point.y() + offset.y();
+        int dstColumn = point.x() + offset.x();
 
         KisNodeDummy *srcDummy = m_d->converter->dummyFromRow(srcRow);
         KisNodeDummy *dstDummy = m_d->converter->dummyFromRow(dstRow);

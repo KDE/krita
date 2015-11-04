@@ -16,22 +16,37 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __TIMELINE_FRAMES_ITEM_DELEGATE_H
-#define __TIMELINE_FRAMES_ITEM_DELEGATE_H
+#ifndef __TIMELINE_COLOR_SCHEME_H
+#define __TIMELINE_COLOR_SCHEME_H
 
-#include <QItemDelegate>
+#include <QScopedPointer>
 
+class QColor;
+class QBrush;
 
-class TimelineFramesItemDelegate : public QItemDelegate
+class TimelineColorScheme
 {
 public:
-    TimelineFramesItemDelegate(QObject *parent);
-    ~TimelineFramesItemDelegate();
+    TimelineColorScheme();
+    ~TimelineColorScheme();
 
-    static void paintActiveFrameSelector(QPainter *painter, const QRect &rc, bool isCurrentFrame);
-    static void drawBackground(QPainter *painter, const QModelIndex &index, const QRect &rc);
+    static TimelineColorScheme* instance();
 
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    QColor selectorColor() const;
+    QColor selectionColor() const;
+    QColor activeLayerBackground() const;
+
+
+    QBrush headerEmpty() const;
+    QBrush headerCachedFrame() const;
+    QBrush headerActive() const;
+
+    QColor frameColor(bool present, bool active);
+
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
-#endif /* __TIMELINE_FRAMES_ITEM_DELEGATE_H */
+#endif /* __TIMELINE_COLOR_SCHEME_H */

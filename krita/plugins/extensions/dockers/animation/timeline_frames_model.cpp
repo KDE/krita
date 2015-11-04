@@ -40,6 +40,7 @@
 #include <commands/kis_node_property_list_command.h>
 
 #include "kis_animation_utils.h"
+#include "timeline_color_scheme.h"
 
 
 struct TimelineFramesModel::Private
@@ -363,28 +364,6 @@ QVariant TimelineFramesModel::data(const QModelIndex &index, int role) const
     case Qt::DisplayRole: {
         return QVariant();
     }
-    case Qt::BackgroundRole: {
-        QColor baseColor = QColor(200, 220, 150);
-        bool active = data(index, ActiveLayerRole).toBool();
-        bool present = m_d->frameExists(index.row(), index.column());
-
-        QColor color = Qt::transparent;
-
-        if (present && !active) {
-            color = baseColor;
-        } else if (present && active) {
-            color = baseColor.darker(130);
-        } else if (!present && active) {
-            color = baseColor.lighter(140);
-        }
-
-        if (!data(index, FrameEditableRole).toBool() && color.alpha() > 0) {
-            const int l = color.lightness();
-            color = QColor(l, l, l);
-        }
-
-        return color;
-    }
     case Qt::TextAlignmentRole: {
         return QVariant(Qt::AlignHCenter | Qt::AlignVCenter);
     }
@@ -408,6 +387,9 @@ bool TimelineFramesModel::setData(const QModelIndex &index, const QVariant &valu
 
             emit dataChanged(this->index(prevLayer, 0), this->index(prevLayer, columnCount() - 1));
             emit dataChanged(this->index(m_d->activeLayerIndex, 0), this->index(m_d->activeLayerIndex, columnCount() - 1));
+
+            emit headerDataChanged(Qt::Vertical, prevLayer, prevLayer);
+            emit headerDataChanged(Qt::Vertical, m_d->activeLayerIndex, m_d->activeLayerIndex);
 
             KisNodeDummy *dummy = m_d->converter->dummyFromRow(m_d->activeLayerIndex);
             KIS_ASSERT_RECOVER(dummy) { return true; }
@@ -471,6 +453,8 @@ QVariant TimelineFramesModel::headerData(int section, Qt::Orientation orientatio
 
     } else {
         switch (role) {
+        case ActiveLayerRole:
+            return section == m_d->activeLayerIndex;
         case Qt::DisplayRole: {
             QVariant value = headerData(section, orientation, Qt::ToolTipRole);
             if (!value.isValid()) return value;

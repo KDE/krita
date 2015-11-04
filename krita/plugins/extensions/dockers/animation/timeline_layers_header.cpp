@@ -25,6 +25,8 @@
 #include <QToolTip>
 
 #include "timeline_frames_model.h"
+#include "timeline_color_scheme.h"
+
 
 struct TimelineLayersHeader::Private
 {
@@ -114,6 +116,33 @@ void TimelineLayersHeader::paintSection(QPainter *painter, const QRect &rect, in
     painter->save();
     QHeaderView::paintSection(painter, rect, logicalIndex);
     painter->restore();
+
+    bool isLayerActive = model()->headerData(logicalIndex, orientation(), TimelineFramesModel::ActiveLayerRole).toBool();
+
+    if (isLayerActive) {
+        QColor lineColor = TimelineColorScheme::instance()->activeLayerBackground();
+        const int lineWidth = 2;
+
+        QPen oldPen = painter->pen();
+        QBrush oldBrush(painter->brush());
+
+        painter->setPen(QPen(lineColor, lineWidth));
+        painter->setBrush(lineColor);
+
+        const int x0 = rect.x();
+        const int y0 = rect.y();
+        const int x1 = rect.right();
+        const int y1 = rect.bottom();
+
+        QVector<QLine> lines;
+        lines << QLine(x0, y0 + lineWidth / 2, x1, y0 + lineWidth / 2);
+        lines << QLine(x0, y1 -  lineWidth / 2, x1,  y1 - lineWidth / 2);
+
+        painter->drawLines(lines);
+
+        painter->setBrush(oldBrush);
+        painter->setPen(oldPen);
+    }
 
     QVariant value =  model()->headerData(logicalIndex, orientation(), TimelineFramesModel::TimelinePropertiesRole);
     TimelineFramesModel::PropertyList props = value.value<TimelineFramesModel::PropertyList>();

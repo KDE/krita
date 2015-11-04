@@ -16,6 +16,8 @@ set(KRITA_ANIMATIONDOCKER_PART_SRCS
     timeline_frames_index_converter.cpp
     timeline_node_list_keeper.cpp
 
+    timeline_color_scheme.cpp
+
     kis_draggable_tool_button.cpp
     kis_animation_utils.cpp
     kis_custom_modifiers_catcher.cpp

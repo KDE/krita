@@ -266,6 +266,7 @@ bool KisNode::isAnimated() const
 void KisNode::enableAnimation()
 {
     m_d->animated = true;
+    baseNodeChangedCallback();
 }
 
 bool KisNode::useInTimeline() const

@@ -56,6 +56,8 @@ private Q_SLOTS:
     void slotBeginRemoveDummy(KisNodeDummy *dummy);
     void slotDummyChanged(KisNodeDummy *dummy);
 
+    void slotUpdateDummyContent(QObject *dummy);
+
 public:
     struct ModelWithExternalNotifications : public QAbstractTableModel {
         ModelWithExternalNotifications(QObject *parent)
@@ -75,6 +77,10 @@ public:
 
         void callEndRemoveRows() {
             endRemoveRows();
+        }
+
+        void callIndexChanged(const QModelIndex &index0, const QModelIndex &index1) {
+            emit dataChanged(index0, index1);
         }
     };
 

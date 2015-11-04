@@ -22,34 +22,49 @@
 #include "kis_dummies_facade_base.h"
 #include "timeline_frames_index_converter.h"
 
+#include <QSet>
+#include <QSignalMapper>
+#include "kis_keyframe_channel.h"
+
 
 struct TimelineNodeListKeeper::Private
 {
-    Private(ModelWithExternalNotifications *_model,
+    Private(TimelineNodeListKeeper *_q,
+            ModelWithExternalNotifications *_model,
             KisDummiesFacadeBase *_dummiesFacade)
-        : model(_model),
+        : q(_q),
+          model(_model),
           dummiesFacade(_dummiesFacade),
           converter(dummiesFacade)
     {
     }
 
+    TimelineNodeListKeeper *q;
     ModelWithExternalNotifications *model;
     KisDummiesFacadeBase *dummiesFacade;
 
     TimelineFramesIndexConverter converter;
 
     QVector<KisNodeDummy*> dummiesList;
+    QSignalMapper dummiesUpdateMapper;
+    QSet<KisNodeDummy*> connectionsSet;
 
     void populateDummiesList() {
         const int rowCount = converter.rowCount();
         for (int i = 0; i < rowCount; ++i) {
-            dummiesList.append(converter.dummyFromRow(i));
+            KisNodeDummy *dummy = converter.dummyFromRow(i);
+
+            dummiesList.append(dummy);
+            tryConnectDummy(dummy);
         }
     }
+
+    void tryConnectDummy(KisNodeDummy *dummy);
+    void disconnectDummy(KisNodeDummy *dummy);
 };
 
 TimelineNodeListKeeper::TimelineNodeListKeeper(ModelWithExternalNotifications *model, KisDummiesFacadeBase *dummiesFacade)
-    : m_d(new Private(model, dummiesFacade))
+    : m_d(new Private(this, model, dummiesFacade))
 {
     KIS_ASSERT_RECOVER_RETURN(m_d->dummiesFacade);
 
@@ -61,6 +76,8 @@ TimelineNodeListKeeper::TimelineNodeListKeeper(ModelWithExternalNotifications *m
             SLOT(slotDummyChanged(KisNodeDummy*)));
 
     m_d->populateDummiesList();
+
+    connect(&m_d->dummiesUpdateMapper, SIGNAL(mapped(QObject*)), SLOT(slotUpdateDummyContent(QObject*)));
 }
 
 TimelineNodeListKeeper::~TimelineNodeListKeeper()
@@ -94,7 +111,6 @@ void TimelineNodeListKeeper::updateActiveDummy(KisNodeDummy *dummy)
     KisNodeDummy *oldActiveDummy = m_d->converter.activeDummy();
     m_d->converter.updateActiveDummy(dummy, &oldRemoved, &newAdded);
 
-
     if (oldRemoved) {
         slotBeginRemoveDummy(oldActiveDummy);
     }
@@ -102,6 +118,62 @@ void TimelineNodeListKeeper::updateActiveDummy(KisNodeDummy *dummy)
     if (newAdded) {
         slotEndInsertDummy(dummy);
     }
+}
+
+void TimelineNodeListKeeper::slotUpdateDummyContent(QObject *_dummy)
+{
+    KisNodeDummy *dummy = qobject_cast<KisNodeDummy*>(_dummy);
+    int pos = m_d->converter.rowForDummy(dummy);
+    if (pos < 0) return;
+
+    QModelIndex index0 = m_d->model->index(pos, 0);
+    QModelIndex index1 = m_d->model->index(pos, m_d->model->columnCount() - 1);
+    m_d->model->callIndexChanged(index0, index1);
+}
+
+void TimelineNodeListKeeper::Private::tryConnectDummy(KisNodeDummy *dummy)
+{
+    KisKeyframeChannel *content =
+        dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+
+    if (!content) {
+        if (connectionsSet.contains(dummy)) {
+            connectionsSet.remove(dummy);
+        }
+
+        return;
+    }
+
+    if (connectionsSet.contains(dummy)) return;
+
+    connect(content, SIGNAL(sigKeyframeAdded(KisKeyframe*)),
+            &dummiesUpdateMapper, SLOT(map()));
+    connect(content, SIGNAL(sigKeyframeAboutToBeRemoved(KisKeyframe*)),
+            &dummiesUpdateMapper, SLOT(map()));
+    connect(content, SIGNAL(sigKeyframeMoved(KisKeyframe*, int)),
+            &dummiesUpdateMapper, SLOT(map()));
+
+
+    dummiesUpdateMapper.setMapping(content, (QObject*)dummy);
+    connectionsSet.insert(dummy);
+}
+
+void TimelineNodeListKeeper::Private::disconnectDummy(KisNodeDummy *dummy)
+{
+    if (!connectionsSet.contains(dummy)) return;
+
+    KisKeyframeChannel *content =
+        dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+
+    if (!content) {
+        if (connectionsSet.contains(dummy)) {
+            connectionsSet.remove(dummy);
+        }
+        return;
+    }
+
+    content->disconnect(&dummiesUpdateMapper);
+    connectionsSet.remove(dummy);
 }
 
 void TimelineNodeListKeeper::slotEndInsertDummy(KisNodeDummy *dummy)
@@ -113,6 +185,7 @@ void TimelineNodeListKeeper::slotEndInsertDummy(KisNodeDummy *dummy)
 
         m_d->model->callBeginInsertRows(QModelIndex(), pos, pos);
         m_d->dummiesList.insert(pos, 1, dummy);
+        m_d->tryConnectDummy(dummy);
         m_d->model->callEndInsertRows();
     }
 }
@@ -123,6 +196,7 @@ void TimelineNodeListKeeper::slotBeginRemoveDummy(KisNodeDummy *dummy)
         int pos = m_d->dummiesList.indexOf(dummy);
 
         m_d->model->callBeginRemoveRows(QModelIndex(), pos, pos);
+        m_d->disconnectDummy(dummy);
         m_d->dummiesList.remove(pos);
         m_d->model->callEndRemoveRows();
     }
@@ -134,6 +208,8 @@ void TimelineNodeListKeeper::slotDummyChanged(KisNodeDummy *dummy)
 {
     const bool present = m_d->dummiesList.contains(dummy);
     const bool shouldBe = m_d->converter.isDummyVisible(dummy);
+
+    m_d->tryConnectDummy(dummy);
 
     if (!present && shouldBe) {
         slotEndInsertDummy(dummy);

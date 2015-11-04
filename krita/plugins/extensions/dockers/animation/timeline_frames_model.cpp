@@ -594,6 +594,7 @@ bool TimelineFramesModel::offsetFrames(QVector<QPoint> srcIndexes, const QPoint 
 {
     bool result = false;
     if (srcIndexes.isEmpty()) return result;
+    if (offset.isNull()) return result;
 
     KisAnimationUtils::sortPointsForSafeMove(&srcIndexes, offset);
 

@@ -114,6 +114,8 @@ void TimelineDocker::setCanvas(KoCanvasBase * canvas)
         m_d->canvasConnections.addConnection(
             m_d->model, SIGNAL(requestCurrentNodeChanged(KisNodeSP)),
             m_d->canvas->viewManager()->nodeManager(), SLOT(slotNonUiActivatedNode(KisNodeSP)));
+
+        m_d->model->slotCurrentNodeChanged(m_d->canvas->viewManager()->activeNode());
     }
 }
 

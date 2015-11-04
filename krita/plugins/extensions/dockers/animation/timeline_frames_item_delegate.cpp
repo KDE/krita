@@ -20,6 +20,7 @@
 
 #include <QPen>
 #include <QPainter>
+#include <QApplication>
 
 #include "timeline_frames_model.h"
 #include "timeline_color_scheme.h"
@@ -83,14 +84,32 @@ void TimelineFramesItemDelegate::drawBackground(QPainter *painter, const QModelI
     painter->fillRect(rc, color);
 }
 
+void TimelineFramesItemDelegate::drawFocus(QPainter *painter,
+                                           const QStyleOptionViewItem &option,
+                                           const QRect &rect) const
+{
+    // copied form Qt 4.8!
+
+    if ((option.state & QStyle::State_HasFocus) == 0 || !rect.isValid())
+        return;
+    QStyleOptionFocusRect o;
+    o.QStyleOption::operator=(option);
+    o.rect = rect;
+    o.state |= QStyle::State_KeyboardFocusChange;
+    o.state |= QStyle::State_Item;
+    QPalette::ColorGroup cg = (option.state & QStyle::State_Enabled)
+                              ? QPalette::Normal : QPalette::Disabled;
+    o.backgroundColor = option.palette.color(cg, (option.state & QStyle::State_Selected)
+                                             ? QPalette::Highlight : QPalette::Window);
+    const QWidget *widget = qobject_cast<QWidget*>(parent());
+    QStyle *style = widget ? widget->style() : QApplication::style();
+    style->drawPrimitive(QStyle::PE_FrameFocusRect, &o, painter, widget);
+}
+
 void TimelineFramesItemDelegate::paint(QPainter *painter,
                                const QStyleOptionViewItem &option,
                                const QModelIndex &index) const
 {
-    //QStyleOptionViewItem op2 = option;
-    //op2.showDecorationSelected = false;
-    //QItemDelegate::paint(painter, op2, index);
-
     drawBackground(painter, index, option.rect);
 
     if (option.showDecorationSelected &&
@@ -109,6 +128,7 @@ void TimelineFramesItemDelegate::paint(QPainter *painter,
         painter->setOpacity(oldOpacity);
     }
 
+    drawFocus(painter, option, option.rect);
 
     bool active = index.data(TimelineFramesModel::ActiveFrameRole).toBool();
     bool layerIsCurrent = index.data(TimelineFramesModel::ActiveLayerRole).toBool();

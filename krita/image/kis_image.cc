@@ -1629,6 +1629,7 @@ bool KisImage::startIsolatedMode(KisNodeSP node)
     // need to emit this signal in multiple threads
     m_d->notifyProjectionUpdatedInPatches(bounds());
 
+    invalidateAllFrames();
     return true;
 }
 
@@ -1644,6 +1645,7 @@ void KisImage::stopIsolatedMode()
     // the GUI uses our thread to do the color space conversion so we
     // need to emit this signal in multiple threads
     m_d->notifyProjectionUpdatedInPatches(bounds());
+    invalidateAllFrames();
 
     // TODO: Substitute notifyProjectionUpdated() with this code
     // when update optimization is implemented

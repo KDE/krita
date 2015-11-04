@@ -84,6 +84,11 @@ if (HAVE_DBUS)
    set (KRITA_WIDGET_UTILS_EXTRA_LIBS ${KRITA_WIDGET_UTILS_EXTRA_LIBS} Qt5::DBus)
 endif ()
 
+if (APPLE)
+    find_library(FOUNDATION_LIBRARY Foundation)
+    set(KRITA_WIDGET_UTILS_EXTRA_LIBS ${KRITA_WIDGET_UTILS_EXTRA_LIBS} ${FOUNDATION_LIBRARY})
+endif ()
+
 target_link_libraries(kritawidgetutils
     PUBLIC
         Qt5::Widgets

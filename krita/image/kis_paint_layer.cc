@@ -192,7 +192,7 @@ void KisPaintLayer::setSectionModelProperties(const KisNodeModel::PropertyList &
         if (property.name == i18n("Alpha Locked")) {
             setAlphaLocked(property.state.toBool());
         }
-        else if (property.name == i18n("Onion skin")) {
+        else if (property.name == i18n("Onion Skins")) {
             setOnionSkinEnabled(property.state.toBool());
         }
     }

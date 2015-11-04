@@ -101,15 +101,15 @@ QModelIndex KisNodeModel::indexFromNode(KisNodeSP node) const
     return QModelIndex();
 }
 
-bool KisNodeModel::belongsToIsolatedGroup(KisNodeSP node) const
+bool KisNodeModel::belongsToIsolatedGroup(KisImageSP image, KisNodeSP node, KisDummiesFacadeBase *dummiesFacade)
 {
-    KisNodeSP isolatedRoot = m_d->image->isolatedModeRoot();
+    KisNodeSP isolatedRoot = image->isolatedModeRoot();
     if (!isolatedRoot) return true;
 
     KisNodeDummy *isolatedRootDummy =
-        m_d->dummiesFacade->dummyForNode(isolatedRoot);
+        dummiesFacade->dummyForNode(isolatedRoot);
     KisNodeDummy *dummy =
-        m_d->dummiesFacade->dummyForNode(node);
+        dummiesFacade->dummyForNode(node);
 
     while (dummy) {
         if (dummy == isolatedRootDummy) {
@@ -119,6 +119,11 @@ bool KisNodeModel::belongsToIsolatedGroup(KisNodeSP node) const
     }
 
     return false;
+}
+
+bool KisNodeModel::belongsToIsolatedGroup(KisNodeSP node) const
+{
+    return belongsToIsolatedGroup(m_d->image, node, m_d->dummiesFacade);
 }
 
 void KisNodeModel::resetIndexConverter()

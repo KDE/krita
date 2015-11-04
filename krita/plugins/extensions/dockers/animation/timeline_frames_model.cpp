@@ -41,6 +41,8 @@
 
 #include "kis_animation_utils.h"
 #include "timeline_color_scheme.h"
+#include "kis_node_model.h"
+#include "kis_projection_leaf.h"
 
 
 struct TimelineFramesModel::Private
@@ -467,6 +469,25 @@ QVariant TimelineFramesModel::headerData(int section, Qt::Orientation orientatio
             }
 
             return name;
+        }
+        case Qt::TextColorRole: {
+            // WARNING: this role doesn't work for header views! Use
+            //          bold font to show isolated mode instead!
+            return QVariant();
+        }
+        case Qt::FontRole: {
+            KisNodeDummy *dummy = m_d->converter->dummyFromRow(section);
+            if (!dummy) return QVariant();
+            KisNodeSP node = dummy->node();
+
+            QFont baseFont;
+            if (node->projectionLeaf()->isDroppedMask()) {
+                baseFont.setStrikeOut(true);
+            } else if (m_d->image->isolatedModeRoot() &&
+                       KisNodeModel::belongsToIsolatedGroup(m_d->image, node, m_d->dummiesFacade)) {
+                baseFont.setBold(true);
+            }
+            return baseFont;
         }
         case Qt::ToolTipRole: {
             return m_d->layerName(section);

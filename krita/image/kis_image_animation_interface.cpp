@@ -111,6 +111,8 @@ bool KisImageAnimationInterface::externalFrameActive() const
 
 void KisImageAnimationInterface::requestTimeSwitchWithUndo(int time)
 {
+    if (m_d->currentUITime == time) return;
+
     KisSwitchCurrentTimeCommand *cmd =
         new KisSwitchCurrentTimeCommand(m_d->image, time);
 
@@ -125,6 +127,8 @@ void KisImageAnimationInterface::requestTimeSwitchNonGUI(int time)
 
 void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId)
 {
+    if (m_d->currentUITime == frameId) return;
+
     m_d->image->barrierLock();
     m_d->currentTime = frameId;
     m_d->currentUITime = frameId;

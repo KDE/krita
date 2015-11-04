@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Normalize Filter
 Name[ca]=Filtre de normalització
+Name[ca@valencia]=Filtre de normalització
 Name[de]=Normalisierungs-Filter
 Name[en_GB]=Normalise Filter
 Name[es]=Filtro de normalizar
@@ -16,6 +17,7 @@ Name[uk]=Фільтр нормалізації
 Name[x-test]=xxNormalize Filterxx
 Comment=Normalize the color channels.
 Comment[ca]=Normalitza els canals de color.
+Comment[ca@valencia]=Normalitza els canals de color.
 Comment[de]=Normalisiert die Farbkanäle.
 Comment[en_GB]=Normalise the colour channels.
 Comment[es]=Normalizar los canales de color.

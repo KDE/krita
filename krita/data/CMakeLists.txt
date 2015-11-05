@@ -18,6 +18,13 @@ add_subdirectory( palettes )
 ########### install files ###############
 
 install( FILES
+    kritarc
+    DESTINATION ${CONFIG_INSTALL_DIR} 
+)
+
+
+
+install( FILES
     krita.xml
     DESTINATION ${XDG_MIME_INSTALL_DIR})
 if (SHARED_MIME_INFO_FOUND)

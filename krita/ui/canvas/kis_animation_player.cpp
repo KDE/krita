@@ -20,7 +20,14 @@
 
 #include <QTimer>
 
+//#define DEBUG_FRAMERATE
+
+#ifdef DEBUG_FRAMERATE
+#include <QTime>
+#endif /* DEBUG_FRAMERATE */
+
 #include "kis_global.h"
+
 
 #include "kis_image.h"
 #include "kis_canvas2.h"
@@ -46,6 +53,10 @@ public:
     KisCanvas2 *canvas;
 
     KisSignalAutoConnectionsStore cancelStrokeConnections;
+
+#ifdef DEBUG_FRAMERATE
+    QTime frameRateTimer;
+#endif /* DEBUG_FRAMERATE */
 };
 
 KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
@@ -152,12 +163,28 @@ void KisAnimationPlayer::slotUpdate()
     uploadFrame(m_d->currentFrame);
 }
 
+#ifdef DEBUG_FRAMERATE
+#include "../../sdk/tests/testutil.h"
+static TestUtil::MeasureAvgPortion C(25);
+#endif /* DEBUG_FRAMERATE */
+
 void KisAnimationPlayer::uploadFrame(int frame)
 {
     if (m_d->canvas->frameCache()->uploadFrame(frame)) {
         m_d->canvas->updateCanvas();
         emit sigFrameChanged();
     }
+
+    //emit sigFrameChanged();
+
+#ifdef DEBUG_FRAMERATE
+    if (!m_d->frameRateTimer.isValid()) {
+        m_d->frameRateTimer.start();
+    } else {
+        const int elapsed = m_d->frameRateTimer.restart();
+        C.addTotal(1000 / elapsed);
+    }
+#endif /* DEBUG_FRAMERATE */
 }
 
 void KisAnimationPlayer::slotCancelPlayback()

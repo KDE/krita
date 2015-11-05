@@ -52,6 +52,7 @@
 #include "layerstyles/kis_layer_style_projection_plane.h"
 
 #include "krita_utils.h"
+#include "kis_layer_properties_icons.h"
 
 
 class KisSafeProjection {
@@ -219,10 +220,10 @@ KisNodeModel::PropertyList KisLayer::sectionModelProperties() const
     }
 
     if (m_d->layerStyle && !m_d->layerStyle->isEmpty()) {
-        l << KisNodeModel::Property(i18n("Layer Style"), KisIconUtils::loadIcon("layer-style-enabled"), KisIconUtils::loadIcon("layer-style-disabled"), m_d->layerStyle->isEnabled());
+        l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::layerStyle, m_d->layerStyle->isEnabled());
     }
 
-    l << KisNodeModel::Property(i18n("Inherit Alpha"), KisIconUtils::loadIcon("transparency-disabled"), KisIconUtils::loadIcon("transparency-enabled"), alphaChannelDisabled());
+    l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::inheritAlpha, alphaChannelDisabled());
 
     return l;
 }

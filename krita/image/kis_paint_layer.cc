@@ -42,6 +42,7 @@
 #include "kis_raster_keyframe_channel.h"
 
 #include "kis_signal_auto_connection.h"
+#include "kis_layer_properties_icons.h"
 
 struct Q_DECL_HIDDEN KisPaintLayer::Private
 {
@@ -171,11 +172,10 @@ KisNodeModel::PropertyList KisPaintLayer::sectionModelProperties() const
 {
     KisNodeModel::PropertyList l = KisLayer::sectionModelProperties();
 
-    // XXX: get right icons
-    l << KisNodeModel::Property(i18n("Alpha Locked"), KisIconUtils::loadIcon("transparency-locked"), KisIconUtils::loadIcon("transparency-unlocked"), alphaLocked());
+    l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::alphaLocked, alphaLocked());
 
     if (isAnimated()) {
-        l << KisNodeModel::Property(i18n("Onion skin"), koIcon("onionOn"), koIcon("onionOff"), onionSkinEnabled());
+        l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::onionSkins, onionSkinEnabled());
     }
 
     return l;

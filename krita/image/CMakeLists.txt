@@ -296,6 +296,7 @@ set(kritaimage_LIB_SRCS
    kis_idle_watcher.cpp
 
    kis_psd_layer_style.cpp
+   kis_layer_properties_icons.cpp
 
    layerstyles/kis_multiple_projection.cpp
    layerstyles/kis_layer_style_filter.cpp

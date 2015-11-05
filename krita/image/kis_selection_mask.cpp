@@ -34,6 +34,7 @@
 #include <KoIcon.h>
 #include <kis_icon.h>
 #include "kis_thread_safe_signal_compressor.h"
+#include "kis_layer_properties_icons.h"
 
 
 struct Q_DECL_HIDDEN KisSelectionMask::Private
@@ -115,7 +116,7 @@ void KisSelectionMask::accept(KisProcessingVisitor &visitor, KisUndoAdapter *und
 KisNodeModel::PropertyList KisSelectionMask::sectionModelProperties() const
 {
     KisNodeModel::PropertyList l = KisBaseNode::sectionModelProperties();
-    l << KisNodeModel::Property(i18n("Active"), KisIconUtils::loadIcon("local_selection_active"), KisIconUtils::loadIcon("local_selection_inactive"), active());
+    l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::selectionActive, active());
     return l;
 }
 

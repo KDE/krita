@@ -485,12 +485,7 @@ QVariant TimelineFramesModel::headerData(int section, Qt::Orientation orientatio
             return m_d->layerName(section);
         }
         case TimelinePropertiesRole: {
-            KisNodeDummy *dummy = m_d->converter->dummyFromRow(section);
-            if (!dummy) return QVariant();
-
-            PropertyList props = dummy->node()->sectionModelProperties();
-            return QVariant::fromValue(props);
-
+            return QVariant::fromValue(m_d->layerProperties(section));
         }
         case OtherLayersRole: {
             TimelineNodeListKeeper::OtherLayersList list =

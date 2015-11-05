@@ -23,6 +23,9 @@
 #include <KoProperties.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
+#include "kis_paint_device.h"
+#include "kis_layer_properties_icons.h"
+
 
 struct Q_DECL_HIDDEN KisBaseNode::Private
 {
@@ -140,8 +143,8 @@ void KisBaseNode::setCompositeOpId(const QString& compositeOp)
 KisNodeModel::PropertyList KisBaseNode::sectionModelProperties() const
 {
     KisNodeModel::PropertyList l;
-    l << KisNodeModel::Property(i18n("Visible"), KisIconUtils::loadIcon("visible"), KisIconUtils::loadIcon("novisible"), visible(), m_d->hack_visible.isInStasis, m_d->hack_visible.stateInStasis);
-    l << KisNodeModel::Property(i18n("Locked"), KisIconUtils::loadIcon("layer-locked"), KisIconUtils::loadIcon("layer-unlocked"), userLocked());
+    l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::visible, visible(), m_d->hack_visible.isInStasis, m_d->hack_visible.stateInStasis);
+    l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::locked, userLocked());
     return l;
 }
 

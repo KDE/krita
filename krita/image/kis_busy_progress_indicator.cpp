@@ -26,7 +26,7 @@
 
 struct KisBusyProgressIndicator::Private
 {
-    Private() : numEmptyTicks(0) {}
+    Private() : numEmptyTicks(0), isStarted(false) {}
 
     QTimer timer;
     int numEmptyTicks;
@@ -34,13 +34,19 @@ struct KisBusyProgressIndicator::Private
     QAtomicInt timerStarted;
     KoProgressProxy *progressProxy;
 
+    bool isStarted;
+
     void startProgressReport() {
+        isStarted = true;
         progressProxy->setRange(0, 0);
     }
 
     void stopProgressReport() {
+        if (!isStarted) return;
+
         progressProxy->setRange(0, 100);
         progressProxy->setValue(100);
+        isStarted = false;
     }
 };
 
@@ -55,6 +61,11 @@ KisBusyProgressIndicator::KisBusyProgressIndicator(KoProgressProxy *progressProx
 }
 
 KisBusyProgressIndicator::~KisBusyProgressIndicator()
+{
+    m_d->stopProgressReport();
+}
+
+void KisBusyProgressIndicator::endUpdatesBeforeDestroying()
 {
     m_d->stopProgressReport();
 }

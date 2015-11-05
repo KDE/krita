@@ -11,7 +11,6 @@
         <file>dark_layer-locked.svg</file>
         <file>dark_layer-unlocked.svg</file>
         <file>dark_nextframe.svg</file>
-        <file>dark_onion_skin_options.svg</file>
         <file>dark_pallete_librarysvg.svg</file>
         <file>dark_passthrough-disabled.svg</file>
         <file>dark_passthrough-enabled.svg</file>
@@ -35,7 +34,6 @@
         <file>light_layer-locked.svg</file>
         <file>light_layer-unlocked.svg</file>
         <file>light_nextframe.svg</file>
-        <file>light_onion_skin_options.svg</file>
         <file>light_pallete_library.svg</file>
         <file>light_passthrough-disabled.svgz</file>
         <file>light_passthrough-enabled.svgz</file>
@@ -48,10 +46,6 @@
         <file>light_transparency-disabled.svg</file>
         <file>light_transparency-enabled.svg</file>
         <file>light_trim-to-image.svg</file>
-        <file>onionA.svg</file>
-        <file>onionB.svg</file>
-        <file>onionOff.svg</file>
-        <file>onionOn.svg</file>
         <file>paintop_presets_disabled.svgz</file>
         <file>paintop_settings_01.svgz</file>
         <file>selection-info.svg</file>

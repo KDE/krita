@@ -32,6 +32,8 @@
 #include "KisPart.h"
 #include "kis_name_server.h"
 #include "flake/kis_shape_controller.h"
+#include "kis_undo_adapter.h"
+
 
 #include "timeline_frames_view.h"
 #include "timeline_frames_model.h"

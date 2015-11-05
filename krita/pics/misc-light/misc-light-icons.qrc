@@ -24,6 +24,8 @@
         <file>light_stroke-join-round.svg</file>
         <file>light_symmetry-horizontal.svg</file>
         <file>light_symmetry-vertical.svg</file>
-
+        <file>light_onionOff.svg</file>
+        <file>light_onionOn.svg</file>
+        <file>light_onion_skin_options.svg</file>
     </qresource>
 </RCC>

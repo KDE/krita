@@ -24,5 +24,8 @@
         <file>dark_stroke-join-round.svg</file>
         <file>dark_symmetry-horizontal.svg</file>
         <file>dark_symmetry-vertical.svg</file>
+        <file>dark_onionOff.svg</file>
+        <file>dark_onionOn.svg</file>
+        <file>dark_onion_skin_options.svg</file>
     </qresource>
 </RCC>

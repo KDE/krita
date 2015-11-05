@@ -120,12 +120,10 @@ class KisOpenPanePrivate : public Ui_KisOpenPaneBase
 public:
     KisOpenPanePrivate() :
         Ui_KisOpenPaneBase() {
-        m_customWidgetsSeparator = 0;
         m_templatesSeparator = 0;
     }
 
     int m_freeCustomWidgetIndex;
-    KoSectionListItem* m_customWidgetsSeparator;
     KoSectionListItem* m_templatesSeparator;
 
    
@@ -297,10 +295,6 @@ void KisOpenPane::addCustomDocumentWidget(QWidget *widget, const QString& title,
 {
     Q_ASSERT(widget);
 
-    if (!d->m_customWidgetsSeparator) {
-        d->m_customWidgetsSeparator = new KoSectionListItem(d->m_sectionList, "", 3);
-    }
-
     QString realtitle = title;
 
     if (realtitle.isEmpty())
@@ -384,5 +378,3 @@ void KisOpenPane::itemClicked(QTreeWidgetItem* item)
         d->m_widgetStack->widget(selectedItem->widgetIndex())->setFocus();
     } 
 }
-
-#include <KisOpenPane.moc>

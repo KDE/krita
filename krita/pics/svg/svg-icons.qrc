@@ -66,10 +66,10 @@
         <file>dark_lazyframeOff.svg</file>
 
         <file>dark_animation_play.svg</file>
-        <file>dark_animation_pause.svg</file>
+        <file>dark_animation_stop.svg</file>
 
         <file>light_animation_play.svg</file>
-        <file>light_animation_pause.svg</file>
+        <file>light_animation_stop.svg</file>
 
     </qresource>
 </RCC>

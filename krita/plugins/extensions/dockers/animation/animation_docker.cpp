@@ -395,7 +395,7 @@ void AnimationDocker::updatePlayPauseIcon()
     bool isPlaying = m_canvas && m_canvas->animationPlayer() && m_canvas->animationPlayer()->isPlaying();
 
     m_playPauseAction->setIcon(isPlaying ?
-                               KisIconUtils::loadIcon("animation_pause") :
+                               KisIconUtils::loadIcon("animation_stop") :
                                KisIconUtils::loadIcon("animation_play"));
 }
 

@@ -30,6 +30,13 @@
 #include <QPainter>
 
 struct KisPaintingAssistantsDecoration::Private {
+    Private() : assistantVisible(false),
+                outlineVisible(false),
+                snapOnlyOneAssistant(true),
+                firstAssistant(0),
+                aFirstStroke(false){}
+
+
     QList<KisPaintingAssistant*> assistants;
     bool assistantVisible;
     bool outlineVisible;

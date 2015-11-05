@@ -32,6 +32,8 @@ public:
     KisBusyProgressIndicator(KoProgressProxy *progressProxy);
     ~KisBusyProgressIndicator();
 
+    void endUpdatesBeforeDestroying();
+
 public Q_SLOTS:
     void update();
 

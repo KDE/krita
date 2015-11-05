@@ -118,7 +118,7 @@ QPainterPath ArtisticTextToolSelection::outline()
 
     int globalCharIndex = m_selectionStart;
     int remainingChars = m_selectionCount;
-    while (remainingChars) {
+    while (remainingChars && ranges.size() > charPos.first) {
         const ArtisticTextRange &currentRange = ranges[charPos.first];
 
         int currentTextLength = currentRange.text().length();

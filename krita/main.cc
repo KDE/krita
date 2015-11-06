@@ -102,6 +102,7 @@ extern "C" int main(int argc, char **argv)
 
     KLocalizedString::setApplicationDomain("krita");
 
+    QCoreApplication::addLibraryPath(QCoreApplication::applicationDirPath());
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
 

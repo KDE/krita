@@ -25,7 +25,6 @@ mkdir "$env:KRITA_INPUT\lib" -ea SilentlyContinue
 mkdir "$env:KRITA_INPUT\lib\krita" -ea SilentlyContinue
 mkdir "$env:KRITA_INPUT\lib\plugins\styles" -ea SilentlyContinue
 mkdir "$env:KRITA_INPUT\lib\plugins\imageformats" -ea SilentlyContinue
-mkdir "$env:KRITA_INPUT\plugins" -ea SilentlyContinue
 mkdir "$env:KRITA_INPUT\share" -ea SilentlyContinue
 mkdir "$env:KRITA_INPUT\share\appdata" -ea SilentlyContinue
 mkdir "$env:KRITA_INPUT\share\applications" -ea SilentlyContinue
@@ -37,7 +36,7 @@ mkdir "$env:KRITA_INPUT\share\dbus-1\" -ea SilentlyContinue
 mkdir "$env:KRITA_INPUT\share\dbus-1\interfaces" -ea SilentlyContinue
 mkdir "$env:KRITA_INPUT\share\dbus-1\services" -ea SilentlyContinue
 mkdir "$env:KRITA_INPUT\share\dbus-1\system-services"-ea SilentlyContinue
-mkdir "$env:KRITA_INPUT\share\kde4\services" -ea SilentlyContinue
+mkdir "$env:KRITA_INPUT\share\kservices5" -ea SilentlyContinue
 mkdir "$env:KRITA_INPUT\share\kservicetypes5" -ea SilentlyContinue
 
 mkdir "$env:KRITA_OUTPUT" -ea SilentlyContinue

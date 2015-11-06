@@ -193,9 +193,10 @@
 
     {
         "msg" : "Copying Qt plugins",
-        "dir" : "plugins",
+        "dir" : "bin",
         "files" : [
             "plugins\\imageformats",
+            "plugins\\platforms",
             "plugins\\iconengines"]
     },
 
@@ -233,6 +234,7 @@
             "share\\color-schemes",
             "share\\apps\\desktoptheme",
             "share\\krita",
+            "share\\kritasketch",
             "share\\kritaanimation",
             "share\\kritaplugins",
             "share\\kstyle",
@@ -271,7 +273,7 @@
     {
         "msg": "Copying directory share/kservices5",
         "comment" : "Make sure calligra directory works properly",
-        "dir" : "share\\kde4\\services",
+        "dir" : "share\\kservices5",
         "files" : [
             "share\\kservices5\\calligra",
             "share\\kservices5\\krita_kra_thumbnail.desktop",

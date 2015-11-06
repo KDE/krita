@@ -11,107 +11,90 @@
 # You must not remove this notice, or any other, from this software.
 # ------------------------------------------------------------------------
 #
-#  C2W Installer
+#  Krita Windows Installer
 #  Environment settings
 #
 #  This file checks for the presence of environment variables
 #  and sets default values if they do not exist.
 #
+#  See README.txt for more details.
+#
 #  wix process
 #  -----------
-#  C2WINSTALL_WIX_BIN - location of the Wix binaries
-#  C2WINSTALL_OUTPUT - destination for generated installers
-#  C2WINSTALL_INPUT - source directory of packaged KDEROOT+CALLIGRA_INST
-#  C2WINSTALL_MERGEMODS - directory where we should look for Merge Modules
+#  KRITA_WIX_BIN - location of the Wix binaries
+#  KRITA_OUTPUT - destination for generated installers
+#  KRITA_INPUT - source directory of packaged KDEROOT+CALLIGRA_INST
+#  KRITA_MERGEMODS - directory where we should look for Merge Modules
 #
 #  package process
 #  ---------------
-#  CALLIGRA_INST - the Calligra installation directory
+#  CALLIGRA_INST - the Krita installation directory (TODO: rename)
 #  KDEROOT - the root of the KDE on Windows emerge based distribution
 #
 #  Build options (defined elsewhere)
 #  ---------------------------------
-# C2WINSTALL_VC2010_DISTRIBUTE:
-#     DLL - bundle DLLs
-#     MSM - use Merge Modules
-#     <other> - display error message
 #
 # ...USE_DLL has priority, if neither are defined, an error is displayed
 #
 #  -----------------------------------------------------------------------
 #
-$C2WINSTALL_GITREV="last"
-$C2WINSTALL_VERSION="2.6.8.0"
-$C2WINSTALL_VERSIONSTRING="2.6.8.0"
+
+# WIX reads environment variables, but PowerShell variables are local by
+# default, so we have to prefix all variables with $env:
+$env:KRITA_VERSION="3.0.0.1"
+$env:KRITA_VERSIONSTRING="3.0.0.1"  # This could be set to a cute name if you wanted.
+$env:KRITA_GITREV="last"
 
 
-## Uncomment these to set manually
-$CALLIGRA_INST="r:"
-$KDEROOT="r:"
-$C2WINSTALL_ROOT="$KDEROOT\inst"
+## Base installation directories
+$env:KDEROOT="r:"
+$env:CALLIGRA_INST="r:"
+$PACKAGER_ROOT="r:\inst"  # Working directory for package.ps1 (script-local)
+$env:KRITA_WIX_BIN="r:\inst\wix310"  # Location of WIX binaries
 
 
-$C2WINSTALL_VC2010_DISTRIBUTE="MSM"
+
+# Method of distributing MSVC 2015
+#     DLL - bundle DLLs
+#     MSM - use Merge Modules
+#     <other> - error
+$env:KRITA_VC2015_DISTRIBUTE="MSM"
+
+# See MSDN: "Redistributing Components By Using Merge Modules"
+# https://msdn.microsoft.com/en-us/library/ms235290.aspx
+$env:KRITA_MERGEMODULES="C:\Program Files (x86)\Common Files\Merge Modules"
 
 
 function warn-unset($v) {
-    # Use this function only when there is no acceptable default
+    # Use this function only when there is no acceptable default.
     $val = (Get-Variable $v).value
-    iex "echo ""Warning: $v not found. Set to default '$val'"""
+    iex "echo ""Warning: variable $v was not set.  Please check your configuration."
+    Exit
 }
 
-if ($CALLIGRA_INST -eq $null) {
-    $CALLIGRA_INST="$PWD..\kde4\inst"
+if ($env:CALLIGRA_INST -eq $null) {
     warn-unset "CALLIGRA_INST"
 }
 
-if ($C2WINSTALL_ROOT -eq $null) {
-    $C2WINSTALL_ROOT="$PWD\.."
-    warn-unset "C2WINSTALL_ROOT"
-}
-
 if ($env:KDEROOT -eq $null) {
-    $env:KDEROOT="$PWD..\kderoot"
     warn-unset "$env:KDEROOT"
 }
 
-if ($C2WINSTALL_VERSION -eq $null) {
-    $C2WINSTALL_VERSION="0.0.0.0"
-    warn-unset "C2WINSTALL_VERSION"
+if ($env:KRITA_VERSION -eq $null) {
+    warn-unset "KRITA_VERSION"
+    Exit
 }
 
-if ($C2WINSTALL_GITREV -eq $null) {
-    $C2WINSTALL_GITREV="last"
-    warn-unset "C2WINSTALL_GITREV"
+if ($env:KRITA_GITREV -eq $null) {
+    warn-unset "KRITA_GITREV"
 }
 
-if ($C2WINSTALL_VC2010_DISTRIBUTE -eq $null) {
-    $C2WINSTALL_VC2010_DISTRIBUTE="ERROR"
-    warn-unset "C2WINSTALL_VC2010_DISTRIBUTE"
-}
 
-if ($C2WINSTALL_WIX_BIN -eq $null) {
-    $C2WINSTALL_WIX_BIN="$C2WINSTALL_ROOT\wix36"
-}
+$env:KRITA_VC2015_DLLS="$PWD\..\deps\vcredist\DLLs\Microsoft.VC140.CRT"
+$env:KRITA_TEMP="$PACKAGER_ROOT\installer-temp"
+$env:KRITA_INPUT="$PACKAGER_ROOT\installer-input"
+$env:KRITA_OUTPUT="$PACKAGER_ROOT\installer-output"
 
-if ($C2WINSTALL_MERGEMODULES -eq $null) {
-    $C2WINSTALL_MERGEMODULES="$C2WINSTALL_ROOT\deps"
-}
 
-if ($C2WINSTALL_VC2010_DLLS -eq $null) {
-    $C2WINSTALL_VC2010_DLLS="$PWD\..\deps\vcredist\DLLs\Microsoft.VC100.CRT"
-}
 
-if ($C2WINSTALL_TEMP -eq $null) {
-    $C2WINSTALL_TEMP="$C2WINSTALL_ROOT\c2winstaller-temp"
-}
-
-if ($C2WINSTALL_INPUT -eq $null) {
-    $C2WINSTALL_INPUT="$C2WINSTALL_ROOT\c2winstaller-input"
-}
-
-if ($C2WINSTALL_OUTPUT -eq $null) {
-    $C2WINSTALL_OUTPUT="$C2WINSTALL_ROOT\c2winstaller-output"
-}
-
-set $env:Path "$($env:Path);$C2WINSTALL_WIX_BIN"
+# set $env:Path "$($env:Path);$KRITA_WIX_BIN"

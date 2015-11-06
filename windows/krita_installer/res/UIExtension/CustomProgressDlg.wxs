@@ -106,9 +106,9 @@
             </BillboardAction>
             
 			<Binary Id="Billboard.Init" SourceFile="res\UIExtension\Bitmaps\Billboards\billboard.bmp" />
-			<Binary Id="Billboard.Page1" SourceFile="res\UIExtension\Bitmaps\Billboards\billboard01.bmp" />
-			<Binary Id="Billboard.Page2" SourceFile="res\UIExtension\Bitmaps\Billboards\billboard02.bmp" />
-			<Binary Id="Billboard.Page3" SourceFile="res\UIExtension\Bitmaps\Billboards\billboard03.bmp" />
+			<Binary Id="Billboard.Page1" SourceFile="res\UIExtension\Bitmaps\Billboards\billboard.bmp" />
+			<Binary Id="Billboard.Page2" SourceFile="res\UIExtension\Bitmaps\Billboards\billboard.bmp" />
+			<Binary Id="Billboard.Page3" SourceFile="res\UIExtension\Bitmaps\Billboards\billboard.bmp" />
             <InstallUISequence>
                 <Show Dialog="CustomProgressDlg" Before="ExecuteAction" Overridable="yes" />
             </InstallUISequence>

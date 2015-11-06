@@ -19,12 +19,13 @@
 #include "timeline_ruler_header.h"
 
 #include <limits>
-#include <klocale.h>
 
 #include <QMenu>
 #include <QAction>
 #include <QPainter>
 #include <QPaintEvent>
+
+#include <klocalizedstring.h>
 
 #include "timeline_frames_model.h"
 #include "timeline_color_scheme.h"

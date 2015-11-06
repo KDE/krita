@@ -23,9 +23,10 @@
 #include <QBrush>
 #include <QPalette>
 
-#include <kglobal.h>
-
 #include "kis_debug.h"
+
+#include <QGlobalStatic>
+Q_GLOBAL_STATIC(TimelineColorScheme, s_instance)
 
 
 struct TimelineColorScheme::Private
@@ -46,7 +47,6 @@ TimelineColorScheme::~TimelineColorScheme()
 
 TimelineColorScheme* TimelineColorScheme::instance()
 {
-    K_GLOBAL_STATIC(TimelineColorScheme, s_instance);
     return s_instance;
 }
 

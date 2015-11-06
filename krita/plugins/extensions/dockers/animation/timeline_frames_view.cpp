@@ -34,7 +34,7 @@
 #include <QMenu>
 #include <QScrollBar>
 #include <QIcon>
-
+#include <QDrag>
 
 #include "kis_debug.h"
 #include "timeline_frames_item_delegate.h"

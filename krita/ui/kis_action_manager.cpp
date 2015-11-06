@@ -230,8 +230,7 @@ void KisActionManager::updateGUI()
 KisAction *KisActionManager::createStandardAction(KStandardAction::StandardAction actionType, const QObject *receiver, const char *member)
 {
     QAction *standardAction = KStandardAction::create(actionType, receiver, member, 0);
-    QString iconName = standardAction->icon().name();
-    KisAction *action = new KisAction(KisIconUtils::loadIcon(iconName), standardAction->text());
+    KisAction *action = new KisAction(standardAction->icon(), standardAction->text());
 
     const QList<QKeySequence> defaultShortcuts = standardAction->property("defaultShortcuts").value<QList<QKeySequence> >();
     const QKeySequence defaultShortcut = defaultShortcuts.isEmpty() ? QKeySequence() : defaultShortcuts.at(0);

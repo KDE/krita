@@ -160,13 +160,15 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     if (object != d->eventsReceiver) return false;
 
 
-    // If we have saved an event, take care of it now, horribly breaking encapsulation with eventEater
+    // If we have saved an event, take care of it now.
     if (d->eventEater.savedEvent) {
+        auto savedEvent = d->eventEater.savedEvent;
+        d->eventEater.savedEvent = 0;
         if (event->type() != QEvent::TabletPress) {
             // Unless things are screwed up beyond hope, the old event was the real deal.
-            this->eventFilterImpl(d->eventEater.savedEvent);
+            this->eventFilterImpl(savedEvent);
         }
-        d->eventEater.savedEvent = 0;
+        delete savedEvent;
     }
 
     if (d->eventEater.eventFilter(object, event)) return false;

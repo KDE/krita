@@ -166,6 +166,8 @@ qt5_add_resources(krita_SRCS krita.qrc
                              ${CMAKE_SOURCE_DIR}/libs/flake/flake.qrc
                              ${CMAKE_SOURCE_DIR}/libs/widgets/kritawidgets.qrc
                              ${CMAKE_SOURCE_DIR}/pics/icons.qrc
+                             data/aboutdata/aboutdata.qrc
+                             data/shaders/shaders.qrc  
 )
 
 add_executable(krita ${krita_SRCS})

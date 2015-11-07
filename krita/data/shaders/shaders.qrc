@@ -1,0 +1,18 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource>
+        <file>bilinear_gradient.frag</file>
+        <file>conical_gradient.frag</file>
+        <file>conical_symetric_gradient.frag</file>
+        <file>cursor.frag</file>
+        <file>cursor.vert</file>
+        <file>highq_downscale.frag</file>
+        <file>linear_gradient.frag</file>
+        <file>matrix_transform.vert</file>
+        <file>matrix_transform_legacy.vert</file>
+        <file>radial_gradient.frag</file>
+        <file>simple_texture.frag</file>
+        <file>simple_texture_legacy.frag</file>
+        <file>square_gradient.frag</file>
+    </qresource>
+</RCC>

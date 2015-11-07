@@ -1,4 +1,3 @@
-add_subdirectory( aboutdata )
 add_subdirectory( actions )
 add_subdirectory( brushes )
 add_subdirectory( bundles )
@@ -6,7 +5,6 @@ add_subdirectory( patterns )
 add_subdirectory( gradients )
 add_subdirectory( profiles )
 add_subdirectory( templates )
-add_subdirectory( shaders )
 add_subdirectory( cursors )
 add_subdirectory( workspaces )
 add_subdirectory( themes )
@@ -21,8 +19,6 @@ install( FILES
     kritarc
     DESTINATION ${CONFIG_INSTALL_DIR} 
 )
-
-
 
 install( FILES
     krita.xml

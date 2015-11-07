@@ -51,7 +51,7 @@ QString getInstallationPrefix() {
                                             CFStringGetSystemEncoding());
      QString bundlePath = QString::fromLatin1(pathPtr);
 
-     qDebug() << "1" << bundlePath << (bundlePath + QString::fromLatin1("/Contents/MacOS/share"));
+//     qDebug() << "1" << bundlePath << (bundlePath + QString::fromLatin1("/Contents/MacOS/share"));
      if (QFile(bundlePath + QString::fromLatin1("/Contents/MacOS/share")).exists()) {
 //         qDebug() << "running from a deployed bundle";
          bundlePath += QString::fromLatin1("/Contents/MacOS/");
@@ -291,7 +291,7 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
     bool noDuplicates = options & KoResourcePaths::NoDuplicates;
     bool recursive = options & KoResourcePaths::Recursive;
 
-    qDebug() << "findAllResources: type" << type << "filter" << _filter << "no dups" << noDuplicates << "recursive" << recursive;
+//    qDebug() << "findAllResources: type" << type << "filter" << _filter << "no dups" << noDuplicates << "recursive" << recursive;
 
     QStringList aliases = d->aliases(type);
     QString filter = _filter;

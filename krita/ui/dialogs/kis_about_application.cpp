@@ -60,7 +60,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
                           "<h1 align=\"center\">Created By</h1></p>"
                           "<p>");
 
-    QFile fileDevelopers(QStandardPaths::locate(QStandardPaths::AppDataLocation, "aboutdata/developers.txt"));
+    QFile fileDevelopers(":/developers.txt");
     Q_ASSERT(fileDevelopers.exists());
     fileDevelopers.open(QIODevice::ReadOnly);
 
@@ -82,7 +82,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
                           "<h1 align=\"center\">Backed By</h1>"
                           "<p>");
 
-    QFile fileBackers(QStandardPaths::locate(QStandardPaths::AppDataLocation, "aboutdata/backers.txt"));
+    QFile fileBackers(":/backers.txt");
     Q_ASSERT(fileBackers.exists());
     fileBackers.open(QIODevice::ReadOnly);
     foreach(const QByteArray &backer, fileBackers.readAll().split('\n')) {
@@ -104,7 +104,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
                           "<h1 align=\"center\">Thanks To</h1>"
                           "<p>");
 
-    QFile fileCredits(QStandardPaths::locate(QStandardPaths::AppDataLocation, "aboutdata/credits.txt"));
+    QFile fileCredits(":/credits.txt");
     Q_ASSERT(fileCredits.exists());
     fileCredits.open(QIODevice::ReadOnly);
 
@@ -145,7 +145,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
                            "to trial or educational versions of commercial software that will forbid your work in commercial situations.</p>"
                            "<br/><hr/><pre>");
 
-    QFile licenseFile(QStandardPaths::locate(QStandardPaths::AppDataLocation, "aboutdata/LICENSE"));
+    QFile licenseFile(":/LICENSE");
     Q_ASSERT(licenseFile.exists());
     licenseFile.open(QIODevice::ReadOnly);
     QByteArray ba = licenseFile.readAll();

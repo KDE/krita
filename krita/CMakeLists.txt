@@ -136,10 +136,6 @@ add_subdirectory( data )
 add_subdirectory( integration )
 add_subdirectory( pics/app )
 
-if (WIN32 AND USE_BREAKPAD)
-        add_subdirectory( crashreporter )
-endif ()
-
 if (NOT WIN32)
     add_subdirectory( benchmarks )
 endif ()
@@ -173,9 +169,23 @@ qt5_add_resources(krita_SRCS krita.qrc
 )
 
 add_executable(krita ${krita_SRCS})
-target_link_libraries(krita kritaui ${BREAKPAD_LIBS})
+target_link_libraries(krita 
+                      kritaui 
+                      Qt5::Core
+                      Qt5::Gui
+                      Qt5::Widgets
+                      Qt5::Xml
+                      Qt5::Network
+                      Qt5::PrintSupport
+                      Qt5::Svg
+                      Qt5::Concurrent
+                      ${BREAKPAD_LIBS})
 
 if (APPLE)
+    set(CMAKE_MACOSX_RPATH ON)
+    SET(CMAKE_SKIP_BUILD_RPATH TRUE)
+    SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+    SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.krita")
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Krita")

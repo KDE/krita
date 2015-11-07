@@ -1,6 +1,0 @@
-/**
- * \mainpage
- * These are copies of 3rd-party libs without real own releases.
- */
-
-EXCLUDE=3rdparty/google-breakpad

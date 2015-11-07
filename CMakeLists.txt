@@ -118,10 +118,6 @@ message(STATUS "Release build: ${RELEASE_BUILD}")
 ############
 
 option(USEOPENGL "Allow the use of OpenGL for Krita" ON)
-if (WIN32)
-    option(USE_BREAKPAD "Build the crash handler for Krita (only on windows)" OFF)
-endif ()
-
 option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only." OFF)
 
  #######################

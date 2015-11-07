@@ -485,50 +485,6 @@ set_target_properties(kritaui
 install(TARGETS kritaui  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
-########### install files ###############
 if (APPLE)
     install(FILES osx.stylesheet DESTINATION ${DATA_INSTALL_DIR}/krita)
 endif ()
-
-install( FILES
-    canvas/kis_canvas2.h
-    canvas/kis_canvas_decoration.h
-    canvas/kis_coordinates_converter.h
-    tool/kis_tool.h
-    kis_canvas_resource_provider.h
-    kis_cursor.h
-    KisViewManager.h
-    kis_ui_types.h
-#    kis_cmb_composite.h
-#    kis_cmb_idlist.h
-#    kis_color_cup.h
-#    kis_config.h
-#    kis_double_click_event.h
-#    kis_double_widget.h
-#    kis_filter_manager.h
-#    kis_gradient_chooser.h
-#    kis_gradient_slider_widget.h
-#    kis_histogram_view.h
-#    kis_icon_item.h
-#    kis_iconwidget.h
-#    kis_itemchooser.h
-#    kis_label_zoom.h
-#    kis_move_event.h
-   widgets/kis_multi_bool_filter_widget.h
-   widgets/kis_multi_double_filter_widget.h
-   widgets/kis_multi_integer_filter_widget.h
-#    kis_paintop_box.h
-#    kis_previewwidget.h
-#    kis_tool_non_paint.h
-#    kis_tool_paint.h
-#    kis_tool_freehand.h
-#    kis_tool_dummy.h
-#    kis_tool_manager.h
-#    kis_tool_types.h
-#    KoInputDevice.h
-#    canvas/kis_perspective_grid_manager.h
-    kis_paintop_option.h
-    kis_paintop_options_model.h
-    kis_paintop_settings_widget.h
-    processing/fill_processing_visitor.h
-   DESTINATION ${INCLUDE_INSTALL_DIR}/krita)

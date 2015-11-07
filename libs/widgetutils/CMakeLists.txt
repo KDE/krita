@@ -76,6 +76,7 @@ ki18n_wrap_ui(kritawidgetutils_LIB_SRCS
 
 qt5_add_resources(kritawidgetutils_LIB_SRCS xmlgui/kxmlgui.qrc)
 
+include_directories(${KRITAGLOBAL_INCLUDES})
 
 add_library(kritawidgetutils SHARED ${kritawidgetutils_LIB_SRCS})
 generate_export_header(kritawidgetutils BASE_NAME kritawidgetutils)

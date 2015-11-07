@@ -56,7 +56,12 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
 
         QDir appDir(qApp->applicationDirPath());
         appDir.cdUp();
-
+#ifdef Q_OS_MAC
+        // Help Krita run without deplo
+        QDir d(appDir);
+        d.cd("../../../");
+        searchDirs << d;
+#endif
         searchDirs << appDir;
         // help plugin trader find installed plugins when run from uninstalled tests
 #ifdef CMAKE_INSTALL_PREFIX

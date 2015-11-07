@@ -50,9 +50,20 @@ QString getInstallationPrefix() {
      const char *pathPtr = CFStringGetCStringPtr(macPath,
                                             CFStringGetSystemEncoding());
      QString bundlePath = QString::fromLatin1(pathPtr);
-     bundlePath += QString::fromLatin1("/Contents/MacOS/");
+
+     qDebug() << "1" << bundlePath << (bundlePath + QString::fromLatin1("/Contents/MacOS/share"));
+     if (QFile(bundlePath + QString::fromLatin1("/Contents/MacOS/share")).exists()) {
+//         qDebug() << "running from a deployed bundle";
+         bundlePath += QString::fromLatin1("/Contents/MacOS/");
+     }
+     else {
+//         qDebug() << "running from make install";
+         bundlePath += "/../";
+     }
+
      CFRelease(appUrlRef);
      CFRelease(macPath);
+
      return bundlePath;
  #else
      return qApp->applicationDirPath() + QLatin1String("/");
@@ -275,12 +286,12 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
                                                       const QString &_filter,
                                                       SearchOptions options) const
 {
-    //qDebug() << "=====================================================";
-    //qDebug() << type << _filter << QStandardPaths::standardLocations(d->mapTypeToQStandardPaths(type));
+//    qDebug() << "=====================================================";
+//    qDebug() << type << _filter << QStandardPaths::standardLocations(d->mapTypeToQStandardPaths(type));
     bool noDuplicates = options & KoResourcePaths::NoDuplicates;
     bool recursive = options & KoResourcePaths::Recursive;
 
-    //qDebug() << "findAllResources: type" << type << "filter" << _filter << "no dups" << noDuplicates << "recursive" << recursive;
+    qDebug() << "findAllResources: type" << type << "filter" << _filter << "no dups" << noDuplicates << "recursive" << recursive;
 
     QStringList aliases = d->aliases(type);
     QString filter = _filter;
@@ -297,39 +308,39 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
         resources << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), filter, QStandardPaths::LocateFile);
     }
 
-    //qDebug() << "\tresources from qstandardpaths:" << resources.size();
+//    qDebug() << "\tresources from qstandardpaths:" << resources.size();
 
 
     foreach(const QString &alias, aliases) {
-        //qDebug() << "\t\talias:" << alias;
-        
+//        qDebug() << "\t\talias:" << alias;
+
         const QStringList dirs = QStringList() << getInstallationPrefix() + "../share/" + alias + "/"
                                                << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias, QStandardPaths::LocateDirectory);
         QSet<QString> s = QSet<QString>::fromList(dirs);
 
-        //qDebug() << "\t\tdirs:" << dirs;
+//        qDebug() << "\t\tdirs:" << dirs;
         Q_FOREACH (const QString &dir, s) {
             resources << filesInDir(dir, filter, noDuplicates, recursive);
         }
     }
 
-    //qDebug() << "\tresources also from aliases:" << resources.size();
-    
+//    qDebug() << "\tresources also from aliases:" << resources.size();
+
     if (resources.isEmpty()) {
         QFileInfo fi(filter);
         resources << filesInDir(getInstallationPrefix() + "../share/" + fi.path(), fi.fileName(), noDuplicates, false);
     }
-    
-    //qDebug() << "\tresources from installation:" << resources.size();
-    
+
+//    qDebug() << "\tresources from installation:" << resources.size();
+
     if (noDuplicates) {
         QSet<QString> s = QSet<QString>::fromList(resources);
         resources = s.toList();
     }
 
-    //qDebug() << "=====================================================";
+//    qDebug() << "=====================================================";
 
-    
+
     return resources;
 }
 
@@ -354,10 +365,11 @@ QString KoResourcePaths::saveLocationInternal(const QString &type, const QString
 {
     QString path = QStandardPaths::writableLocation(d->mapTypeToQStandardPaths(type)) + '/' + suffix;
     QDir d(path);
+
     if (!d.exists() && create) {
         d.mkpath(path);
     }
-    //qDebug() << "saveLocation: type" << type << "suffix" << suffix << "create" << create << "path" << path;
+//    qDebug() << "saveLocation: type" << type << "suffix" << suffix << "create" << create << "path" << path;
 
     return path;
 }
@@ -388,6 +400,6 @@ QString KoResourcePaths::locateInternal(const QString &type, const QString &file
 QString KoResourcePaths::locateLocalInternal(const QString &type, const QString &filename, bool createDir)
 {
     QString path = saveLocationInternal(type, "", createDir);
-    //qDebug() << "locateLocal: type" << type << "filename" << filename << "CreateDir" << createDir << "path" << path;
+//    qDebug() << "locateLocal: type" << type << "filename" << filename << "CreateDir" << createDir << "path" << path;
     return path + '/' + filename;
 }

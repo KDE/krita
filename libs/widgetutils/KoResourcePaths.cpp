@@ -127,6 +127,11 @@ KoResourcePaths::~KoResourcePaths()
 {
 }
 
+QString KoResourcePaths::getApplicationRoot()
+{
+    return getInstallationPrefix();
+}
+
 void KoResourcePaths::addResourceType(const char *type, const char *basetype,
                                       const QString &relativeName, bool priority)
 {

@@ -54,6 +54,8 @@ public:
                       };
     Q_DECLARE_FLAGS(SearchOptions, SearchOption)
 
+    static QString getApplicationRoot();
+
     /**
      * Adds suffixes for types.
      *

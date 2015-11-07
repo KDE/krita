@@ -339,23 +339,13 @@ bool KisApplication::start(const KisApplicationArguments &args)
     QDir appdir(applicationDirPath());
     appdir.cdUp();
 
-    //KoResourcePaths::addXdgDataPrefix(appdir.absolutePath() + "/share");
-    //KoResourcePaths::addPrefix(appdir.absolutePath());
-
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     // If there's no kdehome, set it and restart the process.
-    if (!env.contains("KDEHOME")) {
-        qputenv("KDEHOME", QFile::encodeName(QDesktopServices::storageLocation(QDesktopServices::DataLocation)));
-    }
     if (!env.contains("XDG_DATA_DIRS")) {
-        qputenv("XDG_DATA_DIRS", QFile::encodeName(appdir.absolutePath() + "/share"));
+        qDebug() << "Setting XDG_DATA_DIRS" << KoResourcePaths::getApplicationRoot() + "/share";
+        qputenv("XDG_DATA_DIRS", QFile::encodeName(KoResourcePaths::getApplicationRoot() + "/share"));
     }
-    if (!env.contains("KDEDIR")) {
-        qputenv("KDEDIR", QFile::encodeName(appdir.absolutePath()));
-    }
-    if (!env.contains("KDEDIRS")) {
-        qputenv("KDEDIRS", QFile::encodeName(appdir.absolutePath()));
-    }
+
     qputenv("PATH", QFile::encodeName(appdir.absolutePath() + "/bin" + ";"
                                       + appdir.absolutePath() + "/lib" + ";"
                                       + appdir.absolutePath() + "/lib/kde4" + ";"

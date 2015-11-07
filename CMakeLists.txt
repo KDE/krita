@@ -660,7 +660,6 @@ endif()
 
 # non-app directories are moved here because they can depend on SHOULD_BUILD_{appname} variables set above
 add_subdirectory(libs)
-add_subdirectory(3rdparty)
 add_subdirectory(interfaces)
 add_subdirectory(plugins)
 

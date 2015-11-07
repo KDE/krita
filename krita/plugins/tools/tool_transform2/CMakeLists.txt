@@ -25,7 +25,7 @@ set(kritatooltransform_PART_SRCS
 
 ki18n_wrap_ui(kritatooltransform_PART_SRCS wdg_tool_transform.ui)
 
-add_library(kritatooltransform SHARED ${kritatooltransform_PART_SRCS})
+add_library(kritatooltransform MODULE ${kritatooltransform_PART_SRCS})
 generate_export_header(kritatooltransform BASE_NAME kritatooltransform)
 
 kcoreaddons_desktop_to_json(kritatooltransform kritatooltransform.desktop)

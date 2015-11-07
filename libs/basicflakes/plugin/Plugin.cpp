@@ -25,7 +25,7 @@
 
 #include <kpluginfactory.h>
 
-K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "calligra_tool_basicflakes.json",
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "krita_tool_basicflakes.json",
                            registerPlugin<Plugin>();)
 
 Plugin::Plugin(QObject * parent, const QVariantList &)

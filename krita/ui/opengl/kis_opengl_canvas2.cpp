@@ -712,8 +712,6 @@ QByteArray KisOpenGLCanvas2::buildFragmentShader()
         filename = "simple_texture_legacy.frag";
     }
 
-    QString fileKey = QString("krita/shaders/%1")
-        .arg(filename);
 
     if (haveDisplayFilter) {
         shaderText.append("#define USE_OCIO\n");
@@ -729,7 +727,7 @@ QByteArray KisOpenGLCanvas2::buildFragmentShader()
     }
 
     {
-        QFile prefaceFile(KoResourcePaths::findResource("data", fileKey));
+        QFile prefaceFile(":/" + filename);
         prefaceFile.open(QIODevice::ReadOnly);
         shaderText.append(prefaceFile.readAll());
     }
@@ -774,6 +772,10 @@ void KisOpenGLCanvas2::initializeDisplayShader()
 
     // highq
     d->displayUniformLocationTexelSize = d->displayShader->uniformLocation("texelSize");
+
+
+    // TODO: The trilinear filtering mode is having issues when that is set in the application. It sometimes causes Krita to crash
+    // I cannot tell where that is at in here... Scott P (11/8/2015)
 
     // lod
     d->displayUniformLocationFixedLodLevel =

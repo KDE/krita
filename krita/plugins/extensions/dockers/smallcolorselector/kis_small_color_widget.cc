@@ -153,7 +153,7 @@ void KisSmallColorWidget::paintEvent(QPaintEvent * event)
     p.setPen(QPen(Qt::white, 1.0));
     p.setBrush(color());
     p.translate(d->saturation * d->rectangleWidth / 255.0 + width() - d->rectangleWidth,
-                d->value * d->rectangleHeight / 255.0);
+                d->rectangleHeight-(d->value * d->rectangleHeight / 255.0));
     p.drawEllipse(QRectF(-d->squareHandleSize * 0.5, -d->squareHandleSize * 0.5, d->squareHandleSize, d->squareHandleSize));
     p.end();
 }
@@ -196,7 +196,7 @@ void KisSmallColorWidget::generateSquare()
 {
     QImage image(d->rectangleWidth, d->rectangleHeight, QImage::Format_RGB32);
     for (int y = 0; y < d->rectangleHeight; ++y) {
-        int v = (y * 255) / d->rectangleHeight;
+        int v = 255-((y * 255) / d->rectangleHeight);
         uint* data = reinterpret_cast<uint*>(image.scanLine(y));
         for (int x = 0; x < d->rectangleWidth; ++x, ++data) {
             int s = (x * 255) / d->rectangleWidth;
@@ -251,7 +251,7 @@ void KisSmallColorWidget::selectColorAt(int _x, int _y)
         d->updateTimer.start();
     } else if ((_x > width() - d->rectangleWidth && d->handle == NoHandle) || d->handle == ValueSaturationHandle) {
         d->handle = ValueSaturationHandle;
-        setHSV(d->hue, (_x - width() + d->rectangleWidth) * 255 / d->rectangleWidth, (_y * 255) / d->rectangleHeight);
+        setHSV(d->hue, (_x - width() + d->rectangleWidth) * 255 / d->rectangleWidth, 255-((_y * 255) / d->rectangleHeight));
         d->updateTimer.start();
     }
 }

@@ -469,7 +469,7 @@ void KisPopupPalette::mouseReleaseEvent(QMouseEvent * event)
     QPointF point = event->posF();
     event->accept();
 
-    if (event->button() == Qt::LeftButton) {
+    if (event->button() == Qt::LeftButton || event->button() == Qt::RightButton) {
         QPainterPath pathBrush(drawDonutPathFull(width() / 2, height() / 2, brushInnerRadius, brushOuterRadius));
         QPainterPath pathColor(drawDonutPathFull(width() / 2, height() / 2, colorInnerRadius, colorOuterRadius));
 
@@ -486,8 +486,6 @@ void KisPopupPalette::mouseReleaseEvent(QMouseEvent * event)
                 emit sigUpdateRecentColor(pos);
             }
         }
-    } else if (event->button() == Qt::RightButton) {
-        showPopupPalette(false);
     }
 }
 

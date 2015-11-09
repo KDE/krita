@@ -399,10 +399,15 @@ QCursor KisCursor::load(const QString & cursorName, int hotspotX, int hotspotY)
 {
     QImage cursorImage = QImage(":/" + cursorName);
     if (cursorImage.isNull()) {
-        qWarning() << "Could not load cursor" << cursorName;
-        return Qt::ArrowCursor;
+        qWarning() << "Could not load cursor from qrc, trying filesystem" << cursorName;
+
+        cursorImage = QImage(KoResourcePaths::findResource("kis_pics", cursorName));
+        if (cursorImage.isNull()) {
+            qWarning() << "Could not load cursor from filesystem" << cursorName;
+            return Qt::ArrowCursor;
+        }
     }
-\
+
 #ifdef Q_OS_WIN
     // cursor width must be multiple of 16 on Windows
     int bitmapWidth = qCeil(cursorImage.width() / 16.0) * 16;

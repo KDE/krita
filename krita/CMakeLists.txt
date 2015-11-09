@@ -168,7 +168,7 @@ qt5_add_resources(krita_SRCS krita.qrc
                              ${CMAKE_SOURCE_DIR}/pics/icons.qrc
                              data/aboutdata/aboutdata.qrc
                              data/shaders/shaders.qrc  
-                             data/cursors/shaders.qrc  
+                             data/cursors/cursors.qrc  
 )
 
 add_executable(krita ${krita_SRCS})

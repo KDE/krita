@@ -19,8 +19,4 @@ generate_export_header(kritalutdocker BASE_NAME kritalutdocker)
 
 target_link_libraries(kritalutdocker kritaui ${OCIO_LIBRARIES})
 
-if(HAVE_OPENGL)
-    target_link_libraries(kritalutdocker ${_LIBRARIES})
-endif()
-
 install(TARGETS kritalutdocker  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

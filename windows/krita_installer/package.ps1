@@ -41,7 +41,15 @@ mkdir "$env:KRITA_INPUT\share\kservicetypes5" -ea SilentlyContinue
 
 mkdir "$env:KRITA_OUTPUT" -ea SilentlyContinue
 
-
+# The format of the JSON is as follows.
+# Each data item has four elements.
+#
+# "dir" is the destination directory, relative to $KRITA_INPUT. It is posssible
+#       to have several different groups of files copied to the same destination
+#       directory. DIR must exist already, created in the "mkdir" list above.
+# "files" is a list of files copied into DIR.
+# "msg" will be displayed during the copying procedure.
+# "comment" is ignored by this script.
 $installinfo = ConvertFrom-Json ((Get-Content "krita-files.json") -join "`n")
 
 

@@ -252,6 +252,7 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImag
 
     m_d->image = image;
     m_d->dummiesFacade = dummiesFacade;
+    m_d->parentOfRemovedNode = 0;
     resetIndexConverter();
 
     if(m_d->dummiesFacade) {

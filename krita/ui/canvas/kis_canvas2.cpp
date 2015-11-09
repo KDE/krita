@@ -410,6 +410,11 @@ void KisCanvas2::createOpenGLCanvas()
 
 void KisCanvas2::createCanvas(bool useOpenGL)
 {
+    m_d->prescaledProjection = 0;
+    m_d->openGLImageTextures = 0;
+    m_d->frameCache = 0;
+
+
     KisConfig cfg;
     QDesktopWidget dw;
     const KoColorProfile *profile = cfg.displayProfile(dw.screenNumber(imageView()));

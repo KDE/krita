@@ -43,6 +43,7 @@ public:
 
     KisAnimationPlayer *q;
 
+    bool useFastFrameUpload;
     bool playing;
     int currentFrame;
 
@@ -68,6 +69,7 @@ public:
 KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
     : m_d(new Private(this))
 {
+    m_d->useFastFrameUpload = false;
     m_d->playing = false;
     m_d->fps = 15;
     m_d->canvas = canvas;
@@ -92,7 +94,7 @@ void KisAnimationPlayer::connectCancelSignals()
 
     m_d->cancelStrokeConnections.addConnection(
         m_d->canvas->image().data(), SIGNAL(sigStrokeEndRequested()),
-        this, SLOT(slotCancelPlayback()));
+        this, SLOT(slotCancelPlaybackSafe()));
 
     m_d->cancelStrokeConnections.addConnection(
         m_d->canvas->image()->animationInterface(), SIGNAL(sigFramerateChanged()),
@@ -188,12 +190,20 @@ static TestUtil::MeasureAvgPortion C(25);
 
 void KisAnimationPlayer::uploadFrame(int frame)
 {
-    if (m_d->canvas->frameCache()->uploadFrame(frame)) {
-        m_d->canvas->updateCanvas();
+    if (m_d->canvas->frameCache()) {
+        if (m_d->canvas->frameCache()->uploadFrame(frame)) {
+            m_d->canvas->updateCanvas();
+
+            m_d->useFastFrameUpload = true;
+            emit sigFrameChanged();
+        }
+    } else {
+        qWarning() << "WARNING: Animation playback can be very slow without openGL support!";
+        m_d->canvas->image()->animationInterface()->switchCurrentTimeAsync(frame);
+
+        m_d->useFastFrameUpload = false;
         emit sigFrameChanged();
     }
-
-    //emit sigFrameChanged();
 
 #ifdef DEBUG_FRAMERATE
     if (!m_d->frameRateTimer.isValid()) {
@@ -208,6 +218,24 @@ void KisAnimationPlayer::uploadFrame(int frame)
 void KisAnimationPlayer::slotCancelPlayback()
 {
     stop();
+}
+
+void KisAnimationPlayer::slotCancelPlaybackSafe()
+{
+    /**
+     * If there is no openGL support, then we have no (!) cache at
+     * all. Therefore we should regenerate frame on every time switch,
+     * which, yeah, can be very slow.  What is more important, when
+     * regenerating a frame animation interface will emit a
+     * sigStrokeEndRequested() signal and we should ignore it. That is
+     * not an ideal solution, because the user will be able to paint
+     * on random frames while playing, but it lets users with faulty
+     * GPUs see at least some preview of their animation.
+     */
+
+    if (m_d->useFastFrameUpload) {
+        stop();
+    }
 }
 
 qreal KisAnimationPlayer::playbackSpeed()

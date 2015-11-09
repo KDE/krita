@@ -49,6 +49,7 @@ public:
 public Q_SLOTS:
     void slotUpdate();
     void slotCancelPlayback();
+    void slotCancelPlaybackSafe();
     void slotUpdatePlaybackSpeed(double value);
     void slotUpdatePlaybackTimer();
 

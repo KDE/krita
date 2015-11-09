@@ -341,4 +341,23 @@ namespace KritaUtils
         return flags;
     }
 
+    bool compareChannelFlags(QBitArray f1, QBitArray f2)
+    {
+        if (f1.isNull() && f2.isNull()) return true;
+
+        if (f1.isNull()) {
+            f1.fill(true, f2.size());
+        }
+
+        if (f2.isNull()) {
+            f2.fill(true, f1.size());
+        }
+
+        return f1 == f2;
+    }
+
+    QString KRITAIMAGE_EXPORT toLocalizedOnOff(bool value) {
+        return value ? i18n("on") : i18n("off");
+    }
+
 }

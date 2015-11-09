@@ -101,15 +101,15 @@ QModelIndex KisNodeModel::indexFromNode(KisNodeSP node) const
     return QModelIndex();
 }
 
-bool KisNodeModel::belongsToIsolatedGroup(KisNodeSP node) const
+bool KisNodeModel::belongsToIsolatedGroup(KisImageSP image, KisNodeSP node, KisDummiesFacadeBase *dummiesFacade)
 {
-    KisNodeSP isolatedRoot = m_d->image->isolatedModeRoot();
+    KisNodeSP isolatedRoot = image->isolatedModeRoot();
     if (!isolatedRoot) return true;
 
     KisNodeDummy *isolatedRootDummy =
-        m_d->dummiesFacade->dummyForNode(isolatedRoot);
+        dummiesFacade->dummyForNode(isolatedRoot);
     KisNodeDummy *dummy =
-        m_d->dummiesFacade->dummyForNode(node);
+        dummiesFacade->dummyForNode(node);
 
     while (dummy) {
         if (dummy == isolatedRootDummy) {
@@ -119,6 +119,11 @@ bool KisNodeModel::belongsToIsolatedGroup(KisNodeSP node) const
     }
 
     return false;
+}
+
+bool KisNodeModel::belongsToIsolatedGroup(KisNodeSP node) const
+{
+    return belongsToIsolatedGroup(m_d->image, node, m_d->dummiesFacade);
 }
 
 void KisNodeModel::resetIndexConverter()
@@ -247,6 +252,7 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImag
 
     m_d->image = image;
     m_d->dummiesFacade = dummiesFacade;
+    m_d->parentOfRemovedNode = 0;
     resetIndexConverter();
 
     if(m_d->dummiesFacade) {
@@ -486,36 +492,7 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
         {
             // don't record undo/redo for visibility, locked or alpha locked changes
             PropertyList proplist = value.value<PropertyList>();
-            bool undo = true;
-            foreach(const KisNodeModel::Property &prop, proplist) {
-                if (prop.name == i18n("Visible") && node->visible() !=prop.state.toBool()) undo = false;
-                if (prop.name == i18n("Locked") && node->userLocked() != prop.state.toBool()) undo = false;
-                if (prop.name == i18n("Active")) {
-                    if (KisSelectionMask *m = dynamic_cast<KisSelectionMask*>(node.data())) {
-                        if (m->active() != prop.state.toBool()) {
-                            undo = false;
-                        }
-                    }
-                }
-                if (prop.name == i18n("Alpha Locked")) {
-                    if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(node.data())) {
-                        if (l->alphaLocked() != prop.state.toBool()) {
-                            undo = false;
-                        }
-                    }
-                }
-            }
-
-            KUndo2Command *cmd = new KisNodePropertyListCommand(node, proplist);
-
-            if (undo) {
-                m_d->image->undoAdapter()->addCommand(cmd);
-            }
-            else {
-                m_d->image->setModified();
-                cmd->redo();
-                delete cmd;
-            }
+            KisNodePropertyListCommand::setNodePropertiesNoUndo(node, m_d->image, proplist);
 
             break;
         }

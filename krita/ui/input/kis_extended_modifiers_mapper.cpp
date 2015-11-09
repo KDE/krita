@@ -18,8 +18,10 @@
 
 #include "kis_extended_modifiers_mapper.h"
 
-#include <kis_debug.h>
 #include <QApplication>
+#include <QKeyEvent>
+#include "kis_debug.h"
+
 
 #ifdef HAVE_X11
 
@@ -163,4 +165,17 @@ KisExtendedModifiersMapper::queryExtendedModifiers()
 Qt::KeyboardModifiers KisExtendedModifiersMapper::queryStandardModifiers()
 {
     return QApplication::queryKeyboardModifiers();
+}
+
+Qt::Key KisExtendedModifiersMapper::workaroundShiftAltMetaHell(const QKeyEvent *keyEvent)
+{
+    Qt::Key key = (Qt::Key)keyEvent->key();
+
+    if (keyEvent->key() == Qt::Key_Meta &&
+        keyEvent->modifiers().testFlag(Qt::ShiftModifier)) {
+
+        key = Qt::Key_Alt;
+    }
+
+    return key;
 }

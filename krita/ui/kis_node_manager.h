@@ -207,7 +207,10 @@ public:
     void shear(double angleX, double angleY);
 
     void scale(double sx, double sy, KisFilterStrategy *filterStrategy);
-    
+
+    void removeSingleNode(KisNodeSP node);
+    KisLayerSP createPaintLayer();
+
 private:
     /**
      * Scales opacity from the range 0...1
@@ -215,7 +218,7 @@ private:
      */
     qint32 convertOpacityToInt(qreal opacity);
     void removeSelectedNodes(QList<KisNodeSP> selectedNodes);
-    void removeSingleNode(KisNodeSP node);
+
 
     struct Private;
     Private * const m_d;

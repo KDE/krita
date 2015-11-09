@@ -796,6 +796,7 @@ public:
 
 public:
     QRegion syncLodCache(int levelOfDetail);
+    void setProjectionDevice(bool value);
     void tesingFetchLodDevice(KisPaintDeviceSP targetDevice);
 
 private:

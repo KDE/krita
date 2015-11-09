@@ -328,7 +328,6 @@ set(kritaui_LIB_SRCS
     qtsingleapplication/qtlocalpeer.cpp
     qtsingleapplication/qtsingleapplication.cpp
 
-    kis_timeline_model.cpp
     kis_animation_frame_cache.cpp
     kis_animation_cache_populator.cpp
     kis_animation_exporter.cpp

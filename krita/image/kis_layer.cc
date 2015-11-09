@@ -51,6 +51,9 @@
 #include "kis_layer_projection_plane.h"
 #include "layerstyles/kis_layer_style_projection_plane.h"
 
+#include "krita_utils.h"
+#include "kis_layer_properties_icons.h"
+
 
 class KisSafeProjection {
 public:
@@ -64,6 +67,7 @@ public:
            !(*m_projection->colorSpace() == *prototype->colorSpace())) {
             m_projection = m_reusablePaintDevice;
             m_projection->makeCloneFromRough(prototype, prototype->extent());
+            m_projection->setProjectionDevice(true);
         }
 
         return m_projection;
@@ -216,10 +220,10 @@ KisNodeModel::PropertyList KisLayer::sectionModelProperties() const
     }
 
     if (m_d->layerStyle && !m_d->layerStyle->isEmpty()) {
-        l << KisNodeModel::Property(i18n("Layer Style"), KisIconUtils::loadIcon("layer-style-enabled"), KisIconUtils::loadIcon("layer-style-disabled"), m_d->layerStyle->isEnabled());
+        l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::layerStyle, m_d->layerStyle->isEnabled());
     }
 
-    l << KisNodeModel::Property(i18n("Inherit Alpha"), KisIconUtils::loadIcon("transparency-disabled"), KisIconUtils::loadIcon("transparency-enabled"), alphaChannelDisabled());
+    l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::inheritAlpha, alphaChannelDisabled());
 
     return l;
 }
@@ -234,8 +238,13 @@ void KisLayer::setSectionModelProperties(const KisNodeModel::PropertyList &prope
         }
 
         if (property.name == i18n("Layer Style")) {
-            if (m_d->layerStyle) {
+            if (m_d->layerStyle &&
+                m_d->layerStyle->isEnabled() != property.state.toBool()) {
+
                 m_d->layerStyle->setEnabled(property.state.toBool());
+
+                baseNodeChangedCallback();
+                baseNodeInvalidateAllFramesCallback();
             }
         }
     }
@@ -267,6 +276,11 @@ void KisLayer::setChannelFlags(const QBitArray & channelFlags)
 {
     Q_ASSERT(channelFlags.isEmpty() ||((quint32)channelFlags.count() == colorSpace()->channelCount()));
 
+    if (KritaUtils::compareChannelFlags(channelFlags,
+                                        this->channelFlags())) {
+        return;
+    }
+
     if (!channelFlags.isEmpty() &&
         channelFlags == QBitArray(channelFlags.size(), true)) {
 
@@ -274,6 +288,9 @@ void KisLayer::setChannelFlags(const QBitArray & channelFlags)
     } else {
         m_d->channelFlags = channelFlags;
     }
+
+    baseNodeChangedCallback();
+    baseNodeInvalidateAllFramesCallback();
 }
 
 QBitArray & KisLayer::channelFlags() const

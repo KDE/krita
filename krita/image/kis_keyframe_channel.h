@@ -48,14 +48,15 @@ public:
 
     KisNodeWSP node() const;
 
-    KisKeyframe *addKeyframe(int time, KUndo2Command *parentCommand = 0);
-    bool deleteKeyframe(KisKeyframe *keyframe, KUndo2Command *parentCommand = 0);
-    bool moveKeyframe(KisKeyframe *keyframe, int newTime, KUndo2Command *parentCommand = 0);
-    KisKeyframe *copyKeyframe(const KisKeyframe *keyframe, int newTime, KUndo2Command *parentCommand = 0);
+    KisKeyframeSP addKeyframe(int time, KUndo2Command *parentCommand = 0);
+    bool deleteKeyframe(KisKeyframeSP keyframe, KUndo2Command *parentCommand = 0);
+    bool moveKeyframe(KisKeyframeSP keyframe, int newTime, KUndo2Command *parentCommand = 0);
+    KisKeyframeSP copyKeyframe(const KisKeyframeSP keyframe, int newTime, KUndo2Command *parentCommand = 0);
 
-    KisKeyframe *keyframeAt(int time);
+    KisKeyframeSP keyframeAt(int time) const;
     KisKeyframeSP activeKeyframeAt(int time) const;
 
+    KisKeyframeSP firstKeyframe() const;
     KisKeyframeSP nextKeyframe(KisKeyframeSP keyframe) const;
     KisKeyframeSP previousKeyframe(KisKeyframeSP keyframe) const;
     KisKeyframeSP lastKeyframe() const;
@@ -77,16 +78,16 @@ public:
 
     int keyframeCount() const;
 
-    int keyframeRowIndexOf(KisKeyframe *keyframe) const;
-    KisKeyframe* keyframeAtRow(int row) const;
+    int keyframeRowIndexOf(KisKeyframeSP keyframe) const;
+    KisKeyframeSP keyframeAtRow(int row) const;
 
     int keyframeInsertionRow(int time) const;
 
     virtual bool hasScalarValue() const = 0;
     virtual qreal minScalarValue() const = 0;
     virtual qreal maxScalarValue() const = 0;
-    virtual qreal scalarValue(const KisKeyframe *keyframe) const = 0;
-    virtual void setScalarValue(KisKeyframe *keyframe, qreal value, KUndo2Command *parentCommand = 0) = 0;
+    virtual qreal scalarValue(const KisKeyframeSP keyframe) const = 0;
+    virtual void setScalarValue(KisKeyframeSP keyframe, qreal value, KUndo2Command *parentCommand = 0) = 0;
 
     virtual QDomElement toXML(QDomDocument doc, const QString &layerFilename);
     virtual void loadXML(const QDomElement &channelNode);
@@ -106,15 +107,15 @@ protected:
     const KeyframesMap &constKeys() const;
     KeyframesMap::const_iterator activeKeyIterator(int time) const;
 
-    virtual KisKeyframe* createKeyframe(int time, const KisKeyframe *copySrc, KUndo2Command *parentCommand) = 0;
-    virtual bool canDeleteKeyframe(KisKeyframe *key) = 0;
-    virtual void destroyKeyframe(KisKeyframe *key, KUndo2Command *parentCommand) = 0;
+    virtual KisKeyframeSP createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand) = 0;
+    virtual bool canDeleteKeyframe(KisKeyframeSP key) = 0;
+    virtual void destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand) = 0;
 
-    virtual QRect affectedRect(KisKeyframe *key) = 0;
+    virtual QRect affectedRect(KisKeyframeSP key) = 0;
     virtual void requestUpdate(const KisTimeRange &range, const QRect &rect);
 
     virtual KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode) = 0;
-    virtual void saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement, const QString &layerFilename) = 0;
+    virtual void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) = 0;
 
 private:
     void insertKeyframeImpl(KisKeyframeSP keyframe);
@@ -125,7 +126,7 @@ private:
     struct MoveFrameCommand;
 
 private:
-    KisKeyframe * insertKeyframe(int time, const KisKeyframe *copySrc, KUndo2Command *parentCommand);
+    KisKeyframeSP insertKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand);
 
     struct Private;
     QScopedPointer<Private> m_d;

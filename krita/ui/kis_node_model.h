@@ -83,6 +83,8 @@ public:
     Qt::DropActions supportedDropActions() const;
     bool hasDummiesFacade();
 
+    static bool belongsToIsolatedGroup(KisImageSP image, KisNodeSP node, KisDummiesFacadeBase *dummiesFacade);
+
 Q_SIGNALS:
 
     void nodeActivated(KisNodeSP);

@@ -54,21 +54,24 @@ public:
     bool hasScalarValue() const;
     qreal minScalarValue() const;
     qreal maxScalarValue() const;
-    qreal scalarValue(const KisKeyframe *keyframe) const;
-    void setScalarValue(KisKeyframe *keyframe, qreal value, KUndo2Command *parentCommand);
+    qreal scalarValue(const KisKeyframeSP keyframe) const;
+    void setScalarValue(KisKeyframeSP keyframe, qreal value, KUndo2Command *parentCommand);
 
     QDomElement toXML(QDomDocument doc, const QString &layerFilename);
     void loadXML(const QDomElement &channelNode);
 
-protected:
-    KisKeyframe *createKeyframe(int time, const KisKeyframe *copySrc, KUndo2Command *parentCommand);
-    bool canDeleteKeyframe(KisKeyframe *key);
-    void destroyKeyframe(KisKeyframe *key, KUndo2Command *parentCommand);
+    void setOnionSkinsEnabled(bool value);
+    bool onionSkinsEnabled() const;
 
-    QRect affectedRect(KisKeyframe *key);
+protected:
+    KisKeyframeSP createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand);
+    bool canDeleteKeyframe(KisKeyframeSP key);
+    void destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand);
+
+    QRect affectedRect(KisKeyframeSP key);
     void requestUpdate(const KisTimeRange &range, const QRect &rect);
 
-    void saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement, const QString &layerFilename);
+    void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename);
     KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode);
 
 private:

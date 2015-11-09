@@ -423,6 +423,9 @@ protected:
     virtual void baseNodeChangedCallback() {
     }
 
+    virtual void baseNodeInvalidateAllFramesCallback() {
+    }
+
 Q_SIGNALS:
 
     /**

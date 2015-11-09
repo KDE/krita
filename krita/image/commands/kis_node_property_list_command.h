@@ -37,6 +37,10 @@ public:
     virtual void redo();
     virtual void undo();
 
+
+    typedef KisNodeModel::PropertyList PropertyList;
+    static void setNodePropertiesNoUndo(KisNodeSP node, KisImageSP image, PropertyList proplist);
+
 private:
     void doUpdate(const KisNodeModel::PropertyList &oldPropertyList,
                   const KisNodeModel::PropertyList &newPropertyList);

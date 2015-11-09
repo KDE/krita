@@ -23,6 +23,9 @@
 #include <KoProperties.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
+#include "kis_paint_device.h"
+#include "kis_layer_properties_icons.h"
+
 
 struct Q_DECL_HIDDEN KisBaseNode::Private
 {
@@ -105,10 +108,12 @@ quint8 KisBaseNode::opacity() const
 
 void KisBaseNode::setOpacity(quint8 val)
 {
-    if (opacity() != val) {
-        nodeProperties().setProperty("opacity", val);
-    }
+    if (opacity() == val) return;
+
+    nodeProperties().setProperty("opacity", val);
+
     baseNodeChangedCallback();
+    baseNodeInvalidateAllFramesCallback();
 }
 
 quint8 KisBaseNode::percentOpacity() const
@@ -128,15 +133,18 @@ const QString& KisBaseNode::compositeOpId() const
 
 void KisBaseNode::setCompositeOpId(const QString& compositeOp)
 {
+    if (m_d->compositeOp == compositeOp) return;
+
     m_d->compositeOp = compositeOp;
     baseNodeChangedCallback();
+    baseNodeInvalidateAllFramesCallback();
 }
 
 KisNodeModel::PropertyList KisBaseNode::sectionModelProperties() const
 {
     KisNodeModel::PropertyList l;
-    l << KisNodeModel::Property(i18n("Visible"), KisIconUtils::loadIcon("visible"), KisIconUtils::loadIcon("novisible"), visible(), m_d->hack_visible.isInStasis, m_d->hack_visible.stateInStasis);
-    l << KisNodeModel::Property(i18n("Locked"), KisIconUtils::loadIcon("layer-locked"), KisIconUtils::loadIcon("layer-unlocked"), userLocked());
+    l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::visible, visible(), m_d->hack_visible.isInStasis, m_d->hack_visible.stateInStasis);
+    l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::locked, userLocked());
     return l;
 }
 
@@ -160,6 +168,7 @@ void KisBaseNode::mergeNodeProperties(const KoProperties & properties)
         m_d->properties.setProperty(iter.key(), iter.value());
     }
     baseNodeChangedCallback();
+    baseNodeInvalidateAllFramesCallback();
 }
 
 bool KisBaseNode::check(const KoProperties & properties) const
@@ -199,12 +208,16 @@ bool KisBaseNode::visible(bool recursive) const
 
 void KisBaseNode::setVisible(bool visible, bool loading)
 {
+    const bool isVisible = m_d->properties.boolProperty("visible", true);
+    if (!loading && isVisible == visible) return;
+
     m_d->properties.setProperty("visible", visible);
     notifyParentVisibilityChanged(visible);
 
     if (!loading) {
         emit visibilityChanged(visible);
         baseNodeChangedCallback();
+        baseNodeInvalidateAllFramesCallback();
     }
 }
 
@@ -215,6 +228,9 @@ bool KisBaseNode::userLocked() const
 
 void KisBaseNode::setUserLocked(bool locked)
 {
+    const bool isLocked = m_d->properties.boolProperty("locked", true);
+    if (isLocked == locked) return;
+
     m_d->properties.setProperty("locked", locked);
     emit userLockingChanged(locked);
     baseNodeChangedCallback();

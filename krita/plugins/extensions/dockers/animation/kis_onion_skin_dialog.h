@@ -22,6 +22,8 @@
 #include <QDialog>
 #include <QSlider>
 
+#include "kis_signal_compressor.h"
+
 namespace Ui {
 class KisOnionSkinDialog;
 }
@@ -40,6 +42,8 @@ private:
     QSlider numberOfSkins;
     QVector<QSlider*> forwardOpacities;
     QVector<QSlider*> backwardOpacities;
+
+    KisSignalCompressor m_updatesCompressor;
 
 private Q_SLOTS:
     void changed();

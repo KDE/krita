@@ -132,7 +132,7 @@ void KisKraLoaderTest::testLoadAnimated()
     QCOMPARE(channel1->keyframeCount(), 3);
     QCOMPARE(channel2->keyframeCount(), 1);
 
-    QCOMPARE(image->animationInterface()->framerate(), 17.0f);
+    QCOMPARE(image->animationInterface()->framerate(), 17);
     QCOMPARE(image->animationInterface()->currentRange(), KisTimeRange::fromTime(15, 45));
     QCOMPARE(image->animationInterface()->currentTime(), 19);
 

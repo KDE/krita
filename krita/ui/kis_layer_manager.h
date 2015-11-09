@@ -99,7 +99,7 @@ private Q_SLOTS:
 
     void convertNodeToPaintLayer(KisNodeSP source);
 
-    void addLayer(KisNodeSP activeNode);
+    KisLayerSP addLayer(KisNodeSP activeNode);
     void addGroupLayer(KisNodeSP activeNode);
 
     void addCloneLayer(KisNodeSP activeNode);

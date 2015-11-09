@@ -36,7 +36,8 @@ struct KisImageAnimationInterface::Private
           currentTime(0),
           currentUITime(0),
           externalFrameActive(false),
-          frameInvalidationBlocked(false)
+          frameInvalidationBlocked(false),
+          cachedLastFrameValue(-1)
     {
     }
 
@@ -47,7 +48,8 @@ struct KisImageAnimationInterface::Private
     bool frameInvalidationBlocked;
 
     KisTimeRange currentRange;
-    float framerate;
+    int framerate;
+    int cachedLastFrameValue;
 };
 
 
@@ -83,16 +85,18 @@ const KisTimeRange& KisImageAnimationInterface::currentRange() const
 
 void KisImageAnimationInterface::setRange(const KisTimeRange range) {
     m_d->currentRange = range;
+    emit sigRangeChanged();
 }
 
-float KisImageAnimationInterface::framerate()
+int KisImageAnimationInterface::framerate() const
 {
     return m_d->framerate;
 }
 
-void KisImageAnimationInterface::setFramerate(float fps)
+void KisImageAnimationInterface::setFramerate(int fps)
 {
     m_d->framerate = fps;
+    emit sigFramerateChanged();
 }
 
 KisImageWSP KisImageAnimationInterface::image() const
@@ -107,6 +111,8 @@ bool KisImageAnimationInterface::externalFrameActive() const
 
 void KisImageAnimationInterface::requestTimeSwitchWithUndo(int time)
 {
+    if (m_d->currentUITime == time) return;
+
     KisSwitchCurrentTimeCommand *cmd =
         new KisSwitchCurrentTimeCommand(m_d->image, time);
 
@@ -121,6 +127,8 @@ void KisImageAnimationInterface::requestTimeSwitchNonGUI(int time)
 
 void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId)
 {
+    if (m_d->currentUITime == frameId) return;
+
     m_d->image->barrierLock();
     m_d->currentTime = frameId;
     m_d->currentUITime = frameId;
@@ -194,6 +202,7 @@ void KisImageAnimationInterface::notifyNodeChanged(const KisNode *node,
 
 void KisImageAnimationInterface::invalidateFrames(const KisTimeRange &range, const QRect &rect)
 {
+    m_d->cachedLastFrameValue = -1;
     emit sigFramesChanged(range, rect);
 }
 
@@ -225,7 +234,14 @@ int findLastKeyframeTimeRecursive(KisNodeSP node)
 
 int KisImageAnimationInterface::totalLength()
 {
-    int lastKey = findLastKeyframeTimeRecursive(m_d->image->root());
+    if (m_d->cachedLastFrameValue < 0) {
+        m_d->cachedLastFrameValue = findLastKeyframeTimeRecursive(m_d->image->root());
+    }
 
-    return std::max(lastKey, m_d->currentRange.end());
+    int lastKey = m_d->cachedLastFrameValue;
+
+    lastKey  = std::max(lastKey, m_d->currentRange.end());
+    lastKey  = std::max(lastKey, m_d->currentUITime);
+
+    return lastKey + 1;
 }

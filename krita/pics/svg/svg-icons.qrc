@@ -11,11 +11,13 @@
         <file>dark_layer-locked.svg</file>
         <file>dark_layer-unlocked.svg</file>
         <file>dark_nextframe.svg</file>
-        <file>dark_onion_skin_options.svg</file>
+        <file>dark_nextkeyframe.svg</file>
+        <file>dark_lastframe.svg</file>
+        <file>dark_prevkeyframe.svg</file>
+        <file>dark_firstframe.svg</file>
         <file>dark_pallete_librarysvg.svg</file>
         <file>dark_passthrough-disabled.svg</file>
         <file>dark_passthrough-enabled.svg</file>
-        <file>dark_playpause.svg</file>
         <file>dark_prevframe.svg</file>
         <file>dark_selection-mode_ants.svg</file>
         <file>dark_selection-mode_invisible.svg</file>
@@ -35,12 +37,14 @@
         <file>light_layer-locked.svg</file>
         <file>light_layer-unlocked.svg</file>
         <file>light_nextframe.svg</file>
-        <file>light_onion_skin_options.svg</file>
         <file>light_pallete_library.svg</file>
         <file>light_passthrough-disabled.svgz</file>
         <file>light_passthrough-enabled.svgz</file>
-        <file>light_playpause.svg</file>
         <file>light_prevframe.svg</file>
+        <file>light_nextkeyframe.svg</file>
+        <file>light_lastframe.svg</file>
+        <file>light_prevkeyframe.svg</file>
+        <file>light_firstframe.svg</file>
         <file>light_selection-mode_ants.svg</file>
         <file>light_selection-mode_invisible.svg</file>
         <file>light_selection-mode_mask.svg</file>
@@ -48,10 +52,6 @@
         <file>light_transparency-disabled.svg</file>
         <file>light_transparency-enabled.svg</file>
         <file>light_trim-to-image.svg</file>
-        <file>onionA.svg</file>
-        <file>onionB.svg</file>
-        <file>onionOff.svg</file>
-        <file>onionOn.svg</file>
         <file>paintop_presets_disabled.svgz</file>
         <file>paintop_settings_01.svgz</file>
         <file>selection-info.svg</file>
@@ -60,5 +60,16 @@
         <file>transparency-locked.svg</file>
         <file>transparency-unlocked.svg</file>
         <file>workspace-chooser.svg</file>
+        <file>light_lazyframeOn.svg</file>
+        <file>light_lazyframeOff.svg</file>
+        <file>dark_lazyframeOn.svg</file>
+        <file>dark_lazyframeOff.svg</file>
+
+        <file>dark_animation_play.svg</file>
+        <file>dark_animation_stop.svg</file>
+
+        <file>light_animation_play.svg</file>
+        <file>light_animation_stop.svg</file>
+
     </qresource>
 </RCC>

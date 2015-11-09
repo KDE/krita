@@ -23,8 +23,12 @@
 #include <QVector>
 #include <QScopedPointer>
 
+#include <kritaui_export.h>
 
-class KisExtendedModifiersMapper
+class QKeyEvent;
+
+
+class KRITAUI_EXPORT KisExtendedModifiersMapper
 {
 public:
     KisExtendedModifiersMapper();
@@ -34,6 +38,8 @@ public:
 
     ExtendedModifiers queryExtendedModifiers();
     Qt::KeyboardModifiers queryStandardModifiers();
+
+    static Qt::Key workaroundShiftAltMetaHell(const QKeyEvent *keyEvent);
 
 private:
     struct Private;

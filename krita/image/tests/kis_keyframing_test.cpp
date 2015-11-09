@@ -57,7 +57,7 @@ void KisKeyframingTest::cleanupTestCase()
 void KisKeyframingTest::testScalarChannel()
 {
     KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), 0, -17, 31);
-    KisKeyframe *key;
+    KisKeyframeSP key;
     bool ok;
 
     QCOMPARE(channel->hasScalarValue(), true);
@@ -76,7 +76,7 @@ void KisKeyframingTest::testScalarChannel()
 
     // Adding a keyframe where one exists
 
-    KisKeyframe *key2 = channel->addKeyframe(42);
+    KisKeyframeSP key2 = channel->addKeyframe(42);
     QVERIFY(key2 == key);
 
     // Copying a keyframe
@@ -110,7 +110,7 @@ void KisKeyframingTest::testScalarChannel()
 void KisKeyframingTest::testScalarChannelUndoRedo()
 {
     KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), 0, -17, 31);
-    KisKeyframe *key;
+    KisKeyframeSP key;
 
     QCOMPARE(channel->hasScalarValue(), true);
     QCOMPARE(channel->minScalarValue(), -17.0);
@@ -130,7 +130,7 @@ void KisKeyframingTest::testScalarChannelUndoRedo()
 
     addCmd.undo();
 
-    KisKeyframe *newKey = 0;
+    KisKeyframeSP newKey;
 
     newKey = channel->keyframeAt(42);
     QVERIFY(!newKey);
@@ -161,11 +161,11 @@ void KisKeyframingTest::testRasterChannel()
     QCOMPARE(channel->frameIdAt(0), 0);
     QVERIFY(channel->keyframeAt(0) != 0);
 
-    KisKeyframe * key_0 = channel->keyframeAt(0);
+    KisKeyframeSP key_0 = channel->keyframeAt(0);
 
     // New keyframe
 
-    KisKeyframe * key_10 = channel->addKeyframe(10);
+    KisKeyframeSP key_10 = channel->addKeyframe(10);
     QCOMPARE(channel->keyframeCount(), 2);
     QCOMPARE(dev->framesInterface()->frames().count(), 2);
     QVERIFY(channel->frameIdAt(10) != 0);
@@ -186,7 +186,7 @@ void KisKeyframingTest::testRasterChannel()
 
     // Duplicate keyframe
 
-    KisKeyframe * key_20 = channel->copyKeyframe(key_0, 20);
+    KisKeyframeSP key_20 = channel->copyKeyframe(key_0, 20);
     bounds->testingSetTime(20);
     QImage thumb3a = dev->createThumbnail(50, 50);
 
@@ -229,7 +229,7 @@ void KisKeyframingTest::testRasterChannel()
 void KisKeyframingTest::testChannelSignals()
 {
     KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), 0, -17, 31);
-    KisKeyframe *key;
+    KisKeyframeSP key;
     KisKeyframe *resKey;
 
     qRegisterMetaType<KisKeyframe*>("KisKeyframePtr");
@@ -260,9 +260,9 @@ void KisKeyframingTest::testChannelSignals()
     QCOMPARE(spyPostAdd.count(), 1);
 
     resKey = spyPreAdd.at(0).at(0).value<KisKeyframe*>();
-    QVERIFY(resKey == key);
+    QVERIFY(resKey == key.data());
     resKey = spyPostAdd.at(0).at(0).value<KisKeyframe*>();
-    QVERIFY(resKey == key);
+    QVERIFY(resKey == key.data());
 
     // Moving a keyframe
 
@@ -273,10 +273,10 @@ void KisKeyframingTest::testChannelSignals()
     QCOMPARE(spyPostMove.count(), 1);
 
     resKey = spyPreMove.at(0).at(0).value<KisKeyframe*>();
-    QVERIFY(resKey == key);
+    QVERIFY(resKey == key.data());
     QCOMPARE(spyPreMove.at(0).at(1).toInt(), 15);
     resKey = spyPostMove.at(0).at(0).value<KisKeyframe*>();
-    QVERIFY(resKey == key);
+    QVERIFY(resKey == key.data());
 
     // No-op move (no signals)
 

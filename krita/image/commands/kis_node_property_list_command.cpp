@@ -20,7 +20,11 @@
 #include "kis_node.h"
 #include "kis_layer.h"
 #include "kis_image.h"
+#include "kis_selection_mask.h"
+#include "kis_paint_layer.h"
 #include "commands/kis_node_property_list_command.h"
+#include "kis_undo_adapter.h"
+
 
 
 KisNodePropertyListCommand::KisNodePropertyListCommand(KisNodeSP node, KisNodeModel::PropertyList newPropertyList)
@@ -73,5 +77,38 @@ void KisNodePropertyListCommand::doUpdate(const KisNodeModel::PropertyList &oldP
         layer->image()->refreshGraphAsync(layer);
     } else {
         m_node->setDirty(); // TODO check if visibility was changed or not
+    }
+}
+
+void KisNodePropertyListCommand::setNodePropertiesNoUndo(KisNodeSP node, KisImageSP image, PropertyList proplist)
+{
+    bool undo = true;
+    foreach(const KisNodeModel::Property &prop, proplist) {
+        if (prop.name == i18n("Visible") && node->visible() != prop.state.toBool()) undo = false;
+        if (prop.name == i18n("Locked") && node->userLocked() != prop.state.toBool()) undo = false;
+        if (prop.name == i18n("Active")) {
+            if (KisSelectionMask *m = dynamic_cast<KisSelectionMask*>(node.data())) {
+                if (m->active() != prop.state.toBool()) {
+                    undo = false;
+                }
+            }
+        }
+        if (prop.name == i18n("Alpha Locked")) {
+            if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(node.data())) {
+                if (l->alphaLocked() != prop.state.toBool()) {
+                    undo = false;
+                }
+            }
+        }
+    }
+
+    QScopedPointer<KUndo2Command> cmd(new KisNodePropertyListCommand(node, proplist));
+
+    if (undo) {
+        image->undoAdapter()->addCommand(cmd.take());
+    }
+    else {
+        image->setModified();
+        cmd->redo();
     }
 }

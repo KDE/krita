@@ -26,7 +26,7 @@
 class KRITAIMAGE_EXPORT KisImageConfig
 {
 public:
-    KisImageConfig();
+    KisImageConfig(bool readOnly = false);
     ~KisImageConfig();
 
     bool enableProgressReporting(bool requestDefault = false) const;
@@ -92,11 +92,15 @@ public:
     QColor onionSkinTintColorForward() const;
     void setOnionSkinTintColorForward(const QColor &value);
 
+    bool lazyFrameCreationEnabled(bool requestDefault = false) const;
+    void setLazyFrameCreationEnabled(bool value);
+
 private:
     Q_DISABLE_COPY(KisImageConfig)
 
 private:
     KConfigGroup m_config;
+    bool m_readOnly;
 };
 
 

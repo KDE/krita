@@ -41,12 +41,21 @@
 #include "kis_onion_skin_compositor.h"
 #include "kis_raster_keyframe_channel.h"
 
+#include "kis_signal_auto_connection.h"
+#include "kis_layer_properties_icons.h"
+
 struct Q_DECL_HIDDEN KisPaintLayer::Private
 {
 public:
+    Private() : contentChannel(0) {}
+
     KisPaintDeviceSP paintDevice;
     QBitArray        paintChannelFlags;
+
+    // the real pointer is owned by the paint device
     KisRasterKeyframeChannel *contentChannel;
+
+    KisSignalAutoConnectionsStore onionSkinConnection;
 };
 
 KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, KisPaintDeviceSP dev)
@@ -136,7 +145,11 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
         gc.bitBlt(rect.topLeft(), temporaryTarget(), rect);
     }
 
-    if (m_d->contentChannel && m_d->contentChannel->keyframeCount() > 1 && onionSkinEnabled()) {
+    if (m_d->contentChannel &&
+        m_d->contentChannel->keyframeCount() > 1 &&
+        onionSkinEnabled() &&
+        !m_d->paintDevice->defaultBounds()->externalFrameActive()) {
+
         KisOnionSkinCompositor *compositor = KisOnionSkinCompositor::instance();
         compositor->composite(m_d->paintDevice, projection, rect);
     }
@@ -164,11 +177,10 @@ KisNodeModel::PropertyList KisPaintLayer::sectionModelProperties() const
 {
     KisNodeModel::PropertyList l = KisLayer::sectionModelProperties();
 
-    // XXX: get right icons
-    l << KisNodeModel::Property(i18n("Alpha Locked"), KisIconUtils::loadIcon("transparency-locked"), KisIconUtils::loadIcon("transparency-unlocked"), alphaLocked());
+    l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::alphaLocked, alphaLocked());
 
     if (isAnimated()) {
-        l << KisNodeModel::Property(i18n("Onion skin"), koIcon("onionOn"), koIcon("onionOff"), onionSkinEnabled());
+        l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::onionSkins, onionSkinEnabled());
     }
 
     return l;
@@ -180,7 +192,7 @@ void KisPaintLayer::setSectionModelProperties(const KisNodeModel::PropertyList &
         if (property.name == i18n("Alpha Locked")) {
             setAlphaLocked(property.state.toBool());
         }
-        else if (property.name == i18n("Onion skin")) {
+        else if (property.name == i18n("Onion Skins")) {
             setOnionSkinEnabled(property.state.toBool());
         }
     }
@@ -243,6 +255,8 @@ void KisPaintLayer::setAlphaLocked(bool lock)
         m_d->paintChannelFlags &= colorSpace()->channelFlags(true, false);
     else
         m_d->paintChannelFlags |= colorSpace()->channelFlags(false, true);
+
+    baseNodeChangedCallback();
 }
 
 bool KisPaintLayer::onionSkinEnabled() const
@@ -252,12 +266,39 @@ bool KisPaintLayer::onionSkinEnabled() const
 
 void KisPaintLayer::setOnionSkinEnabled(bool state)
 {
-    if (state == false && onionSkinEnabled()) {
+    int oldState = onionSkinEnabled();
+    if (oldState == state) return;
+
+    if (state == false && oldState) {
+        // FIXME: change ordering! race condition possible!
+
         // Turning off onionskins shrinks our extent. Let's clean up the onion skins first
         setDirty(KisOnionSkinCompositor::instance()->calculateExtent(m_d->paintDevice));
     }
 
+    if (state) {
+        m_d->onionSkinConnection.addConnection(KisOnionSkinCompositor::instance(),
+                                               SIGNAL(sigOnionSkinChanged()),
+                                               this,
+                                               SLOT(slotExternalUpdateOnionSkins()));
+    } else {
+        m_d->onionSkinConnection.clear();
+    }
+
     nodeProperties().setProperty("onionskin", state);
+    m_d->contentChannel->setOnionSkinsEnabled(state);
+
+    baseNodeChangedCallback();
+}
+
+void KisPaintLayer::slotExternalUpdateOnionSkins()
+{
+    if (!onionSkinEnabled()) return;
+
+    const QRect dirtyRect =
+        KisOnionSkinCompositor::instance()->calculateFullExtent(m_d->paintDevice);
+
+    setDirty(dirtyRect);
 }
 
 void KisPaintLayer::enableAnimation()

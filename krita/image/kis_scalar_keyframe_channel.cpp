@@ -63,7 +63,7 @@ qreal KisScalarKeyframeChannel::maxScalarValue() const
     return m_d->maxValue;
 }
 
-qreal KisScalarKeyframeChannel::scalarValue(const KisKeyframe *keyframe) const
+qreal KisScalarKeyframeChannel::scalarValue(const KisKeyframeSP keyframe) const
 {
     return m_d->values[keyframe->value()];
 }
@@ -94,7 +94,7 @@ private:
     qreal m_newValue;
 };
 
-void KisScalarKeyframeChannel::setScalarValue(KisKeyframe *keyframe, qreal value, KUndo2Command *parentCommand)
+void KisScalarKeyframeChannel::setScalarValue(KisKeyframeSP keyframe, qreal value, KUndo2Command *parentCommand)
 {
     QScopedPointer<KUndo2Command> tempCommand;
     if (!parentCommand) {
@@ -142,7 +142,7 @@ private:
     bool m_insert;
 };
 
-KisKeyframe *KisScalarKeyframeChannel::createKeyframe(int time, const KisKeyframe *copySrc, KUndo2Command *parentCommand)
+KisKeyframeSP KisScalarKeyframeChannel::createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand)
 {
     qreal value = (copySrc != 0) ? scalarValue(copySrc) : 0;
     int index = m_d->firstFreeIndex++;
@@ -150,16 +150,16 @@ KisKeyframe *KisScalarKeyframeChannel::createKeyframe(int time, const KisKeyfram
     KUndo2Command *cmd = new Private::InsertValueCommand(m_d.data(), index, value, true, parentCommand);
     cmd->redo();
 
-    return new KisKeyframe(this, time, index);
+    return toQShared(new KisKeyframe(this, time, index));
 }
 
-bool KisScalarKeyframeChannel::canDeleteKeyframe(KisKeyframe *key)
+bool KisScalarKeyframeChannel::canDeleteKeyframe(KisKeyframeSP key)
 {
     Q_UNUSED(key);
     return true;
 }
 
-void KisScalarKeyframeChannel::destroyKeyframe(KisKeyframe *key, KUndo2Command *parentCommand)
+void KisScalarKeyframeChannel::destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand)
 {
     int index = key->value();
 
@@ -169,13 +169,13 @@ void KisScalarKeyframeChannel::destroyKeyframe(KisKeyframe *key, KUndo2Command *
     cmd->redo();
 }
 
-QRect KisScalarKeyframeChannel::affectedRect(KisKeyframe *key)
+QRect KisScalarKeyframeChannel::affectedRect(KisKeyframeSP key)
 {
     Q_UNUSED(key);
     return QRect();
 }
 
-void KisScalarKeyframeChannel::saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement, const QString &layerFilename)
+void KisScalarKeyframeChannel::saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename)
 {
     Q_UNUSED(layerFilename);
     keyframeElement.setAttribute("value", m_d->values[keyframe->value()]);
@@ -187,8 +187,8 @@ KisKeyframeSP KisScalarKeyframeChannel::loadKeyframe(const QDomElement &keyframe
     QVariant value = keyframeNode.toElement().attribute("value");
 
     KUndo2Command tempParentCommand;
-    KisKeyframe *keyframe = createKeyframe(time, 0, &tempParentCommand);
+    KisKeyframeSP keyframe = createKeyframe(time, KisKeyframeSP(), &tempParentCommand);
     setScalarValue(keyframe, value.toReal());
 
-    return toQShared(keyframe);
+    return keyframe;
 }

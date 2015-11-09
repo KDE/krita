@@ -31,17 +31,17 @@ public:
     bool hasScalarValue() const;
     qreal minScalarValue() const;
     qreal maxScalarValue() const;
-    qreal scalarValue(const KisKeyframe *keyframe) const;
-    void setScalarValue(KisKeyframe *keyframe, qreal value, KUndo2Command *parentCommand = 0);
+    qreal scalarValue(const KisKeyframeSP keyframe) const;
+    void setScalarValue(KisKeyframeSP keyframe, qreal value, KUndo2Command *parentCommand = 0);
 
 protected:
-    KisKeyframe *createKeyframe(int time, const KisKeyframe *copySrc, KUndo2Command *parentCommand);
-    bool canDeleteKeyframe(KisKeyframe *key);
-    void destroyKeyframe(KisKeyframe *key, KUndo2Command *parentCommand);
+    KisKeyframeSP createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand);
+    bool canDeleteKeyframe(KisKeyframeSP key);
+    void destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand);
 
-    QRect affectedRect(KisKeyframe *key);
+    QRect affectedRect(KisKeyframeSP key);
 
-    void saveKeyframe(KisKeyframe *keyframe, QDomElement keyframeElement, const QString &layerFilename);
+    void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename);
     KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode);
 
 private:

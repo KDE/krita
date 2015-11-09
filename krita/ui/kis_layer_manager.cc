@@ -567,11 +567,14 @@ void KisLayerManager::addLayerCommon(KisNodeSP activeNode, KisLayerSP layer, boo
     m_commandsAdapter->addNode(layer, parent, above, updateImage, updateImage);
 }
 
-void KisLayerManager::addLayer(KisNodeSP activeNode)
+KisLayerSP KisLayerManager::addLayer(KisNodeSP activeNode)
 {
     KisImageWSP image = m_view->image();
-    addLayerCommon(activeNode,
-                   new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace()), false);
+
+    KisLayerSP layer = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace());
+    addLayerCommon(activeNode, layer, false);
+
+    return layer;
 }
 
 void KisLayerManager::addGroupLayer(KisNodeSP activeNode)

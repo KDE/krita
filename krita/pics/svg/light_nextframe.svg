@@ -14,9 +14,9 @@
    width="22"
    height="22"
    id="svg6190"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="light_nextframe.svg"
-   inkscape:export-filename="/home/tyyppi/krita/animation/calligra/krita/pics/light_nextframe.png"
+   inkscape:export-filename="../light_nextframe.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <sodipodi:namedview
@@ -28,15 +28,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="1005"
+     inkscape:window-width="1878"
+     inkscape:window-height="1048"
      id="namedview4440"
-     showgrid="false"
+     showgrid="true"
      inkscape:zoom="21.454545"
-     inkscape:cx="7.3221365"
-     inkscape:cy="12.213488"
+     inkscape:cx="-1.7668467"
+     inkscape:cy="12.236793"
      inkscape:window-x="0"
-     inkscape:window-y="25"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg6190"
      inkscape:snap-bbox="true"
@@ -1294,18 +1294,29 @@
          style="stop-color:#aaaaaa;stop-opacity:1;" />
     </linearGradient>
     <linearGradient
-       y2="2020.8929"
-       x2="1954.4104"
-       y1="2028.6517"
-       x1="1941.5546"
-       gradientTransform="matrix(0,0.74882994,0.74882994,0,-1506.0233,-1446.9543)"
+       id="linearGradient6935-7-2-0">
+      <stop
+         style="stop-color:#666666;stop-opacity:1"
+         offset="0"
+         id="stop6937-8-2-6" />
+      <stop
+         style="stop-color:#1a1a1a;stop-opacity:1"
+         offset="1"
+         id="stop6939-0-2-9" />
+    </linearGradient>
+    <linearGradient
+       y2="893.61328"
+       x2="1860.6599"
+       y1="880.63397"
+       x1="1847.6807"
+       gradientTransform="matrix(1.0672276,0,0,1.0672276,-1971.8062,-939.6657)"
        gradientUnits="userSpaceOnUse"
-       id="linearGradient4304"
-       xlink:href="#linearGradient5536-08-19-2-0"
+       id="linearGradient3254"
+       xlink:href="#linearGradient6935-7-2-0"
        inkscape:collect="always" />
   </defs>
   <path
-     style="color:#000000;fill:url(#linearGradient4304);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     style="color:#000000;fill:#cacaca;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
      d="M 6,3 6,19 8,19 8,3 z m 3,0 0,16 8,-7.9883 z"
      id="path3308"
      inkscape:connector-curvature="0"

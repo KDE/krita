@@ -21,7 +21,7 @@
 
 #include "kis_types.h"
 
-class KRITAIMAGE_EXPORT KisOnionSkinCompositor : QObject
+class KRITAIMAGE_EXPORT KisOnionSkinCompositor : public QObject
 {
     Q_OBJECT
 
@@ -32,10 +32,14 @@ public:
 
     void composite(const KisPaintDeviceSP sourceDevice, KisPaintDeviceSP targetDevice, const QRect &rect);
 
+    QRect calculateFullExtent(const KisPaintDeviceSP device);
     QRect calculateExtent(const KisPaintDeviceSP device);
 
 public Q_SLOTS:
     void configChanged();
+
+Q_SIGNALS:
+    void sigOnionSkinChanged();
 
 private:
     struct Private;

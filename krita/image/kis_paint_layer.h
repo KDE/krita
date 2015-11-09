@@ -149,6 +149,10 @@ public:
     void enableAnimation();
 
 public Q_SLOTS:
+    void slotExternalUpdateOnionSkins();
+
+
+public:
 
     // KisIndirectPaintingSupport
     KisLayer* layer() {

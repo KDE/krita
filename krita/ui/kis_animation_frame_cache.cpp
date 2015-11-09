@@ -86,9 +86,16 @@ struct KisAnimationFrameCache::Private
         frames.insert(range.start(), frame);
     }
 
-    void invalidate(const KisTimeRange& range)
+    /**
+     * Invalidate any cached frames within the given time range.
+     * @param range
+     * @return true if frames were invalidated, false if nothing was changed
+     */
+    bool invalidate(const KisTimeRange& range)
     {
-        if (frames.isEmpty()) return;
+        if (frames.isEmpty()) return false;
+
+        bool cacheChanged = false;
 
         QMap<int, Frame*>::iterator it = frames.lowerBound(range.start());
         if (it.key() != range.start()) it--;
@@ -114,15 +121,21 @@ struct KisAnimationFrameCache::Private
 
                 it = frames.erase(it);
                 delete frame;
+
+                cacheChanged = true;
                 continue;
 
             } else if (frameIsInfinite || end >= range.start()) {
                 int newEnd = range.start() - 1;
                 frame->length = newEnd - start + 1;
+
+                cacheChanged = true;
             }
 
             it++;
         }
+
+        return cacheChanged;
     }
 
     // TODO: verify that we don't have any leak here!
@@ -193,9 +206,11 @@ void KisAnimationFrameCache::framesChanged(const KisTimeRange &range, const QRec
 
     if (!range.isValid()) return;
 
-    m_d->invalidate(range);
+    bool cacheChanged = m_d->invalidate(range);
 
-    emit changed();
+    if (cacheChanged) {
+        emit changed();
+    }
 }
 
 KisOpenGLUpdateInfoSP KisAnimationFrameCache::fetchFrameData(int time) const

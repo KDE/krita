@@ -275,6 +275,7 @@ void KisFilterManager::apply(KisSafeFilterConfigurationSP filterConfig)
                                                        resources));
 
     QRect processRect = filter->changedRect(d->currentApplyRect, filterConfig.data(), 0);
+    processRect &= image->bounds();
 
     if (filter->supportsThreading()) {
         QSize size = KritaUtils::optimalPatchSize();

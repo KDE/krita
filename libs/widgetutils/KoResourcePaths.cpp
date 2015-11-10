@@ -368,13 +368,13 @@ QStringList KoResourcePaths::resourceDirsInternal(const QString &type)
 
 QString KoResourcePaths::saveLocationInternal(const QString &type, const QString &suffix, bool create)
 {
-    QString path = QStandardPaths::writableLocation(d->mapTypeToQStandardPaths(type)) + '/' + suffix;
+    QString path = QStandardPaths::writableLocation(d->mapTypeToQStandardPaths(type)) + '/' + (suffix.isEmpty() ? "krita" : suffix);
     QDir d(path);
 
     if (!d.exists() && create) {
         d.mkpath(path);
     }
-//    qDebug() << "saveLocation: type" << type << "suffix" << suffix << "create" << create << "path" << path;
+    qDebug() << "saveLocation: type" << type << "suffix" << suffix << "create" << create << "path" << path;
 
     return path;
 }

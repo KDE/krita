@@ -5,18 +5,16 @@ set(kritatoolpolyline_PART_SRCS
     kis_tool_polyline.cc
     )
 
+qt5_add_resources(kritatoolpolyline_PART_SRCS polyline.qrc)
 
 add_library(kritatoolpolyline MODULE ${kritatoolpolyline_PART_SRCS})
 kcoreaddons_desktop_to_json(kritatoolpolyline kritatoolpolyline.desktop)
-
 
 target_link_libraries(kritatoolpolyline kritaui)
 
 install(TARGETS kritatoolpolyline  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
-
-install( FILES  tool_polyline_cursor.png DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
 install( FILES
     KisToolPolyline.action

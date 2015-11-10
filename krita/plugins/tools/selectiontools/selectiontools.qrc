@@ -1,0 +1,24 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource>
+        <file>tool_contiguous_selection_cursor_add.png</file>
+        <file>tool_contiguous_selection_cursor.png</file>
+        <file>tool_contiguous_selection_cursor_sub.png</file>
+        <file>tool_elliptical_selection_cursor_add.png</file>
+        <file>tool_elliptical_selection_cursor.png</file>
+        <file>tool_elliptical_selection_cursor_sub.png</file>
+        <file>tool_eraser_selection_cursor.png</file>
+        <file>tool_outline_selection_cursor_add.png</file>
+        <file>tool_outline_selection_cursor.png</file>
+        <file>tool_outline_selection_cursor_sub.png</file>
+        <file>tool_polygonal_selection_cursor_add.png</file>
+        <file>tool_polygonal_selection_cursor.png</file>
+        <file>tool_polygonal_selection_cursor_sub.png</file>
+        <file>tool_rectangular_selection_cursor_add.png</file>
+        <file>tool_rectangular_selection_cursor.png</file>
+        <file>tool_rectangular_selection_cursor_sub.png</file>
+        <file>tool_similar_selection_cursor_add.png</file>
+        <file>tool_similar_selection_cursor.png</file>
+        <file>tool_similar_selection_cursor_sub.png</file>
+    </qresource>
+</RCC>

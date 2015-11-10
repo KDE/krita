@@ -37,6 +37,7 @@ public:
     void paintEvent(QPaintEvent *event);
 
     QSize sizeHint() const;
+    QSize minimumSizeHint() const;
 
     void setRightmost(bool value);
 

@@ -50,7 +50,7 @@ KisEqualizerSlider::KisEqualizerSlider(QWidget *parent)
 {
     setOrientation(Qt::Vertical);
     setFocusPolicy(Qt::WheelFocus);
-    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
 KisEqualizerSlider::~KisEqualizerSlider()
@@ -128,7 +128,12 @@ void KisEqualizerSlider::mouseReleaseEvent(QMouseEvent *ev)
 
 QSize KisEqualizerSlider::sizeHint() const
 {
-    return QSize(15, 100);
+    return QSize(25, 150);
+}
+
+QSize KisEqualizerSlider::minimumSizeHint() const
+{
+    return QSize(10, 100);
 }
 
 void KisEqualizerSlider::paintEvent(QPaintEvent *event)

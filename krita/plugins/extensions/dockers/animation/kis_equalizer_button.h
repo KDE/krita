@@ -33,6 +33,7 @@ public:
     void setRightmost(bool value);
 
     QSize sizeHint() const;
+    QSize minimumSizeHint() const;
 
     void enterEvent(QEvent *event);
     void leaveEvent(QEvent *event);

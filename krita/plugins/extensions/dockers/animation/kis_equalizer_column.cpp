@@ -41,20 +41,18 @@ KisEqualizerColumn::KisEqualizerColumn(QWidget *parent, int id, const QString &t
     : QWidget(parent),
       m_d(new Private)
 {
-    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     m_d->id = id;
 
     m_d->stateButton = new KisEqualizerButton(this);
     m_d->stateButton->setText(title);
     m_d->stateButton->setCheckable(true);
-    m_d->stateButton->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 
     m_d->mainSlider = new KisEqualizerSlider(this);
     m_d->mainSlider->setRange(0, 100);
     m_d->mainSlider->setSingleStep(5);
     m_d->mainSlider->setPageStep(10);
-    m_d->mainSlider->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 
     QVBoxLayout *vbox = new QVBoxLayout(this);
 

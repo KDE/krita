@@ -49,7 +49,7 @@ KisEqualizerButton::KisEqualizerButton(QWidget *parent)
       m_d(new Private(this))
 {
     setFocusPolicy(Qt::WheelFocus);
-    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
 KisEqualizerButton::~KisEqualizerButton()
@@ -135,6 +135,12 @@ QSize KisEqualizerButton::sizeHint() const
     QFontMetrics metrics(this->font());
     const int minHeight = metrics.height() + 10;
     return QSize(15, minHeight);
+}
+
+QSize KisEqualizerButton::minimumSizeHint() const
+{
+    QSize sh = sizeHint();
+    return QSize(10, sh.height());
 }
 
 void KisEqualizerButton::enterEvent(QEvent *event)

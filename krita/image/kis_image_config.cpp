@@ -255,6 +255,16 @@ void KisImageConfig::setOnionSkinOpacity(int offset, int value)
     m_config.writeEntry("onionSkinOpacity_" + QString::number(offset), value);
 }
 
+bool KisImageConfig::onionSkinState(int offset) const
+{
+    return m_config.readEntry("onionSkinState_" + QString::number(offset), false);
+}
+
+void KisImageConfig::setOnionSkinState(int offset, bool value)
+{
+    m_config.writeEntry("onionSkinState_" + QString::number(offset), value);
+}
+
 QColor KisImageConfig::onionSkinTintColorBackward() const
 {
     return m_config.readEntry("onionSkinTintColorBackward", QColor(Qt::red));
@@ -358,4 +368,15 @@ int KisImageConfig::totalRAM()
     }
 
     return totalMemory;
+}
+
+bool KisImageConfig::showAdditionalOnionSkinsSettings(bool requestDefault) const
+{
+    return !requestDefault ?
+        m_config.readEntry("showAdditionalOnionSkinsSettings", true) : true;
+}
+
+void KisImageConfig::setShowAdditionalOnionSkinsSettings(bool value)
+{
+    m_config.writeEntry("showAdditionalOnionSkinsSettings", value);
 }

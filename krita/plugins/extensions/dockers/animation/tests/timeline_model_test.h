@@ -37,11 +37,14 @@ private Q_SLOTS:
     void testConverter();
     void testModel();
     void testView();
+    void testOnionSkins();
 
 private Q_SLOTS:
     void setCurrentTime(int time);
     void setCurrentLayer(int row);
     void slotGuiChangedNode(KisNodeSP node);
+
+    void slotBang();
 
 Q_SIGNALS:
     void sigRequestNodeChange(KisNodeSP node);

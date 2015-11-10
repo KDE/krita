@@ -94,7 +94,7 @@ inline QColor blendColors(const QColor &c1, const QColor &c2, qreal r1) {
         c1.blueF() * r1 + c2.blueF() * r2);
 }
 
-QColor TimelineColorScheme::frameColor(bool present, bool active)
+QColor TimelineColorScheme::frameColor(bool present, bool active) const
 {
     QColor color = Qt::transparent;
 
@@ -112,3 +112,14 @@ QColor TimelineColorScheme::frameColor(bool present, bool active)
     return color;
 }
 
+QColor TimelineColorScheme::onionSkinsSliderColor() const
+{
+    return m_d->baseColor;
+}
+
+QColor TimelineColorScheme::onionSkinsButtonColor() const
+{
+    QColor bgColor = qApp->palette().color(QPalette::Base);
+    const int lighterCoeff = bgColor.value() > 128 ? 120 : 80;
+    return m_d->baseColor.lighter(lighterCoeff);
+}

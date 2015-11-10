@@ -81,9 +81,14 @@ struct KisOnionSkinCompositor::Private
         backwardOpacities.resize(numberOfSkins);
         forwardOpacities.resize(numberOfSkins);
 
+        const qreal scaleFactor = config.onionSkinOpacity(0) / 255.0;
+
         for (int i = 0; i < numberOfSkins; i++) {
-            backwardOpacities[i] = config.onionSkinOpacity(-(i + 1));
-            forwardOpacities[i] = config.onionSkinOpacity(i + 1);
+            int backwardState = (int) config.onionSkinState(-(i + 1));
+            int forwardState = (int) config.onionSkinState(i + 1);
+
+            backwardOpacities[i] = scaleFactor * backwardState * config.onionSkinOpacity(-(i + 1));
+            forwardOpacities[i] = scaleFactor * forwardState * config.onionSkinOpacity(i + 1);
         }
     }
 };

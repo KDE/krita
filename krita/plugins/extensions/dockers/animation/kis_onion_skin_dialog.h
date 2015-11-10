@@ -28,6 +28,8 @@ namespace Ui {
 class KisOnionSkinDialog;
 }
 
+class KisEqualizerWidget;
+
 class KisOnionSkinDialog : public QDialog
 {
     Q_OBJECT
@@ -39,14 +41,15 @@ public:
 private:
     Ui::KisOnionSkinDialog *ui;
 
-    QSlider numberOfSkins;
-    QVector<QSlider*> forwardOpacities;
-    QVector<QSlider*> backwardOpacities;
-
     KisSignalCompressor m_updatesCompressor;
+    KisEqualizerWidget *m_equalizerWidget;
+
+private:
+    void loadSettings();
 
 private Q_SLOTS:
     void changed();
+    void slotShowAdditionalSettings(bool value);
 };
 
 #endif // KIS_ONION_SKIN_DIALOG_H

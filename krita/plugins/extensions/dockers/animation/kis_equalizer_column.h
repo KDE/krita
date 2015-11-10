@@ -16,39 +16,42 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __TIMELINE_COLOR_SCHEME_H
-#define __TIMELINE_COLOR_SCHEME_H
+#ifndef __KIS_EQUALIZER_COLUMN_H
+#define __KIS_EQUALIZER_COLUMN_H
 
+#include <QWidget>
 #include <QScopedPointer>
+#include <QSlider>
 
-class QColor;
-class QBrush;
+#include "kritaanimationdocker_export.h"
 
-class TimelineColorScheme
+
+class KRITAANIMATIONDOCKER_EXPORT KisEqualizerColumn : public QWidget
 {
+    Q_OBJECT
+
 public:
-    TimelineColorScheme();
-    ~TimelineColorScheme();
+    KisEqualizerColumn(QWidget *parent, int id, const QString &title);
+    ~KisEqualizerColumn();
 
-    static TimelineColorScheme* instance();
+    void setRightmost(bool value);
 
-    QColor selectorColor() const;
-    QColor selectionColor() const;
-    QColor activeLayerBackground() const;
+    int value() const;
+    void setValue(int value);
 
+    bool state() const;
+    void setState(bool value);
 
-    QBrush headerEmpty() const;
-    QBrush headerCachedFrame() const;
-    QBrush headerActive() const;
+Q_SIGNALS:
+    void sigColumnChanged(int id, bool state, int value);
 
-    QColor frameColor(bool present, bool active)const ;
-
-    QColor onionSkinsSliderColor() const;
-    QColor onionSkinsButtonColor() const;
+private Q_SLOTS:
+    void slotSliderChanged(int value);
+    void slotButtonChanged(bool value);
 
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };
 
-#endif /* __TIMELINE_COLOR_SCHEME_H */
+#endif /* __KIS_EQUALIZER_COLUMN_H */

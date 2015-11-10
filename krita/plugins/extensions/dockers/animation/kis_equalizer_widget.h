@@ -16,39 +16,41 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __TIMELINE_COLOR_SCHEME_H
-#define __TIMELINE_COLOR_SCHEME_H
+#ifndef __KIS_EQUALIZER_WIDGET_H
+#define __KIS_EQUALIZER_WIDGET_H
 
 #include <QScopedPointer>
+#include <QWidget>
+#include <QMap>
 
-class QColor;
-class QBrush;
 
-class TimelineColorScheme
+#include "kritaanimationdocker_export.h"
+
+
+class KRITAANIMATIONDOCKER_EXPORT KisEqualizerWidget : public QWidget
 {
+    Q_OBJECT
+
 public:
-    TimelineColorScheme();
-    ~TimelineColorScheme();
+    KisEqualizerWidget(int maxDistance, QWidget *parent);
+    ~KisEqualizerWidget();
 
-    static TimelineColorScheme* instance();
+    struct EqualizerValues {
+        int maxDistance;
+        QMap<int, int> value;
+        QMap<int, bool> state;
+    };
 
-    QColor selectorColor() const;
-    QColor selectionColor() const;
-    QColor activeLayerBackground() const;
+    EqualizerValues getValues() const;
+    void setValues(const EqualizerValues &values);
 
 
-    QBrush headerEmpty() const;
-    QBrush headerCachedFrame() const;
-    QBrush headerActive() const;
-
-    QColor frameColor(bool present, bool active)const ;
-
-    QColor onionSkinsSliderColor() const;
-    QColor onionSkinsButtonColor() const;
+Q_SIGNALS:
+    void sigConfigChanged();
 
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };
 
-#endif /* __TIMELINE_COLOR_SCHEME_H */
+#endif /* __KIS_EQUALIZER_WIDGET_H */

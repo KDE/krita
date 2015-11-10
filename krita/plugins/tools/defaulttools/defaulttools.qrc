@@ -2,6 +2,7 @@
 <RCC version="1.0">
     <qresource>
         <file>tool_fill_cursor.png</file>
+        <file>tool_ellipse_cursor.png</file>
         <file>tool_gradient_cursor.png</file>
         <file>tool_line_cursor.png</file>
         <file>tool_rectangle_cursor.png</file>

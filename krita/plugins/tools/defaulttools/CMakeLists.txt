@@ -23,8 +23,10 @@ set(kritadefaulttools_PART_SRCS
     )
 
 ki18n_wrap_ui(kritadefaulttools_PART_SRCS wdgcolorpicker.ui wdgmovetool.ui)
+qt5_add_resources(kritadefaulttools_PART_SRCS defaulttools.qrc )
 
 add_library(kritadefaulttools MODULE ${kritadefaulttools_PART_SRCS})
+
 generate_export_header(kritadefaulttools BASE_NAME kritadefaulttools)
 kcoreaddons_desktop_to_json(kritadefaulttools kritadefaulttools.desktop)
 
@@ -35,16 +37,6 @@ install(TARGETS kritadefaulttools  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
-
-install( FILES
-# cursors
-    tool_rectangle_cursor.png
-    tool_ellipse_cursor.png
-    tool_line_cursor.png
-    tool_freehand_cursor.png
-    tool_fill_cursor.png
-    tool_gradient_cursor.png
-    DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
 install( FILES
     KisToolPath.action

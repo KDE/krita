@@ -368,13 +368,20 @@ QStringList KoResourcePaths::resourceDirsInternal(const QString &type)
 
 QString KoResourcePaths::saveLocationInternal(const QString &type, const QString &suffix, bool create)
 {
-    QString path = QStandardPaths::writableLocation(d->mapTypeToQStandardPaths(type)) + '/' + (suffix.isEmpty() ? "krita" : suffix);
+    QStringList aliases = d->aliases(type);
+    QString path;
+    if (aliases.size() > 0) {
+        path = QStandardPaths::writableLocation(d->mapTypeToQStandardPaths(type)) + '/' + aliases.first();
+    }
+    else {
+        path = QStandardPaths::writableLocation(d->mapTypeToQStandardPaths(type)) + '/' + (suffix.isEmpty() ? "krita" : suffix);
+    }
     QDir d(path);
 
     if (!d.exists() && create) {
         d.mkpath(path);
     }
-    qDebug() << "saveLocation: type" << type << "suffix" << suffix << "create" << create << "path" << path;
+//    qDebug() << "saveLocation: type" << type << "suffix" << suffix << "create" << create << "path" << path;
 
     return path;
 }
@@ -389,7 +396,6 @@ QString KoResourcePaths::locateInternal(const QString &type, const QString &file
     }
 
     foreach(const QString &alias, aliases) {
-
         locations << QStandardPaths::locate(d->mapTypeToQStandardPaths(type),
                                             (alias.endsWith('/') ? alias : alias + '/') + filename, QStandardPaths::LocateFile);
     }

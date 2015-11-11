@@ -23,6 +23,8 @@
 
 class QColor;
 class QBrush;
+class QFont;
+class QSize;
 
 class TimelineColorScheme
 {
@@ -45,6 +47,8 @@ public:
 
     QColor onionSkinsSliderColor() const;
     QColor onionSkinsButtonColor() const;
+
+    QFont getOnionSkinsFont(const QString &maxString, const QSize &availableSize) const;
 
 private:
     struct Private;

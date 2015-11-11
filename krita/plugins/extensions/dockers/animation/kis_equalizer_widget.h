@@ -44,6 +44,7 @@ public:
     EqualizerValues getValues() const;
     void setValues(const EqualizerValues &values);
 
+    void resizeEvent(QResizeEvent *event);
 
 Q_SIGNALS:
     void sigConfigChanged();

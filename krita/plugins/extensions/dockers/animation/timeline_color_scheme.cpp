@@ -22,6 +22,9 @@
 #include <QColor>
 #include <QBrush>
 #include <QPalette>
+#include <QFont>
+#include <QFontMetrics>
+
 
 #include "kis_debug.h"
 
@@ -64,9 +67,6 @@ QColor TimelineColorScheme::selectionColor() const
 QColor TimelineColorScheme::activeLayerBackground() const
 {
     QColor color =  qApp->palette().color(QPalette::Highlight);
-    QColor bgColor = qApp->palette().color(QPalette::Base);
-
-    int darkenCoeff = bgColor.value() < 128 ? 130 : 80;
     return color;
 }
 
@@ -122,4 +122,25 @@ QColor TimelineColorScheme::onionSkinsButtonColor() const
     QColor bgColor = qApp->palette().color(QPalette::Base);
     const int lighterCoeff = bgColor.value() > 128 ? 120 : 80;
     return m_d->baseColor.lighter(lighterCoeff);
+}
+
+QFont TimelineColorScheme::getOnionSkinsFont(const QString &maxString, const QSize &availableSize) const
+{
+    QFont font = qApp->font();
+
+    while(font.pointSize() > 8) {
+        QFontMetrics fm(font);
+
+        QRect rc = fm.boundingRect(maxString);
+
+        if (rc.width() > availableSize.width() ||
+            rc.height() > availableSize.height()) {
+
+            font.setPointSize(font.pointSize() - 1);
+        } else {
+            break;
+        }
+    }
+
+    return font;
 }

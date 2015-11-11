@@ -23,6 +23,8 @@
 #include "kis_equalizer_column.h"
 #include "kis_signal_compressor.h"
 
+#include "timeline_color_scheme.h"
+
 #include "kis_debug.h"
 
 
@@ -93,5 +95,24 @@ void KisEqualizerWidget::setValues(const EqualizerValues &v)
         } else {
             m_d->columns[i]->setState(false);
         }
+    }
+}
+
+void KisEqualizerWidget::resizeEvent(QResizeEvent *event)
+{
+    Q_UNUSED(event);
+    const QSize newSize = m_d->columns[1]->size();
+
+    QFont font =
+        TimelineColorScheme::instance()->getOnionSkinsFont(
+            QString::number(100), newSize);
+
+    if (font.pointSize() != this->font().pointSize()) {
+        setFont(font);
+
+        for (int i = -m_d->maxDistance; i <= m_d->maxDistance; i++) {
+            m_d->columns[i]->setFont(font);
+        }
+
     }
 }

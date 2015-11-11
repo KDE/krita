@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<link rel="shortcut icon" href="/tcb/img/favicon.ico" type="image/x-icon"/>
 <title>Elle Stone's well-behaved ICC profiles and code</title>
 <meta name="description" content="Elle Stone's well-behaved ICC profiles, plus code for making your own profiles with LittleCMS."/>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <meta name="robots" content="NOARCHIVE,NOODP,NOYDIR"/>
-<meta name="author" content="Elle Stone, http://ninedegreesbelow.com" />
+<meta name="author" content="Elle Stone, ninedegreesbelow.com" />
 <meta name=viewport content="width=device-width, initial-scale=1">
 <style media="screen" type="text/css">
 td,th,tr {text-align: left; }
@@ -28,14 +29,28 @@ h3 {margin-bottom: 1rem;}
 <![endif]-->
 </head>
 <body>
+<a class="screen-reader" href="#maincontent">skip to main content</a>
+<header id="pageheader" role="banner">
+<h1><a href="/" title="Nine Degrees Below Photography" class="">Nine Degrees Below &mdash; color management &amp; photography using free/libre software
+</a></h1>
+<nav id="sitemenu" role="navigation">
+<ol>
+<li><a href="/" title="Nine Degrees Below Photography">Home</a></li>
+<li><a href="/photography/articles.html" title="Articles on color management, camera and monitor profiling, and other topics related to the open source digital darkroom">Articles</a></li>
+<li><a href="/galleries/" title="Photographs and photo-essays">Galleries</a></li>
+<li><a href="/about/about.html" title="Information about the person behind the website">About</a></li>
+</ol>
+</nav>
+</header>
+<article id="main" role="main"><a id="maincontent"></a>
+
 <h1 id="pagetitle">Elle Stone's Well-Behaved ICC Profiles and Code</h1>
 
 <div id="intro"><p>This article provides well-behaved ICC RGB working space profiles, plus Gray, XYZ, and LAB profiles, plus code for making your own V2 and V4 profiles using LittleCMS version 2 ("LCMS").</p>
-<p>See <a href="http://ninedegreesbelow.com/photography/lcms-make-icc-profiles.html">Elle Stone's Well-Behaved ICC Profiles and Code</a> for the latest updated information, code and ICC profiles.</p>
-
-<p>Last updated June 2015. </p>
 
 </div>
+
+<p id="written">Written September 2013. Updated November 2015. </p>
 
 <div id="pagecontents" role="navigation">
 <p>Page Contents</p>
@@ -62,18 +77,20 @@ h3 {margin-bottom: 1rem;}
 </ol>
 </div>
 
+<p><i>Update, November 10, 2015:</i> Krita developer <a href="http://wolthera.info/">Wolthera van Hövell tot Westerflier</a> was checking how my ICC profiles displayed in the <a href="http://wolthera.info/?p=783#more-783">wonderful new color space picking GUI</a> that she coded for <a href="https://krita.org/">Krita</a>, when she discovered that my Rec.709 Tone Reproduction Curve looked very strange. I checked my profile-making code and found the problem &mdash; my code for the Rec.709 parametric curve was using three values that ought to have been inverted, but weren't. My apologies for this really stupid mistake! The code has been corrected and <a href="/files/compressed/elles-icc-profiles.tar.gz">new profiles and profile-making code have been uploaded</a>.</p>
+
 <section> <a id="introduction"></a> <h2>Introduction and why I distribute ICC profiles and profile-making code</h2>
 
 <p>My ICC profile-making code makes a variety of RGB working space profiles, plus Gray profiles, plus XYZ and LAB identity profiles. The code includes the most commonly used RGB working space profiles (including ACES, ACEScg, AdobeRGB1998, ProPhotoRGB, Rec.2020, and sRGB), plus an assortment of less commonly used profiles. </p>
 
 <p>Each RGB working space profile "family" is provided with the profile's standard Tone Reproduction Curve ("TRC"), the linear gamma TRC, and the sRGB and LAB "L" TRCs, in both V2 and V4 versions. </p>
 
-<p>The downloadable <a rel="nofollow" href="http://ninedegreesbelow.com/files/compressed/elles-icc-profiles/elles-icc-profiles.tar.gz">tar.gz</a> or <a rel="nofollow" href="http://ninedegreesbelow.com/files/compressed/elles-icc-profiles/elles-icc-profiles.zip">zip</a> profile pack includes the profiles, source code, licences, README, and etc. If there is a profile you need, that isn't already included in the code or profile pack, let me know and I'll try to add the code to make the new profile.</p> 
+<p>The downloadable <a rel="nofollow" href="/files/compressed/elles-icc-profiles.tar.gz">tar.gz</a> or <a rel="nofollow" href="/files/compressed/elles-icc-profiles.zip">zip</a> profile pack includes the profiles, source code, licences, README, and etc. If there is a profile you need, that isn't already included in the code or profile pack, let me know and I'll try to add the code to make the new profile.</p> 
 
 
 <h3>Legalese</h3>
 
-<p>To the best of my knowledge, all the profiles included in my ICC profile pack and profile-making code are free from known copyright restrictions. I am not a lawyer, so use at your own risk. The downloadable premade profiles are released under the <a href="https://creativecommons.org/licenses/by-sa/3.0/legalcode">Creative Commons Attribution-Share-Alike Unported license, version 3.0</a>. The profile-making code is released as <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GNU General Public License, version 2 (or later)</a>. Both of these licenses are on the <a href="https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing#Content_Licenses">Fedora</a> and <a href="https://wiki.debian.org/DFSGLicenses">Debian</a> lists of free software licenses. This article is also released as <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GPLv2+</a>, for facilitating the use of the provided profile descriptions in free software.</p>
+<p>To the best of my knowledge, all the profiles included in my ICC profile pack and profile-making code are free from known copyright restrictions. I am not a lawyer, so use at your own risk. The downloadable premade profiles are released under the <a href="https://creativecommons.org/licenses/by-sa/3.0/legalcode">Creative Commons Attribution-Share-Alike Unported license, version 3.0</a>. The profile-making code is released as <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GPLv2+</a>. Both of these licenses are on the <a href="https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing#Content_Licenses">Fedora</a> and <a href="https://wiki.debian.org/DFSGLicenses">Debian</a> lists of free software licenses. This article is also released as <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GPLv2+</a>, for facilitating the use of the provided profile descriptions in free software.</p>
 
 <p>The profiles, code, and the information on this page is distributed in the hope that they will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. </p>
 
@@ -86,30 +103,30 @@ h3 {margin-bottom: 1rem;}
 
 <li>I think everyone should have access to well-behaved, properly made ICC profiles that aren't encumbered by onerous copyrights.</li>
 
-<li>Many profile vendors don't supply linear gamma versions of the various ICC RGB working space profiles, even though more and more artists and photographers are choosing to <a title="Linear Gamma vs Higher Gamma RGB Color Spaces: Gaussian Blur and Normal Blend Mode" href="http://ninedegreesbelow.com/photography/linear-gamma-blur-normal-blend.html">edit in linear gamma color spaces to take advantage of proper color mixing</a>. </li>
+<li>Many profile vendors don't supply linear gamma versions of the various ICC RGB working space profiles, even though more and more artists and photographers are choosing to <a title="Linear Gamma vs Higher Gamma RGB Color Spaces: Gaussian Blur and Normal Blend Mode" href="/photography/linear-gamma-blur-normal-blend.html">edit in linear gamma color spaces to take advantage of proper color mixing</a>. </li>
 
 <li>I did a survey of profiles provided by various profile vendors, and didn't like the results:
 <ul>
 
-<li>Some profile vendors supply <a title="Survey of Free and Open Source ICC RGB Working Space Profiles, section entitle 'Floss RGB working space profile evaluations: Which ones you can trust, which ones to avoid, which ones are closest to selected reference profiles'" href="http://ninedegreesbelow.com/photography/linux-icc-profiles.html#profile-evaluation-tables">RGB working space profiles that are made using the wrong source white point, the wrong primaries, and/or wrong or oddly coded TRCs</a>. </li>
+<li>Some profile vendors supply <a title="Survey of Free and Open Source ICC RGB Working Space Profiles, section entitle 'Floss RGB working space profile evaluations: Which ones you can trust, which ones to avoid, which ones are closest to selected reference profiles'" href="/photography/linux-icc-profiles.html#profile-evaluation-tables">RGB working space profiles that are made using the wrong source white point, the wrong primaries, and/or wrong or oddly coded TRCs</a>. </li>
 
-<li>And some profile vendors provide <a title="Are Your Working Space Profiles Well Behaved?" href="http://ninedegreesbelow.com/photography/are-your-working-space-profiles-well-behaved.html">RGB working space profiles that aren't well-behaved</a>, even though <a title="What Makes a Color Space Well Behaved?" href="http://ninedegreesbelow.com/photography/well-behaved-profile.html">being well-behaved is pretty much the defining characteristic of a proper RGB working space profile</a>.</li>
+<li>And some profile vendors provide <a title="Are Your Working Space Profiles Well Behaved?" href="/photography/are-your-working-space-profiles-well-behaved.html">RGB working space profiles that aren't well-behaved</a>, even though <a title="What Makes a Color Space Well Behaved?" href="/photography/well-behaved-profile.html">being well-behaved is pretty much the defining characteristic of a proper RGB working space profile</a>.</li>
 </ul>
 </li> 
 </ol>
 
 <p>For more information about assorted problems with various vendor-supplied RGB working space profiles, see:</p>
 <ol>
-<li><a href="http://ninedegreesbelow.com/photography/photography/well-behaved-profile.html">What Makes a Color Space Well-Behaved?</a></li>
-<li><a href="http://ninedegreesbelow.com/photography/are-your-working-space-profiles-well-behaved.html">Are Your Working Space Profiles Well Behaved?</a></li>
-<li><a href="http://ninedegreesbelow.com/photography/well-behaved-profiles-quest.html">In Quest of Well Behaved Working Spaces</a></li>
-<li><a href="http://ninedegreesbelow.com/photography/linux-icc-profiles.html">Survey of Free and Open Source ICC RGB Working Space Profiles</a></li>
+<li><a href="/photography/photography/well-behaved-profile.html">What Makes a Color Space Well-Behaved?</a></li>
+<li><a href="/photography/are-your-working-space-profiles-well-behaved.html">Are Your Working Space Profiles Well Behaved?</a></li>
+<li><a href="/photography/well-behaved-profiles-quest.html">In Quest of Well Behaved Working Spaces</a></li>
+<li><a href="/photography/linux-icc-profiles.html">Survey of Free and Open Source ICC RGB Working Space Profiles</a></li>
 </ol>
 
 
 <h3>Software used to make the profiles</h3>
 
-<p>My profile-making code uses the <a href="http://www.littlecms.com/">LittleCMS open source color management engine</a> ("LCMS"). However, by itself LCMS often can't create well-behaved profiles because unlike the <a href="http://argyllcms.com/">ArgyllCMS</a> profile-making code, the LCMS profile-making code <a title="In Quest of Well Behaved Working Spaces" href="http://ninedegreesbelow.com/photography/well-behaved-profiles-quest.html">doesn't compensate for hexadecimal quantization</a>. Unfortunately, without somehow compensating for hexadecimal quantization, using LCMS to make sRGB, AdobeRGB1998, and quite a few other color space profiles will result in profiles that aren't well behaved. The AdobeRGB1998 specifications not only give the D65 xy and XYZ values for the AdobeRGB1998 color space, but also the D50-adapted XYZ values. Because LCMS doesn't account for hexadecimal quantization, AdobeRGB1998 profiles made with LCMS don't exactly match the <a href="https://www.adobe.com/digitalimag/pdfs/AdobeRGB1998.pdf">AdobeRGB1998 specifications</a>.</p> 
+<p>My profile-making code uses the <a href="http://www.littlecms.com/">LittleCMS open source color management engine</a> ("LCMS"). However, by itself LCMS often can't create well-behaved profiles because unlike the <a href="http://argyllcms.com/">ArgyllCMS</a> profile-making code, the LCMS profile-making code <a title="In Quest of Well Behaved Working Spaces" href="/photography/well-behaved-profiles-quest.html">doesn't compensate for hexadecimal quantization</a>. Unfortunately, without somehow compensating for hexadecimal quantization, using LCMS to make sRGB, AdobeRGB1998, and quite a few other color space profiles will result in profiles that aren't well behaved. The AdobeRGB1998 specifications not only give the D65 xy and XYZ values for the AdobeRGB1998 color space, but also the D50-adapted XYZ values. Because LCMS doesn't account for hexadecimal quantization, AdobeRGB1998 profiles made with LCMS don't exactly match the <a href="https://www.adobe.com/digitalimag/pdfs/AdobeRGB1998.pdf">AdobeRGB1998 specifications</a>.</p> 
 
 <p><a id="prequantized-primaries"></a>As already noted, ArgyllCMS's profile-making code does compensate for hexadecimal quantization. So for profiles that are affected by hexadecimal quantization, I used the ArgyllCMS profile-making source code (located in "src/mkDispProf.c") to calculate the properly quantized D50-adapted XYZ values. Then I used a spreadsheet to "back-Bradford-adapt" from the ArgyllCMS D50-adapted XYZ values to the source color space white point to calculate "prequantized" xy values to feed to LCMS. These "prequantized" xy values allow me to use LCMS to make profiles that are well-behaved, with colorants that match the corresponding ArgyllCMS profiles (when there is one; my profile pack and code does include profiles that ArgyllCMS doesn't distribute). And I used ArgyllCMS's <a href="http://argyllcms.com/doc/xicclu.html">xicclu</a> utility to confirm that all the profiles included in my profile pack are indeed well-behaved.</p>
 
@@ -171,7 +188,7 @@ h3 {margin-bottom: 1rem;}
 
 <p>A lot changed between V2 and V4, causing a huge uproar and a lot of disagreement and unhappiness. This disagreement and unhappiness is a major reason why some very important software (such as ArgyllCMS and other profiling software) still makes and uses V2 profiles.</p>
 
-<p>The "V2" profiles I supply are actually "<a href="http://ninedegreesbelow.com/photography/linux-icc-profiles.html#variants">V2 profiles made according to V4 specs</a>". These profiles are readable by V2 software such as ArgyllCMS and LCMS version 1. But they don't provide all the functionality you would get from a real V2 profile when using color management software that was programmed to use the V2 ICC specs.</p>
+<p>The "V2" profiles I supply are actually "<a href="/photography/linux-icc-profiles.html#variants">V2 profiles made according to V4 specs</a>". These profiles are readable by V2 software such as ArgyllCMS and LCMS version 1. But they don't provide all the functionality you would get from a real V2 profile when using color management software that was programmed to use the V2 ICC specs.</p>
 
 <p>In particular, V4 specs don't allow for absolute colorimetric conversions to many commonly used matrix profiles, including sRGB. So "V2 according to V4" profiles don't behave exactly like real V2 profiles used in a real V2 workflow. LCMS provides ICC profile color management following V4 specs, not V2 specs. So Krita, GIMP, RawTherapee, showFoto, and all other imaging software that uses LCMS can <i>read</i> real V2 profiles, but V2 profiles are treated as if they were V4 profiles.</p>
 
@@ -255,20 +272,20 @@ h3 {margin-bottom: 1rem;}
 
 <p><a href="http://colour-science.org/blog_about_rgb_colourspace_models_performance.php">About RGB Colourspace Models Performance</a> takes a look at various color spaces from the point of view of how well selected multiplication operations emulate what would happen if you did the same calculations using spectral data. The study ranks the most commonly encountered RGB color spaces on how closely results in each color space emulate results obtained using spectral data. </p>
 
-<p>The <cite>About RGB Colourspace Models Performance</cite> study can be critiqued on various grounds (I wish the study had included actual ICC profile working spaces, and I wish more operations had been checked). Nonetheless the findings are interesting. Some color spaces you might not have ever used ranked near the top of the study's ranking, including Rec.2020 and the ACEScg color space (both of which are included in my profile-making code and profile pack). And some of the more well-known and commonly used RGB working spaces, including sRGB, AdobeRGB1998 and ProPhotoRGB, ranked rather poorly, with sRGB ranking second from the bottom.</p>
+<p>The <cite>About RGB Colourspace Models Performance</cite> study can be critiqued; in particular I wish the study had included actual ICC profile working spaces instead of just the color spaces not adapted to D50. Nonetheless the findings are interesting. Some color spaces you might not have ever used ranked near the top of the study's ranking, including Rec.2020 and the ACEScg color space (both of which are included in my profile-making code and profile pack). And some of the more well-known and commonly used RGB working spaces, including sRGB, AdobeRGB1998 and ProPhotoRGB, ranked rather poorly, with sRGB ranking second from the bottom.</p>
 
-<p>Anyway, I encourage you to think about breaking with the "sRGB/AdobeRGB1998/ProPhotoRGB" trio of commonly-used color spaces, and experiment with the Rec.2020 and ACEScg color spaces. I also encourage you to try using linear gamma color spaces, but of course only if you can use a high bit depth image editor (<a href="http://ninedegreesbelow.com/photography/users-guide-to-high-bit-depth-gimp.html">GIMP 2.9 requires special considerations when choosing an RGB working space</a>). And when you need a color space with a perceptually uniform TRC, try the "labl" version of your preferred linear gamma color space.</p>
+<p>Anyway, I encourage you to think about breaking with the "sRGB/AdobeRGB1998/ProPhotoRGB" trio of commonly-used color spaces, and experiment with the Rec.2020 and ACEScg color spaces. I also encourage you to try using linear gamma color spaces, but of course only if you can use a high bit depth image editor (<a href="/photography/users-guide-to-high-bit-depth-gimp.html">GIMP 2.9 requires special considerations when choosing an RGB working space</a>). And when you need a color space with a perceptually uniform TRC, try the "labl" version of your preferred linear gamma color space.</p>
 </li>
 
 <li><b>The profiles that end in "-g10.icc"</b> are linear gamma (gamma=1.0, "linear light", etc) profiles and should only be used when editing at high bit depths (16-bit floating point, 16-bit integer, 32-bit floating point, 32-bit integer). Many editing operations produce better results in linear gamma color spaces.</li>
 
-<li><b>The profiles that end in "-labl.icc"</b> have <a href="http://ninedegreesbelow.com/photography/xyz-rgb.html#TRCs">perceptually uniform TRCs</a>. A few editing operations really should be done on perceptually uniform RGB. Make sure you use the V4 versions for editing high bit depth images.</li>
+<li><b>The profiles that end in "-labl.icc"</b> have <a href="/photography/xyz-rgb.html#TRCs">perceptually uniform TRCs</a>. A few editing operations really should be done on perceptually uniform RGB. Make sure you use the V4 versions for editing high bit depth images.</li>
 
 <li><b>The profiles that end in "-srgbtrc.icc", "-g22.icc", and "-bt709.icc"</b> have approximately but not exactly perceptually uniform TRCs. ProPhotoRGB's gamma=1.8 TRC is not quite as close to being perceptually uniform.</li>
 
 <li><b>When editing 8-bit images,</b> you should use a profile with a small color gamut and an approximately or exactly uniform TRC. Of the profiles supplied in my profile pack, only the sRGB and AdobeRGB1998 (ClayRGB) color spaces are small enough for 8-bit editing. Even with the AdobeRGB1998 color space you need to be careful to not cause posterization. And of course you can't use the linear gamma versions of these profiles for 8-bit editing.</li>
 
-<li><b>The profiles that end in "-srgbtrc.icc"</b> can be used with high bit depth GIMP 2.9 to mitigate <a href="http://ninedegreesbelow.com/photography/users-guide-to-high-bit-depth-gimp.html#hard-coded-sRGB-TRC">some of the problems caused by GIMP's hard coded sRGB parameters</a>.</li>
+<li><b>The profiles that end in "-srgbtrc.icc"</b> can be used with high bit depth GIMP 2.9 to mitigate <a href="/photography/users-guide-to-high-bit-depth-gimp.html#hard-coded-sRGB-TRC">some of the problems caused by GIMP's hard coded sRGB parameters</a>.</li>
 
 </ol>
 
@@ -297,7 +314,7 @@ h3 {margin-bottom: 1rem;}
 </ol>
 
 
-<h3><a id="ACEScg"></a>ACEScg, D60, gamma=1.0 </h3>
+<h3><a id="ACEScg"></a>ACEScg</h3>
 
 <h4>White point, standard TRC, and color space specification:</h4>
 
@@ -365,7 +382,7 @@ the DCI-P3 gamut</a>", and has chromaticities that fall just barely outside the 
 
 <p>This profile's color gamut is roughly the same size and shape as the ACES color space gamut, and like the ACES color space, AllColorsRGB holds all possible real colors. But AllColorsRGB actually has a slightly larger color gamut (to capture some fringe colors that barely qualify as real when viewed by the standard observer) and uses the D50 white point.</p> 
 
-<p>Just like the ACES color space, AllColorsRGB holds a high percentage of imaginary colors. See the <a href="http://ninedegreesbelow.com/photography/xyz-rgb.html#xyY">Completely Painless Programmer's Guide to XYZ, RGB, ICC, xyY, and TRCs</a> for more information about imaginary colors.</p>
+<p>Just like the ACES color space, AllColorsRGB holds a high percentage of imaginary colors. See the <a href="/photography/xyz-rgb.html#xyY">Completely Painless Programmer's Guide to XYZ, RGB, ICC, xyY, and TRCs</a> for more information about imaginary colors.</p>
 
 <p>I can't think of any particular reason why anyone would want to use this profile for editing, unless you have a burning need to make sure your color space really does hold all possible real colors.</p>
 
@@ -439,7 +456,7 @@ b=0.005182-(0.46436433279205221554*0.17451)=-.07585421971554103213
 </ol>
 
 
-<h3><a id="IdentityRGB"></a>IdentityRGB, D50, Gamma=1.0</h3>
+<h3><a id="IdentityRGB"></a>IdentityRGB</h3>
 
 
 <h4>White point, standard TRC, and color space specification:</h4>
@@ -480,7 +497,7 @@ b=0.005182-(0.46436433279205221554*0.17451)=-.07585421971554103213
 
 <p>Kodak designed the RIMM/ROMM (ProPhotoRGB) color gamut to include all printable and most real world colors. It includes some imaginary colors and excludes some of the real world blues and violet blues that can be captured by digital cameras. It also excludes some very saturated "camera-captured" yellows as interpreted by some (and probably many) camera matrix input profiles.</p>
 
-<p>The ProPhotoRGB primaries are hard-coded into Adobe products such as Lightroom and the Dng-DCP camera "profiles". However, other than being large enough to hold a lot of colors, ProPhotoRGB has no particular merit as an RGB working space. Personally and for most editing purposes, I recommend BetaRGB, Rec2020, or the ACEScg profiles ProPhotoRGB.</p>
+<p>The ProPhotoRGB primaries are hard-coded into Adobe products such as Lightroom and the Dng-DCP camera "profiles". However, other than being large enough to hold a lot of colors, ProPhotoRGB has no particular merit as an RGB working space. Personally I recommend the  Rec.2020 or ACEScg profiles over ProPhotoRGB. But if you have an already well-established workflow using ProPhotoRGB, you might find a shift to another RGB working space a little odd, at least at first, and so you have to weight the pros and cons of changing your workflow.</p>
 
 <h4>Supplied profile variants: </h4>
 
@@ -494,7 +511,7 @@ b=0.005182-(0.46436433279205221554*0.17451)=-.07585421971554103213
 
 
 
-<h3><a id="Rec2020"></a>Rec.2020, D65, Rec709??</h3>
+<h3><a id="Rec2020"></a>Rec.2020</h3>
 
 <h4>White point, standard TRC, and color space specification:</h4>
 
@@ -535,11 +552,11 @@ b=0.005182-(0.46436433279205221554*0.17451)=-.07585421971554103213
 
 <p><a href="http://en.wikipedia.org/wiki/Srgb">Hewlett-Packard and Microsoft</a> designed sRGB to match the color gamut of consumer-grade CRTs from the 1990s. sRGB is the standard color space for the world wide web and is still the best choice for exporting images to the internet.</p>
 
-<p>The sRGB color gamut was a good match to calibrated decent quality CRTs. But <a href="http://ninedegreesbelow.com/photography/srgb-bad-working-space-profile.html">sRGB is not a good match to many consumer-grade LCD monitors</a>, which often can't display the more saturated sRGB blues and magentas (the good news: as technology progresses, wider gamuts are trickling down to consumer grade monitors). </p>
+<p>The sRGB color gamut was a good match to calibrated decent quality CRTs. But <a href="/photography/srgb-bad-working-space-profile.html">sRGB is not a good match to many consumer-grade LCD monitors</a>, which often can't display the more saturated sRGB blues and magentas (the good news: as technology progresses, wider gamuts are trickling down to consumer grade monitors). </p>
 
-<p>Printer color gamuts can easily exceed the sRGB color gamut in cyans, greens, and yellow-greens. <a href="http://ninedegreesbelow.com/photography/srgb-versus-photographic-colors.html">Colors from interpolated camera raw files</a> also often exceed the sRGB color gamut.</p>
+<p>Printer color gamuts can easily exceed the sRGB color gamut in cyans, greens, and yellow-greens. <a href="/photography/srgb-versus-photographic-colors.html">Colors from interpolated camera raw files</a> also often exceed the sRGB color gamut.</p>
 
-<p>As a very relevant aside, <a href="http://ninedegreesbelow.com/photography/icc-profile-conversion-intents.html">using perceptual intent when converting to sRGB</a> does not magically makes otherwise out of gamut colors fit inside the sRGB color gamut! The standard sRGB color space (along with all the other the RGB profiles provided in my profile pack) is a matrix profile, and matrix profiles don't have perceptual intent tables.</p>
+<p>As a very relevant aside, <a href="/photography/icc-profile-conversion-intents.html">using perceptual intent when converting to sRGB</a> does not magically makes otherwise out of gamut colors fit inside the sRGB color gamut! The standard sRGB color space (along with all the other the RGB profiles provided in my profile pack) is a matrix profile, and matrix profiles don't have perceptual intent tables.</p>
 
 <h4>Supplied profile variants: </h4>
 
@@ -555,7 +572,7 @@ b=0.005182-(0.46436433279205221554*0.17451)=-.07585421971554103213
 
 <ul>
 <li>sRGB-elle-V2-srgbtrc.icc: This sRGB profile can be assigned to DCF R03 camera-generated jpegs, and also can be used for editing 8-bit images. For maximum compatibility with color-managed browsers, use this variant for images posted to the internet.</li>
-<li>sRGB-elle-V4-srgbtrc.icc: This sRGB profile can be assigned to DCF R03 camera-generated jpegs. It can be used for editing 8-bit and also high bit depth images. <p>For finished images, it's better to assign the "sRGB-elle-V2-srgbtrc.icc" profile before uploading the image to the internet. This extra step probably only benefits Firefox users who have <a href="http://ninedegreesbelow.com/photography/monitor-profile-calibrate-confuse.html">calibrated and profiled their monitors</a>, but haven't changed the <a href="http://ninedegreesbelow.com/galleries/viewing-photographs-on-the-web.html">default Firefox color management settings</a>, which is to say, probably not very many people.</p></li>
+<li>sRGB-elle-V4-srgbtrc.icc: This sRGB profile can be assigned to DCF R03 camera-generated jpegs. It can be used for editing 8-bit and also high bit depth images. <p>For finished images, it's better to assign the "sRGB-elle-V2-srgbtrc.icc" profile before uploading the image to the internet. This extra step probably only benefits Firefox users who have <a href="/photography/monitor-profile-calibrate-confuse.html">calibrated and profiled their monitors</a>, but haven't changed the <a href="/galleries/viewing-photographs-on-the-web.html">default Firefox color management settings</a>, which is to say, probably not very many people.</p></li>
 <li>sRGB-elle-V2-rec709.icc and sRGB-elle-V4-rec709.icc are actually Rec.709 profiles, as the Rec.709 color space is exactly the same as the sRGB color space, except the Rec.709 colorspace uses the Rec.709 TRC. So if you need a Rec.709 ICC profile, use one of these two profiles.</li>
 </ul>
 
@@ -589,7 +606,7 @@ b=0.005182-(0.46436433279205221554*0.17451)=-.07585421971554103213
 
 
 
-<h3><a id="Gray"></a>Gray ICC profiles, D50 white point</h3>
+<h3><a id="Gray"></a>Gray ICC profiles</h3>
 
 
 <h4>White point, standard TRC, and color space specification:</h4>
@@ -643,14 +660,14 @@ b=0.005182-(0.46436433279205221554*0.17451)=-.07585421971554103213
 
 <section> <a id="compile-profile-making-code"></a> <h2>How to compile the profile-making code</h2>
 
-<p>Many readily available RGB working space profiles <a title="Survey of Free and Open Source ICC RGB Working Space Profiles, section entitle 'Different ICC specs + different software + different white points = many variants of nominally the same floss RGB working space profile'" href="http://ninedegreesbelow.com/photography/linux-icc-profiles.html#variants">are made using the wrong source white point and/or the wrong unadapted primaries</a>. Many readily available RGB working space profiles are <a title="Are Your Working Space Profiles Well Behaved?" href="http://ninedegreesbelow.com/photography/are-your-working-space-profiles-well-behaved.html">not well behaved</a>. I supply not just well-behaved profiles, but also source code that you can modify and compile to make your own RGB working space profiles.</p>
+<p>Many readily available RGB working space profiles <a title="Survey of Free and Open Source ICC RGB Working Space Profiles, section entitle 'Different ICC specs + different software + different white points = many variants of nominally the same floss RGB working space profile'" href="/photography/linux-icc-profiles.html#variants">are made using the wrong source white point and/or the wrong unadapted primaries</a>. Many readily available RGB working space profiles are <a title="Are Your Working Space Profiles Well Behaved?" href="/photography/are-your-working-space-profiles-well-behaved.html">not well behaved</a>. I supply not just well-behaved profiles, but also source code that you can modify and compile to make your own RGB working space profiles.</p>
 
 
 <p>For the three video profiles (PAL, SMPTE-C, and NTSC) and the two old monitor-based working spaces (Apple and ColorMatch), I included the profile's primaries, white point, and tone response curve information but not the actual profile making code. It should be obvious how to add the appropriate code if you want to make these profiles.</p>
 
 <h3>Pre-quantized unadapted primaries</h3>
 
-<p>Making an RGB working space profile requires a source white point and a set of unadapted primaries. As discussed in <a href="http://ninedegreesbelow.com/photography/well-behaved-profiles-quest.html">In Quest of Well Behaved Working Spaces</a> and <a href="http://ninedegreesbelow.com/photography/linux-icc-profiles.html">Survey of Free and Open Source ICC RGB Working Space Profiles</a>, the resulting profile's illuminant, white point/chad tag, and adapted primaries are subject to hexadecimal rounding or <dfn>quantization</dfn> during the profile making process. If this quantization isn't somehow compensated for, the resulting profile's adapted primaries sometimes deviate from the theoretically correct adapted primaries. A side effect for profiles so affected is they end up being not well behaved.</p>
+<p>Making an RGB working space profile requires a source white point and a set of unadapted primaries. As discussed in <a href="/photography/well-behaved-profiles-quest.html">In Quest of Well Behaved Working Spaces</a> and <a href="/photography/linux-icc-profiles.html">Survey of Free and Open Source ICC RGB Working Space Profiles</a>, the resulting profile's illuminant, white point/chad tag, and adapted primaries are subject to hexadecimal rounding or <dfn>quantization</dfn> during the profile making process. If this quantization isn't somehow compensated for, the resulting profile's adapted primaries sometimes deviate from the theoretically correct adapted primaries. A side effect for profiles so affected is they end up being not well behaved.</p>
 
 <p>In addition to the standard unadapted primaries, for the profiles that are affected by hexadecimal rounding, my profile-making code includes "pre-quantized" unadapted primaries that compensate for hexadecimal quantization. These pre-quantized unadapted primaries were back-calculated from profiles made using Argyllcms version 1.6.3, which does compensate for hexadecimal quantization. Profiles made using the "pre-quantized" primaries are well behaved.</p>
 
@@ -662,16 +679,16 @@ b=0.005182-(0.46436433279205221554*0.17451)=-.07585421971554103213
 
 <li><strong>Install a recent version of <a href="http://www.littlecms.com/">LittleCMS</a> version 2.</strong> As of Jun, 2015, I'm using LCMS 2.7.
 
-<p>As an aside, if you want LCMS transicc terminal readout that matches the Argyllcms xicclu readout, you'll need to download and modify the LCMS source code as explained in <a href="http://ninedegreesbelow.com/photography/well-behaved-profiles-quest.html">In Quest of Well Behaved Working Spaces</a>, and compile and install the modified code. Whether or not you've modifed LCMS, the code given below will produce well behaved profiles because the primaries have been pre-quantized.</p>
+<p>As an aside, if you want LCMS transicc terminal readout that matches the Argyllcms xicclu readout, you'll need to download and modify the LCMS source code as explained in <a href="/photography/well-behaved-profiles-quest.html">In Quest of Well Behaved Working Spaces</a>, and compile and install the modified code. Whether or not you've modifed LCMS, the code given below will produce well behaved profiles because the primaries have been pre-quantized.</p>
 <p>Compiling LCMS from source requires that you <strong>install the development versions of various LCMS dependencies</strong> (according to Gentoo Portage: jpeg, tiff, zlib, and coreutils).</p> 
 <p>If you run into a <strong>libtool mismatch error</strong>, see <a href="http://stackoverflow.com/questions/3096989/libtool-version-mismatch-error">libtool version mismatch error</a> for ways to deal with the problem.</p>
 </li>
 
 <li><strong>Download and unpack the code, notes, licences, and profiles</strong>.</li>
 
-<li><strong>Make whatever modifications you want to make to the code and the profile names, descriptions, copyright information, and so on.</strong> <p>If you do modify the code, please respect the <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GNU General Public License, version (or later)</a>.</p> 
+<li><strong>Make whatever modifications you want to make to the code and the profile names, descriptions, copyright information, and so on.</strong> <p>If you do modify the code, please respect the <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GPL2.0+ copyright</a>.</p> 
 <p>If you modify the code in such a way as to make modified profiles, please remove my name from the file name and the profile description and copyright, and put in your own information.</p>
-<p>If you directly modify the profiles themselves, please respect the <a href="">Creative Commons V3 unported BY-SA copyright</a>.</p>
+<p>If you directly modify the profiles themselves, please respect the <a href="https://creativecommons.org/licenses/by-sa/3.0/legalcode">Creative Commons V3 unported BY-SA copyright</a>.</p>
 <p>It should be obvious from the examples provided how to code up additional ICC profiles if there's another working space that you want, that doesn't have primaries and/or white points and/or tone response curves as provided in the current code. But if there's a profile that you want added, send me an email and I'll see if I can add the profile.</p> 
 <p>I couldn't find the LCMS function for creating a V2 XYZ profile. If you know how to do this, please send me an email.</p>
 </li>
@@ -685,11 +702,12 @@ b=0.005182-(0.46436433279205221554*0.17451)=-.07585421971554103213
 </ol>
 
 </section> 
-<footer id="pagefooter" role="contentinfo">
-<p>Questions or comments? Send an email to ellestone (at) ninedegreesbelow (dot) com</p>
-</footer>
 
+
+</article>
+<footer id="pagefooter" role="contentinfo">
+<p class="center">Thanks! for visiting my website.</p> <p style="text-indent:0;">If you have questions or comments, please send an email to ellestone (at) ninedegreesbelow (dot) com. Except where marked otherwise, all content, images, and text on the <a href="/">Nine Degrees Below</a> website are Copyright © 2010-2015 Elle Stone, all rights reserved. For more information see <a href="/about/copyright.html">Copyright and usage information for material on the Nine Degrees Below website</a>.</p>
+</footer>
 </body>
 </html>
-
 

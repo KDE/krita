@@ -1,8 +1,16 @@
+ skip to main content
+Nine Degrees Below — color management & photography using free/libre software
+
+    Home
+    Articles
+    Galleries
+    About
+
 Elle Stone's Well-Behaved ICC Profiles and Code
 
-This profile pack provides well-behaved ICC RGB working space profiles, plus Gray, XYZ, and LAB profiles, plus code for making your own V2 and V4 profiles using LittleCMS version 2 ("LCMS").
+This article provides well-behaved ICC RGB working space profiles, plus Gray, XYZ, and LAB profiles, plus code for making your own V2 and V4 profiles using LittleCMS version 2 ("LCMS").
 
-Written September 2013. Updated June 2015.
+Written September 2013. Updated November 2015.
 
 Page Contents
 
@@ -23,7 +31,8 @@ Page Contents
         LCMS built-in LAB and XYZ Identity ICC profiles
     How to compile the profile-making code
 
-Introduction
+Update, November 10, 2015: Krita developer Wolthera van Hövell tot Westerflier was checking how my ICC profiles displayed in the wonderful new color space picking GUI that she coded for Krita, when she discovered that my Rec.709 Tone Reproduction Curve looked very strange. I checked my profile-making code and found the problem — my code for the Rec.709 parametric curve was using three values that ought to have been inverted, but weren't. My apologies for this really stupid mistake! The code has been corrected and new profiles and profile-making code have been uploaded.
+Introduction and why I distribute ICC profiles and profile-making code
 
 My ICC profile-making code makes a variety of RGB working space profiles, plus Gray profiles, plus XYZ and LAB identity profiles. The code includes the most commonly used RGB working space profiles (including ACES, ACEScg, AdobeRGB1998, ProPhotoRGB, Rec.2020, and sRGB), plus an assortment of less commonly used profiles.
 
@@ -32,9 +41,9 @@ Each RGB working space profile "family" is provided with the profile's standard 
 The downloadable tar.gz or zip profile pack includes the profiles, source code, licences, README, and etc. If there is a profile you need, that isn't already included in the code or profile pack, let me know and I'll try to add the code to make the new profile.
 Legalese
 
-To the best of my knowledge, all the profiles included in my ICC profile pack and profile-making code are free from known copyright restrictions. I am not a lawyer, so use at your own risk. The downloadable premade profiles are released under the Creative Commons Attribution-Share-Alike Unported license, version 3.0 (https://creativecommons.org/licenses/by-sa/3.0/legalcode). The profile-making code is released as GNU General Public License, version 2 (https://www.gnu.org/licenses/old-licenses/gpl-2.0.html). Both of these licenses are on the Fedora and Debian lists of free software licenses. This article is also released as GPLv2+ (https://www.gnu.org/licenses/old-licenses/gpl-2.0.html), for facilitating the use of the provided profile descriptions in free software.
+To the best of my knowledge, all the profiles included in my ICC profile pack and profile-making code are free from known copyright restrictions. I am not a lawyer, so use at your own risk. The downloadable premade profiles are released under the Creative Commons Attribution-Share-Alike Unported license, version 3.0. The profile-making code is released as GPLv2+. Both of these licenses are on the Fedora and Debian lists of free software licenses. This article is also released as GPLv2+, for facilitating the use of the provided profile descriptions in free software.
 
-
+The profiles, code, and the information on this page is distributed in the hope that they will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 Why I distribute ICC profiles and profile-making code
 
 I distribute ICC profiles and profile-making code for three reasons:
@@ -68,9 +77,9 @@ Several variants of each RGB working space profile are provided. Each profile is
     The standard TRC for AdobeRGB1998 (and many other RGB working space profiles) is gamma=2.2.
     The standard TRC for sRGB has a short linear portion in the deep shadows and a gamma=2.4 portion elsewhere, for a net TRC that is approximately equal to the gamma=2.2 TRC.
 
-In addition to the profile's standard TRC, for each of the RGB working spaces, profile variants are made with the linear gamma TRC (gamma=1.0), the sRGB TRC, and the Lab "L" (aka "lstar") TRC.
+In addition to the profile's standard TRC, for each of the RGB working spaces, profile variants are made with the linear gamma TRC (gamma=1.0), the gamma=2.2 TRC (true gamma curve that is closest to perceptually uniform), the sRGB TRC, and the Lab "L" (aka "lstar") TRC.
 
-So there are two or three additional profile variants for each of the standard RGB working spaces, depending on what the standard TRC for any given RGB working space happens to be. Also the Gray profiles are provided with the linear gamma, gamma=1.8, and gamma=2.2 TRCs, plus the sRGB, LAB "L", and Rec.709 TRCs.
+So there are three or four additional profile variants for each of the standard RGB working spaces, depending on what the standard TRC for any given RGB working space happens to be. Also the Gray profiles are provided with the linear gamma, gamma=1.8, and gamma=2.2 TRCs, plus the sRGB, LAB "L", and Rec.709 TRCs.
 A note about V2 vs V4 profiles with gamma=1.8 and gamma=2.2 TRCs:
 
 See the next section below for an explanation of the difference between V2 and V4 profiles.
@@ -160,7 +169,7 @@ Use notes that apply to all the RGB working space profiles:
 
     About RGB Colourspace Models Performance takes a look at various color spaces from the point of view of how well selected multiplication operations emulate what would happen if you did the same calculations using spectral data. The study ranks the most commonly encountered RGB color spaces on how closely results in each color space emulate results obtained using spectral data.
 
-    The About RGB Colourspace Models Performance study can be critiqued on various grounds (I wish the study had included actual ICC profile working spaces, and I wish more operations had been checked). Nonetheless the findings are interesting. Some color spaces you might not have ever used ranked near the top of the study's ranking, including Rec.2020 and the ACEScg color space (both of which are included in my profile-making code and profile pack). And some of the more well-known and commonly used RGB working spaces, including sRGB, AdobeRGB1998 and ProPhotoRGB, ranked rather poorly, with sRGB ranking second from the bottom.
+    The About RGB Colourspace Models Performance study can be critiqued; in particular I wish the study had included actual ICC profile working spaces instead of just the color spaces not adapted to D50. Nonetheless the findings are interesting. Some color spaces you might not have ever used ranked near the top of the study's ranking, including Rec.2020 and the ACEScg color space (both of which are included in my profile-making code and profile pack). And some of the more well-known and commonly used RGB working spaces, including sRGB, AdobeRGB1998 and ProPhotoRGB, ranked rather poorly, with sRGB ranking second from the bottom.
 
     Anyway, I encourage you to think about breaking with the "sRGB/AdobeRGB1998/ProPhotoRGB" trio of commonly-used color spaces, and experiment with the Rec.2020 and ACEScg color spaces. I also encourage you to try using linear gamma color spaces, but of course only if you can use a high bit depth image editor (GIMP 2.9 requires special considerations when choosing an RGB working space). And when you need a color space with a perceptually uniform TRC, try the "labl" version of your preferred linear gamma color space.
     The profiles that end in "-g10.icc" are linear gamma (gamma=1.0, "linear light", etc) profiles and should only be used when editing at high bit depths (16-bit floating point, 16-bit integer, 32-bit floating point, 32-bit integer). Many editing operations produce better results in linear gamma color spaces.
@@ -186,7 +195,7 @@ Supplied profile variants:
     ACES-elle-V2-labl.icc; ACES-elle-V4-labl.icc
     ACES-elle-V2-srgbtrc.icc; ACES-elle-V4-srgbtrc.icc
 
-ACEScg, D60, gamma=1.0
+ACEScg
 White point, standard TRC, and color space specification:
 
     White point: D60 as given in the ACES specifications.
@@ -199,6 +208,7 @@ The ACEScg color space is smaller than the ACES color space, but large enough to
 Supplied profile variants:
 
     ACEScg-elle-V2-g10.icc; ACEScg-elle-V4-g10.icc
+    ACEScg-elle-V2-g22.icc; ACEScg-elle-V4-g22.icc
     ACEScg-elle-V2-labl.icc; ACEScg-elle-V4-labl.icc
     ACEScg-elle-V2-srgbtrc.icc; ACEScg-elle-V4-srgbtrc.icc
 
@@ -256,6 +266,7 @@ b=0.005182-(0.46436433279205221554*0.17451)=-.07585421971554103213
 Supplied profile variants:
 
     AllColorsRGB-elle-V2-g10.icc; AllColorsRGB-elle-V4-g10.icc
+    AllColorsRGB-elle-V2-g22.icc; AllColorsRGB-elle-V4-g22.icc
     AllColorsRGB-elle-V2-labl.icc; AllColorsRGB-elle-V4-labl.icc
     AllColorsRGB-elle-V2-srgbtrc.icc; AllColorsRGB-elle-V4-srgbtrc.icc
 
@@ -294,10 +305,11 @@ Plugging the wavelengths into the ledtuning website gives the following CIE RGB 
 Supplied profile variants:
 
     CIERGB-elle-V2-g10.icc; CIERGB-elle-V4-g10.icc (as used in the color matching experiments, the appropriate TRC is the linear gamma TRC).
+    CIERGB-elle-V2-g22.icc; CIERGB-elle-V4-g22.icc
     CIERGB-elle-V2-labl.icc; CIERGB-elle-V4-labl.icc
     CIERGB-elle-V2-srgbtrc.icc; CIERGB-elle-V4-srgbtrc.icc
 
-IdentityRGB, D50, Gamma=1.0
+IdentityRGB
 White point, standard TRC, and color space specification:
 
     White point: D50.
@@ -310,6 +322,7 @@ The IdentityRGB working space is included in the profile pack because it's a mat
 Supplied profile variants:
 
     IdentityRGB-elle-V2-g10.icc; IdentityRGB-elle-V4-g10.icc
+    IdentityRGB-elle-V2-g22.icc; IdentityRGB-elle-V4-g22.icc
     IdentityRGB-elle-V2-labl.icc; IdentityRGB-elle-V4-labl.icc
     IdentityRGB-elle-V2-srgbtrc.icc; IdentityRGB-elle-V4-srgbtrc.icc
 
@@ -326,15 +339,16 @@ To avoid possible copyright infringement issues, I used "LargeRGB" (following Ra
 
 Kodak designed the RIMM/ROMM (ProPhotoRGB) color gamut to include all printable and most real world colors. It includes some imaginary colors and excludes some of the real world blues and violet blues that can be captured by digital cameras. It also excludes some very saturated "camera-captured" yellows as interpreted by some (and probably many) camera matrix input profiles.
 
-The ProPhotoRGB primaries are hard-coded into Adobe products such as Lightroom and the Dng-DCP camera "profiles". However, other than being large enough to hold a lot of colors, ProPhotoRGB has no particular merit as an RGB working space. Personally and for most editing purposes, I recommend BetaRGB, Rec2020, or the ACEScg profiles ProPhotoRGB.
+The ProPhotoRGB primaries are hard-coded into Adobe products such as Lightroom and the Dng-DCP camera "profiles". However, other than being large enough to hold a lot of colors, ProPhotoRGB has no particular merit as an RGB working space. Personally I recommend the Rec.2020 or ACEScg profiles over ProPhotoRGB. But if you have an already well-established workflow using ProPhotoRGB, you might find a shift to another RGB working space a little odd, at least at first, and so you have to weight the pros and cons of changing your workflow.
 Supplied profile variants:
 
     LargeRGB-elle-V2-g18.icc; LargeRGB-elle-V4-g18.icc: These profiles are compatible with standard ProPhotoRGB images as produced by Lightroom and other raw processing software that uses DCP and outputs normal ProPhotoRGB images.
     LargeRGB-elle-V2-g10.icc; LargeRGB-elle-V4-g10.icc
+    LargeRGB-elle-V2-g22.icc; LargeRGB-elle-V4-g22.icc
     LargeRGB-elle-V2-labl.icc; LargeRGB-elle-V4-labl.icc
     LargeRGB-elle-V2-srgbtrc.icc; LargeRGB-elle-V4-srgbtrc.icc
 
-Rec.2020, D65, Rec709??
+Rec.2020
 White point, standard TRC, and color space specification:
 
     White point: D65 as given in the sRGB and AdobeRGB1998 specs.
@@ -348,6 +362,7 @@ Supplied profile variants:
 
     Rec2020-elle-V2-rec709.icc; Rec2020-elle-V4-rec709.icc
     Rec2020-elle-V2-g10.icc; Rec2020-elle-V4-g10.icc
+    Rec2020-elle-V2-g22.icc; Rec2020-elle-V4-g22.icc
     Rec2020-elle-V2-labl.icc; Rec2020-elle-V4-labl.icc
     Rec2020-elle-V2-srgbtrc.icc; Rec2020-elle-V4-srgbtrc.icc
 
@@ -371,6 +386,7 @@ Supplied profile variants:
 
     sRGB-elle-V2-srgbtrc.icc; sRGB-elle-V4-srgbtrc.icc
     sRGB-elle-V2-g10.icc; sRGB-elle-V4-g10.icc
+    sRGB-elle-V2-g22.icc; sRGB-elle-V4-g22.icc
     sRGB-elle-V2-labl.icc; sRGB-elle-V4-labl.icc
     sRGB-elle-V2-rec709.icc; sRGB-elle-V4-rec709.icc
 
@@ -401,7 +417,7 @@ Supplied profile variants:
     WideRGB-elle-V2-srgbtrc.icc; WideRGB-elle-V4-srgbtrc.icc
     WideRGB-elle-V2-labl.icc; WideRGB-elle-V4-labl.icc
 
-Gray ICC profiles, D50 white point
+Gray ICC profiles
 White point, standard TRC, and color space specification:
 
     White point: D50.
@@ -461,11 +477,11 @@ To make your own ICC profiles:
     Download and unpack the code, notes, licences, and profiles.
     Make whatever modifications you want to make to the code and the profile names, descriptions, copyright information, and so on.
 
-    If you do modify the code, please respect the GNU General Public License, version 2 (or later) license (https://www.gnu.org/licenses/old-licenses/gpl-2.0.html).
+    If you do modify the code, please respect the GPL2.0+ copyright.
 
     If you modify the code in such a way as to make modified profiles, please remove my name from the file name and the profile description and copyright, and put in your own information.
 
-    If you directly modify the profiles themselves, please respect the Creative Commons V3 unported BY-SA copyright (https://creativecommons.org/licenses/by-sa/3.0/legalcode).
+    If you directly modify the profiles themselves, please respect the Creative Commons V3 unported BY-SA copyright.
 
     It should be obvious from the examples provided how to code up additional ICC profiles if there's another working space that you want, that doesn't have primaries and/or white points and/or tone response curves as provided in the current code. But if there's a profile that you want added, send me an email and I'll see if I can add the profile.
 
@@ -474,4 +490,6 @@ To make your own ICC profiles:
     To actually make the ICC profiles, type "./make-elles-profiles" (suitably modified if you created an executable with a different name) at the command line.
     Copy the resulting ICC profiles to wherever you want to keep your ICC profiles. If you run Linux, you'll probably need to be root to copy them to "/usr/share/color/icc".
 
-Questions or comments? Send an email to ellestone@ninedegreesbelow.com
+Thanks! for visiting my website.
+
+If you have questions or comments, please send an email to ellestone (at) ninedegreesbelow (dot) com. Except where marked otherwise, all content, images, and text on the Nine Degrees Below website are Copyright © 2010-2015 Elle Stone, all rights reserved. For more information see Copyright and usage information for material on the Nine Degrees Below website.

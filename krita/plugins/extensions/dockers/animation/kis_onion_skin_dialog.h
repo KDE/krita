@@ -19,9 +19,9 @@
 #ifndef KIS_ONION_SKIN_DIALOG_H
 #define KIS_ONION_SKIN_DIALOG_H
 
-#include <QDialog>
-#include <QSlider>
+#include <QDockWidget>
 
+#include <kis_mainwindow_observer.h>
 #include "kis_signal_compressor.h"
 
 namespace Ui {
@@ -30,13 +30,18 @@ class KisOnionSkinDialog;
 
 class KisEqualizerWidget;
 
-class KisOnionSkinDialog : public QDialog
+class KisOnionSkinDialog : public QDockWidget, public KisMainwindowObserver
 {
     Q_OBJECT
 
 public:
     explicit KisOnionSkinDialog(QWidget *parent = 0);
     ~KisOnionSkinDialog();
+
+    QString observerName() { return "OnionSkinsDocker"; }
+    virtual void setCanvas(KoCanvasBase *canvas);
+    virtual void unsetCanvas();
+    void setMainWindow(KisViewManager *kisview);
 
 private:
     Ui::KisOnionSkinDialog *ui;

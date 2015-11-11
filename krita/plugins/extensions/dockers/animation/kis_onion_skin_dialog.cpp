@@ -34,12 +34,15 @@
 static const int MAX_SKIN_COUNT = 10;
 
 KisOnionSkinDialog::KisOnionSkinDialog(QWidget *parent) :
-    QDialog(parent),
+    QDockWidget(i18n("Onion Skins"), parent),
     ui(new Ui::KisOnionSkinDialog),
     m_updatesCompressor(300, KisSignalCompressor::FIRST_ACTIVE)
 {
+    QWidget* mainWidget = new QWidget(this);
+    setWidget(mainWidget);
+
     KisImageConfig config;
-    ui->setupUi(this);
+    ui->setupUi(mainWidget);
 
     ui->doubleTintFactor->setMinimum(0);
     ui->doubleTintFactor->setMaximum(100);
@@ -80,6 +83,20 @@ KisOnionSkinDialog::KisOnionSkinDialog(QWidget *parent) :
 KisOnionSkinDialog::~KisOnionSkinDialog()
 {
     delete ui;
+}
+
+void KisOnionSkinDialog::setCanvas(KoCanvasBase *canvas)
+{
+    Q_UNUSED(canvas);
+}
+
+void KisOnionSkinDialog::unsetCanvas()
+{
+}
+
+void KisOnionSkinDialog::setMainWindow(KisViewManager *kisview)
+{
+    Q_UNUSED(kisview);
 }
 
 void KisOnionSkinDialog::slotShowAdditionalSettings(bool value)

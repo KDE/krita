@@ -124,6 +124,8 @@ public:
     /// Return the list of dock widgets belonging to this main window.
     QList<QDockWidget*> dockWidgets() const;
 
+    QDockWidget* dockWidget(const QString &id);
+
     QList<KoCanvasObserverBase*> canvasObservers() const;
 
     /**

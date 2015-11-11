@@ -28,7 +28,7 @@
 
 class KisCanvas2;
 class Ui_WdgAnimation;
-class KisOnionSkinDialog;
+class KisMainWindow;
 
 class AnimationDocker : public QDockWidget, public KisMainwindowObserver {
     Q_OBJECT
@@ -75,8 +75,6 @@ private:
     KisCanvas2 *m_canvas;
     Ui_WdgAnimation *m_animationWidget;
 
-    KisOnionSkinDialog *m_onionSkinOptions;
-
     KisAction *m_previousFrameAction;
     KisAction *m_nextFrameAction;
 
@@ -93,6 +91,7 @@ private:
     KisAction *m_deleteKeyframeAction;
     KisAction *m_lazyFrameAction;
 
+    KisMainWindow *m_mainWindow;
 };
 
 

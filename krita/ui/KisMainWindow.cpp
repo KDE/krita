@@ -1758,6 +1758,12 @@ QList<QDockWidget*> KisMainWindow::dockWidgets() const
     return d->dockWidgetsMap.values();
 }
 
+QDockWidget* KisMainWindow::dockWidget(const QString &id)
+{
+    if (!d->dockWidgetsMap.contains(id)) return 0;
+    return d->dockWidgetsMap[id];
+}
+
 QList<KoCanvasObserverBase*> KisMainWindow::canvasObservers() const
 {
     QList<KoCanvasObserverBase*> observers;

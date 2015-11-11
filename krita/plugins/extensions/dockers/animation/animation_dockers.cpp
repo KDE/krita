@@ -19,6 +19,7 @@
 #include "animation_dockers.h"
 #include "animation_docker.h"
 #include "timeline_docker.h"
+#include "kis_onion_skin_dialog.h"
 
 #include <kpluginfactory.h>
 
@@ -91,11 +92,43 @@ public:
 private:
 };
 
+class OnionSkinsDockerFactory : public KoDockFactoryBase {
+public:
+    OnionSkinsDockerFactory()
+    {
+    }
+
+    virtual QString id() const
+    {
+        return QString( "OnionSkinsDocker" );
+    }
+
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const
+    {
+        return Qt::RightDockWidgetArea;
+    }
+
+    virtual QDockWidget *createDockWidget()
+    {
+        KisOnionSkinDialog *dockWidget = new KisOnionSkinDialog();
+        dockWidget->setObjectName(id());
+
+        return dockWidget;
+    }
+
+    DockPosition defaultDockPosition() const
+    {
+        return DockMinimized;
+    }
+private:
+};
+
 AnimationDockersPlugin::AnimationDockersPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KoDockRegistry::instance()->add(new AnimationDockerFactory());
     KoDockRegistry::instance()->add(new TimelineDockerFactory());
+    KoDockRegistry::instance()->add(new OnionSkinsDockerFactory());
 }
 
 AnimationDockersPlugin::~AnimationDockersPlugin()

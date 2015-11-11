@@ -19,7 +19,7 @@
 #include "animation_dockers.h"
 #include "animation_docker.h"
 #include "timeline_docker.h"
-#include "kis_onion_skin_dialog.h"
+#include "onion_skins_docker.h"
 
 #include <kpluginfactory.h>
 
@@ -110,7 +110,7 @@ public:
 
     virtual QDockWidget *createDockWidget()
     {
-        KisOnionSkinDialog *dockWidget = new KisOnionSkinDialog();
+        OnionSkinsDocker *dockWidget = new OnionSkinsDocker();
         dockWidget->setObjectName(id());
 
         return dockWidget;

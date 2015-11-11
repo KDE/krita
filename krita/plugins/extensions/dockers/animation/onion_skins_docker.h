@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_ONION_SKIN_DIALOG_H
-#define KIS_ONION_SKIN_DIALOG_H
+#ifndef ONION_SKINS_DOCKER_H
+#define ONION_SKINS_DOCKER_H
 
 #include <QDockWidget>
 
@@ -25,18 +25,18 @@
 #include "kis_signal_compressor.h"
 
 namespace Ui {
-class KisOnionSkinDialog;
+class OnionSkinsDocker;
 }
 
 class KisEqualizerWidget;
 
-class KisOnionSkinDialog : public QDockWidget, public KisMainwindowObserver
+class OnionSkinsDocker : public QDockWidget, public KisMainwindowObserver
 {
     Q_OBJECT
 
 public:
-    explicit KisOnionSkinDialog(QWidget *parent = 0);
-    ~KisOnionSkinDialog();
+    explicit OnionSkinsDocker(QWidget *parent = 0);
+    ~OnionSkinsDocker();
 
     QString observerName() { return "OnionSkinsDocker"; }
     virtual void setCanvas(KoCanvasBase *canvas);
@@ -44,7 +44,7 @@ public:
     void setMainWindow(KisViewManager *kisview);
 
 private:
-    Ui::KisOnionSkinDialog *ui;
+    Ui::OnionSkinsDocker *ui;
 
     KisSignalCompressor m_updatesCompressor;
     KisEqualizerWidget *m_equalizerWidget;
@@ -57,4 +57,4 @@ private Q_SLOTS:
     void slotShowAdditionalSettings(bool value);
 };
 
-#endif // KIS_ONION_SKIN_DIALOG_H
+#endif // ONION_SKINS_DOCKER_H

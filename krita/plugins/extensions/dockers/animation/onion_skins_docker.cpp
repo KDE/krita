@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_onion_skin_dialog.h"
-#include "ui_kis_onion_skin_dialog.h"
+#include "onion_skins_docker.h"
+#include "ui_onion_skins_docker.h"
 
 #include <QSlider>
 #include <QFrame>
@@ -33,9 +33,9 @@
 
 static const int MAX_SKIN_COUNT = 10;
 
-KisOnionSkinDialog::KisOnionSkinDialog(QWidget *parent) :
+OnionSkinsDocker::OnionSkinsDocker(QWidget *parent) :
     QDockWidget(i18n("Onion Skins"), parent),
-    ui(new Ui::KisOnionSkinDialog),
+    ui(new Ui::OnionSkinsDocker),
     m_updatesCompressor(300, KisSignalCompressor::FIRST_ACTIVE)
 {
     QWidget* mainWidget = new QWidget(this);
@@ -80,26 +80,26 @@ KisOnionSkinDialog::KisOnionSkinDialog(QWidget *parent) :
     resize(sizeHint());
 }
 
-KisOnionSkinDialog::~KisOnionSkinDialog()
+OnionSkinsDocker::~OnionSkinsDocker()
 {
     delete ui;
 }
 
-void KisOnionSkinDialog::setCanvas(KoCanvasBase *canvas)
+void OnionSkinsDocker::setCanvas(KoCanvasBase *canvas)
 {
     Q_UNUSED(canvas);
 }
 
-void KisOnionSkinDialog::unsetCanvas()
+void OnionSkinsDocker::unsetCanvas()
 {
 }
 
-void KisOnionSkinDialog::setMainWindow(KisViewManager *kisview)
+void OnionSkinsDocker::setMainWindow(KisViewManager *kisview)
 {
     Q_UNUSED(kisview);
 }
 
-void KisOnionSkinDialog::slotShowAdditionalSettings(bool value)
+void OnionSkinsDocker::slotShowAdditionalSettings(bool value)
 {
     ui->lblPrevColor->setVisible(value);
     ui->lblNextColor->setVisible(value);
@@ -117,7 +117,7 @@ void KisOnionSkinDialog::slotShowAdditionalSettings(bool value)
     config.setShowAdditionalOnionSkinsSettings(value);
 }
 
-void KisOnionSkinDialog::changed()
+void OnionSkinsDocker::changed()
 {
     KisImageConfig config;
 
@@ -136,7 +136,7 @@ void KisOnionSkinDialog::changed()
     KisOnionSkinCompositor::instance()->configChanged();
 }
 
-void KisOnionSkinDialog::loadSettings()
+void OnionSkinsDocker::loadSettings()
 {
     KisImageConfig config;
 

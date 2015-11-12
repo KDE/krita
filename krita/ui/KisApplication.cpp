@@ -55,6 +55,7 @@
 #include <KoHashGeneratorProvider.h>
 #include <KoResourcePaths.h>
 
+#include "thememanager.h"
 #include "KisPrintJob.h"
 #include "KisDocumentEntry.h"
 #include "KisDocument.h"
@@ -147,6 +148,10 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     // Initialize all Calligra directories etc.
     KoGlobal::initialize();
 
+    KConfigGroup group(KSharedConfig::openConfig(), "theme");
+    Digikam::ThemeManager themeManager;
+    themeManager.setCurrentTheme(group.readEntry("Theme", "Krita dark"));
+
     // for cursors
     KoResourcePaths::addResourceType("kis_pics", "data", "krita/pics/");
 
@@ -172,7 +177,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
 #endif
 
     qDebug() << "Available styles:" << QStyleFactory::keys();
-    QStringList styles = QStringList() /*<< "Breeze"*/ << "Oxygen" << "Plastique" << "Fusion";
+    QStringList styles = QStringList() /*<< "Breeze"*/  << "Fusion" << "Oxygen" << "Plastique";
     foreach(const QString & style, styles) {
         if (!setStyle(style)) {
             qDebug() << "No" << style << "available.";

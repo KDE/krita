@@ -40,6 +40,7 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QStatusBar>
+#include <QDebug>
 
 // KDE includes
 
@@ -79,16 +80,19 @@ public:
     }
 
     const QString          defaultThemeName;
+    QString                currentThemeName;
     QMap<QString, QString> themeMap;            // map<theme name, theme config path>
 
     QActionGroup*          themeMenuActionGroup;
     KActionMenu*           themeMenuAction;
 };
 
-ThemeManager::ThemeManager(QObject *parent)
+ThemeManager::ThemeManager(const QString &theme, QObject *parent)
     : QObject(parent)
     , d(new ThemeManagerPriv)
 {
+    d->currentThemeName = theme;
+    populateThemeMap();
 }
 
 ThemeManager::~ThemeManager()
@@ -103,33 +107,48 @@ QString ThemeManager::defaultThemeName() const
 
 QString ThemeManager::currentThemeName() const
 {
-    if (!d->themeMenuAction || !d->themeMenuActionGroup) return defaultThemeName();
-    QAction* action = d->themeMenuActionGroup->checkedAction();
-    return !action ? defaultThemeName() : action->text().remove('&');
+    if (d->themeMenuAction && d->themeMenuActionGroup) {
+        QAction* action = d->themeMenuActionGroup->checkedAction();
+        return !action ? defaultThemeName() : action->text().remove('&');
+    }
+    else if (!d->currentThemeName.isEmpty()) {
+        return d->currentThemeName;
+    }
+    else {
+        return defaultThemeName();
+    }
 }
 
 void ThemeManager::setCurrentTheme(const QString& name)
 {
-    if (!d->themeMenuAction || !d->themeMenuActionGroup) return;
-    QList<QAction*> list = d->themeMenuActionGroup->actions();
-    foreach(QAction* action, list)
-    {
-        if (action->text().remove('&') == name)
+//    qDebug() << "setCurrentTheme();" << d->currentThemeName << "to" << name;
+    if (d->currentThemeName == name) return;
+
+    d->currentThemeName = name;
+
+    if (d->themeMenuAction  && d->themeMenuActionGroup) {
+        QList<QAction*> list = d->themeMenuActionGroup->actions();
+        foreach(QAction* action, list)
         {
-            action->setChecked(true);
-            slotChangePalette();
+            if (action->text().remove('&') == name)
+            {
+                action->setChecked(true);
+            }
         }
     }
+    slotChangePalette();
 }
 
 void ThemeManager::slotChangePalette()
 {
+//    qDebug() << "slotChangePalette" << sender();
     updateCurrentKDEdefaultThemePreview();
 
     QString theme(currentThemeName());
 
-    if (theme == defaultThemeName() || theme.isEmpty())
+    if (theme == defaultThemeName() || theme.isEmpty()) {
         theme = currentKDEdefaultTheme();
+    }
 
     QString filename        = d->themeMap.value(theme);
     KSharedConfigPtr config = KSharedConfig::openConfig(filename);
@@ -169,6 +188,7 @@ void ThemeManager::slotChangePalette()
         palette.setBrush(state, QPalette::LinkVisited,     schemeView.foreground(KColorScheme::VisitedText));
     }
 
+//    qDebug() << ">>>>>>>>>>>>>>>>>> going to set palette on app" << theme;
     qApp->setPalette(palette);
 
     if (theme == defaultThemeName() || theme.isEmpty()) {
@@ -182,7 +202,7 @@ void ThemeManager::slotChangePalette()
         qApp->style()->polish(qApp);
 #endif
     }
-
+    qDebug() << ">>>>>>>>>>>>>>>>>>> THEMECHANGED <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ";
     emit signalThemeChanged();
 }
 
@@ -227,7 +247,6 @@ void ThemeManager::populateThemeMenu()
         KConfigGroup group(config, "General");
         const QString name      = group.readEntry("Name", info.baseName());
         action                  = new QAction(name, d->themeMenuActionGroup);
-        d->themeMap.insert(name, filename);
         action->setIcon(icon);
         action->setCheckable(true);
         actionMap.insert(name, action);
@@ -247,6 +266,8 @@ void ThemeManager::populateThemeMenu()
 
 void ThemeManager::updateCurrentKDEdefaultThemePreview()
 {
+    if (!d->themeMenuActionGroup) return;
+
     QList<QAction*> list = d->themeMenuActionGroup->actions();
     foreach(QAction* action, list)
     {
@@ -306,10 +327,20 @@ QString ThemeManager::currentKDEdefaultTheme() const
     return group.readEntry("ColorScheme");
 }
 
-void ThemeManager::slotSettingsChanged()
+void ThemeManager::populateThemeMap()
 {
-    populateThemeMenu();
-    slotChangePalette();
+    const QStringList schemeFiles = KoResourcePaths::findAllResources("data", "color-schemes/*.colors", KoResourcePaths::NoDuplicates);
+    for (int i = 0; i < schemeFiles.size(); ++i)
+    {
+        const QString filename  = schemeFiles.at(i);
+        const QFileInfo info(filename);
+        KSharedConfigPtr config = KSharedConfig::openConfig(filename);
+        KConfigGroup group(config, "General");
+        const QString name      = group.readEntry("Name", info.baseName());
+        d->themeMap.insert(name, filename);
+    }
+
+
 }
 
 }  // namespace Digikam

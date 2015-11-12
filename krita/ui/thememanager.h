@@ -47,7 +47,12 @@ class ThemeManager : public QObject
 
 public:
 
-    explicit ThemeManager(QObject *parent);
+    /**
+     * @brief ThemeManager
+     * @param theme the currently active theme: the palette will not be changed to this theme
+     * @param parent
+     */
+    explicit ThemeManager(const QString &theme = "", QObject *parent = 0);
     ~ThemeManager();
 
     QString currentThemeName() const;
@@ -65,11 +70,10 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotChangePalette();
-    void slotSettingsChanged();
 
 private:
 
-
+    void    populateThemeMap();
     void    populateThemeMenu();
     QPixmap createSchemePreviewIcon(const KSharedConfigPtr& config);
     QString currentKDEdefaultTheme() const;

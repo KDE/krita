@@ -18,6 +18,8 @@
 
 #include "kis_equalizer_widget.h"
 
+#include <QMouseEvent>
+#include <QApplication>
 #include <QHBoxLayout>
 
 #include "kis_equalizer_column.h"
@@ -114,5 +116,23 @@ void KisEqualizerWidget::resizeEvent(QResizeEvent *event)
             m_d->columns[i]->setFont(font);
         }
 
+    }
+}
+
+void KisEqualizerWidget::mouseMoveEvent(QMouseEvent *ev)
+{
+    if (!(ev->modifiers() & Qt::ShiftModifier)) return;
+
+    QPoint globalPos = ev->globalPos();
+    QWidget *w = qApp->widgetAt(globalPos);
+
+    if (w && w->inherits("QAbstractSlider")) {
+        QMouseEvent newEv(ev->type(),
+                          w->mapFromGlobal(globalPos),
+                          globalPos,
+                          ev->button(),
+                          ev->buttons(),
+                          ev->modifiers() & ~Qt::ShiftModifier);
+        qApp->sendEvent(w, &newEv);
     }
 }

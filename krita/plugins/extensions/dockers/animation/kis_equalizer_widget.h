@@ -46,6 +46,8 @@ public:
 
     void resizeEvent(QResizeEvent *event);
 
+    void mouseMoveEvent(QMouseEvent *ev);
+
 Q_SIGNALS:
     void sigConfigChanged();
 

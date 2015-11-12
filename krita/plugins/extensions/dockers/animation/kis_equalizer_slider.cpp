@@ -112,6 +112,13 @@ void KisEqualizerSlider::mousePressEvent(QMouseEvent *ev)
 
 void KisEqualizerSlider::mouseMoveEvent(QMouseEvent *ev)
 {
+    if (ev->modifiers() & Qt::ShiftModifier &&
+        !rect().contains(ev->pos())) {
+
+        ev->ignore();
+        return;
+    }
+
     const bool precise = ev->modifiers() & Qt::ControlModifier ||
         ev->buttons() & Qt::RightButton;
 

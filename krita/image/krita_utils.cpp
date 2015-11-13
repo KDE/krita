@@ -30,6 +30,7 @@
 
 #include "kis_image_config.h"
 #include "kis_debug.h"
+#include "kis_node.h"
 
 
 namespace KritaUtils
@@ -360,4 +361,18 @@ namespace KritaUtils
         return value ? i18n("on") : i18n("off");
     }
 
+    KisNodeSP nearestNodeAfterRemoval(KisNodeSP node)
+    {
+        KisNodeSP newNode = node->nextSibling();
+
+        if (!newNode) {
+            newNode = node->prevSibling();
+        }
+
+        if (!newNode) {
+            newNode = node->parent();
+        }
+
+        return newNode;
+    }
 }

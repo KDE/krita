@@ -88,6 +88,7 @@
 #include "kis_signal_compressor.h"
 #include "kis_filter_manager.h"
 #include "krita/gemini/ViewModeSwitchEvent.h"
+#include "krita_utils.h"
 
 
 //static
@@ -319,6 +320,16 @@ void KisView::setViewManager(KisViewManager *view)
     connect(image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), this, SLOT(slotImageSizeChanged(const QPointF&, const QPointF&)));
     connect(image(), SIGNAL(sigResolutionChanged(double,double)), this, SLOT(slotImageResolutionChanged()));
 
+    // executed in a context of an image thread
+    connect(image(), SIGNAL(sigRemoveNodeAsync(KisNodeSP)),
+            SLOT(slotImageNodeRemoved(KisNodeSP)),
+            Qt::DirectConnection);
+
+    // executed in a context of the gui thread
+    connect(this, SIGNAL(sigContinueRemoveNode(KisNodeSP)),
+            SLOT(slotContinueRemoveNode(KisNodeSP)),
+            Qt::AutoConnection);
+
     /*
      * WARNING: Currently we access the global progress bar in two ways:
      * connecting to composite progress proxy (strokes) and creating
@@ -338,6 +349,17 @@ KisViewManager* KisView::viewManager() const
     return d->viewManager;
 }
 
+void KisView::slotImageNodeRemoved(KisNodeSP node)
+{
+    emit sigContinueRemoveNode(KritaUtils::nearestNodeAfterRemoval(node));
+}
+
+void KisView::slotContinueRemoveNode(KisNodeSP newActiveNode)
+{
+    if (!d->isCurrent) {
+        d->currentNode = newActiveNode;
+    }
+}
 
 QAction *KisView::undoAction() const
 {

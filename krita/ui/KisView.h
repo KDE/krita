@@ -219,12 +219,18 @@ public Q_SLOTS:
 
     bool queryClose();
 
+private Q_SLOTS:
+    void slotImageNodeRemoved(KisNodeSP node);
+    void slotContinueRemoveNode(KisNodeSP newActiveNode);
+
 Q_SIGNALS:
     // From KisImage
     void sigSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
     void sigProfileChanged(const KoColorProfile *  profile);
     void sigColorSpaceChanged(const KoColorSpace*  cs);
     void titleModified(QString,bool);
+
+    void sigContinueRemoveNode(KisNodeSP newActiveNode);
 
 protected:
 

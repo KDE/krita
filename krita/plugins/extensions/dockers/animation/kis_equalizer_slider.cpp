@@ -140,7 +140,7 @@ QSize KisEqualizerSlider::sizeHint() const
 
 QSize KisEqualizerSlider::minimumSizeHint() const
 {
-    return QSize(10, 100);
+    return QSize(10, 40);
 }
 
 void KisEqualizerSlider::paintEvent(QPaintEvent *event)

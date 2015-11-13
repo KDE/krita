@@ -170,7 +170,6 @@ void updateIcon(QComboBox *comboBox)
 
 void updateIcon(QAction *action)
 {
-    qDebug() << "updateIcon for action" << action->text();
     QIcon icon = action->icon();
 
     if (adjustIcon(&icon)) {

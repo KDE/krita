@@ -119,7 +119,7 @@ private:
 };
 
 /// An updater that does nothing
-class KOWIDGETUTILS_EXPORT KoDummyUpdater : public KoUpdater
+class KRITAWIDGETUTILS_EXPORT KoDummyUpdater : public KoUpdater
 {
 public:
     KoDummyUpdater();

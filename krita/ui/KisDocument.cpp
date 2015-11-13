@@ -999,11 +999,12 @@ QPixmap KisDocument::generatePreview(const QSize& size)
         newSize.scale(size, Qt::KeepAspectRatio);
 
         QImage image;
-        QRect generationRect =
-            bounds.width() < 1024 && bounds.height() < 1024 ?
-            bounds : QRect(0,0,1024,1024);
-
-        image = d->image->convertToQImage(generationRect, 0);
+        if (bounds.width() < 10000 && bounds.height() < 10000) {
+            image = d->image->convertToQImage(d->image->bounds(), 0);
+        }
+        else {
+            image = d->image->convertToQImage(QRect(0, 0, newSize.width(), newSize.height()), newSize, 0);
+        }
         image = image.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         return QPixmap::fromImage(image);
     }

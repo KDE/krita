@@ -334,6 +334,10 @@ set(kritaui_LIB_SRCS
 
     kis_md5_generator.cpp
     KisApplicationArguments.cpp
+
+    KisNetworkAccessManager.cpp
+    KisWelcomeScreen.cpp
+    KisMultiFeedRSSModel.cpp
 )
 
 if(WIN32)

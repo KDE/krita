@@ -37,16 +37,11 @@
 #include <QStringList>
 #include <QDateTime>
 
-QT_BEGIN_NAMESPACE
+#include <kritaui_export.h>
+
 class QThread;
 class QNetworkReply;
 class QNetworkAccessManager;
-QT_END_NAMESPACE
-
-namespace Welcome
-{
-
-namespace Internal {
 
 struct RssItem {
     QString source;
@@ -60,15 +55,13 @@ struct RssItem {
 };
 typedef QList<RssItem> RssItemList;
 
-} // namespace Internal
-
-class NetworkAccessManager;
+class KisNetworkAccessManager;
 
 enum RssRoles { TitleRole = Qt::UserRole + 1, DescriptionRole, LinkRole,
                 PubDateRole, BlogNameRole, BlogIconRole
               };
 
-class MultiFeedRssModel : public QAbstractListModel
+class KRITAUI_EXPORT MultiFeedRssModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(int articleCount READ articleCount WRITE setArticleCount NOTIFY articleCountChanged)
@@ -101,13 +94,11 @@ private Q_SLOTS:
 
 private:
     QStringList m_sites;
-    Internal::RssItemList m_aggregatedFeed;
+    RssItemList m_aggregatedFeed;
     QNetworkAccessManager *m_networkAccessManager;
     QThread *m_namThread;
     int m_articleCount;
 };
-
-} // namespace Utils
 
 #endif // MULTIFEEDRSSMODEL_H
 

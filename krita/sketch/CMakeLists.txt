@@ -44,7 +44,6 @@ set(kritasketchplugin_SRCS
     Constants.cpp
     ToolManager.cpp
     SimpleTouchArea.cpp
-    NetworkAccessManager.cpp
     ImageBuilder.cpp
     KritaNamespace.cpp
     MouseTracker.cpp
@@ -68,7 +67,6 @@ set(kritasketch_kritaintegrationmodels_SRCS
     models/PresetModel.cpp
     models/RecentImageImageProvider.cpp
     models/RecentImagesModel.cpp
-    models/MultiFeedRSSModel.cpp
     models/FileSystemModel.cpp
     models/ColorModelModel.cpp
     models/ColorDepthModel.cpp

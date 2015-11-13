@@ -30,7 +30,7 @@
 **
 **************************************************************************/
 
-#include "MultiFeedRSSModel.h"
+#include "KisMultiFeedRSSModel.h"
 
 #include <QTimer>
 #include <QThread>
@@ -40,11 +40,7 @@
 
 #include <QNetworkRequest>
 #include <QNetworkReply>
-#include <NetworkAccessManager.h>
-
-namespace Welcome {
-
-namespace Internal {
+#include <KisNetworkAccessManager.h>
 
 QString shortenHtml(QString html)
 {
@@ -60,7 +56,7 @@ QString shortenHtml(QString html)
 
 class RssReader {
 public:
-    Internal::RssItem parseItem() {
+    RssItem parseItem() {
         RssItem item;
         item.source = requestUrl;
         item.blogIcon = blogIcon;
@@ -93,11 +89,11 @@ public:
         return RssItem();
     }
 
-    Internal::RssItemList parse(QNetworkReply *reply) {
+    RssItemList parse(QNetworkReply *reply) {
         QUrl source = reply->request().url();
         requestUrl = source.toString();
         streamReader.setDevice(reply);
-        Internal::RssItemList list;
+        RssItemList list;
         while (!streamReader.atEnd()) {
             switch (streamReader.readNext()) {
             case QXmlStreamReader::StartElement:
@@ -129,11 +125,9 @@ private:
     QString blogName;
 };
 
-} // namespace Internal
-
 MultiFeedRssModel::MultiFeedRssModel(QObject *parent) :
     QAbstractListModel(parent),
-    m_networkAccessManager(new Utils::NetworkAccessManager),
+    m_networkAccessManager(new KisNetworkAccessManager),
     m_articleCount(0)
 {
     connect(m_networkAccessManager, SIGNAL(finished(QNetworkReply*)),
@@ -160,14 +154,14 @@ void MultiFeedRssModel::addFeed(const QString& feed)
                               Qt::QueuedConnection, Q_ARG(QUrl, feedUrl));
 }
 
-bool sortForPubDate(const Internal::RssItem& item1, const Internal::RssItem& item2)
+bool sortForPubDate(const RssItem& item1, const RssItem& item2)
 {
     return item1.pubDate > item2.pubDate;
 }
 
 void MultiFeedRssModel::appendFeedData(QNetworkReply *reply)
 {
-    Internal::RssReader reader;
+    RssReader reader;
     m_aggregatedFeed.append(reader.parse(reply));
     qSort(m_aggregatedFeed.begin(), m_aggregatedFeed.end(), sortForPubDate);
     setArticleCount(m_aggregatedFeed.size());
@@ -176,9 +170,9 @@ void MultiFeedRssModel::appendFeedData(QNetworkReply *reply)
 
 void MultiFeedRssModel::removeFeed(const QString &feed)
 {
-    QMutableListIterator<Internal::RssItem> it(m_aggregatedFeed);
+    QMutableListIterator<RssItem> it(m_aggregatedFeed);
     while (it.hasNext()) {
-        Internal::RssItem item = it.next();
+        RssItem item = it.next();
         if (item.source == feed)
             it.remove();
     }
@@ -193,7 +187,7 @@ int MultiFeedRssModel::rowCount(const QModelIndex &) const
 QVariant MultiFeedRssModel::data(const QModelIndex &index, int role) const
 {
 
-    Internal::RssItem item = m_aggregatedFeed.at(index.row());
+    RssItem item = m_aggregatedFeed.at(index.row());
 
     switch (role) {
     case Qt::DisplayRole: // fall through
@@ -213,5 +207,3 @@ QVariant MultiFeedRssModel::data(const QModelIndex &index, int role) const
 
     return QVariant();
 }
-
-} // namespace Utils

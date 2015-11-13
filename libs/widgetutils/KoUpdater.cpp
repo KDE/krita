@@ -99,3 +99,8 @@ void KoUpdater::interrupt()
 {
     m_interrupted = true;
 }
+
+KoDummyUpdater::KoDummyUpdater()
+    : KoUpdater(new KoUpdaterPrivate(0, 0, "dummy"))
+{
+}

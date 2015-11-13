@@ -870,10 +870,12 @@ bool KisDocument::saveNativeFormatCalligra(KoStore *store)
         (void)store->close();
     }
 
-    if (store->open("preview.png")) {
-        // ### TODO: missing error checking (The partition could be full!)
-        savePreview(store);
-        (void)store->close();
+    if (!isAutosaving()) {
+        if (store->open("preview.png")) {
+            // ### TODO: missing error checking (The partition could be full!)
+            savePreview(store);
+            (void)store->close();
+        }
     }
 
     if (!completeSaving(store)) {
@@ -997,16 +999,7 @@ QPixmap KisDocument::generatePreview(const QSize& size)
         QRect bounds = d->image->bounds();
         QSize newSize = bounds.size();
         newSize.scale(size, Qt::KeepAspectRatio);
-
-        QImage image;
-        if (bounds.width() < 10000 && bounds.height() < 10000) {
-            image = d->image->convertToQImage(d->image->bounds(), 0);
-        }
-        else {
-            image = d->image->convertToQImage(QRect(0, 0, newSize.width(), newSize.height()), newSize, 0);
-        }
-        image = image.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        return QPixmap::fromImage(image);
+        return QPixmap::fromImage(d->image->convertToQImage(newSize, 0));
     }
     return QPixmap(size);
 }

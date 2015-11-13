@@ -49,9 +49,12 @@ public:
         , m_progress(0)
         , m_weight(weight)
         , m_interrupted(false)
-        , m_hasOutput(parent->hasOutput())
+        , m_hasOutput(false)
         , m_parent(parent)
     {
+        if (parent) {
+            m_hasOutput = parent->hasOutput();
+        }
         setObjectName(name);
     }
 

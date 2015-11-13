@@ -118,4 +118,12 @@ private:
     int  m_progressPercent;
 };
 
+/// An updater that does nothing
+class KOWIDGETUTILS_EXPORT KoDummyUpdater : public KoUpdater
+{
+public:
+    KoDummyUpdater();
+};
+
 #endif
+

@@ -564,7 +564,7 @@ void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterSt
     applicator.end();
 }
 
-void KisImage::scaleNode(KisNodeSP node, qreal sx, qreal sy, KisFilterStrategy *filterStrategy)
+void KisImage::scaleNode(KisNodeSP node, qreal scaleX, qreal scaleY, KisFilterStrategy *filterStrategy)
 {
     KUndo2MagicString actionName(kundo2_i18n("Scale Layer"));
     KisImageSignalVector emitSignals;
@@ -575,7 +575,7 @@ void KisImage::scaleNode(KisNodeSP node, qreal sx, qreal sy, KisFilterStrategy *
                                        emitSignals, actionName);
 
     KisProcessingVisitorSP visitor =
-        new KisTransformProcessingVisitor(sx, sy,
+        new KisTransformProcessingVisitor(scaleX, scaleY,
                                           0, 0,
                                           QPointF(),
                                           0,

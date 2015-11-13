@@ -352,7 +352,7 @@ endif()
 ##
 macro_optional_find_package(GSL)
 macro_log_feature(GSL_FOUND "GSL" "GNU Scientific Library" "http://www.gnu.org/software/gsl"
-                  FALSE "1.7" "Required by Krita's Transform tool and Sheets' solver plugin")
+                  FALSE "1.7" "Required by Krita's Transform tool.")
 macro_bool_to_01(GSL_FOUND HAVE_GSL)
 configure_file(config-gsl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gsl.h )
 

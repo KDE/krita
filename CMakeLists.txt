@@ -247,9 +247,8 @@ macro_bool_to_01(KF5KIO_FOUND HAVE_KIO)
 
 find_package(X11)
 if(X11_FOUND)
-    find_package(Qt5 ${MIN_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
-                 X11Extras
-    )
+    find_package(Qt5 ${MIN_QT_VERSION} REQUIRED NO_MODULE COMPONENTS X11Extras)
+    find_package(XCB REQUIRED COMPONENTS XCB)
     set(HAVE_X11 TRUE)
     add_definitions(-DHAVE_X11)
 else()

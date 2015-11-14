@@ -56,26 +56,46 @@ public:
     virtual ~KisActionManager();
 
     void setView(QPointer<KisView> imageView);
-    
+
+    /**
+     * Add an existing action to the action manager.
+     */
     void addAction(const QString& name, KisAction* action);
+
+    /**
+     * Stop managing an action.
+     */
     void takeAction(KisAction* action);
 
+    /**
+     * Create a new KisAction.  Looks up data from the .action data files.
+     */
+    KisAction *createAction(const QString &name);
+
+    /**
+     * Look up an action by name.
+     */
     KisAction *actionByName(const QString &name) const;
 
+
+
+
+
     void registerOperationUIFactory(KisOperationUIFactory* factory);
-
     void registerOperation(KisOperation* operation);
-
     void runOperation(const QString &id);
-
     void runOperationFromConfiguration(KisOperationConfiguration* config);
 
 
-    /// Update actions handled by kis_action_manager to set enabled/disabled.
-    /// This is used to grey out buttons that can't be pressed.
+    /**
+     * Update actions handled by kis_action_manager to set enabled.
+     * This is used to grey out buttons that can't be pressed.
+     */
     void updateGUI();
 
-    /// Create a KisAction based on a KStandardAction. The KStandardAction is deleted.
+    /**
+     * Create a KisAction based on a KStandardAction. The KStandardAction is deleted.
+     */
     KisAction *createStandardAction(KStandardAction::StandardAction,
                                     const QObject *receiver, const char *member);
 

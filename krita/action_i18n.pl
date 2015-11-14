@@ -74,7 +74,9 @@ use constant CONTEXT_SPEC =>
     "label" => [30, []],
   },
   "action" => {
-      "action" => [20, ["name"]],
+      "ActionCollection" => [10, ["name"]],
+      "Actions" => [20, ["category"]],
+      "Action" => [30, ["name"]],
   }
 };
 

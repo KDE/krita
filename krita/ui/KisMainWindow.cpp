@@ -351,7 +351,10 @@ KisMainWindow::KisMainWindow()
 
     setAutoSaveSettings("krita", false);
 
-    KoPluginLoader::instance()->load("Krita/ViewPlugin", "Type == 'Service' and ([X-Krita-Version] == 28)", KoPluginLoader::PluginsConfig(), viewManager());
+    KoPluginLoader::instance()->load("Krita/ViewPlugin",
+                                     "Type == 'Service' and ([X-Krita-Version] == 28)",
+                                     KoPluginLoader::PluginsConfig(),
+                                     viewManager());
 
     subWindowActivated();
     updateWindowMenu();
@@ -2080,45 +2083,35 @@ void KisMainWindow::createActions()
     d->redo = actionManager->createStandardAction(KStandardAction::Redo, this, SLOT(redo()));
     d->redo->setActivationFlags(KisAction::ACTIVE_IMAGE);
 
-    d->exportPdf  = new KisAction(i18nc("@action:inmenu", "Export as PDF..."));
+    d->exportPdf  = actionManager->createAction("file_export_pdf");
     d->exportPdf->setActivationFlags(KisAction::ACTIVE_IMAGE);
     d->exportPdf->setIcon(KisIconUtils::loadIcon("application-pdf"));
-    actionManager->addAction("file_export_pdf", d->exportPdf);
     connect(d->exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));
 
-    d->exportAnimation  = new KisAction(i18nc("@action:inmenu", "Export animation..."));
+    d->exportAnimation  = actionManager->createAction("file_export_animation");
     d->exportAnimation->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    actionManager->addAction("file_export_animation", d->exportAnimation);
     connect(d->exportAnimation, SIGNAL(triggered()), this, SLOT(exportAnimation()));
 
 
-    d->closeAll = new KisAction(i18nc("@action:inmenu", "Close All"));
+    d->closeAll = actionManager->createAction("file_close_all");
     d->closeAll->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    d->closeAll->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_W));
-    actionManager->addAction("file_close_all", d->closeAll);
     connect(d->closeAll, SIGNAL(triggered()), this, SLOT(slotFileCloseAll()));
 
-//    d->reloadFile  = new KisAction(i18nc("@action:inmenu", "Reload"));
+//    d->reloadFile  = actionManager->createAction("file_reload_file");
 //    d->reloadFile->setActivationFlags(KisAction::CURRENT_IMAGE_MODIFIED);
-//    actionManager->addAction("file_reload_file", d->reloadFile);
 //    connect(d->reloadFile, SIGNAL(triggered(bool)), this, SLOT(slotReloadFile()));
 
-    d->importFile  = new KisAction(KisIconUtils::loadIcon("document-import"),
-                                   i18nc("@action:inmenu", "Open ex&isting Document as Untitled Document..."));
-    actionManager->addAction("file_import_file", d->importFile);
+    d->importFile  = actionManager->createAction("file_import_file");
     connect(d->importFile, SIGNAL(triggered(bool)), this, SLOT(slotImportFile()));
 
-    d->exportFile  = new KisAction(KisIconUtils::loadIcon("document-export"), i18nc("@action:inmenu", "E&xport..."));
+    d->exportFile  = actionManager->createAction("file_export_file");
     d->exportFile->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    actionManager->addAction("file_export_file", d->exportFile);
     connect(d->exportFile, SIGNAL(triggered(bool)), this, SLOT(slotExportFile()));
 
     /* The following entry opens the document information dialog.  Since the action is named so it
         intends to show data this entry should not have a trailing ellipses (...).  */
-    d->showDocumentInfo  = new KisAction(KisIconUtils::loadIcon("configure"),
-                                         i18nc("@action:inmenu", "Document Information"));
+    d->showDocumentInfo  = actionManager->createAction("file_documentinfo");
     d->showDocumentInfo->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    actionManager->addAction("file_documentinfo", d->showDocumentInfo);
     connect(d->showDocumentInfo, SIGNAL(triggered(bool)), this, SLOT(slotDocumentInfo()));
 
 
@@ -2127,52 +2120,42 @@ void KisMainWindow::createActions()
     connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SLOT(slotThemeChanged()));
 
 
-    d->toggleDockers = new KisAction(i18nc("@action:inmenu", "Show Dockers"));
-    d->toggleDockers->setCheckable(true);
+    d->toggleDockers = actionManager->createAction("view_toggledockers");
     d->toggleDockers->setChecked(true);
-    actionManager->addAction("view_toggledockers", d->toggleDockers);
     connect(d->toggleDockers, SIGNAL(toggled(bool)), SLOT(toggleDockersVisibility(bool)));
 
-    d->toggleDockerTitleBars = new KisAction(i18nc("@action:inmenu", "Show Docker Titlebars"));
-    d->toggleDockerTitleBars->setCheckable(true);
+    d->toggleDockerTitleBars = actionManager->createAction("view_toggledockertitlebars");
     {
         KisConfig cfg;
         d->toggleDockerTitleBars->setChecked(cfg.showDockerTitleBars());
     }
-    actionManager->addAction("view_toggledockertitlebars", d->toggleDockerTitleBars);
     connect(d->toggleDockerTitleBars, SIGNAL(toggled(bool)), SLOT(showDockerTitleBars(bool)));
 
     actionCollection()->addAction("settings_dockers_menu", d->dockWidgetMenu);
     actionCollection()->addAction("window", d->windowMenu);
 
-    d->mdiCascade = new KisAction(i18nc("@action:inmenu", "Cascade"));
+    d->mdiCascade = actionManager->createAction("windows_cascade");
     d->mdiCascade->setActivationFlags(KisAction::MULTIPLE_IMAGES);
-    actionManager->addAction("windows_cascade", d->mdiCascade);
     connect(d->mdiCascade, SIGNAL(triggered()), d->mdiArea, SLOT(cascadeSubWindows()));
 
-    d->mdiTile = new KisAction(i18nc("@action:inmenu", "Tile"));
+    d->mdiTile = actionManager->createAction("windows_tile");
     d->mdiTile->setActivationFlags(KisAction::MULTIPLE_IMAGES);
-    actionManager->addAction("windows_tile", d->mdiTile);
     connect(d->mdiTile, SIGNAL(triggered()), d->mdiArea, SLOT(tileSubWindows()));
 
-    d->mdiNextWindow = new KisAction(i18nc("@action:inmenu", "Next"));
+    d->mdiNextWindow = actionManager->createAction("windows_next");
     d->mdiNextWindow->setActivationFlags(KisAction::MULTIPLE_IMAGES);
-    actionManager->addAction("windows_next", d->mdiNextWindow);
     connect(d->mdiNextWindow, SIGNAL(triggered()), d->mdiArea, SLOT(activateNextSubWindow()));
 
-    d->mdiPreviousWindow = new KisAction(i18nc("@action:inmenu", "Previous"));
+    d->mdiPreviousWindow = actionManager->createAction("windows_previous");
     d->mdiPreviousWindow->setActivationFlags(KisAction::MULTIPLE_IMAGES);
-    actionCollection()->addAction("windows_previous", d->mdiPreviousWindow);
     connect(d->mdiPreviousWindow, SIGNAL(triggered()), d->mdiArea, SLOT(activatePreviousSubWindow()));
 
-    d->newWindow = new KisAction(KisIconUtils::loadIcon("window-new"), i18nc("@action:inmenu", "&New Window"));
-    actionManager->addAction("view_newwindow", d->newWindow);
+    d->newWindow = actionManager->createAction("view_newwindow");
     connect(d->newWindow, SIGNAL(triggered(bool)), this, SLOT(newWindow()));
 
-    d->close = new KisAction(i18nc("@action:inmenu", "Close"));
+    d->close = actionManager->createAction("file_close");
     d->close->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(d->close, SIGNAL(triggered()), SLOT(closeCurrentWindow()));
-    actionManager->addAction("file_close", d->close);
 
     actionManager->createStandardAction(KStandardAction::Preferences, this, SLOT(slotPreferences()));
 

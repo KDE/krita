@@ -48,18 +48,11 @@ KisGridManager::~KisGridManager()
 
 void KisGridManager::setup(KisActionManager* actionManager)
 {
-    m_toggleGrid = new KisAction(KisIconUtils::loadIcon("view-grid"), i18n("Show Grid"), 0);
-    m_toggleGrid->setCheckable(true);
+    m_toggleGrid = actionManager->createAction("view_grid");
     m_toggleGrid->setActivationFlags(KisAction::ACTIVE_NODE);
-    m_toggleGrid->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Apostrophe));
-    actionManager->addAction("view_grid", m_toggleGrid);
 
-    m_toggleSnapToGrid  = new KisAction(i18n("Snap To Grid"), this);
-    m_toggleSnapToGrid->setCheckable(true);
+    m_toggleSnapToGrid  = actionManager->createAction("view_snap_to_grid");
     m_toggleSnapToGrid->setActivationFlags(KisAction::ACTIVE_NODE);
-    m_toggleSnapToGrid->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Semicolon));
-    // XXX: Why is this disabled?
-    //actionManager->addAction("view_snap_to_grid", m_toggleSnapToGrid);
     connect(m_toggleSnapToGrid, SIGNAL(triggered()), this, SLOT(toggleSnapToGrid()));
 }
 

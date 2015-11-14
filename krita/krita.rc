@@ -14,7 +14,6 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="file_save"/>
       <Action name="file_save_as"/>
       <Action name="file_reload_file"/>
-      <Action name="file_reload_file"/>
       <Separator/>
       <Action name="file_import_file"/>
       <Action name="file_export_file"/>
@@ -45,8 +44,6 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="cut_sharp"/>
       <Action name="copy_sharp"/>
       <Action name="copy_merged"/>
-      <Action name="cut_sharp"/>
-      <Action name="copy_sharp"/>
       <Action name="edit_paste"/>
       <Action name="paste_new"/>
       <Action name="clear"/>
@@ -72,13 +69,11 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
           <Action name="zoom_to_100pct" />
           <Action name="rotate_canvas_right" />
           <Action name="rotate_canvas_left" />
-          <!-- TODO: Something is not right with the way zoom actions are hooked up. These are in the KoZoomController. 
-                     It seems they are not being properly placed in the view manager since the MDI changes were implemented 
-	  <Action name="zoom_in"/>
-          <Action name="zoom_out"/>
+          <!-- TODO: Something is not right with the way zoom actions are hooked up. These are in the KoZoomController.
+               It seems they are not being properly placed in the view manager since the MDI changes were implemented
           -->
-
-
+          <Action name="view_zoom_in"/>
+          <Action name="view_zoom_out"/>
       </Menu>
       <!-- TODO: None of these actions are showing. There names must have been changed to something with the MDI changes?...
       <Action name="actual_pixels"/>
@@ -88,7 +83,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
 
       <Separator/>
       <Action name="view_ruler"/>
-      <Action name="view_guidelines"/>
+      <Action name="view_show_guides"/>
       <!--Action name="view_show_guides"/-->
       <Action name="showStatusBar" />
       <Separator/>
@@ -242,7 +237,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="decor_filters"/>
       <Action name="edge_filters"/>
       <Action name="enhance_filters"/>
-      <Action name="emboss_filters"/>     
+      <Action name="emboss_filters"/>
       <Action name="map_filters"/>
       <Action name="nonphotorealistic_filters"/>
       <Action name="other_filters"/>
@@ -272,12 +267,12 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="view_toggledockertitlebars"/>
       <Action name="settings_dockers_menu"/>
       <Separator/>
-      <Action name="theme_menu"/> 
-      <Separator/>    
+      <Action name="theme_menu"/>
+      <Separator/>
       <Action name="options_configure_keybinding"/>
-      <Action name="options_configure"/>        
-      <Separator/>    
-      <Action name="manage_bundles"/> 
+      <Action name="options_configure"/>
+      <Separator/>
+      <Action name="manage_bundles"/>
       <Action name="switch_application_language"/>
       <Action name="settings_active_author"/>
       <Separator/>

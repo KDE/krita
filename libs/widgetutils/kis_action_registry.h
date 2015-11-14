@@ -47,46 +47,52 @@ public:
     /**
      * Get shortcut for an action
      */
-    QKeySequence getPreferredShortcut(QString name);
+    QKeySequence getPreferredShortcut(const QString &name);
 
     /**
      * Get shortcut for an action
      */
-    QKeySequence getDefaultShortcut(QString name);
+    QKeySequence getDefaultShortcut(const QString &name);
 
     /**
      * Get custom shortcut for an action
      */
-    QKeySequence getCustomShortcut(QString name);
+    QKeySequence getCustomShortcut(const QString &name);
+
 
     /**
-     * @return DOM info for an action @a name.
+     * Get category name
+     */
+    QKeySequence getCategory(const QString &name);
+
+    /**
+     * @return DOM info for an action @a name.  Might be private.
      *
      * Allows somewhat flexible info structure for KisActions, QActions,
      * whatever else we decide on doing later.
      */
-    QDomElement getActionXml(QString name);
+    QDomElement getActionXml(const QString &name);
 
 
     /**
      * Saves action in a category. Note that this grabs ownership of the action.
      */
-    void addAction(QString name, QAction *a, QString category = "Krita");
+    void addAction(const QString &name, QAction *a);
 
 
     /**
      * Produces a new QAction based on the .action data files.
+     *
+     * N.B. this action will not be saved in the registry.
      */
-    QAction * makeQAction(QString name, QObject *parent, QString category = QString());
-
-    KActionCollection * getDefaultCollection();
+    QAction * makeQAction(const QString &name, QObject *parent);
 
     /**
      * Fills the standard QAction properties of an action.
      *
      * @return true if the action was loaded successfully.
      */
-    bool propertizeAction(QString name, QAction *a);
+    bool propertizeAction(const QString &name, QAction *a);
 
 
     /**
@@ -101,14 +107,26 @@ public:
 
 
     /**
-     * Run shortcuts dialog.
+     * Display the shortcut configuration dialog.
      */
     void configureShortcuts(KActionCollection *ac);
+
+
+    /**
+     * Call after settings are changed.
+     */
+    void notifySettingsUpdated();
 
     /**
      * Constructor.  Please don't touch!
      */
     KisActionRegistry();
+
+    // Undocumented
+    void updateShortcut(const QString &name, QAction *ac);
+    KActionCollection * getDefaultCollection();
+
+
 
 private:
     class Private;

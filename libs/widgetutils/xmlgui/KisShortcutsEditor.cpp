@@ -26,6 +26,7 @@
 #include "KisShortcutsEditor.h"
 #include "KisShortcutsEditor_p.h"
 #include "config-xmlgui.h"
+#include "kis_action_registry.h"
 
 // The following is needed for KisShortcutsEditorPrivate and QTreeWidgetHack
 // #include "KisShortcutsDialog_p.h"
@@ -43,6 +44,7 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <ksharedconfig.h>
 #include <kmessagebox.h>
 #include "kactioncollection.h"
 #include "kactioncategory.h"
@@ -112,7 +114,7 @@ void KisShortcutsEditor::addCollection(KActionCollection *collection, const QStr
 
     /**
      * Forward this actioncollection to the delegate which will do conflict checking.
-     * TODO this seems to _replace_ any existing collections in the delegate. So, is that cool?
+     * This _replaces_ existing collections in the delegate.
      */
     d->actionCollections.append(collection);
     d->delegate->setCheckActionCollections(d->actionCollections);
@@ -142,16 +144,25 @@ void KisShortcutsEditor::addCollection(KActionCollection *collection, const QStr
     // Add a subtree for each category? Perhaps easier to think that this
     // doesn't exist. Basically you add KActionCategory as a QObject child of
     // KActionCollection, and then tag objects as belonging to the category.
-    QList<KActionCategory *> categories = collection->findChildren<KActionCategory *>();
-    foreach (KActionCategory *category, categories) {
+    foreach (KActionCategory *category, collection->categories()) {
+
+        // Don't display empty categories.
+        if (category->actions().isEmpty()) {
+            continue;
+        }
+
         hierarchy[KisShortcutsEditorPrivate::Action] =
           d->findOrMakeItem(hierarchy[KisShortcutsEditorPrivate::Program], category->text());
 
-        // Add every item from each category.
+        // Add every item from the category.
         foreach (QAction *action, category->actions()) {
             actionsSeen.insert(action);
             d->addAction(action, hierarchy, KisShortcutsEditorPrivate::Action);
         }
+
+        // Fold in each KActionCategory by default.
+        hierarchy[KisShortcutsEditorPrivate::Action]->setExpanded(false);
+
     }
 
     // Finally, tack on any uncategorized actions.
@@ -194,13 +205,23 @@ void KisShortcutsEditor::exportConfiguration(KConfigBase *config) const
             collection->writeSettings(&group, true);
         }
     }
+
+    KisActionRegistry::instance()->notifySettingsUpdated();
 }
 
 void KisShortcutsEditor::writeConfiguration(KConfigGroup *config) const
 {
-    foreach (KActionCollection *collection, d->actionCollections) {
-        collection->writeSettings(config);
+    // This is a horrible mess with pointers...
+    auto cg = KConfigGroup(KSharedConfig::openConfig("kritashortcutsrc"), "Shortcuts");
+    if (config == 0) {
+        config = &cg;
     }
+
+    foreach (KActionCollection *collection, d->actionCollections) {
+        collection->writeSettings(config, true);
+    }
+
+    KisActionRegistry::instance()->notifySettingsUpdated();
 }
 
 //slot

@@ -35,6 +35,7 @@ class KXMLGUIClient;
 class KConfigGroup;
 class QActionGroup;
 class QString;
+class KActionCategory;
 
 /**
  * \short A container for a set of QAction objects.
@@ -136,6 +137,11 @@ public:
     void readSettings(KConfigGroup *config = 0);
 
     /**
+     * Update shortcuts from the KisActionRegistry.
+     */
+    void updateShortcuts();
+
+    /**
       * Write the current configurable key associations. If @a is nonzero, use
       * that configuration group.
       *
@@ -230,6 +236,20 @@ public:
      */
     const KXMLGUIClient *parentGUIClient() const;
 
+
+    /**
+     * Returns the KActionCategories inside this collection
+     */
+    QList<KActionCategory *> categories() const;
+
+
+    /**
+     * Gets a category with name @p name inside this collection.
+     *
+     * Creates a new category if one does not exist.
+     */
+    KActionCategory *getCategory(const QString &categoryName);
+
 Q_SIGNALS:
     /**
      * Indicates that \a action was inserted into this action collection.
@@ -295,6 +315,13 @@ public:
      * simply ignore the return value.
      */
     Q_INVOKABLE QAction *addAction(const QString &name, QAction *action);
+
+    /**
+     * Adds a new action to the collection in category @p category.
+     *
+     * The category will be created if it does not already exist.
+     */
+    Q_INVOKABLE QAction *addCategorizedAction(const QString &name, QAction *action, const QString &categoryName);
 
     /**
      * Adds a list of actions to the collection.

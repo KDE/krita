@@ -79,6 +79,7 @@
 #include "tool/kis_tool.h"
 #include "kis_signals_blocker.h"
 #include "kis_action_manager.h"
+#include "kis_action_registry.h"
 
 typedef KoResourceServerSimpleConstruction<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
 typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
@@ -136,13 +137,11 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_eraseModeButton->setFixedSize(iconsize, iconsize);
     m_eraseModeButton->setCheckable(true);
 
-    m_eraseAction = new KisAction(i18n("Set eraser mode"), m_eraseModeButton);
+    m_eraseAction = m_viewManager->actionManager()->createAction("erase_action");
     m_eraseAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
     m_eraseAction->setIcon(KisIconUtils::loadIcon("draw-eraser"));
-    m_eraseAction->setDefaultShortcut(Qt::Key_E);
     m_eraseAction->setCheckable(true);
     m_eraseModeButton->setDefaultAction(m_eraseAction);
-    m_viewManager->actionCollection()->addAction("erase_action", m_eraseAction);
 
     eraserBrushSize = 0; // brush size changed when using erase mode
 
@@ -150,43 +149,40 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_reloadButton->setFixedSize(iconsize, iconsize);
     m_reloadButton->setCheckable(true);
 
-    m_reloadAction = new KisAction(i18n("Reload Original Preset"), m_reloadButton);
+    m_reloadAction = m_viewManager->actionManager()->createAction("reload_preset_action");
     m_reloadAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
     m_reloadAction->setIcon(KisIconUtils::loadIcon("view-refresh"));
     m_reloadButton->setDefaultAction(m_reloadAction);
-    m_viewManager->actionCollection()->addAction("reload_preset_action", m_reloadAction);
 
     m_alphaLockButton = new QToolButton(this);
     m_alphaLockButton->setFixedSize(iconsize, iconsize);
     m_alphaLockButton->setCheckable(true);
-    KisAction* alphaLockAction = new KisAction(i18n("Preserve Alpha"), m_alphaLockButton);
+
+    KisAction* alphaLockAction = m_viewManager->actionManager()->createAction("preserve_alpha");
     alphaLockAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
     alphaLockAction->setIcon(KisIconUtils::loadIcon("transparency-unlocked"));
     alphaLockAction->setCheckable(true);
     m_alphaLockButton->setDefaultAction(alphaLockAction);
-    m_viewManager->actionCollection()->addAction("preserve_alpha", alphaLockAction);
 
     m_hMirrorButton = new QToolButton(this);
     m_hMirrorButton->setFixedSize(iconsize, iconsize);
     m_hMirrorButton->setCheckable(true);
 
-    m_hMirrorAction = new KisAction(i18n("Set horizontal mirror mode"), m_hMirrorButton);
+    m_hMirrorAction = m_viewManager->actionManager()->createAction("hmirror_action");
     m_hMirrorAction->setIcon(KisIconUtils::loadIcon("symmetry-horizontal"));
     m_hMirrorAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
     m_hMirrorAction->setCheckable(true);
     m_hMirrorButton->setDefaultAction(m_hMirrorAction);
-    m_viewManager->actionCollection()->addAction("hmirror_action", m_hMirrorAction);
 
     m_vMirrorButton = new QToolButton(this);
     m_vMirrorButton->setFixedSize(iconsize, iconsize);
     m_vMirrorButton->setCheckable(true);
 
-    m_vMirrorAction = new KisAction(i18n("Set vertical mirror mode"), m_vMirrorButton);
+    m_vMirrorAction = m_viewManager->actionManager()->createAction("vmirror_action");
     m_vMirrorAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
     m_vMirrorAction->setIcon(KisIconUtils::loadIcon("symmetry-vertical"));
     m_vMirrorAction->setCheckable(true);
     m_vMirrorButton->setDefaultAction(m_vMirrorAction);
-    m_viewManager->actionCollection()->addAction("vmirror_action", m_vMirrorAction);
 
     const bool sliderLabels = cfg.sliderLabels();
     int sliderWidth;
@@ -286,67 +282,61 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     QWidgetAction * action;
 
     action = new QWidgetAction(this);
-    action->setText(i18n("Brush composite"));
     view->actionCollection()->addAction("composite_actions", action);
     action->setDefaultWidget(compositeActions);
 
     action = new QWidgetAction(this);
-    action->setText(i18n("Brush option slider 1"));
-    view->actionCollection()->addAction("brushslider1", action);
+    KisActionRegistry::instance()->propertizeAction("brushslider1", action);
     action->setDefaultWidget(m_sliderChooser[0]);
     connect(action, SIGNAL(triggered()), m_sliderChooser[0], SLOT(showPopupWidget()));
     connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_sliderChooser[0], SLOT(updateThemedIcons()));
 
     action = new QWidgetAction(this);
-    action->setText(i18n("Brush option slider 2"));
+    KisActionRegistry::instance()->propertizeAction("brushslider2", action);
     view->actionCollection()->addAction("brushslider2", action);
     action->setDefaultWidget(m_sliderChooser[1]);
     connect(action, SIGNAL(triggered()), m_sliderChooser[1], SLOT(showPopupWidget()));
     connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_sliderChooser[1], SLOT(updateThemedIcons()));
 
     action = new QWidgetAction(this);
-    action->setText(i18n("Brush option slider 3"));
+    KisActionRegistry::instance()->propertizeAction("brushslider3", action);
     view->actionCollection()->addAction("brushslider3", action);
     action->setDefaultWidget(m_sliderChooser[2]);
     connect(action, SIGNAL(triggered()), m_sliderChooser[2], SLOT(showPopupWidget()));
         connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_sliderChooser[2], SLOT(updateThemedIcons()));
 
     action = new QWidgetAction(this);
-    action->setText(i18n("Next Favourite Preset"));
-    view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_Comma));
+    KisActionRegistry::instance()->propertizeAction("next_favorite_preset", action);
     view->actionCollection()->addAction("next_favorite_preset", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotNextFavoritePreset()));
 
     action = new QWidgetAction(this);
-    action->setText(i18n("Previous Favourite Preset"));
-    view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_Period));
+    KisActionRegistry::instance()->propertizeAction("previous_favorite_preset", action);
     view->actionCollection()->addAction("previous_favorite_preset", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotPreviousFavoritePreset()));
 
     action = new QWidgetAction(this);
-    action->setText(i18n("Switch to Previous Preset"));
-    view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_Slash));
+    KisActionRegistry::instance()->propertizeAction("previous_preset", action);
     view->actionCollection()->addAction("previous_preset", action);
 
     connect(action, SIGNAL(triggered()), this, SLOT(slotSwitchToPreviousPreset()));
 
     if (!cfg.toolOptionsInDocker()) {
         action = new QWidgetAction(this);
-        action->setText(i18n("Show Tool Options"));
+        KisActionRegistry::instance()->propertizeAction("show_tool_options", action);
+        // TODO: check how this is serialized, add it to krita.action
         view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_Backslash));
         view->actionCollection()->addAction("show_tool_options", action);
         connect(action, SIGNAL(triggered()), m_toolOptionsPopupButton, SLOT(showPopupWidget()));
     }
 
     action = new QWidgetAction(this);
-    action->setText(i18n("Show Brush Editor"));
-    view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_F5));
-    view->actionCollection()->addAction("show_brush_editor", action);
+    KisActionRegistry::instance()->propertizeAction("show_brush_editor", action);
     connect(action, SIGNAL(triggered()), m_brushEditorPopupButton, SLOT(showPopupWidget()));
 
     action = new QWidgetAction(this);
-    action->setText(i18n("Show Brush Presets"));
-    view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_F6));
+    KisActionRegistry::instance()->propertizeAction("show_brush_presets", action);
+    view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_F6));    // TODO: check this
     view->actionCollection()->addAction("show_brush_presets", action);
     connect(action, SIGNAL(triggered()), m_presetSelectorPopupButton, SLOT(showPopupWidget()));
 
@@ -358,12 +348,12 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     mirrorLayout->setContentsMargins(0, 0, 0, 0);
 
     action = new QWidgetAction(this);
-    action->setText(i18n("Mirror"));
+    KisActionRegistry::instance()->propertizeAction("mirror_actions", action);
     action->setDefaultWidget(mirrorActions);
     view->actionCollection()->addAction("mirror_actions", action);
 
     action = new QWidgetAction(this);
-    action->setText(i18n("Workspaces"));
+    KisActionRegistry::instance()->propertizeAction("workspaces", action);
     view->actionCollection()->addAction("workspaces", action);
     action->setDefaultWidget(m_workspaceWidget);
 

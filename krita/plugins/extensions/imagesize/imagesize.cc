@@ -41,34 +41,29 @@
 #include "dlg_layersize.h"
 #include "kis_filter_strategy.h"
 #include "kis_action.h"
+#include "kis_action_manager.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(ImageSizeFactory, "kritaimagesize.json", registerPlugin<ImageSize>();)
 
 ImageSize::ImageSize(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent)
 {
-    KisAction *action  = new KisAction(i18n("Scale Image To New Size..."), this);
+    KisAction *action  = createAction("imagesize");
     action->setActivationFlags(KisAction::ACTIVE_NODE);
-    addAction("imagesize", action);
-    action->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_I));
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageSize()));
 
-    action = new KisAction(i18n("Resize Canvas..."), this);
+    action = createAction("canvassize");
     action->setActivationFlags(KisAction::ACTIVE_NODE);
-    addAction("canvassize", action);
-    action->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_C));
     connect(action, SIGNAL(triggered()), this, SLOT(slotCanvasSize()));
 
-    action = new KisAction(i18n("Scale &Layer to new Size..."), this);
+    action = createAction("layersize");
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    addAction("layersize", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotLayerSize()));
 
-    action  = new KisAction(i18n("&Scale..."), this);
+    action  = createAction("selectionscale");
     action->setActivationFlags(KisAction::PIXELS_SELECTED);
     action->setActivationConditions(KisAction::SELECTION_EDITABLE);
-    addAction("selectionscale", action);
     Q_CHECK_PTR(action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotSelectionScale()));
 }

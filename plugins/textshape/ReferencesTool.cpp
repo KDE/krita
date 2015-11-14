@@ -41,8 +41,9 @@
 #include <KoInlineNote.h>
 #include <KoTextDocumentLayout.h>
 #include <KoIcon.h>
-#include <QMessageBox>
+#include "kis_action_registry.h"
 
+#include <QMessageBox>
 #include <QDebug>
 #include <QAction>
 #include <QTextDocument>
@@ -122,33 +123,30 @@ ReferencesTool::~ReferencesTool()
 
 void ReferencesTool::createActions()
 {
-    QWidgetAction *wAction = 0;
+    KisActionRegistry * actionRegistry = KisActionRegistry::instance();
 
-    QAction *action = new QAction(i18n("Insert"), this);
+    QAction *action = actionRegistry->makeQAction("insert_tableofcontents", this);
     addAction("insert_tableofcontents", action);
-    action->setToolTip(i18n("Insert a Table of Contents into the document."));
 
-    action = new QAction(i18n("Insert Custom..."), this);
+    action = actionRegistry->makeQAction("insert_configure_tableofcontents", this);
     addAction("insert_configure_tableofcontents", action);
-    action->setToolTip(i18n("Insert a custom Table of Contents into the document."));
 
-    action = new QAction(koIcon("configure"), i18n("Configure..."), this);
+    action = actionRegistry->makeQAction("format_tableofcontents", this);
     addAction("format_tableofcontents", action);
-    action->setToolTip(i18n("Configure the Table of Contents"));
-    connect(action, SIGNAL(triggered()), this, SLOT(formatTableOfContents()));
+    connect(action, SIGNAL(triggered().act), this, SLOT(formatTableOfContents()));
 
-    action = new QAction(i18n("Insert footnote with auto number"),this);
+    action = actionRegistry->makeQAction("insert_autofootnote", this);
     addAction("insert_autofootnote",action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertAutoFootNote()));
 
-    wAction = new QWidgetAction(this);
+    QWidgetAction * wAction = new QWidgetAction(this);
     wAction->setText(i18n("Insert Labeled Footnote"));
     QWidget *w = new LabeledWidget(wAction, i18n("Insert with label:"), LabeledWidget::INLINE, false);
     wAction->setDefaultWidget(w);
     addAction("insert_labeledfootnote", wAction);
     connect(w, SIGNAL(triggered(QString)), this, SLOT(insertLabeledFootNote(QString)));
 
-    action = new QAction(i18n("Insert endnote with auto number"),this);
+    action = actionRegistry->makeQAction("insert_autoendnote", this);
     addAction("insert_autoendnote",action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertAutoEndNote()));
 
@@ -158,35 +156,30 @@ void ReferencesTool::createActions()
     wAction->setDefaultWidget(w);
     addAction("insert_labeledendnote", wAction); connect(w, SIGNAL(triggered(QString)), this, SLOT(insertLabeledEndNote(QString)));
 
-    action = new QAction(koIcon("configure"), i18n("Settings..."), this);
+    action = actionRegistry->makeQAction("format_footnotes", this);
     addAction("format_footnotes",action);
     connect(action, SIGNAL(triggered()), this, SLOT(showFootnotesConfigureDialog()));
 
-    action = new QAction(koIcon("configure"), i18n("Settings..."), this);
+    action = actionRegistry->makeQAction("format_endnotes", this);
     addAction("format_endnotes",action);
     connect(action, SIGNAL(triggered()), this, SLOT(showEndnotesConfigureDialog()));
 
-    action = new QAction(i18n("Insert Citation"), this);
+    action = actionRegistry->makeQAction("insert_citation", this);
     addAction("insert_citation",action);
-    action->setToolTip(i18n("Insert a citation into the document."));
     connect(action, SIGNAL(triggered()), this, SLOT(insertCitation()));
 
-    action = new QAction(i18n("Insert Bibliography"), this);
+    action = actionRegistry->makeQAction("insert_bibliography", this);
     addAction("insert_bibliography",action);
-    action->setToolTip(i18n("Insert a bibliography into the document."));
 
-    action = new QAction(i18n("Insert Custom Bibliography"), this);
+    action = actionRegistry->makeQAction("insert_custom_bibliography", this);
     addAction("insert_custom_bibliography", action);
-    action->setToolTip(i18n("Insert a custom Bibliography into the document."));
 
-    action = new QAction(i18n("Configure"),this);
+    action = actionRegistry->makeQAction("configure_bibliography", this);
     addAction("configure_bibliography",action);
-    action->setToolTip(i18n("Configure the bibliography"));
     connect(action, SIGNAL(triggered()), this, SLOT(configureBibliography()));
 
-    action = new QAction(i18n("Insert Link"), this);
+    action = actionRegistry->makeQAction("insert_link", this);
     addAction("insert_link", action);
-    action->setToolTip(i18n("Insert a weblink or link to a bookmark."));
     connect(action, SIGNAL(triggered()), this, SLOT(insertLink()));
 
     wAction = new QWidgetAction(this);
@@ -198,13 +191,11 @@ void ReferencesTool::createActions()
     connect(m_bmark, SIGNAL(triggered(QString)), this, SLOT(insertBookmark(QString)));
     wAction->setToolTip(i18n("Insert a Bookmark. This is useful to create links that point to areas within the document"));
 
-    action = new QAction(i18n("Bookmarks"), this);
+    action = actionRegistry->makeQAction("invoke_bookmark_handler", this);
     addAction("invoke_bookmark_handler", action);
-    action->setToolTip(i18n("Display a pop up that hosts the options to add new Bookmark or handle existing Bookmarks"));
 
-    action = new QAction(i18n("Manage Bookmarks"), this);
+    action = actionRegistry->makeQAction("manage_bookmarks", this);
     addAction("manage_bookmarks", action);
-    action->setToolTip(i18n("Manage your Bookmarks. Check where are they pointing to, Delete or Rename."));
 }
 
 

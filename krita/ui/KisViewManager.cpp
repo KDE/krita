@@ -310,7 +310,7 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
     this->showHideScrollbars();
 
     KoCanvasController *dummy = new KoDummyCanvasController(actionCollection());
-    KoToolManager::instance()->registerTools(actionCollection(), dummy);
+    KoToolManager::instance()->registerToolActions(actionCollection(), dummy);
 
     QTimer::singleShot(0, this, SLOT(makeStatusBarVisible()));
 
@@ -633,16 +633,12 @@ KisUndoAdapter * KisViewManager::undoAdapter()
 
 void KisViewManager::createActions()
 {
-    d->saveIncremental = new KisAction(i18n("Save Incremental &Version"), this);
-    d->saveIncremental->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_S));
+    d->saveIncremental = actionManager()->createAction("save_incremental_version");
     d->saveIncremental->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    actionManager()->addAction("save_incremental_version", d->saveIncremental);
     connect(d->saveIncremental, SIGNAL(triggered()), this, SLOT(slotSaveIncremental()));
 
-    d->saveIncrementalBackup = new KisAction(i18n("Save Incremental Backup"), this);
-    d->saveIncrementalBackup->setDefaultShortcut(Qt::Key_F4);
+    d->saveIncrementalBackup = actionManager()->createAction("save_incremental_backup");
     d->saveIncrementalBackup->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    actionManager()->addAction("save_incremental_backup", d->saveIncrementalBackup);
     connect(d->saveIncrementalBackup, SIGNAL(triggered()), this, SLOT(slotSaveIncrementalBackup()));
 
     connect(mainWindow(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
@@ -650,64 +646,44 @@ void KisViewManager::createActions()
     d->saveIncremental->setEnabled(false);
     d->saveIncrementalBackup->setEnabled(false);
 
-    KisAction *tabletDebugger = new KisAction(i18n("Toggle Tablet Debugger"), this);
-    tabletDebugger->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_T));
-    actionManager()->addAction("tablet_debugger", tabletDebugger );
+    KisAction *tabletDebugger = actionManager()->createAction("tablet_debugger");
     connect(tabletDebugger, SIGNAL(triggered()), this, SLOT(toggleTabletLogger()));
 
-    d->createTemplate = new KisAction( i18n( "&Create Template From Image..." ), this);
+    d->createTemplate = actionManager()->createAction("create_template");
     d->createTemplate->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    actionManager()->addAction("create_template", d->createTemplate);
     connect(d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
 
-    d->createCopy = new KisAction( i18n( "&Create Copy From Current Image" ), this);
+    d->createCopy = actionManager()->createAction("create_copy");
     d->createCopy->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    actionManager()->addAction("create_copy", d->createCopy);
     connect(d->createCopy, SIGNAL(triggered()), this, SLOT(slotCreateCopy()));
 
-    d->openResourcesDirectory = new KisAction(i18n("Open Resources Folder"), this);
-    d->openResourcesDirectory->setToolTip(i18n("Opens a file browser at the location Krita saves resources such as brushes to."));
-    d->openResourcesDirectory->setWhatsThis(i18n("Opens a file browser at the location Krita saves resources such as brushes to."));
-    actionManager()->addAction("open_resources_directory", d->openResourcesDirectory);
+    d->openResourcesDirectory = actionManager()->createAction("open_resources_directory");
     connect(d->openResourcesDirectory, SIGNAL(triggered()), SLOT(openResourcesDirectory()));
 
-    d->rotateCanvasRight = new KisAction(i18n("Rotate Canvas Right"), this);
-    d->rotateCanvasRight->setDefaultShortcut(QKeySequence("Ctrl+]"));
-    actionManager()->addAction("rotate_canvas_right", d->rotateCanvasRight);
+    d->rotateCanvasRight = actionManager()->createAction("rotate_canvas_right");
     d->rotateCanvasRight->setActivationFlags(KisAction::ACTIVE_IMAGE);
 
-    d->rotateCanvasLeft = new KisAction(i18n("Rotate Canvas Left"), this);
-    d->rotateCanvasLeft->setDefaultShortcut(QKeySequence("Ctrl+["));
-    actionManager()->addAction("rotate_canvas_left", d->rotateCanvasLeft);
+    d->rotateCanvasLeft = actionManager()->createAction("rotate_canvas_left");
     d->rotateCanvasLeft->setActivationFlags(KisAction::ACTIVE_IMAGE);
 
-    d->wrapAroundAction = new KisAction(i18n("Wrap Around Mode"), this);
+    d->wrapAroundAction = actionManager()->createAction("wrap_around_mode");
     d->wrapAroundAction->setCheckable(true);
     d->wrapAroundAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    d->wrapAroundAction->setDefaultShortcut(QKeySequence(Qt::Key_W));
-    actionManager()->addAction("wrap_around_mode", d->wrapAroundAction);
 
-    d->levelOfDetailAction = new KisAction(i18n("Fast Preview Mode (LOD)"), this);
+    d->levelOfDetailAction = actionManager()->createAction("level_of_detail_mode");
     d->levelOfDetailAction->setCheckable(true);
     d->levelOfDetailAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    d->levelOfDetailAction->setDefaultShortcut(QKeySequence("Shift+L"));
-    actionManager()->addAction("level_of_detail_mode", d->levelOfDetailAction);
 
-    KisAction *tAction = new KisAction(i18n("Show Status Bar"), this);
+    KisAction *tAction = actionManager()->createAction("showStatusBar");
     tAction->setCheckable(true);
     tAction->setChecked(true);
-    tAction->setToolTip(i18n("Shows or hides the status bar"));
-    actionManager()->addAction("showStatusBar", tAction);
     tAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
-    tAction = new KisAction(i18n("Show Canvas Only"), this);
+    tAction = actionManager()->createAction("view_show_just_the_canvas");
     tAction->setActivationFlags(KisAction::NONE);
     tAction->setCheckable(true);
-    tAction->setToolTip(i18n("Shows just the canvas or the whole window"));
-    tAction->setDefaultShortcut(QKeySequence(Qt::Key_Tab));
     tAction->setChecked(false);
-    actionManager()->addAction("view_show_just_the_canvas", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showJustTheCanvas(bool)));
 
     //Workaround, by default has the same shortcut as mirrorCanvas
@@ -717,31 +693,23 @@ void KisViewManager::createActions()
         a->setActivationConditions(KisAction::SELECTION_EDITABLE);
     }
 
-    a = new KisAction(i18n("Cleanup removed files..."), this);
-    actionManager()->addAction("edit_blacklist_cleanup", a);
+    a = actionManager()->createAction("edit_blacklist_cleanup");
     connect(a, SIGNAL(triggered()), this, SLOT(slotBlacklistCleanup()));
 
-    d->showRulersAction = new KisAction(i18n("Show Rulers"), this);
+    d->showRulersAction = actionManager()->createAction("view_ruler");
     d->showRulersAction->setCheckable(true);
     d->showRulersAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    actionManager()->addAction("view_ruler", d->showRulersAction);
-    d->showRulersAction->setWhatsThis(i18n("The rulers show the horizontal and vertical positions of the mouse on the image "
-                                           "and can be used to position your mouse at the right place on the canvas. <p>Uncheck this to hide the rulers.</p>"));
     KisConfig cfg;
     d->showRulersAction->setChecked(cfg.showRulers());
 
 
-    d->showGuidesAction = new KisAction(i18n("Show Guides"), this);
+    d->showGuidesAction = actionManager()->createAction("view_show_guides");
     d->showGuidesAction->setCheckable(true);
     d->showGuidesAction->setCheckable(false);
     d->showGuidesAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    d->showGuidesAction->setToolTip(i18n("Shows or hides guides"));
-    actionManager()->addAction("view_show_guides", d->showGuidesAction);
 
-    d->zoomTo100pct = new KisAction(i18n("Reset zoom"), this);
+    d->zoomTo100pct = actionManager()->createAction("zoom_to_100pct");
     d->zoomTo100pct->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    d->zoomTo100pct->setDefaultShortcut( QKeySequence( Qt::CTRL + Qt::Key_0 ) );
-    actionManager()->addAction("zoom_to_100pct", d->zoomTo100pct);
 
     d->zoomIn = actionManager()->createStandardAction(KStandardAction::ZoomIn, 0, "");
     d->zoomOut = actionManager()->createStandardAction(KStandardAction::ZoomOut, 0, "");

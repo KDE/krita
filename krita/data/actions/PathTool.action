@@ -1,157 +1,160 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Actions version="2" name="PathTool">
-  <Action name="convert-to-path">
-    <iconText>To Path</iconText>
-    <shortcut>P</shortcut>
-    <toolTip>To Path</toolTip>
-    <icon>convert-to-path</icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>To Path</text>
-    <defaultShortcut>P</defaultShortcut>
-  </Action>
-  <Action name="pathpoint-remove">
-    <iconText>Remove point</iconText>
-    <shortcut>Backspace</shortcut>
-    <toolTip>Remove point</toolTip>
-    <icon>pathpoint-remove</icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Remove point</text>
-    <defaultShortcut>Backspace</defaultShortcut>
-  </Action>
-  <Action name="path-break-segment">
-    <iconText>Break at segment</iconText>
-    <shortcut></shortcut>
-    <toolTip>Break at segment</toolTip>
-    <icon>path-break-segment</icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Break at segment</text>
-    <defaultShortcut></defaultShortcut>
-  </Action>
-  <Action name="pathsegment-line">
-    <iconText>Segment to Line</iconText>
-    <shortcut>F</shortcut>
-    <toolTip>Segment to Line</toolTip>
-    <icon>pathsegment-line</icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Segment to Line</text>
-    <defaultShortcut>F</defaultShortcut>
-  </Action>
-  <Action name="path-break-point">
-    <iconText>Break at point</iconText>
-    <shortcut></shortcut>
-    <toolTip>Break at point</toolTip>
-    <icon>path-break-point</icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Break at point</text>
-    <defaultShortcut></defaultShortcut>
-  </Action>
-  <Action name="pathpoint-line">
-    <iconText>Make line point</iconText>
-    <shortcut></shortcut>
-    <toolTip>Make line point</toolTip>
-    <icon>pathpoint-line</icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Make line point</text>
-    <defaultShortcut></defaultShortcut>
-  </Action>
-  <Action name="pathpoint-symmetric">
-    <iconText>Symmetric Point</iconText>
-    <shortcut></shortcut>
-    <toolTip>Symmetric Point</toolTip>
-    <icon>pathpoint-symmetric</icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Symmetric Point</text>
-    <defaultShortcut></defaultShortcut>
-  </Action>
-  <Action name="pathpoint-curve">
-    <iconText>Make curve point</iconText>
-    <shortcut></shortcut>
-    <toolTip>Make curve point</toolTip>
-    <icon>pathpoint-curve</icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Make curve point</text>
-    <defaultShortcut></defaultShortcut>
-  </Action>
-  <Action name="pathsegment-curve">
-    <iconText>Segment to Curve</iconText>
-    <shortcut>C</shortcut>
-    <toolTip>Segment to Curve</toolTip>
-    <icon>pathsegment-curve</icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Segment to Curve</text>
-    <defaultShortcut>C</defaultShortcut>
-  </Action>
-  <Action name="pathpoint-insert">
-    <iconText>Insert point</iconText>
-    <shortcut>Ins</shortcut>
-    <toolTip>Insert point</toolTip>
-    <icon>pathpoint-insert</icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Insert point</text>
-    <defaultShortcut>Ins</defaultShortcut>
-  </Action>
-  <Action name="pathpoint-corner">
-    <iconText>Corner point</iconText>
-    <shortcut></shortcut>
-    <toolTip>Corner point</toolTip>
-    <icon>pathpoint-corner</icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Corner point</text>
-    <defaultShortcut></defaultShortcut>
-  </Action>
-  <Action name="pathpoint-merge">
-    <iconText>Merge points</iconText>
-    <shortcut></shortcut>
-    <toolTip>Merge points</toolTip>
-    <icon>pathpoint-merge</icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Merge points</text>
-    <defaultShortcut></defaultShortcut>
-  </Action>
-  <Action name="pathpoint-join">
-    <iconText>Join with segment</iconText>
-    <shortcut>J</shortcut>
-    <toolTip>Join with segment</toolTip>
-    <icon>pathpoint-join</icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Join with segment</text>
-    <defaultShortcut>J</defaultShortcut>
-  </Action>
-  <Action name="pathpoint-smooth">
-    <iconText>Smooth point</iconText>
-    <shortcut></shortcut>
-    <toolTip>Smooth point</toolTip>
-    <icon>pathpoint-smooth</icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Smooth point</text>
-    <defaultShortcut></defaultShortcut>
-  </Action>
-</Actions>
+<ActionCollection version="2" name="Tools">
+  <Actions category="Path Tool">
+    <text>Path Tool</text>
+    <Action name="convert-to-path">
+      <iconText>To Path</iconText>
+      <shortcut>P</shortcut>
+      <toolTip>To Path</toolTip>
+      <icon>convert-to-path</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>To Path</text>
+      <defaultShortcut>P</defaultShortcut>
+    </Action>
+    <Action name="pathpoint-remove">
+      <iconText>Remove point</iconText>
+      <shortcut>Backspace</shortcut>
+      <toolTip>Remove point</toolTip>
+      <icon>pathpoint-remove</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Remove point</text>
+      <defaultShortcut>Backspace</defaultShortcut>
+    </Action>
+    <Action name="path-break-segment">
+      <iconText>Break at segment</iconText>
+      <shortcut></shortcut>
+      <toolTip>Break at segment</toolTip>
+      <icon>path-break-segment</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Break at segment</text>
+      <defaultShortcut></defaultShortcut>
+    </Action>
+    <Action name="pathsegment-line">
+      <iconText>Segment to Line</iconText>
+      <shortcut>F</shortcut>
+      <toolTip>Segment to Line</toolTip>
+      <icon>pathsegment-line</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Segment to Line</text>
+      <defaultShortcut>F</defaultShortcut>
+    </Action>
+    <Action name="path-break-point">
+      <iconText>Break at point</iconText>
+      <shortcut></shortcut>
+      <toolTip>Break at point</toolTip>
+      <icon>path-break-point</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Break at point</text>
+      <defaultShortcut></defaultShortcut>
+    </Action>
+    <Action name="pathpoint-line">
+      <iconText>Make line point</iconText>
+      <shortcut></shortcut>
+      <toolTip>Make line point</toolTip>
+      <icon>pathpoint-line</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Make line point</text>
+      <defaultShortcut></defaultShortcut>
+    </Action>
+    <Action name="pathpoint-symmetric">
+      <iconText>Symmetric Point</iconText>
+      <shortcut></shortcut>
+      <toolTip>Symmetric Point</toolTip>
+      <icon>pathpoint-symmetric</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Symmetric Point</text>
+      <defaultShortcut></defaultShortcut>
+    </Action>
+    <Action name="pathpoint-curve">
+      <iconText>Make curve point</iconText>
+      <shortcut></shortcut>
+      <toolTip>Make curve point</toolTip>
+      <icon>pathpoint-curve</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Make curve point</text>
+      <defaultShortcut></defaultShortcut>
+    </Action>
+    <Action name="pathsegment-curve">
+      <iconText>Segment to Curve</iconText>
+      <shortcut>C</shortcut>
+      <toolTip>Segment to Curve</toolTip>
+      <icon>pathsegment-curve</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Segment to Curve</text>
+      <defaultShortcut>C</defaultShortcut>
+    </Action>
+    <Action name="pathpoint-insert">
+      <iconText>Insert point</iconText>
+      <shortcut>Ins</shortcut>
+      <toolTip>Insert point</toolTip>
+      <icon>pathpoint-insert</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Insert point</text>
+      <defaultShortcut>Ins</defaultShortcut>
+    </Action>
+    <Action name="pathpoint-corner">
+      <iconText>Corner point</iconText>
+      <shortcut></shortcut>
+      <toolTip>Corner point</toolTip>
+      <icon>pathpoint-corner</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Corner point</text>
+      <defaultShortcut></defaultShortcut>
+    </Action>
+    <Action name="pathpoint-merge">
+      <iconText>Merge points</iconText>
+      <shortcut></shortcut>
+      <toolTip>Merge points</toolTip>
+      <icon>pathpoint-merge</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Merge points</text>
+      <defaultShortcut></defaultShortcut>
+    </Action>
+    <Action name="pathpoint-join">
+      <iconText>Join with segment</iconText>
+      <shortcut>J</shortcut>
+      <toolTip>Join with segment</toolTip>
+      <icon>pathpoint-join</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Join with segment</text>
+      <defaultShortcut>J</defaultShortcut>
+    </Action>
+    <Action name="pathpoint-smooth">
+      <iconText>Smooth point</iconText>
+      <shortcut></shortcut>
+      <toolTip>Smooth point</toolTip>
+      <icon>pathpoint-smooth</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Smooth point</text>
+      <defaultShortcut></defaultShortcut>
+    </Action>
+  </Actions>
+</ActionCollection>

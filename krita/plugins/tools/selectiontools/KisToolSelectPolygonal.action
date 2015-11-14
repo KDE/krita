@@ -1,47 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Actions version="2" name="KisToolSelectPolygonal">
-  <Action name="reset_fg_bg">
-    <iconText>Reset Foreground and Background Color</iconText>
-    <shortcut>D</shortcut>
-    <toolTip>Reset Foreground and Background Color</toolTip>
-    <icon></icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Reset Foreground and Background Color</text>
-    <defaultShortcut>D</defaultShortcut>
-  </Action>
-  <Action name="toggle_fg_bg">
-    <iconText>Swap Foreground and Background Color</iconText>
-    <shortcut>X</shortcut>
-    <toolTip>Swap Foreground and Background Color</toolTip>
-    <icon></icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Swap Foreground and Background Color</text>
-    <defaultShortcut>X</defaultShortcut>
-  </Action>
-  <Action name="decrease_brush_size">
-    <iconText>Decrease Brush Size</iconText>
-    <shortcut>[</shortcut>
-    <toolTip>Decrease Brush Size</toolTip>
-    <icon></icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Decrease Brush Size</text>
-    <defaultShortcut>[</defaultShortcut>
-  </Action>
-  <Action name="increase_brush_size">
-    <iconText>Increase Brush Size</iconText>
-    <shortcut>]</shortcut>
-    <toolTip>Increase Brush Size</toolTip>
-    <icon></icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Increase Brush Size</text>
-    <defaultShortcut>]</defaultShortcut>
-  </Action>
-</Actions>
+<ActionCollection version="2" name="Tools">
+  <Actions category="Polygonal Selection Tool">
+    <text>Polygonal Selection Tool</text>
+  </Actions>
+</ActionCollection>

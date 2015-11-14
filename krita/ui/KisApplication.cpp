@@ -76,6 +76,7 @@
 #include "kisexiv2/kis_exiv2.h"
 #include "KisApplicationArguments.h"
 #include <kis_debug.h>
+#include "kis_action_registry.h"
 
 #ifdef HAVE_OPENGL
 #include "opengl/kis_opengl.h"
@@ -397,6 +398,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     KisFilterRegistry::instance();
     KisGeneratorRegistry::instance();
     KisPaintOpRegistry::instance();
+    KisActionRegistry::instance();
 
     // Load the krita-specific tools
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),

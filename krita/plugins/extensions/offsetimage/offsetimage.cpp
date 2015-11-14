@@ -44,15 +44,13 @@ K_PLUGIN_FACTORY_WITH_JSON(OffsetImageFactory, "kritaoffsetimage.json", register
 OffsetImage::OffsetImage(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent)
 {
-    KisAction *action  = new KisAction(i18n("&Offset Image..."), this);
+    KisAction *action  = createAction("offsetimage");
     action->setActivationFlags(KisAction::ACTIVE_NODE);
-    addAction("offsetimage", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotOffsetImage()));
 
-    action  = new KisAction(i18n("&Offset Layer..."), this);
+    action  = createAction("offsetlayer");
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    addAction("offsetlayer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotOffsetLayer()));
 }
 

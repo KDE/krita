@@ -311,7 +311,7 @@ void KisView::setViewManager(KisViewManager *view)
     connect(canvasController(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), d->viewManager->mainWindow(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
 
     KoToolManager::instance()->addController(&d->canvasController);
-    KoToolManager::instance()->registerTools(d->actionCollection, &d->canvasController);
+    KoToolManager::instance()->registerToolActions(d->actionCollection, &d->canvasController);
     dynamic_cast<KisShapeController*>(d->document->shapeController())->setInitialShapeForCanvas(&d->canvas);
 
     if (resourceProvider()) {

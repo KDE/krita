@@ -1,25 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Actions version="2" name="KisToolSelectPath">
-  <Action name="reset_fg_bg">
-    <iconText>Reset Foreground and Background Color</iconText>
-    <shortcut>D</shortcut>
-    <toolTip>Reset Foreground and Background Color</toolTip>
-    <icon></icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Reset Foreground and Background Color</text>
-    <defaultShortcut>D</defaultShortcut>
-  </Action>
-  <Action name="toggle_fg_bg">
-    <iconText>Swap Foreground and Background Color</iconText>
-    <shortcut>X</shortcut>
-    <toolTip>Swap Foreground and Background Color</toolTip>
-    <icon></icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Swap Foreground and Background Color</text>
-    <defaultShortcut>X</defaultShortcut>
-  </Action>
-</Actions>
+<ActionCollection version="2" name="Tools">
+  <Actions category="Path Selection Tool">
+    <text>Path Selection Tool</text>
+  </Actions>
+</ActionCollection>

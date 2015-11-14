@@ -23,7 +23,7 @@
 #include <KoSelection.h>
 #include <KoToolBase.h>
 #include <KoToolFactoryBase.h>
-
+#include "kis_action_registry.h"
 
 static int newUniqueToolHelperId()
 {
@@ -128,7 +128,8 @@ KoToolBase *ToolHelper::createTool(KoCanvasBase *canvas) const
 ShortcutToolAction* ToolHelper::createShortcutToolAction(QObject *parent)
 {
     ShortcutToolAction* action = new ShortcutToolAction(id(), text(), parent);
-    action->setShortcut(shortcut());
+
+    KisActionRegistry::instance()->propertizeAction(id(), action);
 
     connect(action, SIGNAL(changed()), SLOT(shortcutToolActionUpdated()));
 
@@ -153,6 +154,81 @@ QKeySequence ToolHelper::shortcut() const
 
     return m_toolFactory->shortcut();
 }
+
+
+//   ************ KoToolAction::Private **********
+
+class Q_DECL_HIDDEN KoToolAction::Private
+{
+public:
+    ToolHelper* toolHelper;
+};
+
+KoToolAction::KoToolAction(ToolHelper* toolHelper)
+    : QObject(toolHelper)
+    , d(new Private)
+{
+    d->toolHelper = toolHelper;
+}
+
+KoToolAction::~KoToolAction()
+{
+    delete d;
+}
+
+void KoToolAction::trigger()
+{
+    d->toolHelper->activate();
+}
+
+
+QString KoToolAction::iconText() const
+{
+    return d->toolHelper->iconText();
+}
+
+QString KoToolAction::toolTip() const
+{
+    return d->toolHelper->toolTip();
+}
+
+QString KoToolAction::id() const
+{
+    return d->toolHelper->id();
+}
+
+QString KoToolAction::iconName() const
+{
+    return d->toolHelper->iconName();
+}
+
+QKeySequence KoToolAction::shortcut() const
+{
+    return d->toolHelper->shortcut();
+}
+
+
+QString KoToolAction::section() const
+{
+    return d->toolHelper->toolType();
+}
+
+int KoToolAction::priority() const
+{
+    return d->toolHelper->priority();
+}
+
+int KoToolAction::buttonGroupId() const
+{
+    return d->toolHelper->uniqueId();
+}
+
+QString KoToolAction::visibilityCode() const
+{
+    return d->toolHelper->activationShapeId();
+}
+
+
 
 //   ************ Connector **********
 Connector::Connector(KoShapeManager *parent)
@@ -181,7 +257,8 @@ ShortcutToolAction::~ShortcutToolAction()
 
 void ShortcutToolAction::actionTriggered()
 {
-    // TODO: why not ToolHelper::activate(); and thus a slightly different behaviour?
+    // todo: why not ToolHelper::activate(); and thus a slightly different behaviour?
+    // Answering the todo item: switchToolRequested
     KoToolManager::instance()->switchToolRequested(m_toolID);
 }
 

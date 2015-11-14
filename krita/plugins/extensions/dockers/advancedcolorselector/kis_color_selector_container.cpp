@@ -39,15 +39,14 @@
 #include "kis_node.h"
 #include "kis_paint_device.h"
 
+#include "kis_action_registry.h"
+
 KisColorSelectorContainer::KisColorSelectorContainer(QWidget *parent) :
     QWidget(parent),
     m_colorSelector(new KisColorSelector(this)),
     m_myPaintShadeSelector(new KisMyPaintShadeSelector(this)),
     m_minimalShadeSelector(new KisMinimalShadeSelector(this)),
     m_shadeSelector(m_myPaintShadeSelector),
-    m_colorSelAction(0),
-    m_mypaintAction(0),
-    m_minimalAction(0),
     m_canvas(0)
 {
     m_widgetLayout = new QBoxLayout(QBoxLayout::TopToBottom, this);
@@ -69,18 +68,14 @@ KisColorSelectorContainer::KisColorSelectorContainer(QWidget *parent) :
     connect(this, SIGNAL(settingsChanged()), m_minimalShadeSelector, SLOT(updateSettings()));
 
 
-    m_colorSelAction = new QAction("Show color selector", this);
-    m_colorSelAction->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_I));
+    m_colorSelAction = KisActionRegistry::instance()->makeQAction("show_color_selector", this);
     connect(m_colorSelAction, SIGNAL(triggered()), m_colorSelector, SLOT(showPopup()), Qt::UniqueConnection);
 
-    m_mypaintAction = new QAction("Show MyPaint shade selector", this);
-    m_mypaintAction->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_M));
+    m_mypaintAction = KisActionRegistry::instance()->makeQAction("show_mypaint_shade_selector", this);
     connect(m_mypaintAction, SIGNAL(triggered()), m_myPaintShadeSelector, SLOT(showPopup()), Qt::UniqueConnection);
 
-    m_minimalAction = new QAction("Show minimal shade selector", this);
-    m_minimalAction->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_N));
+    m_minimalAction = KisActionRegistry::instance()->makeQAction("show_minimal_shade_selector", this);
     connect(m_minimalAction, SIGNAL(triggered()), m_minimalShadeSelector, SLOT(showPopup()), Qt::UniqueConnection);
-
 
 }
 

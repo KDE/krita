@@ -29,6 +29,8 @@
 #include "kactioncategory.h"
 #include "kxmlguiclient.h"
 #include "kxmlguifactory.h"
+#include "kactioncategory.h"
+#include "kis_action_registry.h"
 
 #include <kauthorized.h>
 #include <kconfiggroup.h>
@@ -122,6 +124,27 @@ KActionCollection::~KActionCollection()
 
     delete d;
 }
+
+
+QList<KActionCategory *> KActionCollection::categories() const
+{
+    return this->findChildren<KActionCategory *>();
+}
+
+KActionCategory *KActionCollection::getCategory(const QString &name) {
+    KActionCategory *category = 0;
+    foreach (KActionCategory *c, categories()) {
+        if (c->text() == name) {
+            category = c;
+        }
+    }
+
+    if (category == 0) {
+        category = new KActionCategory(name, this);
+    }
+    return category;
+};
+
 
 void KActionCollection::clear()
 {
@@ -225,6 +248,11 @@ const QList< QActionGroup * > KActionCollection::actionGroups() const
             set.insert(action->actionGroup());
         }
     return set.toList();
+}
+
+QAction *KActionCollection::addCategorizedAction(const QString &name, QAction *action, const QString &categoryName)
+{
+    return getCategory(categoryName)->addAction(name, action);
 }
 
 QAction *KActionCollection::addAction(const QString &name, QAction *action)
@@ -411,9 +439,21 @@ void KActionCollection::setConfigGroup(const QString &group)
     d->configGroup = group;
 }
 
+void KActionCollection::updateShortcuts()
+{
+    auto actionRegistry = KisActionRegistry::instance();
+
+    for (QMap<QString, QAction *>::ConstIterator it = d->actionByName.constBegin();
+         it != d->actionByName.constEnd(); ++it) {
+        actionRegistry->updateShortcut(it.key(), it.value());
+    }
+}
+
+
 void KActionCollection::readSettings(KConfigGroup *config)
 {
-    KConfigGroup cg(KSharedConfig::openConfig(), configGroup());
+    // TODO: perhaps get rid of this
+    KConfigGroup cg(KSharedConfig::openConfig("kritashortcutsrc"), configGroup());
     if (!config) {
         config = &cg;
     }

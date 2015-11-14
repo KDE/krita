@@ -116,13 +116,11 @@ bool KisShortcutsEditorPrivate::addAction(QAction *action, QTreeWidgetItem *hier
 
     // Construct the actual treeview items. The work happens here.
     //
-    // XXX: disentangle the confusing, dire warning left here previously:
-    // "This code doesn't allow editing of QAction. It can not distinguish
-    // between default and active shortcuts. This breaks many assumptions the
-    // editor makes."
+    // Don't feed the editor raw QActions. This code requires that the
+    // "defaultShortcut" dynamic property be set.
     //
-    // Note: Krita never sets the property "isShortcutConfigurable" so we will
-    // add every action here.
+    // Note: Krita never sets the property "isShortcutConfigurable".
+    // Perhaps it could be useful.
     const QVariant value = action->property("isShortcutConfigurable");
     if (!value.isValid() || value.toBool()) {
         new KisShortcutsEditorItem((hier[level]), action);

@@ -47,6 +47,8 @@ protected:
     */
     void addAction(const QString& name, KisAction* action);
 
+    KisAction* createAction(const QString& name);
+
     void addUIFactory(KisOperationUIFactory* factory);
 
     void addOperation(KisOperation* operation);

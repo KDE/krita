@@ -73,6 +73,7 @@
 #include "kis_image.h"
 #include "KisImportExportManager.h"
 #include "KisDocumentEntry.h"
+#include "KoToolManager.h"
 
 #include "kis_color_manager.h"
 #include "kis_debug.h"
@@ -115,32 +116,18 @@ public:
     void loadActions();
 };
 
+// Basically, we are going to insert the current UI/MainWindow ActionCollection
+// into the KisActionRegistry.
 void KisPart::Private::loadActions()
 {
-    actionCollection = new KActionCollection(part, "krita");
+    actionCollection = part->currentMainwindow()->viewManager()->actionCollection();
+
     KisActionRegistry * actionRegistry = KisActionRegistry::instance();
 
-    QStringList actionNames = actionRegistry->allActions();
-    actionCollection->readSettings();  // XXX: consider relocating & managing this
-
-
-    foreach (const QString &name, actionNames) {
-
-        KisAction *a = new KisAction();
-        actionRegistry->propertizeAction(name, a);
-
-        if (!actionCollection->action(name)) {
-            actionCollection->addAction(name, a);
-        }
-        else {
-            dbgAction << "duplicate action" << name << a << "from" << actionCollection;
-            // delete a;
-        }
-
+    foreach (auto action, actionCollection->actions()) {
+        auto name = action->objectName();
+        actionRegistry->addAction(action->objectName(), action);
     }
-
-
-
 };
 
 KisPart* KisPart::instance()
@@ -430,27 +417,21 @@ void KisPart::openExistingFile(const QUrl &url)
 
 void KisPart::configureShortcuts()
 {
-    if (!d->actionCollection) {
-        d->loadActions();
-    }
+    d->loadActions();
 
-    // In kdelibs4 a hack was used to hide the shortcut schemes widget in the
-    // normal shortcut editor KShortcutsDialog from kdelibs, by setting the
-    // bottom buttons oneself. This does not work anymore (as the buttons are
-    // no longer exposed), so for now running with a plain copy of the sources
-    // of KShortcutsDialog, where the schemes editor is disabled directly.
-    // Not nice, but then soon custom Krita-specific shortcut handling is
-    // planned anyway.
+    auto actionRegistry = KisActionRegistry::instance();
+    actionRegistry->configureShortcuts(d->actionCollection);
 
-    // WidgetAction + WindowAction + ApplicationAction leaves only GlobalAction excluded
+    // Update the non-UI actions.  That includes:
+    //  - Shortcuts called inside of tools
+    //  - Perhaps other things?
+    KoToolManager::instance()->updateToolShortcuts();
 
-    KisActionRegistry::instance()->configureShortcuts(d->actionCollection);
-
-
-    // Now update the widget tooltips in the UI.
+    // Now update the UI actions.
     foreach(KisMainWindow *mainWindow, d->mainWindows) {
         KActionCollection *ac = mainWindow->actionCollection();
-        ac->readSettings();
+
+        ac->updateShortcuts();
 
         // Loop through mainWindow->actionCollections() to modify tooltips
         // so that they list shortcuts at the end in parentheses

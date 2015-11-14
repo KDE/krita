@@ -1,135 +1,138 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Actions version="2" name="InteractionTool">
-  <Action name="object_order_raise">
-    <iconText>Raise</iconText>
-    <shortcut>Ctrl+]</shortcut>
-    <toolTip>Raise</toolTip>
-    <icon>object-order-raise-calligra</icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>&amp;Raise</text>
-    <defaultShortcut>Ctrl+]</defaultShortcut>
-  </Action>
-  <Action name="object_align_horizontal_right">
-    <iconText>Align Right</iconText>
-    <shortcut></shortcut>
-    <toolTip>Align Right</toolTip>
-    <icon>object-align-horizontal-right-calligra</icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Align Right</text>
-    <defaultShortcut></defaultShortcut>
-  </Action>
-  <Action name="object_ungroup">
-    <iconText>Ungroup</iconText>
-    <shortcut></shortcut>
-    <toolTip>Ungroup</toolTip>
-    <icon>object-ungroup-calligra</icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Ungroup</text>
-    <defaultShortcut></defaultShortcut>
-  </Action>
-  <Action name="object_order_back">
-    <iconText>Send to Back</iconText>
-    <shortcut>Ctrl+Shift+[</shortcut>
-    <toolTip>Send to Back</toolTip>
-    <icon>object-order-back-calligra</icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Send to &amp;Back</text>
-    <defaultShortcut>Ctrl+Shift+[</defaultShortcut>
-  </Action>
-  <Action name="object_order_front">
-    <iconText>Bring to Front</iconText>
-    <shortcut>Ctrl+Shift+]</shortcut>
-    <toolTip>Bring to Front</toolTip>
-    <icon>object-order-front-calligra</icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Bring to &amp;Front</text>
-    <defaultShortcut>Ctrl+Shift+]</defaultShortcut>
-  </Action>
-  <Action name="object_align_vertical_center">
-    <iconText>Vertically Center</iconText>
-    <shortcut></shortcut>
-    <toolTip>Vertically Center</toolTip>
-    <icon>object-align-vertical-center-calligra</icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Vertically Center</text>
-    <defaultShortcut></defaultShortcut>
-  </Action>
-  <Action name="object_group">
-    <iconText>Group</iconText>
-    <shortcut></shortcut>
-    <toolTip>Group</toolTip>
-    <icon>object-group-calligra</icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Group</text>
-    <defaultShortcut></defaultShortcut>
-  </Action>
-  <Action name="object_align_horizontal_left">
-    <iconText>Align Left</iconText>
-    <shortcut></shortcut>
-    <toolTip>Align Left</toolTip>
-    <icon>object-align-horizontal-left-calligra</icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Align Left</text>
-    <defaultShortcut></defaultShortcut>
-  </Action>
-  <Action name="object_align_vertical_top">
-    <iconText>Align Top</iconText>
-    <shortcut></shortcut>
-    <toolTip>Align Top</toolTip>
-    <icon>object-align-vertical-top-calligra</icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Align Top</text>
-    <defaultShortcut></defaultShortcut>
-  </Action>
-  <Action name="object_align_horizontal_center">
-    <iconText>Horizontally Center</iconText>
-    <shortcut></shortcut>
-    <toolTip>Horizontally Center</toolTip>
-    <icon>object-align-horizontal-center-calligra</icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Horizontally Center</text>
-    <defaultShortcut></defaultShortcut>
-  </Action>
-  <Action name="object_order_lower">
-    <iconText>Lower</iconText>
-    <shortcut>Ctrl+[</shortcut>
-    <toolTip>Lower</toolTip>
-    <icon>object-order-lower-calligra</icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>&amp;Lower</text>
-    <defaultShortcut>Ctrl+[</defaultShortcut>
-  </Action>
-  <Action name="object_align_vertical_bottom">
-    <iconText>Align Bottom</iconText>
-    <shortcut></shortcut>
-    <toolTip>Align Bottom</toolTip>
-    <icon>object-align-vertical-bottom-calligra</icon>
-    <whatsThis></whatsThis>
-    <statusTip></statusTip>
-    <isCheckable>false</isCheckable>
-    <text>Align Bottom</text>
-    <defaultShortcut></defaultShortcut>
-  </Action>
-</Actions>
+<ActionCollection version="2" name="Tools">
+  <Actions category="Interaction Tool">
+    <text>Interaction Tool</text>
+    <Action name="object_order_raise">
+      <iconText>Raise</iconText>
+      <shortcut>Ctrl+]</shortcut>
+      <toolTip>Raise</toolTip>
+      <icon>object-order-raise-calligra</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>&amp;Raise</text>
+      <defaultShortcut>Ctrl+]</defaultShortcut>
+    </Action>
+    <Action name="object_align_horizontal_right">
+      <iconText>Align Right</iconText>
+      <shortcut></shortcut>
+      <toolTip>Align Right</toolTip>
+      <icon>object-align-horizontal-right-calligra</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Align Right</text>
+      <defaultShortcut></defaultShortcut>
+    </Action>
+    <Action name="object_ungroup">
+      <iconText>Ungroup</iconText>
+      <shortcut></shortcut>
+      <toolTip>Ungroup</toolTip>
+      <icon>object-ungroup-calligra</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Ungroup</text>
+      <defaultShortcut></defaultShortcut>
+    </Action>
+    <Action name="object_order_back">
+      <iconText>Send to Back</iconText>
+      <shortcut>Ctrl+Shift+[</shortcut>
+      <toolTip>Send to Back</toolTip>
+      <icon>object-order-back-calligra</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Send to &amp;Back</text>
+      <defaultShortcut>Ctrl+Shift+[</defaultShortcut>
+    </Action>
+    <Action name="object_order_front">
+      <iconText>Bring to Front</iconText>
+      <shortcut>Ctrl+Shift+]</shortcut>
+      <toolTip>Bring to Front</toolTip>
+      <icon>object-order-front-calligra</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Bring to &amp;Front</text>
+      <defaultShortcut>Ctrl+Shift+]</defaultShortcut>
+    </Action>
+    <Action name="object_align_vertical_center">
+      <iconText>Vertically Center</iconText>
+      <shortcut></shortcut>
+      <toolTip>Vertically Center</toolTip>
+      <icon>object-align-vertical-center-calligra</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Vertically Center</text>
+      <defaultShortcut></defaultShortcut>
+    </Action>
+    <Action name="object_group">
+      <iconText>Group</iconText>
+      <shortcut></shortcut>
+      <toolTip>Group</toolTip>
+      <icon>object-group-calligra</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Group</text>
+      <defaultShortcut></defaultShortcut>
+    </Action>
+    <Action name="object_align_horizontal_left">
+      <iconText>Align Left</iconText>
+      <shortcut></shortcut>
+      <toolTip>Align Left</toolTip>
+      <icon>object-align-horizontal-left-calligra</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Align Left</text>
+      <defaultShortcut></defaultShortcut>
+    </Action>
+    <Action name="object_align_vertical_top">
+      <iconText>Align Top</iconText>
+      <shortcut></shortcut>
+      <toolTip>Align Top</toolTip>
+      <icon>object-align-vertical-top-calligra</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Align Top</text>
+      <defaultShortcut></defaultShortcut>
+    </Action>
+    <Action name="object_align_horizontal_center">
+      <iconText>Horizontally Center</iconText>
+      <shortcut></shortcut>
+      <toolTip>Horizontally Center</toolTip>
+      <icon>object-align-horizontal-center-calligra</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Horizontally Center</text>
+      <defaultShortcut></defaultShortcut>
+    </Action>
+    <Action name="object_order_lower">
+      <iconText>Lower</iconText>
+      <shortcut>Ctrl+[</shortcut>
+      <toolTip>Lower</toolTip>
+      <icon>object-order-lower-calligra</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>&amp;Lower</text>
+      <defaultShortcut>Ctrl+[</defaultShortcut>
+    </Action>
+    <Action name="object_align_vertical_bottom">
+      <iconText>Align Bottom</iconText>
+      <shortcut></shortcut>
+      <toolTip>Align Bottom</toolTip>
+      <icon>object-align-vertical-bottom-calligra</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Align Bottom</text>
+      <defaultShortcut></defaultShortcut>
+    </Action>
+  </Actions>
+</ActionCollection>

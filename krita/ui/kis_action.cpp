@@ -19,6 +19,7 @@
 
 #include "kis_action.h"
 #include "kis_action_manager.h"
+#include "kis_action_registry.h"
 #include <QEvent>
 
 class Q_DECL_HIDDEN KisAction::Private {
@@ -60,6 +61,17 @@ KisAction::KisAction(const QIcon &icon, const QString& text, QObject* parent)
 KisAction::~KisAction()
 {
     delete d;
+}
+
+KisAction *makeKisAction(QString name, QObject *parent)
+{
+    KisAction* a = new KisAction(parent);
+    KisActionRegistry::instance()->propertizeAction(name, a);
+    KisActionRegistry::instance()->addAction(name, a);
+
+    // TODO: Add other static data (activationFlags, etc.) using getActionXml()
+
+    return a;
 }
 
 

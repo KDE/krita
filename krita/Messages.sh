@@ -9,7 +9,17 @@ RCFILES=`find . -name \*.rc                                                   \
 	| grep -v gemini/KritaGeminiWin.rc
          `
 $EXTRACTRC $RCFILES >> rc.cpp
+
+ACTIONFILES=`find . -name \*.action`
+./action_i18n.pl --context=action $ACTIONFILES >> rc.cpp
+
+# extracti18n.pl extracts additional data from brushes, palettes etc.
 perl extracti18n.pl > i18ndata
-# ignore sdk/templates since it contains templates for use a future plugins, none of the strings there will ever be seen by any user
-calligra_xgettext krita.pot i18ndata rc.cpp `find . -name \*.cc -o -name \*.h  -o -name \*.cpp | grep -v '/tests/' | grep -v './sdk/templates'`
+
+# Ignore sdk/templates which contains templates for writing future plugins.
+# None of the placeholder strings inside will be seen by users.
+calligra_xgettext krita.pot i18ndata rc.cpp \
+                  `find . -name \*.cc -o -name \*.h  -o -name \*.cpp | grep -v '/tests/' | grep -v './sdk/templates'`
+
+# Clean up
 rm -f i18ndata rc.cpp

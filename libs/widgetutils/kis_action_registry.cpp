@@ -145,7 +145,7 @@ void KisActionRegistry::addAction(QString name, QAction *a, QString category)
         ac = d->actionCollections.value(category);
     } else {
         ac = new KActionCollection(this, category);
-        d->actionCollections.insert("Krita", ac);
+        d->actionCollections.insert(category, ac);
         dbgAction << "Adding a new KActionCollection - " << category;
     }
 
@@ -183,8 +183,8 @@ void KisActionRegistry::configureShortcuts(KActionCollection *ac)
 
     KisShortcutsDialog dlg;
     dlg.addCollection(ac);
-    foreach (auto collection, d->actionCollections) {
-        dlg.addCollection(collection);
+    for (auto i = d->actionCollections.constBegin(); i != d->actionCollections.constEnd(); i++ ) {
+        dlg.addCollection(i.value(), i.key());
     }
 
    dlg.configure();  // Show the dialog.

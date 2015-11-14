@@ -65,7 +65,7 @@
 #include <kis_selection_mask.h>
 #include "kis_resources_snapshot.h"
 #include <KisView.h>
-
+#include "kis_action_registry.h"
 
 
 struct KisTool::Private {
@@ -104,15 +104,13 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
     KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
 
     if (!collection->action("toggle_fg_bg")) {
-        QAction *toggleFgBg = new QAction(i18n("Swap Foreground and Background Color"), collection);
-        toggleFgBg->setShortcut(QKeySequence(Qt::Key_X));
+        QAction *toggleFgBg = KisActionRegistry::instance()->makeQAction("toggle_fg_bg", collection, "Canvas");
         collection->addAction("toggle_fg_bg", toggleFgBg);
     }
 
     if (!collection->action("reset_fg_bg")) {
-        QAction *resetFgBg = new QAction(i18n("Reset Foreground and Background Color"), collection);
-        resetFgBg->setShortcut(QKeySequence(Qt::Key_D));
-        collection->addAction("reset_fg_bg", resetFgBg);
+        QAction *toggleFgBg = KisActionRegistry::instance()->makeQAction("reset_fg_bg", collection, "Canvas");
+        collection->addAction("reset_fg_bg", toggleFgBg);
     }
 
     addAction("toggle_fg_bg", dynamic_cast<QAction *>(collection->action("toggle_fg_bg")));
@@ -696,5 +694,3 @@ bool KisTool::listeningToModifiers()
 {
     return false;
 }
-
-

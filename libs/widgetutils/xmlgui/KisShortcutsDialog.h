@@ -44,8 +44,6 @@
 //     dialogs/KisShortcutsDialog_p.h           <- kshortcutsdialog_p.h, kshortcutseditor_p.h
 //     forms/KisShortcutsDialog.ui              <- kshortcutsdialog.ui
 //
-// These files were forked from KF5 WidgetViews
-//
 //
 // Changes that have been done to the files:
 // * Adapt of includes

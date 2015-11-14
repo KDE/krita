@@ -127,7 +127,7 @@ void KisPart::Private::loadActions()
     foreach (const QString &name, actionNames) {
 
         KisAction *a = new KisAction();
-        actionRegistry->propertizeAction(a, name);
+        actionRegistry->propertizeAction(name, a);
 
         if (!actionCollection->action(name)) {
             actionCollection->addAction(name, a);

@@ -15,7 +15,7 @@
     <iconText>Decrease Indent</iconText>
     <shortcut></shortcut>
     <toolTip>Decrease Indent</toolTip>
-    <icon>format-indent-less</icon>
+    <icon></icon>
     <whatsThis></whatsThis>
     <statusTip></statusTip>
     <isCheckable>false</isCheckable>
@@ -81,7 +81,7 @@
     <iconText>Increase Indent</iconText>
     <shortcut></shortcut>
     <toolTip>Increase Indent</toolTip>
-    <icon>format-indent-more</icon>
+    <icon></icon>
     <whatsThis></whatsThis>
     <statusTip></statusTip>
     <isCheckable>false</isCheckable>

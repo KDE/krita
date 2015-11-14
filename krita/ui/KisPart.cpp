@@ -40,7 +40,6 @@
 #include "KisViewManager.h"
 #include "KisOpenPane.h"
 #include "KisImportExportManager.h"
-#include <KisShortcutsDialog.h>
 
 #include <kis_debug.h>
 #include <KoResourcePaths.h>
@@ -126,44 +125,10 @@ void KisPart::Private::loadActions()
 
 
     foreach (const QString &name, actionNames) {
-        QDomElement actionXml = actionRegistry->getActionXml(name);
 
-        // Convenience macros to extract text of a child node.
-        auto getChildContent      = [=](QString node){return actionXml.firstChildElement(node).text();};
-        // i18n requires converting format from QString.
-        auto getChildContent_i18n = [=](QString node) {
-            if (getChildContent(node).isEmpty()) {
-                // dbgAction << "Found empty string to translate for property" << node;
-                return QString();
-            }
-            return i18n(getChildContent(node).toUtf8().constData());
-        };
+        KisAction *a = new KisAction();
+        actionRegistry->propertizeAction(a, name);
 
-        QString icon      = getChildContent("icon");
-        QString text      = getChildContent("text");
-
-        // Note: these fields in the .action definitions are marked for translation.
-        QString whatsthis = getChildContent_i18n("whatsThis");
-        QString toolTip   = getChildContent_i18n("toolTip");
-        QString statusTip = getChildContent_i18n("statusTip");
-        QString iconText  = getChildContent_i18n("iconText");
-
-        bool isCheckable             = getChildContent("isCheckable") == QString("true");
-        QKeySequence shortcut        = QKeySequence(getChildContent("shortcut"));
-        QKeySequence defaultShortcut = QKeySequence(getChildContent("defaultShortcut"));
-
-        KisAction *a = new KisAction(KisIconUtils::loadIcon(icon.toLatin1()), text);
-        a->setObjectName(name);
-        a->setWhatsThis(whatsthis);
-        a->setToolTip(toolTip);
-        a->setStatusTip(statusTip);
-        a->setIconText(iconText);
-        a->setDefaultShortcut(shortcut);
-        a->setShortcut(shortcut);  //TODO: Make this configurable from custom settings
-        a->setCheckable(isCheckable);
-
-
-        // XXX: these checks may become important again after refactoring
         if (!actionCollection->action(name)) {
             actionCollection->addAction(name, a);
         }
@@ -174,30 +139,7 @@ void KisPart::Private::loadActions()
 
     }
 
-    // TODO: check for colliding shortcuts
-    //
-    // Ultimately we want to have more than one KActionCollection, so we can
-    // have things like Ctrl+I be italics in the text editor widget, while not
-    // complaining about conflicts elsewhere. Right now, we use only one
-    // collection, and we don't make things like the text editor configurable,
-    // so duplicate shortcuts are handled mostly automatically by the shortcut
-    // editor.
-    //
-    // QMap<QKeySequence, QAction*> existingShortcuts;
-    // foreach(QAction* action, actionCollection->actions()) {
-    //     if(action->shortcut() == QKeySequence(0)) {
-    //         continue;
-    //     }
-    //     if (existingShortcuts.contains(action->shortcut())) {
-    //         dbgAction << QString("Actions %1 and %2 have the same shortcut: %3") \
-    //             .arg(action->text())                                             \
-    //             .arg(existingShortcuts[action->shortcut()]->text())              \
-    //             .arg(action->shortcut());
-    //     }
-    //     else {
-    //         existingShortcuts[action->shortcut()] = action;
-    //     }
-    // }
+
 
 };
 
@@ -501,9 +443,8 @@ void KisPart::configureShortcuts()
     // planned anyway.
 
     // WidgetAction + WindowAction + ApplicationAction leaves only GlobalAction excluded
-    KisShortcutsDialog dlg;
-    dlg.addCollection(d->actionCollection);
-    dlg.configure();  // Show the dialog.
+
+    KisActionRegistry::instance()->configureShortcuts(d->actionCollection);
 
 
     // Now update the widget tooltips in the UI.

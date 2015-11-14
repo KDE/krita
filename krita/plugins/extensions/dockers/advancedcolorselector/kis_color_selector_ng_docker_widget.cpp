@@ -42,6 +42,8 @@
 #include "kis_color_selector_settings.h"
 #include "kis_color_selector_container.h"
 
+#include "kis_action_registry.h"
+
 KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) :
     QWidget(parent),
     m_colorHistoryAction(0),
@@ -93,11 +95,13 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
 
     m_colorHistoryAction = new QAction("Show color history", this);
     m_colorHistoryAction->setShortcut(QKeySequence(tr("H")));
+    // m_colorHistoryAction = KisActionRegistry::instance()->makeQAction("show_color_history", this, "Color Selector");
     connect(m_colorHistoryAction, SIGNAL(triggered()), m_colorHistoryWidget, SLOT(showPopup()), Qt::UniqueConnection);
 
 
     m_commonColorsAction = new QAction("Show common colors", this);
     m_commonColorsAction->setShortcut(QKeySequence(tr("U")));
+    // m_colorHistoryAction = KisActionRegistry::instance()->makeQAction("show_common_colors", this, "Color Selector");
     connect(m_commonColorsAction, SIGNAL(triggered()), m_commonColorsWidget, SLOT(showPopup()), Qt::UniqueConnection);
 
 }

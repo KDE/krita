@@ -20,6 +20,7 @@
 #include <QString>
 #include <QKeySequence>
 #include <QDomElement>
+#include <QAction>
 
 #include "kritawidgetutils_export.h"
 
@@ -68,6 +69,27 @@ public:
 
 
     /**
+     * Saves action in a category. Note that this grabs ownership of the action.
+     */
+    void addAction(QString name, QAction *a, QString category = "Krita");
+
+
+    /**
+     * Produces a new QAction based on the .action data files.
+     */
+    QAction * makeQAction(QString name, QObject *parent, QString category = QString());
+
+    KActionCollection * getDefaultCollection();
+
+    /**
+     * Fills the standard QAction properties of an action.
+     *
+     * @return true if the action was loaded successfully.
+     */
+    bool propertizeAction(QString name, QAction *a);
+
+
+    /**
      * @return list of actions with data available.
      */
     QStringList allActions();
@@ -77,6 +99,11 @@ public:
      */
     // void writeSettings(KActionCollection *ac);
 
+
+    /**
+     * Run shortcuts dialog.
+     */
+    void configureShortcuts(KActionCollection *ac);
 
     /**
      * Constructor.  Please don't touch!

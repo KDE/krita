@@ -32,6 +32,8 @@
 #include <kis_action.h>
 #include <kactioncollection.h>
 
+#include "kis_action_registry.h"
+
 #define SNAPPING_THRESHOLD 10
 #define SNAPPING_HANDLE_RADIUS 8
 #define PREVIEW_LINE_WIDTH 1

@@ -19,16 +19,17 @@
 
 #include <QString>
 #include <QHash>
-#include <utility>
-#include <KSharedConfig>
 #include <QGlobalStatic>
-#include <QDomElement>
-#include <kis_debug.h>
-#include <tuple>
-#include "kis_debug.h"
-#include <KoResourcePaths.h>
 #include <QFile>
+#include <QDomElement>
+#include <KSharedConfig>
+#include <klocalizedstring.h>
+#include <KisShortcutsDialog.h>
 
+#include "kis_debug.h"
+#include "KoResourcePaths.h"
+#include "kis_icon_utils.h"
+#include "kactioncollection.h"
 
 
 #include "kis_action_registry.h"
@@ -54,6 +55,8 @@ class Q_DECL_HIDDEN KisActionRegistry::Private
 {
 public:
 
+    Private(KisActionRegistry *_q) : q(_q) {};
+
     /**
      * We associate three pieces of information with each shortcut name. The
      * first piece of information is a QDomElement, containing the raw data from
@@ -65,10 +68,15 @@ public:
      */
     QHash<QString, actionInfoItem> actionInfoList;
     KSharedConfigPtr cfg{0};
-    void loadActions();
+    void loadActionFiles();
+    void loadActionCollections();
     actionInfoItem actionInfo(QString name) {
         return actionInfoList.value(name, emptyActionInfo);
     };
+
+    KisActionRegistry *q;
+    KActionCollection * defaultActionCollection;
+    QHash<QString, KActionCollection*> actionCollections;
 };
 
 
@@ -81,10 +89,15 @@ KisActionRegistry *KisActionRegistry::instance()
 
 
 KisActionRegistry::KisActionRegistry()
-    : d(new KisActionRegistry::Private())
+    : d(new KisActionRegistry::Private(this))
 {
-    d->cfg = KSharedConfig::openConfig("kritashortcutsrc");
-    d->loadActions();
+    d->cfg = KSharedConfig::openConfig("krbitashortcutsrc");
+    d->loadActionFiles();
+
+    // Should change to , then translate
+    d->defaultActionCollection = new KActionCollection(this, "Krita");
+    d->actionCollections.insert("Krita", d->defaultActionCollection);
+
 }
 
 // No this isn't the most efficient logic, but it's nice and readable.
@@ -120,7 +133,152 @@ QDomElement KisActionRegistry::getActionXml(QString name)
     return d->actionInfo(name).xmlData;
 };
 
-void KisActionRegistry::Private::loadActions()
+KActionCollection * KisActionRegistry::getDefaultCollection()
+{
+    return d->defaultActionCollection;
+};
+
+void KisActionRegistry::addAction(QString name, QAction *a, QString category)
+{
+    KActionCollection *ac;
+    if (d->actionCollections.contains(category)) {
+        ac = d->actionCollections.value(category);
+    } else {
+        ac = new KActionCollection(this, category);
+        d->actionCollections.insert("Krita", ac);
+        dbgAction << "Adding a new KActionCollection - " << category;
+    }
+
+    if (!ac->action(name)) {
+        ac->addAction(name, a);
+    }
+    else {
+        dbgAction << "duplicate action" << name << a << "in collection" << ac->componentName();
+    }
+
+    // TODO: look into the loading/saving mechanism
+    ac->readSettings();
+};
+
+
+
+QAction * KisActionRegistry::makeQAction(QString name, QObject *parent, QString category)
+{
+
+    QAction * a = new QAction(parent);
+    if (!d->actionInfoList.contains(name)) {
+        dbgAction << "Warning: requested data for unknown action" << name;
+        return a;
+    }
+
+    propertizeAction(name, a);
+    addAction(name, a, category);
+
+    return a;
+};
+
+
+void KisActionRegistry::configureShortcuts(KActionCollection *ac)
+{
+
+    KisShortcutsDialog dlg;
+    dlg.addCollection(ac);
+    foreach (auto collection, d->actionCollections) {
+        dlg.addCollection(collection);
+    }
+
+   dlg.configure();  // Show the dialog.
+}
+
+
+
+bool KisActionRegistry::propertizeAction(QString name, QAction * a)
+{
+
+    QStringList actionNames = allActions();
+    QDomElement actionXml = getActionXml(name);
+
+
+    // Convenience macros to extract text of a child node.
+    auto getChildContent      = [=](QString node){return actionXml.firstChildElement(node).text();};
+    // i18n requires converting format from QString.
+    auto getChildContent_i18n = [=](QString node) {
+        if (getChildContent(node).isEmpty()) {
+            dbgAction << "Found empty string to translate for property" << node;
+            return QString();
+        }
+        return i18n(getChildContent(node).toUtf8().constData());
+    };
+
+
+    QString icon      = getChildContent("icon");
+    QString text      = getChildContent("text");
+
+    // Note: these fields in the .action definitions are marked for translation.
+    QString whatsthis = getChildContent_i18n("whatsThis");
+    QString toolTip   = getChildContent_i18n("toolTip");
+    QString statusTip = getChildContent_i18n("statusTip");
+    QString iconText  = getChildContent_i18n("iconText");
+
+    bool isCheckable             = getChildContent("isCheckable") == QString("true");
+    QKeySequence shortcut        = QKeySequence(getChildContent("shortcut"));
+    QKeySequence defaultShortcut = QKeySequence(getChildContent("defaultShortcut"));
+
+
+    a->setObjectName(name); // This is helpful!!
+    a->setIcon(KisIconUtils::loadIcon(icon.toLatin1()));
+    a->setText(text);
+    a->setObjectName(name);
+    a->setWhatsThis(whatsthis);
+    a->setToolTip(toolTip);
+    a->setStatusTip(statusTip);
+    a->setIconText(iconText);
+    a->setShortcut(shortcut);
+    a->setCheckable(isCheckable);
+
+
+    // XXX: this totally duplicates KisAction::setDefaultShortcut
+    QList<QKeySequence> listifiedShortcut;
+    listifiedShortcut.append(shortcut);
+    setProperty("defaultShortcuts", qVariantFromValue(listifiedShortcut));
+
+
+
+
+    // TODO: check for colliding shortcuts, or make sure it happens smartly inside kactioncollection
+    //
+    // Ultimately we want to have more than one KActionCollection, so we can
+    // have things like Ctrl+I be italics in the text editor widget, while not
+    // complaining about conflicts elsewhere. Right now, we use only one
+    // collection, and we don't make things like the text editor configurable,
+    // so duplicate shortcuts are handled mostly automatically by the shortcut
+    // editor.
+    //
+    // QMap<QKeySequence, QAction*> existingShortcuts;
+    // foreach(QAction* action, actionCollection->actions()) {
+    //     if(action->shortcut() == QKeySequence(0)) {
+    //         continue;
+    //     }
+    //     if (existingShortcuts.contains(action->shortcut())) {
+    //         dbgAction << QString("Actions %1 and %2 have the same shortcut: %3") \
+    //             .arg(action->text())                                             \
+    //             .arg(existingShortcuts[action->shortcut()]->text())              \
+    //             .arg(action->shortcut());
+    //     }
+    //     else {
+    //         existingShortcuts[action->shortcut()] = action;
+    //     }
+    // }
+
+
+    return true;
+}
+
+
+
+
+
+void KisActionRegistry::Private::loadActionFiles()
 {
 
     KoResourcePaths::addResourceType("kis_actions", "data", "krita/actions");

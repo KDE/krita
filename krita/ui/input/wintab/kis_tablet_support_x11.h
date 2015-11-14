@@ -22,9 +22,10 @@
 #include <QAbstractNativeEventFilter>
 #include <kritaui_export.h>
 
-class KRITAUI_EXPORT KisTabletSupportX11 : public QAbstractNativeEventFilter
+class KRITAUI_EXPORT KisTabletSupportXcb : public QAbstractNativeEventFilter
 {
 public:
+    ~KisTabletSupportXcb();
     static void init();
     virtual bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
 };

@@ -37,6 +37,7 @@ public:
 
 private:
     QList<KoProgressProxy*> m_proxies;
+    QList<KoProgressProxy*> m_uniqueProxies;
 };
 
 #endif /* __KIS_COMPOSITE_PROGRESS_PROXY_H */

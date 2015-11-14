@@ -109,6 +109,7 @@ public:
         int eatOneMouseStroke;
     };
 
+#if !defined(HAVE_X11)
     class EventEater
     {
     public:
@@ -126,9 +127,10 @@ public:
         bool hungry{false};   // Continue eating mouse strokes
         bool peckish{false};  // Eat a single mouse press event
     };
+    EventEater eventEater;
+#endif
 
     CanvasSwitcher canvasSwitcher;
-    EventEater eventEater;
 
     bool focusOnEnter = true;
     bool containsPointer = true;

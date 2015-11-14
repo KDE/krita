@@ -160,7 +160,8 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     if (object != d->eventsReceiver) return false;
 
 
-    // If we have saved an event, take care of it now.
+    // If we have saved an event, take care of it now. (XCB should take care of this!)
+#if !defined(HAVE_X11)
     if (d->eventEater.savedEvent) {
         auto savedEvent = d->eventEater.savedEvent;
         d->eventEater.savedEvent = 0;
@@ -170,9 +171,8 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         }
         delete savedEvent;
     }
-
     if (d->eventEater.eventFilter(object, event)) return false;
-
+#endif
 
     foreach (QPointer<QObject> filter, d->priorityEventFilter) {
         if (filter.isNull()) {

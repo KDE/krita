@@ -291,8 +291,6 @@ void kis_x11_init_tablet()
             needCheckIfItIsReallyATablet = false;
             touchWacomTabletWorkaround = false;
 
-#if defined(Q_OS_IRIX)
-#else
 
 
                 if (devs->type == KIS_ATOM(XWacomStylus) || devs->type == KIS_ATOM(XTabletStylus) ||devs->type == KIS_ATOM(XInputTablet)) {
@@ -328,8 +326,6 @@ void kis_x11_init_tablet()
                     gotStylus = true;
                     touchWacomTabletWorkaround = true;
                 }
-
-#endif
             if (deviceType == QTabletEvent::NoDevice)
                 continue;
 
@@ -419,8 +415,6 @@ void kis_x11_init_tablet()
                         v = (XValuatorInfoPtr) any;
                         a = (XAxisInfoPtr) ((char *) v +
                                             sizeof (XValuatorInfo));
-#if defined (Q_OS_IRIX)
-#else
                         device_data.minX = a[0].min_value;
                         device_data.maxX = a[0].max_value;
                         device_data.minY = a[1].min_value;
@@ -443,8 +437,6 @@ void kis_x11_init_tablet()
                             dbgKrita << "Rotation:" << device_data.minRotation << device_data.maxRotation;
                             dbgKrita << "T. Pres: " << device_data.minTanPressure << device_data.maxTanPressure;
                         }
-
-#endif
 
                         // got the max pressure no need to go further...
                         break;
@@ -560,10 +552,6 @@ QTabletEvent::TabletDevice parseWacomDeviceId(quint32 deviceId)
 bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *defaultWidget)
 {
     Q_ASSERT(defaultWidget);
-
-#if defined (Q_OS_IRIX)
-#endif
-
     Q_ASSERT(tablet != 0);
 
     QWidget *w = defaultWidget;
@@ -585,18 +573,14 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
 
     modifiers = QApplication::queryKeyboardModifiers();
 
-#if !defined (Q_OS_IRIX)
     XID device_id = 0;
-#endif
 
     if (ev->type == tablet->xinput_motion) {
         motion = reinterpret_cast<const XDeviceMotionEvent*>(ev);
         t = KisTabletEvent::TabletMoveEx;
         global = QPoint(motion->x_root, motion->y_root);
         curr = QPoint(motion->x, motion->y);
-#if !defined (Q_OS_IRIX)
         device_id = motion->deviceid;
-#endif
     } else if (ev->type == tablet->xinput_button_press || ev->type == tablet->xinput_button_release) {
         if (ev->type == tablet->xinput_button_press) {
             t = KisTabletEvent::TabletPressEx;
@@ -606,9 +590,7 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
         button = (XDeviceButtonEvent*)ev;
         global = QPoint(button->x_root, button->y_root);
         curr = QPoint(button->x, button->y);
-#if !defined (Q_OS_IRIX)
         device_id = button->deviceid;
-#endif
     } else {
         qFatal("Unknown event type! Probably, 'proximity', "
                "but we don't handle it here, so this is a bug");
@@ -616,8 +598,6 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
 
     qint64 wacomSerialId = 0;
     qint64 wacomDeviceId = 0;
-#if defined (Q_OS_IRIX)
-#else
     // We've been passed in data for a tablet device that handles this type
     // of event, but it isn't necessarily the tablet device that originated
     // the event.  Use the device id to find the originating device if we

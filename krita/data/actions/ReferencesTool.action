@@ -362,7 +362,7 @@
       <iconText>Shrink To Fit</iconText>
       <shortcut></shortcut>
       <defaultShortcut></defaultShortcut>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="edit_select_all">
@@ -571,7 +571,7 @@
       <iconText>Grow To Fit Height</iconText>
       <shortcut></shortcut>
       <defaultShortcut></defaultShortcut>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="format_alignleft">
@@ -615,7 +615,7 @@
       <iconText>Grow To Fit Width</iconText>
       <shortcut></shortcut>
       <defaultShortcut></defaultShortcut>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="format_fontfamily">

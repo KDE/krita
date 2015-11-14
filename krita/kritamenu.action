@@ -641,7 +641,7 @@
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+Shift+'</shortcut>
       <defaultShortcut>Ctrl+Shift+'</defaultShortcut>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="view_snap_to_grid">
@@ -652,7 +652,7 @@
       <iconText>Snap To Grid</iconText>
       <shortcut>Ctrl+Shift+;</shortcut>
       <defaultShortcut>Ctrl+Shift+;</defaultShortcut>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="view_toggle_perspective_grid">

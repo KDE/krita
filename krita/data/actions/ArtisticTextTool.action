@@ -9,7 +9,7 @@
       <icon>format-text-subscript</icon>
       <whatsThis></whatsThis>
       <statusTip></statusTip>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <text>Subscript</text>
       <defaultShortcut></defaultShortcut>
     </Action>
@@ -31,7 +31,7 @@
       <icon>format-text-italic</icon>
       <whatsThis></whatsThis>
       <statusTip></statusTip>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <text>Italic text</text>
       <defaultShortcut></defaultShortcut>
     </Action>
@@ -42,7 +42,7 @@
       <icon>format-justify-center</icon>
       <whatsThis></whatsThis>
       <statusTip></statusTip>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <text>Anchor at Middle</text>
       <defaultShortcut></defaultShortcut>
     </Action>
@@ -53,7 +53,7 @@
       <icon>format-justify-right</icon>
       <whatsThis></whatsThis>
       <statusTip></statusTip>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <text>Anchor at End</text>
       <defaultShortcut></defaultShortcut>
     </Action>
@@ -75,7 +75,7 @@
       <icon>format-justify-left</icon>
       <whatsThis></whatsThis>
       <statusTip></statusTip>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <text>Anchor at Start</text>
       <defaultShortcut></defaultShortcut>
     </Action>
@@ -86,7 +86,7 @@
       <icon>format-text-bold</icon>
       <whatsThis></whatsThis>
       <statusTip></statusTip>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <text>Bold text</text>
       <defaultShortcut></defaultShortcut>
     </Action>
@@ -108,7 +108,7 @@
       <icon>format-text-superscript</icon>
       <whatsThis></whatsThis>
       <statusTip></statusTip>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <text>Superscript</text>
       <defaultShortcut></defaultShortcut>
     </Action>

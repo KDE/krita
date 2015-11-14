@@ -147,7 +147,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_group_layer">
-      <icon>folder-new</icon>
+      <icon>folder</icon>
       <text>&amp;Group Layer</text>
       <whatsThis></whatsThis>
       <toolTip>Group Layer</toolTip>
@@ -173,7 +173,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_shape_layer">
-      <icon>bookmark-new</icon>
+      <icon>bookmarks</icon>
       <text>&amp;Vector Layer</text>
       <whatsThis></whatsThis>
       <toolTip>Vector Layer</toolTip>
@@ -355,7 +355,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="reload_preset_action">
-      <icon>reload_preset</icon>
+      <icon>view-refresh</icon>
       <text>Reload Original Preset</text>
       <whatsThis></whatsThis>
       <toolTip>Reload Original Preset</toolTip>
@@ -836,7 +836,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="show_tool_options">
-      <icon>show_tool_options</icon>
+      <icon></icon>
       <text>Show Tool Options</text>
       <whatsThis></whatsThis>
       <toolTip>Show Tool Options</toolTip>
@@ -847,7 +847,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="show_brush_editor">
-      <icon>show_tool_options</icon>
+      <icon></icon>
       <text>Show Brush Editor</text>
       <whatsThis></whatsThis>
       <toolTip>Show Brush Editor</toolTip>
@@ -858,7 +858,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="show_brush_presets">
-      <icon>show_tool_options</icon>
+      <icon></icon>
       <text>Show Brush Presets</text>
       <whatsThis></whatsThis>
       <toolTip>Show Brush Presets</toolTip>

@@ -142,6 +142,12 @@ extern "C" int main(int argc, char **argv)
 
     app.setSplashScreen(splash);
 
+
+#if defined Q_OS_WIN
+    KisTabletSupportWin::init();
+    // app.installNativeEventFilter(new KisTabletSupportWin());
+#endif
+
     if (!app.start(args)) {
         return 1;
     }

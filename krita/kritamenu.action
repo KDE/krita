@@ -3,7 +3,7 @@
   <Actions category="File">
     <text>File</text>
     <Action name="file_new">
-      <icon>light_document-new</icon>
+      <icon>document-new</icon>
       <text>&amp;New</text>
       <whatsThis></whatsThis>
       <toolTip>Create new document</toolTip>
@@ -266,7 +266,7 @@
   <Actions category="Edit">
     <text>Edit</text>
     <Action name="edit_undo">
-      <icon>light_edit-undo</icon>
+      <icon>edit-undo</icon>
       <text>Undo</text>
       <whatsThis></whatsThis>
       <toolTip>Undo last action</toolTip>
@@ -279,7 +279,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="edit_redo">
-      <icon>light_edit-redo</icon>
+      <icon>_edit-redo</icon>
       <text>Redo</text>
       <whatsThis></whatsThis>
       <toolTip>Redo last undone action</toolTip>
@@ -747,7 +747,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="trim_to_image">
-      <icon>light_trim-to-image</icon>
+      <icon>trim-to-image</icon>
       <text>&amp;Trim to Image Size</text>
       <whatsThis></whatsThis>
       <toolTip>Trim to Image Size</toolTip>
@@ -851,7 +851,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="mirrorImageHorizontal">
-      <icon>light_symmetry-horizontal</icon>
+      <icon>symmetry-horizontal</icon>
       <text>&amp;Mirror Image Horizontally</text>
       <whatsThis></whatsThis>
       <toolTip>Mirror Image Horizontally</toolTip>
@@ -864,7 +864,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="mirrorImageVertical">
-      <icon>light_symmetry-vertical</icon>
+      <icon>symmetry-vertical</icon>
       <text>Mirror Image &amp;Vertically</text>
       <whatsThis></whatsThis>
       <toolTip>Mirror Image Vertically</toolTip>
@@ -946,7 +946,7 @@
   <Actions category="Layer">
     <text>Layer</text>
     <Action name="add_new_paint_layer">
-      <icon>light_document-new</icon>
+      <icon>document-new</icon>
       <text>&amp;Paint Layer</text>
       <whatsThis></whatsThis>
       <toolTip>Paint Layer</toolTip>
@@ -1193,7 +1193,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="mirrorNodeX">
-      <icon>light_symmetry-horizontal</icon>
+      <icon>symmetry-horizontal</icon>
       <text>Mirror Layer Hori&amp;zontally</text>
       <whatsThis></whatsThis>
       <toolTip>Mirror Layer Horizontally</toolTip>
@@ -1206,7 +1206,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="mirrorNodeY">
-      <icon>light_symmetry-vertical</icon>
+      <icon>symmetry-vertical</icon>
       <text>Mirror Layer &amp;Vertically</text>
       <whatsThis></whatsThis>
       <toolTip>Mirror Layer Vertically</toolTip>
@@ -1820,7 +1820,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="options_configure_toolbars">
-      <icon>light_configure</icon>
+      <icon>configure</icon>
       <text>Configure Tool&amp;bars...</text>
       <whatsThis></whatsThis>
       <toolTip>Configure Toolbars</toolTip>

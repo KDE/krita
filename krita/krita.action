@@ -342,16 +342,16 @@
       <statusTip></statusTip>
     </Action>
     <Action name="erase_action">
-      <icon>eraser-toggle</icon>
-      <text>Save Incremental &amp;Version</text>
+      <icon>draw-eraser</icon>
+      <text>Set eraser mode</text>
       <whatsThis></whatsThis>
-      <toolTip>Save Incremental Version</toolTip>
-      <iconText>Save Incremental Version</iconText>
-      <activationFlags>1</activationFlags>
+      <toolTip>Set eraser mode</toolTip>
+      <iconText>Set eraser mode</iconText>
+      <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut>Ctrl+Alt+S</shortcut>
-      <defaultShortcut>Ctrl+Alt+S</defaultShortcut>
-      <isCheckable>false</isCheckable>
+      <shortcut>E</shortcut>
+      <defaultShortcut>E</defaultShortcut>
+      <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="reload_preset_action">
@@ -360,6 +360,7 @@
       <whatsThis></whatsThis>
       <toolTip>Reload Original Preset</toolTip>
       <iconText>Reload Original Preset</iconText>
+      <activationFlags>10000</activationFlags>
       <shortcut></shortcut>
       <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
@@ -371,28 +372,31 @@
       <whatsThis></whatsThis>
       <toolTip>Preserve Alpha</toolTip>
       <iconText>Preserve Alpha</iconText>
+      <activationFlags>10000</activationFlags>
       <shortcut></shortcut>
       <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="hmirror_action">
-      <icon>light_symmetry-horizontal</icon>
+      <icon>symmetry-horizontal</icon>
       <text>Set horizontal mirror mode</text>
       <whatsThis></whatsThis>
       <toolTip>Set horizontal mirror mode</toolTip>
       <iconText>Set horizontal mirror mode</iconText>
+      <activationFlags>10000</activationFlags>
       <shortcut></shortcut>
       <defaultShortcut></defaultShortcut>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="vmirror_action">
-      <icon>light_symmetry-vertical</icon>
+      <icon>symmetry-vertical</icon>
       <text>Set vertical mirror mode</text>
       <whatsThis></whatsThis>
       <toolTip>Set vertical mirror mode</toolTip>
       <iconText>Set vertical mirror mode</iconText>
+      <activationFlags>10000</activationFlags>
       <shortcut></shortcut>
       <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
@@ -493,7 +497,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="view_newwindow">
-      <icon>light_window-new</icon>
+      <icon>window-new</icon>
       <text>&amp;New Window</text>
       <whatsThis></whatsThis>
       <toolTip>New Window</toolTip>

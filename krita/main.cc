@@ -79,7 +79,7 @@ extern "C" int main(int argc, char **argv)
      */
     QLoggingCategory::setFilterRules("calligra*=false\n"
                                      "krita*=false\n"
-                                     "krita.input=true");
+                                     "krita.tabletlog=true");
 
 
     // A per-user unique string, without /, because QLocalServer cannot use names with a / in it

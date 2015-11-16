@@ -101,10 +101,10 @@ void KisTabletDebugger::toggleDebugging()
                              i18n("Tablet Event Logging Enabled") :
                              i18n("Tablet Event Logging Disabled"));
     if (m_debugEnabled) {
-        dbgInput << "vvvvvvvvvvvvvvvvvvvvvvv START TABLET EVENT LOG vvvvvvvvvvvvvvvvvvvvvvv";
+        dbgTablet << "vvvvvvvvvvvvvvvvvvvvvvv START TABLET EVENT LOG vvvvvvvvvvvvvvvvvvvvvvv";
     }
     else {
-        dbgInput << "^^^^^^^^^^^^^^^^^^^^^^^ START TABLET EVENT LOG ^^^^^^^^^^^^^^^^^^^^^^^";
+        dbgTablet << "^^^^^^^^^^^^^^^^^^^^^^^ START TABLET EVENT LOG ^^^^^^^^^^^^^^^^^^^^^^^";
     }
 }
 

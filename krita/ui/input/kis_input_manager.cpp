@@ -159,7 +159,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 {
     if (object != d->eventsReceiver) return false;
 
-
+#if !defined(Q_OS_WIN)
     // If we have saved an event, take care of it now.
     if (d->eventEater.savedEvent) {
         auto savedEvent = d->eventEater.savedEvent;
@@ -172,6 +172,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     }
 
     if (d->eventEater.eventFilter(object, event)) return false;
+#endif
 
 
     Q_FOREACH (QPointer<QObject> filter, d->priorityEventFilter) {

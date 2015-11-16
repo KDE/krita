@@ -68,6 +68,28 @@ namespace {
         CursorTypeBitMask = 0x0F06 // bitmask to find the specific cursor type (see Wacom FAQ)
     };
 
+
+    /* Items below are deprecated. */
+    /**
+     * A cached array for fetching packets from the WinTab queue
+     */
+    enum { QT_TABLET_NPACKETQSIZE = 128 };
+    static PACKET globalPacketBuf[QT_TABLET_NPACKETQSIZE];  // our own tablet packet queue.
+
+    /**
+     * This is an inelegant solution to record pen / eraser switches.
+     * On the Surface Pro 3 we are only notified of cursor changes at the last minute.
+     * The recommended way to handle switches is WT_CSRCHANGE, but that doesn't work
+     * unless we save packet ID information, and we cannot change the structure of the
+     * PACKETDATA due to Qt restrictions.
+     *
+     * Furthermore, WT_CSRCHANGE only ever appears *after* we receive the packet.
+     */
+    static UINT currentCursor = 0;
+    static bool dialogOpen = false;  //< KisTabletSupportWin is not a Q_OBJECT and can't accept dialog signals
+    static bool inlineSwitching = false;  //< Only enable this on SP3 or other devices with the same issue.
+
+
     HCTX global_context;
 }
 
@@ -180,6 +202,17 @@ class Q_DECL_HIDDEN QWindowsTabletSupport
      */
     QVector<QWindowsTabletDeviceData> m_devices;
     int m_currentDevice{-1};
+
+
+    /**
+     * The widget that got the latest tablet press.
+     *
+     * See QGuiApplicationPrivate::tabletPressTarget.
+     *
+     * It should be impossible that one widget would get tablet press and the
+     * other tablet release. We keep track of the widget receiving the press
+     * event to ensure that this is the case.
+     */
     QWidget *targetWidget{0};
 };
 
@@ -202,37 +235,6 @@ kisWindowsTabletSupportWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lP
     }
     return DefWindowProc(hwnd, message, wParam, lParam);
 }
-
-
-/**
- * A cached array for fetching packets from the WinTab queue
- */
-enum { QT_TABLET_NPACKETQSIZE = 128 };
-static PACKET globalPacketBuf[QT_TABLET_NPACKETQSIZE];  // our own tablet packet queue.
-
-
-/**
- * The widget that got the latest tablet press.
- *
- * It should be impossible that one widget would get tablet press and
- * the other tablet release. Keeping track of which widget got the
- * press event allows to ensure that exactly the same widget would get
- * the release.
- */
-static QWidget* kis_tablet_pressed = 0;
-
-/**
- * This is an inelegant solution to record pen / eraser switches.
- * On the Surface Pro 3 we are only notified of cursor changes at the last minute.
- * The recommended way to handle switches is WT_CSRCHANGE, but that doesn't work
- * unless we save packet ID information, and we cannot change the structure of the
- * PACKETDATA due to Qt restrictions.
- *
- * Furthermore, WT_CSRCHANGE only ever appears *after* we receive the packet.
- */
-static UINT currentCursor = 0;
-static bool dialogOpen = false;  //< KisTabletSupportWin is not a Q_OBJECT and can't accept dialog signals
-static bool inlineSwitching = false;  //< Only enable this on SP3 or other devices with the same issue.
 
 
 void QWindowsTabletSupport::notifyActivate()
@@ -258,7 +260,7 @@ namespace {
 
     void printContext(const LOGCONTEXT &lc)
     {
-        dbgInput << "Context data:";
+        dbgInput << "# Getting current context data:";
         dbgInput << ppVar(lc.lcName);
         dbgInput << ppVar(lc.lcDevice);
         dbgInput << ppVar(lc.lcInOrgX);
@@ -380,29 +382,36 @@ namespace {
     }
 
     /**
-     * Qt generates spoofed mouse events for certain rejected tablet events.
-     * When those mouse events are unnecessary we catch and remove them
-     * with this event filter.
+     * Windows generates spoofed mouse events for certain rejected tablet
+     * events. When those mouse events are unnecessary we catch them with this
+     * event filter.
      */
     class EventEater : public QObject {
     public:
-        EventEater(QObject *p) : QObject(p), m_eventType(QEvent::None) {}
+        EventEater(QObject *p) : QObject(p) {}
 
         bool eventFilter(QObject* object, QEvent* event ) {
-            if (event->type() == m_eventType) {
-                m_eventType = QEvent::None;
+            bool isMouseEvent = (event->type() == QEvent::MouseMove ||
+                                 event->type() == QEvent::MouseButtonPress ||
+                                 event->type() == QEvent::MouseButtonRelease);
+
+            if (isMouseEvent && peckish) {
+                peckish--;
                 return true;
             }
-
-            return QObject::eventFilter(object, event);
+            // else if (isMouseEvent && hungry) {
+            //     return true;
+            // }
+             return false;
         }
 
-        void pleaseEatNextEvent(QEvent::Type eventType) {
-            m_eventType = eventType;
-        }
+        void activate() { dbgInput << "Event eating enabled"; hungry = true; peckish = 5;};
+        void deactivate() { dbgInput << "Event eating disabled."; hungry = false; peckish=0;};
+        void chow() { peckish = 5; }; // XXX: perhaps this should be customizable
 
     private:
-        QEvent::Type m_eventType;
+        bool hungry{false};   // Continue eating mouse strokes
+        int  peckish{0};  // Eat a number of mouse events
     };
 
     EventEater *globalEventEater = 0;
@@ -447,7 +456,6 @@ QWindowsTabletDeviceData QWindowsTabletSupport::tabletInit(const quint64 uniqueI
     WINTAB_DLL.wTGet(m_context, &lc);
 
     if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
-        dbgInput << "# Getting current context:";
         printContext(lc);
     }
 
@@ -470,66 +478,8 @@ QWindowsTabletDeviceData QWindowsTabletSupport::tabletInit(const quint64 uniqueI
 
     return result;
 
-    // Older code for the screen size dialog and setting context bounds
-    /*
-
-      QRect qtDesktopRect = QApplication::desktop()->geometry();
-      QRect wintabDesktopRect(lc.lcSysOrgX, lc.lcSysOrgY,
-      lc.lcSysExtX, lc.lcSysExtY);
-
-      dbgInput << ppVar(qtDesktopRect);
-      dbgInput << ppVar(wintabDesktopRect);
-
-      QRect desktopRect = wintabDesktopRect;
-
-      {
-      KisScreenSizeChoiceDialog dlg(0,
-      wintabDesktopRect,
-      qtDesktopRect);
-
-      KisExtendedModifiersMapper mapper;
-      KisExtendedModifiersMapper::ExtendedModifiers modifiers =
-      mapper.queryExtendedModifiers();
-
-      if (modifiers.contains(Qt::Key_Shift) ||
-      (!dlg.canUseDefaultSettings() &&
-      qtDesktopRect != wintabDesktopRect)) {
-
-      dialogOpen = true;
-      dlg.exec();
-      }
-
-      desktopRect = dlg.screenRect();
-      dialogOpen = false;
-      }
-
-      tdd.sysOrgX = desktopRect.x();
-      tdd.sysOrgY = desktopRect.y();
-      tdd.sysExtX = desktopRect.width();
-      tdd.sysExtY = desktopRect.height();
-
-      if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
-      dbgInput << "# Axes configuration";
-      dbgInput << ppVar(tdd.minPressure) << ppVar(tdd.maxPressure);
-      dbgInput << ppVar(tdd.minTanPressure) << ppVar(tdd.maxTanPressure);
-      dbgInput << ppVar(m_tiltSupport);
-      dbgInput << ppVar(tdd.minX) << ppVar(tdd.maxX);
-      dbgInput << ppVar(tdd.minY) << ppVar(tdd.maxY);
-      dbgInput << ppVar(tdd.minZ) << ppVar(tdd.maxZ);
-      dbgInput.nospace() << "# csr type: 0x" << hex << csr_type;
-
-      LOGCONTEXT lcMine;
-
-      // get default region
-      ptrWTInfo(WTI_DEFCONTEXT, 0, &lcMine);
-
-      dbgInput << "# Getting default context:";
-      printContext(lcMine);
-
-      m_devices()->insert(uniqueId, tdd);
-    */
-
-
+    // Older code
+    // m_devices()->insert(uniqueId, tdd);
 };
 
 
@@ -591,6 +541,7 @@ bool QWindowsTabletSupport::translateTabletProximityEvent(WPARAM /* wParam */, L
     if (!LOWORD(lParam)) {
         dbgInput << "leave proximity for device #" << m_currentDevice;
         sendProximityEvent(m_devices.at(m_currentDevice), QEvent::TabletLeaveProximity);
+        // globalEventEater->deactivate();
         return true;
     }
     PACKET proximityBuffer[1]; // we are only interested in the first packet in this case
@@ -615,6 +566,7 @@ bool QWindowsTabletSupport::translateTabletProximityEvent(WPARAM /* wParam */, L
     dbgInput << "enter proximity for device #"
              << m_currentDevice << m_devices.at(m_currentDevice);
     sendProximityEvent(m_devices.at(m_currentDevice), QEvent::TabletEnterProximity);
+    // globalEventEater->activate();
     return true;
 }
 
@@ -656,8 +608,16 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
         buttons = static_cast<Qt::MouseButtons>(localPacketBuf[i].pkButtons);
         bool anyButtonsStillPressed = buttons;
         QEvent::Type type = QEvent::TabletMove;
-        if (buttons != btnOld)
-            type = (buttons > btnOld) ? QEvent::TabletPress : QEvent::TabletRelease;
+        if (buttons > btnOld) {
+            type = QEvent::TabletPress;
+            // globalEventEater->chow();
+            // globalEventEater->activate();
+        } else if (buttons < btnOld)  {
+            type = QEvent::TabletRelease;
+            // if (!anyButtonsStillPressed) {
+                globalEventEater->deactivate();
+            // }
+        }
 
 
         // Pick out the individual button press
@@ -746,7 +706,7 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
         }
 
         dbgInput
-            << "Packet #" << i << '/' << packetCount << "button:" << packet.pkButtons
+            << "Packet #" << (i+1) << '/' << packetCount << "button:" << packet.pkButtons
             << globalPosF << z << "to:" << w << localPos << "(packet" << packet.pkX
             << packet.pkY << ") dev:" << currentDevice << "pointer:"
             << currentPointer << "P:" << pressureNew << "tilt:" << tiltX << ','
@@ -762,7 +722,7 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
         bool sendEvent = qApp->sendEvent(w, &e);
 
         if (e.isAccepted()) {
-            globalEventEater->pleaseEatNextEvent(mouseEventType(type));
+            globalEventEater->chow();
         }
     } // Loop over packets
     return true;
@@ -1003,6 +963,9 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf, int numPackets
             w = parentOverride;
         }
 
+        // Stubbed
+        QWidget *kis_tablet_pressed = 0;
+
         if (kis_tablet_pressed) {
             w = kis_tablet_pressed;
         }
@@ -1097,7 +1060,7 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf, int numPackets
         }
 
         if (e.isAccepted()) {
-            globalEventEater->pleaseEatNextEvent(e.getMouseEventType());
+            globalEventEater->chow();
         } else {
             QTabletEvent t = e.toQTabletEvent();
             qApp->sendEvent(w,  &t);

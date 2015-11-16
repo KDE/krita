@@ -50,23 +50,23 @@ public:
 
 struct QWindowsTabletDeviceData
 {
-	QWindowsTabletDeviceData() : minPressure(0), maxPressure(0), minTanPressure(0),
-		maxTanPressure(0), minX(0), maxX(0), minY(0), maxY(0), minZ(0), maxZ(0),
-    uniqueId(0), currentDevice(0), currentPointerType(0) {}
+    QPointF scaleCoordinates(int coordX, int coordY, const QRect &targetArea) const;
+    qreal scalePressure(qreal p) const { return p / qreal(maxPressure - minPressure); }
+    qreal scaleTangentialPressure(qreal p) const { return p / qreal(maxTanPressure - minTanPressure); }
 
-
-	QPointF scaleCoordinates(int coordX, int coordY, const QRect &targetArea) const;
-	qreal scalePressure(qreal p) const { return p / qreal(maxPressure - minPressure); }
-	qreal scaleTangentialPressure(qreal p) const { return p / qreal(maxTanPressure - minTanPressure); }
-
-	int minPressure;
-	int maxPressure;
-	int minTanPressure;
-	int maxTanPressure;
-	int minX, maxX, minY, maxY, minZ, maxZ;
-	qint64 uniqueId;
-	int currentDevice;
-	int currentPointerType;
+	int minPressure{ 0 };
+	int maxPressure{ 0 };
+	int minTanPressure{ 0 };
+	int maxTanPressure{ 0 };
+	int minX{ 0 };
+	int maxX{ 0 };
+	int minY{ 0 };
+	int maxY{ 0 };
+	int minZ{ 0 };
+	int maxZ{ 0 };
+	qint64 uniqueId{ 0 };
+	int currentDevice{ 0 };
+	int currentPointerType{ 0 };
 
 };
 

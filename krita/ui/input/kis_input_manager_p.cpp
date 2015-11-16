@@ -128,7 +128,7 @@ bool KisInputManager::Private::EventEater::isActive()
 {
     return hungry;
 }
-#endif
+#endif // !defined(Q_OS_WIN)
 
 bool KisInputManager::Private::ignoreQtCursorEvents()
 {

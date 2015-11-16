@@ -357,6 +357,7 @@ if(UNIX)
         set(kritaui_LIB_SRCS
             ${kritaui_LIB_SRCS}
             input/wintab/kis_tablet_support_x11.cpp
+            input/wintab/kis_xcb_connection.cpp
             )
     endif()
 endif()
@@ -453,7 +454,7 @@ if (HAVE_KIO)
 endif() 
 
 if (NOT WIN32 AND NOT APPLE)
-  target_link_libraries(kritaui ${X11_X11_LIB} ${X11_Xinput_LIB})
+  target_link_libraries(kritaui XCB::XCB ${X11_X11_LIB} ${X11_Xinput_LIB})
 endif()
 
 if(APPLE)

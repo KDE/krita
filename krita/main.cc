@@ -149,7 +149,10 @@ extern "C" int main(int argc, char **argv)
 
 #if defined Q_OS_WIN
     KisTabletSupportWin::init();
-    // app.installNativeEventFilter(new KisTabletSupportWin());
+#elif defined HAVE_X11
+    KisTabletSupportXcb::init();
+    // TODO: who owns the filter object?
+    app.installNativeEventFilter(new KisTabletSupportXcb());
 #endif
 
     if (!app.start(args)) {
@@ -168,4 +171,3 @@ extern "C" int main(int argc, char **argv)
 
     return state;
 }
-

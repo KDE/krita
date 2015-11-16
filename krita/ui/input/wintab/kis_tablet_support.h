@@ -36,6 +36,7 @@
 #include "kis_incremental_average.h"
 #endif
 
+#undef None  // thanks, XInput.h
 
 struct QTabletDeviceData
 {

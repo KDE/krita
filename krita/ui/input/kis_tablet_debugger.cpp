@@ -58,7 +58,7 @@ template <class Event>
 {
     s << "btn: " << button(ev) << " ";
     s << "btns: " << buttons(ev) << " ";
-    s << "pos: " << qSetFieldWidth(4) << ev.x() << qSetFieldWidth(0) << "," << qSetFieldWidth(4) << ev.y() << qSetFieldWidth(0) << " ";
+    s << "lpos: " << qSetFieldWidth(4) << ev.x() << qSetFieldWidth(0) << "," << qSetFieldWidth(4) << ev.y() << qSetFieldWidth(0) << " ";
     s << "gpos: "  << qSetFieldWidth(4) << ev.globalX() << qSetFieldWidth(0) << "," << qSetFieldWidth(4) << ev.globalY() << qSetFieldWidth(0) << " ";
 }
 

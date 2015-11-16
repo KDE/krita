@@ -32,9 +32,11 @@
 #include "kis_input_profile_manager.h"
 
 
-#if !defined(Q_OS_WIN)
+#if !defined(HAVE_X11) && !defined(Q_OS_WIN)
 /**
  * This hungry class EventEater encapsulates event masking logic.
+ *
+ * It should not be necessary if we handle our own events. Currently this is done on X11 only.
  *
  * Its basic role is to kill synthetic mouseMove events sent by Xorg or Qt after
  * tablet events. Those events are sent in order to allow widgets that haven't
@@ -119,7 +121,7 @@ void KisInputManager::Private::EventEater::deactivate()
 }
 
 // This would be a solution if we had reliable proximity events. SIGH
-// void eatOneMousePress()
+// void KisInputManager::Private::eatOneMousePress()
 // {
 //     peckish = true;
 // }
@@ -132,8 +134,7 @@ bool KisInputManager::Private::EventEater::isActive()
 
 bool KisInputManager::Private::ignoreQtCursorEvents()
 {
-
-#if !defined(Q_OS_WIN)
+#if !defined(HAVE_X11) && !defined(Q_OS_WIN)
     return eventEater.isActive();
 #else
     return false;
@@ -422,14 +423,14 @@ void KisInputManager::Private::saveTouchEvent( QTouchEvent* event )
 
 void KisInputManager::Private::blockMouseEvents()
 {
-#if !defined(Q_OS_WIN)
+#if !defined(HAVE_X11) && !defined(Q_OS_WIN)
     eventEater.activate();
 #endif
 }
 
 void KisInputManager::Private::allowMouseEvents()
 {
-#if !defined(Q_OS_WIN)
+#if !defined(HAVE_X11) && !defined(Q_OS_WIN)
     eventEater.deactivate();
 #endif
 }

@@ -108,9 +108,8 @@ public:
         QMap<QObject*, KisCanvas2*> canvasResolver;
         int eatOneMouseStroke;
     };
-    CanvasSwitcher canvasSwitcher;
 
-#if !defined(Q_OS_WIN)
+#if !defined(HAVE_X11) && !defined(Q_OS_WIN)
     class EventEater
     {
     public:
@@ -130,6 +129,8 @@ public:
     };
     EventEater eventEater;
 #endif
+
+    CanvasSwitcher canvasSwitcher;
 
     bool focusOnEnter = true;
     bool containsPointer = true;

@@ -161,9 +161,9 @@ int main( int argc, char** argv )
     KisTabletSupportWin::init();
     app.installNativeEventFilter(new KisTabletSupportWin());
 #elif defined HAVE_X11
-    KisTabletSupportX11::init();
+    KisTabletSupportXcb::init();
     // TODO: who owns the filter object?
-    app.installNativeEventFilter(new KisTabletSupportX11());
+    app.installNativeEventFilter(new KisTabletSupportXcb());
 #endif
 
     app.start();

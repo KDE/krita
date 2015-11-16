@@ -204,7 +204,6 @@ find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
         ItemViews
         WindowSystem
 )
-find_package(KF5KIO ${MIN_QT_VERSION})
 
 find_package(Qt5 ${MIN_QT_VERSION}
         REQUIRED COMPONENTS
@@ -243,7 +242,11 @@ include (ECMInstallIcons)
 
 macro_ensure_out_of_source_build("Compiling Calligra inside the source directory is not possible. Please refer to the build instruction http://community.kde.org/Calligra/Building/Building_Calligra")
 
+
+find_package(KF5KIO ${MIN_FRAMEWORKS_VERSION})
 macro_bool_to_01(KF5KIO_FOUND HAVE_KIO)
+find_package(KF5Crash ${MIN_FRAMEWORKS_VERSION})
+macro_bool_to_01(KF5Crash_FOUND HAVE_CRASH)
 
 find_package(X11)
 if(X11_FOUND)

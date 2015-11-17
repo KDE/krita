@@ -22,6 +22,7 @@
 #include <QLocale>
 #include <QUrl>
 #include <QNetworkReply>
+#include <QDebug>
 
 KisNetworkAccessManager::KisNetworkAccessManager(QObject *parent)
     : QNetworkAccessManager(parent)

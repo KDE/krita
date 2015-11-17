@@ -50,6 +50,9 @@
     #include <ui/input/wintab/kis_tablet_support_x11.h>
 #endif
 
+#if defined HAVE_KCRASH
+#include <kcrash.h>
+#endif
 extern "C" int main(int argc, char **argv)
 {
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
@@ -78,7 +81,9 @@ extern "C" int main(int argc, char **argv)
     QString key = "Krita3" +
                   QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");
     key = key.replace(":", "_").replace("\\","_");
-
+#if defined HAVE_KCRASH
+    KCrash::initialize();
+#endif
 #if defined HAVE_X11
     // we need to call XInitThreads() (which this does) because of gmic (and possibly others)
     // do their own X11 stuff in their own threads

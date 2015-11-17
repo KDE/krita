@@ -90,7 +90,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
     KoDialog* kdb = new KoDialog(0);
     kdb->setCaption(i18n("PNG Export Options"));
     kdb->setModal(false);
-    kdb->setButtons(KDialog::Ok | KDialog::Cancel);
+    kdb->setButtons(KoDialog::Ok | KoDialog::Cancel);
 
     KisImageWSP image = input->image();
     qApp->processEvents(); // For vector layers to be updated

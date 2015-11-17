@@ -245,8 +245,8 @@ macro_ensure_out_of_source_build("Compiling Calligra inside the source directory
 
 find_package(KF5KIO ${MIN_FRAMEWORKS_VERSION})
 macro_bool_to_01(KF5KIO_FOUND HAVE_KIO)
-find_package(KF5Crash ${MIN_FRAMEWORKS_VERSION})
-macro_bool_to_01(KF5Crash_FOUND HAVE_CRASH)
+find_package(KF5Crash ${MIN_FRAMEWORKS_VERSION}) 
+macro_bool_to_01(KF5Crash_FOUND HAVE_KCRASH)
 
 find_package(X11)
 if(X11_FOUND)

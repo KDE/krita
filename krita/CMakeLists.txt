@@ -174,6 +174,11 @@ target_link_libraries(krita
                       Qt5::PrintSupport
                       Qt5::Svg
                       Qt5::Concurrent)
+if(HAVE_KCRASH)
+    target_link_libraries(krita
+                          KF5::Crash
+    )
+endif()
 
 if (APPLE)
     set(CMAKE_MACOSX_RPATH ON)

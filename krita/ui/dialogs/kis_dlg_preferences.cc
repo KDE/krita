@@ -588,6 +588,12 @@ void PerformanceTab::load(bool requestDefault)
 
     sliderSwapSize->setValue(cfg.maxSwapSize(requestDefault) / 1024);
     lblSwapFileLocation->setText(cfg.swapDir(requestDefault));
+
+    {
+        KisConfig cfg2;
+        chkOpenGLLogging->setChecked(cfg2.enableOpenGLDebugging(requestDefault));
+        chkDisableVectorOptimizations->setChecked(cfg2.enableAmdVectorizationWorkaround(requestDefault));
+    }
 }
 
 void PerformanceTab::save()
@@ -604,6 +610,12 @@ void PerformanceTab::save()
     cfg.setMaxSwapSize(sliderSwapSize->value() * 1024);
 
     cfg.setSwapDir(lblSwapFileLocation->text());
+
+    {
+        KisConfig cfg2;
+        cfg2.setEnableOpenGLDebugging(chkOpenGLLogging->isChecked());
+        cfg2.setEnableAmdVectorizationWorkaround(chkDisableVectorOptimizations->isChecked());
+    }
 }
 
 void PerformanceTab::selectSwapDir()

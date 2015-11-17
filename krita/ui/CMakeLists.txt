@@ -146,6 +146,7 @@ set(kritaui_LIB_SRCS
     kra/kis_kra_savexml_visitor.cpp
     opengl/kis_opengl.cpp
     opengl/kis_opengl_canvas2.cpp
+    opengl/kis_opengl_canvas_debugger.cpp
     opengl/kis_opengl_image_textures.cpp
     opengl/kis_texture_tile.cpp
     opengl/kis_texture_tile_update_info.cpp

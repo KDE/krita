@@ -192,11 +192,8 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
     }
 
     const KoColorSpace *c;
-    if (colorSpace == 0) {
+    if (colorSpace != 0) {
         c = colorSpace;
-        // m_d = new KisImagePrivate(this, width, height,
-        //                           KoColorSpaceRegistry::instance()->rgb8(),
-        //                           undoStore, startProjection);
     } else {
         c = KoColorSpaceRegistry::instance()->rgb8();
     }

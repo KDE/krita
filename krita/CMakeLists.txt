@@ -35,9 +35,6 @@ endif()
 
 if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
-    if (USE_BREAKPAD)
-        include_directories(${CMAKE_SOURCE_DIR}/3rdparty/google-breakpad/src)
-    endif ()
 #    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:16777216") # for g'mic...
 #    set(CMAKE_CXX_STACK_SIZE "999999999")
 endif()
@@ -142,11 +139,6 @@ endif ()
 
 set(krita_SRCS main.cc)
 
-if(WIN32 AND USE_BREAKPAD)
-    set(krita_SRCS ${krita_SRCS} kis_crash_handler.cpp)
-    set(BREAKPAD_LIBS breakpad)
-endif()
-
 if (NOT APPLE)
     file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/*-apps-calligrakrita.png")
     ecm_add_app_icon(krita_SRCS ICONS ${ICONS_SRCS})
@@ -181,8 +173,7 @@ target_link_libraries(krita
                       Qt5::Network
                       Qt5::PrintSupport
                       Qt5::Svg
-                      Qt5::Concurrent
-                      ${BREAKPAD_LIBS})
+                      Qt5::Concurrent)
 
 if (APPLE)
     set(CMAKE_MACOSX_RPATH ON)

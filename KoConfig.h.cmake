@@ -28,9 +28,6 @@
 #cmakedefine WORDS_BIGENDIAN ${CMAKE_WORDS_BIGENDIAN}
 #endif
 
-/* Defines if the krita crash handler is built */
-#cmakedefine USE_BREAKPAD 1
-
 /* Number of bits in a file offset, on hosts where this is settable. */
 #define _FILE_OFFSET_BITS 64
 

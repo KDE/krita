@@ -45,9 +45,7 @@
 #include <Windows.h>
 #include <stdlib.h>
 #include <ui/input/wintab/kis_tablet_support_win.h>
-#ifdef USE_BREAKPAD
-    #include "kis_crash_handler.h"
-#endif
+
 #elif defined HAVE_X11
     #include <ui/input/wintab/kis_tablet_support_x11.h>
 #endif
@@ -60,12 +58,6 @@ extern "C" int main(int argc, char **argv)
     if (runningInKDE) {
         qputenv("QT_NO_GLIB", "1");
     }
-#endif
-
-#ifdef USE_BREAKPAD
-    qputenv("KDE_DEBUG", "1");
-    KisCrashHandler crashHandler;
-    Q_UNUSED(crashHandler);
 #endif
 
     /**

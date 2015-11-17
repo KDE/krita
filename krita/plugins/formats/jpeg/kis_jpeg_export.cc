@@ -130,7 +130,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
 
     if (!m_chain->manager()->getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {
-            return KisImportExportFilter::OK; // FIXME Cancel doesn't exist :(
+            return KisImportExportFilter::UserCancelled;
         }
     }
     else {

@@ -81,9 +81,6 @@ extern "C" int main(int argc, char **argv)
     QString key = "Krita3" +
                   QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");
     key = key.replace(":", "_").replace("\\","_");
-#if defined HAVE_KCRASH
-    KCrash::initialize();
-#endif
 #if defined HAVE_X11
     // we need to call XInitThreads() (which this does) because of gmic (and possibly others)
     // do their own X11 stuff in their own threads
@@ -102,6 +99,9 @@ extern "C" int main(int argc, char **argv)
     QCoreApplication::addLibraryPath(QCoreApplication::applicationDirPath());
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
+#if defined HAVE_KCRASH
+    KCrash::initialize();
+#endif
 
     // If we should clear the config, it has to be done as soon as possible after
     // KisApplication has been created. Otherwise the config file may have been read

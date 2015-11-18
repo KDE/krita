@@ -54,7 +54,6 @@ namespace Vc {
 
 #include <QDebug>
 #include <ksharedconfig.h>
-#include <kglobal.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
@@ -66,7 +65,7 @@ createOptimizedClass(typename FactoryType::ParamType param)
     static bool useVectorization = true;
 
     if (!isConfigInitialized) {
-        KConfigGroup cfg = KGlobal::config()->group("");
+        KConfigGroup cfg = KSharedConfig::openConfig()->group("");
         useVectorization = !cfg.readEntry("amdDisableVectorWorkaround", false);
         isConfigInitialized = true;
     }

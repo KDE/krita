@@ -297,7 +297,10 @@ set(CALLIGRA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/krita)
 ###########################
 
 find_package(ZLIB REQUIRED)
+macro_bool_to_01(ZLIB_FOUND HAVE_ZLIB)
+
 find_package(PNG REQUIRED)
+
 if (APPLE)
     # this is not added correctly on OSX -- see http://forum.kde.org/viewtopic.php?f=139&t=101867&p=221242#p221242
     include_directories(${PNG_INCLUDE_DIR})

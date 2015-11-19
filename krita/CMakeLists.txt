@@ -42,12 +42,12 @@ if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
 #    set(CMAKE_CXX_STACK_SIZE "999999999")
 endif()
 
-macro_optional_find_package(FFTW3)
-macro_log_feature(FFTW3_FOUND "FFTW3" "A fast, free C FFT library" "http://www.fftw.org/" FALSE "" "Required by the Krita for fast convolution operators")
-macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
 configure_file(image/config_convolution.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/image/config_convolution.h)
+configure_file(config-ocio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ocio.h )
 
 include(CheckFunctionExists)
+check_function_exists(powf HAVE_POWF)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-powf.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-powf.h)
 
 if(HAVE_OPENGL)
     message(STATUS "OpenGL found -- krita will be able  to use OpenGL for hardware accelerated rendering.")
@@ -55,24 +55,8 @@ else()
     message(STATUS "OpenGL NOT found - krita will not be able to use OpenGL for hardware accelerated rendering.")
 endif()
 
-macro_optional_find_package(OCIO)
-macro_log_feature(OCIO_FOUND "OCIO" "The OpenColorIO Library" "http://www.opencolorio.org" FALSE "" "Required by the Krita LUT docker")
-macro_bool_to_01(OCIO_FOUND HAVE_OCIO)
-configure_file(config-ocio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ocio.h )
-
 if(UNIX)
     set(CMAKE_REQUIRED_LIBRARIES "${CMAKE_REQUIRED_LIBRARIES};m")
-endif()
-
-check_function_exists(powf HAVE_POWF)
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-powf.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-powf.h)
-
-set(LINK_OPENEXR_LIB)
-if(OPENEXR_FOUND)
-    include_directories(${OPENEXR_INCLUDE_DIR})
-    set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
-    add_definitions(${OPENEXR_DEFINITIONS})
 endif()
 
 if(WIN32)
@@ -119,10 +103,6 @@ set(KRITA_INCLUDES
 )
 
 include_directories(${KRITA_INCLUDES})
-
-if(HAVE_OPENGL)
-    include_directories(${OPENGL_INCLUDE_DIR})
-endif()
 
 add_subdirectory( libglobal )
 add_subdirectory( libpsd )

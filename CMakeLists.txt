@@ -137,7 +137,7 @@ option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binar
 # 5. estimate which of the products/features can be build by internal deps
 
 # get the special macros
-include(CalligraProductsetMacros)
+include(CalligraProductSetMacros)
 include(MacroJPEG)
 
 # get the definitions of products, features and product sets

@@ -67,6 +67,4 @@ Categories=Qt;KDE;Office;Graphics;
 StartupNotify=true
 X-KDE-ServiceTypes=Calligra/Application
 X-Calligra-DefaultMimeTypes=image/bmp,image/x-xpixmap,image/gif,image/x-xbitmap,image/vnd.microsoft.icon,image/webp
-X-DBUS-StartupType=Multi
-X-DBUS-ServiceName=org.krita.krita
 NoDisplay=true

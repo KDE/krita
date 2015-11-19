@@ -33,14 +33,13 @@ set(gmic_headers_SRCS
   ${GMIC_SOURCE_DIR}/gmic.h
 )
 
-# Mandatory flags
+sModelIndexConverterShowAll# Mandatory flags
 add_definitions(-Dgmic_gimp)
 add_definitions(-Dgmic_build)
 add_definitions(-Dgmic_float_only)
 add_definitions(-Dcimg_use_vt100 )
 
 # PARALLEL
-find_package(Threads)
 if (Threads_FOUND)
     message("G'Mic: using pthreads")
     add_definitions(-Dgmic_is_parallel)
@@ -48,7 +47,6 @@ if (Threads_FOUND)
 endif()
 
 #OpenMP
-find_package(OpenMP)
 if(OPENMP_FOUND)
     message("G'Mic: using OpenMP")
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
@@ -70,15 +68,13 @@ if (PNG_FOUND)
 endif()
 
 # ZLIB
-find_package( ZLIB REQUIRED )
-if ( ZLIB_FOUND )
+if (ZLIB_FOUND)
     add_definitions(-Dcimg_use_zlib)
     include_directories( ${ZLIB_INCLUDE_DIRS} )
 endif()
 
 
 # CURL
-find_package(CURL)
 if (CURL_FOUND)
     message("G'Mic: using Curl")
     add_definitions(-Dcimg_use_curl)

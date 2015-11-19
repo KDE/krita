@@ -45,8 +45,6 @@
 #include "KoShapeShadow.h"
 #include "KoClipPath.h"
 #include "KoPathShape.h"
-#include "KoEventAction.h"
-#include "KoEventActionRegistry.h"
 #include "KoOdfWorkaround.h"
 #include "KoFilterEffectStack.h"
 #include <KoSnapData.h>
@@ -133,7 +131,6 @@ KoShapePrivate::~KoShapePrivate()
     if (filterEffectStack && !filterEffectStack->deref())
         delete filterEffectStack;
     delete clipPath;
-    qDeleteAll(eventActions);
 }
 
 void KoShapePrivate::shapeChanged(KoShape::ChangeType type)
@@ -875,24 +872,6 @@ void KoShape::clearConnectionPoints()
     d->connectors.clear();
 }
 
-void KoShape::addEventAction(KoEventAction *action)
-{
-    Q_D(KoShape);
-    d->eventActions.insert(action);
-}
-
-void KoShape::removeEventAction(KoEventAction *action)
-{
-    Q_D(KoShape);
-    d->eventActions.remove(action);
-}
-
-QSet<KoEventAction *> KoShape::eventActions() const
-{
-    Q_D(const KoShape);
-    return d->eventActions;
-}
-
 KoShape::TextRunAroundSide KoShape::textRunAroundSide() const
 {
     Q_D(const KoShape);
@@ -1596,10 +1575,6 @@ bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingConte
     }
 
     if (attributes & OdfCommonChildElements) {
-        const KoXmlElement eventActionsElement(KoXml::namedItemNS(element, KoXmlNS::office, "event-listeners"));
-        if (!eventActionsElement.isNull()) {
-            d->eventActions = KoEventActionRegistry::instance()->createEventActionsFromOdf(eventActionsElement, context);
-        }
         // load glue points (connection points)
         loadOdfGluePoints(element, context);
     }
@@ -2051,15 +2026,6 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
 void KoShape::saveOdfCommonChildElements(KoShapeSavingContext &context) const
 {
     Q_D(const KoShape);
-    // save event listeners see ODF 9.2.21 Event Listeners
-    if (d->eventActions.size() > 0) {
-        context.xmlWriter().startElement("office:event-listeners");
-        foreach(KoEventAction * action, d->eventActions) {
-            action->saveOdf(context);
-        }
-        context.xmlWriter().endElement();
-    }
-
     // save glue points see ODF 9.2.19 Glue Points
     if(d->connectors.count()) {
         KoConnectionPoints::const_iterator cp = d->connectors.constBegin();

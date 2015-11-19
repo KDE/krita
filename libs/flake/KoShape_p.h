@@ -84,7 +84,6 @@ public:
     KoClipPath * clipPath; ///< the current clip path
     QMap<QString, QString> additionalAttributes;
     QMap<QByteArray, QString> additionalStyleAttributes;
-    QSet<KoEventAction *> eventActions; ///< list of event actions the shape has
     KoFilterEffectStack *filterEffectStack; ///< stack of filter effects applied to the shape
     qreal transparency; ///< the shapes transparency
     QString hyperLink; //hyperlink for this shape

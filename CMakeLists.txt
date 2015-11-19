@@ -613,14 +613,6 @@ set(BASICFLAKES_INCLUDES ${KOWIDGETS_INCLUDES}
 ####################################################
 ###################################################
 
-if (NOT WIN32)
-    set(NOT_WIN TRUE)
-endif()
-
-if (NOT QT_MAC_USE_COCOA)
-    set(NOT_COCOA TRUE)
-endif()
-
 calligra_drop_product_on_bad_condition( APP_KRITA
     EIGEN3_FOUND "Eigen devel not found"
     EXIV2_FOUND "libexiv2 devel not found"

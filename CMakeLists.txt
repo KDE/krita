@@ -293,7 +293,6 @@ set(CALLIGRA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/krita)
 ############################
 ###########################
 
-find_package(Perl REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(PNG REQUIRED)
 if (APPLE)
@@ -617,6 +616,7 @@ set(BASICFLAKES_INCLUDES ${KOWIDGETS_INCLUDES}
 if (NOT WIN32)
     set(NOT_WIN TRUE)
 endif()
+
 if (NOT QT_MAC_USE_COCOA)
     set(NOT_COCOA TRUE)
 endif()

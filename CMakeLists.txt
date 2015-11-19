@@ -346,7 +346,7 @@ macro_log_feature(OPENJPEG_FOUND "openjpeg" "Free library for JPEG 2000 image co
 
 set(LIBRAW_MIN_VERSION  "0.16")
 macro_optional_find_package(LibRaw ${LIBRAW_MIN_VERSION})
-macro_log_feaure(LIBRAW_FOUND "LibRaw" "Library to decode RAW images" "http://www.libraw.org" FALSE "" "Required to build the raw import plugin")
+macro_log_feature(LIBRAW_FOUND "LibRaw" "Library to decode RAW images" "http://www.libraw.org" FALSE "" "Required to build the raw import plugin")
 
 macro_optional_find_package(FFTW3)
 macro_log_feature(FFTW3_FOUND "FFTW3" "A fast, free C FFT library" "http://www.fftw.org/" FALSE "" "Required by the Krita for fast convolution operators and some G'Mic features")
@@ -649,7 +649,7 @@ set(BASICFLAKES_INCLUDES ${KOWIDGETS_INCLUDES}
 ####################################################
 ###################################################
 
-calligra_dzrop_product_on_bad_condition( APP_KRITA
+calligra_drop_product_on_bad_condition( APP_KRITA
     EIGEN3_FOUND "Eigen devel not found"
     EXIV2_FOUND "libexiv2 devel not found"
     HAVE_REQUIRED_LCMS_VERSION "lcms devel not found"

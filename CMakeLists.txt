@@ -296,9 +296,6 @@ set(CALLIGRA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/krita)
 ############################
 ###########################
 
-find_package(ZLIB REQUIRED)
-macro_bool_to_01(ZLIB_FOUND HAVE_ZLIB)
-
 find_package(PNG REQUIRED)
 
 if (APPLE)
@@ -323,6 +320,10 @@ endif ()
 ##
 ## Check for OpenEXR
 ##
+macro_optional_find_package(ZLIB)
+macro_log_feature(ZLIB_FOUND "zlib" "Compression library" "http://www.zlib.net/" FALSE "" "Optionally used by the G'Mic and the PSD plugins")
+macro_bool_to_01(ZLIB_FOUND HAVE_ZLIB)
+
 
 macro_optional_find_package(OpenEXR)
 macro_log_feature(OPENEXR_FOUND "OpenEXR" "High dynamic-range (HDR) image file format" "http://www.openexr.com" FALSE "" "Required by the Krita OpenEXR filter")

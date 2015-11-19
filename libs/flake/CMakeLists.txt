@@ -35,7 +35,6 @@ set(kritaflake_SRCS
     KoShapeManagerPaintingStrategy.cpp
     KoShapeManager.cpp
     KoShapePaintingContext.cpp
-    KoShapePainter.cpp
     KoFrameShape.cpp
     KoUnavailShape.cpp
     KoMarkerData.cpp
@@ -177,6 +176,7 @@ set(kritaflake_SRCS
     tools/KoCreateShapesToolFactory.cpp
     tools/KoShapeRubberSelectStrategy.cpp
     tools/KoPathSegmentChangeStrategy.cpp
+    svg/KoShapePainter.cpp
     svg/SvgUtil.cpp
     svg/SvgGraphicContext.cpp
     svg/SvgSavingContext.cpp

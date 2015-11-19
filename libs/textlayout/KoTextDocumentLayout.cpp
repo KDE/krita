@@ -42,7 +42,6 @@
 #include <KoPostscriptPaintDevice.h>
 #include <KoShape.h>
 #include <KoShapeContainer.h>
-#include <KoAnnotationLayoutManager.h>
 #include <KoAnnotation.h>
 #include <KoTextDocument.h>
 #include <KoUnit.h>
@@ -81,7 +80,6 @@ public:
        , allowPositionInlineObject(true)
        , continuationObstruction(0)
        , referencedLayout(0)
-       , annotationLayoutManager(0)
        , defaultTabSizing(0)
        , y(0)
        , isLayouting(false)
@@ -123,8 +121,6 @@ public:
     KoTextLayoutObstruction *continuationObstruction;
 
     KoTextDocumentLayout *referencedLayout;
-
-    KoAnnotationLayoutManager *annotationLayoutManager;
 
     QHash<KoInlineObject *, KoTextLayoutRootArea *> rootAreaForInlineObject;
 

@@ -126,7 +126,7 @@ option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binar
 ########################
 #######################
 
-# For predefined productsets see the definitions in CalligraProducts.cmake and
+# For predefined productsets see the definitions in KritaProducts.cmake and
 # in the files in the folder cmake/productsets.
 
 # Finding out the products & features to build is done in 5 steps:
@@ -137,11 +137,11 @@ option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binar
 # 5. estimate which of the products/features can be build by internal deps
 
 # get the special macros
-include(CalligraProductSetMacros)
+include(KritaProductsetMacros)
 include(MacroJPEG)
 
 # get the definitions of products, features and product sets
-include(CalligraProducts.cmake)
+include(KritaProducts.cmake)
 
 set(PRODUCTSET_DEFAULT "ALL")
 # temporary migration support

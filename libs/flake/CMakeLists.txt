@@ -98,9 +98,6 @@ set(kritaflake_SRCS
     KoInputDeviceHandler.cpp
     KoInputDeviceHandlerEvent.cpp
     KoInputDeviceHandlerRegistry.cpp
-    KoEventAction.cpp
-    KoEventActionFactoryBase.cpp
-    KoEventActionRegistry.cpp
     KoImageData.cpp
     KoImageData_p.cpp
     KoImageCollection.cpp
@@ -150,8 +147,6 @@ set(kritaflake_SRCS
     commands/KoConnectionShapeTypeCommand.cpp
     commands/KoShapeShadowCommand.cpp
     commands/KoPathReverseCommand.cpp
-    commands/KoEventActionAddCommand.cpp
-    commands/KoEventActionRemoveCommand.cpp
     commands/KoShapeRenameCommand.cpp
     commands/KoShapeRunAroundCommand.cpp
     commands/KoPathPointMergeCommand.cpp

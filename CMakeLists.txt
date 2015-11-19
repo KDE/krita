@@ -671,6 +671,4 @@ macro_display_feature_log()
 calligra_product_deps_report("product_deps")
 calligra_log_should_build()
 
-add_custom_target(apidox doc/api/gendocs.pl WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
-
 configure_file(KoConfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h )

@@ -18,16 +18,23 @@
 
 #include "kis_composite_progress_proxy.h"
 
+#include "kis_debug.h"
+
 void KisCompositeProgressProxy::addProxy(KoProgressProxy *proxy)
 {
     m_proxies.append(proxy);
+    if (!m_uniqueProxies.contains(proxy)) {
+        m_uniqueProxies.append(proxy);
+    }
 }
 
 void KisCompositeProgressProxy::removeProxy(KoProgressProxy *proxy)
 {
-    m_proxies.removeAll(proxy);
+    m_proxies.removeOne(proxy);
+    if (!m_proxies.contains(proxy)) {
+        m_uniqueProxies.removeOne(proxy);
+    }
 }
-
 
 int KisCompositeProgressProxy::maximum() const
 {
@@ -38,21 +45,21 @@ int KisCompositeProgressProxy::maximum() const
 
 void KisCompositeProgressProxy::setValue(int value)
 {
-    foreach(KoProgressProxy *proxy, m_proxies) {
+    foreach(KoProgressProxy *proxy, m_uniqueProxies) {
         proxy->setValue(value);
     }
 }
 
 void KisCompositeProgressProxy::setRange(int minimum, int maximum)
 {
-    foreach(KoProgressProxy *proxy, m_proxies) {
+    foreach(KoProgressProxy *proxy, m_uniqueProxies) {
         proxy->setRange(minimum, maximum);
     }
 }
 
 void KisCompositeProgressProxy::setFormat(const QString &format)
 {
-    foreach(KoProgressProxy *proxy, m_proxies) {
+    foreach(KoProgressProxy *proxy, m_uniqueProxies) {
         proxy->setFormat(format);
     }
 }

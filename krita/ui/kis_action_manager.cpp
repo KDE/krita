@@ -31,6 +31,15 @@
 #include "operations/kis_operation.h"
 #include "kis_layer.h"
 #include "KisDocument.h"
+#include "kis_action_registry.h"
+
+#include "QFile"
+#include <QDomDocument>
+#include <QDomElement>
+
+#include "QFile"
+#include <QDomDocument>
+#include <QDomElement>
 
 
 class Q_DECL_HIDDEN KisActionManager::Private {
@@ -57,6 +66,47 @@ KisActionManager::KisActionManager(KisViewManager* viewManager)
 
 KisActionManager::~KisActionManager()
 {
+
+#if 0
+  if ((d->actions.size() > 0)) {
+
+       QDomDocument doc;
+       QDomElement e = doc.createElement("Actions");
+       e.setAttribute("version", "2");
+       doc.appendChild(e);
+
+       foreach(KisAction *action, d->actions) {
+           QDomElement a = doc.createElement("Action");
+           a.setAttribute("name", action->objectName());
+
+           // But seriously, XML is the worst format ever designed
+           auto addElement = [&](QString title, QString content) {
+               QDomElement newNode = doc.createElement(title);
+               QDomText    newText = doc.createTextNode(content);
+               newNode.appendChild(newText);
+               a.appendChild(newNode);
+           };
+
+           addElement("icon", action->icon().name());
+           addElement("text", action->text());
+           addElement("whatsThis" , action->whatsThis());
+           addElement("toolTip" , action->toolTip());
+           addElement("iconText" , action->iconText());
+           addElement("shortcut" , action->shortcut().toString());
+           addElement("activationFlags" , QString::number(action->activationFlags(),2));;
+           addElement("activationConditions" , QString::number(action->activationConditions(),2));
+           addElement("defaultShortcut" , action->defaultShortcut().toString());
+           addElement("isCheckable" , QString((action->isChecked() ? "true" : "false")));
+           addElement("statusTip", action->statusTip());
+           e.appendChild(a);
+       }
+       QFile f("ActionManager.action");
+       f.open(QFile::WriteOnly);
+       f.write(doc.toString().toUtf8());
+       f.close();
+
+   }
+#endif
     delete d;
 }
 
@@ -78,6 +128,7 @@ void KisActionManager::addAction(const QString& name, KisAction* action)
     d->viewManager->actionCollection()->setDefaultShortcut(action, action->defaultShortcut());
     d->actions.append(action);
     action->setActionManager(this);
+    KisActionRegistry::instance()->addAction(name, action);
 }
 
 void KisActionManager::takeAction(KisAction* action)
@@ -98,6 +149,29 @@ KisAction *KisActionManager::actionByName(const QString &name) const
         }
     }
     return 0;
+}
+
+
+KisAction *KisActionManager::createAction(const QString &name)
+{
+    KisAction *a = actionByName(name); // Check if the action already exists
+    if (a) {
+        return a;
+    }
+
+    // There is some tension here. KisActionManager is supposed to be in control
+    // of global actions, but these actions are supposed to be duplicated. We
+    // will add them to the KisActionRegistry for the time being so we can get
+    // properly categorized shortcuts.
+    a = new KisAction();
+    KisActionRegistry::instance()->propertizeAction(name, a);
+    KisActionRegistry::instance()->addAction(name, a);
+
+    // TODO: Add other static data (activationFlags, etc.) using getActionXml();
+
+    addAction(name, a);
+
+    return a;
 }
 
 void KisActionManager::updateGUI()
@@ -213,7 +287,7 @@ void KisActionManager::updateGUI()
         }
 
         enable = enable && (int)(action->activationConditions() & conditions) == (int)action->activationConditions();
-        
+
         if (node && enable) {
             foreach (const QString &type, action->excludedNodeTypes()) {
                 if (node->inherits(type.toLatin1())) {

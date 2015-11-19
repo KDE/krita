@@ -16,5 +16,6 @@
         <file>rotate_smooth.xpm</file>
         <file>zoom_discrete.xpm</file>
         <file>zoom_smooth.xpm</file>
+        <file>tool_freehand_cursor.png</file>
     </qresource>
 </RCC>

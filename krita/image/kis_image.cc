@@ -192,11 +192,8 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
     }
 
     const KoColorSpace *c;
-    if (colorSpace == 0) {
+    if (colorSpace != 0) {
         c = colorSpace;
-        // m_d = new KisImagePrivate(this, width, height,
-        //                           KoColorSpaceRegistry::instance()->rgb8(),
-        //                           undoStore, startProjection);
     } else {
         c = KoColorSpaceRegistry::instance()->rgb8();
     }
@@ -564,7 +561,7 @@ void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterSt
     applicator.end();
 }
 
-void KisImage::scaleNode(KisNodeSP node, qreal sx, qreal sy, KisFilterStrategy *filterStrategy)
+void KisImage::scaleNode(KisNodeSP node, qreal scaleX, qreal scaleY, KisFilterStrategy *filterStrategy)
 {
     KUndo2MagicString actionName(kundo2_i18n("Scale Layer"));
     KisImageSignalVector emitSignals;
@@ -575,7 +572,7 @@ void KisImage::scaleNode(KisNodeSP node, qreal sx, qreal sy, KisFilterStrategy *
                                        emitSignals, actionName);
 
     KisProcessingVisitorSP visitor =
-        new KisTransformProcessingVisitor(sx, sy,
+        new KisTransformProcessingVisitor(scaleX, scaleY,
                                           0, 0,
                                           QPointF(),
                                           0,
@@ -1360,72 +1357,26 @@ QImage KisImage::convertToQImage(qint32 x,
 
 
 
-QImage KisImage::convertToQImage(const QRect& scaledRect, const QSize& scaledImageSize, const KoColorProfile *profile)
+QImage KisImage::convertToQImage(const QSize& scaledImageSize, const KoColorProfile *profile)
 {
-
-    if (scaledRect.isEmpty() || scaledImageSize.isEmpty()) {
+    if (scaledImageSize.isEmpty()) {
         return QImage();
     }
 
-    try {
-        qint32 imageWidth = width();
-        qint32 imageHeight = height();
-        quint32 pixelSize = colorSpace()->pixelSize();
+    KisPaintDeviceSP dev = new KisPaintDevice(*projection().data());
 
-        double xScale = static_cast<double>(imageWidth) / scaledImageSize.width();
-        double yScale = static_cast<double>(imageHeight) / scaledImageSize.height();
+    double scaleX = qreal(scaledImageSize.width()) / width();
+    double scaleY = qreal(scaledImageSize.height()) / height();
 
-        QRect srcRect;
+    QPointer<KoUpdater> updater = new KoDummyUpdater();
 
-        srcRect.setLeft(static_cast<int>(scaledRect.left() * xScale));
-        srcRect.setRight(static_cast<int>(ceil((scaledRect.right() + 1) * xScale)) - 1);
-        srcRect.setTop(static_cast<int>(scaledRect.top() * yScale));
-        srcRect.setBottom(static_cast<int>(ceil((scaledRect.bottom() + 1) * yScale)) - 1);
+    KisTransformWorker worker(dev, scaleX, scaleY, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, updater, KisFilterStrategyRegistry::instance()->value("Bicubic"));
+    worker.run();
 
-        KisPaintDeviceSP mergedImage = projection();
-        quint8 *scaledImageData = new quint8[scaledRect.width() * scaledRect.height() * pixelSize];
+    delete updater;
 
-        quint8 *imageRow = new quint8[srcRect.width() * pixelSize];
-        const qint32 imageRowX = srcRect.x();
-
-        for (qint32 y = 0; y < scaledRect.height(); ++y) {
-
-            qint32 dstY = scaledRect.y() + y;
-            qint32 dstX = scaledRect.x();
-            qint32 srcY = (dstY * imageHeight) / scaledImageSize.height();
-
-            mergedImage->readBytes(imageRow, imageRowX, srcY, srcRect.width(), 1);
-
-            quint8 *dstPixel = scaledImageData + (y * scaledRect.width() * pixelSize);
-            quint32 columnsRemaining = scaledRect.width();
-
-            while (columnsRemaining > 0) {
-
-                qint32 srcX = (dstX * imageWidth) / scaledImageSize.width();
-
-                memcpy(dstPixel, imageRow + ((srcX - imageRowX) * pixelSize), pixelSize);
-
-                ++dstX;
-                dstPixel += pixelSize;
-                --columnsRemaining;
-            }
-        }
-        delete [] imageRow;
-
-        QImage image = colorSpace()->convertToQImage(scaledImageData, scaledRect.width(), scaledRect.height(), const_cast<KoColorProfile*>(profile),
-                                                     KoColorConversionTransformation::internalRenderingIntent(),
-                                                     KoColorConversionTransformation::internalConversionFlags());
-
-        delete [] scaledImageData;
-
-        return image;
-    }
-    catch (std::bad_alloc) {
-        warnKrita << "KisImage::convertToQImage ran out of memory";
-        return QImage();
-    }
+    return dev->convertToQImage(profile);
 }
-
 void KisImage::notifyLayersChanged()
 {
     m_d->signalRouter.emitNotification(LayersChangedSignal);

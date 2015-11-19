@@ -26,8 +26,10 @@ class QPen;
 class QPointF;
 class QPainterPath;
 class QBitArray;
+
 #include <QVector>
 #include "kritaimage_export.h"
+#include "kis_types.h"
 
 namespace KritaUtils
 {
@@ -64,8 +66,9 @@ namespace KritaUtils
     QBitArray KRITAIMAGE_EXPORT mergeChannelFlags(const QBitArray &flags, const QBitArray &parentFlags);
 
     bool KRITAIMAGE_EXPORT compareChannelFlags(QBitArray f1, QBitArray f2);
-
     QString KRITAIMAGE_EXPORT toLocalizedOnOff(bool value);
+
+    KisNodeSP KRITAIMAGE_EXPORT nearestNodeAfterRemoval(KisNodeSP node);
 }
 
 #endif /* __KRITA_UTILS_H */

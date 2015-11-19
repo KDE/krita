@@ -92,7 +92,7 @@ add_library(kritapigment SHARED ${kritapigment_SRCS})
 generate_export_header(kritapigment)
 
 if (HAVE_VC)
-    target_link_libraries(kritapigment KF5::I18n )
+    target_link_libraries(kritapigment KF5::I18n KF5::ConfigCore)
     target_link_libraries(kritapigment LINK_INTERFACE_LIBRARIES KF5::I18n )
 endif()
 

@@ -5,5 +5,10 @@
         <file>credits.txt</file>
         <file>developers.txt</file>
         <file>LICENSE</file>
+        <file>forumfooter.html</file>
+        <file>forumheader.html</file>
+        <file>links.html</file>
+        <file>newsfooter.html</file>
+        <file>newsheader.html</file>
     </qresource>
 </RCC>

@@ -1,60 +1,61 @@
-#  package_calligra.bat
+#  Copyright (c) 2015 Michael Abrahams <miabraha@gmail.com>
+#  package_calligra.ps1
 #
-#  Copies relevant files from the calligra inst and kderoot folders
+#  Copies relevant files from the calligra inst and kderoot folders.
 #
-
-#  TODO: check that /etc/dbus-1/ is properly installed
-#  TODO: check that icons are properly installed
-#  TODO: check that /share/apps/ is properly installed
-#  TODO: check share\\kde4\\services is properly installed
+#
+#  Information about the files to copy is contained in krita-files.json. The
+#  directory structure is specified here.
+#
 
 #  Safety check:
 #  Make sure key variables are defined
 
-if ($C2WINSTALL_INPUT -eq $null) {
-  echo "!!! C2WINSTALL VARIABLES NOT PROPERLY DEFINED !!!"
-  echo "Operation cancelled."
+if (($env:KRITA_INPUT -eq $null) -or ($env:KRITA_OUTPUT -eq $null)) {
+  echo "!!! ENVIRONMENT VARIABLES NOT PROPERLY DEFINED !!!"
+  echo "(Did you run env.ps1?)"
   Exit
 }
 
-if ($C2WINSTALL_INPUT -eq $null) {
-  echo "!!! C2WINSTALL VARIABLES NOT PROPERLY DEFINED !!!"
-  echo "Operation cancelled."
-  Exit
-}
+# Create directories for the installer.
+mkdir "$env:KRITA_INPUT" -ea SilentlyContinue
+mkdir "$env:KRITA_INPUT\bin" -ea SilentlyContinue
+mkdir "$env:KRITA_INPUT\etc" -ea SilentlyContinue
+mkdir "$env:KRITA_INPUT\lib" -ea SilentlyContinue
+mkdir "$env:KRITA_INPUT\lib\krita" -ea SilentlyContinue
+mkdir "$env:KRITA_INPUT\lib\plugins\styles" -ea SilentlyContinue
+mkdir "$env:KRITA_INPUT\lib\plugins\imageformats" -ea SilentlyContinue
+mkdir "$env:KRITA_INPUT\share" -ea SilentlyContinue
+mkdir "$env:KRITA_INPUT\share\appdata" -ea SilentlyContinue
+mkdir "$env:KRITA_INPUT\share\applications" -ea SilentlyContinue
+mkdir "$env:KRITA_INPUT\share\krita" -ea SilentlyContinue
+mkdir "$env:KRITA_INPUT\share\config" -ea SilentlyContinue
+mkdir "$env:KRITA_INPUT\etc\dbus-1\" -ea SilentlyContinue
+mkdir "$env:KRITA_INPUT\etc\xdg\" -ea SilentlyContinue
+mkdir "$env:KRITA_INPUT\share\dbus-1\" -ea SilentlyContinue
+mkdir "$env:KRITA_INPUT\share\dbus-1\interfaces" -ea SilentlyContinue
+mkdir "$env:KRITA_INPUT\share\dbus-1\services" -ea SilentlyContinue
+mkdir "$env:KRITA_INPUT\share\dbus-1\system-services"-ea SilentlyContinue
+mkdir "$env:KRITA_INPUT\share\kservices5" -ea SilentlyContinue
+mkdir "$env:KRITA_INPUT\share\kservicetypes5" -ea SilentlyContinue
 
+mkdir "$env:KRITA_OUTPUT" -ea SilentlyContinue
 
-# rm -r "$C2WINSTALL_INPUT"
-# Create redistribution directories ( )
-
-mkdir "$C2WINSTALL_INPUT" -ea SilentlyContinue
-mkdir "$C2WINSTALL_OUTPUT" -ea SilentlyContinue
-mkdir "$C2WINSTALL_INPUT\bin" -ea SilentlyContinue
-mkdir "$C2WINSTALL_INPUT\etc" -ea SilentlyContinue
-mkdir "$C2WINSTALL_INPUT\lib" -ea SilentlyContinue
-mkdir "$C2WINSTALL_INPUT\lib\kde4" -ea SilentlyContinue
-mkdir "$C2WINSTALL_INPUT\plugins" -ea SilentlyContinue
-mkdir "$C2WINSTALL_INPUT\share" -ea SilentlyContinue
-mkdir "$C2WINSTALL_INPUT\lib\kde4\styles" -ea SilentlyContinue
-mkdir "$C2WINSTALL_INPUT\lib\kde4\imageformats" -ea SilentlyContinue
-mkdir "$C2WINSTALL_INPUT\lib\kde4\styles\imageformats" -ea SilentlyContinue
-mkdir "$C2WINSTALL_INPUT\share\applications\kde4" -ea SilentlyContinue
-mkdir "$C2WINSTALL_INPUT\share\applications\kde4\apps" -ea SilentlyContinue
-mkdir "$C2WINSTALL_INPUT\share\config" -ea SilentlyContinue
-mkdir "$C2WINSTALL_INPUT\etc\dbus-1\" -ea SilentlyContinue
-mkdir "$C2WINSTALL_INPUT\share\dbus-1\" -ea SilentlyContinue
-mkdir "$C2WINSTALL_INPUT\share\dbus-1\interfaces" -ea SilentlyContinue
-mkdir "$C2WINSTALL_INPUT\share\dbus-1\services" -ea SilentlyContinue
-mkdir "$C2WINSTALL_INPUT\share\dbus-1\system-services"-ea SilentlyContinue
-mkdir "$C2WINSTALL_INPUT\share\kde4\services"-ea SilentlyContinue
-mkdir "$C2WINSTALL_INPUT\share\kde4\servicetypes"-ea SilentlyContinue
-
-
+# The format of the JSON is as follows.
+# Each data item has four elements.
+#
+# "dir" is the destination directory, relative to $KRITA_INPUT. It is posssible
+#       to have several different groups of files copied to the same destination
+#       directory. DIR must exist already, created in the "mkdir" list above.
+# "files" is a list of files copied into DIR.
+# "msg" will be displayed during the copying procedure.
+# "comment" is ignored by this script.
 $installinfo = ConvertFrom-Json ((Get-Content "krita-files.json") -join "`n")
 
 
+# Helper function - basically an rsync kinda thing.
+# Copy items only if they are newer, return error string on failure.
 function copy-newer($src, $dst) {
-    # Copy items only if they are newer, return error string on failure
     Try {
         $src_item = Get-Item $src -ErrorAction SilentlyContinue
         if (-not $?) {
@@ -65,6 +66,7 @@ function copy-newer($src, $dst) {
             $src_update = [datetime](Get-ItemProperty -Path $src -Name LastWriteTime)[0].LastWriteTime
             $dst_update = [datetime](Get-ItemProperty -Path $dst -Name LastWriteTime)[0].LastWriteTime
             if ($src_update -le $dst_update) {
+                # Source file is not newer, skip this file
                 return ""
             }
         }
@@ -88,18 +90,21 @@ function copy-newer($src, $dst) {
 
 foreach ($i in $installinfo.InstallationInfo) {
 
-    #Print messages
+    # Print messages from JSON data
     if ($i.msg) {
         echo "$($i.msg)..."
     }
 
-    #One directory per group
-    $dst = "$C2WINSTALL_INPUT\$($i.dir)"
+    # One directory per group in JSON data
+    $dst = "$env:KRITA_INPUT\$($i.dir)"
 
     #Loop through files
     foreach ($f in $i.files) {
-        $src = "$CALLIGRA_INST\$f"
+        $src = "$env:CALLIGRA_INST\$f"
+        echo "Copying - $src"
         $errstr = copy-newer $src $dst
+
+        # If we got an error when copying, print something helpful
         if ( $errstr ) {
             if ($Error[0].Exception.GetType() -eq [System.IO.IOException]) {
                 echo "INFO: file $dst already exists."
@@ -113,11 +118,3 @@ foreach ($i in $installinfo.InstallationInfo) {
         }
     }
 }
-
-
-# Had to change:
-# share\kde4\services\basicflakesplugin.desktop, share\kde4\services
-#
-
-
-# & $C2WINSTALL_INPUT\..\c2winstaller\res\package\env.bat $C2WINSTALL_INPUT

@@ -17,20 +17,20 @@
 -->
 <Include xmlns="http://schemas.microsoft.com/wix/2006/wi">
 
-<?warning ..Actually including the VC2010 DLLs?>
+<?warning ..Actually including the VC2015 DLLs?>
 	<!-- Bundling DLLs directly -->
 	<DirectoryRef Id="BIN">
-		<Component Id="MSVCP100.DLL"  DiskId="1" Guid="D3C56B68-AC50-4efa-A130-9D4A4D0CFD0F">
-			<File Id="MSVCP100.DLL" Name="MSVCP100.DLL" Source="$(env.C2WINSTALL_VC2010_DLLS)\msvcp100.dll" />
+		<Component Id="MSVCP140.DLL"  DiskId="1" Guid="D3C56B68-AC50-4efa-A130-9D4A4D0CFD0F">
+			<File Id="MSVCP140.DLL" Name="MSVCP140.DLL" Source="$(env.KRITA_VC2015_DLLS)\msvcp140.dll" />
 		</Component>
-		<Component Id="MSVCR100.DLL"  DiskId="1" Guid="E9BC50D1-715E-40eb-A1D8-6D3F2F9DEAA9">
-			<File Id="MSVCR100.DLL" Name="MSVCR100.DLL" Source="$(env.C2WINSTALL_VC2010_DLLS)\msvcr100.dll" />
+		<Component Id="MSVCR140.DLL"  DiskId="1" Guid="E9BC50D1-715E-40eb-A1D8-6D3F2F9DEAA9">
+			<File Id="MSVCR140.DLL" Name="MSVCR140.DLL" Source="$(env.KRITA_VC2015_DLLS)\msvcr140.dll" />
 		</Component>
 		
 	</DirectoryRef>
 
 	<FeatureRef Id="DefaultFeature">
-		<ComponentRef Id="MSVCP100.DLL" />
-		<ComponentRef Id="MSVCR100.DLL" />
+		<ComponentRef Id="MSVCP140.DLL" />
+		<ComponentRef Id="MSVCR140.DLL" />
 	</FeatureRef>
 </Include>

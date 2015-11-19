@@ -92,7 +92,7 @@ KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& fro
 
     if (!m_chain->manager()->getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {
-            return KisImportExportFilter::OK; // FIXME Cancel doesn't exist :(
+            return KisImportExportFilter::UserCancelled;
         }
     }
     else {

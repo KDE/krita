@@ -49,10 +49,9 @@ K_PLUGIN_FACTORY_WITH_JSON(metadataeditorPluginFactory, "kritametadataeditor.jso
 metadataeditorPlugin::metadataeditorPlugin(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent)
 {
-    KisAction *action  = new KisAction(i18n("&Edit metadata..."), this);
+    KisAction *action  = createAction("EditLayerMetaData");
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    addAction("EditLayerMetaData", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotEditLayerMetaData()));
 }
 

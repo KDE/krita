@@ -120,7 +120,7 @@ public:
     /**
      * XXX: docs!
      */
-    QImage convertToQImage(const QRect& scaledRect, const QSize& scaledImageSize, const KoColorProfile *profile);
+    QImage convertToQImage(const QSize& scaledImageSize, const KoColorProfile *profile);
 
     /**
      * Calls KisUpdateScheduler::lock
@@ -183,8 +183,11 @@ public:
      */
     void cropNode(KisNodeSP node, const QRect& newRect);
 
+    /// XXX: ApiDox
     void scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy);
-    void scaleNode(KisNodeSP node, qreal sx, qreal sy, KisFilterStrategy *filterStrategy);
+
+    /// XXX: ApiDox
+    void scaleNode(KisNodeSP node, qreal scaleX, qreal scaleY, KisFilterStrategy *filterStrategy);
 
     /**
      * Execute a rotate transform on all layers in this image.

@@ -290,54 +290,42 @@ void KisLayerManager::activateLayer(KisLayerSP layer)
 
 void KisLayerManager::setup(KisActionManager* actionManager)
 {
-    m_imageFlatten = new KisAction(i18n("&Flatten image"), this);
+    m_imageFlatten = actionManager->createAction("flatten_image");
     m_imageFlatten->setActivationFlags(KisAction::ACTIVE_LAYER);
-    m_imageFlatten->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_E));
-    actionManager->addAction("flatten_image", m_imageFlatten);
     connect(m_imageFlatten, SIGNAL(triggered()), this, SLOT(flattenImage()));
 
-    m_imageMergeLayer = new KisAction(i18n("&Merge with Layer Below"), this);
+    m_imageMergeLayer = actionManager->createAction("merge_layer");
     m_imageMergeLayer->setActivationFlags(KisAction::ACTIVE_LAYER);
-    m_imageMergeLayer->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
-    actionManager->addAction("merge_layer", m_imageMergeLayer);
     connect(m_imageMergeLayer, SIGNAL(triggered()), this, SLOT(mergeLayer()));
 
-    m_flattenLayer = new KisAction(i18n("&Flatten Layer"), this);
+    m_flattenLayer = actionManager->createAction("flatten_layer");
     m_flattenLayer->setActivationFlags(KisAction::ACTIVE_LAYER);
-    actionManager->addAction("flatten_layer", m_flattenLayer);
     connect(m_flattenLayer, SIGNAL(triggered()), this, SLOT(flattenLayer()));
 
-    KisAction * action = new KisAction(i18n("Rename current layer"), this);
+    KisAction * action = actionManager->createAction("RenameCurrentLayer");
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
-    action->setDefaultShortcut(QKeySequence(Qt::Key_F2));
-    actionManager->addAction("RenameCurrentLayer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(layerProperties()));
 
-    m_rasterizeLayer = new KisAction(i18n("Rasterize Layer"), this);
+    m_rasterizeLayer = actionManager->createAction("rasterize_layer");
     m_rasterizeLayer->setActivationFlags(KisAction::ACTIVE_SHAPE_LAYER);
     m_rasterizeLayer->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    actionManager->addAction("rasterize_layer", m_rasterizeLayer);
     connect(m_rasterizeLayer, SIGNAL(triggered()), this, SLOT(rasterizeLayer()));
 
-    m_groupLayersSave = new KisAction(KisIconUtils::loadIcon("document-save"), i18n("Save Group Layers..."), this);
+    m_groupLayersSave = actionManager->createAction("save_groups_as_images");
     m_groupLayersSave->setActivationFlags(KisAction::ACTIVE_LAYER);
-    actionManager->addAction("save_groups_as_images", m_groupLayersSave);
     connect(m_groupLayersSave, SIGNAL(triggered()), this, SLOT(saveGroupLayers()));
 
-    m_imageResizeToLayer = new KisAction(i18n("Trim to Current Layer"), this);
+    m_imageResizeToLayer = actionManager->createAction("resizeimagetolayer");
     m_imageResizeToLayer->setActivationFlags(KisAction::ACTIVE_LAYER);
-    actionManager->addAction("resizeimagetolayer", m_imageResizeToLayer);
     connect(m_imageResizeToLayer, SIGNAL(triggered()), this, SLOT(imageResizeToActiveLayer()));
 
-    KisAction *trimToImage = new KisAction(KisIconUtils::loadIcon("trim-to-image"), i18n("Trim to Image Size"), this);
-    trimToImage->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    actionManager->addAction("trim_to_image", trimToImage);
-    connect(trimToImage, SIGNAL(triggered()), this, SLOT(trimToImage()));
+    action = actionManager->createAction("trim_to_image");
+    action->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    connect(action, SIGNAL(triggered()), this, SLOT(trimToImage()));
 
-    m_layerStyle  = new KisAction(i18n("Layer Style..."), this);
+    m_layerStyle  = actionManager->createAction("layer_style");
     m_layerStyle->setActivationFlags(KisAction::ACTIVE_LAYER);
     m_layerStyle->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    actionManager->addAction("layer_style", m_layerStyle);
     connect(m_layerStyle, SIGNAL(triggered()), this, SLOT(layerStyle()));
 
 }

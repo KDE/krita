@@ -22,7 +22,7 @@ set(kritatooltransform_PART_SRCS
     strokes/transform_stroke_strategy.cpp
     )
 
-
+qt5_add_resources(kritatooltransform_PART_SRCS tool_transform.qrc)
 ki18n_wrap_ui(kritatooltransform_PART_SRCS wdg_tool_transform.ui)
 
 add_library(kritatooltransform MODULE ${kritatooltransform_PART_SRCS})
@@ -39,12 +39,6 @@ endif ()
 
 install(TARGETS kritatooltransform  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
-
-########### install files ###############
-
-install( FILES  
-    rotate_cursor.xpm
-DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
 install( FILES
     KisToolTransform.action

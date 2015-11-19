@@ -156,7 +156,7 @@ public:
      * @param ac the actionCollection that will be the parent of the actions.
      * @param controller tools registered with this controller will have all their actions added as well.
      */
-    void registerTools(KActionCollection *ac, KoCanvasController *controller);
+    void registerToolActions(KActionCollection *ac, KoCanvasController *controller);
 
     /**
      * Register a new canvas controller
@@ -223,6 +223,9 @@ public:
      * @returns lists of toolActions for the current tools.
      */
     QList<KoToolAction*> toolActionList() const;
+
+    /// Update the internal shortcuts of each tool. (Activation shortcuts are exposed already.)
+    void updateToolShortcuts();
 
     /// Request tool activation for the given canvas controller
     void requestToolActivation(KoCanvasController *controller);

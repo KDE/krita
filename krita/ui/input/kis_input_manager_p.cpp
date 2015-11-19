@@ -77,7 +77,7 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
         if (KisTabletDebugger::instance()->debugEnabled()) {
             QString pre = QString("[BLOCKED]");
             QMouseEvent *ev = static_cast<QMouseEvent*>(event);
-            dbgInput << KisTabletDebugger::instance()->eventToString(*ev,pre);
+            dbgTablet << KisTabletDebugger::instance()->eventToString(*ev,pre);
         }
         peckish = false;
         return true;
@@ -107,14 +107,14 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
 void KisInputManager::Private::EventEater::activate()
 {
     if (!hungry && (KisTabletDebugger::instance()->debugEnabled()))
-        dbgInput << "Ignoring mouse events.";
+        dbgTablet << "Ignoring mouse events.";
     hungry = true;
 }
 
 void KisInputManager::Private::EventEater::deactivate()
 {
     if (!hungry && (KisTabletDebugger::instance()->debugEnabled()))
-        dbgInput << "Accepting mouse events.";
+        dbgTablet << "Accepting mouse events.";
     hungry = false;
 }
 

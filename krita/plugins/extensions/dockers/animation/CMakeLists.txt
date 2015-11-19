@@ -4,7 +4,7 @@ set(KRITA_ANIMATIONDOCKER_PART_SRCS
     animation_dockers.cpp
     animation_docker.cpp
     timeline_docker.cpp
-    kis_onion_skin_dialog.cpp
+    onion_skins_docker.cpp
 
     timeline_layers_header.cpp
     timeline_ruler_header.cpp
@@ -21,11 +21,16 @@ set(KRITA_ANIMATIONDOCKER_PART_SRCS
     kis_draggable_tool_button.cpp
     kis_animation_utils.cpp
     kis_custom_modifiers_catcher.cpp
+
+    kis_equalizer_column.cpp
+    kis_equalizer_slider.cpp
+    kis_equalizer_button.cpp
+    kis_equalizer_widget.cpp
 )
 
 ki18n_wrap_ui(KRITA_ANIMATIONDOCKER_PART_SRCS
     wdg_animation.ui
-    kis_onion_skin_dialog.ui
+    onion_skins_docker.ui
 )
 
 add_library(kritaanimationdocker MODULE ${KRITA_ANIMATIONDOCKER_PART_SRCS})

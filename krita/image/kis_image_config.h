@@ -86,6 +86,9 @@ public:
     int onionSkinOpacity(int offset) const;
     void setOnionSkinOpacity(int offset, int value);
 
+    bool onionSkinState(int offset) const;
+    void setOnionSkinState(int offset, bool value);
+
     QColor onionSkinTintColorBackward() const;
     void setOnionSkinTintColorBackward(const QColor &value);
 
@@ -94,6 +97,9 @@ public:
 
     bool lazyFrameCreationEnabled(bool requestDefault = false) const;
     void setLazyFrameCreationEnabled(bool value);
+
+    bool showAdditionalOnionSkinsSettings(bool requestDefault = false) const;
+    void setShowAdditionalOnionSkinsSettings(bool value);
 
 private:
     Q_DISABLE_COPY(KisImageConfig)

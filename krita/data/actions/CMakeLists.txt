@@ -3,4 +3,6 @@ install( FILES
     InteractionTool.action
     PathTool.action
     TextTool.action
+    ConnectionTool.action
+    ReferencesTool.action
 DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)

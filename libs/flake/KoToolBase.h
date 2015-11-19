@@ -125,6 +125,7 @@ public:
      */
     QAction *action(const QString &name) const;
 
+
     /**
      * Called when (one of) the mouse or stylus buttons is pressed.
      * Implementors should call event->ignore() if they do not actually use the event.

@@ -60,41 +60,45 @@ KoToolBase::~KoToolBase()
     Q_D(const KoToolBase);
 
 // Enable this to easily generate action files for tools
-//    if (d->actions.size() > 0) {
 
-//        QDomDocument doc;
-//        QDomElement e = doc.createElement("Actions");
-//        e.setAttribute("name", toolId());
-//        e.setAttribute("version", "1");
-//        doc.appendChild(e);
+   //  if (actions().size() > 0) {
 
-//        foreach(QAction *ac, d->actions.values()) {
-//            QAction *action = qobject_cast<QAction*>(ac);
-//            if (action) {
-//                QDomElement a = doc.createElement("Action");
-//                a.setAttribute("name", action->objectName());
-//                a.setAttribute("icon", action->icon().name());
-//                a.setAttribute("text" , action->text());
-//                a.setAttribute("whatsThis" , action->whatsThis());
-//                a.setAttribute("toolTip" , action->toolTip());
-//                a.setAttribute("iconText" , action->iconText());
-//                a.setAttribute("shortcut" , action->shortcut(QAction::ActiveShortcut).toString());
-//                a.setAttribute("defaultShortcut" , action->shortcut(QAction::DefaultShortcut).toString());
-//                a.setAttribute("isCheckable" , QString((action->isChecked() ? "true" : "false")));
-//                a.setAttribute("statusTip", action->statusTip());
-//                e.appendChild(a);
-//            }
-//            else {
-//                qDebug() << "Got a QAction:" << ac->objectName();
-//            }
+   //     QDomDocument doc;
+   //     QDomElement e = doc.createElement("Actions");
+   //     e.setAttribute("name", toolId());
+   //     e.setAttribute("version", "2");
+   //     doc.appendChild(e);
 
-//        }
-//        QFile f(toolId() + ".action");
-//        f.open(QFile::WriteOnly);
-//        f.write(doc.toString().toUtf8());
-//        f.close();
+   //     foreach(QAction *action, actions().values()) {
+   //         QDomElement a = doc.createElement("Action");
+   //         a.setAttribute("name", action->objectName());
 
-//    }
+   //         // But seriously, XML is the worst format ever designed
+   //         auto addElement = [&](QString title, QString content) {
+   //             QDomElement newNode = doc.createElement(title);
+   //             QDomText    newText = doc.createTextNode(content);
+   //             newNode.appendChild(newText);
+   //             a.appendChild(newNode);
+   //         };
+
+   //         addElement("icon", action->icon().name());
+   //         addElement("text", action->text());
+   //         addElement("whatsThis" , action->whatsThis());
+   //         addElement("toolTip" , action->toolTip());
+   //         addElement("iconText" , action->iconText());
+   //         addElement("shortcut" , action->shortcut().toString());
+   //         addElement("defaultShortcut" , action->shortcut().toString());
+   //         addElement("isCheckable" , QString((action->isChecked() ? "true" : "false")));
+   //         addElement("statusTip", action->statusTip());
+   //         e.appendChild(a);
+   //     }
+   //     QFile f(toolId() + ".action");
+   //     f.open(QFile::WriteOnly);
+   //     f.write(doc.toString().toUtf8());
+   //     f.close();
+
+   // }
+
 //    else {
 //        qDebug() << "Tool" << toolId() << "has no actions";
 //    }

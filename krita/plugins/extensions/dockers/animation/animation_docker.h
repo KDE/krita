@@ -22,13 +22,14 @@
 #include "kritaimage_export.h"
 
 #include <QDockWidget>
+#include <QPointer>
 
 #include <kis_mainwindow_observer.h>
-#include "kis_action.h"
+#include <kis_action.h>
+#include <kis_canvas2.h>
 
-class KisCanvas2;
 class Ui_WdgAnimation;
-class KisOnionSkinDialog;
+class KisMainWindow;
 
 class AnimationDocker : public QDockWidget, public KisMainwindowObserver {
     Q_OBJECT
@@ -72,10 +73,8 @@ private Q_SLOTS:
 
 private:
 
-    KisCanvas2 *m_canvas;
+    QPointer<KisCanvas2> m_canvas;
     Ui_WdgAnimation *m_animationWidget;
-
-    KisOnionSkinDialog *m_onionSkinOptions;
 
     KisAction *m_previousFrameAction;
     KisAction *m_nextFrameAction;
@@ -93,6 +92,7 @@ private:
     KisAction *m_deleteKeyframeAction;
     KisAction *m_lazyFrameAction;
 
+    KisMainWindow *m_mainWindow;
 };
 
 

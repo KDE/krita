@@ -37,7 +37,7 @@
 #include "PresetImageProvider.h"
 #include "RecentImageImageProvider.h"
 #include "RecentFileManager.h"
-#include "MultiFeedRSSModel.h"
+#include "KisMultiFeedRSSModel.h"
 #include "FileSystemModel.h"
 #include "CompositeOpModel.h"
 #include "KeyboardModel.h"
@@ -81,7 +81,7 @@ static QObject *provideKritaRssModelObject(QQmlEngine *engine, QJSEngine *script
     Q_UNUSED(engine)
     Q_UNUSED(scriptEngine)
 
-    Welcome::MultiFeedRssModel *rssModel = new Welcome::MultiFeedRssModel;
+    MultiFeedRssModel *rssModel = new MultiFeedRssModel;
     rssModel->addFeed(QLatin1String("https://krita.org/feed/"));
 
     return rssModel;

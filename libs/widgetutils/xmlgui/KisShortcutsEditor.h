@@ -186,15 +186,7 @@ public:
     /**
      * Write the current settings to the \p config object.
      *
-     * This does not initialize the \p config object. It adds the
-     * configuration.
-     *
-     * @note this will not save the global configuration! globalaccel holds
-     * that part of the configuration.
-     * @see writeGlobalConfig()
-     *
-     * @param config Config object to save to or, or null to use the
-     *               applications config object
+     * @param config Config object to save to. Default is kritashortcutsrc.
      *
      */
     void writeConfiguration(KConfigGroup *config = 0) const;

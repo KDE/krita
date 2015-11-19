@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActionCollection version="2" name="Tools">
+  <Actions category="References Tool">
+    <text>References Tool</text>
+    <Action name="insert_autofootnote">
+      <icon></icon>
+      <text>Insert footnote with auto number</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert footnote with auto number</toolTip>
+      <iconText>Insert footnote with auto number</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="insert_configure_tableofcontents">
+      <icon>configure</icon>
+      <text>Insert Custom...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert a custom Table of Contents into the document.</toolTip>
+      <iconText>Insert Custom</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="insert_labeledfootnote">
+      <icon></icon>
+      <text>Insert Labeled Footnote</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert Labeled Footnote</toolTip>
+      <iconText>Insert Labeled Footnote</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="edit_paste_text">
+      <icon></icon>
+      <text></text>
+      <whatsThis></whatsThis>
+      <toolTip></toolTip>
+      <iconText></iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="format_footnotes">
+      <icon>configure</icon>
+      <text>Settings...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Settings</toolTip>
+      <iconText>Settings</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="change_text_direction">
+      <icon></icon>
+      <text>Change text direction</text>
+      <whatsThis></whatsThis>
+      <toolTip>Change writing direction</toolTip>
+      <iconText>Change text direction</iconText>
+      <shortcut>Ctrl+Shift+D</shortcut>
+      <defaultShortcut>Ctrl+Shift+D</defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="split_sections">
+      <icon></icon>
+      <text>Insert Paragraph between sections</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert Paragraph between sections</toolTip>
+      <iconText>Insert Paragraph between sections</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="repaint">
+      <icon></icon>
+      <text>Repaint</text>
+      <whatsThis></whatsThis>
+      <toolTip>Repaint</toolTip>
+      <iconText>Repaint</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="insert_link">
+      <icon></icon>
+      <text>Insert Link</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert a weblink or link to a bookmark.</toolTip>
+      <iconText>Insert Link</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="manage_bookmarks">
+      <icon></icon>
+      <text>Manage Bookmarks</text>
+      <whatsThis></whatsThis>
+      <toolTip>Manage your Bookmarks. Check where are they pointing to, Delete or Rename.</toolTip>
+      <iconText>Manage Bookmarks</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="format_stylist">
+      <icon></icon>
+      <text>Style Manager...</text>
+      <whatsThis>&lt;p>Change font and paragraph attributes of styles.&lt;/p>&lt;p>Multiple styles can be changed using the dialog box.&lt;/p></whatsThis>
+      <toolTip>Change attributes of styles</toolTip>
+      <iconText>Style Manager</iconText>
+      <shortcut>Ctrl+Alt+S</shortcut>
+      <defaultShortcut>Ctrl+Alt+S</defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="format_font">
+      <icon></icon>
+      <text>Font...</text>
+      <whatsThis>Change the attributes of the currently selected characters.</whatsThis>
+      <toolTip>Change character size, font, boldface, italics etc.</toolTip>
+      <iconText>Font</iconText>
+      <shortcut>Ctrl+Alt+F</shortcut>
+      <defaultShortcut>Ctrl+Alt+F</defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="format_fontsize">
+      <icon></icon>
+      <text>Font Size</text>
+      <whatsThis></whatsThis>
+      <toolTip>Font Size</toolTip>
+      <iconText>Font Size</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="format_textcolor">
+      <icon></icon>
+      <text></text>
+      <whatsThis></whatsThis>
+      <toolTip></toolTip>
+      <iconText></iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="format_alignblock">
+      <icon></icon>
+      <text>Align Block</text>
+      <whatsThis></whatsThis>
+      <toolTip>Align Block</toolTip>
+      <iconText>Align Block</iconText>
+      <shortcut>Ctrl+Alt+R</shortcut>
+      <defaultShortcut>Ctrl+Alt+R</defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="insert_bibliography">
+      <icon></icon>
+      <text>Insert Bibliography</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert a bibliography into the document.</toolTip>
+      <iconText>Insert Bibliography</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="insert_autoendnote">
+      <icon></icon>
+      <text>Insert endnote with auto number</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert endnote with auto number</toolTip>
+      <iconText>Insert endnote with auto number</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="format_endnotes">
+      <icon>configure</icon>
+      <text>Settings...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Settings</toolTip>
+      <iconText>Settings</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="invoke_bookmark_handler">
+      <icon></icon>
+      <text>Bookmarks</text>
+      <whatsThis></whatsThis>
+      <toolTip>Display a pop up that hosts the options to add new Bookmark or handle existing Bookmarks</toolTip>
+      <iconText>Bookmarks</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="format_numberlist">
+      <icon></icon>
+      <text>Numbered list</text>
+      <whatsThis></whatsThis>
+      <toolTip>Numbered list</toolTip>
+      <iconText>Numbered list</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="format_sub">
+      <icon></icon>
+      <text>Subscript</text>
+      <whatsThis></whatsThis>
+      <toolTip>Subscript</toolTip>
+      <iconText>Subscript</iconText>
+      <shortcut>Ctrl+Shift+B</shortcut>
+      <defaultShortcut>Ctrl+Shift+B</defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="fontsizedown">
+      <icon></icon>
+      <text>Decrease Font Size</text>
+      <whatsThis></whatsThis>
+      <toolTip>Decrease Font Size</toolTip>
+      <iconText>Decrease Font Size</iconText>
+      <shortcut>Ctrl+&lt;</shortcut>
+      <defaultShortcut>Ctrl+&lt;</defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="insert_citation">
+      <icon></icon>
+      <text>Insert Citation</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert a citation into the document.</toolTip>
+      <iconText>Insert Citation</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="configure_section">
+      <icon></icon>
+      <text>Configure current section</text>
+      <whatsThis></whatsThis>
+      <toolTip>Configure current section</toolTip>
+      <iconText>Configure current section</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="insert_index">
+      <icon></icon>
+      <text>Insert Index</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert Index</toolTip>
+      <iconText>Insert Index</iconText>
+      <shortcut>Ctrl+T</shortcut>
+      <defaultShortcut>Ctrl+T</defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="format_italic">
+      <icon></icon>
+      <text>Italic</text>
+      <whatsThis></whatsThis>
+      <toolTip>Italic</toolTip>
+      <iconText>Italic</iconText>
+      <shortcut>Ctrl+I</shortcut>
+      <defaultShortcut>Ctrl+I</defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="format_strike">
+      <icon></icon>
+      <text>Strikethrough</text>
+      <whatsThis></whatsThis>
+      <toolTip>Strikethrough</toolTip>
+      <iconText>Strikethrough</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="insert_custom_bibliography">
+      <icon></icon>
+      <text>Insert Custom Bibliography</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert a custom Bibliography into the document.</toolTip>
+      <iconText>Insert Custom Bibliography</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="detailed_debug_styles">
+      <icon></icon>
+      <text>Styles Debug</text>
+      <whatsThis></whatsThis>
+      <toolTip>Styles Debug</toolTip>
+      <iconText>Styles Debug</iconText>
+      <shortcut>Ctrl+Alt+Shift+S</shortcut>
+      <defaultShortcut>Ctrl+Alt+Shift+S</defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="format_bulletlist">
+      <icon></icon>
+      <text>Bullet list</text>
+      <whatsThis></whatsThis>
+      <toolTip>Bullet list</toolTip>
+      <iconText>Bullet list</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="format_underline">
+      <icon></icon>
+      <text>Underline</text>
+      <whatsThis></whatsThis>
+      <toolTip>Underline</toolTip>
+      <iconText>Underline</iconText>
+      <shortcut>Ctrl+U</shortcut>
+      <defaultShortcut>Ctrl+U</defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="format_aligncenter">
+      <icon></icon>
+      <text>Align Center</text>
+      <whatsThis></whatsThis>
+      <toolTip>Align Center</toolTip>
+      <iconText>Align Center</iconText>
+      <shortcut>Ctrl+Alt+C</shortcut>
+      <defaultShortcut>Ctrl+Alt+C</defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="shrink_to_fit">
+      <icon></icon>
+      <text>Shrink To Fit</text>
+      <whatsThis></whatsThis>
+      <toolTip>Shrink To Fit</toolTip>
+      <iconText>Shrink To Fit</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="edit_select_all">
+      <icon></icon>
+      <text>Select &amp;All</text>
+      <whatsThis></whatsThis>
+      <toolTip>Select All</toolTip>
+      <iconText>Select All</iconText>
+      <shortcut>Ctrl+A</shortcut>
+      <defaultShortcut>Ctrl+A</defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="format_increaseindent">
+      <icon></icon>
+      <text>Increase Indent</text>
+      <whatsThis></whatsThis>
+      <toolTip>Increase Indent</toolTip>
+      <iconText>Increase Indent</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="insert_tableofcontents">
+      <icon></icon>
+      <text>Insert</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert a Table of Contents into the document.</toolTip>
+      <iconText>Insert</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="detailed_debug_paragraphs">
+      <icon></icon>
+      <text>Paragraph Debug</text>
+      <whatsThis></whatsThis>
+      <toolTip>Paragraph Debug</toolTip>
+      <iconText>Paragraph Debug</iconText>
+      <shortcut>Ctrl+Alt+Shift+P</shortcut>
+      <defaultShortcut>Ctrl+Alt+Shift+P</defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="insert_labeledendnote">
+      <icon></icon>
+      <text>Insert Labeled Endnote</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert Labeled Endnote</toolTip>
+      <iconText>Insert Labeled Endnote</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="format_paragraph">
+      <icon></icon>
+      <text>Paragraph...</text>
+      <whatsThis>&lt;p>Change paragraph margins, text flow, borders, bullets, numbering etc.&lt;/p>&lt;p>Select text in multiple paragraphs to change the formatting of all selected paragraphs.&lt;/p>&lt;p>If no text is selected, the paragraph where the cursor is located will be changed.&lt;/p></whatsThis>
+      <toolTip>Change paragraph margins, text flow, borders, bullets, numbering etc.</toolTip>
+      <iconText>Paragraph</iconText>
+      <shortcut>Ctrl+Alt+P</shortcut>
+      <defaultShortcut>Ctrl+Alt+P</defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="nonbreaking_space">
+      <icon></icon>
+      <text>Insert Non-Breaking Space</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert Non-Breaking Space</toolTip>
+      <iconText>Insert Non-Breaking Space</iconText>
+      <shortcut>Ctrl+Space</shortcut>
+      <defaultShortcut>Ctrl+Space</defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="soft_hyphen">
+      <icon></icon>
+      <text>Insert Soft Hyphen</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert Soft Hyphen</toolTip>
+      <iconText>Insert Soft Hyphen</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="format_alignright">
+      <icon></icon>
+      <text>Align Right</text>
+      <whatsThis></whatsThis>
+      <toolTip>Align Right</toolTip>
+      <iconText>Align Right</iconText>
+      <shortcut>Ctrl+Alt+R</shortcut>
+      <defaultShortcut>Ctrl+Alt+R</defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="nonbreaking_hyphen">
+      <icon></icon>
+      <text>Insert Non-Breaking Hyphen</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert Non-Breaking Hyphen</toolTip>
+      <iconText>Insert Non-Breaking Hyphen</iconText>
+      <shortcut>Ctrl+Shift+-</shortcut>
+      <defaultShortcut>Ctrl+Shift+-</defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="format_tableofcontents">
+      <icon></icon>
+      <text>Configure...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Configure the Table of Contents</toolTip>
+      <iconText>Configure</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="insert_specialchar">
+      <icon></icon>
+      <text>Special Character...</text>
+      <whatsThis>Insert one or more symbols or characters not found on the keyboard.</whatsThis>
+      <toolTip>Insert one or more symbols or characters not found on the keyboard</toolTip>
+      <iconText>Special Character</iconText>
+      <shortcut>Alt+Shift+C</shortcut>
+      <defaultShortcut>Alt+Shift+C</defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="format_bold">
+      <icon></icon>
+      <text>Bold</text>
+      <whatsThis></whatsThis>
+      <toolTip>Bold</toolTip>
+      <iconText>Bold</iconText>
+      <shortcut>Ctrl+B</shortcut>
+      <defaultShortcut>Ctrl+B</defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="format_super">
+      <icon></icon>
+      <text>Superscript</text>
+      <whatsThis></whatsThis>
+      <toolTip>Superscript</toolTip>
+      <iconText>Superscript</iconText>
+      <shortcut>Ctrl+Shift+P</shortcut>
+      <defaultShortcut>Ctrl+Shift+P</defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="configure_bibliography">
+      <icon></icon>
+      <text>Configure</text>
+      <whatsThis></whatsThis>
+      <toolTip>Configure the bibliography</toolTip>
+      <iconText>Configure</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="insert_section">
+      <icon></icon>
+      <text>Insert new section</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert new section</toolTip>
+      <iconText>Insert new section</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="format_decreaseindent">
+      <icon></icon>
+      <text>Decrease Indent</text>
+      <whatsThis></whatsThis>
+      <toolTip>Decrease Indent</toolTip>
+      <iconText>Decrease Indent</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="fontsizeup">
+      <icon></icon>
+      <text>Increase Font Size</text>
+      <whatsThis></whatsThis>
+      <toolTip>Increase Font Size</toolTip>
+      <iconText>Increase Font Size</iconText>
+      <shortcut>Ctrl+></shortcut>
+      <defaultShortcut>Ctrl+></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="grow_to_fit_height">
+      <icon></icon>
+      <text>Grow To Fit Height</text>
+      <whatsThis></whatsThis>
+      <toolTip>Grow To Fit Height</toolTip>
+      <iconText>Grow To Fit Height</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="format_alignleft">
+      <icon></icon>
+      <text>Align Left</text>
+      <whatsThis></whatsThis>
+      <toolTip>Align Left</toolTip>
+      <iconText>Align Left</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="insert_bookmark">
+      <icon></icon>
+      <text>Add Bookmark</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert a Bookmark. This is useful to create links that point to areas within the document</toolTip>
+      <iconText>Add Bookmark</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="insert_variable">
+      <icon></icon>
+      <text>Variable</text>
+      <whatsThis></whatsThis>
+      <toolTip>Variable</toolTip>
+      <iconText>Variable</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="grow_to_fit_width">
+      <icon></icon>
+      <text>Grow To Fit Width</text>
+      <whatsThis></whatsThis>
+      <toolTip>Grow To Fit Width</toolTip>
+      <iconText>Grow To Fit Width</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="format_fontfamily">
+      <icon></icon>
+      <text>Font Family</text>
+      <whatsThis></whatsThis>
+      <toolTip>Font Family</toolTip>
+      <iconText>Font Family</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="insert_annotation">
+      <icon></icon>
+      <text>Insert Comment</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert Comment</toolTip>
+      <iconText>Insert Comment</iconText>
+      <shortcut>Ctrl+Shift+C</shortcut>
+      <defaultShortcut>Ctrl+Shift+C</defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="format_backgroundcolor">
+      <icon></icon>
+      <text></text>
+      <whatsThis></whatsThis>
+      <toolTip></toolTip>
+      <iconText></iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+  </Actions>
+</ActionCollection>

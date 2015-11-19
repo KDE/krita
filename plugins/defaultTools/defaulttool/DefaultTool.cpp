@@ -56,6 +56,7 @@
 #include <KoStrokeConfigWidget.h>
 #include <KoFillConfigWidget.h>
 #include <KoShadowConfigWidget.h>
+#include "kis_action_registry.h"
 
 #include <KoIcon.h>
 
@@ -211,64 +212,53 @@ bool DefaultTool::wantsAutoScroll() const
 
 void DefaultTool::setupActions()
 {
-    QAction * actionBringToFront = new QAction(koIcon("object-order-front-calligra"),
-                                               i18n("Bring to &Front"), this);
-    actionBringToFront->setShortcut(QKeySequence("Ctrl+Shift+]"));
+    KisActionRegistry * actionRegistry = KisActionRegistry::instance();
+
+    QAction * actionBringToFront = actionRegistry->makeQAction("object_order_front", this);
     addAction("object_order_front", actionBringToFront);
     connect(actionBringToFront, SIGNAL(triggered()), this, SLOT(selectionBringToFront()));
 
-    QAction * actionRaise = new QAction(koIcon("object-order-raise-calligra"), i18n("&Raise"), this);
-    actionRaise->setShortcut(QKeySequence("Ctrl+]"));
+    QAction * actionRaise = actionRegistry->makeQAction("object_order_raise", this);
     addAction("object_order_raise", actionRaise);
     connect(actionRaise, SIGNAL(triggered()), this, SLOT(selectionMoveUp()));
 
-    QAction * actionLower = new QAction(koIcon("object-order-lower-calligra"), i18n("&Lower"), this);
-    actionLower->setShortcut(QKeySequence("Ctrl+["));
+    QAction * actionLower = actionRegistry->makeQAction("object_order_lower", this);
     addAction("object_order_lower", actionLower);
     connect(actionLower, SIGNAL(triggered()), this, SLOT(selectionMoveDown()));
 
-    QAction * actionSendToBack = new QAction(koIcon("object-order-back-calligra"),
-                                             i18n("Send to &Back"), this);
-    actionSendToBack->setShortcut(QKeySequence("Ctrl+Shift+["));
+    QAction * actionSendToBack = actionRegistry->makeQAction("object_order_back", this);
     addAction("object_order_back", actionSendToBack);
     connect(actionSendToBack, SIGNAL(triggered()), this, SLOT(selectionSendToBack()));
 
-    QAction * actionAlignLeft = new QAction(koIcon("object-align-horizontal-left-calligra"),
-                                            i18n("Align Left"), this);
+    QAction * actionAlignLeft = actionRegistry->makeQAction("object_align_horizontal_left", this);
     addAction("object_align_horizontal_left", actionAlignLeft);
     connect(actionAlignLeft, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalLeft()));
 
-    QAction * actionAlignCenter = new QAction(koIcon("object-align-horizontal-center-calligra"),
-                                              i18n("Horizontally Center"), this);
+    QAction * actionAlignCenter = actionRegistry->makeQAction("object_align_horizontal_center", this);
     addAction("object_align_horizontal_center", actionAlignCenter);
     connect(actionAlignCenter, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalCenter()));
 
-    QAction * actionAlignRight = new QAction(koIcon("object-align-horizontal-right-calligra"),
-                                             i18n("Align Right"), this);
+    QAction * actionAlignRight = actionRegistry->makeQAction("object_align_horizontal_right", this);
     addAction("object_align_horizontal_right", actionAlignRight);
     connect(actionAlignRight, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalRight()));
 
-    QAction * actionAlignTop = new QAction(koIcon("object-align-vertical-top-calligra"), i18n("Align Top"), this);
+    QAction * actionAlignTop = actionRegistry->makeQAction("object_align_vertical_top", this);
     addAction("object_align_vertical_top", actionAlignTop);
     connect(actionAlignTop, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalTop()));
 
-    QAction * actionAlignMiddle = new QAction(koIcon("object-align-vertical-center-calligra"),
-                                              i18n("Vertically Center"), this);
+    QAction * actionAlignMiddle = actionRegistry->makeQAction("object_align_vertical_center", this);
     addAction("object_align_vertical_center", actionAlignMiddle);
     connect(actionAlignMiddle, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalCenter()));
 
-    QAction * actionAlignBottom = new QAction(koIcon("object-align-vertical-bottom-calligra"),
-                                              i18n("Align Bottom"), this);
+    QAction * actionAlignBottom = actionRegistry->makeQAction("object_align_vertical_bottom", this);
     addAction("object_align_vertical_bottom", actionAlignBottom);
     connect(actionAlignBottom, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalBottom()));
 
-    QAction * actionGroupBottom = new QAction(koIcon("object-group-calligra"),
-                                              i18n("Group"), this);
+    QAction * actionGroupBottom = actionRegistry->makeQAction("object_group", this);
     addAction("object_group", actionGroupBottom);
     connect(actionGroupBottom, SIGNAL(triggered()), this, SLOT(selectionGroup()));
 
-    QAction * actionUngroupBottom = new QAction(koIcon("object-ungroup-calligra"),
-                                                i18n("Ungroup"), this);
+    QAction * actionUngroupBottom = actionRegistry->makeQAction("object_ungroup", this);
     addAction("object_ungroup", actionUngroupBottom);
     connect(actionUngroupBottom, SIGNAL(triggered()), this, SLOT(selectionUngroup()));
 }

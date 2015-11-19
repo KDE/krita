@@ -103,7 +103,7 @@ KisImageBuilder_Result OraConverter::buildFile(const QUrl &uri, KisImageWSP imag
         QSize previewSize = image->bounds().size();
         previewSize.scale(QSize(256,256), Qt::KeepAspectRatio);
 
-        QImage preview = image->convertToQImage(QRect(0, 0, previewSize.width(), previewSize.height()), previewSize, 0);
+        QImage preview = image->convertToQImage(previewSize, 0);
 
         KoStoreDevice io(store);
         if (io.open(QIODevice::WriteOnly)) {

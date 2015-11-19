@@ -47,22 +47,21 @@
 #include <kis_group_layer.h>
 
 #include "dlg_colorspaceconversion.h"
+#include "kis_action_manager.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(ColorSpaceConversionFactory, "kritacolorspaceconversion.json", registerPlugin<ColorSpaceConversion>();)
 
 
 ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent)
-{      
-    KisAction *action  = new KisAction(i18n("&Convert Image Color Space..."), this);
+{
+    KisAction *action  = m_view->actionManager()->createAction("imagecolorspaceconversion");
     action->setActivationFlags(KisAction::ACTIVE_NODE);
-    addAction("imagecolorspaceconversion", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageColorSpaceConversion()));
 
-    action  = new KisAction(i18n("&Convert Layer Color Space..."), this);
+    action  = m_view->actionManager()->createAction("layercolorspaceconversion");
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    addAction("layercolorspaceconversion", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotLayerColorSpaceConversion()));
 }
 

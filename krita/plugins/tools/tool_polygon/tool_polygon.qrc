@@ -1,0 +1,6 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource>
+        <file>tool_polygon_cursor.png</file>
+    </qresource>
+</RCC>

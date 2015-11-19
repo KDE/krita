@@ -99,6 +99,7 @@ Q_LOGGING_CATEGORY(_41010, "krita.render")
 Q_LOGGING_CATEGORY(_41011, "krita.scripting")
 Q_LOGGING_CATEGORY(_41012, "krita.input")
 Q_LOGGING_CATEGORY(_41013, "krita.action")
+Q_LOGGING_CATEGORY(_41014, "krita.tabletlog")
 
 
 

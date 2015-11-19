@@ -40,7 +40,6 @@
 #include "KisViewManager.h"
 #include "KisOpenPane.h"
 #include "KisImportExportManager.h"
-#include <KisShortcutsDialog.h>
 
 #include <kis_debug.h>
 #include <KoResourcePaths.h>
@@ -74,6 +73,7 @@
 #include "kis_image.h"
 #include "KisImportExportManager.h"
 #include "KisDocumentEntry.h"
+#include "KoToolManager.h"
 
 #include "kis_color_manager.h"
 #include "kis_debug.h"
@@ -116,89 +116,18 @@ public:
     void loadActions();
 };
 
+// Basically, we are going to insert the current UI/MainWindow ActionCollection
+// into the KisActionRegistry.
 void KisPart::Private::loadActions()
 {
-    actionCollection = new KActionCollection(part, "krita");
+    actionCollection = part->currentMainwindow()->viewManager()->actionCollection();
+
     KisActionRegistry * actionRegistry = KisActionRegistry::instance();
 
-    QStringList actionNames = actionRegistry->allActions();
-    actionCollection->readSettings();  // XXX: consider relocating & managing this
-
-
-    foreach (const QString &name, actionNames) {
-        QDomElement actionXml = actionRegistry->getActionXml(name);
-
-        // Convenience macros to extract text of a child node.
-        auto getChildContent      = [=](QString node){return actionXml.firstChildElement(node).text();};
-        // i18n requires converting format from QString.
-        auto getChildContent_i18n = [=](QString node) {
-            if (getChildContent(node).isEmpty()) {
-                // dbgAction << "Found empty string to translate for property" << node;
-                return QString();
-            }
-            return i18n(getChildContent(node).toUtf8().constData());
-        };
-
-        QString icon      = getChildContent("icon");
-        QString text      = getChildContent("text");
-
-        // Note: these fields in the .action definitions are marked for translation.
-        QString whatsthis = getChildContent_i18n("whatsThis");
-        QString toolTip   = getChildContent_i18n("toolTip");
-        QString statusTip = getChildContent_i18n("statusTip");
-        QString iconText  = getChildContent_i18n("iconText");
-
-        bool isCheckable             = getChildContent("isCheckable") == QString("true");
-        QKeySequence shortcut        = QKeySequence(getChildContent("shortcut"));
-        QKeySequence defaultShortcut = QKeySequence(getChildContent("defaultShortcut"));
-
-        KisAction *a = new KisAction(KisIconUtils::loadIcon(icon.toLatin1()), text);
-        a->setObjectName(name);
-        a->setWhatsThis(whatsthis);
-        a->setToolTip(toolTip);
-        a->setStatusTip(statusTip);
-        a->setIconText(iconText);
-        a->setDefaultShortcut(shortcut);
-        a->setShortcut(shortcut);  //TODO: Make this configurable from custom settings
-        a->setCheckable(isCheckable);
-
-
-        // XXX: these checks may become important again after refactoring
-        if (!actionCollection->action(name)) {
-            actionCollection->addAction(name, a);
-        }
-        else {
-            dbgAction << "duplicate action" << name << a << "from" << actionCollection;
-            // delete a;
-        }
-
+    foreach (auto action, actionCollection->actions()) {
+        auto name = action->objectName();
+        actionRegistry->addAction(action->objectName(), action);
     }
-
-    // TODO: check for colliding shortcuts
-    //
-    // Ultimately we want to have more than one KActionCollection, so we can
-    // have things like Ctrl+I be italics in the text editor widget, while not
-    // complaining about conflicts elsewhere. Right now, we use only one
-    // collection, and we don't make things like the text editor configurable,
-    // so duplicate shortcuts are handled mostly automatically by the shortcut
-    // editor.
-    //
-    // QMap<QKeySequence, QAction*> existingShortcuts;
-    // foreach(QAction* action, actionCollection->actions()) {
-    //     if(action->shortcut() == QKeySequence(0)) {
-    //         continue;
-    //     }
-    //     if (existingShortcuts.contains(action->shortcut())) {
-    //         dbgAction << QString("Actions %1 and %2 have the same shortcut: %3") \
-    //             .arg(action->text())                                             \
-    //             .arg(existingShortcuts[action->shortcut()]->text())              \
-    //             .arg(action->shortcut());
-    //     }
-    //     else {
-    //         existingShortcuts[action->shortcut()] = action;
-    //     }
-    // }
-
 };
 
 KisPart* KisPart::instance()
@@ -488,28 +417,21 @@ void KisPart::openExistingFile(const QUrl &url)
 
 void KisPart::configureShortcuts()
 {
-    if (!d->actionCollection) {
-        d->loadActions();
-    }
+    d->loadActions();
 
-    // In kdelibs4 a hack was used to hide the shortcut schemes widget in the
-    // normal shortcut editor KShortcutsDialog from kdelibs, by setting the
-    // bottom buttons oneself. This does not work anymore (as the buttons are
-    // no longer exposed), so for now running with a plain copy of the sources
-    // of KShortcutsDialog, where the schemes editor is disabled directly.
-    // Not nice, but then soon custom Krita-specific shortcut handling is
-    // planned anyway.
+    auto actionRegistry = KisActionRegistry::instance();
+    actionRegistry->configureShortcuts(d->actionCollection);
 
-    // WidgetAction + WindowAction + ApplicationAction leaves only GlobalAction excluded
-    KisShortcutsDialog dlg;
-    dlg.addCollection(d->actionCollection);
-    dlg.configure();  // Show the dialog.
+    // Update the non-UI actions.  That includes:
+    //  - Shortcuts called inside of tools
+    //  - Perhaps other things?
+    KoToolManager::instance()->updateToolShortcuts();
 
-
-    // Now update the widget tooltips in the UI.
+    // Now update the UI actions.
     foreach(KisMainWindow *mainWindow, d->mainWindows) {
         KActionCollection *ac = mainWindow->actionCollection();
-        ac->readSettings();
+
+        ac->updateShortcuts();
 
         // Loop through mainWindow->actionCollections() to modify tooltips
         // so that they list shortcuts at the end in parentheses

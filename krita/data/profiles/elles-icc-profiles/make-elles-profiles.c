@@ -1,63 +1,87 @@
 /* License:
  * 
- * This is free software code; you can redistribute it and/or
- * modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
- *
- * This code is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for details: http://www.gnu.org/licenses/.
+ * Code for making well-behaved ICC profiles
+ * Copyright © 2013, 2014, 2015 Elle Stone 
  * 
- * Copyright 2014 Elle Stone, 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * 
+ * Contact information:
  * ellestone@ninedegreesbelow.com
  * http://ninedegreesbelow.com
+ * 
  * */
 
-/* The profile header "Platform" tag:
- * When creating a profile, LCMS checks to see if the platform is Windows ('MSFT').
- * If your platform isn't Windows, 
- * LCMS defaults to using the Apple ('APPL') platform tag for the profile header.
+/* About the ICC profile header "Platform" tag:
  * 
- * There is an unofficial Platform cmsPlatformSignature cmsSigUnices 0x2A6E6978 '*nix'. 
- * There is, however, no LCMS2 API for changing the platform when making a profile.
+ * When creating a profile, LCMS checks to see if the platform is 
+ * Windows ('MSFT'). If your platform isn't Windows, LCMS defaults 
+ * to using the Apple ('APPL') platform tag for the profile header.
+ * 
+ * There is an unofficial Platform 
+ * cmsPlatformSignature cmsSigUnices 0x2A6E6978 '*nix'. There is, 
+ * however, no LCMS2 API for changing the platform when making a profile.
  * 
  * So on my own computer, to replace 'APPL' with '*nix' in the header, 
  * I modified the LCMS source file 'cmsio0.c' and recompiled LCMS:
-#ifdef CMS_IS_WINDOWS_
-Header.platform= (cmsPlatformSignature) _cmsAdjustEndianess32(cmsSigMicrosoft);
-#else
-Header.platform= (cmsPlatformSignature) _cmsAdjustEndianess32(cmsSigUnices);
-#endif
+ * #ifdef CMS_IS_WINDOWS_
+ * Header.platform= (cmsPlatformSignature) _cmsAdjustEndianess32(cmsSigMicrosoft);
+ * #else
+ * Header.platform= (cmsPlatformSignature) _cmsAdjustEndianess32(cmsSigUnices);
+ * #endif
+ * 
  * */
 
-/* Command line to compile this code:
+/* Sample command line to compile this code:
  * 
- * gcc -g -O0 -Wall -o make-profiles make-profiles.c -llcms2
- *
- * If you installed LCMS2 in /usr/local, 
- * you might need use the following command:
- * gcc -g -O0 -Wall -I/usr/local/include -o make-profiles make-profiles.c -llcms2
+ * gcc -g -O0 -Wall -o make-elles-profiles make-elles-profiles.c -llcms2
+ * 
+ * You'll see a lot of harmless warnings about unused variables. 
+ * That's because I included variables for profiles that the code 
+ * doesn't actually make, in case you might want to make 
+ * these profiles for your own use.
  * 
  * */
-//cmsBool	cmsMD5computeID(cmsHPROFILE	hProfile);	
+ 
 #include <lcms2.h>
 int main ()
 {
-/* prints D50X and D50Y values from lcms2.h */
+/* prints D50 XYZ values from lcms2.h, 
+ * mostly to let you know the code did something! 
+ * */
 printf("D50X, D50Y, D50Z = %1.8f %1.8f %1.8f\n", cmsD50X, cmsD50Y, cmsD50Z);
+
 
 /* ************************** TONE CURVES *************************** */
 
-/* sRGB parametric tone response curve */
-/* About the sRGB parametric curve: 
- * For V4 profiles, this curve works in unbounded mode.
- * For V2 profiles, the resulting TRC is a 4096-point curve and 
- * doesn't work in unbounded mode. 
+/* sRGB, Rec709, and labl Tone Reproduction Curves ("TRCs") */
+/* About these TRCs: 
+ * This code makes V2 and V4 ICC profiles.
+ * For the V4 profiles, which are made using parametric curves, 
+ * these TRCs can work in unbounded mode.
+ * For the V2 profiles, the resulting TRC is a 4096-point curve and 
+ * cannot work in unbounded mode. 
  * See http://ninedegreesbelow.com/photography/lcms2-unbounded-mode.html
  * for an explanation of unbounded mode ICC profile conversions. 
+ * 
+ * Also, during ICC profile conversions,
+ * LCMS quantizes images with ICC profiles that have point TRCs. 
+ * So use the V4 profile variants for editing images with software 
+ * that uses LCMS2 as the Color Management System.
  * */
+ 
+/* sRGB TRC */
 cmsFloat64Number srgb_parameters[5] = 
    { 2.4, 1.0 / 1.055,  0.055 / 1.055, 1.0 / 12.92, 0.04045 }; 
 cmsToneCurve *srgb_parametic_curve =
@@ -65,49 +89,50 @@ cmsToneCurve *srgb_parametic_curve =
 cmsToneCurve *srgb_parametric[3] = 
    {srgb_parametic_curve,srgb_parametic_curve,srgb_parametic_curve};
 
+/* LAB "L" (perceptually uniform) TRC */
+cmsFloat64Number labl_parameters[5] = 
+   { 3.0, 0.862076,  0.137924, 0.110703, 0.080002 }; 
+cmsToneCurve *labl_parametic_curve =
+   cmsBuildParametricToneCurve(NULL, 4, labl_parameters);
+cmsToneCurve *labl_parametric[3] = 
+   {labl_parametic_curve,labl_parametic_curve,labl_parametic_curve};
+
 /* Rec 709 TRC */
 cmsFloat64Number rec709_parameters[5] = 
-   { 1.0 / 0.45, 1.099,  0.099, 4.500, 0.018 }; 
+   { 1.0 / 0.45, 1.0 / 1.099,  0.099 / 1.099,  1.0 / 4.5, 0.018 }; 
 cmsToneCurve *rec709_parametic_curve =
    cmsBuildParametricToneCurve(NULL, 4, rec709_parameters);
 cmsToneCurve *rec709_parametric[3] = 
    {rec709_parametic_curve,rec709_parametic_curve,rec709_parametic_curve};
-
-/* l-star TRC */
-cmsFloat64Number lstar_parameters[5] = 
-   { 3.0, 0.862076,  0.137924, 0.110703, 0.080002 }; 
-cmsToneCurve *lstar_parametic_curve =
-   cmsBuildParametricToneCurve(NULL, 4, lstar_parameters);
-cmsToneCurve *lstar_parametric[3] = 
-   {lstar_parametic_curve,lstar_parametic_curve,lstar_parametic_curve};
+   
+/* The following true gamma TRCs work in unbounded mode
+ * for both V2 and V4 profiles, and quantization during ICC profile
+ * conversions is not an issue with either the V2 or V4 variants: */
    
 /* gamma=1.00, linear gamma, "linear light", etc tone response curve */
 cmsToneCurve* gamma100[3];
 gamma100[0] = gamma100[1] = gamma100[2] = cmsBuildGamma (NULL, 1.00); 
 
+cmsToneCurve* gamma200[3];
+gamma200[0] = gamma200[1] = gamma200[2] = cmsBuildGamma (NULL, 2.00);
+
 /* Because of hexadecimal rounding during the profile making process, 
- * the following true gamma values are not precisely preserved when a V2
- * profile is made.
+ * the following two gamma values for the profile's TRC are not precisely 
+ * preserved when a V2 profile is made. So I used the V2 value for 
+ * both V2 and V4 versions of the profiles that use these TRCs.
+ * Otherwise V2 and V4 versions of nominally gamma=1.80 and gamma=2.20 
+ * profiles would have slightly different gamma curves.
  * */
 
 /* gamma=1.80078125 tone response curve */
 /* http://www.color.org/chardata/rgb/ROMMRGB.pdf indicates that 
- * the official tone response curve for romm isn't a simple gamma curve 
+ * the official tone response curve for ROMM isn't a simple gamma curve 
  * but rather has a linear portion in shadows, just like sRGB.
- * Most ProPhotoRGB profiles use a simple gamma curve 
- * equal to 1.80078125.
+ * Most ProPhotoRGB profiles use a gamma curve equal to 1.80078125. 
  * This odd value is because of hexadecimal rounding.
- * When using gamma=1.80, V2 profiles end up with gamma=1.79688.
- * For this code I used gamma=1.80078125 instead of gamma=1.80.
- * Otherwise V2 and V4 versions of nominally gamma=1.80 profiles 
- * would have different gamma curves.
  * */ 
 cmsToneCurve* gamma180[3];
 gamma180[0] = gamma180[1] = gamma180[2] = cmsBuildGamma (NULL, 1.80078125); 
-
-
-cmsToneCurve* gamma200[3];
-gamma200[0] = gamma200[1] = gamma200[2] = cmsBuildGamma (NULL, 2.00);
 
 /* gamma=2.19921875 tone response curve */
 /* per http://www.adobe.com/digitalimag/pdfs/AdobeRGB1998.pdf;
@@ -117,26 +142,26 @@ gamma200[0] = gamma200[1] = gamma200[2] = cmsBuildGamma (NULL, 2.00);
  * try to create a V2 profile with a gamma=2.20 gamma curve. 
  * So perhaps the AdobeRGB1998 specifications 
  * were simply bowing to the inevitable hexadecimal rounding. 
- * Because of hexadecimal rounding errors in V2 profiles, 
- * using gamma = exactly 2.20 will result in V2 and V4 versions 
- * of the same profile having different gamma curves. 
  * Almost all (all?) V2 ICC profiles with nominally gamma=2.20 
  * really have a gamma of 2.19921875, not 2.20.
  * */
+ 
 cmsToneCurve* gamma220[3];
 gamma220[0] = gamma220[1] = gamma220[2] = cmsBuildGamma (NULL, 2.19921875);
-
-
 
 /* ************************** WHITE POINTS ************************** */
 
 /* D50 WHITE POINTS */
+
 cmsCIExyY d50_romm_spec= {0.3457, 0.3585, 1.0};
 /* http://photo-lovers.org/pdf/color/romm.pdf */
+
 cmsCIExyY d50_illuminant_specs = {0.345702915, 0.358538597, 1.0};
 /* calculated from D50 illuminant XYZ values in ICC specs */
 
+
 /* D65 WHITE POINTS */
+
 cmsCIExyY  d65_srgb_adobe_specs = {0.3127, 0.3290, 1.0};
 /* White point from the sRGB.icm and AdobeRGB1998 profile specs:
  * http://www.adobe.com/digitalimag/pdfs/AdobeRGB1998.pdf 
@@ -146,13 +171,22 @@ cmsCIExyY  d65_srgb_adobe_specs = {0.3127, 0.3290, 1.0};
  * . . . [which] correspond to CIE Standard Illuminant D65.
  * 
  * Wikipedia gives this same white point for SMPTE-C.
+ * This white point is also given in the sRGB color space specs.
  * It's probably correct for most or all of the standard D65 profiles.
+ * 
+ * The D65 white point values used in the LCMS virtual sRGB profile
+ * is slightly different than the D65 white point values given in the 
+ * sRGB color space specs, so the LCMS virtual sRGB profile
+ * doesn't match sRGB profiles made using the values given in the 
+ * sRGB color space specs.
  * 
  * */
  
-/* C and E WHITE POINTS */
+ 
+/* Various C and E WHITE POINTS */
+
 cmsCIExyY c_astm  = {0.310060511, 0.316149551, 1.0}; 
-/* http://www.brucelindbloom.com/index.html?Eqn_ChromAdapt.html */
+/* see http://www.brucelindbloom.com/index.html?Eqn_ChromAdapt.html */
 cmsCIExyY e_astm  = {0.333333333, 0.333333333, 1.0};
 /* see http://www.brucelindbloom.com/index.html?Eqn_ChromAdapt.html */
 
@@ -168,6 +202,12 @@ cmsCIExyY e_5454_robertson= {0.333608970, 0.348572909, 1.0};
  * also see http://www.brucelindbloom.com/index.html?Eqn_T_to_xy.html for the equations */
  
  
+/* ACES white point, taken from
+ * Specification S-2014-004
+ * ACEScg – A Working Space for CGI Render and Compositing
+ */
+cmsCIExyY d60_aces= {0.32168, 0.33767, 1.0};
+
 /* *****************Set up profile variables and values *************** */
 cmsHPROFILE profile;
 cmsToneCurve* tone_curve[3];
@@ -175,22 +215,259 @@ cmsCIExyY whitepoint;
 cmsCIExyYTRIPLE primaries;
 const char* filename;
 cmsMLU *copyright = cmsMLUalloc(NULL, 1);
-cmsMLUsetASCII(copyright, "en", "US", "Elle Stone, CC0, no warranty, use at your own risk; see http://creativecommons.org/publicdomain/zero/1.0/ for details.");
+
+/* I put a Creative Commons Attribution-ShareAlike 3.0 Unported License
+ * on the profiles that I distribute (see
+ * https://creativecommons.org/licenses/by-sa/3.0/legalcode)
+ * The CC V3 Attribution-ShareAlike unported licence is accepted by both
+ * Debian and Fedora as a free licence.
+ * 
+ * Note that the CC V3 BY-SA licence that I put on the ICC profiles 
+ * is not the same licence that's applied to my profile-making code, 
+ * which is LGPL2.1+.
+ * 
+ * Of course you can modify my profile-making code to put some other 
+ * *profile* copyright on the actual profiles that the code makes, 
+ * for example public domain (Creative Commons CC0) 
+ * or one of the GPL copyrights.
+ * 
+ * The ICC suggested wording for profile copyrights is here 
+ * (see the last section, entitled "Licensing"): 
+ * http://www.color.org/registry/profileregistration.xalter
+ * 
+ * The ICC copyright sounds like it's probably a free licence,
+ * but as of June 2015 it hasn't been accepted by Fedora or Debian as a 
+ * free license. 
+ * 
+ * Here are the Fedora and Debian lists of free licences:
+ * 
+ * https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing#Content_Licenses
+ * https://wiki.debian.org/DFSGLicenses
+ * 
+ * */
+
+cmsMLUsetASCII(copyright, "en", "US", "Copyright 2015, Elle Stone (website: http://ninedegreesbelow.com/; email: ellestone@ninedegreesbelow.com). This ICC profile is licensed under a Creative Commons Attribution-ShareAlike 3.0 Unported License (https://creativecommons.org/licenses/by-sa/3.0/legalcode).");
+
 cmsMLU *manufacturer = cmsMLUalloc(NULL, 1);
-cmsMLUsetASCII(manufacturer, "en", "US", "Elle Stone (website: http://ninedegreesbelow.com/; email: ellestone@ninedegreesbelow.com.)");
+
 cmsMLU *description;
 
 /* ********************** MAKE THE PROFILES ************************* */
+
+/* ACES PROFILES */
+
+/* ***** Make profile: ACEScg, D60, gamma=1.00 */
+/* ACEScg chromaticities taken from
+ * Specification S-2014-004
+ * ACEScg – A Working Space for CGI Render and Compositing
+ */
+cmsCIExyYTRIPLE aces_cg_primaries = 
+{
+{0.713, 0.293,  1.0},
+{0.165, 0.830,  1.0},
+{0.128, 0.044,  1.0}
+};
+
+whitepoint = d60_aces;
+primaries = aces_cg_primaries;
+
+/* linear gamma */
+tone_curve[0] = tone_curve[1] = tone_curve[2] = gamma100[0];
+profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "ACEScg-elle-V4-g10.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "ACEScg-elle-V4-g10.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "ACEScg-elle-V2-g10.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "ACEScg-elle-V2-g10.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+
+/* gamma=2.2 */
+tone_curve[0] = tone_curve[1] = tone_curve[2] = gamma220[0];
+profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "ACEScg-elle-V4-g22.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "ACEScg-elle-V4-g22.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "ACEScg-elle-V2-g22.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "ACEScg-elle-V2-g22.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+
+/* sRGB TRC */
+tone_curve[0] = tone_curve[1] = tone_curve[2] = srgb_parametric[0];
+profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "ACEScg-elle-V4-srgbtrc.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "ACEScg-elle-V4-srgbtrc.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "ACEScg-elle-V2-srgbtrc.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "ACEScg-elle-V2-srgbtrc.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+
+/* labl TRC */
+tone_curve[0] = tone_curve[1] = tone_curve[2] = labl_parametric[0];
+profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "ACEScg-elle-V4-labl.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "ACEScg-elle-V4-labl.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "ACEScg-elle-V2-labl.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "ACEScg-elle-V2-labl.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+
+
+
+/* ***** Make profile: ACES, D60, gamma=1.00 */
+/* ACES chromaticities taken from
+ * Specification
+ * */
+cmsCIExyYTRIPLE aces_primaries = 
+{
+{0.73470,  0.26530,  1.0},
+{0.00000,  1.00000,  1.0},
+{0.00010, -0.07700,  1.0}
+};
+cmsCIExyYTRIPLE aces_primaries_prequantized = 
+{
+{0.734704192222, 0.265298276252,  1.0},
+{-0.000004945077, 0.999992850272,  1.0},
+{0.000099889199, -0.077007518685,  1.0}
+};
+
+whitepoint = d60_aces;
+primaries = aces_primaries_prequantized;
+
+/* linear gamma */
+tone_curve[0] = tone_curve[1] = tone_curve[2] = gamma100[0];
+profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "ACES-elle-V4-g10.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "ACES-elle-V4-g10.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "ACES-elle-V2-g10.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "ACES-elle-V2-g10.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+
+/* gamma=2.2 */
+tone_curve[0] = tone_curve[1] = tone_curve[2] = gamma220[0];
+profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "ACES-elle-V4-g122.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "ACES-elle-V4-g22.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "ACES-elle-V2-g22.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "ACES-elle-V2-g22.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+
+/* sRGB TRC */
+tone_curve[0] = tone_curve[1] = tone_curve[2] = srgb_parametric[0];
+profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "ACES-elle-V4-srgbtrc.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "ACES-elle-V4-srgbtrc.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "ACES-elle-V2-srgbtrc.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "ACES-elle-V2-srgbtrc.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+
+/* labl TRC */
+tone_curve[0] = tone_curve[1] = tone_curve[2] = labl_parametric[0];
+profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "ACES-elle-V4-labl.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "ACES-elle-V4-labl.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "ACES-elle-V2-labl.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "ACES-elle-V2-labl.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+
+
+
 
 /* D50 PROFILES */
 
 /* ***** Make profile: AllColorsRGB, D50, gamma=1.00 */
 /* AllColors.icc has a slightly larger color gamut than the ACES color space.
- * It has a D50 white point and a linear gamma TRC. It holds all visible colors.
- * Just like the ACES color space, AllColors also holds a high percentage of imaginary colors.
+ * It has a D50 white point and a linear gamma TRC. 
+ * It holds all visible colors.
+ * Just like the ACES color space, 
+ * AllColors also holds a high percentage of imaginary colors.
  * See http://ninedegreesbelow.com/photography/xyz-rgb.html#xyY 
  * for more information about imaginary colors.
- * AllColors primaries for red and blue from http://www.ledtuning.nl/cie.php
+ * AllColors primaries for red and blue from 
+ * http://www.ledtuning.nl/en/cie-convertor
  * blue 375nm red 780nm, plus Y intercepts:
  * Color Wavelength (): 375 nm.
  * Spectral Locus coordinates: X:0.17451 Y:0.005182
@@ -233,6 +510,26 @@ cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
 cmsSaveProfileToFile(profile, filename);
 cmsMLUfree(description);
 
+/* gamma=2.2 */
+tone_curve[0] = tone_curve[1] = tone_curve[2] = gamma220[0];
+profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "AllColorsRGB-elle-V4-g22.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "AllColorsRGB-elle-V4-g22.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "AllColorsRGB-elle-V2-g22.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "AllColorsRGB-elle-V2-g22.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+
 /* sRGB TRC */
 tone_curve[0] = tone_curve[1] = tone_curve[2] = srgb_parametric[0];
 profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
@@ -253,6 +550,26 @@ cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
 cmsSaveProfileToFile(profile, filename);
 cmsMLUfree(description);
 
+/* labl TRC */
+tone_curve[0] = tone_curve[1] = tone_curve[2] = labl_parametric[0];
+profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "AllColorsRGB-elle-V4-labl.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "AllColorsRGB-elle-V4-labl.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "AllColorsRGB-elle-V2-labl.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "AllColorsRGB-elle-V2-labl.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+
 
 /* ***** Make profile: Identity, D50, gamma=1.00. */
 /* These primaries also hold all possible visible colors, 
@@ -265,6 +582,7 @@ cmsCIExyYTRIPLE identity_primaries = {/*  */
 whitepoint = d50_illuminant_specs;
 primaries = identity_primaries;
 
+/* linear gamma */
 tone_curve[0] = tone_curve[1] = tone_curve[2] = gamma100[0];
 profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
 cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
@@ -281,6 +599,26 @@ description = cmsMLUalloc(NULL, 1);
 cmsMLUsetASCII(description, "en", "US", "IdentityRGB-elle-V2-g10.icc");
 cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
                              filename = "IdentityRGB-elle-V2-g10.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+
+/* gamma=2.2 */
+tone_curve[0] = tone_curve[1] = tone_curve[2] = gamma220[0];
+profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "IdentityRGB-elle-V4-g22.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "IdentityRGB-elle-V4-g22.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "IdentityRGB-elle-V2-g22.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "IdentityRGB-elle-V2-g22.icc";
 cmsSaveProfileToFile(profile, filename);
 cmsMLUfree(description);
 
@@ -301,6 +639,26 @@ description = cmsMLUalloc(NULL, 1);
 cmsMLUsetASCII(description, "en", "US", "IdentityRGB-elle-V2-srgbtrc.icc");
 cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
                              filename = "IdentityRGB-elle-V2-srgbtrc.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+
+/* labl TRC */
+tone_curve[0] = tone_curve[1] = tone_curve[2] = labl_parametric[0];
+profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "IdentityRGB-elle-V4-labl.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "IdentityRGB-elle-V4-labl.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "IdentityRGB-elle-V2-labl.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "IdentityRGB-elle-V2-labl.icc";
 cmsSaveProfileToFile(profile, filename);
 cmsMLUfree(description);
 
@@ -362,6 +720,26 @@ cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
 cmsSaveProfileToFile(profile, filename);
 cmsMLUfree(description);
 
+/* gamma=2.2 */
+tone_curve[0] = tone_curve[1] = tone_curve[2] = gamma220[0];
+profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "LargeRGB-elle-V4-g22.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "LargeRGB-elle-V4-g22.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "LargeRGB-elle-V2-g22.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "LargeRGB-elle-V2-g22.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+
 /* sRGB TRC */
 tone_curve[0] = tone_curve[1] = tone_curve[2] = srgb_parametric[0];
 profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
@@ -379,6 +757,26 @@ description = cmsMLUalloc(NULL, 1);
 cmsMLUsetASCII(description, "en", "US", "LargeRGB-elle-V2-srgbtrc.icc");
 cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
                              filename = "LargeRGB-elle-V2-srgbtrc.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+
+/* labl TRC */
+tone_curve[0] = tone_curve[1] = tone_curve[2] = labl_parametric[0];
+profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "LargeRGB-elle-V4-labl.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "LargeRGB-elle-V4-labl.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "LargeRGB-elle-V2-labl.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "LargeRGB-elle-V2-labl.icc";
 cmsSaveProfileToFile(profile, filename);
 cmsMLUfree(description);
 
@@ -458,6 +856,26 @@ cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
 cmsSaveProfileToFile(profile, filename);
 cmsMLUfree(description);
 
+/* labl TRC */
+tone_curve[0] = tone_curve[1] = tone_curve[2] = labl_parametric[0];
+profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "WideRGB-elle-V4-labl.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "WideRGB-elle-V4-labl.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "WideRGB-elle-V2-labl.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "WideRGB-elle-V2-labl.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+
 
 /* D65 PROFILES */
 
@@ -489,7 +907,7 @@ profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
 cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
 /* V4 */
 description = cmsMLUalloc(NULL, 1);
-cmsMLUsetASCII(description, "en", "US", "ClayRGB-elle-V4-g22.icc AdobeRGB1998 primaries.");
+cmsMLUsetASCII(description, "en", "US", "ClayRGB-elle-V4-g22.icc");
 cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
                              filename = "ClayRGB-elle-V4-g22.icc";
 cmsSaveProfileToFile(profile, filename); 
@@ -497,7 +915,7 @@ cmsMLUfree(description);
 /* V2 */
 cmsSetProfileVersion(profile, 2.1);
 description = cmsMLUalloc(NULL, 1);
-cmsMLUsetASCII(description, "en", "US", "ClayRGB-elle-V2-g22.icc AdobeRGB1998 primaries.");
+cmsMLUsetASCII(description, "en", "US", "ClayRGB-elle-V2-g22.icc");
 cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
                              filename = "ClayRGB-elle-V2-g22.icc";
 cmsSaveProfileToFile(profile, filename); 
@@ -509,7 +927,7 @@ profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
 cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
 /* V4 */
 description = cmsMLUalloc(NULL, 1);
-cmsMLUsetASCII(description, "en", "US", "ClayRGB-elle-V4-g10.icc AdobeRGB1998 primaries.");
+cmsMLUsetASCII(description, "en", "US", "ClayRGB-elle-V4-g10.icc");
 cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
                              filename = "ClayRGB-elle-V4-g10.icc";
 cmsSaveProfileToFile(profile, filename); 
@@ -517,7 +935,7 @@ cmsMLUfree(description);
 /* V2 */
 cmsSetProfileVersion(profile, 2.1);
 description = cmsMLUalloc(NULL, 1);
-cmsMLUsetASCII(description, "en", "US", "ClayRGB-elle-V2-g10.icc AdobeRGB1998 primaries.");
+cmsMLUsetASCII(description, "en", "US", "ClayRGB-elle-V2-g10.icc");
 cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
                              filename = "ClayRGB-elle-V2-g10.icc";
 cmsSaveProfileToFile(profile, filename); 
@@ -529,7 +947,7 @@ profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
 cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
 /* V4 */
 description = cmsMLUalloc(NULL, 1);
-cmsMLUsetASCII(description, "en", "US", "ClayRGB-elle-V4-srgbtrc.icc AdobeRGB1998 primaries.");
+cmsMLUsetASCII(description, "en", "US", "ClayRGB-elle-V4-srgbtrc.icc");
 cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
                              filename = "ClayRGB-elle-V4-srgbtrc.icc";
 cmsSaveProfileToFile(profile, filename); 
@@ -537,15 +955,155 @@ cmsMLUfree(description);
 /* V2 */
 cmsSetProfileVersion(profile, 2.1);
 description = cmsMLUalloc(NULL, 1);
-cmsMLUsetASCII(description, "en", "US", "ClayRGB-elle-V2-srgbtrc.icc AdobeRGB1998 primaries.");
+cmsMLUsetASCII(description, "en", "US", "ClayRGB-elle-V2-srgbtrc.icc");
 cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
                              filename = "ClayRGB-elle-V2-srgbtrc.icc";
 cmsSaveProfileToFile(profile, filename); 
 cmsMLUfree(description);
 
+/* labl TRC */
+tone_curve[0] = tone_curve[1] = tone_curve[2] = labl_parametric[0];
+profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "ClayRGB-elle-V4-labl.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "ClayRGB-elle-V4-labl.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "ClayRGB-elle-V2-labl.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "ClayRGB-elle-V2-labl.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
 
-/* Make profile: sRGB, D65, sRGB-trc
- * http://en.wikipedia.org/wiki/Srgb */
+
+
+/* ***** Make profile: Rec.2020, D65, Rec709 TRC */
+/* 
+ * */
+cmsCIExyYTRIPLE rec2020_primaries = {
+{0.7079, 0.2920, 1.0},
+{0.1702, 0.7965, 1.0},
+{0.1314, 0.0459, 1.0}
+};
+
+cmsCIExyYTRIPLE rec2020_primaries_prequantized = {
+{0.708012540607, 0.291993664388, 1.0},
+{0.169991652439, 0.797007778423, 1.0},
+{0.130997824007, 0.045996550894, 1.0}
+};
+
+primaries = rec2020_primaries_prequantized;
+whitepoint = d65_srgb_adobe_specs;
+/* rec.709 */
+tone_curve[0] = tone_curve[1] = tone_curve[2] = rec709_parametric[0];
+profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "Rec2020-elle-V4-rec709.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "Rec2020-elle-V4-rec709.icc";
+cmsSaveProfileToFile(profile, filename); 
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "Rec2020-elle-V2-rec709.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "Rec2020-elle-V2-rec709.icc";
+cmsSaveProfileToFile(profile, filename); 
+cmsMLUfree(description);
+
+/* linear gamma */
+tone_curve[0] = tone_curve[1] = tone_curve[2] = gamma100[0];
+profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "Rec2020-elle-V4-g10.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "Rec2020-elle-V4-g10.icc";
+cmsSaveProfileToFile(profile, filename); 
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "Rec2020-elle-V2-g10.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "Rec2020-elle-V2-g10.icc";
+cmsSaveProfileToFile(profile, filename); 
+cmsMLUfree(description);
+
+/* gamma=2.2 */
+tone_curve[0] = tone_curve[1] = tone_curve[2] = gamma220[0];
+profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "Rec2020-elle-V4-g22.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "Rec2020-elle-V4-g22.icc";
+cmsSaveProfileToFile(profile, filename); 
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "Rec2020-elle-V2-g22.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "Rec2020-elle-V2-g22.icc";
+cmsSaveProfileToFile(profile, filename); 
+cmsMLUfree(description);
+
+
+/* sRGB TRC */
+tone_curve[0] = tone_curve[1] = tone_curve[2] = srgb_parametric[0];
+profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "Rec2020-elle-V4-srgbtrc.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "Rec2020-elle-V4-srgbtrc.icc";
+cmsSaveProfileToFile(profile, filename); 
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "Rec2020-elle-V2-srgbtrc.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "Rec2020-elle-V2-srgbtrc.icc";
+cmsSaveProfileToFile(profile, filename); 
+cmsMLUfree(description);
+
+/* labl TRC */
+tone_curve[0] = tone_curve[1] = tone_curve[2] = labl_parametric[0];
+profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "Rec2020-elle-V4-labl.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "Rec2020-elle-V4-labl.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "Rec2020-elle-V2-labl.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "Rec2020-elle-V2-labl.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+
+
+/* ***** Make profile: sRGB, D65, sRGB TRC */
+/* http://en.wikipedia.org/wiki/Srgb */
 /* Hewlett-Packard and Microsoft designed sRGB to match 
  * the color gamut of consumer-grade CRTs from the 1990s
  * and to be the standard color space for the world wide web.
@@ -607,9 +1165,68 @@ cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
 cmsSaveProfileToFile(profile, filename);
 cmsMLUfree(description);
 
+/* gamma=2.2 */
+tone_curve[0] = tone_curve[1] = tone_curve[2] = gamma220[0];
+profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "sRGB-elle-V4-g22.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "sRGB-elle-V4-g22.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "sRGB-elle-V2-g22.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "sRGB-elle-V2-g22.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+
+/* labl TRC */
+tone_curve[0] = tone_curve[1] = tone_curve[2] = labl_parametric[0];
+profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "sRGB-elle-V4-labl.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "sRGB-elle-V4-labl.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "sRGB-elle-V2-labl.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "sRGB-elle-V2-labl.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+
+/* Rec.709 TRC */
+tone_curve[0] = tone_curve[1] = tone_curve[2] = rec709_parametric[0];
+profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "sRGB-elle-V4-rec709.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "sRGB-elle-V4-rec709.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "sRGB-elle-V2-rec709.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "sRGB-elle-V2-rec709.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
 
 
-/* The CIE-RGB profile, E white point: */
+/* ***** Make profile: CIE-RGB profile, E white point*/
 /* The ASTM E white point is probably the right white point 
  * to use when making the CIE-RGB color space profile.
  * It's not clear to me what the correct CIE-RGB primaries really are.
@@ -706,6 +1323,26 @@ description = cmsMLUalloc(NULL, 1);
 cmsMLUsetASCII(description, "en", "US", "CIERGB-elle-V2-srgbtrc.icc");
 cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
                              filename = "CIERGB-elle-V2-srgbtrc.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+
+/* labl TRC */
+tone_curve[0] = tone_curve[1] = tone_curve[2] = labl_parametric[0];
+profile = cmsCreateRGBProfile ( &whitepoint, &primaries, tone_curve );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "CIERGB-elle-V4-labl.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "CIERGB-elle-V4-labl.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "CIERGB-elle-V2-labl.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "CIERGB-elle-V2-labl.icc";
 cmsSaveProfileToFile(profile, filename);
 cmsMLUfree(description);
 
@@ -814,6 +1451,46 @@ description = cmsMLUalloc(NULL, 1);
 cmsMLUsetASCII(description, "en", "US", "Gray-D50-elle-V2-srgbtrc.icc");
 cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
                              filename = "Gray-D50-elle-V2-srgbtrc.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+
+/* Gray profile with labl TRC */
+grayTRC = cmsBuildParametricToneCurve(NULL, 4, labl_parameters);
+profile = cmsCreateGrayProfile ( &whitepoint, grayTRC );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "Gray-D50-elle-V4-labl.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "Gray-D50-elle-V4-labl.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "Gray-D50-elle-V2-labl.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "Gray-D50-elle-V2-labl.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+
+/* Gray profile with Rec709 TRC */
+grayTRC = cmsBuildParametricToneCurve(NULL, 4, rec709_parameters);
+profile = cmsCreateGrayProfile ( &whitepoint, grayTRC );
+cmsWriteTag(profile, cmsSigCopyrightTag, copyright);
+/* V4 */
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "Gray-D50-elle-V4-rec709.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "Gray-D50-elle-V4-rec709.icc";
+cmsSaveProfileToFile(profile, filename);
+cmsMLUfree(description);
+/* V2 */
+cmsSetProfileVersion(profile, 2.1);
+description = cmsMLUalloc(NULL, 1);
+cmsMLUsetASCII(description, "en", "US", "Gray-D50-elle-V2-rec709.icc");
+cmsWriteTag(profile, cmsSigProfileDescriptionTag, description);
+                             filename = "Gray-D50-elle-V2-rec709.icc";
 cmsSaveProfileToFile(profile, filename);
 cmsMLUfree(description);
 

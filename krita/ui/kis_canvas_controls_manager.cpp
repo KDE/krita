@@ -50,24 +50,16 @@ KisCanvasControlsManager::~KisCanvasControlsManager()
 
 void KisCanvasControlsManager::setup(KisActionManager *actionManager)
 {
-    KisAction *lighterColor = new KisAction(i18n("Make brush color lighter"));
-    lighterColor->setDefaultShortcut(Qt::Key_L);
-    actionManager->addAction("make_brush_color_lighter", lighterColor);
+    KisAction *lighterColor = actionManager->createAction("make_brush_color_lighter");
     connect(lighterColor, SIGNAL(triggered()), SLOT(makeColorLighter()));
 
-    KisAction *darkerColor = new KisAction(i18n("Make brush color darker"));
-    darkerColor->setDefaultShortcut(Qt::Key_K);
-    actionManager->addAction("make_brush_color_darker", darkerColor);
+    KisAction *darkerColor = actionManager->createAction("make_brush_color_darker");
     connect(darkerColor, SIGNAL(triggered()), SLOT(makeColorDarker()));
 
-    KisAction *increaseOpacity = new KisAction(i18n("Increase opacity"));
-    increaseOpacity->setDefaultShortcut(Qt::Key_O);
-    actionManager->addAction("increase_opacity", increaseOpacity);
+    KisAction *increaseOpacity = actionManager->createAction("increase_opacity");
     connect(increaseOpacity, SIGNAL(triggered()), SLOT(increaseOpacity()));
 
-    KisAction *decreaseOpacity = new KisAction(i18n("Decrease opacity"));
-    decreaseOpacity->setDefaultShortcut(Qt::Key_I);
-    actionManager->addAction("decrease_opacity", decreaseOpacity);
+    KisAction *decreaseOpacity = actionManager->createAction("decrease_opacity");
     connect(decreaseOpacity, SIGNAL(triggered()), SLOT(decreaseOpacity()));
 }
 

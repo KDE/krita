@@ -55,6 +55,7 @@
 #include <KoHashGeneratorProvider.h>
 #include <KoResourcePaths.h>
 
+#include "thememanager.h"
 #include "KisPrintJob.h"
 #include "KisDocumentEntry.h"
 #include "KisDocument.h"
@@ -75,6 +76,7 @@
 #include "kisexiv2/kis_exiv2.h"
 #include "KisApplicationArguments.h"
 #include <kis_debug.h>
+#include "kis_action_registry.h"
 
 #ifdef HAVE_OPENGL
 #include "opengl/kis_opengl.h"
@@ -147,6 +149,10 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     // Initialize all Calligra directories etc.
     KoGlobal::initialize();
 
+    KConfigGroup group(KSharedConfig::openConfig(), "theme");
+    Digikam::ThemeManager themeManager;
+    themeManager.setCurrentTheme(group.readEntry("Theme", "Krita dark"));
+
     // for cursors
     KoResourcePaths::addResourceType("kis_pics", "data", "krita/pics/");
 
@@ -172,7 +178,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
 #endif
 
     qDebug() << "Available styles:" << QStyleFactory::keys();
-    QStringList styles = QStringList() /*<< "Breeze"*/ << "Oxygen" << "Plastique" << "Fusion";
+    QStringList styles = QStringList() /*<< "Breeze"*/  << "Fusion" << "Oxygen" << "Plastique";
     foreach(const QString & style, styles) {
         if (!setStyle(style)) {
             qDebug() << "No" << style << "available.";
@@ -392,6 +398,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     KisFilterRegistry::instance();
     KisGeneratorRegistry::instance();
     KisPaintOpRegistry::instance();
+    KisActionRegistry::instance();
 
     // Load the krita-specific tools
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),

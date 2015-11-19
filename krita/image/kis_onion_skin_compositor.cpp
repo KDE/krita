@@ -57,7 +57,7 @@ struct KisOnionSkinCompositor::Private
         return tintDevice;
     }
 
-    void compositeFrame(KisRasterKeyframeChannel *keyframes, KisKeyframeSP keyframe, KisPainter &gcFrame, KisPainter &gcDest, KisPaintDeviceSP tintSource, int opacity, const QRect &rect)
+    void tryCompositeFrame(KisRasterKeyframeChannel *keyframes, KisKeyframeSP keyframe, KisPainter &gcFrame, KisPainter &gcDest, KisPaintDeviceSP tintSource, int opacity, const QRect &rect)
     {
         if (keyframe.isNull() || opacity == OPACITY_TRANSPARENT_U8) return;
 
@@ -81,9 +81,15 @@ struct KisOnionSkinCompositor::Private
         backwardOpacities.resize(numberOfSkins);
         forwardOpacities.resize(numberOfSkins);
 
+        const int mainState = (int) config.onionSkinState(0);
+        const qreal scaleFactor = mainState * config.onionSkinOpacity(0) / 255.0;
+
         for (int i = 0; i < numberOfSkins; i++) {
-            backwardOpacities[i] = config.onionSkinOpacity(-(i + 1));
-            forwardOpacities[i] = config.onionSkinOpacity(i + 1);
+            int backwardState = (int) config.onionSkinState(-(i + 1));
+            int forwardState = (int) config.onionSkinState(i + 1);
+
+            backwardOpacities[i] = scaleFactor * backwardState * config.onionSkinOpacity(-(i + 1));
+            forwardOpacities[i] = scaleFactor * forwardState * config.onionSkinOpacity(i + 1);
         }
     }
 };
@@ -127,12 +133,12 @@ void KisOnionSkinCompositor::composite(const KisPaintDeviceSP sourceDevice, KisP
     for (int offset = 1; offset <= m_d->numberOfSkins; offset++) {
         if (!keyframeBck.isNull()) {
             keyframeBck = keyframes->previousKeyframe(keyframeBck);
-            m_d->compositeFrame(keyframes, keyframeBck, gcFrame, gcDest, backwardTintDevice, m_d->skinOpacity(-offset), rect);
+            m_d->tryCompositeFrame(keyframes, keyframeBck, gcFrame, gcDest, backwardTintDevice, m_d->skinOpacity(-offset), rect);
         }
 
         if (!keyframeFwd.isNull()) {
             keyframeFwd = keyframes->nextKeyframe(keyframeFwd);
-            m_d->compositeFrame(keyframes, keyframeFwd, gcFrame, gcDest, forwardTintDevice, m_d->skinOpacity(offset), rect);
+            m_d->tryCompositeFrame(keyframes, keyframeFwd, gcFrame, gcDest, forwardTintDevice, m_d->skinOpacity(offset), rect);
         }
     }
 

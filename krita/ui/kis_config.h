@@ -462,6 +462,12 @@ public:
     bool toolOptionsInDocker(bool defaultValue = false) const;
     void setToolOptionsInDocker(bool inDocker);
 
+    void setEnableOpenGLDebugging(bool value) const;
+    bool enableOpenGLDebugging(bool defaultValue = false) const;
+
+    void setEnableAmdVectorizationWorkaround(bool value) const;
+    bool enableAmdVectorizationWorkaround(bool defaultValue = false) const;
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

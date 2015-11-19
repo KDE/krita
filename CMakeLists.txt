@@ -204,7 +204,6 @@ find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
         ItemViews
         WindowSystem
 )
-find_package(KF5KIO ${MIN_QT_VERSION})
 
 find_package(Qt5 ${MIN_QT_VERSION}
         REQUIRED COMPONENTS
@@ -243,7 +242,11 @@ include (ECMInstallIcons)
 
 macro_ensure_out_of_source_build("Compiling Calligra inside the source directory is not possible. Please refer to the build instruction http://community.kde.org/Calligra/Building/Building_Calligra")
 
+
+find_package(KF5KIO ${MIN_FRAMEWORKS_VERSION})
 macro_bool_to_01(KF5KIO_FOUND HAVE_KIO)
+find_package(KF5Crash ${MIN_FRAMEWORKS_VERSION}) 
+macro_bool_to_01(KF5Crash_FOUND HAVE_KCRASH)
 
 find_package(X11)
 if(X11_FOUND)
@@ -377,7 +380,7 @@ endif()
 ## Test for GNU Scientific Library
 ##
 macro_optional_find_package(GSL)
-macro_log_feature(GSL_FOUND "GSL" "GNU Scientific Library" "http://www.gnu.org/software/gsl" FALSE "1.7" "Required by Krita's Transform")
+macro_log_feature(GSL_FOUND "GSL" "GNU Scientific Library" "http://www.gnu.org/software/gsl" FALSE "1.7" "Required by Krita's Transform tool.")
 macro_bool_to_01(GSL_FOUND HAVE_GSL)
 configure_file(config-gsl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gsl.h )
 
@@ -413,7 +416,7 @@ endif()
 set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 macro_optional_find_package(Vc 0.6.70)
-macro_log_feature(Vc_FOUND "Vc" "Portable, zero-overhead SIMD library for C++" "http://code.compeng.uni-frankfurt.de/projects/vc" FALSE "" "Required by the Krita for vectorization")
+macro_log_feature(Vc_FOUND "Vc" "Portable, zero-overhead SIMD library for C++" "https://github.com/VcDevel/Vc" FALSE "" "Required by the Krita for vectorization")
 macro_bool_to_01(Vc_FOUND HAVE_VC)
 macro_bool_to_01(PACKAGERS_BUILD DO_PACKAGERS_BUILD)
 

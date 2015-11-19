@@ -88,6 +88,7 @@
 #include "kis_signal_compressor.h"
 #include "kis_filter_manager.h"
 #include "krita/gemini/ViewModeSwitchEvent.h"
+#include "krita_utils.h"
 
 
 //static
@@ -256,6 +257,11 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
 
 KisView::~KisView()
 {
+    if (d->viewManager) {
+        KoProgressProxy *proxy = d->viewManager->statusBar()->progress()->progressProxy();
+        KIS_ASSERT_RECOVER_NOOP(proxy);
+        image()->compositeProgressProxy()->removeProxy(proxy);
+    }
 
     if (d->viewManager->filterManager()->isStrokeRunning()) {
         d->viewManager->filterManager()->cancel();
@@ -305,7 +311,7 @@ void KisView::setViewManager(KisViewManager *view)
     connect(canvasController(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), d->viewManager->mainWindow(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
 
     KoToolManager::instance()->addController(&d->canvasController);
-    KoToolManager::instance()->registerTools(d->actionCollection, &d->canvasController);
+    KoToolManager::instance()->registerToolActions(d->actionCollection, &d->canvasController);
     dynamic_cast<KisShapeController*>(d->document->shapeController())->setInitialShapeForCanvas(&d->canvas);
 
     if (resourceProvider()) {
@@ -318,6 +324,16 @@ void KisView::setViewManager(KisViewManager *view)
 
     connect(image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), this, SLOT(slotImageSizeChanged(const QPointF&, const QPointF&)));
     connect(image(), SIGNAL(sigResolutionChanged(double,double)), this, SLOT(slotImageResolutionChanged()));
+
+    // executed in a context of an image thread
+    connect(image(), SIGNAL(sigRemoveNodeAsync(KisNodeSP)),
+            SLOT(slotImageNodeRemoved(KisNodeSP)),
+            Qt::DirectConnection);
+
+    // executed in a context of the gui thread
+    connect(this, SIGNAL(sigContinueRemoveNode(KisNodeSP)),
+            SLOT(slotContinueRemoveNode(KisNodeSP)),
+            Qt::AutoConnection);
 
     /*
      * WARNING: Currently we access the global progress bar in two ways:
@@ -338,6 +354,17 @@ KisViewManager* KisView::viewManager() const
     return d->viewManager;
 }
 
+void KisView::slotImageNodeRemoved(KisNodeSP node)
+{
+    emit sigContinueRemoveNode(KritaUtils::nearestNodeAfterRemoval(node));
+}
+
+void KisView::slotContinueRemoveNode(KisNodeSP newActiveNode)
+{
+    if (!d->isCurrent) {
+        d->currentNode = newActiveNode;
+    }
+}
 
 QAction *KisView::undoAction() const
 {

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,37 +16,27 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_ONION_SKIN_DIALOG_H
-#define KIS_ONION_SKIN_DIALOG_H
+#ifndef __KIS_OPENGL_CANVAS_DEBUGGER_H
+#define __KIS_OPENGL_CANVAS_DEBUGGER_H
 
-#include <QDialog>
-#include <QSlider>
+#include <QScopedPointer>
 
-#include "kis_signal_compressor.h"
 
-namespace Ui {
-class KisOnionSkinDialog;
-}
 
-class KisOnionSkinDialog : public QDialog
+class KisOpenglCanvasDebugger
 {
-    Q_OBJECT
-
 public:
-    explicit KisOnionSkinDialog(QWidget *parent = 0);
-    ~KisOnionSkinDialog();
+    KisOpenglCanvasDebugger();
+    ~KisOpenglCanvasDebugger();
+
+    static KisOpenglCanvasDebugger* instance();
+
+    void nofityPaintRequested();
+    void nofitySyncStatus(bool value);
 
 private:
-    Ui::KisOnionSkinDialog *ui;
-
-    QSlider numberOfSkins;
-    QVector<QSlider*> forwardOpacities;
-    QVector<QSlider*> backwardOpacities;
-
-    KisSignalCompressor m_updatesCompressor;
-
-private Q_SLOTS:
-    void changed();
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
-#endif // KIS_ONION_SKIN_DIALOG_H
+#endif /* __KIS_OPENGL_CANVAS_DEBUGGER_H */

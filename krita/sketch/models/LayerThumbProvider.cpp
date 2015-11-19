@@ -50,7 +50,7 @@ QImage LayerThumbProvider::requestImage(const QString& id, QSize* size, const QS
     if (id.split("/").first() == QLatin1String("fullimage")) {
         KisViewManager* view = qobject_cast<KisViewManager*>(d->layerModel->view());
         int width = 300 * ((float)view->image()->bounds().width() / (float)view->image()->bounds().height());
-        return view->image()->convertToQImage(QRect(0, 0, width, 300), QSize(width, 300), view->image()->profile());
+        return view->image()->convertToQImage(QSize(width, 300), view->image()->profile());
     }
     return d->layerModel->layerThumbnail(id);
 }

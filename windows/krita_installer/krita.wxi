@@ -13,7 +13,7 @@
 -->
 <Include>
 
-    <?define ProductName="Krita Desktop $(env.C2WINSTALL_VERSIONSTRING)" ?>
+    <?define ProductName="Krita Desktop $(env.KRITA_VERSIONSTRING)" ?>
     <?define ProductManufacturer="Krita Foundation" ?>
     
 </Include>

@@ -97,10 +97,7 @@ void KisFilterManager::setup(KActionCollection * ac, KisActionManager *actionMan
     d->actionManager = actionManager;
 
     // Setup reapply action
-    d->reapplyAction = new KisAction(i18n("Apply Filter Again"), this);
-    d->reapplyAction->setDefaultShortcut(QKeySequence(Qt::CTRL + Qt::Key_F));
-    d->actionManager->addAction("filter_apply_again", d->reapplyAction);
-
+    d->reapplyAction = d->actionManager->createAction("filter_apply_again");
     d->reapplyAction->setEnabled(false);
     connect(d->reapplyAction, SIGNAL(triggered()), SLOT(reapplyLastFilter()));
 

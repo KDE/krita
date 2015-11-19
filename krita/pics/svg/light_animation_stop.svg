@@ -9,109 +9,61 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
    width="22"
    height="22"
-   id="svg2"
-   version="1.1"
-   inkscape:version="0.49 r12742"
-   viewBox="0 0 22 22"
-   sodipodi:docname="media-playback-stop.svg">
-  <defs
-     id="defs4" />
+   id="svg6190"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="light_animation_stop.svg"
+   inkscape:export-filename="../dark_animation_stop.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
   <sodipodi:namedview
-     id="base"
      pagecolor="#ffffff"
      bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="22.627417"
-     inkscape:cx="13.330953"
-     inkscape:cy="9.9515617"
-     inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:window-width="1878"
+     inkscape:window-height="1048"
+     id="namedview4440"
      showgrid="true"
-     units="px"
-     borderlayer="true"
-     inkscape:showpageshadow="false"
-     inkscape:window-width="1366"
-     inkscape:window-height="718"
-     inkscape:window-x="-2"
-     inkscape:window-y="23"
-     inkscape:window-maximized="1">
-    <sodipodi:guide
-       position="2,20.000017"
-       orientation="18,0"
-       id="guide4066" />
-    <sodipodi:guide
-       position="2,2.0000174"
-       orientation="0,18"
-       id="guide4068" />
-    <sodipodi:guide
-       position="20,2.0000174"
-       orientation="-18,0"
-       id="guide4070" />
-    <sodipodi:guide
-       position="20,20.000017"
-       orientation="0,-18"
-       id="guide4072" />
-    <sodipodi:guide
-       position="3,19.000017"
-       orientation="16,0"
-       id="guide4074" />
-    <sodipodi:guide
-       position="3,3.0000174"
-       orientation="0,16"
-       id="guide4076" />
-    <sodipodi:guide
-       position="19,3.0000174"
-       orientation="-16,0"
-       id="guide4078" />
-    <sodipodi:guide
-       position="19,19.000017"
-       orientation="0,-16"
-       id="guide4080" />
+     inkscape:zoom="21.454545"
+     inkscape:cx="6.1391482"
+     inkscape:cy="16.684468"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg6190"
+     inkscape:snap-bbox="true"
+     inkscape:snap-bbox-edge-midpoints="true">
     <inkscape:grid
        type="xygrid"
-       id="grid4101" />
-    <sodipodi:guide
-       position="8,19.000017"
-       orientation="0,-5"
-       id="guide4124" />
-    <sodipodi:guide
-       position="11,3.0000174"
-       orientation="0,4"
-       id="guide4241" />
+       id="grid3250" />
   </sodipodi:namedview>
   <metadata
-     id="metadata7">
+     id="metadata6196">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <g
-     inkscape:label="Capa 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(0,-1030.3622)">
-    <path
-       style="fill:#f2f2f2;fill-opacity:1;stroke:none"
-       d="M 11 3 C 6.568 3 3 6.568 3 11 C 3 15.432 6.568 19 11 19 C 15.432 19 19 15.432 19 11 C 19 6.568 15.432 3 11 3 z M 11 4 C 14.878 4 18 7.122 18 11 C 18 14.878 14.878 18 11 18 C 7.122 18 4 14.878 4 11 C 4 7.122 7.122 4 11 4 z "
-       transform="translate(0,1030.3622)"
-       id="rect3356" />
-    <rect
-       style="fill:#f2f2f2;fill-opacity:1;stroke:none"
-       id="rect3274"
-       width="6"
-       height="6"
-       x="8"
-       y="1038.3622"
-       ry="0" />
-  </g>
+  <defs
+     id="defs6194" />
+  <rect
+     style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#cacaca;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+     id="rect4134"
+     width="12"
+     height="12"
+     x="5"
+     y="5"
+     ry="0" />
 </svg>

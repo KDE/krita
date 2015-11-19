@@ -262,4 +262,35 @@ void TimelineModelTest::slotGuiChangedNode(KisNodeSP node)
     qDebug() << "GUI changed active node:" << node->name();
 }
 
+#include "kis_equalizer_column.h"
+#include "kis_equalizer_slider.h"
+#include "kis_equalizer_widget.h"
+
+void TimelineModelTest::testOnionSkins()
+{
+    QDialog dlg;
+
+    QFont font;
+    font.setPointSizeF(9);
+    dlg.setFont(font);
+
+    QHBoxLayout *layout = new QHBoxLayout(&dlg);
+
+    KisEqualizerWidget *w = new KisEqualizerWidget(10, &dlg);
+    connect(w, SIGNAL(sigConfigChanged()), SLOT(slotBang()));
+
+    layout->addWidget(w);
+
+    dlg.setLayout(layout);
+
+    dlg.resize(600, 400);
+    dlg.exec();
+
+}
+
+void TimelineModelTest::slotBang()
+{
+    ENTER_FUNCTION() << "!!!!";
+}
+
 QTEST_MAIN(TimelineModelTest)

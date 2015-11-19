@@ -14,8 +14,6 @@ set(kritaflake_SRCS
     KoDocumentResourceManager.cpp
     KoCanvasObserverBase.cpp
     KoCanvasSupervisor.cpp
-    KoCutController.cpp
-    KoCopyController.cpp
     KoDockFactoryBase.cpp
     KoDockRegistry.cpp
     KoDataCenterBase.cpp

@@ -69,7 +69,5 @@ Terminal=false
 Type=Application
 X-KDE-ServiceTypes=Calligra/Application
 X-Calligra-DefaultMimeTypes=image/tiff
-X-DBUS-StartupType=Multi
-X-DBUS-ServiceName=org.krita.krita
 X-KDE-SubstituteUID=false
 X-KDE-Username=

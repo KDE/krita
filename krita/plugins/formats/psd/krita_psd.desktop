@@ -69,7 +69,5 @@ Terminal=false
 Type=Application
 X-KDE-ServiceTypes=Calligra/Application
 X-Calligra-DefaultMimeTypes=image/x-psd,image/photoshop,image/x-photoshop,image/x-vnd.adobe.photoshop,image/vnd.adobe.photoshop
-X-DBUS-ServiceName=org.krita.krita
-X-DBUS-StartupType=multi
 X-KDE-SubstituteUID=false
 X-KDE-Username=

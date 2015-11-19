@@ -137,7 +137,7 @@ option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binar
 # 5. estimate which of the products/features can be build by internal deps
 
 # get the special macros
-include(KritaProductsetMacros)
+include(CalligraProductsetMacros)
 include(MacroJPEG)
 
 # get the definitions of products, features and product sets
@@ -533,13 +533,13 @@ macro_log_feature(Threads_FOUND "PThreads" "A low-level threading library" "" FA
 ## Test for OpenMP (for G'Mic)
 ##
 macro_optional_find_package(OpenMP)
-macro_log_feature(OPENMP_FOUND "OpenMP" "A low-level parallel execution library" "http://openmp.org/wp/" FALSE "" "Optionally used by the G'Mic plugin"
+macro_log_feature(OPENMP_FOUND "OpenMP" "A low-level parallel execution library" "http://openmp.org/wp/" FALSE "" "Optionally used by the G'Mic plugin")
 
 ##
 ## Test for Curl (for G'Mic)
 ##
 macro_optional_find_package(CURL)
-macro_log_feature(CURL_FOUND "CURL" "A tool to fetch remote data" "http://curl.haxx.se/" FALSE "" "Optionally used by the G'Mic plugin"
+macro_log_feature(CURL_FOUND "CURL" "A tool to fetch remote data" "http://curl.haxx.se/" FALSE "" "Optionally used by the G'Mic plugin")
 
  ###############################
 ################################
@@ -649,7 +649,7 @@ set(BASICFLAKES_INCLUDES ${KOWIDGETS_INCLUDES}
 ####################################################
 ###################################################
 
-calligra_drop_product_on_bad_condition( APP_KRITA
+calligra_dzrop_product_on_bad_condition( APP_KRITA
     EIGEN3_FOUND "Eigen devel not found"
     EXIV2_FOUND "libexiv2 devel not found"
     HAVE_REQUIRED_LCMS_VERSION "lcms devel not found"

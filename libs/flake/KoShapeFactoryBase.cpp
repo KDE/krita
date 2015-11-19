@@ -64,7 +64,6 @@ public:
     QMutex pluginLoadingMutex;
     QString deferredPluginName;
     QList<KoShapeTemplate> templates;
-    QList<KoShapeConfigFactoryBase*> configPanels;
     const QString id;
     const QString name;
     QString family;
@@ -142,16 +141,6 @@ void KoShapeFactoryBase::setFamily(const QString & family)
 QString KoShapeFactoryBase::id() const
 {
     return d->id;
-}
-
-void KoShapeFactoryBase::setOptionPanels(const QList<KoShapeConfigFactoryBase*> &panelFactories)
-{
-    d->configPanels = panelFactories;
-}
-
-QList<KoShapeConfigFactoryBase*> KoShapeFactoryBase::panelFactories() const
-{
-    return d->configPanels;
 }
 
 QList<KoShapeTemplate> KoShapeFactoryBase::templates() const

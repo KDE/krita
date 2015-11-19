@@ -76,7 +76,6 @@ set(kritaflake_SRCS
     KoHatchBackground.cpp
     KoPatternBackground.cpp
     KoShapeConfigWidgetBase.cpp
-    KoShapeConfigFactoryBase.cpp
     KoDrag.cpp
     KoDragOdfSaveHelper.cpp
     KoShapeOdfSaveHelper.cpp

@@ -33,7 +33,6 @@
 
 class KoShape;
 class KoProperties;
-class KoShapeConfigFactoryBase;
 class KoShapeConfigWidgetBase;
 class KoShapeLoadingContext;
 class KoDocumentResourceManager;
@@ -110,29 +109,6 @@ public:
     virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels() {
         return QList<KoShapeConfigWidgetBase*>();
     }
-
-    /**
-     * Set app specific panel factories to show config options after creating a new shape.
-     * The application that lets the user create shapes is able to set option
-     * widgets that will be shown after the user inserted a new shape of the
-     * type that this factory presents.
-     * Example:
-     *  @code
-     *  // Init shape Factories with our frame based configuration panels.
-     *  QList<KoShapeConfigFactoryBase *> panels;
-     *  panels.append(new AppConfigFactory()); // insert some factory
-     *  foreach(QString id, KoShapeRegistry::instance()->keys())
-     *      KoShapeRegistry::instance()->value(id)->setOptionPanels(panels);
-     *  @endcode
-     * @see panelFactories()
-     */
-    void setOptionPanels(const QList<KoShapeConfigFactoryBase*> &panelFactories);
-
-    /**
-     * Return the app-specific panels.
-     * @see setOptionPanels()
-     */
-    QList<KoShapeConfigFactoryBase*> panelFactories() const;
 
     /**
      * return the id for the shape this factory creates.

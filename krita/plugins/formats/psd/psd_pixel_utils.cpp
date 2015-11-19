@@ -39,9 +39,7 @@
 #include "kis_iterator_ng.h"
 
 #include "config_psd.h"
-#ifdef HAVE_ZLIB
 #include "zlib.h"
-#endif
 
 namespace PsdPixelUtils {
 
@@ -274,7 +272,6 @@ typedef quint8 Bytef;
 psd_status psd_unzip_without_prediction(psd_uchar *src_buf, psd_int src_len, 
                                         psd_uchar *dst_buf, psd_int dst_len)
 {
-#ifdef HAVE_ZLIB
     z_stream stream;
     psd_int state;
 
@@ -301,10 +298,6 @@ psd_status psd_unzip_without_prediction(psd_uchar *src_buf, psd_int src_len,
         return 0;
 
     return 1;
-
-#endif /* HAVE_ZLIB */
-
-    return 0;
 }
 
 psd_status psd_unzip_with_prediction(psd_uchar *src_buf, psd_int src_len, 

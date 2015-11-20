@@ -578,7 +578,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
                                   i18nc("@title:window", "Krita"),
                                   i18n("You enabled OpenColorIO based color management, but your image is not an RGB image.\n"
                                        "OpenColorIO-based color management only works with RGB images.\n"
-                                       "Please check the settings in the LUT docker."
+                                       "Please check the settings in the LUT docker.\n"
                                        "OpenColorIO will now be deactivated."));
         }
 

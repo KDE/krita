@@ -286,7 +286,10 @@ void KisPaintLayer::setOnionSkinEnabled(bool state)
     }
 
     nodeProperties().setProperty("onionskin", state);
-    m_d->contentChannel->setOnionSkinsEnabled(state);
+
+    if (m_d->contentChannel) {
+        m_d->contentChannel->setOnionSkinsEnabled(state);
+    }
 
     baseNodeChangedCallback();
 }
@@ -305,6 +308,8 @@ void KisPaintLayer::enableAnimation()
 {
     m_d->contentChannel = m_d->paintDevice->createKeyframeChannel(KisKeyframeChannel::Content, this);
     addKeyframeChannel(m_d->contentChannel);
+
+    m_d->contentChannel->setOnionSkinsEnabled(onionSkinEnabled());
 
     KisLayer::enableAnimation();
 }

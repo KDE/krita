@@ -189,7 +189,7 @@ bool KisKraSaveVisitor::visit(KisCloneLayer *layer)
 bool KisKraSaveVisitor::visit(KisFilterMask *mask)
 {
     if (!mask->filter()) {
-        m_errorMessages << i18n("Failed to save filter mask %1. It has no filter", mask->name());
+        m_errorMessages << i18n("Failed to save filter mask %1. It has no filter.", mask->name());
         return false;
     }
     if (!saveSelection(mask)) {

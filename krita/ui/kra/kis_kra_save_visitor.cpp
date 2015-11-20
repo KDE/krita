@@ -94,7 +94,7 @@ bool KisKraSaveVisitor::visit(KisExternalLayer * layer)
         QString location = getLocation(layer, DOT_SHAPE_LAYER);
         result = m_store->enterDirectory(location);
         if (!result) {
-            m_errorMessages << i18n("Filed to open %1.", location);
+            m_errorMessages << i18n("Failed to open %1.", location);
         }
         else {
             result = shapeLayer->saveLayer(m_store);

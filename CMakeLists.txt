@@ -27,6 +27,8 @@ if(NOT ${CMAKE_VERSION} VERSION_LESS 3.3.0)
     cmake_policy(SET CMP0063 OLD)
 endif()
 
+set(APPLE_SUPPRESS_X11_WARNING TRUE)
+
 # QT5TODO: remove KDE4_BUILD_TESTS once all kde4_add_unit_test have been converted
 # transitional forward compatibility:
 # BUILD_TESTING is cmake standard, KDE4_BUILD_TESTS not used by ECM/KF5, but only
@@ -172,13 +174,13 @@ calligra_set_productset(${PRODUCTSET})
 find_package(ECM 1.7.0 REQUIRED NOMODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 include(ECMOptionalAddSubdirectory)
-include(ECMInstallIcons)
 include(ECMAddAppIcon)
 include(ECMSetupVersion)
 include(ECMMarkNonGuiExecutable)
 include(ECMGenerateHeaders)
 include(GenerateExportHeader)
 include(ECMMarkAsTest)
+include(ECMInstallIcons)
 
 include(CMakePackageConfigHelpers)
 include(WriteBasicConfigVersionFile)
@@ -238,10 +240,8 @@ endif ()
 include (MacroLibrary)
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
-include (ECMInstallIcons)
 
 macro_ensure_out_of_source_build("Compiling Calligra inside the source directory is not possible. Please refer to the build instruction http://community.kde.org/Calligra/Building/Building_Calligra")
-
 
 find_package(KF5KIO ${MIN_FRAMEWORKS_VERSION})
 macro_bool_to_01(KF5KIO_FOUND HAVE_KIO)

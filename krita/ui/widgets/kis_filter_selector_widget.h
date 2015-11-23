@@ -96,7 +96,9 @@ public:
     void setModel(QAbstractItemModel *model)
     {
         QTreeView::setModel(model);
-        header()->setResizeMode(0, QHeaderView::ResizeToContents);
+        if (header()->visualIndex(0) != -1) {
+            header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+        }
     }
 
 protected:

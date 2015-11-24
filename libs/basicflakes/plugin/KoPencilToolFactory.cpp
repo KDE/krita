@@ -24,7 +24,7 @@
 #include <klocalizedstring.h>
 
 KoPencilToolFactory::KoPencilToolFactory()
-        : KoToolFactoryBase("KoPencilTool")
+    : KoToolFactoryBase("KoPencilTool")
 {
     setToolTip(i18n("Freehand path"));
     setToolType("karbon, krita");

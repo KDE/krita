@@ -25,7 +25,7 @@
 #include <klocalizedstring.h>
 
 KoCreatePathToolFactory::KoCreatePathToolFactory()
-        : KoToolFactoryBase(KoCreatePathTool_ID)
+    : KoToolFactoryBase(KoCreatePathTool_ID)
 {
     setToolTip(i18n("Draw path"));
     setToolType(mainToolType());

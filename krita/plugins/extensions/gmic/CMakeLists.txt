@@ -4,7 +4,7 @@
 
 set(GMIC_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/gmic")
 
-include_directories(${GMIC_SOURCE_DIR})
+include_directories(${KOWIDGETS_INCLUDES} ${GMIC_SOURCE_DIR})
 
 if(NOT MSVC)
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -fPIC")
@@ -33,7 +33,7 @@ set(gmic_headers_SRCS
   ${GMIC_SOURCE_DIR}/gmic.h
 )
 
-sModelIndexConverterShowAll# Mandatory flags
+# Mandatory flags
 add_definitions(-Dgmic_gimp)
 add_definitions(-Dgmic_build)
 add_definitions(-Dgmic_float_only)
@@ -106,7 +106,8 @@ if(FFTW3_FOUND)
 endif()
 
 if (X11_FOUND)
-    target_link_libraries(gmic ${X11_LIBRARIES})
+    
+    target_link_libraries(gmic ${X11_LIBRARIES} KF5::WindowSystem Qt5::Core)
 endif()
 
 if(CURL_FOUND)
@@ -183,5 +184,5 @@ DESTINATION ${GMIC_INSTALL_DIR} )
 
 # tests, currently broken on OSX due to fftw linking problem
 if(NOT APPLE)
-    add_subdirectory(tests)
+    #add_subdirectory(tests)
 endif()

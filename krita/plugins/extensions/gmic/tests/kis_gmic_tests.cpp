@@ -21,6 +21,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <kis_image.h>
 #include <KoColorSpace.h>
+#include <KoResourcePaths.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColor.h>
 #include <kis_surrogate_undo_adapter.h>
@@ -88,7 +89,7 @@ void KisGmicTests::initTestCase()
     KisGmicParser parser(filePaths);
     m_root = parser.createFilterTree();
 
-    m_blacklistFilePath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", BLACKLIST);
+    m_blacklistFilePath = KoResourcePaths::findResource("gmic_definitions", BLACKLIST);
     m_blacklister = new KisGmicBlacklister(m_blacklistFilePath);
 
     m_qimage = QImage(QString(FILES_DATA_DIR)+"/"+"poster_rodents_bunnysize.jpg");

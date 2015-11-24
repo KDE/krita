@@ -200,7 +200,7 @@ void KisFilterOption::lodLimitations(KisPaintopLodLimitations *l) const
         if (m_currentFilter->neededRect(testRect, config, 0) != testRect ||
             m_currentFilter->changedRect(testRect, config, 0) != testRect) {
 
-            l->blockers << KoID("filter-nonlinear", i18nc("PaintOp LoD limitation", "\"%1\" does not support LOD (non-linear filter)", config->name()));
+            l->blockers << KoID("filter-nonlinear", i18nc("PaintOp instant preview limitation", "\"%1\" does not support scaled preview (non-linear filter)", config->name()));
         }
     }
 }

@@ -505,10 +505,10 @@
     </Action>
     <Action name="level_of_detail_mode">
       <icon></icon>
-      <text>&amp;Fast Preview Mode (LOD)</text>
+      <text>&amp;Instant Preview Mode</text>
       <whatsThis></whatsThis>
-      <toolTip>Fast Preview Mode (LOD)</toolTip>
-      <iconText>Fast Preview Mode (LOD)</iconText>
+      <toolTip>Instant Preview Mode</toolTip>
+      <iconText>Instant Preview Mode</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Shift+L</shortcut>

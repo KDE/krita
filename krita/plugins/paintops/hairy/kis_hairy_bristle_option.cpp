@@ -100,5 +100,5 @@ void KisHairyBristleOption::writeOptionSetting(KisPropertiesConfiguration* confi
 
 void KisHairyBristleOption::lodLimitations(KisPaintopLodLimitations *l) const
 {
-    l->limitations << KoID("hairy-brush", i18nc("PaintOp LoD limitation", "Bristle Brush (the lines will be thinner than on preview)"));
+    l->limitations << KoID("hairy-brush", i18nc("PaintOp instant preview limitation", "Bristle Brush (the lines will be thinner than on preview)"));
 }

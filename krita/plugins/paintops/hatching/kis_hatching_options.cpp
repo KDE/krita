@@ -119,6 +119,6 @@ void KisHatchingOptions::readOptionSetting(const KisPropertiesConfiguration* set
 
 void KisHatchingOptions::lodLimitations(KisPaintopLodLimitations *l) const
 {
-    l->limitations << KoID("hatching-brush", i18nc("PaintOp LoD limitation", "Hatching Brush (heavy aliasing in LOD mode)"));
+    l->limitations << KoID("hatching-brush", i18nc("PaintOp instant preview limitation", "Hatching Brush (heavy aliasing in preview mode)"));
 }
 

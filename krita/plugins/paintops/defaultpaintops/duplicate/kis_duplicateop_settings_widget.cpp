@@ -70,6 +70,6 @@ KisPropertiesConfiguration* KisDuplicateOpSettingsWidget::configuration() const
 KisPaintopLodLimitations KisDuplicateOpSettingsWidget::lodLimitations() const
 {
     KisPaintopLodLimitations l = KisBrushBasedPaintopOptionWidget::lodLimitations();
-    l.blockers << KoID("clone-brush", i18nc("PaintOp LoD limitation", "Clone Brush (temporarily disabled)"));
+    l.blockers << KoID("clone-brush", i18nc("PaintOp instant preview limitation", "Clone Brush (temporarily disabled)"));
     return l;
 }

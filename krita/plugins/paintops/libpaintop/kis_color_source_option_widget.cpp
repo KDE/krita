@@ -87,11 +87,11 @@ void KisColorSourceOptionWidget::readOptionSetting(const KisPropertiesConfigurat
 void KisColorSourceOptionWidget::lodLimitations(KisPaintopLodLimitations *l) const
 {
     if (d->option.type() == KisColorSourceOption::TOTAL_RANDOM) {
-        l->limitations << KoID("source-total-random", i18nc("PaintOp LoD limitation", "Source -> Total Random"));
+        l->limitations << KoID("source-total-random", i18nc("PaintOp instant preview limitation", "Source -> Total Random"));
     } else if (d->option.type() == KisColorSourceOption::PATTERN) {
-        l->blockers << KoID("source-pattern", i18nc("PaintOp LoD limitation", "Source -> Pattern"));
+        l->blockers << KoID("source-pattern", i18nc("PaintOp instant preview limitation", "Source -> Pattern"));
     } else if (d->option.type() == KisColorSourceOption::PATTERN_LOCKED) {
-        l->blockers << KoID("source-pattern-locked", i18nc("PaintOp LoD limitation", "Source -> Pattern Locked"));
+        l->blockers << KoID("source-pattern-locked", i18nc("PaintOp instant preview limitation", "Source -> Pattern Locked"));
     }
 }
 

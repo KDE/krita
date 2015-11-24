@@ -90,24 +90,24 @@ void KisLodAvailabilityWidget::setLimitations(const KisPaintopLodLimitations &l)
 
     bool isBlocked = !l.blockers.isEmpty();
     bool isLimited = !l.limitations.isEmpty();
-    QString text = !isBlocked && isLimited ? i18n("(LOD)*") : i18n("LOD");
+    QString text = !isBlocked && isLimited ? i18n("(Instant Preview)*") : i18n("Instant Preview");
 
     QString toolTip;
 
     if (isBlocked) {
         toolTip.append(i18nc("@info:tooltip",
-                             "<para>Fast Preview Mode (LOD) is "
+                             "<para>Instant Preview Mode is "
                              "disabled by the following options:"
                              "<list>%1</list></para>", blockersText));
 
     } else if (isLimited) {
         toolTip.append(i18nc("@info:tooltip",
-                             "<para>Fast Preview (LOD) may look different "
+                             "<para>Instant Preview may look different "
                              "from the final result. In case of troubles "
                              "try disabling the following options:"
                              "<list>%1</list></para>", limitationsText));
     } else {
-        toolTip = i18nc("@info:tooltip", "<para>Fast Preview Mode (LOD) is available</para>");
+        toolTip = i18nc("@info:tooltip", "<para>Instant Preview Mode is available</para>");
     }
 
     {

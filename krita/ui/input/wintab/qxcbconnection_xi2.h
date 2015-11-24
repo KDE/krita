@@ -141,25 +141,7 @@ public:
     static void handleTabletEvent(QWindow *w, const QPointF &local, const QPointF &global,
                                   int device, int pointerType, Qt::MouseButtons buttons, qreal pressure, int xTilt, int yTilt,
                                   qreal tangentialPressure, qreal rotation, int z, qint64 uid,
-                                  Qt::KeyboardModifiers modifiers = Qt::NoModifier)
-    {
-        Q_UNUSED(w);
-        Q_UNUSED(local);
-        Q_UNUSED(global);
-        Q_UNUSED(device);
-        Q_UNUSED(pointerType);
-        Q_UNUSED(buttons);
-        Q_UNUSED(pressure);
-        Q_UNUSED(xTilt);
-        Q_UNUSED(yTilt);
-        Q_UNUSED(tangentialPressure);
-        Q_UNUSED(rotation);
-        Q_UNUSED(z);
-        Q_UNUSED(uid);
-        Q_UNUSED(modifiers);
-
-        ENTER_FUNCTION();
-    }
+                                  Qt::KeyboardModifiers modifiers = Qt::NoModifier);
 };
 
 namespace QXcbAtom {
@@ -450,7 +432,7 @@ public:
     void xi2Select(xcb_window_t window);
     XInput2TouchDeviceData *touchDeviceForId(int id);
 
-    void xi2HandleEvent(xcb_ge_event_t *event);
+    bool xi2HandleEvent(xcb_ge_event_t *event);
     void xi2ProcessTouch(void *xiDevEvent, QXcbWindow *platformWindow);
     bool xi2SetMouseGrabEnabled(xcb_window_t w, bool grab);
 
@@ -465,7 +447,7 @@ public:
     void xi2HandleScrollEvent(void *event, ScrollingDevice &scrollingDevice);
     Qt::MouseButton xiToQtMouseButton(uint32_t b);
 
-    bool xi2HandleTabletEvent(void *event, TabletData *tabletData, QXcbWindowEventListener *eventListener);
+    bool xi2HandleTabletEvent(void *event, TabletData *tabletData, QWindow *window);
     void xi2ReportTabletEvent(TabletData &tabletData, void *event);
 
 
@@ -476,16 +458,15 @@ public:
 
     bool xi2MouseEvents() const;
 
-    void addWindowEventListener(xcb_window_t id, QXcbWindowEventListener *eventListener);
-    void removeWindowEventListener(xcb_window_t id);
-    QXcbWindowEventListener *windowEventListenerFromId(xcb_window_t id);
-    QXcbWindow *platformWindowFromId(xcb_window_t id);
+    QWindow *windowFromId(xcb_window_t id);
 
     bool canGrab() const { return m_canGrabServer; }
     void *xlib_display() const;
     QXcbKeyboard *keyboard() const { return m_keyboard; }
 
     xcb_connection_t *xcb_connection() const { return m_connection; }
+
+    void notifyEnterEvent(xcb_enter_notify_event_t *event);
 
 private:
     xcb_connection_t *m_connection;
@@ -501,7 +482,7 @@ private:
     int m_xiOpCode, m_xiEventBase, m_xiErrorBase;
     QVector<TabletData> m_tabletData;
 
-    WindowMapper m_mapper;
+    QHash<xcb_window_t, QWindow*> m_windowMapper;
     QXcbKeyboard *m_keyboard;
 
     QHash<int, XInput2TouchDeviceData*> m_touchDevices;

@@ -34,6 +34,11 @@
 #include "qxcbconnection_xi2.h"
 
 #include <QX11Info>
+#include <QWidget>
+#include <QPointer>
+#include <QElapsedTimer>
+#include <QGuiApplication>
+
 
 #include <X11/extensions/XI2proto.h>
 #include <xcb/xproto.h>
@@ -333,27 +338,22 @@ bool QXcbConnection::xi2MouseEvents() const
     return mouseViaXI2;
 }
 
-void QXcbConnection::addWindowEventListener(xcb_window_t id, QXcbWindowEventListener *eventListener)
+void QXcbConnection::notifyEnterEvent(xcb_enter_notify_event_t *event)
 {
-    m_mapper.insert(id, eventListener);
+    xcb_window_t window = event->event;
+
+    if (!m_windowMapper.contains(window)) {
+        QWidget *widget = QWidget::find(window);
+        if (widget) {
+            QWindow *windowHandle = widget->windowHandle();
+            m_windowMapper.insert(window, windowHandle);
+        }
+    }
 }
 
-void QXcbConnection::removeWindowEventListener(xcb_window_t id)
+QWindow* QXcbConnection::windowFromId(xcb_window_t id)
 {
-    m_mapper.remove(id);
-}
-
-QXcbWindowEventListener *QXcbConnection::windowEventListenerFromId(xcb_window_t id)
-{
-    return m_mapper.value(id, 0);
-}
-
-QXcbWindow *QXcbConnection::platformWindowFromId(xcb_window_t id)
-{
-    QXcbWindowEventListener *listener = m_mapper.value(id, 0);
-    if (listener)
-        return listener->toWindow();
-    return 0;
+    return m_windowMapper.value(id, 0);
 }
 
 static int xi2ValuatorOffset(unsigned char *maskPtr, int maskLen, int number)
@@ -483,5 +483,192 @@ Qt::KeyboardModifiers QXcbKeyboard::translateModifiers(int s) const
 */
 
     return ret;
+}
 
+class Q_GUI_EXPORT QWindowSystemInterfacePrivate {
+public:
+    enum EventType {
+        UserInputEvent = 0x100,
+        Close = UserInputEvent | 0x01,
+        GeometryChange = 0x02,
+        Enter = UserInputEvent | 0x03,
+        Leave = UserInputEvent | 0x04,
+        ActivatedWindow = 0x05,
+        WindowStateChanged = 0x06,
+        Mouse = UserInputEvent | 0x07,
+        FrameStrutMouse = UserInputEvent | 0x08,
+        Wheel = UserInputEvent | 0x09,
+        Key = UserInputEvent | 0x0a,
+        Touch = UserInputEvent | 0x0b,
+        ScreenOrientation = 0x0c,
+        ScreenGeometry = 0x0d,
+        ScreenAvailableGeometry = 0x0e,
+        ScreenLogicalDotsPerInch = 0x0f,
+        ScreenRefreshRate = 0x10,
+        ThemeChange = 0x11,
+        Expose_KRITA_XXX = 0x12,
+        FileOpen = UserInputEvent | 0x13,
+        Tablet = UserInputEvent | 0x14,
+        TabletEnterProximity = UserInputEvent | 0x15,
+        TabletLeaveProximity = UserInputEvent | 0x16,
+        PlatformPanel = UserInputEvent | 0x17,
+        ContextMenu = UserInputEvent | 0x18,
+        EnterWhatsThisMode = UserInputEvent | 0x19,
+#ifndef QT_NO_GESTURES
+        Gesture = UserInputEvent | 0x1a,
+#endif
+        ApplicationStateChanged = 0x19,
+        FlushEvents = 0x20,
+        WindowScreenChanged = 0x21
+    };
+
+    class WindowSystemEvent {
+    public:
+        enum {
+            Synthetic = 0x1,
+            NullWindow = 0x2
+        };
+
+        explicit WindowSystemEvent(EventType t)
+            : type(t), flags(0) { }
+        virtual ~WindowSystemEvent() { }
+
+        bool synthetic() const  { return flags & Synthetic; }
+        bool nullWindow() const { return flags & NullWindow; }
+
+        EventType type;
+        int flags;
+    };
+
+    class UserEvent : public WindowSystemEvent {
+    public:
+        UserEvent(QWindow * w, ulong time, EventType t)
+            : WindowSystemEvent(t), window(w), timestamp(time)
+        {
+            if (!w)
+                flags |= NullWindow;
+        }
+        QPointer<QWindow> window;
+        unsigned long timestamp;
+    };
+
+    class InputEvent: public UserEvent {
+    public:
+        InputEvent(QWindow * w, ulong time, EventType t, Qt::KeyboardModifiers mods)
+            : UserEvent(w, time, t), modifiers(mods) {}
+        Qt::KeyboardModifiers modifiers;
+    };
+
+    class TabletEvent : public InputEvent {
+    public:
+        static void handleTabletEvent(QWindow *w, const QPointF &local, const QPointF &global,
+                                      int device, int pointerType, Qt::MouseButtons buttons, qreal pressure, int xTilt, int yTilt,
+                                      qreal tangentialPressure, qreal rotation, int z, qint64 uid,
+                                      Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+
+        TabletEvent(QWindow *w, ulong time, const QPointF &local, const QPointF &global,
+                    int device, int pointerType, Qt::MouseButtons b, qreal pressure, int xTilt, int yTilt, qreal tpressure,
+                    qreal rotation, int z, qint64 uid, Qt::KeyboardModifiers mods)
+            : InputEvent(w, time, Tablet, mods),
+              buttons(b), local(local), global(global), device(device), pointerType(pointerType),
+              pressure(pressure), xTilt(xTilt), yTilt(yTilt), tangentialPressure(tpressure),
+              rotation(rotation), z(z), uid(uid) { }
+        Qt::MouseButtons buttons;
+        QPointF local;
+        QPointF global;
+        int device;
+        int pointerType;
+        qreal pressure;
+        int xTilt;
+        int yTilt;
+        qreal tangentialPressure;
+        qreal rotation;
+        int z;
+        qint64 uid;
+    };
+};
+
+void processTabletEvent(QWindowSystemInterfacePrivate::TabletEvent *e);
+
+static QElapsedTimer g_eventTimer;
+struct EventTimerStaticInitializer
+{
+    EventTimerStaticInitializer() {
+        g_eventTimer.start();
+    }
+};
+EventTimerStaticInitializer __timerStaticInitializer;
+
+Qt::MouseButtons tabletState = Qt::NoButton;
+QWindow* tabletPressTarget = 0;
+
+void QWindowSystemInterface::handleTabletEvent(QWindow *w, const QPointF &local, const QPointF &global,
+                                               int device, int pointerType, Qt::MouseButtons buttons, qreal pressure, int xTilt, int yTilt,
+                                               qreal tangentialPressure, qreal rotation, int z, qint64 uid,
+                                               Qt::KeyboardModifiers modifiers)
+{
+    qint64 timestamp = g_eventTimer.elapsed();
+
+    QWindowSystemInterfacePrivate::TabletEvent *e =
+        new QWindowSystemInterfacePrivate::TabletEvent(w, timestamp, local, global, device, pointerType, buttons, pressure,
+                                                       xTilt, yTilt, tangentialPressure, rotation, z, uid, modifiers);
+
+    processTabletEvent(e);
+}
+
+void processTabletEvent(QWindowSystemInterfacePrivate::TabletEvent *e)
+{
+#ifndef QT_NO_TABLETEVENT
+    QEvent::Type type = QEvent::TabletMove;
+    if (e->buttons != tabletState)
+        type = (e->buttons > tabletState) ? QEvent::TabletPress : QEvent::TabletRelease;
+
+    QWindow *window = e->window.data();
+    //modifier_buttons = e->modifiers; // Krita: not used!
+
+    bool localValid = true;
+    // If window is null, pick one based on the global position and make sure all
+    // subsequent events up to the release are delivered to that same window.
+    // If window is given, just send to that.
+    if (type == QEvent::TabletPress) {
+        if (e->nullWindow()) {
+            window = QGuiApplication::topLevelAt(e->global.toPoint());
+            localValid = false;
+        }
+        if (!window)
+            return;
+        tabletPressTarget = window;
+    } else {
+        if (e->nullWindow()) {
+            window = tabletPressTarget;
+            localValid = false;
+        }
+        if (type == QEvent::TabletRelease)
+            tabletPressTarget = 0;
+        if (!window)
+            return;
+    }
+    QPointF local = e->local;
+    if (!localValid) {
+        QPointF delta = e->global - e->global.toPoint();
+        local = window->mapFromGlobal(e->global.toPoint()) + delta;
+    }
+    Qt::MouseButtons stateChange = e->buttons ^ tabletState;
+    Qt::MouseButton button = Qt::NoButton;
+    for (int check = Qt::LeftButton; check <= int(Qt::MaxMouseButton); check = check << 1) {
+        if (check & stateChange) {
+            button = Qt::MouseButton(check);
+            break;
+        }
+    }
+    QTabletEvent ev(type, local, e->global,
+                    e->device, e->pointerType, e->pressure, e->xTilt, e->yTilt,
+                    e->tangentialPressure, e->rotation, e->z,
+                    e->modifiers, e->uid, button, e->buttons);
+    ev.setTimestamp(e->timestamp);
+    QGuiApplication::sendEvent(window, &ev);
+    tabletState = e->buttons;
+#else
+    Q_UNUSED(e)
+#endif
 }

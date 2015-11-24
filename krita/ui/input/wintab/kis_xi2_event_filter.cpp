@@ -56,8 +56,21 @@ bool KisXi2EventFilter::nativeEventFilter(const QByteArray &eventType, void *mes
     case XCB_GE_GENERIC: {
         xcb_ge_event_t *geEvent = reinterpret_cast<xcb_ge_event_t *>(event);
 
-        qDebug() << "Got a generic event!";
-        m_d->connection->xi2HandleEvent(geEvent);
+        const int eventSize = sizeof(xcb_ge_event_t) + 4 * geEvent->length;
+
+        // Qt's code *modifies* (!) the supplied event internally!!!
+        // And since we reuse Qt's code, we should make a copy of it.
+
+        xcb_ge_event_t *copiedEvent = (xcb_ge_event_t*) malloc(eventSize);
+        memcpy(copiedEvent, geEvent, eventSize);
+        bool result = m_d->connection->xi2HandleEvent(copiedEvent);
+        free(copiedEvent);
+
+        return true;
+    }
+    case XCB_ENTER_NOTIFY: {
+        xcb_enter_notify_event_t *enter = (xcb_enter_notify_event_t *)event;
+        m_d->connection->notifyEnterEvent(enter);
     }
     default:
         break;

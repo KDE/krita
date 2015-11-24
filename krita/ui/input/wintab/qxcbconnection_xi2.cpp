@@ -66,9 +66,9 @@ struct XInput2TouchDeviceData {
 void QXcbConnection::initializeXInput2()
 {
     // TODO Qt 6 (or perhaps earlier): remove these redundant env variables
-    if (qEnvironmentVariableIsSet("QT_XCB_DEBUG_XINPUT"))
+    if (qEnvironmentVariableIsSet("KIS_QT_XCB_DEBUG_XINPUT"))
         const_cast<QLoggingCategory&>(lcQpaXInput()).setEnabled(QtDebugMsg, true);
-    if (qEnvironmentVariableIsSet("QT_XCB_DEBUG_XINPUT_DEVICES"))
+    if (qEnvironmentVariableIsSet("KIS_QT_XCB_DEBUG_XINPUT_DEVICES"))
         const_cast<QLoggingCategory&>(lcQpaXInputDevices()).setEnabled(QtDebugMsg, true);
     Display *xDisplay = static_cast<Display *>(m_xlib_display);
     if (XQueryExtension(xDisplay, "XInputExtension", &m_xiOpCode, &m_xiEventBase, &m_xiErrorBase)) {
@@ -460,13 +460,13 @@ static inline qreal fixed1616ToReal(FP1616 val)
 }
 #endif // defined(XCB_USE_XINPUT21) || !defined(QT_NO_TABLETEVENT)
 
-void QXcbConnection::xi2HandleEvent(xcb_ge_event_t *event)
+bool QXcbConnection::xi2HandleEvent(xcb_ge_event_t *event)
 {
     if (xi2PrepareXIGenericDeviceEvent(event, m_xiOpCode)) {
         xXIGenericDeviceEvent *xiEvent = reinterpret_cast<xXIGenericDeviceEvent *>(event);
         int sourceDeviceId = xiEvent->deviceid; // may be the master id
         xXIDeviceEvent *xiDeviceEvent = 0;
-        QXcbWindowEventListener *eventListener = 0;
+        QWindow *window = 0;
 
         switch (xiEvent->evtype) {
         case XI_ButtonPress:
@@ -479,21 +479,16 @@ void QXcbConnection::xi2HandleEvent(xcb_ge_event_t *event)
 #endif
         {
             xiDeviceEvent = reinterpret_cast<xXIDeviceEvent *>(event);
-            eventListener = windowEventListenerFromId(xiDeviceEvent->event);
-            if (eventListener) {
-                long result = 0;
-                if (eventListener->handleGenericEvent(reinterpret_cast<xcb_generic_event_t *>(event), &result))
-                    return;
-            }
+            window = windowFromId(xiDeviceEvent->event);
             sourceDeviceId = xiDeviceEvent->sourceid; // use the actual device id instead of the master
             break;
         }
         case XI_HierarchyChanged:
             xi2HandleHierachyEvent(xiEvent);
-            return;
+            return false;
         case XI_DeviceChanged:
             xi2HandleDeviceChangedEvent(xiEvent);
-            return;
+            return false;
         default:
             break;
         }
@@ -501,43 +496,23 @@ void QXcbConnection::xi2HandleEvent(xcb_ge_event_t *event)
 #ifndef QT_NO_TABLETEVENT
         for (int i = 0; i < m_tabletData.count(); ++i) {
             if (m_tabletData.at(i).deviceId == sourceDeviceId) {
-                if (xi2HandleTabletEvent(xiEvent, &m_tabletData[i], eventListener))
-                    return;
+                if (xi2HandleTabletEvent(xiEvent, &m_tabletData[i], window)) {
+                    return true;
+                }
             }
         }
 #endif // QT_NO_TABLETEVENT
 
 #ifdef XCB_USE_XINPUT21
-        QHash<int, ScrollingDevice>::iterator device = m_scrollingDevices.find(sourceDeviceId);
-        if (device != m_scrollingDevices.end())
-            xi2HandleScrollEvent(xiEvent, device.value());
+        // Removed from Qt...
 #endif // XCB_USE_XINPUT21
 
 #ifdef XCB_USE_XINPUT22
-        if (xiDeviceEvent) {
-            switch (xiDeviceEvent->evtype) {
-            case XI_ButtonPress:
-            case XI_ButtonRelease:
-            case XI_Motion:
-                if (xi2MouseEvents() && eventListener && !(xiDeviceEvent->flags & XIPointerEmulated))
-                    eventListener->handleXIMouseEvent(event);
-                break;
-
-            case XI_TouchBegin:
-            case XI_TouchUpdate:
-            case XI_TouchEnd:
-                if (Q_UNLIKELY(lcQpaXInput().isDebugEnabled()))
-                    qCDebug(lcQpaXInput, "XI2 touch event type %d seq %d detail %d pos %6.1f, %6.1f root pos %6.1f, %6.1f on window %x",
-                            event->event_type, xiDeviceEvent->sequenceNumber, xiDeviceEvent->detail,
-                            fixed1616ToReal(xiDeviceEvent->event_x), fixed1616ToReal(xiDeviceEvent->event_y),
-                            fixed1616ToReal(xiDeviceEvent->root_x), fixed1616ToReal(xiDeviceEvent->root_y),xiDeviceEvent->event);
-                if (QXcbWindow *platformWindow = platformWindowFromId(xiDeviceEvent->event))
-                    xi2ProcessTouch(xiDeviceEvent, platformWindow);
-                break;
-            }
-        }
+        // Removed from Qt...
 #endif // XCB_USE_XINPUT22
     }
+
+    return false;
 }
 
 #ifdef XCB_USE_XINPUT22
@@ -548,148 +523,6 @@ static qreal valuatorNormalized(double value, XIValuatorClassInfo *vci)
     if (value < vci->min)
         value = vci->min;
     return (value - vci->min) / (vci->max - vci->min);
-}
-
-void QXcbConnection::xi2ProcessTouch(void *xiDevEvent, QXcbWindow *platformWindow)
-{
-    xXIDeviceEvent *xiDeviceEvent = static_cast<xXIDeviceEvent *>(xiDevEvent);
-    XInput2TouchDeviceData *dev = touchDeviceForId(xiDeviceEvent->sourceid);
-    Q_ASSERT(dev);
-    const bool firstTouch = dev->touchPoints.isEmpty();
-    if (xiDeviceEvent->evtype == XI_TouchBegin) {
-        QWindowSystemInterface::TouchPoint tp;
-        tp.id = xiDeviceEvent->detail % INT_MAX;
-        tp.state = Qt::TouchPointPressed;
-        tp.pressure = -1.0;
-        dev->touchPoints[tp.id] = tp;
-    }
-    QWindowSystemInterface::TouchPoint &touchPoint = dev->touchPoints[xiDeviceEvent->detail];
-    QXcbScreen* screen = platformWindow->xcbScreen();
-    QPointF pos = screen->mapFromNative(QPointF(fixed1616ToReal(xiDeviceEvent->root_x),
-                                                fixed1616ToReal(xiDeviceEvent->root_y)));
-    qreal x = pos.x();
-    qreal y = pos.y();
-    qreal nx = -1.0, ny = -1.0, d = 0.0;
-    for (int i = 0; i < dev->xiDeviceInfo->num_classes; ++i) {
-        XIAnyClassInfo *classinfo = dev->xiDeviceInfo->classes[i];
-        if (classinfo->type == XIValuatorClass) {
-            XIValuatorClassInfo *vci = reinterpret_cast<XIValuatorClassInfo *>(classinfo);
-            int n = vci->number;
-            double value;
-            if (!xi2GetValuatorValueIfSet(xiDeviceEvent, n, &value))
-                continue;
-            if (Q_UNLIKELY(lcQpaXInput().isDebugEnabled()))
-                qCDebug(lcQpaXInput, "   valuator %20s value %lf from range %lf -> %lf",
-                        atomName(vci->label).constData(), value, vci->min, vci->max );
-            if (vci->label == atom(QXcbAtom::RelX)) {
-                nx = valuatorNormalized(value, vci);
-            } else if (vci->label == atom(QXcbAtom::RelY)) {
-                ny = valuatorNormalized(value, vci);
-            } else if (vci->label == atom(QXcbAtom::AbsX)) {
-                nx = valuatorNormalized(value, vci);
-            } else if (vci->label == atom(QXcbAtom::AbsY)) {
-                ny = valuatorNormalized(value, vci);
-            } else if (vci->label == atom(QXcbAtom::AbsMTPositionX)) {
-                nx = valuatorNormalized(value, vci);
-            } else if (vci->label == atom(QXcbAtom::AbsMTPositionY)) {
-                ny = valuatorNormalized(value, vci);
-            } else if (vci->label == atom(QXcbAtom::AbsMTTouchMajor)) {
-                d = valuatorNormalized(value, vci) * screen->geometry().width();
-            } else if (vci->label == atom(QXcbAtom::AbsMTPressure) ||
-                       vci->label == atom(QXcbAtom::AbsPressure)) {
-                touchPoint.pressure = valuatorNormalized(value, vci);
-            }
-        }
-    }
-    // If any value was not updated, use the last-known value.
-    if (nx == -1.0) {
-        x = touchPoint.area.center().x();
-        nx = x / screen->geometry().width();
-    }
-    if (ny == -1.0) {
-        y = touchPoint.area.center().y();
-        ny = y / screen->geometry().height();
-    }
-    if (xiDeviceEvent->evtype != XI_TouchEnd) {
-        if (d == 0.0)
-            d = touchPoint.area.width();
-    }
-
-    switch (xiDeviceEvent->evtype) {
-    case XI_TouchBegin:
-        if (firstTouch) {
-            dev->firstPressedPosition = QPointF(x, y);
-            dev->firstPressedNormalPosition = QPointF(nx, ny);
-        }
-        dev->pointPressedPosition.insert(touchPoint.id, QPointF(x, y));
-
-        // Touches must be accepted when we are grabbing touch events. Otherwise the entire sequence
-        // will get replayed when the grab ends.
-        if (m_xiGrab) {
-            // XIAllowTouchEvents deadlocks with libXi < 1.7.4 (this has nothing to do with the XI2 versions like 2.2)
-            // http://lists.x.org/archives/xorg-devel/2014-July/043059.html
-#ifndef LIBXI_MAJOR
-            static bool allowTouchWarningShown = false;
-            if (!allowTouchWarningShown) {
-                allowTouchWarningShown = true;
-                qWarning("Skipping XIAllowTouchEvents() because it was not possible to detect libXi version at build time."
-                         " Minimum libXi version required is 1.7.4."
-                         " Expect issues with touch behavior.");
-            }
-#elif LIBXI_MAJOR == 1 && (LIBXI_MINOR < 7 || (LIBXI_MINOR == 7 && LIBXI_PATCH < 4))
-            static bool allowTouchWarningShown = false;
-            if (!allowTouchWarningShown) {
-                allowTouchWarningShown = true;
-                qWarning("Skipping XIAllowTouchEvents() due to not having libXi >= 1.7.4."
-                         " libXi version at build time was %d.%d.%d."
-                         " Expect issues with touch behavior.", LIBXI_MAJOR, LIBXI_MINOR, LIBXI_PATCH);
-            }
-#else
-            XIAllowTouchEvents(static_cast<Display *>(m_xlib_display), xiDeviceEvent->deviceid,
-                               xiDeviceEvent->detail, xiDeviceEvent->event, XIAcceptTouch);
-#endif
-        }
-        break;
-    case XI_TouchUpdate:
-        if (dev->qtTouchDevice->type() == QTouchDevice::TouchPad && dev->pointPressedPosition.value(touchPoint.id) == QPointF(x, y)) {
-            qreal dx = (nx - dev->firstPressedNormalPosition.x()) *
-                dev->size.width() * screen->geometry().width() / screen->physicalSize().width();
-            qreal dy = (ny - dev->firstPressedNormalPosition.y()) *
-                dev->size.height() * screen->geometry().height() / screen->physicalSize().height();
-            x = dev->firstPressedPosition.x() + dx;
-            y = dev->firstPressedPosition.y() + dy;
-            touchPoint.state = Qt::TouchPointMoved;
-        } else if (touchPoint.area.center() != QPoint(x, y)) {
-            touchPoint.state = Qt::TouchPointMoved;
-            dev->pointPressedPosition[touchPoint.id] = QPointF(x, y);
-        }
-        break;
-    case XI_TouchEnd:
-        touchPoint.state = Qt::TouchPointReleased;
-        if (dev->qtTouchDevice->type() == QTouchDevice::TouchPad && dev->pointPressedPosition.value(touchPoint.id) == QPointF(x, y)) {
-            qreal dx = (nx - dev->firstPressedNormalPosition.x()) *
-                dev->size.width() * screen->geometry().width() / screen->physicalSize().width();
-            qreal dy = (ny - dev->firstPressedNormalPosition.y()) *
-                dev->size.width() * screen->geometry().width() / screen->physicalSize().width();
-            x = dev->firstPressedPosition.x() + dx;
-            y = dev->firstPressedPosition.y() + dy;
-        }
-        dev->pointPressedPosition.remove(touchPoint.id);
-    }
-    touchPoint.area = QRectF(x - d/2, y - d/2, d, d);
-    touchPoint.normalPosition = QPointF(nx, ny);
-
-    if (Q_UNLIKELY(lcQpaXInput().isDebugEnabled()))
-        qCDebug(lcQpaXInput) << "   touchpoint "  << touchPoint.id << " state " << touchPoint.state << " pos norm " << touchPoint.normalPosition <<
-            " area " << touchPoint.area << " pressure " << touchPoint.pressure;
-    QWindowSystemInterface::handleTouchEvent(platformWindow->window(), xiDeviceEvent->time, dev->qtTouchDevice, dev->touchPoints.values());
-    if (touchPoint.state == Qt::TouchPointReleased)
-        // If a touchpoint was released, we can forget it, because the ID won't be reused.
-        dev->touchPoints.remove(touchPoint.id);
-    else
-        // Make sure that we don't send TouchPointPressed/Moved in more than one QTouchEvent
-        // with this touch point if the next XI2 event is about a different touch point.
-        touchPoint.state = Qt::TouchPointStationary;
 }
 
 bool QXcbConnection::xi2SetMouseGrabEnabled(xcb_window_t w, bool grab)
@@ -759,7 +592,7 @@ void QXcbConnection::xi2HandleHierachyEvent(void *event)
         return;
     xi2SetupDevices();
     // Reselect events for all event-listening windows.
-    Q_FOREACH (xcb_window_t window, m_mapper.keys()) {
+    Q_FOREACH (xcb_window_t window, m_windowMapper.keys()) {
         xi2Select(window);
     }
 }
@@ -843,82 +676,6 @@ void QXcbConnection::handleEnterEvent(const xcb_enter_notify_event_t *)
 #endif
 }
 
-void QXcbConnection::xi2HandleScrollEvent(void *event, ScrollingDevice &scrollingDevice)
-{
-#ifdef XCB_USE_XINPUT21
-    xXIGenericDeviceEvent *xiEvent = reinterpret_cast<xXIGenericDeviceEvent *>(event);
-
-    if (xiEvent->evtype == XI_Motion && scrollingDevice.orientations) {
-        xXIDeviceEvent* xiDeviceEvent = reinterpret_cast<xXIDeviceEvent *>(event);
-        if (QXcbWindow *platformWindow = platformWindowFromId(xiDeviceEvent->event)) {
-            QPoint rawDelta;
-            QPoint angleDelta;
-            double value;
-            if (scrollingDevice.orientations & Qt::Vertical) {
-                if (xi2GetValuatorValueIfSet(xiDeviceEvent, scrollingDevice.verticalIndex, &value)) {
-                    double delta = scrollingDevice.lastScrollPosition.y() - value;
-                    scrollingDevice.lastScrollPosition.setY(value);
-                    angleDelta.setY((delta / scrollingDevice.verticalIncrement) * 120);
-                    // We do not set "pixel" delta if it is only measured in ticks.
-                    if (scrollingDevice.verticalIncrement > 1)
-                        rawDelta.setY(delta);
-                }
-            }
-            if (scrollingDevice.orientations & Qt::Horizontal) {
-                if (xi2GetValuatorValueIfSet(xiDeviceEvent, scrollingDevice.horizontalIndex, &value)) {
-                    double delta = scrollingDevice.lastScrollPosition.x() - value;
-                    scrollingDevice.lastScrollPosition.setX(value);
-                    angleDelta.setX((delta / scrollingDevice.horizontalIncrement) * 120);
-                    // We do not set "pixel" delta if it is only measured in ticks.
-                    if (scrollingDevice.horizontalIncrement > 1)
-                        rawDelta.setX(delta);
-                }
-            }
-            if (!angleDelta.isNull()) {
-                const int dpr = int(platformWindow->devicePixelRatio());
-                QPoint local(fixed1616ToReal(xiDeviceEvent->event_x)/dpr, fixed1616ToReal(xiDeviceEvent->event_y)/dpr);
-                QPoint global(fixed1616ToReal(xiDeviceEvent->root_x)/dpr, fixed1616ToReal(xiDeviceEvent->root_y)/dpr);
-                Qt::KeyboardModifiers modifiers = keyboard()->translateModifiers(xiDeviceEvent->mods.effective_mods);
-                if (modifiers & Qt::AltModifier) {
-                    std::swap(angleDelta.rx(), angleDelta.ry());
-                    std::swap(rawDelta.rx(), rawDelta.ry());
-                }
-                QWindowSystemInterface::handleWheelEvent(platformWindow->window(), xiEvent->time, local, global, rawDelta, angleDelta, modifiers);
-            }
-        }
-    } else if (xiEvent->evtype == XI_ButtonRelease && scrollingDevice.legacyOrientations) {
-        xXIDeviceEvent* xiDeviceEvent = reinterpret_cast<xXIDeviceEvent *>(event);
-        if (QXcbWindow *platformWindow = platformWindowFromId(xiDeviceEvent->event)) {
-            QPoint angleDelta;
-            if (scrollingDevice.legacyOrientations & Qt::Vertical) {
-                if (xiDeviceEvent->detail == 4)
-                    angleDelta.setY(120);
-                else if (xiDeviceEvent->detail == 5)
-                    angleDelta.setY(-120);
-            }
-            if (scrollingDevice.legacyOrientations & Qt::Horizontal) {
-                if (xiDeviceEvent->detail == 6)
-                    angleDelta.setX(120);
-                else if (xiDeviceEvent->detail == 7)
-                    angleDelta.setX(-120);
-            }
-            if (!angleDelta.isNull()) {
-                const int dpr = int(platformWindow->devicePixelRatio());
-                QPoint local(fixed1616ToReal(xiDeviceEvent->event_x)/dpr, fixed1616ToReal(xiDeviceEvent->event_y)/dpr);
-                QPoint global(fixed1616ToReal(xiDeviceEvent->root_x)/dpr, fixed1616ToReal(xiDeviceEvent->root_y)/dpr);
-                Qt::KeyboardModifiers modifiers = keyboard()->translateModifiers(xiDeviceEvent->mods.effective_mods);
-                if (modifiers & Qt::AltModifier)
-                    std::swap(angleDelta.rx(), angleDelta.ry());
-                QWindowSystemInterface::handleWheelEvent(platformWindow->window(), xiEvent->time, local, global, QPoint(), angleDelta, modifiers);
-            }
-        }
-    }
-#else
-    Q_UNUSED(event);
-    Q_UNUSED(scrollingDevice);
-#endif // XCB_USE_XINPUT21
-}
-
 Qt::MouseButton QXcbConnection::xiToQtMouseButton(uint32_t b)
 {
     switch (b) {
@@ -967,7 +724,7 @@ static QTabletEvent::TabletDevice toolIdToTabletDevice(quint32 toolId) {
 }
 
 #ifndef QT_NO_TABLETEVENT
-bool QXcbConnection::xi2HandleTabletEvent(void *event, TabletData *tabletData, QXcbWindowEventListener *eventListener)
+bool QXcbConnection::xi2HandleTabletEvent(void *event, TabletData *tabletData, QWindow *window)
 {
     bool handled = true;
     Display *xDisplay = static_cast<Display *>(m_xlib_display);
@@ -1062,8 +819,10 @@ bool QXcbConnection::xi2HandleTabletEvent(void *event, TabletData *tabletData, Q
 #ifdef XCB_USE_XINPUT22
     // Synthesize mouse events since otherwise there are no mouse events from
     // the pen on the XI 2.2+ path.
-    if (xi2MouseEvents() && eventListener)
-        eventListener->handleXIMouseEvent(reinterpret_cast<xcb_ge_event_t *>(event));
+    if (xi2MouseEvents() && window) {
+        // DK: I have no idea why this line was introduced in Qt5.5!
+        //eventListener->handleXIMouseEvent(reinterpret_cast<xcb_ge_event_t *>(event));
+    }
 #else
     Q_UNUSED(eventListener);
 #endif
@@ -1074,10 +833,9 @@ bool QXcbConnection::xi2HandleTabletEvent(void *event, TabletData *tabletData, Q
 void QXcbConnection::xi2ReportTabletEvent(TabletData &tabletData, void *event)
 {
     xXIDeviceEvent *ev = reinterpret_cast<xXIDeviceEvent *>(event);
-    QXcbWindow *xcbWindow = platformWindowFromId(ev->event);
-    if (!xcbWindow)
-        return;
-    QWindow *window = xcbWindow->window();
+    QWindow *window = windowFromId(ev->event);
+    if (!window) return;
+
     const double scale = 65536.0;
     QPointF local(ev->event_x / scale, ev->event_y / scale);
     QPointF global(ev->root_x / scale, ev->root_y / scale);

@@ -745,10 +745,7 @@ bool QXcbConnection::xi2HandleTabletEvent(void *event, TabletData *tabletData, Q
         break;
     }
     case XI_Motion:
-        // Report TabletMove only when the stylus is touching the tablet or any button is pressed.
-        // TODO: report proximity (hover) motion (no suitable Qt event exists yet).
-        if (tabletData->buttons != Qt::NoButton)
-            xi2ReportTabletEvent(*tabletData, xiEvent);
+        xi2ReportTabletEvent(*tabletData, xiEvent);
         break;
     case XI_PropertyEvent: {
         // This is the wacom driver's way of reporting tool proximity.

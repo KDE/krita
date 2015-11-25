@@ -119,7 +119,11 @@ message(STATUS "Release build: ${RELEASE_BUILD}")
 #############
 ############
 
-option(USEOPENGL "Allow the use of OpenGL for Krita" ON)
+if (APPLE)
+    set(USEOPENGL OFF)
+else()
+    option(USEOPENGL "Allow the use of OpenGL for Krita" ON)
+endif()
 option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only." OFF)
 
  #######################
@@ -308,7 +312,7 @@ find_package(Boost REQUIRED COMPONENTS system) # for pigment and stage
 
 if (APPLE)
     SET(CMAKE_CXX_FLAGS "-stdlib=libstdc++ -std=c++11")
-#   find_package(Carbon REQUIRED)
+#    find_package(Carbon REQUIRED)
 endif ()
 
  ###########################

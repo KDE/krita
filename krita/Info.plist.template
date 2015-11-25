@@ -46,13 +46,24 @@
         </array>
         <key>CFBundleTypeOSTypes</key>
         <array>
-            </array>
-        <key>CFBundleTypeExtensions</key>
-        <array>
-          <string>kra</string>
         </array>
         <key>CFBundleTypeName</key>
         <string>Krita File</string>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+      </dict>
+      <dict>
+        <key>CFBundleTypeExtensions</key>
+        <array>
+          <string>ora</string>
+          <string>ORA</string>
+        </array>
+        <key>CFBundleTypeMIMETypes</key>
+        <array>
+          <string>image/openraster</string>
+        </array>
+        <key>CFBundleTypeName</key>
+        <string>OpenRaster File</string>
         <key>CFBundleTypeRole</key>
         <string>Editor</string>
       </dict>

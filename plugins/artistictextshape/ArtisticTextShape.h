@@ -56,13 +56,13 @@ public:
     /// reimplemented
     void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
     /// reimplemented
-    virtual void saveOdf(KoShapeSavingContext & context) const;
+    virtual void saveOdf(KoShapeSavingContext &context) const;
     /// reimplemented
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
     /// reimplemented
     virtual QSizeF size() const;
     /// reimplemented
-    virtual void setSize( const QSizeF &size );
+    virtual void setSize(const QSizeF &size);
     /// reimplemented
     virtual QPainterPath outline() const;
     /// reimplemented from SvgShape
@@ -150,7 +150,7 @@ public:
     QPainterPath baseline() const;
 
     /// Returns a pointer to the shape used as baseline
-    KoPathShape * baselineShape() const;
+    KoPathShape *baselineShape() const;
 
     /// Removes a range of text starting from the given character
     QList<ArtisticTextRange> removeText(int charIndex, int charCount);
@@ -192,10 +192,10 @@ public:
     CharIndex indexOfChar(int charIndex) const;
 
     /// reimplemented from KoShape
-    virtual void shapeChanged(ChangeType type, KoShape * shape);
+    virtual void shapeChanged(ChangeType type, KoShape *shape);
 
 private:
-    void updateSizeAndPosition( bool global = false );
+    void updateSizeAndPosition(bool global = false);
     void cacheGlyphOutlines();
     bool pathHasChanged() const;
     void createOutline();
@@ -220,7 +220,7 @@ private:
 
     QList<ArtisticTextRange> m_ranges;
     KoPostscriptPaintDevice m_paintDevice;
-    KoPathShape * m_path; ///< the path shape we are attached to
+    KoPathShape *m_path;  ///< the path shape we are attached to
     QList<QPainterPath> m_charOutlines; ///< cached character oulines
     qreal m_startOffset; ///< the offset from the attached path start point
     QPointF m_outlineOrigin; ///< the top-left corner of the non-normalized text outline

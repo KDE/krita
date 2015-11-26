@@ -32,7 +32,7 @@ class QActionGroup;
 class KoInteractionStrategy;
 
 /// This is the tool for the artistic text shape.
-class ArtisticTextTool : public KoToolBase 
+class ArtisticTextTool : public KoToolBase
 {
     Q_OBJECT
 public:
@@ -40,21 +40,21 @@ public:
     ~ArtisticTextTool();
 
     /// reimplemented
-    virtual void paint( QPainter &painter, const KoViewConverter &converter );
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
     /// reimplemented
     virtual void repaintDecorations();
     /// reimplemented
-    virtual void mousePressEvent( KoPointerEvent *event ) ;
+    virtual void mousePressEvent(KoPointerEvent *event);
     /// reimplemented
-    virtual void mouseMoveEvent( KoPointerEvent *event );
+    virtual void mouseMoveEvent(KoPointerEvent *event);
     /// reimplemented
-    virtual void mouseReleaseEvent( KoPointerEvent *event );
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
     /// reimplemented
     virtual void shortcutOverrideEvent(QKeyEvent *event);
     /// reimplemented
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
     /// reimplemented
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     /// reimplemented
     virtual void deactivate();
     /// reimplemented
@@ -81,9 +81,9 @@ public:
     int cursorFromMousePosition(const QPointF &mousePosition);
 
 protected:
-    void enableTextCursor( bool enable );
-    void removeFromTextCursor( int from, unsigned int count );
-    void addToTextCursor( const QString &str );
+    void enableTextCursor(bool enable);
+    void removeFromTextCursor(int from, unsigned int count);
+    void addToTextCursor(const QString &str);
 
 private Q_SLOTS:
     void detachPath();
@@ -94,7 +94,7 @@ private Q_SLOTS:
     void setStartOffset(int offset);
     void toggleFontBold(bool enabled);
     void toggleFontItalic(bool enabled);
-    void anchorChanged(QAction*);
+    void anchorChanged(QAction *);
     void setFontFamiliy(const QFont &font);
     void setFontSize(int size);
     void setSuperScript();
@@ -107,7 +107,7 @@ Q_SIGNALS:
 
 private:
     void updateActions();
-    void setTextCursorInternal( int textCursor );
+    void setTextCursorInternal(int textCursor);
     void createTextCursorShape();
     void updateTextCursorArea() const;
     void setCurrentShape(ArtisticTextShape *currentShape);
@@ -132,19 +132,19 @@ private:
     QPainterPath offsetHandleShape();
 
     ArtisticTextToolSelection m_selection; ///< the tools selection
-    ArtisticTextShape * m_currentShape; ///< the current text shape we are working on
-    ArtisticTextShape * m_hoverText;    ///< the text shape the mouse cursor is hovering over
-    KoPathShape * m_hoverPath;          ///< the path shape the mouse cursor is hovering over
+    ArtisticTextShape *m_currentShape;  ///< the current text shape we are working on
+    ArtisticTextShape *m_hoverText;     ///< the text shape the mouse cursor is hovering over
+    KoPathShape *m_hoverPath;           ///< the path shape the mouse cursor is hovering over
     QPainterPath m_textCursorShape;     ///< our visual text cursor representation
     bool m_hoverHandle;
 
-    QAction * m_detachPath;
-    QAction * m_convertText;
-    QAction * m_fontBold;
-    QAction * m_fontItalic;
-    QAction * m_superScript;
-    QAction * m_subScript;
-    QActionGroup * m_anchorGroup;
+    QAction *m_detachPath;
+    QAction *m_convertText;
+    QAction *m_fontBold;
+    QAction *m_fontItalic;
+    QAction *m_superScript;
+    QAction *m_subScript;
+    QActionGroup *m_anchorGroup;
 
     int m_textCursor;
     QTimer m_blinkingCursor;

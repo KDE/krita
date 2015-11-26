@@ -29,14 +29,14 @@ class KoPathShape;
 class DetachTextFromPathCommand : public KUndo2Command
 {
 public:
-    explicit DetachTextFromPathCommand( ArtisticTextShape * textShape, KUndo2Command * parent = 0 );
+    explicit DetachTextFromPathCommand(ArtisticTextShape *textShape, KUndo2Command *parent = 0);
     /// reimplemented from KUndo2Command
     virtual void redo();
     /// reimplemented from KUndo2Command
     virtual void undo();
 private:
-    ArtisticTextShape * m_textShape;
-    KoPathShape * m_pathShape;
+    ArtisticTextShape *m_textShape;
+    KoPathShape *m_pathShape;
     QPainterPath m_path;
 };
 

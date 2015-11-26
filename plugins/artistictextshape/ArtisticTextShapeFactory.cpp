@@ -33,14 +33,14 @@ ArtisticTextShapeFactory::ArtisticTextShapeFactory()
 {
     setToolTip(i18n("A shape which shows a single text line"));
     setIconName(koIconNameCStr("x-shape-text"));
-    setLoadingPriority( 5 );
+    setLoadingPriority(5);
     setXmlElementNames(KoXmlNS::svg, QStringList("text"));
 }
 
 KoShape *ArtisticTextShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
-    ArtisticTextShape * text = new ArtisticTextShape();
-    text->setBackground(QSharedPointer<KoShapeBackground>(new KoColorBackground( QColor( Qt::black))));
+    ArtisticTextShape *text = new ArtisticTextShape();
+    text->setBackground(QSharedPointer<KoShapeBackground>(new KoColorBackground(QColor(Qt::black))));
     text->setPlainText(i18n("Artistic Text"));
     return text;
 }

@@ -39,13 +39,13 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     /// Triggered whenever the font familiy has changed
-    void fontFamilyChanged(const QFont&);
+    void fontFamilyChanged(const QFont &);
 
     /// Triggered whenever the font size has changed
     void fontSizeChanged(int);
 
 private:
-    void blockChildSignals( bool block );
+    void blockChildSignals(bool block);
     Ui::ArtisticTextShapeConfigWidget widget;
     ArtisticTextTool *m_textTool;
 };

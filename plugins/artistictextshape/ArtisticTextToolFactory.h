@@ -28,7 +28,7 @@ public:
     ArtisticTextToolFactory();
     ~ArtisticTextToolFactory();
 
-    KoToolBase * createTool( KoCanvasBase *canvas );
+    KoToolBase *createTool(KoCanvasBase *canvas);
 };
 
 #endif // ARTISTICTEXTTOOLFACTORY_H

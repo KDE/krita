@@ -23,16 +23,21 @@
 #include <klocalizedstring.h>
 
 AddTextRangeCommand::AddTextRangeCommand(ArtisticTextTool *tool, ArtisticTextShape *shape, const QString &text, int from)
-    : m_tool(tool), m_shape(shape), m_plainText(text), m_formattedText(QString(), QFont()), m_from(from)
+    : m_tool(tool)
+    , m_shape(shape)
+    , m_plainText(text)
+    , m_formattedText(QString()
+    , QFont())
+    , m_from(from)
 {
-    setText( kundo2_i18n("Add text range") );
+    setText(kundo2_i18n("Add text range"));
     m_oldFormattedText = shape->text();
 }
 
 AddTextRangeCommand::AddTextRangeCommand(ArtisticTextTool *tool, ArtisticTextShape *shape, const ArtisticTextRange &text, int from)
     : m_tool(tool), m_shape(shape), m_formattedText(text), m_from(from)
 {
-    setText( kundo2_i18n("Add text range") );
+    setText(kundo2_i18n("Add text range"));
     m_oldFormattedText = shape->text();
 }
 
@@ -40,19 +45,22 @@ void AddTextRangeCommand::redo()
 {
     KUndo2Command::redo();
 
-    if ( !m_shape )
+    if (!m_shape) {
         return;
+    }
 
-    if (m_plainText.isEmpty())
+    if (m_plainText.isEmpty()) {
         m_shape->insertText(m_from, m_formattedText);
-    else
+    } else {
         m_shape->insertText(m_from, m_plainText);
+    }
 
     if (m_tool) {
-        if (m_plainText.isEmpty())
+        if (m_plainText.isEmpty()) {
             m_tool->setTextCursor(m_shape, m_from + m_formattedText.text().length());
-        else
+        } else {
             m_tool->setTextCursor(m_shape, m_from + m_plainText.length());
+        }
     }
 }
 
@@ -60,8 +68,9 @@ void AddTextRangeCommand::undo()
 {
     KUndo2Command::undo();
 
-    if ( ! m_shape )
+    if (! m_shape) {
         return;
+    }
 
     m_shape->clear();
     Q_FOREACH (const ArtisticTextRange &range, m_oldFormattedText) {

@@ -32,14 +32,15 @@
 
 double fromPercentage(QString s)
 {
-    if (s.endsWith('%'))
+    if (s.endsWith('%')) {
         return s.remove('%').toDouble() / 100.0;
-    else
+    } else {
         return s.toDouble();
+    }
 }
 
 FilterEffectResource::FilterEffectResource(const QString &filename)
-        : KoResource(filename)
+    : KoResource(filename)
 {
 }
 
@@ -47,8 +48,12 @@ bool FilterEffectResource::load()
 {
     QFile file(filename());
 
-    if (file.size() == 0) return false;
-    if (!file.open(QIODevice::ReadOnly)) return false;
+    if (file.size() == 0) {
+        return false;
+    }
+    if (!file.open(QIODevice::ReadOnly)) {
+        return false;
+    }
 
     bool res = loadFromDevice(&file);
 
@@ -92,10 +97,11 @@ QString FilterEffectResource::defaultFileExtension() const
     return QString(".svg");
 }
 
-FilterEffectResource * FilterEffectResource::fromFilterEffectStack(KoFilterEffectStack *filterStack)
+FilterEffectResource *FilterEffectResource::fromFilterEffectStack(KoFilterEffectStack *filterStack)
 {
-    if (!filterStack)
+    if (!filterStack) {
         return 0;
+    }
 
     QByteArray ba;
     QBuffer buffer(&ba);
@@ -106,7 +112,7 @@ FilterEffectResource * FilterEffectResource::fromFilterEffectStack(KoFilterEffec
 
     buffer.close();
 
-    FilterEffectResource * resource = new FilterEffectResource("");
+    FilterEffectResource *resource = new FilterEffectResource("");
     if (!resource->m_data.setContent(ba)) {
         delete resource;
         return 0;
@@ -115,11 +121,12 @@ FilterEffectResource * FilterEffectResource::fromFilterEffectStack(KoFilterEffec
     return resource;
 }
 
-KoFilterEffectStack * FilterEffectResource::toFilterStack() const
+KoFilterEffectStack *FilterEffectResource::toFilterStack() const
 {
-    KoFilterEffectStack * filterStack = new KoFilterEffectStack();
-    if (!filterStack)
+    KoFilterEffectStack *filterStack = new KoFilterEffectStack();
+    if (!filterStack) {
         return 0;
+    }
 
     QByteArray data = m_data.toByteArray();
     KoXmlDocument doc;
@@ -127,11 +134,13 @@ KoFilterEffectStack * FilterEffectResource::toFilterStack() const
     KoXmlElement e = doc.documentElement();
 
     // only allow obect bounding box units
-    if (e.hasAttribute("filterUnits") && e.attribute("filterUnits") != "objectBoundingBox")
+    if (e.hasAttribute("filterUnits") && e.attribute("filterUnits") != "objectBoundingBox") {
         return 0;
+    }
 
-    if (e.attribute("primitiveUnits") != "objectBoundingBox")
+    if (e.attribute("primitiveUnits") != "objectBoundingBox") {
         return 0;
+    }
 
     // parse filter region rectangle
     QRectF filterRegion;
@@ -143,12 +152,12 @@ KoFilterEffectStack * FilterEffectResource::toFilterStack() const
 
     KoFilterEffectLoadingContext context(QString(""));
 
-    KoFilterEffectRegistry * registry = KoFilterEffectRegistry::instance();
+    KoFilterEffectRegistry *registry = KoFilterEffectRegistry::instance();
 
     // create the filter effects and add them to the shape
     for (KoXmlNode n = e.firstChild(); !n.isNull(); n = n.nextSibling()) {
         KoXmlElement primitive = n.toElement();
-        KoFilterEffect * filterEffect = registry->createFilterEffectFromXml(primitive, context);
+        KoFilterEffect *filterEffect = registry->createFilterEffectFromXml(primitive, context);
         if (!filterEffect) {
             qWarning() << "filter effect" << primitive.tagName() << "is not implemented yet";
             continue;
@@ -161,10 +170,12 @@ KoFilterEffectStack * FilterEffectResource::toFilterStack() const
         qreal h = fromPercentage(primitive.attribute("height", "1"));
         QRectF subRegion(QPointF(x, y), QSizeF(w, h));
 
-        if (primitive.hasAttribute("in"))
+        if (primitive.hasAttribute("in")) {
             filterEffect->setInput(0, primitive.attribute("in"));
-        if (primitive.hasAttribute("result"))
+        }
+        if (primitive.hasAttribute("result")) {
             filterEffect->setOutput(primitive.attribute("result"));
+        }
 
         filterEffect->setFilterRect(subRegion);
 

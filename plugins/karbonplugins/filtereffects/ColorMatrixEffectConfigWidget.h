@@ -36,7 +36,7 @@ public:
     explicit ColorMatrixEffectConfigWidget(QWidget *parent = 0);
 
     /// reimplemented from KoFilterEffectConfigWidgetBase
-    virtual bool editFilterEffect(KoFilterEffect * filterEffect);
+    virtual bool editFilterEffect(KoFilterEffect *filterEffect);
 
 private Q_SLOTS:
     void matrixChanged();
@@ -44,12 +44,12 @@ private Q_SLOTS:
     void hueRotateChanged(double angle);
     void typeChanged(int index);
 private:
-    KComboBox * m_type;
-    ColorMatrixEffect * m_effect;
-    MatrixDataModel * m_matrixModel;
-    QStackedWidget * m_stack;
-    QDoubleSpinBox * m_saturate;
-    QDoubleSpinBox * m_hueRotate;
+    KComboBox *m_type;
+    ColorMatrixEffect *m_effect;
+    MatrixDataModel *m_matrixModel;
+    QStackedWidget *m_stack;
+    QDoubleSpinBox *m_saturate;
+    QDoubleSpinBox *m_hueRotate;
 };
 
 #endif // COLORMATRIXEFFECTCONFIGWIDGET_H

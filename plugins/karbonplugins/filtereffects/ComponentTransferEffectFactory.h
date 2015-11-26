@@ -28,8 +28,8 @@ class ComponentTransferEffectFactory : public KoFilterEffectFactoryBase
 {
 public:
     ComponentTransferEffectFactory();
-    virtual KoFilterEffect * createFilterEffect() const;
-    virtual KoFilterEffectConfigWidgetBase * createConfigWidget() const;
+    virtual KoFilterEffect *createFilterEffect() const;
+    virtual KoFilterEffectConfigWidgetBase *createConfigWidget() const;
 };
 
 #endif // COMPONENTTRANSFEREFFECTFACTORY_H

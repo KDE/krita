@@ -28,7 +28,7 @@ public:
     KarbonGradientToolFactory();
     ~KarbonGradientToolFactory();
 
-    KoToolBase * createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas);
 };
 
 #endif // _KARBONGRADIENTTOOLFACTORY_H_

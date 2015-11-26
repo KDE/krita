@@ -33,7 +33,6 @@
 
 #include <klocalizedstring.h>
 
-
 ImageEffect::ImageEffect()
     : KoFilterEffect(ImageEffectId, i18n("Image"))
 {
@@ -63,14 +62,16 @@ QImage ImageEffect::processImage(const QImage &image, const KoFilterEffectRender
 
 bool ImageEffect::load(const KoXmlElement &element, const KoFilterEffectLoadingContext &context)
 {
-    if (element.tagName() != id())
+    if (element.tagName() != id()) {
         return false;
+    }
 
     QString href = element.attribute("xlink:href");
     if (href.startsWith(QLatin1String("data:"))) {
         int start = href.indexOf("base64,");
-        if (start <= 0 || !m_image.loadFromData(QByteArray::fromBase64(href.mid(start + 7).toLatin1())))
+        if (start <= 0 || !m_image.loadFromData(QByteArray::fromBase64(href.mid(start + 7).toLatin1()))) {
             return false;
+        }
     } else if (!m_image.load(context.pathFromHref(href))) {
         return false;
     }

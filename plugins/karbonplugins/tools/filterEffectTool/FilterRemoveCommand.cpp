@@ -24,9 +24,13 @@
 
 #include <klocalizedstring.h>
 
-FilterRemoveCommand::FilterRemoveCommand(int filterEffectIndex, KoFilterEffectStack * filterStack, KoShape * shape, KUndo2Command *parent)
-        : KUndo2Command(parent), m_filterEffect(0), m_filterStack(filterStack), m_shape(shape)
-        , m_isRemoved(false), m_filterEffectIndex(filterEffectIndex)
+FilterRemoveCommand::FilterRemoveCommand(int filterEffectIndex, KoFilterEffectStack *filterStack, KoShape *shape, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_filterEffect(0)
+    , m_filterStack(filterStack)
+    , m_shape(shape)
+    , m_isRemoved(false)
+    , m_filterEffectIndex(filterEffectIndex)
 {
     Q_ASSERT(filterStack);
     setText(kundo2_i18n("Remove filter effect"));
@@ -34,34 +38,39 @@ FilterRemoveCommand::FilterRemoveCommand(int filterEffectIndex, KoFilterEffectSt
 
 FilterRemoveCommand::~FilterRemoveCommand()
 {
-    if (m_isRemoved)
+    if (m_isRemoved) {
         delete m_filterEffect;
+    }
 }
 
 void FilterRemoveCommand::redo()
 {
     KUndo2Command::redo();
 
-    if (m_shape)
+    if (m_shape) {
         m_shape->update();
+    }
 
     m_filterEffect = m_filterStack->takeFilterEffect(m_filterEffectIndex);
     m_isRemoved = true;
 
-    if (m_shape)
+    if (m_shape) {
         m_shape->update();
+    }
 }
 
 void FilterRemoveCommand::undo()
 {
-    if (m_shape)
+    if (m_shape) {
         m_shape->update();
+    }
 
     m_filterStack->insertFilterEffect(m_filterEffectIndex, m_filterEffect);
     m_isRemoved = false;
 
-    if (m_shape)
+    if (m_shape) {
         m_shape->update();
+    }
 
     KUndo2Command::undo();
 }

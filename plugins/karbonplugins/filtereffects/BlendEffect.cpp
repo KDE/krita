@@ -28,8 +28,8 @@
 #include <math.h>
 
 BlendEffect::BlendEffect()
-        : KoFilterEffect(BlendEffectId, i18n("Blend"))
-        , m_blendMode(Normal)
+    : KoFilterEffect(BlendEffectId, i18n("Blend"))
+    , m_blendMode(Normal)
 {
     setRequiredInputCount(2);
     setMaximalInputCount(2);
@@ -54,15 +54,16 @@ QImage BlendEffect::processImage(const QImage &image, const KoFilterEffectRender
 QImage BlendEffect::processImages(const QList<QImage> &images, const KoFilterEffectRenderContext &context) const
 {
     int imageCount = images.count();
-    if (!imageCount)
+    if (!imageCount) {
         return QImage();
+    }
 
     QImage result = images[0];
     if (images.count() != 2) {
         return result;
     }
-    const QRgb *src = (const QRgb*)images[1].constBits();
-    QRgb *dst = (QRgb*)result.bits();
+    const QRgb *src = (const QRgb *)images[1].constBits();
+    QRgb *dst = (QRgb *)result.bits();
     int w = result.width();
 
     qreal sa, sr, sg, sb;
@@ -127,28 +128,31 @@ QImage BlendEffect::processImages(const QList<QImage> &images, const KoFilterEff
 
 bool BlendEffect::load(const KoXmlElement &element, const KoFilterEffectLoadingContext &)
 {
-    if (element.tagName() != id())
+    if (element.tagName() != id()) {
         return false;
+    }
 
     m_blendMode = Normal; // default blend mode
 
     QString modeStr = element.attribute("mode");
     if (!modeStr.isEmpty()) {
-        if (modeStr == "multiply")
+        if (modeStr == "multiply") {
             m_blendMode = Multiply;
-        else if (modeStr == "screen")
+        } else if (modeStr == "screen") {
             m_blendMode = Screen;
-        else if (modeStr == "darken")
+        } else if (modeStr == "darken") {
             m_blendMode = Darken;
-        else if (modeStr == "lighten")
+        } else if (modeStr == "lighten") {
             m_blendMode = Lighten;
+        }
     }
 
     if (element.hasAttribute("in2")) {
-        if (inputs().count() == 2)
+        if (inputs().count() == 2) {
             setInput(1, element.attribute("in2"));
-        else
+        } else {
             addInput(element.attribute("in2"));
+        }
     }
 
     return true;

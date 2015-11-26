@@ -28,8 +28,8 @@ class BlurEffectFactory : public KoFilterEffectFactoryBase
 {
 public:
     BlurEffectFactory();
-    virtual KoFilterEffect * createFilterEffect() const;
-    virtual KoFilterEffectConfigWidgetBase * createConfigWidget() const;
+    virtual KoFilterEffect *createFilterEffect() const;
+    virtual KoFilterEffectConfigWidgetBase *createConfigWidget() const;
 };
 
 #endif // BLUREFFECTFACTORY_H

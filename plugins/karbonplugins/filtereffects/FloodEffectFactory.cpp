@@ -24,16 +24,16 @@
 #include <klocalizedstring.h>
 
 FloodEffectFactory::FloodEffectFactory()
-        : KoFilterEffectFactoryBase(FloodEffectId, i18n("Flood fill"))
+    : KoFilterEffectFactoryBase(FloodEffectId, i18n("Flood fill"))
 {
 }
 
-KoFilterEffect * FloodEffectFactory::createFilterEffect() const
+KoFilterEffect *FloodEffectFactory::createFilterEffect() const
 {
     return new FloodEffect();
 }
 
-KoFilterEffectConfigWidgetBase * FloodEffectFactory::createConfigWidget() const
+KoFilterEffectConfigWidgetBase *FloodEffectFactory::createConfigWidget() const
 {
     return new FloodEffectConfigWidget();
 }

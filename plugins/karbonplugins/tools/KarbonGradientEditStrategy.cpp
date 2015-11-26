@@ -46,21 +46,25 @@ qreal GradientStrategy::scalarProduct(const QPointF &p1, const QPointF &p2)
     return p1.x() * p2.x() + p1.y() * p2.y();
 }
 
-
-GradientStrategy::GradientStrategy(KoShape *shape, const QGradient * gradient, Target target)
-        : m_shape(shape)
-        , m_editing(false), m_target(target)
-        , m_gradientLine(0, 1), m_selection(None)
-        , m_selectionIndex(0), m_type(gradient->type())
+GradientStrategy::GradientStrategy(KoShape *shape, const QGradient *gradient, Target target)
+    : m_shape(shape)
+    , m_editing(false)
+    , m_target(target)
+    , m_gradientLine(0, 1)
+    , m_selection(None)
+    , m_selectionIndex(0)
+    , m_type(gradient->type())
 {
     if (m_target == Fill) {
         QSharedPointer<KoGradientBackground>  fill = qSharedPointerDynamicCast<KoGradientBackground>(m_shape->background());
-        if (fill)
+        if (fill) {
             m_matrix = fill->transform() * m_shape->absoluteTransformation(0);
+        }
     } else {
-        KoShapeStroke * stroke = dynamic_cast<KoShapeStroke*>(m_shape->stroke());
-        if (stroke)
+        KoShapeStroke *stroke = dynamic_cast<KoShapeStroke *>(m_shape->stroke());
+        if (stroke) {
             m_matrix = stroke->lineBrush().transform() * m_shape->absoluteTransformation(0);
+        }
     }
     m_stops = gradient->stops();
 }
@@ -78,7 +82,7 @@ void GradientStrategy::setEditing(bool on)
                 m_oldBrush.setTransform(fill->transform());
             }
         } else {
-            KoShapeStroke * stroke = dynamic_cast<KoShapeStroke*>(m_shape->stroke());
+            KoShapeStroke *stroke = dynamic_cast<KoShapeStroke *>(m_shape->stroke());
             if (stroke) {
                 m_oldStroke = *stroke;
                 m_oldBrush = stroke->lineBrush();
@@ -93,18 +97,20 @@ bool GradientStrategy::hitHandle(const QPointF &mousePos, const KoViewConverter 
     QRectF roi = grabRect(converter);
 
     int handleIndex = 0;
-    Q_FOREACH (const QPointF & handle, m_handles) {
+    Q_FOREACH (const QPointF &handle, m_handles) {
         roi.moveCenter(m_matrix.map(handle));
         if (roi.contains(mousePos)) {
-            if (select)
+            if (select) {
                 setSelection(Handle, handleIndex);
+            }
             return true;
         }
         handleIndex++;
     }
 
-    if (select)
+    if (select) {
         setSelection(None);
+    }
 
     return false;
 }
@@ -114,13 +120,15 @@ bool GradientStrategy::hitLine(const QPointF &mousePos, const KoViewConverter &c
     qreal maxDistance = converter.viewToDocumentX(grabSensitivity());
     if (mouseAtLineSegment(mousePos, maxDistance)) {
         m_lastMousePos = mousePos;
-        if (select)
+        if (select) {
             setSelection(Line);
+        }
         return true;
     }
 
-    if (select)
+    if (select) {
         setSelection(None);
+    }
 
     return false;
 }
@@ -135,15 +143,17 @@ bool GradientStrategy::hitStop(const QPointF &mousePos, const KoViewConverter &c
     for (int i = 0; i < stopCount; ++i) {
         roi.moveCenter(handles[i].second);
         if (roi.contains(mousePos)) {
-            if (select)
+            if (select) {
                 setSelection(Stop, i);
+            }
             m_lastMousePos = mousePos;
             return true;
         }
     }
 
-    if (select)
+    if (select) {
         setSelection(None);
+    }
 
     return false;
 }
@@ -180,8 +190,9 @@ void GradientStrategy::paintStops(QPainter &painter, const KoViewConverter &conv
             painter.setWorldTransform(m, true);
             painter.drawRect(hr);
             painter.restore();
-        } else
+        } else {
             painter.drawEllipse(hr);
+        }
     }
 
     painter.restore();
@@ -198,12 +209,14 @@ void GradientStrategy::paint(QPainter &painter, const KoViewConverter &converter
     painter.drawLine(startPoint, stopPoint);
 
     // draw the gradient stops
-    if (selected)
+    if (selected) {
         paintStops(painter, converter);
+    }
 
     // draw the gradient handles
-    Q_FOREACH (const QPointF & handle, m_handles)
-    paintHandle(painter, converter, m_matrix.map(handle));
+    Q_FOREACH (const QPointF &handle, m_handles) {
+        paintHandle(painter, converter, m_matrix.map(handle));
+    }
 }
 
 qreal GradientStrategy::projectToGradientLine(const QPointF &point)
@@ -212,8 +225,9 @@ qreal GradientStrategy::projectToGradientLine(const QPointF &point)
     QPointF stopPoint = m_matrix.map(m_handles[m_gradientLine.second]);
     QPointF diff = stopPoint - startPoint;
     qreal diffLength = sqrt(diff.x() * diff.x() + diff.y() * diff.y());
-    if (diffLength == 0.0f)
+    if (diffLength == 0.0f) {
         return 0.0f;
+    }
     // project mouse position relative to stop position on gradient line
     qreal scalar = scalarProduct(point - startPoint, diff / diffLength);
     return scalar /= diffLength;
@@ -222,15 +236,17 @@ qreal GradientStrategy::projectToGradientLine(const QPointF &point)
 bool GradientStrategy::mouseAtLineSegment(const QPointF &mousePos, qreal maxDistance)
 {
     qreal scalar = projectToGradientLine(mousePos);
-    if (scalar < 0.0 || scalar > 1.0)
+    if (scalar < 0.0 || scalar > 1.0) {
         return false;
+    }
     // calculate vector between relative mouse position and projected mouse position
     QPointF startPoint = m_matrix.map(m_handles[m_gradientLine.first]);
     QPointF stopPoint = m_matrix.map(m_handles[m_gradientLine.second]);
     QPointF distVec = startPoint + scalar * (stopPoint - startPoint) - mousePos;
     qreal dist = distVec.x() * distVec.x() + distVec.y() * distVec.y();
-    if (dist > maxDistance*maxDistance)
+    if (dist > maxDistance * maxDistance) {
         return false;
+    }
 
     return true;
 }
@@ -244,8 +260,9 @@ void GradientStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::Keyboar
     case Line: {
         uint handleCount = m_handles.count();
         QPointF delta = invMatrix.map(mouseLocation) - invMatrix.map(m_lastMousePos);
-        for (uint i = 0; i < handleCount; ++i)
+        for (uint i = 0; i < handleCount; ++i) {
             m_handles[i] += delta;
+        }
         m_lastMousePos = mouseLocation;
         break;
     }
@@ -279,8 +296,9 @@ bool GradientStrategy::handleDoubleClick(const QPointF &mouseLocation)
         QPointF diff = stopPoint - startPoint;
         QPointF diffToLine = startPoint + scalar * diff - mouseLocation;
         qreal distToLine = diffToLine.x() * diffToLine.x() + diffToLine.y() * diffToLine.y();
-        if (distToLine > m_handleRadius*m_handleRadius)
+        if (distToLine > m_handleRadius * m_handleRadius) {
             return false;
+        }
 
         QColor newColor = KoGradientHelper::colorAt(scalar, m_stops);
         m_stops.append(QGradientStop(scalar, newColor));
@@ -288,12 +306,14 @@ bool GradientStrategy::handleDoubleClick(const QPointF &mouseLocation)
         // double click on stop handle removes gradient stop
 
         // do not allow removing one of the last two stops
-        if (m_stops.count() <= 2)
+        if (m_stops.count() <= 2) {
             return false;
+        }
         m_stops.remove(m_selectionIndex);
         setSelection(None);
-    } else
+    } else {
         return false;
+    }
 
     applyChanges();
 
@@ -310,16 +330,18 @@ void GradientStrategy::applyChanges()
             fill->setTransform(m_newBrush.transform());
         }
     } else {
-        KoShapeStroke * stroke = dynamic_cast<KoShapeStroke*>(m_shape->stroke());
-        if (stroke)
+        KoShapeStroke *stroke = dynamic_cast<KoShapeStroke *>(m_shape->stroke());
+        if (stroke) {
             stroke->setLineBrush(m_newBrush);
+        }
     }
 }
 
-KUndo2Command * GradientStrategy::createCommand(KUndo2Command * parent)
+KUndo2Command *GradientStrategy::createCommand(KUndo2Command *parent)
 {
-    if (m_newBrush == m_oldBrush)
+    if (m_newBrush == m_oldBrush) {
         return 0;
+    }
 
     if (m_target == Fill) {
         QSharedPointer<KoGradientBackground>  fill = qSharedPointerDynamicCast<KoGradientBackground>(m_shape->background());
@@ -330,10 +352,10 @@ KUndo2Command * GradientStrategy::createCommand(KUndo2Command * parent)
             return new KoShapeBackgroundCommand(m_shape, newFill, parent);
         }
     } else {
-        KoShapeStroke * stroke = dynamic_cast<KoShapeStroke*>(m_shape->stroke());
+        KoShapeStroke *stroke = dynamic_cast<KoShapeStroke *>(m_shape->stroke());
         if (stroke) {
             *stroke = m_oldStroke;
-            KoShapeStroke * newStroke = new KoShapeStroke(*stroke);
+            KoShapeStroke *newStroke = new KoShapeStroke(*stroke);
             newStroke->setLineBrush(m_newBrush);
             return new KoShapeStrokeCommand(m_shape, newStroke, parent);
         }
@@ -354,7 +376,7 @@ QRectF GradientStrategy::boundingRect(const KoViewConverter &converter) const
         bbox.setBottom(qMax(handle.y(), bbox.bottom()));
     }
     QList<StopHandle> handles = stopHandles(converter);
-    Q_FOREACH (const StopHandle & stopHandle, handles) {
+    Q_FOREACH (const StopHandle &stopHandle, handles) {
         QPointF handle = stopHandle.second;
         bbox.setLeft(qMin(handle.x(), bbox.left()));
         bbox.setRight(qMax(handle.x(), bbox.right()));
@@ -373,17 +395,19 @@ void GradientStrategy::repaint(const KoViewConverter &converter) const
     m_shape->update();
 }
 
-const QGradient * GradientStrategy::gradient()
+const QGradient *GradientStrategy::gradient()
 {
     if (m_target == Fill) {
         QSharedPointer<KoGradientBackground>  fill = qSharedPointerDynamicCast<KoGradientBackground>(m_shape->background());
-        if (! fill)
+        if (!fill) {
             return 0;
+        }
         return fill->gradient();
     } else {
-        KoShapeStroke * stroke = dynamic_cast<KoShapeStroke*>(m_shape->stroke());
-        if (! stroke)
+        KoShapeStroke *stroke = dynamic_cast<KoShapeStroke *>(m_shape->stroke());
+        if (!stroke) {
             return 0;
+        }
         return stroke->lineBrush().gradient();
     }
 }
@@ -398,8 +422,9 @@ void GradientStrategy::startDrawing(const QPointF &mousePos)
     QTransform invMatrix = m_matrix.inverted();
 
     int handleCount = m_handles.count();
-    for (int handleId = 0; handleId < handleCount; ++handleId)
+    for (int handleId = 0; handleId < handleCount; ++handleId) {
         m_handles[handleId] = invMatrix.map(mousePos);
+    }
 
     setSelection(Handle, handleCount - 1);
     setEditing(true);
@@ -410,7 +435,7 @@ bool GradientStrategy::hasSelection() const
     return m_selection != None;
 }
 
-KoShape * GradientStrategy::shape()
+KoShape *GradientStrategy::shape()
 {
     return m_shape;
 }
@@ -425,24 +450,27 @@ void GradientStrategy::updateStops()
     QBrush brush;
     if (m_target == Fill) {
         QSharedPointer<KoGradientBackground>  fill = qSharedPointerDynamicCast<KoGradientBackground>(m_shape->background());
-        if (fill)
+        if (fill) {
             m_stops = fill->gradient()->stops();
+        }
     } else {
-        KoShapeStroke * stroke = dynamic_cast<KoShapeStroke*>(m_shape->stroke());
+        KoShapeStroke *stroke = dynamic_cast<KoShapeStroke *>(m_shape->stroke());
         if (stroke) {
             brush = stroke->lineBrush();
-            if (brush.gradient())
+            if (brush.gradient()) {
                 m_stops = brush.gradient()->stops();
+            }
         }
     }
 }
 
 int GradientStrategy::selectedColorStop() const
 {
-    if (m_selection == Stop)
+    if (m_selection == Stop) {
         return m_selectionIndex;
-    else
+    } else {
         return -1;
+    }
 }
 
 GradientStrategy::SelectionType GradientStrategy::selection() const
@@ -457,12 +485,12 @@ void GradientStrategy::setGradientLine(int start, int stop)
 
 QRectF GradientStrategy::handleRect(const KoViewConverter &converter) const
 {
-    return converter.viewToDocument(QRectF(0, 0, 2*m_handleRadius, 2*m_handleRadius));
+    return converter.viewToDocument(QRectF(0, 0, 2 * m_handleRadius, 2 * m_handleRadius));
 }
 
 QRectF GradientStrategy::grabRect(const KoViewConverter &converter) const
 {
-    return converter.viewToDocument(QRectF(0, 0, 2*m_grabSensitivity, 2*m_grabSensitivity));
+    return converter.viewToDocument(QRectF(0, 0, 2 * m_grabSensitivity, 2 * m_grabSensitivity));
 }
 
 void GradientStrategy::setSelection(SelectionType selection, int index)
@@ -487,17 +515,18 @@ QList<GradientStrategy::StopHandle> GradientStrategy::stopHandles(const KoViewCo
     QPointF diff = stop - start;
     QPointF ortho(-diff.y(), diff.x());
     qreal orthoLength = sqrt(ortho.x() * ortho.x() + ortho.y() * ortho.y());
-    if (orthoLength == 0.0)
+    if (orthoLength == 0.0) {
         ortho = QPointF(stopDistance, 0.0f);
-    else
+    } else {
         ortho *= stopDistance / orthoLength;
+    }
 
     // make handles have always the same distance to the gradient line
     // independent of acual zooming
     ortho = converter.viewToDocument(ortho);
 
     QList<StopHandle> handles;
-    Q_FOREACH (const QGradientStop & stop, m_stops) {
+    Q_FOREACH (const QGradientStop &stop, m_stops) {
         QPointF base = start + stop.first * diff;
         handles.append(StopHandle(base, base + ortho));
     }
@@ -509,7 +538,7 @@ QList<GradientStrategy::StopHandle> GradientStrategy::stopHandles(const KoViewCo
 // strategy implementations
 /////////////////////////////////////////////////////////////////
 LinearGradientStrategy::LinearGradientStrategy(KoShape *shape, const QLinearGradient *gradient, Target target)
-        : GradientStrategy(shape, gradient, target)
+    : GradientStrategy(shape, gradient, target)
 {
     Q_ASSERT(gradient->coordinateMode() == QGradient::ObjectBoundingMode);
     QSizeF size(shape->size());
@@ -530,7 +559,7 @@ QBrush LinearGradientStrategy::brush()
 }
 
 RadialGradientStrategy::RadialGradientStrategy(KoShape *shape, const QRadialGradient *gradient, Target target)
-        : GradientStrategy(shape, gradient, target)
+    : GradientStrategy(shape, gradient, target)
 {
     Q_ASSERT(gradient->coordinateMode() == QGradient::ObjectBoundingMode);
     QSizeF size(shape->size());
@@ -548,7 +577,7 @@ QBrush RadialGradientStrategy::brush()
     QSizeF size(m_shape->size());
     QPointF relativeCenter(KoFlake::toRelative(m_handles[center], size));
     QPointF d = KoFlake::toRelative(m_handles[radius], size) - relativeCenter;
-    qreal r = sqrt(d.x()*d.x() + d.y()*d.y());
+    qreal r = sqrt(d.x() * d.x() + d.y() * d.y());
     QRadialGradient gradient(relativeCenter, r, KoFlake::toRelative(m_handles[focal], size));
     gradient.setCoordinateMode(QGradient::ObjectBoundingMode);
     gradient.setStops(m_stops);
@@ -559,7 +588,7 @@ QBrush RadialGradientStrategy::brush()
 }
 
 ConicalGradientStrategy::ConicalGradientStrategy(KoShape *shape, const QConicalGradient *gradient, Target target)
-        : GradientStrategy(shape, gradient, target)
+    : GradientStrategy(shape, gradient, target)
 {
     Q_ASSERT(gradient->coordinateMode() == QGradient::ObjectBoundingMode);
     QSizeF size(m_shape->size());
@@ -574,9 +603,10 @@ QBrush ConicalGradientStrategy::brush()
 {
     QPointF d = m_handles[direction] - m_handles[center];
     qreal angle = atan2(-d.y(), d.x()) / M_PI * 180.0;
-    if (angle < 0.0)
+    if (angle < 0.0) {
         angle += 360;
-    QConicalGradient gradient(KoFlake::toRelative( m_handles[center], m_shape->size()), angle);
+    }
+    QConicalGradient gradient(KoFlake::toRelative(m_handles[center], m_shape->size()), angle);
     gradient.setCoordinateMode(QGradient::ObjectBoundingMode);
     gradient.setStops(m_stops);
     gradient.setSpread(m_oldBrush.gradient()->spread());

@@ -28,7 +28,7 @@ public:
     KarbonPatternToolFactory();
     ~KarbonPatternToolFactory();
 
-    KoToolBase * createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas);
 };
 
 #endif // _KARBONPATTERNTOOLFACTORY_H_

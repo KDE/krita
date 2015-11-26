@@ -24,24 +24,30 @@
 #include <klocalizedstring.h>
 
 FilterStackSetCommand::FilterStackSetCommand(KoFilterEffectStack *newStack, KoShape *shape, KUndo2Command *parent)
-        : KUndo2Command(parent), m_newFilterStack(newStack), m_shape(shape)
+    : KUndo2Command(parent)
+    , m_newFilterStack(newStack)
+    , m_shape(shape)
 {
     Q_ASSERT(m_shape);
     m_oldFilterStack = m_shape->filterEffectStack();
-    if (m_newFilterStack)
+    if (m_newFilterStack) {
         m_newFilterStack->ref();
-    if (m_oldFilterStack)
+    }
+    if (m_oldFilterStack) {
         m_oldFilterStack->ref();
+    }
 
     setText(kundo2_i18n("Set filter stack"));
 }
 
 FilterStackSetCommand::~FilterStackSetCommand()
 {
-    if (m_newFilterStack && !m_newFilterStack->deref())
+    if (m_newFilterStack && !m_newFilterStack->deref()) {
         delete m_newFilterStack;
-    if (m_oldFilterStack && !m_oldFilterStack->deref())
+    }
+    if (m_oldFilterStack && !m_oldFilterStack->deref()) {
         delete m_oldFilterStack;
+    }
 }
 
 void FilterStackSetCommand::redo()

@@ -30,7 +30,7 @@ class KoFilterEffectStack;
 class FilterRemoveCommand : public KUndo2Command
 {
 public:
-    FilterRemoveCommand(int filterEffectIndex, KoFilterEffectStack * filterStack, KoShape * shape, KUndo2Command *parent = 0);
+    FilterRemoveCommand(int filterEffectIndex, KoFilterEffectStack *filterStack, KoShape *shape, KUndo2Command *parent = 0);
     ~FilterRemoveCommand();
     /// redo the command
     virtual void redo();
@@ -38,9 +38,9 @@ public:
     virtual void undo();
 
 private:
-    KoFilterEffect * m_filterEffect;
-    KoFilterEffectStack * m_filterStack;
-    KoShape * m_shape;
+    KoFilterEffect *m_filterEffect;
+    KoFilterEffectStack *m_filterStack;
+    KoShape *m_shape;
     bool m_isRemoved;
     int m_filterEffectIndex;
 };

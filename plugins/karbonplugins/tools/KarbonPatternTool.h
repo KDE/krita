@@ -29,7 +29,6 @@ class KarbonPatternEditStrategyBase;
 class KarbonPatternOptionsWidget;
 class KoShape;
 
-
 class KarbonPatternTool : public KoToolBase
 {
     Q_OBJECT
@@ -40,30 +39,30 @@ public:
     void paint(QPainter &painter, const KoViewConverter &converter);
     void repaintDecorations();
 
-    void mousePressEvent(KoPointerEvent *event) ;
+    void mousePressEvent(KoPointerEvent *event);
     void mouseMoveEvent(KoPointerEvent *event);
     void mouseReleaseEvent(KoPointerEvent *event);
     void keyPressEvent(QKeyEvent *event);
 
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     void deactivate();
 
 public Q_SLOTS:
-    virtual void documentResourceChanged(int key, const QVariant & res);
+    virtual void documentResourceChanged(int key, const QVariant &res);
 
 protected:
     virtual QList<QPointer<QWidget> > createOptionWidgets();
 
 private Q_SLOTS:
-    void patternSelected(KoResource * resource);
+    void patternSelected(KoResource *resource);
     void initialize();
     /// updates options widget from selected pattern
     void updateOptionsWidget();
     void patternChanged();
 private:
-    QMap<KoShape*, KarbonPatternEditStrategyBase*> m_strategies;  ///< the list of editing strategies, one for each shape
-    KarbonPatternEditStrategyBase * m_currentStrategy; ///< the current editing strategy
-    KarbonPatternOptionsWidget * m_optionsWidget;
+    QMap<KoShape *, KarbonPatternEditStrategyBase *> m_strategies; ///< the list of editing strategies, one for each shape
+    KarbonPatternEditStrategyBase *m_currentStrategy;  ///< the current editing strategy
+    KarbonPatternOptionsWidget *m_optionsWidget;
 };
 
 #endif // _KARBONPATTERNTOOL_H_

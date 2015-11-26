@@ -32,7 +32,7 @@ public:
     KarbonCalligraphicShapeFactory();
     virtual ~KarbonCalligraphicShapeFactory();
     virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
-    virtual bool supports(const KoXmlElement & e, KoShapeLoadingContext &context) const;
+    virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
     //virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };
 

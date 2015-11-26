@@ -36,9 +36,10 @@
 #include <KConfigGroup>
 
 ConvolveMatrixEffectConfigWidget::ConvolveMatrixEffectConfigWidget(QWidget *parent)
-        : KoFilterEffectConfigWidgetBase(parent), m_effect(0)
+    : KoFilterEffectConfigWidgetBase(parent)
+    , m_effect(0)
 {
-    QGridLayout * g = new QGridLayout(this);
+    QGridLayout *g = new QGridLayout(this);
 
     m_edgeMode = new KComboBox(this);
     m_edgeMode->addItem(i18n("Duplicate"));
@@ -75,7 +76,7 @@ ConvolveMatrixEffectConfigWidget::ConvolveMatrixEffectConfigWidget(QWidget *pare
     m_preserveAlpha = new QCheckBox(i18n("Preserve alpha"), this);
     g->addWidget(m_preserveAlpha, 4, 1, 1, 3);
 
-    QPushButton * kernelButton = new QPushButton(i18n("Edit kernel"), this);
+    QPushButton *kernelButton = new QPushButton(i18n("Edit kernel"), this);
     g->addWidget(kernelButton, 5, 0, 1, 4);
 
     setLayout(g);
@@ -93,11 +94,12 @@ ConvolveMatrixEffectConfigWidget::ConvolveMatrixEffectConfigWidget(QWidget *pare
     m_matrixModel = new MatrixDataModel(this);
 }
 
-bool ConvolveMatrixEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)
+bool ConvolveMatrixEffectConfigWidget::editFilterEffect(KoFilterEffect *filterEffect)
 {
-    m_effect = dynamic_cast<ConvolveMatrixEffect*>(filterEffect);
-    if (!m_effect)
+    m_effect = dynamic_cast<ConvolveMatrixEffect *>(filterEffect);
+    if (!m_effect) {
         return false;
+    }
 
     m_edgeMode->blockSignals(true);
     m_edgeMode->setCurrentIndex(m_effect->edgeMode());
@@ -110,11 +112,11 @@ bool ConvolveMatrixEffectConfigWidget::editFilterEffect(KoFilterEffect * filterE
     m_orderY->blockSignals(false);
     m_targetX->blockSignals(true);
     m_targetX->setMaximum(m_orderX->value());
-    m_targetX->setValue(m_effect->target().x()+1);
+    m_targetX->setValue(m_effect->target().x() + 1);
     m_targetX->blockSignals(false);
     m_targetY->blockSignals(true);
     m_targetY->setMaximum(m_orderY->value());
-    m_targetY->setValue(m_effect->target().y()+1);
+    m_targetY->setValue(m_effect->target().y() + 1);
     m_targetY->blockSignals(false);
     m_divisor->blockSignals(true);
     m_divisor->setValue(m_effect->divisor());
@@ -131,27 +133,29 @@ bool ConvolveMatrixEffectConfigWidget::editFilterEffect(KoFilterEffect * filterE
 
 void ConvolveMatrixEffectConfigWidget::edgeModeChanged(int id)
 {
-    if (!m_effect)
+    if (!m_effect) {
         return;
+    }
 
-    switch(id) {
-        case ConvolveMatrixEffect::Duplicate:
-            m_effect->setEdgeMode(ConvolveMatrixEffect::Duplicate);
-            break;
-        case ConvolveMatrixEffect::Wrap:
-            m_effect->setEdgeMode(ConvolveMatrixEffect::Wrap);
-            break;
-        case ConvolveMatrixEffect::None:
-            m_effect->setEdgeMode(ConvolveMatrixEffect::None);
-            break;
+    switch (id) {
+    case ConvolveMatrixEffect::Duplicate:
+        m_effect->setEdgeMode(ConvolveMatrixEffect::Duplicate);
+        break;
+    case ConvolveMatrixEffect::Wrap:
+        m_effect->setEdgeMode(ConvolveMatrixEffect::Wrap);
+        break;
+    case ConvolveMatrixEffect::None:
+        m_effect->setEdgeMode(ConvolveMatrixEffect::None);
+        break;
     }
     emit filterChanged();
 }
 
 void ConvolveMatrixEffectConfigWidget::orderChanged(int)
 {
-    if (!m_effect)
+    if (!m_effect) {
         return;
+    }
 
     QPoint newOrder(m_orderX->value(), m_orderY->value());
     QPoint oldOrder = m_effect->order();
@@ -166,10 +170,11 @@ void ConvolveMatrixEffectConfigWidget::orderChanged(int)
 
 void ConvolveMatrixEffectConfigWidget::targetChanged(int)
 {
-    if (!m_effect)
+    if (!m_effect) {
         return;
+    }
 
-    QPoint newTarget(m_targetX->value()-1, m_targetY->value()-1);
+    QPoint newTarget(m_targetX->value() - 1, m_targetY->value() - 1);
     QPoint oldTarget = m_effect->target();
     if (newTarget != oldTarget) {
         m_effect->setTarget(newTarget);
@@ -179,8 +184,9 @@ void ConvolveMatrixEffectConfigWidget::targetChanged(int)
 
 void ConvolveMatrixEffectConfigWidget::divisorChanged(double divisor)
 {
-    if (!m_effect)
+    if (!m_effect) {
         return;
+    }
 
     if (divisor != m_effect->divisor()) {
         m_effect->setDivisor(divisor);
@@ -190,8 +196,9 @@ void ConvolveMatrixEffectConfigWidget::divisorChanged(double divisor)
 
 void ConvolveMatrixEffectConfigWidget::biasChanged(double bias)
 {
-    if (!m_effect)
+    if (!m_effect) {
         return;
+    }
 
     if (bias != m_effect->bias()) {
         m_effect->setBias(bias);
@@ -201,8 +208,9 @@ void ConvolveMatrixEffectConfigWidget::biasChanged(double bias)
 
 void ConvolveMatrixEffectConfigWidget::preserveAlphaChanged(bool checked)
 {
-    if (!m_effect)
+    if (!m_effect) {
         return;
+    }
 
     m_effect->enablePreserveAlpha(checked);
     emit filterChanged();
@@ -210,8 +218,9 @@ void ConvolveMatrixEffectConfigWidget::preserveAlphaChanged(bool checked)
 
 void ConvolveMatrixEffectConfigWidget::editKernel()
 {
-    if (!m_effect)
+    if (!m_effect) {
         return;
+    }
 
     QVector<qreal> oldKernel = m_effect->kernel();
     QPoint kernelSize = m_effect->order();
@@ -219,7 +228,7 @@ void ConvolveMatrixEffectConfigWidget::editKernel()
     connect(m_matrixModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(kernelChanged()));
 
     QPointer<QDialog> dlg = new QDialog(this);
-    QTableView * table = new QTableView(dlg);
+    QTableView *table = new QTableView(dlg);
     table->setModel(m_matrixModel);
     table->horizontalHeader()->hide();
     table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
@@ -241,8 +250,9 @@ void ConvolveMatrixEffectConfigWidget::editKernel()
 
 void ConvolveMatrixEffectConfigWidget::kernelChanged()
 {
-    if (!m_effect)
+    if (!m_effect) {
         return;
+    }
 
     m_effect->setKernel(m_matrixModel->matrix());
     emit filterChanged();

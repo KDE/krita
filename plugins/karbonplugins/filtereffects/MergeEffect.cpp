@@ -26,7 +26,7 @@
 #include <limits.h>
 
 MergeEffect::MergeEffect()
-        : KoFilterEffect(MergeEffectId, i18n("Merge"))
+    : KoFilterEffect(MergeEffectId, i18n("Merge"))
 {
     setRequiredInputCount(2);
     setMaximalInputCount(INT_MAX);
@@ -42,12 +42,14 @@ QImage MergeEffect::processImage(const QImage &image, const KoFilterEffectRender
 QImage MergeEffect::processImages(const QList<QImage> &images, const KoFilterEffectRenderContext &/*context*/) const
 {
     int imageCount = images.count();
-    if (!imageCount)
+    if (!imageCount) {
         return QImage();
+    }
 
     QImage result = images[0];
-    if (imageCount == 1)
+    if (imageCount == 1) {
         return result;
+    }
 
     QPainter p(&result);
 
@@ -60,8 +62,9 @@ QImage MergeEffect::processImages(const QList<QImage> &images, const KoFilterEff
 
 bool MergeEffect::load(const KoXmlElement &element, const KoFilterEffectLoadingContext &)
 {
-    if (element.tagName() != id())
+    if (element.tagName() != id()) {
         return false;
+    }
 
     int inputCount = inputs().count();
     int inputIndex = 0;
@@ -69,10 +72,11 @@ bool MergeEffect::load(const KoXmlElement &element, const KoFilterEffectLoadingC
         KoXmlElement node = n.toElement();
         if (node.tagName() == "feMergeNode") {
             if (node.hasAttribute("in")) {
-                if (inputIndex < inputCount)
+                if (inputIndex < inputCount) {
                     setInput(inputIndex, node.attribute("in"));
-                else
+                } else {
                     addInput(node.attribute("in"));
+                }
                 inputIndex++;
             }
         }

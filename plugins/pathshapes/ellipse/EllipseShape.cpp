@@ -36,10 +36,10 @@
 #include <math.h>
 
 EllipseShape::EllipseShape()
-    :m_startAngle(0),
-    m_endAngle(0),
-    m_kindAngle(M_PI),
-    m_type(Arc)
+    : m_startAngle(0)
+    , m_endAngle(0)
+    , m_kindAngle(M_PI)
+    , m_type(Arc)
 {
     QList<QPointF> handles;
     handles.push_back(QPointF(100, 50));
@@ -64,7 +64,7 @@ void EllipseShape::saveOdf(KoShapeSavingContext &context) const
 
         switch (m_type) {
         case Arc:
-            context.xmlWriter().addAttribute("draw:kind", sweepAngle()==360 ? "full" : "arc");
+            context.xmlWriter().addAttribute("draw:kind", sweepAngle() == 360 ? "full" : "arc");
             break;
         case Pie:
             context.xmlWriter().addAttribute("draw:kind", "section");
@@ -95,13 +95,13 @@ bool EllipseShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
 
     QString kind = element.attributeNS(KoXmlNS::draw, "kind", "full");
 
-    if (element.hasAttributeNS( KoXmlNS::svg, "rx") && element.hasAttributeNS(KoXmlNS::svg, "ry")) {
+    if (element.hasAttributeNS(KoXmlNS::svg, "rx") && element.hasAttributeNS(KoXmlNS::svg, "ry")) {
         qreal rx = KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "rx"));
         qreal ry = KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "ry"));
-        size = QSizeF( 2*rx, 2*ry );
-    } else if(element.hasAttributeNS(KoXmlNS::svg, "r")) {
+        size = QSizeF(2 * rx, 2 * ry);
+    } else if (element.hasAttributeNS(KoXmlNS::svg, "r")) {
         qreal r = KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "r"));
-        size = QSizeF(2*r, 2*r);
+        size = QSizeF(2 * r, 2 * r);
     } else {
         size.setWidth(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "width", QString())));
         size.setHeight(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "height", QString())));
@@ -116,8 +116,8 @@ bool EllipseShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
     QPointF pos;
 
     if (element.hasAttributeNS(KoXmlNS::svg, "cx") && element.hasAttributeNS(KoXmlNS::svg, "cy")) {
-        qreal cx = KoUnit::parseValue(element.attributeNS( KoXmlNS::svg, "cx"));
-        qreal cy = KoUnit::parseValue(element.attributeNS( KoXmlNS::svg, "cy"));
+        qreal cx = KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "cx"));
+        qreal cy = KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "cy"));
         pos = QPointF(cx - 0.5 * size.width(), cy - 0.5 * size.height());
     } else {
         pos.setX(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "x", QString())));
@@ -125,17 +125,18 @@ bool EllipseShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
     }
     setPosition(pos);
 
-    if (kind == "section")
+    if (kind == "section") {
         setType(Pie);
-    else if (kind == "cut")
+    } else if (kind == "cut") {
         setType(Chord);
-    else
+    } else {
         setType(Arc);
+    }
 
     setStartAngle(element.attributeNS(KoXmlNS::draw, "start-angle", "0").toDouble());
     setEndAngle(element.attributeNS(KoXmlNS::draw, "end-angle", "360").toDouble());
     if (!radiusGiven) {
-        // is the size was given by width and height we have to reset the data as the size of the 
+        // is the size was given by width and height we have to reset the data as the size of the
         // part of the cut/pie is given.
         setSize(size);
         setPosition(pos);
@@ -174,18 +175,20 @@ void EllipseShape::moveHandleAction(int handleId, const QPointF &point, Qt::Keyb
     diff.setX(-diff.x());
     qreal angle = 0;
     if (diff.x() == 0) {
-        angle = (diff.y() < 0 ? 270 : 90 ) * M_PI / 180.0;
+        angle = (diff.y() < 0 ? 270 : 90) * M_PI / 180.0;
     } else {
         diff.setY(diff.y() * m_radii.x() / m_radii.y());
-        angle = atan(diff.y() / diff.x ());
-        if (angle < 0)
+        angle = atan(diff.y() / diff.x());
+        if (angle < 0) {
             angle = M_PI + angle;
-        if (diff.y() < 0)
+        }
+        if (diff.y() < 0) {
             angle += M_PI;
+        }
     }
 
     QList<QPointF> handles = this->handles();
-    switch ( handleId ) {
+    switch (handleId) {
     case 0:
         p = QPointF(m_center + QPointF(cos(angle) * m_radii.x(), -sin(angle) * m_radii.y()));
         m_startAngle = angle * 180.0 / M_PI;
@@ -228,7 +231,7 @@ void EllipseShape::updatePath(const QSizeF &size)
 
     QPointF curvePoints[12];
 
-    int pointCnt = arcToCurve(m_radii.x(), m_radii.y(), m_startAngle, sweepAngle() , startpoint, curvePoints);
+    int pointCnt = arcToCurve(m_radii.x(), m_radii.y(), m_startAngle, sweepAngle(), startpoint, curvePoints);
 
     int curvePointCount = 1 + pointCnt / 3;
     int requiredPointCount = curvePointCount;
@@ -248,18 +251,18 @@ void EllipseShape::updatePath(const QSizeF &size)
     points[0]->removeControlPoint1();
     points[0]->setProperty(KoPathPoint::StartSubpath);
     for (int i = 1; i < curvePointCount; ++i) {
-        points[i-1]->setControlPoint2(curvePoints[curveIndex++]);
+        points[i - 1]->setControlPoint2(curvePoints[curveIndex++]);
         points[i]->setControlPoint1(curvePoints[curveIndex++]);
         points[i]->setPoint(curvePoints[curveIndex++]);
         points[i]->removeControlPoint2();
     }
 
     if (m_type == Pie) {
-        points[requiredPointCount-1]->setPoint(m_center);
-        points[requiredPointCount-1]->removeControlPoint1();
-        points[requiredPointCount-1]->removeControlPoint2();
+        points[requiredPointCount - 1]->setPoint(m_center);
+        points[requiredPointCount - 1]->removeControlPoint1();
+        points[requiredPointCount - 1]->removeControlPoint2();
     } else if (m_type == Arc && m_startAngle == m_endAngle) {
-        points[curvePointCount-1]->setControlPoint2(curvePoints[curveIndex]);
+        points[curvePointCount - 1]->setControlPoint2(curvePoints[curveIndex]);
         points[0]->setControlPoint1(curvePoints[++curveIndex]);
     }
 
@@ -287,23 +290,23 @@ void EllipseShape::createPoints(int requiredPointCount)
     }
     int currentPointCount = m_subpaths[0]->count();
     if (currentPointCount > requiredPointCount) {
-        for (int i = 0; i < currentPointCount-requiredPointCount; ++i) {
+        for (int i = 0; i < currentPointCount - requiredPointCount; ++i) {
             delete m_subpaths[0]->front();
             m_subpaths[0]->pop_front();
         }
     } else if (requiredPointCount > currentPointCount) {
-        for (int i = 0; i < requiredPointCount-currentPointCount; ++i) {
+        for (int i = 0; i < requiredPointCount - currentPointCount; ++i) {
             m_subpaths[0]->append(new KoPathPoint(this, QPointF()));
         }
     }
 }
 
-
 void EllipseShape::updateKindHandle()
 {
     m_kindAngle = (m_startAngle + m_endAngle) * M_PI / 360.0;
-    if (m_startAngle > m_endAngle)
+    if (m_startAngle > m_endAngle) {
         m_kindAngle += M_PI;
+    }
     QList<QPointF> handles = this->handles();
     switch (m_type) {
     case Arc:
@@ -333,10 +336,12 @@ qreal EllipseShape::sweepAngle() const
 {
     qreal sAngle =  m_endAngle - m_startAngle;
     // treat also as full circle
-    if (sAngle == 0 || sAngle == -360)
+    if (sAngle == 0 || sAngle == -360) {
         sAngle = 360;
-    if (m_startAngle > m_endAngle)
+    }
+    if (m_startAngle > m_endAngle) {
         sAngle = 360 - m_startAngle + m_endAngle;
+    }
     return sAngle;
 }
 
@@ -426,10 +431,11 @@ bool EllipseShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &conte
 
     const qreal cx = SvgUtil::parseUnitX(context.currentGC(), element.attribute("cx", "0"));
     const qreal cy = SvgUtil::parseUnitY(context.currentGC(), element.attribute("cy", "0"));
-    setSize(QSizeF(2*rx, 2*ry));
+    setSize(QSizeF(2 * rx, 2 * ry));
     setPosition(QPointF(cx - rx, cy - ry));
-    if (rx == 0.0 || ry == 0.0)
+    if (rx == 0.0 || ry == 0.0) {
         setVisible(false);
+    }
 
     return true;
 }

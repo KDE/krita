@@ -86,53 +86,48 @@ void SpiralShape::moveHandleAction(int handleId, const QPointF &point, Qt::Keybo
     QPointF diff(m_center - point);
     diff.setX(-diff.x());
     qreal angle = 0;
-    if (diff.x() == 0)
-    {
+    if (diff.x() == 0) {
         angle = (diff.y() < 0 ? 270 : 90) * M_PI / 180.0;
-    }
-    else
-    {
+    } else {
         diff.setY(diff.y() * m_radii.x() / m_radii.y());
-        angle = atan(diff.y() / diff.x ());
-        if (angle < 0)
+        angle = atan(diff.y() / diff.x());
+        if (angle < 0) {
             angle = M_PI + angle;
-        if (diff.y() < 0)
+        }
+        if (diff.y() < 0) {
             angle += M_PI;
+        }
     }
 
-    switch (handleId)
-    {
-        case 0:
-            p = QPointF(m_center + QPointF(cos(angle) * m_radii.x(), -sin(angle) * m_radii.y()));
-            m_handles[handleId] = p;
-            updateKindHandle();
-            break;
-        case 1:
-            p = QPointF(m_center + QPointF(cos(angle) * m_radii.x(), -sin(angle) * m_radii.y()));
-            m_handles[handleId] = p;
-            updateKindHandle();
-            break;
-        case 2:
-        {
-            QList<QPointF> kindHandlePositions;
-            kindHandlePositions.push_back(QPointF(m_center + QPointF(cos(m_kindAngle) * m_radii.x(), -sin(m_kindAngle) * m_radii.y())));
-            kindHandlePositions.push_back(m_center);
-            kindHandlePositions.push_back((m_handles[0] + m_handles[1]) / 2.0);
+    switch (handleId) {
+    case 0:
+        p = QPointF(m_center + QPointF(cos(angle) * m_radii.x(), -sin(angle) * m_radii.y()));
+        m_handles[handleId] = p;
+        updateKindHandle();
+        break;
+    case 1:
+        p = QPointF(m_center + QPointF(cos(angle) * m_radii.x(), -sin(angle) * m_radii.y()));
+        m_handles[handleId] = p;
+        updateKindHandle();
+        break;
+    case 2: {
+        QList<QPointF> kindHandlePositions;
+        kindHandlePositions.push_back(QPointF(m_center + QPointF(cos(m_kindAngle) * m_radii.x(), -sin(m_kindAngle) * m_radii.y())));
+        kindHandlePositions.push_back(m_center);
+        kindHandlePositions.push_back((m_handles[0] + m_handles[1]) / 2.0);
 
-            QPointF diff = m_center * 2.0;
-            int handlePos = 0;
-            for (int i = 0; i < kindHandlePositions.size(); ++i)
-            {
-                QPointF pointDiff(p - kindHandlePositions[i]);
-                if (i == 0 || qAbs(pointDiff.x()) + qAbs(pointDiff.y()) < qAbs(diff.x()) + qAbs(diff.y()))
-                {
-                    diff = pointDiff;
-                    handlePos = i;
-                }
+        QPointF diff = m_center * 2.0;
+        int handlePos = 0;
+        for (int i = 0; i < kindHandlePositions.size(); ++i) {
+            QPointF pointDiff(p - kindHandlePositions[i]);
+            if (i == 0 || qAbs(pointDiff.x()) + qAbs(pointDiff.y()) < qAbs(diff.x()) + qAbs(diff.y())) {
+                diff = pointDiff;
+                handlePos = i;
             }
-            m_handles[handleId] = kindHandlePositions[handlePos];
-            m_type = SpiralType(handlePos);
-        } break;
+        }
+        m_handles[handleId] = kindHandlePositions[handlePos];
+        m_type = SpiralType(handlePos);
+    } break;
     }
 #endif
 }
@@ -147,40 +142,32 @@ void SpiralShape::updatePath(const QSizeF &size)
 
     QPointF curvePoints[12];
 
-    int pointCnt = arcToCurve(m_radii.x(), m_radii.y(), m_startAngle, sweepAngle() , startpoint, curvePoints);
+    int pointCnt = arcToCurve(m_radii.x(), m_radii.y(), m_startAngle, sweepAngle(), startpoint, curvePoints);
 
     int cp = 0;
     m_points[cp]->setPoint(startpoint);
     m_points[cp]->unsetProperty(KoPathPoint::HasControlPoint1);
-    for (int i = 0; i < pointCnt; i += 3)
-    {
+    for (int i = 0; i < pointCnt; i += 3) {
         m_points[cp]->setControlPoint2(curvePoints[i]);
-        m_points[++cp]->setControlPoint1(curvePoints[i+1]); 
-        m_points[cp]->setPoint(curvePoints[i+2]);
+        m_points[++cp]->setControlPoint1(curvePoints[i + 1]);
+        m_points[cp]->setPoint(curvePoints[i + 2]);
         m_points[cp]->unsetProperty(KoPathPoint::HasControlPoint2);
     }
-    if (m_type == Curve)
-    {
+    if (m_type == Curve) {
         m_points[++cp]->setPoint(m_center);
         m_points[cp]->unsetProperty(KoPathPoint::HasControlPoint1);
         m_points[cp]->unsetProperty(KoPathPoint::HasControlPoint2);
-    }
-    else if (m_type == Line && m_startAngle == m_endAngle)
-    {
+    } else if (m_type == Line && m_startAngle == m_endAngle) {
         m_points[0]->setControlPoint1(m_points[cp]->controlPoint1());
         m_points[0]->setPoint(m_points[cp]->point());
         --cp;
     }
 
     m_subpaths[0]->clear();
-    for (int i = 0; i <= cp; ++i)
-    {
-        if (i < cp || (m_type == Line && m_startAngle != m_endAngle))
-        {
+    for (int i = 0; i <= cp; ++i) {
+        if (i < cp || (m_type == Line && m_startAngle != m_endAngle)) {
             m_points[i]->unsetProperty(KoPathPoint::CloseSubpath);
-        }
-        else
-        {
+        } else {
             m_points[i]->setProperty(KoPathPoint::CloseSubpath);
         }
         m_subpaths[0]->push_back(m_points[i]);
@@ -233,22 +220,22 @@ void SpiralShape::createPath(const QSizeF &size)
 
 void SpiralShape::updateKindHandle()
 {
-/*
-   m_kindAngle = (m_startAngle + m_endAngle) * M_PI / 360.0;
-   if (m_startAngle > m_endAngle)
-   {
-       m_kindAngle += M_PI;
-   }
-   switch (m_type)
-   {
-       case Curve:
-           m_handles[2] = m_center + QPointF(cos(m_kindAngle) * m_radii.x(), -sin(m_kindAngle) * m_radii.y());
-           break;
-       case Line:
-           m_handles[2] = m_center;
-           break;
-   }
-   */
+    /*
+       m_kindAngle = (m_startAngle + m_endAngle) * M_PI / 360.0;
+       if (m_startAngle > m_endAngle)
+       {
+           m_kindAngle += M_PI;
+       }
+       switch (m_type)
+       {
+           case Curve:
+               m_handles[2] = m_center + QPointF(cos(m_kindAngle) * m_radii.x(), -sin(m_kindAngle) * m_radii.y());
+               break;
+           case Line:
+               m_handles[2] = m_center;
+               break;
+       }
+       */
 }
 
 void SpiralShape::updateAngleHandles()

@@ -20,7 +20,7 @@
 #include "SpiralShapeConfigCommand.h"
 #include <klocalizedstring.h>
 
-SpiralShapeConfigCommand::SpiralShapeConfigCommand(SpiralShape * spiral, SpiralShape::SpiralType type, bool clockWise, qreal fade, KUndo2Command *parent)
+SpiralShapeConfigCommand::SpiralShapeConfigCommand(SpiralShape *spiral, SpiralShape::SpiralType type, bool clockWise, qreal fade, KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_spiral(spiral)
     , m_newType(type)
@@ -42,12 +42,15 @@ void SpiralShapeConfigCommand::redo()
 
     m_spiral->update();
 
-    if (m_oldType != m_newType)
+    if (m_oldType != m_newType) {
         m_spiral->setType(m_newType);
-    if (m_oldClockWise != m_newClockWise)
+    }
+    if (m_oldClockWise != m_newClockWise) {
         m_spiral->setClockWise(m_newClockWise);
-    if (m_oldFade != m_newFade)
+    }
+    if (m_oldFade != m_newFade) {
         m_spiral->setFade(m_newFade);
+    }
 
     m_spiral->update();
 }
@@ -58,12 +61,15 @@ void SpiralShapeConfigCommand::undo()
 
     m_spiral->update();
 
-    if (m_oldType != m_newType)
+    if (m_oldType != m_newType) {
         m_spiral->setType(m_oldType);
-    if (m_oldClockWise != m_newClockWise)
+    }
+    if (m_oldClockWise != m_newClockWise) {
         m_spiral->setClockWise(m_oldClockWise);
-    if (m_oldFade != m_newFade)
+    }
+    if (m_oldFade != m_newFade) {
         m_spiral->setFade(m_oldFade);
+    }
 
     m_spiral->update();
 }

@@ -32,8 +32,7 @@ class SpiralShape : public KoParameterShape
 {
 public:
     /// the possible spiral types
-    enum SpiralType
-    {
+    enum SpiralType {
         Curve = 0,   ///< spiral uses curves
         Line = 1    ///< spiral uses lines
     };

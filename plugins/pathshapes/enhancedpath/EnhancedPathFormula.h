@@ -29,13 +29,12 @@ class FormulaToken
 {
 public:
     /// token types
-    enum Type
-    {
-      TypeUnknown = 0, ///< unknown type
-      TypeNumber,      ///< 14, 3, 1977, 3.141592, 1e10, 5.9e-7
-      TypeOperator,    ///< +, *, /, -
-      TypeReference,   ///< function reference, modifier reference or named variable
-      TypeFunction     ///< function name
+    enum Type {
+        TypeUnknown = 0, ///< unknown type
+        TypeNumber,      ///< 14, 3, 1977, 3.141592, 1e10, 5.9e-7
+        TypeOperator,    ///< +, *, /, -
+        TypeReference,   ///< function reference, modifier reference or named variable
+        TypeFunction     ///< function name
     };
 
     /// operator types
@@ -51,29 +50,50 @@ public:
     };
 
     /// Constructs token with given type, text and position
-    explicit FormulaToken(Type type = TypeUnknown, const QString & text = QString(), int position = -1);
+    explicit FormulaToken(Type type = TypeUnknown, const QString &text = QString(), int position = -1);
 
     /// copy constructor
     FormulaToken(const FormulaToken &token);
 
     /// assignment operator
-    FormulaToken& operator=(const FormulaToken &token);
+    FormulaToken &operator=(const FormulaToken &token);
 
     /// Returns the type of the token
-    Type type() const { return m_type; }
+    Type type() const
+    {
+        return m_type;
+    }
     /// Returns the text representation of the token
-    QString text() const { return m_text; }
+    QString text() const
+    {
+        return m_text;
+    }
     /// Returns the position of the token
-    int position() const { return m_position; }
+    int position() const
+    {
+        return m_position;
+    }
 
     /// Returns if the token is a number
-    bool isNumber() const { return m_type == TypeNumber; }
+    bool isNumber() const
+    {
+        return m_type == TypeNumber;
+    }
     /// Returns if the token is a operator, OperatorInvalid if token is no operator
-    bool isOperator() const { return m_type == TypeOperator; }
+    bool isOperator() const
+    {
+        return m_type == TypeOperator;
+    }
     /// Returns if token is a function
-    bool isFunction() const { return m_type == TypeFunction; }
+    bool isFunction() const
+    {
+        return m_type == TypeFunction;
+    }
     /// Returns  if token is a reference
-    bool isReference() const { return m_type == TypeReference; }
+    bool isReference() const
+    {
+        return m_type == TypeReference;
+    }
 
     /// Returns the token converted to qreal
     qreal asNumber() const;
@@ -120,7 +140,7 @@ public:
     };
 
     /// Constructs a new formula from the specified string representation
-    EnhancedPathFormula(const QString &text, EnhancedPathShape * parent);
+    EnhancedPathFormula(const QString &text, EnhancedPathShape *parent);
 
     /// Destroys the formula
     ~EnhancedPathFormula();
@@ -134,7 +154,10 @@ public:
     qreal evaluate();
 
     /// Returns the last occurred error
-    Error error() const { return m_error; }
+    Error error() const
+    {
+        return m_error;
+    }
 
     /// returns string representaion of the formula
     QString toString() const;

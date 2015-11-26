@@ -332,7 +332,7 @@ QPainterPath simplifyPath(const QPainterPath &path,
     QPainterPath finalPath;
 
     QList<QPolygonF> polygons = path.toSubpathPolygons();
-    foreach (const QPolygonF poly, polygons) {
+    Q_FOREACH (const QPolygonF poly, polygons) {
         QPainterPath p;
         p.addPolygon(poly);
 

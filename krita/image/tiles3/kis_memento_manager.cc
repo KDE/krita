@@ -317,7 +317,7 @@ void KisMementoManager::rollforward(KisTileHashTable *ht)
     KisMementoItemSP mi;
 
     blockRegistration();
-    foreach(mi, changeList.itemList) {
+    Q_FOREACH (mi, changeList.itemList) {
         if (mi->parent()->type() == KisMementoItem::CHANGED)
             ht->deleteTile(mi->col(), mi->row());
         if (mi->type() == KisMementoItem::CHANGED)
@@ -370,7 +370,7 @@ void KisMementoManager::resetRevisionHistory(KisMementoItemList list)
     KisMementoItemSP parentMI;
     KisMementoItemSP mi;
 
-    foreach(mi, list) {
+    Q_FOREACH (mi, list) {
         parentMI = mi->parent();
         if(!parentMI) continue;
 
@@ -401,18 +401,18 @@ void KisMementoManager::debugPrintInfo()
 
     printf("Revisions list:\n");
     qint32 i = 0;
-    foreach(const KisHistoryItem &changeList, m_revisions) {
+    Q_FOREACH (const KisHistoryItem &changeList, m_revisions) {
         printf("--- revision #%d ---\n", i++);
-        foreach(mi, changeList.itemList) {
+        Q_FOREACH (mi, changeList.itemList) {
             mi->debugPrintInfo();
         }
     }
 
     printf("\nCancelled revisions list:\n");
     i = 0;
-    foreach(const KisHistoryItem &changeList, m_cancelledRevisions) {
+    Q_FOREACH (const KisHistoryItem &changeList, m_cancelledRevisions) {
         printf("--- revision #%d ---\n", m_revisions.size() + i++);
-        foreach(mi, changeList.itemList) {
+        Q_FOREACH (mi, changeList.itemList) {
             mi->debugPrintInfo();
         }
     }

@@ -1978,7 +1978,7 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style) const
         style.addAttribute("style:display-name", d->name);
     }
     QList<int> keys = d->stylesPrivate.keys();
-    foreach(int key, keys) {
+    Q_FOREACH (int key, keys) {
         if (key == QTextFormat::FontWeight) {
             bool ok = false;
             int boldness = d->stylesPrivate.value(key).toInt(&ok);

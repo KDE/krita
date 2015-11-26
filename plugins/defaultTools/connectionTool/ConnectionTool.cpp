@@ -613,7 +613,7 @@ KoConnectionShape * ConnectionTool::nearestConnectionShape(const QList<KoShape*>
     qreal minSquaredDistance = HUGE_VAL;
     const qreal maxSquaredDistance = grabDistance*grabDistance;
 
-    foreach(KoShape *shape, shapes) {
+    Q_FOREACH (KoShape *shape, shapes) {
         KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>(shape);
         if (!connectionShape || !connectionShape->isParametricShape())
             continue;
@@ -679,9 +679,9 @@ void ConnectionTool::updateActions()
         KoConnectionPoint cp = m_currentShape->connectionPoint(m_activeHandle);
 
         m_alignPercent->setChecked(false);
-        foreach(QAction *action, m_alignHorizontal->actions())
+        Q_FOREACH (QAction *action, m_alignHorizontal->actions())
             action->setChecked(false);
-        foreach(QAction *action, m_alignVertical->actions())
+        Q_FOREACH (QAction *action, m_alignVertical->actions())
             action->setChecked(false);
         switch(cp.alignment) {
             case KoConnectionPoint::AlignNone:
@@ -724,7 +724,7 @@ void ConnectionTool::updateActions()
                 m_alignBottom->setChecked(true);
                 break;
         }
-        foreach(QAction *action, m_escapeDirections->actions())
+        Q_FOREACH (QAction *action, m_escapeDirections->actions())
             action->setChecked(false);
         switch(cp.escapeDirection) {
             case KoConnectionPoint::AllDirections:
@@ -801,7 +801,7 @@ QList<QPointer<QWidget> > ConnectionTool::createOptionWidgets()
     KoShapeFactoryBase * factory = KoShapeRegistry::instance()->get(KOCONNECTIONSHAPEID);
     if (factory) {
         QList<KoShapeConfigWidgetBase*> widgets = factory->createShapeOptionPanels();
-        foreach(KoShapeConfigWidgetBase *cw, widgets) {
+        Q_FOREACH (KoShapeConfigWidgetBase *cw, widgets) {
             if (cw->showOnShapeCreate() || !cw->showOnShapeSelect()) {
                 delete cw;
                 continue;
@@ -849,9 +849,9 @@ void ConnectionTool::verticalAlignChanged()
 
 void ConnectionTool::relativeAlignChanged()
 {
-    foreach(QAction *action, m_alignHorizontal->actions())
+    Q_FOREACH (QAction *action, m_alignHorizontal->actions())
         action->setChecked(false);
-    foreach(QAction *action, m_alignVertical->actions())
+    Q_FOREACH (QAction *action, m_alignVertical->actions())
         action->setChecked(false);
     m_alignPercent->setChecked(true);
 
@@ -923,7 +923,7 @@ void ConnectionTool::connectionChanged()
     if (!connectionShape)
         return;
 
-    foreach(KoShapeConfigWidgetBase *cw, m_connectionShapeWidgets) {
+    Q_FOREACH (KoShapeConfigWidgetBase *cw, m_connectionShapeWidgets) {
         canvas()->addCommand(cw->createCommand());
     }
 }

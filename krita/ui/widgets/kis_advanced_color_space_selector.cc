@@ -103,13 +103,13 @@ void KisAdvancedColorSpaceSelector::fillLstProfiles()
 
     QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
     QStringList profileNames;
-    foreach(const KoColorProfile *profile, profileList) {
+    Q_FOREACH (const KoColorProfile *profile, profileList) {
         profileNames.append(profile->name());
     }
     qSort(profileNames);
     QListWidgetItem *defaultProfile = new QListWidgetItem;
     defaultProfile->setText(csf->defaultProfile() + " " + i18nc("This is appended to the color profile which is the default for the given colorspace and bit-depth","(Default)"));
-    foreach(QString stringName, profileNames) {
+    Q_FOREACH (QString stringName, profileNames) {
         if (stringName==csf->defaultProfile()) {
             d->colorSpaceSelector->lstProfile->addItem(defaultProfile);
         } else {
@@ -660,7 +660,7 @@ void KisAdvancedColorSpaceSelector::installProfile()
 
     QString saveLocation = KoResourcePaths::saveLocation("icc_profiles");
 
-    foreach (const QString &profileName, profileNames) {
+    Q_FOREACH (const QString &profileName, profileNames) {
         QUrl file(profileName);
         if (!QFile::copy(profileName, saveLocation  +  file.fileName())) {
             dbgKrita << "Could not install profile!";

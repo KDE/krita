@@ -772,7 +772,7 @@ void KisNodeManager::removeSingleNode(KisNodeSP node)
 void KisNodeManager::removeSelectedNodes(QList<KisNodeSP> selectedNodes)
 {
     m_d->commandsAdapter.beginMacro(kundo2_i18n("Remove Multiple Layers and Masks"));
-    foreach(KisNodeSP node, selectedNodes) {
+    Q_FOREACH (KisNodeSP node, selectedNodes) {
         if (!scanForParent(selectedNodes, node)) {
             removeSingleNode(node);
         }

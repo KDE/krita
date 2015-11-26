@@ -102,7 +102,7 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
     inputs << ConnectionSource::StrokePaint;
 
     m_defaultSourceSelector = new KComboBox(this);
-    foreach(ConnectionSource::SourceType source, inputs) {
+    Q_FOREACH (ConnectionSource::SourceType source, inputs) {
         m_defaultSourceSelector->addItem(ConnectionSource::typeToString(source));
     }
     m_defaultSourceSelector->hide();
@@ -205,7 +205,7 @@ void FilterEffectEditWidget::removeSelectedItem()
             KoFilterEffect * nextEffect = filterEffects[i];
             QList<QString> inputs = nextEffect->inputs();
             int inputIndex = 0;
-            foreach(const QString &input, inputs) {
+            Q_FOREACH (const QString &input, inputs) {
                 if (input == effect->output()) {
                     InputChangeData data(nextEffect, inputIndex, input, "");
                     changeData.append(data);
@@ -220,7 +220,7 @@ void FilterEffectEditWidget::removeSelectedItem()
         QString outputName = ConnectionSource::typeToString(item.type());
         QList<QString> inputs = effect->inputs();
         int inputIndex = 0;
-        foreach(const QString &input, inputs) {
+        Q_FOREACH (const QString &input, inputs) {
             if (input == outputName) {
                 InputChangeData data(effect, inputIndex, input, "");
                 changeData.append(data);
@@ -283,7 +283,7 @@ void FilterEffectEditWidget::connectionCreated(ConnectionSource source, Connecti
             }
             if (renameOutput) {
                 QSet<QString> uniqueOutputNames;
-                foreach(KoFilterEffect *effect, filterEffects) {
+                Q_FOREACH (KoFilterEffect *effect, filterEffects) {
                     uniqueOutputNames.insert(effect->output());
                 }
                 int index = 0;
@@ -298,7 +298,7 @@ void FilterEffectEditWidget::connectionCreated(ConnectionSource source, Connecti
                 for (int i = sourceEffectIndex + 1; i < targetEffectIndex; ++i) {
                     KoFilterEffect * effect = filterEffects[i];
                     int inputIndex = 0;
-                    foreach(const QString &input, effect->inputs()) {
+                    Q_FOREACH (const QString &input, effect->inputs()) {
                         if (input.isEmpty() && (i == sourceEffectIndex + 1 || input == sourceName)) {
                             InputChangeData data(effect, inputIndex, input, newOutputName);
                             changeData.append(data);
@@ -513,7 +513,7 @@ void FilterEffectEditWidget::defaultSourceChanged(int index)
 
     InputChangeData data;
     int inputIndex = 0;
-    foreach(const QString &input, filterEffect->inputs()) {
+    Q_FOREACH (const QString &input, filterEffect->inputs()) {
         if (input == oldInput || (effectIndex == 0 && oldInput == defInput)) {
             data = InputChangeData(filterEffect, inputIndex, input, newInput);
             break;

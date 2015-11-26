@@ -333,7 +333,7 @@ private:
     void cacheServerResources(const QList<PointerType> &serverResources) {
         m_serverResources.clear();
 
-        foreach(PointerType resource, serverResources) {
+        Q_FOREACH (PointerType resource, serverResources) {
             m_serverResources.append(Policy::toResourcePointer(resource));
         }
         serverResourceCacheInvalid(false);

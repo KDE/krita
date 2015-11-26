@@ -154,7 +154,7 @@ QImage ConvolveMatrixEffect::processImage(const QImage &image, const KoFilterEff
     // if no divisor given, it is the sum of all kernel values
     // if sum of kernel values is zero, divisor is set to 1
     if (divisor == 0.0) {
-        foreach(qreal k, m_kernel) {
+        Q_FOREACH (qreal k, m_kernel) {
             divisor += k;
         }
         if (divisor == 0.0)

@@ -52,7 +52,7 @@ void CitationInsertionDialog::insert()
             int ret = QMessageBox::warning(this,i18n("Warning"),i18n("The document already contains the bibliography entry with different data.\n"
                                  "Do you want to adjust existing entries?"),QMessageBox::Yes | QMessageBox::No);
             if ( ret == QMessageBox::Yes) {
-                foreach(KoInlineCite *existingCite, m_cites.values(dialog.shortName->text())) {
+                Q_FOREACH (KoInlineCite *existingCite, m_cites.values(dialog.shortName->text())) {
                     *existingCite = *toCite();                       //update all cites with new values
                     existingCite->setType(KoInlineCite::ClonedCitation);    //change type to ClonedCitation
                 }

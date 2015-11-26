@@ -342,7 +342,7 @@ void StylesModel::updateParagraphStyles()
     QList<KoParagraphStyle *> styles = m_styleManager->paragraphStyles();
     qSort(styles.begin(), styles.end(), sortParagraphStyleByName);
 
-    foreach(KoParagraphStyle *style, styles) {
+    Q_FOREACH (KoParagraphStyle *style, styles) {
         if (style != m_styleManager->defaultParagraphStyle()) { //The default character style is not user selectable. It only provides individual property defaults and is not a style per say.
             m_styleList.append(style->styleId());
             m_styleMapper->setMapping(style, style->styleId());
@@ -405,7 +405,7 @@ void StylesModel::updateCharacterStyles()
     QList<KoCharacterStyle *> styles = m_styleManager->characterStyles();
     qSort(styles.begin(), styles.end(), sortCharacterStyleByName);
 
-    foreach(KoCharacterStyle *style, styles) {
+    Q_FOREACH (KoCharacterStyle *style, styles) {
         if (style != m_styleManager->defaultCharacterStyle()) { //The default character style is not user selectable. It only provides individual property defaults and is not a style per say.
             m_styleList.append(style->styleId());
             m_styleMapper->setMapping(style, style->styleId());
@@ -560,11 +560,11 @@ void StylesModel::addDraftCharacterStyle(KoCharacterStyle *style)
 
 void StylesModel::clearDraftStyles()
 {
-    foreach(KoParagraphStyle *style, m_draftParStyleList.values()) {
+    Q_FOREACH (KoParagraphStyle *style, m_draftParStyleList.values()) {
         removeParagraphStyle(style);
     }
     m_draftParStyleList.clear();
-    foreach(KoCharacterStyle *style, m_draftCharStyleList.values()) {
+    Q_FOREACH (KoCharacterStyle *style, m_draftCharStyleList.values()) {
         removeCharacterStyle(style);
     }
     m_draftCharStyleList.clear();

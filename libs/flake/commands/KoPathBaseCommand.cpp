@@ -34,7 +34,7 @@ KoPathBaseCommand::KoPathBaseCommand(KoPathShape *shape, KUndo2Command *parent)
 
 void KoPathBaseCommand::repaint(bool normalizeShapes)
 {
-    foreach(KoPathShape *shape, m_shapes) {
+    Q_FOREACH (KoPathShape *shape, m_shapes) {
         if (normalizeShapes)
             shape->normalize();
         shape->update();

@@ -118,7 +118,7 @@ struct KoColumns {
     qreal totalRelativeWidth() const
     {
         qreal result = 0.0;
-        foreach(const ColumnDatum &c, columnData) {
+        Q_FOREACH (const ColumnDatum &c, columnData) {
             result += c.relativeWidth;
         }
         return result;

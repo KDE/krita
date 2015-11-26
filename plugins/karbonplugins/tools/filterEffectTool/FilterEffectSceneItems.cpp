@@ -207,7 +207,7 @@ void EffectItemBase::dropEvent(QGraphicsSceneDragDropEvent * event)
 
 ConnectorItem * EffectItemBase::connectorAtPosition(const QPointF &scenePosition)
 {
-    foreach(QGraphicsItem *childItem, childItems()) {
+    Q_FOREACH (QGraphicsItem *childItem, childItems()) {
         ConnectorItem * connector = dynamic_cast<ConnectorItem*>(childItem);
         if (!connector)
             continue;

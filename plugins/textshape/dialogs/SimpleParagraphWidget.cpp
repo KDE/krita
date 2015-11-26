@@ -131,7 +131,7 @@ void SimpleParagraphWidget::fillListButtons()
     TextShape textShape(&itom, &tlm);
     textShape.setSize(QSizeF(300, 100));
     QTextCursor cursor (textShape.textShapeData()->document());
-    foreach(const Lists::ListStyleItem &item, Lists::genericListStyleItems()) {
+    Q_FOREACH (const Lists::ListStyleItem &item, Lists::genericListStyleItems()) {
         QPixmap pm(48,48);
 
         pm.fill(Qt::transparent);
@@ -231,7 +231,7 @@ void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
     if (style) {
         bool unchanged = true;
 
-        foreach(int property, m_currentBlockFormat.properties().keys()) {
+        Q_FOREACH (int property, m_currentBlockFormat.properties().keys()) {
             switch (property) {
             case QTextFormat::ObjectIndex:
             case KoParagraphStyle::ListStyleId:

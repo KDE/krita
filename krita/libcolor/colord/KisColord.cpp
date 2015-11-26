@@ -97,7 +97,7 @@ KisColord::~KisColord()
 QStringList KisColord::devices(const QString &type) const
 {
     QStringList res;
-    foreach(Device *dev, m_devices.values()) {
+    Q_FOREACH (Device *dev, m_devices.values()) {
         if (type == dev->kind) {
             res << dev->id;
         }
@@ -108,7 +108,7 @@ QStringList KisColord::devices(const QString &type) const
 const QString KisColord::deviceName(const QString &id) const
 {
     QString res;
-    foreach(Device *dev, m_devices.values()) {
+    Q_FOREACH (Device *dev, m_devices.values()) {
         if (dev->id == id) {
             res = dev->model + ", " + dev->vendor;
         }
@@ -121,7 +121,7 @@ QByteArray KisColord::deviceProfile(const QString &id, int p)
     QByteArray ba;
     Device *dev = 0;
     Profile *profile = 0;
-    foreach(Device *d, m_devices.values()) {
+    Q_FOREACH (Device *d, m_devices.values()) {
         if (d->id == id) {
             dev = d;
             break;
@@ -174,7 +174,7 @@ void KisColord::gotDevices(QDBusPendingCallWatcher *call)
         dbgKrita << "Unexpected message" << reply.error().message();
     } else {
         QList<QDBusObjectPath> devices = reply.argumentAt<0>();
-        foreach (const QDBusObjectPath &device, devices) {
+        Q_FOREACH (const QDBusObjectPath &device, devices) {
             deviceAdded(device, false);
         }
         emit changed();
@@ -261,7 +261,7 @@ void KisColord::deviceRemoved(const QDBusObjectPath &objectPath)
 void KisColord::addProfilesToDevice(Device *dev, QList<QDBusObjectPath> profiles) const
 {
 
-    foreach (const QDBusObjectPath &profileObjectPath, profiles) {
+    Q_FOREACH (const QDBusObjectPath &profileObjectPath, profiles) {
 
         CdProfileInterface profile(QLatin1String("org.freedesktop.ColorManager"),
                                    profileObjectPath.path(),

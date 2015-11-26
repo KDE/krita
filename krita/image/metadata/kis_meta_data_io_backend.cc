@@ -32,7 +32,7 @@ IOBackendRegistry::IOBackendRegistry()
 
 IOBackendRegistry::~IOBackendRegistry()
 {
-    foreach(const QString &id, keys()) {
+    Q_FOREACH (const QString &id, keys()) {
         delete get(id);
     }    
 }

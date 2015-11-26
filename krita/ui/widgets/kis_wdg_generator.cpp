@@ -82,7 +82,7 @@ void KisWdgGenerator::initialize(KisViewManager *view)
     d->widgetLayout = new QGridLayout(d->uiWdgGenerators.centralWidgetHolder);
     QList<KisGeneratorSP> generators = KisGeneratorRegistry::instance()->values();
 
-    foreach(const KisGeneratorSP generator, generators) {
+    Q_FOREACH (const KisGeneratorSP generator, generators) {
         Q_ASSERT(generator);
         KisGeneratorItem * item = new KisGeneratorItem(generator->name(),
                 d->uiWdgGenerators.lstGenerators,

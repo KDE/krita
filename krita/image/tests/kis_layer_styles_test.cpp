@@ -106,7 +106,7 @@ void testDropShadowImpl(const TestConfig &config,
     TestUtil::MaskParent parent;
     KisLayerStyleFilterEnvironment env(parent.layer.data());
 
-    foreach (const QRect &rc, applyRects) {
+    Q_FOREACH (const QRect &rc, applyRects) {
         lsFilter.processDirectly(dev, &projection, rc, style, &env);
     }
 

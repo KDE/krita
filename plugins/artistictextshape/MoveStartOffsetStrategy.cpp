@@ -77,7 +77,7 @@ void MoveStartOffsetStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::
     qreal nearestPointParam = 0.0;
     KoPathPointIndex nearestPathPoint;
     qreal minDistance = HUGE_VAL;
-    foreach(const KoPathSegment &s, segments) {
+    Q_FOREACH (const KoPathSegment &s, segments) {
         qreal t = s.nearestPoint(localMousePoint);
         qreal distance = squaredDistance(localMousePoint, s.pointAt(t));
         if ( distance < minDistance) {

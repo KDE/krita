@@ -43,11 +43,11 @@ ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
 {
     widget.setupUi(this);
 
-    foreach(const Lists::ListStyleItem & item, Lists::genericListStyleItems())
+    Q_FOREACH (const Lists::ListStyleItem & item, Lists::genericListStyleItems())
         addStyle(item);
     addStyle(Lists::ListStyleItem(i18n("Custom Bullet"), KoListStyle::CustomCharItem));
     m_blankCharIndex = addStyle(Lists::ListStyleItem(i18n("No Bullet"), KoListStyle::CustomCharItem));
-    foreach(const Lists::ListStyleItem & item, Lists::otherListStyleItems())
+    Q_FOREACH (const Lists::ListStyleItem & item, Lists::otherListStyleItems())
         addStyle(item);
 
     widget.alignment->addItem(i18nc("Automatic horizontal alignment", "Auto"));
@@ -101,7 +101,7 @@ void ParagraphBulletsNumbers::setDisplay(KoParagraphStyle *style, int level)
     widget.suffix->setText(llp.listItemSuffix());
     widget.letterSynchronization->setChecked(llp.letterSynchronization());
     KoListStyle::Style s = llp.style();
-    foreach(int row, m_mapping.keys()) {
+    Q_FOREACH (int row, m_mapping.keys()) {
         if (m_mapping[row] == s) {
             widget.listTypes->setCurrentRow(row);
             break;
@@ -322,7 +322,7 @@ void ParagraphBulletsNumbers::customCharButtonPressed()
         widget.customCharacter->setText(character);
 
         // also switch to the custom list style.
-        foreach(int row, m_mapping.keys()) {
+        Q_FOREACH (int row, m_mapping.keys()) {
             if (m_mapping[row] == KoListStyle::CustomCharItem) {
                 widget.listTypes->setCurrentRow(row);
                 break;

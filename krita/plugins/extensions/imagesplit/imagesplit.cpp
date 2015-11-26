@@ -95,7 +95,7 @@ void Imagesplit::slotImagesplit()
     QStringList listMimeFilter = KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export);
     QStringList filteredMimeTypes;
     QStringList listFileType;
-    foreach(const QString & tempStr, listMimeFilter) {
+    Q_FOREACH (const QString & tempStr, listMimeFilter) {
         QMimeDatabase db;
         QMimeType type = db.mimeTypeForName(tempStr);
         dbgKrita << tempStr << type;

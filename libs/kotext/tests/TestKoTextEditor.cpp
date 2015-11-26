@@ -364,7 +364,7 @@ void TestKoTextEditor::checkSectionModelLevel(TestDocument *doc)
         QList<KoSection *> secStartings = KoSectionUtils::sectionStartings(curBlock.blockFormat());
         QList<KoSectionEnd *> secEndings = KoSectionUtils::sectionEndings(curBlock.blockFormat());
 
-        foreach(KoSection *sec, secStartings) {
+        Q_FOREACH (KoSection *sec, secStartings) {
             SectionHandle *handle = new SectionHandle(sec);
             if (sectionStack.empty()) {
                 rootSections.push_back(handle);
@@ -378,7 +378,7 @@ void TestKoTextEditor::checkSectionModelLevel(TestDocument *doc)
             sectionStack.push(handle);
         }
 
-        foreach(KoSectionEnd *secEnd, secEndings) {
+        Q_FOREACH (KoSectionEnd *secEnd, secEndings) {
             sectionStack.pop();
         }
 

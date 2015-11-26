@@ -109,7 +109,7 @@ bool TasksetResource::saveToDevice(QIODevice *io) const
     QDomElement root = doc.createElement("Taskset");
     root.setAttribute("name", name() );
     root.setAttribute("version", TASKSET_VERSION);
-    foreach(const QString& action, m_actions) {
+    Q_FOREACH (const QString& action, m_actions) {
         QDomElement element = doc.createElement("action");
         element.appendChild(doc.createTextNode(action));
         root.appendChild(element);

@@ -104,7 +104,7 @@ void KoShapeRubberSelectStrategy::finishInteraction(Qt::KeyboardModifiers modifi
     Q_UNUSED(modifiers);
     KoSelection * selection = d->tool->canvas()->shapeManager()->selection();
     QList<KoShape *> shapes(d->tool->canvas()->shapeManager()->shapesAt(d->selectRect));
-    foreach(KoShape * shape, shapes) {
+    Q_FOREACH (KoShape * shape, shapes) {
         if (!(shape->isSelectable() && shape->isVisible()))
             continue;
         selection->select(shape);

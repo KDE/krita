@@ -71,7 +71,7 @@ void InsertBibliographyDialog::updateFields()
     dialog.addedFields->clear();
 
     QSet<QString> addedFields;
-    foreach(IndexEntry *entry, m_bibInfo->m_entryTemplate[bibliographyType()].indexEntries) {
+    Q_FOREACH (IndexEntry *entry, m_bibInfo->m_entryTemplate[bibliographyType()].indexEntries) {
         if (entry->name == IndexEntry::BIBLIOGRAPHY) {
             IndexEntryBibliography *bibEntry = static_cast<IndexEntryBibliography *>(entry);
             QListWidgetItem *bibItem = new QListWidgetItem(bibEntry->dataField, dialog.addedFields);

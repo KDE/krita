@@ -396,7 +396,7 @@ private:
         dataObjects << m_lodData.data();
         dataObjects << m_externalFrameData.data();
 
-        foreach (DataSP value, m_frames.values()) {
+        Q_FOREACH (DataSP value, m_frames.values()) {
             dataObjects << value.data();
         }
 
@@ -682,7 +682,7 @@ KUndo2Command* KisPaintDevice::Private::convertColorSpace(const KoColorSpace * d
 
     QList<Data*> dataObjects = allDataObjects();;
 
-    foreach (Data *data, dataObjects) {
+    Q_FOREACH (Data *data, dataObjects) {
         if (!data) continue;
 
         data->convertDataColorSpace(dstColorSpace, renderingIntent, conversionFlags, parentCommand);
@@ -708,7 +708,7 @@ bool KisPaintDevice::Private::assignProfile(const KoColorProfile * profile)
     if (!dstColorSpace) return false;
 
     QList<Data*> dataObjects = allDataObjects();;
-    foreach (Data *data, dataObjects) {
+    Q_FOREACH (Data *data, dataObjects) {
         if (!data) continue;
         data->assignColorSpace(dstColorSpace);
     }
@@ -721,7 +721,7 @@ bool KisPaintDevice::Private::assignProfile(const KoColorProfile * profile)
 void KisPaintDevice::Private::init(const KoColorSpace *cs, const quint8 *defaultPixel)
 {
     QList<Data*> dataObjects = allDataObjects();;
-    foreach (Data *data, dataObjects) {
+    Q_FOREACH (Data *data, dataObjects) {
         if (!data) continue;
 
         KisDataManagerSP dataManager = new KisDataManager(cs->pixelSize(), defaultPixel);
@@ -1616,7 +1616,7 @@ QVector<qint32> KisPaintDevice::channelSizes() const
     QList<KoChannelInfo*> channels = colorSpace()->channels();
     qSort(channels);
 
-    foreach(KoChannelInfo * channelInfo, channels) {
+    Q_FOREACH (KoChannelInfo * channelInfo, channels) {
         sizes.append(channelInfo->size());
     }
     return sizes;

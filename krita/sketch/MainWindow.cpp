@@ -81,7 +81,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     cfg.setNewOutlineStyle(OUTLINE_NONE);
     cfg.setUseOpenGL(true);
 
-    foreach(QString fileName, fileNames) {
+    Q_FOREACH (QString fileName, fileNames) {
         DocumentManager::instance()->recentFileManager()->addRecent(fileName);
     }
     connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(resetWindowTitle()));
@@ -123,7 +123,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     view->setResizeMode( QQuickView::SizeRootObjectToView );
 
     if (view->errors().count() > 0) {
-        foreach(const QQmlError &error, view->errors()) {
+        Q_FOREACH (const QQmlError &error, view->errors()) {
             dbgKrita << error.toString();
         }
     }

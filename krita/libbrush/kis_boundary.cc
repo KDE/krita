@@ -50,7 +50,7 @@ void KisBoundary::generateBoundary()
     d->m_boundary = generator.outline(d->m_device->data(), 0, 0, d->m_device->bounds().width(), d->m_device->bounds().height());
 
     d->path = QPainterPath();
-    foreach(const QPolygon & polygon, d->m_boundary) {
+    Q_FOREACH (const QPolygon & polygon, d->m_boundary) {
         d->path.addPolygon(polygon);
         d->path.closeSubpath();
     }
@@ -64,7 +64,7 @@ void KisBoundary::paint(QPainter& painter) const
     pen.setBrush(Qt::black);
     painter.setPen(pen);
 
-    foreach(const QPolygon & polygon, d->m_boundary) {
+    Q_FOREACH (const QPolygon & polygon, d->m_boundary) {
         painter.drawPolygon(polygon);
     }
 }

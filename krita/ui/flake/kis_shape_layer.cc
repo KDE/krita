@@ -213,7 +213,7 @@ KisShapeLayer::~KisShapeLayer()
      */
     KisLayer::setImage(0);
 
-    foreach(KoShape *shape, shapes()) {
+    Q_FOREACH (KoShape *shape, shapes()) {
         shape->setParent(0);
         delete shape;
     }
@@ -328,12 +328,12 @@ void KisShapeLayer::slotMoveShapes(const QPointF &diff)
     QList<QPointF> newPos;
 
     QList<KoShape*> shapes;
-    foreach (KoShape* shape, shapeManager()->shapes()) {
+    Q_FOREACH (KoShape* shape, shapeManager()->shapes()) {
         if (!dynamic_cast<KoShapeGroup*>(shape)) {
             shapes.append(shape);
         }
     }
-    foreach (KoShape* shape, shapes) {
+    Q_FOREACH (KoShape* shape, shapes) {
         QPointF pos = shape->position();
         prevPos << pos;
         newPos << pos + diff;
@@ -557,7 +557,7 @@ void KisShapeLayer::resetCache()
     m_d->paintDevice->clear();
 
     QList<KoShape*> shapes = m_d->canvas->shapeManager()->shapes();
-    foreach(const KoShape* shape, shapes) {
+    Q_FOREACH (const KoShape* shape, shapes) {
         shape->update();
     }
 }
@@ -586,7 +586,7 @@ KUndo2Command* KisShapeLayer::transform(const QTransform &transform) {
 
     // this code won't work if there are shapes, that inherit the transformation from the parent container.
     // the chart and tree shapes are examples for that, but they aren't used in krita and there are no other shapes like that.
-    foreach(const KoShape* shape, shapes) {
+    Q_FOREACH (const KoShape* shape, shapes) {
         QTransform oldTransform = shape->transformation();
         oldTransformations.append(oldTransform);
         if (dynamic_cast<const KoShapeGroup*>(shape)) {

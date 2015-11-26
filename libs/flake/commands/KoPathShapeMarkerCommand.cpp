@@ -33,7 +33,7 @@ KoPathShapeMarkerCommand::KoPathShapeMarkerCommand(const QList<KoPathShape*> &sh
     setText(kundo2_i18n("Set marker"));
 
     // save old markers
-    foreach(KoPathShape *shape, m_shapes) {
+    Q_FOREACH (KoPathShape *shape, m_shapes) {
         m_oldMarkers.append(shape->marker(position));
     }
 }
@@ -45,7 +45,7 @@ KoPathShapeMarkerCommand::~KoPathShapeMarkerCommand()
 void KoPathShapeMarkerCommand::redo()
 {
     KUndo2Command::redo();
-    foreach(KoPathShape *shape, m_shapes) {
+    Q_FOREACH (KoPathShape *shape, m_shapes) {
         shape->setMarker(m_marker, m_position);
         shape->update();
     }
@@ -55,7 +55,7 @@ void KoPathShapeMarkerCommand::undo()
 {
     KUndo2Command::undo();
     QList<KoMarker*>::iterator markerIt = m_oldMarkers.begin();
-    foreach(KoPathShape *shape, m_shapes) {
+    Q_FOREACH (KoPathShape *shape, m_shapes) {
         shape->setMarker(*markerIt, m_position);
         shape->update();
         ++markerIt;

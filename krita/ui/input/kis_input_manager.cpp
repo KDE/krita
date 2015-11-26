@@ -174,7 +174,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     if (d->eventEater.eventFilter(object, event)) return false;
 
 
-    foreach (QPointer<QObject> filter, d->priorityEventFilter) {
+    Q_FOREACH (QPointer<QObject> filter, d->priorityEventFilter) {
         if (filter.isNull()) {
             d->priorityEventFilter.remove(filter);
             continue;
@@ -334,7 +334,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             KisExtendedModifiersMapper mapper;
 
             Qt::KeyboardModifiers modifiers = mapper.queryStandardModifiers();
-            foreach (Qt::Key key, mapper.queryExtendedModifiers()) {
+            Q_FOREACH (Qt::Key key, mapper.queryExtendedModifiers()) {
                 QKeyEvent kevent(QEvent::KeyPress, key, modifiers);
                 eventFilterImpl(&kevent);
             }

@@ -82,13 +82,13 @@ RActionThreadBase::~RActionThreadBase()
     wait();
 
     // Cleanup all jobs from memory
-    foreach(RActionJob* const job, d->todo.keys())
+    Q_FOREACH (RActionJob* const job, d->todo.keys())
         delete(job);
 
-    foreach(RActionJob* const job, d->pending.keys())
+    Q_FOREACH (RActionJob* const job, d->pending.keys())
         delete(job);
 
-    foreach(RActionJob* const job, d->processed.keys())
+    Q_FOREACH (RActionJob* const job, d->processed.keys())
         delete(job);
 
     delete d;
@@ -138,7 +138,7 @@ void RActionThreadBase::cancel()
 
     d->todo.clear();
 
-    foreach(RActionJob* const job, d->pending.keys())
+    Q_FOREACH (RActionJob* const job, d->pending.keys())
     {
         job->cancel();
         d->processed.insert(job, 0);

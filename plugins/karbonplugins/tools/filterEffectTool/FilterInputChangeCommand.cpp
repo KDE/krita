@@ -38,7 +38,7 @@ void FilterInputChangeCommand::redo()
     if (m_shape)
         m_shape->update();
 
-    foreach(const InputChangeData &data, m_data) {
+    Q_FOREACH (const InputChangeData &data, m_data) {
         data.filterEffect->setInput(data.inputIndex, data.newInput);
     }
 
@@ -53,7 +53,7 @@ void FilterInputChangeCommand::undo()
     if (m_shape)
         m_shape->update();
 
-    foreach(const InputChangeData &data, m_data) {
+    Q_FOREACH (const InputChangeData &data, m_data) {
         data.filterEffect->setInput(data.inputIndex, data.oldInput);
     }
 

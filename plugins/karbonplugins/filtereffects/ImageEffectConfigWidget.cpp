@@ -65,7 +65,7 @@ void ImageEffectConfigWidget::selectImage()
 
     QStringList imageFilter;
     // add filters for all formats supported by QImage
-    foreach(const QByteArray &format, QImageReader::supportedImageFormats()) {
+    Q_FOREACH (const QByteArray &format, QImageReader::supportedImageFormats()) {
         imageFilter << QString("image/") + format;
     }
 

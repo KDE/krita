@@ -342,7 +342,7 @@ void KisGmicTests::testAllFilters()
 #ifdef RUN_FILTERS
     dbgKrita << "Finish status:" << "Failed:" << failed << " Success: " << success;
     dbgKrita << "== Failed filters ==";
-    foreach (const QString &item, failedFilters)
+    Q_FOREACH (const QString &item, failedFilters)
     {
         dbgKrita << item;
     }
@@ -434,7 +434,7 @@ QString KisGmicTests::filePathify(const QString& fileName)
     << QLatin1String(":");
 
     QString result = fileName;
-    foreach(const QString& item, illegalCharacters)
+    Q_FOREACH (const QString& item, illegalCharacters)
     {
         result = result.replace(item ,"_");
     }
@@ -876,7 +876,7 @@ void KisGmicTests::verifyFilters(QVector< FilterDescription > filters)
             {
 
                 dbgKrita << "Multiple entries found:";
-                foreach (Command * c, commands)
+                Q_FOREACH (Command * c, commands)
                 {
                     dbgKrita << "filter: " << c->name() << "category: " << c->parent()->name();
                 }

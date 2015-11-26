@@ -282,7 +282,7 @@ void ArtisticTextTool::mouseMoveEvent( KoPointerEvent *event )
         if (shapes.contains(m_currentShape)) {
             m_hoverText = m_currentShape;
         } else {
-            foreach( KoShape * shape, shapes ) {
+            Q_FOREACH ( KoShape * shape, shapes ) {
                 ArtisticTextShape * text = dynamic_cast<ArtisticTextShape*>( shape );
                 if (text && !m_hoverText) {
                     m_hoverText = text;
@@ -539,7 +539,7 @@ void ArtisticTextTool::updateActions()
         m_detachPath->setEnabled( m_currentShape->isOnPath() );
         m_convertText->setEnabled( true );
         m_anchorGroup->blockSignals(true);
-        foreach(QAction *action, m_anchorGroup->actions()) {
+        Q_FOREACH (QAction *action, m_anchorGroup->actions()) {
             if (action->data().toInt() == m_currentShape->textAnchor())
                 action->setChecked(true);
         }

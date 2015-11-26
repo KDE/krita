@@ -514,7 +514,7 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         aXBox->setEnabled(freeTransformIsActive);
         aYBox->setEnabled(freeTransformIsActive);
         aZBox->setEnabled(freeTransformIsActive);
-        foreach (QAbstractButton *button, m_rotationCenterButtons->buttons()) {
+        Q_FOREACH (QAbstractButton *button, m_rotationCenterButtons->buttons()) {
             button->setEnabled(freeTransformIsActive);
             freeRotationRadioButton->setEnabled(freeTransformIsActive);
         }

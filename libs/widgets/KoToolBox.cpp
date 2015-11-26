@@ -101,7 +101,7 @@ KoToolBox::KoToolBox()
 
     d->buttonGroup = new QButtonGroup(this);
     setLayout(d->layout);
-    foreach(KoToolAction *toolAction, KoToolManager::instance()->toolActionList()) {
+    Q_FOREACH (KoToolAction *toolAction, KoToolManager::instance()->toolActionList()) {
         addButton(toolAction);
     }
 
@@ -177,7 +177,7 @@ void KoToolBox::setActiveTool(KoCanvasController *canvas, int id)
 
 void KoToolBox::setButtonsVisible(const QList<QString> &codes)
 {
-    foreach(QToolButton *button, d->visibilityCodes.keys()) {
+    Q_FOREACH (QToolButton *button, d->visibilityCodes.keys()) {
         QString code = d->visibilityCodes.value(button);
 
         if (code.startsWith(QLatin1String("flake/"))) {
@@ -261,7 +261,7 @@ void KoToolBox::setOrientation(Qt::Orientation orientation)
 {
     d->layout->setOrientation(orientation);
     QTimer::singleShot(0, this, SLOT(update()));
-    foreach(Section* section, d->sections) {
+    Q_FOREACH (Section* section, d->sections) {
         section->setOrientation(orientation);
     }
 }
@@ -303,11 +303,11 @@ void KoToolBox::slotContextIconSize()
         KConfigGroup cfg =  KSharedConfig::openConfig()->group("KoToolBox");
         cfg.writeEntry("iconSize", iconSize);
 
-        foreach(QToolButton *button, d->buttons) {
+        Q_FOREACH (QToolButton *button, d->buttons) {
             button->setIconSize(QSize(iconSize, iconSize));
         }
 
-        foreach(Section *section, d->sections.values())  {
+        Q_FOREACH (Section *section, d->sections.values())  {
             section->setButtonSize(QSize(iconSize + BUTTON_MARGIN, iconSize + BUTTON_MARGIN));
         }
 
@@ -330,7 +330,7 @@ void KoToolBox::contextMenuEvent(QContextMenuEvent *event)
 
         QList<int> sizes;
         sizes << 12 << 14 << 16 << 22 << 32 << 48 << 64; //<< 96 << 128 << 192 << 256;
-        foreach(int i, sizes) {
+        Q_FOREACH (int i, sizes) {
             d->contextIconSizes.insert(d->contextSize->addAction(i18n("%1x%2", i, i), this, SLOT(slotContextIconSize())), i);
         }
 

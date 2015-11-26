@@ -93,7 +93,7 @@ void KisImageLayerRemoveCommandImpl::Private::processClones(KisNodeSP node)
         /**
          * Initialize the list of reincarnates nodes
          */
-        foreach(KisCloneLayerWSP _clone, layer->registeredClones()) {
+        Q_FOREACH (KisCloneLayerWSP _clone, layer->registeredClones()) {
             KisCloneLayerSP clone = _clone;
             Q_ASSERT(clone);
 
@@ -128,7 +128,7 @@ void KisImageLayerRemoveCommandImpl::Private::moveChildren(KisNodeSP src, KisNod
 
 void KisImageLayerRemoveCommandImpl::Private::moveClones(KisLayerSP src, KisLayerSP dst)
 {
-    foreach(KisCloneLayerWSP _clone, src->registeredClones()) {
+    Q_FOREACH (KisCloneLayerWSP _clone, src->registeredClones()) {
         KisCloneLayerSP clone = _clone;
         Q_ASSERT(clone);
 

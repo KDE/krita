@@ -311,7 +311,7 @@ void KoTableColumnStyle::removeDuplicates(const KoTableColumnStyle &other)
 void KoTableColumnStyle::saveOdf(KoGenStyle &style) const
 {
     QList<int> keys = d->stylesPrivate.keys();
-    foreach(int key, keys) {
+    Q_FOREACH (int key, keys) {
         if (key == KoTableColumnStyle::BreakBefore) {
             style.addProperty("fo:break-before", KoText::textBreakToString(breakBefore()), KoGenStyle::TableColumnType);
         } else if (key == KoTableColumnStyle::BreakAfter) {

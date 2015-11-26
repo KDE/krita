@@ -346,7 +346,7 @@ QDomElement KisKeyframeChannel::toXML(QDomDocument doc, const QString &layerFile
 
     channelElement.setAttribute("name", id());
 
-    foreach (KisKeyframeSP keyframe, m_d->keys.values()) {
+    Q_FOREACH (KisKeyframeSP keyframe, m_d->keys.values()) {
         QDomElement keyframeElement = doc.createElement("keyframe");
         keyframeElement.setAttribute("time", keyframe->time());
 

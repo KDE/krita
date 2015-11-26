@@ -223,7 +223,7 @@ qint64 KisTileDataSwapper::pass(qint64 needToFreeMetric)
 
     }
 
-    foreach(item, additionalCandidates) {
+    Q_FOREACH (item, additionalCandidates) {
         if(freedMetric >= needToFreeMetric) break;
 
         if(iter->trySwapOut(item)) {

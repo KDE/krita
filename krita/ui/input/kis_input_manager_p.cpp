@@ -359,7 +359,7 @@ void KisInputManager::Private::addTouchShortcut( KisAbstractInputAction* action,
 void KisInputManager::Private::setupActions()
 {
     QList<KisAbstractInputAction*> actions = KisInputProfileManager::instance()->actions();
-    foreach(KisAbstractInputAction *action, actions) {
+    Q_FOREACH (KisAbstractInputAction *action, actions) {
         KisToolInvocationAction *toolAction =
             dynamic_cast<KisToolInvocationAction*>(action);
 

@@ -621,7 +621,7 @@ void DefaultTool::mouseReleaseEvent(KoPointerEvent *event)
 void DefaultTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
     QList<KoShape*> shapes;
-    foreach(KoShape *shape, koSelection()->selectedShapes()) {
+    Q_FOREACH (KoShape *shape, koSelection()->selectedShapes()) {
         if (shape->boundingRect().contains(event->point) && // first 'cheap' check
                 shape->outline().contains(event->point)) // this is more expensive but weeds out the almost hits
             shapes.append(shape);
@@ -681,7 +681,7 @@ bool DefaultTool::moveSelection(int direction, Qt::KeyboardModifiers modifiers)
         QList<QPointF> prevPos;
         QList<QPointF> newPos;
         QList<KoShape*> shapes;
-        foreach(KoShape* shape, koSelection()->selectedShapes(KoFlake::TopLevelSelection)) {
+        Q_FOREACH (KoShape* shape, koSelection()->selectedShapes(KoFlake::TopLevelSelection)) {
             if (shape->isGeometryProtected())
                 continue;
             shapes.append(shape);
@@ -1008,7 +1008,7 @@ void DefaultTool::selectionUngroup()
     KUndo2Command *cmd = 0;
 
     // add a ungroup command for each found shape container to the macro command
-    foreach(KoShape* shape, containerSet) {
+    Q_FOREACH (KoShape* shape, containerSet) {
         KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
         if (group) {
             cmd = cmd ? cmd : new KUndo2Command(kundo2_i18n("Ungroup shapes"));
@@ -1046,7 +1046,7 @@ void DefaultTool::selectionAlign(KoShapeAlignCommand::Align align)
             return;
         bb = QRectF(QPointF(0,0), canvas()->resourceManager()->sizeResource(KoCanvasResourceManager::PageSize));
     } else {
-        foreach( KoShape * shape, editableShapes ) {
+        Q_FOREACH ( KoShape * shape, editableShapes ) {
             bb |= shape->boundingRect();
         }
     }
@@ -1295,7 +1295,7 @@ KoToolSelection* DefaultTool::selection()
 QList<KoShape*> DefaultTool::filterEditableShapes( const QList<KoShape*> &shapes )
 {
     QList<KoShape*> editableShapes;
-    foreach( KoShape * shape, shapes ) {
+    Q_FOREACH ( KoShape * shape, shapes ) {
         if (shape->isEditable())
             editableShapes.append(shape);
     }
@@ -1306,7 +1306,7 @@ QList<KoShape*> DefaultTool::filterEditableShapes( const QList<KoShape*> &shapes
 uint DefaultTool::editableShapesCount( const QList<KoShape*> &shapes )
 {
     uint count = 0;
-    foreach( KoShape * shape, shapes ) {
+    Q_FOREACH ( KoShape * shape, shapes ) {
         if (shape->isEditable())
             count++;
     }

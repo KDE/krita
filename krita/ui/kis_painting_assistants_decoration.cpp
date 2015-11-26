@@ -76,7 +76,7 @@ void KisPaintingAssistantsDecoration::removeAssistant(KisPaintingAssistant* assi
 
 void KisPaintingAssistantsDecoration::removeAll()
 {
-    foreach (KisPaintingAssistant* assistant, d->assistants) {
+    Q_FOREACH (KisPaintingAssistant* assistant, d->assistants) {
         delete assistant;
     }
     d->assistants.clear();
@@ -98,7 +98,7 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
     double distance = DBL_MAX;
     //the following tries to find the closest point to stroke-begin. It checks all assistants for the closest point//
     if(!d->snapOnlyOneAssistant){
-        foreach(KisPaintingAssistant* assistant, d->assistants) {
+        Q_FOREACH (KisPaintingAssistant* assistant, d->assistants) {
             if(assistant->snapping()==true){//this checks if the assistant in question has it's snapping boolean turned on//
                 QPointF pt = assistant->adjustPosition(point, strokeBegin);
                 if (pt.x() != pt.x()) continue;
@@ -110,7 +110,7 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
             }
         }
     } else if (d->aFirstStroke==false) {
-        foreach(KisPaintingAssistant* assistant, d->assistants) {
+        Q_FOREACH (KisPaintingAssistant* assistant, d->assistants) {
             if(assistant->snapping()==true){//this checks if the assistant in question has it's snapping boolean turned on//
                 QPointF pt = assistant->adjustPosition(point, strokeBegin);
                 if (pt.x() != pt.x()) continue;
@@ -140,7 +140,7 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
 void KisPaintingAssistantsDecoration::endStroke()
 {
     d->aFirstStroke=false;
-    foreach(KisPaintingAssistant* assistant, d->assistants) {
+    Q_FOREACH (KisPaintingAssistant* assistant, d->assistants) {
         assistant->endStroke();
     }
 }
@@ -151,7 +151,7 @@ void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF&
         dbgFile<<"canvas does not exist in painting assistant decoration, you may have passed arguments incorrectly:"<<canvas;
     }    
     
-    foreach(KisPaintingAssistant* assistant, d->assistants) {
+    Q_FOREACH (KisPaintingAssistant* assistant, d->assistants) {
             assistant->drawAssistant(gc, updateRect, converter, true, canvas, assistantVisibility(), outlineVisibility());
     }
     
@@ -161,13 +161,13 @@ void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF&
 QList<KisPaintingAssistantHandleSP> KisPaintingAssistantsDecoration::handles()
 {
     QList<KisPaintingAssistantHandleSP> hs;
-    foreach(KisPaintingAssistant* assistant, d->assistants) {
-        foreach(const KisPaintingAssistantHandleSP handle, assistant->handles()) {
+    Q_FOREACH (KisPaintingAssistant* assistant, d->assistants) {
+        Q_FOREACH (const KisPaintingAssistantHandleSP handle, assistant->handles()) {
             if (!hs.contains(handle)) {
                 hs.push_back(handle);
             }
         }
-        foreach(const KisPaintingAssistantHandleSP handle, assistant->sideHandles()) {
+        Q_FOREACH (const KisPaintingAssistantHandleSP handle, assistant->sideHandles()) {
             if (!hs.contains(handle)) {
                 hs.push_back(handle);
             }
@@ -206,7 +206,7 @@ bool KisPaintingAssistantsDecoration::outlineVisibility()
 }
 void KisPaintingAssistantsDecoration::uncache()
 {
-     foreach(KisPaintingAssistant* assistant, d->assistants) {
+     Q_FOREACH (KisPaintingAssistant* assistant, d->assistants) {
             assistant->uncache();
     }
 }

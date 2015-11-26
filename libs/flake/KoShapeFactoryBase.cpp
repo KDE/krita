@@ -55,7 +55,7 @@ public:
     }
 
     ~Private() {
-        foreach(const KoShapeTemplate & t, templates)
+        Q_FOREACH (const KoShapeTemplate & t, templates)
             delete t.properties;
         templates.clear();
     }
@@ -239,7 +239,7 @@ void KoShapeFactoryBase::getDeferredPlugin()
     const QList<QPluginLoader *> offers = KoJsonTrader::instance()->query("Calligra/Deferred", QString());
     Q_ASSERT(offers.size() > 0);
 
-    foreach(QPluginLoader *pluginLoader, offers) {
+    Q_FOREACH (QPluginLoader *pluginLoader, offers) {
         KPluginFactory *factory = qobject_cast<KPluginFactory *>(pluginLoader->instance());
         KoDeferredShapeFactoryBase *plugin = factory->create<KoDeferredShapeFactoryBase>(this, QVariantList());
 

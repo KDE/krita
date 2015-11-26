@@ -106,7 +106,7 @@ KUndo2Command *KoPathPointRemoveCommand::createCommand(
     if (pointsToDelete.size() > 0) {
         new KoPathPointRemoveCommand(pointsToDelete, cmd);
     }
-    foreach(const KoPathPointData & pd, subpathToDelete) {
+    Q_FOREACH (const KoPathPointData & pd, subpathToDelete) {
         new KoSubpathRemoveCommand(pd.pathShape, pd.pointIndex.first, cmd);
     }
     if (shapesToDelete.size() > 0) {

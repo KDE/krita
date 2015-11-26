@@ -78,7 +78,7 @@ QString KisGmicParser::parseCategoryName(const QString& line)
 Component* KisGmicParser::createFilterTree()
 {
     Category * rootCategory = 0;
-    foreach (const QString &fileName, m_filePaths)
+    Q_FOREACH (const QString &fileName, m_filePaths)
     {
         QFile file(fileName);
 

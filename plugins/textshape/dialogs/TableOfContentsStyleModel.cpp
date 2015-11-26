@@ -40,7 +40,7 @@ TableOfContentsStyleModel::TableOfContentsStyleModel(const KoStyleManager *manag
 
     m_styleThumbnailer->setThumbnailSize(QSize(250, 48));
 
-    foreach(const KoParagraphStyle *style, m_styleManager->paragraphStyles()) {
+    Q_FOREACH (const KoParagraphStyle *style, m_styleManager->paragraphStyles()) {
         m_styleList.append(style->styleId());
         m_outlineLevel.append(getOutlineLevel(style->styleId()));
     }
@@ -150,7 +150,7 @@ void TableOfContentsStyleModel::saveData()
 {
     int row = 0;
 
-    foreach(const int styleId, m_styleList) {
+    Q_FOREACH (const int styleId, m_styleList) {
         KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(styleId);
         if (paragStyle) {
             setOutlineLevel(styleId, m_outlineLevel[row]);

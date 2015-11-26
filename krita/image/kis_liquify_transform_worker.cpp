@@ -470,7 +470,7 @@ QImage KisLiquifyTransformWorker::runOnQImage(const QImage &srcImage,
                    transformedPointsLocal.begin(), mapFunc);
 
     QRectF dstBounds;
-    foreach (const QPointF &pt, transformedPointsLocal) {
+    Q_FOREACH (const QPointF &pt, transformedPointsLocal) {
         KisAlgebra2D::accumulateBounds(pt, &dstBounds);
     }
 

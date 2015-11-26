@@ -130,7 +130,7 @@ void DefaultToolWidget::positionHasChanged()
     QPointF moveBy = newPos - oldPos;
     QList<QPointF> oldPositions;
     QList<QPointF> newPositions;
-    foreach( KoShape* shape, selectedShapes )
+    Q_FOREACH ( KoShape* shape, selectedShapes )
     {
         oldPositions.append( shape->position() );
         newPositions.append( shape->position() + moveBy );
@@ -196,7 +196,7 @@ void DefaultToolWidget::sizeHasChanged()
         QList<QTransform> oldState;
         QList<QTransform> newState;
 
-        foreach( KoShape* shape, selectedShapes )
+        Q_FOREACH ( KoShape* shape, selectedShapes )
         {
             shape->update();
             QSizeF oldSize = shape->size();

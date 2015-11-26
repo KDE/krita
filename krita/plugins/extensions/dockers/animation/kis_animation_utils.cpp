@@ -75,7 +75,7 @@ namespace KisAnimationUtils {
                                            "Remove Keyframes",
                                            frames.size()))); // lisp-lovers present ;)
 
-        foreach (const FrameItem &item, frames) {
+        Q_FOREACH (const FrameItem &item, frames) {
             const int time = item.time;
             KisNodeSP node = item.node;
 

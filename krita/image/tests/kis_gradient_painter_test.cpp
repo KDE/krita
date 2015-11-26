@@ -256,7 +256,7 @@ void KisGradientPainterTest::testSplitDisjointPaths()
         brushes << Qt::white;
 
         int index = 0;
-        foreach (const QPainterPath &p, result) {
+        Q_FOREACH (const QPainterPath &p, result) {
             gc.fillPath(p, brushes[index]);
             index = (index + 1) % brushes.size();
         }

@@ -289,7 +289,7 @@ QString KisShortcutConfiguration::keysToText(const QList<Qt::Key> &keys)
 {
     QString output;
 
-    foreach (Qt::Key key, keys) {
+    Q_FOREACH (Qt::Key key, keys) {
         if (output.size() > 0) {
             output.append(i18nc("Separator in the list of keys for shortcut", " + "));
         }

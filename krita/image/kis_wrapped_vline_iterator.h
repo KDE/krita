@@ -86,7 +86,7 @@ public:
                     m_iteratorColumnStart = KisWrappedRect::TOPLEFT;
                     m_lastColumnCoord = m_splitRect->topLeft().right();
 
-                    foreach (IteratorTypeSP it, *m_iterators) {
+                    Q_FOREACH (IteratorTypeSP it, *m_iterators) {
                         if (it) {
                             it->resetColumnPos();
                         }

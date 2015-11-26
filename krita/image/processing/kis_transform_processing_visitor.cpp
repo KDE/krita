@@ -152,7 +152,7 @@ void KisTransformProcessingVisitor::transformClones(KisLayer *layer, KisUndoAdap
 {
     QList<KisCloneLayerWSP> clones = layer->registeredClones();
 
-    foreach(KisCloneLayerSP clone, clones) {
+    Q_FOREACH (KisCloneLayerSP clone, clones) {
         // we have just casted an object from a weak pointer,
         // so check validity first
         if(!clone) continue;

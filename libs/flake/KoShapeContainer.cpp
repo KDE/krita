@@ -55,7 +55,7 @@ KoShapeContainer::~KoShapeContainer()
 {
     Q_D(KoShapeContainer);
     if (d->model) {
-        foreach(KoShape *shape, d->model->shapes()) {
+        Q_FOREACH (KoShape *shape, d->model->shapes()) {
             delete shape;
         }
     }
@@ -182,7 +182,7 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
     QRectF clipRect = absTrans.map(outline()).boundingRect();
 
 
-    foreach(KoShape *shape, sortedObjects) {
+    Q_FOREACH (KoShape *shape, sortedObjects) {
         //debugFlake <<"KoShapeContainer::painting shape:" << shape->shapeId() <<"," << shape->boundingRect();
         if (!shape->isVisible())
             continue;
@@ -216,7 +216,7 @@ void KoShapeContainer::shapeChanged(ChangeType type, KoShape* shape)
             || type == SizeChanged || type == PositionChanged || type == GenericMatrixChange))
         return;
     d->model->containerChanged(this, type);
-    foreach(KoShape *shape, d->model->shapes())
+    Q_FOREACH (KoShape *shape, d->model->shapes())
         shape->notifyChanged();
 }
 
@@ -233,7 +233,7 @@ void KoShapeContainer::update() const
     Q_D(const KoShapeContainer);
     KoShape::update();
     if (d->model)
-        foreach(KoShape *shape, d->model->shapes())
+        Q_FOREACH (KoShape *shape, d->model->shapes())
             shape->update();
 }
 

@@ -254,7 +254,7 @@ bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
     // by relying on the code existing inside kactioncollection
     //
     // QMap<QKeySequence, QAction*> existingShortcuts;
-    // foreach(QAction* action, actionCollection->actions()) {
+    // Q_FOREACH (QAction* action, actionCollection->actions()) {
     //     if(action->shortcut() == QKeySequence(0)) {
     //         continue;
     //     }
@@ -286,7 +286,7 @@ void KisActionRegistry::Private::loadActionFiles()
         KoResourcePaths::findAllResources("kis_actions", "*.action", searchType);
 
     // Extract actions all XML .action files.
-    foreach(const QString &actionDefinition, actionDefinitions)  {
+    Q_FOREACH (const QString &actionDefinition, actionDefinitions)  {
         QDomDocument doc;
         QFile f(actionDefinition);
         f.open(QFile::ReadOnly);

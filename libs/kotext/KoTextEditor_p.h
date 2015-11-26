@@ -254,7 +254,7 @@ public:
             block = block.next();
         }
         QList<QTextCharFormat>::Iterator iter = formats.begin();
-        foreach(QTextCursor cursor, cursors) {
+        Q_FOREACH (QTextCursor cursor, cursors) {
             cursor.setCharFormat(*iter);
             ++iter;
         }

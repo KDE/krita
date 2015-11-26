@@ -281,7 +281,7 @@ void KisWarpTransformStrategy::paint(QPainter &gc)
 
             QBrush oldBrush = gc.brush();
             gc.setBrush(selectionBrush);
-            foreach (const QPointF *pt, selectedPoints) {
+            Q_FOREACH (const QPointF *pt, selectedPoints) {
                 gc.drawEllipse(handleRect1.translated(*pt));
             }
             gc.setBrush(oldBrush);
@@ -389,7 +389,7 @@ QVector<QPointF*> KisWarpTransformStrategy::Private::getSelectedPoints(QPointF *
     QRectF boundingRect;
     QVector<QPointF*> selectedPoints;
     if (limitToSelectedOnly || pointsInAction.size() > 1) {
-        foreach (int index, pointsInAction) {
+        Q_FOREACH (int index, pointsInAction) {
             selectedPoints << &points[index];
             KisAlgebra2D::accumulateBounds(points[index], &boundingRect);
         }

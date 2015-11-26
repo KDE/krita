@@ -121,7 +121,7 @@ PriorityQueue<T>::PriorityQueue(const QHash<QByteArray, T*>& items)
 {
     // First put all items into the vector
     int i = 0;
-    foreach(T* item, items) {
+    Q_FOREACH (T* item, items) {
         item->setIndex(i);
         m_vector[i] = item;
         ++i;

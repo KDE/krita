@@ -300,7 +300,7 @@ KisNodeModel::PropertyList KisGroupLayer::sectionModelProperties() const
 
 void KisGroupLayer::setSectionModelProperties(const KisNodeModel::PropertyList &properties)
 {
-    foreach (const KisNodeModel::Property &property, properties) {
+    Q_FOREACH (const KisNodeModel::Property &property, properties) {
         if (property.name == i18n("Pass Through")) {
             setPassThroughMode(property.state.toBool());
         }

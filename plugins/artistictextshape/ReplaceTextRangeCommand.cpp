@@ -56,7 +56,7 @@ void ReplaceTextRangeCommand::redo()
 
     if (m_tool) {
         int length = 0;
-        foreach(const ArtisticTextRange &range, m_newFormattedText) {
+        Q_FOREACH (const ArtisticTextRange &range, m_newFormattedText) {
             length += range.text().length();
         }
         m_tool->setTextCursor(m_shape, m_from + length);
@@ -71,7 +71,7 @@ void ReplaceTextRangeCommand::undo()
         return;
 
     m_shape->clear();
-    foreach(const ArtisticTextRange &range, m_oldFormattedText) {
+    Q_FOREACH (const ArtisticTextRange &range, m_oldFormattedText) {
         m_shape->appendText(range);
     }
     if (m_tool) {

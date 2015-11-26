@@ -95,7 +95,7 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
                     region += alignRect(*it, step);
                 }
 
-                foreach(const QRect &rc, region.rects()) {
+                Q_FOREACH (const QRect &rc, region.rects()) {
                     // FIXME: constness: port rPU to SP
                     listener->requestProjectionUpdate(const_cast<KisNode*>(node.data()), rc);
 

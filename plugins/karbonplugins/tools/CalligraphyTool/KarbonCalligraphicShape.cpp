@@ -302,13 +302,13 @@ void KarbonCalligraphicShape::updatePath(const QSizeF &size)
     clear();
     setPosition(QPoint(0, 0));
 
-    foreach(KarbonCalligraphicPoint *p, m_points)
+    Q_FOREACH (KarbonCalligraphicPoint *p, m_points)
     appendPointToPath(*p);
 
     simplifyPath();
 
     QList<QPointF> handles;
-    foreach(KarbonCalligraphicPoint *p, m_points)
+    Q_FOREACH (KarbonCalligraphicPoint *p, m_points)
     handles.append(p->point());
     setHandles(handles);
 
@@ -371,7 +371,7 @@ void KarbonCalligraphicShape::simplifyGuidePath()
         return;
 
     QList<QPointF> points;
-    foreach(KarbonCalligraphicPoint *p, m_points)
+    Q_FOREACH (KarbonCalligraphicPoint *p, m_points)
     points.append(p->point());
 
     // cumulative data used to determine if the point can be removed

@@ -126,7 +126,7 @@ qint32 KisImageManager::importImage(const QUrl &urlArg, const QString &layerType
         dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
         dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
         QStringList fileNames = dialog.filenames();
-        foreach(const QString &fileName, fileNames) {
+        Q_FOREACH (const QString &fileName, fileNames) {
             urls << QUrl::fromLocalFile(fileName);
         }
 

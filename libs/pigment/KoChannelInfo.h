@@ -178,7 +178,7 @@ public:
     {
         QList <KoChannelInfo*> sortedChannels;
         for (int i = 0; i < channels.size(); ++i) {
-            foreach(KoChannelInfo* channel, channels) {
+            Q_FOREACH (KoChannelInfo* channel, channels) {
                 if (channel->displayPosition() == i) {
                     sortedChannels << channel;
                     break;

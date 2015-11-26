@@ -1340,7 +1340,7 @@ void KisPaintDeviceTest::testCacheState()
     QThreadPool pool;
     pool.setMaxThreadCount(NUM_THREADS);
 
-    foreach(job, jobsList) {
+    Q_FOREACH (job, jobsList) {
         pool.start(job);
     }
 
@@ -1667,7 +1667,7 @@ void KisPaintDeviceTest::testFramesLeaking()
     // ensure all the objects in the list of all objects are unique
     QList<KisPaintDeviceData*> allObjects = i->testingGetDataObjectsList();
     QSet<KisPaintDeviceData*> uniqueObjects;
-    foreach(KisPaintDeviceData *obj, allObjects) {
+    Q_FOREACH (KisPaintDeviceData *obj, allObjects) {
         if (!obj) continue;
         QVERIFY(!uniqueObjects.contains(obj));
         uniqueObjects.insert(obj);
@@ -1986,7 +1986,7 @@ void KisPaintDeviceTest::testCompositionAssociativity()
 
     QList<KoCompositeOp*> allCompositeOps = cs->compositeOps();
 
-    foreach(const KoCompositeOp *op, allCompositeOps) {
+    Q_FOREACH (const KoCompositeOp *op, allCompositeOps) {
 
         accumulator_set<qreal, stats<tag::variance, tag::max, tag::min> > accum;
 

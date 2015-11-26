@@ -80,7 +80,7 @@ KoShapeSavingContextPrivate::KoShapeSavingContextPrivate(KoXmlWriter &w,
 
 KoShapeSavingContextPrivate::~KoShapeSavingContextPrivate()
 {
-    foreach(KoSharedSavingData * data, sharedData) {
+    Q_FOREACH (KoSharedSavingData * data, sharedData) {
         delete data;
     }
 }
@@ -193,7 +193,7 @@ void KoShapeSavingContext::clearXmlIds(const QString &prefix)
 {
 
     if (d->prefixedReferences.contains(prefix)) {
-        foreach(const void* ptr, d->prefixedReferences[prefix]) {
+        Q_FOREACH (const void* ptr, d->prefixedReferences[prefix]) {
             d->references.remove(ptr);
         }
         d->prefixedReferences.remove(prefix);
@@ -213,7 +213,7 @@ void KoShapeSavingContext::addLayerForSaving(const KoShapeLayer *layer)
 void KoShapeSavingContext::saveLayerSet(KoXmlWriter &xmlWriter) const
 {
     xmlWriter.startElement("draw:layer-set");
-    foreach(const KoShapeLayer * layer, d->layers) {
+    Q_FOREACH (const KoShapeLayer * layer, d->layers) {
         xmlWriter.startElement("draw:layer");
         xmlWriter.addAttribute("draw:name", layer->name());
         if (layer->isGeometryProtected())
@@ -280,7 +280,7 @@ void KoShapeSavingContext::addDataCenter(KoDataCenterBase * dataCenter)
 bool KoShapeSavingContext::saveDataCenter(KoStore *store, KoXmlWriter* manifestWriter)
 {
     bool ok = true;
-    foreach(KoDataCenterBase *dataCenter, d->dataCenters) {
+    Q_FOREACH (KoDataCenterBase *dataCenter, d->dataCenters) {
         ok = ok && dataCenter->completeSaving(store, manifestWriter, this);
         //debugFlake << "ok" << ok;
     }

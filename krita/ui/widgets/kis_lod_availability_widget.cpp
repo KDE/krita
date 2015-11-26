@@ -75,14 +75,14 @@ void KisLodAvailabilityWidget::showLodToolTip()
 void KisLodAvailabilityWidget::setLimitations(const KisPaintopLodLimitations &l)
 {
     QString limitationsText;
-    foreach (const KoID &id, l.limitations) {
+    Q_FOREACH (const KoID &id, l.limitations) {
         limitationsText.append("<item>");
         limitationsText.append(id.name());
         limitationsText.append("</item>");
     }
 
     QString blockersText;
-    foreach (const KoID &id, l.blockers) {
+    Q_FOREACH (const KoID &id, l.blockers) {
         blockersText.append("<item>");
         blockersText.append(id.name());
         blockersText.append("</item>");

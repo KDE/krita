@@ -58,7 +58,7 @@ void KarbonPatternTool::paint(QPainter &painter, const KoViewConverter &converte
     painter.setPen(Qt::blue);   //TODO make configurable
 
     // paint all the strategies
-    foreach(KarbonPatternEditStrategyBase *strategy, m_strategies) {
+    Q_FOREACH (KarbonPatternEditStrategyBase *strategy, m_strategies) {
         if (strategy == m_currentStrategy)
             continue;
 
@@ -76,7 +76,7 @@ void KarbonPatternTool::paint(QPainter &painter, const KoViewConverter &converte
 
 void KarbonPatternTool::repaintDecorations()
 {
-    foreach(KarbonPatternEditStrategyBase *strategy, m_strategies)
+    Q_FOREACH (KarbonPatternEditStrategyBase *strategy, m_strategies)
     canvas()->updateCanvas(strategy->boundingRect());
 }
 
@@ -84,7 +84,7 @@ void KarbonPatternTool::mousePressEvent(KoPointerEvent *event)
 {
     //m_currentStrategy = 0;
 
-    foreach(KarbonPatternEditStrategyBase *strategy, m_strategies) {
+    Q_FOREACH (KarbonPatternEditStrategyBase *strategy, m_strategies) {
         if (strategy->selectHandle(event->point, *canvas()->viewConverter())) {
             m_currentStrategy = strategy;
             m_currentStrategy->repaint();
@@ -108,7 +108,7 @@ void KarbonPatternTool::mouseMoveEvent(KoPointerEvent *event)
             return;
         }
     }
-    foreach(KarbonPatternEditStrategyBase *strategy, m_strategies) {
+    Q_FOREACH (KarbonPatternEditStrategyBase *strategy, m_strategies) {
         if (strategy->selectHandle(event->point, *canvas()->viewConverter())) {
             useCursor(Qt::SizeAllCursor);
             return;
@@ -159,7 +159,7 @@ void KarbonPatternTool::initialize()
     QList<KoShape*> selectedShapes = canvas()->shapeManager()->selection()->selectedShapes();
 
     // remove all pattern strategies no longer applicable
-    foreach(KarbonPatternEditStrategyBase * strategy, m_strategies) {
+    Q_FOREACH (KarbonPatternEditStrategyBase * strategy, m_strategies) {
         // is this gradient shape still selected ?
         if (! selectedShapes.contains(strategy->shape()) || ! strategy->shape()->isEditable()) {
             m_strategies.remove(strategy->shape());
@@ -187,7 +187,7 @@ void KarbonPatternTool::initialize()
     KoImageCollection *imageCollection = canvas()->shapeController()->resourceManager()->imageCollection();
 
     // now create new strategies if needed
-    foreach(KoShape *shape, selectedShapes) {
+    Q_FOREACH (KoShape *shape, selectedShapes) {
         if (! shape->isEditable())
             continue;
 
@@ -234,14 +234,14 @@ void KarbonPatternTool::deactivate()
     // we are not interested in selection content changes when not active
     disconnect(canvas()->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(initialize()));
 
-    foreach(KarbonPatternEditStrategyBase * strategy, m_strategies) {
+    Q_FOREACH (KarbonPatternEditStrategyBase * strategy, m_strategies) {
         strategy->repaint();
     }
 
     qDeleteAll(m_strategies);
     m_strategies.clear();
 
-    foreach(KoShape *shape, canvas()->shapeManager()->selection()->selectedShapes())
+    Q_FOREACH (KoShape *shape, canvas()->shapeManager()->selection()->selectedShapes())
     shape->update();
 
     m_currentStrategy = 0;
@@ -251,12 +251,12 @@ void KarbonPatternTool::documentResourceChanged(int key, const QVariant & res)
 {
     switch (key) {
     case KoDocumentResourceManager::HandleRadius:
-        foreach(KarbonPatternEditStrategyBase *strategy, m_strategies)
+        Q_FOREACH (KarbonPatternEditStrategyBase *strategy, m_strategies)
             strategy->repaint();
 
         KarbonPatternEditStrategyBase::setHandleRadius(res.toUInt());
 
-        foreach(KarbonPatternEditStrategyBase *strategy, m_strategies)
+        Q_FOREACH (KarbonPatternEditStrategyBase *strategy, m_strategies)
             strategy->repaint();
         break;
     case KoDocumentResourceManager::GrabSensitivity:

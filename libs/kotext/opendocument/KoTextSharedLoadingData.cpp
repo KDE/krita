@@ -223,7 +223,7 @@ QList<QPair<QString, KoParagraphStyle *> > KoTextSharedLoadingData::loadParagrap
     QHash<KoParagraphStyle*,QString> nextStyles;
     QHash<KoParagraphStyle*,QString> parentStyles;
 
-    foreach(KoXmlElement *styleElem, styleElements) {
+    Q_FOREACH (KoXmlElement *styleElem, styleElements) {
         Q_ASSERT(styleElem);
         Q_ASSERT(!styleElem->isNull());
 
@@ -319,7 +319,7 @@ QList<KoTextSharedLoadingData::OdfCharStyle> KoTextSharedLoadingData::loadCharac
 {
     QList<OdfCharStyle> characterStyles;
 
-    foreach(KoXmlElement *styleElem, styleElements) {
+    Q_FOREACH (KoXmlElement *styleElem, styleElements) {
         Q_ASSERT(styleElem);
         Q_ASSERT(!styleElem->isNull());
 
@@ -361,7 +361,7 @@ QList<QPair<QString, KoListStyle *> > KoTextSharedLoadingData::loadListStyles(Ko
 {
     QList<QPair<QString, KoListStyle *> > listStyles;
 
-    foreach(KoXmlElement *styleElem, styleElements) {
+    Q_FOREACH (KoXmlElement *styleElem, styleElements) {
         Q_ASSERT(styleElem);
         Q_ASSERT(!styleElem->isNull());
 
@@ -400,7 +400,7 @@ QList<QPair<QString, KoTableStyle *> > KoTextSharedLoadingData::loadTableStyles(
 {
     QList<QPair<QString, KoTableStyle *> > tableStyles;
 
-    foreach(KoXmlElement *styleElem, styleElements) {
+    Q_FOREACH (KoXmlElement *styleElem, styleElements) {
         Q_ASSERT(styleElem);
         Q_ASSERT(!styleElem->isNull());
 
@@ -440,7 +440,7 @@ QList<QPair<QString, KoTableColumnStyle *> > KoTextSharedLoadingData::loadTableC
 {
     QList<QPair<QString, KoTableColumnStyle *> > tableColumnStyles;
 
-    foreach(KoXmlElement *styleElem, styleElements) {
+    Q_FOREACH (KoXmlElement *styleElem, styleElements) {
         Q_ASSERT(styleElem);
         Q_ASSERT(!styleElem->isNull());
 
@@ -480,7 +480,7 @@ QList<QPair<QString, KoTableRowStyle *> > KoTextSharedLoadingData::loadTableRowS
 {
     QList<QPair<QString, KoTableRowStyle *> > tableRowStyles;
 
-    foreach(KoXmlElement *styleElem, styleElements) {
+    Q_FOREACH (KoXmlElement *styleElem, styleElements) {
         Q_ASSERT(styleElem);
         Q_ASSERT(!styleElem->isNull());
 
@@ -520,7 +520,7 @@ QList<QPair<QString, KoTableCellStyle *> > KoTextSharedLoadingData::loadTableCel
 {
     QList<QPair<QString, KoTableCellStyle *> > tableCellStyles;
 
-    foreach(KoXmlElement *styleElem, styleElements) {
+    Q_FOREACH (KoXmlElement *styleElem, styleElements) {
         Q_ASSERT(styleElem);
         Q_ASSERT(!styleElem->isNull());
 
@@ -560,7 +560,7 @@ QList<QPair<QString, KoSectionStyle *> > KoTextSharedLoadingData::loadSectionSty
 {
     QList<QPair<QString, KoSectionStyle *> > sectionStyles;
 
-    foreach(KoXmlElement *styleElem, styleElements) {
+    Q_FOREACH (KoXmlElement *styleElem, styleElements) {
         Q_ASSERT(styleElem);
         Q_ASSERT(!styleElem->isNull());
 
@@ -700,7 +700,7 @@ QList<QPair<QString, KoTextTableTemplate *> > KoTextSharedLoadingData::loadTable
 {
     QList<QPair<QString, KoTextTableTemplate *> > tableTemplates;
 
-    foreach(KoXmlElement *styleElem, context.odfLoadingContext().stylesReader().tableTemplates()) {
+    Q_FOREACH (KoXmlElement *styleElem, context.odfLoadingContext().stylesReader().tableTemplates()) {
         Q_ASSERT(styleElem);
         Q_ASSERT(!styleElem->isNull());
 

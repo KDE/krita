@@ -61,7 +61,7 @@ void KisRecordedActionEditorFactoryRegistry::add(KisRecordedActionEditorFactory*
 
 QWidget* KisRecordedActionEditorFactoryRegistry::createEditor(QWidget* parent, KisRecordedAction* action) const
 {
-    foreach(KisRecordedActionEditorFactory* factory, d->factories) {
+    Q_FOREACH (KisRecordedActionEditorFactory* factory, d->factories) {
         if (factory->canEdit(action)) {
             QWidget* editor = factory->createEditor(parent, action);
             Q_ASSERT(editor);
@@ -74,7 +74,7 @@ QWidget* KisRecordedActionEditorFactoryRegistry::createEditor(QWidget* parent, K
 
 bool KisRecordedActionEditorFactoryRegistry::hasEditor(KisRecordedAction* action) const
 {
-    foreach(KisRecordedActionEditorFactory* factory, d->factories) {
+    Q_FOREACH (KisRecordedActionEditorFactory* factory, d->factories) {
         if (factory->canEdit(action)) {
             return true;
         }

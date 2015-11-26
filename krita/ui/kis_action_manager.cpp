@@ -75,7 +75,7 @@ KisActionManager::~KisActionManager()
        e.setAttribute("version", "2");
        doc.appendChild(e);
 
-       foreach(KisAction *action, d->actions) {
+       Q_FOREACH (KisAction *action, d->actions) {
            QDomElement a = doc.createElement("Action");
            a.setAttribute("name", action->objectName());
 
@@ -143,7 +143,7 @@ void KisActionManager::takeAction(KisAction* action)
 
 KisAction *KisActionManager::actionByName(const QString &name) const
 {
-    foreach(KisAction *action, d->actions) {
+    Q_FOREACH (KisAction *action, d->actions) {
         if (action->objectName() == name) {
             return action;
         }
@@ -276,7 +276,7 @@ void KisActionManager::updateGUI()
 
 
     // loop through all actions in action manager and determine what should be enabled
-    foreach(KisAction* action, d->actions) {
+    Q_FOREACH (KisAction* action, d->actions) {
         bool enable;
 
         if (action->activationFlags() == KisAction::NONE) {
@@ -289,7 +289,7 @@ void KisActionManager::updateGUI()
         enable = enable && (int)(action->activationConditions() & conditions) == (int)action->activationConditions();
 
         if (node && enable) {
-            foreach (const QString &type, action->excludedNodeTypes()) {
+            Q_FOREACH (const QString &type, action->excludedNodeTypes()) {
                 if (node->inherits(type.toLatin1())) {
                     enable = false;
                     break;
@@ -377,7 +377,7 @@ void KisActionManager::dumpActionFlags()
     if (data.open(QFile::WriteOnly | QFile::Truncate)) {
         QTextStream out(&data);
 
-        foreach(KisAction* action, d->actions) {
+        Q_FOREACH (KisAction* action, d->actions) {
             KisAction::ActivationFlags flags = action->activationFlags();
             out << "-------- " << action->text() << " --------\n";
             out << "Action will activate on: \n";

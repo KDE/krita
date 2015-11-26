@@ -37,7 +37,7 @@ void SelectionTransformCommand::redo()
     m_selection->blockSignals( true );
     
     m_selection->deselectAll();
-    foreach( KoShape * shape, m_selectedShapes )
+    Q_FOREACH ( KoShape * shape, m_selectedShapes )
         m_selection->select( shape, false );
 
     m_selection->setTransformation( m_newTransformation );
@@ -50,7 +50,7 @@ void SelectionTransformCommand::undo()
     m_selection->blockSignals( true );
 
     m_selection->deselectAll();
-    foreach( KoShape * shape, m_selectedShapes )
+    Q_FOREACH ( KoShape * shape, m_selectedShapes )
         m_selection->select( shape, false );
     
     m_selection->setTransformation( m_oldTransformation );

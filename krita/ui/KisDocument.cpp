@@ -752,7 +752,7 @@ void KisDocument::setReadWrite(bool readwrite)
     d->readwrite = readwrite;
     setAutoSave(d->autoSaveDelay);
 
-    foreach(KisMainWindow *mainWindow, KisPart::instance()->mainWindows()) {
+    Q_FOREACH (KisMainWindow *mainWindow, KisPart::instance()->mainWindows()) {
         mainWindow->setReadWrite(readwrite);
     }
 
@@ -2125,7 +2125,7 @@ bool KisDocument::closeUrl(bool promptToSave)
 {
     if (promptToSave) {
         if ( d->document->isReadWrite() && d->document->isModified()) {
-            foreach(KisView *view, KisPart::instance()->views()) {
+            Q_FOREACH (KisView *view, KisPart::instance()->views()) {
                 if (view && view->document() == this) {
                     if (!view->queryClose()) {
                         return false;
@@ -2384,7 +2384,7 @@ KoShapeLayer* KisDocument::shapeForNode(KisNodeSP layer) const
 vKisNodeSP KisDocument::activeNodes() const
 {
     vKisNodeSP nodes;
-    foreach(KisView *v, KisPart::instance()->views()) {
+    Q_FOREACH (KisView *v, KisPart::instance()->views()) {
         if (v->document() == this && v->viewManager()) {
             KisNodeSP activeNode = v->viewManager()->activeNode();
             if (activeNode && !nodes.contains(activeNode)) {
@@ -2401,7 +2401,7 @@ vKisNodeSP KisDocument::activeNodes() const
 QList<KisPaintingAssistant*> KisDocument::assistants()
 {
     QList<KisPaintingAssistant*> assistants;
-    foreach(KisView *view, KisPart::instance()->views()) {
+    Q_FOREACH (KisView *view, KisPart::instance()->views()) {
         if (view && view->document() == this) {
             KisPaintingAssistantsDecoration* assistantsDecoration = view->canvasBase()->paintingAssistantsDecoration();
             assistants.append(assistantsDecoration->assistants());

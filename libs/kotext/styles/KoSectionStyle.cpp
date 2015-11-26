@@ -477,7 +477,7 @@ void KoSectionStyle::saveOdf(KoGenStyle &style)
     QList<int> columnsKeys;
 
     QList<int> keys = d->stylesPrivate.keys();
-    foreach(int key, keys) {
+    Q_FOREACH (int key, keys) {
         switch (key) {
         case KoSectionStyle::TextProgressionDirection: {
             int directionValue = 0;
@@ -538,7 +538,7 @@ void KoSectionStyle::saveOdf(KoGenStyle &style)
 
         if (!columnsKeys.isEmpty()) {
             elementWriter.startElement("style:column-sep");
-            foreach(int key, columnsKeys) {
+            Q_FOREACH (int key, columnsKeys) {
                 switch (key) {
                 case SeparatorStyle:
                     elementWriter.addAttribute("style:style",

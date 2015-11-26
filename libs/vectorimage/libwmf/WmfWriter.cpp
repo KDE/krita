@@ -392,19 +392,19 @@ void WmfWriter::drawPolyPolygon(QList<QPolygon>& listPa, bool)
 
     int sizeArrayPoly = 0;
 
-    foreach(const QPolygon & pa, listPa) {
+    Q_FOREACH (const QPolygon & pa, listPa) {
         sizeArrayPoly += (pa.size() * 2);
     }
     int size = 4 + listPa.count() + sizeArrayPoly;
     d->mSt << (quint32)size << (quint16)0x0538 << (quint16)listPa.count();
 
     // number of point for each Polygon
-    foreach(const QPolygon & pa, listPa) {
+    Q_FOREACH (const QPolygon & pa, listPa) {
         d->mSt << (quint16)pa.size();
     }
 
     // list of points
-    foreach(const QPolygon & pa, listPa) {
+    Q_FOREACH (const QPolygon & pa, listPa) {
         pointArray(pa);
     }
 

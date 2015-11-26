@@ -68,7 +68,7 @@ QIcon loadIcon(const QString &name)
     // Now check for icons with sizes
     QStringList sizes = QStringList() << "16_" << "22_" << "32_" << "48_" << "64_" << "128_" << "256_" << "512_" << "1048_";
     QVector<QPair<QString, QString> > icons;
-    foreach(const QString &size, sizes) {
+    Q_FOREACH (const QString &size, sizes) {
         const QStringList names = { ":/pics/" + size + realName + ".png",
                                     ":/pics/" + size + realName + ".svg",
                                     ":/pics/" + size + realName + ".svgz",
@@ -92,7 +92,7 @@ QIcon loadIcon(const QString &name)
 
     if (!icons.isEmpty()) {
         QIcon icon;
-        foreach(auto p, icons) {
+        Q_FOREACH (auto p, icons) {
             QString sz = p.first;
             sz.chop(1);
             int size = sz.toInt();

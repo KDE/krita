@@ -227,7 +227,7 @@ void KisOpenGLImageTextures::destroyImageTextureTiles()
 {
     if(m_textureTiles.isEmpty()) return;
 
-    foreach(KisTextureTile *tile, m_textureTiles) {
+    Q_FOREACH (KisTextureTile *tile, m_textureTiles) {
         delete tile;
     }
     m_textureTiles.clear();
@@ -348,7 +348,7 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
     if(!glInfo) return;
 
     KisTextureTileUpdateInfoSP tileInfo;
-    foreach(tileInfo, glInfo->tileList) {
+    Q_FOREACH (tileInfo, glInfo->tileList) {
         KisTextureTile *tile = getTextureTileCR(tileInfo->tileCol(), tileInfo->tileRow());
         KIS_ASSERT_RECOVER_RETURN(tile);
 
@@ -403,7 +403,7 @@ void KisOpenGLImageTextures::updateConfig(bool useBuffer, int NumMipmapLevels)
 {
     if(m_textureTiles.isEmpty()) return;
 
-    foreach(KisTextureTile *tile, m_textureTiles) {
+    Q_FOREACH (KisTextureTile *tile, m_textureTiles) {
         tile->setUseBuffer(useBuffer);
         tile->setNumMipmapLevels(NumMipmapLevels);
     }

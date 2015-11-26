@@ -184,7 +184,7 @@ CharTransforms ArtisticTextLoadingContext::parseList(const QString &listString, 
     } else {
         CharTransforms values;
         QStringList offsets = QString(listString).replace(',', ' ').simplified().split(' ');
-        foreach(const QString &offset, offsets) {
+        Q_FOREACH (const QString &offset, offsets) {
             switch(type) {
             case Number:
                 values.append(offset.toDouble());
@@ -234,27 +234,27 @@ CharTransforms ArtisticTextLoadingContext::collectValues(int count, CharTransfor
 void ArtisticTextLoadingContext::printDebug()
 {
     QString indent;
-    foreach(const CharTransformState &state, CharTransformStack(m_absolutePosX) << m_currentAbsolutePosX) {
+    Q_FOREACH (const CharTransformState &state, CharTransformStack(m_absolutePosX) << m_currentAbsolutePosX) {
         qDebug() << indent << state.data << state.hasData << state.lastTransform;
         indent.append("  ");
     }
     indent.clear();
-    foreach(const CharTransformState &state, CharTransformStack(m_absolutePosY) << m_currentAbsolutePosY) {
+    Q_FOREACH (const CharTransformState &state, CharTransformStack(m_absolutePosY) << m_currentAbsolutePosY) {
         qDebug() << indent << state.data << state.hasData << state.lastTransform;
         indent.append("  ");
     }
     indent.clear();
-    foreach(const CharTransformState &state, CharTransformStack(m_relativePosX) << m_currentRelativePosX) {
+    Q_FOREACH (const CharTransformState &state, CharTransformStack(m_relativePosX) << m_currentRelativePosX) {
         qDebug() << indent << state.data << state.hasData << state.lastTransform;
         indent.append("  ");
     }
     indent.clear();
-    foreach(const CharTransformState &state, CharTransformStack(m_relativePosY) << m_currentRelativePosY) {
+    Q_FOREACH (const CharTransformState &state, CharTransformStack(m_relativePosY) << m_currentRelativePosY) {
         qDebug() << indent << state.data << state.hasData << state.lastTransform;
         indent.append("  ");
     }
     indent.clear();
-    foreach(const CharTransformState &state, CharTransformStack(m_rotations) << m_currentRotations) {
+    Q_FOREACH (const CharTransformState &state, CharTransformStack(m_rotations) << m_currentRotations) {
         qDebug() << indent << state.data << state.hasData << state.lastTransform;
         indent.append("  ");
     }

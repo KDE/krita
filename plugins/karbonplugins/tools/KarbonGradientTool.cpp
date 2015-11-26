@@ -84,7 +84,7 @@ void KarbonGradientTool::paint(QPainter &painter, const KoViewConverter &convert
     painter.setBrush(Qt::green);   //TODO make configurable
     painter.setPen(Qt::blue);   //TODO make configurable
 
-    foreach(GradientStrategy *strategy, m_strategies) {
+    Q_FOREACH (GradientStrategy *strategy, m_strategies) {
         bool current = (strategy == m_currentStrategy);
         painter.save();
         if (current) {
@@ -97,7 +97,7 @@ void KarbonGradientTool::paint(QPainter &painter, const KoViewConverter &convert
 
 void KarbonGradientTool::repaintDecorations()
 {
-    foreach(GradientStrategy *strategy, m_strategies)
+    Q_FOREACH (GradientStrategy *strategy, m_strategies)
     canvas()->updateCanvas(strategy->boundingRect(*canvas()->viewConverter()));
 }
 
@@ -143,7 +143,7 @@ void KarbonGradientTool::mousePressEvent(KoPointerEvent *event)
 
     GradientStrategy * newStrategy = 0;
 
-    foreach(KoShape * shape, shapes) {
+    Q_FOREACH (KoShape * shape, shapes) {
         if (! selection->isSelected(shape))
             continue;
 
@@ -235,7 +235,7 @@ void KarbonGradientTool::mouseMoveEvent(KoPointerEvent *event)
     // the mouse hovers over another gradient (handles and line)
 
     // first check if we hit any handles
-    foreach(GradientStrategy *strategy, m_strategies) {
+    Q_FOREACH (GradientStrategy *strategy, m_strategies) {
         if (strategy->hitHandle(event->point, *canvas()->viewConverter(), false)) {
             m_hoverStrategy = strategy;
             useCursor(KarbonCursor::needleMoveArrow());
@@ -243,7 +243,7 @@ void KarbonGradientTool::mouseMoveEvent(KoPointerEvent *event)
         }
     }
     // now check if we hit any lines
-    foreach(GradientStrategy *strategy, m_strategies) {
+    Q_FOREACH (GradientStrategy *strategy, m_strategies) {
         if (strategy->hitLine(event->point, *canvas()->viewConverter(), false)) {
             m_hoverStrategy = strategy;
             useCursor(Qt::SizeAllCursor);
@@ -347,7 +347,7 @@ void KarbonGradientTool::initialize()
     QList<KoShape*> selectedShapes = canvas()->shapeManager()->selection()->selectedShapes();
     QList<GradientStrategy*> strategies = m_strategies.values();
     // remove all gradient strategies no longer applicable
-    foreach(GradientStrategy * strategy, strategies) {
+    Q_FOREACH (GradientStrategy * strategy, strategies) {
         // is this gradient shape still selected ?
         if (! selectedShapes.contains(strategy->shape()) || ! strategy->shape()->isEditable()) {
             m_strategies.remove(strategy->shape(), strategy);
@@ -383,14 +383,14 @@ void KarbonGradientTool::initialize()
     }
 
     // now create new strategies if needed
-    foreach(KoShape * shape, selectedShapes) {
+    Q_FOREACH (KoShape * shape, selectedShapes) {
         if (! shape->isEditable())
             continue;
 
         bool strokeExists = false;
         bool fillExists = false;
         // check which gradient strategies exist for this shape
-        foreach(GradientStrategy * strategy, m_strategies.values(shape)) {
+        Q_FOREACH (GradientStrategy * strategy, m_strategies.values(shape)) {
             if (strategy->target() == GradientStrategy::Fill) {
                 fillExists = true;
                 strategy->updateStops();
@@ -476,10 +476,10 @@ void KarbonGradientTool::documentResourceChanged(int key, const QVariant & res)
 {
     switch (key) {
     case KoDocumentResourceManager::HandleRadius:
-        foreach(GradientStrategy *strategy, m_strategies)
+        Q_FOREACH (GradientStrategy *strategy, m_strategies)
             strategy->repaint(*canvas()->viewConverter());
         GradientStrategy::setHandleRadius(res.toUInt());
-        foreach(GradientStrategy *strategy, m_strategies)
+        Q_FOREACH (GradientStrategy *strategy, m_strategies)
             strategy->repaint(*canvas()->viewConverter());
         break;
     case KoDocumentResourceManager::GrabSensitivity:
@@ -544,7 +544,7 @@ void KarbonGradientTool::gradientChanged()
 
     if (m_gradientWidget->target() == KoGradientEditWidget::FillGradient) {
         QList<QSharedPointer<KoShapeBackground> > newFills;
-        foreach(KoShape * shape, selectedShapes) {
+        Q_FOREACH (KoShape * shape, selectedShapes) {
             QSharedPointer<KoGradientBackground> newFill;
             QSharedPointer<KoGradientBackground> oldFill = qSharedPointerDynamicCast<KoGradientBackground>(shape->background());
             if (oldFill) {
@@ -562,7 +562,7 @@ void KarbonGradientTool::gradientChanged()
         canvas()->addCommand(new KoShapeBackgroundCommand(selectedShapes, newFills));
     } else {
         QList<KoShapeStrokeModel*> newStrokes;
-        foreach(KoShape * shape, selectedShapes) {
+        Q_FOREACH (KoShape * shape, selectedShapes) {
             KoShapeStroke * stroke = dynamic_cast<KoShapeStroke*>(shape->stroke());
             KoShapeStroke * newStroke = 0;
             if (stroke)

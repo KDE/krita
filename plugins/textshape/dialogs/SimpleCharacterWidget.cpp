@@ -161,7 +161,7 @@ void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format, cons
             unchanged = false;
         }
         else {
-            foreach(int property, m_currentCharFormat.properties().keys()) {
+            Q_FOREACH (int property, m_currentCharFormat.properties().keys()) {
                 if (m_currentCharFormat.property(property) != comparisonFormat.property(property)) {
                     unchanged = false;
                 }
@@ -178,7 +178,7 @@ void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format, cons
 
 void SimpleCharacterWidget::clearUnsetProperties(QTextFormat &format)
 {
-    foreach(int property, format.properties().keys()) {
+    Q_FOREACH (int property, format.properties().keys()) {
         if (!format.property(property).toBool()) {
             format.clearProperty(property);
         }

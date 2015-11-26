@@ -90,7 +90,7 @@ void StylesWidget::setCurrentFormat(const QTextBlockFormat &format)
     if (m_styleManager)
         usedStyle = m_styleManager->paragraphStyle(id);
     if (usedStyle) {
-        foreach(int property, m_currentBlockFormat.properties().keys()) {
+        Q_FOREACH (int property, m_currentBlockFormat.properties().keys()) {
             if (property == QTextFormat::ObjectIndex)
                 continue;
             if (property == KoParagraphStyle::ListStyleId)
@@ -122,7 +122,7 @@ void StylesWidget::setCurrentFormat(const QTextCharFormat &format)
     if (usedStyle) {
         QTextCharFormat defaultFormat;
         usedStyle->unapplyStyle(defaultFormat); // sets the default properties.
-        foreach(int property, m_currentCharFormat.properties().keys()) {
+        Q_FOREACH (int property, m_currentCharFormat.properties().keys()) {
             if (property == QTextFormat::ObjectIndex)
                 continue;
             if (m_currentCharFormat.property(property) != usedStyle->value(property)

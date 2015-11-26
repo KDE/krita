@@ -571,7 +571,7 @@ void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
 
     int lastN = -1;
     Profile *profile = 0; // profile to be moved, will be the last one
-    foreach(Profile *p, m_profiles) {
+    Q_FOREACH (Profile *p, m_profiles) {
         if (p->index > lastN) {
             lastN = p->index;
             profile = p;

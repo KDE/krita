@@ -37,7 +37,7 @@ KoMultipleColorConversionTransformation::KoMultipleColorConversionTransformation
 }
 KoMultipleColorConversionTransformation::~KoMultipleColorConversionTransformation()
 {
-    foreach(KoColorConversionTransformation* transfo, d->transfos) {
+    Q_FOREACH (KoColorConversionTransformation* transfo, d->transfos) {
         delete transfo;
     }
     delete d;

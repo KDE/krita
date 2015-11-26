@@ -64,7 +64,7 @@ void AddTextRangeCommand::undo()
         return;
 
     m_shape->clear();
-    foreach(const ArtisticTextRange &range, m_oldFormattedText) {
+    Q_FOREACH (const ArtisticTextRange &range, m_oldFormattedText) {
         m_shape->appendText(range);
     }
     if (m_tool) {

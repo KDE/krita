@@ -51,7 +51,7 @@ void KoPathToolSelection::paint(QPainter &painter, const KoViewConverter &conver
         painter.setTransform(it.key()->absoluteTransformation(&converter) * painter.transform());
         KoShape::applyConversion(painter, converter);
 
-        foreach(KoPathPoint *p, it.value())
+        Q_FOREACH (KoPathPoint *p, it.value())
             p->paint(painter, handleRadius, KoPathPoint::All);
 
         painter.restore();
@@ -115,11 +115,11 @@ void KoPathToolSelection::selectPoints(const QRectF &rect, bool clearSelection)
     }
 
     blockSignals(true);
-    foreach(KoPathShape* shape, m_selectedShapes) {
+    Q_FOREACH (KoPathShape* shape, m_selectedShapes) {
         KoParameterShape *parameterShape = dynamic_cast<KoParameterShape*>(shape);
         if (parameterShape && parameterShape->isParametricShape())
             continue;
-        foreach(KoPathPoint* point, shape->pointsAt(shape->documentToShape(rect)))
+        Q_FOREACH (KoPathPoint* point, shape->pointsAt(shape->documentToShape(rect)))
             add(point, false);
     }
     blockSignals(false);
@@ -149,7 +149,7 @@ const QSet<KoPathPoint *> & KoPathToolSelection::selectedPoints() const
 QList<KoPathPointData> KoPathToolSelection::selectedPointsData() const
 {
     QList<KoPathPointData> pointData;
-    foreach(KoPathPoint* p, m_selectedPoints) {
+    Q_FOREACH (KoPathPoint* p, m_selectedPoints) {
         KoPathShape * pathShape = p->parent();
         pointData.append(KoPathPointData(pathShape, pathShape->pathPointIndex(p)));
     }
@@ -202,7 +202,7 @@ void KoPathToolSelection::setSelectedShapes(const QList<KoPathShape*> shapes)
 void KoPathToolSelection::repaint()
 {
     update();
-    foreach(KoPathPoint *p, m_selectedPoints) {
+    Q_FOREACH (KoPathPoint *p, m_selectedPoints) {
         m_tool->repaint(p->boundingRect(false));
     }
 }

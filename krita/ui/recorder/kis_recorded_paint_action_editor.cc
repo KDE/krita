@@ -65,7 +65,7 @@ KisRecordedPaintActionEditor::KisRecordedPaintActionEditor(QWidget* parent, KisR
     // Setup paint ops
 
     QList<KoID> keys = KisPaintOpRegistry::instance()->listKeys();
-    foreach(const KoID& paintopId, keys) {
+    Q_FOREACH (const KoID& paintopId, keys) {
         QString pixmapName = KisPaintOpRegistry::instance()->pixmap(paintopId);
 
         QPixmap pm;

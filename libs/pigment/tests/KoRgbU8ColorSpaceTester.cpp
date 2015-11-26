@@ -151,7 +151,7 @@ void KoRgbU8ColorSpaceTester::testCompositeOps()
     QList<KoID> depthIDs = KoColorSpaceRegistry::instance()->colorDepthList(RGBAColorModelID.id(),
                            KoColorSpaceRegistry::AllColorSpaces);
 
-    foreach(const KoID& depthId, depthIDs) {
+    Q_FOREACH (const KoID& depthId, depthIDs) {
 
         if (depthId.id().contains("Float")) continue;
 
@@ -212,7 +212,7 @@ void KoRgbU8ColorSpaceTester::testCompositeOpsWithChannelFlags()
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
     QList<KoCompositeOp*> ops = cs->compositeOps();
 
-    foreach(const KoCompositeOp *op, ops) {
+    Q_FOREACH (const KoCompositeOp *op, ops) {
         /**
          * ALPHA_DARKEN composite op doesn't take channel
          * flags into account, so just skip it

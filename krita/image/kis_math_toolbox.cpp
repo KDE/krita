@@ -58,7 +58,7 @@ KisMathToolboxRegistry::KisMathToolboxRegistry()
 
 KisMathToolboxRegistry::~KisMathToolboxRegistry()
 {
-    foreach(const QString &id, keys()) {
+    Q_FOREACH (const QString &id, keys()) {
         delete get(id);
     }
     dbgRegistry << "Deleting KisMathToolboxRegistry";

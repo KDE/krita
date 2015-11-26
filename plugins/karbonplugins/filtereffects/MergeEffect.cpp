@@ -87,7 +87,7 @@ void MergeEffect::save(KoXmlWriter &writer)
 
     saveCommonAttributes(writer);
 
-    foreach(const QString &input, inputs()) {
+    Q_FOREACH (const QString &input, inputs()) {
         writer.startElement("feMergeNode");
         writer.addAttribute("in", input);
         writer.endElement();

@@ -111,7 +111,7 @@ void ParagraphGeneral::setStyle(KoParagraphStyle *style, int level)
 /*    widget.inheritStyle->clear();
     widget.inheritStyle->addItem(i18nc("Inherit style", "None"));
     widget.inheritStyle->setCurrentIndex(0);
-    foreach(KoParagraphStyle *s, m_paragraphStyles) {
+    Q_FOREACH (KoParagraphStyle *s, m_paragraphStyles) {
         KoParagraphStyle *parent = s;
         bool ok = true;
         while (ok && parent) {

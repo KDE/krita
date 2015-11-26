@@ -57,13 +57,13 @@ void KisNodePropertyListCommand::doUpdate(const KisNodeModel::PropertyList &oldP
     bool oldPassThroughValue = false;
     bool newPassThroughValue = false;
 
-    foreach(const KisNodeModel::Property &prop, oldPropertyList) {
+    Q_FOREACH (const KisNodeModel::Property &prop, oldPropertyList) {
         if (prop.name == i18n("Pass Through")) {
             oldPassThroughValue = prop.state.toBool();
         }
     }
 
-    foreach(const KisNodeModel::Property &prop, newPropertyList) {
+    Q_FOREACH (const KisNodeModel::Property &prop, newPropertyList) {
         if (prop.name == i18n("Pass Through")) {
             newPassThroughValue = prop.state.toBool();
         }
@@ -83,7 +83,7 @@ void KisNodePropertyListCommand::doUpdate(const KisNodeModel::PropertyList &oldP
 void KisNodePropertyListCommand::setNodePropertiesNoUndo(KisNodeSP node, KisImageSP image, PropertyList proplist)
 {
     bool undo = true;
-    foreach(const KisNodeModel::Property &prop, proplist) {
+    Q_FOREACH (const KisNodeModel::Property &prop, proplist) {
         if (prop.name == i18n("Visible") && node->visible() != prop.state.toBool()) undo = false;
         if (prop.name == i18n("Locked") && node->userLocked() != prop.state.toBool()) undo = false;
         if (prop.name == i18n("Active")) {

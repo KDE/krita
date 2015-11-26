@@ -96,11 +96,11 @@ void KisColorSpaceSelector::fillCmbProfiles()
 
     QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
     QStringList profileNames;
-    foreach(const KoColorProfile *profile, profileList) {
+    Q_FOREACH (const KoColorProfile *profile, profileList) {
         profileNames.append(profile->name());
     }
     qSort(profileNames);
-    foreach(QString stringName, profileNames) {
+    Q_FOREACH (QString stringName, profileNames) {
         if (stringName==csf->defaultProfile()) {
             d->colorSpaceSelector->cmbProfile->addSqueezedItem(stringName+d->defaultsuffix);
         } else {
@@ -189,7 +189,7 @@ void KisColorSpaceSelector::installProfile()
 
     QString saveLocation = KoResourcePaths::saveLocation("icc_profiles");
 
-    foreach (const QString &profileName, profileNames) {
+    Q_FOREACH (const QString &profileName, profileNames) {
         QUrl file(profileName);
         if (!QFile::copy(profileName, saveLocation + file.fileName())) {
             dbgKrita << "Could not install profile!";

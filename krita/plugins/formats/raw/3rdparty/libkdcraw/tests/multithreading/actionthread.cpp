@@ -116,7 +116,7 @@ void ActionThread::convertRAWtoPNG(const QList<QUrl>& list, const RawDecodingSet
 {
     RJobCollection collection;
 
-    foreach (const QUrl& url, list)
+    Q_FOREACH (const QUrl& url, list)
     {
         Task* const job = new Task();
         job->fileUrl    = url;

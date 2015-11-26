@@ -168,7 +168,7 @@ void DocumentListModel::Private::relayout()
     emit q->layoutAboutToBeChanged();
 
     QList<DocumentInfo> newList;
-    foreach(const DocumentInfo &docInfo, allDocumentInfos) {
+    Q_FOREACH (const DocumentInfo &docInfo, allDocumentInfos) {
         if (filter == UnknownType || docInfo.docType == filter) {
             if (searchPattern.isEmpty() || docInfo.fileName.contains(searchPattern, Qt::CaseInsensitive)) {
                 newList.append(docInfo);

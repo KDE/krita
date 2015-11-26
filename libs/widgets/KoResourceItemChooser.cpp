@@ -235,7 +235,7 @@ void KoResourceItemChooser::showButtons(bool show)
         show ? button->show() : button->hide();
     }
 
-    foreach(QAbstractButton *button, d->customButtons) {
+    Q_FOREACH (QAbstractButton *button, d->customButtons) {
         show ? button->show() : button->hide();
     }
 }

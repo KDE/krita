@@ -64,7 +64,7 @@ bool EnhancedPathCommand::execute()
         break;
     // line from current point (x y) +
     case 'L':
-        foreach(const QPointF &point, points)
+        Q_FOREACH (const QPointF &point, points)
             m_parent->lineTo(point);
         break;
     // cubic bezier curve from current point (x1 y1 x2 y2 x y) +
@@ -310,7 +310,7 @@ QString EnhancedPathCommand::toString() const
 {
     QString cmd = m_command;
 
-    foreach(EnhancedPathParameter *p, m_parameters)
+    Q_FOREACH (EnhancedPathParameter *p, m_parameters)
         cmd += p->toString() + ' ';
 
     return cmd.trimmed();

@@ -47,7 +47,7 @@ KisColorSourceOptionWidget::KisColorSourceOptionWidget()
     groupBox->setObjectName(QString::fromUtf8("groupBox"));
     QVBoxLayout* verticalLayout = new QVBoxLayout(groupBox);
 
-    foreach(const KoID & id, KisColorSourceOption::sourceIds()) {
+    Q_FOREACH (const KoID & id, KisColorSourceOption::sourceIds()) {
         QRadioButton* radioButton = new QRadioButton(groupBox);
         radioButton->setText(id.name());
         d->id2radio[id.id()] = radioButton;

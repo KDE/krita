@@ -244,7 +244,7 @@ void ShapeCollectionDocker::loadDefaultShapes()
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("KoShapeCollection");
     quickShapes = cfg.readEntry("QuickShapes", quickShapes);
 
-    foreach(const QString & id, KoShapeRegistry::instance()->keys()) {
+    Q_FOREACH (const QString & id, KoShapeRegistry::instance()->keys()) {
         KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(id);
         // don't show hidden factories
         if ( factory->hidden() ) {
@@ -252,7 +252,7 @@ void ShapeCollectionDocker::loadDefaultShapes()
         }
         bool oneAdded = false;
 
-        foreach(const KoShapeTemplate & shapeTemplate, factory->templates()) {
+        Q_FOREACH (const KoShapeTemplate & shapeTemplate, factory->templates()) {
             oneAdded = true;
             KoCollectionItem temp;
             temp.id = shapeTemplate.id;
@@ -405,7 +405,7 @@ void ShapeCollectionDocker::buildAddCollectionMenu()
     QMenu* menu = new QMenu(m_addCollectionButton);
     m_addCollectionButton->setMenu(menu);
 
-    foreach(const QString & dirName, dirs) {
+    Q_FOREACH (const QString & dirName, dirs) {
         QDir dir(dirName);
 
         if(!dir.exists())
@@ -413,7 +413,7 @@ void ShapeCollectionDocker::buildAddCollectionMenu()
 
         QStringList collectionDirs = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
 
-        foreach(const QString & collectionDirName, collectionDirs) {
+        Q_FOREACH (const QString & collectionDirName, collectionDirs) {
             scanCollectionDir(dirName + collectionDirName, menu);
         }
     }
@@ -436,7 +436,7 @@ void ShapeCollectionDocker::scanCollectionDir(const QString& path, QMenu* menu)
         QMenu* submenu = menu->addMenu(QIcon(dir.absoluteFilePath(icon)), name);
         QStringList collectionDirs = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
 
-        foreach(const QString & collectionDirName, collectionDirs) {
+        Q_FOREACH (const QString & collectionDirName, collectionDirs) {
             scanCollectionDir(dir.absoluteFilePath(collectionDirName), submenu);
         }
     } else {
@@ -506,7 +506,7 @@ void ShapeCollectionDocker::onLoadingFinished()
     QList<KoCollectionItem> templateList;
     QList<KoShape*> shapeList = loader->shapeList();
 
-    foreach(KoShape* shape, shapeList)
+    Q_FOREACH (KoShape* shape, shapeList)
     {
         KoCollectionItem temp;
         temp.id = loader->collectionPath() + shape->name();
@@ -553,7 +553,7 @@ void ShapeCollectionDocker::removeCollection(const QString& id)
     {
         CollectionItemModel* model = m_modelMap[id];
         QList<KoCollectionItem> list = model->shapeTemplateList();
-        foreach(const KoCollectionItem & temp, list)
+        Q_FOREACH (const KoCollectionItem & temp, list)
         {
             KoShapeFactoryBase* factory = KoShapeRegistry::instance()->get(temp.id);
             KoShapeRegistry::instance()->remove(temp.id);

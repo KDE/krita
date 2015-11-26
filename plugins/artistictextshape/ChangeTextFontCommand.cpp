@@ -49,7 +49,7 @@ void ChangeTextFontCommand::redo()
         }
     } else {
         m_shape->clear();
-        foreach(const ArtisticTextRange &range, m_newText) {
+        Q_FOREACH (const ArtisticTextRange &range, m_newText) {
             m_shape->appendText(range);
         }
     }
@@ -58,7 +58,7 @@ void ChangeTextFontCommand::redo()
 void ChangeTextFontCommand::undo()
 {
     m_shape->clear();
-    foreach(const ArtisticTextRange &range, m_oldText) {
+    Q_FOREACH (const ArtisticTextRange &range, m_oldText) {
         m_shape->appendText(range);
     }
 }

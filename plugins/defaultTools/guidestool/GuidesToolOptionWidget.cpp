@@ -104,10 +104,10 @@ void GuidesToolOptionWidget::updateList(int orientation)
 {
     widget.positionList->clear();
     if (orientation == Qt::Horizontal-1) {
-        foreach(qreal p, m_hGuides)
+        Q_FOREACH (qreal p, m_hGuides)
             widget.positionList->addItem(m_unit.toUserStringValue(p));
     } else {
-        foreach(qreal p, m_vGuides)
+        Q_FOREACH (qreal p, m_vGuides)
             widget.positionList->addItem(m_unit.toUserStringValue(p));
     }
 

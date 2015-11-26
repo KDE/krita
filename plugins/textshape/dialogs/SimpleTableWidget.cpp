@@ -159,7 +159,7 @@ void SimpleTableWidget::fillBorderButton(const QColor &color)
 
     int i=1;
     KoZoomHandler zoomHandler;
-    foreach(KoTableCellStyle *style, m_cellStyles) {
+    Q_FOREACH (KoTableCellStyle *style, m_cellStyles) {
         if (style == 0) {
             widget.border->addBlanks(1);
             i++;

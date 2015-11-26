@@ -255,7 +255,7 @@ void freeTiles(QVector<Tile> tiles,
                const int srcAlignmentShift,
                const int dstAlignmentShift)
 {
-    foreach (const Tile &tile, tiles) {
+    Q_FOREACH (const Tile &tile, tiles) {
         free(tile.src - srcAlignmentShift);
         free(tile.dst - dstAlignmentShift);
         free(tile.mask);
@@ -410,7 +410,7 @@ void benchmarkCompositeOp(const KoCompositeOp *op,
     QTime timer;
     timer.start();
 
-    foreach (const Tile &tile, tiles) {
+    Q_FOREACH (const Tile &tile, tiles) {
         params.dstRowStart   = tile.dst + tileOffset;
         params.srcRowStart   = tile.src + tileOffset;
         params.maskRowStart  = haveMask ? tile.mask : 0;
@@ -724,7 +724,7 @@ void KisCompositionBenchmark::benchmarkMemcpy()
         generateTiles(numTiles, 0, 0, ALPHA_UNIT, ALPHA_UNIT, 4);
 
     QBENCHMARK_ONCE {
-        foreach (const Tile &tile, tiles) {
+        Q_FOREACH (const Tile &tile, tiles) {
             memcpy(tile.dst, tile.src, 4 * numPixels);
         }
     }

@@ -84,7 +84,7 @@ void karbonSimplifyPath(KoPathShape *path, qreal error)
     }
 
     QList<KoSubpath *> subpaths = split(*path);
-    foreach(KoSubpath *subpath, subpaths)
+    Q_FOREACH (KoSubpath *subpath, subpaths)
     subdivide(subpath);
 
     simplifySubpaths(&subpaths, error);
@@ -151,7 +151,7 @@ void KarbonSimplifyPath::subdivide(KoSubpath *subpath)
     for (int i = 1; i < subpath->size(); ++i) {
         recursiveDepth = 0;
         KoSubpath newPoints = subdivideAux((*subpath)[i-1], (*subpath)[i]);
-        foreach(KoPathPoint *p, newPoints) {
+        Q_FOREACH (KoPathPoint *p, newPoints) {
             subpath->insert(i, p);
             ++i;
         }
@@ -225,7 +225,7 @@ bool KarbonSimplifyPath::isSufficentlyFlat(QPointF curve[4])
 void KarbonSimplifyPath::simplifySubpaths(QList<KoSubpath *> *subpaths,
         qreal error)
 {
-    foreach(KoSubpath *subpath, *subpaths) {
+    Q_FOREACH (KoSubpath *subpath, *subpaths) {
         if (subpath->size() > 2) {
             simplifySubpath(subpath, error);
         }

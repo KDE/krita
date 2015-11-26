@@ -40,7 +40,7 @@ ShapeMoveStrategy::ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked)
 {
     QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
     QRectF boundingRect;
-    foreach(KoShape *shape, selectedShapes) {
+    Q_FOREACH (KoShape *shape, selectedShapes) {
         if (! shape->isEditable())
             continue;
         m_selectedShapes << shape;
@@ -103,7 +103,7 @@ void ShapeMoveStrategy::moveSelection()
     Q_ASSERT(m_newPositions.count());
 
     int i=0;
-    foreach(KoShape *shape, m_selectedShapes) {
+    Q_FOREACH (KoShape *shape, m_selectedShapes) {
         QPointF delta = m_previousPositions.at(i) + m_diff - shape->position();
         if (shape->parent()) {
             shape->parent()->model()->proposeMove(shape, delta);

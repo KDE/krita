@@ -131,7 +131,7 @@ KisExtendedModifiersMapper::queryExtendedModifiers()
 
 #ifdef HAVE_X11
 
-    foreach (const KeyMapping &map, m_d->mapping) {
+    Q_FOREACH (const KeyMapping &map, m_d->mapping) {
         if (m_d->checkKeySymPressedX11(map.x11KeySym)) {
             modifiers << map.qtKey;
         }

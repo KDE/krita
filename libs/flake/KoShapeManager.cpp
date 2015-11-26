@@ -54,7 +54,7 @@ void KoShapeManager::Private::updateTree()
     DetectCollision detector;
     bool selectionModified = false;
     bool anyModified = false;
-    foreach(KoShape *shape, aggregate4update) {
+    Q_FOREACH (KoShape *shape, aggregate4update) {
         if (shapeIndexesBeforeUpdate.contains(shape))
             detector.detect(tree, shape, shapeIndexesBeforeUpdate[shape]);
         selectionModified = selectionModified || selection->isSelected(shape);
@@ -88,7 +88,7 @@ void KoShapeManager::Private::paintGroup(KoShapeGroup *group, QPainter &painter,
 {
     QList<KoShape*> shapes = group->shapes();
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
-    foreach(KoShape *child, shapes) {
+    Q_FOREACH (KoShape *child, shapes) {
         // we paint recursively here, so we do not have to check recursively for visibility
         if (!child->isVisible())
             continue;
@@ -120,10 +120,10 @@ KoShapeManager::KoShapeManager(KoCanvasBase *canvas)
 
 KoShapeManager::~KoShapeManager()
 {
-    foreach(KoShape *shape, d->shapes) {
+    Q_FOREACH (KoShape *shape, d->shapes) {
         shape->priv()->removeShapeManager(this);
     }
-    foreach(KoShape *shape, d->additionalShapes) {
+    Q_FOREACH (KoShape *shape, d->additionalShapes) {
         shape->priv()->removeShapeManager(this);
     }
     delete d;
@@ -134,13 +134,13 @@ void KoShapeManager::setShapes(const QList<KoShape *> &shapes, Repaint repaint)
 {
     //clear selection
     d->selection->deselectAll();
-    foreach(KoShape *shape, d->shapes) {
+    Q_FOREACH (KoShape *shape, d->shapes) {
         shape->priv()->removeShapeManager(this);
     }
     d->aggregate4update.clear();
     d->tree.clear();
     d->shapes.clear();
-    foreach(KoShape *shape, shapes) {
+    Q_FOREACH (KoShape *shape, shapes) {
         addShape(shape, repaint);
     }
 }
@@ -405,7 +405,7 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
                 }
             } else {
                 QList<QImage> inputImages;
-                foreach(const QString &input, filterEffect->inputs()) {
+                Q_FOREACH (const QString &input, filterEffect->inputs()) {
                     QImage image = imageBuffers.value(input);
                     if (!image.isNull())
                         inputImages.append(imageBuffers.value(input));
@@ -518,7 +518,7 @@ void KoShapeManager::notifyShapeChanged(KoShape *shape)
 
     KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
     if (container) {
-        foreach(KoShape *child, container->shapes())
+        Q_FOREACH (KoShape *child, container->shapes())
             notifyShapeChanged(child);
     }
     if (wasEmpty && !d->aggregate4update.isEmpty())
@@ -535,7 +535,7 @@ QList<KoShape*> KoShapeManager::topLevelShapes() const
 {
     QList<KoShape*> shapes;
     // get all toplevel shapes
-    foreach(KoShape *shape, d->shapes) {
+    Q_FOREACH (KoShape *shape, d->shapes) {
         if (shape->parent() == 0) {
             shapes.append(shape);
         }

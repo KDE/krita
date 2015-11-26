@@ -56,7 +56,7 @@ KoColorSpaceEngineRegistry::KoColorSpaceEngineRegistry()
 
 KoColorSpaceEngineRegistry::~KoColorSpaceEngineRegistry()
 {
-    foreach(KoColorSpaceEngine* item, values()) {
+    Q_FOREACH (KoColorSpaceEngine* item, values()) {
         delete item;
     }
 }

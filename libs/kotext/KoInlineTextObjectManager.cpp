@@ -178,7 +178,7 @@ QList<QAction*> KoInlineTextObjectManager::createInsertVariableActions(KoCanvasB
 {
     QList<QAction *> answer = KoInlineObjectRegistry::instance()->createInsertVariableActions(host);
     int i = 0;
-    foreach(const QString & name, m_variableManager.variables()) {
+    Q_FOREACH (const QString & name, m_variableManager.variables()) {
         answer.insert(i++, new InsertNamedVariableAction(host, this, name));
     }
 
@@ -190,7 +190,7 @@ QList<QAction*> KoInlineTextObjectManager::createInsertVariableActions(KoCanvasB
 QList<KoTextLocator*> KoInlineTextObjectManager::textLocators() const
 {
     QList<KoTextLocator*> answers;
-    foreach(KoInlineObject *object, m_objects) {
+    Q_FOREACH (KoInlineObject *object, m_objects) {
         KoTextLocator *tl = dynamic_cast<KoTextLocator*>(object);
         if (tl)
             answers.append(tl);
@@ -201,7 +201,7 @@ QList<KoTextLocator*> KoInlineTextObjectManager::textLocators() const
 QList<KoInlineNote*> KoInlineTextObjectManager::endNotes() const
 {
     QList<KoInlineNote*> answers;
-    foreach(KoInlineObject* object, m_objects) {
+    Q_FOREACH (KoInlineObject* object, m_objects) {
         KoInlineNote* note = dynamic_cast<KoInlineNote*>(object);
         if (note && note->type() == KoInlineNote::Endnote) {
             answers.append(note);
@@ -213,7 +213,7 @@ QList<KoInlineNote*> KoInlineTextObjectManager::endNotes() const
 QMap<QString, KoInlineCite*> KoInlineTextObjectManager::citations(bool duplicatesEnabled) const
 {
     QMap<QString, KoInlineCite*> answers;
-    foreach(KoInlineObject* object, m_objects) {
+    Q_FOREACH (KoInlineObject* object, m_objects) {
         KoInlineCite* cite = dynamic_cast<KoInlineCite*>(object);
         if (cite && (cite->type() == KoInlineCite::Citation ||
                      (duplicatesEnabled && cite->type() == KoInlineCite::ClonedCitation))) {

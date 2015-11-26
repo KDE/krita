@@ -82,7 +82,7 @@ KoShapeGroupCommand::KoShapeGroupCommand(KoShapeGroupCommandPrivate &dd, KUndo2C
 
 void KoShapeGroupCommandPrivate::init(KUndo2Command *q)
 {
-    foreach(KoShape* shape, shapes) {
+    Q_FOREACH (KoShape* shape, shapes) {
         oldParents.append(shape->parent());
         oldClipped.append(shape->parent() && shape->parent()->isClipped(shape));
         oldInheritTransform.append(shape->parent() && shape->parent()->inheritsTransform(shape));
@@ -110,7 +110,7 @@ void KoShapeGroupCommand::redo()
             // the group has changed position and so have the group child shapes
             // -> we need compensate the group position change
             QPointF positionOffset = oldGroupPosition - bound.topLeft();
-            foreach(KoShape * child, d->container->shapes())
+            Q_FOREACH (KoShape * child, d->container->shapes())
                 child->setAbsolutePosition(child->absolutePosition() + positionOffset);
         }
     }
@@ -180,7 +180,7 @@ void KoShapeGroupCommand::undo()
         if (d->container->shapeCount() > 0) {
             bool boundingRectInitialized = false;
             QRectF bound;
-            foreach(KoShape * shape, d->container->shapes()) {
+            Q_FOREACH (KoShape * shape, d->container->shapes()) {
                 if (! boundingRectInitialized) {
                     bound = shape->boundingRect();
                     boundingRectInitialized = true;
@@ -190,7 +190,7 @@ void KoShapeGroupCommand::undo()
             // the group has changed position and so have the group child shapes
             // -> we need compensate the group position change
             QPointF positionOffset = oldGroupPosition - bound.topLeft();
-            foreach(KoShape * child, d->container->shapes())
+            Q_FOREACH (KoShape * child, d->container->shapes())
                 child->setAbsolutePosition(child->absolutePosition() + positionOffset);
 
             d->container->setAbsolutePosition(bound.topLeft(), KoFlake::TopLeftCorner);
@@ -208,7 +208,7 @@ QRectF KoShapeGroupCommandPrivate::containerBoundingRect()
     else
         boundingRectInitialized = false;
 
-    foreach(KoShape *shape, shapes) {
+    Q_FOREACH (KoShape *shape, shapes) {
         if (boundingRectInitialized)
             bound = bound.united(shape->boundingRect());
         else {

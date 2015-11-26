@@ -69,7 +69,7 @@ KisStrokesQueue::KisStrokesQueue()
 
 KisStrokesQueue::~KisStrokesQueue()
 {
-    foreach(KisStrokeSP stroke, m_d->strokesQueue) {
+    Q_FOREACH (KisStrokeSP stroke, m_d->strokesQueue) {
         stroke->cancelStroke();
     }
 
@@ -94,7 +94,7 @@ void KisStrokesQueue::Private::startLod0ToNStroke(int levelOfDetail)
 
 bool KisStrokesQueue::Private::canUseLodN() const
 {
-    foreach (KisStrokeSP stroke, strokesQueue) {
+    Q_FOREACH (KisStrokeSP stroke, strokesQueue) {
         if (stroke->type() == KisStroke::LEGACY) {
             return false;
         }
@@ -105,7 +105,7 @@ bool KisStrokesQueue::Private::canUseLodN() const
 
 bool KisStrokesQueue::Private::shouldWrapInSuspendUpdatesStroke() const
 {
-    foreach (KisStrokeSP stroke, strokesQueue) {
+    Q_FOREACH (KisStrokeSP stroke, strokesQueue) {
         if (stroke->type() == KisStroke::RESUME) {
             return false;
         }
@@ -270,7 +270,7 @@ bool KisStrokesQueue::cancelStroke(KisStrokeId id)
 
 bool KisStrokesQueue::Private::hasUnfinishedStrokes() const
 {
-    foreach (KisStrokeSP stroke, strokesQueue) {
+    Q_FOREACH (KisStrokeSP stroke, strokesQueue) {
         if (!stroke->isEnded()) {
             return true;
         }
@@ -295,7 +295,7 @@ bool KisStrokesQueue::tryCancelCurrentStrokeAsync()
 
         anythingCanceled = true;
 
-        foreach (KisStrokeSP currentStroke, m_d->strokesQueue) {
+        Q_FOREACH (KisStrokeSP currentStroke, m_d->strokesQueue) {
             KIS_ASSERT_RECOVER_NOOP(currentStroke->isEnded());
 
             currentStroke->cancelStroke();
@@ -363,7 +363,7 @@ qint32 KisStrokesQueue::sizeMetric() const
 void KisStrokesQueue::Private::switchDesiredLevelOfDetail(bool forced)
 {
     if (forced || nextDesiredLevelOfDetail != desiredLevelOfDetail) {
-        foreach (KisStrokeSP stroke, strokesQueue) {
+        Q_FOREACH (KisStrokeSP stroke, strokesQueue) {
             if (stroke->type() != KisStroke::LEGACY)
                 return;
         }

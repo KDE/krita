@@ -93,7 +93,7 @@ bool GradientStrategy::hitHandle(const QPointF &mousePos, const KoViewConverter 
     QRectF roi = grabRect(converter);
 
     int handleIndex = 0;
-    foreach(const QPointF & handle, m_handles) {
+    Q_FOREACH (const QPointF & handle, m_handles) {
         roi.moveCenter(m_matrix.map(handle));
         if (roi.contains(mousePos)) {
             if (select)
@@ -202,7 +202,7 @@ void GradientStrategy::paint(QPainter &painter, const KoViewConverter &converter
         paintStops(painter, converter);
 
     // draw the gradient handles
-    foreach(const QPointF & handle, m_handles)
+    Q_FOREACH (const QPointF & handle, m_handles)
     paintHandle(painter, converter, m_matrix.map(handle));
 }
 
@@ -354,7 +354,7 @@ QRectF GradientStrategy::boundingRect(const KoViewConverter &converter) const
         bbox.setBottom(qMax(handle.y(), bbox.bottom()));
     }
     QList<StopHandle> handles = stopHandles(converter);
-    foreach(const StopHandle & stopHandle, handles) {
+    Q_FOREACH (const StopHandle & stopHandle, handles) {
         QPointF handle = stopHandle.second;
         bbox.setLeft(qMin(handle.x(), bbox.left()));
         bbox.setRight(qMax(handle.x(), bbox.right()));
@@ -497,7 +497,7 @@ QList<GradientStrategy::StopHandle> GradientStrategy::stopHandles(const KoViewCo
     ortho = converter.viewToDocument(ortho);
 
     QList<StopHandle> handles;
-    foreach(const QGradientStop & stop, m_stops) {
+    Q_FOREACH (const QGradientStop & stop, m_stops) {
         QPointF base = start + stop.first * diff;
         handles.append(StopHandle(base, base + ortho));
     }

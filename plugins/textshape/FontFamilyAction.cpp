@@ -146,7 +146,7 @@ void KoFontFamilyAction::setFont( const QString &family )
     // Suppress triggered(QString) signal and prevent recursive call to ourself.
     d->settingFont++;
 
-    foreach(QWidget *w, createdWidgets())
+    Q_FOREACH (QWidget *w, createdWidgets())
     {
         KoFontComboBox *cb = qobject_cast<KoFontComboBox *>(w);
         qDebug() << "\tw=" << w << "cb=" << cb;

@@ -57,7 +57,7 @@ SvgWriter::SvgWriter(const QList<KoShapeLayer*> &layers, const QSizeF &pageSize)
     : m_pageSize(pageSize)
     , m_writeInlineImages(true)
 {
-    foreach(KoShapeLayer *layer, layers)
+    Q_FOREACH (KoShapeLayer *layer, layers)
         m_toplevelShapes.append(layer);
 }
 
@@ -113,7 +113,7 @@ bool SvgWriter::save(QIODevice &outputDevice)
         SvgSavingContext savingContext(outputDevice, m_writeInlineImages);
 
         // top level shapes
-        foreach(KoShape *shape, m_toplevelShapes) {
+        Q_FOREACH (KoShape *shape, m_toplevelShapes) {
             KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape);
             if(layer) {
                 saveLayer(layer, savingContext);
@@ -141,7 +141,7 @@ void SvgWriter::saveLayer(KoShapeLayer *layer, SvgSavingContext &context)
     QList<KoShape*> sortedShapes = layer->shapes();
     qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
 
-    foreach(KoShape * shape, sortedShapes) {
+    Q_FOREACH (KoShape * shape, sortedShapes) {
         KoShapeGroup * group = dynamic_cast<KoShapeGroup*>(shape);
         if (group)
             saveGroup(group, context);
@@ -163,7 +163,7 @@ void SvgWriter::saveGroup(KoShapeGroup * group, SvgSavingContext &context)
     QList<KoShape*> sortedShapes = group->shapes();
     qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
 
-    foreach(KoShape * shape, sortedShapes) {
+    Q_FOREACH (KoShape * shape, sortedShapes) {
         KoShapeGroup * childGroup = dynamic_cast<KoShapeGroup*>(shape);
         if (childGroup)
             saveGroup(childGroup, context);

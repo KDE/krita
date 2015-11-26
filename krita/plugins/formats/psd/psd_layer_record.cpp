@@ -483,7 +483,7 @@ void PSDLayerRecord::write(QIODevice* io,
             SAFE_WRITE_EX(io, realNumberOfChannels);
         }
 
-        foreach(ChannelInfo *channel, channelInfoRecords) {
+        Q_FOREACH (ChannelInfo *channel, channelInfoRecords) {
             SAFE_WRITE_EX(io, (quint16)channel->channelId);
 
             channel->channelInfoPosition = io->pos();
@@ -637,7 +637,7 @@ void PSDLayerRecord::writePixelDataImpl(QIODevice *io)
     const psd_color_mode colorMode = m_header.colormode;
 
     QVector<PsdPixelUtils::ChannelWritingInfo> writingInfoList;
-    foreach (const ChannelInfo *channelInfo, channelInfoRecords) {
+    Q_FOREACH (const ChannelInfo *channelInfo, channelInfoRecords) {
         writingInfoList <<
             PsdPixelUtils::ChannelWritingInfo(channelInfo->channelId,
                                               channelInfo->channelInfoPosition);
@@ -772,7 +772,7 @@ QDebug operator<<(QDebug dbg, const PSDLayerRecord &layer)
     dbg.nospace() << ", transparency protected: " << layer.transparencyProtected;
     dbg.nospace() << ", visible: " << layer.visible;
     dbg.nospace() << ", irrelevant: " << layer.irrelevant << "\n";
-    foreach(const ChannelInfo* channel, layer.channelInfoRecords) {
+    Q_FOREACH (const ChannelInfo* channel, layer.channelInfoRecords) {
         dbg.space() << channel;
     }
 #endif

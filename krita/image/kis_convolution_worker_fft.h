@@ -494,7 +494,7 @@ private:
             fftw_free(m_kernelFFT);
         }
 
-        foreach (fftw_complex *channel, m_channelFFT) {
+        Q_FOREACH (fftw_complex *channel, m_channelFFT) {
             fftw_free(channel);
         }
         m_channelFFT.clear();

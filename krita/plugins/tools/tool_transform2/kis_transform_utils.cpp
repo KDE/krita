@@ -162,7 +162,7 @@ bool KisTransformUtils::checkImageTooBig(const QRectF &bounds, const MatricesPac
     points << bounds.bottomRight();
     points << bounds.bottomLeft();
 
-    foreach (const QPointF &pt, points) {
+    Q_FOREACH (const QPointF &pt, points) {
         QVector4D v(pt.x(), pt.y(), 0, 1);
 
         v = unprojectedMatrix * v;

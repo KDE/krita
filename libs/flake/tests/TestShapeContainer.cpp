@@ -132,7 +132,7 @@ void TestShapeContainer::testScaling()
 
     QList<QTransform> oldTransformations;
     QList<QTransform> newTransformations;
-    foreach(const KoShape* shape, transformShapes) {
+    Q_FOREACH (const KoShape* shape, transformShapes) {
         QTransform oldTransform = shape->transformation();
         oldTransformations.append(oldTransform);
         QTransform globalTransform = shape->absoluteTransformation(0);
@@ -192,7 +192,7 @@ void TestShapeContainer::testScaling2()
 
     QList<QTransform> oldTransformations;
     QList<QTransform> newTransformations;
-    foreach(const KoShape* shape, transformShapes) {
+    Q_FOREACH (const KoShape* shape, transformShapes) {
         QTransform oldTransform = shape->transformation();
         oldTransformations.append(oldTransform);
         newTransformations.append(oldTransform*matrix);

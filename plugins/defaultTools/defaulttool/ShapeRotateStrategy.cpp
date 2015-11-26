@@ -41,7 +41,7 @@ ShapeRotateStrategy::ShapeRotateStrategy(KoToolBase *tool, const QPointF &clicke
     m_initialSelectionMatrix = tool->canvas()->shapeManager()->selection()->transformation();
 
     QList<KoShape*> selectedShapes = tool->canvas()->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
-    foreach(KoShape *shape, selectedShapes) {
+    Q_FOREACH (KoShape *shape, selectedShapes) {
         if( ! shape->isEditable() )
             continue;
         m_selectedShapes << shape;
@@ -81,7 +81,7 @@ void ShapeRotateStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
 
     QTransform applyMatrix = matrix * m_rotationMatrix.inverted();
     m_rotationMatrix = matrix;
-    foreach( KoShape * shape, m_selectedShapes ) {
+    Q_FOREACH ( KoShape * shape, m_selectedShapes ) {
         shape->update();
         shape->applyAbsoluteTransformation( applyMatrix );
         shape->update();
@@ -97,7 +97,7 @@ void ShapeRotateStrategy::handleCustomEvent( KoPointerEvent * event )
     matrix.translate(-m_rotationCenter.x(), -m_rotationCenter.y());
 
     m_rotationMatrix *= matrix;
-    foreach( KoShape * shape, m_selectedShapes ) {
+    Q_FOREACH ( KoShape * shape, m_selectedShapes ) {
         shape->update();
         shape->applyAbsoluteTransformation( matrix );
         shape->update();
@@ -114,7 +114,7 @@ void ShapeRotateStrategy::rotateBy( qreal angle )
 
     QTransform applyMatrix = matrix * m_rotationMatrix.inverted();
     m_rotationMatrix = matrix;
-    foreach( KoShape * shape, m_selectedShapes ) {
+    Q_FOREACH ( KoShape * shape, m_selectedShapes ) {
         shape->update();
         shape->applyAbsoluteTransformation( applyMatrix );
         shape->update();
@@ -139,7 +139,7 @@ void ShapeRotateStrategy::paint( QPainter &painter, const KoViewConverter &conve
 
 KUndo2Command* ShapeRotateStrategy::createCommand() {
     QList<QTransform> newTransforms;
-    foreach( KoShape* shape, m_selectedShapes )
+    Q_FOREACH ( KoShape* shape, m_selectedShapes )
         newTransforms << shape->transformation();
 
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( m_selectedShapes, m_oldTransforms, newTransforms );

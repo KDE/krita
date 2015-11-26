@@ -91,11 +91,11 @@ void KisGmicBlacklister::dump()
 {
 
     QList<QString> keysList = m_categoryNameBlacklist.keys();
-    foreach (const QString& item, keysList)
+    Q_FOREACH (const QString& item, keysList)
     {
         QSet<QString> filters = m_categoryNameBlacklist[item];
         dbgPlugins << item;
-        foreach (const QString filterItem, filters)
+        Q_FOREACH (const QString filterItem, filters)
         {
             dbgPlugins << "\t" << filterItem;
         }

@@ -763,7 +763,7 @@ void SvgParser::applyFilter(KoShape *shape)
                 bool hasStdInput = false;
                 bool isFirstEffect = filterStack == 0;
                 // check if one of the inputs is a standard input
-                foreach(const QString &input, filterEffect->inputs()) {
+                Q_FOREACH (const QString &input, filterEffect->inputs()) {
                     if ((isFirstEffect && input.isEmpty()) || stdInputs.contains(input)) {
                         hasStdInput = true;
                         break;
@@ -775,7 +775,7 @@ void SvgParser::applyFilter(KoShape *shape)
                     subRegion.setSize(QSizeF(1, 1));
                 } else {
                     // defaults to bounding rect of all referenced nodes
-                    foreach(const QString &input, filterEffect->inputs()) {
+                    Q_FOREACH (const QString &input, filterEffect->inputs()) {
                         if (!inputs.contains(input))
                             continue;
 

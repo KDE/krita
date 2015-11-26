@@ -300,7 +300,7 @@ void KisTileDataStore::endIteration(KisTileDataStoreClockIterator* iterator)
 void KisTileDataStore::debugPrintList()
 {
     KisTileData *item;
-    foreach(item, m_tileDataList) {
+    Q_FOREACH (item, m_tileDataList) {
         dbgTiles << "-------------------------\n"
                  << "TileData:\t\t\t" << item
                  << "\n  refCount:\t" << item->m_refCount;
@@ -326,7 +326,7 @@ void KisTileDataStore::debugClear()
 {
     QMutexLocker lock(&m_listLock);
 
-    foreach(KisTileData *item, m_tileDataList) {
+    Q_FOREACH (KisTileData *item, m_tileDataList) {
         delete item;
     }
 

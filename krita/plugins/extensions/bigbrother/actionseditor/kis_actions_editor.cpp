@@ -48,7 +48,7 @@ KisActionsEditor::KisActionsEditor(QWidget* parent) : QWidget(parent), m_current
     QSignalMapper* mapper = new QSignalMapper(this);
     connect(mapper, SIGNAL(mapped(QString)), SLOT(slotCreateAction(QString)));
     QMenu* addMenu = new QMenu;
-    foreach(const KoID& id, KisRecordedActionCreatorFactoryRegistry::instance()->creators())
+    Q_FOREACH (const KoID& id, KisRecordedActionCreatorFactoryRegistry::instance()->creators())
     {
         QAction* action = addMenu->addAction(id.name(), mapper, SLOT(map()));
         mapper->setMapping(action, id.id());

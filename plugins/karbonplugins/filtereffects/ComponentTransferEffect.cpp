@@ -226,7 +226,7 @@ void ComponentTransferEffect::loadChannel(Channel channel, const KoXmlElement &e
         d.function = typeStr == "table" ? Table : Discrete;
         QString valueStr = element.attribute("tableValues");
         QStringList values = valueStr.split(QRegExp("(\\s+|,)"), QString::SkipEmptyParts);
-        foreach(const QString &v, values) {
+        Q_FOREACH (const QString &v, values) {
             d.tableValues.append(v.toDouble());
         }
     } else if (typeStr == "linear") {
@@ -310,7 +310,7 @@ void ComponentTransferEffect::saveChannel(Channel channel, KoXmlWriter &writer)
         writer.addAttribute("type", function == Table ? "table" : "discrete");
         if (currentData.tableValues.count()) {
             QString tableStr;
-            foreach(qreal v, currentData.tableValues) {
+            Q_FOREACH (qreal v, currentData.tableValues) {
                 tableStr += QString("%1 ").arg(v);
             }
             writer.addAttribute("tableValues", tableStr.trimmed());

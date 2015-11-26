@@ -41,7 +41,7 @@ void KisSensorsTest::testDrawingAngle()
 
 void KisSensorsTest::testBound(KisDynamicSensorSP sensor)
 {
-    foreach(const KisPaintInformation & pi, paintInformations) {
+    Q_FOREACH (const KisPaintInformation & pi, paintInformations) {
         double v = sensor->parameter(pi);
         QVERIFY(v >= 0.0);
         QVERIFY(v <= 1.0);

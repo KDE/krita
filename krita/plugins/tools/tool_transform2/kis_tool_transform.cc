@@ -389,7 +389,7 @@ void KisToolTransform::touchEvent( QTouchEvent* event )
 {
     //Count all moving touch points
     int touchCount = 0;
-    foreach( QTouchEvent::TouchPoint tp, event->touchPoints() ) {
+    Q_FOREACH ( QTouchEvent::TouchPoint tp, event->touchPoints() ) {
         if( tp.state() == Qt::TouchPointMoved ) {
             touchCount++;
         }
@@ -425,7 +425,7 @@ void KisToolTransform::touchEvent( QTouchEvent* event )
 /* TODO: implement touch-based rotation.
 
             Vector2f center;
-            foreach( const QTouchEvent::TouchPoint &tp, event->touchPoints() ) {
+            Q_FOREACH ( const QTouchEvent::TouchPoint &tp, event->touchPoints() ) {
                 if( tp.state() == Qt::TouchPointMoved ) {
                     center += Vector2f( tp.screenPos().x(), tp.screenPos().y() );
                 }
@@ -1004,7 +1004,7 @@ void KisToolTransform::transformDevices(KisNodeSP node, bool recursive)
                               (m_strokeData.clearedNodes().size() == 1 &&
                                KisNodeSP(m_strokeData.clearedNodes().first()) == node));
 
-    foreach (KisNodeSP currentNode, m_strokeData.clearedNodes()) {
+    Q_FOREACH (KisNodeSP currentNode, m_strokeData.clearedNodes()) {
         KIS_ASSERT_RECOVER_RETURN(currentNode);
 
         image()->addJob(m_strokeData.strokeId(),

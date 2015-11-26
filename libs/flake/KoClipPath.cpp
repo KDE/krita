@@ -109,7 +109,7 @@ public:
 
         QTransform transformToShape = initialTransformToShape * scaleToPercent(initialShapeSize);
 
-        foreach(KoPathShape *path, clipShapes) {
+        Q_FOREACH (KoPathShape *path, clipShapes) {
             if (!path)
                 continue;
             // map clip path to shape coordinates of clipped shape

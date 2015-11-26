@@ -466,7 +466,7 @@ void KisView::dropEvent(QDropEvent *event)
                                        pasteCenter, forceRecenter,
                                        kisimage, kritaShapeController);
 
-        foreach(KisNodeSP node, nodes) {
+        Q_FOREACH (KisNodeSP node, nodes) {
             if (node) {
                 KisNodeCommandsAdapter adapter(viewManager());
                 if (!viewManager()->nodeManager()->activeLayer()) {
@@ -511,7 +511,7 @@ void KisView::dropEvent(QDropEvent *event)
             QAction *action = popup.exec(QCursor::pos());
 
             if (action != 0 && action != cancel) {
-                foreach(const QUrl &url, urls) {
+                Q_FOREACH (const QUrl &url, urls) {
 
                     if (action == insertAsNewLayer || action == insertManyLayers) {
                         d->viewManager->imageManager()->importImage(url);
@@ -672,7 +672,7 @@ bool KisView::event(QEvent *event)
         QMainWindow* mainWindow = qobject_cast<QMainWindow*>(qApp->activeWindow());
         if(mainWindow) {
             QList<QDockWidget*> dockWidgets = mainWindow->findChildren<QDockWidget*>();
-            foreach(QDockWidget* widget, dockWidgets) {
+            Q_FOREACH (QDockWidget* widget, dockWidgets) {
                 if (widget->isFloating()) {
                     widget->hide();
                 }
@@ -737,7 +737,7 @@ bool KisView::event(QEvent *event)
             QMainWindow* mainWindow = qobject_cast<QMainWindow*>(qApp->activeWindow());
             if(mainWindow) {
                 QList<QDockWidget*> dockWidgets = mainWindow->findChildren<QDockWidget*>();
-                foreach(QDockWidget* widget, dockWidgets) {
+                Q_FOREACH (QDockWidget* widget, dockWidgets) {
                     if (widget->isFloating()) {
                         widget->show();
                     }
@@ -945,7 +945,7 @@ void KisView::slotLoadingFinished()
         image()->unlock();
     }
 
-    foreach(KisPaintingAssistant* assist, document()->preLoadedAssistants()) {
+    Q_FOREACH (KisPaintingAssistant* assist, document()->preLoadedAssistants()) {
         d->paintingAssistantsDecoration.addAssistant(assist);
     }
     d->paintingAssistantsDecoration.setVisible(true);

@@ -171,7 +171,7 @@ QVector<QPointF> ArtisticTextShape::calculateAbstractCharacterPositions()
 
     const bool attachedToPath = isOnPath();
 
-    foreach(const ArtisticTextRange &range, m_ranges) {
+    Q_FOREACH (const ArtisticTextRange &range, m_ranges) {
         QFontMetricsF metrics(QFont(range.font(), &m_paintDevice));
         const QString textRange = range.text();
         const qreal letterSpacing = range.letterSpacing();
@@ -312,7 +312,7 @@ void ArtisticTextShape::createOutline()
         m_charPositions[globalCharIndex] = m_baseline.pointAtPercent(m_charOffsets[globalCharIndex]);
     } else {
         qreal rotation = 0.0;
-        foreach(const ArtisticTextRange &range, m_ranges) {
+        Q_FOREACH (const ArtisticTextRange &range, m_ranges) {
             const QString textRange = range.text();
             const int localTextLength = textRange.length();
             for(int localCharIndex = 0; localCharIndex < localTextLength; ++localCharIndex, ++globalCharIndex) {
@@ -356,7 +356,7 @@ void ArtisticTextShape::setPlainText(const QString &newText)
 QString ArtisticTextShape::plainText() const
 {
     QString allText;
-    foreach(const ArtisticTextRange &range, m_ranges) {
+    Q_FOREACH (const ArtisticTextRange &range, m_ranges) {
         allText += range.text();
     }
 
@@ -750,13 +750,13 @@ void ArtisticTextShape::insertText(int charIndex, const QList<ArtisticTextRange>
     ArtisticTextRange &hitRange = m_ranges[charPos.first];
     if (charPos.second == 0) {
         // insert ranges before the hit range
-        foreach(const ArtisticTextRange &range, textRanges) {
+        Q_FOREACH (const ArtisticTextRange &range, textRanges) {
             m_ranges.insert(charPos.first, range);
             charPos.first++;
         }
     } else if (charPos.second == hitRange.text().length()) {
         // insert ranges after the hit range
-        foreach(const ArtisticTextRange &range, textRanges) {
+        Q_FOREACH (const ArtisticTextRange &range, textRanges) {
             m_ranges.insert(charPos.first+1, range);
             charPos.first++;
         }
@@ -765,7 +765,7 @@ void ArtisticTextShape::insertText(int charIndex, const QList<ArtisticTextRange>
         ArtisticTextRange right = hitRange.extract(charPos.second, hitRange.text().length());
         m_ranges.insert(charPos.first+1, right);
         // now insert after the left part of hit range
-        foreach(const ArtisticTextRange &range, textRanges) {
+        Q_FOREACH (const ArtisticTextRange &range, textRanges) {
             m_ranges.insert(charPos.first+1, range);
             charPos.first++;
         }
@@ -905,7 +905,7 @@ void ArtisticTextShape::cacheGlyphOutlines()
 {
     m_charOutlines.clear();
 
-    foreach(const ArtisticTextRange &range, m_ranges) {
+    Q_FOREACH (const ArtisticTextRange &range, m_ranges) {
         const QString rangeText = range.text();
         const QFont rangeFont(range.font(), &m_paintDevice);
         const int textLength = rangeText.length();
@@ -944,7 +944,7 @@ CharIndex ArtisticTextShape::indexOfChar(int charIndex) const
 
     int rangeIndex = 0;
     int textLength = 0;
-    foreach(const ArtisticTextRange &range, m_ranges) {
+    Q_FOREACH (const ArtisticTextRange &range, m_ranges) {
         const int rangeTextLength = range.text().length();
         if (static_cast<int>(charIndex) < textLength+rangeTextLength) {
             return CharIndex(rangeIndex, charIndex-textLength);
@@ -1007,7 +1007,7 @@ bool ArtisticTextShape::saveSvg(SvgSavingContext &context)
         context.shapeWriter().addAttributePt("x", anchorOffset);
         context.shapeWriter().addAttributePt("y", baselineOffset());
         context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
-        foreach(const ArtisticTextRange &range, formattedText) {
+        Q_FOREACH (const ArtisticTextRange &range, formattedText) {
             saveSvgTextRange(range, context, !hasSingleRange, baselineOffset());
         }
     } else {
@@ -1023,7 +1023,7 @@ bool ArtisticTextShape::saveSvg(SvgSavingContext &context)
         context.shapeWriter().addAttribute("xlink:href", QLatin1Char('#')+id);
         if (startOffset() > 0.0)
             context.shapeWriter().addAttribute("startOffset", QString("%1%").arg(startOffset() * 100.0));
-        foreach(const ArtisticTextRange &range, formattedText) {
+        Q_FOREACH (const ArtisticTextRange &range, formattedText) {
             saveSvgTextRange(range, context, !hasSingleRange, baselineOffset());
         }
         context.shapeWriter().endElement();

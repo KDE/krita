@@ -53,13 +53,13 @@ KoListStyle::~KoListStyle()
 
 bool KoListStyle::operator==(const KoListStyle &other) const
 {
-    foreach(int level, d->levels.keys()) {
+    Q_FOREACH (int level, d->levels.keys()) {
         if (! other.hasLevelProperties(level))
             return false;
         if (!(other.levelProperties(level) == d->levels[level]))
             return false;
     }
-    foreach(int level, other.d->levels.keys()) {
+    Q_FOREACH (int level, other.d->levels.keys()) {
         if (! hasLevelProperties(level))
             return false;
     }
@@ -106,7 +106,7 @@ int KoListStyle::styleId() const
 void KoListStyle::setStyleId(int id)
 {
     d->styleId = id;
-    foreach(int level, d->levels.keys()) {
+    Q_FOREACH (int level, d->levels.keys()) {
         d->levels[level].setStyleId(id);
     }
 }

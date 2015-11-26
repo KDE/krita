@@ -158,7 +158,7 @@ void ComponentTransferEffectConfigWidget::updateControls()
     case ComponentTransferEffect::Table:
         m_function->setCurrentIndex(1);
         m_tableValues->blockSignals(true);
-        foreach(qreal v, m_effect->tableValues(m_currentChannel)) {
+        Q_FOREACH (qreal v, m_effect->tableValues(m_currentChannel)) {
             values += QString("%1;").arg(v);
         }
         m_tableValues->setText(values);
@@ -167,7 +167,7 @@ void ComponentTransferEffectConfigWidget::updateControls()
     case ComponentTransferEffect::Discrete:
         m_function->setCurrentIndex(2);
         m_discreteValues->blockSignals(true);
-        foreach(qreal v, m_effect->tableValues(m_currentChannel)) {
+        Q_FOREACH (qreal v, m_effect->tableValues(m_currentChannel)) {
             values += QString("%1;").arg(v);
         }
         m_discreteValues->setText(values);
@@ -260,7 +260,7 @@ void ComponentTransferEffectConfigWidget::tableValuesChanged()
 {
     QStringList values = m_tableValues->text().split(';', QString::SkipEmptyParts);
     QList<qreal> tableValues;
-    foreach(const QString &v, values) {
+    Q_FOREACH (const QString &v, values) {
         tableValues.append(v.toDouble());
     }
     m_effect->setTableValues(m_currentChannel, tableValues);
@@ -271,7 +271,7 @@ void ComponentTransferEffectConfigWidget::discreteValuesChanged()
 {
     QStringList values = m_discreteValues->text().split(';', QString::SkipEmptyParts);
     QList<qreal> tableValues;
-    foreach(const QString &v, values) {
+    Q_FOREACH (const QString &v, values) {
         tableValues.append(v.toDouble());
     }
     m_effect->setTableValues(m_currentChannel, tableValues);

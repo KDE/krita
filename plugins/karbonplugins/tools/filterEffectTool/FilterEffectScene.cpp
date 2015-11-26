@@ -139,7 +139,7 @@ void FilterEffectScene::initialize(KoFilterEffectStack *effectStack)
     if (! filterEffects.count())
         return;
 
-    foreach(KoFilterEffect *effect, filterEffects) {
+    Q_FOREACH (KoFilterEffect *effect, filterEffects) {
         createEffectItems(effect);
     }
 
@@ -158,7 +158,7 @@ void FilterEffectScene::createEffectItems(KoFilterEffect *effect)
     }
 
     QSet<QString> defaultItems;
-    foreach(const QString &currentInput, inputs) {
+    Q_FOREACH (const QString &currentInput, inputs) {
         const QString &input = currentInput.isEmpty() ? defaultInput : currentInput;
         if (m_defaultInputs.contains(input) && ! defaultItems.contains(input)) {
             DefaultInputItem * item = new DefaultInputItem(input, effect);
@@ -172,7 +172,7 @@ void FilterEffectScene::createEffectItems(KoFilterEffect *effect)
 
     // create connections
     int index = 0;
-    foreach(const QString &currentInput, inputs) {
+    Q_FOREACH (const QString &currentInput, inputs) {
         const QString &input = currentInput.isEmpty() ? defaultInput : currentInput;
         EffectItemBase * outputItem = m_outputs.value(input, 0);
         if (outputItem) {
@@ -203,7 +203,7 @@ void FilterEffectScene::addSceneItem(QGraphicsItem *item)
 void FilterEffectScene::layoutEffects()
 {
     QPointF position(25, 25);
-    foreach(EffectItemBase * item, m_items) {
+    Q_FOREACH (EffectItemBase * item, m_items) {
         item->setPos(position);
         position.ry() += item->rect().height() + ItemSpacing;
     }
@@ -215,7 +215,7 @@ void FilterEffectScene::layoutConnections()
 
     // calculate connection sizes from item distances
     int connectionIndex = 0;
-    foreach(ConnectionItem *item, m_connectionItems) {
+    Q_FOREACH (ConnectionItem *item, m_connectionItems) {
         int sourceIndex = m_items.indexOf(item->sourceItem());
         int targetIndex = m_items.indexOf(item->targetItem());
         sortedConnections.append(QPair<int, int>(targetIndex - sourceIndex, connectionIndex));
@@ -258,7 +258,7 @@ void FilterEffectScene::layoutConnections()
 void FilterEffectScene::selectionChanged()
 {
     if (selectedItems().count()) {
-        foreach(EffectItemBase* item, m_items) {
+        Q_FOREACH (EffectItemBase* item, m_items) {
             if (item->isSelected()) {
                 item->setOpacity(1.0);
             } else {
@@ -266,7 +266,7 @@ void FilterEffectScene::selectionChanged()
             }
         }
     } else {
-        foreach(EffectItemBase* item, m_items) {
+        Q_FOREACH (EffectItemBase* item, m_items) {
             item->setOpacity(1);
         }
     }
@@ -282,7 +282,7 @@ QList<ConnectionSource> FilterEffectScene::selectedEffectItems() const
     if (!m_items.count())
         return effectItems;
 
-    foreach(QGraphicsItem * item, selectedGraphicsItems) {
+    Q_FOREACH (QGraphicsItem * item, selectedGraphicsItems) {
         EffectItemBase * effectItem = dynamic_cast<EffectItemBase*>(item);
         if (!item)
             continue;
@@ -304,7 +304,7 @@ void FilterEffectScene::dropEvent(QGraphicsSceneDragDropEvent * event)
 {
     ConnectorItem * dropTargetItem = 0;
     QList<QGraphicsItem*> itemsAtPositon = items(event->scenePos());
-    foreach(QGraphicsItem* item, itemsAtPositon) {
+    Q_FOREACH (QGraphicsItem* item, itemsAtPositon) {
         dropTargetItem = dynamic_cast<ConnectorItem*>(item);
         if (dropTargetItem)
             break;

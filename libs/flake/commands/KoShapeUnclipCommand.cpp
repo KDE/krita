@@ -53,12 +53,12 @@ public:
         if (!clipPathShapes.isEmpty())
             return;
 
-        foreach(KoShape *shape, shapesToUnclip) {
+        Q_FOREACH (KoShape *shape, shapesToUnclip) {
             KoClipPath *clipPath = shape->clipPath();
             if (!clipPath)
                 continue;
             QList<KoShape*> shapes;
-            foreach(KoShape *clipShape, clipPath->clipPathShapes()) {
+            Q_FOREACH (KoShape *clipShape, clipPath->clipPathShapes()) {
                 shapes.append(clipShape);
             }
             KoShapeOdfSaveHelper saveHelper(shapes);
@@ -113,7 +113,7 @@ KoShapeUnclipCommand::KoShapeUnclipCommand(KoShapeBasedDocumentBase *controller,
         : KUndo2Command(parent), d(new Private(controller))
 {
     d->shapesToUnclip = shapes;
-    foreach(KoShape *shape, d->shapesToUnclip) {
+    Q_FOREACH (KoShape *shape, d->shapesToUnclip) {
         d->oldClipPaths.append(shape->clipPath());
     }
 

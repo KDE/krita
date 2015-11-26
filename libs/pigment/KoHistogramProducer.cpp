@@ -48,7 +48,7 @@ QList<QString> KoHistogramProducerFactoryRegistry::keysCompatibleWith(const KoCo
 {
     QList<QString> list;
     QList<float> preferredList;
-    foreach(const QString &id, keys()) {
+    Q_FOREACH (const QString &id, keys()) {
         KoHistogramProducerFactory *f = value(id);
         if (f->isCompatibleWith(colorSpace)) {
             float preferred = f->preferrednessLevelWith(colorSpace);

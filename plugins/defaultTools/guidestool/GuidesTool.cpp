@@ -413,10 +413,10 @@ void GuidesTool::insertorCreateGuidesSlot(GuidesTransaction *result)
         horizontalLines.append(guidesData->horizontalGuideLines());
     } else {
         // trigger repaint at old guide positions
-        foreach(qreal pos, guidesData->verticalGuideLines()) {
+        Q_FOREACH (qreal pos, guidesData->verticalGuideLines()) {
             canvas()->updateCanvas(updateRectFromGuideLine(pos, Qt::Vertical));
         }
-        foreach(qreal pos, guidesData->horizontalGuideLines()) {
+        Q_FOREACH (qreal pos, guidesData->horizontalGuideLines()) {
             canvas()->updateCanvas(updateRectFromGuideLine(pos, Qt::Horizontal));
         }
     }
@@ -446,10 +446,10 @@ void GuidesTool::insertorCreateGuidesSlot(GuidesTransaction *result)
     guidesData->setHorizontalGuideLines(horizontalLines);
 
     // trigger repaint at new guide positions
-    foreach(qreal pos, guidesData->verticalGuideLines()) {
+    Q_FOREACH (qreal pos, guidesData->verticalGuideLines()) {
         canvas()->updateCanvas(updateRectFromGuideLine(pos, Qt::Vertical));
     }
-    foreach(qreal pos, guidesData->horizontalGuideLines()) {
+    Q_FOREACH (qreal pos, guidesData->horizontalGuideLines()) {
         canvas()->updateCanvas(updateRectFromGuideLine(pos, Qt::Horizontal));
     }
 

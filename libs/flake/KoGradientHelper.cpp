@@ -114,7 +114,7 @@ QColor KoGradientHelper::colorAt(qreal position, const QGradientStops &stops)
     QGradientStop prevStop(-1.0, QColor());
     QGradientStop nextStop(2.0, QColor());
     // find framing gradient stops
-    foreach(const QGradientStop & stop, stops) {
+    Q_FOREACH (const QGradientStop & stop, stops) {
         if (stop.first > prevStop.first && stop.first < position)
             prevStop = stop;
         if (stop.first < nextStop.first && stop.first > position)

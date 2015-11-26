@@ -83,7 +83,7 @@ public:
         configSelector->blockSignals(true);
 
         int index = 0;
-        foreach(KoFilterEffect *effect, shape->filterEffectStack()->filterEffects()) {
+        Q_FOREACH (KoFilterEffect *effect, shape->filterEffectStack()->filterEffects()) {
             configSelector->addItem(QString("%1 - ").arg(index) + effect->name());
             index++;
         }

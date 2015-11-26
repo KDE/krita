@@ -74,13 +74,13 @@ KisDocument *createDocument(QList<KisNodeSP> nodes)
 {
     KisDocument *doc = KisPart::instance()->createDocument();
     QRect rc;
-    foreach(KisNodeSP node, nodes) {
+    Q_FOREACH (KisNodeSP node, nodes) {
         rc |= node->exactBounds();
     }
 
     KisImageSP image = new KisImage(0, rc.width(), rc.height(), nodes.first()->colorSpace(), nodes.first()->name());
 
-    foreach(KisNodeSP node, nodes) {
+    Q_FOREACH (KisNodeSP node, nodes) {
         image->addNode(node->clone());
     }
 
@@ -152,7 +152,7 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
         root.setAttribute("application_pid", (qint64)QApplication::applicationPid());
         doc.appendChild(root);
 
-        foreach(KisNodeSP node, m_nodes) {
+        Q_FOREACH (KisNodeSP node, m_nodes) {
             QDomElement element = doc.createElement("node");
             element.setAttribute("pointer_value", (qint64)node.data());
             root.appendChild(element);
@@ -180,7 +180,7 @@ void KisMimeData::initializeExternalNode(KisNodeSP &node,
         KisShapeLayer *shapeLayer2 = new KisShapeLayer(shapeController, image, node->name(), node->opacity());
         QList<KoShape *> shapes = shapeLayer->shapes();
         shapeLayer->removeAllShapes();
-        foreach(KoShape *shape, shapes) {
+        Q_FOREACH (KoShape *shape, shapes) {
             shapeLayer2->addShape(shape);
         }
         node = shapeLayer2;
@@ -228,7 +228,7 @@ QList<KisNodeSP> KisMimeData::tryLoadInternalNodes(const QMimeData *data,
     if (!nodes.isEmpty() && (copyNode || nodes.first()->graphListener() != image.data())) {
         QList<KisNodeSP> clones;
         copyNode = true;
-        foreach(KisNodeSP node, nodes) {
+        Q_FOREACH (KisNodeSP node, nodes) {
             node = node->clone();
             initializeExternalNode(node, image, shapeController);
             clones << node;
@@ -255,7 +255,7 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
 
         if (result) {
             KisImageWSP tempImage = tempDoc->image();
-            foreach(KisNodeSP node, tempImage->root()->childNodes(QStringList(), KoProperties())) {
+            Q_FOREACH (KisNodeSP node, tempImage->root()->childNodes(QStringList(), KoProperties())) {
                 nodes << node;
                 tempImage->removeNode(node);
                 initializeExternalNode(node, image, shapeController);
@@ -273,7 +273,7 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
 
         if (result) {
             KisImageWSP tempImage = tempDoc->image();
-            foreach(KisNodeSP node, tempImage->root()->childNodes(QStringList(), KoProperties())) {
+            Q_FOREACH (KisNodeSP node, tempImage->root()->childNodes(QStringList(), KoProperties())) {
                 nodes << node;
                 tempImage->removeNode(node);
                 initializeExternalNode(node, image, shapeController);
@@ -295,7 +295,7 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
     }
 
     if (!nodes.isEmpty()) {
-        foreach(KisNodeSP node, nodes) {
+        Q_FOREACH (KisNodeSP node, nodes) {
             QRect bounds = node->projection()->exactBounds();
             if (alwaysRecenter || forceRecenter ||
                     (!imageBounds.contains(bounds) &&

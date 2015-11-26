@@ -162,7 +162,7 @@ void KarbonPatternEditStrategy::paint(QPainter &painter, const KoViewConverter &
 bool KarbonPatternEditStrategy::selectHandle(const QPointF &mousePos, const KoViewConverter &converter)
 {
     int handleIndex = 0;
-    foreach(const QPointF & handle, m_handles) {
+    Q_FOREACH (const QPointF & handle, m_handles) {
         if (mouseInsideHandle(mousePos, m_matrix.map(m_origin + handle), converter)) {
             m_selectedHandle = handleIndex;
             return true;

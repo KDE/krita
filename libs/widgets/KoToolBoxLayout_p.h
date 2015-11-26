@@ -48,7 +48,7 @@ public:
         addChildWidget(button);
         m_priorities.insert(button, priority);
         int index = 1;
-        foreach(QWidgetItem *item, m_items) {
+        Q_FOREACH (QWidgetItem *item, m_items) {
             if (m_priorities.value(static_cast<QAbstractButton*>(item->widget())) > priority)
                 break;
             index++;

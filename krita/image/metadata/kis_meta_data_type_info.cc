@@ -201,7 +201,7 @@ const Parser* TypeInfo::parser() const
 bool checkArray(const Value& value, const TypeInfo* typeInfo)
 {
     QList< Value > values = value.asArray();
-    foreach(const Value& val, values) {
+    Q_FOREACH (const Value& val, values) {
         if (!typeInfo->hasCorrectType(val)) {
             return false;
         }
@@ -242,7 +242,7 @@ bool TypeInfo::hasCorrectType(const Value& value) const
     case LangArrayType:
         if (value.type() == Value::LangArray) {
             QList< Value > values = value.asArray();
-            foreach(const Value& vallang, values) {
+            Q_FOREACH (const Value& vallang, values) {
                 if (!Private::Text->hasCorrectType(vallang) ||
                         !Private::Text->hasCorrectType(vallang.propertyQualifiers()["xml:lang"])) {
                     return false;
@@ -277,7 +277,7 @@ bool TypeInfo::hasCorrectType(const Value& value) const
 bool TypeInfo::hasCorrectValue(const Value& value) const
 {
     if (d->propertyType == ClosedChoice) {
-        foreach(const Choice& choice, d->choices) {
+        Q_FOREACH (const Choice& choice, d->choices) {
             if (choice.value() == value) {
                 return true;
             }

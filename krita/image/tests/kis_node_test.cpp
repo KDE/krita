@@ -347,7 +347,7 @@ public:
                 QList<KisNodeSP> visibleNodes =
                     m_victimNode->childNodes(QStringList("TestNodeB"), props);
 
-                foreach(KisNodeSP node, visibleNodes) {
+                Q_FOREACH (KisNodeSP node, visibleNodes) {
                     m_nastyChild->setVisible(visibility++ & 0x1);
                 }
                 // dbgKrita << visibleNodes;

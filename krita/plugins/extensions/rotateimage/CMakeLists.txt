@@ -5,12 +5,12 @@
 
 ########### next target ###############
 
-set(kritarotateimage_PART_SRCS rotateimage.cc dlg_rotateimage.cc )
+set(kritarotateimage_SOURCES rotateimage.cc dlg_rotateimage.cc )
 
 
-ki18n_wrap_ui(kritarotateimage_PART_SRCS wdg_rotateimage.ui )
+ki18n_wrap_ui(kritarotateimage_SOURCES wdg_rotateimage.ui )
 
-add_library(kritarotateimage MODULE ${kritarotateimage_PART_SRCS})
+add_library(kritarotateimage MODULE ${kritarotateimage_SOURCES})
 kcoreaddons_desktop_to_json(kritarotateimage kritarotateimage.desktop)
 
 

@@ -8,7 +8,7 @@ include_directories(
 
 ########### next target ###############
 
-set(karbon_tools_PART_SRCS
+set(karbon_tools_SOURCES
    KarbonToolsPlugin.cpp
    KarbonCursor.cpp
    CalligraphyTool/KarbonCalligraphyTool.cpp
@@ -39,14 +39,14 @@ set(karbon_tools_PART_SRCS
     KarbonPatternOptionsWidget.cpp
 )
 
-ki18n_wrap_ui(karbon_tools_PART_SRCS
+ki18n_wrap_ui(karbon_tools_SOURCES
     filterEffectTool/FilterEffectEditWidget.ui
     KarbonPatternOptionsWidget.ui
 )
 
-qt5_add_resources(karbon_tools_PART_SRCS karbontools.qrc)
+qt5_add_resources(karbon_tools_SOURCES karbontools.qrc)
 
-add_library(krita_karbontools MODULE ${karbon_tools_PART_SRCS})
+add_library(krita_karbontools MODULE ${karbon_tools_SOURCES})
 
 kcoreaddons_desktop_to_json(krita_karbontools karbon_tools.desktop)
 

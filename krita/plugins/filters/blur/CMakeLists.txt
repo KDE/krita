@@ -1,6 +1,6 @@
 
 
-set(kritablurfilter_PART_SRCS
+set(kritablurfilter_SOURCES
     blur.cpp
     kis_blur_filter.cpp
     kis_wdg_blur.cpp
@@ -12,14 +12,14 @@ set(kritablurfilter_PART_SRCS
     kis_wdg_lens_blur.cpp
     )
 
-ki18n_wrap_ui(kritablurfilter_PART_SRCS
+ki18n_wrap_ui(kritablurfilter_SOURCES
     wdgblur.ui
     wdg_gaussian_blur.ui
     wdg_motion_blur.ui
     wdg_lens_blur.ui
     )
 
-add_library(kritablurfilter MODULE ${kritablurfilter_PART_SRCS})
+add_library(kritablurfilter MODULE ${kritablurfilter_SOURCES})
 kcoreaddons_desktop_to_json(kritablurfilter kritablurfilter.desktop)
 
 

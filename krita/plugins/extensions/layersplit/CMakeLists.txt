@@ -1,14 +1,14 @@
-set(kritalayersplit_PART_SRCS
+set(kritalayersplit_SOURCES
     layersplit.cpp
     dlg_layersplit.cpp
     wdg_layersplit.cpp
     )
 
-ki18n_wrap_ui(kritalayersplit_PART_SRCS
+ki18n_wrap_ui(kritalayersplit_SOURCES
     wdg_layersplit.ui
     )
 
-add_library(kritalayersplit MODULE ${kritalayersplit_PART_SRCS})
+add_library(kritalayersplit MODULE ${kritalayersplit_SOURCES})
 kcoreaddons_desktop_to_json(kritalayersplit kritalayersplit.desktop)
 
 target_link_libraries(kritalayersplit kritaui)

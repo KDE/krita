@@ -1,14 +1,14 @@
-set(kritaimagesplit_PART_SRCS
+set(kritaimagesplit_SOURCES
     imagesplit.cpp
     dlg_imagesplit.cpp
     wdg_imagesplit.cpp
     )
 
-ki18n_wrap_ui(kritaimagesplit_PART_SRCS
+ki18n_wrap_ui(kritaimagesplit_SOURCES
     wdg_imagesplit.ui
     )
 
-add_library(kritaimagesplit MODULE ${kritaimagesplit_PART_SRCS})
+add_library(kritaimagesplit MODULE ${kritaimagesplit_SOURCES})
 
 target_link_libraries(kritaimagesplit kritaui)
 kcoreaddons_desktop_to_json(kritaimagesplit kritaimagesplit.desktop)

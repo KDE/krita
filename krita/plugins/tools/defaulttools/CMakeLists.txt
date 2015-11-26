@@ -2,7 +2,7 @@ if (NOT WIN32 AND NOT APPLE)
     add_subdirectory(tests)
 endif ()
 
-set(kritadefaulttools_PART_SRCS
+set(kritadefaulttools_SOURCES
     default_tools.cc
     kis_tool_colorpicker.cc
     kis_tool_brush.cc
@@ -22,10 +22,10 @@ set(kritadefaulttools_PART_SRCS
     kis_tool_pencil.cc
     )
 
-ki18n_wrap_ui(kritadefaulttools_PART_SRCS wdgcolorpicker.ui wdgmovetool.ui)
-qt5_add_resources(kritadefaulttools_PART_SRCS defaulttools.qrc )
+ki18n_wrap_ui(kritadefaulttools_SOURCES wdgcolorpicker.ui wdgmovetool.ui)
+qt5_add_resources(kritadefaulttools_SOURCES defaulttools.qrc )
 
-add_library(kritadefaulttools MODULE ${kritadefaulttools_PART_SRCS})
+add_library(kritadefaulttools MODULE ${kritadefaulttools_SOURCES})
 
 generate_export_header(kritadefaulttools BASE_NAME kritadefaulttools)
 kcoreaddons_desktop_to_json(kritadefaulttools kritadefaulttools.desktop)

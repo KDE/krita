@@ -1,4 +1,4 @@
-set(kritadeformpaintop_PART_SRCS
+set(kritadeformpaintop_SOURCES
     deform_brush.cpp
     deform_paintop_plugin.cpp
     kis_deform_paintop.cpp
@@ -7,9 +7,9 @@ set(kritadeformpaintop_PART_SRCS
     kis_deform_paintop_settings_widget.cpp
     )
 
-ki18n_wrap_ui(kritadeformpaintop_PART_SRCS wdgdeformoptions.ui )
+ki18n_wrap_ui(kritadeformpaintop_SOURCES wdgdeformoptions.ui )
 
-add_library(kritadeformpaintop MODULE ${kritadeformpaintop_PART_SRCS})
+add_library(kritadeformpaintop MODULE ${kritadeformpaintop_SOURCES})
 kcoreaddons_desktop_to_json(kritadeformpaintop kritadeformpaintop.desktop)
 
 target_link_libraries(kritadeformpaintop kritaui kritalibpaintop)

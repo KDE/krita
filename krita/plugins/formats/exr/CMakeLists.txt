@@ -10,12 +10,12 @@ set(libkritaconverter_LIB_SRCS
     exr_extra_tags.cpp
     )
 
-set(kritaexrimport_PART_SRCS
+set(kritaexrimport_SOURCES
     exr_import.cc
     ${libkritaconverter_LIB_SRCS}
     )
 
-add_library(kritaexrimport MODULE ${kritaexrimport_PART_SRCS})
+add_library(kritaexrimport MODULE ${kritaexrimport_SOURCES})
 kcoreaddons_desktop_to_json(kritaexrimport krita_exr_import.desktop)
 
 
@@ -25,14 +25,14 @@ install(TARGETS kritaexrimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
-set(kritaexrexport_PART_SRCS
+set(kritaexrexport_SOURCES
     exr_export.cc
     ${libkritaconverter_LIB_SRCS}
     )
 
-ki18n_wrap_ui(kritaexrexport_PART_SRCS exr_export_widget.ui )
+ki18n_wrap_ui(kritaexrexport_SOURCES exr_export_widget.ui )
 
-add_library(kritaexrexport MODULE ${kritaexrexport_PART_SRCS})
+add_library(kritaexrexport MODULE ${kritaexrexport_SOURCES})
 kcoreaddons_desktop_to_json(kritaexrexport krita_exr_export.desktop)
 
 target_link_libraries(kritaexrexport kritaui  ${OPENEXR_LIBRARIES} )

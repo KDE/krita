@@ -5,7 +5,7 @@ include_directories(
     ${FLAKE_INCLUDES}
 )
 
-set(pathshapes_PART_SRCS
+set(pathshapes_SOURCES
     ellipse/EllipseShape.cpp
     ellipse/EllipseShapeFactory.cpp
     ellipse/EllipseShapeConfigWidget.cpp
@@ -31,16 +31,16 @@ set(pathshapes_PART_SRCS
     PathShapesPlugin.cpp
 )
 
-ki18n_wrap_ui(pathshapes_PART_SRCS
+ki18n_wrap_ui(pathshapes_SOURCES
     star/StarShapeConfigWidget.ui
     rectangle/RectangleShapeConfigWidget.ui
     ellipse/EllipseShapeConfigWidget.ui
     spiral/SpiralShapeConfigWidget.ui
 )
 
-qt5_add_resources(pathshapes_PART_SRCS pathshapes.qrc)
+qt5_add_resources(pathshapes_SOURCES pathshapes.qrc)
 
-add_library(krita_shape_paths MODULE ${pathshapes_PART_SRCS})
+add_library(krita_shape_paths MODULE ${pathshapes_SOURCES})
 kcoreaddons_desktop_to_json(krita_shape_paths calligra_shape_paths.desktop)
 
 target_link_libraries(krita_shape_paths kritaflake kritawidgets)

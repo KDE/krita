@@ -1,6 +1,6 @@
 
 
-set(kritaselectiontools_PART_SRCS
+set(kritaselectiontools_SOURCES
     selection_tools.cc
     kis_tool_select_rectangular.cc
     kis_tool_select_polygonal.cc
@@ -11,9 +11,9 @@ set(kritaselectiontools_PART_SRCS
     kis_tool_select_similar.cc
 )
 
-qt5_add_resources(kritaselectiontools_PART_SRCS selectiontools.qrc)
+qt5_add_resources(kritaselectiontools_SOURCES selectiontools.qrc)
 
-add_library(kritaselectiontools MODULE ${kritaselectiontools_PART_SRCS})
+add_library(kritaselectiontools MODULE ${kritaselectiontools_SOURCES})
 
 kcoreaddons_desktop_to_json(kritaselectiontools kritaselectiontools.desktop)
 

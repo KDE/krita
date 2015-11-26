@@ -1,14 +1,14 @@
 
-set(kritabigbrother_PART_SRCS
+set(kritabigbrother_SOURCES
         bigbrother.cc
         actionseditor/kis_actions_editor.cpp
         actionseditor/kis_actions_editor_dialog.cpp
         actionseditor/kis_macro_model.cpp )
 
-ki18n_wrap_ui(kritabigbrother_PART_SRCS
+ki18n_wrap_ui(kritabigbrother_SOURCES
         actionseditor/wdgactionseditor.ui )
 
-add_library(kritabigbrother MODULE ${kritabigbrother_PART_SRCS})
+add_library(kritabigbrother MODULE ${kritabigbrother_SOURCES})
 kcoreaddons_desktop_to_json(kritabigbrother kritabigbrother.desktop)
 
 target_link_libraries(kritabigbrother kritaui)

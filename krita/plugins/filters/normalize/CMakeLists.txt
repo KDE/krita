@@ -1,9 +1,9 @@
-set(kritanormalize_PART_SRCS
+set(kritanormalize_SOURCES
     kis_normalize.cpp
 )
 
 
-add_library(kritanormalize MODULE ${kritanormalize_PART_SRCS})
+add_library(kritanormalize MODULE ${kritanormalize_SOURCES})
 kcoreaddons_desktop_to_json(kritanormalize kritanormalize.desktop)
 
 

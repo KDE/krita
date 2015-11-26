@@ -1,8 +1,8 @@
 
-set(kritaraindropsfilter_PART_SRCS kis_raindrops_filter_plugin.cpp kis_raindrops_filter.cpp )
+set(kritaraindropsfilter_SOURCES kis_raindrops_filter_plugin.cpp kis_raindrops_filter.cpp )
 
 
-add_library(kritaraindropsfilter MODULE ${kritaraindropsfilter_PART_SRCS})
+add_library(kritaraindropsfilter MODULE ${kritaraindropsfilter_SOURCES})
 kcoreaddons_desktop_to_json(kritaraindropsfilter kritaraindropsfilter.desktop)
 
 

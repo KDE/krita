@@ -17,13 +17,13 @@ set(LIB_PSD_SRCS
     psd_additional_layer_info_block.cpp
 )
 
-set(kritapsdimport_PART_SRCS
+set(kritapsdimport_SOURCES
     psd_import.cc
     psd_loader.cpp
     ${LIB_PSD_SRCS}
 )
 
-add_library(kritapsdimport MODULE ${kritapsdimport_PART_SRCS})
+add_library(kritapsdimport MODULE ${kritapsdimport_SOURCES})
 kcoreaddons_desktop_to_json(kritapsdimport krita_psd_import.desktop)
 
 if (WIN32)
@@ -36,13 +36,13 @@ install(TARGETS kritapsdimport DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
-set(kritapsdexport_PART_SRCS
+set(kritapsdexport_SOURCES
     psd_export.cc
     psd_saver.cpp
     ${LIB_PSD_SRCS}
 )
 
-add_library(kritapsdexport MODULE ${kritapsdexport_PART_SRCS})
+add_library(kritapsdexport MODULE ${kritapsdexport_SOURCES})
 kcoreaddons_desktop_to_json(kritapsdexport krita_psd_export.desktop)
 
 if (WIN32)

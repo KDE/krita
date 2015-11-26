@@ -1,13 +1,13 @@
-set(kritalevelfilter_PART_SRCS
+set(kritalevelfilter_SOURCES
     levelfilter.cpp
     kis_level_filter.cpp
     )
 
-ki18n_wrap_ui(kritalevelfilter_PART_SRCS
+ki18n_wrap_ui(kritalevelfilter_SOURCES
     wdg_level.ui
     )
 
-add_library(kritalevelfilter MODULE ${kritalevelfilter_PART_SRCS})
+add_library(kritalevelfilter MODULE ${kritalevelfilter_SOURCES})
 kcoreaddons_desktop_to_json(kritalevelfilter kritalevelfilter.desktop)
 
 

@@ -1,4 +1,4 @@
-set(kritaparticlepaintop_PART_SRCS
+set(kritaparticlepaintop_SOURCES
     particle_paintop_plugin.cpp
     kis_particle_paintop.cpp
     kis_particleop_option.cpp
@@ -7,9 +7,9 @@ set(kritaparticlepaintop_PART_SRCS
     particle_brush.cpp
     )
 
-ki18n_wrap_ui(kritaparticlepaintop_PART_SRCS wdgparticleoptions.ui )
+ki18n_wrap_ui(kritaparticlepaintop_SOURCES wdgparticleoptions.ui )
 
-add_library(kritaparticlepaintop MODULE ${kritaparticlepaintop_PART_SRCS})
+add_library(kritaparticlepaintop MODULE ${kritaparticlepaintop_SOURCES})
 kcoreaddons_desktop_to_json(kritaparticlepaintop kritaparticlepaintop.desktop)
 
 target_link_libraries(kritaparticlepaintop kritalibpaintop)

@@ -1,14 +1,14 @@
-set(kritarandompickfilter_PART_SRCS
+set(kritarandompickfilter_SOURCES
     randompickfilter.cpp
     kis_wdg_random_pick.cpp
     )
 
 
-ki18n_wrap_ui(kritarandompickfilter_PART_SRCS
+ki18n_wrap_ui(kritarandompickfilter_SOURCES
     wdgrandompickoptions.ui
     )
 
-add_library(kritarandompickfilter MODULE ${kritarandompickfilter_PART_SRCS})
+add_library(kritarandompickfilter MODULE ${kritarandompickfilter_SOURCES})
 kcoreaddons_desktop_to_json(kritarandompickfilter kritarandompickfilter.desktop)
 
 target_link_libraries(kritarandompickfilter kritaui)

@@ -1,4 +1,4 @@
-set(kritahairypaintop_PART_SRCS
+set(kritahairypaintop_SOURCES
     hairy_paintop_plugin.cpp
     kis_hairy_paintop.cpp
     kis_hairy_bristle_option.cpp
@@ -11,9 +11,9 @@ set(kritahairypaintop_PART_SRCS
     trajectory.cpp
     )
 
-ki18n_wrap_ui(kritahairypaintop_PART_SRCS wdgInkOptions.ui  wdghairyshapeoptions.ui wdgbristleoptions.ui)
+ki18n_wrap_ui(kritahairypaintop_SOURCES wdgInkOptions.ui  wdghairyshapeoptions.ui wdgbristleoptions.ui)
 
-add_library(kritahairypaintop MODULE ${kritahairypaintop_PART_SRCS})
+add_library(kritahairypaintop MODULE ${kritahairypaintop_SOURCES})
 kcoreaddons_desktop_to_json(kritahairypaintop kritahairypaintop.desktop)
 
 target_link_libraries(kritahairypaintop kritalibpaintop)

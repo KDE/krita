@@ -126,7 +126,7 @@ endif()
 # compile Krita plug-in and link static library in
 ##
 
-set(kritagmic_shared_PART_SRCS
+set(kritagmic_shared_SOURCES
     kis_gmic_parser.cpp
     kis_gmic_blacklister.cpp
     kis_gmic_filter_model.cpp
@@ -144,9 +144,9 @@ set(kritagmic_shared_PART_SRCS
     kis_filter_preview_widget.cpp
 )
 
-ki18n_wrap_ui(kritagmic_shared_PART_SRCS wdg_gmic.ui wdg_gmic_input_output.ui)
+ki18n_wrap_ui(kritagmic_shared_SOURCES wdg_gmic.ui wdg_gmic_input_output.ui)
 
-set(kritagmic_PART_SRCS
+set(kritagmic_SOURCES
     kis_gmic_simple_convertor.cpp
     kis_export_gmic_processing_visitor.cpp
     kis_gmic_applicator.cpp
@@ -157,16 +157,16 @@ set(kritagmic_PART_SRCS
     kis_import_gmic_processing_visitor.cpp
     kis_gmic_progress_manager.cpp
     kis_gmic_small_applicator.cpp
-    kis_gmic_plugin.cpp ${kritagmic_shared_PART_SRCS}
+    kis_gmic_plugin.cpp ${kritagmic_shared_SOURCES}
 )
-add_library(kritagmic MODULE ${kritagmic_PART_SRCS})
+add_library(kritagmic MODULE ${kritagmic_SOURCES})
 target_link_libraries(kritagmic kritaui gmic Qt5::Xml Qt5::Network ${ZLIB_LIBRARIES})
 kcoreaddons_desktop_to_json(kritagmic kritagmic.desktop)
 
 # gmicparser for debugging purposes
 
-set(gmicparser_PART_SRCS gmicparser.cpp ${kritagmic_shared_PART_SRCS})
-add_executable(gmicparser ${gmicparser_PART_SRCS})
+set(gmicparser_SOURCES gmicparser.cpp ${kritagmic_shared_SOURCES})
+add_executable(gmicparser ${gmicparser_SOURCES})
 target_link_libraries(gmicparser Qt5::Core Qt5::Gui Qt5::Network kritaui gmic ${ZLIB_LIBRARIES})
 
 ########### install files ###############

@@ -1,7 +1,7 @@
-set(kritaseparatechannels_PART_SRCS kis_channel_separator.cc dlg_separate.cc kis_separate_channels_plugin.cc )
+set(kritaseparatechannels_SOURCES kis_channel_separator.cc dlg_separate.cc kis_separate_channels_plugin.cc )
 
-ki18n_wrap_ui(kritaseparatechannels_PART_SRCS wdg_separations.ui )
-add_library(kritaseparatechannels MODULE ${kritaseparatechannels_PART_SRCS})
+ki18n_wrap_ui(kritaseparatechannels_SOURCES wdg_separations.ui )
+add_library(kritaseparatechannels MODULE ${kritaseparatechannels_SOURCES})
 kcoreaddons_desktop_to_json(kritaseparatechannels kritaseparatechannels.desktop)
 
 target_link_libraries(kritaseparatechannels kritaui)

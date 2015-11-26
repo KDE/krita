@@ -1,4 +1,4 @@
-set(kritagridpaintop_PART_SRCS
+set(kritagridpaintop_SOURCES
     grid_paintop_plugin.cpp
     kis_grid_paintop.cpp
     kis_gridop_option.cpp
@@ -8,9 +8,9 @@ set(kritagridpaintop_PART_SRCS
     random_gauss.cpp
     )
 
-ki18n_wrap_ui(kritagridpaintop_PART_SRCS wdggridoptions.ui wdggridbrushshapeoptions.ui )
+ki18n_wrap_ui(kritagridpaintop_SOURCES wdggridoptions.ui wdggridbrushshapeoptions.ui )
 
-add_library(kritagridpaintop MODULE ${kritagridpaintop_PART_SRCS})
+add_library(kritagridpaintop MODULE ${kritagridpaintop_SOURCES})
 kcoreaddons_desktop_to_json(kritagridpaintop kritagridpaintop.desktop)
 
 target_link_libraries(kritagridpaintop kritalibpaintop)

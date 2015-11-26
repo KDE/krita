@@ -1,4 +1,4 @@
-set(kritatangentnormalpaintop_PART_SRCS
+set(kritatangentnormalpaintop_SOURCES
     kis_tangent_normal_paintop_plugin.cpp
     kis_tangent_normal_paintop.cpp
     kis_tangent_normal_paintop_settings_widget.cpp
@@ -7,9 +7,9 @@ set(kritatangentnormalpaintop_PART_SRCS
 
 )
 
-ki18n_wrap_ui(kritatangentnormalpaintop_PART_SRCS wdgtangenttiltoption.ui )
+ki18n_wrap_ui(kritatangentnormalpaintop_SOURCES wdgtangenttiltoption.ui )
 
-add_library(kritatangentnormalpaintop MODULE ${kritatangentnormalpaintop_PART_SRCS})
+add_library(kritatangentnormalpaintop MODULE ${kritatangentnormalpaintop_SOURCES})
 kcoreaddons_desktop_to_json(kritatangentnormalpaintop kritatangentnormalpaintop.desktop)
 
 target_link_libraries(kritatangentnormalpaintop kritalibpaintop)

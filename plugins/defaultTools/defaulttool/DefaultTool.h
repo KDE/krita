@@ -51,7 +51,7 @@ public:
      * and handled by interaction strategies of type KoInteractionStrategy.
      * @param canvas the canvas this tool will be working for.
      */
-    explicit DefaultTool( KoCanvasBase *canvas );
+    explicit DefaultTool(KoCanvasBase *canvas);
     virtual ~DefaultTool();
 
     enum CanvasResource {
@@ -61,7 +61,7 @@ public:
 public:
 
     virtual bool wantsAutoScroll() const;
-    virtual void paint( QPainter &painter, const KoViewConverter &converter );
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
     virtual void repaintDecorations();
 
@@ -76,7 +76,7 @@ public:
     ///reimplemented
     virtual QStringList supportedPasteMimeTypes() const;
     ///reimplemented
-    virtual KoToolSelection* selection();
+    virtual KoToolSelection *selection();
 
     /**
      * Returns which selection handle is at params point (or NoHandle if none).
@@ -89,7 +89,7 @@ public:
     KoFlake::SelectionHandle handleAt(const QPointF &point, bool *innerHandleMeaning = 0);
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
 
 private Q_SLOTS:
     void selectionAlignHorizontalLeft();
@@ -112,14 +112,14 @@ private Q_SLOTS:
 
 public: // Events
 
-    virtual void mousePressEvent( KoPointerEvent *event );
-    virtual void mouseMoveEvent( KoPointerEvent *event );
-    virtual void mouseReleaseEvent( KoPointerEvent *event );
-    virtual void mouseDoubleClickEvent( KoPointerEvent *event );
+    virtual void mousePressEvent(KoPointerEvent *event);
+    virtual void mouseMoveEvent(KoPointerEvent *event);
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
 
     virtual void keyPressEvent(QKeyEvent *event);
 
-    virtual void customMoveEvent( KoPointerEvent * event );
+    virtual void customMoveEvent(KoPointerEvent *event);
 
 protected:
     QList<QPointer<QWidget> > createOptionWidgets();
@@ -131,28 +131,28 @@ private:
     void recalcSelectionBox();
     void updateCursor();
     /// Returns rotation angle of given handle of the current selection
-    qreal rotationOfHandle( KoFlake::SelectionHandle handle, bool useEdgeRotation );
+    qreal rotationOfHandle(KoFlake::SelectionHandle handle, bool useEdgeRotation);
 
     void selectionAlign(KoShapeAlignCommand::Align align);
-    void selectionReorder(KoShapeReorderCommand::MoveShapeType order );
-    bool moveSelection( int direction, Qt::KeyboardModifiers modifiers );
+    void selectionReorder(KoShapeReorderCommand::MoveShapeType order);
+    bool moveSelection(int direction, Qt::KeyboardModifiers modifiers);
 
     /// Returns selection rectangle adjusted by handle proximity threshold
     QRectF handlesSize();
 
     // convenience method;
-    KoSelection * koSelection();
+    KoSelection *koSelection();
 
-    void canvasResourceChanged( int key, const QVariant & res );
+    void canvasResourceChanged(int key, const QVariant &res);
 
     /// selects guide line at given position
-    void selectGuideAtPosition( const QPointF &position );
+    void selectGuideAtPosition(const QPointF &position);
 
     /// Returns list of editable shapes from the given list of shapes
-    QList<KoShape*> filterEditableShapes( const QList<KoShape*> &shapes );
+    QList<KoShape *> filterEditableShapes(const QList<KoShape *> &shapes);
 
     /// Returns the number of editable shapes from the given list of shapes
-    uint editableShapesCount( const QList<KoShape*> &shapes );
+    uint editableShapesCount(const QList<KoShape *> &shapes);
 
     KoFlake::SelectionHandle m_lastHandle;
     KoFlake::Position m_hotPosition;
@@ -170,10 +170,10 @@ private:
     qreal m_angle;
     KoToolSelection *m_selectionHandler;
     friend class SelectionHandler;
-    KoInteractionStrategy * m_customEventStrategy;
+    KoInteractionStrategy *m_customEventStrategy;
 
     class GuideLine;
-    GuideLine * m_guideLine;
+    GuideLine *m_guideLine;
 };
 
 #endif

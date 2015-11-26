@@ -42,29 +42,29 @@ public:
     /**
      * @brief Constructor
      */
-    explicit ConnectionTool( KoCanvasBase * canvas );
+    explicit ConnectionTool(KoCanvasBase *canvas);
     /**
      * @brief Destructor
      */
     ~ConnectionTool();
 
     /// reimplemented from superclass
-    virtual void paint( QPainter &painter, const KoViewConverter &converter );
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
     /// reimplemented from superclass
     virtual void repaintDecorations();
 
     /// reimplemented from superclass
-    virtual void mousePressEvent( KoPointerEvent *event ) ;
+    virtual void mousePressEvent(KoPointerEvent *event);
     /// reimplemented from superclass
-    virtual void mouseMoveEvent( KoPointerEvent *event );
+    virtual void mouseMoveEvent(KoPointerEvent *event);
     /// reimplemented from superclass
-    virtual void mouseReleaseEvent( KoPointerEvent *event );
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
     /// reimplemented from superclass
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
     /// reimplemented from superclass
-    virtual void keyPressEvent( QKeyEvent *event );
+    virtual void keyPressEvent(QKeyEvent *event);
     /// reimplemented from superclass
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     /// reimplemented from superclass
     virtual void deactivate();
     /// reimplemented from superclass
@@ -97,7 +97,7 @@ private:
      * @param p2 The second point
      * @return The float which is the square of the distance
      */
-    qreal squareDistance( const QPointF &p1, const QPointF &p2 ) const;
+    qreal squareDistance(const QPointF &p1, const QPointF &p2) const;
 
     /// Returns nearest connection handle or nearest connection point id of shape
     int handleAtPoint(KoShape *shape, const QPointF &mousePoint) const;
@@ -116,16 +116,16 @@ private:
     void resetEditMode();
 
     /// Returns the nearest connection shape within handle grab sensitiviy distance
-    KoConnectionShape * nearestConnectionShape(const QList<KoShape*> &shapes, const QPointF &mousePos) const;
+    KoConnectionShape *nearestConnectionShape(const QList<KoShape *> &shapes, const QPointF &mousePos) const;
 
     /// Updates status text depending on edit mode
     void updateStatusText();
 
     /// Updates current shape and edit mode dependent on position
-    KoShape * findShapeAtPosition(const QPointF &position) const;
+    KoShape *findShapeAtPosition(const QPointF &position) const;
 
     /// Updates current shape and edit mode dependent on position excluding connection shapes
-    KoShape * findNonConnectionShapeAtPosition(const QPointF &position) const;
+    KoShape *findNonConnectionShapeAtPosition(const QPointF &position) const;
 
     /// Updates actions
     void updateActions();
@@ -135,7 +135,7 @@ private:
 
     EditMode m_editMode; ///< the current edit mode
     KoConnectionShape::Type m_connectionType;
-    KoShape * m_currentShape; ///< the current shape we are working on
+    KoShape *m_currentShape;  ///< the current shape we are working on
     int m_activeHandle;  ///< the currently active connection point/connection handle
     KoInteractionStrategy *m_currentStrategy; ///< the current editing strategy
     KoSnapGuide::Strategies m_oldSnapStrategies; ///< the previously enables snap strategies
@@ -147,25 +147,25 @@ private:
     QActionGroup *m_alignRelative;
     QActionGroup *m_escapeDirections;
 
-    QAction * m_editConnectionPoint;
+    QAction *m_editConnectionPoint;
 
-    QAction * m_alignPercent;
-    QAction * m_alignLeft;
-    QAction * m_alignCenterH;
-    QAction * m_alignRight;
-    QAction * m_alignTop;
-    QAction * m_alignCenterV;
-    QAction * m_alignBottom;
+    QAction *m_alignPercent;
+    QAction *m_alignLeft;
+    QAction *m_alignCenterH;
+    QAction *m_alignRight;
+    QAction *m_alignTop;
+    QAction *m_alignCenterV;
+    QAction *m_alignBottom;
 
-    QAction * m_escapeAll;
-    QAction * m_escapeHorizontal;
-    QAction * m_escapeVertical;
-    QAction * m_escapeUp;
-    QAction * m_escapeLeft;
-    QAction * m_escapeDown;
-    QAction * m_escapeRight;
+    QAction *m_escapeAll;
+    QAction *m_escapeHorizontal;
+    QAction *m_escapeVertical;
+    QAction *m_escapeUp;
+    QAction *m_escapeLeft;
+    QAction *m_escapeDown;
+    QAction *m_escapeRight;
 
-    QList<KoShapeConfigWidgetBase*> m_connectionShapeWidgets;
+    QList<KoShapeConfigWidgetBase *> m_connectionShapeWidgets;
 };
 
 #endif // KO_CONNECTION_TOOL_H

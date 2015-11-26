@@ -31,7 +31,8 @@ class KoSelection;
 /**
  * The SelectionDecorator is used to paint extra user-interface items on top of a selection.
  */
-class SelectionDecorator {
+class SelectionDecorator
+{
 public:
     /**
      * Constructor.
@@ -59,10 +60,10 @@ public:
      * set the radius of the selection handles
      * @param radius the new handle radius
      */
-    void setHandleRadius( int radius );
+    void setHandleRadius(int radius);
 
     /// Sets the hot position to highlight
-    static void setHotPosition( KoFlake::Position hotPosition );
+    static void setHotPosition(KoFlake::Position hotPosition);
 
     /// Returns the hot position
     static KoFlake::Position hotPosition();

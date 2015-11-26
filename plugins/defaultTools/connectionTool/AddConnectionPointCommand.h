@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * 
+ *
  * Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -40,7 +40,7 @@ public:
 private:
     void updateRoi();
 
-    KoShape * m_shape;
+    KoShape *m_shape;
     QPointF m_connectionPoint;
     int m_connectionPointId;
 };

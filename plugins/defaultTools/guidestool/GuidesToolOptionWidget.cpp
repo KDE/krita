@@ -24,7 +24,7 @@
 #include <klocalizedstring.h>
 
 GuidesToolOptionWidget::GuidesToolOptionWidget(QWidget *parent)
-    :QWidget(parent)
+    : QWidget(parent)
 {
     widget.setupUi(this);
 
@@ -37,15 +37,15 @@ GuidesToolOptionWidget::GuidesToolOptionWidget(QWidget *parent)
     widget.position->setUnit(m_unit);
 
     connect(widget.orientation, SIGNAL(currentIndexChanged(int)),
-             this, SLOT(updateList(int)));
+            this, SLOT(updateList(int)));
     connect(widget.positionList, SIGNAL(currentRowChanged(int)),
-             this, SLOT(updatePosition(int)));
+            this, SLOT(updatePosition(int)));
     connect(widget.position, SIGNAL(valueChangedPt(qreal)),
-             this, SLOT(positionChanged(qreal)));
+            this, SLOT(positionChanged(qreal)));
     connect(widget.removeButton, SIGNAL(clicked(bool)),
-             this, SLOT(removeLine()));
+            this, SLOT(removeLine()));
     connect(widget.addButton, SIGNAL(clicked(bool)),
-             this, SLOT(addLine()));
+            this, SLOT(addLine()));
 }
 
 GuidesToolOptionWidget::~GuidesToolOptionWidget()
@@ -55,15 +55,17 @@ GuidesToolOptionWidget::~GuidesToolOptionWidget()
 void GuidesToolOptionWidget::setHorizontalGuideLines(const QList<qreal> &lines)
 {
     m_hGuides = lines;
-    if (orientation() == Qt::Horizontal)
+    if (orientation() == Qt::Horizontal) {
         updateList(widget.orientation->currentIndex());
+    }
 }
 
 void GuidesToolOptionWidget::setVerticalGuideLines(const QList<qreal> &lines)
 {
     m_vGuides = lines;
-    if (orientation() == Qt::Vertical)
+    if (orientation() == Qt::Vertical) {
         updateList(widget.orientation->currentIndex());
+    }
 }
 
 QList<qreal> GuidesToolOptionWidget::horizontalGuideLines() const
@@ -83,7 +85,7 @@ Qt::Orientation GuidesToolOptionWidget::orientation() const
 
 void GuidesToolOptionWidget::setOrientation(Qt::Orientation orientation)
 {
-    widget.orientation->setCurrentIndex(orientation-1);
+    widget.orientation->setCurrentIndex(orientation - 1);
 }
 
 void GuidesToolOptionWidget::selectGuideLine(Qt::Orientation orientation, int index)
@@ -91,7 +93,7 @@ void GuidesToolOptionWidget::selectGuideLine(Qt::Orientation orientation, int in
     widget.orientation->blockSignals(true);
     widget.positionList->blockSignals(true);
 
-    widget.orientation->setCurrentIndex(orientation-1);
+    widget.orientation->setCurrentIndex(orientation - 1);
     updateList(widget.orientation->currentIndex());
     widget.positionList->setCurrentRow(index);
     updatePosition(index);
@@ -103,12 +105,14 @@ void GuidesToolOptionWidget::selectGuideLine(Qt::Orientation orientation, int in
 void GuidesToolOptionWidget::updateList(int orientation)
 {
     widget.positionList->clear();
-    if (orientation == Qt::Horizontal-1) {
-        Q_FOREACH (qreal p, m_hGuides)
+    if (orientation == Qt::Horizontal - 1) {
+        Q_FOREACH (qreal p, m_hGuides) {
             widget.positionList->addItem(m_unit.toUserStringValue(p));
+        }
     } else {
-        Q_FOREACH (qreal p, m_vGuides)
+        Q_FOREACH (qreal p, m_vGuides) {
             widget.positionList->addItem(m_unit.toUserStringValue(p));
+        }
     }
 
     widget.removeButton->setEnabled(widget.positionList->count() > 0);
@@ -121,10 +125,11 @@ void GuidesToolOptionWidget::updatePosition(int index)
     if (index < 0) {
         widget.position->changeValue(0.0);
     } else {
-        if (orientation() == Qt::Horizontal)
+        if (orientation() == Qt::Horizontal) {
             widget.position->changeValue(m_hGuides[index]);
-        else
+        } else {
             widget.position->changeValue(m_vGuides[index]);
+        }
 
         emit guideLineSelected(orientation(), index);
     }
@@ -135,18 +140,21 @@ void GuidesToolOptionWidget::updatePosition(int index)
 void GuidesToolOptionWidget::positionChanged(qreal position)
 {
     int index = widget.positionList->currentRow();
-    if (index < 0)
+    if (index < 0) {
         return;
+    }
 
-    if (orientation() == Qt::Horizontal)
+    if (orientation() == Qt::Horizontal) {
         m_hGuides[index] = position;
-    else
+    } else {
         m_vGuides[index] = position;
+    }
 
     // update the current item text int the list
-    QListWidgetItem * item = widget.positionList->currentItem();
-    if (item)
+    QListWidgetItem *item = widget.positionList->currentItem();
+    if (item) {
         item->setText(m_unit.toUserStringValue(position));
+    }
 
     emit guideLinesChanged(orientation());
 }
@@ -156,13 +164,15 @@ void GuidesToolOptionWidget::removeLine()
     widget.positionList->blockSignals(true);
 
     int index = widget.positionList->currentRow();
-    if (index < 0)
+    if (index < 0) {
         return;
+    }
 
-    if (orientation() == Qt::Horizontal)
+    if (orientation() == Qt::Horizontal) {
         m_hGuides.removeAt(index);
-    else
+    } else {
         m_vGuides.removeAt(index);
+    }
 
     delete widget.positionList->takeItem(index);
 
@@ -175,14 +185,15 @@ void GuidesToolOptionWidget::addLine()
 {
     Qt::Orientation o = orientation();
 
-    if (o == Qt::Horizontal)
+    if (o == Qt::Horizontal) {
         m_hGuides.append(widget.position->value());
-    else
+    } else {
         m_vGuides.append(widget.position->value());
+    }
 
     widget.positionList->blockSignals(true);
     updateList(widget.orientation->currentIndex());
-    widget.positionList->setCurrentRow(widget.positionList->count()-1);
+    widget.positionList->setCurrentRow(widget.positionList->count() - 1);
     widget.positionList->blockSignals(false);
 
     emit guideLinesChanged(o);

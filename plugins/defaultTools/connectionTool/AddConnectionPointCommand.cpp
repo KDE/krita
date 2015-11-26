@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * 
+ *
  * Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -21,8 +21,11 @@
 #include "AddConnectionPointCommand.h"
 #include <KoShape.h>
 
-AddConnectionPointCommand::AddConnectionPointCommand(KoShape* shape, const QPointF& connectionPoint, KUndo2Command* parent)
-: KUndo2Command(parent), m_shape(shape), m_connectionPoint(connectionPoint), m_connectionPointId(-1)
+AddConnectionPointCommand::AddConnectionPointCommand(KoShape *shape, const QPointF &connectionPoint, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_shape(shape)
+    , m_connectionPoint(connectionPoint)
+    , m_connectionPointId(-1)
 {
     Q_ASSERT(m_shape);
 }
@@ -33,7 +36,7 @@ AddConnectionPointCommand::~AddConnectionPointCommand()
 
 void AddConnectionPointCommand::redo()
 {
-    if(m_connectionPointId < 0) {
+    if (m_connectionPointId < 0) {
         m_connectionPointId = m_shape->addConnectionPoint(m_connectionPoint);
     } else {
         m_shape->setConnectionPoint(m_connectionPointId, m_connectionPoint);

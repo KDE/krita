@@ -30,8 +30,9 @@ class RgbCompositeOpClear : public KoCompositeOp
 
 public:
 
-    RgbCompositeOpClear(KoColorSpace * cs)
-            : KoCompositeOp(cs, COMPOSITE_CLEAR, i18n("Clear"), "") {
+    RgbCompositeOpClear(KoColorSpace *cs)
+        : KoCompositeOp(cs, COMPOSITE_CLEAR, i18n("Clear"), "")
+    {
     }
 
     using KoCompositeOp::composite;
@@ -41,7 +42,8 @@ public:
                    const quint8 *maskRowStart, qint32 maskRowStride,
                    qint32 rows, qint32 numColumns,
                    quint8 opacity,
-                   const QBitArray & channelFlags) const {
+                   const QBitArray &channelFlags) const
+    {
         Q_UNUSED(opacity);
         Q_UNUSED(srcRowStart);
         Q_UNUSED(srcRowStride);
@@ -61,8 +63,9 @@ public:
             channels_type *d = reinterpret_cast<channels_type *>(dstRowStart);
             while (rows-- > 0) {
                 for (int channel = 0; channel < MAX_CHANNEL_RGB; channel++) {
-                    if (channelFlags.testBit(channel))
+                    if (channelFlags.testBit(channel)) {
                         memset(d, 0, channelSize);
+                    }
                     d++;
                 }
             }

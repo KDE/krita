@@ -43,14 +43,14 @@ bool XyzU8ColorSpace::willDegrade(ColorSpaceIndependence /*independence*/) const
     return false;
 }
 
-KoColorSpace* XyzU8ColorSpace::clone() const
+KoColorSpace *XyzU8ColorSpace::clone() const
 {
     return new XyzU8ColorSpace(name(), profile()->clone());
 }
 
-void XyzU8ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+void XyzU8ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const
 {
-    const KoXyzU8Traits::Pixel* p = reinterpret_cast<const KoXyzU8Traits::Pixel*>(pixel);
+    const KoXyzU8Traits::Pixel *p = reinterpret_cast<const KoXyzU8Traits::Pixel *>(pixel);
     QDomElement labElt = doc.createElement("XYZ");
     labElt.setAttribute("x", KoColorSpaceMaths< KoXyzU8Traits::channels_type, qreal>::scaleToA(p->x));
     labElt.setAttribute("y", KoColorSpaceMaths< KoXyzU8Traits::channels_type, qreal>::scaleToA(p->y));
@@ -59,9 +59,9 @@ void XyzU8ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomEle
     colorElt.appendChild(labElt);
 }
 
-void XyzU8ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
+void XyzU8ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
-    KoXyzU8Traits::Pixel* p = reinterpret_cast<KoXyzU8Traits::Pixel*>(pixel);
+    KoXyzU8Traits::Pixel *p = reinterpret_cast<KoXyzU8Traits::Pixel *>(pixel);
     p->x = KoColorSpaceMaths< qreal, KoXyzU8Traits::channels_type >::scaleToA(elt.attribute("x").toDouble());
     p->y = KoColorSpaceMaths< qreal, KoXyzU8Traits::channels_type >::scaleToA(elt.attribute("y").toDouble());
     p->z = KoColorSpaceMaths< qreal, KoXyzU8Traits::channels_type >::scaleToA(elt.attribute("z").toDouble());

@@ -18,17 +18,16 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef VECTORSHAPE_FACTORY_H
 #define VECTORSHAPE_FACTORY_H
 
 // Calligra
 #include <KoShapeFactoryBase.h>
 
-
 class KoShape;
 
-class VectorShapeFactory : public KoShapeFactoryBase {
+class VectorShapeFactory : public KoShapeFactoryBase
+{
 
 public:
     /// constructor
@@ -38,9 +37,9 @@ public:
     virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
 
     /// Reimplemented
-    virtual bool supports(const KoXmlElement & e, KoShapeLoadingContext &context) const;
+    virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
 
-    QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
+    QList<KoShapeConfigWidgetBase *> createShapeOptionPanels();
 };
 
 #endif

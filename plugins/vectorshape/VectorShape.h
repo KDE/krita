@@ -19,10 +19,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef VECTORSHAPE_H
 #define VECTORSHAPE_H
-
 
 // Qt
 #include <QByteArray>
@@ -35,16 +33,15 @@
 #include <KoShape.h>
 #include <KoFrameShape.h>
 
-
 #define DEBUG_VECTORSHAPE 0
-
 
 class QPainter;
 class VectorShape;
 
 #define VectorShape_SHAPEID "VectorShapeID"
 
-class VectorShape : public QObject, public KoShape, public KoFrameShape {
+class VectorShape : public QObject, public KoShape, public KoFrameShape
+{
     Q_OBJECT
 public:
     // Type of vector file. Add here when we get support for more.
@@ -65,12 +62,12 @@ public:
     /// reimplemented from KoShape
     void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     /// reimplemented from KoShape
-    virtual void saveOdf(KoShapeSavingContext & context) const;
+    virtual void saveOdf(KoShapeSavingContext &context) const;
     /// reimplemented from KoShape
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
     /// Load the real contents of the frame shape.  reimplemented  from KoFrameShape
-    virtual bool loadOdfFrameElement(const KoXmlElement& frameElement,
-                                     KoShapeLoadingContext& context);
+    virtual bool loadOdfFrameElement(const KoXmlElement &frameElement,
+                                     KoShapeLoadingContext &context);
     /// reimplemented from KoShape
     virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous = true) const;
 
@@ -97,9 +94,8 @@ private:
     mutable QMutex m_mutex;
     QCache<int, QImage> m_cache;
 
-    QImage* render(const KoViewConverter &converter, bool asynchronous, bool useCache) const;
+    QImage *render(const KoViewConverter &converter, bool asynchronous, bool useCache) const;
 };
-
 
 class RenderThread : public QObject, public QRunnable
 {

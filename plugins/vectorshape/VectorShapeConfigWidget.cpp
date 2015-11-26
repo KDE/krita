@@ -29,11 +29,10 @@
 #include <klocalizedstring.h>
 
 #include <kis_url_requester.h>
-// ---------------------------------------------------- //
 
 VectorShapeConfigWidget::VectorShapeConfigWidget()
-    : m_shape(0),
-    m_fileWidget(0)
+    : m_shape(0)
+    , m_fileWidget(0)
 {
 }
 
@@ -44,17 +43,17 @@ VectorShapeConfigWidget::~VectorShapeConfigWidget()
 
 void VectorShapeConfigWidget::open(KoShape *shape)
 {
-    m_shape = dynamic_cast<VectorShape*>(shape);
+    m_shape = dynamic_cast<VectorShape *>(shape);
     Q_ASSERT(m_shape);
     delete m_fileWidget;
     QVBoxLayout *layout = new QVBoxLayout(this);
     m_fileWidget = new KisUrlRequester(this);
     m_fileWidget->setMode(KoFileDialog::OpenFile);
     const QStringList mimetypes = QStringList()
-        << QLatin1String("image/x-wmf")
-        << QLatin1String("image/x-emf")
-        << QLatin1String("image/x-svm")
-        << QLatin1String("image/svg+xml");
+                                  << QLatin1String("image/x-wmf")
+                                  << QLatin1String("image/x-emf")
+                                  << QLatin1String("image/x-svm")
+                                  << QLatin1String("image/svg+xml");
     m_fileWidget->setMimeTypeFilters(mimetypes);
     layout->addWidget(m_fileWidget);
     setLayout(layout);
@@ -66,8 +65,9 @@ void VectorShapeConfigWidget::open(KoShape *shape)
 
 void VectorShapeConfigWidget::save()
 {
-    if (!m_shape)
+    if (!m_shape) {
         return;
+    }
     QString fn = m_fileWidget->url().toLocalFile();
     if (!fn.isEmpty()) {
         QFile f(fn);

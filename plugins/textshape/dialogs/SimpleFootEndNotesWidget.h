@@ -32,7 +32,7 @@ class SimpleFootEndNotesWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SimpleFootEndNotesWidget(TextTool *tool,QWidget *parent = 0);
+    explicit SimpleFootEndNotesWidget(TextTool *tool, QWidget *parent = 0);
     Ui::SimpleFootEndNotesWidget widget;
 
 Q_SIGNALS:

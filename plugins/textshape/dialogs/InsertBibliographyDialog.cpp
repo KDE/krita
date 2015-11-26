@@ -28,10 +28,10 @@
 #include <QListWidgetItem>
 #include <QDebug>
 
-InsertBibliographyDialog::InsertBibliographyDialog(KoTextEditor *editor, QWidget *parent) :
-    QDialog(parent),
-    m_editor(editor),
-    m_bibInfo(new KoBibliographyInfo())
+InsertBibliographyDialog::InsertBibliographyDialog(KoTextEditor *editor, QWidget *parent) 
+    : QDialog(parent)
+    , m_editor(editor)
+    , m_bibInfo(new KoBibliographyInfo())
 {
     dialog.setupUi(this);
 
@@ -40,7 +40,7 @@ InsertBibliographyDialog::InsertBibliographyDialog(KoTextEditor *editor, QWidget
     connect(dialog.add, SIGNAL(clicked()), this, SLOT(addField()));
     connect(dialog.remove, SIGNAL(clicked()), this, SLOT(removeField()));
     connect(dialog.span, SIGNAL(clicked()), this, SLOT(addSpan()));
-    connect(dialog.addedFields, SIGNAL(itemChanged(QListWidgetItem *)), this, SLOT(spanChanged(QListWidgetItem *)));
+    connect(dialog.addedFields, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(spanChanged(QListWidgetItem*)));
 
     /*  To do : handle tab stops
     */
@@ -99,17 +99,17 @@ void InsertBibliographyDialog::addField()
 
     if (row != -1) {
 
-        disconnect(dialog.addedFields, SIGNAL(itemChanged(QListWidgetItem *)), this, SLOT(spanChanged(QListWidgetItem *)));
+        disconnect(dialog.addedFields, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(spanChanged(QListWidgetItem*)));
 
         QString newDataField = dialog.availableFields->takeItem(row)->text();
-        QListWidgetItem *bibField = new QListWidgetItem(newDataField,dialog.addedFields);
+        QListWidgetItem *bibField = new QListWidgetItem(newDataField, dialog.addedFields);
         bibField->setData(Qt::UserRole, QVariant::fromValue<IndexEntry::IndexEntryName>(IndexEntry::BIBLIOGRAPHY));
 
         IndexEntryBibliography *newEntry = new IndexEntryBibliography(QString());
         newEntry->dataField = newDataField;
 
         m_bibInfo->m_entryTemplate[bibliographyType()].indexEntries.append(static_cast<IndexEntry *>(newEntry));
-        connect(dialog.addedFields, SIGNAL(itemChanged( QListWidgetItem * )), this, SLOT(spanChanged( QListWidgetItem *)));
+        connect(dialog.addedFields, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(spanChanged(QListWidgetItem*)));
     }
 }
 
@@ -142,12 +142,12 @@ void InsertBibliographyDialog::addSpan()
     m_bibInfo->m_entryTemplate[bibliographyType()].indexEntries.append(static_cast<IndexEntry *>(span));
 }
 
-void InsertBibliographyDialog::spanChanged( QListWidgetItem *item )
+void InsertBibliographyDialog::spanChanged(QListWidgetItem *item)
 {
     int row = dialog.addedFields->currentRow();
 
     if (row != -1) {
-        IndexEntrySpan *span = static_cast<IndexEntrySpan *>( m_bibInfo->m_entryTemplate[bibliographyType()].indexEntries.at(row) );
+        IndexEntrySpan *span = static_cast<IndexEntrySpan *>(m_bibInfo->m_entryTemplate[bibliographyType()].indexEntries.at(row));
         span->text = item->text();
     }
 }

@@ -22,12 +22,12 @@
 #include "../ReviewTool.h"
 #include "TextTool.h"
 
-SimpleSpellCheckingWidget::SimpleSpellCheckingWidget(ReviewTool *tool, QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::SimpleSpellCheckingWidget)
+SimpleSpellCheckingWidget::SimpleSpellCheckingWidget(ReviewTool *tool, QWidget *parent) 
+    : QWidget(parent)
+    , ui(new Ui::SimpleSpellCheckingWidget)
 {
     ui->setupUi(this);
-    ui->toolAutoSpellCheck->setDefaultAction((QAction*)tool->action("tool_auto_spellcheck"));
+    ui->toolAutoSpellCheck->setDefaultAction((QAction *)tool->action("tool_auto_spellcheck"));
 
 }
 

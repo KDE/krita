@@ -56,7 +56,7 @@ private Q_SLOTS:
     void menuShown();
 
 private:
-    int m_lastId ;
+    int m_lastId;
     QMenu *m_menu;
     QMap<int, QObject *> m_styleMap;
     ItemChooserAction *m_styleAction;

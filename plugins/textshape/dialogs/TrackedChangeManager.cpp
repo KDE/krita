@@ -28,8 +28,9 @@
 
 #include <QDebug>
 
-TrackedChangeManager::TrackedChangeManager(QWidget* parent): QWidget(parent),
-    m_model(0)
+TrackedChangeManager::TrackedChangeManager(QWidget *parent)
+    : QWidget(parent)
+    , m_model(0)
 {
     widget.setupUi(this);
 }
@@ -38,7 +39,7 @@ TrackedChangeManager::~TrackedChangeManager()
 {
 }
 
-void TrackedChangeManager::setModel(TrackedChangeModel* model)
+void TrackedChangeManager::setModel(TrackedChangeModel *model)
 {
     m_model = model;
     widget.treeView->setModel(m_model);

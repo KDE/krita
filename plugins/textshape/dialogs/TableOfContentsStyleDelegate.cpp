@@ -23,8 +23,8 @@
 
 #include <QSpinBox>
 
-TableOfContentsStyleDelegate::TableOfContentsStyleDelegate():
-    QStyledItemDelegate()
+TableOfContentsStyleDelegate::TableOfContentsStyleDelegate()
+    : QStyledItemDelegate()
 {
 }
 
@@ -32,12 +32,12 @@ QSize TableOfContentsStyleDelegate::sizeHint(const QStyleOptionViewItem &option,
 {
     Q_UNUSED(option);
     Q_UNUSED(index);
-    return QSize(250,48);
+    return QSize(250, 48);
 }
 
 QWidget *TableOfContentsStyleDelegate::createEditor(QWidget *parent,
-                                                    const QStyleOptionViewItem &/* option */,
-                                                    const QModelIndex &/* index */) const
+        const QStyleOptionViewItem &/* option */,
+        const QModelIndex &/* index */) const
 {
     QSpinBox *editor = new QSpinBox(parent);
     editor->setMinimum(0);
@@ -47,10 +47,10 @@ QWidget *TableOfContentsStyleDelegate::createEditor(QWidget *parent,
 }
 
 void TableOfContentsStyleDelegate::setEditorData(QWidget *editor,
-                                                 const QModelIndex &index) const
+        const QModelIndex &index) const
 {
     int value = index.model()->data(index, Qt::EditRole).toInt();
-    QSpinBox *spinBox = static_cast<QSpinBox*>(editor);
+    QSpinBox *spinBox = static_cast<QSpinBox *>(editor);
     spinBox->setMinimum(0);
     spinBox->setMaximum(10);
     spinBox->setSpecialValueText(i18n("Disabled"));
@@ -58,9 +58,9 @@ void TableOfContentsStyleDelegate::setEditorData(QWidget *editor,
 }
 
 void TableOfContentsStyleDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
-                                                const QModelIndex &index) const
+        const QModelIndex &index) const
 {
-    QSpinBox *spinBox = static_cast<QSpinBox*>(editor);
+    QSpinBox *spinBox = static_cast<QSpinBox *>(editor);
     spinBox->interpretText();
     int value = spinBox->value();
 
@@ -68,7 +68,7 @@ void TableOfContentsStyleDelegate::setModelData(QWidget *editor, QAbstractItemMo
 }
 
 void TableOfContentsStyleDelegate::updateEditorGeometry(QWidget *editor,
-                                                        const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
+        const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
 {
     editor->setGeometry(option.rect);
 }

@@ -27,8 +27,8 @@
 #include <KoParagraphStyle.h>
 #include <klocalizedstring.h>
 
-BibliographyTemplate::BibliographyTemplate(KoStyleManager *manager):
-    m_manager(manager)
+BibliographyTemplate::BibliographyTemplate(KoStyleManager *manager)
+    : m_manager(manager)
 {
     Q_ASSERT(manager);
 }

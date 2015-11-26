@@ -30,11 +30,11 @@
 #include <QDebug>
 
 StylesCombo::StylesCombo(QWidget *parent)
-    : QComboBox(parent),
-      m_stylesModel(0),
-      m_view(new QListView()),
-      m_selectedItem(-1),
-      m_originalStyle(true)
+    : QComboBox(parent)
+    , m_stylesModel(0)
+    , m_view(new QListView())
+    , m_selectedItem(-1)
+    , m_originalStyle(true)
 {
     // Force "Base" background to white, so the background is consistent with the one
     // of the preview area in the style manager. Also the usual document text colors
@@ -48,7 +48,7 @@ StylesCombo::StylesCombo(QWidget *parent)
     palette.setColor(QPalette::Text, QColor(Qt::black));
     setPalette(palette);
 
-    setMinimumSize(50,32);
+    setMinimumSize(50, 32);
 
     m_view->setMinimumWidth(250);
     m_view->setMouseTracking(true);
@@ -65,7 +65,7 @@ StylesCombo::StylesCombo(QWidget *parent)
 //    connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSelectionChanged(int)));
 
     QComboBox::setEditable(true);
-    setIconSize(QSize(0,0));
+    setIconSize(QSize(0, 0));
 
     StylesComboPreview *preview = new StylesComboPreview(this);
     QComboBox::setEditable(true);
@@ -81,8 +81,7 @@ void StylesCombo::setStyleIsOriginal(bool original)
     m_originalStyle = original;
     if (!original) {
         m_preview->setAddButtonShown(true);
-    }
-    else {
+    } else {
         m_preview->setAddButtonShown(false);
     }
 }
@@ -99,8 +98,8 @@ void StylesCombo::setEditable(bool editable)
         // Create a StylesComboPreview instead of a QLineEdit
         // Compared to QComboBox::setEditable, we might be missing the SH_ComboBox_Popup code though...
         // If a style needs this, then we'll need to call QComboBox::setEditable and then setLineEdit again
-        StylesComboPreview *edit = new StylesComboPreview( this );
-        setLineEdit( edit );
+        StylesComboPreview *edit = new StylesComboPreview(this);
+        setLineEdit(edit);
     } else {
         QComboBox::setEditable(editable);
     }
@@ -115,12 +114,12 @@ void StylesCombo::setLineEdit(QLineEdit *edit)
         // As some StylesCombo features rely on the StylesComboPreview, we reject
         // this order here.
         delete edit;
-        StylesComboPreview* preview = new StylesComboPreview(this);
+        StylesComboPreview *preview = new StylesComboPreview(this);
         edit = preview;
     }
 
     QComboBox::setLineEdit(edit);
-    m_preview = qobject_cast<StylesComboPreview*>(edit);
+    m_preview = qobject_cast<StylesComboPreview *>(edit);
 
     if (m_preview) {
         connect(m_preview, SIGNAL(resized()), this, SLOT(slotUpdatePreview()));
@@ -169,7 +168,7 @@ void StylesCombo::slotPreviewClicked()
 bool StylesCombo::eventFilter(QObject *object, QEvent *event)
 {
     if (event->type() == QEvent::MouseButtonRelease && object == view()->viewport()) {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
         //If what follows isn't a HACK then I have no clue what is!!!!
         //The item delegate editorEvent method is not sent MouseButtonRelease events.
         //This is because the QComboBox installs an event filter on the view and calls
@@ -202,8 +201,9 @@ void StylesCombo::slotModelReset()
     m_view->reset();
 }
 
-void StylesCombo::showEditIcon(bool show){
-    StylesDelegate *delegate = dynamic_cast<StylesDelegate*>(itemDelegate());
+void StylesCombo::showEditIcon(bool show)
+{
+    StylesDelegate *delegate = dynamic_cast<StylesDelegate *>(itemDelegate());
     Q_ASSERT(delegate);
     if (!delegate) { //the following should never get called as we are creating a StylesDelegate on the constructor;
         StylesDelegate *delegate = new StylesDelegate();

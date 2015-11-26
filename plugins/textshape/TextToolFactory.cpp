@@ -26,10 +26,10 @@
 #include <klocalizedstring.h>
 
 TextToolFactory::TextToolFactory()
-        : KoToolFactoryBase("TextTool")
+    : KoToolFactoryBase("TextTool")
 {
     setToolTip(i18n("Text editing"));
-    setToolType(dynamicToolType()+",calligrawords,calligraauthor");
+    setToolType(dynamicToolType() + ",calligrawords,calligraauthor");
     setIconName(koIconNameCStr("tool-text"));
     setPriority(1);
     setActivationShapeId(TextShape_SHAPEID "," AnnotationShape_SHAPEID);
@@ -39,7 +39,7 @@ TextToolFactory::~TextToolFactory()
 {
 }
 
-KoToolBase * TextToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase *TextToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new TextTool(canvas);
 }

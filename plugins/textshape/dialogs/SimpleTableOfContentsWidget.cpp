@@ -35,10 +35,10 @@
 #include <QSignalMapper>
 
 SimpleTableOfContentsWidget::SimpleTableOfContentsWidget(ReferencesTool *tool, QWidget *parent)
-        : QWidget(parent),
-        m_blockSignals(false),
-        m_referenceTool(tool),
-        m_signalMapper(0)
+    : QWidget(parent)
+    , m_blockSignals(false)
+    , m_referenceTool(tool)
+    , m_signalMapper(0)
 {
     widget.setupUi(this);
     Q_ASSERT(tool);
@@ -82,7 +82,7 @@ void SimpleTableOfContentsWidget::prepareTemplateMenu()
     foreach (KoTableOfContentsGeneratorInfo *info, m_templateList) {
         TableOfContentsPreview *preview = new TableOfContentsPreview();
         preview->setStyleManager(KoTextDocument(m_referenceTool->editor()->document()).styleManager());
-        preview->setPreviewSize(QSize(200,120));
+        preview->setPreviewSize(QSize(200, 120));
         preview->updatePreview(info);
         connect(preview, SIGNAL(pixmapGenerated()), m_signalMapper, SLOT(map()));
         m_signalMapper->setMapping(preview, index);
@@ -90,8 +90,8 @@ void SimpleTableOfContentsWidget::prepareTemplateMenu()
         ++index;
 
         //put dummy pixmaps until the actual pixmap previews are generated and added in pixmapReady()
-        if (! widget.addToC->hasItemId(index)) {
-            QPixmap pmm(QSize(200,120));
+        if (!widget.addToC->hasItemId(index)) {
+            QPixmap pmm(QSize(200, 120));
             pmm.fill(Qt::white);
             widget.addToC->addItem(pmm, index);
         }

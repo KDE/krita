@@ -37,7 +37,7 @@ void TestDocumentLayout::testBasicList()
     block = m_doc->begin().next();
     QVERIFY(block.isValid());
     blockLayout = block.layout(); // parag 2
-    KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
+    KoTextBlockData *data = dynamic_cast<KoTextBlockData *>(block.userData());
     QVERIFY(data);
     qreal counterSpacing = data->counterSpacing();
     QVERIFY(counterSpacing > 0.);
@@ -79,16 +79,16 @@ void TestDocumentLayout::testNumberedList()
         style.applyStyle(block);
         QTextList *textList = block.textList();
         QVERIFY(textList);
-        if (previous == 0)
+        if (previous == 0) {
             previous = textList;
-        else
+        } else {
             QCOMPARE(textList, previous);
+        }
         QCOMPARE(textList->format().intProperty(QTextListFormat::ListStyle), (int)(KoListStyle::DecimalItem));
         block = block.next();
     }
     m_layout->layout();
     QTextLayout *blockLayout = m_block.layout();
-
 
     QCOMPARE(blockLayout->lineAt(0).x(), 0.0);
     QTextBlock blok = m_doc->begin().next();
@@ -126,7 +126,7 @@ void TestDocumentLayout::testNumberedList()
     block = m_doc->begin().next();
     i = 1;
     while (block.isValid() && i < 13) {
-        KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
+        KoTextBlockData *data = dynamic_cast<KoTextBlockData *>(block.userData());
         QVERIFY(data);
         QCOMPARE(data->counterText(), QString::number(i++));
         block = block.next();
@@ -154,8 +154,10 @@ void TestDocumentLayout::testNumberedList()
     block = m_doc->begin().next();
     i = 4;
     while (block.isValid() && i < 22) {
-        if (i == 7) i = 12;
-        KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
+        if (i == 7) {
+            i = 12;
+        }
+        KoTextBlockData *data = dynamic_cast<KoTextBlockData *>(block.userData());
         QVERIFY(data);
         QCOMPARE(data->counterText(), QString::number(i++));
         block = block.next();
@@ -188,11 +190,11 @@ void TestDocumentLayout::testInterruptedLists()
     m_layout->layout();
 
     block = m_doc->begin();
-    KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
+    KoTextBlockData *data = dynamic_cast<KoTextBlockData *>(block.userData());
     QVERIFY(data);
     QVERIFY(data->counterText() == "1.");
     block = block.next();
-    data = dynamic_cast<KoTextBlockData*>(block.userData());
+    data = dynamic_cast<KoTextBlockData *>(block.userData());
     QVERIFY(data);
     QVERIFY(data->counterText() == "2.");
     block = block.next();
@@ -202,7 +204,7 @@ void TestDocumentLayout::testInterruptedLists()
     QCOMPARE(block.layout()->lineAt(0).x(), 0.0);
     QVERIFY(block.userData() ==  0);
     block = block.next(); // list item 3
-    data = dynamic_cast<KoTextBlockData*>(block.userData());
+    data = dynamic_cast<KoTextBlockData *>(block.userData());
     QVERIFY(data);
     //qDebug() << data->counterText();
     QVERIFY(data->counterText() == "3.");
@@ -215,11 +217,11 @@ void TestDocumentLayout::testInterruptedLists()
     listStyle.applyStyle(block);
     m_layout->layout();
 
-    data = dynamic_cast<KoTextBlockData*>(block.userData());
+    data = dynamic_cast<KoTextBlockData *>(block.userData());
     QVERIFY(data);
     QVERIFY(data->counterText() == "1.");
     block = block.next();
-    data = dynamic_cast<KoTextBlockData*>(block.userData());
+    data = dynamic_cast<KoTextBlockData *>(block.userData());
     QVERIFY(data);
     QVERIFY(data->counterText() == "2.");
     block = block.next();
@@ -229,7 +231,7 @@ void TestDocumentLayout::testInterruptedLists()
     QCOMPARE(block.layout()->lineAt(0).x(), 0.0);
     QVERIFY(block.userData() ==  0);
     block = block.next(); // list item 3
-    data = dynamic_cast<KoTextBlockData*>(block.userData());
+    data = dynamic_cast<KoTextBlockData *>(block.userData());
     QVERIFY(data);
     qDebug() << data->counterText();
     QVERIFY(data->counterText() == "1.");
@@ -318,11 +320,11 @@ void TestDocumentLayout::testNestedLists()
     block = m_doc->begin();
     QVERIFY(block.userData() == 0);
     block = block.next();
-    static const char* const texts[] = { "1", "1.1.", "1.1.1", "1.1.2", "1.2.", "2", "2.1.", "2.2.", "3", "3.1.1", "1.1" };
+    static const char *const texts[] = { "1", "1.1.", "1.1.1", "1.1.2", "1.2.", "2", "2.1.", "2.2.", "3", "3.1.1", "1.1" };
     int i = 0;
     qreal indent = 0.0;
     while (block.isValid()) {
-        KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
+        KoTextBlockData *data = dynamic_cast<KoTextBlockData *>(block.userData());
         //qDebug() << "text: " << block.text();
         //qDebug() << "expected: " << texts[i];
         QVERIFY(data);
@@ -372,7 +374,7 @@ void TestDocumentLayout::testNestedPrefixedLists()
     h1.setListStyle(&listStyle);
     h2.setListLevel(2);
     h2.setListStyle(&listStyle);
-    
+
     QVERIFY(listStyle.hasLevelProperties(1));
     QVERIFY(listStyle.hasLevelProperties(2));
     QVERIFY(!listStyle.hasLevelProperties(3));
@@ -388,10 +390,10 @@ void TestDocumentLayout::testNestedPrefixedLists()
     block = m_doc->begin();
     QVERIFY(block.userData() == 0);
     block = block.next();
-    static const char* const texts[] = { "Main1:", "Sub1.1*"};
+    static const char *const texts[] = { "Main1:", "Sub1.1*"};
     int i = 0;
     while (block.isValid()) {
-        KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
+        KoTextBlockData *data = dynamic_cast<KoTextBlockData *>(block.userData());
         //qDebug() << "text: " << block.text();
         //qDebug() << "expected: " << texts[i];
         QVERIFY(data);
@@ -439,7 +441,7 @@ void TestDocumentLayout::testAutoRestartList()
 
     m_layout->layout();
 
-    KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(car.userData());
+    KoTextBlockData *data = dynamic_cast<KoTextBlockData *>(car.userData());
     QVERIFY(data);
     // qDebug() << data->counterText();
     QCOMPARE(data->counterText(), QString("2.1."));
@@ -469,7 +471,7 @@ void TestDocumentLayout::testListParagraphIndent()
     m_layout->layout();
 
     // still at h2 parag!
-    KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
+    KoTextBlockData *data = dynamic_cast<KoTextBlockData *>(block.userData());
     QVERIFY(data);
     QCOMPARE(data->counterPosition(), QPointF(10, 14.4));
 }
@@ -513,11 +515,11 @@ void TestDocumentLayout::testRestartNumbering()
 
     m_layout->layout();
 
-    static const char * const values[] = { "1", "2", "1", "2", "3" };
+    static const char *const values[] = { "1", "2", "1", "2", "3" };
     block = m_doc->begin();
     int i = 0;
     while (block.isValid()) {
-        KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
+        KoTextBlockData *data = dynamic_cast<KoTextBlockData *>(block.userData());
         QVERIFY(data);
         // qDebug() << data->counterText() << QString(values[i]);
         QCOMPARE(data->counterText(), QString(values[i++]));
@@ -550,7 +552,7 @@ void TestDocumentLayout::testRightToLeftList()
 
     block = m_doc->begin();
     while (block.isValid()) {
-        KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
+        KoTextBlockData *data = dynamic_cast<KoTextBlockData *>(block.userData());
         QVERIFY(data);
         QVERIFY(data->counterWidth() > 2);
         QVERIFY(data->counterPosition().x() > 100);
@@ -585,11 +587,11 @@ void TestDocumentLayout::testLetterSynchronization()
 
     m_layout->layout();
 
-    static const char * const values[] = { "y", "z", "aa", "bb", "cc" };
+    static const char *const values[] = { "y", "z", "aa", "bb", "cc" };
     block = m_doc->begin();
     int i = 0;
     while (block.isValid()) {
-        KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
+        KoTextBlockData *data = dynamic_cast<KoTextBlockData *>(block.userData());
         QVERIFY(data);
         // qDebug() << "-> " << data->counterText() << endl;
         QCOMPARE(data->counterText(), QString(values[i++]));
@@ -621,7 +623,7 @@ void TestDocumentLayout::testInvalidateLists()
     // check the list items were done (semi) properly
     block = m_doc->begin().next();
     QVERIFY(block.textList());
-    KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
+    KoTextBlockData *data = dynamic_cast<KoTextBlockData *>(block.userData());
     QVERIFY(data);
     QVERIFY(data->hasCounterData());
 
@@ -675,14 +677,14 @@ void TestDocumentLayout::testCenteredItems()
     block = m_doc->begin();
     QTextLayout *layout = block.layout();
     QTextLine line1 = layout->lineAt(0);
-    KoTextBlockData *data1 = dynamic_cast<KoTextBlockData*>(block.userData());
+    KoTextBlockData *data1 = dynamic_cast<KoTextBlockData *>(block.userData());
     QVERIFY(line1.isValid());
     QVERIFY(line1.width() < 200); // the counter takes some space.
 
     block = block.next();
     layout = block.layout();
     QTextLine line2 = layout->lineAt(0);
-    KoTextBlockData *data2 = dynamic_cast<KoTextBlockData*>(block.userData());
+    KoTextBlockData *data2 = dynamic_cast<KoTextBlockData *>(block.userData());
     QVERIFY(line2.isValid());
     QVERIFY(line2.width() < 200); // the counter takes some space.
     QCOMPARE(line1.width(), line2.width());
@@ -699,7 +701,7 @@ void TestDocumentLayout::testCenteredItems()
     block = block.next();
     layout = block.layout();
     QTextLine line = layout->lineAt(0);
-    KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
+    KoTextBlockData *data = dynamic_cast<KoTextBlockData *>(block.userData());
     QCOMPARE(data->counterPosition().x(), 200 - padding - data->counterWidth());
 }
 
@@ -720,7 +722,7 @@ void TestDocumentLayout::testMultiLevel()
 
     m_layout->layout();
 
-    KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
+    KoTextBlockData *data = dynamic_cast<KoTextBlockData *>(block.userData());
     QVERIFY(data);
     QVERIFY(data->hasCounterData());
     QCOMPARE(data->counterText(), QString("1.1.1"));

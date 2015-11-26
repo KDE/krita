@@ -63,8 +63,8 @@ void SimpleLinksWidget::manageBookmarks()
     QString name;
     const KoBookmarkManager *manager =  KoTextDocument(m_referenceTool->editor()->document()).textRangeManager()->bookmarkManager();
     QPointer<ManageBookmarkDialog> dia = new ManageBookmarkDialog(manager->bookmarkNameList(), m_referenceTool->editor(), m_referenceTool->canvas()->canvasWidget());
-    connect(dia, SIGNAL(nameChanged(const QString &, const QString &)), manager, SLOT(rename(const QString &, const QString &)));
-    connect(dia, SIGNAL(bookmarkDeleted(const QString &)), manager, SLOT(remove(const QString &)));
+    connect(dia, SIGNAL(nameChanged(QString,QString)), manager, SLOT(rename(QString,QString)));
+    connect(dia, SIGNAL(bookmarkDeleted(QString)), manager, SLOT(remove(QString)));
     if (dia->exec() == QDialog::Accepted) {
         name = dia->selectedBookmarkName();
     } else {

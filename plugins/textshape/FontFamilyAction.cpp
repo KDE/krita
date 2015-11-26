@@ -10,7 +10,7 @@
               (C) 2003 Andras Mantia <amantia@kde.org>
               (C) 2005-2006 Hamish Rodda <rodda@kde.org>
               (C) 2007 Clarence Dang <dang@kde.org>
-			  (C) 2014 Dan Leinir Turthra Jensen <admin@leinir.dk>
+              (C) 2014 Dan Leinir Turthra Jensen <admin@leinir.dk>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -42,65 +42,69 @@
 
 class KoFontFamilyAction::KoFontFamilyActionPrivate
 {
-    public:
-        KoFontFamilyActionPrivate(KoFontFamilyAction *parent)
-            : q(parent),
-              settingFont(0)
-        {
+public:
+    KoFontFamilyActionPrivate(KoFontFamilyAction *parent)
+        : q(parent)
+        , settingFont(0)
+    {
+    }
+
+    void _ko_slotFontChanged(const QFont &font)
+    {
+        qDebug() << "KoFontComboBox - slotFontChanged("
+                 << font.family() << ") settingFont=" << settingFont;
+        if (settingFont) {
+            return;
         }
 
-        void _ko_slotFontChanged(const QFont &font)
-        {
-            qDebug() << "KoFontComboBox - slotFontChanged("
-                        << font.family() << ") settingFont=" << settingFont;
-            if (settingFont)
-                return;
+        q->setFont(font.family());
+        q->triggered(font.family());
 
-            q->setFont(font.family());
-            q->triggered(font.family());
+        qDebug() << "\tslotFontChanged done";
+    }
 
-            qDebug() << "\tslotFontChanged done";
-        }
-
-
-        KoFontFamilyAction *q;
-        int settingFont;
+    KoFontFamilyAction *q;
+    int settingFont;
 };
 
 KoFontFamilyAction::KoFontFamilyAction(uint fontListCriteria, QObject *parent)
-  : KSelectAction(parent), d(new KoFontFamilyActionPrivate(this))
+    : KSelectAction(parent)
+    , d(new KoFontFamilyActionPrivate(this))
 {
     QStringList list;
-    KFontChooser::getFontList( list, fontListCriteria );
-    KSelectAction::setItems( list );
-    setEditable( true );
+    KFontChooser::getFontList(list, fontListCriteria);
+    KSelectAction::setItems(list);
+    setEditable(true);
 }
 
 KoFontFamilyAction::KoFontFamilyAction(QObject *parent)
-  : KSelectAction(parent), d(new KoFontFamilyActionPrivate(this))
+    : KSelectAction(parent)
+    , d(new KoFontFamilyActionPrivate(this))
 {
     QStringList list;
-    KFontChooser::getFontList( list, 0 );
-    KSelectAction::setItems( list );
-    setEditable( true );
+    KFontChooser::getFontList(list, 0);
+    KSelectAction::setItems(list);
+    setEditable(true);
 }
 
-KoFontFamilyAction::KoFontFamilyAction(const QString & text, QObject *parent)
-  : KSelectAction(text, parent), d(new KoFontFamilyActionPrivate(this))
+KoFontFamilyAction::KoFontFamilyAction(const QString &text, QObject *parent)
+    : KSelectAction(text, parent)
+    , d(new KoFontFamilyActionPrivate(this))
 {
     QStringList list;
-    KFontChooser::getFontList( list, 0 );
-    KSelectAction::setItems( list );
-    setEditable( true );
+    KFontChooser::getFontList(list, 0);
+    KSelectAction::setItems(list);
+    setEditable(true);
 }
 
 KoFontFamilyAction::KoFontFamilyAction(const QIcon &icon, const QString &text, QObject *parent)
-  : KSelectAction(icon, text, parent), d(new KoFontFamilyActionPrivate(this))
+    : KSelectAction(icon, text, parent)
+    , d(new KoFontFamilyActionPrivate(this))
 {
     QStringList list;
-    KFontChooser::getFontList( list, 0 );
-    KSelectAction::setItems( list );
-    setEditable( true );
+    KFontChooser::getFontList(list, 0);
+    KSelectAction::setItems(list);
+    setEditable(true);
 }
 
 KoFontFamilyAction::~KoFontFamilyAction()
@@ -113,7 +117,7 @@ QString KoFontFamilyAction::font() const
     return currentText();
 }
 
-QWidget* KoFontFamilyAction::createWidget(QWidget* parent)
+QWidget *KoFontFamilyAction::createWidget(QWidget *parent)
 {
     qDebug() << "KoFontFamilyAction::createWidget()";
 // silence unclear warning from original kfontaction.acpp
@@ -123,35 +127,36 @@ QWidget* KoFontFamilyAction::createWidget(QWidget* parent)
     // This is the visual element on the screen.  This method overrides
     // the KSelectAction one, preventing KSelectAction from creating its
     // regular KComboBox.
-    KoFontComboBox *cb = new KoFontComboBox( parent );
+    KoFontComboBox *cb = new KoFontComboBox(parent);
     //cb->setFontList(items());
 
     qDebug() << "\tset=" << font();
     // Do this before connecting the signal so that nothing will fire.
-    cb->setCurrentFont( QFont( font().toLower() ) );
+    cb->setCurrentFont(QFont(font().toLower()));
     qDebug() << "\tspit back=" << cb->currentFont().family();
 
-    connect( cb, SIGNAL(currentFontChanged(QFont)), SLOT(_ko_slotFontChanged(QFont)) );
-    cb->setMinimumWidth( cb->sizeHint().width() );
+    connect(cb, SIGNAL(currentFontChanged(QFont)), SLOT(_ko_slotFontChanged(QFont)));
+    cb->setMinimumWidth(cb->sizeHint().width());
     return cb;
 }
 
 /*
  * Maintenance note: Keep in sync with KFontComboBox::setCurrentFont()
  */
-void KoFontFamilyAction::setFont( const QString &family )
+void KoFontFamilyAction::setFont(const QString &family)
 {
     qDebug() << "KoFontFamilyAction::setFont(" << family << ")";
 
     // Suppress triggered(QString) signal and prevent recursive call to ourself.
     d->settingFont++;
 
-    Q_FOREACH (QWidget *w, createdWidgets())
-    {
+    Q_FOREACH (QWidget *w, createdWidgets()) {
         KoFontComboBox *cb = qobject_cast<KoFontComboBox *>(w);
         qDebug() << "\tw=" << w << "cb=" << cb;
 
-        if(!cb) continue;
+        if (!cb) {
+            continue;
+        }
 
         cb->setCurrentFont(QFont(family.toLower()));
         qDebug() << "\t\tw spit back=" << cb->currentFont().family();
@@ -162,21 +167,23 @@ void KoFontFamilyAction::setFont( const QString &family )
     qDebug() << "\tcalling setCurrentAction()";
 
     QString lowerName = family.toLower();
-    if (setCurrentAction(lowerName, Qt::CaseInsensitive))
-       return;
+    if (setCurrentAction(lowerName, Qt::CaseInsensitive)) {
+        return;
+    }
 
     int i = lowerName.indexOf(" [");
-    if (i > -1)
-    {
-       lowerName = lowerName.left(i);
-       i = 0;
-       if (setCurrentAction(lowerName, Qt::CaseInsensitive))
-          return;
+    if (i > -1) {
+        lowerName = lowerName.left(i);
+        i = 0;
+        if (setCurrentAction(lowerName, Qt::CaseInsensitive)) {
+            return;
+        }
     }
 
     lowerName += " [";
-    if (setCurrentAction(lowerName, Qt::CaseInsensitive))
-      return;
+    if (setCurrentAction(lowerName, Qt::CaseInsensitive)) {
+        return;
+    }
 
     // TODO: Inconsistent state if KFontComboBox::setCurrentFont() succeeded
     //       but setCurrentAction() did not and vice-versa.

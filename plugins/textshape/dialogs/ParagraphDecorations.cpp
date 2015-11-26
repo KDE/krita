@@ -22,12 +22,12 @@
 
 #include <QDebug>
 
-ParagraphDecorations::ParagraphDecorations(QWidget* parent)
-        : QWidget(parent)
+ParagraphDecorations::ParagraphDecorations(QWidget *parent)
+    : QWidget(parent)
 {
     widget.setupUi(this);
 
-    connect(widget.backgroundColor, SIGNAL(changed(const QColor&)), this, SLOT(slotBackgroundColorChanged()));
+    connect(widget.backgroundColor, SIGNAL(changed(QColor)), this, SLOT(slotBackgroundColorChanged()));
     connect(widget.resetBackgroundColor, SIGNAL(clicked()), this, SLOT(clearBackgroundColor()));
 }
 
@@ -54,9 +54,11 @@ void ParagraphDecorations::save(KoParagraphStyle *style) const
     if (m_backgroundColorReset)
         // clearing the property doesn't work since ParagraphSettingsDialog does a mergeBlockFormat
         // so we'll set it to a Qt::NoBrush brush instead
+    {
         style->setBackground(QBrush(Qt::NoBrush));
-    else if (m_backgroundColorChanged)
+    } else if (m_backgroundColorChanged) {
         style->setBackground(QBrush(widget.backgroundColor->color()));
+    }
 }
 
 void ParagraphDecorations::clearBackgroundColor()

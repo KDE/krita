@@ -32,7 +32,7 @@ public:
 
     virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources) const;
     virtual KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources) const;
-    virtual bool supports(const KoXmlElement & e, KoShapeLoadingContext &context) const;
+    virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
 
 };
 

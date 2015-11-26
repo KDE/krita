@@ -46,7 +46,7 @@ public:
 
 public Q_SLOTS:
     void setStyleManager(KoStyleManager *sm);
-    void setCurrentFormat(const QTextCharFormat& format, const QTextCharFormat& refBlockCharFormat);
+    void setCurrentFormat(const QTextCharFormat &format, const QTextCharFormat &refBlockCharFormat);
     void setCurrentBlockFormat(const QTextBlockFormat &format);
     void slotCharacterStyleApplied(const KoCharacterStyle *style);
 

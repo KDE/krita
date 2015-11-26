@@ -35,13 +35,14 @@ public:
     /// return true if the current text and formatting for the parameter section is already in our database
     bool hasText(int position, int length) const;
 
-    const TextChange *first() const {
+    const TextChange *first() const
+    {
         return m_root;
     }
-    QMap<int, const TextChange*> changes() const;
+    QMap<int, const TextChange *> changes() const;
 
 private:
-    QMap<int, TextChange*> m_index;
+    QMap<int, TextChange *> m_index;
     TextChange *m_root;
 };
 

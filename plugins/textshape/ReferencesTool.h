@@ -45,7 +45,7 @@ public:
 
     virtual ~ReferencesTool();
 
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     virtual void deactivate();
 
     virtual void createActions();

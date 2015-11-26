@@ -46,10 +46,10 @@ private:
      * @param cellTexts a map of strings to put in the cells, key is QPair<row, col>.
      */
     void initTest(int rows, int columns, KoTableStyle *tableStyle,
-            const QList<KoTableColumnStyle *> &columnStyles,
-            const QList<KoTableRowStyle *> &rowStyles,
-            const QMap<QPair<int, int>, KoTableCellStyle *> &cellStyles,
-            const QMap<QPair<int, int>, QString> &cellTexts);
+                  const QList<KoTableColumnStyle *> &columnStyles,
+                  const QList<KoTableRowStyle *> &rowStyles,
+                  const QMap<QPair<int, int>, KoTableCellStyle *> &cellStyles,
+                  const QMap<QPair<int, int>, QString> &cellTexts);
 
     /**
      * Initialize for a new test. Simplified version.
@@ -121,7 +121,7 @@ class MockTextShape : public TextShape
 public:
     MockTextShape() : TextShape(0)
     {
-        layout = qobject_cast<KoTextDocumentLayout*>(textShapeData()->document()->documentLayout());
+        layout = qobject_cast<KoTextDocumentLayout *>(textShapeData()->document()->documentLayout());
     }
     void paint(QPainter &painter, const KoViewConverter &converter)
     {
@@ -129,7 +129,8 @@ public:
         Q_UNUSED(converter);
     }
     virtual void saveOdf(KoShapeSavingContext &) const {}
-    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) {
+    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &)
+    {
         return true;
     }
     KoTextDocumentLayout *layout;

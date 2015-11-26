@@ -20,9 +20,8 @@
 #include "TextChanges.h"
 #include "TextChange.h"
 
-
 TextChanges::TextChanges()
-        : m_root(0)
+    : m_root(0)
 {
 }
 
@@ -55,21 +54,25 @@ void TextChanges::changed(int position, const QString &former, const QString &la
 
     TextChange *cursor = m_root;
     while (cursor->next()) {
-        if (cursor->position() + cursor->length() >= position) break;
+        if (cursor->position() + cursor->length() >= position) {
+            break;
+        }
         cursor = cursor->next();
     }
     Q_ASSERT(cursor);
     if (cursor->position() > position) { // insert new one before.
         cursor->insertBefore(change);
-        if (cursor == m_root)
+        if (cursor == m_root) {
             m_root = change;
+        }
     } else if (position >= cursor->position() && position <= cursor->position() + cursor->length()) {//merge
         cursor->merge(change);
         delete change;
     } else { // insert new one after.
         cursor->insertAfter(change);
-        if (change->next())
+        if (change->next()) {
             change->next()->move(change->length());
+        }
     }
 }
 
@@ -80,8 +83,8 @@ bool TextChanges::hasText(int position, int length) const
     return false;
 }
 
-QMap<int, const TextChange*> TextChanges::changes() const
+QMap<int, const TextChange *> TextChanges::changes() const
 {
-    QMap<int, const TextChange*> result;
+    QMap<int, const TextChange *> result;
     return result;
 }

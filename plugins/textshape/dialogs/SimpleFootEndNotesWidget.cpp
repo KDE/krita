@@ -28,9 +28,8 @@
 
 #include <QWidget>
 
-
-SimpleFootEndNotesWidget::SimpleFootEndNotesWidget(TextTool *tool ,QWidget *parent)
-        : QWidget(parent)
+SimpleFootEndNotesWidget::SimpleFootEndNotesWidget(TextTool *tool, QWidget *parent)
+    : QWidget(parent)
 {
     widget.setupUi(this);
     widget.addFootnote->addAction(tool->action("insert_autofootnote"));

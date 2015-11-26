@@ -54,16 +54,16 @@
 #include <QDebug>
 
 SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
-        : QWidget(parent)
-        , m_styleManager(0)
-        , m_blockSignals(false)
-        , m_tool(tool)
-        , m_directionButtonState(Auto)
-        , m_thumbnailer(new KoStyleThumbnailer())
-        , m_mapper(new QSignalMapper(this))
-        , m_stylesModel(new StylesModel(0, StylesModel::ParagraphStyle))
-        , m_sortedStylesModel(new DockerStylesComboModel())
-        , m_stylesDelegate(0)
+    : QWidget(parent)
+    , m_styleManager(0)
+    , m_blockSignals(false)
+    , m_tool(tool)
+    , m_directionButtonState(Auto)
+    , m_thumbnailer(new KoStyleThumbnailer())
+    , m_mapper(new QSignalMapper(this))
+    , m_stylesModel(new StylesModel(0, StylesModel::ParagraphStyle))
+    , m_sortedStylesModel(new DockerStylesComboModel())
+    , m_stylesDelegate(0)
 {
     widget.setupUi(this);
     widget.alignCenter->setDefaultAction(tool->action("format_aligncenter"));
@@ -130,16 +130,16 @@ void SimpleParagraphWidget::fillListButtons()
     KoTextRangeManager tlm;
     TextShape textShape(&itom, &tlm);
     textShape.setSize(QSizeF(300, 100));
-    QTextCursor cursor (textShape.textShapeData()->document());
+    QTextCursor cursor(textShape.textShapeData()->document());
     Q_FOREACH (const Lists::ListStyleItem &item, Lists::genericListStyleItems()) {
-        QPixmap pm(48,48);
+        QPixmap pm(48, 48);
 
         pm.fill(Qt::transparent);
         QPainter p(&pm);
 
         p.translate(0, -1.5);
         p.setRenderHint(QPainter::Antialiasing);
-        if(item.style != KoListStyle::None) {
+        if (item.style != KoListStyle::None) {
             KoListStyle listStyle;
             KoListLevelProperties llp = listStyle.levelProperties(1);
             llp.setStyle(item.style);
@@ -149,7 +149,7 @@ void SimpleParagraphWidget::fillListButtons()
             }
             listStyle.setLevelProperties(llp);
             cursor.select(QTextCursor::Document);
-            QTextCharFormat textCharFormat=cursor.blockCharFormat();
+            QTextCharFormat textCharFormat = cursor.blockCharFormat();
             textCharFormat.setFontPointSize(11);
             textCharFormat.setFontWeight(QFont::Normal);
             cursor.setCharFormat(textCharFormat);
@@ -157,7 +157,7 @@ void SimpleParagraphWidget::fillListButtons()
             QTextBlock cursorBlock = cursor.block();
             KoTextBlockData data(cursorBlock);
             cursor.insertText("----");
-            listStyle.applyStyle(cursor.block(),1);
+            listStyle.applyStyle(cursor.block(), 1);
             cursorBlock = cursor.block();
             KoTextBlockData data1(cursorBlock);
             cursor.insertText("\n----");
@@ -167,19 +167,20 @@ void SimpleParagraphWidget::fillListButtons()
             cursorBlock = cursor.block();
             KoTextBlockData data3(cursorBlock);
 
-            KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(textShape.textShapeData()->document()->documentLayout());
-            if(lay)
+            KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout *>(textShape.textShapeData()->document()->documentLayout());
+            if (lay) {
                 lay->layout();
+            }
 
             KoShapePaintingContext paintContext; //FIXME
             textShape.paintComponent(p, zoomHandler, paintContext);
-            widget.bulletListButton->addItem(pm, static_cast<int> (item.style));
+            widget.bulletListButton->addItem(pm, static_cast<int>(item.style));
         }
     }
 
     widget.bulletListButton->addSeparator();
 
-    QAction *action = new QAction(i18n("Change List Level"),this);
+    QAction *action = new QAction(i18n("Change List Level"), this);
     action->setToolTip(i18n("Change the level the list is at"));
 
     QMenu *listLevelMenu = new QMenu();
@@ -189,7 +190,7 @@ void SimpleParagraphWidget::fillListButtons()
         ListLevelChooser *chooserWidget = new ListLevelChooser((levelIndent * level) + 5);
         wa->setDefaultWidget(chooserWidget);
         listLevelMenu->addAction(wa);
-        m_mapper->setMapping(wa,level + 1);
+        m_mapper->setMapping(wa, level + 1);
         connect(chooserWidget, SIGNAL(clicked()), wa, SLOT(trigger()));
         connect(wa, SIGNAL(triggered()), m_mapper, SLOT(map()));
     }
@@ -207,10 +208,12 @@ void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
     m_currentBlock = block;
     m_blockSignals = true;
     struct Finally {
-        Finally(SimpleParagraphWidget *p) {
+        Finally(SimpleParagraphWidget *p)
+        {
             parent = p;
         }
-        ~Finally() {
+        ~Finally()
+        {
             parent->m_blockSignals = false;
         }
         SimpleParagraphWidget *parent;
@@ -222,8 +225,9 @@ void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
 
 void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
 {
-    if (!m_styleManager || format == m_currentBlockFormat)
+    if (!m_styleManager || format == m_currentBlockFormat) {
         return;
+    }
     m_currentBlockFormat = format;
 
     int id = m_currentBlockFormat.intProperty(KoParagraphStyle::StyleId);
@@ -251,11 +255,10 @@ void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
             if (property == QTextBlockFormat::BlockAlignment) { //the default alignment can be retrieved in the defaultTextOption. However, calligra sets the Qt::AlignAbsolute flag, so we need to or this flag with the default alignment before comparing.
                 if ((m_currentBlockFormat.property(property) != style->value(property))
                         && !(style->value(property).isNull()
-                             && ((m_currentBlockFormat.intProperty(property)) == int(m_currentBlock.document()->defaultTextOption().alignment()| Qt::AlignAbsolute)))) {
+                             && ((m_currentBlockFormat.intProperty(property)) == int(m_currentBlock.document()->defaultTextOption().alignment() | Qt::AlignAbsolute)))) {
                     unchanged = false;
                     break;
-                }
-                else {
+                } else {
                     continue;
                 }
             }
@@ -308,7 +311,9 @@ void SimpleParagraphWidget::setInitialUsedStyles(QVector<int> list)
 void SimpleParagraphWidget::listStyleChanged(int id)
 {
     emit doneWithFocus();
-    if (m_blockSignals) return;
+    if (m_blockSignals) {
+        return;
+    }
     KoListLevelProperties llp;
     llp.setStyle(static_cast<KoListStyle::Style>(id));
     llp.setLevel(1);
@@ -352,7 +357,9 @@ void SimpleParagraphWidget::slotParagraphStyleApplied(const KoParagraphStyle *st
 void SimpleParagraphWidget::changeListLevel(int level)
 {
     emit doneWithFocus();
-    if (m_blockSignals) return;
+    if (m_blockSignals) {
+        return;
+    }
 
     m_tool->setListLevel(level);
 }

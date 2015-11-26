@@ -34,7 +34,7 @@ class FontDia : public KoDialog
 {
     Q_OBJECT
 public:
-    explicit FontDia(KoTextEditor *cursor, QWidget* parent = 0);
+    explicit FontDia(KoTextEditor *cursor, QWidget *parent = 0);
 
 protected Q_SLOTS:
     void styleChanged(bool state = true);

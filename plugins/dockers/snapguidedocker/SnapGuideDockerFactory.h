@@ -30,7 +30,7 @@ public:
     SnapGuideDockerFactory();
 
     virtual QString id() const;
-    virtual QDockWidget* createDockWidget();
+    virtual QDockWidget *createDockWidget();
     virtual KoDockFactoryBase::DockPosition defaultDockPosition() const;
 
 };

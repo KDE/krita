@@ -33,7 +33,7 @@ public:
     ShapeCollectionDockerFactory();
 
     virtual QString id() const;
-    virtual QDockWidget* createDockWidget();
+    virtual QDockWidget *createDockWidget();
     DockPosition defaultDockPosition() const
     {
         return DockRight;
@@ -55,19 +55,18 @@ class ShapeCollectionDocker : public QDockWidget, public KoCanvasObserverBase
     Q_OBJECT
 public:
 
-    explicit ShapeCollectionDocker(QWidget* parent = 0);
+    explicit ShapeCollectionDocker(QWidget *parent = 0);
 
     /// reimplemented
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
 
-
 protected Q_SLOTS:
     /**
          * Activates the shape creation tool when a shape is selected.
          */
-    void activateShapeCreationTool(const QModelIndex& index);
-    void activateShapeCreationToolFromQuick(const QModelIndex& index);
+    void activateShapeCreationTool(const QModelIndex &index);
+    void activateShapeCreationToolFromQuick(const QModelIndex &index);
 
     /**
          * Changes the current shape collection
@@ -80,7 +79,7 @@ protected Q_SLOTS:
     void loadCollection();
 
     /// Called when an error occurred while loading a collection
-    void onLoadingFailed(const QString& reason);
+    void onLoadingFailed(const QString &reason);
 
     /// Called when loading of a collection is finished
     void onLoadingFinished();
@@ -100,8 +99,8 @@ protected:
     /**
          * Add a collection to the docker
          */
-    bool addCollection(const QString& id, const QString& title, CollectionItemModel* model);
-    void removeCollection(const QString& id);
+    bool addCollection(const QString &id, const QString &title, CollectionItemModel *model);
+    void removeCollection(const QString &id);
 
     /**
          * Builds the menu for the Add Collection Button
@@ -109,15 +108,15 @@ protected:
     void buildAddCollectionMenu();
 
     /// Generate an icon from @p shape
-    QIcon generateShapeIcon(KoShape* shape);
+    QIcon generateShapeIcon(KoShape *shape);
 
 private:
-    void scanCollectionDir(const QString& dirName, QMenu* menu);
+    void scanCollectionDir(const QString &dirName, QMenu *menu);
 
 private:
     QListView *m_quickView;
     QToolButton *m_moreShapes;
-    QMenu* m_moreShapesContainer;
+    QMenu *m_moreShapesContainer;
     QListWidget *m_collectionChooser;
     QListView *m_collectionView;
     QToolButton *m_closeCollectionButton;
@@ -125,7 +124,7 @@ private:
     QSpacerItem *m_spacer;
     QGridLayout *m_layout;
 
-    QMap<QString, CollectionItemModel*> m_modelMap;
+    QMap<QString, CollectionItemModel *> m_modelMap;
 };
 
 #endif //KOSHAPECOLLECTIONDOCKER_H

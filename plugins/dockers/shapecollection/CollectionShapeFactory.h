@@ -21,18 +21,17 @@
 
 #include <KoShapeFactoryBase.h>
 
-
 class CollectionShapeFactory : public KoShapeFactoryBase
 {
-    public:
-        CollectionShapeFactory(const QString &id, KoShape* shape);
-        ~CollectionShapeFactory();
+public:
+    CollectionShapeFactory(const QString &id, KoShape *shape);
+    ~CollectionShapeFactory();
 
-        virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
-        virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
+    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
+    virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
 
-    private:
-        KoShape* m_shape;
+private:
+    KoShape *m_shape;
 };
 
 #endif //KOCOLLECTIONSHAPEFACTORY_H

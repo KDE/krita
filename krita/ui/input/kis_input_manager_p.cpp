@@ -82,23 +82,6 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
         peckish = false;
         return true;
     }
-    else if ((event->type() == QEvent::MouseButtonPress) /* Need to scrutinize */ &&
-             (!savedEvent)) /* Otherwise we enter a loop repeatedly storing the same event */
-    {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-        // Pocket the event and decide what to do with it later
-        // savedEvent = *(static_cast<QMouseEvent*>(event));
-        savedEvent = new QMouseEvent(QEvent::MouseButtonPress,
-                                     mouseEvent->pos(),
-                                     mouseEvent->windowPos(),
-                                     mouseEvent->screenPos(),
-                                     mouseEvent->button(),
-                                     mouseEvent->buttons(),
-                                     mouseEvent->modifiers());
-        savedTarget = target;
-        mouseEvent->accept();
-        return true;
-    }
 
     return false; // All clear - let this one through!
 }
@@ -107,14 +90,14 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
 void KisInputManager::Private::EventEater::activate()
 {
     if (!hungry && (KisTabletDebugger::instance()->debugEnabled()))
-        dbgTablet << "Ignoring mouse events.";
+        dbgTablet << "Start ignoring mouse events.";
     hungry = true;
 }
 
 void KisInputManager::Private::EventEater::deactivate()
 {
-    if (!hungry && (KisTabletDebugger::instance()->debugEnabled()))
-        dbgTablet << "Accepting mouse events.";
+    if (hungry && (KisTabletDebugger::instance()->debugEnabled()))
+        dbgTablet << "Stop ignoring mouse events.";
     hungry = false;
 }
 

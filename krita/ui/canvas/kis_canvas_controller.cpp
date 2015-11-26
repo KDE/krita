@@ -144,7 +144,7 @@ bool KisCanvasController::eventFilter(QObject *watched, QEvent *event)
     if (canvas && canvas->canvasWidget() && (watched == canvas->canvasWidget())) {
         if (event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove) {
             m_d->emitPointerPositionChangedSignals(event);
-            return true;
+            return false;
         }
     }
 

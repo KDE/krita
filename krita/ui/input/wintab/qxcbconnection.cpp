@@ -38,6 +38,7 @@
 #include <QPointer>
 #include <QElapsedTimer>
 #include <QGuiApplication>
+#include <QApplication>
 
 
 #include <X11/extensions/XI2proto.h>
@@ -600,7 +601,7 @@ struct EventTimerStaticInitializer
 EventTimerStaticInitializer __timerStaticInitializer;
 
 Qt::MouseButtons tabletState = Qt::NoButton;
-QWindow* tabletPressTarget = 0;
+QWidget *tabletPressWidget = 0;
 
 void QWindowSystemInterface::handleTabletEvent(QWindow *w, const QPointF &local, const QPointF &global,
                                                int device, int pointerType, Qt::MouseButtons buttons, qreal pressure, int xTilt, int yTilt,
@@ -623,35 +624,36 @@ void processTabletEvent(QWindowSystemInterfacePrivate::TabletEvent *e)
     if (e->buttons != tabletState)
         type = (e->buttons > tabletState) ? QEvent::TabletPress : QEvent::TabletRelease;
 
-    QWindow *window = e->window.data();
-    //modifier_buttons = e->modifiers; // Krita: not used!
-
     bool localValid = true;
-    // If window is null, pick one based on the global position and make sure all
-    // subsequent events up to the release are delivered to that same window.
-    // If window is given, just send to that.
-    if (type == QEvent::TabletPress) {
-        if (e->nullWindow()) {
-            window = QGuiApplication::topLevelAt(e->global.toPoint());
-            localValid = false;
-        }
-        if (!window)
-            return;
-        tabletPressTarget = window;
-    } else {
-        if (e->nullWindow()) {
-            window = tabletPressTarget;
-            localValid = false;
-        }
-        if (type == QEvent::TabletRelease)
-            tabletPressTarget = 0;
-        if (!window)
-            return;
+
+    QWidget *targetWidget = 0;
+
+    if (e->window) {
+        targetWidget = qobject_cast<QWidget*>(e->window.data());
     }
+
+    if (!targetWidget) {
+        if (tabletPressWidget) {
+            targetWidget = tabletPressWidget;
+            localValid = false;
+        } else {
+            targetWidget = QApplication::widgetAt(e->global.toPoint());
+            localValid = false;
+
+            if (!targetWidget) return;
+        }
+    }
+
+    if (type == QEvent::TabletPress) {
+        tabletPressWidget = targetWidget;
+    } else if (type == QEvent::TabletRelease) {
+        tabletPressWidget = 0;
+    }
+
     QPointF local = e->local;
     if (!localValid) {
         QPointF delta = e->global - e->global.toPoint();
-        local = window->mapFromGlobal(e->global.toPoint()) + delta;
+        local = targetWidget->mapFromGlobal(e->global.toPoint()) + delta;
     }
     Qt::MouseButtons stateChange = e->buttons ^ tabletState;
     Qt::MouseButton button = Qt::NoButton;
@@ -666,9 +668,35 @@ void processTabletEvent(QWindowSystemInterfacePrivate::TabletEvent *e)
                     e->tangentialPressure, e->rotation, e->z,
                     e->modifiers, e->uid, button, e->buttons);
     ev.setTimestamp(e->timestamp);
-    QGuiApplication::sendEvent(window, &ev);
+
+    QGuiApplication::sendEvent(targetWidget, &ev);
+
     tabletState = e->buttons;
 #else
     Q_UNUSED(e)
 #endif
+}
+
+void QWindowSystemInterface::handleTabletEnterProximityEvent(int device, int pointerType, qint64 uid)
+{
+    qint64 timestamp = g_eventTimer.elapsed();
+
+    QTabletEvent ev(QEvent::TabletEnterProximity, QPointF(), QPointF(),
+                    device, pointerType, 0, 0, 0,
+                    0, 0, 0,
+                    Qt::NoModifier, uid, Qt::NoButton, tabletState);
+    ev.setTimestamp(timestamp);
+    QGuiApplication::sendEvent(qGuiApp, &ev);
+}
+
+void QWindowSystemInterface::handleTabletLeaveProximityEvent(int device, int pointerType, qint64 uid)
+{
+    qint64 timestamp = g_eventTimer.elapsed();
+
+    QTabletEvent ev(QEvent::TabletLeaveProximity, QPointF(), QPointF(),
+                    device, pointerType, 0, 0, 0,
+                    0, 0, 0,
+                    Qt::NoModifier, uid, Qt::NoButton, tabletState);
+    ev.setTimestamp(timestamp);
+    QGuiApplication::sendEvent(qGuiApp, &ev);
 }

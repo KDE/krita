@@ -122,22 +122,9 @@ public:
         ENTER_FUNCTION();
     }
 
-    static void handleTabletEnterProximityEvent(int device, int pointerType, qint64 uid)
-    {
-        Q_UNUSED(device);
-        Q_UNUSED(pointerType);
-        Q_UNUSED(uid);
+    static void handleTabletEnterProximityEvent(int device, int pointerType, qint64 uid);
+    static void handleTabletLeaveProximityEvent(int device, int pointerType, qint64 uid);
 
-        ENTER_FUNCTION();
-    }
-    static void handleTabletLeaveProximityEvent(int device, int pointerType, qint64 uid)
-    {
-        Q_UNUSED(device);
-        Q_UNUSED(pointerType);
-        Q_UNUSED(uid);
-
-        ENTER_FUNCTION();
-    }
     static void handleTabletEvent(QWindow *w, const QPointF &local, const QPointF &global,
                                   int device, int pointerType, Qt::MouseButtons buttons, qreal pressure, int xTilt, int yTilt,
                                   qreal tangentialPressure, qreal rotation, int z, qint64 uid,

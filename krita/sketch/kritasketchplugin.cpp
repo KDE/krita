@@ -116,8 +116,7 @@ void KritaSketchPlugin::registerTypes(const char* uri)
 
     qmlRegisterSingletonType<Constants>("org.krita.sketch", 1, 0, "Constants", provideConstantsObject);
     qmlRegisterSingletonType<KritaNamespace>("org.krita.sketch", 1, 0, "Krita", provideKritaNamespaceObject);
-    // QT5TODO: somehow results in welcome screen all white
-//     qmlRegisterSingletonType<Welcome::MultiFeedRssModel>("org.krita.sketch", 1, 0, "KritaFeedRssModel", provideKritaRssModelObject);
+    qmlRegisterSingletonType<MultiFeedRssModel>("org.krita.sketch", 1, 0, "KritaFeedRssModel", provideKritaRssModelObject);
 
     qmlRegisterUncreatableType<LayerCompositeDetails>("org.krita.sketch", 1, 0, "LayerCompositeDetails", "This type is returned by the LayerModel class");
 }

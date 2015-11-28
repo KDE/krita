@@ -61,7 +61,7 @@ public:
                 QFile::copy(filename, saveLocation() + fi.fileName());
             }
             QList<KisBrushSP> collectionResources = createResources(filename);
-            foreach(KisBrushSP brush, collectionResources) {
+            Q_FOREACH (KisBrushSP brush, collectionResources) {
                 addResource(brush);
             }
         }
@@ -84,7 +84,7 @@ private:
         if (fileExtension == "abr") {
             KisAbrBrushCollection collection(filename);
             collection.load();
-            foreach(KisAbrBrush * abrBrush, collection.brushes()) {
+            Q_FOREACH (KisAbrBrush * abrBrush, collection.brushes()) {
 //                abrBrush->setBrushTipImage(QImage());
                 brushes.append(abrBrush);
                 addTag(abrBrush, collection.filename());
@@ -131,7 +131,7 @@ KisBrushServer::KisBrushServer()
     }
     m_brushThread = new KoResourceLoaderThread(m_brushServer);
     m_brushThread->start();
-    foreach(KisBrushSP brush, m_brushServer->resources()) {
+    Q_FOREACH (KisBrushSP brush, m_brushServer->resources()) {
         if (!dynamic_cast<KisAbrBrush*>(brush.data())) {
             brush->setBrushTipImage(QImage());
         }

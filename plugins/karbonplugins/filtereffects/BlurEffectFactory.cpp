@@ -24,16 +24,16 @@
 #include <klocalizedstring.h>
 
 BlurEffectFactory::BlurEffectFactory()
-        : KoFilterEffectFactoryBase(BlurEffectId, i18n("Gaussian blur"))
+    : KoFilterEffectFactoryBase(BlurEffectId, i18n("Gaussian blur"))
 {
 }
 
-KoFilterEffect * BlurEffectFactory::createFilterEffect() const
+KoFilterEffect *BlurEffectFactory::createFilterEffect() const
 {
     return new BlurEffect();
 }
 
-KoFilterEffectConfigWidgetBase * BlurEffectFactory::createConfigWidget() const
+KoFilterEffectConfigWidgetBase *BlurEffectFactory::createConfigWidget() const
 {
     return new BlurEffectConfigWidget();
 }

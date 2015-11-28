@@ -46,10 +46,10 @@ public:
     void setOperation(Operation op);
 
     /// Returns the arithmetic values
-    const qreal * arithmeticValues() const;
+    const qreal *arithmeticValues() const;
 
     /// Sets the arithmetic values
-    void setArithmeticValues(qreal * values);
+    void setArithmeticValues(qreal *values);
 
     /// reimplemented from KoFilterEffect
     virtual QImage processImage(const QImage &image, const KoFilterEffectRenderContext &context) const;

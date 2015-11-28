@@ -23,16 +23,16 @@
 #include <klocalizedstring.h>
 
 ImageEffectFactory::ImageEffectFactory()
-        : KoFilterEffectFactoryBase(ImageEffectId, i18n("Image"))
+    : KoFilterEffectFactoryBase(ImageEffectId, i18n("Image"))
 {
 }
 
-KoFilterEffect * ImageEffectFactory::createFilterEffect() const
+KoFilterEffect *ImageEffectFactory::createFilterEffect() const
 {
     return new ImageEffect();
 }
 
-KoFilterEffectConfigWidgetBase * ImageEffectFactory::createConfigWidget() const
+KoFilterEffectConfigWidgetBase *ImageEffectFactory::createConfigWidget() const
 {
     return new ImageEffectConfigWidget();
 }

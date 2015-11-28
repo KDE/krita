@@ -228,7 +228,7 @@ bool Command::processParameter(const QStringList& block)
     static int unhandledParameters = 0;
 
     Parameter * parameter = 0;
-    foreach (QString token, tokens)
+    Q_FOREACH (QString token, tokens)
     {
 
         QString paramName;
@@ -330,7 +330,7 @@ void Command::print(int level)
     }
     dbgPlugins << "Command : " << qPrintable(name());
 
-    foreach(Parameter * p, m_parameters)
+    Q_FOREACH (Parameter * p, m_parameters)
     {
         for(int j=0; j < level+1; ++j)
         {
@@ -384,7 +384,7 @@ QString Command::buildCommand(const QString &baseCommand)
 {
     // build list of parameters
     QString parameterList;
-    foreach(Parameter * p, m_parameters)
+    Q_FOREACH (Parameter * p, m_parameters)
     {
         if (!p->value().isNull())
         {
@@ -445,7 +445,7 @@ QString Command::mergeBlockToLine(const QStringList& block)
 
 void Command::reset()
 {
-    foreach(Parameter * p, m_parameters)
+    Q_FOREACH (Parameter * p, m_parameters)
     {
         p->reset();
     }

@@ -122,7 +122,7 @@ QSizeF KoShapeGroup::size() const
     //debugFlake << "size" << d->size;
     if (!d->sizeCached) {
         QRectF bound;
-        foreach(KoShape *shape, shapes()) {
+        Q_FOREACH (KoShape *shape, shapes()) {
             if (bound.isEmpty())
                 bound = shape->transformation().mapRect(shape->outlineRect());
             else
@@ -140,7 +140,7 @@ QRectF KoShapeGroup::boundingRect() const
 {
     bool first = true;
     QRectF groupBound;
-    foreach(KoShape* shape, shapes()) {
+    Q_FOREACH (KoShape* shape, shapes()) {
         if (first) {
             groupBound = shape->boundingRect();
             first = false;
@@ -166,7 +166,7 @@ void KoShapeGroup::saveOdf(KoShapeSavingContext & context) const
     QList<KoShape*> shapes = this->shapes();
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
-    foreach(KoShape* shape, shapes) {
+    Q_FOREACH (KoShape* shape, shapes) {
         shape->saveOdf(context);
     }
 
@@ -204,7 +204,7 @@ bool KoShapeGroup::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
 
     QRectF bound;
     bool boundInitialized = false;
-    foreach(KoShape * shape, shapes()) {
+    Q_FOREACH (KoShape * shape, shapes()) {
         if (! boundInitialized) {
             bound = shape->boundingRect();
             boundInitialized = true;
@@ -216,7 +216,7 @@ bool KoShapeGroup::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
     d->sizeCached = true;
     setPosition(bound.topLeft());
 
-    foreach(KoShape * shape, shapes())
+    Q_FOREACH (KoShape * shape, shapes())
         shape->setAbsolutePosition(shape->absolutePosition() - bound.topLeft());
 
     return true;

@@ -46,17 +46,17 @@ public:
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
     virtual void repaintDecorations();
 
-    virtual void mousePressEvent(KoPointerEvent *event) ;
+    virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
     virtual void keyPressEvent(QKeyEvent *event);
 
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     virtual void deactivate();
 
 public Q_SLOTS:
-    virtual void documentResourceChanged(int key, const QVariant & res);
+    virtual void documentResourceChanged(int key, const QVariant &res);
 
 protected:
     /// reimplemented from KoToolBase
@@ -65,14 +65,14 @@ protected:
 private Q_SLOTS:
     void initialize();
     void gradientChanged();
-    void gradientSelected(KoResource*);
+    void gradientSelected(KoResource *);
 private:
-    QGradient * m_gradient;
-    QMultiMap<KoShape*, GradientStrategy*> m_strategies; ///< the list of gradient strategies
-    GradientStrategy * m_currentStrategy;  ///< the current editing strategy
-    GradientStrategy * m_hoverStrategy; ///< the strategy the mouse hovers over
-    KoGradientEditWidget * m_gradientWidget;
-    KUndo2Command * m_currentCmd;
+    QGradient *m_gradient;
+    QMultiMap<KoShape *, GradientStrategy *> m_strategies; ///< the list of gradient strategies
+    GradientStrategy *m_currentStrategy;   ///< the current editing strategy
+    GradientStrategy *m_hoverStrategy;  ///< the strategy the mouse hovers over
+    KoGradientEditWidget *m_gradientWidget;
+    KUndo2Command *m_currentCmd;
     KoSnapGuide::Strategies m_oldSnapStrategies; ///< the previously enables snap strategies
 };
 

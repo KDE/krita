@@ -11,7 +11,7 @@
 
 void TestKoColorSpaceRegistry::testConstruction()
 {
-    KoColorSpaceRegistry* instance = KoColorSpaceRegistry::instance();
+    KoColorSpaceRegistry *instance = KoColorSpaceRegistry::instance();
     Q_ASSERT(instance);
 }
 

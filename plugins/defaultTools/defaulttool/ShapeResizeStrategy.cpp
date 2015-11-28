@@ -34,15 +34,16 @@
 #include <limits>
 #include <math.h>
 
-ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool,
-        const QPointF &clicked, KoFlake::SelectionHandle direction )
-    : KoInteractionStrategy(tool), m_lastScale(1.0,1.0)
+ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool, const QPointF &clicked, KoFlake::SelectionHandle direction)
+    : KoInteractionStrategy(tool)
+    , m_lastScale(1.0, 1.0)
 {
     Q_ASSERT(tool->canvas()->shapeManager()->selection()->count() > 0);
-    QList<KoShape*> selectedShapes = tool->canvas()->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
-    foreach(KoShape *shape, selectedShapes) {
-        if ( ! shape->isEditable() )
+    QList<KoShape *> selectedShapes = tool->canvas()->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
+    Q_FOREACH (KoShape *shape, selectedShapes) {
+        if (!shape->isEditable()) {
             continue;
+        }
         m_selectedShapes << shape;
         m_startPositions << shape->position();
         m_oldTransforms << shape->transformation();
@@ -52,69 +53,73 @@ ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool,
     m_start = clicked;
 
     KoShape *shp = 0;
-    if (tool->canvas()->shapeManager()->selection()->count()>1)
-       shp = tool->canvas()->shapeManager()->selection();
-    if (tool->canvas()->shapeManager()->selection()->count()==1)
+    if (tool->canvas()->shapeManager()->selection()->count() > 1) {
+        shp = tool->canvas()->shapeManager()->selection();
+    }
+    if (tool->canvas()->shapeManager()->selection()->count() == 1) {
         shp = tool->canvas()->shapeManager()->selection()->firstSelectedShape();
+    }
 
-    if ( shp )
-    {
+    if (shp) {
         m_windMatrix = shp->absoluteTransformation(0);
         m_unwindMatrix = m_windMatrix.inverted();
         m_initialSize = shp->size();
         m_initialPosition = m_windMatrix.map(QPointF());
     }
 
-    switch(direction) {
-        case KoFlake::TopMiddleHandle:
-            m_start = 0.5 * (shp->absolutePosition(KoFlake::TopLeftCorner) + shp->absolutePosition(KoFlake::TopRightCorner) );
-            m_top = true; m_bottom = false; m_left = false; m_right = false; break;
-        case KoFlake::TopRightHandle:
-            m_start = shp->absolutePosition(KoFlake::TopRightCorner);
-            m_top = true; m_bottom = false; m_left = false; m_right = true; break;
-        case KoFlake::RightMiddleHandle:
-            m_start = 0.5 * ( shp->absolutePosition(KoFlake::TopRightCorner) + shp->absolutePosition(KoFlake::BottomRightCorner) );
-            m_top = false; m_bottom = false; m_left = false; m_right = true; break;
-        case KoFlake::BottomRightHandle:
-            m_start = shp->absolutePosition(KoFlake::BottomRightCorner);
-            m_top = false; m_bottom = true; m_left = false; m_right = true; break;
-        case KoFlake::BottomMiddleHandle:
-            m_start = 0.5 * ( shp->absolutePosition(KoFlake::BottomRightCorner) + shp->absolutePosition(KoFlake::BottomLeftCorner) );
-            m_top = false; m_bottom = true; m_left = false; m_right = false; break;
-        case KoFlake::BottomLeftHandle:
-            m_start = shp->absolutePosition(KoFlake::BottomLeftCorner);
-            m_top = false; m_bottom = true; m_left = true; m_right = false; break;
-        case KoFlake::LeftMiddleHandle:
-            m_start = 0.5 * ( shp->absolutePosition(KoFlake::BottomLeftCorner) + shp->absolutePosition(KoFlake::TopLeftCorner) );
-            m_top = false; m_bottom = false; m_left = true; m_right = false; break;
-        case KoFlake::TopLeftHandle:
-            m_start = shp->absolutePosition(KoFlake::TopLeftCorner);
-            m_top = true; m_bottom = false; m_left = true; m_right = false; break;
-        default:
-             Q_ASSERT(0); // illegal 'corner'
+    switch (direction) {
+    case KoFlake::TopMiddleHandle:
+        m_start = 0.5 * (shp->absolutePosition(KoFlake::TopLeftCorner) + shp->absolutePosition(KoFlake::TopRightCorner));
+        m_top = true; m_bottom = false; m_left = false; m_right = false; break;
+    case KoFlake::TopRightHandle:
+        m_start = shp->absolutePosition(KoFlake::TopRightCorner);
+        m_top = true; m_bottom = false; m_left = false; m_right = true; break;
+    case KoFlake::RightMiddleHandle:
+        m_start = 0.5 * (shp->absolutePosition(KoFlake::TopRightCorner) + shp->absolutePosition(KoFlake::BottomRightCorner));
+        m_top = false; m_bottom = false; m_left = false; m_right = true; break;
+    case KoFlake::BottomRightHandle:
+        m_start = shp->absolutePosition(KoFlake::BottomRightCorner);
+        m_top = false; m_bottom = true; m_left = false; m_right = true; break;
+    case KoFlake::BottomMiddleHandle:
+        m_start = 0.5 * (shp->absolutePosition(KoFlake::BottomRightCorner) + shp->absolutePosition(KoFlake::BottomLeftCorner));
+        m_top = false; m_bottom = true; m_left = false; m_right = false; break;
+    case KoFlake::BottomLeftHandle:
+        m_start = shp->absolutePosition(KoFlake::BottomLeftCorner);
+        m_top = false; m_bottom = true; m_left = true; m_right = false; break;
+    case KoFlake::LeftMiddleHandle:
+        m_start = 0.5 * (shp->absolutePosition(KoFlake::BottomLeftCorner) + shp->absolutePosition(KoFlake::TopLeftCorner));
+        m_top = false; m_bottom = false; m_left = true; m_right = false; break;
+    case KoFlake::TopLeftHandle:
+        m_start = shp->absolutePosition(KoFlake::TopLeftCorner);
+        m_top = true; m_bottom = false; m_left = true; m_right = false; break;
+    default:
+        Q_ASSERT(0); // illegal 'corner'
     }
 
-    tool->setStatusText( i18n("Press CTRL to resize from center.") );
+    tool->setStatusText(i18n("Press CTRL to resize from center."));
 }
 
 void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers)
 {
     tool()->canvas()->updateCanvas(tool()->canvas()->snapGuide()->boundingRect());
-    QPointF newPos = tool()->canvas()->snapGuide()->snap( point, modifiers );
+    QPointF newPos = tool()->canvas()->snapGuide()->snap(point, modifiers);
     tool()->canvas()->updateCanvas(tool()->canvas()->snapGuide()->boundingRect());
 
     bool keepAspect = modifiers & Qt::ShiftModifier;
-    foreach(KoShape *shape, m_selectedShapes)
+    Q_FOREACH (KoShape *shape, m_selectedShapes) {
         keepAspect = keepAspect || shape->keepAspectRatio();
+    }
 
     qreal startWidth = m_initialSize.width();
-    if (startWidth < std::numeric_limits<qreal>::epsilon())
+    if (startWidth < std::numeric_limits<qreal>::epsilon()) {
         startWidth = std::numeric_limits<qreal>::epsilon();
+    }
     qreal startHeight = m_initialSize.height();
-    if (startHeight < std::numeric_limits<qreal>::epsilon())
+    if (startHeight < std::numeric_limits<qreal>::epsilon()) {
         startHeight = std::numeric_limits<qreal>::epsilon();
+    }
 
-    QPointF distance = m_unwindMatrix.map(newPos) - m_unwindMatrix.map( m_start );
+    QPointF distance = m_unwindMatrix.map(newPos) - m_unwindMatrix.map(m_start);
     // guard against resizing zero width shapes, which would result in huge zoom factors
     if (m_initialSize.width() < std::numeric_limits<qreal>::epsilon()) {
         distance.rx() = 0.0;
@@ -166,32 +171,34 @@ void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
     qreal zoomY = newHeight / startHeight;
 
     if (keepAspect) {
-        const bool cornerUsed = ((m_bottom?1:0) + (m_top?1:0) + (m_left?1:0) + (m_right?1:0)) == 2;
-        if ((cornerUsed && startWidth < startHeight) || m_left || m_right)
+        const bool cornerUsed = ((m_bottom ? 1 : 0) + (m_top ? 1 : 0) + (m_left ? 1 : 0) + (m_right ? 1 : 0)) == 2;
+        if ((cornerUsed && startWidth < startHeight) || m_left || m_right) {
             zoomY = zoomX;
-        else
+        } else {
             zoomX = zoomY;
+        }
     }
 
     QPointF move;
 
-    if (scaleFromCenter)
+    if (scaleFromCenter) {
         move = QPointF(startWidth / 2.0, startHeight / 2.0);
-    else
-        move = QPointF(m_left?startWidth:0, m_top?startHeight:0);
+    } else {
+        move = QPointF(m_left ? startWidth : 0, m_top ? startHeight : 0);
+    }
 
-    resizeBy( move, zoomX, zoomY );
+    resizeBy(move, zoomX, zoomY);
 }
 
-void ShapeResizeStrategy::handleCustomEvent( KoPointerEvent * event )
+void ShapeResizeStrategy::handleCustomEvent(KoPointerEvent *event)
 {
-    QPointF center = 0.5 * QPointF( m_initialSize.width(), m_initialSize.height() );
-    qreal zoom = pow(1.01, -0.1 * event->z() );
+    QPointF center = 0.5 * QPointF(m_initialSize.width(), m_initialSize.height());
+    qreal zoom = pow(1.01, -0.1 * event->z());
     m_lastScale *= zoom;
-    resizeBy( center, m_lastScale.x(), m_lastScale.y() );
+    resizeBy(center, m_lastScale.x(), m_lastScale.y());
 }
 
-void ShapeResizeStrategy::resizeBy( const QPointF &center, qreal zoomX, qreal zoomY )
+void ShapeResizeStrategy::resizeBy(const QPointF &center, qreal zoomX, qreal zoomY)
 {
     QTransform matrix;
     matrix.translate(center.x(), center.y()); // translate to
@@ -204,22 +211,21 @@ void ShapeResizeStrategy::resizeBy( const QPointF &center, qreal zoomX, qreal zo
     // the resizing transformation without the mirroring part
     QTransform resizeMatrix;
     resizeMatrix.translate(center.x(), center.y()); // translate to
-    resizeMatrix.scale( qAbs(zoomX), qAbs(zoomY) );
+    resizeMatrix.scale(qAbs(zoomX), qAbs(zoomY));
     resizeMatrix.translate(-center.x(), -center.y()); // and back
 
     // the mirroring part of the resizing transformation
     QTransform mirrorMatrix;
     mirrorMatrix.translate(center.x(), center.y()); // translate to
-    mirrorMatrix.scale( zoomX < 0 ? -1 : 1, zoomY < 0 ? -1 : 1 );
+    mirrorMatrix.scale(zoomX < 0 ? -1 : 1, zoomY < 0 ? -1 : 1);
     mirrorMatrix.translate(-center.x(), -center.y()); // and back
 
     int i = 0;
-    foreach(KoShape *shape, m_selectedShapes)
-    {
+    Q_FOREACH (KoShape *shape, m_selectedShapes) {
         shape->update();
 
         // this uses resize for the zooming part
-        shape->applyAbsoluteTransformation( m_unwindMatrix );
+        shape->applyAbsoluteTransformation(m_unwindMatrix);
 
         /*
          normally we would just apply the resizeMatrix now and be done with it, but
@@ -228,7 +234,7 @@ void ShapeResizeStrategy::resizeBy( const QPointF &center, qreal zoomX, qreal zo
         */
 
         // undo the last resize transformation
-        shape->applyAbsoluteTransformation( m_transformations[i].inverted() );
+        shape->applyAbsoluteTransformation(m_transformations[i].inverted());
 
         // save the shapes transformation matrix
         QTransform shapeMatrix = shape->absoluteTransformation(0);
@@ -241,44 +247,43 @@ void ShapeResizeStrategy::resizeBy( const QPointF &center, qreal zoomX, qreal zo
         qreal scaleY = localMatrix.m22();
 
         // calculate the scale matrix which is equivalent to our resizing above
-        QTransform scaleMatrix = (QTransform().scale( scaleX, scaleY ));
+        QTransform scaleMatrix = (QTransform().scale(scaleX, scaleY));
         scaleMatrix =  shapeMatrix.inverted() * scaleMatrix * shapeMatrix;
 
         // calculate the new size of the shape, using the effective scale values
-        QSizeF size( scaleX * m_startSizes[i].width(), scaleY * m_startSizes[i].height() );
+        QSizeF size(scaleX * m_startSizes[i].width(), scaleY * m_startSizes[i].height());
 
         // apply the transformation
-        shape->setSize( size );
+        shape->setSize(size);
         // apply the rest of the transformation without the resizing part
-        shape->applyAbsoluteTransformation( scaleMatrix.inverted() * resizeMatrix );
-        shape->applyAbsoluteTransformation( mirrorMatrix );
+        shape->applyAbsoluteTransformation(scaleMatrix.inverted() * resizeMatrix);
+        shape->applyAbsoluteTransformation(mirrorMatrix);
 
         // and remember the applied transformation later for later undoing
         m_transformations[i] = shapeMatrix.inverted() * shape->absoluteTransformation(0);
 
-        shape->applyAbsoluteTransformation( m_windMatrix );
+        shape->applyAbsoluteTransformation(m_windMatrix);
 
         shape->update();
         i++;
     }
-    tool()->canvas()->shapeManager()->selection()->applyAbsoluteTransformation( matrix * m_scaleMatrix.inverted() );
+    tool()->canvas()->shapeManager()->selection()->applyAbsoluteTransformation(matrix * m_scaleMatrix.inverted());
     m_scaleMatrix = matrix;
 }
 
-KUndo2Command* ShapeResizeStrategy::createCommand()
+KUndo2Command *ShapeResizeStrategy::createCommand()
 {
     tool()->canvas()->snapGuide()->reset();
     QList<QSizeF> newSizes;
     QList<QTransform> transformations;
     const int shapeCount = m_selectedShapes.count();
-    for ( int i = 0; i < shapeCount; ++i )
-    {
+    for (int i = 0; i < shapeCount; ++i) {
         newSizes << m_selectedShapes[i]->size();
         transformations << m_selectedShapes[i]->transformation();
     }
-    KUndo2Command * cmd = new KUndo2Command(kundo2_i18n("Resize"));
-    new KoShapeSizeCommand(m_selectedShapes, m_startSizes, newSizes, cmd );
-    new KoShapeTransformCommand( m_selectedShapes, m_oldTransforms, transformations, cmd );
+    KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Resize"));
+    new KoShapeSizeCommand(m_selectedShapes, m_startSizes, newSizes, cmd);
+    new KoShapeTransformCommand(m_selectedShapes, m_oldTransforms, transformations, cmd);
     return cmd;
 }
 
@@ -288,9 +293,9 @@ void ShapeResizeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     tool()->canvas()->updateCanvas(tool()->canvas()->snapGuide()->boundingRect());
 }
 
-void ShapeResizeStrategy::paint( QPainter &painter, const KoViewConverter &converter)
+void ShapeResizeStrategy::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    SelectionDecorator decorator (KoFlake::NoHandle, false, false);
+    SelectionDecorator decorator(KoFlake::NoHandle, false, false);
     decorator.setSelection(tool()->canvas()->shapeManager()->selection());
     decorator.setHandleRadius(handleRadius());
     decorator.paint(painter, converter);

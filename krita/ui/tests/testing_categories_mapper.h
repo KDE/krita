@@ -57,7 +57,7 @@ public:
     void checkRowChangedIndices(const QVector<int> indices) {
         QCOMPARE(indices.size(), rowChangedIndices.size());
 
-        foreach (int index, rowChangedIndices) {
+        Q_FOREACH (int index, rowChangedIndices) {
             QVERIFY(indices.contains(index));
         }
 

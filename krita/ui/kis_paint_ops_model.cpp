@@ -56,7 +56,7 @@ QVariant KisPaintOpListModel::data(const QModelIndex& idx, int role) const
 
 void KisPaintOpListModel::fill(const QList<KisPaintOpFactory*>& list)
 {
-    foreach (KisPaintOpFactory *factory, list) {
+    Q_FOREACH (KisPaintOpFactory *factory, list) {
         QString fileName = KoResourcePaths::findResource("kis_images", factory->pixmap());
         QPixmap pixmap(fileName);
 

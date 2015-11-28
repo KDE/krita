@@ -83,7 +83,7 @@ public:
         QList<KoRuler::Tab> tabs;
         QVariant variant = format.property(KoParagraphStyle::TabPositions);
         if (! variant.isNull()) {
-            foreach(const QVariant & var, qvariant_cast<QList<QVariant> >(variant)) {
+            Q_FOREACH (const QVariant & var, qvariant_cast<QList<QVariant> >(variant)) {
                 KoText::Tab textTab = var.value<KoText::Tab>();
                 KoRuler::Tab tab;
                 tab.position = textTab.position;
@@ -166,7 +166,7 @@ public:
         QList<KoText::Tab> sortedList = tabList;
         qSort(sortedList.begin(), sortedList.end(), compareTabs);
         QList<QVariant> list;
-        foreach(const KoText::Tab & tab, sortedList) {
+        Q_FOREACH (const KoText::Tab & tab, sortedList) {
             QVariant v;
             v.setValue(tab);
             list.append(v);

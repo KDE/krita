@@ -235,7 +235,7 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
 
     QString resource = QStandardPaths::locate(d->mapTypeToQStandardPaths(type), fileName, QStandardPaths::LocateFile);
     if (resource.isEmpty()) {
-        foreach(const QString &alias, aliases) {
+        Q_FOREACH (const QString &alias, aliases) {
             resource = QStandardPaths::locate(d->mapTypeToQStandardPaths(type), alias + '/' + fileName, QStandardPaths::LocateFile);
             if (!resource.isEmpty()) {
                 continue;
@@ -252,7 +252,7 @@ QStringList KoResourcePaths::findDirsInternal(const QString &type, const QString
     QStringList aliases = d->aliases(type);
 
     QStringList dirs = QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), relDir, QStandardPaths::LocateDirectory);
-    foreach(const QString &alias, aliases) {
+    Q_FOREACH (const QString &alias, aliases) {
         dirs << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias + '/' + relDir, QStandardPaths::LocateDirectory);
     }
     //Q_ASSERT(!dirs.isEmpty());
@@ -316,7 +316,7 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
 //    qDebug() << "\tresources from qstandardpaths:" << resources.size();
 
 
-    foreach(const QString &alias, aliases) {
+    Q_FOREACH (const QString &alias, aliases) {
 //        qDebug() << "\t\talias:" << alias;
 
         const QStringList dirs = QStringList() << getInstallationPrefix() + "../share/" + alias + "/"
@@ -354,7 +354,7 @@ QStringList KoResourcePaths::resourceDirsInternal(const QString &type)
     QStringList resourceDirs;
     QStringList aliases = d->aliases(type);
 
-    foreach(const QString &alias, aliases) {
+    Q_FOREACH (const QString &alias, aliases) {
         resourceDirs << getInstallationPrefix() + "../share/" + alias + "/"
                                                << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias, QStandardPaths::LocateDirectory);
 
@@ -395,7 +395,7 @@ QString KoResourcePaths::locateInternal(const QString &type, const QString &file
         locations << QStandardPaths::locate(d->mapTypeToQStandardPaths(type), filename, QStandardPaths::LocateFile);
     }
 
-    foreach(const QString &alias, aliases) {
+    Q_FOREACH (const QString &alias, aliases) {
         locations << QStandardPaths::locate(d->mapTypeToQStandardPaths(type),
                                             (alias.endsWith('/') ? alias : alias + '/') + filename, QStandardPaths::LocateFile);
     }

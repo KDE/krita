@@ -29,9 +29,9 @@
 
 #include "StylesModel.h"
 
-DockerStylesComboModel::DockerStylesComboModel(QObject *parent) :
-    StylesFilteredModelBase(parent),
-    m_styleManager(0)
+DockerStylesComboModel::DockerStylesComboModel(QObject *parent) 
+    : StylesFilteredModelBase(parent)
+    , m_styleManager(0)
 {
 }
 
@@ -45,24 +45,26 @@ Qt::ItemFlags DockerStylesComboModel::flags(const QModelIndex &index) const
 
 QModelIndex DockerStylesComboModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if (row < 0 || column != 0)
+    if (row < 0 || column != 0) {
         return QModelIndex();
+    }
 
     if (!parent.isValid()) {
         if (row >= m_proxyToSource.count()) {
             return QModelIndex();
         }
-        return createIndex(row, column, (m_proxyToSource.at(row) >= 0)?int(m_sourceModel->index(m_proxyToSource.at(row), 0, QModelIndex()).internalId()):m_proxyToSource.at(row));
+        return createIndex(row, column, (m_proxyToSource.at(row) >= 0) ? int(m_sourceModel->index(m_proxyToSource.at(row), 0, QModelIndex()).internalId()) : m_proxyToSource.at(row));
     }
     return QModelIndex();
 }
 
 QVariant DockerStylesComboModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
         return QVariant();
+    }
 
-    switch (role){
+    switch (role) {
     case AbstractStylesModel::isTitleRole: {
         if (index.internalId() == UsedStyleId || index.internalId() == UnusedStyleId) {
             return true;
@@ -104,7 +106,7 @@ void DockerStylesComboModel::setStyleManager(KoStyleManager *sm)
 {
     Q_ASSERT(sm);
     Q_ASSERT(m_sourceModel);
-    if(!sm || !m_sourceModel || m_styleManager == sm) {
+    if (!sm || !m_sourceModel || m_styleManager == sm) {
         return;
     }
     m_styleManager = sm;
@@ -146,7 +148,7 @@ void DockerStylesComboModel::createMapping()
     }
 
     // The order of the styles is already correctly given by the source model.
-    // Therefor it is not needed to resort the styles again here. The source model 
+    // Therefor it is not needed to resort the styles again here. The source model
     // makes sure to have the NoneStyleId as first style and the styles after
     // that are ordered by name.
     for (int i = 0; i < m_sourceModel->rowCount(QModelIndex()); ++i) {
@@ -155,8 +157,7 @@ void DockerStylesComboModel::createMapping()
         if (id == StylesModel::NoneStyleId || usedStyles.contains(id)) {
             m_usedStylesId.append(id);
             m_usedStyles.append(i);
-        }
-        else {
+        } else {
             m_unusedStyles.append(i);
         }
     }

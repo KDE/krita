@@ -37,7 +37,7 @@ class EnhancedPathCommand
 {
 public:
     /// Constructs a new command from the given command type
-    EnhancedPathCommand(const QChar & command, EnhancedPathShape *parent);
+    EnhancedPathCommand(const QChar &command, EnhancedPathShape *parent);
     ~EnhancedPathCommand();
     /// Excutes the command on the specified path shape
     bool execute();
@@ -60,7 +60,7 @@ private:
     QRectF rectFromPoints(const QPointF &tl, const QPointF &br) const;
 
     QChar m_command; ///< the actual command
-    QList<EnhancedPathParameter*> m_parameters; ///< the commands parameters
+    QList<EnhancedPathParameter *> m_parameters; ///< the commands parameters
     EnhancedPathShape *m_parent; ///< the enhanced path owning the command
 };
 

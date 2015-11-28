@@ -359,7 +359,7 @@ QMap<quint16, QByteArray> fetchChannelsBytes(QIODevice *io, QVector<ChannelInfo*
 
     QMap<quint16, QByteArray> channelBytes;
 
-    foreach(ChannelInfo *channelInfo, channelInfoRecords) {
+    Q_FOREACH (ChannelInfo *channelInfo, channelInfoRecords) {
         // user supplied masks are ignored here
         if (channelInfo->channelId < -1) continue;
 
@@ -409,7 +409,7 @@ void readCommon(KisPaintDeviceSP dev,
 
         QMap<quint16, QByteArray> channelBytes;
 
-        foreach (ChannelInfo *info, infoRecords) {
+        Q_FOREACH (ChannelInfo *info, infoRecords) {
             io->seek(info->channelDataStart);
             QByteArray compressedBytes = io->read(info->channelDataLength);
             QByteArray uncompressedBytes(numPixels, 0);
@@ -604,7 +604,7 @@ void writePixelDataCommon(QIODevice *io,
         quint8 *alphaPlanePtr = 0;
 
         QList<KoChannelInfo*> origChannels = colorSpace->channels();
-        foreach(KoChannelInfo *ch, KoChannelInfo::displayOrderSorted(origChannels)) {
+        Q_FOREACH (KoChannelInfo *ch, KoChannelInfo::displayOrderSorted(origChannels)) {
             int channelIndex = KoChannelInfo::displayPositionToChannelIndex(ch->displayPosition(), origChannels);
 
             quint8 *holder = 0;

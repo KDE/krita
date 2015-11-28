@@ -62,7 +62,7 @@ void KisTemplateTree::writeTemplateTree()
 {
     QString localDir = KoResourcePaths::saveLocation("data", m_templatesResourcePath);
 
-    foreach (KisTemplateGroup *group, m_groups) {
+    Q_FOREACH (KisTemplateGroup *group, m_groups) {
         //dbgUI <<"---------------------------------";
         //dbgUI <<"group:" << group->name();
 
@@ -92,7 +92,7 @@ void KisTemplateTree::writeTemplateTree()
                 }
             }
         }
-        foreach (KisTemplate *t, templates) {
+        Q_FOREACH (KisTemplate *t, templates) {
             if (t->touched()) {
                 //dbgUI <<"++template:" << t->name();
                 writeTemplate(t, group, localDir);
@@ -141,14 +141,14 @@ void KisTemplateTree::readGroups()
 {
 
     QStringList dirs = KoResourcePaths::findDirs("data", m_templatesResourcePath);
-    foreach(const QString & dirName, dirs) {
+    Q_FOREACH (const QString & dirName, dirs) {
         //dbgUI <<"dir:" << *it;
         QDir dir(dirName);
         // avoid the annoying warning
         if (!dir.exists())
             continue;
         QStringList templateDirs = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-        foreach(const QString & templateDirName, templateDirs) {
+        Q_FOREACH (const QString & templateDirName, templateDirs) {
             QDir templateDir(dirName + templateDirName);
             QString name = templateDirName;
             QString defaultTab;
@@ -176,7 +176,7 @@ void KisTemplateTree::readTemplates()
         dontShow = "metric";
     }
 
-    foreach (KisTemplateGroup* group, m_groups) {
+    Q_FOREACH (KisTemplateGroup* group, m_groups) {
         QStringList dirs = group->dirs();
         for (QStringList::ConstIterator it = dirs.constBegin(); it != dirs.constEnd(); ++it) {
             QDir d(*it);

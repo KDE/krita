@@ -1,12 +1,12 @@
 
 include_directories( ${CMAKE_SOURCE_DIR}/krita/image/metadata)
 
-set(kritaqmlexport_PART_SRCS
+set(kritaqmlexport_SOURCES
     qml_converter.cc
     qml_export.cc
     )
 
-add_library(kritaqmlexport MODULE ${kritaqmlexport_PART_SRCS})
+add_library(kritaqmlexport MODULE ${kritaqmlexport_SOURCES})
 kcoreaddons_desktop_to_json(kritaqmlexport krita_qml_export.desktop)
 
 target_link_libraries(kritaqmlexport kritaui )

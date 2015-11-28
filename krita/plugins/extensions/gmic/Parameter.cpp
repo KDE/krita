@@ -374,7 +374,7 @@ QString ChoiceParameter::toString()
 {
     QString result;
     result.append(m_name+";"+QString::number(m_defaultValue)+";"+QString::number(m_value));
-    foreach (QString choice, m_choices)
+    Q_FOREACH (QString choice, m_choices)
     {
         result.append(choice+";");
     }

@@ -94,7 +94,7 @@ void KisNodeShapesGraphTest::testShapeChildren()
 
     QList<KoShape*> realChildren = parent->shapes();
 
-    foreach(KoShape *shape, realChildren) {
+    Q_FOREACH (KoShape *shape, realChildren) {
         KisNodeShape *nodeShape = dynamic_cast<KisNodeShape*>(shape);
 
         QVERIFY(expectedChildren.contains(nodeShape));

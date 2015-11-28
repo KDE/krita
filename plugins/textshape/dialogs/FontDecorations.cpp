@@ -21,9 +21,9 @@
 
 #include "FontDecorations.h"
 
-FontDecorations::FontDecorations(bool uniqueFormat, QWidget* parent)
-        : QWidget(parent),
-        m_uniqueFormat(uniqueFormat)
+FontDecorations::FontDecorations(bool uniqueFormat, QWidget *parent)
+    : QWidget(parent)
+    ,  m_uniqueFormat(uniqueFormat)
 {
     widget.setupUi(this);
 
@@ -40,28 +40,31 @@ void FontDecorations::hyphenateStateChanged()
 
 void FontDecorations::setDisplay(KoCharacterStyle *style)
 {
-    if (!style)
+    if (!style) {
         return;
+    }
 
     m_hyphenateInherited = !style->hasProperty(KoCharacterStyle::HasHyphenation);
     if (!m_uniqueFormat) {
         widget.hyphenate->setTristate(true);
         widget.hyphenate->setCheckState(Qt::PartiallyChecked);
-    }
-    else
+    } else {
         widget.hyphenate->setChecked(style->hasHyphenation());
+    }
 }
 
 void FontDecorations::save(KoCharacterStyle *style) const
 {
-    if (!style)
+    if (!style) {
         return;
+    }
 
     if (!m_hyphenateInherited) {
-        if (widget.hyphenate->checkState() == Qt::Checked)
+        if (widget.hyphenate->checkState() == Qt::Checked) {
             style->setHasHyphenation(true);
-        else if (widget.hyphenate->checkState() == Qt::Unchecked)
+        } else if (widget.hyphenate->checkState() == Qt::Unchecked) {
             style->setHasHyphenation(false);
+        }
     }
 
 }

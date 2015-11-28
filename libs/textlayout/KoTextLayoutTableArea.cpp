@@ -480,7 +480,7 @@ void KoTextLayoutTableArea::layoutColumns()
             // If not table width was defined then we need to scale down the fixed size columns so they match
             // into the width of the table.
             qreal diff = (-availableWidth) / qreal(fixedWidthColumns.count());
-            foreach(int col, fixedWidthColumns) {
+            Q_FOREACH (int col, fixedWidthColumns) {
                 d->columnWidths[col] = qMax(qreal(0.0), d->columnWidths[col] - diff);
             }
         }
@@ -983,7 +983,7 @@ void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLay
 
     // Possibly paint the selection of the entire cell
     if (context.showSelections) {
-        foreach(const QAbstractTextDocumentLayout::Selection & selection,   context.textContext.selections) {
+        Q_FOREACH (const QAbstractTextDocumentLayout::Selection & selection,   context.textContext.selections) {
             QTextTableCell startTableCell = d->table->cellAt(selection.cursor.selectionStart());
             QTextTableCell endTableCell = d->table->cellAt(selection.cursor.selectionEnd());
 

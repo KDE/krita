@@ -224,7 +224,7 @@ public:
 
         const int pixelSize = m_device->pixelSize();
 
-        foreach (const QRect &rc, borderRegion.rects()) {
+        Q_FOREACH (const QRect &rc, borderRegion.rects()) {
             KisRandomConstAccessorSP srcIt = KisPaintDeviceStrategy::createRandomConstAccessorNG(rc.x(), rc.y());
             KisRandomAccessorSP dstIt = createRandomAccessorNG(rc.x(), rc.y());
 
@@ -271,14 +271,14 @@ public:
 
     void clear(const QRect &rect) {
         KisWrappedRect splitRect(rect, m_wrapRect);
-        foreach (const QRect &rc, splitRect) {
+        Q_FOREACH (const QRect &rc, splitRect) {
             KisPaintDeviceStrategy::clear(rc);
         }
     }
 
     void fill(const QRect &rect, const quint8 *fillPixel) {
         KisWrappedRect splitRect(rect, m_wrapRect);
-        foreach (const QRect &rc, splitRect) {
+        Q_FOREACH (const QRect &rc, splitRect) {
             KisPaintDeviceStrategy::fill(rc, fillPixel);
         }
     }
@@ -328,14 +328,14 @@ public:
 
     void fastBitBltImpl(KisDataManagerSP srcDataManager, const QRect &rect) {
         KisWrappedRect splitRect(rect, m_wrapRect);
-        foreach (const QRect &rc, splitRect) {
+        Q_FOREACH (const QRect &rc, splitRect) {
             KisPaintDeviceStrategy::fastBitBltImpl(srcDataManager, rc);
         }
     }
 
     void fastBitBltOldData(KisPaintDeviceSP src, const QRect &rect) {
         KisWrappedRect splitRect(rect, m_wrapRect);
-        foreach (const QRect &rc, splitRect) {
+        Q_FOREACH (const QRect &rc, splitRect) {
             KisPaintDeviceStrategy::fastBitBltOldData(src, rc);
         }
     }

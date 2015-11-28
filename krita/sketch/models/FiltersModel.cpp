@@ -189,7 +189,7 @@ void FiltersModel::setConfiguration(int index, QObject* configuration)
     if (qobject_cast< PropertyContainer* >(configuration) && index > -1 && index < d->configurations.count() - 1)
     {
         KisSafeFilterConfigurationSP config = d->configurations[index];
-        foreach(const QByteArray& propName, configuration->dynamicPropertyNames())
+        Q_FOREACH (const QByteArray& propName, configuration->dynamicPropertyNames())
         {
             config->setProperty(QString(propName), configuration->property(propName));
         }

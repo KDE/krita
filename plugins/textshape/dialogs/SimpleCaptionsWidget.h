@@ -39,7 +39,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void doneWithFocus();
-    
+
 private:
     Ui::SimpleCaptionsWidget widget;
     KoStyleManager *m_styleManager;

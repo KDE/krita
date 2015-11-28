@@ -32,7 +32,7 @@ KisTakeAllShapesCommand::KisTakeAllShapesCommand(KisShapeSelection *shapeSelecti
 
 KisTakeAllShapesCommand::~KisTakeAllShapesCommand()
 {
-    foreach (KoShape *shape, m_shapes) {
+    Q_FOREACH (KoShape *shape, m_shapes) {
         delete shape;
     }
 }
@@ -45,7 +45,7 @@ void KisTakeAllShapesCommand::redo()
 
     m_shapes = m_shapeSelection->shapes();
 
-    foreach (KoShape *shape, m_shapes) {
+    Q_FOREACH (KoShape *shape, m_shapes) {
         m_shapeSelection->removeShape(shape);
     }
 
@@ -60,7 +60,7 @@ void KisTakeAllShapesCommand::undo()
         m_shapeSelection->setUpdatesEnabled(false);
     }
 
-    foreach (KoShape *shape, m_shapes) {
+    Q_FOREACH (KoShape *shape, m_shapes) {
         m_shapeSelection->addShape(shape);
     }
 

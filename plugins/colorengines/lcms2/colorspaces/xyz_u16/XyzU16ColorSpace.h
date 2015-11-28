@@ -34,19 +34,21 @@ public:
 
     virtual bool willDegrade(ColorSpaceIndependence independence) const;
 
-    virtual KoID colorModelId() const {
+    virtual KoID colorModelId() const
+    {
         return XYZAColorModelID;
     }
 
-    virtual KoID colorDepthId() const {
+    virtual KoID colorDepthId() const
+    {
         return Integer16BitsColorDepthID;
     }
 
-    virtual KoColorSpace* clone() const;
+    virtual KoColorSpace *clone() const;
 
-    virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
+    virtual void colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const;
 
-    virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const;
+    virtual void colorFromXML(quint8 *pixel, const QDomElement &elt) const;
 
     static QString colorSpaceId()
     {
@@ -58,36 +60,44 @@ public:
 class XyzU16ColorSpaceFactory : public LcmsColorSpaceFactory
 {
 public:
-    XyzU16ColorSpaceFactory() : LcmsColorSpaceFactory(TYPE_XYZA_16, cmsSigXYZData) {
+    XyzU16ColorSpaceFactory() : LcmsColorSpaceFactory(TYPE_XYZA_16, cmsSigXYZData)
+    {
     }
-    virtual QString id() const {
+    virtual QString id() const
+    {
         return XyzU16ColorSpace::colorSpaceId();
     }
-    virtual QString name() const {
+    virtual QString name() const
+    {
         return i18n("XYZ (16-bit integer/channel)");
     }
-    virtual bool userVisible() const {
+    virtual bool userVisible() const
+    {
         return true;
     }
 
-    virtual KoID colorModelId() const {
+    virtual KoID colorModelId() const
+    {
         return XYZAColorModelID;
     }
-    virtual KoID colorDepthId() const {
+    virtual KoID colorDepthId() const
+    {
         return Integer16BitsColorDepthID;
     }
-    virtual int referenceDepth() const {
+    virtual int referenceDepth() const
+    {
         return 16;
     }
 
-    virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const {
+    virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const
+    {
         return new XyzU16ColorSpace(name(), p->clone());
     }
 
-    virtual QString defaultProfile() const {
+    virtual QString defaultProfile() const
+    {
         return "XYZ identity built-in";
     }
 };
-
 
 #endif

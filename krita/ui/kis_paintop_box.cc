@@ -243,7 +243,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     m_cmbCompositeOp = new KisCompositeOpComboBox();
     m_cmbCompositeOp->setFixedHeight(iconsize);
-    foreach(KisAction * a, m_cmbCompositeOp->blendmodeActions()) {
+    Q_FOREACH (KisAction * a, m_cmbCompositeOp->blendmodeActions()) {
         m_viewManager->actionManager()->addAction(a->text(), a);
     }
 
@@ -380,7 +380,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     QList<QString> keys = KisPaintOpRegistry::instance()->keys();
     QList<KisPaintOpFactory*> factoryList;
 
-    foreach(const QString & paintopId, keys) {
+    Q_FOREACH (const QString & paintopId, keys) {
         factoryList.append(KisPaintOpRegistry::instance()->get(paintopId));
     }
     m_presetsPopup->setPaintOpList(factoryList);
@@ -767,7 +767,7 @@ void KisPaintopBox::slotSaveActivePreset()
     newPreset->setPresetDirty(false);
 
     rServer->addResource(newPreset);
-    foreach(const QString & tag, tags) {
+    Q_FOREACH (const QString & tag, tags) {
         rServer->addTag(newPreset.data(), tag);
     }
 
@@ -1017,7 +1017,7 @@ void KisPaintopBox::slotPreviousFavoritePreset()
     if (!m_favoriteResourceManager) return;
 
     int i = 0;
-    foreach (KisPaintOpPresetSP preset, m_favoriteResourceManager->favoritePresetList()) {
+    Q_FOREACH (KisPaintOpPresetSP preset, m_favoriteResourceManager->favoritePresetList()) {
         if (m_resourceProvider->currentPreset() && m_resourceProvider->currentPreset()->name() == preset->name()) {
             if (i > 0) {
                 m_favoriteResourceManager->slotChangeActivePaintop(i - 1);
@@ -1036,7 +1036,7 @@ void KisPaintopBox::slotNextFavoritePreset()
     if (!m_favoriteResourceManager) return;
 
     int i = 0;
-    foreach (KisPaintOpPresetSP preset, m_favoriteResourceManager->favoritePresetList()) {
+    Q_FOREACH (KisPaintOpPresetSP preset, m_favoriteResourceManager->favoritePresetList()) {
         if (m_resourceProvider->currentPreset()->name() == preset->name()) {
             if (i < m_favoriteResourceManager->numFavoritePresets() - 1) {
                 m_favoriteResourceManager->slotChangeActivePaintop(i + 1);

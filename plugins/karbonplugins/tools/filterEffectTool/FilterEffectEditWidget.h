@@ -37,13 +37,13 @@ public:
     ~FilterEffectEditWidget();
 
     /// Edits effects of given shape
-    void editShape(KoShape *shape, KoCanvasBase * canvas);
+    void editShape(KoShape *shape, KoCanvasBase *canvas);
 
 protected:
     /// reimplemented from QWidget
-    virtual void resizeEvent(QResizeEvent * event);
+    virtual void resizeEvent(QResizeEvent *event);
     /// reimplemented from QWidget
-    virtual void showEvent(QShowEvent * event);
+    virtual void showEvent(QShowEvent *event);
 private Q_SLOTS:
     void addSelectedEffect();
     void removeSelectedItem();
@@ -58,12 +58,12 @@ private:
     void fitScene();
     void addWidgetForItem(ConnectionSource item);
 
-    FilterEffectScene * m_scene;
-    KoShape * m_shape;
-    KoCanvasBase * m_canvas;
-    KoFilterEffectStack * m_effects;
+    FilterEffectScene *m_scene;
+    KoShape *m_shape;
+    KoCanvasBase *m_canvas;
+    KoFilterEffectStack *m_effects;
     ConnectionSource m_currentItem;
-    KComboBox * m_defaultSourceSelector;
+    KComboBox *m_defaultSourceSelector;
 };
 
 #endif // FILTEREFFECTEDITWIDGET_H

@@ -103,7 +103,7 @@ void TimelineModelTest::testConverter()
 
     TimelineNodeListKeeper::OtherLayersList list = keeper.otherLayersList();
 
-    foreach (const TimelineNodeListKeeper::OtherLayer &l, list) {
+    Q_FOREACH (const TimelineNodeListKeeper::OtherLayer &l, list) {
         qDebug() << ppVar(l.name) << ppVar(l.dummy->node()->name());
     }
 

@@ -52,10 +52,17 @@
 #include "KoCreatePathTool_p.h"
 
 KoPencilTool::KoPencilTool(KoCanvasBase *canvas)
-        : KoToolBase(canvas),  m_mode(ModeCurve), m_optimizeRaw(false)
-        , m_optimizeCurve(false), m_combineAngle(15.0), m_fittingError(5.0)
-        , m_close(false), m_shape(0)
-        , m_existingStartPoint(0), m_existingEndPoint(0), m_hoveredPoint(0)
+    : KoToolBase(canvas)
+    , m_mode(ModeCurve)
+    , m_optimizeRaw(false)
+    , m_optimizeCurve(false)
+    , m_combineAngle(15.0)
+    , m_fittingError(5.0)
+    , m_close(false)
+    , m_shape(0)
+    , m_existingStartPoint(0)
+    , m_existingEndPoint(0)
+    , m_hoveredPoint(0)
 {
 }
 
@@ -427,7 +434,7 @@ KoPathPoint* KoPencilTool::endPointAtPosition(const QPointF &position)
     qreal minDistance = HUGE_VAL;
     qreal maxDistance = canvas()->viewConverter()->viewToDocumentX(grabSensitivity());
 
-    foreach(KoShape *shape, shapes) {
+    Q_FOREACH(KoShape * shape, shapes) {
         KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
         if (!path)
             continue;
@@ -540,10 +547,12 @@ bool KoPencilTool::connectPaths(KoPathShape *pathShape, KoPathPoint *pointAtStar
     return true;
 }
 
-qreal KoPencilTool::getFittingError(){
+qreal KoPencilTool::getFittingError()
+{
     return this->m_fittingError;
 }
 
-void KoPencilTool::setFittingError(qreal fittingError){
+void KoPencilTool::setFittingError(qreal fittingError)
+{
     this->m_fittingError = fittingError;
 }

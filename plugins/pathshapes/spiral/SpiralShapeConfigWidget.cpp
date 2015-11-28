@@ -43,9 +43,10 @@ SpiralShapeConfigWidget::SpiralShapeConfigWidget()
 
 void SpiralShapeConfigWidget::open(KoShape *shape)
 {
-    m_spiral = dynamic_cast<SpiralShape*>(shape);
-    if (!m_spiral)
+    m_spiral = dynamic_cast<SpiralShape *>(shape);
+    if (!m_spiral) {
         return;
+    }
 
     widget.spiralType->blockSignals(true);
     widget.clockWise->blockSignals(true);
@@ -62,18 +63,20 @@ void SpiralShapeConfigWidget::open(KoShape *shape)
 
 void SpiralShapeConfigWidget::save()
 {
-    if (!m_spiral)
+    if (!m_spiral) {
         return;
+    }
 
     m_spiral->setType(static_cast<SpiralShape::SpiralType>(widget.spiralType->currentIndex()));
     m_spiral->setClockWise(widget.clockWise->currentIndex() == 0);
     m_spiral->setFade(widget.fade->value());
 }
 
-KUndo2Command * SpiralShapeConfigWidget::createCommand()
+KUndo2Command *SpiralShapeConfigWidget::createCommand()
 {
-    if (!m_spiral)
+    if (!m_spiral) {
         return 0;
+    }
     SpiralShape::SpiralType type = static_cast<SpiralShape::SpiralType>(widget.spiralType->currentIndex());
     return new SpiralShapeConfigCommand(m_spiral, type, (widget.clockWise->currentIndex() == 0), widget.fade->value());
 }

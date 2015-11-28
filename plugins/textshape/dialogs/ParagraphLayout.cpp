@@ -23,7 +23,7 @@
 #include <KoParagraphStyle.h>
 
 ParagraphLayout::ParagraphLayout(QWidget *parent)
-        : QWidget(parent)
+    : QWidget(parent)
 {
     widget.setupUi(this);
 
@@ -40,14 +40,15 @@ ParagraphLayout::ParagraphLayout(QWidget *parent)
 void ParagraphLayout::slotAlignChanged()
 {
     Qt::Alignment align;
-    if (widget.right->isChecked())
+    if (widget.right->isChecked()) {
         align = Qt::AlignRight;
-    else if (widget.center->isChecked())
+    } else if (widget.center->isChecked()) {
         align = Qt::AlignHCenter;
-    else if (widget.justify->isChecked())
+    } else if (widget.justify->isChecked()) {
         align = Qt::AlignJustify;
-    else
+    } else {
         align = Qt::AlignLeft;
+    }
 
     m_alignmentInherited = false;
 
@@ -56,14 +57,14 @@ void ParagraphLayout::slotAlignChanged()
 
 void ParagraphLayout::breakAfterChanged()
 {
-   m_breakAfterInherited = false;
-   emit parStyleChanged();
+    m_breakAfterInherited = false;
+    emit parStyleChanged();
 }
 
 void ParagraphLayout::keepTogetherChanged()
 {
-   m_keepTogetherInherited = false;
-   emit parStyleChanged();
+    m_keepTogetherInherited = false;
+    emit parStyleChanged();
 }
 
 void ParagraphLayout::breakBeforeChanged()
@@ -106,34 +107,37 @@ void ParagraphLayout::save(KoParagraphStyle *style)
 {
     if (!m_alignmentInherited) {
         Qt::Alignment align;
-        if (widget.right->isChecked())
+        if (widget.right->isChecked()) {
             align = Qt::AlignRight;
-        else if (widget.center->isChecked())
+        } else if (widget.center->isChecked()) {
             align = Qt::AlignHCenter;
-        else if (widget.justify->isChecked())
+        } else if (widget.justify->isChecked()) {
             align = Qt::AlignJustify;
-        else
+        } else {
             align = Qt::AlignLeft;
+        }
         style->setAlignment(align);
     }
 
-        if (!m_keepTogetherInherited) {
-            style->setNonBreakableLines(widget.keepTogether->isChecked());
+    if (!m_keepTogetherInherited) {
+        style->setNonBreakableLines(widget.keepTogether->isChecked());
+    }
+    if (!m_breakBeforeInherited) {
+        if (widget.breakBefore->isChecked()) {
+            style->setBreakBefore(KoText::PageBreak);
+        } else {
+            style->setBreakBefore(KoText::NoBreak);
         }
-        if (!m_breakBeforeInherited) {
-            if (widget.breakBefore->isChecked())
-                style->setBreakBefore(KoText::PageBreak);
-            else
-                style->setBreakBefore(KoText::NoBreak);
+    }
+    if (!m_breakAfterInherited) {
+        if (widget.breakAfter->isChecked()) {
+            style->setBreakAfter(KoText::PageBreak);
+        } else {
+            style->setBreakAfter(KoText::NoBreak);
         }
-        if (!m_breakAfterInherited) {
-            if (widget.breakAfter->isChecked())
-                style->setBreakAfter(KoText::PageBreak);
-            else
-                style->setBreakAfter(KoText::NoBreak);
-        }
+    }
 
-        if (!m_orphanThresholdInherited) {
-            style->setOrphanThreshold(widget.threshold->value());
-        }
+    if (!m_orphanThresholdInherited) {
+        style->setOrphanThreshold(widget.threshold->value());
+    }
 }

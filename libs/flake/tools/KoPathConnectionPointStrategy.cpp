@@ -67,7 +67,7 @@ void KoPathConnectionPointStrategy::handleMouseMove(const QPointF &mouseLocation
         KoShape *nearestShape = 0;
         int nearestPointId = InvalidConnectionPointId;
 
-        foreach(KoShape* shape, shapes) {
+        Q_FOREACH (KoShape* shape, shapes) {
             // we do not want to connect to ourself
             if (shape == d->connectionShape)
                 continue;

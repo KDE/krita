@@ -110,7 +110,7 @@ void KisMinimalShadeSelector::updateSettings()
 
 void KisMinimalShadeSelector::mousePressEvent(QMouseEvent * e)
 {
-    foreach(KisShadeSelectorLine* line, m_shadingLines) {
+    Q_FOREACH (KisShadeSelectorLine* line, m_shadingLines) {
         QMouseEvent newEvent(e->type(),
                                           line->mapFromGlobal(e->globalPos()),
                                           e->button(),
@@ -124,7 +124,7 @@ void KisMinimalShadeSelector::mousePressEvent(QMouseEvent * e)
 
 void KisMinimalShadeSelector::mouseMoveEvent(QMouseEvent * e)
 {
-    foreach(KisShadeSelectorLine* line, m_shadingLines) {
+    Q_FOREACH (KisShadeSelectorLine* line, m_shadingLines) {
         QMouseEvent newEvent(e->type(),
                                           line->mapFromGlobal(e->globalPos()),
                                           e->button(),
@@ -138,7 +138,7 @@ void KisMinimalShadeSelector::mouseMoveEvent(QMouseEvent * e)
 
 void KisMinimalShadeSelector::mouseReleaseEvent(QMouseEvent * e)
 {
-    foreach(KisShadeSelectorLine* line, m_shadingLines) {
+    Q_FOREACH (KisShadeSelectorLine* line, m_shadingLines) {
         QMouseEvent newEvent(e->type(),
                                           line->mapFromGlobal(e->globalPos()),
                                           e->button(),

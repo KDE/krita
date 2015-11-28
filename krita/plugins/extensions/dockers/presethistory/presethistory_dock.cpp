@@ -75,7 +75,7 @@ void PresetHistoryDock::setCanvas(KoCanvasBase * canvas)
         KisConfig cfg;
         QStringList presetHistory = cfg.readEntry<QString>("presethistory", "").split(",", QString::SkipEmptyParts);
         KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-        foreach(const QString &p, presetHistory) {
+        Q_FOREACH (const QString &p, presetHistory) {
             KisPaintOpPresetSP preset = rserver->resourceByName(p);
             addPreset(preset);
         }

@@ -26,23 +26,22 @@
 #include <KoIcon.h>
 #include <klocalizedstring.h>
 
-
 VectorToolFactory::VectorToolFactory()
     : KoToolFactoryBase("VectorTool")
 {
     setToolTip(i18n("Vector Image (EMF/WMF/SVM/SVG) tool"));
     setIconName(koIconNameCStrNeededWithSubs("a generic vector image icon", "x-shape-vectorimage", "application-x-wmf"));
-    setToolType( dynamicToolType() );
-    setPriority( 1 );
-    setActivationShapeId( VectorShape_SHAPEID );
+    setToolType(dynamicToolType());
+    setPriority(1);
+    setActivationShapeId(VectorShape_SHAPEID);
 }
 
 VectorToolFactory::~VectorToolFactory()
 {
 }
 
-KoToolBase* VectorToolFactory::createTool( KoCanvasBase* canvas )
+KoToolBase *VectorToolFactory::createTool(KoCanvasBase *canvas)
 {
-    return new VectorTool( canvas );
+    return new VectorTool(canvas);
 }
 

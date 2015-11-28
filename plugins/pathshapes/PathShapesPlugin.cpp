@@ -28,10 +28,9 @@
 #include "enhancedpath/EnhancedPathShapeFactory.h"
 #include <kpluginfactory.h>
 
-K_PLUGIN_FACTORY_WITH_JSON(PathShapesPluginFactory, "calligra_shape_paths.json",
-                           registerPlugin<PathShapesPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PathShapesPluginFactory, "calligra_shape_paths.json", registerPlugin<PathShapesPlugin>();)
 
-PathShapesPlugin::PathShapesPlugin(QObject *parent, const QVariantList&)
+PathShapesPlugin::PathShapesPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KoShapeRegistry::instance()->add(new StarShapeFactory());

@@ -351,7 +351,7 @@ QImage KisCageTransformWorker::runOnQImage(QPointF *newOffset)
     QVector<QPointF> transformedPoints = m_d->calculateTransformedPoints();
 
     QRectF dstBounds;
-    foreach (const QPointF &pt, transformedPoints) {
+    Q_FOREACH (const QPointF &pt, transformedPoints) {
         KisAlgebra2D::accumulateBounds(pt, &dstBounds);
     }
 

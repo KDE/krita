@@ -49,7 +49,7 @@ public:
 
 public Q_SLOTS:
     void setCurrentBlock(const QTextBlock &block);
-    void setCurrentFormat(const QTextBlockFormat& format);
+    void setCurrentFormat(const QTextBlockFormat &format);
     void setStyleManager(KoStyleManager *sm);
     void slotShowStyleManager(int index);
     void slotParagraphStyleApplied(const KoParagraphStyle *style);
@@ -74,7 +74,6 @@ private:
     };
 
     void updateDirection(DirectionButtonState state);
-
 
     void fillListButtons();
 

@@ -142,7 +142,7 @@ KoDocumentInfoDlg::~KoDocumentInfoDlg()
 void KoDocumentInfoDlg::accept()
 {
     // check if any pages veto the close
-    foreach(KPageWidgetItem* item, d->pages) {
+    Q_FOREACH (KPageWidgetItem* item, d->pages) {
         KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter*>(item);
         if (page) {
             if (page->shouldDialogCloseBeVetoed()) {
@@ -153,7 +153,7 @@ void KoDocumentInfoDlg::accept()
 
     // all fine, go and apply
     saveAboutData();
-    foreach(KPageWidgetItem* item, d->pages) {
+    Q_FOREACH (KPageWidgetItem* item, d->pages) {
         KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter*>(item);
         if (page) {
             page->apply();

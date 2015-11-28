@@ -43,15 +43,15 @@
 
 #include <QDate>
 
-
 //#include "TextShape.h"
 #define AnnotationShape_SHAPEID "AnnotationTextShapeID"
 
-ReviewTool::ReviewTool(KoCanvasBase* canvas): TextTool(canvas),
-    m_textEditor(0),
-    m_textShapeData(0),
-    m_canvas(canvas),
-    m_textShape(0)
+ReviewTool::ReviewTool(KoCanvasBase *canvas)
+    : TextTool(canvas)
+    , m_textEditor(0)
+    , m_textShapeData(0)
+    , m_canvas(canvas)
+    , m_textShape(0)
 {
     createActions();
 }
@@ -68,12 +68,12 @@ void ReviewTool::createActions()
     connect(m_removeAnnotationAction, SIGNAL(triggered()), this, SLOT(removeAnnotation()));
 }
 
-void ReviewTool::mouseReleaseEvent(KoPointerEvent* event)
+void ReviewTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     TextTool::mouseReleaseEvent(event);
     event->accept();
 }
-void ReviewTool::activate(KoToolBase::ToolActivation toolActivation, const QSet< KoShape* >& shapes)
+void ReviewTool::activate(KoToolBase::ToolActivation toolActivation, const QSet< KoShape * > &shapes)
 {
     TextTool::activate(toolActivation, shapes);
 }
@@ -81,7 +81,7 @@ void ReviewTool::deactivate()
 {
     TextTool::deactivate();
 }
-void ReviewTool::mouseMoveEvent(KoPointerEvent* event)
+void ReviewTool::mouseMoveEvent(KoPointerEvent *event)
 {
     TextTool::mouseMoveEvent(event);
 }
@@ -90,19 +90,19 @@ void ReviewTool::mousePressEvent(KoPointerEvent *event)
     TextTool::mousePressEvent(event);
     m_currentAnnotationShape = dynamic_cast<AnnotationTextShape *>(textShape());
 }
-void ReviewTool::keyPressEvent(QKeyEvent* event)
+void ReviewTool::keyPressEvent(QKeyEvent *event)
 {
     TextTool::keyPressEvent(event);
 }
-void ReviewTool::paint(QPainter& painter, const KoViewConverter& converter)
+void ReviewTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    TextTool::paint(painter,converter);
+    TextTool::paint(painter, converter);
 }
 
 QList<QPointer<QWidget> > ReviewTool::createOptionWidgets()
 {
     QList<QPointer<QWidget> > widgets;
-    SimpleSpellCheckingWidget* sscw = new SimpleSpellCheckingWidget(this, 0);
+    SimpleSpellCheckingWidget *sscw = new SimpleSpellCheckingWidget(this, 0);
     SimpleAnnotationWidget *saw = new SimpleAnnotationWidget(this, 0);
 
     connect(saw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));

@@ -83,7 +83,7 @@ public:
                 m_iteratorRowStart = KisWrappedRect::TOPLEFT;
                 m_lastRowCoord = m_splitRect->topLeft().bottom();
 
-                foreach (IteratorTypeSP it, *m_iterators) {
+                Q_FOREACH (IteratorTypeSP it, *m_iterators) {
                     if (it) {
                         it->resetRowPos();
                     }

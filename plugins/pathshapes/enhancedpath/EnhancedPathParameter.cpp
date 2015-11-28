@@ -41,8 +41,7 @@ QString identifierData[] = {
     "logheight"  // IdentifierLogheight
 };
 
-
-EnhancedPathParameter::EnhancedPathParameter(EnhancedPathShape * parent)
+EnhancedPathParameter::EnhancedPathParameter(EnhancedPathShape *parent)
     : m_parent(parent)
 {
     Q_ASSERT(m_parent);
@@ -52,7 +51,7 @@ EnhancedPathParameter::~EnhancedPathParameter()
 {
 }
 
-EnhancedPathShape * EnhancedPathParameter::parent()
+EnhancedPathShape *EnhancedPathParameter::parent()
 {
     return m_parent;
 }
@@ -67,8 +66,9 @@ void EnhancedPathParameter::modify(qreal value)
     Q_UNUSED(value);
 }
 
-EnhancedPathConstantParameter::EnhancedPathConstantParameter(qreal value, EnhancedPathShape * parent)
-    : EnhancedPathParameter(parent), m_value(value)
+EnhancedPathConstantParameter::EnhancedPathConstantParameter(qreal value, EnhancedPathShape *parent)
+    : EnhancedPathParameter(parent)
+    , m_value(value)
 {
 }
 
@@ -82,12 +82,13 @@ QString EnhancedPathConstantParameter::toString() const
     return QString::number(m_value);
 }
 
-EnhancedPathNamedParameter::EnhancedPathNamedParameter(Identifier identifier, EnhancedPathShape * parent)
-: EnhancedPathParameter(parent), m_identifier(identifier)
+EnhancedPathNamedParameter::EnhancedPathNamedParameter(Identifier identifier, EnhancedPathShape *parent)
+    : EnhancedPathParameter(parent)
+    , m_identifier(identifier)
 {
 }
 
-EnhancedPathNamedParameter::EnhancedPathNamedParameter(const QString &identifier, EnhancedPathShape * parent)
+EnhancedPathNamedParameter::EnhancedPathNamedParameter(const QString &identifier, EnhancedPathShape *parent)
     : EnhancedPathParameter(parent)
 {
     m_identifier = identifierFromString(identifier);
@@ -97,7 +98,7 @@ qreal EnhancedPathNamedParameter::evaluate()
 {
     const QRect &viewBox = parent()->viewBox();
 
-    switch(m_identifier) {
+    switch (m_identifier) {
     case IdentifierPi:
         return M_PI;
         break;
@@ -145,36 +146,37 @@ qreal EnhancedPathNamedParameter::evaluate()
 
 Identifier EnhancedPathNamedParameter::identifierFromString(const QString &text)
 {
-    if (text.isEmpty())
+    if (text.isEmpty()) {
         return IdentifierUnknown;
-    else if (text == "pi")
+    } else if (text == "pi") {
         return IdentifierPi;
-    else if (text == "left")
+    } else if (text == "left") {
         return IdentifierLeft;
-    else if (text == "top")
+    } else if (text == "top") {
         return IdentifierTop;
-    else if (text == "right")
+    } else if (text == "right") {
         return IdentifierRight;
-    else if (text == "bottom")
+    } else if (text == "bottom") {
         return IdentifierBottom;
-    else if (text == "xstretch")
+    } else if (text == "xstretch") {
         return IdentifierXstretch;
-    else if (text == "ystretch")
+    } else if (text == "ystretch") {
         return IdentifierYstretch;
-    else if (text == "hasstroke")
+    } else if (text == "hasstroke") {
         return IdentifierHasStroke;
-    else if (text == "hasfill")
+    } else if (text == "hasfill") {
         return IdentifierHasFill;
-    else if (text == "width")
+    } else if (text == "width") {
         return IdentifierWidth;
-    else if (text == "height")
+    } else if (text == "height") {
         return IdentifierHeight;
-    else if (text == "logwidth")
+    } else if (text == "logwidth") {
         return IdentifierLogwidth;
-    else if (text == "logheight")
+    } else if (text == "logheight") {
         return IdentifierLogheight;
-    else
+    } else {
         return IdentifierUnknown;
+    }
 }
 
 QString EnhancedPathNamedParameter::toString() const
@@ -182,8 +184,9 @@ QString EnhancedPathNamedParameter::toString() const
     return identifierData[m_identifier];
 }
 
-EnhancedPathReferenceParameter::EnhancedPathReferenceParameter(const QString &reference, EnhancedPathShape * parent)
-: EnhancedPathParameter(parent), m_reference(reference)
+EnhancedPathReferenceParameter::EnhancedPathReferenceParameter(const QString &reference, EnhancedPathShape *parent)
+    : EnhancedPathParameter(parent)
+    , m_reference(reference)
 {
 }
 

@@ -1,4 +1,4 @@
-set(kritasketchpaintop_PART_SRCS
+set(kritasketchpaintop_SOURCES
     sketch_paintop_plugin.cpp
     kis_sketch_paintop.cpp
     kis_sketchop_option.cpp
@@ -9,9 +9,9 @@ set(kritasketchpaintop_PART_SRCS
     kis_sketch_paintop_settings_widget.cpp
     )
 
-ki18n_wrap_ui(kritasketchpaintop_PART_SRCS wdgsketchoptions.ui )
+ki18n_wrap_ui(kritasketchpaintop_SOURCES wdgsketchoptions.ui )
 
-add_library(kritasketchpaintop MODULE ${kritasketchpaintop_PART_SRCS})
+add_library(kritasketchpaintop MODULE ${kritasketchpaintop_SOURCES})
 kcoreaddons_desktop_to_json(kritasketchpaintop kritasketchpaintop.desktop)
 
 target_link_libraries(kritasketchpaintop kritalibpaintop)

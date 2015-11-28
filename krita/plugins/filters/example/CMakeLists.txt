@@ -1,8 +1,8 @@
 
 
-set(kritaexample_PART_SRCS example.cpp )
+set(kritaexample_SOURCES example.cpp )
 
-add_library(kritaexample MODULE ${kritaexample_PART_SRCS})
+add_library(kritaexample MODULE ${kritaexample_SOURCES})
 kcoreaddons_desktop_to_json(kritaexample kritaexample.desktop)
 
 

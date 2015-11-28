@@ -34,26 +34,29 @@ public:
 
     virtual bool willDegrade(ColorSpaceIndependence independence) const;
 
-    virtual KoID colorModelId() const {
+    virtual KoID colorModelId() const
+    {
         return CMYKAColorModelID;
     }
 
-    virtual KoID colorDepthId() const {
+    virtual KoID colorDepthId() const
+    {
         return Float32BitsColorDepthID;
     }
 
-    virtual KoColorSpace* clone() const;
+    virtual KoColorSpace *clone() const;
 
-    virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
+    virtual void colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const;
 
-    virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const;
+    virtual void colorFromXML(quint8 *pixel, const QDomElement &elt) const;
 
     static QString colorSpaceId()
     {
         return "CMYKAF32";
     }
 
-    virtual bool hasHighDynamicRange() const {
+    virtual bool hasHighDynamicRange() const
+    {
         return true;
     }
 };
@@ -67,35 +70,43 @@ public:
     {
     }
 
-    virtual bool userVisible() const {
+    virtual bool userVisible() const
+    {
         return true;
     }
 
-    virtual QString id() const {
+    virtual QString id() const
+    {
         return CmykF32ColorSpace::colorSpaceId();
     }
 
-    virtual QString name() const {
+    virtual QString name() const
+    {
         return i18n("CMYK (32 bits floating/channel)");
     }
 
-    virtual KoID colorModelId() const {
+    virtual KoID colorModelId() const
+    {
         return CMYKAColorModelID;
     }
 
-    virtual KoID colorDepthId() const {
+    virtual KoID colorDepthId() const
+    {
         return Float32BitsColorDepthID;
     }
 
-    virtual int referenceDepth() const {
+    virtual int referenceDepth() const
+    {
         return 32;
     }
 
-    virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const {
+    virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const
+    {
         return new CmykF32ColorSpace(name(), p->clone());
     }
 
-    virtual QString defaultProfile() const {
+    virtual QString defaultProfile() const
+    {
         return "Chemical proof";
     }
 
@@ -104,6 +115,5 @@ public:
         return true;
     }
 };
-
 
 #endif

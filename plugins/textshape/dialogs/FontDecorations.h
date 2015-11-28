@@ -30,15 +30,14 @@ class FontDecorations : public QWidget
     Q_OBJECT
 
 public:
-    explicit FontDecorations(bool uniqueFormat, QWidget* parent = 0);
+    explicit FontDecorations(bool uniqueFormat, QWidget *parent = 0);
     ~FontDecorations() {}
 
     void setDisplay(KoCharacterStyle *style);
     void save(KoCharacterStyle *style) const;
-    
+
 private Q_SLOTS:
     void hyphenateStateChanged();
-
 
 private:
     Ui::FontDecorations widget;

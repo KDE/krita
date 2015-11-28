@@ -65,7 +65,7 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
 
     connect(m_buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(buttonClicked(int)));
 
-    foreach(QWidget * widget, m_chooserMap.values()) {
+    Q_FOREACH (QWidget * widget, m_chooserMap.values()) {
         m_mininmumSize = m_mininmumSize.expandedTo(widget->sizeHint());
     }
 

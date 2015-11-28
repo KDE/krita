@@ -146,11 +146,11 @@ public:
             delete m_tagStore;
         }
 
-        foreach(ObserverType* observer, m_observers) {
+        Q_FOREACH (ObserverType* observer, m_observers) {
             observer->unsetResourceServer();
         }
 
-        foreach(PointerType res, m_resources) {
+        Q_FOREACH (PointerType res, m_resources) {
             Policy::deleteResource(res);
         }
 
@@ -194,7 +194,7 @@ public:
                 m_loadLock.lock();
                 uniqueFiles.append(fname);
                 QList<PointerType> resources = createResources(front);
-                foreach(PointerType resource, resources) {
+                Q_FOREACH (PointerType resource, resources) {
                     Q_CHECK_PTR(resource);
                     if (resource->load() && resource->valid() && !resource->md5().isEmpty()) {
                         QByteArray md5 = resource->md5();
@@ -222,7 +222,7 @@ public:
 
         m_resources = sortedResources();
 
-        foreach(ObserverType* observer, m_observers) {
+        Q_FOREACH (ObserverType* observer, m_observers) {
             observer->syncTaggedResourceView();
         }
 
@@ -339,7 +339,7 @@ public:
     QList<PointerType> resources() {
         m_loadLock.lock();
         QList<PointerType> resourceList = m_resources;
-        foreach(PointerType r, m_resourceBlackList) {
+        Q_FOREACH (PointerType r, m_resourceBlackList) {
             resourceList.removeOne(r);
         }
         m_loadLock.unlock();
@@ -426,7 +426,7 @@ public:
             m_observers.append(observer);
 
             if(notifyLoadedResources) {
-                foreach(PointerType resource, m_resourcesByFilename) {
+                Q_FOREACH (PointerType resource, m_resourcesByFilename) {
                     observer->resourceAdded(resource);
 
                 }
@@ -486,7 +486,7 @@ public:
 
     void removeBlackListedFiles() {
         QStringList remainingFiles; // Files that can't be removed e.g. no rights will stay blacklisted
-        foreach(const QString &filename, m_blackListFileNames) {
+        Q_FOREACH (const QString &filename, m_blackListFileNames) {
             QFile file( filename );
             if( ! file.remove() ) {
                 remainingFiles.append(filename);
@@ -521,7 +521,7 @@ public:
     void tagCategoryAdded(const QString& tag)
     {
         m_tagStore->serializeTags();
-        foreach(ObserverType* observer, m_observers) {
+        Q_FOREACH (ObserverType* observer, m_observers) {
             observer->syncTagAddition(tag);
         }
     }
@@ -530,7 +530,7 @@ public:
     {
         m_tagStore->delTag(tag);
         m_tagStore->serializeTags();
-        foreach(ObserverType* observer, m_observers) {
+        Q_FOREACH (ObserverType* observer, m_observers) {
             observer->syncTagRemoval(tag);
         }
     }
@@ -538,7 +538,7 @@ public:
     void tagCategoryMembersChanged()
     {
         m_tagStore->serializeTags();
-        foreach(ObserverType* observer, m_observers) {
+        Q_FOREACH (ObserverType* observer, m_observers) {
             observer->syncTaggedResourceView();
         }
     }
@@ -572,7 +572,7 @@ public:
     virtual QList<PointerType> sortedResources()
     {
         QMap<QString, PointerType> sortedNames;
-        foreach(const QString &name, m_resourcesByName.keys()) {
+        Q_FOREACH (const QString &name, m_resourcesByName.keys()) {
             sortedNames.insert(name.toLower(), m_resourcesByName[name]);
         }
         return sortedNames.values();
@@ -582,21 +582,21 @@ protected:
 
     void notifyResourceAdded(PointerType resource)
     {
-        foreach(ObserverType* observer, m_observers) {
+        Q_FOREACH (ObserverType* observer, m_observers) {
             observer->resourceAdded(resource);
         }
     }
 
     void notifyRemovingResource(PointerType resource)
     {
-        foreach(ObserverType* observer, m_observers) {
+        Q_FOREACH (ObserverType* observer, m_observers) {
             observer->removingResource(resource);
         }
     }
 
     void notifyResourceChanged(PointerType resource)
     {
-        foreach(ObserverType* observer, m_observers) {
+        Q_FOREACH (ObserverType* observer, m_observers) {
             observer->resourceChanged(resource);
         }
     }
@@ -655,7 +655,7 @@ protected:
         root = doc.createElement("resourceFilesList");
         doc.appendChild(root);
 
-        foreach(QString filename, m_blackListFileNames) {
+        Q_FOREACH (QString filename, m_blackListFileNames) {
             QDomElement fileEl = doc.createElement("file");
             QDomElement nameEl = doc.createElement("name");
             QDomText nameText = doc.createTextNode(filename.replace(QDir::homePath(),QString("~")));

@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef ADDTEXTRANGECOMMAND_H 
+#ifndef ADDTEXTRANGECOMMAND_H
 #define ADDTEXTRANGECOMMAND_H
 
 #include <kundo2command.h>

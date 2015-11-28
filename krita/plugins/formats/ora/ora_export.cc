@@ -56,7 +56,7 @@ bool hasShapeLayerChild(KisNodeSP node)
 {
     if (!node) return false;
 
-    foreach(KisNodeSP child, node->childNodes(QStringList(), KoProperties())) {
+    Q_FOREACH (KisNodeSP child, node->childNodes(QStringList(), KoProperties())) {
         if (child->inherits("KisShapeLayer")
                 || child->inherits("KisGeneratorLayer")
                 || child->inherits("KisCloneLayer")) {

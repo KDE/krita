@@ -37,12 +37,12 @@
 #include <QDebug>
 
 CharacterGeneral::CharacterGeneral(QWidget *parent)
-        : QWidget(parent)
-        , m_style(0)
-        , m_styleManager(0)
-        , m_thumbnail(new KoStyleThumbnailer())
-        , m_paragraphStyleModel(new StylesModel(0,StylesModel::ParagraphStyle))
-        , m_characterInheritedStyleModel(new StylesModel(0, StylesModel::CharacterStyle))
+    : QWidget(parent)
+    , m_style(0)
+    , m_styleManager(0)
+    , m_thumbnail(new KoStyleThumbnailer())
+    , m_paragraphStyleModel(new StylesModel(0, StylesModel::ParagraphStyle))
+    , m_characterInheritedStyleModel(new StylesModel(0, StylesModel::CharacterStyle))
 {
     widget.setupUi(this);
     // we don't have next style for character styles
@@ -73,13 +73,13 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
 
     m_languageTab->setVisible(false);
 
-    connect(widget.name, SIGNAL(textChanged(const QString &)), this, SIGNAL(nameChanged(const QString&)));
+    connect(widget.name, SIGNAL(textChanged(QString)), this, SIGNAL(nameChanged(QString)));
 }
 
 void CharacterGeneral::hideStyleName(bool hide)
 {
     if (hide) {
-        disconnect(widget.name, SIGNAL(textChanged(const QString &)), this, SIGNAL(nameChanged(const QString&)));
+        disconnect(widget.name, SIGNAL(textChanged(QString)), this, SIGNAL(nameChanged(QString)));
         widget.tabs->removeTab(0);
         m_nameHidden = true;
     }
@@ -88,12 +88,14 @@ void CharacterGeneral::hideStyleName(bool hide)
 void CharacterGeneral::setStyle(KoCharacterStyle *style)
 {
     m_style = style;
-    if (m_style == 0)
+    if (m_style == 0) {
         return;
+    }
     blockSignals(true);
 
-    if (!m_nameHidden)
+    if (!m_nameHidden) {
         widget.name->setText(style->name());
+    }
 
     m_characterHighlighting->setDisplay(style);
     //m_languageTab->setDisplay(style);
@@ -114,13 +116,14 @@ void CharacterGeneral::save(KoCharacterStyle *style)
 {
     KoCharacterStyle *savingStyle;
     if (style == 0) {
-        if (m_style == 0)
+        if (m_style == 0) {
             return;
-        else
+        } else {
             savingStyle = m_style;
-    }
-    else
+        }
+    } else {
         savingStyle = style;
+    }
 
     m_characterHighlighting->save(savingStyle);
     //m_languageTab->save(savingStyle);
@@ -161,8 +164,9 @@ QString CharacterGeneral::styleName() const
 
 void CharacterGeneral::setStyleManager(KoStyleManager *sm)
 {
-    if (!sm)
+    if (!sm) {
         return;
+    }
     m_styleManager = sm;
     m_paragraphStyleModel->setStyleManager(m_styleManager);
     m_characterInheritedStyleModel->setStyleManager(m_styleManager);
@@ -170,8 +174,9 @@ void CharacterGeneral::setStyleManager(KoStyleManager *sm)
 
 void CharacterGeneral::updateNextStyleCombo(KoParagraphStyle *style)
 {
-    if (!style)
+    if (!style) {
         return;
+    }
 
     widget.nextStyle->setCurrentIndex(m_paragraphStyleModel->indexOf(*style).row());
     m_paragraphStyleModel->setCurrentParagraphStyle(style->styleId());
@@ -185,11 +190,10 @@ int CharacterGeneral::nextStyleId()
     int nextStyleIndex = widget.nextStyle->currentIndex();
     QModelIndex paragraphStyleIndex = m_paragraphStyleModel->index(nextStyleIndex);
     quint64 internalId = paragraphStyleIndex.internalId();
-    KoParagraphStyle * paragraphStyle = m_styleManager->paragraphStyle(internalId);
+    KoParagraphStyle *paragraphStyle = m_styleManager->paragraphStyle(internalId);
     if (paragraphStyle) {
         return paragraphStyle->styleId();
-    }
-    else {
+    } else {
         return 0;
     }
 }

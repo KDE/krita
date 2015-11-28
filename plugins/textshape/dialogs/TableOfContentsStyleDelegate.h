@@ -37,7 +37,7 @@ public:
                       const QModelIndex &index) const;
 
     void updateEditorGeometry(QWidget *editor,
-        const QStyleOptionViewItem &option, const QModelIndex &index) const;
+                              const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
 
 #endif // TABLEOFCONTENTSSTYLEDELEGATE_H

@@ -49,7 +49,7 @@ KoShapeDistributeCommand::KoShapeDistributeCommand(const QList<KoShape*> &shapes
     QRectF bRect;
     qreal extent = 0.0;
     // sort by position and calculate sum of objects widht/height
-    foreach(KoShape *shape, shapes) {
+    Q_FOREACH (KoShape *shape, shapes) {
         bRect = shape->boundingRect();
         switch (d->distribute) {
         case HorizontalCenterDistribution:

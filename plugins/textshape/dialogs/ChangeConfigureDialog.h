@@ -23,51 +23,50 @@
 #include <QLabel>
 #include <KoChangeTracker.h>
 
-class ColorDisplayLabel:public QLabel
+class ColorDisplayLabel: public QLabel
 {
-    public:
-        explicit ColorDisplayLabel(QWidget *parent = 0);
-        ~ColorDisplayLabel();
-        void paintEvent(QPaintEvent *event);
-        const QColor& color() const;
-        void setColor(const QColor &color);
+public:
+    explicit ColorDisplayLabel(QWidget *parent = 0);
+    ~ColorDisplayLabel();
+    void paintEvent(QPaintEvent *event);
+    const QColor &color() const;
+    void setColor(const QColor &color);
 
-    private:
-        QColor labelColor;
+private:
+    QColor labelColor;
 };
 
 #include <ui_ChangeConfigureDialog.h>
 
-class ChangeConfigureDialog:public QDialog
+class ChangeConfigureDialog: public QDialog
 {
     Q_OBJECT
 
-    typedef enum
-    {
+    typedef enum {
         eInsert,
         eDelete,
         eFormatChange,
         eChangeTypeNone
-    }ChangeType;
+    } ChangeType;
 
-    public:
-        ChangeConfigureDialog(const QColor& insertionColor, const QColor& deletionColor, const QColor& formatChangeColor, const QString& authorName, KoChangeTracker::ChangeSaveFormat changeSaveFormat, QWidget *parent=NULL);
-        ~ChangeConfigureDialog();
-        
-        const QColor& getInsertionBgColor();
-        const QColor& getDeletionBgColor();
-        const QColor& getFormatChangeBgColor();
-        const QString authorName();
-        KoChangeTracker::ChangeSaveFormat saveFormat();
+public:
+    ChangeConfigureDialog(const QColor &insertionColor, const QColor &deletionColor, const QColor &formatChangeColor, const QString &authorName, KoChangeTracker::ChangeSaveFormat changeSaveFormat, QWidget *parent = NULL);
+    ~ChangeConfigureDialog();
 
-    private:
-        Ui::ChangeConfigureDialog ui;
-        void updatePreviewText();
-        void colorSelect(ChangeType type);
+    const QColor &getInsertionBgColor();
+    const QColor &getDeletionBgColor();
+    const QColor &getFormatChangeBgColor();
+    const QString authorName();
+    KoChangeTracker::ChangeSaveFormat saveFormat();
 
-    private Q_SLOTS:
-        void insertionColorSelect();
-        void deletionColorSelect();
-        void formatChangeColorSelect();
+private:
+    Ui::ChangeConfigureDialog ui;
+    void updatePreviewText();
+    void colorSelect(ChangeType type);
+
+private Q_SLOTS:
+    void insertionColorSelect();
+    void deletionColorSelect();
+    void formatChangeColorSelect();
 };
 #endif

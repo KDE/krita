@@ -1,12 +1,12 @@
 
 
-set(kritatoolpolygon_PART_SRCS
+set(kritatoolpolygon_SOURCES
     tool_polygon.cc
     kis_tool_polygon.cc
     )
 
-qt5_add_resources(kritatoolpolygon_PART_SRCS tool_polygon.qrc)
-add_library(kritatoolpolygon MODULE ${kritatoolpolygon_PART_SRCS})
+qt5_add_resources(kritatoolpolygon_SOURCES tool_polygon.qrc)
+add_library(kritatoolpolygon MODULE ${kritatoolpolygon_SOURCES})
 kcoreaddons_desktop_to_json(kritatoolpolygon kritatoolpolygon.desktop)
 
 

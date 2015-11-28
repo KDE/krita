@@ -29,7 +29,7 @@ void KoColorSpacesBenchmark::createRowsColumns()
     QTest::addColumn<QString>("modelID");
     QTest::addColumn<QString>("depthID");
     QList<const KoColorSpace*> colorSpaces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
-    foreach(const KoColorSpace* colorSpace, colorSpaces) {
+    Q_FOREACH (const KoColorSpace* colorSpace, colorSpaces) {
         QTest::newRow(colorSpace->name().toLatin1().data()) << colorSpace->colorModelId().id() << colorSpace->colorDepthId().id();
     }
 }

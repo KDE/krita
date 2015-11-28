@@ -73,7 +73,7 @@ public:
             pageNumber = page->pageNumber();
         }
 */        if (pageTmp != pageNumber || chapterTmp != chapterPosition) {
-            foreach(KoTextReference* reference, listeners)
+            Q_FOREACH (KoTextReference* reference, listeners)
                 reference->variableMoved(0, 0);
         }
     }

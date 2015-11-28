@@ -61,7 +61,7 @@ public:
                 KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(shape->shapeId());
                 Q_ASSERT(factory);
                 int z = 0;
-                foreach(KoShape *sh, canvas->shapeManager()->shapes())
+                Q_FOREACH (KoShape *sh, canvas->shapeManager()->shapes())
                     z = qMax(z, sh->zIndex());
                 shape->setZIndex(z + 1);
 
@@ -71,7 +71,7 @@ public:
 
                 int pageCount = 0;
                 QList<KoShapeConfigWidgetBase*> widgets;
-                foreach(KoShapeConfigWidgetBase* panel, factory->createShapeOptionPanels()) {
+                Q_FOREACH (KoShapeConfigWidgetBase* panel, factory->createShapeOptionPanels()) {
                     if (! panel->showOnShapeCreate())
                         continue;
                     panel->open(shape);
@@ -91,7 +91,7 @@ public:
                         delete dialog;
                         return 0;
                     }
-                    foreach(KoShapeConfigWidgetBase *widget, widgets)
+                    Q_FOREACH (KoShapeConfigWidgetBase *widget, widgets)
                         widget->save();
                 }
                 delete dialog;

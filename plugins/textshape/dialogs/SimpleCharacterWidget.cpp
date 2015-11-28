@@ -43,15 +43,15 @@
 #include <QComboBox>
 
 SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
-    : QWidget(parent),
-    m_styleManager(0),
-    m_blockSignals(false),
-    m_comboboxHasBidiItems(false),
-    m_tool(tool),
-    m_thumbnailer(new KoStyleThumbnailer()),
-    m_stylesModel(new StylesModel(0, StylesModel::CharacterStyle)),
-    m_sortedStylesModel(new DockerStylesComboModel()),
-    m_stylesDelegate(0)
+    : QWidget(parent)
+    , m_styleManager(0)
+    , m_blockSignals(false)
+    , m_comboboxHasBidiItems(false)
+    , m_tool(tool)
+    , m_thumbnailer(new KoStyleThumbnailer())
+    , m_stylesModel(new StylesModel(0, StylesModel::CharacterStyle))
+    , m_sortedStylesModel(new DockerStylesComboModel())
+    , m_stylesDelegate(0)
 {
     widget.setupUi(this);
     widget.bold->setDefaultAction(tool->action("format_bold"));
@@ -76,23 +76,23 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
     connect(widget.subscript, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
 
     QWidgetAction *fontFamilyAction = qobject_cast<QWidgetAction *>(tool->action("format_fontfamily"));
-    QComboBox *family = fontFamilyAction ? qobject_cast<QComboBox*> (fontFamilyAction->requestWidget(this)) : 0;
+    QComboBox *family = fontFamilyAction ? qobject_cast<QComboBox *> (fontFamilyAction->requestWidget(this)) : 0;
     if (family) { // kdelibs 4.1 didn't return anything here.
-        widget.fontsFrame->addWidget(family,0,0);
+        widget.fontsFrame->addWidget(family, 0, 0);
         connect(family, SIGNAL(activated(int)), this, SIGNAL(doneWithFocus()));
         connect(family, SIGNAL(activated(int)), this, SLOT(fontFamilyActivated(int)));
     }
     QWidgetAction *fontSizeAction = qobject_cast<QWidgetAction *>(tool->action("format_fontsize"));
-    QComboBox *size = fontSizeAction ? qobject_cast<QComboBox*> (fontSizeAction->requestWidget(this)) : 0;
+    QComboBox *size = fontSizeAction ? qobject_cast<QComboBox *> (fontSizeAction->requestWidget(this)) : 0;
     if (size) { // kdelibs 4.1 didn't return anything here.
-        widget.fontsFrame->addWidget(size,0,1);
+        widget.fontsFrame->addWidget(size, 0, 1);
         connect(size, SIGNAL(activated(int)), this, SIGNAL(doneWithFocus()));
         connect(size, SIGNAL(activated(int)), this, SLOT(fontSizeActivated(int)));
-        QDoubleValidator* validator = new QDoubleValidator(2, 999, 1, size);
+        QDoubleValidator *validator = new QDoubleValidator(2, 999, 1, size);
         size->setValidator(validator);
     }
 
-    widget.fontsFrame->setColumnStretch(0,1);
+    widget.fontsFrame->setColumnStretch(0, 1);
 
     m_stylesModel->setStyleThumbnailer(m_thumbnailer);
     widget.characterStyleCombo->setStylesModel(m_sortedStylesModel);
@@ -133,7 +133,7 @@ void SimpleCharacterWidget::setInitialUsedStyles(QVector<int> list)
     m_sortedStylesModel->setInitialUsedStyles(list);
 }
 
-void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format, const QTextCharFormat& refBlockCharFormat)
+void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat &format, const QTextCharFormat &refBlockCharFormat)
 {
     if (!m_styleManager || format == m_currentCharFormat) {
         return;
@@ -143,7 +143,7 @@ void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format, cons
     KoCharacterStyle *style(m_styleManager->characterStyle(m_currentCharFormat.intProperty(KoCharacterStyle::StyleId)));
     bool useParagraphStyle = false;
     if (!style) {
-        style = static_cast<KoCharacterStyle*>(m_styleManager->paragraphStyle(m_currentCharFormat.intProperty(KoParagraphStyle::StyleId)));
+        style = static_cast<KoCharacterStyle *>(m_styleManager->paragraphStyle(m_currentCharFormat.intProperty(KoParagraphStyle::StyleId)));
         useParagraphStyle = true;
     }
     if (style) {
@@ -159,17 +159,16 @@ void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format, cons
         clearUnsetProperties(m_currentCharFormat);
         if (m_currentCharFormat.properties().count() != comparisonFormat.properties().count()) {
             unchanged = false;
-        }
-        else {
-            foreach(int property, m_currentCharFormat.properties().keys()) {
+        } else {
+            Q_FOREACH (int property, m_currentCharFormat.properties().keys()) {
                 if (m_currentCharFormat.property(property) != comparisonFormat.property(property)) {
                     unchanged = false;
                 }
             }
         }
         disconnect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex)), this, SLOT(styleSelected(QModelIndex)));
-         //TODO, this is very brittle index 1 is because index 0 is the title. The proper solution to that would be for the "None" style to have a styleId which does not get applied on the text, but can be used in the ui
-        widget.characterStyleCombo->setCurrentIndex((useParagraphStyle)?1:m_sortedStylesModel->indexOf(*style).row());
+        //TODO, this is very brittle index 1 is because index 0 is the title. The proper solution to that would be for the "None" style to have a styleId which does not get applied on the text, but can be used in the ui
+        widget.characterStyleCombo->setCurrentIndex((useParagraphStyle) ? 1 : m_sortedStylesModel->indexOf(*style).row());
         widget.characterStyleCombo->setStyleIsOriginal(unchanged);
         widget.characterStyleCombo->slotUpdatePreview();
         connect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex)), this, SLOT(styleSelected(QModelIndex)));
@@ -178,14 +177,15 @@ void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format, cons
 
 void SimpleCharacterWidget::clearUnsetProperties(QTextFormat &format)
 {
-    foreach(int property, format.properties().keys()) {
+    Q_FOREACH (int property, format.properties().keys()) {
         if (!format.property(property).toBool()) {
             format.clearProperty(property);
         }
     }
 }
 
-void SimpleCharacterWidget::fontFamilyActivated(int index) {
+void SimpleCharacterWidget::fontFamilyActivated(int index)
+{
     /**
      * Hack:
      *
@@ -194,14 +194,16 @@ void SimpleCharacterWidget::fontFamilyActivated(int index) {
      * manually triggering it here if that happens.
      */
     if (index == m_lastFontFamilyIndex) {
-        KSelectAction *action = qobject_cast<KSelectAction*>(m_tool->action("format_fontfamily"));
-        if(action->currentAction())
+        KSelectAction *action = qobject_cast<KSelectAction *>(m_tool->action("format_fontfamily"));
+        if (action->currentAction()) {
             action->currentAction()->trigger();
+        }
     }
     m_lastFontFamilyIndex = index;
 }
 
-void SimpleCharacterWidget::fontSizeActivated(int index) {
+void SimpleCharacterWidget::fontSizeActivated(int index)
+{
     /**
      * Hack:
      *
@@ -210,7 +212,7 @@ void SimpleCharacterWidget::fontSizeActivated(int index) {
      * the way by manually triggering it here if that happens.
      */
     if (index == m_lastFontSizeIndex) {
-        KSelectAction *action = qobject_cast<KSelectAction*>(m_tool->action("format_fontsize"));
+        KSelectAction *action = qobject_cast<KSelectAction *>(m_tool->action("format_fontsize"));
         action->currentAction()->trigger();
     }
     m_lastFontSizeIndex = index;
@@ -218,8 +220,9 @@ void SimpleCharacterWidget::fontSizeActivated(int index) {
 
 void SimpleCharacterWidget::setCurrentBlockFormat(const QTextBlockFormat &format)
 {
-    if (format == m_currentBlockFormat)
+    if (format == m_currentBlockFormat) {
         return;
+    }
     m_currentBlockFormat = format;
 
     m_stylesModel->setCurrentParagraphStyle(format.intProperty(KoParagraphStyle::StyleId));

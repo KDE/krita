@@ -55,7 +55,7 @@ QPointF KisZoomAction::Private::centerPoint(QTouchEvent* event)
     QPointF result;
     int count = 0;
 
-    foreach (QTouchEvent::TouchPoint point, event->touchPoints()) {
+    Q_FOREACH (QTouchEvent::TouchPoint point, event->touchPoints()) {
         if (point.state() != Qt::TouchPointReleased) {
             result += point.screenPos();
             count++;
@@ -182,7 +182,7 @@ void KisZoomAction::inputEvent( QEvent* event )
 
             int count = 0;
             float dist = 0.0f;
-            foreach(const QTouchEvent::TouchPoint &point, tevent->touchPoints()) {
+            Q_FOREACH (const QTouchEvent::TouchPoint &point, tevent->touchPoints()) {
                 if (point.state() != Qt::TouchPointReleased) {
                     count++;
 

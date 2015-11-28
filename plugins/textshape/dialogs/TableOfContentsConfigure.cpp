@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #include "TableOfContentsConfigure.h"
 #include "TableOfContentsStyleConfigure.h"
 #include "TableOfContentsEntryDelegate.h"
@@ -29,32 +28,32 @@
 #include <KoTextEditor.h>
 #include <KoParagraphStyle.h>
 
-TableOfContentsConfigure::TableOfContentsConfigure(KoTextEditor *editor, QTextBlock block, QWidget *parent) :
-    QDialog(parent),
-    m_textEditor(editor),
-    m_tocStyleConfigure(0),
-    m_tocInfo(0),
-    m_block(block),
-    m_document(0),
-    m_tocEntryStyleModel(0),
-    m_tocEntryConfigureDelegate(0)
+TableOfContentsConfigure::TableOfContentsConfigure(KoTextEditor *editor, QTextBlock block, QWidget *parent) 
+    : QDialog(parent)
+    , m_textEditor(editor)
+    , m_tocStyleConfigure(0)
+    , m_tocInfo(0)
+    , m_block(block)
+    , m_document(0)
+    , m_tocEntryStyleModel(0)
+    , m_tocEntryConfigureDelegate(0)
 {
     init();
 
-    KoTableOfContentsGeneratorInfo *info = block.blockFormat().property(KoParagraphStyle::TableOfContentsData).value<KoTableOfContentsGeneratorInfo*>();
+    KoTableOfContentsGeneratorInfo *info = block.blockFormat().property(KoParagraphStyle::TableOfContentsData).value<KoTableOfContentsGeneratorInfo *>();
     m_tocInfo = info->clone();
 
     setDisplay();
 }
 
-TableOfContentsConfigure::TableOfContentsConfigure(KoTextEditor *editor, KoTableOfContentsGeneratorInfo *info, QWidget *parent) :
-    QDialog(parent),
-    m_textEditor(editor),
-    m_tocStyleConfigure(0),
-    m_tocInfo(0),
-    m_document(0),
-    m_tocEntryStyleModel(0),
-    m_tocEntryConfigureDelegate(0)
+TableOfContentsConfigure::TableOfContentsConfigure(KoTextEditor *editor, KoTableOfContentsGeneratorInfo *info, QWidget *parent)
+    : QDialog(parent)
+    , m_textEditor(editor)
+    , m_tocStyleConfigure(0)
+    , m_tocInfo(0)
+    , m_document(0)
+    , m_tocEntryStyleModel(0)
+    , m_tocEntryConfigureDelegate(0)
 {
     init();
     m_tocInfo = info->clone();
@@ -98,9 +97,9 @@ void TableOfContentsConfigure::setDisplay()
     ui.useOutline->setCheckState(m_tocInfo->m_useOutlineLevel ? Qt::Checked : Qt::Unchecked);
     ui.useStyles->setCheckState(m_tocInfo->m_useIndexSourceStyles ? Qt::Checked : Qt::Unchecked);
 
-    connect(ui.lineEditTitle, SIGNAL(textChanged(const QString &)), this, SLOT(titleTextChanged(const QString&)));
-    connect(ui.useOutline, SIGNAL(stateChanged(int )), this, SLOT(useOutline(int)));
-    connect(ui.useStyles, SIGNAL(stateChanged(int )), this, SLOT(useIndexSourceStyles(int)));
+    connect(ui.lineEditTitle, SIGNAL(textChanged(QString)), this, SLOT(titleTextChanged(QString)));
+    connect(ui.useOutline, SIGNAL(stateChanged(int)), this, SLOT(useOutline(int)));
+    connect(ui.useStyles, SIGNAL(stateChanged(int)), this, SLOT(useIndexSourceStyles(int)));
 
     m_tocEntryStyleModel = new TableOfContentsEntryModel(KoTextDocument(m_textEditor->document()).styleManager(), m_tocInfo);
     connect(m_tocEntryStyleModel, SIGNAL(tocEntryDataChanged()), this, SLOT(updatePreview()));
@@ -175,24 +174,23 @@ void TableOfContentsConfigure::updatePreview()
 
 void TableOfContentsConfigure::cleanUp()
 {
-    disconnect(ui.lineEditTitle, SIGNAL(textChanged (const QString &)), this, SLOT(titleTextChanged(const QString &)));
-    disconnect(ui.useOutline, SIGNAL(stateChanged(int )), this, SLOT(useOutline(int)));
-    disconnect(ui.useStyles, SIGNAL(stateChanged(int )), this, SLOT(useIndexSourceStyles(int)));
+    disconnect(ui.lineEditTitle, SIGNAL(textChanged(QString)), this, SLOT(titleTextChanged(QString)));
+    disconnect(ui.useOutline, SIGNAL(stateChanged(int)), this, SLOT(useOutline(int)));
+    disconnect(ui.useStyles, SIGNAL(stateChanged(int)), this, SLOT(useIndexSourceStyles(int)));
 
     disconnect(this, SIGNAL(accepted()), this, SLOT(save()));
     disconnect(this, SIGNAL(rejected()), this, SLOT(cleanUp()));
 
-    if(m_tocEntryStyleModel) {
+    if (m_tocEntryStyleModel) {
         delete m_tocEntryStyleModel;
         m_tocEntryStyleModel = 0;
     }
 
-    if(m_tocEntryConfigureDelegate) {
+    if (m_tocEntryConfigureDelegate) {
         delete m_tocEntryConfigureDelegate;
         m_tocEntryConfigureDelegate = 0;
     }
 }
-
 
 KoTableOfContentsGeneratorInfo *TableOfContentsConfigure::currentToCData()
 {

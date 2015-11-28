@@ -307,7 +307,7 @@ bool KisSelectionManager::haveShapesInClipboard()
         const QMimeData* data = QApplication::clipboard()->mimeData();
         if (data) {
             QStringList mimeTypes = m_view->canvasBase()->toolProxy()->supportedPasteMimeTypes();
-            foreach(const QString & mimeType, mimeTypes) {
+            Q_FOREACH (const QString & mimeType, mimeTypes) {
                 if (data->hasFormat(mimeType)) {
                     return true;
                 }
@@ -543,7 +543,7 @@ void KisSelectionManager::shapeSelectionChanged()
     QList<KoShape*> selectedShapes = selection->selectedShapes();
 
     KoShapeStroke* border = new KoShapeStroke(0, Qt::lightGray);
-    foreach(KoShape* shape, shapeManager->shapes()) {
+    Q_FOREACH (KoShape* shape, shapeManager->shapes()) {
         if (dynamic_cast<KisShapeSelection*>(shape->parent())) {
             if (selectedShapes.contains(shape))
                 shape->setStroke(border);
@@ -584,7 +584,7 @@ void KisSelectionManager::paintSelectedShapes()
                                        KisPainter::StrokeStyleBrush,
                                        KisPainter::FillStyleNone);
 
-    foreach(KoShape* shape, shapes) {
+    Q_FOREACH (KoShape* shape, shapes) {
         QTransform matrix = shape->absoluteTransformation(0) * QTransform::fromScale(image->xRes(), image->yRes());
         QPainterPath mapedOutline = matrix.map(shape->outline());
         helper.paintPainterPath(mapedOutline);

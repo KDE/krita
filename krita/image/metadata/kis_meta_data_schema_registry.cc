@@ -55,7 +55,7 @@ SchemaRegistry::SchemaRegistry()
     QStringList schemasFilenames;
     schemasFilenames += KoResourcePaths::findAllResources("metadata_schema", "*.schema");
 
-    foreach(const QString& fileName, schemasFilenames) {
+    Q_FOREACH (const QString& fileName, schemasFilenames) {
         Schema* schema = new Schema();
         schema->d->load(fileName);
         if (schemaFromUri(schema->uri())) {

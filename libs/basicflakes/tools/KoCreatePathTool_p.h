@@ -39,19 +39,16 @@
 /// Small helper to keep track of a path point and its parent path shape
 struct PathConnectionPoint {
     PathConnectionPoint()
-    : path(0), point(0)
-    {
+        : path(0), point(0) {
     }
 
     // reset state to invalid
-    void reset()
-    {
+    void reset() {
         path = 0;
         point = 0;
     }
 
-    PathConnectionPoint& operator =(KoPathPoint * pathPoint)
-    {
+    PathConnectionPoint& operator =(KoPathPoint * pathPoint) {
         if (!pathPoint || ! pathPoint->parent()) {
             reset();
         } else {
@@ -61,24 +58,20 @@ struct PathConnectionPoint {
         return *this;
     }
 
-    bool operator != (const PathConnectionPoint &rhs) const
-    {
+    bool operator != (const PathConnectionPoint &rhs) const {
         return rhs.path != path || rhs.point != point;
     }
 
-    bool operator == (const PathConnectionPoint &rhs) const
-    {
+    bool operator == (const PathConnectionPoint &rhs) const {
         return rhs.path == path && rhs.point == point;
     }
 
-    bool isValid() const
-    {
+    bool isValid() const {
         return path && point;
     }
 
     // checks if the path and point are still valid
-    void validate(KoCanvasBase *canvas)
-    {
+    void validate(KoCanvasBase *canvas) {
         // no point in validating an already invalid state
         if (!isValid()) {
             return;
@@ -94,7 +87,7 @@ struct PathConnectionPoint {
             return;
         }
         // check if point is still part of the path
-        if (path->pathPointIndex(point) == KoPathPointIndex(-1,-1)) {
+        if (path->pathPointIndex(point) == KoPathPointIndex(-1, -1)) {
             reset();
             return;
         }
@@ -104,33 +97,29 @@ struct PathConnectionPoint {
     KoPathPoint * point;
 };
 
-inline qreal squareDistance( const QPointF &p1, const QPointF &p2)
+inline qreal squareDistance(const QPointF &p1, const QPointF &p2)
 {
-    qreal dx = p1.x()-p2.x();
-    qreal dy = p1.y()-p2.y();
-    return dx*dx + dy*dy;
+    qreal dx = p1.x() - p2.x();
+    qreal dy = p1.y() - p2.y();
+    return dx * dx + dy * dy;
 }
 
 class AngleSnapStrategy : public KoSnapStrategy
 {
 public:
-    explicit AngleSnapStrategy( qreal angleStep, bool active)
-    : KoSnapStrategy(KoSnapGuide::CustomSnapping), m_angleStep(angleStep), m_active(active)
-    {
+    explicit AngleSnapStrategy(qreal angleStep, bool active)
+        : KoSnapStrategy(KoSnapGuide::CustomSnapping), m_angleStep(angleStep), m_active(active) {
     }
 
-    void setStartPoint(const QPointF &startPoint)
-    {
+    void setStartPoint(const QPointF &startPoint) {
         m_startPoint = startPoint;
     }
 
-    void setAngleStep(qreal angleStep)
-    {
+    void setAngleStep(qreal angleStep) {
         m_angleStep = qAbs(angleStep);
     }
 
-    virtual bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance)
-    {
+    virtual bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance) {
         Q_UNUSED(proxy);
 
         if (!m_active)
@@ -140,8 +129,8 @@ public:
         qreal currentAngle = line.angle();
         int prevStep = qAbs(currentAngle / m_angleStep);
         int nextStep = prevStep + 1;
-        qreal prevAngle = prevStep*m_angleStep;
-        qreal nextAngle = nextStep*m_angleStep;
+        qreal prevAngle = prevStep * m_angleStep;
+        qreal nextAngle = nextStep * m_angleStep;
 
         if (qAbs(currentAngle - prevAngle) <= qAbs(currentAngle - nextAngle)) {
             line.setAngle(prevAngle);
@@ -149,7 +138,7 @@ public:
             line.setAngle(nextAngle);
         }
 
-        qreal maxSquareSnapDistance = maxSnapDistance*maxSnapDistance;
+        qreal maxSquareSnapDistance = maxSnapDistance * maxSnapDistance;
         qreal snapDistance = squareDistance(mousePosition, line.p2());
         if (snapDistance > maxSquareSnapDistance)
             return false;
@@ -158,8 +147,7 @@ public:
         return true;
     }
 
-    virtual QPainterPath decoration(const KoViewConverter &converter) const
-    {
+    virtual QPainterPath decoration(const KoViewConverter &converter) const {
         Q_UNUSED(converter);
 
         QPainterPath decoration;
@@ -168,12 +156,11 @@ public:
         return decoration;
     }
 
-    void deactivate()
-    {
+    void deactivate() {
         m_active = false;
     }
 
-    void activate(){
+    void activate() {
         m_active = true;
     }
 
@@ -184,26 +171,27 @@ private:
 };
 
 
-class KoCreatePathToolPrivate : public KoToolBasePrivate {
+class KoCreatePathToolPrivate : public KoToolBasePrivate
+{
     KoCreatePathTool * const q;
 public:
     KoCreatePathToolPrivate(KoCreatePathTool * const qq, KoCanvasBase* canvas)
         : KoToolBasePrivate(qq, canvas),
-        q(qq),
-        shape(0),
-        activePoint(0),
-        firstPoint(0),
-        handleRadius(3),
-        mouseOverFirstPoint(false),
-        pointIsDragged(false),
-        finishAfterThisPoint(false),
-        hoveredPoint(0),
-        listeningToModifiers(false),
-        angleSnapStrategy(0),
-        angleSnappingDelta(15),
-        angleSnapStatus(false),
-        strokeWidget(0)
-    {}
+          q(qq),
+          shape(0),
+          activePoint(0),
+          firstPoint(0),
+          handleRadius(3),
+          mouseOverFirstPoint(false),
+          pointIsDragged(false),
+          finishAfterThisPoint(false),
+          hoveredPoint(0),
+          listeningToModifiers(false),
+          angleSnapStrategy(0),
+          angleSnappingDelta(15),
+          angleSnapStatus(false),
+          strokeWidget(0) {
+    }
 
     KoPathShape *shape;
     KoPathPoint *activePoint;
@@ -222,8 +210,7 @@ public:
     bool angleSnapStatus;
     KoStrokeConfigWidget *strokeWidget;
 
-    void repaintActivePoint() const
-    {
+    void repaintActivePoint() const {
         const bool isFirstPoint = (activePoint == firstPoint);
 
         if (!isFirstPoint && !pointIsDragged)
@@ -254,8 +241,7 @@ public:
     }
 
     /// returns the nearest existing path point
-    KoPathPoint* endPointAtPosition( const QPointF &position ) const
-    {
+    KoPathPoint* endPointAtPosition(const QPointF &position) const {
         QRectF roi = q->handleGrabRect(position);
         QList<KoShape *> shapes = q->canvas()->shapeManager()->shapesAt(roi);
 
@@ -264,7 +250,7 @@ public:
         uint grabSensitivity = q->grabSensitivity();
         qreal maxDistance = q->canvas()->viewConverter()->viewToDocumentX(grabSensitivity);
 
-        foreach(KoShape *s, shapes) {
+        Q_FOREACH(KoShape * s, shapes) {
             KoPathShape * path = dynamic_cast<KoPathShape*>(s);
             if (!path)
                 continue;
@@ -285,7 +271,7 @@ public:
                     minDistance = d;
                 }
                 // check end of subpath
-                p = path->pointByIndex(KoPathPointIndex(i, path->subpathPointCount(i)-1));
+                p = path->pointByIndex(KoPathPointIndex(i, path->subpathPointCount(i) - 1));
                 d = squareDistance(position, path->shapeToDocument(p->point()));
                 if (d < minDistance && d < maxDistance) {
                     nearestPoint = p;
@@ -298,8 +284,7 @@ public:
     }
 
     /// Connects given path with the ones we hit when starting/finishing
-    bool connectPaths( KoPathShape *pathShape, const PathConnectionPoint &pointAtStart, const PathConnectionPoint &pointAtEnd ) const
-    {
+    bool connectPaths(KoPathShape *pathShape, const PathConnectionPoint &pointAtStart, const PathConnectionPoint &pointAtEnd) const {
         KoPathShape * startShape = 0;
         KoPathShape * endShape = 0;
         KoPathPoint * startPoint = 0;
@@ -328,19 +313,19 @@ public:
 
         uint newPointCount = pathShape->subpathPointCount(0);
         KoPathPointIndex newStartPointIndex(0, 0);
-        KoPathPointIndex newEndPointIndex(0, newPointCount-1);
+        KoPathPointIndex newEndPointIndex(0, newPointCount - 1);
         KoPathPoint * newStartPoint = pathShape->pointByIndex(newStartPointIndex);
         KoPathPoint * newEndPoint = pathShape->pointByIndex(newEndPointIndex);
 
         // combine with the path we hit on start
-        KoPathPointIndex startIndex(-1,-1);
+        KoPathPointIndex startIndex(-1, -1);
         if (startShape && startPoint) {
             startIndex = startShape->pathPointIndex(startPoint);
             pathShape->combine(startShape);
-            pathShape->moveSubpath(0, pathShape->subpathCount()-1);
+            pathShape->moveSubpath(0, pathShape->subpathCount() - 1);
         }
         // combine with the path we hit on finish
-        KoPathPointIndex endIndex(-1,-1);
+        KoPathPointIndex endIndex(-1, -1);
         if (endShape && endPoint) {
             endIndex = endShape->pathPointIndex(endPoint);
             if (endShape != startShape) {
@@ -353,7 +338,7 @@ public:
 
         if (startIndex.second == 0 && !connectToSingleSubpath) {
             pathShape->reverseSubpath(startIndex.first);
-            startIndex.second = pathShape->subpathPointCount(startIndex.first)-1;
+            startIndex.second = pathShape->subpathPointCount(startIndex.first) - 1;
         }
         if (endIndex.second > 0 && !connectToSingleSubpath) {
             pathShape->reverseSubpath(endIndex.first);
@@ -389,8 +374,7 @@ public:
         return true;
     }
 
-    void addPathShape()
-    {
+    void addPathShape() {
         if (!shape) return;
 
         if (shape->pointCount() < 2) {
@@ -400,7 +384,7 @@ public:
 
         // this is done so that nothing happens when the mouseReleaseEvent for the this event is received
         KoPathShape *pathShape = shape;
-        shape=0;
+        shape = 0;
 
         q->addPathShape(pathShape);
 
@@ -416,25 +400,23 @@ public:
         angleSnapStrategy = 0;
 
         delete shape;
-        shape=0;
+        shape = 0;
         existingStartPoint = 0;
         existingEndPoint = 0;
         hoveredPoint = 0;
         listeningToModifiers = false;
     }
 
-    void angleDeltaChanged(int value)
-    {
+    void angleDeltaChanged(int value) {
         angleSnappingDelta = value;
         if (angleSnapStrategy)
             angleSnapStrategy->setAngleStep(angleSnappingDelta);
     }
 
-    void angleSnapChanged(int angleSnap){
+    void angleSnapChanged(int angleSnap) {
         angleSnapStatus = ! angleSnapStatus;
-        if(angleSnapStrategy)
-        {
-            if(angleSnap == Qt::Checked)
+        if (angleSnapStrategy) {
+            if (angleSnap == Qt::Checked)
                 angleSnapStrategy->activate();
             else
                 angleSnapStrategy->deactivate();

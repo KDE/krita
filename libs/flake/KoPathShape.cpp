@@ -362,8 +362,8 @@ QRect KoPathShape::loadOdfViewbox(const KoXmlElement & element)
 
 void KoPathShape::clear()
 {
-    foreach(KoSubpath *subpath, m_subpaths) {
-        foreach(KoPathPoint *point, *subpath)
+    Q_FOREACH (KoSubpath *subpath, m_subpaths) {
+        Q_FOREACH (KoPathPoint *point, *subpath)
             delete point;
         delete subpath;
     }
@@ -449,10 +449,10 @@ void KoPathShape::paintPoints(QPainter &painter, const KoViewConverter &converte
 QPainterPath KoPathShape::outline() const
 {
     QPainterPath path;
-    foreach(KoSubpath * subpath, m_subpaths) {
+    Q_FOREACH (KoSubpath * subpath, m_subpaths) {
         KoPathPoint * lastPoint = subpath->first();
         bool activeCP = false;
-        foreach(KoPathPoint * currPoint, *subpath) {
+        Q_FOREACH (KoPathPoint * currPoint, *subpath) {
             KoPathPoint::PointProperties currProperties = currPoint->properties();
             if (currPoint == subpath->first()) {
                 if (currProperties & KoPathPoint::StartSubpath) {
@@ -1040,7 +1040,7 @@ bool KoPathShape::join(int subpathIndex)
     nextSubpath->first()->unsetProperty(KoPathPoint::StartSubpath);
 
     // append the second subpath to the first
-    foreach(KoPathPoint * p, *nextSubpath)
+    Q_FOREACH (KoPathPoint * p, *nextSubpath)
         subpath->append(p);
 
     // remove the nextSubpath from path
@@ -1187,10 +1187,10 @@ bool KoPathShape::combine(KoPathShape *path)
     QTransform pathMatrix = path->absoluteTransformation(0);
     QTransform myMatrix = absoluteTransformation(0).inverted();
 
-    foreach(KoSubpath* subpath, path->m_subpaths) {
+    Q_FOREACH (KoSubpath* subpath, path->m_subpaths) {
         KoSubpath *newSubpath = new KoSubpath();
 
-        foreach(KoPathPoint* point, *subpath) {
+        Q_FOREACH (KoPathPoint* point, *subpath) {
             KoPathPoint *newPoint = new KoPathPoint(*point);
             newPoint->map(pathMatrix);
             newPoint->map(myMatrix);
@@ -1210,7 +1210,7 @@ bool KoPathShape::separate(QList<KoPathShape*> & separatedPaths)
 
     QTransform myMatrix = absoluteTransformation(0);
 
-    foreach(KoSubpath* subpath, m_subpaths) {
+    Q_FOREACH (KoSubpath* subpath, m_subpaths) {
         KoPathShape *shape = new KoPathShape();
         if (! shape) continue;
 
@@ -1219,7 +1219,7 @@ bool KoPathShape::separate(QList<KoPathShape*> & separatedPaths)
 
         KoSubpath *newSubpath = new KoSubpath();
 
-        foreach(KoPathPoint* point, *subpath) {
+        Q_FOREACH (KoPathPoint* point, *subpath) {
             KoPathPoint *newPoint = new KoPathPoint(*point);
             newPoint->map(myMatrix);
             newSubpath->append(newPoint);

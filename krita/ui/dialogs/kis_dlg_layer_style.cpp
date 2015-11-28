@@ -217,7 +217,7 @@ bool checkCustomNameAvailable(const QString &name)
 
     KisPSDLayerStyleCollectionResource *collection = dynamic_cast<KisPSDLayerStyleCollectionResource*>(resource);
 
-    foreach(KisPSDLayerStyleSP style, collection->layerStyles()) {
+    Q_FOREACH (KisPSDLayerStyleSP style, collection->layerStyles()) {
         if (style->name() == name) {
             return false;
         }
@@ -449,7 +449,7 @@ void StylesSelector::refillCollections()
     QString previousCollection = ui.cmbStyleCollections->currentText();
 
     ui.cmbStyleCollections->clear();
-    foreach(KoResource *res, KisResourceServerProvider::instance()->layerStyleCollectionServer()->resources()) {
+    Q_FOREACH (KoResource *res, KisResourceServerProvider::instance()->layerStyleCollectionServer()->resources()) {
         ui.cmbStyleCollections->addItem(res->name());
     }
 
@@ -492,7 +492,7 @@ void StylesSelector::loadStyles(const QString &name)
     KoResource *res = KisResourceServerProvider::instance()->layerStyleCollectionServer()->resourceByName(name);
     KisPSDLayerStyleCollectionResource *collection = dynamic_cast<KisPSDLayerStyleCollectionResource*>(res);
     if (collection) {
-        foreach(KisPSDLayerStyleSP style, collection->layerStyles()) {
+        Q_FOREACH (KisPSDLayerStyleSP style, collection->layerStyles()) {
             // XXX: also use the preview image, when we have one
             ui.listStyles->addItem(new StyleItem(style));
         }

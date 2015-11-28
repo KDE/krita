@@ -173,7 +173,7 @@ void KisGmicPlugin::setupDefinitionPaths()
         m_definitionFilePaths.prepend(updatedGmicDefinitionFilePath);
     }
 
-    foreach (const QString item, m_definitionFilePaths)
+    Q_FOREACH (const QString item, m_definitionFilePaths)
     {
         dbgPlugins << "registered gmic file: " << item;
     }
@@ -360,7 +360,7 @@ void KisGmicPlugin::slotFilterCurrentImage(KisGmicFilterSetting* setting)
 
 void KisGmicPlugin::parseGmicCommandDefinitions(const QStringList& gmicDefinitionFilePaths)
 {
-    foreach (const QString filePath, gmicDefinitionFilePaths)
+    Q_FOREACH (const QString filePath, gmicDefinitionFilePaths)
     {
         QByteArray gmicCommands = KisGmicParser::extractGmicCommandsOnly(filePath);
         m_gmicCustomCommands.append(gmicCommands);

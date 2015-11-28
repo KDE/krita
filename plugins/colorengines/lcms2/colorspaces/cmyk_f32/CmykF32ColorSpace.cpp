@@ -28,7 +28,7 @@
 CmykF32ColorSpace::CmykF32ColorSpace(const QString &name, KoColorProfile *p)
     : LcmsColorSpace<KoCmykF32Traits>(colorSpaceId(), name,  TYPE_CMYKA_FLT, cmsSigCmykData, p)
 {
-    const IccColorProfile* icc_p = dynamic_cast<const IccColorProfile*>(p);
+    const IccColorProfile *icc_p = dynamic_cast<const IccColorProfile *>(p);
     Q_ASSERT(icc_p);
     QVector<KoChannelInfo::DoubleRange> uiRanges(icc_p->getFloatUIMinMax());
     Q_ASSERT(uiRanges.size() == 4);
@@ -46,20 +46,21 @@ CmykF32ColorSpace::CmykF32ColorSpace(const QString &name, KoColorProfile *p)
 
 bool CmykF32ColorSpace::willDegrade(ColorSpaceIndependence independence) const
 {
-    if (independence == TO_RGBA16)
+    if (independence == TO_RGBA16) {
         return true;
-    else
+    } else {
         return false;
+    }
 }
 
-KoColorSpace* CmykF32ColorSpace::clone() const
+KoColorSpace *CmykF32ColorSpace::clone() const
 {
     return new CmykF32ColorSpace(name(), profile()->clone());
 }
 
-void CmykF32ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+void CmykF32ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const
 {
-    const KoCmykF32Traits::Pixel* p = reinterpret_cast<const KoCmykF32Traits::Pixel*>(pixel);
+    const KoCmykF32Traits::Pixel *p = reinterpret_cast<const KoCmykF32Traits::Pixel *>(pixel);
     QDomElement labElt = doc.createElement("CMYK");
     labElt.setAttribute("c", KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA(p->cyan));
     labElt.setAttribute("m", KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA(p->magenta));
@@ -69,14 +70,13 @@ void CmykF32ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomE
     colorElt.appendChild(labElt);
 }
 
-void CmykF32ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
+void CmykF32ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
-    KoCmykF32Traits::Pixel* p = reinterpret_cast<KoCmykF32Traits::Pixel*>(pixel);
+    KoCmykF32Traits::Pixel *p = reinterpret_cast<KoCmykF32Traits::Pixel *>(pixel);
     p->cyan = KoColorSpaceMaths< qreal, KoCmykF32Traits::channels_type >::scaleToA(elt.attribute("c").toDouble());
     p->magenta = KoColorSpaceMaths< qreal, KoCmykF32Traits::channels_type >::scaleToA(elt.attribute("m").toDouble());
     p->yellow = KoColorSpaceMaths< qreal, KoCmykF32Traits::channels_type >::scaleToA(elt.attribute("y").toDouble());
     p->black = KoColorSpaceMaths< qreal, KoCmykF32Traits::channels_type >::scaleToA(elt.attribute("k").toDouble());
     p->alpha = 1.0;
 }
-
 

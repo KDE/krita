@@ -33,10 +33,10 @@
 #include <QPixmap>
 
 SimpleTableWidget::SimpleTableWidget(TextTool *tool, QWidget *parent)
-        : QWidget(parent)
-        , m_blockSignals(false)
-        , m_tool(tool)
-        , m_lastStyleEmitted(2)
+    : QWidget(parent)
+    , m_blockSignals(false)
+    , m_tool(tool)
+    , m_lastStyleEmitted(2)
 {
     widget.setupUi(this);
     widget.addRowAbove->setDefaultAction(tool->action("insert_tablerow_above"));
@@ -53,13 +53,13 @@ SimpleTableWidget::SimpleTableWidget(TextTool *tool, QWidget *parent)
 
     widget.border->setNumColumns(9);
 
-    fillBorderButton(QColor(0,0,0));
+    fillBorderButton(QColor(0, 0, 0));
 
     KoColorPopupAction *actionBorderColor = new KoColorPopupAction(this);
     actionBorderColor->setIcon(koIcon("format-fill-color"));
     actionBorderColor->setText(i18n("Set Border Color..."));
     widget.border->addAction(actionBorderColor);
-    connect(actionBorderColor, SIGNAL(colorChanged(const KoColor &)), this, SLOT(setBorderColor(const KoColor &)));
+    connect(actionBorderColor, SIGNAL(colorChanged(KoColor)), this, SLOT(setBorderColor(KoColor)));
 
     connect(widget.addRowAbove, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.addRowBelow, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
@@ -82,7 +82,7 @@ void SimpleTableWidget::restartPainting()
 void SimpleTableWidget::emitTableBorderDataUpdated(int i)
 {
     m_lastStyleEmitted = i;
-    emit tableBorderDataUpdated(m_cellStyles[i-1]->getEdge(KoBorder::TopBorder));
+    emit tableBorderDataUpdated(m_cellStyles[i - 1]->getEdge(KoBorder::TopBorder));
 }
 
 void SimpleTableWidget::setStyleManager(KoStyleManager *sm)
@@ -101,112 +101,111 @@ void SimpleTableWidget::fillBorderButton(const QColor &color)
     m_cellStyles.clear();
 
     qreal thickness[9] = {0.25, 0.5, 0.75, 1.0, 1.5, 2.25, 3.0, 4.5, 6.0};
- 
+
     KoTableCellStyle cellStyle;
     qDeleteAll(m_cellStyles);
     m_cellStyles.append(KoTableCellStyle().clone());
-    for (int i=8; i<9; i++) {
+    for (int i = 8; i < 9; i++) {
         cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderDoubleWave, thickness[i], color);
         m_cellStyles.append(cellStyle.clone());
     }
-    for (int i=6; i<8; i++) {
+    for (int i = 6; i < 8; i++) {
         cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderWave, thickness[i], color);
         m_cellStyles.append(cellStyle.clone());
     }
-    for (int i=4; i<9; i++) {
-        cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderDouble, thickness[i]*1.5, color);
-        cellStyle.setEdgeDoubleBorderValues(KoBorder::TopBorder, thickness[i], thickness[i]/4);
+    for (int i = 4; i < 9; i++) {
+        cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderDouble, thickness[i] * 1.5, color);
+        cellStyle.setEdgeDoubleBorderValues(KoBorder::TopBorder, thickness[i], thickness[i] / 4);
         m_cellStyles.append(cellStyle.clone());
     }
-    for (int i=6; i<7; i++) {
+    for (int i = 6; i < 7; i++) {
         cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderSlash, thickness[i], color);
         m_cellStyles.append(cellStyle.clone());
     }
     m_cellStyles.append(0);
-    for (int i=0; i<7; i++) {
-        cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderDouble, thickness[i]*3, color);
+    for (int i = 0; i < 7; i++) {
+        cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderDouble, thickness[i] * 3, color);
         m_cellStyles.append(cellStyle.clone());
     }
-    for (int i=0; i<9; i++) {
-        cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderDouble, thickness[i]*2, color);
-        cellStyle.setEdgeDoubleBorderValues(KoBorder::TopBorder, thickness[i]/2, thickness[i]/2);
+    for (int i = 0; i < 9; i++) {
+        cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderDouble, thickness[i] * 2, color);
+        cellStyle.setEdgeDoubleBorderValues(KoBorder::TopBorder, thickness[i] / 2, thickness[i] / 2);
         m_cellStyles.append(cellStyle.clone());
     }
-    for (int i=0; i<9; i++) {
+    for (int i = 0; i < 9; i++) {
         cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderSolid, thickness[i], color);
         m_cellStyles.append(cellStyle.clone());
     }
-    for (int i=0; i<9; i++) {
+    for (int i = 0; i < 9; i++) {
         cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderDotted, thickness[i], color);
         m_cellStyles.append(cellStyle.clone());
     }
-    for (int i=0; i<9; i++) {
+    for (int i = 0; i < 9; i++) {
         cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderDashed, thickness[i], color);
         m_cellStyles.append(cellStyle.clone());
     }
-    for (int i=0; i<9; i++) {
+    for (int i = 0; i < 9; i++) {
         cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderDashedLong, thickness[i], color);
         m_cellStyles.append(cellStyle.clone());
     }
-    for (int i=0; i<9; i++) {
+    for (int i = 0; i < 9; i++) {
         cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderDashDot, thickness[i], color);
         m_cellStyles.append(cellStyle.clone());
     }
-    for (int i=0; i<9; i++) {
+    for (int i = 0; i < 9; i++) {
         cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderDashDotDot, thickness[i], color);
         m_cellStyles.append(cellStyle.clone());
     }
 
-    int i=1;
+    int i = 1;
     KoZoomHandler zoomHandler;
-    foreach(KoTableCellStyle *style, m_cellStyles) {
+    Q_FOREACH (KoTableCellStyle *style, m_cellStyles) {
         if (style == 0) {
             widget.border->addBlanks(1);
             i++;
             continue;
         }
-        QPixmap pm(48,16);
+        QPixmap pm(48, 16);
 
         pm.fill(Qt::transparent);
         QPainter p(&pm);
         p.setRenderHint(QPainter::Antialiasing);
 
-        if(style->hasBorders()) {
-            p.scale(zoomHandler.zoomedResolutionX(),zoomHandler.zoomedResolutionY());
+        if (style->hasBorders()) {
+            p.scale(zoomHandler.zoomedResolutionX(), zoomHandler.zoomedResolutionY());
             KoTextLayoutCellHelper cellStyleHelper(*style);
             qreal width = style->topBorderWidth();
-            cellStyleHelper.drawTopHorizontalBorder(p, 0, 8/zoomHandler.zoomedResolutionY() - width/2, pm.width()/zoomHandler.zoomedResolutionX(), 0);
+            cellStyleHelper.drawTopHorizontalBorder(p, 0, 8 / zoomHandler.zoomedResolutionY() - width / 2, pm.width() / zoomHandler.zoomedResolutionX(), 0);
 
-            widget.border->addItem(pm, i, KoUnit().toUserStringValue(style->topBorderWidth())+"pt");
-        } else
-        {
-            p.drawText(0, 0, 48, 16, Qt::AlignCenter, i18nc("No border - has to fit in 48pixels","None"));
+            widget.border->addItem(pm, i, KoUnit().toUserStringValue(style->topBorderWidth()) + "pt");
+        } else {
+            p.drawText(0, 0, 48, 16, Qt::AlignCenter, i18nc("No border - has to fit in 48pixels", "None"));
             widget.border->addItem(pm, i, i18n("No Border"));
         }
         i++;
     }
     widget.border->setItemsBackground(QColor(Qt::white));
 
-   // widget.borderType->addItem("None");
+    // widget.borderType->addItem("None");
 
     widget.border->addSeparator();
 
-/*
-    //TODO: Uncomment the below line when the string freeze is over
-    //action->setToolTip(i18n("Change the level the list is at"));
+    /*
+        //TODO: Uncomment the below line when the string freeze is over
+        //action->setToolTip(i18n("Change the level the list is at"));
 
-    QMenu *listLevelMenu = new QMenu();
-    const int levelIndent = 13;
-    for (int level = 0; level < 10; ++level) {
-        QWidgetAction *wa = new QWidgetAction(listLevelMenu);
-        ListLevelChooser *chooserWidget = new ListLevelChooser((levelIndent * level) + 5);
-        wa->setDefaultWidget(chooserWidget);
-        listLevelMenu->addAction(wa);
-        m_mapper->setMapping(wa,level + 1);
-        connect(chooserWidget, SIGNAL(clicked()), wa, SLOT(trigger()));
-        connect(wa, SIGNAL(triggered()), m_mapper, SLOT(map()));
-    }
+        QMenu *listLevelMenu = new QMenu();
+        const int levelIndent = 13;
+        for (int level = 0; level < 10; ++level) {
+            QWidgetAction *wa = new QWidgetAction(listLevelMenu);
+            ListLevelChooser *chooserWidget = new ListLevelChooser((levelIndent * level) + 5);
+            wa->setDefaultWidget(chooserWidget);
+            listLevelMenu->addAction(wa);
+            m_mapper->setMapping(wa,level + 1);
+            connect(chooserWidget, SIGNAL(clicked()), wa, SLOT(trigger()));
+            connect(wa, SIGNAL(triggered()), m_mapper, SLOT(map()));
+        }
 
-    action->setMenu(listLevelMenu);
-    */
+        action->setMenu(listLevelMenu);
+        */
 }

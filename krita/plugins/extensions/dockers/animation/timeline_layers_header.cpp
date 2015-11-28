@@ -77,7 +77,7 @@ int TimelineLayersHeader::Private::numIcons(int logicalIndex) const
     if (value.isValid()) {
         TimelineFramesModel::PropertyList props = value.value<TimelineFramesModel::PropertyList>();
 
-        foreach (const TimelineFramesModel::Property &p, props) {
+        Q_FOREACH (const TimelineFramesModel::Property &p, props) {
             if (p.isMutable) {
                 result++;
             }

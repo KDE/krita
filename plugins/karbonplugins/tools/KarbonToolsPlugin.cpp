@@ -30,17 +30,16 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 
-K_PLUGIN_FACTORY_WITH_JSON(KarbonToolsPluginFactory, "karbon_tools.json",
-                           registerPlugin<KarbonToolsPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(KarbonToolsPluginFactory, "karbon_tools.json", registerPlugin<KarbonToolsPlugin>();)
 
-KarbonToolsPlugin::KarbonToolsPlugin(QObject *parent, const QVariantList&)
-        : QObject(parent)
+KarbonToolsPlugin::KarbonToolsPlugin(QObject *parent, const QVariantList &)
+    : QObject(parent)
 {
     KoToolRegistry::instance()->add(new KarbonCalligraphyToolFactory());
     KoToolRegistry::instance()->add(new KarbonGradientToolFactory());
     KoToolRegistry::instance()->add(new KarbonPatternToolFactory());
     KoToolRegistry::instance()->add(new KarbonFilterEffectsToolFactory());
-    
+
     KoShapeRegistry::instance()->add(new KarbonCalligraphicShapeFactory());
 }
 #include <KarbonToolsPlugin.moc>

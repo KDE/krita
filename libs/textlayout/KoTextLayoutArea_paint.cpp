@@ -150,7 +150,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             tocContext.textContext.selections = QVector<QAbstractTextDocumentLayout::Selection>();
 
             bool pure = true;
-            foreach(const QAbstractTextDocumentLayout::Selection &selection, context.textContext.selections) {
+            Q_FOREACH (const QAbstractTextDocumentLayout::Selection &selection, context.textContext.selections) {
                 if (selection.cursor.selectionStart()  <= block.position()
                     && selection.cursor.selectionEnd() >= block.position()) {
                     painter->fillRect(d->generatedDocAreas[tocIndex]->boundingRect(), selection.format.background());
@@ -222,7 +222,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
 
             QVector<QTextLayout::FormatRange> selections;
             if (context.showSelections) {
-                foreach(const QAbstractTextDocumentLayout::Selection & selection, context.textContext.selections) {
+                Q_FOREACH (const QAbstractTextDocumentLayout::Selection & selection, context.textContext.selections) {
                     QTextCursor cursor = selection.cursor;
                     int begin = cursor.position();
                     int end = cursor.anchor();
@@ -382,7 +382,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
 
     painter->translate(0, -d->verticalAlignOffset);
     painter->translate(0, bottom() - d->footNotesHeight);
-    foreach(KoTextLayoutNoteArea *footerArea, d->footNoteAreas) {
+    Q_FOREACH (KoTextLayoutNoteArea *footerArea, d->footNoteAreas) {
         footerArea->paint(painter, context);
         painter->translate(0, footerArea->bottom() - footerArea->top());
     }

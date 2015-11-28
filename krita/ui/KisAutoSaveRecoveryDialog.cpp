@@ -197,7 +197,7 @@ KisAutoSaveRecoveryDialog::KisAutoSaveRecoveryDialog(const QStringList &filename
     m_listView->setItemDelegate(delegate);
 
     QList<FileItem*> fileItems;
-    foreach(const QString &filename, filenames) {
+    Q_FOREACH (const QString &filename, filenames) {
 
         FileItem *file = new FileItem();
         file->name = filename;
@@ -240,7 +240,7 @@ KisAutoSaveRecoveryDialog::KisAutoSaveRecoveryDialog(const QStringList &filename
 QStringList KisAutoSaveRecoveryDialog::recoverableFiles()
 {
     QStringList files;
-    foreach(FileItem* fileItem, m_model->m_fileItems) {
+    Q_FOREACH (FileItem* fileItem, m_model->m_fileItems) {
         if (fileItem->checked) {
             files << fileItem->name;
         }

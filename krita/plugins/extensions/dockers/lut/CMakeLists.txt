@@ -2,18 +2,18 @@ add_subdirectory(tests)
 include_directories( ${OCIO_INCLUDE_DIR})
 kde_enable_exceptions()
 
-set(KRITA_LUTDOCKER_PART_SRCS
+set(KRITA_LUTDOCKER_SOURCES
   lutdocker.cpp
   lutdocker_dock.cpp
   ocio_display_filter.cpp
   black_white_point_chooser.cpp
   )
 
-ki18n_wrap_ui(KRITA_LUTDOCKER_PART_SRCS
+ki18n_wrap_ui(KRITA_LUTDOCKER_SOURCES
     wdglut.ui
 )
 
-add_library(kritalutdocker MODULE ${KRITA_LUTDOCKER_PART_SRCS})
+add_library(kritalutdocker MODULE ${KRITA_LUTDOCKER_SOURCES})
 kcoreaddons_desktop_to_json(kritalutdocker krita_lutdocker.desktop)
 generate_export_header(kritalutdocker BASE_NAME kritalutdocker)
 

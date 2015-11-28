@@ -2792,7 +2792,7 @@ void KisPainter::renderDabWithMirroringNonIncremental(QRect rc, KisPaintDeviceSP
         rects << QRect(x, mirrorY, rc.width(), rc.height());
     }
 
-    foreach(const QRect &rc, rects) {
+    Q_FOREACH (const QRect &rc, rects) {
         d->device->clear(rc);
     }
 
@@ -2814,11 +2814,11 @@ void KisPainter::renderDabWithMirroringNonIncremental(QRect rc, KisPaintDeviceSP
         rects.resize(1);
     }
 
-    foreach(const QRect &rc, rects) {
+    Q_FOREACH (const QRect &rc, rects) {
         bitBlt(rc.topLeft(), dab, rc);
     }
 
-    foreach(const QRect &rc, rects) {
+    Q_FOREACH (const QRect &rc, rects) {
         renderMirrorMask(rc, dab);
     }
 }

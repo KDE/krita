@@ -339,7 +339,7 @@ int getColumnCount(const QModelIndexList &indexes, int *leftmostCol, int *rightm
     int leftmost = std::numeric_limits<int>::max();
     int rightmost = std::numeric_limits<int>::min();
 
-    foreach (const QModelIndex &index, indexes) {
+    Q_FOREACH (const QModelIndex &index, indexes) {
         leftmost = qMin(leftmost, index.column());
         rightmost = qMax(rightmost, index.column());
         if (!columns.contains(index.column())) {
@@ -464,7 +464,7 @@ void TimelineRulerHeader::slotClearColumns(bool removeColumns)
     QVector<QPoint> movingFrames = m_d->prepareFramesSlab(leftmostCol, rightmostCol);
 
     QModelIndexList framesToRemove;
-    foreach (const QPoint &pt, movingFrames) {
+    Q_FOREACH (const QPoint &pt, movingFrames) {
         QModelIndex index = m_d->model->index(pt.y(), pt.x());
         if (index.isValid()) {
             framesToRemove << index;

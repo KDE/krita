@@ -928,7 +928,7 @@ void KisImage::refreshHiddenArea(KisNodeSP rootNode, const QRect &preparedArea)
         QRegion dirtyRegion = realNodeRect;
         dirtyRegion -= preparedArea;
 
-        foreach(const QRect &rc, dirtyRegion.rects()) {
+        Q_FOREACH (const QRect &rc, dirtyRegion.rects()) {
             refreshGraph(rootNode, rc, realNodeRect);
         }
     }
@@ -963,7 +963,7 @@ void KisImage::flatten()
 
 bool checkIsSourceForClone(KisNodeSP src, const QList<KisNodeSP> &nodes)
 {
-    foreach (KisNodeSP node, nodes) {
+    Q_FOREACH (KisNodeSP node, nodes) {
         if (node == src) continue;
 
         KisCloneLayer *clone = dynamic_cast<KisCloneLayer*>(node.data());
@@ -1004,7 +1004,7 @@ bool checkIsChildOf(KisNodeSP node, const QList<KisNodeSP> &parents)
         parent = parent->parent();
     }
 
-    foreach(KisNodeSP perspectiveParent, parents) {
+    Q_FOREACH (KisNodeSP perspectiveParent, parents) {
         if (nodeParents.contains(perspectiveParent)) {
             return true;
         }
@@ -1056,7 +1056,7 @@ void sortMergableNodes(KisNodeSP root, QList<KisNodeSP> &inputNodes, QList<KisNo
 
 void fetchSelectionMasks(QList<KisNodeSP> mergedNodes, QVector<KisSelectionMaskSP> &selectionMasks)
 {
-    foreach (KisNodeSP node, mergedNodes) {
+    Q_FOREACH (KisNodeSP node, mergedNodes) {
         KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
 
         KisSelectionMaskSP mask;
@@ -1070,7 +1070,7 @@ void fetchSelectionMasks(QList<KisNodeSP> mergedNodes, QVector<KisSelectionMaskS
 void reparentSelectionMasks(KisLayerSP newLayer, const QVector<KisSelectionMaskSP> &selectionMasks)
 {
     KisImageSP image = newLayer->image();
-    foreach (KisSelectionMaskSP mask, selectionMasks) {
+    Q_FOREACH (KisSelectionMaskSP mask, selectionMasks) {
         image->undoAdapter()->addCommand(new KisImageLayerMoveCommand(image, mask, newLayer, newLayer->lastChild()));
         image->undoAdapter()->addCommand(new KisActivateSelectionMaskCommand(mask, false));
     }
@@ -1082,7 +1082,7 @@ KisNodeSP tryMergeSelectionMasks(KisImageSP image, QList<KisNodeSP> mergedNodes)
 
     QList<KisSelectionMaskSP> selectionMasks;
 
-    foreach (KisNodeSP node, mergedNodes) {
+    Q_FOREACH (KisNodeSP node, mergedNodes) {
         KisSelectionMaskSP mask = dynamic_cast<KisSelectionMask*>(node.data());
         if (!mask) return 0;
 
@@ -1094,7 +1094,7 @@ KisNodeSP tryMergeSelectionMasks(KisImageSP image, QList<KisNodeSP> mergedNodes)
 
     KisSelectionSP selection = new KisSelection();
 
-    foreach (KisMaskSP mask, selectionMasks) {
+    Q_FOREACH (KisMaskSP mask, selectionMasks) {
         selection->pixelSelection()->applySelection(
             mask->selection()->pixelSelection(), SELECTION_ADD);
     }
@@ -1138,7 +1138,7 @@ KisNodeSP KisImage::mergeMultipleLayers(QList<KisNodeSP> mergedNodes, KisNodeSP 
     QVector<KisSelectionMaskSP> selectionMasks;
     fetchSelectionMasks(mergedNodes, selectionMasks);
 
-    foreach (KisNodeSP layer, mergedNodes) {
+    Q_FOREACH (KisNodeSP layer, mergedNodes) {
         refreshHiddenArea(layer, bounds());
     }
 
@@ -1148,7 +1148,7 @@ KisNodeSP KisImage::mergeMultipleLayers(QList<KisNodeSP> mergedNodes, KisNodeSP 
     {
         KisImageBarrierLocker l(this);
 
-        foreach (KisNodeSP layer, mergedNodes) {
+        Q_FOREACH (KisNodeSP layer, mergedNodes) {
             QRect rc = layer->exactBounds() | bounds();
             layer->projectionPlane()->apply(&gc, rc);
         }
@@ -1799,7 +1799,7 @@ void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
         QRect boundRect = bounds();
         KisWrappedRect splitRect(rect, boundRect);
 
-        foreach (const QRect &rc, splitRect) {
+        Q_FOREACH (const QRect &rc, splitRect) {
             requestProjectionUpdateImpl(node, rc, boundRect);
         }
     } else {

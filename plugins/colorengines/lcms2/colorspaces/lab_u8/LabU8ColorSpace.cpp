@@ -26,7 +26,7 @@
 #include "../compositeops/KoCompositeOps.h"
 
 LabU8ColorSpace::LabU8ColorSpace(const QString &name, KoColorProfile *p) :
-        LcmsColorSpace<KoLabU8Traits>(colorSpaceId(), name, TYPE_LABA_8, cmsSigLabData, p)
+    LcmsColorSpace<KoLabU8Traits>(colorSpaceId(), name, TYPE_LABA_8, cmsSigLabData, p)
 {
     addChannel(new KoChannelInfo(i18n("Lightness"), 0 * sizeof(quint8), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(quint8), QColor(100, 100, 100)));
     addChannel(new KoChannelInfo(i18n("a*"),        1 * sizeof(quint8), 1, KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(quint8), QColor(150, 150, 150)));
@@ -63,15 +63,14 @@ QString LabU8ColorSpace::normalisedChannelValueText(const quint8 *pixel, quint32
 
 }
 
-KoColorSpace* LabU8ColorSpace::clone() const
+KoColorSpace *LabU8ColorSpace::clone() const
 {
     return new LabU8ColorSpace(name(), profile()->clone());
 }
 
-
-void LabU8ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+void LabU8ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const
 {
-    const KoLabU8Traits::Pixel* p = reinterpret_cast<const KoLabU8Traits::Pixel*>(pixel);
+    const KoLabU8Traits::Pixel *p = reinterpret_cast<const KoLabU8Traits::Pixel *>(pixel);
     QDomElement labElt = doc.createElement("Lab");
     labElt.setAttribute("L", KoColorSpaceMaths< KoLabU8Traits::channels_type, qreal>::scaleToA(p->L));
     labElt.setAttribute("a", KoColorSpaceMaths< KoLabU8Traits::channels_type, qreal>::scaleToA(p->a));
@@ -80,9 +79,9 @@ void LabU8ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomEle
     colorElt.appendChild(labElt);
 }
 
-void LabU8ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
+void LabU8ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
-    KoLabU8Traits::Pixel* p = reinterpret_cast<KoLabU8Traits::Pixel*>(pixel);
+    KoLabU8Traits::Pixel *p = reinterpret_cast<KoLabU8Traits::Pixel *>(pixel);
     p->L = KoColorSpaceMaths< qreal, KoLabU8Traits::channels_type >::scaleToA(elt.attribute("L").toDouble());
     p->a = KoColorSpaceMaths< qreal, KoLabU8Traits::channels_type >::scaleToA(elt.attribute("a").toDouble());
     p->b = KoColorSpaceMaths< qreal, KoLabU8Traits::channels_type >::scaleToA(elt.attribute("b").toDouble());

@@ -52,14 +52,14 @@ KisMacro::~KisMacro()
 
 void KisMacro::appendActions(const QList<KisRecordedAction*>& actions)
 {
-    foreach(KisRecordedAction* action, actions) {
+    Q_FOREACH (KisRecordedAction* action, actions) {
         addAction(*action);
     }
 }
 
 void KisMacro::removeActions(const QList<KisRecordedAction*>& actions)
 {
-    foreach(KisRecordedAction* action, actions) {
+    Q_FOREACH (KisRecordedAction* action, actions) {
         d->actions.removeAll(action);
     }
     qDeleteAll(actions);

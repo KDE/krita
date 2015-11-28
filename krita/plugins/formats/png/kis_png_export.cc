@@ -59,7 +59,7 @@ KisPNGExport::~KisPNGExport()
 bool hasVisibleWidgets()
 {
     QWidgetList wl = QApplication::allWidgets();
-    foreach(QWidget* w, wl) {
+    Q_FOREACH (QWidget* w, wl) {
         if (w->isVisible() && strcmp(w->metaObject()->className(), "QDesktopWidget")) {
             dbgFile << "Widget " << w << " " << w->objectName() << " " << w->metaObject()->className() << " is visible";
             return true;

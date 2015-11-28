@@ -25,14 +25,14 @@
 
 #include <QMessageBox>
 
-CitationInsertionDialog::CitationInsertionDialog(KoTextEditor *editor ,QWidget *parent) :
-    QDialog(parent),
-    m_blockSignals(false),
-    m_editor(editor)
+CitationInsertionDialog::CitationInsertionDialog(KoTextEditor *editor, QWidget *parent) 
+    : QDialog(parent)
+    , m_blockSignals(false)
+    , m_editor(editor)
 {
     dialog.setupUi(this);
-    connect(dialog.buttonBox,SIGNAL(accepted()),this,SLOT(insert()));
-    connect(dialog.existingCites,SIGNAL(currentIndexChanged(QString)),this,SLOT(selectionChangedFromExistingCites()));
+    connect(dialog.buttonBox, SIGNAL(accepted()), this, SLOT(insert()));
+    connect(dialog.existingCites, SIGNAL(currentIndexChanged(QString)), this, SLOT(selectionChangedFromExistingCites()));
 
     QStringList existingCites(i18n("Select"));
     foreach (KoInlineCite *cite, KoTextDocument(m_editor->document()).inlineTextObjectManager()->citations().values()) {
@@ -49,15 +49,17 @@ void CitationInsertionDialog::insert()
 {
     if (m_cites.contains(dialog.shortName->text())) {
         if (*m_cites.value(dialog.shortName->text()) != *toCite()) {      //prompts if values are changed
-            int ret = QMessageBox::warning(this,i18n("Warning"),i18n("The document already contains the bibliography entry with different data.\n"
-                                 "Do you want to adjust existing entries?"),QMessageBox::Yes | QMessageBox::No);
-            if ( ret == QMessageBox::Yes) {
-                foreach(KoInlineCite *existingCite, m_cites.values(dialog.shortName->text())) {
+            int ret = QMessageBox::warning(this, i18n("Warning"), i18n("The document already contains the bibliography entry with different data.\n"
+                                           "Do you want to adjust existing entries?"), QMessageBox::Yes | QMessageBox::No);
+            if (ret == QMessageBox::Yes) {
+                Q_FOREACH (KoInlineCite *existingCite, m_cites.values(dialog.shortName->text())) {
                     *existingCite = *toCite();                       //update all cites with new values
                     existingCite->setType(KoInlineCite::ClonedCitation);    //change type to ClonedCitation
                 }
                 emit accept();
-            } else return;
+            } else {
+                return;
+            }
         }
     }
     KoInlineCite *cite = m_editor->insertCitation();
@@ -66,7 +68,7 @@ void CitationInsertionDialog::insert()
             KoTextDocument(m_editor->document()).inlineTextObjectManager()->citations().count();
         dialog.shortName->setText(i18n("Short name%1", number));
 
-        dialog.shortName->setSelection(dialog.shortName->text().length(),0);
+        dialog.shortName->setSelection(dialog.shortName->text().length(), 0);
     }
     *cite = *toCite();
     emit accept();
@@ -130,7 +132,7 @@ void CitationInsertionDialog::fillValuesFrom(KoInlineCite *cite)
     dialog.address->setText(cite->address());
     dialog.annotation->setText(cite->annotation());
     dialog.author->setText(cite->author());
-    dialog.sourceType->setCurrentIndex(dialog.sourceType->findText(cite->bibliographyType(),Qt::MatchFixedString));
+    dialog.sourceType->setCurrentIndex(dialog.sourceType->findText(cite->bibliographyType(), Qt::MatchFixedString));
     dialog.booktitle->setText(cite->bookTitle());
     dialog.chapter->setText(cite->chapter());
     dialog.ud1->setText(cite->custom1());

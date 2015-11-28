@@ -31,8 +31,8 @@ class ChangeTracker : public QObject
 public:
     explicit ChangeTracker(TextTool *parent);
 
-    void setDocument(QTextDocument * document);
-    
+    void setDocument(QTextDocument *document);
+
     int getChangeId(QString title, int existingChangeId);
 
     void notifyForUndo();

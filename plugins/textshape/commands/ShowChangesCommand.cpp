@@ -39,28 +39,30 @@
 #include <QtAlgorithms>
 #include <QList>
 
-ShowChangesCommand::ShowChangesCommand(bool showChanges, QTextDocument *document, KoCanvasBase *canvas, KUndo2Command *parent) :
-    KoTextCommandBase (parent),
-    m_document(document),
-    m_first(true),
-    m_showChanges(showChanges),
-    m_canvas(canvas)
+ShowChangesCommand::ShowChangesCommand(bool showChanges, QTextDocument *document, KoCanvasBase *canvas, KUndo2Command *parent) 
+    : KoTextCommandBase(parent)
+    , m_document(document)
+    , m_first(true)
+    , m_showChanges(showChanges)
+    , m_canvas(canvas)
 {
     Q_ASSERT(document);
     m_changeTracker = KoTextDocument(m_document).changeTracker();
     m_textEditor = KoTextDocument(m_document).textEditor();
-    if (showChanges)
-      setText(kundo2_i18n("Show Changes"));
-    else
-      setText(kundo2_i18n("Hide Changes"));
+    if (showChanges) {
+        setText(kundo2_i18n("Show Changes"));
+    } else {
+        setText(kundo2_i18n("Hide Changes"));
+    }
 }
 
 void ShowChangesCommand::undo()
 {
     KoTextCommandBase::undo();
     UndoRedoFinalizer finalizer(this);
-    foreach (KUndo2Command *shapeCommand, m_shapeCommands)
+    foreach (KUndo2Command *shapeCommand, m_shapeCommands) {
         shapeCommand->undo();
+    }
     emit toggledShowChange(!m_showChanges);
     enableDisableStates(!m_showChanges);
 }
@@ -70,8 +72,9 @@ void ShowChangesCommand::redo()
     if (!m_first) {
         KoTextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
-        foreach (KUndo2Command *shapeCommand, m_shapeCommands)
+        foreach (KUndo2Command *shapeCommand, m_shapeCommands) {
             shapeCommand->redo();
+        }
         emit toggledShowChange(m_showChanges);
         enableDisableStates(m_showChanges);
     } else {
@@ -85,16 +88,18 @@ void ShowChangesCommand::enableDisableChanges()
     if (m_changeTracker) {
         enableDisableStates(m_showChanges);
 
-        if(m_showChanges)
-          insertDeletedChanges();
-        else
-          removeDeletedChanges();
+        if (m_showChanges) {
+            insertDeletedChanges();
+        } else {
+            removeDeletedChanges();
+        }
 #if 0
-TODO
-        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_document->documentLayout());
-        if (lay)
-          lay->scheduleLayout();
-        #endif
+        TODO
+        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout *>(m_document->documentLayout());
+        if (lay) {
+            lay->scheduleLayout();
+        }
+#endif
     }
 }
 
@@ -117,30 +122,31 @@ void ShowChangesCommand::insertDeletedChanges()
 void ShowChangesCommand::checkAndAddAnchoredShapes(int position, int length)
 {
     KoInlineTextObjectManager *inlineObjectManager
-                = KoTextDocument(m_document).inlineTextObjectManager();
+        = KoTextDocument(m_document).inlineTextObjectManager();
     Q_ASSERT(inlineObjectManager);
 
     QTextCursor cursor = m_textEditor->document()->find(QString(QChar::ObjectReplacementCharacter), position);
-    while(!cursor.isNull() && cursor.position() < position + length) {
+    while (!cursor.isNull() && cursor.position() < position + length) {
         QTextCharFormat fmt = cursor.charFormat();
         KoInlineObject *object = inlineObjectManager->inlineTextObject(fmt);
         Q_ASSERT(object);
         Q_UNUSED(object);
-/* FIXME
-        KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(object);
-        if (!anchor) {
-            continue;
-        }
-        */
+        /* FIXME
+                KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(object);
+                if (!anchor) {
+                    continue;
+                }
+                */
 #if 0
         // TODO -- since March 2010...
-        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_document->documentLayout());
+        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout *>(m_document->documentLayout());
 
         KoShapeContainer *container = dynamic_cast<KoShapeContainer *>(lay->shapeForPosition(i));
 
         // a very ugly hack. Since this class is going away soon, it should be okay
-        if (!container)
+        if (!container) {
             container = dynamic_cast<KoShapeContainer *>((lay->shapes()).at(0));
+        }
 
         if (container) {
             container->addShape(anchor->shape());
@@ -163,11 +169,11 @@ void ShowChangesCommand::removeDeletedChanges()
 void ShowChangesCommand::checkAndRemoveAnchoredShapes(int position, int length)
 {
     KoInlineTextObjectManager *inlineObjectManager
-                = KoTextDocument(m_document).inlineTextObjectManager();
+        = KoTextDocument(m_document).inlineTextObjectManager();
     Q_ASSERT(inlineObjectManager);
 
     QTextCursor cursor = m_textEditor->document()->find(QString(QChar::ObjectReplacementCharacter), position);
-    while(!cursor.isNull() && cursor.position() < position + length) {
+    while (!cursor.isNull() && cursor.position() < position + length) {
         QTextCharFormat fmt = cursor.charFormat();
         KoInlineObject *object = inlineObjectManager->inlineTextObject(fmt);
         Q_ASSERT(object);

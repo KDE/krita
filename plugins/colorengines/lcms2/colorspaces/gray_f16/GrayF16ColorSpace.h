@@ -30,30 +30,33 @@ class GrayF16ColorSpace : public LcmsColorSpace<KoGrayF16Traits>
 public:
     GrayF16ColorSpace(const QString &name, KoColorProfile *p);
 
-    virtual bool willDegrade(ColorSpaceIndependence) const {
+    virtual bool willDegrade(ColorSpaceIndependence) const
+    {
         return false;
     }
 
-    virtual KoID colorModelId() const {
+    virtual KoID colorModelId() const
+    {
         return GrayAColorModelID;
     }
 
-    virtual KoID colorDepthId() const {
+    virtual KoID colorDepthId() const
+    {
         return Float16BitsColorDepthID;
     }
 
-    virtual KoColorSpace* clone() const;
+    virtual KoColorSpace *clone() const;
 
-    virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
+    virtual void colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const;
 
-    virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const;
+    virtual void colorFromXML(quint8 *pixel, const QDomElement &elt) const;
 
     static QString colorSpaceId()
     {
         return "GRAYAF16";
     }
 
-    virtual bool hasHighDynamicRange() const 
+    virtual bool hasHighDynamicRange() const
     {
         return true;
     }
@@ -67,35 +70,43 @@ public:
     {
     }
 
-    virtual QString id() const {
+    virtual QString id() const
+    {
         return GrayF16ColorSpace::colorSpaceId();
     }
 
-    virtual QString name() const {
+    virtual QString name() const
+    {
         return i18n("Grayscale/Alpha (16-bit float/channel)");
     }
 
-    virtual KoID colorModelId() const {
+    virtual KoID colorModelId() const
+    {
         return GrayAColorModelID;
     }
 
-    virtual KoID colorDepthId() const {
+    virtual KoID colorDepthId() const
+    {
         return Float16BitsColorDepthID;
     }
 
-    virtual int referenceDepth() const {
+    virtual int referenceDepth() const
+    {
         return 16;
     }
 
-    virtual bool userVisible() const {
+    virtual bool userVisible() const
+    {
         return true;
     }
 
-    virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const {
+    virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const
+    {
         return new GrayF16ColorSpace(name(), p->clone());
     }
 
-    virtual QString defaultProfile() const {
+    virtual QString defaultProfile() const
+    {
         return "gray built-in";
     }
 

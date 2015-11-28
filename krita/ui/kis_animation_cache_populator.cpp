@@ -181,7 +181,7 @@ struct KisAnimationCachePopulator::Private
                     int currentTime = activeCanvas->currentImage()->animationInterface()->currentUITime();
 
                     KisKeyframeChannel *channel;
-                    foreach (channel, activeNode->keyframeChannels()) {
+                    Q_FOREACH (channel, activeNode->keyframeChannels()) {
                         skipRange |= channel->affectedFrames(currentTime);
                     }
                 }
@@ -193,7 +193,7 @@ struct KisAnimationCachePopulator::Private
 
         QList<KisAnimationFrameCache*> caches = KisAnimationFrameCache::caches();
         KisAnimationFrameCache *cache;
-        foreach (cache, caches) {
+        Q_FOREACH (cache, caches) {
             if (cache == activeDocumentCache.data()) {
                 // We already handled this one...
                 continue;

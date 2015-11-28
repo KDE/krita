@@ -25,27 +25,27 @@
 
 class KoChangeTracker;
 
-class AcceptRejectChangeDialog:public QDialog
+class AcceptRejectChangeDialog: public QDialog
 {
     Q_OBJECT
 
-    public:
-        typedef enum{
-            eDialogCancelled = 0,
-            eChangeAccepted,
-            eChangeRejected
-        }AcceptRejectResult;
+public:
+    typedef enum {
+        eDialogCancelled = 0,
+        eChangeAccepted,
+        eChangeRejected
+    } AcceptRejectResult;
 
-        AcceptRejectChangeDialog(KoChangeTracker *changeTracker, int changeId);
-        ~AcceptRejectChangeDialog();
-        
-    private:
-        Ui::AcceptRejectChangeDialog ui;
+    AcceptRejectChangeDialog(KoChangeTracker *changeTracker, int changeId);
+    ~AcceptRejectChangeDialog();
 
-    private Q_SLOTS:
-        void changeAccepted();
-        void changeRejected();
-        void dialogCancelled();
+private:
+    Ui::AcceptRejectChangeDialog ui;
+
+private Q_SLOTS:
+    void changeAccepted();
+    void changeRejected();
+    void dialogCancelled();
 };
 
 #endif

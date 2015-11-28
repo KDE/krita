@@ -67,8 +67,8 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
 #ifdef CMAKE_INSTALL_PREFIX
         searchDirs << QDir(CMAKE_INSTALL_PREFIX);
 #endif
-        foreach(const QDir& dir, searchDirs) {
-            foreach(QString entry, dir.entryList()) {
+        Q_FOREACH (const QDir& dir, searchDirs) {
+            Q_FOREACH (QString entry, dir.entryList()) {
                 QFileInfo info(dir, entry);
                 if (info.isDir() && (info.fileName().contains("lib") || info.fileName().contains("PlugIns"))) {
                     QDir libDir(info.absoluteFilePath());
@@ -81,7 +81,7 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
 
                     // on debian at least the actual libdir is a subdir named like "lib/x86_64-linux-gnu"
                     // so search there for the calligra subdir which will contain our plugins
-                    foreach(QString subEntry, libDir.entryList()) {
+                    Q_FOREACH (QString subEntry, libDir.entryList()) {
                         QFileInfo subInfo(libDir, subEntry);
                         if (subInfo.isDir()) {
                             if (QDir(subInfo.absoluteFilePath()).entryList(QStringList() << "krita").size() > 0) {

@@ -30,12 +30,13 @@
 #include <QToolButton>
 
 FloodEffectConfigWidget::FloodEffectConfigWidget(QWidget *parent)
-        : KoFilterEffectConfigWidgetBase(parent), m_effect(0)
+    : KoFilterEffectConfigWidgetBase(parent)
+    , m_effect(0)
 {
-    QGridLayout * g = new QGridLayout(this);
+    QGridLayout *g = new QGridLayout(this);
 
     g->addWidget(new QLabel(i18n("Flood color"), this), 0, 0);
-    QToolButton * button = new QToolButton(this);
+    QToolButton *button = new QToolButton(this);
     g->addWidget(button, 0, 1);
     m_actionStopColor = new KoColorPopupAction(this);
     button->setDefaultAction(m_actionStopColor);
@@ -44,11 +45,12 @@ FloodEffectConfigWidget::FloodEffectConfigWidget(QWidget *parent)
     connect(m_actionStopColor, SIGNAL(colorChanged(KoColor)), this, SLOT(colorChanged()));
 }
 
-bool FloodEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)
+bool FloodEffectConfigWidget::editFilterEffect(KoFilterEffect *filterEffect)
 {
-    m_effect = dynamic_cast<FloodEffect*>(filterEffect);
-    if (!m_effect)
+    m_effect = dynamic_cast<FloodEffect *>(filterEffect);
+    if (!m_effect) {
         return false;
+    }
 
     m_actionStopColor->setCurrentColor(m_effect->floodColor());
     return true;
@@ -56,8 +58,9 @@ bool FloodEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)
 
 void FloodEffectConfigWidget::colorChanged()
 {
-    if (!m_effect)
+    if (!m_effect) {
         return;
+    }
 
     m_effect->setFloodColor(m_actionStopColor->currentColor());
     emit filterChanged();

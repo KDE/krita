@@ -118,7 +118,7 @@ KoShapePrivate::~KoShapePrivate()
     Q_Q(KoShape);
     if (parent)
         parent->removeShape(q);
-    foreach(KoShapeManager *manager, shapeManagers) {
+    Q_FOREACH (KoShapeManager *manager, shapeManagers) {
         manager->remove(q);
         manager->removeAdditional(q);
     }
@@ -139,7 +139,7 @@ void KoShapePrivate::shapeChanged(KoShape::ChangeType type)
     if (parent)
         parent->model()->childChanged(q, type);
     q->shapeChanged(type);
-    foreach(KoShape * shape, dependees)
+    Q_FOREACH (KoShape * shape, dependees)
         shape->shapeChanged(type, q);
 }
 
@@ -581,7 +581,7 @@ void KoShape::update() const
 
     if (!d->shapeManagers.empty()) {
         QRectF rect(boundingRect());
-        foreach(KoShapeManager * manager, d->shapeManagers) {
+        Q_FOREACH (KoShapeManager * manager, d->shapeManagers) {
             manager->update(rect, this, true);
         }
     }
@@ -598,7 +598,7 @@ void KoShape::update(const QRectF &rect) const
 
     if (!d->shapeManagers.empty() && isVisible()) {
         QRectF rc(absoluteTransformation(0).mapRect(rect));
-        foreach(KoShapeManager * manager, d->shapeManagers) {
+        Q_FOREACH (KoShapeManager * manager, d->shapeManagers) {
             manager->update(rc);
         }
     }
@@ -658,7 +658,7 @@ void KoShape::copySettings(const KoShape *shape)
     Q_D(KoShape);
     d->size = shape->size();
     d->connectors.clear();
-    foreach(const KoConnectionPoint &point, shape->connectionPoints())
+    Q_FOREACH (const KoConnectionPoint &point, shape->connectionPoints())
         addConnectionPoint(point);
     d->zIndex = shape->zIndex();
     d->visible = shape->isVisible();
@@ -679,7 +679,7 @@ void KoShape::copySettings(const KoShape *shape)
 void KoShape::notifyChanged()
 {
     Q_D(KoShape);
-    foreach(KoShapeManager * manager, d->shapeManagers) {
+    Q_FOREACH (KoShapeManager * manager, d->shapeManagers) {
         manager->notifyShapeChanged(this);
     }
 }
@@ -1565,7 +1565,7 @@ bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingConte
 
     if (attributes & OdfAdditionalAttributes) {
         QSet<KoShapeLoadingContext::AdditionalAttributeData> additionalAttributeData = KoShapeLoadingContext::additionalAttributeData();
-        foreach(const KoShapeLoadingContext::AdditionalAttributeData &attributeData, additionalAttributeData) {
+        Q_FOREACH (const KoShapeLoadingContext::AdditionalAttributeData &attributeData, additionalAttributeData) {
             if (element.hasAttributeNS(attributeData.ns, attributeData.tag)) {
                 QString value = element.attributeNS(attributeData.ns, attributeData.tag);
                 //debugFlake << "load additional attribute" << attributeData.tag << value;

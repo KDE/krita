@@ -80,7 +80,7 @@ public:
         categories.clear();
         QList<KisFilterSP> filters = KisFilterRegistry::instance()->values();
         QList<QString> tmpCategoryIDs;
-        foreach(const KisFilterSP filter, filters) {
+        Q_FOREACH (const KisFilterSP filter, filters) {
             Q_ASSERT(filter);
             FiltersModel* cat = 0;
             if (!tmpCategoryIDs.contains(filter->menuCategory().id())) {
@@ -226,7 +226,7 @@ void FiltersCategoryModel::filterConfigurationChanged(int index, FiltersModel* m
             config = KisSafeFilterConfigurationSP(KisFilterRegistry::instance()->cloneConfiguration(filter->defaultConfiguration(d->view->activeNode()->original())));
         }
         QObject* configuration = d->categories[d->currentCategory]->configuration(index);
-        foreach(const QByteArray& propName, configuration->dynamicPropertyNames()) {
+        Q_FOREACH (const QByteArray& propName, configuration->dynamicPropertyNames()) {
             config->setProperty(QString(propName), configuration->property(propName));
         }
         config->setCurve(qobject_cast<PropertyContainer*>(configuration)->curve());

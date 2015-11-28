@@ -29,14 +29,14 @@ public:
     virtual ~IccColorSpaceEngine();
     void addProfile(const QString &filename);
     void removeProfile(const QString &filename);
-    virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,
-                                                                       const KoColorSpace* dstColorSpace,
-                                                                       KoColorConversionTransformation::Intent renderingIntent,
-                                                                       KoColorConversionTransformation::ConversionFlags conversionFlags) const;
-    quint32 computeColorSpaceType(const KoColorSpace* cs) const;
+    virtual KoColorConversionTransformation *createColorTransformation(const KoColorSpace *srcColorSpace,
+            const KoColorSpace *dstColorSpace,
+            KoColorConversionTransformation::Intent renderingIntent,
+            KoColorConversionTransformation::ConversionFlags conversionFlags) const;
+    quint32 computeColorSpaceType(const KoColorSpace *cs) const;
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

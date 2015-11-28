@@ -29,17 +29,17 @@
 #include <QRadioButton>
 #include <QGroupBox>
 
-BibliographyConfigureDialog::BibliographyConfigureDialog(const QTextDocument *document, QWidget *parent) :
-    QDialog(parent),
-    m_document(document),
-    m_bibConfiguration(KoTextDocument(m_document).styleManager()->bibliographyConfiguration())
+BibliographyConfigureDialog::BibliographyConfigureDialog(const QTextDocument *document, QWidget *parent) 
+    : QDialog(parent)
+    ,  m_document(document)
+    , m_bibConfiguration(KoTextDocument(m_document).styleManager()->bibliographyConfiguration())
 {
     dialog.setupUi(this);
     dialog.prefix->setText(m_bibConfiguration->prefix());
     dialog.suffix->setText(m_bibConfiguration->suffix());
     dialog.numberedEntries->setChecked(m_bibConfiguration->numberedEntries());
     dialog.sortAlgorithm->setCurrentIndex(
-                dialog.sortAlgorithm->findText(m_bibConfiguration->sortAlgorithm(), Qt::MatchFixedString));
+        dialog.sortAlgorithm->findText(m_bibConfiguration->sortAlgorithm(), Qt::MatchFixedString));
 
     dialog.sortByPosition->setChecked(m_bibConfiguration->sortByPosition());
 
@@ -56,7 +56,7 @@ BibliographyConfigureDialog::BibliographyConfigureDialog(const QTextDocument *do
 
     foreach (const SortKeyPair &key, m_bibConfiguration->sortKeys()) {
         dialog.sortKeyGroupBox->layout()->addWidget(
-                    new SortKeyWidget(key.first, key.second, dialog.sortKeyGroupBox));
+            new SortKeyWidget(key.first, key.second, dialog.sortKeyGroupBox));
     }
 
     show();
@@ -75,9 +75,9 @@ void BibliographyConfigureDialog::save(QAbstractButton *button)
         QList<SortKeyPair> sortKeys;
 
         foreach (QObject *o, dialog.sortKeyGroupBox->children()) {
-            SortKeyWidget *widget = dynamic_cast<SortKeyWidget*>(o);
+            SortKeyWidget *widget = dynamic_cast<SortKeyWidget *>(o);
             if (widget) {
-                sortKeys << SortKeyPair(widget->sortKey(),widget->sortOrder());
+                sortKeys << SortKeyPair(widget->sortKey(), widget->sortOrder());
             }
         }
         m_bibConfiguration->setSortKeys(sortKeys);
@@ -90,7 +90,7 @@ void BibliographyConfigureDialog::save(QAbstractButton *button)
 void BibliographyConfigureDialog::addSortKey()
 {
     dialog.sortKeyGroupBox->layout()->addWidget(
-                new SortKeyWidget("identifier", Qt::AscendingOrder, dialog.sortKeyGroupBox));
+        new SortKeyWidget("identifier", Qt::AscendingOrder, dialog.sortKeyGroupBox));
 }
 
 void BibliographyConfigureDialog::sortMethodChanged(bool sortByPosition)
@@ -130,8 +130,11 @@ void SortKeyWidget::setSortKey(const QString &sortKey)
 
 void SortKeyWidget::setSortOrder(Qt::SortOrder order)
 {
-    if (order == Qt::DescendingOrder) m_dscButton->setChecked(true);
-    else m_ascButton->setChecked(true);
+    if (order == Qt::DescendingOrder) {
+        m_dscButton->setChecked(true);
+    } else {
+        m_ascButton->setChecked(true);
+    }
 }
 
 QString SortKeyWidget::sortKey() const

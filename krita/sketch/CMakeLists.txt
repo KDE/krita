@@ -74,7 +74,7 @@ set(kritasketch_kritaintegrationmodels_SRCS
 )
 
 
-set(KRITA_COLORSELECTORNG_PART_SRCS
+set(KRITA_COLORSELECTORNG_SOURCES
 ../plugins/extensions/dockers/advancedcolorselector/kis_my_paint_shade_selector.cpp
 ../plugins/extensions/dockers/advancedcolorselector/kis_color_patches.cpp
 ../plugins/extensions/dockers/advancedcolorselector/kis_color_history.cpp
@@ -152,7 +152,7 @@ install(FILES     kritasketch.rc                    DESTINATION ${DATA_INSTALL_D
 # Sketch Qt Quick components
 # =============================================================================
 
-add_library(kritasketchplugin SHARED ${kritasketchplugin_SRCS} ${kritasketch_kritaintegrationmodels_SRCS} ${KRITA_COLORSELECTORNG_PART_SRCS})
+add_library(kritasketchplugin SHARED ${kritasketchplugin_SRCS} ${kritasketch_kritaintegrationmodels_SRCS} ${KRITA_COLORSELECTORNG_SOURCES})
 
 target_link_libraries(kritasketchplugin
     Qt5::Quick

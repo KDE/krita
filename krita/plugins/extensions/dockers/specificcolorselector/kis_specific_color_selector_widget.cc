@@ -106,7 +106,7 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
     Q_ASSERT(m_colorSpace);
     Q_ASSERT(*m_colorSpace == *cs);
     m_color = KoColor(m_color, m_colorSpace);
-    foreach(KisColorInput* input, m_inputs) {
+    Q_FOREACH (KisColorInput* input, m_inputs) {
         delete input;
     }
     m_inputs.clear();
@@ -117,7 +117,7 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
 
     KoColorDisplayRendererInterface *displayRenderer = m_displayRenderer ? m_displayRenderer : m_fallbackRenderer;
 
-    foreach(KoChannelInfo* channel, channels) {
+    Q_FOREACH (KoChannelInfo* channel, channels) {
         if (channel->channelType() == KoChannelInfo::COLOR) {
             KisColorInput* input = 0;
             switch (channel->channelValueType()) {
@@ -161,7 +161,7 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
     }
 
     bool allChannels8Bit = true;
-    foreach (KoChannelInfo* channel, channels) {
+    Q_FOREACH (KoChannelInfo* channel, channels) {
         if (channel->channelType() == KoChannelInfo::COLOR && channel->channelValueType() != KoChannelInfo::UINT8) {
             allChannels8Bit = false;
         }

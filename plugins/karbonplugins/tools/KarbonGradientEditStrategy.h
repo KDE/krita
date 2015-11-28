@@ -44,7 +44,7 @@ public:
     enum SelectionType { None, Handle, Line, Stop };
 
     /// constructs new strategy on the specified shape and target
-    explicit GradientStrategy(KoShape *shape, const QGradient * gradient, Target target);
+    explicit GradientStrategy(KoShape *shape, const QGradient *gradient, Target target);
 
     virtual ~GradientStrategy() {}
 
@@ -70,33 +70,38 @@ public:
     void setEditing(bool on);
 
     /// checks if strategy is in editing mode
-    bool isEditing() const {
+    bool isEditing() const
+    {
         return m_editing;
     }
 
     /// create the command for changing the shapes background
-    KUndo2Command * createCommand(KUndo2Command * parent);
+    KUndo2Command *createCommand(KUndo2Command *parent);
 
     /// schedules a repaint of the shape and gradient handles
     void repaint(const KoViewConverter &converter) const;
 
     /// sets the handle radius in pixel used for painting the handles
-    static void setHandleRadius(uint radius) {
+    static void setHandleRadius(uint radius)
+    {
         m_handleRadius = radius;
     }
 
     /// returns the actual handle radius in pixel
-    static uint handleRadius() {
+    static uint handleRadius()
+    {
         return m_handleRadius;
     }
 
     /// Sets the grab sensitivity in pixel used for grabbing handles or lines
-    static void setGrabSensitivity(int grabSensitivity) {
+    static void setGrabSensitivity(int grabSensitivity)
+    {
         m_grabSensitivity = grabSensitivity;
     }
 
     /// Returns the actual grab sensitivity in pixel
-    static int grabSensitivity() {
+    static int grabSensitivity()
+    {
         return m_grabSensitivity;
     }
 
@@ -104,7 +109,7 @@ public:
     QRectF boundingRect(const KoViewConverter &converter) const;
 
     /// returns the actual gradient
-    const QGradient * gradient();
+    const QGradient *gradient();
 
     /// Returns the gradient target
     Target target() const;
@@ -116,7 +121,7 @@ public:
     bool hasSelection() const;
 
     /// Returns the shape associated with the gradient
-    KoShape * shape();
+    KoShape *shape();
 
     /// Returns the type of this gradient strategy
     QGradient::Type type() const;

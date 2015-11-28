@@ -83,7 +83,7 @@ void KoSelectionPrivate::selectGroupChildren(KoShapeGroup *group)
     if (! group)
         return;
 
-    foreach(KoShape *shape, group->shapes()) {
+    Q_FOREACH (KoShape *shape, group->shapes()) {
         if (selectedShapes.contains(shape))
             continue;
         selectedShapes << shape;
@@ -99,7 +99,7 @@ void KoSelectionPrivate::deselectGroupChildren(KoShapeGroup *group)
     if (! group)
         return;
 
-    foreach(KoShape *shape, group->shapes()) {
+    Q_FOREACH (KoShape *shape, group->shapes()) {
         if (selectedShapes.contains(shape))
             selectedShapes.removeAll(shape);
 
@@ -236,7 +236,7 @@ int KoSelection::count() const
 {
     Q_D(const KoSelection);
     int count = 0;
-    foreach(KoShape *shape, d->selectedShapes)
+    Q_FOREACH (KoShape *shape, d->selectedShapes)
         if (dynamic_cast<KoShapeGroup*>(shape) == 0)
             ++count;
     return count;
@@ -275,7 +275,7 @@ const QList<KoShape*> KoSelection::selectedShapes(KoFlake::SelectionType strip) 
     QList<KoShape*> answer;
     // strip the child objects when there is also a parent included.
     bool doStripping = strip == KoFlake::StrippedSelection;
-    foreach(KoShape *shape, d->selectedShapes) {
+    Q_FOREACH (KoShape *shape, d->selectedShapes) {
         KoShapeContainer *container = shape->parent();
         if (strip != KoFlake::TopLevelSelection && dynamic_cast<KoShapeGroup*>(shape))
             // since a KoShapeGroup

@@ -428,7 +428,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, L
     KoTextRangeManager *textRangeManager = KoTextDocument(cursor.block().document()).textRangeManager();
     Q_UNUSED(textRangeManager);
     //debugText << "text ranges::";
-    //foreach(KoTextRange *range, textRangeManager->textRanges()) {
+    //Q_FOREACH (KoTextRange *range, textRangeManager->textRanges()) {
         //debugText << range->id();
     //}
 
@@ -1316,7 +1316,7 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
     }
 
     // Finally create spans
-    foreach(const QRect &span, spanStore) {
+    Q_FOREACH (const QRect &span, spanStore) {
         tbl->mergeCells(span.y(), span.x(), span.height(), span.width()); // for some reason Qt takes row, column
     }
     cursor = tbl->lastCursorPosition();

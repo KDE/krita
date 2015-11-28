@@ -30,7 +30,7 @@ public:
     ShapePropertiesDockerFactory();
 
     virtual QString id() const;
-    virtual QDockWidget* createDockWidget();
+    virtual QDockWidget *createDockWidget();
     virtual DockPosition defaultDockPosition() const;
 
 };

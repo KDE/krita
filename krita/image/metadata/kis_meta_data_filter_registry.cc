@@ -45,7 +45,7 @@ FilterRegistry& FilterRegistry::operator=(const FilterRegistry&)
 
 FilterRegistry::~FilterRegistry()
 {
-    foreach(const QString &id, keys()) {
+    Q_FOREACH (const QString &id, keys()) {
         delete get(id);
     }
     dbgRegistry << "Deleting FilterRegistry";

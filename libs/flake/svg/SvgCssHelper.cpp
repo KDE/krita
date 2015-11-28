@@ -257,7 +257,7 @@ public:
 
     virtual bool match(const KoXmlElement &e)
     {
-        foreach(CssSelectorBase *s, m_selectors) {
+        Q_FOREACH (CssSelectorBase *s, m_selectors) {
             if (!s->match(e))
                 return false;
         }
@@ -268,7 +268,7 @@ public:
     QString toString() const
     {
         QString str;
-        foreach(CssSelectorBase *s, m_selectors) {
+        Q_FOREACH (CssSelectorBase *s, m_selectors) {
             str += s->toString();
         }
         return str;
@@ -276,7 +276,7 @@ public:
     virtual int priority()
     {
         int p = 0;
-        foreach(CssSelectorBase *s, m_selectors) {
+        Q_FOREACH (CssSelectorBase *s, m_selectors) {
             p += s->priority();
         }
         return p;
@@ -472,7 +472,7 @@ public:
     virtual int priority()
     {
         int p = 0;
-        foreach(CssSelectorBase *s, m_selectors) {
+        Q_FOREACH (CssSelectorBase *s, m_selectors) {
             p += s->priority();
         }
         return p;
@@ -481,7 +481,7 @@ public:
 private:
     void compile(const QList<CssToken> &tokens)
     {
-        foreach(const CssToken &token, tokens) {
+        Q_FOREACH (const CssToken &token, tokens) {
             if(token.first == SelectorToken) {
                 m_selectors.append(new CssSimpleSelector(token.second));
             } else {
@@ -504,7 +504,7 @@ class SvgCssHelper::Private
 public:
     ~Private()
     {
-        foreach(const CssRule &rule, cssRules) {
+        Q_FOREACH (const CssRule &rule, cssRules) {
             qDeleteAll(rule.first);
         }
     }
@@ -670,8 +670,8 @@ QStringList SvgCssHelper::matchStyles(const KoXmlElement &element) const
 {
     QMap<int, QString> prioritizedRules;
     // match rules to element
-    foreach(const CssRule &rule, d->cssRules) {
-        foreach(CssSelectorBase *s, rule.first) {
+    Q_FOREACH (const CssRule &rule, d->cssRules) {
+        Q_FOREACH (CssSelectorBase *s, rule.first) {
             bool matched = s->match(element);
             if (matched)
                 prioritizedRules[s->priority()] = rule.second;

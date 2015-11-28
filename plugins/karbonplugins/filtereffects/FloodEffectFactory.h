@@ -28,8 +28,8 @@ class FloodEffectFactory : public KoFilterEffectFactoryBase
 {
 public:
     FloodEffectFactory();
-    virtual KoFilterEffect * createFilterEffect() const;
-    virtual KoFilterEffectConfigWidgetBase * createConfigWidget() const;
+    virtual KoFilterEffect *createFilterEffect() const;
+    virtual KoFilterEffectConfigWidgetBase *createConfigWidget() const;
 };
 
 #endif // FLOODEFFECTFACTORY_H

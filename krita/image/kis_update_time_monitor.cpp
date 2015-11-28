@@ -226,7 +226,7 @@ void KisUpdateTimeMonitor::reportJobFinished(void *key, const QVector<QRect> &re
     StrokeTicket *ticket = m_d->preliminaryTickets.take(key);
     ticket->jobCompleted();
 
-    foreach(const QRect &rect, rects) {
+    Q_FOREACH (const QRect &rect, rects) {
         ticket->dirtyRegion += rect;
     }
     m_d->finishedTickets.insert(ticket);
@@ -238,7 +238,7 @@ void KisUpdateTimeMonitor::reportUpdateFinished(const QRect &rect)
 
     QMutexLocker locker(&m_d->mutex);
 
-    foreach(StrokeTicket *ticket, m_d->finishedTickets) {
+    Q_FOREACH (StrokeTicket *ticket, m_d->finishedTickets) {
         ticket->dirtyRegion -= rect;
         if(ticket->dirtyRegion.isEmpty()) {
             ticket->updateCompleted();

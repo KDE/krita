@@ -1,7 +1,7 @@
 include_directories( ${KOWIDGETS_INCLUDES} ${FLAKE_INCLUDES} )
 add_definitions(-DTRANSLATION_DOMAIN=\"krita_filtereffects\")
 
-set(karbon_filtereffects_PART_SRCS
+set(karbon_filtereffects_SOURCES
     FilterEffectsPlugin.cpp
     BlurEffect.cpp
     BlurEffectFactory.cpp
@@ -39,7 +39,7 @@ set(karbon_filtereffects_PART_SRCS
     MatrixDataModel.cpp
     )
 
-add_library(krita_filtereffects MODULE ${karbon_filtereffects_PART_SRCS})
+add_library(krita_filtereffects MODULE ${karbon_filtereffects_SOURCES})
 
 kcoreaddons_desktop_to_json(krita_filtereffects karbon_filtereffects.desktop)
 

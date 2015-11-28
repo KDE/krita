@@ -28,7 +28,7 @@
 YCbCrF32ColorSpace::YCbCrF32ColorSpace(const QString &name, KoColorProfile *p)
     : LcmsColorSpace<KoYCbCrF32Traits>(colorSpaceId(), name, TYPE_YCbCrA_FLT, cmsSigXYZData, p)
 {
-    const IccColorProfile* icc_p = dynamic_cast<const IccColorProfile*>(p);
+    const IccColorProfile *icc_p = dynamic_cast<const IccColorProfile *>(p);
     Q_ASSERT(icc_p);
     QVector<KoChannelInfo::DoubleRange> uiRanges(icc_p->getFloatUIMinMax());
     Q_ASSERT(uiRanges.size() == 3);
@@ -45,21 +45,22 @@ YCbCrF32ColorSpace::YCbCrF32ColorSpace(const QString &name, KoColorProfile *p)
 
 bool YCbCrF32ColorSpace::willDegrade(ColorSpaceIndependence independence) const
 {
-    if (independence == TO_RGBA16)
+    if (independence == TO_RGBA16) {
         return true;
-    else
+    } else {
         return false;
+    }
 
 }
 
-KoColorSpace* YCbCrF32ColorSpace::clone() const
+KoColorSpace *YCbCrF32ColorSpace::clone() const
 {
     return new YCbCrF32ColorSpace(name(), profile()->clone());
 }
 
-void YCbCrF32ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+void YCbCrF32ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const
 {
-    const KoYCbCrF32Traits::Pixel* p = reinterpret_cast<const KoYCbCrF32Traits::Pixel*>(pixel);
+    const KoYCbCrF32Traits::Pixel *p = reinterpret_cast<const KoYCbCrF32Traits::Pixel *>(pixel);
     QDomElement labElt = doc.createElement("YCbCr");
     labElt.setAttribute("Y",  KoColorSpaceMaths< KoYCbCrF32Traits::channels_type, qreal>::scaleToA(p->Y));
     labElt.setAttribute("Cb", KoColorSpaceMaths< KoYCbCrF32Traits::channels_type, qreal>::scaleToA(p->Cb));
@@ -68,9 +69,9 @@ void YCbCrF32ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDom
     colorElt.appendChild(labElt);
 }
 
-void YCbCrF32ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
+void YCbCrF32ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
-    KoYCbCrF32Traits::Pixel* p = reinterpret_cast<KoYCbCrF32Traits::Pixel*>(pixel);
+    KoYCbCrF32Traits::Pixel *p = reinterpret_cast<KoYCbCrF32Traits::Pixel *>(pixel);
     p->Y = KoColorSpaceMaths< qreal, KoYCbCrF32Traits::channels_type >::scaleToA(elt.attribute("Y").toDouble());
     p->Cb = KoColorSpaceMaths< qreal, KoYCbCrF32Traits::channels_type >::scaleToA(elt.attribute("Cb").toDouble());
     p->Cr = KoColorSpaceMaths< qreal, KoYCbCrF32Traits::channels_type >::scaleToA(elt.attribute("Cr").toDouble());

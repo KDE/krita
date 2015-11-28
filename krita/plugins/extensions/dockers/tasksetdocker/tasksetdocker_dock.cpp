@@ -140,7 +140,7 @@ void TasksetDockerDock::setCanvas(KoCanvasBase * canvas)
 {
     if (m_canvas && m_canvas->viewManager()) {
          m_canvas->viewManager()->actionCollection()->disconnect(this);
-         foreach(KXMLGUIClient* client, m_canvas->viewManager()->mainWindow()->childClients()) {
+         Q_FOREACH (KXMLGUIClient* client, m_canvas->viewManager()->mainWindow()->childClients()) {
             client->actionCollection()->disconnect(this);
         }
     }
@@ -176,7 +176,7 @@ void TasksetDockerDock::recordClicked()
         KisViewManager* view = m_canvas->viewManager();
         connect(view->actionCollection(), SIGNAL(actionTriggered(QAction*)),
                 this, SLOT(actionTriggered(QAction*)), Qt::UniqueConnection);
-        foreach(KXMLGUIClient* client, view->mainWindow()->childClients()) {
+        Q_FOREACH (KXMLGUIClient* client, view->mainWindow()->childClients()) {
             connect(client->actionCollection(), SIGNAL(actionTriggered(QAction*)),
                     this, SLOT(actionTriggered(QAction*)), Qt::UniqueConnection);
         }
@@ -198,7 +198,7 @@ void TasksetDockerDock::saveClicked()
     TasksetResource* taskset = new TasksetResource("");
 
     QStringList actionNames;
-    foreach(QAction* action, m_model->actions()) {
+    Q_FOREACH (QAction* action, m_model->actions()) {
         actionNames.append(action->objectName());
     }
     taskset->setActionList(actionNames);
@@ -238,7 +238,7 @@ void TasksetDockerDock::resourceSelected(KoResource* resource)
     }
     m_model->clear();
     saveButton->setEnabled(true);
-    foreach(const QString& actionName, static_cast<TasksetResource*>(resource)->actionList()) {
+    Q_FOREACH (const QString& actionName, static_cast<TasksetResource*>(resource)->actionList()) {
         QAction* action = m_canvas->viewManager()->actionCollection()->action(actionName);
         if(action) {
             m_model->addAction(action);

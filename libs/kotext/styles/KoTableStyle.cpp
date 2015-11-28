@@ -602,7 +602,7 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
         keys.removeAll(QTextFormat::FrameRightMargin);
         keys.removeAll(QTextFormat::FrameLeftMargin);
     }
-    foreach(int key, keys) {
+    Q_FOREACH (int key, keys) {
         if (key == QTextFormat::FrameWidth) {
             QTextLength width = propertyLength(QTextFormat::FrameWidth);
             if (width.type() == QTextLength::PercentageLength) {

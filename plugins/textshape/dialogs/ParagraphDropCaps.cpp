@@ -24,8 +24,8 @@
 #include "KoParagraphStyle.h"
 #include <QMessageBox>
 
-ParagraphDropCaps::ParagraphDropCaps(QWidget *parent) :
-    QWidget(parent)
+ParagraphDropCaps::ParagraphDropCaps(QWidget *parent)
+    : QWidget(parent)
 {
     widget.setupUi(this);
 
@@ -45,8 +45,7 @@ void ParagraphDropCaps::dropCapsStateChanged()
     if (widget.capsState->isChecked()) {
         widget.setting->setEnabled(true);
         m_dropCapsInherited = false;
-    }
-    else {
+    } else {
         widget.setting->setEnabled(false);
     }
     emit parStyleChanged();
@@ -54,8 +53,9 @@ void ParagraphDropCaps::dropCapsStateChanged()
 
 void ParagraphDropCaps::setDisplay(KoParagraphStyle *style)
 {
-    if (!style)
+    if (!style) {
         return;
+    }
     if (!style->dropCaps()) {
         widget.setting->setEnabled(false);
         return;
@@ -74,8 +74,9 @@ void ParagraphDropCaps::setDisplay(KoParagraphStyle *style)
 
 void ParagraphDropCaps::save(KoParagraphStyle *style)
 {
-    if (!style)
+    if (!style) {
         return;
+    }
 
     if (!m_dropCapsInherited) {
         style->setDropCaps(widget.capsState->isChecked());

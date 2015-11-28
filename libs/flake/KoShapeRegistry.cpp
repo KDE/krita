@@ -342,7 +342,7 @@ QList<KoShapeFactoryBase*> KoShapeRegistry::factoriesForElement(const QString &n
     QMultiMap<int, KoShapeFactoryBase*> priorityMap = d->factoryMap.value(p);
     QList<KoShapeFactoryBase*> shapeFactories;
     // sort list by priority
-    foreach(KoShapeFactoryBase *f, priorityMap.values()) {
+    Q_FOREACH (KoShapeFactoryBase *f, priorityMap.values()) {
         shapeFactories.prepend(f);
     }
 

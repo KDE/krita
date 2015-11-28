@@ -147,7 +147,7 @@ void KoTextLayoutEndNotesArea::paint(QPainter *painter, const KoTextDocumentLayo
         int shiftDown = 10;
         painter->drawLine(left, top()+shiftDown, right, top()+shiftDown);
     }
-    foreach(KoTextLayoutNoteArea *area, d->endNoteAreas) {
+    Q_FOREACH (KoTextLayoutNoteArea *area, d->endNoteAreas) {
         area->paint(painter, context);
     }
 }

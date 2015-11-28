@@ -25,8 +25,9 @@
 #include <QWidget>
 
 //This is the resulting transaction to be applied.
-//NOTE: it is a class instead of a struct so to be able to forward include i 
-class GuidesTransaction {
+//NOTE: it is a class instead of a struct so to be able to forward include i
+class GuidesTransaction
+{
 public:
     bool insertVerticalEdgesGuides;
     bool insertHorizontalEdgesGuides;

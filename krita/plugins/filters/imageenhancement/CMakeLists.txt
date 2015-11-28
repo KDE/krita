@@ -1,13 +1,13 @@
 
 kde_enable_exceptions()
 
-set(kritaimageenhancement_PART_SRCS
+set(kritaimageenhancement_SOURCES
     imageenhancement.cpp
     kis_simple_noise_reducer.cpp
     kis_wavelet_noise_reduction.cpp
     )
 
-add_library(kritaimageenhancement MODULE ${kritaimageenhancement_PART_SRCS})
+add_library(kritaimageenhancement MODULE ${kritaimageenhancement_SOURCES})
 kcoreaddons_desktop_to_json(kritaimageenhancement kritaimageenhancement.desktop)
 
 

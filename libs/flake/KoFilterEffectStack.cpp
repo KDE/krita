@@ -134,7 +134,7 @@ void KoFilterEffectStack::save(KoXmlWriter &writer, const QString &filterId)
     writer.addAttribute("width", d->clipRect.width());
     writer.addAttribute("height", d->clipRect.height());
 
-    foreach(KoFilterEffect *effect, d->filterEffects) {
+    Q_FOREACH (KoFilterEffect *effect, d->filterEffects) {
         effect->save(writer);
     }
 
@@ -158,8 +158,8 @@ QSet<QString> KoFilterEffectStack::requiredStandarsInputs() const
     if (d->filterEffects.first()->inputs().contains(""))
         requiredInputs.insert("SourceGraphic");
 
-    foreach(KoFilterEffect *effect, d->filterEffects) {
-        foreach(const QString &input, effect->inputs()) {
+    Q_FOREACH (KoFilterEffect *effect, d->filterEffects) {
+        Q_FOREACH (const QString &input, effect->inputs()) {
             if (stdInputs.contains(input))
                 requiredInputs.insert(input);
         }

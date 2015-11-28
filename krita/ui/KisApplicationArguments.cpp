@@ -134,7 +134,7 @@ QByteArray KisApplicationArguments::serialize()
     QDataStream ds(&buf);
     ds.setVersion(QDataStream::Qt_5_0);
     ds << d->filenames.count();
-    foreach(const QString &filename, d->filenames) {
+    Q_FOREACH (const QString &filename, d->filenames) {
         ds << filename;
     }
     ds << d->dpiX;

@@ -54,7 +54,7 @@ public:
     * Creates a cursor from two specified XPM images.
     * This is only a wrapper function for a QCursor ctor.
     */
-    static QCursor createCursor(const char * bitmap[], const char * mask[], int hotX = -1, int hotY = -1);
+    static QCursor createCursor(const char *bitmap[], const char *mask[], int hotX = -1, int hotY = -1);
 
     /** crosshair cursor */
     static QCursor crossHair();

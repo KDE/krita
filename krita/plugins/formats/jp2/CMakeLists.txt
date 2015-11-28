@@ -5,12 +5,12 @@ set(libkritaconverter_LIB_SRCS
     jp2_converter.cc
     )
 
-set(kritajp2import_PART_SRCS
+set(kritajp2import_SOURCES
     jp2_import.cc
     ${libkritaconverter_LIB_SRCS}
     )
 
-add_library(kritajp2import MODULE ${kritajp2import_PART_SRCS})
+add_library(kritajp2import MODULE ${kritajp2import_SOURCES})
 kcoreaddons_desktop_to_json(kritajp2import krita_jp2_import.desktop)
 
 
@@ -20,14 +20,14 @@ install(TARGETS kritajp2import  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
-set(kritajp2export_PART_SRCS
+set(kritajp2export_SOURCES
     jp2_export.cc
     ${libkritaconverter_LIB_SRCS}
     )
 
-ki18n_wrap_ui(kritajp2export_PART_SRCS kis_wdg_options_jp2.ui )
+ki18n_wrap_ui(kritajp2export_SOURCES kis_wdg_options_jp2.ui )
 
-add_library(kritajp2export MODULE ${kritajp2export_PART_SRCS})
+add_library(kritajp2export MODULE ${kritajp2export_SOURCES})
 kcoreaddons_desktop_to_json(kritajp2export krita_jp2_export.desktop)
 
 

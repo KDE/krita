@@ -48,14 +48,14 @@ public:
     /// Returns the source type
     SourceType type() const;
     /// Returns the corresponding filter effect, or 0 if type == Effect
-    KoFilterEffect * effect() const;
+    KoFilterEffect *effect() const;
 
     static SourceType typeFromString(const QString &str);
     static QString typeToString(SourceType type);
 
 private:
     SourceType m_type;         ///< the source type
-    KoFilterEffect * m_effect; ///< the corresponding effect if type == Effect, 0 otherwise
+    KoFilterEffect *m_effect;  ///< the corresponding effect if type == Effect, 0 otherwise
 };
 
 class ConnectionTarget
@@ -67,11 +67,11 @@ public:
     /// Returns the target input index
     int inputIndex() const;
     /// Returns the corresponding filter effect
-    KoFilterEffect * effect() const;
+    KoFilterEffect *effect() const;
 
 private:
     int m_inputIndex;          ///< the index of the input of the target effect
-    KoFilterEffect * m_effect; ///< the target effect
+    KoFilterEffect *m_effect;  ///< the target effect
 };
 
 class FilterEffectScene : public QGraphicsScene
@@ -92,7 +92,7 @@ Q_SIGNALS:
 
 protected:
     /// reimplemented from QGraphicsScene
-    virtual void dropEvent(QGraphicsSceneDragDropEvent * event);
+    virtual void dropEvent(QGraphicsSceneDragDropEvent *event);
 
 private Q_SLOTS:
     void selectionChanged();
@@ -103,10 +103,10 @@ private:
     void layoutEffects();
 
     QList<QString> m_defaultInputs;
-    KoFilterEffectStack * m_effectStack;
-    QList<EffectItemBase*> m_items;
-    QList<ConnectionItem*> m_connectionItems;
-    QMap<QString, EffectItemBase*> m_outputs;
+    KoFilterEffectStack *m_effectStack;
+    QList<EffectItemBase *> m_items;
+    QList<ConnectionItem *> m_connectionItems;
+    QMap<QString, EffectItemBase *> m_outputs;
     QGraphicsProxyWidget *m_defaultInputProxy;
 };
 

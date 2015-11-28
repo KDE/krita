@@ -25,8 +25,7 @@
 
 #include <kpluginfactory.h>
 
-K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "krita_tool_basicflakes.json",
-                           registerPlugin<Plugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "krita_tool_basicflakes.json", registerPlugin<Plugin>();)
 
 Plugin::Plugin(QObject * parent, const QVariantList &)
     : QObject(parent)

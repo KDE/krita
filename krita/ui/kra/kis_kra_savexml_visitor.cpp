@@ -348,7 +348,7 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
         el.setAttribute(LAYER_STYLE_UUID, layer->layerStyle()->uuid().toString());
     }
 
-    foreach (KisNodeSP node, m_selectedNodes) {
+    Q_FOREACH (KisNodeSP node, m_selectedNodes) {
         if (node.data() == layer) {
             el.setAttribute("selected", "true");
             break;

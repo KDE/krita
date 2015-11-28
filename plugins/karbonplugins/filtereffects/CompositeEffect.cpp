@@ -29,12 +29,12 @@
 #include <QPainter>
 
 CompositeEffect::CompositeEffect()
-        : KoFilterEffect(CompositeEffectId, i18n("Composite"))
-        , m_operation(CompositeOver)
+    : KoFilterEffect(CompositeEffectId, i18n("Composite"))
+    , m_operation(CompositeOver)
 {
     setRequiredInputCount(2);
     setMaximalInputCount(2);
-    memset(m_k, 0, 4*sizeof(qreal));
+    memset(m_k, 0, 4 * sizeof(qreal));
 }
 
 CompositeEffect::Operation CompositeEffect::operation() const
@@ -47,14 +47,14 @@ void CompositeEffect::setOperation(Operation op)
     m_operation = op;
 }
 
-const qreal * CompositeEffect::arithmeticValues() const
+const qreal *CompositeEffect::arithmeticValues() const
 {
     return m_k;
 }
 
-void CompositeEffect::setArithmeticValues(qreal * values)
+void CompositeEffect::setArithmeticValues(qreal *values)
 {
-    memcpy(m_k, values, 4*sizeof(qreal));
+    memcpy(m_k, values, 4 * sizeof(qreal));
 }
 
 QImage CompositeEffect::processImage(const QImage &image, const KoFilterEffectRenderContext &) const
@@ -65,8 +65,9 @@ QImage CompositeEffect::processImage(const QImage &image, const KoFilterEffectRe
 QImage CompositeEffect::processImages(const QList<QImage> &images, const KoFilterEffectRenderContext &context) const
 {
     int imageCount = images.count();
-    if (!imageCount)
+    if (!imageCount) {
         return QImage();
+    }
 
     QImage result = images[0];
     if (images.count() != 2) {
@@ -74,8 +75,8 @@ QImage CompositeEffect::processImages(const QList<QImage> &images, const KoFilte
     }
 
     if (m_operation == Arithmetic) {
-        const QRgb *src = (QRgb*)images[1].constBits();
-        QRgb *dst = (QRgb*)result.bits();
+        const QRgb *src = (QRgb *)images[1].constBits();
+        QRgb *dst = (QRgb *)result.bits();
         int w = result.width();
 
         qreal sa, sr, sg, sb;
@@ -146,8 +147,9 @@ QImage CompositeEffect::processImages(const QList<QImage> &images, const KoFilte
 
 bool CompositeEffect::load(const KoXmlElement &element, const KoFilterEffectLoadingContext &)
 {
-    if (element.tagName() != id())
+    if (element.tagName() != id()) {
         return false;
+    }
 
     QString opStr = element.attribute("operator");
     if (opStr == "over") {
@@ -162,23 +164,28 @@ bool CompositeEffect::load(const KoXmlElement &element, const KoFilterEffectLoad
         m_operation = CompositeXor;
     } else if (opStr == "arithmetic") {
         m_operation = Arithmetic;
-        if (element.hasAttribute("k1"))
+        if (element.hasAttribute("k1")) {
             m_k[0] = element.attribute("k1").toDouble();
-        if (element.hasAttribute("k2"))
+        }
+        if (element.hasAttribute("k2")) {
             m_k[1] = element.attribute("k2").toDouble();
-        if (element.hasAttribute("k3"))
+        }
+        if (element.hasAttribute("k3")) {
             m_k[2] = element.attribute("k3").toDouble();
-        if (element.hasAttribute("k4"))
+        }
+        if (element.hasAttribute("k4")) {
             m_k[3] = element.attribute("k4").toDouble();
+        }
     } else {
         return false;
     }
 
     if (element.hasAttribute("in2")) {
-        if (inputs().count() == 2)
+        if (inputs().count() == 2) {
             setInput(1, element.attribute("in2"));
-        else
+        } else {
             addInput(element.attribute("in2"));
+        }
     }
 
     return true;

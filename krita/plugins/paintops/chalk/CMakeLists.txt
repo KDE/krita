@@ -1,4 +1,4 @@
-set(kritachalkpaintop_PART_SRCS
+set(kritachalkpaintop_SOURCES
     chalk_paintop_plugin.cpp
     kis_chalk_paintop.cpp
     kis_chalkop_option.cpp
@@ -7,9 +7,9 @@ set(kritachalkpaintop_PART_SRCS
     chalk_brush.cpp	
     )
 
-ki18n_wrap_ui(kritachalkpaintop_PART_SRCS wdgchalkoptions.ui )
+ki18n_wrap_ui(kritachalkpaintop_SOURCES wdgchalkoptions.ui )
 
-add_library(kritachalkpaintop MODULE ${kritachalkpaintop_PART_SRCS})
+add_library(kritachalkpaintop MODULE ${kritachalkpaintop_SOURCES})
 kcoreaddons_desktop_to_json(kritachalkpaintop kritachalkpaintop.desktop)
 
 target_link_libraries(kritachalkpaintop kritalibpaintop)

@@ -1,6 +1,6 @@
 add_subdirectory(tests)
 
-set(kritatooltransform_PART_SRCS
+set(kritatooltransform_SOURCES
     tool_transform.cc
     tool_transform_args.cc
     kis_transform_mask_adapter.cpp
@@ -22,10 +22,10 @@ set(kritatooltransform_PART_SRCS
     strokes/transform_stroke_strategy.cpp
     )
 
-qt5_add_resources(kritatooltransform_PART_SRCS tool_transform.qrc)
-ki18n_wrap_ui(kritatooltransform_PART_SRCS wdg_tool_transform.ui)
+qt5_add_resources(kritatooltransform_SOURCES tool_transform.qrc)
+ki18n_wrap_ui(kritatooltransform_SOURCES wdg_tool_transform.ui)
 
-add_library(kritatooltransform MODULE ${kritatooltransform_PART_SRCS})
+add_library(kritatooltransform MODULE ${kritatooltransform_SOURCES})
 generate_export_header(kritatooltransform BASE_NAME kritatooltransform)
 
 kcoreaddons_desktop_to_json(kritatooltransform kritatooltransform.desktop)

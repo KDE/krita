@@ -199,7 +199,7 @@ void KisLocklessStackTest::runStressTest(KisAbstractIntStack &stack)
     pool.setMaxThreadCount(NUM_THREADS);
 
     QBENCHMARK {
-        foreach(job, jobsList) {
+        Q_FOREACH (job, jobsList) {
             pool.start(job);
         }
 

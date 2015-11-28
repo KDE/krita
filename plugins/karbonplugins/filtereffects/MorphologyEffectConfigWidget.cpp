@@ -30,13 +30,14 @@
 #include <QButtonGroup>
 
 MorphologyEffectConfigWidget::MorphologyEffectConfigWidget(QWidget *parent)
-        : KoFilterEffectConfigWidgetBase(parent), m_effect(0)
+    : KoFilterEffectConfigWidgetBase(parent)
+    , m_effect(0)
 {
-    QGridLayout * g = new QGridLayout(this);
+    QGridLayout *g = new QGridLayout(this);
 
     m_operator = new QButtonGroup(this);
-    QRadioButton * erode = new QRadioButton(i18n("Erode"), this);
-    QRadioButton * dilate = new QRadioButton(i18n("Dilate"), this);
+    QRadioButton *erode = new QRadioButton(i18n("Erode"), this);
+    QRadioButton *dilate = new QRadioButton(i18n("Dilate"), this);
     m_operator->addButton(erode, MorphologyEffect::Erode);
     m_operator->addButton(dilate, MorphologyEffect::Dilate);
     g->addWidget(new QLabel(i18n("Operator:"), this), 0, 0);
@@ -62,20 +63,21 @@ MorphologyEffectConfigWidget::MorphologyEffectConfigWidget(QWidget *parent)
     connect(m_radiusY, SIGNAL(valueChanged(double)), this, SLOT(radiusYChanged(double)));
 }
 
-bool MorphologyEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)
+bool MorphologyEffectConfigWidget::editFilterEffect(KoFilterEffect *filterEffect)
 {
-    m_effect = dynamic_cast<MorphologyEffect*>(filterEffect);
-    if (!m_effect)
+    m_effect = dynamic_cast<MorphologyEffect *>(filterEffect);
+    if (!m_effect) {
         return false;
+    }
 
     m_operator->blockSignals(true);
     m_operator->button(m_effect->morphologyOperator())->setChecked(true);
     m_operator->blockSignals(false);
     m_radiusX->blockSignals(true);
-    m_radiusX->setValue(m_effect->morphologyRadius().x()*100);
+    m_radiusX->setValue(m_effect->morphologyRadius().x() * 100);
     m_radiusX->blockSignals(false);
     m_radiusY->blockSignals(true);
-    m_radiusY->setValue(m_effect->morphologyRadius().y()*100);
+    m_radiusY->setValue(m_effect->morphologyRadius().y() * 100);
     m_radiusY->blockSignals(false);
 
     return true;
@@ -83,40 +85,45 @@ bool MorphologyEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffec
 
 void MorphologyEffectConfigWidget::operatorChanged(int id)
 {
-    if (!m_effect)
+    if (!m_effect) {
         return;
+    }
 
-    switch(id) {
-        case MorphologyEffect::Erode:
-            m_effect->setMorphologyOperator(MorphologyEffect::Erode);
-            break;
-        case MorphologyEffect::Dilate:
-            m_effect->setMorphologyOperator(MorphologyEffect::Dilate);
-            break;
+    switch (id) {
+    case MorphologyEffect::Erode:
+        m_effect->setMorphologyOperator(MorphologyEffect::Erode);
+        break;
+    case MorphologyEffect::Dilate:
+        m_effect->setMorphologyOperator(MorphologyEffect::Dilate);
+        break;
     }
     emit filterChanged();
 }
 
 void MorphologyEffectConfigWidget::radiusXChanged(double x)
 {
-    if (!m_effect)
+    if (!m_effect) {
         return;
+    }
 
     QPointF radius = m_effect->morphologyRadius();
-    if (radius.x() != x)
-        m_effect->setMorphologyRadius(QPointF(x*0.01, radius.y()));
+    if (radius.x() != x) {
+        m_effect->setMorphologyRadius(QPointF(x * 0.01, radius.y()));
+    }
 
     emit filterChanged();
 }
 
 void MorphologyEffectConfigWidget::radiusYChanged(double y)
 {
-    if (!m_effect)
+    if (!m_effect) {
         return;
+    }
 
     QPointF radius = m_effect->morphologyRadius();
-    if (radius.y() != y)
-        m_effect->setMorphologyRadius(QPointF(radius.x(), y*0.01));
+    if (radius.y() != y) {
+        m_effect->setMorphologyRadius(QPointF(radius.x(), y * 0.01));
+    }
 
     emit filterChanged();
 }

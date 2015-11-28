@@ -100,7 +100,7 @@ int main( int argc, char** argv )
     aboutData.processCommandLine(&parser);
 
     QStringList fileNames;
-    foreach (const QString &fileName, parser.positionalArguments()) {
+    Q_FOREACH (const QString &fileName, parser.positionalArguments()) {
         if (QFile::exists(fileName)) {
             fileNames << fileName;
         }

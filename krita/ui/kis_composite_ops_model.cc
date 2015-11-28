@@ -126,7 +126,7 @@ void KisCompositeOpListModel::removeFavoriteEntry(const KoID &entry)
 void KisCompositeOpListModel::readFavoriteCompositeOpsFromConfig()
 {
     KisConfig   config;
-    foreach (const QString &op, config.favoriteCompositeOps()) {
+    Q_FOREACH (const QString &op, config.favoriteCompositeOps()) {
         KoID entry = KoCompositeOpRegistry::instance().getKoID(op);
 
         DataItem *item = categoriesMapper()->fetchOneEntry(entry);
@@ -144,7 +144,7 @@ void KisCompositeOpListModel::writeFavoriteCompositeOpsToConfig() const
     QVector<DataItem*> filteredItems =
         categoriesMapper()->itemsForCategory(favoriteCategory().name());
 
-    foreach (DataItem *item, filteredItems) {
+    Q_FOREACH (DataItem *item, filteredItems) {
         list.append(item->data()->id());
     }
 

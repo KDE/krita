@@ -1,13 +1,13 @@
 
 
-set(kritatoolpolyline_PART_SRCS
+set(kritatoolpolyline_SOURCES
     tool_polyline.cc
     kis_tool_polyline.cc
     )
 
-qt5_add_resources(kritatoolpolyline_PART_SRCS polyline.qrc)
+qt5_add_resources(kritatoolpolyline_SOURCES polyline.qrc)
 
-add_library(kritatoolpolyline MODULE ${kritatoolpolyline_PART_SRCS})
+add_library(kritatoolpolyline MODULE ${kritatoolpolyline_SOURCES})
 kcoreaddons_desktop_to_json(kritatoolpolyline kritatoolpolyline.desktop)
 
 target_link_libraries(kritatoolpolyline kritaui)

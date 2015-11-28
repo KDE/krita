@@ -89,7 +89,7 @@ bool PSDImageResourceSection::write(QIODevice* io)
     buf.setBuffer(&ba);
     buf.open(QBuffer::WriteOnly);
 
-    foreach(PSDResourceBlock* block, resources) {
+    Q_FOREACH (PSDResourceBlock* block, resources) {
         if (!block->write(&buf)) {
             error = block->error;
             return false;

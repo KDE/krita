@@ -30,7 +30,7 @@ public:
     }
 
     ~InlineObjectFactoryPrivate() {
-        foreach(const KoInlineObjectTemplate &t, templates)
+        Q_FOREACH (const KoInlineObjectTemplate &t, templates)
             delete t.properties;
         templates.clear();
     }

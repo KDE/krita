@@ -331,7 +331,7 @@ void KoPathTool::convertToPath()
 {
     Q_D(KoToolBase);
     QList<KoParameterShape*> shapesToConvert;
-    foreach(KoShape *shape, m_pointSelection.selectedShapes()) {
+    Q_FOREACH (KoShape *shape, m_pointSelection.selectedShapes()) {
         KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(shape);
         if (parameterShape && parameterShape->isParametricShape())
             shapesToConvert.append(parameterShape);
@@ -422,7 +422,7 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
     painter.setBrush(Qt::white);   //TODO make configurable
     painter.setPen(Qt::blue);
 
-    foreach(KoPathShape *shape, m_pointSelection.selectedShapes()) {
+    Q_FOREACH (KoPathShape *shape, m_pointSelection.selectedShapes()) {
         painter.save();
         painter.setTransform(shape->absoluteTransformation(&converter) * painter.transform());
 
@@ -469,7 +469,7 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
 
 void KoPathTool::repaintDecorations()
 {
-    foreach(KoShape *shape, m_pointSelection.selectedShapes()) {
+    Q_FOREACH (KoShape *shape, m_pointSelection.selectedShapes()) {
         repaint(shape->boundingRect());
     }
 
@@ -527,7 +527,7 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
     delete m_activeSegment;
     m_activeSegment = 0;
 
-    foreach(KoPathShape *shape, m_pointSelection.selectedShapes()) {
+    Q_FOREACH (KoPathShape *shape, m_pointSelection.selectedShapes()) {
         QRectF roi = handleGrabRect(shape->documentToShape(event->point));
         KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(shape);
         if (parameterShape && parameterShape->isParametricShape()) {
@@ -559,7 +559,7 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
                 KoPathPoint * bestPoint = 0;
                 KoPathPoint::PointType bestPointType = KoPathPoint::Node;
                 qreal minDistance = HUGE_VAL;
-                foreach(KoPathPoint *p, points) {
+                Q_FOREACH (KoPathPoint *p, points) {
                     // the node point must be hit if the point is not selected yet
                     if (! m_pointSelection.contains(p) && ! roi.contains(p->point()))
                         continue;
@@ -780,7 +780,7 @@ KoPathTool::PathSegment* KoPathTool::segmentAtPoint(const QPointF &point)
 
     PathSegment *segment = new PathSegment;
 
-    foreach(KoPathShape *shape, m_pointSelection.selectedShapes()) {
+    Q_FOREACH (KoPathShape *shape, m_pointSelection.selectedShapes()) {
         KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(shape);
         if (parameterShape && parameterShape->isParametricShape())
             continue;
@@ -828,7 +828,7 @@ void KoPathTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &s
 
     repaintDecorations();
     QList<KoPathShape*> selectedShapes;
-    foreach(KoShape *shape, shapes) {
+    Q_FOREACH (KoShape *shape, shapes) {
         KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
 
         if (shape->isEditable() && pathShape) {
@@ -854,7 +854,7 @@ void KoPathTool::activate()
 {
     Q_D(KoToolBase);
     QSet<KoShape*> shapes;
-    foreach(KoShape *shape, d->canvas->shapeManager()->selection()->selectedShapes()) {
+    Q_FOREACH (KoShape *shape, d->canvas->shapeManager()->selection()->selectedShapes()) {
         QSet<KoShape*> delegates = shape->toolDelegates();
         if (delegates.isEmpty()) {
             shapes << shape;
@@ -869,7 +869,7 @@ void KoPathTool::updateOptionsWidget()
 {
     PathToolOptionWidget::Types type;
     QList<KoPathShape*> selectedShapes = m_pointSelection.selectedShapes();
-    foreach(KoPathShape *shape, selectedShapes) {
+    Q_FOREACH (KoPathShape *shape, selectedShapes) {
         KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(shape);
         type |= parameterShape && parameterShape->isParametricShape() ?
                 PathToolOptionWidget::ParametricShape : PathToolOptionWidget::PlainPath;
@@ -930,7 +930,7 @@ void KoPathTool::documentResourceChanged(int key, const QVariant & res)
 
         // repaint with the bigger of old and new handle radius
         int maxRadius = qMax(m_handleRadius, oldHandleRadius);
-        foreach(KoPathShape *shape, m_pointSelection.selectedShapes()) {
+        Q_FOREACH (KoPathShape *shape, m_pointSelection.selectedShapes()) {
             QRectF controlPointRect = shape->absoluteTransformation(0).map(shape->outline()).controlPointRect();
             repaint(controlPointRect.adjusted(-maxRadius, -maxRadius, maxRadius, maxRadius));
         }

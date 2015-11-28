@@ -27,14 +27,16 @@ class KoFilterEffect;
 
 struct InputChangeData {
     InputChangeData()
-            : filterEffect(0), inputIndex(-1) {
+        : filterEffect(0), inputIndex(-1)
+    {
     }
 
     InputChangeData(KoFilterEffect *effect, int index, const QString &oldIn, const QString &newIn)
-            : filterEffect(effect), inputIndex(index), oldInput(oldIn), newInput(newIn) {
+        : filterEffect(effect), inputIndex(index), oldInput(oldIn), newInput(newIn)
+    {
     }
 
-    KoFilterEffect * filterEffect;
+    KoFilterEffect *filterEffect;
     int inputIndex;
     QString oldInput;
     QString newInput;
@@ -46,7 +48,7 @@ class FilterInputChangeCommand : public KUndo2Command
 public:
     explicit FilterInputChangeCommand(const InputChangeData &data, KoShape *shape = 0, KUndo2Command *parent = 0);
 
-    explicit FilterInputChangeCommand(const QList<InputChangeData> &data, KoShape * shape = 0, KUndo2Command *parent = 0);
+    explicit FilterInputChangeCommand(const QList<InputChangeData> &data, KoShape *shape = 0, KUndo2Command *parent = 0);
 
     /// redo the command
     virtual void redo();
@@ -54,7 +56,7 @@ public:
     virtual void undo();
 private:
     QList<InputChangeData> m_data;
-    KoShape * m_shape;
+    KoShape *m_shape;
 };
 
 #endif // FILTERINPUTCHANGECOMMAND_H

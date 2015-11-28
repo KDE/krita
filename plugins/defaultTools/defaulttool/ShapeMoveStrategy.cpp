@@ -38,41 +38,44 @@ ShapeMoveStrategy::ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked)
     , m_start(clicked)
     , m_canvas(tool->canvas())
 {
-    QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
+    QList<KoShape *> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
     QRectF boundingRect;
-    foreach(KoShape *shape, selectedShapes) {
-        if (! shape->isEditable())
+    Q_FOREACH (KoShape *shape, selectedShapes) {
+        if (!shape->isEditable()) {
             continue;
+        }
         m_selectedShapes << shape;
         m_previousPositions << shape->position();
         m_newPositions << shape->position();
-        boundingRect = boundingRect.united( shape->boundingRect() );
+        boundingRect = boundingRect.united(shape->boundingRect());
     }
-    KoSelection * selection = m_canvas->shapeManager()->selection();
-    m_initialOffset = selection->absolutePosition( SelectionDecorator::hotPosition() ) - m_start;
+    KoSelection *selection = m_canvas->shapeManager()->selection();
+    m_initialOffset = selection->absolutePosition(SelectionDecorator::hotPosition()) - m_start;
     m_initialSelectionPosition = selection->position();
-    m_canvas->snapGuide()->setIgnoredShapes( selection->selectedShapes( KoFlake::FullSelection ) );
+    m_canvas->snapGuide()->setIgnoredShapes(selection->selectedShapes(KoFlake::FullSelection));
 
     tool->setStatusText(i18n("Press ALT to hold x- or y-position."));
 }
 
 void ShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers)
 {
-    if(m_selectedShapes.isEmpty())
+    if (m_selectedShapes.isEmpty()) {
         return;
+    }
     QPointF diff = point - m_start;
 
     if (modifiers & (Qt::AltModifier | Qt::ControlModifier)) {
         // keep x or y position unchanged
-        if(qAbs(diff.x()) < qAbs(diff.y()))
+        if (qAbs(diff.x()) < qAbs(diff.y())) {
             diff.setX(0);
-        else
+        } else {
             diff.setY(0);
+        }
     } else {
         QPointF positionToSnap = point + m_initialOffset;
-        tool()->canvas()->updateCanvas( tool()->canvas()->snapGuide()->boundingRect() );
-        QPointF snappedPosition = tool()->canvas()->snapGuide()->snap( positionToSnap, modifiers );
-        tool()->canvas()->updateCanvas( tool()->canvas()->snapGuide()->boundingRect() );
+        tool()->canvas()->updateCanvas(tool()->canvas()->snapGuide()->boundingRect());
+        QPointF snappedPosition = tool()->canvas()->snapGuide()->snap(positionToSnap, modifiers);
+        tool()->canvas()->updateCanvas(tool()->canvas()->snapGuide()->boundingRect());
         diff = snappedPosition - m_initialOffset - m_start;
     }
 
@@ -87,13 +90,14 @@ void ShapeMoveStrategy::handleCustomEvent(KoPointerEvent *event)
 
     if (event->modifiers() & (Qt::AltModifier | Qt::ControlModifier)) {
         // keep x or y position unchanged
-        if(qAbs(diff.x()) < qAbs(diff.y()))
+        if (qAbs(diff.x()) < qAbs(diff.y())) {
             diff.setX(0);
-        else
+        } else {
             diff.setY(0);
+        }
     }
 
-    m_diff += 0.1 * diff ;
+    m_diff += 0.1 * diff;
 
     moveSelection();
 }
@@ -102,14 +106,14 @@ void ShapeMoveStrategy::moveSelection()
 {
     Q_ASSERT(m_newPositions.count());
 
-    int i=0;
-    foreach(KoShape *shape, m_selectedShapes) {
+    int i = 0;
+    Q_FOREACH (KoShape *shape, m_selectedShapes) {
         QPointF delta = m_previousPositions.at(i) + m_diff - shape->position();
         if (shape->parent()) {
             shape->parent()->model()->proposeMove(shape, delta);
         }
         tool()->canvas()->clipToDocument(shape, delta);
-        QPointF newPos (shape->position() + delta);
+        QPointF newPos(shape->position() + delta);
         m_newPositions[i] = newPos;
         shape->update();
         shape->setPosition(newPos);
@@ -119,11 +123,12 @@ void ShapeMoveStrategy::moveSelection()
     tool()->canvas()->shapeManager()->selection()->setPosition(m_initialSelectionPosition + m_diff);
 }
 
-KUndo2Command* ShapeMoveStrategy::createCommand()
+KUndo2Command *ShapeMoveStrategy::createCommand()
 {
     tool()->canvas()->snapGuide()->reset();
-    if(m_diff.x() == 0 && m_diff.y() == 0)
+    if (m_diff.x() == 0 && m_diff.y() == 0) {
         return 0;
+    }
     return new KoShapeMoveCommand(m_selectedShapes, m_previousPositions, m_newPositions);
 }
 
@@ -133,9 +138,9 @@ void ShapeMoveStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     tool()->canvas()->updateCanvas(tool()->canvas()->snapGuide()->boundingRect());
 }
 
-void ShapeMoveStrategy::paint( QPainter &painter, const KoViewConverter &converter)
+void ShapeMoveStrategy::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    SelectionDecorator decorator (KoFlake::NoHandle, false, false);
+    SelectionDecorator decorator(KoFlake::NoHandle, false, false);
     decorator.setSelection(tool()->canvas()->shapeManager()->selection());
     decorator.setHandleRadius(handleRadius());
     decorator.paint(painter, converter);

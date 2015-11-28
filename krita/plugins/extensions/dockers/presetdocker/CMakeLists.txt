@@ -1,7 +1,7 @@
 
-set(KRITA_PRESETDOCKER_PART_SRCS presetdocker.cpp presetdocker_dock.cpp )
+set(KRITA_PRESETDOCKER_SOURCES presetdocker.cpp presetdocker_dock.cpp )
 
-add_library(kritapresetdocker MODULE ${KRITA_PRESETDOCKER_PART_SRCS})
+add_library(kritapresetdocker MODULE ${KRITA_PRESETDOCKER_SOURCES})
 kcoreaddons_desktop_to_json(kritapresetdocker krita_presetdocker.desktop)
 
 target_link_libraries(kritapresetdocker kritaui)

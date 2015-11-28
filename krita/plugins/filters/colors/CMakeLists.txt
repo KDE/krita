@@ -1,6 +1,6 @@
 
 
-set(kritaextensioncolorsfilters_PART_SRCS
+set(kritaextensioncolorsfilters_SOURCES
     colors.cpp
     kis_wdg_color_to_alpha.cpp
     kis_color_to_alpha.cpp
@@ -8,11 +8,11 @@ set(kritaextensioncolorsfilters_PART_SRCS
     )
 
 
-ki18n_wrap_ui(kritaextensioncolorsfilters_PART_SRCS
+ki18n_wrap_ui(kritaextensioncolorsfilters_SOURCES
     wdgcolortoalphabase.ui
     )
 
-add_library(kritaextensioncolorsfilters MODULE ${kritaextensioncolorsfilters_PART_SRCS})
+add_library(kritaextensioncolorsfilters MODULE ${kritaextensioncolorsfilters_SOURCES})
 kcoreaddons_desktop_to_json(kritaextensioncolorsfilters kritaextensioncolorsfilters.desktop)
 
 

@@ -22,13 +22,13 @@
 #include <QDebug>
 
 StylesSortFilterProxyModel::StylesSortFilterProxyModel(QObject *parent)
-: QSortFilterProxyModel(parent)
+    : QSortFilterProxyModel(parent)
 {
 }
 
 bool StylesSortFilterProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
-    QVariant leftData= sourceModel()->data(left, Qt::DisplayRole);
+    QVariant leftData = sourceModel()->data(left, Qt::DisplayRole);
     QVariant rightData = sourceModel()->data(right, Qt::DisplayRole);
 
     QString leftName = leftData.toString();

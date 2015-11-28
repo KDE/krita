@@ -83,7 +83,7 @@ void Validator::revalidate()
     QList<Entry> entries = d->store->entries();
     d->countValidEntries = 0;
     d->invalidEntries.clear();
-    foreach(const Entry& entry, entries) {
+    Q_FOREACH (const Entry& entry, entries) {
         const TypeInfo* typeInfo = entry.schema()->propertyType(entry.name());
         if (typeInfo) {
             if (typeInfo->hasCorrectType(entry.value())) {

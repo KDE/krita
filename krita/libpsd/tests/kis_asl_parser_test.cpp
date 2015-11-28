@@ -294,7 +294,7 @@ void KisAslParserTest::testParserWithPatterns()
 
     int index = 0;
 
-    foreach (const QFileInfo &fileInfo, files) {
+    Q_FOREACH (const QFileInfo &fileInfo, files) {
 
         //if (index != 12) {index++; continue;}
 

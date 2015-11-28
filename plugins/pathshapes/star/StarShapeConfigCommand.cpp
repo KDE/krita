@@ -21,7 +21,7 @@
 #include "StarShape.h"
 #include <klocalizedstring.h>
 
-StarShapeConfigCommand::StarShapeConfigCommand(StarShape * star, uint cornerCount, qreal innerRadius, qreal outerRadius, bool convex, KUndo2Command *parent)
+StarShapeConfigCommand::StarShapeConfigCommand(StarShape *star, uint cornerCount, qreal innerRadius, qreal outerRadius, bool convex, KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_star(star)
     , m_newCornerCount(cornerCount)
@@ -47,14 +47,18 @@ void StarShapeConfigCommand::redo()
 
     QPointF position = m_star->absolutePosition();
 
-    if (m_oldCornerCount != m_newCornerCount)
+    if (m_oldCornerCount != m_newCornerCount) {
         m_star->setCornerCount(m_newCornerCount);
-    if (m_oldInnerRadius != m_newInnerRadius)
+    }
+    if (m_oldInnerRadius != m_newInnerRadius) {
         m_star->setBaseRadius(m_newInnerRadius);
-    if (m_oldOuterRadius != m_newOuterRadius)
+    }
+    if (m_oldOuterRadius != m_newOuterRadius) {
         m_star->setTipRadius(m_newOuterRadius);
-    if (m_oldConvex != m_newConvex)
+    }
+    if (m_oldConvex != m_newConvex) {
         m_star->setConvex(m_newConvex);
+    }
 
     m_star->setAbsolutePosition(position);
 
@@ -69,14 +73,18 @@ void StarShapeConfigCommand::undo()
 
     QPointF position = m_star->absolutePosition();
 
-    if (m_oldCornerCount != m_newCornerCount)
+    if (m_oldCornerCount != m_newCornerCount) {
         m_star->setCornerCount(m_oldCornerCount);
-    if (m_oldInnerRadius != m_newInnerRadius)
+    }
+    if (m_oldInnerRadius != m_newInnerRadius) {
         m_star->setBaseRadius(m_oldInnerRadius);
-    if (m_oldOuterRadius != m_newOuterRadius)
+    }
+    if (m_oldOuterRadius != m_newOuterRadius) {
         m_star->setTipRadius(m_oldOuterRadius);
-    if (m_oldConvex != m_newConvex)
+    }
+    if (m_oldConvex != m_newConvex) {
         m_star->setConvex(m_oldConvex);
+    }
 
     m_star->setAbsolutePosition(position);
 

@@ -34,7 +34,7 @@ class CharacterHighlighting : public QWidget
     Q_OBJECT
 
 public:
-    explicit CharacterHighlighting(bool uniqueFormat, QWidget* parent = 0);
+    explicit CharacterHighlighting(bool uniqueFormat, QWidget *parent = 0);
     ~CharacterHighlighting() {}
 
     void setDisplay(KoCharacterStyle *style);
@@ -51,7 +51,6 @@ Q_SIGNALS:
     void textColorChanged(QColor);
     void backgroundColorChanged(QColor);
     void charStyleChanged();
-
 
 private Q_SLOTS:
     void underlineTypeChanged(int item);
@@ -77,7 +76,7 @@ private:
 
     Ui::CharacterHighlighting widget;
 
-     KFontChooser *m_fontChooser;
+    KFontChooser *m_fontChooser;
 
     bool m_uniqueFormat;
     bool m_underlineInherited;

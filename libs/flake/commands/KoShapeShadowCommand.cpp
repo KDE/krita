@@ -28,7 +28,7 @@ class Q_DECL_HIDDEN KoShapeShadowCommand::Private
 public:
     Private() {}
     ~Private() {
-        foreach(KoShapeShadow* shadow, oldShadows) {
+        Q_FOREACH (KoShapeShadow* shadow, oldShadows) {
             if (shadow && !shadow->deref())
                 delete shadow;
         }
@@ -59,7 +59,7 @@ KoShapeShadowCommand::KoShapeShadowCommand(const QList<KoShape*> &shapes, KoShap
 {
     d->shapes = shapes;
     // save old shadows
-    foreach(KoShape *shape, d->shapes) {
+    Q_FOREACH (KoShape *shape, d->shapes) {
         d->addOldShadow(shape->shadow());
         d->addNewShadow(shadow);
     }
@@ -76,9 +76,9 @@ KoShapeShadowCommand::KoShapeShadowCommand(const QList<KoShape*> &shapes, const 
     d->shapes = shapes;
 
     // save old shadows
-    foreach(KoShape *shape, shapes)
+    Q_FOREACH (KoShape *shape, shapes)
         d->addOldShadow(shape->shadow());
-    foreach(KoShapeShadow * shadow, shadows)
+    Q_FOREACH (KoShapeShadow * shadow, shadows)
         d->addNewShadow(shadow);
 
     setText(kundo2_i18n("Set Shadow"));

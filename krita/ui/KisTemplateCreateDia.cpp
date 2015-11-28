@@ -508,12 +508,12 @@ void KisTemplateCreateDia::updatePixmap() {
 
 void KisTemplateCreateDia::fillGroupTree() {
 
-    foreach(KisTemplateGroup *group, d->m_tree.groups()) {
+    Q_FOREACH (KisTemplateGroup *group, d->m_tree.groups()) {
         if(group->isHidden())
             continue;
         QTreeWidgetItem *groupItem=new QTreeWidgetItem(d->m_groups, QStringList() << group->name());
 
-        foreach(KisTemplate *t, group->templates()) {
+        Q_FOREACH (KisTemplate *t, group->templates()) {
             if(t->isHidden())
                 continue;
             (void)new QTreeWidgetItem(groupItem, QStringList() << t->name());

@@ -29,9 +29,9 @@ QString ShapePropertiesDockerFactory::id() const
     return QString("Shape Properties");
 }
 
-QDockWidget* ShapePropertiesDockerFactory::createDockWidget()
+QDockWidget *ShapePropertiesDockerFactory::createDockWidget()
 {
-    ShapePropertiesDocker* widget = new ShapePropertiesDocker();
+    ShapePropertiesDocker *widget = new ShapePropertiesDocker();
     widget->setObjectName(id());
 
     return widget;

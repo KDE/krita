@@ -137,7 +137,7 @@ inline void KisTile::unblockSwapping() const
         m_tileData->unblockSwapping();
 
         if(!m_oldTileData.isEmpty()) {
-            foreach(KisTileData *td, m_oldTileData) {
+            Q_FOREACH (KisTileData *td, m_oldTileData) {
                 td->unblockSwapping();
                 td->release();
             }

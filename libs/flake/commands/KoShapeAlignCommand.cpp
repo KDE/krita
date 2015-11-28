@@ -45,7 +45,7 @@ KoShapeAlignCommand::KoShapeAlignCommand(const QList<KoShape*> &shapes, Align al
     QPointF position;
     QPointF delta;
     QRectF bRect;
-    foreach(KoShape *shape, shapes) {
+    Q_FOREACH (KoShape *shape, shapes) {
 //   if (dynamic_cast<KoShapeGroup*> (shape))
 //       debugFlake <<"Found Group";
 //   else if (dynamic_cast<KoShapeContainer*> (shape))

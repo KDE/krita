@@ -36,8 +36,8 @@ public:
     virtual QVariant data(const QModelIndex &index, int role) const;
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
-    virtual QModelIndex index(int row, int column=0, const QModelIndex &parent = QModelIndex()) const;
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const ;
+    virtual QModelIndex index(int row, int column = 0, const QModelIndex &parent = QModelIndex()) const;
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
     void saveData();
 

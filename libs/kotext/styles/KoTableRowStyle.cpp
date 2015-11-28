@@ -360,7 +360,7 @@ bool KoTableRowStyle::isEmpty() const
 void KoTableRowStyle::saveOdf(KoGenStyle &style) const
 {
     QList<int> keys = d->stylesPrivate.keys();
-    foreach(int key, keys) {
+    Q_FOREACH (int key, keys) {
         if (key == QTextFormat::BackgroundBrush) {
             QBrush backBrush = background();
             if (backBrush.style() != Qt::NoBrush)

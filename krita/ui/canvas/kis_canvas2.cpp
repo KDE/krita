@@ -818,7 +818,7 @@ void KisCanvas2::slotSelectionChanged()
         return;
     }
     m_d->shapeManager.selection()->deselectAll();
-    foreach(KoShape* shape, shapeLayer->shapeManager()->selection()->selectedShapes()) {
+    Q_FOREACH (KoShape* shape, shapeLayer->shapeManager()->selection()->selectedShapes()) {
         m_d->shapeManager.selection()->select(shape);
     }
 }

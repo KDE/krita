@@ -1,4 +1,4 @@
-set(kritadynapaintop_PART_SRCS
+set(kritadynapaintop_SOURCES
     dyna_paintop_plugin.cpp
     kis_dyna_paintop.cpp
     kis_dynaop_option.cpp
@@ -8,9 +8,9 @@ set(kritadynapaintop_PART_SRCS
     filter.cpp
     )
 
-ki18n_wrap_ui(kritadynapaintop_PART_SRCS wdgdynaoptions.ui )
+ki18n_wrap_ui(kritadynapaintop_SOURCES wdgdynaoptions.ui )
 
-add_library(kritadynapaintop MODULE ${kritadynapaintop_PART_SRCS})
+add_library(kritadynapaintop MODULE ${kritadynapaintop_SOURCES})
 kcoreaddons_desktop_to_json(kritadynapaintop kritadynapaintop.desktop)
 
 target_link_libraries(kritadynapaintop kritalibpaintop)

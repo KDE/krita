@@ -1,4 +1,4 @@
-set(kritaexperimentpaintop_PART_SRCS
+set(kritaexperimentpaintop_SOURCES
     experiment_paintop_plugin.cpp
     kis_experiment_paintop.cpp
     kis_experimentop_option.cpp
@@ -6,9 +6,9 @@ set(kritaexperimentpaintop_PART_SRCS
     kis_experiment_paintop_settings_widget.cpp
     )
 
-ki18n_wrap_ui(kritaexperimentpaintop_PART_SRCS wdgexperimentoptions.ui )
+ki18n_wrap_ui(kritaexperimentpaintop_SOURCES wdgexperimentoptions.ui )
 
-add_library(kritaexperimentpaintop MODULE ${kritaexperimentpaintop_PART_SRCS})
+add_library(kritaexperimentpaintop MODULE ${kritaexperimentpaintop_SOURCES})
 kcoreaddons_desktop_to_json(kritaexperimentpaintop kritaexperimentpaintop.desktop)
 
 target_link_libraries(kritaexperimentpaintop kritalibpaintop)

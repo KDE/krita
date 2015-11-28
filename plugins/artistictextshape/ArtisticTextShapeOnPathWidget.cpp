@@ -41,16 +41,18 @@ ArtisticTextShapeOnPathWidget::~ArtisticTextShapeOnPathWidget()
 
 void ArtisticTextShapeOnPathWidget::updateWidget()
 {
-    ArtisticTextToolSelection *selection = dynamic_cast<ArtisticTextToolSelection*>(m_textTool->selection());
-    if (!selection)
+    ArtisticTextToolSelection *selection = dynamic_cast<ArtisticTextToolSelection *>(m_textTool->selection());
+    if (!selection) {
         return;
+    }
 
     ArtisticTextShape *currentText = selection->selectedShape();
-    if (!currentText)
+    if (!currentText) {
         return;
+    }
 
     ui->startOffset->blockSignals(true);
-    ui->startOffset->setValue( static_cast<int>( currentText->startOffset() * 100.0 ) );
+    ui->startOffset->setValue(static_cast<int>(currentText->startOffset() * 100.0));
     ui->startOffset->setEnabled(currentText->isOnPath());
     ui->startOffset->blockSignals(false);
 }

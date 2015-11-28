@@ -1,4 +1,4 @@
-set(kritaspraypaintop_PART_SRCS
+set(kritaspraypaintop_SOURCES
     spray_paintop_plugin.cpp
     kis_spray_paintop.cpp
     kis_sprayop_option.cpp
@@ -10,9 +10,9 @@ set(kritaspraypaintop_PART_SRCS
     random_gauss.cpp
     )
 
-ki18n_wrap_ui(kritaspraypaintop_PART_SRCS wdgsprayoptions.ui wdgsprayshapeoptions.ui wdgshapedynamicsoptions.ui )
+ki18n_wrap_ui(kritaspraypaintop_SOURCES wdgsprayoptions.ui wdgsprayshapeoptions.ui wdgshapedynamicsoptions.ui )
 
-add_library(kritaspraypaintop MODULE ${kritaspraypaintop_PART_SRCS})
+add_library(kritaspraypaintop MODULE ${kritaspraypaintop_SOURCES})
 kcoreaddons_desktop_to_json(kritaspraypaintop kritaspraypaintop.desktop)
 
 target_link_libraries(kritaspraypaintop kritalibpaintop)

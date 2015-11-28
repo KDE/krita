@@ -1,5 +1,5 @@
 
-set(KRITA_COLORSELECTORNG_PART_SRCS
+set(KRITA_COLORSELECTORNG_SOURCES
 colorselectorng.cpp
 kis_color_selector_ng_dock.cpp
 kis_color_selector_ng_docker_widget.cpp
@@ -27,11 +27,11 @@ kis_color_selector_combo_box.cpp
 kis_color_selector_base_proxy.cpp
 )
 
-ki18n_wrap_ui(KRITA_COLORSELECTORNG_PART_SRCS
+ki18n_wrap_ui(KRITA_COLORSELECTORNG_SOURCES
     wdg_color_selector_settings.ui
 )
 
-add_library(kritacolorselectorng MODULE ${KRITA_COLORSELECTORNG_PART_SRCS})
+add_library(kritacolorselectorng MODULE ${KRITA_COLORSELECTORNG_SOURCES})
 kcoreaddons_desktop_to_json(kritacolorselectorng krita_colorselectorng.desktop)
 
 target_link_libraries(kritacolorselectorng kritaui)

@@ -341,7 +341,7 @@ bool KisTileDataPooler::processLists(QList<KisTileData*> &beggers,
     bool hadWork = false;
 
 
-    foreach(KisTileData *item, beggers) {
+    Q_FOREACH (KisTileData *item, beggers) {
         qint32 clonesNeeded = numClonesNeeded(item);
         qint32 clonesMemory = clonesMetric(item, clonesNeeded);
 

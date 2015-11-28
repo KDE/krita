@@ -34,8 +34,9 @@ class RgbCompositeOpHue : public KoCompositeOp
 
 public:
 
-    RgbCompositeOpHue(KoColorSpace * cs)
-            : KoCompositeOp(cs, COMPOSITE_HUE, i18n("Hue"), "") {
+    RgbCompositeOpHue(KoColorSpace *cs)
+        : KoCompositeOp(cs, COMPOSITE_HUE, i18n("Hue"), "")
+    {
     }
 
     using KoCompositeOp::composite;
@@ -45,7 +46,8 @@ public:
                    const quint8 *maskRowStart, qint32 maskRowStride,
                    qint32 rows, qint32 numColumns,
                    quint8 opacity,
-                   const QBitArray & channelFlags) const {
+                   const QBitArray &channelFlags) const
+    {
         channels_type *dst;
         const channels_type *src;
 
@@ -54,7 +56,7 @@ public:
             src = reinterpret_cast<const channels_type *>(srcRowStart);
             dst = reinterpret_cast<channels_type *>(dstRowStart);
 
-            for (int i = numColumns ; i > 0 ; --i) {
+            for (int i = numColumns; i > 0; --i) {
                 channels_type srcAlpha = src[_CSTraits::alpha_pos];
                 channels_type dstAlpha = dst[_CSTraits::alpha_pos];
 
@@ -63,7 +65,7 @@ public:
                 // apply the alphamask
                 if (mask != 0) {
                     if (*mask != OPACITY_OPAQUE_U8) {
-                        channels_type tmpOpacity = KoColorSpaceMaths<quint8 , channels_type>::scaleToA(*mask);
+                        channels_type tmpOpacity = KoColorSpaceMaths<quint8, channels_type>::scaleToA(*mask);
                         srcAlpha =  KoColorSpaceMaths<channels_type>::multiply(srcAlpha, tmpOpacity);
                     }
                     mask++;
@@ -72,7 +74,7 @@ public:
                 if (srcAlpha != NATIVE_OPACITY_TRANSPARENT) {
 
                     if (opacity != OPACITY_OPAQUE_U8) {
-                        channels_type tmpOpacity = KoColorSpaceMaths<quint8 , channels_type>::scaleToA(opacity);
+                        channels_type tmpOpacity = KoColorSpaceMaths<quint8, channels_type>::scaleToA(opacity);
                         srcAlpha = KoColorSpaceMaths<channels_type>::multiply(src[_CSTraits::alpha_pos], tmpOpacity);
                     }
 
@@ -111,12 +113,15 @@ public:
 
                     HSVToRGB(srcHue, dstSaturation, dstValue, &srcRed, &srcGreen, &srcBlue);
 
-                    if (channelFlags.isEmpty() || channelFlags.testBit(_CSTraits::red_pos))
+                    if (channelFlags.isEmpty() || channelFlags.testBit(_CSTraits::red_pos)) {
                         dst[_CSTraits::red_pos] = KoColorSpaceMaths<channels_type>::blend(SCALE_FROM_FLOAT(srcRed), SCALE_FROM_FLOAT(dstRed), srcBlend);
-                    if (channelFlags.isEmpty() || channelFlags.testBit(_CSTraits::green_pos))
+                    }
+                    if (channelFlags.isEmpty() || channelFlags.testBit(_CSTraits::green_pos)) {
                         dst[_CSTraits::green_pos] = KoColorSpaceMaths<channels_type>::blend(SCALE_FROM_FLOAT(srcGreen), SCALE_FROM_FLOAT(dstGreen), srcBlend);
-                    if (channelFlags.isEmpty() || channelFlags.testBit(_CSTraits::blue_pos))
+                    }
+                    if (channelFlags.isEmpty() || channelFlags.testBit(_CSTraits::blue_pos)) {
                         dst[_CSTraits::blue_pos] = KoColorSpaceMaths<channels_type>::blend(SCALE_FROM_FLOAT(srcBlue), SCALE_FROM_FLOAT(dstBlue), srcBlend);
+                    }
                 }
 
                 src += _CSTraits::channels_nb;
@@ -126,8 +131,9 @@ public:
             rows--;
             srcRowStart += srcRowStride;
             dstRowStart += dstRowStride;
-            if (maskRowStart)
+            if (maskRowStart) {
                 maskRowStart += maskRowStride;
+            }
         }
     }
 };

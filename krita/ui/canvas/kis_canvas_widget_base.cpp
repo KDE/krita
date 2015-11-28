@@ -106,7 +106,7 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
     QTransform worldTransform = gc.worldTransform();
     gc.setPen( Qt::green );
 
-    foreach (KoShape *shape, canvas()->shapeManager()->selection()->selectedShapes()) {
+    Q_FOREACH (KoShape *shape, canvas()->shapeManager()->selection()->selectedShapes()) {
         if (shape->shapeId() == "ArtisticText" || shape->shapeId() == "TextShapeID") {
             gc.setWorldTransform(shape->absoluteTransformation(m_d->viewConverter) * worldTransform);
             KoShape::applyConversion(gc, *m_d->viewConverter);
@@ -121,7 +121,7 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
         gc.save();
         gc.setPen(Qt::NoPen);
         gc.setBrush(Qt::NoBrush);
-        foreach (KoShape *shape, canvas()->shapeManager()->selection()->selectedShapes()) {
+        Q_FOREACH (KoShape *shape, canvas()->shapeManager()->selection()->selectedShapes()) {
             if (shape->shapeId() == "ArtisticText" || shape->shapeId() == "TextShapeID") {
                 KoShapePaintingContext  paintContext(canvas(), false);
                 gc.save();
@@ -140,7 +140,7 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
     gc.restore();
 
     // ask the decorations to paint themselves
-    foreach(KisCanvasDecoration* deco, m_d->decorations) {
+    Q_FOREACH (KisCanvasDecoration* deco, m_d->decorations) {
         deco->paint(gc, m_d->coordinatesConverter->widgetToDocument(updateWidgetRect), m_d->coordinatesConverter,m_d->canvas);
     }
 
@@ -161,7 +161,7 @@ void KisCanvasWidgetBase::addDecoration(KisCanvasDecoration* deco)
 
 KisCanvasDecoration* KisCanvasWidgetBase::decoration(const QString& id) const
 {
-    foreach(KisCanvasDecoration* deco, m_d->decorations) {
+    Q_FOREACH (KisCanvasDecoration* deco, m_d->decorations) {
         if (deco->id() == id) {
             return deco;
         }

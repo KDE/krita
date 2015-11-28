@@ -1,7 +1,7 @@
 
-set(KRITA_CHANNELDOCKER_PART_SRCS channelmodel.cpp channeldocker.cpp channeldocker_dock.cpp )
+set(KRITA_CHANNELDOCKER_SOURCES channelmodel.cpp channeldocker.cpp channeldocker_dock.cpp )
 
-add_library(kritachanneldocker MODULE ${KRITA_CHANNELDOCKER_PART_SRCS})
+add_library(kritachanneldocker MODULE ${KRITA_CHANNELDOCKER_SOURCES})
 kcoreaddons_desktop_to_json(kritachanneldocker krita_channeldocker.desktop)
 
 target_link_libraries(kritachanneldocker kritaui)

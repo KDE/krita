@@ -32,12 +32,12 @@
 #include <KoStyleThumbnailer.h>
 
 ParagraphGeneral::ParagraphGeneral(QWidget *parent)
-        : CharacterGeneral(parent)
-        , m_nameHidden(false)
-        , m_style(0)
-        , m_styleManager(0)
-        , m_thumbnail(new KoStyleThumbnailer())
-        , m_paragraphInheritedStyleModel(new StylesModel(0, StylesModel::ParagraphStyle))
+    : CharacterGeneral(parent)
+    , m_nameHidden(false)
+    , m_style(0)
+    , m_styleManager(0)
+    , m_thumbnail(new KoStyleThumbnailer())
+    , m_paragraphInheritedStyleModel(new StylesModel(0, StylesModel::ParagraphStyle))
 {
 //Disable for now
     //include in TOC
@@ -76,7 +76,7 @@ ParagraphGeneral::ParagraphGeneral(QWidget *parent)
 
     widget.preview->setText(QString("Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
 
-    connect(widget.name, SIGNAL(textChanged(const QString &)), this, SIGNAL(nameChanged(const QString&)));
+    connect(widget.name, SIGNAL(textChanged(QString)), this, SIGNAL(nameChanged(QString)));
     connect(widget.nextStyle, SIGNAL(currentIndexChanged(int)), this, SIGNAL(styleChanged()));
 
     connect(this, SIGNAL(styleChanged()), this, SLOT(setPreviewParagraphStyle()));
@@ -85,7 +85,7 @@ ParagraphGeneral::ParagraphGeneral(QWidget *parent)
 void ParagraphGeneral::hideStyleName(bool hide)
 {
     if (hide) {
-        disconnect(widget.name, SIGNAL(textChanged(const QString &)), this, SIGNAL(nameChanged(const QString&)));
+        disconnect(widget.name, SIGNAL(textChanged(QString)), this, SIGNAL(nameChanged(QString)));
         widget.tabs->removeTab(0);
         m_nameHidden = true;
     }
@@ -101,32 +101,34 @@ void ParagraphGeneral::selectName()
 void ParagraphGeneral::setStyle(KoParagraphStyle *style, int level)
 {
     m_style = style;
-    if (m_style == 0)
+    if (m_style == 0) {
         return;
+    }
 
     CharacterGeneral::setStyle(style);
 
     blockSignals(true);
 
-/*    widget.inheritStyle->clear();
-    widget.inheritStyle->addItem(i18nc("Inherit style", "None"));
-    widget.inheritStyle->setCurrentIndex(0);
-    foreach(KoParagraphStyle *s, m_paragraphStyles) {
-        KoParagraphStyle *parent = s;
-        bool ok = true;
-        while (ok && parent) {
-            ok = parent->styleId() != style->styleId();
-            parent = parent->parentStyle();
-        }
-        if (! ok) continue; // can't inherit from myself, even indirectly.
+    /*    widget.inheritStyle->clear();
+        widget.inheritStyle->addItem(i18nc("Inherit style", "None"));
+        widget.inheritStyle->setCurrentIndex(0);
+        Q_FOREACH (KoParagraphStyle *s, m_paragraphStyles) {
+            KoParagraphStyle *parent = s;
+            bool ok = true;
+            while (ok && parent) {
+                ok = parent->styleId() != style->styleId();
+                parent = parent->parentStyle();
+            }
+            if (!ok) continue; // can't inherit from myself, even indirectly.
 
-        widget.inheritStyle->addItem(s->name(), s->styleId());
-        if (s == style->parent())
-            widget.inheritStyle->setCurrentIndex(widget.inheritStyle->count() - 1);
-    }
-*/
-    if (!m_nameHidden)
+            widget.inheritStyle->addItem(s->name(), s->styleId());
+            if (s == style->parent())
+                widget.inheritStyle->setCurrentIndex(widget.inheritStyle->count() - 1);
+        }
+    */
+    if (!m_nameHidden) {
         widget.name->setText(style->name());
+    }
 
     if (m_styleManager) {
         CharacterGeneral::updateNextStyleCombo(m_styleManager->paragraphStyle(style->nextStyle()));
@@ -159,13 +161,14 @@ void ParagraphGeneral::save(KoParagraphStyle *style)
     KoParagraphStyle *savingStyle;
 
     if (style == 0) {
-        if (m_style == 0)
+        if (m_style == 0) {
             return;
-        else
+        } else {
             savingStyle = m_style;
-    }
-    else
+        }
+    } else {
         savingStyle = style;
+    }
 
     CharacterGeneral::save(style);
 
@@ -212,8 +215,9 @@ QString ParagraphGeneral::styleName() const
 
 void ParagraphGeneral::setStyleManager(KoStyleManager *sm)
 {
-    if (!sm)
+    if (!sm) {
         return;
+    }
     m_styleManager = sm;
     CharacterGeneral::setStyleManager(m_styleManager);
     m_paragraphInheritedStyleModel->setStyleManager(m_styleManager);

@@ -34,11 +34,10 @@
 
 #include <kpluginfactory.h>
 
-K_PLUGIN_FACTORY_WITH_JSON(FilterEffectsPluginFacory, "karbon_filtereffects.json",
-                           registerPlugin<FilterEffectsPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(FilterEffectsPluginFacory, "karbon_filtereffects.json", registerPlugin<FilterEffectsPlugin>();)
 
-FilterEffectsPlugin::FilterEffectsPlugin(QObject *parent, const QList<QVariant>&)
-        : QObject(parent)
+FilterEffectsPlugin::FilterEffectsPlugin(QObject *parent, const QList<QVariant> &)
+    : QObject(parent)
 {
     KoFilterEffectRegistry::instance()->add(new BlurEffectFactory());
     KoFilterEffectRegistry::instance()->add(new OffsetEffectFactory());

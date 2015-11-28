@@ -157,7 +157,7 @@ void KoCanvasControllerWidget::Private::activate()
     if (!observerProvider) {
         return;
     }
-    foreach(KoCanvasObserverBase *docker, observerProvider->canvasObservers()) {
+    Q_FOREACH (KoCanvasObserverBase *docker, observerProvider->canvasObservers()) {
         KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
         if (observer) {
             observer->setObservedCanvas(q->canvas());
@@ -176,7 +176,7 @@ void KoCanvasControllerWidget::Private::unsetCanvas()
     if (!observerProvider) {
         return;
     }
-    foreach(KoCanvasObserverBase *docker, observerProvider->canvasObservers()) {
+    Q_FOREACH (KoCanvasObserverBase *docker, observerProvider->canvasObservers()) {
         KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
         if (observer && observer->observedCanvas() == q->canvas()) {
             observer->unsetObservedCanvas();

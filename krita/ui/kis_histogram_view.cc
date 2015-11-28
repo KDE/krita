@@ -238,7 +238,7 @@ void KisHistogramView::setChannels()
         KoGenericRGBHistogramProducerFactory f;
         addProducerChannels(f.generate());
     } else {
-        foreach (const QString &id, list) {
+        Q_FOREACH (const QString &id, list) {
             KoHistogramProducer *producer = KoHistogramProducerFactoryRegistry::instance()->value(id)->generate();
             if (producer) {
                 addProducerChannels(producer);

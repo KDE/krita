@@ -51,7 +51,7 @@ public:
     /// reimplemented form KoToolBase
     virtual void repaintDecorations();
     /// reimplemented form KoToolBase
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     /// reimplemented form KoToolBase
     virtual void deactivate();
 
@@ -76,7 +76,7 @@ private Q_SLOTS:
     /// reimplemented from KoToolBase
     virtual void canvasResourceChanged(int key, const QVariant &res);
 
-    void insertorCreateGuidesSlot(GuidesTransaction* result);
+    void insertorCreateGuidesSlot(GuidesTransaction *result);
 
 private:
     typedef QPair<Qt::Orientation, int> GuideLine;

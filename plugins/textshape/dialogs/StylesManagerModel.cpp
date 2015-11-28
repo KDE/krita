@@ -25,8 +25,8 @@
 #include <QDebug>
 
 StylesManagerModel::StylesManagerModel(QObject *parent)
-: QAbstractListModel(parent)
-, m_styleThumbnailer(0)
+    : QAbstractListModel(parent)
+    , m_styleThumbnailer(0)
 {
 }
 
@@ -50,8 +50,7 @@ QVariant StylesManagerModel::data(const QModelIndex &index, int role) const
     case Qt::DecorationRole:
         if (!m_styleThumbnailer) {
             retval = QPixmap();
-        }
-        else {
+        } else {
             retval = m_styleThumbnailer->thumbnail(m_styles[row]);
         }
         break;
@@ -138,6 +137,4 @@ QModelIndex StylesManagerModel::styleIndex(KoCharacterStyle *style)
     }
     return index;
 }
-
-
 

@@ -39,23 +39,23 @@ GrayAU16ColorSpace::GrayAU16ColorSpace(const QString &name, KoColorProfile *p)
     addStandardCompositeOps<GrayAU16Traits>(this);
 }
 
-KoColorSpace* GrayAU16ColorSpace::clone() const
+KoColorSpace *GrayAU16ColorSpace::clone() const
 {
     return new GrayAU16ColorSpace(name(), profile()->clone());
 }
 
-void GrayAU16ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+void GrayAU16ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const
 {
-    const GrayAU16Traits::channels_type* p = reinterpret_cast<const GrayAU16Traits::channels_type*>(pixel);
+    const GrayAU16Traits::channels_type *p = reinterpret_cast<const GrayAU16Traits::channels_type *>(pixel);
     QDomElement labElt = doc.createElement("Gray");
     labElt.setAttribute("g", KoColorSpaceMaths< GrayAU16Traits::channels_type, qreal>::scaleToA(p[0]));
     labElt.setAttribute("space", profile()->name());
     colorElt.appendChild(labElt);
 }
 
-void GrayAU16ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
+void GrayAU16ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
-    GrayAU16Traits::channels_type* p = reinterpret_cast<GrayAU16Traits::channels_type*>(pixel);
+    GrayAU16Traits::channels_type *p = reinterpret_cast<GrayAU16Traits::channels_type *>(pixel);
     p[0] = KoColorSpaceMaths< qreal, GrayAU16Traits::channels_type >::scaleToA(elt.attribute("g").toDouble());
     p[1] = KoColorSpaceMathsTraits<quint16>::max;
 }

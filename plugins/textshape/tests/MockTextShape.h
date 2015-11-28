@@ -29,14 +29,16 @@ public:
     MockTextShape()
         : TextShape(0)
     {
-        layout = qobject_cast<KoTextDocumentLayout*>(textShapeData()->document()->documentLayout());
+        layout = qobject_cast<KoTextDocumentLayout *>(textShapeData()->document()->documentLayout());
     }
-    void paint(QPainter &painter, const KoViewConverter &converter) {
+    void paint(QPainter &painter, const KoViewConverter &converter)
+    {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
     }
     virtual void saveOdf(KoShapeSavingContext &) const {}
-    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) {
+    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &)
+    {
         return true;
     }
     KoTextDocumentLayout *layout;

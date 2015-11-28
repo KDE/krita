@@ -37,7 +37,7 @@ class SimpleCitationBibliographyWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SimpleCitationBibliographyWidget(ReferencesTool *tool,QWidget *parent = 0);
+    explicit SimpleCitationBibliographyWidget(ReferencesTool *tool, QWidget *parent = 0);
     ~SimpleCitationBibliographyWidget();
 
 public Q_SLOTS:
@@ -51,7 +51,7 @@ private Q_SLOTS:
 
 Q_SIGNALS:
     void doneWithFocus();
-    
+
 private:
     Ui::SimpleCitationBibliographyWidget widget;
     KoStyleManager *m_styleManager;

@@ -22,8 +22,8 @@
 #include "ArtisticTextShape.h"
 #include <KoPathShape.h>
 
-ArtisticTextShapeLoadingUpdater::ArtisticTextShapeLoadingUpdater(ArtisticTextShape * artisticTextShape)
-: m_artisticTextShape(artisticTextShape)
+ArtisticTextShapeLoadingUpdater::ArtisticTextShapeLoadingUpdater(ArtisticTextShape *artisticTextShape)
+    : m_artisticTextShape(artisticTextShape)
 {
 }
 
@@ -31,15 +31,15 @@ ArtisticTextShapeLoadingUpdater::~ArtisticTextShapeLoadingUpdater()
 {
 }
 
-void ArtisticTextShapeLoadingUpdater::update(KoShape * shape)
+void ArtisticTextShapeLoadingUpdater::update(KoShape *shape)
 {
     // we have already loaded the correct transformation, so save it here
     // and apply after putting us on the path shape
     QTransform matrix = m_artisticTextShape->transformation();
-    
+
     // putting us on the path shape resulting in a changed transformation
-    m_artisticTextShape->putOnPath(dynamic_cast<KoPathShape*>(shape));
+    m_artisticTextShape->putOnPath(dynamic_cast<KoPathShape *>(shape));
 
     // resetting the transformation to the former state
-    m_artisticTextShape->setTransformation( matrix );
+    m_artisticTextShape->setTransformation(matrix);
 }

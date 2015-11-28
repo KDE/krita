@@ -44,7 +44,7 @@ public:
 
     /** Re-implement from QAbstractItemModel. */
 
-    virtual QModelIndex index(int row, int column=0, const QModelIndex &parent = QModelIndex()) const;
+    virtual QModelIndex index(int row, int column = 0, const QModelIndex &parent = QModelIndex()) const;
 
     virtual QModelIndex parent(const QModelIndex &child) const;
 

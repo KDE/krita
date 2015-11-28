@@ -34,8 +34,7 @@ class KoTextDocumentLayout;
 
 class QTextDocument;
 
-struct ItemData
-{
+struct ItemData {
     int changeId;
     QList<QPair<int, int> > changeRanges;
     KoGenChange::Type changeType;
@@ -59,7 +58,7 @@ public:
     void appendChild(ModelItem *child);
 
     ModelItem *child(int row);
-    QList<ModelItem*> children();
+    QList<ModelItem *> children();
     int childCount() const;
     int row() const;
     ModelItem *parent();
@@ -71,7 +70,7 @@ public:
     void removeChildren();
 
 private:
-    QList<ModelItem*> m_childItems;
+    QList<ModelItem *> m_childItems;
     ModelItem *m_parentItem;
     ItemData m_data;
 };
@@ -107,7 +106,7 @@ private:
     KoTextDocumentLayout *m_layout;
 
     QHash<int, int> m_changeOccurenceCounter;
-    QHash<int, ModelItem*> m_changeItems;
+    QHash<int, ModelItem *> m_changeItems;
 };
 
 #endif // TRACKEDCHANGEMODEL_H

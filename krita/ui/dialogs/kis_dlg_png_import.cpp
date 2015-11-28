@@ -45,7 +45,7 @@ KisDlgPngImport::KisDlgPngImport(const QString &path, const QString &colorModelI
     if (csf) {
         QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
 
-        foreach(const KoColorProfile *profile, profileList) {
+        Q_FOREACH (const KoColorProfile *profile, profileList) {
             dlgWidget.cmbProfile->addSqueezedItem(profile->name());
         }
         KisConfig cfg;

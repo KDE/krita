@@ -24,16 +24,16 @@
 #include <klocalizedstring.h>
 
 ColorMatrixEffectFactory::ColorMatrixEffectFactory()
-        : KoFilterEffectFactoryBase(ColorMatrixEffectId, i18n("Color matrix"))
+    : KoFilterEffectFactoryBase(ColorMatrixEffectId, i18n("Color matrix"))
 {
 }
 
-KoFilterEffect * ColorMatrixEffectFactory::createFilterEffect() const
+KoFilterEffect *ColorMatrixEffectFactory::createFilterEffect() const
 {
     return new ColorMatrixEffect();
 }
 
-KoFilterEffectConfigWidgetBase * ColorMatrixEffectFactory::createConfigWidget() const
+KoFilterEffectConfigWidgetBase *ColorMatrixEffectFactory::createConfigWidget() const
 {
     return new ColorMatrixEffectConfigWidget();
 }

@@ -15,12 +15,12 @@ QStringList findIconPaths(const QString &baseName, const QDir startDir)
 
     QFileInfoList icons = startDir.entryInfoList(filters, QDir::Files);
     QStringList results;
-    foreach(const QFileInfo &icon, icons) {
+    Q_FOREACH (const QFileInfo &icon, icons) {
         results << icon.absoluteFilePath();
     }
 
     QStringList subdirs = startDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-    foreach(const QString &subdir, subdirs) {
+    Q_FOREACH (const QString &subdir, subdirs) {
         results << findIconPaths(baseName, QDir(startDir.absolutePath() + "/" + subdir));
     }
     return results;
@@ -62,16 +62,16 @@ int main(int argc, char *argv[])
                 "<RCC version=\"1.0\">\n"
                 "\t<qresource>\n");
 
-    foreach(const QByteArray &iconName, iconNames) {
+    Q_FOREACH (const QByteArray &iconName, iconNames) {
         if (!iconName.isEmpty()) {
-            foreach(const QString &theme, themes) {
+            Q_FOREACH (const QString &theme, themes) {
                 QStringList iconPaths = findIconPaths(QString::fromLatin1(iconName), QDir(theme));
                 if (iconPaths.isEmpty()) {
                     qDebug() << "Could not find" << iconName << "in theme" << theme;
                 }
                 else {
                     bool dark = theme.contains("dark");
-                    foreach(const QString &iconPath, iconPaths) {
+                    Q_FOREACH (const QString &iconPath, iconPaths) {
                         QFileInfo fi(iconPath);
                         // Check whether the path contains a size
                         QStringList parts = fi.absolutePath().split('/');

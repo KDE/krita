@@ -31,7 +31,7 @@ KisCurveOption::KisCurveOption(const QString& name, KisPaintOpOption::PaintopCat
     , m_useSameCurve(true)
     , m_separateCurveValue(false)
 {
-    foreach (const DynamicSensorType sensorType, KisDynamicSensor::sensorsTypes()) {
+    Q_FOREACH (const DynamicSensorType sensorType, KisDynamicSensor::sensorsTypes()) {
         KisDynamicSensorSP sensor = KisDynamicSensor::type2Sensor(sensorType);
         sensor->setActive(false);
         replaceSensor(sensor);
@@ -74,7 +74,7 @@ qreal KisCurveOption::value() const
 
 void KisCurveOption::resetAllSensors()
 {
-    foreach (KisDynamicSensorSP sensor, m_sensorMap.values()) {
+    Q_FOREACH (KisDynamicSensorSP sensor, m_sensorMap.values()) {
         if (sensor->isActive()) {
             sensor->reset();
         }
@@ -96,7 +96,7 @@ void KisCurveOption::writeOptionSetting(KisPropertiesConfiguration* setting) con
         doc.appendChild(root);
         root.setAttribute("id", "sensorslist");
 
-        foreach (KisDynamicSensorSP sensor, activeSensors()) {
+        Q_FOREACH (KisDynamicSensorSP sensor, activeSensors()) {
             QDomElement childelt = doc.createElement("ChildSensor");
             sensor->toXML(doc, childelt);
             root.appendChild(childelt);
@@ -134,7 +134,7 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
     m_sensorMap.clear();
 
     // Replace all sensors with the inactive defaults
-    foreach(const DynamicSensorType sensorType, KisDynamicSensor::sensorsTypes()) {
+    Q_FOREACH (const DynamicSensorType sensorType, KisDynamicSensor::sensorsTypes()) {
         replaceSensor(KisDynamicSensor::type2Sensor(sensorType));
     }
 
@@ -174,7 +174,7 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
     if (!setting->getString(prefix + "Sensor").contains("curve")) {
         //dbgKrita << "\told format";
         if (setting->getBool("Custom" + prefix, false)) {
-            foreach(KisDynamicSensorSP s, m_sensorMap.values()) {
+            Q_FOREACH (KisDynamicSensorSP s, m_sensorMap.values()) {
                 s->setCurve(setting->getCubicCurve("Curve" + prefix));
             }
         }
@@ -264,7 +264,7 @@ void KisCurveOption::setCurve(DynamicSensorType sensorType, bool useSameCurve, c
     // No switch in state, don't mess with the cache
     if (useSameCurve == m_useSameCurve) {
         if (useSameCurve) {
-            foreach(KisDynamicSensorSP s, m_sensorMap.values()) {
+            Q_FOREACH (KisDynamicSensorSP s, m_sensorMap.values()) {
                 s->setCurve(curve);
             }
         }
@@ -281,7 +281,7 @@ void KisCurveOption::setCurve(DynamicSensorType sensorType, bool useSameCurve, c
         if (!m_useSameCurve && useSameCurve) {
             // Copy the custom curves to the cache and set the new curve on all sensors, active or not
             m_curveCache.clear();
-            foreach(KisDynamicSensorSP s, m_sensorMap.values()) {
+            Q_FOREACH (KisDynamicSensorSP s, m_sensorMap.values()) {
                 m_curveCache[s->sensorType()] = s->curve();
                 s->setCurve(curve);
             }
@@ -289,7 +289,7 @@ void KisCurveOption::setCurve(DynamicSensorType sensorType, bool useSameCurve, c
         else { //if (m_useSameCurve && !useSameCurve)
             // Restore the cached curves
             KisDynamicSensorSP s = 0;
-            foreach(DynamicSensorType sensorType, m_curveCache.keys()) {
+            Q_FOREACH (DynamicSensorType sensorType, m_curveCache.keys()) {
                 if (m_sensorMap.contains(sensorType)) {
                     s = m_sensorMap[sensorType];
                 }
@@ -340,7 +340,7 @@ double KisCurveOption::computeValue(const KisPaintInformation& info) const
 
         QVector<KisDynamicSensorSP> additiveSensors;
 
-        foreach (KisDynamicSensorSP s, m_sensorMap.values()) {
+        Q_FOREACH (KisDynamicSensorSP s, m_sensorMap.values()) {
             if (s->isActive()) {
                 if (!s->isAdditive()) {
                     t *= s->parameter(info);
@@ -353,7 +353,7 @@ double KisCurveOption::computeValue(const KisPaintInformation& info) const
         }
 
         // add up addivite sensors to the result
-        foreach (KisDynamicSensorSP s, additiveSensors) {
+        Q_FOREACH (KisDynamicSensorSP s, additiveSensors) {
             qreal t0 = t;
             qreal v = s->parameter(info);
 
@@ -378,7 +378,7 @@ QList<KisDynamicSensorSP> KisCurveOption::sensors()
 QList<KisDynamicSensorSP> KisCurveOption::activeSensors() const
 {
     QList<KisDynamicSensorSP> sensorList;
-    foreach(KisDynamicSensorSP sensor, m_sensorMap.values()) {
+    Q_FOREACH (KisDynamicSensorSP sensor, m_sensorMap.values()) {
         if (sensor->isActive()) {
             sensorList << sensor;
         }

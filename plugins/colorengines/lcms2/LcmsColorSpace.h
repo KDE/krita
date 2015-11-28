@@ -26,7 +26,6 @@
 #include <KoColorSpaceAbstract.h>
 #include <KoColorSpaceRegistry.h>
 
-
 class KoLcmsInfo
 {
     struct Private {
@@ -43,27 +42,30 @@ public:
         d->colorSpaceSignature = colorSpaceSignature;
     }
 
-    virtual ~KoLcmsInfo() {
+    virtual ~KoLcmsInfo()
+    {
         delete d;
     }
 
-    virtual quint32 colorSpaceType() const {
+    virtual quint32 colorSpaceType() const
+    {
         return d->cmType;
     }
 
-    virtual cmsColorSpaceSignature colorSpaceSignature() const {
+    virtual cmsColorSpaceSignature colorSpaceSignature() const
+    {
         return d->colorSpaceSignature;
     }
 
 private:
-    Private* const d;
+    Private *const d;
 };
 
 struct KoLcmsDefaultTransformations {
     cmsHTRANSFORM toRGB;
     cmsHTRANSFORM fromRGB;
     static cmsHPROFILE s_RGBProfile;
-    static QMap< QString, QMap< LcmsColorProfileContainer*, KoLcmsDefaultTransformations* > > s_transformations;
+    static QMap< QString, QMap< LcmsColorProfileContainer *, KoLcmsDefaultTransformations * > > s_transformations;
 };
 
 /**
@@ -75,7 +77,7 @@ class LcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo
 {
     struct KoLcmsColorTransformation : public KoColorTransformation {
 
-        KoLcmsColorTransformation(const KoColorSpace* colorSpace)
+        KoLcmsColorTransformation(const KoColorSpace *colorSpace)
             : KoColorTransformation()
             , m_colorSpace(colorSpace)
         {
@@ -87,26 +89,31 @@ class LcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo
             profiles[2] = 0;
         }
 
-        ~KoLcmsColorTransformation() {
+        ~KoLcmsColorTransformation()
+        {
 
-            if (cmstransform)
+            if (cmstransform) {
                 cmsDeleteTransform(cmstransform);
-            if (profiles[0] && profiles[0] != csProfile)
+            }
+            if (profiles[0] && profiles[0] != csProfile) {
                 cmsCloseProfile(profiles[0]);
-            if (profiles[1] && profiles[1] != csProfile)
+            }
+            if (profiles[1] && profiles[1] != csProfile) {
                 cmsCloseProfile(profiles[1]);
-            if (profiles[2] && profiles[2] != csProfile)
+            }
+            if (profiles[2] && profiles[2] != csProfile) {
                 cmsCloseProfile(profiles[2]);
+            }
         }
 
-        virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const {
+        virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
+        {
             cmsDoTransform(cmstransform, const_cast<quint8 *>(src), dst, nPixels);
-
 
             qint32 numPixels = nPixels;
             qint32 pixelSize = m_colorSpace->pixelSize();
             int index = 0;
-            
+
             if (cmsAlphaTransform) {
                 qreal *alpha = new qreal[nPixels];
                 qreal *dstalpha = new qreal[nPixels];
@@ -116,17 +123,16 @@ class LcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo
                     src += pixelSize;
                     index++;
                 }
-                
+
                 cmsDoTransform(cmsAlphaTransform, const_cast<qreal *>(alpha), static_cast<qreal *>(dstalpha), nPixels);
-                for(int i = 0 ; i < numPixels ; i++) {
+                for (int i = 0; i < numPixels; i++) {
                     m_colorSpace->setOpacity(dst, dstalpha[i], 1);
                     dst += pixelSize;
                 }
-                
+
                 delete [] alpha;
                 delete [] dstalpha;
-            }
-            else {
+            } else {
                 while (numPixels > 0) {
                     qreal alpha = m_colorSpace->opacityF(src);
                     m_colorSpace->setOpacity(dst, alpha, 1);
@@ -136,8 +142,8 @@ class LcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo
                 }
             }
         }
-            
-        const KoColorSpace* m_colorSpace;
+
+        const KoColorSpace *m_colorSpace;
         cmsHPROFILE csProfile;
         cmsHPROFILE profiles[3];
         cmsHTRANSFORM cmstransform;
@@ -146,13 +152,13 @@ class LcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo
 
     struct Private {
         mutable quint8 *qcolordata; // A small buffer for conversion from and to qcolor.
-        KoLcmsDefaultTransformations* defaultTransformations;
+        KoLcmsDefaultTransformations *defaultTransformations;
 
         mutable cmsHPROFILE   lastRGBProfile;  // Last used profile to transform to/from RGB
         mutable cmsHTRANSFORM lastToRGB;       // Last used transform to transform to RGB
         mutable cmsHTRANSFORM lastFromRGB;     // Last used transform to transform from RGB
         LcmsColorProfileContainer *profile;
-        KoColorProfile* colorProfile;
+        KoColorProfile *colorProfile;
     };
 
 protected:
@@ -178,13 +184,15 @@ protected:
         d->defaultTransformations = 0;
     }
 
-    virtual ~LcmsColorSpace() {
+    virtual ~LcmsColorSpace()
+    {
         delete d->colorProfile;
         delete[] d->qcolordata;
         delete d;
     }
 
-    void init() {
+    void init()
+    {
         // Default pixel buffer for QColor conversion
         d->qcolordata = new quint8[3];
         Q_CHECK_PTR(d->qcolordata);
@@ -198,18 +206,18 @@ protected:
         if (!d->defaultTransformations) {
             d->defaultTransformations = new KoLcmsDefaultTransformations;
             d->defaultTransformations->fromRGB = cmsCreateTransform(KoLcmsDefaultTransformations::s_RGBProfile,
-                                                                    TYPE_BGR_8,
-                                                                    d->profile->lcmsProfile(),
-                                                                    this->colorSpaceType(),
-                                                                    KoColorConversionTransformation::internalRenderingIntent(),
-                                                                    KoColorConversionTransformation::internalConversionFlags());
+                                                 TYPE_BGR_8,
+                                                 d->profile->lcmsProfile(),
+                                                 this->colorSpaceType(),
+                                                 KoColorConversionTransformation::internalRenderingIntent(),
+                                                 KoColorConversionTransformation::internalConversionFlags());
             Q_ASSERT(d->defaultTransformations->fromRGB);
             d->defaultTransformations->toRGB = cmsCreateTransform(d->profile->lcmsProfile(),
-                                                                  this->colorSpaceType(),
-                                                                  KoLcmsDefaultTransformations::s_RGBProfile,
-                                                                  TYPE_BGR_8,
-                                                                  KoColorConversionTransformation::internalRenderingIntent(),
-                                                                  KoColorConversionTransformation::internalConversionFlags());
+                                               this->colorSpaceType(),
+                                               KoLcmsDefaultTransformations::s_RGBProfile,
+                                               TYPE_BGR_8,
+                                               KoColorConversionTransformation::internalRenderingIntent(),
+                                               KoColorConversionTransformation::internalConversionFlags());
             Q_ASSERT(d->defaultTransformations->toRGB);
             KoLcmsDefaultTransformations::s_transformations[ this->id()][ d->profile ] = d->defaultTransformations;
         }
@@ -217,25 +225,29 @@ protected:
 
 public:
 
-    virtual bool hasHighDynamicRange() const {
+    virtual bool hasHighDynamicRange() const
+    {
         return false;
     }
 
-    virtual const KoColorProfile * profile() const {
+    virtual const KoColorProfile *profile() const
+    {
         return d->colorProfile;
     }
 
-    virtual bool profileIsCompatible(const KoColorProfile* profile) const {
-        const IccColorProfile* p = dynamic_cast<const IccColorProfile*>(profile);
+    virtual bool profileIsCompatible(const KoColorProfile *profile) const
+    {
+        const IccColorProfile *p = dynamic_cast<const IccColorProfile *>(profile);
         return (p && p->asLcms()->colorSpaceSignature() == colorSpaceSignature());
     }
 
-    virtual void fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * koprofile = 0) const {
+    virtual void fromQColor(const QColor &color, quint8 *dst, const KoColorProfile *koprofile = 0) const
+    {
         d->qcolordata[2] = color.red();
         d->qcolordata[1] = color.green();
         d->qcolordata[0] = color.blue();
 
-        LcmsColorProfileContainer* profile = asLcmsProfile(koprofile);
+        LcmsColorProfileContainer *profile = asLcmsProfile(koprofile);
         if (profile == 0) {
             // Default sRGB
             Q_ASSERT(d->defaultTransformations && d->defaultTransformations->fromRGB);
@@ -255,11 +267,12 @@ public:
             cmsDoTransform(d->lastFromRGB, d->qcolordata, dst, 1);
         }
 
-        this->setOpacity(dst, (quint8)(color.alpha()) , 1);
+        this->setOpacity(dst, (quint8)(color.alpha()), 1);
     }
 
-    virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile * koprofile = 0) const {
-        LcmsColorProfileContainer* profile = asLcmsProfile(koprofile);
+    virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile *koprofile = 0) const
+    {
+        LcmsColorProfileContainer *profile = asLcmsProfile(koprofile);
         if (profile == 0) {
             // Default sRGB transform
             Q_ASSERT(d->defaultTransformations && d->defaultTransformations->toRGB);
@@ -278,11 +291,14 @@ public:
         c->setAlpha(this->opacityU8(src));
     }
 
-    virtual KoColorTransformation *createBrightnessContrastAdjustment(const quint16 *transferValues) const {
-        if (!d->profile) return 0;
+    virtual KoColorTransformation *createBrightnessContrastAdjustment(const quint16 *transferValues) const
+    {
+        if (!d->profile) {
+            return 0;
+        }
 
-        cmsToneCurve* transferFunctions[3];
-        transferFunctions[0] = cmsBuildTabulatedToneCurve16( 0, 256, transferValues);
+        cmsToneCurve *transferFunctions[3];
+        transferFunctions[0] = cmsBuildTabulatedToneCurve16(0, 256, transferValues);
         transferFunctions[1] = cmsBuildGamma(0, 1.0);
         transferFunctions[2] = cmsBuildGamma(0, 1.0);
 
@@ -293,28 +309,30 @@ public:
         adj->profiles[0] = d->profile->lcmsProfile();
         adj->profiles[2] = d->profile->lcmsProfile();
         adj->cmstransform  = cmsCreateMultiprofileTransform(adj->profiles, 3, this->colorSpaceType(), this->colorSpaceType(),
-                                                            KoColorConversionTransformation::adjustmentRenderingIntent(),
-                                                            KoColorConversionTransformation::adjustmentConversionFlags());
+                             KoColorConversionTransformation::adjustmentRenderingIntent(),
+                             KoColorConversionTransformation::adjustmentConversionFlags());
         adj->csProfile = d->profile->lcmsProfile();
         return adj;
     }
 
+    virtual KoColorTransformation *createPerChannelAdjustment(const quint16 *const *transferValues) const
+    {
+        if (!d->profile) {
+            return 0;
+        }
 
-    virtual KoColorTransformation *createPerChannelAdjustment(const quint16 * const*transferValues) const {
-        if (!d->profile) return 0;
-
-        cmsToneCurve ** transferFunctions = new cmsToneCurve*[ this->colorChannelCount()];
+        cmsToneCurve **transferFunctions = new cmsToneCurve*[ this->colorChannelCount()];
 
         for (uint ch = 0; ch < this->colorChannelCount(); ch++) {
             transferFunctions[ch] = transferValues[ch] ?
-                cmsBuildTabulatedToneCurve16( 0, 256, transferValues[ch]) :
-                cmsBuildGamma(0, 1.0);
+                                    cmsBuildTabulatedToneCurve16(0, 256, transferValues[ch]) :
+                                    cmsBuildGamma(0, 1.0);
         }
 
-        cmsToneCurve ** alphaTransferFunctions = new cmsToneCurve*[1];
+        cmsToneCurve **alphaTransferFunctions = new cmsToneCurve*[1];
         alphaTransferFunctions[0] = transferValues[this->colorChannelCount()] ?
-            cmsBuildTabulatedToneCurve16( 0, 256, transferValues[this->colorChannelCount()]) :
-            cmsBuildGamma(0, 1.0);
+                                    cmsBuildTabulatedToneCurve16(0, 256, transferValues[this->colorChannelCount()]) :
+                                    cmsBuildGamma(0, 1.0);
 
         KoLcmsColorTransformation *adj = new KoLcmsColorTransformation(this);
         adj->profiles[0] = cmsCreateLinearizationDeviceLink(this->colorSpaceSignature(), transferFunctions);
@@ -324,23 +342,25 @@ public:
         adj->cmstransform  = cmsCreateTransform(adj->profiles[0], this->colorSpaceType(), NULL, this->colorSpaceType(),
                                                 KoColorConversionTransformation::adjustmentRenderingIntent(),
                                                 KoColorConversionTransformation::adjustmentConversionFlags());
-        
+
         adj->cmsAlphaTransform  = cmsCreateTransform(adj->profiles[1], TYPE_GRAY_DBL, NULL, TYPE_GRAY_DBL,
-                                                     KoColorConversionTransformation::adjustmentRenderingIntent(),
-                                                     KoColorConversionTransformation::adjustmentConversionFlags());
+                                  KoColorConversionTransformation::adjustmentRenderingIntent(),
+                                  KoColorConversionTransformation::adjustmentConversionFlags());
 
         delete [] transferFunctions;
         delete [] alphaTransferFunctions;
         return adj;
     }
 
-    virtual quint8 difference(const quint8* src1, const quint8* src2) const {
+    virtual quint8 difference(const quint8 *src1, const quint8 *src2) const
+    {
         quint8 lab1[8], lab2[8];
         cmsCIELab labF1, labF2;
 
         if (this->opacityU8(src1) == OPACITY_TRANSPARENT_U8
-                || this->opacityU8(src2) == OPACITY_TRANSPARENT_U8)
+                || this->opacityU8(src2) == OPACITY_TRANSPARENT_U8) {
             return (this->opacityU8(src1) == this->opacityU8(src2) ? 0 : 255);
+        }
         Q_ASSERT(this->toLabA16Converter());
         this->toLabA16Converter()->transform(src1, lab1, 1);
         this->toLabA16Converter()->transform(src2, lab2, 1);
@@ -348,21 +368,24 @@ public:
         cmsLabEncoded2Float(&labF2, (cmsUInt16Number *)lab2);
         qreal diff = cmsDeltaE(&labF1, &labF2);
 
-        if (diff > 255.0)
+        if (diff > 255.0) {
             return 255;
-        else
+        } else {
             return quint8(diff);
+        }
     }
 
-    virtual quint8 differenceA(const quint8* src1, const quint8* src2) const {
+    virtual quint8 differenceA(const quint8 *src1, const quint8 *src2) const
+    {
         quint8 lab1[8];
         quint8 lab2[8];
         cmsCIELab labF1;
         cmsCIELab labF2;
 
         if (this->opacityU8(src1) == OPACITY_TRANSPARENT_U8
-                || this->opacityU8(src2) == OPACITY_TRANSPARENT_U8)
+                || this->opacityU8(src2) == OPACITY_TRANSPARENT_U8) {
             return (this->opacityU8(src1) == this->opacityU8(src2) ? 0 : 255);
+        }
         Q_ASSERT(this->toLabA16Converter());
         this->toLabA16Converter()->transform(src1, lab1, 1);
         this->toLabA16Converter()->transform(src2, lab2, 1);
@@ -380,28 +403,33 @@ public:
 
         static const int LabAAlphaPos = 3;
         static const cmsFloat64Number alphaScale = 100.0 / KoColorSpaceMathsTraits<quint16>::max;
-        quint16 alpha1 = reinterpret_cast<quint16*>(lab1)[LabAAlphaPos];
-        quint16 alpha2 = reinterpret_cast<quint16*>(lab2)[LabAAlphaPos];
+        quint16 alpha1 = reinterpret_cast<quint16 *>(lab1)[LabAAlphaPos];
+        quint16 alpha2 = reinterpret_cast<quint16 *>(lab2)[LabAAlphaPos];
         dAlpha = fabs((qreal)(alpha1 - alpha2)) * alphaScale;
 
         qreal diff = pow(dL * dL + da * da + db * db + dAlpha * dAlpha, 0.5);
 
-        if (diff > 255.0)
+        if (diff > 255.0) {
             return 255;
-        else
+        } else {
             return quint8(diff);
+        }
     }
 
 private:
 
-    inline LcmsColorProfileContainer* lcmsProfile() const {
+    inline LcmsColorProfileContainer *lcmsProfile() const
+    {
         return d->profile;
     }
 
-    inline static LcmsColorProfileContainer* asLcmsProfile(const KoColorProfile* p) {
-        if (!p) return 0;
+    inline static LcmsColorProfileContainer *asLcmsProfile(const KoColorProfile *p)
+    {
+        if (!p) {
+            return 0;
+        }
 
-        const IccColorProfile* iccp = dynamic_cast<const IccColorProfile*>(p);
+        const IccColorProfile *iccp = dynamic_cast<const IccColorProfile *>(p);
 
         if (!iccp) {
             return 0;
@@ -412,7 +440,7 @@ private:
         return iccp->asLcms();
     }
 
-    Private * const d;
+    Private *const d;
 };
 
 /**
@@ -426,21 +454,24 @@ public:
     {
     }
 
-    virtual bool profileIsCompatible(const KoColorProfile* profile) const {
-        const IccColorProfile* p = dynamic_cast<const IccColorProfile*>(profile);
+    virtual bool profileIsCompatible(const KoColorProfile *profile) const
+    {
+        const IccColorProfile *p = dynamic_cast<const IccColorProfile *>(profile);
         return (p && p->asLcms()->colorSpaceSignature() == colorSpaceSignature());
     }
 
-    virtual QString colorSpaceEngine() const {
+    virtual QString colorSpaceEngine() const
+    {
         return "icc";
     }
 
-    virtual bool isHdr() const {
+    virtual bool isHdr() const
+    {
         return false;
     }
 
-    virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
-    virtual KoColorProfile* createColorProfile(const QByteArray& rawData) const;
+    virtual QList<KoColorConversionTransformationFactory *> colorConversionLinks() const;
+    virtual KoColorProfile *createColorProfile(const QByteArray &rawData) const;
 };
 
 #endif

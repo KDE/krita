@@ -56,7 +56,8 @@ public:
     virtual void undo();
 
     /// reimplemnted from KUndo2Command
-    virtual int id() const {
+    virtual int id() const
+    {
         return 58450689;
     }
     /// reimplemnted from KUndo2Command
@@ -69,7 +70,7 @@ private:
     int m_coefficient;
 
     QList<QTextBlock> m_blocks;
-    QHash<int, KoList*> m_lists;
+    QHash<int, KoList *> m_lists;
     QHash<int, int> m_levels;
 
     bool m_first;

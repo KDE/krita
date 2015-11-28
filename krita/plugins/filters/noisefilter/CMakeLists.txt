@@ -1,16 +1,16 @@
 
 
-set(kritanoisefilter_PART_SRCS
+set(kritanoisefilter_SOURCES
     noisefilter.cpp
     kis_wdg_noise.cpp
     )
 
 
-ki18n_wrap_ui(kritanoisefilter_PART_SRCS
+ki18n_wrap_ui(kritanoisefilter_SOURCES
     wdgnoiseoptions.ui
     )
 
-add_library(kritanoisefilter MODULE ${kritanoisefilter_PART_SRCS})
+add_library(kritanoisefilter MODULE ${kritanoisefilter_SOURCES})
 kcoreaddons_desktop_to_json(kritanoisefilter kritanoisefilter.desktop)
 
 

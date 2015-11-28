@@ -48,7 +48,7 @@ Graph::Graph(const QByteArray& from)
 
 Graph::~Graph()
 {
-    foreach(Vertex* vertex, m_vertices) {
+    Q_FOREACH (Vertex* vertex, m_vertices) {
         delete vertex;
     }
     m_vertices.clear();
@@ -62,7 +62,7 @@ void Graph::setSourceMimeType(const QByteArray& from)
     m_graphValid = false;
 
     // Initialize with "infinity" ...
-    foreach(Vertex* vertex, m_vertices) {
+    Q_FOREACH (Vertex* vertex, m_vertices) {
         vertex->reset();
     }
     // ...and re-run the shortest path search for the new source mime
@@ -103,7 +103,7 @@ void Graph::dump() const
 #ifndef NDEBUG
     dbgFile << "+++++++++ Graph::dump +++++++++";
     dbgFile << "From:" << m_from;
-    foreach(Vertex *vertex, m_vertices) {
+    Q_FOREACH (Vertex *vertex, m_vertices) {
         vertex->dump("   ");
     }
     dbgFile << "+++++++++ Graph::dump (done) +++++++++";
@@ -117,12 +117,12 @@ void Graph::buildGraph()
     // Make sure that all available parts are added to the graph
     const QList<KisDocumentEntry> parts(KisDocumentEntry::query());
 
-    foreach(const KisDocumentEntry& part, parts) {
+    Q_FOREACH (const KisDocumentEntry& part, parts) {
 
         QStringList nativeMimeTypes = part.loader()->metaData().value("MetaData").toObject().value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
         nativeMimeTypes += part.loader()->metaData().value("MetaData").toObject().value("X-KDE-NativeMimeType").toString();
 
-        foreach(const QString& nativeMimeType, nativeMimeTypes) {
+        Q_FOREACH (const QString& nativeMimeType, nativeMimeTypes) {
             const QByteArray key = nativeMimeType.toLatin1();
             if (!m_vertices.contains(key))
                 m_vertices[key] = new Vertex(key);
@@ -132,10 +132,10 @@ void Graph::buildGraph()
     // no constraint here - we want *all* :)
     const QList<KisFilterEntrySP> filters(KisFilterEntry::query());
 
-    foreach(KisFilterEntrySP filter, filters) {
+    Q_FOREACH (KisFilterEntrySP filter, filters) {
 
         // First add the "starting points" to the dict
-        foreach (const QString& import, filter->import) {
+        Q_FOREACH (const QString& import, filter->import) {
             const QByteArray key = import.toLatin1();    // latin1 is okay here (werner)
             // already there?
             if (!m_vertices.contains(key))
@@ -145,7 +145,7 @@ void Graph::buildGraph()
         // Are we allowed to use this filter at all?
         if (KisImportExportManager::filterAvailable(filter)) {
 
-            foreach(const QString& exportIt, filter->export_) {
+            Q_FOREACH (const QString& exportIt, filter->export_) {
 
                 // First make sure the export vertex is in place
                 const QByteArray key = exportIt.toLatin1();    // latin1 is okay here
@@ -155,7 +155,7 @@ void Graph::buildGraph()
                     m_vertices.insert(key, exp);
                 }
                 // Then create the appropriate edges
-                foreach(const QString& import, filter->import) {
+                Q_FOREACH (const QString& import, filter->import) {
                     m_vertices[import.toLatin1()]->addEdge(new Edge(exp, filter));
                 }
             }

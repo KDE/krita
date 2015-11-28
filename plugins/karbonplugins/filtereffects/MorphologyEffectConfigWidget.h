@@ -34,14 +34,14 @@ public:
     explicit MorphologyEffectConfigWidget(QWidget *parent = 0);
 
     /// reimplemented from KoFilterEffectConfigWidgetBase
-    virtual bool editFilterEffect(KoFilterEffect * filterEffect);
+    virtual bool editFilterEffect(KoFilterEffect *filterEffect);
 
 private Q_SLOTS:
     void radiusXChanged(double x);
     void radiusYChanged(double y);
     void operatorChanged(int op);
 private:
-    MorphologyEffect * m_effect;
+    MorphologyEffect *m_effect;
     QButtonGroup *m_operator;
     QDoubleSpinBox *m_radiusX;
     QDoubleSpinBox *m_radiusY;

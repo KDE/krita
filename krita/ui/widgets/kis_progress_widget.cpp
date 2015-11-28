@@ -68,7 +68,7 @@ KoProgressProxy* KisProgressWidget::progressProxy()
 
 void KisProgressWidget::cancel()
 {
-    foreach(KoProgressUpdater* updater, m_activeUpdaters) {
+    Q_FOREACH (KoProgressUpdater* updater, m_activeUpdaters) {
         updater->cancel();
     }
     emit sigCancellationRequested();

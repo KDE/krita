@@ -368,6 +368,8 @@ Theme* Theme::load(const QString& id, QObject* parent)
     QQmlComponent themeComponent(QmlGlobalEngine::instance()->engine(), parent);
     themeComponent.loadUrl(QUrl::fromLocalFile(qml), QQmlComponent::PreferSynchronous);
 
+    warnKrita << "+++++++++++" << themeComponent.url() << themeComponent.progress() << themeComponent.status();
+
     if(themeComponent.isError()) {
         warnKrita << themeComponent.errorString();
         return 0;

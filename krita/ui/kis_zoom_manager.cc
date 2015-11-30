@@ -46,7 +46,6 @@
 #include "kis_config.h"
 #include "krita_utils.h"
 #include "kis_canvas_resource_provider.h"
-#include "opengl/kis_opengl.h"
 #include "kis_lod_transform.h"
 
 

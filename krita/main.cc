@@ -38,7 +38,6 @@
 #include "ui/KisDocument.h"
 #include "kis_splash_screen.h"
 #include "KisPart.h"
-#include "opengl/kis_opengl.h"
 #include "KisApplicationArguments.h"
 
 #if defined Q_OS_WIN

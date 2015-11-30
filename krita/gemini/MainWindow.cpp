@@ -23,8 +23,6 @@
 #include "desktopviewproxy.h"
 #include "ViewModeSwitchEvent.h"
 
-#include "opengl/kis_opengl.h"
-
 #include <QApplication>
 #include <QResizeEvent>
 #include <QDeclarativeView>

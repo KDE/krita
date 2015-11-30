@@ -17,7 +17,6 @@
  */
 #include "SketchDeclarativeView.h"
 
-#include <opengl/kis_opengl.h>
 #include <QWidget>
 #include <QGLWidget>
 #include <QGLFramebufferObject>

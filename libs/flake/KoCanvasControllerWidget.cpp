@@ -43,7 +43,7 @@
 #include <QTimer>
 #include <QPointer>
 
-#include <KoConfig.h>
+#include <KoConfig.h> // for HAVE_OPENGL
 
 #ifdef HAVE_OPENGL
 #include <QOpenGLWidget>

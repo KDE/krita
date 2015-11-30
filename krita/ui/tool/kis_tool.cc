@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_tool.h"
-#include "opengl/kis_opengl.h"
 #include <QCursor>
 #include <QLabel>
 #include <QWidget>
@@ -28,6 +27,7 @@
 #include <kactioncollection.h>
 
 #include <kis_icon.h>
+#include <KoConfig.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
 #include <KoCanvasBase.h>
@@ -53,7 +53,9 @@
 #include <kis_transaction.h>
 #include <kis_floating_message.h>
 
+#ifdef HAVE_OPENGL
 #include "opengl/kis_opengl_canvas2.h"
+#endif
 #include "kis_canvas_resource_provider.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_coordinates_converter.h"

@@ -103,7 +103,9 @@ public:
     {
     }
 
-    KisTextureTileUpdateInfo(qint32 col, qint32 row, QRect tileRect, QRect updateRect, QRect currentImageRect, int levelOfDetail)
+    KisTextureTileUpdateInfo(qint32 col, qint32 row,
+                             const QRect &tileRect, const QRect &updateRect, const QRect &currentImageRect,
+                             int levelOfDetail)
         : m_patchPixelsLength(0)
     {
         m_tileCol = col;
@@ -129,7 +131,7 @@ public:
         }
     }
 
-    void retrieveData(KisImageWSP image, QBitArray channelFlags, bool onlyOneChannelSelected, int selectedChannelIndex)
+    void retrieveData(KisImageWSP image, const QBitArray &channelFlags, bool onlyOneChannelSelected, int selectedChannelIndex)
     {
         m_patchColorSpace = image->projection()->colorSpace();
 

@@ -31,12 +31,12 @@
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 
+#include <KoResourcePaths.h>
 #include <kiconloader.h>
 #include "data/splash/splash_screen.xpm"
 #include "MainWindow.h"
 
-// QT5TODO
-// #include "sketch/SketchInputContext.h"
+#include "sketch/SketchInputContext.h"
 
 #include <calligraversion.h>
 #include <calligragitversion.h>
@@ -181,10 +181,9 @@ int main( int argc, char** argv )
 
     MainWindow window(fileNames);
 
-// QT5TODO
-//     if (args->isSet("vkb")) {
-//         app.setInputContext(new SketchInputContext(&app));
-//     }
+    if (args->isSet("vkb")) {
+        app.setInputContext(new SketchInputContext(&app));
+    }
 
     if (args->isSet("sketch")) {
         window.setSlateMode(true);

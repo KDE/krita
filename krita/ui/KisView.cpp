@@ -52,8 +52,6 @@
 #include <QToolBar>
 #include <QUrl>
 #include <QStatusBar>
-#include <QOpenGLContext>
-#include <QOpenGLFunctions>
 #include <QMoveEvent>
 
 #include <kis_image.h>

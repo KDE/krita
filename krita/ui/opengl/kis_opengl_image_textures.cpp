@@ -19,7 +19,6 @@
 #include "opengl/kis_opengl_image_textures.h"
 
 #ifdef HAVE_OPENGL
-#include <QOpenGLWidget>
 #include <QOpenGLFunctions>
 #include <QOpenGLContext>
 

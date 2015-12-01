@@ -202,6 +202,7 @@ void KisOpenGLImageTextures::createImageTextureTiles()
         m_initialized = true;
         dbgUI  << "OpenGL: creating texture tiles of size" << m_texturesInfo.height << "x" << m_texturesInfo.width;
 
+        m_textureTiles.reserve((lastRow+1)*m_numCols);
         for (int row = 0; row <= lastRow; row++) {
             for (int col = 0; col <= lastCol; col++) {
                 QRect tileRect = calculateTileRect(col, row);

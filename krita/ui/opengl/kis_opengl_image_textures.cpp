@@ -182,9 +182,6 @@ void KisOpenGLImageTextures::createImageTextureTiles()
     m_storedImageBounds = m_image->bounds();
     const int lastCol = xToCol(m_image->width());
     const int lastRow = yToRow(m_image->height());
-    if (lastCol == 0) {
-      return;
-    }
 
     m_numCols = lastCol + 1;
 

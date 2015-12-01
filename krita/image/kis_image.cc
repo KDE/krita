@@ -1363,8 +1363,10 @@ QImage KisImage::convertToQImage(const QSize& scaledImageSize, const KoColorProf
         return QImage();
     }
 
-    KisPaintDeviceSP dev = new KisPaintDevice(*projection().data());
-
+    KisPaintDeviceSP dev = new KisPaintDevice(colorSpace());
+    KisPainter gc;
+    gc.copyAreaOptimized(QPoint(0, 0),projection(), dev, bounds());
+    gc.end();
     double scaleX = qreal(scaledImageSize.width()) / width();
     double scaleY = qreal(scaledImageSize.height()) / height();
 

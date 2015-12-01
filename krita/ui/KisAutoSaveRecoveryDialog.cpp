@@ -181,6 +181,8 @@ KisAutoSaveRecoveryDialog::KisAutoSaveRecoveryDialog(const QStringList &filename
     KoDialog(parent)
 {
     setCaption(i18nc("@title:window", "Recover Files"));
+    setButtons( KoDialog::Ok | KoDialog::Cancel | KoDialog::User1 );
+    setButtonText(KoDialog::User1, i18n("Discard All"));
     setMinimumSize(650, 500);
     QWidget *page = new QWidget(this);
     QVBoxLayout *layout = new QVBoxLayout(page);
@@ -234,8 +236,18 @@ KisAutoSaveRecoveryDialog::KisAutoSaveRecoveryDialog(const QStringList &filename
     layout->addWidget(m_listView);
     layout->addWidget(new QLabel(i18n("If you select Cancel, all recoverable files will be kept.\nIf you press OK, selected files will be recovered, the unselected files discarded.")));
     setMainWidget(page);
+    
+    setAttribute(Qt::WA_DeleteOnClose, true);
+    connect( this, SIGNAL( user1Clicked() ), this, SLOT( slotDeleteAll() ) );
 }
 
+void KisAutoSaveRecoveryDialog::slotDeleteAll()
+{
+    foreach(FileItem* fileItem, m_model->m_fileItems) {
+        fileItem->checked = false;
+    }
+    accept();
+}
 
 QStringList KisAutoSaveRecoveryDialog::recoverableFiles()
 {

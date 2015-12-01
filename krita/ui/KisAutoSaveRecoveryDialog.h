@@ -38,6 +38,7 @@ public:
 public Q_SLOTS:
 
     void toggleFileItem(bool toggle);
+    void slotDeleteAll();
 
 private:
 

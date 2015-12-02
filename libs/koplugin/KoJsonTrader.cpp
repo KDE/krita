@@ -97,12 +97,11 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
                 }
             }
 
-            if(!m_pluginPath.isEmpty()) {
+            if (!m_pluginPath.isEmpty()) {
                 break;
             }
         }
         qDebug() << "KoJsonTrader will load its plugins from" << m_pluginPath;
-
     }
 
     QList<QPluginLoader *>list;

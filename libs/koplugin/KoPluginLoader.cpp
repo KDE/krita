@@ -122,9 +122,14 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     }
 
     QList<QString> whiteList;
-    Q_FOREACH (QPluginLoader *loader, serviceNames) {
+    Q_FOREACH (const QString &serviceName, serviceNames.keys()) {
+//        qDebug() << "loading" << serviceName;
+        QPluginLoader *loader = serviceNames[serviceName];
         KPluginFactory *factory = qobject_cast<KPluginFactory *>(loader->instance());
-        QObject *plugin = factory->create<QObject>(owner ? owner : this, QVariantList());
+        QObject *plugin = 0;
+        if (factory) {
+            plugin = factory->create<QObject>(owner ? owner : this, QVariantList());
+        }
         if (plugin) {
             QJsonObject json = loader->metaData().value("MetaData").toObject();
             json = json.value("KPlugin").toObject();

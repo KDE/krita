@@ -31,7 +31,6 @@
 #include "operations/kis_operation.h"
 #include "kis_layer.h"
 #include "KisDocument.h"
-#include "kis_action_registry.h"
 
 #include "QFile"
 #include <QDomDocument>
@@ -164,10 +163,16 @@ KisAction *KisActionManager::createAction(const QString &name)
     // will add them to the KisActionRegistry for the time being so we can get
     // properly categorized shortcuts.
     a = new KisAction();
-    KisActionRegistry::instance()->propertizeAction(name, a);
-    KisActionRegistry::instance()->addAction(name, a);
+    auto actionRegistry = KisActionRegistry::instance();
 
-    // TODO: Add other static data (activationFlags, etc.) using getActionXml();
+    // Add extra properties
+    actionRegistry->propertizeAction(name, a);
+    actionRegistry->addAction(name, a);
+    bool ok; // We will skip this check
+    int activationFlags = actionRegistry->getActionProperty(name, "activationFlags").toInt(&ok, 2);
+    int activationConditions = actionRegistry->getActionProperty(name, "activationConditions").toInt(&ok, 2);
+    a->setActivationFlags((KisAction::ActivationFlags) activationFlags);
+    a->setActivationConditions((KisAction::ActivationConditions) activationConditions);
 
     addAction(name, a);
 

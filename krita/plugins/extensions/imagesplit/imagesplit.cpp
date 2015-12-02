@@ -54,7 +54,6 @@ Imagesplit::Imagesplit(QObject *parent, const QVariantList &)
     : KisViewPlugin(parent)
 {
     KisAction *action  = createAction("imagesplit");
-    action->setActivationFlags(KisAction::ACTIVE_NODE);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImagesplit()));
 }
 

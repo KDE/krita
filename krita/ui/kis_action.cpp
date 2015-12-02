@@ -19,7 +19,6 @@
 
 #include "kis_action.h"
 #include "kis_action_manager.h"
-#include "kis_action_registry.h"
 #include <QEvent>
 
 class Q_DECL_HIDDEN KisAction::Private {

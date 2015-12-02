@@ -2095,17 +2095,13 @@ void KisMainWindow::createActions()
     d->redo->setActivationFlags(KisAction::ACTIVE_IMAGE);
 
     d->exportPdf  = actionManager->createAction("file_export_pdf");
-    d->exportPdf->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    d->exportPdf->setIcon(KisIconUtils::loadIcon("application-pdf"));
     connect(d->exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));
 #ifdef HAVE_OPENGL
     d->exportAnimation  = actionManager->createAction("file_export_animation");
-    d->exportAnimation->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(d->exportAnimation, SIGNAL(triggered()), this, SLOT(exportAnimation()));
 #endif
 
     d->closeAll = actionManager->createAction("file_close_all");
-    d->closeAll->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(d->closeAll, SIGNAL(triggered()), this, SLOT(slotFileCloseAll()));
 
 //    d->reloadFile  = actionManager->createAction("file_reload_file");
@@ -2116,13 +2112,11 @@ void KisMainWindow::createActions()
     connect(d->importFile, SIGNAL(triggered(bool)), this, SLOT(slotImportFile()));
 
     d->exportFile  = actionManager->createAction("file_export_file");
-    d->exportFile->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(d->exportFile, SIGNAL(triggered(bool)), this, SLOT(slotExportFile()));
 
     /* The following entry opens the document information dialog.  Since the action is named so it
         intends to show data this entry should not have a trailing ellipses (...).  */
     d->showDocumentInfo  = actionManager->createAction("file_documentinfo");
-    d->showDocumentInfo->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(d->showDocumentInfo, SIGNAL(triggered(bool)), this, SLOT(slotDocumentInfo()));
 
 
@@ -2146,26 +2140,21 @@ void KisMainWindow::createActions()
     actionCollection()->addAction("window", d->windowMenu);
 
     d->mdiCascade = actionManager->createAction("windows_cascade");
-    d->mdiCascade->setActivationFlags(KisAction::MULTIPLE_IMAGES);
     connect(d->mdiCascade, SIGNAL(triggered()), d->mdiArea, SLOT(cascadeSubWindows()));
 
     d->mdiTile = actionManager->createAction("windows_tile");
-    d->mdiTile->setActivationFlags(KisAction::MULTIPLE_IMAGES);
     connect(d->mdiTile, SIGNAL(triggered()), d->mdiArea, SLOT(tileSubWindows()));
 
     d->mdiNextWindow = actionManager->createAction("windows_next");
-    d->mdiNextWindow->setActivationFlags(KisAction::MULTIPLE_IMAGES);
     connect(d->mdiNextWindow, SIGNAL(triggered()), d->mdiArea, SLOT(activateNextSubWindow()));
 
     d->mdiPreviousWindow = actionManager->createAction("windows_previous");
-    d->mdiPreviousWindow->setActivationFlags(KisAction::MULTIPLE_IMAGES);
     connect(d->mdiPreviousWindow, SIGNAL(triggered()), d->mdiArea, SLOT(activatePreviousSubWindow()));
 
     d->newWindow = actionManager->createAction("view_newwindow");
     connect(d->newWindow, SIGNAL(triggered(bool)), this, SLOT(newWindow()));
 
     d->close = actionManager->createAction("file_close");
-    d->close->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(d->close, SIGNAL(triggered()), SLOT(closeCurrentWindow()));
 
     actionManager->createStandardAction(KStandardAction::Preferences, this, SLOT(slotPreferences()));

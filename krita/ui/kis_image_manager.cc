@@ -59,33 +59,25 @@ void KisImageManager::setup(KisActionManager *actionManager)
 {
 
     KisAction *action  = actionManager->createAction("import_layer_from_file");
-    action->setActivationFlags(KisAction::ACTIVE_LAYER);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerFromFile()));
 
     action  = actionManager->createAction("image_properties");
-    action->setActivationFlags(KisAction::ACTIVE_NODE);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageProperties()));
 
     action  = actionManager->createAction("import_layer_as_paint_layer");
-    action->setActivationFlags(KisAction::ACTIVE_NODE);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerFromFile()));
 
     action  = actionManager->createAction("import_layer_as_transparency_mask");
-    action->setActivationFlags(KisAction::ACTIVE_NODE);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerAsTransparencyMask()));
 
     action  = actionManager->createAction("import_layer_as_filter_mask");
-    action->setActivationFlags(KisAction::ACTIVE_NODE);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerAsFilterMask()));
 
     action  = actionManager->createAction("import_layer_as_selection_mask");
-    action->setActivationFlags(KisAction::ACTIVE_NODE);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerAsSelectionMask()));
 
     action = actionManager->createAction("image_color");
-    action->setActivationFlags(KisAction::ACTIVE_NODE);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageColor()));
-
 }
 
 void KisImageManager::slotImportLayerFromFile()

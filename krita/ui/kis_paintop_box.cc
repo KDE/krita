@@ -79,7 +79,6 @@
 #include "tool/kis_tool.h"
 #include "kis_signals_blocker.h"
 #include "kis_action_manager.h"
-#include "kis_action_registry.h"
 
 typedef KoResourceServerSimpleConstruction<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
 typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
@@ -138,9 +137,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_eraseModeButton->setCheckable(true);
 
     m_eraseAction = m_viewManager->actionManager()->createAction("erase_action");
-    m_eraseAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    m_eraseAction->setIcon(KisIconUtils::loadIcon("draw-eraser"));
-    m_eraseAction->setCheckable(true);
     m_eraseModeButton->setDefaultAction(m_eraseAction);
 
     eraserBrushSize = 0; // brush size changed when using erase mode
@@ -150,8 +146,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_reloadButton->setCheckable(true);
 
     m_reloadAction = m_viewManager->actionManager()->createAction("reload_preset_action");
-    m_reloadAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    m_reloadAction->setIcon(KisIconUtils::loadIcon("view-refresh"));
     m_reloadButton->setDefaultAction(m_reloadAction);
 
     m_alphaLockButton = new QToolButton(this);
@@ -159,9 +153,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_alphaLockButton->setCheckable(true);
 
     KisAction* alphaLockAction = m_viewManager->actionManager()->createAction("preserve_alpha");
-    alphaLockAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    alphaLockAction->setIcon(KisIconUtils::loadIcon("transparency-unlocked"));
-    alphaLockAction->setCheckable(true);
     m_alphaLockButton->setDefaultAction(alphaLockAction);
 
     m_hMirrorButton = new QToolButton(this);
@@ -169,9 +160,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_hMirrorButton->setCheckable(true);
 
     m_hMirrorAction = m_viewManager->actionManager()->createAction("hmirror_action");
-    m_hMirrorAction->setIcon(KisIconUtils::loadIcon("symmetry-horizontal"));
-    m_hMirrorAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    m_hMirrorAction->setCheckable(true);
     m_hMirrorButton->setDefaultAction(m_hMirrorAction);
 
     m_vMirrorButton = new QToolButton(this);
@@ -179,9 +167,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_vMirrorButton->setCheckable(true);
 
     m_vMirrorAction = m_viewManager->actionManager()->createAction("vmirror_action");
-    m_vMirrorAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    m_vMirrorAction->setIcon(KisIconUtils::loadIcon("symmetry-vertical"));
-    m_vMirrorAction->setCheckable(true);
     m_vMirrorButton->setDefaultAction(m_vMirrorAction);
 
     const bool sliderLabels = cfg.sliderLabels();

@@ -634,11 +634,9 @@ KisUndoAdapter * KisViewManager::undoAdapter()
 void KisViewManager::createActions()
 {
     d->saveIncremental = actionManager()->createAction("save_incremental_version");
-    d->saveIncremental->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(d->saveIncremental, SIGNAL(triggered()), this, SLOT(slotSaveIncremental()));
 
     d->saveIncrementalBackup = actionManager()->createAction("save_incremental_backup");
-    d->saveIncrementalBackup->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(d->saveIncrementalBackup, SIGNAL(triggered()), this, SLOT(slotSaveIncrementalBackup()));
 
     connect(mainWindow(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
@@ -650,39 +648,24 @@ void KisViewManager::createActions()
     connect(tabletDebugger, SIGNAL(triggered()), this, SLOT(toggleTabletLogger()));
 
     d->createTemplate = actionManager()->createAction("create_template");
-    d->createTemplate->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
 
     d->createCopy = actionManager()->createAction("create_copy");
-    d->createCopy->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(d->createCopy, SIGNAL(triggered()), this, SLOT(slotCreateCopy()));
 
     d->openResourcesDirectory = actionManager()->createAction("open_resources_directory");
     connect(d->openResourcesDirectory, SIGNAL(triggered()), SLOT(openResourcesDirectory()));
 
-    d->rotateCanvasRight = actionManager()->createAction("rotate_canvas_right");
-    d->rotateCanvasRight->setActivationFlags(KisAction::ACTIVE_IMAGE);
-
-    d->rotateCanvasLeft = actionManager()->createAction("rotate_canvas_left");
-    d->rotateCanvasLeft->setActivationFlags(KisAction::ACTIVE_IMAGE);
-
-    d->wrapAroundAction = actionManager()->createAction("wrap_around_mode");
-    d->wrapAroundAction->setCheckable(true);
-    d->wrapAroundAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
-
+    d->rotateCanvasRight   = actionManager()->createAction("rotate_canvas_right");
+    d->rotateCanvasLeft    = actionManager()->createAction("rotate_canvas_left");
+    d->wrapAroundAction    = actionManager()->createAction("wrap_around_mode");
     d->levelOfDetailAction = actionManager()->createAction("level_of_detail_mode");
-    d->levelOfDetailAction->setCheckable(true);
-    d->levelOfDetailAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
 
     KisAction *tAction = actionManager()->createAction("showStatusBar");
-    tAction->setCheckable(true);
     tAction->setChecked(true);
-    tAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
     tAction = actionManager()->createAction("view_show_just_the_canvas");
-    tAction->setActivationFlags(KisAction::NONE);
-    tAction->setCheckable(true);
     tAction->setChecked(false);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showJustTheCanvas(bool)));
 
@@ -690,26 +673,18 @@ void KisViewManager::createActions()
     KisAction *a = dynamic_cast<KisAction*>(actionCollection()->action("format_italic"));
     if (a) {
         a->setDefaultShortcut(QKeySequence());
-        a->setActivationConditions(KisAction::SELECTION_EDITABLE);
     }
 
     a = actionManager()->createAction("edit_blacklist_cleanup");
     connect(a, SIGNAL(triggered()), this, SLOT(slotBlacklistCleanup()));
 
-    d->showRulersAction = actionManager()->createAction("view_ruler");
-    d->showRulersAction->setCheckable(true);
-    d->showRulersAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
     KisConfig cfg;
+    d->showRulersAction = actionManager()->createAction("view_ruler");
     d->showRulersAction->setChecked(cfg.showRulers());
 
-
     d->showGuidesAction = actionManager()->createAction("view_show_guides");
-    d->showGuidesAction->setCheckable(true);
-    d->showGuidesAction->setCheckable(false);
-    d->showGuidesAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
 
     d->zoomTo100pct = actionManager()->createAction("zoom_to_100pct");
-    d->zoomTo100pct->setActivationFlags(KisAction::ACTIVE_IMAGE);
 
     d->zoomIn = actionManager()->createStandardAction(KStandardAction::ZoomIn, 0, "");
     d->zoomOut = actionManager()->createStandardAction(KStandardAction::ZoomOut, 0, "");

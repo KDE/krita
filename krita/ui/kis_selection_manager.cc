@@ -125,11 +125,9 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_paste = actionManager->createStandardAction(KStandardAction::Paste, this, SLOT(paste()));
 
     KisAction *action = actionManager->createAction("copy_sharp");
-    action->setActivationFlags(KisAction::PIXELS_SELECTED);
     connect(action, SIGNAL(triggered()), this, SLOT(copySharp()));
 
     action = actionManager->createAction("cut_sharp");
-    action->setActivationFlags(KisAction::PIXELS_SELECTED);
     connect(action, SIGNAL(triggered()), this, SLOT(cutSharp()));
 
     m_pasteNew = actionManager->createAction("paste_new");
@@ -139,102 +137,73 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     connect(m_pasteAt, SIGNAL(triggered()), this, SLOT(pasteAt()));
 
     m_copyMerged = actionManager->createAction("copy_merged");
-    m_copyMerged->setActivationFlags(KisAction::PIXELS_SELECTED);
     connect(m_copyMerged, SIGNAL(triggered()), this, SLOT(copyMerged()));
 
     m_selectAll = actionManager->createAction("select_all");
     connect(m_selectAll, SIGNAL(triggered()), this, SLOT(selectAll()));
 
     m_deselect = actionManager->createAction("deselect");
-    m_deselect->setActivationFlags(KisAction::PIXELS_SELECTED | KisAction::SHAPES_SELECTED);
     connect(m_deselect, SIGNAL(triggered()), this, SLOT(deselect()));
 
     m_clear = actionManager->createAction("clear");
-    m_clear->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(m_clear, SIGNAL(triggered()), SLOT(clear()));
 
     m_reselect = actionManager->createAction("reselect");
     connect(m_reselect, SIGNAL(triggered()), this, SLOT(reselect()));
 
     m_invert = actionManager->createAction("invert");
-    m_invert->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
-    m_invert->setActivationConditions(KisAction::SELECTION_EDITABLE);
     m_invert->setOperationID("invertselection");
 
     actionManager->registerOperation(new KisInvertSelectionOperaton);
     
     m_copyToNewLayer = actionManager->createAction("copy_selection_to_new_layer");
-    m_copyToNewLayer->setActivationFlags(KisAction::PIXELS_SELECTED);
     connect(m_copyToNewLayer, SIGNAL(triggered()), this, SLOT(copySelectionToNewLayer()));
 
     m_cutToNewLayer = actionManager->createAction("cut_selection_to_new_layer");
-    m_cutToNewLayer->setActivationFlags(KisAction::PIXELS_SELECTED);
-    m_cutToNewLayer->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     connect(m_cutToNewLayer, SIGNAL(triggered()), this, SLOT(cutToNewLayer()));
 
     m_fillForegroundColor = actionManager->createAction("fill_selection_foreground_color");
-    m_fillForegroundColor->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    m_fillForegroundColor->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     connect(m_fillForegroundColor, SIGNAL(triggered()), this, SLOT(fillForegroundColor()));
 
     m_fillBackgroundColor  = actionManager->createAction("fill_selection_background_color");
-    m_fillBackgroundColor->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    m_fillBackgroundColor->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     connect(m_fillBackgroundColor, SIGNAL(triggered()), this, SLOT(fillBackgroundColor()));
 
     m_fillPattern = actionManager->createAction("fill_selection_pattern");
-    m_fillPattern->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    m_fillPattern->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     connect(m_fillPattern, SIGNAL(triggered()), this, SLOT(fillPattern()));
 
     m_fillForegroundColorOpacity  = actionManager->createAction("fill_selection_foreground_color_opacity");
-    m_fillForegroundColorOpacity->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    m_fillForegroundColorOpacity->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     connect(m_fillForegroundColorOpacity, SIGNAL(triggered()), this, SLOT(fillForegroundColorOpacity()));
 
     m_fillBackgroundColorOpacity  = actionManager->createAction("fill_selection_background_color_opacity");
-    m_fillBackgroundColorOpacity->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    m_fillBackgroundColorOpacity->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     connect(m_fillBackgroundColorOpacity, SIGNAL(triggered()), this, SLOT(fillBackgroundColorOpacity()));
 
     m_fillPatternOpacity  = actionManager->createAction("fill_selection_pattern_opacity");
-    m_fillPatternOpacity->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    m_fillPatternOpacity->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     connect(m_fillPatternOpacity, SIGNAL(triggered()), this, SLOT(fillPatternOpacity()));
 
     m_strokeShapes  = actionManager->createAction("stroke_shapes");
-    m_strokeShapes->setActivationFlags(KisAction::SHAPES_SELECTED);
     connect(m_strokeShapes, SIGNAL(triggered()), this, SLOT(paintSelectedShapes()));
 
     m_toggleDisplaySelection  = actionManager->createAction("toggle_display_selection");
-    m_toggleDisplaySelection->setCheckable(true);
-    m_toggleDisplaySelection->setActivationFlags(KisAction::ACTIVE_NODE);
     connect(m_toggleDisplaySelection, SIGNAL(triggered()), this, SLOT(toggleDisplaySelection()));
-
     m_toggleDisplaySelection->setChecked(true);
 
     m_imageResizeToSelection  = actionManager->createAction("resizeimagetoselection");
-    m_imageResizeToSelection->setActivationFlags(KisAction::PIXELS_SELECTED);
     connect(m_imageResizeToSelection, SIGNAL(triggered()), this, SLOT(imageResizeToSelection()));
 
     action = actionManager->createAction("convert_to_vector_selection");
-    action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
     connect(action, SIGNAL(triggered()), SLOT(convertToVectorSelection()));
 
     action = actionManager->createAction("convert_shapes_to_vector_selection");
-    action->setActivationFlags(KisAction::SHAPES_SELECTED);
     connect(action, SIGNAL(triggered()), SLOT(convertShapesToVectorSelection()));
 
     action = actionManager->createAction("convert_selection_to_shape");
-    action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
-    connect(action, SIGNAL(triggered()), SLOT(convertToShape())); 
+    connect(action, SIGNAL(triggered()), SLOT(convertToShape()));
 
     m_toggleSelectionOverlayMode  = actionManager->createAction("toggle-selection-overlay-mode");
     connect(m_toggleSelectionOverlayMode, SIGNAL(triggered()), SLOT(slotToggleSelectionDecoration()));
 
     QClipboard *cb = QApplication::clipboard();
     connect(cb, SIGNAL(dataChanged()), SLOT(clipboardDataChanged()));
-
 }
 
 

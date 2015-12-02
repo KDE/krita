@@ -133,7 +133,7 @@ void ReferencesTool::createActions()
 
     action = actionRegistry->makeQAction("format_tableofcontents", this);
     addAction("format_tableofcontents", action);
-    connect(action, SIGNAL(triggered().act), this, SLOT(formatTableOfContents()));
+    connect(action, SIGNAL(triggered()), this, SLOT(formatTableOfContents()));
 
     action = actionRegistry->makeQAction("insert_autofootnote", this);
     addAction("insert_autofootnote", action);

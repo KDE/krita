@@ -42,15 +42,8 @@ KisPaintingAssistantsManager::~KisPaintingAssistantsManager()
 
 void KisPaintingAssistantsManager::setup(KisActionManager * actionManager)
 {
-    m_toggleAssistant = new KisAction(i18n("Show Painting Assistants"), this);
-    m_toggleAssistant->setCheckable(true);
-    m_toggleAssistant->setActivationFlags(KisAction::ACTIVE_NODE);
-    actionManager->addAction("view_toggle_painting_assistants", m_toggleAssistant);
-
-    m_togglePreview = new KisAction(i18n("Show Assistant Previews"), this);
-    m_togglePreview->setCheckable(true);
-    m_togglePreview->setActivationFlags(KisAction::ACTIVE_NODE);
-    actionManager->addAction("view_toggle_assistant_previews", m_togglePreview);
+    m_toggleAssistant = actionManager->createAction("view_toggle_painting_assistants");
+    m_togglePreview   = actionManager->createAction("view_toggle_assistant_previews");
 
     updateAction();
 }

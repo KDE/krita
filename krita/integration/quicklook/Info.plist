@@ -11,15 +11,112 @@
 			<string>QLGenerator</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>org.krita.kra</string>
-				<string>org.freedesktop.ora</string>
+				<string>dyn.ah62d4rv4ge8006xb</string>
+                <string>org.krita.kra</string>
+                <string>org.krita.ora</string>
+                <string>public.data</string>
+                <string>public.item</string>
 			</array>
 		</dict>
 	</array>
+    <key>UTExportedTypeDeclarations</key>
+    <array>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>dyn.ah62d4rv4ge8006xb</string>
+            <key>UTTypeDescription</key>
+            <string>Krita 3.0 Image</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.png</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>kra</string>
+                    <string>KRA</string>
+                </array>
+                <key>public.mime-type</key>
+                <array>
+                    <string>application/x-krita</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>dyn.ah62d4rv4ge8006xb</string>
+            <key>UTTypeDescription</key>
+            <string>Open Raster Image</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.png</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>ora</string>
+                    <string>ORA</string>
+                </array>
+                <key>public.mime-type</key>
+                <array>
+                    <string>image/openraster</string>
+                </array>
+            </dict>
+        </dict>
+    </array>
+    <key>UTImportedTypeDeclarations</key>
+    <array>
+        <dict>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.png</string>
+            </array>
+            <key>UTTypeDescription</key>
+            <string>Krita 3.0 Image</string>
+            <key>UTTypeIdentifier</key>
+            <string>org.krita.kra</string>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>kra</string>
+                    <string>KRA</string>
+                </array>
+                <key>public.mime-type</key>
+                <array>
+                    <string>application/x-krita</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.png</string>
+            </array>
+            <key>UTTypeDescription</key>
+            <string>Open Raster Image</string>
+            <key>UTTypeIdentifier</key>
+            <string>org.krita.ora</string>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>ora</string>
+                    <string>ORA</string>
+                </array>
+                <key>public.mime-type</key>
+                <array>
+                    <string>image/openraster</string>
+                </array>
+            </dict>
+        </dict>
+    </array>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<string>org.$(PRODUCT_NAME:rfc1034identifier)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -36,20 +133,20 @@
 	<string>NO</string>
 	<key>CFPlugInFactories</key>
 	<dict>
-		<key>E58D9C7A-F1B5-406A-BBD9-F2E7C6EDD0B4</key>
+		<key>292DC9CD-1640-49AE-B0C1-308ED88E6677</key>
 		<string>QuickLookGeneratorPluginFactory</string>
 	</dict>
 	<key>CFPlugInTypes</key>
 	<dict>
 		<key>5E2D9680-5022-40FA-B806-43349622E5B9</key>
 		<array>
-			<string>E58D9C7A-F1B5-406A-BBD9-F2E7C6EDD0B4</string>
+			<string>292DC9CD-1640-49AE-B0C1-308ED88E6677</string>
 		</array>
 	</dict>
 	<key>CFPlugInUnloadFunction</key>
 	<string></string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2015 Boudewijn Rempt. All rights reserved.</string>
+	<string>Copyright © 2015 Krita Foundation. All rights reserved.</string>
 	<key>QLNeedsToBeRunInMainThread</key>
 	<false/>
 	<key>QLPreviewHeight</key>
@@ -60,47 +157,5 @@
 	<false/>
 	<key>QLThumbnailMinimumSize</key>
 	<real>17</real>
-    <key>UTImportedTypeDeclarations</key>
-    <array>
-        <dict>
-            <key>UTTypeConformsTo</key>
-            <array>
-                <string>public.image</string>
-            </array>
-            <key>UTTypeDescription</key>
-            <string>Krita image</string>
-            <key>UTTypeIdentifier</key>
-            <string>org.krita.kra</string>
-            <key>UTTypeReferenceURL</key>
-            <string>http://www.krita.org</string>
-            <key>UTTypeTagSpecification</key>
-            <dict>
-                <key>public.filename-extension</key>
-                <array>
-                    <string>kra</string>
-                </array>
-            </dict>
-        </dict>
-        <dict>
-            <key>UTTypeConformsTo</key>
-            <array>
-                <string>public.image</string>
-            </array>
-            <key>UTTypeDescription</key>
-            <string>OpenRaster image</string>
-            <key>UTTypeIdentifier</key>
-            <string>org.freedesktop.ora</string>
-            <key>UTTypeReferenceURL</key>
-            <string>http://www.freedesktop.org/wiki/Specifications/OpenRaster/</string>
-            <key>UTTypeTagSpecification</key>
-            <dict>
-                <key>public.filename-extension</key>
-                <array>
-                    <string>ora</string>
-                </array>
-            </dict>
-        </dict>
-
-    </array>
 </dict>
 </plist>

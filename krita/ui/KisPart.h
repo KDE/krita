@@ -29,7 +29,7 @@
 #include <QUrl>
 
 #include "kritaui_export.h"
-
+#include <KoConfig.h>
 #include <KisMainWindow.h>
 
 namespace KIO {
@@ -40,8 +40,9 @@ class KisView;
 class QGraphicsItem;
 class KisDocument;
 class KisIdleWatcher;
+#ifdef HAVE_OPENGL
 class KisAnimationCachePopulator;
-
+#endif
 
 /**
  * KisPart is the Great Deku Tree of Krita.
@@ -140,11 +141,12 @@ public:
      * @return the application-wide KisIdleWatcher.
      */
     KisIdleWatcher *idleWatcher() const;
-
+#ifdef HAVE_OPENGL
     /**
      * @return the application-wide AnimationCachePopulator.
      */
     KisAnimationCachePopulator *cachePopulator() const;
+#endif
 
 public Q_SLOTS:
 

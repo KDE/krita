@@ -23,8 +23,9 @@
 #include <QTransform>
 #include <kis_paint_information.h>
 
+#include <kritaimage_export.h>
 
-class KisLodTransform {
+class KRITAIMAGE_EXPORT KisLodTransform {
 public:
     KisLodTransform(int levelOfDetail) {
         qreal scale = lodToScale(levelOfDetail);

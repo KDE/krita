@@ -118,7 +118,9 @@
 #include "kis_action_manager.h"
 #include "thememanager.h"
 #include "kis_resource_server_provider.h"
+#ifdef HAVE_OPENGL
 #include "kis_animation_exporter.h"
+#endif
 #include "kis_icon_utils.h"
 #include <KisImportExportFilter.h>
 #include <KisDocumentEntry.h>
@@ -219,7 +221,9 @@ public:
     KisAction *printAction;
     KisAction *printActionPreview;
     KisAction *exportPdf;
+#ifdef HAVE_OPENGL
     KisAction *exportAnimation;
+#endif
     KisAction *closeAll;
 //    KisAction *reloadFile;
     KisAction *importFile;
@@ -1480,6 +1484,7 @@ KisPrintJob* KisMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFile
 
 void KisMainWindow::exportAnimation()
 {
+#ifdef HAVE_OPENGL
     if (!activeView()) return;
 
     KisDocument *document = activeView()->document();
@@ -1489,6 +1494,7 @@ void KisMainWindow::exportAnimation()
     exporter.exportSequence(document);
 
     activeView()->canvasBase()->refetchDataFromImage();
+#endif
 }
 
 void KisMainWindow::slotConfigureKeys()
@@ -2092,11 +2098,11 @@ void KisMainWindow::createActions()
     d->exportPdf->setActivationFlags(KisAction::ACTIVE_IMAGE);
     d->exportPdf->setIcon(KisIconUtils::loadIcon("application-pdf"));
     connect(d->exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));
-
+#ifdef HAVE_OPENGL
     d->exportAnimation  = actionManager->createAction("file_export_animation");
     d->exportAnimation->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(d->exportAnimation, SIGNAL(triggered()), this, SLOT(exportAnimation()));
-
+#endif
 
     d->closeAll = actionManager->createAction("file_close_all");
     d->closeAll->setActivationFlags(KisAction::ACTIVE_IMAGE);

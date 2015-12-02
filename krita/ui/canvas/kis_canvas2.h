@@ -25,6 +25,7 @@
 #include <QSize>
 #include <QString>
 
+#include <KoConfig.h>
 #include <KoColorConversionTransformation.h>
 #include <KoCanvasBase.h>
 #include <kritaui_export.h>
@@ -164,10 +165,10 @@ public: // KisCanvas2 methods
     KisExposureGammaCorrectionInterface* exposureGammaCorrectionInterface() const;
 
     void setCursor(const QCursor &cursor);
-
+#ifdef HAVE_OPENGL
     KisAnimationFrameCacheSP frameCache() const;
     KisAnimationPlayer *animationPlayer() const;
-
+#endif
     void refetchDataFromImage();
 
 Q_SIGNALS:

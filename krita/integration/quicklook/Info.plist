@@ -28,7 +28,7 @@
             <string>Krita 3.0 Image</string>
             <key>UTTypeConformsTo</key>
             <array>
-                <string>public.png</string>
+                <string>public.image</string>
             </array>
             <key>UTTypeTagSpecification</key>
             <dict>
@@ -50,7 +50,7 @@
             <string>Open Raster Image</string>
             <key>UTTypeConformsTo</key>
             <array>
-                <string>public.png</string>
+                <string>public.image</string>
             </array>
             <key>UTTypeTagSpecification</key>
             <dict>
@@ -71,7 +71,7 @@
         <dict>
             <key>UTTypeConformsTo</key>
             <array>
-                <string>public.png</string>
+                <string>public.image</string>
             </array>
             <key>UTTypeDescription</key>
             <string>Krita 3.0 Image</string>
@@ -93,7 +93,7 @@
         <dict>
             <key>UTTypeConformsTo</key>
             <array>
-                <string>public.png</string>
+                <string>public.image</string>
             </array>
             <key>UTTypeDescription</key>
             <string>Open Raster Image</string>

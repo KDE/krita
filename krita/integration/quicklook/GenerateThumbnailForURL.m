@@ -3,6 +3,7 @@
 #include <CoreServices/CoreServices.h>
 #include <QuickLook/QuickLook.h>
 
+void UnzipTask(NSURL *path, NSString *target, NSData **output, NSData **error);
 OSStatus GenerateThumbnailForURL(void *thisInterface, QLThumbnailRequestRef thumbnail, CFURLRef url, CFStringRef contentTypeUTI, CFDictionaryRef options, CGSize maxSize);
 void CancelThumbnailGeneration(void *thisInterface, QLThumbnailRequestRef thumbnail);
 
@@ -11,6 +12,21 @@ void CancelThumbnailGeneration(void *thisInterface, QLThumbnailRequestRef thumbn
 
    This function's job is to create thumbnail for designated file as fast as possible
    ----------------------------------------------------------------------------- */
+
+// Run unzip and try to obtain the target file in the archive
+void UnzipTask(NSURL *path, NSString *target, NSData **output, NSData **error) {
+    NSPipe *errorPipe = [NSPipe pipe];
+    NSTask *unzipTask = [NSTask new];
+    [unzipTask setLaunchPath:@"/usr/bin/unzip"];
+    [unzipTask setStandardOutput:[NSPipe pipe]];
+    [unzipTask setStandardError:errorPipe];
+    [unzipTask setArguments:@[@"-p", [path path], target]];
+    [unzipTask launch];
+    //[unzipTask waitUntilExit];
+    
+    *output = [[[unzipTask standardOutput] fileHandleForReading] readDataToEndOfFile];
+    *error = [[[unzipTask standardError] fileHandleForReading] readDataToEndOfFile];
+}
 
 OSStatus GenerateThumbnailForURL(void *thisInterface, QLThumbnailRequestRef thumbnail, CFURLRef url, CFStringRef contentTypeUTI, CFDictionaryRef options, CGSize maxSize)
 {
@@ -37,18 +53,16 @@ OSStatus GenerateThumbnailForURL(void *thisInterface, QLThumbnailRequestRef thum
      
     NSURL *URL = (__bridge NSURL *)url;
     NSData *appPlist = nil;
+    NSData *error = nil;
     
     NSImage *appIcon = nil;
     
-    NSTask *unzipTask = [NSTask new];
-    [unzipTask setLaunchPath:@"/usr/bin/unzip"];
-    [unzipTask setStandardOutput:[NSPipe pipe]];
-    [unzipTask setArguments:@[@"-p", [URL path], @"preview.png"]];
-    [unzipTask launch];
-    //[unzipTask waitUntilExit];
+    UnzipTask(URL, @"preview.png", &appPlist, &error);
     
-    appPlist = [[[unzipTask standardOutput] fileHandleForReading] readDataToEndOfFile];
-    
+    // Not made with Krita. Find ORA thumbnail instead.
+    if (error.length > 0) {
+        UnzipTask(URL, @"Thumbnails/thumbnail.png", &appPlist, &error);
+    }
     
     if (QLThumbnailRequestIsCancelled(thumbnail)) {
         [pool release];

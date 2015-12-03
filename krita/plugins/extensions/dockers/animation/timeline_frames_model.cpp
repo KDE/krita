@@ -700,9 +700,7 @@ Qt::ItemFlags TimelineFramesModel::flags(const QModelIndex &index) const
     if (!index.isValid()) return flags;
 
     if (m_d->frameExists(index.row(), index.column())) {
-        if (index.column() > 0 &&
-            data(index, FrameEditableRole).toBool()) {
-
+        if (data(index, FrameEditableRole).toBool()) {
             flags |= Qt::ItemIsDragEnabled;
         }
     }

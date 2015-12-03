@@ -159,8 +159,9 @@ bool KisKeyframeChannel::deleteKeyframe(KisKeyframeSP keyframe, KUndo2Command *p
         cmd->redo();
         destroyKeyframe(keyframe, parentCommand);
 
-        // FIXME: leak!
-        // delete keyframe;
+        if (keyframe->time() == 0) {
+            addKeyframe(0, parentCommand);
+        }
 
         result = true;
     }
@@ -199,8 +200,14 @@ bool KisKeyframeChannel::moveKeyframe(KisKeyframeSP keyframe, int newTime, KUndo
     KisKeyframeSP other = keyframeAt(newTime);
     if (other) return false;
 
-    KUndo2Command *cmd = new MoveFrameCommand(this, keyframe, keyframe->time(), newTime, parentCommand);
+    const int srcTime = keyframe->time();
+
+    KUndo2Command *cmd = new MoveFrameCommand(this, keyframe, srcTime, newTime, parentCommand);
     cmd->redo();
+
+    if (srcTime == 0) {
+        addKeyframe(srcTime, parentCommand);
+    }
 
     return true;
 }

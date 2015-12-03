@@ -252,9 +252,11 @@ public:
         KIS_ASSERT_RECOVER_RETURN(m_frames.contains(frame));
         KIS_ASSERT_RECOVER_RETURN(parentCommand);
 
+        DataSP deletedData = m_frames[frame];
+
         KUndo2Command *cmd =
             new FrameInsertionCommand(&m_frames,
-                                      m_frames[frame],
+                                      deletedData,
                                       frame, false,
                                       parentCommand);
         cmd->redo();
@@ -263,7 +265,7 @@ public:
             // the original m_data will be deleted by shared poiter
             // when the command will be destroyed, so just create a
             // new one for m_data
-            m_data = new Data(q);
+            m_data = new Data(deletedData.data(), false);
         }
     }
 

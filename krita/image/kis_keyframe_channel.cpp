@@ -149,24 +149,17 @@ bool KisKeyframeChannel::deleteKeyframe(KisKeyframeSP keyframe, KUndo2Command *p
 {
     LAZY_INITIALIZE_PARENT_COMMAND(parentCommand);
 
-    bool result = false;
+    Q_ASSERT(parentCommand);
 
-    if (canDeleteKeyframe(keyframe)) {
+    KUndo2Command *cmd = new InsertFrameCommand(this, keyframe, false, parentCommand);
+    cmd->redo();
+    destroyKeyframe(keyframe, parentCommand);
 
-        Q_ASSERT(parentCommand);
-
-        KUndo2Command *cmd = new InsertFrameCommand(this, keyframe, false, parentCommand);
-        cmd->redo();
-        destroyKeyframe(keyframe, parentCommand);
-
-        if (keyframe->time() == 0) {
-            addKeyframe(0, parentCommand);
-        }
-
-        result = true;
+    if (keyframe->time() == 0) {
+        addKeyframe(0, parentCommand);
     }
 
-    return result;
+    return true;
 }
 
 void KisKeyframeChannel::moveKeyframeImpl(KisKeyframeSP keyframe, int newTime)

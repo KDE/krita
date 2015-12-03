@@ -108,7 +108,6 @@ protected:
     KeyframesMap::const_iterator activeKeyIterator(int time) const;
 
     virtual KisKeyframeSP createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand) = 0;
-    virtual bool canDeleteKeyframe(KisKeyframeSP key) = 0;
     virtual void destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand) = 0;
 
     virtual QRect affectedRect(KisKeyframeSP key) = 0;

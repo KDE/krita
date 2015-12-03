@@ -841,7 +841,7 @@ void TimelineFramesModel::setScrubState(bool active)
 
         m_d->scrubInProgress = false;
 
-        if (m_d->scrubStartFrame > 0 &&
+        if (m_d->scrubStartFrame >= 0 &&
             m_d->scrubStartFrame != m_d->activeFrameIndex) {
 
             scrubTo(m_d->activeFrameIndex, false);

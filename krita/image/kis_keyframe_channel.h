@@ -117,8 +117,9 @@ protected:
     virtual void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) = 0;
 
 private:
-    void insertKeyframeImpl(KisKeyframeSP keyframe);
-    void deleteKeyframeImpl(KisKeyframeSP keyframe);
+    void insertKeyframeLogical(KisKeyframeSP keyframe);
+    void deleteKeyframeLogical(KisKeyframeSP keyframe);
+    bool deleteKeyframeImpl(KisKeyframeSP keyframe, KUndo2Command *parentCommand, bool recreate);
     void moveKeyframeImpl(KisKeyframeSP keyframe, int newTime);
 
     struct InsertFrameCommand;

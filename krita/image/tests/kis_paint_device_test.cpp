@@ -1912,6 +1912,117 @@ void KisPaintDeviceTest::testFramesUndoRedoWithChannel()
     QVERIFY(o.m_currentData == o.m_frames.begin().value());
 }
 
+void fillRect(KisPaintDeviceSP dev, int time, const QRect &rc, TestUtil::TestingTimedDefaultBounds *bounds)
+{
+    KUndo2Command parentCommand;
+    KisRasterKeyframeChannel *channel = dev->keyframeChannel();
+    KisKeyframeSP frame = channel->addKeyframe(time, &parentCommand);
+
+    const int oldTime = bounds->currentTime();
+    bounds->testingSetTime(time);
+
+    KoColor color(Qt::red, dev->colorSpace());
+    dev->fill(rc, color);
+
+    bounds->testingSetTime(oldTime);
+}
+
+bool checkRect(KisPaintDeviceSP dev, int time, const QRect &rc, TestUtil::TestingTimedDefaultBounds *bounds)
+{
+    const int oldTime = bounds->currentTime();
+    bounds->testingSetTime(time);
+
+    bool result = dev->exactBounds() == rc;
+
+    if (!result) {
+        qDebug() << "Failed to check frame:" << ppVar(time) << ppVar(rc) << ppVar(dev->exactBounds());
+    }
+
+    bounds->testingSetTime(oldTime);
+
+    return result;
+}
+
+void testCrossDeviceFrameCopyImpl(bool useChannel)
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev1 = new KisPaintDevice(cs);
+    KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
+
+    const KoColorSpace *cs3 = KoColorSpaceRegistry::instance()->rgb16();
+    KisPaintDeviceSP dev3 = new KisPaintDevice(cs3);
+
+    TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();
+    dev1->setDefaultBounds(bounds);
+    dev2->setDefaultBounds(bounds);
+    dev3->setDefaultBounds(bounds);
+
+    KisRasterKeyframeChannel *channel1 = dev1->createKeyframeChannel(KisKeyframeChannel::Content, 0);
+    KisPaintDeviceFramesInterface *i1 = dev1->framesInterface();
+    QVERIFY(channel1);
+    QVERIFY(i1);
+
+    KisRasterKeyframeChannel *channel2 = dev2->createKeyframeChannel(KisKeyframeChannel::Content, 0);
+    KisPaintDeviceFramesInterface *i2 = dev2->framesInterface();
+    QVERIFY(channel2);
+    QVERIFY(i2);
+
+    KisRasterKeyframeChannel *channel3 = dev3->createKeyframeChannel(KisKeyframeChannel::Content, 0);
+    KisPaintDeviceFramesInterface *i3 = dev3->framesInterface();
+    QVERIFY(channel3);
+    QVERIFY(i3);
+
+    fillRect(dev1, 10, QRect(100,100,100,100), bounds);
+    fillRect(dev2, 20, QRect(200,200,100,100), bounds);
+    fillRect(dev3, 30, QRect(300,300,100,100), bounds);
+
+    QCOMPARE(dev1->exactBounds(), QRect());
+
+    const int dstFrameId1 = channel1->frameIdAt(10);
+    const int srcFrameId2 = channel2->frameIdAt(20);
+    const int srcFrameId3 = channel3->frameIdAt(30);
+
+    KUndo2Command cmd1;
+    if (!useChannel) {
+        dev1->framesInterface()->uploadFrame(srcFrameId2, dstFrameId1, dev2);
+    } else {
+        KisKeyframeSP k = channel1->copyExternalKeyframe(channel2, 20, 10, &cmd1);
+    }
+
+    QCOMPARE(dev1->exactBounds(), QRect());
+    QVERIFY(checkRect(dev1, 10, QRect(200,200,100,100), bounds));
+
+    if (useChannel) {
+        cmd1.undo();
+        QVERIFY(checkRect(dev1, 10, QRect(100,100,100,100), bounds));
+    }
+
+    KUndo2Command cmd2;
+    if (!useChannel) {
+        dev1->framesInterface()->uploadFrame(srcFrameId3, dstFrameId1, dev3);
+    } else {
+        KisKeyframeSP k = channel1->copyExternalKeyframe(channel3, 30, 10, &cmd2);
+    }
+
+    QCOMPARE(dev1->exactBounds(), QRect());
+    QVERIFY(checkRect(dev1, 10, QRect(300,300,100,100), bounds));
+
+    if (useChannel) {
+        cmd2.undo();
+        QVERIFY(checkRect(dev1, 10, QRect(100,100,100,100), bounds));
+    }
+}
+
+void KisPaintDeviceTest::testCrossDeviceFrameCopyDirect()
+{
+    testCrossDeviceFrameCopyImpl(false);
+}
+
+void KisPaintDeviceTest::testCrossDeviceFrameCopyChannel()
+{
+    testCrossDeviceFrameCopyImpl(true);
+}
+
 #include "kis_surrogate_undo_adapter.h"
 
 void KisPaintDeviceTest::testLazyFrameCreation()

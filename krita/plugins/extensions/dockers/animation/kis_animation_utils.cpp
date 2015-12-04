@@ -154,19 +154,35 @@ namespace KisAnimationUtils {
             const int dstTime = dstFrames[i].time;
             KisNodeSP dstNode = dstFrames[i].node;
 
-            if (srcNode != dstNode) continue;
+            if (srcNode == dstNode) {
+                KisKeyframeChannel *content =
+                    srcNode->getKeyframeChannel(KisKeyframeChannel::Content.id());
 
-            KisKeyframeChannel *content =
-                srcNode->getKeyframeChannel(KisKeyframeChannel::Content.id());
+                if (!content) continue;
 
-            if (!content) continue;
+                KisKeyframeSP srcKeyframe = content->keyframeAt(srcTime);
+                if (srcKeyframe) {
+                    if (copy) {
+                        content->copyKeyframe(srcKeyframe, dstTime, cmd.data());
+                    } else {
+                        content->moveKeyframe(srcKeyframe, dstTime, cmd.data());
+                    }
+                }
+            } else {
+                KisKeyframeChannel *srcContent =
+                    srcNode->getKeyframeChannel(KisKeyframeChannel::Content.id());
+                KisKeyframeChannel *dstContent =
+                    dstNode->getKeyframeChannel(KisKeyframeChannel::Content.id());
 
-            KisKeyframeSP srcKeyframe = content->keyframeAt(srcTime);
-            if (srcKeyframe) {
-                if (copy) {
-                    content->copyKeyframe(srcKeyframe, dstTime, cmd.data());
-                } else {
-                    content->moveKeyframe(srcKeyframe, dstTime, cmd.data());
+                if (!srcContent || !dstContent) continue;
+
+                KisKeyframeSP srcKeyframe = srcContent->keyframeAt(srcTime);
+                if (!srcKeyframe) continue;
+
+                dstContent->copyExternalKeyframe(srcContent, srcTime, dstTime, cmd.data());
+
+                if (!copy) {
+                    srcContent->deleteKeyframe(srcKeyframe, cmd.data());
                 }
             }
 

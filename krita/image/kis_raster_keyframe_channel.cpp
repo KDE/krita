@@ -111,6 +111,20 @@ void KisRasterKeyframeChannel::destroyKeyframe(KisKeyframeSP key, KUndo2Command 
     m_d->paintDevice->framesInterface()->deleteFrame(key->value(), parentCommand);
 }
 
+void KisRasterKeyframeChannel::uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame)
+{
+    KisRasterKeyframeChannel *srcRasterChannel = dynamic_cast<KisRasterKeyframeChannel*>(srcChannel);
+    KIS_ASSERT_RECOVER_RETURN(srcRasterChannel);
+
+    const int srcId = srcRasterChannel->frameIdAt(srcTime);
+    const int dstId = dstFrame->value();
+
+    m_d->paintDevice->framesInterface()->
+        uploadFrame(srcId,
+                    dstId,
+                    srcRasterChannel->m_d->paintDevice);
+}
+
 QRect KisRasterKeyframeChannel::affectedRect(KisKeyframeSP key)
 {
     KeyframesMap::iterator it = keys().find(key->time());

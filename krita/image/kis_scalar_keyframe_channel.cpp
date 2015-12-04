@@ -163,6 +163,21 @@ void KisScalarKeyframeChannel::destroyKeyframe(KisKeyframeSP key, KUndo2Command 
     cmd->redo();
 }
 
+void KisScalarKeyframeChannel::uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame)
+{
+    KisScalarKeyframeChannel *srcScalarChannel = dynamic_cast<KisScalarKeyframeChannel*>(srcChannel);
+    KIS_ASSERT_RECOVER_RETURN(srcScalarChannel);
+
+    KisKeyframeSP srcFrame = srcScalarChannel->keyframeAt(srcTime);
+    KIS_ASSERT_RECOVER_RETURN(srcFrame);
+
+    const qreal newValue = scalarValue(srcFrame);
+
+    const int dstId = dstFrame->value();
+    KIS_ASSERT_RECOVER_RETURN(m_d->values.contains(dstId));
+    m_d->values[dstId] = newValue;
+}
+
 QRect KisScalarKeyframeChannel::affectedRect(KisKeyframeSP key)
 {
     Q_UNUSED(key);

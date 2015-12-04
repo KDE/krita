@@ -415,6 +415,29 @@ KisKeyframeSP KisKeyframeChannel::insertKeyframe(int time, const KisKeyframeSP c
     return keyframe;
 }
 
+KisKeyframeSP KisKeyframeChannel::copyExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, int dstTime, KUndo2Command *parentCommand)
+{
+    if (srcChannel->id() != id()) {
+        warnKrita << "Cannot copy frames from different ids:" << ppVar(srcChannel->id()) << ppVar(id());
+        return KisKeyframeSP();
+    }
+
+    LAZY_INITIALIZE_PARENT_COMMAND(parentCommand);
+
+    KisKeyframeSP dstFrame = keyframeAt(dstTime);
+    if (dstFrame) {
+        deleteKeyframeImpl(dstFrame, parentCommand, false);
+    }
+
+    KisKeyframeSP newKeyframe = createKeyframe(dstTime, KisKeyframeSP(), parentCommand);
+    uploadExternalKeyframe(srcChannel, srcTime, newKeyframe);
+
+    KUndo2Command *cmd = new InsertFrameCommand(this, newKeyframe, true, parentCommand);
+    cmd->redo();
+
+    return newKeyframe;
+}
+
 KisKeyframeChannel::KeyframesMap::const_iterator
 KisKeyframeChannel::activeKeyIterator(int time) const
 {

@@ -52,6 +52,7 @@ public:
     bool deleteKeyframe(KisKeyframeSP keyframe, KUndo2Command *parentCommand = 0);
     bool moveKeyframe(KisKeyframeSP keyframe, int newTime, KUndo2Command *parentCommand = 0);
     KisKeyframeSP copyKeyframe(const KisKeyframeSP keyframe, int newTime, KUndo2Command *parentCommand = 0);
+    KisKeyframeSP copyExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, int dstTime, KUndo2Command *parentCommand = 0);
 
     KisKeyframeSP keyframeAt(int time) const;
     KisKeyframeSP activeKeyframeAt(int time) const;
@@ -109,6 +110,7 @@ protected:
 
     virtual KisKeyframeSP createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand) = 0;
     virtual void destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand) = 0;
+    virtual void uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame) = 0;
 
     virtual QRect affectedRect(KisKeyframeSP key) = 0;
     virtual void requestUpdate(const KisTimeRange &range, const QRect &rect);

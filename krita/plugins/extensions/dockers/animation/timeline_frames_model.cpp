@@ -604,11 +604,11 @@ bool TimelineFramesModel::canDropFrameData(const QMimeData *data, const QModelIn
 {
     if (!index.isValid()) return false;
 
-    QByteArray encoded = data->data("application/x-krita-frame");
-    int baseRow, baseColumn;
-    decodeBaseIndex(&encoded, &baseRow, &baseColumn);
-
-    return baseRow == index.row();
+    /**
+     * Now we support D&D around any layer, so just return 'true' all
+     * the time.
+     */
+    return true;
 }
 
 bool TimelineFramesModel::offsetFrames(QVector<QPoint> srcIndexes, const QPoint &offset, bool copyFrames)
@@ -674,8 +674,6 @@ bool TimelineFramesModel::dropMimeData(const QMimeData *data, Qt::DropAction act
 
     int size, baseRow, baseColumn;
     stream >> size >> baseRow >> baseColumn;
-
-    if (baseRow != parent.row()) return result;
 
     QVector<QPoint> srcIndexes;
 

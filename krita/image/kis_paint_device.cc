@@ -319,6 +319,8 @@ public:
     }
 
     void fetchFrame(int frameId, KisPaintDeviceSP targetDevice);
+    void uploadFrame(int srcFrameId, int dstFrameId, KisPaintDeviceSP srcDevice);
+
     QRegion syncLodData(int newLod);
 
     void tesingFetchLodDevice(KisPaintDeviceSP targetDevice);
@@ -634,6 +636,33 @@ void KisPaintDevice::Private::fetchFrame(int frameId, KisPaintDeviceSP targetDev
 {
     Data *data = m_frames[frameId].data();
     transferFromData(data, targetDevice);
+}
+
+void KisPaintDevice::Private::uploadFrame(int srcFrameId, int dstFrameId, KisPaintDeviceSP srcDevice)
+{
+    DataSP dstData = m_frames[dstFrameId];
+    KIS_ASSERT_RECOVER_RETURN(dstData);
+
+    DataSP srcData = srcDevice->m_d->m_frames[srcFrameId];
+    KIS_ASSERT_RECOVER_RETURN(srcData);
+
+    if (srcData->colorSpace() != dstData->colorSpace() &&
+        !(*srcData->colorSpace() == *dstData->colorSpace())) {
+
+        KUndo2Command tempCommand;
+
+        srcData = toQShared(new Data(srcData.data(), true));
+        srcData->convertDataColorSpace(dstData->colorSpace(),
+                                       KoColorConversionTransformation::internalRenderingIntent(),
+                                       KoColorConversionTransformation::internalConversionFlags(),
+                                       &tempCommand);
+    }
+
+    dstData->dataManager()->clear();
+    dstData->cache()->invalidate();
+
+    const QRect rect = srcData->dataManager()->extent();
+    dstData->dataManager()->bitBltRough(srcData->dataManager(), rect);
 }
 
 void KisPaintDevice::Private::tesingFetchLodDevice(KisPaintDeviceSP targetDevice)
@@ -1677,6 +1706,11 @@ void KisPaintDeviceFramesInterface::deleteFrame(int frame, KUndo2Command *parent
 void KisPaintDeviceFramesInterface::fetchFrame(int frameId, KisPaintDeviceSP targetDevice)
 {
     q->m_d->fetchFrame(frameId, targetDevice);
+}
+
+void KisPaintDeviceFramesInterface::uploadFrame(int srcFrameId, int dstFrameId, KisPaintDeviceSP srcDevice)
+{
+    q->m_d->uploadFrame(srcFrameId, dstFrameId, srcDevice);
 }
 
 QRect KisPaintDeviceFramesInterface::frameBounds(int frameId)

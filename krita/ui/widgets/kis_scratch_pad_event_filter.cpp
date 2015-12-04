@@ -17,7 +17,9 @@
  */
 
 #include "kis_scratch_pad_event_filter.h"
+#include "kis_scratch_pad.h"
 #include <QWidget>
+#include <QDebug>
 
 
 KisScratchPadEventFilter::KisScratchPadEventFilter(QWidget *parent)
@@ -25,6 +27,7 @@ KisScratchPadEventFilter::KisScratchPadEventFilter(QWidget *parent)
       m_tabletPressed(false)
 {
     parent->installEventFilter(this);
+    m_scratchPad = qobject_cast<KisScratchPad *>(parent);
 }
 
 void KisScratchPadEventFilter::setWidgetToDocumentTransform(const QTransform &transform)
@@ -39,12 +42,14 @@ QWidget* KisScratchPadEventFilter::parentWidget()
 
 KoPointerEvent* KisScratchPadEventFilter::createMouseEvent(QEvent *event)
 {
+    qDebug() << "Dispatching mouse event to KisScratchPad";
     QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
     return new KoPointerEvent(mouseEvent, m_widgetToDocument.map(mouseEvent->pos()));
 }
 
 KoPointerEvent* KisScratchPadEventFilter::createTabletEvent(QEvent *event)
 {
+    qDebug() << "Dispatching tablet event to KisScratchPad";
     QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
     const QPointF pos = tabletEvent->hiResGlobalPos() - parentWidget()->mapToGlobal(QPoint());
 
@@ -61,38 +66,39 @@ bool KisScratchPadEventFilter::eventFilter(QObject *obj, QEvent *event)
 
     KoPointerEvent *ev = 0;
 
+
     switch(event->type()) {
     case QEvent::MouseButtonPress:
         if(m_tabletPressed) break;
         ev = createMouseEvent(event);
-        emit mousePressSignal(ev);
+        m_scratchPad->pointerPress(ev);
         break;
     case QEvent::MouseButtonRelease:
         if(m_tabletPressed) break;
         ev = createMouseEvent(event);
-        emit mouseReleaseSignal(ev);
+        m_scratchPad->pointerRelease(ev);
         break;
     case QEvent::MouseMove:
         if(m_tabletPressed) break;
         ev = createMouseEvent(event);
-        emit mouseMoveSignal(ev);
+        m_scratchPad->pointerMove(ev);
         break;
     case QEvent::TabletPress:
-        if(m_tabletPressed) break;
+        // if(m_tabletPressed) break;
         m_tabletPressed = true;
         ev = createTabletEvent(event);
-        emit mousePressSignal(ev);
+        m_scratchPad->pointerPress(ev);
         break;
     case QEvent::TabletRelease:
-        if(!m_tabletPressed) break;
+        // if(!m_tabletPressed) break;
         m_tabletPressed = false;
         ev = createTabletEvent(event);
-        emit mouseReleaseSignal(ev);
+        m_scratchPad->pointerRelease(ev);
         break;
     case QEvent::TabletMove:
-        if(!m_tabletPressed) break;
+        // if(!m_tabletPressed) break;
         ev = createTabletEvent(event);
-        emit mouseMoveSignal(ev);
+        m_scratchPad->pointerMove(ev);
         break;
     default:
         result = false;
@@ -100,6 +106,7 @@ bool KisScratchPadEventFilter::eventFilter(QObject *obj, QEvent *event)
 
     if(ev) {
         result = ev->isAccepted();
+        event->setAccepted(result);
         delete ev;
     }
 

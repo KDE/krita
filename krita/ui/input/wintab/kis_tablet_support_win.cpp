@@ -223,7 +223,7 @@ class Q_DECL_HIDDEN QWindowsTabletSupport
      * Furthermore, WT_CSRCHANGE only ever appears *after* we receive the packet.
      */
     UINT currentPkCursor{0};
-    bool inlineSwitching{false};  //< Only enable this on SP3 or other devices with the same issue.
+    bool isSurfacePro3{false};  //< Only enable this on SP3 or other devices with the same issue.
 
 };
 
@@ -412,8 +412,8 @@ namespace {
         bool eventFilter(QObject* object, QEvent* event ) {
             bool isMouseEvent = isMouseEventType(event->type());
 
-            if (isMouseEvent && peckish) {
-                peckish--;
+            if (isMouseEvent && (hunger > 0)) {
+                hunger--;
 
                 if (KisTabletDebugger::instance()->debugEnabled()) {
                     QString pre = QString("[BLOCKED]");
@@ -422,19 +422,15 @@ namespace {
                 }
                 return true;
             }
-            // else if (isMouseEvent && hungry) {
-            //     return true;
-            // }
              return false;
         }
 
-        void activate()   { peckish = 5;};
-        void deactivate() { peckish = 0;};
-        void chow() { peckish = 5; }; // XXX: perhaps this could be customizable
+        void activate()   { hunger = 3;}; // XXX: this number could be tweaked or customized
+        void deactivate() { hunger = 0;};
+        void chow() { activate();};
 
     private:
-        bool hungry{false};   // Continue eating mouse strokes
-        int  peckish{0};  // Eat a number of mouse events
+        int  hunger{0};  // Eat a number of mouse events
     };
 
     EventEater *globalEventEater = 0;
@@ -481,9 +477,9 @@ void QWindowsTabletSupport::tabletUpdateCursor(const quint64 uniqueId,
     dbgInput << "DVC_NAME =" << qDvcName;
     if (qDvcName == QString::fromLatin1("N-trig DuoSense device")) {
         dbgInput << "Setting inline switching to true.";
-        inlineSwitching = true;
+        isSurfacePro3 = true;
     } else {
-        inlineSwitching = false;
+        isSurfacePro3 = false;
     }
     delete[] dvcName;
 #endif
@@ -751,12 +747,14 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
                 << tiltY << "tanP:" << tangentialPressure << "rotation:" << rotation;
         }
 
+        // Device independent pixels
         const QPointF localPosDip = QPointF(localPos / dpr);
         const QPointF globalPosDip = globalPosF / dpr;
 
 
 
-        // Reusable function - closures are your friend!
+        // Reusable helper function: send a tablet event, if that is rejected,
+        // send a mouse event instead. Closures are your friend!
         auto trySendTabletEvent = [&](QTabletEvent::Type t){
             // First, try sending a tablet event.
             QTabletEvent e(t, localPosDip, globalPosDip, currentDevice, currentPointerType,
@@ -764,19 +762,15 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
                            keyboardModifiers, tabletData.uniqueId, button, buttons);
             qApp->sendEvent(w, &e);
 
-            bool accepted = e.isAccepted();
-
-            // If it's rejected, flush the eventEater send a synthetic mouse event.
-            if (accepted) {
+            if (e.isAccepted()) {
                 globalEventEater->activate();
             }
             else {
+                // Turn off eventEater send a synthetic mouse event.
                 globalEventEater->deactivate();
                 QMouseEvent m(mouseEventType(t), localPosDip, button, buttons, keyboardModifiers);
                 qApp->sendEvent(w, &e);
-                accepted = m.isAccepted();
             }
-            return accepted;
         };
 
         /**
@@ -784,7 +778,7 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
          * These are caused by the eraser trigger button on the Surface Pro 3.
          * We shoot out a tabletUpdateCursor request and a switchInputDevice request.
          */
-        if (inlineSwitching && (packet.pkCursor != currentPkCursor)) {
+        if (isSurfacePro3 && (packet.pkCursor != currentPkCursor)) {
 
             // Send tablet release event.
             trySendTabletEvent(QTabletEvent::TabletRelease);
@@ -812,7 +806,6 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
 
             trySendTabletEvent(QTabletEvent::TabletPress);
         }
-        // Workaround ends here.
 
 
         trySendTabletEvent(type);
@@ -862,9 +855,9 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
           delete dvcName;
           dbgInput << "DVC_NAME =" << qDvcName;
           if (qDvcName == QString::fromLatin1("N-trig DuoSense device")) {
-          inlineSwitching = true;
+          isSurfacePro3 = true;
           } else {
-          inlineSwitching = false;
+          isSurfacePro3 = false;
           }
           #endif
 
@@ -1126,7 +1119,7 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf, int numPackets
         // These are caused by the eraser trigger button on the Surface Pro 3.
         // We shoot out a tabletUpdateCursor request and a switchInputDevice request.
 
-        if (inlineSwitching && !dialogOpen && (localPacketBuf[i].pkCursor != currentCursor)) {
+        if (isSurfacePro3 && !dialogOpen && (localPacketBuf[i].pkCursor != currentCursor)) {
 
             tabletUpdateCursor(localPacketBuf[i].pkCursor);
             KoInputDevice id(QTabletEvent::TabletDevice(currentTabletPointer->currentDevice),

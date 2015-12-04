@@ -77,7 +77,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="KisSliderSpinBox" name="intScale" native="true">
+          <widget class="KisSliderSpinBox" name="intScale">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -100,7 +100,7 @@
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="KisSliderSpinBox" name="intDepth" native="true">
+          <widget class="KisSliderSpinBox" name="intDepth">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>

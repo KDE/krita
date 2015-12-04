@@ -35,7 +35,7 @@
     </layout>
    </item>
    <item>
-    <widget class="KisWdgGenerator" name="wdgGenerator" native="true">
+    <widget class="KisWdgGenerator" name="wdgGenerator">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
        <horstretch>0</horstretch>

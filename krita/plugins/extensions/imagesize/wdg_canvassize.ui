@@ -47,7 +47,7 @@
        <widget class="QComboBox" name="heightUnit"/>
       </item>
       <item row="0" column="4" rowspan="2">
-       <widget class="KoAspectButton" name="aspectRatioBtn" native="true"/>
+       <widget class="KoAspectButton" name="aspectRatioBtn"/>
       </item>
       <item row="1" column="2">
        <widget class="QSpinBox" name="newHeight">
@@ -331,7 +331,7 @@
           <number>2</number>
          </property>
          <item>
-          <widget class="KCanvasPreview" name="canvasPreview" native="true"/>
+          <widget class="KCanvasPreview" name="canvasPreview"/>
          </item>
         </layout>
        </widget>

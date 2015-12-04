@@ -134,10 +134,10 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="heightSpin" native="true"/>
+      <widget class="KisDoubleSliderSpinBox" name="heightSpin"/>
      </item>
      <item row="1" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="widthSpin" native="true">
+      <widget class="KisDoubleSliderSpinBox" name="widthSpin">
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -177,7 +177,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KisUrlRequester" name="imageUrl" native="true">
+      <widget class="KisUrlRequester" name="imageUrl">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
          <horstretch>0</horstretch>

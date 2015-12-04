@@ -97,7 +97,7 @@
     </layout>
    </item>
    <item>
-    <widget class="KisSliderSpinBox" name="zoomSlider" native="true"/>
+    <widget class="KisSliderSpinBox" name="zoomSlider"/>
    </item>
   </layout>
  </widget>

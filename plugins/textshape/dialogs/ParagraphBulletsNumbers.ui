@@ -15,7 +15,7 @@
     <widget class="QListWidget" name="listTypes"/>
    </item>
    <item row="0" column="1">
-    <widget class="QWidget" name="listPropertiesPane" native="true">
+    <widget class="QWidget" name="listPropertiesPane">
      <layout class="QGridLayout">
       <property name="margin">
        <number>0</number>

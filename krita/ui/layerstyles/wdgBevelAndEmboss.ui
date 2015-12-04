@@ -117,7 +117,7 @@
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="KisSliderSpinBox" name="intDepth" native="true">
+          <widget class="KisSliderSpinBox" name="intDepth">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -164,7 +164,7 @@
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="KisSliderSpinBox" name="intSize" native="true">
+          <widget class="KisSliderSpinBox" name="intSize">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -184,7 +184,7 @@
           </widget>
          </item>
          <item row="5" column="1">
-          <widget class="KisSliderSpinBox" name="intSoften" native="true">
+          <widget class="KisSliderSpinBox" name="intSoften">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -338,7 +338,7 @@
           </widget>
          </item>
          <item row="4" column="2">
-          <widget class="KisSliderSpinBox" name="intOpacity" native="true">
+          <widget class="KisSliderSpinBox" name="intOpacity">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
              <horstretch>0</horstretch>
@@ -391,7 +391,7 @@
           </widget>
          </item>
          <item row="6" column="2">
-          <widget class="KisSliderSpinBox" name="intOpacity2" native="true">
+          <widget class="KisSliderSpinBox" name="intOpacity2">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
              <horstretch>0</horstretch>

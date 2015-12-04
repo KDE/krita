@@ -711,7 +711,7 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="KisDoubleSliderSpinBox" name="aXBox" native="true">
+             <widget class="KisDoubleSliderSpinBox" name="aXBox">
               <property name="toolTip">
                <string>Rotate around X-Axis</string>
               </property>
@@ -746,14 +746,14 @@
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="KisDoubleSliderSpinBox" name="aYBox" native="true">
+             <widget class="KisDoubleSliderSpinBox" name="aYBox">
               <property name="toolTip">
                <string>Rotate around Y-Axis</string>
               </property>
              </widget>
             </item>
             <item row="3" column="1">
-             <widget class="KisDoubleSliderSpinBox" name="aZBox" native="true">
+             <widget class="KisDoubleSliderSpinBox" name="aZBox">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -876,7 +876,7 @@
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QSpinBox" name="scaleXBox" native="true">
+               <widget class="QSpinBox" name="scaleXBox">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -892,7 +892,7 @@
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="QSpinBox" name="scaleYBox" native="true">
+               <widget class="QSpinBox" name="scaleYBox">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -938,7 +938,7 @@
              </layout>
             </item>
             <item>
-             <widget class="KoAspectButton" name="aspectButton" native="true">
+             <widget class="KoAspectButton" name="aspectButton">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1025,7 +1025,7 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QSpinBox" name="translateXBox" native="true">
+             <widget class="QSpinBox" name="translateXBox">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1041,7 +1041,7 @@
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QSpinBox" name="translateYBox" native="true">
+             <widget class="QSpinBox" name="translateYBox">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1156,7 +1156,7 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="KisDoubleSliderSpinBox" name="shearYBox" native="true">
+             <widget class="KisDoubleSliderSpinBox" name="shearYBox">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -1197,7 +1197,7 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="KisDoubleSliderSpinBox" name="shearXBox" native="true">
+             <widget class="KisDoubleSliderSpinBox" name="shearXBox">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -1250,7 +1250,7 @@
          <number>0</number>
         </property>
         <item row="1" column="1">
-         <widget class="KisDoubleSliderSpinBox" name="alphaBox" native="true">
+         <widget class="KisDoubleSliderSpinBox" name="alphaBox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -1336,7 +1336,7 @@
        <property name="checkable">
         <bool>false</bool>
        </property>
-       <widget class="QWidget" name="defaultWarpWidget" native="true">
+       <widget class="QWidget" name="defaultWarpWidget">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -1398,7 +1398,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="drawWarpWidget" native="true">
+       <widget class="QWidget" name="drawWarpWidget">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -1443,7 +1443,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QWidget" name="customWarpWidget" native="true">
+          <widget class="QWidget" name="customWarpWidget">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -1715,7 +1715,7 @@
             </widget>
            </item>
            <item row="4" column="1">
-            <widget class="KisDoubleSliderSpinBox" name="liquifySpacingSlider" native="true"/>
+            <widget class="KisDoubleSliderSpinBox" name="liquifySpacingSlider"/>
            </item>
            <item row="4" column="0">
             <widget class="QLabel" name="lblSpacing">
@@ -1756,7 +1756,7 @@
             </widget>
            </item>
            <item row="3" column="1">
-            <widget class="KisDoubleSliderSpinBox" name="liquifyFlowSlider" native="true"/>
+            <widget class="KisDoubleSliderSpinBox" name="liquifyFlowSlider"/>
            </item>
            <item row="1" column="0">
             <widget class="QLabel" name="lblSize">
@@ -1778,7 +1778,7 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="KisDoubleSliderSpinBox" name="liquifySizeSlider" native="true"/>
+            <widget class="KisDoubleSliderSpinBox" name="liquifySizeSlider"/>
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="lblAmount">
@@ -1800,7 +1800,7 @@
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="KisDoubleSliderSpinBox" name="liquifyAmountSlider" native="true"/>
+            <widget class="KisDoubleSliderSpinBox" name="liquifyAmountSlider"/>
            </item>
            <item row="0" column="0">
             <widget class="QLabel" name="label_2">
@@ -2012,7 +2012,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QWidget" name="SpecialSpacer" native="true"/>
+    <widget class="QWidget" name="SpecialSpacer"/>
    </item>
   </layout>
  </widget>

@@ -282,7 +282,7 @@
       </widget>
      </item>
      <item row="2" column="0">
-      <widget class="KisCIETongueWidget" name="TongueWidget" native="true">
+      <widget class="KisCIETongueWidget" name="TongueWidget">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>0</horstretch>

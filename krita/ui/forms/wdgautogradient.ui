@@ -32,7 +32,7 @@
     </layout>
    </item>
    <item>
-    <widget class="KisGradientSliderWidget" name="gradientSlider" native="true">
+    <widget class="KisGradientSliderWidget" name="gradientSlider">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>

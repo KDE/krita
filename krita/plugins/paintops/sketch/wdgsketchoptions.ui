@@ -45,7 +45,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KisDoubleSliderSpinBox" name="lineWidthSPBox" native="true">
+       <widget class="KisDoubleSliderSpinBox" name="lineWidthSPBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -65,7 +65,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="KisDoubleSliderSpinBox" name="offsetSPBox" native="true" />
+       <widget class="KisDoubleSliderSpinBox" name="offsetSPBox" />
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_3">

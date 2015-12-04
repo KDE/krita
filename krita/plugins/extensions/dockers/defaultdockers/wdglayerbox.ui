@@ -94,7 +94,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KisDoubleSliderSpinBox" name="doubleOpacity" native="true">
+      <widget class="KisDoubleSliderSpinBox" name="doubleOpacity">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -114,7 +114,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="KisNodeView" name="listLayers" native="true">
+      <widget class="KisNodeView" name="listLayers">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
          <horstretch>0</horstretch>

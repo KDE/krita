@@ -40,7 +40,7 @@
     </widget>
    </item>
    <item>
-    <widget class="KisUrlRequester" name="fileNameURLRequester" native="true"/>
+    <widget class="KisUrlRequester" name="fileNameURLRequester"/>
    </item>
    <item>
     <layout class="QHBoxLayout">

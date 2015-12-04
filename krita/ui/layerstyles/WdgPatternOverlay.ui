@@ -63,7 +63,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="KisSliderSpinBox" name="intOpacity" native="true">
+          <widget class="KisSliderSpinBox" name="intOpacity">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
              <horstretch>0</horstretch>
@@ -135,7 +135,7 @@
           </widget>
          </item>
          <item row="5" column="1">
-          <widget class="KisSliderSpinBox" name="intScale" native="true">
+          <widget class="KisSliderSpinBox" name="intScale">
            <property name="toolTip">
             <string>Set size of gradation</string>
            </property>

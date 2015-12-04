@@ -55,7 +55,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KisSliderSpinBox" name="spinBoxDuration" native="true">
+      <widget class="KisSliderSpinBox" name="spinBoxDuration">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
          <horstretch>0</horstretch>

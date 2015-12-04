@@ -19,7 +19,7 @@
      <property name="childrenCollapsible">
       <bool>false</bool>
      </property>
-     <widget class="QWidget" name="bundleOverviewContainer" native="true">
+     <widget class="QWidget" name="bundleOverviewContainer">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -261,7 +261,7 @@
          <property name="childrenCollapsible">
           <bool>false</bool>
          </property>
-         <widget class="QWidget" name="selectedBundleInfoContainer" native="true">
+         <widget class="QWidget" name="selectedBundleInfoContainer">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>10</horstretch>

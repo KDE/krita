@@ -49,7 +49,7 @@
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="KisPopupButton" name="chooserButton" native="true"/>
+    <widget class="KisPopupButton" name="chooserButton"/>
    </item>
   </layout>
  </widget>

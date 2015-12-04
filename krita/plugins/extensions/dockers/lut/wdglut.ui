@@ -148,7 +148,7 @@
          </widget>
         </item>
         <item row="7" column="1">
-         <widget class="KisDoubleWidget" name="m_exposureDoubleWidget" native="true">
+         <widget class="KisDoubleWidget" name="m_exposureDoubleWidget">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -243,7 +243,7 @@
          </widget>
         </item>
         <item row="8" column="1">
-         <widget class="KisDoubleWidget" name="m_gammaDoubleWidget" native="true">
+         <widget class="KisDoubleWidget" name="m_gammaDoubleWidget">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
             <horstretch>0</horstretch>

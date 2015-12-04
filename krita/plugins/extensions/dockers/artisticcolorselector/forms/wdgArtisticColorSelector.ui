@@ -52,7 +52,7 @@
     </layout>
    </item>
    <item>
-    <widget class="KisColorSelector" name="colorSelector" native="true">
+    <widget class="KisColorSelector" name="colorSelector">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>

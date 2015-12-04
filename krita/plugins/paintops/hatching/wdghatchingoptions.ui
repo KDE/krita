@@ -57,7 +57,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="angleKisDoubleSliderSpinBox" native="true">
+      <widget class="KisDoubleSliderSpinBox" name="angleKisDoubleSliderSpinBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
          <horstretch>1</horstretch>
@@ -95,7 +95,7 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="separationKisDoubleSliderSpinBox" native="true">
+      <widget class="KisDoubleSliderSpinBox" name="separationKisDoubleSliderSpinBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
          <horstretch>1</horstretch>
@@ -133,7 +133,7 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="thicknessKisDoubleSliderSpinBox" native="true">
+      <widget class="KisDoubleSliderSpinBox" name="thicknessKisDoubleSliderSpinBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
          <horstretch>1</horstretch>
@@ -171,7 +171,7 @@
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="originXKisDoubleSliderSpinBox" native="true">
+      <widget class="KisDoubleSliderSpinBox" name="originXKisDoubleSliderSpinBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
          <horstretch>1</horstretch>
@@ -209,7 +209,7 @@
       </widget>
      </item>
      <item row="4" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="originYKisDoubleSliderSpinBox" native="true">
+      <widget class="KisDoubleSliderSpinBox" name="originYKisDoubleSliderSpinBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
          <horstretch>1</horstretch>

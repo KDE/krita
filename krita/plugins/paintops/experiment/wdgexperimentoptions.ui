@@ -55,7 +55,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="speed" native="true">
+      <widget class="KisDoubleSliderSpinBox" name="speed">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -72,7 +72,7 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="smoothThreshold" native="true">
+      <widget class="KisDoubleSliderSpinBox" name="smoothThreshold">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -100,7 +100,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KisDoubleSliderSpinBox" name="displaceStrength" native="true"/>
+      <widget class="KisDoubleSliderSpinBox" name="displaceStrength"/>
      </item>
     </layout>
    </item>

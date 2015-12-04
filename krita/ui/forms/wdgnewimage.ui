@@ -365,7 +365,7 @@
      </property>
      <layout class="QVBoxLayout">
       <item>
-       <widget class="KisColorSpaceSelector" name="colorSpaceSelector" native="true"/>
+       <widget class="KisColorSpaceSelector" name="colorSpaceSelector"/>
       </item>
      </layout>
     </widget>
@@ -402,7 +402,7 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="KisDoubleSliderSpinBox" name="sliderOpacity" native="true"/>
+          <widget class="KisDoubleSliderSpinBox" name="sliderOpacity"/>
          </item>
         </layout>
        </widget>

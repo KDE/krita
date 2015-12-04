@@ -55,7 +55,7 @@
       <widget class="KColorButton" name="bnColor"/>
      </item>
      <item row="0" column="1">
-      <widget class="KisPatternChooser" name="patternChooser" native="true">
+      <widget class="KisPatternChooser" name="patternChooser">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>

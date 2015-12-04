@@ -130,7 +130,7 @@
    <property name="title">
     <string>Ink Depletion Curve</string>
    </property>
-   <widget class="KisCurveWidget" name="inkCurve" native="true">
+   <widget class="KisCurveWidget" name="inkCurve">
     <property name="geometry">
      <rect>
       <x>9</x>
@@ -176,7 +176,7 @@
      </widget>
     </item>
     <item row="2" column="2">
-     <widget class="KisDoubleSliderSpinBox" name="bristleInkAmountSlider" native="true">
+     <widget class="KisDoubleSliderSpinBox" name="bristleInkAmountSlider">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -193,7 +193,7 @@
      </widget>
     </item>
     <item row="3" column="2">
-     <widget class="KisDoubleSliderSpinBox" name="bristleLengthSlider" native="true">
+     <widget class="KisDoubleSliderSpinBox" name="bristleLengthSlider">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -203,7 +203,7 @@
      </widget>
     </item>
     <item row="1" column="2">
-     <widget class="KisDoubleSliderSpinBox" name="pressureSlider" native="true">
+     <widget class="KisDoubleSliderSpinBox" name="pressureSlider">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -220,7 +220,7 @@
      </widget>
     </item>
     <item row="4" column="2">
-     <widget class="KisDoubleSliderSpinBox" name="inkDepletionSlider" native="true">
+     <widget class="KisDoubleSliderSpinBox" name="inkDepletionSlider">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>

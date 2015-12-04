@@ -69,7 +69,7 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QWidget" name="monitorprofileholder" native="true"/>
+         <widget class="QWidget" name="monitorprofileholder"/>
         </item>
        </layout>
       </item>

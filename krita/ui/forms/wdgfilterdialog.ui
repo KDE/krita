@@ -30,7 +30,7 @@
     <number>12</number>
    </property>
    <item>
-    <widget class="KisFilterSelectorWidget" name="filterSelection" native="true">
+    <widget class="KisFilterSelectorWidget" name="filterSelection">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>

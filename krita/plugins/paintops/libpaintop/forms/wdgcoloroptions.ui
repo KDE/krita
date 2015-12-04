@@ -43,7 +43,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="KisSliderSpinBox" name="hueSlider" native="true">
+      <widget class="KisSliderSpinBox" name="hueSlider">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
          <horstretch>10</horstretch>
@@ -63,7 +63,7 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="KisSliderSpinBox" name="saturationSlider" native="true">
+      <widget class="KisSliderSpinBox" name="saturationSlider">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
          <horstretch>10</horstretch>
@@ -83,7 +83,7 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="KisSliderSpinBox" name="valueSlider" native="true">
+      <widget class="KisSliderSpinBox" name="valueSlider">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
          <horstretch>10</horstretch>

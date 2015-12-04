@@ -42,7 +42,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="KisSliderSpinBox" name="sliderRate" native="true">
+      <widget class="KisSliderSpinBox" name="sliderRate">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
          <horstretch>0</horstretch>

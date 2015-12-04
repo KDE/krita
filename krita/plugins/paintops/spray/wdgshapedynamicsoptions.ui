@@ -73,7 +73,7 @@
        <widget class="KisDoubleSliderSpinBox" name="fixedAngleBox" />
       </item>
       <item row="1" column="1" colspan="2">
-       <widget class="KisDoubleSliderSpinBox" name="randomAngleWeight" native="true" />
+       <widget class="KisDoubleSliderSpinBox" name="randomAngleWeight" />
       </item>
       <item row="2" column="1" colspan="2">
        <widget class="KisDoubleSliderSpinBox" name="followCursorWeight" />
@@ -86,7 +86,7 @@
        </widget>
       </item>
       <item row="3" column="1" colspan="2">
-       <widget class="KisDoubleSliderSpinBox" name="drawingAngleWeight" native="true" />
+       <widget class="KisDoubleSliderSpinBox" name="drawingAngleWeight" />
       </item>
      </layout>
     </widget>

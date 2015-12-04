@@ -25,7 +25,7 @@
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="QSpinBox" name="shearAngleX" native="true">
+    <widget class="QSpinBox" name="shearAngleX">
      <property name="minimum" stdset="0">
       <number>-45</number>
      </property>
@@ -48,7 +48,7 @@
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QSpinBox" name="shearAngleY" native="true">
+    <widget class="QSpinBox" name="shearAngleY">
      <property name="maximumSize">
       <size>
        <width>32767</width>

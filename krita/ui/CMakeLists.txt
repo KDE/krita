@@ -345,6 +345,7 @@ if(WIN32)
         input/wintab/kis_screen_size_choice_dialog.cpp
         qtlockedfile/qtlockedfile_win.cpp
         )
+      include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 endif()
 if (HAVE_OPENGL)
     set(kritaui_LIB_SRCS

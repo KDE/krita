@@ -32,6 +32,8 @@
 #include <QGuiApplication>
 #include <QDesktopWidget>
 
+#include <qpa/qwindowsysteminterface.h>
+
 #include <QScreen>
 #include <QWidget>
 #include <QLibrary>

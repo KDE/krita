@@ -21,55 +21,14 @@
 #ifndef KIS_TABLET_SUPPORT_WIN_H
 #define KIS_TABLET_SUPPORT_WIN_H
 
-#include <Qt>
 #include <kritaui_export.h>
 
-#include <QAbstractNativeEventFilter>
-
-#ifndef _WINDEF_
-typedef unsigned long DWORD;
-#endif
-
-class KRITAUI_EXPORT KisTabletSupportWin : public QAbstractNativeEventFilter
+class KRITAUI_EXPORT KisTabletSupportWin
 {
-public:
-    struct KRITAUI_EXPORT ButtonsConverter {
-        virtual ~ButtonsConverter() {}
-        virtual void convert(DWORD btnOld, DWORD btnNew,
-                             Qt::MouseButton *button,
-                             Qt::MouseButtons *buttons) = 0;
-    };
-
 public:
     static void init();
-    static void setButtonsConverter(ButtonsConverter *buttonsConverter);
-    bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
 
 };
-
-
-struct QWindowsTabletDeviceData
-{
-    QPointF scaleCoordinates(int coordX, int coordY, const QRect &targetArea) const;
-    qreal scalePressure(qreal p) const { return p / qreal(maxPressure - minPressure); }
-    qreal scaleTangentialPressure(qreal p) const { return p / qreal(maxTanPressure - minTanPressure); }
-
-	int minPressure{ 0 };
-	int maxPressure{ 0 };
-	int minTanPressure{ 0 };
-	int maxTanPressure{ 0 };
-	int minX{ 0 };
-	int maxX{ 0 };
-	int minY{ 0 };
-	int maxY{ 0 };
-	int minZ{ 0 };
-	int maxZ{ 0 };
-	qint64 uniqueId{ 0 };
-	int currentDevice{ 0 };
-	int currentPointerType{ 0 };
-
-};
-
 
 
 #endif // KIS_TABLET_SUPPORT_WIN_H

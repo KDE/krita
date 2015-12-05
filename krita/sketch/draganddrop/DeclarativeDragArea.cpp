@@ -278,7 +278,7 @@ void DeclarativeDragArea::mouseMoveEvent(QMouseEvent *event)
                     icons << "text-html";
                 }
                 if (mimeData()->hasUrls()) {
-                    foreach (const QVariant &u, mimeData()->urls()) {
+                    Q_FOREACH (const QVariant &u, mimeData()->urls()) {
                         Q_UNUSED(u);
                         icons << "text-html";
                     }
@@ -289,7 +289,7 @@ void DeclarativeDragArea::mouseMoveEvent(QMouseEvent *event)
                     pm.fill(Qt::transparent);
                     QPainter p(&pm);
                     int i = 0;
-                    foreach (const QString &ic, icons) {
+                    Q_FOREACH (const QString &ic, icons) {
                         p.drawPixmap(QPoint(i*_w, 0), KisIconUtils::loadIcon(ic).pixmap(_w, _w));
                         i++;
                     }

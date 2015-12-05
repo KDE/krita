@@ -79,7 +79,6 @@
 #include "tool/kis_tool.h"
 #include "kis_signals_blocker.h"
 #include "kis_action_manager.h"
-#include "kis_action_registry.h"
 
 typedef KoResourceServerSimpleConstruction<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
 typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
@@ -138,9 +137,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_eraseModeButton->setCheckable(true);
 
     m_eraseAction = m_viewManager->actionManager()->createAction("erase_action");
-    m_eraseAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    m_eraseAction->setIcon(KisIconUtils::loadIcon("draw-eraser"));
-    m_eraseAction->setCheckable(true);
     m_eraseModeButton->setDefaultAction(m_eraseAction);
 
     eraserBrushSize = 0; // brush size changed when using erase mode
@@ -150,8 +146,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_reloadButton->setCheckable(true);
 
     m_reloadAction = m_viewManager->actionManager()->createAction("reload_preset_action");
-    m_reloadAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    m_reloadAction->setIcon(KisIconUtils::loadIcon("view-refresh"));
     m_reloadButton->setDefaultAction(m_reloadAction);
 
     m_alphaLockButton = new QToolButton(this);
@@ -159,9 +153,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_alphaLockButton->setCheckable(true);
 
     KisAction* alphaLockAction = m_viewManager->actionManager()->createAction("preserve_alpha");
-    alphaLockAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    alphaLockAction->setIcon(KisIconUtils::loadIcon("transparency-unlocked"));
-    alphaLockAction->setCheckable(true);
     m_alphaLockButton->setDefaultAction(alphaLockAction);
 
     m_hMirrorButton = new QToolButton(this);
@@ -169,9 +160,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_hMirrorButton->setCheckable(true);
 
     m_hMirrorAction = m_viewManager->actionManager()->createAction("hmirror_action");
-    m_hMirrorAction->setIcon(KisIconUtils::loadIcon("symmetry-horizontal"));
-    m_hMirrorAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    m_hMirrorAction->setCheckable(true);
     m_hMirrorButton->setDefaultAction(m_hMirrorAction);
 
     m_vMirrorButton = new QToolButton(this);
@@ -179,9 +167,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_vMirrorButton->setCheckable(true);
 
     m_vMirrorAction = m_viewManager->actionManager()->createAction("vmirror_action");
-    m_vMirrorAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    m_vMirrorAction->setIcon(KisIconUtils::loadIcon("symmetry-vertical"));
-    m_vMirrorAction->setCheckable(true);
     m_vMirrorButton->setDefaultAction(m_vMirrorAction);
 
     const bool sliderLabels = cfg.sliderLabels();
@@ -243,7 +228,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     m_cmbCompositeOp = new KisCompositeOpComboBox();
     m_cmbCompositeOp->setFixedHeight(iconsize);
-    foreach(KisAction * a, m_cmbCompositeOp->blendmodeActions()) {
+    Q_FOREACH (KisAction * a, m_cmbCompositeOp->blendmodeActions()) {
         m_viewManager->actionManager()->addAction(a->text(), a);
     }
 
@@ -380,7 +365,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     QList<QString> keys = KisPaintOpRegistry::instance()->keys();
     QList<KisPaintOpFactory*> factoryList;
 
-    foreach(const QString & paintopId, keys) {
+    Q_FOREACH (const QString & paintopId, keys) {
         factoryList.append(KisPaintOpRegistry::instance()->get(paintopId));
     }
     m_presetsPopup->setPaintOpList(factoryList);
@@ -767,7 +752,7 @@ void KisPaintopBox::slotSaveActivePreset()
     newPreset->setPresetDirty(false);
 
     rServer->addResource(newPreset);
-    foreach(const QString & tag, tags) {
+    Q_FOREACH (const QString & tag, tags) {
         rServer->addTag(newPreset.data(), tag);
     }
 
@@ -1017,7 +1002,7 @@ void KisPaintopBox::slotPreviousFavoritePreset()
     if (!m_favoriteResourceManager) return;
 
     int i = 0;
-    foreach (KisPaintOpPresetSP preset, m_favoriteResourceManager->favoritePresetList()) {
+    Q_FOREACH (KisPaintOpPresetSP preset, m_favoriteResourceManager->favoritePresetList()) {
         if (m_resourceProvider->currentPreset() && m_resourceProvider->currentPreset()->name() == preset->name()) {
             if (i > 0) {
                 m_favoriteResourceManager->slotChangeActivePaintop(i - 1);
@@ -1036,7 +1021,7 @@ void KisPaintopBox::slotNextFavoritePreset()
     if (!m_favoriteResourceManager) return;
 
     int i = 0;
-    foreach (KisPaintOpPresetSP preset, m_favoriteResourceManager->favoritePresetList()) {
+    Q_FOREACH (KisPaintOpPresetSP preset, m_favoriteResourceManager->favoritePresetList()) {
         if (m_resourceProvider->currentPreset()->name() == preset->name()) {
             if (i < m_favoriteResourceManager->numFavoritePresets() - 1) {
                 m_favoriteResourceManager->slotChangeActivePaintop(i + 1);

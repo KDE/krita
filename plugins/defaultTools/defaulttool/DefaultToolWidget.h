@@ -28,25 +28,26 @@
 
 class KoInteractionTool;
 
-class DefaultToolWidget : public QWidget, Ui::DefaultToolWidget {
+class DefaultToolWidget : public QWidget, Ui::DefaultToolWidget
+{
     Q_OBJECT
 public:
-    explicit DefaultToolWidget( KoInteractionTool* tool, QWidget *parent = 0 );
+    explicit DefaultToolWidget(KoInteractionTool *tool, QWidget *parent = 0);
 
     /// Sets the unit used by the unit aware child widgets
-    void setUnit( const KoUnit &unit );
+    void setUnit(const KoUnit &unit);
 
 private Q_SLOTS:
-    void positionSelected( KoFlake::Position position );
+    void positionSelected(KoFlake::Position position);
     void updatePosition();
     void positionHasChanged();
     void updateSize();
     void sizeHasChanged();
-    void resourceChanged( int key, const QVariant & res );
+    void resourceChanged(int key, const QVariant &res);
     void aspectButtonToggled(bool keepAspect);
 
 private:
-    KoInteractionTool* m_tool;
+    KoInteractionTool *m_tool;
     bool m_blockSignals;
 };
 

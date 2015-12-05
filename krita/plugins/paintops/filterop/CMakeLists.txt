@@ -1,4 +1,4 @@
-set(kritafilterop_PART_SRCS
+set(kritafilterop_SOURCES
     filterop.cpp
     kis_filterop.cpp
     kis_filterop_settings.cpp
@@ -6,7 +6,7 @@ set(kritafilterop_PART_SRCS
     )
 
 
-add_library(kritafilterop MODULE ${kritafilterop_PART_SRCS})
+add_library(kritafilterop MODULE ${kritafilterop_SOURCES})
 kcoreaddons_desktop_to_json(kritafilterop kritafilterop.desktop)
 
 target_link_libraries(kritafilterop kritalibpaintop)

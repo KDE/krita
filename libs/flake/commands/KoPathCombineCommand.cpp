@@ -36,7 +36,7 @@ public:
     }
     ~Private() {
         if (isCombined && controller) {
-            foreach(KoPathShape* path, paths)
+            Q_FOREACH (KoPathShape* path, paths)
                 delete path;
         } else
             delete combinedPath;
@@ -61,7 +61,7 @@ KoPathCombineCommand::KoPathCombineCommand(KoShapeBasedDocumentBase *controller,
     d->combinedPath->setStroke(d->paths.first()->stroke());
     d->combinedPath->setShapeId(d->paths.first()->shapeId());
     // combine the paths
-    foreach(KoPathShape* path, d->paths) {
+    Q_FOREACH (KoPathShape* path, d->paths) {
         d->combinedPath->combine(path);
         if (! d->combinedPathParent && path->parent())
             d->combinedPathParent = path->parent();
@@ -84,7 +84,7 @@ void KoPathCombineCommand::redo()
 
     if (d->controller) {
         QList<KoShapeContainer*>::iterator parentIt = d->oldParents.begin();
-        foreach(KoPathShape* p, d->paths) {
+        Q_FOREACH (KoPathShape* p, d->paths) {
             d->controller->removeShape(p);
             if (*parentIt)
                 (*parentIt)->removeShape(p);
@@ -109,7 +109,7 @@ void KoPathCombineCommand::undo()
         if (d->combinedPath->parent())
             d->combinedPath->parent()->removeShape(d->combinedPath);
         QList<KoShapeContainer*>::iterator parentIt = d->oldParents.begin();
-        foreach(KoPathShape* p, d->paths) {
+        Q_FOREACH (KoPathShape* p, d->paths) {
             d->controller->addShape(p);
             p->setParent(*parentIt);
             ++parentIt;

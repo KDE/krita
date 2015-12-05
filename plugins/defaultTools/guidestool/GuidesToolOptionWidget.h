@@ -40,10 +40,10 @@ public:
     /// Sets vertical guide lines
     void setVerticalGuideLines(const QList<qreal> &lines);
 
-     /// Returns the list of horizontal guide lines.
+    /// Returns the list of horizontal guide lines.
     QList<qreal> horizontalGuideLines() const;
 
-     /// Returns the list of vertical guide lines.
+    /// Returns the list of vertical guide lines.
     QList<qreal> verticalGuideLines() const;
 
     /// Returns the current selected lines orientation

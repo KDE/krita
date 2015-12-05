@@ -66,12 +66,11 @@ public:
     QKeySequence getCategory(const QString &name);
 
     /**
-     * @return DOM info for an action @a name.  Might be private.
+     * @return value @p property for an action @p name.
      *
-     * Allows somewhat flexible info structure for KisActions, QActions,
-     * whatever else we decide on doing later.
+     * Allow flexible info structure for KisActions, etc.
      */
-    QDomElement getActionXml(const QString &name);
+    QString getActionProperty(const QString &name, const QString &property);
 
 
     /**

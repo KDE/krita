@@ -38,7 +38,7 @@ double KisPressureRotationOption::apply(const KisPaintInformation & info) const
     if (!isChecked()) return m_defaultAngle;
 
     bool dependsOnViewportTransformations = false;
-    foreach(const KisDynamicSensorSP s, activeSensors()) {
+    Q_FOREACH (const KisDynamicSensorSP s, activeSensors()) {
         if (s->dependsOnCanvasRotation()) {
             dependsOnViewportTransformations = true;
             break;

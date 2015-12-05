@@ -68,7 +68,7 @@ public:
 void KoShapeShadow::Private::paintGroupShadow(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter)
 {
     QList<KoShape*> shapes = group->shapes();
-    foreach(KoShape *child, shapes) {
+    Q_FOREACH (KoShape *child, shapes) {
         // we paint recursively here, so we do not have to check recursively for visibility
         if (!child->isVisible())
             continue;

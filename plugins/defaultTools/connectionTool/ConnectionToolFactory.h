@@ -32,7 +32,7 @@ public:
     /// Destructor
     ~ConnectionToolFactory();
     /// reimplemented
-    KoToolBase* createTool( KoCanvasBase *canvas );
+    KoToolBase *createTool(KoCanvasBase *canvas);
 };
 
 #endif

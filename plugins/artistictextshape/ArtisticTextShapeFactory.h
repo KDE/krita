@@ -32,7 +32,7 @@ public:
 
     virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
     // reimplemented from KoShapeFactoryBase
-    virtual bool supports(const KoXmlElement & e, KoShapeLoadingContext &context) const;
+    virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
 };
 
 #endif // ARTISTICTEXTSHAPEFACTORY_H

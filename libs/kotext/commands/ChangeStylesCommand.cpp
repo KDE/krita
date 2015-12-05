@@ -165,7 +165,7 @@ void ChangeStylesCommand::redo()
 
             QList<QTextCharFormat>::Iterator fmtIt = memento->fragmentDirectFormats.begin();
             QList<int>::Iterator idIt = memento->fragmentStyleId.begin();
-            foreach(QTextCursor fragCursor, memento->fragmentCursors) {
+            Q_FOREACH (QTextCursor fragCursor, memento->fragmentCursors) {
                 QTextCharFormat cf(block.charFormat()); // start with block formatting
 
                 if (*idIt > 0) {
@@ -197,7 +197,7 @@ void ChangeStylesCommand::undo()
 void ChangeStylesCommand::clearCommonProperties(QTextFormat *firstFormat, const QTextFormat &secondFormat)
 {
     Q_ASSERT(firstFormat);
-    foreach(int key, secondFormat.properties().keys()) {
+    Q_FOREACH (int key, secondFormat.properties().keys()) {
         if (firstFormat->property(key) == secondFormat.property(key)) {
             firstFormat->clearProperty(key);
         }

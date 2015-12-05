@@ -34,11 +34,11 @@ public:
     StylesDelegate();
 
     virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
-                            const QModelIndex &index) const;
+                       const QModelIndex &index) const;
     virtual QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
     virtual bool editorEvent(QEvent *event, QAbstractItemModel *model,
-                            const QStyleOptionViewItem &option, const QModelIndex &index);
+                             const QStyleOptionViewItem &option, const QModelIndex &index);
     void setEditButtonEnable(bool enable);
 
 Q_SIGNALS:

@@ -38,7 +38,7 @@ KoPathFillRuleCommand::KoPathFillRuleCommand(const QList<KoPathShape*> &shapes, 
         , d(new Private(fillRule))
 {
     d->shapes = shapes;
-    foreach(KoPathShape *shape, d->shapes)
+    Q_FOREACH (KoPathShape *shape, d->shapes)
         d->oldFillRules.append(shape->fillRule());
 
     setText(kundo2_i18n("Set fill rule"));
@@ -52,7 +52,7 @@ KoPathFillRuleCommand::~KoPathFillRuleCommand()
 void KoPathFillRuleCommand::redo()
 {
     KUndo2Command::redo();
-    foreach(KoPathShape *shape, d->shapes) {
+    Q_FOREACH (KoPathShape *shape, d->shapes) {
         shape->setFillRule(d->newFillRule);
         shape->update();
     }
@@ -62,7 +62,7 @@ void KoPathFillRuleCommand::undo()
 {
     KUndo2Command::undo();
     QList<Qt::FillRule>::iterator ruleIt = d->oldFillRules.begin();
-    foreach(KoPathShape *shape, d->shapes) {
+    Q_FOREACH (KoPathShape *shape, d->shapes) {
         shape->setFillRule(*ruleIt);
         shape->update();
         ++ruleIt;

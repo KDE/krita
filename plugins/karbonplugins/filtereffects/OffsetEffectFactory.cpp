@@ -23,16 +23,16 @@
 #include <klocalizedstring.h>
 
 OffsetEffectFactory::OffsetEffectFactory()
-        : KoFilterEffectFactoryBase(OffsetEffectId, i18n("Offset"))
+    : KoFilterEffectFactoryBase(OffsetEffectId, i18n("Offset"))
 {
 }
 
-KoFilterEffect * OffsetEffectFactory::createFilterEffect() const
+KoFilterEffect *OffsetEffectFactory::createFilterEffect() const
 {
     return new OffsetEffect();
 }
 
-KoFilterEffectConfigWidgetBase * OffsetEffectFactory::createConfigWidget() const
+KoFilterEffectConfigWidgetBase *OffsetEffectFactory::createConfigWidget() const
 {
     return new OffsetEffectConfigWidget();
 }

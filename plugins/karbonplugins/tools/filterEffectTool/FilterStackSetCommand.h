@@ -38,9 +38,9 @@ public:
     virtual void undo();
 
 private:
-    KoFilterEffectStack * m_newFilterStack;
-    KoFilterEffectStack * m_oldFilterStack;
-    KoShape * m_shape;
+    KoFilterEffectStack *m_newFilterStack;
+    KoFilterEffectStack *m_oldFilterStack;
+    KoShape *m_shape;
     bool m_isSet;
 };
 

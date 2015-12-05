@@ -147,7 +147,7 @@ QPointF KisPanAction::Private::averagePoint( QTouchEvent* event )
     QPointF result;
     int count = 0;
 
-    foreach( QTouchEvent::TouchPoint point, event->touchPoints() ) {
+    Q_FOREACH ( QTouchEvent::TouchPoint point, event->touchPoints() ) {
         if( point.state() != Qt::TouchPointReleased ) {
             result += point.screenPos();
             count++;

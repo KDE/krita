@@ -1,10 +1,10 @@
 
-set(kritacolorrange_PART_SRCS colorrange.cc dlg_colorrange.cc )
+set(kritacolorrange_SOURCES colorrange.cc dlg_colorrange.cc )
 
 
-ki18n_wrap_ui(kritacolorrange_PART_SRCS wdg_colorrange.ui )
+ki18n_wrap_ui(kritacolorrange_SOURCES wdg_colorrange.ui )
 
-add_library(kritacolorrange MODULE ${kritacolorrange_PART_SRCS})
+add_library(kritacolorrange MODULE ${kritacolorrange_SOURCES})
 kcoreaddons_desktop_to_json(kritacolorrange kritacolorrange.desktop)
 
 

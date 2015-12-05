@@ -21,7 +21,8 @@
 
 MatrixDataModel::MatrixDataModel(QObject *parent)
     : QAbstractTableModel(parent)
-    , m_rows(0), m_cols(0)
+    , m_rows(0)
+    , m_cols(0)
 {
 }
 
@@ -32,7 +33,7 @@ void MatrixDataModel::setMatrix(const QVector<qreal> &matrix, int rows, int cols
     m_cols = cols;
     Q_ASSERT(m_rows);
     Q_ASSERT(m_cols);
-    Q_ASSERT(m_matrix.count() == m_rows*m_cols);
+    Q_ASSERT(m_matrix.count() == m_rows * m_cols);
     reset();
 }
 
@@ -54,13 +55,13 @@ int MatrixDataModel::columnCount(const QModelIndex &/*parent*/) const
 QVariant MatrixDataModel::data(const QModelIndex &index, int role) const
 {
     int element = index.row() * m_cols + index.column();
-    switch(role) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-            return QVariant(QString("%1").arg(m_matrix[element], 2));
-            break;
-        default:
-            return QVariant();
+    switch (role) {
+    case Qt::DisplayRole:
+    case Qt::EditRole:
+        return QVariant(QString("%1").arg(m_matrix[element], 2));
+        break;
+    default:
+        return QVariant();
     }
 }
 
@@ -69,8 +70,9 @@ bool MatrixDataModel::setData(const QModelIndex &index, const QVariant &value, i
     int element = index.row() * m_cols + index.column();
     bool valid = false;
     qreal elementValue = value.toDouble(&valid);
-    if (!valid)
+    if (!valid) {
         return false;
+    }
     m_matrix[element] = elementValue;
     emit dataChanged(index, index);
     return true;
@@ -78,5 +80,5 @@ bool MatrixDataModel::setData(const QModelIndex &index, const QVariant &value, i
 
 Qt::ItemFlags MatrixDataModel::flags(const QModelIndex &/*index*/) const
 {
-    return Qt::ItemIsEnabled|Qt::ItemIsSelectable|Qt::ItemIsEditable;
+    return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
 }

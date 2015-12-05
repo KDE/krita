@@ -55,9 +55,7 @@ K_PLUGIN_FACTORY_WITH_JSON(LayerSplitFactory, "kritalayersplit.json", registerPl
 LayerSplit::LayerSplit(QObject *parent, const QVariantList &)
     : KisViewPlugin(parent)
 {
-    KisAction *action  = new KisAction(i18n("Split Layer..."), this);
-    action->setActivationFlags(KisAction::ACTIVE_NODE);
-    addAction("layersplit", action);
+    KisAction *action  = createAction("layersplit");
     connect(action, SIGNAL(triggered()), this, SLOT(slotLayerSplit()));
 }
 
@@ -132,7 +130,7 @@ void LayerSplit::slotLayerSplit()
                 }
 
                 bool found = false;
-                foreach(const Layer &l, colorMap) {
+                Q_FOREACH (const Layer &l, colorMap) {
                     if (fuzziness == 0) {
 
                         found = (l.color == c);
@@ -172,7 +170,7 @@ void LayerSplit::slotLayerSplit()
         updater->setProgress(100);
 
         dbgKrita << "Created" << colorMap.size() << "layers";
-//        foreach(const Layer &l, colorMap) {
+//        Q_FOREACH (const Layer &l, colorMap) {
 //            dbgKrita << "\t" << l.device->objectName() << ":" << l.pixelsWritten;
 //        }
 
@@ -200,7 +198,7 @@ void LayerSplit::slotLayerSplit()
             baseGroup = grp;
         }
 
-        foreach(const Layer &l, colorMap) {
+        Q_FOREACH (const Layer &l, colorMap) {
             KisGroupLayerSP grp = baseGroup;
             if (dlg.createSeparateGroups()) {
                 grp = new KisGroupLayer(image, l.device->objectName(), OPACITY_OPAQUE_U8);

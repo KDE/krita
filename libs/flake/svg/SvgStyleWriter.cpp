@@ -202,7 +202,7 @@ void SvgStyleWriter::saveSvgClipping(KoShape *shape, SvgSavingContext &context)
 
 void SvgStyleWriter::saveSvgColorStops(const QGradientStops &colorStops, SvgSavingContext &context)
 {
-    foreach(const QGradientStop &stop, colorStops) {
+    Q_FOREACH (const QGradientStop &stop, colorStops) {
         context.styleWriter().startElement("stop");
         context.styleWriter().addAttribute("stop-color", stop.second.name());
         context.styleWriter().addAttribute("offset", stop.first);

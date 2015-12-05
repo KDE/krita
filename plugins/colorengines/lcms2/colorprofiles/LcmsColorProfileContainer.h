@@ -30,7 +30,6 @@
 #include <QByteArray>
 #include <QString>
 
-
 /**
  * This class contains an LCMS color profile. Don't use it outside LcmsColorSpace.
  */
@@ -51,7 +50,7 @@ public:
      *                to this function
      * @return an ICC profile created from an LCMS profile
      */
-    static IccColorProfile* createFromLcmsProfile(const cmsHPROFILE profile);
+    static IccColorProfile *createFromLcmsProfile(const cmsHPROFILE profile);
 public:
 
     virtual ~LcmsColorProfileContainer();
@@ -97,7 +96,7 @@ private:
     bool init();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOCOLORPROFILE_H

@@ -26,7 +26,7 @@ class FilterEffectsPlugin : public QObject
 {
     Q_OBJECT
 public:
-    FilterEffectsPlugin(QObject * parent, const QList<QVariant>&);
+    FilterEffectsPlugin(QObject *parent, const QList<QVariant> &);
     ~FilterEffectsPlugin() {}
 };
 

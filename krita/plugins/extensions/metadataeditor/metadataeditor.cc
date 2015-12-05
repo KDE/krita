@@ -50,8 +50,6 @@ metadataeditorPlugin::metadataeditorPlugin(QObject *parent, const QVariantList &
         : KisViewPlugin(parent)
 {
     KisAction *action  = createAction("EditLayerMetaData");
-    action->setActivationFlags(KisAction::ACTIVE_LAYER);
-    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     connect(action, SIGNAL(triggered()), this, SLOT(slotEditLayerMetaData()));
 }
 

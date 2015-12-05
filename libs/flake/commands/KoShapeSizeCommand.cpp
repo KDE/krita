@@ -52,7 +52,7 @@ void KoShapeSizeCommand::redo()
 {
     KUndo2Command::redo();
     int i = 0;
-    foreach(KoShape *shape, d->shapes) {
+    Q_FOREACH (KoShape *shape, d->shapes) {
         shape->update();
         shape->setSize(d->newSizes[i++]);
         shape->update();
@@ -63,7 +63,7 @@ void KoShapeSizeCommand::undo()
 {
     KUndo2Command::undo();
     int i = 0;
-    foreach(KoShape *shape, d->shapes) {
+    Q_FOREACH (KoShape *shape, d->shapes) {
         shape->update();
         shape->setSize(d->previousSizes[i++]);
         shape->update();

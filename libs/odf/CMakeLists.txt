@@ -25,7 +25,6 @@ set(kritaodf_LIB_SRCS
     KoDocumentBase.cpp
     KoEmbeddedDocumentSaver.cpp
     KoBorder.cpp
-    Ko3dScene.cpp
     KoShadowStyle.cpp
     KoPageLayout.cpp
     KoPageFormat.cpp

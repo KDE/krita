@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * 
+ *
  * Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -22,8 +22,8 @@
 #include "ConnectionTool.h"
 #include <QAction>
 
-ConnectionPointWidget::ConnectionPointWidget(ConnectionTool *tool, QWidget * parent)
-    :QWidget(parent)
+ConnectionPointWidget::ConnectionPointWidget(ConnectionTool *tool, QWidget *parent)
+    : QWidget(parent)
 {
     widget.setupUi(this);
     widget.alignLeft->setDefaultAction(tool->action("align-left"));
@@ -49,9 +49,10 @@ ConnectionPointWidget::ConnectionPointWidget(ConnectionTool *tool, QWidget * par
 void ConnectionPointWidget::toggleEditModeCheckbox(bool checked)
 {
     widget.toggleEditMode->blockSignals(true);
-    if (checked)
+    if (checked) {
         widget.toggleEditMode->setCheckState(Qt::Checked);
-    else
+    } else {
         widget.toggleEditMode->setCheckState(Qt::Unchecked);
+    }
     widget.toggleEditMode->blockSignals(false);
 }

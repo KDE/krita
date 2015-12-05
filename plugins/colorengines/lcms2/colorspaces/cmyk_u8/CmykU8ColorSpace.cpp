@@ -42,20 +42,21 @@ CmykU8ColorSpace::CmykU8ColorSpace(const QString &name, KoColorProfile *p)
 
 bool CmykU8ColorSpace::willDegrade(ColorSpaceIndependence independence) const
 {
-    if (independence == TO_RGBA8)
+    if (independence == TO_RGBA8) {
         return true;
-    else
+    } else {
         return false;
+    }
 }
 
-KoColorSpace* CmykU8ColorSpace::clone() const
+KoColorSpace *CmykU8ColorSpace::clone() const
 {
     return new CmykU8ColorSpace(name(), profile()->clone());
 }
 
-void CmykU8ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+void CmykU8ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const
 {
-    const CmykU8Traits::Pixel* p = reinterpret_cast<const CmykU8Traits::Pixel*>(pixel);
+    const CmykU8Traits::Pixel *p = reinterpret_cast<const CmykU8Traits::Pixel *>(pixel);
     QDomElement labElt = doc.createElement("CMYK");
     labElt.setAttribute("c", KoColorSpaceMaths< CmykU8Traits::channels_type, qreal>::scaleToA(p->cyan));
     labElt.setAttribute("m", KoColorSpaceMaths< CmykU8Traits::channels_type, qreal>::scaleToA(p->magenta));
@@ -65,14 +66,13 @@ void CmykU8ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomEl
     colorElt.appendChild(labElt);
 }
 
-void CmykU8ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
+void CmykU8ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
-    CmykU8Traits::Pixel* p = reinterpret_cast<CmykU8Traits::Pixel*>(pixel);
+    CmykU8Traits::Pixel *p = reinterpret_cast<CmykU8Traits::Pixel *>(pixel);
     p->cyan = KoColorSpaceMaths< qreal, CmykU8Traits::channels_type >::scaleToA(elt.attribute("c").toDouble());
     p->magenta = KoColorSpaceMaths< qreal, CmykU8Traits::channels_type >::scaleToA(elt.attribute("m").toDouble());
     p->yellow = KoColorSpaceMaths< qreal, CmykU8Traits::channels_type >::scaleToA(elt.attribute("y").toDouble());
     p->black = KoColorSpaceMaths< qreal, CmykU8Traits::channels_type >::scaleToA(elt.attribute("k").toDouble());
     p->alpha = KoColorSpaceMathsTraits<quint8>::max;
 }
-
 

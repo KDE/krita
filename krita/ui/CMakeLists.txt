@@ -51,7 +51,6 @@ set(kritaui_LIB_SRCS
     canvas/kis_image_patch.cpp
     canvas/kis_image_pyramid.cpp
     canvas/kis_infinity_manager.cpp
-    canvas/kis_animation_player.cpp
     dialogs/kis_about_application.cpp
     dialogs/kis_dlg_adj_layer_props.cc
     dialogs/kis_dlg_adjustment_layer.cc
@@ -146,6 +145,7 @@ set(kritaui_LIB_SRCS
     kra/kis_kra_savexml_visitor.cpp
     opengl/kis_opengl.cpp
     opengl/kis_opengl_canvas2.cpp
+    opengl/kis_opengl_canvas_debugger.cpp
     opengl/kis_opengl_image_textures.cpp
     opengl/kis_texture_tile.cpp
     opengl/kis_texture_tile_update_info.cpp
@@ -328,12 +328,13 @@ set(kritaui_LIB_SRCS
     qtsingleapplication/qtlocalpeer.cpp
     qtsingleapplication/qtsingleapplication.cpp
 
-    kis_animation_frame_cache.cpp
-    kis_animation_cache_populator.cpp
-    kis_animation_exporter.cpp
 
     kis_md5_generator.cpp
     KisApplicationArguments.cpp
+
+    KisNetworkAccessManager.cpp
+    KisWelcomeScreen.cpp
+    KisMultiFeedRSSModel.cpp
 )
 
 if(WIN32)
@@ -344,6 +345,15 @@ if(WIN32)
         input/wintab/kis_screen_size_choice_dialog.cpp
         qtlockedfile/qtlockedfile_win.cpp
         )
+endif()
+if (HAVE_OPENGL)
+    set(kritaui_LIB_SRCS
+        ${kritaui_LIB_SRCS}
+        kis_animation_frame_cache.cpp
+        kis_animation_cache_populator.cpp
+        canvas/kis_animation_player.cpp
+        kis_animation_exporter.cpp
+    )
 endif()
 
 if(UNIX)

@@ -264,7 +264,7 @@ KoList *KoTextDocument::list(QTextList *textList) const
         return 0;
     }
     // FIXME: this is horrible.
-    foreach(KoList *l, lists()) {
+    Q_FOREACH (KoList *l, lists()) {
         if (l->textLists().contains(textList))
             return l;
     }
@@ -273,7 +273,7 @@ KoList *KoTextDocument::list(QTextList *textList) const
 
 KoList *KoTextDocument::list(KoListStyle::ListIdType listId) const
 {
-    foreach(KoList *l, lists()) {
+    Q_FOREACH (KoList *l, lists()) {
         if (l->textListIds().contains(listId))
             return l;
     }
@@ -293,7 +293,7 @@ QVector< QAbstractTextDocumentLayout::Selection > KoTextDocument::selections() c
     QVariantList variants = resource.toList();
 
     QVector<QAbstractTextDocumentLayout::Selection> selections;
-    foreach(const QVariant &variant, variants) {
+    Q_FOREACH (const QVariant &variant, variants) {
         selections.append(variant.value<QAbstractTextDocumentLayout::Selection>());
     }
 
@@ -303,7 +303,7 @@ QVector< QAbstractTextDocumentLayout::Selection > KoTextDocument::selections() c
 void KoTextDocument::setSelections(const QVector< QAbstractTextDocumentLayout::Selection >& selections)
 {
     QVariantList variants;
-    foreach(const QAbstractTextDocumentLayout::Selection &selection, selections) {
+    Q_FOREACH (const QAbstractTextDocumentLayout::Selection &selection, selections) {
         variants.append(QVariant::fromValue<QAbstractTextDocumentLayout::Selection>(selection));
     }
 

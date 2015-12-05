@@ -93,7 +93,7 @@ void FillProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapt
 
         m_resources->setupPainter(&painter);
 
-        foreach(const QRect &rc, dirtyRect) {
+        Q_FOREACH (const QRect &rc, dirtyRect) {
             painter.bitBlt(rc.topLeft(), filledDevice, rc);
         }
 

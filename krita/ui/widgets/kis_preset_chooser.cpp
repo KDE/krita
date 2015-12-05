@@ -139,7 +139,7 @@ public:
         }
 
         QList<KoResource*> resources;
-        foreach (KoResource *resource, serverResources) {
+        Q_FOREACH (KoResource *resource, serverResources) {
             KisPaintOpPreset *preset = dynamic_cast<KisPaintOpPreset*>(resource);
 
             if (preset && preset->paintOp().id() == m_paintopID) {

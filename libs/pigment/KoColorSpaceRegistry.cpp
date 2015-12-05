@@ -87,7 +87,7 @@ void KoColorSpaceRegistry::init()
     d->localFactories << new KoLabColorSpaceFactory()
             << new KoRgbU8ColorSpaceFactory()
             << new KoRgbU16ColorSpaceFactory();
-    foreach(KoColorSpaceFactory *factory, d->localFactories) {
+    Q_FOREACH (KoColorSpaceFactory *factory, d->localFactories) {
         add(factory);
     }
 
@@ -108,7 +108,7 @@ void KoColorSpaceRegistry::init()
 
 
     dbgPigment << "Loaded the following colorspaces:";
-    foreach(const KoID& id, listKeys()) {
+    Q_FOREACH (const KoID& id, listKeys()) {
         dbgPigment << "\t" << id.id() << "," << id.name();
     }
 }
@@ -123,12 +123,12 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
 {
     // Just leak on exit... It's faster.
 //    delete d->colorConversionSystem;
-//    foreach(KoColorProfile* profile, d->profileMap) {
+//    Q_FOREACH (KoColorProfile* profile, d->profileMap) {
 //        delete profile;
 //    }
 //    d->profileMap.clear();
 
-//    foreach(const KoColorSpace * cs, d->csMap) {
+//    Q_FOREACH (const KoColorSpace * cs, d->csMap) {
 //        cs->d->deletability = OwnedByRegistryRegistryDeletes;
 //    }
 //    d->csMap.clear();
@@ -158,7 +158,7 @@ void KoColorSpaceRegistry::remove(KoColorSpaceFactory* item)
 {
     d->registrylock.lockForRead();
     QList<QString> toremove;
-    foreach(const KoColorSpace * cs, d->csMap) {
+    Q_FOREACH (const KoColorSpace * cs, d->csMap) {
         if (cs->id() == item->id()) {
             toremove.push_back(idsToCacheName(cs->id(), cs->profile()->name()));
             cs->d->deletability = OwnedByRegistryRegistryDeletes;
@@ -166,7 +166,7 @@ void KoColorSpaceRegistry::remove(KoColorSpaceFactory* item)
     }
     d->registrylock.unlock();
     d->registrylock.lockForWrite();
-    foreach(const QString& id, toremove) {
+    Q_FOREACH (const QString& id, toremove) {
         d->csMap.remove(id);
         // TODO: should not it delete the color space when removing it from the map ?
     }
@@ -235,7 +235,7 @@ QList<const KoColorSpaceFactory*> KoColorSpaceRegistry::colorSpacesFor(const KoC
 {
     QReadLocker l(&d->registrylock);
     QList<const KoColorSpaceFactory*> csfs;
-    foreach(KoColorSpaceFactory* csf, d->colorSpaceFactoryRegistry.values()) {
+    Q_FOREACH (KoColorSpaceFactory* csf, d->colorSpaceFactoryRegistry.values()) {
         if (csf->profileIsCompatible(_profile)) {
             csfs.push_back(csf);
         }
@@ -501,7 +501,7 @@ QList<KoID> KoColorSpaceRegistry::colorModelsList(ColorSpaceListVisibility optio
     QReadLocker l(&d->registrylock);
     QList<KoID> ids;
     QList<KoColorSpaceFactory*> factories = d->colorSpaceFactoryRegistry.values();
-    foreach(KoColorSpaceFactory* factory, factories) {
+    Q_FOREACH (KoColorSpaceFactory* factory, factories) {
         if (!ids.contains(factory->colorModelId())
                 && (option == AllColorSpaces || factory->userVisible())) {
             ids << factory->colorModelId();
@@ -520,7 +520,7 @@ QList<KoID> KoColorSpaceRegistry::colorDepthList(const QString & colorModelId, C
     QReadLocker l(&d->registrylock);
     QList<KoID> ids;
     QList<KoColorSpaceFactory*> factories = d->colorSpaceFactoryRegistry.values();
-    foreach(KoColorSpaceFactory* factory, factories) {
+    Q_FOREACH (KoColorSpaceFactory* factory, factories) {
         if (!ids.contains(KoID(factory->colorDepthId()))
                 && factory->colorModelId().id() == colorModelId
                 && (option == AllColorSpaces || factory->userVisible())) {
@@ -534,7 +534,7 @@ QString KoColorSpaceRegistry::colorSpaceId(const QString & colorModelId, const Q
 {
     QReadLocker l(&d->registrylock);
     QList<KoColorSpaceFactory*> factories = d->colorSpaceFactoryRegistry.values();
-    foreach(KoColorSpaceFactory* factory, factories) {
+    Q_FOREACH (KoColorSpaceFactory* factory, factories) {
         if (factory->colorModelId().id() == colorModelId && factory->colorDepthId().id() == colorDepthId) {
             return factory->id();
         }
@@ -597,7 +597,7 @@ QList<KoID> KoColorSpaceRegistry::listKeys() const
 {
     QReadLocker l(&d->registrylock);
     QList<KoID> answer;
-    foreach(const QString& key, d->colorSpaceFactoryRegistry.keys()) {
+    Q_FOREACH (const QString& key, d->colorSpaceFactoryRegistry.keys()) {
         answer.append(KoID(key, d->colorSpaceFactoryRegistry.get(key)->name()));
     }
 
@@ -619,7 +619,7 @@ QList<const KoColorSpace*> KoColorSpaceRegistry::allColorSpaces(ColorSpaceListVi
     QList<KoColorSpaceFactory*> factories = d->colorSpaceFactoryRegistry.values();
     d->registrylock.unlock();
 
-    foreach(KoColorSpaceFactory* factory, factories) {
+    Q_FOREACH (KoColorSpaceFactory* factory, factories) {
         // Don't test with ycbcr for now, since we don't have a default profile for it.
         if (factory->colorModelId().id().startsWith("Y")) continue;
         if (visibility == AllColorSpaces || factory->userVisible()) {
@@ -633,7 +633,7 @@ QList<const KoColorSpace*> KoColorSpaceRegistry::allColorSpaces(ColorSpaceListVi
                 }
             } else {
                 QList<const KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor(factory->id());
-                foreach(const KoColorProfile * profile, profiles) {
+                Q_FOREACH (const KoColorProfile * profile, profiles) {
                     const KoColorSpace *cs = colorSpace(factory->id(), profile);
                     if (cs) {
                         colorSpaces.append(cs);

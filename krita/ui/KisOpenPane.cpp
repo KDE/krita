@@ -209,7 +209,7 @@ void KisOpenPane::openFileDialog()
                           : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
     dialog.setMimeTypeFilters(m_mimeFilter);
     dialog.setHideNameFilterDetailsOption();
-    foreach(const QString &filename, dialog.filenames()) {
+    Q_FOREACH (const QString &filename, dialog.filenames()) {
         emit openExistingFile(QUrl::fromUserInput(filename));
     }
 }
@@ -223,7 +223,7 @@ void KisOpenPane::initTemplates(const QString& templatesResourcePath)
     if (!templatesResourcePath.isEmpty()) {
         KisTemplateTree templateTree(templatesResourcePath, true);
 
-        foreach (KisTemplateGroup *group, templateTree.groups()) {
+        Q_FOREACH (KisTemplateGroup *group, templateTree.groups()) {
             if (group->isHidden()) {
                 continue;
             }

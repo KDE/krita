@@ -44,7 +44,7 @@ void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)(const KoCo
 {
     QList<const KoColorSpace*> colorsapces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
 
-    foreach(const KoColorSpace* cs, colorsapces) {
+    Q_FOREACH (const KoColorSpace* cs, colorsapces) {
 
         QString csId = cs->id();
         // ALL THESE COLORSPACES ARE BROKEN: WE NEED UNITTESTS FOR COLORSPACES!
@@ -197,7 +197,7 @@ void KisPainterTest::testPaintDeviceBltSelectionIrregular(const KoColorSpace * c
     image.save("blt_Selection_irregular" + cs->name() + ".png");
 
     QCOMPARE(dst->exactBounds(), QRect(10, 10, 10, 10));
-    foreach(KoChannelInfo * channel, cs->channels()) {
+    Q_FOREACH (KoChannelInfo * channel, cs->channels()) {
         // Only compare alpha if there actually is an alpha channel in
         // this colorspace
         if (channel->channelType() == KoChannelInfo::ALPHA) {

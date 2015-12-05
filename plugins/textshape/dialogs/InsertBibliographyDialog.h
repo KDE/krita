@@ -33,7 +33,7 @@ class InsertBibliographyDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit InsertBibliographyDialog(KoTextEditor *editor , QWidget *parent = 0);
+    explicit InsertBibliographyDialog(KoTextEditor *editor, QWidget *parent = 0);
     QString bibliographyType();
 
 public Q_SLOTS:
@@ -44,7 +44,7 @@ public Q_SLOTS:
     void addSpan();
     void insertTabStop();
     void removeTabStop();
-    void spanChanged( QListWidgetItem *);
+    void spanChanged(QListWidgetItem *);
 
 private:
     Ui::InsertBibliographyDialog dialog;
@@ -52,6 +52,5 @@ private:
     KoTextEditor *m_editor;
     KoBibliographyInfo *m_bibInfo;
 };
-
 
 #endif // INSERTBIBLIOGRAPHYDIALOG_H

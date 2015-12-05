@@ -1,6 +1,6 @@
 add_subdirectory( tests )
 
-set(kritaresourcemanager_PART_SRCS
+set(kritaresourcemanager_SOURCES
     resourcemanager.cpp
 	resourcebundle_manifest.cpp
     resourcebundle.cpp
@@ -8,12 +8,12 @@ set(kritaresourcemanager_PART_SRCS
     dlg_bundle_manager.cpp
 )
 
-ki18n_wrap_ui(kritaresourcemanager_PART_SRCS
+ki18n_wrap_ui(kritaresourcemanager_SOURCES
     wdgdlgcreatebundle.ui 
     wdgdlgbundlemanager.ui
 )
 
-add_library(kritaresourcemanager MODULE ${kritaresourcemanager_PART_SRCS})
+add_library(kritaresourcemanager MODULE ${kritaresourcemanager_SOURCES})
 kcoreaddons_desktop_to_json(kritaresourcemanager kritaresourcemanager.desktop)
 
 target_link_libraries(kritaresourcemanager kritawidgets kritaui kritalibpaintop)

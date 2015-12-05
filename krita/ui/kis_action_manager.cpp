@@ -31,7 +31,6 @@
 #include "operations/kis_operation.h"
 #include "kis_layer.h"
 #include "KisDocument.h"
-#include "kis_action_registry.h"
 
 #include "QFile"
 #include <QDomDocument>
@@ -75,7 +74,7 @@ KisActionManager::~KisActionManager()
        e.setAttribute("version", "2");
        doc.appendChild(e);
 
-       foreach(KisAction *action, d->actions) {
+       Q_FOREACH (KisAction *action, d->actions) {
            QDomElement a = doc.createElement("Action");
            a.setAttribute("name", action->objectName());
 
@@ -143,7 +142,7 @@ void KisActionManager::takeAction(KisAction* action)
 
 KisAction *KisActionManager::actionByName(const QString &name) const
 {
-    foreach(KisAction *action, d->actions) {
+    Q_FOREACH (KisAction *action, d->actions) {
         if (action->objectName() == name) {
             return action;
         }
@@ -164,10 +163,16 @@ KisAction *KisActionManager::createAction(const QString &name)
     // will add them to the KisActionRegistry for the time being so we can get
     // properly categorized shortcuts.
     a = new KisAction();
-    KisActionRegistry::instance()->propertizeAction(name, a);
-    KisActionRegistry::instance()->addAction(name, a);
+    auto actionRegistry = KisActionRegistry::instance();
 
-    // TODO: Add other static data (activationFlags, etc.) using getActionXml();
+    // Add extra properties
+    actionRegistry->propertizeAction(name, a);
+    actionRegistry->addAction(name, a);
+    bool ok; // We will skip this check
+    int activationFlags = actionRegistry->getActionProperty(name, "activationFlags").toInt(&ok, 2);
+    int activationConditions = actionRegistry->getActionProperty(name, "activationConditions").toInt(&ok, 2);
+    a->setActivationFlags((KisAction::ActivationFlags) activationFlags);
+    a->setActivationConditions((KisAction::ActivationConditions) activationConditions);
 
     addAction(name, a);
 
@@ -276,7 +281,7 @@ void KisActionManager::updateGUI()
 
 
     // loop through all actions in action manager and determine what should be enabled
-    foreach(KisAction* action, d->actions) {
+    Q_FOREACH (KisAction* action, d->actions) {
         bool enable;
 
         if (action->activationFlags() == KisAction::NONE) {
@@ -289,7 +294,7 @@ void KisActionManager::updateGUI()
         enable = enable && (int)(action->activationConditions() & conditions) == (int)action->activationConditions();
 
         if (node && enable) {
-            foreach (const QString &type, action->excludedNodeTypes()) {
+            Q_FOREACH (const QString &type, action->excludedNodeTypes()) {
                 if (node->inherits(type.toLatin1())) {
                     enable = false;
                     break;
@@ -377,7 +382,7 @@ void KisActionManager::dumpActionFlags()
     if (data.open(QFile::WriteOnly | QFile::Truncate)) {
         QTextStream out(&data);
 
-        foreach(KisAction* action, d->actions) {
+        Q_FOREACH (KisAction* action, d->actions) {
             KisAction::ActivationFlags flags = action->activationFlags();
             out << "-------- " << action->text() << " --------\n";
             out << "Action will activate on: \n";

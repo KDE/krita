@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 // Own
 #include "VectorShapePlugin.h"
 
@@ -33,11 +32,9 @@
 #include "VectorToolFactory.h"
 #include "VectorShapeFactory.h"
 
+K_PLUGIN_FACTORY_WITH_JSON(VectorShapePluginFactory, "calligra_shape_vector.json", registerPlugin<VectorShapePlugin>();)
 
-K_PLUGIN_FACTORY_WITH_JSON(VectorShapePluginFactory, "calligra_shape_vector.json",
-                 registerPlugin<VectorShapePlugin>();)
-
-VectorShapePlugin::VectorShapePlugin(QObject * parent, const QVariantList &)
+VectorShapePlugin::VectorShapePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KoToolRegistry::instance()->add(new VectorToolFactory());

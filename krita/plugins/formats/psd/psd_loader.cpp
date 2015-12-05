@@ -152,7 +152,7 @@ KisImageBuilder_Result PSDLoader::decode(const QUrl &uri)
     }
 
     // Preserve all the annotations
-    foreach(PSDResourceBlock *resourceBlock, resourceSection.resources.values()) {
+    Q_FOREACH (PSDResourceBlock *resourceBlock, resourceSection.resources.values()) {
         m_image->addAnnotation(resourceBlock);
     }
 
@@ -252,7 +252,7 @@ KisImageBuilder_Result PSDLoader::decode(const QUrl &uri)
 
         }
 
-        foreach(ChannelInfo *channelInfo, layerRecord->channelInfoRecords) {
+        Q_FOREACH (ChannelInfo *channelInfo, layerRecord->channelInfoRecords) {
             if (channelInfo->channelId < -1) {
                 KisTransparencyMaskSP mask = new KisTransparencyMask();
                 mask->setName(i18n("Transparency Mask"));
@@ -271,7 +271,7 @@ KisImageBuilder_Result PSDLoader::decode(const QUrl &uri)
     KisAslLayerStyleSerializer serializer;
 
     if (!embeddedPatterns.isEmpty()) {
-        foreach (const QDomDocument &doc, embeddedPatterns) {
+        Q_FOREACH (const QDomDocument &doc, embeddedPatterns) {
             serializer.registerPSDPattern(doc);
         }
     }
@@ -279,7 +279,7 @@ KisImageBuilder_Result PSDLoader::decode(const QUrl &uri)
     QVector<KisPSDLayerStyleSP> allStylesForServer;
 
     if (!allStylesXml.isEmpty()) {
-        foreach (const LayerStyleMapping &mapping, allStylesXml) {
+        Q_FOREACH (const LayerStyleMapping &mapping, allStylesXml) {
             serializer.readFromPSDXML(mapping.first);
 
             if (serializer.styles().size() == 1) {

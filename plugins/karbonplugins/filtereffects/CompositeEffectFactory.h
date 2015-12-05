@@ -28,8 +28,8 @@ class CompositeEffectFactory : public KoFilterEffectFactoryBase
 {
 public:
     CompositeEffectFactory();
-    virtual KoFilterEffect * createFilterEffect() const;
-    virtual KoFilterEffectConfigWidgetBase * createConfigWidget() const;
+    virtual KoFilterEffect *createFilterEffect() const;
+    virtual KoFilterEffectConfigWidgetBase *createConfigWidget() const;
 };
 
 #endif // COMPOSITEEFFECTFACTORY_H

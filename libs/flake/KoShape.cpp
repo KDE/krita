@@ -45,8 +45,6 @@
 #include "KoShapeShadow.h"
 #include "KoClipPath.h"
 #include "KoPathShape.h"
-#include "KoEventAction.h"
-#include "KoEventActionRegistry.h"
 #include "KoOdfWorkaround.h"
 #include "KoFilterEffectStack.h"
 #include <KoSnapData.h>
@@ -120,7 +118,7 @@ KoShapePrivate::~KoShapePrivate()
     Q_Q(KoShape);
     if (parent)
         parent->removeShape(q);
-    foreach(KoShapeManager *manager, shapeManagers) {
+    Q_FOREACH (KoShapeManager *manager, shapeManagers) {
         manager->remove(q);
         manager->removeAdditional(q);
     }
@@ -133,7 +131,6 @@ KoShapePrivate::~KoShapePrivate()
     if (filterEffectStack && !filterEffectStack->deref())
         delete filterEffectStack;
     delete clipPath;
-    qDeleteAll(eventActions);
 }
 
 void KoShapePrivate::shapeChanged(KoShape::ChangeType type)
@@ -142,7 +139,7 @@ void KoShapePrivate::shapeChanged(KoShape::ChangeType type)
     if (parent)
         parent->model()->childChanged(q, type);
     q->shapeChanged(type);
-    foreach(KoShape * shape, dependees)
+    Q_FOREACH (KoShape * shape, dependees)
         shape->shapeChanged(type, q);
 }
 
@@ -584,7 +581,7 @@ void KoShape::update() const
 
     if (!d->shapeManagers.empty()) {
         QRectF rect(boundingRect());
-        foreach(KoShapeManager * manager, d->shapeManagers) {
+        Q_FOREACH (KoShapeManager * manager, d->shapeManagers) {
             manager->update(rect, this, true);
         }
     }
@@ -601,7 +598,7 @@ void KoShape::update(const QRectF &rect) const
 
     if (!d->shapeManagers.empty() && isVisible()) {
         QRectF rc(absoluteTransformation(0).mapRect(rect));
-        foreach(KoShapeManager * manager, d->shapeManagers) {
+        Q_FOREACH (KoShapeManager * manager, d->shapeManagers) {
             manager->update(rc);
         }
     }
@@ -661,7 +658,7 @@ void KoShape::copySettings(const KoShape *shape)
     Q_D(KoShape);
     d->size = shape->size();
     d->connectors.clear();
-    foreach(const KoConnectionPoint &point, shape->connectionPoints())
+    Q_FOREACH (const KoConnectionPoint &point, shape->connectionPoints())
         addConnectionPoint(point);
     d->zIndex = shape->zIndex();
     d->visible = shape->isVisible();
@@ -682,7 +679,7 @@ void KoShape::copySettings(const KoShape *shape)
 void KoShape::notifyChanged()
 {
     Q_D(KoShape);
-    foreach(KoShapeManager * manager, d->shapeManagers) {
+    Q_FOREACH (KoShapeManager * manager, d->shapeManagers) {
         manager->notifyShapeChanged(this);
     }
 }
@@ -873,24 +870,6 @@ void KoShape::clearConnectionPoints()
 {
     Q_D(KoShape);
     d->connectors.clear();
-}
-
-void KoShape::addEventAction(KoEventAction *action)
-{
-    Q_D(KoShape);
-    d->eventActions.insert(action);
-}
-
-void KoShape::removeEventAction(KoEventAction *action)
-{
-    Q_D(KoShape);
-    d->eventActions.remove(action);
-}
-
-QSet<KoEventAction *> KoShape::eventActions() const
-{
-    Q_D(const KoShape);
-    return d->eventActions;
 }
 
 KoShape::TextRunAroundSide KoShape::textRunAroundSide() const
@@ -1586,7 +1565,7 @@ bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingConte
 
     if (attributes & OdfAdditionalAttributes) {
         QSet<KoShapeLoadingContext::AdditionalAttributeData> additionalAttributeData = KoShapeLoadingContext::additionalAttributeData();
-        foreach(const KoShapeLoadingContext::AdditionalAttributeData &attributeData, additionalAttributeData) {
+        Q_FOREACH (const KoShapeLoadingContext::AdditionalAttributeData &attributeData, additionalAttributeData) {
             if (element.hasAttributeNS(attributeData.ns, attributeData.tag)) {
                 QString value = element.attributeNS(attributeData.ns, attributeData.tag);
                 //debugFlake << "load additional attribute" << attributeData.tag << value;
@@ -1596,10 +1575,6 @@ bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingConte
     }
 
     if (attributes & OdfCommonChildElements) {
-        const KoXmlElement eventActionsElement(KoXml::namedItemNS(element, KoXmlNS::office, "event-listeners"));
-        if (!eventActionsElement.isNull()) {
-            d->eventActions = KoEventActionRegistry::instance()->createEventActionsFromOdf(eventActionsElement, context);
-        }
         // load glue points (connection points)
         loadOdfGluePoints(element, context);
     }
@@ -2051,15 +2026,6 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
 void KoShape::saveOdfCommonChildElements(KoShapeSavingContext &context) const
 {
     Q_D(const KoShape);
-    // save event listeners see ODF 9.2.21 Event Listeners
-    if (d->eventActions.size() > 0) {
-        context.xmlWriter().startElement("office:event-listeners");
-        foreach(KoEventAction * action, d->eventActions) {
-            action->saveOdf(context);
-        }
-        context.xmlWriter().endElement();
-    }
-
     // save glue points see ODF 9.2.19 Glue Points
     if(d->connectors.count()) {
         KoConnectionPoints::const_iterator cp = d->connectors.constBegin();

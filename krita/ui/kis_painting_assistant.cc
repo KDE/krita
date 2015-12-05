@@ -98,7 +98,7 @@ void KisPaintingAssistantHandle::mergeWith(KisPaintingAssistantHandleSP handle)
 {
     if(this->handleType()=='S' || handle.data()->handleType()== 'S')
         return;
-    foreach(KisPaintingAssistant* assistant, handle->d->assistants) {
+    Q_FOREACH (KisPaintingAssistant* assistant, handle->d->assistants) {
         if (!assistant->handles().contains(this)) {
             assistant->replaceHandle(handle, this);
         }
@@ -108,7 +108,7 @@ void KisPaintingAssistantHandle::mergeWith(KisPaintingAssistantHandleSP handle)
 QList<KisPaintingAssistantHandleSP> KisPaintingAssistantHandle::split()
 {
     QList<KisPaintingAssistantHandleSP> newHandles;
-    foreach(KisPaintingAssistant* assistant, d->assistants) {
+    Q_FOREACH (KisPaintingAssistant* assistant, d->assistants) {
         KisPaintingAssistantHandleSP newHandle(new KisPaintingAssistantHandle(*this));
         newHandles.append(newHandle);
         assistant->replaceHandle(this, newHandle);
@@ -118,7 +118,7 @@ QList<KisPaintingAssistantHandleSP> KisPaintingAssistantHandle::split()
 
 void KisPaintingAssistantHandle::uncache()
 {
-    foreach(KisPaintingAssistant* assistant, d->assistants) {
+    Q_FOREACH (KisPaintingAssistant* assistant, d->assistants) {
         assistant->uncache();
     }
 }
@@ -209,18 +209,18 @@ void KisPaintingAssistant::initHandles(QList<KisPaintingAssistantHandleSP> _hand
 {
     Q_ASSERT(d->handles.isEmpty());
     d->handles = _handles;
-    foreach(KisPaintingAssistantHandleSP handle, _handles) {
+    Q_FOREACH (KisPaintingAssistantHandleSP handle, _handles) {
         handle->registerAssistant(this);
     }
 }
 
 KisPaintingAssistant::~KisPaintingAssistant()
 {
-    foreach(KisPaintingAssistantHandleSP handle, d->handles) {
+    Q_FOREACH (KisPaintingAssistantHandleSP handle, d->handles) {
         handle->unregisterAssistant(this);
     }
     if(!d->sideHandles.isEmpty()) {
-        foreach(KisPaintingAssistantHandleSP handle, d->sideHandles) {
+        Q_FOREACH (KisPaintingAssistantHandleSP handle, d->sideHandles) {
             handle->unregisterAssistant(this);
         }
     }
@@ -312,7 +312,7 @@ void KisPaintingAssistant::uncache()
 QRect KisPaintingAssistant::boundingRect() const
 {
     QRectF r;
-    foreach (KisPaintingAssistantHandleSP h, handles()) {
+    Q_FOREACH (KisPaintingAssistantHandleSP h, handles()) {
         r = r.united(QRectF(*h, QSizeF(1,1)));
     }
     return r.adjusted(-2, -2, 2, 2).toAlignedRect();
@@ -326,7 +326,7 @@ QByteArray KisPaintingAssistant::saveXml(QMap<KisPaintingAssistantHandleSP, int>
             xml.writeStartElement("assistant");
             xml.writeAttribute("type",d->id);
             xml.writeStartElement("handles");
-            foreach(const KisPaintingAssistantHandleSP handle, d->handles) {
+            Q_FOREACH (const KisPaintingAssistantHandleSP handle, d->handles) {
                 int id = handleMap.size();
                 if (!handleMap.contains(handle)){
                     handleMap.insert(handle, id);
@@ -443,7 +443,7 @@ void KisPaintingAssistant::findHandleLocation() {
         //get the handle opposite to the first handle
         oppHandle = oppHandleOne();
         //Sorting handles into two list, X sorted and Y sorted into hHandlesList and vHandlesList respectively.
-        foreach(const KisPaintingAssistantHandleSP handle,d->handles) {
+        Q_FOREACH (const KisPaintingAssistantHandleSP handle,d->handles) {
             hHandlesList.append(handle);
             hHole = hHandlesList.size() - 1;
             vHandlesList.append(handle);
@@ -676,7 +676,7 @@ KisPaintingAssistantFactoryRegistry::KisPaintingAssistantFactoryRegistry()
 
 KisPaintingAssistantFactoryRegistry::~KisPaintingAssistantFactoryRegistry()
 {
-    foreach(const QString &id, keys()) {
+    Q_FOREACH (const QString &id, keys()) {
         delete get(id);
     }
     dbgRegistry << "deleting KisPaintingAssistantFactoryRegistry ";

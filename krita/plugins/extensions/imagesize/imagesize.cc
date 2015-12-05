@@ -49,22 +49,15 @@ ImageSize::ImageSize(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent)
 {
     KisAction *action  = createAction("imagesize");
-    action->setActivationFlags(KisAction::ACTIVE_NODE);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageSize()));
 
     action = createAction("canvassize");
-    action->setActivationFlags(KisAction::ACTIVE_NODE);
     connect(action, SIGNAL(triggered()), this, SLOT(slotCanvasSize()));
 
     action = createAction("layersize");
-    action->setActivationFlags(KisAction::ACTIVE_LAYER);
-    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     connect(action, SIGNAL(triggered()), this, SLOT(slotLayerSize()));
 
     action  = createAction("selectionscale");
-    action->setActivationFlags(KisAction::PIXELS_SELECTED);
-    action->setActivationConditions(KisAction::SELECTION_EDITABLE);
-    Q_CHECK_PTR(action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotSelectionScale()));
 }
 

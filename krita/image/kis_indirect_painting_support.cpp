@@ -148,7 +148,7 @@ void KisIndirectPaintingSupport::mergeToLayerImpl(KisNodeSP layer,
     if(undoAdapter) {
         gc.beginTransaction(transactionText,timedID);
     }
-    foreach (const QRect &rc, d->temporaryTarget->region().rects()) {
+    Q_FOREACH (const QRect &rc, d->temporaryTarget->region().rects()) {
         gc.bitBlt(rc.topLeft(), d->temporaryTarget, rc);
     }
     releaseResources();

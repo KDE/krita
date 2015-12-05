@@ -32,11 +32,11 @@
 #include <QTextBlock>
 #include <QTimer>
 
-ParagraphSettingsDialog::ParagraphSettingsDialog(TextTool *tool, KoTextEditor *editor, QWidget* parent)
-        : KoDialog(parent)
-        , m_tool(tool)
-        , m_editor(editor)
-        , m_styleChanged(false)
+ParagraphSettingsDialog::ParagraphSettingsDialog(TextTool *tool, KoTextEditor *editor, QWidget *parent)
+    : KoDialog(parent)
+    , m_tool(tool)
+    , m_editor(editor)
+    , m_styleChanged(false)
 {
     setCaption(i18n("Paragraph Format"));
     setModal(true);
@@ -46,7 +46,6 @@ ParagraphSettingsDialog::ParagraphSettingsDialog(TextTool *tool, KoTextEditor *e
     m_paragraphGeneral = new ParagraphGeneral;
     m_paragraphGeneral->hideStyleName(true);
     setMainWidget(m_paragraphGeneral);
-
 
     connect(this, SIGNAL(applyClicked()), this, SLOT(slotApply()));
     connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
@@ -79,8 +78,9 @@ void ParagraphSettingsDialog::slotOk()
 
 void ParagraphSettingsDialog::slotApply()
 {
-    if (!m_styleChanged)
+    if (!m_styleChanged) {
         return;
+    }
 
     KoParagraphStyle chosenStyle;
     m_paragraphGeneral->save(&chosenStyle);

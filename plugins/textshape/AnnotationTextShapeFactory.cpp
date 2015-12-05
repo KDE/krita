@@ -40,8 +40,8 @@
 #include <kundo2stack.h>
 #include <QTextCursor>
 
-AnnotationTextShapeFactory::AnnotationTextShapeFactory() :
-    KoShapeFactoryBase(AnnotationShape_SHAPEID, i18n("Annotation"))
+AnnotationTextShapeFactory::AnnotationTextShapeFactory() 
+    : KoShapeFactoryBase(AnnotationShape_SHAPEID, i18n("Annotation"))
 {
     setToolTip(i18n("Annotation shape to show annotation content"));
     QList<QPair<QString, QStringList> > odfElements;
@@ -85,7 +85,7 @@ KoShape *AnnotationTextShapeFactory::createDefaultShape(KoDocumentResourceManage
         KoTextDocument document(annotation->textShapeData()->document());
 
         if (documentResources->hasResource(KoText::StyleManager)) {
-            KoStyleManager *styleManager = documentResources->resource(KoText::StyleManager).value<KoStyleManager*>();
+            KoStyleManager *styleManager = documentResources->resource(KoText::StyleManager).value<KoStyleManager *>();
             document.setStyleManager(styleManager);
         }
 
@@ -95,11 +95,11 @@ KoShape *AnnotationTextShapeFactory::createDefaultShape(KoDocumentResourceManage
         document.setUndoStack(documentResources->undoStack());
 
         if (documentResources->hasResource(KoText::PageProvider)) {
-            KoPageProvider *pp = static_cast<KoPageProvider *>(documentResources->resource(KoText::PageProvider).value<void*>());
+            KoPageProvider *pp = static_cast<KoPageProvider *>(documentResources->resource(KoText::PageProvider).value<void *>());
             annotation->setPageProvider(pp);
         }
         if (documentResources->hasResource(KoText::ChangeTracker)) {
-            KoChangeTracker *changeTracker = documentResources->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
+            KoChangeTracker *changeTracker = documentResources->resource(KoText::ChangeTracker).value<KoChangeTracker *>();
             document.setChangeTracker(changeTracker);
         }
 
@@ -118,7 +118,7 @@ KoShape *AnnotationTextShapeFactory::createDefaultShape(KoDocumentResourceManage
 KoShape *AnnotationTextShapeFactory::createShape(const KoProperties *params, KoDocumentResourceManager *documentResources) const
 {
     Q_UNUSED(params);
-    AnnotationTextShape *shape = static_cast<AnnotationTextShape*>(createDefaultShape(documentResources));
+    AnnotationTextShape *shape = static_cast<AnnotationTextShape *>(createDefaultShape(documentResources));
     shape->textShapeData()->document()->setUndoRedoEnabled(false);
 
     if (documentResources) {

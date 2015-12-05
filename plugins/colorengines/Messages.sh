@@ -1,4 +1,4 @@
 #! /bin/sh
-source ../../calligra_xgettext.sh
+source ../../krita_xgettext.sh
 
-calligra_xgettext kritacolorspaces.pot `find . -name \*.cpp -o -name \*.h`
+krita_xgettext kritacolorspaces.pot `find . -name \*.cpp -o -name \*.h`

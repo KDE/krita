@@ -48,7 +48,7 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
     QStringList failuresDocImage;
     QStringList failuresCompare;
 
-    foreach(QFileInfo sourceFileInfo, dirSources.entryInfoList()) {
+    Q_FOREACH (QFileInfo sourceFileInfo, dirSources.entryInfoList()) {
         if (exclusions.indexOf(sourceFileInfo.fileName()) > -1) {
             continue;
         }

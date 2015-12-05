@@ -94,9 +94,9 @@ void PriorityToFirstMergeStrategy::merge(Store* dst, QList<const Store*> srcs, Q
     Q_UNUSED(score);
     dbgImage << "Priority to first meta data";
 
-    foreach(const Store* store, srcs) {
+    Q_FOREACH (const Store* store, srcs) {
         QList<QString> keys = store->keys();
-        foreach(const QString & key, keys) {
+        Q_FOREACH (const QString & key, keys) {
             if (!dst->containsEntry(key)) {
                 dst->addEntry(store->getEntry(key));
             }
@@ -137,11 +137,11 @@ void OnlyIdenticalMergeStrategy::merge(Store* dst, QList<const Store*> srcs, QLi
 
     Q_ASSERT(srcs.size() > 0);
     QList<QString> keys = srcs[0]->keys();
-    foreach(const QString & key, keys) {
+    Q_FOREACH (const QString & key, keys) {
         bool keep = true;
         const Entry& e = srcs[0]->getEntry(key);
         const Value& v = e.value();
-        foreach(const Store* store, srcs) {
+        Q_FOREACH (const Store* store, srcs) {
             if (!(store->containsEntry(key) && e.value() == v)) {
                 keep = false;
                 break;
@@ -217,7 +217,7 @@ Value SmartMergeStrategy::election(QList<const Store*> srcs, QList<double> score
     }
     const ScoreValue* bestSv = 0;
     double bestScore = -1.0;
-    foreach(const ScoreValue& sv, scoreValues) {
+    Q_FOREACH (const ScoreValue& sv, scoreValues) {
         if (sv.score > bestScore) {
             bestScore = sv.score;
             bestSv = &sv;
@@ -235,7 +235,7 @@ void SmartMergeStrategy::mergeEntry(Store* dst, QList<const Store*> srcs, const 
 {
     bool foundOnce = false;
     Value v(QList<Value>(), Value::OrderedArray);
-    foreach(const Store* store, srcs) {
+    Q_FOREACH (const Store* store, srcs) {
         if (store->containsEntry(schema, identifier)) {
             v += store->getEntry(schema, identifier).value();
             foundOnce = true;
@@ -278,9 +278,9 @@ void SmartMergeStrategy::merge(Store* dst, QList<const Store*> srcs, QList<doubl
 
 
         // Election
-        foreach(const Store* store, srcs) {
+        Q_FOREACH (const Store* store, srcs) {
             QList<QString> keys = store->keys();
-            foreach(const QString & key, keys) {
+            Q_FOREACH (const QString & key, keys) {
                 if (!dst->containsEntry(key)) {
                     Value v = election(srcs, scores, key);
                     if (!v.type() == Value::Invalid) {

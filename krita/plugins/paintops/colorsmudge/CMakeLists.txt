@@ -1,4 +1,4 @@
-set(kritacolorsmudgepaintop_PART_SRCS
+set(kritacolorsmudgepaintop_SOURCES
     colorsmudge_paintop_plugin.cpp
     kis_colorsmudgeop.cpp
     kis_colorsmudgeop_settings_widget.cpp
@@ -8,7 +8,7 @@ set(kritacolorsmudgepaintop_PART_SRCS
     kis_smudge_radius_option.cpp
 )
 
-add_library(kritacolorsmudgepaintop MODULE ${kritacolorsmudgepaintop_PART_SRCS})
+add_library(kritacolorsmudgepaintop MODULE ${kritacolorsmudgepaintop_SOURCES})
 kcoreaddons_desktop_to_json(kritacolorsmudgepaintop kritacolorsmudgepaintop.desktop)
 
 target_link_libraries(kritacolorsmudgepaintop kritalibpaintop)

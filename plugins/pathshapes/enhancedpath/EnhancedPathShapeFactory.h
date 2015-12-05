@@ -44,8 +44,8 @@ private:
 
     typedef QMap<QString, QVariant > ComplexType;
     typedef QList<QVariant> ListType;
-    KoProperties* dataToProperties(const QString &modifiers, const QStringList &commands,
-        const ListType &handles, const ComplexType &formulae) const;
+    KoProperties *dataToProperties(const QString &modifiers, const QStringList &commands,
+                                   const ListType &handles, const ComplexType &formulae) const;
 
 };
 

@@ -1,10 +1,10 @@
 
-set(kritashearimage_PART_SRCS shearimage.cc dlg_shearimage.cc )
+set(kritashearimage_SOURCES shearimage.cc dlg_shearimage.cc )
 
 
-ki18n_wrap_ui(kritashearimage_PART_SRCS wdg_shearimage.ui )
+ki18n_wrap_ui(kritashearimage_SOURCES wdg_shearimage.ui )
 
-add_library(kritashearimage MODULE ${kritashearimage_PART_SRCS})
+add_library(kritashearimage MODULE ${kritashearimage_SOURCES})
 kcoreaddons_desktop_to_json(kritashearimage kritashearimage.desktop)
 
 

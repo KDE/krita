@@ -68,7 +68,9 @@
 #include "kis_image_from_clipboard_widget.h"
 #include "kis_shape_controller.h"
 #include "kis_resource_server_provider.h"
+#ifdef HAVE_OPENGL
 #include "kis_animation_cache_populator.h"
+#endif
 #include "kis_idle_watcher.h"
 #include "kis_image.h"
 #include "KisImportExportManager.h"
@@ -90,7 +92,9 @@ public:
     Private(KisPart *_part)
         : part(_part)
         , idleWatcher(2500)
+#ifdef HAVE_OPENGL
         , animationCachePopulator(_part)
+#endif
     {
     }
 
@@ -111,8 +115,9 @@ public:
     KActionCollection *actionCollection{0};
 
     KisIdleWatcher idleWatcher;
+#ifdef HAVE_OPENGL
     KisAnimationCachePopulator animationCachePopulator;
-
+#endif
     void loadActions();
 };
 
@@ -124,7 +129,7 @@ void KisPart::Private::loadActions()
 
     KisActionRegistry * actionRegistry = KisActionRegistry::instance();
 
-    foreach (auto action, actionCollection->actions()) {
+    Q_FOREACH (auto action, actionCollection->actions()) {
         auto name = action->objectName();
         actionRegistry->addAction(action->objectName(), action);
     }
@@ -151,11 +156,12 @@ KisPart::KisPart()
 
     connect(this, SIGNAL(documentClosed(QString)),
             this, SLOT(updateIdleWatcherConnections()));
-
+#ifdef HAVE_OPENGL
     connect(&d->idleWatcher, SIGNAL(startedIdleMode()),
             &d->animationCachePopulator, SLOT(slotRequestRegeneration()));
 
     d->animationCachePopulator.slotRequestRegeneration();
+#endif
 }
 
 KisPart::~KisPart()
@@ -179,7 +185,7 @@ void KisPart::updateIdleWatcherConnections()
 {
     QVector<KisImageSP> images;
 
-    foreach (QPointer<KisDocument> document, documents()) {
+    Q_FOREACH (QPointer<KisDocument> document, documents()) {
         images << document->image();
     }
 
@@ -285,7 +291,7 @@ void KisPart::removeView(KisView *view)
 
     if (doc) {
         bool found = false;
-        foreach(QPointer<KisView> view, d->views) {
+        Q_FOREACH (QPointer<KisView> view, d->views) {
             if (view && view->document() == doc) {
                 found = true;
                 break;
@@ -309,7 +315,7 @@ int KisPart::viewCount(KisDocument *doc) const
     }
     else {
         int count = 0;
-        foreach(QPointer<KisView> view, d->views) {
+        Q_FOREACH (QPointer<KisView> view, d->views) {
             if (view->document() == doc) {
                 count++;
             }
@@ -377,10 +383,12 @@ KisIdleWatcher* KisPart::idleWatcher() const
     return &d->idleWatcher;
 }
 
+#ifdef HAVE_OPENGL
 KisAnimationCachePopulator* KisPart::cachePopulator() const
 {
     return &d->animationCachePopulator;
 }
+#endif
 
 void KisPart::openExistingFile(const QUrl &url)
 {
@@ -428,14 +436,14 @@ void KisPart::configureShortcuts()
     KoToolManager::instance()->updateToolShortcuts();
 
     // Now update the UI actions.
-    foreach(KisMainWindow *mainWindow, d->mainWindows) {
+    Q_FOREACH (KisMainWindow *mainWindow, d->mainWindows) {
         KActionCollection *ac = mainWindow->actionCollection();
 
         ac->updateShortcuts();
 
         // Loop through mainWindow->actionCollections() to modify tooltips
         // so that they list shortcuts at the end in parentheses
-        foreach( QAction* action, ac->actions())
+        Q_FOREACH ( QAction* action, ac->actions())
         {
             // Remove any existing suffixes from the tooltips.
             // Note this regexp starts with a space, e.g. " (Ctrl-a)"
@@ -493,7 +501,7 @@ void KisPart::viewDestroyed()
 void KisPart::addRecentURLToAllMainWindows(QUrl url)
 {
     // Add to recent actions list in our mainWindows
-    foreach(KisMainWindow *mainWindow, d->mainWindows) {
+    Q_FOREACH (KisMainWindow *mainWindow, d->mainWindows) {
         mainWindow->addRecentURL(url);
     }
 }
@@ -542,7 +550,7 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
     d->startupWidget = new KisOpenPane(0, mimeFilter, d->templatesResourcePath);
     d->startupWidget->setWindowModality(Qt::WindowModal);
     QList<CustomDocumentWidgetItem> widgetList = createCustomDocumentWidgets(d->startupWidget);
-    foreach(const CustomDocumentWidgetItem & item, widgetList) {
+    Q_FOREACH (const CustomDocumentWidgetItem & item, widgetList) {
         d->startupWidget->addCustomDocumentWidget(item.widget, item.title, item.icon);
         connect(item.widget, SIGNAL(documentSelected(KisDocument*)), this, SLOT(startCustomDocument(KisDocument*)));
     }

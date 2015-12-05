@@ -40,16 +40,16 @@ public:
     virtual bool save();
 
     /// reimplemented from KoResource
-    virtual bool saveToDevice(QIODevice* dev) const;
+    virtual bool saveToDevice(QIODevice *dev) const;
 
     /// reimplemented from KoResource
     virtual QString defaultFileExtension() const;
 
     /// Creates resource from given filter effect stack
-    static FilterEffectResource * fromFilterEffectStack(KoFilterEffectStack *filterStack);
+    static FilterEffectResource *fromFilterEffectStack(KoFilterEffectStack *filterStack);
 
     /// Creates a new filter stack from this filter resource
-    KoFilterEffectStack * toFilterStack() const;
+    KoFilterEffectStack *toFilterStack() const;
 protected:
     virtual QByteArray generateMD5() const;
 private:

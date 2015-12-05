@@ -36,8 +36,8 @@ private Q_SLOTS:
     void testRasterChannel();
     void testChannelSignals();
     void testRasterFrameFetching();
+    void testDeleteFirstRasterChannel();
     void testAffectedFrames();
-
     void cleanupTestCase();
 
 private:

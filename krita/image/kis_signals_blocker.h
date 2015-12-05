@@ -78,7 +78,7 @@ public:
 
 private:
     void blockObjects() {
-        foreach (QObject *object, m_objects) {
+        Q_FOREACH (QObject *object, m_objects) {
             object->blockSignals(true);
         }
     }

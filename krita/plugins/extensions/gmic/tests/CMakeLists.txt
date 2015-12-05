@@ -3,7 +3,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/krita/sdk/tests ../)
 
 macro_add_unittest_definitions()
 
-set(kritagmic_parser_PART_SRCS
+set(kritagmic_parser_SOURCES
 ../kis_gmic_parser.cpp
 ../kis_gmic_blacklister.cpp
 ../Category.cpp
@@ -25,11 +25,11 @@ set(kritagmic_parser_PART_SRCS
 
 ########### next target ###############
 
-set(kis_gmic_tests_SRCS kis_gmic_tests.cpp ${kritagmic_parser_PART_SRCS})
+set(kis_gmic_tests_SRCS kis_gmic_tests.cpp ${kritagmic_parser_SOURCES})
 kde4_add_unit_test(KisGmicTests TESTNAME krita-plugins-extensions-gmic-GmicTests ${kis_gmic_tests_SRCS})
 target_link_libraries(KisGmicTests gmic kritaimage Qt5::Test ${QT_QTXML_LIBRARY})
 
 
-set(kis_gmic_benchmarks_SRCS kis_gmic_benchmarks.cpp ${kritagmic_parser_PART_SRCS})
+set(kis_gmic_benchmarks_SRCS kis_gmic_benchmarks.cpp ${kritagmic_parser_SOURCES})
 calligra_add_benchmark(KisGmicBenchmark TESTNAME krita-plugins-extensions-gmic-GmicBenchmarks ${kis_gmic_benchmarks_SRCS})
 target_link_libraries(KisGmicBenchmark gmic kritaimage Qt5::Test ${QT_QTXML_LIBRARY})

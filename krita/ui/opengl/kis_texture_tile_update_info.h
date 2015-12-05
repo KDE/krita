@@ -18,7 +18,7 @@
 #ifndef KIS_TEXTURE_TILE_UPDATE_INFO_H_
 #define KIS_TEXTURE_TILE_UPDATE_INFO_H_
 
-#include "opengl/kis_opengl.h"
+#include <KoConfig.h> // for HAVE_OPENGL
 
 #ifdef HAVE_OPENGL
 
@@ -103,7 +103,9 @@ public:
     {
     }
 
-    KisTextureTileUpdateInfo(qint32 col, qint32 row, QRect tileRect, QRect updateRect, QRect currentImageRect, int levelOfDetail)
+    KisTextureTileUpdateInfo(qint32 col, qint32 row,
+                             const QRect &tileRect, const QRect &updateRect, const QRect &currentImageRect,
+                             int levelOfDetail)
         : m_patchPixelsLength(0)
     {
         m_tileCol = col;
@@ -129,7 +131,7 @@ public:
         }
     }
 
-    void retrieveData(KisImageWSP image, QBitArray m_channelFlags, bool onlyOneChannelSelected, int selectedChannelIndex)
+    void retrieveData(KisImageWSP image, const QBitArray &channelFlags, bool onlyOneChannelSelected, int selectedChannelIndex)
     {
         m_patchColorSpace = image->projection()->colorSpace();
 
@@ -143,7 +145,7 @@ public:
 
         // XXX: if the paint colorspace is rgb, we should do the channel swizzling in
         //      the display shader
-        if (!m_channelFlags.isEmpty()) {
+        if (!channelFlags.isEmpty()) {
             m_conversionCache.ensureNotSmaller(m_patchPixelsLength);
 
             QList<KoChannelInfo*> channelInfo = m_patchColorSpace->channels();
@@ -174,7 +176,7 @@ public:
             else {
                 for (uint pixelIndex = 0; pixelIndex < numPixels; ++pixelIndex) {
                     for (uint channelIndex = 0; channelIndex < m_patchColorSpace->channelCount(); ++channelIndex) {
-                        if (m_channelFlags.testBit(channelIndex)) {
+                        if (channelFlags.testBit(channelIndex)) {
                             memcpy(m_conversionCache.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize),
                                    m_patchPixels.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize),
                                    channelSize);

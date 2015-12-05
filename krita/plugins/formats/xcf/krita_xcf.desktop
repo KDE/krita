@@ -69,7 +69,5 @@ StartupNotify=true
 Terminal=false
 X-KDE-ServiceTypes=Calligra/Application
 X-Calligra-DefaultMimeTypes=image/x-xcf
-X-DBUS-StartupType=Multi
-X-DBUS-ServiceName=org.krita.krita
 X-KDE-SubstituteUID=false
 X-KDE-Username=

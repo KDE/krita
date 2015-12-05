@@ -24,12 +24,13 @@
 #include <KoToolFactoryBase.h>
 
 /// Factory for the KoInteractionTool
-class DefaultToolFactory : public KoToolFactoryBase {
+class DefaultToolFactory : public KoToolFactoryBase
+{
 public:
     /// constructor
     DefaultToolFactory();
     ~DefaultToolFactory();
 
-    KoToolBase* createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas);
 };
 #endif

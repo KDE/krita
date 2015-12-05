@@ -130,7 +130,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
 
     if (!m_chain->manager()->getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {
-            return KisImportExportFilter::OK; // FIXME Cancel doesn't exist :(
+            return KisImportExportFilter::UserCancelled;
         }
     }
     else {
@@ -179,7 +179,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
 
     options.filters = frm.enabledFilters();
     QString enabledFilters;
-    foreach(const KisMetaData::Filter* filter, options.filters) {
+    Q_FOREACH (const KisMetaData::Filter* filter, options.filters) {
         enabledFilters = enabledFilters + filter->id() + ',';
     }
 

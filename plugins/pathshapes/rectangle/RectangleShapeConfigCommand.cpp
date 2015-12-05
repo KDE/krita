@@ -21,7 +21,7 @@
 #include "RectangleShape.h"
 #include <klocalizedstring.h>
 
-RectangleShapeConfigCommand::RectangleShapeConfigCommand(RectangleShape * rectangle, qreal cornerRadiusX, qreal cornerRadiusY, KUndo2Command *parent)
+RectangleShapeConfigCommand::RectangleShapeConfigCommand(RectangleShape *rectangle, qreal cornerRadiusX, qreal cornerRadiusY, KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_rectangle(rectangle)
     , m_newCornerRadiusX(cornerRadiusX)
@@ -41,10 +41,12 @@ void RectangleShapeConfigCommand::redo()
 
     m_rectangle->update();
 
-    if (m_oldCornerRadiusX != m_newCornerRadiusX)
+    if (m_oldCornerRadiusX != m_newCornerRadiusX) {
         m_rectangle->setCornerRadiusX(m_newCornerRadiusX);
-    if (m_oldCornerRadiusY != m_newCornerRadiusY)
+    }
+    if (m_oldCornerRadiusY != m_newCornerRadiusY) {
         m_rectangle->setCornerRadiusY(m_newCornerRadiusY);
+    }
 
     m_rectangle->update();
 }
@@ -55,10 +57,12 @@ void RectangleShapeConfigCommand::undo()
 
     m_rectangle->update();
 
-    if (m_oldCornerRadiusX != m_newCornerRadiusX)
+    if (m_oldCornerRadiusX != m_newCornerRadiusX) {
         m_rectangle->setCornerRadiusX(m_oldCornerRadiusX);
-    if (m_oldCornerRadiusY != m_newCornerRadiusY)
+    }
+    if (m_oldCornerRadiusY != m_newCornerRadiusY) {
         m_rectangle->setCornerRadiusY(m_oldCornerRadiusY);
+    }
 
     m_rectangle->update();
 }

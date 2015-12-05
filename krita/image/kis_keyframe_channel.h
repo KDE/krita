@@ -108,7 +108,6 @@ protected:
     KeyframesMap::const_iterator activeKeyIterator(int time) const;
 
     virtual KisKeyframeSP createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand) = 0;
-    virtual bool canDeleteKeyframe(KisKeyframeSP key) = 0;
     virtual void destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand) = 0;
 
     virtual QRect affectedRect(KisKeyframeSP key) = 0;
@@ -118,8 +117,9 @@ protected:
     virtual void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) = 0;
 
 private:
-    void insertKeyframeImpl(KisKeyframeSP keyframe);
-    void deleteKeyframeImpl(KisKeyframeSP keyframe);
+    void insertKeyframeLogical(KisKeyframeSP keyframe);
+    void deleteKeyframeLogical(KisKeyframeSP keyframe);
+    bool deleteKeyframeImpl(KisKeyframeSP keyframe, KUndo2Command *parentCommand, bool recreate);
     void moveKeyframeImpl(KisKeyframeSP keyframe, int newTime);
 
     struct InsertFrameCommand;

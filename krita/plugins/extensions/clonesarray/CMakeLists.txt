@@ -1,12 +1,12 @@
 ########### next target ###############
 
-set(kritaclonesarray_PART_SRCS
+set(kritaclonesarray_SOURCES
   clonesarray.cpp
   dlg_clonesarray.cpp
   )
 
-ki18n_wrap_ui(kritaclonesarray_PART_SRCS wdg_clonesarray.ui )
-add_library(kritaclonesarray MODULE ${kritaclonesarray_PART_SRCS})
+ki18n_wrap_ui(kritaclonesarray_SOURCES wdg_clonesarray.ui )
+add_library(kritaclonesarray MODULE ${kritaclonesarray_SOURCES})
 kcoreaddons_desktop_to_json(kritaclonesarray kritaclonesarray.desktop)
 
 target_link_libraries(kritaclonesarray kritaui)

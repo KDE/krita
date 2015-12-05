@@ -84,7 +84,7 @@ QList<QPointer<QWidget> > KisToolPath::createOptionWidgets()
 {
     QList<QPointer<QWidget> > widgets = DelegatedPathTool::createOptionWidgets();
     QList<QPointer<QWidget> > filteredWidgets;
-    foreach(QWidget* widget, widgets) {
+    Q_FOREACH (QWidget* widget, widgets) {
         if (widget->objectName() != "Stroke widget") {
             filteredWidgets.push_back(widget);
         }

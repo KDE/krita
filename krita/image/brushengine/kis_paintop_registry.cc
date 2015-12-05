@@ -45,7 +45,7 @@ KisPaintOpRegistry::KisPaintOpRegistry()
 
 KisPaintOpRegistry::~KisPaintOpRegistry()
 {
-    foreach(const QString & id, keys()) {
+    Q_FOREACH (const QString & id, keys()) {
         delete get(id);
     }
     dbgRegistry << "Deleting KisPaintOpRegistry";
@@ -58,7 +58,7 @@ void KisPaintOpRegistry::initRegistry()
 
     QStringList toBeRemoved;
 
-    foreach(const QString & id, keys()) {
+    Q_FOREACH (const QString & id, keys()) {
         KisPaintOpFactory *factory = get(id);
         if (!factory->settings()) {
             toBeRemoved << id;
@@ -66,7 +66,7 @@ void KisPaintOpRegistry::initRegistry()
             factory->processAfterLoading();
         }
     }
-    foreach(const QString & id, toBeRemoved) {
+    Q_FOREACH (const QString & id, toBeRemoved) {
         remove(id);
     }
 }
@@ -165,7 +165,7 @@ QString KisPaintOpRegistry::pixmap(const KoID & id) const
 QList<KoID> KisPaintOpRegistry::listKeys() const
 {
     QList<KoID> answer;
-    foreach(const QString & key, keys()) {
+    Q_FOREACH (const QString & key, keys()) {
         answer.append(KoID(key, get(key)->name()));
     }
 

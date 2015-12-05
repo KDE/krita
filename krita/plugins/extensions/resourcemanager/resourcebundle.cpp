@@ -95,7 +95,7 @@ bool ResourceBundle::load()
             }
             resourceStore->close();
 
-            foreach(ResourceBundleManifest::ResourceReference ref, m_manifest.files()) {
+            Q_FOREACH (ResourceBundleManifest::ResourceReference ref, m_manifest.files()) {
                 if (!resourceStore->open(ref.resourcePath)) {
                     warnKrita << "Bundle is broken. File" << ref.resourcePath << "is missing";
                     toRecreate = true;
@@ -295,11 +295,11 @@ bool ResourceBundle::save()
 
     if (!store || store->bad()) return false;
 
-    foreach(const QString &resType, m_manifest.types()) {
+    Q_FOREACH (const QString &resType, m_manifest.types()) {
 
         if (resType == "ko_gradients") {
             KoResourceServer<KoAbstractGradient>* gradientServer = KoResourceServerProvider::instance()->gradientServer();
-            foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+            Q_FOREACH (const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
                 KoResource *res = gradientServer->resourceByMD5(ref.md5sum);
                 if (!res) res = gradientServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
                 if (!saveResourceToStore(res, store.data(), "gradients")) {
@@ -314,7 +314,7 @@ bool ResourceBundle::save()
         }
         else if (resType  == "ko_patterns") {
             KoResourceServer<KoPattern>* patternServer = KoResourceServerProvider::instance()->patternServer();
-            foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+            Q_FOREACH (const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
                 KoResource *res = patternServer->resourceByMD5(ref.md5sum);
                 if (!res) res = patternServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
                 if (!saveResourceToStore(res, store.data(), "patterns")) {
@@ -329,7 +329,7 @@ bool ResourceBundle::save()
         }
         else if (resType  == "kis_brushes") {
             KisBrushResourceServer* brushServer = KisBrushServer::instance()->brushServer();
-            foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+            Q_FOREACH (const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
                 KisBrushSP brush = brushServer->resourceByMD5(ref.md5sum);
                 if (!brush) brush = brushServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
                 KoResource *res = brush.data();
@@ -345,7 +345,7 @@ bool ResourceBundle::save()
         }
         else if (resType  == "ko_palettes") {
             KoResourceServer<KoColorSet>* paletteServer = KoResourceServerProvider::instance()->paletteServer();
-            foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+            Q_FOREACH (const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
                 KoResource *res = paletteServer->resourceByMD5(ref.md5sum);
                 if (!res) res = paletteServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
                 if (!saveResourceToStore(res, store.data(), "palettes")) {
@@ -360,7 +360,7 @@ bool ResourceBundle::save()
         }
         else if (resType  == "kis_workspaces") {
             KoResourceServer< KisWorkspaceResource >* workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
-            foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+            Q_FOREACH (const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
                 KoResource *res = workspaceServer->resourceByMD5(ref.md5sum);
                 if (!res) res = workspaceServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
                 if (!saveResourceToStore(res, store.data(), "workspaces")) {
@@ -375,7 +375,7 @@ bool ResourceBundle::save()
         }
         else if (resType  == "kis_paintoppresets") {
             KisPaintOpPresetResourceServer* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-            foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+            Q_FOREACH (const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
                 KisPaintOpPresetSP res = paintoppresetServer->resourceByMD5(ref.md5sum);
                 if (!res) res = paintoppresetServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
                 if (!saveResourceToStore(res.data(), store.data(), "paintoppresets")) {
@@ -427,11 +427,11 @@ bool ResourceBundle::install()
         return false;
     }
 
-    foreach(const QString &resType, m_manifest.types()) {
+    Q_FOREACH (const QString &resType, m_manifest.types()) {
         dbgResources << "Installing resource type" << resType;
         if (resType == "gradients") {
             KoResourceServer<KoAbstractGradient>* gradientServer = KoResourceServerProvider::instance()->gradientServer();
-            foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+            Q_FOREACH (const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
 
                 if (resourceStore->isOpen()) resourceStore->close();
 
@@ -462,7 +462,7 @@ bool ResourceBundle::install()
                         md5Mismatch.append(res->name());
                     }
                     
-                    foreach(const QString &tag, ref.tagList) {
+                    Q_FOREACH (const QString &tag, ref.tagList) {
                         gradientServer->addTag(res, tag);
                     }
                     gradientServer->addTag(res, name());
@@ -475,7 +475,7 @@ bool ResourceBundle::install()
         }
         else if (resType  == "patterns") {
             KoResourceServer<KoPattern>* patternServer = KoResourceServerProvider::instance()->patternServer();
-            foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+            Q_FOREACH (const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
 
                 if (resourceStore->isOpen()) resourceStore->close();
 
@@ -506,7 +506,7 @@ bool ResourceBundle::install()
                         md5Mismatch.append(res->name());
                     }
                        
-                    foreach(const QString &tag, ref.tagList) {
+                    Q_FOREACH (const QString &tag, ref.tagList) {
                         patternServer->addTag(res, tag);
                     }
                     patternServer->addTag(res, name());
@@ -516,7 +516,7 @@ bool ResourceBundle::install()
         }
         else if (resType  == "brushes") {
             KisBrushResourceServer *brushServer = KisBrushServer::instance()->brushServer();
-            foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+            Q_FOREACH (const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
 
                 if (resourceStore->isOpen()) resourceStore->close();
 
@@ -548,7 +548,7 @@ bool ResourceBundle::install()
                         md5Mismatch.append(res->name());
                     }
                        
-                    foreach(const QString &tag, ref.tagList) {
+                    Q_FOREACH (const QString &tag, ref.tagList) {
                         brushServer->addTag(res.data(), tag);
                     }
                     brushServer->addTag(res.data(), name());
@@ -560,7 +560,7 @@ bool ResourceBundle::install()
         }
         else if (resType  == "palettes") {
             KoResourceServer<KoColorSet>* paletteServer = KoResourceServerProvider::instance()->paletteServer();
-            foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+            Q_FOREACH (const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
 
                 if (resourceStore->isOpen()) resourceStore->close();
 
@@ -593,7 +593,7 @@ bool ResourceBundle::install()
                         md5Mismatch.append(res->name());
                     }
                     
-                    foreach(const QString &tag, ref.tagList) {
+                    Q_FOREACH (const QString &tag, ref.tagList) {
                         paletteServer->addTag(res, tag);
                     }
                     paletteServer->addTag(res, name());
@@ -605,7 +605,7 @@ bool ResourceBundle::install()
         }
         else if (resType  == "workspaces") {
             KoResourceServer< KisWorkspaceResource >* workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
-            foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+            Q_FOREACH (const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
 
                 if (resourceStore->isOpen()) resourceStore->close();
 
@@ -637,7 +637,7 @@ bool ResourceBundle::install()
                         md5Mismatch.append(res->name());
                     }
                       
-                    foreach(const QString &tag, ref.tagList) {
+                    Q_FOREACH (const QString &tag, ref.tagList) {
                         workspaceServer->addTag(res, tag);
                     }
                     workspaceServer->addTag(res, name());
@@ -650,7 +650,7 @@ bool ResourceBundle::install()
         }
         else if (resType  == "paintoppresets") {
             KisPaintOpPresetResourceServer*  paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-            foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+            Q_FOREACH (const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
 
                 if (resourceStore->isOpen()) resourceStore->close();
 
@@ -686,7 +686,7 @@ bool ResourceBundle::install()
                         md5Mismatch.append(res->name());
                     }
                     
-                    foreach(const QString &tag, ref.tagList) {
+                    Q_FOREACH (const QString &tag, ref.tagList) {
                         paintoppresetServer->addTag(res.data(), tag);
                     }
                     paintoppresetServer->addTag(res.data(), name());
@@ -703,7 +703,7 @@ bool ResourceBundle::install()
         QString message = i18n("The following resources had mismatching MD5 sums. They may have gotten corrupted, for example, during download.");
         QMessageBox bundleFeedback;
         bundleFeedback.setIcon(QMessageBox::Warning);
-        foreach (QString name, md5Mismatch) {
+        Q_FOREACH (QString name, md5Mismatch) {
             message.append("\n");
             message.append(name);
         }
@@ -719,8 +719,8 @@ bool ResourceBundle::uninstall()
 
 
     KoResourceServer<KoAbstractGradient>* gradientServer = KoResourceServerProvider::instance()->gradientServer();
-    //foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("gradients")) {
-    foreach(const QByteArray md5, m_gradientsMd5Installed) {
+    //Q_FOREACH (const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("gradients")) {
+    Q_FOREACH (const QByteArray md5, m_gradientsMd5Installed) {
         KoAbstractGradient *res = gradientServer->resourceByMD5(md5);
         if (res) {
             gradientServer->removeResourceFromServer(res);
@@ -728,8 +728,8 @@ bool ResourceBundle::uninstall()
     }
 
     KoResourceServer<KoPattern>* patternServer = KoResourceServerProvider::instance()->patternServer();
-    //foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("patterns")) {
-    foreach(const QByteArray md5, m_patternsMd5Installed) {
+    //Q_FOREACH (const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("patterns")) {
+    Q_FOREACH (const QByteArray md5, m_patternsMd5Installed) {
         KoPattern *res = patternServer->resourceByMD5(md5);
         if (res) {
             patternServer->removeResourceFromServer(res);
@@ -737,8 +737,8 @@ bool ResourceBundle::uninstall()
     }
 
     KisBrushResourceServer *brushServer = KisBrushServer::instance()->brushServer();
-    //foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("brushes")) {
-    foreach(const QByteArray md5, m_brushesMd5Installed) {
+    //Q_FOREACH (const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("brushes")) {
+    Q_FOREACH (const QByteArray md5, m_brushesMd5Installed) {
         KisBrushSP res = brushServer->resourceByMD5(md5);
         if (res) {
             brushServer->removeResourceFromServer(res);
@@ -746,16 +746,16 @@ bool ResourceBundle::uninstall()
     }
 
     KoResourceServer<KoColorSet>* paletteServer = KoResourceServerProvider::instance()->paletteServer();
-    //foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("palettes")) {
-    foreach(const QByteArray md5, m_palettesMd5Installed) {
+    //Q_FOREACH (const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("palettes")) {
+    Q_FOREACH (const QByteArray md5, m_palettesMd5Installed) {
         KoColorSet *res = paletteServer->resourceByMD5(md5);
         if (res) {
             paletteServer->removeResourceFromServer(res);
         }
     }
     KoResourceServer< KisWorkspaceResource >* workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
-    //foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("workspaces")) {
-    foreach(const QByteArray md5, m_workspacesMd5Installed) {
+    //Q_FOREACH (const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("workspaces")) {
+    Q_FOREACH (const QByteArray md5, m_workspacesMd5Installed) {
         KisWorkspaceResource *res = workspaceServer->resourceByMD5(md5);
         if (res) {
             workspaceServer->removeResourceFromServer(res);
@@ -763,8 +763,8 @@ bool ResourceBundle::uninstall()
     }
 
     KisPaintOpPresetResourceServer* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-    //foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("paintoppresets")) {
-    foreach(const QByteArray md5, m_presetsMd5Installed) {
+    //Q_FOREACH (const ResourceBundleManifest::ResourceReference &ref, m_manifest.files("paintoppresets")) {
+    Q_FOREACH (const QByteArray md5, m_presetsMd5Installed) {
         KisPaintOpPresetSP res = paintoppresetServer->resourceByMD5(md5);
         if (res) {
             paintoppresetServer->removeResourceFromServer(res);
@@ -816,7 +816,7 @@ QList<KoResource*> ResourceBundle::resources(const QString &resType)
     QList<ResourceBundleManifest::ResourceReference> references = m_manifest.files(resType);
 
     QList<KoResource*> ret;
-    foreach(const ResourceBundleManifest::ResourceReference &ref, references) {
+    Q_FOREACH (const ResourceBundleManifest::ResourceReference &ref, references) {
         if (resType == "gradients") {
             KoResourceServer<KoAbstractGradient>* gradientServer = KoResourceServerProvider::instance()->gradientServer();
             KoResource *res =  gradientServer->resourceByMD5(ref.md5sum);
@@ -917,7 +917,7 @@ void ResourceBundle::saveMetadata(QScopedPointer<KoStore> &store)
     writeUserDefinedMeta("email", &metaWriter);
     writeUserDefinedMeta("license", &metaWriter);
     writeUserDefinedMeta("website", &metaWriter);
-    foreach (const QString &tag, m_bundletags) {
+    Q_FOREACH (const QString &tag, m_bundletags) {
         metaWriter.startElement("meta:meta-userdefined");
         metaWriter.addAttribute("meta:name", "tag");
         metaWriter.addAttribute("meta:value", tag);
@@ -956,7 +956,7 @@ void ResourceBundle::recreateBundle(QScopedPointer<KoStore> &oldStore)
 
     addMeta("updated", QDate::currentDate().toString("dd/MM/yyyy"));
 
-    foreach(ResourceBundleManifest::ResourceReference ref, m_manifest.files()) {
+    Q_FOREACH (ResourceBundleManifest::ResourceReference ref, m_manifest.files()) {
         // Wrong manifest entry found, skip it
         if(!oldStore->open(ref.resourcePath))
             continue;

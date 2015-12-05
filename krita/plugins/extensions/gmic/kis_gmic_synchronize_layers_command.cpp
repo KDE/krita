@@ -98,7 +98,7 @@ void KisGmicSynchronizeLayersCommand::redo()
 void KisGmicSynchronizeLayersCommand::undo()
 {
     KisImageCommand * cmd;
-    foreach(cmd, m_imageCommands)
+    Q_FOREACH (cmd, m_imageCommands)
     {
         cmd->undo();
     }

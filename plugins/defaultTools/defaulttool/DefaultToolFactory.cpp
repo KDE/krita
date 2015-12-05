@@ -34,9 +34,11 @@ DefaultToolFactory::DefaultToolFactory()
     setActivationShapeId("flake/always");
 }
 
-DefaultToolFactory::~DefaultToolFactory() {
+DefaultToolFactory::~DefaultToolFactory()
+{
 }
 
-KoToolBase* DefaultToolFactory::createTool(KoCanvasBase *canvas) {
+KoToolBase *DefaultToolFactory::createTool(KoCanvasBase *canvas)
+{
     return new DefaultTool(canvas);
 }

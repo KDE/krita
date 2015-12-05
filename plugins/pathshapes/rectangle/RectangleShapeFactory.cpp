@@ -50,7 +50,7 @@ KoShape *RectangleShapeFactory::createDefaultShape(KoDocumentResourceManager *) 
     rect->setStroke(new KoShapeStroke(1.0));
     rect->setShapeId(KoPathShapeId);
 
-    QLinearGradient *gradient = new QLinearGradient(QPointF(0,0), QPointF(1,1));
+    QLinearGradient *gradient = new QLinearGradient(QPointF(0, 0), QPointF(1, 1));
     gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
 
     gradient->setColorAt(0.0, Qt::white);
@@ -60,15 +60,15 @@ KoShape *RectangleShapeFactory::createDefaultShape(KoDocumentResourceManager *) 
     return rect;
 }
 
-bool RectangleShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &/*context*/) const
+bool RectangleShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &/*context*/) const
 {
     Q_UNUSED(e);
     return (e.localName() == "rect" && e.namespaceURI() == KoXmlNS::draw);
 }
 
-QList<KoShapeConfigWidgetBase*> RectangleShapeFactory::createShapeOptionPanels()
+QList<KoShapeConfigWidgetBase *> RectangleShapeFactory::createShapeOptionPanels()
 {
-    QList<KoShapeConfigWidgetBase*> panels;
+    QList<KoShapeConfigWidgetBase *> panels;
     panels.append(new RectangleShapeConfigWidget());
     return panels;
 }

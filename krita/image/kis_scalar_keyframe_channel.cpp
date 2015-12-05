@@ -153,12 +153,6 @@ KisKeyframeSP KisScalarKeyframeChannel::createKeyframe(int time, const KisKeyfra
     return toQShared(new KisKeyframe(this, time, index));
 }
 
-bool KisScalarKeyframeChannel::canDeleteKeyframe(KisKeyframeSP key)
-{
-    Q_UNUSED(key);
-    return true;
-}
-
 void KisScalarKeyframeChannel::destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand)
 {
     int index = key->value();

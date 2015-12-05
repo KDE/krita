@@ -118,7 +118,7 @@ bool KisCustomModifiersCatcher::eventFilter(QObject* object, QEvent* event)
             KisExtendedModifiersMapper mapper;
 
             Qt::KeyboardModifiers modifiers = mapper.queryStandardModifiers();
-            foreach (Qt::Key key, mapper.queryExtendedModifiers()) {
+            Q_FOREACH (Qt::Key key, mapper.queryExtendedModifiers()) {
                 QKeyEvent kevent(QEvent::ShortcutOverride, key, modifiers);
                 eventFilter(object, &kevent);
             }

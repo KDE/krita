@@ -64,7 +64,7 @@ LabeledWidget::LabeledWidget(QAction *action, const QString &label, LabelPositio
     if (lb == LabeledWidget::INLINE) { // label followed by line edit
         layout = new QHBoxLayout();
         l->setIndent(l->style()->pixelMetric(QStyle::PM_SmallIconSize)
-                    + l->style()->pixelMetric(QStyle::PM_MenuPanelWidth) + 4);
+                     + l->style()->pixelMetric(QStyle::PM_MenuPanelWidth) + 4);
     } else { //Label goes above the text edit
         layout = new QVBoxLayout();
         m_lineEdit->setFixedWidth(300); //TODO : assuming a reasonable width, is there a better way?
@@ -96,7 +96,7 @@ void LabeledWidget::enterEvent(QEvent *event)
     QWidget::enterEvent(event);
 }
 
-void LabeledWidget::setWarningText(int pos, const QString& warning)
+void LabeledWidget::setWarningText(int pos, const QString &warning)
 {
     if ((m_warningLabel[pos] == NULL)) {
         return;
@@ -109,7 +109,7 @@ void LabeledWidget::clearLineEdit()
     m_lineEdit->setText("");
 }
 
-ReferencesTool::ReferencesTool(KoCanvasBase* canvas): TextTool(canvas),
+ReferencesTool::ReferencesTool(KoCanvasBase *canvas): TextTool(canvas),
     m_configure(0),
     m_stocw(0),
     m_canvas(canvas)
@@ -123,7 +123,7 @@ ReferencesTool::~ReferencesTool()
 
 void ReferencesTool::createActions()
 {
-    KisActionRegistry * actionRegistry = KisActionRegistry::instance();
+    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
 
     QAction *action = actionRegistry->makeQAction("insert_tableofcontents", this);
     addAction("insert_tableofcontents", action);
@@ -133,13 +133,13 @@ void ReferencesTool::createActions()
 
     action = actionRegistry->makeQAction("format_tableofcontents", this);
     addAction("format_tableofcontents", action);
-    connect(action, SIGNAL(triggered().act), this, SLOT(formatTableOfContents()));
+    connect(action, SIGNAL(triggered()), this, SLOT(formatTableOfContents()));
 
     action = actionRegistry->makeQAction("insert_autofootnote", this);
-    addAction("insert_autofootnote",action);
+    addAction("insert_autofootnote", action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertAutoFootNote()));
 
-    QWidgetAction * wAction = new QWidgetAction(this);
+    QWidgetAction *wAction = new QWidgetAction(this);
     wAction->setText(i18n("Insert Labeled Footnote"));
     QWidget *w = new LabeledWidget(wAction, i18n("Insert with label:"), LabeledWidget::INLINE, false);
     wAction->setDefaultWidget(w);
@@ -147,7 +147,7 @@ void ReferencesTool::createActions()
     connect(w, SIGNAL(triggered(QString)), this, SLOT(insertLabeledFootNote(QString)));
 
     action = actionRegistry->makeQAction("insert_autoendnote", this);
-    addAction("insert_autoendnote",action);
+    addAction("insert_autoendnote", action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertAutoEndNote()));
 
     wAction = new QWidgetAction(this);
@@ -157,25 +157,25 @@ void ReferencesTool::createActions()
     addAction("insert_labeledendnote", wAction); connect(w, SIGNAL(triggered(QString)), this, SLOT(insertLabeledEndNote(QString)));
 
     action = actionRegistry->makeQAction("format_footnotes", this);
-    addAction("format_footnotes",action);
+    addAction("format_footnotes", action);
     connect(action, SIGNAL(triggered()), this, SLOT(showFootnotesConfigureDialog()));
 
     action = actionRegistry->makeQAction("format_endnotes", this);
-    addAction("format_endnotes",action);
+    addAction("format_endnotes", action);
     connect(action, SIGNAL(triggered()), this, SLOT(showEndnotesConfigureDialog()));
 
     action = actionRegistry->makeQAction("insert_citation", this);
-    addAction("insert_citation",action);
+    addAction("insert_citation", action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertCitation()));
 
     action = actionRegistry->makeQAction("insert_bibliography", this);
-    addAction("insert_bibliography",action);
+    addAction("insert_bibliography", action);
 
     action = actionRegistry->makeQAction("insert_custom_bibliography", this);
     addAction("insert_custom_bibliography", action);
 
     action = actionRegistry->makeQAction("configure_bibliography", this);
-    addAction("configure_bibliography",action);
+    addAction("configure_bibliography", action);
     connect(action, SIGNAL(triggered()), this, SLOT(configureBibliography()));
 
     action = actionRegistry->makeQAction("insert_link", this);
@@ -198,8 +198,7 @@ void ReferencesTool::createActions()
     addAction("manage_bookmarks", action);
 }
 
-
-void ReferencesTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void ReferencesTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     TextTool::activate(toolActivation, shapes);
 }

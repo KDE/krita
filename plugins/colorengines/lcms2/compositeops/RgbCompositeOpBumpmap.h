@@ -30,30 +30,33 @@ class RgbCompositeOpBumpmap : public KoCompositeOpAlphaBase<_CSTraits, RgbCompos
 
 public:
 
-    RgbCompositeOpBumpmap(KoColorSpace * cs)
-            : KoCompositeOpAlphaBase<_CSTraits, RgbCompositeOpBumpmap<_CSTraits>, true >(cs, COMPOSITE_BUMPMAP, i18n("Bumpmap"),  KoCompositeOp::categoryMisc()) {
-    }                       
-                       
-    inline static channels_type selectAlpha(channels_type srcAlpha, channels_type dstAlpha) {
+    RgbCompositeOpBumpmap(KoColorSpace *cs)
+        : KoCompositeOpAlphaBase<_CSTraits, RgbCompositeOpBumpmap<_CSTraits>, true >(cs, COMPOSITE_BUMPMAP, i18n("Bumpmap"),  KoCompositeOp::categoryMisc())
+    {
+    }
+
+    inline static channels_type selectAlpha(channels_type srcAlpha, channels_type dstAlpha)
+    {
         return qMin(srcAlpha, dstAlpha);
     }
 
     inline static void composeColorChannels(channels_type srcBlend,
-                                            const channels_type* src,
-                                            channels_type* dst,
+                                            const channels_type *src,
+                                            channels_type *dst,
                                             bool allChannelFlags,
-                                            const QBitArray & channelFlags) {
+                                            const QBitArray &channelFlags)
+    {
         qreal intensity;
-        
+
         // And I'm not sure whether this is correct, either.
         intensity = ((qreal)306.0 * src[_CSTraits::red_pos] +
-                        (qreal)601.0 * src[_CSTraits::green_pos] +
-                        (qreal)117.0 * src[_CSTraits::blue_pos]) / 1024.0;
-                        
+                     (qreal)601.0 * src[_CSTraits::green_pos] +
+                     (qreal)117.0 * src[_CSTraits::blue_pos]) / 1024.0;
+
         for (uint i = 0; i < _CSTraits::channels_nb; i++) {
             if ((int)i != _CSTraits::alpha_pos  && (allChannelFlags || channelFlags.testBit(i))) {
                 channels_type srcChannel = (channels_type)(((qreal)
-                                            intensity * dst[i]) / NATIVE_OPACITY_OPAQUE + 0.5);
+                                           intensity * dst[i]) / NATIVE_OPACITY_OPAQUE + 0.5);
                 channels_type dstChannel = dst[i];
 
                 dst[i] = KoColorSpaceMaths<channels_type>::blend(srcChannel, dstChannel, srcBlend);

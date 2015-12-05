@@ -28,10 +28,10 @@ class ArtisticTextShapeLoadingUpdater : public KoLoadingShapeUpdater
 public:
     explicit ArtisticTextShapeLoadingUpdater(ArtisticTextShape *artisticTextShape);
     virtual ~ArtisticTextShapeLoadingUpdater();
-    virtual void update(KoShape * shape);
+    virtual void update(KoShape *shape);
 
 private:
-    ArtisticTextShape * m_artisticTextShape;
+    ArtisticTextShape *m_artisticTextShape;
 };
 
 #endif // ARTISTICTEXTSHAPELOADINGUPDATER_H

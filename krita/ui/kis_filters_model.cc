@@ -73,7 +73,7 @@ KisFiltersModel::KisFiltersModel(bool showAll, KisPaintDeviceSP thumb)
 {
     d->thumb = thumb;
     QList<KisFilterSP> filters = KisFilterRegistry::instance()->values();
-    foreach(const KisFilterSP filter, filters) {
+    Q_FOREACH (const KisFilterSP filter, filters) {
         if (!showAll && !filter->supportsAdjustmentLayers()) {
             continue;
         }

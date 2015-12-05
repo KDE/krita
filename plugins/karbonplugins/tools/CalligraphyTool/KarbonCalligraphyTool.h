@@ -36,13 +36,13 @@ public:
 
     void paint(QPainter &painter, const KoViewConverter &converter);
 
-    void mousePressEvent(KoPointerEvent *event) ;
+    void mousePressEvent(KoPointerEvent *event);
     void mouseMoveEvent(KoPointerEvent *event);
     void mouseReleaseEvent(KoPointerEvent *event);
 
     QList<QPointer<QWidget> > createOptionWidgets();
 
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     void deactivate();
 
 Q_SIGNALS:

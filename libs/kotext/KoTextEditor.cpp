@@ -237,7 +237,7 @@ KoTextEditor *KoTextEditor::getTextEditorFromCanvas(KoCanvasBase *canvas)
 {
     KoSelection *selection = canvas->shapeManager()->selection();
     if (selection) {
-        foreach(KoShape *shape, selection->selectedShapes()) {
+        Q_FOREACH (KoShape *shape, selection->selectedShapes()) {
             if (KoTextShapeDataBase *textData = qobject_cast<KoTextShapeDataBase*>(shape->userData())) {
                 KoTextDocument doc(textData->document());
                 return doc.textEditor();

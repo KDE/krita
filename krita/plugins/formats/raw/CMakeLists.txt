@@ -4,7 +4,7 @@ endif()
 include_directories(${LibRaw_INCLUDE_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/libkdcraw/src)
 
-set(krita_raw_import_PART_SRCS kis_raw_import.cpp 
+set(krita_raw_import_SOURCES kis_raw_import.cpp 
     3rdparty/libkdcraw/src/dcrawinfocontainer.cpp
     3rdparty/libkdcraw/src/dcrawsettingswidget.cpp
     3rdparty/libkdcraw/src/kdcraw.cpp
@@ -21,11 +21,11 @@ set(krita_raw_import_PART_SRCS kis_raw_import.cpp
     3rdparty/libkdcraw/src/squeezedcombobox.cpp
 )
 
-ki18n_wrap_ui(krita_raw_import_PART_SRCS 
+ki18n_wrap_ui(krita_raw_import_SOURCES 
     wdgrawimport.ui 
 )
 
-add_library(krita_raw_import MODULE ${krita_raw_import_PART_SRCS})
+add_library(krita_raw_import MODULE ${krita_raw_import_SOURCES})
 kcoreaddons_desktop_to_json(krita_raw_import krita_raw_import.desktop)
 target_link_libraries(krita_raw_import kritaui ${LibRaw_LIBRARIES})
 

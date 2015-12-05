@@ -57,7 +57,7 @@ bool KisAbstractShortcut::compareKeys(const QSet<Qt::Key> &keys1,
 {
     if (keys1.size() != keys2.size()) return false;
 
-    foreach(Qt::Key key, keys1) {
+    Q_FOREACH (Qt::Key key, keys1) {
         if (!keys2.contains(key)) return false;
     }
     return true;

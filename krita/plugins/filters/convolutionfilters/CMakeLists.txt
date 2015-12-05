@@ -1,10 +1,10 @@
 
-set(kritaconvolutionfilters_PART_SRCS
+set(kritaconvolutionfilters_SOURCES
    convolutionfilters.cpp
    kis_convolution_filter.cpp )
 
 
-add_library(kritaconvolutionfilters MODULE ${kritaconvolutionfilters_PART_SRCS})
+add_library(kritaconvolutionfilters MODULE ${kritaconvolutionfilters_SOURCES})
 kcoreaddons_desktop_to_json(kritaconvolutionfilters kritaconvolutionfilters.desktop)
 
 

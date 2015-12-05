@@ -322,7 +322,7 @@ QPixmap KisNodeView::createDragPixmap() const
     QPainter painter(&dragPixmap);
     int x = 0;
     int y = 0;
-    foreach (const QModelIndex &selectedIndex, selectedIndexes) {
+    Q_FOREACH (const QModelIndex &selectedIndex, selectedIndexes) {
         const QImage img = selectedIndex.data(int(Model::BeginThumbnailRole) + size).value<QImage>();
         painter.drawPixmap(x, y, QPixmap().fromImage(img.scaled(QSize(size, size), Qt::KeepAspectRatio)));
 

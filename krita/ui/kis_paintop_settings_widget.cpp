@@ -109,7 +109,7 @@ void KisPaintOpSettingsWidget::setConfiguration(const KisPropertiesConfiguration
     Q_ASSERT(!config->getString("paintop").isEmpty());
     KisLockedPropertiesProxy* propertiesProxy = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(config);
     int indexcount = 0;
-    foreach (KisPaintOpOption* option, m_d->paintOpOptions) {
+    Q_FOREACH (KisPaintOpOption* option, m_d->paintOpOptions) {
         option->startReadOptionSetting(propertiesProxy);
 
         if (KisLockedPropertiesServer::instance()->propertiesFromLocked()) {
@@ -136,7 +136,7 @@ void KisPaintOpSettingsWidget::setConfiguration(const KisPropertiesConfiguration
 void KisPaintOpSettingsWidget::writeConfiguration(KisPropertiesConfiguration *config) const
 {
     KisLockedPropertiesProxy* propertiesProxy = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(config);
-    foreach(const KisPaintOpOption* option, m_d->paintOpOptions) {
+    Q_FOREACH (const KisPaintOpOption* option, m_d->paintOpOptions) {
         option->startWriteOptionSetting(propertiesProxy);
     }
 
@@ -148,7 +148,7 @@ KisPaintopLodLimitations KisPaintOpSettingsWidget::lodLimitations() const
 {
     KisPaintopLodLimitations l;
 
-    foreach(const KisPaintOpOption* option, m_d->paintOpOptions) {
+    Q_FOREACH (const KisPaintOpOption* option, m_d->paintOpOptions) {
         if (option->isCheckable() && !option->isChecked()) continue;
         option->lodLimitations(&l);
     }
@@ -158,14 +158,14 @@ KisPaintopLodLimitations KisPaintOpSettingsWidget::lodLimitations() const
 
 void KisPaintOpSettingsWidget::setImage(KisImageWSP image)
 {
-    foreach(KisPaintOpOption* option, m_d->paintOpOptions) {
+    Q_FOREACH (KisPaintOpOption* option, m_d->paintOpOptions) {
         option->setImage(image);
     }
 }
 
 void KisPaintOpSettingsWidget::setNode(KisNodeWSP node)
 {
-    foreach(KisPaintOpOption* option, m_d->paintOpOptions) {
+    Q_FOREACH (KisPaintOpOption* option, m_d->paintOpOptions) {
         option->setNode(node);
     }
 }

@@ -291,41 +291,30 @@ void KisLayerManager::activateLayer(KisLayerSP layer)
 void KisLayerManager::setup(KisActionManager* actionManager)
 {
     m_imageFlatten = actionManager->createAction("flatten_image");
-    m_imageFlatten->setActivationFlags(KisAction::ACTIVE_LAYER);
     connect(m_imageFlatten, SIGNAL(triggered()), this, SLOT(flattenImage()));
 
     m_imageMergeLayer = actionManager->createAction("merge_layer");
-    m_imageMergeLayer->setActivationFlags(KisAction::ACTIVE_LAYER);
     connect(m_imageMergeLayer, SIGNAL(triggered()), this, SLOT(mergeLayer()));
 
     m_flattenLayer = actionManager->createAction("flatten_layer");
-    m_flattenLayer->setActivationFlags(KisAction::ACTIVE_LAYER);
     connect(m_flattenLayer, SIGNAL(triggered()), this, SLOT(flattenLayer()));
 
     KisAction * action = actionManager->createAction("RenameCurrentLayer");
-    action->setActivationFlags(KisAction::ACTIVE_LAYER);
     connect(action, SIGNAL(triggered()), this, SLOT(layerProperties()));
 
     m_rasterizeLayer = actionManager->createAction("rasterize_layer");
-    m_rasterizeLayer->setActivationFlags(KisAction::ACTIVE_SHAPE_LAYER);
-    m_rasterizeLayer->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     connect(m_rasterizeLayer, SIGNAL(triggered()), this, SLOT(rasterizeLayer()));
 
     m_groupLayersSave = actionManager->createAction("save_groups_as_images");
-    m_groupLayersSave->setActivationFlags(KisAction::ACTIVE_LAYER);
     connect(m_groupLayersSave, SIGNAL(triggered()), this, SLOT(saveGroupLayers()));
 
     m_imageResizeToLayer = actionManager->createAction("resizeimagetolayer");
-    m_imageResizeToLayer->setActivationFlags(KisAction::ACTIVE_LAYER);
     connect(m_imageResizeToLayer, SIGNAL(triggered()), this, SLOT(imageResizeToActiveLayer()));
 
     action = actionManager->createAction("trim_to_image");
-    action->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(action, SIGNAL(triggered()), this, SLOT(trimToImage()));
 
     m_layerStyle  = actionManager->createAction("layer_style");
-    m_layerStyle->setActivationFlags(KisAction::ACTIVE_LAYER);
-    m_layerStyle->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     connect(m_layerStyle, SIGNAL(triggered()), this, SLOT(layerStyle()));
 
 }

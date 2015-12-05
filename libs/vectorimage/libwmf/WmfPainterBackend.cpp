@@ -585,7 +585,7 @@ void WmfPainterBackend::drawPolyPolygon(WmfDeviceContext &context, QList<QPolygo
 
     // define clipping region
     QRegion region;
-    foreach(const QPolygon & pa, listPa) {
+    Q_FOREACH (const QPolygon & pa, listPa) {
         region = region.xored(pa);
     }
     mPainter->setClipRegion(region);
@@ -600,7 +600,7 @@ void WmfPainterBackend::drawPolyPolygon(WmfDeviceContext &context, QList<QPolygo
     mPainter->setClipping(false);
     if (mPainter->pen().style() != Qt::NoPen) {
         mPainter->setBrush(Qt::NoBrush);
-        foreach(const QPolygon & pa, listPa) {
+        Q_FOREACH (const QPolygon & pa, listPa) {
 #if DEBUG_WMFPAINT
             debugVectorImage << pa;
 #endif

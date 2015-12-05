@@ -1,6 +1,6 @@
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../RulerAssistantCommon)
 
-set(kritarulerassistanttool_PART_SRCS
+set(kritarulerassistanttool_SOURCES
     RulerAssistant.cc
     EllipseAssistant.cc
     Ellipse.cc
@@ -15,9 +15,9 @@ set(kritarulerassistanttool_PART_SRCS
     FisheyePointAssistant.cc
     )
 
-ki18n_wrap_ui(kritarulerassistanttool_PART_SRCS AssistantsToolOptions.ui )
+ki18n_wrap_ui(kritarulerassistanttool_SOURCES AssistantsToolOptions.ui )
 
-add_library(kritarulerassistanttool MODULE ${kritarulerassistanttool_PART_SRCS})
+add_library(kritarulerassistanttool MODULE ${kritarulerassistanttool_SOURCES})
 kcoreaddons_desktop_to_json(kritarulerassistanttool kritarulerassistanttool.desktop)
 
 target_link_libraries(kritarulerassistanttool kritaui kritaflake   )

@@ -199,7 +199,7 @@ QList<QImage> KisFavoriteResourceManager::favoritePresetImages()
 {
     init();
     QList<QImage> images;   
-    foreach(KisPaintOpPresetSP preset, m_favoritePresetsList) {
+    Q_FOREACH (KisPaintOpPresetSP preset, m_favoritePresetsList) {
         if (preset) {
             images.append(preset->image());
         }
@@ -355,7 +355,7 @@ void KisFavoriteResourceManager::init()
 
         if (!oldFavoritePresets.isEmpty() && m_currentTag.isEmpty()) {
             m_currentTag = i18n("Favorite Presets");
-            foreach( const QString& name, oldFavoritePresets) {
+            Q_FOREACH ( const QString& name, oldFavoritePresets) {
                 KisPaintOpPresetSP preset = rServer->resourceByName(name);
                 rServer->addTag(preset.data(), m_currentTag);
             }

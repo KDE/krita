@@ -55,7 +55,7 @@ public:
     }
 
     ~Private() {
-        foreach(const KoShapeTemplate & t, templates)
+        Q_FOREACH (const KoShapeTemplate & t, templates)
             delete t.properties;
         templates.clear();
     }
@@ -64,7 +64,6 @@ public:
     QMutex pluginLoadingMutex;
     QString deferredPluginName;
     QList<KoShapeTemplate> templates;
-    QList<KoShapeConfigFactoryBase*> configPanels;
     const QString id;
     const QString name;
     QString family;
@@ -142,16 +141,6 @@ void KoShapeFactoryBase::setFamily(const QString & family)
 QString KoShapeFactoryBase::id() const
 {
     return d->id;
-}
-
-void KoShapeFactoryBase::setOptionPanels(const QList<KoShapeConfigFactoryBase*> &panelFactories)
-{
-    d->configPanels = panelFactories;
-}
-
-QList<KoShapeConfigFactoryBase*> KoShapeFactoryBase::panelFactories() const
-{
-    return d->configPanels;
 }
 
 QList<KoShapeTemplate> KoShapeFactoryBase::templates() const
@@ -250,7 +239,7 @@ void KoShapeFactoryBase::getDeferredPlugin()
     const QList<QPluginLoader *> offers = KoJsonTrader::instance()->query("Calligra/Deferred", QString());
     Q_ASSERT(offers.size() > 0);
 
-    foreach(QPluginLoader *pluginLoader, offers) {
+    Q_FOREACH (QPluginLoader *pluginLoader, offers) {
         KPluginFactory *factory = qobject_cast<KPluginFactory *>(pluginLoader->instance());
         KoDeferredShapeFactoryBase *plugin = factory->create<KoDeferredShapeFactoryBase>(this, QVariantList());
 

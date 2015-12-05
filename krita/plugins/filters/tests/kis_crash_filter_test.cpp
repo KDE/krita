@@ -64,7 +64,7 @@ bool KisCrashFilterTest::testFilter(KisFilterSP f)
 {
     QList<const KoColorSpace*> colorSpaces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::AllProfiles);
     bool ok = false;
-    foreach(const KoColorSpace* colorSpace, colorSpaces) {
+    Q_FOREACH (const KoColorSpace* colorSpace, colorSpaces) {
         // XXX: Let's not check the painterly colorspaces right now
         if (colorSpace->id().startsWith("KS", Qt::CaseInsensitive)) {
             continue;

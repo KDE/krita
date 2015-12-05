@@ -253,7 +253,7 @@ void KisPSDTest::testOpeningAllFormats()
     QString path = TestUtil::fetchExternalDataFileName("psd_format_test_files");
     QDir dirSources(path);
 
-    foreach(QFileInfo sourceFileInfo, dirSources.entryInfoList()) {
+    Q_FOREACH (QFileInfo sourceFileInfo, dirSources.entryInfoList()) {
         Q_ASSERT(sourceFileInfo.exists());
 
         if (sourceFileInfo.isHidden() || sourceFileInfo.isDir()) {
@@ -283,7 +283,7 @@ void KisPSDTest::testSavingAllFormats()
     QString path = TestUtil::fetchExternalDataFileName("psd_format_test_files");
     QDir dirSources(path);
 
-    foreach(QFileInfo sourceFileInfo, dirSources.entryInfoList()) {
+    Q_FOREACH (QFileInfo sourceFileInfo, dirSources.entryInfoList()) {
         Q_ASSERT(sourceFileInfo.exists());
 
         if (sourceFileInfo.isHidden() || sourceFileInfo.isDir()) {

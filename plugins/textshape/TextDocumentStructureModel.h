@@ -30,8 +30,7 @@ class QTextDocument;
 class QTextFrame;
 class QTextBlock;
 
-struct NodeData
-{
+struct NodeData {
     enum Type {Frame, Block};
 
     Type type;
@@ -42,7 +41,6 @@ struct NodeData
     static NodeData fromFrame(QTextFrame *frame);
     static NodeData fromBlock(int blockNumber);
 };
-
 
 class TextDocumentStructureModel : public QAbstractItemModel
 {
@@ -81,7 +79,7 @@ private:
 
     mutable QVector<NodeData> m_nodeDataTable;
     mutable QHash<int, int> m_blockNumberTable;
-    mutable QHash<QTextFrame*, int> m_frameTable;
+    mutable QHash<QTextFrame *, int> m_frameTable;
 };
 
 #endif // TEXTDOCUMENTSTRUCTUREMODEL_H

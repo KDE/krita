@@ -200,7 +200,7 @@ void KisWalkersTest::verifyResult(KisBaseRectsWalker &walker, QStringList refere
         dbgKrita << "*** We are going to crash soon... just wait...";
     }
 
-    foreach(const KisMergeWalker::JobItem &item, list) {
+    Q_FOREACH (const KisMergeWalker::JobItem &item, list) {
 #ifdef DEBUG_VISITORS
         dbgKrita << item.m_leaf->node()->name() << '\t'
                  << item.m_applyRect << '\t'
@@ -1110,7 +1110,7 @@ void KisWalkersTest::testMasksOverlapping()
         updateList.append(job);
     }
 
-    foreach(UpdateTestJob job, updateList) {
+    Q_FOREACH (UpdateTestJob job, updateList) {
         KisMergeWalker walker(cropRect);
         reportStartWith(job.startNode->name(), job.updateRect);
         dbgKrita << "Area:" << job.updateAreaName;

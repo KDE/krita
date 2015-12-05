@@ -24,16 +24,16 @@
 #include <klocalizedstring.h>
 
 ComponentTransferEffectFactory::ComponentTransferEffectFactory()
-        : KoFilterEffectFactoryBase(ComponentTransferEffectId, i18n("Component transfer"))
+    : KoFilterEffectFactoryBase(ComponentTransferEffectId, i18n("Component transfer"))
 {
 }
 
-KoFilterEffect * ComponentTransferEffectFactory::createFilterEffect() const
+KoFilterEffect *ComponentTransferEffectFactory::createFilterEffect() const
 {
     return new ComponentTransferEffect();
 }
 
-KoFilterEffectConfigWidgetBase * ComponentTransferEffectFactory::createConfigWidget() const
+KoFilterEffectConfigWidgetBase *ComponentTransferEffectFactory::createConfigWidget() const
 {
     return new ComponentTransferEffectConfigWidget();
 }

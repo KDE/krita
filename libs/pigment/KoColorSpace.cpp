@@ -67,7 +67,7 @@ KoColorSpace::~KoColorSpace()
     Q_ASSERT(d->deletability != OwnedByRegistryDoNotDelete);
 
     qDeleteAll(d->compositeOps);
-    foreach(KoChannelInfo * channel, d->channels) {
+    Q_FOREACH (KoChannelInfo * channel, d->channels) {
         delete channel;
     }
     if (d->deletability == NotOwnedByRegistry) {

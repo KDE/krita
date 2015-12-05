@@ -38,20 +38,20 @@
 #include "ui/KisDocument.h"
 #include "kis_splash_screen.h"
 #include "KisPart.h"
-#include "opengl/kis_opengl.h"
 #include "KisApplicationArguments.h"
 
 #if defined Q_OS_WIN
 #include <Windows.h>
 #include <stdlib.h>
 #include <ui/input/wintab/kis_tablet_support_win.h>
-#ifdef USE_BREAKPAD
-    #include "kis_crash_handler.h"
-#endif
+
 #elif defined HAVE_X11
     #include <ui/input/wintab/kis_tablet_support_x11.h>
 #endif
 
+#if defined HAVE_KCRASH
+#include <kcrash.h>
+#endif
 extern "C" int main(int argc, char **argv)
 {
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
@@ -60,12 +60,6 @@ extern "C" int main(int argc, char **argv)
     if (runningInKDE) {
         qputenv("QT_NO_GLIB", "1");
     }
-#endif
-
-#ifdef USE_BREAKPAD
-    qputenv("KDE_DEBUG", "1");
-    KisCrashHandler crashHandler;
-    Q_UNUSED(crashHandler);
 #endif
 
     /**
@@ -86,7 +80,6 @@ extern "C" int main(int argc, char **argv)
     QString key = "Krita3" +
                   QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");
     key = key.replace(":", "_").replace("\\","_");
-
 #if defined HAVE_X11
     // we need to call XInitThreads() (which this does) because of gmic (and possibly others)
     // do their own X11 stuff in their own threads
@@ -105,6 +98,9 @@ extern "C" int main(int argc, char **argv)
     QCoreApplication::addLibraryPath(QCoreApplication::applicationDirPath());
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
+#if defined HAVE_KCRASH
+    KCrash::initialize();
+#endif
 
     // If we should clear the config, it has to be done as soon as possible after
     // KisApplication has been created. Otherwise the config file may have been read

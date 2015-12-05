@@ -69,7 +69,7 @@ KoToolBase::~KoToolBase()
    //     e.setAttribute("version", "2");
    //     doc.appendChild(e);
 
-   //     foreach(QAction *action, actions().values()) {
+   //     Q_FOREACH (QAction *action, actions().values()) {
    //         QDomElement a = doc.createElement("Action");
    //         a.setAttribute("name", action->objectName());
 

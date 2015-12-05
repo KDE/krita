@@ -48,7 +48,7 @@ public:
     }
 
     virtual void lodLimitations(KisPaintopLodLimitations *l) const {
-        l->blockers << KoID("colorsmudge-overlay", i18nc("PaintOp LoD limitation", "Overlay Option"));
+        l->blockers << KoID("colorsmudge-overlay", i18nc("PaintOp instant preview limitation", "Overlay Option"));
     }
 
 };

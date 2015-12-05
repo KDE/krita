@@ -167,7 +167,7 @@ void KoToolProxy::touchEvent(QTouchEvent *event)
     QList<KoTouchPoint> touchPoints;
 
     bool isPrimary = true;
-    foreach(QTouchEvent::TouchPoint p, event->touchPoints()) {
+    Q_FOREACH (QTouchEvent::TouchPoint p, event->touchPoints()) {
         QPointF docPoint = widgetToDocument(p.screenPos());
         if (isPrimary) {
             point = docPoint;
@@ -542,7 +542,7 @@ bool KoToolProxy::paste()
             success = paste.paste(KoOdf::Text, data);
             if (success) {
                 shapeManager->selection()->deselectAll();
-                foreach(KoShape *shape, paste.pastedShapes()) {
+                Q_FOREACH (KoShape *shape, paste.pastedShapes()) {
                     shapeManager->selection()->select(shape);
                 }
             }
@@ -576,7 +576,7 @@ bool KoToolProxy::paste()
         const KoViewConverter *converter = canvas->viewConverter();
         if (imageList.length() > 0 && factory && canvasWidget) {
             KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Paste Image"));
-            foreach(const QImage &image, imageList) {
+            Q_FOREACH (const QImage &image, imageList) {
                 if (!image.isNull()) {
                     QPointF p = converter->viewToDocument(canvasWidget->mapFromGlobal(QCursor::pos()) + canvas->canvasController()->documentOffset()- canvasWidget->pos());
                     KoProperties params;

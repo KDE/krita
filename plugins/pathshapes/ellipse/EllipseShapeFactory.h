@@ -34,7 +34,7 @@ public:
     virtual ~EllipseShapeFactory() {}
     virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
     virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
-    virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
+    virtual QList<KoShapeConfigWidgetBase *> createShapeOptionPanels();
 };
 
 #endif /* KOELLIPSESHAPEFACTORY_H */

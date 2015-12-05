@@ -48,9 +48,7 @@ K_PLUGIN_FACTORY_WITH_JSON(KisSeparateChannelsPluginFactory, "kritaseparatechann
 KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const QVariantList &)
     : KisViewPlugin(parent)
 {
-    KisAction *action  = new KisAction(i18n("Separate Image..."), this);
-    action->setActivationFlags(KisAction::ACTIVE_NODE);
-    addAction("separate", action);
+    KisAction *action  = createAction("separate");
     connect(action, SIGNAL(triggered(bool)), SLOT(slotSeparate()));
 }
 

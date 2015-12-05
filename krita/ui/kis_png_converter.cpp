@@ -544,7 +544,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                     const KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(s);
                     if (csf) {
                         QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
-                        foreach(const KoColorProfile *p, profileList) {
+                        Q_FOREACH (const KoColorProfile *p, profileList) {
                             if (p->name() == dlg.profile()) {
                                 profile = p;
                                 break;

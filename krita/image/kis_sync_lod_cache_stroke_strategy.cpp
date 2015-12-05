@@ -31,7 +31,7 @@ struct KisSyncLodCacheStrokeStrategy::Private
 };
 
 KisSyncLodCacheStrokeStrategy::KisSyncLodCacheStrokeStrategy(KisImageWSP image)
-    : KisSimpleStrokeStrategy("SyncLodCacheStroke", kundo2_i18n("Update LOD")),
+    : KisSimpleStrokeStrategy("SyncLodCacheStroke", kundo2_i18n("Instant Preview")),
       m_d(new Private)
 {
     m_d->image = image;

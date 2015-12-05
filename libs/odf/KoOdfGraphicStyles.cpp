@@ -252,7 +252,7 @@ QString KoOdfGraphicStyles::saveOdfGradientStyle(KoGenStyles &mainStyles, const 
 
     // save stops
     QGradientStops stops = gradient->stops();
-    foreach(const QGradientStop & stop, stops) {
+    Q_FOREACH (const QGradientStop & stop, stops) {
         elementWriter.startElement("svg:stop");
         elementWriter.addAttribute("svg:offset", QString("%1").arg(stop.first));
         elementWriter.addAttribute("svg:stop-color", stop.second.name());

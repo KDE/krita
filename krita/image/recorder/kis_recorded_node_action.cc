@@ -52,7 +52,7 @@ void KisRecordedNodeAction::play(const KisPlayInfo& _info, KoUpdater* _updater) 
     QList<KisNodeSP> nodes = nodeQueryPath().queryNodes(_info.image(), _info.currentNode());
     KoProgressUpdater updater(_updater);
     updater.start(nodes.size(), i18n("Applying action to all selected nodes"));
-    foreach(KisNodeSP node, nodes)
+    Q_FOREACH (KisNodeSP node, nodes)
     {
         play(node, _info, updater.startSubtask());
     }

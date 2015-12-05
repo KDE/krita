@@ -85,11 +85,8 @@ KisGmicPlugin::KisGmicPlugin(QObject *parent, const QVariantList &)
             m_onCanvasPreviewRequestCounter(0),
             m_filteringIsRunning(false)
 {
-    KisAction *action  = new KisAction(i18n("G'MIC"), this);
-    action->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    KisAction *action  = createAction("gmic");
     connect(action, SIGNAL(triggered()), this, SLOT(slotShowGmicDialog()));
-    addAction("gmic", action);
 
     KoResourcePaths::addResourceType("gmic_definitions", "data", "krita/gmic/");
     m_blacklistPath = KoResourcePaths::findResource("gmic_definitions", STANDARD_GMIC_DEFINITION + ".blacklist");
@@ -173,7 +170,7 @@ void KisGmicPlugin::setupDefinitionPaths()
         m_definitionFilePaths.prepend(updatedGmicDefinitionFilePath);
     }
 
-    foreach (const QString item, m_definitionFilePaths)
+    Q_FOREACH (const QString item, m_definitionFilePaths)
     {
         dbgPlugins << "registered gmic file: " << item;
     }
@@ -360,7 +357,7 @@ void KisGmicPlugin::slotFilterCurrentImage(KisGmicFilterSetting* setting)
 
 void KisGmicPlugin::parseGmicCommandDefinitions(const QStringList& gmicDefinitionFilePaths)
 {
-    foreach (const QString filePath, gmicDefinitionFilePaths)
+    Q_FOREACH (const QString filePath, gmicDefinitionFilePaths)
     {
         QByteArray gmicCommands = KisGmicParser::extractGmicCommandsOnly(filePath);
         m_gmicCustomCommands.append(gmicCommands);

@@ -8,7 +8,7 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-undef -Wno-missing-format-attribute -Wno-sign-compare)
 endif ()
 
-set(kritaxcfimport_PART_SRCS
+set(kritaxcfimport_SOURCES
     kis_xcf_import.cpp
     ${XCFTOOLS_SOURCE_DIR}/xcf-general.c
     ${XCFTOOLS_SOURCE_DIR}/utils.c
@@ -21,7 +21,7 @@ set(kritaxcfimport_PART_SRCS
     ${XCFTOOLS_SOURCE_DIR}/flatten.c  
     )
 
-add_library(kritaxcfimport MODULE ${kritaxcfimport_PART_SRCS})
+add_library(kritaxcfimport MODULE ${kritaxcfimport_SOURCES})
 kcoreaddons_desktop_to_json(kritaxcfimport krita_xcf_import.desktop)
 
 target_link_libraries(kritaxcfimport kritaui )

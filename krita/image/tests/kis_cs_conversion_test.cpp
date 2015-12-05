@@ -64,8 +64,8 @@ void KisCsConversionTest::testColorSpaceConversion()
 
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "tile.png");
 
-    foreach(const KoColorSpace * srcCs, colorSpaces) {
-        foreach(const KoColorSpace * dstCs,  colorSpaces) {
+    Q_FOREACH (const KoColorSpace * srcCs, colorSpaces) {
+        Q_FOREACH (const KoColorSpace * dstCs,  colorSpaces) {
 
             KisPaintDeviceSP dev  = new KisPaintDevice(srcCs);
             dev->convertFromQImage(image, 0);

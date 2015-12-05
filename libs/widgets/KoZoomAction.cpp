@@ -105,7 +105,7 @@ QList<qreal> KoZoomAction::Private::filterMenuZoomLevels(const QList<qreal> &zoo
 {
     QList<qreal> filteredZoomLevels;
 
-    foreach(qreal zoom, zoomLevels) {
+    Q_FOREACH (qreal zoom, zoomLevels) {
         if (zoom >= 0.2 && zoom <= 10) {
             filteredZoomLevels << zoom;
         }
@@ -200,7 +200,7 @@ void KoZoomAction::regenerateItems(const qreal zoom, bool asCurrent)
         values << KoZoomMode::toString(KoZoomMode::ZOOM_PAGE);
     }
 
-    foreach(qreal value, zoomLevels) {
+    Q_FOREACH (qreal value, zoomLevels) {
         const qreal valueInPercent = value * 100;
         const int precision = (value > 10.0) ? 0 : 1;
 

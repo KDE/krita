@@ -1615,3 +1615,23 @@ void KisConfig::setCustomColorSelectorColorSpace(const KoColorSpace *cs)
 
     KisConfigNotifier::instance()->notifyConfigChanged();
 }
+
+bool KisConfig::enableOpenGLDebugging(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("enableOpenGLDebugging", false));
+}
+
+void KisConfig::setEnableOpenGLDebugging(bool value) const
+{
+    m_cfg.writeEntry("enableOpenGLDebugging", value);
+}
+
+void KisConfig::setEnableAmdVectorizationWorkaround(bool value) const
+{
+    m_cfg.writeEntry("amdDisableVectorWorkaround", value);
+}
+
+bool KisConfig::enableAmdVectorizationWorkaround(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("amdDisableVectorWorkaround", false));
+}

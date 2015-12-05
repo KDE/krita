@@ -39,6 +39,7 @@
 #include <KoSelection.h>
 #include <KoShapeController.h>
 
+#include <kis_lod_transform.h>
 #include "kis_tool_proxy.h"
 #include "kis_coordinates_converter.h"
 #include "kis_prescaled_projection.h"
@@ -65,10 +66,10 @@
 #include "kis_exposure_gamma_correction_interface.h"
 #include "KisView.h"
 #include "kis_canvas_controller.h"
-#include "kis_animation_player.h"
-#include "kis_animation_frame_cache.h"
 
 #ifdef HAVE_OPENGL
+#include "kis_animation_player.h"
+#include "kis_animation_frame_cache.h"
 #include "opengl/kis_opengl_canvas2.h"
 #endif
 
@@ -118,10 +119,10 @@ public:
     KisDisplayColorConverter displayColorConverter;
 
     KisCanvasUpdatesCompressor projectionUpdatesCompressor;
-
+#ifdef HAVE_OPENGL
     KisAnimationPlayer *animationPlayer;
     KisAnimationFrameCacheSP frameCache;
-
+#endif
     bool lodAllowedInCanvas;
     bool bootsrapLodBlocked;
 
@@ -155,9 +156,9 @@ void KisCanvas2::setup()
     createCanvas(cfg.useOpenGL());
 
     setLodAllowedInCanvas(m_d->lodAllowedInCanvas);
-
+#ifdef HAVE_OPENGL
     m_d->animationPlayer = new KisAnimationPlayer(this);
-
+#endif
     connect(m_d->view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved(QPoint)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
 
@@ -192,10 +193,11 @@ void KisCanvas2::setup()
 
 KisCanvas2::~KisCanvas2()
 {
+#ifdef HAVE_OPENGL
     if (m_d->animationPlayer->isPlaying()) {
         m_d->animationPlayer->forcedStopOnExit();
     }
-
+#endif
     delete m_d;
 }
 
@@ -414,7 +416,9 @@ void KisCanvas2::createCanvas(bool useOpenGL)
 {
     // deinitialize previous canvas structures
     m_d->prescaledProjection = 0;
+#ifdef HAVE_OPENGL
     m_d->frameCache = 0;
+#endif
 
     KisConfig cfg;
     QDesktopWidget dw;
@@ -801,6 +805,7 @@ void KisCanvas2::setCursor(const QCursor &cursor)
     canvasWidget()->setCursor(cursor);
 }
 
+#ifdef HAVE_OPENGL
 KisAnimationFrameCacheSP KisCanvas2::frameCache() const
 {
     return m_d->frameCache;
@@ -810,7 +815,7 @@ KisAnimationPlayer *KisCanvas2::animationPlayer() const
 {
     return m_d->animationPlayer;
 }
-
+#endif
 void KisCanvas2::slotSelectionChanged()
 {
     KisShapeLayer* shapeLayer = dynamic_cast<KisShapeLayer*>(viewManager()->activeLayer().data());
@@ -818,7 +823,7 @@ void KisCanvas2::slotSelectionChanged()
         return;
     }
     m_d->shapeManager.selection()->deselectAll();
-    foreach(KoShape* shape, shapeLayer->shapeManager()->selection()->selectedShapes()) {
+    Q_FOREACH (KoShape* shape, shapeLayer->shapeManager()->selection()->selectedShapes()) {
         m_d->shapeManager.selection()->select(shape);
     }
 }

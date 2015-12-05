@@ -18,7 +18,7 @@
 #ifndef KIS_TEXTURE_TILE_H_
 #define KIS_TEXTURE_TILE_H_
 
-#include <opengl/kis_opengl.h>
+#include <KoConfig.h> // for HAVE_OPENGL
 
 #ifdef HAVE_OPENGL
 

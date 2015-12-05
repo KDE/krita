@@ -98,7 +98,7 @@ KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const KisPainterBas
       m_undoEnabled(true),
       m_useMergeID(rhs.m_useMergeID)
 {
-    foreach(PainterInfo *info, rhs.m_painterInfos) {
+    Q_FOREACH (PainterInfo *info, rhs.m_painterInfos) {
         m_painterInfos.append(new PainterInfo(*info, levelOfDetail));
     }
 
@@ -135,7 +135,7 @@ void KisPainterBasedStrokeStrategy::initPainters(KisPaintDeviceSP targetDevice,
                                                  bool hasIndirectPainting,
                                                  const QString &indirectPaintingCompositeOp)
 {
-    foreach(PainterInfo *info, m_painterInfos) {
+    Q_FOREACH (PainterInfo *info, m_painterInfos) {
         KisPainter *painter = info->painter;
 
         painter->begin(targetDevice, !hasIndirectPainting ? selection : 0);
@@ -151,7 +151,7 @@ void KisPainterBasedStrokeStrategy::initPainters(KisPaintDeviceSP targetDevice,
 
 void KisPainterBasedStrokeStrategy::deletePainters()
 {
-    foreach(PainterInfo *info, m_painterInfos) {
+    Q_FOREACH (PainterInfo *info, m_painterInfos) {
         delete info;
     }
 

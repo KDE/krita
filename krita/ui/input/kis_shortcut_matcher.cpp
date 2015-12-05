@@ -291,7 +291,7 @@ bool KisShortcutMatcher::touchEndEvent( QTouchEvent* event )
 
 Qt::MouseButtons listToFlags(const QList<Qt::MouseButton> &list) {
     Qt::MouseButtons flags;
-    foreach (Qt::MouseButton b, list) {
+    Q_FOREACH (Qt::MouseButton b, list) {
         flags |= b;
     }
     return flags;
@@ -355,7 +355,7 @@ bool KisShortcutMatcher::tryRunSingleActionShortcutImpl(T param, U *event, const
 
     KisSingleActionShortcut *goodCandidate = 0;
 
-    foreach(KisSingleActionShortcut *s, m_d->singleActionShortcuts) {
+    Q_FOREACH (KisSingleActionShortcut *s, m_d->singleActionShortcuts) {
         if(s->match(keysState, param) &&
            (!goodCandidate || s->priority() > goodCandidate->priority())) {
 
@@ -379,7 +379,7 @@ void KisShortcutMatcher::prepareReadyShortcuts()
     m_d->candidateShortcuts.clear();
     if (m_d->actionsSuppressed()) return;
 
-    foreach(KisStrokeShortcut *s, m_d->strokeShortcuts) {
+    Q_FOREACH (KisStrokeShortcut *s, m_d->strokeShortcuts) {
         if (s->matchReady(m_d->keys, m_d->buttons)) {
             m_d->candidateShortcuts.append(s);
         }
@@ -390,7 +390,7 @@ bool KisShortcutMatcher::tryRunReadyShortcut( Qt::MouseButton button, QEvent* ev
 {
     KisStrokeShortcut *goodCandidate = 0;
 
-    foreach(KisStrokeShortcut *s, m_d->candidateShortcuts) {
+    Q_FOREACH (KisStrokeShortcut *s, m_d->candidateShortcuts) {
         if (s->matchBegin(button) &&
             (!goodCandidate || s->priority() > goodCandidate->priority())) {
 
@@ -422,7 +422,7 @@ void KisShortcutMatcher::tryActivateReadyShortcut()
 {
     KisStrokeShortcut *goodCandidate = 0;
 
-    foreach(KisStrokeShortcut *s, m_d->candidateShortcuts) {
+    Q_FOREACH (KisStrokeShortcut *s, m_d->candidateShortcuts) {
         if (!goodCandidate || s->priority() > goodCandidate->priority()) {
             goodCandidate = s;
         }
@@ -474,7 +474,7 @@ bool KisShortcutMatcher::tryRunTouchShortcut( QTouchEvent* event )
     if (m_d->actionsSuppressed())
         return false;
 
-    foreach(KisTouchShortcut* shortcut, m_d->touchShortcuts) {
+    Q_FOREACH (KisTouchShortcut* shortcut, m_d->touchShortcuts) {
         if( shortcut->match( event ) && (!goodCandidate || shortcut->priority() > goodCandidate->priority()) ) {
             goodCandidate = shortcut;
         }

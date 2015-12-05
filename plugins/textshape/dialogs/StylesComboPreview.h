@@ -33,7 +33,7 @@ class StylesComboPreview : public QLineEdit
 {
     Q_OBJECT
 
-    Q_PROPERTY( bool showAddButton READ isAddButtonShown WRITE setAddButtonShown )
+    Q_PROPERTY(bool showAddButton READ isAddButtonShown WRITE setAddButtonShown)
 
 public:
     explicit StylesComboPreview(QWidget *parent = 0);

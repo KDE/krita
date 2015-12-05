@@ -415,7 +415,7 @@ void KisPrescaledProjectionTest::testUpdates()
         }
     }
 
-    foreach(KisUpdateInfoSP info, infos) {
+    Q_FOREACH (KisUpdateInfoSP info, infos) {
         t.projection.recalculateCache(info);
     }
 

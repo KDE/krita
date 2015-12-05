@@ -104,5 +104,5 @@ void KisSketchOpOption::readOptionSetting(const KisPropertiesConfiguration* sett
 
 void KisSketchOpOption::lodLimitations(KisPaintopLodLimitations *l) const
 {
-    l->limitations << KoID("sketch-brush", i18nc("PaintOp LoD limitation", "Sketch brush (differences in connecting lines are possible)"));
+    l->limitations << KoID("sketch-brush", i18nc("PaintOp instant preview limitation", "Sketch brush (differences in connecting lines are possible)"));
 }

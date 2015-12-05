@@ -80,7 +80,7 @@ void KisExperimentPaintOp::paintRegion(const QRegion &changedRegion)
     if (m_useMirroring) {
         m_originalPainter->setAntiAliasPolygonFill(!m_hardEdge);
 
-        foreach(const QRect & rect, changedRegion.rects()) {
+        Q_FOREACH (const QRect & rect, changedRegion.rects()) {
             m_originalPainter->fillPainterPath(m_path, rect);
             painter()->renderDabWithMirroringNonIncremental(rect, m_originalDevice);
         }
@@ -90,7 +90,7 @@ void KisExperimentPaintOp::paintRegion(const QRegion &changedRegion)
         painter()->setCompositeOp(COMPOSITE_COPY);
         painter()->setAntiAliasPolygonFill(!m_hardEdge);
 
-        foreach(const QRect & rect, changedRegion.rects()) {
+        Q_FOREACH (const QRect & rect, changedRegion.rects()) {
             painter()->fillPainterPath(m_path, rect);
         }
     }

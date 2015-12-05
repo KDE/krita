@@ -35,9 +35,12 @@ public:
     /// reimplemented
     virtual void save();
     /// reimplemented
-    virtual bool showOnShapeCreate() { return false; }
+    virtual bool showOnShapeCreate()
+    {
+        return false;
+    }
     /// reimplemented
-    virtual KUndo2Command * createCommand();
+    virtual KUndo2Command *createCommand();
 private Q_SLOTS:
     void closeEllipse();
 private:

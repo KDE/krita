@@ -62,7 +62,7 @@ public:
 
     /** Re-implemented from QAbstractItemModel. */
 
-    virtual QModelIndex index(int row, int column=0, const QModelIndex &parent = QModelIndex()) const;
+    virtual QModelIndex index(int row, int column = 0, const QModelIndex &parent = QModelIndex()) const;
 
     virtual int rowCount(const QModelIndex &parent) const;
 
@@ -96,7 +96,6 @@ public:
 
     /** Sets the @class KoStyleThumbnailer of the model. It is required that a @param thumbnailer is set before using the model. */
     void setStyleThumbnailer(KoStyleThumbnailer *thumbnailer);
-
 
     /** *************** */
     /** Using the model */
@@ -141,14 +140,13 @@ public:
     AbstractStylesModel::Type stylesType() const;
 
 private Q_SLOTS:
-    void removeParagraphStyle(KoParagraphStyle*);
-    void removeCharacterStyle(KoCharacterStyle*);
+    void removeParagraphStyle(KoParagraphStyle *);
+    void removeCharacterStyle(KoCharacterStyle *);
     void updateName(int styleId);
 
 public Q_SLOTS:
-    void addParagraphStyle(KoParagraphStyle*);
-    void addCharacterStyle(KoCharacterStyle*);
-
+    void addParagraphStyle(KoParagraphStyle *);
+    void addCharacterStyle(KoCharacterStyle *);
 
 private:
     void updateParagraphStyles();

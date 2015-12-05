@@ -41,10 +41,10 @@ double KisPressureSizeOption::apply(const KisPaintInformation & info) const
 void KisPressureSizeOption::lodLimitations(KisPaintopLodLimitations *l) const
 {
     if (sensor(FUZZY, true)) {
-        l->limitations << KoID("size-fade", i18nc("PaintOp LoD limitation", "Size -> Fuzzy (sensor)"));
+        l->limitations << KoID("size-fade", i18nc("PaintOp instant preview limitation", "Size -> Fuzzy (sensor)"));
     }
 
     if (sensor(FADE, true)) {
-        l->blockers << KoID("size-fuzzy", i18nc("PaintOp LoD limitation", "Size -> Fade (sensor)"));
+        l->blockers << KoID("size-fuzzy", i18nc("PaintOp instant preview limitation", "Size -> Fade (sensor)"));
     }
 }

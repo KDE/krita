@@ -179,5 +179,5 @@ void KisDynaOpOption::readOptionSetting(const KisPropertiesConfiguration* settin
 
 void KisDynaOpOption::lodLimitations(KisPaintopLodLimitations *l) const
 {
-    l->blockers << KoID("dyna-brush", i18nc("PaintOp LoD limitation", "Dyna Brush (not supported)"));
+    l->blockers << KoID("dyna-brush", i18nc("PaintOp instant preview limitation", "Dyna Brush (not supported)"));
 }

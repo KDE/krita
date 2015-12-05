@@ -45,10 +45,10 @@ public:
     virtual void undo();
 
 private:
-    KoFilterEffect * m_effect; ///< the filter effect we are working on
+    KoFilterEffect *m_effect;  ///< the filter effect we are working on
     QRectF m_oldRegion; ///< the old filter region
     QRectF m_newRegion; ///< the new filter region
-    KoShape * m_shape;  ///< the shape the effect is applied to, might be zero
+    KoShape *m_shape;   ///< the shape the effect is applied to, might be zero
 };
 
 #endif // FILTERREGIONCHANGECOMMAND_H

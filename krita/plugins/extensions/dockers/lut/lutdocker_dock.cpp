@@ -489,7 +489,7 @@ void LutDockerDock::refillControls()
         m_cmbComponents->clear();
         m_cmbComponents->addSqueezedItem(i18n("Luminance"));
         m_cmbComponents->addSqueezedItem(i18n("All Channels"));
-        foreach(KoChannelInfo *channel, KoChannelInfo::displayOrderSorted(cs->channels())) {
+        Q_FOREACH (KoChannelInfo *channel, KoChannelInfo::displayOrderSorted(cs->channels())) {
             m_cmbComponents->addSqueezedItem(channel->name());
         }
         m_cmbComponents->setCurrentIndex(1); // All Channels...

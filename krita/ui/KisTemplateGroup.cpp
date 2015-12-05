@@ -49,7 +49,7 @@ bool KisTemplateGroup::isHidden() const
 
 void KisTemplateGroup::setHidden(bool hidden) const
 {
-    foreach (KisTemplate* t, m_templates)
+    Q_FOREACH (KisTemplate* t, m_templates)
         t->setHidden(hidden);
 
     m_touched = true;

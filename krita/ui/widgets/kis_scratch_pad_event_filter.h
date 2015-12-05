@@ -24,6 +24,7 @@
 #include <KoPointerEvent.h>
 
 class QWidget;
+class KisScratchPad;
 
 
 class KisScratchPadEventFilter : public QObject
@@ -33,11 +34,6 @@ class KisScratchPadEventFilter : public QObject
 public:
     KisScratchPadEventFilter(QWidget *parent);
     void setWidgetToDocumentTransform(const QTransform &transform);
-
-Q_SIGNALS:
-    void mousePressSignal(KoPointerEvent *event);
-    void mouseReleaseSignal(KoPointerEvent *event);
-    void mouseMoveSignal(KoPointerEvent *event);
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
@@ -50,6 +46,7 @@ private:
 private:
     QTransform m_widgetToDocument;
     bool m_tabletPressed;
+    KisScratchPad *m_scratchPad;
 };
 
 #endif /* __KIS_SCRATCH_PAD_EVENT_FILTER_H */

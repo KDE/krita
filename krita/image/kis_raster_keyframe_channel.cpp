@@ -106,14 +106,6 @@ KisKeyframeSP KisRasterKeyframeChannel::createKeyframe(int time, const KisKeyfra
     return keyframe;
 }
 
-bool KisRasterKeyframeChannel::canDeleteKeyframe(KisKeyframeSP key)
-{
-    Q_UNUSED(key);
-
-    // Raster content must have at least one keyframe at all times
-    return keys().count() > 1 && key->time() != 0;
-}
-
 void KisRasterKeyframeChannel::destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand)
 {
     m_d->paintDevice->framesInterface()->deleteFrame(key->value(), parentCommand);

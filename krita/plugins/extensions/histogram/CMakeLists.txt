@@ -1,10 +1,10 @@
 
-set(kritahistogram_PART_SRCS histogram.cc dlg_histogram.cc kis_histogram_widget.cc )
+set(kritahistogram_SOURCES histogram.cc dlg_histogram.cc kis_histogram_widget.cc )
 
 
-ki18n_wrap_ui(kritahistogram_PART_SRCS wdghistogram.ui )
+ki18n_wrap_ui(kritahistogram_SOURCES wdghistogram.ui )
 
-add_library(kritahistogram MODULE ${kritahistogram_PART_SRCS})
+add_library(kritahistogram MODULE ${kritahistogram_SOURCES})
 kcoreaddons_desktop_to_json(kritahistogram kritahistogram.desktop)
 
 

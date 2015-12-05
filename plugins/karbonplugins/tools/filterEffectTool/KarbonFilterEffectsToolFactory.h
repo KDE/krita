@@ -27,7 +27,7 @@ class KarbonFilterEffectsToolFactory : public KoToolFactoryBase
 public:
     KarbonFilterEffectsToolFactory();
     virtual ~KarbonFilterEffectsToolFactory();
-    virtual KoToolBase * createTool(KoCanvasBase *canvas);
+    virtual KoToolBase *createTool(KoCanvasBase *canvas);
 };
 
 #endif // KARBONFILTEREFFECTSTOOLFACTORY_H

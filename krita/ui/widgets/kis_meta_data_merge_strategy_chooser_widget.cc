@@ -36,7 +36,7 @@ KisMetaDataMergeStrategyChooserWidget::KisMetaDataMergeStrategyChooserWidget(QWi
     setObjectName("KisMetadataMergeStrategyChooserWidget");
     d->uiWdg.setupUi(this);
     QList<QString> keys = KisMetaData::MergeStrategyRegistry::instance()->keys();
-    foreach(const QString & key, keys) {
+    Q_FOREACH (const QString & key, keys) {
         const KisMetaData::MergeStrategy* ms = KisMetaData::MergeStrategyRegistry::instance()->get(key);
         d->uiWdg.mergeStrategy->addItem(ms->name(), ms->id());
     }

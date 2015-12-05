@@ -32,7 +32,6 @@
 #include "commands/KoShapeConnectionChangeCommand.h"
 #include "KoCanvasBase.h"
 #include "KoShapeConfigWidgetBase.h"
-#include "KoShapeConfigFactoryBase.h"
 #include "KoShapeFactoryBase.h"
 #include "KoShape.h"
 #include "KoConnectionShape.h"
@@ -62,7 +61,7 @@ public:
                 KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(shape->shapeId());
                 Q_ASSERT(factory);
                 int z = 0;
-                foreach(KoShape *sh, canvas->shapeManager()->shapes())
+                Q_FOREACH (KoShape *sh, canvas->shapeManager()->shapes())
                     z = qMax(z, sh->zIndex());
                 shape->setZIndex(z + 1);
 
@@ -71,27 +70,8 @@ public:
                 dialog->setWindowTitle(i18n("%1 Options", factory->name()));
 
                 int pageCount = 0;
-                QList<KoShapeConfigFactoryBase*> panels = factory->panelFactories();
-                qSort(panels.begin(), panels.end(), KoShapeConfigFactoryBase::compare);
                 QList<KoShapeConfigWidgetBase*> widgets;
-                foreach(KoShapeConfigFactoryBase *panelFactory, panels) {
-                    if (! panelFactory->showForShapeId(shape->shapeId()))
-                        continue;
-                    KoShapeConfigWidgetBase *widget = panelFactory->createConfigWidget(shape);
-                    if (widget == 0)
-                        continue;
-                    if (! widget->showOnShapeCreate()) {
-                        delete widget;
-                        continue;
-                    }
-                    widget->connect(widget, SIGNAL(accept()), dialog, SLOT(accept()));
-                    widgets.append(widget);
-                    widget->setResourceManager(canvas->resourceManager());
-                    widget->setUnit(canvas->unit());
-                    dialog->addPage(widget, panelFactory->name());
-                    pageCount ++;
-                }
-                foreach(KoShapeConfigWidgetBase* panel, factory->createShapeOptionPanels()) {
+                Q_FOREACH (KoShapeConfigWidgetBase* panel, factory->createShapeOptionPanels()) {
                     if (! panel->showOnShapeCreate())
                         continue;
                     panel->open(shape);
@@ -111,7 +91,7 @@ public:
                         delete dialog;
                         return 0;
                     }
-                    foreach(KoShapeConfigWidgetBase *widget, widgets)
+                    Q_FOREACH (KoShapeConfigWidgetBase *widget, widgets)
                         widget->save();
                 }
                 delete dialog;

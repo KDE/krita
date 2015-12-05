@@ -44,9 +44,10 @@ EllipseShapeConfigWidget::EllipseShapeConfigWidget()
 
 void EllipseShapeConfigWidget::open(KoShape *shape)
 {
-    m_ellipse = dynamic_cast<EllipseShape*>(shape);
-    if (!m_ellipse)
+    m_ellipse = dynamic_cast<EllipseShape *>(shape);
+    if (!m_ellipse) {
         return;
+    }
 
     widget.ellipseType->blockSignals(true);
     widget.startAngle->blockSignals(true);
@@ -63,8 +64,9 @@ void EllipseShapeConfigWidget::open(KoShape *shape)
 
 void EllipseShapeConfigWidget::save()
 {
-    if (!m_ellipse)
+    if (!m_ellipse) {
         return;
+    }
 
     m_ellipse->setType(static_cast<EllipseShape::EllipseType>(widget.ellipseType->currentIndex()));
     m_ellipse->setStartAngle(widget.startAngle->value());

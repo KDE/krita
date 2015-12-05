@@ -27,7 +27,7 @@ class TextPlugin : public QObject
     Q_OBJECT
 
 public:
-    TextPlugin(QObject * parent, const QVariantList &);
+    TextPlugin(QObject *parent, const QVariantList &);
     ~TextPlugin() {}
 };
 #endif

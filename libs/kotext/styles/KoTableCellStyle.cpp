@@ -794,7 +794,7 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
         donePadding = true;
         style.addPropertyPt("fo:padding", leftPadding(), KoGenStyle::TableCellType);
     }
-    foreach(int key, keys) {
+    Q_FOREACH (int key, keys) {
         if (key == CellBackgroundBrush) {
             QBrush backBrush = background();
             if (backBrush.style() != Qt::NoBrush)

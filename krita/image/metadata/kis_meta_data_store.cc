@@ -185,7 +185,7 @@ void Store::debugDump() const
 {
     dbgImage << "=== Dumping MetaData Store ===";
     dbgImage << " - Metadata (there are" << d->entries.size() << " entries)";
-    foreach(const Entry& e, d->entries) {
+    Q_FOREACH (const Entry& e, d->entries) {
         if (e.isValid()) {
             dbgImage << e;
         } else {
@@ -197,7 +197,7 @@ void Store::debugDump() const
 void Store::applyFilters(const QList<const Filter*> & filters)
 {
     dbgImage << "Apply " << filters.size() << " filters";
-    foreach(const Filter* filter, filters) {
+    Q_FOREACH (const Filter* filter, filters) {
         filter->filter(this);
     }
 }

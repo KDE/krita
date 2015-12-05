@@ -42,21 +42,23 @@ public:
 
     KoTextEditingPlugin *spellcheck() const;
 
-    KoTextEditingPlugin *plugin(const QString &pluginId) const {
+    KoTextEditingPlugin *plugin(const QString &pluginId) const
+    {
         if (m_textEditingPlugins.contains(pluginId)) {
             return m_textEditingPlugins.value(pluginId);
         }
         return 0;
     }
 
-    QList<KoTextEditingPlugin*> values() const {
+    QList<KoTextEditingPlugin *> values() const
+    {
         return m_textEditingPlugins.values();
     }
 
 private:
-    QHash<QString, KoTextEditingPlugin*> m_textEditingPlugins;
+    QHash<QString, KoTextEditingPlugin *> m_textEditingPlugins;
 };
 
-Q_DECLARE_METATYPE(TextEditingPluginContainer*)
+Q_DECLARE_METATYPE(TextEditingPluginContainer *)
 
 #endif

@@ -23,8 +23,6 @@
 #include "desktopviewproxy.h"
 #include "ViewModeSwitchEvent.h"
 
-#include "opengl/kis_opengl.h"
-
 #include <QApplication>
 #include <QResizeEvent>
 #include <QDeclarativeView>
@@ -181,7 +179,7 @@ public:
         sketchView->setResizeMode( QDeclarativeView::SizeRootObjectToView );
 
         if (sketchView->errors().count() > 0) {
-            foreach(const QDeclarativeError &error, sketchView->errors()) {
+            Q_FOREACH (const QDeclarativeError &error, sketchView->errors()) {
                 dbgKrita << error.toString();
             }
         }
@@ -259,7 +257,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     cfg.setNewCursorStyle(CURSOR_STYLE_NO_CURSOR);
     cfg.setUseOpenGL(true);
 
-    foreach(QString fileName, fileNames) {
+    Q_FOREACH (QString fileName, fileNames) {
         DocumentManager::instance()->recentFileManager()->addRecent( QDir::current().absoluteFilePath( fileName ) );
     }
 

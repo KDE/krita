@@ -82,7 +82,7 @@ public:
     public:
         DetectCollision() {}
         void detect(KoRTree<KoShape *> &tree, KoShape *s, int prevZIndex) {
-            foreach(KoShape *shape, tree.intersects(s->boundingRect())) {
+            Q_FOREACH (KoShape *shape, tree.intersects(s->boundingRect())) {
                 bool isChild = false;
                 KoShapeContainer *parent = s->parent();
                 while (parent && !isChild) {
@@ -101,7 +101,7 @@ public:
         }
 
         void fireSignals() {
-            foreach(KoShape *shape, shapesWithCollisionDetection)
+            Q_FOREACH (KoShape *shape, shapesWithCollisionDetection)
                 shape->priv()->shapeChanged(KoShape::CollisionDetected);
         }
 

@@ -25,10 +25,10 @@
 
 #include "../compositeops/KoCompositeOps.h"
 
-LabF32ColorSpace::LabF32ColorSpace (const QString &name, KoColorProfile *p)
+LabF32ColorSpace::LabF32ColorSpace(const QString &name, KoColorProfile *p)
     : LcmsColorSpace<KoLabF32Traits>(colorSpaceId(), name, TYPE_LabA_FLT, cmsSigLabData, p)
 {
-    const IccColorProfile* icc_p = dynamic_cast<const IccColorProfile*>(p);
+    const IccColorProfile *icc_p = dynamic_cast<const IccColorProfile *>(p);
     Q_ASSERT(icc_p);
     QVector<KoChannelInfo::DoubleRange> uiRanges(icc_p->getFloatUIMinMax());
     Q_ASSERT(uiRanges.size() == 3);
@@ -45,21 +45,21 @@ LabF32ColorSpace::LabF32ColorSpace (const QString &name, KoColorProfile *p)
 
 bool LabF32ColorSpace::willDegrade(ColorSpaceIndependence independence) const
 {
-    if (independence == TO_RGBA16)
+    if (independence == TO_RGBA16) {
         return true;
-    else
+    } else {
         return false;
+    }
 }
 
-KoColorSpace* LabF32ColorSpace::clone() const
+KoColorSpace *LabF32ColorSpace::clone() const
 {
     return new LabF32ColorSpace(name(), profile()->clone());
 }
 
-
-void LabF32ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+void LabF32ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const
 {
-    const KoLabF32Traits::Pixel* p = reinterpret_cast<const KoLabF32Traits::Pixel*>(pixel);
+    const KoLabF32Traits::Pixel *p = reinterpret_cast<const KoLabF32Traits::Pixel *>(pixel);
     QDomElement labElt = doc.createElement("Lab");
     labElt.setAttribute("L", KoColorSpaceMaths< KoLabF32Traits::channels_type, qreal>::scaleToA(p->L));
     labElt.setAttribute("a", KoColorSpaceMaths< KoLabF32Traits::channels_type, qreal>::scaleToA(p->a));
@@ -68,9 +68,9 @@ void LabF32ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomEl
     colorElt.appendChild(labElt);
 }
 
-void LabF32ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
+void LabF32ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
-    KoLabF32Traits::Pixel* p = reinterpret_cast<KoLabF32Traits::Pixel*>(pixel);
+    KoLabF32Traits::Pixel *p = reinterpret_cast<KoLabF32Traits::Pixel *>(pixel);
     p->L = KoColorSpaceMaths< qreal, KoLabF32Traits::channels_type >::scaleToA(elt.attribute("L").toDouble());
     p->a = KoColorSpaceMaths< qreal, KoLabF32Traits::channels_type >::scaleToA(elt.attribute("a").toDouble());
     p->b = KoColorSpaceMaths< qreal, KoLabF32Traits::channels_type >::scaleToA(elt.attribute("b").toDouble());

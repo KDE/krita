@@ -182,7 +182,7 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes)
         }
     };
 
-    foreach(KoShape* shape, shapes) {
+    Q_FOREACH (KoShape* shape, shapes) {
         applicator.applyCommand(
             new KisGuiContextCommand(new AddSelectionShape(view, shape), view));
     }

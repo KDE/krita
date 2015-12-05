@@ -28,11 +28,11 @@
 #include "compositeops/RgbCompositeOps.h"
 
 RgbF16ColorSpace::RgbF16ColorSpace(const QString &name, KoColorProfile *p) :
-        LcmsColorSpace<KoRgbF16Traits>(colorSpaceId(), name, TYPE_RGBA_HALF_FLT, cmsSigRgbData, p)
+    LcmsColorSpace<KoRgbF16Traits>(colorSpaceId(), name, TYPE_RGBA_HALF_FLT, cmsSigRgbData, p)
 {
-    addChannel(new KoChannelInfo(i18n("Red")  , 0 * sizeof(half), 0, KoChannelInfo::COLOR, KoChannelInfo::FLOAT16, 2, QColor(255, 0, 0)));
+    addChannel(new KoChannelInfo(i18n("Red"), 0 * sizeof(half), 0, KoChannelInfo::COLOR, KoChannelInfo::FLOAT16, 2, QColor(255, 0, 0)));
     addChannel(new KoChannelInfo(i18n("Green"), 1 * sizeof(half), 1, KoChannelInfo::COLOR, KoChannelInfo::FLOAT16, 2, QColor(0, 255, 0)));
-    addChannel(new KoChannelInfo(i18n("Blue") , 2 * sizeof(half), 2, KoChannelInfo::COLOR, KoChannelInfo::FLOAT16, 2, QColor(0, 0, 255)));
+    addChannel(new KoChannelInfo(i18n("Blue"), 2 * sizeof(half), 2, KoChannelInfo::COLOR, KoChannelInfo::FLOAT16, 2, QColor(0, 0, 255)));
     addChannel(new KoChannelInfo(i18n("Alpha"), 3 * sizeof(half), 3, KoChannelInfo::ALPHA, KoChannelInfo::FLOAT16, 2));
 
     init();
@@ -46,20 +46,21 @@ RgbF16ColorSpace::RgbF16ColorSpace(const QString &name, KoColorProfile *p) :
 
 bool RgbF16ColorSpace::willDegrade(ColorSpaceIndependence independence) const
 {
-    if (independence == TO_RGBA16)
+    if (independence == TO_RGBA16) {
         return true;
-    else
+    } else {
         return false;
+    }
 }
 
-KoColorSpace* RgbF16ColorSpace::clone() const
+KoColorSpace *RgbF16ColorSpace::clone() const
 {
     return new RgbF16ColorSpace(name(), profile()->clone());
 }
 
-void RgbF16ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+void RgbF16ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const
 {
-    const KoRgbF16Traits::Pixel* p = reinterpret_cast<const KoRgbF16Traits::Pixel*>(pixel);
+    const KoRgbF16Traits::Pixel *p = reinterpret_cast<const KoRgbF16Traits::Pixel *>(pixel);
     QDomElement labElt = doc.createElement("RGB");
     labElt.setAttribute("r", KoColorSpaceMaths< KoRgbF16Traits::channels_type, qreal>::scaleToA(p->red));
     labElt.setAttribute("g", KoColorSpaceMaths< KoRgbF16Traits::channels_type, qreal>::scaleToA(p->green));
@@ -68,9 +69,9 @@ void RgbF16ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomEl
     colorElt.appendChild(labElt);
 }
 
-void RgbF16ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
+void RgbF16ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
-    KoRgbF16Traits::Pixel* p = reinterpret_cast<KoRgbF16Traits::Pixel*>(pixel);
+    KoRgbF16Traits::Pixel *p = reinterpret_cast<KoRgbF16Traits::Pixel *>(pixel);
     p->red = KoColorSpaceMaths< qreal, KoRgbF16Traits::channels_type >::scaleToA(elt.attribute("r").toDouble());
     p->green = KoColorSpaceMaths< qreal, KoRgbF16Traits::channels_type >::scaleToA(elt.attribute("g").toDouble());
     p->blue = KoColorSpaceMaths< qreal, KoRgbF16Traits::channels_type >::scaleToA(elt.attribute("b").toDouble());

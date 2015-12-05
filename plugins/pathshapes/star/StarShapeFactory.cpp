@@ -121,8 +121,9 @@ KoShape *StarShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 KoShape *StarShapeFactory::createShape(const KoProperties *params, KoDocumentResourceManager *) const
 {
     StarShape *star = new StarShape();
-    if (! star)
+    if (!star) {
         return 0;
+    }
 
     star->setCornerCount(params->intProperty("corners", 5));
     star->setConvex(params->boolProperty("convex", false));
@@ -133,24 +134,26 @@ KoShape *StarShapeFactory::createShape(const KoProperties *params, KoDocumentRes
     star->setStroke(new KoShapeStroke(1.0));
     star->setShapeId(KoPathShapeId);
     QVariant v;
-    if (params->property("background", v))
+    if (params->property("background", v)) {
         star->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(v.value<QColor>())));
+    }
 
     return star;
 }
 
-bool StarShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
+bool StarShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
     Q_UNUSED(context);
-    if (e.localName() == "regular-polygon" && e.namespaceURI() == KoXmlNS::draw)
+    if (e.localName() == "regular-polygon" && e.namespaceURI() == KoXmlNS::draw) {
         return true;
+    }
     return (e.localName() == "custom-shape" && e.namespaceURI() == KoXmlNS::draw
             && e.attributeNS(KoXmlNS::draw, "engine", "") == "calligra:star");
 }
 
-QList<KoShapeConfigWidgetBase*> StarShapeFactory::createShapeOptionPanels()
+QList<KoShapeConfigWidgetBase *> StarShapeFactory::createShapeOptionPanels()
 {
-    QList<KoShapeConfigWidgetBase*> panels;
+    QList<KoShapeConfigWidgetBase *> panels;
     panels.append(new StarShapeConfigWidget());
     return panels;
 }

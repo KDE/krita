@@ -19,23 +19,12 @@
 #ifndef KIS_SKETCH_PAINTOP_SETTINGS_H_
 #define KIS_SKETCH_PAINTOP_SETTINGS_H_
 
-#include <kis_paintop_settings.h>
+#include <kis_brush_based_paintop_settings.h>
 #include <kis_types.h>
 
 #include "kis_sketch_paintop_settings_widget.h"
 
 #include <kis_pressure_opacity_option.h>
-
-#include <opengl/kis_opengl.h>
-
-#if defined(_WIN32) || defined(_WIN64)
-#ifndef __MINGW32__
-# include <windows.h>
-#endif
-#endif
-#include <kis_brush_based_paintop_settings.h>
-
-
 
 
 class KisSketchPaintOpSettings : public KisBrushBasedPaintOpSettings

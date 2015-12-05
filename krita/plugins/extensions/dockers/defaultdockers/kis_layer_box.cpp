@@ -316,7 +316,7 @@ void KisLayerBox::setMainWindow(KisViewManager* kisview)
     m_nodeManager = kisview->nodeManager();
 
 
-    foreach(KisAction *action, m_actions) {
+    Q_FOREACH (KisAction *action, m_actions) {
         kisview->actionManager()->
             addAction(action->objectName(),
                       action);
@@ -417,6 +417,7 @@ void KisLayerBox::unsetCanvas()
         m_newLayerMenu->clear();
     }
 
+    m_nodeModel->setDummiesFacade(0, 0, 0);
     disconnect(m_image, 0, this, 0);
     disconnect(m_nodeManager, 0, this, 0);
     disconnect(m_nodeModel, 0, m_nodeManager, 0);
@@ -495,7 +496,7 @@ void KisLayerBox::slotModelReset()
 {
     if(m_nodeModel->hasDummiesFacade()) {
         QItemSelection selection;
-        foreach(const KisNodeSP node, m_nodeManager->selectedNodes()) {
+        Q_FOREACH (const KisNodeSP node, m_nodeManager->selectedNodes()) {
             const QModelIndex &idx = m_nodeModel->indexFromNode(node);
             if(idx.isValid()){
                 QItemSelectionRange selectionRange(idx);
@@ -644,7 +645,7 @@ void KisLayerBox::slotLowerClicked()
 void KisLayerBox::slotLeftClicked()
 {
     if (!m_canvas) return;
-    foreach(KisNodeSP node, m_nodeManager->selectedNodes()) {
+    Q_FOREACH (KisNodeSP node, m_nodeManager->selectedNodes()) {
         KisNodeSP parent = node->parent();
         KisNodeSP grandParent = parent->parent();
         quint16 nodeIndex = parent->index(node);
@@ -665,7 +666,7 @@ void KisLayerBox::slotRightClicked()
 {
     if (!m_canvas) return;
 
-    foreach(KisNodeSP node, m_nodeManager->selectedNodes()) {
+    Q_FOREACH (KisNodeSP node, m_nodeManager->selectedNodes()) {
         KisNodeSP parent = m_nodeManager->activeNode()->parent();
         KisNodeSP newParent;
         int nodeIndex = parent->index(node);
@@ -822,7 +823,7 @@ void KisLayerBox::selectionChanged(const QModelIndexList selection)
 
 
     QList<KisNodeSP> selectedNodes;
-    foreach(const QModelIndex &idx, selection) {
+    Q_FOREACH (const QModelIndex &idx, selection) {
         selectedNodes << m_nodeModel->nodeFromIndex(idx);
     }
 

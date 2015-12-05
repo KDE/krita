@@ -56,7 +56,7 @@ void KisCategoriesMapperTest::testAddRemoveCategories()
     categories << "cat3";
     categories << "cat4";
 
-    foreach (const QString &cat, categories) {
+    Q_FOREACH (const QString &cat, categories) {
         mapper.addCategory(cat);
         mapper.checkInsertedCorrectly();
     }
@@ -64,7 +64,7 @@ void KisCategoriesMapperTest::testAddRemoveCategories()
     checkItemsList(mapper.testingGetItems(), categories);
     checkFetching(mapper, categories, QStringList());
 
-    foreach (const QString &cat, categories) {
+    Q_FOREACH (const QString &cat, categories) {
         mapper.removeCategory(cat);
         mapper.checkRemovedCorrectly();
 

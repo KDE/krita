@@ -275,7 +275,7 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
 
     QVector<KoPattern*> allPatterns;
 
-    foreach (KisPSDLayerStyleSP style, m_stylesVector) {
+    Q_FOREACH (KisPSDLayerStyleSP style, m_stylesVector) {
         allPatterns += fetchAllPatterns(style.data());
     }
 
@@ -286,7 +286,7 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
     if (!allPatterns.isEmpty()) {
         w.enterList("Patterns");
 
-        foreach (KoPattern *pattern, allPatterns) {
+        Q_FOREACH (KoPattern *pattern, allPatterns) {
             if (pattern) {
                 if (!patternToUuidMap.contains(pattern)) {
                     QString uuid = w.writePattern("", pattern);
@@ -300,7 +300,7 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
         w.leaveList();
     }
 
-    foreach (KisPSDLayerStyleSP style, m_stylesVector) {
+    Q_FOREACH (KisPSDLayerStyleSP style, m_stylesVector) {
 
         w.enterDescriptor("", "", "null");
         w.writeText("Nm  ", style->name());
@@ -1197,7 +1197,7 @@ void KisAslLayerStyleSerializer::readFromDevice(QIODevice *device)
     parser.parseXML(doc, m_catcher);
 
     // correct all the layer styles
-    foreach(KisPSDLayerStyleSP style, m_stylesVector) {
+    Q_FOREACH (KisPSDLayerStyleSP style, m_stylesVector) {
         FillStylesCorrector::correct(style.data());
     }
 }
@@ -1229,7 +1229,7 @@ void KisAslLayerStyleSerializer::readFromPSDXML(const QDomDocument &doc)
     parser.parseXML(doc, m_catcher);
 
     // correct all the layer styles
-    foreach(KisPSDLayerStyleSP style, m_stylesVector) {
+    Q_FOREACH (KisPSDLayerStyleSP style, m_stylesVector) {
         FillStylesCorrector::correct(style.data());
     }
 }

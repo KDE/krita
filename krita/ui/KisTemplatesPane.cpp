@@ -60,7 +60,7 @@ KisTemplatesPane::KisTemplatesPane(QWidget* parent, const QString& header,
     QStandardItem* rootItem = model()->invisibleRootItem();
     QStandardItem* defaultItem = 0;
 
-    foreach (KisTemplate* t, group->templates()) {
+    Q_FOREACH (KisTemplate* t, group->templates()) {
         if (t->isHidden())
             continue;
 

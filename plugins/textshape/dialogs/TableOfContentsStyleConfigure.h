@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef TABLEOFCONTENTSSTYLECONFIGURE_H
 #define TABLEOFCONTENTSSTYLECONFIGURE_H
 
@@ -26,15 +25,15 @@
 
 #include <QDialog>
 
-namespace Ui {
-    class TableOfContentsStyleConfigure;
+namespace Ui
+{
+class TableOfContentsStyleConfigure;
 }
 
 class QStandardItemModel;
 class KoStyleManager;
 class TableOfContentsStyleModel;
 class KoTableOfContentsGeneratorInfo;
-
 
 class TableOfContentsStyleConfigure : public QDialog
 {

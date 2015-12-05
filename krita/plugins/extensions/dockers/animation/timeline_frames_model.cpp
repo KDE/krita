@@ -266,7 +266,7 @@ void TimelineFramesModel::slotDummyChanged(KisNodeDummy *dummy)
 
 void TimelineFramesModel::processUpdateQueue()
 {
-    foreach(KisNodeDummy *dummy, m_d->updateQueue) {
+    Q_FOREACH (KisNodeDummy *dummy, m_d->updateQueue) {
         int row = m_d->converter->rowForDummy(dummy);
 
         if (row >= 0) {
@@ -583,7 +583,7 @@ QMimeData* TimelineFramesModel::mimeData(const QModelIndexList &indexes) const
     stream << indexes.size();
     stream << baseRow << baseColumn;
 
-    foreach (const QModelIndex &index, indexes) {
+    Q_FOREACH (const QModelIndex &index, indexes) {
         stream << index.row() - baseRow << index.column() - baseColumn;
     }
 
@@ -623,7 +623,7 @@ bool TimelineFramesModel::offsetFrames(QVector<QPoint> srcIndexes, const QPoint 
     KisAnimationUtils::FrameItemList dstFrameItems;
     QModelIndexList updateIndexes;
 
-    foreach (const QPoint &point, srcIndexes) {
+    Q_FOREACH (const QPoint &point, srcIndexes) {
         int srcRow = point.y();
         int srcColumn = point.x();
 
@@ -649,7 +649,7 @@ bool TimelineFramesModel::offsetFrames(QVector<QPoint> srcIndexes, const QPoint 
                                               dstFrameItems,
                                               copyFrames);
 
-    foreach (const QModelIndex &index, updateIndexes) {
+    Q_FOREACH (const QModelIndex &index, updateIndexes) {
         emit dataChanged(index, index);
     }
 
@@ -700,9 +700,7 @@ Qt::ItemFlags TimelineFramesModel::flags(const QModelIndex &index) const
     if (!index.isValid()) return flags;
 
     if (m_d->frameExists(index.row(), index.column())) {
-        if (index.column() > 0 &&
-            data(index, FrameEditableRole).toBool()) {
-
+        if (data(index, FrameEditableRole).toBool()) {
             flags |= Qt::ItemIsDragEnabled;
         }
     }
@@ -789,7 +787,7 @@ bool TimelineFramesModel::removeFrames(const QModelIndexList &indexes)
 {
     KisAnimationUtils::FrameItemList frameItems;
 
-    foreach (const QModelIndex &index, indexes) {
+    Q_FOREACH (const QModelIndex &index, indexes) {
         KisNodeDummy *dummy = m_d->converter->dummyFromRow(index.row());
         if (!dummy) continue;
 
@@ -801,7 +799,7 @@ bool TimelineFramesModel::removeFrames(const QModelIndexList &indexes)
 
     KisAnimationUtils::removeKeyframes(m_d->image, frameItems);
 
-    foreach (const QModelIndex &index, indexes) {
+    Q_FOREACH (const QModelIndex &index, indexes) {
         if (index.isValid()) {
             emit dataChanged(index, index);
         }
@@ -843,7 +841,7 @@ void TimelineFramesModel::setScrubState(bool active)
 
         m_d->scrubInProgress = false;
 
-        if (m_d->scrubStartFrame > 0 &&
+        if (m_d->scrubStartFrame >= 0 &&
             m_d->scrubStartFrame != m_d->activeFrameIndex) {
 
             scrubTo(m_d->activeFrameIndex, false);

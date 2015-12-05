@@ -1,7 +1,7 @@
 ### DEFINITION OF PRODUCTS, FEATURES AND PRODUCTSETS
 ####################################################
 
-# When building Calligra a lot of different things are created and installed. To
+# When building Krita  a lot of different things are created and installed. To
 # describe them and their internal dependencies the concepts of "product",
 # "feature" and "product set" are used.
 

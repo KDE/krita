@@ -69,7 +69,7 @@ void KisPerspectiveGridNode::mergeWith(KisPerspectiveGridNodeSP node)
 {
     if(node==0) return;
 
-    foreach(KisSubPerspectiveGrid* grid, node->d->subGrids) {
+    Q_FOREACH (KisSubPerspectiveGrid* grid, node->d->subGrids) {
         if (grid->topLeft() == node) {
             grid->setTopLeft(this);
         }

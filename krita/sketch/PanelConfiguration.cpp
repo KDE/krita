@@ -79,11 +79,11 @@ QQmlListProperty< QQuickItem > PanelConfiguration::panelAreas()
 void PanelConfiguration::restore()
 {
     if (d->panelAreaMap.count() == d->panels.count()) {
-        foreach(QQuickItem* panel, d->panels) {
+        Q_FOREACH (QQuickItem* panel, d->panels) {
             QString panelName = panel->objectName();
             QString area = d->panelAreaMap.value(panelName);
 
-            foreach(QQuickItem* panelArea, d->panelAreas) {
+            Q_FOREACH (QQuickItem* panelArea, d->panelAreas) {
                 if (panelArea->objectName() == area) {
                     panel->setParentItem(panelArea);
                     break;
@@ -104,7 +104,7 @@ void PanelConfiguration::save()
 
     panelConfig.beginWriteArray("Panels");
     int index = 0;
-    foreach(QQuickItem* panel, d->panels) {
+    Q_FOREACH (QQuickItem* panel, d->panels) {
         panelConfig.setArrayIndex(index++);
 
         panelConfig.setValue("panel", panel->objectName());

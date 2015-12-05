@@ -49,7 +49,7 @@ public:
     virtual void mouseMoveEvent(KoPointerEvent *event);
 
     /// reimplemented from KoToolBase
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
 
 protected:
     /// reimplemented from KoToolBase
@@ -69,7 +69,7 @@ private Q_SLOTS:
     void regionHeightChanged(double height);
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KARBONFILTEREFFECTSTOOL_H

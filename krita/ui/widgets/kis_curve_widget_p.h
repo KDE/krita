@@ -148,7 +148,7 @@ int KisCurveWidget::Private::sp2io(double x)
 
 bool KisCurveWidget::Private::jumpOverExistingPoints(QPointF &pt, int skipIndex)
 {
-    foreach(const QPointF &it, m_curve.points()) {
+    Q_FOREACH (const QPointF &it, m_curve.points()) {
         if (m_curve.points().indexOf(it) == skipIndex)
             continue;
         if (fabs(it.x() - pt.x()) < POINT_AREA)
@@ -164,7 +164,7 @@ int KisCurveWidget::Private::nearestPointInRange(QPointF pt, int wWidth, int wHe
     int nearestIndex = -1;
     int i = 0;
 
-    foreach(const QPointF & point, m_curve.points()) {
+    Q_FOREACH (const QPointF & point, m_curve.points()) {
         double distanceSquared = (pt.x() - point.x()) *
                                  (pt.x() - point.x()) +
                                  (pt.y() - point.y()) *

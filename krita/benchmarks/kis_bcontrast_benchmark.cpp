@@ -87,7 +87,7 @@ void KisBContrastBenchmark::benchmarkFilter()
     QVector<QRect> rects = KritaUtils::splitRectIntoPatches(QRect(0, 0, GMP_IMAGE_WIDTH,GMP_IMAGE_HEIGHT), size);
 
     QBENCHMARK{
-        foreach(const QRect &rc, rects) {
+        Q_FOREACH (const QRect &rc, rects) {
             filter->process(m_device, rc, kfc);
         }
     }

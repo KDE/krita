@@ -58,12 +58,12 @@ KoShapeClipCommand::KoShapeClipCommand(KoShapeBasedDocumentBase *controller, con
     d->shapesToClip = shapes;
     d->clipPathShapes = clipPathShapes;
     d->clipData = new KoClipData(clipPathShapes);
-    foreach(KoShape *shape, d->shapesToClip) {
+    Q_FOREACH (KoShape *shape, d->shapesToClip) {
         d->oldClipPaths.append(shape->clipPath());
         d->newClipPaths.append(new KoClipPath(shape, d->clipData.data()));
     }
 
-    foreach(KoPathShape *path, clipPathShapes) {
+    Q_FOREACH (KoPathShape *path, clipPathShapes) {
         d->oldParents.append(path->parent());
     }
 
@@ -79,7 +79,7 @@ KoShapeClipCommand::KoShapeClipCommand(KoShapeBasedDocumentBase *controller, KoS
     d->oldClipPaths.append(shape->clipPath());
     d->newClipPaths.append(new KoClipPath(shape, d->clipData.data()));
 
-    foreach(KoPathShape *path, clipPathShapes) {
+    Q_FOREACH (KoPathShape *path, clipPathShapes) {
         d->oldParents.append(path->parent());
     }
 

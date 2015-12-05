@@ -29,26 +29,27 @@
 
 KoFlake::Position SelectionDecorator::m_hotPosition = KoFlake::TopLeftCorner;
 
-SelectionDecorator::SelectionDecorator(KoFlake::SelectionHandle arrows,
-                                       bool rotationHandles, bool shearHandles)
+SelectionDecorator::SelectionDecorator(KoFlake::SelectionHandle arrows, bool rotationHandles, bool shearHandles)
     : m_rotationHandles(rotationHandles)
     , m_shearHandles(shearHandles)
     , m_arrows(arrows)
-    , m_handleRadius( 3 )
-    , m_lineWidth( 1 )
+    , m_handleRadius(3)
+    , m_lineWidth(1)
 {
 }
 
-void SelectionDecorator::setSelection(KoSelection *selection) {
+void SelectionDecorator::setSelection(KoSelection *selection)
+{
     m_selection = selection;
 }
 
-void SelectionDecorator::setHandleRadius( int radius ) {
+void SelectionDecorator::setHandleRadius(int radius)
+{
     m_handleRadius = radius;
     m_lineWidth = qMax(1, (int)(radius / 2));
 }
 
-void SelectionDecorator::setHotPosition( KoFlake::Position hotPosition )
+void SelectionDecorator::setHotPosition(KoFlake::Position hotPosition)
 {
     m_hotPosition = hotPosition;
 }
@@ -71,23 +72,24 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     pen.setColor(QColor(0, 173, 245, 127));
     pen.setWidth(m_lineWidth);
     pen.setJoinStyle(Qt::RoundJoin);
-    painter.setPen( pen );
-    bool editable=false;
+    painter.setPen(pen);
+    bool editable = false;
     foreach (KoShape *shape, m_selection->selectedShapes(KoFlake::StrippedSelection)) {
         // apply the shape transformation on top of the old painter transformation
-        painter.setWorldTransform( shape->absoluteTransformation(&converter) * painterMatrix );
+        painter.setWorldTransform(shape->absoluteTransformation(&converter) * painterMatrix);
         // apply the zoom factor
-        KoShape::applyConversion( painter, converter );
+        KoShape::applyConversion(painter, converter);
         // draw the shape bounding rect
-        painter.drawRect( QRectF( QPointF(), shape->size() ) );
+        painter.drawRect(QRectF(QPointF(), shape->size()));
 
-        if (!shape->isGeometryProtected())
+        if (!shape->isGeometryProtected()) {
             editable = true;
+        }
     }
 
     if (m_selection->count() > 1) {
         // more than one shape selected, so we need to draw the selection bounding rect
-        painter.setPen( Qt::blue );
+        painter.setPen(Qt::blue);
         // apply the selection transformation on top of the old painter transformation
         painter.setWorldTransform(m_selection->absoluteTransformation(&converter) * painterMatrix);
         // apply the zoom factor
@@ -108,21 +110,22 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     painter.restore();
 
     // if we have no editable shape selected there is no need drawing the selection handles
-    if (!editable)
+    if (!editable) {
         return;
+    }
 
     painter.save();
 
     painter.setTransform(QTransform());
-    painter.setRenderHint( QPainter::Antialiasing, false );
+    painter.setRenderHint(QPainter::Antialiasing, false);
 
     painter.setPen(pen);
     painter.setBrush(pen.color());
 
-    QPolygonF outline = painterMatrix.map( handleArea );
+    QPolygonF outline = painterMatrix.map(handleArea);
 
     // the 8 move rects
-    QRectF rect( QPointF(0.5,0.5), QSizeF(2*m_handleRadius,2*m_handleRadius) );
+    QRectF rect(QPointF(0.5, 0.5), QSizeF(2 * m_handleRadius, 2 * m_handleRadius));
     rect.moveCenter(outline.value(0));
     painter.drawRect(rect);
     rect.moveCenter(outline.value(1));
@@ -131,26 +134,26 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     painter.drawRect(rect);
     rect.moveCenter(outline.value(3));
     painter.drawRect(rect);
-    rect.moveCenter((outline.value(0)+outline.value(1))/2);
+    rect.moveCenter((outline.value(0) + outline.value(1)) / 2);
     painter.drawRect(rect);
-    rect.moveCenter((outline.value(1)+outline.value(2))/2);
+    rect.moveCenter((outline.value(1) + outline.value(2)) / 2);
     painter.drawRect(rect);
-    rect.moveCenter((outline.value(2)+outline.value(3))/2);
+    rect.moveCenter((outline.value(2) + outline.value(3)) / 2);
     painter.drawRect(rect);
-    rect.moveCenter((outline.value(3)+outline.value(0))/2);
+    rect.moveCenter((outline.value(3) + outline.value(0)) / 2);
     painter.drawRect(rect);
 
     // draw the hot position
     painter.setBrush(Qt::red);
     QPointF pos;
-    switch( m_hotPosition ) {
+    switch (m_hotPosition) {
     case KoFlake::TopLeftCorner: pos = handleArea.topLeft(); break;
     case KoFlake::TopRightCorner: pos = handleArea.topRight(); break;
     case KoFlake::BottomLeftCorner: pos = handleArea.bottomLeft(); break;
     case KoFlake::BottomRightCorner: pos = handleArea.bottomRight(); break;
     case KoFlake::CenteredPosition: pos = handleArea.center(); break;
     }
-    rect.moveCenter( painterMatrix.map(pos ));
+    rect.moveCenter(painterMatrix.map(pos));
     painter.drawRect(rect);
 
     painter.restore();

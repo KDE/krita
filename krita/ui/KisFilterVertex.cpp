@@ -63,7 +63,7 @@ const Edge* Vertex::findEdge(const Vertex* vertex) const
     if (!vertex)
         return 0;
     const Edge* edge = 0;
-    foreach(Edge* e, m_edges) {
+    Q_FOREACH (Edge* e, m_edges) {
         if (e->vertex() == vertex &&
             (!edge || e->weight() < edge->weight())) {
             edge = e;
@@ -74,7 +74,7 @@ const Edge* Vertex::findEdge(const Vertex* vertex) const
 
 void Vertex::relaxVertices(PriorityQueue<Vertex>& queue)
 {
-    foreach(Edge* e, m_edges) {
+    Q_FOREACH (Edge* e, m_edges) {
         e->relax(this, queue);
     }
 }
@@ -86,7 +86,7 @@ void Vertex::dump(const QByteArray& indent) const
 #else
     dbgFile << indent << "Vertex:" << m_mimeType << " (" << m_weight << "):";
     const QByteArray i(indent + "   ");
-    foreach(Edge* edge, m_edges) {
+    Q_FOREACH (Edge* edge, m_edges) {
         edge->dump(i);
     }
 #endif

@@ -63,7 +63,7 @@ class ImageFilter: public QSortFilterProxyModel
 
         //QImageReader::supportedImageFormats return a list with mixed-case ByteArrays so
         //iterate over it manually to make it possible to do toLower().
-        foreach(const QByteArray& format, s_supportedImageFormats) {
+        Q_FOREACH (const QByteArray& format, s_supportedImageFormats) {
             if(format.toLower() == ext.toUtf8()) {
                 return true;
             }
@@ -218,7 +218,7 @@ ImageDockerDock::ImageDockerDock():
     m_ui->cmbPath->addItem(KisIconUtils::loadIcon("folder-documents"), QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
     m_ui->cmbPath->addItem(KisIconUtils::loadIcon("go-home"), QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
 
-    foreach(const QFileInfo &info, QDir::drives()) {
+    Q_FOREACH (const QFileInfo &info, QDir::drives()) {
         m_ui->cmbPath->addItem(KisIconUtils::loadIcon("drive-harddisk"), info.absolutePath());
     }
 
@@ -283,7 +283,7 @@ void ImageDockerDock::dropEvent(QDropEvent *event)
     } else if (event->mimeData()->hasUrls()) {
         QList<QUrl> urls = event->mimeData()->urls();
 
-        foreach(const QUrl &url, urls) {
+        Q_FOREACH (const QUrl &url, urls) {
             QString path = url.path();
             QFileInfo info(path);
 

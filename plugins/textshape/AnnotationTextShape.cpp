@@ -38,8 +38,7 @@
 
 #include <QDebug>
 
-AnnotationTextShape::AnnotationTextShape(KoInlineTextObjectManager *inlineTextObjectManager,
-                                         KoTextRangeManager *textRangeManager)
+AnnotationTextShape::AnnotationTextShape(KoInlineTextObjectManager *inlineTextObjectManager, KoTextRangeManager *textRangeManager)
     : TextShape(inlineTextObjectManager, textRangeManager)
     , m_creator()
     , m_date()
@@ -64,14 +63,14 @@ void AnnotationTextShape::setAnnotaionTextData(KoTextShapeData *textShapeData)
 }
 
 void AnnotationTextShape::paintComponent(QPainter &painter, const KoViewConverter &converter,
-                                         KoShapePaintingContext &paintcontext)
+        KoShapePaintingContext &paintcontext)
 {
     if (paintcontext.showAnnotations) {
         TextShape::paintComponent(painter, converter, paintcontext);
         QRectF clipRect = outlineRect();
 
         // Paint creator and of creation of the annotation.
-        QPen peninfo (Qt::darkYellow);
+        QPen peninfo(Qt::darkYellow);
         QFont serifFont("Times", HeaderFontSize, QFont::Bold);
         painter.setPen(peninfo);
         painter.setFont(serifFont);
@@ -103,18 +102,15 @@ bool AnnotationTextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingCon
                 if (m_creator.isEmpty()) {
                     m_creator = "Unknown";
                 }
-            }
-            else if (el.localName() == "date" && el.namespaceURI() == KoXmlNS::dc) {
+            } else if (el.localName() == "date" && el.namespaceURI() == KoXmlNS::dc) {
                 m_date = el.text();
-            }
-            else if (el.localName() == "datestring" && el.namespaceURI() == KoXmlNS::meta) {
+            } else if (el.localName() == "datestring" && el.namespaceURI() == KoXmlNS::meta) {
                 m_dateString = el.text();
             }
         }
         textLoader.loadBody(element, cursor);
         //qDebug() << "****** End Load ******";
-    }
-    else {
+    } else {
         // something pretty weird going on...
         return false;
     }

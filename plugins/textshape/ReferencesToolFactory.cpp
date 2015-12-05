@@ -27,7 +27,7 @@
 #include <klocalizedstring.h>
 
 ReferencesToolFactory::ReferencesToolFactory()
-        : KoToolFactoryBase("ReferencesTool")
+    : KoToolFactoryBase("ReferencesTool")
 {
     setToolTip(i18n("References"));
     setToolType("calligrawords,calligraauthor");
@@ -40,7 +40,7 @@ ReferencesToolFactory::~ReferencesToolFactory()
 {
 }
 
-KoToolBase * ReferencesToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase *ReferencesToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new ReferencesTool(canvas);
 }

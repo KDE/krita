@@ -130,7 +130,7 @@ void KisPerspectiveTransformStrategy::Private::recalculateTransformedHandles()
     srcCornerPoints << transaction.originalBottomRight();
 
     dstCornerPoints.clear();
-    foreach (const QPointF &pt, srcCornerPoints) {
+    Q_FOREACH (const QPointF &pt, srcCornerPoints) {
         dstCornerPoints << transform.map(pt);
     }
 

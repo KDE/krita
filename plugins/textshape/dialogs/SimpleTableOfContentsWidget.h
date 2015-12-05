@@ -51,7 +51,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void applyTemplate(int templateId);
     void insertCustomToC();
-    
+
 private:
     Ui::SimpleTableOfContentsWidget widget;
     KoStyleManager *m_styleManager;

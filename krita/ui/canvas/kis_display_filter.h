@@ -20,10 +20,11 @@
 
 #include <QObject>
 
-#include <QSharedPointer>
+#include <KoConfig.h> // for HAVE_OPENGL
+#ifdef HAVE_OPENGL
 #include <qopengl.h>
+#endif
 
-#include <opengl/kis_opengl.h>
 #include <kritaui_export.h>
 
 class KisExposureGammaCorrectionInterface;

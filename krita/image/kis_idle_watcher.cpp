@@ -63,7 +63,7 @@ bool KisIdleWatcher::isIdle() const
 {
     bool idle = true;
 
-    foreach(KisImageSP image, m_d->trackedImages) {
+    Q_FOREACH (KisImageSP image, m_d->trackedImages) {
         if (!image) continue;
 
         if (!image->isIdle()) {
@@ -80,7 +80,7 @@ void KisIdleWatcher::setTrackedImages(const QVector<KisImageSP> &images)
     m_d->connectionsStore.clear();
     m_d->trackedImages.clear();
 
-    foreach (KisImageSP image, images) {
+    Q_FOREACH (KisImageSP image, images) {
         m_d->trackedImages << image;
         m_d->connectionsStore.addConnection(image, SIGNAL(sigImageModified()),
                                             this, SLOT(slotImageModified()));

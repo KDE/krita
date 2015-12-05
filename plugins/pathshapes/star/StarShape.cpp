@@ -30,18 +30,18 @@
 #include <math.h>
 
 StarShape::StarShape()
-: m_cornerCount(5)
-, m_zoomX(1.0)
-, m_zoomY(1.0)
-, m_convex(false)
+    : m_cornerCount(5)
+    , m_zoomX(1.0)
+    , m_zoomY(1.0)
+    , m_convex(false)
 {
     m_radius[base] = 25.0;
     m_radius[tip] = 50.0;
     m_angles[base] = m_angles[tip] = defaultAngleRadian();
     m_roundness[base] = m_roundness[tip] = 0.0f;
 
-    m_center = QPointF(50,50);
-    updatePath(QSize(100,100));
+    m_center = QPointF(50, 50);
+    updatePath(QSize(100, 100));
 }
 
 StarShape::~StarShape()
@@ -54,8 +54,8 @@ void StarShape::setCornerCount(uint cornerCount)
         double oldDefaultAngle = defaultAngleRadian();
         m_cornerCount = cornerCount;
         double newDefaultAngle = defaultAngleRadian();
-        m_angles[base] += newDefaultAngle-oldDefaultAngle;
-        m_angles[tip] += newDefaultAngle-oldDefaultAngle;
+        m_angles[base] += newDefaultAngle - oldDefaultAngle;
+        m_angles[tip] += newDefaultAngle - oldDefaultAngle;
 
         updatePath(QSize());
     }
@@ -116,48 +116,51 @@ QPointF StarShape::starCenter() const
     return m_center;
 }
 
-void StarShape::moveHandleAction(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers)
+void StarShape::moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers)
 {
     if (modifiers & Qt::ShiftModifier) {
         QPointF handle = handles()[handleId];
         QPointF tangentVector = point - handle;
-        qreal distance = sqrt(tangentVector.x()*tangentVector.x() + tangentVector.y()*tangentVector.y());
+        qreal distance = sqrt(tangentVector.x() * tangentVector.x() + tangentVector.y() * tangentVector.y());
         QPointF radialVector = handle - m_center;
         // cross product to determine in which direction the user is dragging
-        qreal moveDirection = radialVector.x()*tangentVector.y() - radialVector.y()*tangentVector.x();
+        qreal moveDirection = radialVector.x() * tangentVector.y() - radialVector.y() * tangentVector.x();
         // make the roundness stick to zero if distance is under a certain value
         float snapDistance = 3.0;
-        if (distance >= 0.0)
-            distance = distance < snapDistance ? 0.0 : distance-snapDistance;
-        else
-            distance = distance > -snapDistance ? 0.0 : distance+snapDistance;
+        if (distance >= 0.0) {
+            distance = distance < snapDistance ? 0.0 : distance - snapDistance;
+        } else {
+            distance = distance > -snapDistance ? 0.0 : distance + snapDistance;
+        }
         // control changes roundness on both handles, else only the actual handle roundness is changed
-        if (modifiers & Qt::ControlModifier)
+        if (modifiers & Qt::ControlModifier) {
             m_roundness[handleId] = moveDirection < 0.0f ? distance : -distance;
-        else
+        } else {
             m_roundness[base] = m_roundness[tip] = moveDirection < 0.0f ? distance : -distance;
-    }
-    else {
+        }
+    } else {
         QPointF distVector = point - m_center;
         // unapply scaling
         distVector.rx() /= m_zoomX;
         distVector.ry() /= m_zoomY;
-        m_radius[handleId] = sqrt(distVector.x()*distVector.x() + distVector.y()*distVector.y());
+        m_radius[handleId] = sqrt(distVector.x() * distVector.x() + distVector.y() * distVector.y());
 
         qreal angle = atan2(distVector.y(), distVector.x());
-        if (angle < 0.0)
-            angle += 2.0*M_PI;
-        qreal diffAngle = angle-m_angles[handleId];
+        if (angle < 0.0) {
+            angle += 2.0 * M_PI;
+        }
+        qreal diffAngle = angle - m_angles[handleId];
         qreal radianStep = M_PI / static_cast<qreal>(m_cornerCount);
         if (handleId == tip) {
-            m_angles[tip] += diffAngle-radianStep;
-            m_angles[base] += diffAngle-radianStep;
+            m_angles[tip] += diffAngle - radianStep;
+            m_angles[base] += diffAngle - radianStep;
         } else {
             // control make the base point move freely
-            if (modifiers & Qt::ControlModifier)
-                m_angles[base] += diffAngle-2*radianStep;
-            else
+            if (modifiers & Qt::ControlModifier) {
+                m_angles[base] += diffAngle - 2 * radianStep;
+            } else {
                 m_angles[base] = m_angles[tip];
+            }
         }
     }
 }
@@ -167,16 +170,17 @@ void StarShape::updatePath(const QSizeF &size)
     Q_UNUSED(size);
     qreal radianStep = M_PI / static_cast<qreal>(m_cornerCount);
 
-    createPoints(m_convex ? m_cornerCount : 2*m_cornerCount);
+    createPoints(m_convex ? m_cornerCount : 2 * m_cornerCount);
 
     KoSubpath &points = *m_subpaths[0];
 
     uint index = 0;
-    for (uint i = 0; i < 2*m_cornerCount; ++i) {
+    for (uint i = 0; i < 2 * m_cornerCount; ++i) {
         uint cornerType = i % 2;
-        if (cornerType == base && m_convex)
+        if (cornerType == base && m_convex) {
             continue;
-        qreal radian = static_cast<qreal>((i+1)*radianStep) + m_angles[cornerType];
+        }
+        qreal radian = static_cast<qreal>((i + 1) * radianStep) + m_angles[cornerType];
         QPointF cornerPoint = QPointF(m_zoomX * m_radius[cornerType] * cos(radian), m_zoomY * m_radius[cornerType] * sin(radian));
 
         points[index]->setPoint(m_center + cornerPoint);
@@ -184,7 +188,7 @@ void StarShape::updatePath(const QSizeF &size)
         points[index]->unsetProperty(KoPathPoint::CloseSubpath);
         if (m_roundness[cornerType] > 1e-10 || m_roundness[cornerType] < -1e-10) {
             // normalized cross product to compute tangential vector for handle point
-            QPointF tangentVector(cornerPoint.y()/m_radius[cornerType], -cornerPoint.x()/m_radius[cornerType]);
+            QPointF tangentVector(cornerPoint.y() / m_radius[cornerType], -cornerPoint.x() / m_radius[cornerType]);
             points[index]->setControlPoint2(points[index]->point() - m_roundness[cornerType] * tangentVector);
             points[index]->setControlPoint1(points[index]->point() + m_roundness[cornerType] * tangentVector);
         } else {
@@ -205,8 +209,9 @@ void StarShape::updatePath(const QSizeF &size)
 
     QList<QPointF> handles;
     handles.push_back(points.at(tip)->point());
-    if (! m_convex)
+    if (!m_convex) {
         handles.push_back(points.at(base)->point());
+    }
     setHandles(handles);
 
     m_center = computeCenter();
@@ -220,12 +225,12 @@ void StarShape::createPoints(int requiredPointCount)
     }
     int currentPointCount = m_subpaths[0]->count();
     if (currentPointCount > requiredPointCount) {
-        for (int i = 0; i < currentPointCount-requiredPointCount; ++i) {
+        for (int i = 0; i < currentPointCount - requiredPointCount; ++i) {
             delete m_subpaths[0]->front();
             m_subpaths[0]->pop_front();
         }
     } else if (requiredPointCount > currentPointCount) {
-        for (int i = 0; i < requiredPointCount-currentPointCount; ++i) {
+        for (int i = 0; i < requiredPointCount - currentPointCount; ++i) {
             m_subpaths[0]->append(new KoPathPoint(this, QPointF()));
         }
     }
@@ -249,33 +254,35 @@ QPointF StarShape::computeCenter() const
 
     QPointF center(0, 0);
     for (uint i = 0; i < m_cornerCount; ++i) {
-        if (m_convex)
+        if (m_convex) {
             center += points[i]->point();
-        else
-            center += points[2*i]->point();
+        } else {
+            center += points[2 * i]->point();
+        }
     }
     return center / static_cast<qreal>(m_cornerCount);
 }
 
-bool StarShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context)
+bool StarShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     bool loadAsCustomShape = false;
 
     if (element.localName() == "custom-shape") {
         QString drawEngine = element.attributeNS(KoXmlNS::draw, "engine", "");
-        if (drawEngine != "calligra:star")
+        if (drawEngine != "calligra:star") {
             return false;
+        }
         loadAsCustomShape = true;
     } else if (element.localName() != "regular-polygon") {
         return false;
     }
 
     m_radius[tip] = 50;
-    m_center = QPointF(50,50);
+    m_center = QPointF(50, 50);
 
     if (!loadAsCustomShape) {
         QString corners = element.attributeNS(KoXmlNS::draw, "corners", "");
-        if (! corners.isEmpty()) {
+        if (!corners.isEmpty()) {
             m_cornerCount = corners.toUInt();
             // initialize default angles of tip and base
             m_angles[base] = m_angles[tip] = defaultAngleRadian();
@@ -290,26 +297,27 @@ bool StarShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & co
             // 0% means all polygon points are on a single ellipse
             // 100% means inner points are located at polygon center point
             QString sharpness = element.attributeNS(KoXmlNS::draw, "sharpness", "");
-            if (! sharpness.isEmpty() && sharpness.right(1) == "%")
-            {
-                float percent = sharpness.left(sharpness.length()-1).toFloat();
-                m_radius[base] = m_radius[tip] * (100-percent)/100;
+            if (!sharpness.isEmpty() && sharpness.right(1) == "%") {
+                float percent = sharpness.left(sharpness.length() - 1).toFloat();
+                m_radius[base] = m_radius[tip] * (100 - percent) / 100;
             }
         }
-    }
-    else {
+    } else {
         QString drawData = element.attributeNS(KoXmlNS::draw, "data");
-        if (drawData.isEmpty())
+        if (drawData.isEmpty()) {
             return false;
+        }
 
         QStringList properties = drawData.split(';');
-        if (properties.count() == 0)
+        if (properties.count() == 0) {
             return false;
+        }
 
         foreach (const QString &property, properties) {
             QStringList pair = property.split(':');
-            if (pair.count() != 2)
+            if (pair.count() != 2) {
                 continue;
+            }
             if (pair[0] == "corners") {
                 m_cornerCount = pair[1].toInt();
             } else if (pair[0] == "concave") {
@@ -323,8 +331,8 @@ bool StarShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & co
             } else if (pair[0] == "tipAngle") {
                 m_angles[tip] = pair[1].toDouble();
             } else if (pair[0] == "sharpness") {
-                float percent = pair[1].left(pair[1].length()-1).toFloat();
-                m_radius[base] = m_radius[tip] * (100-percent)/100;
+                float percent = pair[1].left(pair[1].length() - 1).toFloat();
+                m_radius[base] = m_radius[tip] * (100 - percent) / 100;
             }
         }
 
@@ -344,7 +352,7 @@ bool StarShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & co
     return true;
 }
 
-void StarShape::saveOdf(KoShapeSavingContext & context) const
+void StarShape::saveOdf(KoShapeSavingContext &context) const
 {
     if (isParametricShape()) {
         double defaultAngle = defaultAngleRadian();
@@ -361,11 +369,11 @@ void StarShape::saveOdf(KoShapeSavingContext & context) const
             // create the data attribute
             QString drawData = QString("corners:%1;").arg(m_cornerCount);
             drawData += m_convex ? "concave:false;" : "concave:true;";
-            if (! m_convex) {
+            if (!m_convex) {
                 // sharpness is radius of ellipse on which inner polygon points are located
                 // 0% means all polygon points are on a single ellipse
                 // 100% means inner points are located at polygon center point
-                qreal percent = (m_radius[tip]-m_radius[base]) / m_radius[tip] * 100.0;
+                qreal percent = (m_radius[tip] - m_radius[base]) / m_radius[tip] * 100.0;
                 drawData += QString("sharpness:%1%;").arg(percent);
             }
             if (m_roundness[base] != 0.0f) {
@@ -388,17 +396,16 @@ void StarShape::saveOdf(KoShapeSavingContext & context) const
             context.xmlWriter().endElement(); // draw:enhanced-geometry
 
             context.xmlWriter().endElement(); // draw:custom-shape
-        }
-        else {
+        } else {
             context.xmlWriter().startElement("draw:regular-polygon");
             saveOdfAttributes(context, OdfAllAttributes);
             context.xmlWriter().addAttribute("draw:corners", m_cornerCount);
             context.xmlWriter().addAttribute("draw:concave", m_convex ? "false" : "true");
-            if (! m_convex) {
+            if (!m_convex) {
                 // sharpness is radius of ellipse on which inner polygon points are located
                 // 0% means all polygon points are on a single ellipse
                 // 100% means inner points are located at polygon center point
-                qreal percent = (m_radius[tip]-m_radius[base]) / m_radius[tip] * 100.0;
+                qreal percent = (m_radius[tip] - m_radius[base]) / m_radius[tip] * 100.0;
                 context.xmlWriter().addAttribute("draw:sharpness", QString("%1%").arg(percent));
             }
             saveOdfCommonChildElements(context);
@@ -419,5 +426,5 @@ double StarShape::defaultAngleRadian() const
 {
     qreal radianStep = M_PI / static_cast<qreal>(m_cornerCount);
 
-    return M_PI_2-2*radianStep;
+    return M_PI_2 - 2 * radianStep;
 }

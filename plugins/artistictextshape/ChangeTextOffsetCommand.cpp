@@ -22,24 +22,27 @@
 
 #include <klocalizedstring.h>
 
-ChangeTextOffsetCommand::ChangeTextOffsetCommand( ArtisticTextShape * textShape, qreal oldOffset, qreal newOffset, KUndo2Command * parent )
-    : KUndo2Command(parent), m_textShape(textShape), m_oldOffset(oldOffset), m_newOffset(newOffset)
+ChangeTextOffsetCommand::ChangeTextOffsetCommand(ArtisticTextShape *textShape, qreal oldOffset, qreal newOffset, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_textShape(textShape)
+    , m_oldOffset(oldOffset)
+    , m_newOffset(newOffset)
 {
-    setText( kundo2_i18n("Change Text Offset") );
+    setText(kundo2_i18n("Change Text Offset"));
 }
 
 void ChangeTextOffsetCommand::redo()
 {
     KUndo2Command::redo();
     m_textShape->update();
-    m_textShape->setStartOffset( m_newOffset );
+    m_textShape->setStartOffset(m_newOffset);
     m_textShape->update();
 }
 
 void ChangeTextOffsetCommand::undo()
 {
     m_textShape->update();
-    m_textShape->setStartOffset( m_oldOffset );
+    m_textShape->setStartOffset(m_oldOffset);
     m_textShape->update();
     KUndo2Command::undo();
 }

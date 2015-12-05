@@ -424,7 +424,7 @@ bool getOrthogonalPointApproximation(const QPoint &cellPt,
     *srcPoint = indexesOp.getSrcPointForce(cellPt);
     *dstPoint = QPointF();
 
-    foreach (const Private::PointExtension &ext, extensionPoints) {
+    Q_FOREACH (const Private::PointExtension &ext, extensionPoints) {
         QPointF near = transformedPoints[ext.near];
         QPointF far = transformedPoints[ext.far];
 

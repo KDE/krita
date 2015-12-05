@@ -55,9 +55,11 @@ namespace {
         QString      categoryName;
     };
 
-    QKeySequence getShortcutFromXml(QDomElement node) {
-        return node.firstChildElement("shortcut").text();
+    // Convenience macros to extract text of a child node.
+    QString getChildContent(QDomElement xml, QString node) {
+        return xml.firstChildElement(node).text();
     };
+
     ActionInfoItem emptyActionInfo;  // Used as default return value
 
 
@@ -216,19 +218,17 @@ bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
     }
 
 
-    // Convenience macros to extract text of a child node.
-    auto getChildContent      = [=](QString node){return actionXml.firstChildElement(node).text();};
     // i18n requires converting format from QString.
-    auto getChildContent_i18n = [=](QString node){return quietlyTranslate(getChildContent(node));};
+    auto getChildContent_i18n = [=](QString node){return quietlyTranslate(getChildContent(actionXml, node));};
 
     // Note: the fields in the .action documents marked for translation are determined by extractrc.
-    QString icon                 = getChildContent("icon");
-    QString text                 = getChildContent("text");
-    QString whatsthis            = getChildContent_i18n("whatsThis");
-    QString toolTip              = getChildContent_i18n("toolTip");
-    QString statusTip            = getChildContent_i18n("statusTip");
-    QString iconText             = getChildContent_i18n("iconText");
-    bool isCheckable             = getChildContent("isCheckable") == QString("true");
+    QString icon      = getChildContent(actionXml, "icon");
+    QString text      = getChildContent(actionXml, "text");
+    QString whatsthis = getChildContent_i18n("whatsThis");
+    QString toolTip   = getChildContent_i18n("toolTip");
+    QString statusTip = getChildContent_i18n("statusTip");
+    QString iconText  = getChildContent_i18n("iconText");
+    bool isCheckable  = getChildContent(actionXml, "isCheckable") == QString("true");
 
 
 
@@ -254,7 +254,7 @@ bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
     // by relying on the code existing inside kactioncollection
     //
     // QMap<QKeySequence, QAction*> existingShortcuts;
-    // foreach(QAction* action, actionCollection->actions()) {
+    // Q_FOREACH (QAction* action, actionCollection->actions()) {
     //     if(action->shortcut() == QKeySequence(0)) {
     //         continue;
     //     }
@@ -275,6 +275,18 @@ bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
 
 
 
+QString KisActionRegistry::getActionProperty(const QString &name, const QString &property)
+{
+    ActionInfoItem info = d->actionInfo(name);
+    QDomElement actionXml = info.xmlData;
+    if (actionXml.text().isEmpty()) {
+        dbgAction << "No XML data found for action" << name;
+        return QString();
+    }
+
+    return getChildContent(actionXml, property);
+
+}
 
 
 void KisActionRegistry::Private::loadActionFiles()
@@ -286,7 +298,7 @@ void KisActionRegistry::Private::loadActionFiles()
         KoResourcePaths::findAllResources("kis_actions", "*.action", searchType);
 
     // Extract actions all XML .action files.
-    foreach(const QString &actionDefinition, actionDefinitions)  {
+    Q_FOREACH (const QString &actionDefinition, actionDefinitions)  {
         QDomDocument doc;
         QFile f(actionDefinition);
         f.open(QFile::ReadOnly);
@@ -342,7 +354,7 @@ void KisActionRegistry::Private::loadActionFiles()
                     else {
                         ActionInfoItem info;
                         info.xmlData         = actionXml;
-                        info.defaultShortcut = getShortcutFromXml(actionXml);
+                        info.defaultShortcut = getChildContent(actionXml, "shortcut");
                         info.customShortcut  = QKeySequence();
                         info.categoryName    = categoryName;
                         info.collectionName  = collectionName;

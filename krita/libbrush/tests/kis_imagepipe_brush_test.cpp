@@ -33,7 +33,7 @@
 #include <kis_painter.h>
 
 #define COMPARE_ALL(brush, method)                                      \
-    foreach(KisGbrBrush *child, brush->testingGetBrushes()) {           \
+    Q_FOREACH (KisGbrBrush *child, brush->testingGetBrushes()) {           \
         if(brush->method() != child->method()) {                        \
             dbgKrita << "Failing method:" << #method                    \
                      << "brush index:"                                  \

@@ -90,7 +90,7 @@ KoColorConversionCache::KoColorConversionCache() : d(new Private)
 
 KoColorConversionCache::~KoColorConversionCache()
 {
-    foreach(CachedTransformation* transfo, d->cache) {
+    Q_FOREACH (CachedTransformation* transfo, d->cache) {
         delete transfo;
     }
     delete d;
@@ -117,7 +117,7 @@ KoCachedColorConversionTransformation KoColorConversionCache::cachedConverter(co
     QMutexLocker lock(&d->cacheMutex);
     QList< CachedTransformation* > cachedTransfos = d->cache.values(key);
     if (cachedTransfos.size() != 0) {
-        foreach(CachedTransformation* ct, cachedTransfos) {
+        Q_FOREACH (CachedTransformation* ct, cachedTransfos) {
             if (ct->available()) {
                 ct->transfo->setSrcColorSpace(src);
                 ct->transfo->setDstColorSpace(dst);

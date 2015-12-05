@@ -168,7 +168,7 @@ void KisStroke::cancelStroke()
 
 bool KisStroke::sanityCheckAllJobsAreCancellable() const
 {
-    foreach(KisStrokeJob *item, m_jobsQueue) {
+    Q_FOREACH (KisStrokeJob *item, m_jobsQueue) {
         if (!item->isCancellable()) {
             return false;
         }

@@ -32,7 +32,7 @@ public:
     Private() {}
     ~Private()
     {
-        foreach(KoShapeStrokeModel* stroke, oldStrokes) {
+        Q_FOREACH (KoShapeStrokeModel* stroke, oldStrokes) {
             if (stroke && !stroke->deref())
                 delete stroke;
         }
@@ -64,7 +64,7 @@ KoShapeStrokeCommand::KoShapeStrokeCommand(const QList<KoShape*> &shapes, KoShap
     d->shapes = shapes;
 
     // save old strokes
-    foreach(KoShape *shape, d->shapes) {
+    Q_FOREACH (KoShape *shape, d->shapes) {
         d->addOldStroke(shape->stroke());
         d->addNewStroke(stroke);
     }
@@ -83,7 +83,7 @@ KoShapeStrokeCommand::KoShapeStrokeCommand(const QList<KoShape*> &shapes,
     d->shapes = shapes;
 
     // save old strokes
-    foreach(KoShape *shape, shapes)
+    Q_FOREACH (KoShape *shape, shapes)
         d->addOldStroke(shape->stroke());
     foreach (KoShapeStrokeModel * stroke, strokes)
         d->addNewStroke(stroke);
@@ -111,7 +111,7 @@ void KoShapeStrokeCommand::redo()
 {
     KUndo2Command::redo();
     QList<KoShapeStrokeModel*>::iterator strokeIt = d->newStrokes.begin();
-    foreach(KoShape *shape, d->shapes) {
+    Q_FOREACH (KoShape *shape, d->shapes) {
         shape->update();
         shape->setStroke(*strokeIt);
         shape->update();
@@ -123,7 +123,7 @@ void KoShapeStrokeCommand::undo()
 {
     KUndo2Command::undo();
     QList<KoShapeStrokeModel*>::iterator strokeIt = d->oldStrokes.begin();
-    foreach(KoShape *shape, d->shapes) {
+    Q_FOREACH (KoShape *shape, d->shapes) {
         shape->update();
         shape->setStroke(*strokeIt);
         shape->update();

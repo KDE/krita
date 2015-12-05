@@ -49,7 +49,7 @@ public Q_SLOTS:
     /**
      * stores the applied notes' configuration as globalnotesconfiguration of the document
      */
-    void apply(QAbstractButton*);
+    void apply(QAbstractButton *);
 
 private:
     KoOdfNotesConfiguration *m_notesConfig;

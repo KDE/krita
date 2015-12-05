@@ -56,12 +56,9 @@ ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const QVariantList &
         : KisViewPlugin(parent)
 {
     KisAction *action  = m_view->actionManager()->createAction("imagecolorspaceconversion");
-    action->setActivationFlags(KisAction::ACTIVE_NODE);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageColorSpaceConversion()));
 
     action  = m_view->actionManager()->createAction("layercolorspaceconversion");
-    action->setActivationFlags(KisAction::ACTIVE_LAYER);
-    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     connect(action, SIGNAL(triggered()), this, SLOT(slotLayerColorSpaceConversion()));
 }
 

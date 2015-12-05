@@ -698,7 +698,7 @@ QTextLine KoTextLayoutArea::Private::recreatePartialLayout(QTextBlock &block, QL
     if (layout->lineCount() == 1) {
         blockData.setCounterPosition(stashedCounterPosition);
     }
-    foreach(const LineKeeper &lk, stashedLines) {
+    Q_FOREACH (const LineKeeper &lk, stashedLines) {
         line.setLineWidth(lk.lineWidth);
         if (lk.columns != line.textLength()) {
             // As setNumColumns might break differently we only use it if setLineWidth doesn't give
@@ -1189,7 +1189,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             blockData.setCounterPosition(QPointF(d->x + labelBoxIndent, d->y));
             if (listFormat.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab
                 && !presentationListTabWorkaround(textIndent(block, textList, pStyle), labelBoxWidth, presentationListTabValue)) {
-                foreach(QTextOption::Tab tab, qTabs) {
+                Q_FOREACH (QTextOption::Tab tab, qTabs) {
                     qreal position = tab.position  * 72. / qt_defaultDpiY();
                     if (position > 0.0) {
                         d->indent += position;

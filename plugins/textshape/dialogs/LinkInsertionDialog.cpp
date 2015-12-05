@@ -27,8 +27,7 @@
 #include <QLabel>
 #include <QDialogButtonBox>
 
-
-LinkInsertionDialog::LinkInsertionDialog(KoTextEditor* editor, QWidget* parent)
+LinkInsertionDialog::LinkInsertionDialog(KoTextEditor *editor, QWidget *parent)
     : QDialog(parent)
     , m_editor(editor)
     , m_bookmarkManager(0)
@@ -58,7 +57,7 @@ LinkInsertionDialog::LinkInsertionDialog(KoTextEditor* editor, QWidget* parent)
     setUpdatesEnabled(true);
 
     ///setting up the bookmark link insertion tab
-    //connect(dlg.bookmarkListWidget, SIGNAL(itemActivated(QListWidgetItem *)), this, SLOT(slotItemClicked(QListWidgetItem *)));
+    //connect(dlg.bookmarkListWidget, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(slotItemClicked(QListWidgetItem*)));
     m_bookmarkManager =  KoTextDocument(editor->document()).textRangeManager()->bookmarkManager();
     m_bookmarkList = m_bookmarkManager->bookmarkNameList();
     QCompleter *bookmarkAutoCompleter = new QCompleter(m_bookmarkList, this);
@@ -77,34 +76,34 @@ void LinkInsertionDialog::enableDisableButtons(QString text)
 {
     text = text.trimmed();
     QObject *signalSender = (sender());
-    if (qobject_cast< QLineEdit* >(signalSender) == dlg.hyperlinkURL) {  //deal with fetch button
+    if (qobject_cast< QLineEdit * >(signalSender) == dlg.hyperlinkURL) { //deal with fetch button
         if (!text.isEmpty()) { // is empty?
             if (!QUrl(text).isValid()) { //not empty, is it valid?
                 dlg.fetchTitleButton->setEnabled(false);
                 dlg.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);//not valid too, time to get out
                 displayInlineWarning(i18n("The URL is invalid"), dlg.weblinkStatusLabel);
                 return;
-             } else { //valid but non empty, can fetch but not sure about the others so can't OK
+            } else { //valid but non empty, can fetch but not sure about the others so can't OK
                 displayInlineWarning("", dlg.weblinkStatusLabel);
                 dlg.fetchTitleButton->setEnabled(true);
-             }
+            }
         } else { //field is empty, no other choice
             dlg.fetchTitleButton->setEnabled(false);
             dlg.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
             return;
         }
-    } else if (qobject_cast< QComboBox* >(signalSender) == dlg.bookmarkLinkURL) { //need to check existence
-            if (dlg.bookmarkLinkURL->currentText().isEmpty()) {
-                displayInlineWarning("", dlg.bookmarkLinkStatusLabel);
-                dlg.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
-                return;
-            } else if (!exists(dlg.bookmarkLinkURL->currentText())) { //definitely can't go in
-                displayInlineWarning(i18n("Bookmark does not exist"), dlg.bookmarkLinkStatusLabel);
-                dlg.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
-                return;
-            } else {  //non empty and exits
-                displayInlineWarning("", dlg.bookmarkLinkStatusLabel); //can clear the label but cannot be sure about OK
-            }
+    } else if (qobject_cast< QComboBox * >(signalSender) == dlg.bookmarkLinkURL) { //need to check existence
+        if (dlg.bookmarkLinkURL->currentText().isEmpty()) {
+            displayInlineWarning("", dlg.bookmarkLinkStatusLabel);
+            dlg.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+            return;
+        } else if (!exists(dlg.bookmarkLinkURL->currentText())) { //definitely can't go in
+            displayInlineWarning(i18n("Bookmark does not exist"), dlg.bookmarkLinkStatusLabel);
+            dlg.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+            return;
+        } else {  //non empty and exits
+            displayInlineWarning("", dlg.bookmarkLinkStatusLabel); //can clear the label but cannot be sure about OK
+        }
     } else if (text.isEmpty()) { //for others, empty is definitely incorrect
         dlg.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
         return;
@@ -127,7 +126,7 @@ void LinkInsertionDialog::checkInsertEnableValidity(int currentTab)
 {
     dlg.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
     switch (currentTab) {
-     case 0 :
+    case 0 :
         if (!dlg.hyperlinkText->text().isEmpty() && QUrl(dlg.hyperlinkURL->text()).isValid() && !dlg.hyperlinkURL->text().isEmpty()) {
             dlg.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
         }
@@ -153,12 +152,12 @@ void LinkInsertionDialog::insertLink()
     }
 }
 
-void LinkInsertionDialog::displayInlineWarning(const QString& warning, QLabel *label) const
+void LinkInsertionDialog::displayInlineWarning(const QString &warning, QLabel *label) const
 {
     label->setText(warning);
 }
 
-void LinkInsertionDialog::insertHyperlink(QString& linkURLString, const QString& linkText)
+void LinkInsertionDialog::insertHyperlink(QString &linkURLString, const QString &linkText)
 {
     QString linkhtml;
     QUrl linkURL  = QUrl(linkURLString);
@@ -234,12 +233,12 @@ void LinkInsertionDialog::replyFinished()
 {
     //check for redirections
     QVariant possibleRedirectVariant =
-                        m_reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
+        m_reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
     QUrl possibleRedirectUrl = possibleRedirectVariant.toUrl();
     if (!possibleRedirectUrl.isEmpty() && m_linkURL != possibleRedirectUrl) { //redirect
         if (possibleRedirectUrl.toString().at(0) == '/') { //redirection to a relative url
             if (m_linkURL.toString().at(m_linkURL.toString().length() - 1) == '/') { //initially of the form http:xyz.com/
-                possibleRedirectUrl.setUrl(m_linkURL.toString() + possibleRedirectUrl.toString().remove(0,1));
+                possibleRedirectUrl.setUrl(m_linkURL.toString() + possibleRedirectUrl.toString().remove(0, 1));
             } else {
                 possibleRedirectUrl.setUrl(m_linkURL.toString() + possibleRedirectUrl.toString());
             }

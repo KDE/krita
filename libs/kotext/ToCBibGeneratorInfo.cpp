@@ -165,7 +165,7 @@ void BibliographyEntryTemplate::saveOdf(KoXmlWriter* writer) const
     writer->startElement("text:bibliography-entry-template");
         writer->addAttribute("text:style-name", styleName);
         writer->addAttribute("text:bibliography-type", bibliographyType);
-        foreach(IndexEntry* e,indexEntries) {
+        Q_FOREACH (IndexEntry* e,indexEntries) {
             e->saveOdf(writer);
         }
 
@@ -218,7 +218,7 @@ void IndexSourceStyles::saveOdf(KoXmlWriter* writer) const
 {
     writer->startElement("text:index-source-styles");
         writer->addAttribute("text:outline-level", outlineLevel);
-        foreach(const IndexSourceStyle &s, styles) {
+        Q_FOREACH (const IndexSourceStyle &s, styles) {
             s.saveOdf(writer);
         }
     writer->endElement();
@@ -267,7 +267,7 @@ void TocEntryTemplate::saveOdf(KoXmlWriter* writer) const
         writer->addAttribute("text:outline-level", outlineLevel);
         writer->addAttribute("text:style-name", styleName);
 
-        foreach(IndexEntry* e,indexEntries) {
+        Q_FOREACH (IndexEntry* e,indexEntries) {
             e->saveOdf(writer);
         }
 

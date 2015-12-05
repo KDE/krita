@@ -28,8 +28,8 @@ class MorphologyEffectFactory : public KoFilterEffectFactoryBase
 {
 public:
     MorphologyEffectFactory();
-    virtual KoFilterEffect * createFilterEffect() const;
-    virtual KoFilterEffectConfigWidgetBase * createConfigWidget() const;
+    virtual KoFilterEffect *createFilterEffect() const;
+    virtual KoFilterEffectConfigWidgetBase *createConfigWidget() const;
 };
 
 #endif // MORPHOLOGYEFFECTFACTORY_H

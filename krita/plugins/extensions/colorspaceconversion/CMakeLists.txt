@@ -1,10 +1,10 @@
 
-set(kritacolorspaceconversion_PART_SRCS colorspaceconversion.cc dlg_colorspaceconversion.cc )
+set(kritacolorspaceconversion_SOURCES colorspaceconversion.cc dlg_colorspaceconversion.cc )
 
 
-ki18n_wrap_ui(kritacolorspaceconversion_PART_SRCS wdgconvertcolorspace.ui )
+ki18n_wrap_ui(kritacolorspaceconversion_SOURCES wdgconvertcolorspace.ui )
 
-add_library(kritacolorspaceconversion MODULE ${kritacolorspaceconversion_PART_SRCS})
+add_library(kritacolorspaceconversion MODULE ${kritacolorspaceconversion_SOURCES})
 kcoreaddons_desktop_to_json(kritacolorspaceconversion kritacolorspaceconversion.desktop)
 
 

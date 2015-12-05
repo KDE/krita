@@ -128,7 +128,7 @@ void ThemeManager::setCurrentTheme(const QString& name)
 
     if (d->themeMenuAction  && d->themeMenuActionGroup) {
         QList<QAction*> list = d->themeMenuActionGroup->actions();
-        foreach(QAction* action, list)
+        Q_FOREACH (QAction* action, list)
         {
             if (action->text().remove('&') == name)
             {
@@ -256,7 +256,7 @@ void ThemeManager::populateThemeMenu()
     QStringList actionMapKeys = actionMap.keys();
     actionMapKeys.sort();
 
-    foreach(const QString& name, actionMapKeys)
+    Q_FOREACH (const QString& name, actionMapKeys)
     {
         d->themeMenuAction->addAction(actionMap.value(name));
     }
@@ -269,7 +269,7 @@ void ThemeManager::updateCurrentKDEdefaultThemePreview()
     if (!d->themeMenuActionGroup) return;
 
     QList<QAction*> list = d->themeMenuActionGroup->actions();
-    foreach(QAction* action, list)
+    Q_FOREACH (QAction* action, list)
     {
         if (action->text().remove('&') == defaultThemeName())
         {

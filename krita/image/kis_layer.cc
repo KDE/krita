@@ -98,7 +98,7 @@ public:
     }
 
     void setDirty(const QRect &rect) {
-        foreach(KisCloneLayerWSP clone, m_clonesList) {
+        Q_FOREACH (KisCloneLayerWSP clone, m_clonesList) {
             clone->setDirtyOriginal(rect);
         }
     }
@@ -232,7 +232,7 @@ void KisLayer::setSectionModelProperties(const KisNodeModel::PropertyList &prope
 {
     KisBaseNode::setSectionModelProperties(properties);
 
-    foreach (const KisNodeModel::Property &property, properties) {
+    Q_FOREACH (const KisNodeModel::Property &property, properties) {
         if (property.name == i18n("Inherit Alpha")) {
             disableAlphaChannel(property.state.toBool());
         }
@@ -435,7 +435,7 @@ KisSelectionMaskSP KisLayer::selectionMask() const
     QList<KisNodeSP> masks = childNodes(QStringList("KisSelectionMask"), properties);
 
     // return the first visible mask
-    foreach (KisNodeSP mask, masks) {
+    Q_FOREACH (KisNodeSP mask, masks) {
         if (mask->visible()) {
             return dynamic_cast<KisSelectionMask*>(mask.data());
         }
@@ -468,7 +468,7 @@ QList<KisEffectMaskSP> KisLayer::effectMasks(KisNodeSP lastNode) const
         properties.setProperty("visible", true);
         QList<KisNodeSP> nodes = childNodes(QStringList("KisEffectMask"), properties);
 
-        foreach(const KisNodeSP& node,  nodes) {
+        Q_FOREACH (const KisNodeSP& node,  nodes) {
             if (node == lastNode) break;
 
             KisEffectMaskSP mask = dynamic_cast<KisEffectMask*>(const_cast<KisNode*>(node.data()));
@@ -508,7 +508,7 @@ QRect KisLayer::masksChangeRect(const QList<KisEffectMaskSP> &masks,
      */
     QRect changeRect = requestedRect;
 
-    foreach(const KisEffectMaskSP& mask, masks) {
+    Q_FOREACH (const KisEffectMaskSP& mask, masks) {
         changeRect = mask->changeRect(prevChangeRect);
 
         if (changeRect != prevChangeRect)
@@ -615,7 +615,7 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
                 copyOriginalToProjection(source, destination, needRect);
             }
 
-            foreach(const KisEffectMaskSP& mask, masks) {
+            Q_FOREACH (const KisEffectMaskSP& mask, masks) {
                 const QRect maskApplyRect = applyRects.pop();
                 const QRect maskNeedRect =
                     applyRects.isEmpty() ? needRect : applyRects.top();
@@ -638,7 +638,7 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
             QRect maskApplyRect = applyRects.pop();
             QRect maskNeedRect = needRect;
 
-            foreach(const KisEffectMaskSP& mask, masks) {
+            Q_FOREACH (const KisEffectMaskSP& mask, masks) {
                 PositionToFilthy maskPosition = calculatePositionToFilthy(mask, filthyNode, const_cast<KisLayer*>(this));
                 mask->apply(tempDevice, maskApplyRect, maskNeedRect, maskPosition);
 

@@ -8,7 +8,7 @@
               (C) 2002 Ellis Whitehead <ellis@kde.org>
               (C) 2003 Andras Mantia <amantia@kde.org>
               (C) 2005-2006 Hamish Rodda <rodda@kde.org>
-			  (C) 2014 Dan Leinir Turthra Jensen
+              (C) 2014 Dan Leinir Turthra Jensen
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -42,26 +42,26 @@ class QIcon;
 class KoFontFamilyAction : public KSelectAction
 {
     Q_OBJECT
-    Q_PROPERTY( QString font READ font WRITE setFont )
+    Q_PROPERTY(QString font READ font WRITE setFont)
 
 public:
     KoFontFamilyAction(uint fontListCriteria, QObject *parent);
     explicit KoFontFamilyAction(QObject *parent);
-    KoFontFamilyAction(const QString& text, QObject *parent);
+    KoFontFamilyAction(const QString &text, QObject *parent);
     KoFontFamilyAction(const QIcon &icon, const QString &text, QObject *parent);
     virtual ~KoFontFamilyAction();
 
     QString font() const;
 
-    void setFont( const QString &family );
+    void setFont(const QString &family);
 
-    virtual QWidget* createWidget(QWidget* parent);
+    virtual QWidget *createWidget(QWidget *parent);
 
 private:
     class KoFontFamilyActionPrivate;
-    KoFontFamilyActionPrivate * const d;
+    KoFontFamilyActionPrivate *const d;
 
-    Q_PRIVATE_SLOT( d, void _ko_slotFontChanged(const QFont&) )
+    Q_PRIVATE_SLOT(d, void _ko_slotFontChanged(const QFont &))
 };
 
 #endif

@@ -6,7 +6,7 @@ include_directories(eraser)
 include_directories(duplicate)
 
 
-set(kritadefaultpaintops_PART_SRCS
+set(kritadefaultpaintops_SOURCES
 	defaultpaintops_plugin.cc
 	brush/kis_brushop.cpp
 	brush/kis_brushop_settings_widget.cpp
@@ -16,9 +16,9 @@ set(kritadefaultpaintops_PART_SRCS
 	duplicate/kis_duplicateop_option.cpp
     )
 
-ki18n_wrap_ui(kritadefaultpaintops_PART_SRCS duplicate/wdgduplicateop.ui )
+ki18n_wrap_ui(kritadefaultpaintops_SOURCES duplicate/wdgduplicateop.ui )
 
-add_library(kritadefaultpaintops MODULE ${kritadefaultpaintops_PART_SRCS})
+add_library(kritadefaultpaintops MODULE ${kritadefaultpaintops_SOURCES})
 
 
 

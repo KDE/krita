@@ -58,7 +58,7 @@ KisImageSignalRouter::~KisImageSignalRouter()
 
 void KisImageSignalRouter::emitNotifications(KisImageSignalVector notifications)
 {
-    foreach(const KisImageSignalType &type, notifications) {
+    Q_FOREACH (const KisImageSignalType &type, notifications) {
         emitNotification(type);
     }
 }

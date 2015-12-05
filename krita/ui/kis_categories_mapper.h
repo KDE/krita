@@ -247,14 +247,14 @@ public:
     }
 
     DataItem* fetchCategory(const QString &category) const {
-        foreach(DataItem *item, m_items) {
+        Q_FOREACH (DataItem *item, m_items) {
             if (item->isCategory() && item->name() == category) return item;
         }
         return 0;
     }
 
     DataItem* fetchEntry(const QString &category, const TEntry &entry) const {
-        foreach(DataItem *item, m_items) {
+        Q_FOREACH (DataItem *item, m_items) {
             if (!item->isCategory() &&
                 *item->data() == entry &&
                 item->parentCategory()->name() == category) return item;
@@ -263,7 +263,7 @@ public:
     }
 
     DataItem* fetchOneEntry(const TEntry &entry) const {
-        foreach(DataItem *item, m_items) {
+        Q_FOREACH (DataItem *item, m_items) {
             if (!item->isCategory() &&
                 *item->data() == entry) return item;
         }
@@ -273,7 +273,7 @@ public:
     QVector<DataItem*> itemsForCategory(const QString &category) const {
         QVector<DataItem*> filteredItems;
 
-        foreach(DataItem *item, m_items) {
+        Q_FOREACH (DataItem *item, m_items) {
             if (!item->isCategory() &&
                 item->parentCategory()->name() == category) {
 
@@ -285,7 +285,7 @@ public:
     }
 
     void expandAllCategories() {
-        foreach(DataItem *item, m_items) {
+        Q_FOREACH (DataItem *item, m_items) {
             if (item->isCategory()) {
                 item->setExpanded(true);
             }
@@ -313,7 +313,7 @@ private:
         Q_ASSERT(categoryItem->isCategory());
         notifyItemChanged(categoryItem);
 
-        foreach(DataItem *item, m_items) {
+        Q_FOREACH (DataItem *item, m_items) {
             if (!item->isCategory() &&
                 item->parentCategory() == categoryItem) {
 

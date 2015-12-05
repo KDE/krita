@@ -242,7 +242,7 @@ Exiv2::Value* kmdValueToExivXmpValue(const KisMetaData::Value& value)
             // Cannot happen
             ;
         }
-        foreach(const KisMetaData::Value& v, value.asArray()) {
+        Q_FOREACH (const KisMetaData::Value& v, value.asArray()) {
             Exiv2::Value* ev = kmdValueToExivXmpValue(v);
             if (ev) {
                 arrV->read(ev->toString());

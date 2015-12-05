@@ -1,4 +1,4 @@
-set(kritahatchingpaintop_PART_SRCS
+set(kritahatchingpaintop_SOURCES
     hatching_paintop_plugin.cpp
     kis_hatching_paintop.cpp
     kis_hatching_options.cpp
@@ -11,9 +11,9 @@ set(kritahatchingpaintop_PART_SRCS
     hatching_brush.cpp
     )
 
-ki18n_wrap_ui(kritahatchingpaintop_PART_SRCS wdghatchingpreferences.ui wdghatchingoptions.ui)
+ki18n_wrap_ui(kritahatchingpaintop_SOURCES wdghatchingpreferences.ui wdghatchingoptions.ui)
 
-add_library(kritahatchingpaintop MODULE ${kritahatchingpaintop_PART_SRCS})
+add_library(kritahatchingpaintop MODULE ${kritahatchingpaintop_SOURCES})
 kcoreaddons_desktop_to_json(kritahatchingpaintop kritahatchingpaintop.desktop)
 
 target_link_libraries(kritahatchingpaintop kritalibpaintop)

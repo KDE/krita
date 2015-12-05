@@ -142,19 +142,19 @@ public:
     }
 
     void setUseColorAsMask(bool useColorAsMask) {
-        foreach(KisGbrBrush * brush, m_brushes) {
+        Q_FOREACH (KisGbrBrush * brush, m_brushes) {
             brush->setUseColorAsMask(useColorAsMask);
         }
     }
 
     void makeMaskImage() {
-        foreach(KisGbrBrush * brush, m_brushes) {
+        Q_FOREACH (KisGbrBrush * brush, m_brushes) {
             brush->makeMaskImage();
         }
     }
 
     bool saveToDevice(QIODevice* dev) const {
-        foreach(KisGbrBrush * brush, m_brushes) {
+        Q_FOREACH (KisGbrBrush * brush, m_brushes) {
             if (!brush->saveToDevice(dev)) {
                 return false;
             }

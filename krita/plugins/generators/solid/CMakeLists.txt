@@ -1,14 +1,14 @@
-set(kritacolorgenerator_PART_SRCS
+set(kritacolorgenerator_SOURCES
     colorgenerator.cpp
     kis_wdg_color.cpp
     )
 
 
-ki18n_wrap_ui(kritacolorgenerator_PART_SRCS
+ki18n_wrap_ui(kritacolorgenerator_SOURCES
     wdgcoloroptions.ui
     )
 
-add_library(kritacolorgenerator MODULE ${kritacolorgenerator_PART_SRCS})
+add_library(kritacolorgenerator MODULE ${kritacolorgenerator_SOURCES})
 kcoreaddons_desktop_to_json(kritacolorgenerator kritacolorgenerator.desktop)
 
 target_link_libraries(kritacolorgenerator kritaui)

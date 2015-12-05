@@ -459,7 +459,7 @@ QList<KisNodeSP> KisNode::childNodes(const QStringList & nodeTypes, const KoProp
 
                 if(!nodeTypes.isEmpty()) {
                     rightType = false;
-                    foreach(const QString &nodeType,  nodeTypes) {
+                    Q_FOREACH (const QString &nodeType,  nodeTypes) {
                         if ((*iter)->inherits(nodeType.toLatin1())) {
                             rightType = true;
                             break;
@@ -583,7 +583,7 @@ void KisNode::setDirty()
 
 void KisNode::setDirty(const QVector<QRect> &rects)
 {
-    foreach(const QRect &rc, rects) {
+    Q_FOREACH (const QRect &rc, rects) {
         setDirty(rc);
     }
 }

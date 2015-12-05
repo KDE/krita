@@ -39,7 +39,7 @@ void TestKoColor::testForModel(QString model)
 {
     QColor qc(200, 125, 100);
     QList<KoID> depthIDs = KoColorSpaceRegistry::instance()->colorDepthList(model, KoColorSpaceRegistry::AllColorSpaces);
-    foreach(const KoID& depthId, depthIDs) {
+    Q_FOREACH (const KoID& depthId, depthIDs) {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(model, depthId.id() , "");
         if (cs) {
             KoColor kc(cs);

@@ -4,7 +4,7 @@
 
 set(GMIC_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/gmic")
 
-include_directories(${GMIC_SOURCE_DIR})
+include_directories(${KOWIDGETS_INCLUDES} ${GMIC_SOURCE_DIR})
 
 if(NOT MSVC)
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -fPIC")
@@ -40,7 +40,6 @@ add_definitions(-Dgmic_float_only)
 add_definitions(-Dcimg_use_vt100 )
 
 # PARALLEL
-find_package(Threads)
 if (Threads_FOUND)
     message("G'Mic: using pthreads")
     add_definitions(-Dgmic_is_parallel)
@@ -48,7 +47,6 @@ if (Threads_FOUND)
 endif()
 
 #OpenMP
-find_package(OpenMP)
 if(OPENMP_FOUND)
     message("G'Mic: using OpenMP")
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
@@ -70,15 +68,13 @@ if (PNG_FOUND)
 endif()
 
 # ZLIB
-find_package( ZLIB REQUIRED )
-if ( ZLIB_FOUND )
+if (ZLIB_FOUND)
     add_definitions(-Dcimg_use_zlib)
     include_directories( ${ZLIB_INCLUDE_DIRS} )
 endif()
 
 
 # CURL
-find_package(CURL)
 if (CURL_FOUND)
     message("G'Mic: using Curl")
     add_definitions(-Dcimg_use_curl)
@@ -110,7 +106,8 @@ if(FFTW3_FOUND)
 endif()
 
 if (X11_FOUND)
-    target_link_libraries(gmic ${X11_LIBRARIES})
+    
+    target_link_libraries(gmic ${X11_LIBRARIES} KF5::WindowSystem Qt5::Core)
 endif()
 
 if(CURL_FOUND)
@@ -129,7 +126,7 @@ endif()
 # compile Krita plug-in and link static library in
 ##
 
-set(kritagmic_shared_PART_SRCS
+set(kritagmic_shared_SOURCES
     kis_gmic_parser.cpp
     kis_gmic_blacklister.cpp
     kis_gmic_filter_model.cpp
@@ -147,9 +144,9 @@ set(kritagmic_shared_PART_SRCS
     kis_filter_preview_widget.cpp
 )
 
-ki18n_wrap_ui(kritagmic_shared_PART_SRCS wdg_gmic.ui wdg_gmic_input_output.ui)
+ki18n_wrap_ui(kritagmic_shared_SOURCES wdg_gmic.ui wdg_gmic_input_output.ui)
 
-set(kritagmic_PART_SRCS
+set(kritagmic_SOURCES
     kis_gmic_simple_convertor.cpp
     kis_export_gmic_processing_visitor.cpp
     kis_gmic_applicator.cpp
@@ -160,16 +157,16 @@ set(kritagmic_PART_SRCS
     kis_import_gmic_processing_visitor.cpp
     kis_gmic_progress_manager.cpp
     kis_gmic_small_applicator.cpp
-    kis_gmic_plugin.cpp ${kritagmic_shared_PART_SRCS}
+    kis_gmic_plugin.cpp ${kritagmic_shared_SOURCES}
 )
-add_library(kritagmic MODULE ${kritagmic_PART_SRCS})
+add_library(kritagmic MODULE ${kritagmic_SOURCES})
 target_link_libraries(kritagmic kritaui gmic Qt5::Xml Qt5::Network ${ZLIB_LIBRARIES})
 kcoreaddons_desktop_to_json(kritagmic kritagmic.desktop)
 
 # gmicparser for debugging purposes
 
-set(gmicparser_PART_SRCS gmicparser.cpp ${kritagmic_shared_PART_SRCS})
-add_executable(gmicparser ${gmicparser_PART_SRCS})
+set(gmicparser_SOURCES gmicparser.cpp ${kritagmic_shared_SOURCES})
+add_executable(gmicparser ${gmicparser_SOURCES})
 target_link_libraries(gmicparser Qt5::Core Qt5::Gui Qt5::Network kritaui gmic ${ZLIB_LIBRARIES})
 
 ########### install files ###############
@@ -187,5 +184,5 @@ DESTINATION ${GMIC_INSTALL_DIR} )
 
 # tests, currently broken on OSX due to fftw linking problem
 if(NOT APPLE)
-    add_subdirectory(tests)
+    #add_subdirectory(tests)
 endif()

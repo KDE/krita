@@ -63,7 +63,7 @@ void KisOpenGLUpdateInfo::convertColorSpace()
 {
     KIS_ASSERT_RECOVER_RETURN(needsConversion());
 
-    foreach (KisTextureTileUpdateInfoSP tileInfo, tileList) {
+    Q_FOREACH (KisTextureTileUpdateInfoSP tileInfo, tileList) {
         tileInfo->convertTo(m_options.m_destinationColorSpace,
                             m_options.m_renderingIntent,
                             m_options.m_conversionFlags);

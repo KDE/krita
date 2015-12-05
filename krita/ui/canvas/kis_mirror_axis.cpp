@@ -25,8 +25,10 @@
 #include <QToolButton>
 #include <QApplication>
 #include <QPaintEngine>
+#ifdef HAVE_OPENGL
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
+#endif
 
 #include <kis_icon.h>
 

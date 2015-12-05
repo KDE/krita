@@ -111,7 +111,7 @@ private:
 
         KisLayer *layer = dynamic_cast<KisLayer*>(m_node.data());
         if(layer && layer->hasClones()) {
-            foreach(KisCloneLayerSP clone, layer->registeredClones()) {
+            Q_FOREACH (KisCloneLayerSP clone, layer->registeredClones()) {
                 if(!clone) continue;
 
                 QPoint offset(clone->x(), clone->y());
@@ -163,7 +163,7 @@ public:
 
 private:
     void doUpdate(KisImageSignalVector emitSignals) {
-        foreach(KisImageSignalType type, emitSignals) {
+        Q_FOREACH (KisImageSignalType type, emitSignals) {
             m_image->signalRouter()->emitNotification(type);
         }
     }

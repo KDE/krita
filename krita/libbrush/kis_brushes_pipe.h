@@ -31,7 +31,7 @@ public:
     KisBrushesPipe(const KisBrushesPipe &rhs) {
         qDeleteAll(m_brushes);
         m_brushes.clear();
-        foreach(BrushType * brush, rhs.m_brushes) {
+        Q_FOREACH (BrushType * brush, rhs.m_brushes) {
             m_brushes.append(brush->clone());
         }
     }
@@ -72,25 +72,25 @@ public:
     }
 
     void setAngle(qreal angle) {
-        foreach(BrushType * brush, m_brushes) {
+        Q_FOREACH (BrushType * brush, m_brushes) {
             brush->setAngle(angle);
         }
     }
 
     void setScale(qreal scale) {
-        foreach(BrushType * brush, m_brushes) {
+        Q_FOREACH (BrushType * brush, m_brushes) {
             brush->setScale(scale);
         }
     }
 
     void setSpacing(double spacing) {
-        foreach(BrushType * brush, m_brushes) {
+        Q_FOREACH (BrushType * brush, m_brushes) {
             brush->setSpacing(spacing);
         }
     }
 
     bool hasColor() const {
-        foreach(BrushType * brush, m_brushes) {
+        Q_FOREACH (BrushType * brush, m_brushes) {
             if (brush->hasColor()) return true;
         }
         return false;

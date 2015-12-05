@@ -34,19 +34,22 @@ class RgbCompositeOpColor : public KoCompositeOpAlphaBase<_CSTraits, RgbComposit
 
 public:
 
-    RgbCompositeOpColor(KoColorSpace * cs)
-            : KoCompositeOpAlphaBase<_CSTraits, RgbCompositeOpColor<_CSTraits>, true >(cs, COMPOSITE_COLOR, i18n("Color"), KoCompositeOp::categoryMisc()) {
+    RgbCompositeOpColor(KoColorSpace *cs)
+        : KoCompositeOpAlphaBase<_CSTraits, RgbCompositeOpColor<_CSTraits>, true >(cs, COMPOSITE_COLOR, i18n("Color"), KoCompositeOp::categoryMisc())
+    {
     }
 
-    inline static channels_type selectAlpha(channels_type srcAlpha, channels_type dstAlpha) {
+    inline static channels_type selectAlpha(channels_type srcAlpha, channels_type dstAlpha)
+    {
         return qMin(srcAlpha, dstAlpha);
     }
 
     inline static void composeColorChannels(channels_type srcBlend,
-                                            const channels_type* src,
-                                            channels_type* dst,
+                                            const channels_type *src,
+                                            channels_type *dst,
                                             bool allChannelFlags,
-                                            const QBitArray & channelFlags) {
+                                            const QBitArray &channelFlags)
+    {
 
         float dstRed = SCALE_TO_FLOAT(dst[_CSTraits::red_pos]);
         float dstGreen = SCALE_TO_FLOAT(dst[_CSTraits::green_pos]);
@@ -67,12 +70,15 @@ public:
         RGBToHSL(dstRed, dstGreen, dstBlue, &dstHue, &dstSaturation, &dstLightness);
         HSLToRGB(srcHue, srcSaturation, dstLightness, &srcRed, &srcGreen, &srcBlue);
 
-        if (allChannelFlags || channelFlags.testBit(_CSTraits::red_pos))
+        if (allChannelFlags || channelFlags.testBit(_CSTraits::red_pos)) {
             dst[_CSTraits::red_pos] = KoColorSpaceMaths<channels_type>::blend(SCALE_FROM_FLOAT(srcRed), SCALE_FROM_FLOAT(dstRed), srcBlend);
-        if (allChannelFlags || channelFlags.testBit(_CSTraits::green_pos))
+        }
+        if (allChannelFlags || channelFlags.testBit(_CSTraits::green_pos)) {
             dst[_CSTraits::green_pos] = KoColorSpaceMaths<channels_type>::blend(SCALE_FROM_FLOAT(srcGreen), SCALE_FROM_FLOAT(dstGreen), srcBlend);
-        if (allChannelFlags || channelFlags.testBit(_CSTraits::blue_pos))
+        }
+        if (allChannelFlags || channelFlags.testBit(_CSTraits::blue_pos)) {
             dst[_CSTraits::blue_pos] = KoColorSpaceMaths<channels_type>::blend(SCALE_FROM_FLOAT(srcBlue), SCALE_FROM_FLOAT(dstBlue), srcBlend);
+        }
     }
 };
 

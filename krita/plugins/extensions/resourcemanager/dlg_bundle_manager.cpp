@@ -88,7 +88,7 @@ void DlgBundleManager::refreshListData()
     m_ui->listActive->clear();
 
 
-    foreach(const QString &f, bundleServer->blackListedFiles()) {
+    Q_FOREACH (const QString &f, bundleServer->blackListedFiles()) {
         ResourceBundle *bundle = new ResourceBundle(f);
         bundle->load();
         if (bundle->valid()) {
@@ -98,7 +98,7 @@ void DlgBundleManager::refreshListData()
     }
     fillListWidget(m_blacklistedBundles.values(), m_ui->listInactive);
 
-    foreach(ResourceBundle *bundle, bundleServer->resources()) {
+    Q_FOREACH (ResourceBundle *bundle, bundleServer->resources()) {
         if (bundle->valid()) {
             m_activeBundles[bundle->filename()] = bundle;
         }
@@ -120,7 +120,7 @@ void DlgBundleManager::accept()
         
         if (!bundle) {
             // Get it from the blacklisted bundles
-            foreach (ResourceBundle *b2, m_blacklistedBundles.values()) {
+            Q_FOREACH (ResourceBundle *b2, m_blacklistedBundles.values()) {
                 if (b2->md5() == ba) {
                     bundle = b2;
                     break;
@@ -175,7 +175,7 @@ void DlgBundleManager::accept()
 void DlgBundleManager::addSelected()
 {
 
-    foreach(QListWidgetItem *item, m_ui->listActive->selectedItems()) {
+    Q_FOREACH (QListWidgetItem *item, m_ui->listActive->selectedItems()) {
         m_ui->listInactive->addItem(m_ui->listActive->takeItem(m_ui->listActive->row(item)));
     }
 
@@ -183,7 +183,7 @@ void DlgBundleManager::addSelected()
 
 void DlgBundleManager::removeSelected()
 {
-    foreach(QListWidgetItem *item, m_ui->listInactive->selectedItems()) {
+    Q_FOREACH (QListWidgetItem *item, m_ui->listInactive->selectedItems()) {
         m_ui->listActive->addItem(m_ui->listInactive->takeItem(m_ui->listInactive->row(item)));
     }
 }
@@ -212,7 +212,7 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
 
         if (!bundle) {
             // Get it from the blacklisted bundles
-            foreach (ResourceBundle *b2, m_blacklistedBundles.values()) {
+            Q_FOREACH (ResourceBundle *b2, m_blacklistedBundles.values()) {
                 if (b2->md5() == ba) {
                     bundle = b2;
                     break;
@@ -236,7 +236,7 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
             m_ui->lblPreview->setPixmap(QPixmap::fromImage(bundle->image().scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
             m_ui->listBundleContents->clear();
 
-            foreach(const QString & resType, bundle->resourceTypes()) {
+            Q_FOREACH (const QString & resType, bundle->resourceTypes()) {
 
                 QTreeWidgetItem *toplevel = new QTreeWidgetItem();
                 if (resType == "gradients") {
@@ -260,7 +260,7 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
 
                 m_ui->listBundleContents->addTopLevelItem(toplevel);
 
-                foreach(const KoResource *res, bundle->resources(resType)) {
+                Q_FOREACH (const KoResource *res, bundle->resources(resType)) {
                     if (res) {
                         QTreeWidgetItem *i = new QTreeWidgetItem();
                         i->setIcon(0, QIcon(QPixmap::fromImage(res->image())));
@@ -296,7 +296,7 @@ void DlgBundleManager::fillListWidget(QList<ResourceBundle *> bundles, QListWidg
     w->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
     w->setSelectionMode(QAbstractItemView::MultiSelection);
 
-    foreach(ResourceBundle *bundle, bundles) {
+    Q_FOREACH (ResourceBundle *bundle, bundles) {
         QPixmap pixmap(ICON_SIZE, ICON_SIZE);
         if (!bundle->image().isNull()) {
             QImage scaled = bundle->image().scaled(ICON_SIZE, ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation);

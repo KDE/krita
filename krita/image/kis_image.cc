@@ -192,11 +192,8 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
     }
 
     const KoColorSpace *c;
-    if (colorSpace == 0) {
+    if (colorSpace != 0) {
         c = colorSpace;
-        // m_d = new KisImagePrivate(this, width, height,
-        //                           KoColorSpaceRegistry::instance()->rgb8(),
-        //                           undoStore, startProjection);
     } else {
         c = KoColorSpaceRegistry::instance()->rgb8();
     }
@@ -931,7 +928,7 @@ void KisImage::refreshHiddenArea(KisNodeSP rootNode, const QRect &preparedArea)
         QRegion dirtyRegion = realNodeRect;
         dirtyRegion -= preparedArea;
 
-        foreach(const QRect &rc, dirtyRegion.rects()) {
+        Q_FOREACH (const QRect &rc, dirtyRegion.rects()) {
             refreshGraph(rootNode, rc, realNodeRect);
         }
     }
@@ -966,7 +963,7 @@ void KisImage::flatten()
 
 bool checkIsSourceForClone(KisNodeSP src, const QList<KisNodeSP> &nodes)
 {
-    foreach (KisNodeSP node, nodes) {
+    Q_FOREACH (KisNodeSP node, nodes) {
         if (node == src) continue;
 
         KisCloneLayer *clone = dynamic_cast<KisCloneLayer*>(node.data());
@@ -1007,7 +1004,7 @@ bool checkIsChildOf(KisNodeSP node, const QList<KisNodeSP> &parents)
         parent = parent->parent();
     }
 
-    foreach(KisNodeSP perspectiveParent, parents) {
+    Q_FOREACH (KisNodeSP perspectiveParent, parents) {
         if (nodeParents.contains(perspectiveParent)) {
             return true;
         }
@@ -1059,7 +1056,7 @@ void sortMergableNodes(KisNodeSP root, QList<KisNodeSP> &inputNodes, QList<KisNo
 
 void fetchSelectionMasks(QList<KisNodeSP> mergedNodes, QVector<KisSelectionMaskSP> &selectionMasks)
 {
-    foreach (KisNodeSP node, mergedNodes) {
+    Q_FOREACH (KisNodeSP node, mergedNodes) {
         KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
 
         KisSelectionMaskSP mask;
@@ -1073,7 +1070,7 @@ void fetchSelectionMasks(QList<KisNodeSP> mergedNodes, QVector<KisSelectionMaskS
 void reparentSelectionMasks(KisLayerSP newLayer, const QVector<KisSelectionMaskSP> &selectionMasks)
 {
     KisImageSP image = newLayer->image();
-    foreach (KisSelectionMaskSP mask, selectionMasks) {
+    Q_FOREACH (KisSelectionMaskSP mask, selectionMasks) {
         image->undoAdapter()->addCommand(new KisImageLayerMoveCommand(image, mask, newLayer, newLayer->lastChild()));
         image->undoAdapter()->addCommand(new KisActivateSelectionMaskCommand(mask, false));
     }
@@ -1085,7 +1082,7 @@ KisNodeSP tryMergeSelectionMasks(KisImageSP image, QList<KisNodeSP> mergedNodes)
 
     QList<KisSelectionMaskSP> selectionMasks;
 
-    foreach (KisNodeSP node, mergedNodes) {
+    Q_FOREACH (KisNodeSP node, mergedNodes) {
         KisSelectionMaskSP mask = dynamic_cast<KisSelectionMask*>(node.data());
         if (!mask) return 0;
 
@@ -1097,7 +1094,7 @@ KisNodeSP tryMergeSelectionMasks(KisImageSP image, QList<KisNodeSP> mergedNodes)
 
     KisSelectionSP selection = new KisSelection();
 
-    foreach (KisMaskSP mask, selectionMasks) {
+    Q_FOREACH (KisMaskSP mask, selectionMasks) {
         selection->pixelSelection()->applySelection(
             mask->selection()->pixelSelection(), SELECTION_ADD);
     }
@@ -1141,7 +1138,7 @@ KisNodeSP KisImage::mergeMultipleLayers(QList<KisNodeSP> mergedNodes, KisNodeSP 
     QVector<KisSelectionMaskSP> selectionMasks;
     fetchSelectionMasks(mergedNodes, selectionMasks);
 
-    foreach (KisNodeSP layer, mergedNodes) {
+    Q_FOREACH (KisNodeSP layer, mergedNodes) {
         refreshHiddenArea(layer, bounds());
     }
 
@@ -1151,7 +1148,7 @@ KisNodeSP KisImage::mergeMultipleLayers(QList<KisNodeSP> mergedNodes, KisNodeSP 
     {
         KisImageBarrierLocker l(this);
 
-        foreach (KisNodeSP layer, mergedNodes) {
+        Q_FOREACH (KisNodeSP layer, mergedNodes) {
             QRect rc = layer->exactBounds() | bounds();
             layer->projectionPlane()->apply(&gc, rc);
         }
@@ -1366,8 +1363,10 @@ QImage KisImage::convertToQImage(const QSize& scaledImageSize, const KoColorProf
         return QImage();
     }
 
-    KisPaintDeviceSP dev = new KisPaintDevice(*projection().data());
-
+    KisPaintDeviceSP dev = new KisPaintDevice(colorSpace());
+    KisPainter gc;
+    gc.copyAreaOptimized(QPoint(0, 0), projection(), dev, bounds());
+    gc.end();
     double scaleX = qreal(scaledImageSize.width()) / width();
     double scaleY = qreal(scaledImageSize.height()) / height();
 
@@ -1375,6 +1374,8 @@ QImage KisImage::convertToQImage(const QSize& scaledImageSize, const KoColorProf
 
     KisTransformWorker worker(dev, scaleX, scaleY, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, updater, KisFilterStrategyRegistry::instance()->value("Bicubic"));
     worker.run();
+
+    delete updater;
 
     return dev->convertToQImage(profile);
 }
@@ -1800,7 +1801,7 @@ void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
         QRect boundRect = bounds();
         KisWrappedRect splitRect(rect, boundRect);
 
-        foreach (const QRect &rc, splitRect) {
+        Q_FOREACH (const QRect &rc, splitRect) {
             requestProjectionUpdateImpl(node, rc, boundRect);
         }
     } else {

@@ -46,13 +46,13 @@
 #include <klocalizedstring.h>
 #include <QDebug>
 
-FormattingPreview::FormattingPreview(QWidget* parent)
-        : QFrame(parent),
-        m_sampleText(i18n("Font")),
-        m_characterStyle(0),
-        m_paragraphStyle(0),
-        m_thumbnailer(new KoStyleThumbnailer()),
-        m_previewLayoutRequired(true)
+FormattingPreview::FormattingPreview(QWidget *parent)
+    : QFrame(parent)
+    , m_sampleText(i18n("Font"))
+    , m_characterStyle(0)
+    , m_paragraphStyle(0)
+    , m_thumbnailer(new KoStyleThumbnailer())
+    , m_previewLayoutRequired(true)
 {
     setFrameStyle(QFrame::Box | QFrame::Plain);
     setMinimumSize(500, 150);
@@ -82,7 +82,7 @@ void FormattingPreview::setText(const QString &sampleText)
 }
 
 //Character properties
-void FormattingPreview::setCharacterStyle(const KoCharacterStyle* style)
+void FormattingPreview::setCharacterStyle(const KoCharacterStyle *style)
 {
     if (m_characterStyle) {
         delete m_characterStyle;
@@ -120,7 +120,7 @@ void FormattingPreview::paintEvent(QPaintEvent *event)
     QRect rectang = contentsRect();
 
     p->fillRect(rectang, QBrush(QColor(Qt::white)));
-    p->drawImage(rectang, m_thumbnailer->thumbnail(m_characterStyle,m_paragraphStyle,rectang.size(),m_previewLayoutRequired, KoStyleThumbnailer::NoFlags));
+    p->drawImage(rectang, m_thumbnailer->thumbnail(m_characterStyle, m_paragraphStyle, rectang.size(), m_previewLayoutRequired, KoStyleThumbnailer::NoFlags));
 
     m_previewLayoutRequired = false;
 

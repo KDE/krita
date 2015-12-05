@@ -268,6 +268,21 @@ bool PSDResourceBlock::write(QIODevice* io)
         return false;
     }
 
+    if (identifier == PSDImageResourceSection::LAYER_STATE ||
+        identifier == PSDImageResourceSection::LAYER_GROUP ||
+        identifier == PSDImageResourceSection::LAYER_COMPS ||
+        identifier == PSDImageResourceSection::LAYER_GROUP_ENABLED_ID ||
+        identifier == PSDImageResourceSection::LAYER_SELECTION_ID) {
+
+        /**
+         * We can actually handle LAYER_SELECTION_ID. It consists
+         * of a number of layers and a list of IDs to select, which
+         * are retrieved from 'lyid' additional layer block.
+         */
+        dbgFile << "Skip writing resource block" << identifier << displayText();
+        return true;
+    }
+
     QByteArray ba;
 
     // createBlock returns true by default but does not change the data.

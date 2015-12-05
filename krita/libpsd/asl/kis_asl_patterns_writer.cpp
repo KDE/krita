@@ -179,13 +179,13 @@ void KisAslPatternsWriter::addPattern(const KoPattern *pattern)
                 KIS_ASSERT_RECOVER_RETURN(imagePlanes[i].size() == pattern->pattern().height());
 
                 if (isCompressed) {
-                    foreach(const QByteArray &compressedRow, imagePlanes[i]) {
+                    Q_FOREACH (const QByteArray &compressedRow, imagePlanes[i]) {
                         const quint16 compressionRowSize = compressedRow.size();
                         SAFE_WRITE_EX(m_device, compressionRowSize);
                     }
                 }
 
-                foreach(const QByteArray &rowData, imagePlanes[i]) {
+                Q_FOREACH (const QByteArray &rowData, imagePlanes[i]) {
                     int bytesWritten = m_device->write(rowData);
                     if (bytesWritten != rowData.size()) {
                         throw KisAslWriterUtils::ASLWriteException("Failed to write a compressed pattern plane");

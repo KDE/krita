@@ -86,8 +86,8 @@ public:
                   enumChannelType channelType, 
                   enumChannelValueType channelValueType,
                   qint32 size = -1, 
-                  QColor color = QColor(0, 0, 0),
-                  DoubleRange uiMinMax = DoubleRange())
+                  const QColor &color = QColor(0, 0, 0),
+                  const DoubleRange &uiMinMax = DoubleRange())
         : m_name(name)
         , m_pos(npos)
         , m_displayPosition(displayPosition)
@@ -164,7 +164,7 @@ public:
     /**
      * converts the display position to the pixel-order index in the channels vector.
      */
-    static int displayPositionToChannelIndex(int displayPosition, QList<KoChannelInfo*> channels) 
+    static int displayPositionToChannelIndex(int displayPosition, const QList<KoChannelInfo*> &channels)
     {
         for (int i = 0; i < channels.size(); ++i) {
             if (channels.at(i)->displayPosition() == displayPosition) {
@@ -174,11 +174,11 @@ public:
         return -1;
     }
     
-    static QList<KoChannelInfo*> displayOrderSorted(QList<KoChannelInfo*> channels) 
+    static QList<KoChannelInfo*> displayOrderSorted(const QList<KoChannelInfo*> &channels)
     {
         QList <KoChannelInfo*> sortedChannels;
         for (int i = 0; i < channels.size(); ++i) {
-            foreach(KoChannelInfo* channel, channels) {
+            Q_FOREACH (KoChannelInfo* channel, channels) {
                 if (channel->displayPosition() == i) {
                     sortedChannels << channel;
                     break;

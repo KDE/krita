@@ -329,7 +329,7 @@ void ColorSettingsTab::installProfile()
 
     QString saveLocation = KoResourcePaths::saveLocation("icc_profiles");
 
-    foreach (const QString &profileName, profileNames) {
+    Q_FOREACH (const QString &profileName, profileNames) {
         QUrl file(profileName);
         if (!QFile::copy(profileName, saveLocation + file.fileName())) {
             dbgKrita << "Could not install profile!";
@@ -364,7 +364,7 @@ void ColorSettingsTab::toggleAllowMonitorProfileSelection(bool useSystemProfile)
             for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
                 m_monitorProfileWidgets[i]->clear();
                 QString monitorForScreen = cfg.monitorForScreen(i, devices[i]);
-                foreach(const QString &device, devices) {
+                Q_FOREACH (const QString &device, devices) {
                     m_monitorProfileLabels[i]->setText(i18nc("The display/screen we got from Qt", "Screen %1:", i + 1));
                     m_monitorProfileWidgets[i]->addSqueezedItem(KisColorManager::instance()->deviceName(device), device);
                     if (devices[i] == monitorForScreen) {
@@ -422,7 +422,7 @@ void ColorSettingsTab::refillMonitorProfiles(const KoID & s)
 
     QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
 
-    foreach (const KoColorProfile *profile, profileList) {
+    Q_FOREACH (const KoColorProfile *profile, profileList) {
 //        //dbgKrita << "Profile" << profile->name() << profile->isSuitableForDisplay() << csf->defaultProfile();
         if (profile->isSuitableForDisplay()) {
             for (int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
@@ -448,7 +448,7 @@ void ColorSettingsTab::refillPrintProfiles(const KoID & s)
 
     QList<const KoColorProfile *> profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
 
-    foreach(const KoColorProfile *profile, profileList) {
+    Q_FOREACH (const KoColorProfile *profile, profileList) {
         if (profile->isSuitableForPrinting())
             m_page->cmbPrintProfile->addSqueezedItem(profile->name());
     }
@@ -588,6 +588,12 @@ void PerformanceTab::load(bool requestDefault)
 
     sliderSwapSize->setValue(cfg.maxSwapSize(requestDefault) / 1024);
     lblSwapFileLocation->setText(cfg.swapDir(requestDefault));
+
+    {
+        KisConfig cfg2;
+        chkOpenGLLogging->setChecked(cfg2.enableOpenGLDebugging(requestDefault));
+        chkDisableVectorOptimizations->setChecked(cfg2.enableAmdVectorizationWorkaround(requestDefault));
+    }
 }
 
 void PerformanceTab::save()
@@ -604,6 +610,12 @@ void PerformanceTab::save()
     cfg.setMaxSwapSize(sliderSwapSize->value() * 1024);
 
     cfg.setSwapDir(lblSwapFileLocation->text());
+
+    {
+        KisConfig cfg2;
+        cfg2.setEnableOpenGLDebugging(chkOpenGLLogging->isChecked());
+        cfg2.setEnableAmdVectorizationWorkaround(chkDisableVectorOptimizations->isChecked());
+    }
 }
 
 void PerformanceTab::selectSwapDir()
@@ -956,7 +968,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     connect(restoreDefaultsButton, SIGNAL(clicked(bool)), m_inputConfiguration, SLOT(setDefaults()));
 
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
-    foreach (KisAbstractPreferenceSetFactory *preferenceSetFactory, preferenceSetRegistry->values()) {
+    Q_FOREACH (KisAbstractPreferenceSetFactory *preferenceSetFactory, preferenceSetRegistry->values()) {
         KisPreferenceSet* preferenceSet = preferenceSetFactory->createPreferenceSet();
         vbox = new KoVBox();
         page = new KPageWidgetItem(vbox, preferenceSet->name());
@@ -1031,7 +1043,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setToolOptionsInDocker(dialog->m_general->toolOptionsInDocker());
         KisPart *part = KisPart::instance();
         if (part) {
-            foreach(QPointer<KisDocument> doc, part->documents()) {
+            Q_FOREACH (QPointer<KisDocument> doc, part->documents()) {
                 if (doc) {
                     doc->setAutoSave(dialog->m_general->autoSaveInterval());
                     doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());

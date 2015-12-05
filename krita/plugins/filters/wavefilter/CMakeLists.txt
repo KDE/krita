@@ -1,16 +1,16 @@
 
 
-set(kritawavefilter_PART_SRCS
+set(kritawavefilter_SOURCES
     wavefilter.cpp
     kis_wdg_wave.cpp
     )
 
 
-ki18n_wrap_ui(kritawavefilter_PART_SRCS
+ki18n_wrap_ui(kritawavefilter_SOURCES
     wdgwaveoptions.ui
     )
 
-add_library(kritawavefilter MODULE ${kritawavefilter_PART_SRCS})
+add_library(kritawavefilter MODULE ${kritawavefilter_SOURCES})
 kcoreaddons_desktop_to_json(kritawavefilter kritawavefilter.desktop)
 
 

@@ -46,16 +46,10 @@ K_PLUGIN_FACTORY_WITH_JSON(ColorRangeFactory, "kritacolorrange.json", registerPl
 ColorRange::ColorRange(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent)
 {
-    KisAction* action = new KisAction(i18n("Select from Color Range..."), this);
-    action->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    action->setActivationConditions(KisAction::SELECTION_EDITABLE);
-    addAction("colorrange", action);
+    KisAction* action = createAction("colorrange");
     connect(action, SIGNAL(triggered()), this, SLOT(slotActivated()));
 
-    action  = new KisAction(i18n("Select Opaque"), this);
-    action->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    action->setActivationConditions(KisAction::SELECTION_EDITABLE);
-    addAction("selectopaque", action);
+    action  = createAction("selectopaque");
     connect(action, SIGNAL(triggered()), this, SLOT(selectOpaque()));
 }
 

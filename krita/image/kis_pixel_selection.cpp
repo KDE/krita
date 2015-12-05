@@ -412,7 +412,7 @@ void KisPixelSelection::recalculateOutlineCache()
 
     m_d->outlineCache = QPainterPath();
 
-    foreach (const QPolygon &polygon, outline()) {
+    Q_FOREACH (const QPolygon &polygon, outline()) {
         m_d->outlineCache.addPolygon(polygon);
 
         /**

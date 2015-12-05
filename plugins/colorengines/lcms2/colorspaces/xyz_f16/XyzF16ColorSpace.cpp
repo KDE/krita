@@ -38,24 +38,23 @@ XyzF16ColorSpace::XyzF16ColorSpace(const QString &name, KoColorProfile *p) :
     addStandardCompositeOps<KoXyzF16Traits>(this);
 }
 
-
-
 bool XyzF16ColorSpace::willDegrade(ColorSpaceIndependence independence) const
 {
-    if (independence == TO_RGBA16)
+    if (independence == TO_RGBA16) {
         return true;
-    else
+    } else {
         return false;
+    }
 }
 
-KoColorSpace* XyzF16ColorSpace::clone() const
+KoColorSpace *XyzF16ColorSpace::clone() const
 {
     return new XyzF16ColorSpace(name(), profile()->clone());
 }
 
-void XyzF16ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+void XyzF16ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const
 {
-    const KoXyzF16Traits::Pixel* p = reinterpret_cast<const KoXyzF16Traits::Pixel*>(pixel);
+    const KoXyzF16Traits::Pixel *p = reinterpret_cast<const KoXyzF16Traits::Pixel *>(pixel);
     QDomElement labElt = doc.createElement("XYZ");
     labElt.setAttribute("x", KoColorSpaceMaths< KoXyzF16Traits::channels_type, qreal>::scaleToA(p->x));
     labElt.setAttribute("y", KoColorSpaceMaths< KoXyzF16Traits::channels_type, qreal>::scaleToA(p->y));
@@ -64,9 +63,9 @@ void XyzF16ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomEl
     colorElt.appendChild(labElt);
 }
 
-void XyzF16ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
+void XyzF16ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
-    KoXyzF16Traits::Pixel* p = reinterpret_cast<KoXyzF16Traits::Pixel*>(pixel);
+    KoXyzF16Traits::Pixel *p = reinterpret_cast<KoXyzF16Traits::Pixel *>(pixel);
     p->x = KoColorSpaceMaths< qreal, KoXyzF16Traits::channels_type >::scaleToA(elt.attribute("x").toDouble());
     p->y = KoColorSpaceMaths< qreal, KoXyzF16Traits::channels_type >::scaleToA(elt.attribute("y").toDouble());
     p->z = KoColorSpaceMaths< qreal, KoXyzF16Traits::channels_type >::scaleToA(elt.attribute("z").toDouble());

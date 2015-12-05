@@ -1,8 +1,8 @@
 
-set(kritaoilpaintfilter_PART_SRCS kis_oilpaint_filter_plugin.cpp kis_oilpaint_filter.cpp )
+set(kritaoilpaintfilter_SOURCES kis_oilpaint_filter_plugin.cpp kis_oilpaint_filter.cpp )
 
 
-add_library(kritaoilpaintfilter MODULE ${kritaoilpaintfilter_PART_SRCS})
+add_library(kritaoilpaintfilter MODULE ${kritaoilpaintfilter_SOURCES})
 kcoreaddons_desktop_to_json(kritaoilpaintfilter kritaoilpaintfilter.desktop)
 
 

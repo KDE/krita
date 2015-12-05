@@ -22,14 +22,13 @@
 
 #include <KoToolFactoryBase.h>
 
-
 class ReviewToolFactory : public KoToolFactoryBase
 {
 public:
     ReviewToolFactory();
     ~ReviewToolFactory();
 
-    KoToolBase * createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas);
 };
 
 #endif

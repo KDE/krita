@@ -1,4 +1,4 @@
 #! /bin/sh
-source ../../calligra_xgettext.sh
+source ../../krita_xgettext.sh
 
-calligra_xgettext krita_shape_vector.pot *.cpp
+krita_xgettext krita_shape_vector.pot *.cpp

@@ -38,7 +38,7 @@ void KoInputDeviceHandlerRegistry::init()
     KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Device"),
                                      QString::fromLatin1("[X-Flake-PluginVersion] == 28"), config);
 
-    foreach(const QString & id, keys()) {
+    Q_FOREACH (const QString & id, keys()) {
         KoInputDeviceHandler * d = value(id);
         if (d)
             d->start();
@@ -47,13 +47,13 @@ void KoInputDeviceHandlerRegistry::init()
 
 KoInputDeviceHandlerRegistry::~KoInputDeviceHandlerRegistry()
 {
-    foreach(const QString & id, keys()) {
+    Q_FOREACH (const QString & id, keys()) {
         KoInputDeviceHandler * d = value(id);
         if (d) {
             d->stop();
         }
     }
-    foreach(const QString &id, keys()) {
+    Q_FOREACH (const QString &id, keys()) {
         get(id)->deleteLater();
     }
     // just leak on exit -- we get into trouble for explicitly

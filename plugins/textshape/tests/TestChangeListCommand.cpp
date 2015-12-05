@@ -14,7 +14,6 @@
 #include <QTextCursor>
 #include <QTextList>
 
-
 void TestChangeListCommand::addList()
 {
     QTextDocument doc;

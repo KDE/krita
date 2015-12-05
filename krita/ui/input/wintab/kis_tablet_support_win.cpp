@@ -33,6 +33,8 @@
 #include <QDesktopWidget>
 
 #include <qpa/qwindowsysteminterface.h>
+#include <qpa/qplatformscreen.h>
+#include <private/qguiapplication_p.h>
 
 #include <QScreen>
 #include <QWidget>
@@ -47,6 +49,7 @@
 #include <KoToolManager.h>
 #include <KoInputDevice.h>
 #include "kis_screen_size_choice_dialog.h"
+
 
 // NOTE: we stub out qwindowcontext.cpp::347 to disable Qt's own tablet support.
 
@@ -72,6 +75,9 @@ enum {
  */
 
 QWindowsTabletSupport *QTAB = 0;
+static QWidget *targetWindow = 0; //< Window receiving last tablet event
+static QWidget *qt_tablet_target = 0; //< Widget receiving last tablet event
+
 
 HWND createDummyWindow(const QString &className, const wchar_t *windowName, WNDPROC wndProc)
 {
@@ -195,6 +201,71 @@ void KisTabletSupportWin::init()
     QTAB = QWindowsTabletSupport::create();
     qApp->installEventFilter(globalEventEater);
 }
+
+
+// Derived from qwidgetwindow.
+//
+// The work done by processTabletEvent from qguiapplicationprivate is divided
+// between here and translateTabletPacketEvent.
+static void handleTabletEvent(QWidget *windowWidget, const QPointF &local, const QPointF &global,
+                               int device, int pointerType, Qt::MouseButton button, Qt::MouseButtons buttons,
+                               qreal pressure,int xTilt, int yTilt, qreal tangentialPressure, qreal rotation,
+                               int z, qint64 uniqueId, Qt::KeyboardModifiers modifiers, QEvent::Type type)
+{
+    // Lock in target window
+    if (type == QEvent::TabletPress) {
+        targetWindow = windowWidget;
+    } else {
+        if (type == QEvent::TabletRelease)
+            targetWindow = 0;
+    }
+    if (!windowWidget) // Should never happen
+        return;
+
+
+    // We do this instead of constructing the event e beforehand
+    QPoint localPos = local.toPoint();
+    QPoint globalPos = global.toPoint();
+
+    if (type == QEvent::TabletPress) {
+        QWidget *widget = windowWidget->childAt(localPos);
+        if (!widget)
+            widget = windowWidget;
+        qt_tablet_target = widget;
+    }
+
+    QWidget *finalDestination = qt_tablet_target;
+    if (!finalDestination) {
+        finalDestination = windowWidget->childAt(localPos);
+    }
+
+    if (finalDestination) {
+        // The event was specified relative to windowWidget, so we remap it
+        QPointF delta = global - globalPos;
+        QPointF mapped = finalDestination->mapFromGlobal(global.toPoint()) + delta;
+        QTabletEvent ev(type, mapped, global, device, pointerType, pressure, xTilt, yTilt,
+                        tangentialPressure, rotation, z, modifiers, uniqueId, button, buttons);
+        ev.setTimestamp(QWindowSystemInterfacePrivate::eventTime.elapsed());
+        QGuiApplication::sendEvent(finalDestination, &ev);
+
+
+        if (ev.isAccepted()) {
+            // dbgInput << "Tablet event" << type << "accepted" << "by target widget" << finalDestination;
+            globalEventEater->activate();
+        }
+        else {
+            // Turn off eventEater send a synthetic mouse event.
+            // dbgInput << "Tablet event" << type << "rejected; sending mouse event to" << finalDestination;
+            globalEventEater->deactivate();
+            QMouseEvent m(mouseEventType(type), mapped, button, buttons, modifiers);
+            QGuiApplication::sendEvent(finalDestination, &m);
+        }
+    }
+
+    if (type == QEvent::TabletRelease && buttons == Qt::NoButton)
+        qt_tablet_target = 0;
+}
+
 
 /*
  *
@@ -530,11 +601,13 @@ bool QWindowsTabletSupport::translateTabletProximityEvent(WPARAM /* wParam */, L
 bool QWindowsTabletSupport::translateTabletPacketEvent()
 {
     static PACKET localPacketBuf[TabletPacketQSize];  // our own tablet packet queue.
+    static QPlatformScreen *platformScreen = qApp->primaryScreen()->handle();
     const int packetCount = QWindowsTabletSupport::m_winTab32DLL.wTPacketsGet(m_context, TabletPacketQSize, &localPacketBuf);
     if (!packetCount || m_currentDevice < 0)
         return false;
-    const qreal dpr = qApp->primaryScreen()->devicePixelRatio();
 
+    // In contrast to Qt, these will not be "const" during our loop.
+    // This is because the Surface Pro 3 may cause us to switch devices.
     QWindowsTabletDeviceData tabletData = m_devices.at(m_currentDevice);
     int currentDevice  = tabletData.currentDevice;
     int currentPointerType = tabletData.currentPointerType;
@@ -553,9 +626,10 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
     //    in which case we snap the position to the mouse position.
     // It seems there is no way to find out the mode programmatically, the LOGCONTEXT orgX/Y/Ext
     // area is always the virtual desktop.
+    const qreal dpr = qApp->primaryScreen()->devicePixelRatio();
     const QRect virtualDesktopArea = mapToNative(qApp->primaryScreen()->virtualGeometry(), dpr);
 
-    Qt::KeyboardModifiers keyboardModifiers = QApplication::queryKeyboardModifiers();
+    const Qt::KeyboardModifiers keyboardModifiers = QApplication::queryKeyboardModifiers();
 
     for (int i = 0; i < packetCount; ++i) {
         const PACKET &packet = localPacketBuf[i];
@@ -604,35 +678,24 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
             globalPosF = globalPos;
         }
 
-        // Older window-targeting code
-        // QWindow *target = QGuiApplicationPrivate::tabletPressTarget; // Pass to window that grabbed it.
-        //if (!target)
-        //	target = QWindowsScreen::windowAt(globalPos, CWP_SKIPINVISIBLE | CWP_SKIPTRANSPARENT);
-        //if (!target)
-        //	continue;
+        // Find top-level window
+        QWidget *w = targetWindow; // Pass to window that grabbed it.
+        if (!w) w = qApp->activePopupWidget();
+        if (!w) w = qApp->activeModalWidget();
+        if (!w) w = qApp->topLevelAt(globalPos);
+        if (!w) w = qApp->activeWindow();
+        if (!w) continue;
 
-        QWidget *w = targetWidget;
-        if (!w) w  = QApplication::activePopupWidget();
-        if (!w) w  = QApplication::activeModalWidget();
-        if (!w) w  = qApp->widgetAt(globalPos);
-        if (!w) w  = qApp->activeWindow();
+        w = w->window();
 
-        if (type == QEvent::TabletPress) {
-            targetWidget = w;
-        }
-        else if (type == QEvent::TabletRelease && targetWidget) {
-            targetWidget = 0;
-        }
         const QPoint localPos = w->mapFromGlobal(globalPos);
 
-
-        const qreal pressureNew = packet.pkButtons &&
-            (currentPointerType == QTabletEvent::Pen || currentPointerType == QTabletEvent::Eraser) ?
-            tabletData.scalePressure(packet.pkNormalPressure) :
-            qreal(0);
+        const qreal pressureNew = packet.pkButtons && (currentPointerType == QTabletEvent::Pen || currentPointerType == QTabletEvent::Eraser) ?
+                                  m_devices.at(m_currentDevice).scalePressure(packet.pkNormalPressure) :
+                                  qreal(0);
         const qreal tangentialPressure = currentDevice == QTabletEvent::Airbrush ?
-            tabletData.scaleTangentialPressure(packet.pkTangentPressure) :
-            qreal(0);
+                                         m_devices.at(m_currentDevice).scaleTangentialPressure(packet.pkTangentPressure) :
+                                         qreal(0);
 
         int tiltX = 0;
         int tiltY = 0;
@@ -672,25 +735,11 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
         const QPointF globalPosDip = globalPosF / dpr;
 
 
-
-        // Reusable helper function: send a tablet event, if that is rejected,
-        // send a mouse event instead. Closures are your friend!
-        auto trySendTabletEvent = [&](QTabletEvent::Type t){
-            // First, try sending a tablet event.
-            QTabletEvent e(t, localPosDip, globalPosDip, currentDevice, currentPointerType,
-                           pressureNew, tiltX, tiltY, tangentialPressure, rotation, z,
-                           keyboardModifiers, tabletData.uniqueId, button, buttons);
-            qApp->sendEvent(w, &e);
-
-            if (e.isAccepted()) {
-                globalEventEater->activate();
-            }
-            else {
-                // Turn off eventEater send a synthetic mouse event.
-                globalEventEater->deactivate();
-                QMouseEvent m(mouseEventType(t), localPosDip, button, buttons, keyboardModifiers);
-                qApp->sendEvent(w, &e);
-            }
+        // Reusable helper function. Better than compiler macros!
+        auto sendTabletEvent = [&](QTabletEvent::Type t){
+            handleTabletEvent(w, localPosDip, globalPosDip, currentDevice, currentPointerType,
+                               button, buttons, pressureNew, tiltX, tiltY, tangentialPressure, rotation, z,
+                               m_devices.at(m_currentDevice).uniqueId, keyboardModifiers, t);
         };
 
         /**
@@ -701,7 +750,7 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
         if (isSurfacePro3 && (packet.pkCursor != currentPkCursor)) {
 
             // Send tablet release event.
-            trySendTabletEvent(QTabletEvent::TabletRelease);
+            sendTabletEvent(QTabletEvent::TabletRelease);
 
             // Read the new cursor info.
             UINT pkCursor = packet.pkCursor;
@@ -717,22 +766,17 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
             currentDevice  = deviceType(tabletData.currentDevice);
             currentPointerType = pointerType(pkCursor);
 
-            // Hack. Don't do this right now.
-            // dbgInput << "Cursor updated. Requesting input device switch.";
-            // KoInputDevice id((QTabletEvent::TabletDevice)currentDevice,
-            // 	 (QTabletEvent::PointerType)currentPointerType,
-            // 	 uniqueId);
-            // KoToolManager::instance()->switchInputDeviceRequested(id);
-
-            trySendTabletEvent(QTabletEvent::TabletPress);
+            sendTabletEvent(QTabletEvent::TabletPress);
         }
 
-
-        trySendTabletEvent(type);
+        sendTabletEvent(type);
 
     } // Loop over packets
     return true;
 }
+
+
+
 
 
 void QWindowsTabletSupport::tabletUpdateCursor(const quint64 uniqueId,

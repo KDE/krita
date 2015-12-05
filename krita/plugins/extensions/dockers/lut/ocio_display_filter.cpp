@@ -30,6 +30,8 @@
 #ifdef HAVE_OPENGL
 #include <opengl/kis_opengl.h>
 #include <QOpenGLContext>
+#include <QOpenGLFunctions>
+#include <QOpenGLFunctions_2_0>
 #endif
 
 
@@ -42,9 +44,9 @@ OcioDisplayFilter::OcioDisplayFilter(KisExposureGammaCorrectionInterface *interf
     , view(0)
     , swizzle(RGBA)
     , m_interface(interface)
-#ifdef HAVE_OPENGL
+    #ifdef HAVE_OPENGL
     , m_lut3dTexID(0)
-#endif
+    #endif
 {
 }
 
@@ -245,26 +247,28 @@ void OcioDisplayFilter::updateProcessor()
     KisConfig cfg;
     if (!cfg.useOpenGL()) return;
 
+    QOpenGLFunctions glFuncs(QOpenGLContext::currentContext());
+    QOpenGLFunctions_2_0 glFuncs2;
     const int lut3DEdgeSize = cfg.ocioLutEdgeSize();
 
     if (m_lut3d.size() == 0) {
         //dbgKrita << "generating lut";
-        glGenTextures(1, &m_lut3dTexID);
+        glFuncs.glGenTextures(1, &m_lut3dTexID);
 
         int num3Dentries = 3 * lut3DEdgeSize * lut3DEdgeSize * lut3DEdgeSize;
         m_lut3d.fill(0.0, num3Dentries);
 
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_3D, m_lut3dTexID);
+        glFuncs.glActiveTexture(GL_TEXTURE1);
+        glFuncs.glBindTexture(GL_TEXTURE_3D, m_lut3dTexID);
 
-        glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-        glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB16F_ARB,
-                     lut3DEdgeSize, lut3DEdgeSize, lut3DEdgeSize,
-                     0, GL_RGB, GL_FLOAT, &m_lut3d.constData()[0]);
+        glFuncs.glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glFuncs.glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glFuncs.glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glFuncs.glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glFuncs.glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+        glFuncs2.glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB16F_ARB,
+                              lut3DEdgeSize, lut3DEdgeSize, lut3DEdgeSize,
+                              0, GL_RGB, GL_FLOAT, &m_lut3d.constData()[0]);
     }
 
     // Step 1: Create a GPU Shader Description
@@ -287,11 +291,11 @@ void OcioDisplayFilter::updateProcessor()
         m_lut3dcacheid = lut3dCacheID;
         m_processor->getGpuLut3D(&m_lut3d[0], shaderDesc);
 
-        glBindTexture(GL_TEXTURE_3D, m_lut3dTexID);
-        glTexSubImage3D(GL_TEXTURE_3D, 0,
-                        0, 0, 0,
-                        lut3DEdgeSize, lut3DEdgeSize, lut3DEdgeSize,
-                        GL_RGB, GL_FLOAT, &m_lut3d[0]);
+        glFuncs.glBindTexture(GL_TEXTURE_3D, m_lut3dTexID);
+        glFuncs2.glTexSubImage3D(GL_TEXTURE_3D, 0,
+                                 0, 0, 0,
+                                 lut3DEdgeSize, lut3DEdgeSize, lut3DEdgeSize,
+                                 GL_RGB, GL_FLOAT, &m_lut3d[0]);
     }
 
 

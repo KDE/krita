@@ -51,7 +51,7 @@ KoPointerEvent* KisScratchPadEventFilter::createTabletEvent(QEvent *event)
 {
     qDebug() << "Dispatching tablet event to KisScratchPad";
     QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
-    const QPointF pos = tabletEvent->hiResGlobalPos() - parentWidget()->mapToGlobal(QPoint());
+    const QPointF pos = tabletEvent->hiResGlobalPos();
 
     KoPointerEvent *ev = new KoPointerEvent(tabletEvent, m_widgetToDocument.map(pos));
     ev->setTabletButton(Qt::LeftButton);

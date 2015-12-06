@@ -18,10 +18,8 @@
 #include "SketchDeclarativeView.h"
 
 #include <QWidget>
-#include <QGLWidget>
-#include <QGLFramebufferObject>
 #include <QResizeEvent>
-#include <QGraphicsItem>
+#include <QPaintEngine>
 
 #include "kis_coordinates_converter.h"
 #include "kis_config.h"

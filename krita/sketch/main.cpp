@@ -103,8 +103,9 @@ int main( int argc, char** argv )
 
     QStringList fileNames;
     Q_FOREACH (const QString &fileName, parser.positionalArguments()) {
-        if (QFile::exists(fileName)) {
-            fileNames << fileName;
+        const QString absoluteFilePath = QDir::current().absoluteFilePath(fileName);
+        if (QFile::exists(absoluteFilePath)) {
+            fileNames << absoluteFilePath;
         }
     }
 

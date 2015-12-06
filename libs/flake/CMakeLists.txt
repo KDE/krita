@@ -209,10 +209,6 @@ generate_export_header(kritaflake BASE_NAME kritaflake)
 target_link_libraries(kritaflake kritapigment kritawidgetutils kritaodf kritaundo2 KF5::WidgetsAddons Qt5::Svg)
 target_link_libraries(kritaflake LINK_INTERFACE_LIBRARIES kritapigment kritawidgetutils kritaodf kritaundo2 KF5::WidgetsAddons )
 
-if(HAVE_OPENGL)
-    target_link_libraries(kritaflake ${OPENGL_LIBRARIES} Qt5::OpenGL)
-endif()
-
 set_target_properties(kritaflake PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )

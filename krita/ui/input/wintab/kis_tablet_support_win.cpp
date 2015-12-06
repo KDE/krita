@@ -212,20 +212,23 @@ static void handleTabletEvent(QWidget *windowWidget, const QPointF &local, const
                                qreal pressure,int xTilt, int yTilt, qreal tangentialPressure, qreal rotation,
                                int z, qint64 uniqueId, Qt::KeyboardModifiers modifiers, QEvent::Type type)
 {
+    static QPlatformScreen *platformScreen = qApp->primaryScreen()->handle();
+
     // Lock in target window
     if (type == QEvent::TabletPress) {
         targetWindow = windowWidget;
-    } else {
-        if (type == QEvent::TabletRelease)
-            targetWindow = 0;
+        dbgInput << "Locking target window" << targetWindow;
+    } else if ((type == QEvent::TabletRelease || buttons == Qt::NoButton) && (targetWindow != 0)) {
+        dbgInput << "Releasing target window" << targetWindow;
+        targetWindow = 0;
     }
     if (!windowWidget) // Should never happen
         return;
 
 
     // We do this instead of constructing the event e beforehand
-    QPoint localPos = local.toPoint();
-    QPoint globalPos = global.toPoint();
+    const QPoint localPos = local.toPoint();
+    const QPoint globalPos = global.toPoint();
 
     if (type == QEvent::TabletPress) {
         QWidget *widget = windowWidget->childAt(localPos);
@@ -237,6 +240,12 @@ static void handleTabletEvent(QWidget *windowWidget, const QPointF &local, const
     QWidget *finalDestination = qt_tablet_target;
     if (!finalDestination) {
         finalDestination = windowWidget->childAt(localPos);
+    }
+
+
+    if ((type == QEvent::TabletRelease || buttons == Qt::NoButton) && (qt_tablet_target != 0)) {
+        dbgInput << "releasing tablet target" << qt_tablet_target;
+        qt_tablet_target = 0;
     }
 
     if (finalDestination) {
@@ -257,13 +266,24 @@ static void handleTabletEvent(QWidget *windowWidget, const QPointF &local, const
             // Turn off eventEater send a synthetic mouse event.
             // dbgInput << "Tablet event" << type << "rejected; sending mouse event to" << finalDestination;
             globalEventEater->deactivate();
-            QMouseEvent m(mouseEventType(type), mapped, button, buttons, modifiers);
-            QGuiApplication::sendEvent(finalDestination, &m);
+            // QMouseEvent m(mouseEventType(type), mapped, button, buttons, modifiers);
+            // QGuiApplication::sendEvent(finalDestination, &m);
+
+            // We shouldn't ever get a widget accepting a tablet event from this
+            // call, so we won't worry about any interactions with our own
+            // widget-locking code.
+            QWindow *target = platformScreen->topLevelAt(globalPos);
+            if (!target) return;
+            QPointF windowLocal = global - QPointF(target->mapFromGlobal(QPoint())) + delta;
+            QWindowSystemInterface::handleTabletEvent(target, ev.timestamp(), windowLocal,
+                                                      global, device, pointerType,
+                                                      buttons, pressure, xTilt, yTilt,
+                                                      tangentialPressure, rotation, z,
+                                                      uniqueId, modifiers);
+
         }
     }
 
-    if (type == QEvent::TabletRelease && buttons == Qt::NoButton)
-        qt_tablet_target = 0;
 }
 
 
@@ -601,7 +621,6 @@ bool QWindowsTabletSupport::translateTabletProximityEvent(WPARAM /* wParam */, L
 bool QWindowsTabletSupport::translateTabletPacketEvent()
 {
     static PACKET localPacketBuf[TabletPacketQSize];  // our own tablet packet queue.
-    static QPlatformScreen *platformScreen = qApp->primaryScreen()->handle();
     const int packetCount = QWindowsTabletSupport::m_winTab32DLL.wTPacketsGet(m_context, TabletPacketQSize, &localPacketBuf);
     if (!packetCount || m_currentDevice < 0)
         return false;
@@ -749,6 +768,7 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
          */
         if (isSurfacePro3 && (packet.pkCursor != currentPkCursor)) {
 
+            dbgInput << "Got an inline tool switch.";
             // Send tablet release event.
             sendTabletEvent(QTabletEvent::TabletRelease);
 

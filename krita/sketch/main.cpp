@@ -34,6 +34,7 @@
 #include <calligraversion.h>
 #include <calligragitversion.h>
 #include <opengl/kis_opengl.h>
+#include <kis_icon.h>
 
 #include "MainWindow.h"
 
@@ -84,6 +85,7 @@ int main( int argc, char** argv )
 
     SketchApplication app(argc, argv);
     KAboutData::setApplicationData( aboutData );
+    app.setWindowIcon(KisIconUtils::loadIcon("kritasketch"));
 
     QCommandLineParser parser;
     aboutData.setupCommandLine(&parser);

@@ -818,8 +818,10 @@ void QWindowsTabletSupport::tabletUpdateCursor(const quint64 uniqueId,
     QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEVICES, DVC_NAME, dvcName);
     QString qDvcName = QString::fromWCharArray((const wchar_t*)dvcName);
     dbgInput << "DVC_NAME =" << qDvcName;
-    if (qDvcName == QString::fromLatin1("N-trig DuoSense device")) {
-        dbgInput << "Setting inline switching to true.";
+    // Name changed between older and newer Surface Pro 3 drivers
+    if (qDvcName == QString::fromLatin1("N-trig DuoSense device") ||
+        qDvcName == QString::fromLatin1("Microsoft device")) {
+        dbgInput << "This looks like a Surface Pro 3. Enabling eraser workaround.";
         isSurfacePro3 = true;
     } else {
         isSurfacePro3 = false;

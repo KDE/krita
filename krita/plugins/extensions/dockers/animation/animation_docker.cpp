@@ -192,7 +192,9 @@ void AnimationDocker::setMainWindow(KisViewManager *view)
     actionManager->addAction("add_duplicate_frame", m_addDuplicateFrameAction);
     actionManager->addAction("delete_keyframe", m_deleteKeyframeAction);
 
+    slotUpdateIcons();
     connect(view->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotUpdateIcons()));
+
 
     m_mainWindow = view->mainWindow();
 }

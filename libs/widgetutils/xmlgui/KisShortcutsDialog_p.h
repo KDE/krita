@@ -35,7 +35,7 @@
 #include <QModelIndex>
 #include <QtCore/QList>
 #include <QtCore/QCollator>
-#include <QGroupBox>
+#include <QHBoxLayout>
 
 class QLabel;
 class QTreeWidget;
@@ -97,9 +97,7 @@ public:
     KisShortcutsDialog *q;
     KisShortcutsEditor *m_shortcutsEditor;
     bool m_saveSettings{false};
-    QPushButton *m_detailsButton;
 
-    void toggleDetails();
     KShortcutSchemesEditor *m_schemeEditor{0};
 };
 
@@ -238,7 +236,7 @@ private:
     QObject *m_action;
 };
 
-class KShortcutSchemesEditor: public QGroupBox
+class KShortcutSchemesEditor: public QHBoxLayout
 {
     Q_OBJECT
 public:
@@ -267,6 +265,7 @@ private:
     QComboBox *m_schemesList;
 
     KisShortcutsDialog *m_dialog;
+    QHash<QString, QString> m_schemeFileLocations;
 };
 
 

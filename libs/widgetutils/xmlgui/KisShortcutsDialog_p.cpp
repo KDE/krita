@@ -99,12 +99,4 @@ void KisShortcutsDialog::KisShortcutsDialogPrivate::save()
     emit q->saved();
 };
 
-void KisShortcutsDialog::KisShortcutsDialogPrivate::toggleDetails()
-{
-    const bool isVisible = m_schemeEditor->isVisible();
-
-    m_schemeEditor->setVisible(!isVisible);
-    m_detailsButton->setText(i18n("&Details") + (isVisible ? QStringLiteral(" >>") : QLatin1String(" <<")));
-}
-
 #include "moc_KisShortcutsDialog_p.cpp"

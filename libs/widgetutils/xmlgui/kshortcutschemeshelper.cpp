@@ -32,22 +32,13 @@
 #include "kactioncollection.h"
 #include "kxmlguiclient.h"
 
+#include "KoResourcePaths.h"
+
 bool KShortcutSchemesHelper::exportActionCollection(KActionCollection *collection,
         const QString &schemeName, const QString &dir)
 {
-    const KXMLGUIClient *client = collection->parentGUIClient();
-    if (!client) {
-        return false;
-    }
 
-    QString schemeFileName;
-    if (!dir.isEmpty()) {
-        const QString dirPath = dir + QStringLiteral("shortcuts/");
-        QDir().mkpath(dirPath);
-        schemeFileName = dirPath + client->componentName() + schemeName;
-    } else {
-        schemeFileName = shortcutSchemeFileName(client, schemeName);
-    }
+    QString schemeFileName = shortcutSchemeFileName(schemeName);
     QFile schemeFile(schemeFileName);
     if (!schemeFile.open(QFile::WriteOnly | QFile::Truncate)) {
         return false;
@@ -55,7 +46,7 @@ bool KShortcutSchemesHelper::exportActionCollection(KActionCollection *collectio
     QDomDocument doc;
     QDomElement docElem = doc.createElement(QStringLiteral("kpartgui"));
     docElem.setAttribute(QStringLiteral("version"), QLatin1String("1"));
-    docElem.setAttribute(QStringLiteral("name"), client->componentName());
+    docElem.setAttribute(QStringLiteral("name"), QCoreApplication::applicationName());
     doc.appendChild(docElem);
     QDomElement elem = doc.createElement(QStringLiteral("ActionProperties"));
     docElem.appendChild(elem);
@@ -86,15 +77,8 @@ QString KShortcutSchemesHelper::currentShortcutSchemeName()
     return KSharedConfig::openConfig()->group("Shortcut Schemes").readEntry("Current Scheme", "Default");
 }
 
-QString KShortcutSchemesHelper::shortcutSchemeFileName(const KXMLGUIClient *client, const QString &schemeName)
+QString KShortcutSchemesHelper::shortcutSchemeFileName(const QString &schemeName)
 {
-    return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') +
-           client->componentName() + QStringLiteral("/shortcuts/") +
-           client->componentName() + schemeName;
-}
-
-QString KShortcutSchemesHelper::applicationShortcutSchemeFileName(const QString &schemeName)
-{
-    return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') +
-           QCoreApplication::applicationName() + schemeName;
+    // Create a directory if one cannot be found.
+    return KoResourcePaths::locateLocal("kis_shortcuts", schemeName, true);
 }

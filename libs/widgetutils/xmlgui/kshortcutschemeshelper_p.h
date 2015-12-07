@@ -49,12 +49,7 @@ public:
     /**
      * @return the name of the (writable) file to save the shortcut scheme to.
     */
-    static QString shortcutSchemeFileName(const KXMLGUIClient *client, const QString &schemeName);
-
-    /**
-     * @return the name of the scheme file for application itself.
-    */
-    static QString applicationShortcutSchemeFileName(const QString &schemeName);
+    static QString shortcutSchemeFileName(const QString &schemeName);
 
     static bool saveShortcutScheme();
 };

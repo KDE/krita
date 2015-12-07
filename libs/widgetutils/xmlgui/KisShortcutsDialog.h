@@ -179,6 +179,8 @@ public Q_SLOTS:
     ///@reimp
     void accept() Q_DECL_OVERRIDE;
 
+    void allDefault();
+
 Q_SIGNALS:
     ///emitted after OK is clicked and settings are saved
     void saved();
@@ -186,7 +188,6 @@ Q_SIGNALS:
 private:
     Q_PRIVATE_SLOT(d, void changeShortcutScheme(const QString &))
     Q_PRIVATE_SLOT(d, void undo())
-    Q_PRIVATE_SLOT(d, void toggleDetails())
 
     class KisShortcutsDialogPrivate;
     class KisShortcutsDialogPrivate *const d;

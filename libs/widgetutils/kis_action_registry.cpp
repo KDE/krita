@@ -121,6 +121,8 @@ KisActionRegistry::KisActionRegistry()
 {
     d->loadActionFiles();
     d->loadCustomShortcuts();
+
+    KoResourcePaths::addResourceType("kis_shortcuts", "data", "krita/shortcuts/");
 }
 
 // Not the most efficient logic, but simple and readable.

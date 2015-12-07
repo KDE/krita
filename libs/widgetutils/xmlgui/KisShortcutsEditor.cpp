@@ -254,8 +254,6 @@ void KisShortcutsEditor::save()
     commit();
 }
 
-//From 2007-ish:
-// There was once a crash where these items were deleted too early by Qt.
 void KisShortcutsEditor::undo()
 {
     for (QTreeWidgetItemIterator it(d->ui.list); (*it); ++it) {

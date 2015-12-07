@@ -33,8 +33,8 @@ set(kritawidgetutils_LIB_SRCS
     xmlgui/KisShortcutsEditor.cpp
     xmlgui/KisShortcutsEditor_p.cpp
 
-    # xmlgui/kshortcutschemeseditor.cpp
-    # xmlgui/kshortcutschemeshelper.cpp
+    xmlgui/kshortcutschemeseditor.cpp
+    xmlgui/kshortcutschemeshelper.cpp
 
     xmlgui/kaboutkdedialog_p.cpp
     xmlgui/kactioncategory.cpp

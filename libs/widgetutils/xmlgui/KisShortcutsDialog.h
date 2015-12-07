@@ -145,6 +145,17 @@ public:
     QSize sizeHint() const Q_DECL_OVERRIDE;
 
 
+
+    /**
+     * Import shortcut scheme file from @p path
+     */
+    void importConfiguration(const QString &path);
+
+    /**
+     * Exports shortcut scheme file to @p path
+     */
+    void exportConfiguration(const QString &path) const;
+
     /**
      * Pops up a modal (blocking) dialog for configuring key settings. The new
      * shortcut settings will become active if the user presses OK.
@@ -175,6 +186,7 @@ Q_SIGNALS:
 private:
     Q_PRIVATE_SLOT(d, void changeShortcutScheme(const QString &))
     Q_PRIVATE_SLOT(d, void undo())
+    Q_PRIVATE_SLOT(d, void toggleDetails())
 
     class KisShortcutsDialogPrivate;
     class KisShortcutsDialogPrivate *const d;

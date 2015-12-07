@@ -46,6 +46,7 @@ class KActionCollection;
 class QPushButton;
 class QComboBox;
 class KisShortcutsDialog;
+class KShortcutSchemesEditor;
 class QAction;
 
 
@@ -96,6 +97,10 @@ public:
     KisShortcutsDialog *q;
     KisShortcutsEditor *m_shortcutsEditor;
     bool m_saveSettings{false};
+    QPushButton *m_detailsButton;
+
+    void toggleDetails();
+    KShortcutSchemesEditor *m_schemeEditor{0};
 };
 
 
@@ -233,6 +238,36 @@ private:
     QObject *m_action;
 };
 
+class KShortcutSchemesEditor: public QGroupBox
+{
+    Q_OBJECT
+public:
+    KShortcutSchemesEditor(KisShortcutsDialog *parent);
+
+    /** @return the currently selected scheme in the editor (may differ from current app's scheme.*/
+    QString currentScheme();
+
+private Q_SLOTS:
+    void newScheme();
+    void deleteScheme();
+    void exportShortcutsScheme();
+    void saveAsDefaultsForScheme();
+    void importShortcutsScheme();
+
+Q_SIGNALS:
+    void shortcutsSchemeChanged(const QString &);
+
+protected:
+    void updateDeleteButton();
+
+private:
+    QPushButton *m_newScheme;
+    QPushButton *m_deleteScheme;
+    QPushButton *m_exportScheme;
+    QComboBox *m_schemesList;
+
+    KisShortcutsDialog *m_dialog;
+};
 
 
 #endif /* KISSHORTCUTSDIALOG_P_H */

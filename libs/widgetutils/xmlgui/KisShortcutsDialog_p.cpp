@@ -24,7 +24,7 @@
 #include "kxmlguifactory.h"
 #include <QAction>
 #include <QApplication>
-
+#include <QDebug>
 
 
 
@@ -45,6 +45,10 @@ KisShortcutsDialog::KisShortcutsDialogPrivate::KisShortcutsDialogPrivate(KisShor
 
 void KisShortcutsDialog::KisShortcutsDialogPrivate::changeShortcutScheme(const QString &scheme)
 {
+    qDebug() << "Not implemented";
+
+#if 0
+
     QString dialogText = i18n("The current shortcut scheme is modified. Save before switching to the new one?");
     if (m_shortcutsEditor->isModified() &&
         KMessageBox::questionYesNo( q,dialogText ) == KMessageBox::Yes) {
@@ -80,6 +84,8 @@ void KisShortcutsDialog::KisShortcutsDialogPrivate::changeShortcutScheme(const Q
     }
 
     QApplication::restoreOverrideCursor();
+
+#endif
 }
 
 void KisShortcutsDialog::KisShortcutsDialogPrivate::undo()
@@ -93,5 +99,12 @@ void KisShortcutsDialog::KisShortcutsDialogPrivate::save()
     emit q->saved();
 };
 
+void KisShortcutsDialog::KisShortcutsDialogPrivate::toggleDetails()
+{
+    const bool isVisible = m_schemeEditor->isVisible();
+
+    m_schemeEditor->setVisible(!isVisible);
+    m_detailsButton->setText(i18n("&Details") + (isVisible ? QStringLiteral(" >>") : QLatin1String(" <<")));
+}
 
 #include "moc_KisShortcutsDialog_p.cpp"

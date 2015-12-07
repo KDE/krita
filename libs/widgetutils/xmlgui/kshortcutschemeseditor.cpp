@@ -16,7 +16,7 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
-#include "kshortcutsdialog_p.h"
+#include "KisShortcutsDialog_p.h"
 
 #include <QDir>
 #include <QLabel>
@@ -29,17 +29,18 @@
 #include <QStandardPaths>
 #include <QInputDialog>
 #include <QComboBox>
+#include <QHBoxLayout>
 
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
 #include <ksharedconfig.h>
 
-#include "kshortcutsdialog.h"
+#include "KisShortcutsDialog.h"
 #include "kshortcutschemeshelper_p.h"
 #include "kactioncollection.h"
 #include "kxmlguiclient.h"
 
-KShortcutSchemesEditor::KShortcutSchemesEditor(KShortcutsDialog *parent)
+KShortcutSchemesEditor::KShortcutSchemesEditor(KisShortcutsDialog *parent)
     : QGroupBox(i18n("Shortcut Schemes"), parent), m_dialog(parent)
 {
     KConfigGroup group(KSharedConfig::openConfig(), "Shortcut Schemes");

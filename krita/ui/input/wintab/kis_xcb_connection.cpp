@@ -26,6 +26,12 @@
 #include <QX11Info>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QScreen>
+#include <QWindow>
+
+// qtbase5-private-dev
+// #include <qpa/qplatformscreen.h>
+// #include <qpa/qwindowsysteminterface.h>
 
 // Note: XInput 2.2 is required
 #include <xcb/xcb.h>
@@ -50,7 +56,7 @@ KisXcbConnection::KisXcbConnection()
 
 KisXcbConnection::~KisXcbConnection()
 {
-    // From finalizeXInput2(). Uncomment when touch support is added.
+    // From finalizeXInput2(). May be useful if we do touch support.
     // foreach (XInput2TouchDeviceData *dev, m_touchDevices) {
     //     if (dev->xiDeviceInfo)
     //         XIFreeDeviceInfo(dev->xiDeviceInfo);
@@ -279,7 +285,7 @@ void KisXcbConnection::xi2SetupDevices()
         dbgInput << "T. Pres: " << device_data.minTanPressure << device_data.maxTanPressure;
         */
 
-        // TODO: what was this?
+        // TODO: see if this is still necessary
         // device_data.savedAxesData.tryFetchAxesMapping(dev);
 
     } // Loop over devices
@@ -529,6 +535,7 @@ bool KisXcbConnection::handleWacomProximityEvent(TabletData &tabletData, void *e
                     tabletData.tool = toolIdToTabletDevice(ptr[_WACSER_LAST_TOOL_SERIAL]);
                 tabletData.serialId = qint64(ptr[_WACSER_USB_ID]) << 32 | qint64(ptr[_WACSER_LAST_TOOL_SERIAL]);
                 sendProximityEvent(tabletData, QEvent::TabletLeaveProximity);
+                tabletData.widgetToGetPress = 0;
             }
 
             // Qt had more informative debug output
@@ -546,44 +553,35 @@ bool KisXcbConnection::handleWacomProximityEvent(TabletData &tabletData, void *e
 bool KisXcbConnection::xi2ReportTabletEvent(TabletData &tabletData, void *event, QEvent::Type type)
 {
     xXIDeviceEvent *ev = reinterpret_cast<xXIDeviceEvent*>(event);
-    // QXcbWindow *xcbWindow = platformWindowFromId(ev->event);
-    // if (!xcbWindow)
-    //     return;
-    // QWindow *window = xcbWindow->window();
-    // QWindow *window = QWindow::fromWinId(reply->atom)
+
+    // Assumption: dpr is the same for all screens and never changes. (Should hold for X11)
+    // static qreal dpr = QPlatformScreen::platformScreenForWindow(qApp->allWindows().at(0))->devicePixelRatio();
+    static qreal dpr = qApp->screens().at(0)->devicePixelRatio();
+
     double pressure = 0, rotation = 0, tangentialPressure = 0;
     int xTilt = 0, yTilt = 0;
     Qt::KeyboardModifiers keyState = QApplication::queryKeyboardModifiers();
 
-    // Note: this uses the buggy computation
-    // const double scale = 65536.0;
-    // QPointF local(ev->event_x / scale, ev->event_y / scale);
-    // QPointF global(ev->root_x / scale, ev->root_y / scale);
-
-
-    // Raw valuator: Not implemented yet
-    // QPointF global(0.0, 0.0);
-    // QRegion area(m_screens.at(0)->nativeGeometry());
-    // for (int i = 1; i < m_screens.count(); ++i)
-    //     screenArea += m_screens.at(i)->nativeGeometry();
-
-    // HMM.
+    // Note: there may be an issue related to scaling by dpr
     QPointF global(0.0, 0.0);
     QRect screenArea = qApp->desktop()->rect();
+    // auto screens = qApp->screens();
+    // QRegion screenArea(screens.at(0)->geometry());
+    // for (int i = 1; i < screens.count(); ++i)
+    //     screenArea += screens.at(i)->geometry();
 
     for (QHash<int, TabletData::ValuatorClassInfo>::iterator it = tabletData.valuatorInfo.begin(),
             ite = tabletData.valuatorInfo.end(); it != ite; ++it) {
         int valuator = it.key();
         TabletData::ValuatorClassInfo &classInfo(it.value());
+        // Using raw valuator data
         xi2GetValuatorValueIfSet(event, classInfo.number, &classInfo.curVal);
         double normalizedValue = (classInfo.curVal - classInfo.minVal) / (classInfo.maxVal - classInfo.minVal);
         switch (valuator) {
         case KisXcbAtom::AbsX:
-            // global.rx() = screenArea.boundingRect().width() * normalizedValue;
             global.rx() = screenArea.width() * normalizedValue;
             break;
         case KisXcbAtom::AbsY:
-            // global.ry() = screenArea.boundingRect().height() * normalizedValue;
             global.ry() = screenArea.height() * normalizedValue;
             break;
         case KisXcbAtom::AbsPressure:
@@ -612,61 +610,67 @@ bool KisXcbConnection::xi2ReportTabletEvent(TabletData &tabletData, void *event,
         }
     }
 
-
     // Global valuator method
     QPointF local = global - QPointF((ev->root_x >> 16) - (ev->event_x >> 16),
                                      (ev->root_y >> 16) - (ev->event_y >> 16));
 
-    // From older translateXinputEvent()
 
-    QWidget *w = 0;
-    if (tabletData.widgetToGetPress) {
-        w = tabletData.widgetToGetPress;
-    }
-    if (!w) {
-        w = QApplication::activePopupWidget();
-    }
-    if (!w) {
-        w = QApplication::activeModalWidget();
-    }
-    if (!w) {
-        w = QWidget::find((WId)ev->event);  //XXX: No idea what I'm doing here..
-    }
-    if (!w) {
-        w = qApp->activeWindow();
-    }
+    // Find target widget. Start by finding top level window.
+    QWidget *w = tabletData.widgetToGetPress;
+    if (!w) w = QApplication::activePopupWidget();
+    if (!w) w = QApplication::activeModalWidget();
+    if (!w) w = QWidget::find((WId)ev->event);
+    if (!w) w = qApp->activeWindow();
+    if (!w) return true;
 
-    if (w) {
-        QWidget *child = w->childAt(local.toPoint());
-        if (child)
-            w = child;
+    // Now find child widget if appropriate.
+    QWidget *child = w->childAt(local.toPoint());
+    QPointF widgetLocal;
+    if (child) {
+        w = child;
+        widgetLocal = w->mapFromGlobal(global.toPoint());
+    } else {
+        // TODO: straighten out local/global transformations
+        widgetLocal = global - w->mapToGlobal(QPoint());
     }
 
-    if (type == QEvent::TabletPress) {
-        tabletData.widgetToGetPress = w;
-    } else if (type == QEvent::TabletRelease && tabletData.widgetToGetPress) {
-        local = w->mapFromGlobal(global.toPoint());
-        tabletData.widgetToGetPress = 0;
-    }
 
-    // TODO: this is redundant (see xi2HandleTabletEvent)
     Qt::MouseButton qtbutton = Qt::NoButton;
     if (type != QEvent::TabletMove) {
         qtbutton = xiToQtMouseButton(ev->detail);
     }
 
-    // XXX: should we do something like this?
-    // local = w->mapFromGlobal(global);
+    if (type == QEvent::TabletRelease) {
+        dbgInput << "Releasing target widget" << w;
+        tabletData.widgetToGetPress = 0;
+    }
 
-    QTabletEvent e(type, local, global, tabletData.tool, tabletData.pointerType,
+
+    QTabletEvent e(type, widgetLocal, global, tabletData.tool, tabletData.pointerType,
                    pressure, xTilt, yTilt, tangentialPressure, rotation, 0,
                    keyState, tabletData.serialId, qtbutton, tabletData.buttons);
     e.ignore();
     qApp->sendEvent(w, &e);
-    // dbgInput << "Custom QTabletEvent sent to widget:" << w->objectName() << " Accepted?" << e.isAccepted();
-    // QString prefix = QStringLiteral("");
-    // dbgInput << KisTabletDebugger::instance()->eventToString(e, prefix);
+    dbgInput << "Custom QTabletEvent" << type << "sent to widget:" << w << " Accepted?" << e.isAccepted();
+    dbgInput << KisTabletDebugger::instance()->eventToString(e, "");
     // return e.isAccepted();
+    if (e.isAccepted()) {
+        // Lock onto target widget
+        if (type == QEvent::TabletPress) {
+            dbgInput << "Targeting new widget" << w;
+            tabletData.widgetToGetPress = w;
+        }
+    } else {
+        QWindow *window = QWindow::fromWinId(ev->event);
+        // QWindowSystemInterface::handleTabletEvent(window, local, global,
+        //                                           tabletData.tool, tabletData.pointerType,
+        //                                           tabletData.buttons, pressure,
+        //                                           xTilt, yTilt, tangentialPressure,
+        //                                           rotation, 0, tabletData.serialId);
+        return false;
+    }
+
+
     return true;
 }
 

@@ -126,7 +126,8 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
 
     if (qApp->applicationName() != "qttest") {
 
-        bool sRGB = cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive);
+        bool sRGB = (cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive)
+                     && !cs->profile()->name().contains(QLatin1String("g10")));
 
         KisWdgOptionsPNG* wdg = new KisWdgOptionsPNG(kdb);
 
@@ -151,8 +152,6 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
         wdg->interlacing->setChecked(cfg.getBool("interlaced", false));
         wdg->compressionLevel->setValue(cfg.getInt("compression", 9));
         wdg->compressionLevel->setRange(1, 9 , 0);
-
-
 
         wdg->alpha->setVisible(isThereAlpha);
         wdg->tryToSaveAsIndexed->setVisible(!isThereAlpha);

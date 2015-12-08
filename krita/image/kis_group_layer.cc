@@ -142,7 +142,7 @@ void KisGroupLayer::setImage(KisImageWSP image)
     KisLayer::setImage(image);
 }
 
-KisLayerSP KisGroupLayer::createMergedLayer(KisLayerSP prevLayer)
+KisLayerSP KisGroupLayer::createMergedLayerTemplate(KisLayerSP prevLayer)
 {
     KisGroupLayer *prevGroup = dynamic_cast<KisGroupLayer*>(prevLayer.data());
 
@@ -160,7 +160,14 @@ KisLayerSP KisGroupLayer::createMergedLayer(KisLayerSP prevLayer)
 
         return merged;
     } else
-        return KisLayer::createMergedLayer(prevLayer);
+        return KisLayer::createMergedLayerTemplate(prevLayer);
+}
+
+void KisGroupLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer)
+{
+    if (!dynamic_cast<KisGroupLayer*>(dstLayer.data())) {
+        KisLayer::fillMergedLayerTemplate(dstLayer, prevLayer);
+    }
 }
 
 void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)

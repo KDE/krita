@@ -83,6 +83,7 @@
 #include "kis_layer_composition.h"
 #include "kis_wrapped_rect.h"
 #include "kis_crop_saved_extra_data.h"
+#include "kis_layer_utils.h"
 
 #include "kis_lod_transform.h"
 
@@ -1194,60 +1195,9 @@ KisNodeSP KisImage::mergeMultipleLayers(QList<KisNodeSP> mergedNodes, KisNodeSP 
     return newLayer;
 }
 
-KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrategy* strategy)
+void KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrategy* strategy)
 {
-    if (!layer->prevSibling()) return 0;
-
-    // XXX: this breaks if we allow free mixing of masks and layers
-    KisLayerSP prevLayer = dynamic_cast<KisLayer*>(layer->prevSibling().data());
-    if (!prevLayer) return 0;
-
-    refreshHiddenArea(layer, bounds());
-    refreshHiddenArea(prevLayer, bounds());
-
-    QVector<KisSelectionMaskSP> selectionMasks;
-    {
-        QList<KisNodeSP> mergedNodes;
-        mergedNodes << layer;
-        mergedNodes << prevLayer;
-        fetchSelectionMasks(mergedNodes, selectionMasks);
-    }
-
-    QRect layerProjectionExtent = this->projection()->extent();
-    QRect prevLayerProjectionExtent = prevLayer->projection()->extent();
-
-    // actual merging done by KisLayer::createMergedLayer (or specialized decendant)
-    KisLayerSP mergedLayer = layer->createMergedLayer(prevLayer);
-    Q_CHECK_PTR(mergedLayer);
-
-    // Merge meta data
-    QList<const KisMetaData::Store*> srcs;
-    srcs.append(prevLayer->metaData());
-    srcs.append(layer->metaData());
-    QList<double> scores;
-    int prevLayerArea = prevLayerProjectionExtent.width() * prevLayerProjectionExtent.height();
-    int layerArea = layerProjectionExtent.width() * layerProjectionExtent.height();
-    double norm = qMax(prevLayerArea, layerArea);
-    scores.append(prevLayerArea / norm);
-    scores.append(layerArea / norm);
-    strategy->merge(mergedLayer->metaData(), srcs, scores);
-
-    KisNodeSP parent = layer->parent(); // parent is set to null when the layer is removed from the node
-    dbgImage << ppVar(parent);
-
-    // FIXME: "Merge Down"?
-    undoAdapter()->beginMacro(kundo2_i18n("Merge with Layer Below"));
-
-    undoAdapter()->addCommand(new KisImageLayerAddCommand(this, mergedLayer, parent, layer));
-
-    // reparent selection masks into the newly created node
-    reparentSelectionMasks(mergedLayer, selectionMasks);
-
-    safeRemoveTwoNodes(layer, prevLayer);
-
-    undoAdapter()->endMacro();
-
-    return mergedLayer;
+    KisLayerUtils::mergeDown(this, layer, strategy);
 }
 
 /**

@@ -341,32 +341,44 @@ bool KisLayer::canMergeAndKeepBlendOptions(KisLayerSP otherLayer)
          *this->colorSpace() == *otherLayer->colorSpace());
 }
 
-KisLayerSP KisLayer::createMergedLayer(KisLayerSP prevLayer)
+KisLayerSP KisLayer::createMergedLayerTemplate(KisLayerSP prevLayer)
 {
-    KisImageSP my_image = image();
+    const bool keepBlendingOptions = canMergeAndKeepBlendOptions(prevLayer);
+
+    KisLayerSP newLayer = new KisPaintLayer(image(), prevLayer->name(), OPACITY_OPAQUE_U8);
+
+    if (keepBlendingOptions) {
+        newLayer->setCompositeOpId(compositeOpId());
+        newLayer->setOpacity(opacity());
+        newLayer->setChannelFlags(channelFlags());
+    }
+
+    return newLayer;
+}
+
+void KisLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer)
+{
+    const bool keepBlendingOptions = canMergeAndKeepBlendOptions(prevLayer);
 
     QRect layerProjectionExtent = this->projection()->extent();
     QRect prevLayerProjectionExtent = prevLayer->projection()->extent();
     bool alphaDisabled = this->alphaChannelDisabled();
     bool prevAlphaDisabled = prevLayer->alphaChannelDisabled();
 
-    KisPaintDeviceSP mergedDevice;
-
-    bool keepBlendingOptions = canMergeAndKeepBlendOptions(prevLayer);
+    KisPaintDeviceSP mergedDevice = dstLayer->paintDevice();
 
     if (!keepBlendingOptions) {
 
         KisNodeSP parentNode = parent();
         const KoColorSpace *dstCs = parentNode && parentNode->colorSpace() ?
-            parentNode->colorSpace() : my_image->colorSpace();
+            parentNode->colorSpace() : image()->colorSpace();
 
-        mergedDevice = new KisPaintDevice(dstCs, "merged");
         KisPainter gc(mergedDevice);
 
         //Copy the pixels of previous layer with their actual alpha value
         prevLayer->disableAlphaChannel(false);
 
-        prevLayer->projectionPlane()->apply(&gc, prevLayerProjectionExtent | my_image->bounds());
+        prevLayer->projectionPlane()->apply(&gc, prevLayerProjectionExtent | image()->bounds());
 
         //Restore the previous prevLayer disableAlpha status for correct undo/redo
         prevLayer->disableAlphaChannel(prevAlphaDisabled);
@@ -376,31 +388,20 @@ KisLayerSP KisLayer::createMergedLayer(KisLayerSP prevLayer)
             this->disableAlphaChannel(false);
         }
 
-        this->projectionPlane()->apply(&gc, layerProjectionExtent | my_image->bounds());
+        this->projectionPlane()->apply(&gc, layerProjectionExtent | image()->bounds());
 
         //Restore the layer disableAlpha status for correct undo/redo
         this->disableAlphaChannel(alphaDisabled);
     }
     else {
         //Copy prevLayer
-        my_image->lock();
-        mergedDevice = new KisPaintDevice(*prevLayer->projection());
-        my_image->unlock();
+        KisPaintDeviceSP srcDev = prevLayer->projection();
+        mergedDevice->makeCloneFrom(srcDev, srcDev->extent());
 
         //Paint layer on the copy
         KisPainter gc(mergedDevice);
         gc.bitBlt(layerProjectionExtent.topLeft(), this->projection(), layerProjectionExtent);
     }
-
-    KisLayerSP newLayer = new KisPaintLayer(my_image, prevLayer->name(), OPACITY_OPAQUE_U8, mergedDevice);
-
-    if (keepBlendingOptions) {
-        newLayer->setCompositeOpId(compositeOpId());
-        newLayer->setOpacity(opacity());
-        newLayer->setChannelFlags(channelFlags());
-    }
-
-    return newLayer;
 }
 
 void KisLayer::registerClone(KisCloneLayerWSP clone)

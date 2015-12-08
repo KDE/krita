@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,33 +16,23 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_IMAGE_LAYER_REMOVE_COMMAND_H
-#define __KIS_IMAGE_LAYER_REMOVE_COMMAND_H
+#ifndef __KIS_LAYER_UTILS_H
+#define __KIS_LAYER_UTILS_H
 
-#include "kritaimage_export.h"
 #include "kis_types.h"
-#include "kis_image_command.h"
+#include "kritaimage_export.h"
 
-
-class KRITAIMAGE_EXPORT KisImageLayerRemoveCommand : public KisImageCommand
+namespace KisMetaData
 {
-public:
-    KisImageLayerRemoveCommand(KisImageWSP image,
-                               KisNodeSP node,
-                               bool doRedoUpdates = true,
-                               bool doUndoUpdates = true);
-    ~KisImageLayerRemoveCommand();
+    class MergeStrategy;
+}
 
-    void redo();
-    void undo();
+namespace KisLayerUtils
+{
+    KRITAIMAGE_EXPORT void mergeDown(KisImageSP image, KisLayerSP layer, const KisMetaData::MergeStrategy* strategy);
 
-private:
-    void addSubtree(KisImageWSP image, KisNodeSP node);
-
-private:
-    KisNodeSP m_node;
-    bool m_doRedoUpdates;
-    bool m_doUndoUpdates;
+    KRITAIMAGE_EXPORT QSet<int> fetchLayerFrames(KisNodeSP node);
+    KRITAIMAGE_EXPORT QSet<int> fetchLayerFramesRecursive(KisNodeSP rootNode);
 };
 
-#endif /* __KIS_IMAGE_LAYER_REMOVE_COMMAND_H */
+#endif /* __KIS_LAYER_UTILS_H */

@@ -52,7 +52,8 @@ public:
 
     virtual void setImage(KisImageWSP image);
 
-    virtual KisLayerSP createMergedLayer(KisLayerSP prevLayer);
+    virtual KisLayerSP createMergedLayerTemplate(KisLayerSP prevLayer);
+    virtual void fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer);
 
     /**
      * Clear the projection

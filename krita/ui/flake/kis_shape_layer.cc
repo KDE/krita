@@ -261,14 +261,21 @@ void KisShapeLayer::setImage(KisImageWSP _image)
     m_d->paintDevice = new KisPaintDevice(image()->colorSpace());
 }
 
-KisLayerSP KisShapeLayer::createMergedLayer(KisLayerSP prevLayer)
+KisLayerSP KisShapeLayer::createMergedLayerTemplate(KisLayerSP prevLayer)
 {
     KisShapeLayer *prevShape = dynamic_cast<KisShapeLayer*>(prevLayer.data());
 
     if (prevShape)
         return new KisShapeLayer(*prevShape, *this);
     else
-        return KisExternalLayer::createMergedLayer(prevLayer);
+        return KisExternalLayer::createMergedLayerTemplate(prevLayer);
+}
+
+void KisShapeLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer)
+{
+    if (!dynamic_cast<KisShapeLayer*>(dstLayer.data())) {
+        KisLayer::fillMergedLayerTemplate(dstLayer, prevLayer);
+    }
 }
 
 void KisShapeLayer::setParent(KoShapeContainer *parent)

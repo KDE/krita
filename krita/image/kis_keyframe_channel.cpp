@@ -265,6 +265,21 @@ KisKeyframeSP KisKeyframeChannel::lastKeyframe() const
     return (m_d->keys.end()-1).value();
 }
 
+QSet<int> KisKeyframeChannel::allKeyframeIds() const
+{
+    QSet<int> frames;
+
+    KeyframesMap::const_iterator it = m_d->keys.constBegin();
+    KeyframesMap::const_iterator end = m_d->keys.constEnd();
+
+    while (it != end) {
+        frames.insert(it.key());
+        ++it;
+    }
+
+    return frames;
+}
+
 KisTimeRange KisKeyframeChannel::affectedFrames(int time) const
 {
     return identicalFrames(time);

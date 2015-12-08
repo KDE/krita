@@ -28,6 +28,9 @@
 class KisUpdatesFacade;
 class KisTimeRange;
 
+namespace KisLayerUtils {
+    struct SwitchFrameCommand;
+}
 
 class KRITAIMAGE_EXPORT KisImageAnimationInterface : public QObject
 {
@@ -113,6 +116,8 @@ private:
     // interface for:
     friend class KisRegenerateFrameStrokeStrategy;
     friend class KisAnimationFrameCacheTest;
+    friend class KisLayerUtils::SwitchFrameCommand;
+    friend class KisImageTest;
     void saveAndResetCurrentTime(int frameId, int *savedValue);
     void restoreCurrentTime(int *savedValue);
     void notifyFrameReady();

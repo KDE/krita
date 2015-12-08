@@ -62,6 +62,7 @@ public:
     KisKeyframeSP previousKeyframe(KisKeyframeSP keyframe) const;
     KisKeyframeSP lastKeyframe() const;
 
+    QSet<int> allKeyframeIds() const;
     /**
      * Get the set of frames affected by any changes to the value
      * of the active keyframe at the given time.

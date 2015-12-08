@@ -187,7 +187,8 @@ public:
      *
      * Decendants that perform there own version do NOT call KisLayer::createMergedLayer
      */
-    virtual KisLayerSP createMergedLayer(KisLayerSP prevLayer);
+    virtual KisLayerSP createMergedLayerTemplate(KisLayerSP prevLayer);
+    virtual void fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer);
 
     /**
      * Clones should be informed about updates of the original

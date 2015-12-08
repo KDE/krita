@@ -191,6 +191,8 @@ set(kritaimage_LIB_SRCS
    kis_indirect_painting_support.cpp
    kis_abstract_projection_plane.cpp
    kis_layer_projection_plane.cpp
+   kis_command_utils.cpp
+   kis_layer_utils.cpp
    kis_mask_projection_plane.cpp
    kis_projection_leaf.cpp
    kis_mask.cc

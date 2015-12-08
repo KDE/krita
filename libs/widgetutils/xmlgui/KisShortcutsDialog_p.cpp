@@ -18,6 +18,7 @@
 
 
 #include "KisShortcutsDialog_p.h"
+#include "kshortcutschemeshelper_p.h"
 #include "kxmlguiclient.h"
 #include <QDomDocument>
 #include "kactioncollection.h"
@@ -25,6 +26,9 @@
 #include <QAction>
 #include <QApplication>
 #include <QDebug>
+#include "kis_action_registry.h"
+#include <KSharedConfig>
+#include <KConfigGroup>
 
 
 
@@ -43,11 +47,8 @@ KisShortcutsDialog::KisShortcutsDialogPrivate::KisShortcutsDialogPrivate(KisShor
     : q(q)
 { }
 
-void KisShortcutsDialog::KisShortcutsDialogPrivate::changeShortcutScheme(const QString &scheme)
+void KisShortcutsDialog::KisShortcutsDialogPrivate::changeShortcutScheme(const QString &schemeName)
 {
-    qDebug() << "Not implemented";
-
-#if 0
 
     QString dialogText = i18n("The current shortcut scheme is modified. Save before switching to the new one?");
     if (m_shortcutsEditor->isModified() &&
@@ -60,32 +61,33 @@ void KisShortcutsDialog::KisShortcutsDialogPrivate::changeShortcutScheme(const Q
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     m_shortcutsEditor->clearCollections();
 
-    foreach (KActionCollection *collection, m_collections) {
-        // passing an empty stream forces the clients to reread the XML
-        KXMLGUIClient *client = const_cast<KXMLGUIClient *>(collection->parentGUIClient());
-        if (client) {
-            client->setXMLGUIBuildDocument(QDomDocument());
+    KConfigGroup cg = KSharedConfig::openConfig()->group("Shortcut Schemes");
+    cg.writeEntry("Current Scheme", schemeName);
+
+
+    // Load scheme file
+    if (schemeName != QStringLiteral("Default")) {
+        QString schemeFileName = KShortcutSchemesHelper::schemeFileLocations().value(schemeName);
+        if (schemeFileName.isEmpty()) {
+            // qDebug() << "No configuration file found for scheme" << schemeName;
+            return;
         }
+        KConfig schemeConfig(schemeFileName, KConfig::SimpleConfig);
+        KisActionRegistry::instance()->applyShortcutScheme(&schemeConfig);
+    } else {
+        // Apply default scheme, updating KisActionRegistry data
+        KisActionRegistry::instance()->applyShortcutScheme();
     }
 
-    //get xmlguifactory
-    if (!m_collections.isEmpty()) {
-        const KXMLGUIClient *client = m_collections.first()->parentGUIClient();
-        if (client) {
-            KXMLGUIFactory *factory = client->factory();
-            if (factory) {
-                factory->changeShortcutScheme(scheme);
-            }
-        }
-    }
-
-    foreach (KActionCollection *collection, m_collections) {
-        m_shortcutsEditor->addCollection(collection);
+    // Update actions themselves, and re-add to dialog box to refresh
+    auto it = m_collections.constBegin();
+    while (it != m_collections.constEnd()) {
+        it.value()->updateShortcuts();
+        m_shortcutsEditor->addCollection(it.value(), it.key());
+        it++;
     }
 
     QApplication::restoreOverrideCursor();
-
-#endif
 }
 
 void KisShortcutsDialog::KisShortcutsDialogPrivate::undo()

@@ -98,8 +98,11 @@ public:
     void loadActionFiles();
     void loadActionCollections();
     void loadCustomShortcuts(QString filename = QStringLiteral("kritashortcutsrc"));
-    ActionInfoItem actionInfo(const QString &name) {
-        return actionInfoList.value(name, emptyActionInfo);
+    ActionInfoItem &actionInfo(const QString &name) {
+        if (!actionInfoList.contains(name)) {
+            dbgAction << "Tried to look up info for unknown action" << name;
+        }
+        return actionInfoList[name];
     };
 
     KisActionRegistry *q;
@@ -152,7 +155,7 @@ void KisActionRegistry::addAction(const QString &name, QAction *a)
 
     KActionCollection *collection = d->actionCollections.value(info.collectionName);
     if (!collection) {
-        qDebug() << "No collection found for action" << name;
+        dbgAction << "No collection found for action" << name;
         return;
     }
     if (collection->action(name)) {
@@ -200,19 +203,48 @@ void KisActionRegistry::configureShortcuts(KActionCollection *ac)
    dlg.configure();  // Show the dialog.
 
    d->loadCustomShortcuts();
+
+   emit shortcutsUpdated();
 }
 
 
+void KisActionRegistry::applyShortcutScheme(const KConfigBase *config)
+{
+
+    /**
+     * Stuff from XMLGUI starts here
+     */
+
+    // First, update the things in KisActionRegistry
+    if (config == 0) {
+        // Simplest just to reload everything
+        d->loadActionFiles();
+    } else {
+        const auto schemeEntries = config->group(QStringLiteral("Shortcuts")).entryMap();
+        // Load info item for each shortcut, reset custom shortcuts
+        auto it = schemeEntries.constBegin();
+        while (it != schemeEntries.end()) {
+            ActionInfoItem &info = d->actionInfo(it.key());
+            info.defaultShortcut = it.value();
+            info.customShortcut = QKeySequence();
+            it++;
+        }
+    }
+}
+
 void KisActionRegistry::updateShortcut(const QString &name, QAction *action)
 {
-    action->setShortcut(preferredShortcut(d->actionInfo(name)));
+    const ActionInfoItem info = d->actionInfo(name);
+    action->setShortcut(preferredShortcut(info));
+    auto propertizedShortcut = qVariantFromValue(QList<QKeySequence>() << info.defaultShortcut);
+    action->setProperty("defaultShortcuts", propertizedShortcut);
 }
 
 
 bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
 {
 
-    ActionInfoItem info = d->actionInfo(name);
+    const ActionInfoItem info = d->actionInfo(name);
     QDomElement actionXml = info.xmlData;
     if (actionXml.text().isEmpty()) {
         dbgAction << "No XML data found for action" << name;
@@ -245,10 +277,7 @@ bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
     a->setIconText(iconText);
     a->setCheckable(isCheckable);
 
-
-    a->setShortcut(preferredShortcut(info));
-    auto propertizedShortcut = qVariantFromValue(QList<QKeySequence>() << info.defaultShortcut);
-    a->setProperty("defaultShortcuts", propertizedShortcut);
+    updateShortcut(name, a);
 
 
 

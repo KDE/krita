@@ -93,7 +93,7 @@ public:
     void undo();
     void save();
 
-    QList<KActionCollection *> m_collections;
+    QHash<QString, KActionCollection *> m_collections;
     KisShortcutsDialog *q;
     KisShortcutsEditor *m_shortcutsEditor;
     bool m_saveSettings{false};

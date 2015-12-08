@@ -20,9 +20,11 @@
 #define KSHORTCUTSCHEMESHELPER_P_H
 
 #include <QString>
+#include <QHash>
 
 class KActionCollection;
 class KXMLGUIClient;
+class KConfigBase;
 
 class KShortcutSchemesHelper
 {
@@ -52,6 +54,13 @@ public:
     static QString shortcutSchemeFileName(const QString &schemeName);
 
     static bool saveShortcutScheme();
+
+    /**
+     * @return a list of files to save the shortcut scheme to. Does not include "Default"
+     * @see shortcutSchemeFileName, exportActionCollection
+     */
+    static QHash<QString, QString> schemeFileLocations();
+
 };
 
 #endif

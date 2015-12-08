@@ -181,6 +181,8 @@ private Q_SLOTS:
 
     void updateIdleWatcherConnections();
 
+    void updateShortcuts();
+
 Q_SIGNALS:
     /**
      * emitted when a new document is opened.

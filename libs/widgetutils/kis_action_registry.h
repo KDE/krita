@@ -27,6 +27,7 @@
 
 class KActionCollection;
 class QDomElement;
+class KConfigBase;
 
 /**
  * KisShortcutRegistry is intended to manage the global shortcut configuration
@@ -126,6 +127,11 @@ public:
     KActionCollection * getDefaultCollection();
 
 
+    // If config == 0, reload defaults
+    void applyShortcutScheme(const KConfigBase *config = 0);
+
+Q_SIGNALS:
+    void shortcutsUpdated();
 
 private:
     class Private;

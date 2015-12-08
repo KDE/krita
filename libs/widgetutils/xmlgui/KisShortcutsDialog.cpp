@@ -106,12 +106,12 @@ KisShortcutsDialog::~KisShortcutsDialog()
 void KisShortcutsDialog::addCollection(KActionCollection *collection, const QString &title)
 {
     d->m_shortcutsEditor->addCollection(collection, title);
-    d->m_collections << collection;
+    d->m_collections.insert(title, collection);
 }
 
 QList<KActionCollection *> KisShortcutsDialog::actionCollections() const
 {
-    return d->m_collections;
+    return d->m_collections.values();
 }
 
 bool KisShortcutsDialog::configure(bool saveSettings)

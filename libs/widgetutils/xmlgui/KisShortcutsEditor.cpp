@@ -25,6 +25,7 @@
 
 #include "KisShortcutsEditor.h"
 #include "KisShortcutsEditor_p.h"
+#include "kshortcutschemeshelper_p.h"
 #include "config-xmlgui.h"
 #include "kis_action_registry.h"
 
@@ -188,7 +189,34 @@ void KisShortcutsEditor::clearConfiguration()
 
 void KisShortcutsEditor::importConfiguration(KConfigBase *config)
 {
-    d->importConfiguration(config);
+    Q_ASSERT(config);
+    if (!config) {
+        return;
+    }
+
+    // Reload the configuration file
+    KisActionRegistry::instance()->applyShortcutScheme(config);
+
+
+    // Update the actions themselves
+    // TODO
+
+    // Update the dialog entry items
+    const KConfigGroup schemeShortcuts(config, QStringLiteral("Shortcuts"));
+    for (QTreeWidgetItemIterator it(d->ui.list); (*it); ++it) {
+
+        if (!(*it)->parent()) {
+            continue;
+        }
+        KisShortcutsEditorItem *item = static_cast<KisShortcutsEditorItem *>(*it);
+        const QString actionId = item->data(Id).toString();
+        if (!schemeShortcuts.hasKey(actionId))
+            continue;
+
+        QList<QKeySequence> sc = QKeySequence::listFromString(schemeShortcuts.readEntry(actionId, QString()));
+        d->changeKeyShortcut(item, LocalPrimary, primarySequence(sc));
+        d->changeKeyShortcut(item, LocalAlternate, alternateSequence(sc));
+    }
 }
 
 void KisShortcutsEditor::exportConfiguration(KConfigBase *config) const
@@ -252,6 +280,7 @@ void KisShortcutsEditor::save()
 
 void KisShortcutsEditor::undo()
 {
+    // TODO: is this working?
     for (QTreeWidgetItemIterator it(d->ui.list); (*it); ++it) {
         if (KisShortcutsEditorItem *item = dynamic_cast<KisShortcutsEditorItem *>(*it)) {
             item->undo();

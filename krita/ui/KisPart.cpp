@@ -156,6 +156,9 @@ KisPart::KisPart()
 
     connect(this, SIGNAL(documentClosed(QString)),
             this, SLOT(updateIdleWatcherConnections()));
+
+    connect(KisActionRegistry::instance(), SIGNAL(shortcutsUpdated()),
+            this, SLOT(updateShortcuts()));
 #ifdef HAVE_OPENGL
     connect(&d->idleWatcher, SIGNAL(startedIdleMode()),
             &d->animationCachePopulator, SLOT(slotRequestRegeneration()));
@@ -429,8 +432,11 @@ void KisPart::configureShortcuts()
 
     auto actionRegistry = KisActionRegistry::instance();
     actionRegistry->configureShortcuts(d->actionCollection);
+}
 
-    // Update the non-UI actions.  That includes:
+void KisPart::updateShortcuts()
+{
+    // Update any non-UI actionCollections.  That includes:
     //  - Shortcuts called inside of tools
     //  - Perhaps other things?
     KoToolManager::instance()->updateToolShortcuts();

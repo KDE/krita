@@ -53,17 +53,8 @@ KShortcutSchemesEditor::KShortcutSchemesEditor(KisShortcutsDialog *parent)
     QStringList schemes;
     schemes << QStringLiteral("Default");
 
-    // List files in the shortcuts subdirs.
-    // See KShortcutSchemesHelper functions shortcutSchemeFileName, exportActionCollection
-    const QStringList shortcutFiles = KoResourcePaths::findAllResources("kis_shortcuts", "*.shortcuts");
-    Q_FOREACH (const QString &file, shortcutFiles) {
-        QFileInfo fileInfo(file);
-        QString schemeName = fileInfo.completeBaseName();
-        if (!schemes.contains(schemeName)) {
-            schemes << schemeName;
-            m_schemeFileLocations.insert(schemeName, fileInfo.canonicalFilePath());
-        }
-    }
+    auto schemeFileLocations = KShortcutSchemesHelper::schemeFileLocations();
+    schemes << schemeFileLocations.keys();
 
     const QString currentScheme = group.readEntry("Current Scheme", "Default");
     setMargin(0);
@@ -127,18 +118,12 @@ void KShortcutSchemesEditor::newScheme()
     if (!schemeFile.open(QFile::WriteOnly | QFile::Truncate)) {
         return;
     }
+    schemeFile.close();
 
-    QDomDocument doc;
-    QDomElement docElem = doc.createElement(QStringLiteral("kpartgui"));
-    doc.appendChild(docElem);
-    QDomElement elem = doc.createElement(QStringLiteral("ActionProperties"));
-    docElem.appendChild(elem);
-
-    QTextStream out(&schemeFile);
-    out << doc.toString(4);
-
+    m_dialog->exportConfiguration(newSchemeFileName);
     m_schemesList->addItem(newName);
     m_schemesList->setCurrentIndex(m_schemesList->findText(newName));
+    m_schemeFileLocations.insert(newName, newSchemeFileName);
     updateDeleteButton();
     emit shortcutsSchemeChanged(newName);
 }

@@ -33,6 +33,7 @@
 #include "kxmlguiclient.h"
 
 #include "KoResourcePaths.h"
+#include "kis_action_registry.h"
 
 bool KShortcutSchemesHelper::exportActionCollection(KActionCollection *collection,
         const QString &schemeName, const QString &dir)
@@ -81,4 +82,22 @@ QString KShortcutSchemesHelper::shortcutSchemeFileName(const QString &schemeName
 {
     // Create a directory if one cannot be found.
     return KoResourcePaths::locateLocal("kis_shortcuts", schemeName, true);
+}
+
+
+QHash<QString, QString> KShortcutSchemesHelper::schemeFileLocations()
+{
+    QStringList schemes;
+    schemes << QString("Default");  // Forbid "Default.shortcuts"
+    QHash<QString, QString> schemeFileLocations;
+    const QStringList shortcutFiles = KoResourcePaths::findAllResources("kis_shortcuts", "*.shortcuts");
+    Q_FOREACH (const QString &file, shortcutFiles) {
+        QFileInfo fileInfo(file);
+        QString schemeName = fileInfo.completeBaseName();
+        if (!schemes.contains(schemeName)) {
+            schemes << schemeName;
+            schemeFileLocations.insert(schemeName, fileInfo.canonicalFilePath());
+        }
+    }
+    return schemeFileLocations;
 }

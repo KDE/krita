@@ -34,6 +34,7 @@
 #include <QPrintDialog>
 #include <ksharedconfig.h>
 #include <KConfigGroup>
+#include "kis_action_registry.h"
 
 //---------------------------------------------------------------------
 // KisShortcutsEditorPrivate
@@ -211,31 +212,6 @@ void KisShortcutsEditorPrivate::clearConfiguration()
 
     }
 }
-
-void KisShortcutsEditorPrivate::importConfiguration(KConfigBase *config)
-{
-    Q_ASSERT(config);
-    if (!config) {
-        return;
-    }
-
-    const KConfigGroup localShortcutsGroup(config, QStringLiteral("Shortcuts"));
-    for (QTreeWidgetItemIterator it(ui.list); (*it); ++it) {
-
-        if (!(*it)->parent()) {
-            continue;
-        }
-        KisShortcutsEditorItem *item = static_cast<KisShortcutsEditorItem *>(*it);
-        const QString actionId = item->data(Id).toString();
-        if (!localShortcutsGroup.hasKey(actionId))
-            continue;
-
-        QList<QKeySequence> sc = QKeySequence::listFromString(localShortcutsGroup.readEntry(actionId, QString()));
-        changeKeyShortcut(item, LocalPrimary, primarySequence(sc));
-        changeKeyShortcut(item, LocalAlternate, alternateSequence(sc));
-    }
-}
-
 
 /*TODO for the printShortcuts function
 Nice to have features (which I'm not sure I can do before may due to

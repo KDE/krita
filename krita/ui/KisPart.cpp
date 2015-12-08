@@ -451,9 +451,9 @@ void KisPart::configureShortcuts()
 
             // Now update the tooltips with the new shortcut info.
             if(action->shortcut() == QKeySequence(0))
-                 action->setToolTip(strippedTooltip);
+                action->setToolTip(strippedTooltip);
             else
-                 action->setToolTip( strippedTooltip + " (" + action->shortcut().toString() + ")");
+                action->setToolTip( strippedTooltip + " (" + action->shortcut().toString() + ")");
         }
     }
 }

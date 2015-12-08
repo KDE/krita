@@ -37,18 +37,18 @@ public:
      * The name of the resulting file is: shortcuts/<scheme name>.rc .
      *
      *  @return true if the action collection was exported
-    */
+     */
     static bool exportActionCollection(KActionCollection *collection, const QString &schemeName,
                                        const QString &dir = QString());
 
     /**
      * @return the current shortcut scheme name for the application.
-    */
+     */
     static QString currentShortcutSchemeName();
 
     /**
      * @return the name of the (writable) file to save the shortcut scheme to.
-    */
+     */
     static QString shortcutSchemeFileName(const QString &schemeName);
 
     static bool saveShortcutScheme();

@@ -170,9 +170,7 @@ public:
     void save();
 
     /**
-     * Commit the changes without saving.
-     *
-     * This commits the changes without saving.
+     * Update the dialog entries without saving.
      *
      * @since 4.2
      */

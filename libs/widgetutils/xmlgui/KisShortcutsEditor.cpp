@@ -247,11 +247,7 @@ void KisShortcutsEditor::commit()
 void KisShortcutsEditor::save()
 {
     writeConfiguration();
-    // we have to call commit. If we wouldn't do that the changes would be
-    // undone on deletion! That would lead to weird problems. Changes to
-    // Global Shortcuts would vanish completely. Changes to local shortcuts
-    // would vanish for this session.
-    commit();
+    commit(); // Not doing this would be bad
 }
 
 void KisShortcutsEditor::undo()
@@ -263,10 +259,6 @@ void KisShortcutsEditor::undo()
     }
 }
 
-// WTF?
-//
-// "We ask the user here if there are any conflicts, as opposed to undo(). They
-//  don't do the same thing anyway, this just not to confuse any readers. slot"
 void KisShortcutsEditor::allDefault()
 {
     d->allDefault();

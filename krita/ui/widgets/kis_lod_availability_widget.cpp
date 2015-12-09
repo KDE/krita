@@ -76,16 +76,16 @@ void KisLodAvailabilityWidget::setLimitations(const KisPaintopLodLimitations &l)
 {
     QString limitationsText;
     Q_FOREACH (const KoID &id, l.limitations) {
-        limitationsText.append("<item>");
+        limitationsText.append("<li>");
         limitationsText.append(id.name());
-        limitationsText.append("</item>");
+        limitationsText.append("</li>");
     }
 
     QString blockersText;
     Q_FOREACH (const KoID &id, l.blockers) {
-        blockersText.append("<item>");
+        blockersText.append("<li>");
         blockersText.append(id.name());
-        blockersText.append("</item>");
+        blockersText.append("</li>");
     }
 
     bool isBlocked = !l.blockers.isEmpty();
@@ -96,18 +96,18 @@ void KisLodAvailabilityWidget::setLimitations(const KisPaintopLodLimitations &l)
 
     if (isBlocked) {
         toolTip.append(i18nc("@info:tooltip",
-                             "<para>Instant Preview Mode is "
+                             "<p>Instant Preview Mode is "
                              "disabled by the following options:"
-                             "<list>%1</list></para>", blockersText));
+                             "<ul>%1</ul></p>", blockersText));
 
     } else if (isLimited) {
         toolTip.append(i18nc("@info:tooltip",
-                             "<para>Instant Preview may look different "
+                             "<p>Instant Preview may look different "
                              "from the final result. In case of troubles "
                              "try disabling the following options:"
-                             "<list>%1</list></para>", limitationsText));
+                             "<ul>%1</ul></p>", limitationsText));
     } else {
-        toolTip = i18nc("@info:tooltip", "<para>Instant Preview Mode is available</para>");
+        toolTip = i18nc("@info:tooltip", "<p>Instant Preview Mode is available</p>");
     }
 
     {

@@ -75,10 +75,12 @@ bool testFilterSrcNotIsDev(KisFilterSP f)
         //dbgKrita << "creating new file for " << f->id();
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&file);
+        out.setCodec("UTF-8");
         out << kfc->toXML();
     } else {
         QString s;
         QTextStream in(&file);
+        out.setCodec("UTF-8");
         s = in.readAll();
         //dbgKrita << "Read for " << f->id() << "\n" << s;
         kfc->fromXML(s);
@@ -113,10 +115,12 @@ bool testFilterNoTransaction(KisFilterSP f)
         //dbgKrita << "creating new file for " << f->id();
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&file);
+        out.setCodec("UTF-8");
         out << kfc->toXML();
     } else {
         QString s;
         QTextStream in(&file);
+        in.setCodec("UTF-8");
         s = in.readAll();
         //dbgKrita << "Read for " << f->id() << "\n" << s;
         kfc->fromXML(s);
@@ -157,10 +161,12 @@ bool testFilter(KisFilterSP f)
         //dbgKrita << "creating new file for " << f->id();
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&file);
+        out.setCodec("UTF-8");
         out << kfc->toXML();
     } else {
         QString s;
         QTextStream in(&file);
+        in.setCodec("UTF-8");
         s = in.readAll();
         //dbgKrita << "Read for " << f->id() << "\n" << s;
         kfc->fromXML(s);
@@ -199,10 +205,12 @@ bool testFilterWithSelections(KisFilterSP f)
         //dbgKrita << "creating new file for " << f->id();
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&file);
+        out.setCodec("UTF-8");
         out << kfc->toXML();
     } else {
         QString s;
         QTextStream in(&file);
+        in.setCodec("UTF-8");
         s = in.readAll();
         //dbgKrita << "Read for " << f->id() << "\n" << s;
         kfc->fromXML(s);

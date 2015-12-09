@@ -117,6 +117,7 @@ bool TasksetResource::saveToDevice(QIODevice *io) const
     doc.appendChild(root);
 
     QTextStream textStream(io);
+    textStream.setCodec("UTF-8");
     doc.save(textStream, 4);
 
     KoResource::saveToDevice(io);

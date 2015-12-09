@@ -240,6 +240,7 @@ void KoResourceTagStore::writeXMLFile(const QString &tagstore)
     }
 
     QTextStream metastream(&f);
+    metastream.setCodec("UTF-8");
     metastream << doc.toString();
 
     f.close();

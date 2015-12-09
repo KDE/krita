@@ -57,6 +57,7 @@ KisTooltipManager::~KisTooltipManager()
             root.appendChild(tooltip);
         }
         QTextStream stream(&f);
+        stream.setCodec("UTF-8");
         stream << doc.toString();
 
         f.close();

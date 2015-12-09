@@ -1216,7 +1216,7 @@ void exrConverter::Private::reportLayersNotSaved(const QSet<KisNodeSP> &layersNo
 {
     QString layersList;
     QTextStream textStream(&layersList);
-
+    textStream.setCodec("UTF-8");
 
     Q_FOREACH (KisNodeSP node, layersNotSaved) {
         textStream << "<item>" << i18nc("@item:unsupported-node-message", "%1 (type: \"%2\")", node->name(), node->metaObject()->className()) << "</item>";

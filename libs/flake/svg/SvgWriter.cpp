@@ -96,6 +96,7 @@ bool SvgWriter::save(QIODevice &outputDevice)
         return false;
 
     QTextStream svgStream(&outputDevice);
+    svgStream.setCodec("UTF-8");
 
     // standard header:
     svgStream << "<?xml version=\"1.0\" standalone=\"no\"?>" << endl;

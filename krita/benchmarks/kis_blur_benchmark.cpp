@@ -72,10 +72,12 @@ void KisBlurBenchmark::benchmarkFilter()
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&file);
+        out.setCodec("UTF-8");
         out << kfc->toXML();
     } else {
         QString s;
         QTextStream in(&file);
+        in.setCodec("UTF-8");
         s = in.readAll();
         kfc->fromXML(s);
     }

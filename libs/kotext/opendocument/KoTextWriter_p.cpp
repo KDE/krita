@@ -1060,6 +1060,7 @@ void KoTextWriter::Private::addNameSpaceDefinitions(QString &generatedXmlString)
     //Generate the name-space definitions so that it can be parsed. Like what is office:text, office:delta etc
     QString nameSpaceDefinitions;
     QTextStream nameSpacesStream(&nameSpaceDefinitions);
+    nameSpacesStream.setCodec("UTF-8");
 
     nameSpacesStream << "<generated-xml ";
     nameSpacesStream << "xmlns:office=\"" << KoXmlNS::office << "\" ";

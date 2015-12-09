@@ -229,6 +229,7 @@ void BigBrotherPlugin::saveMacro(const KisMacro* macro)
         QFile f(filename);
         f.open(QIODevice::WriteOnly);
         QTextStream stream(&f);
+        stream.setCodec("UTF-8");
         doc.save(stream, 2);
         f.close();
     }

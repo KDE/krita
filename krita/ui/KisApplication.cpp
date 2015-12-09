@@ -439,6 +439,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     if (argsCount > 0) {
 
         QTextStream profileoutput;
+        profileoutput.setCodec("UTF-8");
         QFile profileFile(profileFileName);
         if (!profileFileName.isEmpty()
                 && profileFile.open(QFile::WriteOnly | QFile::Truncate)) {

@@ -24,11 +24,11 @@
 #include <QObject>
 #include <QRect>
 
-#include <KoGenericRegistry.h>
+#include <new>
+
 #include <KoColorSpace.h>
 
 #include "kis_types.h"
-#include <new>
 #include "kis_paint_device.h"
 
 #ifdef _MSC_VER
@@ -40,10 +40,8 @@
 typedef double(*PtrToDouble)(const quint8*, int);
 typedef void (*PtrFromDouble)(quint8*, int, double);
 
-class KRITAIMAGE_EXPORT KisMathToolbox : public QObject
+class KRITAIMAGE_EXPORT KisMathToolbox
 {
-
-    Q_OBJECT
 
 public:
 
@@ -71,24 +69,8 @@ public:
 
     typedef KisFloatRepresentation KisWavelet;
 
-public:
-
-    KisMathToolbox(KoID id);
-
-    virtual ~KisMathToolbox();
-
-public:
-
-    inline QString id() {
-        return m_id.id();
-    }
-
-    inline QString name() {
-        return m_id.name();
-    }
-
     /**
-     * This function initialize a wavelet structure
+     * This function initializes a wavelet structure
      * @param lay the layer that will be used for the transformation
      */
     inline KisWavelet* initWavelet(KisPaintDeviceSP lay, const QRect&) throw(std::bad_alloc);
@@ -103,7 +85,7 @@ public:
      * in transformToWavelet and in untransformToWavelet, use initWavelet to initialize
      * the buffer
      */
-    virtual KisWavelet* fastWaveletTransformation(KisPaintDeviceSP src, const QRect&, KisWavelet* buff = 0) = 0;
+    KisWavelet* fastWaveletTransformation(KisPaintDeviceSP src, const QRect&, KisWavelet* buff = 0);
 
     /**
      * This function reconstruct the layer from the information of a wavelet
@@ -114,7 +96,7 @@ public:
      * in transformToWavelet and in untransformToWavelet, use initWavelet to initialize
      * the buffer
      */
-    virtual void fastWaveletUntransformation(KisPaintDeviceSP dst, const QRect&, KisWavelet* wav, KisWavelet* buff = 0) = 0;
+    void fastWaveletUntransformation(KisPaintDeviceSP dst, const QRect&, KisWavelet* wav, KisWavelet* buff = 0);
 
     bool getToDoubleChannelPtr(QList<KoChannelInfo *> cis, QVector<PtrToDouble>& f);
     bool getFromDoubleChannelPtr(QList<KoChannelInfo *> cis, QVector<PtrFromDouble>& f);
@@ -122,11 +104,10 @@ public:
     double minChannelValue(KoChannelInfo *);
     double maxChannelValue(KoChannelInfo *);
 
-Q_SIGNALS:
+private:
 
-    void nextStep();
-
-protected:
+    void wavetrans(KisWavelet* wav, KisWavelet* buff, uint halfsize);
+    void waveuntrans(KisWavelet* wav, KisWavelet* buff, uint halfsize);
 
     /**
      * This function transform a paint device into a KisFloatRepresentation, this function is colorspace independent,
@@ -140,27 +121,7 @@ protected:
      */
     void transformFromFR(KisPaintDeviceSP dst, KisFloatRepresentation*, const QRect&);
 
-private:
-
-    KoID m_id;
-
 };
-
-class KRITAIMAGE_EXPORT KisMathToolboxRegistry
-        : public KoGenericRegistry<KisMathToolbox*>
-{
-
-public:
-    KisMathToolboxRegistry();
-    virtual ~KisMathToolboxRegistry();
-    static KisMathToolboxRegistry * instance();
-
-private:
-
-    KisMathToolboxRegistry(const KisMathToolboxRegistry&);
-    KisMathToolboxRegistry operator=(const KisMathToolboxRegistry&);
-};
-
 
 inline KisMathToolbox::KisWavelet* KisMathToolbox::initWavelet(KisPaintDeviceSP src, const QRect& rect)
 throw(std::bad_alloc)

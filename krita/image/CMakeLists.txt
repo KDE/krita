@@ -125,7 +125,6 @@ set(kritaimage_LIB_SRCS
    kis_base_accessor.cpp
    kis_base_node.cpp
    kis_base_processor.cpp
-   kis_basic_math_toolbox.cpp
    kis_bookmarked_configuration_manager.cc
    kis_clone_info.cpp
    kis_clone_layer.cpp

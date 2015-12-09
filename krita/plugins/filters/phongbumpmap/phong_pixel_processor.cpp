@@ -18,7 +18,6 @@
 
 #include "phong_pixel_processor.h"
 #include <cmath>
-#include "kis_math_toolbox.h"
 #include <iostream>
 #include <KoChannelInfo.h>
 

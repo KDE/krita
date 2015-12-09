@@ -177,11 +177,11 @@ public:
               alphaCachePos(-1),
               alphaRealPos(-1)
         {
-            KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->value(colorSpace->mathToolboxId().id());
+            KisMathToolbox mathToolbox;
 
             for (int i = 0; i < convChannelList.count(); ++i) {
-                minClamp.append(mathToolbox->minChannelValue(convChannelList[i]));
-                maxClamp.append(mathToolbox->maxChannelValue(convChannelList[i]));
+                minClamp.append(mathToolbox.minChannelValue(convChannelList[i]));
+                maxClamp.append(mathToolbox.maxChannelValue(convChannelList[i]));
                 absoluteOffset.append((maxClamp[i] - minClamp[i]) * kernel->offset());
 
                 if (convChannelList[i]->channelType() == KoChannelInfo::ALPHA) {
@@ -193,8 +193,8 @@ public:
             toDoubleFuncPtr.resize(convChannelList.count());
             fromDoubleFuncPtr.resize(convChannelList.count());
 
-            bool result = mathToolbox->getToDoubleChannelPtr(convChannelList, toDoubleFuncPtr);
-            result &= mathToolbox->getFromDoubleChannelPtr(convChannelList, fromDoubleFuncPtr);
+            bool result = mathToolbox.getToDoubleChannelPtr(convChannelList, toDoubleFuncPtr);
+            result &= mathToolbox.getFromDoubleChannelPtr(convChannelList, fromDoubleFuncPtr);
 
             KIS_ASSERT(result);
         }

@@ -80,30 +80,27 @@ void KisWaveletNoiseReduction::processImpl(KisPaintDeviceSP device,
     int maxrectsize = qMax(applyRect.width(), applyRect.height());
     for (size = 2; size < maxrectsize; size *= 2) ;
 
-    KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->get(device->colorSpace()->mathToolboxId().id());
+    KisMathToolbox mathToolbox;
 
     if (progressUpdater) {
-        progressUpdater->setRange(0, mathToolbox->fastWaveletTotalSteps(applyRect) * 2 + size*size*depth);
+        progressUpdater->setRange(0, mathToolbox.fastWaveletTotalSteps(applyRect) * 2 + size*size*depth);
     }
     int count = 0;
-//     connect(mathToolbox, SIGNAL(nextStep()), this, SLOT(incProgress()));
-
 
 //     dbgFilters << size <<"" << maxrectsize <<"" << srcTopLeft.x() <<"" << srcTopLeft.y();
 
 //     dbgFilters <<"Transforming...";
-//     setProgressStage( i18n("Fast wavelet transformation") ,progress());
     KisMathToolbox::KisWavelet* buff = 0;
     KisMathToolbox::KisWavelet* wav = 0;
 
     try {
-        buff = mathToolbox->initWavelet(device, applyRect);
+        buff = mathToolbox.initWavelet(device, applyRect);
     } catch (std::bad_alloc) {
         if (buff) delete buff;
         return;
     }
     try {
-        wav = mathToolbox->fastWaveletTransformation(device, applyRect, buff);
+        wav = mathToolbox.fastWaveletTransformation(device, applyRect, buff);
     } catch (std::bad_alloc) {
         if (wav) delete wav;
         return;
@@ -125,9 +122,8 @@ void KisWaveletNoiseReduction::processImpl(KisPaintDeviceSP device,
 
 //     dbgFilters <<"Untransforming...";
 
-    mathToolbox->fastWaveletUntransformation(device, applyRect, wav, buff);
+    mathToolbox.fastWaveletUntransformation(device, applyRect, wav, buff);
 
     delete wav;
     delete buff;
-//     disconnect(mathToolbox, SIGNAL(nextStep()), this, SLOT(incProgress()));
 }

@@ -80,7 +80,7 @@ bool testFilterSrcNotIsDev(KisFilterSP f)
     } else {
         QString s;
         QTextStream in(&file);
-        out.setCodec("UTF-8");
+        in.setCodec("UTF-8");
         s = in.readAll();
         //dbgKrita << "Read for " << f->id() << "\n" << s;
         kfc->fromXML(s);

@@ -106,8 +106,8 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
     //===============RENDER=================
 
     QVector<PtrToDouble> toDoubleFuncPtr(device->colorSpace()->channels().count());
-    KisMathToolbox *mathToolbox = KisMathToolboxRegistry::instance()->value(device->colorSpace()->mathToolboxId().id());
-    if (!mathToolbox->getToDoubleChannelPtr(device->colorSpace()->channels(), toDoubleFuncPtr)) {
+    KisMathToolbox mathToolbox;
+    if (!mathToolbox.getToDoubleChannelPtr(device->colorSpace()->channels(), toDoubleFuncPtr)) {
         return;
     }
 

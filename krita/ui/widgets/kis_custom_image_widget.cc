@@ -150,6 +150,7 @@ void KisCustomImageWidget::showEvent(QShowEvent *)
 {
     fillPredefined();
     this->createButton->setFocus();
+    this->createButton->setEnabled(true);
 }
 
 KisCustomImageWidget::~KisCustomImageWidget()
@@ -218,6 +219,7 @@ void KisCustomImageWidget::heightChanged(double value)
 
 void KisCustomImageWidget::createImage()
 {
+    createButton->setEnabled(false);
     KisDocument *doc = createNewImage();
     if (doc) {
         doc->setModified(false);

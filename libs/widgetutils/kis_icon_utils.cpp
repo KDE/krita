@@ -29,8 +29,11 @@
 
 #include <KoIcon.h>
 
+
 namespace KisIconUtils
 {
+
+static QMap<qint64, QString> s_icons;
 
 QIcon loadIcon(const QString &name)
 {
@@ -41,7 +44,6 @@ QIcon loadIcon(const QString &name)
     const char * const prefix = useDarkIcons ? "dark_" : "light_";
 
     QString  realName = QLatin1String(prefix) + name;
-
 
     // Dark and light, no size specified
     const QStringList names = { ":/pics/" + realName + ".png",
@@ -61,6 +63,7 @@ QIcon loadIcon(const QString &name)
     for (const QString &resname : names) {
         if (QFile(resname).exists()) {
             QIcon icon(resname);
+            s_icons.insert(icon.cacheKey(), name);
             return icon;
         }
     }
@@ -98,6 +101,7 @@ QIcon loadIcon(const QString &name)
             int size = sz.toInt();
             icon.addFile(p.second, QSize(size, size));
         }
+        s_icons.insert(icon.cacheKey(), name);
         return icon;
     }
 
@@ -111,7 +115,11 @@ bool adjustIcon(QIcon *icon)
     bool result = false;
 
     QString iconName = icon->name();
-    if (iconName.isNull()) return result;
+    if (iconName.isNull()) {
+        if (s_icons.contains(icon->cacheKey())) {
+            iconName = s_icons.take(icon->cacheKey());
+        }
+    }
 
     QString realIconName = iconName;
 
@@ -126,6 +134,7 @@ bool adjustIcon(QIcon *icon)
     if (!realIconName.isNull()) {
         *icon = loadIcon(realIconName);
         result = !icon->isNull();
+        s_icons.insert(icon->cacheKey(), iconName);
     }
 
     return result;

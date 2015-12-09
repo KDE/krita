@@ -18,20 +18,30 @@
 
 #include "kis_layer_utils.h"
 
+#include <algorithm>
+
+#include <KoColorSpaceConstants.h>
+
+#include "kis_painter.h"
 #include "kis_image.h"
 #include "kis_node.h"
 #include "kis_layer.h"
+#include "kis_paint_layer.h"
 #include "kis_clone_layer.h"
+#include "kis_selection.h"
 #include "kis_selection_mask.h"
 #include "kis_meta_data_merge_strategy.h"
 #include <kundo2command.h>
 #include "commands/kis_image_layer_add_command.h"
 #include "commands/kis_image_layer_remove_command.h"
+#include "commands/kis_image_layer_move_command.h"
+#include "commands_new/kis_activate_selection_mask_command.h"
 #include "kis_abstract_projection_plane.h"
 #include "kis_processing_applicator.h"
 #include "kis_image_animation_interface.h"
 #include "kis_keyframe_channel.h"
 #include "kis_command_utils.h"
+
 
 namespace KisLayerUtils {
 
@@ -48,59 +58,99 @@ namespace KisLayerUtils {
         }
     }
 
-    struct MergeDownInfo {
+    struct MergeDownInfoBase {
+        MergeDownInfoBase(KisImageSP _image)
+            : image(_image),
+              savedSwitchedTime(0)
+        {
+        }
+        virtual ~MergeDownInfoBase() {}
+
+        KisImageWSP image;
+
+        QVector<KisSelectionMaskSP> selectionMasks;
+
+        KisNodeSP dstNode;
+
+        int savedSwitchedTime;
+        QSet<int> frames;
+
+        virtual QList<KisNodeSP> allSrcNodes() = 0;
+        virtual KisLayerSP dstLayer() { return 0; }
+    };
+
+    struct MergeDownInfo : public MergeDownInfoBase {
         MergeDownInfo(KisImageSP _image,
                       KisLayerSP _prevLayer,
                       KisLayerSP _currLayer)
-            : image(_image),
+            : MergeDownInfoBase(_image),
               prevLayer(_prevLayer),
-              currLayer(_currLayer),
-              savedSwitchedTime(0)
+              currLayer(_currLayer)
         {
             frames =
                 fetchLayerFramesRecursive(prevLayer) |
                 fetchLayerFramesRecursive(currLayer);
         }
 
-        KisImageWSP image;
-
         KisLayerSP prevLayer;
         KisLayerSP currLayer;
 
-        QVector<KisSelectionMaskSP> selectionMasks;
+        QList<KisNodeSP> allSrcNodes() {
+            QList<KisNodeSP> mergedNodes;
+            mergedNodes << currLayer;
+            mergedNodes << prevLayer;
+            return mergedNodes;
+        }
 
-        KisLayerSP dstLayer;
-
-        int savedSwitchedTime;
-        QSet<int> frames;
+        KisLayerSP dstLayer() {
+            return dynamic_cast<KisLayer*>(dstNode.data());
+        }
     };
 
+    struct MergeMultipleInfo : public MergeDownInfoBase {
+        MergeMultipleInfo(KisImageSP _image,
+                          QList<KisNodeSP> _mergedNodes)
+            : MergeDownInfoBase(_image),
+              mergedNodes(_mergedNodes)
+        {
+            foreach (KisNodeSP node, mergedNodes) {
+                frames |= fetchLayerFramesRecursive(node);
+            }
+        }
+
+        QList<KisNodeSP> mergedNodes;
+
+        QList<KisNodeSP> allSrcNodes() {
+            return mergedNodes;
+        }
+    };
+
+    typedef QSharedPointer<MergeDownInfoBase> MergeDownInfoBaseSP;
     typedef QSharedPointer<MergeDownInfo> MergeDownInfoSP;
+    typedef QSharedPointer<MergeMultipleInfo> MergeMultipleInfoSP;
 
     struct FillSelectionMasks : public KUndo2Command {
-        FillSelectionMasks(MergeDownInfoSP info) : m_info(info) {}
+        FillSelectionMasks(MergeDownInfoBaseSP info) : m_info(info) {}
 
         void redo() {
-            QList<KisNodeSP> mergedNodes;
-            mergedNodes << m_info->currLayer;
-            mergedNodes << m_info->prevLayer;
-            fetchSelectionMasks(mergedNodes, m_info->selectionMasks);
+            fetchSelectionMasks(m_info->allSrcNodes(), m_info->selectionMasks);
         }
 
     private:
-        MergeDownInfoSP m_info;
+        MergeDownInfoBaseSP m_info;
     };
 
     struct RefreshHiddenAreas : public KUndo2Command {
-        RefreshHiddenAreas(MergeDownInfoSP info) : m_info(info) {}
+        RefreshHiddenAreas(MergeDownInfoBaseSP info) : m_info(info) {}
 
         void redo() {
             KisImageAnimationInterface *interface = m_info->image->animationInterface();
             const QRect preparedRect = !interface->externalFrameActive() ?
                 m_info->image->bounds() : QRect();
 
-            refreshHiddenAreaAsync(m_info->currLayer, preparedRect);
-            refreshHiddenAreaAsync(m_info->prevLayer, preparedRect);
+            foreach (KisNodeSP node, m_info->allSrcNodes()) {
+                refreshHiddenAreaAsync(node, preparedRect);
+            }
         }
 
     private:
@@ -132,18 +182,18 @@ namespace KisLayerUtils {
             }
         }
     private:
-        MergeDownInfoSP m_info;
+        MergeDownInfoBaseSP m_info;
     };
 
-    struct CreateMergedLayer : public KUndo2Command {
+    struct CreateMergedLayer : public KisCommandUtils::AggregateCommand {
         CreateMergedLayer(MergeDownInfoSP info) : m_info(info) {}
 
-        void redo() {
+        void populateChildCommands() {
             // actual merging done by KisLayer::createMergedLayer (or specialized decendant)
-            m_info->dstLayer = m_info->currLayer->createMergedLayerTemplate(m_info->prevLayer);
+            m_info->dstNode = m_info->currLayer->createMergedLayerTemplate(m_info->prevLayer);
 
             if (m_info->frames.size() > 0) {
-                m_info->dstLayer->enableAnimation();
+                m_info->dstNode->enableAnimation();
             }
         }
 
@@ -151,16 +201,55 @@ namespace KisLayerUtils {
         MergeDownInfoSP m_info;
     };
 
-    struct MergeLayers : public KUndo2Command {
+    struct CreateMergedLayerMultiple : public KisCommandUtils::AggregateCommand {
+        CreateMergedLayerMultiple(MergeMultipleInfoSP info) : m_info(info) {}
+
+        void populateChildCommands() {
+            const QString mergedLayerSuffix = i18n("Merged");
+            QString mergedLayerName = m_info->mergedNodes.first()->name();
+
+            if (!mergedLayerName.endsWith(mergedLayerSuffix)) {
+                mergedLayerName = QString("%1 %2")
+                    .arg(mergedLayerName).arg(mergedLayerSuffix);
+            }
+
+            m_info->dstNode = new KisPaintLayer(m_info->image, mergedLayerName, OPACITY_OPAQUE_U8);
+
+            if (m_info->frames.size() > 0) {
+                m_info->dstNode->enableAnimation();
+            }
+        }
+
+    private:
+        MergeMultipleInfoSP m_info;
+    };
+
+    struct MergeLayers : public KisCommandUtils::AggregateCommand {
         MergeLayers(MergeDownInfoSP info) : m_info(info) {}
 
-        void redo() {
+        void populateChildCommands() {
             // actual merging done by KisLayer::createMergedLayer (or specialized decendant)
-            m_info->currLayer->fillMergedLayerTemplate(m_info->dstLayer, m_info->prevLayer);
+            m_info->currLayer->fillMergedLayerTemplate(m_info->dstLayer(), m_info->prevLayer);
         }
 
     private:
         MergeDownInfoSP m_info;
+    };
+
+    struct MergeLayersMultiple : public KisCommandUtils::AggregateCommand {
+        MergeLayersMultiple(MergeMultipleInfoSP info) : m_info(info) {}
+
+        void populateChildCommands() {
+            KisPainter gc(m_info->dstNode->paintDevice());
+
+            foreach (KisNodeSP node, m_info->allSrcNodes()) {
+                QRect rc = node->exactBounds() | m_info->image->bounds();
+                node->projectionPlane()->apply(&gc, rc);
+            }
+        }
+
+    private:
+        MergeMultipleInfoSP m_info;
     };
 
     struct MergeMetaData : public KUndo2Command {
@@ -182,7 +271,7 @@ namespace KisLayerUtils {
             QList<const KisMetaData::Store*> srcs;
             srcs.append(m_info->prevLayer->metaData());
             srcs.append(m_info->currLayer->metaData());
-            m_strategy->merge(m_info->dstLayer->metaData(), srcs, scores);
+            m_strategy->merge(m_info->dstLayer()->metaData(), srcs, scores);
         }
 
     private:
@@ -191,19 +280,64 @@ namespace KisLayerUtils {
     };
 
     struct CleanUpNodes : public KisCommandUtils::AggregateCommand {
-        CleanUpNodes(MergeDownInfoSP info) : m_info(info) {}
+        CleanUpNodes(MergeDownInfoBaseSP info, KisNodeSP putAfter)
+            : m_info(info), m_putAfter(putAfter) {}
+
+        static void findPerfectParent(QList<KisNodeSP> nodesToDelete, KisNodeSP &putAfter, KisNodeSP &parent) {
+            if (!putAfter) {
+                putAfter = nodesToDelete.last();
+            }
+
+            // Add the new merged node on top of the active node -- checking
+            // whether the parent is going to be deleted
+            parent = putAfter->parent();
+            while (nodesToDelete.contains(parent)) {
+                parent = parent->parent();
+            }
+        }
 
         void populateChildCommands() {
-            addCommand(new KisImageLayerAddCommand(m_info->image,
-                                                   m_info->dstLayer,
-                                                   m_info->currLayer->parent(),
-                                                   m_info->currLayer,
-                                                   true, false));
+            QList<KisNodeSP> nodesToDelete = m_info->allSrcNodes();
 
-            safeRemoveTwoNodes(m_info->currLayer, m_info->prevLayer);
+            KisNodeSP parent;
+            findPerfectParent(nodesToDelete, m_putAfter, parent);
+
+            if (parent == m_putAfter->parent()) {
+                addCommand(new KisImageLayerAddCommand(m_info->image,
+                                                       m_info->dstNode,
+                                                       parent,
+                                                       m_putAfter,
+                                                       true, false));
+            } else {
+                addCommand(new KisImageLayerAddCommand(m_info->image,
+                                                       m_info->dstNode,
+                                                       parent,
+                                                       parent->lastChild(),
+                                                       true, false));
+            }
+
+            reparentSelectionMasks(m_info->image,
+                                   m_info->dstLayer(),
+                                   m_info->selectionMasks);
+
+            safeRemoveMultipleNodes(m_info->allSrcNodes());
         }
 
     private:
+        bool checkIsSourceForClone(KisNodeSP src, const QList<KisNodeSP> &nodes) {
+            foreach (KisNodeSP node, nodes) {
+                if (node == src) continue;
+
+                KisCloneLayer *clone = dynamic_cast<KisCloneLayer*>(node.data());
+
+                if (clone && KisNodeSP(clone->copyFrom()) == src) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         /**
          * The removal of two nodes in one go may be a bit tricky, because one
          * of them may be the clone of another. If we remove the source of a
@@ -213,24 +347,38 @@ namespace KisLayerUtils {
          * That's why we need to care about the order of the nodes removal:
          * the clone --- first, the source --- last.
          */
-        void safeRemoveTwoNodes(KisNodeSP node1, KisNodeSP node2) {
-            KisCloneLayer *clone1 = dynamic_cast<KisCloneLayer*>(node1.data());
+        void safeRemoveMultipleNodes(QList<KisNodeSP> nodes) {
+            while (!nodes.isEmpty()) {
+                QList<KisNodeSP>::iterator it = nodes.begin();
 
-            if (clone1 && KisNodeSP(clone1->copyFrom()) == node2) {
-                addCommand(new KisImageLayerRemoveCommand(m_info->image, node1, false, true));
-                addCommand(new KisImageLayerRemoveCommand(m_info->image, node2, false, true));
-            } else {
-                addCommand(new KisImageLayerRemoveCommand(m_info->image, node2, false, true));
-                addCommand(new KisImageLayerRemoveCommand(m_info->image, node1, false, true));
+                while (it != nodes.end()) {
+                    if (!checkIsSourceForClone(*it, nodes)) {
+                        KisNodeSP node = *it;
+                        addCommand(new KisImageLayerRemoveCommand(m_info->image, node, false, true));
+                        it = nodes.erase(it);
+                    } else {
+                        ++it;
+                    }
+                }
             }
         }
 
+        void reparentSelectionMasks(KisImageSP image,
+                                    KisLayerSP newLayer,
+                                    const QVector<KisSelectionMaskSP> &selectionMasks) {
+
+            foreach (KisSelectionMaskSP mask, selectionMasks) {
+                addCommand(new KisImageLayerMoveCommand(image, mask, newLayer, newLayer->lastChild()));
+                addCommand(new KisActivateSelectionMaskCommand(mask, false));
+            }
+        }
     private:
-        MergeDownInfoSP m_info;
+        MergeDownInfoBaseSP m_info;
+        KisNodeSP m_putAfter;
     };
 
     struct SwitchFrameCommand : public KUndo2Command {
-        SwitchFrameCommand(MergeDownInfoSP info, int time, bool finalize)
+        SwitchFrameCommand(MergeDownInfoBaseSP info, int time, bool finalize)
             : m_info(info),
               m_newTime(time),
               m_finalize(finalize) {}
@@ -264,24 +412,24 @@ namespace KisLayerUtils {
             interface->image()->enableUIUpdates();
         }
     private:
-        MergeDownInfoSP m_info;
+        MergeDownInfoBaseSP m_info;
         int m_newTime;
         bool m_finalize;
     };
 
     struct AddNewFrame : public KisCommandUtils::AggregateCommand {
-        AddNewFrame(MergeDownInfoSP info, int frame) : m_info(info), m_frame(frame) {}
+        AddNewFrame(MergeDownInfoBaseSP info, int frame) : m_info(info), m_frame(frame) {}
 
         void populateChildCommands() {
             KUndo2Command *cmd = new KisCommandUtils::SkipFirstRedoWrapper();
-            KisKeyframeChannel *channel = m_info->dstLayer->getKeyframeChannel(KisKeyframeChannel::Content.id());
+            KisKeyframeChannel *channel = m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Content.id());
             channel->addKeyframe(m_frame, cmd);
 
             addCommand(cmd);
         }
 
     private:
-        MergeDownInfoSP m_info;
+        MergeDownInfoBaseSP m_info;
         int m_frame;
     };
 
@@ -348,11 +496,230 @@ namespace KisLayerUtils {
         }
 
         applicator.applyCommand(new MergeMetaData(info, strategy), KisStrokeJobData::BARRIER);
-        applicator.applyCommand(new CleanUpNodes(info),
+        applicator.applyCommand(new CleanUpNodes(info, layer),
                                 KisStrokeJobData::SEQUENTIAL,
                                 KisStrokeJobData::EXCLUSIVE);
 
         applicator.end();
     }
 
+    bool checkIsChildOf(KisNodeSP node, const QList<KisNodeSP> &parents)
+    {
+        QList<KisNodeSP> nodeParents;
+
+        KisNodeSP parent = node->parent();
+        while (parent) {
+            nodeParents << parent;
+            parent = parent->parent();
+        }
+
+        foreach(KisNodeSP perspectiveParent, parents) {
+            if (nodeParents.contains(perspectiveParent)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    void filterMergableNodes(QList<KisNodeSP> &nodes)
+    {
+        QList<KisNodeSP>::iterator it = nodes.begin();
+
+        while (it != nodes.end()) {
+            if (!dynamic_cast<KisLayer*>(it->data()) ||
+                checkIsChildOf(*it, nodes)) {
+
+                qDebug() << "Skipping node" << ppVar((*it)->name());
+                it = nodes.erase(it);
+            } else {
+                ++it;
+            }
+        }
+    }
+
+    void sortMergableNodes(KisNodeSP root, QList<KisNodeSP> &inputNodes, QList<KisNodeSP> &outputNodes)
+    {
+        QList<KisNodeSP>::iterator it = std::find(inputNodes.begin(), inputNodes.end(), root);
+
+        if (it != inputNodes.end()) {
+            outputNodes << *it;
+            inputNodes.erase(it);
+        }
+
+        if (inputNodes.isEmpty()) {
+            return;
+        }
+
+        KisNodeSP child = root->firstChild();
+        while (child) {
+            sortMergableNodes(child, inputNodes, outputNodes);
+            child = child->nextSibling();
+        }
+
+        /**
+         * By the end of recursion \p inputNodes must be empty
+         */
+        KIS_ASSERT_RECOVER_NOOP(root->parent() || inputNodes.isEmpty());
+    }
+
+    void mergeMultipleLayers(KisImageSP image, QList<KisNodeSP> mergedNodes, KisNodeSP putAfter)
+    {
+        filterMergableNodes(mergedNodes);
+        {
+            QList<KisNodeSP> tempNodes;
+            qSwap(mergedNodes, tempNodes);
+            sortMergableNodes(image->root(), tempNodes, mergedNodes);
+        }
+
+        if (mergedNodes.size() <= 1) return;
+
+        if (!putAfter) {
+            putAfter = mergedNodes.last();
+        }
+
+        // Add the new merged node on top of the active node -- checking
+        // whether the parent is going to be deleted
+        KisNodeSP parent = putAfter->parent();
+        while (mergedNodes.contains(parent)) {
+            parent = parent->parent();
+        }
+
+        KisImageSignalVector emitSignals;
+        emitSignals << ModifiedSignal;
+
+        KisProcessingApplicator applicator(image, 0,
+                                           KisProcessingApplicator::NONE,
+                                           emitSignals,
+                                           kundo2_i18n("Merge Selected Nodes"));
+
+        MergeMultipleInfoSP info(new MergeMultipleInfo(image, mergedNodes));
+
+
+        applicator.applyCommand(new FillSelectionMasks(info));
+        applicator.applyCommand(new CreateMergedLayerMultiple(info), KisStrokeJobData::BARRIER);
+
+        if (info->frames.size() > 0) {
+            KisImageAnimationInterface *interface = info->image->animationInterface();
+            const int currentTime = interface->currentTime();
+
+            foreach (int frame, info->frames) {
+                if (frame != currentTime) {
+                    applicator.applyCommand(new SwitchFrameCommand(info, frame, false));
+                }
+
+                applicator.applyCommand(new AddNewFrame(info, frame));
+                applicator.applyCommand(new RefreshHiddenAreas(info));
+                applicator.applyCommand(new MergeLayersMultiple(info), KisStrokeJobData::BARRIER);
+
+                if (frame != currentTime) {
+                    applicator.applyCommand(new SwitchFrameCommand(info, frame, true));
+                }
+            }
+        } else {
+            applicator.applyCommand(new RefreshHiddenAreas(info));
+            applicator.applyCommand(new MergeLayersMultiple(info), KisStrokeJobData::BARRIER);
+        }
+
+        //applicator.applyCommand(new MergeMetaData(info, strategy), KisStrokeJobData::BARRIER);
+        applicator.applyCommand(new CleanUpNodes(info, putAfter),
+                                KisStrokeJobData::SEQUENTIAL,
+                                KisStrokeJobData::EXCLUSIVE);
+
+        applicator.end();
+
+    }
+
+    struct MergeSelectionMasks : public KisCommandUtils::AggregateCommand {
+        MergeSelectionMasks(MergeDownInfoBaseSP info, KisNodeSP putAfter)
+            : m_info(info),
+              m_putAfter(putAfter){}
+
+        void populateChildCommands() {
+            KisNodeSP parent;
+            CleanUpNodes::findPerfectParent(m_info->allSrcNodes(), m_putAfter, parent);
+
+            KisLayerSP parentLayer;
+            do {
+                parentLayer = dynamic_cast<KisLayer*>(parent.data());
+
+                parent = parent->parent();
+            } while(!parentLayer && parent);
+
+            KisSelectionSP selection = new KisSelection();
+
+            foreach (KisNodeSP node, m_info->allSrcNodes()) {
+                KisMaskSP mask = dynamic_cast<KisMask*>(node.data());
+                if (!mask) continue;
+
+                selection->pixelSelection()->applySelection(
+                    mask->selection()->pixelSelection(), SELECTION_ADD);
+            }
+
+            KisSelectionMaskSP mergedMask = new KisSelectionMask(m_info->image);
+            mergedMask->initSelection(parentLayer);
+            mergedMask->setSelection(selection);
+
+            m_info->dstNode = mergedMask;
+        }
+
+    private:
+        MergeDownInfoBaseSP m_info;
+        KisNodeSP m_putAfter;
+    };
+
+    struct ActivateSelectionMask : public KisCommandUtils::AggregateCommand {
+        ActivateSelectionMask(MergeDownInfoBaseSP info)
+            : m_info(info) {}
+
+        void populateChildCommands() {
+            KisSelectionMaskSP mergedMask = dynamic_cast<KisSelectionMask*>(m_info->dstNode.data());
+            addCommand(new KisActivateSelectionMaskCommand(mergedMask, true));
+        }
+
+    private:
+        MergeDownInfoBaseSP m_info;
+    };
+
+    bool tryMergeSelectionMasks(KisImageSP image, QList<KisNodeSP> mergedNodes, KisNodeSP putAfter)
+    {
+        QList<KisSelectionMaskSP> selectionMasks;
+
+        QList<KisNodeSP>::iterator it = mergedNodes.begin();
+        QList<KisNodeSP>::iterator end = mergedNodes.end();
+        while (it != end) {
+            KisSelectionMaskSP mask = dynamic_cast<KisSelectionMask*>(it->data());
+            if (!mask) {
+                it = mergedNodes.erase(it);
+            } else {
+                selectionMasks.append(mask);
+                ++it;
+            }
+        }
+
+        if (mergedNodes.isEmpty()) return false;
+
+        KisLayerSP parentLayer = dynamic_cast<KisLayer*>(selectionMasks.first()->parent().data());
+        KIS_ASSERT_RECOVER(parentLayer) { return 0; }
+
+        KisImageSignalVector emitSignals;
+        emitSignals << ModifiedSignal;
+
+        KisProcessingApplicator applicator(image, 0,
+                                           KisProcessingApplicator::NONE,
+                                           emitSignals,
+                                           kundo2_i18n("Merge Selection Masks"));
+
+        MergeMultipleInfoSP info(new MergeMultipleInfo(image, mergedNodes));
+
+
+        applicator.applyCommand(new MergeSelectionMasks(info, putAfter));
+        applicator.applyCommand(new CleanUpNodes(info, putAfter),
+                                KisStrokeJobData::SEQUENTIAL,
+                                KisStrokeJobData::EXCLUSIVE);
+        applicator.applyCommand(new ActivateSelectionMask(info));
+        applicator.end();
+
+        return true;
+    }
 }

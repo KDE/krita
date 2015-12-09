@@ -45,6 +45,8 @@ private Q_SLOTS:
 
     void testMergeMultiple();
     void testMergeCrossColorSpace();
+
+    void testMergeSelectionMasks();
 };
 
 #endif

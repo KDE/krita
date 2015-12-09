@@ -788,7 +788,7 @@ void KisLayerManager::mergeLayer()
 
     QList<KisNodeSP> selectedNodes = m_view->nodeManager()->selectedNodes();
     if (selectedNodes.size() > 1) {
-        image->mergeMultipleLayers(selectedNodes, layer);
+        image->mergeMultipleLayers(selectedNodes, m_view->activeNode());
 
     } else if (!tryMergeSelectionMasks(m_view->activeNode(), image)) {
 

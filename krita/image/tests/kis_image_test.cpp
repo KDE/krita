@@ -36,6 +36,7 @@
 #include <kis_debug.h>
 #include <kis_layer_composition.h>
 #include "kis_keyframe_channel.h"
+#include "kis_selection_mask.h"
 
 #include "kis_undo_stores.h"
 
@@ -665,6 +666,20 @@ void KisImageTest::testMergeDownMultipleFrames()
     }
 }
 
+template<class ContainerTest>
+KisNodeSP mergeMultipleHelper(ContainerTest &p, QList<KisNodeSP> selectedNodes, KisNodeSP putAfter)
+{
+    QSignalSpy spy(p.image.data(), SIGNAL(sigNodeAddedAsync(KisNodeSP)));
+
+    p.image->mergeMultipleLayers(selectedNodes, putAfter);
+    //KisLayerUtils::mergeMultipleLayers(p.image, selectedNodes, putAfter);
+    p.image->waitForDone();
+
+    Q_ASSERT(spy.count() == 1);
+    QList<QVariant> arguments = spy.takeFirst();
+    KisNodeSP newNode = arguments.first().value<KisNodeSP>();
+    return newNode;
+}
 void KisImageTest::testMergeMultiple()
 {
     FlattenTestImage p;
@@ -680,8 +695,10 @@ void KisImageTest::testMergeMultiple()
                       << p.layer6;
 
         {
-            KisNodeSP newLayer = p.image->mergeMultipleLayers(selectedNodes, 0);
-            p.image->waitForDone();
+            KisNodeSP newLayer = mergeMultipleHelper(p, selectedNodes, 0);
+
+            //KisNodeSP newLayer = p.image->mergeMultipleLayers(selectedNodes, 0);
+            //p.image->waitForDone();
 
             QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
             QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "01_layer8_layerproj"));
@@ -705,8 +722,10 @@ void KisImageTest::testMergeMultiple()
                       << p.layer2;
 
         {
-            KisNodeSP newLayer = p.image->mergeMultipleLayers(selectedNodes, 0);
-            p.image->waitForDone();
+            KisNodeSP newLayer = mergeMultipleHelper(p, selectedNodes, 0);
+
+            //KisNodeSP newLayer = p.image->mergeMultipleLayers(selectedNodes, 0);
+            //p.image->waitForDone();
 
             QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
             QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "01_layer8_layerproj"));
@@ -786,4 +805,56 @@ void KisImageTest::testMergeCrossColorSpace()
     testMergeCrossColorSpaceImpl(false, true);
 }
 
-QTEST_MAIN(KisImageTest)
+void KisImageTest::testMergeSelectionMasks()
+{
+    QRect refRect;
+    TestUtil::MaskParent p;
+
+    QRect rect1(100, 100, 100, 100);
+    QRect rect2(150, 150, 150, 150);
+    QRect rect3(50, 50, 100, 100);
+
+    KisPaintLayerSP layer1 = p.layer;
+    layer1->paintDevice()->fill(rect1, KoColor(Qt::red, layer1->colorSpace()));
+
+    p.image->initialRefreshGraph();
+
+    KisSelectionSP sel = new KisSelection(layer1->paintDevice()->defaultBounds());
+
+    sel->pixelSelection()->select(rect2, MAX_SELECTED);
+    KisSelectionMaskSP mask1 = new KisSelectionMask(p.image);
+    mask1->initSelection(sel, layer1);
+    p.image->addNode(mask1, layer1);
+
+    QVERIFY(!layer1->selection());
+
+    mask1->setActive(true);
+
+    QCOMPARE(layer1->selection()->selectedExactRect(), QRect(150,150,150,150));
+
+    sel->pixelSelection()->select(rect3, MAX_SELECTED);
+    KisSelectionMaskSP mask2 = new KisSelectionMask(p.image);
+    mask2->initSelection(sel, layer1);
+    p.image->addNode(mask2, layer1);
+
+    QCOMPARE(layer1->selection()->selectedExactRect(), QRect(150,150,150,150));
+
+    mask2->setActive(true);
+
+    QCOMPARE(layer1->selection()->selectedExactRect(), QRect(50,50,250,250));
+
+    QList<KisNodeSP> selectedNodes;
+
+    selectedNodes << mask2
+                  << mask1;
+
+    {
+        KisNodeSP newLayer = mergeMultipleHelper(p, selectedNodes, 0);
+        QCOMPARE(newLayer->parent(), KisNodeSP(layer1));
+        QCOMPARE((int)layer1->childCount(), 1);
+        QCOMPARE(layer1->selection()->selectedExactRect(), QRect(50,50,250,250));
+    }
+}
+
+QTEST_MAIN(KisImageTest, NoGUI)
+#include "kis_image_test.moc"

@@ -125,6 +125,7 @@
 #include "kra/kis_kra_loader.h"
 #include "widgets/kis_floating_message.h"
 #include "kis_signal_auto_connection.h"
+#include "kis_script_manager.h"
 #include "kis_icon_utils.h"
 
 
@@ -239,6 +240,7 @@ public:
         , guiUpdateCompressor(30, KisSignalCompressor::POSTPONE, _q)
         , mirrorManager(_q)
         , inputManager(_q)
+        , scriptManager(_q)
         , actionAuthor(0)
     {
     }
@@ -285,6 +287,7 @@ public:
     KisInputManager inputManager;
 
     KisSignalAutoConnectionsStore viewConnections;
+    KisScriptManager scriptManager;
     KSelectAction *actionAuthor; // Select action for author profile.
 
     QByteArray canvasState;
@@ -722,6 +725,7 @@ void KisViewManager::setupManagers()
 
     d->mirrorManager.setup(actionCollection());
 
+    d->scriptManager.setup(actionCollection());
 }
 
 void KisViewManager::updateGUI()
@@ -766,6 +770,11 @@ KisDocument *KisViewManager::document() const
         return d->currentImageView->document();
     }
     return 0;
+}
+
+KisScriptManager *KisViewManager::scriptManager() const
+{
+  return &d->scriptManager;
 }
 
 int KisViewManager::viewCount() const

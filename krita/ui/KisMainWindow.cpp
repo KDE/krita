@@ -309,6 +309,8 @@ KisMainWindow::KisMainWindow()
 
     QMetaObject::invokeMethod(this, "initializeGeometry", Qt::QueuedConnection);
 
+    KoPluginLoader::instance()->load("Krita/ViewPlugin", "Type == 'Service' and ([X-Krita-Version] == 28)", KoPluginLoader::PluginsConfig(), d->viewManager);
+    
     KoToolBoxFactory toolBoxFactory;
     QDockWidget *toolbox = createDockWidget(&toolBoxFactory);
     toolbox->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetClosable);
@@ -359,11 +361,6 @@ KisMainWindow::KisMainWindow()
     createActions();
 
     setAutoSaveSettings("krita", false);
-
-    KoPluginLoader::instance()->load("Krita/ViewPlugin",
-                                     "Type == 'Service' and ([X-Krita-Version] == 28)",
-                                     KoPluginLoader::PluginsConfig(),
-                                     viewManager());
 
     subWindowActivated();
     updateWindowMenu();

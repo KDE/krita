@@ -35,6 +35,7 @@
 
 
 #include "kis_action_registry.h"
+#include "kshortcutschemeshelper_p.h"
 
 
 namespace {
@@ -123,12 +124,21 @@ KisActionRegistry::KisActionRegistry()
     : d(new KisActionRegistry::Private(this))
 {
     d->loadActionFiles();
+
+    KConfigGroup cg = KSharedConfig::openConfig()->group("Shortcut Schemes");
+    QString schemeName = cg.readEntry("Current Scheme", "Default");
+    loadShortcutScheme(schemeName);
+
     d->loadCustomShortcuts();
 
     KoResourcePaths::addResourceType("kis_shortcuts", "data", "krita/shortcuts/");
 }
 
-// Not the most efficient logic, but simple and readable.
+QKeySequence KisActionRegistry::getCustomShortcut(const QString &name)
+{
+    return d->actionInfo(name).customShortcut;
+};
+
 QKeySequence KisActionRegistry::getPreferredShortcut(const QString &name)
 {
     return preferredShortcut(d->actionInfo(name));
@@ -172,6 +182,28 @@ void KisActionRegistry::notifySettingsUpdated()
     d->loadCustomShortcuts();
 };
 
+void KisActionRegistry::loadCustomShortcuts()
+{
+    d->loadCustomShortcuts();
+};
+
+void KisActionRegistry::loadShortcutScheme(const QString &schemeName)
+{
+    // Load scheme file
+    if (schemeName != QStringLiteral("Default")) {
+        QString schemeFileName = KShortcutSchemesHelper::schemeFileLocations().value(schemeName);
+        if (schemeFileName.isEmpty()) {
+            // qDebug() << "No configuration file found for scheme" << schemeName;
+            return;
+        }
+        KConfig schemeConfig(schemeFileName, KConfig::SimpleConfig);
+        applyShortcutScheme(&schemeConfig);
+    } else {
+        // Apply default scheme, updating KisActionRegistry data
+        applyShortcutScheme();
+    }
+}
+
 QAction * KisActionRegistry::makeQAction(const QString &name, QObject *parent)
 {
 
@@ -210,11 +242,6 @@ void KisActionRegistry::configureShortcuts(KActionCollection *ac)
 
 void KisActionRegistry::applyShortcutScheme(const KConfigBase *config)
 {
-
-    /**
-     * Stuff from XMLGUI starts here
-     */
-
     // First, update the things in KisActionRegistry
     if (config == 0) {
         // Simplest just to reload everything
@@ -226,7 +253,6 @@ void KisActionRegistry::applyShortcutScheme(const KConfigBase *config)
         while (it != schemeEntries.end()) {
             ActionInfoItem &info = d->actionInfo(it.key());
             info.defaultShortcut = it.value();
-            info.customShortcut = QKeySequence();
             it++;
         }
     }
@@ -319,6 +345,26 @@ QString KisActionRegistry::getActionProperty(const QString &name, const QString 
 
 }
 
+
+void KisActionRegistry::writeCustomShortcuts() const
+{
+    KConfigGroup cg(KSharedConfig::openConfig("kritashortcutsrc"),
+                    QStringLiteral("Shortcuts"));
+
+    QList<QAction *> writeActions;
+    for (auto it = d->actionInfoList.constBegin();
+         it != d->actionInfoList.constEnd(); ++it) {
+
+        QString actionName = it.key();
+        QString s = it.value().customShortcut.toString();
+        if (s.isEmpty()) {
+            cg.deleteEntry(actionName, KConfigGroup::Persistent);
+        } else {
+            cg.writeEntry(actionName, s, KConfigGroup::Persistent);
+        }
+    }
+    cg.sync();
+}
 
 void KisActionRegistry::Private::loadActionFiles()
 {

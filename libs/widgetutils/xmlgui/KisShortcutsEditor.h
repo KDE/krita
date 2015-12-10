@@ -182,15 +182,27 @@ public:
     void clearConfiguration();
 
     /**
-     * Write the current settings to the \p config object.
+     * Write the current custom shortcut settings to the \p config object.
      *
      * @param config Config object to save to. Default is kritashortcutsrc.
      *
      */
-    void writeConfiguration(KConfigGroup *config = 0) const;
+    void saveShortcuts(KConfigGroup *config = 0) const;
 
+
+    /**
+     * Write the current shortcuts to a new scheme to configuration file
+     *
+     * @param config Config object to save to.
+     */
     void exportConfiguration(KConfigBase *config) const;
 
+
+    /**
+     * Import a shortcut scheme from configuration file
+     *
+     * @param config Config object to save to.
+     */
     void importConfiguration(KConfigBase *config);
 
     /**

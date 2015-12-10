@@ -113,6 +113,18 @@ public:
 
 
     /**
+     * Reload custom shortcuts from kritashortcutsrc
+     */
+    void loadCustomShortcuts();
+
+
+    /**
+     * Read custom shortcuts from kritashortcutsrc
+     */
+    void writeCustomShortcuts() const;
+
+
+    /**
      * Call after settings are changed.
      */
     void notifySettingsUpdated();
@@ -127,6 +139,7 @@ public:
     KActionCollection * getDefaultCollection();
 
 
+    void loadShortcutScheme(const QString &schemeName);
     // If config == 0, reload defaults
     void applyShortcutScheme(const KConfigBase *config = 0);
 

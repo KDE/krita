@@ -63,21 +63,8 @@ void KisShortcutsDialog::KisShortcutsDialogPrivate::changeShortcutScheme(const Q
 
     KConfigGroup cg = KSharedConfig::openConfig()->group("Shortcut Schemes");
     cg.writeEntry("Current Scheme", schemeName);
+    KisActionRegistry::instance()->loadShortcutScheme(schemeName);
 
-
-    // Load scheme file
-    if (schemeName != QStringLiteral("Default")) {
-        QString schemeFileName = KShortcutSchemesHelper::schemeFileLocations().value(schemeName);
-        if (schemeFileName.isEmpty()) {
-            // qDebug() << "No configuration file found for scheme" << schemeName;
-            return;
-        }
-        KConfig schemeConfig(schemeFileName, KConfig::SimpleConfig);
-        KisActionRegistry::instance()->applyShortcutScheme(&schemeConfig);
-    } else {
-        // Apply default scheme, updating KisActionRegistry data
-        KisActionRegistry::instance()->applyShortcutScheme();
-    }
 
     // Update actions themselves, and re-add to dialog box to refresh
     auto it = m_collections.constBegin();

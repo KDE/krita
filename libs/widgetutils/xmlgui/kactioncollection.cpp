@@ -450,17 +450,10 @@ void KActionCollection::updateShortcuts()
 }
 
 
-void KActionCollection::readSettings(KConfigGroup *config)
+void KActionCollection::readSettings()
 {
-    // TODO: perhaps get rid of this
-    KConfigGroup cg(KSharedConfig::openConfig("kritashortcutsrc"), configGroup());
-    if (!config) {
-        config = &cg;
-    }
-
-    if (!config->exists()) {
-        return;
-    }
+    auto ar = KisActionRegistry::instance();
+    ar->loadCustomShortcuts();
 
     for (QMap<QString, QAction *>::ConstIterator it = d->actionByName.constBegin();
             it != d->actionByName.constEnd(); ++it) {
@@ -471,15 +464,9 @@ void KActionCollection::readSettings(KConfigGroup *config)
 
         if (isShortcutsConfigurable(action)) {
             QString actionName = it.key();
-            QString entry = config->readEntry(actionName, QString());
-            if (!entry.isEmpty()) {
-                action->setShortcuts(QKeySequence::listFromString(entry));
-            } else {
-                action->setShortcuts(defaultShortcuts(action));
-            }
+            ar->updateShortcut(actionName, action);
         }
     }
-
 }
 
 
@@ -546,7 +533,7 @@ bool KActionCollectionPrivate::writeKXMLGUIConfigFile()
 }
 
 void KActionCollection::writeSettings(KConfigGroup *config,
-                                      bool writeAll,
+                                      bool writeScheme,
                                       QAction *oneAction) const
 {
     // If the caller didn't provide a config group we try to save the KXMLGUI
@@ -591,22 +578,28 @@ void KActionCollection::writeSettings(KConfigGroup *config,
         if (isShortcutsConfigurable(action)) {
             bool bConfigHasAction = !config->readEntry(actionName, QString()).isEmpty();
             bool bSameAsDefault = (action->shortcuts() == defaultShortcuts(action));
-            // If we're using a global config (no) or this setting
-            // differs from the default, then we want to write.
+            // If the current shortcut differs from the default, we want to write.
+
             KConfigGroup::WriteConfigFlags flags = KConfigGroup::Persistent;
 
-            if (writeAll || !bSameAsDefault) {
+            if (writeScheme || !bSameAsDefault) {
                 // We are instructed to write all shortcuts or the shortcut is
                 // not set to its default value. Write it
                 QString s = QKeySequence::listToString(action->shortcuts());
                 if (s.isEmpty()) {
-                    s = QStringLiteral("none");
+                    if (writeScheme) {
+                        // A scheme file should explicitly set "none" for the shortcut
+                        s = QStringLiteral("none");
+                        config->writeEntry(actionName, s, flags);
+                    } else {
+                        config->deleteEntry(actionName, flags);
+                    }
+                } else {
+                    config->writeEntry(actionName, s, flags);
                 }
-                config->writeEntry(actionName, s, flags);
-
             } else if (bConfigHasAction) {
-                // Otherwise, this key is the same as default but exists in
-                // config file. Remove it.
+                // This key is the same as default but exists in config file.
+                // Remove it.
                 config->deleteEntry(actionName, flags);
             }
         }

@@ -152,7 +152,9 @@ QString KShortcutSchemesEditor::currentScheme()
 void KShortcutSchemesEditor::exportShortcutsScheme()
 {
     //ask user about dir
-    QString path = QFileDialog::getSaveFileName(m_dialog, i18n("Export Shortcuts"), QDir::currentPath(), i18n("Shortcuts (*.shortcuts)"));
+    QString path = QFileDialog::getSaveFileName(m_dialog, i18n("Export Shortcuts"),
+                                                KoResourcePaths::saveLocation("kis_shortcuts"),
+                                                i18n("Shortcuts (*.shortcuts)"));
     if (path.isEmpty()) {
         return;
     }

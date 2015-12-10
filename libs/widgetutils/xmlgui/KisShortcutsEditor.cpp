@@ -198,8 +198,8 @@ void KisShortcutsEditor::importConfiguration(KConfigBase *config)
     KisActionRegistry::instance()->applyShortcutScheme(config);
 
 
-    // Update the actions themselves
-    // TODO
+    // XXX: Any need to update the actions themselves?
+
 
     // Update the dialog entry items
     const KConfigGroup schemeShortcuts(config, QStringLiteral("Shortcuts"));
@@ -237,7 +237,7 @@ void KisShortcutsEditor::exportConfiguration(KConfigBase *config) const
     KisActionRegistry::instance()->notifySettingsUpdated();
 }
 
-void KisShortcutsEditor::writeConfiguration(KConfigGroup *config) const
+void KisShortcutsEditor::saveShortcuts(KConfigGroup *config) const
 {
     // This is a horrible mess with pointers...
     auto cg = KConfigGroup(KSharedConfig::openConfig("kritashortcutsrc"), "Shortcuts");
@@ -245,8 +245,10 @@ void KisShortcutsEditor::writeConfiguration(KConfigGroup *config) const
         config = &cg;
     }
 
+    // Clear and reset temporary shortcuts
+    config->deleteGroup();
     foreach (KActionCollection *collection, d->actionCollections) {
-        collection->writeSettings(config, true);
+        collection->writeSettings(config, false);
     }
 
     KisActionRegistry::instance()->notifySettingsUpdated();
@@ -274,7 +276,7 @@ void KisShortcutsEditor::commit()
 
 void KisShortcutsEditor::save()
 {
-    writeConfiguration();
+    saveShortcuts();
     commit(); // Not doing this would be bad
 }
 

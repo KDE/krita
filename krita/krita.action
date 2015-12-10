@@ -2461,6 +2461,35 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="select_opaque">
+      <icon></icon>
+      <text>&amp;Select Opaque</text>
+      <whatsThis></whatsThis>
+      <toolTip>Select Opaque</toolTip>
+      <iconText>Select Opaque</iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>100</activationConditions>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="show-global-selection-mask">
+      <icon></icon>
+      <text>&amp;Show Global Selection Mask</text>
+      <whatsThis></whatsThis>
+      <toolTip>Shows global selection as a usual selection mask in &lt;interface>Layers&lt;/interface> docker</toolTip>
+      <iconText>Show Global Selection Mask</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+  </Actions>
+  <Actions category="Layers">
+    <text>Layers</text>
     <Action name="remove_layer">
       <icon>deletelayer</icon>
       <text>&amp;Remove Layer</text>
@@ -2500,6 +2529,28 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="move_layer_up">
+      <icon></icon>
+      <text>Move Layer or Mask Up</text>
+      <whatsThis></whatsThis>
+      <toolTip>Move Layer or Mask Up</toolTip>
+      <iconText></iconText>
+      <shortcut>Ctrl+PgDown</shortcut>
+      <defaultShortcut>Ctrl+PgUp</defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="move_layer_down">
+      <icon></icon>
+      <text>Move Layer or Mask down</text>
+      <whatsThis></whatsThis>
+      <toolTip>Move Layer or Mask Down</toolTip>
+      <iconText></iconText>
+      <shortcut>Ctrl+PgDown</shortcut>
+      <defaultShortcut>Ctrl+PgDown</defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="layer_properties">
       <icon>properties</icon>
       <text>&amp;Properties...</text>
@@ -2511,32 +2562,6 @@
       <shortcut></shortcut>
       <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="select_opaque">
-      <icon></icon>
-      <text>&amp;Select Opaque</text>
-      <whatsThis></whatsThis>
-      <toolTip>Select Opaque</toolTip>
-      <iconText>Select Opaque</iconText>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>100</activationConditions>
-      <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="show-global-selection-mask">
-      <icon></icon>
-      <text>&amp;Show Global Selection Mask</text>
-      <whatsThis></whatsThis>
-      <toolTip>Shows global selection as a usual selection mask in &lt;interface>Layers&lt;/interface> docker</toolTip>
-      <iconText>Show Global Selection Mask</iconText>
-      <activationFlags>0</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
-      <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
   </Actions>

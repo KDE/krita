@@ -217,6 +217,25 @@ KisLayerBox::KisLayerBox()
     connect(action, SIGNAL(triggered()), this, SLOT(slotRightClicked()));
     m_actions.append(action);
 
+
+    action  = new ButtonAction(m_wdgLayerBox->bnRaise, this);
+    action->setText(i18n("Move Layer or Mask Up"));
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
+    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    action->setObjectName("move_layer_up");
+    action->setShortcut(Qt::CTRL + Qt::Key_PageUp);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotLowerClicked()));
+    m_actions.append(action);
+
+    action  = new ButtonAction(m_wdgLayerBox->bnLower, this);
+    action->setText(i18n("Move Layer or Mask Down"));
+    action->setActivationFlags(KisAction::ACTIVE_NODE);
+    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    action->setObjectName("move_layer_down");
+    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_PageDown));
+    connect(action, SIGNAL(triggered()), this, SLOT(slotRaiseClicked()));
+    m_actions.append(action);
+
     m_propertiesAction  = new ButtonAction(m_wdgLayerBox->bnProperties,
                                            KisIconUtils::loadIcon("properties"), i18n("&Properties..."),this);
     m_propertiesAction->setActivationFlags(KisAction::ACTIVE_NODE);

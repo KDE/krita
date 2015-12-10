@@ -395,10 +395,10 @@ bool KisApplication::start(const KisApplicationArguments &args)
     KoShapeRegistry* r = KoShapeRegistry::instance();
     r->add(new KisShapeSelectionFactory());
 
+    KisActionRegistry::instance();
     KisFilterRegistry::instance();
     KisGeneratorRegistry::instance();
     KisPaintOpRegistry::instance();
-    KisActionRegistry::instance();
 
     // Load the krita-specific tools
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),

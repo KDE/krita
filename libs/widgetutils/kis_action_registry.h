@@ -30,12 +30,25 @@ class QDomElement;
 class KConfigBase;
 
 /**
- * KisShortcutRegistry is intended to manage the global shortcut configuration
- * for Krita. It is intended to provide the user's choice of shortcuts
- * the .action files, the configuration files that were done with XMLGUI, and
- * the
+ * KisActionRegistry is intended to manage the global action configuration data
+ * for Krita. The data come from four sources:
+ * - .action files, containing static action configuration data in XML format,
+ * - .rc configuration files, originally from XMLGUI and now in WidgetUtils,
+ * - kritashortcutsrc, containing temporary shortcut configuration, and
+ * - .shortcuts scheme files providing sets of default shortcuts, also from XMLGUI
  *
- * It is a global static.  Grab an ::instance.
+ * This class can be used as a factory by calling makeQAction. It can be used to
+ * add standard properties such as default shortcuts and default tooltip to an
+ * existing action with propertizeAction. If you have a custom action class
+ * which needs to add other properties, you can use propertizeAction to add any
+ * sort of data you wish to the .action configuration file.
+ *
+ * This class is also in charge of displaying the shortcut configuration dialog.
+ * The interplay between this class, KActionCollection, KisShortcutsEditor and
+ * so on can be complex, and is sometimes synchronized by file I/O by reading
+ * and writing the configuration files mentioned above.
+ *
+ * It is a global static.  Grab an ::instance().
  */
 class KRITAWIDGETUTILS_EXPORT KisActionRegistry : public QObject
 {

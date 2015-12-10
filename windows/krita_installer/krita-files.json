@@ -152,7 +152,10 @@
 
     {
         "dir" : "lib\\plugins\\styles",
-        "files" : ["lib\\plugins\\styles\\oxygen.dll"]
+        "files" : [
+            "lib\\plugins\\styles\\oxygen.dll",
+            "lib\\plugins\\styles\\breeze.dll"
+        ]
     },
 
 
@@ -190,11 +193,14 @@
                    "bin\\KF5ConfigCore.dll",
                    "bin\\KF5ConfigGui.dll",
                    "bin\\KF5CoreAddons.dll",
+                   "bin\\KF5DbusAddons.dll",
                    "bin\\KF5Crash.dll",
                    "bin\\KF5GuiAddons.dll",
                    "bin\\KF5I18n.dll",
                    "bin\\KF5ItemModels.dll",
                    "bin\\KF5ItemViews.dll",
+                   "bin\\KF5KIOCore.dll",
+                   "bin\\KF5Service.dll",
                    "bin\\KF5WidgetsAddons.dll",
                    "bin\\KF5WindowSystem.dll",
                    "bin\\Qt5Concurrent.dll",

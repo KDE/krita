@@ -29,6 +29,8 @@
 #include "filter/kis_filter_registry.h"
 #include "filter/kis_filter.h"
 #include "generator/kis_generator_layer.h"
+#include "kis_time_range.h"
+
 
 KisColorSpaceConvertVisitor::KisColorSpaceConvertVisitor(KisImageWSP image,
                                                          const KoColorSpace *srcColorSpace,
@@ -149,6 +151,7 @@ bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
     m_image->undoAdapter()->addCommand(propsCommand);
 
     layer->setDirty();
+    layer->invalidateFrames(KisTimeRange::infinite(0), layer->extent());
 
     return true;
 

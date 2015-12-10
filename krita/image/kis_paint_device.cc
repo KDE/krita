@@ -700,6 +700,7 @@ KUndo2Command* KisPaintDevice::Private::convertColorSpace(const KoColorSpace * d
         }
 
         void undo() {
+            KUndo2Command::undo();
             emitNotifications();
         }
 

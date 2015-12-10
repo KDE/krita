@@ -277,6 +277,13 @@ void KisPaintDeviceTest::testColorSpaceConversion()
     QCOMPARE(dev->pixelSize(), dstCs->pixelSize());
     QVERIFY(*dev->colorSpace() == *dstCs);
 
+    cmd->redo();
+    cmd->undo();
+
+    QCOMPARE(dev->exactBounds(), QRect(10, 10, image.width(), image.height()));
+    QCOMPARE(dev->pixelSize(), srcCs->pixelSize());
+    QVERIFY(*dev->colorSpace() == *srcCs);
+
     delete cmd;
 }
 

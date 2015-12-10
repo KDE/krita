@@ -431,7 +431,7 @@ void KisPart::configureShortcuts()
     d->loadActions();
 
     auto actionRegistry = KisActionRegistry::instance();
-    actionRegistry->configureShortcuts(d->actionCollection);
+    actionRegistry->configureShortcuts();
 }
 
 void KisPart::updateShortcuts()

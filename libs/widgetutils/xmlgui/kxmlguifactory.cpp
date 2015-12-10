@@ -687,8 +687,11 @@ void KXMLGUIFactoryPrivate::applyShortcutScheme(KXMLGUIClient *client,
                                                 const QList<QAction *> &actions
                                                 /*, const QDomDocument &scheme */)
 {
+    // Deprecated - use KisShortcutsEditor and KisActionRegistry instead
+    Q_UNUSED(client);
+    Q_UNUSED(actions);
+
 #if 0
-    Q_UNUSED(client)
     KConfigGroup cg = KSharedConfig::openConfig()->group("Shortcut Schemes");
     QString schemeName = cg.readEntry("Current Scheme", "Default");
 

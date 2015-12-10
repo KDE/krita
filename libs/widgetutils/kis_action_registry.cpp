@@ -217,7 +217,7 @@ QAction * KisActionRegistry::makeQAction(const QString &name, QObject *parent)
 };
 
 
-void KisActionRegistry::configureShortcuts(KActionCollection *ac)
+void KisActionRegistry::configureShortcuts()
 {
     KisShortcutsDialog dlg;
 
@@ -307,8 +307,7 @@ bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
 
 
 
-    // TODO: check for colliding shortcuts, either with some code like this, or
-    // by relying on the code existing inside kactioncollection
+    // TODO: check for colliding shortcuts, either here, or in loading code
     //
     // QMap<QKeySequence, QAction*> existingShortcuts;
     // Q_FOREACH (QAction* action, actionCollection->actions()) {
@@ -407,8 +406,8 @@ void KisActionRegistry::Private::loadActionFiles()
             // <text> field
             QDomElement categoryTextNode = actions.firstChild().toElement();
             QString categoryName         = quietlyTranslate(categoryTextNode.text());
-            KActionCategory *category    = actionCollection->getCategory(categoryName);
-            dbgAction << "Using category" << categoryName;
+            // KActionCategory *category    = actionCollection->getCategory(categoryName);
+            // dbgAction << "Using category" << categoryName;
 
             // <action></action> tags
             QDomElement actionXml  = categoryTextNode.nextSiblingElement();

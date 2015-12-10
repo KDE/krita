@@ -35,43 +35,6 @@
 #include "KoResourcePaths.h"
 #include "kis_action_registry.h"
 
-bool KShortcutSchemesHelper::exportActionCollection(KActionCollection *collection,
-        const QString &schemeName, const QString &dir)
-{
-
-    QString schemeFileName = shortcutSchemeFileName(schemeName);
-    QFile schemeFile(schemeFileName);
-    if (!schemeFile.open(QFile::WriteOnly | QFile::Truncate)) {
-        return false;
-    }
-    QDomDocument doc;
-    QDomElement docElem = doc.createElement(QStringLiteral("kpartgui"));
-    docElem.setAttribute(QStringLiteral("version"), QLatin1String("1"));
-    docElem.setAttribute(QStringLiteral("name"), QCoreApplication::applicationName());
-    doc.appendChild(docElem);
-    QDomElement elem = doc.createElement(QStringLiteral("ActionProperties"));
-    docElem.appendChild(elem);
-
-    // now, iterate through our actions
-    Q_FOREACH (QAction *action, collection->actions()) {
-        if (!action) {
-            continue;
-        }
-
-        QString actionName = action->objectName();
-        QString shortcut = QKeySequence::listToString(action->shortcuts());
-        if (!shortcut.isEmpty()) {
-            QDomElement act_elem = doc.createElement(QStringLiteral("Action"));
-            act_elem.setAttribute(QStringLiteral("name"), actionName);
-            act_elem.setAttribute(QStringLiteral("shortcut"), shortcut);
-            elem.appendChild(act_elem);
-        }
-    }
-
-    QTextStream out(&schemeFile);
-    out << doc.toString(2);
-    return true;
-}
 
 QString KShortcutSchemesHelper::currentShortcutSchemeName()
 {

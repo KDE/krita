@@ -101,7 +101,7 @@ public:
     QStringList allActions();
 
     /**
-     * Save settings. Not implemented yet.
+     * Save settings. Currently implemented in KisShortcutsEditor
      */
     // void writeSettings(KActionCollection *ac);
 
@@ -109,7 +109,7 @@ public:
     /**
      * Display the shortcut configuration dialog.
      */
-    void configureShortcuts(KActionCollection *ac);
+    void configureShortcuts();
 
 
     /**

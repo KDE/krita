@@ -70,7 +70,6 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
     if ((hungry && (event->type() == QEvent::MouseMove ||
                     event->type() == QEvent::MouseButtonPress ||
                     event->type() == QEvent::MouseButtonRelease))
-        //  || (peckish && (event->type() == QEvent::MouseButtonPress))
         )
     {
         // Chow down
@@ -79,7 +78,6 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
             QMouseEvent *ev = static_cast<QMouseEvent*>(event);
             dbgTablet << KisTabletDebugger::instance()->eventToString(*ev,pre);
         }
-        peckish = false;
         return true;
     }
 
@@ -100,12 +98,6 @@ void KisInputManager::Private::EventEater::deactivate()
         dbgTablet << "Stop ignoring mouse events.";
     hungry = false;
 }
-
-// This would be a solution if we had reliable proximity events. SIGH
-// void eatOneMousePress()
-// {
-//     peckish = true;
-// }
 
 bool KisInputManager::Private::EventEater::isActive()
 {

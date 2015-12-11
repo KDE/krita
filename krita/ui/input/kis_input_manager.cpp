@@ -364,7 +364,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     }
 
     case QEvent::TabletPress: {
-        d->debugEvent<QTabletEvent, true>(event);
+        d->debugEvent<QTabletEvent, false>(event);
         QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
         if (d->tryHidePopupPalette()) {
             retval = true;

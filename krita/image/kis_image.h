@@ -414,7 +414,7 @@ public:
      * and all subnodes are removed. If this is not a paint layer, it will morph
      * into a paint layer.
      */
-    KisLayerSP flattenLayer(KisLayerSP layer);
+    void flattenLayer(KisLayerSP layer);
 
     /**
      * Merges layers in \p mergedLayers and creates a new layer above

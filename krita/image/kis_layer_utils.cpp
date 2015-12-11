@@ -218,6 +218,34 @@ namespace KisLayerUtils {
             if (m_info->frames.size() > 0) {
                 m_info->dstNode->enableAnimation();
             }
+
+            QString compositeOpId;
+            QBitArray channelFlags;
+            bool compositionVaries = false;
+
+            foreach (KisNodeSP node, m_info->allSrcNodes()) {
+                if (compositeOpId.isEmpty()) {
+                    compositeOpId = node->compositeOpId();
+                } else if (compositeOpId != node->compositeOpId()) {
+                    compositionVaries = true;
+                    break;
+                }
+
+                KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
+                if (layer && layer->layerStyle()) {
+                    compositionVaries = true;
+                    break;
+                }
+            }
+
+            if (!compositionVaries) {
+                if (!compositeOpId.isEmpty()) {
+                    m_info->dstNode->setCompositeOpId(compositeOpId);
+                }
+                if (m_info->dstLayer() && !channelFlags.isEmpty()) {
+                    m_info->dstLayer()->setChannelFlags(channelFlags);
+                }
+            }
         }
 
     private:
@@ -563,7 +591,7 @@ namespace KisLayerUtils {
         KIS_ASSERT_RECOVER_NOOP(root->parent() || inputNodes.isEmpty());
     }
 
-    void mergeMultipleLayers(KisImageSP image, QList<KisNodeSP> mergedNodes, KisNodeSP putAfter)
+    void mergeMultipleLayers(KisImageSP image, QList<KisNodeSP> mergedNodes, KisNodeSP putAfter, bool flattenSingleLayer)
     {
         filterMergableNodes(mergedNodes);
         {
@@ -572,26 +600,20 @@ namespace KisLayerUtils {
             sortMergableNodes(image->root(), tempNodes, mergedNodes);
         }
 
-        if (mergedNodes.size() <= 1) return;
-
-        if (!putAfter) {
-            putAfter = mergedNodes.last();
-        }
-
-        // Add the new merged node on top of the active node -- checking
-        // whether the parent is going to be deleted
-        KisNodeSP parent = putAfter->parent();
-        while (mergedNodes.contains(parent)) {
-            parent = parent->parent();
-        }
+        if (mergedNodes.size() <= 1 &&
+            (!flattenSingleLayer && mergedNodes.size() == 1)) return;
 
         KisImageSignalVector emitSignals;
         emitSignals << ModifiedSignal;
 
+        KUndo2MagicString actionName = mergedNodes.size() == 1 ?
+            kundo2_i18n("Flatten Layer") :
+            kundo2_i18n("Merge Selected Nodes");
+
         KisProcessingApplicator applicator(image, 0,
                                            KisProcessingApplicator::NONE,
                                            emitSignals,
-                                           kundo2_i18n("Merge Selected Nodes"));
+                                           actionName);
 
         MergeMultipleInfoSP info(new MergeMultipleInfo(image, mergedNodes));
 
@@ -721,5 +743,16 @@ namespace KisLayerUtils {
         applicator.end();
 
         return true;
+    }
+
+    void flattenLayer(KisImageSP image, KisLayerSP layer)
+    {
+        if (!layer->childCount() && !layer->layerStyle())
+            return;
+
+        QList<KisNodeSP> mergedNodes;
+        mergedNodes << layer;
+
+        mergeMultipleLayers(image, mergedNodes, layer, true);
     }
 }

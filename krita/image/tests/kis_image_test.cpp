@@ -37,6 +37,7 @@
 #include <kis_layer_composition.h>
 #include "kis_keyframe_channel.h"
 #include "kis_selection_mask.h"
+#include "kis_layer_utils.h"
 
 #include "kis_undo_stores.h"
 
@@ -399,6 +400,28 @@ struct FlattenTestImage
     KisPaintLayerSP layer8;
 };
 
+template<class ContainerTest>
+KisLayerSP flattenLayerHelper(ContainerTest &p, KisLayerSP layer, bool nothingHappens = false)
+{
+    QSignalSpy spy(p.image.data(), SIGNAL(sigNodeAddedAsync(KisNodeSP)));
+
+    //p.image->flattenLayer(layer);
+    KisLayerUtils::flattenLayer(p.image, layer);
+    p.image->waitForDone();
+
+    if (nothingHappens) {
+        Q_ASSERT(!spy.count());
+        return layer;
+    }
+
+    Q_ASSERT(spy.count() == 1);
+    QList<QVariant> arguments = spy.takeFirst();
+    KisNodeSP newNode = arguments.first().value<KisNodeSP>();
+
+    KisLayerSP newLayer = dynamic_cast<KisLayer*>(newNode.data());
+    return newLayer;
+}
+
 void KisImageTest::testFlattenLayer()
 {
     FlattenTestImage p;
@@ -408,8 +431,10 @@ void KisImageTest::testFlattenLayer()
     {
         QCOMPARE(p.layer2->compositeOpId(), COMPOSITE_ADD);
 
-        KisLayerSP newLayer = p.image->flattenLayer(p.layer2);
-        p.image->waitForDone();
+        KisLayerSP newLayer = flattenLayerHelper(p, p.layer2);
+
+        //KisLayerSP newLayer = p.image->flattenLayer(p.layer2);
+        //p.image->waitForDone();
 
         QVERIFY(chk.checkDevice(p.image->projection(), p.image, "00_initial"));
         QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "01_layer2_layerproj"));
@@ -420,8 +445,10 @@ void KisImageTest::testFlattenLayer()
     {
         QCOMPARE(p.group1->compositeOpId(), COMPOSITE_ADD);
 
-        KisLayerSP newLayer = p.image->flattenLayer(p.group1);
-        p.image->waitForDone();
+        KisLayerSP newLayer = flattenLayerHelper(p, p.group1);
+
+        //KisLayerSP newLayer = p.image->flattenLayer(p.group1);
+        //p.image->waitForDone();
 
         QVERIFY(chk.checkDevice(p.image->projection(), p.image, "00_initial"));
         QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "02_group1_layerproj"));
@@ -434,8 +461,10 @@ void KisImageTest::testFlattenLayer()
         QCOMPARE(p.layer5->compositeOpId(), COMPOSITE_OVER);
         QCOMPARE(p.layer5->alphaChannelDisabled(), true);
 
-        KisLayerSP newLayer = p.image->flattenLayer(p.layer5);
-        p.image->waitForDone();
+        KisLayerSP newLayer = flattenLayerHelper(p, p.layer5, true);
+
+        //KisLayerSP newLayer = p.image->flattenLayer(p.layer5);
+        //p.image->waitForDone();
 
         QVERIFY(chk.checkDevice(p.image->projection(), p.image, "00_initial"));
         QVERIFY(chk.checkDevice(newLayer->projection(), p.image, "03_layer5_layerproj"));
@@ -448,8 +477,6 @@ void KisImageTest::testFlattenLayer()
 }
 
 #include <metadata/kis_meta_data_merge_strategy_registry.h>
-
-#include "kis_layer_utils.h"
 
 template<class ContainerTest>
 KisLayerSP mergeHelper(ContainerTest &p, KisLayerSP layer)

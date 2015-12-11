@@ -883,5 +883,4 @@ void KisImageTest::testMergeSelectionMasks()
     }
 }
 
-QTEST_MAIN(KisImageTest, NoGUI)
-#include "kis_image_test.moc"
+QTEST_GUILESS_MAIN(KisImageTest)

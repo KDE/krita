@@ -24,7 +24,7 @@
 #include "kis_processing_visitor.h"
 #include "commands_new/kis_processing_command.h"
 #include "kis_stroke_strategy_undo_command_based.h"
-
+#include "kis_layer_utils.h"
 
 class DisableUIUpdatesCommand : public KUndo2Command
 {
@@ -228,6 +228,44 @@ void KisProcessingApplicator::applyVisitor(KisProcessingVisitorSP visitor,
     }
     else {
         visitRecursively(m_node, visitor, sequentiality, exclusivity);
+    }
+}
+
+void KisProcessingApplicator::applyVisitorAllFrames(KisProcessingVisitorSP visitor,
+                                                    KisStrokeJobData::Sequentiality sequentiality,
+                                                    KisStrokeJobData::Exclusivity exclusivity)
+{
+    KisLayerUtils::FrameJobs jobs;
+
+    if (m_flags.testFlag(RECURSIVE)) {
+        KisLayerUtils::updateFrameJobsRecursive(&jobs, m_node);
+    } else {
+        KisLayerUtils::updateFrameJobsRecursive(&jobs, m_node);
+    }
+
+    if (jobs.isEmpty()) {
+        applyVisitor(visitor, sequentiality, exclusivity);
+        return;
+    }
+
+    KisLayerUtils::FrameJobs::const_iterator it = jobs.constBegin();
+    KisLayerUtils::FrameJobs::const_iterator end = jobs.constEnd();
+
+    KisLayerUtils::SwitchFrameCommand::SharedStorageSP switchFrameStorage(
+        new KisLayerUtils::SwitchFrameCommand::SharedStorage());
+
+    for (; it != end; ++it) {
+        const int frame = it.key();
+        const QSet<KisNodeSP> &nodes = it.value();
+
+        applyCommand(new KisLayerUtils::SwitchFrameCommand(m_image, frame, false, switchFrameStorage), KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
+
+        foreach (KisNodeSP node, nodes) {
+            applyCommand(new KisProcessingCommand(visitor, node),
+                         sequentiality, exclusivity);
+        }
+
+        applyCommand(new KisLayerUtils::SwitchFrameCommand(m_image, frame, true, switchFrameStorage), KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
     }
 }
 

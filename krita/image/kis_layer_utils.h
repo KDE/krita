@@ -19,6 +19,7 @@
 #ifndef __KIS_LAYER_UTILS_H
 #define __KIS_LAYER_UTILS_H
 
+#include "kundo2command.h"
 #include "kis_types.h"
 #include "kritaimage_export.h"
 
@@ -38,6 +39,40 @@ namespace KisLayerUtils
     KRITAIMAGE_EXPORT bool tryMergeSelectionMasks(KisImageSP image, QList<KisNodeSP> mergedNodes, KisNodeSP putAfter);
 
     KRITAIMAGE_EXPORT void flattenLayer(KisImageSP image, KisLayerSP layer);
+    KRITAIMAGE_EXPORT void flattenImage(KisImageSP image);
+
+    typedef QMap<int, QSet<KisNodeSP> > FrameJobs;
+    void updateFrameJobs(FrameJobs *jobs, KisNodeSP node);
+    void updateFrameJobsRecursive(FrameJobs *jobs, KisNodeSP rootNode);
+
+    struct SwitchFrameCommand : public KUndo2Command {
+        struct SharedStorage {
+            /**
+             * For some reason the absence of a destructor in the SharedStorage
+             * makes Krita crash on exit. Seems like some compiler weirdness... (DK)
+             */
+            ~SharedStorage();
+            int value;
+        };
+
+        typedef QSharedPointer<SharedStorage> SharedStorageSP;
+
+    public:
+        SwitchFrameCommand(KisImageSP image, int time, bool finalize, SharedStorageSP storage);
+        ~SwitchFrameCommand();
+        void redo();
+        void undo();
+
+    private:
+        void init();
+        void end();
+
+    private:
+        KisImageWSP m_image;
+        int m_newTime;
+        bool m_finalize;
+        SharedStorageSP m_storage;
+    };
 };
 
 #endif /* __KIS_LAYER_UTILS_H */

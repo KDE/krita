@@ -61,7 +61,7 @@ namespace KisLayerUtils {
     struct MergeDownInfoBase {
         MergeDownInfoBase(KisImageSP _image)
             : image(_image),
-              savedSwitchedTime(0)
+              storage(new SwitchFrameCommand::SharedStorage())
         {
         }
         virtual ~MergeDownInfoBase() {}
@@ -72,7 +72,7 @@ namespace KisLayerUtils {
 
         KisNodeSP dstNode;
 
-        int savedSwitchedTime;
+        SwitchFrameCommand::SharedStorageSP storage;
         QSet<int> frames;
 
         virtual QList<KisNodeSP> allSrcNodes() = 0;
@@ -405,45 +405,55 @@ namespace KisLayerUtils {
         KisNodeSP m_putAfter;
     };
 
-    struct SwitchFrameCommand : public KUndo2Command {
-        SwitchFrameCommand(MergeDownInfoBaseSP info, int time, bool finalize)
-            : m_info(info),
-              m_newTime(time),
-              m_finalize(finalize) {}
+    SwitchFrameCommand::SharedStorage::~SharedStorage() {
+    }
 
-        void redo() {
-            if (!m_finalize) {
-                init();
-            } else {
-                end();
-            }
+    SwitchFrameCommand::SwitchFrameCommand(KisImageSP image, int time, bool finalize, SharedStorageSP storage)
+        : m_image(image),
+          m_newTime(time),
+          m_finalize(finalize),
+          m_storage(storage) {}
+
+    SwitchFrameCommand::~SwitchFrameCommand() {}
+
+    void SwitchFrameCommand::redo() {
+        if (!m_finalize) {
+            init();
+        } else {
+            end();
+        }
+    }
+
+    void SwitchFrameCommand::undo() {
+        if (m_finalize) {
+            init();
+        } else {
+            end();
+        }
+    }
+
+    void SwitchFrameCommand::init() {
+        KisImageAnimationInterface *interface = m_image->animationInterface();
+        const int currentTime = interface->currentTime();
+        if (currentTime == m_newTime) {
+            m_storage->value = m_newTime;
+            return;
         }
 
-        void undo() {
-            if (m_finalize) {
-                init();
-            } else {
-                end();
-            }
+        interface->image()->disableUIUpdates();
+        interface->saveAndResetCurrentTime(m_newTime, &m_storage->value);
+    }
+
+    void SwitchFrameCommand::end() {
+        KisImageAnimationInterface *interface = m_image->animationInterface();
+        const int currentTime = interface->currentTime();
+        if (currentTime == m_storage->value) {
+            return;
         }
 
-    private:
-        void init() {
-            KisImageAnimationInterface *interface = m_info->image->animationInterface();
-            interface->image()->disableUIUpdates();
-            interface->saveAndResetCurrentTime(m_newTime, &m_info->savedSwitchedTime);
-        }
-
-        void end() {
-            KisImageAnimationInterface *interface = m_info->image->animationInterface();
-            interface->restoreCurrentTime(&m_info->savedSwitchedTime);
-            interface->image()->enableUIUpdates();
-        }
-    private:
-        MergeDownInfoBaseSP m_info;
-        int m_newTime;
-        bool m_finalize;
-    };
+        interface->restoreCurrentTime(&m_storage->value);
+        interface->image()->enableUIUpdates();
+    }
 
     struct AddNewFrame : public KisCommandUtils::AggregateCommand {
         AddNewFrame(MergeDownInfoBaseSP info, int frame) : m_info(info), m_frame(frame) {}
@@ -480,6 +490,24 @@ namespace KisLayerUtils {
         return frames;
     }
 
+    void updateFrameJobs(FrameJobs *jobs, KisNodeSP node) {
+        QSet<int> frames = fetchLayerFrames(node);
+
+        foreach (int frame, frames) {
+            (*jobs)[frame].insert(node);
+        }
+    }
+
+    void updateFrameJobsRecursive(FrameJobs *jobs, KisNodeSP rootNode) {
+        updateFrameJobs(jobs, rootNode);
+
+        KisNodeSP node = rootNode->firstChild();
+        while(node) {
+            updateFrameJobsRecursive(jobs, node);
+            node = node->nextSibling();
+        }
+    }
+
     void mergeDown(KisImageSP image, KisLayerSP layer, const KisMetaData::MergeStrategy* strategy)
     {
         if (!layer->prevSibling()) return;
@@ -502,21 +530,14 @@ namespace KisLayerUtils {
         applicator.applyCommand(new CreateMergedLayer(info), KisStrokeJobData::BARRIER);
 
         if (info->frames.size() > 0) {
-            KisImageAnimationInterface *interface = info->image->animationInterface();
-            const int currentTime = interface->currentTime();
-
             foreach (int frame, info->frames) {
-                if (frame != currentTime) {
-                    applicator.applyCommand(new SwitchFrameCommand(info, frame, false));
-                }
+                applicator.applyCommand(new SwitchFrameCommand(info->image, frame, false, info->storage));
 
                 applicator.applyCommand(new AddNewFrame(info, frame));
                 applicator.applyCommand(new RefreshHiddenAreas(info));
                 applicator.applyCommand(new MergeLayers(info), KisStrokeJobData::BARRIER);
 
-                if (frame != currentTime) {
-                    applicator.applyCommand(new SwitchFrameCommand(info, frame, true));
-                }
+                applicator.applyCommand(new SwitchFrameCommand(info->image, frame, true, info->storage));
             }
         } else {
             applicator.applyCommand(new RefreshHiddenAreas(info));
@@ -622,21 +643,14 @@ namespace KisLayerUtils {
         applicator.applyCommand(new CreateMergedLayerMultiple(info), KisStrokeJobData::BARRIER);
 
         if (info->frames.size() > 0) {
-            KisImageAnimationInterface *interface = info->image->animationInterface();
-            const int currentTime = interface->currentTime();
-
             foreach (int frame, info->frames) {
-                if (frame != currentTime) {
-                    applicator.applyCommand(new SwitchFrameCommand(info, frame, false));
-                }
+                applicator.applyCommand(new SwitchFrameCommand(info->image, frame, false, info->storage));
 
                 applicator.applyCommand(new AddNewFrame(info, frame));
                 applicator.applyCommand(new RefreshHiddenAreas(info));
                 applicator.applyCommand(new MergeLayersMultiple(info), KisStrokeJobData::BARRIER);
 
-                if (frame != currentTime) {
-                    applicator.applyCommand(new SwitchFrameCommand(info, frame, true));
-                }
+                applicator.applyCommand(new SwitchFrameCommand(info->image, frame, true, info->storage));
             }
         } else {
             applicator.applyCommand(new RefreshHiddenAreas(info));

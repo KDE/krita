@@ -462,7 +462,7 @@ void KisImage::resizeImageImpl(const QRect& newRect, bool cropLayers)
     if (cropLayers || !newRect.topLeft().isNull()) {
         KisProcessingVisitorSP visitor =
             new KisCropProcessingVisitor(newRect, cropLayers, true);
-        applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
+        applicator.applyVisitorAllFrames(visitor, KisStrokeJobData::CONCURRENT);
     }
     applicator.applyCommand(new KisImageResizeCommand(this, newRect.size()));
     applicator.end();
@@ -499,7 +499,7 @@ void KisImage::cropNode(KisNodeSP node, const QRect& newRect)
 
     KisProcessingVisitorSP visitor =
         new KisCropProcessingVisitor(newRect, true, false);
-    applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
+    applicator.applyVisitorAllFrames(visitor, KisStrokeJobData::CONCURRENT);
     applicator.end();
 }
 

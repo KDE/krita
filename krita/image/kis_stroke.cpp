@@ -89,7 +89,7 @@ KisStrokeJob* KisStroke::popOneJob()
     KisStrokeJob *job = dequeue();
 
     if(job) {
-        m_prevJobSequential = job->isSequential();
+        m_prevJobSequential = job->isSequential() || job->isBarrier();
 
         m_strokeInitialized = true;
         m_strokeSuspended = false;

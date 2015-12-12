@@ -216,6 +216,8 @@ void KisOpenPane::openFileDialog()
 
 void KisOpenPane::initTemplates(const QString& templatesResourcePath)
 {
+    qDebug() << "initTemplates();" << templatesResourcePath;
+
     QTreeWidgetItem* selectItem = 0;
     QTreeWidgetItem* firstItem = 0;
     const int templateOffset = 1000;

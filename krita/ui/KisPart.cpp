@@ -108,7 +108,6 @@ public:
     QList<QPointer<KisView> > views;
     QList<QPointer<KisMainWindow> > mainWindows;
     QList<QPointer<KisDocument> > documents;
-    QString templatesResourcePath;
 
     QGraphicsItem *canvasItem{0};
     KisOpenPane *startupWidget{0};
@@ -144,8 +143,6 @@ KisPart* KisPart::instance()
 KisPart::KisPart()
     : d(new Private(this))
 {
-    setTemplatesResourcePath(QLatin1String("krita/templates/"));
-
     // Preload all the resources in the background
     Q_UNUSED(KoResourceServerProvider::instance());
     Q_UNUSED(KisResourceServerProvider::instance());
@@ -515,11 +512,6 @@ void KisPart::addRecentURLToAllMainWindows(QUrl url)
 void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
 {
 
-#ifndef NDEBUG
-    if (d->templatesResourcePath.isEmpty())
-        dbgUI << "showStartUpWidget called, but setTemplatesResourcePath() never called. This will not show a lot";
-#endif
-
     if (!alwaysShow) {
         KConfigGroup cfgGrp( KSharedConfig::openConfig(), "TemplateChooserDialog");
         QString fullTemplateName = cfgGrp.readPathEntry("AlwaysUseTemplate", QString());
@@ -527,10 +519,10 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
             QUrl url(fullTemplateName);
             QFileInfo fi(url.toLocalFile());
             if (!fi.exists()) {
-                const QString templatesResourcePath = this->templatesResourcePath();
-                QString desktopfile = KoResourcePaths::findResource("data", templatesResourcePath + "*/" + fullTemplateName);
+                const QString templatesPath = templatesResourcePath();
+                QString desktopfile = KoResourcePaths::findResource("data", templatesPath + "*/" + fullTemplateName);
                 if (desktopfile.isEmpty()) {
-                    desktopfile = KoResourcePaths::findResource("data", templatesResourcePath + fullTemplateName);
+                    desktopfile = KoResourcePaths::findResource("data", templatesPath + fullTemplateName);
                 }
                 if (desktopfile.isEmpty()) {
                     fullTemplateName.clear();
@@ -553,7 +545,7 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
                                                                       KisImportExportManager::Import,
                                                                       KisDocumentEntry::extraNativeMimeTypes());
 
-    d->startupWidget = new KisOpenPane(0, mimeFilter, d->templatesResourcePath);
+    d->startupWidget = new KisOpenPane(0, mimeFilter, templatesResourcePath());
     d->startupWidget->setWindowModality(Qt::WindowModal);
     QList<CustomDocumentWidgetItem> widgetList = createCustomDocumentWidgets(d->startupWidget);
     Q_FOREACH (const CustomDocumentWidgetItem & item, widgetList) {
@@ -623,17 +615,9 @@ QList<KisPart::CustomDocumentWidgetItem> KisPart::createCustomDocumentWidgets(QW
     return widgetList;
 }
 
-void KisPart::setTemplatesResourcePath(const QString &templatesResourcePath)
-{
-    Q_ASSERT(!templatesResourcePath.isEmpty());
-    Q_ASSERT(templatesResourcePath.endsWith(QLatin1Char('/')));
-
-    d->templatesResourcePath = templatesResourcePath;
-}
-
 QString KisPart::templatesResourcePath() const
 {
-    return d->templatesResourcePath;
+    return QStringLiteral("krita/templates/");
 }
 
 void KisPart::startCustomDocument(KisDocument* doc)

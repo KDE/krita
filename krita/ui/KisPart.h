@@ -253,7 +253,6 @@ public:
      */
     QString templatesResourcePath() const;
 
-
     /**
      * Creates and shows the start up widget.
      * @param parent the KisMainWindow used as parent for the widget.
@@ -262,12 +261,6 @@ public:
     void showStartUpWidget(KisMainWindow *parent, bool alwaysShow = false);
 
 protected:
-
-    /**
-     * Set the templates resource path used. This is used by the start up widget to show
-     * the correct templates.
-     */
-    void setTemplatesResourcePath(const QString &templatesResourcePath);
 
     /**
      * Struct used in the list created by createCustomDocumentWidgets()

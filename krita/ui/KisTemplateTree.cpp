@@ -141,15 +141,15 @@ void KisTemplateTree::readGroups()
 {
 
     QStringList dirs = KoResourcePaths::findDirs("data", m_templatesResourcePath);
+
     Q_FOREACH (const QString & dirName, dirs) {
-        //dbgUI <<"dir:" << *it;
         QDir dir(dirName);
         // avoid the annoying warning
         if (!dir.exists())
             continue;
         QStringList templateDirs = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
         Q_FOREACH (const QString & templateDirName, templateDirs) {
-            QDir templateDir(dirName + templateDirName);
+            QDir templateDir(dirName + "/" + templateDirName);
             QString name = templateDirName;
             QString defaultTab;
             int sortingWeight = 1000;
@@ -159,7 +159,6 @@ void KisTemplateTree::readGroups()
                 name = dg.readEntry("Name");
                 defaultTab = dg.readEntry("X-KDE-DefaultTab");
                 sortingWeight = dg.readEntry("X-KDE-SortingWeight", 1000);
-                //dbgUI <<"name:" << name;
             }
             KisTemplateGroup *g = new KisTemplateGroup(name, templateDir.absolutePath() + QDir::separator(), sortingWeight);
             add(g);

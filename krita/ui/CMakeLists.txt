@@ -472,15 +472,15 @@ if(APPLE)
 endif ()
 
 
-if(HAVE_OPENGL)
-    target_link_libraries(kritaui ${OPENGL_LIBRARIES} ${OPENEXR_LIBRARIES})
+if(HAVE_OPENEXR)
+    target_link_libraries(kritaui ${OPENEXR_LIBRARIES})
+endif()
 
+if(HAVE_OPENGL)
     # Add VSync disable workaround
     if(NOT WIN32 AND NOT APPLE)
       target_link_libraries(kritaui ${CMAKE_DL_LIBS} Qt5::X11Extras)
     endif()
-
-    set (GL_INTERFACE_LIBRARIES ";${OPENGL_LIBRARIES}")
 endif()
 
 if(X11_FOUND)

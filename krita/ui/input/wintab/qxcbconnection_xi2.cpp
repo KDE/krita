@@ -40,6 +40,8 @@
 //#include "qtouchdevice.h"
 //#include <qpa/qwindowsysteminterface.h>
 #include <QDebug>
+#include <QApplication>
+#include <QDesktopWidget>
 
 #ifdef XCB_USE_XINPUT2
 
@@ -827,6 +829,11 @@ bool QXcbConnection::xi2HandleTabletEvent(void *event, TabletData *tabletData, Q
     return handled;
 }
 
+inline qreal scaleOneValuator(qreal normValue, qreal screenMin, qreal screenSize)
+{
+    return screenMin + normValue * screenSize;
+}
+
 void QXcbConnection::xi2ReportTabletEvent(TabletData &tabletData, void *event)
 {
     xXIDeviceEvent *ev = reinterpret_cast<xXIDeviceEvent *>(event);
@@ -839,6 +846,8 @@ void QXcbConnection::xi2ReportTabletEvent(TabletData &tabletData, void *event)
     double pressure = 0, rotation = 0, tangentialPressure = 0;
     int xTilt = 0, yTilt = 0;
 
+    QRect screenArea = qApp->desktop()->rect();
+
     for (QHash<int, TabletData::ValuatorClassInfo>::iterator it = tabletData.valuatorInfo.begin(),
             ite = tabletData.valuatorInfo.end(); it != ite; ++it) {
         int valuator = it.key();
@@ -846,6 +855,20 @@ void QXcbConnection::xi2ReportTabletEvent(TabletData &tabletData, void *event)
         xi2GetValuatorValueIfSet(event, classInfo.number, &classInfo.curVal);
         double normalizedValue = (classInfo.curVal - classInfo.minVal) / (classInfo.maxVal - classInfo.minVal);
         switch (valuator) {
+        case QXcbAtom::AbsX: {
+            const qreal value = scaleOneValuator(normalizedValue, screenArea.x(), screenArea.width());
+            const qreal offset = local.x() - global.x();
+            global.rx() = value;
+            local.rx() = value + offset;
+            break;
+        }
+        case QXcbAtom::AbsY: {
+            qreal value = scaleOneValuator(normalizedValue, screenArea.y(), screenArea.height());
+            qreal offset = local.y() - global.y();
+            global.ry() = value;
+            local.ry() = value + offset;
+            break;
+        }
         case QXcbAtom::AbsPressure:
             pressure = normalizedValue;
             break;

@@ -27,8 +27,6 @@
 #include <QDomDocument>
 #include <QBuffer>
 
-#include <KoInputDevice.h>
-
 #include "kis_paintop_settings.h"
 #include "kis_paintop_registry.h"
 #include "kis_painter.h"

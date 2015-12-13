@@ -19,7 +19,6 @@
 #ifndef KIS_SIMPLE_PAINTOP_FACTORY_H
 #define KIS_SIMPLE_PAINTOP_FACTORY_H
 
-#include <KoInputDevice.h>
 #include <kis_paintop_factory.h>
 #include <kis_paintop_settings.h>
 

@@ -25,7 +25,6 @@
 #include <klocalizedstring.h>
 
 #include <KoCompositeOp.h>
-#include <KoInputDevice.h>
 #include <KoID.h>
 
 #include <filter/kis_filter_registry.h>

@@ -41,7 +41,6 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
-#include <KoInputDevice.h>
 #include <KoColorSpaceRegistry.h>
 
 #include <kis_brush.h>

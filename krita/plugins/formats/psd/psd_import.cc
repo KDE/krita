@@ -55,10 +55,12 @@ KisImportExportFilter::ConversionStatus psdImport::convert(const QByteArray&, co
 
     if (!filename.isEmpty()) {
 
-        QUrl url(filename);
+        QUrl url = QUrl::fromLocalFile(filename);
 
-        if (url.isEmpty())
+        if (url.isEmpty()) {
+            qDebug() << "url is empty" << filename << url;
             return KisImportExportFilter::FileNotFound;
+        }
 
         PSDLoader ib(doc);
 
@@ -72,6 +74,7 @@ KisImportExportFilter::ConversionStatus psdImport::convert(const QByteArray&, co
         case KisImageBuilder_RESULT_NO_URI:
         case KisImageBuilder_RESULT_NOT_EXIST:
         case KisImageBuilder_RESULT_NOT_LOCAL:
+            qDebug() << "ib returned KisImageBuilder_RESULT_NOT_LOCAL";
             return KisImportExportFilter::FileNotFound;
         case KisImageBuilder_RESULT_BAD_FETCH:
         case KisImageBuilder_RESULT_EMPTY:

@@ -77,7 +77,7 @@ enum {
 QWindowsTabletSupport *QTAB = 0;
 static QWidget *targetWindow = 0; //< Window receiving last tablet event
 static QWidget *qt_tablet_target = 0; //< Widget receiving last tablet event
-
+static qreal dpr = 0; //< Device pixel ratio - preferably update dynamically
 
 HWND createDummyWindow(const QString &className, const wchar_t *windowName, WNDPROC wndProc)
 {
@@ -199,6 +199,7 @@ void KisTabletSupportWin::init()
 {
     globalEventEater = new EventEater(qApp);
     QTAB = QWindowsTabletSupport::create();
+    dpr = qApp->primaryScreen()->devicePixelRatio();
     qApp->installEventFilter(globalEventEater);
 }
 
@@ -633,6 +634,7 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
 
     static Qt::MouseButtons buttons = Qt::NoButton, btnOld, btnChange;
 
+    // NOTE: We disabled Qt's icky hack.
     // The tablet can be used in 2 different modes, depending on its settings:
     // 1) Absolute (pen) mode:
     //    The coordinates are scaled to the virtual desktop (by default). The user
@@ -645,7 +647,6 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
     //    in which case we snap the position to the mouse position.
     // It seems there is no way to find out the mode programmatically, the LOGCONTEXT orgX/Y/Ext
     // area is always the virtual desktop.
-    const qreal dpr = qApp->primaryScreen()->devicePixelRatio();
     const QRect virtualDesktopArea = mapToNative(qApp->primaryScreen()->virtualGeometry(), dpr);
 
     const Qt::KeyboardModifiers keyboardModifiers = QApplication::queryKeyboardModifiers();
@@ -686,16 +687,6 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
         m_oldGlobalPosF = tabletData.scaleCoordinates(packet.pkX, packet.pkY, virtualDesktopArea);
 
         QPoint globalPos = globalPosF.toPoint();
-
-        // Get Mouse Position and compare to tablet info
-        QPoint mouseLocation = mousePosition();
-
-        // Positions should be almost the same if we are in absolute
-        // mode. If they are not, use the mouse location.
-        if ((mouseLocation - globalPos).manhattanLength() > m_absoluteRange) {
-            globalPos = mouseLocation;
-            globalPosF = globalPos;
-        }
 
         // Find top-level window
         QWidget *w = targetWindow; // Pass to window that grabbed it.

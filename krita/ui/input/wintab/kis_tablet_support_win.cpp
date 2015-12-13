@@ -287,6 +287,71 @@ static void handleTabletEvent(QWidget *windowWidget, const QPointF &local, const
 
 }
 
+/**
+ * This is a default implementation of a class for converting the
+ * WinTab value of the buttons pressed to the Qt buttons. This class
+ * may be substituted from the UI.
+ */
+struct DefaultButtonsConverter
+{
+    void convert(DWORD btnOld, DWORD btnNew,
+                 Qt::MouseButton *button,
+                 Qt::MouseButtons *buttons,
+                 const QWindowsTabletDeviceData &tdd) {
+
+        int pressedButtonValue = btnNew ^ btnOld;
+
+        *button = buttonValueToEnum(pressedButtonValue, tdd);
+
+        *buttons = Qt::NoButton;
+        for (int i = 0; i < 3; i++) {
+            int btn = 0x1 << i;
+
+            if (btn & btnNew) {
+                Qt::MouseButton convertedButton =
+                    buttonValueToEnum(btn, tdd);
+
+                *buttons |= convertedButton;
+
+                /**
+                 * If a button that is present in hardware input is
+                 * mapped to a Qt::NoButton, it means that it is going
+                 * to be eaten by the driver, for example by its
+                 * "Pan/Scroll" feature. Therefore we shouldn't handle
+                 * any of the events associated to it. So just return
+                 * Qt::NoButton here.
+                 */
+                if (convertedButton == Qt::NoButton) {
+                    *button = Qt::NoButton;
+                    *buttons = Qt::NoButton;
+                    break;
+                }
+            }
+        }
+    }
+
+private:
+    Qt::MouseButton buttonValueToEnum(DWORD button,
+                                      const QWindowsTabletDeviceData &tdd) {
+        const int leftButtonValue = 0x1;
+        const int middleButtonValue = 0x2;
+        const int rightButtonValue = 0x4;
+        const int doubleClickButtonValue = 0x7;
+
+        button = tdd.buttonsMap.value(button);
+
+        return button == leftButtonValue ? Qt::LeftButton :
+            button == rightButtonValue ? Qt::RightButton :
+            button == doubleClickButtonValue ? Qt::MiddleButton :
+            button == middleButtonValue ? Qt::MiddleButton :
+            button ? Qt::LeftButton /* fallback item */ :
+            Qt::NoButton;
+    }
+};
+
+
+static DefaultButtonsConverter *globalButtonsConverter =
+    new DefaultButtonsConverter();
 
 /*
  *
@@ -632,7 +697,9 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
     int currentDevice  = tabletData.currentDevice;
     int currentPointerType = tabletData.currentPointerType;
 
-    static Qt::MouseButtons buttons = Qt::NoButton, btnOld, btnChange;
+    // static Qt::MouseButtons buttons = Qt::NoButton, btnOld, btnChange;
+
+    static DWORD btnNew, btnOld, btnChange;
 
     // NOTE: We disabled Qt's icky hack.
     // The tablet can be used in 2 different modes, depending on its settings:
@@ -654,30 +721,24 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
     for (int i = 0; i < packetCount; ++i) {
         const PACKET &packet = localPacketBuf[i];
 
-        // Identify press/release from button state changes and translate
-        // into Qt events. (see QGuiApplicationPrivate::processTabletEvent)
-        buttons = static_cast<Qt::MouseButtons>(localPacketBuf[i].pkButtons);
-        bool anyButtonsStillPressed = buttons;
-        QEvent::Type type = QEvent::TabletMove;
-        if (buttons > btnOld) {
-            type = QEvent::TabletPress;
-        } else if (buttons < btnOld)  {
-            type = QEvent::TabletRelease;
-            if (!anyButtonsStillPressed) {
-                globalEventEater->deactivate();
-            }
-        }
+        btnOld = btnNew;
+        btnNew = localPacketBuf[i].pkButtons;
+        btnChange = btnOld ^ btnNew;
 
-
-        // Pick out the individual button press
-        btnChange = btnOld ^ buttons;
-        btnOld = buttons;
+        bool buttonPressed = btnChange && btnNew > btnOld;
+        bool buttonReleased = btnChange && btnNew < btnOld;
+        bool anyButtonsStillPressed = btnNew;
         Qt::MouseButton button = Qt::NoButton;
-        for (int check = Qt::LeftButton; check <= int(Qt::MaxMouseButton); check = check << 1) {
-            if (check & btnChange) {
-                button = Qt::MouseButton(check);
-                break;
-            }
+        Qt::MouseButtons buttons;
+
+        globalButtonsConverter->convert(btnOld, btnNew, &button, &buttons, tabletData);
+
+        QEvent::Type type = QEvent::TabletMove;
+        if (buttonPressed && button != Qt::NoButton) {
+            type = QEvent::TabletPress;
+        } else if (buttonReleased && button != Qt::NoButton) {
+            type = QEvent::TabletRelease;
+            globalEventEater->deactivate();
         }
 
         const int z = currentDevice == QTabletEvent::FourDMouse ? int(packet.pkZ) : 0;
@@ -801,6 +862,13 @@ void QWindowsTabletSupport::tabletUpdateCursor(const quint64 uniqueId,
     }
     m_devices[m_currentDevice].currentPointerType = pointerType(pkCursor);
     currentPkCursor = pkCursor;
+
+    BYTE logicalButtons[32];
+    memset(logicalButtons, 0, 32);
+    m_winTab32DLL.wTInfo(WTI_CURSORS + pkCursor, CSR_SYSBTNMAP, &logicalButtons);
+    m_devices[m_currentDevice].buttonsMap[0x1] = logicalButtons[0];
+    m_devices[m_currentDevice].buttonsMap[0x2] = logicalButtons[1];
+    m_devices[m_currentDevice].buttonsMap[0x4] = logicalButtons[2];
 
     // Check tablet name to enable Surface Pro 3 workaround.
 #ifdef UNICODE

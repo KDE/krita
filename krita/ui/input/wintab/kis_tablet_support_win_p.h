@@ -24,6 +24,7 @@
 
 #include <QtCore/QVector>
 #include <QtCore/QPointF>
+#include <QMap>
 
 #include "wintab.h"
 
@@ -80,6 +81,9 @@ struct QWindowsTabletDeviceData
     qint64 uniqueId;
     int currentDevice;
     int currentPointerType;
+
+    // Added by Krita
+    QMap<quint8, quint8> buttonsMap;
 };
 
 QDebug operator<<(QDebug d, const QWindowsTabletDeviceData &t);

@@ -290,6 +290,14 @@ KisDabCache::calculateDabRect(const QPointF &cursorPoint,
         subPixelY = 0;
     }
 
+    if (qIsNaN(subPixelX)) {
+        subPixelX = 0;
+    }
+
+    if (qIsNaN(subPixelY)) {
+        subPixelY = 0;
+    }
+
     int width = m_d->brush->maskWidth(scaleX, angle, subPixelX, subPixelY, info);
     int height = m_d->brush->maskHeight(scaleY, angle, subPixelX, subPixelY, info);
 

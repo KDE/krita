@@ -29,6 +29,8 @@
 #include "kis_random_source.h"
 #include "kis_paint_information.h"
 
+#include <random>
+
 
 KisColorSource::~KisColorSource() { }
 
@@ -204,12 +206,16 @@ void KisTotalRandomColorSource::colorize(KisPaintDeviceSP dev, const QRect& rect
 
     QColor qc;
 
+    std::random_device rand_dev;
+    std::default_random_engine rand_engine{rand_dev()};
+    std::uniform_int_distribution<> rand_distr(0, 255);
+
     int pixelSize = dev->colorSpace()->pixelSize();
 
     KisHLineIteratorSP it = dev->createHLineIteratorNG(rect.x(), rect.y(), rect.width());
     for (int y = 0; y < rect.height(); y++) {
         do {
-            qc.setRgb((int)((255.0 * rand()) / RAND_MAX), (int)((255.0 * rand()) / RAND_MAX), (int)((255.0 * rand()) / RAND_MAX));
+            qc.setRgb(rand_distr(rand_engine), rand_distr(rand_engine), rand_distr(rand_engine));
             kc.fromQColor(qc);
             memcpy(it->rawData(), kc.data(), pixelSize);
         } while (it->nextPixel());

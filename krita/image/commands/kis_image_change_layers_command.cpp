@@ -35,7 +35,7 @@ void KisImageChangeLayersCommand::redo()
 {
     m_image->setRootLayer(static_cast<KisGroupLayer*>(m_newRootLayer.data()));
 
-    m_image->refreshGraph();
+    m_image->refreshGraphAsync();
     m_image->notifyLayersChanged();
 }
 
@@ -43,6 +43,6 @@ void KisImageChangeLayersCommand::undo()
 {
     m_image->setRootLayer(static_cast<KisGroupLayer*>(m_oldRootLayer.data()));
 
-    m_image->refreshGraph();
+    m_image->refreshGraphAsync();
     m_image->notifyLayersChanged();
 }

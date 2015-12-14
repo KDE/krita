@@ -883,4 +883,22 @@ void KisImageTest::testMergeSelectionMasks()
     }
 }
 
+void KisImageTest::testFlattenImage()
+{
+    FlattenTestImage p;
+    KisImageSP image = p.image;
+
+    TestUtil::ExternalImageChecker img("flatten", "imagetest");
+
+    {
+        KisLayerUtils::flattenImage(p.image);
+        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+
+        p.undoStore->undo();
+        p.image->waitForDone();
+
+        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+    }
+}
+
 QTEST_GUILESS_MAIN(KisImageTest)

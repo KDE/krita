@@ -28,6 +28,7 @@
 #include "kis_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_clone_layer.h"
+#include "kis_group_layer.h"
 #include "kis_selection.h"
 #include "kis_selection_mask.h"
 #include "kis_meta_data_merge_strategy.h"
@@ -35,6 +36,7 @@
 #include "commands/kis_image_layer_add_command.h"
 #include "commands/kis_image_layer_remove_command.h"
 #include "commands/kis_image_layer_move_command.h"
+#include "commands/kis_image_change_layers_command.h"
 #include "commands_new/kis_activate_selection_mask_command.h"
 #include "kis_abstract_projection_plane.h"
 #include "kis_processing_applicator.h"
@@ -319,7 +321,7 @@ namespace KisLayerUtils {
             // Add the new merged node on top of the active node -- checking
             // whether the parent is going to be deleted
             parent = putAfter->parent();
-            while (nodesToDelete.contains(parent)) {
+            while (parent && nodesToDelete.contains(parent)) {
                 parent = parent->parent();
             }
         }
@@ -330,25 +332,41 @@ namespace KisLayerUtils {
             KisNodeSP parent;
             findPerfectParent(nodesToDelete, m_putAfter, parent);
 
-            if (parent == m_putAfter->parent()) {
+            if (!parent) {
+                KisNodeSP oldRoot = m_info->image->root();
+                KisNodeSP newRoot =
+                    new KisGroupLayer(m_info->image, "root", OPACITY_OPAQUE_U8);
+
                 addCommand(new KisImageLayerAddCommand(m_info->image,
                                                        m_info->dstNode,
-                                                       parent,
-                                                       m_putAfter,
+                                                       newRoot,
+                                                       KisNodeSP(),
                                                        true, false));
+                addCommand(new KisImageChangeLayersCommand(m_info->image, oldRoot, newRoot));
+
             } else {
-                addCommand(new KisImageLayerAddCommand(m_info->image,
-                                                       m_info->dstNode,
-                                                       parent,
-                                                       parent->lastChild(),
-                                                       true, false));
+                if (parent == m_putAfter->parent()) {
+                    addCommand(new KisImageLayerAddCommand(m_info->image,
+                                                           m_info->dstNode,
+                                                           parent,
+                                                           m_putAfter,
+                                                           true, false));
+                } else {
+                    addCommand(new KisImageLayerAddCommand(m_info->image,
+                                                           m_info->dstNode,
+                                                           parent,
+                                                           parent->lastChild(),
+                                                           true, false));
+                }
+
+                reparentSelectionMasks(m_info->image,
+                                       m_info->dstLayer(),
+                                       m_info->selectionMasks);
+
+                safeRemoveMultipleNodes(m_info->allSrcNodes());
             }
 
-            reparentSelectionMasks(m_info->image,
-                                   m_info->dstLayer(),
-                                   m_info->selectionMasks);
 
-            safeRemoveMultipleNodes(m_info->allSrcNodes());
         }
 
     private:
@@ -612,7 +630,7 @@ namespace KisLayerUtils {
         KIS_ASSERT_RECOVER_NOOP(root->parent() || inputNodes.isEmpty());
     }
 
-    void mergeMultipleLayers(KisImageSP image, QList<KisNodeSP> mergedNodes, KisNodeSP putAfter, bool flattenSingleLayer)
+    void mergeMultipleLayersImpl(KisImageSP image, QList<KisNodeSP> mergedNodes, KisNodeSP putAfter, bool flattenSingleLayer, const KUndo2MagicString &actionName)
     {
         filterMergableNodes(mergedNodes);
         {
@@ -626,10 +644,6 @@ namespace KisLayerUtils {
 
         KisImageSignalVector emitSignals;
         emitSignals << ModifiedSignal;
-
-        KUndo2MagicString actionName = mergedNodes.size() == 1 ?
-            kundo2_i18n("Flatten Layer") :
-            kundo2_i18n("Merge Selected Nodes");
 
         KisProcessingApplicator applicator(image, 0,
                                            KisProcessingApplicator::NONE,
@@ -664,6 +678,11 @@ namespace KisLayerUtils {
 
         applicator.end();
 
+    }
+
+    void mergeMultipleLayers(KisImageSP image, QList<KisNodeSP> mergedNodes, KisNodeSP putAfter)
+    {
+        mergeMultipleLayersImpl(image, mergedNodes, putAfter, false, kundo2_i18n("Merge Selected Nodes"));
     }
 
     struct MergeSelectionMasks : public KisCommandUtils::AggregateCommand {
@@ -767,6 +786,14 @@ namespace KisLayerUtils {
         QList<KisNodeSP> mergedNodes;
         mergedNodes << layer;
 
-        mergeMultipleLayers(image, mergedNodes, layer, true);
+        mergeMultipleLayersImpl(image, mergedNodes, layer, true, kundo2_i18n("Flatten Layer"));
+    }
+
+    void flattenImage(KisImageSP image)
+    {
+        QList<KisNodeSP> mergedNodes;
+        mergedNodes << image->root();
+
+        mergeMultipleLayersImpl(image, mergedNodes, 0, true, kundo2_i18n("Flatten Image"));
     }
 }

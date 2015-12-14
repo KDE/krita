@@ -47,6 +47,8 @@ private Q_SLOTS:
     void testMergeCrossColorSpace();
 
     void testMergeSelectionMasks();
+
+    void testFlattenImage();
 };
 
 #endif

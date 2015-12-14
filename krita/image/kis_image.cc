@@ -905,61 +905,9 @@ qint32 KisImage::nHiddenLayers() const
     return visitor.count();
 }
 
-QRect realNodeExactBounds(KisNodeSP rootNode, QRect currentRect = QRect())
-{
-    KisNodeSP node = rootNode->firstChild();
-
-    while(node) {
-        currentRect |= realNodeExactBounds(node, currentRect);
-        node = node->nextSibling();
-    }
-
-    // TODO: it would be better to count up changeRect inside
-    // node's extent() method
-    currentRect |= rootNode->projectionPlane()->changeRect(rootNode->exactBounds());
-
-    return currentRect;
-}
-
-void KisImage::refreshHiddenArea(KisNodeSP rootNode, const QRect &preparedArea)
-{
-    QRect realNodeRect = realNodeExactBounds(rootNode);
-    if (!preparedArea.contains(realNodeRect)) {
-
-        QRegion dirtyRegion = realNodeRect;
-        dirtyRegion -= preparedArea;
-
-        Q_FOREACH (const QRect &rc, dirtyRegion.rects()) {
-            refreshGraph(rootNode, rc, realNodeRect);
-        }
-    }
-}
-
 void KisImage::flatten()
 {
-    KisGroupLayerSP oldRootLayer = m_d->rootLayer;
-    KisGroupLayerSP newRootLayer =
-        new KisGroupLayer(this, "root", OPACITY_OPAQUE_U8);
-
-    refreshHiddenArea(oldRootLayer, bounds());
-
-    lock();
-    KisPaintDeviceSP projectionCopy = new KisPaintDevice(oldRootLayer->projection()->colorSpace());
-    projectionCopy->makeCloneFrom(oldRootLayer->projection(), oldRootLayer->exactBounds());
-    unlock();
-
-    KisPaintLayerSP flattenLayer =
-        new KisPaintLayer(this, nextLayerName(), OPACITY_OPAQUE_U8, projectionCopy);
-    Q_CHECK_PTR(flattenLayer);
-
-    addNode(flattenLayer, newRootLayer, 0);
-
-    undoAdapter()->beginMacro(kundo2_i18n("Flatten Image"));
-    // NOTE: KisImageChangeLayersCommand performs all the locking for us
-    undoAdapter()->addCommand(new KisImageChangeLayersCommand(KisImageWSP(this), oldRootLayer, newRootLayer));
-    undoAdapter()->endMacro();
-
-    setModified();
+    KisLayerUtils::flattenImage(this);
 }
 
 void KisImage::mergeMultipleLayers(QList<KisNodeSP> mergedNodes, KisNodeSP putAfter)

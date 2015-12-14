@@ -65,7 +65,17 @@ void KisImageSignalRouter::emitNotifications(KisImageSignalVector notifications)
 
 void KisImageSignalRouter::emitNotification(KisImageSignalType type)
 {
-    emit sigNotification(type);
+    /**
+     * All the notifications except LayersChangedSignal should go in a
+     * queued way. And LayersChangedSignal should be delivered to the
+     * recipients in a non-reordered way
+     */
+
+    if (type.id == LayersChangedSignal) {
+        slotNotification(type);
+    } else {
+        emit sigNotification(type);
+    }
 }
 
 void KisImageSignalRouter::emitNodeChanged(KisNodeSP node)

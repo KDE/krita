@@ -98,7 +98,7 @@ struct KisAnimationFrameCache::Private
         bool cacheChanged = false;
 
         QMap<int, Frame*>::iterator it = frames.lowerBound(range.start());
-        if (it.key() != range.start()) it--;
+        if (it.key() != range.start() && it != frames.begin()) it--;
 
         while (it != frames.end()) {
             Frame *frame = it.value();

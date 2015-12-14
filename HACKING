@@ -26,6 +26,8 @@ C++11 and C++14
 
     Before using other new features, discuss on #krita so we can expand this list.
 
+    Our minimum gcc version is 4.5, shipped with Ubuntu 12.04
+
 
 Indentation
 

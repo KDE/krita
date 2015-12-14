@@ -1,0 +1,17 @@
+Windows
+
+copy zlib.lib to zdll.lib for Qt to find it
+same for png and ext_tiff
+
+copy Half.dll from lib to bin; openexr still cannot find ilmbase
+
+exiv2: currently tzname hacked out, should be be #define tzname _tzname
+
+todo: libssh, libcurl, libgsl
+
+boost_system needs to be renamed to plain boost_system.lib
+
+cl errors out during cmake phase
+
+need to add png2ico, icons, mimeinfo, translations
+

@@ -36,6 +36,7 @@ set(kritasketch_SRCS
     main.cpp
     MainWindow.cpp
 )
+qt5_add_resources(kritasketch_SRCS  ${krita_QRCS})
 
 set(kritasketchplugin_SRCS
     kritasketchplugin.cpp

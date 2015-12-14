@@ -511,8 +511,12 @@ namespace KisLayerUtils {
     void updateFrameJobs(FrameJobs *jobs, KisNodeSP node) {
         QSet<int> frames = fetchLayerFrames(node);
 
-        foreach (int frame, frames) {
-            (*jobs)[frame].insert(node);
+        if (frames.isEmpty()) {
+            (*jobs)[0].insert(node);
+        } else {
+            foreach (int frame, frames) {
+                (*jobs)[frame].insert(node);
+            }
         }
     }
 

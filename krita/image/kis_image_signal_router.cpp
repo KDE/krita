@@ -85,11 +85,13 @@ void KisImageSignalRouter::emitNodeChanged(KisNodeSP node)
 
 void KisImageSignalRouter::emitNodeHasBeenAdded(KisNode *parent, int index)
 {
+    m_image->invalidateAllFrames();
     emit sigNodeAddedAsync(parent->at(index));
 }
 
 void KisImageSignalRouter::emitAboutToRemoveANode(KisNode *parent, int index)
 {
+    m_image->invalidateAllFrames();
     emit sigRemoveNodeAsync(parent->at(index));
 }
 
@@ -98,22 +100,27 @@ void KisImageSignalRouter::slotNotification(KisImageSignalType type)
 {
     switch(type.id) {
     case LayersChangedSignal:
+        m_image->invalidateAllFrames();
         emit sigLayersChangedAsync();
         break;
     case ModifiedSignal:
         emit sigImageModified();
         break;
     case SizeChangedSignal:
+        m_image->invalidateAllFrames();
         emit sigSizeChanged(type.sizeChangedSignal.oldStillPoint,
                             type.sizeChangedSignal.newStillPoint);
         break;
     case ProfileChangedSignal:
+        m_image->invalidateAllFrames();
         emit sigProfileChanged(m_image->profile());
         break;
     case ColorSpaceChangedSignal:
+        m_image->invalidateAllFrames();
         emit sigColorSpaceChanged(m_image->colorSpace());
         break;
     case ResolutionChangedSignal:
+        m_image->invalidateAllFrames();
         emit sigResolutionChanged(m_image->xRes(), m_image->yRes());
         break;
     }

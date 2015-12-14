@@ -27,6 +27,9 @@
        <property name="alignment">
         <set>Qt::AlignCenter</set>
        </property>
+       <property name="maximum">
+        <number>10000</number>
+       </property>
       </widget>
      </item>
      <item>

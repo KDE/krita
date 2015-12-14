@@ -100,7 +100,7 @@ void MoveStrokeStrategy::cancelStrokeCallback()
 
         // FIXME: make cancel job exclusive instead
         m_updatesFacade->blockUpdates();
-        moveAndUpdate(-m_finalOffset);
+        moveAndUpdate(QPoint());
         m_updatesFacade->unblockUpdates();
     }
 

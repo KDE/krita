@@ -51,7 +51,7 @@ void KisScanlineFillTest::testFillGeneral(const QVector<KisFillInterval> &initia
     KisScanlineFill gc(dev, QPoint(), boundingRect);
 
     KisFillIntervalMap *backwardMap = gc.testingGetBackwardIntervals();
-    foreach(const KisFillInterval &i, initialBackwardIntervals) {
+    Q_FOREACH (const KisFillInterval &i, initialBackwardIntervals) {
         backwardMap->insertInterval(i);
     }
 

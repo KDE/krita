@@ -39,7 +39,7 @@ AcceptRejectChangeDialog::AcceptRejectChangeDialog(KoChangeTracker *changeTracke
     connect(ui.acceptButton, SIGNAL(released()), this, SLOT(changeAccepted()));
     connect(ui.rejectButton, SIGNAL(released()), this, SLOT(changeRejected()));
     connect(ui.cancelButton, SIGNAL(released()), this, SLOT(dialogCancelled()));
-    
+
 }
 
 AcceptRejectChangeDialog::~AcceptRejectChangeDialog()

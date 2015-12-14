@@ -463,7 +463,7 @@ void PSDLayerMaskSection::writeImpl(QIODevice* io, KisNodeSP rootLayer)
             }
 
             // Layer records section
-            foreach(const FlattenedNode &item, nodes) {
+            Q_FOREACH (const FlattenedNode &item, nodes) {
                 KisNodeSP node = item.node;
 
                 PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header);
@@ -571,7 +571,7 @@ void PSDLayerMaskSection::writeImpl(QIODevice* io, KisNodeSP rootLayer)
             dbgFile << "start writing layer pixel data" << io->pos();
 
             // Now save the pixel data
-            foreach(PSDLayerRecord *layerRecord, layers) {
+            Q_FOREACH (PSDLayerRecord *layerRecord, layers) {
                 layerRecord->writePixelData(io);
             }
 

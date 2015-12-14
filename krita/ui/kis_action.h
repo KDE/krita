@@ -45,6 +45,11 @@ class KRITAUI_EXPORT KisAction : public QWidgetAction
 {
     Q_OBJECT
 public:
+
+    /**
+     * If you re-order these, you must change the associated values in
+     * krita.action and kritamenu.action!
+     */
     enum ActivationFlag {
         NONE                        = 0x0000, ///< Always activate
         ACTIVE_IMAGE                = 0x0001, ///< Activate if there is at least one image

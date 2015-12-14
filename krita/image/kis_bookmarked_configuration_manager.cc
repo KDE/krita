@@ -95,7 +95,7 @@ QList<QString> KisBookmarkedConfigurationManager::configurations() const
     QMap< QString, QString > m = cfg->entryMap(configEntryGroup());
     QList<QString> keys = m.keys();
     QList<QString> configsKey;
-    foreach(const QString & key, keys) {
+    Q_FOREACH (const QString & key, keys) {
         if (key != KisBookmarkedConfigurationManager::ConfigDefault && key != KisBookmarkedConfigurationManager::ConfigLastUsed) {
             configsKey << key;
         }

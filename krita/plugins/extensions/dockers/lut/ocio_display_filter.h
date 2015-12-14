@@ -18,12 +18,12 @@
 #ifndef OCIO_DISPLAY_FILTER_H
 #define OCIO_DISPLAY_FILTER_H
 
+#include <KoConfig.h> // for HAVE_OPENGL
 #include "kritalutdocker_export.h"
 #include <kis_display_filter.h>
 #include <OpenColorIO/OpenColorIO.h>
 #include <OpenColorIO/OpenColorTransforms.h>
 #include <QVector>
-#include <opengl/kis_opengl.h>
 #include "kis_exposure_gamma_correction_interface.h"
 
 namespace OCIO = OCIO_NAMESPACE;

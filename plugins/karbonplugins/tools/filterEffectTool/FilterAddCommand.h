@@ -29,7 +29,7 @@ class KoFilterEffect;
 class FilterAddCommand : public KUndo2Command
 {
 public:
-    FilterAddCommand(KoFilterEffect *filterEffect, KoShape * shape, KUndo2Command *parent = 0);
+    FilterAddCommand(KoFilterEffect *filterEffect, KoShape *shape, KUndo2Command *parent = 0);
     ~FilterAddCommand();
     /// redo the command
     virtual void redo();
@@ -37,8 +37,8 @@ public:
     virtual void undo();
 
 private:
-    KoFilterEffect * m_filterEffect;
-    KoShape * m_shape;
+    KoFilterEffect *m_filterEffect;
+    KoShape *m_shape;
     bool m_isAdded;
 };
 

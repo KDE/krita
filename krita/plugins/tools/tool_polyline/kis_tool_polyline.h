@@ -49,7 +49,7 @@ class KisToolPolylineFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolPolylineFactory(const QStringList&)
+    KisToolPolylineFactory()
             : KoToolFactoryBase("KisToolPolyline") {
         setToolTip(i18n("Polyline Tool: Shift-mouseclick ends the polyline."));
         setToolType(TOOL_TYPE_SHAPE);

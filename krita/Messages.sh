@@ -1,5 +1,5 @@
 #! /bin/sh
-source ../calligra_xgettext.sh
+source ../krita_xgettext.sh
 
 $EXTRACTRC `find . -name \*.ui | grep -v '/tests/'` >> rc.cpp
 RCFILES=`find . -name \*.rc                                                   \
@@ -18,7 +18,7 @@ perl extracti18n.pl > i18ndata
 
 # Ignore sdk/templates which contains templates for writing future plugins.
 # None of the placeholder strings inside will be seen by users.
-calligra_xgettext krita.pot i18ndata rc.cpp \
+krita_xgettext krita.pot i18ndata rc.cpp \
                   `find . -name \*.cc -o -name \*.h  -o -name \*.cpp | grep -v '/tests/' | grep -v './sdk/templates'`
 
 # Clean up

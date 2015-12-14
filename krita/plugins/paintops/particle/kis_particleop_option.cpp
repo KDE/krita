@@ -129,5 +129,5 @@ void KisParticleOpOption::readOptionSetting(const KisPropertiesConfiguration* se
 
 void KisParticleOpOption::lodLimitations(KisPaintopLodLimitations *l) const
 {
-    l->blockers << KoID("particle-brush", i18nc("PaintOp LoD limitation", "Particle Brush (not supported)"));
+    l->blockers << KoID("particle-brush", i18nc("PaintOp instant preview limitation", "Particle Brush (not supported)"));
 }

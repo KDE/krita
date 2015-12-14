@@ -104,7 +104,7 @@ void KisFilterManager::setup(KActionCollection * ac, KisActionManager *actionMan
     connect(&d->actionsMapper, SIGNAL(mapped(const QString&)), SLOT(showFilterDialog(const QString&)));
 
     // Setup list of filters
-    foreach (const QString &filterName, KisFilterRegistry::instance()->keys()) {
+    Q_FOREACH (const QString &filterName, KisFilterRegistry::instance()->keys()) {
         insertFilter(filterName);
     }
 
@@ -278,7 +278,7 @@ void KisFilterManager::apply(KisSafeFilterConfigurationSP filterConfig)
         QSize size = KritaUtils::optimalPatchSize();
         QVector<QRect> rects = KritaUtils::splitRectIntoPatches(processRect, size);
 
-        foreach(const QRect &rc, rects) {
+        Q_FOREACH (const QRect &rc, rects) {
             image->addJob(d->currentStrokeId,
                           new KisFilterStrokeStrategy::Data(rc, true));
         }

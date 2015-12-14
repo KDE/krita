@@ -28,8 +28,9 @@
 class KoParagraphStyle;
 class KoUnit;
 
-namespace Ui {
-    class ParagraphDropCaps;
+namespace Ui
+{
+class ParagraphDropCaps;
 }
 
 class ParagraphDropCaps : public QWidget
@@ -37,21 +38,21 @@ class ParagraphDropCaps : public QWidget
     Q_OBJECT
 
 public:
-  explicit ParagraphDropCaps(QWidget *parent = 0);
+    explicit ParagraphDropCaps(QWidget *parent = 0);
 
-  void setDisplay(KoParagraphStyle *style);
-  void save(KoParagraphStyle *style);
+    void setDisplay(KoParagraphStyle *style);
+    void save(KoParagraphStyle *style);
 
-  void setUnit(const KoUnit &unit);
+    void setUnit(const KoUnit &unit);
 
 Q_SIGNALS:
-  void parStyleChanged();
+    void parStyleChanged();
 
 private Q_SLOTS:
-  void dropCapsStateChanged();
-  void paragraphDistanceChanged(qreal distance);
-  void dropsLineSpanChanged(int lineSpan);
-  void dropedCharacterCountChanged(int count);
+    void dropCapsStateChanged();
+    void paragraphDistanceChanged(qreal distance);
+    void dropsLineSpanChanged(int lineSpan);
+    void dropedCharacterCountChanged(int count);
 
 private:
     Ui::ParagraphDropCaps widget;

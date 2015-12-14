@@ -34,9 +34,7 @@ K_PLUGIN_FACTORY_WITH_JSON(ClonesArrayFactory, "kritaclonesarray.json", register
 ClonesArray::ClonesArray(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent)
 {
-    KisAction *action = new KisAction(i18n("Clones &Array..."), this);
-    action->setActivationFlags(KisAction::ACTIVE_LAYER);
-    addAction("clones_array", action);
+    KisAction *action = createAction("clones_array");
     connect(action, SIGNAL(triggered()), this, SLOT(slotCreateClonesArray()));
 }
 

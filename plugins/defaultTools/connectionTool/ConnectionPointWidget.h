@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * 
+ *
  * Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -37,8 +37,8 @@ private Q_SLOTS:
 
 private:
     Ui::ConnectionPointWidget widget;
-    QButtonGroup * m_horzGroup;
-    QButtonGroup * m_vertGroup;
+    QButtonGroup *m_horzGroup;
+    QButtonGroup *m_vertGroup;
 };
 
 #endif // CONNECTIONPOINTWIDGET_H

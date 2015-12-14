@@ -72,9 +72,9 @@ public:
     KoSection *getSectionByIndex(const QModelIndex &idx) const
     {
         return sourceModel()->data(
-            mapToSource(idx),
-            KoSectionModel::PointerRole
-        ).value<KoSection *>();
+                   mapToSource(idx),
+                   KoSectionModel::PointerRole
+               ).value<KoSection *>();
     }
 
 private:
@@ -176,7 +176,7 @@ void SectionFormatDialog::updateTreeState()
     enableButtonOk(allOk);
 }
 
-inline KoSection* SectionFormatDialog::sectionFromModel(const QModelIndex &idx)
+inline KoSection *SectionFormatDialog::sectionFromModel(const QModelIndex &idx)
 {
     return dynamic_cast<ProxyModel *>(m_widget.sectionTree->model())->getSectionByIndex(idx);
 }

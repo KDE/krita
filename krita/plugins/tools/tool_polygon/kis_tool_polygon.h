@@ -48,7 +48,7 @@ class KisToolPolygonFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolPolygonFactory(const QStringList&)
+    KisToolPolygonFactory()
             : KoToolFactoryBase("KisToolPolygon") {
         setToolTip(i18n("Polygon Tool: Shift-mouseclick ends the polygon."));
         setToolType(TOOL_TYPE_SHAPE);

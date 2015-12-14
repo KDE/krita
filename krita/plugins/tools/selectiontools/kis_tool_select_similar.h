@@ -43,7 +43,7 @@ public:
     QWidget* createOptionWidget();
 
 
-    public Q_SLOTS:    
+    public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void setSelectionAction(int newSelectionAction);
     void slotSetFuzziness(int);
@@ -60,7 +60,7 @@ private:
 class KisToolSelectSimilarFactory : public KoToolFactoryBase
 {
 public:
-    KisToolSelectSimilarFactory(const QStringList&)
+    KisToolSelectSimilarFactory()
             : KoToolFactoryBase("KisToolSelectSimilar") {
         setToolTip(i18n("Similar Color Selection Tool"));
         setToolType(TOOL_TYPE_SELECTED);

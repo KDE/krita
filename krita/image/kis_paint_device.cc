@@ -252,9 +252,11 @@ public:
         KIS_ASSERT_RECOVER_RETURN(m_frames.contains(frame));
         KIS_ASSERT_RECOVER_RETURN(parentCommand);
 
+        DataSP deletedData = m_frames[frame];
+
         KUndo2Command *cmd =
             new FrameInsertionCommand(&m_frames,
-                                      m_frames[frame],
+                                      deletedData,
                                       frame, false,
                                       parentCommand);
         cmd->redo();
@@ -263,7 +265,7 @@ public:
             // the original m_data will be deleted by shared poiter
             // when the command will be destroyed, so just create a
             // new one for m_data
-            m_data = new Data(q);
+            m_data = new Data(deletedData.data(), false);
         }
     }
 
@@ -317,6 +319,8 @@ public:
     }
 
     void fetchFrame(int frameId, KisPaintDeviceSP targetDevice);
+    void uploadFrame(int srcFrameId, int dstFrameId, KisPaintDeviceSP srcDevice);
+
     QRegion syncLodData(int newLod);
 
     void tesingFetchLodDevice(KisPaintDeviceSP targetDevice);
@@ -396,7 +400,7 @@ private:
         dataObjects << m_lodData.data();
         dataObjects << m_externalFrameData.data();
 
-        foreach (DataSP value, m_frames.values()) {
+        Q_FOREACH (DataSP value, m_frames.values()) {
             dataObjects << value.data();
         }
 
@@ -634,6 +638,33 @@ void KisPaintDevice::Private::fetchFrame(int frameId, KisPaintDeviceSP targetDev
     transferFromData(data, targetDevice);
 }
 
+void KisPaintDevice::Private::uploadFrame(int srcFrameId, int dstFrameId, KisPaintDeviceSP srcDevice)
+{
+    DataSP dstData = m_frames[dstFrameId];
+    KIS_ASSERT_RECOVER_RETURN(dstData);
+
+    DataSP srcData = srcDevice->m_d->m_frames[srcFrameId];
+    KIS_ASSERT_RECOVER_RETURN(srcData);
+
+    if (srcData->colorSpace() != dstData->colorSpace() &&
+        !(*srcData->colorSpace() == *dstData->colorSpace())) {
+
+        KUndo2Command tempCommand;
+
+        srcData = toQShared(new Data(srcData.data(), true));
+        srcData->convertDataColorSpace(dstData->colorSpace(),
+                                       KoColorConversionTransformation::internalRenderingIntent(),
+                                       KoColorConversionTransformation::internalConversionFlags(),
+                                       &tempCommand);
+    }
+
+    dstData->dataManager()->clear();
+    dstData->cache()->invalidate();
+
+    const QRect rect = srcData->dataManager()->extent();
+    dstData->dataManager()->bitBltRough(srcData->dataManager(), rect);
+}
+
 void KisPaintDevice::Private::tesingFetchLodDevice(KisPaintDeviceSP targetDevice)
 {
     Data *data = m_lodData.data();
@@ -669,6 +700,7 @@ KUndo2Command* KisPaintDevice::Private::convertColorSpace(const KoColorSpace * d
         }
 
         void undo() {
+            KUndo2Command::undo();
             emitNotifications();
         }
 
@@ -682,7 +714,7 @@ KUndo2Command* KisPaintDevice::Private::convertColorSpace(const KoColorSpace * d
 
     QList<Data*> dataObjects = allDataObjects();;
 
-    foreach (Data *data, dataObjects) {
+    Q_FOREACH (Data *data, dataObjects) {
         if (!data) continue;
 
         data->convertDataColorSpace(dstColorSpace, renderingIntent, conversionFlags, parentCommand);
@@ -708,7 +740,7 @@ bool KisPaintDevice::Private::assignProfile(const KoColorProfile * profile)
     if (!dstColorSpace) return false;
 
     QList<Data*> dataObjects = allDataObjects();;
-    foreach (Data *data, dataObjects) {
+    Q_FOREACH (Data *data, dataObjects) {
         if (!data) continue;
         data->assignColorSpace(dstColorSpace);
     }
@@ -721,7 +753,7 @@ bool KisPaintDevice::Private::assignProfile(const KoColorProfile * profile)
 void KisPaintDevice::Private::init(const KoColorSpace *cs, const quint8 *defaultPixel)
 {
     QList<Data*> dataObjects = allDataObjects();;
-    foreach (Data *data, dataObjects) {
+    Q_FOREACH (Data *data, dataObjects) {
         if (!data) continue;
 
         KisDataManagerSP dataManager = new KisDataManager(cs->pixelSize(), defaultPixel);
@@ -1616,7 +1648,7 @@ QVector<qint32> KisPaintDevice::channelSizes() const
     QList<KoChannelInfo*> channels = colorSpace()->channels();
     qSort(channels);
 
-    foreach(KoChannelInfo * channelInfo, channels) {
+    Q_FOREACH (KoChannelInfo * channelInfo, channels) {
         sizes.append(channelInfo->size());
     }
     return sizes;
@@ -1675,6 +1707,11 @@ void KisPaintDeviceFramesInterface::deleteFrame(int frame, KUndo2Command *parent
 void KisPaintDeviceFramesInterface::fetchFrame(int frameId, KisPaintDeviceSP targetDevice)
 {
     q->m_d->fetchFrame(frameId, targetDevice);
+}
+
+void KisPaintDeviceFramesInterface::uploadFrame(int srcFrameId, int dstFrameId, KisPaintDeviceSP srcDevice)
+{
+    q->m_d->uploadFrame(srcFrameId, dstFrameId, srcDevice);
 }
 
 QRect KisPaintDeviceFramesInterface::frameBounds(int frameId)

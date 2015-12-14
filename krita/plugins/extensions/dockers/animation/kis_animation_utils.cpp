@@ -75,7 +75,7 @@ namespace KisAnimationUtils {
                                            "Remove Keyframes",
                                            frames.size()))); // lisp-lovers present ;)
 
-        foreach (const FrameItem &item, frames) {
+        Q_FOREACH (const FrameItem &item, frames) {
             const int time = item.time;
             KisNodeSP node = item.node;
 
@@ -154,24 +154,35 @@ namespace KisAnimationUtils {
             const int dstTime = dstFrames[i].time;
             KisNodeSP dstNode = dstFrames[i].node;
 
-            if (srcNode != dstNode) continue;
+            if (srcNode == dstNode) {
+                KisKeyframeChannel *content =
+                    srcNode->getKeyframeChannel(KisKeyframeChannel::Content.id());
 
-            KisKeyframeChannel *content =
-                srcNode->getKeyframeChannel(KisKeyframeChannel::Content.id());
+                if (!content) continue;
 
-            if (!content) continue;
+                KisKeyframeSP srcKeyframe = content->keyframeAt(srcTime);
+                if (srcKeyframe) {
+                    if (copy) {
+                        content->copyKeyframe(srcKeyframe, dstTime, cmd.data());
+                    } else {
+                        content->moveKeyframe(srcKeyframe, dstTime, cmd.data());
+                    }
+                }
+            } else {
+                KisKeyframeChannel *srcContent =
+                    srcNode->getKeyframeChannel(KisKeyframeChannel::Content.id());
+                KisKeyframeChannel *dstContent =
+                    dstNode->getKeyframeChannel(KisKeyframeChannel::Content.id());
 
-            KisKeyframeSP dstKeyframe = content->keyframeAt(dstTime);
-            if (dstKeyframe) {
-                content->deleteKeyframe(dstKeyframe, cmd.data());
-            }
+                if (!srcContent || !dstContent) continue;
 
-            KisKeyframeSP srcKeyframe = content->keyframeAt(srcTime);
-            if (srcKeyframe) {
-                if (copy) {
-                    content->copyKeyframe(srcKeyframe, dstTime, cmd.data());
-                } else {
-                    content->moveKeyframe(srcKeyframe, dstTime, cmd.data());
+                KisKeyframeSP srcKeyframe = srcContent->keyframeAt(srcTime);
+                if (!srcKeyframe) continue;
+
+                dstContent->copyExternalKeyframe(srcContent, srcTime, dstTime, cmd.data());
+
+                if (!copy) {
+                    srcContent->deleteKeyframe(srcKeyframe, cmd.data());
                 }
             }
 

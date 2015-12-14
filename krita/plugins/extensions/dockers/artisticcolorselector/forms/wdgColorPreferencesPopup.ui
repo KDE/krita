@@ -83,7 +83,7 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="KisSliderSpinBox" name="numPiecesSlider" native="true">
+      <widget class="KisSliderSpinBox" name="numPiecesSlider">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -103,7 +103,7 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="KisSliderSpinBox" name="numRingsSlider" native="true">
+      <widget class="KisSliderSpinBox" name="numRingsSlider">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -123,7 +123,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="KisSliderSpinBox" name="numLightPiecesSlider" native="true">
+      <widget class="KisSliderSpinBox" name="numLightPiecesSlider">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>

@@ -34,7 +34,7 @@ public:
         if (! paths.size())
             return;
 
-        foreach(KoPathShape* shape, paths) {
+        Q_FOREACH (KoPathShape* shape, paths) {
             int subpathCount = shape->subpathCount();
             for (int i = 0; i < subpathCount; ++i)
                 shape->reverseSubpath(i);

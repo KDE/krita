@@ -329,7 +329,7 @@ void KisShapeSelection::recalculateOutlineCache()
     QList<KoShape*> shapesList = shapes();
 
     QPainterPath outline;
-    foreach(KoShape * shape, shapesList) {
+    Q_FOREACH (KoShape * shape, shapesList) {
         QTransform shapeMatrix = shape->absoluteTransformation(0);
         outline = outline.united(shapeMatrix.map(shape->outline()));
     }
@@ -406,7 +406,7 @@ KisShapeSelectionFactory::KisShapeSelectionFactory()
 
 void KisShapeSelection::moveX(qint32 x)
 {
-    foreach (KoShape* shape, shapeManager()->shapes()) {
+    Q_FOREACH (KoShape* shape, shapeManager()->shapes()) {
         if (shape != this) {
             QPointF pos = shape->position();
             shape->setPosition(QPointF(pos.x() + x/m_image->xRes(), pos.y()));
@@ -416,7 +416,7 @@ void KisShapeSelection::moveX(qint32 x)
 
 void KisShapeSelection::moveY(qint32 y)
 {
-    foreach (KoShape* shape, shapeManager()->shapes()) {
+    Q_FOREACH (KoShape* shape, shapeManager()->shapes()) {
         if (shape != this) {
             QPointF pos = shape->position();
             shape->setPosition(QPointF(pos.x(), pos.y() + y/m_image->yRes()));
@@ -437,7 +437,7 @@ KUndo2Command* KisShapeSelection::transform(const QTransform &transform) {
 
     // this code won't work if there are shapes, that inherit the transformation from the parent container.
     // the chart and tree shapes are examples for that, but they aren't used in krita and there are no other shapes like that.
-    foreach(const KoShape* shape, shapes) {
+    Q_FOREACH (const KoShape* shape, shapes) {
         QTransform oldTransform = shape->transformation();
         oldTransformations.append(oldTransform);
         if (dynamic_cast<const KoShapeGroup*>(shape)) {

@@ -28,7 +28,6 @@
 #include <QTextBlock>
 #include <QTextCursor>
 
-
 NodeData NodeData::fromBlock(int blockNumber)
 {
     NodeData nodeData;
@@ -37,7 +36,7 @@ NodeData NodeData::fromBlock(int blockNumber)
     return nodeData;
 }
 
-NodeData NodeData::fromFrame(QTextFrame* frame)
+NodeData NodeData::fromFrame(QTextFrame *frame)
 {
     NodeData nodeData;
     nodeData.type = Frame;
@@ -45,9 +44,8 @@ NodeData NodeData::fromFrame(QTextFrame* frame)
     return nodeData;
 }
 
-
 TextDocumentStructureModel::TextDocumentStructureModel(QObject *parent)
-  : QAbstractItemModel(parent)
+    : QAbstractItemModel(parent)
 {
     connect(this, SIGNAL(modelReset()), SLOT(onModelReset()));
 }
@@ -55,7 +53,6 @@ TextDocumentStructureModel::TextDocumentStructureModel(QObject *parent)
 TextDocumentStructureModel::~TextDocumentStructureModel()
 {
 }
-
 
 int TextDocumentStructureModel::columnCount(const QModelIndex &index) const
 {
@@ -66,12 +63,12 @@ int TextDocumentStructureModel::columnCount(const QModelIndex &index) const
 
 int TextDocumentStructureModel::rowCount(const QModelIndex &index) const
 {
-    qDebug() << "-------------------------- index:"<<index<<m_textDocument;
-    if (! m_textDocument) {
+    qDebug() << "-------------------------- index:" << index << m_textDocument;
+    if (!m_textDocument) {
         return 0;
     }
 
-    if (! index.isValid()) {
+    if (!index.isValid()) {
         // one root frame
         return 1;
     }
@@ -81,7 +78,7 @@ int TextDocumentStructureModel::rowCount(const QModelIndex &index) const
     const NodeData &nodeData = m_nodeDataTable.at(index.internalId());
 
     if (nodeData.type == NodeData::Frame) {
-        QTextFrame* frame = nodeData.frame;
+        QTextFrame *frame = nodeData.frame;
 
         // count frames and blocks
         int count = 0;
@@ -97,7 +94,7 @@ int TextDocumentStructureModel::rowCount(const QModelIndex &index) const
 
 QVariant TextDocumentStructureModel::data(const QModelIndex &index, int role) const
 {
-    if (! m_textDocument || ! index.isValid()) {
+    if (!m_textDocument || ! index.isValid()) {
         return QVariant();
     }
 
@@ -106,15 +103,14 @@ QVariant TextDocumentStructureModel::data(const QModelIndex &index, int role) co
     const NodeData &nodeData = m_nodeDataTable.at(index.internalId());
 
     switch (role) {
-        case Qt::DisplayRole:
-        {
-            if (nodeData.type == NodeData::Frame) {
-                QTextFrame* frame = nodeData.frame;
-                return QLatin1String(frame->metaObject()->className());
-            }
-            // else should be a block
-            return QLatin1String("Block");
+    case Qt::DisplayRole: {
+        if (nodeData.type == NodeData::Frame) {
+            QTextFrame *frame = nodeData.frame;
+            return QLatin1String(frame->metaObject()->className());
         }
+        // else should be a block
+        return QLatin1String("Block");
+    }
     }
 
     return QVariant();
@@ -122,8 +118,8 @@ QVariant TextDocumentStructureModel::data(const QModelIndex &index, int role) co
 
 QModelIndex TextDocumentStructureModel::parent(const QModelIndex &index) const
 {
-    qDebug() << "-------------------------- index:"<<index<<m_textDocument;
-    if (! m_textDocument || ! index.isValid()) {
+    qDebug() << "-------------------------- index:" << index << m_textDocument;
+    if (!m_textDocument || ! index.isValid()) {
         return QModelIndex();
     }
 
@@ -131,7 +127,7 @@ QModelIndex TextDocumentStructureModel::parent(const QModelIndex &index) const
 
     const NodeData &nodeData = m_nodeDataTable.at(index.internalId());
 
-    QTextFrame* parentFrame;
+    QTextFrame *parentFrame;
     if (nodeData.type == NodeData::Frame) {
         parentFrame = nodeData.frame->parentFrame();
     } else {
@@ -142,13 +138,13 @@ QModelIndex TextDocumentStructureModel::parent(const QModelIndex &index) const
         parentFrame = cursor.currentFrame();
     }
 
-    if (! parentFrame) {
+    if (!parentFrame) {
         return QModelIndex();
     }
 
-    QTextFrame* grandParentFrame = parentFrame->parentFrame();
+    QTextFrame *grandParentFrame = parentFrame->parentFrame();
     // parent is root frame?
-    if (! grandParentFrame) {
+    if (!grandParentFrame) {
         Q_ASSERT(parentFrame == m_textDocument->rootFrame());
         return createIndex(0, 0, static_cast<quintptr>(0));
     }
@@ -163,18 +159,18 @@ QModelIndex TextDocumentStructureModel::parent(const QModelIndex &index) const
         }
         ++row;
     }
-    Q_ASSERT(posFound);Q_UNUSED(posFound);
+    Q_ASSERT(posFound); Q_UNUSED(posFound);
     return createIndex(row, 0, frameIndex(parentFrame));
 }
 
 QModelIndex TextDocumentStructureModel::index(int row, int column, const QModelIndex &parentIndex) const
 {
-    qDebug() << "-------------------------- row:" << row << "column:"<<column << "index:"<<parentIndex<<m_textDocument;
-    if (! m_textDocument) {
+    qDebug() << "-------------------------- row:" << row << "column:" << column << "index:" << parentIndex << m_textDocument;
+    if (!m_textDocument) {
         return QModelIndex();
     }
 
-    if (! parentIndex.isValid()) {
+    if (!parentIndex.isValid()) {
         return createIndex(row, column, static_cast<quintptr>(0));
     }
 
@@ -184,7 +180,7 @@ QModelIndex TextDocumentStructureModel::index(int row, int column, const QModelI
     // can be only frame for now
     Q_ASSERT(nodeData.type == NodeData::Frame);
 
-    QTextFrame* parentFrame = nodeData.frame;
+    QTextFrame *parentFrame = nodeData.frame;
     int index = -1;
     int count = 0;
     for (QTextFrame::iterator iterator = parentFrame->begin(); !iterator.atEnd(); ++iterator) {
@@ -210,12 +206,12 @@ QModelIndex TextDocumentStructureModel::index(int row, int column, const QModelI
 
 bool TextDocumentStructureModel::hasChildren(const QModelIndex &parentIndex) const
 {
-    qDebug() << "-------------------------- parentIndex:"<<parentIndex<<m_textDocument;
-    if (! m_textDocument) {
+    qDebug() << "-------------------------- parentIndex:" << parentIndex << m_textDocument;
+    if (!m_textDocument) {
         return false;
     }
     // there is one root children
-    if (! parentIndex.isValid()) {
+    if (!parentIndex.isValid()) {
         return true;
     }
 
@@ -230,8 +226,7 @@ bool TextDocumentStructureModel::hasChildren(const QModelIndex &parentIndex) con
     return false;
 }
 
-
-void TextDocumentStructureModel::setTextDocument(QTextDocument* textDocument)
+void TextDocumentStructureModel::setTextDocument(QTextDocument *textDocument)
 {
     if (m_textDocument) {
         m_textDocument->disconnect(this);
@@ -267,7 +262,7 @@ int TextDocumentStructureModel::frameIndex(QTextFrame *frame) const
 {
     int index;
 
-    QHash<QTextFrame*, int>::ConstIterator it = m_frameTable.constFind(frame);
+    QHash<QTextFrame *, int>::ConstIterator it = m_frameTable.constFind(frame);
     if (it == m_frameTable.constEnd()) {
         index = m_nodeDataTable.count();
         m_frameTable.insert(frame, index);
@@ -286,7 +281,7 @@ void TextDocumentStructureModel::onContentsChanged()
 
 void TextDocumentStructureModel::onModelReset()
 {
-    qDebug() << "-------------------------- "<<m_textDocument;
+    qDebug() << "-------------------------- " << m_textDocument;
     m_nodeDataTable.clear();
     m_blockNumberTable.clear();
     m_frameTable.clear();

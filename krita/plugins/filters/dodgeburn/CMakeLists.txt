@@ -1,12 +1,12 @@
 
 
-set(kritadodgeburn_PART_SRCS DodgeBurnPlugin.cpp DodgeBurn.cpp )
+set(kritadodgeburn_SOURCES DodgeBurnPlugin.cpp DodgeBurn.cpp )
 
-ki18n_wrap_ui(kritadodgeburn_PART_SRCS
+ki18n_wrap_ui(kritadodgeburn_SOURCES
     DodgeBurnConfigurationBaseWidget.ui
     )
 
-add_library(kritadodgeburn MODULE ${kritadodgeburn_PART_SRCS})
+add_library(kritadodgeburn MODULE ${kritadodgeburn_SOURCES})
 kcoreaddons_desktop_to_json(kritadodgeburn kritadodgeburn.desktop)
 
 target_link_libraries(kritadodgeburn kritaui)

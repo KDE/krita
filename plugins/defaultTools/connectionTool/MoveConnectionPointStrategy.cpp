@@ -24,8 +24,10 @@
 #include <KoToolBase.h>
 #include <KoCanvasBase.h>
 
-MoveConnectionPointStrategy::MoveConnectionPointStrategy(KoShape *shape, int connectionPointId, KoToolBase* parent)
-: KoInteractionStrategy(parent), m_shape(shape), m_connectionPointId(connectionPointId)
+MoveConnectionPointStrategy::MoveConnectionPointStrategy(KoShape *shape, int connectionPointId, KoToolBase *parent)
+    : KoInteractionStrategy(parent)
+    , m_shape(shape)
+    , m_connectionPointId(connectionPointId)
 {
     Q_ASSERT(m_shape);
     m_oldPoint = m_newPoint = m_shape->connectionPoint(m_connectionPointId);
@@ -35,12 +37,12 @@ MoveConnectionPointStrategy::~MoveConnectionPointStrategy()
 {
 }
 
-void MoveConnectionPointStrategy::paint(QPainter& painter, const KoViewConverter& converter)
+void MoveConnectionPointStrategy::paint(QPainter &painter, const KoViewConverter &converter)
 {
     KoInteractionStrategy::paint(painter, converter);
 }
 
-void MoveConnectionPointStrategy::handleMouseMove(const QPointF& mouseLocation, Qt::KeyboardModifiers /*modifiers*/)
+void MoveConnectionPointStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers /*modifiers*/)
 {
     m_newPoint.position = m_shape->documentToShape(mouseLocation);
     m_shape->setConnectionPoint(m_connectionPointId, m_newPoint);
@@ -56,14 +58,15 @@ void MoveConnectionPointStrategy::finishInteraction(Qt::KeyboardModifiers /*modi
 {
 }
 
-KUndo2Command* MoveConnectionPointStrategy::createCommand()
+KUndo2Command *MoveConnectionPointStrategy::createCommand()
 {
     int grabDistance = grabSensitivity();
-    const qreal dx = m_newPoint.position.x()-m_oldPoint.position.x();
-    const qreal dy = m_newPoint.position.y()-m_oldPoint.position.y();
+    const qreal dx = m_newPoint.position.x() - m_oldPoint.position.x();
+    const qreal dy = m_newPoint.position.y() - m_oldPoint.position.y();
     // check if we have moved the connection point at least a little bit
-    if(dx*dx+dy*dy < grabDistance*grabDistance)
+    if (dx * dx + dy * dy < grabDistance * grabDistance) {
         return 0;
+    }
 
     return new ChangeConnectionPointCommand(m_shape, m_connectionPointId, m_oldPoint, m_newPoint);
 }

@@ -134,7 +134,7 @@ int KoShapeContainerDefaultModel::count() const
 QList<KoShape*> KoShapeContainerDefaultModel::shapes() const
 {
     QList<KoShape*> answer;
-    foreach(Private::Relation *relation, d->relations) {
+    Q_FOREACH (Private::Relation *relation, d->relations) {
         answer.append(relation->child());
     }
     return answer;

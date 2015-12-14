@@ -149,7 +149,7 @@ void KisTransformWorkerTest::testOffset()
     QImage result;
     int test = 0;
     QPoint origin(0,0);
-    foreach (QPoint offsetPoint, offsetPoints)
+    Q_FOREACH (QPoint offsetPoint, offsetPoints)
     {
         dev2->convertFromQImage(image, 0);
         KisTransformWorker::offset(dev2, offsetPoint, QRect(origin, image.size()) );
@@ -947,8 +947,8 @@ void KisTransformWorkerTest::generateTestImages()
     names << "hakonepa.png";
     //names << "star-chart-bars-full-600dpi.png";
 
-    foreach(const QString &name, names) {
-        foreach(KisFilterStrategy *filter, filters) {
+    Q_FOREACH (const QString &name, names) {
+        Q_FOREACH (KisFilterStrategy *filter, filters) {
             generateTestImage(name, 0.5,0.0,0.0,filter);
             generateTestImage(name, 0.734,0.0,0.0,filter);
             generateTestImage(name, 1.387,0.0,0.0,filter);

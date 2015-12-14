@@ -109,7 +109,7 @@ class KisToolLineFactory : public KoToolFactoryBase
 
 public:
 
-    KisToolLineFactory(const QStringList&)
+    KisToolLineFactory()
             : KoToolFactoryBase("KritaShape/KisToolLine") {
         setToolTip(i18n("Line Tool"));
         // Temporarily

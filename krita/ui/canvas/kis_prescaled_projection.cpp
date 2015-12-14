@@ -172,13 +172,13 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
     QPainter gc(&newImage);
     QVector<QRect> rects = updateRegion.rects();
 
-    foreach(const QRect &rect, rects) {
+    Q_FOREACH (const QRect &rect, rects) {
         QRect imageRect =
             m_d->coordinatesConverter->viewportToImage(rect).toAlignedRect();
         QVector<QRect> patches =
             KritaUtils::splitRectIntoPatches(imageRect, m_d->updatePatchSize);
 
-        foreach(const QRect& rc, patches) {
+        Q_FOREACH (const QRect& rc, patches) {
             QRect viewportPatch =
                 m_d->coordinatesConverter->imageToViewport(rc).toAlignedRect();
 
@@ -250,7 +250,7 @@ void KisPrescaledProjection::preScale()
     QVector<QRect> patches =
         KritaUtils::splitRectIntoPatches(imageRect, m_d->updatePatchSize);
 
-    foreach(const QRect& rc, patches) {
+    Q_FOREACH (const QRect& rc, patches) {
         QRect viewportPatch = m_d->coordinatesConverter->imageToViewport(rc).toAlignedRect();
         KisPPUpdateInfoSP info = getInitialUpdateInformation(QRect());
         fillInUpdateInformation(viewportPatch, info);

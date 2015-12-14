@@ -122,12 +122,6 @@ KisScratchPad::KisScratchPad(QWidget *parent)
 
     // filter will be deleted by the QObject hierarchy
     m_eventFilter = new KisScratchPadEventFilter(this);
-    connect(m_eventFilter, SIGNAL(mousePressSignal(KoPointerEvent*)),
-            SLOT(slotMousePress(KoPointerEvent*)), Qt::DirectConnection);
-    connect(m_eventFilter, SIGNAL(mouseReleaseSignal(KoPointerEvent*)),
-            SLOT(slotMouseRelease(KoPointerEvent*)), Qt::DirectConnection);
-    connect(m_eventFilter, SIGNAL(mouseMoveSignal(KoPointerEvent*)),
-            SLOT(slotMouseMove(KoPointerEvent*)), Qt::DirectConnection);
 
     m_infoBuilder = new KisPaintingInformationBuilder();
     m_helper = new KisToolFreehandHelper(m_infoBuilder);
@@ -145,7 +139,7 @@ KisScratchPad::~KisScratchPad() {
     delete m_nodeListener;
 }
 
-void KisScratchPad::slotMousePress(KoPointerEvent *event)
+void KisScratchPad::pointerPress(KoPointerEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
         m_toolMode = PAINTING;
@@ -163,7 +157,7 @@ void KisScratchPad::slotMousePress(KoPointerEvent *event)
     }
 }
 
-void KisScratchPad::slotMouseRelease(KoPointerEvent *event)
+void KisScratchPad::pointerRelease(KoPointerEvent *event)
 {
     if (m_toolMode == PAINTING) {
         endStroke(event);
@@ -181,7 +175,7 @@ void KisScratchPad::slotMouseRelease(KoPointerEvent *event)
     }
 }
 
-void KisScratchPad::slotMouseMove(KoPointerEvent *event)
+void KisScratchPad::pointerMove(KoPointerEvent *event)
 {
     if (m_toolMode == PAINTING) {
         doStroke(event);

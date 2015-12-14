@@ -146,7 +146,7 @@ QString TemplatesModel::groupNameOf(int index) const
 
 void TemplatesModel::toggleGroup(const QString& name)
 {
-    foreach(ItemData* item, d->items) {
+    Q_FOREACH (ItemData* item, d->items) {
         if(item->groupName == name)
             item->groupFolded = !item->groupFolded;
     }
@@ -156,11 +156,11 @@ void TemplatesModel::toggleGroup(const QString& name)
 void TemplatesModel::populate()
 {
     KisTemplateTree templateTree(KisPart::instance()->templatesResourcePath(), true);
-    foreach (KisTemplateGroup *group, templateTree.groups()) {
+    Q_FOREACH (KisTemplateGroup *group, templateTree.groups()) {
         if (group->isHidden()) {
             continue;
         }
-        foreach (KisTemplate* t, group->templates()) {
+        Q_FOREACH (KisTemplate* t, group->templates()) {
             if (t->isHidden())
                 continue;
 

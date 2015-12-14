@@ -48,7 +48,7 @@ int main( int argc, char **argv )
     filesToTest << "visio-1.emf";
     
     
-    foreach( const QString &fileToTest, filesToTest ) {
+    Q_FOREACH ( const QString &fileToTest, filesToTest ) {
         if ( testOneFile( fileToTest ) == false ) {
             return -1;
         }

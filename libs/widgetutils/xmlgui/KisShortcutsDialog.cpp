@@ -30,7 +30,7 @@
 
 #include "KisShortcutsDialog.h"
 #include "KisShortcutsDialog_p.h"
-// #include "kshortcutschemeshelper_p.h" diff to KF5 version: seems not needed, thankfully
+#include "kshortcutschemeshelper_p.h"
 
 #include <QApplication>
 #include <QDialogButtonBox>
@@ -60,9 +60,16 @@ KisShortcutsDialog::KisShortcutsDialog(KisShortcutsEditor::ActionTypes types,
     setWindowTitle(i18n("Configure Shortcuts"));
     setModal(true);
 
-    QVBoxLayout *layout = new QVBoxLayout;
-    setLayout(layout);
-    layout->addWidget(d->m_shortcutsEditor);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
+    mainLayout->addWidget(d->m_shortcutsEditor);
+
+
+    QHBoxLayout *bottomLayout = new QHBoxLayout;
+    d->m_schemeEditor = new KShortcutSchemesEditor(this);
+    connect(d->m_schemeEditor, SIGNAL(shortcutsSchemeChanged(QString)),
+            this, SLOT(changeShortcutScheme(QString)));
+    bottomLayout->addLayout(d->m_schemeEditor);
 
     QPushButton *printButton = new QPushButton;
     KGuiItem::assign(printButton, KStandardGuiItem::print());
@@ -70,18 +77,16 @@ KisShortcutsDialog::KisShortcutsDialog(KisShortcutsEditor::ActionTypes types,
     QDialogButtonBox *buttonBox = new QDialogButtonBox(this);
     buttonBox->addButton(printButton, QDialogButtonBox::ActionRole);
     buttonBox->setStandardButtons(QDialogButtonBox::Ok |
-                                  QDialogButtonBox::Cancel |
-                                  QDialogButtonBox::RestoreDefaults);
+                                  QDialogButtonBox::Cancel);
     KGuiItem::assign(buttonBox->button(QDialogButtonBox::Ok),
                      KStandardGuiItem::ok());
     KGuiItem::assign(buttonBox->button(QDialogButtonBox::Cancel),
                      KStandardGuiItem::cancel());
-    KGuiItem::assign(buttonBox->button(QDialogButtonBox::RestoreDefaults),
-                     KStandardGuiItem::defaults());
-    layout->addWidget(buttonBox);
+    bottomLayout->addWidget(buttonBox);
 
-    connect(buttonBox->button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked()),
-            d->m_shortcutsEditor, SLOT(allDefault()));
+
+    mainLayout->addLayout(bottomLayout);
+
     connect(printButton, SIGNAL(clicked()), d->m_shortcutsEditor, SLOT(printShortcuts()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(undo()));
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
@@ -101,12 +106,12 @@ KisShortcutsDialog::~KisShortcutsDialog()
 void KisShortcutsDialog::addCollection(KActionCollection *collection, const QString &title)
 {
     d->m_shortcutsEditor->addCollection(collection, title);
-    d->m_collections << collection;
+    d->m_collections.insert(title, collection);
 }
 
 QList<KActionCollection *> KisShortcutsDialog::actionCollections() const
 {
-    return d->m_collections;
+    return d->m_collections.values();
 }
 
 bool KisShortcutsDialog::configure(bool saveSettings)
@@ -141,6 +146,23 @@ int KisShortcutsDialog::configure(KActionCollection *collection,
     KisShortcutsDialog dlg(KisShortcutsEditor::AllActions, allowLetterShortcuts, parent);
     dlg.d->m_shortcutsEditor->addCollection(collection);
     return dlg.configure(saveSettings);
+}
+
+void KisShortcutsDialog::allDefault()
+{
+    d->m_shortcutsEditor->allDefault();
+}
+
+void KisShortcutsDialog::importConfiguration(const QString &path)
+{
+    KConfig config(path);
+    d->m_shortcutsEditor->importConfiguration(static_cast<KConfigBase *>(&config));
+}
+
+void KisShortcutsDialog::exportConfiguration(const QString &path) const
+{
+    KConfig config(path);
+    d->m_shortcutsEditor->exportConfiguration(static_cast<KConfigBase *>(&config));
 }
 
 #include "moc_KisShortcutsDialog.cpp"

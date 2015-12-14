@@ -269,7 +269,7 @@ KoAlphaColorSpace::KoAlphaColorSpace() :
             << new CompositeMultiply(this)
             << new KoCompositeOpAlphaDarken<AlphaU8Traits>(this);
 
-    foreach(KoCompositeOp *op, m_compositeOps) {
+    Q_FOREACH (KoCompositeOp *op, m_compositeOps) {
         addCompositeOp(op);
     }
     m_profile = new KoDummyColorProfile;

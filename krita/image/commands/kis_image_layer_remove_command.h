@@ -27,7 +27,10 @@
 class KRITAIMAGE_EXPORT KisImageLayerRemoveCommand : public KisImageCommand
 {
 public:
-    KisImageLayerRemoveCommand(KisImageWSP image, KisNodeSP node);
+    KisImageLayerRemoveCommand(KisImageWSP image,
+                               KisNodeSP node,
+                               bool doRedoUpdates = true,
+                               bool doUndoUpdates = true);
     ~KisImageLayerRemoveCommand();
 
     void redo();
@@ -38,6 +41,8 @@ private:
 
 private:
     KisNodeSP m_node;
+    bool m_doRedoUpdates;
+    bool m_doUndoUpdates;
 };
 
 #endif /* __KIS_IMAGE_LAYER_REMOVE_COMMAND_H */

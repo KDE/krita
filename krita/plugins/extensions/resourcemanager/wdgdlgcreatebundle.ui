@@ -67,7 +67,7 @@
      <item row="1" column="0">
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
-        <widget class="QWidget" name="wdgAvailablePage" native="true">
+        <widget class="QWidget" name="wdgAvailablePage">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
            <horstretch>0</horstretch>
@@ -159,7 +159,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QWidget" name="wdgSelectedPage" native="true">
+        <widget class="QWidget" name="wdgSelectedPage">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
            <horstretch>0</horstretch>

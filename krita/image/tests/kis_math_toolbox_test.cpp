@@ -19,18 +19,11 @@
 #include "kis_math_toolbox_test.h"
 
 #include <QTest>
-#include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
 #include "kis_math_toolbox.h"
 
 void KisMathToolboxTest::testCreation()
 {
-    KisMathToolboxRegistry * reg = KisMathToolboxRegistry::instance();
-    QVERIFY(reg);
-
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisMathToolbox * toolbox = reg->get(cs->mathToolboxId().id());
-    QVERIFY(toolbox);
+    KisMathToolbox tb;
 }
 
 

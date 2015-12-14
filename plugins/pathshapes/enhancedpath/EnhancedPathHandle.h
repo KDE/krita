@@ -102,7 +102,7 @@ public:
      * If both parameters are valid pointers, then the handle behaves like
      * a polar handle. This means the x-coordinate of the position represents
      * an angle in degree and the y-coordinate a radius.
-     * 
+     *
      * @param polarX the polar center x-coordinate
      * @param polarY the polar center y-coordinate
      */
@@ -123,7 +123,7 @@ private:
     /// Returns if handle is polar
     bool isPolar() const;
     EnhancedPathShape *m_parent; ///< the enhanced path shape owning this handle
-    EnhancedPathParameter *m_positionX; ///< the position x-coordinate 
+    EnhancedPathParameter *m_positionX; ///< the position x-coordinate
     EnhancedPathParameter *m_positionY; ///< the position y-coordinate
     EnhancedPathParameter *m_minimumX;  ///< the minimum x-coordinate
     EnhancedPathParameter *m_minimumY;  ///< the minmum y-coordinate

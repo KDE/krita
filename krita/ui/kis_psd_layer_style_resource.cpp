@@ -150,7 +150,7 @@ void KisPSDLayerStyleCollectionResource::assignAllLayerStyles(KisNodeSP root)
 
         bool found = false;
 
-        foreach (KisPSDLayerStyleSP style, m_layerStyles) {
+        Q_FOREACH (KisPSDLayerStyleSP style, m_layerStyles) {
             if (style->uuid() == uuid) {
                 layer->setLayerStyle(style->clone());
                 found = true;

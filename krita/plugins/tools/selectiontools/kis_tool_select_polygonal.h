@@ -62,7 +62,7 @@ public:
 class KisToolSelectPolygonalFactory : public KoToolFactoryBase
 {
 public:
-    KisToolSelectPolygonalFactory(const QStringList&)
+    KisToolSelectPolygonalFactory()
             : KoToolFactoryBase("KisToolSelectPolygonal") {
         setToolTip(i18n("Polygonal Selection Tool"));
         setToolType(TOOL_TYPE_SELECTED);

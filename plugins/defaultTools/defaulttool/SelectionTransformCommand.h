@@ -29,15 +29,15 @@ class KoShape;
 class SelectionTransformCommand : public KUndo2Command
 {
 public:
-    SelectionTransformCommand( KoSelection * selection, const QTransform &oldTransformation, const QTransform &newTransformation, KUndo2Command * parent = 0 );
+    SelectionTransformCommand(KoSelection *selection, const QTransform &oldTransformation, const QTransform &newTransformation, KUndo2Command *parent = 0);
 
     /// reimplemented from KUndo2Command
     virtual void redo();
     /// reimplemented from KUndo2Command
     virtual void undo();
 private:
-    KoSelection * m_selection;
-    QList<KoShape*> m_selectedShapes;
+    KoSelection *m_selection;
+    QList<KoShape *> m_selectedShapes;
     QTransform m_oldTransformation;
     QTransform m_newTransformation;
 };

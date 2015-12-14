@@ -57,7 +57,7 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_hsvOptions.append(KisPressureHSVOption::createSaturationOption());
     m_hsvOptions.append(KisPressureHSVOption::createValueOption());
 
-    foreach(KisPressureHSVOption * option, m_hsvOptions) {
+    Q_FOREACH (KisPressureHSVOption * option, m_hsvOptions) {
         option->readOptionSetting(settings);
         option->resetAllSensors();
         if (option->isChecked() && !m_hsvTransformation) {
@@ -133,7 +133,7 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
     m_darkenOption.apply(m_colorSource, info);
 
     if (m_hsvTransformation) {
-        foreach(KisPressureHSVOption * option, m_hsvOptions) {
+        Q_FOREACH (KisPressureHSVOption * option, m_hsvOptions) {
             option->apply(m_hsvTransformation, info);
         }
         m_colorSource->applyColorTransformation(m_hsvTransformation);

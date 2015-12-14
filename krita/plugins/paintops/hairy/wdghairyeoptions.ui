@@ -332,7 +332,7 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
-           <widget class="KisCurveWidget" name="inkCurve" native="true"/>
+           <widget class="KisCurveWidget" name="inkCurve"/>
           </item>
          </layout>
         </widget>

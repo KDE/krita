@@ -123,13 +123,13 @@ public:
             traversingDirection = Horizontal;
         }
 
-        KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->value(src->colorSpace()->mathToolboxId().id());
+        KisMathToolbox mathToolbox;
         m_toDoubleFuncPtr = QVector<PtrToDouble>(m_convolveChannelsNo);
-        if (!mathToolbox->getToDoubleChannelPtr(m_convChannelList, m_toDoubleFuncPtr))
+        if (!mathToolbox.getToDoubleChannelPtr(m_convChannelList, m_toDoubleFuncPtr))
             return;
 
         m_fromDoubleFuncPtr = QVector<PtrFromDouble>(m_convolveChannelsNo);
-        if (!mathToolbox->getFromDoubleChannelPtr(m_convChannelList, m_fromDoubleFuncPtr))
+        if (!mathToolbox.getFromDoubleChannelPtr(m_convChannelList, m_fromDoubleFuncPtr))
             return;
 
         m_kernelFactor = kernel->factor() ? 1.0 / kernel->factor() : 1;
@@ -137,8 +137,8 @@ public:
         m_minClamp = new qreal[m_convChannelList.count()];
         m_absoluteOffset = new qreal[m_convChannelList.count()];
         for (quint16 i = 0; i < m_convChannelList.count(); ++i) {
-            m_minClamp[i] = mathToolbox->minChannelValue(m_convChannelList[i]);
-            m_maxClamp[i] = mathToolbox->maxChannelValue(m_convChannelList[i]);
+            m_minClamp[i] = mathToolbox.minChannelValue(m_convChannelList[i]);
+            m_maxClamp[i] = mathToolbox.maxChannelValue(m_convChannelList[i]);
             m_absoluteOffset[i] = (m_maxClamp[i] - m_minClamp[i]) * kernel->offset();
         }
 

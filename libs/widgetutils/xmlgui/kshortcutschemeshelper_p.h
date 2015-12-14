@@ -20,43 +20,34 @@
 #define KSHORTCUTSCHEMESHELPER_P_H
 
 #include <QString>
+#include <QHash>
 
 class KActionCollection;
 class KXMLGUIClient;
+class KConfigBase;
 
 class KShortcutSchemesHelper
 {
 public:
 
     /**
-     * Saves actions from the collection to shortcut scheme file.
-     * If the url is given, saves to that directory, otherwise saves to user appdata directory.
-     *
-     * This doesn't save anything if there's no parent xmlgui client for action collection.
-     *
-     * The name of the resulting file is: shortcuts/<scheme name>.rc .
-     *
-     *  @return true if the action collection was exported
-    */
-    static bool exportActionCollection(KActionCollection *collection, const QString &schemeName,
-                                       const QString &dir = QString());
-
-    /**
      * @return the current shortcut scheme name for the application.
-    */
+     */
     static QString currentShortcutSchemeName();
 
     /**
      * @return the name of the (writable) file to save the shortcut scheme to.
-    */
-    static QString shortcutSchemeFileName(const KXMLGUIClient *client, const QString &schemeName);
-
-    /**
-     * @return the name of the scheme file for application itself.
-    */
-    static QString applicationShortcutSchemeFileName(const QString &schemeName);
+     */
+    static QString shortcutSchemeFileName(const QString &schemeName);
 
     static bool saveShortcutScheme();
+
+    /**
+     * @return a list of files to save the shortcut scheme to. Does not include "Default"
+     * @see shortcutSchemeFileName, exportActionCollection
+     */
+    static QHash<QString, QString> schemeFileLocations();
+
 };
 
 #endif

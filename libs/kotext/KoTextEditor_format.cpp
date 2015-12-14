@@ -247,7 +247,7 @@ public:
     void visit(QTextCharFormat &format) const {
         const qreal current = format.fontPointSize();
         int prev = 1;
-        foreach(int pt, defaultSizes) {
+        Q_FOREACH (int pt, defaultSizes) {
             if ((type == Grow && pt > current) || (type == Shrink && pt >= current)) {
                 format.setFontPointSize(type == Grow ? pt : prev);
                 return;
@@ -356,7 +356,7 @@ public:
         KoTextVisitor::visitBlock(block, caret);
 
         QList<QTextCharFormat>::Iterator it = m_formats.begin();
-        foreach(QTextCursor cursor, m_cursors) {
+        Q_FOREACH (QTextCursor cursor, m_cursors) {
             QTextFormat prevFormat(cursor.charFormat());
             cursor.setCharFormat(*it);
             editor()->registerTrackedChange(cursor, KoGenChange::FormatChange, kundo2_i18n("Set Character Style"), *it, prevFormat, false);
@@ -504,7 +504,7 @@ public:
         KoTextVisitor::visitBlock(block, caret);
 
         QList<QTextCharFormat>::Iterator it = m_formats.begin();
-        foreach(QTextCursor cursor, m_cursors) {
+        Q_FOREACH (QTextCursor cursor, m_cursors) {
             QTextFormat prevFormat(cursor.charFormat());
             cursor.setCharFormat(*it);
             editor()->registerTrackedChange(cursor, KoGenChange::FormatChange, kundo2_i18n("Formatting"), *it, prevFormat, false);

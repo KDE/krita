@@ -27,9 +27,10 @@ class MockModel : public StylesModel
 {
 public:
     MockModel(KoStyleManager *manager, QObject *parent = 0)
-            : StylesModel(manager, parent) { }
+        : StylesModel(manager, parent) { }
 
-    QList<int> rootStyleIds() {
+    QList<int> rootStyleIds()
+    {
         return m_styleList;
     }
 };

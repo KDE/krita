@@ -439,7 +439,7 @@ void KisPopupPalette::mousePressEvent(QMouseEvent* event)
 
                 if (!tags.isEmpty()) {
                     QMenu menu;
-                    foreach(const QString& tag, tags) {
+                    Q_FOREACH (const QString& tag, tags) {
                         menu.addAction(tag);
                     }
                     QAction* action = menu.exec(event->globalPos());

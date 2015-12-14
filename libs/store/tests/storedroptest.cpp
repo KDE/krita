@@ -92,7 +92,7 @@ void StoreDropTest::paste()
 
     const QString acceptMimeType("application/vnd.oasis.opendocument.");
     QStringList formats = m->formats();
-    foreach(QString fmt, formats) {
+    Q_FOREACH (QString fmt, formats) {
         bool oasis = fmt.startsWith(acceptMimeType);
         if (oasis || fmt == "application/x-kpresenter") {
             QByteArray data = m->data(fmt);

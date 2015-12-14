@@ -47,16 +47,16 @@ public:
     virtual ~ShapeMoveStrategy() {}
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
-    KUndo2Command* createCommand();
+    KUndo2Command *createCommand();
     void finishInteraction(Qt::KeyboardModifiers modifiers);
-    virtual void paint( QPainter &painter, const KoViewConverter &converter);
-    virtual void handleCustomEvent( KoPointerEvent * event );
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    virtual void handleCustomEvent(KoPointerEvent *event);
 private:
     void moveSelection();
     QList<QPointF> m_previousPositions;
     QList<QPointF> m_newPositions;
     QPointF m_start, m_diff, m_initialSelectionPosition, m_initialOffset;
-    QList<KoShape*> m_selectedShapes;
+    QList<KoShape *> m_selectedShapes;
     KoCanvasBase *m_canvas;
 };
 

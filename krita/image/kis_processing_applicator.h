@@ -58,6 +58,10 @@ public:
                       KisStrokeJobData::Sequentiality sequentiality = KisStrokeJobData::SEQUENTIAL,
                       KisStrokeJobData::Exclusivity exclusivity = KisStrokeJobData::NORMAL);
 
+    void applyVisitorAllFrames(KisProcessingVisitorSP visitor,
+                               KisStrokeJobData::Sequentiality sequentiality = KisStrokeJobData::SEQUENTIAL,
+                               KisStrokeJobData::Exclusivity exclusivity = KisStrokeJobData::NORMAL);
+
     /**
      * This method emits all the final update signals of the stroke
      * without actually ending the stroke. This can be used for

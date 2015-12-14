@@ -301,7 +301,7 @@ void KisTiledDataManager::purge(const QRect& area)
             ++iter;
         }
     }
-    foreach(KisTileSP tile, tilesToDelete) {
+    Q_FOREACH (KisTileSP tile, tilesToDelete) {
         m_hashTable->deleteTile(tile);
     }
 
@@ -748,7 +748,7 @@ void KisTiledDataManager::writePlanarBytes(QVector<quint8*> planes,
 
     bool allChannelsPresent = true;
 
-    foreach (const quint8* plane, planes) {
+    Q_FOREACH (const quint8* plane, planes) {
         if (!plane) {
             allChannelsPresent = false;
             break;

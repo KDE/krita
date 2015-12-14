@@ -125,7 +125,6 @@ set(kritaimage_LIB_SRCS
    kis_base_accessor.cpp
    kis_base_node.cpp
    kis_base_processor.cpp
-   kis_basic_math_toolbox.cpp
    kis_bookmarked_configuration_manager.cc
    kis_clone_info.cpp
    kis_clone_layer.cpp
@@ -192,6 +191,8 @@ set(kritaimage_LIB_SRCS
    kis_indirect_painting_support.cpp
    kis_abstract_projection_plane.cpp
    kis_layer_projection_plane.cpp
+   kis_command_utils.cpp
+   kis_layer_utils.cpp
    kis_mask_projection_plane.cpp
    kis_projection_leaf.cpp
    kis_mask.cc

@@ -58,7 +58,7 @@ static QString fontProperties(const QTextCharFormat &textFormat)
     QMap<int, QVariant> properties = textFormat.properties();
     QStringList fontProps;
     // add only font properties here
-    foreach(int id, properties.keys()) {
+    Q_FOREACH (int id, properties.keys()) {
         QString key, value;
         switch (id) {
         case QTextFormat::FontFamily:
@@ -173,7 +173,7 @@ QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
         attrs.append(QString(" achorName=\"%1\"").arg(textFormat.anchorName()));
     }
 
-    foreach(int id, properties.keys()) {
+    Q_FOREACH (int id, properties.keys()) {
         QString key, value;
         switch (id) {
         case QTextFormat::TextOutline: {
@@ -321,7 +321,7 @@ QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
     }
 
     QMap<int, QVariant> properties = blockFormat.properties();
-    foreach(int id, properties.keys()) {
+    Q_FOREACH (int id, properties.keys()) {
         QString key, value;
         switch (id) {
         // the following are 'todo'
@@ -407,7 +407,7 @@ QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
         case KoParagraphStyle::TabPositions:
             key = "tab-stops";
             value.clear();
-            foreach(const QVariant & qvtab, qvariant_cast<QList<QVariant> >(properties[id])) {
+            Q_FOREACH (const QVariant & qvtab, qvariant_cast<QList<QVariant> >(properties[id])) {
                 KoText::Tab tab = qvtab.value<KoText::Tab>();
                 value.append("{");
                 value.append(" pos:").append(QString::number(tab.position));
@@ -495,7 +495,7 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
     }
 
     QMap<int, QVariant> properties = listFormat.properties();
-    foreach(int id, properties.keys()) {
+    Q_FOREACH (int id, properties.keys()) {
         QString key, value;
         switch (id) {
         case QTextListFormat::ListStyle:
@@ -628,7 +628,7 @@ QString KoTextDebug::tableAttributes(const QTextTableFormat &tableFormat)
     }
 
     QMap<int, QVariant> properties = tableFormat.properties();
-    foreach(int id, properties.keys()) {
+    Q_FOREACH (int id, properties.keys()) {
         QString key, value;
         switch (id) {
         case QTextTableFormat::TableColumnWidthConstraints:
@@ -702,7 +702,7 @@ QString KoTextDebug::frameAttributes(const QTextFrameFormat &frameFormat)
     QString attrs;
 
     QMap<int, QVariant> properties = frameFormat.properties();
-    foreach(int id, properties.keys()) {
+    Q_FOREACH (int id, properties.keys()) {
         QString key, value;
         switch (id) {
         case QTextFrameFormat::FrameBorderBrush:
@@ -815,7 +815,7 @@ QString KoTextDebug::tableCellAttributes(const QTextTableCellFormat &tableCellFo
     }
 
     QMap<int, QVariant> properties = tableCellFormat.properties();
-    foreach(int id, properties.keys()) {
+    Q_FOREACH (int id, properties.keys()) {
         QString key, value;
         switch (id) {
         case QTextTableCellFormat::TableCellRowSpan:

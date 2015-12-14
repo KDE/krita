@@ -41,20 +41,21 @@ CmykU16ColorSpace::CmykU16ColorSpace(const QString &name, KoColorProfile *p)
 
 bool CmykU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const
 {
-    if (independence == TO_RGBA8)
+    if (independence == TO_RGBA8) {
         return true;
-    else
+    } else {
         return false;
+    }
 }
 
-KoColorSpace* CmykU16ColorSpace::clone() const
+KoColorSpace *CmykU16ColorSpace::clone() const
 {
     return new CmykU16ColorSpace(name(), profile()->clone());
 }
 
-void CmykU16ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+void CmykU16ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const
 {
-    const CmykU16Traits::Pixel* p = reinterpret_cast<const CmykU16Traits::Pixel*>(pixel);
+    const CmykU16Traits::Pixel *p = reinterpret_cast<const CmykU16Traits::Pixel *>(pixel);
     QDomElement labElt = doc.createElement("CMYK");
     labElt.setAttribute("c", KoColorSpaceMaths< CmykU16Traits::channels_type, qreal>::scaleToA(p->cyan));
     labElt.setAttribute("m", KoColorSpaceMaths< CmykU16Traits::channels_type, qreal>::scaleToA(p->magenta));
@@ -64,9 +65,9 @@ void CmykU16ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomE
     colorElt.appendChild(labElt);
 }
 
-void CmykU16ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
+void CmykU16ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
-    CmykU16Traits::Pixel* p = reinterpret_cast<CmykU16Traits::Pixel*>(pixel);
+    CmykU16Traits::Pixel *p = reinterpret_cast<CmykU16Traits::Pixel *>(pixel);
     p->cyan = KoColorSpaceMaths< qreal, CmykU16Traits::channels_type >::scaleToA(elt.attribute("c").toDouble());
     p->magenta = KoColorSpaceMaths< qreal, CmykU16Traits::channels_type >::scaleToA(elt.attribute("m").toDouble());
     p->yellow = KoColorSpaceMaths< qreal, CmykU16Traits::channels_type >::scaleToA(elt.attribute("y").toDouble());

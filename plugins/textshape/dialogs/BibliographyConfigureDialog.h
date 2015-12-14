@@ -29,7 +29,6 @@
 
 #include "KoOdfBibliographyConfiguration.h"
 
-
 class BibliographyConfigureDialog : public QDialog
 {
     Q_OBJECT

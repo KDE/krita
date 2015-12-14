@@ -37,7 +37,7 @@ class Q_DECL_HIDDEN KoImageCollection::Private
 public:
     ~Private()
     {
-        foreach(KoImageDataPrivate *id, images)
+        Q_FOREACH (KoImageDataPrivate *id, images)
             id->collection = 0;
     }
 

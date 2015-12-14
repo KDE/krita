@@ -32,12 +32,13 @@
 #include <KConfigGroup>
 
 ImageEffectConfigWidget::ImageEffectConfigWidget(QWidget *parent)
-        : KoFilterEffectConfigWidgetBase(parent), m_effect(0)
+    : KoFilterEffectConfigWidgetBase(parent)
+    , m_effect(0)
 {
-    QGridLayout * g = new QGridLayout(this);
+    QGridLayout *g = new QGridLayout(this);
 
     m_image = new QLabel(this);
-    QPushButton * button = new QPushButton(i18n("Select image..."), this);
+    QPushButton *button = new QPushButton(i18n("Select image..."), this);
 
     g->addWidget(m_image, 0, 0, Qt::AlignCenter);
     g->addWidget(button, 0, 1);
@@ -47,11 +48,12 @@ ImageEffectConfigWidget::ImageEffectConfigWidget(QWidget *parent)
     connect(button, SIGNAL(clicked()), this, SLOT(selectImage()));
 }
 
-bool ImageEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)
+bool ImageEffectConfigWidget::editFilterEffect(KoFilterEffect *filterEffect)
 {
-    m_effect = dynamic_cast<ImageEffect*>(filterEffect);
-    if (!m_effect)
+    m_effect = dynamic_cast<ImageEffect *>(filterEffect);
+    if (!m_effect) {
         return false;
+    }
 
     m_image->setPixmap(QPixmap::fromImage(m_effect->image().scaledToWidth(80)));
 
@@ -60,12 +62,13 @@ bool ImageEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)
 
 void ImageEffectConfigWidget::selectImage()
 {
-    if (!m_effect)
+    if (!m_effect) {
         return;
+    }
 
     QStringList imageFilter;
     // add filters for all formats supported by QImage
-    foreach(const QByteArray &format, QImageReader::supportedImageFormats()) {
+    Q_FOREACH (const QByteArray &format, QImageReader::supportedImageFormats()) {
         imageFilter << QString("image/") + format;
     }
 
@@ -75,11 +78,14 @@ void ImageEffectConfigWidget::selectImage()
 
     QString fname = dialog.filename();
 
-    if (fname.isEmpty()) return;
+    if (fname.isEmpty()) {
+        return;
+    }
 
     QImage newImage;
-    if (!newImage.load(fname))
+    if (!newImage.load(fname)) {
         return;
+    }
 
     m_effect->setImage(newImage);
     editFilterEffect(m_effect);

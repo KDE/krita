@@ -24,8 +24,8 @@
 #include <klocalizedstring.h>
 
 TableOfContentsEntryModel::TableOfContentsEntryModel(KoStyleManager *manager, KoTableOfContentsGeneratorInfo *info)
-    :m_styleManager(manager),
-      m_tocInfo(info)
+    : m_styleManager(manager)
+    , m_tocInfo(info)
 {
     Q_ASSERT(manager);
     Q_ASSERT(info);
@@ -40,7 +40,7 @@ TableOfContentsEntryModel::TableOfContentsEntryModel(KoStyleManager *manager, Ko
     m_tocEntries.append(qMakePair(i18n("Title"), titleStyleId));
 
     for (int i = 1; i <= m_tocInfo->m_outlineLevel; i++) {
-        m_tocEntries.append(qMakePair(i18n("Level %1",QString("%1").arg(i)), m_styleManager->defaultTableOfContentsEntryStyle(i)->styleId()));
+        m_tocEntries.append(qMakePair(i18n("Level %1", QString("%1").arg(i)), m_styleManager->defaultTableOfContentsEntryStyle(i)->styleId()));
     }
 
     for (int j = 0; j < m_tocInfo->m_entryTemplate.count(); j++) {
@@ -77,19 +77,20 @@ QModelIndex TableOfContentsEntryModel::index(int row, int column, const QModelIn
         return QModelIndex();
     }
 
-    if (! parent.isValid()) {
-        if (row >= m_tocEntries.count()){
+    if (!parent.isValid()) {
+        if (row >= m_tocEntries.count()) {
             return QModelIndex();
         }
-        return createIndex(row, column, new QPair<QString, int>(m_tocEntries[row].first, m_tocEntries[row].second ));
+        return createIndex(row, column, new QPair<QString, int>(m_tocEntries[row].first, m_tocEntries[row].second));
     }
     return QModelIndex();
 }
 
 QVariant TableOfContentsEntryModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
         return QVariant();
+    }
 
     if (index.column() == Levels) {
         switch (role) {
@@ -103,7 +104,7 @@ QVariant TableOfContentsEntryModel::data(const QModelIndex &index, int role) con
         case Qt::DisplayRole:
         case Qt::DecorationRole:
             return QVariant(m_styleManager->paragraphStyle(static_cast< QPair<QString, int> *>(index.internalPointer())->second)->name());
-            //break
+        //break
         case Qt::EditRole:
             return QVariant(static_cast< QPair<QString, int> *>(index.internalPointer())->second);
         default: break;
@@ -166,7 +167,7 @@ void TableOfContentsEntryModel::saveData()
     m_tocInfo->m_indexTitleTemplate.styleId = m_tocEntries.at(0).second;
 
     for (int i = 1; i <= m_tocInfo->m_outlineLevel; i++) {
-        m_tocInfo->m_entryTemplate[i-1].styleName = m_styleManager->paragraphStyle(m_tocEntries.at(i).second)->name();
-        m_tocInfo->m_entryTemplate[i-1].styleId = m_tocEntries.at(i).second;
+        m_tocInfo->m_entryTemplate[i - 1].styleName = m_styleManager->paragraphStyle(m_tocEntries.at(i).second)->name();
+        m_tocInfo->m_entryTemplate[i - 1].styleId = m_tocEntries.at(i).second;
     }
 }

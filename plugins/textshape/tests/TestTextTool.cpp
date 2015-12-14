@@ -30,12 +30,12 @@ void TestTextTool::testCaretRect()
 
     MockTextShape *shape1 = new MockTextShape();
     QVERIFY(shape1->userData());
-    QVERIFY(qobject_cast<KoTextShapeData*>(shape1->userData()));
+    QVERIFY(qobject_cast<KoTextShapeData *>(shape1->userData()));
 
-    tool.setShapeData(qobject_cast<KoTextShapeData*>(shape1->userData()));
+    tool.setShapeData(qobject_cast<KoTextShapeData *>(shape1->userData()));
     QVERIFY(tool.textEditor());
 
-    QTextCursor cursor(qobject_cast<KoTextShapeData*>(shape1->userData())->document());
+    QTextCursor cursor(qobject_cast<KoTextShapeData *>(shape1->userData())->document());
     cursor.insertText("foo\n");
 
     QCOMPARE(tool.caretRect(0), QRectF()); // invalid

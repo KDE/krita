@@ -28,8 +28,8 @@ class ImageEffectFactory : public KoFilterEffectFactoryBase
 {
 public:
     ImageEffectFactory();
-    virtual KoFilterEffect * createFilterEffect() const;
-    virtual KoFilterEffectConfigWidgetBase * createConfigWidget() const;
+    virtual KoFilterEffect *createFilterEffect() const;
+    virtual KoFilterEffectConfigWidgetBase *createConfigWidget() const;
 };
 
 #endif // IMAGEEFFECTFACTORY_H

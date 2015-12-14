@@ -63,6 +63,7 @@ bool KisWorkspaceResource::saveToDevice(QIODevice *dev) const
     doc.appendChild(root);
 
     QTextStream textStream(dev);
+    textStream.setCodec("UTF-8");
     doc.save(textStream, 4);
 
     KoResource::saveToDevice(dev);

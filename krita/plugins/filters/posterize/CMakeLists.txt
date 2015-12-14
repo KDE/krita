@@ -1,8 +1,8 @@
 
 
-set(kritaposterize_PART_SRCS posterize.cpp )
+set(kritaposterize_SOURCES posterize.cpp )
 
-add_library(kritaposterize MODULE ${kritaposterize_PART_SRCS})
+add_library(kritaposterize MODULE ${kritaposterize_SOURCES})
 kcoreaddons_desktop_to_json(kritaposterize kritaposterize.desktop)
 
 

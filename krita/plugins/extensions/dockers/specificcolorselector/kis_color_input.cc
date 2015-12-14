@@ -257,7 +257,7 @@ void KisHexColorInput::setValue()
 
     QList<KoChannelInfo*> channels = m_color->colorSpace()->channels();
     channels = KoChannelInfo::displayOrderSorted(channels);
-    foreach(KoChannelInfo* channel, channels) {
+    Q_FOREACH (KoChannelInfo* channel, channels) {
         if (channel->channelType() == KoChannelInfo::COLOR) {
             Q_ASSERT(channel->channelValueType() == KoChannelInfo::UINT8);
             quint8* data = m_color->data() + channel->pos();
@@ -276,7 +276,7 @@ void KisHexColorInput::update()
 
     QList<KoChannelInfo*> channels = m_color->colorSpace()->channels();
     channels = KoChannelInfo::displayOrderSorted(channels);
-    foreach(KoChannelInfo* channel, channels) {
+    Q_FOREACH (KoChannelInfo* channel, channels) {
         if (channel->channelType() == KoChannelInfo::COLOR) {
             Q_ASSERT(channel->channelValueType() == KoChannelInfo::UINT8);
             quint8* data = m_color->data() + channel->pos();

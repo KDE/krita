@@ -50,6 +50,7 @@ KisImageBuilder_Result QMLConverter::buildFile(const QUrl &uri, KisImageWSP imag
     }
 
     QTextStream out(&file);
+    out.setCodec("UTF-8");
     out << "import QtQuick 1.1" << "\n\n";
     out << "Rectangle {\n";
     writeInt(out, 1, "width", image->width());

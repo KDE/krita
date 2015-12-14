@@ -32,11 +32,11 @@ class ConnectorItem : public QGraphicsEllipseItem
 public:
     enum ConnectorType { Input, Output };
 
-    ConnectorItem(ConnectorType type, int index, QGraphicsItem * parent);
+    ConnectorItem(ConnectorType type, int index, QGraphicsItem *parent);
     void setCenter(const QPointF &position);
     ConnectorType connectorType();
     int connectorIndex() const;
-    KoFilterEffect * effect() const;
+    KoFilterEffect *effect() const;
 private:
     ConnectorType m_type;
     int m_index;
@@ -47,9 +47,9 @@ class ConnectorMimeData : public QMimeData
 {
 public:
     explicit ConnectorMimeData(ConnectorItem *connector);
-    ConnectorItem * connector() const;
+    ConnectorItem *connector() const;
 private:
-    ConnectorItem * m_connector;
+    ConnectorItem *m_connector;
 };
 
 /// Base class for effect items
@@ -71,7 +71,7 @@ public:
     QSizeF connectorSize() const;
 
     /// Returns the corresponding filter effect
-    KoFilterEffect * effect() const;
+    KoFilterEffect *effect() const;
 
 protected:
     void createText(const QString &text);
@@ -79,16 +79,16 @@ protected:
     void createInput(const QPointF &position);
 
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    virtual void dragMoveEvent(QGraphicsSceneDragDropEvent * event);
-    virtual void dropEvent(QGraphicsSceneDragDropEvent * event);
+    virtual void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
+    virtual void dropEvent(QGraphicsSceneDragDropEvent *event);
 
-    ConnectorItem * connectorAtPosition(const QPointF &scenePosition);
+    ConnectorItem *connectorAtPosition(const QPointF &scenePosition);
 
 private:
     QPointF m_outputPosition;
     QString m_outputName;
     QList<QPointF> m_inputPositions;
-    KoFilterEffect * m_effect;
+    KoFilterEffect *m_effect;
 };
 
 /// Graphics item representing a predefined input image
@@ -107,30 +107,30 @@ public:
     explicit EffectItem(KoFilterEffect *effect);
 
 private:
-    KoFilterEffect * m_effect;
+    KoFilterEffect *m_effect;
 };
 
 /// Graphics item representing an connection between an output and input
 class ConnectionItem : public QGraphicsPathItem
 {
 public:
-    ConnectionItem(EffectItemBase *source, EffectItemBase * target, int targetInput);
+    ConnectionItem(EffectItemBase *source, EffectItemBase *target, int targetInput);
 
     /// Returns the source item of the connection
-    EffectItemBase * sourceItem() const;
+    EffectItemBase *sourceItem() const;
     /// Returns the target item of the connection
-    EffectItemBase * targetItem() const;
+    EffectItemBase *targetItem() const;
     /// Returns the input index of the target item
     int targetInput() const;
 
     /// Sets the source item
-    void setSourceItem(EffectItemBase * source);
+    void setSourceItem(EffectItemBase *source);
     /// Set the target item and the corresponding input index
-    void setTargetItem(EffectItemBase * target, int targetInput);
+    void setTargetItem(EffectItemBase *target, int targetInput);
 
 private:
-    EffectItemBase * m_source;
-    EffectItemBase * m_target;
+    EffectItemBase *m_source;
+    EffectItemBase *m_target;
     int m_targetInput;
 };
 

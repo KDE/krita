@@ -62,7 +62,7 @@ class KisToolSelectRectangularFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolSelectRectangularFactory(const QStringList&)
+    KisToolSelectRectangularFactory()
             : KoToolFactoryBase("KisToolSelectRectangular") {
         setToolTip(i18n("Rectangular Selection Tool"));
         setToolType(TOOL_TYPE_SELECTED);

@@ -39,40 +39,30 @@ ModifySelection::ModifySelection(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent)
 {
     KisAction* action = createAction("growselection");
-    action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
-    action->setActivationConditions(KisAction::SELECTION_EDITABLE);
     action->setOperationID("growselection");
 
     addUIFactory(new KisOperationUIWidgetFactory<WdgGrowSelection>("growselection"));
     addOperation(new GrowSelectionOperation);
 
     action = createAction("shrinkselection");
-    action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
-    action->setActivationConditions(KisAction::SELECTION_EDITABLE);
     action->setOperationID("shrinkselection");
 
     addUIFactory(new KisOperationUIWidgetFactory<WdgShrinkSelection>("shrinkselection"));
     addOperation(new ShrinkSelectionOperation);
 
     action = createAction("borderselection");
-    action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
-    action->setActivationConditions(KisAction::SELECTION_EDITABLE);
     action->setOperationID("borderselection");
 
     addUIFactory(new KisOperationUIWidgetFactory<WdgBorderSelection>("borderselection"));
     addOperation(new BorderSelectionOperation);
 
     action = createAction("featherselection");
-    action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
-    action->setActivationConditions(KisAction::SELECTION_EDITABLE);
     action->setOperationID("featherselection");
 
     addUIFactory(new KisOperationUIWidgetFactory<WdgFeatherSelection>("featherselection"));
     addOperation(new FeatherSelectionOperation);
 
     action = createAction("smoothselection");
-    action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
-    action->setActivationConditions(KisAction::SELECTION_EDITABLE);
     action->setOperationID("smoothselection");
 
     addOperation(new SmoothSelectionOperation);

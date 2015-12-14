@@ -21,30 +21,14 @@
 #ifndef KIS_TABLET_SUPPORT_WIN_H
 #define KIS_TABLET_SUPPORT_WIN_H
 
-#include <Qt>
 #include <kritaui_export.h>
 
-#include <QAbstractNativeEventFilter>
-
-#ifndef _WINDEF_
-typedef unsigned long DWORD;
-#endif
-
-
-class KRITAUI_EXPORT KisTabletSupportWin : public QAbstractNativeEventFilter
+class KRITAUI_EXPORT KisTabletSupportWin
 {
 public:
-    struct KRITAUI_EXPORT ButtonsConverter {
-        virtual ~ButtonsConverter() {}
-        virtual void convert(DWORD btnOld, DWORD btnNew,
-                             Qt::MouseButton *button,
-                             Qt::MouseButtons *buttons) = 0;
-    };
-
-public:
     static void init();
-    static void setButtonsConverter(ButtonsConverter *buttonsConverter);
-    bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
+
 };
+
 
 #endif // KIS_TABLET_SUPPORT_WIN_H

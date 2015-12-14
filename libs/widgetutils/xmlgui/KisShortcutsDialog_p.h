@@ -35,7 +35,7 @@
 #include <QModelIndex>
 #include <QtCore/QList>
 #include <QtCore/QCollator>
-#include <QGroupBox>
+#include <QHBoxLayout>
 
 class QLabel;
 class QTreeWidget;
@@ -46,6 +46,7 @@ class KActionCollection;
 class QPushButton;
 class QComboBox;
 class KisShortcutsDialog;
+class KShortcutSchemesEditor;
 class QAction;
 
 
@@ -92,10 +93,12 @@ public:
     void undo();
     void save();
 
-    QList<KActionCollection *> m_collections;
+    QHash<QString, KActionCollection *> m_collections;
     KisShortcutsDialog *q;
     KisShortcutsEditor *m_shortcutsEditor;
     bool m_saveSettings{false};
+
+    KShortcutSchemesEditor *m_schemeEditor{0};
 };
 
 
@@ -233,6 +236,37 @@ private:
     QObject *m_action;
 };
 
+class KShortcutSchemesEditor: public QHBoxLayout
+{
+    Q_OBJECT
+public:
+    KShortcutSchemesEditor(KisShortcutsDialog *parent);
+
+    /** @return the currently selected scheme in the editor (may differ from current app's scheme.*/
+    QString currentScheme();
+
+private Q_SLOTS:
+    void newScheme();
+    void deleteScheme();
+    void exportShortcutsScheme();
+    void saveAsDefaultsForScheme();
+    void importShortcutsScheme();
+
+Q_SIGNALS:
+    void shortcutsSchemeChanged(const QString &);
+
+protected:
+    void updateDeleteButton();
+
+private:
+    QPushButton *m_newScheme;
+    QPushButton *m_deleteScheme;
+    QPushButton *m_exportScheme;
+    QComboBox *m_schemesList;
+
+    KisShortcutsDialog *m_dialog;
+    QHash<QString, QString> m_schemeFileLocations;
+};
 
 
 #endif /* KISSHORTCUTSDIALOG_P_H */

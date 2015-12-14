@@ -51,7 +51,7 @@ public:
 
     ~KoToolBasePrivate()
     {
-        foreach(QPointer<QWidget> optionWidget, optionWidgets) {
+        Q_FOREACH (QPointer<QWidget> optionWidget, optionWidgets) {
             if (optionWidget) {
                 optionWidget->setParent(0);
                 delete optionWidget;

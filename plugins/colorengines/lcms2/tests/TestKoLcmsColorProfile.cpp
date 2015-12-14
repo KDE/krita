@@ -148,14 +148,14 @@ void TestKoLcmsColorProfile::testConversion()
     quint16 dst[4];
     memset(&dst, 0, 8);
 
-    linearRgb->convertPixelsTo((quint8*)&src, (quint8*)&dst, sRgb, 1, KoColorConversionTransformation::IntentRelativeColorimetric, KoColorConversionTransformation::BlackpointCompensation);
+    linearRgb->convertPixelsTo((quint8 *)&src, (quint8 *)&dst, sRgb, 1, KoColorConversionTransformation::IntentRelativeColorimetric, KoColorConversionTransformation::BlackpointCompensation);
 
     quint16 dst2[4];
     memset(&dst2, 0, 8);
 
     cmsHPROFILE sRgbProfile = cmsCreate_sRGBProfile();
     QByteArray rawData = linearRgb->profile()->rawData();
-    cmsHPROFILE linearRgbProfile = cmsOpenProfileFromMem((void*)rawData.constData(), rawData.size());
+    cmsHPROFILE linearRgbProfile = cmsOpenProfileFromMem((void *)rawData.constData(), rawData.size());
 
     cmsHTRANSFORM tf = cmsCreateTransform(linearRgbProfile,
                                           TYPE_BGRA_16,
@@ -164,7 +164,7 @@ void TestKoLcmsColorProfile::testConversion()
                                           INTENT_RELATIVE_COLORIMETRIC,
                                           cmsFLAGS_NOOPTIMIZE);
 
-    cmsDoTransform(tf, (quint8*)&src, (quint8*)&dst2, 1);
+    cmsDoTransform(tf, (quint8 *)&src, (quint8 *)&dst2, 1);
 
     Q_ASSERT(dst[0] == dst2[0]);
 

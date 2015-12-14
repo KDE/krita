@@ -33,8 +33,8 @@
 #include <SvgStyleWriter.h>
 
 RectangleShape::RectangleShape()
-: m_cornerRadiusX(0)
-, m_cornerRadiusY(0)
+    : m_cornerRadiusX(0)
+    , m_cornerRadiusY(0)
 {
     QList<QPointF> handles;
     handles.push_back(QPointF(100, 0));
@@ -59,7 +59,7 @@ bool RectangleShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext 
         m_cornerRadiusY = ry / (0.5 * size().height()) * 100;
     } else {
         QString cornerRadius = element.attributeNS(KoXmlNS::draw, "corner-radius", "");
-        if (! cornerRadius.isEmpty()) {
+        if (!cornerRadius.isEmpty()) {
             qreal radius = KoUnit::parseValue(cornerRadius);
             m_cornerRadiusX = qMin<qreal>(radius / (0.5 * size().width()) * 100, qreal(100));
             m_cornerRadiusY = qMin<qreal>(radius / (0.5 * size().height()) * 100, qreal(100));
@@ -75,14 +75,14 @@ bool RectangleShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext 
     return true;
 }
 
-void RectangleShape::saveOdf(KoShapeSavingContext & context) const
+void RectangleShape::saveOdf(KoShapeSavingContext &context) const
 {
     if (isParametricShape()) {
         context.xmlWriter().startElement("draw:rect");
         saveOdfAttributes(context, OdfAllAttributes);
         if (m_cornerRadiusX > 0 && m_cornerRadiusY > 0) {
-            context.xmlWriter().addAttributePt("svg:rx", m_cornerRadiusX * (0.5*size().width()) / 100.0);
-            context.xmlWriter().addAttributePt("svg:ry", m_cornerRadiusY * (0.5*size().height()) / 100.0);
+            context.xmlWriter().addAttributePt("svg:rx", m_cornerRadiusX * (0.5 * size().width()) / 100.0);
+            context.xmlWriter().addAttributePt("svg:ry", m_cornerRadiusY * (0.5 * size().height()) / 100.0);
         }
         saveOdfCommonChildElements(context);
         saveText(context);
@@ -92,7 +92,7 @@ void RectangleShape::saveOdf(KoShapeSavingContext & context) const
     }
 }
 
-void RectangleShape::moveHandleAction(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers)
+void RectangleShape::moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED(modifiers);
     QPointF p(point);
@@ -108,8 +108,9 @@ void RectangleShape::moveHandleAction(int handleId, const QPointF & point, Qt::K
         }
         p.setY(0);
         m_cornerRadiusX = (size().width() - p.x()) / width2 * 100.0;
-        if (! (modifiers & Qt::ControlModifier))
+        if (!(modifiers & Qt::ControlModifier)) {
             m_cornerRadiusY = (size().width() - p.x()) / height2 * 100.0;
+        }
         break;
     case 1:
         if (p.y() < 0) {
@@ -119,15 +120,18 @@ void RectangleShape::moveHandleAction(int handleId, const QPointF & point, Qt::K
         }
         p.setX(size().width());
         m_cornerRadiusY = p.y() / height2 * 100.0;
-        if (!(modifiers & Qt::ControlModifier))
+        if (!(modifiers & Qt::ControlModifier)) {
             m_cornerRadiusX = p.y() / width2 * 100.0;
+        }
         break;
     }
     // this is needed otherwise undo/redo might not end in the same result
-    if (100 - m_cornerRadiusX < 1e-10)
+    if (100 - m_cornerRadiusX < 1e-10) {
         m_cornerRadiusX = 100;
-    if (100 - m_cornerRadiusY < 1e-10)
+    }
+    if (100 - m_cornerRadiusY < 1e-10) {
         m_cornerRadiusY = 100;
+    }
 
     updateHandles();
 }
@@ -135,8 +139,8 @@ void RectangleShape::moveHandleAction(int handleId, const QPointF & point, Qt::K
 void RectangleShape::updateHandles()
 {
     QList<QPointF> handles;
-    handles.append(QPointF(size().width() - m_cornerRadiusX/100.0 * 0.5 * size().width(), 0.0));
-    handles.append(QPointF(size().width(), m_cornerRadiusY/100.0 * 0.5 * size().height()));
+    handles.append(QPointF(size().width() - m_cornerRadiusX / 100.0 * 0.5 * size().width(), 0.0));
+    handles.append(QPointF(size().width(), m_cornerRadiusY / 100.0 * 0.5 * size().height()));
     setHandles(handles);
 }
 
@@ -155,10 +159,12 @@ void RectangleShape::updatePath(const QSizeF &size)
     QPointF curvePoints[12];
 
     int requiredCurvePointCount = 4;
-    if (rx && m_cornerRadiusX < 100)
+    if (rx && m_cornerRadiusX < 100) {
         requiredCurvePointCount += 2;
-    if (ry && m_cornerRadiusY < 100)
+    }
+    if (ry && m_cornerRadiusY < 100) {
         requiredCurvePointCount += 2;
+    }
 
     createPoints(requiredCurvePointCount);
 
@@ -255,12 +261,12 @@ void RectangleShape::createPoints(int requiredPointCount)
     }
     int currentPointCount = m_subpaths[0]->count();
     if (currentPointCount > requiredPointCount) {
-        for (int i = 0; i < currentPointCount-requiredPointCount; ++i) {
+        for (int i = 0; i < currentPointCount - requiredPointCount; ++i) {
             delete m_subpaths[0]->front();
             m_subpaths[0]->pop_front();
         }
     } else if (requiredPointCount > currentPointCount) {
-        for (int i = 0; i < requiredPointCount-currentPointCount; ++i) {
+        for (int i = 0; i < requiredPointCount - currentPointCount; ++i) {
             m_subpaths[0]->append(new KoPathPoint(this, QPointF()));
         }
     }
@@ -312,11 +318,13 @@ bool RectangleShape::saveSvg(SvgSavingContext &context)
     context.shapeWriter().addAttributePt("height", size.height());
 
     double rx = cornerRadiusX();
-    if (rx > 0.0)
+    if (rx > 0.0) {
         context.shapeWriter().addAttributePt("rx", 0.01 * rx * 0.5 * size.width());
+    }
     double ry = cornerRadiusY();
-    if (ry > 0.0)
+    if (ry > 0.0) {
         context.shapeWriter().addAttributePt("ry", 0.01 * ry * 0.5 * size.height());
+    }
 
     context.shapeWriter().endElement();
 
@@ -334,19 +342,24 @@ bool RectangleShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &con
     qreal rx = rxStr.isEmpty() ? 0.0 : SvgUtil::parseUnitX(context.currentGC(), rxStr);
     qreal ry = ryStr.isEmpty() ? 0.0 : SvgUtil::parseUnitY(context.currentGC(), ryStr);
     // if one radius is given but not the other, use the same value for both
-    if (!rxStr.isEmpty() && ryStr.isEmpty())
+    if (!rxStr.isEmpty() && ryStr.isEmpty()) {
         ry = rx;
-    if (rxStr.isEmpty() && !ryStr.isEmpty())
+    }
+    if (rxStr.isEmpty() && !ryStr.isEmpty()) {
         rx = ry;
+    }
 
     setSize(QSizeF(w, h));
     setPosition(QPointF(x, y));
-    if (rx >= 0.0)
+    if (rx >= 0.0) {
         setCornerRadiusX(qMin(qreal(100.0), qreal(rx / (0.5 * w) * 100.0)));
-    if (ry >= 0.0)
+    }
+    if (ry >= 0.0) {
         setCornerRadiusY(qMin(qreal(100.0), qreal(ry / (0.5 * h) * 100.0)));
-    if (w == 0.0 || h == 0.0)
+    }
+    if (w == 0.0 || h == 0.0) {
         setVisible(false);
+    }
 
     return true;
 }

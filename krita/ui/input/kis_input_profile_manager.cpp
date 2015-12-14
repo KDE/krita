@@ -317,7 +317,7 @@ void KisInputProfileManager::resetAll()
     QString kdeHome = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
     QStringList profiles = KoResourcePaths::findAllResources("data", "krita/input/*", KoResourcePaths::Recursive);
 
-    foreach(const QString &profile, profiles) {
+    Q_FOREACH (const QString &profile, profiles) {
         if(profile.contains(kdeHome)) {
             //This is a local file, remove it.
             QFile::remove(profile);

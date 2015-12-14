@@ -23,14 +23,13 @@
 #include <KoTextEditor.h>
 #include <QTextBlock>
 
-
 class KoInlineCite;
 
 class CitationInsertionDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit CitationInsertionDialog(KoTextEditor *editor ,QWidget *parent = 0);
+    explicit CitationInsertionDialog(KoTextEditor *editor, QWidget *parent = 0);
     KoInlineCite *toCite();                 //returns cite with values filled in form
     void fillValuesFrom(KoInlineCite *cite);        //fills form with values in cite
 
@@ -42,7 +41,7 @@ private:
     Ui::CitationInsertionDialog dialog;
     bool m_blockSignals;
     KoTextEditor *m_editor;
-    QMap<QString, KoInlineCite*> m_cites;
+    QMap<QString, KoInlineCite *> m_cites;
 };
 
 #endif // CITATIONBIBLIOGRAPHYDIALOG_H

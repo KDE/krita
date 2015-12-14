@@ -29,14 +29,14 @@ class KoPathShape;
 class AttachTextToPathCommand : public KUndo2Command
 {
 public:
-    AttachTextToPathCommand( ArtisticTextShape * textShape, KoPathShape * pathShape, KUndo2Command * parent = 0 );
+    AttachTextToPathCommand(ArtisticTextShape *textShape, KoPathShape *pathShape, KUndo2Command *parent = 0);
     /// reimplemented from KUndo2Command
     virtual void redo();
     /// reimplemented from KUndo2Command
     virtual void undo();
 private:
-    ArtisticTextShape * m_textShape;
-    KoPathShape * m_pathShape;
+    ArtisticTextShape *m_textShape;
+    KoPathShape *m_pathShape;
     QTransform m_oldMatrix;
 };
 

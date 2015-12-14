@@ -70,7 +70,7 @@ void KoResourceTagStore::removeResource(const KoResource *resource)
     d->md5ToTag.remove(resource->md5());
     d->identifierToTag.remove(resource->filename());
 
-    foreach(const QString &tag, tags) {
+    Q_FOREACH (const QString &tag, tags) {
         if (d->tagList.contains(tag)) {
             if (d->tagList[tag] > 0) {
                 d->tagList[tag]--;
@@ -129,10 +129,10 @@ void KoResourceTagStore::delTag(KoResource* resource, const QString& tag)
 
 void KoResourceTagStore::delTag(const QString& tag)
 {
-    foreach(const QByteArray &res, d->md5ToTag.keys(tag)) {
+    Q_FOREACH (const QByteArray &res, d->md5ToTag.keys(tag)) {
         d->md5ToTag.remove(res, tag);
     }
-    foreach(const QString &identifier, d->identifierToTag.keys(tag)) {
+    Q_FOREACH (const QString &identifier, d->identifierToTag.keys(tag)) {
         d->identifierToTag.remove(identifier, tag);
     }
 
@@ -151,12 +151,12 @@ QStringList KoResourceTagStore::searchTag(const QString& query) const
     QSet<const KoResource*> resources;
 
     foreach (QString tag, tagsList) {
-        foreach(const QByteArray &md5, d->md5ToTag.keys(tag)) {
+        Q_FOREACH (const QByteArray &md5, d->md5ToTag.keys(tag)) {
             KoResource *res = d->resourceServer->byMd5(md5);
             if (res)
                 resources << res;
         }
-        foreach(const QString &identifier, d->identifierToTag.keys(tag)) {
+        Q_FOREACH (const QString &identifier, d->identifierToTag.keys(tag)) {
             KoResource *res = d->resourceServer->byFileName(identifier);
             if (res)
                 resources << res;
@@ -176,7 +176,7 @@ QStringList KoResourceTagStore::searchTag(const QString& query) const
 void KoResourceTagStore::loadTags()
 {
     QStringList tagFiles = QStandardPaths::locateAll(QStandardPaths::AppDataLocation, "tags/" + d->resourceServer->type() + "_tags.xml");
-    foreach(const QString &tagFile, tagFiles) {
+    Q_FOREACH (const QString &tagFile, tagFiles) {
         readXMLFile(tagFile);
     }
 }
@@ -240,6 +240,7 @@ void KoResourceTagStore::writeXMLFile(const QString &tagstore)
     }
 
     QTextStream metastream(&f);
+    metastream.setCodec("UTF-8");
     metastream << doc.toString();
 
     f.close();

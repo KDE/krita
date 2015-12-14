@@ -90,10 +90,6 @@ KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const ch
     KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer(false);
     QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoAbstractGradient>(rserver));
     m_gradientWidget->setResourceAdapter(adapter);
-
-    m_patternWidget->setPopupWidget(m_patternChooserPopup);
-    m_gradientWidget->setPopupWidget(m_gradientChooserPopup);
-
 }
 
 void KisControlFrame::setup(QWidget *parent)
@@ -150,6 +146,7 @@ void KisControlFrame::slotSetGradient(KoAbstractGradient * gradient)
 
 void KisControlFrame::createPatternsChooser(KisViewManager * view)
 {
+    if (m_patternChooserPopup) delete m_patternChooserPopup;
     m_patternChooserPopup = new QWidget(m_patternWidget);
     m_patternChooserPopup->setObjectName("pattern_chooser_popup");
     QHBoxLayout * l2 = new QHBoxLayout(m_patternChooserPopup);
@@ -187,10 +184,14 @@ void KisControlFrame::createPatternsChooser(KisViewManager * view)
         view->resourceProvider()->slotPatternActivated(m_patternChooser->currentResource());
     }
 
+    m_patternWidget->setPopupWidget(m_patternChooserPopup);
+
+
 }
 
 void KisControlFrame::createGradientsChooser(KisViewManager * view)
 {
+    if (m_gradientChooserPopup) delete m_gradientChooserPopup;
     m_gradientChooserPopup = new QWidget(m_gradientWidget);
     m_gradientChooserPopup->setObjectName("gradient_chooser_popup");
     QHBoxLayout * l2 = new QHBoxLayout(m_gradientChooserPopup);
@@ -215,6 +216,9 @@ void KisControlFrame::createGradientsChooser(KisViewManager * view)
     m_gradientChooser->setCurrentItem(0, 0);
     if (m_gradientChooser->currentResource() && view->resourceProvider())
         view->resourceProvider()->slotGradientActivated(m_gradientChooser->currentResource());
+
+    m_gradientWidget->setPopupWidget(m_gradientChooserPopup);
+
 }
 
 

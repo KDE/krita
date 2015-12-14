@@ -28,9 +28,6 @@
 #cmakedefine WORDS_BIGENDIAN ${CMAKE_WORDS_BIGENDIAN}
 #endif
 
-/* Defines if the krita crash handler is built */
-#cmakedefine USE_BREAKPAD 1
-
 /* Number of bits in a file offset, on hosts where this is settable. */
 #define _FILE_OFFSET_BITS 64
 
@@ -57,6 +54,9 @@
 
 /* Defines if DBUS is present */
 #cmakedefine HAVE_DBUS 1
+
+/* Defines if KCrash is present */
+#cmakedefine HAVE_KCRASH 1
 
 /* This file contains all the paths that change when changing the installation prefix */
 #define CALLIGRAPREFIX "${CMAKE_INSTALL_PREFIX}"

@@ -70,8 +70,6 @@ X-KDE-ServiceTypes=Calligra/Application
 # application/pdf is not on this list because Karbon has the default;
 # Krita will be used only in absence of Karbon
 X-Calligra-DefaultMimeTypes=
-X-DBUS-StartupType=Multi
-X-DBUS-ServiceName=org.krita.krita
 X-KDE-SubstituteUID=false
 X-KDE-Username=
 NoDisplay=true

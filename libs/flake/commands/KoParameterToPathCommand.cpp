@@ -83,7 +83,7 @@ void KoParameterToPathCommand::undo()
 
 void KoParameterToPathCommandPrivate::initialize()
 {
-    foreach(KoParameterShape *shape, shapes) {
+    Q_FOREACH (KoParameterShape *shape, shapes) {
         KoPathShape *p = new KoPathShape();
         copyPath(p, shape);
         copies.append(p);

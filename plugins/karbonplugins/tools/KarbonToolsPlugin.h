@@ -28,7 +28,7 @@ class KarbonToolsPlugin : public QObject
     Q_OBJECT
 
 public:
-    KarbonToolsPlugin(QObject * parent,  const QVariantList &);
+    KarbonToolsPlugin(QObject *parent,  const QVariantList &);
     ~KarbonToolsPlugin() {}
 
 };

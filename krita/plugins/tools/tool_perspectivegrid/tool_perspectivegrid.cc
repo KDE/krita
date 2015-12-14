@@ -41,8 +41,7 @@ K_PLUGIN_FACTORY_WITH_JSON(ToolPerspectiveGridFactory, "kritatoolperspectivegrid
 ToolPerspectiveGrid::ToolPerspectiveGrid(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    KoToolRegistry * r = KoToolRegistry::instance();
-    r->add(new KisToolPerspectiveGridFactory(QStringList()));
+    KoToolRegistry::instance()->add(new KisToolPerspectiveGridFactory());
 }
 
 ToolPerspectiveGrid::~ToolPerspectiveGrid()

@@ -56,7 +56,7 @@
     </layout>
    </item>
    <item row="1" column="0">
-    <widget class="QWidget" name="setting" native="true">
+    <widget class="QWidget" name="setting">
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="1" column="0">
        <layout class="QHBoxLayout" name="horizontalLayout_2">

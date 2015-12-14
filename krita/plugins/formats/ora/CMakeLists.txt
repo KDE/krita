@@ -5,12 +5,12 @@ set(libkritaconverter_LIB_SRCS
     ora_converter.cc
     )
 
-set(kritaoraimport_PART_SRCS
+set(kritaoraimport_SOURCES
     ora_import.cc
     ${libkritaconverter_LIB_SRCS}
     )
 
-add_library(kritaoraimport MODULE ${kritaoraimport_PART_SRCS})
+add_library(kritaoraimport MODULE ${kritaoraimport_SOURCES})
 kcoreaddons_desktop_to_json(kritaoraimport krita_ora_import.desktop)
 
 target_link_libraries(kritaoraimport kritaui )
@@ -19,12 +19,12 @@ install(TARGETS kritaoraimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
-set(kritaoraexport_PART_SRCS
+set(kritaoraexport_SOURCES
     ora_export.cc
     ${libkritaconverter_LIB_SRCS}
     )
 
-add_library(kritaoraexport MODULE ${kritaoraexport_PART_SRCS})
+add_library(kritaoraexport MODULE ${kritaoraexport_SOURCES})
 kcoreaddons_desktop_to_json(kritaoraexport krita_ora_export.desktop)
 
 target_link_libraries(kritaoraexport kritaui )

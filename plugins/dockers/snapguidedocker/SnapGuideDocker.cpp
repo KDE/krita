@@ -45,7 +45,6 @@ public:
     QWidget *mainWidget;
 };
 
-
 SnapGuideDocker::SnapGuideDocker()
     : d(new Private())
 {
@@ -56,7 +55,6 @@ SnapGuideDocker::~SnapGuideDocker()
 {
     delete d;
 }
-
 
 void SnapGuideDocker::setCanvas(KoCanvasBase *canvas)
 {

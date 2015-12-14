@@ -35,13 +35,13 @@
 #include "kis_signal_auto_connection.h"
 #include "kis_node_manager.h"
 
+#include <QPointer>
 
 struct TimelineDocker::Private
 {
     Private(QWidget *parent)
         : model(new TimelineFramesModel(parent)),
-          view(new TimelineFramesView(parent)),
-          canvas(0)
+          view(new TimelineFramesView(parent))
     {
         view->setModel(model);
     }
@@ -49,7 +49,7 @@ struct TimelineDocker::Private
     TimelineFramesModel *model;
     TimelineFramesView *view;
 
-    KisCanvas2 *canvas;
+    QPointer<KisCanvas2> canvas;
 
     KisSignalAutoConnectionsStore canvasConnections;
 };

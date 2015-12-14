@@ -22,7 +22,8 @@
 #include <QWidget>
 
 #include "ui_SimpleSpellCheckingWidget.h"
-namespace Ui {
+namespace Ui
+{
 class SimpleSpellCheckingWidget;
 }
 class ReviewTool;
@@ -34,7 +35,6 @@ class SimpleSpellCheckingWidget : public QWidget
 public:
     explicit SimpleSpellCheckingWidget(ReviewTool *tool, QWidget *parent = 0);
     ~SimpleSpellCheckingWidget();
-
 
 private:
     Ui::SimpleSpellCheckingWidget *ui;

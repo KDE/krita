@@ -52,10 +52,29 @@ namespace Vc {
 
 #ifdef DO_PACKAGERS_BUILD
 
+#include <QDebug>
+#include <ksharedconfig.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+
 template<class FactoryType>
 typename FactoryType::ReturnType
 createOptimizedClass(typename FactoryType::ParamType param)
 {
+    static bool isConfigInitialized = false;
+    static bool useVectorization = true;
+
+    if (!isConfigInitialized) {
+        KConfigGroup cfg = KSharedConfig::openConfig()->group("");
+        useVectorization = !cfg.readEntry("amdDisableVectorWorkaround", false);
+        isConfigInitialized = true;
+    }
+
+    if (!useVectorization) {
+        qWarning() << "WARNING: vector instructions disabled by \'amdDisableVectorWorkaround\' option!";
+        return FactoryType::template create<Vc::ScalarImpl>(param);
+    }
+
     /**
      * We use SSE2, SSSE3, SSE4.1, AVX and AVX2.
      * The rest are integer and string instructions mostly.

@@ -49,6 +49,7 @@ void TestXmlReader::testNode()
     QBuffer xmldevice;
     xmldevice.open(QIODevice::WriteOnly);
     QTextStream xmlstream(&xmldevice);
+    xmlstream.setCodec("UTF-8");
     xmlstream << "<earth>";
     xmlstream << " <continents>";
     xmlstream << "  <asia/>";
@@ -208,6 +209,7 @@ void TestXmlReader::testElement()
     QBuffer xmldevice;
     xmldevice.open(QIODevice::WriteOnly);
     QTextStream xmlstream(&xmldevice);
+    xmlstream.setCodec("UTF-8");
     xmlstream << "<html>";
     xmlstream << "<body bgcolor=\"#000\">";
     xmlstream << "<p>";
@@ -369,6 +371,7 @@ void TestXmlReader::testAttributes()
     QBuffer xmldevice;
     xmldevice.open(QIODevice::WriteOnly);
     QTextStream xmlstream(&xmldevice);
+    xmlstream.setCodec("UTF-8");
     xmlstream << "<p>";
     xmlstream << "<img src=\"foo.png\" width=\"300\" height=\"150\"/>";
     xmlstream << "</p>";
@@ -417,7 +420,7 @@ void TestXmlReader::testAttributes()
     QVERIFY(list.contains("width"));
     QVERIFY(list.contains("height"));
     QVERIFY(! list.contains("border"));
-    foreach(QString a, list) {
+    Q_FOREACH (QString a, list) {
         QCOMPARE(imgElement.hasAttribute(a), true);
         QCOMPARE(imgElement.attribute(a).isEmpty(), false);
     }
@@ -432,6 +435,7 @@ void TestXmlReader::testText()
     QBuffer xmldevice;
     xmldevice.open(QIODevice::WriteOnly);
     QTextStream xmlstream(&xmldevice);
+    xmlstream.setCodec("UTF-8");
     xmlstream << "<p>";
     xmlstream << "Hello ";
     xmlstream << "<b>world</b>";
@@ -528,6 +532,7 @@ void TestXmlReader::testCDATA()
     QBuffer xmldevice;
     xmldevice.open(QIODevice::WriteOnly);
     QTextStream xmlstream(&xmldevice);
+    xmlstream.setCodec("UTF-8");
     xmlstream << "<p>";
     xmlstream << "Hello ";
     xmlstream << "<![CDATA[world]]>";
@@ -607,6 +612,7 @@ void TestXmlReader::testDocument()
     QBuffer xmldevice;
     xmldevice.open(QIODevice::WriteOnly);
     QTextStream xmlstream(&xmldevice);
+    xmlstream.setCodec("UTF-8");
     xmlstream << "<calligra>";
     xmlstream << "  <words/>\n";
     xmlstream << "  <kpresenter/>\n";
@@ -690,6 +696,7 @@ void TestXmlReader::testDocumentType()
     QBuffer xmldevice;
     xmldevice.open(QIODevice::WriteOnly);
     QTextStream xmlstream(&xmldevice);
+    xmlstream.setCodec("UTF-8");
     xmlstream << "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">";
     xmlstream << "<body>";
     xmlstream << "  <img/>\n";
@@ -765,7 +772,7 @@ void TestXmlReader::testNamespace()
     QBuffer xmldevice;
     xmldevice.open(QIODevice::WriteOnly);
     QTextStream xmlstream(&xmldevice);
-
+    xmlstream.setCodec("UTF-8");
     // taken from example in Qt documentation (xml.html)
     xmlstream << "<document xmlns:book = \"http://trolltech.com/fnord/book/\"";
     xmlstream << "          xmlns      = \"http://trolltech.com/fnord/\" >";
@@ -1073,7 +1080,7 @@ void TestXmlReader::testUnload()
     QBuffer xmldevice;
     xmldevice.open(QIODevice::WriteOnly);
     QTextStream xmlstream(&xmldevice);
-
+    xmlstream.setCodec("UTF-8");
     xmlstream << "<earth>";
     xmlstream << "<continents>";
     xmlstream << "<asia/>";
@@ -1145,6 +1152,7 @@ void TestXmlReader::testSimpleXML()
     QBuffer xmldevice;
     xmldevice.open(QIODevice::WriteOnly);
     QTextStream xmlstream(&xmldevice);
+    xmlstream.setCodec("UTF-8");
     xmlstream << "<solarsystem>";
     xmlstream << "  <mercurius/>\n";
     xmlstream << "  <venus/>\n";
@@ -1251,6 +1259,7 @@ void TestXmlReader::testRootError()
     QBuffer xmldevice;
     xmldevice.open(QIODevice::WriteOnly);
     QTextStream xmlstream(&xmldevice);
+    xmlstream.setCodec("UTF-8");
     xmlstream << "<earth></earth><moon></moon>";
     xmldevice.close();
 
@@ -1271,6 +1280,7 @@ void TestXmlReader::testMismatchedTag()
     QBuffer xmldevice;
     xmldevice.open(QIODevice::WriteOnly);
     QTextStream xmlstream(&xmldevice);
+    xmlstream.setCodec("UTF-8");
     xmlstream << "<earth></e>";
     xmldevice.close();
 
@@ -1291,6 +1301,7 @@ void TestXmlReader::testConvertQDomDocument()
     QBuffer xmldevice;
     xmldevice.open(QIODevice::WriteOnly);
     QTextStream xmlstream(&xmldevice);
+    xmlstream.setCodec("UTF-8");
     xmlstream << "<solarsystem star=\"sun\">";
     xmlstream << "  <mercurius/>\n";
     xmlstream << "  <venus/>\n";
@@ -1365,6 +1376,7 @@ void TestXmlReader::testConvertQDomElement()
     QBuffer xmldevice;
     xmldevice.open(QIODevice::WriteOnly);
     QTextStream xmlstream(&xmldevice);
+    xmlstream.setCodec("UTF-8");
     xmlstream << "<universe>";
     xmlstream << " <solarsystem star=\"sun\">";
     xmlstream << "   <mercurius/>\n";
@@ -1442,6 +1454,7 @@ void TestXmlReader::testSimpleOpenDocumentText()
     QBuffer xmldevice;
     xmldevice.open(QIODevice::WriteOnly);
     QTextStream xmlstream(&xmldevice);
+    xmlstream.setCodec("UTF-8");
 
     // content.xml from a simple OpenDocument text
     // it has only paragraph "Hello, world!"
@@ -1607,6 +1620,7 @@ void TestXmlReader::testWhitespace()
     QBuffer xmldevice;
     xmldevice.open(QIODevice::WriteOnly);
     QTextStream xmlstream(&xmldevice);
+    xmlstream.setCodec("UTF-8");
 
     // content.xml for testing paragraphs with whitespace
     /* The list of elements for which whitespace should be preserved can be
@@ -1661,6 +1675,7 @@ void TestXmlReader::testSimpleOpenDocumentSpreadsheet()
     QBuffer xmldevice;
     xmldevice.open(QIODevice::WriteOnly);
     QTextStream xmlstream(&xmldevice);
+    xmlstream.setCodec("UTF-8");
 
     // content.xml from a simple OpenDocument spreadsheet
     // the document has three worksheets, the last two are empty.
@@ -1870,7 +1885,7 @@ void TestXmlReader::testSimpleOpenDocumentPresentation()
     QBuffer xmldevice;
     xmldevice.open(QIODevice::WriteOnly);
     QTextStream xmlstream(&xmldevice);
-
+    xmlstream.setCodec("UTF-8");
     // content.xml from a simple OpenDocument presentation
     // styles, declarations and unnecessary namespaces are omitted
     // the first page is "Title" and has two text boxes

@@ -57,7 +57,7 @@
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="QWidget" name="SpecialSpacer" native="true"/>
+    <widget class="QWidget" name="SpecialSpacer"/>
    </item>
   </layout>
  </widget>

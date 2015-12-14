@@ -107,7 +107,7 @@
        </widget>
       </item>
       <item row="0" column="4" rowspan="2">
-       <widget class="KoAspectButton" name="pixelAspectRatioBtn" native="true">
+       <widget class="KoAspectButton" name="pixelAspectRatioBtn">
         <property name="text" stdset="0">
          <string/>
         </property>
@@ -178,7 +178,7 @@
        </spacer>
       </item>
       <item row="2" column="2" colspan="2">
-       <widget class="KisCmbIDList" name="pixelFilterCmb" native="true"/>
+       <widget class="KisCmbIDList" name="pixelFilterCmb"/>
       </item>
      </layout>
     </widget>
@@ -266,7 +266,7 @@
        </widget>
       </item>
       <item row="0" column="4" rowspan="2">
-       <widget class="KoAspectButton" name="printAspectRatioBtn" native="true">
+       <widget class="KoAspectButton" name="printAspectRatioBtn">
         <property name="text" stdset="0">
          <string/>
         </property>

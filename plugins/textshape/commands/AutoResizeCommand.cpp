@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #include "AutoResizeCommand.h"
 #include "TextShape.h"
 
@@ -35,18 +34,18 @@ AutoResizeCommand::AutoResizeCommand(KoTextShapeData *shapeData, KoTextShapeData
     Q_ASSERT(m_shapeData);
     const QString s = m_enabled ? i18nc("Enable Shrink To Fit", "Enable") : i18nc("Disable Shrink To Fit", "Disable");
     switch (m_resizeMethod) {
-        case KoTextShapeData::AutoGrowWidth:
-            setText(kundo2_i18nc("Enable/Disable Grow To Fit Width", "%1 Grow To Fit Width", s));
-            break;
-        case KoTextShapeData::AutoGrowHeight:
-            setText(kundo2_i18nc("Enable/Disable Grow To Fit Height", "%1 Grow To Fit Height", s));
-            break;
-        case KoTextShapeData::ShrinkToFitResize:
-            setText(kundo2_i18nc("Enable/Disable Shrink To Fit", "%1 Shrink To Fit", s));
-            break;
-        default:
-            Q_ASSERT_X(false, __FUNCTION__, QString("The resize-method '%1' is unsupported by this command").arg(resizeMethod).toUtf8());
-            break;
+    case KoTextShapeData::AutoGrowWidth:
+        setText(kundo2_i18nc("Enable/Disable Grow To Fit Width", "%1 Grow To Fit Width", s));
+        break;
+    case KoTextShapeData::AutoGrowHeight:
+        setText(kundo2_i18nc("Enable/Disable Grow To Fit Height", "%1 Grow To Fit Height", s));
+        break;
+    case KoTextShapeData::ShrinkToFitResize:
+        setText(kundo2_i18nc("Enable/Disable Shrink To Fit", "%1 Shrink To Fit", s));
+        break;
+    default:
+        Q_ASSERT_X(false, __FUNCTION__, QString("The resize-method '%1' is unsupported by this command").arg(resizeMethod).toUtf8());
+        break;
     }
 }
 
@@ -64,11 +63,13 @@ void AutoResizeCommand::redo()
     KoTextShapeData::ResizeMethod resize = m_enabled ? m_resizeMethod : KoTextShapeData::NoResize;
     if (m_resizeMethod == KoTextShapeData::AutoGrowWidth || m_resizeMethod == KoTextShapeData::AutoGrowHeight) {
         if (m_enabled) {
-            if ((m_shapeData->resizeMethod() == KoTextShapeData::AutoGrowWidth || m_shapeData->resizeMethod() == KoTextShapeData::AutoGrowHeight) && m_resizeMethod != m_shapeData->resizeMethod())
+            if ((m_shapeData->resizeMethod() == KoTextShapeData::AutoGrowWidth || m_shapeData->resizeMethod() == KoTextShapeData::AutoGrowHeight) && m_resizeMethod != m_shapeData->resizeMethod()) {
                 resize = KoTextShapeData::AutoGrowWidthAndHeight;
+            }
         } else {
-            if (m_shapeData->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight)
+            if (m_shapeData->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight) {
                 resize = m_resizeMethod == KoTextShapeData::AutoGrowWidth ? KoTextShapeData::AutoGrowHeight : KoTextShapeData::AutoGrowWidth;
+            }
         }
     }
     m_shapeData->setResizeMethod(resize);

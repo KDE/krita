@@ -20,8 +20,10 @@ import QtQuick 2.3
 import org.krita.sketch 1.0
 
 KritaSketchBase {
-    width: 1280;
-    height: 768;
+// TODO: presetting size with certain values somehow sometimes results in bad values
+// for grid width/height values and thus a sometimes broken welcome screen, this calculation seems fragile
+//     width: 1280;
+//     height: 768;
     onWidthChanged: Constants.setGridWidth( width / Constants.GridColumns );
     onHeightChanged: Constants.setGridHeight( height / Constants.GridRows );
     window: mainWindow;

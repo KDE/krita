@@ -29,7 +29,7 @@
 #include <QUrl>
 
 #include "kritaui_export.h"
-
+#include <KoConfig.h>
 #include <KisMainWindow.h>
 
 namespace KIO {
@@ -40,8 +40,9 @@ class KisView;
 class QGraphicsItem;
 class KisDocument;
 class KisIdleWatcher;
+#ifdef HAVE_OPENGL
 class KisAnimationCachePopulator;
-
+#endif
 
 /**
  * KisPart is the Great Deku Tree of Krita.
@@ -140,11 +141,12 @@ public:
      * @return the application-wide KisIdleWatcher.
      */
     KisIdleWatcher *idleWatcher() const;
-
+#ifdef HAVE_OPENGL
     /**
      * @return the application-wide AnimationCachePopulator.
      */
     KisAnimationCachePopulator *cachePopulator() const;
+#endif
 
 public Q_SLOTS:
 
@@ -178,6 +180,8 @@ private Q_SLOTS:
     void startCustomDocument(KisDocument *doc);
 
     void updateIdleWatcherConnections();
+
+    void updateShortcuts();
 
 Q_SIGNALS:
     /**
@@ -249,7 +253,6 @@ public:
      */
     QString templatesResourcePath() const;
 
-
     /**
      * Creates and shows the start up widget.
      * @param parent the KisMainWindow used as parent for the widget.
@@ -258,12 +261,6 @@ public:
     void showStartUpWidget(KisMainWindow *parent, bool alwaysShow = false);
 
 protected:
-
-    /**
-     * Set the templates resource path used. This is used by the start up widget to show
-     * the correct templates.
-     */
-    void setTemplatesResourcePath(const QString &templatesResourcePath);
 
     /**
      * Struct used in the list created by createCustomDocumentWidgets()

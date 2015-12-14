@@ -178,6 +178,7 @@ void KisEqualizerSlider::paintEvent(QPaintEvent *event)
 
     QString textValue = QString::number(value());
 
+    /*  Text isn't really needed for onion skinning and makes it look a bit cluttered. Uncomment this out of that changes.
     { // draw text
         QPalette::ColorRole textRole = QPalette::Text;
 
@@ -194,6 +195,7 @@ void KisEqualizerSlider::paintEvent(QPaintEvent *event)
         p.setPen(textColor);
         p.drawText(bounds, Qt::AlignCenter, textValue);
     }
+    */
 
     // draw focus rect
     if (hasFocus()) {

@@ -153,7 +153,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KisSliderSpinBox" name="sliderPrecision" native="true">
+      <widget class="KisSliderSpinBox" name="sliderPrecision">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>

@@ -119,7 +119,7 @@ class KisToolMoveFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolMoveFactory(const QStringList&)
+    KisToolMoveFactory()
             : KoToolFactoryBase("KritaTransform/KisToolMove") {
         setToolTip(i18n("Move Tool"));
         setToolType(TOOL_TYPE_TRANSFORM);

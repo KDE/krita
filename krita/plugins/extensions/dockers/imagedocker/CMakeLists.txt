@@ -1,14 +1,14 @@
 
-set(kritaimagedocker_PART_SRCS
+set(kritaimagedocker_SOURCES
     imagedocker.cpp
     imagedocker_dock.cpp
     image_strip_scene.cpp
     image_view.cpp
 )
 
-ki18n_wrap_ui(kritaimagedocker_PART_SRCS forms/wdgimagedocker.ui forms/wdgImageViewPopup.ui)
+ki18n_wrap_ui(kritaimagedocker_SOURCES forms/wdgimagedocker.ui forms/wdgImageViewPopup.ui)
 
-add_library(kritaimagedocker MODULE ${kritaimagedocker_PART_SRCS})
+add_library(kritaimagedocker MODULE ${kritaimagedocker_SOURCES})
 kcoreaddons_desktop_to_json(kritaimagedocker kritaimagedocker.desktop)
 
 target_link_libraries(kritaimagedocker kritaui)

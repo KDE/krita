@@ -1,8 +1,8 @@
 
-set(kritapixelizefilter_PART_SRCS kis_pixelize_filter_plugin.cpp kis_pixelize_filter.cpp )
+set(kritapixelizefilter_SOURCES kis_pixelize_filter_plugin.cpp kis_pixelize_filter.cpp )
 
 
-add_library(kritapixelizefilter MODULE ${kritapixelizefilter_PART_SRCS})
+add_library(kritapixelizefilter MODULE ${kritapixelizefilter_SOURCES})
 kcoreaddons_desktop_to_json(kritapixelizefilter kritapixelizefilter.desktop)
 
 

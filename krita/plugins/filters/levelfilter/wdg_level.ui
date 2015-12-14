@@ -108,7 +108,7 @@
     </layout>
    </item>
    <item>
-    <widget class="KisGradientSlider" name="ingradient" native="true">
+    <widget class="KisGradientSlider" name="ingradient">
      <property name="minimumSize">
       <size>
        <width>256</width>
@@ -219,7 +219,7 @@
     </widget>
    </item>
    <item>
-    <widget class="KisGradientSlider" name="outgradient" native="true">
+    <widget class="KisGradientSlider" name="outgradient">
      <property name="minimumSize">
       <size>
        <width>256</width>

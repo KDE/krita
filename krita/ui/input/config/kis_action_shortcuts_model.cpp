@@ -352,7 +352,7 @@ bool KisActionShortcutsModel::removeRows(int row, int count, const QModelIndex &
 int KisActionShortcutsModel::Private::shortcutModeCount(uint mode)
 {
     int count = 0;
-    foreach(KisShortcutConfiguration* s, shortcuts) {
+    Q_FOREACH (KisShortcutConfiguration* s, shortcuts) {
         if(s->mode() == mode) {
             count++;
         }

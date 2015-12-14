@@ -68,7 +68,9 @@
 #include "kis_image_from_clipboard_widget.h"
 #include "kis_shape_controller.h"
 #include "kis_resource_server_provider.h"
+#ifdef HAVE_OPENGL
 #include "kis_animation_cache_populator.h"
+#endif
 #include "kis_idle_watcher.h"
 #include "kis_image.h"
 #include "KisImportExportManager.h"
@@ -90,7 +92,9 @@ public:
     Private(KisPart *_part)
         : part(_part)
         , idleWatcher(2500)
+#ifdef HAVE_OPENGL
         , animationCachePopulator(_part)
+#endif
     {
     }
 
@@ -104,15 +108,15 @@ public:
     QList<QPointer<KisView> > views;
     QList<QPointer<KisMainWindow> > mainWindows;
     QList<QPointer<KisDocument> > documents;
-    QString templatesResourcePath;
 
     QGraphicsItem *canvasItem{0};
     KisOpenPane *startupWidget{0};
     KActionCollection *actionCollection{0};
 
     KisIdleWatcher idleWatcher;
+#ifdef HAVE_OPENGL
     KisAnimationCachePopulator animationCachePopulator;
-
+#endif
     void loadActions();
 };
 
@@ -124,7 +128,7 @@ void KisPart::Private::loadActions()
 
     KisActionRegistry * actionRegistry = KisActionRegistry::instance();
 
-    foreach (auto action, actionCollection->actions()) {
+    Q_FOREACH (auto action, actionCollection->actions()) {
         auto name = action->objectName();
         actionRegistry->addAction(action->objectName(), action);
     }
@@ -139,8 +143,6 @@ KisPart* KisPart::instance()
 KisPart::KisPart()
     : d(new Private(this))
 {
-    setTemplatesResourcePath(QLatin1String("krita/templates/"));
-
     // Preload all the resources in the background
     Q_UNUSED(KoResourceServerProvider::instance());
     Q_UNUSED(KisResourceServerProvider::instance());
@@ -152,10 +154,14 @@ KisPart::KisPart()
     connect(this, SIGNAL(documentClosed(QString)),
             this, SLOT(updateIdleWatcherConnections()));
 
+    connect(KisActionRegistry::instance(), SIGNAL(shortcutsUpdated()),
+            this, SLOT(updateShortcuts()));
+#ifdef HAVE_OPENGL
     connect(&d->idleWatcher, SIGNAL(startedIdleMode()),
             &d->animationCachePopulator, SLOT(slotRequestRegeneration()));
 
     d->animationCachePopulator.slotRequestRegeneration();
+#endif
 }
 
 KisPart::~KisPart()
@@ -179,7 +185,7 @@ void KisPart::updateIdleWatcherConnections()
 {
     QVector<KisImageSP> images;
 
-    foreach (QPointer<KisDocument> document, documents()) {
+    Q_FOREACH (QPointer<KisDocument> document, documents()) {
         images << document->image();
     }
 
@@ -285,7 +291,7 @@ void KisPart::removeView(KisView *view)
 
     if (doc) {
         bool found = false;
-        foreach(QPointer<KisView> view, d->views) {
+        Q_FOREACH (QPointer<KisView> view, d->views) {
             if (view && view->document() == doc) {
                 found = true;
                 break;
@@ -309,7 +315,7 @@ int KisPart::viewCount(KisDocument *doc) const
     }
     else {
         int count = 0;
-        foreach(QPointer<KisView> view, d->views) {
+        Q_FOREACH (QPointer<KisView> view, d->views) {
             if (view->document() == doc) {
                 count++;
             }
@@ -377,10 +383,12 @@ KisIdleWatcher* KisPart::idleWatcher() const
     return &d->idleWatcher;
 }
 
+#ifdef HAVE_OPENGL
 KisAnimationCachePopulator* KisPart::cachePopulator() const
 {
     return &d->animationCachePopulator;
 }
+#endif
 
 void KisPart::openExistingFile(const QUrl &url)
 {
@@ -420,22 +428,25 @@ void KisPart::configureShortcuts()
     d->loadActions();
 
     auto actionRegistry = KisActionRegistry::instance();
-    actionRegistry->configureShortcuts(d->actionCollection);
+    actionRegistry->configureShortcuts();
+}
 
-    // Update the non-UI actions.  That includes:
+void KisPart::updateShortcuts()
+{
+    // Update any non-UI actionCollections.  That includes:
     //  - Shortcuts called inside of tools
     //  - Perhaps other things?
     KoToolManager::instance()->updateToolShortcuts();
 
     // Now update the UI actions.
-    foreach(KisMainWindow *mainWindow, d->mainWindows) {
+    Q_FOREACH (KisMainWindow *mainWindow, d->mainWindows) {
         KActionCollection *ac = mainWindow->actionCollection();
 
         ac->updateShortcuts();
 
         // Loop through mainWindow->actionCollections() to modify tooltips
         // so that they list shortcuts at the end in parentheses
-        foreach( QAction* action, ac->actions())
+        Q_FOREACH ( QAction* action, ac->actions())
         {
             // Remove any existing suffixes from the tooltips.
             // Note this regexp starts with a space, e.g. " (Ctrl-a)"
@@ -443,9 +454,9 @@ void KisPart::configureShortcuts()
 
             // Now update the tooltips with the new shortcut info.
             if(action->shortcut() == QKeySequence(0))
-                 action->setToolTip(strippedTooltip);
+                action->setToolTip(strippedTooltip);
             else
-                 action->setToolTip( strippedTooltip + " (" + action->shortcut().toString() + ")");
+                action->setToolTip( strippedTooltip + " (" + action->shortcut().toString() + ")");
         }
     }
 }
@@ -493,18 +504,13 @@ void KisPart::viewDestroyed()
 void KisPart::addRecentURLToAllMainWindows(QUrl url)
 {
     // Add to recent actions list in our mainWindows
-    foreach(KisMainWindow *mainWindow, d->mainWindows) {
+    Q_FOREACH (KisMainWindow *mainWindow, d->mainWindows) {
         mainWindow->addRecentURL(url);
     }
 }
 
 void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
 {
-
-#ifndef NDEBUG
-    if (d->templatesResourcePath.isEmpty())
-        dbgUI << "showStartUpWidget called, but setTemplatesResourcePath() never called. This will not show a lot";
-#endif
 
     if (!alwaysShow) {
         KConfigGroup cfgGrp( KSharedConfig::openConfig(), "TemplateChooserDialog");
@@ -513,10 +519,10 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
             QUrl url(fullTemplateName);
             QFileInfo fi(url.toLocalFile());
             if (!fi.exists()) {
-                const QString templatesResourcePath = this->templatesResourcePath();
-                QString desktopfile = KoResourcePaths::findResource("data", templatesResourcePath + "*/" + fullTemplateName);
+                const QString templatesPath = templatesResourcePath();
+                QString desktopfile = KoResourcePaths::findResource("data", templatesPath + "*/" + fullTemplateName);
                 if (desktopfile.isEmpty()) {
-                    desktopfile = KoResourcePaths::findResource("data", templatesResourcePath + fullTemplateName);
+                    desktopfile = KoResourcePaths::findResource("data", templatesPath + fullTemplateName);
                 }
                 if (desktopfile.isEmpty()) {
                     fullTemplateName.clear();
@@ -539,10 +545,10 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
                                                                       KisImportExportManager::Import,
                                                                       KisDocumentEntry::extraNativeMimeTypes());
 
-    d->startupWidget = new KisOpenPane(0, mimeFilter, d->templatesResourcePath);
+    d->startupWidget = new KisOpenPane(0, mimeFilter, templatesResourcePath());
     d->startupWidget->setWindowModality(Qt::WindowModal);
     QList<CustomDocumentWidgetItem> widgetList = createCustomDocumentWidgets(d->startupWidget);
-    foreach(const CustomDocumentWidgetItem & item, widgetList) {
+    Q_FOREACH (const CustomDocumentWidgetItem & item, widgetList) {
         d->startupWidget->addCustomDocumentWidget(item.widget, item.title, item.icon);
         connect(item.widget, SIGNAL(documentSelected(KisDocument*)), this, SLOT(startCustomDocument(KisDocument*)));
     }
@@ -609,17 +615,9 @@ QList<KisPart::CustomDocumentWidgetItem> KisPart::createCustomDocumentWidgets(QW
     return widgetList;
 }
 
-void KisPart::setTemplatesResourcePath(const QString &templatesResourcePath)
-{
-    Q_ASSERT(!templatesResourcePath.isEmpty());
-    Q_ASSERT(templatesResourcePath.endsWith(QLatin1Char('/')));
-
-    d->templatesResourcePath = templatesResourcePath;
-}
-
 QString KisPart::templatesResourcePath() const
 {
-    return d->templatesResourcePath;
+    return QStringLiteral("krita/templates/");
 }
 
 void KisPart::startCustomDocument(KisDocument* doc)

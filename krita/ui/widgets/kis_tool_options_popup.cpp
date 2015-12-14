@@ -55,7 +55,7 @@ public:
 
     void recreateLayout(const QList<QPointer<QWidget> > &optionWidgetList)
     {
-        foreach(QPointer<QWidget> widget, currentWidgetList) {
+        Q_FOREACH (QPointer<QWidget> widget, currentWidgetList) {
             if (!widget.isNull() && widget && hiderWidget) {
                 widget->setParent(hiderWidget);
             }
@@ -74,7 +74,7 @@ public:
         housekeeperLayout->setHorizontalSpacing(0);
         housekeeperLayout->setVerticalSpacing(2);
         int specialCount = 0;
-        foreach(QPointer<QWidget> widget, currentWidgetList) {
+        Q_FOREACH (QPointer<QWidget> widget, currentWidgetList) {
             if (widget.isNull() || widget->objectName().isEmpty()) {
                 continue; // skip this docker in release build when assert don't crash
             }

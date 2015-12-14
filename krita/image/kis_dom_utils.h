@@ -144,7 +144,7 @@ void saveValue(QDomElement *parent, const QString &tag, const QVector<T> &array)
     e.setAttribute("type", "array");
 
     int i = 0;
-    foreach (const T &v, array) {
+    Q_FOREACH (const T &v, array) {
         saveValue(&e, QString("item_%1").arg(i++), v);
     }
 }

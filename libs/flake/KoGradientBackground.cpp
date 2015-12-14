@@ -137,7 +137,7 @@ bool KoGradientBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF 
                 if (! opacityPercent.isEmpty() && opacityPercent.right(1) == "%") {
                     float opacity = qMin(opacityPercent.left(opacityPercent.length() - 1).toDouble(), 100.0) / 100;
                     QGradientStops stops;
-                    foreach(QGradientStop stop, d->gradient->stops()) {
+                    Q_FOREACH (QGradientStop stop, d->gradient->stops()) {
                         stop.second.setAlphaF(opacity);
                         stops << stop;
                     }

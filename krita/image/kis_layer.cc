@@ -98,7 +98,7 @@ public:
     }
 
     void setDirty(const QRect &rect) {
-        foreach(KisCloneLayerWSP clone, m_clonesList) {
+        Q_FOREACH (KisCloneLayerWSP clone, m_clonesList) {
             clone->setDirtyOriginal(rect);
         }
     }
@@ -232,7 +232,7 @@ void KisLayer::setSectionModelProperties(const KisNodeModel::PropertyList &prope
 {
     KisBaseNode::setSectionModelProperties(properties);
 
-    foreach (const KisNodeModel::Property &property, properties) {
+    Q_FOREACH (const KisNodeModel::Property &property, properties) {
         if (property.name == i18n("Inherit Alpha")) {
             disableAlphaChannel(property.state.toBool());
         }
@@ -341,32 +341,44 @@ bool KisLayer::canMergeAndKeepBlendOptions(KisLayerSP otherLayer)
          *this->colorSpace() == *otherLayer->colorSpace());
 }
 
-KisLayerSP KisLayer::createMergedLayer(KisLayerSP prevLayer)
+KisLayerSP KisLayer::createMergedLayerTemplate(KisLayerSP prevLayer)
 {
-    KisImageSP my_image = image();
+    const bool keepBlendingOptions = canMergeAndKeepBlendOptions(prevLayer);
+
+    KisLayerSP newLayer = new KisPaintLayer(image(), prevLayer->name(), OPACITY_OPAQUE_U8);
+
+    if (keepBlendingOptions) {
+        newLayer->setCompositeOpId(compositeOpId());
+        newLayer->setOpacity(opacity());
+        newLayer->setChannelFlags(channelFlags());
+    }
+
+    return newLayer;
+}
+
+void KisLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer)
+{
+    const bool keepBlendingOptions = canMergeAndKeepBlendOptions(prevLayer);
 
     QRect layerProjectionExtent = this->projection()->extent();
     QRect prevLayerProjectionExtent = prevLayer->projection()->extent();
     bool alphaDisabled = this->alphaChannelDisabled();
     bool prevAlphaDisabled = prevLayer->alphaChannelDisabled();
 
-    KisPaintDeviceSP mergedDevice;
-
-    bool keepBlendingOptions = canMergeAndKeepBlendOptions(prevLayer);
+    KisPaintDeviceSP mergedDevice = dstLayer->paintDevice();
 
     if (!keepBlendingOptions) {
 
         KisNodeSP parentNode = parent();
         const KoColorSpace *dstCs = parentNode && parentNode->colorSpace() ?
-            parentNode->colorSpace() : my_image->colorSpace();
+            parentNode->colorSpace() : image()->colorSpace();
 
-        mergedDevice = new KisPaintDevice(dstCs, "merged");
         KisPainter gc(mergedDevice);
 
         //Copy the pixels of previous layer with their actual alpha value
         prevLayer->disableAlphaChannel(false);
 
-        prevLayer->projectionPlane()->apply(&gc, prevLayerProjectionExtent | my_image->bounds());
+        prevLayer->projectionPlane()->apply(&gc, prevLayerProjectionExtent | image()->bounds());
 
         //Restore the previous prevLayer disableAlpha status for correct undo/redo
         prevLayer->disableAlphaChannel(prevAlphaDisabled);
@@ -376,31 +388,20 @@ KisLayerSP KisLayer::createMergedLayer(KisLayerSP prevLayer)
             this->disableAlphaChannel(false);
         }
 
-        this->projectionPlane()->apply(&gc, layerProjectionExtent | my_image->bounds());
+        this->projectionPlane()->apply(&gc, layerProjectionExtent | image()->bounds());
 
         //Restore the layer disableAlpha status for correct undo/redo
         this->disableAlphaChannel(alphaDisabled);
     }
     else {
         //Copy prevLayer
-        my_image->lock();
-        mergedDevice = new KisPaintDevice(*prevLayer->projection());
-        my_image->unlock();
+        KisPaintDeviceSP srcDev = prevLayer->projection();
+        mergedDevice->makeCloneFrom(srcDev, srcDev->extent());
 
         //Paint layer on the copy
         KisPainter gc(mergedDevice);
         gc.bitBlt(layerProjectionExtent.topLeft(), this->projection(), layerProjectionExtent);
     }
-
-    KisLayerSP newLayer = new KisPaintLayer(my_image, prevLayer->name(), OPACITY_OPAQUE_U8, mergedDevice);
-
-    if (keepBlendingOptions) {
-        newLayer->setCompositeOpId(compositeOpId());
-        newLayer->setOpacity(opacity());
-        newLayer->setChannelFlags(channelFlags());
-    }
-
-    return newLayer;
 }
 
 void KisLayer::registerClone(KisCloneLayerWSP clone)
@@ -435,7 +436,7 @@ KisSelectionMaskSP KisLayer::selectionMask() const
     QList<KisNodeSP> masks = childNodes(QStringList("KisSelectionMask"), properties);
 
     // return the first visible mask
-    foreach (KisNodeSP mask, masks) {
+    Q_FOREACH (KisNodeSP mask, masks) {
         if (mask->visible()) {
             return dynamic_cast<KisSelectionMask*>(mask.data());
         }
@@ -468,7 +469,7 @@ QList<KisEffectMaskSP> KisLayer::effectMasks(KisNodeSP lastNode) const
         properties.setProperty("visible", true);
         QList<KisNodeSP> nodes = childNodes(QStringList("KisEffectMask"), properties);
 
-        foreach(const KisNodeSP& node,  nodes) {
+        Q_FOREACH (const KisNodeSP& node,  nodes) {
             if (node == lastNode) break;
 
             KisEffectMaskSP mask = dynamic_cast<KisEffectMask*>(const_cast<KisNode*>(node.data()));
@@ -508,7 +509,7 @@ QRect KisLayer::masksChangeRect(const QList<KisEffectMaskSP> &masks,
      */
     QRect changeRect = requestedRect;
 
-    foreach(const KisEffectMaskSP& mask, masks) {
+    Q_FOREACH (const KisEffectMaskSP& mask, masks) {
         changeRect = mask->changeRect(prevChangeRect);
 
         if (changeRect != prevChangeRect)
@@ -615,7 +616,7 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
                 copyOriginalToProjection(source, destination, needRect);
             }
 
-            foreach(const KisEffectMaskSP& mask, masks) {
+            Q_FOREACH (const KisEffectMaskSP& mask, masks) {
                 const QRect maskApplyRect = applyRects.pop();
                 const QRect maskNeedRect =
                     applyRects.isEmpty() ? needRect : applyRects.top();
@@ -638,7 +639,7 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
             QRect maskApplyRect = applyRects.pop();
             QRect maskNeedRect = needRect;
 
-            foreach(const KisEffectMaskSP& mask, masks) {
+            Q_FOREACH (const KisEffectMaskSP& mask, masks) {
                 PositionToFilthy maskPosition = calculatePositionToFilthy(mask, filthyNode, const_cast<KisLayer*>(this));
                 mask->apply(tempDevice, maskApplyRect, maskNeedRect, maskPosition);
 

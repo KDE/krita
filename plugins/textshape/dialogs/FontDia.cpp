@@ -37,10 +37,10 @@
 #include <QTextDocument>
 #include <QTextCursor>
 
-FontDia::FontDia(KoTextEditor *editor, QWidget* parent)
-        : KoDialog(parent)
-        , m_editor(editor)
-        , m_styleChanged(false)
+FontDia::FontDia(KoTextEditor *editor, QWidget *parent)
+    : KoDialog(parent)
+    , m_editor(editor)
+    , m_styleChanged(false)
 {
     m_initialFormat = m_editor->charFormat();
 
@@ -75,8 +75,9 @@ void FontDia::styleChanged(bool state)
 
 void FontDia::slotApply()
 {
-    if (!m_styleChanged)
+    if (!m_styleChanged) {
         return;
+    }
 
     m_editor->beginEditBlock(kundo2_i18n("Font"));
     KoCharacterStyle chosenStyle;

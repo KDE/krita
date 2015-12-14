@@ -151,7 +151,7 @@ QPointer<KoUpdater> KoProgressUpdater::startSubtask(int weight,
 
 void KoProgressUpdater::cancel()
 {
-    foreach(KoUpdaterPrivate *updater, d->subtasks) {
+    Q_FOREACH (KoUpdaterPrivate *updater, d->subtasks) {
         updater->setProgress(100);
         updater->interrupt();
     }
@@ -178,7 +178,7 @@ void KoProgressUpdater::updateUi()
 
     if (d->updated) {
         int totalProgress = 0;
-        foreach(QPointer<KoUpdaterPrivate> updater, d->subtasks) {
+        Q_FOREACH (QPointer<KoUpdaterPrivate> updater, d->subtasks) {
             if (updater->interrupted()) {
                 d->currentProgress = -1;
                 return;

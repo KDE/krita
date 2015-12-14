@@ -119,7 +119,7 @@ public:
                 QRect r(QPoint(), m_splash->size());
                 m_splash->move(QApplication::desktop()->availableGeometry().center() - r.center());
                 m_splash->setWindowTitle(qAppName());
-                foreach(QObject *o, m_splash->children()) {
+                Q_FOREACH (QObject *o, m_splash->children()) {
                     QWidget *w = qobject_cast<QWidget*>(o);
                     if (w && w->isHidden()) {
                         w->setVisible(true);
@@ -179,7 +179,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
 
     qDebug() << "Available styles:" << QStyleFactory::keys();
     QStringList styles = QStringList() /*<< "Breeze"*/  << "Fusion" << "Oxygen" << "Plastique";
-    foreach(const QString & style, styles) {
+    Q_FOREACH (const QString & style, styles) {
         if (!setStyle(style)) {
             qDebug() << "No" << style << "available.";
         }
@@ -395,10 +395,10 @@ bool KisApplication::start(const KisApplicationArguments &args)
     KoShapeRegistry* r = KoShapeRegistry::instance();
     r->add(new KisShapeSelectionFactory());
 
+    KisActionRegistry::instance();
     KisFilterRegistry::instance();
     KisGeneratorRegistry::instance();
     KisPaintOpRegistry::instance();
-    KisActionRegistry::instance();
 
     // Load the krita-specific tools
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
@@ -428,7 +428,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     // Check for autosave files that can be restored, if we're not running a batchrun (test, print, export to pdf)
     QList<QUrl> urls = checkAutosaveFiles();
     if (!batchRun && mainWindow) {
-        foreach(const QUrl &url, urls) {
+        Q_FOREACH (const QUrl &url, urls) {
             KisDocument *doc = KisPart::instance()->createDocument();
             mainWindow->openDocumentInternal(url, doc);
         }
@@ -439,6 +439,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     if (argsCount > 0) {
 
         QTextStream profileoutput;
+        profileoutput.setCodec("UTF-8");
         QFile profileFile(profileFileName);
         if (!profileFileName.isEmpty()
                 && profileFile.open(QFile::WriteOnly | QFile::Truncate)) {
@@ -616,7 +617,7 @@ QList<QUrl> KisApplication::checkAutosaveFiles()
         if (dlg->exec() == QDialog::Accepted) {
 
             QStringList filesToRecover = dlg->recoverableFiles();
-            foreach (const QString &autosaveFile, autoSaveFiles) {
+            Q_FOREACH (const QString &autosaveFile, autoSaveFiles) {
                 if (!filesToRecover.contains(autosaveFile)) {
                     QFile::remove(dir.absolutePath() + "/" + autosaveFile);
                 }
@@ -632,7 +633,7 @@ QList<QUrl> KisApplication::checkAutosaveFiles()
     QList<QUrl> autosaveUrls;
     if (autoSaveFiles.size() > 0) {
 
-        foreach(const QString &autoSaveFile, autoSaveFiles) {
+        Q_FOREACH (const QString &autoSaveFile, autoSaveFiles) {
             const QUrl url = QUrl::fromLocalFile(dir.absolutePath() + QLatin1Char('/') + autoSaveFile);
             autosaveUrls << url;
         }

@@ -356,9 +356,6 @@ private Q_SLOTS:
     void slotResetFgBg();
 
 private:
-    ToolMode m_mode;
-    bool m_isActive;
-
     struct Private;
     Private* const d;
 };

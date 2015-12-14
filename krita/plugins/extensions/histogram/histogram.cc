@@ -38,9 +38,7 @@ K_PLUGIN_FACTORY_WITH_JSON(HistogramFactory, "kritahistogram.json", registerPlug
 Histogram::Histogram(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent)
 {
-    KisAction* action  = new KisAction(i18n("&Histogram..."), this);
-    action->setActivationFlags(KisAction::ACTIVE_LAYER);
-    addAction("histogram", action);
+    KisAction* action  = createAction("histogram");
     connect(action,  SIGNAL(triggered()), this, SLOT(slotActivated()));
 }
 

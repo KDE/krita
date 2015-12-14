@@ -122,7 +122,7 @@ void KisRecordedPathPaintAction::playPaint(const KisPlayInfo&, KisPainter* paint
     if (d->curveSlices.size() <= 0) return;
     KisDistanceInformation savedDist;
 
-    foreach (const Private::BezierCurveSlice &slice, d->curveSlices)
+    Q_FOREACH (const Private::BezierCurveSlice &slice, d->curveSlices)
     {
         switch(slice.type)
         {
@@ -143,7 +143,7 @@ void KisRecordedPathPaintAction::toXML(QDomDocument& doc, QDomElement& elt, KisR
 {
     KisRecordedPaintAction::toXML(doc, elt, context);
     QDomElement waypointsElt = doc.createElement("Slices");
-    foreach(const Private::BezierCurveSlice & slice, d->curveSlices) {
+    Q_FOREACH (const Private::BezierCurveSlice & slice, d->curveSlices) {
         switch(slice.type)
         {
             case Private::BezierCurveSlice::Point:

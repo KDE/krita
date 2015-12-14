@@ -34,6 +34,7 @@
 #include <calligraversion.h>
 #include <calligragitversion.h>
 #include <opengl/kis_opengl.h>
+#include <kis_icon.h>
 
 #include "MainWindow.h"
 
@@ -84,6 +85,7 @@ int main( int argc, char** argv )
 
     SketchApplication app(argc, argv);
     KAboutData::setApplicationData( aboutData );
+    app.setWindowIcon(KisIconUtils::loadIcon("kritasketch"));
 
     QCommandLineParser parser;
     aboutData.setupCommandLine(&parser);
@@ -100,9 +102,10 @@ int main( int argc, char** argv )
     aboutData.processCommandLine(&parser);
 
     QStringList fileNames;
-    foreach (const QString &fileName, parser.positionalArguments()) {
-        if (QFile::exists(fileName)) {
-            fileNames << fileName;
+    Q_FOREACH (const QString &fileName, parser.positionalArguments()) {
+        const QString absoluteFilePath = QDir::current().absoluteFilePath(fileName);
+        if (QFile::exists(absoluteFilePath)) {
+            fileNames << absoluteFilePath;
         }
     }
 
@@ -159,7 +162,6 @@ int main( int argc, char** argv )
 
 #if defined Q_OS_WIN
     KisTabletSupportWin::init();
-    app.installNativeEventFilter(new KisTabletSupportWin());
 #elif defined HAVE_X11
     KisTabletSupportX11::init();
     // TODO: who owns the filter object?

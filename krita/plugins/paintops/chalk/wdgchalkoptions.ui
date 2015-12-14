@@ -51,7 +51,7 @@
        </widget>
       </item>
       <item>
-       <widget class="KisSliderSpinBox" name="radiusSpinBox" native="true"/>
+       <widget class="KisSliderSpinBox" name="radiusSpinBox"/>
       </item>
      </layout>
     </item>

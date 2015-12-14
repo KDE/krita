@@ -202,7 +202,7 @@
          </layout>
         </item>
         <item>
-         <widget class="KoAspectButton" name="pixelAspectRatioBtn" native="true">
+         <widget class="KoAspectButton" name="pixelAspectRatioBtn">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>

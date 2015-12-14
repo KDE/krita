@@ -34,7 +34,7 @@ public:
     virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
     virtual KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = 0) const;
     virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
-    virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
+    virtual QList<KoShapeConfigWidgetBase *> createShapeOptionPanels();
 };
 
 #endif // KOSTARHAPEFACTORY_H

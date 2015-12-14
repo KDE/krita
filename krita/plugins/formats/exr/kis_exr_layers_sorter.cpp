@@ -149,7 +149,7 @@ void KisExrLayersSorter::Private::sortLayers(KisNodeSP root)
     qStableSort(childNodes.begin(), childNodes.end(), CompareNodesFunctor(nodeToOrderingMap));
 
     // put the children back
-    foreach (KisNodeSP node, childNodes) {
+    Q_FOREACH (KisNodeSP node, childNodes) {
         image->addNode(node, root, root->childCount());
     }
 

@@ -46,7 +46,7 @@ KisOperationRegistry::KisOperationRegistry()
 
 KisOperationRegistry::~KisOperationRegistry()
 {
-    foreach(const QString &id, keys()) {
+    Q_FOREACH (const QString &id, keys()) {
         delete get(id);
     }
 }

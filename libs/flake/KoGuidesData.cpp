@@ -129,13 +129,13 @@ void KoGuidesData::paintGuides(QPainter &painter, const KoViewConverter &convert
         return;
 
     painter.setPen(d->guidesColor);
-    foreach(qreal guide, d->horzGuideLines) {
+    Q_FOREACH (qreal guide, d->horzGuideLines) {
         if (guide < area.top() || guide > area.bottom())
             continue;
         painter.drawLine(converter.documentToView(QPointF(area.left(), guide)),
                          converter.documentToView(QPointF(area.right(), guide)));
     }
-    foreach(qreal guide, d->vertGuideLines) {
+    Q_FOREACH (qreal guide, d->vertGuideLines) {
         if (guide < area.left() || guide > area.right())
             continue;
         painter.drawLine(converter.documentToView(QPointF(guide, area.top())),
@@ -186,11 +186,11 @@ void KoGuidesData::saveOdfSettings(KoXmlWriter &settingsWriter)
 
     QString lineStr;
 
-    foreach(qreal h, d->horzGuideLines) {
+    Q_FOREACH (qreal h, d->horzGuideLines) {
         int tmpY = static_cast<int>(POINT_TO_MM(h * 100.0));
         lineStr += 'H' + QString::number(tmpY);
     }
-    foreach(qreal v, d->vertGuideLines) {
+    Q_FOREACH (qreal v, d->vertGuideLines) {
         int tmpX = static_cast<int>(POINT_TO_MM(v * 100.0));
         lineStr += 'V' + QString::number(tmpX);
     }

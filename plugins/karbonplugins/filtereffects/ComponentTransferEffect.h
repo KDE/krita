@@ -108,8 +108,9 @@ private:
 
     struct Data {
         Data()
-                : function(Identity), slope(1.0), intercept(0.0)
-                , amplitude(1.0), exponent(1.0), offset(0.0) {
+            : function(Identity), slope(1.0), intercept(0.0)
+            , amplitude(1.0), exponent(1.0), offset(0.0)
+        {
         }
 
         Function function;   ///< the component transfer function

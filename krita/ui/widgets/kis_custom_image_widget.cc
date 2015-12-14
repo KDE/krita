@@ -150,6 +150,7 @@ void KisCustomImageWidget::showEvent(QShowEvent *)
 {
     fillPredefined();
     this->createButton->setFocus();
+    this->createButton->setEnabled(true);
 }
 
 KisCustomImageWidget::~KisCustomImageWidget()
@@ -218,6 +219,7 @@ void KisCustomImageWidget::heightChanged(double value)
 
 void KisCustomImageWidget::createImage()
 {
+    createButton->setEnabled(false);
     KisDocument *doc = createNewImage();
     if (doc) {
         doc->setModified(false);
@@ -334,7 +336,7 @@ void KisCustomImageWidget::fillPredefined()
 
     if (!definitions.empty()) {
 
-        foreach(const QString &definition, definitions) {
+        Q_FOREACH (const QString &definition, definitions) {
             QFile f(definition);
             f.open(QIODevice::ReadOnly);
             if (f.exists()) {
@@ -403,7 +405,7 @@ void KisCustomImageWidget::saveAsPredefined()
 
     int i = 0;
     bool found = false;
-    foreach(KisPropertiesConfiguration *pr, m_predefined) {
+    Q_FOREACH (KisPropertiesConfiguration *pr, m_predefined) {
         if (pr->getString("name") == txtPredefinedName->text()) {
             found = true;
             break;

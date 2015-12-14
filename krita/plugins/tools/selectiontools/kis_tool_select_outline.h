@@ -66,7 +66,7 @@ private:
 class KisToolSelectOutlineFactory : public KoToolFactoryBase
 {
 public:
-    KisToolSelectOutlineFactory(const QStringList&)
+    KisToolSelectOutlineFactory()
             : KoToolFactoryBase("KisToolSelectOutline") {
         setToolTip(i18n("Outline Selection Tool"));
         setToolType(TOOL_TYPE_SELECTED);

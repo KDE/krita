@@ -219,7 +219,7 @@ void KoResourceFiltering::setExclusions(const QStringList &exclusions)
 
 bool KoResourceFiltering::excludeFilterIsValid(const QString &exclusion)
 {
-    foreach(const QString &inclusion, d->includedNames) {
+    Q_FOREACH (const QString &inclusion, d->includedNames) {
         if ((inclusion.startsWith(exclusion)  && exclusion.size() <= inclusion.size())) {
             return false;
         }
@@ -230,7 +230,7 @@ bool KoResourceFiltering::excludeFilterIsValid(const QString &exclusion)
 QList< KoResource* > KoResourceFiltering::filterResources(QList< KoResource* > resources)
 {
 
-    foreach(KoResource* resource, resources) {
+    Q_FOREACH (KoResource* resource, resources) {
         if(!presetMatchesSearch(resource)) {
             resources.removeAll(resource);
         }

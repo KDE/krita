@@ -26,14 +26,14 @@
 
 void TestKoColorSpaceSanity::testChannelsInfo()
 {
-    foreach(const KoColorSpace* colorSpace, KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile))
+    Q_FOREACH (const KoColorSpace* colorSpace, KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile))
     {
 
         QCOMPARE(colorSpace->channelCount(), quint32(colorSpace->channels().size()));
         QList<int> displayPositions;
         quint32 colorChannels = 0;
         quint32 size = 0;
-        foreach(KoChannelInfo* info, colorSpace->channels())
+        Q_FOREACH (KoChannelInfo* info, colorSpace->channels())
         {
             if(info->channelType() == KoChannelInfo::COLOR ) {
                 ++colorChannels;
@@ -41,7 +41,7 @@ void TestKoColorSpaceSanity::testChannelsInfo()
             // Check poses
             qint32 pos = info->pos();
             QVERIFY(pos + info->size() <= (qint32)colorSpace->pixelSize());
-            foreach(KoChannelInfo* info2, colorSpace->channels())
+            Q_FOREACH (KoChannelInfo* info2, colorSpace->channels())
             {
                 if( info != info2 )
                 {

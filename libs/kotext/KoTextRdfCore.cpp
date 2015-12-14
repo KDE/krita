@@ -235,7 +235,7 @@ void KoTextRdfCore::removeStatementsIfTheyExist( QSharedPointer<Soprano::Model> 
     foreach (const Soprano::Statement &s, removeList) {
         StatementIterator it = m->listStatements(s.subject(), s.predicate(), s.object(), s.context());
         QList<Statement> allStatements = it.allElements();
-        foreach(const Soprano::Statement &z, allStatements) {
+        Q_FOREACH (const Soprano::Statement &z, allStatements) {
             debugText << "found:" << z;
             m->removeStatement(z);
         }

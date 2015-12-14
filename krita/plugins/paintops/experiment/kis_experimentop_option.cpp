@@ -126,6 +126,6 @@ void KisExperimentOpOption::enableDisplacement(qreal value)
 void KisExperimentOpOption::lodLimitations(KisPaintopLodLimitations *l) const
 {
     if (m_options->displaceCHBox->isChecked()) {
-        l->blockers << KoID("experiment-displacement", i18nc("PaintOp LoD limitation", "Displacement Option"));
+        l->blockers << KoID("experiment-displacement", i18nc("PaintOp instant preview limitation", "Displacement Option"));
     }
 }

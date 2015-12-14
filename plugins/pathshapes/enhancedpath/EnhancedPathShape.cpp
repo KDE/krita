@@ -37,13 +37,13 @@
 #include <KoPathPoint.h>
 
 EnhancedPathShape::EnhancedPathShape(const QRect &viewBox)
-: m_viewBox(viewBox)
-, m_viewBoxOffset(0.0, 0.0)
-, m_mirrorVertically(false)
-, m_mirrorHorizontally(false)
-, m_pathStretchPointX(-1)
-, m_pathStretchPointY(-1)
-, m_cacheResults(false)
+    : m_viewBox(viewBox)
+    , m_viewBoxOffset(0.0, 0.0)
+    , m_mirrorVertically(false)
+    , m_mirrorHorizontally(false)
+    , m_pathStretchPointX(-1)
+    , m_pathStretchPointY(-1)
+    , m_cacheResults(false)
 {
 }
 
@@ -70,7 +70,7 @@ void EnhancedPathShape::reset()
     m_textArea.clear();
 }
 
-void EnhancedPathShape::moveHandleAction(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers)
+void EnhancedPathShape::moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED(modifiers);
     EnhancedPathHandle *handle = m_enhancedHandles[ handleId ];
@@ -79,14 +79,15 @@ void EnhancedPathShape::moveHandleAction(int handleId, const QPointF & point, Qt
     }
 }
 
-void EnhancedPathShape::updatePath(const QSizeF & size)
+void EnhancedPathShape::updatePath(const QSizeF &size)
 {
     if (isParametricShape()) {
         clear();
         enableResultCache(true);
 
-        foreach (EnhancedPathCommand *cmd, m_commands)
+        foreach (EnhancedPathCommand *cmd, m_commands) {
             cmd->execute();
+        }
 
         enableResultCache(false);
 
@@ -116,8 +117,9 @@ void EnhancedPathShape::updatePath(const QSizeF & size)
 
         const int handleCount = m_enhancedHandles.count();
         QList<QPointF> handles;
-        for (int i = 0; i < handleCount; ++i)
+        for (int i = 0; i < handleCount; ++i) {
             handles.append(matrix.map(m_enhancedHandles[i]->position()));
+        }
         setHandles(handles);
 
         normalize();
@@ -130,8 +132,8 @@ void EnhancedPathShape::setSize(const QSizeF &newSize)
     KoParameterShape::setSize(newSize);
 
     // calculate scaling factors from viewbox size to shape size
-    qreal xScale = m_viewBound.width() == 0 ? 1 : newSize.width()/m_viewBound.width();
-    qreal yScale = m_viewBound.height() == 0 ? 1 : newSize.height()/m_viewBound.height();
+    qreal xScale = m_viewBound.width() == 0 ? 1 : newSize.width() / m_viewBound.width();
+    qreal yScale = m_viewBound.height() == 0 ? 1 : newSize.height() / m_viewBound.height();
 
     // create view matrix, take mirroring into account
     m_viewMatrix.reset();
@@ -151,15 +153,16 @@ QPointF EnhancedPathShape::normalize()
 
 QPointF EnhancedPathShape::shapeToViewbox(const QPointF &point) const
 {
-    return (m_mirrorMatrix * m_viewMatrix).inverted().map( point-m_viewBoxOffset );
+    return (m_mirrorMatrix * m_viewMatrix).inverted().map(point - m_viewBoxOffset);
 }
 
 void EnhancedPathShape::evaluateHandles()
 {
     const int handleCount = m_enhancedHandles.count();
     QList<QPointF> handles;
-    for (int i = 0; i < handleCount; ++i)
+    for (int i = 0; i < handleCount; ++i) {
         handles.append(m_enhancedHandles[i]->position());
+    }
     setHandles(handles);
 }
 
@@ -170,14 +173,15 @@ QRect EnhancedPathShape::viewBox() const
 
 qreal EnhancedPathShape::evaluateReference(const QString &reference)
 {
-    if (reference.isEmpty())
+    if (reference.isEmpty()) {
         return 0.0;
+    }
 
     const char c = reference[0].toLatin1();
 
     qreal res = 0.0;
 
-    switch(c) {
+    switch (c) {
     // referenced modifier
     case '$': {
         bool success = false;
@@ -193,11 +197,12 @@ qreal EnhancedPathShape::evaluateReference(const QString &reference)
         } else {
             FormulaStore::const_iterator formulaIt = m_formulae.constFind(fname);
             if (formulaIt != m_formulae.constEnd()) {
-                EnhancedPathFormula * formula = formulaIt.value();
+                EnhancedPathFormula *formula = formulaIt.value();
                 if (formula) {
                     res = formula->evaluate();
-                    if (m_cacheResults)
+                    if (m_cacheResults) {
                         m_resultChache.insert(fname, res);
+                    }
                 }
             }
         }
@@ -217,26 +222,30 @@ qreal EnhancedPathShape::evaluateConstantOrReference(const QString &val)
 {
     bool ok = true;
     qreal res = val.toDouble(&ok);
-    if (ok) return res;
+    if (ok) {
+        return res;
+    }
     return evaluateReference(val);
 }
 
 void EnhancedPathShape::modifyReference(const QString &reference, qreal value)
 {
-    if (reference.isEmpty())
+    if (reference.isEmpty()) {
         return;
+    }
 
     const char c = reference[0].toLatin1();
 
     if (c == '$') {
         bool success = false;
         int modifierIndex = reference.mid(1).toInt(&success);
-        if (modifierIndex >= 0 && modifierIndex < m_modifiers.count())
+        if (modifierIndex >= 0 && modifierIndex < m_modifiers.count()) {
             m_modifiers[modifierIndex] = value;
+        }
     }
 }
 
-EnhancedPathParameter * EnhancedPathShape::parameter(const QString & text)
+EnhancedPathParameter *EnhancedPathShape::parameter(const QString &text)
 {
     Q_ASSERT(! text.isEmpty());
 
@@ -255,13 +264,15 @@ EnhancedPathParameter * EnhancedPathShape::parameter(const QString & text)
                 parameter = new EnhancedPathConstantParameter(constant, this);
             } else {
                 Identifier identifier = EnhancedPathNamedParameter::identifierFromString(text);
-                if (identifier != IdentifierUnknown)
+                if (identifier != IdentifierUnknown) {
                     parameter = new EnhancedPathNamedParameter(identifier, this);
+                }
             }
         }
 
-        if (parameter)
+        if (parameter) {
             m_parameters[text] = parameter;
+        }
 
         return parameter;
     }
@@ -269,24 +280,28 @@ EnhancedPathParameter * EnhancedPathShape::parameter(const QString & text)
 
 void EnhancedPathShape::addFormula(const QString &name, const QString &formula)
 {
-    if (name.isEmpty() || formula.isEmpty())
+    if (name.isEmpty() || formula.isEmpty()) {
         return;
+    }
 
     m_formulae[name] = new EnhancedPathFormula(formula, this);
 }
 
-void EnhancedPathShape::addHandle(const QMap<QString,QVariant> &handle)
+void EnhancedPathShape::addHandle(const QMap<QString, QVariant> &handle)
 {
-    if (handle.isEmpty())
+    if (handle.isEmpty()) {
         return;
+    }
 
-    if (! handle.contains("draw:handle-position"))
+    if (!handle.contains("draw:handle-position")) {
         return;
+    }
     QVariant position = handle.value("draw:handle-position");
 
     QStringList tokens = position.toString().simplified().split(' ');
-    if (tokens.count() < 2)
+    if (tokens.count() < 2) {
         return;
+    }
 
     EnhancedPathHandle *newHandle = new EnhancedPathHandle(this);
     newHandle->setPosition(parameter(tokens[0]), parameter(tokens[1]));
@@ -300,19 +315,22 @@ void EnhancedPathShape::addHandle(const QMap<QString,QVariant> &handle)
 
             QVariant minRadius = handle.value("draw:handle-radius-range-minimum");
             QVariant maxRadius = handle.value("draw:handle-radius-range-maximum");
-            if (minRadius.isValid() && maxRadius.isValid())
+            if (minRadius.isValid() && maxRadius.isValid()) {
                 newHandle->setRadiusRange(parameter(minRadius.toString()), parameter(maxRadius.toString()));
+            }
         }
     } else {
         QVariant minX = handle.value("draw:handle-range-x-minimum");
         QVariant maxX = handle.value("draw:handle-range-x-maximum");
-        if (minX.isValid() && maxX.isValid())
+        if (minX.isValid() && maxX.isValid()) {
             newHandle->setRangeX(parameter(minX.toString()), parameter(maxX.toString()));
+        }
 
         QVariant minY = handle.value("draw:handle-range-y-minimum");
         QVariant maxY = handle.value("draw:handle-range-y-maximum");
-        if (minY.isValid() && maxY.isValid())
+        if (minY.isValid() && maxY.isValid()) {
             newHandle->setRangeY(parameter(minY.toString()), parameter(maxY.toString()));
+        }
     }
 
     m_enhancedHandles.append(newHandle);
@@ -322,13 +340,15 @@ void EnhancedPathShape::addHandle(const QMap<QString,QVariant> &handle)
 
 void EnhancedPathShape::addModifiers(const QString &modifiers)
 {
-    if (modifiers.isEmpty())
+    if (modifiers.isEmpty()) {
         return;
+    }
 
     QStringList tokens = modifiers.simplified().split(' ');
     int tokenCount = tokens.count();
-    for (int i = 0; i < tokenCount; ++i)
-       m_modifiers.append(tokens[i].toDouble());
+    for (int i = 0; i < tokenCount; ++i) {
+        m_modifiers.append(tokens[i].toDouble());
+    }
 }
 
 void EnhancedPathShape::addCommand(const QString &command)
@@ -339,8 +359,9 @@ void EnhancedPathShape::addCommand(const QString &command)
 void EnhancedPathShape::addCommand(const QString &command, bool triggerUpdate)
 {
     QString commandStr = command.simplified();
-    if (commandStr.isEmpty())
+    if (commandStr.isEmpty()) {
         return;
+    }
 
     // the first character is the command
     EnhancedPathCommand *cmd = new EnhancedPathCommand(commandStr[0], this);
@@ -357,8 +378,9 @@ void EnhancedPathShape::addCommand(const QString &command, bool triggerUpdate)
     }
     m_commands.append(cmd);
 
-    if (triggerUpdate)
+    if (triggerUpdate) {
         updatePath(size());
+    }
 }
 
 bool EnhancedPathShape::useStretchPoints(const QSizeF &size, qreal &scale)
@@ -372,13 +394,13 @@ bool EnhancedPathShape::useStretchPoints(const QSizeF &size, qreal &scale)
             foreach (KoSubpath *subpath, m_subpaths) {
                 foreach (KoPathPoint *currPoint, *subpath) {
                     if (currPoint->point().x() >=  m_pathStretchPointX &&
-                        currPoint->controlPoint1().x() >= m_pathStretchPointX &&
-                        currPoint->controlPoint2().x() >= m_pathStretchPointX) {
+                            currPoint->controlPoint1().x() >= m_pathStretchPointX &&
+                            currPoint->controlPoint2().x() >= m_pathStretchPointX) {
                         currPoint->setPoint(QPointF(currPoint->point().x() + deltaX, currPoint->point().y()));
                         currPoint->setControlPoint1(QPointF(currPoint->controlPoint1().x() + deltaX,
-                                                    currPoint->controlPoint1().y()));
+                                                            currPoint->controlPoint1().y()));
                         currPoint->setControlPoint2(QPointF(currPoint->controlPoint2().x() + deltaX,
-                                                    currPoint->controlPoint2().y()));
+                                                            currPoint->controlPoint2().y()));
                         retval = true;
                     }
                 }
@@ -389,13 +411,13 @@ bool EnhancedPathShape::useStretchPoints(const QSizeF &size, qreal &scale)
             foreach (KoSubpath *subpath, m_subpaths) {
                 foreach (KoPathPoint *currPoint, *subpath) {
                     if (currPoint->point().y() >=  m_pathStretchPointY &&
-                        currPoint->controlPoint1().y() >= m_pathStretchPointY &&
-                        currPoint->controlPoint2().y() >= m_pathStretchPointY) {
+                            currPoint->controlPoint1().y() >= m_pathStretchPointY &&
+                            currPoint->controlPoint2().y() >= m_pathStretchPointY) {
                         currPoint->setPoint(QPointF(currPoint->point().x(), currPoint->point().y() + deltaY));
                         currPoint->setControlPoint1(QPointF(currPoint->controlPoint1().x(),
-                                                    currPoint->controlPoint1().y() + deltaY));
+                                                            currPoint->controlPoint1().y() + deltaY));
                         currPoint->setControlPoint2(QPointF(currPoint->controlPoint2().x(),
-                                                    currPoint->controlPoint2().y() + deltaY));
+                                                            currPoint->controlPoint2().y() + deltaY));
                         retval = true;
                     }
                 }
@@ -420,26 +442,24 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
         QPointF topLeft = m_viewBound.topLeft();
         QPointF diff;
         if (qAbs(topLeft.x()) > 1E-5) {
-            diff.setX(topLeft.x()*currentSize.width()/m_viewBound.width());
+            diff.setX(topLeft.x()*currentSize.width() / m_viewBound.width());
         }
         if (qAbs(topLeft.y()) > 1E-5) {
-            diff.setY(topLeft.y()*currentSize.height()/m_viewBound.height());
+            diff.setY(topLeft.y()*currentSize.height() / m_viewBound.height());
         }
 
         if (diff.isNull()) {
-            saveOdfAttributes(context, OdfAllAttributes&~OdfSize);
-        }
-        else {
+            saveOdfAttributes(context, OdfAllAttributes & ~OdfSize);
+        } else {
             //FIXME: this needs to be fixed for shapes that are transformed by rotation or skewing
             QTransform offset(context.shapeOffset(this));
             QTransform newOffset(offset);
             newOffset.translate(-diff.x(), -diff.y());
             context.addShapeOffset(this, newOffset);
-            saveOdfAttributes(context, OdfAllAttributes&~OdfSize);
+            saveOdfAttributes(context, OdfAllAttributes & ~OdfSize);
             if (offset.isIdentity()) {
                 context.removeShapeOffset(this);
-            }
-            else {
+            } else {
                 context.addShapeOffset(this, offset);
             }
         }
@@ -447,8 +467,8 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
         // save the right size so that when loading we fit the viewbox
         // to the right size without getting any wrong scaling
         // -> calculate the right size from the current size/viewbound ratio
-        context.xmlWriter().addAttributePt("svg:width", currentSize.width() == 0 ? 0 : m_viewBox.width()*currentSize.width()/m_viewBound.width());
-        context.xmlWriter().addAttributePt("svg:height", currentSize.height() == 0 ? 0 : m_viewBox.height()*currentSize.height()/m_viewBound.height());
+        context.xmlWriter().addAttributePt("svg:width", currentSize.width() == 0 ? 0 : m_viewBox.width()*currentSize.width() / m_viewBound.width());
+        context.xmlWriter().addAttributePt("svg:height", currentSize.height() == 0 ? 0 : m_viewBox.height()*currentSize.height() / m_viewBound.height());
 
         saveText(context);
 
@@ -470,8 +490,9 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
         }
 
         QString modifiers;
-        foreach (qreal modifier, m_modifiers)
+        foreach (qreal modifier, m_modifiers) {
             modifiers += QString::number(modifier) + ' ';
+        }
         context.xmlWriter().addAttribute("draw:modifiers", modifiers.trimmed());
 
         if (m_textArea.size() >= 4) {
@@ -479,8 +500,9 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
         }
 
         QString path;
-        foreach (EnhancedPathCommand * c, m_commands)
+        foreach (EnhancedPathCommand *c, m_commands) {
             path += c->toString() + ' ';
+        }
         context.xmlWriter().addAttribute("draw:enhanced-path", path.trimmed());
 
         FormulaStore::const_iterator i = m_formulae.constBegin();
@@ -491,8 +513,9 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
             context.xmlWriter().endElement(); // draw:equation
         }
 
-        foreach (EnhancedPathHandle * handle, m_enhancedHandles)
+        foreach (EnhancedPathHandle *handle, m_enhancedHandles) {
             handle->saveOdf(context);
+        }
 
         context.xmlWriter().endElement(); // draw:enhanced-geometry
         saveOdfCommonChildElements(context);
@@ -503,19 +526,19 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
     }
 }
 
-bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
+bool EnhancedPathShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     reset();
 
-    const KoXmlElement enhancedGeometry(KoXml::namedItemNS(element, KoXmlNS::draw, "enhanced-geometry" ) );
-    if (!enhancedGeometry.isNull() ) {
+    const KoXmlElement enhancedGeometry(KoXml::namedItemNS(element, KoXmlNS::draw, "enhanced-geometry"));
+    if (!enhancedGeometry.isNull()) {
 
-        setPathStretchPointX(enhancedGeometry.attributeNS(KoXmlNS::draw, "path-stretchpoint-x","-1").toDouble());
-        setPathStretchPointY(enhancedGeometry.attributeNS(KoXmlNS::draw, "path-stretchpoint-y","-1").toDouble());
+        setPathStretchPointX(enhancedGeometry.attributeNS(KoXmlNS::draw, "path-stretchpoint-x", "-1").toDouble());
+        setPathStretchPointY(enhancedGeometry.attributeNS(KoXmlNS::draw, "path-stretchpoint-y", "-1").toDouble());
 
         // load the modifiers
         QString modifiers = enhancedGeometry.attributeNS(KoXmlNS::draw, "modifiers", "");
-        if (! modifiers.isEmpty()) {
+        if (!modifiers.isEmpty()) {
             addModifiers(modifiers);
         }
 
@@ -526,14 +549,15 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
 
         KoXmlElement grandChild;
         forEachElement(grandChild, enhancedGeometry) {
-            if (grandChild.namespaceURI() != KoXmlNS::draw)
+            if (grandChild.namespaceURI() != KoXmlNS::draw) {
                 continue;
+            }
             if (grandChild.localName() == "equation") {
                 QString name = grandChild.attributeNS(KoXmlNS::draw, "name");
                 QString formula = grandChild.attributeNS(KoXmlNS::draw, "formula");
                 addFormula(name, formula);
             } else if (grandChild.localName() == "handle") {
-                EnhancedPathHandle * handle = new EnhancedPathHandle(this);
+                EnhancedPathHandle *handle = new EnhancedPathHandle(this);
                 if (handle->loadOdf(grandChild, context)) {
                     m_enhancedHandles.append(handle);
                     evaluateHandles();
@@ -589,8 +613,9 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
 
 void EnhancedPathShape::parsePathData(const QString &data)
 {
-    if (data.isEmpty())
+    if (data.isEmpty()) {
         return;
+    }
 
     int start = -1;
     bool separator = true;
@@ -598,13 +623,13 @@ void EnhancedPathShape::parsePathData(const QString &data)
         QChar ch = data.at(i);
         ushort uni_ch = ch.unicode();
         if (separator && (uni_ch == 'M' || uni_ch == 'L'
-            || uni_ch == 'C' || uni_ch == 'Z'
-            || uni_ch == 'N' || uni_ch == 'F'
-            || uni_ch == 'S' || uni_ch == 'T'
-            || uni_ch == 'U' || uni_ch == 'A'
-            || uni_ch == 'B' || uni_ch == 'W'
-            || uni_ch == 'V' || uni_ch == 'X'
-            || uni_ch == 'Y' || uni_ch == 'Q')) {
+                          || uni_ch == 'C' || uni_ch == 'Z'
+                          || uni_ch == 'N' || uni_ch == 'F'
+                          || uni_ch == 'S' || uni_ch == 'T'
+                          || uni_ch == 'U' || uni_ch == 'A'
+                          || uni_ch == 'B' || uni_ch == 'W'
+                          || uni_ch == 'V' || uni_ch == 'X'
+                          || uni_ch == 'Y' || uni_ch == 'Q')) {
             if (start != -1) { // process last chars
                 addCommand(data.mid(start, i - start), false);
             }
@@ -612,15 +637,17 @@ void EnhancedPathShape::parsePathData(const QString &data)
         }
         separator = ch.isSpace();
     }
-    if (start < data.length())
+    if (start < data.length()) {
         addCommand(data.mid(start));
-    if (start != -1)
+    }
+    if (start != -1) {
         updatePath(size());
+    }
 }
 
 void EnhancedPathShape::setMirrorHorizontally(bool mirrorHorizontally)
 {
-    if( m_mirrorHorizontally != mirrorHorizontally) {
+    if (m_mirrorHorizontally != mirrorHorizontally) {
         m_mirrorHorizontally = mirrorHorizontally;
         updatePath(size());
     }
@@ -629,7 +656,7 @@ void EnhancedPathShape::setMirrorHorizontally(bool mirrorHorizontally)
 
 void EnhancedPathShape::setMirrorVertically(bool mirrorVertically)
 {
-    if( m_mirrorVertically != mirrorVertically) {
+    if (m_mirrorVertically != mirrorVertically) {
         m_mirrorVertically = mirrorVertically;
         updatePath(size());
     }

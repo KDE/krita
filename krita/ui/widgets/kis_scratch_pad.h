@@ -75,6 +75,12 @@ public:
     // A callback for scratch pad default bounds
     QRect imageBounds() const;
 
+
+    // Called by the event filter
+    void pointerPress(KoPointerEvent *event);
+    void pointerRelease(KoPointerEvent *event);
+    void pointerMove(KoPointerEvent *event);
+
 public Q_SLOTS:
     void fillDefault();
     void fillGradient();
@@ -106,10 +112,6 @@ Q_SIGNALS:
 protected:
     virtual void paintEvent ( QPaintEvent * event );
 
-public Q_SLOTS:
-    void slotMousePress(KoPointerEvent *event);
-    void slotMouseRelease(KoPointerEvent *event);
-    void slotMouseMove(KoPointerEvent *event);
 
 private:
     void beginStroke(KoPointerEvent *event);

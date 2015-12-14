@@ -297,7 +297,7 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_10">
         <item>
-         <widget class="KisColorSpaceSelector" name="colorSpace" native="true">
+         <widget class="KisColorSpaceSelector" name="colorSpace">
           <property name="enabled">
            <bool>false</bool>
           </property>
@@ -1201,7 +1201,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QWidget" name="colorSliderOptions" native="true">
+    <widget class="QWidget" name="colorSliderOptions">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
        <horstretch>0</horstretch>

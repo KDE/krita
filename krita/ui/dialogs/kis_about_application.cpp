@@ -64,7 +64,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     Q_ASSERT(fileDevelopers.exists());
     fileDevelopers.open(QIODevice::ReadOnly);
 
-    foreach(const QByteArray &author, fileDevelopers.readAll().split('\n')) {
+    Q_FOREACH (const QByteArray &author, fileDevelopers.readAll().split('\n')) {
         authors.append(QString::fromUtf8(author));
         authors.append(", ");
     }
@@ -85,7 +85,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     QFile fileBackers(":/backers.txt");
     Q_ASSERT(fileBackers.exists());
     fileBackers.open(QIODevice::ReadOnly);
-    foreach(const QByteArray &backer, fileBackers.readAll().split('\n')) {
+    Q_FOREACH (const QByteArray &backer, fileBackers.readAll().split('\n')) {
         backers.append(QString::fromUtf8(backer));
         backers.append(", ");
     }
@@ -108,7 +108,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     Q_ASSERT(fileCredits.exists());
     fileCredits.open(QIODevice::ReadOnly);
 
-    foreach(const QByteArray &credit, fileCredits.readAll().split('\n')) {
+    Q_FOREACH (const QByteArray &credit, fileCredits.readAll().split('\n')) {
         if (!credit.isEmpty()) {
             QList<QByteArray> creditSplit = credit.split(':');
             Q_ASSERT(creditSplit.size() == 2);

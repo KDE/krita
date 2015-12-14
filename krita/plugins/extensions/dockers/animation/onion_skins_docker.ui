@@ -54,7 +54,7 @@
       </layout>
      </item>
      <item>
-      <widget class="KisDoubleSliderSpinBox" name="doubleTintFactor" native="true">
+      <widget class="KisDoubleSliderSpinBox" name="doubleTintFactor">
        <property name="minimumSize">
         <size>
          <width>50</width>

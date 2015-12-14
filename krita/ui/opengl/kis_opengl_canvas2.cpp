@@ -64,6 +64,8 @@
 #include "kis_coordinates_converter.h"
 #include "canvas/kis_display_filter.h"
 #include "canvas/kis_display_color_converter.h"
+#include "kis_opengl_canvas_debugger.h"
+
 
 #define NEAR_VAL -1000.0
 #define FAR_VAL 1000.0
@@ -312,8 +314,11 @@ void KisOpenGLCanvas2::paintGL()
         cfg.writeEntry("canvasState", "OPENGL_PAINT_STARTED");
     }
 
+    KisOpenglCanvasDebugger::instance()->nofityPaintRequested();
+
     QPainter gc(this);
     gc.beginNativePainting();
+
     renderCanvasGL();
 
     if (d->glSyncObject) {
@@ -404,7 +409,10 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
 
 bool KisOpenGLCanvas2::isBusy() const
 {
-    return Sync::syncStatus(d->glSyncObject) == Sync::Unsignaled;
+    const bool isBusyStatus = Sync::syncStatus(d->glSyncObject) == Sync::Unsignaled;
+    KisOpenglCanvasDebugger::instance()->nofitySyncStatus(isBusyStatus);
+
+    return isBusyStatus;
 }
 
 inline void rectToVertices(QVector3D* vertices, const QRectF &rc)

@@ -15,7 +15,7 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <widget class="KisDoubleSliderSpinBox" name="sliderSpinBox" native="true">
+    <widget class="KisDoubleSliderSpinBox" name="sliderSpinBox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
        <horstretch>0</horstretch>

@@ -23,8 +23,8 @@
 
 #include "kis_image_patch.h"
 #include "kis_shared.h"
-#include "opengl/kis_opengl.h"
 #include "kritaui_export.h"
+#include <KoConfig.h> // for HAVE_OPENGL
 
 #include "kis_ui_types.h"
 

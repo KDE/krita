@@ -89,7 +89,7 @@ KisStrokeJob* KisStroke::popOneJob()
     KisStrokeJob *job = dequeue();
 
     if(job) {
-        m_prevJobSequential = job->isSequential();
+        m_prevJobSequential = job->isSequential() || job->isBarrier();
 
         m_strokeInitialized = true;
         m_strokeSuspended = false;
@@ -168,7 +168,7 @@ void KisStroke::cancelStroke()
 
 bool KisStroke::sanityCheckAllJobsAreCancellable() const
 {
-    foreach(KisStrokeJob *item, m_jobsQueue) {
+    Q_FOREACH (KisStrokeJob *item, m_jobsQueue) {
         if (!item->isCancellable()) {
             return false;
         }

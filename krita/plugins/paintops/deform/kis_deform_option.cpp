@@ -109,7 +109,7 @@ void KisDeformOption::writeOptionSetting(KisPropertiesConfiguration* config) con
 
 void KisDeformOption::lodLimitations(KisPaintopLodLimitations *l) const
 {
-    l->blockers << KoID("deform-brush", i18nc("PaintOp LoD limitation", "Deform Brush (unsupported)"));
+    l->blockers << KoID("deform-brush", i18nc("PaintOp instant preview limitation", "Deform Brush (unsupported)"));
 }
 
 int  KisDeformOption::deformAction() const

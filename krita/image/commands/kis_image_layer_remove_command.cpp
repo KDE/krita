@@ -23,9 +23,14 @@
 #include "kis_image_layer_remove_command_impl.h"
 
 
-KisImageLayerRemoveCommand::KisImageLayerRemoveCommand(KisImageWSP image, KisNodeSP node)
+KisImageLayerRemoveCommand::KisImageLayerRemoveCommand(KisImageWSP image,
+                                                       KisNodeSP node,
+                                                       bool doRedoUpdates,
+                                                       bool doUndoUpdates)
     : KisImageCommand(kundo2_i18n("Remove Layer"), image),
-      m_node(node)
+      m_node(node),
+      m_doRedoUpdates(doRedoUpdates),
+      m_doUndoUpdates(doUndoUpdates)
 {
     addSubtree(image, node);
 }
@@ -55,16 +60,21 @@ void KisImageLayerRemoveCommand::redo()
 {
     UpdateTarget target(m_image, m_node, m_image->bounds());
     KisImageCommand::redo();
-    target.update();
+
+    if (m_doRedoUpdates) {
+        target.update();
+    }
 }
 
 void KisImageLayerRemoveCommand::undo()
 {
     KisImageCommand::undo();
 
-    /**
-     * We are removing the group recursively, so the updates should
-     * come recursively as well
-     */
-    m_image->refreshGraphAsync(m_node, m_image->bounds());
+    if (m_doUndoUpdates) {
+        /**
+         * We are removing the group recursively, so the updates should
+         * come recursively as well
+         */
+        m_image->refreshGraphAsync(m_node, m_image->bounds());
+    }
 }

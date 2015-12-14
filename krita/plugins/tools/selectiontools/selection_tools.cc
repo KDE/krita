@@ -43,15 +43,13 @@ K_PLUGIN_FACTORY_WITH_JSON(SelectionToolsFactory, "kritaselectiontools.json", re
 SelectionTools::SelectionTools(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    KoToolRegistry * r = KoToolRegistry::instance();
-
-    r->add(new KisToolSelectOutlineFactory(QStringList()));
-    r->add(new KisToolSelectPolygonalFactory(QStringList()));
-    r->add(new KisToolSelectRectangularFactory(QStringList()));
-    r->add(new KisToolSelectEllipticalFactory(QStringList()));
-    r->add(new KisToolSelectContiguousFactory(QStringList()));
-    r->add(new KisToolSelectPathFactory(QStringList()));
-    r->add(new KisToolSelectSimilarFactory(QStringList()));
+    KoToolRegistry::instance()->add(new KisToolSelectOutlineFactory());
+    KoToolRegistry::instance()->add(new KisToolSelectPolygonalFactory());
+    KoToolRegistry::instance()->add(new KisToolSelectRectangularFactory());
+    KoToolRegistry::instance()->add(new KisToolSelectEllipticalFactory());
+    KoToolRegistry::instance()->add(new KisToolSelectContiguousFactory());
+    KoToolRegistry::instance()->add(new KisToolSelectPathFactory());
+    KoToolRegistry::instance()->add(new KisToolSelectSimilarFactory());
 }
 
 SelectionTools::~SelectionTools()

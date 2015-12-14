@@ -50,7 +50,7 @@ FilterResourceServerProvider::~FilterResourceServerProvider()
     delete m_filterEffectServer;
 }
 
-FilterResourceServerProvider* FilterResourceServerProvider::instance()
+FilterResourceServerProvider *FilterResourceServerProvider::instance()
 {
     if (FilterResourceServerProvider::m_singleton == 0) {
         FilterResourceServerProvider::m_singleton = new FilterResourceServerProvider();
@@ -58,7 +58,7 @@ FilterResourceServerProvider* FilterResourceServerProvider::instance()
     return FilterResourceServerProvider::m_singleton;
 }
 
-KoResourceServer<FilterEffectResource>* FilterResourceServerProvider::filterEffectServer()
+KoResourceServer<FilterEffectResource> *FilterResourceServerProvider::filterEffectServer()
 {
     m_filterEffectThread->barrier();
     return m_filterEffectServer;

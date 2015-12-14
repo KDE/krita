@@ -23,7 +23,8 @@
 #include <QObject>
 #include <QVariantList>
 
-class PathShapesPlugin : public QObject {
+class PathShapesPlugin : public QObject
+{
     Q_OBJECT
 
 public:

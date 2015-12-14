@@ -26,7 +26,7 @@
 #include <QPushButton>
 
 InsertCharacter::InsertCharacter(QWidget *parent)
-        : QDockWidget(i18n("Special Characters"))
+    : QDockWidget(i18n("Special Characters"))
 {
     QWidget *specialCharacterWidget = new QWidget();
     QGridLayout *lay = new QGridLayout(specialCharacterWidget);
@@ -44,11 +44,13 @@ InsertCharacter::InsertCharacter(QWidget *parent)
 
     setObjectName("insertSpecialCharacter");
     setWidget(specialCharacterWidget);
-    while (parent->parentWidget())
+    while (parent->parentWidget()) {
         parent = parent->parentWidget();
-    QMainWindow *mw = dynamic_cast<QMainWindow*>(parent);
-    if (mw)
+    }
+    QMainWindow *mw = dynamic_cast<QMainWindow *>(parent);
+    if (mw) {
         mw->addDockWidget(Qt::TopDockWidgetArea, this);
+    }
     setFloating(true);
 
     connect(close, SIGNAL(released()), this, SLOT(hide()));

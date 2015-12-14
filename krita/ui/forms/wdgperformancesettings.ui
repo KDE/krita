@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>711</width>
-    <height>407</height>
+    <width>753</width>
+    <height>554</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -53,7 +53,7 @@
       <item row="1" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="KisDoubleSliderSpinBox" name="sliderMemoryLimit" native="true">
+         <widget class="KisDoubleSliderSpinBox" name="sliderMemoryLimit">
           <property name="sizePolicy">
            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -84,7 +84,7 @@
       <item row="2" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <widget class="KisDoubleSliderSpinBox" name="sliderPoolLimit" native="true">
+         <widget class="KisDoubleSliderSpinBox" name="sliderPoolLimit">
           <property name="sizePolicy">
            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -115,7 +115,7 @@
       <item row="3" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="KisDoubleSliderSpinBox" name="sliderUndoLimit" native="true">
+         <widget class="KisDoubleSliderSpinBox" name="sliderUndoLimit">
           <property name="sizePolicy">
            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -158,7 +158,7 @@
       <item row="0" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
-         <widget class="KisSliderSpinBox" name="sliderSwapSize" native="true">
+         <widget class="KisSliderSpinBox" name="sliderSwapSize">
           <property name="sizePolicy">
            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -249,6 +249,20 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QCheckBox" name="chkOpenGLLogging">
+        <property name="text">
+         <string>Enable OpenGL logging</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="chkDisableVectorOptimizations">
+        <property name="text">
+         <string>Disable vector optimizations (for AMD CPUs)</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -269,15 +283,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisSliderSpinBox</class>
-   <extends>QWidget</extends>
-   <header location="global">kis_slider_spin_box.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

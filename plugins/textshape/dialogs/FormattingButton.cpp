@@ -37,7 +37,7 @@ public:
 };
 
 LabelAction::LabelAction(QString label)
- : QWidgetAction(0)
+    : QWidgetAction(0)
 {
     m_label = new QLabel(label);
     setDefaultWidget(m_label);
@@ -57,9 +57,9 @@ public:
 };
 
 ItemChooserAction::ItemChooserAction(int columns)
- : QWidgetAction(0)
- , m_cnt(0)
- , m_columns(columns)
+    : QWidgetAction(0)
+    , m_cnt(0)
+    , m_columns(columns)
 {
     m_widget = new QFrame;
     QGridLayout *l = new QGridLayout();
@@ -93,7 +93,6 @@ void ItemChooserAction::addBlanks(int n)
     m_cnt += n;
 }
 
-
 FormattingButton::FormattingButton(QWidget *parent)
     : QToolButton(parent)
     , m_lastId(0)
@@ -118,7 +117,7 @@ void FormattingButton::setNumColumns(int columns)
 
 void FormattingButton::setItemsBackground(const QColor &color)
 {
-    if(m_styleAction) {
+    if (m_styleAction) {
         foreach (QObject *o, m_styleAction->defaultWidget()->children()) {
             QWidget *w = qobject_cast<QWidget *>(o);
             if (w) {
@@ -129,7 +128,7 @@ void FormattingButton::setItemsBackground(const QColor &color)
                 break;
             }
         }
-        qobject_cast<QFrame *>(m_styleAction->defaultWidget())->setFrameStyle(QFrame::StyledPanel|QFrame::Sunken);
+        qobject_cast<QFrame *>(m_styleAction->defaultWidget())->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     }
 }
 
@@ -139,13 +138,13 @@ void FormattingButton::addItem(const QPixmap &pm, int id, const QString &toolTip
     Q_ASSERT(id != 0);
 
     if (m_styleMap.contains(id)) {
-        QToolButton *button = dynamic_cast<QToolButton *> (m_styleMap.value(id));
+        QToolButton *button = dynamic_cast<QToolButton *>(m_styleMap.value(id));
         if (button) {
             button->setIcon(QIcon(pm));
             button->setIconSize(pm.size());
         }
     } else {
-        if(m_styleAction == 0) {
+        if (m_styleAction == 0) {
             m_styleAction = new ItemChooserAction(m_columns);
             m_menu->addAction(m_styleAction);
         }
@@ -162,7 +161,7 @@ void FormattingButton::addItem(const QPixmap &pm, int id, const QString &toolTip
 
 void FormattingButton::addBlanks(int n)
 {
-    if(m_styleAction) {
+    if (m_styleAction) {
         m_styleAction->addBlanks(n);
     }
 }
@@ -191,7 +190,7 @@ void FormattingButton::itemSelected()
         return;
     }
 
-    if(sender() != this) {
+    if (sender() != this) {
         m_lastId = m_styleMap.key(sender());
     }
     m_menu->hide();

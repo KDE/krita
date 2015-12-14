@@ -24,16 +24,17 @@
 
 #include <QDebug>
 
-StylesFilteredModelBase::StylesFilteredModelBase(QObject *parent) :
-    AbstractStylesModel(parent),
-    m_sourceModel(0)
+StylesFilteredModelBase::StylesFilteredModelBase(QObject *parent) 
+    : AbstractStylesModel(parent)
+    , m_sourceModel(0)
 {
 }
 
 QModelIndex StylesFilteredModelBase::index(int row, int column, const QModelIndex &parent) const
 {
-    if (row < 0 || column != 0)
+    if (row < 0 || column != 0) {
         return QModelIndex();
+    }
 
     if (!parent.isValid()) {
         if (row >= m_proxyToSource.count()) {
@@ -66,10 +67,11 @@ int StylesFilteredModelBase::rowCount(const QModelIndex &parent) const
 
 QVariant StylesFilteredModelBase::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
         return QVariant();
+    }
 
-    switch (role){
+    switch (role) {
     case Qt::DisplayRole: {
         return QVariant();
     }
@@ -87,8 +89,9 @@ QVariant StylesFilteredModelBase::data(const QModelIndex &index, int role) const
 
 Qt::ItemFlags StylesFilteredModelBase::flags(const QModelIndex &index) const
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
         return 0;
+    }
     return (Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 }
 
@@ -131,23 +134,23 @@ void StylesFilteredModelBase::setStylesModel(AbstractStylesModel *sourceModel)
         return;
     }
     if (m_sourceModel) {
-        disconnect(m_sourceModel, SIGNAL(rowsAboutToBeInserted(const QModelIndex &, int, int)), this, SLOT(rowsAboutToBeInserted(QModelIndex,int,int)));
-        disconnect(m_sourceModel, SIGNAL(rowsAboutToBeMoved(const QModelIndex &, int, int, const QModelIndex &, int)), this, SLOT(rowsAboutToBeMoved(QModelIndex, int, int, QModelIndex, int)));
-        disconnect(m_sourceModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex &, int, int)), this, SLOT(rowsAboutToBeRemoved(QModelIndex, int, int)));
-        disconnect(m_sourceModel, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(rowsInserted(QModelIndex,int,int)));
-        disconnect(m_sourceModel, SIGNAL(rowsMoved(const QModelIndex &, int, int, const QModelIndex &, int)), this, SLOT(rowsMoved(QModelIndex, int, int, QModelIndex, int)));
-        disconnect(m_sourceModel, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(rowsRemoved(QModelIndex,int,int)));
+        disconnect(m_sourceModel, SIGNAL(rowsAboutToBeInserted(QModelIndex,int,int)), this, SLOT(rowsAboutToBeInserted(QModelIndex,int,int)));
+        disconnect(m_sourceModel, SIGNAL(rowsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int)), this, SLOT(rowsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int)));
+        disconnect(m_sourceModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)), this, SLOT(rowsAboutToBeRemoved(QModelIndex,int,int)));
+        disconnect(m_sourceModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(rowsInserted(QModelIndex,int,int)));
+        disconnect(m_sourceModel, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)), this, SLOT(rowsMoved(QModelIndex,int,int,QModelIndex,int)));
+        disconnect(m_sourceModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(rowsRemoved(QModelIndex,int,int)));
         disconnect(m_sourceModel, SIGNAL(modelAboutToBeReset()), this, SLOT(modelAboutToBeReset()));
         disconnect(m_sourceModel, SIGNAL(modelReset()), this, SLOT(modelReset()));
     }
 
     m_sourceModel = sourceModel;
-    connect(m_sourceModel, SIGNAL(rowsAboutToBeInserted(const QModelIndex &, int, int)), this, SLOT(rowsAboutToBeInserted(QModelIndex,int,int)));
-    connect(m_sourceModel, SIGNAL(rowsAboutToBeMoved(const QModelIndex &, int, int, const QModelIndex &, int)), this, SLOT(rowsAboutToBeMoved(QModelIndex, int, int, QModelIndex, int)));
-    connect(m_sourceModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex &, int, int)), this, SLOT(rowsAboutToBeRemoved(QModelIndex, int, int)));
-    connect(m_sourceModel, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(rowsInserted(QModelIndex,int,int)));
-    connect(m_sourceModel, SIGNAL(rowsMoved(const QModelIndex &, int, int, const QModelIndex &, int)), this, SLOT(rowsMoved(QModelIndex, int, int, QModelIndex, int)));
-    connect(m_sourceModel, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(rowsRemoved(QModelIndex, int, int)));
+    connect(m_sourceModel, SIGNAL(rowsAboutToBeInserted(QModelIndex,int,int)), this, SLOT(rowsAboutToBeInserted(QModelIndex,int,int)));
+    connect(m_sourceModel, SIGNAL(rowsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int)), this, SLOT(rowsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int)));
+    connect(m_sourceModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)), this, SLOT(rowsAboutToBeRemoved(QModelIndex,int,int)));
+    connect(m_sourceModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(rowsInserted(QModelIndex,int,int)));
+    connect(m_sourceModel, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)), this, SLOT(rowsMoved(QModelIndex,int,int,QModelIndex,int)));
+    connect(m_sourceModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(rowsRemoved(QModelIndex,int,int)));
     connect(m_sourceModel, SIGNAL(modelAboutToBeReset()), this, SLOT(modelAboutToBeReset()));
     connect(m_sourceModel, SIGNAL(modelReset()), this, SLOT(modelReset()));
 
@@ -237,12 +240,12 @@ void StylesFilteredModelBase::createMapping()
     m_sourceToProxy.clear();
     m_proxyToSource.clear();
 
-    for(int i = 0; i < m_sourceModel->rowCount(QModelIndex()); ++i) {
+    for (int i = 0; i < m_sourceModel->rowCount(QModelIndex()); ++i) {
         m_proxyToSource.append(i);
     }
 
     m_sourceToProxy.fill(-1, m_sourceModel->rowCount(QModelIndex()));
-    for(int i = 0; i < m_proxyToSource.count(); ++i) {
+    for (int i = 0; i < m_proxyToSource.count(); ++i) {
         m_sourceToProxy[m_proxyToSource.at(i)] = i;
     }
 }

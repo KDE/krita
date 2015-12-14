@@ -46,7 +46,7 @@
          <item row="0" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
-            <widget class="KisCmbContour" name="cmbContour" native="true">
+            <widget class="KisCmbContour" name="cmbContour">
              <property name="sizePolicy">
               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -78,7 +78,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="KisSliderSpinBox" name="intNoise" native="true">
+          <widget class="KisSliderSpinBox" name="intNoise">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -136,7 +136,7 @@
           </widget>
          </item>
          <item row="1" column="1" colspan="2">
-          <widget class="KisSliderSpinBox" name="intOpacity" native="true">
+          <widget class="KisSliderSpinBox" name="intOpacity">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
              <horstretch>0</horstretch>
@@ -218,7 +218,7 @@
           </widget>
          </item>
          <item row="3" column="1" colspan="2">
-          <widget class="KisSliderSpinBox" name="intDistance" native="true">
+          <widget class="KisSliderSpinBox" name="intDistance">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -238,7 +238,7 @@
           </widget>
          </item>
          <item row="4" column="1" colspan="2">
-          <widget class="KisSliderSpinBox" name="intSpread" native="true">
+          <widget class="KisSliderSpinBox" name="intSpread">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -258,7 +258,7 @@
           </widget>
          </item>
          <item row="5" column="1" colspan="2">
-          <widget class="KisSliderSpinBox" name="intSize" native="true">
+          <widget class="KisSliderSpinBox" name="intSize">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>

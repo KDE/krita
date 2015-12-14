@@ -149,7 +149,7 @@ void KisInfinityManager::drawDecoration(QPainter& gc, const QRectF& updateArea, 
 
     QPainterPath p = KisAlgebra2D::smallArrow();
 
-    foreach (const QTransform &t, m_handleTransform) {
+    Q_FOREACH (const QTransform &t, m_handleTransform) {
         gc.fillPath(t.map(p), color);
     }
 

@@ -4,7 +4,7 @@ message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 
 cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
-set(MIN_QT_VERSION 5.3.0)
+set(MIN_QT_VERSION 5.4.0)
 set(MIN_FRAMEWORKS_VERSION 5.7.0)
 
 cmake_policy(SET CMP0002 OLD)
@@ -26,6 +26,8 @@ if(NOT ${CMAKE_VERSION} VERSION_LESS 3.3.0)
     cmake_policy(SET CMP0059 OLD)
     cmake_policy(SET CMP0063 OLD)
 endif()
+
+set(APPLE_SUPPRESS_X11_WARNING TRUE)
 
 # QT5TODO: remove KDE4_BUILD_TESTS once all kde4_add_unit_test have been converted
 # transitional forward compatibility:
@@ -117,7 +119,11 @@ message(STATUS "Release build: ${RELEASE_BUILD}")
 #############
 ############
 
-option(USEOPENGL "Allow the use of OpenGL for Krita" ON)
+if (APPLE)
+    set(USEOPENGL OFF)
+else()
+    option(USEOPENGL "Allow the use of OpenGL for Krita" ON)
+endif()
 option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only." OFF)
 
  #######################
@@ -126,7 +132,7 @@ option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binar
 ########################
 #######################
 
-# For predefined productsets see the definitions in CalligraProducts.cmake and
+# For predefined productsets see the definitions in KritaProducts.cmake and
 # in the files in the folder cmake/productsets.
 
 # Finding out the products & features to build is done in 5 steps:
@@ -141,7 +147,7 @@ include(CalligraProductSetMacros)
 include(MacroJPEG)
 
 # get the definitions of products, features and product sets
-include(CalligraProducts.cmake)
+include(KritaProducts.cmake)
 
 set(PRODUCTSET_DEFAULT "ALL")
 # temporary migration support
@@ -172,13 +178,13 @@ calligra_set_productset(${PRODUCTSET})
 find_package(ECM 1.7.0 REQUIRED NOMODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 include(ECMOptionalAddSubdirectory)
-include(ECMInstallIcons)
 include(ECMAddAppIcon)
 include(ECMSetupVersion)
 include(ECMMarkNonGuiExecutable)
 include(ECMGenerateHeaders)
 include(GenerateExportHeader)
 include(ECMMarkAsTest)
+include(ECMInstallIcons)
 
 include(CMakePackageConfigHelpers)
 include(WriteBasicConfigVersionFile)
@@ -204,7 +210,6 @@ find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
         ItemViews
         WindowSystem
 )
-find_package(KF5KIO ${MIN_QT_VERSION})
 
 find_package(Qt5 ${MIN_QT_VERSION}
         REQUIRED COMPONENTS
@@ -229,8 +234,6 @@ set(HAVE_DBUS ${Qt5DBus_FOUND})
 set(QT_QTTEST_LIBRARY Qt5::Test)
 
 if (USEOPENGL)
-    find_package(Qt5 ${MIN_QT_VERSION} REQUIRED OpenGL)
-    set(QT_QTOPENGL_FOUND ${Qt5OpenGL_FOUND})
     if (NOT WIN32 AND NOT APPLE)
         find_package(Qt5 ${MIN_QT_VERSION} REQUIRED X11Extras)
     endif()
@@ -239,11 +242,13 @@ endif ()
 include (MacroLibrary)
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
-include (ECMInstallIcons)
 
 macro_ensure_out_of_source_build("Compiling Calligra inside the source directory is not possible. Please refer to the build instruction http://community.kde.org/Calligra/Building/Building_Calligra")
 
+find_package(KF5KIO ${MIN_FRAMEWORKS_VERSION})
 macro_bool_to_01(KF5KIO_FOUND HAVE_KIO)
+find_package(KF5Crash ${MIN_FRAMEWORKS_VERSION}) 
+macro_bool_to_01(KF5Crash_FOUND HAVE_KCRASH)
 
 find_package(X11)
 if(X11_FOUND)
@@ -300,9 +305,8 @@ set(CALLIGRA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/krita)
 ############################
 ###########################
 
-find_package(Perl REQUIRED)
-find_package(ZLIB REQUIRED)
 find_package(PNG REQUIRED)
+
 if (APPLE)
     # this is not added correctly on OSX -- see http://forum.kde.org/viewtopic.php?f=139&t=101867&p=221242#p221242
     include_directories(${PNG_INCLUDE_DIR})
@@ -310,13 +314,10 @@ endif()
 
 add_definitions(-DBOOST_ALL_NO_LIB)
 find_package(Boost REQUIRED COMPONENTS system) # for pigment and stage
-if (NOT Boost_FOUND)
-    message(FATAL_ERROR "Did not find Boost. Boost is required for the core libraries, stage, sheets and krita.")
-endif ()
 
 if (APPLE)
     SET(CMAKE_CXX_FLAGS "-stdlib=libstdc++ -std=c++11")
-#   find_package(Carbon REQUIRED)
+#    find_package(Carbon REQUIRED)
 endif ()
 
  ###########################
@@ -325,41 +326,64 @@ endif ()
 ############################
 ###########################
 
-
 ##
 ## Check for OpenEXR
 ##
+macro_optional_find_package(ZLIB)
+macro_log_feature(ZLIB_FOUND "zlib" "Compression library" "http://www.zlib.net/" FALSE "" "Optionally used by the G'Mic and the PSD plugins")
+macro_bool_to_01(ZLIB_FOUND HAVE_ZLIB)
+
 
 macro_optional_find_package(OpenEXR)
+macro_log_feature(OPENEXR_FOUND "OpenEXR" "High dynamic-range (HDR) image file format" "http://www.openexr.com" FALSE "" "Required by the Krita OpenEXR filter")
 macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
+set(LINK_OPENEXR_LIB)
+if(OPENEXR_FOUND)
+    include_directories(${OPENEXR_INCLUDE_DIR})
+    set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
+    add_definitions(${OPENEXR_DEFINITIONS})
+endif()
 
+macro_optional_find_package(TIFF)
+macro_log_feature(TIFF_FOUND "tiff" "TIFF Library and Utilities" "http://www.remotesensing.org/libtiff" FALSE "" "Required by the Krita TIFF filter")
+
+macro_optional_find_package(JPEG)
+macro_log_feature(JPEG_FOUND "jpeg" "Free library for JPEG image compression. Note: libjpeg8 is NOT supported." "http://www.libjpeg-turbo.org" FALSE "" "Required by the Krita JPEG filter")
+
+macro_optional_find_package(OpenJPEG)
+macro_log_feature(OPENJPEG_FOUND "openjpeg" "Free library for JPEG 2000 image compression" "http://www.openjpeg.org" FALSE "" "Required by the Krita JPEG 2000 filter")
+
+set(LIBRAW_MIN_VERSION  "0.16")
+macro_optional_find_package(LibRaw ${LIBRAW_MIN_VERSION})
+macro_log_feature(LIBRAW_FOUND "LibRaw" "Library to decode RAW images" "http://www.libraw.org" FALSE "" "Required to build the raw import plugin")
+
+macro_optional_find_package(FFTW3)
+macro_log_feature(FFTW3_FOUND "FFTW3" "A fast, free C FFT library" "http://www.fftw.org/" FALSE "" "Required by the Krita for fast convolution operators and some G'Mic features")
+macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
+
+macro_optional_find_package(OCIO)
+macro_log_feature(OCIO_FOUND "OCIO" "The OpenColorIO Library" "http://www.opencolorio.org" FALSE "" "Required by the Krita LUT docker")
+macro_bool_to_01(OCIO_FOUND HAVE_OCIO)
 ##
 ## Look for OpenGL
 ##
 set(HAVE_OPENGL 0)
 if (USEOPENGL)
-    macro_optional_find_package(OpenGL)
-
-    if(OPENGL_FOUND)
-        message(STATUS "Found OpenGL: ${OPENGL_LIBRARIES}")
-        if(QT_QTOPENGL_FOUND)
-            message(STATUS "Found Qt OpenGL support")
-            set(HAVE_OPENGL 1)
-        else()
-            message(STATUS "Did NOT find Qt OpenGL support. Check your Qt configuration")
-        endif()
+    # TODO: see if there is a better check for QtGui being built with opengl support (and thus the QOpenGL* classes)
+    if(Qt5Gui_OPENGL_IMPLEMENTATION)
+        message(STATUS "Found QtGui OpenGL support")
+        set(HAVE_OPENGL 1)
+        include_directories(${OPENGL_INCLUDE_DIR})
     else()
-        message(STATUS "Did NOT find OpenGL libraries")
+        message(STATUS "Did NOT find QtGui OpenGL support. Check your Qt configuration")
     endif()
-    macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by Gemini, parts of Krita and optionally by flake")
 endif()
 
 ##
 ## Test for GNU Scientific Library
 ##
 macro_optional_find_package(GSL)
-macro_log_feature(GSL_FOUND "GSL" "GNU Scientific Library" "http://www.gnu.org/software/gsl"
-                  FALSE "1.7" "Required by Krita's Transform tool and Sheets' solver plugin")
+macro_log_feature(GSL_FOUND "GSL" "GNU Scientific Library" "http://www.gnu.org/software/gsl" FALSE "1.7" "Required by Krita's Transform tool.")
 macro_bool_to_01(GSL_FOUND HAVE_GSL)
 configure_file(config-gsl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gsl.h )
 
@@ -367,7 +391,7 @@ configure_file(config-gsl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gsl.h )
 ## Test for eigen3
 ##
 macro_optional_find_package(Eigen3)
-macro_log_feature(EIGEN3_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "3.0" "Required by Calligra Sheets and Krita")
+macro_log_feature(EIGEN3_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "3.0" "Required by Krita")
 
 ##
 ## Test for exiv2
@@ -380,7 +404,7 @@ macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata library and tools" "http:/
 ## Test for lcms
 ##
 macro_optional_find_package(LCMS2)
-macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.4" "Will be used for color management and is necesary for Krita")
+macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.4" "Will be used for color management and is necessary for Krita")
 if(LCMS2_FOUND)
     if(NOT ${LCMS2_VERSION} VERSION_LESS 2040 )
         set(HAVE_LCMS24 TRUE)
@@ -395,7 +419,7 @@ endif()
 set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 macro_optional_find_package(Vc 0.6.70)
-macro_log_feature(Vc_FOUND "Vc" "Portable, zero-overhead SIMD library for C++" "http://code.compeng.uni-frankfurt.de/projects/vc" FALSE "" "Required by the Krita for vectorization")
+macro_log_feature(Vc_FOUND "Vc" "Portable, zero-overhead SIMD library for C++" "https://github.com/VcDevel/Vc" FALSE "" "Required by the Krita for vectorization")
 macro_bool_to_01(Vc_FOUND HAVE_VC)
 macro_bool_to_01(PACKAGERS_BUILD DO_PACKAGERS_BUILD)
 
@@ -459,8 +483,8 @@ if(HAVE_VC)
     endif()
 
     if (NOT PACKAGERS_BUILD)
-      # Optimize the whole Calligra for current architecture
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
+        # Optimize everything for the current architecture
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
     endif ()
 endif()
 set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
@@ -477,17 +501,10 @@ endif()
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 
 if(WIN32)
-    set(KDE4_ICON_DIR ${KDE_INSTALL_FULL_ICONDIR})
-    message(STATUS "using oxygen application icons from ${KDE4_ICON_DIR}")
-
     set(LIB_INSTALL_DIR ${LIB_INSTALL_DIR}
                         RUNTIME DESTINATION ${BIN_INSTALL_DIR}
                         LIBRARY ${INSTALL_TARGETS_DEFAULT_ARGS}
                         ARCHIVE ${INSTALL_TARGETS_DEFAULT_ARGS} )
-
-
-else()
-    set (KDE4_ICON_DIR  ${CMAKE_INSTALL_PREFIX}/share/icons)
 endif()
 
 ##
@@ -508,10 +525,23 @@ macro_log_feature(SHARED_MIME_INFO_FOUND "SharedMimeInfo" "Shared Mime Info" "ht
 macro_optional_find_package(Poppler)
 macro_log_feature( POPPLER_FOUND "Poppler-Qt5" "A PDF rendering library" "http://poppler.freedesktop.org" FALSE "" "Required by the Krita PDF filter, Karbon PDF import filter and CSTester PDF feature")
 
+##
+## Test for pthreads (for G'Mic)
+##
+macro_optional_find_package(Threads)
+macro_log_feature(Threads_FOUND "PThreads" "A low-level threading library" "" FALSE "" "Optionally used by the G'Mic plugin")
 
 ##
-## Generate a file for prefix information
+## Test for OpenMP (for G'Mic)
 ##
+macro_optional_find_package(OpenMP)
+macro_log_feature(OPENMP_FOUND "OpenMP" "A low-level parallel execution library" "http://openmp.org/wp/" FALSE "" "Optionally used by the G'Mic plugin")
+
+##
+## Test for Curl (for G'Mic)
+##
+macro_optional_find_package(CURL)
+macro_log_feature(CURL_FOUND "CURL" "A tool to fetch remote data" "http://curl.haxx.se/" FALSE "" "Optionally used by the G'Mic plugin")
 
  ###############################
 ################################
@@ -621,13 +651,6 @@ set(BASICFLAKES_INCLUDES ${KOWIDGETS_INCLUDES}
 ####################################################
 ###################################################
 
-if (NOT WIN32)
-    set(NOT_WIN TRUE)
-endif()
-if (NOT QT_MAC_USE_COCOA)
-    set(NOT_COCOA TRUE)
-endif()
-
 calligra_drop_product_on_bad_condition( APP_KRITA
     EIGEN3_FOUND "Eigen devel not found"
     EXIV2_FOUND "libexiv2 devel not found"
@@ -671,7 +694,6 @@ endif()
 
 # non-app directories are moved here because they can depend on SHOULD_BUILD_{appname} variables set above
 add_subdirectory(libs)
-add_subdirectory(interfaces)
 add_subdirectory(plugins)
 
 macro_display_feature_log()
@@ -679,12 +701,4 @@ macro_display_feature_log()
 calligra_product_deps_report("product_deps")
 calligra_log_should_build()
 
-add_custom_target(apidox doc/api/gendocs.pl WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
-
 configure_file(KoConfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h )
-
-## temporary warning
-if (WARN_ABOUT_CREATIVEONLY)
-    message(STATUS "WARNING:\n   You are using a deprecated build flag,\n   switch from \"-DCREATIVEONLY=ON\" to \"-DPRODUCTSET=CREATIVE\"\n   and remove the line \"CREATIVEONLY:BOOL=ON\" from CMakeCache.txt")
-    message(STATUS "-------------------------------------------------------------------" )
-endif ()

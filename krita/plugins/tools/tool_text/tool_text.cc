@@ -42,8 +42,7 @@ K_PLUGIN_FACTORY_WITH_JSON(ToolTextFactory, "kritatooltext.json", registerPlugin
 ToolText::ToolText(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    KoToolRegistry * r = KoToolRegistry::instance();
-    r->add(new KisToolTextFactory(QStringList()));
+    KoToolRegistry::instance()->add(new KisToolTextFactory());
 
 
 }

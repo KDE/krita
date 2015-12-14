@@ -68,10 +68,16 @@ public:
     QRectF outlineRect() const;
 
     ///reimplemented
-    ChildZOrderPolicy childZOrderPolicy() {return KoShape::ChildZPassThrough;}
+    ChildZOrderPolicy childZOrderPolicy()
+    {
+        return KoShape::ChildZPassThrough;
+    }
 
     /// set the image collection which is needed to draw bullet from images
-    void setImageCollection(KoImageCollection *collection) { m_imageCollection = collection; }
+    void setImageCollection(KoImageCollection *collection)
+    {
+        m_imageCollection = collection;
+    }
 
     KoImageCollection *imageCollection();
 
@@ -95,7 +101,8 @@ public:
      */
     virtual void saveOdf(KoShapeSavingContext &context) const;
 
-    KoTextShapeData *textShapeData() {
+    KoTextShapeData *textShapeData()
+    {
         return m_textShapeData;
     }
 
@@ -105,7 +112,10 @@ public:
     virtual void update(const QRectF &shape) const;
 
     // required for kpresenter hack
-    void setPageProvider(KoPageProvider *provider) { m_pageProvider = provider; }
+    void setPageProvider(KoPageProvider *provider)
+    {
+        m_pageProvider = provider;
+    }
 
     /// reimplemented
     virtual bool loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext &context);
@@ -126,7 +136,7 @@ private:
     KoPageProvider *m_pageProvider;
     KoImageCollection *m_imageCollection;
     QRegion m_paintRegion;
-    KoParagraphStyle * m_paragraphStyle;
+    KoParagraphStyle *m_paragraphStyle;
     bool m_clip;
     KoTextDocumentLayout *m_layout;
 };

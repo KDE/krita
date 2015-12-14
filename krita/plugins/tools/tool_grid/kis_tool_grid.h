@@ -66,7 +66,7 @@ class KisToolGridFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolGridFactory(const QStringList&)
+    KisToolGridFactory()
             : KoToolFactoryBase("KisToolGrid") {
         setToolTip(i18n("Grid Tool"));
         setToolType(TOOL_TYPE_VIEW);

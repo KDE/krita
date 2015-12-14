@@ -152,15 +152,15 @@ bool ResourceBundleManifest::save(QIODevice *device)
        manifestWriter.addAttribute("manifest:version", "1.2");
        manifestWriter.addManifestEntry("/", "application/x-krita-resourcebundle");
 
-       foreach(QString resourceType, m_resources.uniqueKeys()) {
-           foreach(const ResourceReference &resource, m_resources[resourceType].values()) {
+       Q_FOREACH (QString resourceType, m_resources.uniqueKeys()) {
+           Q_FOREACH (const ResourceReference &resource, m_resources[resourceType].values()) {
                manifestWriter.startElement("manifest:file-entry");
                manifestWriter.addAttribute("manifest:media-type", resourceTypeToManifestType(resourceType));
                manifestWriter.addAttribute("manifest:full-path", resourceTypeToManifestType(resourceType) + "/" + QFileInfo(resource.resourcePath).fileName());
                manifestWriter.addAttribute("manifest:md5sum", QString(resource.md5sum.toHex()));
                if (!resource.tagList.isEmpty()) {
                    manifestWriter.startElement("manifest:tags");
-                   foreach(const QString tag, resource.tagList) {
+                   Q_FOREACH (const QString tag, resource.tagList) {
                        manifestWriter.startElement("manifest:tag");
                        manifestWriter.addTextNode(tag);
                        manifestWriter.endElement();
@@ -194,8 +194,8 @@ QStringList ResourceBundleManifest::types() const
 QStringList ResourceBundleManifest::tags() const
 {
     QSet<QString> tags;
-    foreach(const QString &type, m_resources.keys()) {
-        foreach(const ResourceReference &ref, m_resources[type].values()) {
+    Q_FOREACH (const QString &type, m_resources.keys()) {
+        Q_FOREACH (const ResourceReference &ref, m_resources[type].values()) {
             tags += ref.tagList.toSet();
         }
     }
@@ -224,7 +224,7 @@ QList<ResourceBundleManifest::ResourceReference> ResourceBundleManifest::files(c
 void ResourceBundleManifest::removeFile(QString fileName)
 {
     QList<QString> tags;
-    foreach(const QString &type, m_resources.keys()) {
+    Q_FOREACH (const QString &type, m_resources.keys()) {
         if (m_resources[type].contains(fileName)) {
             m_resources[type].remove(fileName);
         }

@@ -38,8 +38,7 @@ K_PLUGIN_FACTORY_WITH_JSON(ToolTransformFactory, "kritatooltransform.json", regi
 ToolTransform::ToolTransform(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    KoToolRegistry * r = KoToolRegistry::instance();
-    r->add(new KisToolTransformFactory(QStringList()));
+    KoToolRegistry::instance()->add(new KisToolTransformFactory());
 }
 
 ToolTransform::~ToolTransform()

@@ -113,7 +113,7 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="KisDoubleSliderSpinBox" name="specularReflectivityKisDoubleSliderSpinBox" native="true">
+              <widget class="KisDoubleSliderSpinBox" name="specularReflectivityKisDoubleSliderSpinBox">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                  <horstretch>1</horstretch>
@@ -145,7 +145,7 @@
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="KisSliderSpinBox" name="shinynessExponentKisSliderSpinBox" native="true">
+              <widget class="KisSliderSpinBox" name="shinynessExponentKisSliderSpinBox">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>1</horstretch>
@@ -226,7 +226,7 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="KisDoubleSliderSpinBox" name="diffuseReflectivityKisDoubleSliderSpinBox" native="true">
+              <widget class="KisDoubleSliderSpinBox" name="diffuseReflectivityKisDoubleSliderSpinBox">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                  <horstretch>1</horstretch>
@@ -304,7 +304,7 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="KisDoubleSliderSpinBox" name="ambientReflectivityKisDoubleSliderSpinBox" native="true">
+              <widget class="KisDoubleSliderSpinBox" name="ambientReflectivityKisDoubleSliderSpinBox">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                  <horstretch>1</horstretch>

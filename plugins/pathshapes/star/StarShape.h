@@ -143,4 +143,3 @@ private:
 
 #endif /* KOSTARSHAPE_H */
 
-

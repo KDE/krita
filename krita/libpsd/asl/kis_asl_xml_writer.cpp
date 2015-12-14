@@ -244,7 +244,7 @@ void KisAslXmlWriter::writeCurve(const QString &key, const QString &name, const 
 
     enterList("Crv ");
 
-    foreach (const QPointF &pt, points) {
+    Q_FOREACH (const QPointF &pt, points) {
         writePoint("", pt);
     }
 
@@ -343,7 +343,7 @@ void KisAslXmlWriter::writeSegmentGradient(const QString &key, const KoSegmentGr
     QVector<qreal> positions;
     QVector<qreal> middleOffsets;
 
-    foreach (const KoGradientSegment *seg, segments) {
+    Q_FOREACH (const KoGradientSegment *seg, segments) {
         const qreal start = seg->startOffset();
         const qreal end = seg->endOffset();
         const qreal mid = (end - start) > DBL_EPSILON ? (seg->middleOffset() - start) / (end - start) : 0.5;
@@ -382,7 +382,7 @@ void KisAslXmlWriter::writeStopGradient(const QString &key, const KoStopGradient
     QVector<qreal> positions;
     QVector<qreal> middleOffsets;
 
-    foreach (const KoGradientStop &stop, gradient->stops()) {
+    Q_FOREACH (const KoGradientStop &stop, gradient->stops()) {
         QColor color = stop.second.toQColor();
         qreal transparency = color.alphaF();
         color.setAlphaF(1.0);

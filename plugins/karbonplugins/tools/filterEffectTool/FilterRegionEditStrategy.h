@@ -31,7 +31,7 @@ class KoFilterEffect;
 class FilterRegionEditStrategy : public KoInteractionStrategy
 {
 public:
-    FilterRegionEditStrategy(KoToolBase* parent, KoShape * shape, KoFilterEffect *effect, KarbonFilterEffectsTool::EditMode mode);
+    FilterRegionEditStrategy(KoToolBase *parent, KoShape *shape, KoFilterEffect *effect, KarbonFilterEffectsTool::EditMode mode);
 
     // reimplemented from KoInteractionStrategy
     virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
@@ -43,8 +43,8 @@ public:
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
 private:
-    KoFilterEffect * m_effect;
-    KoShape * m_shape;
+    KoFilterEffect *m_effect;
+    KoShape *m_shape;
     QRectF m_sizeRect;
     QRectF m_filterRect;
     KarbonFilterEffectsTool::EditMode m_editMode;

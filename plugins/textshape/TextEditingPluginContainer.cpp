@@ -24,7 +24,7 @@
 
 #include <QDebug>
 
-TextEditingPluginContainer::TextEditingPluginContainer(QObject * parent)
+TextEditingPluginContainer::TextEditingPluginContainer(QObject *parent)
     : QObject(parent)
 {
     foreach (const QString &key, KoTextEditingRegistry::instance()->keys()) {

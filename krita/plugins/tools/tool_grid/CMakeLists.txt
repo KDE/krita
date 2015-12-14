@@ -1,11 +1,11 @@
 
 
-set(kritatoolgrid_PART_SRCS
+set(kritatoolgrid_SOURCES
     tool_grid.cc
     kis_tool_grid.cc
     )
 
-add_library(kritatoolgrid MODULE ${kritatoolgrid_PART_SRCS})
+add_library(kritatoolgrid MODULE ${kritatoolgrid_SOURCES})
 kcoreaddons_desktop_to_json(kritatoolgrid kritatoolgrid.desktop)
 
 

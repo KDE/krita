@@ -45,10 +45,12 @@ bool KisCrashFilterTest::applyFilter(const KoColorSpace * cs,  KisFilterSP f)
         dbgKrita << "creating new file for " << f->id();
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&file);
+        out.setCodec("UTF-8");
         out << kfc->toXML();
     } else {
         QString s;
         QTextStream in(&file);
+        in.setCodec("UTF-8");
         s = in.readAll();
         kfc->fromXML(s);
     }
@@ -64,7 +66,7 @@ bool KisCrashFilterTest::testFilter(KisFilterSP f)
 {
     QList<const KoColorSpace*> colorSpaces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::AllProfiles);
     bool ok = false;
-    foreach(const KoColorSpace* colorSpace, colorSpaces) {
+    Q_FOREACH (const KoColorSpace* colorSpace, colorSpaces) {
         // XXX: Let's not check the painterly colorspaces right now
         if (colorSpace->id().startsWith("KS", Qt::CaseInsensitive)) {
             continue;

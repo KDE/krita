@@ -110,7 +110,7 @@ namespace KritaUtils
 
                 QRect rect(x, y, nextX - x, nextY - y);
 
-                foreach(const QPolygonF &triangle, triangles) {
+                Q_FOREACH (const QPolygonF &triangle, triangles) {
                     if(checkInTriangle(rect, triangle)) {
                         dirtyRegion |= rect;
                         break;
@@ -273,7 +273,7 @@ namespace KritaUtils
         QList<QPainterPath> resultList;
         QList<QPolygonF> inputPolygons = path.toSubpathPolygons();
 
-        foreach (const QPolygonF &poly, inputPolygons) {
+        Q_FOREACH (const QPolygonF &poly, inputPolygons) {
             QPainterPath testPath;
             testPath.addPolygon(poly);
 

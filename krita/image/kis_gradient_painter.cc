@@ -585,7 +585,7 @@ void KisGradientPainter::precalculateShape()
 
     QList<QPainterPath> splitPaths = KritaUtils::splitDisjointPaths(path);
 
-    foreach (const QPainterPath &subpath, splitPaths) {
+    Q_FOREACH (const QPainterPath &subpath, splitPaths) {
         QRect boundingRect = subpath.boundingRect().toAlignedRect();
 
         if (boundingRect.width() < 3 || boundingRect.height() < 3) {
@@ -706,7 +706,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
     const KoColorSpace * colorSpace = dev->colorSpace();
     const qint32 pixelSize = colorSpace->pixelSize();
 
-    foreach (const Private::ProcessRegion &r, m_d->processRegions) {
+    Q_FOREACH (const Private::ProcessRegion &r, m_d->processRegions) {
         QRect processRect = r.processRect;
         QSharedPointer<KisGradientShapeStrategy> shapeStrategy = r.precalculatedShapeStrategy;
 

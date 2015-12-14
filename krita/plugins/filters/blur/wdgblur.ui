@@ -168,7 +168,7 @@
     </spacer>
    </item>
    <item row="0" column="2" rowspan="2">
-    <widget class="KoAspectButton" name="aspectButton" native="true"/>
+    <widget class="KoAspectButton" name="aspectButton"/>
    </item>
   </layout>
  </widget>

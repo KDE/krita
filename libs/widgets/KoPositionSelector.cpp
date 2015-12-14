@@ -63,7 +63,7 @@ public:
 
     ~RadioLayout()
     {
-        foreach( const Item & item, items )
+        Q_FOREACH ( const Item & item, items )
             delete item.child;
         items.clear();
     }
@@ -86,7 +86,7 @@ public:
         qreal offsetX = 0.5 * (geom.width()- static_cast<qreal>(maxCol) * columnWidth);
         qreal offsetY = 0.5 * (geom.height() - static_cast<qreal>(maxRow) * rowHeight);
         QPoint offset( qRound(offsetX), qRound(offsetY));
-        foreach(const Item & item, items) {
+        Q_FOREACH (const Item & item, items) {
             QPoint point( qRound(item.column * columnWidth), qRound(item.row * rowHeight) );
             QRect rect(point + offset + padding + geom.topLeft(), prefSize);
             item.child->setGeometry(rect);
@@ -97,7 +97,7 @@ public:
         QSize prefSize;
         maxRow = 0;
         maxCol = 0;
-        foreach(const Item & item, items) {
+        Q_FOREACH (const Item & item, items) {
             if(prefSize.isEmpty()) {
                 QAbstractButton *but = dynamic_cast<QAbstractButton*> (item.child->widget());
                 Q_ASSERT(but);

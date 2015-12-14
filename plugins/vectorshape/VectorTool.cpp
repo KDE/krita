@@ -36,23 +36,23 @@
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 
-VectorTool::VectorTool( KoCanvasBase* canvas )
-    : KoToolBase( canvas ),
-      m_shape(0)
+VectorTool::VectorTool(KoCanvasBase *canvas)
+    : KoToolBase(canvas)
+    , m_shape(0)
 {
 }
 
-void VectorTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void VectorTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     Q_UNUSED(toolActivation);
 
     foreach (KoShape *shape, shapes) {
-        m_shape = dynamic_cast<VectorShape*>( shape );
-        if ( m_shape )
+        m_shape = dynamic_cast<VectorShape *>(shape);
+        if (m_shape) {
             break;
+        }
     }
-    if ( !m_shape )
-    {
+    if (!m_shape) {
         emit done();
         return;
     }
@@ -64,7 +64,7 @@ void VectorTool::deactivate()
     m_shape = 0;
 }
 
-QWidget * VectorTool::createOptionWidget()
+QWidget *VectorTool::createOptionWidget()
 {
     QWidget *optionWidget = new QWidget();
     QGridLayout *layout = new QGridLayout(optionWidget);
@@ -82,8 +82,9 @@ QWidget * VectorTool::createOptionWidget()
 
 void VectorTool::changeUrlPressed()
 {
-    if (m_shape == 0)
+    if (m_shape == 0) {
         return;
+    }
     KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
     dialog.setCaption(i18n("Select a Vector Image"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
@@ -104,9 +105,9 @@ void VectorTool::changeUrlPressed()
     }
 }
 
-void VectorTool::mouseDoubleClickEvent( KoPointerEvent *event )
+void VectorTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
-    if(canvas()->shapeManager()->shapeAt(event->point) != m_shape) {
+    if (canvas()->shapeManager()->shapeAt(event->point) != m_shape) {
         event->ignore(); // allow the event to be used by another
         return;
     }

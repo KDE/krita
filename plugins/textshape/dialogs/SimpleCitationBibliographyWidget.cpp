@@ -31,10 +31,10 @@
 #include <QSignalMapper>
 
 SimpleCitationBibliographyWidget::SimpleCitationBibliographyWidget(ReferencesTool *tool, QWidget *parent)
-        : QWidget(parent),
-          m_blockSignals(false),
-          m_referenceTool(tool),
-          m_signalMapper(0)
+    : QWidget(parent)
+    , m_blockSignals(false)
+    , m_referenceTool(tool)
+    , m_signalMapper(0)
 {
     widget.setupUi(this);
     Q_ASSERT(tool);
@@ -42,16 +42,16 @@ SimpleCitationBibliographyWidget::SimpleCitationBibliographyWidget(ReferencesToo
     m_templateGenerator = new BibliographyTemplate(KoTextDocument(m_referenceTool->editor()->document()).styleManager());
 
     widget.addCitation->setDefaultAction(tool->action("insert_citation"));
-    connect(widget.addCitation,SIGNAL(clicked(bool)),this,SIGNAL(doneWithFocus()));
+    connect(widget.addCitation, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
 
     widget.addBibliography->setDefaultAction(tool->action("insert_bibliography"));
     widget.addBibliography->setNumColumns(1);
-    connect(widget.addBibliography,SIGNAL(clicked(bool)),this,SIGNAL(doneWithFocus()));
+    connect(widget.addBibliography, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.addBibliography, SIGNAL(aboutToShowMenu()), this, SLOT(prepareTemplateMenu()));
     connect(widget.addBibliography, SIGNAL(itemTriggered(int)), this, SLOT(applyTemplate(int)));
 
     widget.configureBibliography->setDefaultAction(tool->action("configure_bibliography"));
-    connect(widget.configureBibliography,SIGNAL(clicked(bool)),this,SIGNAL(doneWithFocus()));
+    connect(widget.configureBibliography, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
 }
 
 SimpleCitationBibliographyWidget::~SimpleCitationBibliographyWidget()
@@ -84,7 +84,7 @@ void SimpleCitationBibliographyWidget::prepareTemplateMenu()
     foreach (KoBibliographyInfo *info, m_templateList) {
         BibliographyPreview *preview = new BibliographyPreview();
         preview->setStyleManager(KoTextDocument(m_referenceTool->editor()->document()).styleManager());
-        preview->setPreviewSize(QSize(200,120));
+        preview->setPreviewSize(QSize(200, 120));
         preview->updatePreview(info);
         connect(preview, SIGNAL(pixmapGenerated()), m_signalMapper, SLOT(map()));
         m_signalMapper->setMapping(preview, index);
@@ -92,8 +92,8 @@ void SimpleCitationBibliographyWidget::prepareTemplateMenu()
         ++index;
 
         //put dummy pixmaps until the actual pixmap previews are generated and added in pixmapReady()
-        if (! widget.addBibliography->hasItemId(index)) {
-            QPixmap pmm(QSize(200,120));
+        if (!widget.addBibliography->hasItemId(index)) {
+            QPixmap pmm(QSize(200, 120));
             pmm.fill(Qt::white);
             widget.addBibliography->addItem(pmm, index);
         }
@@ -111,7 +111,6 @@ void SimpleCitationBibliographyWidget::insertCustomBibliography()
     m_templateGenerator->moveTemplateToUsed(m_templateList.at(0));
     m_referenceTool->insertCustomBibliography(m_templateList.at(0));
 }
-
 
 void SimpleCitationBibliographyWidget::pixmapReady(int templateId)
 {

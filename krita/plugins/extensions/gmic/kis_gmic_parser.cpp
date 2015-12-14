@@ -78,7 +78,7 @@ QString KisGmicParser::parseCategoryName(const QString& line)
 Component* KisGmicParser::createFilterTree()
 {
     Category * rootCategory = 0;
-    foreach (const QString &fileName, m_filePaths)
+    Q_FOREACH (const QString &fileName, m_filePaths)
     {
         QFile file(fileName);
 
@@ -97,6 +97,7 @@ Component* KisGmicParser::createFilterTree()
         }
 
         QTextStream in(&file);
+        in.setCodec("UTF-8");
 
         Command * command = 0;
         Category * category = rootCategory;
@@ -266,6 +267,7 @@ QByteArray KisGmicParser::extractGmicCommandsOnly(const QString& filePath)
     }
 
     QTextStream in(&file);
+    in.setCodec("UTF-8");
     QByteArray result;
     while(!in.atEnd())
     {

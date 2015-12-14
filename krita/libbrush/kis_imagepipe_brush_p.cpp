@@ -140,6 +140,7 @@ bool KisPipeBrushParasite::saveToDevice(QIODevice* dev) const
     // <count> ncells:<count> dim:<dim> rank0:<rank0> sel0:<sel0> <...>
 
     QTextStream stream(dev);
+    stream.setCodec("UTF-8");
 
     // XXX: FIXME things like step, placement and so are not added (nor loaded, as a matter of fact)"
     stream << ncells << " ncells:" << ncells << " dim:" << dim;

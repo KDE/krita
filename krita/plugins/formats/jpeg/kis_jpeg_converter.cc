@@ -498,10 +498,10 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const QUrl &uri, KisPaintLaye
     uint width = image->width();
     // Initialize structure
     struct jpeg_compress_struct cinfo;
-    jpeg_create_compress(&cinfo);
     // Initialize error output
     struct jpeg_error_mgr jerr;
     cinfo.err = jpeg_std_error(&jerr);
+    jpeg_create_compress(&cinfo);
     // Initialize output stream
     KisJPEGDestination::setDestination(&cinfo, &file);
 

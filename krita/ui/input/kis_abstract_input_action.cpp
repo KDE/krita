@@ -158,6 +158,10 @@ bool KisAbstractInputAction::isShortcutRequired(int shortcut) const
 
 QPoint KisAbstractInputAction::eventPos(const QEvent *event) {
 
+    if(!event) {
+	return QPoint();
+    }
+
     switch (event->type()) {
     case QEvent::MouseMove:
     case QEvent::MouseButtonPress:

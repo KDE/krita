@@ -48,20 +48,18 @@ K_PLUGIN_FACTORY_WITH_JSON(DefaultToolsFactory, "kritadefaulttools.json", regist
 DefaultTools::DefaultTools(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    KoToolRegistry * r = KoToolRegistry::instance();
-
-    r->add(new KisToolFillFactory( QStringList()));
-    r->add(new KisToolGradientFactory(QStringList()));
-    r->add(new KisToolBrushFactory(QStringList()));
-    r->add(new KisToolColorPickerFactory(QStringList()));
-    r->add(new KisToolLineFactory(QStringList()));
-    r->add(new KisToolEllipseFactory(QStringList()));
-    r->add(new KisToolRectangleFactory(QStringList()));
-    r->add(new KisToolMeasureFactory(QStringList()));
-    r->add(new KisToolPathFactory(QStringList()));
-    r->add(new KisToolMoveFactory(QStringList()));
-    r->add(new KisToolMultiBrushFactory(QStringList()));
-    r->add(new KisToolPencilFactory(QStringList()));
+    KoToolRegistry::instance()->add(new KisToolFillFactory());
+    KoToolRegistry::instance()->add(new KisToolGradientFactory());
+    KoToolRegistry::instance()->add(new KisToolBrushFactory());
+    KoToolRegistry::instance()->add(new KisToolColorPickerFactory());
+    KoToolRegistry::instance()->add(new KisToolLineFactory());
+    KoToolRegistry::instance()->add(new KisToolEllipseFactory());
+    KoToolRegistry::instance()->add(new KisToolRectangleFactory());
+    KoToolRegistry::instance()->add(new KisToolMeasureFactory());
+    KoToolRegistry::instance()->add(new KisToolPathFactory());
+    KoToolRegistry::instance()->add(new KisToolMoveFactory());
+    KoToolRegistry::instance()->add(new KisToolMultiBrushFactory());
+    KoToolRegistry::instance()->add(new KisToolPencilFactory());
 }
 
 DefaultTools::~DefaultTools()

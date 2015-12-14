@@ -68,7 +68,7 @@ public:
 class KisToolSelectEllipticalFactory : public KoToolFactoryBase
 {
 public:
-    KisToolSelectEllipticalFactory(const QStringList&)
+    KisToolSelectEllipticalFactory()
             : KoToolFactoryBase("KisToolSelectElliptical") {
         setToolTip(i18n("Elliptical Selection Tool"));
         setToolType(TOOL_TYPE_SELECTED);

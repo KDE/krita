@@ -53,7 +53,7 @@ KoInlineObject *InsertTextReferenceAction::createInlineObject()
     QLabel *label = new QLabel(i18n("Select the index you want to reference"), widget);
     lay->addWidget(label);
     QStringList selectionList;
-    foreach(KoTextLocator* locator, textLocators)
+    Q_FOREACH (KoTextLocator* locator, textLocators)
         selectionList << locator->word() + '(' + QString::number(locator->pageNumber()) + ')';
     QListWidget *list = new QListWidget(widget);
     lay->addWidget(list);

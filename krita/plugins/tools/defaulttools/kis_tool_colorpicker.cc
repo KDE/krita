@@ -337,7 +337,7 @@ void KisToolColorPicker::displayPickedColor()
 
         }
 
-        foreach(const PickedChannel &pc, pickedChannels) {
+        Q_FOREACH (const PickedChannel &pc, pickedChannels) {
             QTreeWidgetItem *item = new QTreeWidgetItem(m_optionsWidget->listViewChannels);
             item->setText(0, pc.name);
             item->setText(1, pc.valueText);
@@ -376,7 +376,7 @@ QWidget* KisToolColorPicker::createOptionWidget()
 
     QList<KoColorSet*> palettes = srv->resources();
 
-    foreach(KoColorSet *palette, palettes) {
+    Q_FOREACH (KoColorSet *palette, palettes) {
         if (palette) {
             m_optionsWidget->cmbPalette->addSqueezedItem(palette->name());
             m_palettes.append(palette);

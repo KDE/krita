@@ -29,11 +29,10 @@
 #include <KoIcon.h>
 #include <klocalizedstring.h>
 
-
 EllipseShapeFactory::EllipseShapeFactory()
     : KoShapeFactoryBase(EllipseShapeId, i18n("Ellipse"))
 {
-    setToolTip(i18n( "An ellipse"));
+    setToolTip(i18n("An ellipse"));
     setIconName(koIconNameCStr("ellipse-shape"));
     setFamily("geometric");
     setLoadingPriority(1);
@@ -53,7 +52,7 @@ KoShape *EllipseShapeFactory::createDefaultShape(KoDocumentResourceManager *) co
     ellipse->setStroke(new KoShapeStroke(1.0));
     ellipse->setShapeId(KoPathShapeId);
 
-    QRadialGradient *gradient = new QRadialGradient(QPointF(0.5,0.5), 0.5, QPointF(0.25,0.25));
+    QRadialGradient *gradient = new QRadialGradient(QPointF(0.5, 0.5), 0.5, QPointF(0.25, 0.25));
     gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
     gradient->setColorAt(0.0, Qt::white);
     gradient->setColorAt(1.0, Qt::green);
@@ -66,12 +65,12 @@ bool EllipseShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext 
 {
     Q_UNUSED(context);
     return (e.localName() == "ellipse" || e.localName() == "circle")
-        && e.namespaceURI() == KoXmlNS::draw;
+           && e.namespaceURI() == KoXmlNS::draw;
 }
 
-QList<KoShapeConfigWidgetBase*> EllipseShapeFactory::createShapeOptionPanels()
+QList<KoShapeConfigWidgetBase *> EllipseShapeFactory::createShapeOptionPanels()
 {
-    QList<KoShapeConfigWidgetBase*> panels;
+    QList<KoShapeConfigWidgetBase *> panels;
     panels.append(new EllipseShapeConfigWidget());
     return panels;
 }

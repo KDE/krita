@@ -57,7 +57,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
     widgets["dublincore.ui"] = new WdgDublinCore(this);
     widgets["exif.ui"] = new WdgExif(this);
 
-    foreach(const QString & file, files) {
+    Q_FOREACH (const QString & file, files) {
 
         QFile xmlFile(file);
         xmlFile.open(QFile::ReadOnly);
@@ -107,7 +107,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
                     KisEntryEditor* ee = new KisEntryEditor(obj, d->store, key, propertyName, structureField, arrayIndex);
                     connect(obj, editorSignal.toLatin1(), ee, SLOT(valueEdited()));
                     QList<KisEntryEditor*> otherEditors = d->entryEditors.values(key);
-                    foreach(KisEntryEditor* oe, otherEditors) {
+                    Q_FOREACH (KisEntryEditor* oe, otherEditors) {
                         connect(ee, SIGNAL(valueHasBeenEdited()), oe, SLOT(valueChanged()));
                         connect(oe, SIGNAL(valueHasBeenEdited()), ee, SLOT(valueChanged()));
                     }
@@ -141,7 +141,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
 
 KisMetaDataEditor::~KisMetaDataEditor()
 {
-    foreach(KisEntryEditor* e, d->entryEditors) {
+    Q_FOREACH (KisEntryEditor* e, d->entryEditors) {
         delete e;
     }
     delete d->store;

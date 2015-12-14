@@ -1,6 +1,6 @@
 add_subdirectory(tests)
 
-set(KRITA_ANIMATIONDOCKER_PART_SRCS
+set(KRITA_ANIMATIONDOCKER_SOURCES
     animation_dockers.cpp
     animation_docker.cpp
     timeline_docker.cpp
@@ -28,12 +28,12 @@ set(KRITA_ANIMATIONDOCKER_PART_SRCS
     kis_equalizer_widget.cpp
 )
 
-ki18n_wrap_ui(KRITA_ANIMATIONDOCKER_PART_SRCS
+ki18n_wrap_ui(KRITA_ANIMATIONDOCKER_SOURCES
     wdg_animation.ui
     onion_skins_docker.ui
 )
 
-add_library(kritaanimationdocker MODULE ${KRITA_ANIMATIONDOCKER_PART_SRCS})
+add_library(kritaanimationdocker MODULE ${KRITA_ANIMATIONDOCKER_SOURCES})
 generate_export_header(kritaanimationdocker BASE_NAME kritaanimationdocker EXPORT_MACRO_NAME KRITAANIMATIONDOCKER_EXPORT)
 
 kcoreaddons_desktop_to_json(kritaanimationdocker krita_animationdocker.desktop)

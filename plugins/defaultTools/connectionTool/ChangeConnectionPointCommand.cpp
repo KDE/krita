@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * 
+ *
  * Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -21,9 +21,12 @@
 #include "ChangeConnectionPointCommand.h"
 #include <KoShape.h>
 
-ChangeConnectionPointCommand::ChangeConnectionPointCommand(KoShape* shape, int connectionPointId, const KoConnectionPoint &oldPoint, const KoConnectionPoint &newPoint, KUndo2Command* parent)
-: KUndo2Command(parent), m_shape(shape), m_connectionPointId(connectionPointId)
-, m_oldPoint(oldPoint), m_newPoint(newPoint)
+ChangeConnectionPointCommand::ChangeConnectionPointCommand(KoShape *shape, int connectionPointId, const KoConnectionPoint &oldPoint, const KoConnectionPoint &newPoint, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_shape(shape)
+    , m_connectionPointId(connectionPointId)
+    , m_oldPoint(oldPoint)
+    , m_newPoint(newPoint)
 {
     Q_ASSERT(m_shape);
 }

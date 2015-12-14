@@ -222,7 +222,7 @@ void KisCustomBrushWidget::createBrush()
         properties.setProperty("visible", true);
         QList<KisNodeSP> layers = m_image->root()->childNodes(QStringList("KisLayer"), properties);
         KisNodeSP node;
-        foreach(KisNodeSP node, layers) {
+        Q_FOREACH (KisNodeSP node, layers) {
             devices[0].push_back(node->projection().data());
         }
 

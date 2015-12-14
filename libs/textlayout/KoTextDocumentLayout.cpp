@@ -42,7 +42,6 @@
 #include <KoPostscriptPaintDevice.h>
 #include <KoShape.h>
 #include <KoShapeContainer.h>
-#include <KoAnnotationLayoutManager.h>
 #include <KoAnnotation.h>
 #include <KoTextDocument.h>
 #include <KoUnit.h>
@@ -81,7 +80,6 @@ public:
        , allowPositionInlineObject(true)
        , continuationObstruction(0)
        , referencedLayout(0)
-       , annotationLayoutManager(0)
        , defaultTabSizing(0)
        , y(0)
        , isLayouting(false)
@@ -123,8 +121,6 @@ public:
     KoTextLayoutObstruction *continuationObstruction;
 
     KoTextDocumentLayout *referencedLayout;
-
-    KoAnnotationLayoutManager *annotationLayoutManager;
 
     QHash<KoInlineObject *, KoTextLayoutRootArea *> rootAreaForInlineObject;
 
@@ -246,7 +242,7 @@ QSizeF KoTextDocumentLayout::documentSize() const
 QRectF KoTextDocumentLayout::selectionBoundingBox(QTextCursor &cursor) const
 {
     QRectF retval;
-    foreach(const KoTextLayoutRootArea *rootArea, d->rootAreaList) {
+    Q_FOREACH (const KoTextLayoutRootArea *rootArea, d->rootAreaList) {
         if (!rootArea->isDirty()) {
             QRectF areaBB  = rootArea->selectionBoundingBox(cursor);
             if (areaBB.isValid()) {
@@ -389,7 +385,7 @@ KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPosition(int position) co
 
 KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPoint(const QPointF &point) const
 {
-    foreach(KoTextLayoutRootArea *rootArea, d->rootAreaList) {
+    Q_FOREACH (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
         if (!rootArea->isDirty()) {
             if (rootArea->boundingRect().contains(point)) {
                 return rootArea;
@@ -570,7 +566,7 @@ void KoTextDocumentLayout::positionAnchorTextRanges(int pos, int length, const Q
     }
     QHash<int, KoTextRange *> ranges = textRangeManager()->textRangesChangingWithin(effectiveDocument, pos, pos+length, pos, pos+length);
 
-    foreach(KoTextRange *range, ranges.values()) {
+    Q_FOREACH (KoTextRange *range, ranges.values()) {
         KoAnchorTextRange *anchorRange = dynamic_cast<KoAnchorTextRange *>(range);
         if (anchorRange) {
             // We need some special treatment for anchors as they need to position their object during

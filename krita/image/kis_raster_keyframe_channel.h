@@ -65,8 +65,8 @@ public:
 
 protected:
     KisKeyframeSP createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand);
-    bool canDeleteKeyframe(KisKeyframeSP key);
     void destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand);
+    void uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame);
 
     QRect affectedRect(KisKeyframeSP key);
     void requestUpdate(const KisTimeRange &range, const QRect &rect);

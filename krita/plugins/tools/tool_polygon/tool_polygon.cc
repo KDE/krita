@@ -42,8 +42,7 @@ K_PLUGIN_FACTORY_WITH_JSON(ToolPolygonFactory, "kritatoolpolygon.json", register
 ToolPolygon::ToolPolygon(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    KoToolRegistry * r = KoToolRegistry::instance();
-    r->add(new KisToolPolygonFactory(QStringList()));
+    KoToolRegistry::instance()->add(new KisToolPolygonFactory());
 }
 
 ToolPolygon::~ToolPolygon()

@@ -205,7 +205,7 @@ void DlgCreateBundle::addSelected()
 {
     int row = m_ui->tableAvailable->currentRow();
 
-    foreach(QListWidgetItem *item, m_ui->tableAvailable->selectedItems()) {
+    Q_FOREACH (QListWidgetItem *item, m_ui->tableAvailable->selectedItems()) {
         m_ui->tableSelected->addItem(m_ui->tableAvailable->takeItem(m_ui->tableAvailable->row(item)));
         QString resourceType = m_ui->cmbResourceTypes->itemData(m_ui->cmbResourceTypes->currentIndex()).toString();
         if (resourceType == "brushes") {
@@ -236,7 +236,7 @@ void DlgCreateBundle::removeSelected()
 {
     int row = m_ui->tableSelected->currentRow();
 
-    foreach(QListWidgetItem *item, m_ui->tableSelected->selectedItems()) {
+    Q_FOREACH (QListWidgetItem *item, m_ui->tableSelected->selectedItems()) {
         m_ui->tableAvailable->addItem(m_ui->tableSelected->takeItem(m_ui->tableSelected->row(item)));
         QString resourceType = m_ui->cmbResourceTypes->itemData(m_ui->cmbResourceTypes->currentIndex()).toString();
         if (resourceType == "brushes") {
@@ -284,7 +284,7 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
 
     if (resourceType == "brushes") {
         KisBrushResourceServer *server = KisBrushServer::instance()->brushServer();
-        foreach(KisBrushSP res, server->resources()) {
+        Q_FOREACH (KisBrushSP res, server->resources()) {
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
             item->setData(Qt::UserRole, res->shortFilename());
 
@@ -298,7 +298,7 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
     }
     else if (resourceType == "presets") {
         KisPaintOpPresetResourceServer* server = KisResourceServerProvider::instance()->paintOpPresetServer();
-        foreach(KisPaintOpPresetSP res, server->resources()) {
+        Q_FOREACH (KisPaintOpPresetSP res, server->resources()) {
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
             item->setData(Qt::UserRole, res->shortFilename());
 
@@ -312,7 +312,7 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
     }
     else if (resourceType == "gradients") {
         KoResourceServer<KoAbstractGradient>* server = KoResourceServerProvider::instance()->gradientServer();
-        foreach(KoResource *res, server->resources()) {
+        Q_FOREACH (KoResource *res, server->resources()) {
             if (res->filename()!="Foreground to Transparent" && res->filename()!="Foreground to Background") {
             //technically we should read from the file-name whether or not the file can be opened, but this works for now. The problem is making sure that bundle-resource know where they are stored.//
             //dbgKrita<<res->filename();
@@ -330,7 +330,7 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
     }
     else if (resourceType == "patterns") {
         KoResourceServer<KoPattern>* server = KoResourceServerProvider::instance()->patternServer();
-        foreach(KoResource *res, server->resources()) {
+        Q_FOREACH (KoResource *res, server->resources()) {
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
             item->setData(Qt::UserRole, res->shortFilename());
 
@@ -344,7 +344,7 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
     }
     else if (resourceType == "palettes") {
         KoResourceServer<KoColorSet>* server = KoResourceServerProvider::instance()->paletteServer();
-        foreach(KoResource *res, server->resources()) {
+        Q_FOREACH (KoResource *res, server->resources()) {
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
             item->setData(Qt::UserRole, res->shortFilename());
 
@@ -358,7 +358,7 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
     }
     else if (resourceType == "workspaces") {
         KoResourceServer<KisWorkspaceResource>* server = KisResourceServerProvider::instance()->workspaceServer();
-        foreach(KoResource *res, server->resources()) {
+        Q_FOREACH (KoResource *res, server->resources()) {
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
             item->setData(Qt::UserRole, res->shortFilename());
 

@@ -111,9 +111,7 @@ KisTextureTile::KisTextureTile(const QRect &imageRect, const KisGLTexturesInfo *
 KisTextureTile::~KisTextureTile()
 {
 #ifdef USE_PIXEL_BUFFERS
-    if (m_useBuffer) {
-        delete m_glBuffer;
-    }
+    delete m_glBuffer;
 #endif
     f->glDeleteTextures(1, &m_textureId);
 }
@@ -351,6 +349,7 @@ void KisTextureTile::createTextureBuffer(const char *data, int size)
 
     }
     else {
+        delete m_glBuffer;
         m_glBuffer = 0;
     }
 }

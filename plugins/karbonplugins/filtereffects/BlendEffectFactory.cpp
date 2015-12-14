@@ -24,16 +24,16 @@
 #include <klocalizedstring.h>
 
 BlendEffectFactory::BlendEffectFactory()
-        : KoFilterEffectFactoryBase(BlendEffectId, i18n("Blend"))
+    : KoFilterEffectFactoryBase(BlendEffectId, i18n("Blend"))
 {
 }
 
-KoFilterEffect * BlendEffectFactory::createFilterEffect() const
+KoFilterEffect *BlendEffectFactory::createFilterEffect() const
 {
     return new BlendEffect();
 }
 
-KoFilterEffectConfigWidgetBase * BlendEffectFactory::createConfigWidget() const
+KoFilterEffectConfigWidgetBase *BlendEffectFactory::createConfigWidget() const
 {
     return new BlendEffectConfigWidget();
 }

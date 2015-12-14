@@ -24,8 +24,11 @@
 
 #include <klocalizedstring.h>
 
-FilterAddCommand::FilterAddCommand(KoFilterEffect *filterEffect, KoShape * shape, KUndo2Command *parent)
-        : KUndo2Command(parent), m_filterEffect(filterEffect), m_shape(shape), m_isAdded(false)
+FilterAddCommand::FilterAddCommand(KoFilterEffect *filterEffect, KoShape *shape, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_filterEffect(filterEffect)
+    , m_shape(shape)
+    , m_isAdded(false)
 {
     Q_ASSERT(m_shape);
     setText(kundo2_i18n("Add filter effect"));
@@ -33,8 +36,9 @@ FilterAddCommand::FilterAddCommand(KoFilterEffect *filterEffect, KoShape * shape
 
 FilterAddCommand::~FilterAddCommand()
 {
-    if (!m_isAdded)
+    if (!m_isAdded) {
         delete m_filterEffect;
+    }
 }
 
 void FilterAddCommand::redo()

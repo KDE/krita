@@ -21,23 +21,24 @@
 #include "ChangeTextAnchorCommand.h"
 #include <klocalizedstring.h>
 
-ChangeTextAnchorCommand::ChangeTextAnchorCommand( ArtisticTextShape * shape, ArtisticTextShape::TextAnchor anchor )
-    : m_shape(shape), m_anchor( anchor )
+ChangeTextAnchorCommand::ChangeTextAnchorCommand(ArtisticTextShape *shape, ArtisticTextShape::TextAnchor anchor)
+    : m_shape(shape)
+    , m_anchor(anchor)
 {
-    setText( kundo2_i18n("Change text anchor") );
+    setText(kundo2_i18n("Change text anchor"));
 }
 
 void ChangeTextAnchorCommand::undo()
 {
-    if ( m_shape ) {
-        m_shape->setTextAnchor( m_oldAnchor );
+    if (m_shape) {
+        m_shape->setTextAnchor(m_oldAnchor);
     }
 }
 
 void ChangeTextAnchorCommand::redo()
 {
-    if ( m_shape ) {
+    if (m_shape) {
         m_oldAnchor = m_shape->textAnchor();
-        m_shape->setTextAnchor( m_anchor );
+        m_shape->setTextAnchor(m_anchor);
     }
 }

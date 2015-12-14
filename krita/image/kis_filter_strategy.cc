@@ -184,7 +184,7 @@ KisFilterStrategyRegistry::KisFilterStrategyRegistry()
 
 KisFilterStrategyRegistry::~KisFilterStrategyRegistry()
 {
-    foreach(const QString &id, keys()) {
+    Q_FOREACH (const QString &id, keys()) {
         delete get(id);
     }    
     dbgRegistry << "deleting KisFilterStrategyRegistry";
@@ -209,7 +209,7 @@ KisFilterStrategyRegistry* KisFilterStrategyRegistry::instance()
 QList<KoID> KisFilterStrategyRegistry::listKeys() const
 {
     QList<KoID> answer;
-    foreach (const QString key, keys()) {
+    Q_FOREACH (const QString key, keys()) {
         answer.append(KoID(key, get(key)->name()));
     }
 
@@ -220,7 +220,7 @@ QString KisFilterStrategyRegistry::formatedDescriptions() const
 {
     QString formatedDescription("<html><head/><body>");
 
-    foreach (const QString key, keys()) {
+    Q_FOREACH (const QString key, keys()) {
         KisFilterStrategy *strategy = get(key);
         QString description = strategy->description();
 

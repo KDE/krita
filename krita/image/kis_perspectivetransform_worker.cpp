@@ -127,7 +127,7 @@ void KisPerspectiveTransformWorker::run()
     KisRandomSubAccessorSP srcAcc = cloneDevice->createRandomSubAccessor();
     KisRandomAccessorSP accessor = m_dev->createRandomAccessorNG(0, 0);
 
-    foreach(const QRect &rect, m_dstRegion.rects()) {
+    Q_FOREACH (const QRect &rect, m_dstRegion.rects()) {
         for (int y = rect.y(); y < rect.y() + rect.height(); ++y) {
             for (int x = rect.x(); x < rect.x() + rect.width(); ++x) {
 

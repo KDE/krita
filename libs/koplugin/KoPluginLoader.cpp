@@ -82,7 +82,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         if (firstStart) {
             configChanged = true;
         }
-        foreach(QPluginLoader *loader, offers) {
+        Q_FOREACH (QPluginLoader *loader, offers) {
             QJsonObject json = loader->metaData().value("MetaData").toObject();
             json = json.value("KPlugin").toObject();
             const QString pluginName = json.value("Id").toString();
@@ -104,7 +104,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     }
 
     QMap<QString, QPluginLoader *> serviceNames;
-    foreach(QPluginLoader *loader, plugins) {
+    Q_FOREACH (QPluginLoader *loader, plugins) {
         if (serviceNames.contains(loader->fileName())) { // duplicate
             QJsonObject json2 = loader->metaData().value("MetaData").toObject();
             QVariant pluginVersion2 = json2.value("X-Flake-PluginVersion").toVariant();
@@ -122,9 +122,14 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     }
 
     QList<QString> whiteList;
-    foreach(QPluginLoader *loader, serviceNames) {
+    Q_FOREACH (const QString &serviceName, serviceNames.keys()) {
+//        qDebug() << "loading" << serviceName;
+        QPluginLoader *loader = serviceNames[serviceName];
         KPluginFactory *factory = qobject_cast<KPluginFactory *>(loader->instance());
-        QObject *plugin = factory->create<QObject>(owner ? owner : this, QVariantList());
+        QObject *plugin = 0;
+        if (factory) {
+            plugin = factory->create<QObject>(owner ? owner : this, QVariantList());
+        }
         if (plugin) {
             QJsonObject json = loader->metaData().value("MetaData").toObject();
             json = json.value("KPlugin").toObject();

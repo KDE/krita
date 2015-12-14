@@ -145,6 +145,17 @@ public:
     QSize sizeHint() const Q_DECL_OVERRIDE;
 
 
+
+    /**
+     * Import shortcut scheme file from @p path
+     */
+    void importConfiguration(const QString &path);
+
+    /**
+     * Exports shortcut scheme file to @p path
+     */
+    void exportConfiguration(const QString &path) const;
+
     /**
      * Pops up a modal (blocking) dialog for configuring key settings. The new
      * shortcut settings will become active if the user presses OK.
@@ -167,6 +178,8 @@ public:
 public Q_SLOTS:
     ///@reimp
     void accept() Q_DECL_OVERRIDE;
+
+    void allDefault();
 
 Q_SIGNALS:
     ///emitted after OK is clicked and settings are saved

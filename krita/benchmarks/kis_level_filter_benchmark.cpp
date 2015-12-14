@@ -81,10 +81,12 @@ void KisLevelFilterBenchmark::benchmarkFilter()
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&file);
+        out.setCodec("UTF-8");
         out << kfc->toXML();
     } else {
         QString s;
         QTextStream in(&file);
+        in.setCodec("UTF-8");
         s = in.readAll();
         kfc->fromXML(s);
     }
@@ -93,7 +95,7 @@ void KisLevelFilterBenchmark::benchmarkFilter()
     QVector<QRect> rects = KritaUtils::splitRectIntoPatches(QRect(0, 0, GMP_IMAGE_WIDTH,GMP_IMAGE_HEIGHT), size);
 
     QBENCHMARK{
-        foreach(const QRect &rc, rects) {
+        Q_FOREACH (const QRect &rc, rects) {
             filter->process(m_device, rc, kfc);
         }
     }

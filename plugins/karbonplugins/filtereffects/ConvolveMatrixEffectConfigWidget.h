@@ -37,7 +37,7 @@ public:
     explicit ConvolveMatrixEffectConfigWidget(QWidget *parent = 0);
 
     /// reimplemented from KoFilterEffectConfigWidgetBase
-    virtual bool editFilterEffect(KoFilterEffect * filterEffect);
+    virtual bool editFilterEffect(KoFilterEffect *filterEffect);
 
 private Q_SLOTS:
     void orderChanged(int value);
@@ -49,8 +49,8 @@ private Q_SLOTS:
     void editKernel();
     void kernelChanged();
 private:
-    ConvolveMatrixEffect * m_effect;
-    KComboBox * m_edgeMode;
+    ConvolveMatrixEffect *m_effect;
+    KComboBox *m_edgeMode;
     QSpinBox *m_orderX;
     QSpinBox *m_orderY;
     QSpinBox *m_targetX;
@@ -58,7 +58,7 @@ private:
     QDoubleSpinBox *m_divisor;
     QDoubleSpinBox *m_bias;
     QCheckBox *m_preserveAlpha;
-    MatrixDataModel * m_matrixModel;
+    MatrixDataModel *m_matrixModel;
 };
 
 #endif // CONVOLVEMATRIXEFFECTCONFIGWIDGET_H

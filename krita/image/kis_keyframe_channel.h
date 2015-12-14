@@ -52,6 +52,7 @@ public:
     bool deleteKeyframe(KisKeyframeSP keyframe, KUndo2Command *parentCommand = 0);
     bool moveKeyframe(KisKeyframeSP keyframe, int newTime, KUndo2Command *parentCommand = 0);
     KisKeyframeSP copyKeyframe(const KisKeyframeSP keyframe, int newTime, KUndo2Command *parentCommand = 0);
+    KisKeyframeSP copyExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, int dstTime, KUndo2Command *parentCommand = 0);
 
     KisKeyframeSP keyframeAt(int time) const;
     KisKeyframeSP activeKeyframeAt(int time) const;
@@ -61,6 +62,7 @@ public:
     KisKeyframeSP previousKeyframe(KisKeyframeSP keyframe) const;
     KisKeyframeSP lastKeyframe() const;
 
+    QSet<int> allKeyframeIds() const;
     /**
      * Get the set of frames affected by any changes to the value
      * of the active keyframe at the given time.
@@ -108,8 +110,8 @@ protected:
     KeyframesMap::const_iterator activeKeyIterator(int time) const;
 
     virtual KisKeyframeSP createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand) = 0;
-    virtual bool canDeleteKeyframe(KisKeyframeSP key) = 0;
     virtual void destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand) = 0;
+    virtual void uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame) = 0;
 
     virtual QRect affectedRect(KisKeyframeSP key) = 0;
     virtual void requestUpdate(const KisTimeRange &range, const QRect &rect);
@@ -118,8 +120,9 @@ protected:
     virtual void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) = 0;
 
 private:
-    void insertKeyframeImpl(KisKeyframeSP keyframe);
-    void deleteKeyframeImpl(KisKeyframeSP keyframe);
+    void insertKeyframeLogical(KisKeyframeSP keyframe);
+    void deleteKeyframeLogical(KisKeyframeSP keyframe);
+    bool deleteKeyframeImpl(KisKeyframeSP keyframe, KUndo2Command *parentCommand, bool recreate);
     void moveKeyframeImpl(KisKeyframeSP keyframe, int newTime);
 
     struct InsertFrameCommand;

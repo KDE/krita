@@ -24,7 +24,7 @@
 #include <QSize>
 #include <QPixmap>
 
-static const char* const cminus[] = {
+static const char *const cminus[] = {
     "16 16 6 1",
     "  c Gray0",
     ". c #939393",
@@ -50,7 +50,7 @@ static const char* const cminus[] = {
     "OOOOOOOOOOOOOO  "
 };
 
-static const char* const cplus[] = {
+static const char *const cplus[] = {
     "16 16 6 1",
     "  c Gray0",
     ". c #939393",
@@ -83,10 +83,10 @@ QCursor KarbonCursor::createCursor(CursorType type)
         return crossHair();
         break;
     case ZoomPlus:
-        return QCursor(QPixmap((const char**) cplus), -1, -1);
+        return QCursor(QPixmap((const char **) cplus), -1, -1);
         break;
     case ZoomMinus:
-        return QCursor(QPixmap((const char**) cminus), -1, -1);
+        return QCursor(QPixmap((const char **) cminus), -1, -1);
         break;
     case NeedleArrow:
         return needleArrow();
@@ -95,13 +95,13 @@ QCursor KarbonCursor::createCursor(CursorType type)
     }
 }
 
-QCursor KarbonCursor::createCursor(const char * bitmap[], const char * mask[], int hotX, int hotY)
+QCursor KarbonCursor::createCursor(const char *bitmap[], const char *mask[], int hotX, int hotY)
 {
     // the cursor bitmap and mask
     QBitmap b, m;
 
-    b = QPixmap((const char**) bitmap);
-    m = QPixmap((const char**) mask);
+    b = QPixmap((const char **) bitmap);
+    m = QPixmap((const char **) mask);
 
     return QCursor(b, m, hotX, hotY);
 }

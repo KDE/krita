@@ -1,9 +1,9 @@
 ########### next target ###############
 
-set(kritaoffsetimage_PART_SRCS offsetimage.cpp dlg_offsetimage.cpp kis_offset_processing_visitor.cpp)
+set(kritaoffsetimage_SOURCES offsetimage.cpp dlg_offsetimage.cpp kis_offset_processing_visitor.cpp)
 
-ki18n_wrap_ui(kritaoffsetimage_PART_SRCS wdg_offsetimage.ui )
-add_library(kritaoffsetimage MODULE ${kritaoffsetimage_PART_SRCS})
+ki18n_wrap_ui(kritaoffsetimage_SOURCES wdg_offsetimage.ui )
+add_library(kritaoffsetimage MODULE ${kritaoffsetimage_SOURCES})
 kcoreaddons_desktop_to_json(kritaoffsetimage kritaoffsetimage.desktop)
 
 target_link_libraries(kritaoffsetimage kritaui)

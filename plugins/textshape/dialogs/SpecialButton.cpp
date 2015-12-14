@@ -30,14 +30,14 @@
 #include <QDebug>
 
 SpecialButton::SpecialButton(QWidget *parent)
-    : QFrame(parent),
-      m_stylesWidget(0),
-      m_preview(0)
+    : QFrame(parent)
+    , m_stylesWidget(0)
+    , m_preview(0)
 {
     setFrameShape(QFrame::StyledPanel);
     setFrameShadow(QFrame::Sunken);
 
-    setMinimumSize(50,32);
+    setMinimumSize(50, 32);
     setMaximumHeight(25);
 
     m_preview = new QLabel();
@@ -72,12 +72,15 @@ void SpecialButton::showPopup()
     QRect popupRect(mapToGlobal(QPoint(0, height())), m_stylesWidget->sizeHint());
     // Make sure the popup is not drawn outside the screen area
     QRect screenRect = QApplication::desktop()->availableGeometry(this);
-    if (popupRect.right() > screenRect.right())
+    if (popupRect.right() > screenRect.right()) {
         popupRect.translate(screenRect.right() - popupRect.right(), 0);
-    if (popupRect.left() < screenRect.left())
+    }
+    if (popupRect.left() < screenRect.left()) {
         popupRect.translate(screenRect.left() - popupRect.left(), 0);
-    if (popupRect.bottom() > screenRect.bottom())
+    }
+    if (popupRect.bottom() > screenRect.bottom()) {
         popupRect.translate(0, -(height() + m_stylesWidget->height()));
+    }
 
     m_stylesWidget->setGeometry(popupRect);
     m_stylesWidget->raise();
@@ -100,8 +103,7 @@ void SpecialButton::mousePressEvent(QMouseEvent *)
 {
     if (!isPopupVisible) {
         showPopup();
-    }
-    else {
+    } else {
         hidePopup();
     }
 }

@@ -22,11 +22,12 @@
 #include "kritaimage_export.h"
 
 #include <QDockWidget>
+#include <QPointer>
 
 #include <kis_mainwindow_observer.h>
-#include "kis_action.h"
+#include <kis_action.h>
+#include <kis_canvas2.h>
 
-class KisCanvas2;
 class Ui_WdgAnimation;
 class KisMainWindow;
 
@@ -72,7 +73,7 @@ private Q_SLOTS:
 
 private:
 
-    KisCanvas2 *m_canvas;
+    QPointer<KisCanvas2> m_canvas;
     Ui_WdgAnimation *m_animationWidget;
 
     KisAction *m_previousFrameAction;

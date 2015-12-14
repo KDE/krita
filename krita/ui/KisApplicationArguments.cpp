@@ -21,6 +21,7 @@
 #include <QCommandLineParser>
 #include <QCommandLineOption>
 #include <QApplication>
+#include <QDir>
 #include <QStringList>
 #include <QString>
 #include <QDebug>
@@ -69,7 +70,10 @@ KisApplicationArguments::KisApplicationArguments(const QApplication &app)
     parser.addPositionalArgument(QLatin1String("[file(s)]"), i18n("File(s) or URL(s) to open"));
     parser.process(app);
 
-    d->filenames = parser.positionalArguments();
+    const QDir currentDir = QDir::current();
+    Q_FOREACH (const QString &filename, parser.positionalArguments()) {
+        d->filenames << currentDir.absoluteFilePath(filename);
+    }
 
     QString dpiValues = parser.value("dpi");
     if (!dpiValues.isEmpty()) {
@@ -134,7 +138,7 @@ QByteArray KisApplicationArguments::serialize()
     QDataStream ds(&buf);
     ds.setVersion(QDataStream::Qt_5_0);
     ds << d->filenames.count();
-    foreach(const QString &filename, d->filenames) {
+    Q_FOREACH (const QString &filename, d->filenames) {
         ds << filename;
     }
     ds << d->dpiX;

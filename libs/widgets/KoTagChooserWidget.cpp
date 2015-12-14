@@ -170,7 +170,7 @@ void KoTagChooserWidget::addItems(QStringList tagNames)
     tagNames.sort();
     QStringList items;
 
-    foreach(const QString & readOnlyTag, d->readOnlyTags) {
+    Q_FOREACH (const QString & readOnlyTag, d->readOnlyTags) {
         items.append(readOnlyTag);
     }
 

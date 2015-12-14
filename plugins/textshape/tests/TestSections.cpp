@@ -53,16 +53,16 @@ void TestSections::initTest(const KoSectionStyle *sectionStyle)
     Q_ASSERT(m_defaultSectionStyle);
     m_defaultSectionStyle->setLeftMargin(0.0);
     m_defaultSectionStyle->setRightMargin(0.0);
-    
+
     QString loremIpsum("Lorem ipsum dolor sit amet, XgXgectetuer adiXiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.");
 
     m_doc->rootFrame()->firstCursorPosition().insertText(loremIpsum);
-    
+
     // Style.
     QTextFrameFormat sectionFormat;
     sectionStyle->applyStyle(sectionFormat);
     QTextFrame *section = m_doc->rootFrame()->firstCursorPosition().insertFrame(sectionFormat);
-    
+
     section->firstCursorPosition().insertText(loremIpsum);
 }
 
@@ -78,7 +78,7 @@ void TestSections::testBasicLayout()
     Q_ASSERT(sectionStyle);
     sectionStyle->setLeftMargin(0.0);
     sectionStyle->setRightMargin(0.0);
-    
+
     initTest(sectionStyle);
 
     m_layout->layout();
@@ -135,6 +135,5 @@ void TestSections::testMoveByMargin()
     QCOMPARE(blockLayout->lineAt(0).width(), 200.0);
     cleanupTest();
 }
-
 
 QTEST_KDEMAIN(TestSections, GUI)

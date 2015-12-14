@@ -252,16 +252,33 @@ void KisStrokesQueueTest::testBarrierStrokeJobs()
 
     context.clear();
 
-    // Finally, we can do our work
+    // Finally, we can do our work. Barrier job is executed alone
     queue.processQueue(context, externalJobsPending);
 
     jobs = context.getJobs();
     COMPARE_NAME(jobs[0], "nor_dab");
-    COMPARE_NAME(jobs[1], "nor_dab");
+    VERIFY_EMPTY(jobs[1]);
+    VERIFY_EMPTY(jobs[2]);
+
+    // Barrier job has finished
+    context.clear();
+
+    jobs = context.getJobs();
+    VERIFY_EMPTY(jobs[0]);
+    VERIFY_EMPTY(jobs[1]);
+    VERIFY_EMPTY(jobs[2]);
+
+    // fetch the last (concurrent) one
+    queue.processQueue(context, externalJobsPending);
+
+    jobs = context.getJobs();
+    COMPARE_NAME(jobs[0], "nor_dab");
+    VERIFY_EMPTY(jobs[1]);
     VERIFY_EMPTY(jobs[2]);
 
     context.clear();
 
+    // finish the stroke
     queue.processQueue(context, externalJobsPending);
 
     jobs = context.getJobs();

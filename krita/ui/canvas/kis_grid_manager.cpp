@@ -49,10 +49,8 @@ KisGridManager::~KisGridManager()
 void KisGridManager::setup(KisActionManager* actionManager)
 {
     m_toggleGrid = actionManager->createAction("view_grid");
-    m_toggleGrid->setActivationFlags(KisAction::ACTIVE_NODE);
 
     m_toggleSnapToGrid  = actionManager->createAction("view_snap_to_grid");
-    m_toggleSnapToGrid->setActivationFlags(KisAction::ACTIVE_NODE);
     connect(m_toggleSnapToGrid, SIGNAL(triggered()), this, SLOT(toggleSnapToGrid()));
 }
 

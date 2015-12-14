@@ -45,7 +45,7 @@
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
-          <widget class="KisScratchPad" name="scratchPad" native="true">
+          <widget class="KisScratchPad" name="scratchPad">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -148,7 +148,7 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="KisPresetSelectorStrip" name="presetWidget" native="true">
+      <widget class="KisPresetSelectorStrip" name="presetWidget">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -210,7 +210,7 @@
     </layout>
    </item>
    <item row="0" column="0" rowspan="4">
-    <widget class="KisPaintOpListWidget" name="paintopList" native="true">
+    <widget class="KisPaintOpListWidget" name="paintopList">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -282,7 +282,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KisLodAvailabilityWidget" name="wdgLodAvailability" native="true">
+      <widget class="KisLodAvailabilityWidget" name="wdgLodAvailability">
        <property name="minimumSize">
         <size>
          <width>60</width>

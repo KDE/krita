@@ -127,7 +127,7 @@
     </widget>
    </item>
    <item row="5" column="1" colspan="2">
-    <widget class="KisDoubleSliderSpinBox" name="inputSpacing" native="true"/>
+    <widget class="KisDoubleSliderSpinBox" name="inputSpacing"/>
    </item>
    <item row="3" column="1">
     <widget class="QCheckBox" name="pipeModeChbox">

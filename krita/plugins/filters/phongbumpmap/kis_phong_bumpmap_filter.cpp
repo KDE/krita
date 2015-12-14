@@ -61,7 +61,7 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
 
     KoChannelInfo *m_heightChannel = 0;
 
-    foreach (KoChannelInfo* channel, device->colorSpace()->channels()) {
+    Q_FOREACH (KoChannelInfo* channel, device->colorSpace()->channels()) {
         if (userChosenHeightChannel == channel->name()) {
             m_heightChannel = channel;
         }
@@ -106,8 +106,8 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
     //===============RENDER=================
 
     QVector<PtrToDouble> toDoubleFuncPtr(device->colorSpace()->channels().count());
-    KisMathToolbox *mathToolbox = KisMathToolboxRegistry::instance()->value(device->colorSpace()->mathToolboxId().id());
-    if (!mathToolbox->getToDoubleChannelPtr(device->colorSpace()->channels(), toDoubleFuncPtr)) {
+    KisMathToolbox mathToolbox;
+    if (!mathToolbox.getToDoubleChannelPtr(device->colorSpace()->channels(), toDoubleFuncPtr)) {
         return;
     }
 

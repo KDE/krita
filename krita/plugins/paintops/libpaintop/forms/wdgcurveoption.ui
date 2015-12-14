@@ -12,7 +12,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="2" column="0" rowspan="4">
-    <widget class="KisMultiSensorsSelector" name="sensorSelector" native="true">
+    <widget class="KisMultiSensorsSelector" name="sensorSelector">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -52,7 +52,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KisDoubleSliderSpinBox" name="slider" native="true">
+      <widget class="KisDoubleSliderSpinBox" name="slider">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -184,7 +184,7 @@
       </layout>
      </item>
      <item row="1" column="0">
-      <widget class="KisCurveWidget" name="curveWidget" native="true">
+      <widget class="KisCurveWidget" name="curveWidget">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
          <horstretch>1</horstretch>

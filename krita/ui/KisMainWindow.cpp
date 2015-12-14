@@ -118,10 +118,13 @@
 #include "kis_action_manager.h"
 #include "thememanager.h"
 #include "kis_resource_server_provider.h"
+#ifdef HAVE_OPENGL
 #include "kis_animation_exporter.h"
+#endif
 #include "kis_icon_utils.h"
 #include <KisImportExportFilter.h>
 #include <KisDocumentEntry.h>
+#include <KisWelcomeScreen.h>
 
 class ToolDockerFactory : public KoDockFactoryBase
 {
@@ -188,6 +191,7 @@ public:
         , windowMapper(new QSignalMapper(parent))
         , documentMapper(new QSignalMapper(parent))
         , lastExportSpecialOutputFlag(0)
+        , welcomeScreen(new KisWelcomeScreen(parent))
     {
     }
 
@@ -217,7 +221,9 @@ public:
     KisAction *printAction;
     KisAction *printActionPreview;
     KisAction *exportPdf;
+#ifdef HAVE_OPENGL
     KisAction *exportAnimation;
+#endif
     KisAction *closeAll;
 //    KisAction *reloadFile;
     KisAction *importFile;
@@ -263,6 +269,8 @@ public:
 
     QByteArray lastExportedFormat;
     int lastExportSpecialOutputFlag;
+
+    KisWelcomeScreen *welcomeScreen;
 
     KisActionManager * actionManager() {
         return viewManager->actionManager();
@@ -312,23 +320,23 @@ KisMainWindow::KisMainWindow()
 
     QMap<QString, QAction*> dockwidgetActions;
     dockwidgetActions[toolbox->toggleViewAction()->text()] = toolbox->toggleViewAction();
-    foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
+    Q_FOREACH (const QString & docker, KoDockRegistry::instance()->keys()) {
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
         QDockWidget *dw = createDockWidget(factory);
         dockwidgetActions[dw->toggleViewAction()->text()] = dw->toggleViewAction();
     }
-    foreach(QString title, dockwidgetActions.keys()) {
+    Q_FOREACH (QString title, dockwidgetActions.keys()) {
         d->dockWidgetMenu->addAction(dockwidgetActions[title]);
     }
 
 
-    foreach (QDockWidget *wdg, dockWidgets()) {
+    Q_FOREACH (QDockWidget *wdg, dockWidgets()) {
         if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
             wdg->setVisible(true);
         }
     }
 
-    foreach(KoCanvasObserverBase* observer, canvasObservers()) {
+    Q_FOREACH (KoCanvasObserverBase* observer, canvasObservers()) {
         observer->setObservedCanvas(0);
         KisMainwindowObserver* mainwindowObserver = dynamic_cast<KisMainwindowObserver*>(observer);
         if (mainwindowObserver) {
@@ -342,6 +350,7 @@ KisMainWindow::KisMainWindow()
     d->mdiArea->setTabsClosable(true);
 
     setCentralWidget(d->mdiArea);
+    d->welcomeScreen->hide();
 
     connect(d->mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(subWindowActivated()));
     connect(d->windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
@@ -404,7 +413,7 @@ KisMainWindow::KisMainWindow()
 #if 0
     //check for colliding shortcuts
     QSet<QKeySequence> existingShortcuts;
-    foreach(QAction* action, actionCollection()->actions()) {
+    Q_FOREACH (QAction* action, actionCollection()->actions()) {
         if(action->shortcut() == QKeySequence(0)) {
             continue;
         }
@@ -427,7 +436,7 @@ KisMainWindow::KisMainWindow()
 
     // Create and plug toolbar list for Settings menu
     QList<QAction *> toolbarList;
-    foreach(QWidget* it, guiFactory()->containers("ToolBar")) {
+    Q_FOREACH (QWidget* it, guiFactory()->containers("ToolBar")) {
         KToolBar * toolBar = ::qobject_cast<KToolBar *>(it);
 
         if (toolBar) {
@@ -462,7 +471,7 @@ void KisMainWindow::setNoCleanup(bool noCleanup)
 
 KisMainWindow::~KisMainWindow()
 {
-//    foreach(QAction *ac, actionCollection()->actions()) {
+//    Q_FOREACH (QAction *ac, actionCollection()->actions()) {
 //        QAction *action = qobject_cast<QAction*>(ac);
 //        if (action) {
 //        dbgKrita << "<Action"
@@ -557,7 +566,7 @@ void KisMainWindow::slotPreferences()
         KisConfigNotifier::instance()->notifyConfigChanged();
 
         // XXX: should this be changed for the views in other windows as well?
-        foreach(QPointer<KisView> koview, KisPart::instance()->views()) {
+        Q_FOREACH (QPointer<KisView> koview, KisPart::instance()->views()) {
             KisViewManager *view = qobject_cast<KisViewManager*>(koview);
             if (view) {
                 // Update the settings for all nodes -- they don't query
@@ -582,7 +591,7 @@ void KisMainWindow::slotThemeChanged()
     group.writeEntry("Theme", d->themeManager->currentThemeName());
 
     // reload action icons!
-    foreach (QAction *action, actionCollection()->actions()) {
+    Q_FOREACH (QAction *action, actionCollection()->actions()) {
         KisIconUtils::updateIcon(action);
     }
 
@@ -644,7 +653,7 @@ void KisMainWindow::saveRecentFiles()
 
     // Tell all windows to reload their list, after saving
     // Doesn't work multi-process, but it's a start
-    foreach(KMainWindow* window, KMainWindow::memberList())
+    Q_FOREACH (KMainWindow* window, KMainWindow::memberList())
         static_cast<KisMainWindow *>(window)->reloadRecentFileList();
 }
 
@@ -1102,7 +1111,7 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
         if (d->noCleanup)
             return;
 
-        foreach(QMdiSubWindow *subwin, d->mdiArea->subWindowList()) {
+        Q_FOREACH (QMdiSubWindow *subwin, d->mdiArea->subWindowList()) {
             KisView *view = dynamic_cast<KisView*>(subwin);
             if (view) {
                 KisPart::instance()->removeView(view);
@@ -1110,7 +1119,7 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
         }
 
         if (!d->dockWidgetVisibilityMap.isEmpty()) { // re-enable dockers for persistency
-            foreach(QDockWidget* dockWidget, d->dockWidgetsMap)
+            Q_FOREACH (QDockWidget* dockWidget, d->dockWidgetsMap)
                 dockWidget->setVisible(d->dockWidgetVisibilityMap.value(dockWidget));
         }
     } else {
@@ -1178,7 +1187,7 @@ void KisMainWindow::dragEnterEvent(QDragEnterEvent *event)
 void KisMainWindow::dropEvent(QDropEvent *event)
 {
     if (event->mimeData()->hasUrls() && event->mimeData()->urls().size() > 0) {
-        foreach(const QUrl &url, event->mimeData()->urls()) {
+        Q_FOREACH (const QUrl &url, event->mimeData()->urls()) {
             openDocument(url);
         }
     }
@@ -1208,7 +1217,7 @@ void KisMainWindow::slotFileOpen()
     if (urls.isEmpty())
         return;
 
-    foreach(const QString& url, urls) {
+    Q_FOREACH (const QString& url, urls) {
 
         if (!url.isEmpty()) {
             bool res = openDocument(QUrl::fromLocalFile(url));
@@ -1311,7 +1320,7 @@ void KisMainWindow::slotDocumentInfo()
 
 bool KisMainWindow::slotFileCloseAll()
 {
-    foreach(QMdiSubWindow *subwin, d->mdiArea->subWindowList()) {
+    Q_FOREACH (QMdiSubWindow *subwin, d->mdiArea->subWindowList()) {
         if (subwin) {
             if(!subwin->close())
                 return false;
@@ -1329,7 +1338,7 @@ void KisMainWindow::slotFileQuit()
 
     close();
 
-    foreach(QPointer<KisMainWindow> mainWin, KisPart::instance()->mainWindows()) {
+    Q_FOREACH (QPointer<KisMainWindow> mainWin, KisPart::instance()->mainWindows()) {
         if (mainWin != this) {
             if(!mainWin->slotFileCloseAll())
                 return;
@@ -1475,6 +1484,7 @@ KisPrintJob* KisMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFile
 
 void KisMainWindow::exportAnimation()
 {
+#ifdef HAVE_OPENGL
     if (!activeView()) return;
 
     KisDocument *document = activeView()->document();
@@ -1484,6 +1494,7 @@ void KisMainWindow::exportAnimation()
     exporter.exportSequence(document);
 
     activeView()->canvasBase()->refetchDataFromImage();
+#endif
 }
 
 void KisMainWindow::slotConfigureKeys()
@@ -1749,7 +1760,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 
 void KisMainWindow::forceDockTabFonts()
 {
-    foreach(QObject *child, children()) {
+    Q_FOREACH (QObject *child, children()) {
         if (child->inherits("QTabBar")) {
             ((QTabBar *)child)->setFont(KoDockRegistry::dockFont());
         }
@@ -1771,7 +1782,7 @@ QList<KoCanvasObserverBase*> KisMainWindow::canvasObservers() const
 {
     QList<KoCanvasObserverBase*> observers;
 
-    foreach(QDockWidget *docker, dockWidgets()) {
+    Q_FOREACH (QDockWidget *docker, dockWidgets()) {
         KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
         if (observer) {
             observers << observer;
@@ -1789,7 +1800,7 @@ void KisMainWindow::toggleDockersVisibility(bool visible)
     if (!visible) {
         d->dockerStateBeforeHiding = saveState();
 
-        foreach(QObject* widget, children()) {
+        Q_FOREACH (QObject* widget, children()) {
             if (widget->inherits("QDockWidget")) {
                 QDockWidget* dw = static_cast<QDockWidget*>(widget);
                 if (dw->isVisible()) {
@@ -1828,7 +1839,7 @@ void KisMainWindow::subWindowActivated()
     d->closeAll->setEnabled(enabled);
 
     setActiveSubWindow(d->mdiArea->activeSubWindow());
-    foreach(QToolBar *tb, toolBars()) {
+    Q_FOREACH (QToolBar *tb, toolBars()) {
         if (tb->objectName() == "BrushesAndStuff") {
             tb->setEnabled(enabled);
         }
@@ -1849,7 +1860,7 @@ void KisMainWindow::updateWindowMenu()
     QMenu *docMenu = d->documentMenu->menu();
     docMenu->clear();
 
-    foreach (QPointer<KisDocument> doc, KisPart::instance()->documents()) {
+    Q_FOREACH (QPointer<KisDocument> doc, KisPart::instance()->documents()) {
         if (doc) {
             QString title = doc->url().toDisplayString();
             if (title.isEmpty()) title = doc->image()->objectName();
@@ -1921,7 +1932,7 @@ void KisMainWindow::configChanged()
     KisConfig cfg;
     QMdiArea::ViewMode viewMode = (QMdiArea::ViewMode)cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView);
     d->mdiArea->setViewMode(viewMode);
-    foreach(QMdiSubWindow *subwin, d->mdiArea->subWindowList()) {
+    Q_FOREACH (QMdiSubWindow *subwin, d->mdiArea->subWindowList()) {
         subwin->setOption(QMdiSubWindow::RubberBandMove, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
         subwin->setOption(QMdiSubWindow::RubberBandResize, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
     }
@@ -2008,7 +2019,7 @@ QPointer<KisView>KisMainWindow::activeKisView()
 
 void KisMainWindow::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList)
 {
-    foreach(QWidget *w, optionWidgetList) {
+    Q_FOREACH (QWidget *w, optionWidgetList) {
 #ifdef Q_OS_MAC
         w->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
@@ -2084,17 +2095,13 @@ void KisMainWindow::createActions()
     d->redo->setActivationFlags(KisAction::ACTIVE_IMAGE);
 
     d->exportPdf  = actionManager->createAction("file_export_pdf");
-    d->exportPdf->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    d->exportPdf->setIcon(KisIconUtils::loadIcon("application-pdf"));
     connect(d->exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));
-
+#ifdef HAVE_OPENGL
     d->exportAnimation  = actionManager->createAction("file_export_animation");
-    d->exportAnimation->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(d->exportAnimation, SIGNAL(triggered()), this, SLOT(exportAnimation()));
-
+#endif
 
     d->closeAll = actionManager->createAction("file_close_all");
-    d->closeAll->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(d->closeAll, SIGNAL(triggered()), this, SLOT(slotFileCloseAll()));
 
 //    d->reloadFile  = actionManager->createAction("file_reload_file");
@@ -2105,13 +2112,11 @@ void KisMainWindow::createActions()
     connect(d->importFile, SIGNAL(triggered(bool)), this, SLOT(slotImportFile()));
 
     d->exportFile  = actionManager->createAction("file_export_file");
-    d->exportFile->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(d->exportFile, SIGNAL(triggered(bool)), this, SLOT(slotExportFile()));
 
     /* The following entry opens the document information dialog.  Since the action is named so it
         intends to show data this entry should not have a trailing ellipses (...).  */
     d->showDocumentInfo  = actionManager->createAction("file_documentinfo");
-    d->showDocumentInfo->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(d->showDocumentInfo, SIGNAL(triggered(bool)), this, SLOT(slotDocumentInfo()));
 
 
@@ -2135,26 +2140,21 @@ void KisMainWindow::createActions()
     actionCollection()->addAction("window", d->windowMenu);
 
     d->mdiCascade = actionManager->createAction("windows_cascade");
-    d->mdiCascade->setActivationFlags(KisAction::MULTIPLE_IMAGES);
     connect(d->mdiCascade, SIGNAL(triggered()), d->mdiArea, SLOT(cascadeSubWindows()));
 
     d->mdiTile = actionManager->createAction("windows_tile");
-    d->mdiTile->setActivationFlags(KisAction::MULTIPLE_IMAGES);
     connect(d->mdiTile, SIGNAL(triggered()), d->mdiArea, SLOT(tileSubWindows()));
 
     d->mdiNextWindow = actionManager->createAction("windows_next");
-    d->mdiNextWindow->setActivationFlags(KisAction::MULTIPLE_IMAGES);
     connect(d->mdiNextWindow, SIGNAL(triggered()), d->mdiArea, SLOT(activateNextSubWindow()));
 
     d->mdiPreviousWindow = actionManager->createAction("windows_previous");
-    d->mdiPreviousWindow->setActivationFlags(KisAction::MULTIPLE_IMAGES);
     connect(d->mdiPreviousWindow, SIGNAL(triggered()), d->mdiArea, SLOT(activatePreviousSubWindow()));
 
     d->newWindow = actionManager->createAction("view_newwindow");
     connect(d->newWindow, SIGNAL(triggered(bool)), this, SLOT(newWindow()));
 
     d->close = actionManager->createAction("file_close");
-    d->close->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(d->close, SIGNAL(triggered()), SLOT(closeCurrentWindow()));
 
     actionManager->createStandardAction(KStandardAction::Preferences, this, SLOT(slotPreferences()));
@@ -2227,7 +2227,7 @@ void KisMainWindow::showManual()
 
 void KisMainWindow::showDockerTitleBars(bool show)
 {
-    foreach (QDockWidget *dock, dockWidgets()) {
+    Q_FOREACH (QDockWidget *dock, dockWidgets()) {
         if (dock->titleBarWidget()) {
             const bool isCollapsed = (dock->widget() && dock->widget()->isHidden()) || !dock->widget();
             dock->titleBarWidget()->setVisible(show || (dock->isFloating() && isCollapsed));

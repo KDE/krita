@@ -337,7 +337,7 @@ void KoTosContainer::shapeChanged(ChangeType type, KoShape *shape)
     }
     // TODO is this needed?
 #if 0
-    foreach(KoShape *shape, d->model->shapes())
+    Q_FOREACH (KoShape *shape, d->model->shapes())
         shape->notifyChanged();
 #endif
 }

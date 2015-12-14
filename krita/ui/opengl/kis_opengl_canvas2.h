@@ -20,7 +20,7 @@
 #ifndef KIS_OPENGL_CANVAS_2_H
 #define KIS_OPENGL_CANVAS_2_H
 
-#include <opengl/kis_opengl.h>
+#include <KoConfig.h> // for HAVE_OPENGL
 
 #ifdef HAVE_OPENGL
 
@@ -49,7 +49,7 @@ class QPainterPath;
  * in the qpainter canvas.
  *
  */
-class KRITAUI_EXPORT KisOpenGLCanvas2 : public QOpenGLWidget, public QOpenGLFunctions, public KisCanvasWidgetBase
+class KRITAUI_EXPORT KisOpenGLCanvas2 : public QOpenGLWidget, protected QOpenGLFunctions, public KisCanvasWidgetBase
 {
 
     Q_OBJECT

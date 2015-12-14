@@ -351,7 +351,7 @@ void KisNodeModel::slotDummyChanged(KisNodeDummy *dummy)
 
 void KisNodeModel::processUpdateQueue()
 {
-    foreach(KisNodeDummy *dummy, m_d->updateQueue) {
+    Q_FOREACH (KisNodeDummy *dummy, m_d->updateQueue) {
         QModelIndex index = m_d->indexConverter->indexFromDummy(dummy);
         emit dataChanged(index, index);
     }
@@ -564,7 +564,7 @@ QList<KisNodeSP> sortNodes(KisNodeSP sourceRoot, QList<KisNodeSP> selectedNodes)
 QMimeData * KisNodeModel::mimeData(const QModelIndexList &indexes) const
 {
     QList<KisNodeSP> nodes;
-    foreach(const QModelIndex &idx, indexes) {
+    Q_FOREACH (const QModelIndex &idx, indexes) {
         nodes << nodeFromIndex(idx);
     }
     nodes = sortNodes(m_d->image->rootLayer(), nodes);
@@ -638,7 +638,7 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
 
     bool result = true;
 
-    foreach(KisNodeSP node, nodes) {
+    Q_FOREACH (KisNodeSP node, nodes) {
 
         if (!correctNewNodeLocation(node, parentDummy, aboveThisDummy)) {
             return false;

@@ -146,10 +146,6 @@ public:
         return new KoFallBackColorTransformation(this, KoColorSpaceRegistry::instance()->lab16(""), new KoLabDarkenColorTransformation<quint16>(shade, compensate, compensation, KoColorSpaceRegistry::instance()->lab16("")));
     }
 
-    virtual KoID mathToolboxId() const {
-        return KoID("Basic");
-    }
-
     virtual bool convertPixelsTo(const quint8 *src,
                                  quint8 *dst, const KoColorSpace *dstColorSpace,
                                  quint32 numPixels,

@@ -96,7 +96,7 @@ CompositionDockerDock::~CompositionDockerDock()
 void CompositionDockerDock::setCanvas(KoCanvasBase * canvas)
 {
     if (m_canvas && m_canvas->viewManager()) {
-        foreach(KisAction *action, m_actions) {
+        Q_FOREACH (KisAction *action, m_actions) {
             m_canvas->viewManager()->actionManager()->takeAction(action);
         }
     }
@@ -106,7 +106,7 @@ void CompositionDockerDock::setCanvas(KoCanvasBase * canvas)
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     if (m_canvas && m_canvas->viewManager()) {
-        foreach(KisAction *action, m_actions) {
+        Q_FOREACH (KisAction *action, m_actions) {
             m_canvas->viewManager()->actionManager()->addAction(action->objectName(), action);
         }
         updateModel();
@@ -149,7 +149,7 @@ void CompositionDockerDock::saveClicked()
         do {
             name = QString("%1").arg(i, 3, 10, QChar('0'));
             found = false;
-            foreach(KisLayerComposition* composition, m_canvas->viewManager()->image()->compositions()) {
+            Q_FOREACH (KisLayerComposition* composition, m_canvas->viewManager()->image()->compositions()) {
                 if (composition->name() == name) {
                     found = true;
                     break;
@@ -196,7 +196,7 @@ void CompositionDockerDock::exportClicked()
             path += info.baseName() + '_';
         }
 
-        foreach(KisLayerComposition* composition, m_canvas->viewManager()->image()->compositions()) {
+        Q_FOREACH (KisLayerComposition* composition, m_canvas->viewManager()->image()->compositions()) {
             if (!composition->isExportEnabled()) {
                 continue;
             }

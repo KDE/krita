@@ -219,7 +219,7 @@ KoStopGradient * KoStopGradient::fromQGradient(QGradient * gradient)
         return 0;
     }
 
-    foreach(const QGradientStop & stop, gradient->stops()) {
+    Q_FOREACH (const QGradientStop & stop, gradient->stops()) {
         KoColor color(newGradient->colorSpace());
         color.fromQColor(stop.second);
         newGradient->m_stops.append(KoGradientStop(stop.first, color));
@@ -232,7 +232,7 @@ void KoStopGradient::setStops(QList< KoGradientStop > stops)
 {
     m_stops.clear();
     KoColor color;
-    foreach(const KoGradientStop & stop, stops) {
+    Q_FOREACH (const KoGradientStop & stop, stops) {
         color = stop.second;
         color.convertTo(colorSpace());
         m_stops.append(KoGradientStop(stop.first, color));
@@ -546,7 +546,7 @@ void KoStopGradient::parseSvgGradient(const QDomElement& element)
                 // try style attr
                 QString style = colorstop.attribute("style").simplified();
                 QStringList substyles = style.split(';', QString::SkipEmptyParts);
-                foreach(const QString & s, substyles) {
+                Q_FOREACH (const QString & s, substyles) {
                     QStringList substyle = s.split(':');
                     QString command = substyle[0].trimmed();
                     QString params = substyle[1].trimmed();
@@ -639,7 +639,7 @@ bool KoStopGradient::saveToDevice(QIODevice *dev) const
     QColor color;
 
     // color stops
-    foreach(const KoGradientStop & stop, m_stops) {
+    Q_FOREACH (const KoGradientStop & stop, m_stops) {
         stop.second.toQColor(&color);
         stream << indent << indent;
         stream << "<stop stop-color=\"";

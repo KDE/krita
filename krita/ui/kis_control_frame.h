@@ -69,10 +69,10 @@ private:
 private:
 
     QFont m_font;
-    KisViewManager * m_viewManager;
+    KisViewManager *m_viewManager;
 
-    QTabWidget * m_gradientTab;
-    QTabWidget * m_patternsTab;
+    QTabWidget *m_gradientTab;
+    QTabWidget *m_patternsTab;
 
     KisIconWidget *m_patternWidget;
     KisIconWidget *m_gradientWidget;

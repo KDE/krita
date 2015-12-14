@@ -57,6 +57,7 @@ KisTooltipManager::~KisTooltipManager()
             root.appendChild(tooltip);
         }
         QTextStream stream(&f);
+        stream.setCodec("UTF-8");
         stream << doc.toString();
 
         f.close();
@@ -67,11 +68,11 @@ void KisTooltipManager::record()
 {
     m_recording = true;
     QList<QAction*> actions =  m_view->actionCollection()->actions();
-    foreach(KXMLGUIClient* client, m_view->mainWindow()->childClients() ) {
+    Q_FOREACH (KXMLGUIClient* client, m_view->mainWindow()->childClients() ) {
         actions.append(client->actionCollection()->actions());
     }
 
-    foreach(QAction* action, actions) {
+    Q_FOREACH (QAction* action, actions) {
         action->disconnect();
         connect(action, SIGNAL(triggered()), this, SLOT(captureToolip()));
     }

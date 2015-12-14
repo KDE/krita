@@ -29,9 +29,9 @@ QString SnapGuideDockerFactory::id() const
     return QString("SnapGuide Properties");
 }
 
-QDockWidget* SnapGuideDockerFactory::createDockWidget()
+QDockWidget *SnapGuideDockerFactory::createDockWidget()
 {
-    SnapGuideDocker* widget = new SnapGuideDocker();
+    SnapGuideDocker *widget = new SnapGuideDocker();
     widget->setObjectName(id());
 
     return widget;

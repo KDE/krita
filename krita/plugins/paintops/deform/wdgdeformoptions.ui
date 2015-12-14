@@ -136,7 +136,7 @@
         </widget>
        </item>
        <item>
-        <widget class="KisDoubleSliderSpinBox" name="deformAmount" native="true"/>
+        <widget class="KisDoubleSliderSpinBox" name="deformAmount"/>
        </item>
       </layout>
      </item>

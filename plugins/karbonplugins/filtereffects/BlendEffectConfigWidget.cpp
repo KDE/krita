@@ -28,9 +28,10 @@
 #include <QLabel>
 
 BlendEffectConfigWidget::BlendEffectConfigWidget(QWidget *parent)
-        : KoFilterEffectConfigWidgetBase(parent), m_effect(0)
+    : KoFilterEffectConfigWidgetBase(parent)
+    , m_effect(0)
 {
-    QGridLayout * g = new QGridLayout(this);
+    QGridLayout *g = new QGridLayout(this);
 
     g->addWidget(new QLabel(i18n("Blend mode"), this), 0, 0);
     m_mode = new KComboBox(this);
@@ -47,11 +48,12 @@ BlendEffectConfigWidget::BlendEffectConfigWidget(QWidget *parent)
     connect(m_mode, SIGNAL(currentIndexChanged(int)), this, SLOT(modeChanged(int)));
 }
 
-bool BlendEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)
+bool BlendEffectConfigWidget::editFilterEffect(KoFilterEffect *filterEffect)
 {
-    m_effect = dynamic_cast<BlendEffect*>(filterEffect);
-    if (!m_effect)
+    m_effect = dynamic_cast<BlendEffect *>(filterEffect);
+    if (!m_effect) {
         return false;
+    }
 
     m_mode->blockSignals(true);
 
@@ -80,8 +82,9 @@ bool BlendEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)
 
 void BlendEffectConfigWidget::modeChanged(int index)
 {
-    if (!m_effect)
+    if (!m_effect) {
         return;
+    }
 
     m_effect->setBlendMode(static_cast<BlendEffect::BlendMode>(index));
 

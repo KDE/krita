@@ -410,7 +410,7 @@ bool KisCubicCurve::isNull() const
 {
     const QList<QPointF> &points = d->data->points;
 
-    foreach (const QPointF &pt, points) {
+    Q_FOREACH (const QPointF &pt, points) {
         if (!qFuzzyCompare(pt.x(), pt.y())) {
             return false;
         }
@@ -436,7 +436,7 @@ QString KisCubicCurve::toString() const
     if(d->data->points.count() < 1)
         return sCurve;
 
-    foreach(const QPointF & pair, d->data->points) {
+    Q_FOREACH (const QPointF & pair, d->data->points) {
         sCurve += QString::number(pair.x());
         sCurve += ',';
         sCurve += QString::number(pair.y());
@@ -452,7 +452,7 @@ void KisCubicCurve::fromString(const QString& string)
 
     QList<QPointF> points;
 
-    foreach(const QString & pair, data) {
+    Q_FOREACH (const QString & pair, data) {
         if (pair.indexOf(',') > -1) {
             QPointF p;
             p.rx() = pair.section(',', 0, 0).toDouble();

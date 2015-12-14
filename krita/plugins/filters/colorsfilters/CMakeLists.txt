@@ -1,6 +1,6 @@
 
 
-set(kritacolorsfilters_PART_SRCS
+set(kritacolorsfilters_SOURCES
     colorsfilters.cpp
     kis_hsv_adjustment_filter.cpp
     virtual_channel_info.cpp
@@ -10,7 +10,7 @@ set(kritacolorsfilters_PART_SRCS
     kis_desaturate_filter.cpp
     )
 
-ki18n_wrap_ui(kritacolorsfilters_PART_SRCS
+ki18n_wrap_ui(kritacolorsfilters_SOURCES
     wdg_perchannel.ui
     wdg_color_balance.ui
     wdg_brightness_contrast.ui
@@ -18,7 +18,7 @@ ki18n_wrap_ui(kritacolorsfilters_PART_SRCS
     wdg_desaturate.ui
 )
 
-add_library(kritacolorsfilters MODULE ${kritacolorsfilters_PART_SRCS})
+add_library(kritacolorsfilters MODULE ${kritacolorsfilters_SOURCES})
 kcoreaddons_desktop_to_json(kritacolorsfilters kritacolorsfilter.desktop)
 
 

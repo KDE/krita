@@ -170,22 +170,22 @@ void ResourceManager::slotImport()
     resourceType = filterToTypeMap[resourceType];
 
     if (resourceType == "brushes") {
-        foreach(const QString &res, resources) {
+        Q_FOREACH (const QString &res, resources) {
             d->brushServer->importResourceFile(res);
         }
     }
     else if (resourceType == "presets") {
-        foreach(const QString &res, resources) {
+        Q_FOREACH (const QString &res, resources) {
             d->paintopServer->importResourceFile(res);
         }
     }
     else if (resourceType == "gradients") {
-        foreach(const QString &res, resources) {
+        Q_FOREACH (const QString &res, resources) {
             d->gradientServer->importResourceFile(res);
         }
     }
     else if (resourceType == "bundles") {
-        foreach(const QString &res, resources) {
+        Q_FOREACH (const QString &res, resources) {
             ResourceBundle *bundle = ResourceBundleServerProvider::instance()->resourceBundleServer()->createResource(res);
             bundle->load();
             if (bundle->valid()) {
@@ -212,17 +212,17 @@ void ResourceManager::slotImport()
         }
     }
     else if (resourceType == "patterns") {
-         foreach(const QString &res, resources) {
+         Q_FOREACH (const QString &res, resources) {
             d->patternServer->importResourceFile(res);
         }
     }
     else if (resourceType == "palettes") {
-        foreach(const QString &res, resources) {
+        Q_FOREACH (const QString &res, resources) {
             d->paletteServer->importResourceFile(res);
         }
     }
     else if (resourceType == "workspaces") {
-        foreach(const QString &res, resources) {
+        Q_FOREACH (const QString &res, resources) {
             d->workspaceServer->importResourceFile(res);
         }
     }
@@ -250,38 +250,38 @@ void ResourceManager::slotCreateBundle()
     newBundle->addMeta("description", dlgCreateBundle.description());
 
     QStringList res = dlgCreateBundle.selectedBrushes();
-    foreach(const QString &r, res) {
+    Q_FOREACH (const QString &r, res) {
         KoResource *res = d->brushServer->resourceByFilename(r).data();
         newBundle->addResource("kis_brushes", res->filename(), d->brushServer->assignedTagsList(res), res->md5());
     }
 
     res = dlgCreateBundle.selectedGradients();
-    foreach(const QString &r, res) {
+    Q_FOREACH (const QString &r, res) {
         KoResource *res = d->gradientServer->resourceByFilename(r);
         newBundle->addResource("ko_gradients", res->filename(), d->gradientServer->assignedTagsList(res), res->md5());
     }
 
     res = dlgCreateBundle.selectedPalettes();
-    foreach(const QString &r, res) {
+    Q_FOREACH (const QString &r, res) {
         KoResource *res = d->paletteServer->resourceByFilename(r);
         newBundle->addResource("ko_palettes", res->filename(), d->paletteServer->assignedTagsList(res), res->md5());
     }
 
     res = dlgCreateBundle.selectedPatterns();
-    foreach(const QString &r, res) {
+    Q_FOREACH (const QString &r, res) {
         KoResource *res = d->patternServer->resourceByFilename(r);
         newBundle->addResource("ko_patterns", res->filename(), d->patternServer->assignedTagsList(res), res->md5());
     }
 
     res = dlgCreateBundle.selectedPresets();
-    foreach(const QString &r, res) {
+    Q_FOREACH (const QString &r, res) {
         KisPaintOpPresetSP preset = d->paintopServer->resourceByFilename(r);
         KoResource *res = preset.data();
         newBundle->addResource("kis_paintoppresets", res->filename(), d->paintopServer->assignedTagsList(res), res->md5());
     }
 
     res = dlgCreateBundle.selectedWorkspaces();
-    foreach(const QString &r, res) {
+    Q_FOREACH (const QString &r, res) {
         KoResource *res = d->workspaceServer->resourceByFilename(r);
         newBundle->addResource("kis_workspaces", res->filename(), d->workspaceServer->assignedTagsList(res), res->md5());
     }
@@ -321,7 +321,7 @@ void ResourceManager::bundlesLoaded()
     delete d->loader;
     d->loader = 0;
 
-    foreach(ResourceBundle *bundle, ResourceBundleServerProvider::instance()->resourceBundleServer()->resources()) {
+    Q_FOREACH (ResourceBundle *bundle, ResourceBundleServerProvider::instance()->resourceBundleServer()->resources()) {
         if (!bundle->install()) {
             warnKrita << "Could not install resources for bundle" << bundle->name();
         }

@@ -18,9 +18,11 @@
  */
 #include "TextChange.h"
 
-
 TextChange::TextChange()
-        : m_formerPosition(0), m_position(0), m_previous(0), m_next(0)
+    : m_formerPosition(0)
+    , m_position(0)
+    , m_previous(0)
+    , m_next(0)
 {
 }
 
@@ -74,8 +76,9 @@ void TextChange::setNext(TextChange *item)
 void TextChange::move(int length)
 {
     m_position += length;
-    if (m_next)
+    if (m_next) {
         m_next->move(length);
+    }
 }
 
 void TextChange::insertBefore(TextChange *node)
@@ -84,8 +87,9 @@ void TextChange::insertBefore(TextChange *node)
     node->setPrevious(previous());
     node->setNext(this);
     setPrevious(node);
-    if (node->previous())
+    if (node->previous()) {
         node->previous()->setNext(node);
+    }
 }
 
 void TextChange::insertAfter(TextChange *node)
@@ -93,8 +97,9 @@ void TextChange::insertAfter(TextChange *node)
     node->setPrevious(this);
     node->setNext(next());
     setNext(node);
-    if (node->next())
+    if (node->next()) {
         node->next()->setPrevious(node);
+    }
 }
 
 void TextChange::merge(TextChange *other)

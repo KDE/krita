@@ -152,36 +152,104 @@
 
     {
         "dir" : "lib\\plugins\\styles",
-        "files" : ["lib\\plugins\\styles\\oxygen.dll"]
+        "files" : [
+            "lib\\plugins\\styles\\oxygen.dll",
+            "lib\\plugins\\styles\\breeze.dll"
+        ]
     },
+
+
+
 
     {
         "msg" : "Copying Shared Libraries",
         "dir" : "bin\\",
-        "files" : ["bin\\*dll"]
+        "files" : ["bin\\boost_system-vc150-mt-1_59.dll",
+                   "bin\\dbus-1.dll",
+                   "bin\\exiv2.dll",
+                   "bin\\expat.dll",
+                   "bin\\iconv.dll",
+                   "bin\\icudt55.dll",
+                   "bin\\icuin55.dll",
+                   "bin\\icuuc55.dll",
+                   "bin\\lcms2.dll",
+                   "bin\\libeay32.dll",
+                   "bin\\libintl.dll",
+                   "bin\\libpng15.dll",
+                   "bin\\lzma.dll",
+                   "bin\\oxygenstyle5.dll",
+                   "bin\\oxygenstyleconfig5.dll",
+                   "bin\\ssleay32.dll",
+                   "bin\\tiff3.dll",
+                   "bin\\zlib.dll"
+                  ]
+    },
+
+    {
+        "msg" : "Copying Qt and KDE Libraries",
+        "dir" : "bin\\",
+        "files" : ["bin\\KF5Archive.dll",
+                   "bin\\KF5Completion.dll",
+                   "bin\\KF5ConfigCore.dll",
+                   "bin\\KF5ConfigGui.dll",
+                   "bin\\KF5CoreAddons.dll",
+                   "bin\\KF5DbusAddons.dll",
+                   "bin\\KF5Crash.dll",
+                   "bin\\KF5GuiAddons.dll",
+                   "bin\\KF5I18n.dll",
+                   "bin\\KF5ItemModels.dll",
+                   "bin\\KF5ItemViews.dll",
+                   "bin\\KF5KIOCore.dll",
+                   "bin\\KF5Service.dll",
+                   "bin\\KF5WidgetsAddons.dll",
+                   "bin\\KF5WindowSystem.dll",
+                   "bin\\Qt5Concurrent.dll",
+                   "bin\\Qt5Core.dll",
+                   "bin\\Qt5DBus.dll",
+                   "bin\\Qt5Gui.dll",
+                   "bin\\Qt5Network.dll",
+                   "bin\\Qt5OpenGL.dll",
+                   "bin\\Qt5PrintSupport.dll",
+                   "bin\\Qt5Svg.dll",
+                   "bin\\Qt5Widgets.dll",
+                   "bin\\Qt5WinExtras.dll",
+                   "bin\\Qt5Xml.dll"
+                  ]
+    },
+
+    {
+        "msg" : "Copying Krita Libraries",
+        "dir" : "bin\\",
+        "files" : ["bin\\kritabasicflakes.dll",
+                   "bin\\kritacolor.dll",
+                   "bin\\kritaflake.dll",
+                   "bin\\kritaglobal.dll",
+                   "bin\\kritaimage.dll",
+                   "bin\\kritalibbrush.dll",
+                   "bin\\kritalibpaintop.dll",
+                   "bin\\kritaodf.dll",
+                   "bin\\kritapigment.dll",
+                   "bin\\kritaplugin.dll",
+                   "bin\\kritapsd.dll",
+                   "bin\\kritasketchlib.dll",
+                   "bin\\kritastore.dll",
+                   "bin\\kritatext.dll",
+                   "bin\\kritatextlayout.dll",
+                   "bin\\kritaui.dll",
+                   "bin\\kritaundo2.dll",
+                   "bin\\kritavectorimage.dll",
+                   "bin\\kritaversion.dll",
+                   "bin\\kritawidgets.dll",
+                   "bin\\kritawidgetutils.dll"
+                  ]
     },
 
     {
         "msg" : "Copying Executables",
         "dir" : "bin\\",
         "files" : [
-            "bin\\dbus-daemon.exe",
-            "bin\\dbus-launch.exe",
-            "bin\\drkonqi.exe",
-            "bin\\kbuildsycoca5.exe",
-            "bin\\kconf_update.exe",
-            "bin\\kconfig_compiler_kf5.exe",
-            "bin\\kf5-config.exe",
-            "bin\\kdebugdialog5.exe",
-            "bin\\kdeinit5.exe",
-            "bin\\kioexec.exe",
-            "bin\\kioslave.exe",
-            "bin\\klauncher.exe",
-            "bin\\kquitapp.exe",
-            "bin\\krita.exe",
-            "bin\\kwalletd.exe",
-            "bin\\kwrapper5.exe",
-            "bin\\update-mime-database.exe"
+            "bin\\gmicparser.exe",
+            "bin\\krita.exe"
         ]
     },
 
@@ -262,12 +330,6 @@
         "files" : [
             "share\\dbus-1\\interfaces\\kf5_org.kde.*",
             "share\\dbus-1\\services\\kf5_org.kde.*"]
-    },
-
-    {
-        "msg" : "Copying directory /share/icons. Please double check this.",
-        "dir" : "share\\",
-        "files" : ["share\\icons"]
     },
 
     {

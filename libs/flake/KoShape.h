@@ -51,7 +51,6 @@ class KoShapeSavingContext;
 class KoShapeLoadingContext;
 class KoGenStyle;
 class KoShapeShadow;
-class KoEventAction;
 class KoShapePrivate;
 class KoFilterEffectStack;
 class KoSnapData;
@@ -367,21 +366,6 @@ public:
 
     /// Removes all connection points
     void clearConnectionPoints();
-
-    /**
-     * Add a event action
-     */
-    void addEventAction(KoEventAction *action);
-
-    /**
-     * Remove a event action
-     */
-    void removeEventAction(KoEventAction *action);
-
-    /**
-     * Get all event actions
-     */
-    QSet<KoEventAction *> eventActions() const;
 
     /**
      * Return the side text should flow around this shape. This implements the ODF style:wrap

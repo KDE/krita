@@ -24,16 +24,16 @@
 #include <klocalizedstring.h>
 
 MorphologyEffectFactory::MorphologyEffectFactory()
-        : KoFilterEffectFactoryBase(MorphologyEffectId, i18n("Morphology"))
+    : KoFilterEffectFactoryBase(MorphologyEffectId, i18n("Morphology"))
 {
 }
 
-KoFilterEffect * MorphologyEffectFactory::createFilterEffect() const
+KoFilterEffect *MorphologyEffectFactory::createFilterEffect() const
 {
     return new MorphologyEffect();
 }
 
-KoFilterEffectConfigWidgetBase * MorphologyEffectFactory::createConfigWidget() const
+KoFilterEffectConfigWidgetBase *MorphologyEffectFactory::createConfigWidget() const
 {
     return new MorphologyEffectConfigWidget();
 }

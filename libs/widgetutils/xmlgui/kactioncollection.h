@@ -134,7 +134,7 @@ public:
       * application's configuration file KSharedConfig::openConfig(),
       * in the group set by setConfigGroup().
       */
-    void readSettings(KConfigGroup *config = 0);
+    void readSettings();
 
     /**
      * Update shortcuts from the KisActionRegistry.
@@ -154,11 +154,11 @@ public:
       * configuration file.
       *
       * \param config Config object to save to, or null (see above)
-      * \param writeDefaults set to true to write settings which are already at defaults.
+      * \param writeScheme set to true if we export all settings as new shortcut scheme
       * \param oneAction pass an action here if you just want to save the values for one action, eg.
       *                  if you know that action is the only one which has changed.
       */
-    void writeSettings(KConfigGroup *config = 0, bool writeDefaults = false, QAction *oneAction = 0) const;
+    void writeSettings(KConfigGroup *config = 0, bool writeScheme = false, QAction *oneAction = 0) const;
 
     /**
      * Returns the number of actions in the collection.

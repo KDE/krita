@@ -153,12 +153,6 @@ KisKeyframeSP KisScalarKeyframeChannel::createKeyframe(int time, const KisKeyfra
     return toQShared(new KisKeyframe(this, time, index));
 }
 
-bool KisScalarKeyframeChannel::canDeleteKeyframe(KisKeyframeSP key)
-{
-    Q_UNUSED(key);
-    return true;
-}
-
 void KisScalarKeyframeChannel::destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand)
 {
     int index = key->value();
@@ -167,6 +161,21 @@ void KisScalarKeyframeChannel::destroyKeyframe(KisKeyframeSP key, KUndo2Command 
 
     KUndo2Command *cmd = new Private::InsertValueCommand(m_d.data(), index, m_d->values[index], false, parentCommand);
     cmd->redo();
+}
+
+void KisScalarKeyframeChannel::uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame)
+{
+    KisScalarKeyframeChannel *srcScalarChannel = dynamic_cast<KisScalarKeyframeChannel*>(srcChannel);
+    KIS_ASSERT_RECOVER_RETURN(srcScalarChannel);
+
+    KisKeyframeSP srcFrame = srcScalarChannel->keyframeAt(srcTime);
+    KIS_ASSERT_RECOVER_RETURN(srcFrame);
+
+    const qreal newValue = scalarValue(srcFrame);
+
+    const int dstId = dstFrame->value();
+    KIS_ASSERT_RECOVER_RETURN(m_d->values.contains(dstId));
+    m_d->values[dstId] = newValue;
 }
 
 QRect KisScalarKeyframeChannel::affectedRect(KisKeyframeSP key)

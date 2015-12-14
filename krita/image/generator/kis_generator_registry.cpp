@@ -40,7 +40,7 @@ KisGeneratorRegistry::KisGeneratorRegistry(QObject *parent)
 
 KisGeneratorRegistry::~KisGeneratorRegistry()
 {
-    foreach(KisGeneratorSP generator, values()) {
+    Q_FOREACH (KisGeneratorSP generator, values()) {
         remove(generator->id());
         generator.clear();
     }

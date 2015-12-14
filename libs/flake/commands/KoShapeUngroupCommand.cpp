@@ -44,7 +44,7 @@ KoShapeUngroupCommand::KoShapeUngroupCommand(KoShapeContainer *container, const 
     }
 
     int zIndex = d->container->zIndex();
-    foreach(KoShape *shape, d->shapes) {
+    Q_FOREACH (KoShape *shape, d->shapes) {
         d->clipped.append(d->container->isClipped(shape));
         d->oldParents.append(d->container->parent());
         d->oldClipped.append(d->container->isClipped(shape));

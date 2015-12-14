@@ -14,8 +14,6 @@ set(kritaflake_SRCS
     KoDocumentResourceManager.cpp
     KoCanvasObserverBase.cpp
     KoCanvasSupervisor.cpp
-    KoCutController.cpp
-    KoCopyController.cpp
     KoDockFactoryBase.cpp
     KoDockRegistry.cpp
     KoDataCenterBase.cpp
@@ -37,7 +35,6 @@ set(kritaflake_SRCS
     KoShapeManagerPaintingStrategy.cpp
     KoShapeManager.cpp
     KoShapePaintingContext.cpp
-    KoShapePainter.cpp
     KoFrameShape.cpp
     KoUnavailShape.cpp
     KoMarkerData.cpp
@@ -78,7 +75,6 @@ set(kritaflake_SRCS
     KoHatchBackground.cpp
     KoPatternBackground.cpp
     KoShapeConfigWidgetBase.cpp
-    KoShapeConfigFactoryBase.cpp
     KoDrag.cpp
     KoDragOdfSaveHelper.cpp
     KoShapeOdfSaveHelper.cpp
@@ -100,9 +96,6 @@ set(kritaflake_SRCS
     KoInputDeviceHandler.cpp
     KoInputDeviceHandlerEvent.cpp
     KoInputDeviceHandlerRegistry.cpp
-    KoEventAction.cpp
-    KoEventActionFactoryBase.cpp
-    KoEventActionRegistry.cpp
     KoImageData.cpp
     KoImageData_p.cpp
     KoImageCollection.cpp
@@ -119,7 +112,6 @@ set(kritaflake_SRCS
     KoTosContainerModel.cpp
     KoClipPath.cpp
     KoCurveFit.cpp
-    KoAnnotationLayoutManager.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp
@@ -153,8 +145,6 @@ set(kritaflake_SRCS
     commands/KoConnectionShapeTypeCommand.cpp
     commands/KoShapeShadowCommand.cpp
     commands/KoPathReverseCommand.cpp
-    commands/KoEventActionAddCommand.cpp
-    commands/KoEventActionRemoveCommand.cpp
     commands/KoShapeRenameCommand.cpp
     commands/KoShapeRunAroundCommand.cpp
     commands/KoPathPointMergeCommand.cpp
@@ -186,6 +176,7 @@ set(kritaflake_SRCS
     tools/KoCreateShapesToolFactory.cpp
     tools/KoShapeRubberSelectStrategy.cpp
     tools/KoPathSegmentChangeStrategy.cpp
+    svg/KoShapePainter.cpp
     svg/SvgUtil.cpp
     svg/SvgGraphicContext.cpp
     svg/SvgSavingContext.cpp
@@ -217,10 +208,6 @@ generate_export_header(kritaflake BASE_NAME kritaflake)
 
 target_link_libraries(kritaflake kritapigment kritawidgetutils kritaodf kritaundo2 KF5::WidgetsAddons Qt5::Svg)
 target_link_libraries(kritaflake LINK_INTERFACE_LIBRARIES kritapigment kritawidgetutils kritaodf kritaundo2 KF5::WidgetsAddons )
-
-if(HAVE_OPENGL)
-    target_link_libraries(kritaflake ${OPENGL_LIBRARIES} Qt5::OpenGL)
-endif()
 
 set_target_properties(kritaflake PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

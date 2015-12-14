@@ -169,7 +169,7 @@ void KoResourceTaggingManager::undeleteTag(const QString & tagToUndelete)
 
     QList<KoResource*> serverResources = d->model->serverResources();
 
-    foreach(KoResource * resource, d->lastDeletedTag.resources) {
+    Q_FOREACH (KoResource * resource, d->lastDeletedTag.resources) {
         if (serverResources.contains(resource)) {
             addResourceTag(resource, tagName);
         }
@@ -191,7 +191,7 @@ void KoResourceTaggingManager::addResourceTag(KoResource* resource, const QStrin
     if (tagsList.isEmpty()) {
         d->model->addTag(resource, tagName);
     } else {
-        foreach(const QString & tag, tagsList) {
+        Q_FOREACH (const QString & tag, tagsList) {
             if (tag.compare(tagName)) {
                 d->model->addTag(resource, tagName);
             }
@@ -255,7 +255,7 @@ void KoResourceTaggingManager::contextRemoveTagFromResource(KoResource* resource
 void KoResourceTaggingManager::removeTagFromComboBox(const QString &tag)
 {
     QList<KoResource*> resources = d->model->currentlyVisibleResources();
-    foreach(KoResource * resource, resources) {
+    Q_FOREACH (KoResource * resource, resources) {
         removeResourceTag(resource, tag);
     }
     d->model->tagCategoryRemoved(tag);
@@ -267,7 +267,7 @@ void KoResourceTaggingManager::removeResourceTag(KoResource* resource, const QSt
 {
     QStringList tagsList = d->model->assignedTagsList(resource);
 
-    foreach(const QString & oldName, tagsList) {
+    Q_FOREACH (const QString & oldName, tagsList) {
         if (!oldName.compare(tagName)) {
             d->model->deleteTag(resource, oldName);
         }
@@ -279,7 +279,7 @@ void KoResourceTaggingManager::renameTag(const QString &oldName, const QString& 
     if (!d->model->tagNamesList().contains(newName)) {
         QList<KoResource*> resources = d->model->currentlyVisibleResources();
 
-        foreach(KoResource * resource, resources) {
+        Q_FOREACH (KoResource * resource, resources) {
             removeResourceTag(resource, oldName);
             addResourceTag(resource, newName);
         }
@@ -337,11 +337,11 @@ void KoResourceTaggingManager::tagSaveButtonPressed()
 {
     if (!d->tagChooser->selectedTagIsReadOnly()) {
         QList<KoResource*> newResources = d->model->currentlyVisibleResources();
-        foreach(KoResource * oldRes, d->originalResources) {
+        Q_FOREACH (KoResource * oldRes, d->originalResources) {
             if (!newResources.contains(oldRes))
                 removeResourceTag(oldRes, d->currentTag);
         }
-        foreach(KoResource * newRes, newResources) {
+        Q_FOREACH (KoResource * newRes, newResources) {
             if (!d->originalResources.contains(newRes))
                 addResourceTag(newRes, d->currentTag);
         }

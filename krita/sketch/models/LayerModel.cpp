@@ -73,7 +73,7 @@ public:
         , imageChangedTimer(new QTimer(qq))
     {
         QList<KisFilterSP> tmpFilters = KisFilterRegistry::instance()->values();
-        foreach(const KisFilterSP& filter, tmpFilters)
+        Q_FOREACH (const KisFilterSP& filter, tmpFilters)
         {
             filters[filter.data()->id()] = filter.data();
         }

@@ -42,7 +42,7 @@ KisStrokeShortcut::~KisStrokeShortcut()
 int KisStrokeShortcut::priority() const
 {
     int buttonScore = 0;
-    foreach (Qt::MouseButton button, m_d->buttons) {
+    Q_FOREACH (Qt::MouseButton button, m_d->buttons) {
         buttonScore += Qt::XButton2 - button;
     }
 
@@ -70,7 +70,7 @@ bool KisStrokeShortcut::matchReady(const QSet<Qt::Key> &modifiers,
         return false;
     }
 
-    foreach(Qt::MouseButton button, buttons) {
+    Q_FOREACH (Qt::MouseButton button, buttons) {
         if (!m_d->buttons.contains(button)) return false;
     }
     return true;

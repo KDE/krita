@@ -120,7 +120,7 @@ class KisToolColorPickerFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolColorPickerFactory(const QStringList&)
+    KisToolColorPickerFactory()
             : KoToolFactoryBase("KritaSelected/KisToolColorPicker") {
         setToolTip(i18n("Color Selector Tool"));
         setToolType(TOOL_TYPE_FILL);

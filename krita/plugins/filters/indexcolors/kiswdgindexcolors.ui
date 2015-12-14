@@ -24,7 +24,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="1" column="0">
-       <widget class="QWidget" name="colorsBox" native="true">
+       <widget class="QWidget" name="colorsBox">
         <property name="minimumSize">
          <size>
           <width>20</width>
@@ -107,7 +107,7 @@
        </widget>
       </item>
       <item row="1" column="0" colspan="2">
-       <widget class="QWidget" name="widget" native="true">
+       <widget class="QWidget" name="widget">
         <property name="minimumSize">
          <size>
           <width>80</width>

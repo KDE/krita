@@ -136,7 +136,7 @@ void KoFileDialogTester::testOpenFiles()
     }
 
     QStringList urls = dlg.filenames();
-    foreach(const QString &url, urls) {
+    Q_FOREACH (const QString &url, urls) {
         ui->listResults->addItem(url);
     }
     ui->lblMime->setText(dlg.selectedMimeType());
@@ -249,7 +249,7 @@ void KoFileDialogTester::testImportFiles()
         dlg.setHideNameFilterDetailsOption();
     }
 
-    QStringList urls = dlg.filenames(); foreach(const QString &url, urls) {
+    QStringList urls = dlg.filenames(); Q_FOREACH (const QString &url, urls) {
         ui->listResults->addItem(url);
     }
     ui->lblMime->setText(dlg.selectedMimeType());

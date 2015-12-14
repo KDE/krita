@@ -82,7 +82,7 @@ class KisToolPathFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolPathFactory(const QStringList&)
+    KisToolPathFactory()
             : KoToolFactoryBase("KisToolPath") {
         setToolTip(i18n("Bezier Curve Tool: Shift-mouseclick ends the curve."));
         setToolType(TOOL_TYPE_SHAPE);

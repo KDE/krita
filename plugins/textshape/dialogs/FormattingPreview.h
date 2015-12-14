@@ -36,7 +36,7 @@ class FormattingPreview : public QFrame
     Q_OBJECT
 
 public:
-    explicit FormattingPreview(QWidget* parent = 0);
+    explicit FormattingPreview(QWidget *parent = 0);
     ~FormattingPreview();
 
 public Q_SLOTS:

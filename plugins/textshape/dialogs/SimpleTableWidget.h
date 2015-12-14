@@ -39,7 +39,7 @@ public:
 
 public Q_SLOTS:
     void setStyleManager(KoStyleManager *sm);
-    void emitTableBorderDataUpdated(int i=0);
+    void emitTableBorderDataUpdated(int i = 0);
     void restartPainting();
     void setBorderColor(const KoColor &);
 

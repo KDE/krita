@@ -306,7 +306,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QWidget" name="SpecialSpacer" native="true"/>
+    <widget class="QWidget" name="SpecialSpacer"/>
    </item>
   </layout>
  </widget>

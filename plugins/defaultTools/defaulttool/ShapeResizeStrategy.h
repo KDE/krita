@@ -45,12 +45,12 @@ public:
     virtual ~ShapeResizeStrategy() {}
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
-    KUndo2Command* createCommand();
+    KUndo2Command *createCommand();
     void finishInteraction(Qt::KeyboardModifiers modifiers);
-    virtual void paint( QPainter &painter, const KoViewConverter &converter);
-    virtual void handleCustomEvent( KoPointerEvent * event );
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    virtual void handleCustomEvent(KoPointerEvent *event);
 private:
-    void resizeBy( const QPointF &center, qreal zoomX, qreal zoomY );
+    void resizeBy(const QPointF &center, qreal zoomX, qreal zoomY);
 
     QPointF m_start;
     QList<QPointF> m_startPositions;
@@ -63,7 +63,7 @@ private:
     QList<QTransform> m_oldTransforms;
     QList<QTransform> m_transformations;
     QPointF m_lastScale;
-    QList<KoShape*> m_selectedShapes;
+    QList<KoShape *> m_selectedShapes;
 };
 
 #endif

@@ -17,12 +17,12 @@ set(libkritaconverter_LIB_SRCS
     ${ICCJPEG_SOURCE_DIR}/iccjpeg.c
     )
 
-set(kritajpegimport_PART_SRCS
+set(kritajpegimport_SOURCES
     kis_jpeg_import.cc
     ${libkritaconverter_LIB_SRCS}
     )
 
-add_library(kritajpegimport MODULE ${kritajpegimport_PART_SRCS})
+add_library(kritajpegimport MODULE ${kritajpegimport_SOURCES})
 kcoreaddons_desktop_to_json(kritajpegimport krita_jpeg_import.desktop)
 
 if(LCMS2_FOUND)
@@ -35,14 +35,14 @@ install(TARGETS kritajpegimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
-set(kritajpegexport_PART_SRCS
+set(kritajpegexport_SOURCES
     kis_jpeg_export.cc
     ${libkritaconverter_LIB_SRCS}
     )
 
-ki18n_wrap_ui(kritajpegexport_PART_SRCS kis_wdg_options_jpeg.ui )
+ki18n_wrap_ui(kritajpegexport_SOURCES kis_wdg_options_jpeg.ui )
 
-add_library(kritajpegexport MODULE ${kritajpegexport_PART_SRCS})
+add_library(kritajpegexport MODULE ${kritajpegexport_SOURCES})
 kcoreaddons_desktop_to_json(kritajpegexport krita_jpeg_export.desktop)
 
 if(LCMS2_FOUND)

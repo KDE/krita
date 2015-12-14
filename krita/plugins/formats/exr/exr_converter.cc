@@ -843,7 +843,7 @@ KisImageBuilder_Result exrConverter::decode(const QUrl &uri)
             // Check if should set the channels
             if (!info.remappedChannels.isEmpty()) {
                 QList<KisMetaData::Value> values;
-                foreach(const ExrPaintLayerInfo::Remap& remap, info.remappedChannels) {
+                Q_FOREACH (const ExrPaintLayerInfo::Remap& remap, info.remappedChannels) {
                     QMap<QString, KisMetaData::Value> map;
                     map["original"] = KisMetaData::Value(remap.original);
                     map["current"] = KisMetaData::Value(remap.current);
@@ -991,17 +991,17 @@ Encoder* encoder(Imf::OutputFile& file, const ExrPaintLayerSaveInfo& info, int w
 void encodeData(Imf::OutputFile& file, const QList<ExrPaintLayerSaveInfo>& informationObjects, int width, int height)
 {
     QList<Encoder*> encoders;
-    foreach(const ExrPaintLayerSaveInfo& info, informationObjects) {
+    Q_FOREACH (const ExrPaintLayerSaveInfo& info, informationObjects) {
         encoders.push_back(encoder(file, info, width));
     }
 
     for (int y = 0; y < height; ++y) {
         Imf::FrameBuffer frameBuffer;
-        foreach(Encoder* encoder, encoders) {
+        Q_FOREACH (Encoder* encoder, encoders) {
             encoder->prepareFrameBuffer(&frameBuffer, y);
         }
         file.setFrameBuffer(frameBuffer);
-        foreach(Encoder* encoder, encoders) {
+        Q_FOREACH (Encoder* encoder, encoders) {
             encoder->encodeData(y);
         }
         file.writePixels(1);
@@ -1090,7 +1090,7 @@ void exrConverter::Private::makeLayerNamesUnique(QList<ExrPaintLayerSaveInfo>& i
         }
     }
 
-    foreach (const QString &key, namesMap.keys()) {
+    Q_FOREACH (const QString &key, namesMap.keys()) {
         if (namesMap.count(key) > 1) {
             KIS_ASSERT_RECOVER(key.endsWith(".")) { continue; }
             QString strippedName = key.left(key.size() - 1); // trim the ending dot
@@ -1134,7 +1134,7 @@ void exrConverter::Private::recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveIn
                 const KisMetaData::Entry& entry = paintLayer->metaData()->getEntry(KisMetaData::SchemaRegistry::instance()->create("http://krita.org/exrchannels/1.0/" , "exrchannels"), "channelsmap");
                 QList< KisMetaData::Value> values = entry.value().asArray();
 
-                foreach(const KisMetaData::Value& value, values) {
+                Q_FOREACH (const KisMetaData::Value& value, values) {
                     QMap<QString, KisMetaData::Value> map = value.asStructure();
                     if (map.contains("original") && map.contains("current")) {
                         current2original[map["current"].toString()] = map["original"].toString();
@@ -1216,9 +1216,9 @@ void exrConverter::Private::reportLayersNotSaved(const QSet<KisNodeSP> &layersNo
 {
     QString layersList;
     QTextStream textStream(&layersList);
+    textStream.setCodec("UTF-8");
 
-
-    foreach(KisNodeSP node, layersNotSaved) {
+    Q_FOREACH (KisNodeSP node, layersNotSaved) {
         textStream << "<item>" << i18nc("@item:unsupported-node-message", "%1 (type: \"%2\")", node->name(), node->metaObject()->className()) << "</item>";
     }
 
@@ -1299,9 +1299,9 @@ KisImageBuilder_Result exrConverter::buildFile(const QUrl &uri, KisGroupLayerSP 
     }
      dbgFile << informationObjects.size() << " layers to save";
 
-    foreach(const ExrPaintLayerSaveInfo& info, informationObjects) {
+    Q_FOREACH (const ExrPaintLayerSaveInfo& info, informationObjects) {
         if (info.pixelType < Imf::NUM_PIXELTYPES) {
-            foreach(const QString& channel, info.channels) {
+            Q_FOREACH (const QString& channel, info.channels) {
                 dbgFile << channel << " " << info.pixelType;
                 header.channels().insert(channel.toUtf8().data(), Imf::Channel(info.pixelType));
             }

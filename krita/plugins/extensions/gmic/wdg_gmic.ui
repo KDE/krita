@@ -14,7 +14,7 @@
    <item row="0" column="0">
     <layout class="QGridLayout" name="m_filterConfigLayout" columnstretch="1,0,0,0">
      <item row="0" column="0" rowspan="3">
-      <widget class="KisGmicInputOutputWidget" name="m_inputOutputOptions" native="true"/>
+      <widget class="KisGmicInputOutputWidget" name="m_inputOutputOptions"/>
      </item>
      <item row="0" column="1">
       <widget class="QTreeView" name="m_filterTree">

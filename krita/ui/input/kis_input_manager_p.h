@@ -108,7 +108,9 @@ public:
         QMap<QObject*, KisCanvas2*> canvasResolver;
         int eatOneMouseStroke;
     };
+    CanvasSwitcher canvasSwitcher;
 
+#if !defined(Q_OS_WIN)
     class EventEater
     {
     public:
@@ -124,9 +126,8 @@ public:
         bool hungry{false};   // Continue eating mouse strokes
         bool peckish{false};  // Eat a single mouse press event
     };
-
-    CanvasSwitcher canvasSwitcher;
     EventEater eventEater;
+#endif
 
     bool focusOnEnter = true;
     bool containsPointer = true;

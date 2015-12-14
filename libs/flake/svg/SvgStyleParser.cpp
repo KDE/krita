@@ -72,7 +72,7 @@ void SvgStyleParser::parseStyle(const SvgStyles &styles)
         return;
 
     // make sure we parse the style attributes in the right order
-    foreach(const QString & command, d->styleAttributes) {
+    Q_FOREACH (const QString & command, d->styleAttributes) {
         const QString &params = styles.value(command);
         if (params.isEmpty())
             continue;
@@ -87,7 +87,7 @@ void SvgStyleParser::parseFont(const SvgStyles &styles)
         return;
 
     // make sure to only parse font attributes here
-    foreach(const QString & command, d->fontAttributes) {
+    Q_FOREACH (const QString & command, d->fontAttributes) {
         const QString &params = styles.value(command);
         if (params.isEmpty())
             continue;
@@ -394,12 +394,12 @@ SvgStyles SvgStyleParser::collectStyles(const KoXmlElement &e)
     SvgStyles styleMap;
 
     // collect individual presentation style attributes which have the priority 0
-    foreach(const QString &command, d->styleAttributes) {
+    Q_FOREACH (const QString &command, d->styleAttributes) {
         const QString attribute = e.attribute(command);
         if (!attribute.isEmpty())
             styleMap[command] = attribute;
     }
-    foreach(const QString & command, d->fontAttributes) {
+    Q_FOREACH (const QString & command, d->fontAttributes) {
         const QString attribute = e.attribute(command);
         if (!attribute.isEmpty())
             styleMap[command] = attribute;
@@ -409,7 +409,7 @@ SvgStyles SvgStyleParser::collectStyles(const KoXmlElement &e)
     QStringList cssStyles = d->context.matchingStyles(e);
 
     // collect all css style attributes
-    foreach(const QString &style, cssStyles) {
+    Q_FOREACH (const QString &style, cssStyles) {
         QStringList substyles = style.split(';', QString::SkipEmptyParts);
         if (!substyles.count())
             continue;

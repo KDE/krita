@@ -183,6 +183,7 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->zoomDragButton->setAutoRaise(true);
     m_d->zoomDragButton->setIcon(KisIconUtils::loadIcon("zoom-in"));
     m_d->zoomDragButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    m_d->zoomDragButton->setToolTip("Zoom Timeline. Hold down and drag left or right.");
     m_d->zoomDragButton->setPopupMode(QToolButton::InstantPopup);
     connect(m_d->zoomDragButton, SIGNAL(valueChanged(int)), SLOT(slotZoomButtonChanged(int)));
     connect(m_d->zoomDragButton, SIGNAL(pressed()), SLOT(slotZoomButtonPressed()));
@@ -449,7 +450,7 @@ void TimelineFramesView::startDrag(Qt::DropActions supportedActions)
         QVector<int> rows;
         int leftmostColumn = std::numeric_limits<int>::max();
 
-        foreach (const QModelIndex &index, indexes) {
+        Q_FOREACH (const QModelIndex &index, indexes) {
             leftmostColumn = qMin(leftmostColumn, index.column());
             if (!rows.contains(index.row())) {
                 rows.append(index.row());
@@ -459,7 +460,7 @@ void TimelineFramesView::startDrag(Qt::DropActions supportedActions)
         const int lastColumn = m_d->model->columnCount() - 1;
 
         selectionModel()->clear();
-        foreach (const int row, rows) {
+        Q_FOREACH (const int row, rows) {
             QItemSelection sel(m_d->model->index(row, leftmostColumn), m_d->model->index(row, lastColumn));
             selectionModel()->select(sel, QItemSelectionModel::Select);
         }
@@ -637,7 +638,7 @@ void TimelineFramesView::slotUpdateLayersMenu()
         TimelineFramesModel::OtherLayersList list = value.value<TimelineFramesModel::OtherLayersList>();
 
         int i = 0;
-        foreach (const TimelineFramesModel::OtherLayer &l, list) {
+        Q_FOREACH (const TimelineFramesModel::OtherLayer &l, list) {
             action = m_d->existingLayersMenu->addAction(l.name);
             action->setData(i++);
         }

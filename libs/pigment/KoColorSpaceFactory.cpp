@@ -61,10 +61,10 @@ KoColorSpaceFactory::~KoColorSpaceFactory()
     }
     Q_ASSERT(count == d->colorspaces.size());
 #endif
-    foreach(KoColorSpace* cs, d->colorspaces) {
+    Q_FOREACH (KoColorSpace* cs, d->colorspaces) {
         delete cs;
     }
-    foreach(KoColorProfile* profile, d->colorprofiles) {
+    Q_FOREACH (KoColorProfile* profile, d->colorprofiles) {
         KoColorSpaceRegistry::instance()->removeProfile(profile);
         delete profile;
     }

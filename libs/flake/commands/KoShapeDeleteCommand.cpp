@@ -36,7 +36,7 @@ public:
         if (! deleteShapes)
             return;
 
-        foreach(KoShape *shape, shapes)
+        Q_FOREACH (KoShape *shape, shapes)
             delete shape;
     }
 
@@ -62,7 +62,7 @@ KoShapeDeleteCommand::KoShapeDeleteCommand(KoShapeBasedDocumentBase *controller,
         d(new Private(controller))
 {
     d->shapes = shapes;
-    foreach(KoShape *shape, d->shapes) {
+    Q_FOREACH (KoShape *shape, d->shapes) {
         d->oldParents.append(shape->parent());
     }
 

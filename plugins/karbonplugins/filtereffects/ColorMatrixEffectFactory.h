@@ -28,8 +28,8 @@ class ColorMatrixEffectFactory : public KoFilterEffectFactoryBase
 {
 public:
     ColorMatrixEffectFactory();
-    virtual KoFilterEffect * createFilterEffect() const;
-    virtual KoFilterEffectConfigWidgetBase * createConfigWidget() const;
+    virtual KoFilterEffect *createFilterEffect() const;
+    virtual KoFilterEffectConfigWidgetBase *createConfigWidget() const;
 };
 
 #endif // COLORMATRIXEFFECTFACTORY_H

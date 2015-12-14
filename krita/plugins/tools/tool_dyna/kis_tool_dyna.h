@@ -153,7 +153,7 @@ class KisToolDynaFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolDynaFactory(const QStringList&)
+    KisToolDynaFactory()
             : KoToolFactoryBase("KritaShape/KisToolDyna") {
 
         setToolTip(i18n("Dynamic Brush Tool"));

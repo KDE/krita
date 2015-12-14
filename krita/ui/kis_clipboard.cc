@@ -361,7 +361,9 @@ QSize KisClipboard::clipSize() const
         }
 
         const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(csModel, csDepth, profile);
-
+        if (!cs) {
+            cs = KoColorSpaceRegistry::instance()->rgb8();
+        }
         clip = new KisPaintDevice(cs);
 
         if (store->hasFile("layerdata")) {

@@ -149,7 +149,7 @@ bool KisKraSaver::saveNodeKeyframes(KoStore *store, QString location, const KisN
     QDomElement root = doc.documentElement();
 
     KisKeyframeChannel *channel;
-    foreach (channel, node->keyframeChannels()) {
+    Q_FOREACH (channel, node->keyframeChannels()) {
         QDomElement element = channel->toXML(doc, m_d->nodeFileNames[node]);
         root.appendChild(element);
     }
@@ -273,7 +273,7 @@ void KisKraSaver::saveCompositions(QDomDocument& doc, QDomElement& element, KisI
 {
     if (!image->compositions().isEmpty()) {
         QDomElement e = doc.createElement("compositions");
-        foreach(KisLayerComposition* composition, image->compositions()) {
+        Q_FOREACH (KisLayerComposition* composition, image->compositions()) {
             composition->save(doc, e);
         }
         element.appendChild(e);
@@ -288,7 +288,7 @@ bool KisKraSaver::saveAssistants(KoStore* store, QString uri, bool external)
     QList<KisPaintingAssistant*> assistants =  m_d->doc->assistants();
     QMap<KisPaintingAssistantHandleSP, int> handlemap;
     if (!assistants.isEmpty()) {
-        foreach(KisPaintingAssistant* assist, assistants){
+        Q_FOREACH (KisPaintingAssistant* assist, assistants){
             if (!assistantcounters.contains(assist->id())){
                 assistantcounters.insert(assist->id(),0);
             }
@@ -312,7 +312,7 @@ bool KisKraSaver::saveAssistantsList(QDomDocument& doc, QDomElement& element)
     QList<KisPaintingAssistant*> assistants =  m_d->doc->assistants();
     if (!assistants.isEmpty()) {
         QDomElement assistantsElement = doc.createElement("assistants");
-        foreach(KisPaintingAssistant* assist, assistants){
+        Q_FOREACH (KisPaintingAssistant* assist, assistants){
             if (assist->id() == "ellipse"){
                 assist->saveXmlList(doc, assistantsElement, count_ellipse);
                 count_ellipse++;

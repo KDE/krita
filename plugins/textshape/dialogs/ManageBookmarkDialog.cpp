@@ -26,8 +26,8 @@
 static QString lastBookMarkItem;
 
 ManageBookmark::ManageBookmark(const QList<QString> &nameList, KoTextEditor *editor, QWidget *parent)
-    : QWidget(parent),
-      m_editor(editor)
+    : QWidget(parent)
+    , m_editor(editor)
 {
     widget.setupUi(this);
     widget.bookmarkList->addItems(nameList);
@@ -35,10 +35,11 @@ ManageBookmark::ManageBookmark(const QList<QString> &nameList, KoTextEditor *edi
     const int count = widget.bookmarkList->count();
     if (count > 0) {
         int row = 0;
-        if (! lastBookMarkItem.isNull()) {
+        if (!lastBookMarkItem.isNull()) {
             QList<QListWidgetItem *> items = widget.bookmarkList->findItems(lastBookMarkItem, Qt::MatchExactly);
-            if (items.count() > 0)
+            if (items.count() > 0) {
                 row = widget.bookmarkList->row(items[0]);
+            }
         }
         widget.bookmarkList->setCurrentRow(row);
     }
@@ -47,8 +48,8 @@ ManageBookmark::ManageBookmark(const QList<QString> &nameList, KoTextEditor *edi
     connect(widget.buttonRename, SIGNAL(clicked()), this, SLOT(slotBookmarkRename()));
     connect(widget.buttonDelete, SIGNAL(clicked()), this, SLOT(slotBookmarkDelete()));
     connect(widget.buttonInsert, SIGNAL(clicked()), this, SLOT(slotBookmarkInsert()));
-    connect(widget.bookmarkList, SIGNAL(itemActivated(QListWidgetItem *)),
-            this, SLOT(slotBookmarkItemActivated(QListWidgetItem *)));
+    connect(widget.bookmarkList, SIGNAL(itemActivated(QListWidgetItem*)),
+            this, SLOT(slotBookmarkItemActivated(QListWidgetItem*)));
     selectionChanged(bookmarkRow());
 }
 
@@ -150,12 +151,12 @@ ManageBookmarkDialog::ManageBookmarkDialog(const QList<QString> &nameList, KoTex
     setDefaultButton(Ok);
     showButtonSeparator(true);
     connect(ui, SIGNAL(bookmarkSelectionChanged(int)), this, SLOT(selectionChanged(int)));
-    connect(ui, SIGNAL(bookmarkNameChanged(const QString &, const QString &)),
-            this, SIGNAL(nameChanged(const QString &, const QString &)));
-    connect(ui, SIGNAL(bookmarkItemDeleted(const QString &)),
-            this, SIGNAL(bookmarkDeleted(const QString &)));
-    connect(ui, SIGNAL(bookmarkItemDoubleClicked(QListWidgetItem *)),
-            this, SLOT(bookmarkDoubleClicked(QListWidgetItem *)));
+    connect(ui, SIGNAL(bookmarkNameChanged(QString,QString)),
+            this, SIGNAL(nameChanged(QString,QString)));
+    connect(ui, SIGNAL(bookmarkItemDeleted(QString)),
+            this, SIGNAL(bookmarkDeleted(QString)));
+    connect(ui, SIGNAL(bookmarkItemDoubleClicked(QListWidgetItem*)),
+            this, SLOT(bookmarkDoubleClicked(QListWidgetItem*)));
     selectionChanged(ui->bookmarkRow());
 }
 

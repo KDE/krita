@@ -25,6 +25,7 @@
 
 #include "KisShortcutsEditor.h"
 #include "KisShortcutsEditor_p.h"
+#include "kshortcutschemeshelper_p.h"
 #include "config-xmlgui.h"
 #include "kis_action_registry.h"
 
@@ -188,7 +189,34 @@ void KisShortcutsEditor::clearConfiguration()
 
 void KisShortcutsEditor::importConfiguration(KConfigBase *config)
 {
-    d->importConfiguration(config);
+    Q_ASSERT(config);
+    if (!config) {
+        return;
+    }
+
+    // Reload the configuration file
+    KisActionRegistry::instance()->applyShortcutScheme(config);
+
+
+    // XXX: Any need to update the actions themselves?
+
+
+    // Update the dialog entry items
+    const KConfigGroup schemeShortcuts(config, QStringLiteral("Shortcuts"));
+    for (QTreeWidgetItemIterator it(d->ui.list); (*it); ++it) {
+
+        if (!(*it)->parent()) {
+            continue;
+        }
+        KisShortcutsEditorItem *item = static_cast<KisShortcutsEditorItem *>(*it);
+        const QString actionId = item->data(Id).toString();
+        if (!schemeShortcuts.hasKey(actionId))
+            continue;
+
+        QList<QKeySequence> sc = QKeySequence::listFromString(schemeShortcuts.readEntry(actionId, QString()));
+        d->changeKeyShortcut(item, LocalPrimary, primarySequence(sc));
+        d->changeKeyShortcut(item, LocalAlternate, alternateSequence(sc));
+    }
 }
 
 void KisShortcutsEditor::exportConfiguration(KConfigBase *config) const
@@ -209,7 +237,7 @@ void KisShortcutsEditor::exportConfiguration(KConfigBase *config) const
     KisActionRegistry::instance()->notifySettingsUpdated();
 }
 
-void KisShortcutsEditor::writeConfiguration(KConfigGroup *config) const
+void KisShortcutsEditor::saveShortcuts(KConfigGroup *config) const
 {
     // This is a horrible mess with pointers...
     auto cg = KConfigGroup(KSharedConfig::openConfig("kritashortcutsrc"), "Shortcuts");
@@ -217,8 +245,10 @@ void KisShortcutsEditor::writeConfiguration(KConfigGroup *config) const
         config = &cg;
     }
 
+    // Clear and reset temporary shortcuts
+    config->deleteGroup();
     foreach (KActionCollection *collection, d->actionCollections) {
-        collection->writeSettings(config, true);
+        collection->writeSettings(config, false);
     }
 
     KisActionRegistry::instance()->notifySettingsUpdated();
@@ -246,18 +276,13 @@ void KisShortcutsEditor::commit()
 
 void KisShortcutsEditor::save()
 {
-    writeConfiguration();
-    // we have to call commit. If we wouldn't do that the changes would be
-    // undone on deletion! That would lead to weird problems. Changes to
-    // Global Shortcuts would vanish completely. Changes to local shortcuts
-    // would vanish for this session.
-    commit();
+    saveShortcuts();
+    commit(); // Not doing this would be bad
 }
 
-//From 2007-ish:
-// There was once a crash where these items were deleted too early by Qt.
 void KisShortcutsEditor::undo()
 {
+    // TODO: is this working?
     for (QTreeWidgetItemIterator it(d->ui.list); (*it); ++it) {
         if (KisShortcutsEditorItem *item = dynamic_cast<KisShortcutsEditorItem *>(*it)) {
             item->undo();
@@ -265,10 +290,6 @@ void KisShortcutsEditor::undo()
     }
 }
 
-// WTF?
-//
-// "We ask the user here if there are any conflicts, as opposed to undo(). They
-//  don't do the same thing anyway, this just not to confuse any readers. slot"
 void KisShortcutsEditor::allDefault()
 {
     d->allDefault();

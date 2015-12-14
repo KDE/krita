@@ -87,7 +87,7 @@ public:
     void addFormula(const QString &name, const QString &formula);
 
     /// Add a single handle with format: x y minX maxX minY maxY
-    void addHandle(const QMap<QString,QVariant> &handle);
+    void addHandle(const QMap<QString, QVariant> &handle);
 
     /// Add modifiers with format: modifier0 modifier1 modifier2 ...
     void addModifiers(const QString &modifiers);
@@ -155,9 +155,9 @@ private:
     // Returns true if any points were actually changed, otherwise false.
     bool useStretchPoints(const QSizeF &size, qreal &scale);
 
-    typedef QMap<QString, EnhancedPathFormula*> FormulaStore;
+    typedef QMap<QString, EnhancedPathFormula *> FormulaStore;
     typedef QList<qreal> ModifierStore;
-    typedef QMap<QString, EnhancedPathParameter*> ParameterStore;
+    typedef QMap<QString, EnhancedPathParameter *> ParameterStore;
 
     QRect m_viewBox;     ///< the viewbox rectangle
     QRectF m_viewBound;   ///< the bounding box of the path in viewbox coordinates
@@ -165,8 +165,8 @@ private:
     QTransform m_mirrorMatrix; ///< matrix to used for mirroring
     QPointF m_viewBoxOffset;
     QStringList m_textArea;
-    QList<EnhancedPathCommand*> m_commands; ///< the commands creating the outline
-    QList<EnhancedPathHandle*> m_enhancedHandles; ///< the handles for modifiying the shape
+    QList<EnhancedPathCommand *> m_commands; ///< the commands creating the outline
+    QList<EnhancedPathHandle *> m_enhancedHandles; ///< the handles for modifiying the shape
     FormulaStore m_formulae;     ///< the formulae
     ModifierStore m_modifiers;   ///< the modifier values
     ParameterStore m_parameters; ///< the shared parameters

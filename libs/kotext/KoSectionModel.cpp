@@ -13,7 +13,7 @@ KoSectionModel::KoSectionModel(QTextDocument *doc)
 
 KoSectionModel::~KoSectionModel()
 {
-    foreach(KoSection *sec, m_registeredSections) {
+    Q_FOREACH (KoSection *sec, m_registeredSections) {
         delete sec; // This will delete associated KoSectionEnd in KoSection destructor
     }
 }

@@ -56,7 +56,7 @@ void KisEmbeddedPatternManagerTest::init()
 
 void KisEmbeddedPatternManagerTest::cleanUp()
 {
-    foreach(KoPattern * p, KoResourceServerProvider::instance()->patternServer()->resources()) {
+    Q_FOREACH (KoPattern * p, KoResourceServerProvider::instance()->patternServer()->resources()) {
         if (p->filename().contains("__test_pattern")) {
             QFile file(p->filename());
             file.remove();
@@ -138,7 +138,7 @@ KoPattern* findOnServer(QByteArray md5)
     KoPattern *pattern = 0;
 
     if (!md5.isEmpty()) {
-        foreach(KoResource * res, KoResourceServerProvider::instance()->patternServer()->resources()) {
+        Q_FOREACH (KoResource * res, KoResourceServerProvider::instance()->patternServer()->resources()) {
             KoPattern *pat = static_cast<KoPattern *>(res);
             if (pat->md5() == md5) {
                 pattern = pat;

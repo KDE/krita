@@ -92,4 +92,3 @@ private:
 
 #endif /* KORECTANGLESHAPE_H */
 
-

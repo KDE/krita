@@ -1,6 +1,6 @@
 add_subdirectory( pics )
 
-set(kritaimagesize_PART_SRCS
+set(kritaimagesize_SOURCES
     imagesize.cc
     dlg_imagesize.cc
     dlg_canvassize.cc
@@ -8,13 +8,13 @@ set(kritaimagesize_PART_SRCS
     kcanvaspreview.cc
     )
 
-ki18n_wrap_ui(kritaimagesize_PART_SRCS
+ki18n_wrap_ui(kritaimagesize_SOURCES
     wdg_imagesize.ui
     wdg_canvassize.ui
     wdg_layersize.ui
     )
 
-add_library(kritaimagesize MODULE ${kritaimagesize_PART_SRCS})
+add_library(kritaimagesize MODULE ${kritaimagesize_SOURCES})
 kcoreaddons_desktop_to_json(kritaimagesize kritaimagesize.desktop)
 
 

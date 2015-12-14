@@ -27,8 +27,8 @@
 #include <QPainter>
 
 OffsetEffect::OffsetEffect()
-        : KoFilterEffect(OffsetEffectId, i18n("Offset"))
-        , m_offset(0, 0)
+    : KoFilterEffect(OffsetEffectId, i18n("Offset"))
+    , m_offset(0, 0)
 {
 }
 
@@ -44,8 +44,9 @@ void OffsetEffect::setOffset(const QPointF &offset)
 
 QImage OffsetEffect::processImage(const QImage &image, const KoFilterEffectRenderContext &context) const
 {
-    if (m_offset.x() == 0.0 && m_offset.y() == 0.0)
+    if (m_offset.x() == 0.0 && m_offset.y() == 0.0) {
         return image;
+    }
 
     // transform from bounding box coordinates
     QPointF offset = context.toUserSpace(m_offset);
@@ -62,13 +63,16 @@ QImage OffsetEffect::processImage(const QImage &image, const KoFilterEffectRende
 
 bool OffsetEffect::load(const KoXmlElement &element, const KoFilterEffectLoadingContext &context)
 {
-    if (element.tagName() != id())
+    if (element.tagName() != id()) {
         return false;
+    }
 
-    if (element.hasAttribute("dx"))
+    if (element.hasAttribute("dx")) {
         m_offset.rx() = element.attribute("dx").toDouble();
-    if (element.hasAttribute("dy"))
+    }
+    if (element.hasAttribute("dy")) {
         m_offset.ry() = element.attribute("dy").toDouble();
+    }
 
     m_offset = context.convertFilterPrimitiveUnits(m_offset);
 
@@ -81,10 +85,12 @@ void OffsetEffect::save(KoXmlWriter &writer)
 
     saveCommonAttributes(writer);
 
-    if (m_offset.x() != 0.0)
+    if (m_offset.x() != 0.0) {
         writer.addAttribute("dx", m_offset.x());
-    if (m_offset.y() != 0.0)
+    }
+    if (m_offset.y() != 0.0) {
         writer.addAttribute("dy", m_offset.x());
+    }
 
     writer.endElement();
 }

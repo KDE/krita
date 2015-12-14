@@ -207,7 +207,7 @@ class KisToolCropFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolCropFactory(const QStringList&)
+    KisToolCropFactory()
             : KoToolFactoryBase("KisToolCrop") {
         setToolTip(i18n("Crop Tool"));
         setToolType(TOOL_TYPE_TRANSFORM);

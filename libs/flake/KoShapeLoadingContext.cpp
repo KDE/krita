@@ -51,7 +51,7 @@ public:
     }
 
     ~Private() {
-        foreach(KoSharedLoadingData * data, sharedData) {
+        Q_FOREACH (KoSharedLoadingData * data, sharedData) {
             delete data;
         }
     }

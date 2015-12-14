@@ -301,7 +301,7 @@ class KisToolTransformFactory : public KoToolFactoryBase
 {
 public:
 
-    KisToolTransformFactory(const QStringList&)
+    KisToolTransformFactory()
             : KoToolFactoryBase("KisToolTransform") {
         setToolTip(i18n("Transform a layer or a selection"));
         setToolType(TOOL_TYPE_TRANSFORM);

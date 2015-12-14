@@ -30,7 +30,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">
-       <widget class="KisCurveWidget" name="pressureCurve" native="true">
+       <widget class="KisCurveWidget" name="pressureCurve">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
           <horstretch>0</horstretch>

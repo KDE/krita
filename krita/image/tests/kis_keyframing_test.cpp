@@ -340,6 +340,68 @@ void KisKeyframingTest::testRasterFrameFetching()
     QVERIFY(fetched3 == frame3);
 }
 
+void KisKeyframingTest::testDeleteFirstRasterChannel()
+{
+    // Test Plan:
+    // 
+    // delete
+    // undo delete
+    // move
+    // undo move
+
+    TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();
+
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->setDefaultBounds(bounds);
+
+    KisRasterKeyframeChannel * channel = dev->createKeyframeChannel(KoID(), 0);
+
+    QCOMPARE(channel->hasScalarValue(), false);
+    QCOMPARE(channel->keyframeCount(), 1);
+    QCOMPARE(dev->framesInterface()->frames().count(), 1);
+    QCOMPARE(channel->frameIdAt(0), 0);
+    QVERIFY(channel->keyframeAt(0) != 0);
+
+    KisKeyframeSP key_0 = channel->keyframeAt(0);
+
+    {
+        KUndo2Command cmd;
+        bool deleteResult = channel->deleteKeyframe(key_0, &cmd);
+        QVERIFY(deleteResult);
+        QCOMPARE(dev->framesInterface()->frames().count(), 1);
+        QVERIFY(channel->frameIdAt(0) != 0);
+        QVERIFY(channel->keyframeAt(0));
+        QVERIFY(channel->keyframeAt(0) != key_0);
+
+        cmd.undo();
+
+        QCOMPARE(dev->framesInterface()->frames().count(), 1);
+        QVERIFY(channel->frameIdAt(0) == 0);
+        QVERIFY(channel->keyframeAt(0));
+        QVERIFY(channel->keyframeAt(0) == key_0);
+    }
+
+    {
+        KUndo2Command cmd;
+        bool moveResult = channel->moveKeyframe(key_0, 1, &cmd);
+        QVERIFY(moveResult);
+        QCOMPARE(dev->framesInterface()->frames().count(), 2);
+        QVERIFY(channel->frameIdAt(0) != 0);
+        QVERIFY(channel->frameIdAt(1) == 0);
+        QVERIFY(channel->keyframeAt(0));
+        QVERIFY(channel->keyframeAt(1));
+        QVERIFY(channel->keyframeAt(0) != key_0);
+        QVERIFY(channel->keyframeAt(1) == key_0);
+
+        cmd.undo();
+
+        QCOMPARE(dev->framesInterface()->frames().count(), 1);
+        QVERIFY(channel->frameIdAt(0) == 0);
+        QVERIFY(channel->keyframeAt(0));
+        QVERIFY(channel->keyframeAt(0) == key_0);
+    }
+}
+
 void KisKeyframingTest::testAffectedFrames()
 {
     KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), 0, -17, 31);

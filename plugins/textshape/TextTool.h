@@ -99,14 +99,17 @@ public:
     virtual void keyReleaseEvent(QKeyEvent *event);
 
     /// reimplemented from superclass
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     /// reimplemented from superclass
     virtual void deactivate();
     /// reimplemented from superclass
     virtual void copy() const;
 
     /// reimplemented from KoUndoableTool
-    virtual void setAddUndoCommandAllowed(bool allowed) { m_allowAddUndoCommand = allowed; }
+    virtual void setAddUndoCommandAllowed(bool allowed)
+    {
+        m_allowAddUndoCommand = allowed;
+    }
 
     ///reimplemented
     virtual void deleteSelection();
@@ -127,40 +130,45 @@ public:
     virtual void repaintDecorations();
 
     /// reimplemented from superclass
-    virtual KoToolSelection* selection();
+    virtual KoToolSelection *selection();
     /// reimplemented from superclass
     virtual QList<QPointer<QWidget> > createOptionWidgets();
 
     /// reimplemented from superclass
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
     /// reimplemented from superclass
-    virtual void inputMethodEvent(QInputMethodEvent * event);
-
+    virtual void inputMethodEvent(QInputMethodEvent *event);
 
     /// The following two methods allow an undo/redo command to tell the tool, it will modify the QTextDocument and wants to be parent of the undo/redo commands resulting from these changes.
 
-    void startEditing(KUndo2Command* command);
+    void startEditing(KUndo2Command *command);
 
     void stopEditing();
 
     void setShapeData(KoTextShapeData *data);
 
-    QRectF caretRect(QTextCursor *cursor, bool *upToDate=0) const;
+    QRectF caretRect(QTextCursor *cursor, bool *upToDate = 0) const;
 
     QRectF textRect(QTextCursor &cursor) const;
 
 protected:
     virtual void createActions();
-    TextShape *textShape() {return m_textShape;}
+    TextShape *textShape()
+    {
+        return m_textShape;
+    }
 
     friend class SimpleParagraphWidget;
     friend class ParagraphSettingsDialog;
 
-    KoTextEditor *textEditor() { return m_textEditor.data(); }
+    KoTextEditor *textEditor()
+    {
+        return m_textEditor.data();
+    }
 
 public Q_SLOTS:
     /// Insert comment to document.
-     void insertAnnotation();
+    void insertAnnotation();
     /// start the textedit-plugin.
     void startTextEditingPlugin(const QString &pluginId);
     /// reimplemented from KoToolBase
@@ -170,7 +178,7 @@ Q_SIGNALS:
     /// emitted every time a different styleManager is set.
     void styleManagerChanged(KoStyleManager *manager);
     /// emitted every time a caret move leads to a different character format being under the caret
-    void charFormatChanged(const QTextCharFormat &format, const QTextCharFormat& refBlockCharFormat);
+    void charFormatChanged(const QTextCharFormat &format, const QTextCharFormat &refBlockCharFormat);
     /// emitted every time a caret move leads to a different paragraph format being under the caret
     void blockFormatChanged(const QTextBlockFormat &format);
     /// emitted every time a caret move leads to a different paragraph format being under the caret
@@ -319,7 +327,7 @@ private Q_SLOTS:
 private:
     void repaintCaret();
     void repaintSelection();
-    KoPointedAt hitTest(const QPointF & point) const;
+    KoPointedAt hitTest(const QPointF &point) const;
     void updateStyleManager();
     void updateSelectedShape(const QPointF &point, bool noDocumentChange);
     void updateSelectionHandler();

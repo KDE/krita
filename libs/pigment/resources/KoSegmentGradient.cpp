@@ -65,7 +65,7 @@ KoSegmentGradient::~KoSegmentGradient()
 KoSegmentGradient::KoSegmentGradient(const KoSegmentGradient &rhs)
     : KoAbstractGradient(rhs)
 {
-    foreach(KoGradientSegment *segment, rhs.m_segments) {
+    Q_FOREACH (KoGradientSegment *segment, rhs.m_segments) {
         pushSegment(new KoGradientSegment(*segment));
     }
 }
@@ -209,7 +209,7 @@ bool KoSegmentGradient::saveToDevice(QIODevice *dev) const
     fileContent << "Name: " << name() << "\n";
     fileContent << m_segments.count() << "\n";
 
-    foreach(KoGradientSegment* segment, m_segments) {
+    Q_FOREACH (KoGradientSegment* segment, m_segments) {
         fileContent << QString::number(segment->startOffset(), 'f') << " " << QString::number(segment->middleOffset(), 'f') << " "
                     << QString::number(segment->endOffset(), 'f') << " ";
 
@@ -257,7 +257,7 @@ QGradient* KoSegmentGradient::toQGradient() const
     QGradient* gradient = new QLinearGradient();
 
     QColor color;
-    foreach(KoGradientSegment* segment, m_segments) {
+    Q_FOREACH (KoGradientSegment* segment, m_segments) {
         segment->startColor().toQColor(&color);
         gradient->setColorAt(segment->startOffset() , color);
         segment->endColor().toQColor(&color);

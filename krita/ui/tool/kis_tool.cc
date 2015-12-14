@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_tool.h"
-#include "opengl/kis_opengl.h"
 #include <QCursor>
 #include <QLabel>
 #include <QWidget>
@@ -28,6 +27,7 @@
 #include <kactioncollection.h>
 
 #include <kis_icon.h>
+#include <KoConfig.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
 #include <KoCanvasBase.h>
@@ -53,7 +53,9 @@
 #include <kis_transaction.h>
 #include <kis_floating_message.h>
 
+#ifdef HAVE_OPENGL
 #include "opengl/kis_opengl_canvas2.h"
+#endif
 #include "kis_canvas_resource_provider.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_coordinates_converter.h"
@@ -69,27 +71,19 @@
 
 
 
-struct KisTool::Private {
-    Private()
-        : currentPattern(0),
-          currentGradient(0),
-          currentExposure(1.0),
-          currentGenerator(0),
-          optionWidget(0)
-    {
-    }
-
+struct Q_DECL_HIDDEN KisTool::Private {
     QCursor cursor; // the cursor that should be shown on tool activation.
 
     // From the canvas resources
-    KoPattern* currentPattern;
-    KoAbstractGradient* currentGradient;
+    KoPattern* currentPattern{0};
+    KoAbstractGradient* currentGradient{0};
     KoColor currentFgColor;
     KoColor currentBgColor;
-    float currentExposure;
-    KisFilterConfiguration* currentGenerator;
-    QWidget* optionWidget;
-
+    float currentExposure{1.0};
+    KisFilterConfiguration* currentGenerator{0};
+    QWidget* optionWidget{0};
+    ToolMode m_mode{HOVER_MODE};
+    bool m_isActive{false};
 };
 
 KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
@@ -97,7 +91,6 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
     , d(new Private)
 {
     d->cursor = cursor;
-    m_isActive = false;
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()));
     connect(this, SIGNAL(isActiveChanged()), SLOT(resetCursorStyle()));
@@ -117,7 +110,6 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
     addAction("toggle_fg_bg", dynamic_cast<QAction *>(collection->action("toggle_fg_bg")));
     addAction("reset_fg_bg", dynamic_cast<QAction *>(collection->action("reset_fg_bg")));
 
-    setMode(HOVER_MODE);
 }
 
 KisTool::~KisTool()
@@ -166,7 +158,7 @@ void KisTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shap
     connect(image(), SIGNAL(sigStrokeCancellationRequested()), SLOT(requestStrokeCancellation()), Qt::UniqueConnection);
     connect(image(), SIGNAL(sigStrokeEndRequested()), SLOT(requestStrokeEnd()), Qt::UniqueConnection);
 
-    m_isActive = true;
+    d->m_isActive = true;
     emit isActiveChanged();
 }
 
@@ -185,7 +177,7 @@ void KisTool::deactivate()
                    << "some signal connections. Your actions might be executed twice!";
     }
 
-    m_isActive = false;
+    d->m_isActive = false;
     emit isActiveChanged();
 }
 
@@ -420,11 +412,11 @@ KisFilterConfiguration * KisTool::currentGenerator()
 }
 
 void KisTool::setMode(ToolMode mode) {
-    m_mode = mode;
+    d->m_mode = mode;
 }
 
 KisTool::ToolMode KisTool::mode() const {
-    return m_mode;
+    return d->m_mode;
 }
 
 KisTool::AlternateAction KisTool::actionToAlternateAction(ToolAction action) {
@@ -614,7 +606,7 @@ bool KisTool::overrideCursorIfNotEditable()
 
 bool KisTool::isActive() const
 {
-    return m_isActive;
+    return d->m_isActive;
 }
 
 void KisTool::slotToggleFgBg()

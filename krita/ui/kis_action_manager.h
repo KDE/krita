@@ -27,6 +27,7 @@
 #include "KisView.h"
 
 #include "kstandardaction.h"
+#include "kis_action_registry.h"
 
 class KisViewManager;
 class KisAction;

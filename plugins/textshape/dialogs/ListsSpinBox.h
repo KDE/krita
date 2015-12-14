@@ -34,13 +34,13 @@ public:
     virtual QString textFromValue(int value) const;
 
 public Q_SLOTS:
-    void setLetterSynchronization(bool on) {
+    void setLetterSynchronization(bool on)
+    {
         m_letterSynchronization = on;
     }
 
 private:
     virtual int valueFromText(const QString &text) const;
-
 
     KoListStyle::Style m_type;
     bool m_letterSynchronization;

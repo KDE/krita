@@ -21,6 +21,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <kis_image.h>
 #include <KoColorSpace.h>
+#include <KoResourcePaths.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColor.h>
 #include <kis_surrogate_undo_adapter.h>
@@ -88,7 +89,7 @@ void KisGmicTests::initTestCase()
     KisGmicParser parser(filePaths);
     m_root = parser.createFilterTree();
 
-    m_blacklistFilePath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", BLACKLIST);
+    m_blacklistFilePath = KoResourcePaths::findResource("gmic_definitions", BLACKLIST);
     m_blacklister = new KisGmicBlacklister(m_blacklistFilePath);
 
     m_qimage = QImage(QString(FILES_DATA_DIR)+"/"+"poster_rodents_bunnysize.jpg");
@@ -341,7 +342,7 @@ void KisGmicTests::testAllFilters()
 #ifdef RUN_FILTERS
     dbgKrita << "Finish status:" << "Failed:" << failed << " Success: " << success;
     dbgKrita << "== Failed filters ==";
-    foreach (const QString &item, failedFilters)
+    Q_FOREACH (const QString &item, failedFilters)
     {
         dbgKrita << item;
     }
@@ -433,7 +434,7 @@ QString KisGmicTests::filePathify(const QString& fileName)
     << QLatin1String(":");
 
     QString result = fileName;
-    foreach(const QString& item, illegalCharacters)
+    Q_FOREACH (const QString& item, illegalCharacters)
     {
         result = result.replace(item ,"_");
     }
@@ -875,7 +876,7 @@ void KisGmicTests::verifyFilters(QVector< FilterDescription > filters)
             {
 
                 dbgKrita << "Multiple entries found:";
-                foreach (Command * c, commands)
+                Q_FOREACH (Command * c, commands)
                 {
                     dbgKrita << "filter: " << c->name() << "category: " << c->parent()->name();
                 }

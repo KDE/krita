@@ -25,19 +25,18 @@
 #include <QLineEdit>
 #include <QTextEdit>
 
-#include <kis_gmic_settings_widget.h>
-#include <kis_debug.h>
+#include "kis_gmic_settings_widget.h"
+#include "Parameter.h"
 
-#include <Parameter.h>
+#include <kis_debug.h>
 
 // kritaui lib
 #include <kis_slider_spin_box.h>
 #include <kis_properties_configuration.h>
-#include <kis_url_requester.h>
 #include <KisImportExportManager.h>
 
 //
-#include "widgets/kis_url_requester.h"
+#include <kis_url_requester.h>
 #include <kcolorbutton.h>
 #include <klocalizedstring.h>
 #include <kseparator.h>
@@ -314,7 +313,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                 if (role == CreateRole)
                 {
                     urlRequester = new KisUrlRequester;
-                    urlRequester.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
+                    urlRequester->setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
                     urlRequester->setMode(KoFileDialog::OpenDirectory);
 
                     m_widgetToParameterIndexMapper[ urlRequester ] = i;

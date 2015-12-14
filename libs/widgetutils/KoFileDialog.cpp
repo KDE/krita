@@ -135,7 +135,7 @@ void KoFileDialog::setImageFilters()
 {
     QStringList imageFilters;
     // add filters for all formats supported by QImage
-    foreach(const QByteArray &format, QImageReader::supportedImageFormats()) {
+    Q_FOREACH (const QByteArray &format, QImageReader::supportedImageFormats()) {
         imageFilters << QLatin1String("image/") + format;
     }
     setMimeTypeFilters(imageFilters);
@@ -161,7 +161,7 @@ void KoFileDialog::setNameFilters(const QStringList &filterList,
 
     if (d->type == KoFileDialog::SaveFile) {
         QStringList mimeList;
-        foreach(const QString &filter, filterList) {
+        Q_FOREACH (const QString &filter, filterList) {
             d->filterList << splitNameFilter(filter, &mimeList);
         }
 
@@ -410,7 +410,7 @@ QStringList KoFileDialog::splitNameFilter(const QString &nameFilter, QStringList
 
     QStringList entries = nameFilter.mid(nameFilter.indexOf("(") + 1).split(" ",QString::SkipEmptyParts );
 
-    foreach(QString entry, entries) {
+    Q_FOREACH (QString entry, entries) {
 
         entry = entry.remove("*");
         entry = entry.remove(")");

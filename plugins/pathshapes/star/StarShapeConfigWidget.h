@@ -38,15 +38,18 @@ public:
     /// reimplemented
     virtual void setUnit(const KoUnit &unit);
     /// reimplemented
-    virtual bool showOnShapeCreate() { return false; }
+    virtual bool showOnShapeCreate()
+    {
+        return false;
+    }
     /// reimplemented
-    virtual KUndo2Command * createCommand();
+    virtual KUndo2Command *createCommand();
 
 private Q_SLOTS:
     void typeChanged();
 private:
     Ui::StarShapeConfigWidget widget;
-    StarShape * m_star;
+    StarShape *m_star;
 };
 
 #endif // STARSHAPECONFIGWIDGET_H

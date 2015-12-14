@@ -2,11 +2,11 @@ add_subdirectory(tests)
 
 include_directories( ${CMAKE_SOURCE_DIR}/krita/image/metadata )
 
-set(kritapngimport_PART_SRCS
+set(kritapngimport_SOURCES
     kis_png_import.cc
     )
 
-add_library(kritapngimport MODULE ${kritapngimport_PART_SRCS})
+add_library(kritapngimport MODULE ${kritapngimport_SOURCES})
 kcoreaddons_desktop_to_json(kritapngimport krita_png_import.desktop)
 
 
@@ -18,14 +18,14 @@ target_link_libraries(kritapngimport kritaui ${PNG_LIBRARIES} )
 
 install(TARGETS kritapngimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
-set(kritapngexport_PART_SRCS
+set(kritapngexport_SOURCES
     kis_png_export.cc
     )
 
 
-ki18n_wrap_ui(kritapngexport_PART_SRCS kis_wdg_options_png.ui )
+ki18n_wrap_ui(kritapngexport_SOURCES kis_wdg_options_png.ui )
 
-add_library(kritapngexport MODULE ${kritapngexport_PART_SRCS})
+add_library(kritapngexport MODULE ${kritapngexport_SOURCES})
 kcoreaddons_desktop_to_json(kritapngexport krita_png_export.desktop)
 
 

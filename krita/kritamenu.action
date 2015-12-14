@@ -474,7 +474,7 @@
       <activationConditions>0</activationConditions>
       <shortcut>Tab</shortcut>
       <defaultShortcut>Tab</defaultShortcut>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="fullscreen">
@@ -500,15 +500,15 @@
       <activationConditions>0</activationConditions>
       <shortcut>W</shortcut>
       <defaultShortcut>W</defaultShortcut>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="level_of_detail_mode">
       <icon></icon>
-      <text>&amp;Fast Preview Mode (LOD)</text>
+      <text>&amp;Instant Preview Mode</text>
       <whatsThis></whatsThis>
-      <toolTip>Fast Preview Mode (LOD)</toolTip>
-      <iconText>Fast Preview Mode (LOD)</iconText>
+      <toolTip>Instant Preview Mode</toolTip>
+      <iconText>Instant Preview Mode</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Shift+L</shortcut>
@@ -602,7 +602,7 @@
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
       <defaultShortcut></defaultShortcut>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="view_show_guides">
@@ -615,7 +615,7 @@
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
       <defaultShortcut></defaultShortcut>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="showStatusBar">
@@ -650,6 +650,7 @@
       <whatsThis></whatsThis>
       <toolTip>Snap To Grid</toolTip>
       <iconText>Snap To Grid</iconText>
+      <activationFlags>1000</activationFlags>
       <shortcut>Ctrl+Shift+;</shortcut>
       <defaultShortcut>Ctrl+Shift+;</defaultShortcut>
       <isCheckable>true</isCheckable>
@@ -1754,7 +1755,7 @@
     </Action>
     <Action name="gmic">
       <icon></icon>
-      <text>Apply G'Mic Action...</text>
+      <text>G'MIC</text>
       <whatsThis></whatsThis>
       <toolTip>Apply G'Mic Action</toolTip>
       <iconText>Apply G'Mic Action</iconText>
@@ -1878,6 +1879,17 @@
       <shortcut></shortcut>
       <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="settings_active_author">
+      <icon>im-user</icon>
+      <text>Active Author Profile</text>
+      <whatsThis></whatsThis>
+      <toolTip>Active Author Profile</toolTip>
+      <iconText>Active Author Profile</iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable></isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="options_configure_keybinding">

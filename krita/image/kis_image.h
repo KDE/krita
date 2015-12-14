@@ -407,26 +407,20 @@ public:
      * Merge the specified layer with the layer
      * below this layer, remove the specified layer.
      */
-    KisLayerSP mergeDown(KisLayerSP l, const KisMetaData::MergeStrategy* strategy);
+    void mergeDown(KisLayerSP l, const KisMetaData::MergeStrategy* strategy);
 
     /**
      * flatten the layer: that is, the projection becomes the layer
      * and all subnodes are removed. If this is not a paint layer, it will morph
      * into a paint layer.
      */
-    KisLayerSP flattenLayer(KisLayerSP layer);
-
-    /**
-     * Removes \p nodes in a safe way, that is handling clone layers
-     * reincarnation correctly
-     */
-    void safeRemoveMultipleNodes(QList<KisNodeSP> nodes);
+    void flattenLayer(KisLayerSP layer);
 
     /**
      * Merges layers in \p mergedLayers and creates a new layer above
      * \p putAfter
      */
-    KisNodeSP mergeMultipleLayers(QList<KisNodeSP> mergedLayers, KisNodeSP putAfter);
+    void mergeMultipleLayers(QList<KisNodeSP> mergedLayers, KisNodeSP putAfter);
 
     /// This overrides interface for KisDefaultBounds
     /// @return the exact bounds of the image in pixel coordinates.

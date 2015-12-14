@@ -27,7 +27,7 @@
 
 SliderAndSpinBoxSync::SliderAndSpinBoxSync(KisDoubleSliderSpinBox *slider,
                                            QSpinBox *spinBox,
-                                           IntFunction parentValueOp)
+                                           boost::function<int()> parentValueOp)
     : m_slider(slider),
       m_spinBox(spinBox),
       m_parentValueOp(parentValueOp),

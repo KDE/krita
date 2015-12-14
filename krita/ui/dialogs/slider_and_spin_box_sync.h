@@ -20,7 +20,7 @@
 #define __SLIDER_AND_SPIN_BOX_SYNC_H
 
 #include <QObject>
-#include <functional>
+#include <boost/function.hpp>
 
 class QSpinBox;
 class KisDoubleSliderSpinBox;
@@ -40,12 +40,10 @@ class KisDoubleSliderSpinBox;
 class SliderAndSpinBoxSync : public QObject
 {
     Q_OBJECT
-    using IntFunction = std::function<int()>;
-
 public:
     SliderAndSpinBoxSync(KisDoubleSliderSpinBox *slider,
                          QSpinBox *spinBox,
-                         IntFunction parentValueOp);
+                         boost::function<int()> parentValueOp);
 
     ~SliderAndSpinBoxSync();
 
@@ -59,7 +57,7 @@ private Q_SLOTS:
 private:
     KisDoubleSliderSpinBox *m_slider;
     QSpinBox *m_spinBox;
-    IntFunction m_parentValueOp;
+    boost::function<int()> m_parentValueOp;
 
     bool m_blockUpdates;
 };

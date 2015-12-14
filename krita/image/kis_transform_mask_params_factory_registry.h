@@ -21,7 +21,8 @@
 
 #include <QMap>
 
-#include <functional>
+#include <boost/function.hpp>
+#include <boost/bind.hpp>
 
 #include "kis_types.h"
 #include "kritaimage_export.h"
@@ -30,8 +31,8 @@
 class QDomElement;
 
 
-using KisTransformMaskParamsFactory    = std::function<KisTransformMaskParamsInterfaceSP (const QDomElement &)>;
-using KisTransformMaskParamsFactoryMap = QMap<QString, KisTransformMaskParamsFactory>;
+typedef boost::function<KisTransformMaskParamsInterfaceSP (const QDomElement &)> KisTransformMaskParamsFactory;
+typedef QMap<QString, KisTransformMaskParamsFactory> KisTransformMaskParamsFactoryMap;
 
 class KRITAIMAGE_EXPORT KisTransformMaskParamsFactoryRegistry
 {

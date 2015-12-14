@@ -110,7 +110,7 @@ public:
     void emitNotification(KisImageSignalType type);
     void emitNotifications(KisImageSignalVector notifications);
 
-    void emitNodeChanged(KisNodeSP node);
+    void emitNodeChanged(KisNode *node);
     void emitNodeHasBeenAdded(KisNode *parent, int index);
     void emitAboutToRemoveANode(KisNode *parent, int index);
 

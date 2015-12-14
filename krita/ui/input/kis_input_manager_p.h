@@ -39,6 +39,7 @@ class KisInputManager::Private
 {
 public:
     Private(KisInputManager *qq);
+
     bool tryHidePopupPalette();
     void addStrokeShortcut(KisAbstractInputAction* action, int index, const QList< Qt::Key >& modifiers, Qt::MouseButtons buttons);
     void addKeyShortcut(KisAbstractInputAction* action, int index,const QList<Qt::Key> &keys);
@@ -51,25 +52,25 @@ public:
 
     KisInputManager *q;
 
-    KisCanvas2 *canvas = 0;
-    KisToolProxy *toolProxy = 0;
+    KisCanvas2 *canvas;
+    KisToolProxy *toolProxy;
 
-    bool forwardAllEventsToTool = false;
+    bool forwardAllEventsToTool;
     bool ignoreQtCursorEvents();
 
-    bool disableTouchOnCanvas = false;
-    bool touchHasBlockedPressEvents = false;
+    bool disableTouchOnCanvas;
+    bool touchHasBlockedPressEvents;
 
     KisShortcutMatcher matcher;
-    QTouchEvent *lastTouchEvent = 0;
+    QTouchEvent *lastTouchEvent;
 
-    KisToolInvocationAction *defaultInputAction = 0;
+    KisToolInvocationAction *defaultInputAction;
 
-    QObject *eventsReceiver = 0;
+    QObject *eventsReceiver;
     KisSignalCompressor moveEventCompressor;
     QScopedPointer<QTabletEvent> compressedMoveEvent;
-    bool testingAcceptCompressedTabletEvents = false;
-    bool testingCompressBrushEvents = false;
+    bool testingAcceptCompressedTabletEvents;
+    bool testingCompressBrushEvents;
 
 
     QSet<QPointer<QObject> > priorityEventFilter;
@@ -114,6 +115,12 @@ public:
     class EventEater
     {
     public:
+
+        EventEater()
+            : hungry(false)
+            , peckish(false)
+        {}
+
         bool eventFilter(QObject* target, QEvent* event);
 
         // This should be called after we're certain a tablet stroke has started.
@@ -123,12 +130,12 @@ public:
         bool isActive();
 
     private:
-        bool hungry{false};   // Continue eating mouse strokes
-        bool peckish{false};  // Eat a single mouse press event
+        bool hungry;   // Continue eating mouse strokes
+        bool peckish;  // Eat a single mouse press event
     };
     EventEater eventEater;
 #endif
 
-    bool focusOnEnter = true;
-    bool containsPointer = true;
+    bool focusOnEnter;
+    bool containsPointer;
 };

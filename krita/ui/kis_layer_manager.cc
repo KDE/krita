@@ -959,7 +959,7 @@ void KisLayerManager::layerStyle()
 
     KisDlgLayerStyle dlg(oldStyle->clone(), m_view->resourceProvider());
 
-    std::function<void ()> updateCall(std::bind(updateLayerStyles, layer, &dlg));
+    boost::function<void ()> updateCall(boost::bind(updateLayerStyles, layer, &dlg));
     SignalToFunctionProxy proxy(updateCall);
     connect(&dlg, SIGNAL(configChanged()), &proxy, SLOT(start()));
 

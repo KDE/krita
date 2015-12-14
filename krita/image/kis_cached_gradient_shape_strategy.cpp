@@ -23,7 +23,8 @@
 
 #include <cmath>
 
-#include <functional>
+#include <boost/function.hpp>
+#include <boost/bind.hpp>
 
 #include "kis_algebra_2d.h"
 #include "kis_debug.h"
@@ -47,8 +48,6 @@ KisCachedGradientShapeStrategy::KisCachedGradientShapeStrategy(const QRect &rc,
     : KisGradientShapeStrategy(),
       m_d(new Private())
 {
-    using namespace std::placeholders;  // for _1, _2, _3...
-
     KIS_ASSERT_RECOVER_NOOP(rc.width() >= 3 && rc.height() >= 3);
 
     m_d->rc = rc;
@@ -83,8 +82,8 @@ KisCachedGradientShapeStrategy::KisCachedGradientShapeStrategy(const QRect &rc,
                                        yStart, yEnd, numSamplesY, Natural));
 
 
-    std::function<qreal(qreal, qreal)> valueOp =
-        std::bind(&KisGradientShapeStrategy::valueAt, m_d->baseStrategy.data(), _1, _2);
+    boost::function<qreal(qreal, qreal)> valueOp =
+        boost::bind(&KisGradientShapeStrategy::valueAt, m_d->baseStrategy.data(), _1, _2);
 
     m_d->spline->initializeSpline(valueOp);
 

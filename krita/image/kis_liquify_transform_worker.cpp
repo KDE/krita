@@ -428,17 +428,15 @@ void KisLiquifyTransformWorker::run(KisPaintDeviceSP device)
                                                     m_d->transformedPoints);
 }
 
-#include <functional>
+#include <boost/function.hpp>
+#include <boost/bind.hpp>
 #include <QTransform>
 
-using PointMapFunction = std::function<QPointF (const QPointF&)>;
-
+typedef boost::function<QPointF (const QPointF&)> PointMapFunction;
 
 PointMapFunction bindPointMapTransform(const QTransform &transform) {
-    using namespace std::placeholders;
-
     typedef QPointF (QTransform::*MapFuncType)(const QPointF&) const;
-    return std::bind(static_cast<MapFuncType>(&QTransform::map), &transform, _1);
+    return boost::bind(static_cast<MapFuncType>(&QTransform::map), &transform, _1);
 }
 
 QImage KisLiquifyTransformWorker::runOnQImage(const QImage &srcImage,

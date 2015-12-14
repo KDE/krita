@@ -78,7 +78,7 @@ void KisImageSignalRouter::emitNotification(KisImageSignalType type)
     }
 }
 
-void KisImageSignalRouter::emitNodeChanged(KisNodeSP node)
+void KisImageSignalRouter::emitNodeChanged(KisNode *node)
 {
     emit sigNodeChanged(node);
 }

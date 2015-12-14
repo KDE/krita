@@ -105,7 +105,14 @@ public:
     Private(KisView *_q, KisDocument *document,
             KoCanvasResourceManager *resourceManager,
             KActionCollection *actionCollection)
-        : actionCollection(actionCollection)
+        : undo(0)
+        , redo(0)
+        , tempActiveWidget(0)
+        , documentDeleted(false)
+        , viewManager(0)
+        , isCurrent(false)
+        , showFloatingMessage(false)
+        , actionCollection(actionCollection)
         , viewConverter()
         , canvasController(_q, actionCollection)
         , canvas(&viewConverter, resourceManager, _q, document->shapeController())
@@ -115,8 +122,8 @@ public:
     {
     }
 
-    KisUndoStackAction *undo = 0;
-    KisUndoStackAction *redo = 0;
+    KisUndoStackAction *undo;
+    KisUndoStackAction *redo;
 
     class StatusBarItem;
 
@@ -124,7 +131,7 @@ public:
     bool inOperation; //in the middle of an operation (no screen refreshing)?
 
     QPointer<KisDocument> document; // our KisDocument
-    QWidget *tempActiveWidget = 0;
+    QWidget *tempActiveWidget;
 
     /**
      * Signals the document has been deleted. Can't use document==0 since this
@@ -132,18 +139,18 @@ public:
      * XXX: either provide a better justification to do things this way, or
      * rework the mechanism.
      */
-    bool documentDeleted = false;
+    bool documentDeleted;
 
     KActionCollection* actionCollection;
     KisCoordinatesConverter viewConverter;
     KisCanvasController canvasController;
     KisCanvas2 canvas;
     KisZoomManager zoomManager;
-    KisViewManager *viewManager = 0;
+    KisViewManager *viewManager;
     KisNodeSP currentNode;
     KisPaintingAssistantsDecoration paintingAssistantsDecoration;
-    bool isCurrent = false;
-    bool showFloatingMessage = false;
+    bool isCurrent;
+    bool showFloatingMessage;
     QPointer<KisFloatingMessage> savedFloatingMessage;
     KisSignalCompressor floatingMessageCompressor;
 
@@ -157,8 +164,9 @@ public:
             : m_widget(widget),
               m_stretch(stretch),
               m_permanent(permanent),
-              m_connected(false),
-              m_hidden(false) {}
+              m_hidden(false),
+              m_connected(false)
+        {}
 
         bool operator==(const StatusBarItem& rhs) {
             return m_widget == rhs.m_widget;
@@ -195,11 +203,11 @@ public:
             }
         }
     private:
-        QWidget * m_widget = 0;
+        QWidget * m_widget;
         int m_stretch;
         bool m_permanent;
-        bool m_connected = false;
-        bool m_hidden = false;
+        bool m_connected;
+        bool m_hidden;
 
     };
 

@@ -25,6 +25,13 @@
 //#include <X11/extensions/XI2proto.h>
 #include <xcb/xcb.h>
 
+#ifndef XCB_GE_GENERIC
+#define XCB_GE_GENERIC 35
+#endif
+#ifndef XCB_GE_NOTIFY
+#define XCB_ENTER_NOTIFY 7
+#endif
+
 #include "qxcbconnection_xi2.h"
 
 struct KisXi2EventFilter::Private

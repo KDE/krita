@@ -270,6 +270,8 @@ public:
         } else {
             unit = KoUnit::Centimeter;
         }
+        confirmNonNativeSave[0] = true;
+        confirmNonNativeSave[1] = true;
     }
 
     ~Private() {
@@ -292,7 +294,7 @@ public:
 
     QByteArray mimeType; // The actual mimetype of the document
     QByteArray outputMimeType; // The mimetype to use when saving
-    bool confirmNonNativeSave [2] = {true, true}; // used to pop up a dialog when saving for the
+    bool confirmNonNativeSave [2]; // used to pop up a dialog when saving for the
     // first time if the file is in a foreign format
     // (Save/Save As, Export)
     int specialOutputFlag; // See KoFileDialog in koMainWindow.cc

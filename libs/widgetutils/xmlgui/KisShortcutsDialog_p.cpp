@@ -45,6 +45,9 @@ QKeySequence alternateSequence(const QList<QKeySequence> &sequences)
 
 KisShortcutsDialog::KisShortcutsDialogPrivate::KisShortcutsDialogPrivate(KisShortcutsDialog *q)
     : q(q)
+    , m_shortcutsEditor(0)
+    , m_saveSettings(false)
+    , m_schemeEditor(0)
 { }
 
 void KisShortcutsDialog::KisShortcutsDialogPrivate::changeShortcutScheme(const QString &schemeName)

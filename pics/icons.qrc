@@ -301,9 +301,5 @@
 		<file>16_dark_zoom-fit-best.svg</file>
 		<file>22_dark_zoom-fit-best.svg</file>
 		<file>24_dark_zoom-fit-best.svg</file>
-		<file>16_light_media-floppy.svg</file>
-		<file>22_light_media-floppy.svg</file>
-		<file>16_dark_media-floppy.svg</file>
-		<file>22_dark_media-floppy.svg</file>
 	</qresource>
 </RCC>

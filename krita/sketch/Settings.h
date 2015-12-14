@@ -23,9 +23,9 @@
 #include <QObject>
 #include <QString>
 
-#include "KisSketchView.h"
-
 #include "krita_sketch_export.h"
+
+class QQuickItem;
 
 class KRITA_SKETCH_EXPORT Settings : public QObject
 {

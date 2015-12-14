@@ -24,8 +24,6 @@
 #include <kis_selection_filters.h>
 #include <operations/kis_filter_selection_operation.h>
 
-#include "KisSketchView.h"
-
 KisSelectionExtras::KisSelectionExtras(KisViewManager *view)
     : m_view(view)
 {

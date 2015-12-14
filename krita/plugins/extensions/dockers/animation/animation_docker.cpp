@@ -34,6 +34,7 @@
 #include "kis_animation_utils.h"
 #include "krita_utils.h"
 #include "kis_image_config.h"
+#include "kis_signals_blocker.h"
 
 
 #include "ui_wdg_animation.h"
@@ -150,9 +151,15 @@ void AnimationDocker::setCanvas(KoCanvasBase * canvas)
 
     if (m_canvas && m_canvas->image()) {
         KisImageAnimationInterface *animation = m_canvas->image()->animationInterface();
-        m_animationWidget->spinFromFrame->setValue(animation->currentRange().start());
-        m_animationWidget->spinToFrame->setValue(animation->currentRange().end());
-        m_animationWidget->intFramerate->setValue(animation->framerate());
+        {
+            KisSignalsBlocker bloker(m_animationWidget->spinFromFrame,
+                                     m_animationWidget->spinToFrame,
+                                     m_animationWidget->intFramerate);
+
+            m_animationWidget->spinFromFrame->setValue(animation->currentRange().start());
+            m_animationWidget->spinToFrame->setValue(animation->currentRange().end());
+            m_animationWidget->intFramerate->setValue(animation->framerate());
+        }
 
         connect(animation, SIGNAL(sigTimeChanged(int)), this, SLOT(slotGlobalTimeChanged()));
         connect(m_canvas->animationPlayer(), SIGNAL(sigFrameChanged()), this, SLOT(slotGlobalTimeChanged()));

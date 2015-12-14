@@ -3,7 +3,7 @@
     <qresource>
         <file>dark_draw-eraser.svg</file>
         <file alias="dark_object-align-horizontal-center-calligra.svg">dark_ox16-action-object-align-horizontal-center-calligra.svg</file>
-        <file alias="dark_object-align-horizontal-right-calligra.svg">dark_ox16-action-object-align-horizontal-left-calligra.svg</file>
+        <file alias="dark_object-align-horizontal-left-calligra.svg">dark_ox16-action-object-align-horizontal-left-calligra.svg</file>
         <file alias="dark_object-align-horizontal-right-calligra.svg">dark_ox16-action-object-align-horizontal-right-calligra.svg</file>
         <file alias="dark_object-align-vertical-bottom-calligra.svg">dark_ox16-action-object-align-vertical-bottom-calligra.svg</file>
         <file alias="dark_object-align-vertical-center-calligra.svg">dark_ox16-action-object-align-vertical-center-calligra.svg</file>

@@ -22,6 +22,16 @@
 #include "opengl/kis_opengl_canvas2.h"
 
 #ifdef HAVE_OPENGL
+#include "opengl/kis_opengl_canvas2_p.h"
+
+#include "opengl/kis_opengl_canvas_debugger.h"
+#include "canvas/kis_canvas2.h"
+#include "canvas/kis_coordinates_converter.h"
+#include "canvas/kis_display_filter.h"
+#include "canvas/kis_display_color_converter.h"
+#include "kis_config.h"
+#include "kis_config_notifier.h"
+#include "kis_debug.h"
 
 #include <QPainter>
 #include <QPainterPath>
@@ -31,26 +41,7 @@
 #include <QThread>
 #include <QFile>
 #include <QOpenGLShaderProgram>
-#include <QOpenGLShaderProgram>
-#include <QOpenGLFramebufferObject>
 #include <QMessageBox>
-
-#include "KoToolProxy.h"
-
-#include <kis_favorite_resource_manager.h>
-#include "canvas/kis_canvas2.h"
-#include "kis_image.h"
-#include "opengl/kis_opengl_image_textures.h"
-#include "kis_canvas_resource_provider.h"
-#include "kis_config.h"
-#include "kis_config_notifier.h"
-#include "kis_debug.h"
-#include "opengl/kis_opengl_canvas2_p.h"
-#include "kis_coordinates_converter.h"
-#include "canvas/kis_display_filter.h"
-#include "canvas/kis_display_color_converter.h"
-#include "kis_opengl_canvas_debugger.h"
-
 
 #define NEAR_VAL -1000.0
 #define FAR_VAL 1000.0

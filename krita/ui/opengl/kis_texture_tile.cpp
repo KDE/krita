@@ -22,8 +22,9 @@
 
 #ifdef HAVE_OPENGL
 #include <kis_debug.h>
-#include <QOpenGLFunctions>
-
+#if !defined(QT_OPENGL_ES)
+#include <QOpenGLBuffer>
+#endif
 
 #ifndef GL_BGRA
 #define GL_BGRA 0x814F

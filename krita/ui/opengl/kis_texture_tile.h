@@ -22,16 +22,17 @@
 
 #ifdef HAVE_OPENGL
 
-class KisTextureTileUpdateInfo;
-
 #include <QRect>
 #include <QRectF>
+// no forward-declaration, used to get GL* primitive types defined
 #include <QOpenGLFunctions>
 
 #if !defined(QT_OPENGL_ES)
 #define USE_PIXEL_BUFFERS
-#include <QOpenGLBuffer>
 #endif
+
+class KisTextureTileUpdateInfo;
+class QOpenGLBuffer;
 
 
 struct KisGLTexturesInfo {

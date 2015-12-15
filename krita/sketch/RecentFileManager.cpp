@@ -59,7 +59,7 @@ public:
 
             value = cg.readPathEntry(QString("File%1").arg(i), QString());
             if (value.isEmpty()) continue;
-            url = QUrl(value);
+            url = QUrl::fromUserInput(value);
 
             // krita sketch only handles local files
             if (!url.isLocalFile())
@@ -69,7 +69,9 @@ public:
             if (!QFile::exists(url.toLocalFile()))
                 continue;
 
+#ifdef Q_OS_WIN
             value = QDir::toNativeSeparators( value );
+#endif
 
             // Don't restore where the url is already known (eg. broken config)
             if (recentFiles.contains(value))

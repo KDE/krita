@@ -54,7 +54,12 @@ protected:
     virtual bool event(QEvent* event);
     virtual bool eventFilter(QObject* watched, QEvent* e);
 
-    void drawBackground(QPainter *painter, const QRectF &rect);
+protected Q_SLOTS:
+    void initializeImageRenderer();
+    void invalidateImageRenderer();
+    void synchronizeImageRenderer();
+    void renderImageOnBackground();
+
 private:
 
     bool m_drawCanvas;

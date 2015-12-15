@@ -46,6 +46,16 @@ SketchDeclarativeView::SketchDeclarativeView(QWindow *parent)
 //     viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
 //     viewport()->setAttribute(Qt::WA_NoSystemBackground);
 //     viewport()->installEventFilter(this);
+
+    // prevent image painted on background cleared again
+    setClearBeforeRendering(false);
+    // for now avoid having to deal with context being temporarily destroyed
+    setPersistentOpenGLContext(true);
+
+    connect(this, &QQuickWindow::sceneGraphInitialized, this, &SketchDeclarativeView::initializeImageRenderer, Qt::DirectConnection);
+    connect(this, &QQuickWindow::sceneGraphInvalidated, this, &SketchDeclarativeView::invalidateImageRenderer, Qt::DirectConnection);
+    connect(this, &QQuickWindow::beforeSynchronizing, this, &SketchDeclarativeView::synchronizeImageRenderer, Qt::DirectConnection);
+    connect(this, &QQuickWindow::beforeRendering, this, &SketchDeclarativeView::renderImageOnBackground, Qt::DirectConnection);
 }
 
 SketchDeclarativeView::SketchDeclarativeView(const QUrl &url, QWindow *parent)
@@ -66,6 +76,16 @@ SketchDeclarativeView::SketchDeclarativeView(const QUrl &url, QWindow *parent)
 //     viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
 //     viewport()->setAttribute(Qt::WA_NoSystemBackground);
 //     viewport()->installEventFilter(this);
+
+    // prevent image painted on background cleared again
+    setClearBeforeRendering(false);
+    // for now avoid having to deal with context being temporarily destroyed
+    setPersistentOpenGLContext(true);
+
+    connect(this, &QQuickWindow::sceneGraphInitialized, this, &SketchDeclarativeView::initializeImageRenderer, Qt::DirectConnection);
+    connect(this, &QQuickWindow::sceneGraphInvalidated, this, &SketchDeclarativeView::invalidateImageRenderer, Qt::DirectConnection);
+    connect(this, &QQuickWindow::beforeSynchronizing, this, &SketchDeclarativeView::synchronizeImageRenderer, Qt::DirectConnection);
+    connect(this, &QQuickWindow::beforeRendering, this, &SketchDeclarativeView::renderImageOnBackground, Qt::DirectConnection);
 }
 
 SketchDeclarativeView::~SketchDeclarativeView()
@@ -103,29 +123,35 @@ void SketchDeclarativeView::setDrawCanvas(bool drawCanvas)
     }
 }
 
-void SketchDeclarativeView::drawBackground(QPainter *painter, const QRectF &rect)
+void SketchDeclarativeView::initializeImageRenderer()
 {
-
-    if (painter->paintEngine()->type() != QPaintEngine::OpenGL2) {
-        qWarning("OpenGLScene: drawBackground needs a "
-                 "QGLWidget to be set as viewport on the "
-                 "graphics view");
-        return;
+    if (m_drawCanvas && m_canvasWidget) {
+        resetOpenGLState();
     }
+}
 
+void SketchDeclarativeView::invalidateImageRenderer()
+{
+    if (m_drawCanvas && m_canvasWidget) {
+        resetOpenGLState();
+    }
+}
+
+void SketchDeclarativeView::synchronizeImageRenderer()
+{
+}
+
+void SketchDeclarativeView::renderImageOnBackground()
+{
     if (m_drawCanvas && m_canvasWidget) {
         if (!m_GLInitialized) {
             m_canvasWidget->initializeGL();
             m_GLInitialized = true;
         }
         m_canvasWidget->renderCanvasGL();
-        m_canvasWidget->renderDecorations(painter);
+//         m_canvasWidget->renderDecorations(painter);
+        resetOpenGLState();
     }
-    else {
-        // QT5TODO
-//         QQuickView::drawBackground(painter, rect);
-    }
-
 }
 
 

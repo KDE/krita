@@ -7,23 +7,31 @@ cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 set(MIN_QT_VERSION 5.4.0)
 set(MIN_FRAMEWORKS_VERSION 5.7.0)
 
-cmake_policy(SET CMP0002 OLD)
-#cmake_policy CMP0017 was introduced in version 2.8.4
-if (NOT ${CMAKE_VERSION} VERSION_LESS 2.8.3)
+if (POLICY CMP0002)
+    cmake_policy(SET CMP0002 OLD)
+endif()
+
+if (POLICY CMP0017)
     cmake_policy(SET CMP0017 NEW)
 endif ()
 
-if (NOT ${CMAKE_VERSION} VERSION_LESS 2.8.12)
+if (POLICY CMP0022)
     cmake_policy(SET CMP0022 OLD)
 endif ()
 
-if (NOT ${CMAKE_VERSION} VERSION_LESS 3.0.0)
+if (POLICY CMP0026)
     cmake_policy(SET CMP0026 OLD)
+endif()
+
+if (POLICY CMP0046)
     cmake_policy(SET CMP0046 OLD)
 endif ()
 
-if(NOT ${CMAKE_VERSION} VERSION_LESS 3.3.0)
+if (POLICY CMP0059)
     cmake_policy(SET CMP0059 OLD)
+endif()
+
+if (POLICY CMP0063)
     cmake_policy(SET CMP0063 OLD)
 endif()
 

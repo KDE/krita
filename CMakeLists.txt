@@ -35,6 +35,14 @@ if (POLICY CMP0063)
     cmake_policy(SET CMP0063 OLD)
 endif()
 
+if (POLICY CMP0054)
+    cmake_policy(SET CMP0054 OLD)
+endif()
+
+if (POLICY CMP0064)
+    cmake_policy(SET CMP0064 OLD)
+endif()
+
 set(APPLE_SUPPRESS_X11_WARNING TRUE)
 
 # QT5TODO: remove KDE4_BUILD_TESTS once all kde4_add_unit_test have been converted

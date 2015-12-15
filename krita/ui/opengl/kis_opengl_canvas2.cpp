@@ -23,37 +23,22 @@
 
 #ifdef HAVE_OPENGL
 
-#include <QFile>
-#include <QMenu>
-#include <QWidget>
-#include <QBrush>
 #include <QPainter>
-#include <QPaintEvent>
 #include <QPainterPath>
-#include <QPoint>
-#include <QPainter>
+#include <QPointF>
 #include <QMatrix>
-#include <kis_debug.h>
+#include <QTransform>
 #include <QThread>
-#include <QMessageBox>
 #include <QFile>
 #include <QOpenGLShaderProgram>
-#include <QTransform>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLFramebufferObject>
-#include <QOpenGLWidget>
-#include <QOpenGLFunctions>
-
-#include <KoResourcePaths.h>
-
+#include <QMessageBox>
 
 #include "KoToolProxy.h"
 
-#include "kis_config.h"
-#include "kis_types.h"
 #include <kis_favorite_resource_manager.h>
 #include "canvas/kis_canvas2.h"
-#include "kis_coordinates_converter.h"
 #include "kis_image.h"
 #include "opengl/kis_opengl_image_textures.h"
 #include "kis_canvas_resource_provider.h"

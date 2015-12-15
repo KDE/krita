@@ -20,7 +20,6 @@
 
 #ifdef HAVE_OPENGL
 #include <QOpenGLContext>
-#include <QOpenGLWidget>
 #include <QOpenGLFunctions>
 #endif
 
@@ -28,7 +27,6 @@
 #include <QDir>
 #include <QFile>
 #include <QDesktopServices>
-#include <QMessageBox>
 
 #include <klocalizedstring.h>
 

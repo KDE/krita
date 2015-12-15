@@ -27,15 +27,12 @@
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
 
-#include <KoCanvasBase.h>
-
 #include "canvas/kis_canvas_widget_base.h"
 #include "opengl/kis_opengl_image_textures.h"
 
 #include "kritaui_export.h"
 #include "kis_ui_types.h"
 
-class QWidget;
 class KisCanvas2;
 class KisDisplayColorConverter;
 class QOpenGLShaderProgram;

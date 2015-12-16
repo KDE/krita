@@ -202,14 +202,6 @@ void KisOpenGLCanvas2::setDisplayFilterImpl(KisDisplayFilter* displayFilter, boo
     }
 }
 
-void KisOpenGLCanvas2::disconnectCurrentCanvas()
-{
-    Q_ASSERT(d->openGLImageTextures);
-    d->openGLImageTextures->disconnect(canvas());
-    d->openGLImageTextures->disconnect(canvas()->image());
-}
-
-
 void KisOpenGLCanvas2::setWrapAroundViewingMode(bool value)
 {
     d->wrapAroundMode = value;

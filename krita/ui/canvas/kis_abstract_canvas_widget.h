@@ -70,9 +70,6 @@ public:
     // Called from KisCanvas2::slotSetDisplayProfile
     virtual void setDisplayProfile(KisDisplayColorConverter *colorConverter) = 0;
 
-    // Called from KisCanvas2::disconnectCurrentCanvas
-    virtual void disconnectCurrentCanvas() = 0;
-
     // Called from KisCanvas2::finishResizingImage
     virtual void finishResizingImage(qint32 w, qint32 h) = 0;
 

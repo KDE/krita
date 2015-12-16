@@ -484,11 +484,6 @@ void KisCanvas2::connectCurrentCanvas()
     setLodAllowedInCanvas(m_d->lodAllowedInCanvas);
 }
 
-void KisCanvas2::disconnectCurrentCanvas()
-{
-    m_d->canvasWidget->disconnectCurrentCanvas();
-}
-
 void KisCanvas2::resetCanvas(bool useOpenGL)
 {
     // we cannot reset the canvas before it's created, but this method might be called,
@@ -503,7 +498,6 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
          m_d->openGLFilterMode != cfg.openGLFilteringMode());
 
     if (needReset) {
-        disconnectCurrentCanvas();
         createCanvas(useOpenGL);
         connectCurrentCanvas();
         notifyZoomChanged();

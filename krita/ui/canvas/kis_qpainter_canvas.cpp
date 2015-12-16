@@ -202,9 +202,6 @@ void KisQPainterCanvas::setWrapAroundViewingMode(bool value)
     return;
 }
 
-void KisQPainterCanvas::disconnectCurrentCanvas()
-{ }
-
 void KisQPainterCanvas::finishResizingImage(qint32 w, qint32 h)
 {
     m_d->prescaledProjection->slotImageSizeChanged(w, h);

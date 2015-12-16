@@ -22,7 +22,6 @@
 
 #ifdef HAVE_OPENGL
 
-#include <QObject>
 #include <QVector>
 #include <QMap>
 
@@ -42,10 +41,8 @@ class KoColorProfile;
 /**
  * A set of OpenGL textures that contains the projection of a KisImage.
  */
-class KRITAUI_EXPORT KisOpenGLImageTextures : public QObject, public KisShared
+class KRITAUI_EXPORT KisOpenGLImageTextures : public KisShared
 {
-    Q_OBJECT
-
 public:
     /**
      * Obtain a KisOpenGLImageTextures object for the given image.
@@ -138,8 +135,6 @@ public:
 
     KisOpenGLUpdateInfoSP updateCache(const QRect& rect);
     KisOpenGLUpdateInfoSP updateCacheNoConversion(const QRect& rect);
-
-public Q_SLOTS:
 
     void recalculateCache(KisUpdateInfoSP info);
 

@@ -45,6 +45,7 @@ public:
 public Q_SLOTS:
     void setZoom(qreal zoom);
     void setZoomDouble(double zoom);
+    void slotSelectionChanged();
 
 private Q_SLOTS:
     void slotUpdateLayersMenu();

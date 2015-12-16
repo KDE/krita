@@ -60,6 +60,9 @@ public:
     void setScrubState(bool active);
     void scrubTo(int time, bool preview);
 
+    void setPlaybackRange(const KisTimeRange &range);
+    bool isPlaybackActive() const;
+
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;

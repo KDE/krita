@@ -103,6 +103,9 @@ public:
     const KisTimeRange &currentRange() const;
     void setRange(const KisTimeRange range);
 
+    const KisTimeRange &playbackRange() const;
+    void setPlaybackRange(const KisTimeRange range);
+
     int framerate() const;
 
 public Q_SLOTS:
@@ -134,6 +137,7 @@ Q_SIGNALS:
 
     void sigFramerateChanged();
     void sigRangeChanged();
+    void sigPlaybackRangeChanged();
 
 private:
     struct Private;

@@ -43,7 +43,7 @@
 #include "timeline_color_scheme.h"
 #include "kis_node_model.h"
 #include "kis_projection_leaf.h"
-
+#include "kis_time_range.h"
 
 struct TimelineFramesModel::Private
 {
@@ -875,5 +875,15 @@ void TimelineFramesModel::slotPlaybackStopped()
     setData(index(0, m_d->image->animationInterface()->currentUITime()), true, ActiveFrameRole);
 }
 
+void TimelineFramesModel::setPlaybackRange(const KisTimeRange &range)
+{
+    if (!m_d->dummiesFacade) return;
 
+    KisImageAnimationInterface *i = m_d->image->animationInterface();
+    i->setPlaybackRange(range);
+}
 
+bool TimelineFramesModel::isPlaybackActive() const
+{
+    return m_d->animationPlayer && m_d->animationPlayer->isPlaying();
+}

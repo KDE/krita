@@ -48,6 +48,7 @@ struct KisImageAnimationInterface::Private
     bool frameInvalidationBlocked;
 
     KisTimeRange currentRange;
+    KisTimeRange playbackRange;
     int framerate;
     int cachedLastFrameValue;
 };
@@ -86,6 +87,17 @@ const KisTimeRange& KisImageAnimationInterface::currentRange() const
 void KisImageAnimationInterface::setRange(const KisTimeRange range) {
     m_d->currentRange = range;
     emit sigRangeChanged();
+}
+
+const KisTimeRange& KisImageAnimationInterface::playbackRange() const
+{
+    return m_d->playbackRange.isValid() ? m_d->playbackRange : m_d->currentRange;
+}
+
+void KisImageAnimationInterface::setPlaybackRange(const KisTimeRange range)
+{
+    m_d->playbackRange = range;
+    emit sigPlaybackRangeChanged();
 }
 
 int KisImageAnimationInterface::framerate() const

@@ -46,6 +46,8 @@
 #include "kis_animation_utils.h"
 #include "kis_custom_modifiers_catcher.h"
 #include "kis_action.h"
+#include "kis_signal_compressor.h"
+#include "kis_time_range.h"
 
 typedef QPair<QRect, QModelIndex> QItemViewPaintPair;
 typedef QList<QItemViewPaintPair> QItemViewPaintPairs;
@@ -60,7 +62,8 @@ struct TimelineFramesView::Private
           zoomStillPointIndex(-1),
           zoomStillPointOriginalOffset(0),
           dragInProgress(false),
-          modifiersCatcher(0)
+          modifiersCatcher(0),
+          selectionChangedCompressor(300, KisSignalCompressor::FIRST_INACTIVE)
     {}
 
     TimelineFramesView *q;
@@ -94,7 +97,7 @@ struct TimelineFramesView::Private
 
     KisCustomModifiersCatcher *modifiersCatcher;
     QPoint lastPressedPosition;
-
+    KisSignalCompressor selectionChangedCompressor;
 
     QStyleOptionViewItemV4 viewOptionsV4() const;
     QItemViewPaintPairs draggablePaintPairs(const QModelIndexList &indexes, QRect *r) const;
@@ -198,6 +201,9 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
 
     setFramesPerSecond(12);
     setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+
+    connect(&m_d->selectionChangedCompressor, SIGNAL(timeout()),
+            SLOT(slotSelectionChanged()));
 }
 
 TimelineFramesView::~TimelineFramesView()
@@ -256,6 +262,9 @@ void TimelineFramesView::setModel(QAbstractItemModel *model)
 
     connect(m_d->model, SIGNAL(sigInfiniteTimelineUpdateNeeded()),
             this, SLOT(slotUpdateInfiniteFramesCount()));
+
+    connect(selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
+            &m_d->selectionChangedCompressor, SLOT(start()));
 }
 
 void TimelineFramesView::setFramesPerSecond(int fps)
@@ -353,6 +362,28 @@ void TimelineFramesView::currentChanged(const QModelIndex &current, const QModel
     }
 }
 
+void TimelineFramesView::slotSelectionChanged()
+{
+    int minColumn = std::numeric_limits<int>::max();
+    int maxColumn = std::numeric_limits<int>::min();
+
+    foreach (const QModelIndex &idx, selectedIndexes()) {
+        if (idx.column() > maxColumn) {
+            maxColumn = idx.column();
+        }
+
+        if (idx.column() < minColumn) {
+            minColumn = idx.column();
+        }
+    }
+
+    KisTimeRange range;
+    if (maxColumn > minColumn) {
+        range = KisTimeRange(minColumn, maxColumn - minColumn + 1);
+    }
+    m_d->model->setPlaybackRange(range);
+}
+
 void TimelineFramesView::slotReselectCurrentIndex()
 {
     QModelIndex index = currentIndex();
@@ -361,6 +392,8 @@ void TimelineFramesView::slotReselectCurrentIndex()
 
 void TimelineFramesView::slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
+    if (m_d->model->isPlaybackActive()) return;
+
     int selectedColumn = -1;
 
     for (int j = topLeft.column(); j <= bottomRight.column(); j++) {

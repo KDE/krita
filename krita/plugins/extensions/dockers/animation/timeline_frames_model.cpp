@@ -186,6 +186,11 @@ TimelineFramesModel::~TimelineFramesModel()
 {
 }
 
+bool TimelineFramesModel::hasConnectionToCanvas() const
+{
+    return m_d->dummiesFacade;
+}
+
 void TimelineFramesModel::setFrameCache(KisAnimationFrameCacheSP cache)
 {
     if (m_d->framesCache == cache) return;

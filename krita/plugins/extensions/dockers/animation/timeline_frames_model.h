@@ -40,6 +40,8 @@ public:
     TimelineFramesModel(QObject *parent);
     ~TimelineFramesModel();
 
+    bool hasConnectionToCanvas() const;
+
     void setFrameCache(KisAnimationFrameCacheSP cache);
     void setAnimationPlayer(KisAnimationPlayer *player);
 

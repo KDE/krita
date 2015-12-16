@@ -562,8 +562,10 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
             addActionToMenu(&menu, "layer_style");
 
             menu.addSeparator();
-            menu.addAction(m_removeAction);
+            addActionToMenu(&menu, "show_in_timeline");
+            menu.addSeparator();
 
+            menu.addAction(m_removeAction);
             addActionToMenu(&menu, "duplicatelayer");
             addActionToMenu(&menu, "flatten_image");
             addActionToMenu(&menu, "flatten_layer");

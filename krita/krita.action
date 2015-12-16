@@ -2392,6 +2392,17 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="show_in_timeline">
+      <icon></icon>
+      <text>Show in Timeline</text>
+      <whatsThis></whatsThis>
+      <toolTip></toolTip>
+      <iconText></iconText>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
   </Actions>
 
   <Actions category="Unknown">

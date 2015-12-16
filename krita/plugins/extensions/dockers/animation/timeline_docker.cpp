@@ -126,9 +126,16 @@ void TimelineDocker::unsetCanvas()
 
 void TimelineDocker::setMainWindow(KisViewManager *view)
 {
-    Q_UNUSED(view);
-    //KisActionManager *actionManager = view->actionManager();
-    //actionManager->addAction("toggle_onion_skin", m_toggleOnionSkinAction);
+    KisActionManager *actionManager = view->actionManager();
+
+    QMap<QString, KisAction*> actions = m_d->view->globalActions();
+
+    QMap<QString, KisAction*>::iterator it = actions.begin();
+    QMap<QString, KisAction*>::iterator end = actions.end();
+
+    for (; it != end; ++it) {
+        actionManager->addAction(it.key(), it.value());
+    }
 }
 
 #include "timeline_docker.moc"

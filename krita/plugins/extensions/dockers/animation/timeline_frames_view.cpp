@@ -45,6 +45,7 @@
 
 #include "kis_animation_utils.h"
 #include "kis_custom_modifiers_catcher.h"
+#include "kis_action.h"
 
 typedef QPair<QRect, QModelIndex> QItemViewPaintPair;
 typedef QList<QItemViewPaintPair> QItemViewPaintPairs;
@@ -76,7 +77,7 @@ struct TimelineFramesView::Private
     QPoint startZoomPanDragPos;
 
     QToolButton *addLayersButton;
-    QAction *showHideLayerAction;
+    KisAction *showHideLayerAction;
     QMenu *layerEditingMenu;
     QMenu *existingLayersMenu;
 
@@ -84,6 +85,7 @@ struct TimelineFramesView::Private
     QMenu *frameEditingMenu;
 
     QMenu *multipleFrameEditingMenu;
+    QMap<QString, KisAction*> globalActions;
 
 
     KisDraggableToolButton *zoomDragButton;
@@ -158,8 +160,14 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->layerEditingMenu->addAction("New Layer", this, SLOT(slotAddNewLayer()));
     m_d->existingLayersMenu = m_d->layerEditingMenu->addMenu("Add Existing Layer");
     m_d->layerEditingMenu->addSeparator();
-    m_d->showHideLayerAction = m_d->layerEditingMenu->addAction(KisAnimationUtils::showLayerActionName, this, SLOT(slotHideLayerFromTimeline()));
+
+    m_d->showHideLayerAction = new KisAction(KisAnimationUtils::showLayerActionName, this);
+    m_d->showHideLayerAction->setActivationFlags(KisAction::ACTIVE_LAYER);
+    connect(m_d->showHideLayerAction, SIGNAL(triggered()), SLOT(slotHideLayerFromTimeline()));
     m_d->showHideLayerAction->setCheckable(true);
+    m_d->globalActions.insert("show_in_timeline", m_d->showHideLayerAction);
+    m_d->layerEditingMenu->addAction(m_d->showHideLayerAction);
+
     m_d->layerEditingMenu->addAction("Remove Layer", this, SLOT(slotRemoveLayer()));
 
     connect(m_d->existingLayersMenu, SIGNAL(aboutToShow()), SLOT(slotUpdateLayersMenu()));
@@ -194,6 +202,11 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
 
 TimelineFramesView::~TimelineFramesView()
 {
+}
+
+QMap<QString, KisAction*> TimelineFramesView::globalActions() const
+{
+    return m_d->globalActions;
 }
 
 void resizeToMinimalSize(QAbstractButton *w, int minimalSize) {
@@ -388,8 +401,17 @@ void TimelineFramesView::slotHeaderDataChanged(Qt::Orientation orientation, int 
         if (newFps != m_d->fps) {
             setFramesPerSecond(newFps);
         }
+    } else /* if (orientation == Qt::Vertical) */ {
+        updateShowInTimeline();
     }
 }
+
+void TimelineFramesView::rowsInserted(const QModelIndex& parent, int start, int end)
+{
+    QTableView::rowsInserted(parent, start, end);
+    updateShowInTimeline();
+}
+
 
 inline bool isIndexDragEnabled(QAbstractItemModel *model, const QModelIndex &index) {
     return (model->flags(index) & Qt::ItemIsDragEnabled);
@@ -647,11 +669,14 @@ void TimelineFramesView::slotUpdateLayersMenu()
 
 void TimelineFramesView::slotLayerContextMenuRequested(const QPoint &globalPos)
 {
+    m_d->layerEditingMenu->exec(globalPos);
+}
+
+void TimelineFramesView::updateShowInTimeline()
+{
     const int row = m_d->model->activeLayerRow();
     const bool status = m_d->model->headerData(row, Qt::Vertical, TimelineFramesModel::LayerUsedInTimelineRole).toBool();
-
     m_d->showHideLayerAction->setChecked(status);
-    m_d->layerEditingMenu->exec(globalPos);
 }
 
 void TimelineFramesView::slotAddNewLayer()

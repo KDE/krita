@@ -202,14 +202,6 @@ void KisOpenGLCanvas2::setDisplayFilterImpl(KisDisplayFilter* displayFilter, boo
     }
 }
 
-void KisOpenGLCanvas2::disconnectCurrentCanvas()
-{
-    Q_ASSERT(d->openGLImageTextures);
-    d->openGLImageTextures->disconnect(canvas());
-    d->openGLImageTextures->disconnect(canvas()->image());
-}
-
-
 void KisOpenGLCanvas2::setWrapAroundViewingMode(bool value)
 {
     d->wrapAroundMode = value;
@@ -651,23 +643,12 @@ void KisOpenGLCanvas2::initializeCheckerShader()
     delete d->checkerShader;
     d->checkerShader = new QOpenGLShaderProgram();
 
-    QString vertexShaderName;
-    QString fragmentShaderName;
-
-    if (KisOpenGL::supportsGLSL13()) {
-        vertexShaderName = ":/matrix_transform.vert";
-        fragmentShaderName = ":/simple_texture.frag";
-    } else {
-        vertexShaderName = ":/matrix_transform_legacy.vert";
-        fragmentShaderName = ":/simple_texture_legacy.frag";
-    }
-
     bool result;
 
-    result = d->checkerShader->addShaderFromSourceFile(QOpenGLShader::Vertex, vertexShaderName);
+    result = d->checkerShader->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/matrix_transform.vert");
     reportShaderLinkFailedAndExit(result, "Checker vertex shader", d->checkerShader->log());
 
-    result = d->checkerShader->addShaderFromSourceFile(QOpenGLShader::Fragment, fragmentShaderName);
+    result = d->checkerShader->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/simple_texture.frag");
     reportShaderLinkFailedAndExit(result, "Checker fragment shader", d->checkerShader->log());
 
     d->checkerShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
@@ -689,31 +670,20 @@ QByteArray KisOpenGLCanvas2::buildFragmentShader()
 
     bool haveDisplayFilter = d->displayFilter && !d->displayFilter->program().isEmpty();
     bool useHiQualityFiltering = d->filterMode == KisTextureTile::HighQualityFiltering;
-    bool haveGLSL13 = KisOpenGL::supportsGLSL13();
-    bool useDirectLodFetch = haveGLSL13;
 
-    QString filename;
-
-    if (haveGLSL13) {
-        filename = "highq_downscale.frag";
-        shaderText.append("#version 130\n");
-    } else {
-        filename = "simple_texture_legacy.frag";
-    }
-
+    QString filename = "highq_downscale.frag";
+    // FIXME is this necessary?
+    shaderText.append("#version 130\n");
 
     if (haveDisplayFilter) {
         shaderText.append("#define USE_OCIO\n");
         shaderText.append(d->displayFilter->program().toLatin1());
     }
 
-    if (haveGLSL13 && useHiQualityFiltering) {
+    if (useHiQualityFiltering) {
         shaderText.append("#define HIGHQ_SCALING\n");
     }
-
-    if (haveGLSL13 && useDirectLodFetch) {
-        shaderText.append("#define DIRECT_LOD_FETCH\n");
-    }
+    shaderText.append("#define DIRECT_LOD_FETCH\n");
 
     {
         QFile prefaceFile(":/" + filename);
@@ -734,11 +704,8 @@ void KisOpenGLCanvas2::initializeDisplayShader()
     bool result = d->displayShader->addShaderFromSourceCode(QOpenGLShader::Fragment, buildFragmentShader());
     reportShaderLinkFailedAndExit(result, "Display fragment shader", d->displayShader->log());
 
-    if (KisOpenGL::supportsGLSL13()) {
-        result = d->displayShader->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/matrix_transform.vert");
-    } else {
-        result = d->displayShader->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/matrix_transform_legacy.vert");
-    }
+    result = d->displayShader->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/matrix_transform.vert");
+
     reportShaderLinkFailedAndExit(result, "Display vertex shader", d->displayShader->log());
 
     d->displayShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
@@ -767,9 +734,7 @@ void KisOpenGLCanvas2::initializeDisplayShader()
     // I cannot tell where that is at in here... Scott P (11/8/2015)
 
     // lod
-    d->displayUniformLocationFixedLodLevel =
-        KisOpenGL::supportsGLSL13() ?
-        d->displayShader->uniformLocation("fixedLodLevel") : -1;
+    d->displayUniformLocationFixedLodLevel = d->displayShader->uniformLocation("fixedLodLevel");
 }
 
 void KisOpenGLCanvas2::slotConfigChanged()

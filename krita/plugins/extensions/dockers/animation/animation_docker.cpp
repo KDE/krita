@@ -156,8 +156,8 @@ void AnimationDocker::setCanvas(KoCanvasBase * canvas)
                                      m_animationWidget->spinToFrame,
                                      m_animationWidget->intFramerate);
 
-            m_animationWidget->spinFromFrame->setValue(animation->currentRange().start());
-            m_animationWidget->spinToFrame->setValue(animation->currentRange().end());
+            m_animationWidget->spinFromFrame->setValue(animation->fullClipRange().start());
+            m_animationWidget->spinToFrame->setValue(animation->fullClipRange().end());
             m_animationWidget->intFramerate->setValue(animation->framerate());
         }
 
@@ -246,7 +246,7 @@ void AnimationDocker::slotUIRangeChanged()
     int fromTime = m_animationWidget->spinFromFrame->value();
     int toTime = m_animationWidget->spinToFrame->value();
 
-    m_canvas->image()->animationInterface()->setRange(KisTimeRange::fromTime(fromTime, toTime));
+    m_canvas->image()->animationInterface()->setFullClipRange(KisTimeRange::fromTime(fromTime, toTime));
 }
 
 void AnimationDocker::slotUIFramerateChanged()

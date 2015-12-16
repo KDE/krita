@@ -116,7 +116,7 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageWSP image)
 
     QDomElement animationElement = doc.createElement("animation");
     KisDomUtils::saveValue(&animationElement, "framerate", image->animationInterface()->framerate());
-    KisDomUtils::saveValue(&animationElement, "range", image->animationInterface()->currentRange());
+    KisDomUtils::saveValue(&animationElement, "range", image->animationInterface()->fullClipRange());
     KisDomUtils::saveValue(&animationElement, "currentTime", image->animationInterface()->currentUITime());
     imageElement.appendChild(animationElement);
 

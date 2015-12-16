@@ -68,9 +68,9 @@ void KisAnimationExporterUI::exportSequence(KisDocument *document)
 
     if (filename.isEmpty()) return;
 
-    const KisTimeRange currentRange = document->image()->animationInterface()->currentRange();
-    int firstFrame = currentRange.start();
-    int lastFrame = currentRange.end();
+    const KisTimeRange fullClipRange = document->image()->animationInterface()->fullClipRange();
+    int firstFrame = fullClipRange.start();
+    int lastFrame = fullClipRange.end();
 
     m_d->progressDialog.setWindowModality(Qt::ApplicationModal);
     m_d->progressDialog.setMinimum(firstFrame);

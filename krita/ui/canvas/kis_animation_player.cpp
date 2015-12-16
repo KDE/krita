@@ -101,7 +101,7 @@ void KisAnimationPlayer::connectCancelSignals()
         this, SLOT(slotUpdatePlaybackTimer()));
 
     m_d->cancelStrokeConnections.addConnection(
-        m_d->canvas->image()->animationInterface(), SIGNAL(sigRangeChanged()),
+        m_d->canvas->image()->animationInterface(), SIGNAL(sigFullClipRangeChanged()),
         this, SLOT(slotUpdatePlaybackTimer()));
 
     m_d->cancelStrokeConnections.addConnection(

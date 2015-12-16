@@ -506,7 +506,7 @@ void KisKraLoader::loadAnimationMetadata(const KoXmlElement &element, KisImageWS
     }
 
     if (KisDomUtils::loadValue(qElement, "range", &range)) {
-        animation->setRange(range);
+        animation->setFullClipRange(range);
     }
 
     if (KisDomUtils::loadValue(qElement, "currentTime", &currentTime)) {

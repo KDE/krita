@@ -212,7 +212,7 @@ struct KisAnimationCachePopulator::Private
         if (!image) return false;
 
         KisImageAnimationInterface *animation = image->animationInterface();
-        KisTimeRange currentRange = animation->currentRange();
+        KisTimeRange currentRange = animation->fullClipRange();
 
         if (currentRange.isValid()) {
             Q_ASSERT(!currentRange.isInfinite());

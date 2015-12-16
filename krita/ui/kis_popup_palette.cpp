@@ -132,8 +132,7 @@ KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoCo
     connect(m_timer, SIGNAL(timeout()), this, SLOT(slotEnableChangeFGColor()));
     connect(this, SIGNAL(sigEnableChangeFGColor(bool)), m_resourceManager, SIGNAL(sigEnableChangeColor(bool)));
 
-
-
+    setCursor(Qt::ArrowCursor);
     setMouseTracking(true);
     setHoveredPreset(-1);
     setHoveredColor(-1);
@@ -225,10 +224,8 @@ void KisPopupPalette::showPopupPalette(bool show)
 {
     if (show) {
         emit sigEnableChangeFGColor(!show);
-        QApplication::setOverrideCursor(Qt::ArrowCursor);
     } else {
         emit sigTriggerTimer();
-        QApplication::restoreOverrideCursor();
     }
     setVisible(show);
 }

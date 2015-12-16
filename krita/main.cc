@@ -47,6 +47,7 @@
 
 #elif defined HAVE_X11
     #include <ui/input/wintab/kis_tablet_support_x11.h>
+    #include <ui/input/wintab/kis_xi2_event_filter.h>
 #endif
 
 #if defined HAVE_KCRASH
@@ -127,6 +128,10 @@ extern "C" int main(int argc, char **argv)
         app.setAttribute(Qt::AA_DontShowIconsInMenus);
     }
 
+#if defined HAVE_X11
+    app.installNativeEventFilter(KisXi2EventFilter::instance());
+#endif
+
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,
     // so use an xpm.
@@ -158,7 +163,6 @@ extern "C" int main(int argc, char **argv)
 
     QObject::connect(&app, SIGNAL(fileOpenRequest(QString)),
                      &app, SLOT(fileOpenRequested(QString)));
-
 
     int state = app.exec();
 

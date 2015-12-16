@@ -277,6 +277,13 @@ else()
     set(HAVE_X11 FALSE)
 endif()
 
+find_package(XCB COMPONENTS XCB ATOM)
+if(XCB_FOUND)
+  set(HAVE_XCB TRUE)
+else()
+  set(HAVE_XCB FALSE)
+endif()
+
 # use sane compile flags
 add_definitions(
   -DQT_USE_QSTRINGBUILDER

@@ -122,8 +122,6 @@ public:
         void deactivate();
         bool isActive();
 
-        QEvent *savedEvent{0};
-        QObject *savedTarget; // More storage
     private:
         bool hungry{false};   // Continue eating mouse strokes
         bool peckish{false};  // Eat a single mouse press event

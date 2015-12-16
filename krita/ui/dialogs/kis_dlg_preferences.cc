@@ -657,10 +657,6 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         chkDisableVsync->setChecked(cfg.disableVSync());
         cmbFilterMode->setEnabled(cfg.useOpenGL());
         cmbFilterMode->setCurrentIndex(cfg.openGLFilteringMode());
-        // Don't show the high quality filtering mode if it's not available
-        if (!KisOpenGL::supportsGLSL13()) {
-            cmbFilterMode->removeItem(3);
-        }
     }
     if (qApp->applicationName() == "kritasketch" || qApp->applicationName() == "kritagemini") {
        grpOpenGL->setVisible(false);

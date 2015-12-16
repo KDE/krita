@@ -50,12 +50,6 @@ public:
     static bool hasOpenGL();
 
     /**
-     * @brief supportsGLSL13
-     * @return true if we have a modern opengl capable of high-quality filtering
-     */
-    static bool supportsGLSL13();
-
-    /**
      * @brief supportsFilter
      * @return True if OpenGL provides fence sync methods.
      */
@@ -74,4 +68,3 @@ private:
 };
 
 #endif // KIS_OPENGL_H_
-

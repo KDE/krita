@@ -871,8 +871,7 @@ void KisCanvas2::setLodAllowedInCanvas(bool value)
 #ifdef HAVE_OPENGL
     m_d->lodAllowedInCanvas =
         value &&
-        m_d->currentCanvasIsOpenGL &&
-        KisOpenGL::supportsGLSL13();
+        m_d->currentCanvasIsOpenGL;
 #else
     Q_UNUSED(value);
     m_d->lodAllowedInCanvas = false;

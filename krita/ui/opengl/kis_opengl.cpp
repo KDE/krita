@@ -111,12 +111,6 @@ bool KisOpenGL::supportsFenceSync()
     return true;
 }
 
-bool KisOpenGL::supportsGLSL13()
-{
-    // return glVersion > 300;
-    return true; // QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_0; -- we force 3.2 for now, since that has glFenceSync
-}
-
 bool KisOpenGL::needsFenceWorkaround()
 {
     return NeedsFenceWorkaround;

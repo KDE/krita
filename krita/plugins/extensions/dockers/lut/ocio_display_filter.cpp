@@ -274,11 +274,8 @@ void OcioDisplayFilter::updateProcessor()
     // Step 1: Create a GPU Shader Description
     OCIO::GpuShaderDesc shaderDesc;
 
-    if (KisOpenGL::supportsGLSL13()) {
-        shaderDesc.setLanguage(OCIO::GPU_LANGUAGE_GLSL_1_3);
-    } else {
-        shaderDesc.setLanguage(OCIO::GPU_LANGUAGE_GLSL_1_0);
-    }
+    shaderDesc.setLanguage(OCIO::GPU_LANGUAGE_GLSL_1_3);
+
     shaderDesc.setFunctionName("OCIODisplay");
     shaderDesc.setLut3DEdgeLen(lut3DEdgeSize);
 

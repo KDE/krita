@@ -45,6 +45,16 @@ KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KoID &id, const KisNode
 {
 }
 
+KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KisRasterKeyframeChannel &rhs, const KisNodeWSP newParentNode, const KisPaintDeviceWSP newPaintDevice)
+    : KisKeyframeChannel(rhs, newParentNode),
+      m_d(new Private(newPaintDevice))
+{
+    KIS_ASSERT_RECOVER_NOOP(&rhs != this);
+
+    m_d->frameFilenames = rhs.m_d->frameFilenames;
+    m_d->onionSkinsEnabled = rhs.m_d->onionSkinsEnabled;
+}
+
 KisRasterKeyframeChannel::~KisRasterKeyframeChannel()
 {
 }

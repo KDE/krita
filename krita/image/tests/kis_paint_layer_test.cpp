@@ -114,19 +114,22 @@ void KisPaintLayerTest::testKeyframing()
     KisPaintLayerSP layer = new KisPaintLayer(image, "", OPACITY_OPAQUE_U8);
     KisPaintDeviceSP dev = layer->paintDevice();
 
-    KisKeyframeChannel *contentChannel = layer->getKeyframeChannel("content");
+    KisKeyframeChannel *contentChannel = layer->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    QVERIFY(!contentChannel);
 
-    QVERIFY(contentChannel != 0);
+    layer->enableAnimation();
+
+    contentChannel = layer->getKeyframeChannel("content");
+    QVERIFY(contentChannel);
     QCOMPARE(contentChannel->keyframeCount(), 1);
 
     KUndo2Command parentCommand;
 
-    KisKeyframeChannel *rasterChannel = layer->getKeyframeChannel(KisKeyframeChannel::Content.id());
-    rasterChannel->addKeyframe(7, &parentCommand);
+    contentChannel->addKeyframe(7, &parentCommand);
     QCOMPARE(contentChannel->keyframeCount(), 2);
     QVERIFY(contentChannel->keyframeAt(0) != contentChannel->keyframeAt(7));
 
-
+    KisPaintLayerSP layerCopy = new KisPaintLayer(*layer.data());
 }
 
 void KisPaintLayerTest::testLayerStyles()

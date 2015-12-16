@@ -41,6 +41,7 @@ public:
 
 public:
     KisKeyframeChannel(const KoID& id, KisNodeWSP node);
+    KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP newParentNode);
     ~KisKeyframeChannel();
 
     QString id() const;

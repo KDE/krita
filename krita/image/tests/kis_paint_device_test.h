@@ -74,6 +74,7 @@ private Q_SLOTS:
     void testCrossDeviceFrameCopyDirect();
     void testCrossDeviceFrameCopyChannel();
     void testLazyFrameCreation();
+    void testCopyPaintDeviceWithFrames();
 
     void testCompositionAssociativity();
 };

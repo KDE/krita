@@ -30,6 +30,13 @@ const KoID KisKeyframeChannel::Content = KoID("content", i18n("Content"));
 
 struct KisKeyframeChannel::Private
 {
+    Private() {}
+    Private(const Private &rhs, KisNodeWSP newParentNode) {
+        keys = rhs.keys;
+        node = newParentNode;
+        id = rhs.id;
+    }
+
     KeyframesMap keys;
     KisNodeWSP node;
     KoID id;
@@ -99,6 +106,12 @@ KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisNodeWSP node)
 {
     m_d->id = id;
     m_d->node = node;
+}
+
+KisKeyframeChannel::KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP newParentNode)
+    : m_d(new Private(*rhs.m_d, newParentNode))
+{
+    KIS_ASSERT_RECOVER_NOOP(&rhs != this);
 }
 
 KisKeyframeChannel::~KisKeyframeChannel()

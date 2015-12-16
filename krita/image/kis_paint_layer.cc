@@ -95,7 +95,20 @@ KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
         , KisIndirectPaintingSupport()
         , m_d(new Private)
 {
-    init(new KisPaintDevice(*rhs.m_d->paintDevice.data()), rhs.m_d->paintChannelFlags);
+    const bool copyAnimation = rhs.isAnimated();
+
+    if (!copyAnimation) {
+        init(new KisPaintDevice(*rhs.m_d->paintDevice.data()), rhs.m_d->paintChannelFlags);
+    } else {
+        init(new KisPaintDevice(*rhs.m_d->paintDevice.data(), true, this), rhs.m_d->paintChannelFlags);
+
+        m_d->contentChannel = m_d->paintDevice->keyframeChannel();
+        addKeyframeChannel(m_d->contentChannel);
+
+        m_d->contentChannel->setOnionSkinsEnabled(rhs.onionSkinEnabled());
+
+        KisLayer::enableAnimation();
+    }
 }
 
 void KisPaintLayer::init(KisPaintDeviceSP paintDevice, const QBitArray &paintChannelFlags)

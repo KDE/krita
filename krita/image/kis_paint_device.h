@@ -98,7 +98,7 @@ public:
      * behavior). If \p copyFrames is true, the new device is a deep
      * copy of the source with all the frames included.
      */
-    KisPaintDevice(const KisPaintDevice& rhs, bool copyFrames = false);
+    KisPaintDevice(const KisPaintDevice& rhs, bool copyFrames = false, KisNode *newParentNode = 0);
     virtual ~KisPaintDevice();
 
 protected:

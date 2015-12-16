@@ -2070,6 +2070,54 @@ void KisPaintDeviceTest::testLazyFrameCreation()
     QCOMPARE(i->frames().size(), 2);
 }
 
+void KisPaintDeviceTest::testCopyPaintDeviceWithFrames()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();
+    dev->setDefaultBounds(bounds);
+
+    KisRasterKeyframeChannel *channel = dev->createKeyframeChannel(KisKeyframeChannel::Content, 0);
+    QVERIFY(channel);
+
+    KisPaintDeviceFramesInterface *i = dev->framesInterface();
+    QVERIFY(i);
+
+    QCOMPARE(i->frames().size(), 1);
+
+    KisPaintDeviceFramesInterface::TestingDataObjects o;
+
+    // Itinial state: one frame, m_data shared
+    o = i->testingGetDataObjects();
+    QVERIFY(!o.m_data);
+    QVERIFY(!o.m_lodData);
+    QVERIFY(!o.m_externalFrameData);
+    QCOMPARE(o.m_frames.size(), 1);
+    QVERIFY(o.m_currentData == o.m_frames.begin().value());
+
+
+    // add a keyframe
+
+    KUndo2Command cmdAdd;
+
+    KisKeyframeSP frame = channel->addKeyframe(10, &cmdAdd);
+
+    QVERIFY(channel->keyframeAt(10));
+
+    o = i->testingGetDataObjects();
+    QVERIFY(!o.m_data);
+    QVERIFY(!o.m_lodData);
+    QVERIFY(!o.m_externalFrameData);
+    QCOMPARE(o.m_frames.size(), 2);
+    //QVERIFY(o.m_currentData == o.m_frames.begin().value());
+
+    KisPaintDeviceSP newDev = new KisPaintDevice(*dev, true, 0);
+
+    QVERIFY(channel->keyframeAt(0));
+    QVERIFY(channel->keyframeAt(10));
+}
+
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/variance.hpp>

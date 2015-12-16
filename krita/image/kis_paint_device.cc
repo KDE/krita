@@ -803,7 +803,7 @@ void KisPaintDevice::init(const KoColorSpace *colorSpace,
     setParentNode(parent);
 }
 
-KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs, bool copyFrames)
+KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs, bool copyFrames, KisNode *newParentNode)
     : QObject()
     , KisShared()
     , m_d(new Private(this))
@@ -814,6 +814,13 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs, bool copyFrames)
 
         // copy data objects with or without frames
         m_d->cloneAllDataObjects(rhs.m_d, copyFrames);
+
+        if (copyFrames) {
+            KIS_ASSERT_RECOVER_RETURN(rhs.m_d->framesInterface);
+            KIS_ASSERT_RECOVER_RETURN(rhs.m_d->contentChannel);
+            m_d->framesInterface.reset(new KisPaintDeviceFramesInterface(this));
+            m_d->contentChannel.reset(new KisRasterKeyframeChannel(*rhs.m_d->contentChannel.data(), newParentNode, this));
+        }
 
         setDefaultBounds(rhs.m_d->defaultBounds);
         setParentNode(0);

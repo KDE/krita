@@ -70,6 +70,22 @@ KisOpenglCanvasDebugger::instance()
     return s_instance;
 }
 
+bool KisOpenglCanvasDebugger::showFpsOnCanvas() const
+{
+    return m_d->isEnabled;
+}
+
+qreal KisOpenglCanvasDebugger::accumulatedFps()
+{
+    qreal value = 0;
+
+    if (m_d->fpsSum > 0) {
+        value = qreal(m_d->fpsCounter) / m_d->fpsSum * 1000.0;
+    }
+
+    return value;
+}
+
 void KisOpenglCanvasDebugger::nofityPaintRequested()
 {
     if (!m_d->isEnabled) return;

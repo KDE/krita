@@ -74,7 +74,7 @@
 #endif
 
 #include "opengl/kis_opengl.h"
-
+#include "kis_fps_decoration.h"
 
 #include <kis_favorite_resource_manager.h>
 #include <kis_popup_palette.h>
@@ -407,6 +407,10 @@ void KisCanvas2::createOpenGLCanvas()
     m_d->frameCache = KisAnimationFrameCache::getFrameCache(canvasWidget->openGLImageTextures());
 
     setCanvasWidget(canvasWidget);
+
+    if (canvasWidget->needsFpsDebugging() && !decoration(KisFpsDecoration::idTag)) {
+        addDecoration(new KisFpsDecoration(imageView()));
+    }
 #else
     qFatal("Bad use of createOpenGLCanvas(). It shouldn't have happened =(");
 #endif

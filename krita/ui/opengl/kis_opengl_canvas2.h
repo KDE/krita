@@ -73,6 +73,7 @@ public:
     void renderDecorations(QPainter *painter);
     void paintToolOutline(const QPainterPath &path);
 
+    bool needsFpsDebugging() const;
 
 public: // Implement kis_abstract_canvas_widget interface
     void setDisplayFilter(KisDisplayFilter* displayFilter);

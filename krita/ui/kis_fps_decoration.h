@@ -16,30 +16,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_OPENGL_CANVAS_DEBUGGER_H
-#define __KIS_OPENGL_CANVAS_DEBUGGER_H
+#ifndef __KIS_FPS_DECORATION_H
+#define __KIS_FPS_DECORATION_H
 
-#include <QScopedPointer>
+#include "canvas/kis_canvas_decoration.h"
 
-
-
-class KisOpenglCanvasDebugger
+class KisFpsDecoration : public KisCanvasDecoration
 {
 public:
-    KisOpenglCanvasDebugger();
-    ~KisOpenglCanvasDebugger();
+    KisFpsDecoration(QPointer<KisView> view);
+    ~KisFpsDecoration();
 
-    static KisOpenglCanvasDebugger* instance();
-
-    bool showFpsOnCanvas() const;
-
-    void nofityPaintRequested();
-    void nofitySyncStatus(bool value);
-    qreal accumulatedFps();
-
-private:
-    struct Private;
-    const QScopedPointer<Private> m_d;
+    void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, KisCanvas2* canvas);
+    static const QString idTag;
 };
 
-#endif /* __KIS_OPENGL_CANVAS_DEBUGGER_H */
+#endif /* __KIS_FPS_DECORATION_H */

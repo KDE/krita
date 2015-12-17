@@ -709,7 +709,15 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
     //    in which case we snap the position to the mouse position.
     // It seems there is no way to find out the mode programmatically, the LOGCONTEXT orgX/Y/Ext
     // area is always the virtual desktop.
-    const QRect virtualDesktopArea = mapToNative(qApp->primaryScreen()->virtualGeometry(), dpr);
+    const QPlatformScreen *platformScreen = qApp->primaryScreen()->handle();
+    const qreal dpr = qApp->primaryScreen()->devicePixelRatio();
+
+    QRect virtualDesktopArea = platformScreen->geometry();
+    Q_FOREACH(auto s, platformScreen->virtualSiblings()) {
+        virtualDesktopArea |= s->geometry();
+    }
+
+
 
     const Qt::KeyboardModifiers keyboardModifiers = QApplication::queryKeyboardModifiers();
 

@@ -902,11 +902,14 @@ void QXcbConnection::xi2ReportTabletEvent(TabletData &tabletData, void *event)
             fixed1616ToReal(ev->root_x), fixed1616ToReal(ev->root_y),
             (int)tabletData.buttons, pressure, xTilt, yTilt, rotation);
 
+    Qt::KeyboardModifiers modifiers = QApplication::queryKeyboardModifiers();
+
     QWindowSystemInterface::handleTabletEvent(window, local, global,
                                               tabletData.tool, tabletData.pointerType,
                                               tabletData.buttons, pressure,
                                               xTilt, yTilt, tangentialPressure,
-                                              rotation, 0, tabletData.serialId);
+                                              rotation, 0, tabletData.serialId,
+                                              modifiers);
 }
 
 #endif // QT_NO_TABLETEVENT

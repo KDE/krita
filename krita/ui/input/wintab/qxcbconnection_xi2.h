@@ -128,7 +128,7 @@ public:
     static void handleTabletEvent(QWindow *w, const QPointF &local, const QPointF &global,
                                   int device, int pointerType, Qt::MouseButtons buttons, qreal pressure, int xTilt, int yTilt,
                                   qreal tangentialPressure, qreal rotation, int z, qint64 uid,
-                                  Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+                                  Qt::KeyboardModifiers modifiers);
 };
 
 namespace QXcbAtom {

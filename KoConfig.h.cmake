@@ -61,3 +61,5 @@
 /* This file contains all the paths that change when changing the installation prefix */
 #define CALLIGRAPREFIX "${CMAKE_INSTALL_PREFIX}"
 
+/* This variable contains the path to the current build directory */
+#define KRITA_BUILD_DIR "${CMAKE_BINARY_DIR}"

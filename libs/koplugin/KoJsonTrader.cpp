@@ -70,7 +70,11 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
         Q_FOREACH (const QDir& dir, searchDirs) {
             Q_FOREACH (QString entry, dir.entryList()) {
                 QFileInfo info(dir, entry);
+#ifdef Q_OS_MAC
                 if (info.isDir() && (info.fileName().contains("lib") || info.fileName().contains("PlugIns"))) {
+#else
+                if (info.isDir() && info.fileName().contains("lib")) {
+#endif
                     QDir libDir(info.absoluteFilePath());
 
                     // on many systems this will be the actual lib dir (and krita subdir contains plugins)

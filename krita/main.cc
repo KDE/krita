@@ -99,6 +99,12 @@ extern "C" int main(int argc, char **argv)
     QCoreApplication::addLibraryPath(QCoreApplication::applicationDirPath());
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
+
+    if (qApp->applicationDirPath().contains(KRITA_BUILD_DIR)) {
+        qFatal("FATAL: You're trying to run krita from the build location. You can only run Krita from the installation location.");
+    }
+
+
 #if defined HAVE_KCRASH
     KCrash::initialize();
 #endif

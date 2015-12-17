@@ -129,7 +129,7 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     m_horizontalRuler->setShowMousePosition(true);
     m_horizontalRuler->createGuideToolConnection(m_view->canvasBase());
 
-    new KoRulerController(m_horizontalRuler, m_canvasController->canvas()->resourceManager());
+//    new KoRulerController(m_horizontalRuler, m_canvasController->canvas()->resourceManager());
     m_verticalRuler = new KoRuler(m_view, Qt::Vertical, m_zoomHandler);
     m_verticalRuler->setShowMousePosition(true);
     m_verticalRuler->createGuideToolConnection(m_view->canvasBase());

@@ -22,9 +22,8 @@
 
 #include "kritawidgets_export.h"
 
-#include <KoText.h>
-
 #include <kpagedialog.h>
+#include <KoUnit.h>
 
 struct KoPageLayout;
 
@@ -37,8 +36,6 @@ public:
     ~KoPageLayoutDialog();
 
     void showTextDirection(bool on);
-    KoText::Direction textDirection() const;
-    void setTextDirection(KoText::Direction direction);
     void showPageSpread(bool on);
     void setPageSpread(bool pageSpread);
     KoPageLayout pageLayout() const;

@@ -310,7 +310,7 @@ void TextTool::createActions()
 
     const char *const decreaseIndentActionIconName =
         QApplication::isRightToLeft() ? koIconNameCStr("format_decreaseindent") : koIconNameCStr("format-indent-less");
-    m_actionFormatIncreaseIndent->setIcon(koIcon(increaseIndentActionIconName));
+    m_actionFormatIncreaseIndent->setIcon(koIcon(decreaseIndentActionIconName));
 
     QAction *action = actionRegistry->makeQAction("format_bulletlist", this);
     addAction("format_bulletlist", action);

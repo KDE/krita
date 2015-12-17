@@ -51,7 +51,6 @@
 #include "KisViewManager.h"
 #include "kis_node.h"
 
-#include <KoTextDocumentLayout.h>
 #include <KoDocumentResourceManager.h>
 #include <KoDataCenterBase.h>
 #include <commands/kis_image_layer_add_command.h>

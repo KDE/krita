@@ -1,4 +1,4 @@
-include_directories( ${KRITA_INCLUDES} ${KOTEXT_INCLUDES} )
+include_directories( ${KRITA_INCLUDES} ${FLAKE_INCLUDES} )
 
 set(kritahistorydocker_SOURCES
     History.h

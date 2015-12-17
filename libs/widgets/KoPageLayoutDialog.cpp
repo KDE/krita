@@ -124,16 +124,6 @@ void KoPageLayoutDialog::showTextDirection(bool on)
     d->pageLayoutWidget->showTextDirection(on);
 }
 
-KoText::Direction KoPageLayoutDialog::textDirection() const
-{
-    return d->pageLayoutWidget->textDirection();
-}
-
-void KoPageLayoutDialog::setTextDirection(KoText::Direction direction)
-{
-    d->pageLayoutWidget->setTextDirection(direction);
-}
-
 void KoPageLayoutDialog::showPageSpread(bool on)
 {
     d->pageLayoutWidget->showPageSpread(on);

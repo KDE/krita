@@ -31,7 +31,8 @@
 #include "ChangeConnectionPointCommand.h"
 #include "MoveConnectionPointStrategy.h"
 #include "ConnectionPointWidget.h"
-#include "../../textshape/TextShape.h"
+
+#define TextShape_SHAPEID "TextShapeID"
 
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>

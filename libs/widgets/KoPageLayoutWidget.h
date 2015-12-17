@@ -22,7 +22,6 @@
 
 #include "kritawidgets_export.h"
 
-#include <KoText.h>
 #include <KoPageLayout.h>
 #include <QWidget>
 
@@ -47,8 +46,6 @@ public:
     QString currentPageStyle() const;
     void setPageSpread(bool pageSpread);
     void showTextDirection(bool on);
-    void setTextDirection(KoText::Direction direction);
-    KoText::Direction textDirection() const;
 
 Q_SIGNALS:
     void layoutChanged(const KoPageLayout &layout);

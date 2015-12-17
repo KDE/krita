@@ -299,36 +299,6 @@ void KoPageLayoutWidget::showTextDirection(bool on)
     d->widget.textDirection->setVisible(on);
 }
 
-void KoPageLayoutWidget::setTextDirection(KoText::Direction direction )
-{
-    int index = 0;
-    switch(direction) {
-    case KoText::LeftRightTopBottom:
-        index = 1;
-        break;
-    case KoText::RightLeftTopBottom:
-        index = 2;
-        break;
-    case KoText::TopBottomRightLeft: // unused for now.
-    case KoText::InheritDirection:
-    case KoText::AutoDirection:
-        index = 0;
-    case KoText::TopBottomLeftRight:
-        ; // unhandled, because it actually doesn't exist in real-world writing systems.
-          // Boustrophedon would be interesting to implement, though
-    }
-    d->widget.textDirection->setCurrentIndex(index);
-}
-
-KoText::Direction KoPageLayoutWidget::textDirection() const
-{
-    switch(d->widget.textDirection->currentIndex()) {
-    case 1: return KoText::LeftRightTopBottom;
-    case 2: return KoText::RightLeftTopBottom;
-    default:
-    case 0: return KoText::AutoDirection;
-    }
-}
 
 void KoPageLayoutWidget::showPageStyles(bool on)
 {

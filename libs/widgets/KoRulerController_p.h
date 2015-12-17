@@ -20,11 +20,9 @@
 #define KoRulerController_p_h
 
 #include "KoRulerController.h"
-#include "KoText.h"
 #include "styles/KoParagraphStyle.h"
 
 #include <KoCanvasResourceManager.h>
-#include <KoTextDocument.h>
 
 #include <WidgetsDebug.h>
 
@@ -203,9 +201,5 @@ public:
 private:
     KoRuler *ruler;
     KoCanvasResourceManager *resourceManager;
-    int lastPosition; // the last position in the text document.
-    QList<KoText::Tab> tabList;
-    KoText::Tab currentTab;
-    int originalTabIndex, currentTabIndex;
 };
 #endif

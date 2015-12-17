@@ -28,7 +28,7 @@
 #include <QAbstractTextDocumentLayout>
 #include <QUrl>
 
-#include "KoListStyle.h"
+#include <styles/KoListStyle.h>
 
 class KoList;
 class KoStyleManager;

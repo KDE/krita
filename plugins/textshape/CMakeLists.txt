@@ -2,7 +2,23 @@ project( textPlugin)
 
 add_definitions(-DTRANSLATION_DOMAIN=\"krita_shape_text\")
 
-#add_subdirectory( tests )
+# KoText depends on koplugin, odf
+set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/plugins/textshape/kotext
+                   ${CMAKE_BINARY_DIR}/plugins/textshape/kotext
+                   ${CMAKE_SOURCE_DIR}/plugins/textshape/kotext/changetracker
+                   ${CMAKE_SOURCE_DIR}/plugins/textshape/kotext/styles
+                   ${CMAKE_SOURCE_DIR}/plugins/textshape/kotext/opendocument
+                   ${FLAKE_INCLUDES}
+                   ${KOODF_INCLUDES})
+
+# TextLayout depends on kotext
+set(TEXTLAYOUT_INCLUDES ${KOTEXT_INCLUDES}
+                   ${CMAKE_SOURCE_DIR}/plugins/textshape/textlayout
+                   ${CMAKE_BINARY_DIR}/plugins/textshape/textlayout)
+
+
+add_subdirectory( textlayout )
+add_subdirectory( kotext )
 
 include_directories(
     ${KOTEXT_INCLUDES}

@@ -2,9 +2,6 @@ include_directories(${KOTEXT_INCLUDES}
                     ${FONTCONFIG_INCLUDE_DIR}/fontconfig
                     ${FREETYPE_INCLUDE_DIRS})
 
-add_subdirectory( tests )
-add_subdirectory( styles/tests )
-
 ########### next target ###############
 set(kritatext_LIB_SRCS
     KoDocumentRdfBase.cpp

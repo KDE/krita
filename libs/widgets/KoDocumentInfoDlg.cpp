@@ -27,7 +27,6 @@
 #include "KoDocumentBase.h"
 #include "KoGlobal.h"
 #include "KoPageWidgetItem.h"
-#include <KoDocumentRdfBase.h>
 #include <KoIcon.h>
 
 

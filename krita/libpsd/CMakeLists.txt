@@ -1,4 +1,4 @@
-include_directories(${KOTEXT_INCLUDES})
+include_directories(${FLAKE_INCLUDES})
 include_directories(${CMAKE_BINARY_DIR}/krita/libpsd)  #For kispsd_include.h
 
 add_subdirectory( tests )

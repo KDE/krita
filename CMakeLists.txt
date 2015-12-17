@@ -633,22 +633,8 @@ set(VECTORIMAGE_INCLUDES
                    ${CMAKE_SOURCE_DIR}/libs/vectorimage/libsvm
                    ${CMAKE_SOURCE_DIR}/libs/vectorimage/libwmf)
 
-# KoText depends on koplugin, odf
-set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
-                   ${CMAKE_BINARY_DIR}/libs/kotext
-                   ${CMAKE_SOURCE_DIR}/libs/kotext/changetracker
-                   ${CMAKE_SOURCE_DIR}/libs/kotext/styles
-                   ${CMAKE_SOURCE_DIR}/libs/kotext/opendocument
-                   ${FLAKE_INCLUDES}
-                   ${KOODF_INCLUDES})
-
-# TextLayout depends on kotext
-set(TEXTLAYOUT_INCLUDES ${KOTEXT_INCLUDES}
-                   ${CMAKE_SOURCE_DIR}/libs/textlayout
-                   ${CMAKE_BINARY_DIR}/libs/textlayout)
-
 # Widgets depends on kritatext and flake
-set(KOWIDGETS_INCLUDES ${KOTEXT_INCLUDES}
+set(KOWIDGETS_INCLUDES ${FLAKE_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/widgetutils
                    ${CMAKE_BINARY_DIR}/libs/widgetutils
                    ${CMAKE_SOURCE_DIR}/libs/widgets

@@ -44,7 +44,7 @@ void KisAnimationExporterTest::testAnimationExport()
 
     rasterChannel->addKeyframe(1, &parentCommand);
     rasterChannel->addKeyframe(2, &parentCommand);
-    p.image->animationInterface()->setRange(KisTimeRange::fromTime(0, 2));
+    p.image->animationInterface()->setFullClipRange(KisTimeRange::fromTime(0, 2));
 
     KisPaintDeviceSP dev = p.layer->paintDevice();
 

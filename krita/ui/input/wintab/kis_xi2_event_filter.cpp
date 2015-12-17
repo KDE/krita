@@ -47,6 +47,7 @@ KisXi2EventFilter::~KisXi2EventFilter()
 
 bool KisXi2EventFilter::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
 {
+    Q_UNUSED(eventType);
     Q_UNUSED(result);
     xcb_generic_event_t *event = static_cast<xcb_generic_event_t*>(message);
 

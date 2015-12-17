@@ -518,14 +518,6 @@ bool QXcbConnection::xi2HandleEvent(xcb_ge_event_t *event)
 }
 
 #ifdef XCB_USE_XINPUT22
-static qreal valuatorNormalized(double value, XIValuatorClassInfo *vci)
-{
-    if (value > vci->max)
-        value = vci->max;
-    if (value < vci->min)
-        value = vci->min;
-    return (value - vci->min) / (vci->max - vci->min);
-}
 
 bool QXcbConnection::xi2SetMouseGrabEnabled(xcb_window_t w, bool grab)
 {

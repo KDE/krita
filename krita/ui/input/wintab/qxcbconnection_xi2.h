@@ -333,38 +333,6 @@ namespace QXcbAtom {
     };
 }
 
-class QXcbWindow;
-class QXcbScreen;
-class QXcbKeyboard;
-
-class QXcbWindowEventListener
-{
-public:
-    virtual ~QXcbWindowEventListener() {}
-    virtual bool handleGenericEvent(xcb_generic_event_t *, long *) { return false; }
-
-    virtual void handleExposeEvent(const xcb_expose_event_t *) {}
-    virtual void handleClientMessageEvent(const xcb_client_message_event_t *) {}
-    virtual void handleConfigureNotifyEvent(const xcb_configure_notify_event_t *) {}
-    virtual void handleMapNotifyEvent(const xcb_map_notify_event_t *) {}
-    virtual void handleUnmapNotifyEvent(const xcb_unmap_notify_event_t *) {}
-    virtual void handleDestroyNotifyEvent(const xcb_destroy_notify_event_t *) {}
-    virtual void handleButtonPressEvent(const xcb_button_press_event_t *) {}
-    virtual void handleButtonReleaseEvent(const xcb_button_release_event_t *) {}
-    virtual void handleMotionNotifyEvent(const xcb_motion_notify_event_t *) {}
-    virtual void handleEnterNotifyEvent(const xcb_enter_notify_event_t *) {}
-    virtual void handleLeaveNotifyEvent(const xcb_leave_notify_event_t *) {}
-    virtual void handleFocusInEvent(const xcb_focus_in_event_t *) {}
-    virtual void handleFocusOutEvent(const xcb_focus_out_event_t *) {}
-    virtual void handlePropertyNotifyEvent(const xcb_property_notify_event_t *) {}
-    virtual void handleXIMouseEvent(xcb_ge_event_t *) {}
-
-    virtual QXcbWindow *toWindow() { return 0; }
-};
-
-typedef QHash<xcb_window_t, QXcbWindowEventListener *> WindowMapper;
-
-
 class QXcbConnection
 {
 public:
@@ -420,7 +388,6 @@ public:
     XInput2TouchDeviceData *touchDeviceForId(int id);
 
     bool xi2HandleEvent(xcb_ge_event_t *event);
-    void xi2ProcessTouch(void *xiDevEvent, QXcbWindow *platformWindow);
     bool xi2SetMouseGrabEnabled(xcb_window_t w, bool grab);
 
     static bool xi2PrepareXIGenericDeviceEvent(xcb_ge_event_t *event, int opCode);  // FIXME: to be copied
@@ -449,7 +416,6 @@ public:
 
     bool canGrab() const { return m_canGrabServer; }
     void *xlib_display() const;
-    QXcbKeyboard *keyboard() const { return m_keyboard; }
 
     xcb_connection_t *xcb_connection() const { return m_connection; }
 
@@ -470,7 +436,6 @@ private:
     QVector<TabletData> m_tabletData;
 
     QHash<xcb_window_t, QWindow*> m_windowMapper;
-    QXcbKeyboard *m_keyboard;
 
     QHash<int, XInput2TouchDeviceData*> m_touchDevices;
     bool m_xiGrab;
@@ -479,33 +444,6 @@ private:
     QHash<int, ScrollingDevice> m_scrollingDevices;
 };
 
-class QPlatformScreen;
-class QWindow;
-
-class QXcbScreen
-{
-public:
-    QPointF mapFromNative(const QPointF &pos) const;
-    QRect geometry() const;
-    QSizeF physicalSize() const;
-};
-
-class QXcbWindow
-{
-public:
-    QWindow* window() const;
-    QXcbScreen *xcbScreen() const;
-    qreal devicePixelRatio() const;
-};
-
-
-class QXcbKeyboard
-{
-public:
-    QXcbKeyboard(QXcbConnection *conn) { Q_UNUSED(conn); }
-
-    Qt::KeyboardModifiers translateModifiers(int s) const;
-};
 
 #ifdef Q_XCB_DEBUG
 template <typename cookie_t>

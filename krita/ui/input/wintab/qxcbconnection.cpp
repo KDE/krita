@@ -68,7 +68,6 @@ QXcbConnection::QXcbConnection(bool canGrabServer, const char *displayName)
 #if defined(XCB_USE_XINPUT2)
     initializeXInput2();
 #endif
-    m_keyboard = new QXcbKeyboard(this);
 }
 
 QXcbConnection::~QXcbConnection()
@@ -76,8 +75,6 @@ QXcbConnection::~QXcbConnection()
 #if defined(XCB_USE_XINPUT2)
     finalizeXInput2();
 #endif
-
-    delete m_keyboard;
 }
 
 QXcbAtom::Atom QXcbConnection::qatom(xcb_atom_t xatom) const
@@ -420,70 +417,6 @@ bool QXcbConnection::xi2PrepareXIGenericDeviceEvent(xcb_ge_event_t *ev, int opCo
         return true;
     }
     return false;
-}
-
-QPointF QXcbScreen::mapFromNative(const QPointF &pos) const
-{
-    return pos;
-}
-
-QRect QXcbScreen::geometry() const
-{
-    return QRect(0,0,1000,1000);
-}
-
-QSizeF QXcbScreen::physicalSize() const
-{
-    return QSizeF(500,300);
-}
-
-
-QWindow* QXcbWindow::window() const
-{
-    return 0;
-}
-
-QXcbScreen *QXcbWindow::xcbScreen() const
-{
-    return 0;
-}
-
-qreal QXcbWindow::devicePixelRatio() const
-{
-    return 1.0;
-}
-
-
-
-
-
-
-
-
-
-
-Qt::KeyboardModifiers QXcbKeyboard::translateModifiers(int s) const
-{
-    Q_UNUSED(s);
-
-    Qt::KeyboardModifiers ret = 0;
-
-    // TODO: find modifiers somewhere!
-
-/*    if (s & XCB_MOD_MASK_SHIFT)
-        ret |= Qt::ShiftModifier;
-    if (s & XCB_MOD_MASK_CONTROL)
-        ret |= Qt::ControlModifier;
-    if (s & rmod_masks.alt)
-        ret |= Qt::AltModifier;
-    if (s & rmod_masks.meta)
-        ret |= Qt::MetaModifier;
-    if (s & rmod_masks.altgr)
-        ret |= Qt::GroupSwitchModifier;
-
-*/
-
-    return ret;
 }
 
 class Q_GUI_EXPORT QWindowSystemInterfacePrivate {

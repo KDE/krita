@@ -77,7 +77,6 @@ enum {
 QWindowsTabletSupport *QTAB = 0;
 static QWidget *targetWindow = 0; //< Window receiving last tablet event
 static QWidget *qt_tablet_target = 0; //< Widget receiving last tablet event
-static qreal dpr = 0; //< Device pixel ratio - preferably update dynamically
 
 HWND createDummyWindow(const QString &className, const wchar_t *windowName, WNDPROC wndProc)
 {
@@ -199,7 +198,6 @@ void KisTabletSupportWin::init()
 {
     globalEventEater = new EventEater(qApp);
     QTAB = QWindowsTabletSupport::create();
-    dpr = qApp->primaryScreen()->devicePixelRatio();
     qApp->installEventFilter(globalEventEater);
 }
 
@@ -213,7 +211,6 @@ static void handleTabletEvent(QWidget *windowWidget, const QPointF &local, const
                                qreal pressure,int xTilt, int yTilt, qreal tangentialPressure, qreal rotation,
                                int z, qint64 uniqueId, Qt::KeyboardModifiers modifiers, QEvent::Type type)
 {
-    static QPlatformScreen *platformScreen = qApp->primaryScreen()->handle();
 
     // Lock in target window
     if (type == QEvent::TabletPress) {
@@ -267,20 +264,19 @@ static void handleTabletEvent(QWidget *windowWidget, const QPointF &local, const
             // Turn off eventEater send a synthetic mouse event.
             // dbgInput << "Tablet event" << type << "rejected; sending mouse event to" << finalDestination;
             globalEventEater->deactivate();
-            // QMouseEvent m(mouseEventType(type), mapped, button, buttons, modifiers);
-            // QGuiApplication::sendEvent(finalDestination, &m);
+            qt_tablet_target = 0;
 
             // We shouldn't ever get a widget accepting a tablet event from this
             // call, so we won't worry about any interactions with our own
             // widget-locking code.
-            QWindow *target = platformScreen->topLevelAt(globalPos);
-            if (!target) return;
-            QPointF windowLocal = global - QPointF(target->mapFromGlobal(QPoint())) + delta;
-            QWindowSystemInterface::handleTabletEvent(target, ev.timestamp(), windowLocal,
-                                                      global, device, pointerType,
-                                                      buttons, pressure, xTilt, yTilt,
-                                                      tangentialPressure, rotation, z,
-                                                      uniqueId, modifiers);
+            // QWindow *target = platformScreen->topLevelAt(globalPos);
+            // if (!target) return;
+            // QPointF windowLocal = global - QPointF(target->mapFromGlobal(QPoint())) + delta;
+            // QWindowSystemInterface::handleTabletEvent(target, ev.timestamp(), windowLocal,
+            //                                           global, device, pointerType,
+            //                                           buttons, pressure, xTilt, yTilt,
+            //                                           tangentialPressure, rotation, z,
+            //                                           uniqueId, modifiers);
 
         }
     }
@@ -701,7 +697,6 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
 
     static DWORD btnNew, btnOld, btnChange;
 
-    // NOTE: We disabled Qt's icky hack.
     // The tablet can be used in 2 different modes, depending on its settings:
     // 1) Absolute (pen) mode:
     //    The coordinates are scaled to the virtual desktop (by default). The user
@@ -760,6 +755,8 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
         w = w->window();
 
         const QPoint localPos = w->mapFromGlobal(globalPos);
+        const QPointF delta = globalPosF - globalPos;
+        const QPointF localPosF = globalPosF + QPointF(localPos - globalPos) + delta;
 
         const qreal pressureNew = packet.pkButtons && (currentPointerType == QTabletEvent::Pen || currentPointerType == QTabletEvent::Eraser) ?
                                   m_devices.at(m_currentDevice).scalePressure(packet.pkNormalPressure) :
@@ -801,8 +798,8 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
                 << tiltY << "tanP:" << tangentialPressure << "rotation:" << rotation;
         }
 
-        // Device independent pixels
-        const QPointF localPosDip = QPointF(localPos / dpr);
+        // Convert from "native" to "device independent pixels"
+        const QPointF localPosDip = localPosF / dpr;
         const QPointF globalPosDip = globalPosF / dpr;
 
 

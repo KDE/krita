@@ -18,7 +18,7 @@
 
 #include "kis_change_frame_action.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include "kis_action.h"
 #include "kis_input_manager.h"
 #include "kis_canvas2.h"

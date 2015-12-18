@@ -114,12 +114,6 @@ public:
     QStringList allActions();
 
     /**
-     * Save settings. Currently implemented in KisShortcutsEditor
-     */
-    // void writeSettings(KActionCollection *ac);
-
-
-    /**
      * Display the shortcut configuration dialog.
      */
     void configureShortcuts();
@@ -132,9 +126,9 @@ public:
 
 
     /**
-     * Read custom shortcuts from kritashortcutsrc
+     * Write custom shortcuts to a specific file
      */
-    void writeCustomShortcuts() const;
+    void writeCustomShortcuts(KConfigBase *config) const;
 
 
     /**

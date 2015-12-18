@@ -197,10 +197,6 @@ void KisShortcutsEditor::importConfiguration(KConfigBase *config)
     // Reload the configuration file
     KisActionRegistry::instance()->applyShortcutScheme(config);
 
-
-    // XXX: Any need to update the actions themselves?
-
-
     // Update the dialog entry items
     const KConfigGroup schemeShortcuts(config, QStringLiteral("Shortcuts"));
     for (QTreeWidgetItemIterator it(d->ui.list); (*it); ++it) {
@@ -240,8 +236,10 @@ void KisShortcutsEditor::exportConfiguration(KConfigBase *config) const
 void KisShortcutsEditor::saveShortcuts(KConfigGroup *config) const
 {
     // This is a horrible mess with pointers...
-    auto cg = KConfigGroup(KSharedConfig::openConfig("kritashortcutsrc"), "Shortcuts");
+    KConfigGroup cg;
     if (config == 0) {
+        cg = KConfigGroup(KSharedConfig::openConfig("kritashortcutsrc"),
+                          QStringLiteral("Shortcuts"));
         config = &cg;
     }
 

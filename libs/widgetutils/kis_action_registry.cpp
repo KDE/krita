@@ -345,12 +345,17 @@ QString KisActionRegistry::getActionProperty(const QString &name, const QString 
 }
 
 
-void KisActionRegistry::writeCustomShortcuts() const
+void KisActionRegistry::writeCustomShortcuts(KConfigBase *config) const
 {
-    KConfigGroup cg(KSharedConfig::openConfig("kritashortcutsrc"),
-                    QStringLiteral("Shortcuts"));
 
-    QList<QAction *> writeActions;
+    KConfigGroup cg;
+    if (config == 0) {
+        cg = KConfigGroup(KSharedConfig::openConfig("kritashortcutsrc"),
+                          QStringLiteral("Shortcuts"));
+    } else {
+        cg = KConfigGroup(config, QStringLiteral("Shortcuts"));
+    }
+
     for (auto it = d->actionInfoList.constBegin();
          it != d->actionInfoList.constEnd(); ++it) {
 

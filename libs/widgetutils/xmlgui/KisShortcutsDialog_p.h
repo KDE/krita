@@ -249,7 +249,8 @@ private Q_SLOTS:
     void newScheme();
     void deleteScheme();
     void exportShortcutsScheme();
-    void saveAsDefaultsForScheme();
+    void saveCustomShortcuts();
+    // void saveAsDefaultsForScheme();  //Not implemented
     void importShortcutsScheme();
 
 Q_SIGNALS:

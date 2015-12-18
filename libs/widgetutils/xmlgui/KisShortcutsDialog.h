@@ -156,6 +156,12 @@ public:
      */
     void exportConfiguration(const QString &path) const;
 
+
+    /**
+     * Exports custom shortcuts to @p path
+     */
+    void saveCustomShortcuts(const QString &path) const;
+
     /**
      * Pops up a modal (blocking) dialog for configuring key settings. The new
      * shortcut settings will become active if the user presses OK.

@@ -165,4 +165,11 @@ void KisShortcutsDialog::exportConfiguration(const QString &path) const
     d->m_shortcutsEditor->exportConfiguration(static_cast<KConfigBase *>(&config));
 }
 
+void KisShortcutsDialog::saveCustomShortcuts(const QString &path) const
+{
+  KConfig config(path);
+  KConfigGroup cg(&config, QStringLiteral("Shortcuts"));
+  d->m_shortcutsEditor->saveShortcuts(&cg);
+}
+
 #include "moc_KisShortcutsDialog.cpp"

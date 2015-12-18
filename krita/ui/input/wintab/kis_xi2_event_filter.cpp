@@ -67,7 +67,7 @@ bool KisXi2EventFilter::nativeEventFilter(const QByteArray &eventType, void *mes
         bool result = m_d->connection->xi2HandleEvent(copiedEvent);
         free(copiedEvent);
 
-        return true;
+        return result;
     }
     case XCB_ENTER_NOTIFY: {
         xcb_enter_notify_event_t *enter = (xcb_enter_notify_event_t *)event;

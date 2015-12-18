@@ -18,17 +18,16 @@
 
 #include "kis_animation_player.h"
 
+#include <QElapsedTimer>
 #include <QTimer>
+#include <QtMath>
 
-//#define DEBUG_FRAMERATE
-
-#ifdef DEBUG_FRAMERATE
-#include <QTime>
-#endif /* DEBUG_FRAMERATE */
+//#define PLAYER_DEBUG_FRAMERATE
 
 #include "kis_global.h"
 
-
+#include "kis_config.h"
+#include "kis_config_notifier.h"
 #include "kis_image.h"
 #include "kis_canvas2.h"
 #include "kis_animation_frame_cache.h"
@@ -36,19 +35,38 @@
 #include "kis_image_animation_interface.h"
 #include "kis_time_range.h"
 
+#ifdef PLAYER_DEBUG_FRAMERATE
+#include <boost/accumulators/accumulators.hpp>
+#include <boost/accumulators/statistics/stats.hpp>
+#include <boost/accumulators/statistics/rolling_mean.hpp>
+
+using namespace boost::accumulators;
+typedef accumulator_set<qreal, stats<tag::rolling_mean> > FpsAccumulator;
+#endif /* PLAYER_DEBUG_FRAMERATE */
+
 struct KisAnimationPlayer::Private
 {
 public:
-    Private(KisAnimationPlayer *_q) : q(_q) {}
+    Private(KisAnimationPlayer *_q)
+        : q(_q),
+#ifdef PLAYER_DEBUG_FRAMERATE
+          realFpsAccumulator(tag::rolling_window::window_size = 12),
+          droppedFpsAccumulator(tag::rolling_window::window_size = 12),
+#endif /* PLAYER_DEBUG_FRAMERATE */
+          dropFramesMode(true),
+          nextFrameExpectedTime(0),
+          expectedInterval(0),
+          expectedFrame(0),
+          lastTimerInterval(0),
+          lastPaintedFrame(0)
+          {}
 
     KisAnimationPlayer *q;
 
     bool useFastFrameUpload;
     bool playing;
-    int currentFrame;
 
     QTimer *timer;
-    QImage frame;
 
     int firstFrame;
     int lastFrame;
@@ -59,11 +77,30 @@ public:
 
     KisSignalAutoConnectionsStore cancelStrokeConnections;
 
-#ifdef DEBUG_FRAMERATE
-    QTime frameRateTimer;
-#endif /* DEBUG_FRAMERATE */
+#ifdef PLAYER_DEBUG_FRAMERATE
+    QElapsedTimer realFpsTimer;
+    FpsAccumulator realFpsAccumulator;
+    FpsAccumulator droppedFpsAccumulator;
+#endif /* PLAYER_DEBUG_FRAMERATE */
+
+    bool dropFramesMode;
+
+    QElapsedTimer playbackTime;
+    int nextFrameExpectedTime;
+    int expectedInterval;
+    int expectedFrame;
+    int lastTimerInterval;
+    int lastPaintedFrame;
 
     void stopImpl(bool doUpdates);
+
+    int incFrame(int frame, int inc) {
+        frame += inc;
+        if (frame > lastFrame) {
+            frame = firstFrame + frame - lastFrame - 1;
+        }
+        return frame;
+    }
 };
 
 KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
@@ -77,10 +114,22 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
 
     m_d->timer = new QTimer(this);
     connect(m_d->timer, SIGNAL(timeout()), this, SLOT(slotUpdate()));
+    m_d->timer->setSingleShot(true);
+
+    connect(KisConfigNotifier::instance(),
+            SIGNAL(dropFramesModeChanged()),
+            SLOT(slotUpdateDropFramesMode()));
+    slotUpdateDropFramesMode();
 }
 
 KisAnimationPlayer::~KisAnimationPlayer()
 {}
+
+void KisAnimationPlayer::slotUpdateDropFramesMode()
+{
+    KisConfig cfg;
+    m_d->dropFramesMode = cfg.animationDropFrames();
+}
 
 void KisAnimationPlayer::connectCancelSignals()
 {
@@ -125,9 +174,19 @@ void KisAnimationPlayer::slotUpdatePlaybackTimer()
     m_d->fps = animation->framerate();
     m_d->firstFrame = range.start();
     m_d->lastFrame = range.end();
-    m_d->currentFrame = qBound(m_d->firstFrame, m_d->currentFrame, m_d->lastFrame);
+    m_d->expectedFrame = qBound(m_d->firstFrame, m_d->expectedFrame, m_d->lastFrame);
 
-    m_d->timer->start(qreal(1000) / m_d->fps / m_d->playbackSpeed);
+    m_d->expectedInterval = qreal(1000) / m_d->fps / m_d->playbackSpeed;
+    m_d->lastTimerInterval = m_d->expectedInterval;
+    m_d->timer->start(m_d->expectedInterval);
+
+    if (m_d->playbackTime.isValid()) {
+        m_d->playbackTime.restart();
+    } else {
+        m_d->playbackTime.start();
+    }
+
+    m_d->nextFrameExpectedTime = m_d->playbackTime.elapsed() + m_d->expectedInterval;
 }
 
 void KisAnimationPlayer::play()
@@ -135,7 +194,8 @@ void KisAnimationPlayer::play()
     m_d->playing = true;
 
     slotUpdatePlaybackTimer();
-    m_d->currentFrame = m_d->firstFrame;
+    m_d->expectedFrame = m_d->firstFrame;
+    m_d->lastPaintedFrame = m_d->firstFrame;
 
     connectCancelSignals();
 }
@@ -171,7 +231,7 @@ bool KisAnimationPlayer::isPlaying()
 
 int KisAnimationPlayer::currentTime()
 {
-    return m_d->currentFrame;
+    return m_d->lastPaintedFrame;
 }
 
 void KisAnimationPlayer::displayFrame(int time)
@@ -181,19 +241,35 @@ void KisAnimationPlayer::displayFrame(int time)
 
 void KisAnimationPlayer::slotUpdate()
 {
-    m_d->currentFrame++;
-    if (m_d->currentFrame > m_d->lastFrame) m_d->currentFrame = m_d->firstFrame;
-
-    uploadFrame(m_d->currentFrame);
+    uploadFrame(-1);
 }
-
-#ifdef DEBUG_FRAMERATE
-#include "../../sdk/tests/testutil.h"
-static TestUtil::MeasureAvgPortion C(25);
-#endif /* DEBUG_FRAMERATE */
 
 void KisAnimationPlayer::uploadFrame(int frame)
 {
+    if (frame < 0) {
+        const int currentTime = m_d->playbackTime.elapsed();
+        const int framesDiff = currentTime - m_d->nextFrameExpectedTime;
+        const qreal framesDiffNorm = qreal(framesDiff) / m_d->expectedInterval;
+
+        // qDebug() << ppVar(framesDiff)
+        //          << ppVar(m_d->expectedFrame)
+        //          << ppVar(framesDiffNorm)
+        //          << ppVar(m_d->lastTimerInterval);
+
+        if (m_d->dropFramesMode) {
+            frame = m_d->incFrame(m_d->expectedFrame, qMax(0, qRound(framesDiffNorm)));
+        } else {
+            frame = m_d->expectedFrame;
+        }
+
+        m_d->nextFrameExpectedTime = currentTime + m_d->expectedInterval;
+
+        m_d->lastTimerInterval = qMax(0.0, m_d->lastTimerInterval - 0.5 * framesDiff);
+        m_d->expectedFrame = m_d->incFrame(frame,  1);
+
+        m_d->timer->start(m_d->lastTimerInterval);
+    }
+
     if (m_d->canvas->frameCache()) {
         if (m_d->canvas->frameCache()->uploadFrame(frame)) {
             m_d->canvas->updateCanvas();
@@ -209,14 +285,29 @@ void KisAnimationPlayer::uploadFrame(int frame)
         emit sigFrameChanged();
     }
 
-#ifdef DEBUG_FRAMERATE
-    if (!m_d->frameRateTimer.isValid()) {
-        m_d->frameRateTimer.start();
+#ifdef PLAYER_DEBUG_FRAMERATE
+    if (!m_d->realFpsTimer.isValid()) {
+        m_d->realFpsTimer.start();
     } else {
-        const int elapsed = m_d->frameRateTimer.restart();
-        C.addTotal(1000 / elapsed);
+        const int elapsed = m_d->realFpsTimer.restart();
+        m_d->realFpsAccumulator(elapsed);
+
+        int numFrames = frame - m_d->lastPaintedFrame;
+        if (numFrames < 0) {
+            numFrames += m_d->lastFrame - m_d->firstFrame + 1;
+        }
+
+        if (numFrames > 0) {
+            m_d->droppedFpsAccumulator(qreal(elapsed) / numFrames);
+        }
+
+        qDebug() << "    RFPS:" << 1000.0 / rolling_mean(m_d->realFpsAccumulator)
+                 << "DFPS:" << 1000.0 / rolling_mean(m_d->droppedFpsAccumulator) << ppVar(numFrames);
     }
-#endif /* DEBUG_FRAMERATE */
+#endif /* PLAYER_DEBUG_FRAMERATE */
+
+    m_d->lastPaintedFrame = frame;
+
 }
 
 void KisAnimationPlayer::slotCancelPlayback()

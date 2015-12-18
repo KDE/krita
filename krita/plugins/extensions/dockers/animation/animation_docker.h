@@ -68,8 +68,10 @@ private Q_SLOTS:
 
     void updatePlayPauseIcon();
     void updateLazyFrameIcon();
+    void updateDropFramesIcon();
 
     void slotLazyFrameChanged(bool value);
+    void slotDropFramesChanged(bool value);
 
 private:
 
@@ -91,6 +93,7 @@ private:
     KisAction *m_addDuplicateFrameAction;
     KisAction *m_deleteKeyframeAction;
     KisAction *m_lazyFrameAction;
+    KisAction *m_dropFramesAction;
 
     KisMainWindow *m_mainWindow;
 };

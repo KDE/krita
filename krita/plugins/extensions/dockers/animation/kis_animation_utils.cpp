@@ -34,6 +34,7 @@ namespace KisAnimationUtils {
     const QString removeFrameActionName = i18n("Remove Frame");
     const QString removeFramesActionName = i18n("Remove Frames");
     const QString lazyFrameCreationActionName = i18n("Auto Frame Mode");
+    const QString dropFramesActionName = i18n("Drop Frames");
     const QString showLayerActionName = i18n("Show in Timeline");
 
 

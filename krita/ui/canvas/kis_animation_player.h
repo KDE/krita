@@ -52,7 +52,7 @@ public Q_SLOTS:
     void slotCancelPlaybackSafe();
     void slotUpdatePlaybackSpeed(double value);
     void slotUpdatePlaybackTimer();
-
+    void slotUpdateDropFramesMode();
 Q_SIGNALS:
     void sigFrameChanged();
     void sigPlaybackStopped();
@@ -60,7 +60,7 @@ Q_SIGNALS:
 private:
     void connectCancelSignals();
     void disconnectCancelSignals();
-    void uploadFrame(int frame);
+    void uploadFrame(int time);
 
 private:
     struct Private;

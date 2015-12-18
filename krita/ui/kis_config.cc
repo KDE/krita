@@ -1626,7 +1626,7 @@ void KisConfig::setEnableOpenGLDebugging(bool value) const
     m_cfg.writeEntry("enableOpenGLDebugging", value);
 }
 
-void KisConfig::setEnableAmdVectorizationWorkaround(bool value) const
+void KisConfig::setEnableAmdVectorizationWorkaround(bool value)
 {
     m_cfg.writeEntry("amdDisableVectorWorkaround", value);
 }
@@ -1634,4 +1634,19 @@ void KisConfig::setEnableAmdVectorizationWorkaround(bool value) const
 bool KisConfig::enableAmdVectorizationWorkaround(bool defaultValue) const
 {
     return (defaultValue ? false : m_cfg.readEntry("amdDisableVectorWorkaround", false));
+}
+
+void KisConfig::setAnimationDropFrames(bool value)
+{
+    bool oldValue = animationDropFrames();
+
+    if (value == oldValue) return;
+
+    m_cfg.writeEntry("animationDropFrames", value);
+    KisConfigNotifier::instance()->notifyDropFramesModeChanged();
+}
+
+bool KisConfig::animationDropFrames(bool defaultValue) const
+{
+    return (defaultValue ? true : m_cfg.readEntry("animationDropFrames", true));
 }

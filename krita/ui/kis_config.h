@@ -465,8 +465,11 @@ public:
     void setEnableOpenGLDebugging(bool value) const;
     bool enableOpenGLDebugging(bool defaultValue = false) const;
 
-    void setEnableAmdVectorizationWorkaround(bool value) const;
+    void setEnableAmdVectorizationWorkaround(bool value);
     bool enableAmdVectorizationWorkaround(bool defaultValue = false) const;
+
+    bool animationDropFrames(bool defaultValue = false) const;
+    void setAnimationDropFrames(bool value);
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

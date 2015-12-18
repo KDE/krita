@@ -19,6 +19,7 @@
 #define KIS_CONFIG_NOTIFIER_H_
 
 #include <QObject>
+#include <QScopedPointer>
 
 #include "kritaui_export.h"
 
@@ -44,15 +45,21 @@ public:
      */
     void notifyConfigChanged(void);
 
+    void notifyDropFramesModeChanged();
+
 Q_SIGNALS:
     /**
      * This signal is emitted whenever notifyConfigChanged() is called.
      */
     void configChanged(void);
-
+    void dropFramesModeChanged();
 private:
     KisConfigNotifier(const KisConfigNotifier&);
     KisConfigNotifier operator=(const KisConfigNotifier&);
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
 #endif // KIS_CONFIG_NOTIFIER_H_

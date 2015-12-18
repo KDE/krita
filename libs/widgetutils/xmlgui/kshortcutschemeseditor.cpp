@@ -79,8 +79,9 @@ KShortcutSchemesEditor::KShortcutSchemesEditor(KisShortcutsDialog *parent)
     addWidget(moreActions);
 
     QMenu *moreActionsMenu = new QMenu(m_dialog);
-    moreActionsMenu->addAction(i18n("Save as Scheme Defaults"),
-                               this, SLOT(saveAsDefaultsForScheme()));
+    // moreActionsMenu->addAction(i18n("Save as Scheme Defaults"),
+                               // this, SLOT(saveAsDefaultsForScheme()));
+
     moreActionsMenu->addAction(i18n("Save Custom Shortcuts"),
                                this, SLOT(saveCustomShortcuts()));
     moreActionsMenu->addAction(i18n("Export Scheme..."),
@@ -188,15 +189,15 @@ void KShortcutSchemesEditor::importShortcutsScheme()
     m_dialog->importConfiguration(path);
 }
 
+#if 0
+// XXX: Not implemented
 void KShortcutSchemesEditor::saveAsDefaultsForScheme()
 {
-    // XXX: Not implemented
-#if 0
     foreach (KActionCollection *collection, m_dialog->actionCollections()) {
         KShortcutSchemesHelper::exportActionCollection(collection, currentScheme());
     }
-#endif
 }
+#endif
 
 void KShortcutSchemesEditor::updateDeleteButton()
 {

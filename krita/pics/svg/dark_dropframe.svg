@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="22"
+   height="22"
+   id="svg6190"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="dark_dropframe.svg"
+   inkscape:export-filename="../light_addblankframe.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1878"
+     inkscape:window-height="1048"
+     id="namedview4440"
+     showgrid="true"
+     inkscape:zoom="16"
+     inkscape:cx="21.867248"
+     inkscape:cy="8.9823248"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     inkscape:snap-bbox="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3250" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata6196">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs6194" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer1"
+     inkscape:label="Layer 1">
+    <path
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#373737;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
+       d="m 10,7.5 0,6 3,-2.99649 z"
+       id="path3308"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/tyyppi/krita/animation/calligra/krita/pics/dark_playpause.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"
+       sodipodi:nodetypes="cccc" />
+    <path
+       id="path6348-2"
+       d="M 2,4 2,6 2,17 4,17 4.375,17 5.75,15 5,15 5,6 11.9375,6 13.3125,4 4,4 2,4 Z M 17.3125,4 15.9375,6 17,6 17,15 9.75,15 8.375,17 20,17 20,15 20,6 20,4 18,4 17.3125,4 Z M 3,5 4,5 4,6 3,6 3,5 Z m 14.96875,0 1,0 0,1 -1,0 0,-1 z M 3,7 4,7 4,8 3,8 3,7 Z m 14.96875,0 1,0 0,1 -1,0 0,-1 z M 3,9 4,9 4,10 3,10 3,9 Z m 14.96875,0 1,0 0,1 -1,0 0,-1 z M 3,11 l 1,0 0,1 -1,0 0,-1 z m 14.96875,0 1,0 0,1 -1,0 0,-1 z M 3,13 l 1,0 0,1 -1,0 0,-1 z m 14.96875,0 1,0 0,1 -1,0 0,-1 z M 3,15 l 1,0 0,1 -1,0 0,-1 z m 14.96875,0 1,0 0,1 -1,0 0,-1 z"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#373737;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
+       inkscape:connector-curvature="0" />
+    <path
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#373737;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
+       d="m 15.65625,2 -2.742188,4 2,0 2.742188,-4 -2,0 z M 6.7421875,15 4,19 l 2,0 2.7421875,-4 -2,0 z"
+       id="path3370"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>

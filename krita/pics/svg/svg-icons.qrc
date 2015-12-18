@@ -67,9 +67,12 @@
 
         <file>dark_animation_play.svg</file>
         <file>dark_animation_stop.svg</file>
-
+        <file>dark_dropframe.svg</file>
+        
         <file>light_animation_play.svg</file>
         <file>light_animation_stop.svg</file>
+        <file>light_dropframe.svg</file>
+        
 
     </qresource>
 </RCC>

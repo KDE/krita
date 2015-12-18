@@ -18,6 +18,9 @@
 
 #include "kis_abstract_shortcut.h"
 
+#include "kis_abstract_input_action.h"
+
+
 class Q_DECL_HIDDEN KisAbstractShortcut::Private
 {
 public:
@@ -61,4 +64,9 @@ bool KisAbstractShortcut::compareKeys(const QSet<Qt::Key> &keys1,
         if (!keys2.contains(key)) return false;
     }
     return true;
+}
+
+bool KisAbstractShortcut::isAvailable() const
+{
+    return action()->isAvailable();
 }

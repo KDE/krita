@@ -40,6 +40,7 @@
 #include "kis_shortcut_configuration.h"
 #include "kis_select_layer_action.h"
 #include "kis_gamma_exposure_action.h"
+#include "kis_change_frame_action.h"
 
 #define PROFILE_VERSION 3
 
@@ -356,6 +357,7 @@ void KisInputProfileManager::Private::createActions()
     actions.append(new KisShowPaletteAction());
     actions.append(new KisSelectLayerAction());
     actions.append(new KisGammaExposureAction());
+    actions.append(new KisChangeFrameAction());
 }
 
 QString KisInputProfileManager::Private::profileFileName(const QString &profileName)

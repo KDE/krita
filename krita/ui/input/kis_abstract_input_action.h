@@ -159,6 +159,14 @@ public:
      */
     virtual bool isShortcutRequired(int shortcut) const;
 
+    /**
+     * Some of the actions are available in particular sutiations
+     * only.  E.g. switch frame action is available iff a animated
+     * layer is selected. If isAvailable() returns true then the
+     * action will *not* be triggered by the shortcut matcher.
+     */
+    virtual bool isAvailable() const;
+
 protected:
     /**
      * The input manager this action belongs to.

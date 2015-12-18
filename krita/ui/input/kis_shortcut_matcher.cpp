@@ -356,7 +356,8 @@ bool KisShortcutMatcher::tryRunSingleActionShortcutImpl(T param, U *event, const
     KisSingleActionShortcut *goodCandidate = 0;
 
     Q_FOREACH (KisSingleActionShortcut *s, m_d->singleActionShortcuts) {
-        if(s->match(keysState, param) &&
+        if(s->isAvailable() &&
+           s->match(keysState, param) &&
            (!goodCandidate || s->priority() > goodCandidate->priority())) {
 
             goodCandidate = s;
@@ -391,7 +392,8 @@ bool KisShortcutMatcher::tryRunReadyShortcut( Qt::MouseButton button, QEvent* ev
     KisStrokeShortcut *goodCandidate = 0;
 
     Q_FOREACH (KisStrokeShortcut *s, m_d->candidateShortcuts) {
-        if (s->matchBegin(button) &&
+        if (s->isAvailable() &&
+            s->matchBegin(button) &&
             (!goodCandidate || s->priority() > goodCandidate->priority())) {
 
             goodCandidate = s;

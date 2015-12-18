@@ -204,3 +204,8 @@ QPointF KisAbstractInputAction::eventPosF(const QEvent *event) {
         return QPoint();
     }
 }
+
+bool KisAbstractInputAction::isAvailable() const
+{
+    return true;
+}

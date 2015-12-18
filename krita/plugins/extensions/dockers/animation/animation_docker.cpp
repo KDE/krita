@@ -461,8 +461,8 @@ void AnimationDocker::updateDropFramesIcon()
     const bool value = cfg.animationDropFrames();
 
     m_dropFramesAction->setIcon(value ?
-                               KisIconUtils::loadIcon("lazyframeOn") :
-                               KisIconUtils::loadIcon("lazyframeOff"));
+                               KisIconUtils::loadIcon("dropframe") :
+                               KisIconUtils::loadIcon("dropframe"));
 
     m_dropFramesAction->setText(QString("%1 (%2)")
                                .arg(KisAnimationUtils::dropFramesActionName)

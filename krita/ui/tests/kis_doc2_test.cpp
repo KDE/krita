@@ -26,7 +26,6 @@
 #include "KisDocument.h"
 #include "kis_image.h"
 #include "kis_undo_store.h"
-#include "kis_factory2.h"
 #include "KisPart.h"
 #include <KisViewManager.h>
 #include "util.h"

@@ -36,6 +36,7 @@
 #include <kis_paint_device.h>
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
+#include <kis_update_info.h>
 
 #include "canvas/kis_coordinates_converter.h"
 #include "canvas/kis_prescaled_projection.h"

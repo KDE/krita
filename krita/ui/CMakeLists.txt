@@ -21,7 +21,7 @@ include_directories(
     ${EXIV2_INCLUDE_DIR}
     ${OCIO_INCLUDE_DIR})
 
-#add_subdirectory( tests )
+add_subdirectory( tests )
 
 if (APPLE)
     find_library(FOUNDATION_LIBRARY Foundation)

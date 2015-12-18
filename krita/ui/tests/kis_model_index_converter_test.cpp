@@ -95,7 +95,7 @@ inline void KisModelIndexConverterTest::checkIndexFromAddedDummy(KisNodeSP paren
 
    dummy = parent ? m_dummiesFacade->dummyForNode(parent) : 0;
    result = m_indexConverter->indexFromAddedDummy(dummy, index, type, false, modelIndex, row);
-   if(!result) dbgKrita() << "Failing parent:" << (parent ? parent->name() : "none") << "index:" << index;
+   if(!result) dbgKrita << "Failing parent:" << (parent ? parent->name() : "none") << "index:" << index;
    QVERIFY(result);
 
    QCOMPARE(modelIndex.isValid(), parentValid);

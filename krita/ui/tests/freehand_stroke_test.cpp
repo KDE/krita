@@ -183,4 +183,4 @@ void FreehandStrokeTest::testPredefinedBrushStrokeLod()
     tester.testSimpleStroke();
 }
 
-QTEST_MAIN(FreehandStrokeTest, GUI)
+QTEST_MAIN(FreehandStrokeTest)

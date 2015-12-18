@@ -28,6 +28,7 @@
 
 #include <KoPattern.h>
 
+#include "kis_global.h"
 
 #include "testutil.h"
 #include "kis_psd_layer_style.h"

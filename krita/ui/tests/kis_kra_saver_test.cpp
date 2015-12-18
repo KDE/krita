@@ -319,4 +319,4 @@ void KisKraSaverTest::testRoundTripAnimation()
 
 }
 
-QTEST_MAIN(KisKraSaverTest, GUI)
+QTEST_MAIN(KisKraSaverTest)

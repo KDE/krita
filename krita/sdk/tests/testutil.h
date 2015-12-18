@@ -19,6 +19,8 @@
 #ifndef TEST_UTIL
 #define TEST_UTIL
 
+#include <QProcessEnvironment>
+
 #include <QList>
 #include <QTime>
 #include <QDir>
@@ -63,7 +65,6 @@ inline KisNodeSP findNode(KisNodeSP root, const QString &name) {
     return 0;
 }
 
-#include <QProcessEnvironment>
 
 inline QString fetchExternalDataFileName(const QString relativeFileName)
 {

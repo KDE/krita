@@ -1,7 +1,7 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(  ${KRITA_INCLUDES}   ${CMAKE_SOURCE_DIR}/krita/sdk/tests )
 
-add_subdirectory(scratchpad)
+#add_subdirectory(scratchpad)
 
 macro_add_unittest_definitions()
 
@@ -163,9 +163,9 @@ set_tests_properties(krita-ui-KisZoomAndPanTest PROPERTIES TIMEOUT 300)
 
 ########### next target ###############
 
-set(kis_input_manager_test_SRCS kis_input_manager_test.cpp ../../sdk/tests/testutil.cpp)
-kde4_add_unit_test(KisInputManagerTest TESTNAME krita-ui-KisInputManagerTest  ${kis_input_manager_test_SRCS})
-target_link_libraries(KisInputManagerTest    kritaui kritaimage Qt5::Test)
+# set(kis_input_manager_test_SRCS kis_input_manager_test.cpp ../../sdk/tests/testutil.cpp)
+# kde4_add_unit_test(KisInputManagerTest TESTNAME krita-ui-KisInputManagerTest  ${kis_input_manager_test_SRCS})
+# target_link_libraries(KisInputManagerTest    kritaui kritaimage Qt5::Test)
 
 ########### next target ###############
 

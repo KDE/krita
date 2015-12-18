@@ -18,7 +18,7 @@
 
 #include "kis_animation_frame_cache_test.h"
 
-#include <qtest_kde.h>
+#include <QTest>
 #include <testutil.h>
 
 #include "kis_animation_frame_cache.h"
@@ -27,6 +27,7 @@
 #include "kis_time_range.h"
 #include "kis_keyframe_channel.h"
 
+#include "kundo2command.h"
 
 void verifyRangeIsCachedStatus(KisAnimationFrameCacheSP cache, int start, int end, KisAnimationFrameCache::CacheStatus status)
 {
@@ -99,6 +100,6 @@ void KisAnimationFrameCacheTest::testCache()
 
 }
 
-QTEST_KDEMAIN(KisAnimationFrameCacheTest, GUI)
+QTEST_MAIN(KisAnimationFrameCacheTest)
 #include "kis_animation_frame_cache_test.moc"
 

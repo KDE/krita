@@ -14,7 +14,7 @@
    height="22"
    id="svg6190"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="dark_dropframe.svg"
+   sodipodi:docname="dark_droppedframes.svg"
    inkscape:export-filename="../light_addblankframe.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
@@ -51,7 +51,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -62,7 +62,7 @@
      id="layer1"
      inkscape:label="Layer 1">
     <path
-       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#373737;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#da4453;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
        d="m 10,7.5 0,6 3,-2.99649 z"
        id="path3308"
        inkscape:connector-curvature="0"
@@ -76,7 +76,7 @@
        style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#373737;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
        inkscape:connector-curvature="0" />
     <path
-       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#373737;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#da4453;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
        d="m 15.65625,2 -2.742188,4 2,0 2.742188,-4 -2,0 z M 6.7421875,15 4,19 l 2,0 2.7421875,-4 -2,0 z"
        id="path3370"
        inkscape:connector-curvature="0" />

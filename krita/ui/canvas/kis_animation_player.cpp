@@ -34,31 +34,31 @@
 #include "kis_signal_auto_connection.h"
 #include "kis_image_animation_interface.h"
 #include "kis_time_range.h"
+#include "kis_signal_compressor.h"
 
-#ifdef PLAYER_DEBUG_FRAMERATE
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/rolling_mean.hpp>
 
 using namespace boost::accumulators;
 typedef accumulator_set<qreal, stats<tag::rolling_mean> > FpsAccumulator;
-#endif /* PLAYER_DEBUG_FRAMERATE */
+
 
 struct KisAnimationPlayer::Private
 {
 public:
     Private(KisAnimationPlayer *_q)
         : q(_q),
-#ifdef PLAYER_DEBUG_FRAMERATE
-          realFpsAccumulator(tag::rolling_window::window_size = 12),
-          droppedFpsAccumulator(tag::rolling_window::window_size = 12),
-#endif /* PLAYER_DEBUG_FRAMERATE */
+          realFpsAccumulator(tag::rolling_window::window_size = 24),
+          droppedFpsAccumulator(tag::rolling_window::window_size = 24),
+          droppedFramesPortion(tag::rolling_window::window_size = 24),
           dropFramesMode(true),
           nextFrameExpectedTime(0),
           expectedInterval(0),
           expectedFrame(0),
           lastTimerInterval(0),
-          lastPaintedFrame(0)
+          lastPaintedFrame(0),
+          playbackStatisticsCompressor(1000, KisSignalCompressor::FIRST_INACTIVE)
           {}
 
     KisAnimationPlayer *q;
@@ -77,11 +77,11 @@ public:
 
     KisSignalAutoConnectionsStore cancelStrokeConnections;
 
-#ifdef PLAYER_DEBUG_FRAMERATE
     QElapsedTimer realFpsTimer;
     FpsAccumulator realFpsAccumulator;
     FpsAccumulator droppedFpsAccumulator;
-#endif /* PLAYER_DEBUG_FRAMERATE */
+    FpsAccumulator droppedFramesPortion;
+
 
     bool dropFramesMode;
 
@@ -91,6 +91,8 @@ public:
     int expectedFrame;
     int lastTimerInterval;
     int lastPaintedFrame;
+
+    KisSignalCompressor playbackStatisticsCompressor;
 
     void stopImpl(bool doUpdates);
 
@@ -120,6 +122,9 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
             SIGNAL(dropFramesModeChanged()),
             SLOT(slotUpdateDropFramesMode()));
     slotUpdateDropFramesMode();
+
+    connect(&m_d->playbackStatisticsCompressor, SIGNAL(timeout()),
+            this, SIGNAL(sigPlaybackStatisticsUpdated()));
 }
 
 KisAnimationPlayer::~KisAnimationPlayer()
@@ -257,7 +262,8 @@ void KisAnimationPlayer::uploadFrame(int frame)
         //          << ppVar(m_d->lastTimerInterval);
 
         if (m_d->dropFramesMode) {
-            frame = m_d->incFrame(m_d->expectedFrame, qMax(0, qRound(framesDiffNorm)));
+            const int numDroppedFrames = qMax(0, qRound(framesDiffNorm));
+            frame = m_d->incFrame(m_d->expectedFrame, numDroppedFrames);
         } else {
             frame = m_d->expectedFrame;
         }
@@ -268,6 +274,8 @@ void KisAnimationPlayer::uploadFrame(int frame)
         m_d->expectedFrame = m_d->incFrame(frame,  1);
 
         m_d->timer->start(m_d->lastTimerInterval);
+
+        m_d->playbackStatisticsCompressor.start();
     }
 
     if (m_d->canvas->frameCache()) {
@@ -285,7 +293,6 @@ void KisAnimationPlayer::uploadFrame(int frame)
         emit sigFrameChanged();
     }
 
-#ifdef PLAYER_DEBUG_FRAMERATE
     if (!m_d->realFpsTimer.isValid()) {
         m_d->realFpsTimer.start();
     } else {
@@ -297,17 +304,35 @@ void KisAnimationPlayer::uploadFrame(int frame)
             numFrames += m_d->lastFrame - m_d->firstFrame + 1;
         }
 
+        m_d->droppedFramesPortion(qreal(int(numFrames != 1)));
+
         if (numFrames > 0) {
             m_d->droppedFpsAccumulator(qreal(elapsed) / numFrames);
         }
 
+#ifdef PLAYER_DEBUG_FRAMERATE
         qDebug() << "    RFPS:" << 1000.0 / rolling_mean(m_d->realFpsAccumulator)
                  << "DFPS:" << 1000.0 / rolling_mean(m_d->droppedFpsAccumulator) << ppVar(numFrames);
-    }
 #endif /* PLAYER_DEBUG_FRAMERATE */
+    }
 
     m_d->lastPaintedFrame = frame;
 
+}
+
+qreal KisAnimationPlayer::effectiveFps() const
+{
+    return 1000.0 / rolling_mean(m_d->droppedFpsAccumulator);
+}
+
+qreal KisAnimationPlayer::realFps() const
+{
+    return 1000.0 / rolling_mean(m_d->realFpsAccumulator);
+}
+
+qreal KisAnimationPlayer::framesDroppedPortion() const
+{
+    return rolling_mean(m_d->droppedFramesPortion);
 }
 
 void KisAnimationPlayer::slotCancelPlayback()

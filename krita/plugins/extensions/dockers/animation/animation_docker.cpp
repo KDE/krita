@@ -187,6 +187,7 @@ void AnimationDocker::setCanvas(KoCanvasBase * canvas)
         connect(m_canvas->animationPlayer(), SIGNAL(sigFrameChanged()), this, SLOT(slotGlobalTimeChanged()));
         connect(m_canvas->animationPlayer(), SIGNAL(sigPlaybackStopped()), this, SLOT(slotGlobalTimeChanged()));
         connect(m_canvas->animationPlayer(), SIGNAL(sigPlaybackStopped()), this, SLOT(updatePlayPauseIcon()));
+        connect(m_canvas->animationPlayer(), SIGNAL(sigPlaybackStatisticsUpdated()), this, SLOT(updateDropFramesIcon()));
         connect(m_animationWidget->doublePlaySpeed,
                 SIGNAL(valueChanged(double)),
                 m_canvas->animationPlayer(),
@@ -456,17 +457,49 @@ void AnimationDocker::updateLazyFrameIcon()
 
 void AnimationDocker::updateDropFramesIcon()
 {
-    KisConfig cfg;
+    qreal effectiveFps = 0.0;
+    qreal realFps = 0.0;
+    qreal framesDropped = 0.0;
+    bool isPlaying = false;
 
+    KisAnimationPlayer *player =
+        m_canvas && m_canvas->animationPlayer() ?
+        m_canvas->animationPlayer() : 0;
+
+    if (player) {
+        effectiveFps = player->effectiveFps();
+        realFps = player->realFps();
+        framesDropped = player->framesDroppedPortion();
+        isPlaying = player->isPlaying();
+    }
+
+    KisConfig cfg;
     const bool value = cfg.animationDropFrames();
 
     m_dropFramesAction->setIcon(value ?
-                               KisIconUtils::loadIcon("dropframe") :
-                               KisIconUtils::loadIcon("dropframe"));
+                                KisIconUtils::loadIcon(framesDropped > 0.05 ? "droppedframes" : "dropframe") :
+                                KisIconUtils::loadIcon("dropframe"));
 
-    m_dropFramesAction->setText(QString("%1 (%2)")
-                               .arg(KisAnimationUtils::dropFramesActionName)
-                               .arg(KritaUtils::toLocalizedOnOff(value)));
+
+    QString text;
+
+    if (!isPlaying) {
+        text = QString("%1 (%2)")
+            .arg(KisAnimationUtils::dropFramesActionName)
+            .arg(KritaUtils::toLocalizedOnOff(value));
+    } else {
+        text = QString("%1 (%2)\n"
+                       "%3\n"
+                       "%4\n"
+                       "%5")
+            .arg(KisAnimationUtils::dropFramesActionName)
+            .arg(KritaUtils::toLocalizedOnOff(value))
+            .arg(i18n("Effective FPS:\t%1", effectiveFps))
+            .arg(i18n("Real FPS:\t%1", realFps))
+            .arg(i18n("Frames dropped:\t%1\%", framesDropped * 100));
+    }
+
+    m_dropFramesAction->setText(text);
 }
 
 void AnimationDocker::slotUpdateIcons()

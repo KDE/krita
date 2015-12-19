@@ -129,7 +129,7 @@ KMWSessionManager::~KMWSessionManager()
 {
 }
 
-bool KMWSessionManager::saveState(QSessionManager &sm)
+bool KMWSessionManager::saveState(QSessionManager &)
 {
 #if 0
     KConfigGui::setSessionConfig(sm.sessionId(), sm.sessionKey());
@@ -373,7 +373,7 @@ bool KMainWindow::canBeRestored(int number)
     return number >= 1 && number <= n;
 }
 
-const QString KMainWindow::classNameOfToplevel(int number)
+const QString KMainWindow::classNameOfToplevel(int )
 {
     return QString();
 #if 0
@@ -394,7 +394,7 @@ const QString KMainWindow::classNameOfToplevel(int number)
 #endif
 }
 
-bool KMainWindow::restore(int number, bool show)
+bool KMainWindow::restore(int , bool )
 {
 #if 0
     if (!canBeRestored(number)) {

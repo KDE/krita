@@ -22,7 +22,7 @@ Q_GLOBAL_STATIC(KisColorManager, s_instance)
 
 class KisColorManager::Private {
 public:
-    Private(QObject *parent)
+    Private(QObject *)
     {}
 };
 
@@ -37,17 +37,17 @@ KisColorManager::~KisColorManager()
     delete d;
 }
 
-QString KisColorManager::deviceName(const QString &id)
+QString KisColorManager::deviceName(const QString &)
 {
     return QString();
 }
 
-QStringList KisColorManager::devices(DeviceType type) const
+QStringList KisColorManager::devices(DeviceType ) const
 {
     return QStringList();
 }
 
-QByteArray KisColorManager::displayProfile(const QString &device, int profile) const
+QByteArray KisColorManager::displayProfile(const QString &, int ) const
 {
     return QByteArray();
 }

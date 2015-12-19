@@ -35,15 +35,30 @@ static QString cleanup(const QString &path)
     return QDir::cleanPath(path);
 }
 
+
 static QStringList cleanup(const QStringList &pathList)
 {
     QStringList cleanedPathList;
     Q_FOREACH(const QString &path, pathList) {
-        cleanedPathList << QDir::cleanPath(path);
+      cleanedPathList << cleanup(path);
     }
     return cleanedPathList;
 }
 
+
+static QString cleanupDirs(const QString &path)
+{
+  return QDir::cleanPath(path) + QDir::separator();
+}
+
+static QStringList cleanupDirs(const QStringList &pathList)
+{
+  QStringList cleanedPathList;
+  Q_FOREACH(const QString &path, pathList) {
+    cleanedPathList << cleanupDirs(path);
+  }
+  return cleanedPathList;
+}
 
 
 #ifdef Q_OS_WIN
@@ -82,7 +97,7 @@ QString getInstallationPrefix() {
 
      return bundlePath;
  #else
-     return qApp->applicationDirPath() + QLatin1String("/");
+     return qApp->applicationDirPath() + QDir::separator();
  #endif
 }
 
@@ -145,7 +160,7 @@ KoResourcePaths::~KoResourcePaths()
 
 QString KoResourcePaths::getApplicationRoot()
 {
-    return cleanup(getInstallationPrefix());
+    return getInstallationPrefix();
 }
 
 void KoResourcePaths::addResourceType(const char *type, const char *basetype,
@@ -166,7 +181,7 @@ QString KoResourcePaths::findResource(const char *type, const QString &fileName)
 
 QStringList KoResourcePaths::findDirs(const char *type, const QString &reldir)
 {
-    return cleanup(s_instance->findDirsInternal(QString::fromLatin1(type), reldir));
+    return cleanupDirs(s_instance->findDirsInternal(QString::fromLatin1(type), reldir));
 }
 
 QStringList KoResourcePaths::findAllResources(const char *type,
@@ -178,12 +193,12 @@ QStringList KoResourcePaths::findAllResources(const char *type,
 
 QStringList KoResourcePaths::resourceDirs(const char *type)
 {
-    return cleanup(s_instance->resourceDirsInternal(QString::fromLatin1(type)));
+    return cleanupDirs(s_instance->resourceDirsInternal(QString::fromLatin1(type)));
 }
 
 QString KoResourcePaths::saveLocation(const char *type, const QString &suffix, bool create)
 {
-    return cleanup(s_instance->saveLocationInternal(QString::fromLatin1(type), suffix, create));
+    return cleanupDirs(s_instance->saveLocationInternal(QString::fromLatin1(type), suffix, create));
 }
 
 QString KoResourcePaths::locate(const char *type, const QString &filename)

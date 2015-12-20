@@ -1,0 +1,13 @@
+diff --git a/cmake/EigenConfigureTesting.cmake b/cmake/EigenConfigureTesting.cmake
+index 11ecc95..f7f8b34 100644
+--- a/cmake/EigenConfigureTesting.cmake
++++ b/cmake/EigenConfigureTesting.cmake
+@@ -41,7 +41,7 @@ endif()
+ 
+ # copy ctest properties, which currently
+ # o raise the warning levels
+-configure_file(${CMAKE_CURRENT_BINARY_DIR}/DartConfiguration.tcl ${CMAKE_BINARY_DIR}/DartConfiguration.tcl)
++#configure_file(${CMAKE_CURRENT_BINARY_DIR}/DartConfiguration.tcl ${CMAKE_BINARY_DIR}/DartConfiguration.tcl)
+ 
+ # restore default CMAKE_MAKE_PROGRAM
+ set(CMAKE_MAKE_PROGRAM ${CMAKE_MAKE_PROGRAM_SAVE})

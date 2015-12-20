@@ -1,0 +1,1016 @@
+diff -Nru -x '*~' jpeg-9.orig/cdjpeg.c jpeg-9/cdjpeg.c
+--- jpeg-9.orig/cdjpeg.c	1997-09-07 17:51:36.000000000 +0200
++++ jpeg-9/cdjpeg.c	2013-01-23 12:56:59.748823600 +0100
+@@ -43,7 +43,7 @@
+ }
+ 
+ 
+-GLOBAL(void)
++EXTERN(void)
+ enable_signal_catcher (j_common_ptr cinfo)
+ {
+   sig_cinfo = cinfo;
+@@ -85,7 +85,7 @@
+ }
+ 
+ 
+-GLOBAL(void)
++EXTERN(void)
+ start_progress_monitor (j_common_ptr cinfo, cd_progress_ptr progress)
+ {
+   /* Enable progress display, unless trace output is on */
+@@ -99,7 +99,7 @@
+ }
+ 
+ 
+-GLOBAL(void)
++EXTERN(void)
+ end_progress_monitor (j_common_ptr cinfo)
+ {
+   /* Clear away progress display */
+@@ -118,7 +118,7 @@
+  * minchars is length of minimum legal abbreviation.
+  */
+ 
+-GLOBAL(boolean)
++EXTERN(boolean)
+ keymatch (char * arg, const char * keyword, int minchars)
+ {
+   register int ca, ck;
+@@ -145,7 +145,7 @@
+  * Non-Unix systems often require some hacking to get out of text mode.
+  */
+ 
+-GLOBAL(FILE *)
++EXTERN(FILE *)
+ read_stdin (void)
+ {
+   FILE * input_file = stdin;
+@@ -163,7 +163,7 @@
+ }
+ 
+ 
+-GLOBAL(FILE *)
++EXTERN(FILE *)
+ write_stdout (void)
+ {
+   FILE * output_file = stdout;
+diff -Nru -x '*~' jpeg-9.orig/cdjpeg.h jpeg-9/cdjpeg.h
+--- jpeg-9.orig/cdjpeg.h	2003-11-03 21:53:18.000000000 +0100
++++ jpeg-9/cdjpeg.h	2013-01-23 12:56:59.753823600 +0100
+@@ -16,7 +16,8 @@
+ #include "jerror.h"		/* get library error codes too */
+ #include "cderror.h"		/* get application-specific error codes */
+ 
+-
++#undef EXTERN
++#define EXTERN(type) type
+ /*
+  * Object interface for cjpeg's source file decoding modules
+  */
+diff -Nru -x '*~' jpeg-9.orig/CMakeLists.txt jpeg-9/CMakeLists.txt
+--- jpeg-9.orig/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ jpeg-9/CMakeLists.txt	2013-01-23 12:56:59.763823600 +0100
+@@ -0,0 +1,101 @@
++project(jpeg)
++
++set(JPEG_VERSION_MAJOR 9 CACHE INT "Major JPEG version number" FORCE)
++set(JPEG_VERSION_MINOR 0 CACHE INT "Minor JPEG version number" FORCE)
++set(JPEG_VERSION_PATCH 0 CACHE INT "Release JPEG version number" FORCE)
++set(JPEG_VERSION_STRING "${JPEG_VERSION_MAJOR}.${JPEG_VERSION_MINOR}.${JPEG_VERSION_PATCH}" CACHE STRING "JPEG version string" FORCE)
++
++option(BUILD_tools "build the jpeg related tools like cjpeg, djpeg, jpegtran etc." OFF)
++cmake_minimum_required(VERSION 2.6)
++
++set(LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)" )
++set(LIB_DESTINATION "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" CACHE STRING "Library directory name" FORCE)
++
++include_directories(
++    ${CMAKE_CURRENT_SOURCE_DIR}
++    ${CMAKE_CURRENT_BINARY_DIR}
++)
++
++include(CheckIncludeFile)
++check_include_file(stddef.h HAVE_STDDEF_H)
++check_include_file(stdlib.h HAVE_STDLIB_H)
++
++if(MSVC)
++    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
++endif(MSVC)
++if(WINCE)
++    add_definitions(-DNO_GETENV)
++endif(WINCE)
++
++configure_file(${CMAKE_CURRENT_SOURCE_DIR}/jconfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/jconfig.h)
++
++set(libjpeg_SOURCES
++    jaricom.c jcapimin.c jcapistd.c jcarith.c jccoefct.c jccolor.c
++    jcdctmgr.c jchuff.c jcinit.c jcmainct.c jcmarker.c jcmaster.c
++    jcomapi.c jcparam.c jcprepct.c jcsample.c jctrans.c jdapimin.c
++    jdapistd.c jdarith.c jdcoefct.c jdcolor.c
++    jddctmgr.c jdhuff.c jdinput.c jdmainct.c jdmarker.c jdmaster.c
++    jdmerge.c jdpostct.c jdsample.c jdtrans.c jerror.c jfdctflt.c
++    jfdctfst.c jfdctint.c jidctflt.c jidctfst.c jidctint.c jquant1.c
++    jquant2.c jutils.c jmemmgr.c jmemnobs.c
++)
++
++#jdatadst.c jdatasrc.c are in the header instead
++
++set(libjpeg_HEADERS
++    jpeglib.h
++    jerror.h
++    jdatadst.h
++    jdatasrc.h
++    jmorecfg.h
++)
++
++add_library(libjpeg SHARED ${libjpeg_SOURCES})
++
++set_target_properties(libjpeg PROPERTIES
++    OUTPUT_NAME jpeg
++    VERSION ${JPEG_VERSION_STRING}
++    SOVERSION ${JPEG_VERSION_MAJOR}
++)
++
++install(
++    TARGETS libjpeg
++    ARCHIVE DESTINATION ${LIB_DESTINATION}
++    LIBRARY DESTINATION ${LIB_DESTINATION}
++    RUNTIME DESTINATION bin
++)
++
++install(
++    FILES ${libjpeg_HEADERS} ${CMAKE_CURRENT_BINARY_DIR}/jconfig.h
++    DESTINATION include
++    COMPONENT Devel
++)
++
++if(BUILD_tools)
++set(cjpeg_SRCS cjpeg.c rdppm.c rdgif.c rdtarga.c rdrle.c rdbmp.c rdswitch.c cdjpeg.c)
++add_executable(cjpeg ${cjpeg_SRCS})
++target_link_libraries(cjpeg jpeg)
++
++set(djpeg_SRCS djpeg.c wrppm.c wrgif.c wrtarga.c wrrle.c wrbmp.c rdcolmap.c cdjpeg.c)
++add_executable(djpeg ${djpeg_SRCS})
++target_link_libraries(djpeg jpeg)
++
++set(jpegtran_SRCS jpegtran.c rdswitch.c cdjpeg.c transupp.c)
++add_executable(jpegtran ${jpegtran_SRCS})
++target_link_libraries(jpegtran jpeg)
++
++set(rdjpgcom_SRCS rdjpgcom.c)
++add_executable(rdjpgcom ${rdjpgcom_SRCS})
++target_link_libraries(rdjpgcom jpeg)
++
++set(wrjpgcom_SRCS wrjpgcom.c)
++add_executable(wrjpgcom ${wrjpgcom_SRCS})
++target_link_libraries(wrjpgcom jpeg)
++
++install(
++    TARGETS cjpeg djpeg jpegtran rdjpgcom wrjpgcom
++    ARCHIVE DESTINATION ${LIB_DESTINATION}
++    LIBRARY DESTINATION ${LIB_DESTINATION}
++    RUNTIME DESTINATION bin
++)
++endif(BUILD_tools)
+\ Kein Zeilenumbruch am Dateiende.
+diff -Nru -x '*~' jpeg-9.orig/jconfig.h.cmake jpeg-9/jconfig.h.cmake
+--- jpeg-9.orig/jconfig.h.cmake	1970-01-01 01:00:00.000000000 +0100
++++ jpeg-9/jconfig.h.cmake	2013-01-23 12:56:59.768823600 +0100
+@@ -0,0 +1,31 @@
++#define HAVE_PROTOTYPES
++#define HAVE_UNSIGNED_CHAR
++#define HAVE_UNSIGNED_SHORT
++#cmakedefine HAVE_STDDEF_H
++#cmakedefine HAVE_STDLIB_H
++
++#define JPEG_STDIO_IN_HEADERS
++
++#if defined(_WIN32)
++    #if defined(libjpeg_EXPORTS)
++        #define JPEG_EXPORT __declspec(dllexport)
++    #else
++        #define JPEG_EXPORT __declspec(dllimport)
++    #endif
++#else
++    #define JPEG_EXPORT 
++#endif
++
++#ifdef _WIN32
++# include <windows.h>
++/* Define "boolean" as unsigned char, not int, per Windows custom */
++# if !defined __RPCNDR_H__ || defined __MINGW32__    /* don't conflict if rpcndr.h already read */
++#  ifndef boolean     /* don't conflict if rpcndr.h already read */
++    typedef unsigned char boolean;
++#  endif /* boolean */
++# endif /* __RPCNDR_H__ */
++# define HAVE_BOOLEAN     /* prevent jmorecfg.h from redefining it */
++#endif /* _WIN32 */
++
++#define GLOBAL(type) JPEG_EXPORT type
++#define EXTERN(type) JPEG_EXPORT type
+diff -Nru -x '*~' jpeg-9.orig/jdatadst.h jpeg-9/jdatadst.h
+--- jpeg-9.orig/jdatadst.h	1970-01-01 01:00:00.000000000 +0100
++++ jpeg-9/jdatadst.h	2013-01-23 12:56:59.773823600 +0100
+@@ -0,0 +1,145 @@
++/*
++ * jdatadst.c
++ *
++ * Copyright (C) 1994-1996, Thomas G. Lane.
++ * This file is part of the Independent JPEG Group's software.
++ * For conditions of distribution and use, see the accompanying README file.
++ *
++ * This file contains compression data destination routines for the case of
++ * emitting JPEG data to a file (or any stdio stream).  While these routines
++ * are sufficient for most applications, some will want to use a different
++ * destination manager.
++ * IMPORTANT: we assume that fwrite() will correctly transcribe an array of
++ * JOCTETs into 8-bit-wide elements on external storage.  If char is wider
++ * than 8 bits on your machine, you may need to do some tweaking.
++ */
++
++/* Expanded data destination object for stdio output */
++
++typedef struct {
++  struct jpeg_destination_mgr pub; /* public fields */
++
++  FILE * outfile;		/* target stream */
++  JOCTET * buffer;		/* start of buffer */
++} jdatadst_my_destination_mgr;
++
++typedef jdatadst_my_destination_mgr * jdatadst_my_dest_ptr;
++
++#define JDATADST_OUTPUT_BUF_SIZE  4096	/* choose an efficiently fwrite'able size */
++
++
++/*
++ * Initialize destination --- called by jpeg_start_compress
++ * before any data is actually written.
++ */
++
++METHODDEF(void)
++jdatadst_init_destination (j_compress_ptr cinfo)
++{
++  jdatadst_my_dest_ptr dest = (jdatadst_my_dest_ptr) cinfo->dest;
++
++  /* Allocate the output buffer --- it will be released when done with image */
++  dest->buffer = (JOCTET *)
++      (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
++				  JDATADST_OUTPUT_BUF_SIZE * sizeof(JOCTET));
++
++  dest->pub.next_output_byte = dest->buffer;
++  dest->pub.free_in_buffer = JDATADST_OUTPUT_BUF_SIZE;
++}
++
++
++/*
++ * Empty the output buffer --- called whenever buffer fills up.
++ *
++ * In typical applications, this should write the entire output buffer
++ * (ignoring the current state of next_output_byte & free_in_buffer),
++ * reset the pointer & count to the start of the buffer, and return TRUE
++ * indicating that the buffer has been dumped.
++ *
++ * In applications that need to be able to suspend compression due to output
++ * overrun, a FALSE return indicates that the buffer cannot be emptied now.
++ * In this situation, the compressor will return to its caller (possibly with
++ * an indication that it has not accepted all the supplied scanlines).  The
++ * application should resume compression after it has made more room in the
++ * output buffer.  Note that there are substantial restrictions on the use of
++ * suspension --- see the documentation.
++ *
++ * When suspending, the compressor will back up to a convenient restart point
++ * (typically the start of the current MCU). next_output_byte & free_in_buffer
++ * indicate where the restart point will be if the current call returns FALSE.
++ * Data beyond this point will be regenerated after resumption, so do not
++ * write it out when emptying the buffer externally.
++ */
++
++METHODDEF(boolean)
++jdatadst_empty_output_buffer (j_compress_ptr cinfo)
++{
++  jdatadst_my_dest_ptr dest = (jdatadst_my_dest_ptr) cinfo->dest;
++
++  if (fwrite(dest->buffer, 1, JDATADST_OUTPUT_BUF_SIZE, dest->outfile) !=
++      (size_t) JDATADST_OUTPUT_BUF_SIZE)
++    ERREXIT(cinfo, JERR_FILE_WRITE);
++
++  dest->pub.next_output_byte = dest->buffer;
++  dest->pub.free_in_buffer = JDATADST_OUTPUT_BUF_SIZE;
++
++  return TRUE;
++}
++
++
++/*
++ * Terminate destination --- called by jpeg_finish_compress
++ * after all data has been written.  Usually needs to flush buffer.
++ *
++ * NB: *not* called by jpeg_abort or jpeg_destroy; surrounding
++ * application must deal with any cleanup that should happen even
++ * for error exit.
++ */
++
++METHODDEF(void)
++jdatadst_term_destination (j_compress_ptr cinfo)
++{
++  jdatadst_my_dest_ptr dest = (jdatadst_my_dest_ptr) cinfo->dest;
++  size_t datacount = JDATADST_OUTPUT_BUF_SIZE - dest->pub.free_in_buffer;
++
++  /* Write any data remaining in the buffer */
++  if (datacount > 0) {
++    if (fwrite(dest->buffer, 1, datacount, dest->outfile) != datacount) 
++      ERREXIT(cinfo, JERR_FILE_WRITE);
++  }
++  fflush(dest->outfile);
++  /* Make sure we wrote the output file OK */
++  if (ferror(dest->outfile))
++    ERREXIT(cinfo, JERR_FILE_WRITE);
++}
++
++
++/*
++ * Prepare for output to a stdio stream.
++ * The caller must have already opened the stream, and is responsible
++ * for closing it after finishing compression.
++ */
++
++LOCAL(void)
++jpeg_stdio_dest (j_compress_ptr cinfo, FILE * outfile)
++{
++  jdatadst_my_dest_ptr dest;
++
++  /* The destination object is made permanent so that multiple JPEG images
++   * can be written to the same file without re-executing jpeg_stdio_dest.
++   * This makes it dangerous to use this manager and a different destination
++   * manager serially with the same JPEG object, because their private object
++   * sizes may be different.  Caveat programmer.
++   */
++  if (cinfo->dest == NULL) {	/* first time for this JPEG object? */
++    cinfo->dest = (struct jpeg_destination_mgr *)
++      (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
++				  sizeof(jdatadst_my_destination_mgr));
++  }
++
++  dest = (jdatadst_my_dest_ptr) cinfo->dest;
++  dest->pub.init_destination = jdatadst_init_destination;
++  dest->pub.empty_output_buffer = jdatadst_empty_output_buffer;
++  dest->pub.term_destination = jdatadst_term_destination;
++  dest->outfile = outfile;
++}
+diff -Nru -x '*~' jpeg-9.orig/jdatasrc.h jpeg-9/jdatasrc.h
+--- jpeg-9.orig/jdatasrc.h	1970-01-01 01:00:00.000000000 +0100
++++ jpeg-9/jdatasrc.h	2013-01-23 12:56:59.778823600 +0100
+@@ -0,0 +1,206 @@
++/*
++ * jdatasrc.c
++ *
++ * Copyright (C) 1994-1996, Thomas G. Lane.
++ * This file is part of the Independent JPEG Group's software.
++ * For conditions of distribution and use, see the accompanying README file.
++ *
++ * This file contains decompression data source routines for the case of
++ * reading JPEG data from a file (or any stdio stream).  While these routines
++ * are sufficient for most applications, some will want to use a different
++ * source manager.
++ * IMPORTANT: we assume that fread() will correctly transcribe an array of
++ * JOCTETs from 8-bit-wide elements on external storage.  If char is wider
++ * than 8 bits on your machine, you may need to do some tweaking.
++ */
++
++/* Expanded data source object for stdio input */
++
++typedef struct {
++  struct jpeg_source_mgr pub;	/* public fields */
++
++  FILE * infile;		/* source stream */
++  JOCTET * buffer;		/* start of buffer */
++  boolean start_of_file;	/* have we gotten any data yet? */
++} jdatasrc_my_source_mgr;
++
++typedef jdatasrc_my_source_mgr * jdatasrc_my_src_ptr;
++
++#define JDATASRC_INPUT_BUF_SIZE  4096	/* choose an efficiently fread'able size */
++
++
++/*
++ * Initialize source --- called by jpeg_read_header
++ * before any data is actually read.
++ */
++
++METHODDEF(void)
++jdatasrc_init_source (j_decompress_ptr cinfo)
++{
++  jdatasrc_my_src_ptr src = (jdatasrc_my_src_ptr) cinfo->src;
++
++  /* We reset the empty-input-file flag for each image,
++   * but we don't clear the input buffer.
++   * This is correct behavior for reading a series of images from one source.
++   */
++  src->start_of_file = TRUE;
++}
++
++
++/*
++ * Fill the input buffer --- called whenever buffer is emptied.
++ *
++ * In typical applications, this should read fresh data into the buffer
++ * (ignoring the current state of next_input_byte & bytes_in_buffer),
++ * reset the pointer & count to the start of the buffer, and return TRUE
++ * indicating that the buffer has been reloaded.  It is not necessary to
++ * fill the buffer entirely, only to obtain at least one more byte.
++ *
++ * There is no such thing as an EOF return.  If the end of the file has been
++ * reached, the routine has a choice of ERREXIT() or inserting fake data into
++ * the buffer.  In most cases, generating a warning message and inserting a
++ * fake EOI marker is the best course of action --- this will allow the
++ * decompressor to output however much of the image is there.  However,
++ * the resulting error message is misleading if the real problem is an empty
++ * input file, so we handle that case specially.
++ *
++ * In applications that need to be able to suspend compression due to input
++ * not being available yet, a FALSE return indicates that no more data can be
++ * obtained right now, but more may be forthcoming later.  In this situation,
++ * the decompressor will return to its caller (with an indication of the
++ * number of scanlines it has read, if any).  The application should resume
++ * decompression after it has loaded more data into the input buffer.  Note
++ * that there are substantial restrictions on the use of suspension --- see
++ * the documentation.
++ *
++ * When suspending, the decompressor will back up to a convenient restart point
++ * (typically the start of the current MCU). next_input_byte & bytes_in_buffer
++ * indicate where the restart point will be if the current call returns FALSE.
++ * Data beyond this point must be rescanned after resumption, so move it to
++ * the front of the buffer rather than discarding it.
++ */
++
++METHODDEF(boolean)
++jdatasrc_fill_input_buffer (j_decompress_ptr cinfo)
++{
++  jdatasrc_my_src_ptr src = (jdatasrc_my_src_ptr) cinfo->src;
++  size_t nbytes;
++
++  nbytes = fread(src->buffer, 1, JDATASRC_INPUT_BUF_SIZE, src->infile);
++
++  if (nbytes <= 0) {
++    if (src->start_of_file)	/* Treat empty input file as fatal error */
++      ERREXIT(cinfo, JERR_INPUT_EMPTY);
++    WARNMS(cinfo, JWRN_JPEG_EOF);
++    /* Insert a fake EOI marker */
++    src->buffer[0] = (JOCTET) 0xFF;
++    src->buffer[1] = (JOCTET) JPEG_EOI;
++    nbytes = 2;
++  }
++
++  src->pub.next_input_byte = src->buffer;
++  src->pub.bytes_in_buffer = nbytes;
++  src->start_of_file = FALSE;
++
++  return TRUE;
++}
++
++
++/*
++ * Skip data --- used to skip over a potentially large amount of
++ * uninteresting data (such as an APPn marker).
++ *
++ * Writers of suspendable-input applications must note that jdatasrc_skip_input_data
++ * is not granted the right to give a suspension return.  If the skip extends
++ * beyond the data currently in the buffer, the buffer can be marked empty so
++ * that the next read will cause a jdatasrc_fill_input_buffer call that can suspend.
++ * Arranging for additional bytes to be discarded before reloading the input
++ * buffer is the application writer's problem.
++ */
++
++METHODDEF(void)
++jdatasrc_skip_input_data (j_decompress_ptr cinfo, long num_bytes)
++{
++  jdatasrc_my_src_ptr src = (jdatasrc_my_src_ptr) cinfo->src;
++
++  /* Just a dumb implementation for now.  Could use fseek() except
++   * it doesn't work on pipes.  Not clear that being smart is worth
++   * any trouble anyway --- large skips are infrequent.
++   */
++  if (num_bytes > 0) {
++    while (num_bytes > (long) src->pub.bytes_in_buffer) {
++      num_bytes -= (long) src->pub.bytes_in_buffer;
++      (void) jdatasrc_fill_input_buffer(cinfo);
++      /* note we assume that jdatasrc_fill_input_buffer will never return FALSE,
++       * so suspension need not be handled.
++       */
++    }
++    src->pub.next_input_byte += (size_t) num_bytes;
++    src->pub.bytes_in_buffer -= (size_t) num_bytes;
++  }
++}
++
++
++/*
++ * An additional method that can be provided by data source modules is the
++ * resync_to_restart method for error recovery in the presence of RST markers.
++ * For the moment, this source module just uses the default resync method
++ * provided by the JPEG library.  That method assumes that no backtracking
++ * is possible.
++ */
++
++
++/*
++ * Terminate source --- called by jpeg_finish_decompress
++ * after all data has been read.  Often a no-op.
++ *
++ * NB: *not* called by jpeg_abort or jpeg_destroy; surrounding
++ * application must deal with any cleanup that should happen even
++ * for error exit.
++ */
++
++METHODDEF(void)
++jdatasrc_term_source (j_decompress_ptr cinfo)
++{
++  /* no work necessary here */
++}
++
++
++/*
++ * Prepare for input from a stdio stream.
++ * The caller must have already opened the stream, and is responsible
++ * for closing it after finishing decompression.
++ */
++
++LOCAL(void)
++jpeg_stdio_src (j_decompress_ptr cinfo, FILE * infile)
++{
++  jdatasrc_my_src_ptr src;
++
++  /* The source object and input buffer are made permanent so that a series
++   * of JPEG images can be read from the same file by calling jpeg_stdio_src
++   * only before the first one.  (If we discarded the buffer at the end of
++   * one image, we'd likely lose the start of the next one.)
++   * This makes it unsafe to use this manager and a different source
++   * manager serially with the same JPEG object.  Caveat programmer.
++   */
++  if (cinfo->src == NULL) {	/* first time for this JPEG object? */
++    cinfo->src = (struct jpeg_source_mgr *)
++      (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
++				  sizeof(jdatasrc_my_source_mgr));
++    src = (jdatasrc_my_src_ptr) cinfo->src;
++    src->buffer = (JOCTET *)
++      (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
++				  JDATASRC_INPUT_BUF_SIZE * sizeof(JOCTET));
++  }
++
++  src = (jdatasrc_my_src_ptr) cinfo->src;
++  src->pub.init_source = jdatasrc_init_source;
++  src->pub.fill_input_buffer = jdatasrc_fill_input_buffer;
++  src->pub.skip_input_data = jdatasrc_skip_input_data;
++  src->pub.resync_to_restart = jpeg_resync_to_restart; /* use default method */
++  src->pub.term_source = jdatasrc_term_source;
++  src->infile = infile;
++  src->pub.bytes_in_buffer = 0; /* forces jdatasrc_fill_input_buffer on first read */
++  src->pub.next_input_byte = NULL; /* until buffer loaded */
++}
+diff -Nru -x '*~' jpeg-9.orig/jerror.h jpeg-9/jerror.h
+--- jpeg-9.orig/jerror.h	2012-04-29 14:35:38.000000000 +0200
++++ jpeg-9/jerror.h	2013-01-23 12:56:59.783823600 +0100
+@@ -14,6 +14,21 @@
+  * and/or the macros.
+  */
+ 
++#ifndef JPEG_STRCPY
++#define JPEG_STRCPY
++/* Use this instead of strncpy, which is bad */
++static void jpeg_strcpy(char *dest, const char *src, int avail)
++{
++    while (*src && avail > 1) {
++        *dest = *src;
++        dest++;
++        src++;
++        avail--;
++    }
++    *dest = '\0';
++}
++#endif
++
+ /*
+  * To define the enum list of message codes, include this file without
+  * defining macro JMESSAGE.  To create a message string table, include it
+@@ -242,7 +257,7 @@
+    (*(cinfo)->err->error_exit) ((j_common_ptr) (cinfo)))
+ #define ERREXITS(cinfo,code,str)  \
+   ((cinfo)->err->msg_code = (code), \
+-   strncpy((cinfo)->err->msg_parm.s, (str), JMSG_STR_PARM_MAX), \
++   jpeg_strcpy((cinfo)->err->msg_parm.s, (str), JMSG_STR_PARM_MAX), \
+    (*(cinfo)->err->error_exit) ((j_common_ptr) (cinfo)))
+ 
+ #define MAKESTMT(stuff)		do { stuff } while (0)
+@@ -298,7 +313,7 @@
+ 	   (*(cinfo)->err->emit_message) ((j_common_ptr) (cinfo), (lvl)); )
+ #define TRACEMSS(cinfo,lvl,code,str)  \
+   ((cinfo)->err->msg_code = (code), \
+-   strncpy((cinfo)->err->msg_parm.s, (str), JMSG_STR_PARM_MAX), \
++   jpeg_strcpy((cinfo)->err->msg_parm.s, (str), JMSG_STR_PARM_MAX), \
+    (*(cinfo)->err->emit_message) ((j_common_ptr) (cinfo), (lvl)))
+ 
+ #endif /* JERROR_H */
+diff -Nru -x '*~' jpeg-9.orig/jmorecfg.h jpeg-9/jmorecfg.h
+--- jpeg-9.orig/jmorecfg.h	2012-08-08 16:23:20.000000000 +0200
++++ jpeg-9/jmorecfg.h	2013-01-23 12:56:59.788823700 +0100
+@@ -188,13 +188,21 @@
+  */
+ 
+ /* a function called through method pointers: */
++#ifndef METHODDEF
+ #define METHODDEF(type)		static type
++#endif
+ /* a function used only in its module: */
++#ifndef LOCAL
+ #define LOCAL(type)		static type
++#endif
+ /* a function referenced thru EXTERNs: */
++#ifndef GLOBAL
+ #define GLOBAL(type)		type
++#endif
+ /* a reference to a GLOBAL function: */
++#ifndef EXTERN
+ #define EXTERN(type)		extern type
++#endif
+ 
+ 
+ /* This macro is used to declare a "method", that is, a function pointer.
+diff -Nru -x '*~' jpeg-9.orig/jpeglib.h jpeg-9/jpeglib.h
+--- jpeg-9.orig/jpeglib.h	2012-08-08 14:44:08.000000000 +0200
++++ jpeg-9/jpeglib.h	2013-01-23 12:56:59.798823700 +0100
+@@ -26,6 +26,19 @@
+ #endif
+ #include "jmorecfg.h"		/* seldom changed options */
+ 
++#ifdef HAVE_STDDEF_H
++#include <stddef.h>
++#endif
++
++#ifdef HAVE_STDLIB_H
++#include <stdlib.h>
++#endif
++
++#ifdef NEED_SYS_TYPES_H
++#include <sys/types.h>
++#endif
++
++#include <stdio.h>
+ 
+ #ifdef __cplusplus
+ #ifndef DONT_USE_EXTERN_C
+@@ -964,8 +977,10 @@
+ 
+ /* Standard data source and destination managers: stdio streams. */
+ /* Caller is responsible for opening the file before and closing after. */
++#ifndef JPEG_STDIO_IN_HEADERS
+ EXTERN(void) jpeg_stdio_dest JPP((j_compress_ptr cinfo, FILE * outfile));
+ EXTERN(void) jpeg_stdio_src JPP((j_decompress_ptr cinfo, FILE * infile));
++#endif
+ 
+ /* Data source and destination managers: memory buffers. */
+ EXTERN(void) jpeg_mem_dest JPP((j_compress_ptr cinfo,
+@@ -1170,4 +1185,10 @@
+ #endif
+ #endif
+ 
++#if !defined(JPEG_INTERNALS) && defined(JPEG_STDIO_IN_HEADERS)
++#include "jerror.h"
++#include "jdatadst.h"
++#include "jdatasrc.h"
++#endif
++
+ #endif /* JPEGLIB_H */
+diff -Nru -x '*~' jpeg-9.orig/rdcolmap.c jpeg-9/rdcolmap.c
+--- jpeg-9.orig/rdcolmap.c	1996-11-19 11:38:44.000000000 +0100
++++ jpeg-9/rdcolmap.c	2013-01-23 12:56:59.803823700 +0100
+@@ -42,7 +42,7 @@
+  * Add a (potentially) new color to the color map.
+  */
+ 
+-LOCAL(void)
++EXTERN(void)
+ add_map_entry (j_decompress_ptr cinfo, int R, int G, int B)
+ {
+   JSAMPROW colormap0 = cinfo->colormap[0];
+@@ -75,7 +75,7 @@
+  * Extract color map from a GIF file.
+  */
+ 
+-LOCAL(void)
++EXTERN(void)
+ read_gif_map (j_decompress_ptr cinfo, FILE * infile)
+ {
+   int header[13];
+@@ -117,7 +117,7 @@
+ /* Support routines for reading PPM */
+ 
+ 
+-LOCAL(int)
++EXTERN(int)
+ pbm_getc (FILE * infile)
+ /* Read next char, skipping over any comments */
+ /* A comment/newline sequence is returned as a newline */
+@@ -134,7 +134,7 @@
+ }
+ 
+ 
+-LOCAL(unsigned int)
++EXTERN(unsigned int)
+ read_pbm_integer (j_decompress_ptr cinfo, FILE * infile)
+ /* Read an unsigned decimal integer from the PPM file */
+ /* Swallows one trailing character after the integer */
+@@ -167,7 +167,7 @@
+  * Extract color map from a PPM file.
+  */
+ 
+-LOCAL(void)
++EXTERN(void)
+ read_ppm_map (j_decompress_ptr cinfo, FILE * infile)
+ {
+   int c;
+@@ -227,7 +227,7 @@
+  *  Output: colormap and actual_number_of_colors fields are set in cinfo.
+  */
+ 
+-GLOBAL(void)
++EXTERN(void)
+ read_color_map (j_decompress_ptr cinfo, FILE * infile)
+ {
+   /* Allocate space for a color map of maximum supported size. */
+diff -Nru -x '*~' jpeg-9.orig/rdswitch.c jpeg-9/rdswitch.c
+--- jpeg-9.orig/rdswitch.c	2003-11-03 21:51:40.000000000 +0100
++++ jpeg-9/rdswitch.c	2013-01-23 12:56:59.813823700 +0100
+@@ -18,7 +18,7 @@
+ #include <ctype.h>		/* to declare isdigit(), isspace() */
+ 
+ 
+-LOCAL(int)
++EXTERN(int)
+ text_getc (FILE * file)
+ /* Read next char, skipping over any comments (# to end of line) */
+ /* A comment/newline sequence is returned as a newline */
+@@ -35,7 +35,7 @@
+ }
+ 
+ 
+-LOCAL(boolean)
++EXTERN(boolean)
+ read_text_integer (FILE * file, long * result, int * termchar)
+ /* Read an unsigned decimal integer from a file, store it in result */
+ /* Reads one trailing character after the integer; returns it in termchar */
+@@ -70,7 +70,7 @@
+ }
+ 
+ 
+-GLOBAL(boolean)
++EXTERN(boolean)
+ read_quant_tables (j_compress_ptr cinfo, char * filename, boolean force_baseline)
+ /* Read a set of quantization tables from the specified file.
+  * The file is plain ASCII text: decimal numbers with whitespace between.
+@@ -126,7 +126,7 @@
+ 
+ #ifdef C_MULTISCAN_FILES_SUPPORTED
+ 
+-LOCAL(boolean)
++EXTERN(boolean)
+ read_scan_integer (FILE * file, long * result, int * termchar)
+ /* Variant of read_text_integer that always looks for a non-space termchar;
+  * this simplifies parsing of punctuation in scan scripts.
+@@ -155,7 +155,7 @@
+ }
+ 
+ 
+-GLOBAL(boolean)
++EXTERN(boolean)
+ read_scan_script (j_compress_ptr cinfo, char * filename)
+ /* Read a scan script from the specified text file.
+  * Each entry in the file defines one scan to be emitted.
+@@ -263,7 +263,7 @@
+ #endif /* C_MULTISCAN_FILES_SUPPORTED */
+ 
+ 
+-GLOBAL(boolean)
++EXTERN(boolean)
+ set_quality_ratings (j_compress_ptr cinfo, char *arg, boolean force_baseline)
+ /* Process a quality-ratings parameter string, of the form
+  *     N[,N,...]
+@@ -295,7 +295,7 @@
+ }
+ 
+ 
+-GLOBAL(boolean)
++EXTERN(boolean)
+ set_quant_slots (j_compress_ptr cinfo, char *arg)
+ /* Process a quantization-table-selectors parameter string, of the form
+  *     N[,N,...]
+@@ -330,7 +330,7 @@
+ }
+ 
+ 
+-GLOBAL(boolean)
++EXTERN(boolean)
+ set_sample_factors (j_compress_ptr cinfo, char *arg)
+ /* Process a sample-factors parameter string, of the form
+  *     HxV[,HxV,...]
+diff -Nru -x '*~' jpeg-9.orig/transupp.c jpeg-9/transupp.c
+--- jpeg-9.orig/transupp.c	2012-06-02 14:44:44.000000000 +0200
++++ jpeg-9/transupp.c	2013-01-23 12:56:59.843823700 +0100
+@@ -22,6 +22,8 @@
+ #include "transupp.h"		/* My own external interface */
+ #include <ctype.h>		/* to declare isdigit() */
+ 
++#undef EXTERN
++#define EXTERN(type) type
+ 
+ #if TRANSFORMS_SUPPORTED
+ 
+@@ -75,7 +77,7 @@
+  */
+ 
+ 
+-LOCAL(void)
++EXTERN(void)
+ do_crop (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
+ 	 JDIMENSION x_crop_offset, JDIMENSION y_crop_offset,
+ 	 jvirt_barray_ptr *src_coef_arrays,
+@@ -113,7 +115,7 @@
+ }
+ 
+ 
+-LOCAL(void)
++EXTERN(void)
+ do_flip_h_no_crop (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
+ 		   JDIMENSION x_crop_offset,
+ 		   jvirt_barray_ptr *src_coef_arrays)
+@@ -180,7 +182,7 @@
+ }
+ 
+ 
+-LOCAL(void)
++EXTERN(void)
+ do_flip_h (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
+ 	   JDIMENSION x_crop_offset, JDIMENSION y_crop_offset,
+ 	   jvirt_barray_ptr *src_coef_arrays,
+@@ -242,7 +244,7 @@
+ }
+ 
+ 
+-LOCAL(void)
++EXTERN(void)
+ do_flip_v (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
+ 	   JDIMENSION x_crop_offset, JDIMENSION y_crop_offset,
+ 	   jvirt_barray_ptr *src_coef_arrays,
+@@ -322,7 +324,7 @@
+ }
+ 
+ 
+-LOCAL(void)
++EXTERN(void)
+ do_transpose (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
+ 	      JDIMENSION x_crop_offset, JDIMENSION y_crop_offset,
+ 	      jvirt_barray_ptr *src_coef_arrays,
+@@ -370,7 +372,7 @@
+ }
+ 
+ 
+-LOCAL(void)
++EXTERN(void)
+ do_rot_90 (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
+ 	   JDIMENSION x_crop_offset, JDIMENSION y_crop_offset,
+ 	   jvirt_barray_ptr *src_coef_arrays,
+@@ -451,7 +453,7 @@
+ }
+ 
+ 
+-LOCAL(void)
++EXTERN(void)
+ do_rot_270 (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
+ 	    JDIMENSION x_crop_offset, JDIMENSION y_crop_offset,
+ 	    jvirt_barray_ptr *src_coef_arrays,
+@@ -522,7 +524,7 @@
+ }
+ 
+ 
+-LOCAL(void)
++EXTERN(void)
+ do_rot_180 (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
+ 	    JDIMENSION x_crop_offset, JDIMENSION y_crop_offset,
+ 	    jvirt_barray_ptr *src_coef_arrays,
+@@ -630,7 +632,7 @@
+ }
+ 
+ 
+-LOCAL(void)
++EXTERN(void)
+ do_transverse (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
+ 	       JDIMENSION x_crop_offset, JDIMENSION y_crop_offset,
+ 	       jvirt_barray_ptr *src_coef_arrays,
+@@ -750,7 +752,7 @@
+  * *strptr is advanced over the digit string, and *result is set to its value.
+  */
+ 
+-LOCAL(boolean)
++EXTERN(boolean)
+ jt_read_integer (const char ** strptr, JDIMENSION * result)
+ {
+   const char * ptr = *strptr;
+@@ -780,7 +782,7 @@
+  * This code is loosely based on XParseGeometry from the X11 distribution.
+  */
+ 
+-GLOBAL(boolean)
++EXTERN(boolean)
+ jtransform_parse_crop_spec (jpeg_transform_info *info, const char *spec)
+ {
+   info->crop = FALSE;
+@@ -834,7 +836,7 @@
+ 
+ /* Trim off any partial iMCUs on the indicated destination edge */
+ 
+-LOCAL(void)
++EXTERN(void)
+ trim_right_edge (jpeg_transform_info *info, JDIMENSION full_width)
+ {
+   JDIMENSION MCU_cols;
+@@ -845,7 +847,7 @@
+     info->output_width = MCU_cols * info->iMCU_sample_width;
+ }
+ 
+-LOCAL(void)
++EXTERN(void)
+ trim_bottom_edge (jpeg_transform_info *info, JDIMENSION full_height)
+ {
+   JDIMENSION MCU_rows;
+@@ -874,7 +876,7 @@
+  * and transformation is not perfect.  Otherwise returns TRUE.
+  */
+ 
+-GLOBAL(boolean)
++EXTERN(boolean)
+ jtransform_request_workspace (j_decompress_ptr srcinfo,
+ 			      jpeg_transform_info *info)
+ {
+@@ -1111,7 +1113,7 @@
+ 
+ /* Transpose destination image parameters */
+ 
+-LOCAL(void)
++EXTERN(void)
+ transpose_critical_parameters (j_compress_ptr dstinfo)
+ {
+   int tblno, i, j, ci, itemp;
+@@ -1157,7 +1159,7 @@
+  * We try to adjust the Tags ExifImageWidth and ExifImageHeight if possible.
+  */
+ 
+-LOCAL(void)
++EXTERN(void)
+ adjust_exif_parameters (JOCTET FAR * data, unsigned int length,
+ 			JDIMENSION new_width, JDIMENSION new_height)
+ {
+@@ -1319,7 +1321,7 @@
+  * to jpeg_write_coefficients().
+  */
+ 
+-GLOBAL(jvirt_barray_ptr *)
++EXTERN(jvirt_barray_ptr *)
+ jtransform_adjust_parameters (j_decompress_ptr srcinfo,
+ 			      j_compress_ptr dstinfo,
+ 			      jvirt_barray_ptr *src_coef_arrays,
+@@ -1414,7 +1416,7 @@
+  * Note that some transformations will modify the source data arrays!
+  */
+ 
+-GLOBAL(void)
++EXTERN(void)
+ jtransform_execute_transform (j_decompress_ptr srcinfo,
+ 			      j_compress_ptr dstinfo,
+ 			      jvirt_barray_ptr *src_coef_arrays,
+@@ -1487,7 +1489,7 @@
+  *           (may use custom action then)
+  */
+ 
+-GLOBAL(boolean)
++EXTERN(boolean)
+ jtransform_perfect_transform(JDIMENSION image_width, JDIMENSION image_height,
+ 			     int MCU_width, int MCU_height,
+ 			     JXFORM_CODE transform)
+@@ -1526,7 +1528,7 @@
+  * This must be called before jpeg_read_header() to have the desired effect.
+  */
+ 
+-GLOBAL(void)
++EXTERN(void)
+ jcopy_markers_setup (j_decompress_ptr srcinfo, JCOPY_OPTION option)
+ {
+ #ifdef SAVE_MARKERS_SUPPORTED
+@@ -1551,7 +1553,7 @@
+  * JFIF APP0 or Adobe APP14 markers if selected.
+  */
+ 
+-GLOBAL(void)
++EXTERN(void)
+ jcopy_markers_execute (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
+ 		       JCOPY_OPTION option)
+ {

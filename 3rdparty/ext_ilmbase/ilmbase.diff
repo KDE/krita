@@ -1,0 +1,270 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+new file mode 100644
+index 0000000..5f6fcd8
+--- /dev/null
++++ b/CMakeLists.txt
+@@ -0,0 +1,102 @@
++project(ilmbase)
++
++cmake_minimum_required(VERSION 2.8)
++
++set(ilmbase_lib_STATIC STATIC)
++
++set(ilmbase_srcs_Imath
++	Imath/ImathShear.cpp
++	Imath/ImathColorAlgo.cpp
++	Imath/ImathMatrixAlgo.cpp
++	Imath/ImathBox.cpp
++	Imath/ImathFun.cpp
++	Imath/ImathRandom.cpp
++	Imath/ImathVec.cpp
++	)
++file(GLOB ilmbase_header_Imath Imath/*.h)
++
++set(ilmbase_srcs_IlmThread
++	IlmThread/IlmThreadMutex.cpp
++	IlmThread/IlmThreadMutexPosix.cpp
++	IlmThread/IlmThreadSemaphorePosixCompat.cpp
++	IlmThread/IlmThreadPosix.cpp
++	IlmThread/IlmThreadPool.cpp
++	IlmThread/IlmThreadSemaphore.cpp
++	IlmThread/IlmThreadSemaphorePosix.cpp
++	IlmThread/IlmThread.cpp
++	)
++if(WIN32)
++	set(ilmbase_srcs_IlmThread ${ilmbase_srcs_IlmThread}
++		IlmThread/IlmThreadSemaphoreWin32.cpp
++		IlmThread/IlmThreadMutexWin32.cpp
++		IlmThread/IlmThreadWin32.cpp
++		)
++endif(WIN32)
++file(GLOB ilmbase_header_IlmThread IlmThread/*.h)
++
++set(ilmbase_srcs_Half
++	Half/half.cpp
++	)
++file(GLOB ilmbase_header_Half Half/*.h)
++
++set(ilmbase_srcs_IexMath
++	IexMath/IexMathFloatExc.cpp
++	IexMath/IexMathFpu.cpp
++	)
++file(GLOB ilmbase_header_IexMath IexMath/*.h)
++
++set(ilmbase_srcs_Iex
++	Iex/IexBaseExc.cpp
++	Iex/IexThrowErrnoExc.cpp
++	)
++file(GLOB ilmbase_header_Iex Iex/*.h)
++
++include_directories(${CMAKE_INSTALL_PREFIX}/include)
++include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Half)
++include_directories(${CMAKE_CURRENT_SOURCE_DIR}/IexMath)
++include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Iex)
++include_directories(${CMAKE_CURRENT_BINARY_DIR})
++
++if(WIN32)
++include_directories(${CMAKE_CURRENT_SOURCE_DIR}/config.windows)
++else(WIN32)
++include_directories(${CMAKE_CURRENT_SOURCE_DIR}/config)
++endif(WIN32)
++
++
++set(ilmbase_header_IlmThread ${ilmbase_header_IlmThread} ${CMAKE_CURRENT_SOURCE_DIR}/config.windows/IlmBaseConfig.h)
++
++add_executable(toFloat Half/toFloat.cpp)
++add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/toFloat.h
++	COMMAND $<TARGET_FILE:toFloat> > ${CMAKE_CURRENT_BINARY_DIR}/toFloat.h
++	DEPENDS toFloat
++	)
++add_custom_target(toFloat_h DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/toFloat.h)
++
++add_executable(eLut Half/eLut.cpp)
++add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/eLut.h
++	COMMAND $<TARGET_FILE:eLut> > ${CMAKE_CURRENT_BINARY_DIR}/eLut.h
++	DEPENDS eLut
++	)
++add_custom_target(eLut_h DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/eLut.h)
++
++add_library(Imath ${ilmbase_lib_STATIC} ${ilmbase_srcs_Imath})
++install(TARGETS Imath LIBRARY DESTINATION lib ARCHIVE DESTINATION lib RUNTIME DESTINATION bin)
++install(FILES ${ilmbase_header_Imath} DESTINATION include)
++
++add_library(IlmThread ${ilmbase_lib_STATIC} ${ilmbase_srcs_IlmThread})
++install(TARGETS IlmThread LIBRARY DESTINATION lib ARCHIVE DESTINATION lib RUNTIME DESTINATION bin)
++install(FILES ${ilmbase_header_IlmThread} DESTINATION include)
++
++add_library(Half ${ilmbase_lib_STATIC} ${ilmbase_srcs_Half})
++install(TARGETS Half LIBRARY DESTINATION lib ARCHIVE DESTINATION lib RUNTIME DESTINATION bin)
++add_dependencies(Half toFloat_h eLut_h)
++install(FILES ${ilmbase_header_Half} DESTINATION include)
++
++add_library(Iex ${ilmbase_lib_STATIC} ${ilmbase_srcs_Iex})
++install(TARGETS Iex LIBRARY DESTINATION lib ARCHIVE DESTINATION lib RUNTIME DESTINATION bin)
++install(FILES ${ilmbase_header_Iex} DESTINATION include)
++
++add_library(IexMath ${ilmbase_lib_STATIC} ${ilmbase_srcs_IexMath})
++install(TARGETS IexMath LIBRARY DESTINATION lib ARCHIVE DESTINATION lib RUNTIME DESTINATION bin)
++install(FILES ${ilmbase_header_IexMath} DESTINATION include)
+diff --git a/Half/half.h b/Half/half.h
+index 5e707ef..776bb84 100644
+--- a/Half/half.h
++++ b/Half/half.h
+@@ -87,17 +87,8 @@
+ 
+ #include <iostream>
+ 
+-#if defined(OPENEXR_DLL)
+-    #if defined(HALF_EXPORTS)
+-	#define HALF_EXPORT __declspec(dllexport)
+-    #else
+-	#define HALF_EXPORT __declspec(dllimport)
+-    #endif
+-    #define HALF_EXPORT_CONST
+-#else
+-    #define HALF_EXPORT
+-    #define HALF_EXPORT_CONST const
+-#endif
++#define HALF_EXPORT
++#define HALF_EXPORT_CONST const
+ 
+ class HALF_EXPORT half
+ {
+diff --git a/IlmThread/IlmThread.h b/IlmThread/IlmThread.h
+index e5ca595..b91a8b9 100644
+--- a/IlmThread/IlmThread.h
++++ b/IlmThread/IlmThread.h
+@@ -93,25 +93,13 @@
+ #include "IlmBaseConfig.h"
+ 
+ #if defined _WIN32 || defined _WIN64
+-    #ifdef NOMINMAX
+-        #undef NOMINMAX
+-    #endif
+-    #define NOMINMAX
+     #include <windows.h>
+     #include <process.h>
+ #elif HAVE_PTHREAD
+     #include <pthread.h>
+ #endif
+ 
+-#if defined(OPENEXR_DLL) && !defined(ZENO_STATIC)
+-    #ifdef ILMTHREAD_EXPORTS
+-	#define ILMTHREAD_EXPORT __declspec(dllexport)
+-    #else
+-	#define ILMTHREAD_EXPORT __declspec(dllimport)
+-    #endif
+-#else
+-    #define ILMTHREAD_EXPORT 
+-#endif
++#define ILMTHREAD_EXPORT 
+ 
+ namespace IlmThread {
+ 
+diff --git a/IlmThread/IlmThreadMutex.h b/IlmThread/IlmThreadMutex.h
+index 354282b..3fe39c9 100644
+--- a/IlmThread/IlmThreadMutex.h
++++ b/IlmThread/IlmThreadMutex.h
+@@ -69,10 +69,6 @@
+ #include "IlmBaseConfig.h"
+ 
+ #if defined _WIN32 || defined _WIN64
+-    #ifdef NOMINMAX
+-        #undef NOMINMAX
+-    #endif
+-    #define NOMINMAX
+     #include <windows.h>
+ #elif HAVE_PTHREAD
+     #include <pthread.h>
+diff --git a/IlmThread/IlmThreadSemaphore.h b/IlmThread/IlmThreadSemaphore.h
+index a9ba60a..8ffd282 100644
+--- a/IlmThread/IlmThreadSemaphore.h
++++ b/IlmThread/IlmThreadSemaphore.h
+@@ -45,10 +45,6 @@
+ #include "IlmBaseConfig.h"
+ 
+ #if defined _WIN32 || defined _WIN64
+-    #ifdef NOMINMAX
+-        #undef NOMINMAX
+-    #endif
+-    #define NOMINMAX
+     #include <windows.h>
+ #elif HAVE_PTHREAD && !HAVE_POSIX_SEMAPHORES
+     #include <pthread.h>
+diff --git a/Imath/ImathMatrixAlgo.cpp b/Imath/ImathMatrixAlgo.cpp
+index 8896c8d..fd75d3d 100644
+--- a/Imath/ImathMatrixAlgo.cpp
++++ b/Imath/ImathMatrixAlgo.cpp
+@@ -44,12 +44,9 @@
+ 
+ #include "ImathMatrixAlgo.h"
+ #include <cmath>
++#include <algorithm>
+ 
+-#if defined(OPENEXR_DLL)
+-    #define EXPORT_CONST __declspec(dllexport)
+-#else
+-    #define EXPORT_CONST const
+-#endif
++#define EXPORT_CONST const
+ 
+ namespace Imath {
+ 
+@@ -627,12 +624,12 @@ T
+ maxOffDiag (const Imath::Matrix33<T>& A)
+ {
+     T result = 0;
+-    result = std::max (result, std::abs (A[0][1]));
+-    result = std::max (result, std::abs (A[0][2]));
+-    result = std::max (result, std::abs (A[1][0]));
+-    result = std::max (result, std::abs (A[1][2]));
+-    result = std::max (result, std::abs (A[2][0]));
+-    result = std::max (result, std::abs (A[2][1]));
++    result = (std::max) (result, std::abs (A[0][1]));
++    result = (std::max) (result, std::abs (A[0][2]));
++    result = (std::max) (result, std::abs (A[1][0]));
++    result = (std::max) (result, std::abs (A[1][2]));
++    result = (std::max) (result, std::abs (A[2][0]));
++    result = (std::max) (result, std::abs (A[2][1]));
+     return result;
+ }
+ 
+@@ -646,7 +643,7 @@ maxOffDiag (const Imath::Matrix44<T>& A)
+         for (int j = 0; j < 4; ++j)
+         {
+             if (i != j)
+-                result = std::max (result, std::abs (A[i][j]));
++                result = (std::max) (result, std::abs (A[i][j]));
+         }
+     }
+ 
+@@ -1091,7 +1088,7 @@ maxOffDiagSymm (const TM& A)
+     T result = 0;
+     for (unsigned int i = 0; i < TM::dimensions(); ++i)
+         for (unsigned int j = i+1; j < TM::dimensions(); ++j)
+-            result = std::max (result, std::abs (A[i][j]));
++            result = (std::max) (result, std::abs (A[i][j]));
+ 
+    return result;
+ }
+diff --git a/Imath/ImathMatrixAlgo.h b/Imath/ImathMatrixAlgo.h
+index 6cb1568..ede2ab7 100644
+--- a/Imath/ImathMatrixAlgo.h
++++ b/Imath/ImathMatrixAlgo.h
+@@ -57,15 +57,7 @@
+ #include <math.h>
+ 
+ 
+-#ifdef OPENEXR_DLL
+-    #ifdef IMATH_EXPORTS
+-        #define IMATH_EXPORT_CONST extern __declspec(dllexport)
+-    #else
+-	#define IMATH_EXPORT_CONST extern __declspec(dllimport)
+-    #endif
+-#else
+-    #define IMATH_EXPORT_CONST extern const
+-#endif
++#define IMATH_EXPORT_CONST extern const
+ 
+ 
+ namespace Imath {

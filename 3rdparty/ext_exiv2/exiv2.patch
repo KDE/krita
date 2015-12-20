@@ -1,0 +1,1344 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+new file mode 100644
+index 0000000..632fc8c
+--- /dev/null
++++ b/CMakeLists.txt
+@@ -0,0 +1,104 @@
++# CMake build system for exiv2 library and executables
++# Copyright 2008 by Patrick Spendrin <ps_ml@gmx.de>
++#
++# Redistribution and use in source and binary forms, with or without
++# modification, are permitted provided that the following conditions
++# are met:
++#
++#    1. Redistributions of source code must retain the above copyright
++#       notice, this list of conditions and the following disclaimer.
++#    2. Redistributions in binary form must reproduce the above
++#       copyright notice, this list of conditions and the following
++#       disclaimer in the documentation and/or other materials provided
++#       with the distribution.
++#    3. The name of the author may not be used to endorse or promote
++#       products derived from this software without specific prior
++#       written permission.
++#
++# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
++# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
++# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++# ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
++# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
++# GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
++# IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
++# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
++# IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++#
++
++project( exiv2 )
++
++cmake_minimum_required( VERSION 2.6 )
++
++set( PACKAGE_BUGREPORT      "ahuggel@gmx.net" )
++set( PACKAGE                "exiv2" )
++set( PACKAGE_NAME           "exiv2" )
++set( PACKAGE_STRING         "exiv2 0.22" )
++set( PACKAGE_TARNAME        "exiv2" )
++set( PACKAGE_VERSION        "0.22" )
++set( GENERIC_LIB_VERSION    "0.22" )
++set( GENERIC_LIB_SOVERSION  "2" )
++
++# options and there default values
++option( EXIV2_ENABLE_SHARED       "Build exiv2 as a shared library (dll)"                 ON )
++option( EXIV2_ENABLE_XMP          "Build with XMP metadata support"                       ON )
++option( EXIV2_ENABLE_LIBXMP       "Build a static convenience Library for XMP"            OFF )
++option( EXIV2_ENABLE_PNG          "Build with png support (requires libz)"                ON )
++option( EXIV2_ENABLE_NLS          "Build native language support (requires gettext)"      OFF )
++option( EXIV2_ENABLE_PRINTUCS2    "Build with Printucs2"                                  ON )
++option( EXIV2_ENABLE_LENSDATA     "include lens data"                                     ON )
++option( EXIV2_ENABLE_COMMERCIAL   "compile with the EXV_COMMERCIAL_VERSION symbol set"    OFF )
++
++option( BUILD_samples       "Build the unit tests"                                  OFF )
++
++if( MINGW OR UNIX )
++        add_definitions( -Wall -Wcast-align -Wpointer-arith -Wformat-security -Wmissing-format-attribute -Woverloaded-virtual -W )
++endif( MINGW OR UNIX )
++
++if( EXIV2_ENABLE_XMP )
++    set( HAVE_XMP_TOOLKIT ON )
++    set( XMPLIB "do" )
++endif( EXIV2_ENABLE_XMP )
++
++if( BUILD_samples )
++    EXIV2_ENABLE_TESTING()
++endif( BUILD_samples )
++
++
++include( config/ConfigureChecks.cmake )
++
++set( INSTALL_TARGET_STANDARD_ARGS RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib )
++
++# add sources from XMPSDK directory - this needs to be done here
++set( XMPSRC 
++            ${CMAKE_SOURCE_DIR}/xmpsdk/src/XML_Node.cpp
++            ${CMAKE_SOURCE_DIR}/xmpsdk/src/XMPMeta.cpp
++            ${CMAKE_SOURCE_DIR}/xmpsdk/src/XMPMeta-GetSet.cpp
++            ${CMAKE_SOURCE_DIR}/xmpsdk/src/XMPMeta-Parse.cpp
++            ${CMAKE_SOURCE_DIR}/xmpsdk/src/XMPMeta-Serialize.cpp
++            ${CMAKE_SOURCE_DIR}/xmpsdk/src/XMPIterator.cpp
++            ${CMAKE_SOURCE_DIR}/xmpsdk/src/XMPUtils.cpp
++            ${CMAKE_SOURCE_DIR}/xmpsdk/src/XMPUtils-FileInfo.cpp
++            ${CMAKE_SOURCE_DIR}/xmpsdk/src/XMPCore_Impl.cpp
++            ${CMAKE_SOURCE_DIR}/xmpsdk/src/ExpatAdapter.cpp
++            ${CMAKE_SOURCE_DIR}/xmpsdk/src/ParseRDF.cpp
++            ${CMAKE_SOURCE_DIR}/xmpsdk/src/UnicodeConversions.cpp
++            ${CMAKE_SOURCE_DIR}/xmpsdk/src/MD5.cpp
++            ${CMAKE_SOURCE_DIR}/xmpsdk/src/WXMPMeta.cpp
++            ${CMAKE_SOURCE_DIR}/xmpsdk/src/WXMPIterator.cpp
++            ${CMAKE_SOURCE_DIR}/xmpsdk/src/WXMPUtils.cpp
++ )
++
++# the following lines need to be added to circumvent the error in xmpsdk\src\MD5.h
++if( ${EXV_HAVE_STDINT_H} )
++    add_definitions( -DEXV_HAVE_STDINT_H )
++endif( ${EXV_HAVE_STDINT_H} )
++
++add_subdirectory( xmpsdk )
++add_subdirectory( src )
++
++if( BUILD_samples )
++    add_subdirectory( samples )
++endif( BUILD_samples )
+diff --git a/README-cmake b/README-cmake
+new file mode 100644
+index 0000000..81c8f26
+--- /dev/null
++++ b/README-cmake
+@@ -0,0 +1,80 @@
++Exiv2 uses cmake, a cross-platform build system, to control the
++compilation process using simple platform and compiler independent
++configuration files.
++
++The old make and MSVC build files are currently still around but are
++considered deprecated in the unstable branch. They will disappear once
++the cmake build process is feature-complete, stable and documented. Or
++maybe earlier to force me to get there.
++
++
++Cmake resources
++===============
++
++Home: http://www.cmake.org/
++Help: http://www.cmake.org/cmake/help/help.html
++Doc:  http://www.cmake.org/cmake/help/documentation.html
++Wiki: http://www.cmake.org/Wiki/CMake
++FAQ:  http://www.cmake.org/Wiki/CMake_FAQ
++
++
++Building and Installing
++=======================
++
++a) From the command line 
++
++Run the following commands from the top directory (containing this
++file) to configure, build and install the library and utility:
++
++    $ mkdir build
++    $ cd build
++    $ cmake ..
++    $ make
++    $ make install
++
++To modify the configuration
++
++    $ ccmake ..
++
++
++Default install locations
++...
++
++To uninstall Exiv2, run:
++
++    $ make uninstall     >>>>>   TODO
++
++    in the meantime, on UNIX-like systems, use
++
++    $ xargs rm < install_manifest.txt
++
++
++b) Using the cmake GUI
++
++   ccmake
++
++
++
++
++
++Dependencies
++============
++
++cmake itself
++
++migrate the rest here from README, test one by one
++
++
++
++
++-----
++
++Further TODOs:
++
++  * Rename configuration settings to EXIV2_*, e.g., EXIV2_ENABLE_SHARED
++  * Two cmake projects: 1) exiv2 2) samples, common config in config/
++  * Is it possible to not have CMakeLists.txt file in the top dir?
++  * --disable-visibility
++  * cross-compilation
++  * Release build and packaging scripts
++  * emacs M-c command to (re-)compile
+diff --git a/Todo-cmake.txt b/Todo-cmake.txt
+new file mode 100644
+index 0000000..3e06170
+--- /dev/null
++++ b/Todo-cmake.txt
+@@ -0,0 +1,59 @@
++DONE * Need soname versioning for shared library
++
++* Need g++ specific DONE compiler options (warnings) and settings (visibility)
++
++* enable build types in cmake. In case required, add support for it
++
++* The following options of the configure script should be supported
++   --without-zlib       DONE - ENABLE_PNG
++   --disable-nls        DONE - ENABLE_NLS ??? that doesn't work correctly here
++   --disable-printucs2  DONE - ENABLE_PRINTUCS2
++   --disable-xmp        DONE - ENABLE_XMP
++   --enable-commercial  DONE - ENABLE_COMMERCIAL
++   --disable-lensdata   DONE - ENABLE_LENSDATA
++   --disable-shared     DONE - ENABLE_SHARED_EXIV2
++
++DONE * Add further messages to display option settings
++
++   ------------------------------------------------------------------
++   -- Exiv2 0.18.1 feature configuration summary
++   --
++   -- Build a shared library......... NO
++   -- PNG image support.............. YES
++   -- Native language support........ NO
++
++   gettext is required for native language support. Make sure the
++   gettext header files are installed. You can get gettext from
++   http://www.gnu.org/software/gettext/
++   
++   -- Conversion of Windows XP tags.. YES
++   -- Nikon lens database............ YES
++   -- XMP metadata support........... YES
++   ------------------------------------------------------------------
++
++* Need targets to build/install doc, DONE man page
++
++DONE * add possibility to build xmp as a convenience library
++
++DONE * Compilation fails if Expat (possibly also other dependencies?) is in a
++  non-standard place
++
++WONTFIX * This is probably not necessary in src/CMakeLists.txt / can be removed:
++   set( LIBEXIV2_SRC   ${LIBEXIV2_SRC} getopt_win32.c )
++   it is necessary as both windows compilers do not autoexport
++
++DONE * Do we need to worry about MSVC warnings like this:
++d:\home\ahuggel\msys\src\exiv2\src\exif.hpp(245) : warning C4251: 'Exiv2::Exifdatum::value_' : class 'std::auto_ptr<_Ty>' needs to have dll-interface to be used by clients of class 'Exiv2::Exifdatum'
++        with
++        [
++            _Ty=Exiv2::Value
++        ]
++
++* add information on how to cross-compile on Linux for Windows (MinGW) (some applications and
++  my own release-build process need this) to the README.cmake
++
++INFO * check How does cmake handle RPATH? (I'll read up on this)
++
++DONE * Is the pkgconfig file not installed in MinGW? - it is now
++
++* Can the logic needed to build the doc be re-written using cmake?
+diff --git a/config/ConfigureChecks.cmake b/config/ConfigureChecks.cmake
+new file mode 100644
+index 0000000..3e4f1c1
+--- /dev/null
++++ b/config/ConfigureChecks.cmake
+@@ -0,0 +1,266 @@
++# CMake build system for exiv2 library and executables
++# Copyright 2008 by Patrick Spendrin <ps_ml@gmx.de>
++#
++# Redistribution and use in source and binary forms, with or without
++# modification, are permitted provided that the following conditions
++# are met:
++#
++#    1. Redistributions of source code must retain the above copyright
++#       notice, this list of conditions and the following disclaimer.
++#    2. Redistributions in binary form must reproduce the above
++#       copyright notice, this list of conditions and the following
++#       disclaimer in the documentation and/or other materials provided
++#       with the distribution.
++#    3. The name of the author may not be used to endorse or promote
++#       products derived from this software without specific prior
++#       written permission.
++#
++# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
++# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
++# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++# ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
++# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
++# GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
++# IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
++# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
++# IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++#
++# ConfigureChecks for exiv2
++
++set( CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/config )
++include( CheckIncludeFile )
++include( CheckFunctionExists )
++include( CheckSymbolExists )
++include( CheckCSourceCompiles )
++
++set( STDC_HEADERS ON )
++set( HAVE_DECL_STRERROR_R 0 )
++
++set( HAVE_PRINTUCS2 ${EXIV2_ENABLE_PRINTUCS2} )
++set( HAVE_LENSDATA ${EXIV2_ENABLE_LENSDATA} )
++
++include_directories( ${CMAKE_INCLUDE_PATH} ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/xmpsdk/include )
++link_directories( ${CMAKE_LIBRARY_PATH} )
++set( CMAKE_REQUIRED_INCLUDES ${CMAKE_INCLUDE_PATH} )
++set( CMAKE_REQUIRED_LIBRARIES ${ICONV_LIBRARIES} )
++
++find_library( ICONV_LIBRARIES iconv )
++find_library( LIBINTL_LIBRARIES libintl )
++
++if( EXIV2_ENABLE_PNG )
++    find_package( ZLIB )
++    include_directories( ${ZLIB_INCLUDE_DIR} )
++    set (HAVE_LIBZ ${ZLIB_FOUND})
++endif( EXIV2_ENABLE_PNG )
++
++if (EXIV2_ENABLE_XMP)
++    find_package(EXPAT)
++    include_directories(${EXPAT_INCLUDE_DIR})
++    # FindEXPAT.cmake doesn't check for REQUIRED flags - so we need to check ourselves
++    if (NOT EXPAT_FOUND)
++        message(FATAL_ERROR "missing library expat required for XMP")
++    endif( NOT EXPAT_FOUND )
++endif (EXIV2_ENABLE_XMP)
++
++if( EXIV2_ENABLE_SHARED )
++    add_definitions( -DEXV_HAVE_DLL )
++    set( STATIC_FLAG SHARED )
++else( EXIV2_ENABLE_SHARED )
++    set( STATIC_FLAG STATIC )
++endif( EXIV2_ENABLE_SHARED )
++
++if( EXIV2_ENABLE_NLS )
++    if( NOT LOCALEDIR )
++        set( LOCALEDIR "\"${CMAKE_INSTALL_PREFIX}/share/locale\"" )
++        if( WIN32 )
++            string( REPLACE "/" "\\\\" LOCALEDIR ${LOCALEDIR} )
++        endif( WIN32 )
++    endif( NOT LOCALEDIR )
++    add_definitions( -DEXV_LOCALEDIR=${LOCALEDIR} )
++endif( EXIV2_ENABLE_NLS )
++
++if( EXIV2_ENABLE_COMMERCIAL )
++    add_definitions( -DEXV_COMMERCIAL_VERSION )
++endif( EXIV2_ENABLE_COMMERCIAL )
++
++# checking for Header files
++check_include_file( "inttypes.h" HAVE_INTTYPES_H )
++check_include_file( "libintl.h" HAVE_LIBINTL_H )
++check_include_file( "malloc.h" HAVE_MALLOC_H )
++check_include_file( "memory.h" HAVE_MEMORY_H )
++check_include_file( "iconv.h" HAVE_ICONV_H )
++check_include_file( "stdbool.h" HAVE_STDBOOL_H )
++check_include_file( "stdint.h" HAVE_STDINT_H )
++check_include_file( "stdlib.h" HAVE_STDLIB_H )
++check_include_file( "string.h" HAVE_STRING_H )
++check_include_file( "strings.h" HAVE_STRINGS_H )
++check_include_file( "unistd.h" HAVE_UNISTD_H )
++check_include_file( "wchar.h" HAVE_WCHAR_H )
++check_include_file( "sys/stat.h" HAVE_SYS_STAT_H )
++check_include_file( "sys/time.h" HAVE_SYS_TIME_H )
++check_include_file( "sys/types.h" HAVE_SYS_TYPES_H )
++check_include_file( "sys/mman.h" HAVE_SYS_MMAN_H )
++check_include_file( "process.h" HAVE_PROCESS_H )
++
++check_function_exists( alarm HAVE_ALARM )
++check_function_exists( gmtime_r HAVE_GMTIME_R )
++check_function_exists( iconv HAVE_ICONV )
++check_function_exists( malloc HAVE_MALLOC )
++check_function_exists( memset HAVE_MEMSET )
++check_function_exists( mmap HAVE_MMAP )
++check_function_exists( munmap HAVE_MUNMAP )
++check_function_exists( realloc HAVE_REALLOC )
++check_function_exists( strchr HAVE_STRCHR )
++check_function_exists( strchr_r HAVE_STRCHR_R )
++check_function_exists( strerror HAVE_STRERROR )
++check_function_exists( strerror_r HAVE_STRERROR_R )
++check_function_exists( strtol HAVE_STRTOL )
++check_function_exists( timegm HAVE_TIMEGM )
++check_function_exists( vprintf HAVE_VPRINTF )
++
++message( STATUS "None:              ${CMAKE_CXX_FLAGS}" )
++message( STATUS "Debug:             ${CMAKE_CXX_FLAGS_DEBUG}" )
++message( STATUS "Release:           ${CMAKE_CXX_FLAGS_RELEASE}" )
++message( STATUS "RelWithDebInfo:    ${CMAKE_CXX_FLAGS_RELWITHDEBINFO}" )
++message( STATUS "MinSizeRel:        ${CMAKE_CXX_FLAGS_MINSIZEREL}" )
++
++if( HAVE_STDBOOL_H )
++    check_symbol_exists( "_Bool" stdbool.h HAVE__BOOL )
++endif( HAVE_STDBOOL_H )
++
++# struct tm in sys/time.h
++if( HAVE_SYS_TIME_H )
++    check_c_source_compiles( "#include <sys/time.h>
++int main() {
++struct tm t;
++return 0;
++}" TM_IN_SYS_TIME )
++endif( HAVE_SYS_TIME_H )
++
++# strerror_r returns char*
++check_c_source_compiles( "#include <string.h>
++int main() {
++char * c;
++c = strerror_r(0,c,0);
++return 0;
++}" STRERROR_R_CHAR_P )
++
++#function is declared with the above
++if( STRERROR_R_CHAR_P )
++    set( HAVE_DECL_STRERROR_R 1 )
++endif( STRERROR_R_CHAR_P )
++
++# time.h and sys/time.h can be included in the same file
++check_c_source_compiles( "#include <time.h>
++#include <sys/time.h>
++int main() {
++return 0;
++}" TIME_WITH_SYS_TIME )
++
++# check if the second argument is const char**
++check_c_source_compiles( "#include <iconv.h>
++int main() {
++const char ** in;
++char * out;
++size_t t;
++iconv_t cd;
++iconv (cd, in, &t, &out, &t);
++return 0;
++}" CONST_ICONV )
++
++if( CONST_ICONV )
++    set( EXV_ICONV_CONST "const" )
++else( CONST_ICONV )
++    set( EXV_ICONV_CONST "const" )
++endif( CONST_ICONV )
++
++# for msvc define to int in exv_conf.h
++if( NOT MSVC )
++    set( HAVE_PID_T TRUE )
++endif( NOT MSVC )
++
++set( EXV_SYMBOLS
++HAVE_INTTYPES_H
++HAVE_LIBINTL_H
++HAVE_MALLOC_H
++HAVE_MEMORY_H
++HAVE_ICONV_H
++HAVE_STDBOOL_H
++HAVE_STDINT_H
++HAVE_STDLIB_H
++HAVE_STRING_H
++HAVE_STRINGS_H
++HAVE_UNISTD_H
++HAVE_WCHAR_H
++HAVE_SYS_STAT_H
++HAVE_SYS_TIME_H
++HAVE_SYS_TYPES_H
++HAVE_SYS_MMAN_H
++HAVE_PROCESS_H
++HAVE_ALARM
++HAVE_GMTIME_R
++HAVE_ICONV
++HAVE_MEMSET
++HAVE_MMAP
++HAVE_MUNMAP
++HAVE_REALLOC
++HAVE_STRCHR
++HAVE_STRCHR_R
++HAVE_STRERROR
++HAVE_STRERROR_R
++HAVE_STRTOL
++HAVE_TIMEGM
++HAVE_VPRINTF
++
++HAVE__BOOL
++HAVE_LENSDATA
++EXIV2_ENABLE_NLS
++HAVE_DECL_STRERROR_R
++HAVE_PRINTUCS2
++HAVE_LIBZ
++HAVE_XMP_TOOLKIT
++PACKAGE_BUGREPORT
++PACKAGE
++PACKAGE_NAME
++PACKAGE_STRING
++PACKAGE_TARNAME
++PACKAGE_VERSION
++)
++
++foreach( entry ${EXV_SYMBOLS} )
++    set( EXV_${entry} ${${entry}} )
++endforeach( entry ${EXV_SYMBOLS} )
++
++configure_file( config/config.h.cmake ${CMAKE_BINARY_DIR}/exv_conf.h )
++configure_file( config/exv_msvc.h.cmake ${CMAKE_BINARY_DIR}/exv_msvc.h COPYONLY )
++install( FILES ${CMAKE_BINARY_DIR}/exv_conf.h DESTINATION include/exiv2 )
++install( FILES ${CMAKE_BINARY_DIR}/exv_msvc.h DESTINATION include/exiv2 )
++
++if( NOT MSVC )
++    configure_file( config/exiv2.pc.cmake ${CMAKE_BINARY_DIR}/exiv2.pc )
++    install( FILES ${CMAKE_BINARY_DIR}/exiv2.pc DESTINATION lib/pkgconfig )
++endif( NOT MSVC )
++
++# ******************************************************************************
++# output chosen build options
++macro( OptionOutput _outputstring )
++    if( ${ARGN} )
++        set( _var "YES" )
++    else( ${ARGN} )
++        set( _var "NO" )
++    endif( ${ARGN} )
++    message( STATUS "${_outputstring}${_var}" )
++endmacro( OptionOutput _outputstring )
++
++message( STATUS "-------------------------------------------------------------" )
++OptionOutput( "Building PNG support:            " EXIV2_ENABLE_PNG AND ZLIB_FOUND )
++OptionOutput( "Building shared library:         " EXIV2_ENABLE_SHARED )
++OptionOutput( "XMP metadata support:            " EXIV2_ENABLE_XMP )
++OptionOutput( "Building static libxmp:          " ENABLE_LIBXMP )
++OptionOutput( "Native language support:         " EXIV2_ENABLE_NLS )
++OptionOutput( "Conversion of Windows XP tags:   " EXIV2_ENABLE_PRINTUCS2 )
++OptionOutput( "Nikon lens database:             " EXIV2_ENABLE_LENSDATA )
++OptionOutput( "commercial build:                " EXIV2_ENABLE_COMMERCIAL )
++message( STATUS "-------------------------------------------------------------" )
+diff --git a/config/FindEXPAT.cmake b/config/FindEXPAT.cmake
+new file mode 100644
+index 0000000..ee804e1
+--- /dev/null
++++ b/config/FindEXPAT.cmake
+@@ -0,0 +1,28 @@
++# - Find expat
++# Find the native EXPAT headers and libraries.
++#
++#  EXPAT_INCLUDE_DIRS - where to find expat.h, etc.
++#  EXPAT_LIBRARIES    - List of libraries when using expat.
++#  EXPAT_FOUND        - True if expat found.
++
++# Look for the header file.
++FIND_PATH(EXPAT_INCLUDE_DIR NAMES expat.h)
++
++# Look for the library.
++FIND_LIBRARY(EXPAT_LIBRARY NAMES expat libexpat)
++
++# handle the QUIETLY and REQUIRED arguments and set EXPAT_FOUND to TRUE if 
++# all listed variables are TRUE
++INCLUDE(FindPackageHandleStandardArgs)
++FIND_PACKAGE_HANDLE_STANDARD_ARGS(EXPAT DEFAULT_MSG EXPAT_LIBRARY EXPAT_INCLUDE_DIR)
++
++# Copy the results to the output variables.
++IF(EXPAT_FOUND)
++  SET(EXPAT_LIBRARIES ${EXPAT_LIBRARY})
++  SET(EXPAT_INCLUDE_DIRS ${EXPAT_INCLUDE_DIR})
++ELSE(EXPAT_FOUND)
++  SET(EXPAT_LIBRARIES)
++  SET(EXPAT_INCLUDE_DIRS)
++ENDIF(EXPAT_FOUND)
++
++MARK_AS_ADVANCED(EXPAT_INCLUDE_DIR EXPAT_LIBRARY)
+diff --git a/config/config.h.cmake b/config/config.h.cmake
+new file mode 100644
+index 0000000..bcfb135
+--- /dev/null
++++ b/config/config.h.cmake
+@@ -0,0 +1,247 @@
++/**/
++/* config.h.  Generated by cmake from config.h.cmake.  */
++
++/* Define to 1 if you have the `alarm' function. */
++#cmakedefine EXV_HAVE_ALARM
++
++/* Define to 1 if you have the declaration of `strerror_r', and to 0 if you
++   don't. */
++#cmakedefine EXV_HAVE_DECL_STRERROR_R 1
++
++/* Define to 1 if you have the `gmtime_r' function. */
++#cmakedefine EXV_HAVE_GMTIME_R 1
++
++/* Define to 1 if you have the <inttypes.h> header file. */
++#cmakedefine EXV_HAVE_INTTYPES_H 1
++
++/* Define to 1 if you have the <libintl.h> header file. */
++#cmakedefine EXV_HAVE_LIBINTL_H 1
++
++#ifndef EXV_COMMERCIAL_VERSION
++
++/* Define to 1 to enable translation of Exif.Nikon3.LensData. */
++#cmakedefine EXV_HAVE_LENSDATA 1
++
++/* Define to 1 if translation of program messages to the user's
++   native language is requested. */
++#cmakedefine EXV_ENABLE_NLS 1
++
++/* Define to 1 if you have the `iconv' function. */
++#cmakedefine EXV_HAVE_ICONV 1
++
++/* Define to 1 to enable conversion of UCS2 encoded Windows tags to UTF-8. */
++#cmakedefine EXV_HAVE_PRINTUCS2 1
++
++#endif /* !EXV_COMMERCIAL_VERSION */
++
++/* Define to `const' or to empty, depending on the second argument of `iconv'. */
++#define EXV_ICONV_CONST
++
++/* Define to 1 if you have the <libintl.h> header file. */
++#cmakedefine EXV_HAVE_LIBINTL_H 1
++
++/* Define to 1 if your system has a GNU libc compatible `malloc' function, and
++   to 0 otherwise. */
++#cmakedefine EXV_HAVE_MALLOC 1
++
++/* Define to 1 if you have the <malloc.h> header file. */
++#cmakedefine EXV_HAVE_MALLOC_H 1
++
++/* Define to 1 if you have the <memory.h> header file. */
++#cmakedefine EXV_HAVE_MEMORY_H 1
++
++/* Define to 1 if you have the `memset' function. */
++#cmakedefine EXV_HAVE_MEMSET 1
++
++/* Define to 1 if your system has a GNU libc compatible `realloc' function,
++   and to 0 otherwise. */
++#cmakedefine EXV_HAVE_REALLOC 1
++
++/* Define to 1 if stdbool.h conforms to C99. */
++#cmakedefine EXV_HAVE_STDBOOL_H 1
++
++/* Define to 1 if you have the <stdint.h> header file. */
++#cmakedefine EXV_HAVE_STDINT_H 1
++
++/* Define to 1 if you have the <stdlib.h> header file. */
++#cmakedefine EXV_HAVE_STDLIB_H 1
++
++/* Define to 1 if you have the `strchr' function. */
++#cmakedefine EXV_HAVE_STRCHR 1
++
++/* Define to 1 if you have the `strerror' function. */
++#cmakedefine EXV_HAVE_STRERROR 1
++
++/* Define to 1 if you have the `strerror_r' function. */
++#cmakedefine EXV_HAVE_STRERROR_R 1
++
++/* Define to 1 if you have the <strings.h> header file. */
++#cmakedefine EXV_HAVE_STRINGS_H 1
++
++/* Define to 1 if you have the <string.h> header file. */
++#cmakedefine EXV_HAVE_STRING_H 1
++
++/* Define to 1 if you have the `strtol' function. */
++#cmakedefine EXV_HAVE_STRTOL 1
++
++/* Define to 1 if you have the `mmap' function. */
++#cmakedefine EXV_HAVE_MMAP 1
++
++/* Define to 1 if you have the `munmap' function. */
++#cmakedefine EXV_HAVE_MUNMAP 1
++
++/* Define to 1 if you have the <sys/stat.h> header file. */
++#cmakedefine EXV_HAVE_SYS_STAT_H 1
++
++/* Define to 1 if you have the <sys/time.h> header file. */
++#cmakedefine EXV_HAVE_SYS_TIME_H 1
++
++/* Define to 1 if you have the <sys/types.h> header file. */
++#cmakedefine EXV_HAVE_SYS_TYPES_H 1
++
++/* Define to 1 if you have the `timegm' function. */
++#cmakedefine EXV_HAVE_TIMEGM 1
++
++/* Define to 1 if you have the <unistd.h> header file. */
++#cmakedefine EXV_HAVE_UNISTD_H 1
++
++/* Define to 1 if you have the `vprintf' function. */
++#cmakedefine EXV_HAVE_VPRINTF 1
++
++/* Define to 1 if you have the <wchar.h> header file. */
++#cmakedefine EXV_HAVE_WCHAR_H 1
++
++/* Define to 1 if you have the <sys/mman.h> header file. */
++#cmakedefine EXV_HAVE_SYS_MMAN_H 1
++
++/* Define to 1 if you have the `zlib' library. */
++#cmakedefine EXV_HAVE_LIBZ 1
++
++/* Define to 1 if you have the <process.h> header file. */
++#cmakedefine EXV_HAVE_PROCESS_H 1
++
++/* Define to 1 if you have the Adobe XMP Toolkit. */
++#cmakedefine EXV_HAVE_XMP_TOOLKIT 1
++
++/* Define to 1 if the system has the type `_Bool'. */
++#cmakedefine EXV_HAVE__BOOL 1
++
++/* Define to 1 if `lstat' dereferences a symlink specified with a trailing
++   slash. */
++#cmakedefine EXV_LSTAT_FOLLOWS_SLASHED_SYMLINK 1
++
++/* Define to the address where bug reports for this package should be sent. */
++#cmakedefine EXV_PACKAGE_BUGREPORT "@PACKAGE_BUGREPORT@"
++
++/* Define to the name of this package. */
++#cmakedefine EXV_PACKAGE "@PACKAGE@"
++
++/* Define to the full name of this package. */
++#cmakedefine EXV_PACKAGE_NAME "@PACKAGE_NAME@"
++
++/* Define to the full name and version of this package. */
++#cmakedefine EXV_PACKAGE_STRING "@PACKAGE_STRING@"
++
++/* Define to the one symbol short name of this package. */
++#cmakedefine EXV_PACKAGE_TARNAME "@PACKAGE_TARNAME@"
++
++/* Define to the version of this package. */
++#cmakedefine EXV_PACKAGE_VERSION "@PACKAGE_VERSION@"
++
++/* Define to 1 if you have the ANSI C header files. */
++#cmakedefine STDC_HEADERS 1
++
++/* Define to 1 if strerror_r returns char *. */
++#cmakedefine STRERROR_R_CHAR_P 1
++
++/* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
++#define TIME_WITH_SYS_TIME 1
++
++/* Define to 1 if your <sys/time.h> declares `struct tm'. */
++#cmakedefine TM_IN_SYS_TIME 1
++
++/* Define to empty if `const' does not conform to ANSI C. */
++#cmakedefine const
++
++/* Define to `__inline__' or `__inline' if that's what the C compiler
++   calls it, or to nothing if 'inline' is not supported under any name.  */
++#ifndef __cplusplus
++#cmakedefine inline
++#endif
++
++/* Define to rpl_malloc if the replacement function should be used. */
++#cmakedefine malloc
++
++/* Define to `int' if <sys/types.h> does not define. */
++#cmakedefine HAVE_PID_T 1
++
++/* On Microsoft compilers pid_t has to be set to int. */
++#ifndef HAVE_PID_T
++typedef int pid_t;
++#endif
++
++/* Define to rpl_realloc if the replacement function should be used. */
++#cmakedefine realloc
++
++/* Define to `unsigned' if <sys/types.h> does not define. */
++#cmakedefine size_t
++
++#if defined __CYGWIN32__ && !defined __CYGWIN__
++   /* For backwards compatibility with Cygwin b19 and
++      earlier, we define __CYGWIN__ here, so that
++      we can rely on checking just for that macro. */
++#define __CYGWIN__  __CYGWIN32__
++#endif
++     
++/* File path seperator */
++#if defined WIN32 && !defined __CYGWIN__
++#define EXV_SEPERATOR_STR "\\"
++#define EXV_SEPERATOR_CHR '\\'
++#else
++#define EXV_SEPERATOR_STR "/"
++#define EXV_SEPERATOR_CHR '/'
++#endif
++
++/* Shared library support, see http://gcc.gnu.org/wiki/Visibility */
++#ifdef WIN32
++# define EXV_IMPORT __declspec(dllimport)
++# define EXV_EXPORT __declspec(dllexport)
++# define EXV_DLLLOCAL
++# define EXV_DLLPUBLIC
++#else
++# ifdef EXV_HAVE_GXXCLASSVISIBILITY
++#  define EXV_IMPORT __attribute__ ((visibility("default")))
++#  define EXV_EXPORT __attribute__ ((visibility("default")))
++#  define EXV_DLLLOCAL __attribute__ ((visibility("hidden")))
++#  define EXV_DLLPUBLIC __attribute__ ((visibility("default")))
++# else
++#  define EXV_IMPORT
++#  define EXV_EXPORT
++#  define EXV_DLLLOCAL
++#  define EXV_DLLPUBLIC
++# endif /* ! EXV_HAVE_GXXCLASSVISIBILITY */
++#endif /* ! WIN32 */
++
++/* Define EXIV2API for DLL builds */
++#ifdef EXV_HAVE_DLL
++# ifdef EXV_BUILDING_LIB
++#  define EXIV2API EXV_EXPORT
++# else
++#  define EXIV2API EXV_IMPORT
++# endif /* ! EXV_BUILDING_LIB */
++#else
++# define EXIV2API
++#endif /* ! EXV_HAVE_DLL */
++
++/*
++  Visual Studio C++ 2005 (8.0)
++  Disable warnings about 'deprecated' standard functions
++  See, eg. http://www.informit.com/guides/content.asp?g=cplusplus&seqNum=259
++*/
++#if _MSC_VER >= 1400
++# pragma warning(disable : 4996 4251)
++#endif
++
++#ifndef R_OK
++# define R_OK 4
++#endif
+diff --git a/config/exiv2.pc.cmake b/config/exiv2.pc.cmake
+new file mode 100644
+index 0000000..4d243e6
+--- /dev/null
++++ b/config/exiv2.pc.cmake
+@@ -0,0 +1,10 @@
++prefix=@CMAKE_INSTALL_PREFIX@
++exec_prefix=${prefix}
++libdir=${prefix}/lib
++includedir=${prefix}/include
++
++Name: exiv2
++Description: Exif and IPTC metadata library and tools
++Version: @PACKAGE_VERSION@
++Libs: -L${libdir} -lexiv2 @EXV_LIB_STATIC@
++Cflags: -I${includedir}
+diff --git a/config/exv_msvc.h.cmake b/config/exv_msvc.h.cmake
+new file mode 100644
+index 0000000..f2fa241
+--- /dev/null
++++ b/config/exv_msvc.h.cmake
+@@ -0,0 +1,5 @@
++/*
++This file redirects to the configuration header file generated by cmake.
++*/
++
++#include "exv_conf.h"
+diff --git a/samples/CMakeLists.txt b/samples/CMakeLists.txt
+new file mode 100644
+index 0000000..ed29935
+--- /dev/null
++++ b/samples/CMakeLists.txt
+@@ -0,0 +1,59 @@
++# CMake build system for exiv2 library and executables
++# Copyright 2008 by Patrick Spendrin <ps_ml@gmx.de>
++#
++# Redistribution and use in source and binary forms, with or without
++# modification, are permitted provided that the following conditions
++# are met:
++#
++#    1. Redistributions of source code must retain the above copyright
++#       notice, this list of conditions and the following disclaimer.
++#    2. Redistributions in binary form must reproduce the above
++#       copyright notice, this list of conditions and the following
++#       disclaimer in the documentation and/or other materials provided
++#       with the distribution.
++#    3. The name of the author may not be used to endorse or promote
++#       products derived from this software without specific prior
++#       written permission.
++#
++# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
++# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
++# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++# ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
++# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
++# GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
++# IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
++# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
++# IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++
++
++set( SAMPLES    addmoddel.cpp
++                convert-test.cpp
++                easyaccess-test.cpp
++                exifcomment.cpp
++                exifdata-test.cpp
++                exifprint.cpp
++                iotest.cpp
++                iptceasy.cpp
++                iptcprint.cpp
++                iptctest.cpp
++                key-test.cpp
++                largeiptc-test.cpp
++                mmap-test.cpp
++                prevtest.cpp 
++                stringto-test.cpp
++                tiff-test.cpp
++                werror-test.cpp
++                write-test.cpp
++                write2-test.cpp
++                xmpparse.cpp
++                xmpparser-test.cpp
++                xmpsample.cpp )
++
++foreach(entry ${SAMPLES})
++STRING( REPLACE ".cpp" "" target ${entry})
++add_executable( ${target} ${target}.cpp )
++add_test( ${target}_test ${target} )
++target_link_libraries(${target} exiv2 )
++endforeach(entry ${SAMPLES})
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+new file mode 100644
+index 0000000..01314ea
+--- /dev/null
++++ b/src/CMakeLists.txt
+@@ -0,0 +1,227 @@
++# CMake build system for exiv2 library and executables
++# Copyright 2008 by Patrick Spendrin <ps_ml@gmx.de>
++#
++# Redistribution and use in source and binary forms, with or without
++# modification, are permitted provided that the following conditions
++# are met:
++#
++#    1. Redistributions of source code must retain the above copyright
++#       notice, this list of conditions and the following disclaimer.
++#    2. Redistributions in binary form must reproduce the above
++#       copyright notice, this list of conditions and the following
++#       disclaimer in the documentation and/or other materials provided
++#       with the distribution.
++#    3. The name of the author may not be used to endorse or promote
++#       products derived from this software without specific prior
++#       written permission.
++#
++# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
++# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
++# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++# ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
++# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
++# GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
++# IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
++# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
++# IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++#
++# Private headers which are only needed for the library itself
++set( LIBEXIV2_PRIVATE_HDR   canonmn_int.hpp
++                            cr2image_int.hpp
++                            crwimage_int.hpp
++                            fujimn_int.hpp
++                            makernote_int.hpp
++                            minoltamn_int.hpp
++                            nikonmn_int.hpp
++                            olympusmn_int.hpp
++                            orfimage_int.hpp
++                            panasonicmn_int.hpp
++                            pentaxmn_int.hpp
++                            pngchunk_int.hpp
++                            rcsid_int.hpp
++                            rw2image_int.hpp
++                            samsungmn_int.hpp
++                            sigmamn_int.hpp
++                            sonymn_int.hpp
++                            tags_int.hpp
++                            tiffcomposite_int.hpp
++                            tifffwd_int.hpp
++                            tiffimage_int.hpp
++                            tiffvisitor_int.hpp
++)
++# Add standalone C++ header files to this list
++set( LIBEXIV2_HDR   basicio.hpp
++                    bmpimage.hpp
++                    convert.hpp
++                    cr2image.hpp
++                    crwimage.hpp
++                    datasets.hpp
++                    easyaccess.hpp
++                    epsimage.hpp
++                    error.hpp
++                    exif.hpp
++                    exiv2.hpp
++                    futils.hpp
++                    gifimage.hpp
++                    image.hpp
++                    iptc.hpp
++                    jp2image.hpp
++                    jpgimage.hpp
++                    metadatum.hpp
++                    mrwimage.hpp
++                    orfimage.hpp
++                    pgfimage.hpp
++                    preview.hpp
++                    properties.hpp
++                    psdimage.hpp
++                    rafimage.hpp
++                    rw2image.hpp
++                    tags.hpp
++                    tgaimage.hpp
++                    tiffimage.hpp
++                    types.hpp
++                    value.hpp
++                    version.hpp
++                    xmp.hpp
++                    xmpsidecar.hpp )
++
++# Add library C++ source files to this list
++set( LIBEXIV2_SRC   basicio.cpp
++                    bmpimage.cpp
++                    canonmn.cpp
++                    convert.cpp
++                    cr2image.cpp
++                    crwedit.cpp
++                    crwimage.cpp
++                    datasets.cpp
++                    easyaccess.cpp
++                    epsimage.cpp
++                    error.cpp
++                    exif.cpp
++                    futils.cpp
++                    fujimn.cpp
++                    gifimage.cpp
++                    image.cpp
++                    iptc.cpp
++                    jp2image.cpp
++                    jpgimage.cpp
++                    makernote.cpp
++                    metadatum.cpp
++                    minoltamn.cpp
++                    mrwimage.cpp
++                    nikonmn.cpp
++                    olympusmn.cpp
++                    orfimage.cpp
++                    pentaxmn.cpp
++                    panasonicmn.cpp
++                    pgfimage.cpp
++                    preview.cpp
++                    properties.cpp
++                    psdimage.cpp
++                    rafimage.cpp
++                    rw2image.cpp
++                    samsungmn.cpp
++                    sigmamn.cpp
++                    sonymn.cpp
++                    tags.cpp
++                    tgaimage.cpp
++                    tiffcomposite.cpp
++                    tiffimage.cpp
++                    tiffvisitor.cpp
++                    types.cpp
++                    value.cpp
++                    version.cpp
++                    xmp.cpp
++                    xmpsidecar.cpp )
++#                   crwparse.cpp
++#                   tiffparse.cpp
++
++# Add source files of simple applications to this list
++set( TAGLIST_SRC    taglist.cpp )
++
++# Source files for the Exiv2 application
++set( EXIV2_SRC      exiv2.cpp
++                    actions.cpp
++                    utils.cpp )
++
++# Source files for the metacopy sample application
++set( MC_SRC         metacopy.cpp
++                    utils.cpp )
++
++if( EXIV2_ENABLE_PNG )
++    if( ZLIB_FOUND )
++        set( LIBEXIV2_SRC ${LIBEXIV2_SRC}   pngchunk.cpp
++                                            pngimage.cpp )
++        set( LIBEXIV2_HDR ${LIBEXIV2_HDR}   pngimage.hpp )
++    endif( ZLIB_FOUND )
++endif( EXIV2_ENABLE_PNG )
++
++if(NOT HAVE_TIMEGM )
++    set( LIBEXIV2_SRC   ${LIBEXIV2_SRC} localtime.c )
++    set( EXIV2_SRC      ${EXIV2_SRC}    localtime.c )
++endif( NOT HAVE_TIMEGM )
++
++if( MSVC )
++    set( MC_SRC         ${MC_SRC}       getopt_win32.c )
++    set( EXIV2_SRC      ${EXIV2_SRC}    getopt_win32.c )
++    set( LIBEXIV2_SRC   ${LIBEXIV2_SRC} getopt_win32.c )
++endif( MSVC )
++
++
++if( EXIV2_ENABLE_XMP )
++    if( NOT EXIV2_ENABLE_LIBXMP )
++        set( LIBEXIV2_SRC ${XMPSRC} ${LIBEXIV2_SRC} )
++    endif( NOT EXIV2_ENABLE_LIBXMP )
++endif( EXIV2_ENABLE_XMP )
++
++# ******************************************************************************
++# Library
++add_library( exiv2 ${STATIC_FLAG} ${LIBEXIV2_SRC} )
++set_target_properties( exiv2 PROPERTIES VERSION ${GENERIC_LIB_VERSION} 
++                                        SOVERSION ${GENERIC_LIB_SOVERSION}
++                                        DEFINE_SYMBOL EXV_BUILDING_LIB )
++
++if( EXIV2_ENABLE_LIBXMP )
++    target_link_libraries( exiv2 ${XMPLIB} )
++endif( EXIV2_ENABLE_LIBXMP )
++target_link_libraries( exiv2 ${EXPAT_LIBRARIES} )
++if( EXIV2_ENABLE_PNG )
++    if( ZLIB_FOUND )
++        target_link_libraries( exiv2 ${ZLIB_LIBRARIES} )
++    endif( ZLIB_FOUND )
++endif( EXIV2_ENABLE_PNG )
++if( EXIV2_ENABLE_NLS )
++    target_link_libraries( exiv2 ${LIBINTL_LIBRARIES} )
++endif( EXIV2_ENABLE_NLS )
++
++install( TARGETS exiv2 ${INSTALL_TARGET_STANDARD_ARGS} )
++
++# ******************************************************************************
++# Binary
++add_executable( exiv2bin ${EXIV2_SRC} )
++set_target_properties( exiv2bin PROPERTIES RUNTIME_OUTPUT_NAME exiv2 )
++target_link_libraries( exiv2bin exiv2 )
++install( TARGETS exiv2bin ${INSTALL_TARGET_STANDARD_ARGS} )
++
++# ******************************************************************************
++# Binary
++add_executable( metacopy ${MC_SRC} )
++target_link_libraries( metacopy exiv2 )
++install( TARGETS metacopy ${INSTALL_TARGET_STANDARD_ARGS} )
++
++
++# ******************************************************************************
++# Binary
++add_executable( taglist ${TAGLIST_SRC} )
++target_link_libraries( taglist exiv2 )
++install( TARGETS taglist ${INSTALL_TARGET_STANDARD_ARGS} )
++
++# ******************************************************************************
++# Headers
++install( FILES ${LIBEXIV2_HDR} DESTINATION include/exiv2 )
++
++# ******************************************************************************
++# Man page
++install( FILES exiv2.1 DESTINATION man/man1 )
+diff --git a/src/localtime.c b/src/localtime.c
+index 04bde66..f521cc1 100644
+--- a/src/localtime.c
++++ b/src/localtime.c
+@@ -11,6 +11,7 @@
+ #endif
+ 
+ #include "timegm.h"
++#include "time.h"
+ 
+ /*
+ ** This file is in the public domain, so clarified as of
+@@ -935,7 +936,7 @@ struct tm * const	tmp;
+ 	*/
+ 	timesub(&t, ttisp->tt_gmtoff, sp, tmp);
+ 	tmp->tm_isdst = ttisp->tt_isdst;
+-	tzname[tmp->tm_isdst] = &sp->chars[ttisp->tt_abbrind];
++	//tzname[tmp->tm_isdst] = &sp->chars[ttisp->tt_abbrind];
+ #ifdef TM_ZONE
+ 	tmp->TM_ZONE = &sp->chars[ttisp->tt_abbrind];
+ #endif /* defined TM_ZONE */
+diff --git a/src/types.hpp b/src/types.hpp
+index 5addff4..a896f9b 100644
+--- a/src/types.hpp
++++ b/src/types.hpp
+@@ -58,16 +58,40 @@
+ #endif
+ 
+ // MSVC doesn't provide C99 types, but it has MS specific variants
+-#ifdef _MSC_VER
++#if defined(_MSC_VER) && _MSC_VER < 1600
++#if !defined(HAVE_UINT8_T)
++#define HAVE_UINT8_T
+ typedef unsigned __int8  uint8_t;
++#endif
++#if !defined(HAVE_UINT16_T)
++#define HAVE_UINT16_T
+ typedef unsigned __int16 uint16_t;
++#endif
++#if !defined(HAVE_UINT32_T)
++#define HAVE_UINT32_T
+ typedef unsigned __int32 uint32_t;
++#endif
++#if !defined(HAVE_UINT64_T)
++#define HAVE_UINT64_T
+ typedef unsigned __int64 uint64_t;
++#endif
++#if !defined(HAVE_INT8_T)
++#define HAVE_INT8_T
+ typedef __int8           int8_t;
++#endif
++#if !defined(HAVE_INT16_T)
++#define HAVE_INT16_T
+ typedef __int16          int16_t;
++#endif
++#if !defined(HAVE_INT32_T)
++#define HAVE_INT32_T
+ typedef __int32          int32_t;
++#endif
++#if !defined(HAVE_INT64_T)
++#define HAVE_INT64_T
+ typedef __int64          int64_t;
+ #endif
++#endif
+ 
+ /*!
+   @brief Macro to make calls to member functions through a pointer more readable.
+diff --git a/src/value.cpp b/src/value.cpp
+index 1d21aca..d74f2c4 100644
+--- a/src/value.cpp
++++ b/src/value.cpp
+@@ -581,6 +581,10 @@ namespace Exiv2 {
+     {
+     }
+ 
++    XmpValue::~XmpValue()
++    {
++    }
++
+     XmpValue& XmpValue::operator=(const XmpValue& rhs)
+     {
+         if (this == &rhs) return *this;
+@@ -657,6 +661,10 @@ namespace Exiv2 {
+         read(buf);
+     }
+ 
++    XmpTextValue::~XmpTextValue()
++    {
++    }
++
+     int XmpTextValue::read(const std::string& buf)
+     {
+         // support a type=Alt,Bag,Seq,Struct indicator
+@@ -756,6 +764,10 @@ namespace Exiv2 {
+         setXmpArrayType(xmpArrayType(typeId));
+     }
+ 
++    XmpArrayValue::~XmpArrayValue()
++    {
++    }
++
+     int XmpArrayValue::read(const std::string& buf)
+     {
+         value_.push_back(buf);
+@@ -819,6 +831,10 @@ namespace Exiv2 {
+         read(buf);
+     }
+ 
++    LangAltValue::~LangAltValue()
++    {
++    }
++
+     int LangAltValue::read(const std::string& buf)
+     {
+         std::string b = buf;
+diff --git a/src/value.hpp b/src/value.hpp
+index 543790b..d0f8157 100644
+--- a/src/value.hpp
++++ b/src/value.hpp
+@@ -649,7 +649,10 @@ namespace Exiv2 {
+ 
+         //! @name Creators
+         //@{
++        //! Constructor
+         explicit XmpValue(TypeId typeId);
++        //! Virtual destructor.
++        virtual ~XmpValue();
+         //@}
+ 
+         //! @name Accessors
+@@ -739,6 +742,8 @@ namespace Exiv2 {
+         XmpTextValue();
+         //! Constructor, reads the value from a string.
+         explicit XmpTextValue(const std::string& buf);
++        //! Virtual destructor.
++        virtual ~XmpTextValue();
+         //@}
+ 
+         //! @name Manipulators
+@@ -819,6 +824,8 @@ namespace Exiv2 {
+         //@{
+         //! Constructor. \em typeId can be one of xmpBag, xmpSeq or xmpAlt.
+         explicit XmpArrayValue(TypeId typeId =xmpBag);
++        //! Virtual destructor.
++        virtual ~XmpArrayValue();
+         //@}
+ 
+         //! @name Manipulators
+@@ -888,6 +895,8 @@ namespace Exiv2 {
+         LangAltValue();
+         //! Constructor, reads the value from a string.
+         explicit LangAltValue(const std::string& buf);
++        //! Virtual destructor.
++        virtual ~LangAltValue();
+         //@}
+ 
+         //! @name Manipulators
+diff --git a/xmpsdk/CMakeLists.txt b/xmpsdk/CMakeLists.txt
+new file mode 100644
+index 0000000..691608a
+--- /dev/null
++++ b/xmpsdk/CMakeLists.txt
+@@ -0,0 +1,36 @@
++# CMake build system for exiv2 library and executables
++# Copyright 2008 by Patrick Spendrin <ps_ml@gmx.de>
++#
++# Redistribution and use in source and binary forms, with or without
++# modification, are permitted provided that the following conditions
++# are met:
++#
++#    1. Redistributions of source code must retain the above copyright
++#       notice, this list of conditions and the following disclaimer.
++#    2. Redistributions in binary form must reproduce the above
++#       copyright notice, this list of conditions and the following
++#       disclaimer in the documentation and/or other materials provided
++#       with the distribution.
++#    3. The name of the author may not be used to endorse or promote
++#       products derived from this software without specific prior
++#       written permission.
++#
++# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
++# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
++# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++# ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
++# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
++# GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
++# IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
++# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
++# IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++
++if( EXIV2_ENABLE_XMP AND EXIV2_ENABLE_LIBXMP )
++    add_library( xmp STATIC ${XMPSRC} )
++    get_target_property( XMPLIB xmp LOCATION )
++    set( XMPLIB ${XMPLIB} PARENT_SCOPE )
++    
++    install(TARGETS xmp ${INSTALL_TARGET_STANDARD_ARGS} )
++endif( EXIV2_ENABLE_XMP AND EXIV2_ENABLE_LIBXMP )

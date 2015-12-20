@@ -1,0 +1,1420 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+new file mode 100644
+index 0000000..f4ef285
+--- /dev/null
++++ b/CMakeLists.txt
+@@ -0,0 +1,45 @@
++project(libtiff)
++
++cmake_minimum_required(VERSION 2.6)
++
++option(BUILD_TOOLS "build the tools" OFF)
++option(BUILD_TESTS "build the tests" OFF)
++
++if(BUILD_TESTS)
++    enable_testing()
++endif(BUILD_TESTS)
++
++include_directories(
++    ${CMAKE_SOURCE_DIR}/libtiff 
++    ${CMAKE_SOURCE_DIR}/port 
++    ${CMAKE_BINARY_DIR}
++    ${CMAKE_BINARY_DIR}/libtiff
++)
++
++include(ConfigureChecks.cmake)
++
++if(MSVC)
++    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
++    add_definitions(-D_CRT_SECURE_NO_DEPRECATE)
++    if(NOT MSVC60)
++        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4996")
++        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4996")
++    endif(NOT MSVC60)
++endif(MSVC)
++
++include_directories(
++    ${CMAKE_SOURCE_DIR}/libtiff 
++    ${CMAKE_BINARY_DIR}
++    ${CMAKE_BINARY_DIR}/libtiff
++)
++
++add_subdirectory(libtiff)
++add_subdirectory(man)
++if(BUILD_TOOLS)
++    add_subdirectory(port)
++    add_subdirectory(tools)
++endif(BUILD_TOOLS)
++
++if(BUILD_TESTS)
++    add_subdirectory(tests)
++endif(BUILD_TESTS)
+diff --git a/ConfigureChecks.cmake b/ConfigureChecks.cmake
+new file mode 100644
+index 0000000..ee25058
+--- /dev/null
++++ b/ConfigureChecks.cmake
+@@ -0,0 +1,181 @@
++# configure checks.
++find_package(OpenGL)
++
++include_directories(${CMAKE_BINARY_DIR})
++
++# options
++if(APPLE)
++    set(AC_APPLE_UNIVERSAL_BUILD 1)
++endif(APPLE)
++
++option(CCITT_SUPPORT "CCITT Group 3 & 4 algorithms" ON)
++option(LOGLUV_SUPPORT "LogLuv high dynamic range encoding" ON)
++option(CXX_SUPPORT "C++ stream API (requires C++ compiler)" OFF)
++option(LZW_SUPPORT "LZW algorithm" ON)
++option(JBIG_SUPPORT "ISO JBIG compression (requires JBIG-KIT library)" OFF)
++option(MDI_SUPPORT "Microsoft Document Imaging format" OFF)
++option(NEXT_SUPPORT "NeXT 2-bit RLE algorithm" ON)
++option(SUBIFD_SUPPORT "SubIFD tag (330) support" ON)
++option(THUNDER_SUPPORT "ThunderScan 4-bit RLE algorithm" ON)
++option(OJPEG_SUPPORT "Old JPEG compresson (read-only)" OFF)
++option(PACKBITS_SUPPORT "Macintosh PackBits algorithm" ON)
++
++option(CHECK_JPEG_YCBCR_SUBSAMPLING 1)
++option(DEFAULT_EXTRASAMPLE_AS_ALPHA "Treat extra sample as alpha" ON)
++
++
++if(WIN32)
++    set(X_DISPLAY_MISSING 1)
++else(WIN32)
++    set(STDC_HEADERS 1)
++    set(HAVE_LIBC 1)
++    set(HAVE_LIBM 1)
++    set(HAVE_PTHREAD 1)
++endif(WIN32)
++
++if(NOT WINCE)
++    set(HAVE_IEEEFP 1)
++endif(NOT WINCE)
++
++if(MSVC)
++    set(inline "__inline")
++else(MSVC)
++    set(inline "inline")
++endif(MSVC)
++
++include(CheckIncludeFiles)
++include(CheckFunctionExists)
++include(CheckLibraryExists)
++include(CheckSymbolExists)
++include(CheckTypeSize)
++include(TestBigEndian)
++
++test_big_endian(HOST_BIGENDIAN)
++
++if(HOST_BIGENDIAN)
++    set(HOST_FILLORDER "FILLORDER_MSB2LSB")
++else(HOST_BIGENDIAN)
++    set(HOST_FILLORDER "FILLORDER_LSB2MSB")
++endif(HOST_BIGENDIAN)
++
++
++
++check_include_files("assert.h" HAVE_ASSERT_H)
++check_include_files("dlfcn.h" HAVE_DLFCN_H)
++check_include_files("fcntl.h" HAVE_FCNTL_H)
++check_include_files("inttypes.h" HAVE_INTTYPES_H)
++check_include_files("io.h" HAVE_IO_H)
++check_include_files("limits.h" HAVE_LIMITS_H)
++check_include_files("malloc.h" HAVE_MALLOC_H)
++check_include_files("memory.h" HAVE_MEMORY_H)
++check_include_files("search.h" HAVE_SEARCH_H)
++check_include_files("stdint.h" HAVE_STDINT_H)
++check_include_files("stdlib.h" HAVE_STDLIB_H)
++check_include_files("strings.h" HAVE_STRINGS_H)
++check_include_files("string.h" HAVE_STRING_H)
++check_include_files("sys/stat.h" HAVE_SYS_STAT_H)
++check_include_files("sys/time.h" HAVE_SYS_TIME_H)
++check_include_files("sys/types.h" HAVE_SYS_TYPES_H)
++check_include_files("unistd.h" HAVE_UNISTD_H)
++check_include_files("windows.h" HAVE_WINDOWS_H)
++
++check_function_exists("floor" HAVE_FLOOR)
++check_function_exists("getopt" HAVE_GETOPT)
++check_function_exists("isascii" HAVE_ISASCII)
++check_function_exists("jbg_newlen" HAVE_JBG_NEWLEN)
++check_function_exists("lfind" HAVE_LFIND)
++check_function_exists("memmove" HAVE_MEMMOVE)
++check_function_exists("memset" HAVE_MEMSET)
++check_function_exists("mmap" HAVE_MMAP)
++check_function_exists("pow" HAVE_POW)
++check_function_exists("setmode" HAVE_SETMODE)
++check_function_exists("sqrt" HAVE_SQRT)
++check_function_exists("strcasecmp" HAVE_STRCASECMP)
++check_function_exists("strchr" HAVE_STRCHR)
++check_function_exists("strrchr" HAVE_STRRCHR)
++check_function_exists("strstr" HAVE_STRSTR)
++check_function_exists("strtol" HAVE_STRTOL)
++check_function_exists("strtoul" HAVE_STRTOUL)
++
++check_symbol_exists("int8" "stdint.h" HAVE_INT8)
++check_symbol_exists("int16" "stdint.h" HAVE_INT16)
++check_symbol_exists("int32" "stdint.h" HAVE_INT32)
++
++
++set(PACKAGE "tiff")
++set(PACKAGE_BUGREPORT "kde-windows@kde.org")
++set(PACKAGE_NAME "LibTIFF Software")
++set(PACKAGE_STRING "LibTIFF Software 4.0.3")
++set(PACKAGE_TARNAME "tiff")
++set(PACKAGE_URL "http://www.libtiff.org/")
++set(PACKAGE_VERSION "4.0.3")
++set(VERSION "4.0.3")
++
++
++find_package(JPEG)
++find_package(ZLIB)
++
++if(HAVE_JPEG)
++    include_directories(${JPEG_INCLUDE_DIR})
++    option(JPEG_SUPPORT "JPEG compression" ON)
++endif(HAVE_JPEG)
++
++if(ZLIB_FOUND)
++    include_directories(${ZLIB_INCLUDE_DIR})
++    option(PIXARLOG_SUPPORT "Deflate compression" ON)
++    option(ZIP_SUPPORT "Pixar log-format algorithm" ON)
++endif(ZLIB_FOUND)
++
++CHECK_TYPE_SIZE("int" SIZEOF_INT)
++CHECK_TYPE_SIZE("long" SIZEOF_LONG)
++CHECK_TYPE_SIZE("signed long" SIZEOF_SIGNED_LONG)
++CHECK_TYPE_SIZE("signed long long" SIZEOF_SIGNED_LONG_LONG)
++CHECK_TYPE_SIZE("unsigned long" SIZEOF_UNSIGNED_LONG)
++CHECK_TYPE_SIZE("unsigned long long" SIZEOF_UNSIGNED_LONG_LONG)
++
++set(STRIPCHOP_DEFAULT "TIFF_STRIPCHOP")
++
++if(STRIPCHOP_DEFAULT AND NOT WIN32)
++    set(STRIP_SIZE_DEFAULT 8192)
++endif(STRIPCHOP_DEFAULT AND NOT WIN32)
++
++if(WIN32)
++    set(TIFF_INT64_FORMAT "\"%I64d\"")
++    set(TIFF_INT64_T "signed __int64")
++    set(TIFF_UINT64_FORMAT "\"%I64u\"")
++    set(TIFF_UINT64_T "unsigned __int64")
++endif(WIN32)
++
++check_symbol_exists("tm" "sys/time.h" TM_IN_SYS_TIME)
++
++check_symbol_exists("off_t" "sys/types.h" HAVE_OFF_T)
++if(NOT HAVE_OFF_T)
++    set(OFF_T "long int")
++endif(NOT HAVE_OFF_T)
++
++check_symbol_exists("size_t" "sys/types.h" HAVE_SIZE_T)
++if(NOT HAVE_SIZE_T)
++    set(SIZE_T "unsigned int")
++endif(NOT HAVE_SIZE_T)
++
++#***************************************************************************************
++# still to fix later
++#/* Define to necessary symbol if this constant uses a non-standard name on
++#   your system. */
++#cmakedefine PTHREAD_CREATE_JOINABLE
++
++#/* Define to 1 if your C compiler doesn't accept -c and -o together. */
++#cmakedefine NO_MINUS_C_MINUS_O
++
++#/* Number of bits in a file offset, on hosts where this is settable. */
++#cmakedefine _FILE_OFFSET_BITS
++
++#/* Define for large files, on AIX-style hosts. */
++#cmakedefine _LARGE_FILES
++#***************************************************************************************
++
++configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libtiff/tif_config.vc.h ${CMAKE_CURRENT_BINARY_DIR}/tif_config.h @COPYONLY)
++configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libtiff/tiffconf.vc.h ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.h @COPYONLY)
++#configure_file(${CMAKE_SOURCE_DIR}/libtiff/tif_config.h.cmake ${CMAKE_BINARY_DIR}/tif_config.h)
++#configure_file(${CMAKE_SOURCE_DIR}/libtiff/tiffconf.h.cmake ${CMAKE_BINARY_DIR}/tiffconf.h)
++
+diff --git a/libtiff/CMakeLists.txt b/libtiff/CMakeLists.txt
+new file mode 100644
+index 0000000..6d27cb9
+--- /dev/null
++++ b/libtiff/CMakeLists.txt
+@@ -0,0 +1,63 @@
++set(tiff_SRCS
++    tif_aux.c
++    tif_close.c
++    tif_codec.c
++    tif_color.c
++    tif_compress.c
++    tif_dir.c
++    tif_dirinfo.c
++    tif_dirread.c
++    tif_dirwrite.c
++    tif_dumpmode.c
++    tif_error.c
++    tif_extension.c
++    tif_fax3.c
++    tif_fax3sm.c
++    tif_flush.c
++    tif_getimage.c
++    tif_jbig.c
++    tif_jpeg.c
++    tif_jpeg_12.c
++    tif_luv.c
++    tif_lzma.c
++    tif_lzw.c
++    tif_next.c
++    tif_ojpeg.c
++    tif_open.c
++    tif_packbits.c
++    tif_pixarlog.c
++    tif_predict.c
++    tif_print.c
++    tif_read.c
++    tif_strip.c
++    tif_swab.c
++    tif_thunder.c
++    tif_tile.c
++    tif_version.c
++    tif_warning.c
++    tif_write.c
++    tif_zip.c
++)
++
++if(WIN32)
++    set(tiff_SRCS ${tiff_SRCS} tif_win32.c libtiff.def)
++else(WIN32)
++    set(tiff_SRCS ${tiff_SRCS} tif_unix.c)
++endif(WIN32)
++
++add_library(tiff SHARED ${tiff_SRCS})
++set_target_properties(tiff PROPERTIES OUTPUT_NAME "tiff3")
++
++if(JPEG_FOUND)
++    target_link_libraries(tiff ${JPEG_LIBRARIES})
++endif(JPEG_FOUND)
++
++if(ZLIB_FOUND)
++    target_link_libraries(tiff ${ZLIB_LIBRARY})
++endif(ZLIB_FOUND)
++
++install(TARGETS tiff RUNTIME DESTINATION bin
++                     LIBRARY DESTINATION lib
++                     ARCHIVE DESTINATION lib)
++                     
++install(FILES tiffvers.h tiff.h ${CMAKE_BINARY_DIR}/tiffconf.h tiffio.h DESTINATION include)
+\ No newline at end of file
+diff --git a/libtiff/tif_config.h.cmake b/libtiff/tif_config.h.cmake
+new file mode 100644
+index 0000000..d3e8f98
+--- /dev/null
++++ b/libtiff/tif_config.h.cmake
+@@ -0,0 +1,320 @@
++/* libtiff/tif_config.h.in.  Generated from configure.ac by autoheader.  */
++#ifndef TIF_CONFIG_H
++#define TIF_CONFIG_H
++
++/* Define if building universal (internal helper macro) */
++#cmakedefine AC_APPLE_UNIVERSAL_BUILD
++
++/* Support CCITT Group 3 & 4 algorithms */
++#cmakedefine CCITT_SUPPORT
++
++/* Pick up YCbCr subsampling info from the JPEG data stream to support files
++   lacking the tag (default enabled). */
++#cmakedefine CHECK_JPEG_YCBCR_SUBSAMPLING
++
++/* Support C++ stream API (requires C++ compiler) */
++#cmakedefine CXX_SUPPORT
++
++/* Treat extra sample as alpha (default enabled). The RGBA interface will
++   treat a fourth sample with no EXTRASAMPLE_ value as being ASSOCALPHA. Many
++   packages produce RGBA files but don't mark the alpha properly. */
++#cmakedefine DEFAULT_EXTRASAMPLE_AS_ALPHA
++
++/* Use the Apple OpenGL framework. */
++#cmakedefine HAVE_APPLE_OPENGL_FRAMEWORK
++
++/* Define to 1 if you have the <assert.h> header file. */
++#cmakedefine HAVE_ASSERT_H
++
++/* Define to 1 if you have the <dlfcn.h> header file. */
++#cmakedefine HAVE_DLFCN_H
++
++/* Define to 1 if you have the <fcntl.h> header file. */
++#cmakedefine HAVE_FCNTL_H @HAVE_FCNTL_H@
++
++/* Define to 1 if you have the `floor' function. */
++#cmakedefine HAVE_FLOOR
++
++/* Define to 1 if you have the `getopt' function. */
++#cmakedefine HAVE_GETOPT
++
++/* Define as 0 or 1 according to the floating point format suported by the
++   machine */
++#cmakedefine HAVE_IEEEFP
++
++/* Define to 1 if the system has the type `int16'. */
++#cmakedefine HAVE_INT16
++
++/* Define to 1 if the system has the type `int32'. */
++#cmakedefine HAVE_INT32
++
++/* Define to 1 if the system has the type `int8'. */
++#cmakedefine HAVE_INT8
++
++/* Define to 1 if you have the <inttypes.h> header file. */
++#cmakedefine HAVE_INTTYPES_H
++
++/* Define to 1 if you have the <io.h> header file. */
++#cmakedefine HAVE_IO_H @HAVE_IO_H@
++
++/* Define to 1 if you have the `isascii' function. */
++#cmakedefine HAVE_ISASCII
++
++/* Define to 1 if you have the `jbg_newlen' function. */
++#cmakedefine HAVE_JBG_NEWLEN
++
++/* Define to 1 if you have the `lfind' function. */
++#cmakedefine HAVE_LFIND
++
++/* Define to 1 if you have the `c' library (-lc). */
++#cmakedefine HAVE_LIBC
++
++/* Define to 1 if you have the `m' library (-lm). */
++#cmakedefine HAVE_LIBM
++
++/* Define to 1 if you have the <limits.h> header file. */
++#cmakedefine HAVE_LIMITS_H
++
++/* Define to 1 if you have the <malloc.h> header file. */
++#cmakedefine HAVE_MALLOC_H
++
++/* Define to 1 if you have the `memmove' function. */
++#cmakedefine HAVE_MEMMOVE
++
++/* Define to 1 if you have the <memory.h> header file. */
++#cmakedefine HAVE_MEMORY_H
++
++/* Define to 1 if you have the `memset' function. */
++#cmakedefine HAVE_MEMSET
++
++/* Define to 1 if you have the `mmap' function. */
++#cmakedefine HAVE_MMAP
++
++/* Define to 1 if you have the `pow' function. */
++#cmakedefine HAVE_POW
++
++/* Define if you have POSIX threads libraries and header files. */
++#cmakedefine HAVE_PTHREAD
++
++/* Define to 1 if you have the <search.h> header file. */
++#cmakedefine HAVE_SEARCH_H
++
++/* Define to 1 if you have the `setmode' function. */
++#cmakedefine HAVE_SETMODE
++
++/* Define to 1 if you have the `sqrt' function. */
++#cmakedefine HAVE_SQRT
++
++/* Define to 1 if you have the <stdint.h> header file. */
++#cmakedefine HAVE_STDINT_H
++
++/* Define to 1 if you have the <stdlib.h> header file. */
++#cmakedefine HAVE_STDLIB_H
++
++/* Define to 1 if you have the `strcasecmp' function. */
++#cmakedefine HAVE_STRCASECMP
++
++/* Define to 1 if you have the `strchr' function. */
++#cmakedefine HAVE_STRCHR
++
++/* Define to 1 if you have the <strings.h> header file. */
++#cmakedefine HAVE_STRINGS_H
++
++/* Define to 1 if you have the <string.h> header file. */
++#cmakedefine HAVE_STRING_H
++
++/* Define to 1 if you have the `strrchr' function. */
++#cmakedefine HAVE_STRRCHR
++
++/* Define to 1 if you have the `strstr' function. */
++#cmakedefine HAVE_STRSTR
++
++/* Define to 1 if you have the `strtol' function. */
++#cmakedefine HAVE_STRTOL
++
++/* Define to 1 if you have the `strtoul' function. */
++#cmakedefine HAVE_STRTOUL
++
++/* Define to 1 if you have the <sys/stat.h> header file. */
++#cmakedefine HAVE_SYS_STAT_H
++
++/* Define to 1 if you have the <sys/time.h> header file. */
++#cmakedefine HAVE_SYS_TIME_H
++
++/* Define to 1 if you have the <sys/types.h> header file. */
++#cmakedefine HAVE_SYS_TYPES_H @HAVE_SYS_TYPES_H@
++
++/* Define to 1 if you have the <unistd.h> header file. */
++#cmakedefine HAVE_UNISTD_H 1
++
++/* Define to 1 if you have the <windows.h> header file. */
++#cmakedefine HAVE_WINDOWS_H
++
++/* Native cpu byte order: 1 if big-endian (Motorola) or 0 if little-endian
++   (Intel) */
++#cmakedefine01 HOST_BIGENDIAN
++
++/* Set the native cpu bit order (FILLORDER_LSB2MSB or FILLORDER_MSB2LSB) */
++#cmakedefine HOST_FILLORDER @HOST_FILLORDER@
++
++/* Support ISO JBIG compression (requires JBIG-KIT library) */
++#cmakedefine JBIG_SUPPORT
++
++/* Support JPEG compression (requires IJG JPEG library) */
++#cmakedefine JPEG_SUPPORT
++
++/* Support LogLuv high dynamic range encoding */
++#cmakedefine LOGLUV_SUPPORT
++
++/* Define to the sub-directory in which libtool stores uninstalled libraries.
++   */
++#cmakedefine LT_OBJDIR
++
++/* Support LZW algorithm */
++#cmakedefine LZW_SUPPORT
++
++/* Support Microsoft Document Imaging format */
++#cmakedefine MDI_SUPPORT
++
++/* Support NeXT 2-bit RLE algorithm */
++#cmakedefine NEXT_SUPPORT
++
++/* Define to 1 if your C compiler doesn't accept -c and -o together. */
++#cmakedefine NO_MINUS_C_MINUS_O
++
++/* Support Old JPEG compresson (read-only) */
++#cmakedefine OJPEG_SUPPORT
++
++/* Name of package */
++#cmakedefine PACKAGE @PACKAGE@
++
++/* Define to the address where bug reports for this package should be sent. */
++#cmakedefine PACKAGE_BUGREPORT @PACKAGE_BUGREPORT@
++
++/* Define to the full name of this package. */
++#cmakedefine PACKAGE_NAME @PACKAGE_NAME@
++
++/* Define to the full name and version of this package. */
++#cmakedefine PACKAGE_STRING @PACKAGE_STRING@
++
++/* Define to the one symbol short name of this package. */
++#cmakedefine PACKAGE_TARNAME @PACKAGE_TARNAME@
++
++/* Define to the home page for this package. */
++#cmakedefine PACKAGE_URL @PACKAGE_URL@
++
++/* Define to the version of this package. */
++#cmakedefine PACKAGE_VERSION @PACKAGE_VERSION@
++
++/* Support Macintosh PackBits algorithm */
++#cmakedefine PACKBITS_SUPPORT
++
++/* Support Pixar log-format algorithm (requires Zlib) */
++#cmakedefine PIXARLOG_SUPPORT
++
++/* Define to necessary symbol if this constant uses a non-standard name on
++   your system. */
++#cmakedefine PTHREAD_CREATE_JOINABLE
++
++/* The size of `int', as computed by sizeof. */
++#cmakedefine SIZEOF_INT @SIZEOF_INT@
++
++/* The size of `long', as computed by sizeof. */
++#cmakedefine SIZEOF_LONG @SIZEOF_LONG@
++
++/* The size of `signed long', as computed by sizeof. */
++#cmakedefine SIZEOF_SIGNED_LONG @SIZEOF_SIGNED_LONG@
++
++/* The size of `signed long long', as computed by sizeof. */
++#cmakedefine SIZEOF_SIGNED_LONG_LONG @SIZEOF_SIGNED_LONG_LONG@
++
++/* The size of `unsigned long', as computed by sizeof. */
++#cmakedefine SIZEOF_UNSIGNED_LONG @SIZEOF_UNSIGNED_LONG@
++
++/* The size of `unsigned long long', as computed by sizeof. */
++#cmakedefine SIZEOF_UNSIGNED_LONG_LONG @SIZEOF_UNSIGNED_LONG_LONG@
++
++/* Define to 1 if you have the ANSI C header files. */
++#cmakedefine STDC_HEADERS
++
++/* Support strip chopping (whether or not to convert single-strip uncompressed
++   images to mutiple strips of specified size to reduce memory usage) */
++#cmakedefine STRIPCHOP_DEFAULT @STRIPCHOP_DEFAULT@
++
++/* Default size of the strip in bytes (when strip chopping enabled) */
++#cmakedefine STRIP_SIZE_DEFAULT @STRIP_SIZE_DEFAULT@
++
++/* Enable SubIFD tag (330) support */
++#cmakedefine SUBIFD_SUPPORT
++
++/* Support ThunderScan 4-bit RLE algorithm */
++#cmakedefine THUNDER_SUPPORT
++
++/* Signed 64-bit type formatter */
++#cmakedefine TIFF_INT64_FORMAT @TIFF_INT64_FORMAT@
++
++/* Signed 64-bit type */
++#cmakedefine TIFF_INT64_T @TIFF_INT64_T@
++
++/* Unsigned 64-bit type formatter */
++#cmakedefine TIFF_UINT64_FORMAT @TIFF_UINT64_FORMAT@
++
++/* Unsigned 64-bit type */
++#cmakedefine TIFF_UINT64_T @TIFF_UINT64_T@
++
++/* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
++#cmakedefine TIME_WITH_SYS_TIME
++
++/* Define to 1 if your <sys/time.h> declares `struct tm'. */
++#cmakedefine TM_IN_SYS_TIME
++
++/* Version number of package */
++#cmakedefine VERSION @VERSION@
++
++/* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
++   significant byte first (like Motorola and SPARC, unlike Intel). */
++#if defined AC_APPLE_UNIVERSAL_BUILD
++# if defined __BIG_ENDIAN__
++#  define WORDS_BIGENDIAN 1
++# endif
++#else
++# ifndef WORDS_BIGENDIAN
++#  undef WORDS_BIGENDIAN
++# endif
++#endif
++
++/* Define to 1 if the X Window System is missing or not being used. */
++#cmakedefine X_DISPLAY_MISSING
++
++/* Support Deflate compression */
++#cmakedefine ZIP_SUPPORT
++
++/* Number of bits in a file offset, on hosts where this is settable. */
++#cmakedefine _FILE_OFFSET_BITS
++
++/* Define for large files, on AIX-style hosts. */
++#cmakedefine _LARGE_FILES
++
++/* Define to empty if `const' does not conform to ANSI C. */
++#cmakedefine const
++
++/* Define to `__inline__' or `__inline' if that's what the C compiler
++   calls it, or to nothing if 'inline' is not supported under any name.  */
++#ifndef __cplusplus
++#cmakedefine inline @inline@
++#endif
++
++/* Define to `long int' if <sys/types.h> does not define. */
++#cmakedefine off_t @off_t@
++
++/* Define to `unsigned int' if <sys/types.h> does not define. */
++#cmakedefine size_t @size_t@
++
++#ifdef _MSC_VER
++#define lfind _lfind
++#endif
++
++#if !defined(HAVE_GETOPT) && !defined(HAVE_STRCASECMP)
++    #include "libport.h"
++#endif
++#endif
+\ No newline at end of file
+diff --git a/libtiff/tif_config.vc.h b/libtiff/tif_config.vc.h
+index c297cf3..2e10246 100644
+--- a/libtiff/tif_config.vc.h
++++ b/libtiff/tif_config.vc.h
+@@ -47,7 +47,7 @@
+ /* Set the native cpu bit order */
+ #define HOST_FILLORDER FILLORDER_LSB2MSB
+ 
+-#define snprintf _snprintf
++//#define snprintf _snprintf
+ 
+ /* Define to 1 if your processor stores words with the most significant byte
+    first (like Motorola and SPARC, unlike Intel and VAX). */
+diff --git a/libtiff/tif_win32.c b/libtiff/tif_win32.c
+index 2cf1de9..e07ca59 100644
+--- a/libtiff/tif_win32.c
++++ b/libtiff/tif_win32.c
+@@ -365,7 +365,7 @@ _TIFFmemcmp(const void* p1, const void* p2, tmsize_t c)
+ #ifndef _WIN32_WCE
+ 
+ #if (_MSC_VER < 1500)
+-#  define vsnprintf _vsnprintf
++//#  define vsnprintf _vsnprintf
+ #endif
+ 
+ static void
+diff --git a/libtiff/tiff.h b/libtiff/tiff.h
+index 19b4e79..718f9e9 100644
+--- a/libtiff/tiff.h
++++ b/libtiff/tiff.h
+@@ -65,17 +65,17 @@
+  * strings              unsigned char*
+  */
+ 
+-typedef TIFF_INT8_T   int8;
+-typedef TIFF_UINT8_T  uint8;
++typedef __int8   int8;
++typedef unsigned __int8  uint8;
+ 
+-typedef TIFF_INT16_T  int16;
+-typedef TIFF_UINT16_T uint16;
++typedef __int16  int16;
++typedef unsigned __int16 uint16;
+ 
+-typedef TIFF_INT32_T  int32;
+-typedef TIFF_UINT32_T uint32;
++typedef __int32 int32;
++typedef unsigned __int32 uint32;
+ 
+-typedef TIFF_INT64_T  int64;
+-typedef TIFF_UINT64_T uint64;
++typedef __int64 int64;
++typedef unsigned __int64 uint64;
+ 
+ /*
+  * Some types as promoted in a variable argument list
+diff --git a/libtiff/tiffconf.h.cmake b/libtiff/tiffconf.h.cmake
+new file mode 100644
+index 0000000..aef040b
+--- /dev/null
++++ b/libtiff/tiffconf.h.cmake
+@@ -0,0 +1,103 @@
++/*
++  Configuration defines for installed libtiff.
++  This file maintained for backward compatibility. Do not use definitions
++  from this file in your programs.
++*/
++
++#ifndef _TIFFCONF_
++#define _TIFFCONF_
++
++/* Define to 1 if the system has the type `int16'. */
++#cmakedefine HAVE_INT16
++
++/* Define to 1 if the system has the type `int32'. */
++#cmakedefine HAVE_INT32
++
++/* Define to 1 if the system has the type `int8'. */
++#cmakedefine HAVE_INT8
++
++/* The size of a `int', as computed by sizeof. */
++#cmakedefine SIZEOF_INT @SIZEOF_INT@
++
++/* The size of a `long', as computed by sizeof. */
++#cmakedefine SIZEOF_LONG @SIZEOF_LONG@
++
++/* Compatibility stuff. */
++
++/* Define as 0 or 1 according to the floating point format suported by the
++   machine */
++#cmakedefine HAVE_IEEEFP
++
++/* Set the native cpu bit order (FILLORDER_LSB2MSB or FILLORDER_MSB2LSB) */
++#cmakedefine HOST_FILLORDER @HOST_FILLORDER@
++
++/* Native cpu byte order: 1 if big-endian (Motorola) or 0 if little-endian
++   (Intel) */
++#cmakedefine01 HOST_BIGENDIAN
++
++/* Support CCITT Group 3 & 4 algorithms */
++#cmakedefine CCITT_SUPPORT
++
++/* Support JPEG compression (requires IJG JPEG library) */
++#cmakedefine JPEG_SUPPORT
++
++/* Support JBIG compression (requires JBIG-KIT library) */
++#cmakedefine JBIG_SUPPORT
++
++/* Support LogLuv high dynamic range encoding */
++#cmakedefine LOGLUV_SUPPORT
++
++/* Support LZW algorithm */
++#cmakedefine LZW_SUPPORT
++
++/* Support NeXT 2-bit RLE algorithm */
++#cmakedefine NEXT_SUPPORT
++
++/* Support Old JPEG compresson (read contrib/ojpeg/README first! Compilation
++   fails with unpatched IJG JPEG library) */
++#cmakedefine OJPEG_SUPPORT
++
++/* Support Macintosh PackBits algorithm */
++#cmakedefine PACKBITS_SUPPORT
++
++/* Support Pixar log-format algorithm (requires Zlib) */
++#cmakedefine PIXARLOG_SUPPORT
++
++/* Support ThunderScan 4-bit RLE algorithm */
++#cmakedefine THUNDER_SUPPORT
++
++/* Support Deflate compression */
++#cmakedefine ZIP_SUPPORT
++
++/* Support strip chopping (whether or not to convert single-strip uncompressed
++   images to mutiple strips of ~8Kb to reduce memory usage) */
++#cmakedefine STRIPCHOP_DEFAULT @STRIPCHOP_DEFAULT@
++
++/* Enable SubIFD tag (330) support */
++#cmakedefine SUBIFD_SUPPORT
++
++/* Treat extra sample as alpha (default enabled). The RGBA interface will
++   treat a fourth sample with no EXTRASAMPLE_ value as being ASSOCALPHA. Many
++   packages produce RGBA files but don't mark the alpha properly. */
++#cmakedefine DEFAULT_EXTRASAMPLE_AS_ALPHA
++
++/* Pick up YCbCr subsampling info from the JPEG data stream to support files
++   lacking the tag (default enabled). */
++#cmakedefine CHECK_JPEG_YCBCR_SUBSAMPLING
++
++/* Support MS MDI magic number files as TIFF */
++#cmakedefine MDI_SUPPORT
++
++/*
++ * Feature support definitions.
++ * XXX: These macros are obsoleted. Don't use them in your apps!
++ * Macros stays here for backward compatibility and should be always defined.
++ */
++#define COLORIMETRY_SUPPORT
++#define YCBCR_SUPPORT
++#define CMYK_SUPPORT
++#define ICC_SUPPORT
++#define PHOTOSHOP_SUPPORT
++#define IPTC_SUPPORT
++
++#endif /* _TIFFCONF_ */
+diff --git a/libtiff/tiffconf.vc.h b/libtiff/tiffconf.vc.h
+index 680f839..1d72692 100644
+--- a/libtiff/tiffconf.vc.h
++++ b/libtiff/tiffconf.vc.h
+@@ -89,7 +89,7 @@
+ #define CCITT_SUPPORT 1
+ 
+ /* Support JPEG compression (requires IJG JPEG library) */
+-/* #undef JPEG_SUPPORT */
++#define JPEG_SUPPORT 1
+ 
+ /* Support JBIG compression (requires JBIG-KIT library) */
+ /* #undef JBIG_SUPPORT */
+@@ -117,7 +117,7 @@
+ #define THUNDER_SUPPORT 1
+ 
+ /* Support Deflate compression */
+-/* #undef ZIP_SUPPORT */
++#define ZIP_SUPPORT
+ 
+ /* Support strip chopping (whether or not to convert single-strip uncompressed
+    images to mutiple strips of ~8Kb to reduce memory usage) */
+diff --git a/man/CMakeLists.txt b/man/CMakeLists.txt
+new file mode 100644
+index 0000000..fe8f4c5
+--- /dev/null
++++ b/man/CMakeLists.txt
+@@ -0,0 +1,73 @@
++set(tiff1_FILES
++    bmp2tiff.1
++    fax2ps.1
++    fax2tiff.1
++    gif2tiff.1
++    pal2rgb.1
++    ppm2tiff.1
++    ras2tiff.1
++    raw2tiff.1
++    rgb2ycbcr.1
++    sgi2tiff.1
++    thumbnail.1
++    tiff2bw.1
++    tiff2pdf.1
++    tiff2ps.1
++    tiff2rgba.1
++    tiffcmp.1
++    tiffcp.1
++    tiffcrop.1
++    tiffdither.1
++    tiffdump.1
++    tiffgt.1
++    tiffinfo.1
++    tiffmedian.1
++    tiffset.1
++    tiffsplit.1
++    tiffsv.1
++)
++set(tiff3_FILES
++    libtiff.3tiff
++    TIFFbuffer.3tiff
++    TIFFClose.3tiff
++    TIFFcodec.3tiff
++    TIFFcolor.3tiff
++    TIFFDataWidth.3tiff
++    TIFFError.3tiff
++    TIFFFlush.3tiff
++    TIFFGetField.3tiff
++    TIFFmemory.3tiff
++    TIFFOpen.3tiff
++    TIFFPrintDirectory.3tiff
++    TIFFquery.3tiff
++    TIFFReadDirectory.3tiff
++    TIFFReadEncodedStrip.3tiff
++    TIFFReadEncodedTile.3tiff
++    TIFFReadRawStrip.3tiff
++    TIFFReadRawTile.3tiff
++    TIFFReadRGBAImage.3tiff
++    TIFFReadRGBAStrip.3tiff
++    TIFFReadRGBATile.3tiff
++    TIFFReadScanline.3tiff
++    TIFFReadTile.3tiff
++    TIFFRGBAImage.3tiff
++    TIFFSetDirectory.3tiff
++    TIFFSetField.3tiff
++    TIFFsize.3tiff
++    TIFFstrip.3tiff
++    TIFFswab.3tiff
++    TIFFtile.3tiff
++    TIFFWarning.3tiff
++    TIFFWriteDirectory.3tiff
++    TIFFWriteEncodedStrip.3tiff
++    TIFFWriteEncodedTile.3tiff
++    TIFFWriteRawStrip.3tiff
++    TIFFWriteRawTile.3tiff
++    TIFFWriteScanline.3tiff
++    TIFFWriteTile.3tiff
++)
++
++if(BUILD_TOOLS)
++    install(FILES ${tiff1_FILES} DESTINATION share/man/man1)
++endif(BUILD_TOOLS)
++install(FILES ${tiff3_FILES} DESTINATION share/man/man3)
+\ No newline at end of file
+diff --git a/port/CMakeLists.txt b/port/CMakeLists.txt
+new file mode 100644
+index 0000000..c3dca62
+--- /dev/null
++++ b/port/CMakeLists.txt
+@@ -0,0 +1,19 @@
++if(NOT WIN32)
++    set(port_SRCS
++        dummy.c
++    )
++else(NOT WIN32)
++    set(port_SRCS
++        strcasecmp.c
++        getopt.c
++    )
++endif(NOT WIN32)
++
++if(NOT HAVE_LFIND)
++    set(port_SRCS ${port_SRCS} lfind.c)
++endif(NOT HAVE_LFIND)
++if(NOT HAVE_STRTOUL)
++    set(port_SRCS ${port_SRCS} strtoul.c)
++endif(NOT HAVE_STRTOUL)
++
++add_library(port ${port_SRCS})
+\ No newline at end of file
+diff --git a/tools/CMakeLists.txt b/tools/CMakeLists.txt
+new file mode 100644
+index 0000000..4ecc0bf
+--- /dev/null
++++ b/tools/CMakeLists.txt
+@@ -0,0 +1,137 @@
++
++#EXTRA_PROGRAMS = sgi2tiff sgisv ycbcr
++
++#if HAVE_RPATH
++#AM_LDFLAGS = $(LIBDIR)
++#endif
++
++include_directories(${CMAKE_BINARY_DIR}/libtiff ${CMAKE_SOURCE_DIR}/libtiff)
++
++set(bmp2tiff_SRCS bmp2tiff.c)
++add_executable(bmp2tiff ${bmp2tiff_SRCS})
++target_link_libraries(bmp2tiff tiff port)
++
++set(fax2ps_SRCS fax2ps.c)
++add_executable(fax2ps ${fax2ps_SRCS})
++target_link_libraries(fax2ps tiff port)
++
++set(fax2tiff_SRCS fax2tiff.c)
++add_executable(fax2tiff ${fax2tiff_SRCS})
++target_link_libraries(fax2tiff tiff port)
++
++set(gif2tiff_SRCS gif2tiff.c)
++add_executable(gif2tiff ${gif2tiff_SRCS})
++target_link_libraries(gif2tiff tiff port)
++
++set(pal2rgb_SRCS pal2rgb.c)
++add_executable(pal2rgb ${pal2rgb_SRCS})
++target_link_libraries(pal2rgb tiff port)
++
++set(ppm2tiff_SRCS ppm2tiff.c)
++add_executable(ppm2tiff ${ppm2tiff_SRCS})
++target_link_libraries(ppm2tiff tiff port)
++
++set(ras2tiff_SRCS ras2tiff.c rasterfile.h)
++add_executable(ras2tiff ${ras2tiff_SRCS})
++target_link_libraries(ras2tiff tiff port)
++
++set(raw2tiff_SRCS raw2tiff.c)
++add_executable(raw2tiff ${raw2tiff_SRCS})
++target_link_libraries(raw2tiff tiff port)
++
++set(rgb2ycbcr_SRCS rgb2ycbcr.c ../libtiff/tif_aux.c)
++add_executable(rgb2ycbcr ${rgb2ycbcr_SRCS})
++target_link_libraries(rgb2ycbcr tiff port)
++
++set(thumbnail_SRCS thumbnail.c)
++add_executable(thumbnail ${thumbnail_SRCS})
++target_link_libraries(thumbnail tiff port)
++
++set(tiff2bw_SRCS tiff2bw.c)
++add_executable(tiff2bw ${tiff2bw_SRCS})
++target_link_libraries(tiff2bw tiff port)
++
++set(tiff2pdf_SRCS tiff2pdf.c)
++add_executable(tiff2pdf ${tiff2pdf_SRCS})
++target_link_libraries(tiff2pdf tiff port)
++
++set(tiff2ps_SRCS tiff2ps.c)
++add_executable(tiff2ps ${tiff2ps_SRCS})
++target_link_libraries(tiff2ps tiff port)
++
++set(tiff2rgba_SRCS tiff2rgba.c ../libtiff/tif_aux.c)
++add_executable(tiff2rgba ${tiff2rgba_SRCS})
++target_link_libraries(tiff2rgba tiff port)
++
++set(tiffcmp_SRCS tiffcmp.c)
++add_executable(tiffcmp ${tiffcmp_SRCS})
++target_link_libraries(tiffcmp tiff port)
++
++set(tiffcp_SRCS tiffcp.c)
++add_executable(tiffcp ${tiffcp_SRCS})
++target_link_libraries(tiffcp tiff port)
++
++set(tiffcrop_SRCS tiffcrop.c)
++add_executable(tiffcrop ${tiffcrop_SRCS})
++target_link_libraries(tiffcrop tiff port)
++
++set(tiffdither_SRCS tiffdither.c)
++add_executable(tiffdither ${tiffdither_SRCS})
++target_link_libraries(tiffdither tiff port)
++
++set(tiffdump_SRCS tiffdump.c)
++add_executable(tiffdump ${tiffdump_SRCS})
++target_link_libraries(tiffdump tiff port)
++
++set(tiffinfo_SRCS tiffinfo.c)
++add_executable(tiffinfo ${tiffinfo_SRCS})
++target_link_libraries(tiffinfo tiff port)
++
++set(tiffmedian_SRCS tiffmedian.c)
++add_executable(tiffmedian ${tiffmedian_SRCS})
++target_link_libraries(tiffmedian tiff port)
++
++set(tiffset_SRCS tiffset.c)
++add_executable(tiffset ${tiffset_SRCS})
++target_link_libraries(tiffset tiff port)
++
++set(tiffsplit_SRCS tiffsplit.c)
++add_executable(tiffsplit ${tiffsplit_SRCS})
++target_link_libraries(tiffsplit tiff port)
++
++if(HAVE_OPENGL)
++    set(tiffgt_SRCS tiffgt.c)
++#    include_directories(${OpenGL_INCLUDE_DIR})
++    add_executable(tiffgt ${tiffgt_SRCS})
++    target_link_libraries(tiffgt tiff port ${OpenGL_LIBRARIES})
++endif(HAVE_OPENGL)
++
++set(tools
++bmp2tiff
++fax2ps
++fax2tiff
++gif2tiff
++pal2rgb
++ppm2tiff
++ras2tiff
++raw2tiff
++rgb2ycbcr
++thumbnail
++tiff2bw
++tiff2pdf
++tiff2ps
++tiff2rgba
++tiffcmp
++tiffcp
++tiffcrop
++tiffdither
++tiffdump
++tiffinfo
++tiffmedian
++tiffset
++tiffsplit
++)
++
++install(TARGETS ${tools} RUNTIME DESTINATION bin
++                         LIBRARY DESTINATION lib
++                         ARCHIVE DESTINATION lib)
+\ No newline at end of file
+diff --git a/tools/tiffcrop.c b/tools/tiffcrop.c
+index 9cd5d86..b1d9874 100644
+--- a/tools/tiffcrop.c
++++ b/tools/tiffcrop.c
+@@ -2931,9 +2931,9 @@ extractContigSamples24bits (uint8 *in, uint8 *out, uint32 cols,
+         }
+       else /* If we have a full buffer's worth, write it out */
+         {
+-        bytebuff1 = (buff2 >> 24);
++        bytebuff1 = (uint8)(buff2 >> 24);
+         *dst++ = bytebuff1;
+-        bytebuff2 = (buff2 >> 16);
++        bytebuff2 = (uint8)(buff2 >> 16);
+         *dst++ = bytebuff2;
+         ready_bits -= 16;
+ 
+@@ -2947,7 +2947,7 @@ extractContigSamples24bits (uint8 *in, uint8 *out, uint32 cols,
+   /* catch any trailing bits at the end of the line */
+   while (ready_bits > 0)
+     {
+-    bytebuff1 = (buff2 >> 24);
++    bytebuff1 = (uint8)(buff2 >> 24);
+     *dst++ = bytebuff1;
+ 
+     buff2 = (buff2 << 8);
+@@ -3031,13 +3031,13 @@ extractContigSamples32bits (uint8 *in, uint8 *out, uint32 cols,
+       /* If we have a full buffer's worth, write it out */
+       if (ready_bits >= 32)
+         {
+-        bytebuff1 = (buff2 >> 56);
++        bytebuff1 = (uint8)(buff2 >> 56);
+         *dst++ = bytebuff1;
+-        bytebuff2 = (buff2 >> 48);
++        bytebuff2 = (uint8)(buff2 >> 48);
+         *dst++ = bytebuff2;
+-        bytebuff3 = (buff2 >> 40);
++        bytebuff3 = (uint8)(buff2 >> 40);
+         *dst++ = bytebuff3;
+-        bytebuff4 = (buff2 >> 32);
++        bytebuff4 = (uint8)(buff2 >> 32);
+         *dst++ = bytebuff4;
+         ready_bits -= 32;
+                     
+@@ -3054,7 +3054,7 @@ extractContigSamples32bits (uint8 *in, uint8 *out, uint32 cols,
+     }
+   while (ready_bits > 0)
+     {
+-    bytebuff1 = (buff2 >> 56);
++    bytebuff1 = (uint8)(buff2 >> 56);
+     *dst++ = bytebuff1;
+     buff2 = (buff2 << 8);
+     ready_bits -= 8;
+@@ -3304,9 +3304,9 @@ extractContigSamplesShifted24bits (uint8 *in, uint8 *out, uint32 cols,
+         }
+       else /* If we have a full buffer's worth, write it out */
+         {
+-        bytebuff1 = (buff2 >> 24);
++        bytebuff1 = (uint8)(buff2 >> 24);
+         *dst++ = bytebuff1;
+-        bytebuff2 = (buff2 >> 16);
++        bytebuff2 = (uint8)(buff2 >> 16);
+         *dst++ = bytebuff2;
+         ready_bits -= 16;
+ 
+@@ -3320,7 +3320,7 @@ extractContigSamplesShifted24bits (uint8 *in, uint8 *out, uint32 cols,
+   /* catch any trailing bits at the end of the line */
+   while (ready_bits > 0)
+     {
+-    bytebuff1 = (buff2 >> 24);
++    bytebuff1 = (uint8)(buff2 >> 24);
+     *dst++ = bytebuff1;
+ 
+     buff2 = (buff2 << 8);
+@@ -3412,13 +3412,13 @@ extractContigSamplesShifted32bits (uint8 *in, uint8 *out, uint32 cols,
+         }
+       else  /* If we have a full buffer's worth, write it out */
+         {
+-        bytebuff1 = (buff2 >> 56);
++        bytebuff1 = (uint8)(buff2 >> 56);
+         *dst++ = bytebuff1;
+-        bytebuff2 = (buff2 >> 48);
++        bytebuff2 = (uint8)(buff2 >> 48);
+         *dst++ = bytebuff2;
+-        bytebuff3 = (buff2 >> 40);
++        bytebuff3 = (uint8)(buff2 >> 40);
+         *dst++ = bytebuff3;
+-        bytebuff4 = (buff2 >> 32);
++        bytebuff4 = (uint8)(buff2 >> 32);
+         *dst++ = bytebuff4;
+         ready_bits -= 32;
+                     
+@@ -3430,7 +3430,7 @@ extractContigSamplesShifted32bits (uint8 *in, uint8 *out, uint32 cols,
+     }
+   while (ready_bits > 0)
+     {
+-    bytebuff1 = (buff2 >> 56);
++    bytebuff1 = (uint8)(buff2 >> 56);
+     *dst++ = bytebuff1;
+     buff2 = (buff2 << 8);
+     ready_bits -= 8;
+@@ -3944,9 +3944,9 @@ combineSeparateSamples24bits (uint8 *in[], uint8 *out, uint32 cols,
+ 	/* If we have a full buffer's worth, write it out */
+ 	if (ready_bits >= 16)
+ 	  {
+-	    bytebuff1 = (buff2 >> 24);
++	    bytebuff1 = (uint8)(buff2 >> 24);
+ 	    *dst++ = bytebuff1;
+-	    bytebuff2 = (buff2 >> 16);
++	    bytebuff2 = (uint8)(buff2 >> 16);
+ 	    *dst++ = bytebuff2;
+ 	    ready_bits -= 16;
+ 
+@@ -3981,7 +3981,7 @@ combineSeparateSamples24bits (uint8 *in[], uint8 *out, uint32 cols,
+     /* catch any trailing bits at the end of the line */
+     while (ready_bits > 0)
+       {
+-	bytebuff1 = (buff2 >> 24);
++	bytebuff1 = (uint8)(buff2 >> 24);
+ 	*dst++ = bytebuff1;
+ 
+ 	buff2 = (buff2 << 8);
+@@ -4077,13 +4077,13 @@ combineSeparateSamples32bits (uint8 *in[], uint8 *out, uint32 cols,
+ 	/* If we have a full buffer's worth, write it out */
+ 	if (ready_bits >= 32)
+ 	  {
+-	  bytebuff1 = (buff2 >> 56);
++	  bytebuff1 = (uint8)(buff2 >> 56);
+ 	  *dst++ = bytebuff1;
+-	  bytebuff2 = (buff2 >> 48);
++	  bytebuff2 = (uint8)(buff2 >> 48);
+ 	  *dst++ = bytebuff2;
+-	  bytebuff3 = (buff2 >> 40);
++	  bytebuff3 = (uint8)(buff2 >> 40);
+ 	  *dst++ = bytebuff3;
+-	  bytebuff4 = (buff2 >> 32);
++	  bytebuff4 = (uint8)(buff2 >> 32);
+ 	  *dst++ = bytebuff4;
+ 	  ready_bits -= 32;
+                     
+@@ -4104,17 +4104,17 @@ combineSeparateSamples32bits (uint8 *in[], uint8 *out, uint32 cols,
+ 	  dump_info (dumpfile, format, "",
+ 		     "Row %3d, Col %3d, Sample %d, Src byte offset %3d  bit offset %2d  Dst offset %3d",
+ 		     row + 1, col + 1, s, src_byte, src_bit, dst - out);
+-	  dump_wide (dumpfile, format, "Match bits ", matchbits);
++	  dump_wide (dumpfile, format, "Match bits ", (uint32)matchbits);
+ 	  dump_data (dumpfile, format, "Src   bits ", src, 8);
+-	  dump_wide (dumpfile, format, "Buff1 bits ", buff1);
+-	  dump_wide (dumpfile, format, "Buff2 bits ", buff2);
++	  dump_wide (dumpfile, format, "Buff1 bits ", (uint32)buff1);
++	  dump_wide (dumpfile, format, "Buff2 bits ", (uint32)buff2);
+ 	  dump_info (dumpfile, format, "", "Ready bits:   %d, %s", ready_bits, action); 
+ 	  }
+ 	}
+       }
+     while (ready_bits > 0)
+       {
+-      bytebuff1 = (buff2 >> 56);
++      bytebuff1 = (uint8)(buff2 >> 56);
+       *dst++ = bytebuff1;
+       buff2 = (buff2 << 8);
+       ready_bits -= 8;
+@@ -4126,10 +4126,10 @@ combineSeparateSamples32bits (uint8 *in[], uint8 *out, uint32 cols,
+ 	         "Row %3d, Col %3d, Src byte offset %3d  bit offset %2d  Dst offset %3d",
+ 		 row + 1, col + 1, src_byte, src_bit, dst - out);
+ 
+-      dump_long (dumpfile, format, "Match bits ", matchbits);
++      dump_long (dumpfile, format, "Match bits ", (uint32)matchbits);
+       dump_data (dumpfile, format, "Src   bits ", src, 4);
+-      dump_long (dumpfile, format, "Buff1 bits ", buff1);
+-      dump_long (dumpfile, format, "Buff2 bits ", buff2);
++      dump_long (dumpfile, format, "Buff1 bits ", (uint32)buff1);
++      dump_long (dumpfile, format, "Buff2 bits ", (uint32)buff2);
+       dump_byte (dumpfile, format, "Write bits1", bytebuff1);
+       dump_byte (dumpfile, format, "Write bits2", bytebuff2);
+       dump_info (dumpfile, format, "", "Ready bits:  %2d", ready_bits); 
+@@ -4468,9 +4468,9 @@ combineSeparateTileSamples24bits (uint8 *in[], uint8 *out, uint32 cols,
+ 	/* If we have a full buffer's worth, write it out */
+ 	if (ready_bits >= 16)
+ 	  {
+-	    bytebuff1 = (buff2 >> 24);
++	    bytebuff1 = (uint8)(buff2 >> 24);
+ 	    *dst++ = bytebuff1;
+-	    bytebuff2 = (buff2 >> 16);
++	    bytebuff2 = (uint8)(buff2 >> 16);
+ 	    *dst++ = bytebuff2;
+ 	    ready_bits -= 16;
+ 
+@@ -4505,7 +4505,7 @@ combineSeparateTileSamples24bits (uint8 *in[], uint8 *out, uint32 cols,
+     /* catch any trailing bits at the end of the line */
+     while (ready_bits > 0)
+       {
+-	bytebuff1 = (buff2 >> 24);
++	bytebuff1 = (uint8)(buff2 >> 24);
+ 	*dst++ = bytebuff1;
+ 
+ 	buff2 = (buff2 << 8);
+@@ -4602,13 +4602,13 @@ combineSeparateTileSamples32bits (uint8 *in[], uint8 *out, uint32 cols,
+ 	/* If we have a full buffer's worth, write it out */
+ 	if (ready_bits >= 32)
+ 	  {
+-	  bytebuff1 = (buff2 >> 56);
++	  bytebuff1 = (uint8)(buff2 >> 56);
+ 	  *dst++ = bytebuff1;
+-	  bytebuff2 = (buff2 >> 48);
++	  bytebuff2 = (uint8)(buff2 >> 48);
+ 	  *dst++ = bytebuff2;
+-	  bytebuff3 = (buff2 >> 40);
++	  bytebuff3 = (uint8)(buff2 >> 40);
+ 	  *dst++ = bytebuff3;
+-	  bytebuff4 = (buff2 >> 32);
++	  bytebuff4 = (uint8)(buff2 >> 32);
+ 	  *dst++ = bytebuff4;
+ 	  ready_bits -= 32;
+                     
+@@ -4639,7 +4639,7 @@ combineSeparateTileSamples32bits (uint8 *in[], uint8 *out, uint32 cols,
+       }
+     while (ready_bits > 0)
+       {
+-      bytebuff1 = (buff2 >> 56);
++      bytebuff1 = (uint8)(buff2 >> 56);
+       *dst++ = bytebuff1;
+       buff2 = (buff2 << 8);
+       ready_bits -= 8;
+@@ -4651,10 +4651,10 @@ combineSeparateTileSamples32bits (uint8 *in[], uint8 *out, uint32 cols,
+ 	         "Row %3d, Col %3d, Src byte offset %3d  bit offset %2d  Dst offset %3d",
+ 		 row + 1, col + 1, src_byte, src_bit, dst - out);
+ 
+-      dump_long (dumpfile, format, "Match bits ", matchbits);
++      dump_long (dumpfile, format, "Match bits ", (uint32)matchbits);
+       dump_data (dumpfile, format, "Src   bits ", src, 4);
+-      dump_long (dumpfile, format, "Buff1 bits ", buff1);
+-      dump_long (dumpfile, format, "Buff2 bits ", buff2);
++      dump_long (dumpfile, format, "Buff1 bits ", (uint32)buff1);
++      dump_long (dumpfile, format, "Buff2 bits ", (uint32)buff2);
+       dump_byte (dumpfile, format, "Write bits1", bytebuff1);
+       dump_byte (dumpfile, format, "Write bits2", bytebuff2);
+       dump_info (dumpfile, format, "", "Ready bits:  %2d", ready_bits); 
+@@ -5548,12 +5548,12 @@ computeOutputPixelOffsets (struct crop_mask *crop, struct image_data *image,
+   if (page->width <= 0)
+     pwidth = iwidth;
+   else
+-    pwidth = page->width;
++    pwidth = (uint32)page->width;
+ 
+   if (page->length <= 0)
+     plength = ilength;
+   else
+-    plength = page->length;
++    plength = (uint32)page->length;
+ 
+   if (dump->debug)
+     {
+@@ -8060,9 +8060,9 @@ rotateContigSamples24bits(uint16 rotation, uint16 spp, uint16 bps, uint32 width,
+       /* If we have a full buffer's worth, write it out */
+       if (ready_bits >= 16)
+         {
+-        bytebuff1 = (buff2 >> 24);
++        bytebuff1 = (uint8)(buff2 >> 24);
+         *dst++ = bytebuff1;
+-        bytebuff2 = (buff2 >> 16);
++        bytebuff2 = (uint8)(buff2 >> 16);
+         *dst++ = bytebuff2;
+         ready_bits -= 16;
+ 
+@@ -8081,7 +8081,7 @@ rotateContigSamples24bits(uint16 rotation, uint16 spp, uint16 bps, uint32 width,
+  /* catch any trailing bits at the end of the line */
+   while (ready_bits > 0)
+     {
+-    bytebuff1 = (buff2 >> 24);
++    bytebuff1 = (uint8)(buff2 >> 24);
+     *dst++ = bytebuff1;
+ 
+     buff2 = (buff2 << 8);
+@@ -8172,13 +8172,13 @@ rotateContigSamples32bits(uint16 rotation, uint16 spp, uint16 bps, uint32 width,
+         }
+       else /* If we have a full buffer's worth, write it out */
+         {
+-        bytebuff1 = (buff2 >> 56);
++        bytebuff1 = (uint8)(buff2 >> 56);
+         *dst++ = bytebuff1;
+-        bytebuff2 = (buff2 >> 48);
++        bytebuff2 = (uint8)(buff2 >> 48);
+         *dst++ = bytebuff2;
+-        bytebuff3 = (buff2 >> 40);
++        bytebuff3 = (uint8)(buff2 >> 40);
+         *dst++ = bytebuff3;
+-        bytebuff4 = (buff2 >> 32);
++        bytebuff4 = (uint8)(buff2 >> 32);
+         *dst++ = bytebuff4;
+         ready_bits -= 32;
+                     
+@@ -8190,7 +8190,7 @@ rotateContigSamples32bits(uint16 rotation, uint16 spp, uint16 bps, uint32 width,
+     }
+   while (ready_bits > 0)
+     {
+-    bytebuff1 = (buff2 >> 56);
++    bytebuff1 = (uint8)(buff2 >> 56);
+     *dst++ = bytebuff1;
+     buff2 = (buff2 << 8);
+     ready_bits -= 8;
+@@ -8679,9 +8679,9 @@ reverseSamples24bits (uint16 spp, uint16 bps, uint32 width,
+         }
+       else /* If we have a full buffer's worth, write it out */
+         {
+-        bytebuff1 = (buff2 >> 24);
++        bytebuff1 = (uint8)(buff2 >> 24);
+         *dst++ = bytebuff1;
+-        bytebuff2 = (buff2 >> 16);
++        bytebuff2 = (uint8)(buff2 >> 16);
+         *dst++ = bytebuff2;
+         ready_bits -= 16;
+ 
+@@ -8695,7 +8695,7 @@ reverseSamples24bits (uint16 spp, uint16 bps, uint32 width,
+  /* catch any trailing bits at the end of the line */
+   while (ready_bits > 0)
+     {
+-    bytebuff1 = (buff2 >> 24);
++    bytebuff1 = (uint8)(buff2 >> 24);
+     *dst++ = bytebuff1;
+ 
+     buff2 = (buff2 << 8);
+@@ -8780,13 +8780,13 @@ reverseSamples32bits (uint16 spp, uint16 bps, uint32 width,
+         }
+       else /* If we have a full buffer's worth, write it out */
+         {
+-        bytebuff1 = (buff2 >> 56);
++        bytebuff1 = (uint8)(buff2 >> 56);
+         *dst++ = bytebuff1;
+-        bytebuff2 = (buff2 >> 48);
++        bytebuff2 = (uint8)(buff2 >> 48);
+         *dst++ = bytebuff2;
+-        bytebuff3 = (buff2 >> 40);
++        bytebuff3 = (uint8)(buff2 >> 40);
+         *dst++ = bytebuff3;
+-        bytebuff4 = (buff2 >> 32);
++        bytebuff4 = (uint8)(buff2 >> 32);
+         *dst++ = bytebuff4;
+         ready_bits -= 32;
+                     
+@@ -8798,7 +8798,7 @@ reverseSamples32bits (uint16 spp, uint16 bps, uint32 width,
+     }
+   while (ready_bits > 0)
+     {
+-    bytebuff1 = (buff2 >> 56);
++    bytebuff1 = (uint8)(buff2 >> 56);
+     *dst++ = bytebuff1;
+     buff2 = (buff2 << 8);
+     ready_bits -= 8;

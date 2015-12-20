@@ -1,0 +1,242 @@
+diff -Nru -x '*~' lcms2-2.4.orig/CMakeLists.txt lcms2-2.4/CMakeLists.txt
+--- lcms2-2.4.orig/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ lcms2-2.4/CMakeLists.txt	2013-01-24 11:35:17.013861600 +0100
+@@ -0,0 +1,22 @@
++project(lcms2)
++
++option(BUILD_TESTS "build the test executable" OFF)
++option(BUILD_STATIC "build the static library" OFF)
++option(BUILD_UTILS "build the utilities executables" ON)
++
++set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
++
++cmake_minimum_required(VERSION 2.6)
++
++include_directories(
++${CMAKE_BINARY_DIR}/include 
++${CMAKE_SOURCE_DIR}/include
++)
++
++add_subdirectory(src)
++if(BUILD_TESTS)
++    add_subdirectory(testbed)
++endif(BUILD_TESTS)
++if(BUILD_UTILS)
++    add_subdirectory(utils)
++endif(BUILD_UTILS)
+diff -Nru -x '*~' lcms2-2.4.orig/include/lcms2.h lcms2-2.4/include/lcms2.h
+--- lcms2-2.4.orig/include/lcms2.h	2012-09-10 18:01:51.000000000 +0200
++++ lcms2-2.4/include/lcms2.h	2013-01-24 11:35:17.022862100 +0100
+@@ -199,25 +199,25 @@
+ 
+ // Calling convention -- this is hardly platform and compiler dependent
+ #ifdef CMS_IS_WINDOWS_
+-#  if defined(CMS_DLL) || defined(CMS_DLL_BUILD)
+-#     ifdef __BORLANDC__
+-#        define CMSEXPORT       __stdcall _export
+-#        define CMSAPI
+-#     else
+-#        define CMSEXPORT      _stdcall
+-#        ifdef CMS_DLL_BUILD
++#   if !defined(CMS_STATIC)
++#      ifdef __BORLANDC__
++#         define CMSEXPORT       __stdcall _export
++#         define CMSAPI
++#      else
++#         define CMSEXPORT
++#         ifdef CMS_DLL_BUILD
+ #            define CMSAPI    __declspec(dllexport)
+-#        else
+-#           define CMSAPI     __declspec(dllimport)
+-#       endif
+-#     endif
+-#  else
+-#       define CMSEXPORT
+-#       define CMSAPI
+-#  endif
++#         else
++#            define CMSAPI     __declspec(dllimport)
++#         endif
++#      endif
++#   else
++#      define CMSEXPORT
++#      define CMSAPI
++#   endif
+ #else
+-# define CMSEXPORT
+-# define CMSAPI
++#   define CMSEXPORT
++#   define CMSAPI
+ #endif
+ 
+ // Some common definitions
+diff -Nru -x '*~' lcms2-2.4.orig/src/CMakeLists.txt lcms2-2.4/src/CMakeLists.txt
+--- lcms2-2.4.orig/src/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ lcms2-2.4/src/CMakeLists.txt	2013-01-24 11:42:39.515171300 +0100
+@@ -0,0 +1,63 @@
++# some configure checks:
++if(WIN32)
++    if(MSVC)
++        set(UINT8_T "unsigned char")
++        set(UINT16_T "unsigned short")
++        set(UINT32_T "unsigned long")
++        set(INT8_T "char")
++        set(INT16_T "short")
++        set(INT32_T "long")
++    else(MSVC)
++        set(UINT8_T "uint8_t")
++        set(UINT16_T "uint16_t")
++        set(UINT32_T "uint32_t")
++        set(INT8_T "int8_t")
++        set(INT16_T "int16_t")
++        set(INT32_T "int32_t")
++    endif(MSVC)
++endif(WIN32)
++
++set(lcms_SRCS
++    cmscnvrt.c
++    cmserr.c
++    cmsgamma.c
++    cmsgmt.c
++    cmsintrp.c
++    cmsio0.c
++    cmsio1.c
++    cmslut.c
++    cmsplugin.c
++    cmssm.c
++    cmsmd5.c
++    cmsmtrx.c
++    cmspack.c
++    cmspcs.c
++    cmswtpnt.c
++    cmsxform.c
++    cmssamp.c
++    cmsnamed.c
++    cmscam02.c
++    cmsvirt.c
++    cmstypes.c
++    cmscgats.c
++    cmsps2.c
++    cmsopt.c
++    cmshalf.c
++)
++
++include_directories(${CMAKE_BINARY_DIR})
++
++add_library(lcms SHARED ${lcms_SRCS})
++set_target_properties(lcms PROPERTIES OUTPUT_NAME "lcms2"
++                                      DEFINE_SYMBOL CMS_DLL_BUILD)
++
++if(BUILD_TESTS OR BUILD_UTILS OR BUILD_STATIC)
++    add_library(lcms_static ${lcms_SRCS})
++	set_target_properties(lcms_static PROPERTIES COMPILE_FLAGS -DCMS_STATIC)
++    set(LCMS_STATIC lcms_static)
++endif(BUILD_TESTS OR BUILD_UTILS OR BUILD_STATIC)
++
++install(TARGETS lcms ${LCMS_STATIC} RUNTIME DESTINATION bin
++                                    LIBRARY DESTINATION lib
++                                    ARCHIVE DESTINATION lib)
++install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../include/lcms2.h ${CMAKE_CURRENT_SOURCE_DIR}/../include/lcms2_plugin.h DESTINATION include)
+diff -Nru -x '*~' lcms2-2.4.orig/testbed/CMakeLists.txt lcms2-2.4/testbed/CMakeLists.txt
+--- lcms2-2.4.orig/testbed/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ lcms2-2.4/testbed/CMakeLists.txt	2013-01-24 11:35:17.033862800 +0100
+@@ -0,0 +1,5 @@
++include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../include ${CMAKE_CURRENT_SOURCE_DIR}/../src)
++
++add_executable(testcms testcms2.c)
++target_link_libraries(testcms lcms_static)
++set_target_properties(testcms PROPERTIES COMPILE_FLAGS -DCMS_STATIC)
+diff -Nru -x '*~' lcms2-2.4.orig/testbed/testcms2.c lcms2-2.4/testbed/testcms2.c
+--- lcms2-2.4.orig/testbed/testcms2.c	2012-09-10 18:01:51.000000000 +0200
++++ lcms2-2.4/testbed/testcms2.c	2013-01-24 11:35:17.043863300 +0100
+@@ -31,7 +31,7 @@
+ #include "lcms2_internal.h"
+ 
+ // On Visual Studio, use debug CRT
+-#ifdef _MSC_VER
++#ifdef _WIN32
+ #     include "crtdbg.h"
+ #     include <io.h>
+ #endif
+diff -Nru -x '*~' lcms2-2.4.orig/utils/CMakeLists.txt lcms2-2.4/utils/CMakeLists.txt
+--- lcms2-2.4.orig/utils/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ lcms2-2.4/utils/CMakeLists.txt	2013-01-24 11:35:17.050863800 +0100
+@@ -0,0 +1,78 @@
++include_directories(
++    ${CMAKE_CURRENT_SOURCE_DIR}/../include
++    ${CMAKE_CURRENT_SOURCE_DIR}/../src
++    ${CMAKE_CURRENT_SOURCE_DIR}/../utils/common
++)
++
++find_package(JPEG)
++find_package(TIFF)
++
++set(UTILS_EXECUTABLES )
++set(UTILS_MANPAGES )
++
++###############################################################################
++if(JPEG_FOUND)
++    include_directories(${JPEG_INCLUDE_DIR})
++    set(JPGICC_SRCS
++        jpgicc/jpgicc.c
++        jpgicc/iccjpeg.c
++        common/xgetopt.c
++        common/vprf.c
++    )
++    add_executable(jpgicc ${JPGICC_SRCS})
++    target_link_libraries(jpgicc lcms ${JPEG_LIBRARIES})
++    list(APPEND UTILS_EXECUTABLES jpgicc)
++    list(APPEND UTILS_MANPAGES jpgicc/jpgicc.1)
++endif(JPEG_FOUND)
++
++###############################################################################
++set(LINKICC_SRCS
++    linkicc/linkicc.c
++    common/xgetopt.c
++    common/vprf.c
++)
++add_executable(linkicc ${LINKICC_SRCS})
++target_link_libraries(linkicc lcms)
++list(APPEND UTILS_EXECUTABLES linkicc)
++list(APPEND UTILS_MANPAGES linkicc/linkicc.1)
++
++###############################################################################
++set(PSICC_SRCS
++    psicc/psicc.c
++    common/xgetopt.c
++    common/vprf.c
++)
++add_executable(psicc ${PSICC_SRCS})
++target_link_libraries(psicc lcms)
++list(APPEND UTILS_EXECUTABLES psicc)
++list(APPEND UTILS_MANPAGES psicc/psicc.1)
++
++###############################################################################
++if(TIFF_FOUND)
++    include_directories(${TIFF_INCLUDE_DIR})
++    set(JPGICC_SRCS
++        tificc/tificc.c
++        common/xgetopt.c
++        common/vprf.c
++    )
++    add_executable(tificc ${JPGICC_SRCS})
++    target_link_libraries(tificc lcms ${TIFF_LIBRARIES})
++    list(APPEND UTILS_EXECUTABLES tificc)
++    list(APPEND UTILS_MANPAGES tificc/tificc.1)
++endif(TIFF_FOUND)
++
++###############################################################################
++set(TRANSICC_SRCS
++    transicc/transicc.c
++    common/xgetopt.c
++    common/vprf.c
++)
++add_executable(transicc ${TRANSICC_SRCS})
++target_link_libraries(transicc lcms)
++list(APPEND UTILS_EXECUTABLES transicc)
++list(APPEND UTILS_MANPAGES transicc/transicc.1)
++
++install(TARGETS ${UTILS_EXECUTABLES} RUNTIME DESTINATION bin
++                                     LIBRARY DESTINATION lib
++                                     ARCHIVE DESTINATION lib)
++install(FILES ${UTILS_MANPAGES} DESTINATION share/man/man1)

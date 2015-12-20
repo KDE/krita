@@ -31,7 +31,7 @@
 #include <opengl/kis_opengl.h>
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
-#include <QOpenGLFunctions_2_0>
+#include <QOpenGLFunctions_3_2_Core>
 #endif
 
 
@@ -248,7 +248,7 @@ void OcioDisplayFilter::updateProcessor()
     if (!cfg.useOpenGL()) return;
 
     QOpenGLFunctions glFuncs(QOpenGLContext::currentContext());
-    QOpenGLFunctions_2_0 glFuncs2;
+    QOpenGLFunctions_3_2_Core *glFuncs3 = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_2_Core>();
     const int lut3DEdgeSize = cfg.ocioLutEdgeSize();
 
     if (m_lut3d.size() == 0) {
@@ -266,7 +266,7 @@ void OcioDisplayFilter::updateProcessor()
         glFuncs.glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glFuncs.glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glFuncs.glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-        glFuncs2.glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB16F_ARB,
+        glFuncs3->glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB16F_ARB,
                               lut3DEdgeSize, lut3DEdgeSize, lut3DEdgeSize,
                               0, GL_RGB, GL_FLOAT, &m_lut3d.constData()[0]);
     }
@@ -289,7 +289,7 @@ void OcioDisplayFilter::updateProcessor()
         m_processor->getGpuLut3D(&m_lut3d[0], shaderDesc);
 
         glFuncs.glBindTexture(GL_TEXTURE_3D, m_lut3dTexID);
-        glFuncs2.glTexSubImage3D(GL_TEXTURE_3D, 0,
+        glFuncs3->glTexSubImage3D(GL_TEXTURE_3D, 0,
                                  0, 0, 0,
                                  lut3DEdgeSize, lut3DEdgeSize, lut3DEdgeSize,
                                  GL_RGB, GL_FLOAT, &m_lut3d[0]);

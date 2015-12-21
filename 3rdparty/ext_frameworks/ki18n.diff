@@ -1,21 +1,25 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 59917fa..b56e0af 100644
+index 178117e..497395d 100755
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -58,7 +58,10 @@ if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
-     ki18n_install(po)
+@@ -54,11 +54,11 @@ if(MSVC)
  endif()
+ 
+ add_definitions(-DTRANSLATION_DOMAIN=\"ki18n5\")
+-if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
+-    ki18n_install(po)
+-endif()
++#if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
++#    ki18n_install(po)
++#endif()
  add_subdirectory(src)
 -add_subdirectory(autotests)
-+
-+if (BUILD_TESTING)
-+    add_subdirectory(autotests)
-+endif()
++#add_subdirectory(autotests)
  
  # create a Config.cmake and a ConfigVersion.cmake file and install them
  set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5I18n")
 diff --git a/cmake/KF5I18NMacros.cmake b/cmake/KF5I18NMacros.cmake
-index 53ba812..db8ea98 100644
+index 53ba812..db8ea98 100755
 --- a/cmake/KF5I18NMacros.cmake
 +++ b/cmake/KF5I18NMacros.cmake
 @@ -25,14 +25,9 @@

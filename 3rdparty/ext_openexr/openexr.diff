@@ -1,124 +1,20 @@
-diff -Naur openexr-1.7.1-orig/CMakeLists.txt openexr-1.7.1/CMakeLists.txt
---- openexr-1.7.1-orig/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ openexr-1.7.1/CMakeLists.txt	2013-06-04 13:08:47.569992308 +0200
-@@ -0,0 +1,101 @@
-+project(ilmbase)
-+
-+cmake_minimum_required(VERSION 2.8)
-+
-+set(openexr_srcs_IlmImf
-+	IlmImf/ImfAcesFile.cpp
-+	IlmImf/ImfAttribute.cpp
-+	IlmImf/ImfB44Compressor.cpp
-+	IlmImf/ImfBoxAttribute.cpp
-+	IlmImf/ImfCRgbaFile.cpp
-+	IlmImf/ImfChannelList.cpp
-+	IlmImf/ImfChannelListAttribute.cpp
-+	IlmImf/ImfChromaticities.cpp
-+	IlmImf/ImfChromaticitiesAttribute.cpp
-+	IlmImf/ImfCompressionAttribute.cpp
-+	IlmImf/ImfCompressor.cpp
-+	IlmImf/ImfConvert.cpp
-+	IlmImf/ImfDoubleAttribute.cpp
-+	IlmImf/ImfEnvmap.cpp
-+	IlmImf/ImfEnvmapAttribute.cpp
-+	IlmImf/ImfFloatAttribute.cpp
-+	IlmImf/ImfFrameBuffer.cpp
-+	IlmImf/ImfFramesPerSecond.cpp
-+	IlmImf/ImfHeader.cpp
-+	IlmImf/ImfHuf.cpp
-+	IlmImf/ImfIO.cpp
-+	IlmImf/ImfInputFile.cpp
-+	IlmImf/ImfIntAttribute.cpp
-+	IlmImf/ImfKeyCode.cpp
-+	IlmImf/ImfKeyCodeAttribute.cpp
-+	IlmImf/ImfLineOrderAttribute.cpp
-+	IlmImf/ImfLut.cpp
-+	IlmImf/ImfMatrixAttribute.cpp
-+	IlmImf/ImfMisc.cpp
-+	IlmImf/ImfMultiView.cpp
-+	IlmImf/ImfOpaqueAttribute.cpp
-+	IlmImf/ImfOutputFile.cpp
-+	IlmImf/ImfPizCompressor.cpp
-+	IlmImf/ImfPreviewImage.cpp
-+	IlmImf/ImfPreviewImageAttribute.cpp
-+	IlmImf/ImfPxr24Compressor.cpp
-+	IlmImf/ImfRational.cpp
-+	IlmImf/ImfRationalAttribute.cpp
-+	IlmImf/ImfRgbaFile.cpp
-+	IlmImf/ImfRgbaYca.cpp
-+	IlmImf/ImfRleCompressor.cpp
-+	IlmImf/ImfScanLineInputFile.cpp
-+	IlmImf/ImfStandardAttributes.cpp
-+	IlmImf/ImfStdIO.cpp
-+	IlmImf/ImfStringAttribute.cpp
-+	IlmImf/ImfStringVectorAttribute.cpp
-+	IlmImf/ImfTestFile.cpp
-+	IlmImf/ImfThreading.cpp
-+	IlmImf/ImfTileDescriptionAttribute.cpp
-+	IlmImf/ImfTileOffsets.cpp
-+	IlmImf/ImfTiledInputFile.cpp
-+	IlmImf/ImfTiledMisc.cpp
-+	IlmImf/ImfTiledOutputFile.cpp
-+	IlmImf/ImfTiledRgbaFile.cpp
-+	IlmImf/ImfTimeCode.cpp
-+	IlmImf/ImfTimeCodeAttribute.cpp
-+	IlmImf/ImfVecAttribute.cpp
-+	IlmImf/ImfVersion.cpp
-+	IlmImf/ImfWav.cpp
-+	IlmImf/ImfZipCompressor.cpp
-+	IlmImf/b44ExpLogTable.cpp
-+	)
-+file(GLOB openexr_header_IlmImf IlmImf/*.h)
-+
-+include_directories(${CMAKE_INSTALL_PREFIX}/include)
-+link_directories(${CMAKE_INSTALL_PREFIX}/lib)
-+
-+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/IlmImf)
-+include_directories(${CMAKE_CURRENT_BINARY_DIR})
-+
-+if(WIN32)
-+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/config.windows)
-+else(WIN32)
-+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/config)
-+endif(WIN32)
-+
-+# add_executable(toFloat Half/toFloat.cpp)
-+# add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/toFloat.h
-+# 	COMMAND $<TARGET_FILE:toFloat> > ${CMAKE_CURRENT_BINARY_DIR}/toFloat.h
-+# 	#DEPENDS toFloat
-+# 	)
-+# add_custom_target(toFloat_h #DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/toFloat.h)
-+# 
-+# add_executable(eLut Half/eLut.cpp)
-+# add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/eLut.h
-+# 	COMMAND $<TARGET_FILE:eLut> > ${CMAKE_CURRENT_BINARY_DIR}/eLut.h
-+# 	#DEPENDS eLut
-+# 	)
-+# add_custom_target(eLut_h #DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/eLut.h)
-+
-+add_library(IlmImf STATIC ${openexr_srcs_IlmImf})
-+install(TARGETS IlmImf LIBRARY DESTINATION lib ARCHIVE DESTINATION lib RUNTIME DESTINATION bin)
-+install(FILES ${openexr_header_IlmImf} DESTINATION include)
-+
-+# add_dependencies(Half toFloat_h eLut_h)
-+
-diff -Naur openexr-1.7.1-orig/IlmImf/ImfAttribute.h openexr-1.7.1/IlmImf/ImfAttribute.h
---- openexr-1.7.1-orig/IlmImf/ImfAttribute.h	2012-07-18 01:27:26.000000000 +0200
-+++ openexr-1.7.1/IlmImf/ImfAttribute.h	2013-06-06 13:29:54.057810657 +0200
-@@ -400,6 +400,7 @@
+diff --git a/IlmImf/CMakeLists.txt b/IlmImf/CMakeLists.txt
+index 18d90ed..6c2f48c 100644
+--- a/IlmImf/CMakeLists.txt
++++ b/IlmImf/CMakeLists.txt
+@@ -5,6 +5,7 @@ SET(CMAKE_INCLUDE_CURRENT_DIR 1)
+ ADD_EXECUTABLE ( b44ExpLogTable
+   b44ExpLogTable.cpp
+ )
++set_target_properties(b44ExpLogTable PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;${CMAKE_INSTALL_PREFIX}/bin")
  
- } // namespace Imf
+ TARGET_LINK_LIBRARIES ( b44ExpLogTable
+   Half
+@@ -22,6 +23,7 @@ ADD_CUSTOM_COMMAND (
+ ADD_EXECUTABLE ( dwaLookups
+   dwaLookups.cpp
+ )
++set_target_properties(dwaLookups PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;${CMAKE_INSTALL_PREFIX}/bin")
  
-+#if 0
- #if defined(OPENEXR_DLL) && defined(_MSC_VER)
-     // Tell MS VC++ to disable "non dll-interface class used as base
-     // for dll-interface class" and "no suitable definition provided
-@@ -418,6 +419,7 @@
-     #pragma warning(default : 4251)
-     #undef EXTERN_TEMPLATE
- #endif
-+#endif
- 
- // Metrowerks compiler wants the .cpp file inlined, too
- #ifdef __MWERKS__
+ TARGET_LINK_LIBRARIES ( dwaLookups
+   Half

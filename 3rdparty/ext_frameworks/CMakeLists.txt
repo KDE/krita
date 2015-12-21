@@ -155,7 +155,7 @@ ExternalProject_Add(
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
     ALWAYS 0
-    DEPENDS ext_kguiaddons
+    DEPENDS ext_gettext ext_kguiaddons
 )
 
 

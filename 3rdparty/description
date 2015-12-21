@@ -24,7 +24,6 @@ Note: on all operating systems the entire procedure is done in a terminal window
     * Linux: gcc, minimum version 4.5
     * OSX: clang, you need to install xcode for this
     * Windows: MSVC 2015 Community Edition: https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx
-4. On linux, install nasm (for libjpeg-turbo)
 
 == Setup your environment ==
 

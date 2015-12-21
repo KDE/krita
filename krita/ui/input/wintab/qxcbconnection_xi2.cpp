@@ -649,27 +649,6 @@ void QXcbConnection::updateScrollingDevice(ScrollingDevice &scrollingDevice, int
 #endif
 }
 
-void QXcbConnection::handleEnterEvent(const xcb_enter_notify_event_t *)
-{
-#ifdef XCB_USE_XINPUT21
-    QHash<int, ScrollingDevice>::iterator it = m_scrollingDevices.begin();
-    const QHash<int, ScrollingDevice>::iterator end = m_scrollingDevices.end();
-    while (it != end) {
-        ScrollingDevice& scrollingDevice = it.value();
-        int nrDevices = 0;
-        XIDeviceInfo* xiDeviceInfo = XIQueryDevice(static_cast<Display *>(m_xlib_display), scrollingDevice.deviceId, &nrDevices);
-        if (nrDevices <= 0) {
-            qCDebug(lcQpaXInputDevices, "scrolling device %d no longer present", scrollingDevice.deviceId);
-            it = m_scrollingDevices.erase(it);
-            continue;
-        }
-        updateScrollingDevice(scrollingDevice, xiDeviceInfo->num_classes, xiDeviceInfo->classes);
-        XIFreeDeviceInfo(xiDeviceInfo);
-        ++it;
-    }
-#endif
-}
-
 Qt::MouseButton QXcbConnection::xiToQtMouseButton(uint32_t b)
 {
     switch (b) {

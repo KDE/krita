@@ -69,10 +69,10 @@ uint qHash(QPointer<T> value) {
 #define start_ignore_cursor_events() d->blockMouseEvents()
 #define stop_ignore_cursor_events() d->allowMouseEvents()
 
-// Note: this is placeholder!
-#define touch_stop_block_press_events()  //d->blockMouseEvents()
-#define touch_start_block_press_events()  //d->blockMouseEvents()
-#define break_if_touch_blocked_press_events() // if (d->touchHasBlockedPressEvents) break;
+// Touch rejection: do not accept
+#define touch_start_block_press_events()  d->touchHasBlockedPressEvents = d->disableTouchOnCanvas;
+#define touch_stop_block_press_events()  d->touchHasBlockedPressEvents = false;
+#define break_if_touch_blocked_press_events() if (d->touchHasBlockedPressEvents) break;
 
 KisInputManager::KisInputManager(QObject *parent)
     : QObject(parent), d(new Private(this))
@@ -191,7 +191,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonDblClick: {
         d->debugEvent<QMouseEvent, true>(event);
-        // break_if_touch_blocked_press_events();
+        break_if_touch_blocked_press_events();
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 
@@ -207,7 +207,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     }
     case QEvent::MouseButtonRelease: {
         d->debugEvent<QMouseEvent, true>(event);
-        // break_if_touch_blocked_press_events();
+        break_if_touch_blocked_press_events();
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         retval = d->matcher.buttonReleased(mouseEvent->button(), mouseEvent);

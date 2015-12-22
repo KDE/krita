@@ -96,9 +96,9 @@ public:
     QHash<QString, KActionCollection *> m_collections;
     KisShortcutsDialog *q;
     KisShortcutsEditor *m_shortcutsEditor;
-    bool m_saveSettings;
+    bool m_saveSettings{false};
 
-    KShortcutSchemesEditor *m_schemeEditor;
+    KShortcutSchemesEditor *m_schemeEditor{0};
 };
 
 

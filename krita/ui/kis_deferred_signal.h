@@ -21,12 +21,11 @@
 
 #include <QObject>
 
-#include <boost/function.hpp>
-#include <boost/bind.hpp>
+#include <functional>
 
 /**
  * \class KisDeferredSignal is used for calling a specified callback
- *        function (which is a boost::function) after a specified time
+ *        function (which is a std::function) after a specified time
  *        delay. The callback is called from the QTimer event, so the
  *        usage of the class does not block the Qt's event loop.
  *
@@ -35,8 +34,8 @@
  *        \code{.cpp}
  *
  *        // prepare the callback function
- *        boost::function<void ()> callback(
- *            boost::bind(&KisCanvas2::setMonitorProfile, this,
+ *        std::function<void ()> callback(
+ *            std::bind(&KisCanvas2::setMonitorProfile, this,
  *                        monitorProfile, renderingIntent, conversionFlags));
  *
  *        // create the timer connected to the function
@@ -44,30 +43,29 @@
  *
  *        \endcode
  *
- *        TODO: 1) rename KisDeferredSignal -> KisDeferredCallback
- *              2) rename TrivialFunction -> CallbackFunction
+ *        TODO: rename KisDeferredSignal -> KisDeferredCallback
  */
 class KisDeferredSignal : public QObject
 {
     Q_OBJECT
 public:
-    typedef boost::function<void ()> TrivialFunction;
+    using CallbackFunction = std::function<void ()>;
 
 public:
     /**
      * Creates a timer which will call \p function after \p delay
      * milliseconds
      */
-    static void deferSignal(int delay, TrivialFunction function);
+    static void deferSignal(int delay, CallbackFunction function);
 
 private Q_SLOTS:
     void timeout();
 
 private:
-    KisDeferredSignal(int delay, TrivialFunction function);
+    KisDeferredSignal(int delay, CallbackFunction function);
 
 private:
-    TrivialFunction m_function;
+    CallbackFunction m_function;
 };
 
 #endif /* __KIS_DEFERRED_SIGNAL_H */

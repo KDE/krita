@@ -163,11 +163,11 @@ private:
     QAction *m_action;
 
     //! Should the Name column be painted in bold?
-    bool m_isNameBold;
+    bool m_isNameBold{false};
 
     //@{
     //! The original shortcuts before user changes. 0 means no change.
-    QList<QKeySequence> *m_oldLocalShortcut;
+    QList<QKeySequence> *m_oldLocalShortcut{0};
     //@}
 
     //! The localized action name

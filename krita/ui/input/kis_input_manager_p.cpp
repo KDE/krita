@@ -117,20 +117,8 @@ bool KisInputManager::Private::ignoreQtCursorEvents()
 
 KisInputManager::Private::Private(KisInputManager *qq)
     : q(qq)
-    , canvas(0)
-    , toolProxy(0)
-    , forwardAllEventsToTool(0)
-    , disableTouchOnCanvas(false)
-    , touchHasBlockedPressEvents(false)
-    , lastTouchEvent(0)
-    , defaultInputAction(0)
-    , eventsReceiver(0)
-    , testingAcceptCompressedTabletEvents(false)
-    , testingCompressBrushEvents(false)
     , moveEventCompressor(10 /* ms */, KisSignalCompressor::FIRST_ACTIVE)
     , canvasSwitcher(this, qq)
-    , focusOnEnter(true)
-    , containsPointer(true)
 {
     KisConfig cfg;
     disableTouchOnCanvas = cfg.disableTouchOnCanvas();

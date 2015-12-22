@@ -26,6 +26,7 @@
 
 //#include <X11/extensions/XInput2.h>
 #include <X11/extensions/XI2proto.h>
+#include "qxcbconnection_xi2.h"
 
 #ifndef XCB_GE_GENERIC
 #define XCB_GE_GENERIC 35

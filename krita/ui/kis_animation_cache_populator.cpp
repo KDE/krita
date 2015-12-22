@@ -18,7 +18,7 @@
 
 #include "kis_animation_cache_populator.h"
 
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <QTimer>
 #include <QMutex>
@@ -98,13 +98,6 @@ struct KisAnimationCachePopulator::Private
 
         imageRequestConnection.reset();
         requestInfo = requestCache->fetchFrameData(frame);
-
-        QFuture<void> requestFuture =
-            QtConcurrent::run(
-                boost::bind(&KisAnimationCachePopulator::Private::processFrameInfo,
-                            requestInfo));
-
-        infoConversionWatcher.setFuture(requestFuture);
 
         /**
          * This method is called from the context of the image worker

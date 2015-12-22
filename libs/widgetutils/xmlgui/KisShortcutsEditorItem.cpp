@@ -34,8 +34,6 @@
 KisShortcutsEditorItem::KisShortcutsEditorItem(QTreeWidgetItem *parent, QAction *action)
     : QTreeWidgetItem(parent, ActionItem)
     , m_action(action)
-    , m_isNameBold(false)
-    , m_oldLocalShortcut(0)
 {
     // Filtering message requested by translators (scripting).
     m_id = m_action->objectName();

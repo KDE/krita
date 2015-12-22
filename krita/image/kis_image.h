@@ -886,7 +886,7 @@ private:
 
 private:
     class KisImagePrivate;
-    KisImagePrivate * const m_d;
+    KisImagePrivate * m_d;
 };
 
 #endif // KIS_IMAGE_H_

@@ -72,29 +72,18 @@
 
 
 struct Q_DECL_HIDDEN KisTool::Private {
-
-    Private()
-        : currentPattern(0)
-        , currentGradient(0)
-        , currentExposure(1.0)
-        , currentGenerator(0)
-        , optionWidget(0)
-        , m_mode(HOVER_MODE)
-        , m_isActive(false)
-    {}
-
     QCursor cursor; // the cursor that should be shown on tool activation.
 
     // From the canvas resources
-    KoPattern* currentPattern;
-    KoAbstractGradient* currentGradient;
+    KoPattern* currentPattern{0};
+    KoAbstractGradient* currentGradient{0};
     KoColor currentFgColor;
     KoColor currentBgColor;
-    float currentExposure;
-    KisFilterConfiguration* currentGenerator;
-    QWidget* optionWidget;
-    ToolMode m_mode;
-    bool m_isActive;
+    float currentExposure{1.0};
+    KisFilterConfiguration* currentGenerator{0};
+    QWidget* optionWidget{0};
+    ToolMode m_mode{HOVER_MODE};
+    bool m_isActive{false};
 };
 
 KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)

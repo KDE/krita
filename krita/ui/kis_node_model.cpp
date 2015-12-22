@@ -53,35 +53,24 @@
 
 struct KisNodeModel::Private
 {
-    Private ()
-        : shapeController(0)
-        , indexConverter(0)
-        , dummiesFacade(0)
-        , needFinishRemoveRows(0)
-        , needFinishInsertRows(0)
-        , showRootLayer(false)
-        , showGlobalSelection(false)
-        , parentOfRemovedNode(0)
-    {}
-
     KisImageWSP image;
-    KisShapeController *shapeController;
+    KisShapeController *shapeController = 0;
     QList<KisNodeDummy*> updateQueue;
     QTimer updateTimer;
 
-    KisModelIndexConverterBase *indexConverter;
-    KisDummiesFacadeBase *dummiesFacade;
-    bool needFinishRemoveRows;
-    bool needFinishInsertRows;
-    bool showRootLayer;
-    bool showGlobalSelection;
+    KisModelIndexConverterBase *indexConverter = 0;
+    KisDummiesFacadeBase *dummiesFacade = 0;
+    bool needFinishRemoveRows = false;
+    bool needFinishInsertRows = false;
+    bool showRootLayer = false;
+    bool showGlobalSelection = false;
 
-    KisNodeDummy* parentOfRemovedNode;
+    KisNodeDummy* parentOfRemovedNode = 0;
 };
 
 KisNodeModel::KisNodeModel(QObject * parent)
-    : QAbstractItemModel(parent)
-    , m_d(new Private)
+        : QAbstractItemModel(parent)
+        , m_d(new Private)
 {
     updateSettings();
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(updateSettings()));
@@ -118,9 +107,9 @@ bool KisNodeModel::belongsToIsolatedGroup(KisImageSP image, KisNodeSP node, KisD
     if (!isolatedRoot) return true;
 
     KisNodeDummy *isolatedRootDummy =
-            dummiesFacade->dummyForNode(isolatedRoot);
+        dummiesFacade->dummyForNode(isolatedRoot);
     KisNodeDummy *dummy =
-            dummiesFacade->dummyForNode(node);
+        dummiesFacade->dummyForNode(node);
 
     while (dummy) {
         if (dummy == isolatedRootDummy) {
@@ -300,10 +289,10 @@ void KisNodeModel::slotBeginInsertDummy(KisNodeDummy *parent, int index, const Q
     QModelIndex parentIndex;
 
     bool willAdd =
-            m_d->indexConverter->indexFromAddedDummy(parent, index,
-                                                     metaObjectType,
-                                                     isAnimated,
-                                                     parentIndex, row);
+        m_d->indexConverter->indexFromAddedDummy(parent, index,
+                                                 metaObjectType,
+                                                 isAnimated,
+                                                 parentIndex, row);
 
     if(willAdd) {
         beginInsertRows(parentIndex, row, row);
@@ -423,7 +412,7 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
     case Qt::SizeHintRole: return m_d->image->size(); // FIXME
     case Qt::TextColorRole:
         return belongsToIsolatedGroup(node) &&
-                !node->projectionLeaf()->isDroppedMask() ? QVariant() : QVariant(QColor(Qt::gray));
+            !node->projectionLeaf()->isDroppedMask() ? QVariant() : QVariant(QColor(Qt::gray));
     case Qt::FontRole: {
         QFont baseFont;
         if (node->projectionLeaf()->isDroppedMask()) {
@@ -500,13 +489,13 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
         node->setName(value.toString());
         break;
     case PropertiesRole:
-    {
-        // don't record undo/redo for visibility, locked or alpha locked changes
-        PropertyList proplist = value.value<PropertyList>();
-        KisNodePropertyListCommand::setNodePropertiesNoUndo(node, m_d->image, proplist);
+        {
+            // don't record undo/redo for visibility, locked or alpha locked changes
+            PropertyList proplist = value.value<PropertyList>();
+            KisNodePropertyListCommand::setNodePropertiesNoUndo(node, m_d->image, proplist);
 
-        break;
-    }
+            break;
+        }
     default:
         result = false;
     }
@@ -596,7 +585,7 @@ bool KisNodeModel::correctNewNodeLocation(KisNodeSP node,
         parentDummy = parentDummy->parent();
 
         result = (!parentDummy) ? false :
-                                  correctNewNodeLocation(node, parentDummy, aboveThisDummy);
+            correctNewNodeLocation(node, parentDummy, aboveThisDummy);
     }
 
     return result;
@@ -609,10 +598,10 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
     bool copyNode = (action == Qt::CopyAction);
 
     QList<KisNodeSP> nodes =
-            KisMimeData::tryLoadInternalNodes(data,
-                                              m_d->image,
-                                              m_d->shapeController,
-                                              copyNode /* IN-OUT */);
+        KisMimeData::tryLoadInternalNodes(data,
+                                          m_d->image,
+                                          m_d->shapeController,
+                                          copyNode /* IN-OUT */);
 
     if (nodes.isEmpty()) {
         QRect imageBounds = m_d->image->bounds();
@@ -637,8 +626,8 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
     KisNodeDummy *aboveThisDummy = 0;
 
     parentDummy = parent.isValid() ?
-                m_d->indexConverter->dummyFromIndex(parent) :
-                m_d->dummiesFacade->rootDummy();
+        m_d->indexConverter->dummyFromIndex(parent) :
+        m_d->dummiesFacade->rootDummy();
 
     if (row == -1) {
         aboveThisDummy = parent.isValid() ? parentDummy->lastChild() : 0;

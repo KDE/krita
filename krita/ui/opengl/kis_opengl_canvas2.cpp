@@ -62,16 +62,6 @@ static kis_glLogicOp ptr_glLogicOp = 0;
 struct KisOpenGLCanvas2::Private
 {
 public:
-
-    Private()
-        : canvasInitialized(false)
-        , displayShader(0)
-        , checkerShader(0)
-        , cursorShader(0)
-        , glSyncObject(0)
-        , wrapAroundMode(0)
-    {}
-
     ~Private() {
         delete displayShader;
         delete checkerShader;
@@ -79,14 +69,14 @@ public:
         Sync::deleteSync(glSyncObject);
     }
 
-    bool canvasInitialized;
+    bool canvasInitialized{false};
 
     QVector3D vertices[6];
     QVector2D texCoords[6];
 
     KisOpenGLImageTexturesSP openGLImageTextures;
 
-    QOpenGLShaderProgram *displayShader;
+    QOpenGLShaderProgram *displayShader{0};
     int displayUniformLocationModelViewProjection;
     int displayUniformLocationTextureMatrix;
     int displayUniformLocationViewPortScale;
@@ -95,21 +85,21 @@ public:
     int displayUniformLocationTexture1;
     int displayUniformLocationFixedLodLevel;
 
-    QOpenGLShaderProgram *checkerShader;
+    QOpenGLShaderProgram *checkerShader{0};
     GLfloat checkSizeScale;
     bool scrollCheckers;
     int checkerUniformLocationModelViewProjection;
     int checkerUniformLocationTextureMatrix;
 
-    QOpenGLShaderProgram *cursorShader;
+    QOpenGLShaderProgram *cursorShader{0};
     int cursorShaderModelViewProjectionUniform;
 
     KisDisplayFilter* displayFilter;
     KisTextureTile::FilterMode filterMode;
 
-    GLsync glSyncObject;
+    GLsync glSyncObject{0};
 
-    bool wrapAroundMode;
+    bool wrapAroundMode{false};
 
     int xToColWithWrapCompensation(int x, const QRect &imageRect) {
         int firstImageColumn = openGLImageTextures->xToCol(imageRect.left());

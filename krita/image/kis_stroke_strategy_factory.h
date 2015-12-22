@@ -19,7 +19,7 @@
 #ifndef __KIS_STROKE_STRATEGY_FACTORY_H
 #define __KIS_STROKE_STRATEGY_FACTORY_H
 
-#include <boost/function.hpp>
-typedef boost::function< KisStrokeStrategy*() > KisStrokeStrategyFactory;
+#include <functional>
+using KisStrokeStrategyFactory = std::function<KisStrokeStrategy*()>;
 
 #endif /* __KIS_STROKE_STRATEGY_FACTORY_H */

@@ -80,14 +80,13 @@ void KisImageTest::benchmarkCreation()
 
 #include "testutil.h"
 #include "kis_stroke_strategy.h"
-#include <boost/function.hpp>
-#include <boost/bind.hpp>
+#include <functional>
 
 
 class ForbiddenLodStrokeStrategy : public KisStrokeStrategy
 {
 public:
-    ForbiddenLodStrokeStrategy(boost::function<void()> lodCallback)
+    ForbiddenLodStrokeStrategy(std::function<void()> lodCallback)
         : m_lodCallback(lodCallback)
     {
     }
@@ -99,7 +98,7 @@ public:
     }
 
 private:
-    boost::function<void()> m_lodCallback;
+    std::function<void()> m_lodCallback;
 };
 
 void notifyVar(bool *value) {
@@ -121,7 +120,7 @@ void KisImageTest::testBlockLevelOfDetail()
         bool lodCreated = false;
         KisStrokeId id = p.image->startStroke(
             new ForbiddenLodStrokeStrategy(
-                boost::bind(&notifyVar, &lodCreated)));
+                std::bind(&notifyVar, &lodCreated)));
         p.image->endStroke(id);
         p.image->waitForDone();
 
@@ -134,7 +133,7 @@ void KisImageTest::testBlockLevelOfDetail()
         bool lodCreated = false;
         KisStrokeId id = p.image->startStroke(
             new ForbiddenLodStrokeStrategy(
-                boost::bind(&notifyVar, &lodCreated)));
+                std::bind(&notifyVar, &lodCreated)));
         p.image->endStroke(id);
         p.image->waitForDone();
 
@@ -148,7 +147,7 @@ void KisImageTest::testBlockLevelOfDetail()
         bool lodCreated = false;
         KisStrokeId id = p.image->startStroke(
             new ForbiddenLodStrokeStrategy(
-                boost::bind(&notifyVar, &lodCreated)));
+                std::bind(&notifyVar, &lodCreated)));
         p.image->endStroke(id);
         p.image->waitForDone();
 

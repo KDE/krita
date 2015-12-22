@@ -91,9 +91,6 @@ class Q_DECL_HIDDEN KisPart::Private
 public:
     Private(KisPart *_part)
         : part(_part)
-        , canvasItem(0)
-        , startupWidget(0)
-        , actionCollection(0)
         , idleWatcher(2500)
 #ifdef HAVE_OPENGL
         , animationCachePopulator(_part)
@@ -112,9 +109,9 @@ public:
     QList<QPointer<KisMainWindow> > mainWindows;
     QList<QPointer<KisDocument> > documents;
 
-    QGraphicsItem *canvasItem;
-    KisOpenPane *startupWidget;
-    KActionCollection *actionCollection;
+    QGraphicsItem *canvasItem{0};
+    KisOpenPane *startupWidget{0};
+    KActionCollection *actionCollection{0};
 
     KisIdleWatcher idleWatcher;
 #ifdef HAVE_OPENGL

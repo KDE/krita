@@ -20,29 +20,27 @@
 #define __KIS_SIGNAL_COMPRESSOR_WITH_PARAM_H
 
 #include <kis_signal_compressor.h>
+#include <functional>
 
-#include <boost/function.hpp>
-#include <boost/bind.hpp>
 
 /**
- * A special class that converts a Qt signal into a boost::function
- * call.
+ * A special class that converts a Qt signal into a std::function call.
  *
  * Example:
  *
- * boost::function<void ()> destinationFunctionCall(boost::bind(someNiceFunc, firstParam, secondParam));
+ * std::function<void ()> destinationFunctionCall(std::bind(someNiceFunc, firstParam, secondParam));
  * SignalToFunctionProxy proxy(destinationFunctionCall);
  * connect(srcObject, SIGNAL(sigSomethingChanged()), &proxy, SLOT(start()));
  *
  * Now every time sigSomethingChanged() is emitted, someNiceFunc is
- * called. boost::bind allows us to call any method of any class without
+ * called. std::bind allows us to call any method of any class without
  * changing signature of the class or creating special wrappers.
  */
 class KRITAIMAGE_EXPORT SignalToFunctionProxy : public QObject
 {
     Q_OBJECT
 public:
-    typedef boost::function<void ()> TrivialFunction;
+    using TrivialFunction = std::function<void ()>;
 
 public:
     SignalToFunctionProxy(TrivialFunction function)
@@ -64,7 +62,7 @@ private:
  * A special class for deferring and comressing events with one
  * parameter of type T. This works like KisSignalCompressor but can
  * handle events with one parameter. Due to limitation of the Qt this
- * doesn't allow signal/slots, so it uses boost::funxtion instead.
+ * doesn't allow signal/slots, so it uses std::function instead.
  *
  * In the end (after a timeout) the latest param value is returned to
  * the callback.
@@ -73,9 +71,11 @@ private:
  *
  *        \code{.cpp}
  *
+ *        using namespace std::placeholders; // For _1 placeholder
+ *
  *        // prepare the callback function
- *        boost::function<void (qreal)> callback(
- *            boost::bind(&LutDockerDock::setCurrentExposureImpl, this, _1));
+ *        std::function<void (qreal)> callback(
+ *            std::bind(&LutDockerDock::setCurrentExposureImpl, this, _1));
  *
  *        // Create the compressor object
  *        KisSignalCompressorWithParam<qreal> compressor(40, callback);
@@ -90,15 +90,15 @@ template <typename T>
 class KisSignalCompressorWithParam
 {
 public:
-    typedef boost::function<void (T)> CallbackFunction;
+    using CallbackFunction = std::function<void (T)>;
 
 public:
     KisSignalCompressorWithParam(int delay, CallbackFunction function)
         : m_compressor(delay, KisSignalCompressor::FIRST_ACTIVE),
           m_function(function)
     {
-        boost::function<void ()> callback(
-            boost::bind(&KisSignalCompressorWithParam<T>::fakeSlotTimeout, this));
+        std::function<void ()> callback(
+            std::bind(&KisSignalCompressorWithParam<T>::fakeSlotTimeout, this));
         m_signalProxy.reset(new SignalToFunctionProxy(callback));
 
         m_compressor.connect(&m_compressor, SIGNAL(timeout()), m_signalProxy.data(), SLOT(start()));

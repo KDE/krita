@@ -279,8 +279,11 @@ static void handleTabletEvent(QWidget *windowWidget, const QPointF &local, const
             //                                           uniqueId, modifiers);
 
         }
+    } else {
+        globalEventEater->deactivate();
+        qt_tablet_target = 0;
+        targetWindow = 0;
     }
-
 }
 
 /**
@@ -645,13 +648,14 @@ QWindowsTabletDeviceData QWindowsTabletSupport::tabletInit(const quint64 uniqueI
 
 bool QWindowsTabletSupport::translateTabletProximityEvent(WPARAM /* wParam */, LPARAM lParam)
 {
+
     auto sendProximityEvent = [&](QEvent::Type type) {
         QPointF emptyPos;
         qreal zero = 0.0;
         QTabletEvent e(type, emptyPos, emptyPos, 0, m_devices.at(m_currentDevice).currentPointerType,
                        zero, 0, 0, zero, zero, 0, Qt::NoModifier,
                        m_devices.at(m_currentDevice).uniqueId, Qt::NoButton, (Qt::MouseButtons)0);
-        qApp->sendEvent(qApp->activeWindow(), &e);
+        qApp->sendEvent(qApp, &e);
     };
 
     if (!LOWORD(lParam)) {
@@ -753,14 +757,15 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
         QPoint globalPos = globalPosF.toPoint();
 
         // Find top-level window
-        QWidget *w = targetWindow; // Pass to window that grabbed it.
-        if (!w) w = qApp->activePopupWidget();
-        if (!w) w = qApp->activeModalWidget();
-        if (!w) w = qApp->topLevelAt(globalPos);
-        if (!w) w = qApp->activeWindow();
-        if (!w) continue;
+        QWidget *w = targetWindow; // If we had a target already, use it.
+        if (!w) {
+            w = qApp->activePopupWidget();
+            if (!w) w = qApp->activeModalWidget();
+            if (!w) w = qApp->topLevelAt(globalPos);
+            if (!w) continue;
+            w = w->window();
+        }
 
-        w = w->window();
 
         const QPoint localPos = w->mapFromGlobal(globalPos);
         const QPointF delta = globalPosF - globalPos;
@@ -877,20 +882,20 @@ void QWindowsTabletSupport::tabletUpdateCursor(const quint64 uniqueId,
 
     // Check tablet name to enable Surface Pro 3 workaround.
 #ifdef UNICODE
-    UINT nameLength = QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEVICES, DVC_NAME, 0);
-    TCHAR* dvcName = new TCHAR[nameLength + 1];
-    QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEVICES, DVC_NAME, dvcName);
-    QString qDvcName = QString::fromWCharArray((const wchar_t*)dvcName);
-    dbgInput << "DVC_NAME =" << qDvcName;
-    // Name changed between older and newer Surface Pro 3 drivers
-    if (qDvcName == QString::fromLatin1("N-trig DuoSense device") ||
-        qDvcName == QString::fromLatin1("Microsoft device")) {
-        dbgInput << "This looks like a Surface Pro 3. Enabling eraser workaround.";
-        isSurfacePro3 = true;
-    } else {
-        isSurfacePro3 = false;
+    if (!isSurfacePro3) {
+        UINT nameLength = QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEVICES, DVC_NAME, 0);
+        TCHAR* dvcName = new TCHAR[nameLength + 1];
+        QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEVICES, DVC_NAME, dvcName);
+        QString qDvcName = QString::fromWCharArray((const wchar_t*)dvcName);
+        dbgInput << "DVC_NAME =" << qDvcName;
+        // Name changed between older and newer Surface Pro 3 drivers
+        if (qDvcName == QString::fromLatin1("N-trig DuoSense device") ||
+            qDvcName == QString::fromLatin1("Microsoft device")) {
+            dbgInput << "This looks like a Surface Pro 3. Enabling eraser workaround.";
+            isSurfacePro3 = true;
+        }
+        delete[] dvcName;
     }
-    delete[] dvcName;
 #endif
 }
 

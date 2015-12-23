@@ -281,13 +281,25 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
 QStringList KoResourcePaths::findDirsInternal(const QString &type, const QString &relDir)
 {
     QStringList aliases = d->aliases(type);
+    qDebug() << type << aliases << d->mapTypeToQStandardPaths(type);
 
-    QStringList dirs = QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), relDir, QStandardPaths::LocateDirectory);
+    QStringList dirs;
+
+#ifdef Q_OS_MAC
+    QString bundlePath = getApplicationRoot() + "/share/" + relDir;
+    dirs << bundlePath;
+    bundlePath = getApplicationRoot() + "/../share/" + relDir;
+    dirs << bundlePath;
+#endif
+
+    dirs << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), relDir, QStandardPaths::LocateDirectory);
+
     Q_FOREACH (const QString &alias, aliases) {
         dirs << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias + '/' + relDir, QStandardPaths::LocateDirectory);
     }
+
     //Q_ASSERT(!dirs.isEmpty());
-    //qDebug() << "findDirs: type" << type << "relDir" << relDir<< "resource" << dirs;
+    qDebug() << "findDirs: type" << type << "relDir" << relDir<< "resource" << dirs;
     return dirs;
 }
 
@@ -332,7 +344,7 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
     QStringList aliases = d->aliases(type);
     QString filter = _filter;
 
-    // In cases where the filter  is like "color-schemes/*.colors" instead of "*.kpp", used with unregistgered resource types
+    // In cases where the filter  is like "color-schemes/*.colors" instead of "*.kpp", used with unregistered resource types
     if (filter.indexOf('*') > 0) {
         aliases << filter.split('*').first();
         filter = '*' + filter.split('*')[1];

@@ -180,14 +180,6 @@ KisLayerBox::KisLayerBox()
     m_wdgLayerBox->bnLower->setIcon(KisIconUtils::loadIcon("arrowdown"));
     m_wdgLayerBox->bnLower->setIconSize(QSize(22, 22));
 
-    m_wdgLayerBox->bnLeft->setEnabled(true);
-    m_wdgLayerBox->bnLeft->setIcon(KisIconUtils::loadIcon("removefromfolder"));
-    m_wdgLayerBox->bnLeft->setIconSize(QSize(22, 22));
-
-    m_wdgLayerBox->bnRight->setEnabled(true);
-    m_wdgLayerBox->bnRight->setIcon(KisIconUtils::loadIcon("addtofolder"));
-    m_wdgLayerBox->bnRight->setIconSize(QSize(22, 22));
-
     m_wdgLayerBox->bnProperties->setIcon(KisIconUtils::loadIcon("properties"));
     m_wdgLayerBox->bnProperties->setIconSize(QSize(22, 22));
 
@@ -202,24 +194,7 @@ KisLayerBox::KisLayerBox()
     connect(m_removeAction, SIGNAL(triggered()), this, SLOT(slotRmClicked()));
     m_actions.append(m_removeAction);
 
-    KisAction* action  = new ButtonAction(m_wdgLayerBox->bnLeft, this);
-    action->setText(i18n("Move Layer Left"));
-    action->setActivationFlags(KisAction::ACTIVE_NODE);
-    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    action->setObjectName("move_layer_left");
-    connect(action, SIGNAL(triggered()), this, SLOT(slotLeftClicked()));
-    m_actions.append(action);
-
-    action  = new ButtonAction(m_wdgLayerBox->bnRight, this);
-    action->setText(i18n("Move Layer Right"));
-    action->setActivationFlags(KisAction::ACTIVE_NODE);
-    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    action->setObjectName("move_layer_right");
-    connect(action, SIGNAL(triggered()), this, SLOT(slotRightClicked()));
-    m_actions.append(action);
-
-
-    action  = new ButtonAction(m_wdgLayerBox->bnRaise, this);
+    KisAction *action  = new ButtonAction(m_wdgLayerBox->bnRaise, this);
     action->setText(i18n("Move Layer or Mask Up"));
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
@@ -648,48 +623,6 @@ void KisLayerBox::slotLowerClicked()
     }
 
     m_nodeJuggler->lowerNode(m_nodeManager->activeNode());
-}
-
-void KisLayerBox::slotLeftClicked()
-{
-    if (!m_canvas) return;
-    Q_FOREACH (KisNodeSP node, m_nodeManager->selectedNodes()) {
-        KisNodeSP parent = node->parent();
-        KisNodeSP grandParent = parent->parent();
-        quint16 nodeIndex = parent->index(node);
-
-        if (!grandParent) continue;
-        if (!grandParent->parent() && node->inherits("KisMask")) continue;
-
-        if (nodeIndex <= parent->childCount() / 2) {
-            m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent));
-        }
-        else {
-            m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent) + 1);
-        }
-    }
-}
-
-void KisLayerBox::slotRightClicked()
-{
-    if (!m_canvas) return;
-
-    Q_FOREACH (KisNodeSP node, m_nodeManager->selectedNodes()) {
-        KisNodeSP parent = m_nodeManager->activeNode()->parent();
-        KisNodeSP newParent;
-        int nodeIndex = parent->index(node);
-        int indexAbove = nodeIndex + 1;
-        int indexBelow = nodeIndex - 1;
-
-        if (parent->at(indexBelow) && parent->at(indexBelow)->allowAsChild(node)) {
-            newParent = parent->at(indexBelow);
-            m_nodeManager->moveNodeAt(node, newParent, newParent->childCount());
-        }
-        else if (parent->at(indexAbove) && parent->at(indexAbove)->allowAsChild(node)) {
-            newParent = parent->at(indexAbove);
-            m_nodeManager->moveNodeAt(node, newParent, 0);
-        }
-    }
 }
 
 void KisLayerBox::slotPropertiesClicked()

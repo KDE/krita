@@ -2514,32 +2514,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="move_layer_left">
-      <icon></icon>
-      <text>Move Layer Left</text>
-      <whatsThis></whatsThis>
-      <toolTip>Move Layer Left</toolTip>
-      <iconText>Move Layer Left</iconText>
-      <activationFlags>1000</activationFlags>
-      <activationConditions>1</activationConditions>
-      <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="move_layer_right">
-      <icon></icon>
-      <text>Move Layer Right</text>
-      <whatsThis></whatsThis>
-      <toolTip>Move Layer Right</toolTip>
-      <iconText>Move Layer Right</iconText>
-      <activationFlags>1000</activationFlags>
-      <activationConditions>1</activationConditions>
-      <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="move_layer_up">
       <icon></icon>
       <text>Move Layer or Mask Up</text>

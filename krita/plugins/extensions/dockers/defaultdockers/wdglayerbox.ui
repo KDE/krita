@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>WdgLayerBox</class>
  <widget class="QWidget" name="WdgLayerBox">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>238</width>
+    <height>83</height>
+   </rect>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>1</number>
@@ -94,7 +102,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KisDoubleSliderSpinBox" name="doubleOpacity">
+      <widget class="KisDoubleSliderSpinBox" name="doubleOpacity" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -114,7 +122,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="KisNodeView" name="listLayers">
+      <widget class="KisNodeView" name="listLayers" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -126,7 +134,7 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="hbox1" stretch="0,0,0,0,0,0,0,1,0">
+    <layout class="QHBoxLayout" name="hbox1" stretch="0,0,0,0,0,1,0">
      <property name="spacing">
       <number>2</number>
      </property>
@@ -215,56 +223,6 @@
        </property>
        <property name="toolTip">
         <string>Move layer or mask up</string>
-       </property>
-       <property name="text">
-        <string>...</string>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>22</width>
-         <height>22</height>
-        </size>
-       </property>
-       <property name="autoRaise">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="bnLeft">
-       <property name="minimumSize">
-        <size>
-         <width>28</width>
-         <height>28</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>Move layer out of group</string>
-       </property>
-       <property name="text">
-        <string>...</string>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>22</width>
-         <height>22</height>
-        </size>
-       </property>
-       <property name="autoRaise">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="bnRight">
-       <property name="minimumSize">
-        <size>
-         <width>28</width>
-         <height>28</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>Move layer into group</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -377,8 +335,6 @@
   <tabstop>bnDuplicate</tabstop>
   <tabstop>bnLower</tabstop>
   <tabstop>bnRaise</tabstop>
-  <tabstop>bnLeft</tabstop>
-  <tabstop>bnRight</tabstop>
   <tabstop>bnProperties</tabstop>
   <tabstop>bnDelete</tabstop>
  </tabstops>

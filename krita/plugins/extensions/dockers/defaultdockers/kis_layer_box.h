@@ -96,8 +96,6 @@ private Q_SLOTS:
     void slotRmClicked();
     void slotRaiseClicked();
     void slotLowerClicked();
-    void slotLeftClicked();
-    void slotRightClicked();
     void slotPropertiesClicked();
 
     void slotMergeLayer();

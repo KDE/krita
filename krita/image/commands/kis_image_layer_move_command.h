@@ -41,7 +41,7 @@ public:
      * @param newParent the next parent of the layer
      * @param newAbove the layer that will be below the layer after the move
      */
-    KisImageLayerMoveCommand(KisImageWSP image, KisNodeSP node, KisNodeSP newParent, KisNodeSP newAbove);
+    KisImageLayerMoveCommand(KisImageWSP image, KisNodeSP node, KisNodeSP newParent, KisNodeSP newAbove, bool doUpdates = true);
     KisImageLayerMoveCommand(KisImageWSP image, KisNodeSP node, KisNodeSP newParent, quint32 index);
 
     virtual void redo();
@@ -56,6 +56,7 @@ private:
     quint32 m_index;
 
     bool m_useIndex;
+    bool m_doUpdates;
 };
 
 #endif

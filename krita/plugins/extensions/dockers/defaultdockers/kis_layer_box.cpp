@@ -75,6 +75,7 @@
 #include "kis_selection_mask.h"
 #include "kis_config.h"
 #include "KisView.h"
+#include "kis_node_juggler_compressed.h"
 
 #include "ui_wdglayerbox.h"
 
@@ -224,7 +225,7 @@ KisLayerBox::KisLayerBox()
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     action->setObjectName("move_layer_up");
     action->setShortcut(Qt::CTRL + Qt::Key_PageUp);
-    connect(action, SIGNAL(triggered()), this, SLOT(slotLowerClicked()));
+    connect(action, SIGNAL(triggered()), this, SLOT(slotRaiseClicked()));
     m_actions.append(action);
 
     action  = new ButtonAction(m_wdgLayerBox->bnLower, this);
@@ -233,7 +234,7 @@ KisLayerBox::KisLayerBox()
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     action->setObjectName("move_layer_down");
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_PageDown));
-    connect(action, SIGNAL(triggered()), this, SLOT(slotRaiseClicked()));
+    connect(action, SIGNAL(triggered()), this, SLOT(slotLowerClicked()));
     m_actions.append(action);
 
     m_propertiesAction  = new ButtonAction(m_wdgLayerBox->bnProperties,
@@ -243,11 +244,6 @@ KisLayerBox::KisLayerBox()
     m_propertiesAction->setObjectName("layer_properties");
     connect(m_propertiesAction, SIGNAL(triggered()), this, SLOT(slotPropertiesClicked()));
     m_actions.append(m_propertiesAction);
-
-    // NOTE: this is _not_ a mistake. The layerbox shows the layers in the reverse order
-    connect(m_wdgLayerBox->bnRaise, SIGNAL(clicked()), SLOT(slotLowerClicked()));
-    connect(m_wdgLayerBox->bnLower, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
-    // END NOTE
 
     if (cfg.sliderLabels()) {
         m_wdgLayerBox->opacityLabel->hide();
@@ -633,34 +629,25 @@ void KisLayerBox::slotRmClicked()
 void KisLayerBox::slotRaiseClicked()
 {
     if (!m_canvas) return;
-    KisNodeSP node = m_nodeManager->activeNode();
-    KisNodeSP parent = node->parent();
-    KisNodeSP grandParent = parent->parent();
 
-    if (!m_nodeManager->activeNode()->prevSibling()) {
-        if (!grandParent) return;
-        if (!grandParent->parent() && node->inherits("KisMask")) return;
-        m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent));
-    } else {
-        m_nodeManager->raiseNode();
+    if (!m_nodeJuggler) {
+        m_nodeJuggler = new KisNodeJugglerCompressed(kundo2_i18n("Move Nodes"), m_image, 3000);
+        m_nodeJuggler->setAutoDelete(true);
     }
+
+    m_nodeJuggler->raiseNode(m_nodeManager->activeNode());
 }
 
 void KisLayerBox::slotLowerClicked()
 {
     if (!m_canvas) return;
-    KisNodeSP node = m_nodeManager->activeNode();
-    KisNodeSP parent = node->parent();
-    KisNodeSP grandParent = parent->parent();
 
-    if (!m_nodeManager->activeNode()->nextSibling()) {
-        if (!grandParent) return;
-        if (!grandParent->parent() && node->inherits("KisMask")) return;
-        m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent) + 1);
+    if (!m_nodeJuggler) {
+        m_nodeJuggler = new KisNodeJugglerCompressed(kundo2_i18n("Move Nodes"), m_image, 3000);
+        m_nodeJuggler->setAutoDelete(true);
     }
-    else {
-        m_nodeManager->lowerNode();
-    }
+
+    m_nodeJuggler->lowerNode(m_nodeManager->activeNode());
 }
 
 void KisLayerBox::slotLeftClicked()

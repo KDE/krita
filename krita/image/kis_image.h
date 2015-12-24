@@ -688,6 +688,12 @@ Q_SIGNALS:
     void sigStrokeEndRequested();
 
     /**
+     * Same as sigStrokeEndRequested() but is not emitted when the active node
+     * is changed.
+     */
+    void sigStrokeEndRequestedActiveNodeFiltered();
+
+    /**
      * Emitted when the isolated mode status has changed.
      *
      * Can be used by the receivers to catch a fact of forcefully
@@ -829,6 +835,15 @@ public Q_SLOTS:
      * will be notified and the stroke will be cancelled
      */
     void requestStrokeEnd();
+
+    /**
+     * Same as requestStrokeEnd() but is called by view manager when
+     * the current node is changed. Use to dintinguish
+     * sigStrokeEndRequested() and
+     * sigStrokeEndRequestedActiveNodeFiltered() which are used by
+     * KisNodeJugglerCompressed
+     */
+    void requestStrokeEndActiveNode();
 
 private:
 

@@ -66,4 +66,34 @@ namespace KisCommandUtils
             m_child->undo();
         }
     }
+
+    FlipFlopCommand::FlipFlopCommand(bool finalize, KUndo2Command *parent)
+        : KUndo2Command(parent),
+          m_finalize(finalize),
+          m_firstRedo(true)
+    {
+    }
+
+    void FlipFlopCommand::redo()
+    {
+        if (!m_finalize) {
+            init();
+        } else {
+            end();
+        }
+
+        m_firstRedo = false;
+    }
+
+    void FlipFlopCommand::undo()
+    {
+        if (m_finalize) {
+            init();
+        } else {
+            end();
+        }
+    }
+
+    void FlipFlopCommand::init() {}
+    void FlipFlopCommand::end() {}
 }

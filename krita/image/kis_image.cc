@@ -1252,6 +1252,12 @@ void KisImage::requestStrokeCancellation()
 void KisImage::requestStrokeEnd()
 {
     emit sigStrokeEndRequested();
+    emit sigStrokeEndRequestedActiveNodeFiltered();
+}
+
+void KisImage::requestStrokeEndActiveNode()
+{
+    emit sigStrokeEndRequested();
 }
 
 void KisImage::refreshGraph(KisNodeSP root)

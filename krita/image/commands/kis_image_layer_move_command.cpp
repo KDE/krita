@@ -33,7 +33,7 @@
 #include "kis_undo_adapter.h"
 
 
-KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageWSP image, KisNodeSP layer, KisNodeSP newParent, KisNodeSP newAbove)
+KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageWSP image, KisNodeSP layer, KisNodeSP newParent, KisNodeSP newAbove, bool doUpdates)
         : KisImageCommand(kundo2_i18n("Move Layer"), image)
 {
     m_layer = layer;
@@ -43,6 +43,7 @@ KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageWSP image, KisNodeSP 
     m_prevAbove = layer->prevSibling();
     m_index = -1;
     m_useIndex = false;
+    m_doUpdates = doUpdates;
 }
 
 KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageWSP image, KisNodeSP node, KisNodeSP newParent, quint32 index)
@@ -55,6 +56,7 @@ KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageWSP image, KisNodeSP 
     m_prevAbove = node->prevSibling();
     m_index = index;
     m_useIndex = true;
+    m_doUpdates = true;
 }
 
 void KisImageLayerMoveCommand::redo()
@@ -66,16 +68,22 @@ void KisImageLayerMoveCommand::redo()
         m_image->moveNode(m_layer, m_newParent, m_newAbove);
     }
 
-    m_image->refreshGraphAsync(m_prevParent);
-    if (m_newParent != m_prevParent)
-        m_layer->setDirty(m_image->bounds());
+    if (m_doUpdates) {
+        m_image->refreshGraphAsync(m_prevParent);
+        if (m_newParent != m_prevParent) {
+            m_layer->setDirty(m_image->bounds());
+        }
+    }
 }
 
 void KisImageLayerMoveCommand::undo()
 {
     m_image->moveNode(m_layer, m_prevParent, m_prevAbove);
 
-    m_image->refreshGraphAsync(m_newParent);
-    if (m_newParent != m_prevParent)
-        m_layer->setDirty(m_image->bounds());
+    if (m_doUpdates) {
+        m_image->refreshGraphAsync(m_newParent);
+        if (m_newParent != m_prevParent) {
+            m_layer->setDirty(m_image->bounds());
+        }
+    }
 }

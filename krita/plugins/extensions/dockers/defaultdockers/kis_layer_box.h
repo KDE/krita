@@ -50,6 +50,7 @@ class KoCompositeOp;
 class KisCanvas2;
 class KisNodeModel;
 class Ui_WdgLayerBox;
+class KisNodeJugglerCompressed;
 
 /**
  * A widget that shows a visualization of the layer structure.
@@ -137,6 +138,7 @@ private:
     KisAction* m_removeAction;
     KisAction* m_propertiesAction;
     KisAction* m_selectOpaque;
+    QPointer<KisNodeJugglerCompressed> m_nodeJuggler;
 };
 
 class KisLayerBoxFactory : public KoDockFactoryBase

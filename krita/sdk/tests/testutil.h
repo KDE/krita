@@ -329,8 +329,11 @@ inline bool checkQImageImpl(bool externalTest,
                                      externalTest);
     }
 
-    bool canSkipExternalTest = fullPath.isEmpty() && externalTest;
+    if (!QFileInfo(fullPath).exists()) {
+        fullPath = "";
+    }
 
+    bool canSkipExternalTest = fullPath.isEmpty() && externalTest;
     QImage ref(fullPath);
 
     bool valid = true;
@@ -394,9 +397,15 @@ struct ExternalImageChecker
     ExternalImageChecker(const QString &prefix, const QString &testName)
         : m_prefix(prefix),
           m_testName(testName),
-          m_success(true)
+          m_success(true),
+          m_maxFailingPixels(100)
         {
         }
+
+
+    void setMaxFailingPixels(int value) {
+        m_maxFailingPixels = value;
+    }
 
     bool testPassed() const {
         return m_success;
@@ -407,7 +416,7 @@ struct ExternalImageChecker
             checkQImageExternal(device->convertToQImage(0, image->bounds()),
                                 m_testName,
                                 m_prefix,
-                                caseName, 1, 1, 100);
+                                caseName, 1, 1, m_maxFailingPixels);
 
         m_success &= result;
         return result;
@@ -425,6 +434,7 @@ private:
     QString m_testName;
 
     bool m_success;
+    int m_maxFailingPixels;
 };
 
 

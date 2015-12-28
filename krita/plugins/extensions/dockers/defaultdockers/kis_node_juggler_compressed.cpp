@@ -28,8 +28,22 @@
 #include "commands/kis_image_layer_move_command.h"
 #include "kis_signal_compressor.h"
 #include "kis_command_utils.h"
+#include "kis_layer_utils.h"
+#include "kis_node_manager.h"
 
 
+/**
+ * A special structure that stores information about a node that was
+ * moved. The purpose of the object is twofold:
+ *
+ *     1) When the reordering stroke is already started than the
+ *        parent and sibling nodes may be not consistent anymore. So
+ *        we store it separately.
+ *
+ *     2) This objects allows merging (compressing) multiple moves of
+ *        a layer into a signle action. This behavior is implemented
+ *        in tryMerge() method.
+ */
 struct MoveNodeStruct {
     MoveNodeStruct(KisImageSP _image, KisNodeSP _node, KisNodeSP _parent, KisNodeSP _above)
         : image(_image),
@@ -93,12 +107,25 @@ struct MoveNodeStruct {
 typedef QSharedPointer<MoveNodeStruct> MoveNodeStructSP;
 typedef QHash<KisNodeSP, MoveNodeStructSP> MovedNodesHash;
 
-struct BatchMoveUpdateData {
+
+/**
+ * All the commands executed bythe stroke system are running in the
+ * background asynchronously. But, at the same time, they emit updates
+ * in parallel to the ones emitted by the juggler. Therefore, the
+ * juggler and all its commands should share some data: which updates
+ * have been requested, but not yet dispatched (m_movedNodesInitial),
+ * and what updates have already been processed and executed
+ * (m_movedNodesUpdated). This object is shared via a shared pointer
+ * and guarantees safe (including thread-safe) access to the shared
+ * data.
+ */
+class BatchMoveUpdateData {
     MovedNodesHash m_movedNodesInitial;
     MovedNodesHash m_movedNodesUpdated;
 
-    bool m_jugglerAlive;
     QMutex m_mutex;
+
+private:
 
     static void addToHashLazy(MovedNodesHash *hash, MoveNodeStructSP moveStruct) {
         if (hash->contains(moveStruct->node)) {
@@ -108,6 +135,8 @@ struct BatchMoveUpdateData {
             hash->insert(moveStruct->node, moveStruct);
         }
     }
+
+public:
 
     void processUnhandledUpdates() {
         QMutexLocker l(&m_mutex);
@@ -131,6 +160,8 @@ struct BatchMoveUpdateData {
     }
 
     void emitFinalUpdates(bool undo) {
+        QMutexLocker l(&m_mutex);
+
         if (m_movedNodesUpdated.isEmpty()) return;
 
         MovedNodesHash::const_iterator it = m_movedNodesUpdated.constBegin();
@@ -148,6 +179,10 @@ struct BatchMoveUpdateData {
 
 typedef QSharedPointer<BatchMoveUpdateData> BatchMoveUpdateDataSP;
 
+/**
+ * A command that emits a update signals on the compressed move undo
+ * or redo.
+ */
 class UpdateMovedNodesCommand : public KisCommandUtils::FlipFlopCommand
 {
 public:
@@ -158,36 +193,131 @@ public:
     }
 
     void end() {
-        if (isFirstRedo()) {
+        if (isFinalizing() && isFirstRedo()) {
+            /**
+             * When doing the first redo() some of the updates might
+             * have already been executed by the juggler itself, so we
+             * should process'unhandled' updates only
+             */
             m_updateData->processUnhandledUpdates();
         } else {
+            /**
+             * When being executed by real undo/redo operations, we
+             * should emit all the update signals. Noone else will do
+             * that for us (juggler, which did it in the previous
+             * case, might have already died).
+             */
             m_updateData->emitFinalUpdates(isFinalizing());
         }
     }
 private:
     BatchMoveUpdateDataSP m_updateData;
-    bool m_firstRun;
 };
 
+/**
+ * A special QObject-based proxy object that connects to the node
+ * manager and allows the command to emit signals to change
+ * active/selected nodes from another (non-gui) thread.
+ */
+class SelectionSignalsProxy : public QObject {
+    Q_OBJECT
+public:
+    SelectionSignalsProxy(KisNodeManager *nodeManager, QObject *parent = 0)
+        : QObject(parent)
+    {
+        connect(this, SIGNAL(sigActivateNode(KisNodeSP)), nodeManager, SLOT(slotNonUiActivatedNode(KisNodeSP)));
+        connect(this, SIGNAL(sigSetSelectedNodes(const KisNodeList&)), nodeManager, SLOT(slotSetSelectedNodes(const KisNodeList&)));
+    }
+
+    void changeLayersSelection(KisNodeSP activeNode, const KisNodeList &selectedNodes) {
+        emit sigActivateNode(activeNode);
+        emit sigSetSelectedNodes(selectedNodes);
+    }
+
+Q_SIGNALS:
+    void sigActivateNode(KisNodeSP node);
+    void sigSetSelectedNodes(const KisNodeList &nodes);
+};
+
+/**
+ * A command to keep correct set of selected/active nodes thoroughout
+ * the action.
+ */
+class KeepNodesSelectedCommand : public KisCommandUtils::FlipFlopCommand
+{
+public:
+    KeepNodesSelectedCommand(const KisNodeList &selectedBefore,
+                             const KisNodeList &selectedAfter,
+                             KisNodeSP activeBefore,
+                             KisNodeSP activeAfter,
+                             KisNodeManager *nodeManager,
+                             bool finalize, KUndo2Command *parent = 0)
+        : FlipFlopCommand(finalize, parent),
+          m_selectedBefore(selectedBefore),
+          m_selectedAfter(selectedAfter),
+          m_activeBefore(activeBefore),
+          m_activeAfter(activeAfter),
+          m_nodeManager(nodeManager),
+          m_signalProxy(new SelectionSignalsProxy(nodeManager))
+    {
+    }
+
+    void end() {
+        if (isFinalizing()) {
+            m_signalProxy->changeLayersSelection(m_activeAfter, m_selectedAfter);
+        } else {
+            m_signalProxy->changeLayersSelection(m_activeBefore, m_selectedBefore);
+        }
+    }
+
+private:
+    KisNodeList m_selectedBefore;
+    KisNodeList m_selectedAfter;
+    KisNodeSP m_activeBefore;
+    KisNodeSP m_activeAfter;
+    KisNodeManager *m_nodeManager;
+    QScopedPointer<SelectionSignalsProxy> m_signalProxy;
+};
+
+/**
+ * A generalized command to muve up/down a set of layer
+ */
 struct LowerRaiseLayer : public KisCommandUtils::AggregateCommand {
     LowerRaiseLayer(BatchMoveUpdateDataSP updateData,
-               KisImageSP image,
-               KisNodeSP node,
-               bool lower)
+                    KisNodeManager *nodeManager,
+                    KisImageSP image,
+                    const KisNodeList &nodes,
+                    KisNodeSP activeNode,
+                    bool lower)
         : m_updateData(updateData),
+          m_nodeManager(nodeManager),
           m_image(image),
-          m_node(node),
+          m_nodes(nodes),
+          m_activeNode(activeNode),
           m_lower (lower) {}
 
+    KisNodeList sortAndFilterNodes(const KisNodeList &nodes) {
+        KisNodeList filteredNodes = nodes;
+        KisNodeList sortedNodes;
+
+        KisLayerUtils::filterMergableNodes(filteredNodes);
+        KisLayerUtils::sortMergableNodes(m_image->root(), filteredNodes, sortedNodes);
+
+        return sortedNodes;
+    }
+
     void populateChildCommands() {
-        KisNodeSP parent = m_node->parent();
+        KisNodeList sortedNodes = sortAndFilterNodes(m_nodes);
+        KisNodeSP headNode = m_lower ? sortedNodes.first() : sortedNodes.last();
+
+        KisNodeSP parent = headNode->parent();
         KisNodeSP grandParent = parent ? parent->parent() : 0;
 
         KisNodeSP newAbove;
         KisNodeSP newParent;
 
         if (m_lower) {
-            KisNodeSP prevNode = m_node->prevSibling();
+            KisNodeSP prevNode = headNode->prevSibling();
 
             if (prevNode) {
                 if (prevNode->inherits("KisGroupLayer") &&
@@ -200,13 +330,13 @@ struct LowerRaiseLayer : public KisCommandUtils::AggregateCommand {
                     newParent = parent;
                 }
             } else if (grandParent &&
-                       !m_node->inherits("KisMask")) {
+                       !headNode->inherits("KisMask")) { // TODO
 
                 newAbove = parent->prevSibling();
                 newParent = grandParent;
             }
         } else {
-            KisNodeSP nextNode = m_node->nextSibling();
+            KisNodeSP nextNode = headNode->nextSibling();
 
             if (nextNode) {
                 if (nextNode->inherits("KisGroupLayer") &&
@@ -219,7 +349,7 @@ struct LowerRaiseLayer : public KisCommandUtils::AggregateCommand {
                     newParent = parent;
                 }
             } else if (grandParent &&
-                       !m_node->inherits("KisMask")) {
+                       !headNode->inherits("KisMask")) { // TODO
 
                 newAbove = parent;
                 newParent = grandParent;
@@ -228,23 +358,37 @@ struct LowerRaiseLayer : public KisCommandUtils::AggregateCommand {
 
         if (!newParent) return;
 
-        MoveNodeStructSP moveStruct = toQShared(new MoveNodeStruct(m_image, m_node, newParent, newAbove));
-        addCommand(new KisImageLayerMoveCommand(m_image, m_node, newParent, newAbove, false));
-        m_updateData->addInitialUpdate(moveStruct);
+        addCommand(new KeepNodesSelectedCommand(sortedNodes, sortedNodes,
+                                                m_activeNode, m_activeNode,
+                                                m_nodeManager, false));
+
+        KisNodeSP currentAbove = newAbove;
+        Q_FOREACH (KisNodeSP node, sortedNodes) {
+            MoveNodeStructSP moveStruct = toQShared(new MoveNodeStruct(m_image, node, newParent, currentAbove));
+            addCommand(new KisImageLayerMoveCommand(m_image, node, newParent, currentAbove, false));
+            m_updateData->addInitialUpdate(moveStruct);
+            currentAbove = node;
+        }
+
+        addCommand(new KeepNodesSelectedCommand(sortedNodes, sortedNodes,
+                                                m_activeNode, m_activeNode,
+                                                m_nodeManager, true));
     }
 
 private:
     BatchMoveUpdateDataSP m_updateData;
-
+    KisNodeManager *m_nodeManager;
     KisImageSP m_image;
-    KisNodeSP m_node;
+    KisNodeList m_nodes;
+    KisNodeSP m_activeNode;
     bool m_lower;
 };
 
 struct KisNodeJugglerCompressed::Private
 {
-    Private(KisImageSP _image, int _timeout)
+    Private(KisImageSP _image, KisNodeManager *_nodeManager, int _timeout)
         : image(_image),
+          nodeManager(_nodeManager),
           compressor(_timeout, KisSignalCompressor::POSTPONE),
           selfDestructionCompressor(3 * _timeout, KisSignalCompressor::POSTPONE),
           updateData(new BatchMoveUpdateData),
@@ -253,6 +397,7 @@ struct KisNodeJugglerCompressed::Private
     {}
 
     KisImageSP image;
+    KisNodeManager *nodeManager;
     QScopedPointer<KisProcessingApplicator> applicator;
 
     KisSignalCompressor compressor;
@@ -264,8 +409,8 @@ struct KisNodeJugglerCompressed::Private
     bool isStarted;
 };
 
-KisNodeJugglerCompressed::KisNodeJugglerCompressed(const KUndo2MagicString &actionName, KisImageSP image, int timeout)
-    : m_d(new Private(image, timeout))
+KisNodeJugglerCompressed::KisNodeJugglerCompressed(const KUndo2MagicString &actionName, KisImageSP image, KisNodeManager *nodeManager, int timeout)
+    : m_d(new Private(image, nodeManager, timeout))
 {
     connect(m_d->image, SIGNAL(sigStrokeCancellationRequested()), SLOT(slotEndStrokeRequested()));
     connect(m_d->image, SIGNAL(sigStrokeEndRequestedActiveNodeFiltered()), SLOT(slotEndStrokeRequested()));
@@ -281,7 +426,7 @@ KisNodeJugglerCompressed::KisNodeJugglerCompressed(const KUndo2MagicString &acti
     connect(&m_d->compressor, SIGNAL(timeout()), SLOT(slotUpdateTimeout()));
 
     m_d->applicator->applyCommand(
-            new UpdateMovedNodesCommand(m_d->updateData, false));
+        new UpdateMovedNodesCommand(m_d->updateData, false));
     m_d->isStarted = true;
 }
 
@@ -289,18 +434,33 @@ KisNodeJugglerCompressed::~KisNodeJugglerCompressed()
 {
 }
 
-void KisNodeJugglerCompressed::lowerNode(KisNodeSP node)
+KisNodeList KisNodeJugglerCompressed::sortAndFilterNodes(const KisNodeList &nodes)
+{
+    KisNodeList filteredNodes = nodes;
+    KisNodeList sortedNodes;
+
+    KisLayerUtils::filterMergableNodes(filteredNodes);
+    KisLayerUtils::sortMergableNodes(m_d->image->root(), filteredNodes, sortedNodes);
+
+    return sortedNodes;
+}
+
+void KisNodeJugglerCompressed::lowerNode(const KisNodeList &nodes)
 {
     m_d->applicator->applyCommand(
-        new LowerRaiseLayer(m_d->updateData, m_d->image, node, true));
+        new LowerRaiseLayer(m_d->updateData, m_d->nodeManager,
+                            m_d->image,
+                            nodes, m_d->nodeManager->activeNode(), true));
 
     startTimers();
 }
 
-void KisNodeJugglerCompressed::raiseNode(KisNodeSP node)
+void KisNodeJugglerCompressed::raiseNode(const KisNodeList &nodes)
 {
     m_d->applicator->applyCommand(
-        new LowerRaiseLayer(m_d->updateData, m_d->image, node, false));
+        new LowerRaiseLayer(m_d->updateData, m_d->nodeManager,
+                            m_d->image,
+                            nodes, m_d->nodeManager->activeNode(), false));
     startTimers();
 }
 
@@ -333,7 +493,7 @@ void KisNodeJugglerCompressed::end()
     if (!m_d->isStarted) return;
 
     m_d->applicator->applyCommand(
-            new UpdateMovedNodesCommand(m_d->updateData, true));
+        new UpdateMovedNodesCommand(m_d->updateData, true));
 
     m_d->applicator->end();
     m_d->applicator.reset();
@@ -362,3 +522,5 @@ bool KisNodeJugglerCompressed::isEnded() const
 {
     return !m_d->isStarted;
 }
+
+#include "kis_node_juggler_compressed.moc"

@@ -30,6 +30,9 @@ namespace KisMetaData
 
 namespace KisLayerUtils
 {
+    KRITAIMAGE_EXPORT void sortMergableNodes(KisNodeSP root, QList<KisNodeSP> &inputNodes, QList<KisNodeSP> &outputNodes);
+    KRITAIMAGE_EXPORT void filterMergableNodes(QList<KisNodeSP> &nodes);
+
     KRITAIMAGE_EXPORT void mergeDown(KisImageSP image, KisLayerSP layer, const KisMetaData::MergeStrategy* strategy);
 
     KRITAIMAGE_EXPORT QSet<int> fetchLayerFrames(KisNodeSP node);

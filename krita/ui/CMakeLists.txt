@@ -106,6 +106,7 @@ set(kritaui_LIB_SRCS
     kis_mimedata.cpp
     kis_node_commands_adapter.cpp
     kis_node_manager.cpp
+    kis_node_selection_adapter.cpp
     kis_node_model.cpp
     kis_model_index_converter_base.cpp
     kis_model_index_converter.cpp

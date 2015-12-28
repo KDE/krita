@@ -39,6 +39,7 @@
 #include "kis_action.h"
 #include "KisViewManager.h"
 #include "kis_mainwindow_observer.h"
+#include "kis_signal_compressor.h"
 
 class QModelIndex;
 
@@ -112,6 +113,7 @@ private Q_SLOTS:
     void slotEditGlobalSelection(bool showSelections);
 
     void selectionChanged(const QModelIndexList selection);
+    void slotNodeManagerChangedSelection(const QList<KisNodeSP> &nodes);
 
     void updateThumbnail();
 
@@ -137,6 +139,7 @@ private:
     KisAction* m_propertiesAction;
     KisAction* m_selectOpaque;
     QPointer<KisNodeJugglerCompressed> m_nodeJuggler;
+    KisSignalCompressor m_thumbnailCompressor;
 };
 
 class KisLayerBoxFactory : public KoDockFactoryBase

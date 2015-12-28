@@ -56,7 +56,14 @@ struct KisNodeSPStaticRegistrar {
         qRegisterMetaType<KisNodeSP>("KisNodeSP");
     }
 };
-static KisNodeSPStaticRegistrar __registrar;
+static KisNodeSPStaticRegistrar __registrar1;
+
+struct KisNodeListStaticRegistrar {
+    KisNodeListStaticRegistrar() {
+        qRegisterMetaType<KisNodeList>("KisNodeList");
+    }
+};
+static KisNodeListStaticRegistrar __registrar2;
 
 
 /**

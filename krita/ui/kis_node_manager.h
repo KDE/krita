@@ -34,6 +34,7 @@ class KisFilterStrategy;
 class KisViewManager;
 class KisActionManager;
 class KisView;
+class KisNodeSelectionAdapter;
 
 /**
  * The node manager passes requests for new layers or masks on to the mask and layer
@@ -63,6 +64,8 @@ Q_SIGNALS:
     /// without telling the node manager that the node is activated,
     /// preventing loops (I think...)
     void sigUiNeedChangeActiveNode(KisNodeSP node);
+
+    void sigUiNeedChangeSelectedNodes(const KisNodeList &nodes);
     
 public:
     
@@ -95,12 +98,9 @@ public:
      */
     void setNodeCompositeOp(KisNodeSP node, const KoCompositeOp* compositeOp);
 
-    /**
-     * @brief setSelectedNodes set the list of nodes selected in the layerbox. Selected nodes are not necessarily active nodes.
-     * @param nodes the selected nodes
-     */
-    void setSelectedNodes(QList<KisNodeSP> nodes);
-    QList<KisNodeSP> selectedNodes();
+    KisNodeList selectedNodes();
+
+    KisNodeSelectionAdapter* nodeSelectionAdapter() const;
 
 public Q_SLOTS:
 
@@ -201,6 +201,12 @@ public Q_SLOTS:
     void slotSplitAlphaWrite();
     void slotSplitAlphaSaveMerged();
 
+    /**
+     * @brief slotSetSelectedNodes set the list of nodes selected in the layerbox. Selected nodes are not necessarily active nodes.
+     * @param nodes the selected nodes
+     */
+    void slotSetSelectedNodes(const KisNodeList &nodes);
+
 public:
 
     
@@ -217,8 +223,8 @@ private:
      * to the integer range 0...255
      */
     qint32 convertOpacityToInt(qreal opacity);
-    void removeSelectedNodes(QList<KisNodeSP> selectedNodes);
-
+    void removeSelectedNodes(KisNodeList selectedNodes);
+    void slotSomethingActivatedNodeImpl(KisNodeSP node);
 
     struct Private;
     Private * const m_d;

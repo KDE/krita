@@ -66,6 +66,7 @@
 #include "kis_processing_applicator.h"
 #include "kis_sequential_iterator.h"
 #include "kis_transaction.h"
+#include "kis_node_selection_adapter.h"
 
 #include "processing/kis_mirror_processing_visitor.h"
 #include "KisView.h"
@@ -79,6 +80,7 @@ struct KisNodeManager::Private {
         , layerManager(v)
         , maskManager(v)
         , commandsAdapter(v)
+        , nodeSelectionAdapter(new KisNodeSelectionAdapter(q))
     {
     }
 
@@ -88,8 +90,9 @@ struct KisNodeManager::Private {
     KisLayerManager layerManager;
     KisMaskManager maskManager;
     KisNodeCommandsAdapter commandsAdapter;
+    QScopedPointer<KisNodeSelectionAdapter> nodeSelectionAdapter; 
 
-    QList<KisNodeSP> selectedNodes;
+    KisNodeList selectedNodes;
 
     bool activateNodeImpl(KisNodeSP node);
 
@@ -493,8 +496,10 @@ void KisNodeManager::convertNode(const QString &nodeType)
     }
 }
 
-void KisNodeManager::slotNonUiActivatedNode(KisNodeSP node)
+void KisNodeManager::slotSomethingActivatedNodeImpl(KisNodeSP node)
 {
+    KIS_ASSERT_RECOVER_RETURN(node != activeNode());
+
     if (m_d->activateNodeImpl(node)) {
         emit sigUiNeedChangeActiveNode(node);
         emit sigNodeActivated(node);
@@ -508,12 +513,24 @@ void KisNodeManager::slotNonUiActivatedNode(KisNodeSP node)
     }
 }
 
+void KisNodeManager::slotNonUiActivatedNode(KisNodeSP node)
+{
+    if (node == activeNode()) return;
+    slotSomethingActivatedNodeImpl(node);
+
+    if (node) {
+        bool toggled =  m_d->view->actionCollection()->action("view_show_just_the_canvas")->isChecked();
+        if (toggled) {
+            m_d->view->showFloatingMessage( activeLayer()->name(), QIcon(), 1600, KisFloatingMessage::Medium, Qt::TextSingleLine);
+        }
+    }
+}
+
 void KisNodeManager::slotUiActivatedNode(KisNodeSP node)
 {
-    if (m_d->activateNodeImpl(node)) {
-        emit sigNodeActivated(node);
-        nodesUpdated();
-    }
+    if (node == activeNode()) return;
+
+    slotSomethingActivatedNodeImpl(node);
 
     if (node) {
         QStringList vectorTools = QStringList()
@@ -606,14 +623,20 @@ void KisNodeManager::setNodeCompositeOp(KisNodeSP node,
     m_d->commandsAdapter.setCompositeOp(node, compositeOp);
 }
 
-void KisNodeManager::setSelectedNodes(QList<KisNodeSP> nodes)
+void KisNodeManager::slotSetSelectedNodes(const KisNodeList &nodes)
 {
     m_d->selectedNodes = nodes;
+    emit sigUiNeedChangeSelectedNodes(nodes);
 }
 
-QList<KisNodeSP> KisNodeManager::selectedNodes()
+KisNodeList KisNodeManager::selectedNodes()
 {
     return m_d->selectedNodes;
+}
+
+KisNodeSelectionAdapter* KisNodeManager::nodeSelectionAdapter() const
+{
+    return m_d->nodeSelectionAdapter.data();
 }
 
 void KisNodeManager::nodeOpacityChanged(qreal opacity, bool finalChange)
@@ -710,7 +733,7 @@ bool scanForLastLayer(KisImageWSP image, KisNodeSP nodeToRemove)
 }
 
 /// Scan whether the node has a parent in the list of nodes
-bool scanForParent(QList<KisNodeSP> nodeList, KisNodeSP node)
+bool scanForParent(KisNodeList nodeList, KisNodeSP node)
 {
     KisNodeSP parent = node->parent();
 
@@ -742,7 +765,7 @@ void KisNodeManager::removeSingleNode(KisNodeSP node)
     }
 }
 
-void KisNodeManager::removeSelectedNodes(QList<KisNodeSP> selectedNodes)
+void KisNodeManager::removeSelectedNodes(KisNodeList selectedNodes)
 {
     m_d->commandsAdapter.beginMacro(kundo2_i18n("Remove Multiple Layers and Masks"));
     Q_FOREACH (KisNodeSP node, selectedNodes) {

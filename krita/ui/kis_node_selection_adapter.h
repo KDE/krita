@@ -16,47 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_NODE_JUGGLER_COMPRESSED_H
-#define __KIS_NODE_JUGGLER_COMPRESSED_H
+#ifndef __KIS_NODE_SELECTION_ADAPTER_H
+#define __KIS_NODE_SELECTION_ADAPTER_H
 
-#include <QObject>
 #include <QScopedPointer>
-
-#include <kritadefaultdockers_export.h>
-#include <kundo2command.h>
 #include "kis_types.h"
-#include "kis_node_manager.h"
+#include "kritaui_export.h"
+
+class KisNodeManager;
 
 
-class KRITADEFAULTDOCKERS_EXPORT KisNodeJugglerCompressed : public QObject
+class KRITAUI_EXPORT KisNodeSelectionAdapter
 {
-    Q_OBJECT
 public:
-    KisNodeJugglerCompressed(const KUndo2MagicString &actionName, KisImageSP image, KisNodeManager *nodeManager, int timeout);
-    ~KisNodeJugglerCompressed();
+    KisNodeSelectionAdapter(KisNodeManager *nodeManager);
+    ~KisNodeSelectionAdapter();
 
-    void moveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP above);
-    void setAutoDelete(bool value);
-
-    bool isEnded() const;
-
-    void lowerNode(const KisNodeList &nodes);
-    void raiseNode(const KisNodeList &nodes);
-
-public Q_SLOTS:
-    void end();
-
-private Q_SLOTS:
-    void slotUpdateTimeout();
-    void slotEndStrokeRequested();
-
-private:
-    void startTimers();
-    KisNodeList sortAndFilterNodes(const KisNodeList &nodes);
+    KisNodeSP activeNode() const;
+    void setActiveNode(KisNodeSP node);
 
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_NODE_JUGGLER_COMPRESSED_H */
+#endif /* __KIS_NODE_SELECTION_ADAPTER_H */

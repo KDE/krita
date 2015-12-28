@@ -55,7 +55,7 @@ void KisNodeJugglerCompressedTest::testMove(int delayBeforeEnd)
     TestUtil::ExternalImageChecker chk("node_juggler", "move_test");
     chk.setMaxFailingPixels(0);
 
-    KisNodeJugglerCompressed juggler(kundo2_i18n("Move Layer"), p->image, 600);
+    KisNodeJugglerCompressed juggler(kundo2_i18n("Move Layer"), p->image, 0, 600);
     QVERIFY(chk.checkImage(p->image, "initial"));
 
     juggler.moveNode(layer1, p->image->root(), layer2);

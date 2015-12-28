@@ -45,6 +45,7 @@
 #include "kis_node_dummies_graph.h"
 #include "kis_model_index_converter.h"
 #include "kis_model_index_converter_show_all.h"
+#include "kis_node_selection_adapter.h"
 
 #include "kis_config.h"
 #include "kis_config_notifier.h"
@@ -55,15 +56,17 @@ struct KisNodeModel::Private
 {
     KisImageWSP image;
     KisShapeController *shapeController = 0;
+    KisNodeSelectionAdapter *nodeSelectionAdapter;
     QList<KisNodeDummy*> updateQueue;
     QTimer updateTimer;
 
     KisModelIndexConverterBase *indexConverter = 0;
     KisDummiesFacadeBase *dummiesFacade = 0;
-    bool needFinishRemoveRows = false;
-    bool needFinishInsertRows = false;
-    bool showRootLayer = false;
-    bool showGlobalSelection = false;
+    bool needFinishRemoveRows;
+    bool needFinishInsertRows;
+    bool showRootLayer;
+    bool showGlobalSelection;
+    QPersistentModelIndex activeNodeIndex;
 
     KisNodeDummy* parentOfRemovedNode = 0;
 };
@@ -235,7 +238,7 @@ void KisNodeModel::connectDummies(KisNodeDummy *dummy, bool needConnect)
     }
 }
 
-void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageWSP image, KisShapeController *shapeController)
+void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageWSP image, KisShapeController *shapeController, KisNodeSelectionAdapter *nodeSelectionAdapter)
 {
     KisDummiesFacadeBase *oldDummiesFacade;
     KisShapeController *oldShapeController;
@@ -243,6 +246,7 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImag
     oldDummiesFacade = m_d->dummiesFacade;
 
     m_d->shapeController = shapeController;
+    m_d->nodeSelectionAdapter = nodeSelectionAdapter;
 
     if(oldDummiesFacade && m_d->image) {
         m_d->image->disconnect(this);
@@ -426,6 +430,9 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
         KisNodeProgressProxy *proxy = node->nodeProgressProxy();
         return proxy ? proxy->percentage() : -1;
     }
+    case ActiveRole: {
+        return m_d->activeNodeIndex == index;
+    }
     default:
         if (role >= int(BeginThumbnailRole) && belongsToIsolatedGroup(node))
             return node->createThumbnail(role - int(BeginThumbnailRole), role - int(BeginThumbnailRole));
@@ -448,7 +455,6 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
 {
 
     if (role == ActiveRole || role == AlternateActiveRole) {
-
         QModelIndex parentIndex;
         if (!index.isValid() && m_d->parentOfRemovedNode && m_d->dummiesFacade && m_d->indexConverter) {
             parentIndex = m_d->indexConverter->indexFromDummy(m_d->parentOfRemovedNode);
@@ -467,8 +473,18 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
             activatedNode = 0;
         }
 
+        QModelIndex newActiveNode = activatedNode ? indexFromNode(activatedNode) : QModelIndex();
+        if (role == ActiveRole && value.toBool() &&
+            m_d->activeNodeIndex == newActiveNode) {
 
-        emit nodeActivated(activatedNode);
+            return true;
+        }
+
+        m_d->activeNodeIndex = newActiveNode;
+
+        if (m_d->nodeSelectionAdapter) {
+            m_d->nodeSelectionAdapter->setActiveNode(activatedNode);
+        }
 
         if (role == AlternateActiveRole) {
             emit toggleIsolateActiveNode();

@@ -69,6 +69,17 @@ namespace KritaUtils
     QString KRITAIMAGE_EXPORT toLocalizedOnOff(bool value);
 
     KisNodeSP KRITAIMAGE_EXPORT nearestNodeAfterRemoval(KisNodeSP node);
+
+    template <class T>
+        bool compareListsUnordered(const QList<T> &a, const QList<T> &b) {
+        if (a.size() != b.size()) return false;
+
+        Q_FOREACH(const T &t, a) {
+            if (!b.contains(t)) return false;
+        }
+
+        return true;
+    }
 }
 
 #endif /* __KRITA_UTILS_H */

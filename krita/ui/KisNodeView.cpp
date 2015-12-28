@@ -20,6 +20,7 @@
 #include "KisNodePropertyAction_p.h"
 #include "KisNodeDelegate.h"
 #include "kis_node_model.h"
+#include "kis_signals_blocker.h"
 
 
 #include <kconfig.h>
@@ -82,9 +83,11 @@ KisNodeView::KisNodeView(QWidget *parent)
     , d(new Private(this))
 {
     setMouseTracking(true);
-    setVerticalScrollMode(ScrollPerPixel);
-    setSelectionMode(SingleSelection);
     setSelectionBehavior(SelectItems);
+    setDefaultDropAction(Qt::MoveAction);
+    setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
+    setSelectionMode(QAbstractItemView::ExtendedSelection);
+
     header()->hide();
     setDragEnabled(true);
     setDragDropMode(QAbstractItemView::DragDrop);
@@ -229,8 +232,11 @@ void KisNodeView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bot
     QTreeView::dataChanged(topLeft, bottomRight);
     for (int x = topLeft.row(); x <= bottomRight.row(); ++x) {
         for (int y = topLeft.column(); y <= bottomRight.column(); ++y) {
-            if (topLeft.sibling(x, y).data(Model::ActiveRole).toBool()) {
-                setCurrentIndex(topLeft.sibling(x, y));
+            QModelIndex index = topLeft.sibling(x, y);
+            if (index.data(Model::ActiveRole).toBool()) {
+                if (currentIndex() != index) {
+                    setCurrentIndex(index);
+                }
                 return;
             }
         }
@@ -241,7 +247,6 @@ void KisNodeView::selectionChanged(const QItemSelection &selected, const QItemSe
 {
     QTreeView::selectionChanged(selected, deselected);
     emit selectionChanged(selectedIndexes());
-
 }
 
 void KisNodeView::slotActionToggled(bool on, const QPersistentModelIndex &index, int num)

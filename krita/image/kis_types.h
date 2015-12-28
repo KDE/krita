@@ -222,7 +222,8 @@ typedef KisSharedPtr<KisProcessingVisitor> KisProcessingVisitorSP;
 class KUndo2Command;
 typedef QSharedPointer<KUndo2Command> KUndo2CommandSP;
 
-typedef QSharedPointer<QList <KisNodeSP> > KisNodeListSP;
+typedef QList<KisNodeSP> KisNodeList;
+typedef QSharedPointer<KisNodeList> KisNodeListSP;
 
 class KisStroke;
 typedef QSharedPointer<KisStroke> KisStrokeSP;

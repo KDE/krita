@@ -31,6 +31,10 @@ ki18n_wrap_ui(KRITA_COLORSELECTORNG_SOURCES
     wdg_color_selector_settings.ui
 )
 
+qt5_add_resources(KRITA_COLORSELECTORNG_SOURCES
+    advanced_color_selector.qrc
+)
+
 add_library(kritacolorselectorng MODULE ${KRITA_COLORSELECTORNG_SOURCES})
 kcoreaddons_desktop_to_json(kritacolorselectorng krita_colorselectorng.desktop)
 

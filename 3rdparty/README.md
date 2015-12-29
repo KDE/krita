@@ -2,7 +2,7 @@
 
 If you need to build Krita's dependencies for the following reasons:
 
-* you develop on Windows
+* you develop on Windows and aren't using Emerge
 * you develop on OSX and aren't using Homebrew
 * you want to build a generic, distro-agnostic version of Krita for Linux
 * you develop on Linux, but some dependencies aren't available for your distribution
@@ -12,7 +12,9 @@ the dependencies that Krita needs.
 
 If you develop on Linux and your distribution has the dependencies available,
 
-YOU DO NOT NEED THIS GUIDE AND YOU STOP READING NOW
+YOU DO NOT NEED THIS GUIDE AND YOU SHOULD STOP READING NOW
+
+Otherwise you risk major confusion.
 
 == Prerequisites ==
 

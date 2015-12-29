@@ -215,31 +215,6 @@ private:
 };
 
 /**
- * A special QObject-based proxy object that connects to the node
- * manager and allows the command to emit signals to change
- * active/selected nodes from another (non-gui) thread.
- */
-class SelectionSignalsProxy : public QObject {
-    Q_OBJECT
-public:
-    SelectionSignalsProxy(KisNodeManager *nodeManager, QObject *parent = 0)
-        : QObject(parent)
-    {
-        connect(this, SIGNAL(sigActivateNode(KisNodeSP)), nodeManager, SLOT(slotNonUiActivatedNode(KisNodeSP)));
-        connect(this, SIGNAL(sigSetSelectedNodes(const KisNodeList&)), nodeManager, SLOT(slotSetSelectedNodes(const KisNodeList&)));
-    }
-
-    void changeLayersSelection(KisNodeSP activeNode, const KisNodeList &selectedNodes) {
-        emit sigActivateNode(activeNode);
-        emit sigSetSelectedNodes(selectedNodes);
-    }
-
-Q_SIGNALS:
-    void sigActivateNode(KisNodeSP node);
-    void sigSetSelectedNodes(const KisNodeList &nodes);
-};
-
-/**
  * A command to keep correct set of selected/active nodes thoroughout
  * the action.
  */
@@ -250,24 +225,25 @@ public:
                              const KisNodeList &selectedAfter,
                              KisNodeSP activeBefore,
                              KisNodeSP activeAfter,
-                             KisNodeManager *nodeManager,
+                             KisImageSP image,
                              bool finalize, KUndo2Command *parent = 0)
         : FlipFlopCommand(finalize, parent),
           m_selectedBefore(selectedBefore),
           m_selectedAfter(selectedAfter),
           m_activeBefore(activeBefore),
           m_activeAfter(activeAfter),
-          m_nodeManager(nodeManager),
-          m_signalProxy(new SelectionSignalsProxy(nodeManager))
+          m_image(image)
     {
     }
 
     void end() {
+        KisImageSignalType type;
         if (isFinalizing()) {
-            m_signalProxy->changeLayersSelection(m_activeAfter, m_selectedAfter);
+            type = ComplexNodeReselectionSignal(m_activeAfter, m_selectedAfter);
         } else {
-            m_signalProxy->changeLayersSelection(m_activeBefore, m_selectedBefore);
+            type = ComplexNodeReselectionSignal(m_activeBefore, m_selectedBefore);
         }
+        m_image->signalRouter()->emitNotification(type);
     }
 
 private:
@@ -275,8 +251,7 @@ private:
     KisNodeList m_selectedAfter;
     KisNodeSP m_activeBefore;
     KisNodeSP m_activeAfter;
-    KisNodeManager *m_nodeManager;
-    QScopedPointer<SelectionSignalsProxy> m_signalProxy;
+    KisImageWSP m_image;
 };
 
 /**
@@ -360,7 +335,7 @@ struct LowerRaiseLayer : public KisCommandUtils::AggregateCommand {
 
         addCommand(new KeepNodesSelectedCommand(sortedNodes, sortedNodes,
                                                 m_activeNode, m_activeNode,
-                                                m_nodeManager, false));
+                                                m_image, false));
 
         KisNodeSP currentAbove = newAbove;
         Q_FOREACH (KisNodeSP node, sortedNodes) {
@@ -372,7 +347,7 @@ struct LowerRaiseLayer : public KisCommandUtils::AggregateCommand {
 
         addCommand(new KeepNodesSelectedCommand(sortedNodes, sortedNodes,
                                                 m_activeNode, m_activeNode,
-                                                m_nodeManager, true));
+                                                m_image, true));
     }
 
 private:

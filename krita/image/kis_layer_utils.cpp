@@ -648,6 +648,7 @@ namespace KisLayerUtils {
 
         KisImageSignalVector emitSignals;
         emitSignals << ModifiedSignal;
+        emitSignals << ComplexNodeReselectionSignal(KisNodeSP(), KisNodeList(), KisNodeSP(), mergedNodes);
 
         KisProcessingApplicator applicator(image, 0,
                                            KisProcessingApplicator::NONE,

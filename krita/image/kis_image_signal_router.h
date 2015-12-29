@@ -35,7 +35,8 @@ enum KisImageSignalTypeEnum {
     SizeChangedSignal,
     ProfileChangedSignal,
     ColorSpaceChangedSignal,
-    ResolutionChangedSignal
+    ResolutionChangedSignal,
+    NodeReselectionRequestSignal
 };
 
 /**
@@ -73,6 +74,32 @@ struct ComplexSizeChangedSignal {
     QPointF newStillPoint;
 };
 
+/**
+ * A special signal which handles emitting signals for node reselection
+ *
+ * \see KisImage::sigRequestNodeReselection()
+ */
+struct ComplexNodeReselectionSignal {
+    ComplexNodeReselectionSignal() {}
+    ComplexNodeReselectionSignal(KisNodeSP _newActiveNode, KisNodeList _newSelectedNodes,
+                                 KisNodeSP _oldActiveNode = KisNodeSP(), KisNodeList _oldSelectedNodes = KisNodeList())
+        : newActiveNode(_newActiveNode),
+          newSelectedNodes(_newSelectedNodes),
+          oldActiveNode(_oldActiveNode),
+          oldSelectedNodes(_oldSelectedNodes)
+    {
+    }
+
+    ComplexNodeReselectionSignal inverted() const {
+        return ComplexNodeReselectionSignal(oldActiveNode, oldSelectedNodes, newActiveNode, newSelectedNodes);
+    }
+
+    KisNodeSP newActiveNode;
+    KisNodeList newSelectedNodes;
+    KisNodeSP oldActiveNode;
+    KisNodeList oldSelectedNodes;
+};
+
 struct KisImageSignalType {
     KisImageSignalType() {}
     KisImageSignalType(KisImageSignalTypeEnum _id)
@@ -86,15 +113,23 @@ struct KisImageSignalType {
     {
     }
 
+    KisImageSignalType(ComplexNodeReselectionSignal signal)
+        : id(NodeReselectionRequestSignal),
+          nodeReselectionSignal(signal)
+    {
+    }
+
     KisImageSignalType inverted() const {
         KisImageSignalType t;
         t.id = id;
         t.sizeChangedSignal = sizeChangedSignal.inverted();
+        t.nodeReselectionSignal = nodeReselectionSignal.inverted();
         return t;
     }
 
     KisImageSignalTypeEnum id;
     ComplexSizeChangedSignal sizeChangedSignal;
+    ComplexNodeReselectionSignal nodeReselectionSignal;
 };
 
 typedef QVector<KisImageSignalType> KisImageSignalVector;
@@ -128,6 +163,7 @@ Q_SIGNALS:
     void sigProfileChanged(const KoColorProfile *  profile);
     void sigColorSpaceChanged(const KoColorSpace*  cs);
     void sigResolutionChanged(double xRes, double yRes);
+    void sigRequestNodeReselection(KisNodeSP activeNode, const KisNodeList &selectedNodes);
 
     // Graph change signals
     void sigNodeChanged(KisNodeSP node);

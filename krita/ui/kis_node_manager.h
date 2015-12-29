@@ -207,6 +207,8 @@ public Q_SLOTS:
      */
     void slotSetSelectedNodes(const KisNodeList &nodes);
 
+    void slotImageRequestNodeReselection(KisNodeSP activeNode, const KisNodeList &selectedNodes);
+
 public:
 
     

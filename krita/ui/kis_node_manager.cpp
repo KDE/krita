@@ -189,6 +189,7 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
         Q_ASSERT(shapeController);
         connect(shapeController, SIGNAL(sigActivateNode(KisNodeSP)), SLOT(slotNonUiActivatedNode(KisNodeSP)));
         connect(m_d->imageView->image(), SIGNAL(sigIsolatedModeChanged()),this, SLOT(slotUpdateIsolateModeAction()));
+        connect(m_d->imageView->image(), SIGNAL(sigRequestNodeReselection(KisNodeSP, const KisNodeList&)),this, SLOT(slotImageRequestNodeReselection(KisNodeSP, const KisNodeList&)));
         m_d->imageView->resourceProvider()->slotNodeActivated(m_d->imageView->currentNode());
     }
 
@@ -621,6 +622,16 @@ void KisNodeManager::setNodeCompositeOp(KisNodeSP node,
     if (node->compositeOp() == compositeOp) return;
 
     m_d->commandsAdapter.setCompositeOp(node, compositeOp);
+}
+
+void KisNodeManager::slotImageRequestNodeReselection(KisNodeSP activeNode, const KisNodeList &selectedNodes)
+{
+    if (activeNode) {
+        slotNonUiActivatedNode(activeNode);
+    }
+    if (!selectedNodes.isEmpty()) {
+        slotSetSelectedNodes(selectedNodes);
+    }
 }
 
 void KisNodeManager::slotSetSelectedNodes(const KisNodeList &nodes)

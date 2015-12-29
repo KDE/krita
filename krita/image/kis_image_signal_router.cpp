@@ -45,6 +45,7 @@ KisImageSignalRouter::KisImageSignalRouter(KisImageWSP image)
     CONNECT_TO_IMAGE(sigProfileChanged(const KoColorProfile*));
     CONNECT_TO_IMAGE(sigColorSpaceChanged(const KoColorSpace*));
     CONNECT_TO_IMAGE(sigResolutionChanged(double, double));
+    CONNECT_TO_IMAGE(sigRequestNodeReselection(KisNodeSP, const KisNodeList&));
 
     CONNECT_TO_IMAGE(sigNodeChanged(KisNodeSP));
     CONNECT_TO_IMAGE(sigNodeAddedAsync(KisNodeSP));
@@ -122,6 +123,14 @@ void KisImageSignalRouter::slotNotification(KisImageSignalType type)
     case ResolutionChangedSignal:
         m_image->invalidateAllFrames();
         emit sigResolutionChanged(m_image->xRes(), m_image->yRes());
+        break;
+    case NodeReselectionRequestSignal:
+        if (type.nodeReselectionSignal.newActiveNode ||
+            !type.nodeReselectionSignal.newSelectedNodes.isEmpty()) {
+
+            emit sigRequestNodeReselection(type.nodeReselectionSignal.newActiveNode,
+                                           type.nodeReselectionSignal.newSelectedNodes);
+        }
         break;
     }
 }

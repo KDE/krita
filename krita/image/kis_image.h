@@ -605,6 +605,7 @@ Q_SIGNALS:
     void sigProfileChanged(const KoColorProfile *  profile);
     void sigColorSpaceChanged(const KoColorSpace*  cs);
     void sigResolutionChanged(double xRes, double yRes);
+    void sigRequestNodeReselection(KisNodeSP activeNode, const KisNodeList &selectedNodes);
 
     /**
      * Inform the model that a node was changed

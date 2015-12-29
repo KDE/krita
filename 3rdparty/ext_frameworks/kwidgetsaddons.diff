@@ -38,3 +38,19 @@ index 1e46929..63a817b 100644
  }
  
  KLed::~KLed()
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8baeda3..bd5491e 100755
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -36,8 +36,8 @@ if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
+ endif()
+ 
+ add_subdirectory(src)
+-add_subdirectory(autotests)
+-add_subdirectory(tests)
++#add_subdirectory(autotests)
++#add_subdirectory(tests)
+ 
+ # create a Config.cmake and a ConfigVersion.cmake file and install them
+ set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5WidgetsAddons")
+

@@ -78,9 +78,11 @@ void KisAutogradient::slotSelectedSegment(KoGradientSegment* segment)
 
     int leftOpacity = (startColor.alpha() * 100) / OPACITY_OPAQUE_U8;
     intNumInputLeftOpacity->setValue(leftOpacity);
+    intNumInputLeftOpacity->setSuffix(" %");
 
     int rightOpacity = (endColor.alpha() * 100) / OPACITY_OPAQUE_U8;
     intNumInputRightOpacity->setValue(rightOpacity);
+    intNumInputRightOpacity->setSuffix(" %");
 
     paramChanged();
 }

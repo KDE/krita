@@ -754,14 +754,18 @@ GridSettingsTab::GridSettingsTab(QWidget* parent) : WdgGridSettingsBase(parent)
     colorSubdivision->setColor(cfg.getGridSubdivisionColor());
 
     intHSpacing->setValue(cfg.getGridHSpacing());
+    intHSpacing->setSuffix(" px");
     intVSpacing->setValue(cfg.getGridVSpacing());
+    intVSpacing->setSuffix(" px");
     spacingAspectButton->setKeepAspectRatio(cfg.getGridSpacingAspect());
     linkSpacingToggled(cfg.getGridSpacingAspect());
 
     intSubdivision->setValue(cfg.getGridSubdivisions());
 
     intXOffset->setValue(cfg.getGridOffsetX());
+    intXOffset->setSuffix(" px");
     intYOffset->setValue(cfg.getGridOffsetY());
+    intYOffset->setSuffix(" px");
     offsetAspectButton->setKeepAspectRatio(cfg.getGridOffsetAspect());
     linkOffsetToggled(cfg.getGridOffsetAspect());
 
@@ -791,6 +795,7 @@ void GridSettingsTab::setDefault()
     intSubdivision->setValue(cfg.getGridSubdivisions(true));
     intXOffset->setValue(cfg.getGridOffsetX(true));
     intYOffset->setValue(cfg.getGridOffsetY());
+
     linkOffsetToggled(cfg.getGridOffsetAspect(true));
 }
 

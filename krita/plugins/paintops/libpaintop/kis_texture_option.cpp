@@ -83,14 +83,17 @@ public:
         QBoxLayout *offsetLayoutX = new QBoxLayout(QBoxLayout::LeftToRight);
         offsetSliderX = new KisSliderSpinBox(this);
         offsetSliderX->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        offsetSliderX->setSuffix(" px");
         randomOffsetX = new QCheckBox(i18n("Random Offset"),this);
         offsetLayoutX->addWidget(offsetSliderX,1,0);
         offsetLayoutX->addWidget(randomOffsetX,0,0);
         formLayout->addRow(i18n("Horizontal Offset:"), offsetLayoutX);
 
+
         QBoxLayout *offsetLayoutY = new QBoxLayout(QBoxLayout::LeftToRight);
         offsetSliderY = new KisSliderSpinBox(this);
         offsetSliderY->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        offsetSliderY->setSuffix(" px");
         randomOffsetY = new QCheckBox(i18n("Random Offset"),this);
         offsetLayoutY->addWidget(offsetSliderY,1,0);
         offsetLayoutY->addWidget(randomOffsetY,0,0);

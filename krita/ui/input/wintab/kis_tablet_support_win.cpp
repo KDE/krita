@@ -194,11 +194,25 @@ static QPoint mousePosition()
     return QPoint(p.x, p.y);
 }
 
+QWindowsWinTab32DLL QWindowsTabletSupport::m_winTab32DLL;
+
 void KisTabletSupportWin::init()
 {
+    if (!QWindowsTabletSupport::m_winTab32DLL.init()) {
+        qWarning() << "Failed to initialize Wintab";
+        return;
+    }
+
     globalEventEater = new EventEater(qApp);
     QTAB = QWindowsTabletSupport::create();
     qApp->installEventFilter(globalEventEater);
+
+    // Refresh tablet context after tablet rotated, screen added, etc.
+    QObject::connect(qApp->primaryScreen(), &QScreen::geometryChanged,
+                     [=](const QRect & geometry){
+                         delete QTAB;
+                         QTAB = QWindowsTabletSupport::create();
+                     });
 }
 
 
@@ -401,8 +415,6 @@ inline QPointF QWindowsTabletDeviceData::scaleCoordinates(int coordX, int coordY
     return QPointF(x, y);
 }
 
-QWindowsWinTab32DLL QWindowsTabletSupport::m_winTab32DLL;
-
 
 /*!
   \class QWindowsWinTab32DLL QWindowsTabletSupport
@@ -466,11 +478,6 @@ QWindowsTabletSupport::~QWindowsTabletSupport()
 
 QWindowsTabletSupport *QWindowsTabletSupport::create()
 {
-    if (!QWindowsTabletSupport::m_winTab32DLL.init()) {
-        qWarning() << "Failed to initialize Wintab";
-        return 0;
-    }
-
     const HWND window = createDummyWindow(QStringLiteral("TabletDummyWindow"),
                                           L"TabletDummyWindow",
                                           qWindowsTabletSupportWndProc);

@@ -110,12 +110,12 @@ public:
 
 
     void tabletUpdateCursor(const quint64 uniqueId, const UINT cursorType, const int pkCursor);
+    static QWindowsWinTab32DLL m_winTab32DLL;
 
 private:
     unsigned options() const;
     QWindowsTabletDeviceData tabletInit(const quint64 uniqueId, const UINT cursorType) const;
 
-    static QWindowsWinTab32DLL m_winTab32DLL;
     const HWND m_window;
     const HCTX m_context;
     int m_absoluteRange;

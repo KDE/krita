@@ -425,12 +425,13 @@ KisMainWindow::KisMainWindow()
 
     configChanged();
 
+    // If we have customized the toolbars, load that first
+    setLocalXMLFile(KoResourcePaths::locateLocal("data", "krita/krita.rc"));
+
     QString doc;
     QStringList allFiles = KoResourcePaths::findAllResources("data", "krita/krita.rc");
     KIS_ASSERT(allFiles.size() > 0); // We need at least one krita.rc file!
-
     setXMLFile(findMostRecentXMLFile(allFiles, doc));
-    setLocalXMLFile(KoResourcePaths::locateLocal("data", "krita/krita.rc"));
 
     guiFactory()->addClient(this);
 

@@ -758,7 +758,7 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
         const int z = currentDevice == QTabletEvent::FourDMouse ? int(packet.pkZ) : 0;
 
         // This code is to delay the tablet data one cycle to sync with the mouse location.
-        QPointF globalPosF = m_oldGlobalPosF;
+        QPointF globalPosF = m_oldGlobalPosF / dpr; // Convert from "native" to "device independent pixels."
         m_oldGlobalPosF = tabletData.scaleCoordinates(packet.pkX, packet.pkY, virtualDesktopArea);
 
         QPoint globalPos = globalPosF.toPoint();
@@ -817,11 +817,6 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
                 << currentPointerType << "P:" << pressureNew << "tilt:" << tiltX << ','
                 << tiltY << "tanP:" << tangentialPressure << "rotation:" << rotation;
         }
-
-        // Convert from "native" to "device independent pixels"
-        const QPointF localPosDip = localPosF / dpr;
-        const QPointF globalPosDip = globalPosF / dpr;
-
 
         // Reusable helper function. Better than compiler macros!
         auto sendTabletEvent = [&](QTabletEvent::Type t){

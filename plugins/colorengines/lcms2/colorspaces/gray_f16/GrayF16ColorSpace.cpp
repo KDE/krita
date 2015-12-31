@@ -33,8 +33,8 @@ GrayF16ColorSpace::GrayF16ColorSpace(const QString &name, KoColorProfile *p)
     const IccColorProfile *icc_p = dynamic_cast<const IccColorProfile *>(p);
     Q_ASSERT(icc_p);
 
-    addChannel(new KoChannelInfo(i18n("Gray"), 0 * sizeof(float), 0, KoChannelInfo::COLOR, KoChannelInfo::FLOAT16, 2, Qt::gray));
-    addChannel(new KoChannelInfo(i18n("Alpha"), 1 * sizeof(float), 1, KoChannelInfo::ALPHA, KoChannelInfo::FLOAT16, 2));
+    addChannel(new KoChannelInfo(i18n("Gray"), 0 * sizeof(half), 0, KoChannelInfo::COLOR, KoChannelInfo::FLOAT16, 2, Qt::gray));
+    addChannel(new KoChannelInfo(i18n("Alpha"), 1 * sizeof(half), 1, KoChannelInfo::ALPHA, KoChannelInfo::FLOAT16, 2));
 
     init();
 

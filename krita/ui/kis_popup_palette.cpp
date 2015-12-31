@@ -34,7 +34,6 @@
 #include <QMenu>
 #include <QWhatsThis>
 #include <QDebug>
-#include "QDebug"
 #include <math.h>
 #include "kis_signal_compressor.h"
 #include <QApplication>
@@ -100,6 +99,9 @@ KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoCo
     m_triangleColorSelector->move(77, 77);
     m_triangleColorSelector->resize(136, 136);
     m_triangleColorSelector->setVisible(true);
+
+    QRegion maskedRegion(0, 0, 136, 136, QRegion::Ellipse );
+    m_triangleColorSelector->setMask(maskedRegion);
 
     setAttribute(Qt::WA_ContentsPropagated, true);
     //setAttribute(Qt::WA_TranslucentBackground, true);

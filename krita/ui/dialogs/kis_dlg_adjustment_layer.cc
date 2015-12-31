@@ -31,8 +31,6 @@
 #include <QPushButton>
 #include <QDialogButtonBox>
 
-#include <KoResourcePaths.h>
-
 #include "filter/kis_filter.h"
 #include "kis_config_widget.h"
 #include "filter/kis_filter_configuration.h"
@@ -65,7 +63,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
     setMainWidget(page);
 
     wdgFilterNodeCreation.filterGalleryToggle->setChecked(wdgFilterNodeCreation.filterSelector->isFilterGalleryVisible());
-    wdgFilterNodeCreation.filterGalleryToggle->setIcon(QPixmap(KoResourcePaths::findResource("data", "krita/pics/sidebaricon.png")));
+    wdgFilterNodeCreation.filterGalleryToggle->setIcon(QPixmap(":/pics/sidebaricon.png"));
     wdgFilterNodeCreation.filterGalleryToggle->setMaximumWidth(wdgFilterNodeCreation.filterGalleryToggle->height());
     connect(wdgFilterNodeCreation.filterSelector, SIGNAL(sigFilterGalleryToggled(bool)), wdgFilterNodeCreation.filterGalleryToggle, SLOT(setChecked(bool)));
     connect(wdgFilterNodeCreation.filterGalleryToggle, SIGNAL(toggled(bool)), wdgFilterNodeCreation.filterSelector, SLOT(showFilterGallery(bool)));

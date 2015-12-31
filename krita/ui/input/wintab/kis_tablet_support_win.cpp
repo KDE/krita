@@ -820,9 +820,9 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
 
         // Reusable helper function. Better than compiler macros!
         auto sendTabletEvent = [&](QTabletEvent::Type t){
-            handleTabletEvent(w, localPosDip, globalPosDip, currentDevice, currentPointerType,
-                               button, buttons, pressureNew, tiltX, tiltY, tangentialPressure, rotation, z,
-                               m_devices.at(m_currentDevice).uniqueId, keyboardModifiers, t);
+            handleTabletEvent(w, localPosF, globalPosF, currentDevice, currentPointerType,
+                              button, buttons, pressureNew, tiltX, tiltY, tangentialPressure, rotation, z,
+                              m_devices.at(m_currentDevice).uniqueId, keyboardModifiers, t);
         };
 
         /**

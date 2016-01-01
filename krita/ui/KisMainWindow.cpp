@@ -124,7 +124,6 @@
 #include "kis_icon_utils.h"
 #include <KisImportExportFilter.h>
 #include <KisDocumentEntry.h>
-#include <KisWelcomeScreen.h>
 
 class ToolDockerFactory : public KoDockFactoryBase
 {
@@ -191,7 +190,6 @@ public:
         , windowMapper(new QSignalMapper(parent))
         , documentMapper(new QSignalMapper(parent))
         , lastExportSpecialOutputFlag(0)
-        , welcomeScreen(new KisWelcomeScreen(parent))
     {
     }
 
@@ -269,8 +267,6 @@ public:
 
     QByteArray lastExportedFormat;
     int lastExportSpecialOutputFlag;
-
-    KisWelcomeScreen *welcomeScreen;
 
     KisActionManager * actionManager() {
         return viewManager->actionManager();
@@ -350,7 +346,6 @@ KisMainWindow::KisMainWindow()
     d->mdiArea->setTabsClosable(true);
 
     setCentralWidget(d->mdiArea);
-    d->welcomeScreen->hide();
 
     connect(d->mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(subWindowActivated()));
     connect(d->windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));

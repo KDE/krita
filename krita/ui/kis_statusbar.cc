@@ -113,12 +113,6 @@ void KisStatusBar::setup()
 
 KisStatusBar::~KisStatusBar()
 {
-    m_view->removeStatusBarItem(m_selectionStatus);
-    m_view->removeStatusBarItem(m_statusBarStatusLabel);
-    m_view->removeStatusBarItem(m_statusBarProfileLabel);
-    m_view->removeStatusBarItem(m_memoryReportBox);
-    m_view->removeStatusBarItem(m_pointerPositionLabel);
-    m_view->removeStatusBarItem(m_progress);
 }
 
 void KisStatusBar::setView(QPointer<KisView> imageView)

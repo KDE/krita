@@ -68,7 +68,7 @@ private:
 
 private:
 
-    KisViewManager * m_view;
+    QPointer<KisViewManager> m_view;
     QPointer<KisView> m_imageView;
     KisProgressWidget * m_progress;
 

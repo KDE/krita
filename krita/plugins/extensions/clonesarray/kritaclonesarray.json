@@ -1,0 +1,9 @@
+{
+    "Id": "Clones Array Plugin",
+    "Type": "Service",
+    "X-KDE-Library": "kritaclonesarray",
+    "X-KDE-ServiceTypes": [
+        "Krita/ViewPlugin"
+    ],
+    "X-Krita-Version": "28"
+}

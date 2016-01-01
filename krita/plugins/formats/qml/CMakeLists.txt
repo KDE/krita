@@ -7,7 +7,6 @@ set(kritaqmlexport_SOURCES
     )
 
 add_library(kritaqmlexport MODULE ${kritaqmlexport_SOURCES})
-kcoreaddons_desktop_to_json(kritaqmlexport krita_qml_export.desktop)
 
 target_link_libraries(kritaqmlexport kritaui )
 

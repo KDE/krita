@@ -1,0 +1,10 @@
+{
+    "Icon": "",
+    "Id": "Image enhancement Filters (Extension)",
+    "Type": "Service",
+    "X-KDE-Library": "kritaunsharpfilter",
+    "X-KDE-ServiceTypes": [
+        "Krita/Filter"
+    ],
+    "X-Krita-Version": "28"
+}

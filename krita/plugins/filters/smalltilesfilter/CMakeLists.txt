@@ -1,5 +1,4 @@
 set(kritasmalltilesfilter_SOURCES kis_small_tiles_filter_plugin.cpp kis_small_tiles_filter.cpp )
 add_library(kritasmalltilesfilter MODULE ${kritasmalltilesfilter_SOURCES})
-kcoreaddons_desktop_to_json(kritasmalltilesfilter kritasmalltilesfilter.desktop)
 target_link_libraries(kritasmalltilesfilter kritaui)
 install(TARGETS kritasmalltilesfilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

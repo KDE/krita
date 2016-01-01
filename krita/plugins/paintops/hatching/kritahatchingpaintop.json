@@ -1,0 +1,9 @@
+{
+    "Id": "Hatching brush",
+    "Type": "Service",
+    "X-KDE-Library": "kritahatchingpaintop",
+    "X-KDE-ServiceTypes": [
+        "Krita/Paintop"
+    ],
+    "X-Krita-Version": "28"
+}

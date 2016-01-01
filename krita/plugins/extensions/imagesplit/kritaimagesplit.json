@@ -1,0 +1,9 @@
+{
+    "Id": "Image Splitter",
+    "Type": "Service",
+    "X-KDE-Library": "kritaimagesplit",
+    "X-KDE-ServiceTypes": [
+        "Krita/ViewPlugin"
+    ],
+    "X-Krita-Version": "28"
+}

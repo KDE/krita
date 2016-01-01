@@ -1,4 +1,3 @@
-
 set(kritaimagedocker_SOURCES
     imagedocker.cpp
     imagedocker_dock.cpp
@@ -7,10 +6,6 @@ set(kritaimagedocker_SOURCES
 )
 
 ki18n_wrap_ui(kritaimagedocker_SOURCES forms/wdgimagedocker.ui forms/wdgImageViewPopup.ui)
-
 add_library(kritaimagedocker MODULE ${kritaimagedocker_SOURCES})
-kcoreaddons_desktop_to_json(kritaimagedocker kritaimagedocker.desktop)
-
 target_link_libraries(kritaimagedocker kritaui)
-
 install(TARGETS kritaimagedocker DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

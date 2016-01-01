@@ -1,0 +1,13 @@
+{
+    "Icon": "",
+    "Id": "Krita PhotoShop Import Filter",
+    "NoDisplay": "true",
+    "Type": "Service",
+    "X-KDE-Export": "application/x-krita",
+    "X-KDE-Import": "image/vnd.adobe.photoshop",
+    "X-KDE-Library": "kritapsdimport",
+    "X-KDE-ServiceTypes": [
+        "Krita/FileFilter"
+    ],
+    "X-KDE-Weight": "1"
+}

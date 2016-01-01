@@ -14,7 +14,6 @@ set(kritahatchingpaintop_SOURCES
 ki18n_wrap_ui(kritahatchingpaintop_SOURCES wdghatchingpreferences.ui wdghatchingoptions.ui)
 
 add_library(kritahatchingpaintop MODULE ${kritahatchingpaintop_SOURCES})
-kcoreaddons_desktop_to_json(kritahatchingpaintop kritahatchingpaintop.desktop)
 
 target_link_libraries(kritahatchingpaintop kritalibpaintop)
 

@@ -9,7 +9,6 @@ ki18n_wrap_ui(kritacolorgenerator_SOURCES
     )
 
 add_library(kritacolorgenerator MODULE ${kritacolorgenerator_SOURCES})
-kcoreaddons_desktop_to_json(kritacolorgenerator kritacolorgenerator.desktop)
 
 target_link_libraries(kritacolorgenerator kritaui)
 

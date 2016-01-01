@@ -1,0 +1,9 @@
+{
+    "Id": "Preset History Docker",
+    "Type": "Service",
+    "X-KDE-Library": "kritapresethistory",
+    "X-KDE-ServiceTypes": [
+        "Krita/Dock"
+    ],
+    "X-Krita-Version": "28"
+}

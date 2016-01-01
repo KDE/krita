@@ -10,7 +10,6 @@ set(kritachalkpaintop_SOURCES
 ki18n_wrap_ui(kritachalkpaintop_SOURCES wdgchalkoptions.ui )
 
 add_library(kritachalkpaintop MODULE ${kritachalkpaintop_SOURCES})
-kcoreaddons_desktop_to_json(kritachalkpaintop kritachalkpaintop.desktop)
 
 target_link_libraries(kritachalkpaintop kritalibpaintop)
 

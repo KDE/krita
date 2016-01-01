@@ -1,0 +1,9 @@
+{
+    "Id": "Composition Docker",
+    "Type": "Service",
+    "X-KDE-Library": "kritacompositiondocker",
+    "X-KDE-ServiceTypes": [
+        "Krita/Dock"
+    ],
+    "X-Krita-Version": "28"
+}

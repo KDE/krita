@@ -15,13 +15,6 @@ ki18n_wrap_ui(kritaimagesize_SOURCES
     )
 
 add_library(kritaimagesize MODULE ${kritaimagesize_SOURCES})
-kcoreaddons_desktop_to_json(kritaimagesize kritaimagesize.desktop)
-
-
 target_link_libraries(kritaimagesize kritaui)
-
 install(TARGETS kritaimagesize  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-########### install files ###############
-
 install( FILES  imagesize.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)

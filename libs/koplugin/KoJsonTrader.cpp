@@ -49,7 +49,6 @@ KoJsonTrader* KoJsonTrader::instance()
 
 QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QString &mimetype)
 {
-
     if (m_pluginPath.isEmpty()) {
 
         QList<QDir> searchDirs;
@@ -78,8 +77,8 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
                     QDir libDir(info.absoluteFilePath());
 
                     // on many systems this will be the actual lib dir (and krita subdir contains plugins)
-                    if (libDir.entryList(QStringList() << "krita").size() > 0) {
-                        m_pluginPath = info.absoluteFilePath() + "/krita";
+                    if (libDir.entryList(QStringList() << "kritaplugins").size() > 0) {
+                        m_pluginPath = info.absoluteFilePath() + "/kritaplugins";
                         break;
                     }
 
@@ -88,8 +87,8 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
                     Q_FOREACH (QString subEntry, libDir.entryList()) {
                         QFileInfo subInfo(libDir, subEntry);
                         if (subInfo.isDir()) {
-                            if (QDir(subInfo.absoluteFilePath()).entryList(QStringList() << "krita").size() > 0) {
-                                m_pluginPath = subInfo.absoluteFilePath() + "/krita";
+                            if (QDir(subInfo.absoluteFilePath()).entryList(QStringList() << "kritaplugins").size() > 0) {
+                                m_pluginPath = subInfo.absoluteFilePath() + "/kritaplugins";
                                 break; // will only break inner loop so we need the extra check below
                             }
                         }
@@ -113,15 +112,17 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
     while (dirIter.hasNext()) {
         dirIter.next();
         if (dirIter.fileInfo().isFile()) {
+            //qDebug() << dirIter.fileName();
             QPluginLoader *loader = new QPluginLoader(dirIter.filePath());
             QJsonObject json = loader->metaData().value("MetaData").toObject();
+
+            //qDebug() << mimetype << json << json.value("X-KDE-ServiceTypes");
 
             if (json.isEmpty()) {
                 qDebug() << dirIter.filePath() << "has no json!";
             }
-            if (!json.isEmpty()) {
-                QJsonObject pluginData = json.value("KPlugin").toObject();
-                if (!pluginData.value("ServiceTypes").toArray().contains(QJsonValue(servicetype))) {
+            else {
+                if (!json.value("X-KDE-ServiceTypes").toArray().contains(QJsonValue(servicetype))) {
                     continue;
                 }
 
@@ -138,6 +139,5 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
         }
 
     }
-
     return list;
 }

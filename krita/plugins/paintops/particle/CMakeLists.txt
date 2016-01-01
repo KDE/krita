@@ -10,7 +10,6 @@ set(kritaparticlepaintop_SOURCES
 ki18n_wrap_ui(kritaparticlepaintop_SOURCES wdgparticleoptions.ui )
 
 add_library(kritaparticlepaintop MODULE ${kritaparticlepaintop_SOURCES})
-kcoreaddons_desktop_to_json(kritaparticlepaintop kritaparticlepaintop.desktop)
 
 target_link_libraries(kritaparticlepaintop kritalibpaintop)
 

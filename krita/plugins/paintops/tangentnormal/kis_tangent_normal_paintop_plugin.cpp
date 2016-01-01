@@ -32,11 +32,7 @@
 
 #include "kis_global.h"
 
-//K_PLUGIN_FACTORY(TangentNormalPaintOpPluginFactory, registerPlugin<TangentNormalPaintOpPlugin>();)
-//K_EXPORT_PLUGIN(TangentNormalPaintOpPluginFactory("krita"))
-
 K_PLUGIN_FACTORY_WITH_JSON(TangentNormalPaintOpPluginFactory, "kritatangentnormalpaintop.json", registerPlugin<TangentNormalPaintOpPlugin>();)
-
 
 TangentNormalPaintOpPlugin::TangentNormalPaintOpPlugin(QObject* parent, const QVariantList&):
     QObject(parent)

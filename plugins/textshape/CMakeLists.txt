@@ -175,8 +175,6 @@ qt5_add_resources(textshape_SRCS textshape.qrc)
 
 add_library(krita_shape_text MODULE ${textshape_SRCS})
 
-kcoreaddons_desktop_to_json(krita_shape_text calligra_shape_text.desktop)
-
 target_link_libraries(krita_shape_text kritatext kritatextlayout kritawidgetutils kritawidgets Qt5::Network KF5::Completion KF5::ItemViews KF5::WidgetsAddons
 )
 

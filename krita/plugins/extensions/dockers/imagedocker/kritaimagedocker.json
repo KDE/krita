@@ -1,0 +1,9 @@
+{
+    "Id": "Image Docker",
+    "Type": "Service",
+    "X-KDE-Library": "kritaimagedocker",
+    "X-KDE-ServiceTypes": [
+        "Krita/Dock"
+    ],
+    "X-Krita-Version": "28"
+}

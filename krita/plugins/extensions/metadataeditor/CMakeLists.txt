@@ -8,14 +8,7 @@ ki18n_wrap_ui(kritametadataeditor_SOURCES
 )
 
 add_library(kritametadataeditor MODULE ${kritametadataeditor_SOURCES})
-kcoreaddons_desktop_to_json(kritametadataeditor kritametadataeditor.desktop)
-
 target_link_libraries(kritametadataeditor kritaui )
-
 install(TARGETS kritametadataeditor  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
 install( FILES metadataeditor.rc DESTINATION ${DATA_INSTALL_DIR}/kritaplugins )
 install( FILES editors/dublincore.rc editors/exif.rc DESTINATION ${DATA_INSTALL_DIR}/kritaplugins/metadataeditor )

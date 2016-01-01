@@ -1,0 +1,13 @@
+{
+    "Icon": "",
+    "Id": "Krita PPM Export Filter",
+    "NoDisplay": "true",
+    "Type": "Service",
+    "X-KDE-Export": "image/x-portable-pixmap,image/x-portable-graymap,image/x-portable-bitmap",
+    "X-KDE-Import": "application/x-krita",
+    "X-KDE-Library": "kritappmexport",
+    "X-KDE-ServiceTypes": [
+        "Krita/FileFilter"
+    ],
+    "X-KDE-Weight": "1"
+}

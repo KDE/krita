@@ -1,5 +1,3 @@
-
-
 set(kritacolorsfilters_SOURCES
     colorsfilters.cpp
     kis_hsv_adjustment_filter.cpp
@@ -19,10 +17,5 @@ ki18n_wrap_ui(kritacolorsfilters_SOURCES
 )
 
 add_library(kritacolorsfilters MODULE ${kritacolorsfilters_SOURCES})
-kcoreaddons_desktop_to_json(kritacolorsfilters kritacolorsfilter.desktop)
-
-
-
 target_link_libraries(kritacolorsfilters kritaui)
-
 install(TARGETS kritacolorsfilters  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

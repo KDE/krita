@@ -1,13 +1,9 @@
-
-
 set(kritatoolperspectivegrid_SOURCES
     tool_perspectivegrid.cc
     kis_tool_perspectivegrid.cc
     )
 qt5_add_resources(kritatoolperspectivegrid_SOURCES tool_perspectivegrid.qrc)
 add_library(kritatoolperspectivegrid MODULE ${kritatoolperspectivegrid_SOURCES})
-kcoreaddons_desktop_to_json(kritatoolperspectivegrid kritatoolperspectivegrid.desktop)
-
 
 target_link_libraries(kritatoolperspectivegrid kritaui)
 

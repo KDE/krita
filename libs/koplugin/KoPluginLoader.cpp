@@ -67,6 +67,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     }
 
     QList<QPluginLoader *> offers = KoJsonTrader::instance()->query(serviceType, QString());
+
     QList<QPluginLoader *> plugins;
     bool configChanged = false;
     QList<QString> blacklist; // what we will save out afterwards
@@ -84,7 +85,9 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         }
         Q_FOREACH (QPluginLoader *loader, offers) {
             QJsonObject json = loader->metaData().value("MetaData").toObject();
-            json = json.value("KPlugin").toObject();
+            if (json.contains("KPlugin")) {
+                json = json.value("KPlugin").toObject();
+            }
             const QString pluginName = json.value("Id").toString();
             if (pluginName.isEmpty()) {
                 qWarning() << "Loading plugin" << loader->fileName() << "failed, has no X-KDE-PluginInfo-Name.";

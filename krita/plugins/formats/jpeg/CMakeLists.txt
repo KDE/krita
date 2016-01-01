@@ -4,11 +4,7 @@ set(ICCJPEG_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/lcms")
 
 include_directories(${ICCJPEG_SOURCE_DIR})
 
-if(LCMS2_FOUND)
-    include_directories( ${LCMS2_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/krita/image/metadata ${EXIV2_INCLUDE_DIR})
-else()
-    include_directories( ${CMAKE_SOURCE_DIR}/krita/image/metadata ${EXIV2_INCLUDE_DIR} ${LCMS_INCLUDE_DIR})
-endif()
+include_directories( ${LCMS2_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/krita/image/metadata ${EXIV2_INCLUDE_DIR})
 
 set(libkritaconverter_LIB_SRCS
     kis_jpeg_converter.cc
@@ -23,17 +19,10 @@ set(kritajpegimport_SOURCES
     )
 
 add_library(kritajpegimport MODULE ${kritajpegimport_SOURCES})
-kcoreaddons_desktop_to_json(kritajpegimport krita_jpeg_import.desktop)
 
-if(LCMS2_FOUND)
-    target_link_libraries(kritajpegimport kritaui  ${JPEG_LIBRARIES} ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} )
-else()
-    target_link_libraries(kritajpegimport kritaui  ${JPEG_LIBRARIES} ${LCMS_LIBRARIES} ${EXIV2_LIBRARIES} )
-endif()
+target_link_libraries(kritajpegimport kritaui  ${JPEG_LIBRARIES} ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} )
 
 install(TARGETS kritajpegimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-########### next target ###############
 
 set(kritajpegexport_SOURCES
     kis_jpeg_export.cc
@@ -43,17 +32,8 @@ set(kritajpegexport_SOURCES
 ki18n_wrap_ui(kritajpegexport_SOURCES kis_wdg_options_jpeg.ui )
 
 add_library(kritajpegexport MODULE ${kritajpegexport_SOURCES})
-kcoreaddons_desktop_to_json(kritajpegexport krita_jpeg_export.desktop)
 
-if(LCMS2_FOUND)
-    target_link_libraries(kritajpegexport kritaui   ${JPEG_LIBRARIES} ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} )
-else()
-    target_link_libraries(kritajpegexport kritaui   ${JPEG_LIBRARIES} ${LCMS_LIBRARIES} ${EXIV2_LIBRARIES} )
-endif()
+target_link_libraries(kritajpegexport kritaui   ${JPEG_LIBRARIES} ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} )
 
 install(TARGETS kritajpegexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
 install( PROGRAMS  krita_jpeg.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

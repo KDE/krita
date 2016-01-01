@@ -1,0 +1,9 @@
+{
+    "Id": "metadataeditor",
+    "Type": "Service",
+    "X-KDE-Library": "kritametadataeditor",
+    "X-KDE-ServiceTypes": [
+        "Krita/ViewPlugin"
+    ],
+    "X-Krita-Version": "28"
+}

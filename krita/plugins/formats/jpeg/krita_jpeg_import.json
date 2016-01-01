@@ -1,0 +1,13 @@
+{
+    "Icon": "",
+    "Id": "Krita JPEG Import Filter",
+    "NoDisplay": "true",
+    "Type": "Service",
+    "X-KDE-Export": "application/x-krita",
+    "X-KDE-Import": "image/jpeg",
+    "X-KDE-Library": "kritajpegimport",
+    "X-KDE-ServiceTypes": [
+        "Krita/FileFilter"
+    ],
+    "X-KDE-Weight": "1"
+}

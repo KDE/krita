@@ -48,8 +48,6 @@ qt5_add_resources(karbon_tools_SOURCES karbontools.qrc)
 
 add_library(krita_karbontools MODULE ${karbon_tools_SOURCES})
 
-kcoreaddons_desktop_to_json(krita_karbontools karbon_tools.desktop)
-
 target_link_libraries(krita_karbontools kritawidgets KF5::Completion)
 
 install(TARGETS krita_karbontools DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

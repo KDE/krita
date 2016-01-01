@@ -1,6 +1,6 @@
 {
     "Comment": "Definition of a text-editing plugin",
-    "Name": "Text Editing plugin for the Calligra text tool",
+    "Id": "Text Editing plugin for the Calligra text tool",
     "Type": "ServiceType",
     "X-KDE-ServiceType": "Calligra/Text-EditingPlugin"
 }

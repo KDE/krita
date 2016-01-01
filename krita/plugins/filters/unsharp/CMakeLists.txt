@@ -11,8 +11,6 @@ ki18n_wrap_ui(kritaunsharpfilter_SOURCES
     )
 
 add_library(kritaunsharpfilter MODULE ${kritaunsharpfilter_SOURCES})
-kcoreaddons_desktop_to_json(kritaunsharpfilter kritaunsharpfilter.desktop)
-
 
 target_link_libraries(kritaunsharpfilter kritaui)
 

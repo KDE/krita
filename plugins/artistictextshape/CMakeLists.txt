@@ -41,8 +41,6 @@ qt5_add_resources(ArtisticTextShape_SRCS artistictextshape.qrc)
 
 add_library(krita_shape_artistictext MODULE ${ArtisticTextShape_SRCS} )
 
-kcoreaddons_desktop_to_json(krita_shape_artistictext calligra_shape_artistictext.desktop)
-
 target_link_libraries(krita_shape_artistictext kritaflake)
 
 install( TARGETS krita_shape_artistictext DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR} )

@@ -41,7 +41,6 @@ ki18n_wrap_ui(pathshapes_SOURCES
 qt5_add_resources(pathshapes_SOURCES pathshapes.qrc)
 
 add_library(krita_shape_paths MODULE ${pathshapes_SOURCES})
-kcoreaddons_desktop_to_json(krita_shape_paths calligra_shape_paths.desktop)
 
 target_link_libraries(krita_shape_paths kritaflake kritawidgets)
 

@@ -1,0 +1,9 @@
+{
+    "Id": "Image Resize and Scale Plugin",
+    "Type": "Service",
+    "X-KDE-Library": "kritaimagesize",
+    "X-KDE-ServiceTypes": [
+        "Krita/ViewPlugin"
+    ],
+    "X-Krita-Version": "28"
+}

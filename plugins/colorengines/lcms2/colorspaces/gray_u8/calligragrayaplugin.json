@@ -1,0 +1,10 @@
+{
+    "Id": "Grayscale Color Model with Alpha",
+    "X-Flake-PluginVersion": "28",
+    "X-KDE-Library": "calligragrayau8plugin",
+    "X-KDE-PluginInfo-Name": "calligragrayau8plugin",
+    "X-KDE-ServiceTypes": [
+        "Calligra/ColorSpace"
+    ],
+    "X-Pigment-MinVersion": "28"
+}

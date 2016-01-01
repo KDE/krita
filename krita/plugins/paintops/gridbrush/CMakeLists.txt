@@ -11,7 +11,6 @@ set(kritagridpaintop_SOURCES
 ki18n_wrap_ui(kritagridpaintop_SOURCES wdggridoptions.ui wdggridbrushshapeoptions.ui )
 
 add_library(kritagridpaintop MODULE ${kritagridpaintop_SOURCES})
-kcoreaddons_desktop_to_json(kritagridpaintop kritagridpaintop.desktop)
 
 target_link_libraries(kritagridpaintop kritalibpaintop)
 

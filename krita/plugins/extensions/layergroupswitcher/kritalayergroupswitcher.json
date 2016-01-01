@@ -1,0 +1,9 @@
+{
+    "Id": "Quick Layergroup Switcher",
+    "Type": "Service",
+    "X-KDE-Library": "kritalayergroupswitcher",
+    "X-KDE-ServiceTypes": [
+        "Krita/ViewPlugin"
+    ],
+    "X-Krita-Version": "28"
+}

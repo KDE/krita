@@ -1,0 +1,9 @@
+{
+    "Id": "Phong Bumpmap Filter",
+    "Type": "Service",
+    "X-KDE-Library": "kritaphongbumpmap",
+    "X-KDE-ServiceTypes": [
+        "Krita/Filter"
+    ],
+    "X-Krita-Version": "28"
+}

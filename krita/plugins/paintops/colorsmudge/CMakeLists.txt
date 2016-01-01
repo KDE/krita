@@ -9,7 +9,6 @@ set(kritacolorsmudgepaintop_SOURCES
 )
 
 add_library(kritacolorsmudgepaintop MODULE ${kritacolorsmudgepaintop_SOURCES})
-kcoreaddons_desktop_to_json(kritacolorsmudgepaintop kritacolorsmudgepaintop.desktop)
 
 target_link_libraries(kritacolorsmudgepaintop kritalibpaintop)
 

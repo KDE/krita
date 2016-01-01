@@ -1,0 +1,10 @@
+{
+    "Icon": "",
+    "Id": "Random pick Filter",
+    "Type": "Service",
+    "X-KDE-Library": "kritarandompickfilter",
+    "X-KDE-ServiceTypes": [
+        "Krita/Filter"
+    ],
+    "X-Krita-Version": "28"
+}

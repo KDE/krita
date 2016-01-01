@@ -1,5 +1,3 @@
-
-
 set(kritaselectiontools_SOURCES
     selection_tools.cc
     kis_tool_select_rectangular.cc
@@ -14,8 +12,6 @@ set(kritaselectiontools_SOURCES
 qt5_add_resources(kritaselectiontools_SOURCES selectiontools.qrc)
 
 add_library(kritaselectiontools MODULE ${kritaselectiontools_SOURCES})
-
-kcoreaddons_desktop_to_json(kritaselectiontools kritaselectiontools.desktop)
 
 target_link_libraries(kritaselectiontools kritaui kritabasicflakes)
 

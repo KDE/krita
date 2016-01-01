@@ -1,0 +1,12 @@
+{
+    "Icon": "",
+    "Id": "Path Shapes",
+    "Type": "Service",
+    "X-Flake-MinVersion": "28",
+    "X-Flake-PluginVersion": "28",
+    "X-KDE-Library": "krita_shape_paths",
+    "X-KDE-PluginInfo-Name": "pathshapes",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Shape"
+    ]
+}

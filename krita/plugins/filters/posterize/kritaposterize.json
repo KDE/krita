@@ -1,0 +1,9 @@
+{
+    "Id": "Posterize Filter",
+    "Type": "Service",
+    "X-KDE-Library": "kritaposterize",
+    "X-KDE-ServiceTypes": [
+        "Krita/Filter"
+    ],
+    "X-Krita-Version": "28"
+}

@@ -1,0 +1,12 @@
+{
+    "Id": "Krita TGA Import Filter",
+    "NoDisplay": "true",
+    "Type": "Service",
+    "X-KDE-Export": "application/x-krita",
+    "X-KDE-Import": "image/x-tga",
+    "X-KDE-Library": "kritatgaimport",
+    "X-KDE-ServiceTypes": [
+        "Krita/FileFilter"
+    ],
+    "X-KDE-Weight": "1"
+}

@@ -12,8 +12,5 @@ set( extensions_plugin_SOURCES
 )
 
 add_library(krita_colorspaces_extensions MODULE ${extensions_plugin_SOURCES} )
-kcoreaddons_desktop_to_json(krita_colorspaces_extensions krita_colorspaces_extensions_plugin.desktop)
-
 target_link_libraries(krita_colorspaces_extensions kritapigment kritaglobal ${OPENEXR_LIBRARIES} KF5::I18n KF5::CoreAddons)
-
 install( TARGETS krita_colorspaces_extensions DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR} )

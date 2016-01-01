@@ -28,7 +28,6 @@ qt5_add_resources(kritadefaulttools_SOURCES defaulttools.qrc )
 add_library(kritadefaulttools MODULE ${kritadefaulttools_SOURCES})
 
 generate_export_header(kritadefaulttools BASE_NAME kritadefaulttools)
-kcoreaddons_desktop_to_json(kritadefaulttools kritadefaulttools.desktop)
 
 target_link_libraries(kritadefaulttools kritaui kritabasicflakes)
 target_link_libraries(kritadefaulttools ${Boost_SYSTEM_LIBRARY})

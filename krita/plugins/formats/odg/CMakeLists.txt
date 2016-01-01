@@ -1,12 +1,10 @@
-
 include_directories( ${CMAKE_SOURCE_DIR}/krita/image/metadata )
 
 set(kritaodgimport_SOURCES
     kis_odg_import.cc
-    )
+)
 
 add_library(kritaodgimport MODULE ${kritaodgimport_SOURCES})
-kcoreaddons_desktop_to_json(kritaodgimport krita_odg_import.desktop)
 
 include_directories(${PNG_INCLUDE_DIR})
 

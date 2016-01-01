@@ -16,14 +16,10 @@ set(kritaexrimport_SOURCES
     )
 
 add_library(kritaexrimport MODULE ${kritaexrimport_SOURCES})
-kcoreaddons_desktop_to_json(kritaexrimport krita_exr_import.desktop)
-
 
 target_link_libraries(kritaexrimport kritaui  ${OPENEXR_LIBRARIES} )
 
 install(TARGETS kritaexrimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-########### next target ###############
 
 set(kritaexrexport_SOURCES
     exr_export.cc
@@ -33,14 +29,10 @@ set(kritaexrexport_SOURCES
 ki18n_wrap_ui(kritaexrexport_SOURCES exr_export_widget.ui )
 
 add_library(kritaexrexport MODULE ${kritaexrexport_SOURCES})
-kcoreaddons_desktop_to_json(kritaexrexport krita_exr_export.desktop)
 
 target_link_libraries(kritaexrexport kritaui  ${OPENEXR_LIBRARIES} )
 
 install(TARGETS kritaexrexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
 
 install( FILES
     exrchannels.schema

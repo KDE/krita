@@ -7,8 +7,6 @@ set(kritapngimport_SOURCES
     )
 
 add_library(kritapngimport MODULE ${kritapngimport_SOURCES})
-kcoreaddons_desktop_to_json(kritapngimport krita_png_import.desktop)
-
 
 include_directories(${PNG_INCLUDE_DIR})
 
@@ -20,14 +18,11 @@ install(TARGETS kritapngimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 set(kritapngexport_SOURCES
     kis_png_export.cc
-    )
-
+)
 
 ki18n_wrap_ui(kritapngexport_SOURCES kis_wdg_options_png.ui )
 
 add_library(kritapngexport MODULE ${kritapngexport_SOURCES})
-kcoreaddons_desktop_to_json(kritapngexport krita_png_export.desktop)
-
 
 target_link_libraries(kritapngexport kritaui ${PNG_LIBRARIES})
 

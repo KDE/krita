@@ -11,7 +11,6 @@ set(kritadynapaintop_SOURCES
 ki18n_wrap_ui(kritadynapaintop_SOURCES wdgdynaoptions.ui )
 
 add_library(kritadynapaintop MODULE ${kritadynapaintop_SOURCES})
-kcoreaddons_desktop_to_json(kritadynapaintop kritadynapaintop.desktop)
 
 target_link_libraries(kritadynapaintop kritalibpaintop)
 

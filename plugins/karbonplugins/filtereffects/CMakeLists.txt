@@ -41,8 +41,6 @@ set(karbon_filtereffects_SOURCES
 
 add_library(krita_filtereffects MODULE ${karbon_filtereffects_SOURCES})
 
-kcoreaddons_desktop_to_json(krita_filtereffects karbon_filtereffects.desktop)
-
 target_link_libraries(krita_filtereffects kritaflake kritawidgets KF5::Completion)
 
 install(TARGETS krita_filtereffects  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

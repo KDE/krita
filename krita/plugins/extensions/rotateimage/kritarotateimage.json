@@ -1,0 +1,9 @@
+{
+    "Id": "Rotate Image Plugin",
+    "Type": "Service",
+    "X-KDE-Library": "kritarotateimage",
+    "X-KDE-ServiceTypes": [
+        "Krita/ViewPlugin"
+    ],
+    "X-Krita-Version": "28"
+}

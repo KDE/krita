@@ -321,7 +321,7 @@ if(WIN32)
 endif()
 
 # set custom krita plugin installdir
-set(CALLIGRA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/krita)
+set(CALLIGRA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/kritaplugins)
 
  ###########################
 ############################

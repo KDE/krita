@@ -12,7 +12,6 @@ set(kritacurvepaintop_SOURCES
 ki18n_wrap_ui(kritacurvepaintop_SOURCES wdgcurveoptions.ui )
 
 add_library(kritacurvepaintop MODULE ${kritacurvepaintop_SOURCES})
-kcoreaddons_desktop_to_json(kritacurvepaintop kritacurvepaintop.desktop)
 
 target_link_libraries(kritacurvepaintop kritalibpaintop)
 

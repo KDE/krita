@@ -1,0 +1,12 @@
+{
+    "Icon": "",
+    "Id": "Krita jp2 Import Filter",
+    "Type": "Service",
+    "X-KDE-Export": "application/x-krita",
+    "X-KDE-Import": "image/jp2",
+    "X-KDE-Library": "kritajp2import",
+    "X-KDE-ServiceTypes": [
+        "Krita/FileFilter"
+    ],
+    "X-KDE-Weight": "1"
+}

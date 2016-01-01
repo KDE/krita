@@ -24,7 +24,6 @@ set(kritapsdimport_SOURCES
 )
 
 add_library(kritapsdimport MODULE ${kritapsdimport_SOURCES})
-kcoreaddons_desktop_to_json(kritapsdimport krita_psd_import.desktop)
 
 if (WIN32)
 	target_link_libraries(kritapsdimport kritaui kritapsd  ${WIN32_PLATFORM_NET_LIBS} ${ZLIB_LIBRARIES})
@@ -34,8 +33,6 @@ endif ()
 
 install(TARGETS kritapsdimport DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
-########### next target ###############
-
 set(kritapsdexport_SOURCES
     psd_export.cc
     psd_saver.cpp
@@ -43,7 +40,6 @@ set(kritapsdexport_SOURCES
 )
 
 add_library(kritapsdexport MODULE ${kritapsdexport_SOURCES})
-kcoreaddons_desktop_to_json(kritapsdexport krita_psd_export.desktop)
 
 if (WIN32)
     target_link_libraries(kritapsdexport kritaui ${WIN32_PLATFORM_NET_LIBS} ${ZLIB_LIBRARIES})

@@ -1,0 +1,9 @@
+{
+    "Id": "Histogram Plugin",
+    "Type": "Service",
+    "X-KDE-Library": "kritahistogram",
+    "X-KDE-ServiceTypes": [
+        "Krita/ViewPlugin"
+    ],
+    "X-Krita-Version": "28"
+}

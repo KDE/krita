@@ -1,0 +1,9 @@
+{
+    "Id": "Perspective Grid Tool",
+    "Type": "Service",
+    "X-KDE-Library": "kritatoolperspectivegrid",
+    "X-KDE-ServiceTypes": [
+        "Krita/Tool"
+    ],
+    "X-Krita-Version": "28"
+}

@@ -1,0 +1,9 @@
+{
+    "Id": "Layer Splitter",
+    "Type": "Service",
+    "X-KDE-Library": "kritalayersplit",
+    "X-KDE-ServiceTypes": [
+        "Krita/ViewPlugin"
+    ],
+    "X-Krita-Version": "28"
+}

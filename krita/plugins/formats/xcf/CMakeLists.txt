@@ -22,7 +22,6 @@ set(kritaxcfimport_SOURCES
     )
 
 add_library(kritaxcfimport MODULE ${kritaxcfimport_SOURCES})
-kcoreaddons_desktop_to_json(kritaxcfimport krita_xcf_import.desktop)
 
 target_link_libraries(kritaxcfimport kritaui )
 

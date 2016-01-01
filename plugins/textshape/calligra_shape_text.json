@@ -1,0 +1,11 @@
+{
+    "Id": "Text Shape",
+    "Type": "Service",
+    "X-Flake-MinVersion": "28",
+    "X-Flake-PluginVersion": "28",
+    "X-KDE-Library": "krita_shape_text",
+    "X-KDE-PluginInfo-Name": "textshape",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Flake"
+    ]
+}

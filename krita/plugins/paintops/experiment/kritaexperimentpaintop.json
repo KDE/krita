@@ -1,0 +1,9 @@
+{
+    "Id": "Experiment",
+    "Type": "Service",
+    "X-KDE-Library": "kritaexperimentpaintop",
+    "X-KDE-ServiceTypes": [
+        "Krita/Paintop"
+    ],
+    "X-Krita-Version": "28"
+}

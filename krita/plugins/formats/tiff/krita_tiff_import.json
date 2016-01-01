@@ -1,0 +1,13 @@
+{
+    "Icon": "",
+    "Id": "Krita TIFF Import Filter",
+    "NoDisplay": "true",
+    "Type": "Service",
+    "X-KDE-Export": "application/x-krita",
+    "X-KDE-Import": "image/tiff",
+    "X-KDE-Library": "kritatiffimport",
+    "X-KDE-ServiceTypes": [
+        "Krita/FileFilter"
+    ],
+    "X-KDE-Weight": "1"
+}

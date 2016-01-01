@@ -1,5 +1,3 @@
-
-
 set(kritatoolpolygon_SOURCES
     tool_polygon.cc
     kis_tool_polygon.cc
@@ -7,8 +5,6 @@ set(kritatoolpolygon_SOURCES
 
 qt5_add_resources(kritatoolpolygon_SOURCES tool_polygon.qrc)
 add_library(kritatoolpolygon MODULE ${kritatoolpolygon_SOURCES})
-kcoreaddons_desktop_to_json(kritatoolpolygon kritatoolpolygon.desktop)
-
 
 target_link_libraries(kritatoolpolygon kritaui)
 

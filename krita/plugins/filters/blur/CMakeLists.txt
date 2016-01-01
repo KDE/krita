@@ -1,5 +1,3 @@
-
-
 set(kritablurfilter_SOURCES
     blur.cpp
     kis_blur_filter.cpp
@@ -20,9 +18,5 @@ ki18n_wrap_ui(kritablurfilter_SOURCES
     )
 
 add_library(kritablurfilter MODULE ${kritablurfilter_SOURCES})
-kcoreaddons_desktop_to_json(kritablurfilter kritablurfilter.desktop)
-
-
 target_link_libraries(kritablurfilter kritaui)
-
 install(TARGETS kritablurfilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

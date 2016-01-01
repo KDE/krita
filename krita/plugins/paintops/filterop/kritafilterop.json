@@ -1,0 +1,9 @@
+{
+    "Id": "Filter Op",
+    "Type": "Service",
+    "X-KDE-Library": "kritafilterop",
+    "X-KDE-ServiceTypes": [
+        "Krita/Paintop"
+    ],
+    "X-Krita-Version": "28"
+}

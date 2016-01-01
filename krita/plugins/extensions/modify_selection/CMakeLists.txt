@@ -1,5 +1,3 @@
-
-
 set(kritamodifyselection_SOURCES
     dlg_grow_selection.cc
     dlg_shrink_selection.cc
@@ -18,14 +16,6 @@ ki18n_wrap_ui(kritamodifyselection_SOURCES
     )
 
 add_library(kritamodifyselection MODULE ${kritamodifyselection_SOURCES})
-kcoreaddons_desktop_to_json(kritamodifyselection kritamodifyselection.desktop)
-
-
 target_link_libraries(kritamodifyselection kritaui)
-
 install(TARGETS kritamodifyselection  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
 install( FILES  modify_selection.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)

@@ -26,7 +26,6 @@ ki18n_wrap_ui(krita_raw_import_SOURCES
 )
 
 add_library(krita_raw_import MODULE ${krita_raw_import_SOURCES})
-kcoreaddons_desktop_to_json(krita_raw_import krita_raw_import.desktop)
 target_link_libraries(krita_raw_import kritaui ${LibRaw_LIBRARIES})
 
 install(TARGETS krita_raw_import  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

@@ -8,11 +8,6 @@ set(kritacolorslider_SOURCES
 
 )
 
-# ki18n_wrap_ui(kritaspecificcolorselector_SOURCES myuifile.ui )
-
 add_library(kritacolorslider MODULE ${kritacolorslider_SOURCES})
-kcoreaddons_desktop_to_json(kritacolorslider krita_colorslider.desktop)
-
 target_link_libraries(kritacolorslider kritaui ${OPENEXR_LIBRARIES})
-
 install(TARGETS kritacolorslider  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

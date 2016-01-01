@@ -9,7 +9,6 @@ set(kritaexperimentpaintop_SOURCES
 ki18n_wrap_ui(kritaexperimentpaintop_SOURCES wdgexperimentoptions.ui )
 
 add_library(kritaexperimentpaintop MODULE ${kritaexperimentpaintop_SOURCES})
-kcoreaddons_desktop_to_json(kritaexperimentpaintop kritaexperimentpaintop.desktop)
 
 target_link_libraries(kritaexperimentpaintop kritalibpaintop)
 

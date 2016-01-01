@@ -14,10 +14,6 @@ ki18n_wrap_ui(kritaresourcemanager_SOURCES
 )
 
 add_library(kritaresourcemanager MODULE ${kritaresourcemanager_SOURCES})
-kcoreaddons_desktop_to_json(kritaresourcemanager kritaresourcemanager.desktop)
-
 target_link_libraries(kritaresourcemanager kritawidgets kritaui kritalibpaintop)
-
 install(TARGETS kritaresourcemanager  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-install( FILES  resourcemanager.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
+install(FILES resourcemanager.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)

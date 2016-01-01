@@ -10,7 +10,6 @@ set(kritatangentnormalpaintop_SOURCES
 ki18n_wrap_ui(kritatangentnormalpaintop_SOURCES wdgtangenttiltoption.ui )
 
 add_library(kritatangentnormalpaintop MODULE ${kritatangentnormalpaintop_SOURCES})
-kcoreaddons_desktop_to_json(kritatangentnormalpaintop kritatangentnormalpaintop.desktop)
 
 target_link_libraries(kritatangentnormalpaintop kritalibpaintop)
 

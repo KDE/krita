@@ -7,7 +7,6 @@ set(kritafilterop_SOURCES
 
 
 add_library(kritafilterop MODULE ${kritafilterop_SOURCES})
-kcoreaddons_desktop_to_json(kritafilterop kritafilterop.desktop)
 
 target_link_libraries(kritafilterop kritalibpaintop)
 

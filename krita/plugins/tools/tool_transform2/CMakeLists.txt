@@ -28,8 +28,6 @@ ki18n_wrap_ui(kritatooltransform_SOURCES wdg_tool_transform.ui)
 add_library(kritatooltransform MODULE ${kritatooltransform_SOURCES})
 generate_export_header(kritatooltransform BASE_NAME kritatooltransform)
 
-kcoreaddons_desktop_to_json(kritatooltransform kritatooltransform.desktop)
-
 if (NOT GSL_FOUND)
   message (WARNING "KRITA WARNING! No GNU Scientific Library was found! Krita's Transform Tool will not be able to scale the image with handles. Please install GSL library.")
   target_link_libraries(kritatooltransform kritaui)

@@ -35,11 +35,7 @@ ki18n_wrap_ui(KRITA_ANIMATIONDOCKER_SOURCES
 
 add_library(kritaanimationdocker MODULE ${KRITA_ANIMATIONDOCKER_SOURCES})
 generate_export_header(kritaanimationdocker BASE_NAME kritaanimationdocker EXPORT_MACRO_NAME KRITAANIMATIONDOCKER_EXPORT)
-
-kcoreaddons_desktop_to_json(kritaanimationdocker krita_animationdocker.desktop)
-
 target_link_libraries(kritaanimationdocker kritaui)
-
 install(TARGETS kritaanimationdocker  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
 

@@ -1,0 +1,11 @@
+{
+    "Id": "Calligra Dockers plugin",
+    "Type": "Service",
+    "X-Flake-MinVersion": "28",
+    "X-Flake-PluginVersion": "28",
+    "X-KDE-Library": "krita_docker_defaults",
+    "X-KDE-PluginInfo-Name": "calligradockers",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Dock"
+    ]
+}

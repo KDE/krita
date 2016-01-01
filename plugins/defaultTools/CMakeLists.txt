@@ -51,6 +51,5 @@ ki18n_wrap_ui(defaulttools_SRCS
 qt5_add_resources(defaulttools_SRCS defaulttools.qrc)
 
 add_library(krita_flaketools MODULE ${defaulttools_SRCS})
-kcoreaddons_desktop_to_json(krita_flaketools calligra_tool_defaults.desktop)
 target_link_libraries(krita_flaketools kritaflake kritawidgets)
 install(TARGETS krita_flaketools DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

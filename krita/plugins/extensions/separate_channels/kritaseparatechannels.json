@@ -1,0 +1,9 @@
+{
+    "Id": "Separate Channels Plugin",
+    "Type": "Service",
+    "X-KDE-Library": "kritaseparatechannels",
+    "X-KDE-ServiceTypes": [
+        "Krita/ViewPlugin"
+    ],
+    "X-Krita-Version": "28"
+}

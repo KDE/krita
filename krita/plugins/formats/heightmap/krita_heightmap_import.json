@@ -1,0 +1,13 @@
+{
+    "Icon": "",
+    "Id": "Krita HeightMap Import Filter",
+    "NoDisplay": "true",
+    "Type": "Service",
+    "X-KDE-Export": "application/x-krita",
+    "X-KDE-Import": "image/x-r16,image/x-r8",
+    "X-KDE-Library": "kritaheightmapimport",
+    "X-KDE-ServiceTypes": [
+        "Krita/FileFilter"
+    ],
+    "X-KDE-Weight": "1"
+}

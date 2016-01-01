@@ -1,0 +1,10 @@
+{
+    "Icon": "",
+    "Id": "Color Transfer Filter",
+    "Type": "Service",
+    "X-KDE-Library": "kritafastcolortransferfilter",
+    "X-KDE-ServiceTypes": [
+        "Krita/Filter"
+    ],
+    "X-Krita-Version": "28"
+}

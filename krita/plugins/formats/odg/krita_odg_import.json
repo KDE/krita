@@ -1,0 +1,12 @@
+{
+    "Id": "Krita ODG Import Filter",
+    "NoDisplay": "true",
+    "Type": "Service",
+    "X-KDE-Export": "application/x-krita",
+    "X-KDE-Import": "application/vnd.oasis.opendocument.graphics",
+    "X-KDE-Library": "kritaodgimport",
+    "X-KDE-ServiceTypes": [
+        "Krita/FileFilter"
+    ],
+    "X-KDE-Weight": "1"
+}

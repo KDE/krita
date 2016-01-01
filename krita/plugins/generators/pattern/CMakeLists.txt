@@ -9,7 +9,6 @@ ki18n_wrap_ui(kritapatterngenerator_SOURCES
     )
 
 add_library(kritapatterngenerator MODULE ${kritapatterngenerator_SOURCES})
-kcoreaddons_desktop_to_json(kritapatterngenerator kritapatterngenerator.desktop)
 
 target_link_libraries(kritapatterngenerator kritaui)
 

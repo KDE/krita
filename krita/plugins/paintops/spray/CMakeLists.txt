@@ -13,7 +13,6 @@ set(kritaspraypaintop_SOURCES
 ki18n_wrap_ui(kritaspraypaintop_SOURCES wdgsprayoptions.ui wdgsprayshapeoptions.ui wdgshapedynamicsoptions.ui )
 
 add_library(kritaspraypaintop MODULE ${kritaspraypaintop_SOURCES})
-kcoreaddons_desktop_to_json(kritaspraypaintop kritaspraypaintop.desktop)
 
 target_link_libraries(kritaspraypaintop kritalibpaintop)
 

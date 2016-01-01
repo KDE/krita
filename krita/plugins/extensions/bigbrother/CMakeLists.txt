@@ -1,4 +1,3 @@
-
 set(kritabigbrother_SOURCES
         bigbrother.cc
         actionseditor/kis_actions_editor.cpp
@@ -9,13 +8,6 @@ ki18n_wrap_ui(kritabigbrother_SOURCES
         actionseditor/wdgactionseditor.ui )
 
 add_library(kritabigbrother MODULE ${kritabigbrother_SOURCES})
-kcoreaddons_desktop_to_json(kritabigbrother kritabigbrother.desktop)
-
 target_link_libraries(kritabigbrother kritaui)
-
 install(TARGETS kritabigbrother  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
 install( FILES  bigbrother.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)

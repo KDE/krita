@@ -1,0 +1,10 @@
+{
+    "CacheThumbnail": "true",
+    "MimeType": "image/openraster;",
+    "Id": "OpenRaster Archiving Images",
+    "Type": "Service",
+    "X-KDE-Library": "kritathumbnail",
+    "X-KDE-ServiceTypes": [
+        "ThumbCreator"
+    ]
+}

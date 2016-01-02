@@ -76,6 +76,16 @@ namespace KisLayerUtils
         bool m_finalize;
         SharedStorageSP m_storage;
     };
+
+    class KRITAIMAGE_EXPORT RemoveNodeHelper {
+    public:
+        virtual ~RemoveNodeHelper();
+    protected:
+        virtual void addCommandImpl(KUndo2Command *cmd) = 0;
+        void safeRemoveMultipleNodes(QList<KisNodeSP> nodes, KisImageSP image);
+    private:
+        bool checkIsSourceForClone(KisNodeSP src, const QList<KisNodeSP> &nodes);
+    };
 };
 
 #endif /* __KIS_LAYER_UTILS_H */

@@ -594,7 +594,13 @@ void KisLayerBox::slotThumbnailView()
 void KisLayerBox::slotRmClicked()
 {
     if (!m_canvas) return;
-    m_nodeManager->removeNode();
+
+    if (!m_nodeJuggler) {
+        m_nodeJuggler = new KisNodeJugglerCompressed(kundo2_i18n("Remove Nodes"), m_image, m_nodeManager, 1000);
+        m_nodeJuggler->setAutoDelete(true);
+    }
+
+    m_nodeJuggler->removeNode(m_nodeManager->selectedNodes());
 }
 
 void KisLayerBox::slotRaiseClicked()

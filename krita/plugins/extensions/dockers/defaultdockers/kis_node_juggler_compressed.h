@@ -42,6 +42,7 @@ public:
 
     void lowerNode(const KisNodeList &nodes);
     void raiseNode(const KisNodeList &nodes);
+    void removeNode(const KisNodeList &nodes);
 
 public Q_SLOTS:
     void end();
@@ -49,9 +50,11 @@ public Q_SLOTS:
 private Q_SLOTS:
     void slotUpdateTimeout();
     void slotEndStrokeRequested();
+    void slotCancelStrokeRequested();
 
 private:
     void startTimers();
+    void cleanup();
     KisNodeList sortAndFilterNodes(const KisNodeList &nodes);
 
 private:

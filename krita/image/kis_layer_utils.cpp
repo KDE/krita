@@ -309,7 +309,50 @@ namespace KisLayerUtils {
         const KisMetaData::MergeStrategy *m_strategy;
     };
 
-    struct CleanUpNodes : public KisCommandUtils::AggregateCommand {
+    RemoveNodeHelper::~RemoveNodeHelper()
+    {
+    }
+
+    /**
+     * The removal of two nodes in one go may be a bit tricky, because one
+     * of them may be the clone of another. If we remove the source of a
+     * clone layer, it will reincarnate into a paint layer. In this case
+     * the pointer to the second layer will be lost.
+     *
+     * That's why we need to care about the order of the nodes removal:
+     * the clone --- first, the source --- last.
+     */
+    void RemoveNodeHelper::safeRemoveMultipleNodes(QList<KisNodeSP> nodes, KisImageSP image) {
+        while (!nodes.isEmpty()) {
+            QList<KisNodeSP>::iterator it = nodes.begin();
+
+            while (it != nodes.end()) {
+                if (!checkIsSourceForClone(*it, nodes)) {
+                    KisNodeSP node = *it;
+                    addCommandImpl(new KisImageLayerRemoveCommand(image, node, false, true));
+                    it = nodes.erase(it);
+                } else {
+                    ++it;
+                }
+            }
+        }
+    }
+
+    bool RemoveNodeHelper::checkIsSourceForClone(KisNodeSP src, const QList<KisNodeSP> &nodes) {
+        foreach (KisNodeSP node, nodes) {
+            if (node == src) continue;
+
+            KisCloneLayer *clone = dynamic_cast<KisCloneLayer*>(node.data());
+
+            if (clone && KisNodeSP(clone->copyFrom()) == src) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    struct CleanUpNodes : private RemoveNodeHelper, public KisCommandUtils::AggregateCommand {
         CleanUpNodes(MergeDownInfoBaseSP info, KisNodeSP putAfter)
             : m_info(info), m_putAfter(putAfter) {}
 
@@ -363,50 +406,15 @@ namespace KisLayerUtils {
                                        m_info->dstLayer(),
                                        m_info->selectionMasks);
 
-                safeRemoveMultipleNodes(m_info->allSrcNodes());
+                safeRemoveMultipleNodes(m_info->allSrcNodes(), m_info->image);
             }
 
 
         }
 
     private:
-        bool checkIsSourceForClone(KisNodeSP src, const QList<KisNodeSP> &nodes) {
-            foreach (KisNodeSP node, nodes) {
-                if (node == src) continue;
-
-                KisCloneLayer *clone = dynamic_cast<KisCloneLayer*>(node.data());
-
-                if (clone && KisNodeSP(clone->copyFrom()) == src) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        /**
-         * The removal of two nodes in one go may be a bit tricky, because one
-         * of them may be the clone of another. If we remove the source of a
-         * clone layer, it will reincarnate into a paint layer. In this case
-         * the pointer to the second layer will be lost.
-         *
-         * That's why we need to care about the order of the nodes removal:
-         * the clone --- first, the source --- last.
-         */
-        void safeRemoveMultipleNodes(QList<KisNodeSP> nodes) {
-            while (!nodes.isEmpty()) {
-                QList<KisNodeSP>::iterator it = nodes.begin();
-
-                while (it != nodes.end()) {
-                    if (!checkIsSourceForClone(*it, nodes)) {
-                        KisNodeSP node = *it;
-                        addCommand(new KisImageLayerRemoveCommand(m_info->image, node, false, true));
-                        it = nodes.erase(it);
-                    } else {
-                        ++it;
-                    }
-                }
-            }
+        virtual void addCommandImpl(KUndo2Command *cmd) {
+            addCommand(cmd);
         }
 
         void reparentSelectionMasks(KisImageSP image,

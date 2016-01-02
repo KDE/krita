@@ -637,29 +637,6 @@ void KisLayerManager::addGeneratorLayer(KisNodeSP activeNode)
 
 }
 
-void KisLayerManager::layerDuplicate()
-{
-    KisImageWSP image = m_view->image();
-
-    if (!image)
-        return;
-
-    KisLayerSP active = activeLayer();
-
-    if (!active)
-        return;
-
-    KisLayerSP dup = dynamic_cast<KisLayer*>(active->clone().data());
-    m_commandsAdapter->addNode(dup.data(), active->parent(), active.data());
-    if (dup) {
-        activateLayer(dup);
-    } else {
-        QMessageBox::critical(m_view->mainWindow(),
-                              i18nc("@title:window", "Krita"),
-                              i18n("Could not add layer to image."));
-    }
-}
-
 void KisLayerManager::rotateLayer(double radians)
 {
     if (!m_view->image()) return;

@@ -674,16 +674,9 @@ void KisNodeManager::nodeCompositeOpChanged(const KoCompositeOp* op)
 
 void KisNodeManager::duplicateActiveNode()
 {
-    KisNodeSP node = activeNode();
-
-    // FIXME: can't imagine how it may happen
-    Q_ASSERT(node);
-
-    if (node->inherits("KisLayer")) {
-        m_d->layerManager.layerDuplicate();
-    } else if (node->inherits("KisMask")) {
-        m_d->maskManager.duplicateMask();
-    }
+    KUndo2MagicString actionName = kundo2_i18n("Duplicate Nodes");
+    KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
+    juggler->duplicateNode(selectedNodes());
 }
 
 KisNodeJugglerCompressed* KisNodeManager::Private::lazyGetJuggler(const KUndo2MagicString &actionName)

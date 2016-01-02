@@ -43,6 +43,7 @@ public:
     void lowerNode(const KisNodeList &nodes);
     void raiseNode(const KisNodeList &nodes);
     void removeNode(const KisNodeList &nodes);
+    void duplicateNode(const KisNodeList &nodes);
 
     bool canMergeAction(const KUndo2MagicString &actionName);
 
@@ -57,7 +58,6 @@ private Q_SLOTS:
 private:
     void startTimers();
     void cleanup();
-    KisNodeList sortAndFilterNodes(const KisNodeList &nodes);
 
 private:
     struct Private;

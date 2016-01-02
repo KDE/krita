@@ -81,8 +81,6 @@ private Q_SLOTS:
 
     void layerProperties();
 
-    void layerDuplicate();
-
     void flattenImage();
 
     void flattenLayer();

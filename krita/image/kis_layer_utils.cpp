@@ -601,12 +601,12 @@ namespace KisLayerUtils {
         return false;
     }
 
-    void filterMergableNodes(QList<KisNodeSP> &nodes)
+    void filterMergableNodes(QList<KisNodeSP> &nodes, bool allowMasks)
     {
         QList<KisNodeSP>::iterator it = nodes.begin();
 
         while (it != nodes.end()) {
-            if (!dynamic_cast<KisLayer*>(it->data()) ||
+            if ((!allowMasks && !dynamic_cast<KisLayer*>(it->data())) ||
                 checkIsChildOf(*it, nodes)) {
 
                 qDebug() << "Skipping node" << ppVar((*it)->name());

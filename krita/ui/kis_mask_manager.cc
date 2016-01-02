@@ -240,26 +240,6 @@ void KisMaskManager::createTransformMask(KisNodeSP activeNode)
     createMaskCommon(mask, activeNode, 0, kundo2_i18n("Add Transform Mask"), "KisTransformMask", i18n("Transform Mask"), true, false);
 }
 
-void KisMaskManager::duplicateMask()
-{
-    if (!activeMask()) return;
-    if (!m_view->image()) return;
-
-    // If it's a global mask we shouldn't be able to duplicate
-    // TODO: Maybe add this check to KisSelectionMask function to know if it's global or not?
-    if(activeMask()->parent().data() == m_view->image()->rootLayer().data()) return;
-
-    KisMaskSP newMask = dynamic_cast<KisMask*>(activeMask()->clone().data());
-    newMask->setName(i18n("Duplication of ") + activeMask()->name());
-    m_commandsAdapter->addNode(newMask, activeMask()->parent(), activeMask());
-
-    KisSelectionMaskSP selectionMask = dynamic_cast<KisSelectionMask*>(newMask.data());
-    if (selectionMask) {
-        selectionMask->setActive(true);
-    }
-    masksUpdated();
-}
-
 void KisMaskManager::maskProperties()
 {
     if (!activeMask()) return;

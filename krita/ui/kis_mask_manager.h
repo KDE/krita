@@ -66,11 +66,6 @@ private:
     KisMaskSP activeMask();
 
     /**
-     * Create an exact duplicate of the current mask.
-     */
-    void duplicateMask();
-
-    /**
      * Show the mask properties dialog
      */
     void maskProperties();

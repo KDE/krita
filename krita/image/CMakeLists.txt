@@ -80,10 +80,6 @@ set(kritaimage_LIB_SRCS
    commands/kis_image_layer_move_command.cpp
    commands/kis_image_layer_remove_command.cpp
    commands/kis_image_layer_remove_command_impl.cpp
-   commands/kis_image_node_lower_command.cpp
-   commands/kis_image_node_raise_command.cpp
-   commands/kis_image_node_to_bottom_command.cpp
-   commands/kis_image_node_to_top_command.cpp
    commands/kis_image_lock_command.cpp
    commands/kis_layer_command.cpp
    commands/kis_layer_props_command.cpp

@@ -71,36 +71,6 @@ private:
     void duplicateMask();
 
     /**
-     * Delete the mask
-     */
-    void removeMask();
-
-    /**
-     * Move the mask one up in the mask stack. If we reach the top
-     * of the stack, try to move the mask to the layer on top of the
-     * active layer.
-     */
-    void raiseMask();
-
-    /**
-     * Move the mask one down in the mask stack. If we reach the bottom
-     * of the stack, try to move the mask to the layer beneath the
-     * active layer.
-     */
-    void lowerMask();
-
-    /**
-     * Move the mask to the top of the mask stack of the active layer
-     */
-    void maskToTop();
-
-    /**
-     * Move the mask to the bottom of the mask stack of the active
-     * layer
-     */
-    void maskToBottom();
-
-    /**
      * Show the mask properties dialog
      */
     void maskProperties();

@@ -75,7 +75,6 @@
 #include "kis_selection_mask.h"
 #include "kis_config.h"
 #include "KisView.h"
-#include "kis_node_juggler_compressed.h"
 #include "krita_utils.h"
 
 #include "ui_wdglayerbox.h"
@@ -594,37 +593,19 @@ void KisLayerBox::slotThumbnailView()
 void KisLayerBox::slotRmClicked()
 {
     if (!m_canvas) return;
-
-    if (!m_nodeJuggler) {
-        m_nodeJuggler = new KisNodeJugglerCompressed(kundo2_i18n("Remove Nodes"), m_image, m_nodeManager, 1000);
-        m_nodeJuggler->setAutoDelete(true);
-    }
-
-    m_nodeJuggler->removeNode(m_nodeManager->selectedNodes());
+    m_nodeManager->removeNode();
 }
 
 void KisLayerBox::slotRaiseClicked()
 {
     if (!m_canvas) return;
-
-    if (!m_nodeJuggler) {
-        m_nodeJuggler = new KisNodeJugglerCompressed(kundo2_i18n("Move Nodes"), m_image, m_nodeManager, 1000);
-        m_nodeJuggler->setAutoDelete(true);
-    }
-
-    m_nodeJuggler->raiseNode(m_nodeManager->selectedNodes());
+    m_nodeManager->raiseNode();
 }
 
 void KisLayerBox::slotLowerClicked()
 {
     if (!m_canvas) return;
-
-    if (!m_nodeJuggler) {
-        m_nodeJuggler = new KisNodeJugglerCompressed(kundo2_i18n("Move Nodes"), m_image, m_nodeManager, 1000);
-        m_nodeJuggler->setAutoDelete(true);
-    }
-
-    m_nodeJuggler->lowerNode(m_nodeManager->selectedNodes());
+    m_nodeManager->lowerNode();
 }
 
 void KisLayerBox::slotPropertiesClicked()

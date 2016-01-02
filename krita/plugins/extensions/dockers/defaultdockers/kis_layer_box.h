@@ -138,7 +138,6 @@ private:
     KisAction* m_removeAction;
     KisAction* m_propertiesAction;
     KisAction* m_selectOpaque;
-    QPointer<KisNodeJugglerCompressed> m_nodeJuggler;
     KisSignalCompressor m_thumbnailCompressor;
 };
 

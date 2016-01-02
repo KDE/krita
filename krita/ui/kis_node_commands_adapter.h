@@ -48,10 +48,6 @@ public:
     void moveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
     void moveNode(KisNodeSP node, KisNodeSP parent, quint32 indexaboveThis);
     void removeNode(KisNodeSP node);
-    void lower(KisNodeSP node);
-    void raise(KisNodeSP node);
-    void toBottom(KisNodeSP node);
-    void toTop(KisNodeSP node);
     void setOpacity(KisNodeSP node, qint32 opacity);
     void setCompositeOp(KisNodeSP node, const KoCompositeOp* compositeOp);
 

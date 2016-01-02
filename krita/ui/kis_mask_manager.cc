@@ -260,14 +260,6 @@ void KisMaskManager::duplicateMask()
     masksUpdated();
 }
 
-void KisMaskManager::removeMask()
-{
-    if (!activeMask()) return;
-    if (!m_view->image()) return;
-    m_commandsAdapter->removeNode(activeMask());
-    masksUpdated();
-}
-
 void KisMaskManager::maskProperties()
 {
     if (!activeMask()) return;
@@ -329,32 +321,3 @@ void KisMaskManager::maskProperties()
         // Not much to show for transparency or selection masks?
     }
 }
-
-void KisMaskManager::raiseMask()
-{
-    if (!activeMask()) return;
-    if (!m_view->image()) return;
-    m_commandsAdapter->raise(activeMask());
-}
-
-void KisMaskManager::lowerMask()
-{
-    if (!activeMask()) return;
-    if (!m_view->image()) return;
-    m_commandsAdapter->lower(activeMask());
-}
-
-void KisMaskManager::maskToTop()
-{
-    if (!activeMask()) return;
-    if (!m_view->image()) return;
-    m_commandsAdapter->toTop(activeMask());
-}
-
-void KisMaskManager::maskToBottom()
-{
-    if (!activeMask()) return;
-    if (!m_view->image()) return;
-    m_commandsAdapter->toBottom(activeMask());
-}
-

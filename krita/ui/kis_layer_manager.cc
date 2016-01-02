@@ -660,59 +660,6 @@ void KisLayerManager::layerDuplicate()
     }
 }
 
-void KisLayerManager::layerRaise()
-{
-    KisImageWSP image = m_view->image();
-    KisLayerSP layer;
-
-    if (!image)
-        return;
-
-    layer = activeLayer();
-
-    m_commandsAdapter->raise(layer);
-    layer->parent()->setDirty();
-}
-
-void KisLayerManager::layerLower()
-{
-    KisImageWSP image = m_view->image();
-    KisLayerSP layer;
-
-    if (!image)
-        return;
-
-    layer = activeLayer();
-
-    m_commandsAdapter->lower(layer);
-    layer->parent()->setDirty();
-}
-
-void KisLayerManager::layerFront()
-{
-    KisImageWSP image = m_view->image();
-    KisLayerSP layer;
-
-    if (!image)
-        return;
-
-    layer = activeLayer();
-    m_commandsAdapter->toTop(layer);
-    layer->parent()->setDirty();
-}
-
-void KisLayerManager::layerBack()
-{
-    KisImageWSP image = m_view->image();
-    if (!image) return;
-
-    KisLayerSP layer;
-
-    layer = activeLayer();
-    m_commandsAdapter->toBottom(layer);
-    layer->parent()->setDirty();
-}
-
 void KisLayerManager::rotateLayer(double radians)
 {
     if (!m_view->image()) return;

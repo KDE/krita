@@ -159,9 +159,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 {
     if (object != d->eventsReceiver) return false;
 
-#if !defined(Q_OS_WIN)
     if (d->eventEater.eventFilter(object, event)) return false;
-#endif
 
     Q_FOREACH (QPointer<QObject> filter, d->priorityEventFilter) {
         if (filter.isNull()) {

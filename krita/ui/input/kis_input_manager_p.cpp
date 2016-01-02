@@ -32,7 +32,6 @@
 #include "kis_input_profile_manager.h"
 
 
-#if !defined(Q_OS_WIN)
 /**
  * This hungry class EventEater encapsulates event masking logic.
  *
@@ -103,16 +102,11 @@ bool KisInputManager::Private::EventEater::isActive()
 {
     return hungry;
 }
-#endif // !defined(Q_OS_WIN)
 
 bool KisInputManager::Private::ignoreQtCursorEvents()
 {
 
-#if !defined(Q_OS_WIN)
     return eventEater.isActive();
-#else
-    return false;
-#endif
 }
 
 KisInputManager::Private::Private(KisInputManager *qq)
@@ -397,16 +391,12 @@ void KisInputManager::Private::saveTouchEvent( QTouchEvent* event )
 
 void KisInputManager::Private::blockMouseEvents()
 {
-#if !defined(Q_OS_WIN)
     eventEater.activate();
-#endif
 }
 
 void KisInputManager::Private::allowMouseEvents()
 {
-#if !defined(Q_OS_WIN)
     eventEater.deactivate();
-#endif
 }
 
 bool KisInputManager::Private::handleCompressedTabletEvent(QObject *object, QTabletEvent *tevent)

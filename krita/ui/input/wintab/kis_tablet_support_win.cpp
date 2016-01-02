@@ -151,42 +151,6 @@ static inline bool isMouseEventType(QEvent::Type t)
             t == QEvent::MouseButtonRelease);
 }
 
-/**
- * Windows generates spoofed mouse events for certain rejected tablet
- * events. When those mouse events are unnecessary we catch them with this
- * event filter.
- */
-class EventEater : public QObject {
-public:
-    EventEater(QObject *p) : QObject(p) {}
-
-    bool eventFilter(QObject* object, QEvent* event ) {
-        bool isMouseEvent = isMouseEventType(event->type());
-
-        if (isMouseEvent && (hunger > 0)) {
-            hunger--;
-
-            if (KisTabletDebugger::instance()->debugEnabled()) {
-                QString pre = QString("[BLOCKED]");
-                QMouseEvent *ev = static_cast<QMouseEvent*>(event);
-                dbgTablet << KisTabletDebugger::instance()->eventToString(*ev,pre);
-            }
-            return true;
-        }
-        return false;
-    }
-
-    void activate()   { hunger = 3;}; // XXX: this number could be tweaked or customized
-    void deactivate() { hunger = 0;};
-    void chow() { activate();};
-
-private:
-    int  hunger{0};  // Eat a number of mouse events
-};
-
-EventEater *globalEventEater = 0;
-
-
 static QPoint mousePosition()
 {
     POINT p;
@@ -203,9 +167,7 @@ void KisTabletSupportWin::init()
         return;
     }
 
-    globalEventEater = new EventEater(qApp);
     QTAB = QWindowsTabletSupport::create();
-    qApp->installEventFilter(globalEventEater);
 
     // Refresh tablet context after tablet rotated, screen added, etc.
     QObject::connect(qApp->primaryScreen(), &QScreen::geometryChanged,
@@ -272,12 +234,10 @@ static void handleTabletEvent(QWidget *windowWidget, const QPointF &local, const
 
         if (ev.isAccepted()) {
             // dbgInput << "Tablet event" << type << "accepted" << "by target widget" << finalDestination;
-            globalEventEater->activate();
         }
         else {
             // Turn off eventEater send a synthetic mouse event.
             // dbgInput << "Tablet event" << type << "rejected; sending mouse event to" << finalDestination;
-            globalEventEater->deactivate();
             qt_tablet_target = 0;
 
             // We shouldn't ever get a widget accepting a tablet event from this
@@ -294,7 +254,6 @@ static void handleTabletEvent(QWidget *windowWidget, const QPointF &local, const
 
         }
     } else {
-        globalEventEater->deactivate();
         qt_tablet_target = 0;
         targetWindow = 0;
     }
@@ -668,7 +627,6 @@ bool QWindowsTabletSupport::translateTabletProximityEvent(WPARAM /* wParam */, L
     if (!LOWORD(lParam)) {
         // dbgInput << "leave proximity for device #" << m_currentDevice;
         sendProximityEvent(QEvent::TabletLeaveProximity);
-        // globalEventEater->deactivate();
         return true;
     }
     PACKET proximityBuffer[1]; // we are only interested in the first packet in this case
@@ -687,7 +645,6 @@ bool QWindowsTabletSupport::translateTabletProximityEvent(WPARAM /* wParam */, L
     tabletUpdateCursor(uniqueId, cursorType, pkCursor);
     // dbgInput << "enter proximity for device #" << m_currentDevice << m_devices.at(m_currentDevice);
     sendProximityEvent(QEvent::TabletEnterProximity);
-    // globalEventEater->activate();
     return true;
 }
 
@@ -752,7 +709,6 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
             type = QEvent::TabletPress;
         } else if (buttonReleased && button != Qt::NoButton) {
             type = QEvent::TabletRelease;
-            globalEventEater->deactivate();
         }
 
         const int z = currentDevice == QTabletEvent::FourDMouse ? int(packet.pkZ) : 0;

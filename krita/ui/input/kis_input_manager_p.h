@@ -110,7 +110,6 @@ public:
     };
     CanvasSwitcher canvasSwitcher;
 
-#if !defined(Q_OS_WIN)
     class EventEater
     {
     public:
@@ -127,7 +126,6 @@ public:
         bool peckish{false};  // Eat a single mouse press event
     };
     EventEater eventEater;
-#endif
 
     bool focusOnEnter = true;
     bool containsPointer = true;

@@ -203,6 +203,10 @@ set(kis_asl_layer_style_serializer_test_SRCS kis_asl_layer_style_serializer_test
 kde4_add_unit_test(KisAslLayerStyleSerializerTest TESTNAME krita-ui-KisAslLayerStyleSerializerTest ${kis_asl_layer_style_serializer_test_SRCS})
 target_link_libraries(KisAslLayerStyleSerializerTest kritaui kritaimage ${QT_QTTEST_LIBRARY})
 
+set(kis_node_juggler_compressed_test_SRCS kis_node_juggler_compressed_test.cpp )
+kde4_add_unit_test(KisNodeJugglerCompressedTest TESTNAME krita-image-BaseNodeTest ${kis_node_juggler_compressed_test_SRCS})
+target_link_libraries(KisNodeJugglerCompressedTest kritaimage kritaui Qt5::Test)
+
 if (HAVE_OPENGL)
 
 ########### next target ###############

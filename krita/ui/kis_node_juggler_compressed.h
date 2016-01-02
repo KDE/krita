@@ -22,13 +22,13 @@
 #include <QObject>
 #include <QScopedPointer>
 
-#include <kritadefaultdockers_export.h>
+#include <kritaui_export.h>
 #include <kundo2command.h>
 #include "kis_types.h"
 #include "kis_node_manager.h"
 
 
-class KRITADEFAULTDOCKERS_EXPORT KisNodeJugglerCompressed : public QObject
+class KRITAUI_EXPORT KisNodeJugglerCompressed : public QObject
 {
     Q_OBJECT
 public:

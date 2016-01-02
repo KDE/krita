@@ -19,7 +19,7 @@
 #include "kis_node_juggler_compressed_test.h"
 
 #include <QTest>
-#include "../kis_node_juggler_compressed.h"
+#include "kis_node_juggler_compressed.h"
 
 
 #include <KoColor.h>

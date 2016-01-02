@@ -2,7 +2,6 @@ add_subdirectory( tests )
 
 set(kritadefaultdockers_SOURCES 
   kis_layer_box.cpp
-  kis_node_juggler_compressed.cpp
   defaultdockers.cpp
 )
 

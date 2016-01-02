@@ -187,6 +187,7 @@ KisLayerBox::KisLayerBox()
     m_removeAction->setActivationFlags(KisAction::ACTIVE_NODE);
     m_removeAction->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     m_removeAction->setObjectName("remove_layer");
+    m_removeAction->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Delete));
     connect(m_removeAction, SIGNAL(triggered()), this, SLOT(slotRmClicked()));
     m_actions.append(m_removeAction);
 
@@ -195,7 +196,7 @@ KisLayerBox::KisLayerBox()
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     action->setObjectName("move_layer_up");
-    action->setShortcut(Qt::CTRL + Qt::Key_PageUp);
+    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_PageUp));
     connect(action, SIGNAL(triggered()), this, SLOT(slotRaiseClicked()));
     m_actions.append(action);
 

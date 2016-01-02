@@ -2509,8 +2509,8 @@
       <iconText>Remove Layer</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>1</activationConditions>
-      <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
+      <shortcut>Shift+Delete</shortcut>
+      <defaultShortcut>Shift+Delete</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2520,7 +2520,7 @@
       <whatsThis></whatsThis>
       <toolTip>Move Layer or Mask Up</toolTip>
       <iconText></iconText>
-      <shortcut>Ctrl+PgDown</shortcut>
+      <shortcut>Ctrl+PgUp</shortcut>
       <defaultShortcut>Ctrl+PgUp</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>

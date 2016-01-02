@@ -44,6 +44,8 @@ public:
     void raiseNode(const KisNodeList &nodes);
     void removeNode(const KisNodeList &nodes);
 
+    bool canMergeAction(const KUndo2MagicString &actionName);
+
 public Q_SLOTS:
     void end();
 

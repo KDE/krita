@@ -109,6 +109,7 @@ struct KisNodeManager::Private {
                            quint8 opacity);
 
     void mergeTransparencyMaskAsAlpha(bool writeToLayers);
+    KisNodeJugglerCompressed* lazyGetJuggler(const KUndo2MagicString &actionName);
 };
 
 bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
@@ -685,28 +686,33 @@ void KisNodeManager::duplicateActiveNode()
     }
 }
 
-void KisNodeManager::raiseNode()
+KisNodeJugglerCompressed* KisNodeManager::Private::lazyGetJuggler(const KUndo2MagicString &actionName)
 {
-    KisImageWSP image = m_d->view->image();
+    KisImageWSP image = view->image();
 
-    if (!m_d->nodeJuggler) {
-        m_d->nodeJuggler = new KisNodeJugglerCompressed(kundo2_i18n("Move Nodes"), image, this, 1000);
-        m_d->nodeJuggler->setAutoDelete(true);
+    if (!nodeJuggler ||
+        (nodeJuggler &&
+         !nodeJuggler->canMergeAction(actionName))) {
+
+        nodeJuggler = new KisNodeJugglerCompressed(actionName, image, q, 1000);
+        nodeJuggler->setAutoDelete(true);
     }
 
-    m_d->nodeJuggler->raiseNode(selectedNodes());
+    return nodeJuggler;
+}
+
+void KisNodeManager::raiseNode()
+{
+    KUndo2MagicString actionName = kundo2_i18n("Raise Nodes");
+    KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
+    juggler->raiseNode(selectedNodes());
 }
 
 void KisNodeManager::lowerNode()
 {
-    KisImageWSP image = m_d->view->image();
-
-    if (!m_d->nodeJuggler) {
-        m_d->nodeJuggler = new KisNodeJugglerCompressed(kundo2_i18n("Move Nodes"), image, this, 1000);
-        m_d->nodeJuggler->setAutoDelete(true);
-    }
-
-    m_d->nodeJuggler->lowerNode(selectedNodes());
+    KUndo2MagicString actionName = kundo2_i18n("Lower Nodes");
+    KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
+    juggler->lowerNode(selectedNodes());
 }
 
 void KisNodeManager::removeSingleNode(KisNodeSP node)
@@ -720,16 +726,11 @@ void KisNodeManager::removeSingleNode(KisNodeSP node)
     removeSelectedNodes(nodes);
 }
 
-void KisNodeManager::removeSelectedNodes(KisNodeList selectedNodes)
+void KisNodeManager::removeSelectedNodes(KisNodeList nodes)
 {
-    KisImageWSP image = m_d->view->image();
-
-    if (!m_d->nodeJuggler) {
-        m_d->nodeJuggler = new KisNodeJugglerCompressed(kundo2_i18n("Remove Nodes"), image, this, 1000);
-        m_d->nodeJuggler->setAutoDelete(true);
-    }
-
-    m_d->nodeJuggler->removeNode(selectedNodes);
+    KUndo2MagicString actionName = kundo2_i18n("Remove Nodes");
+    KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
+    juggler->removeNode(nodes);
 }
 
 void KisNodeManager::removeNode()

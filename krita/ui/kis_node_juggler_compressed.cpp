@@ -447,8 +447,9 @@ private:
 
 struct KisNodeJugglerCompressed::Private
 {
-    Private(KisImageSP _image, KisNodeManager *_nodeManager, int _timeout)
-        : image(_image),
+    Private(const KUndo2MagicString &_actionName, KisImageSP _image, KisNodeManager *_nodeManager, int _timeout)
+        : actionName(_actionName),
+          image(_image),
           nodeManager(_nodeManager),
           compressor(_timeout, KisSignalCompressor::POSTPONE),
           selfDestructionCompressor(3 * _timeout, KisSignalCompressor::POSTPONE),
@@ -457,6 +458,7 @@ struct KisNodeJugglerCompressed::Private
           isStarted(false)
     {}
 
+    KUndo2MagicString actionName;
     KisImageSP image;
     KisNodeManager *nodeManager;
     QScopedPointer<KisProcessingApplicator> applicator;
@@ -471,7 +473,7 @@ struct KisNodeJugglerCompressed::Private
 };
 
 KisNodeJugglerCompressed::KisNodeJugglerCompressed(const KUndo2MagicString &actionName, KisImageSP image, KisNodeManager *nodeManager, int timeout)
-    : m_d(new Private(image, nodeManager, timeout))
+    : m_d(new Private(actionName, image, nodeManager, timeout))
 {
     connect(m_d->image, SIGNAL(sigStrokeCancellationRequested()), SLOT(slotEndStrokeRequested()));
     connect(m_d->image, SIGNAL(sigUndoDuringStrokeRequested()), SLOT(slotCancelStrokeRequested()));
@@ -494,6 +496,11 @@ KisNodeJugglerCompressed::KisNodeJugglerCompressed(const KUndo2MagicString &acti
 
 KisNodeJugglerCompressed::~KisNodeJugglerCompressed()
 {
+}
+
+bool KisNodeJugglerCompressed::canMergeAction(const KUndo2MagicString &actionName)
+{
+    return actionName == m_d->actionName;
 }
 
 KisNodeList KisNodeJugglerCompressed::sortAndFilterNodes(const KisNodeList &nodes)

@@ -22,7 +22,7 @@ mkdir "$env:KRITA_INPUT" -ea SilentlyContinue
 mkdir "$env:KRITA_INPUT\bin" -ea SilentlyContinue
 mkdir "$env:KRITA_INPUT\etc" -ea SilentlyContinue
 mkdir "$env:KRITA_INPUT\lib" -ea SilentlyContinue
-mkdir "$env:KRITA_INPUT\lib\krita" -ea SilentlyContinue
+mkdir "$env:KRITA_INPUT\lib\kritaplugins" -ea SilentlyContinue
 mkdir "$env:KRITA_INPUT\lib\plugins\styles" -ea SilentlyContinue
 mkdir "$env:KRITA_INPUT\lib\plugins\imageformats" -ea SilentlyContinue
 mkdir "$env:KRITA_INPUT\share" -ea SilentlyContinue

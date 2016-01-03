@@ -16,6 +16,7 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
+#include "kshortcutschemeseditor.h"
 #include "KisShortcutsDialog_p.h"
 
 #include <QDir>

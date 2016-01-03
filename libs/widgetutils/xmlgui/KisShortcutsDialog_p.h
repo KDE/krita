@@ -50,7 +50,6 @@ class KShortcutSchemesEditor;
 class QAction;
 
 
-// What is this for??  (will use abbreviation WTF)
 enum ColumnDesignation {
     Name = 0,
     LocalPrimary,
@@ -68,7 +67,6 @@ enum MyRoles {
 
 /**
  * Type used for QTreeWidgetItems
- * WTF?
  *
  * @internal
  */
@@ -235,40 +233,5 @@ private:
     bool m_isUpdating;
     QObject *m_action;
 };
-
-class KShortcutSchemesEditor: public QHBoxLayout
-{
-    Q_OBJECT
-public:
-    KShortcutSchemesEditor(KisShortcutsDialog *parent);
-
-    /** @return the currently selected scheme in the editor (may differ from current app's scheme.*/
-    QString currentScheme();
-
-private Q_SLOTS:
-    void newScheme();
-    void deleteScheme();
-    void importShortcutsScheme();
-    void exportShortcutsScheme();
-    void loadCustomShortcuts();
-    void saveCustomShortcuts();
-    // void saveAsDefaultsForScheme();  //Not implemented
-
-Q_SIGNALS:
-    void shortcutsSchemeChanged(const QString &);
-
-protected:
-    void updateDeleteButton();
-
-private:
-    QPushButton *m_newScheme;
-    QPushButton *m_deleteScheme;
-    QPushButton *m_exportScheme;
-    QComboBox *m_schemesList;
-
-    KisShortcutsDialog *m_dialog;
-    QHash<QString, QString> m_schemeFileLocations;
-};
-
 
 #endif /* KISSHORTCUTSDIALOG_P_H */

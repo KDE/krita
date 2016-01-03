@@ -31,6 +31,7 @@
 #include "KisShortcutsDialog.h"
 #include "KisShortcutsDialog_p.h"
 #include "kshortcutschemeshelper_p.h"
+#include "kshortcutschemeseditor.h"
 
 #include <QApplication>
 #include <QDialogButtonBox>

@@ -202,7 +202,7 @@ protected:
      *
      * \param event A mouse or tablet event.
      */
-    static QPoint eventPos(const QEvent *event);
+    QPoint eventPos(const QEvent *event);
 
     /**
      * Convenience method to extract the floating point position from a
@@ -210,7 +210,7 @@ protected:
      *
      * \param event A mouse or tablet event.
      */
-    static QPointF eventPosF(const QEvent *event);
+    QPointF eventPosF(const QEvent *event);
 
 private:
     friend class KisInputManager;

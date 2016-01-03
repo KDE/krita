@@ -74,7 +74,7 @@ void KisZoomAction::Private::zoomTo(bool zoomIn, QEvent *event)
     KoZoomAction *zoomAction = q->inputManager()->canvas()->viewManager()->zoomController()->zoomAction();
 
     if (event) {
-        QPoint pos = eventPos(event);
+        QPoint pos = q->eventPos(event);
 
         float oldZoom = zoomAction->effectiveZoom();
         float newZoom = zoomIn ?
@@ -192,7 +192,7 @@ void KisZoomAction::inputEvent( QEvent* event )
 
             dist /= count;
             float delta = qFuzzyCompare(1.0f, 1.0f + d->lastDistance) ? 1.f : dist / d->lastDistance;
-            
+
             if(qAbs(delta) > 0.1f) {
                 qreal zoom = inputManager()->canvas()->viewManager()->zoomController()->zoomAction()->effectiveZoom();
                 Q_UNUSED(zoom);
@@ -203,11 +203,11 @@ void KisZoomAction::inputEvent( QEvent* event )
                 inputManager()->canvas()->canvasController()->pan(-moveDelta.toPoint());
                 d->lastPosition = center;
             }
+            return;  // Don't try to update the cursor during a pinch-zoom
         }
         default:
             break;
     }
-
     KisAbstractInputAction::inputEvent(event);
 }
 

@@ -69,10 +69,11 @@ uint qHash(QPointer<T> value) {
 #define start_ignore_cursor_events() d->blockMouseEvents()
 #define stop_ignore_cursor_events() d->allowMouseEvents()
 
-// Touch rejection: do not accept
+// Touch rejection: if touch is disabled on canvas, no need to block mouse press events
 #define touch_start_block_press_events()  d->touchHasBlockedPressEvents = d->disableTouchOnCanvas;
 #define touch_stop_block_press_events()  d->touchHasBlockedPressEvents = false;
 #define break_if_touch_blocked_press_events() if (d->touchHasBlockedPressEvents) break;
+#define touch_eat_one_mouse_press() if (d->disableTouchOnCanvas) d->eatOneMousePress();
 
 KisInputManager::KisInputManager(QObject *parent)
     : QObject(parent), d(new Private(this))
@@ -376,11 +377,13 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         event->setAccepted(true);
         retval = true;
         start_ignore_cursor_events();
+        d->eatOneMousePress();
         break;
     }
 
     case QEvent::TouchBegin:
         touch_start_block_press_events();
+        touch_eat_one_mouse_press();
         KisAbstractInputAction::setInputManager(this);
 
         retval = d->matcher.touchBeginEvent(static_cast<QTouchEvent*>(event));

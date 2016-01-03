@@ -21,7 +21,7 @@
 #include <QPointF>
 #include <QMouseEvent>
 #include <klocalizedstring.h>
-#include <QDebug>
+#include <kis_debug.h>
 
 class Q_DECL_HIDDEN KisAbstractInputAction::Private
 {
@@ -159,7 +159,7 @@ bool KisAbstractInputAction::isShortcutRequired(int shortcut) const
 QPoint KisAbstractInputAction::eventPos(const QEvent *event) {
 
     if(!event) {
-	return QPoint();
+        return QPoint();
     }
 
     switch (event->type()) {
@@ -177,7 +177,7 @@ QPoint KisAbstractInputAction::eventPos(const QEvent *event) {
         return static_cast<const QWheelEvent*>(event)->pos();
 
     default:
-        qCritical() << "KisAbstractInputAction tried to process event data from an unhandled event type" << event->type();
+        warnInput << "KisAbstractInputAction" << d->name << "tried to process event data from an unhandled event type" << event->type();
         return QPoint();
     }
 }
@@ -200,8 +200,8 @@ QPointF KisAbstractInputAction::eventPosF(const QEvent *event) {
         return static_cast<const QWheelEvent*>(event)->posF();
 
     default:
-        qCritical() << "KisAbstractInputAction tried to process event data from an unhandled event type" << event->type();
-        return QPoint();
+        warnInput << "KisAbstractInputAction" << d->name << "tried to process event data from an unhandled event type" << event->type();
+        return QPointF();
     }
 }
 

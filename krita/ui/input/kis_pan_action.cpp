@@ -116,6 +116,7 @@ void KisPanAction::inputEvent(QEvent *event)
                 QPanGesture *pan = static_cast<QPanGesture*>(gevent->activeGestures().at(0));
                 inputManager()->canvas()->canvasController()->pan(-pan->delta().toPoint() * 0.2);
             }
+            return;
         }
         case QEvent::TouchUpdate: {
             QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
@@ -128,11 +129,11 @@ void KisPanAction::inputEvent(QEvent *event)
                 inputManager()->canvas()->canvasController()->pan(-delta.toPoint());
                 d->lastPosition = newPos;
             }
+            return;
         }
         default:
             break;
     }
-
     KisAbstractInputAction::inputEvent(event);
 }
 

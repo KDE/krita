@@ -76,6 +76,7 @@ public:
 
     void blockMouseEvents();
     void allowMouseEvents();
+    void eatOneMousePress();
 
     template <class Event, bool useBlocking>
     void debugEvent(QEvent *event)
@@ -120,6 +121,9 @@ public:
         // This should be called after a tablet stroke has ended.
         void deactivate();
         bool isActive();
+
+        // On Windows, we sometimes receive mouse events very late, so watch & wait.
+        void eatOneMousePress();
 
     private:
         bool hungry{false};   // Continue eating mouse strokes

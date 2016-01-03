@@ -51,32 +51,34 @@
  * events when we're using a tablet, either, you may only see an Enter event.
  *
  * Once we see tablet events heading our way, we can say pretty confidently that
- * every mouse event is fake. The only problem is the boundary case at the
- * beginning of a stroke: since a newly arriving MousePress event may be a fake
- * synthetic one or an actual press, and the only context that can tell us this
- * is if the event *after* it is a TabletPress. The solution is to store one
- * MousePress event in the EventEater until the next event arrives. Once it sees
- * the event following, it will know whether to forward the MouseMove event or
- * to toss it away. If the event after a MousePress event is a tablet event, the
- * MousePress was synthetic, so toss it. If the event was a MouseMove, it was a
- * real mouse click, so keep it. If it is possible that the arrival of events
- * can be off by more than one, this solution will not work. On the other
- * hand, that would be simply preposterous.
+ * every mouse event is fake. There are two painful cases to consider - a
+ * mousePress event could arrive before the tabletPress event, or it could
+ * arrive much later, e.g. after tabletRelease. The first was only seen on Linux
+ * with Qt's XInput2 code, the solution was to hold onto mousePress events
+ * temporarily and wait for tabletPress later, this is contained in git history
+ * but is now removed. The second case is currently handled by the
+ * eatOneMousePress function, which waits as long as necessary to detect and
+ * block a single mouse press event.
  */
 
 bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* event )
 {
-    if ((hungry && (event->type() == QEvent::MouseMove ||
-                    event->type() == QEvent::MouseButtonPress ||
-                    event->type() == QEvent::MouseButtonRelease))
-        )
-    {
-        // Chow down
+    auto debugEvent = [&]() {
         if (KisTabletDebugger::instance()->debugEnabled()) {
             QString pre = QString("[BLOCKED]");
             QMouseEvent *ev = static_cast<QMouseEvent*>(event);
             dbgTablet << KisTabletDebugger::instance()->eventToString(*ev,pre);
         }
+    };
+
+    if (peckish && event->type() == QEvent::MouseButtonPress) {
+        peckish = false;
+        debugEvent();
+        return true;
+    } else if (hungry && (event->type() == QEvent::MouseMove ||
+                          event->type() == QEvent::MouseButtonPress ||
+                          event->type() == QEvent::MouseButtonRelease)) {
+        debugEvent();
         return true;
     }
 
@@ -98,6 +100,15 @@ void KisInputManager::Private::EventEater::deactivate()
     hungry = false;
 }
 
+void KisInputManager::Private::EventEater::eatOneMousePress()
+{
+#if defined(Q_OS_WIN)
+    // Enable on other platforms if getting full-pressure splotches
+    peckish = true;
+#endif
+}
+
+
 bool KisInputManager::Private::EventEater::isActive()
 {
     return hungry;
@@ -105,7 +116,6 @@ bool KisInputManager::Private::EventEater::isActive()
 
 bool KisInputManager::Private::ignoreQtCursorEvents()
 {
-
     return eventEater.isActive();
 }
 
@@ -397,6 +407,11 @@ void KisInputManager::Private::blockMouseEvents()
 void KisInputManager::Private::allowMouseEvents()
 {
     eventEater.deactivate();
+}
+
+void KisInputManager::Private::eatOneMousePress()
+{
+    eventEater.eatOneMousePress();
 }
 
 bool KisInputManager::Private::handleCompressedTabletEvent(QObject *object, QTabletEvent *tevent)

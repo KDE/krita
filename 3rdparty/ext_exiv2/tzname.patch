@@ -1,0 +1,15 @@
+diff --git a/src/localtime.c b/src/localtime.c
+index d6533c7..9a096fa 100644
+--- a/src/localtime.c
++++ b/src/localtime.c
+@@ -105,6 +105,10 @@ struct lsinfo {				/* leap second information */
+ #define MY_TZNAME_MAX	255
+ #endif /* !defined TZNAME_MAX */
+ 
++#ifdef  _MSC_VER
++#define tzname _tzname
++#endif
++
+ struct state {
+ 	int		leapcnt;
+ 	int		timecnt;

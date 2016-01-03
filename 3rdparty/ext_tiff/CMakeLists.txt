@@ -5,7 +5,7 @@ ExternalProject_Add( ext_tiff
     URL http://files.kde.org/krita/build/dependencies/tiff-4.0.3.tar.gz
     URL_MD5 051c1068e6a0627f461948c365290410
         
-    PATCH_COMMAND  -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/tiff-4.0.3-20130124.diff
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/tiff-4.0.3-20130124.diff
     INSTALL_DIR ${EXTPREFIX_tiff}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_tiff} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
 

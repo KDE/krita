@@ -6,7 +6,7 @@ ExternalProject_Add(
     URL http://files.kde.org/krita/build/dependencies/gettext-0.18.tar.gz
     URL_MD5 d52a3e061032a1ed13856d42fc86f0fd
 
-    PATCH_COMMAND  -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/gettext-0.18-20130319.diff
+    PATCH_COMMAND ${PATCH_COMMAND} --binary -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/gettext-0.18-20130319.diff
     INSTALL_DIR ${PREFIX_ext_gettext}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_gettext} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
 

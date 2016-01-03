@@ -15,3 +15,8 @@ cl errors out during cmake phase
 
 need to add png2ico, icons, mimeinfo, translations
 
+===========================
+
+3rdparty deps:
+
+poppler: doesn't build with msvc 2015 bevause of compiler compatibility issues

@@ -1,6 +1,6 @@
 SET(PREFIX_ext_fftw3 "${EXTPREFIX}" )
 if (MSVC)
-    if (WIN64_BUILD  STREQUAL "TRUE")
+    if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 14 2015 Win64")
         ExternalProject_Add( ext_fftw3
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
             URL http://files.kde.org/krita/build/dependencies/fftw-3.3.4-dll64.zip

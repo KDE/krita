@@ -1653,7 +1653,7 @@
     </Action>
     <Action name="KisToolPath">
       <icon></icon>
-      <text>Bezier Curve Tool. Shift-mouseclick ends the curve.</text>
+      <text>Bezier Curve Tool</text>
       <whatsThis></whatsThis>
       <toolTip>Bezier Curve Tool. Shift-mouseclick ends the curve.</toolTip>
       <iconText>Bezier Curve Tool. Shift-mouseclick ends the curve.</iconText>
@@ -1774,7 +1774,7 @@
     </Action>
     <Action name="KritaShape/KisToolMeasure">
       <icon></icon>
-      <text>Measure the distance between two points</text>
+      <text>Measurement Tool</text>
       <whatsThis></whatsThis>
       <toolTip>Measure the distance between two points</toolTip>
       <iconText>Measure the distance between two points</iconText>
@@ -1796,7 +1796,7 @@
     </Action>
     <Action name="KritaTransform/KisToolMove">
       <icon></icon>
-      <text>Move a layer</text>
+      <text>Move Tool</text>
       <whatsThis></whatsThis>
       <toolTip>Move a layer</toolTip>
       <iconText>Move a layer</iconText>
@@ -1807,7 +1807,7 @@
     </Action>
     <Action name="VectorTool">
       <icon></icon>
-      <text>Vector Image (EMF/WMF/SVM/SVG) tool</text>
+      <text>Vector Image Tool</text>
       <whatsThis></whatsThis>
       <toolTip>Vector Image (EMF/WMF/SVM/SVG) tool</toolTip>
       <iconText>Vector Image (EMF/WMF/SVM/SVG) tool</iconText>
@@ -1840,7 +1840,7 @@
     </Action>
     <Action name="KisToolPolyline">
       <icon></icon>
-      <text>Polyline Tool. Shift-mouseclick ends the polyline.</text>
+      <text>Polyline Tool</text>
       <whatsThis></whatsThis>
       <toolTip>Polyline Tool. Shift-mouseclick ends the polyline.</toolTip>
       <iconText>Polyline Tool. Shift-mouseclick ends the polyline.</iconText>
@@ -1851,7 +1851,7 @@
     </Action>
     <Action name="KisToolTransform">
       <icon></icon>
-      <text>Transform a layer or a selection</text>
+      <text>Transform Tool</text>
       <whatsThis></whatsThis>
       <toolTip>Transform a layer or a selection</toolTip>
       <iconText>Transform a layer or a selection</iconText>
@@ -1884,7 +1884,7 @@
     </Action>
     <Action name="KarbonGradientTool">
       <icon></icon>
-      <text>Gradient editing</text>
+      <text>Gradient Editing Tool</text>
       <whatsThis></whatsThis>
       <toolTip>Gradient editing</toolTip>
       <iconText>Gradient editing</iconText>

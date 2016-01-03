@@ -156,6 +156,10 @@ public:
      */
     void exportConfiguration(const QString &path) const;
 
+    /**
+     * Import custom shortcuts from @p path
+     */
+    void loadCustomShortcuts(const QString &path);
 
     /**
      * Exports custom shortcuts to @p path

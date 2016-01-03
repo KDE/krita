@@ -84,6 +84,8 @@ KShortcutSchemesEditor::KShortcutSchemesEditor(KisShortcutsDialog *parent)
 
     moreActionsMenu->addAction(i18n("Save Custom Shortcuts"),
                                this, SLOT(saveCustomShortcuts()));
+    moreActionsMenu->addAction(i18n("Load Custom Shortcuts"),
+                               this, SLOT(loadCustomShortcuts()));
     moreActionsMenu->addAction(i18n("Export Scheme..."),
                                this, SLOT(exportShortcutsScheme()));
     moreActionsMenu->addAction(i18n("Import Scheme..."),
@@ -189,6 +191,24 @@ void KShortcutSchemesEditor::saveCustomShortcuts()
     }
 
     m_dialog->saveCustomShortcuts(path);
+}
+
+
+void KShortcutSchemesEditor::loadCustomShortcuts()
+{
+    auto path = QFileDialog::getOpenFileName(m_dialog,
+                                             i18n("Import Shortcuts"),
+                                             QDir::currentPath(),
+                                             i18n("Shortcuts (*.shortcuts)"));
+
+    if (path.isEmpty()) {
+        return;
+    }
+
+    // auto ar = KisActionRegistry::instance();
+    // ar->loadCustomShortcuts(path);
+    m_dialog->loadCustomShortcuts(path);
+
 }
 
 void KShortcutSchemesEditor::importShortcutsScheme()

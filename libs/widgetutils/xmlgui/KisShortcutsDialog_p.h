@@ -248,10 +248,11 @@ public:
 private Q_SLOTS:
     void newScheme();
     void deleteScheme();
+    void importShortcutsScheme();
     void exportShortcutsScheme();
+    void loadCustomShortcuts();
     void saveCustomShortcuts();
     // void saveAsDefaultsForScheme();  //Not implemented
-    void importShortcutsScheme();
 
 Q_SIGNALS:
     void shortcutsSchemeChanged(const QString &);

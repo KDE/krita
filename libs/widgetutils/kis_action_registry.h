@@ -122,7 +122,7 @@ public:
     /**
      * Reload custom shortcuts from kritashortcutsrc
      */
-    void loadCustomShortcuts();
+    void loadCustomShortcuts(const QString &path = QString());
 
 
     /**

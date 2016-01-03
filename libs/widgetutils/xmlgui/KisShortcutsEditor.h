@@ -199,11 +199,12 @@ public:
 
 
     /**
-     * Import a shortcut scheme from configuration file
+     * Import a shortcut configuration file.
      *
-     * @param config Config object to save to.
+     * @param config Config object to load from.
+     * @param isScheme true for shortcut scheme, false for custom shortcuts
      */
-    void importConfiguration(KConfigBase *config);
+    void importConfiguration(KConfigBase *config, bool isScheme);
 
     /**
      * Sets the types of actions to display in this widget.

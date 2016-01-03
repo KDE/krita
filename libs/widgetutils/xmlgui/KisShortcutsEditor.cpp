@@ -187,15 +187,17 @@ void KisShortcutsEditor::clearConfiguration()
     d->clearConfiguration();
 }
 
-void KisShortcutsEditor::importConfiguration(KConfigBase *config)
+void KisShortcutsEditor::importConfiguration(KConfigBase *config, bool isScheme)
 {
     Q_ASSERT(config);
     if (!config) {
         return;
     }
 
-    // Reload the configuration file
-    KisActionRegistry::instance()->applyShortcutScheme(config);
+    // If this is a shortcut scheme, apply it
+    if (isScheme) {
+        KisActionRegistry::instance()->applyShortcutScheme(config);
+    }
 
     // Update the dialog entry items
     const KConfigGroup schemeShortcuts(config, QStringLiteral("Shortcuts"));

@@ -181,9 +181,13 @@ void KisActionRegistry::notifySettingsUpdated()
     d->loadCustomShortcuts();
 };
 
-void KisActionRegistry::loadCustomShortcuts()
+void KisActionRegistry::loadCustomShortcuts(const QString &path)
 {
-    d->loadCustomShortcuts();
+    if (path.isEmpty()) {
+        d->loadCustomShortcuts();
+    } else {
+        d->loadCustomShortcuts(path);
+    }
 };
 
 void KisActionRegistry::loadShortcutScheme(const QString &schemeName)
@@ -457,9 +461,7 @@ void KisActionRegistry::Private::loadActionFiles()
 
 void KisActionRegistry::Private::loadCustomShortcuts(QString filename)
 {
-    Q_UNUSED(filename);
-
-    const KConfigGroup localShortcuts(KSharedConfig::openConfig("kritashortcutsrc"),
+    const KConfigGroup localShortcuts(KSharedConfig::openConfig(filename),
                                       QStringLiteral("Shortcuts"));
 
 
@@ -471,6 +473,8 @@ void KisActionRegistry::Private::loadCustomShortcuts(QString filename)
         if (localShortcuts.hasKey(i.key())) {
             QString entry = localShortcuts.readEntry(i.key(), QString());
             i.value().customShortcut = QKeySequence(entry);
+        } else {
+            i.value().customShortcut = QKeySequence();
         }
     }
 };

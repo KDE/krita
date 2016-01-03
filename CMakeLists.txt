@@ -458,7 +458,11 @@ if(HAVE_VC)
     if(Vc_COMPILER_IS_CLANG)
         set(ADDITIONAL_VC_FLAGS "-Wabi -ffp-contract=fast")
     else()
-        set(ADDITIONAL_VC_FLAGS "-Wabi -fabi-version=0 -ffp-contract=fast")
+        if (MSVC)
+            set(ADDITIONAL_VC_FLAGS "-fabi-version=0 -ffp-contract=fast")
+        else()
+            set(ADDITIONAL_VC_FLAGS "-Wabi -fabi-version=0 -ffp-contract=fast")
+        endif()
     endif()
 
     #Handle Vc master

@@ -354,6 +354,27 @@ void KisNodeManager::moveNodeDirect(KisNodeSP node, KisNodeSP parent, KisNodeSP 
     m_d->commandsAdapter.moveNode(node, parent, aboveThis);
 }
 
+void KisNodeManager::moveNodesDirect(KisNodeList nodes, KisNodeSP parent, KisNodeSP aboveThis)
+{
+    KUndo2MagicString actionName = kundo2_i18n("Move Nodes");
+    KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
+    juggler->moveNode(nodes, parent, aboveThis);
+}
+
+void KisNodeManager::copyNodesDirect(KisNodeList nodes, KisNodeSP parent, KisNodeSP aboveThis)
+{
+    KUndo2MagicString actionName = kundo2_i18n("Copy Nodes");
+    KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
+    juggler->copyNode(nodes, parent, aboveThis);
+}
+
+void KisNodeManager::addNodesDirect(KisNodeList nodes, KisNodeSP parent, KisNodeSP aboveThis)
+{
+    KUndo2MagicString actionName = kundo2_i18n("Add Nodes");
+    KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
+    juggler->addNode(nodes, parent, aboveThis);
+}
+
 void KisNodeManager::toggleIsolateActiveNode()
 {
     KisImageWSP image = m_d->view->image();

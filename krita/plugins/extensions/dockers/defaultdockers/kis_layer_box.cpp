@@ -375,6 +375,13 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         connect(m_nodeModel, SIGNAL(requestMoveNode(KisNodeSP, KisNodeSP, KisNodeSP)),
                 m_nodeManager, SLOT(moveNodeDirect(KisNodeSP, KisNodeSP, KisNodeSP)));
 
+        connect(m_nodeModel, SIGNAL(requestMoveNodes(KisNodeList, KisNodeSP, KisNodeSP)),
+                m_nodeManager, SLOT(moveNodesDirect(KisNodeList, KisNodeSP, KisNodeSP)));
+        connect(m_nodeModel, SIGNAL(requestCopyNodes(KisNodeList, KisNodeSP, KisNodeSP)),
+                m_nodeManager, SLOT(copyNodesDirect(KisNodeList, KisNodeSP, KisNodeSP)));
+        connect(m_nodeModel, SIGNAL(requestAddNodes(KisNodeList, KisNodeSP, KisNodeSP)),
+                m_nodeManager, SLOT(addNodesDirect(KisNodeList, KisNodeSP, KisNodeSP)));
+
         m_wdgLayerBox->listLayers->expandAll();
         expandNodesRecursively(m_image->rootLayer(), m_nodeModel, m_wdgLayerBox->listLayers);
         m_wdgLayerBox->listLayers->scrollTo(m_wdgLayerBox->listLayers->currentIndex());

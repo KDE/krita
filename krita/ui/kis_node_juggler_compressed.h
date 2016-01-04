@@ -45,6 +45,10 @@ public:
     void removeNode(const KisNodeList &nodes);
     void duplicateNode(const KisNodeList &nodes);
 
+    void copyNode(const KisNodeList &nodes, KisNodeSP dstParent, KisNodeSP dstAbove);
+    void moveNode(const KisNodeList &nodes, KisNodeSP dstParent, KisNodeSP dstAbove);
+    void addNode(const KisNodeList &nodes, KisNodeSP dstParent, KisNodeSP dstAbove);
+
     bool canMergeAction(const KUndo2MagicString &actionName);
 
 public Q_SLOTS:

@@ -93,6 +93,9 @@ Q_SIGNALS:
 
     void requestAddNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
     void requestMoveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
+    void requestMoveNodes(KisNodeList nodes, KisNodeSP parent, KisNodeSP aboveThis);
+    void requestCopyNodes(KisNodeList nodes, KisNodeSP parent, KisNodeSP aboveThis);
+    void requestAddNodes(KisNodeList nodes, KisNodeSP parent, KisNodeSP aboveThis);
 
 protected Q_SLOTS:
     void slotBeginInsertDummy(KisNodeDummy *parent, int index, const QString &metaObjectType, bool isAnimated);
@@ -122,7 +125,7 @@ private:
 
     void resetIndexConverter();
 
-    bool correctNewNodeLocation(KisNodeSP node,
+    bool correctNewNodeLocation(KisNodeList nodes,
                                 KisNodeDummy* &parentDummy,
                                 KisNodeDummy* &aboveThisDummy);
 

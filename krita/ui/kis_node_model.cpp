@@ -588,20 +588,31 @@ QMimeData * KisNodeModel::mimeData(const QModelIndexList &indexes) const
     return data;
 }
 
+bool nodeAllowsAsChild(KisNodeSP parent, KisNodeList nodes)
+{
+    bool result = true;
+    Q_FOREACH (KisNodeSP node, nodes) {
+        if (!parent->allowAsChild(node)) {
+            result = false;
+            break;
+        }
+    }
+    return result;
+}
 
-bool KisNodeModel::correctNewNodeLocation(KisNodeSP node,
+bool KisNodeModel::correctNewNodeLocation(KisNodeList nodes,
                                           KisNodeDummy* &parentDummy,
                                           KisNodeDummy* &aboveThisDummy)
 {
     KisNodeSP parentNode = parentDummy->node();
     bool result = true;
 
-    if(!parentDummy->node()->allowAsChild(node)) {
+    if(!nodeAllowsAsChild(parentDummy->node(), nodes)) {
         aboveThisDummy = parentDummy;
         parentDummy = parentDummy->parent();
 
         result = (!parentDummy) ? false :
-            correctNewNodeLocation(node, parentDummy, aboveThisDummy);
+            correctNewNodeLocation(nodes, parentDummy, aboveThisDummy);
     }
 
     return result;
@@ -654,25 +665,18 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
 
     bool result = true;
 
-    Q_FOREACH (KisNodeSP node, nodes) {
+    if (!correctNewNodeLocation(nodes, parentDummy, aboveThisDummy)) {
+        return false;
+    }
 
-        if (!correctNewNodeLocation(node, parentDummy, aboveThisDummy)) {
-            return false;
-        }
-
-        Q_ASSERT(parentDummy);
-        KisNodeSP aboveThisNode = aboveThisDummy ? aboveThisDummy->node() : 0;
-
-        if (action == Qt::CopyAction) {
-            emit requestAddNode(node, parentDummy->node(), aboveThisNode);
-        }
-        else if (action == Qt::MoveAction) {
-            Q_ASSERT(node->graphListener() == m_d->image.data());
-            emit requestMoveNode(node, parentDummy->node(), aboveThisNode);
-        }
-        else {
-            result = false;
-        }
+    Q_ASSERT(parentDummy);
+    KisNodeSP aboveThisNode = aboveThisDummy ? aboveThisDummy->node() : 0;
+    if (action == Qt::CopyAction) {
+        emit requestAddNodes(nodes, parentDummy->node(), aboveThisNode);
+    }
+    else if (action == Qt::MoveAction) {
+        Q_ASSERT(nodes.first()->graphListener() == m_d->image.data());
+        emit requestMoveNodes(nodes, parentDummy->node(), aboveThisNode);
     }
 
     return result;

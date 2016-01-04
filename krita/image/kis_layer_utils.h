@@ -44,6 +44,8 @@ namespace KisLayerUtils
     KRITAIMAGE_EXPORT void flattenLayer(KisImageSP image, KisLayerSP layer);
     KRITAIMAGE_EXPORT void flattenImage(KisImageSP image);
 
+    KRITAIMAGE_EXPORT void addCopyOfNameTag(KisNodeSP node);
+
     typedef QMap<int, QSet<KisNodeSP> > FrameJobs;
     void updateFrameJobs(FrameJobs *jobs, KisNodeSP node);
     void updateFrameJobsRecursive(FrameJobs *jobs, KisNodeSP rootNode);

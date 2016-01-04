@@ -304,7 +304,20 @@ KisNodeList sortAndFilterNodes(const KisNodeList &nodes, KisImageSP image, bool 
     KisNodeList sortedNodes;
 
     KisLayerUtils::filterMergableNodes(filteredNodes, allowMasks);
-    KisLayerUtils::sortMergableNodes(image->root(), filteredNodes, sortedNodes);
+
+    bool haveExternalNodes = false;
+    Q_FOREACH (KisNodeSP node, nodes) {
+        if (node->graphListener() != image->root()->graphListener()) {
+            haveExternalNodes = true;
+            break;
+        }
+    }
+
+    if (!haveExternalNodes) {
+        KisLayerUtils::sortMergableNodes(image->root(), filteredNodes, sortedNodes);
+    } else {
+        sortedNodes = filteredNodes;
+    }
 
     return sortedNodes;
 }
@@ -405,16 +418,29 @@ private:
 };
 
 struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
+    enum Mode {
+        MOVE,
+        COPY,
+        ADD
+    };
+
+
     DuplicateLayers(BatchMoveUpdateDataSP updateData,
                     KisNodeManager *nodeManager,
                     KisImageSP image,
                     const KisNodeList &nodes,
-                    KisNodeSP activeNode)
+                    KisNodeSP dstParent,
+                    KisNodeSP dstAbove,
+                    KisNodeSP activeNode,
+                    Mode mode)
         : m_updateData(updateData),
           m_nodeManager(nodeManager),
           m_image(image),
           m_nodes(nodes),
-          m_activeNode(activeNode){}
+          m_dstParent(dstParent),
+          m_dstAbove(dstAbove),
+          m_activeNode(activeNode),
+          m_mode(mode) {}
 
     void populateChildCommands() {
         KisNodeList filteredNodes = sortAndFilterNodes(m_nodes, m_image, true);
@@ -423,6 +449,13 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
 
         KisNodeSP newAbove = filteredNodes.last();
         KisNodeSP newParent = newAbove->parent();
+
+        // override parent if provided externally
+        if (m_dstAbove) {
+            newAbove = m_dstAbove;
+            newParent = m_dstParent;
+        }
+
         const int indexOfActiveNode = filteredNodes.indexOf(m_activeNode);
         QList<KisSelectionMaskSP> activeMasks = findActiveSelectionMasks(filteredNodes);
         const bool haveActiveMasks = !activeMasks.isEmpty();
@@ -443,29 +476,48 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
         QList<KisSelectionMaskSP> newActiveMasks;
         KisNodeSP currentAbove = newAbove;
         Q_FOREACH (KisNodeSP node, filteredNodes) {
-            KisNodeSP newNode = node->clone();
+            if (m_mode == COPY || m_mode == ADD) {
+                KisNodeSP newNode;
 
-            const QString prefix = i18n("Copy of");
-            QString newName = node->name();
-            if (!newName.startsWith(prefix)) {
-                newName = QString("%1 %2").arg(prefix).arg(newName);
-                newNode->setName(newName);
+                if (m_mode == COPY) {
+                    newNode = node->clone();
+                    KisLayerUtils::addCopyOfNameTag(newNode);
+                } else {
+                    newNode = node;
+                }
+
+                newNodes << newNode;
+                if (haveActiveMasks && toActiveSelectionMask(node)) {
+                    KisSelectionMaskSP mask = dynamic_cast<KisSelectionMask*>(newNode.data());
+                    newActiveMasks << mask;
+                }
+
+                MoveNodeStructSP moveStruct = toQShared(new MoveNodeStruct(m_image, newNode, newParent, currentAbove));
+                m_updateData->addInitialUpdate(moveStruct);
+
+                addCommand(new KisImageLayerAddCommand(m_image, newNode,
+                                                       newParent,
+                                                       currentAbove,
+                                                       false, false));
+                currentAbove = newNode;
+            } else if (m_mode == MOVE) {
+                KisNodeSP newNode = node;
+
+                newNodes << newNode;
+                if (haveActiveMasks && toActiveSelectionMask(node)) {
+                    KisSelectionMaskSP mask = dynamic_cast<KisSelectionMask*>(newNode.data());
+                    newActiveMasks << mask;
+                }
+
+                MoveNodeStructSP moveStruct = toQShared(new MoveNodeStruct(m_image, newNode, newParent, currentAbove));
+                m_updateData->addInitialUpdate(moveStruct);
+
+                addCommand(new KisImageLayerMoveCommand(m_image, newNode,
+                                                        newParent,
+                                                        currentAbove,
+                                                        false));
+                currentAbove = newNode;
             }
-
-            newNodes << newNode;
-            if (haveActiveMasks && toActiveSelectionMask(node)) {
-                KisSelectionMaskSP mask = dynamic_cast<KisSelectionMask*>(newNode.data());
-                newActiveMasks << mask;
-            }
-
-            MoveNodeStructSP moveStruct = toQShared(new MoveNodeStruct(m_image, newNode, newParent, currentAbove));
-            m_updateData->addInitialUpdate(moveStruct);
-
-            addCommand(new KisImageLayerAddCommand(m_image, newNode,
-                                                   newParent,
-                                                   currentAbove,
-                                                   false, false));
-            currentAbove = newNode;
         }
 
 
@@ -503,7 +555,10 @@ private:
     KisNodeManager *m_nodeManager;
     KisImageSP m_image;
     KisNodeList m_nodes;
+    KisNodeSP m_dstParent;
+    KisNodeSP m_dstAbove;
     KisNodeSP m_activeNode;
+    Mode m_mode;
 };
 
 struct RemoveLayers : private KisLayerUtils::RemoveNodeHelper, public KisCommandUtils::AggregateCommand {
@@ -537,11 +592,15 @@ struct RemoveLayers : private KisLayerUtils::RemoveNodeHelper, public KisCommand
 
         safeRemoveMultipleNodes(filteredNodes, m_image);
         if (lastLayer) {
-            KisLayerSP newLayer = m_nodeManager->constructDefaultLayer();
-            addCommand(new KisImageLayerAddCommand(m_image, newLayer,
-                                                   m_image->root(),
-                                                   KisNodeSP(),
-                                                   false, false));
+            if (m_nodeManager) {
+                KisLayerSP newLayer = m_nodeManager->constructDefaultLayer();
+                addCommand(new KisImageLayerAddCommand(m_image, newLayer,
+                                                       m_image->root(),
+                                                       KisNodeSP(),
+                                                       false, false));
+            } else {
+                qWarning() << "WARNING: we have deleted the last layer and the node manager is not accessible to create a new one!";
+            }
         }
 
         addCommand(new KeepNodesSelectedCommand(filteredNodes, KisNodeList(),
@@ -636,6 +695,10 @@ KisNodeJugglerCompressed::KisNodeJugglerCompressed(const KUndo2MagicString &acti
 
 KisNodeJugglerCompressed::~KisNodeJugglerCompressed()
 {
+    KIS_ASSERT_RECOVER(!m_d->applicator) {
+        m_d->applicator->end();
+        m_d->applicator.reset();
+    }
 }
 
 bool KisNodeJugglerCompressed::canMergeAction(const KUndo2MagicString &actionName)
@@ -645,39 +708,95 @@ bool KisNodeJugglerCompressed::canMergeAction(const KUndo2MagicString &actionNam
 
 void KisNodeJugglerCompressed::lowerNode(const KisNodeList &nodes)
 {
+    KisNodeSP activeNode = m_d->nodeManager ? m_d->nodeManager->activeNode() : 0;
+
     m_d->applicator->applyCommand(
         new LowerRaiseLayer(m_d->updateData, m_d->nodeManager,
                             m_d->image,
-                            nodes, m_d->nodeManager->activeNode(), true));
+                            nodes, activeNode, true));
 
     startTimers();
 }
 
 void KisNodeJugglerCompressed::raiseNode(const KisNodeList &nodes)
 {
+    KisNodeSP activeNode = m_d->nodeManager ? m_d->nodeManager->activeNode() : 0;
+
     m_d->applicator->applyCommand(
         new LowerRaiseLayer(m_d->updateData, m_d->nodeManager,
                             m_d->image,
-                            nodes, m_d->nodeManager->activeNode(), false));
+                            nodes, activeNode, false));
     startTimers();
 }
 
 void KisNodeJugglerCompressed::removeNode(const KisNodeList &nodes)
 {
+    KisNodeSP activeNode = m_d->nodeManager ? m_d->nodeManager->activeNode() : 0;
+
     m_d->applicator->applyCommand(
         new RemoveLayers(m_d->updateData, m_d->nodeManager,
                          m_d->image,
-                         nodes, m_d->nodeManager->activeNode()));
+                         nodes, activeNode));
 
     startTimers();
 }
 
 void KisNodeJugglerCompressed::duplicateNode(const KisNodeList &nodes)
 {
+    KisNodeSP activeNode = m_d->nodeManager ? m_d->nodeManager->activeNode() : 0;
+
     m_d->applicator->applyCommand(
         new DuplicateLayers(m_d->updateData, m_d->nodeManager,
                             m_d->image,
-                            nodes, m_d->nodeManager->activeNode()));
+                            nodes,
+                            KisNodeSP(), KisNodeSP(),
+                            activeNode,
+                            DuplicateLayers::COPY));
+
+    startTimers();
+}
+
+void KisNodeJugglerCompressed::copyNode(const KisNodeList &nodes, KisNodeSP dstParent, KisNodeSP dstAbove)
+{
+    KisNodeSP activeNode = m_d->nodeManager ? m_d->nodeManager->activeNode() : 0;
+
+    m_d->applicator->applyCommand(
+        new DuplicateLayers(m_d->updateData, m_d->nodeManager,
+                            m_d->image,
+                            nodes,
+                            dstParent, dstAbove,
+                            activeNode,
+                            DuplicateLayers::COPY));
+
+    startTimers();
+}
+
+void KisNodeJugglerCompressed::moveNode(const KisNodeList &nodes, KisNodeSP dstParent, KisNodeSP dstAbove)
+{
+    KisNodeSP activeNode = m_d->nodeManager ? m_d->nodeManager->activeNode() : 0;
+
+    m_d->applicator->applyCommand(
+        new DuplicateLayers(m_d->updateData, m_d->nodeManager,
+                            m_d->image,
+                            nodes,
+                            dstParent, dstAbove,
+                            activeNode,
+                            DuplicateLayers::MOVE));
+
+    startTimers();
+}
+
+void KisNodeJugglerCompressed::addNode(const KisNodeList &nodes, KisNodeSP dstParent, KisNodeSP dstAbove)
+{
+    KisNodeSP activeNode = m_d->nodeManager ? m_d->nodeManager->activeNode() : 0;
+
+    m_d->applicator->applyCommand(
+        new DuplicateLayers(m_d->updateData, m_d->nodeManager,
+                            m_d->image,
+                            nodes,
+                            dstParent, dstAbove,
+                            activeNode,
+                            DuplicateLayers::ADD));
 
     startTimers();
 }

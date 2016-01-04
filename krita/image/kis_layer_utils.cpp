@@ -642,6 +642,16 @@ namespace KisLayerUtils {
         KIS_ASSERT_RECOVER_NOOP(root->parent() || inputNodes.isEmpty());
     }
 
+    void addCopyOfNameTag(KisNodeSP node)
+    {
+        const QString prefix = i18n("Copy of");
+        QString newName = node->name();
+        if (!newName.startsWith(prefix)) {
+            newName = QString("%1 %2").arg(prefix).arg(newName);
+            node->setName(newName);
+        }
+    }
+
     void mergeMultipleLayersImpl(KisImageSP image, QList<KisNodeSP> mergedNodes, KisNodeSP putAfter, bool flattenSingleLayer, const KUndo2MagicString &actionName)
     {
         filterMergableNodes(mergedNodes);

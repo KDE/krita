@@ -29,6 +29,7 @@
 #include "KisDocument.h"
 #include "kis_shape_controller.h"
 #include "KisPart.h"
+#include "kis_layer_utils.h"
 
 #include <KoProperties.h>
 #include <KoStore.h>
@@ -230,6 +231,7 @@ QList<KisNodeSP> KisMimeData::tryLoadInternalNodes(const QMimeData *data,
         copyNode = true;
         Q_FOREACH (KisNodeSP node, nodes) {
             node = node->clone();
+            KisLayerUtils::addCopyOfNameTag(node);
             initializeExternalNode(node, image, shapeController);
             clones << node;
         }

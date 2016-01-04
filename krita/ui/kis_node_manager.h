@@ -142,6 +142,9 @@ public Q_SLOTS:
      */
     void moveNodeDirect(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
 
+    void moveNodesDirect(KisNodeList nodes, KisNodeSP parent, KisNodeSP aboveThis);
+    void copyNodesDirect(KisNodeList nodes, KisNodeSP parent, KisNodeSP aboveThis);
+    void addNodesDirect(KisNodeList nodes, KisNodeSP parent, KisNodeSP aboveThis);
 
     void toggleIsolateActiveNode();
     void toggleIsolateMode(bool checked);

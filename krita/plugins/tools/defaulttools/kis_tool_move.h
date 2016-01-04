@@ -65,6 +65,13 @@ public:
         MoveGroup
     };
 
+    enum MoveDirection {
+        Up,
+        Down,
+        Left,
+        Right
+    };
+
     void beginPrimaryAction(KoPointerEvent *event);
     void continuePrimaryAction(KoPointerEvent *event);
     void endPrimaryAction(KoPointerEvent *event);
@@ -86,6 +93,8 @@ public:
 public Q_SLOTS:
     void setMoveToolMode(MoveToolMode newMode);
     void slotWidgetRadioToggled(bool checked);
+    void moveDiscrete(MoveDirection direction);
+    void slotSetMoveStep(int newMoveStep);
 
 Q_SIGNALS:
     void moveToolModeChanged();
@@ -112,6 +121,12 @@ private:
     bool m_moveInProgress;
     KisNodeSP m_currentlyProcessingNode;
     KConfigGroup configGroup;
+    int m_moveStep;
+
+    QAction * m_actionMoveUp;
+    QAction * m_actionMoveDown;
+    QAction * m_actionMoveLeft;
+    QAction * m_actionMoveRight;
 };
 
 

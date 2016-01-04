@@ -3,6 +3,7 @@
  *                1999 Michael Koch    <koch@kde.org>
  *                2002 Patrick Julien <freak@codepimps.org>
  *                2004 Boudewijn Rempt <boud@valdyas.org>
+ *                2016 Michael Abrahams <miabraha@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,7 +37,7 @@
 #include "kis_tool_movetooloptionswidget.h"
 #include "strokes/move_selection_stroke_strategy.h"
 #include "kis_resources_snapshot.h"
-
+#include "kis_action_registry.h"
 
 KisToolMove::KisToolMove(KoCanvasBase * canvas)
         :  KisTool(canvas, KisCursor::moveCursor())
@@ -45,6 +46,23 @@ KisToolMove::KisToolMove(KoCanvasBase * canvas)
     m_optionsWidget = 0;
     m_moveToolMode = MoveSelectedLayer;
     m_moveInProgress = false;
+
+    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
+    m_actionMoveUp = actionRegistry->makeQAction("movetool-move-up", this);
+    addAction("movetool-move-up", m_actionMoveUp);
+    connect(m_actionMoveUp, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Up);});
+
+    m_actionMoveDown = actionRegistry->makeQAction("movetool-move-down", this);
+    addAction("movetool-move-down", m_actionMoveDown);
+    connect(m_actionMoveDown, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Down);});
+
+    m_actionMoveLeft = actionRegistry->makeQAction("movetool-move-left", this);
+    addAction("movetool-move-left", m_actionMoveLeft);
+    connect(m_actionMoveLeft, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Left);});
+
+    m_actionMoveRight = actionRegistry->makeQAction("movetool-move-right", this);
+    addAction("movetool-move-right", m_actionMoveRight);
+    connect(m_actionMoveRight, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Right);});
 }
 
 KisToolMove::~KisToolMove()
@@ -57,6 +75,73 @@ void KisToolMove::resetCursorStyle()
     KisTool::resetCursorStyle();
 
     overrideCursorIfNotEditable();
+}
+
+void KisToolMove::moveDiscrete(MoveDirection direction)
+{
+    if (mode() == KisTool::PAINT_MODE) return;  // Don't interact with dragging
+
+    setMode(KisTool::PAINT_MODE);
+
+    KisNodeSP node;
+    KisImageSP image = this->image();
+
+    KisResourcesSnapshotSP resources =
+        new KisResourcesSnapshot(image, currentNode(), 0, this->canvas()->resourceManager());
+    KisSelectionSP selection = resources->activeSelection();
+
+    // Move current layer by default.
+    if ((!node && !(node = resources->currentNode())) || !node->isEditable()) {
+        return;
+    }
+
+
+    // If node has changed, end current stroke.
+    if (m_strokeId && (node != m_currentlyProcessingNode)) {
+        endStroke();
+    }
+
+
+    /**
+     * Begin a new stroke if necessary.
+     */
+    if (!m_strokeId) {
+        KisStrokeStrategy *strategy;
+
+        KisPaintLayerSP paintLayer =
+            dynamic_cast<KisPaintLayer*>(node.data());
+
+        if (paintLayer && selection &&
+            !selection->isTotallyUnselected(image->bounds())) {
+
+            strategy =
+                new MoveSelectionStrokeStrategy(paintLayer,
+                                                selection,
+                                                image.data(),
+                                                image->postExecutionUndoAdapter());
+        } else {
+            strategy =
+                new MoveStrokeStrategy(node, image.data(),
+                                       image->postExecutionUndoAdapter());
+        }
+
+        m_strokeId = image->startStroke(strategy);
+        m_currentlyProcessingNode = node;
+        m_accumulatedOffset = QPoint();
+    }
+
+    QPoint offset = direction == Up   ? QPoint( 0, -m_moveStep) :
+                    direction == Down ? QPoint( 0,  m_moveStep) :
+                    direction == Left ? QPoint(-m_moveStep,  0) :
+                                        QPoint( m_moveStep,  0) ;
+
+    image->addJob(m_strokeId, new MoveStrokeStrategy::Data(m_accumulatedOffset + offset));
+    m_accumulatedOffset += offset;
+
+
+    m_moveInProgress = false;
+    emit moveInProgressChanged();
+    setMode(KisTool::HOVER_MODE);
 }
 
 void KisToolMove::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -272,12 +357,17 @@ QWidget* KisToolMove::createOptionWidget()
 
     m_optionsWidget->setFixedHeight(m_optionsWidget->sizeHint().height());
 
+
     connect(m_optionsWidget->radioSelectedLayer, SIGNAL(toggled(bool)),
             this, SLOT(slotWidgetRadioToggled(bool)));
     connect(m_optionsWidget->radioFirstLayer, SIGNAL(toggled(bool)),
             this, SLOT(slotWidgetRadioToggled(bool)));
     connect(m_optionsWidget->radioGroup, SIGNAL(toggled(bool)),
             this, SLOT(slotWidgetRadioToggled(bool)));
+
+    connect(m_optionsWidget->sliderMoveStep, SIGNAL(valueChanged(int)),
+            this, SLOT(slotSetMoveStep(int)));
+
 
 
     // load config for correct radio button
@@ -292,6 +382,12 @@ QWidget* KisToolMove::createOptionWidget()
     m_moveToolMode = newMode; // set the internal variable for calculations
 
 
+    // Keyboard shortcut move step
+    m_optionsWidget->sliderMoveStep->setRange(1, 50);
+    int moveStep = configGroup.readEntry<int>("moveToolStep", 5);
+    m_optionsWidget->sliderMoveStep->setValue(moveStep);
+    m_moveStep = moveStep;
+
     return m_optionsWidget;
 }
 
@@ -299,6 +395,12 @@ void KisToolMove::setMoveToolMode(KisToolMove::MoveToolMode newMode)
 {
     m_moveToolMode = newMode;
     configGroup.writeEntry("moveToolMode", static_cast<int>(newMode));
+}
+
+void KisToolMove::slotSetMoveStep(int newMoveStep)
+{
+    m_moveStep = newMoveStep;
+    configGroup.writeEntry("moveToolStep", newMoveStep);
 }
 
 KisToolMove::MoveToolMode KisToolMove::moveToolMode() const

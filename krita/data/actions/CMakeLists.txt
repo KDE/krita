@@ -5,4 +5,5 @@ install( FILES
     TextTool.action
     ConnectionTool.action
     ReferencesTool.action
-DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)
+    MoveTool.action
+    DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)

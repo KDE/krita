@@ -417,3 +417,15 @@ bool KoToolBase::isInTextMode() const
     Q_D(const KoToolBase);
     return d->isInTextMode;
 }
+
+bool KoToolBase::maskSyntheticEvents() const
+{
+    Q_D(const KoToolBase);
+    return d->maskSyntheticEvents;
+}
+
+void KoToolBase::setMaskSyntheticEvents(bool value)
+{
+    Q_D(KoToolBase);
+    d->maskSyntheticEvents = value;
+}

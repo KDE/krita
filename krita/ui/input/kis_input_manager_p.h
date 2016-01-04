@@ -77,6 +77,7 @@ public:
     void blockMouseEvents();
     void allowMouseEvents();
     void eatOneMousePress();
+    void maskSyntheticEvents(bool value);
 
     template <class Event, bool useBlocking>
     void debugEvent(QEvent *event)
@@ -111,23 +112,21 @@ public:
     };
     CanvasSwitcher canvasSwitcher;
 
-    class EventEater
+    struct EventEater
     {
-    public:
         bool eventFilter(QObject* target, QEvent* event);
 
         // This should be called after we're certain a tablet stroke has started.
         void activate();
         // This should be called after a tablet stroke has ended.
         void deactivate();
-        bool isActive();
 
         // On Windows, we sometimes receive mouse events very late, so watch & wait.
         void eatOneMousePress();
 
-    private:
         bool hungry{false};   // Continue eating mouse strokes
         bool peckish{false};  // Eat a single mouse press event
+        bool eatSyntheticEvents{true}; // Mask all synthetic events
     };
     EventEater eventEater;
 

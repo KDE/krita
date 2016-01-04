@@ -325,9 +325,6 @@ target_link_libraries(kritaimage kritaversion kritawidgets kritaglobal kritapsd 
 target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES kritaversion kritaglobal kritapsd kritaodf kritapigment kritaundo2 kritawidgetutils Qt5::Concurrent)
 
 target_link_libraries(kritaimage ${Boost_SYSTEM_LIBRARY})
-message("DEBUG_BOOST_LIBRARIES = " ${Boost_LIBRARIES})
-message("DEBUG_BOOST_SYSTEM_FOUND = " ${Boost_SYSTEM_FOUND})
-message("DEBUG_BOOST_SYSTEM_LIBRARY = " ${Boost_SYSTEM_LIBRARY})
 
 if(OPENEXR_FOUND)
   target_link_libraries(kritaimage  ${OPENEXR_LIBRARIES})

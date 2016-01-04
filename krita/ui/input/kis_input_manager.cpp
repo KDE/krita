@@ -78,6 +78,8 @@ uint qHash(QPointer<T> value) {
 KisInputManager::KisInputManager(QObject *parent)
     : QObject(parent), d(new Private(this))
 {
+    d->setupActions();
+
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
             SLOT(slotToolChanged()));
     connect(&d->moveEventCompressor, SIGNAL(timeout()), SLOT(slotCompressedMoveEvent()));

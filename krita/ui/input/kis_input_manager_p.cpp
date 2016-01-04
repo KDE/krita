@@ -130,7 +130,6 @@ KisInputManager::Private::Private(KisInputManager *qq)
     moveEventCompressor.setDelay(cfg.tabletEventsDelay());
     testingAcceptCompressedTabletEvents = cfg.testingAcceptCompressedTabletEvents();
     testingCompressBrushEvents = cfg.testingCompressBrushEvents();
-    setupActions();
 }
 
 

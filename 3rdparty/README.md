@@ -122,6 +122,15 @@ On all operating systems:
     cmake --build . --config RelWithDebInfo --target ext_eigen3
     cmake --build . --config RelWithDebInfo --target ext_exiv2
     cmake --build . --config RelWithDebInfo --target ext_fftw3
+
+Note for Windows:
+
+fftw3 is still broken, don't know why. Copy the bin, lib and include folders from 
+
+    \b\ext_fftw3\ext_fftw3-prefix\src\ext_fftw3
+
+manuall to BUILDROOT\i
+
     cmake --build . --config RelWithDebInfo --target ext_ilmbase
     cmake --build . --config RelWithDebInfo --target ext_jpeg
     cmake --build . --config RelWithDebInfo --target ext_lcms2

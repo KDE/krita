@@ -1,6 +1,6 @@
 SET(PREFIX_ext_boost "${EXTPREFIX}" )
 if (MSVC)
-	if (WIN64_BUILD)
+	if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 14 2015 Win64")
 		ExternalProject_Add(
 			ext_boost
 			DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

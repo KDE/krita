@@ -2,7 +2,7 @@ SET(PREFIX_ext_png2ico "${EXTPREFIX}" )
 ExternalProject_Add( ext_png2ico
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 	URL http://files.kde.org/krita/build/dependencies/png2ico.zip
-	URL_MD5 20592f02540607317cec8a3b847c7b1a
+	URL_MD5 5be668b436990255b75cce4ce03be282
 
 	INSTALL_DIR ${PREFIX_ext_png2ico}
 	CONFIGURE_COMMAND ""

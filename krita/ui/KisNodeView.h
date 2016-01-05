@@ -125,6 +125,9 @@ public:
     void updateNode(const QModelIndex &index);
 
 protected:
+    QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index,
+                                                         const QEvent *event) const;
+
     virtual bool viewportEvent(QEvent *event);
     virtual void contextMenuEvent(QContextMenuEvent *event);
     virtual void showContextMenu(const QPoint &globalPos, const QModelIndex &index);

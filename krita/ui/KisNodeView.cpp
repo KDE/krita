@@ -137,6 +137,16 @@ void KisNodeView::updateNode(const QModelIndex &index)
 QItemSelectionModel::SelectionFlags KisNodeView::selectionCommand(const QModelIndex &index,
                                                                   const QEvent *event) const
 {
+    /**
+     * Qt has a bug: when we Ctrl+click on an item, the item's
+     * selections gets toggled on mouse *press*, whereas usually it is
+     * done on mouse *release*.  Therefore the user cannot do a
+     * Ctrl+D&D with the default configuration. This code fixes the
+     * problem by manually returning QItemSelectionModel::NoUpdate
+     * flag when the user clicks on an item and returning
+     * QItemSelectionModel::Toggle on release.
+     */
+
     if (event &&
         (event->type() == QEvent::MouseButtonPress ||
          event->type() == QEvent::MouseButtonRelease) &&

@@ -610,6 +610,9 @@ private:
     qint64 m_cycles;
 };
 
+QStringList getHierarchy(KisNodeSP root, const QString &prefix = "");
+bool checkHierarchy(KisNodeSP root, const QStringList &expected);
+
 }
 
 #endif

@@ -96,37 +96,6 @@ void KisNodeJugglerCompressedTest::testEndBeforeUpdate()
     testMove(0);
 }
 
-QStringList getHierarchy(KisNodeSP root, const QString &prefix = "") {
-    QStringList list;
-
-    QString nextPrefix;
-    if (root->parent()) {
-        nextPrefix = prefix + "+";
-        list << prefix + root->name();
-    }
-
-    KisNodeSP node = root->firstChild();
-    while (node) {
-        list += getHierarchy(node, nextPrefix);
-        node = node->nextSibling();
-    }
-
-    return list;
-}
-
-bool checkHierarchy(KisNodeSP root, const QStringList &expected)
-{
-    QStringList result = getHierarchy(root);
-    if (result != expected) {
-        qDebug() << "Failed to compare hierarchy:";
-        qDebug() << "   " << ppVar(result);
-        qDebug() << "   " << ppVar(expected);
-        return false;
-    }
-
-    return true;
-}
-
 void KisNodeJugglerCompressedTest::testDuplicateImpl(bool externalParent, bool useMove)
 {
     TestUtil::ExternalImageChecker chk("node_juggler", "move_test");
@@ -140,7 +109,7 @@ void KisNodeJugglerCompressedTest::testDuplicateImpl(bool externalParent, bool u
     initialRef << "+paint5";
     initialRef << "paint6";
 
-    QVERIFY(checkHierarchy(p->image->root(), initialRef));
+    QVERIFY(TestUtil::checkHierarchy(p->image->root(), initialRef));
 
     KisNodeList selectedNodes;
     selectedNodes << layer2;
@@ -195,12 +164,12 @@ void KisNodeJugglerCompressedTest::testDuplicateImpl(bool externalParent, bool u
         ref << "paint5";
     }
 
-    QVERIFY(checkHierarchy(p->image->root(), ref));
+    QVERIFY(TestUtil::checkHierarchy(p->image->root(), ref));
 
     p->undoStore->undo();
     p->image->waitForDone();
 
-    QVERIFY(checkHierarchy(p->image->root(), initialRef));
+    QVERIFY(TestUtil::checkHierarchy(p->image->root(), initialRef));
 }
 
 void KisNodeJugglerCompressedTest::testDuplicate()

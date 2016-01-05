@@ -36,4 +36,35 @@ namespace TestUtil
     const KoCompositeOp * TestNode::compositeOp() const {
         return 0;
     }
+
+    QStringList getHierarchy(KisNodeSP root, const QString &prefix) {
+        QStringList list;
+
+        QString nextPrefix;
+        if (root->parent()) {
+            nextPrefix = prefix + "+";
+            list << prefix + root->name();
+        }
+
+        KisNodeSP node = root->firstChild();
+        while (node) {
+            list += getHierarchy(node, nextPrefix);
+            node = node->nextSibling();
+        }
+
+        return list;
+    }
+
+    bool checkHierarchy(KisNodeSP root, const QStringList &expected)
+    {
+        QStringList result = getHierarchy(root);
+        if (result != expected) {
+            qDebug() << "Failed to compare hierarchy:";
+            qDebug() << "   " << ppVar(result);
+            qDebug() << "   " << ppVar(expected);
+            return false;
+        }
+
+        return true;
+    }
 }

@@ -78,6 +78,7 @@ public:
     bool showCanvasMessages();
     bool compressKra();
     bool toolOptionsInDocker();
+    bool switchSelectionCtrlAlt();
 private Q_SLOTS:
     void getBackgroundImage();
     void clearBackgroundImage();

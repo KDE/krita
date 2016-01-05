@@ -7,6 +7,7 @@ set(kritaselectiontools_SOURCES
     kis_tool_select_outline.cc
     kis_tool_select_path.cc
     kis_tool_select_similar.cc
+    kis_selection_modifier_mapper.cc
 )
 
 qt5_add_resources(kritaselectiontools_SOURCES selectiontools.qrc)

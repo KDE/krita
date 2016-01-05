@@ -116,6 +116,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_chkCanvasMessages->setChecked(cfg.showCanvasMessages());
     m_chkCompressKra->setChecked(cfg.compressKra());
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker());
+    m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt());
 
     connect(m_bnFileName, SIGNAL(clicked()), SLOT(getBackgroundImage()));
     connect(clearBgImageButton, SIGNAL(clicked()), SLOT(clearBackgroundImage()));
@@ -143,6 +144,8 @@ void GeneralTab::setDefault()
     m_chkCanvasMessages->setChecked(cfg.showCanvasMessages(true));
     m_chkCompressKra->setChecked(cfg.compressKra(true));
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker(true));
+    m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt(true));
+
 }
 
 CursorStyle GeneralTab::cursorStyle()
@@ -205,6 +208,13 @@ bool GeneralTab::toolOptionsInDocker()
 {
     return m_radioToolOptionsInDocker->isChecked();
 }
+
+bool GeneralTab::switchSelectionCtrlAlt()
+{
+    return m_chkSwitchSelectionCtrlAlt->isChecked();
+
+}
+
 
 void GeneralTab::getBackgroundImage()
 {
@@ -1042,6 +1052,8 @@ bool KisDlgPreferences::editPreferences()
         cfg.setShowCanvasMessages(dialog->m_general->showCanvasMessages());
         cfg.setCompressKra(dialog->m_general->compressKra());
         cfg.setToolOptionsInDocker(dialog->m_general->toolOptionsInDocker());
+        cfg.setSwitchSelectionCtrlAlt(dialog->m_general->switchSelectionCtrlAlt());
+
         KisPart *part = KisPart::instance();
         if (part) {
             Q_FOREACH (QPointer<KisDocument> doc, part->documents()) {

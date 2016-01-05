@@ -272,25 +272,45 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="0" column="0">
-        <widget class="QGroupBox" name="groupBox_4">
+        <widget class="QGroupBox" name="ToolSettings">
          <property name="title">
-          <string>Tool Options Location (needs restart)</string>
+          <string>Tool Settings</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
+         <layout class="QVBoxLayout" name="verticalLayout_1">
           <item>
-           <widget class="QRadioButton" name="m_radioToolOptionsInDocker">
-            <property name="text">
-             <string>In Docker</string>
-            </property>
-           </widget>
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <item>
+             <widget class="QGroupBox" name="groupBox_4">
+              <property name="title">
+               <string>Tool Options Location (needs restart)</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_3">
+               <item>
+                <widget class="QRadioButton" name="m_radioToolOptionsInDocker">
+                 <property name="text">
+                  <string>In Doc&amp;ker</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="m_radioToolOptionsInToolbar">
+                 <property name="text">
+                  <string>In Toolbar</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item>
-           <widget class="QRadioButton" name="m_radioToolOptionsInToolbar">
+           <widget class="QCheckBox" name="m_chkSwitchSelectionCtrlAlt">
             <property name="text">
-             <string>In Toolbar</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
+             <string>Switch Control/Alt Selection Modifiers</string>
             </property>
            </widget>
           </item>

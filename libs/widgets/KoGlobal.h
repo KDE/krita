@@ -50,8 +50,8 @@ public:
     }
 
     /**
-     * @return the global KConfig object around calligrarc.
-     * calligrarc is used for Calligra-wide settings, from totally unrelated classes,
+     * @return the global KConfig object around kritarc.
+     * kritarc is used for Calligra-wide settings, from totally unrelated classes,
      * so this is the centralization of the KConfig object so that the file is
      * parsed only once
      */

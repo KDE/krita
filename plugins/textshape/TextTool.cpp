@@ -3151,7 +3151,7 @@ void TextTool::insertAnnotation()
     textEditor()->addAnnotation(shape);
 
     // Set annotation creator.
-    KConfig cfg("calligrarc");
+    KConfig cfg("kritarc");
     cfg.reparseConfiguration();
     KConfigGroup authorGroup(&cfg, "Author");
     QStringList profiles = authorGroup.readEntry("profile-names", QStringList());

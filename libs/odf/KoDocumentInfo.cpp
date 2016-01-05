@@ -392,7 +392,7 @@ void KoDocumentInfo::updateParameters()
         return;
     }
 
-    KConfig config("calligrarc");
+    KConfig config("kritarc");
     config.reparseConfiguration();
     KConfigGroup authorGroup(&config, "Author");
     QStringList profiles = authorGroup.readEntry("profile-names", QStringList());

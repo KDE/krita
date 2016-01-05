@@ -165,7 +165,7 @@ QString KoGlobal::languageFromTag(const QString &langTag)
 KConfig* KoGlobal::_calligraConfig()
 {
     if (!m_calligraConfig) {
-        m_calligraConfig = new KConfig("calligrarc");
+        m_calligraConfig = new KConfig("kritarc");
     }
     return m_calligraConfig;
 }

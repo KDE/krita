@@ -134,6 +134,32 @@ void KisNodeView::updateNode(const QModelIndex &index)
     dataChanged(index, index);
 }
 
+QItemSelectionModel::SelectionFlags KisNodeView::selectionCommand(const QModelIndex &index,
+                                                                  const QEvent *event) const
+{
+    if (event &&
+        (event->type() == QEvent::MouseButtonPress ||
+         event->type() == QEvent::MouseButtonRelease) &&
+        index.isValid()) {
+
+        const QMouseEvent *mevent = static_cast<const QMouseEvent*>(event);
+
+        if (event->type() == QEvent::MouseButtonPress &&
+            (mevent->modifiers() & Qt::ControlModifier)) {
+
+            return QItemSelectionModel::NoUpdate;
+        }
+
+        if (event->type() == QEvent::MouseButtonRelease &&
+            (mevent->modifiers() & Qt::ControlModifier)) {
+
+            return QItemSelectionModel::Toggle;
+        }
+    }
+
+    return QAbstractItemView::selectionCommand(index, event);
+}
+
 bool KisNodeView::viewportEvent(QEvent *e)
 {
     if (model()) {

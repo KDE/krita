@@ -20,6 +20,7 @@
 #define KIS_ONION_SKIN_COMPOSITOR_H
 
 #include "kis_types.h"
+#include "kritaimage_export.h"
 
 class KRITAIMAGE_EXPORT KisOnionSkinCompositor : public QObject
 {

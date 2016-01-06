@@ -19,8 +19,7 @@
 #ifndef _KIS_MEMORY_LEAK_TRACKER_H_
 #define _KIS_MEMORY_LEAK_TRACKER_H_
 
-
-#include <kritaimage_export.h>
+#include <kritaglobal_export.h>
 
 #include <config-memory-leak-tracker.h>
 
@@ -42,7 +41,7 @@
  * and translate to NOOP on other platforms. It is also just a debug tool,
  * and should not be used in a production build of krita.
  */
-class KRITAIMAGE_EXPORT KisMemoryLeakTracker
+class KRITAGLOBAL_EXPORT KisMemoryLeakTracker
 {
 public:
     KisMemoryLeakTracker();

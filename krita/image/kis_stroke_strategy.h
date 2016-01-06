@@ -22,6 +22,7 @@
 #include <QString>
 #include "kis_types.h"
 #include "kundo2magicstring.h"
+#include "kritaimage_export.h"
 
 class KisStrokeJobStrategy;
 class KisStrokeJobData;

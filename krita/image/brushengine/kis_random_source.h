@@ -23,6 +23,8 @@
 #include "kis_shared.h"
 #include "kis_shared_ptr.h"
 
+#include "kritaimage_export.h"
+
 /**
  * KisRandomSource is a special object that wraps around random number
  * generation routines.

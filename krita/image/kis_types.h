@@ -22,6 +22,8 @@
 #include <QPoint>
 #include <QList>
 
+#include "kritaimage_export.h"
+
 template<class T>
 class KisWeakSharedPtr;
 template<class T>

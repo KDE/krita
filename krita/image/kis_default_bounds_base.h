@@ -22,7 +22,7 @@
 #include <QRect>
 #include "kis_shared.h"
 #include "kis_shared_ptr.h"
-
+#include "kritaimage_export.h"
 class KisDefaultBoundsBase;
 
 typedef KisSharedPtr<KisDefaultBoundsBase> KisDefaultBoundsBaseSP;

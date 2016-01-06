@@ -215,6 +215,7 @@ void KoResourcePaths::addResourceTypeInternal(const QString &type, const QString
                                               const QString &relativename,
                                               bool priority)
 {
+    Q_UNUSED(basetype);
     if (relativename.isEmpty()) return;
 
     QString copy = relativename;

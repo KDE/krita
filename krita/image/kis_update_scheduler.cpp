@@ -438,6 +438,7 @@ void KisUpdateScheduler::spareThreadAppeared()
 KisTestableUpdateScheduler::KisTestableUpdateScheduler(KisProjectionUpdateListener *projectionUpdateListener,
                                                        qint32 threadCount)
 {
+    Q_UNUSED(threadCount);
     updateSettings();
     m_d->projectionUpdateListener = projectionUpdateListener;
 

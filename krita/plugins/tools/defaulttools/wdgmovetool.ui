@@ -65,12 +65,24 @@
       <string>Shortcut Move Distance</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
-      <item row="0" column="0">
-       <widget class="KisSliderSpinBox" name="sliderMoveStep">
-        <property name="toolTip">
-         <string>Number of pixels to move after move shortcut keypress.</string>
-        </property>
-       </widget>
+       <item row="0" column="0">
+         <widget class="QDoubleSpinBox" name="spinMoveStep">
+           <property name="minimum">
+             <number>1</number>
+           </property>
+           <property name="maximum">
+             <number>100000</number>
+           </property>
+           <property name="value">
+             <number>1</number>
+           </property>
+           <property name="toolTip">
+             <string>Number of pixels to move after move shortcut keypress.</string>
+           </property>
+         </widget>
+       </item>
+      <item row="0" column="1">
+        <widget class="QComboBox" name="cmbUnit"/>
       </item>
      </layout>
     </widget>

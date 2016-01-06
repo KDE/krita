@@ -44,7 +44,7 @@ class KisShortcutsEditorPrivate;
  * already free of conflicts. If it is not, nothing will crash, but your users
  * won't like the resulting behavior.
  *
- * TODO: What exactly is the problem?
+ * TODO: Find the right place to check for conflicts.
  */
 
 
@@ -100,20 +100,6 @@ public:
         /// Letter shortcuts are allowed
         LetterShortcutsAllowed
     };
-
-    /**
-     * Constructor.
-     *
-     * @param collection the KActionCollection to configure
-     * @param parent parent widget
-     * @param actionTypes types of actions to display in this widget.
-     * @param allowLetterShortcuts set to LetterShortcutsDisallowed if unmodified alphanumeric
-     *  keys ('A', '1', etc.) are not permissible shortcuts.
-     */
-    KisShortcutsEditor(KActionCollection *collection,
-                       QWidget *parent,
-                       ActionTypes actionTypes = AllActions,
-                       LetterShortcuts allowLetterShortcuts = LetterShortcutsAllowed);
 
     /**
      * \overload

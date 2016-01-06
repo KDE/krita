@@ -58,15 +58,6 @@
 Q_DECLARE_METATYPE(KisShortcutsEditorItem *)
 
 
-KisShortcutsEditor::KisShortcutsEditor(KActionCollection *collection, QWidget *parent, ActionTypes actionType,
-                                   LetterShortcuts allowLetterShortcuts)
-    : QWidget(parent)
-    , d(new KisShortcutsEditorPrivate(this))
-{
-    d->initGUI(actionType, allowLetterShortcuts);
-    addCollection(collection);
-}
-
 KisShortcutsEditor::KisShortcutsEditor(QWidget *parent, ActionTypes actionType, LetterShortcuts allowLetterShortcuts)
     : QWidget(parent)
     , d(new KisShortcutsEditorPrivate(this))

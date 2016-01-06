@@ -22,7 +22,6 @@
 #include "canvas/kis_perspective_grid_manager.h"
 
 
-#include <QAction>
 #include <klocalizedstring.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>

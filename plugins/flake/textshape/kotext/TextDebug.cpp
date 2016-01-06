@@ -20,7 +20,7 @@
 
 const QLoggingCategory &TEXT_LOG() \
 {
-    static const QLoggingCategory category("calligra.lib.text");
+    static const QLoggingCategory category("krita.lib.text");
     return category;
 }
 

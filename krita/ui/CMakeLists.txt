@@ -4,8 +4,6 @@
 # warning: case value ‘1002’ not in enumerated type ‘QEvent::Type’ [-Wswitch]
 if (CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(${KDE4_ENABLE_EXCEPTIONS} -Wno-switch)
-else ()
-    kde_enable_exceptions()
 endif ()
 
 include_directories(

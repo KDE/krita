@@ -1,6 +1,5 @@
 add_subdirectory(tests)
 include_directories( ${OCIO_INCLUDE_DIR})
-kde_enable_exceptions()
 
 set(KRITA_LUTDOCKER_SOURCES
   lutdocker.cpp

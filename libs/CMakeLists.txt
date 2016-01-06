@@ -10,6 +10,7 @@ add_definitions(
 
 if (SHOULD_BUILD_LIB_CALLIGRA)
     add_subdirectory( version )
+    add_subdirectory( libglobal )
     add_subdirectory( koplugin )
     add_subdirectory( widgetutils )
     add_subdirectory( widgets )
@@ -19,6 +20,7 @@ if (SHOULD_BUILD_LIB_CALLIGRA)
     add_subdirectory( basicflakes )
     add_subdirectory( pigment )
     add_subdirectory( kundo2 )
+    add_subdirectory( impex )
 endif ()
 
 if (SHOULD_BUILD_LIB_KOVECTORIMAGE)

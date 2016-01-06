@@ -1,4 +1,3 @@
-kde_enable_exceptions()
 set(kritaimageenhancement_SOURCES
     imageenhancement.cpp
     kis_simple_noise_reducer.cpp

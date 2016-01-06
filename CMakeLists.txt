@@ -303,6 +303,9 @@ add_definitions(
   -DQT_DISABLE_DEPRECATED_BEFORE=0
 )
 
+# enable exceptions globally
+kde_enable_exceptions()
+
 
 # only with this definition will all the FOO_TEST_EXPORT macro do something
 # TODO: check if this can be moved to only those places which make use of it,

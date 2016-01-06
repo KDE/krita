@@ -20,9 +20,9 @@
 #define _KIS_SHARED_H_
 
 #include <QAtomicInt>
-#include <kritaimage_export.h>
+#include "kritaglobal_export.h"
 
-class KRITAIMAGE_EXPORT KisShared
+class KRITAGLOBAL_EXPORT KisShared
 {
 private:
     KisShared(const KisShared& );

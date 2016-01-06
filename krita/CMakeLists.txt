@@ -10,8 +10,6 @@ add_definitions(
   -DQT_USE_FAST_CONCATENATION
 )
 
-kde_enable_exceptions()
-
 # To avoid the confusion of an endless stream of Eigen warnings.
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-unused-local-typedefs -Wno-deprecated -Wno-deprecated-declarations)
@@ -68,7 +66,6 @@ set(KRITA_INCLUDES
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}/image
 
-    ${CMAKE_SOURCE_DIR}/krita/libglobal
     ${CMAKE_SOURCE_DIR}/krita/libpsd
     ${CMAKE_SOURCE_DIR}/krita/image
     ${CMAKE_SOURCE_DIR}/krita/image/brushengine
@@ -101,7 +98,6 @@ set(KRITA_INCLUDES
 
 include_directories(${KRITA_INCLUDES})
 
-add_subdirectory( libglobal )
 add_subdirectory( libpsd )
 add_subdirectory( image )
 add_subdirectory( libbrush )

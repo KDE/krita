@@ -1,9 +1,5 @@
 add_subdirectory( tests )
 
-########### next target ###############
-
-kde_enable_exceptions()
-
 # Chose a tiles backend
 # 1 - image/tiles
 # 3 - image/tiles3
@@ -227,7 +223,6 @@ set(kritaimage_LIB_SRCS
    kis_update_outline_job.cpp
    kis_update_selection_job.cpp
    kis_serializable_configuration.cc
-   kis_shared.cc
    kis_transaction_data.cpp
    kis_transform_worker.cc
    kis_perspectivetransform_worker.cpp

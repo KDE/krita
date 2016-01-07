@@ -9,28 +9,9 @@ if (SHOULD_BUILD_PLUGIN_COLORENGINES)
     add_subdirectory( colorengines )
 endif ()
 
-if (SHOULD_BUILD_PLUGIN_ARTISTICTEXTSHAPE)
-    add_subdirectory( artistictextshape )
-endif ()
-
 if (SHOULD_BUILD_PLUGIN_DOCKERS)
     add_subdirectory( dockers )
 endif ()
 
-if (SHOULD_BUILD_PLUGIN_DEFAULTTOOLS)
-    add_subdirectory( defaultTools )
-endif ()
-
-if (SHOULD_BUILD_PLUGIN_PATHSHAPES)
-    add_subdirectory( pathshapes )
-endif ()
-
-if (SHOULD_BUILD_PLUGIN_TEXTSHAPE)
-    add_subdirectory( textshape )
-endif()
-
-if (SHOULD_BUILD_PLUGIN_VECTORSHAPE)
-    add_subdirectory( vectorshape )
-endif ()
-
-add_subdirectory( karbonplugins )
+add_subdirectory( tools )
+add_subdirectory( flake )

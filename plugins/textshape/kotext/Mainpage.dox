@@ -1,11 +1,11 @@
 /**
  * \mainpage
  *
- * KoText is a library for general use that extends the QText framework
+ * KritaText is a library for general use that extends the QText framework
  * (codenamed scribe) with an enhanced text-layout which adds features
  * required by ODF and general word-processing applications.
  *
- * You can use KoText at all places where you would normally use a
+ * You can use KritaText at all places where you would normally use a
  * QTextDocument as the main text layout class in scribe can be replaced
  * on any QTextDocument instance using QTextDocument::setDocumentLayout().
  * This means you can use the Qt API as normal, but you will be
@@ -61,5 +61,5 @@
  * KoText namespace.
  */
 
-// DOXYGEN_SET_PROJECT_NAME = KoText
+// DOXYGEN_SET_PROJECT_NAME = KritaText
 // DOXYGEN_SET_IGNORE_PREFIX = Ko K

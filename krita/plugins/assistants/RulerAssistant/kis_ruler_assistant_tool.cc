@@ -276,10 +276,24 @@ void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
 
     m_assistantDrag = 0;
     Q_FOREACH (KisPaintingAssistant* assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
-        QPointF iconPosition = m_canvas->viewConverter()->documentToView(assistant->buttonPosition());
-        QRectF deleteRect(iconPosition - QPointF(32, 32), QSizeF(16, 16));
-        QRectF visibleRect(iconPosition + QPointF(16, 16), QSizeF(16, 16));
-        QRectF moveRect(iconPosition - QPointF(16, 16), QSizeF(32, 32));
+
+        // This code contains the click event behavior. The actual display of the icons are done at the bottom
+        // of the paint even. Make sure the rectangles positions are the same between the two.
+
+        // TODO: These 6 lines are duplicated below in the paint layer. It shouldn't be done like this.
+        int assistantHeight =  assistant->boundingRect().height();
+        int assistantWidth = assistant->boundingRect().width();
+        QPointF actionsPosition = m_canvas->viewConverter()->documentToView(assistant->buttonPosition());
+        QPointF iconDeletePosition(actionsPosition + QPointF(50, assistantHeight + 36));
+        QPointF iconSnapPosition(actionsPosition + QPointF(70, assistantHeight + 36));
+        QPointF iconMovePosition(actionsPosition + QPointF(15, assistantHeight + 25));
+
+
+
+        QRectF deleteRect(iconDeletePosition, QSizeF(16, 16));
+        QRectF visibleRect(iconSnapPosition, QSizeF(16, 16));
+        QRectF moveRect(iconMovePosition, QSizeF(32, 32));
+
         if (moveRect.contains(mousePos)) {
             m_assistantDrag = assistant;
             m_mousePosition = event->point;
@@ -611,17 +625,57 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
 
 
     Q_FOREACH (const KisPaintingAssistant* assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
-        QPointF iconDeletePos = _converter.documentToView(assistant->buttonPosition());
-        _gc.drawPixmap(iconDeletePos - QPointF(32, 32), iconDelete);
+
+
+        // We are going to put all of the assistant actions below the bounds of the assistant
+        // so they are out of the way
+        int assistantHeight =  assistant->boundingRect().height();
+        int assistantWidth = assistant->boundingRect().width();
+
+
+       // QPointF centerBottomPosition(assistantWidth*0.5, assistantHeight );
+       QPointF actionsPosition = _converter.documentToView(assistant->buttonPosition());
+       QPointF iconDeletePosition(actionsPosition + QPointF(50, assistantHeight + 36));
+       QPointF iconSnapPosition(actionsPosition + QPointF(70, assistantHeight + 36));
+       QPointF iconMovePosition(actionsPosition + QPointF(15, assistantHeight + 25));
+
+         _gc.setRenderHint(QPainter::Antialiasing);
+
+
+
+
+        // make the ellipse background
+
+         //_gc.drawEllipse(actionsPosition.x(), actionsPosition.y(), 10, 10); // remove when done testing
+         //_gc.fillPath(QBrush())
+          //  painter.fillPath(backgroundContainer,palette().brush(QPalette::Window));
+
+
+        QBrush backgroundColor(QColor(130, 130, 130, 255));
+         QPointF actionsBGRectangle(actionsPosition + QPointF(20, assistantHeight + 28));
+         _gc.fillRect(actionsBGRectangle.x(), actionsBGRectangle.y(), 80, 30, backgroundColor);
+
+
+        _gc.drawPixmap(iconDeletePosition, iconDelete);
         if (assistant->snapping()==true) {
-            _gc.drawPixmap(iconDeletePos + QPointF(16, 16), iconSnapOn);
-            }
-            else
-            {
-            _gc.drawPixmap(iconDeletePos + QPointF(16, 16), iconSnapOff);
-            }
-        _gc.drawPixmap(iconDeletePos - QPointF(16, 16), iconMove);
-    }
+            _gc.drawPixmap(iconSnapPosition, iconSnapOn);
+        }
+        else
+        {
+            _gc.drawPixmap(iconSnapPosition, iconSnapOff);
+        }
+
+
+        // Move Assistant Tool
+        QPainterPath movePath;
+        movePath.addEllipse(iconMovePosition.x()-5, iconMovePosition.y()-5, 40, 40);// background behind icon
+        _gc.fillPath(movePath, backgroundColor);
+        _gc.drawPixmap(iconMovePosition, iconMove);
+
+
+        qDebug() << QString::number(assistantHeight);
+
+  }
 }
 
 void KisRulerAssistantTool::removeAllAssistants()

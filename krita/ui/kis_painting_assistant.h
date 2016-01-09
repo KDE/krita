@@ -136,8 +136,8 @@ public:
      */
     static void drawPath(QPainter& painter, const QPainterPath& path, bool drawActive=true);
     static void drawPreview(QPainter& painter, const QPainterPath& path);
-protected:
     virtual QRect boundingRect() const;
+protected:
     virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible=true) = 0;
     void initHandles(QList<KisPaintingAssistantHandleSP> _handles);
     QList<KisPaintingAssistantHandleSP> m_handles;

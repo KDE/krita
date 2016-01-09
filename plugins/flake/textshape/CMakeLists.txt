@@ -3,18 +3,18 @@ project( textPlugin)
 add_definitions(-DTRANSLATION_DOMAIN=\"krita_shape_text\")
 
 # KoText depends on koplugin, odf
-set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/plugins/textshape/kotext
-                   ${CMAKE_BINARY_DIR}/plugins/textshape/kotext
-                   ${CMAKE_SOURCE_DIR}/plugins/textshape/kotext/changetracker
-                   ${CMAKE_SOURCE_DIR}/plugins/textshape/kotext/styles
-                   ${CMAKE_SOURCE_DIR}/plugins/textshape/kotext/opendocument
+set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/plugins/flake/textshape/kotext
+                   ${CMAKE_BINARY_DIR}/plugins/flake/textshape/kotext
+                   ${CMAKE_SOURCE_DIR}/plugins/flake/textshape/kotext/changetracker
+                   ${CMAKE_SOURCE_DIR}/plugins/flake/textshape/kotext/styles
+                   ${CMAKE_SOURCE_DIR}/plugins/flake/textshape/kotext/opendocument
                    ${FLAKE_INCLUDES}
                    ${KOODF_INCLUDES})
 
 # TextLayout depends on kotext
 set(TEXTLAYOUT_INCLUDES ${KOTEXT_INCLUDES}
-                   ${CMAKE_SOURCE_DIR}/plugins/textshape/textlayout
-                   ${CMAKE_BINARY_DIR}/plugins/textshape/textlayout)
+                   ${CMAKE_SOURCE_DIR}/plugins/flake/textshape/textlayout
+                   ${CMAKE_BINARY_DIR}/plugins/flake/textshape/textlayout)
 
 
 add_subdirectory( textlayout )

@@ -20,7 +20,6 @@ if (SHOULD_BUILD_LIB_CALLIGRA)
     add_subdirectory( basicflakes )
     add_subdirectory( pigment )
     add_subdirectory( kundo2 )
-    add_subdirectory( impex )
 endif ()
 
 if (SHOULD_BUILD_LIB_KOVECTORIMAGE)

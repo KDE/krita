@@ -249,12 +249,6 @@ find_package(Qt5 ${MIN_QT_VERSION}
 )
 
 
-# Note: OPTIONAL_COMPONENTS does not seem to be reliable
-# (as of ECM 5.15.0, CMake 3.2)
-find_package(Qt5Quick ${MIN_QT_VERSION})
-find_package(Qt5DBus ${MIN_QT_VERSION})
-
-set(HAVE_DBUS ${Qt5DBus_FOUND})
 set(QT_QTTEST_LIBRARY Qt5::Test)
 
 if (USEOPENGL)
@@ -269,27 +263,44 @@ include (MacroAddFileDependencies)
 
 macro_ensure_out_of_source_build("Compiling Calligra inside the source directory is not possible. Please refer to the build instruction http://community.kde.org/Calligra/Building/Building_Calligra")
 
-find_package(KF5KIO ${MIN_FRAMEWORKS_VERSION})
-macro_bool_to_01(KF5KIO_FOUND HAVE_KIO)
-find_package(KF5Crash ${MIN_FRAMEWORKS_VERSION}) 
-macro_bool_to_01(KF5Crash_FOUND HAVE_KCRASH)
+# Note: OPTIONAL_COMPONENTS does not seem to be reliable
+# (as of ECM 5.15.0, CMake 3.2)
+find_package(Qt5Quick ${MIN_QT_VERSION} QUIET)
+macro_log_feature($PQt5Quick_FOUND} "QtQuick" "Qt Quick" "http://www.qt.io" FALSE "" "Necessary to build the tablet gui for Krita")
 
-find_package(X11)
-if(X11_FOUND)
-    find_package(Qt5 ${MIN_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
-                 X11Extras
-    )
-    set(HAVE_X11 TRUE)
-    add_definitions(-DHAVE_X11)
+find_package(Qt5DBus ${MIN_QT_VERSION} QUIET)
+set(HAVE_DBUS ${Qt5DBus_FOUND})
+macro_log_feature(${Qt5DBus_FOUND} "dbus" "Qt DBUS integration" "http://www.qt.io/" FALSE "" "Optionally used to provide a dbus api on Linux")
+
+
+if (NOT WIN32 AND NOT APPLE)
+
+        find_package(KF5KIO ${MIN_FRAMEWORKS_VERSION})
+        macro_bool_to_01(KF5KIO_FOUND HAVE_KIO)
+        macro_log_feature(${KF5KIO_FOUND} "KIO" "KDE's KIO Framework" "http://api.kde.org/frameworks-api/frameworks5-apidocs/kio/html/index.html" FALSE "" "Optionally used to create thumbnailers for Dolphin")
+
+        find_package(KF5Crash ${MIN_FRAMEWORKS_VERSION}) 
+        macro_bool_to_01(KF5Crash_FOUND HAVE_KCRASH)
+        macro_log_feature(${KF5Crash_FOUND} "kcrash" "KDE's Crash Handler" "http://api.kde.org/frameworks-api/frameworks5-apidocs/kcrash/html/index.html" FALSE "" "Optionally used to provide crash reporting on Linux")
+
+        find_package(X11)
+        if(X11_FOUND)
+            find_package(Qt5 ${MIN_QT_VERSION} REQUIRED NO_MODULE COMPONENTS X11Extras)
+            set(HAVE_X11 TRUE)
+            add_definitions(-DHAVE_X11)
+        else()
+            set(HAVE_X11 FALSE)
+        endif()
+
+        find_package(XCB COMPONENTS XCB ATOM)
+        if(XCB_FOUND)
+            set(HAVE_XCB TRUE)
+        else()
+            set(HAVE_XCB FALSE)
+        endif()
 else()
     set(HAVE_X11 FALSE)
-endif()
-
-find_package(XCB COMPONENTS XCB ATOM)
-if(XCB_FOUND)
-  set(HAVE_XCB TRUE)
-else()
-  set(HAVE_XCB FALSE)
+    set(HAVE_XCB FALSE)
 endif()
 
 # use sane compile flags

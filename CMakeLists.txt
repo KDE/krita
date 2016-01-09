@@ -275,11 +275,11 @@ macro_log_feature(${Qt5DBus_FOUND} "dbus" "Qt DBUS integration" "http://www.qt.i
 
 if (NOT WIN32 AND NOT APPLE)
 
-        find_package(KF5KIO ${MIN_FRAMEWORKS_VERSION})
+        find_package(KF5KIO ${MIN_FRAMEWORKS_VERSION} QUIET)
         macro_bool_to_01(KF5KIO_FOUND HAVE_KIO)
         macro_log_feature(${KF5KIO_FOUND} "KIO" "KDE's KIO Framework" "http://api.kde.org/frameworks-api/frameworks5-apidocs/kio/html/index.html" FALSE "" "Optionally used to create thumbnailers for Dolphin")
 
-        find_package(KF5Crash ${MIN_FRAMEWORKS_VERSION}) 
+        find_package(KF5Crash ${MIN_FRAMEWORKS_VERSION} QUIET) 
         macro_bool_to_01(KF5Crash_FOUND HAVE_KCRASH)
         macro_log_feature(${KF5Crash_FOUND} "kcrash" "KDE's Crash Handler" "http://api.kde.org/frameworks-api/frameworks5-apidocs/kcrash/html/index.html" FALSE "" "Optionally used to provide crash reporting on Linux")
 

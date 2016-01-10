@@ -283,7 +283,7 @@ void SmartMergeStrategy::merge(Store* dst, QList<const Store*> srcs, QList<doubl
             Q_FOREACH (const QString & key, keys) {
                 if (!dst->containsEntry(key)) {
                     Value v = election(srcs, scores, key);
-                    if (!v.type() == Value::Invalid) {
+                    if (v.type() != Value::Invalid) {
                         dst->getEntry(key).value() = v;
                     }
                 }

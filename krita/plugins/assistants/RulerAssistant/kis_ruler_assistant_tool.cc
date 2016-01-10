@@ -561,6 +561,10 @@ QPointF KisRulerAssistantTool::straightLine(QPointF point, QPointF compare)
 void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 {
 
+    QPixmap iconDelete = KisIconUtils::loadIcon("edit-delete").pixmap(16, 16);
+    QPixmap iconSnapOn = KisIconUtils::loadIcon("visible").pixmap(16, 16);
+    QPixmap iconSnapOff = KisIconUtils::loadIcon("novisible").pixmap(16, 16);
+    QPixmap iconMove = KisIconUtils::loadIcon("transform-move").pixmap(32, 32);
     QColor handlesColor(0, 0, 0, 125);
 
     if (m_newAssistant) {
@@ -572,24 +576,41 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
         }
     }
 
-    Q_FOREACH (const KisPaintingAssistantHandleSP handle, m_handles) {
-        QRectF ellipse(_converter.documentToView(*handle) -  QPointF(6, 6), QSizeF(12, 12));
-        if (handle == m_handleDrag || handle == m_handleCombine) {
-            _gc.save();
-            _gc.setPen(Qt::transparent);
-            _gc.setBrush(handlesColor);
-            _gc.drawEllipse(ellipse);
-            _gc.restore();
+    // TODO: too  many Q_FOREACH loops going through all assistants. Condense this to one to be a little more performant
+
+    // render handles for the asssistant
+    Q_FOREACH (KisPaintingAssistant* assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
+        Q_FOREACH (const KisPaintingAssistantHandleSP handle, m_handles) {
+            QRectF ellipse(_converter.documentToView(*handle) -  QPointF(6, 6), QSizeF(12, 12));
+
+            // render handles when they are being dragged and moved
+            if (handle == m_handleDrag || handle == m_handleCombine) {
+                _gc.save();
+                _gc.setPen(Qt::transparent);
+                _gc.setBrush(handlesColor);
+                _gc.drawEllipse(ellipse);
+                _gc.restore();
+            }
+
+            if ( assistant->id() =="vanishing point") {
+
+                if (assistant->handles().at(0) == handle )  { // vanishing point handle
+                     ellipse = QRectF(_converter.documentToView(*handle) -  QPointF(10, 10), QSizeF(20, 20));
+                     // TODO: change this to be smaller, but fill in with a color
+                }
+
+                //TODO: render outside handles a little bigger than rotation anchor handles
+            }
+
+            QPainterPath path;
+            path.addEllipse(ellipse);
+            KisPaintingAssistant::drawPath(_gc, path);
+
         }
-        QPainterPath path;
-        path.addEllipse(ellipse);
-        KisPaintingAssistant::drawPath(_gc, path);
     }
 
-    QPixmap iconDelete = KisIconUtils::loadIcon("edit-delete").pixmap(16, 16);
-    QPixmap iconSnapOn = KisIconUtils::loadIcon("visible").pixmap(16, 16);
-    QPixmap iconSnapOff = KisIconUtils::loadIcon("novisible").pixmap(16, 16);
-    QPixmap iconMove = KisIconUtils::loadIcon("transform-move").pixmap(32, 32);
+
+
     Q_FOREACH (KisPaintingAssistant* assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
         if(assistant->id()=="perspective") {
             assistant->findHandleLocation();
@@ -613,9 +634,11 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
             QPointF p2 = _converter.documentToView(*assistant->sideHandles()[1]);
             QPointF p3 = _converter.documentToView(*assistant->sideHandles()[2]);
             QPointF p4 = _converter.documentToView(*assistant->sideHandles()[3]);
-            QPainterPath preview;
+
             _gc.setPen(QColor(0, 0, 0, 75));
             // Draw control lines
+            QPen penStyle(QColor(120, 120, 120, 60), 2.0, Qt::DashDotDotLine);
+            _gc.setPen(penStyle);
             _gc.drawLine(p0, p1);
             _gc.drawLine(p0, p3);
             _gc.drawLine(p1, p2);

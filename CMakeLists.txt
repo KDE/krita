@@ -277,7 +277,7 @@ if (NOT WIN32 AND NOT APPLE)
 
         find_package(KF5KIO ${MIN_FRAMEWORKS_VERSION} QUIET)
         macro_bool_to_01(KF5KIO_FOUND HAVE_KIO)
-        macro_log_feature(${KF5KIO_FOUND} "KIO" "KDE's KIO Framework" "http://api.kde.org/frameworks-api/frameworks5-apidocs/kio/html/index.html" FALSE "" "Optionally used to create thumbnailers for Dolphin")
+        macro_log_feature(${KF5KIO_FOUND} "KIO" "KDE's KIO Framework" "http://api.kde.org/frameworks-api/frameworks5-apidocs/kio/html/index.html" FALSE "" "Optionally used for recent document handling")
 
         find_package(KF5Crash ${MIN_FRAMEWORKS_VERSION} QUIET) 
         macro_bool_to_01(KF5Crash_FOUND HAVE_KCRASH)

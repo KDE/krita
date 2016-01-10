@@ -281,5 +281,7 @@ void KisWidgetChooser::changeEvent(QEvent *e)
     case QEvent::EnabledChange:
         updateArrowIcon();
         break;
+    default:
+        ;
     }
 }

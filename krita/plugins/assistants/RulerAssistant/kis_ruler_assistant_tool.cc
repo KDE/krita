@@ -72,6 +72,7 @@ void KisRulerAssistantTool::activate(ToolActivation toolActivation, const QSet<K
     m_canvas->updateCanvas();
     m_handleDrag = 0;
     m_internalMode = MODE_CREATION;
+
 }
 
 void KisRulerAssistantTool::deactivate()
@@ -284,8 +285,8 @@ void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
         int assistantHeight =  assistant->boundingRect().height();
         int assistantWidth = assistant->boundingRect().width();
         QPointF actionsPosition = m_canvas->viewConverter()->documentToView(assistant->buttonPosition());
-        QPointF iconDeletePosition(actionsPosition + QPointF(50, assistantHeight + 36));
-        QPointF iconSnapPosition(actionsPosition + QPointF(70, assistantHeight + 36));
+        QPointF iconDeletePosition(actionsPosition + QPointF(78, assistantHeight + 32));
+        QPointF iconSnapPosition(actionsPosition + QPointF(54, assistantHeight + 32));
         QPointF iconMovePosition(actionsPosition + QPointF(15, assistantHeight + 25));
 
 
@@ -560,6 +561,7 @@ QPointF KisRulerAssistantTool::straightLine(QPointF point, QPointF compare)
 
 void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 {
+
     QColor handlesColor(0, 0, 0, 125);
 
     if (m_newAssistant) {
@@ -627,35 +629,38 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
     Q_FOREACH (const KisPaintingAssistant* assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
 
 
-        // We are going to put all of the assistant actions below the bounds of the assistant
-        // so they are out of the way
+       // We are going to put all of the assistant actions below the bounds of the assistant
+       // so they are out of the way
         int assistantHeight =  assistant->boundingRect().height();
         int assistantWidth = assistant->boundingRect().width();
-
-
-       // QPointF centerBottomPosition(assistantWidth*0.5, assistantHeight );
-       QPointF actionsPosition = _converter.documentToView(assistant->buttonPosition());
-       QPointF iconDeletePosition(actionsPosition + QPointF(50, assistantHeight + 36));
-       QPointF iconSnapPosition(actionsPosition + QPointF(70, assistantHeight + 36));
-       QPointF iconMovePosition(actionsPosition + QPointF(15, assistantHeight + 25));
-
-         _gc.setRenderHint(QPainter::Antialiasing);
+        QPointF actionsPosition = _converter.documentToView(assistant->buttonPosition());
+        QPointF iconDeletePosition(actionsPosition + QPointF(78, assistantHeight + 32));
+        QPointF iconSnapPosition(actionsPosition + QPointF(54, assistantHeight + 32));
+        QPointF iconMovePosition(actionsPosition + QPointF(15, assistantHeight + 25));
 
 
 
+        // Background container for helpers
+        QBrush backgroundColor = m_canvas->viewManager()->mainWindow()->palette().window();
+        QPointF actionsBGRectangle(actionsPosition + QPointF(25, assistantHeight + 25));
 
-        // make the ellipse background
+        _gc.setRenderHint(QPainter::Antialiasing);
 
-         //_gc.drawEllipse(actionsPosition.x(), actionsPosition.y(), 10, 10); // remove when done testing
-         //_gc.fillPath(QBrush())
-          //  painter.fillPath(backgroundContainer,palette().brush(QPalette::Window));
-
-
-        QBrush backgroundColor(QColor(130, 130, 130, 255));
-         QPointF actionsBGRectangle(actionsPosition + QPointF(20, assistantHeight + 28));
-         _gc.fillRect(actionsBGRectangle.x(), actionsBGRectangle.y(), 80, 30, backgroundColor);
+        QPainterPath bgPath;
+        bgPath.addRoundedRect(QRectF(actionsBGRectangle.x(), actionsBGRectangle.y(), 80, 30), 6, 6);
+        QPen stroke(QColor(60, 60, 60, 80), 2);
+        _gc.setPen(stroke);
+        _gc.fillPath(bgPath, backgroundColor);
+        _gc.drawPath(bgPath);
 
 
+        QPainterPath movePath;  // render circle behind by move helper
+        _gc.setPen(stroke);
+        movePath.addEllipse(iconMovePosition.x()-5, iconMovePosition.y()-5, 40, 40);// background behind icon
+        _gc.fillPath(movePath, backgroundColor);
+        _gc.drawPath(movePath);
+
+        // Preview/Snap Tool helper
         _gc.drawPixmap(iconDeletePosition, iconDelete);
         if (assistant->snapping()==true) {
             _gc.drawPixmap(iconSnapPosition, iconSnapOn);
@@ -666,14 +671,9 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
         }
 
 
-        // Move Assistant Tool
-        QPainterPath movePath;
-        movePath.addEllipse(iconMovePosition.x()-5, iconMovePosition.y()-5, 40, 40);// background behind icon
-        _gc.fillPath(movePath, backgroundColor);
+        // Move Assistant Tool helper
         _gc.drawPixmap(iconMovePosition, iconMove);
 
-
-        qDebug() << QString::number(assistantHeight);
 
   }
 }

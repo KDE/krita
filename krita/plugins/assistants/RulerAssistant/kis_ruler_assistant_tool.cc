@@ -282,13 +282,12 @@ void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
         // of the paint even. Make sure the rectangles positions are the same between the two.
 
         // TODO: These 6 lines are duplicated below in the paint layer. It shouldn't be done like this.
-        int assistantHeight =  assistant->boundingRect().height();
-        int assistantWidth = assistant->boundingRect().width();
         QPointF actionsPosition = m_canvas->viewConverter()->documentToView(assistant->buttonPosition());
+        int assistantHeight = calculateAssistantYMax(assistant);
+
         QPointF iconDeletePosition(actionsPosition + QPointF(78, assistantHeight + 32));
         QPointF iconSnapPosition(actionsPosition + QPointF(54, assistantHeight + 32));
         QPointF iconMovePosition(actionsPosition + QPointF(15, assistantHeight + 25));
-
 
 
         QRectF deleteRect(iconDeletePosition, QSizeF(16, 16));
@@ -631,9 +630,9 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
 
        // We are going to put all of the assistant actions below the bounds of the assistant
        // so they are out of the way
-        int assistantHeight =  assistant->boundingRect().height();
-        int assistantWidth = assistant->boundingRect().width();
-        QPointF actionsPosition = _converter.documentToView(assistant->buttonPosition());
+        QPointF actionsPosition = m_canvas->viewConverter()->documentToView(assistant->buttonPosition());
+        int assistantHeight = calculateAssistantYMax(assistant);
+
         QPointF iconDeletePosition(actionsPosition + QPointF(78, assistantHeight + 32));
         QPointF iconSnapPosition(actionsPosition + QPointF(54, assistantHeight + 32));
         QPointF iconMovePosition(actionsPosition + QPointF(15, assistantHeight + 25));
@@ -676,6 +675,22 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
 
 
   }
+}
+
+int KisRulerAssistantTool::calculateAssistantYMax(const KisPaintingAssistant* assistant)
+{
+    // loop through each handle and get the greatest Y position
+    int maxYhandle = 0;
+    QList<KisPaintingAssistantHandleSP> asst_handles = m_canvas->paintingAssistantsDecoration()->handles();
+    for (int i=0; i < assistant->handles().length(); i++) {
+
+        if (maxYhandle < asst_handles[i].data()->y() ) {
+            maxYhandle = asst_handles[i].data()->y();
+        }
+    }
+
+    //qDebug() << "max Y " << QString::number(maxYhandle);
+    return maxYhandle;
 }
 
 void KisRulerAssistantTool::removeAllAssistants()

@@ -194,7 +194,7 @@ int compress(const void* input, int length, void* output, int maxout)
         }
         *op++ = *ip++;
         ++copy;
-        if ((copy == MAX_COPY)) {
+        if (copy == MAX_COPY) {
             // start next literal copy item
             copy = 0;
             if (ip < ip_limit) {

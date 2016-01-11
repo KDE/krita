@@ -127,7 +127,7 @@ public:
         return device;
     }
 
-    QVector<BrushType*> testingGetBrushes() {
+    QVector<BrushType*> brushes() {
         return m_brushes;
     }
 

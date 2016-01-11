@@ -25,6 +25,7 @@ Boston, MA 02110-1301, USA.
 #include "KisDocument.h"
 #include "KisDocumentEntry.h"
 #include "KoProgressUpdater.h"
+#include "KoJsonTrader.h"
 
 #include <QFile>
 #include <QLabel>
@@ -93,8 +94,15 @@ QString KisImportExportManager::importDocument(const QString& location,
     if (documentMimeType.isEmpty()) {
         QMimeDatabase db;
         db.mimeTypeForFile(u.path(), QMimeDatabase::MatchExtension);
-        if (t.isValid())
+        if (t.isValid()) {
             typeName = t.name();
+        }
+        else {
+            // Find the right mimetype by the extension
+            KoJsonTrader trader;
+            QStringList mimes = trader.instance()->mimeTypes(QFileInfo(location).suffix());
+            typeName = mimes.first();
+        }
     }
     m_graph.setSourceMimeType(typeName.toLatin1()); // .latin1() is okay here (Werner)
 
@@ -423,7 +431,7 @@ QStringList connected(const QHash<QByteArray, Vertex*>& vertices, const QByteArr
 // graph this mimetype has a connection to.
 QStringList KisImportExportManager::mimeFilter(const QByteArray &mimetype, Direction direction, const QStringList &extraNativeMimeTypes)
 {
-    //dbgFile <<"mimetype=" << mimetype <<" extraNativeMimeTypes=" << extraNativeMimeTypes;
+    //qDebug() <<"mimetype=" << mimetype <<" extraNativeMimeTypes=" << extraNativeMimeTypes;
     QHash<QByteArray, Vertex*> vertices;
     buildGraph(vertices, direction);
 
@@ -439,7 +447,7 @@ QStringList KisImportExportManager::mimeFilter(const QByteArray &mimetype, Direc
     // Now look for filters which output each of those natives mimetypes
     Q_FOREACH (const QString &natit, nativeMimeTypes) {
         const QStringList outMimes = connected(vertices, natit.toLatin1());
-        //dbgFile <<"output formats connected to mime" << natit <<" :" << outMimes;
+        //qDebug() <<"output formats connected to mime" << natit <<" :" << outMimes;
         Q_FOREACH (const QString &mit, outMimes) {
             if (!lst.contains(mit))     // append only if not there already. Qt4: QSet<QString>?
                 lst.append(mit);
@@ -482,6 +490,9 @@ QStringList KisImportExportManager::mimeFilter()
         ++partIt;
     }
     QStringList result = connected(vertices, "supercalifragilistic/x-pialadocious");
+
+
+    //qDebug() << "result" << result;
 
     // Finally we have to get rid of our fake mimetype again
     result.removeAll("supercalifragilistic/x-pialadocious");
@@ -567,6 +578,5 @@ QUrl KisImportExportManager::locationToUrl(QString location) const
     return (u.isEmpty()) ? QUrl(location) : u;
 }
 
-#include <KisImportExportManager.moc>
 #include <QMimeDatabase>
 #include <QMimeType>

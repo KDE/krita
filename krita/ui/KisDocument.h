@@ -542,6 +542,8 @@ public:
      */
     void setModified(bool _mod);
 
+    void updateEditingTime(bool forceStoreElapsed);
+
     /**
      * Initialize an empty document using default values
      */

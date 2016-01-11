@@ -70,6 +70,7 @@ void KisShortcutsDialog::KisShortcutsDialogPrivate::changeShortcutScheme(const Q
     auto it = m_collections.constBegin();
     while (it != m_collections.constEnd()) {
         it.value()->updateShortcuts();
+        // TODO: BAD
         m_shortcutsEditor->addCollection(it.value(), it.key());
         it++;
     }

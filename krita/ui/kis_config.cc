@@ -1650,3 +1650,14 @@ bool KisConfig::animationDropFrames(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("animationDropFrames", true));
 }
+
+bool KisConfig::switchSelectionCtrlAlt(bool defaultValue) const
+{
+    return defaultValue ? false : m_cfg.readEntry("switchSelectionCtrlAlt", false);
+}
+
+void KisConfig::setSwitchSelectionCtrlAlt(bool value)
+{
+    m_cfg.writeEntry("switchSelectionCtrlAlt", value);
+    KisConfigNotifier::instance()->notifyConfigChanged();
+}

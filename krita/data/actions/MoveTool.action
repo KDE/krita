@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActionCollection version="2" name="Tools">
+  <Actions category="Path Tool">
+    <text>Path Tool</text>
+    <Action name="movetool-move-up">
+      <iconText>Move up</iconText>
+      <shortcut>Up</shortcut>
+      <toolTip>Move up</toolTip>
+      <icon></icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Move up</text>
+      <defaultShortcut>Up</defaultShortcut>
+    </Action>
+    <Action name="movetool-move-down">
+      <iconText>Move down</iconText>
+      <shortcut>Down</shortcut>
+      <toolTip>Move down</toolTip>
+      <icon></icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Move down</text>
+      <defaultShortcut>Down</defaultShortcut>
+    </Action>
+    <Action name="movetool-move-left">
+      <iconText>Move left</iconText>
+      <shortcut>Left</shortcut>
+      <toolTip>Move left</toolTip>
+      <icon></icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Move left</text>
+      <defaultShortcut>Left</defaultShortcut>
+    </Action>
+    <Action name="movetool-move-right">
+      <iconText>Move right</iconText>
+      <shortcut>Right</shortcut>
+      <toolTip>Move right</toolTip>
+      <icon></icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Move right</text>
+      <defaultShortcut>Right</defaultShortcut>
+    </Action>
+  </Actions>
+</ActionCollection>

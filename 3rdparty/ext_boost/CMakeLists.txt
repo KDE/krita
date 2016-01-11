@@ -1,11 +1,11 @@
 SET(PREFIX_ext_boost "${EXTPREFIX}" )
 if (MSVC)
-	if (WIN64_BUILD)
+	if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 14 2015 Win64")
 		ExternalProject_Add(
 			ext_boost
 			DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-			URL http://files.kde.org/krita/build/dependencies/boost_1_55_0.tar.bz2
-			URL_MD5 d6eef4b4cacb2183f2bf265a5a03a354
+			URL http://files.kde.org/krita/build/dependencies/boost_1_55_0.zip
+			URL_MD5 8aca361a4713a1f491b0a5e33fee0f1f
 
 			CONFIGURE_COMMAND <SOURCE_DIR>/bootstrap.bat --prefix=${PREFIX_ext_boost}
 			BUILD_COMMAND <SOURCE_DIR>/b2.exe --with-system --build-dir=build-dir --prefix=${PREFIX_ext_boost} toolset=msvc variant=release link=shared  threading=multi architecture=x86 address-model=64 variant=release install
@@ -21,8 +21,8 @@ if (MSVC)
 			ext_boost
 
 			DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-			URL http://files.kde.org/krita/build/dependencies/boost_1_55_0.tar.bz2
-			URL_MD5 d6eef4b4cacb2183f2bf265a5a03a354
+			URL http://files.kde.org/krita/build/dependencies/boost_1_55_0.zip
+			URL_MD5 8aca361a4713a1f491b0a5e33fee0f1f
 
 			CONFIGURE_COMMAND <SOURCE_DIR>/bootstrap.bat --prefix=${PREFIX_ext_boost}
 			BUILD_COMMAND <SOURCE_DIR>/b2.exe --with-system --build-dir=build-dir --prefix=${PREFIX_ext_boost} toolset=msvc variant=release link=shared  threading=multi architecture=x86 variant=release install

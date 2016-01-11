@@ -471,6 +471,9 @@ public:
     bool animationDropFrames(bool defaultValue = false) const;
     void setAnimationDropFrames(bool value);
 
+    bool switchSelectionCtrlAlt(bool defaultValue = false) const;
+    void setSwitchSelectionCtrlAlt(bool value);
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

@@ -46,7 +46,6 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
         color = "#000000";
     }
 
-
     lblSplash->setPixmap(pixmap);
     bnClose->hide();
     connect(bnClose, SIGNAL(clicked()), this, SLOT(close()));

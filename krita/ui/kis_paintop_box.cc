@@ -28,7 +28,6 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QToolButton>
-#include <QAction>
 #include <QPixmap>
 #include <QWidgetAction>
 

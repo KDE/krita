@@ -61,6 +61,14 @@
  * block a single mouse press event.
  */
 
+static bool isMouseEventType(QEvent::Type t)
+{
+    return (t == QEvent::MouseMove ||
+            t == QEvent::MouseButtonPress ||
+            t == QEvent::MouseButtonRelease ||
+            t == QEvent::MouseButtonDblClick);
+}
+
 bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* event )
 {
     auto debugEvent = [&]() {
@@ -71,17 +79,18 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
         }
     };
 
-    if (peckish && event->type() == QEvent::MouseButtonPress) {
+    if (peckish && event->type() == QEvent::MouseButtonPress
+        // Drop one mouse press following tabletPress or touchBegin
+        && (static_cast<QMouseEvent*>(event)->button() == Qt::LeftButton)) {
         peckish = false;
         debugEvent();
         return true;
-    } else if (hungry && (event->type() == QEvent::MouseMove ||
-                          event->type() == QEvent::MouseButtonPress ||
-                          event->type() == QEvent::MouseButtonRelease)) {
+    } else if (isMouseEventType(event->type()) &&
+               (hungry || (eatSyntheticEvents && static_cast<QMouseEvent*>(event)->source() != 0))) {
+        // Drop mouse events if enabled or event was synthetic & synthetic events are disabled
         debugEvent();
         return true;
     }
-
     return false; // All clear - let this one through!
 }
 
@@ -108,15 +117,14 @@ void KisInputManager::Private::EventEater::eatOneMousePress()
 #endif
 }
 
-
-bool KisInputManager::Private::EventEater::isActive()
-{
-    return hungry;
-}
-
 bool KisInputManager::Private::ignoreQtCursorEvents()
 {
-    return eventEater.isActive();
+    return eventEater.hungry;
+}
+
+void KisInputManager::Private::maskSyntheticEvents(bool value)
+{
+    eventEater.eatSyntheticEvents = value;
 }
 
 KisInputManager::Private::Private(KisInputManager *qq)

@@ -65,6 +65,7 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     m_only_one_assistant = true;
 
     setSupportOutline(true);
+    setMaskSyntheticEvents(true); // Disallow mouse events from finger presses.
 
     m_infoBuilder = new KisToolFreehandPaintingInformationBuilder(this);
     m_recordingAdapter = new KisRecordingAdapter();

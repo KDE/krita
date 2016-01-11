@@ -94,6 +94,7 @@ Smudge_rake.kpp
 Smudge_rake_2.kpp
 Smudge_soft.kpp
 Smudge_textured.kpp
+Smudge_water.kpp
 Sparkle_wet.kpp
 Sparkle_wet_soft.kpp
 Special_dyna_dots.kpp

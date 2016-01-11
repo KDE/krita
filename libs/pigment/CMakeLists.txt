@@ -23,7 +23,6 @@ set(LINK_VC_LIB)
 if(HAVE_VC)
     include_directories(${Vc_INCLUDE_DIR})
     set(LINK_VC_LIB ${Vc_LIBRARIES})
-    kde_enable_exceptions()
     ko_compile_for_all_implementations_no_scalar(__per_arch_factory_objs compositeops/KoOptimizedCompositeOpFactoryPerArch.cpp)
 
     message("Following objects are generated from the per-arch lib")

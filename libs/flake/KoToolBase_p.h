@@ -86,6 +86,7 @@ public:
     KoToolBase *q;
     KoCanvasBase *canvas; ///< the canvas interface this tool will work for.
     bool isInTextMode;
+    bool maskSyntheticEvents{false}; ///< Whether this tool masks synthetic events
 };
 
 #endif

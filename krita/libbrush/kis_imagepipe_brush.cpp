@@ -17,7 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_imagepipe_brush.h"
-#include "kis_imagepipe_brush_p.h"
+#include "kis_pipebrush_parasite.h"
 #include "kis_brushes_pipe.h"
 
 
@@ -206,11 +206,8 @@ KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
 
     parasite.setBrushesCount();
 
-    m_d->brushesPipe.setParasite(parasite);
-    for (int i = 0; i < devices.at(0).count(); i++) {
-        m_d->brushesPipe.addBrush(new KisGbrBrush(devices.at(0).at(i), 0, 0, w, h));
-    }
-
+    setParasite(parasite);
+    setDevices(devices, w, h);
     setBrushTipImage(m_d->brushesPipe.firstBrush()->brushTipImage());
 }
 
@@ -363,6 +360,11 @@ void KisImagePipeBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceS
     m_d->brushesPipe.generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, scaleX, scaleY, angle, info, subPixelX, subPixelY, softnessFactor);
 }
 
+QVector<KisGbrBrush *> KisImagePipeBrush::brushes() const
+{
+    return m_d->brushesPipe.brushes();
+}
+
 KisFixedPaintDeviceSP KisImagePipeBrush::paintDevice(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
     return m_d->brushesPipe.paintDevice(colorSpace, scale, angle, info, subPixelX, subPixelY);
@@ -450,7 +452,7 @@ void KisImagePipeBrush::setBrushType(enumBrushType type)
 {
     Q_UNUSED(type);
     qFatal("FATAL: protected member setBrushType has no meaning for KisImagePipeBrush");
-    // brushType() is a finction of hasColor() and useColorAsMask()
+    // brushType() is a function of hasColor() and useColorAsMask()
 }
 
 void KisImagePipeBrush::setHasColor(bool hasColor)
@@ -465,12 +467,25 @@ KisGbrBrush* KisImagePipeBrush::testingGetCurrentBrush(const KisPaintInformation
     return m_d->brushesPipe.currentBrush(info);
 }
 
-QVector<KisGbrBrush*> KisImagePipeBrush::testingGetBrushes() const
-{
-    return m_d->brushesPipe.testingGetBrushes();
-}
 
 void KisImagePipeBrush::testingSelectNextBrush(const KisPaintInformation& info) const
 {
     return m_d->brushesPipe.testingSelectNextBrush(info);
+}
+
+const KisPipeBrushParasite& KisImagePipeBrush::parasite() const {
+    return m_d->brushesPipe.parasite();
+}
+
+void KisImagePipeBrush::setParasite(const KisPipeBrushParasite &parasite)
+{
+    m_d->brushesPipe.setParasite(parasite);
+}
+
+void KisImagePipeBrush::setDevices(QVector<QVector<KisPaintDevice *> > devices, int w, int h)
+{
+
+    for (int i = 0; i < devices.at(0).count(); i++) {
+        m_d->brushesPipe.addBrush(new KisGbrBrush(devices.at(0).at(i), 0, 0, w, h));
+    }
 }

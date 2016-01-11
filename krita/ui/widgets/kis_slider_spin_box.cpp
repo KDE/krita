@@ -903,5 +903,7 @@ void KisAbstractSliderSpinBox::changeEvent(QEvent *e)
             d->style = KisAbstractSliderSpinBoxPrivate::STYLE_NOQUIRK;
         }
         break;
+    default:
+        break;
     }
 }

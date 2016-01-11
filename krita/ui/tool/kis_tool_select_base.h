@@ -29,43 +29,26 @@
 #include "kis_selection_tool_config_widget_helper.h"
 #include "KisViewManager.h"
 #include "kis_selection_manager.h"
-#include <bitset>
+#include "kis_selection_modifier_mapper.h"
 
-
-#define QMOD_BINARY() QString(std::bitset<sizeof(int) * 8>(event->modifiers()).to_string().c_str())
-
-/** 
- * This is a basic template to create selection tools from basic path based drawing tools. 
- * The template overrides the ability to execute alternate actions correctly. 
- * Modifier keys are overridden with the following behavior: 
- * 
+/**
+ * This is a basic template to create selection tools from basic path based drawing tools.
+ * The template overrides the ability to execute alternate actions correctly.
+ * The default behavior for the modifier keys is as follows:
+ *
  * Shift: add to selection
  * Alt: subtract from selection
  * Shift+Alt: intersect current selection
  * Ctrl: replace selection
  *
- * Certain tools also use modifier keys to alter their behavior, e.g. forcing square proportions with the rectangle tool. 
- * The template enables the following rules for forwarding keys: 
- * 1) Any modifier keys held *when the tool is first activated* will determine the new selection method.  
- * 2) If the underlying tool *does not take modifier keys*, pressing modifier keys in the middle of a stroke will change the selection method.  This applies to the lasso tool and polygon tool. 
+ * The mapping itself is done in KisSelectionModifierMapper.
+ *
+ * Certain tools also use modifier keys to alter their behavior, e.g. forcing square proportions with the rectangle tool.
+ * The template enables the following rules for forwarding keys:
+ * 1) Any modifier keys held *when the tool is first activated* will determine the new selection method.
+ * 2) If the underlying tool *does not take modifier keys*, pressing modifier keys in the middle of a stroke will change the selection method.  This applies to the lasso tool and polygon tool.
  * 3) If the underlying tool *takes modifier keys,* they will always be forwarded to the underlying tool, and it is not possible to change the selection method in the middle of a stroke.
- * 
- */ 
-
-
-static SelectionAction selectionModifierMap(Qt::KeyboardModifiers m) {
-    SelectionAction newAction = SELECTION_DEFAULT;
-    if (m & Qt::ControlModifier) {
-        newAction = SELECTION_REPLACE;
-    } else if ((m & Qt::ShiftModifier) && (m & Qt::AltModifier)) {
-        newAction = SELECTION_INTERSECT;
-    } else if (m & Qt::ShiftModifier) {
-        newAction = SELECTION_ADD;
-    } else if (m & Qt::AltModifier) {
-        newAction = SELECTION_SUBTRACT;
-    }
-    return newAction;
-}
+ */
 
 template <class BaseClass>
     class SelectionActionHandler : public BaseClass
@@ -79,6 +62,7 @@ public:
          m_selectionAction(SELECTION_DEFAULT),
          m_selectionActionAlternate(SELECTION_DEFAULT)
     {
+      KisSelectionModifierMapper::instance();
     }
 
     SelectionActionHandler(KoCanvasBase* canvas, const QCursor cursor, const QString toolName)
@@ -178,7 +162,7 @@ public:
     {
         keysAtStart = event->modifiers();
 
-        setAlternateSelectionAction(selectionModifierMap(keysAtStart));
+        setAlternateSelectionAction(KisSelectionModifierMapper::map(keysAtStart));
   if (alternateSelectionAction() != SELECTION_DEFAULT) {
     BaseClass::listenToModifiers(false);
   }
@@ -194,7 +178,7 @@ public:
 
         //Always defer to the base class if it signals it is capturing modifier keys
         if (!BaseClass::listeningToModifiers()) {
-            setAlternateSelectionAction(selectionModifierMap(event->modifiers()));
+            setAlternateSelectionAction(KisSelectionModifierMapper::map(event->modifiers()));
         }
 
         BaseClass::continuePrimaryAction(event);

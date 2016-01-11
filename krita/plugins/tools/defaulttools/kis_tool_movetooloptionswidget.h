@@ -21,12 +21,37 @@
 #define KIS_TOOL_MOVETOOLOPTIONSWIDGET_H
 
 #include "ui_wdgmovetool.h"
+#include <kconfiggroup.h>
+#include "kis_tool_move.h"
 
 class MoveToolOptionsWidget : public QWidget, public Ui::WdgMoveTool
 {
     Q_OBJECT
 public:
-    MoveToolOptionsWidget(QWidget *parent);
+    MoveToolOptionsWidget(QWidget *parent, int resolution, QString toolId);
+    int moveStep();
+    KisToolMove::MoveToolMode mode();
+
+private Q_SLOTS:
+    void on_spinMoveStep_valueChanged(double UIMoveStep);
+
+    void on_cmbUnit_currentIndexChanged(int newUnit);
+
+    void on_radioSelectedLayer_toggled(bool checked);
+
+    void on_radioFirstLayer_toggled(bool checked);
+
+    void on_radioGroup_toggled(bool checked);
+
+private:
+    void updateUIUnit(int newUnit);
+    void setMoveToolMode(KisToolMove::MoveToolMode newMode);
+    int m_resolution;
+    int m_moveStep;
+    int m_moveStepUnit;
+    KisToolMove::MoveToolMode m_moveToolMode;
+
+    KConfigGroup m_configGroup;
 };
 
 #endif // KIS_TOOL_MOVETOOLOPTIONSWIDGET_H

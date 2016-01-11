@@ -38,7 +38,6 @@ if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 14 2015 Win64")
         -DCMAKE_EXE_LINKER_FLAGS=/machine:x64 
         -DCMAKE_SHARED_LINKER_FLAGS=/machine:x64 
         -DCMAKE_STATIC_LINKER_FLAGS=/machine:x64 
-        -DCMAKE_RC_COMPILER = "C:/Program Files (x86)/Windows Kits/8.0/bin/x64/rc.exe"  
     )
 endif ()
 

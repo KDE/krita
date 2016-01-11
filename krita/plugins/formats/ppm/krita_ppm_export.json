@@ -9,5 +9,7 @@
     "X-KDE-ServiceTypes": [
         "Krita/FileFilter"
     ],
-    "X-KDE-Weight": "1"
+    "X-KDE-Weight": "1",
+    "X-KDE-Extensions" : "ppm"
+
 }

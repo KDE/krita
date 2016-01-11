@@ -1,5 +1,6 @@
 favoriteCompositeOps=normal,erase,multiply,burn,darken,add,dodge,screen,overlay,soft_light_svg,luminize,lighten,saturation,color
 SpecificColorSelector/ShowColorSpaceSelector=false
+levelOfDetailEnabled=true
 
 [krita]
 cursorStyleDef=3

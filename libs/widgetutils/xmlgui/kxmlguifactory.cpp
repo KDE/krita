@@ -91,9 +91,6 @@ public:
     void configureAction(QAction *action, const QDomAttr &attribute,
                          ShortcutOption shortcutOption = KXMLGUIFactoryPrivate::SetActiveShortcut);
 
-    /// STUBBED OUT. Lots of loading seems to happen here.
-    void applyShortcutScheme(KXMLGUIClient *client, const QList<QAction *> &actions /*, const QDomDocument &scheme */);
-
 
     void refreshActionProperties(KXMLGUIClient *client, const QList<QAction *> &actions, const QDomDocument &doc);
     void saveDefaultActionProperties(const QList<QAction *> &actions);
@@ -287,7 +284,7 @@ void KXMLGUIFactory::addClient(KXMLGUIClient *client)
         d->clientBuilderCustomTags.clear();
     }
 
-    // load shortcut schemes, user-defined shortcuts and other action properties
+    // load user-defined shortcuts and other action properties
     d->saveDefaultActionProperties(client->actionCollection()->actions());
     if (!doc.isNull()) {
         d->refreshActionProperties(client, client->actionCollection()->actions(), doc);
@@ -335,20 +332,6 @@ void KXMLGUIFactory::addClient(KXMLGUIClient *client)
 //    qDebug() << "addClient took " << dt.elapsed();
 }
 
-void KXMLGUIFactory::refreshActionProperties()
-{
-    Q_FOREACH (KXMLGUIClient *client, d->m_clients) {
-        d->guiClient = client;
-        QDomDocument doc = client->xmlguiBuildDocument();
-        if (doc.documentElement().isNull()) {
-            client->reloadXML();
-            doc = client->domDocument();
-        }
-        d->refreshActionProperties(client, client->actionCollection()->actions(), doc);
-    }
-    d->guiClient = 0;
-}
-
 // Find the right ActionProperties element, otherwise return null element
 static QDomElement findActionPropertiesElement(const QDomDocument &doc)
 {
@@ -364,8 +347,10 @@ static QDomElement findActionPropertiesElement(const QDomDocument &doc)
 
 void KXMLGUIFactoryPrivate::refreshActionProperties(KXMLGUIClient *client, const QList<QAction *> &actions, const QDomDocument &doc)
 {
-    // try to find and apply shortcuts schemes
-    applyShortcutScheme(client, actions);
+    // These were used for applyShortcutScheme() but not for applyActionProperties()??
+    Q_UNUSED(client);
+    Q_UNUSED(actions);
+
 
     // try to find and apply user-defined shortcuts
     const QDomElement actionPropElement = findActionPropertiesElement(doc);
@@ -399,15 +384,6 @@ void KXMLGUIFactoryPrivate::saveDefaultActionProperties(const QList<QAction *> &
             action->setProperty("_k_DefaultShortcut", QVariant::fromValue(defaultShortcut));
         }
     }
-}
-
-void KXMLGUIFactory::changeShortcutScheme(const QString &scheme)
-{
-    //qDebug(260) << "Changing shortcut scheme to" << scheme;
-    KConfigGroup cg = KSharedConfig::openConfig()->group("Shortcut Schemes");
-    cg.writeEntry("Current Scheme", scheme);
-
-    refreshActionProperties();
 }
 
 void KXMLGUIFactory::forgetClient(KXMLGUIClient *client)
@@ -681,70 +657,6 @@ void KXMLGUIFactoryPrivate::configureAction(QAction *action, const QDomAttr &att
     if (!isShortcut && !action->setProperty(attrName.toLatin1().constData(), propertyValue)) {
         qWarning() << "Error: Unknown action property " << attrName << " will be ignored!";
     }
-}
-
-void KXMLGUIFactoryPrivate::applyShortcutScheme(KXMLGUIClient *client,
-                                                const QList<QAction *> &actions
-                                                /*, const QDomDocument &scheme */)
-{
-    // Deprecated - use KisShortcutsEditor and KisActionRegistry instead
-    Q_UNUSED(client);
-    Q_UNUSED(actions);
-
-#if 0
-    KConfigGroup cg = KSharedConfig::openConfig()->group("Shortcut Schemes");
-    QString schemeName = cg.readEntry("Current Scheme", "Default");
-
-    //First clear all existing shortcuts
-    if (schemeName != QStringLiteral("Default")) {
-        Q_FOREACH (QAction *action, actions) {
-            action->setShortcuts(QList<QKeySequence>());
-            // We clear the default shortcut as well because the shortcut scheme will set its own defaults
-            action->setProperty("defaultShortcuts", QVariant::fromValue(QList<QKeySequence>()));
-        }
-    } else {
-        // apply saved default shortcuts
-        Q_FOREACH (QAction *action, actions) {
-            QVariant savedDefaultShortcut = action->property("_k_DefaultShortcut");
-            if (savedDefaultShortcut.isValid()) {
-                QList<QKeySequence> shortcut = savedDefaultShortcut.value<QList<QKeySequence> >();
-                //qDebug() << "scheme said" << shortcut.toString() << "for action" << kaction->objectName();
-                action->setShortcuts(shortcut);
-                action->setProperty("defaultShortcuts", QVariant::fromValue(shortcut));
-            }
-        }
-    }
-
-    if (scheme.isNull()) {
-        return;
-    }
-
-    QDomElement docElement = scheme.documentElement();
-    QDomElement actionPropElement = docElement.namedItem(QStringLiteral("ActionProperties")).toElement();
-
-    //Check if we really have the shortcut configuration here
-    if (!actionPropElement.isNull()) {
-        //qDebug(260) << "Applying shortcut scheme for XMLGUI client" << client->componentName();
-
-        //Apply all shortcuts we have
-        applyActionProperties(actionPropElement, KXMLGUIFactoryPrivate::SetDefaultShortcut);
-        //} else {
-        //qDebug(260) << "Invalid shortcut scheme file";
-    }
-#endif
-}
-
-int KXMLGUIFactory::configureShortcuts(bool letterCutsOk, bool bSaveSettings)
-{
-    KisShortcutsDialog dlg(KisShortcutsEditor::AllActions,
-                         letterCutsOk ? KisShortcutsEditor::LetterShortcutsAllowed : KisShortcutsEditor::LetterShortcutsDisallowed,
-                         qobject_cast<QWidget *>(parent()));
-    Q_FOREACH (KXMLGUIClient *client, d->m_clients) {
-        if (client) {
-            dlg.addCollection(client->actionCollection());
-        }
-    }
-    return dlg.configure(bSaveSettings);
 }
 
 // Find or create

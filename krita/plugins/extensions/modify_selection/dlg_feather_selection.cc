@@ -51,7 +51,7 @@ WdgFeatherSelection::WdgFeatherSelection(QWidget* parent, KisViewManager* view)
     spbGroup->addWidget(spbRadius);
     spbGroup->addWidget(spbRadiusDouble);
 
-    connect(spbRadius, SIGNAL(valueChanged(int)), this, SLOT(slotRadiusChanged(int)));
+    connect(spbRadius, SIGNAL(valueChanged(double)), this, SLOT(slotRadiusChanged(double)));
     connect(spbRadiusDouble, SIGNAL(valueChanged(double)), this, SLOT(slotRadiusChanged(double)));
     connect(cmbUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUnitChanged(int)));
 }

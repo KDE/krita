@@ -23,7 +23,7 @@ Note: on all operating systems the entire procedure is done in a terminal window
 1. git: https://git-scm.com/downloads. Make sure git is in your path
 2. cmake: https://cmake.org/download/. Make sure cmake is in your path.
 3. Make sure you have a compiler:
-    * Linux: gcc, minimum version 4.5
+    * Linux: gcc, minimum version 4.8
     * OSX: clang, you need to install xcode for this
     * Windows: MSVC 2015 Community Edition: https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx
 
@@ -31,7 +31,8 @@ Note: on all operating systems the entire procedure is done in a terminal window
 
 == Prepare your directory layout ==
 
-1. Make a toplevel build directory, say $HOME/dev or c:\dev. We'll refer to this directory as BUILDROOT 
+1. Make a toplevel build directory, say $HOME/dev or c:\dev. We'll refer to this directory as BUILDROOT. You can use a variable for this, on WINDOWS %BUILDROOT%, on OSX and Linux $BUILDROOT. 
+
 2. Checkout krita in BUILDROOT
     cd BUILDROOT
     git clone git://anongit.kde.org/krita.git
@@ -44,7 +45,7 @@ Note: on all operating systems the entire procedure is done in a terminal window
 
 == Qt ==
 
-Install Qt. Either build from source or with the qt.io installer. Make sure qmake is in your path. You need qtbase, qtsvg, qttools, qtscript, qtdeclarative, qtgraphicaleffects, qttranslations
+Install Qt. Either build from source or with the qt.io installer. Make sure qmake is in your path. You need qtbase, qtsvg, qttools, qtscript, qtdeclarative, qtgraphicaleffects, qttranslations. On Windows, you also need qtwinextras, on Linux qtx11extras.
 
 When installing from source, you can use these example configure commands:
  
@@ -82,6 +83,34 @@ When installing from source, you can use these example configure commands:
     make -j8
 
 * OSX
+
+./configure \
+    -skip qt3d \
+    -skip qtactiveqt \
+    -skip qtcanvas3d \
+    -skip qtconnectivity \
+    -skip qtdeclarative \
+    -skip qtdoc \
+    -skip qtenginio \
+    -skip qtgraphicaleffects \
+    -skip qtlocation \
+    -skip qtmultimedia \
+    -skip qtsensors \
+    -skip qtserialport \
+    -skip qtwayland \
+    -skip qtwebchannel \
+    -skip qtwebengine \
+    -skip qtwebsockets \
+    -skip qtxmlpatterns \
+    -opensource -confirm-license -release \
+    -no-qml-debug -no-mtdev -no-journald \
+    -no-openssl -no-libproxy \
+    -no-pulseaudio -no-alsa -no-nis \
+    -no-cups -no-tslib -no-pch \
+    -no-dbus  -no-gstreamer -no-system-proxies \
+    -no-openssl -no-libproxy -no-pulseaudio \
+    -nomake examples -nomake demos \
+    -prefix $BUILDROOT/i
 
 * Windows
 
@@ -122,6 +151,15 @@ On all operating systems:
     cmake --build . --config RelWithDebInfo --target ext_eigen3
     cmake --build . --config RelWithDebInfo --target ext_exiv2
     cmake --build . --config RelWithDebInfo --target ext_fftw3
+
+Note for Windows:
+
+fftw3 is still broken, don't know why. Copy the bin, lib and include folders from 
+
+    \b\ext_fftw3\ext_fftw3-prefix\src\ext_fftw3
+
+manuall to BUILDROOT\i
+
     cmake --build . --config RelWithDebInfo --target ext_ilmbase
     cmake --build . --config RelWithDebInfo --target ext_jpeg
     cmake --build . --config RelWithDebInfo --target ext_lcms2
@@ -140,6 +178,7 @@ Note for Windows:
 
 With MSVC 2015, the boost library has a name that later on makes the libraries unfindable, so you need to copy them.
 
+    cd BUILDROOT\i\lib
     copy boost_system-vc-mt-1_55.dll boost_system140-mt-1_55.ddl
     copy boost_system-vc-mt-1_55.lib boost_system140-mt-1_55.lib
 
@@ -200,6 +239,7 @@ On OSX
 On Linux and OSX
     make
     make install
+
 On Windows
     cmake --build . --config RelWithDebInfo --target INSTALL
 

@@ -130,6 +130,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
 
     if (!m_chain->manager()->getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {
+            delete kdb;
             return KisImportExportFilter::UserCancelled;
         }
     }

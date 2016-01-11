@@ -93,6 +93,8 @@ private:
     /** Saves the changed data back to the KoDocumentInfo class */
     void saveAboutData();
 
+    void updateEditingTime();
+
     class KoDocumentInfoDlgPrivate;
     KoDocumentInfoDlgPrivate * const d;
 };

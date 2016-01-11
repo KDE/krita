@@ -164,6 +164,10 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
         <Action name="convert_to_selection_mask"/>
       </Menu>
       <Separator/>
+        <Action name="cut_layer_clipboard"/>
+        <Action name="copy_layer_clipboard"/>
+        <Action name="paste_layer_from_clipboard"/>
+      <Separator/>
       <Menu name="LayerSplitAlpha">
         <text>S&amp;plit Alpha</text>
         <Action name="split_alpha_into_mask"/>

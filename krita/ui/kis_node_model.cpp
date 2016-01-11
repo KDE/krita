@@ -46,6 +46,7 @@
 #include "kis_model_index_converter.h"
 #include "kis_model_index_converter_show_all.h"
 #include "kis_node_selection_adapter.h"
+#include "kis_node_insertion_adapter.h"
 
 #include "kis_config.h"
 #include "kis_config_notifier.h"
@@ -56,7 +57,8 @@ struct KisNodeModel::Private
 {
     KisImageWSP image;
     KisShapeController *shapeController = 0;
-    KisNodeSelectionAdapter *nodeSelectionAdapter;
+    KisNodeSelectionAdapter *nodeSelectionAdapter = 0;
+    KisNodeInsertionAdapter *nodeInsertionAdapter = 0;
     QList<KisNodeDummy*> updateQueue;
     QTimer updateTimer;
 
@@ -238,7 +240,7 @@ void KisNodeModel::connectDummies(KisNodeDummy *dummy, bool needConnect)
     }
 }
 
-void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageWSP image, KisShapeController *shapeController, KisNodeSelectionAdapter *nodeSelectionAdapter)
+void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageWSP image, KisShapeController *shapeController, KisNodeSelectionAdapter *nodeSelectionAdapter, KisNodeInsertionAdapter *nodeInsertionAdapter)
 {
     KisDummiesFacadeBase *oldDummiesFacade;
     KisShapeController *oldShapeController;
@@ -247,6 +249,7 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImag
 
     m_d->shapeController = shapeController;
     m_d->nodeSelectionAdapter = nodeSelectionAdapter;
+    m_d->nodeInsertionAdapter = nodeInsertionAdapter;
 
     if(oldDummiesFacade && m_d->image) {
         m_d->image->disconnect(this);
@@ -546,76 +549,14 @@ QStringList KisNodeModel::mimeTypes() const
     return types;
 }
 
-bool hasParentInList(QList<KisNodeSP> nodeList, KisNodeSP node)
-{
-    KisNodeSP parent = node->parent();
-
-    while (parent) {
-        if (nodeList.contains(parent)) {
-            return true;
-        }
-        parent = parent->parent();
-    }
-    return false;
-}
-
-QList<KisNodeSP> sortNodes(KisNodeSP sourceRoot, QList<KisNodeSP> selectedNodes)
-{
-    QList<KisNodeSP> nodes;
-
-    KisNodeSP child = sourceRoot->lastChild();
-    while (child) {
-        if (selectedNodes.contains(child) && !hasParentInList(selectedNodes, child)) {
-            nodes << child;
-        }
-        if (child->childCount() > 0) {
-            nodes += sortNodes(child, selectedNodes);
-        }
-        child = child->prevSibling();
-    }
-
-    return nodes;
-}
-
 QMimeData * KisNodeModel::mimeData(const QModelIndexList &indexes) const
 {
-    QList<KisNodeSP> nodes;
+    KisNodeList nodes;
     Q_FOREACH (const QModelIndex &idx, indexes) {
         nodes << nodeFromIndex(idx);
     }
-    nodes = sortNodes(m_d->image->rootLayer(), nodes);
-    KisMimeData* data = new KisMimeData(nodes);
-    return data;
-}
 
-bool nodeAllowsAsChild(KisNodeSP parent, KisNodeList nodes)
-{
-    bool result = true;
-    Q_FOREACH (KisNodeSP node, nodes) {
-        if (!parent->allowAsChild(node)) {
-            result = false;
-            break;
-        }
-    }
-    return result;
-}
-
-bool KisNodeModel::correctNewNodeLocation(KisNodeList nodes,
-                                          KisNodeDummy* &parentDummy,
-                                          KisNodeDummy* &aboveThisDummy)
-{
-    KisNodeSP parentNode = parentDummy->node();
-    bool result = true;
-
-    if(!nodeAllowsAsChild(parentDummy->node(), nodes)) {
-        aboveThisDummy = parentDummy;
-        parentDummy = parentDummy->parent();
-
-        result = (!parentDummy) ? false :
-            correctNewNodeLocation(nodes, parentDummy, aboveThisDummy);
-    }
-
-    return result;
+    return KisMimeData::mimeForLayers(nodes, m_d->image->rootLayer());
 }
 
 bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent)
@@ -623,31 +564,6 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
     Q_UNUSED(column);
 
     bool copyNode = (action == Qt::CopyAction);
-
-    QList<KisNodeSP> nodes =
-        KisMimeData::tryLoadInternalNodes(data,
-                                          m_d->image,
-                                          m_d->shapeController,
-                                          copyNode /* IN-OUT */);
-
-    if (nodes.isEmpty()) {
-        QRect imageBounds = m_d->image->bounds();
-        nodes = KisMimeData::loadNodes(data,
-                                       imageBounds, imageBounds.center(),
-                                       false,
-                                       m_d->image, m_d->shapeController);
-        copyNode = true;
-    }
-
-    if (nodes.isEmpty()) return false;
-
-    if (copyNode) {
-        /**
-         * Don't try to move a node originating from another image,
-         * just copy it.
-         */
-        action = Qt::CopyAction;
-    }
 
     KisNodeDummy *parentDummy = 0;
     KisNodeDummy *aboveThisDummy = 0;
@@ -663,22 +579,12 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
         aboveThisDummy = row < m_d->indexConverter->rowCount(parent) ? m_d->indexConverter->dummyFromRow(row, parent) : 0;
     }
 
-    bool result = true;
-
-    if (!correctNewNodeLocation(nodes, parentDummy, aboveThisDummy)) {
-        return false;
-    }
-
-    Q_ASSERT(parentDummy);
-    KisNodeSP aboveThisNode = aboveThisDummy ? aboveThisDummy->node() : 0;
-    if (action == Qt::CopyAction) {
-        emit requestAddNodes(nodes, parentDummy->node(), aboveThisNode);
-    }
-    else if (action == Qt::MoveAction) {
-        Q_ASSERT(nodes.first()->graphListener() == m_d->image.data());
-        emit requestMoveNodes(nodes, parentDummy->node(), aboveThisNode);
-    }
-
-    return result;
+    return KisMimeData::insertMimeLayers(data,
+                                         m_d->image,
+                                         m_d->shapeController,
+                                         parentDummy,
+                                         aboveThisDummy,
+                                         copyNode,
+                                         m_d->nodeInsertionAdapter);
 }
 

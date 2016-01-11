@@ -26,6 +26,7 @@
 #include <kritaui_export.h>
 
 class QRect;
+class QMimeData;
 
 enum enumPasteBehaviour {
     PASTE_ASSUME_WEB,
@@ -68,10 +69,13 @@ public:
 
     QSize clipSize() const;
 
+    void setLayers(KisNodeList nodes, KisNodeSP imageRoot, bool forceCopy = false);
+    bool hasLayers() const;
+    const QMimeData* layersMimeData() const;
+
 Q_SIGNALS:
 
     void clipCreated();
-
 
 private Q_SLOTS:
 

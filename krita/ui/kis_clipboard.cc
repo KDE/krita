@@ -40,10 +40,12 @@
 #include <kis_paint_device.h>
 #include <kis_debug.h>
 #include <kis_annotation.h>
+#include <kis_node.h>
 
 // local
 #include "kis_config.h"
 #include "kis_store_paintdevice_writer.h"
+#include "kis_mimedata.h"
 
 Q_GLOBAL_STATIC(KisClipboard, s_instance)
 
@@ -381,5 +383,28 @@ QSize KisClipboard::clipSize() const
         }
     }
     return QSize();
+}
+
+void KisClipboard::setLayers(KisNodeList nodes, KisNodeSP imageRoot, bool forceCopy)
+{
+    QMimeData *data = KisMimeData::mimeForLayers(nodes, imageRoot, forceCopy);
+    if (!data) return;
+
+    QClipboard *cb = QApplication::clipboard();
+    cb->setMimeData(data);
+}
+
+bool KisClipboard::hasLayers() const
+{
+    QClipboard *cb = QApplication::clipboard();
+    const QMimeData *cbData = cb->mimeData();
+    return cbData->hasFormat("application/x-krita-node");
+}
+
+const QMimeData* KisClipboard::layersMimeData() const
+{
+    QClipboard *cb = QApplication::clipboard();
+    const QMimeData *cbData = cb->mimeData();
+    return cbData->hasFormat("application/x-krita-node") ? cbData : 0;
 }
 

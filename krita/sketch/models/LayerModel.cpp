@@ -261,7 +261,7 @@ void LayerModel::setView(QObject *newView)
         d->layers.clear();
         d->activeNode.clear();
         d->canvas = 0;
-        d->nodeModel->setDummiesFacade(0, 0, 0, 0);
+        d->nodeModel->setDummiesFacade(0, 0, 0, 0, 0);
 
     }
 
@@ -283,7 +283,7 @@ void LayerModel::setView(QObject *newView)
 
         KisDummiesFacadeBase *kritaDummiesFacade = dynamic_cast<KisDummiesFacadeBase*>(d->canvas->imageView()->document()->shapeController());
         KisShapeController *shapeController = dynamic_cast<KisShapeController*>(d->canvas->imageView()->document()->shapeController());
-        d->nodeModel->setDummiesFacade(kritaDummiesFacade, d->image, shapeController, d->nodeManager->nodeSelectionAdapter());
+        d->nodeModel->setDummiesFacade(kritaDummiesFacade, d->image, shapeController, d->nodeManager->nodeSelectionAdapter(), d->nodeManager->nodeInsertionAdapter());
 
         connect(d->image, SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
         connect(d->image, SIGNAL(sigNodeChanged(KisNodeSP)), SLOT(nodeChanged(KisNodeSP)));
@@ -296,13 +296,6 @@ void LayerModel::setView(QObject *newView)
         // Connection KisNodeManager -> KisLayerBox
         connect(d->nodeManager, SIGNAL(sigUiNeedChangeActiveNode(KisNodeSP)), this, SLOT(currentNodeChanged(KisNodeSP)));
 
-        // Node manipulation methods are forwarded to the node manager
-        connect(d->nodeModel, SIGNAL(requestMoveNodes(KisNodeList, KisNodeSP, KisNodeSP)),
-                d->nodeManager, SLOT(moveNodesDirect(KisNodeList, KisNodeSP, KisNodeSP)));
-        connect(d->nodeModel, SIGNAL(requestCopyNodes(KisNodeList, KisNodeSP, KisNodeSP)),
-                d->nodeManager, SLOT(copyNodesDirect(KisNodeList, KisNodeSP, KisNodeSP)));
-        connect(d->nodeModel, SIGNAL(requestAddNodes(KisNodeList, KisNodeSP, KisNodeSP)),
-                d->nodeManager, SLOT(addNodesDirect(KisNodeList, KisNodeSP, KisNodeSP)));
         d->rebuildLayerList();
         reset();
     }

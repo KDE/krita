@@ -31,6 +31,8 @@
 #include "operations/kis_operation.h"
 #include "kis_layer.h"
 #include "KisDocument.h"
+#include "kis_clipboard.h"
+
 
 #include "QFile"
 #include <QDomDocument>
@@ -240,6 +242,10 @@ void KisActionManager::updateGUI()
 
         if (layer && layer->inherits("KisShapeLayer")) {
             flags |= KisAction::ACTIVE_SHAPE_LAYER;
+        }
+
+        if (KisClipboard::instance()->hasLayers()) {
+            flags |= KisAction::LAYERS_IN_CLIPBOARD;
         }
 
         if (selectionManager)

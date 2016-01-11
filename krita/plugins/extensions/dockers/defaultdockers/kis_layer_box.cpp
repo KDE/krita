@@ -323,7 +323,7 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
-        m_nodeModel->setDummiesFacade(0, 0, 0, 0);
+        m_nodeModel->setDummiesFacade(0, 0, 0, 0, 0);
 
         disconnect(m_image, 0, this, 0);
         disconnect(m_nodeManager, 0, this, 0);
@@ -344,7 +344,7 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
             dynamic_cast<KisShapeController*>(doc->shapeController());
         KisDummiesFacadeBase *kritaDummiesFacade =
             static_cast<KisDummiesFacadeBase*>(kritaShapeController);
-        m_nodeModel->setDummiesFacade(kritaDummiesFacade, m_image, kritaShapeController, m_nodeManager->nodeSelectionAdapter());
+        m_nodeModel->setDummiesFacade(kritaDummiesFacade, m_image, kritaShapeController, m_nodeManager->nodeSelectionAdapter(), m_nodeManager->nodeInsertionAdapter());
 
         connect(m_image, SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
         connect(m_image, SIGNAL(sigNodeCollapsedChanged()), SLOT(slotNodeCollapsedChanged()));
@@ -368,14 +368,6 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         // Connection KisLayerBox -> KisNodeManager (isolate layer)
         connect(m_nodeModel, SIGNAL(toggleIsolateActiveNode()),
                 m_nodeManager, SLOT(toggleIsolateActiveNode()));
-
-        // Node manipulation methods are forwarded to the node manager
-        connect(m_nodeModel, SIGNAL(requestMoveNodes(KisNodeList, KisNodeSP, KisNodeSP)),
-                m_nodeManager, SLOT(moveNodesDirect(KisNodeList, KisNodeSP, KisNodeSP)));
-        connect(m_nodeModel, SIGNAL(requestCopyNodes(KisNodeList, KisNodeSP, KisNodeSP)),
-                m_nodeManager, SLOT(copyNodesDirect(KisNodeList, KisNodeSP, KisNodeSP)));
-        connect(m_nodeModel, SIGNAL(requestAddNodes(KisNodeList, KisNodeSP, KisNodeSP)),
-                m_nodeManager, SLOT(addNodesDirect(KisNodeList, KisNodeSP, KisNodeSP)));
 
         m_wdgLayerBox->listLayers->expandAll();
         expandNodesRecursively(m_image->rootLayer(), m_nodeModel, m_wdgLayerBox->listLayers);
@@ -405,7 +397,7 @@ void KisLayerBox::unsetCanvas()
         m_newLayerMenu->clear();
     }
 
-    m_nodeModel->setDummiesFacade(0, 0, 0, 0);
+    m_nodeModel->setDummiesFacade(0, 0, 0, 0, 0);
     disconnect(m_image, 0, this, 0);
     disconnect(m_nodeManager, 0, this, 0);
     disconnect(m_nodeModel, 0, m_nodeManager, 0);

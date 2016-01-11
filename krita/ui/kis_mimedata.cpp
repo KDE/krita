@@ -30,6 +30,9 @@
 #include "kis_shape_controller.h"
 #include "KisPart.h"
 #include "kis_layer_utils.h"
+#include "kis_node_insertion_adapter.h"
+#include "kis_dummies_facade_base.h"
+#include "kis_node_dummies_graph.h"
 
 #include <KoProperties.h>
 #include <KoStore.h>
@@ -45,9 +48,10 @@
 #include <QTemporaryFile>
 #include <QDesktopWidget>
 
-KisMimeData::KisMimeData(QList<KisNodeSP> nodes)
+KisMimeData::KisMimeData(QList<KisNodeSP> nodes, bool forceCopy)
     : QMimeData()
     , m_nodes(nodes)
+    , m_forceCopy(forceCopy)
 {
     Q_ASSERT(m_nodes.size() > 0);
 }
@@ -151,6 +155,7 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
         QDomDocument doc("krita_internal_node_pointer");
         QDomElement root = doc.createElement("pointer");
         root.setAttribute("application_pid", (qint64)QApplication::applicationPid());
+        root.setAttribute("force_copy", m_forceCopy);
         doc.appendChild(root);
 
         Q_FOREACH (KisNodeSP node, m_nodes) {
@@ -194,10 +199,13 @@ QList<KisNodeSP> KisMimeData::tryLoadInternalNodes(const QMimeData *data,
                                                    bool /* IN-OUT */ &copyNode)
 {
     QList<KisNodeSP> nodes;
-    // Qt 4.7 way
+    bool forceCopy = false;
+
+    // Qt 4.7 and Qt 5.5 way
     const KisMimeData *mimedata = qobject_cast<const KisMimeData*>(data);
     if (mimedata) {
         nodes = mimedata->nodes();
+        forceCopy = mimedata->m_forceCopy;
     }
 
     // Qt 4.8 way
@@ -209,6 +217,7 @@ QList<KisNodeSP> KisMimeData::tryLoadInternalNodes(const QMimeData *data,
 
         QDomElement element = doc.documentElement();
         qint64 pid = element.attribute("application_pid").toLongLong();
+        forceCopy = element.attribute("force_copy").toInt();
 
         if (pid == QApplication::applicationPid()) {
 
@@ -226,12 +235,14 @@ QList<KisNodeSP> KisMimeData::tryLoadInternalNodes(const QMimeData *data,
         }
     }
 
-    if (!nodes.isEmpty() && (copyNode || nodes.first()->graphListener() != image.data())) {
+    if (!nodes.isEmpty() && (forceCopy || copyNode || nodes.first()->graphListener() != image.data())) {
         QList<KisNodeSP> clones;
         copyNode = true;
         Q_FOREACH (KisNodeSP node, nodes) {
             node = node->clone();
-            KisLayerUtils::addCopyOfNameTag(node);
+            if (nodes.first()->graphListener()) {
+                KisLayerUtils::addCopyOfNameTag(node);
+            }
             initializeExternalNode(node, image, shapeController);
             clones << node;
         }
@@ -311,4 +322,95 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
     }
 
     return nodes;
+}
+
+QMimeData* KisMimeData::mimeForLayers(const KisNodeList &nodes, KisNodeSP imageRoot, bool forceCopy)
+{
+    KisNodeList inputNodes = nodes;
+    KisNodeList sortedNodes;
+    KisLayerUtils::sortMergableNodes(imageRoot, inputNodes, sortedNodes);
+    if (sortedNodes.isEmpty()) return 0;
+
+    KisMimeData* data = new KisMimeData(sortedNodes, forceCopy);
+    return data;
+}
+
+bool nodeAllowsAsChild(KisNodeSP parent, KisNodeList nodes)
+{
+    bool result = true;
+    Q_FOREACH (KisNodeSP node, nodes) {
+        if (!parent->allowAsChild(node)) {
+            result = false;
+            break;
+        }
+    }
+    return result;
+}
+
+bool correctNewNodeLocation(KisNodeList nodes,
+                            KisNodeDummy* &parentDummy,
+                            KisNodeDummy* &aboveThisDummy)
+{
+    KisNodeSP parentNode = parentDummy->node();
+    bool result = true;
+
+    if(!nodeAllowsAsChild(parentDummy->node(), nodes)) {
+        aboveThisDummy = parentDummy;
+        parentDummy = parentDummy->parent();
+
+        result = (!parentDummy) ? false :
+            correctNewNodeLocation(nodes, parentDummy, aboveThisDummy);
+    }
+
+    return result;
+}
+
+bool KisMimeData::insertMimeLayers(const QMimeData *data,
+                                   KisImageSP image,
+                                   KisShapeController *shapeController,
+                                   KisNodeDummy *parentDummy,
+                                   KisNodeDummy *aboveThisDummy,
+                                   bool copyNode,
+                                   KisNodeInsertionAdapter *nodeInsertionAdapter)
+{
+    QList<KisNodeSP> nodes =
+        KisMimeData::tryLoadInternalNodes(data,
+                                          image,
+                                          shapeController,
+                                          copyNode /* IN-OUT */);
+
+    if (nodes.isEmpty()) {
+        QRect imageBounds = image->bounds();
+        nodes = KisMimeData::loadNodes(data,
+                                       imageBounds, imageBounds.center(),
+                                       false,
+                                       image, shapeController);
+        /**
+         * Don't try to move a node originating from another image,
+         * just copy it.
+         */
+        copyNode = true;
+    }
+
+    if (nodes.isEmpty()) return false;
+
+    bool result = true;
+
+    if (!correctNewNodeLocation(nodes, parentDummy, aboveThisDummy)) {
+        return false;
+    }
+
+    KIS_ASSERT_RECOVER(nodeInsertionAdapter) { return false; }
+
+    Q_ASSERT(parentDummy);
+    KisNodeSP aboveThisNode = aboveThisDummy ? aboveThisDummy->node() : 0;
+    if (copyNode) {
+        nodeInsertionAdapter->addNodes(nodes, parentDummy->node(), aboveThisNode);
+    }
+    else {
+        Q_ASSERT(nodes.first()->graphListener() == image.data());
+        nodeInsertionAdapter->moveNodes(nodes, parentDummy->node(), aboveThisNode);
+    }
+
+    return result;
 }

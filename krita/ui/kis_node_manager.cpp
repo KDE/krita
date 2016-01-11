@@ -67,7 +67,11 @@
 #include "kis_sequential_iterator.h"
 #include "kis_transaction.h"
 #include "kis_node_selection_adapter.h"
+#include "kis_node_insertion_adapter.h"
 #include "kis_node_juggler_compressed.h"
+#include "kis_clipboard.h"
+#include "kis_node_dummies_graph.h"
+#include "kis_mimedata.h"
 
 #include "processing/kis_mirror_processing_visitor.h"
 #include "KisView.h"
@@ -82,6 +86,7 @@ struct KisNodeManager::Private {
         , maskManager(v)
         , commandsAdapter(v)
         , nodeSelectionAdapter(new KisNodeSelectionAdapter(q))
+        , nodeInsertionAdapter(new KisNodeInsertionAdapter(q))
     {
     }
 
@@ -91,7 +96,8 @@ struct KisNodeManager::Private {
     KisLayerManager layerManager;
     KisMaskManager maskManager;
     KisNodeCommandsAdapter commandsAdapter;
-    QScopedPointer<KisNodeSelectionAdapter> nodeSelectionAdapter; 
+    QScopedPointer<KisNodeSelectionAdapter> nodeSelectionAdapter;
+    QScopedPointer<KisNodeInsertionAdapter> nodeInsertionAdapter;
 
     KisNodeList selectedNodes;
     QPointer<KisNodeJugglerCompressed> nodeJuggler;
@@ -239,6 +245,14 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     action = actionManager->createAction("duplicatelayer");
     connect(action, SIGNAL(triggered()), this, SLOT(duplicateActiveNode()));
 
+    action = actionManager->createAction("copy_layer_clipboard");
+    connect(action, SIGNAL(triggered()), this, SLOT(copyLayersToClipboard()));
+
+    action = actionManager->createAction("cut_layer_clipboard");
+    connect(action, SIGNAL(triggered()), this, SLOT(cutLayersToClipboard()));
+
+    action = actionManager->createAction("paste_layer_from_clipboard");
+    connect(action, SIGNAL(triggered()), this, SLOT(pasteLayersFromClipboard()));
 
     NEW_LAYER_ACTION("add_new_paint_layer", "KisPaintLayer");
 
@@ -298,9 +312,7 @@ void KisNodeManager::updateGUI()
     // enable/disable all relevant actions
     m_d->layerManager.updateGUI();
     m_d->maskManager.updateGUI();
-
 }
-
 
 KisNodeSP KisNodeManager::activeNode()
 {
@@ -665,6 +677,11 @@ KisNodeList KisNodeManager::selectedNodes()
 KisNodeSelectionAdapter* KisNodeManager::nodeSelectionAdapter() const
 {
     return m_d->nodeSelectionAdapter.data();
+}
+
+KisNodeInsertionAdapter* KisNodeManager::nodeInsertionAdapter() const
+{
+    return m_d->nodeInsertionAdapter.data();
 }
 
 void KisNodeManager::nodeOpacityChanged(qreal opacity, bool finalChange)
@@ -1055,5 +1072,51 @@ void KisNodeManager::slotSplitAlphaSaveMerged()
     m_d->mergeTransparencyMaskAsAlpha(false);
 }
 
+void KisNodeManager::cutLayersToClipboard()
+{
+    KisNodeList nodes = this->selectedNodes();
+    KisNodeSP root = m_d->view->image()->root();
+    if (nodes.isEmpty()) return;
 
+    KisClipboard::instance()->setLayers(nodes, root, false);
+
+    KUndo2MagicString actionName = kundo2_i18n("Cut Nodes");
+    KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
+    juggler->removeNode(nodes);
+}
+
+void KisNodeManager::copyLayersToClipboard()
+{
+    KisNodeList nodes = this->selectedNodes();
+    KisNodeSP root = m_d->view->image()->root();
+
+    KisClipboard::instance()->setLayers(nodes, root, true);
+}
+
+void KisNodeManager::pasteLayersFromClipboard()
+{
+    const QMimeData *data = KisClipboard::instance()->layersMimeData();
+    if (!data) return;
+
+    KisNodeSP activeNode = this->activeNode();
+
+    KisShapeController *shapeController = dynamic_cast<KisShapeController*>(m_d->imageView->document()->shapeController());
+    Q_ASSERT(shapeController);
+
+    KisDummiesFacadeBase *dummiesFacade = dynamic_cast<KisDummiesFacadeBase*>(m_d->imageView->document()->shapeController());
+    Q_ASSERT(dummiesFacade);
+
+    const bool copyNode = false;
+    KisImageSP image = m_d->view->image();
+    KisNodeDummy *parentDummy = dummiesFacade->dummyForNode(activeNode);
+    KisNodeDummy *aboveThisDummy = parentDummy ? parentDummy->lastChild() : 0;
+
+    KisMimeData::insertMimeLayers(data,
+                                  image,
+                                  shapeController,
+                                  parentDummy,
+                                  aboveThisDummy,
+                                  copyNode,
+                                  nodeInsertionAdapter());
+}
 

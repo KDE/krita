@@ -26,6 +26,8 @@
 #include <kritaui_export.h>
 
 class KisShapeController;
+class KisNodeDummy;
+class KisNodeInsertionAdapter;
 
 /**
  * KisMimeData implements delayed retrieval of nodes for d&d and copy/paste.
@@ -36,7 +38,7 @@ class KRITAUI_EXPORT KisMimeData : public QMimeData
 {
     Q_OBJECT
 public:
-    KisMimeData(QList<KisNodeSP> nodes);
+    KisMimeData(QList<KisNodeSP> nodes, bool forceCopy = false);
 
     /// return the node set on this mimedata object -- for internal use
     QList<KisNodeSP> nodes() const;
@@ -52,6 +54,7 @@ public:
      */
     QStringList formats() const;
 
+//private:
     /**
      * Try load the node, which belongs to the same Krita instance,
      * that is can be fetched without serialization
@@ -72,6 +75,16 @@ public:
                                       KisImageWSP image,
                                       KisShapeController *shapeController);
 
+public:
+    static QMimeData* mimeForLayers(const KisNodeList &nodes, KisNodeSP imageRoot, bool forceCopy = false);
+    static bool insertMimeLayers(const QMimeData *data,
+                                 KisImageSP image,
+                                 KisShapeController *shapeController,
+                                 KisNodeDummy *parentDummy,
+                                 KisNodeDummy *aboveThisDummy,
+                                 bool copyNode,
+                                 KisNodeInsertionAdapter *nodeInsertionAdapter);
+
 protected:
 
     QVariant retrieveData(const QString &mimetype, QVariant::Type preferredType) const;
@@ -84,6 +97,7 @@ private:
 private:
 
     QList<KisNodeSP> m_nodes;
+    bool m_forceCopy;
 
 };
 

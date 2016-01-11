@@ -35,6 +35,7 @@ class KisViewManager;
 class KisActionManager;
 class KisView;
 class KisNodeSelectionAdapter;
+class KisNodeInsertionAdapter;
 
 /**
  * The node manager passes requests for new layers or masks on to the mask and layer
@@ -101,6 +102,7 @@ public:
     KisNodeList selectedNodes();
 
     KisNodeSelectionAdapter* nodeSelectionAdapter() const;
+    KisNodeInsertionAdapter* nodeInsertionAdapter() const;
 
 public Q_SLOTS:
 
@@ -201,6 +203,10 @@ public Q_SLOTS:
     void slotSetSelectedNodes(const KisNodeList &nodes);
 
     void slotImageRequestNodeReselection(KisNodeSP activeNode, const KisNodeList &selectedNodes);
+
+    void cutLayersToClipboard();
+    void copyLayersToClipboard();
+    void pasteLayersFromClipboard();
 
 public:
 

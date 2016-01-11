@@ -66,7 +66,7 @@ public:
         PIXELS_IN_CLIPBOARD         = 0x0800, ///< Activate if the clipboard contains pixels
         SHAPES_IN_CLIPBOARD         = 0x1000, ///< Activate if the clipboard contains vector data
         NEVER_ACTIVATE              = 0x2000, ///<
-
+        LAYERS_IN_CLIPBOARD         = 0x4000
     };
     Q_DECLARE_FLAGS(ActivationFlags, ActivationFlag)
 

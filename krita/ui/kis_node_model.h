@@ -31,6 +31,7 @@ class KisNodeDummy;
 class KisShapeController;
 class KisModelIndexConverterBase;
 class KisNodeSelectionAdapter;
+class KisNodeInsertionAdapter;
 
 /**
  * KisNodeModel offers a Qt model-view compatible view of the node
@@ -58,7 +59,7 @@ public: // from QAbstractItemModel
     KisNodeModel(QObject * parent);
     ~KisNodeModel();
 
-    void setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageWSP image, KisShapeController *shapeController, KisNodeSelectionAdapter *nodeSelectionAdapter);
+    void setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageWSP image, KisShapeController *shapeController, KisNodeSelectionAdapter *nodeSelectionAdapter, KisNodeInsertionAdapter *nodeInsertionAdapter);
     KisNodeSP nodeFromIndex(const QModelIndex &index) const;
     QModelIndex indexFromNode(KisNodeSP node) const;
 
@@ -91,10 +92,6 @@ Q_SIGNALS:
     void nodeActivated(KisNodeSP);
     void toggleIsolateActiveNode();
 
-    void requestMoveNodes(KisNodeList nodes, KisNodeSP parent, KisNodeSP aboveThis);
-    void requestCopyNodes(KisNodeList nodes, KisNodeSP parent, KisNodeSP aboveThis);
-    void requestAddNodes(KisNodeList nodes, KisNodeSP parent, KisNodeSP aboveThis);
-
 protected Q_SLOTS:
     void slotBeginInsertDummy(KisNodeDummy *parent, int index, const QString &metaObjectType, bool isAnimated);
     void slotEndInsertDummy(KisNodeDummy *dummy);
@@ -122,10 +119,6 @@ private:
     void connectDummies(KisNodeDummy *dummy, bool needConnect);
 
     void resetIndexConverter();
-
-    bool correctNewNodeLocation(KisNodeList nodes,
-                                KisNodeDummy* &parentDummy,
-                                KisNodeDummy* &aboveThisDummy);
 
     void regenerateItems(KisNodeDummy *dummy);
     bool belongsToIsolatedGroup(KisNodeSP node) const;

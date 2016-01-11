@@ -108,6 +108,7 @@ set(kritaui_LIB_SRCS
     kis_node_manager.cpp
     kis_node_juggler_compressed.cpp
     kis_node_selection_adapter.cpp
+    kis_node_insertion_adapter.cpp
     kis_node_model.cpp
     kis_model_index_converter_base.cpp
     kis_model_index_converter.cpp

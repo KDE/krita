@@ -2465,6 +2465,45 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="copy_layer_clipboard">
+      <icon></icon>
+      <text>Copy Layer</text>
+      <whatsThis></whatsThis>
+      <toolTip>Copy layer to clipboard</toolTip>
+      <iconText>Copy layer to clipboard</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="cut_layer_clipboard">
+      <icon></icon>
+      <text>Cut Layer</text>
+      <whatsThis></whatsThis>
+      <toolTip>Cut layer to clipboard</toolTip>
+      <iconText>Cut layer to clipboard</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="paste_layer_from_clipboard">
+      <icon></icon>
+      <text>Paste Layer</text>
+      <whatsThis></whatsThis>
+      <toolTip>Paste layer from clipboard</toolTip>
+      <iconText>Paste layer from clipboard</iconText>
+      <activationFlags>100000000000000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="save_node_as_image">
       <icon>document-save</icon>
       <text>&amp;Save Layer/Mask...</text>

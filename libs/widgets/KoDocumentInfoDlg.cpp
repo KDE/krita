@@ -45,8 +45,8 @@ class KoPageWidgetItemAdapter : public KPageWidgetItem
 {
 public:
     KoPageWidgetItemAdapter(KoPageWidgetItem *item)
-      : KPageWidgetItem(item->widget(), item->name())
-      , m_item(item)
+        : KPageWidgetItem(item->widget(), item->name())
+        , m_item(item)
     {
         setHeader(item->name());
         setIcon(KisIconUtils::loadIcon(item->iconName()));
@@ -84,7 +84,7 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
     d->info = docInfo;
 
     setWindowTitle(i18n("Document Information"));
-//    setInitialSize(QSize(500, 500));
+    //    setInitialSize(QSize(500, 500));
     setFaceType(KPageDialog::List);
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     button(QDialogButtonBox::Ok)->setDefault(true);
@@ -207,6 +207,8 @@ void KoDocumentInfoDlg::initAboutTab()
 
     d->aboutUi->lblRevision->setText(d->info->aboutInfo("editing-cycles"));
 
+    updateEditingTime();
+
     connect(d->aboutUi->pbReset, SIGNAL(clicked()),
             this, SLOT(slotResetMetaData()));
 }
@@ -288,4 +290,42 @@ void KoDocumentInfoDlg::addPageItem(KoPageWidgetItem *item)
 
     addPage(page);
     d->pages.append(page);
+}
+
+void KoDocumentInfoDlg::updateEditingTime()
+{
+    const int timeElapsed = d->info->aboutInfo("editing-time").toInt();
+
+    const int secondsElapsed = timeElapsed % 60;
+    const int minutesElapsed = (timeElapsed / 60) % 60;
+    const int hoursElapsed = (timeElapsed / 3600) % 24;
+    const int daysElapsed = (timeElapsed / 86400) % 7;
+    const int weeksElapsed = timeElapsed / 604800;
+
+    QString majorTimeUnit;
+    QString minorTimeUnit;
+
+    if (weeksElapsed > 0) {
+        majorTimeUnit = i18np("%1 week", "%1 weeks", weeksElapsed);
+        minorTimeUnit = i18np("%1 day", "%1 days", daysElapsed);
+    } else if (daysElapsed > 0) {
+        majorTimeUnit = i18np("%1 day", "%1 days", daysElapsed);
+        minorTimeUnit = i18np("%1 hour", "%1 hours", hoursElapsed);
+    } else if (hoursElapsed > 0) {
+        majorTimeUnit = i18np("%1 hour", "%1 hours", hoursElapsed);
+        minorTimeUnit = i18np("%1 minute", "%1 minutes", minutesElapsed);
+    } else if (minutesElapsed > 0) {
+        majorTimeUnit = i18np("%1 minute", "%1 minutes", minutesElapsed);
+        minorTimeUnit = i18np("%1 second", "%1 seconds", secondsElapsed);
+    } else {
+        d->aboutUi->lblEditing->setText(i18np("%1 seconds", "%1 seconds", secondsElapsed));
+        return;
+    }
+
+    d->aboutUi->lblEditing->setText(i18nc(
+                                        "major time unit and minor time unit",
+                                        "%1 and %2",
+                                        majorTimeUnit,
+                                        minorTimeUnit
+                                        ));
 }

@@ -336,6 +336,9 @@ public:
     bool modified;
     bool readwrite;
 
+    QDateTime firstMod;
+    QDateTime lastMod;
+
     bool disregardAutosaveFailure;
 
     KisNameServer *nserver;
@@ -455,6 +458,9 @@ KisDocument::KisDocument()
     KConfigGroup cfgGrp( KSharedConfig::openConfig(), "Undo");
     d->undoStack->setUndoLimit(cfgGrp.readEntry("UndoLimit", 1000));
 
+    d->firstMod = QDateTime::currentDateTime();
+    d->lastMod = QDateTime::currentDateTime();
+
     connect(d->undoStack, SIGNAL(indexChanged(int)), this, SLOT(slotUndoStackIndexChanged(int)));
 
     // preload the krita resources
@@ -485,7 +491,7 @@ KisDocument::~KisDocument()
 
     // Despite being QObject they needs to be deleted before the image
     delete d->shapeController;
-    
+
     delete d->koShapeController;
 
     if (d->image) {
@@ -1644,6 +1650,10 @@ void KisDocument::setModified()
 
 void KisDocument::setModified(bool mod)
 {
+    if (mod) {
+        updateEditingTime(false);
+    }
+
     if (isAutosaving())   // ignore setModified calls due to autosaving
         return;
 
@@ -1674,6 +1684,23 @@ void KisDocument::setModified(bool mod)
     // This influences the title
     setTitleModified();
     emit modified(mod);
+}
+
+void KisDocument::updateEditingTime(bool forceStoreElapsed)
+{
+    QDateTime now = QDateTime::currentDateTime();
+    int firstModDelta = d->firstMod.secsTo(now);
+    int lastModDelta = d->lastMod.secsTo(now);
+
+    if (lastModDelta > 30) {
+        d->docInfo->setAboutInfo("editing-time", QString::number(d->docInfo->aboutInfo("editing-time").toInt() + d->firstMod.secsTo(d->lastMod)));
+        d->firstMod = now;
+    } else if (firstModDelta > 60 || forceStoreElapsed) {
+        d->docInfo->setAboutInfo("editing-time", QString::number(d->docInfo->aboutInfo("editing-time").toInt() + firstModDelta));
+        d->firstMod = now;
+    }
+
+    d->lastMod = now;
 }
 
 QString KisDocument::prettyPathOrUrl() const
@@ -2182,6 +2209,8 @@ bool KisDocument::save()
     d->m_saveOk = false;
     if ( d->m_file.isEmpty() ) // document was created empty
         d->prepareSaving();
+
+    updateEditingTime(true);
 
     DocumentProgressProxy *progressProxy = 0;
     if (!d->document->progressProxy()) {

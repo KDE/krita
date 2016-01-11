@@ -297,10 +297,12 @@ void LayerModel::setView(QObject *newView)
         connect(d->nodeManager, SIGNAL(sigUiNeedChangeActiveNode(KisNodeSP)), this, SLOT(currentNodeChanged(KisNodeSP)));
 
         // Node manipulation methods are forwarded to the node manager
-        connect(d->nodeModel, SIGNAL(requestAddNode(KisNodeSP, KisNodeSP, KisNodeSP)),
-                d->nodeManager, SLOT(addNodeDirect(KisNodeSP, KisNodeSP, KisNodeSP)));
-        connect(d->nodeModel, SIGNAL(requestMoveNode(KisNodeSP, KisNodeSP, KisNodeSP)),
-                d->nodeManager, SLOT(moveNodeDirect(KisNodeSP, KisNodeSP, KisNodeSP)));
+        connect(d->nodeModel, SIGNAL(requestMoveNodes(KisNodeList, KisNodeSP, KisNodeSP)),
+                d->nodeManager, SLOT(moveNodesDirect(KisNodeList, KisNodeSP, KisNodeSP)));
+        connect(d->nodeModel, SIGNAL(requestCopyNodes(KisNodeList, KisNodeSP, KisNodeSP)),
+                d->nodeManager, SLOT(copyNodesDirect(KisNodeList, KisNodeSP, KisNodeSP)));
+        connect(d->nodeModel, SIGNAL(requestAddNodes(KisNodeList, KisNodeSP, KisNodeSP)),
+                d->nodeManager, SLOT(addNodesDirect(KisNodeList, KisNodeSP, KisNodeSP)));
         d->rebuildLayerList();
         reset();
     }

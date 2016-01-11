@@ -91,8 +91,6 @@ Q_SIGNALS:
     void nodeActivated(KisNodeSP);
     void toggleIsolateActiveNode();
 
-    void requestAddNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
-    void requestMoveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
     void requestMoveNodes(KisNodeList nodes, KisNodeSP parent, KisNodeSP aboveThis);
     void requestCopyNodes(KisNodeList nodes, KisNodeSP parent, KisNodeSP aboveThis);
     void requestAddNodes(KisNodeList nodes, KisNodeSP parent, KisNodeSP aboveThis);

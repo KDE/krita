@@ -202,7 +202,6 @@ void ThemeManager::slotChangePalette()
         qApp->style()->polish(qApp);
 #endif
     }
-    qDebug() << ">>>>>>>>>>>>>>>>>>> THEMECHANGED <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ";
     emit signalThemeChanged();
 }
 

@@ -147,53 +147,12 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
 
     QString version = CalligraVersionWrapper::versionString(true);
     setApplicationVersion(version);
-
-    // Initialize all Calligra directories etc.
-    KoGlobal::initialize();
-
-    KConfigGroup group(KSharedConfig::openConfig(), "theme");
-    Digikam::ThemeManager themeManager;
-    themeManager.setCurrentTheme(group.readEntry("Theme", "Krita dark"));
-
-    // for cursors
-    KoResourcePaths::addResourceType("kis_pics", "data", "krita/pics/");
-
-    // for images in the paintop box
-    KoResourcePaths::addResourceType("kis_images", "data", "krita/images/");
-
-    KoResourcePaths::addResourceType("icc_profiles", "data", "krita/profiles/");
-
     setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
 
 #ifdef HAVE_OPENGL
     KisOpenGL::initialize();
 #endif
 
-#ifdef Q_OS_MACX
-    if ( QSysInfo::MacintoshVersion > QSysInfo::MV_10_8 )
-    {
-        // fix Mac OS X 10.9 (mavericks) font issue
-        // https://bugreports.qt-project.org/browse/QTBUG-32789
-        QFont::insertSubstitution(".Lucida Grande UI", "Lucida Grande");
-    }
-    setAttribute(Qt::AA_DontShowIconsInMenus, true);
-#endif
-
-    qDebug() << "Available styles:" << QStyleFactory::keys();
-    QStringList styles = QStringList() /*<< "Breeze"*/  << "Fusion" << "Oxygen" << "Plastique";
-    Q_FOREACH (const QString & style, styles) {
-        if (!setStyle(style)) {
-            qDebug() << "No" << style << "available.";
-        }
-        else {
-            break;
-        }
-    }
-    qDebug() << "Style:" << QApplication::style();
-
-
-
-    KoHashGeneratorProvider::instance()->setGenerator("MD5", new KisMD5Generator());
 }
 
 #if defined(Q_OS_WIN) && defined(ENV32BIT)
@@ -223,114 +182,9 @@ BOOL isWow64()
 }
 #endif
 
-
-bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWindow *mainWindow)
-{
-    QString templatePath;
-
-    const QUrl templateUrl = QUrl::fromLocalFile(fileName);
-    if (QFile::exists(fileName)) {
-        templatePath = templateUrl.toLocalFile();
-        dbgUI << "using full path...";
-    }
-    else {
-        QString desktopName(fileName);
-        const QString templatesResourcePath = KisPart::instance()->templatesResourcePath();
-
-        QStringList paths = KoResourcePaths::findAllResources("data", templatesResourcePath + "*/" + desktopName);
-        if (paths.isEmpty()) {
-            paths = KoResourcePaths::findAllResources("data", templatesResourcePath + desktopName);
-        }
-
-        if (paths.isEmpty()) {
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"),
-                                  i18n("No template found for: %1", desktopName));
-        } else if (paths.count() > 1) {
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"),
-                                  i18n("Too many templates found for: %1", desktopName));
-        } else {
-            templatePath = paths.at(0);
-        }
-    }
-
-    if (!templatePath.isEmpty()) {
-        QUrl templateBase;
-        templateBase.setPath(templatePath);
-        KDesktopFile templateInfo(templatePath);
-
-        QString templateName = templateInfo.readUrl();
-        QUrl templateURL;
-        templateURL.setPath(templateBase.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path() + '/' + templateName);
-
-        KisDocument *doc = KisPart::instance()->createDocument();
-        if (mainWindow->openDocumentInternal(templateURL, doc)) {
-            doc->resetURL();
-            doc->setEmpty();
-            doc->setTitleModified();
-            dbgUI << "Template loaded...";
-            return true;
-        }
-        else {
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"),
-                                  i18n("Template %1 failed to load.", templateURL.toDisplayString()));
-        }
-    }
-
-    return false;
-}
-
-void KisApplication::clearConfig()
-{
-    KIS_ASSERT_RECOVER_RETURN(qApp->thread() == QThread::currentThread());
-
-    KSharedConfigPtr config =  KSharedConfig::openConfig();
-
-    // find user settings file
-    bool createDir = false;
-    QString kritarcPath = KoResourcePaths::locateLocal("config", "kritarc", createDir);
-
-    QFile configFile(kritarcPath);
-    if (configFile.exists()) {
-        // clear file
-        if (configFile.open(QFile::WriteOnly)) {
-            configFile.close();
-        }
-        else {
-            QMessageBox::warning(0,
-                                 i18nc("@title:window", "Krita"),
-                                 i18n("Failed to clear %1\n\n"
-                                      "Please make sure no other program is using the file and try again.",
-                                      kritarcPath),
-                                 QMessageBox::Ok, QMessageBox::Ok);
-        }
-    }
-
-    // reload from disk; with the user file settings cleared,
-    // this should load any default configuration files shipping with the program
-    config->reparseConfiguration();
-    config->sync();
-}
-
-void KisApplication::askClearConfig()
-{
-    Qt::KeyboardModifiers mods = QApplication::queryKeyboardModifiers();
-    bool askClearConfig = (mods & Qt::ControlModifier) && (mods & Qt::ShiftModifier) && (mods & Qt::AltModifier);
-
-    if (askClearConfig) {
-        bool ok = QMessageBox::question(0,
-                                        i18nc("@title:window", "Krita"),
-                                        i18n("Do you want to clear the settings file?"),
-                                        QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes;
-        if (ok) {
-            clearConfig();
-        }
-    }
-}
-
 bool KisApplication::start(const KisApplicationArguments &args)
 {
-
-#if defined(Q_OS_WIN)  || defined (Q_OS_MACX)
+#if defined(Q_OS_WIN)  || defined (Q_OS_MAC)
 #ifdef ENV32BIT
     KisConfig cfg;
     if (isWow64() && !cfg.readEntry("WarnedAbout32Bits", false)) {
@@ -381,14 +235,31 @@ bool KisApplication::start(const KisApplicationArguments &args)
     // only show the mainWindow when no command-line mode option is passed
     // TODO: fix print & exportAsPdf to work without mainwindow shown
     const bool showmainWindow = !exportAs; // would be !batchRun;
-    const bool runningInGnome = (qgetenv("XDG_CURRENT_DESKTOP") == "GNOME");
-    const bool showSplashScreen = !batchRun && !runningInGnome;
 
-    if (d->splashScreen && showSplashScreen) {
+    const bool showSplashScreen = !batchRun && !qgetenv("NOSPLASH").isEmpty();
+    if (showSplashScreen) {
         d->splashScreen->show();
         d->splashScreen->repaint();
         processEvents();
     }
+
+    KoHashGeneratorProvider::instance()->setGenerator("MD5", new KisMD5Generator());
+
+    // Initialize all Calligra directories etc.
+    KoGlobal::initialize();
+
+    KConfigGroup group(KSharedConfig::openConfig(), "theme");
+    Digikam::ThemeManager themeManager;
+    themeManager.setCurrentTheme(group.readEntry("Theme", "Krita dark"));
+
+    // for cursors
+    KoResourcePaths::addResourceType("kis_pics", "data", "krita/pics/");
+
+    // for images in the paintop box
+    KoResourcePaths::addResourceType("kis_images", "data", "krita/images/");
+
+    KoResourcePaths::addResourceType("icc_profiles", "data", "krita/profiles/");
+
 
     ResetStarting resetStarting(d->splashScreen); // remove the splash when done
     Q_UNUSED(resetStarting);
@@ -644,3 +515,105 @@ QList<QUrl> KisApplication::checkAutosaveFiles()
     return autosaveUrls;
 }
 
+bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWindow *mainWindow)
+{
+    QString templatePath;
+
+    const QUrl templateUrl = QUrl::fromLocalFile(fileName);
+    if (QFile::exists(fileName)) {
+        templatePath = templateUrl.toLocalFile();
+        dbgUI << "using full path...";
+    }
+    else {
+        QString desktopName(fileName);
+        const QString templatesResourcePath = KisPart::instance()->templatesResourcePath();
+
+        QStringList paths = KoResourcePaths::findAllResources("data", templatesResourcePath + "*/" + desktopName);
+        if (paths.isEmpty()) {
+            paths = KoResourcePaths::findAllResources("data", templatesResourcePath + desktopName);
+        }
+
+        if (paths.isEmpty()) {
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"),
+                                  i18n("No template found for: %1", desktopName));
+        } else if (paths.count() > 1) {
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"),
+                                  i18n("Too many templates found for: %1", desktopName));
+        } else {
+            templatePath = paths.at(0);
+        }
+    }
+
+    if (!templatePath.isEmpty()) {
+        QUrl templateBase;
+        templateBase.setPath(templatePath);
+        KDesktopFile templateInfo(templatePath);
+
+        QString templateName = templateInfo.readUrl();
+        QUrl templateURL;
+        templateURL.setPath(templateBase.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path() + '/' + templateName);
+
+        KisDocument *doc = KisPart::instance()->createDocument();
+        if (mainWindow->openDocumentInternal(templateURL, doc)) {
+            doc->resetURL();
+            doc->setEmpty();
+            doc->setTitleModified();
+            dbgUI << "Template loaded...";
+            return true;
+        }
+        else {
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"),
+                                  i18n("Template %1 failed to load.", templateURL.toDisplayString()));
+        }
+    }
+
+    return false;
+}
+
+void KisApplication::clearConfig()
+{
+    KIS_ASSERT_RECOVER_RETURN(qApp->thread() == QThread::currentThread());
+
+    KSharedConfigPtr config =  KSharedConfig::openConfig();
+
+    // find user settings file
+    bool createDir = false;
+    QString kritarcPath = KoResourcePaths::locateLocal("config", "kritarc", createDir);
+
+    QFile configFile(kritarcPath);
+    if (configFile.exists()) {
+        // clear file
+        if (configFile.open(QFile::WriteOnly)) {
+            configFile.close();
+        }
+        else {
+            QMessageBox::warning(0,
+                                 i18nc("@title:window", "Krita"),
+                                 i18n("Failed to clear %1\n\n"
+                                      "Please make sure no other program is using the file and try again.",
+                                      kritarcPath),
+                                 QMessageBox::Ok, QMessageBox::Ok);
+        }
+    }
+
+    // reload from disk; with the user file settings cleared,
+    // this should load any default configuration files shipping with the program
+    config->reparseConfiguration();
+    config->sync();
+}
+
+void KisApplication::askClearConfig()
+{
+    Qt::KeyboardModifiers mods = QApplication::queryKeyboardModifiers();
+    bool askClearConfig = (mods & Qt::ControlModifier) && (mods & Qt::ShiftModifier) && (mods & Qt::AltModifier);
+
+    if (askClearConfig) {
+        bool ok = QMessageBox::question(0,
+                                        i18nc("@title:window", "Krita"),
+                                        i18n("Do you want to clear the settings file?"),
+                                        QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes;
+        if (ok) {
+            clearConfig();
+        }
+    }
+}

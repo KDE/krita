@@ -57,12 +57,6 @@ extern "C" int main(int argc, char **argv)
 {
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
 
-#ifdef HAVE_X11
-    if (runningInKDE) {
-        qputenv("QT_NO_GLIB", "1");
-    }
-#endif
-
     /**
      * Disable debug output by default. (krita.input enables tablet debugging.)
      * Debug logs can be controlled by an environment variable QT_LOGGING_RULES.
@@ -81,6 +75,7 @@ extern "C" int main(int argc, char **argv)
     QString key = "Krita3" +
                   QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");
     key = key.replace(":", "_").replace("\\","_");
+
 #if defined HAVE_X11
     // we need to call XInitThreads() (which this does) because of gmic (and possibly others)
     // do their own X11 stuff in their own threads

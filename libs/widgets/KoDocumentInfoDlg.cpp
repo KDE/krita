@@ -318,7 +318,7 @@ void KoDocumentInfoDlg::updateEditingTime()
         majorTimeUnit = i18np("%1 minute", "%1 minutes", minutesElapsed);
         minorTimeUnit = i18np("%1 second", "%1 seconds", secondsElapsed);
     } else {
-        d->aboutUi->lblEditing->setText(i18np("%1 seconds", "%1 seconds", secondsElapsed));
+        d->aboutUi->lblEditing->setText(i18np("%1 second", "%1 seconds", secondsElapsed));
         return;
     }
 

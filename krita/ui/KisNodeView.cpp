@@ -154,6 +154,13 @@ QItemSelectionModel::SelectionFlags KisNodeView::selectionCommand(const QModelIn
 
         const QMouseEvent *mevent = static_cast<const QMouseEvent*>(event);
 
+        if (mevent->button() == Qt::RightButton &&
+            selectionModel()->selectedIndexes().contains(index)) {
+
+            // Allow calling context menu for multiple layers
+            return QItemSelectionModel::NoUpdate;
+        }
+
         if (event->type() == QEvent::MouseButtonPress &&
             (mevent->modifiers() & Qt::ControlModifier)) {
 

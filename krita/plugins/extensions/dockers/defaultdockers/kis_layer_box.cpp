@@ -518,48 +518,60 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
     if (m_canvas) {
         QMenu menu;
 
-        if (index.isValid()) {
-            menu.addAction(m_propertiesAction);
-            addActionToMenu(&menu, "layer_style");
+        const bool singleLayer = m_nodeManager->selectedNodes().size() == 1;
 
-            menu.addSeparator();
-            addActionToMenu(&menu, "show_in_timeline");
+        if (index.isValid()) {
+            if (singleLayer) {
+                menu.addAction(m_propertiesAction);
+                addActionToMenu(&menu, "layer_style");
+
+                menu.addSeparator();
+                addActionToMenu(&menu, "show_in_timeline");
+                menu.addSeparator();
+            }
+
+            addActionToMenu(&menu, "cut_layer_clipboard");
+            addActionToMenu(&menu, "copy_layer_clipboard");
+            addActionToMenu(&menu, "paste_layer_from_clipboard");
+
             menu.addSeparator();
 
             menu.addAction(m_removeAction);
             addActionToMenu(&menu, "duplicatelayer");
-            addActionToMenu(&menu, "flatten_image");
-            addActionToMenu(&menu, "flatten_layer");
+            addActionToMenu(&menu, "merge_layer");
+            if (singleLayer) {
+                addActionToMenu(&menu, "flatten_image");
+                addActionToMenu(&menu, "flatten_layer");
+                menu.addSeparator();
 
-            // TODO: missing icon "edit-merge"
-            QAction* mergeLayerDown = menu.addAction(i18n("&Merge with Layer Below"),
-                                                     this, SLOT(slotMergeLayer()));
-            if (!index.sibling(index.row() + 1, 0).isValid()) mergeLayerDown->setEnabled(false);
-            menu.addSeparator();
+                QMenu *convertToMenu = menu.addMenu(i18n("&Convert"));
+                addActionToMenu(convertToMenu, "convert_to_paint_layer");
+                addActionToMenu(convertToMenu, "convert_to_transparency_mask");
+                addActionToMenu(convertToMenu, "convert_to_filter_mask");
+                addActionToMenu(convertToMenu, "convert_to_selection_mask");
 
-            QMenu *convertToMenu = menu.addMenu(i18n("&Convert"));
-            addActionToMenu(convertToMenu, "convert_to_paint_layer");
-            addActionToMenu(convertToMenu, "convert_to_transparency_mask");
-            addActionToMenu(convertToMenu, "convert_to_filter_mask");
-            addActionToMenu(convertToMenu, "convert_to_selection_mask");
+                QMenu *splitAlphaMenu = menu.addMenu(i18n("S&plit Alpha"));
+                addActionToMenu(splitAlphaMenu, "split_alpha_into_mask");
+                addActionToMenu(splitAlphaMenu, "split_alpha_write");
+                addActionToMenu(splitAlphaMenu, "split_alpha_save_merged");
 
-            QMenu *splitAlphaMenu = menu.addMenu(i18n("S&plit Alpha"));
-            addActionToMenu(splitAlphaMenu, "split_alpha_into_mask");
-            addActionToMenu(splitAlphaMenu, "split_alpha_write");
-            addActionToMenu(splitAlphaMenu, "split_alpha_save_merged");
-
-            KisNodeSP node = m_nodeModel->nodeFromIndex(index);
-            if (node && !node->inherits("KisTransformMask")) {
-                addActionToMenu(&menu, "isolate_layer");
+                KisNodeSP node = m_nodeModel->nodeFromIndex(index);
+                if (node && !node->inherits("KisTransformMask")) {
+                    addActionToMenu(&menu, "isolate_layer");
+                }
             }
         }
-        menu.addSeparator();
-        addActionToMenu(&menu, "add_new_transparency_mask");
-        addActionToMenu(&menu, "add_new_filter_mask");
-        addActionToMenu(&menu, "add_new_transform_mask");
-        addActionToMenu(&menu, "add_new_selection_mask");
-        menu.addSeparator();
-        menu.addAction(m_selectOpaque);
+
+        if (singleLayer) {
+            menu.addSeparator();
+            addActionToMenu(&menu, "add_new_transparency_mask");
+            addActionToMenu(&menu, "add_new_filter_mask");
+            addActionToMenu(&menu, "add_new_transform_mask");
+            addActionToMenu(&menu, "add_new_selection_mask");
+            menu.addSeparator();
+            menu.addAction(m_selectOpaque);
+        }
+
         menu.exec(pos);
     }
 }

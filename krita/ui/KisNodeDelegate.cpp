@@ -187,11 +187,6 @@ bool KisNodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, cons
             model->setData(index, true, Model::AlternateActiveRole);
             return true;
         }
-
-        if (mouseEvent->button() != Qt::LeftButton) {
-            d->view->setCurrentIndex(index);
-            return false;
-        }
     }
     else if (event->type() == QEvent::ToolTip) {
         if (!KisConfig().hidePopups()) {

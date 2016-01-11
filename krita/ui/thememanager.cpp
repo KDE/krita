@@ -40,7 +40,7 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QStatusBar>
-#include <//qDebug>
+#include <qDebug>
 
 // KDE includes
 

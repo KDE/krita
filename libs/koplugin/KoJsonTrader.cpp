@@ -111,7 +111,7 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
     while (dirIter.hasNext()) {
         dirIter.next();
         if (dirIter.fileInfo().isFile()) {
-            qDebug() << dirIter.fileName();
+            //qDebug() << dirIter.fileName();
             QPluginLoader *loader = new QPluginLoader(dirIter.filePath());
             QJsonObject json = loader->metaData().value("MetaData").toObject();
 

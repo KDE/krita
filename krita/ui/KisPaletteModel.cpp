@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "palettemodel.h"
+#include "KisPaletteModel.h"
 
 #include <QBrush>
 
@@ -27,18 +27,18 @@
 #include <kis_layer.h>
 #include <kis_paint_layer.h>
 
-PaletteModel::PaletteModel(QObject* parent)
+KisPaletteModel::KisPaletteModel(QObject* parent)
     : QAbstractTableModel(parent),
       m_colorSet(0),
       m_displayRenderer(KoDumbColorDisplayRenderer::instance())
 {
 }
 
-PaletteModel::~PaletteModel()
+KisPaletteModel::~KisPaletteModel()
 {
 }
 
-void PaletteModel::setDisplayRenderer(KoColorDisplayRendererInterface *displayRenderer)
+void KisPaletteModel::setDisplayRenderer(KoColorDisplayRendererInterface *displayRenderer)
 {
     if (displayRenderer) {
         if (m_displayRenderer) {
@@ -52,12 +52,12 @@ void PaletteModel::setDisplayRenderer(KoColorDisplayRendererInterface *displayRe
     }
 }
 
-void PaletteModel::slotDisplayConfigurationChanged()
+void KisPaletteModel::slotDisplayConfigurationChanged()
 {
     reset();
 }
 
-QVariant PaletteModel::data(const QModelIndex& index, int role) const
+QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
 {
     if (m_colorSet) {
         int i = index.row()*columnCount()+index.column();
@@ -74,7 +74,7 @@ QVariant PaletteModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-int PaletteModel::rowCount(const QModelIndex& /*parent*/) const
+int KisPaletteModel::rowCount(const QModelIndex& /*parent*/) const
 {
     if (!m_colorSet) {
         return 0;
@@ -85,7 +85,7 @@ int PaletteModel::rowCount(const QModelIndex& /*parent*/) const
     return m_colorSet->nColors()/15 + 1;
 }
 
-int PaletteModel::columnCount(const QModelIndex& /*parent*/) const
+int KisPaletteModel::columnCount(const QModelIndex& /*parent*/) const
 {
     if (m_colorSet && m_colorSet->columnCount() > 0) {
         return m_colorSet->columnCount();
@@ -93,13 +93,13 @@ int PaletteModel::columnCount(const QModelIndex& /*parent*/) const
     return 15;
 }
 
-Qt::ItemFlags PaletteModel::flags(const QModelIndex& /*index*/) const
+Qt::ItemFlags KisPaletteModel::flags(const QModelIndex& /*index*/) const
 {
     Qt::ItemFlags flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable;
     return flags;
 }
 
-QModelIndex PaletteModel::index(int row, int column, const QModelIndex& parent) const
+QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& parent) const
 {
     int index = row*columnCount()+column;
     if (m_colorSet && index < m_colorSet->nColors()) {
@@ -109,7 +109,7 @@ QModelIndex PaletteModel::index(int row, int column, const QModelIndex& parent) 
 }
 
 
-void PaletteModel::setColorSet(KoColorSet* colorSet)
+void KisPaletteModel::setColorSet(KoColorSet* colorSet)
 {
     m_colorSet = colorSet;
     reset();

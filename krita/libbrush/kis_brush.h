@@ -45,8 +45,7 @@ enum enumBrushType {
     MASK,
     IMAGE,
     PIPE_MASK,
-    PIPE_IMAGE,
-    AIRBRUSH
+    PIPE_IMAGE
 };
 
 static const qreal DEFAULT_SOFTNESS_FACTOR = 1.0;

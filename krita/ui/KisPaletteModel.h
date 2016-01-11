@@ -17,22 +17,23 @@
  */
 
 
-#ifndef PALETTEMODEL_H
-#define PALETTEMODEL_H
+#ifndef KIS_PALETTEMODEL_H
+#define KIS_PALETTEMODEL_H
 
 #include <QModelIndex>
 
 #include <kis_types.h>
+#include "kritaui_export.h"
 
 class KoColorSet;
 class KoColorDisplayRendererInterface;
 
-class PaletteModel : public QAbstractTableModel
+class KRITAUI_EXPORT KisPaletteModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    PaletteModel(QObject* parent = 0);
-    virtual ~PaletteModel();
+    KisPaletteModel(QObject* parent = 0);
+    virtual ~KisPaletteModel();
     
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -57,4 +58,4 @@ private:
     KoColorDisplayRendererInterface *m_displayRenderer;
 };
 
-#endif // PALETTEMODEL_H
+#endif

@@ -16,7 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "kis_imagepipe_brush_p.h"
+#include "kis_pipebrush_parasite.h"
 
 KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
 {
@@ -168,4 +168,10 @@ bool KisPipeBrushParasite::saveToDevice(QIODevice* dev) const
     }
 
     return true;
+}
+
+bool loadFromDevice(QIODevice *dev)
+{
+    // XXX: implement...
+    return true;;
 }

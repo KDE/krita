@@ -43,8 +43,8 @@
 #include <kis_display_color_converter.h>
 #include <kis_canvas2.h>
 
-#include "palettemodel.h"
-#include "colorsetchooser.h"
+#include "KisPaletteModel.h"
+#include "KisColorsetChooser.h"
 #include "ui_wdgpalettedock.h"
 
 /// The resource item delegate for rendering the resource preview
@@ -137,7 +137,7 @@ PaletteDockerDock::PaletteDockerDock( )
     connect(m_wdgPaletteDock->bnAddDialog, SIGNAL(clicked(bool)), this, SLOT(addColor()));
     connect(m_wdgPaletteDock->bnRemove, SIGNAL(clicked(bool)), this, SLOT(removeColor()));
 
-    m_model = new PaletteModel(this);
+    m_model = new KisPaletteModel(this);
     m_wdgPaletteDock->paletteView->setModel(m_model);
     m_wdgPaletteDock->paletteView->setShowGrid(false);
     m_wdgPaletteDock->paletteView->horizontalHeader()->setVisible(false);
@@ -159,7 +159,7 @@ PaletteDockerDock::PaletteDockerDock( )
     m_serverAdapter->connectToResourceServer();
     rServer->addObserver(this);
 
-    m_colorSetChooser = new ColorSetChooser(this);
+    m_colorSetChooser = new KisColorsetChooser(this);
     connect(m_colorSetChooser, SIGNAL(paletteSelected(KoColorSet*)), this, SLOT(setColorSet(KoColorSet*)));
 
     m_wdgPaletteDock->bnColorSets->setIcon(KisIconUtils::loadIcon("hi16-palette_library"));

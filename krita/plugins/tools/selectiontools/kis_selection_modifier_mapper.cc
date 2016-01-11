@@ -17,6 +17,23 @@
  * Boston, MA 02110-1301, USA.
  */
 
+/**
+ * This is a basic template to create selection tools from basic path based drawing tools.
+ * The template overrides the ability to execute alternate actions correctly.
+ * Modifier keys are overridden with the following behavior:
+ *
+ * Shift: add to selection
+ * Alt: subtract from selection
+ * Shift+Alt: intersect current selection
+ * Ctrl: replace selection
+ *
+ * Certain tools also use modifier keys to alter their behavior, e.g. forcing square proportions with the rectangle tool.
+ * The template enables the following rules for forwarding keys:
+ * 1) Any modifier keys held *when the tool is first activated* will determine the new selection method.
+ * 2) If the underlying tool *does not take modifier keys*, pressing modifier keys in the middle of a stroke will change the selection method.  This applies to the lasso tool and polygon tool.
+ * 3) If the underlying tool *takes modifier keys,* they will always be forwarded to the underlying tool, and it is not possible to change the selection method in the middle of a stroke.
+ */
+
 #include "kis_selection.h"
 #include "kis_selection_modifier_mapper.h"
 #include "kis_config_notifier.h"

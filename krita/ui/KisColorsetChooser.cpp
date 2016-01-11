@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "colorsetchooser.h"
+#include "KisColorsetChooser.h"
 
 #include <QVBoxLayout>
 #include <QAbstractItemDelegate>
@@ -82,7 +82,7 @@ void ColorSetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
     painter->restore();
 }
 
-ColorSetChooser::ColorSetChooser(QWidget* parent): QWidget(parent)
+KisColorsetChooser::KisColorsetChooser(QWidget* parent): QWidget(parent)
 {
     KoResourceServer<KoColorSet> * rserver = KoResourceServerProvider::instance()->paletteServer(false);
     QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KoColorSet>(rserver));
@@ -115,16 +115,16 @@ ColorSetChooser::ColorSetChooser(QWidget* parent): QWidget(parent)
     layout->setColumnStretch(1, 1);
 }
 
-ColorSetChooser::~ColorSetChooser()
+KisColorsetChooser::~KisColorsetChooser()
 {
 }
 
-void ColorSetChooser::resourceSelected(KoResource* resource)
+void KisColorsetChooser::resourceSelected(KoResource* resource)
 {
     emit paletteSelected(static_cast<KoColorSet*>(resource));
 }
 
-void ColorSetChooser::slotSave()
+void KisColorsetChooser::slotSave()
 {
     KoResourceServer<KoColorSet> * rserver = KoResourceServerProvider::instance()->paletteServer();
 

@@ -11,7 +11,7 @@ set(kritalibbrush_LIB_SRCS
     kis_abr_brush.cpp
     kis_abr_brush_collection.cpp
     kis_imagepipe_brush.cpp
-    kis_imagepipe_brush_p.cpp
+    kis_pipebrush_parasite.cpp
     kis_png_brush.cpp
     kis_svg_brush.cpp
     kis_qimage_pyramid.cpp

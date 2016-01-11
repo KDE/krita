@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <mime-type type="image/x-gimp-brush">
+    <comment>Gimp Brush</comment>
+    <glob pattern="*.gbr"/>
+    <glob pattern="*.vbr"/>
+  </mime-type>
+</mime-info>

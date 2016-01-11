@@ -921,6 +921,7 @@ QString KisDocument::checkImageMimeTypes(const QString &mimeType, const QUrl &ur
                    << "image/png"
                    << "image/bmp" << "image/x-xpixmap" << "image/gif" << "image/x-xbitmap"
                    << "image/tiff"
+                   << "image/x-gimp-brush" << "image/x-gimp-brush-animated"
                    << "image/jp2";
 
     if (!imageMimeTypes.contains(mimeType)) return mimeType;

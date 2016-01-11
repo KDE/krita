@@ -18,8 +18,8 @@
  */
 
 
-#ifndef COLORSET_CHOOSER_H
-#define COLORSET_CHOOSER_H
+#ifndef KIS_COLORSET_CHOOSER_H
+#define KIS_COLORSET_CHOOSER_H
 
 #include <QWidget>
 
@@ -29,12 +29,15 @@ class QLineEdit;
 class KoResourceItemChooser;
 class KoResource;
 
-class ColorSetChooser : public QWidget
+#include "kritaui_export.h"
+
+
+class KRITAUI_EXPORT KisColorsetChooser : public QWidget
 {
     Q_OBJECT
 public:
-    ColorSetChooser(QWidget* parent = 0);
-    virtual ~ColorSetChooser();
+    KisColorsetChooser(QWidget* parent = 0);
+    virtual ~KisColorsetChooser();
 
 Q_SIGNALS:
     void paletteSelected(KoColorSet* colorSet);

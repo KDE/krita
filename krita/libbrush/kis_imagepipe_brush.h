@@ -27,6 +27,7 @@
 #include "kis_gbr_brush.h"
 #include "kis_global.h"
 
+class KisPipeBrushParasite;
 
 /**
  * Velocity won't be supported, atm Tilt isn't either,
@@ -105,6 +106,13 @@ public:
             double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
 
+    QVector<KisGbrBrush*> brushes() const;
+
+
+    const KisPipeBrushParasite &parasite() const;
+
+    void setParasite(const KisPipeBrushParasite& parasite);
+    void setDevices(QVector< QVector<KisPaintDevice*> > devices, int w, int h);
 
 protected:
     void setBrushType(enumBrushType type);
@@ -119,11 +127,10 @@ private:
     friend class KisImagePipeBrushTest;
 
     KisGbrBrush* testingGetCurrentBrush(const KisPaintInformation& info) const;
-    QVector<KisGbrBrush*> testingGetBrushes() const;
     void testingSelectNextBrush(const KisPaintInformation& info) const;
 
     bool initFromData(const QByteArray &data);
-    void sanitize(); // Force some default values in case the ones read in don't make sense
+
 private:
     struct Private;
     Private * const m_d;

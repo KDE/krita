@@ -40,6 +40,7 @@
 #include "kis_paint_device.h"
 #include "kis_layer.h"
 
+#include "kritabrush_export.h"
 
 /**
  * The parasite info that gets loaded from the terribly documented gimp pipe brush parasite.
@@ -62,7 +63,7 @@
  * until we have reached dimension dim. Or at least, that is how it looks like, we'll know
  * for sure when we can test it better with >1 dim brushes and Angular selectionMode.
  **/
-class KisPipeBrushParasite
+class BRUSH_EXPORT KisPipeBrushParasite
 {
 public:
     /// Set some default values
@@ -86,7 +87,7 @@ public:
      * Saves a GIMP-compatible representation of this parasite to the device. Also writes the
      * number of brushes (== ncells) (no trailing '\n') */
     bool saveToDevice(QIODevice* dev) const;
-
+    bool loadFromDevice(QIODevice *dev);
 
     enum Placement { DefaultPlacement, ConstantPlacement, RandomPlacement };
 

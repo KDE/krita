@@ -140,6 +140,8 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     : QtSingleApplication(key, argc, argv)
     , d(new KisApplicationPrivate)
 {
+    QCoreApplication::addLibraryPath(QCoreApplication::applicationDirPath());
+
     setApplicationDisplayName("Krita");
     setApplicationName("krita");
 

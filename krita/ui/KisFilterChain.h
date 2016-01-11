@@ -98,24 +98,13 @@ public:
     QString outputFile();
 
     /**
-     * Get a file from a storage. May return 0!
-     * This part of the API is for the filters in our chain.
-     * If you call it multiple times with the same stream name
-     * the stream will be closed and re-opened.
-     * Note: @em Don't delete that @ref KoStoreDevice we return.
-     * @param name The name of the stream inside the storage
-     * @param mode Whether we want to read or write from/to the stream
-     * @return The storage device to access the stream. May be 0!
-     */
-    KoStoreDevice* storageFile(const QString& name = "root", KoStore::Mode mode = KoStore::Read);
-
-    /**
      * This method allows your filter to work directly on the
      * @ref KisDocument of the application.
      * This part of the API is for the filters in our chain.
      * @return The document containing the data. May return 0 on error.
      */
     KisDocument* inputDocument();
+
     /**
      * This method allows your filter to work directly on the
      * @ref KisDocument of the application.
@@ -127,9 +116,6 @@ public:
 
     /// returns the amount of filters this chain contains representing the weight
     int weight() const;
-
-    // debugging
-    void dump();
 
 private:
     // ### API for Calligra::Graph:

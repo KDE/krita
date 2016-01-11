@@ -145,11 +145,6 @@ QString KisFilterChain::inputFile()
 
 QString KisFilterChain::outputFile()
 {
-    // sanity check: No embedded filter should ask for a plain file
-    // ###### CHECK: This will break as soon as we support exporting embedding filters
-    if (filterManagerParentChain())
-        warnFile << "An embedded filter has to use storageFile()!";
-
     if (m_outputQueried == File)
         return m_outputFile;
     else if (m_outputQueried != Nil) {
@@ -170,27 +165,6 @@ QString KisFilterChain::outputFile()
     return m_outputFile;
 }
 
-KoStoreDevice* KisFilterChain::storageFile(const QString& name, KoStore::Mode mode)
-{
-    // Plain normal use case
-    if (m_inputQueried == Storage && mode == KoStore::Read &&
-            m_inputStorage && m_inputStorage->mode() == KoStore::Read)
-        return storageNewStreamHelper(&m_inputStorage, &m_inputStorageDevice, name);
-    else if (m_outputQueried == Storage && mode == KoStore::Write &&
-             m_outputStorage && m_outputStorage->mode() == KoStore::Write)
-        return storageNewStreamHelper(&m_outputStorage, &m_outputStorageDevice, name);
-    else if (m_inputQueried == Nil && mode == KoStore::Read)
-        return storageHelper(inputFile(), name, KoStore::Read,
-                             &m_inputStorage, &m_inputStorageDevice);
-    else if (m_outputQueried == Nil && mode == KoStore::Write)
-        return storageHelper(outputFile(), name, KoStore::Write,
-                             &m_outputStorage, &m_outputStorageDevice);
-    else {
-        warnFile << "Oooops, how did we get here? You already asked for a"
-                 << " different source/destination?" << endl;
-        return 0;
-    }
-}
 
 KisDocument* KisFilterChain::inputDocument()
 {
@@ -214,13 +188,6 @@ KisDocument* KisFilterChain::inputDocument()
 
 KisDocument* KisFilterChain::outputDocument()
 {
-    // sanity check: No embedded filter should ask for a document
-    // ###### CHECK: This will break as soon as we support exporting embedding filters
-    if (filterManagerParentChain()) {
-        warnFile << "An embedded filter has to use storageFile()!";
-        return 0;
-    }
-
     if (m_outputQueried == Document)
         return m_outputDocument;
     else if (m_outputQueried != Nil) {
@@ -237,17 +204,6 @@ KisDocument* KisFilterChain::outputDocument()
 
     m_outputQueried = Document;
     return m_outputDocument;
-}
-
-void KisFilterChain::dump()
-{
-    dbgFile << "########## KisFilterChain with" << m_chainLinks.count() << " members:";
-    ChainLink* link = m_chainLinks.first();
-    while (link) {
-        link->dump();
-        link = m_chainLinks.next();
-    }
-    dbgFile << "########## KisFilterChain (done) ##########";
 }
 
 void KisFilterChain::appendChainLink(KisFilterEntrySP filterEntry, const QByteArray& from, const QByteArray& to)

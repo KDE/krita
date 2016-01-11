@@ -8,5 +8,6 @@
     "X-KDE-ServiceTypes": [
         "Krita/FileFilter"
     ],
-    "X-KDE-Weight": "1"
+    "X-KDE-Weight": "1",
+    "X-KDE-Extensions" : "nef,cr2,sr2,crw,pef,x3f,kdc,mrw,arw,k25,dcr,orf,raw,raw,raf,srf,dng"
 }

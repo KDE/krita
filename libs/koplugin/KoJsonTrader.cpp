@@ -118,11 +118,15 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
             //qDebug() << mimetype << json << json.value("X-KDE-ServiceTypes");
 
             if (json.isEmpty()) {
-                qDebug() << dirIter.filePath() << "has no json!";
+                qWarning() << dirIter.filePath() << "has no json!";
             }
             else {
-                if (!json.value("X-KDE-ServiceTypes").toArray().contains(QJsonValue(servicetype))) {
-                    qDebug() << dirIter.filePath() << "has no X-KDE-ServiceTypes";
+                QJsonArray  serviceTypes = json.value("X-KDE-ServiceTypes").toArray();
+                if (serviceTypes.isEmpty()) {
+                    qWarning() << dirIter.fileName() << "has no X-KDE-ServiceTypes";
+                }
+                if (!serviceTypes.contains(QJsonValue(servicetype))) {
+
                     continue;
                 }
 
@@ -131,7 +135,7 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
                     mimeTypes += json.value("MimeType").toString().split(';');
                     mimeTypes += json.value("X-KDE-NativeMimeType").toString();
                     if (! mimeTypes.contains(mimetype)) {
-                        qDebug() << dirIter.filePath() << "doesn't contain mimetype" << mimetype << "in" << mimeTypes;
+                        qWarning() << dirIter.filePath() << "doesn't contain mimetype" << mimetype << "in" << mimeTypes;
                         continue;
                     }
                 }

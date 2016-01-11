@@ -40,7 +40,7 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QStatusBar>
-#include <QDebug>
+#include <//qDebug>
 
 // KDE includes
 
@@ -73,13 +73,13 @@ class ThemeManager::ThemeManagerPriv
 public:
 
     ThemeManagerPriv()
-        : defaultThemeName(i18nc("default theme name", "Default")),
-          themeMenuActionGroup(0),
-          themeMenuAction(0)
+        : defaultThemeName(i18nc("default theme name", "Default"))
+        , themeMenuActionGroup(0)
+        , themeMenuAction(0)
     {
     }
 
-    const QString          defaultThemeName;
+    QString          defaultThemeName;
     QString                currentThemeName;
     QMap<QString, QString> themeMap;            // map<theme name, theme config path>
 
@@ -91,6 +91,8 @@ ThemeManager::ThemeManager(const QString &theme, QObject *parent)
     : QObject(parent)
     , d(new ThemeManagerPriv)
 {
+    //qDebug() << "Creating theme manager with theme" << theme;
+    d->defaultThemeName = theme;
     d->currentThemeName = theme;
     populateThemeMap();
 }
@@ -102,26 +104,40 @@ ThemeManager::~ThemeManager()
 
 QString ThemeManager::defaultThemeName() const
 {
+    //qDebug() << "defaultThemeName()" << d->defaultThemeName;
     return d->defaultThemeName;
 }
 
 QString ThemeManager::currentThemeName() const
 {
+    //qDebug() << "getting current themename";
+    QString themeName;
     if (d->themeMenuAction && d->themeMenuActionGroup) {
+
         QAction* action = d->themeMenuActionGroup->checkedAction();
-        return !action ? defaultThemeName() : action->text().remove('&');
+        themeName = (!action ? defaultThemeName() : action->text().remove('&'));
+
+        //qDebug() << "\tthemename from action" << themeName;
     }
     else if (!d->currentThemeName.isEmpty()) {
-        return d->currentThemeName;
+
+        //qDebug() << "\tcurrent themename" << d->currentThemeName;
+
+        themeName = d->currentThemeName;
     }
     else {
-        return defaultThemeName();
+
+        //qDebug() << "\tdefault theme name" << d->defaultThemeName;
+
+        themeName = d->defaultThemeName;
     }
+    //qDebug() << "\tresult" << themeName;
+    return themeName;
 }
 
 void ThemeManager::setCurrentTheme(const QString& name)
 {
-//    qDebug() << "setCurrentTheme();" << d->currentThemeName << "to" << name;
+    //qDebug() << "setCurrentTheme();" << d->currentThemeName << "to" << name;
     if (d->currentThemeName == name) return;
 
     d->currentThemeName = name;
@@ -141,7 +157,7 @@ void ThemeManager::setCurrentTheme(const QString& name)
 
 void ThemeManager::slotChangePalette()
 {
-//    qDebug() << "slotChangePalette" << sender();
+    //qDebug() << "slotChangePalette" << sender();
     updateCurrentKDEdefaultThemePreview();
 
     QString theme(currentThemeName());
@@ -188,7 +204,7 @@ void ThemeManager::slotChangePalette()
         palette.setBrush(state, QPalette::LinkVisited,     schemeView.foreground(KColorScheme::VisitedText));
     }
 
-//    qDebug() << ">>>>>>>>>>>>>>>>>> going to set palette on app" << theme;
+    //qDebug() << ">>>>>>>>>>>>>>>>>> going to set palette on app" << theme;
     qApp->setPalette(palette);
 
     if (theme == defaultThemeName() || theme.isEmpty()) {
@@ -323,7 +339,9 @@ QString ThemeManager::currentKDEdefaultTheme() const
 {
     KSharedConfigPtr config = KSharedConfig::openConfig("kdeglobals");
     KConfigGroup group(config, "General");
-    return group.readEntry("ColorScheme");
+    QString colorScheme = group.readEntry("ColorScheme");
+    //qDebug() << "currentKDEdefaultTheme()" << colorScheme;
+    return colorScheme;
 }
 
 void ThemeManager::populateThemeMap()

@@ -293,7 +293,7 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
 QStringList KoResourcePaths::findDirsInternal(const QString &type, const QString &relDir)
 {
     QStringList aliases = d->aliases(type);
-    qDebug() << type << aliases << d->mapTypeToQStandardPaths(type);
+    //qDebug() << type << aliases << d->mapTypeToQStandardPaths(type);
 
     QStringList dirs;
 
@@ -311,7 +311,7 @@ QStringList KoResourcePaths::findDirsInternal(const QString &type, const QString
     }
 
     //Q_ASSERT(!dirs.isEmpty());
-    qDebug() << "findDirs: type" << type << "relDir" << relDir<< "resource" << dirs;
+    //qDebug() << "findDirs: type" << type << "relDir" << relDir<< "resource" << dirs;
     return dirs;
 }
 

@@ -54,26 +54,26 @@ public:
      */
     QStringList formats() const;
 
-//private:
-    /**
-     * Try load the node, which belongs to the same Krita instance,
-     * that is can be fetched without serialization
-     */
-    static QList<KisNodeSP> tryLoadInternalNodes(const QMimeData *data,
-                                                 KisImageWSP image,
-                                                 KisShapeController *shapeController,
-                                                 bool /* IN-OUT */ &copyNode);
-
     /**
      * Loads a node from a mime container
      * Supports application/x-krita-node and image types.
      */
-    static QList<KisNodeSP> loadNodes(const QMimeData *data,
+    static KisNodeList loadNodes(const QMimeData *data,
                                       const QRect &imageBounds,
                                       const QPoint &preferredCenter,
                                       bool forceRecenter,
                                       KisImageWSP image,
                                       KisShapeController *shapeController);
+
+private:
+    /**
+     * Try load the node, which belongs to the same Krita instance,
+     * that is can be fetched without serialization
+     */
+    static KisNodeList tryLoadInternalNodes(const QMimeData *data,
+                                                 KisImageWSP image,
+                                                 KisShapeController *shapeController,
+                                                 bool /* IN-OUT */ &copyNode);
 
 public:
     static QMimeData* mimeForLayers(const KisNodeList &nodes, KisNodeSP imageRoot, bool forceCopy = false);

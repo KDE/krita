@@ -435,28 +435,12 @@ namespace KisLayerUtils {
     }
 
     SwitchFrameCommand::SwitchFrameCommand(KisImageSP image, int time, bool finalize, SharedStorageSP storage)
-        : m_image(image),
+        : FlipFlopCommand(finalize),
+          m_image(image),
           m_newTime(time),
-          m_finalize(finalize),
           m_storage(storage) {}
 
     SwitchFrameCommand::~SwitchFrameCommand() {}
-
-    void SwitchFrameCommand::redo() {
-        if (!m_finalize) {
-            init();
-        } else {
-            end();
-        }
-    }
-
-    void SwitchFrameCommand::undo() {
-        if (m_finalize) {
-            init();
-        } else {
-            end();
-        }
-    }
 
     void SwitchFrameCommand::init() {
         KisImageAnimationInterface *interface = m_image->animationInterface();

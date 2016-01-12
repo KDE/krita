@@ -25,58 +25,46 @@
 #include "commands_new/kis_processing_command.h"
 #include "kis_stroke_strategy_undo_command_based.h"
 #include "kis_layer_utils.h"
+#include "kis_command_utils.h"
 
-class DisableUIUpdatesCommand : public KUndo2Command
+class DisableUIUpdatesCommand : public KisCommandUtils::FlipFlopCommand
 {
 public:
     DisableUIUpdatesCommand(KisImageWSP image,
                             bool finalUpdate)
-        : m_image(image),
-          m_finalUpdate(finalUpdate)
+        : FlipFlopCommand(finalUpdate),
+          m_image(image)
     {
     }
 
-    void redo() {
-        if(m_finalUpdate) m_image->enableUIUpdates();
-        else m_image->disableUIUpdates();
+    void init() {
+        m_image->disableUIUpdates();
     }
 
-    void undo() {
-        if(!m_finalUpdate) m_image->enableUIUpdates();
-        else m_image->disableUIUpdates();
+    void end() {
+        m_image->enableUIUpdates();
     }
 
 private:
     KisImageWSP m_image;
-    bool m_finalUpdate;
 };
 
 
-class UpdateCommand : public KUndo2Command
+class UpdateCommand : public KisCommandUtils::FlipFlopCommand
 {
 public:
     UpdateCommand(KisImageWSP image, KisNodeSP node,
                   KisProcessingApplicator::ProcessingFlags flags,
                   bool finalUpdate)
-        : m_image(image),
+        : FlipFlopCommand(finalUpdate),
+          m_image(image),
           m_node(node),
-          m_flags(flags),
-          m_finalUpdate(finalUpdate)
+          m_flags(flags)
     {
     }
 
-    void redo() {
-        if(!m_finalUpdate) initialize();
-        else finalize();
-    }
-
-    void undo() {
-        if(m_finalUpdate) initialize();
-        else finalize();
-    }
-
 private:
-    void initialize() {
+    void init() {
         /**
          * We disable all non-centralized updates here. Everything
          * should be done by this command's explicit updates.
@@ -88,7 +76,7 @@ private:
         m_image->disableDirtyRequests();
     }
 
-    void finalize() {
+    void end() {
         m_image->enableDirtyRequests();
 
         if(m_flags.testFlag(KisProcessingApplicator::RECURSIVE)) {
@@ -130,25 +118,22 @@ private:
     bool m_finalUpdate;
 };
 
-class EmitImageSignalsCommand : public KUndo2Command
+class EmitImageSignalsCommand : public KisCommandUtils::FlipFlopCommand
 {
 public:
     EmitImageSignalsCommand(KisImageWSP image,
                             KisImageSignalVector emitSignals,
                             bool finalUpdate)
-        : m_image(image),
-          m_emitSignals(emitSignals),
-          m_finalUpdate(finalUpdate)
+        : FlipFlopCommand(finalUpdate),
+          m_image(image),
+          m_emitSignals(emitSignals)
     {
     }
 
-    void redo() {
-        if(m_finalUpdate) doUpdate(m_emitSignals);
-    }
-
-    void undo() {
-        if(!m_finalUpdate) {
-
+    void end() {
+        if (isFinalizing()) {
+            doUpdate(m_emitSignals);
+        } else {
             KisImageSignalVector reverseSignals;
 
             KisImageSignalVector::iterator i = m_emitSignals.end();

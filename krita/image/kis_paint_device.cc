@@ -120,16 +120,15 @@ public:
             if (m_data) {
                 m_data->prepareClone(rhs->currentData(), true);
             } else {
-                m_data = new KisPaintDeviceData(rhs->currentData(), true);
+                m_data = toQShared(new KisPaintDeviceData(rhs->currentData(), true));
             }
         } else {
             if (m_data && !rhs->m_data) {
-                delete m_data;
-                m_data = 0;
+                m_data.clear();
             } else if (!m_data && rhs->m_data) {
-                m_data = new KisPaintDeviceData(rhs->m_data, true);
+                m_data = toQShared(new KisPaintDeviceData(rhs->m_data.data(), true));
             } else if (m_data && rhs->m_data) {
-                m_data->prepareClone(rhs->m_data, true);
+                m_data->prepareClone(rhs->m_data.data(), true);
             }
 
             if (!rhs->m_frames.isEmpty()) {
@@ -219,16 +218,16 @@ public:
     {
         KIS_ASSERT_RECOVER(parentCommand) { return -1; }
 
-        Data *data;
+        DataSP data;
 
         if (m_frames.isEmpty()) {
             data = m_data;
-            m_data = 0;
+            m_data.clear();
         } else if (copy) {
-            data = new Data(m_frames[copySrc].data(), true);
+            data = toQShared(new Data(m_frames[copySrc].data(), true));
         } else {
             Data *srcData = m_frames.begin().value().data();
-            data = new Data(srcData, false);
+            data = toQShared(new Data(srcData, false));
         }
 
         if (!copy) {
@@ -240,7 +239,7 @@ public:
 
         KUndo2Command *cmd =
             new FrameInsertionCommand(&m_frames,
-                                      toQShared(data),
+                                      data,
                                       frameId, true,
                                       parentCommand);
 
@@ -267,7 +266,7 @@ public:
             // the original m_data will be deleted by shared poiter
             // when the command will be destroyed, so just create a
             // new one for m_data
-            m_data = new Data(deletedData.data(), false);
+            m_data = toQShared(new Data(deletedData.data(), false));
         }
     }
 
@@ -332,7 +331,7 @@ private:
     QRegion syncWholeDevice(Data *srcData);
 
     inline Data* currentNonLodData() const {
-        Data *data = m_data;
+        Data *data = m_data.data();
 
         if (contentChannel) {
             if (contentChannel->keyframeCount() > 1) {
@@ -350,7 +349,7 @@ private:
             if (!m_externalFrameData) {
                 QMutexLocker l(&m_dataSwitchLock);
                 if (!m_externalFrameData) {
-                    m_externalFrameData.reset(new Data(m_data, false));
+                    m_externalFrameData.reset(new Data(m_data.data(), false));
                 }
             }
             data = m_externalFrameData.data();
@@ -360,7 +359,7 @@ private:
     }
 
     inline Data* currentData() const {
-        Data *data = m_data;
+        Data *data = m_data.data();
 
         if (defaultBounds->currentLevelOfDetail()) {
             if (!m_lodData) {
@@ -397,7 +396,7 @@ private:
         QList<Data*> dataObjects;
 
         if (m_frames.isEmpty()) {
-            dataObjects << m_data;
+            dataObjects << m_data.data();
         }
         dataObjects << m_lodData.data();
         dataObjects << m_externalFrameData.data();
@@ -419,7 +418,7 @@ private:
     friend class KisPaintDeviceFramesInterface;
 
 private:
-    Data *m_data;
+    DataSP m_data;
     mutable QScopedPointer<Data> m_lodData;
     mutable QScopedPointer<Data> m_externalFrameData;
     mutable QMutex m_dataSwitchLock;
@@ -443,7 +442,6 @@ KisPaintDevice::Private::Private(KisPaintDevice *paintDevice)
 
 KisPaintDevice::Private::~Private()
 {
-    delete m_data;
     m_frames.clear();
 }
 
@@ -1786,7 +1784,7 @@ KisPaintDeviceFramesInterface::testingGetDataObjects() const
 {
     TestingDataObjects objects;
 
-    objects.m_data = q->m_d->m_data;
+    objects.m_data = q->m_d->m_data.data();
     objects.m_lodData = q->m_d->m_lodData.data();
     objects.m_externalFrameData = q->m_d->m_externalFrameData.data();
 

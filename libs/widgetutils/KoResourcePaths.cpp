@@ -27,6 +27,7 @@
 #include <QDebug>
 #include <QSet>
 #include <QApplication>
+#include <QMutex>
 
 Q_GLOBAL_STATIC(KoResourcePaths, s_instance);
 
@@ -106,19 +107,25 @@ public:
     QMap<QString, QStringList> absolutes; // For each resource type, the list of absolute paths, from most local (most priority) to most global
     QMap<QString, QStringList> relatives; // Same with relative paths
 
+    QMutex relativesMutex;
+    QMutex absolutesMutex;
 
     QStringList aliases(const QString &type)
     {
         QStringList r;
         QStringList a;
+        relativesMutex.lock();
         if (relatives.contains(type)) {
             r += relatives[type];
         }
+        relativesMutex.unlock();
         //qDebug() << "\trelatives" << r;
+        absolutesMutex.lock();
         if (absolutes.contains(type)) {
             a += absolutes[type];
         }
         //qDebug() << "\tabsolutes" << a;
+        absolutesMutex.unlock();
 
         return r + a;
     }
@@ -226,6 +233,7 @@ void KoResourcePaths::addResourceTypeInternal(const QString &type, const QString
         copy += QLatin1Char('/');
     }
 
+    d->relativesMutex.lock();
     QStringList &rels = d->relatives[type]; // find or insert
 
     if (!rels.contains(copy, cs)) {
@@ -235,6 +243,7 @@ void KoResourcePaths::addResourceTypeInternal(const QString &type, const QString
             rels.append(copy);
         }
     }
+    d->relativesMutex.unlock();
 
     //qDebug() << "addResourceType: type" << type << "basetype" << basetype << "relativename" << relativename << "priority" << priority << d->relatives[type];
 }
@@ -249,6 +258,7 @@ void KoResourcePaths::addResourceDirInternal(const QString &type, const QString 
         copy += QLatin1Char('/');
     }
 
+    d->absolutesMutex.lock();
     QStringList &paths = d->absolutes[type];
     if (!paths.contains(copy, cs)) {
         if (priority) {
@@ -257,6 +267,7 @@ void KoResourcePaths::addResourceDirInternal(const QString &type, const QString 
             paths.append(copy);
         }
     }
+    d->absolutesMutex.unlock();
 
     //qDebug() << "addResourceDir: type" << type << "absdir" << absdir << "priority" << priority << d->absolutes[type];
 }

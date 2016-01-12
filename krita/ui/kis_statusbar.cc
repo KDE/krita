@@ -56,9 +56,10 @@ enum {
     POINTER_POSITION_ID
 };
 
-KisStatusBar::KisStatusBar(KisViewManager * view)
-        : m_view(view)
-        , m_imageView(0)
+KisStatusBar::KisStatusBar(KisViewManager *view)
+        : m_view(view),
+          m_imageView(0),
+          m_statusBar(0)
 {
 }
 
@@ -70,32 +71,39 @@ void KisStatusBar::setup()
     m_selectionStatus->setEnabled(false);   
     updateSelectionIcon();
 
+    m_statusBar = m_view->mainWindow()->statusBar();
+
     connect(m_selectionStatus, SIGNAL(clicked()), m_view->selectionManager(), SLOT(slotToggleSelectionDecoration()));
     connect(m_view->selectionManager(), SIGNAL(displaySelectionChanged()), SLOT(updateSelectionToolTip()));
     connect(m_view->mainWindow(), SIGNAL(themeChanged()), this, SLOT(updateSelectionIcon()));
 
-    m_view->addStatusBarItem(m_selectionStatus);
+    addStatusBarItem(m_selectionStatus);
+    m_selectionStatus->setVisible(false);
 
     m_statusBarStatusLabel = new KSqueezedTextLabel();
     m_statusBarStatusLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     m_statusBarStatusLabel->setContentsMargins(5, 5, 5, 5);
     connect(KoToolManager::instance(), SIGNAL(changedStatusText(const QString &)),
             m_statusBarStatusLabel, SLOT(setText(const QString &)));
-    m_view->addStatusBarItem(m_statusBarStatusLabel, 2);
+    addStatusBarItem(m_statusBarStatusLabel, 2);
+    m_statusBarStatusLabel->setVisible(false);
 
     m_statusBarProfileLabel = new KSqueezedTextLabel();
     m_statusBarProfileLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     m_statusBarProfileLabel->setContentsMargins(5, 5, 5, 5);
-    m_view->addStatusBarItem(m_statusBarProfileLabel, 3);
+    addStatusBarItem(m_statusBarProfileLabel, 3);
+    m_statusBarProfileLabel->setVisible(false);
 
     m_progress = new KisProgressWidget();
-    m_view->addStatusBarItem(m_progress);
+    addStatusBarItem(m_progress);
+    m_progress->setVisible(false);
 
     m_memoryReportBox = new QPushButton();
     m_memoryReportBox->setFlat(true);
     m_memoryReportBox->setContentsMargins(5, 5, 5, 5);
     m_memoryReportBox->setMinimumWidth(120);
-    m_view->addStatusBarItem(m_memoryReportBox);
+    addStatusBarItem(m_memoryReportBox);
+    m_memoryReportBox->setVisible(false);
 
     connect(m_memoryReportBox, SIGNAL(clicked()), SLOT(showMemoryInfoToolTip()));
 
@@ -103,7 +111,7 @@ void KisStatusBar::setup()
     m_pointerPositionLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_pointerPositionLabel->setMinimumWidth(100);
     m_pointerPositionLabel->setContentsMargins(5,5, 5, 5);
-    m_view->addStatusBarItem(m_pointerPositionLabel);
+    addStatusBarItem(m_pointerPositionLabel);
     m_pointerPositionLabel->setVisible(false);
 
     connect(KisMemoryStatisticsServer::instance(),
@@ -122,7 +130,8 @@ void KisStatusBar::setView(QPointer<KisView> imageView)
     }
     if (m_imageView) {
         m_imageView->disconnect(this);
-        m_view->removeStatusBarItem(m_imageView->zoomManager()->zoomActionWidget());
+        removeStatusBarItem(m_imageView->zoomManager()->zoomActionWidget());
+
         m_imageView = 0;
     }
     if (imageView) {
@@ -135,10 +144,56 @@ void KisStatusBar::setView(QPointer<KisView> imageView)
         connect(m_imageView, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)),
                 this, SLOT(imageSizeChanged()));
         updateStatusBarProfileLabel();
-        m_view->addStatusBarItem(m_imageView->zoomManager()->zoomActionWidget());
+        addStatusBarItem(m_imageView->zoomManager()->zoomActionWidget());
     }
 
     imageSizeChanged();
+}
+
+void KisStatusBar::addStatusBarItem(QWidget *widget, int stretch, bool permanent)
+{
+    StatusBarItem sbItem(widget);
+
+    if (permanent) {
+        m_statusBar->addPermanentWidget(widget, stretch);
+    }
+    else {
+        m_statusBar->addWidget(widget, stretch);
+    }
+
+    sbItem.show();
+
+    m_statusBarItems.append(sbItem);
+}
+
+void KisStatusBar::removeStatusBarItem(QWidget *widget)
+{
+    int i = 0;
+    Q_FOREACH(const StatusBarItem& sbItem, m_statusBarItems) {
+        if (sbItem.widget() == widget) {
+            break;
+        }
+        i++;
+    }
+
+    if (i < m_statusBarItems.count()) {
+        m_statusBar->removeWidget(m_statusBarItems[i].widget());
+        m_statusBarItems.remove(i);
+    }
+}
+
+void KisStatusBar::hideAllStatusBarItems()
+{
+    Q_FOREACH(const StatusBarItem& sbItem, m_statusBarItems) {
+        sbItem.hide();
+    }
+}
+
+void KisStatusBar::showAllStatusBarItems()
+{
+    Q_FOREACH(const StatusBarItem& sbItem, m_statusBarItems) {
+        sbItem.show();
+    }
 }
 
 void KisStatusBar::documentMousePositionChanged(const QPointF &pos)

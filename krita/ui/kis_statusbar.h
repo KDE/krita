@@ -22,6 +22,7 @@
 #include <QObject>
 #include <QPointer>
 #include <QIcon>
+#include <QStatusBar>
 
 #include <kis_types.h>
 #include "KisView.h"
@@ -37,15 +38,52 @@ class KisProgressWidget;
 
 class KRITAUI_EXPORT KisStatusBar : public QObject
 {
+    class StatusBarItem
+    {
+    public:
+        StatusBarItem() // for QValueList
+            : m_widget(0) {}
+
+        StatusBarItem(QWidget * widget)
+            : m_widget(widget) {}
+
+        bool operator==(const StatusBarItem& rhs) {
+            return m_widget == rhs.m_widget;
+        }
+
+        bool operator!=(const StatusBarItem& rhs) {
+            return m_widget != rhs.m_widget;
+        }
+
+        QWidget * widget() const {
+            return m_widget;
+        }
+
+        void show() const {
+            m_widget->show();
+        }
+        void hide() const {
+            m_widget->hide();
+        }
+
+
+    private:
+        QPointer<QWidget> m_widget;
+    };
+
     Q_OBJECT
 
 public:
 
-    KisStatusBar(KisViewManager * view);
+    KisStatusBar(KisViewManager *view);
     ~KisStatusBar();
 
     void setup();
     void setView(QPointer<KisView> imageView);
+    void addStatusBarItem(QWidget *widget, int stretch = 0, bool permanent = false);
+    void removeStatusBarItem(QWidget *widget);
+    void hideAllStatusBarItems();
+    void showAllStatusBarItems();
 
     KisProgressWidget *progress();
 
@@ -70,6 +108,7 @@ private:
 
     QPointer<KisViewManager> m_view;
     QPointer<KisView> m_imageView;
+    QPointer<QStatusBar> m_statusBar;
     KisProgressWidget * m_progress;
 
     QToolButton *m_selectionStatus;
@@ -83,6 +122,8 @@ private:
     QString m_shortMemoryTag;
     QString m_longMemoryTag;
     QIcon m_memoryStatusIcon;
+
+    QVector<StatusBarItem> m_statusBarItems;
 };
 
 #endif

@@ -1172,6 +1172,7 @@ void KisMainWindow::setActiveView(KisView* view)
     updateCaption();
     actionCollection()->action("edit_undo")->setText(activeView()->undoAction()->text());
     actionCollection()->action("edit_redo")->setText(activeView()->redoAction()->text());
+    d->viewManager->setCurrentView(view);
 }
 
 void KisMainWindow::dragEnterEvent(QDragEnterEvent *event)
@@ -1915,7 +1916,6 @@ void KisMainWindow::setActiveSubWindow(QWidget *window)
         KisView *view = qobject_cast<KisView *>(subwin->widget());
         //dbgKrita << "\t" << view << activeView();
         if (view && view != activeView()) {
-            d->viewManager->setCurrentView(view);
             setActiveView(view);
         }
         d->activeSubWindow = subwin;

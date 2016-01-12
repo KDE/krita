@@ -118,9 +118,6 @@ public:
     KisUndoStackAction *undo = 0;
     KisUndoStackAction *redo = 0;
 
-    class StatusBarItem;
-
-    QList<StatusBarItem> statusBarItems; // Our statusbar items
     bool inOperation; //in the middle of an operation (no screen refreshing)?
 
     QPointer<KisDocument> document; // our KisDocument
@@ -550,34 +547,6 @@ void KisView::setDocumentDeleted()
 {
     d->documentDeleted = true;
 }
-
-void KisView::addStatusBarItem(QWidget * widget, int stretch, bool permanent)
-{
-    Private::StatusBarItem item(widget, stretch, permanent);
-    QStatusBar * sb = statusBar();
-    if (sb) {
-        item.ensureItemShown(sb);
-    }
-    d->statusBarItems.append(item);
-}
-
-void KisView::removeStatusBarItem(QWidget *widget)
-{
-    QStatusBar *sb = statusBar();
-
-    int itemCount = d->statusBarItems.count();
-    for (int i = itemCount-1; i >= 0; --i) {
-        Private::StatusBarItem &sbItem = d->statusBarItems[i];
-        if (sbItem.widget() == widget) {
-            if (sb) {
-                sbItem.ensureItemHidden(sb);
-            }
-            d->statusBarItems.removeOne(sbItem);
-            break;
-        }
-    }
-}
-
 
 KoPageLayout KisView::pageLayout() const
 {

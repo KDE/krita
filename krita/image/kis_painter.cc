@@ -76,6 +76,8 @@
 
 struct Q_DECL_HIDDEN KisPainter::Private {
     Private(KisPainter *_q) : q(_q) {}
+    Private(KisPainter *_q, const KoColorSpace *cs)
+        : q(_q), paintColor(cs), backgroundColor(cs) {}
 
     KisPainter *q;
 
@@ -134,7 +136,7 @@ KisPainter::KisPainter()
 }
 
 KisPainter::KisPainter(KisPaintDeviceSP device)
-    : d(new Private(this))
+    : d(new Private(this, device->colorSpace()))
 {
     init();
     Q_ASSERT(device);
@@ -142,7 +144,7 @@ KisPainter::KisPainter(KisPaintDeviceSP device)
 }
 
 KisPainter::KisPainter(KisPaintDeviceSP device, KisSelectionSP selection)
-    : d(new Private(this))
+    : d(new Private(this, device->colorSpace()))
 {
     init();
     Q_ASSERT(device);

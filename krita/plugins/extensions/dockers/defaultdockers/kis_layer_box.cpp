@@ -535,6 +535,13 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
             addActionToMenu(&menu, "paste_layer_from_clipboard");
 
             menu.addSeparator();
+            QMenu *selectMenu = menu.addMenu(i18n("&Select"));
+            addActionToMenu(selectMenu, "select_all_layers");
+            addActionToMenu(selectMenu, "select_visible_layers");
+            addActionToMenu(selectMenu, "select_invisible_layers");
+            addActionToMenu(selectMenu, "select_locked_layers");
+            addActionToMenu(selectMenu, "select_unlocked_layers");
+            menu.addSeparator();
             addActionToMenu(&menu, "create_quick_group");
             addActionToMenu(&menu, "create_quick_clipping_group");
             menu.addSeparator();

@@ -37,6 +37,7 @@ class KisView;
 class KisNodeSelectionAdapter;
 class KisNodeInsertionAdapter;
 class KisNodeJugglerCompressed;
+class KoProperties;
 
 /**
  * The node manager passes requests for new layers or masks on to the mask and layer
@@ -212,6 +213,12 @@ public Q_SLOTS:
     void createQuickGroup();
     void createQuickClippingGroup();
 
+    void selectAllNodes();
+    void selectVisibleNodes();
+    void selectLockedNodes();
+    void selectInvisibleNodes();
+    void selectUnlockedNodes();
+
 public:
 
     
@@ -235,6 +242,7 @@ private:
                               const QString &overrideGroupName,
                               KisNodeSP *newGroup,
                               KisNodeSP *newLastChild);
+    void selectLayersImpl(const KoProperties &props, const KoProperties &invertedProps);
 
     struct Private;
     Private * const m_d;

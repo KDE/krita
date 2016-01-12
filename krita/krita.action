@@ -2530,6 +2530,71 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="select_all_layers">
+      <icon></icon>
+      <text>All Layers</text>
+      <whatsThis></whatsThis>
+      <toolTip>Select all layers</toolTip>
+      <iconText>Select all layers</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="select_visible_layers">
+      <icon></icon>
+      <text>Visible Layers</text>
+      <whatsThis></whatsThis>
+      <toolTip>Select all visible layers</toolTip>
+      <iconText>Select all visible layers</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="select_locked_layers">
+      <icon></icon>
+      <text>Locked Layers</text>
+      <whatsThis></whatsThis>
+      <toolTip>Select all locked layers</toolTip>
+      <iconText>Select all locked layers</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="select_invisible_layers">
+      <icon></icon>
+      <text>Invisible Layers</text>
+      <whatsThis></whatsThis>
+      <toolTip>Select all invisible layers</toolTip>
+      <iconText>Select all invisible layers</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="select_unlocked_layers">
+      <icon></icon>
+      <text>Unlocked Layers</text>
+      <whatsThis></whatsThis>
+      <toolTip>Select all unlocked layers</toolTip>
+      <iconText>Select all unlocked layers</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="save_node_as_image">
       <icon>document-save</icon>
       <text>&amp;Save Layer/Mask...</text>

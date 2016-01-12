@@ -164,6 +164,15 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
         <Action name="convert_to_selection_mask"/>
       </Menu>
       <Separator/>
+      <Menu name="LayerSelect">
+        <text>&amp;Select</text>
+        <Action name="select_all_layers"/>
+        <Action name="select_visible_layers"/>
+        <Action name="select_invisible_layers"/>
+        <Action name="select_locked_layers"/>
+        <Action name="select_unlocked_layers"/>
+      </Menu>
+      <Separator/>
         <Action name="cut_layer_clipboard"/>
         <Action name="copy_layer_clipboard"/>
         <Action name="paste_layer_from_clipboard"/>

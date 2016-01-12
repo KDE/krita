@@ -33,6 +33,8 @@
 #include <KisImportExportManager.h>
 #include <KoFileDialog.h>
 #include <KoToolManager.h>
+#include <KoProperties.h>
+
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -73,6 +75,7 @@
 #include "kis_node_dummies_graph.h"
 #include "kis_mimedata.h"
 #include "kis_layer_utils.h"
+#include "krita_utils.h"
 
 #include "processing/kis_mirror_processing_visitor.h"
 #include "KisView.h"
@@ -260,6 +263,21 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
     action = actionManager->createAction("create_quick_clipping_group");
     connect(action, SIGNAL(triggered()), this, SLOT(createQuickClippingGroup()));
+
+    action = actionManager->createAction("select_all_layers");
+    connect(action, SIGNAL(triggered()), this, SLOT(selectAllNodes()));
+
+    action = actionManager->createAction("select_visible_layers");
+    connect(action, SIGNAL(triggered()), this, SLOT(selectVisibleNodes()));
+
+    action = actionManager->createAction("select_locked_layers");
+    connect(action, SIGNAL(triggered()), this, SLOT(selectLockedNodes()));
+
+    action = actionManager->createAction("select_invisible_layers");
+    connect(action, SIGNAL(triggered()), this, SLOT(selectInvisibleNodes()));
+
+    action = actionManager->createAction("select_unlocked_layers");
+    connect(action, SIGNAL(triggered()), this, SLOT(selectUnlockedNodes()));
 
     NEW_LAYER_ACTION("add_new_paint_layer", "KisPaintLayer");
 
@@ -1180,4 +1198,87 @@ void KisNodeManager::createQuickClippingGroup()
     maskLayer->disableAlphaChannel(true);
 
     juggler->addNode(KisNodeList() << maskLayer, parent, above);
+}
+
+KisNodeList findNodesWithProps(KisNodeSP root, const KoProperties &props, bool excludeRoot)
+{
+    KisNodeList nodes;
+
+    if ((!excludeRoot || root->parent()) && root->check(props)) {
+        nodes << root;
+    }
+
+    KisNodeSP node = root->firstChild();
+    while (node) {
+        nodes += findNodesWithProps(node, props, excludeRoot);
+        node = node->nextSibling();
+    }
+
+    return nodes;
+}
+
+void KisNodeManager::selectLayersImpl(const KoProperties &props, const KoProperties &invertedProps)
+{
+    KisImageSP image = m_d->view->image();
+    KisNodeList nodes = findNodesWithProps(image->root(), props, true);
+
+    KisNodeList selectedNodes = this->selectedNodes();
+
+    if (KritaUtils::compareListsUnordered(nodes, selectedNodes)) {
+        nodes = findNodesWithProps(image->root(), invertedProps, true);
+    }
+
+    if (!nodes.isEmpty()) {
+        slotImageRequestNodeReselection(nodes.last(), nodes);
+    }
+}
+
+void KisNodeManager::selectAllNodes()
+{
+    KoProperties props;
+    selectLayersImpl(props, props);
+}
+
+void KisNodeManager::selectVisibleNodes()
+{
+    KoProperties props;
+    props.setProperty("visible", true);
+
+    KoProperties invertedProps;
+    invertedProps.setProperty("visible", false);
+
+    selectLayersImpl(props, invertedProps);
+}
+
+void KisNodeManager::selectLockedNodes()
+{
+    KoProperties props;
+    props.setProperty("locked", true);
+
+    KoProperties invertedProps;
+    invertedProps.setProperty("locked", false);
+
+    selectLayersImpl(props, invertedProps);
+}
+
+void KisNodeManager::selectInvisibleNodes()
+{
+    KoProperties props;
+    props.setProperty("visible", false);
+
+    KoProperties invertedProps;
+    invertedProps.setProperty("visible", true);
+
+    selectLayersImpl(props, invertedProps);
+}
+
+void KisNodeManager::selectUnlockedNodes()
+{
+    KoProperties props;
+    props.setProperty("locked", false);
+
+    KoProperties invertedProps;
+    invertedProps.setProperty("locked", true);
+
+    selectLayersImpl(props, invertedProps);
 }

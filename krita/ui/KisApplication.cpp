@@ -149,6 +149,19 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     setApplicationVersion(version);
     setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
 
+    QStringList styles = QStringList() << "Breeze" << "Oxygen" << "Fusion" << "Plastique";
+    if (!styles.contains(style()->objectName())) {
+        Q_FOREACH (const QString & style, styles) {
+            if (!setStyle(style)) {
+                qDebug() << "No" << style << "available.";
+            }
+            else {
+                break;
+            }
+        }
+    }
+
+
 #ifdef HAVE_OPENGL
     KisOpenGL::initialize();
 #endif

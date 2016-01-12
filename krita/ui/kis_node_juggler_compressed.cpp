@@ -575,7 +575,7 @@ struct RemoveLayers : private KisLayerUtils::RemoveNodeHelper, public KisCommand
 
     void populateChildCommands() {
         KisNodeList filteredNodes = m_nodes;
-        KisLayerUtils::filterMergableNodes(filteredNodes);
+        KisLayerUtils::filterMergableNodes(filteredNodes, true);
 
         if (filteredNodes.isEmpty()) return;
 

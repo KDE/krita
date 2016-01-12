@@ -2504,6 +2504,32 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="create_quick_group">
+      <icon></icon>
+      <text>Quick Group</text>
+      <whatsThis></whatsThis>
+      <toolTip>Create a group layer containing selected layers</toolTip>
+      <iconText>Quick Group</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut>Ctrl+G</shortcut>
+      <defaultShortcut>Ctrl+G</defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="create_quick_clipping_group">
+      <icon></icon>
+      <text>Quick Clipping Group</text>
+      <whatsThis></whatsThis>
+      <toolTip>Group selected layers and add a layer with clipped alpha channel</toolTip>
+      <iconText>Quick Clipping Group</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut>Ctrl+Shift+G</shortcut>
+      <defaultShortcut>Ctrl+Shift+G</defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="save_node_as_image">
       <icon>document-save</icon>
       <text>&amp;Save Layer/Mask...</text>

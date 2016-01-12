@@ -36,6 +36,7 @@ class KisActionManager;
 class KisView;
 class KisNodeSelectionAdapter;
 class KisNodeInsertionAdapter;
+class KisNodeJugglerCompressed;
 
 /**
  * The node manager passes requests for new layers or masks on to the mask and layer
@@ -208,6 +209,9 @@ public Q_SLOTS:
     void copyLayersToClipboard();
     void pasteLayersFromClipboard();
 
+    void createQuickGroup();
+    void createQuickClippingGroup();
+
 public:
 
     
@@ -227,6 +231,10 @@ private:
     qint32 convertOpacityToInt(qreal opacity);
     void removeSelectedNodes(KisNodeList selectedNodes);
     void slotSomethingActivatedNodeImpl(KisNodeSP node);
+    void createQuickGroupImpl(KisNodeJugglerCompressed *juggler,
+                              const QString &overrideGroupName,
+                              KisNodeSP *newGroup,
+                              KisNodeSP *newLastChild);
 
     struct Private;
     Private * const m_d;

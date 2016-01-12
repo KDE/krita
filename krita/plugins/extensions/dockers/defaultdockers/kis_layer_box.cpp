@@ -535,6 +535,9 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
             addActionToMenu(&menu, "paste_layer_from_clipboard");
 
             menu.addSeparator();
+            addActionToMenu(&menu, "create_quick_group");
+            addActionToMenu(&menu, "create_quick_clipping_group");
+            menu.addSeparator();
 
             menu.addAction(m_removeAction);
             addActionToMenu(&menu, "duplicatelayer");

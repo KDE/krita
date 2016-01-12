@@ -72,6 +72,7 @@
 #include "kis_clipboard.h"
 #include "kis_node_dummies_graph.h"
 #include "kis_mimedata.h"
+#include "kis_layer_utils.h"
 
 #include "processing/kis_mirror_processing_visitor.h"
 #include "KisView.h"
@@ -253,6 +254,12 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
     action = actionManager->createAction("paste_layer_from_clipboard");
     connect(action, SIGNAL(triggered()), this, SLOT(pasteLayersFromClipboard()));
+
+    action = actionManager->createAction("create_quick_group");
+    connect(action, SIGNAL(triggered()), this, SLOT(createQuickGroup()));
+
+    action = actionManager->createAction("create_quick_clipping_group");
+    connect(action, SIGNAL(triggered()), this, SLOT(createQuickClippingGroup()));
 
     NEW_LAYER_ACTION("add_new_paint_layer", "KisPaintLayer");
 
@@ -529,7 +536,6 @@ void KisNodeManager::convertNode(const QString &nodeType)
 void KisNodeManager::slotSomethingActivatedNodeImpl(KisNodeSP node)
 {
     KIS_ASSERT_RECOVER_RETURN(node != activeNode());
-
     if (m_d->activateNodeImpl(node)) {
         emit sigUiNeedChangeActiveNode(node);
         emit sigNodeActivated(node);
@@ -1120,3 +1126,58 @@ void KisNodeManager::pasteLayersFromClipboard()
                                   nodeInsertionAdapter());
 }
 
+void KisNodeManager::createQuickGroupImpl(KisNodeJugglerCompressed *juggler,
+                                          const QString &overrideGroupName,
+                                          KisNodeSP *newGroup,
+                                          KisNodeSP *newLastChild)
+{
+    KisNodeSP active = activeNode();
+    if (!active) return;
+
+    KisNodeSP parent = active->parent();
+    KisNodeSP aboveThis = active;
+
+    KisImageSP image = m_d->view->image();
+    QString groupName = !overrideGroupName.isEmpty() ? overrideGroupName : image->nextLayerName();
+    KisGroupLayerSP group = new KisGroupLayer(image.data(), groupName, OPACITY_OPAQUE_U8);
+
+    KisNodeList nodes1;
+    nodes1 << group;
+
+    KisNodeList nodes2;
+    nodes2 = KisLayerUtils::sortMergableNodes(image->root(), selectedNodes());
+
+    juggler->addNode(nodes1, parent, aboveThis);
+    juggler->moveNode(nodes2, group, 0);
+
+    *newGroup = group;
+    *newLastChild = nodes2.last();
+}
+
+void KisNodeManager::createQuickGroup()
+{
+    KUndo2MagicString actionName = kundo2_i18n("Quick Group");
+    KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
+
+    KisNodeSP parent;
+    KisNodeSP above;
+
+    createQuickGroupImpl(juggler, "", &parent, &above);
+}
+
+void KisNodeManager::createQuickClippingGroup()
+{
+    KUndo2MagicString actionName = kundo2_i18n("Quick Clipping Group");
+    KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
+
+    KisNodeSP parent;
+    KisNodeSP above;
+
+    KisImageSP image = m_d->view->image();
+    createQuickGroupImpl(juggler, image->nextLayerName(i18nc("default name for a clipping group layer", "Clipping Group")), &parent, &above);
+
+    KisPaintLayerSP maskLayer = new KisPaintLayer(image.data(), i18nc("default name for quick clip group mask layer", "Mask Layer"), OPACITY_OPAQUE_U8, image->colorSpace());
+    maskLayer->disableAlphaChannel(true);
+
+    juggler->addNode(KisNodeList() << maskLayer, parent, above);
+}

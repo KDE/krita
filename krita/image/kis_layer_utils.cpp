@@ -642,6 +642,13 @@ namespace KisLayerUtils {
         KIS_ASSERT_RECOVER_NOOP(root->parent() || inputNodes.isEmpty());
     }
 
+    KisNodeList sortMergableNodes(KisNodeSP root, KisNodeList nodes)
+    {
+        KisNodeList result;
+        sortMergableNodes(root, nodes, result);
+        return result;
+    }
+
     void addCopyOfNameTag(KisNodeSP node)
     {
         const QString prefix = i18n("Copy of");

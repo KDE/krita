@@ -146,7 +146,7 @@ public:
     /**
      * Retrieve the next automatic layername (XXX: fix to add option to return Mask X)
      */
-    QString nextLayerName() const;
+    QString nextLayerName(const QString &baseName = "") const;
 
     /**
      * Set the automatic layer name counter one back.

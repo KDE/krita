@@ -201,7 +201,11 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="merge_all_shape_layers"/>
       <Action name="flatten_image"/>
       <Action name="merge_selected_layers"/>
+      <Separator/>
       <Action name="layer_style"/>
+      <Separator/>
+      <Action name="create_quick_group"/>
+      <Action name="create_quick_clipping_group"/>
     </Menu>
     <Menu name="Select">
       <text>&amp;Select</text>

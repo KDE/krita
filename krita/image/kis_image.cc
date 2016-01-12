@@ -344,14 +344,20 @@ void KisImage::reselectGlobalSelection()
     }
 }
 
-QString KisImage::nextLayerName() const
+QString KisImage::nextLayerName(const QString &_baseName) const
 {
+    QString baseName = _baseName;
+
     if (m_d->nserver.currentSeed() == 0) {
         m_d->nserver.number();
         return i18n("background");
     }
 
-    return i18n("Layer %1", m_d->nserver.number());
+    if (baseName.isEmpty()) {
+        baseName = i18n("Layer");
+    }
+
+    return QString("%1 %2").arg(baseName).arg(m_d->nserver.number());
 }
 
 void KisImage::rollBackLayerName()

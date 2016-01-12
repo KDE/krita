@@ -451,7 +451,7 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
         KisNodeSP newParent = newAbove->parent();
 
         // override parent if provided externally
-        if (m_dstAbove) {
+        if (m_dstParent) {
             newAbove = m_dstAbove;
             newParent = m_dstParent;
         }

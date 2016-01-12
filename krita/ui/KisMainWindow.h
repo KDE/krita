@@ -48,9 +48,6 @@ class KisView;
 class KisViewManager;
 
 
-// Calligra class but not in main module
-class KisDockerManager;
-
 /**
  * @brief Main window for Krita
  *
@@ -127,14 +124,6 @@ public:
     QDockWidget* dockWidget(const QString &id);
 
     QList<KoCanvasObserverBase*> canvasObservers() const;
-
-    /**
-     * @return the KisDockerManager which is assigned
-     * WARNING: this could be 0, if no docker have been assigned yet. In that case create one
-      * and assign it.
-     * @ref setDockerManager to assign it.
-     */
-    KisDockerManager * dockerManager() const;
 
     KoCanvasResourceManager *resourceManager() const;
 

@@ -325,7 +325,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
             Qt::KeyboardModifiers modifiers = mapper.queryStandardModifiers();
             Q_FOREACH (Qt::Key key, mapper.queryExtendedModifiers()) {
-                QKeyEvent kevent(QEvent::KeyPress, key, modifiers);
+                QKeyEvent kevent(QEvent::ShortcutOverride, key, modifiers);
                 eventFilterImpl(&kevent);
             }
         }

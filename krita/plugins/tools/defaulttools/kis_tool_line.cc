@@ -99,6 +99,7 @@ void KisToolLine::activate(ToolActivation activation, const QSet<KoShape*> &shap
 
 void KisToolLine::deactivate()
 {
+    KisToolPaint::deactivate();
     cancelStroke();
 }
 

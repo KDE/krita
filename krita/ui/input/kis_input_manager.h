@@ -42,8 +42,6 @@ class KisCanvas2;
  * consecutive events on to this action.
  *
  * \sa KisAbstractInputAction
- *
- * \todo Implement shortcut configuration
  */
 class KRITAUI_EXPORT KisInputManager : public QObject
 {

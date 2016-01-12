@@ -113,7 +113,6 @@ protected:
 private:
     friend class KisModelIndexConverter;
     friend class KisModelIndexConverterShowAll;
-    friend class KisModelIndexConverterAnimatedLayers;
 
     void connectDummy(KisNodeDummy *dummy, bool needConnect);
     void connectDummies(KisNodeDummy *dummy, bool needConnect);

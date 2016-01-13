@@ -300,6 +300,8 @@ KisTimeRange KisKeyframeChannel::affectedFrames(int time) const
 
 KisTimeRange KisKeyframeChannel::identicalFrames(int time) const
 {
+    if (m_d->keys.isEmpty()) return KisTimeRange::infinite(0);
+
     KeyframesMap::const_iterator active = activeKeyIterator(time);
     KeyframesMap::const_iterator next = active + 1;
 

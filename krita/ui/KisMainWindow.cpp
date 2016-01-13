@@ -118,6 +118,7 @@
 #include "kis_action_manager.h"
 #include "thememanager.h"
 #include "kis_resource_server_provider.h"
+#include "kis_animation_importer.h"
 #ifdef HAVE_OPENGL
 #include "kis_animation_exporter.h"
 #endif
@@ -219,6 +220,7 @@ public:
     KisAction *printAction;
     KisAction *printActionPreview;
     KisAction *exportPdf;
+    KisAction *importAnimation;
 #ifdef HAVE_OPENGL
     KisAction *exportAnimation;
 #endif
@@ -748,6 +750,22 @@ void KisMainWindow::addViewAndNotifyLoadingCompleted(KisDocument *document)
     emit guiLoadingFinished();
 }
 
+QStringList KisMainWindow::showOpenFileDialog()
+{
+    KoFileDialog dialog(this, KoFileDialog::ImportFiles, "OpenDocument");
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KIS_MIME_TYPE,
+                                                                 KisImportExportManager::Import,
+                                                                 KisDocumentEntry::extraNativeMimeTypes()));
+    QStringList filters = dialog.nameFilters();
+    filters << i18n("All files (*.*)");
+    dialog.setNameFilters(filters);
+    dialog.setHideNameFilterDetailsOption();
+    dialog.setCaption(isImporting() ? i18n("Import Images") : i18n("Open Images"));
+
+    return dialog.filenames();
+}
+
 // Separate from openDocument to handle async loading (remote URLs)
 void KisMainWindow::slotLoadCompleted()
 {
@@ -1198,19 +1216,7 @@ void KisMainWindow::slotFileNew()
 
 void KisMainWindow::slotFileOpen()
 {
-    QStringList urls;
-    KoFileDialog dialog(this, KoFileDialog::ImportFiles, "OpenDocument");
-    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KIS_MIME_TYPE,
-                                                                 KisImportExportManager::Import,
-                                                                 KisDocumentEntry::extraNativeMimeTypes()));
-    QStringList filters = dialog.nameFilters();
-    filters << i18n("All files (*.*)");
-    dialog.setNameFilters(filters);
-    dialog.setHideNameFilterDetailsOption();
-    dialog.setCaption(isImporting() ? i18n("Import Images") : i18n("Open Images"));
-
-    urls = dialog.filenames();
+    QStringList urls = showOpenFileDialog();
 
     if (urls.isEmpty())
         return;
@@ -1478,6 +1484,19 @@ KisPrintJob* KisMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFile
 
     printJob->startPrinting(KisPrintJob::DeleteWhenDone);
     return printJob;
+}
+
+void KisMainWindow::importAnimation()
+{
+    if (!activeView()) return;
+
+    KisDocument *document = activeView()->document();
+    if (!document) return;
+
+    KisAnimationImporterUI importer(this);
+    importer.importSequence(document);
+
+    activeView()->canvasBase()->refetchDataFromImage();
 }
 
 void KisMainWindow::exportAnimation()
@@ -2093,6 +2112,10 @@ void KisMainWindow::createActions()
 
     d->exportPdf  = actionManager->createAction("file_export_pdf");
     connect(d->exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));
+
+    d->importAnimation  = actionManager->createAction("file_import_animation");
+    connect(d->importAnimation, SIGNAL(triggered()), this, SLOT(importAnimation()));
+
 #ifdef HAVE_OPENGL
     d->exportAnimation  = actionManager->createAction("file_export_animation");
     connect(d->exportAnimation, SIGNAL(triggered()), this, SLOT(exportAnimation()));

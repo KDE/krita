@@ -140,6 +140,8 @@ public:
 
     void addViewAndNotifyLoadingCompleted(KisDocument *document);
 
+    QStringList showOpenFileDialog();
+
 Q_SIGNALS:
 
     /**
@@ -257,6 +259,7 @@ private Q_SLOTS:
 
     KisPrintJob* exportToPdf(KoPageLayout pageLayout, QString pdfFileName = QString());
 
+    void importAnimation();
     void exportAnimation();
 
     /**

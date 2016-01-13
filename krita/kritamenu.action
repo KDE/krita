@@ -118,6 +118,19 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="file_import_animation">
+      <icon></icon>
+      <text>Import animation frames...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Import animation frames</toolTip>
+      <iconText>Import animation frames</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="file_export_animation">
       <icon></icon>
       <text>Expor&amp;t animation...</text>

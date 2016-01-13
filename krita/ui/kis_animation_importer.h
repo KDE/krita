@@ -23,6 +23,23 @@
 #include "kritaui_export.h"
 
 class KisDocument;
+class KisMainWindow;
+
+class KRITAUI_EXPORT KisAnimationImporterUI : public QObject
+{
+    Q_OBJECT
+
+public:
+    KisAnimationImporterUI(KisMainWindow *parent);
+    ~KisAnimationImporterUI();
+
+    void importSequence(KisDocument *document);
+
+private:
+    class Private;
+    QScopedPointer<Private> m_d;
+};
+
 
 class KRITAUI_EXPORT KisAnimationImporter : public QObject
 {

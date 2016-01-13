@@ -321,6 +321,8 @@ public:
 
     void fetchFrame(int frameId, KisPaintDeviceSP targetDevice);
     void uploadFrame(int srcFrameId, int dstFrameId, KisPaintDeviceSP srcDevice);
+    void uploadFrame(int dstFrameId, KisPaintDeviceSP srcDevice);
+    void uploadFrameData(DataSP srcData, DataSP dstData);
 
     QRegion syncLodData(int newLod);
 
@@ -330,21 +332,28 @@ private:
 
     QRegion syncWholeDevice(Data *srcData);
 
+    inline DataSP currentFrameData() const {
+        DataSP data;
+
+        if (contentChannel->keyframeCount() > 1) {
+            int frameId = contentChannel->frameIdAt(defaultBounds->currentTime());
+            KIS_ASSERT_RECOVER(m_frames.contains(frameId)) { return m_frames.begin().value(); }
+            data = m_frames[frameId];
+        } else {
+            data = m_frames.begin().value();
+        }
+
+        // sanity check!
+        KIS_ASSERT_RECOVER_NOOP(!m_data);
+
+        return data;
+    }
+
     inline Data* currentNonLodData() const {
         Data *data = m_data.data();
 
         if (contentChannel) {
-            if (contentChannel->keyframeCount() > 1) {
-                int frameId = contentChannel->frameIdAt(defaultBounds->currentTime());
-                KIS_ASSERT_RECOVER(m_frames.contains(frameId)) { return data; }
-                data = m_frames[frameId].data();
-            } else {
-                data = m_frames.begin().value().data();
-            }
-
-            // sanity check!
-            KIS_ASSERT_RECOVER_NOOP(!m_data);
-
+            data = currentFrameData().data();
         } else if (isProjectionDevice && defaultBounds->externalFrameActive()) {
             if (!m_externalFrameData) {
                 QMutexLocker l(&m_dataSwitchLock);
@@ -646,6 +655,20 @@ void KisPaintDevice::Private::uploadFrame(int srcFrameId, int dstFrameId, KisPai
     DataSP srcData = srcDevice->m_d->m_frames[srcFrameId];
     KIS_ASSERT_RECOVER_RETURN(srcData);
 
+    uploadFrameData(srcData, dstData);
+}
+
+void KisPaintDevice::Private::uploadFrame(int dstFrameId, KisPaintDeviceSP srcDevice) {
+    DataSP dstData = m_frames[dstFrameId];
+    KIS_ASSERT_RECOVER_RETURN(dstData);
+
+    DataSP srcData = srcDevice->m_d->m_data;
+    KIS_ASSERT_RECOVER_RETURN(srcData);
+
+    uploadFrameData(srcData, dstData);
+}
+
+void KisPaintDevice::Private::uploadFrameData(DataSP srcData, DataSP dstData) {
     if (srcData->colorSpace() != dstData->colorSpace() &&
         !(*srcData->colorSpace() == *dstData->colorSpace())) {
 
@@ -1719,6 +1742,11 @@ void KisPaintDeviceFramesInterface::fetchFrame(int frameId, KisPaintDeviceSP tar
 void KisPaintDeviceFramesInterface::uploadFrame(int srcFrameId, int dstFrameId, KisPaintDeviceSP srcDevice)
 {
     q->m_d->uploadFrame(srcFrameId, dstFrameId, srcDevice);
+}
+
+void KisPaintDeviceFramesInterface::uploadFrame(int dstFrameId, KisPaintDeviceSP srcDevice)
+{
+    q->m_d->uploadFrame(dstFrameId, srcDevice);
 }
 
 QRect KisPaintDeviceFramesInterface::frameBounds(int frameId)

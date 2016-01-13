@@ -67,6 +67,13 @@ public:
     void uploadFrame(int srcFrameId, int dstFrameId, KisPaintDeviceSP srcDevice);
 
     /**
+     * Copy the given paint device contents into the specified frame
+     * @param dstFrameId ID of the frame to be overwritten (must exist)
+     * @param sourceDevice paint device to copy from
+     */
+    void uploadFrame(int dstFrameId, KisPaintDeviceSP srcDevice);
+
+    /**
      * @return extent() of \p frameId
      */
     QRect frameBounds(int frameId);

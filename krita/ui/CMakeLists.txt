@@ -359,6 +359,7 @@ if (HAVE_OPENGL)
         kis_animation_cache_populator.cpp
         canvas/kis_animation_player.cpp
         kis_animation_exporter.cpp
+        kis_animation_importer.cpp
     )
 endif()
 

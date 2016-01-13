@@ -70,6 +70,15 @@ void KisRasterKeyframeChannel::fetchFrame(KisKeyframeSP keyframe, KisPaintDevice
     m_d->paintDevice->framesInterface()->fetchFrame(keyframe->value(), targetDevice);
 }
 
+void KisRasterKeyframeChannel::importFrame(int time, KisPaintDeviceSP sourceDevice, KUndo2Command *parentCommand)
+{
+    KisKeyframeSP keyframe = addKeyframe(time, parentCommand);
+
+    const int frameId = keyframe->value();
+
+    m_d->paintDevice->framesInterface()->uploadFrame(frameId, sourceDevice);
+}
+
 QRect KisRasterKeyframeChannel::frameExtents(KisKeyframeSP keyframe)
 {
     return m_d->paintDevice->framesInterface()->frameBounds(keyframe->value());

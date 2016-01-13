@@ -39,14 +39,18 @@ public:
     int frameIdAt(int time) const;
 
     /**
-     * Copy the active frame at given time and offset to target device.
-     * Note: offset is the number of keyframes back or forth counted
-     * from the active keyframe at the given time.
+     * Copy the active frame at given time to target device.
+     * @param keyframe keyframe to copy from
      * @param targetDevice device to copy the frame to
-     * @param time time to determine base keyframe
-     * @param offset number of keyframes to offset from base keyframe
      */
     void fetchFrame(KisKeyframeSP keyframe, KisPaintDeviceSP targetDevice);
+
+    /**
+     * Copy the content of the sourceDevice into a new keyframe at given time
+     * @param time position of new keyframe
+     * @param sourceDevice source for content
+     */
+    void importFrame(int time, KisPaintDeviceSP sourceDevice, KUndo2Command *parentCommand);
 
     QRect frameExtents(KisKeyframeSP keyframe);
 

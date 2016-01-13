@@ -217,6 +217,12 @@ target_link_libraries(KisAnimationExporterTest kritaui kritaimage ${QT_QTTEST_LI
 
 ########### next target ###############
 
+set(kis_animation_importer_test_SRCS kis_animation_importer_test.cpp )
+kde4_add_unit_test(KisAnimationImporterTest TESTNAME kritaui-animation_importer_test ${kis_animation_importer_test_SRCS})
+target_link_libraries(KisAnimationImporterTest kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(kis_animation_frame_cache_test_SRCS kis_animation_frame_cache_test.cpp )
 kde4_add_unit_test(KisAnimationFrameCacheTest TESTNAME kritaui-animation_frame_cache_test ${kis_animation_frame_cache_test_SRCS})
 target_link_libraries(KisAnimationFrameCacheTest kritaui kritaimage ${QT_QTTEST_LIBRARY})

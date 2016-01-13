@@ -153,15 +153,15 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
         wdg->compressionLevel->setValue(cfg.getInt("compression", 9));
         wdg->compressionLevel->setRange(1, 9 , 0);
 
-        wdg->alpha->setVisible(isThereAlpha);
+        wdg->alpha->setEnabled(isThereAlpha);
         wdg->tryToSaveAsIndexed->setVisible(!isThereAlpha);
 
         wdg->bnTransparencyFillColor->setEnabled(!wdg->alpha->isChecked());
 
-        wdg->chkSRGB->setVisible(sRGB);
+        wdg->chkSRGB->setEnabled(sRGB);
         wdg->chkSRGB->setChecked(cfg.getBool("saveSRGBProfile", true));
 
-        wdg->chkForceSRGB->setVisible(!sRGB);
+        wdg->chkForceSRGB->setEnabled(!sRGB);
         wdg->chkForceSRGB->setChecked(cfg.getBool("forceSRGB", false));
 
         QStringList rgb = cfg.getString("transparencyFillcolor", "0,0,0").split(',');

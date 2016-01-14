@@ -266,7 +266,7 @@ macro_ensure_out_of_source_build("Compiling Calligra inside the source directory
 # Note: OPTIONAL_COMPONENTS does not seem to be reliable
 # (as of ECM 5.15.0, CMake 3.2)
 find_package(Qt5Quick ${MIN_QT_VERSION} QUIET)
-macro_log_feature($PQt5Quick_FOUND} "QtQuick" "Qt Quick" "http://www.qt.io" FALSE "" "Necessary to build the tablet gui for Krita")
+macro_log_feature(${Qt5Quick_FOUND} "QtQuick" "Qt Quick" "http://www.qt.io" FALSE "" "Necessary to build the tablet gui for Krita")
 
 find_package(Qt5DBus ${MIN_QT_VERSION} QUIET)
 set(HAVE_DBUS ${Qt5DBus_FOUND})

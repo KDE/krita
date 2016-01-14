@@ -70,6 +70,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
           <Action name="zoom_to_100pct" />
           <Action name="rotate_canvas_right" />
           <Action name="rotate_canvas_left" />
+          <Action name="reset_canvas_rotation" />
           <!-- TODO: Something is not right with the way zoom actions are hooked up. These are in the KoZoomController.
                It seems they are not being properly placed in the view manager since the MDI changes were implemented
           -->

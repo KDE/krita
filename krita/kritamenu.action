@@ -605,6 +605,19 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="reset_canvas_rotation">
+      <icon></icon>
+      <text>Reset Canvas Rotation</text>
+      <whatsThis></whatsThis>
+      <toolTip>Rotate Canvas Left</toolTip>
+      <iconText>Rotate Canvas Left</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <defaultShortcut></defaultShortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="view_ruler">
       <icon></icon>
       <text>Show &amp;Rulers</text>

@@ -156,6 +156,7 @@ public:
         , openResourcesDirectory(0)
         , rotateCanvasRight(0)
         , rotateCanvasLeft(0)
+        , resetCanvasRotation(0)
         , wrapAroundAction(0)
         , levelOfDetailAction(0)
         , showRulersAction(0)
@@ -194,6 +195,7 @@ public:
     KisAction *openResourcesDirectory;
     KisAction *rotateCanvasRight;
     KisAction *rotateCanvasLeft;
+    KisAction *resetCanvasRotation;
     KisAction *wrapAroundAction;
     KisAction *levelOfDetailAction;
     KisAction *showRulersAction;
@@ -343,6 +345,7 @@ void KisViewManager::setCurrentView(KisView *view)
         d->viewConnections.addUniqueConnection(&d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), doc->image(), SLOT(requestStrokeEndActiveNode()));
         d->viewConnections.addUniqueConnection(d->rotateCanvasRight, SIGNAL(triggered()), canvasController, SLOT(rotateCanvasRight15()));
         d->viewConnections.addUniqueConnection(d->rotateCanvasLeft, SIGNAL(triggered()),canvasController, SLOT(rotateCanvasLeft15()));
+        d->viewConnections.addUniqueConnection(d->resetCanvasRotation, SIGNAL(triggered()),canvasController, SLOT(resetCanvasRotation()));
 
         d->viewConnections.addUniqueConnection(d->wrapAroundAction, SIGNAL(toggled(bool)), canvasController, SLOT(slotToggleWrapAroundMode(bool)));
         d->wrapAroundAction->setChecked(canvasController->wrapAroundMode());
@@ -588,6 +591,7 @@ void KisViewManager::createActions()
 
     d->rotateCanvasRight   = actionManager()->createAction("rotate_canvas_right");
     d->rotateCanvasLeft    = actionManager()->createAction("rotate_canvas_left");
+    d->resetCanvasRotation = actionManager()->createAction("reset_canvas_rotation");
     d->wrapAroundAction    = actionManager()->createAction("wrap_around_mode");
     d->levelOfDetailAction = actionManager()->createAction("level_of_detail_mode");
 

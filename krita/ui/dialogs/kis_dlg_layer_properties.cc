@@ -22,57 +22,65 @@
 
 #include <QLabel>
 #include <QLayout>
-#include <QSlider>
 #include <QString>
-#include <QBitArray>
-#include <QVector>
 #include <QGroupBox>
 #include <QVBoxLayout>
 
 #include <klocalizedstring.h>
 
-#include <KoChannelInfo.h>
 #include <KoColorSpace.h>
-#include <KoCompositeOp.h>
 
-#include "kis_undo_adapter.h"
-#include "QTimer"
-#include "commands/kis_layer_commands.h"
-#include "kis_layer.h"
 #include "KisViewManager.h"
-#include "KisDocument.h"
-#include "kis_cursor.h"
 #include <kis_debug.h>
 #include <kis_global.h>
 
-#include "widgets/squeezedcombobox.h"
-
 #include "widgets/kis_cmb_composite.h"
-#include "widgets/kis_cmb_idlist.h"
 #include "KoColorProfile.h"
-#include "widgets/kis_channelflags_widget.h"
-#include <kis_composite_ops_model.h>
+#include "kis_multinode_property.h"
+#include "kis_layer_utils.h"
+#include "kis_image.h"
+#include "kis_layer_properties_icons.h"
+#include "kis_signal_compressor.h"
 
 
 struct KisDlgLayerProperties::Private
 {
-    QString deviceName;
+    Private() : updatesCompressor(500, KisSignalCompressor::POSTPONE) {}
+
+    KisNodeList nodes;
     const KoColorSpace *colorSpace;
-    const KoCompositeOp *compositeOp;
-    QBitArray channelFlags;
-    quint8 opacity;
-    KisLayerSP layer;
     KisViewManager *view;
-    KisDocument *doc;
     WdgLayerProperties *page;
-    KisChannelFlagsWidget *channelFlagsWidget;
-    QTimer previewTimer;
+
+    QSharedPointer<KisMultinodeCompositeOpProperty> compositeOpProperty;
+    QSharedPointer<KisMultinodeOpacityProperty> opacityProperty;
+    QSharedPointer<KisMultinodeNameProperty> nameProperty;
+
+    QList<KisMultinodePropertyInterfaceSP> layerProperties;
+    QList<QPointer<QCheckBox> > layerPropCheckboxes;
+
+    QList<KisMultinodePropertyInterfaceSP> channelFlagsProps;
+    QList<QPointer<QCheckBox> > channelFlagsCheckboxes;
+
+    KisSignalCompressor updatesCompressor;
+
+    QList<KisMultinodePropertyInterfaceSP> allProperties() const {
+        QList<KisMultinodePropertyInterfaceSP> props;
+        props << compositeOpProperty;
+        props << opacityProperty;
+        props << nameProperty;
+        props << layerProperties;
+        props << channelFlagsProps;
+        return props;
+    }
 };
 
-KisDlgLayerProperties::KisDlgLayerProperties(KisLayerSP layer, KisViewManager *view, KisDocument *doc, QWidget *parent, const char *name, Qt::WFlags f)
+KisDlgLayerProperties::KisDlgLayerProperties(KisNodeList nodes, KisViewManager *view, QWidget *parent, const char *name, Qt::WFlags f)
     : KoDialog(parent)
     , d(new Private())
 {
+    nodes = KisLayerUtils::sortMergableNodes(view->image()->root(), nodes);
+    d->nodes = nodes;
 
     Q_UNUSED(f);
     setCaption(i18n("Layer Properties"));
@@ -82,175 +90,171 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisLayerSP layer, KisViewManager *v
 
     setObjectName(name);
     d->page = new WdgLayerProperties(this);
-    d->layer = layer;
-    d->view = view;
-    d->doc = doc;
-    d->deviceName = layer->name();
-    d->colorSpace = layer->colorSpace();
-    d->compositeOp = layer->compositeOp();
-    d->channelFlags = layer->channelFlags();
-    d->opacity = layer->opacity();
-
-    quint8 sliderOpacity = int((d->opacity * 100.0) / 255 + 0.5);
-
     setMainWidget(d->page);
+    d->view = view;
+    d->colorSpace = d->nodes.first()->colorSpace();
 
-    d->page->editName->setText(d->deviceName);
     d->page->editName->setFocus();
-    connect(d->page->editName, SIGNAL(textChanged(const QString &)), this, SLOT(slotNameChanged(const QString &)));
-
-    d->page->lblColorSpace->setText(d->colorSpace->name());
-
-    if (const KoColorProfile* profile = d->colorSpace->profile()) {
-        d->page->lblProfile->setText(profile->name());
-    }
+    d->nameProperty.reset(new KisMultinodeNameProperty(nodes));
+    d->nameProperty->connectIgnoreCheckBox(d->page->chkName);
+    d->nameProperty->connectValueChangedSignal(this, SLOT(slotNameValueChangedInternally()));
+    connect(d->page->editName, SIGNAL(textChanged(const QString &)), SLOT(slotNameValueChangedExternally()));
 
     d->page->intOpacity->setRange(0, 100);
-    d->page->intOpacity->setValue(sliderOpacity);
     d->page->intOpacity->setSuffix("%");
-    connect(d->page->intOpacity, SIGNAL(valueChanged(int)), SLOT(kickTimer()));
+    d->opacityProperty.reset(new KisMultinodeOpacityProperty(nodes));
+    d->opacityProperty->connectIgnoreCheckBox(d->page->chkOpacity);
+    d->opacityProperty->connectValueChangedSignal(this, SLOT(slotOpacityValueChangedInternally()));
+    d->opacityProperty->connectValueChangedSignal(&d->updatesCompressor, SLOT(start()));
+    connect(d->page->intOpacity, SIGNAL(valueChanged(int)), SLOT(slotOpacityValueChangedExternally()));
 
-    d->page->cmbComposite->setEnabled(d->compositeOp);
-    connect(d->page->cmbComposite, SIGNAL(currentIndexChanged(int)), SLOT(kickTimer()));
+    d->compositeOpProperty.reset(new KisMultinodeCompositeOpProperty(nodes));
+    d->compositeOpProperty->connectIgnoreCheckBox(d->page->chkCompositeOp);
+    d->compositeOpProperty->connectValueChangedSignal(this, SLOT(slotCompositeOpValueChangedInternally()));
+    d->compositeOpProperty->connectValueChangedSignal(&d->updatesCompressor, SLOT(start()));
+    connect(d->page->cmbComposite, SIGNAL(currentIndexChanged(int)), SLOT(slotCompositeOpValueChangedExternally()));
 
-    if (d->compositeOp) {
-        d->page->cmbComposite->validate(d->colorSpace);
-        d->page->cmbComposite->selectCompositeOp(KoID(d->compositeOp->id()));
+    if (!checkNodesDiffer<const KoColorSpace*>(d->nodes, [](KisNodeSP node) { return node->colorSpace(); })) {
+
+        d->page->lblColorSpace->setText(d->colorSpace->name());
+        if (const KoColorProfile* profile = d->colorSpace->profile()) {
+            d->page->lblProfile->setText(profile->name());
+        }
+
+        ChannelFlagAdapter::PropertyList props = ChannelFlagAdapter::adaptersList(nodes);
+        if (!props.isEmpty()) {
+            QVBoxLayout *vbox = new QVBoxLayout;
+            Q_FOREACH (const ChannelFlagAdapter::Property &prop, props) {
+                QCheckBox *chk = new QCheckBox(prop.name, this);
+                vbox->addWidget(chk);
+
+                KisMultinodePropertyInterface *multiprop =
+                    new KisMultinodeProperty<ChannelFlagAdapter>(
+                        nodes,
+                        ChannelFlagAdapter(prop));
+
+                multiprop->connectIgnoreCheckBox(chk);
+                multiprop->connectValueChangedSignal(this, SLOT(slotFlagsValueChangedInternally()));
+                multiprop->connectValueChangedSignal(&d->updatesCompressor, SLOT(start()));
+
+                d->channelFlagsCheckboxes << chk;
+                d->channelFlagsProps << toQShared(multiprop);
+            }
+
+            d->page->grpActiveChannels->setLayout(vbox);
+        } else {
+            d->page->grpActiveChannels->setVisible(false);
+            d->page->lineActiveChannels->setVisible(false);
+        }
+    } else {
+        d->page->grpActiveChannels->setVisible(false);
+        d->page->lineActiveChannels->setVisible(false);
+        d->page->cmbComposite->setEnabled(false);
+        d->page->chkCompositeOp->setEnabled(false);
+
+        d->page->lblColorSpace->setText(i18n("*varies*"));
+        d->page->lblProfile->setText(i18n("*varies*"));
     }
 
-    slotNameChanged(d->page->editName->text());
+    {
+        QVBoxLayout *vbox = new QVBoxLayout;
 
-    QVBoxLayout * vbox = new QVBoxLayout;
-    d->channelFlagsWidget = new KisChannelFlagsWidget(d->colorSpace);
-    connect(d->channelFlagsWidget, SIGNAL(channelSelectionChanced()), SLOT(kickTimer()));
+        KisNodeModel::PropertyList props = LayerPropertyAdapter::adaptersList(nodes);
+        Q_FOREACH (const KisNodeModel::Property &prop, props) {
+            QCheckBox *chk = new QCheckBox(prop.name, this);
+            chk->setIcon(prop.onIcon);
+            vbox->addWidget(chk);
 
-    vbox->addWidget(d->channelFlagsWidget);
-    vbox->addStretch(1);
-    d->page->grpActiveChannels->setLayout(vbox);
+            KisMultinodePropertyInterface *multiprop =
+                new KisMultinodeProperty<LayerPropertyAdapter>(
+                    nodes,
+                    LayerPropertyAdapter(prop.name));
 
-    d->channelFlagsWidget->setChannelFlags(d->channelFlags);
+            multiprop->connectIgnoreCheckBox(chk);
+            multiprop->connectValueChangedSignal(this, SLOT(slotPropertyValueChangedInternally()));
+            multiprop->connectValueChangedSignal(&d->updatesCompressor, SLOT(start()));
 
-    QMetaObject::invokeMethod(this, "adjustSize", Qt::QueuedConnection);
+            d->layerPropCheckboxes << chk;
+            d->layerProperties << toQShared(multiprop);
+        }
 
-    connect(&d->previewTimer, SIGNAL(timeout()), SLOT(updatePreview()));
+        d->page->grpProperties->setLayout(vbox);
+    }
+
+    connect(&d->updatesCompressor, SIGNAL(timeout()), SLOT(updatePreview()));
 }
 
 KisDlgLayerProperties::~KisDlgLayerProperties()
 {
     if (result() == QDialog::Accepted) {
-        applyNewProperties();
+        if (d->updatesCompressor.isActive()) {
+            d->updatesCompressor.stop();
+            updatePreview();
+        }
+        // TODO: save the undo command
     }
-    else { // QDialog::Rejected
-        cleanPreviewChanges();
-        d->doc->setModified(true);
-        d->layer->setDirty();
+    else /* if (result() == QDialog::Rejected) */ {
+        Q_FOREACH(auto prop, d->allProperties()) {
+            prop->setIgnored(true);
+        }
+        updatePreview();
     }
+}
 
-    delete d;
+void KisDlgLayerProperties::slotCompositeOpValueChangedInternally()
+{
+    d->page->cmbComposite->validate(d->colorSpace);
+    d->page->cmbComposite->selectCompositeOp(KoID(d->compositeOpProperty->value()));
+    d->page->cmbComposite->setEnabled(!d->compositeOpProperty->isIgnored());
+}
+
+void KisDlgLayerProperties::slotCompositeOpValueChangedExternally()
+{
+    if (d->compositeOpProperty->isIgnored()) return;
+    d->compositeOpProperty->setValue(d->page->cmbComposite->selectedCompositeOp().id());
+}
+
+void KisDlgLayerProperties::slotOpacityValueChangedInternally()
+{
+    d->page->intOpacity->setValue(d->opacityProperty->value());
+    d->page->intOpacity->setEnabled(!d->opacityProperty->isIgnored());
+}
+
+void KisDlgLayerProperties::slotOpacityValueChangedExternally()
+{
+    if (d->opacityProperty->isIgnored()) return;
+    d->opacityProperty->setValue(d->page->intOpacity->value());
+}
+
+void KisDlgLayerProperties::slotNameValueChangedInternally()
+{
+    d->page->editName->setText(d->nameProperty->value());
+    d->page->editName->setEnabled(!d->nameProperty->isIgnored());
+}
+
+void KisDlgLayerProperties::slotNameValueChangedExternally()
+{
+    if (d->nameProperty->isIgnored()) return;
+    d->nameProperty->setValue(d->page->editName->text());
+}
+
+void KisDlgLayerProperties::slotPropertyValueChangedInternally()
+{
+    Q_FOREACH (KisMultinodePropertyInterfaceSP prop, d->channelFlagsProps) {
+        prop->rereadCurrentValue();
+    }
+}
+
+void KisDlgLayerProperties::slotFlagsValueChangedInternally()
+{
+    Q_FOREACH (KisMultinodePropertyInterfaceSP prop, d->layerProperties) {
+        prop->rereadCurrentValue();
+    }
 }
 
 void KisDlgLayerProperties::updatePreview()
 {
-    if (!d->layer) return;
-
-    if (d->page->checkBoxPreview->isChecked()) {
-        d->layer->setOpacity(getOpacity());
-        d->layer->setCompositeOpId(getCompositeOp());
-        d->layer->setName(getName());
-        d->layer->setChannelFlags(getChannelFlags());
-        d->doc->setModified(true);
-        d->layer->setDirty();
+    Q_FOREACH(KisNodeSP node, d->nodes) {
+        node->setDirty(node->extent());
     }
 }
-
-void KisDlgLayerProperties::adjustSize()
-{
-    KoDialog::adjustSize();
-    setMinimumSize(size());
-}
-
-
-bool KisDlgLayerProperties::haveChanges() const
-{
-    return d->layer->name() !=  getName()
-        || d->layer->opacity() !=  getOpacity()
-        || d->layer->channelFlags() !=  getChannelFlags()
-        || (d->compositeOp && d->layer->compositeOp() &&
-            d->layer->compositeOp()->id()!= getCompositeOp());
-
-}
-
-
-void KisDlgLayerProperties::applyNewProperties()
-{
-    if (!d->layer) return;
-
-    cleanPreviewChanges();
-
-    if (haveChanges()) {
-        QApplication::setOverrideCursor(KisCursor::waitCursor());
-        KUndo2Command *change = new KisLayerPropsCommand(d->layer,
-                                                         d->layer->opacity(),       getOpacity(),
-                                                         d->layer->compositeOpId(), getCompositeOp(),
-                                                         d->layer->name(),          getName(),
-                                                         d->layer->channelFlags(),  getChannelFlags(),
-                                                         true);
-        d->view->undoAdapter()->addCommand(change);
-        QApplication::restoreOverrideCursor();
-        d->doc->setModified(true);
-        d->layer->setDirty();
-    }
-}
-
-void KisDlgLayerProperties::cleanPreviewChanges()
-{
-    d->layer->setOpacity(d->opacity);
-    d->layer->setName(d->deviceName);
-    d->layer->setChannelFlags(d->channelFlags);
-
-    if (d->compositeOp) {
-        d->layer->setCompositeOpId(d->compositeOp->id());
-    }
-}
-
-void KisDlgLayerProperties::kickTimer()
-{
-    d->previewTimer.start(200);
-}
-
-void KisDlgLayerProperties::slotNameChanged(const QString &_text)
-{
-    enableButtonOk(!_text.isEmpty());
-}
-
-QString KisDlgLayerProperties::getName() const
-{
-    return d->page->editName->text();
-}
-
-int KisDlgLayerProperties::getOpacity() const
-{
-    qint32 opacity = d->page->intOpacity->value();
-    if (opacity > 0 ) {
-        opacity = int((opacity * 255.0) / 100 + 0.5);
-    }
-    if (opacity > 255) {
-        opacity = 255;
-    }
-    return opacity;
-}
-
-QString KisDlgLayerProperties::getCompositeOp() const
-{
-    return d->page->cmbComposite->selectedCompositeOp().id();
-}
-
-QBitArray KisDlgLayerProperties::getChannelFlags() const
-{
-    QBitArray flags = d->channelFlagsWidget->channelFlags();
-    for (int i = 0; i < flags.size(); ++i) {
-        dbgUI << "Received flag from channelFlags widget, flag " << i << " is " << flags.testBit(i);
-    }
-    return flags;
-}
-

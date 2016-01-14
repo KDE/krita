@@ -133,6 +133,7 @@ set(kritaui_LIB_SRCS
     kis_view_plugin.cpp
     kis_canvas_controls_manager.cpp
     kis_tooltip_manager.cpp
+    kis_multinode_property.cpp
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
     kisexiv2/kis_iptc_io.cpp
@@ -187,7 +188,6 @@ set(kritaui_LIB_SRCS
     tool/strokes/freehand_stroke.cpp
     tool/strokes/kis_painter_based_stroke_strategy.cpp
     tool/strokes/kis_filter_stroke_strategy.cpp
-    widgets/kis_channelflags_widget.cpp
     widgets/kis_cmb_composite.cc
     widgets/kis_cmb_contour.cpp
     widgets/kis_cmb_gradient.cpp

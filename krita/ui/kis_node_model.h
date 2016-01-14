@@ -191,6 +191,10 @@ public:
         state while in stasis */
         bool stateInStasis;
 
+        bool operator==(const Property &rhs) const {
+            return rhs.name == name;
+        }
+
         /// Default constructor. Use if you want to assign the members manually.
         Property(): isMutable( false ) { }
 

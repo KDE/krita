@@ -25,7 +25,7 @@
 #include "kis_node_model.h"
 
 
-class KisLayerPropertiesIcons
+class KRITAIMAGE_EXPORT KisLayerPropertiesIcons
 {
 public:
     KisLayerPropertiesIcons();

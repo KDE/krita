@@ -457,7 +457,9 @@ void KisLayerManager::layerProperties()
 
         }
     } else { // If layer == normal painting layer, vector layer, or group layer
-        KisDlgLayerProperties *dialog = new KisDlgLayerProperties(layer, m_view, m_view->document());
+        QList<KisNodeSP> selectedNodes = m_view->nodeManager()->selectedNodes();
+
+        KisDlgLayerProperties *dialog = new KisDlgLayerProperties(selectedNodes, m_view);
         dialog->resize(dialog->minimumSizeHint());
         dialog->setAttribute(Qt::WA_DeleteOnClose);
         Qt::WindowFlags flags = dialog->windowFlags();

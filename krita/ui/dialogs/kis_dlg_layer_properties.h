@@ -21,6 +21,8 @@
 
 #include <QList>
 #include <QCheckBox>
+#include <QScopedPointer>
+
 
 #include "kis_types.h"
 #include <KoDialog.h>
@@ -53,36 +55,28 @@ class KisDlgLayerProperties : public KoDialog
     Q_OBJECT
 
 public:
-    KisDlgLayerProperties(KisLayerSP layer, KisViewManager *view, KisDocument *doc, QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
+    KisDlgLayerProperties(KisNodeList nodes, KisViewManager *view, QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
 
     virtual ~KisDlgLayerProperties();
 
-private:
-
-    bool haveChanges() const;
-    QString getName() const;
-    qint32 getOpacity() const;
-    QString getCompositeOp() const;
-
-    /**
-     * @return a bit array of channel flags in the order in which the
-     * channels appear in the pixel, not in the list of KoChannelInfo
-     * objects from the colorspace.
-     */
-    QBitArray getChannelFlags() const;
-
 protected Q_SLOTS:
-    void slotNameChanged(const QString &);
-    void applyNewProperties();
-    void cleanPreviewChanges();
-    void kickTimer();
     void updatePreview();
-    void adjustSize();
+
+    void slotCompositeOpValueChangedInternally();
+    void slotCompositeOpValueChangedExternally();
+
+    void slotOpacityValueChangedInternally();
+    void slotOpacityValueChangedExternally();
+
+    void slotNameValueChangedInternally();
+    void slotNameValueChangedExternally();
+
+    void slotPropertyValueChangedInternally();
+    void slotFlagsValueChangedInternally();
 
 private:
-
     struct Private;
-    Private * const d;
+    const QScopedPointer<Private> d;
 };
 
 #endif // KIS_DLG_LAYER_PROPERTIES_H_

@@ -39,6 +39,7 @@ void KisMultinodePropertyTest::test()
     nodes << layer2;
     nodes << layer3;
 
+    // Test uniform initial state
     {
         QScopedPointer<QCheckBox> box(new QCheckBox("test ignore"));
         KisMultinodeCompositeOpProperty prop(nodes);
@@ -78,6 +79,8 @@ void KisMultinodePropertyTest::test()
         QCOMPARE(box->isChecked(), true);
     }
 
+
+    // Test non-uniform initial state
     layer1->setCompositeOpId(COMPOSITE_ALPHA_DARKEN);
     layer2->setCompositeOpId(COMPOSITE_OVER);
     layer3->setCompositeOpId(COMPOSITE_OVER);
@@ -123,6 +126,38 @@ void KisMultinodePropertyTest::test()
         QCOMPARE(prop.value(), COMPOSITE_ALPHA_DARKEN);
         QCOMPARE(box->isEnabled(), true);
         QCOMPARE(box->isChecked(), false);
+    }
+
+    // Test undo-redo
+    {
+        QScopedPointer<QCheckBox> box(new QCheckBox("test ignore"));
+        KisMultinodeCompositeOpProperty prop(nodes);
+
+        prop.connectIgnoreCheckBox(box.data());
+
+        QCOMPARE(layer1->compositeOpId(), COMPOSITE_ALPHA_DARKEN);
+        QCOMPARE(layer2->compositeOpId(), COMPOSITE_OVER);
+        QCOMPARE(layer3->compositeOpId(), COMPOSITE_OVER);
+
+        prop.setIgnored(false);
+
+        QCOMPARE(layer1->compositeOpId(), COMPOSITE_ALPHA_DARKEN);
+        QCOMPARE(layer2->compositeOpId(), COMPOSITE_ALPHA_DARKEN);
+        QCOMPARE(layer3->compositeOpId(), COMPOSITE_ALPHA_DARKEN);
+
+        QScopedPointer<KUndo2Command> cmd(prop.createPostExecutionUndoCommand());
+
+        cmd->undo();
+
+        QCOMPARE(layer1->compositeOpId(), COMPOSITE_ALPHA_DARKEN);
+        QCOMPARE(layer2->compositeOpId(), COMPOSITE_OVER);
+        QCOMPARE(layer3->compositeOpId(), COMPOSITE_OVER);
+
+        cmd->redo();
+
+        QCOMPARE(layer1->compositeOpId(), COMPOSITE_ALPHA_DARKEN);
+        QCOMPARE(layer2->compositeOpId(), COMPOSITE_ALPHA_DARKEN);
+        QCOMPARE(layer3->compositeOpId(), COMPOSITE_ALPHA_DARKEN);
     }
 }
 

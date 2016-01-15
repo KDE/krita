@@ -41,6 +41,8 @@
 #include "kis_image.h"
 #include "kis_layer_properties_icons.h"
 #include "kis_signal_compressor.h"
+#include "commands_new/kis_saved_commands.h"
+#include "kis_post_execution_undo_adapter.h"
 
 
 struct KisDlgLayerProperties::Private
@@ -191,7 +193,18 @@ KisDlgLayerProperties::~KisDlgLayerProperties()
             d->updatesCompressor.stop();
             updatePreview();
         }
-        // TODO: save the undo command
+
+        KisPostExecutionUndoAdapter *adapter =
+            d->view->image()->postExecutionUndoAdapter();
+        KisSavedMacroCommand *macro = adapter->createMacro(kundo2_i18n("Change Layer Properties"));
+        macro->addCommand(toQShared(new KisLayerUtils::KisSimpleUpdateCommand(d->nodes, false)));
+        Q_FOREACH(auto prop, d->allProperties()) {
+            if (!prop->isIgnored()) {
+                macro->addCommand(toQShared(prop->createPostExecutionUndoCommand()));
+            }
+        }
+        macro->addCommand(toQShared(new KisLayerUtils::KisSimpleUpdateCommand(d->nodes, true)));
+        adapter->addMacro(macro);
     }
     else /* if (result() == QDialog::Rejected) */ {
         Q_FOREACH(auto prop, d->allProperties()) {
@@ -254,7 +267,5 @@ void KisDlgLayerProperties::slotFlagsValueChangedInternally()
 
 void KisDlgLayerProperties::updatePreview()
 {
-    Q_FOREACH(KisNodeSP node, d->nodes) {
-        node->setDirty(node->extent());
-    }
+    KisLayerUtils::KisSimpleUpdateCommand::updateNodes(d->nodes);
 }

@@ -87,6 +87,16 @@ namespace KisLayerUtils
     private:
         bool checkIsSourceForClone(KisNodeSP src, const QList<KisNodeSP> &nodes);
     };
+
+    class KRITAIMAGE_EXPORT KisSimpleUpdateCommand : public KisCommandUtils::FlipFlopCommand
+    {
+    public:
+        KisSimpleUpdateCommand(KisNodeList nodes, bool finalize, KUndo2Command *parent = 0);
+        void end();
+        static void updateNodes(const KisNodeList &nodes);
+    private:
+        KisNodeList m_nodes;
+    };
 };
 
 #endif /* __KIS_LAYER_UTILS_H */

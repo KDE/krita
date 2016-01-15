@@ -26,7 +26,7 @@
 class KisStrokesFacade;
 
 
-class KisSavedCommandBase : public KUndo2Command
+class KRITAIMAGE_EXPORT KisSavedCommandBase : public KUndo2Command
 {
 public:
     KisSavedCommandBase(const KUndo2MagicString &name, KisStrokesFacade *strokesFacade);
@@ -48,7 +48,7 @@ private:
     bool m_skipOneRedo;
 };
 
-class KisSavedCommand : public KisSavedCommandBase
+class KRITAIMAGE_EXPORT KisSavedCommand : public KisSavedCommandBase
 {
 public:
     KisSavedCommand(KUndo2CommandSP command, KisStrokesFacade *strokesFacade);
@@ -73,15 +73,15 @@ private:
     KUndo2CommandSP m_command;
 };
 
-class KisSavedMacroCommand : public KisSavedCommandBase
+class KRITAIMAGE_EXPORT KisSavedMacroCommand : public KisSavedCommandBase
 {
 public:
     KisSavedMacroCommand(const KUndo2MagicString &name, KisStrokesFacade *strokesFacade);
     ~KisSavedMacroCommand();
 
     void addCommand(KUndo2CommandSP command,
-                    KisStrokeJobData::Sequentiality sequentiality,
-                    KisStrokeJobData::Exclusivity exclusivity);
+                    KisStrokeJobData::Sequentiality sequentiality = KisStrokeJobData::SEQUENTIAL,
+                    KisStrokeJobData::Exclusivity exclusivity = KisStrokeJobData::NORMAL);
 
     void performCancel(KisStrokeId id, bool strokeUndo);
 

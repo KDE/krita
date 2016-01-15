@@ -810,4 +810,20 @@ namespace KisLayerUtils {
 
         mergeMultipleLayersImpl(image, mergedNodes, 0, true, kundo2_i18n("Flatten Image"));
     }
+
+    KisSimpleUpdateCommand::KisSimpleUpdateCommand(KisNodeList nodes, bool finalize, KUndo2Command *parent)
+        : FlipFlopCommand(finalize, parent),
+          m_nodes(nodes)
+    {
+    }
+    void KisSimpleUpdateCommand::end()
+    {
+        updateNodes(m_nodes);
+    }
+    void KisSimpleUpdateCommand::updateNodes(const KisNodeList &nodes)
+    {
+        Q_FOREACH(KisNodeSP node, nodes) {
+            node->setDirty(node->extent());
+        }
+    }
 }

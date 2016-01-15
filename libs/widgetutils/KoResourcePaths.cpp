@@ -136,22 +136,22 @@ public:
             return QStandardPaths::TempLocation;
         }
         else if (type == "appdata") {
-            return QStandardPaths::DataLocation;
+            return QStandardPaths::AppDataLocation;
         }
         else if (type == "data") {
-            return QStandardPaths::GenericDataLocation;
+            return QStandardPaths::AppDataLocation;
         }
         else if (type == "config") {
-            return QStandardPaths::GenericConfigLocation;
+            return QStandardPaths::AppConfigLocation;
         }
         else if (type == "cache") {
             return QStandardPaths::CacheLocation;
         }
         else if (type == "locale") {
-            return QStandardPaths::GenericDataLocation;
+            return QStandardPaths::AppDataLocation;
         }
         else {
-            return QStandardPaths::GenericDataLocation;
+            return QStandardPaths::AppDataLocation;
         }
     }
 };

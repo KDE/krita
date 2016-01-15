@@ -118,8 +118,8 @@
 #include "kis_action_manager.h"
 #include "thememanager.h"
 #include "kis_resource_server_provider.h"
-#include "kis_animation_importer.h"
 #ifdef HAVE_OPENGL
+#include "kis_animation_importer.h"
 #include "kis_animation_exporter.h"
 #endif
 #include "kis_icon_utils.h"
@@ -220,8 +220,8 @@ public:
     KisAction *printAction;
     KisAction *printActionPreview;
     KisAction *exportPdf;
-    KisAction *importAnimation;
 #ifdef HAVE_OPENGL
+    KisAction *importAnimation;
     KisAction *exportAnimation;
 #endif
     KisAction *closeAll;
@@ -1488,6 +1488,7 @@ KisPrintJob* KisMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFile
 
 void KisMainWindow::importAnimation()
 {
+#ifdef HAVE_OPENGL
     if (!activeView()) return;
 
     KisDocument *document = activeView()->document();
@@ -1497,6 +1498,7 @@ void KisMainWindow::importAnimation()
     importer.importSequence(document);
 
     activeView()->canvasBase()->refetchDataFromImage();
+#endif
 }
 
 void KisMainWindow::exportAnimation()
@@ -2113,10 +2115,10 @@ void KisMainWindow::createActions()
     d->exportPdf  = actionManager->createAction("file_export_pdf");
     connect(d->exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));
 
+#ifdef HAVE_OPENGL
     d->importAnimation  = actionManager->createAction("file_import_animation");
     connect(d->importAnimation, SIGNAL(triggered()), this, SLOT(importAnimation()));
 
-#ifdef HAVE_OPENGL
     d->exportAnimation  = actionManager->createAction("file_export_animation");
     connect(d->exportAnimation, SIGNAL(triggered()), this, SLOT(exportAnimation()));
 #endif

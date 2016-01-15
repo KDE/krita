@@ -51,7 +51,6 @@
 #include <QToolButton>
 #include <QStackedWidget>
 #include <QLabel>
-#include <KConfigGroup>
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QVBoxLayout>

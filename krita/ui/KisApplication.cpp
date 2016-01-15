@@ -209,11 +209,12 @@ void initializeGlobals(const KisApplicationArguments &args)
 }
 
 
-bool checkLocalResourcesTree()
+void checkLocalResourcesTree()
 {
+
 }
 
-bool loadPlugins()
+void loadPlugins()
 {
     KoShapeRegistry* r = KoShapeRegistry::instance();
     r->add(new KisShapeSelectionFactory());
@@ -235,10 +236,11 @@ bool loadPlugins()
     // XXX_EXIV: make the exiv io backends real plugins
     KisExiv2::initialize();
 
+
 }
 
 
-bool loadResources()
+void loadResources()
 {
 
     // for cursors

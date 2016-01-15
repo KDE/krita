@@ -368,6 +368,8 @@ protected:
     // QWidget overrides
     virtual void dragEnterEvent(QDragEnterEvent * event);
     virtual void dropEvent(QDropEvent * event);
+    virtual void dragMoveEvent(QDragMoveEvent * event);
+    virtual void dragLeaveEvent(QDragLeaveEvent * event);
 
     void setToolbarList(QList<QAction*> toolbarList);
 
@@ -443,6 +445,7 @@ protected:
 private Q_SLOTS:
     void initializeGeometry();
     void showManual();
+    void switchTab(int index);
 
 private:
     class Private;

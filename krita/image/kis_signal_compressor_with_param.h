@@ -93,8 +93,8 @@ public:
     using CallbackFunction = std::function<void (T)>;
 
 public:
-    KisSignalCompressorWithParam(int delay, CallbackFunction function)
-        : m_compressor(delay, KisSignalCompressor::FIRST_ACTIVE),
+KisSignalCompressorWithParam(int delay, CallbackFunction function, KisSignalCompressor::Mode mode = KisSignalCompressor::FIRST_ACTIVE)
+        : m_compressor(delay, mode),
           m_function(function)
     {
         std::function<void ()> callback(
@@ -111,6 +111,14 @@ public:
     void start(T param) {
         m_currentParamValue = param;
         m_compressor.start();
+    }
+
+    void stop() {
+        m_compressor.stop();
+    }
+
+    bool isActive() const {
+        return m_compressor.isActive();
     }
 
 private:

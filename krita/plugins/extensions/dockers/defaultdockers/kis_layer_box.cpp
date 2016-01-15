@@ -76,31 +76,9 @@
 #include "kis_config.h"
 #include "KisView.h"
 #include "krita_utils.h"
+#include "sync_button_and_action.h"
 
 #include "ui_wdglayerbox.h"
-
-class ButtonAction : public KisAction
-{
-public:
-    ButtonAction(QAbstractButton* button, const QIcon& icon, const QString& text, QObject* parent)
-        : KisAction(icon, text, parent)
-        , m_button(button)
-    {
-        connect(m_button, SIGNAL(clicked()), this, SLOT(trigger()));
-    }
-
-    ButtonAction(QAbstractButton* button, QObject* parent) : KisAction(parent) , m_button(button)
-    {
-        connect(m_button, SIGNAL(clicked()), this, SLOT(trigger()));
-    }
-
-    virtual void setActionEnabled(bool enabled) {
-        KisAction::setActionEnabled(enabled);
-        m_button->setEnabled(enabled);
-    }
-private:
-    QAbstractButton* m_button;
-};
 
 inline void KisLayerBox::connectActionToButton(KisViewManager* view, QAbstractButton *button, const QString &id)
 {
@@ -181,41 +159,6 @@ KisLayerBox::KisLayerBox()
 
     m_wdgLayerBox->bnDuplicate->setIcon(KisIconUtils::loadIcon("duplicatelayer"));
     m_wdgLayerBox->bnDuplicate->setIconSize(QSize(22, 22));
-
-    m_removeAction  = new ButtonAction(m_wdgLayerBox->bnDelete,
-                                       KisIconUtils::loadIcon("deletelayer"), i18n("&Remove Layer"), this);
-    m_removeAction->setActivationFlags(KisAction::ACTIVE_NODE);
-    m_removeAction->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    m_removeAction->setObjectName("remove_layer");
-    m_removeAction->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Delete));
-    connect(m_removeAction, SIGNAL(triggered()), this, SLOT(slotRmClicked()));
-    m_actions.append(m_removeAction);
-
-    KisAction *action  = new ButtonAction(m_wdgLayerBox->bnRaise, this);
-    action->setText(i18n("Move Layer or Mask Up"));
-    action->setActivationFlags(KisAction::ACTIVE_NODE);
-    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    action->setObjectName("move_layer_up");
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_PageUp));
-    connect(action, SIGNAL(triggered()), this, SLOT(slotRaiseClicked()));
-    m_actions.append(action);
-
-    action  = new ButtonAction(m_wdgLayerBox->bnLower, this);
-    action->setText(i18n("Move Layer or Mask Down"));
-    action->setActivationFlags(KisAction::ACTIVE_NODE);
-    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    action->setObjectName("move_layer_down");
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_PageDown));
-    connect(action, SIGNAL(triggered()), this, SLOT(slotLowerClicked()));
-    m_actions.append(action);
-
-    m_propertiesAction  = new ButtonAction(m_wdgLayerBox->bnProperties,
-                                           KisIconUtils::loadIcon("properties"), i18n("&Properties..."),this);
-    m_propertiesAction->setActivationFlags(KisAction::ACTIVE_NODE);
-    m_propertiesAction->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    m_propertiesAction->setObjectName("layer_properties");
-    connect(m_propertiesAction, SIGNAL(triggered()), this, SLOT(slotPropertiesClicked()));
-    m_actions.append(m_propertiesAction);
 
     if (cfg.sliderLabels()) {
         m_wdgLayerBox->opacityLabel->hide();
@@ -312,6 +255,27 @@ void KisLayerBox::setMainWindow(KisViewManager* kisview)
 
     connectActionToButton(kisview, m_wdgLayerBox->bnAdd, "add_new_paint_layer");
     connectActionToButton(kisview, m_wdgLayerBox->bnDuplicate, "duplicatelayer");
+
+    KisActionManager *actionManager = kisview->actionManager();
+
+    KisAction *action = actionManager->createAction("RenameCurrentLayer");
+    connect(action, SIGNAL(triggered()), this, SLOT(slotRenameCurrentNode()));
+
+    m_propertiesAction = actionManager->createAction("layer_properties");
+    new SyncButtonAndAction(m_propertiesAction, m_wdgLayerBox->bnProperties, this);
+    connect(m_propertiesAction, SIGNAL(triggered()), this, SLOT(slotPropertiesClicked()));
+
+    m_removeAction = actionManager->createAction("remove_layer");
+    new SyncButtonAndAction(m_removeAction, m_wdgLayerBox->bnDelete, this);
+    connect(m_removeAction, SIGNAL(triggered()), this, SLOT(slotRmClicked()));
+
+    action = actionManager->createAction("move_layer_up");
+    new SyncButtonAndAction(action, m_wdgLayerBox->bnRaise, this);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotRaiseClicked()));
+
+    action = actionManager->createAction("move_layer_down");
+    new SyncButtonAndAction(action, m_wdgLayerBox->bnLower, this);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotLowerClicked()));
 }
 
 void KisLayerBox::setCanvas(KoCanvasBase *canvas)
@@ -805,5 +769,9 @@ void KisLayerBox::updateThumbnail()
     m_wdgLayerBox->listLayers->updateNode(m_wdgLayerBox->listLayers->currentIndex());
 }
 
-#include "moc_kis_layer_box.cpp"
+void KisLayerBox::slotRenameCurrentNode()
+{
+    m_wdgLayerBox->listLayers->edit(m_wdgLayerBox->listLayers->currentIndex());
+}
 
+#include "moc_kis_layer_box.cpp"

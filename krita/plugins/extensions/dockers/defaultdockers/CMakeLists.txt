@@ -3,6 +3,7 @@ add_subdirectory( tests )
 set(kritadefaultdockers_SOURCES 
   kis_layer_box.cpp
   defaultdockers.cpp
+  sync_button_and_action.cpp
 )
 
 set(kritadefaultdockers_PART_HEADERS

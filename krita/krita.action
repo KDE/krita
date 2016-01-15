@@ -3117,8 +3117,8 @@
       <iconText>Properties</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>1</activationConditions>
-      <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
+      <shortcut>F3</shortcut>
+      <defaultShortcut>F3</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>

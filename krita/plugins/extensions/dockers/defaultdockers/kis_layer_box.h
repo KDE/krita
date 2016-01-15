@@ -111,6 +111,7 @@ private Q_SLOTS:
     void slotNodeCollapsedChanged();
 
     void slotEditGlobalSelection(bool showSelections);
+    void slotRenameCurrentNode();
 
     void selectionChanged(const QModelIndexList selection);
     void slotNodeManagerChangedSelection(const QList<KisNodeSP> &nodes);
@@ -163,8 +164,6 @@ public:
         return DockRight;
     }
 };
-
-
 
 #endif // KIS_LAYERBOX_H
 

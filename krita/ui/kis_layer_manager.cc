@@ -299,9 +299,6 @@ void KisLayerManager::setup(KisActionManager* actionManager)
     m_flattenLayer = actionManager->createAction("flatten_layer");
     connect(m_flattenLayer, SIGNAL(triggered()), this, SLOT(flattenLayer()));
 
-    KisAction * action = actionManager->createAction("RenameCurrentLayer");
-    connect(action, SIGNAL(triggered()), this, SLOT(layerProperties()));
-
     m_rasterizeLayer = actionManager->createAction("rasterize_layer");
     connect(m_rasterizeLayer, SIGNAL(triggered()), this, SLOT(rasterizeLayer()));
 
@@ -311,7 +308,7 @@ void KisLayerManager::setup(KisActionManager* actionManager)
     m_imageResizeToLayer = actionManager->createAction("resizeimagetolayer");
     connect(m_imageResizeToLayer, SIGNAL(triggered()), this, SLOT(imageResizeToActiveLayer()));
 
-    action = actionManager->createAction("trim_to_image");
+    KisAction *action = actionManager->createAction("trim_to_image");
     connect(action, SIGNAL(triggered()), this, SLOT(trimToImage()));
 
     m_layerStyle  = actionManager->createAction("layer_style");

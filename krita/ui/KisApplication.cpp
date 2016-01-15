@@ -41,12 +41,14 @@
 #include <QTimer>
 #include <QStyle>
 #include <QStyleFactory>
+#include <QStandardPaths>
 
 #include <klocalizedstring.h>
 #include <kdesktopfile.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
+#include <KoColorSpaceRegistry.h>
 #include <KoPluginLoader.h>
 #include <KoShapeRegistry.h>
 #include <KoDpi.h>
@@ -144,6 +146,8 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
 
     setApplicationDisplayName("Krita");
     setApplicationName("krita");
+    setOrganizationName("Krita");
+    setOrganizationDomain("krita.org");
 
     QString version = CalligraVersionWrapper::versionString(true);
     setApplicationVersion(version);
@@ -195,6 +199,59 @@ BOOL isWow64()
 }
 #endif
 
+void initializeGlobals(const KisApplicationArguments &args)
+{
+    int dpiX = args.dpiX();
+    int dpiY = args.dpiY();
+    if (dpiX > 0 && dpiY > 0) {
+        KoDpi::setDPI(dpiX, dpiY);
+    }
+}
+
+
+bool checkLocalResourcesTree()
+{
+}
+
+bool loadPlugins()
+{
+    KoShapeRegistry* r = KoShapeRegistry::instance();
+    r->add(new KisShapeSelectionFactory());
+
+    KisActionRegistry::instance();
+    KisFilterRegistry::instance();
+    KisGeneratorRegistry::instance();
+    KisPaintOpRegistry::instance();
+    KoColorSpaceRegistry::instance();
+    // Load the krita-specific tools
+    KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
+                                     QString::fromLatin1("[X-Krita-Version] == 28"));
+
+    // Load dockers
+    KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
+                                     QString::fromLatin1("[X-Krita-Version] == 28"));
+
+
+    // XXX_EXIV: make the exiv io backends real plugins
+    KisExiv2::initialize();
+
+}
+
+
+bool loadResources()
+{
+
+    // for cursors
+    KoResourcePaths::addResourceType("kis_pics", "data", "krita/pics/");
+
+    // for images in the paintop box
+    KoResourcePaths::addResourceType("kis_images", "data", "krita/images/");
+
+    KoResourcePaths::addResourceType("icc_profiles", "data", "krita/profiles/");
+
+
+}
+
 bool KisApplication::start(const KisApplicationArguments &args)
 {
 #if defined(Q_OS_WIN)  || defined (Q_OS_MAC)
@@ -229,11 +286,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
 #endif
 
-    int dpiX = args.dpiX();
-    int dpiY = args.dpiY();
-    if (dpiX > 0 && dpiY > 0) {
-        KoDpi::setDPI(dpiX, dpiY);
-    }
+    initializeGlobals(args);
 
     const bool doTemplate = args.doTemplate();
     const bool print = args.print();
@@ -265,38 +318,12 @@ bool KisApplication::start(const KisApplicationArguments &args)
     Digikam::ThemeManager themeManager;
     themeManager.setCurrentTheme(group.readEntry("Theme", "Krita dark"));
 
-    // for cursors
-    KoResourcePaths::addResourceType("kis_pics", "data", "krita/pics/");
-
-    // for images in the paintop box
-    KoResourcePaths::addResourceType("kis_images", "data", "krita/images/");
-
-    KoResourcePaths::addResourceType("icc_profiles", "data", "krita/profiles/");
-
-
     ResetStarting resetStarting(d->splashScreen); // remove the splash when done
     Q_UNUSED(resetStarting);
 
-    // Load various global plugins
-    KoShapeRegistry* r = KoShapeRegistry::instance();
-    r->add(new KisShapeSelectionFactory());
 
-    KisActionRegistry::instance();
-    KisFilterRegistry::instance();
-    KisGeneratorRegistry::instance();
-    KisPaintOpRegistry::instance();
-
-    // Load the krita-specific tools
-    KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
-                                     QString::fromLatin1("[X-Krita-Version] == 28"));
-
-    // Load dockers
-    KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
-                                     QString::fromLatin1("[X-Krita-Version] == 28"));
-
-
-    // XXX_EXIV: make the exiv io backends real plugins
-    KisExiv2::initialize();
+    loadPlugins();
+    loadResources();
 
     KisMainWindow *mainWindow = 0;
 

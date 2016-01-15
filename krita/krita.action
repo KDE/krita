@@ -2427,7 +2427,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="duplicatelayer">
-      <icon>edit-copy</icon>
+      <icon>duplicatelayer</icon>
       <text>&amp;Duplicate Layer or Mask</text>
       <whatsThis></whatsThis>
       <toolTip>Duplicate Layer or Mask</toolTip>
@@ -3088,7 +3088,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="move_layer_up">
-      <icon></icon>
+      <icon>arrowupblr</icon>
       <text>Move Layer or Mask Up</text>
       <whatsThis></whatsThis>
       <toolTip>Move Layer or Mask Up</toolTip>
@@ -3099,7 +3099,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="move_layer_down">
-      <icon></icon>
+      <icon>arrowdown</icon>
       <text>Move Layer or Mask down</text>
       <whatsThis></whatsThis>
       <toolTip>Move Layer or Mask Down</toolTip>

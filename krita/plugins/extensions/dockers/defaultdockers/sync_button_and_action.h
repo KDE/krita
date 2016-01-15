@@ -33,6 +33,9 @@ public:
           m_button(button)
     {
         connect(m_action, SIGNAL(changed()), SLOT(slotActionChanged()));
+        connect(m_button, SIGNAL(clicked()), m_action, SLOT(trigger()));
+        m_button->setIcon(m_action->icon());
+        m_button->setText(m_action->text());
     }
 
 private Q_SLOTS:

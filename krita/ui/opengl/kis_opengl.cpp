@@ -79,6 +79,7 @@ int KisOpenGL::initializeContext(QOpenGLContext* s) {
 
     QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
 
+    QString renderer = QString((const char*)f->glGetString(GL_RENDERER));
 
     /**
      * Warn about Intel's broken video drivers
@@ -87,7 +88,6 @@ int KisOpenGL::initializeContext(QOpenGLContext* s) {
 #ifndef GL_RENDERER
 #  define GL_RENDERER 0x1F01
 #endif
-    QString renderer = QString((const char*)f->glGetString(GL_RENDERER));
     if (cfg.useOpenGL() && renderer.startsWith("Intel") && !cfg.readEntry("WarnedAboutIntel", false)) {
         QMessageBox::information(0,
                                  i18nc("@title:window", "Krita: Warning"),
@@ -106,7 +106,6 @@ int KisOpenGL::initializeContext(QOpenGLContext* s) {
     QString vendor((const char*)f->glGetString(GL_VENDOR));
     log.write(vendor.toLatin1());
     log.write(", ");
-    QString renderer((const char*)f->glGetString(GL_RENDERER));
     log.write(renderer.toLatin1());
     log.write(", ");
     QString version((const char*)f->glGetString(GL_VERSION));

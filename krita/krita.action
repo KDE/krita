@@ -3100,7 +3100,7 @@
     </Action>
     <Action name="move_layer_down">
       <icon>arrowdown</icon>
-      <text>Move Layer or Mask down</text>
+      <text>Move Layer or Mask Down</text>
       <whatsThis></whatsThis>
       <toolTip>Move Layer or Mask Down</toolTip>
       <iconText></iconText>

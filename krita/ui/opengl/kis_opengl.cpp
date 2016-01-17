@@ -63,6 +63,7 @@ void KisOpenGL::initialize()
     }
     format.setSwapInterval(0); // Disable vertical refresh syncing
     QSurfaceFormat::setDefaultFormat(format);
+
 #endif
 }
 
@@ -76,6 +77,27 @@ int KisOpenGL::initializeContext(QOpenGLContext* s) {
     glVersion = 100 * format.majorVersion() + format.minorVersion();
 
     QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
+
+
+    /**
+     * Warn about Intel's broken video drivers
+     */
+#if defined HAVE_OPENGL && defined Q_OS_WIN
+#ifndef GL_RENDERER
+#  define GL_RENDERER 0x1F01
+#endif
+    QString renderer = QString((const char*)f.glGetString(GL_RENDERER));
+    if (cfg.useOpenGL() && renderer.startsWith("Intel") && !cfg.readEntry("WarnedAboutIntel", false)) {
+        QMessageBox::information(0,
+                                 i18nc("@title:window", "Krita: Warning"),
+                                 i18n("You have an Intel(R) HD Graphics video adapter.\n"
+                                      "If you experience problems like a black or blank screen,"
+                                      "please update your display driver to the latest version.\n\n"
+                                      "You can also disable OpenGL rendering in Krita's Settings.\n"));
+        cfg.writeEntry("WarnedAboutIntel", true);
+    }
+#endif
+
 
     QFile log(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-opengl.txt");
     dbgUI << "Writing OpenGL log to" << log.fileName();

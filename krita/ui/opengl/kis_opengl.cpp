@@ -27,6 +27,7 @@
 #include <QDir>
 #include <QFile>
 #include <QDesktopServices>
+#include <QMessageBox>
 
 #include <klocalizedstring.h>
 
@@ -86,7 +87,7 @@ int KisOpenGL::initializeContext(QOpenGLContext* s) {
 #ifndef GL_RENDERER
 #  define GL_RENDERER 0x1F01
 #endif
-    QString renderer = QString((const char*)f.glGetString(GL_RENDERER));
+    QString renderer = QString((const char*)f->glGetString(GL_RENDERER));
     if (cfg.useOpenGL() && renderer.startsWith("Intel") && !cfg.readEntry("WarnedAboutIntel", false)) {
         QMessageBox::information(0,
                                  i18nc("@title:window", "Krita: Warning"),

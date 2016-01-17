@@ -40,6 +40,7 @@ namespace
 #endif
     bool NeedsFenceWorkaround = false;
     int glVersion = 0;
+    QString Renderer;
 }
 
 
@@ -79,26 +80,10 @@ int KisOpenGL::initializeContext(QOpenGLContext* s) {
 
     QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
 
-    QString renderer = QString((const char*)f->glGetString(GL_RENDERER));
-
-    /**
-     * Warn about Intel's broken video drivers
-     */
-#if defined HAVE_OPENGL && defined Q_OS_WIN
 #ifndef GL_RENDERER
 #  define GL_RENDERER 0x1F01
 #endif
-    if (cfg.useOpenGL() && renderer.startsWith("Intel") && !cfg.readEntry("WarnedAboutIntel", false)) {
-        QMessageBox::information(0,
-                                 i18nc("@title:window", "Krita: Warning"),
-                                 i18n("You have an Intel(R) HD Graphics video adapter.\n"
-                                      "If you experience problems like a black or blank screen,"
-                                      "please update your display driver to the latest version.\n\n"
-                                      "You can also disable OpenGL rendering in Krita's Settings.\n"));
-        cfg.writeEntry("WarnedAboutIntel", true);
-    }
-#endif
-
+    Renderer = QString((const char*)f->glGetString(GL_RENDERER));
 
     QFile log(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-opengl.txt");
     dbgUI << "Writing OpenGL log to" << log.fileName();
@@ -106,7 +91,7 @@ int KisOpenGL::initializeContext(QOpenGLContext* s) {
     QString vendor((const char*)f->glGetString(GL_VENDOR));
     log.write(vendor.toLatin1());
     log.write(", ");
-    log.write(renderer.toLatin1());
+    log.write(Renderer.toLatin1());
     log.write(", ");
     QString version((const char*)f->glGetString(GL_VERSION));
     log.write(version.toLatin1());
@@ -117,7 +102,7 @@ int KisOpenGL::initializeContext(QOpenGLContext* s) {
     isOnX11 = true;
 #endif
 
-    if ((isOnX11 && renderer.startsWith("AMD")) || cfg.forceOpenGLFenceWorkaround()) {
+    if ((isOnX11 && Renderer.startsWith("AMD")) || cfg.forceOpenGLFenceWorkaround()) {
         NeedsFenceWorkaround = true;
     }
 #else
@@ -136,6 +121,11 @@ bool KisOpenGL::supportsFenceSync()
 bool KisOpenGL::needsFenceWorkaround()
 {
     return NeedsFenceWorkaround;
+}
+
+QString KisOpenGL::renderer()
+{
+    return Renderer;
 }
 
 bool KisOpenGL::hasOpenGL()

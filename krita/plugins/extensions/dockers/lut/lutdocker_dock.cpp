@@ -464,6 +464,10 @@ void LutDockerDock::resetOcioConfiguration()
 void LutDockerDock::refillControls()
 {
     if (!m_canvas) return;
+    if (!m_canvas->viewManager()) return;
+    if (!m_canvas->viewManager()->resourceProvider()) return;
+    if (!m_canvas->viewManager()->image()) return;
+
     KIS_ASSERT_RECOVER_RETURN(m_ocioConfig);
 
     { // Color Management Mode

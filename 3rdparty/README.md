@@ -179,11 +179,11 @@ Note for Windows:
 With MSVC 2015, the boost library has a name that later on makes the libraries unfindable, so you need to copy them.
 
     cd BUILDROOT\i\lib
-    copy boost_system-vc-mt-1_55.dll boost_system140-mt-1_55.ddl
-    copy boost_system-vc-mt-1_55.lib boost_system140-mt-1_55.lib
+    copy boost_system-vc-mt-1_55.dll boost_system-vc140-mt-1_55.dll
+    copy boost_system-vc-mt-1_55.lib boost_system-vc140-mt-1_55.lib
 
 
-On All operatting systems:
+On All operating systems:
 
     cmake --build . --config RelWithDebInfo --target ext_png
     cmake --build . --config RelWithDebInfo --target ext_tiff

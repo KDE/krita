@@ -169,7 +169,9 @@ void CompositionDockerDock::saveClicked()
 
 void CompositionDockerDock::updateModel()
 {
-    m_model->setCompositions(m_canvas->viewManager()->image()->compositions());
+    if (m_model && m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->image()) {
+        m_model->setCompositions(m_canvas->viewManager()->image()->compositions());
+    }
 }
 
 void CompositionDockerDock::exportClicked()

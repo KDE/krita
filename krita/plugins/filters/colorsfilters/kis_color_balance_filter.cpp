@@ -24,7 +24,7 @@
 #include "kis_processing_information.h"
 
 KisColorBalanceFilter::KisColorBalanceFilter() 
-		: KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Color Balance.."))
+		: KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Color Balance..."))
 {
     setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
 	setSupportsPainting(true);

@@ -120,6 +120,7 @@
 #include "kis_resource_server_provider.h"
 #ifdef HAVE_OPENGL
 #include "kis_animation_importer.h"
+#include "dialogs/kis_dlg_import_image_sequence.h"
 #include "kis_animation_exporter.h"
 #endif
 #include "kis_icon_utils.h"
@@ -1558,10 +1559,18 @@ void KisMainWindow::importAnimation()
     KisDocument *document = activeView()->document();
     if (!document) return;
 
-    KisAnimationImporterUI importer(this);
-    importer.importSequence(document);
+    KisDlgImportImageSequence dlg(this, document);
 
-    activeView()->canvasBase()->refetchDataFromImage();
+    if (dlg.exec() == QDialog::Accepted) {
+        QStringList files = dlg.files();
+        int firstFrame = dlg.firstFrame();
+        int step = dlg.step();
+
+        KisAnimationImporter importer(document->image());
+        importer.import(files, firstFrame, step);
+
+        activeView()->canvasBase()->refetchDataFromImage();
+    }
 #endif
 }
 

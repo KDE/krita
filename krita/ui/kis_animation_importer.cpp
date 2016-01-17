@@ -18,8 +18,6 @@
 
 #include "kis_animation_importer.h"
 
-#include "KisMainWindow.h"
-#include "KoFileDialog.h"
 #include "KoColorSpace.h"
 #include "KisPart.h"
 #include "KisDocument.h"
@@ -29,36 +27,6 @@
 #include "kis_group_layer.h"
 #include "kis_raster_keyframe_channel.h"
 #include "commands/kis_image_layer_add_command.h"
-
-struct KisAnimationImporterUI::Private
-{
-    KisMainWindow *mainWindow;
-
-    Private(KisMainWindow *parent)
-        : mainWindow(parent)
-    {}
-};
-
-KisAnimationImporterUI::KisAnimationImporterUI(KisMainWindow *mainWindow)
-    : m_d(new Private(mainWindow))
-{
-}
-
-KisAnimationImporterUI::~KisAnimationImporterUI()
-{}
-
-void KisAnimationImporterUI::importSequence(KisDocument *document)
-{
-    QStringList urls = m_d->mainWindow->showOpenFileDialog();
-
-    if (urls.isEmpty()) return;
-
-    urls.sort();
-
-    KisAnimationImporter importer(document->image());
-
-    importer.import(urls, 0, 1);
-}
 
 struct KisAnimationImporter::Private
 {

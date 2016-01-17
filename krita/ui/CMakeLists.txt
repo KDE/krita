@@ -62,6 +62,7 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_blacklist_cleanup.cpp
     dialogs/kis_dlg_layer_style.cpp
     dialogs/kis_dlg_png_import.cpp
+    dialogs/kis_dlg_import_image_sequence.cpp
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
     flake/kis_dummies_facade.cpp
@@ -431,6 +432,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgpresetselectorstrip.ui
     forms/wdgdlgblacklistcleanup.ui
     forms/wdgrectangleconstraints.ui
+    forms/wdgimportimagesequence.ui
     forms/KisDetailsPaneBase.ui
     forms/KisOpenPaneBase.ui
     input/config/kis_input_configuration_page.ui

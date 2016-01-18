@@ -56,7 +56,7 @@ KisDlgImportImageSequence::KisDlgImportImageSequence(KisMainWindow *mainWindow, 
     enableButtonOk(false);
 
     ui.cmbOrder->addItem(i18n("Ascending"), Ascending);
-    ui.cmbOrder->addItem(i18n("Descencing"), Descending);
+    ui.cmbOrder->addItem(i18n("Descending"), Descending);
     ui.cmbOrder->setCurrentIndex(0);
 
     ui.cmbSortMode->addItem(i18n("Alphabetical"), Natural);

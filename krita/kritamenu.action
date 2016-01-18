@@ -635,7 +635,7 @@
       <icon></icon>
       <text>Show Guides</text>
       <whatsThis></whatsThis>
-      <toolTip>Show or hides guides</toolTip>
+      <toolTip>Show or hide guides</toolTip>
       <iconText>Show Guides</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
@@ -648,7 +648,7 @@
       <icon></icon>
       <text>Show Status &amp;Bar</text>
       <whatsThis></whatsThis>
-      <toolTip>Show or hides the status bar</toolTip>
+      <toolTip>Show or hide the status bar</toolTip>
       <iconText>Show Status Bar</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>

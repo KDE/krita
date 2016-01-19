@@ -211,6 +211,7 @@ void KisToolCrop::paint(QPainter &painter, const KoViewConverter &converter)
 
 void KisToolCrop::beginPrimaryAction(KoPointerEvent *event)
 {
+    m_finalRect.setCropRect(image()->bounds());
     setMode(KisTool::PAINT_MODE);
 
     QPoint pos = convertToPixelCoord(event).toPoint();
@@ -406,9 +407,6 @@ void KisToolCrop::crop()
     } else {
         currentImage()->cropImage(cropRect);
     }
-
-    m_finalRect.setCropRect(image()->bounds());
-
 }
 
 void KisToolCrop::setCropTypeLegacy(int cropType)

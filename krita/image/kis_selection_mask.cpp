@@ -40,7 +40,10 @@
 struct Q_DECL_HIDDEN KisSelectionMask::Private
 {
 public:
-    Private(KisSelectionMask *_q) : q(_q) {}
+    Private(KisSelectionMask *_q)
+        : q(_q)
+        , updatesCompressor(0)
+    {}
 
     KisImageWSP image;
     KisThreadSafeSignalCompressor *updatesCompressor;
@@ -50,15 +53,15 @@ public:
 };
 
 KisSelectionMask::KisSelectionMask(KisImageWSP image)
-        : KisMask("selection")
-        , m_d(new Private(this))
+    : KisMask("selection")
+    , m_d(new Private(this))
 {
     setActive(false);
 
     m_d->image = image;
 
     m_d->updatesCompressor =
-        new KisThreadSafeSignalCompressor(300, KisSignalCompressor::POSTPONE/*, this*/);
+            new KisThreadSafeSignalCompressor(300, KisSignalCompressor::POSTPONE);
 
     connect(m_d->updatesCompressor, SIGNAL(timeout()), SLOT(slotSelectionChangedCompressed()));
     this->setObjectName("KisSelectionMask");
@@ -66,11 +69,14 @@ KisSelectionMask::KisSelectionMask(KisImageWSP image)
 }
 
 KisSelectionMask::KisSelectionMask(const KisSelectionMask& rhs)
-        : KisMask(rhs)
-        , m_d(new Private(this))
+    : KisMask(rhs)
+    , m_d(new Private(this))
 {
     setActive(false);
     m_d->image = rhs.image();
+    connect(m_d->updatesCompressor, SIGNAL(timeout()), SLOT(slotSelectionChangedCompressed()));
+    this->setObjectName("KisSelectionMask");
+    this->moveToThread(m_d->image->thread());
 }
 
 KisSelectionMask::~KisSelectionMask()

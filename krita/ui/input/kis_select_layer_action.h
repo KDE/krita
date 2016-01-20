@@ -31,6 +31,7 @@ class KisSelectLayerAction : public KisAbstractInputAction
 public:
     enum Shortcut {
         SelectLayerModeShortcut, ///< Toggle the layer select mode.
+        SelectMultipleLayerModeShortcut, ///< Toggle the multiple layer select mode.
     };
 
     explicit KisSelectLayerAction();

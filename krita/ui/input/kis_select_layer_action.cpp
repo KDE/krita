@@ -37,6 +37,8 @@
 class KisSelectLayerAction::Private
 {
 public:
+    Private() : multipleMode(false) {}
+    bool multipleMode;
 };
 
 KisSelectLayerAction::KisSelectLayerAction()
@@ -48,6 +50,7 @@ KisSelectLayerAction::KisSelectLayerAction()
 
     QHash<QString, int> shortcuts;
     shortcuts.insert(i18n("Select Layer Mode"), SelectLayerModeShortcut);
+    shortcuts.insert(i18n("Select Multiple Layer Mode"), SelectMultipleLayerModeShortcut);
     setShortcutIndexes(shortcuts);
 }
 
@@ -78,23 +81,37 @@ void KisSelectLayerAction::begin(int shortcut, QEvent *event)
     KisAbstractInputAction::begin(shortcut, event);
 
     switch (shortcut) {
-        case SelectLayerModeShortcut:
-            inputEvent(event);
-            break;
+    case SelectMultipleLayerModeShortcut:
+    case SelectLayerModeShortcut:
+        d->multipleMode = shortcut == SelectMultipleLayerModeShortcut;
+        inputEvent(event);
+        break;
     }
 }
 
 void KisSelectLayerAction::inputEvent(QEvent *event)
 {
-    if (event && (event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove)) {
+    if (event &&
+        (event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove ||
+         event->type() == QEvent::MouseButtonPress || event->type() == QEvent::TabletPress)) {
+
         QPoint pos =
             inputManager()->canvas()->
             coordinatesConverter()->widgetToImage(eventPosF(event)).toPoint();
 
         KisNodeSP node = KisToolUtils::findNode(inputManager()->canvas()->image()->root(), pos, false);
+        if (!node) return;
 
-        if (node) {
-            inputManager()->canvas()->viewManager()->nodeManager()->slotNonUiActivatedNode(node);
+        KisNodeManager *nodeManager = inputManager()->canvas()->viewManager()->nodeManager();
+
+        if (!d->multipleMode) {
+            nodeManager->slotNonUiActivatedNode(node);
+        } else {
+            KisNodeList nodes = nodeManager->selectedNodes();
+            if (!nodes.contains(node)) {
+                nodes.append(node);
+            }
+            nodeManager->slotImageRequestNodeReselection(node, nodes);
         }
     }
 }

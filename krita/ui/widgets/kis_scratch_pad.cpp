@@ -399,8 +399,10 @@ void KisScratchPad::paintPresetImage()
 
 void KisScratchPad::setDisplayProfile(const KoColorProfile *colorProfile)
 {
-    m_displayProfile = colorProfile;
-    QWidget::update();
+    if (colorProfile) {
+        m_displayProfile = colorProfile;
+        QWidget::update();
+    }
 }
 
 void KisScratchPad::fillDefault()

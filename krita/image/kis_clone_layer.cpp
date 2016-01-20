@@ -47,6 +47,7 @@ struct Q_DECL_HIDDEN KisCloneLayer::Private
     {
     }
 
+    KisPaintDeviceSP fallback;
     KisLodCapableLayerOffset offset;
 
     KisLayerSP copyFrom;
@@ -58,6 +59,7 @@ KisCloneLayer::KisCloneLayer(KisLayerSP from, KisImageWSP image, const QString &
         : KisLayer(image, name, opacity)
         , m_d(new Private(new KisDefaultBounds(image)))
 {
+    m_d->fallback = new KisPaintDevice(image->colorSpace());
     m_d->copyFrom = from;
     m_d->type = COPY_PROJECTION;
 
@@ -71,6 +73,7 @@ KisCloneLayer::KisCloneLayer(const KisCloneLayer& rhs)
         : KisLayer(rhs)
         , m_d(new Private(new KisDefaultBounds(rhs.image())))
 {
+    m_d->fallback = new KisPaintDevice(rhs.m_d->fallback->colorSpace());
     m_d->copyFrom = rhs.copyFrom();
     m_d->type = rhs.copyType();
     m_d->offset = rhs.m_d->offset;
@@ -112,8 +115,7 @@ KisPaintDeviceSP KisCloneLayer::paintDevice() const
 
 KisPaintDeviceSP KisCloneLayer::original() const
 {
-    Q_ASSERT(m_d->copyFrom);
-
+    if (!m_d->copyFrom || !m_d->copyFrom->projection()) return m_d->fallback;
     KisPaintDeviceSP retval;
     switch (m_d->type) {
     case COPY_PROJECTION:

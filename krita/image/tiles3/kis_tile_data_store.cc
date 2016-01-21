@@ -83,10 +83,9 @@ KisTileDataStore::~KisTileDataStore()
     m_swapper.terminateSwapper();
 
     if(numTiles() > 0) {
-        errKrita << "CRITICAL: According to statistics of the KisTileDataStore"
-                    << "some tiles have leaked from the Krita control!";
-        errKrita << "CRITICAL: Tiles in memory:" << numTilesInMemory()
-                    << "Total tiles:" << numTiles();
+         errKrita << "Warning: some tiles have leaked:";
+         errKrita << "\tTiles in memory:" << numTilesInMemory() << "\n"
+                    << "\tTotal tiles:" << numTiles();
     }
 }
 

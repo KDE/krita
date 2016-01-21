@@ -107,20 +107,7 @@ public:
 
         ENTER_FUNCTION();
     }
-    static void handleWheelEvent(QWindow *w, ulong timestamp, const QPointF & local, const QPointF & global, QPoint pixelDelta, QPoint angleDelta, Qt::KeyboardModifiers mods = Qt::NoModifier, Qt::ScrollPhase phase = Qt::ScrollUpdate, Qt::MouseEventSource source = Qt::MouseEventNotSynthesized)
-    {
-        Q_UNUSED(w);
-        Q_UNUSED(timestamp);
-        Q_UNUSED(local);
-        Q_UNUSED(global);
-        Q_UNUSED(pixelDelta);
-        Q_UNUSED(phase);
-        Q_UNUSED(source);
-        Q_UNUSED(angleDelta);
-        Q_UNUSED(mods);
-
-        ENTER_FUNCTION();
-    }
+    static void handleWheelEvent(QWindow *w, ulong timestamp, const QPointF & local, const QPointF & global, QPoint pixelDelta, QPoint angleDelta, Qt::KeyboardModifiers mods = Qt::NoModifier, Qt::ScrollPhase phase = Qt::ScrollUpdate, Qt::MouseEventSource source = Qt::MouseEventNotSynthesized);
 
     static void handleTabletEnterProximityEvent(int device, int pointerType, qint64 uid);
     static void handleTabletLeaveProximityEvent(int device, int pointerType, qint64 uid);
@@ -403,7 +390,6 @@ public:
 
     bool xi2HandleTabletEvent(void *event, TabletData *tabletData, QWindow *window);
     void xi2ReportTabletEvent(TabletData &tabletData, void *event);
-
 
     inline xcb_atom_t atom(QXcbAtom::Atom atom) const { return m_allAtoms[atom]; }
     QXcbAtom::Atom qatom(xcb_atom_t xatom) const;

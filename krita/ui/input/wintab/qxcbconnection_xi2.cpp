@@ -506,6 +506,9 @@ bool QXcbConnection::xi2HandleEvent(xcb_ge_event_t *event)
 #endif // QT_NO_TABLETEVENT
 
 #ifdef XCB_USE_XINPUT21
+        QHash<int, ScrollingDevice>::iterator device = m_scrollingDevices.find(sourceDeviceId);
+        if (device != m_scrollingDevices.end())
+            xi2HandleScrollEvent(xiEvent, device.value());
         // Removed from Qt...
 #endif // XCB_USE_XINPUT21
 
@@ -881,6 +884,82 @@ void QXcbConnection::xi2ReportTabletEvent(TabletData &tabletData, void *event)
                                               xTilt, yTilt, tangentialPressure,
                                               rotation, 0, tabletData.serialId,
                                               modifiers);
+}
+
+void QXcbConnection::xi2HandleScrollEvent(void *event, ScrollingDevice &scrollingDevice)
+{
+#ifdef XCB_USE_XINPUT21
+    xXIGenericDeviceEvent *xiEvent = reinterpret_cast<xXIGenericDeviceEvent *>(event);
+
+    if (xiEvent->evtype == XI_Motion && scrollingDevice.orientations) {
+        xXIDeviceEvent* xiDeviceEvent = reinterpret_cast<xXIDeviceEvent *>(event);
+        if (QWindow *platformWindow = windowFromId(xiDeviceEvent->event)) {
+            QPoint rawDelta;
+            QPoint angleDelta;
+            double value;
+            if (scrollingDevice.orientations & Qt::Vertical) {
+                if (xi2GetValuatorValueIfSet(xiDeviceEvent, scrollingDevice.verticalIndex, &value)) {
+                    double delta = scrollingDevice.lastScrollPosition.y() - value;
+                    scrollingDevice.lastScrollPosition.setY(value);
+                    angleDelta.setY((delta / scrollingDevice.verticalIncrement) * 120);
+                    // We do not set "pixel" delta if it is only measured in ticks.
+                    if (scrollingDevice.verticalIncrement > 1)
+                        rawDelta.setY(delta);
+                }
+            }
+            if (scrollingDevice.orientations & Qt::Horizontal) {
+                if (xi2GetValuatorValueIfSet(xiDeviceEvent, scrollingDevice.horizontalIndex, &value)) {
+                    double delta = scrollingDevice.lastScrollPosition.x() - value;
+                    scrollingDevice.lastScrollPosition.setX(value);
+                    angleDelta.setX((delta / scrollingDevice.horizontalIncrement) * 120);
+                    // We do not set "pixel" delta if it is only measured in ticks.
+                    if (scrollingDevice.horizontalIncrement > 1)
+                        rawDelta.setX(delta);
+                }
+            }
+            if (!angleDelta.isNull()) {
+                const int dpr = int(platformWindow->devicePixelRatio());
+                QPoint local(fixed1616ToReal(xiDeviceEvent->event_x)/dpr, fixed1616ToReal(xiDeviceEvent->event_y)/dpr);
+                QPoint global(fixed1616ToReal(xiDeviceEvent->root_x)/dpr, fixed1616ToReal(xiDeviceEvent->root_y)/dpr);
+                Qt::KeyboardModifiers modifiers = QApplication::queryKeyboardModifiers();
+                if (modifiers & Qt::AltModifier) {
+                    std::swap(angleDelta.rx(), angleDelta.ry());
+                    std::swap(rawDelta.rx(), rawDelta.ry());
+                }
+                QWindowSystemInterface::handleWheelEvent(platformWindow, xiEvent->time, local, global, rawDelta, angleDelta, modifiers);
+            }
+        }
+    } else if (xiEvent->evtype == XI_ButtonRelease && scrollingDevice.legacyOrientations) {
+        xXIDeviceEvent* xiDeviceEvent = reinterpret_cast<xXIDeviceEvent *>(event);
+        if (QWindow *platformWindow = windowFromId(xiDeviceEvent->event)) {
+            QPoint angleDelta;
+            if (scrollingDevice.legacyOrientations & Qt::Vertical) {
+                if (xiDeviceEvent->detail == 4)
+                    angleDelta.setY(120);
+                else if (xiDeviceEvent->detail == 5)
+                    angleDelta.setY(-120);
+            }
+            if (scrollingDevice.legacyOrientations & Qt::Horizontal) {
+                if (xiDeviceEvent->detail == 6)
+                    angleDelta.setX(120);
+                else if (xiDeviceEvent->detail == 7)
+                    angleDelta.setX(-120);
+            }
+            if (!angleDelta.isNull()) {
+                const int dpr = int(platformWindow->devicePixelRatio());
+                QPoint local(fixed1616ToReal(xiDeviceEvent->event_x)/dpr, fixed1616ToReal(xiDeviceEvent->event_y)/dpr);
+                QPoint global(fixed1616ToReal(xiDeviceEvent->root_x)/dpr, fixed1616ToReal(xiDeviceEvent->root_y)/dpr);
+                Qt::KeyboardModifiers modifiers = QApplication::queryKeyboardModifiers();
+                if (modifiers & Qt::AltModifier)
+                    std::swap(angleDelta.rx(), angleDelta.ry());
+                QWindowSystemInterface::handleWheelEvent(platformWindow, xiEvent->time, local, global, QPoint(), angleDelta, modifiers);
+            }
+        }
+    }
+#else
+    Q_UNUSED(event);
+    Q_UNUSED(scrollingDevice);
+#endif // XCB_USE_XINPUT21
 }
 
 #endif // QT_NO_TABLETEVENT

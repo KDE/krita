@@ -520,6 +520,21 @@ public:
         int z;
         qint64 uid;
     };
+
+    class WheelEvent : public InputEvent {
+    public:
+        WheelEvent(QWindow *w, ulong time, const QPointF & local, const QPointF & global, QPoint pixelD, QPoint angleD, int qt4D, Qt::Orientation qt4O,
+                   Qt::KeyboardModifiers mods, Qt::ScrollPhase phase = Qt::ScrollUpdate, Qt::MouseEventSource src = Qt::MouseEventNotSynthesized)
+            : InputEvent(w, time, Wheel, mods), pixelDelta(pixelD), angleDelta(angleD), qt4Delta(qt4D), qt4Orientation(qt4O), localPos(local), globalPos(global), phase(phase), source(src) { }
+        QPoint pixelDelta;
+        QPoint angleDelta;
+        int qt4Delta;
+        Qt::Orientation qt4Orientation;
+        QPointF localPos;
+        QPointF globalPos;
+        Qt::ScrollPhase phase;
+        Qt::MouseEventSource source;
+    };
 };
 
 void processTabletEvent(QWindowSystemInterfacePrivate::TabletEvent *e);
@@ -632,4 +647,85 @@ void QWindowSystemInterface::handleTabletLeaveProximityEvent(int device, int poi
                     Qt::NoModifier, uid, Qt::NoButton, tabletState);
     ev.setTimestamp(timestamp);
     QGuiApplication::sendEvent(qGuiApp, &ev);
+}
+
+void processWheelEvent(QWindowSystemInterfacePrivate::WheelEvent *e);
+
+void QWindowSystemInterface::handleWheelEvent(QWindow *tlw, ulong timestamp, const QPointF & local, const QPointF & global, QPoint pixelDelta, QPoint angleDelta, Qt::KeyboardModifiers mods, Qt::ScrollPhase phase, Qt::MouseEventSource source)
+{
+    // Qt 4 sends two separate wheel events for horizontal and vertical
+    // deltas. For Qt 5 we want to send the deltas in one event, but at the
+    // same time preserve source and behavior compatibility with Qt 4.
+    //
+    // In addition high-resolution pixel-based deltas are also supported.
+    // Platforms that does not support these may pass a null point here.
+    // Angle deltas must always be sent in addition to pixel deltas.
+    QWindowSystemInterfacePrivate::WheelEvent *e;
+
+    // Pass Qt::ScrollBegin and Qt::ScrollEnd through
+    // even if the wheel delta is null.
+    if (angleDelta.isNull() && phase == Qt::ScrollUpdate)
+        return;
+
+    // Simple case: vertical deltas only:
+    if (angleDelta.y() != 0 && angleDelta.x() == 0) {
+        e = new QWindowSystemInterfacePrivate::WheelEvent(tlw, timestamp, local, global, pixelDelta, angleDelta, angleDelta.y(), Qt::Vertical, mods, phase, source);
+        processWheelEvent(e);
+        return;
+    }
+
+    // Simple case: horizontal deltas only:
+    if (angleDelta.y() == 0 && angleDelta.x() != 0) {
+        e = new QWindowSystemInterfacePrivate::WheelEvent(tlw, timestamp, local, global, pixelDelta, angleDelta, angleDelta.x(), Qt::Horizontal, mods, phase, source);
+        processWheelEvent(e);
+        return;
+    }
+
+    // Both horizontal and vertical deltas: Send two wheel events.
+    // The first event contains the Qt 5 pixel and angle delta as points,
+    // and in addition the Qt 4 compatibility vertical angle delta.
+    e = new QWindowSystemInterfacePrivate::WheelEvent(tlw, timestamp, local, global, pixelDelta, angleDelta, angleDelta.y(), Qt::Vertical, mods, phase, source);
+    processWheelEvent(e);
+
+    // The second event contains null pixel and angle points and the
+    // Qt 4 compatibility horizontal angle delta.
+    e = new QWindowSystemInterfacePrivate::WheelEvent(tlw, timestamp, local, global, QPoint(), QPoint(), angleDelta.x(), Qt::Horizontal, mods, phase, source);
+    processWheelEvent(e);
+}
+
+void processWheelEvent(QWindowSystemInterfacePrivate::WheelEvent *e)
+{
+#ifndef QT_NO_WHEELEVENT
+    QWindow *window = e->window.data();
+    QPointF globalPoint = e->globalPos;
+    QPointF localPoint = e->localPos;
+
+    if (e->nullWindow()) {
+        window = QGuiApplication::topLevelAt(globalPoint.toPoint());
+        if (window) {
+            QPointF delta = globalPoint - globalPoint.toPoint();
+            localPoint = window->mapFromGlobal(globalPoint.toPoint()) + delta;
+        }
+    }
+
+    if (!window)
+        return;
+
+    // Cut off in Krita...
+    //
+    // QGuiApplicationPrivate::lastCursorPosition = globalPoint;
+    // modifier_buttons = e->modifiers;
+
+    //if (window->d_func()->blockedByModalWindow) {
+    if (QGuiApplication::modalWindow() &&
+        QGuiApplication::modalWindow() != window) {
+
+        // a modal window is blocking this window, don't allow wheel events through
+        return;
+    }
+
+    QWheelEvent ev(localPoint, globalPoint, e->pixelDelta, e->angleDelta, e->qt4Delta, e->qt4Orientation, QGuiApplication::mouseButtons(), e->modifiers, e->phase, e->source);
+    ev.setTimestamp(e->timestamp);
+    QGuiApplication::sendEvent(window, &ev);
+#endif /* ifndef QT_NO_WHEELEVENT */
 }

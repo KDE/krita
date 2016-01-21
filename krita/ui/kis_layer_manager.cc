@@ -369,11 +369,16 @@ void KisLayerManager::layerProperties()
     if (!m_view->document()) return;
 
     KisLayerSP layer = activeLayer();
+    QList<KisNodeSP> selectedNodes = m_view->nodeManager()->selectedNodes();
+    const bool multipleLayersSelected = selectedNodes.size() > 1;
 
     if (!layer) return;
 
+    KisAdjustmentLayerSP alayer = KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(layer.data()));
+    KisGeneratorLayerSP glayer = KisGeneratorLayerSP(dynamic_cast<KisGeneratorLayer*>(layer.data()));
 
-    if (KisAdjustmentLayerSP alayer = KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(layer.data()))) {
+    if (alayer && !multipleLayersSelected) {
+
         KisPaintDeviceSP dev = alayer->projection();
 
         KisDlgAdjLayerProps dlg(alayer, alayer.data(), dev, m_view, alayer->filter().data(), alayer->name(), i18n("Filter Layer Properties"), m_view->mainWindow(), "dlgadjlayerprops");
@@ -418,12 +423,12 @@ void KisLayerManager::layerProperties()
             }
         }
     }
-    else if (KisGeneratorLayerSP alayer = KisGeneratorLayerSP(dynamic_cast<KisGeneratorLayer*>(layer.data()))) {
+    else if (glayer && !multipleLayersSelected) {
 
-        KisDlgGeneratorLayer dlg(alayer->name(), m_view, m_view->mainWindow());
+        KisDlgGeneratorLayer dlg(glayer->name(), m_view, m_view->mainWindow());
         dlg.setCaption(i18n("Fill Layer Properties"));
 
-        KisSafeFilterConfigurationSP configBefore(alayer->filter());
+        KisSafeFilterConfigurationSP configBefore(glayer->filter());
         Q_ASSERT(configBefore);
         QString xmlBefore = configBefore->toXML();
 
@@ -432,7 +437,7 @@ void KisLayerManager::layerProperties()
 
         if (dlg.exec() == QDialog::Accepted) {
 
-            alayer->setName(dlg.layerName());
+            glayer->setName(dlg.layerName());
 
             KisSafeFilterConfigurationSP configAfter(dlg.configuration());
             Q_ASSERT(configAfter);
@@ -440,7 +445,7 @@ void KisLayerManager::layerProperties()
 
             if(xmlBefore != xmlAfter) {
                 KisChangeFilterCmd *cmd
-                        = new KisChangeFilterCmd(alayer,
+                        = new KisChangeFilterCmd(glayer,
                                                  configBefore->name(),
                                                  xmlBefore,
                                                  configAfter->name(),

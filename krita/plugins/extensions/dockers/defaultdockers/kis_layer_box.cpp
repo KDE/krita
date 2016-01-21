@@ -485,14 +485,15 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         const bool singleLayer = m_nodeManager->selectedNodes().size() == 1;
 
         if (index.isValid()) {
-            if (singleLayer) {
-                menu.addAction(m_propertiesAction);
-                addActionToMenu(&menu, "layer_style");
+            menu.addAction(m_propertiesAction);
 
+            if (singleLayer) {
+                addActionToMenu(&menu, "layer_style");
                 menu.addSeparator();
                 addActionToMenu(&menu, "show_in_timeline");
-                menu.addSeparator();
             }
+
+            menu.addSeparator();
 
             addActionToMenu(&menu, "cut_layer_clipboard");
             addActionToMenu(&menu, "copy_layer_clipboard");

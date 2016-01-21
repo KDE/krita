@@ -247,25 +247,24 @@ void OcioDisplayFilter::updateProcessor()
     KisConfig cfg;
     if (!cfg.useOpenGL()) return;
 
-    QOpenGLFunctions glFuncs(QOpenGLContext::currentContext());
     QOpenGLFunctions_3_2_Core *glFuncs3 = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_2_Core>();
     const int lut3DEdgeSize = cfg.ocioLutEdgeSize();
 
     if (m_lut3d.size() == 0) {
         //dbgKrita << "generating lut";
-        glFuncs.glGenTextures(1, &m_lut3dTexID);
+        glFuncs3->glGenTextures(1, &m_lut3dTexID);
 
         int num3Dentries = 3 * lut3DEdgeSize * lut3DEdgeSize * lut3DEdgeSize;
         m_lut3d.fill(0.0, num3Dentries);
 
-        glFuncs.glActiveTexture(GL_TEXTURE1);
-        glFuncs.glBindTexture(GL_TEXTURE_3D, m_lut3dTexID);
+        glFuncs3->glActiveTexture(GL_TEXTURE1);
+        glFuncs3->glBindTexture(GL_TEXTURE_3D, m_lut3dTexID);
 
-        glFuncs.glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glFuncs.glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glFuncs.glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glFuncs.glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glFuncs.glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+        glFuncs3->glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glFuncs3->glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glFuncs3->glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glFuncs3->glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glFuncs3->glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
         glFuncs3->glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB16F_ARB,
                               lut3DEdgeSize, lut3DEdgeSize, lut3DEdgeSize,
                               0, GL_RGB, GL_FLOAT, &m_lut3d.constData()[0]);
@@ -288,7 +287,7 @@ void OcioDisplayFilter::updateProcessor()
         m_lut3dcacheid = lut3dCacheID;
         m_processor->getGpuLut3D(&m_lut3d[0], shaderDesc);
 
-        glFuncs.glBindTexture(GL_TEXTURE_3D, m_lut3dTexID);
+        glFuncs3->glBindTexture(GL_TEXTURE_3D, m_lut3dTexID);
         glFuncs3->glTexSubImage3D(GL_TEXTURE_3D, 0,
                                  0, 0, 0,
                                  lut3DEdgeSize, lut3DEdgeSize, lut3DEdgeSize,

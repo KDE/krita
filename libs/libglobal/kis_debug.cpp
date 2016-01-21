@@ -103,7 +103,7 @@ Q_LOGGING_CATEGORY(_41014, "krita.tabletlog")
 
 
 
-const char* __methodName(const char *_prettyFunction)
+QString __methodName(const char *_prettyFunction)
 {
     std::string prettyFunction(_prettyFunction);
 
@@ -111,5 +111,5 @@ const char* __methodName(const char *_prettyFunction)
     size_t begin = prettyFunction.substr(0,colons).rfind(" ") + 1;
     size_t end = prettyFunction.rfind("(") - begin;
 
-    return std::string(prettyFunction.substr(begin,end) + "()").c_str();
+    return QString(std::string(prettyFunction.substr(begin,end) + "()").c_str());
 }

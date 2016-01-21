@@ -140,14 +140,6 @@ KRITAGLOBAL_EXPORT QString kisBacktrace();
  */
 #define ppVar( var ) #var << "=" << var
 
-#ifdef __GNUC__
-#define ENTER_FUNCTION() qDebug() << "Entering" << __func__
-#define LEAVE_FUNCTION() qDebug() << "Leaving " << __func__
-#else
-#define ENTER_FUNCTION() qDebug() << "Entering" << "<unknown>"
-#define LEAVE_FUNCTION() qDebug() << "Leaving " << "<unknown>"
-#endif
-
 #  ifndef QT_NO_DEBUG
 #    undef Q_ASSERT
 #    define Q_ASSERT(cond) if(!(cond)) { errKrita << kisBacktrace(); qt_assert(#cond,__FILE__,__LINE__); } qt_noop()
@@ -155,13 +147,21 @@ KRITAGLOBAL_EXPORT QString kisBacktrace();
 
 
 #ifdef __GNUC__
-KRITAGLOBAL_EXPORT const char* __methodName(const char *prettyFunction);
+KRITAGLOBAL_EXPORT QString __methodName(const char *prettyFunction);
 #define __METHOD_NAME__ __methodName(__PRETTY_FUNCTION__)
 #else
 #define __METHOD_NAME__ "<unknown>:<unknown>"
 #endif
 
 #define PREPEND_METHOD(msg) QString("%1: %2").arg(__METHOD_NAME__).arg(msg)
+
+#ifdef __GNUC__
+#define ENTER_FUNCTION() qDebug() << "Entering" << __METHOD_NAME__
+#define LEAVE_FUNCTION() qDebug() << "Leaving " << __METHOD_NAME__
+#else
+#define ENTER_FUNCTION() qDebug() << "Entering" << "<unknown>"
+#define LEAVE_FUNCTION() qDebug() << "Leaving " << "<unknown>"
+#endif
 
 #include "kis_assert.h"
 

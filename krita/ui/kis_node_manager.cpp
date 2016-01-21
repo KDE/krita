@@ -1200,32 +1200,15 @@ void KisNodeManager::createQuickClippingGroup()
     juggler->addNode(KisNodeList() << maskLayer, parent, above);
 }
 
-KisNodeList findNodesWithProps(KisNodeSP root, const KoProperties &props, bool excludeRoot)
-{
-    KisNodeList nodes;
-
-    if ((!excludeRoot || root->parent()) && root->check(props)) {
-        nodes << root;
-    }
-
-    KisNodeSP node = root->firstChild();
-    while (node) {
-        nodes += findNodesWithProps(node, props, excludeRoot);
-        node = node->nextSibling();
-    }
-
-    return nodes;
-}
-
 void KisNodeManager::selectLayersImpl(const KoProperties &props, const KoProperties &invertedProps)
 {
     KisImageSP image = m_d->view->image();
-    KisNodeList nodes = findNodesWithProps(image->root(), props, true);
+    KisNodeList nodes = KisLayerUtils::findNodesWithProps(image->root(), props, true);
 
     KisNodeList selectedNodes = this->selectedNodes();
 
     if (KritaUtils::compareListsUnordered(nodes, selectedNodes)) {
-        nodes = findNodesWithProps(image->root(), invertedProps, true);
+        nodes = KisLayerUtils::findNodesWithProps(image->root(), invertedProps, true);
     }
 
     if (!nodes.isEmpty()) {

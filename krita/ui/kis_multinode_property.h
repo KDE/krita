@@ -31,6 +31,7 @@
 
 #include "kis_node.h"
 #include "kis_layer.h"
+#include "kis_layer_utils.h"
 
 class KisMultinodePropertyInterface;
 class MultinodePropertyBaseConnector;
@@ -189,27 +190,6 @@ private:
     QString m_propName;
 };
 
-// TODO: move to KisLayerUtils
-#include <functional>
-
-template <typename T>
-bool checkNodesDiffer(KisNodeList nodes, std::function<T(KisNodeSP)> checkerFunc)
-{
-    bool valueDiffers = false;
-    bool initialized = false;
-    T currentValue;
-    Q_FOREACH (KisNodeSP node, nodes) {
-        if (!initialized) {
-            currentValue = checkerFunc(node);
-            initialized = true;
-        } else if (currentValue != checkerFunc(node)) {
-            valueDiffers = true;
-            break;
-        }
-    }
-    return valueDiffers;
-}
-
 struct ChannelFlagAdapter : public BaseAdapter {
     typedef bool ValueType;
     typedef MultinodePropertyBoolConnector<ChannelFlagAdapter> ConnectorType;
@@ -258,7 +238,7 @@ struct ChannelFlagAdapter : public BaseAdapter {
         PropertyList props;
 
         {
-            bool nodesDiffer = checkNodesDiffer<const KoColorSpace*>(nodes, [](KisNodeSP node) { return node->colorSpace(); });
+            bool nodesDiffer = KisLayerUtils::checkNodesDiffer<const KoColorSpace*>(nodes, [](KisNodeSP node) { return node->colorSpace(); });
 
             if (nodesDiffer) {
                 return props;

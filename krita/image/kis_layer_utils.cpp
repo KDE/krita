@@ -643,6 +643,23 @@ namespace KisLayerUtils {
         }
     }
 
+    KisNodeList findNodesWithProps(KisNodeSP root, const KoProperties &props, bool excludeRoot)
+    {
+        KisNodeList nodes;
+
+        if ((!excludeRoot || root->parent()) && root->check(props)) {
+            nodes << root;
+        }
+
+        KisNodeSP node = root->firstChild();
+        while (node) {
+            nodes += findNodesWithProps(node, props, excludeRoot);
+            node = node->nextSibling();
+        }
+
+        return nodes;
+    }
+
     void mergeMultipleLayersImpl(KisImageSP image, QList<KisNodeSP> mergedNodes, KisNodeSP putAfter, bool flattenSingleLayer, const KUndo2MagicString &actionName)
     {
         filterMergableNodes(mergedNodes);

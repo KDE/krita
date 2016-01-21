@@ -116,7 +116,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisNodeList nodes, KisViewManager *
     d->compositeOpProperty->connectValueChangedSignal(&d->updatesCompressor, SLOT(start()));
     connect(d->page->cmbComposite, SIGNAL(currentIndexChanged(int)), SLOT(slotCompositeOpValueChangedExternally()));
 
-    if (!checkNodesDiffer<const KoColorSpace*>(d->nodes, [](KisNodeSP node) { return node->colorSpace(); })) {
+    if (!KisLayerUtils::checkNodesDiffer<const KoColorSpace*>(d->nodes, [](KisNodeSP node) { return node->colorSpace(); })) {
 
         d->page->lblColorSpace->setText(d->colorSpace->name());
         if (const KoColorProfile* profile = d->colorSpace->profile()) {

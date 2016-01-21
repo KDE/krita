@@ -47,7 +47,7 @@ KisImageConfig::~KisImageConfig()
     if (m_readOnly) return;
 
     if (qApp->thread() != QThread::currentThread()) {
-        dbgKrita << "WARNING: KisImageConfig: requested config synchronization from nonGUI thread! Skipping...";
+        dbgKrita << "KisImageConfig: requested config synchronization from nonGUI thread! Called from" << kisBacktrace();
         return;
     }
 
@@ -365,7 +365,6 @@ int KisImageConfig::totalRAM()
     errno = 0;
     if (sysctl(mib, namelen, &size, &len, NULL, 0) >= 0) {
         totalMemory = size >> 20;
-        dbgKrita << "sysctl(\"hw.memsize\") returned size=" << size << " =>" << totalMemory << "MiB";
         error = 0;
     }
     else {
@@ -373,9 +372,8 @@ int KisImageConfig::totalRAM()
     }
 #endif
 
-    if(error) {
-        dbgKrita << "Cannot get the size of your RAM."
-                   << "Using default value of 1GiB.";
+    if (error) {
+        warnKrita << "Cannot get the size of your RAM. Using 1 GiB by default.";
     }
 
     return totalMemory;

@@ -145,7 +145,6 @@ bool KisPaintOpPreset::load()
     QByteArray ba;
 
     if (filename().startsWith("bundle://")) {
-        dbgKrita << "bundle";
         QString bn = filename().mid(9);
         int pos = bn.lastIndexOf(":");
         QString fn = bn.right(bn.size() - pos - 1);

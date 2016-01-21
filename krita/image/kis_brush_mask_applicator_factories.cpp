@@ -31,7 +31,6 @@ template<>
 MaskApplicatorFactory<KisMaskGenerator, KisBrushMaskScalarApplicator>::ReturnType
 MaskApplicatorFactory<KisMaskGenerator, KisBrushMaskScalarApplicator>::create<VC_IMPL>(ParamType maskGenerator)
 {
-    // dbgKrita << "Creating scalar applicator" << b(VC_IMPL);
     return new KisBrushMaskScalarApplicator<KisMaskGenerator,VC_IMPL>(maskGenerator);
 }
 
@@ -40,7 +39,6 @@ template<>
 MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator>::ReturnType
 MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator>::create<VC_IMPL>(ParamType maskGenerator)
 {
-    // dbgKrita << "Creating vector applicator" << b(VC_IMPL);
     return new KisBrushMaskVectorApplicator<KisCircleMaskGenerator,VC_IMPL>(maskGenerator);
 }
 

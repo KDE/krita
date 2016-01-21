@@ -104,7 +104,7 @@ void KisTabletDebugger::toggleDebugging()
         dbgTablet << "vvvvvvvvvvvvvvvvvvvvvvv START TABLET EVENT LOG vvvvvvvvvvvvvvvvvvvvvvv";
     }
     else {
-        dbgTablet << "^^^^^^^^^^^^^^^^^^^^^^^ START TABLET EVENT LOG ^^^^^^^^^^^^^^^^^^^^^^^";
+        dbgTablet << "^^^^^^^^^^^^^^^^^^^^^^^ END TABLET EVENT LOG ^^^^^^^^^^^^^^^^^^^^^^^";
     }
 }
 

@@ -270,7 +270,11 @@ void loadResources()
 
     KoResourcePaths::addResourceType("icc_profiles", "data", "krita/profiles/");
 
+    // Load base resources: patterns, brushes, gradients, ...
+    // load paintop presets
+    // load tags
 
+    // verify everything is fine...
 }
 
 bool KisApplication::start(const KisApplicationArguments &args)
@@ -342,9 +346,8 @@ bool KisApplication::start(const KisApplicationArguments &args)
     ResetStarting resetStarting(d->splashScreen); // remove the splash when done
     Q_UNUSED(resetStarting);
 
-
-    loadPlugins();
     loadResources();
+    loadPlugins();
 
     KisMainWindow *mainWindow = 0;
 

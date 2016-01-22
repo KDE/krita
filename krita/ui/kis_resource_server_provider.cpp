@@ -58,30 +58,25 @@ KisResourceServerProvider::KisResourceServerProvider()
 {
     KisBrushServer *brushServer = KisBrushServer::instance();
 
-    KoResourcePaths::addResourceType("kis_paintoppresets", "data", "krita/paintoppresets/");
-    KoResourcePaths::addResourceDir("kis_paintoppresets", QDir::homePath() + QString("/.create/paintoppresets/krita"));
-    KoResourcePaths::addResourceType("kis_workspaces", "data", "krita/workspaces/");
-    KoResourcePaths::addResourceType("psd_layer_style_collections", "data", "krita/asl");
-
     m_paintOpPresetServer = new KisPaintOpPresetResourceServer("kis_paintoppresets", "*.kpp");
     if (!QFileInfo(m_paintOpPresetServer->saveLocation()).exists()) {
         QDir().mkpath(m_paintOpPresetServer->saveLocation());
     }
     m_paintOpPresetThread = new KoResourceLoaderThread(m_paintOpPresetServer);
-    m_paintOpPresetThread->start();
-    if (!isRunningInKrita()) {
-        m_paintOpPresetThread->barrier();
-    }
+    m_paintOpPresetThread->loadSynchronously();
+//    if (!isRunningInKrita()) {
+//        m_paintOpPresetThread->barrier();
+//    }
 
     m_workspaceServer = new KoResourceServerSimpleConstruction<KisWorkspaceResource>("kis_workspaces", "*.kws");
     if (!QFileInfo(m_workspaceServer->saveLocation()).exists()) {
         QDir().mkpath(m_workspaceServer->saveLocation());
     }
     m_workspaceThread = new KoResourceLoaderThread(m_workspaceServer);
-    m_workspaceThread->start();
-    if (!isRunningInKrita()) {
-        m_workspaceThread->barrier();
-    }
+    m_workspaceThread->loadSynchronously();
+//    if (!isRunningInKrita()) {
+//        m_workspaceThread->barrier();
+//    }
 
     m_layerStyleCollectionServer = new KoResourceServerSimpleConstruction<KisPSDLayerStyleCollectionResource>("psd_layer_style_collections", "*.asl");
     if (!QFileInfo(m_layerStyleCollectionServer->saveLocation()).exists()) {
@@ -89,11 +84,10 @@ KisResourceServerProvider::KisResourceServerProvider()
     }
 
     m_layerStyleCollectionThread = new KoResourceLoaderThread(m_layerStyleCollectionServer);
-    m_layerStyleCollectionThread->start();
-    if (!isRunningInKrita()) {
-        m_layerStyleCollectionThread->barrier();
-    }
-
+    m_layerStyleCollectionThread->loadSynchronously();
+//    if (!isRunningInKrita()) {
+//        m_layerStyleCollectionThread->barrier();
+//    }
 
     connect(this, SIGNAL(notifyBrushBlacklistCleanup()),
             brushServer, SLOT(slotRemoveBlacklistedResources()));

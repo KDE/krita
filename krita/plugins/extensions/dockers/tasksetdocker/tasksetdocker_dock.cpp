@@ -99,7 +99,6 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
 
     chooserButton->setIcon(KisIconUtils::loadIcon("edit-copy"));
 
-    KoResourcePaths::addResourceType("kis_taskset", "data", "krita/taskset/");
     m_rserver = new KoResourceServerSimpleConstruction<TasksetResource>("kis_taskset", "*.kts");
 
     if (!QFileInfo(m_rserver->saveLocation()).exists()) {

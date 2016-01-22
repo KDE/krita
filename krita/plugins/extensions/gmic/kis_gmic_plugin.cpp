@@ -88,7 +88,6 @@ KisGmicPlugin::KisGmicPlugin(QObject *parent, const QVariantList &)
     KisAction *action  = createAction("gmic");
     connect(action, SIGNAL(triggered()), this, SLOT(slotShowGmicDialog()));
 
-    KoResourcePaths::addResourceType("gmic_definitions", "data", "krita/gmic/");
     m_blacklistPath = KoResourcePaths::findResource("gmic_definitions", STANDARD_GMIC_DEFINITION + ".blacklist");
 
     dumpCompiletimeFeatures();

@@ -100,7 +100,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 {
     Q_ASSERT(view != 0);
 
-    KoResourcePaths::addResourceType("kis_defaultpresets", "data", "krita/defaultpresets/");
 
     setObjectName(name);
     KisConfig cfg;

@@ -47,6 +47,7 @@ public:
      */
     explicit KoResourceLoaderThread(KoResourceServerBase *server);
     ~KoResourceLoaderThread();
+    void loadSynchronously();
 public Q_SLOTS:
     /**
      * Checks whether the thread has finished loading and waits

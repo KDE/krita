@@ -121,16 +121,13 @@ private:
 
 KisBrushServer::KisBrushServer()
 {
-    KoResourcePaths::addResourceType("kis_brushes", "data", "krita/brushes/");
-    KoResourcePaths::addResourceDir("kis_brushes", "/usr/share/create/brushes/gimp");
-    KoResourcePaths::addResourceDir("kis_brushes", QDir::homePath() + QString("/.create/brushes/gimp"));
-
     m_brushServer = new BrushResourceServer();
     if (!QFileInfo(m_brushServer->saveLocation()).exists()) {
         QDir().mkpath(m_brushServer->saveLocation());
     }
     m_brushThread = new KoResourceLoaderThread(m_brushServer);
-    m_brushThread->start();
+    m_brushThread->loadSynchronously();
+//    m_brushThread->barrier();
     Q_FOREACH (KisBrushSP brush, m_brushServer->resources()) {
         if (!dynamic_cast<KisAbrBrush*>(brush.data())) {
             brush->setBrushTipImage(QImage());

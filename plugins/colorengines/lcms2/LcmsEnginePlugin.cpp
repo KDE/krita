@@ -92,8 +92,6 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     // Initialise color engine
     KoColorSpaceEngineRegistry::instance()->add(new IccColorSpaceEngine);
 
-    // prepare a list of the ICC profiles
-    KoResourcePaths::addResourceType("icc_profiles", "data", "color/icc");
 
     QStringList profileFilenames;
     profileFilenames += KoResourcePaths::findAllResources("icc_profiles", "*.icm",  KoResourcePaths::Recursive | KoResourcePaths::NoDuplicates);

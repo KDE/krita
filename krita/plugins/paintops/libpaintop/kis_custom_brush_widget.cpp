@@ -118,8 +118,6 @@ void KisCustomBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask)
 
 void KisCustomBrushWidget::slotAddPredefined()
 {
-    // Save in the directory that is likely to be: ~/.kde/share/apps/krita/brushes
-    // a unique file with this brushname
     QString dir = KoResourcePaths::saveLocation("data", "krita/brushes");
     QString extension;
 

@@ -53,8 +53,6 @@ Q_GLOBAL_STATIC(ResourceBundleServerProvider, s_instance)
 ResourceBundleServerProvider::ResourceBundleServerProvider()
 {
     // user-local
-    KoResourcePaths::addResourceType("kis_resourcebundles", "data", "krita/bundles/");
-    KoResourcePaths::addResourceDir("kis_resourcebundles", QDir::homePath() + QString("/.create/bundles"));
     m_resourceBundleServer = new KoResourceServerSimpleConstruction<ResourceBundle>("kis_resourcebundles", "*.bundle");
     if (!QFileInfo(m_resourceBundleServer->saveLocation()).exists()) {
         QDir().mkpath(m_resourceBundleServer->saveLocation());

@@ -24,9 +24,8 @@
 #include <QStringList>
 #include <QFile>
 #include <QDir>
-#include <QStandardPaths>
 #include <QDomDocument>
-
+#include <KoResourcePaths.h>
 #include <KoResourceServer.h>
 
 
@@ -175,14 +174,19 @@ QStringList KoResourceTagStore::searchTag(const QString& query) const
 
 void KoResourceTagStore::loadTags()
 {
-    QStringList tagFiles = QStandardPaths::locateAll(QStandardPaths::AppDataLocation, "tags/" + d->resourceServer->type() + "_tags.xml");
+    QStringList tagFiles = KoResourcePaths::findDirs("tags", "");
+
+    //qDebug() << "Going to load tags" << tagFiles;
+
     Q_FOREACH (const QString &tagFile, tagFiles) {
-        readXMLFile(tagFile);
+        readXMLFile(tagFile + d->resourceServer->type() + "_tags.xml");
     }
 }
 
 void KoResourceTagStore::writeXMLFile(const QString &tagstore)
 {
+    //qDebug() << "writing tags to" << tagstore;
+
     QFile f(tagstore);
     if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
         warnWidgets << "Cannot write meta information to '" << tagstore << "'.";
@@ -249,12 +253,14 @@ void KoResourceTagStore::writeXMLFile(const QString &tagstore)
 
 void KoResourceTagStore::readXMLFile(const QString &tagstore)
 {
-    QString inputFile;
+    //qDebug() << "Reading tags from" << tagstore;
 
+    QString inputFile;
     if (QFile::exists(tagstore)) {
         inputFile = tagstore;
     } else {
-        inputFile = QStandardPaths::locate(QStandardPaths::AppDataLocation, "tags.xml");
+        //qDebug() << "\tdoesn't exist";
+        return;
     }
 
     QFile f(inputFile);
@@ -382,5 +388,5 @@ QStringList KoResourceTagStore::removeAdjustedFileNames(QStringList fileNamesLis
 
 void KoResourceTagStore::serializeTags()
 {
-    writeXMLFile(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/tags/" + d->resourceServer->type() + "_tags.xml");
+    writeXMLFile(KoResourcePaths::saveLocation("tags") + d->resourceServer->type() + "_tags.xml");
 }

@@ -130,7 +130,6 @@ KisActionRegistry::KisActionRegistry()
     loadShortcutScheme(schemeName);
     loadCustomShortcuts();
 
-    KoResourcePaths::addResourceType("kis_shortcuts", "data", "krita/shortcuts/");
 }
 
 QKeySequence KisActionRegistry::getCustomShortcut(const QString &name)
@@ -377,8 +376,6 @@ void KisActionRegistry::writeCustomShortcuts(KConfigBase *config) const
 
 void KisActionRegistry::Private::loadActionFiles()
 {
-
-    KoResourcePaths::addResourceType("kis_actions", "data", "krita/actions");
     auto searchType = KoResourcePaths::Recursive | KoResourcePaths::NoDuplicates;
     QStringList actionDefinitions =
         KoResourcePaths::findAllResources("kis_actions", "*.action", searchType);

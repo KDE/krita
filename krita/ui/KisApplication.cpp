@@ -80,6 +80,9 @@
 #include "KisApplicationArguments.h"
 #include <kis_debug.h>
 #include "kis_action_registry.h"
+#include <kis_brush_server.h>
+#include <kis_resource_server_provider.h>
+#include <KoResourceServerProvider.h>
 
 #ifdef HAVE_OPENGL
 #include "opengl/kis_opengl.h"
@@ -147,7 +150,8 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
 
     setApplicationDisplayName("Krita");
     setApplicationName("krita");
-    setOrganizationName("Krita");
+    // Note: Qt docs suggest we set this, but if we do, we get resource paths of the form of krita/krita, which is weird.
+//    setOrganizationName("krita");
     setOrganizationDomain("krita.org");
 
     QString version = CalligraVersionWrapper::versionString(true);
@@ -161,6 +165,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
                 qDebug() << "No" << style << "available.";
             }
             else {
+                qDebug() << "Set style" << style;
                 break;
             }
         }
@@ -227,10 +232,64 @@ void initializeGlobals(const KisApplicationArguments &args)
     }
 }
 
-
-void checkLocalResourcesTree()
+void addResourceTypes()
 {
+    // All Krita's resource types
+    KoResourcePaths::addResourceType("kis_pics", "data", "/pics/");
+    KoResourcePaths::addResourceType("kis_images", "data", "/images/");
+    KoResourcePaths::addResourceType("icc_profiles", "data", "/profiles/");
+    KoResourcePaths::addResourceType("metadata_schema", "data", "/metadata/schemas/");
+    KoResourcePaths::addResourceType("kis_brushes", "data", "/brushes/");
+    KoResourcePaths::addResourceType("kis_taskset", "data", "/taskset/");
+    KoResourcePaths::addResourceType("kis_taskset", "data", "/taskset/");
+    KoResourcePaths::addResourceType("gmic_definitions", "data", "/gmic/");
+    KoResourcePaths::addResourceType("kis_resourcebundles", "data", "/bundles/");
+    KoResourcePaths::addResourceType("kis_defaultpresets", "data", "/defaultpresets/");
+    KoResourcePaths::addResourceType("kis_paintoppresets", "data", "/paintoppresets/");
+    KoResourcePaths::addResourceType("kis_workspaces", "data", "/workspaces/");
+    KoResourcePaths::addResourceType("psd_layer_style_collections", "data", "/asl");
+    KoResourcePaths::addResourceType("ko_patterns", "data", "/patterns/", true);
+    KoResourcePaths::addResourceType("ko_gradients", "data", "/gradients/");
+    KoResourcePaths::addResourceType("ko_gradients", "data", "/gradients/", true);
+    KoResourcePaths::addResourceType("ko_palettes", "data", "/palettes/", true);
+    KoResourcePaths::addResourceType("kis_shortcuts", "data", "/shortcuts/");
+    KoResourcePaths::addResourceType("kis_actions", "data", "/actions");
+    KoResourcePaths::addResourceType("icc_profiles", "data", "/color/icc");
+    KoResourcePaths::addResourceType("ko_effects", "data", "/effects/");
+    KoResourcePaths::addResourceType("tags", "data", "/tags/");
 
+//    // Extra directories to look for create resources. (Does anyone actually use that anymore?)
+//    KoResourcePaths::addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");
+//    KoResourcePaths::addResourceDir("ko_gradients", QDir::homePath() + QString("/.create/gradients/gimp"));
+//    KoResourcePaths::addResourceDir("ko_patterns", "/usr/share/create/patterns/gimp");
+//    KoResourcePaths::addResourceDir("ko_patterns", QDir::homePath() + QString("/.create/patterns/gimp"));
+//    KoResourcePaths::addResourceDir("kis_brushes", "/usr/share/create/brushes/gimp");
+//    KoResourcePaths::addResourceDir("kis_brushes", QDir::homePath() + QString("/.create/brushes/gimp"));
+//    KoResourcePaths::addResourceDir("ko_palettes", "/usr/share/create/swatches");
+//    KoResourcePaths::addResourceDir("ko_palettes", QDir::homePath() + QString("/.create/swatches"));
+
+    // Make directories for all resources we can save, and tags
+    QDir d;
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/tags/");
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/asl/");
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/bundles/");
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/gradients/");
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/paintoppresets/");
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/palettes/");
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/patterns/");
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/taskset/");
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/workspaces/");
+}
+
+void loadResources()
+{
+    // Load base resources
+    KoResourceServerProvider::instance()->gradientServer(true);
+    KoResourceServerProvider::instance()->patternServer(true);
+    KoResourceServerProvider::instance()->paletteServer(false);
+    KisBrushServer::instance()->brushServer(true);
+    // load paintop presets
+    KisResourceServerProvider::instance()->paintOpPresetServer(true);
 }
 
 void loadPlugins()
@@ -254,28 +313,8 @@ void loadPlugins()
 
     // XXX_EXIV: make the exiv io backends real plugins
     KisExiv2::initialize();
-
-
 }
 
-
-void loadResources()
-{
-
-    // for cursors
-    KoResourcePaths::addResourceType("kis_pics", "data", "krita/pics/");
-
-    // for images in the paintop box
-    KoResourcePaths::addResourceType("kis_images", "data", "krita/images/");
-
-    KoResourcePaths::addResourceType("icc_profiles", "data", "krita/profiles/");
-
-    // Load base resources: patterns, brushes, gradients, ...
-    // load paintop presets
-    // load tags
-
-    // verify everything is fine...
-}
 
 bool KisApplication::start(const KisApplicationArguments &args)
 {
@@ -346,7 +385,11 @@ bool KisApplication::start(const KisApplicationArguments &args)
     ResetStarting resetStarting(d->splashScreen); // remove the splash when done
     Q_UNUSED(resetStarting);
 
+    // Make sure we can save resources and tags
+    addResourceTypes();
+    // Load all resources and tags before the plugins do that
     loadResources();
+    // Load the plugins
     loadPlugins();
 
     KisMainWindow *mainWindow = 0;

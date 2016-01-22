@@ -185,8 +185,6 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
         , KisShared()
 {
     setObjectName(name);
-    dbgImage << "creating" << name;
-
     // Handle undoStore == 0 and colorSpace == 0 cases
     if (!undoStore) {
         undoStore = new KisDumbUndoStore();

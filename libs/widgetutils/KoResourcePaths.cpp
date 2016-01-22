@@ -141,9 +141,6 @@ public:
         else if (type == "data") {
             return QStandardPaths::AppDataLocation;
         }
-        else if (type == "config") {
-            return QStandardPaths::AppConfigLocation;
-        }
         else if (type == "cache") {
             return QStandardPaths::CacheLocation;
         }

@@ -724,7 +724,11 @@ void processWheelEvent(QWindowSystemInterfacePrivate::WheelEvent *e)
         return;
     }
 
+#if QT_VERSION >= 0x050500
     QWheelEvent ev(localPoint, globalPoint, e->pixelDelta, e->angleDelta, e->qt4Delta, e->qt4Orientation, QGuiApplication::mouseButtons(), e->modifiers, e->phase, e->source);
+#else
+    QWheelEvent ev(localPoint, globalPoint, e->pixelDelta, e->angleDelta, e->qt4Delta, e->qt4Orientation, QGuiApplication::mouseButtons(), e->modifiers, e->phase);
+#endif
     ev.setTimestamp(e->timestamp);
     QGuiApplication::sendEvent(window, &ev);
 #endif /* ifndef QT_NO_WHEELEVENT */

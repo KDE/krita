@@ -24,7 +24,7 @@
 #include <KoDialog.h>
 #include "kis_action_manager.h"
 
-class KisResourceBundle;
+class ResourceBundle;
 class QListWidget;
 class QListWidgetItem;
 
@@ -57,13 +57,13 @@ private:
     QWidget *m_page;
     Ui::WdgDlgBundleManager *m_ui;
 
-    void fillListWidget(QList<KisResourceBundle*> bundles, QListWidget *w);
+    void fillListWidget(QList<ResourceBundle*> bundles, QListWidget *w);
     void refreshListData();
 
-    QMap<QString, KisResourceBundle*> m_blacklistedBundles;
-    QMap<QString, KisResourceBundle*> m_activeBundles;
+    QMap<QString, ResourceBundle*> m_blacklistedBundles;
+    QMap<QString, ResourceBundle*> m_activeBundles;
 
-    KisResourceBundle *m_currentBundle;
+    ResourceBundle *m_currentBundle;
     KisActionManager* m_actionManager;
 };
 

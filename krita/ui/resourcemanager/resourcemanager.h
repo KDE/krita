@@ -22,10 +22,26 @@
 
 #include <QVariant>
 #include <KoResourceServer.h>
-#
+
 #include <kis_view_plugin.h>
 
-#include "KisResourceBundle.h"
+#include "resourcebundle.h"
+
+class ResourceBundleServerProvider {
+public:
+    static ResourceBundleServerProvider *instance();
+    ResourceBundleServerProvider();
+    ~ResourceBundleServerProvider();
+
+    KoResourceServer<ResourceBundle> *resourceBundleServer();
+
+private:
+
+    KoResourceServer<ResourceBundle> *m_resourceBundleServer;
+
+    Q_DISABLE_COPY(ResourceBundleServerProvider)
+
+};
 
 class ResourceManager : public KisViewPlugin
 {
@@ -38,7 +54,8 @@ private Q_SLOTS:
     void slotImport();
     void slotCreateBundle();
     void slotManageBundles();
-
+    void loadBundles();
+    void bundlesLoaded();
 private:
     class Private;
     Private *const d;

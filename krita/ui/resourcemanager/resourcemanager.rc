@@ -1,0 +1,13 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritaresourcemanager" version="8" translationDomain="krita">
+<MenuBar>
+     <Menu name="edit"><text>&amp;Edit</text>
+         <Menu name="resources"><text>&amp;Resources</text>
+            <Action name="import"/>
+            <Action name="createbundle"/>
+            <Action name="managebundles"/>
+        </Menu>
+ </Menu>
+
+</MenuBar>
+</kpartgui>

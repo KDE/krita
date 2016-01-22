@@ -1,5 +1,9 @@
+add_subdirectory( tests )
+
 set(kritaresourcemanager_SOURCES
     resourcemanager.cpp
+	resourcebundle_manifest.cpp
+    resourcebundle.cpp
     dlg_create_bundle.cpp
     dlg_bundle_manager.cpp
 )

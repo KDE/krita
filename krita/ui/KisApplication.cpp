@@ -290,6 +290,7 @@ void loadResources()
     KisBrushServer::instance()->brushServer(true);
     // load paintop presets
     KisResourceServerProvider::instance()->paintOpPresetServer(true);
+    KisResourceServerProvider::instance()->resourceBundleServer();
 }
 
 void loadPlugins()

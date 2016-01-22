@@ -153,6 +153,7 @@ void KoResourceLoaderThread::barrier()
 
 struct Q_DECL_HIDDEN KoResourceServerProvider::Private
 {
+
     KoResourceServer<KoPattern>* patternServer;
     KoResourceServer<KoAbstractGradient>* gradientServer;
     KoResourceServer<KoColorSet>* paletteServer;

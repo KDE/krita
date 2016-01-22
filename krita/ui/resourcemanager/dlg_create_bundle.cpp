@@ -43,11 +43,11 @@
 
 #include <kis_config.h>
 
-#include "KisResourceBundle.h"
+#include "resourcebundle.h"
 
 #define ICON_SIZE 48
 
-DlgCreateBundle::DlgCreateBundle(KisResourceBundle *bundle, QWidget *parent)
+DlgCreateBundle::DlgCreateBundle(ResourceBundle *bundle, QWidget *parent)
     : KoDialog(parent)
     , m_ui(new Ui::WdgDlgCreateBundle)
     , m_bundle(bundle)

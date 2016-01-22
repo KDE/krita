@@ -235,4 +235,11 @@ set(kis_animation_frame_cache_test_SRCS kis_animation_frame_cache_test.cpp )
 kde4_add_unit_test(KisAnimationFrameCacheTest TESTNAME kritaui-animation_frame_cache_test ${kis_animation_frame_cache_test_SRCS})
 target_link_libraries(KisAnimationFrameCacheTest kritaui kritaimage ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(ResourceBundleTest_SRCS ResourceBundleTest.cpp ../KisResourceBundle.cpp ../KisResourceBundleManifest.cpp)
+kde4_add_unit_test(ResourceBundleTest TESTNAME krita-resourcemanager-ResourceBundleTest ${ResourceBundleTest_SRCS})
+target_link_libraries(ResourceBundleTest kritaui kritalibbrush kritalibpaintop Qt5::Test )
+
+
 endif ()

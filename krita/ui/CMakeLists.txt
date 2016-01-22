@@ -331,6 +331,8 @@ set(kritaui_LIB_SRCS
     qtsingleapplication/qtlocalpeer.cpp
     qtsingleapplication/qtsingleapplication.cpp
 
+    KisResourceBundle.cpp
+    KisResourceBundleManifest.cpp
 
     kis_md5_generator.cpp
     KisApplicationArguments.cpp

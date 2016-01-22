@@ -28,6 +28,7 @@
 
 #include <kis_paintop_preset.h>
 
+#include "KisResourceBundle.h"
 #include "kritaui_export.h"
 
 class KoResourceLoaderThread;
@@ -47,6 +48,7 @@ public:
 
     static KisResourceServerProvider* instance();
 
+    KoResourceServer<KisResourceBundle> *resourceBundleServer();
     KisPaintOpPresetResourceServer* paintOpPresetServer(bool block = true);
     KoResourceServer<KisWorkspaceResource>* workspaceServer(bool block = true);
     KoResourceServer<KisPSDLayerStyleCollectionResource>* layerStyleCollectionServer(bool block = true);
@@ -61,9 +63,10 @@ private:
     KisResourceServerProvider(const KisResourceServerProvider&);
     KisResourceServerProvider operator=(const KisResourceServerProvider&);
 
-    KisPaintOpPresetResourceServer* m_paintOpPresetServer;
-    KoResourceServer<KisWorkspaceResource>* m_workspaceServer;
-    KoResourceServer<KisPSDLayerStyleCollectionResource>* m_layerStyleCollectionServer;
+    KisPaintOpPresetResourceServer *m_paintOpPresetServer;
+    KoResourceServer<KisWorkspaceResource> *m_workspaceServer;
+    KoResourceServer<KisPSDLayerStyleCollectionResource> *m_layerStyleCollectionServer;
+    KoResourceServer<KisResourceBundle> *m_resourceBundleServer;
 
 private:
 

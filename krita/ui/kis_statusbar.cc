@@ -243,28 +243,29 @@ inline QString formatSize(qint64 size)
 {
     qint64 K = 1024;
     QString suffix = i18nc("very shortened \'byte\' suffix (for statusbar)", "b");
+    qreal realSize = size;
 
-    if (size > K) {
-        size /= K;
+    if (realSize > K) {
+        realSize /= K;
         suffix = i18nc("very shortened KiB suffix (for statusbar)", "K");
     }
 
-    if (size > K) {
-        size /= K;
+    if (realSize > K) {
+        realSize /= K;
         suffix = i18nc("very shortened MiB suffix (for statusbar)", "M");
     }
 
-    if (size > K) {
-        size /= K;
+    if (realSize > K) {
+        realSize /= K;
         suffix = i18nc("very shortened GiB suffix (for statusbar)", "G");
     }
 
-    if (size > K) {
-        size /= K;
+    if (realSize > K) {
+        realSize /= K;
         suffix = i18nc("very shortened TiB suffix (for statusbar)", "T");
     }
 
-    return QString("%2%3").arg(size).arg(suffix);
+    return QString("%2%3").arg(QString::number(realSize, 'f', 1)).arg(suffix);
 }
 
 void KisStatusBar::updateMemoryStatus()

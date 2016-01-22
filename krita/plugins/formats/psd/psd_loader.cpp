@@ -207,7 +207,9 @@ KisImageBuilder_Result PSDLoader::decode(const QUrl &uri)
                 groupStack.push(groupLayer);
                 newLayer = groupLayer;
             }
-            else if ((layerRecord->infoBlocks.sectionDividerType == psd_open_folder || layerRecord->infoBlocks.sectionDividerType == psd_closed_folder) && !groupStack.isEmpty()) {
+            else if ((layerRecord->infoBlocks.sectionDividerType == psd_open_folder ||
+                      layerRecord->infoBlocks.sectionDividerType == psd_closed_folder) &&
+                     !groupStack.isEmpty()) {
                 KisGroupLayerSP groupLayer = groupStack.pop();
                 groupLayer->setName(layerRecord->layerName);
                 groupLayer->setVisible(layerRecord->visible);
@@ -225,6 +227,26 @@ KisImageBuilder_Result PSDLoader::decode(const QUrl &uri)
                 groupLayer->setCompositeOpId(compositeOp);
 
                 newLayer = groupLayer;
+            } else {
+                /**
+                 * In some files saved by PS CS6 the group layer sections seem
+                 * to be unbalanced.  I don't know why it happens because the
+                 * reporter didn't provide us an example file. So here we just
+                 * check if the new layer was created, and if not, skip the
+                 * initialization of masks.
+                 *
+                 * See bug: 357559
+                 */
+
+                warnKrita << "WARNING: Provided PSD has unbalanced group "
+                          << "layer markers. Some masks and/or layers can "
+                          << "be lost while loading this file. Please "
+                          << "report a bug to Krita developes and attach "
+                          << "this file to the bugreport\n"
+                          << "    " << ppVar(layerRecord->layerName) << "\n"
+                          << "    " << ppVar(layerRecord->infoBlocks.sectionDividerType) << "\n"
+                          << "    " << ppVar(groupStack.size());
+                continue;
             }
         }
         else {

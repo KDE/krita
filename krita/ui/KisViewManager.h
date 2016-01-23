@@ -195,7 +195,7 @@ public:
 
 public Q_SLOTS:
 
-    void showJustTheCanvas(bool toggled);
+    void switchCanvasOnly(bool toggled);
     void setShowFloatingMessage(bool show);
     void showHideScrollbars();
 

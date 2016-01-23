@@ -601,7 +601,7 @@ void KisViewManager::createActions()
 
     tAction = actionManager()->createAction("view_show_just_the_canvas");
     tAction->setChecked(false);
-    connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showJustTheCanvas(bool)));
+    connect(tAction, SIGNAL(toggled(bool)), this, SLOT(switchCanvasOnly(bool)));
 
     //Workaround, by default has the same shortcut as mirrorCanvas
     KisAction *a = dynamic_cast<KisAction*>(actionCollection()->action("format_italic"));
@@ -992,7 +992,7 @@ void KisViewManager::showStatusBar(bool toggled)
     }
 }
 
-void KisViewManager::showJustTheCanvas(bool toggled)
+void KisViewManager::switchCanvasOnly(bool toggled)
 {
     KisConfig cfg;
     KisMainWindow* main = mainWindow();

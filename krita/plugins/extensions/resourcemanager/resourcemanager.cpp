@@ -77,8 +77,6 @@ ResourceManager::ResourceManager(QObject *parent, const QVariantList &)
     : KisViewPlugin(parent)
     , d(new Private())
 {
-    QTimer::singleShot(0, this, SLOT(loadBundles()));
-
     KisAction *action = new KisAction(i18n("Import Resources or Bundles..."), this);
     addAction("import_resources", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImport()));

@@ -367,11 +367,10 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
 
     //qDebug() << "\tresources from qstandardpaths:" << resources.size();
 
-
     Q_FOREACH (const QString &alias, aliases) {
         //qDebug() << "\t\talias:" << alias;
-
         const QStringList dirs = QStringList() << getInstallationPrefix() + "../share/" + alias + "/"
+                                               << getInstallationPrefix() + "../share/krita/" + alias + "/"
                                                << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias, QStandardPaths::LocateDirectory);
         QSet<QString> s = QSet<QString>::fromList(dirs);
 
@@ -386,6 +385,7 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
     if (resources.isEmpty()) {
         QFileInfo fi(filter);
         resources << filesInDir(getInstallationPrefix() + "../share/" + fi.path(), fi.fileName(), noDuplicates, false);
+        resources << filesInDir(getInstallationPrefix() + "../share/krita" + fi.path(), fi.fileName(), noDuplicates, false);
     }
 
     //qDebug() << "\tresources from installation:" << resources.size();
@@ -407,6 +407,8 @@ QStringList KoResourcePaths::resourceDirsInternal(const QString &type)
 
     Q_FOREACH (const QString &alias, aliases) {
         resourceDirs << getInstallationPrefix() + "../share/" + alias + "/"
+                                               << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias, QStandardPaths::LocateDirectory);
+        resourceDirs << getInstallationPrefix() + "../share/krita" + alias + "/"
                                                << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias, QStandardPaths::LocateDirectory);
 
         resourceDirs << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias, QStandardPaths::LocateDirectory);

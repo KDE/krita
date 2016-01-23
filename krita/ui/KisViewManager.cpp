@@ -599,7 +599,7 @@ void KisViewManager::createActions()
     tAction->setChecked(true);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
-    tAction = actionManager()->createAction("view_show_just_the_canvas");
+    tAction = actionManager()->createAction("view_show_canvas_only");
     tAction->setChecked(false);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(switchCanvasOnly(bool)));
 
@@ -1075,7 +1075,7 @@ void KisViewManager::switchCanvasOnly(bool toggled)
         // show a fading heads-up display about the shortcut to go back
 
         showFloatingMessage(i18n("Going into Canvas-Only mode.\nPress %1 to go back.",
-                                 actionCollection()->action("view_show_just_the_canvas")->shortcut().toString()), QIcon());
+                                 actionCollection()->action("view_show_canvas_only")->shortcut().toString()), QIcon());
     }
     else {
         main->restoreState(d->canvasState);
@@ -1154,7 +1154,7 @@ void KisViewManager::showHideScrollbars()
     if (!d->currentImageView->canvasController()) return;
 
     KisConfig cfg;
-    bool toggled = actionCollection()->action("view_show_just_the_canvas")->isChecked();
+    bool toggled = actionCollection()->action("view_show_canvas_only")->isChecked();
 
     if ( (toggled && cfg.hideScrollbarsFullscreen()) || (!toggled && cfg.hideScrollbars()) ) {
         d->currentImageView->canvasController()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

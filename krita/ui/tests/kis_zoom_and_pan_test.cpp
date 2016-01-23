@@ -375,7 +375,7 @@ void KisZoomAndPanTest::initializeViewport(ZoomAndPanTester &t, bool fullscreenM
     if (fullscreenMode) {
         QCOMPARE(t.canvasController()->preferredCenter(), QPointF(320,220));
 
-        QAction *action = t.view()->viewManager()->actionCollection()->action("view_show_just_the_canvas");
+        QAction *action = t.view()->viewManager()->actionCollection()->action("view_show_canvas_only");
         action->setChecked(true);
 
         QVERIFY(verifyOffset(t, QPoint(79,-21)));

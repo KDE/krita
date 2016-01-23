@@ -477,7 +477,7 @@
 
   <Actions category="View">
     <text>View</text>
-    <Action name="view_show_just_the_canvas">
+    <Action name="view_show_canvas_only">
       <icon></icon>
       <text>&amp;Show Canvas Only</text>
       <whatsThis></whatsThis>

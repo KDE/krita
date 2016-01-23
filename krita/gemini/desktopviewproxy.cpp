@@ -217,7 +217,7 @@ void DesktopViewProxy::documentChanged()
 {
     // Remove existing linking for toggling canvas, in order
     // to over-ride the window state behaviour
-    QAction* toggleJustTheCanvasAction = d->desktopWindow->actionCollection()->action("view_show_just_the_canvas");
+    QAction* toggleJustTheCanvasAction = d->desktopWindow->actionCollection()->action("view_show_canvas_only");
     toggleJustTheCanvasAction->disconnect(d->desktopWindow);
     connect(toggleJustTheCanvasAction, SIGNAL(toggled(bool)), this, SLOT(toggleShowJustTheCanvas(bool)));
 }

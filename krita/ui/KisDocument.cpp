@@ -2223,8 +2223,6 @@ bool KisDocument::save()
     }
     d->document->setUrl(url());
 
-    // THIS IS WRONG! KisDocument::saveFile should move here, and whoever subclassed KisDocument to
-    // reimplement saveFile shold now subclass KisPart.
     bool ok = d->document->saveFile();
 
     if (progressProxy) {

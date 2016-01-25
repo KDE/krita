@@ -32,7 +32,7 @@
 #include "kis_duplicateop.h"
 #include "kis_duplicateop_settings.h"
 #include "kis_global.h"
-#include "kis_paintop_registry.h"
+#include <brushengine/kis_paintop_registry.h>
 #include "kis_brush_based_paintop_settings.h"
 #include "kis_brush_server.h"
 #include "kis_duplicateop_settings_widget.h"

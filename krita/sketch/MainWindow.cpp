@@ -30,7 +30,7 @@
 #include <KoZoomController.h>
 
 #include "filter/kis_filter_registry.h"
-#include "kis_paintop_registry.h"
+#include <brushengine/kis_paintop_registry.h>
 #include <kis_icon.h>
 
 #include "KisViewManager.h"

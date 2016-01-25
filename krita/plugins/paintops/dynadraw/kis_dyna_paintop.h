@@ -20,7 +20,7 @@
 #define KIS_DYNA_PAINTOP_H_
 
 #include <klocalizedstring.h>
-#include <kis_paintop.h>
+#include <brushengine/kis_paintop.h>
 #include <kis_types.h>
 
 #include "dyna_brush.h"

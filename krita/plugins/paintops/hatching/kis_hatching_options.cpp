@@ -18,7 +18,7 @@
  */
 
 #include "kis_hatching_options.h"
-#include "kis_paintop_lod_limitations.h"
+#include <brushengine/kis_paintop_lod_limitations.h>
 
 #include "ui_wdghatchingoptions.h"
 

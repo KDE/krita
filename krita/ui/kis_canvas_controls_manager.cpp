@@ -30,9 +30,9 @@
 #include "kis_canvas2.h"
 #include "kis_canvas_resource_provider.h"
 
-#include "kis_locked_properties_proxy.h"
-#include "kis_locked_properties_server.h"
-#include "kis_locked_properties.h"
+#include <brushengine/kis_locked_properties_proxy.h>
+#include <brushengine/kis_locked_properties_server.h>
+#include <brushengine/kis_locked_properties.h>
 
 #include <klocalizedstring.h>
 

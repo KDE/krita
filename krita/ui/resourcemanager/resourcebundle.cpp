@@ -45,7 +45,7 @@
 #include <KoHashGenerator.h>
 #include <kis_resource_server_provider.h>
 #include <kis_workspace_resource.h>
-#include <kis_paintop_preset.h>
+#include <brushengine/kis_paintop_preset.h>
 #include <kis_brush_server.h>
 #include <kis_debug.h>
 

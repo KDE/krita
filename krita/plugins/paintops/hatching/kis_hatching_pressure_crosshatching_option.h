@@ -20,7 +20,7 @@
 #define KIS_HATCHING_PRESSURE_CROSSHATCHING_OPTION_H
 
 #include "kis_curve_option.h"
-#include <kis_paint_information.h>
+#include <brushengine/kis_paint_information.h>
 
 /**
  * The pressure crosshatching option defines a curve that is used to

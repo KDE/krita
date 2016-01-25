@@ -37,7 +37,7 @@
 
 #include <kis_debug.h>
 #include <kis_cursor.h>
-#include <kis_paintop_registry.h>
+#include <brushengine/kis_paintop_registry.h>
 #include "kis_figure_painting_tool_helper.h"
 #include "kis_canvas2.h"
 

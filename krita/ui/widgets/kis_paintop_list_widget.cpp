@@ -22,10 +22,10 @@
 
 #include <klocalizedstring.h>
 #include <kis_debug.h>
-#include <kis_paintop_factory.h>
+#include <brushengine/kis_paintop_factory.h>
 #include "../kis_paint_ops_model.h"
 #include "../kis_categorized_item_delegate.h"
-#include <kis_locked_properties_server.h>
+#include <brushengine/kis_locked_properties_server.h>
 
 KisPaintOpListWidget::KisPaintOpListWidget(QWidget* parent, const char* name):
     KisCategorizedListView(false, parent),

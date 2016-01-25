@@ -26,7 +26,7 @@
 
 #include <kis_painter.h>
 #include <kis_paint_device.h>
-#include <kis_paint_information.h>
+#include <brushengine/kis_paint_information.h>
 
 #include "kis_hatching_options.h"
 

@@ -25,7 +25,7 @@
 #include <QList>
 #include <KoID.h>
 #include <kis_types.h>
-#include <kis_paintop_factory.h>
+#include <brushengine/kis_paintop_factory.h>
 
 class QString;
 class KisCanvasResourceProvider;

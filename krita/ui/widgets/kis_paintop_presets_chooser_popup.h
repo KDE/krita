@@ -24,7 +24,7 @@
 #include <QWidget>
 #include <KoID.h>
 #include <kritaui_export.h>
-#include "kis_paintop_preset.h"
+#include <brushengine/kis_paintop_preset.h>
 
 class KoResource;
 

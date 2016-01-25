@@ -41,13 +41,13 @@ inline double drand48()
 #include <kis_layer.h>
 #include <kis_paint_layer.h>
 
-#include <kis_paint_information.h>
-#include <kis_paintop_preset.h>
+#include <brushengine/kis_paint_information.h>
+#include <brushengine/kis_paintop_preset.h>
 
 #define GMP_IMAGE_WIDTH 3274
 #define GMP_IMAGE_HEIGHT 2067
 #include <kis_painter.h>
-#include <kis_paintop_registry.h>
+#include <brushengine/kis_paintop_registry.h>
 
 //#define SAVE_OUTPUT
 

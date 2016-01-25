@@ -19,7 +19,7 @@
 #include "kis_dynamic_sensor_drawing_angle.h"
 
 #include <QDomElement>
-#include <kis_paint_information.h>
+#include <brushengine/kis_paint_information.h>
 
 #include <QCheckBox>
 #include <QLabel>

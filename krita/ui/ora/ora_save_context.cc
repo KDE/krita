@@ -26,7 +26,7 @@
 #include <kis_paint_device.h>
 #include <kis_image.h>
 
-#include <kis_meta_data_store.h>
+#include <metadata/kis_meta_data_store.h>
 
 #include "kis_png_converter.h"
 

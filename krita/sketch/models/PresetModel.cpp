@@ -24,9 +24,9 @@
 #include <kis_canvas_resource_provider.h>
 #include <kis_canvas2.h>
 #include <kis_paintop_box.h>
-#include <image/brushengine/kis_paintop_preset.h>
-#include <kis_paintop_factory.h>
-#include <kis_paintop_registry.h>
+#include <brushengine/kis_paintop_preset.h>
+#include <brushengine/kis_paintop_factory.h>
+#include <brushengine/kis_paintop_registry.h>
 #include <kis_node.h>
 #include <kis_image.h>
 

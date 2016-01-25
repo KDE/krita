@@ -23,7 +23,7 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
-#include <kis_paintop_registry.h>
+#include <brushengine/kis_paintop_registry.h>
 #include <kis_brush_based_paintop_settings.h>
 
 #include "kis_tangent_normal_paintop.h"

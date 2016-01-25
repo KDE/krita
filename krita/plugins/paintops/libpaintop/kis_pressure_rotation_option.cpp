@@ -22,7 +22,7 @@
 #include "sensors/kis_dynamic_sensor_fuzzy.h"
 #include <klocalizedstring.h>
 #include <kis_painter.h>
-#include <kis_paintop.h>
+#include <brushengine/kis_paintop.h>
 #include <KoColor.h>
 
 KisPressureRotationOption::KisPressureRotationOption()

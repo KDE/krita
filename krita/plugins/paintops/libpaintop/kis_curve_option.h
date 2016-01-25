@@ -27,7 +27,7 @@
 #include "kis_paintop_option.h"
 #include "kis_global.h"
 #include "kis_paintop_option.h"
-#include "kis_paint_information.h"
+#include <brushengine/kis_paint_information.h>
 #include "kritapaintop_export.h"
 #include "kis_dynamic_sensor.h"
 

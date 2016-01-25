@@ -19,8 +19,8 @@
 #ifndef KIS_SIMPLE_PAINTOP_FACTORY_H
 #define KIS_SIMPLE_PAINTOP_FACTORY_H
 
-#include <kis_paintop_factory.h>
-#include <kis_paintop_settings.h>
+#include <brushengine/kis_paintop_factory.h>
+#include <brushengine/kis_paintop_settings.h>
 
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND

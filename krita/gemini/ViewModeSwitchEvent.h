@@ -27,7 +27,7 @@
 #include <kis_node.h>
 #include <resources/KoPattern.h>
 #include <KoGridData.h>
-#include <kis_paintop_preset.h>
+#include <brushengine/kis_paintop_preset.h>
 #include <kis_smoothing_options.h>
 
 struct ViewModeSynchronisationObject {

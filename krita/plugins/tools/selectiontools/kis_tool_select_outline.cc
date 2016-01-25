@@ -47,7 +47,7 @@
 #include <kis_image.h>
 
 #include "kis_painter.h"
-#include "kis_paintop_registry.h"
+#include <brushengine/kis_paintop_registry.h>
 #include "canvas/kis_canvas2.h"
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"

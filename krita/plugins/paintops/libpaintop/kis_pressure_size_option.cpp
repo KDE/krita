@@ -22,7 +22,7 @@
 #include <kis_painter.h>
 #include <KoColor.h>
 #include "kis_dynamic_sensor.h"
-#include "kis_paintop_lod_limitations.h"
+#include <brushengine/kis_paintop_lod_limitations.h>
 
 
 KisPressureSizeOption::KisPressureSizeOption()

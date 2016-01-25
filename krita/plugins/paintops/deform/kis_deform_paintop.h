@@ -19,7 +19,7 @@
 #ifndef KIS_DEFORMPAINTOP_H_
 #define KIS_DEFORMPAINTOP_H_
 
-#include <kis_paintop.h>
+#include <brushengine/kis_paintop.h>
 #include <kis_types.h>
 
 #include <kis_pressure_size_option.h>

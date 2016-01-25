@@ -32,9 +32,9 @@
 #include "kis_paint_device.h"
 #include "kis_painter.h"
 
-#include <kis_paint_information.h>
-#include <kis_paintop_registry.h>
-#include <kis_paintop_preset.h>
+#include <brushengine/kis_paint_information.h>
+#include <brushengine/kis_paintop_registry.h>
+#include <brushengine/kis_paintop_preset.h>
 
 #include "tiles3/kis_tile_data_store.h"
 #include "kis_surrogate_undo_adapter.h"

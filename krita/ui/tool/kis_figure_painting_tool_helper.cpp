@@ -21,7 +21,7 @@
 #include <KoCanvasResourceManager.h>
 
 #include "kis_resources_snapshot.h"
-#include "kis_distance_information.h"
+#include <kis_distance_information.h>
 #include "kis_image.h"
 #include "kis_painter.h"
 

@@ -44,9 +44,9 @@
 #include <kis_paint_device.h>
 #include <kis_properties_configuration.h>
 #include <kis_config.h>
-#include <kis_meta_data_store.h>
-#include <kis_meta_data_filter_registry_model.h>
-#include <kis_exif_info_visitor.h>
+#include <metadata/kis_meta_data_store.h>
+#include <metadata/kis_meta_data_filter_registry_model.h>
+#include <metadata/kis_exif_info_visitor.h>
 #include <generator/kis_generator_layer.h>
 #include "kis_jpeg_converter.h"
 #include <KisImportExportManager.h>

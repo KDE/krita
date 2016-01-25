@@ -21,7 +21,7 @@
 #include <QWidget>
 #include <QRadioButton>
 
-#include "kis_paintop_lod_limitations.h"
+#include <brushengine/kis_paintop_lod_limitations.h>
 
 #include "ui_wdgparticleoptions.h"
 

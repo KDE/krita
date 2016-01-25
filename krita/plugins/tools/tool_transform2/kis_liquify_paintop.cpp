@@ -22,7 +22,7 @@
 #include <QTransform>
 
 
-#include "kis_paint_information.h"
+#include <brushengine/kis_paint_information.h>
 #include "kis_liquify_transform_worker.h"
 #include "kis_algebra_2d.h"
 #include "kis_liquify_properties.h"

@@ -19,7 +19,7 @@
 #ifndef KIS_CHALK_PAINTOP_SETTINGS_H_
 #define KIS_CHALK_PAINTOP_SETTINGS_H_
 
-#include <kis_paintop_settings.h>
+#include <brushengine/kis_paintop_settings.h>
 #include <kis_types.h>
 
 #include "kis_chalk_paintop_settings_widget.h"

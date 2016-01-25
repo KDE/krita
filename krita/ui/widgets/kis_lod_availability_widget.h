@@ -22,7 +22,7 @@
 #include <QWidget>
 #include <QScopedPointer>
 
-#include "kis_paintop_lod_limitations.h"
+#include <brushengine/kis_paintop_lod_limitations.h>
 
 class KoCanvasResourceManager;
 

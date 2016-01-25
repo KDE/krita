@@ -21,8 +21,8 @@
 #define KIS_HAIRYPAINTOP_H_
 
 #include <klocalizedstring.h>
-#include <kis_paintop.h>
-#include <kis_paintop_factory.h>
+#include <brushengine/kis_paintop.h>
+#include <brushengine/kis_paintop_factory.h>
 #include <kis_types.h>
 
 #include "hairy_brush.h"

@@ -19,7 +19,7 @@
 #ifndef KIS_CURVEPAINTOP_H_
 #define KIS_CURVEPAINTOP_H_
 
-#include <kis_paintop.h>
+#include <brushengine/kis_paintop.h>
 #include <kis_types.h>
 #include "curve_brush.h"
 #include "kis_curve_line_option.h"

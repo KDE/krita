@@ -21,7 +21,7 @@
 
 #include "kis_types.h"
 #include "kritaui_export.h"
-#include "kis_paint_information.h"
+#include <brushengine/kis_paint_information.h>
 #include "strokes/freehand_stroke.h"
 
 

@@ -70,8 +70,8 @@
 #include "kis_canvas_resource_provider.h"
 #include <recorder/kis_recorded_paint_action.h>
 #include "kis_tool_utils.h"
-#include <kis_paintop.h>
-#include <kis_paintop_preset.h>
+#include <brushengine/kis_paintop.h>
+#include <brushengine/kis_paintop_preset.h>
 #include <kis_action_manager.h>
 #include <kis_action.h>
 

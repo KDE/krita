@@ -38,8 +38,8 @@
 #include <KoResourceServerAdapter.h>
 #include <KoResourceItemChooserSync.h>
 
-#include "kis_paintop_settings.h"
-#include "kis_paintop_preset.h"
+#include <brushengine/kis_paintop_settings.h>
+#include <brushengine/kis_paintop_preset.h>
 #include "kis_resource_server_provider.h"
 #include "kis_global.h"
 #include "kis_slider_spin_box.h"

@@ -23,7 +23,7 @@
 #include <klocalizedstring.h>
 
 #include <kis_painter.h>
-#include <kis_paint_information.h>
+#include <brushengine/kis_paint_information.h>
 #include <kis_indirect_painting_support.h>
 #include <kis_node.h>
 #include <widgets/kis_curve_widget.h>

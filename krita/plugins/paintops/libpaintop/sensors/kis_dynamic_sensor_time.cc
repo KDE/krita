@@ -22,7 +22,7 @@
 #include <QDomElement>
 #include "ui_SensorTimeConfiguration.h"
 
-#include "kis_paint_information.h"
+#include <brushengine/kis_paint_information.h>
 
 KisDynamicSensorTime::KisDynamicSensorTime()
     : KisDynamicSensor(TIME)

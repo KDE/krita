@@ -74,7 +74,7 @@
 #include <filter/kis_filter_configuration.h>
 #include <generator/kis_generator_registry.h>
 #include <generator/kis_generator.h>
-#include <kis_paintop_registry.h>
+#include <brushengine/kis_paintop_registry.h>
 #include <metadata/kis_meta_data_io_backend.h>
 #include "kisexiv2/kis_exiv2.h"
 #include "KisApplicationArguments.h"

@@ -25,7 +25,7 @@
 
 #include "kis_chalkop_option.h"
 #include "kis_paint_device.h"
-#include "kis_random_source.h"
+#include <brushengine/kis_random_source.h>
 
 
 class ChalkBrush

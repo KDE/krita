@@ -22,7 +22,7 @@
 #include "../kis_dynamic_sensor.h"
 
 
-#include "kis_paint_information.h"
+#include <brushengine/kis_paint_information.h>
 
 class KisDynamicSensorSpeed : public KisDynamicSensor
 {

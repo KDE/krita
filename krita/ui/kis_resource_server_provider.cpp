@@ -37,7 +37,7 @@
 
 #include <kis_debug.h>
 #include <resources/KoPattern.h>
-#include <kis_paintop_preset.h>
+#include <brushengine/kis_paintop_preset.h>
 #include <kis_workspace_resource.h>
 #include <kis_psd_layer_style_resource.h>
 

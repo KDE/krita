@@ -21,7 +21,7 @@
 #ifndef KIS_HATCHING_PAINTOP_H_
 #define KIS_HATCHING_PAINTOP_H_
 
-#include <kis_paintop.h>
+#include <brushengine/kis_paintop.h>
 #include <kis_brush_based_paintop.h>
 #include <kis_types.h>
 

@@ -20,7 +20,7 @@
 
 #include "kis_image.h"
 #include "kis_node.h"
-#include "kis_paintop_preset.h"
+#include <brushengine/kis_paintop_preset.h>
 
 #include "recorder/kis_action_recorder.h"
 #include "recorder/kis_recorded_path_paint_action.h"

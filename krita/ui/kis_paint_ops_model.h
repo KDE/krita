@@ -25,7 +25,7 @@
 #include <QPixmap>
 #include <kritaui_export.h>
 #include "kis_categorized_list_model.h"
-#include "kis_paintop_factory.h"
+#include <brushengine/kis_paintop_factory.h>
 
 class KisPaintOpFactory;
 

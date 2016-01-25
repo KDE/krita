@@ -20,7 +20,7 @@
 #define _DEFORM_BRUSH_H_
 
 #include <kis_paint_device.h>
-#include <kis_paint_information.h>
+#include <brushengine/kis_paint_information.h>
 
 #include <kis_brush_size_option.h>
 

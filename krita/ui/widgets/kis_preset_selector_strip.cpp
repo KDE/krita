@@ -21,7 +21,7 @@
 #include "KoResourceModel.h"
 #include "KoResourceItemView.h"
 #include "KoResourceItemChooser.h"
-#include "kis_paintop_registry.h"
+#include <brushengine/kis_paintop_registry.h>
 
 #include <kis_icon.h>
 

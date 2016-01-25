@@ -20,7 +20,7 @@
 #define KIS_LINEWIDTH_OPTION_H_
 
 #include "kis_curve_option.h"
-#include <kis_paint_information.h>
+#include <brushengine/kis_paint_information.h>
 
 class KisLineWidthOption : public KisCurveOption
 {

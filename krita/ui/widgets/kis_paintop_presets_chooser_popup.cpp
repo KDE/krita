@@ -30,9 +30,9 @@
 #include <ui_wdgpaintoppresets.h>
 #include <kis_config.h>
 #include <kis_resource_server_provider.h>
-#include <kis_paintop_preset.h>
+#include <brushengine/kis_paintop_preset.h>
 #include <kis_icon.h>
-#include "kis_paintop_settings.h"
+#include <brushengine/kis_paintop_settings.h>
 
 struct KisPaintOpPresetsChooserPopup::Private
 {

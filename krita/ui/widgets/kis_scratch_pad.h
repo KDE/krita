@@ -27,7 +27,7 @@
 #include <KoColor.h>
 
 
-#include <kis_paintop_preset.h>
+#include <brushengine/kis_paintop_preset.h>
 #include <kis_types.h>
 #include <kritaui_export.h>
 

@@ -24,7 +24,7 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
-#include <kis_paintop_registry.h>
+#include <brushengine/kis_paintop_registry.h>
 
 #include "kis_curve_paintop.h"
 #include "kis_curve_paintop_settings_widget.h"

@@ -33,8 +33,8 @@
 #include <kis_paint_device.h>
 #include <kis_painter.h>
 #include <kis_types.h>
-#include <kis_paintop.h>
-#include <kis_paint_information.h>
+#include <brushengine/kis_paintop.h>
+#include <brushengine/kis_paint_information.h>
 #include <kis_fixed_paint_device.h>
 
 #include <kis_pressure_opacity_option.h>

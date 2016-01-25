@@ -23,7 +23,7 @@
 #include <kis_icon.h>
 #include <KoResourceServerProvider.h>
 
-#include <kis_paintop_preset.h>
+#include <brushengine/kis_paintop_preset.h>
 #include <kis_workspace_resource.h>
 #include <resources/KoColorSet.h>
 #include <resources/KoAbstractGradient.h>

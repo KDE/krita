@@ -20,7 +20,7 @@
 #define KIS_PAINTOP_SETTINGS_WIDGET_H
 
 #include <kritaui_export.h>
-#include <kis_paintop_config_widget.h>
+#include <brushengine/kis_paintop_config_widget.h>
 
 class KisPaintOpOption;
 class KisPropertiesConfiguration;

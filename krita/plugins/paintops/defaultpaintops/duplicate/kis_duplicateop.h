@@ -28,8 +28,8 @@
 #include <klocalizedstring.h>
 
 #include <kis_types.h>
-#include <kis_paintop_factory.h>
-#include <kis_paintop_settings.h>
+#include <brushengine/kis_paintop_factory.h>
+#include <brushengine/kis_paintop_settings.h>
 #include <kis_pressure_size_option.h>
 
 class KisPaintInformation;

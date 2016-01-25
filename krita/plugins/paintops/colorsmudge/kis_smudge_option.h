@@ -22,7 +22,7 @@
 #define KIS_SMUDGE_OPTION_H
 
 #include "kis_rate_option.h"
-#include <kis_paint_information.h>
+#include <brushengine/kis_paint_information.h>
 #include <kis_types.h>
 
 // static const QString SMUDGE_MODE = "SmudgeMode";

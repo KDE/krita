@@ -24,7 +24,7 @@
 #include <KoCompositeOp.h>
 #include <KoMixColorsOp.h>
 
-#include "kis_paintop.h"
+#include <brushengine/kis_paintop.h>
 
 #include <QVariant>
 #include <QHash>
@@ -37,7 +37,7 @@
 #include <kis_paint_device.h>
 
 #include <kis_painter.h>
-#include <kis_paint_information.h>
+#include <brushengine/kis_paint_information.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_cross_device_color_picker.h>
 

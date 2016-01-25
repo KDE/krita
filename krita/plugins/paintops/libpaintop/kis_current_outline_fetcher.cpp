@@ -21,7 +21,7 @@
 #include "kis_pressure_size_option.h"
 #include "kis_pressure_rotation_option.h"
 #include "kis_pressure_mirror_option.h"
-#include "kis_paintop_settings.h"
+#include <brushengine/kis_paintop_settings.h>
 
 #include <QElapsedTimer>
 

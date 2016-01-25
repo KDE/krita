@@ -21,7 +21,7 @@
 #ifndef KIS_TANGENT_TILT_OPTION_H
 #define KIS_TANGENT_TILT_OPTION_H
 
-#include <kis_paint_information.h>
+#include <brushengine/kis_paint_information.h>
 #include <kis_types.h>
 
 #include <kis_paintop_option.h>

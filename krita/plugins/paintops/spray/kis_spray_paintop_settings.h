@@ -19,7 +19,7 @@
 #ifndef KIS_SPRAY_PAINTOP_SETTINGS_H_
 #define KIS_SPRAY_PAINTOP_SETTINGS_H_
 
-#include <kis_paintop_settings.h>
+#include <brushengine/kis_paintop_settings.h>
 #include <kis_types.h>
 
 #include <kis_outline_generation_policy.h>

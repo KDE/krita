@@ -26,7 +26,7 @@
 #include <KoResourceServer.h>
 #include <KoResourceServerAdapter.h>
 
-#include <kis_paintop_preset.h>
+#include <brushengine/kis_paintop_preset.h>
 
 #include "KisResourceBundle.h"
 #include "kritaui_export.h"

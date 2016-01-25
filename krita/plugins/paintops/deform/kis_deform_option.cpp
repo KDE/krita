@@ -18,7 +18,7 @@
 #include "kis_deform_option.h"
 #include "ui_wdgdeformoptions.h"
 
-#include "kis_paintop_lod_limitations.h"
+#include <brushengine/kis_paintop_lod_limitations.h>
 
 
 class KisDeformOptionsWidget: public QWidget, public Ui::WdgDeformOptions

@@ -26,7 +26,7 @@
 #include "kis_tool_rectangle.h"
 
 #include <kis_debug.h>
-#include "kis_paintop_registry.h"
+#include <brushengine/kis_paintop_registry.h>
 #include "KoCanvasBase.h"
 #include "kis_shape_tool_helper.h"
 #include "kis_figure_painting_tool_helper.h"

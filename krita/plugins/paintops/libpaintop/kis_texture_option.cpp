@@ -50,7 +50,7 @@
 #include "kis_embedded_pattern_manager.h"
 #include "kis_algebra_2d.h"
 #include "kis_lod_transform.h"
-#include "kis_paintop_lod_limitations.h"
+#include <brushengine/kis_paintop_lod_limitations.h>
 
 
 #include <time.h>

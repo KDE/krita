@@ -25,7 +25,7 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoCompositeOpRegistry.h>
-#include "kis_paintop_preset.h"
+#include <brushengine/kis_paintop_preset.h>
 #include <resources/KoPattern.h>
 #include "kis_canvas_resource_provider.h"
 #include "kis_image.h"

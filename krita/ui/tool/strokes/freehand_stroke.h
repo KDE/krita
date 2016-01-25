@@ -23,8 +23,8 @@
 #include "kis_types.h"
 #include "kis_node.h"
 #include "kis_painter_based_stroke_strategy.h"
-#include "kis_distance_information.h"
-#include "kis_paint_information.h"
+#include <kis_distance_information.h>
+#include <brushengine/kis_paint_information.h>
 #include "kis_lod_transform.h"
 
 

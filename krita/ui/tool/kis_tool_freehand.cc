@@ -39,9 +39,9 @@
 #include <kis_layer.h>
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
-#include <kis_paintop.h>
+#include <brushengine/kis_paintop.h>
 #include <kis_selection.h>
-#include <kis_paintop_preset.h>
+#include <brushengine/kis_paintop_preset.h>
 
 
 // Krita/ui

@@ -23,7 +23,7 @@
 #include "flake/kis_shape_selection.h"
 #include <filter/kis_filter_registry.h>
 #include <generator/kis_generator_registry.h>
-#include <kis_paintop_registry.h>
+#include <brushengine/kis_paintop_registry.h>
 #include "kisexiv2/kis_exiv2.h"
 
 

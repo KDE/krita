@@ -26,7 +26,7 @@
 #include "kis_resources_snapshot.h"
 #include "kis_image.h"
 #include "kis_painter.h"
-#include "kis_paint_information.h"
+#include <brushengine/kis_paint_information.h>
 
 
 class FreehandStrokeTester : public utils::StrokeTester

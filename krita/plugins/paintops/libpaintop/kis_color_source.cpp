@@ -26,8 +26,8 @@
 #include <kis_fill_painter.h>
 #include "kis_iterator_ng.h"
 #include "kis_selection.h"
-#include "kis_random_source.h"
-#include "kis_paint_information.h"
+#include <brushengine/kis_random_source.h>
+#include <brushengine/kis_paint_information.h>
 
 #include <random>
 

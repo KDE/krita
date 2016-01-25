@@ -29,7 +29,7 @@
 
 #include <kis_shape_tool_helper.h>
 #include "kis_figure_painting_tool_helper.h"
-#include <kis_paintop_preset.h>
+#include <brushengine/kis_paintop_preset.h>
 #include <kis_system_locker.h>
 
 #include <recorder/kis_action_recorder.h>

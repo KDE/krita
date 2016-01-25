@@ -35,8 +35,8 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
-#include <kis_paintop_preset.h>
-#include <kis_paintop_settings.h>
+#include <brushengine/kis_paintop_preset.h>
+#include <brushengine/kis_paintop_settings.h>
 #include "kis_favorite_resource_manager.h"
 
 #include "kis_config.h"

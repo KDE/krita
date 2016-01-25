@@ -22,7 +22,7 @@
 //#define BENCHMARK
 
 #include <klocalizedstring.h>
-#include <kis_paintop.h>
+#include <brushengine/kis_paintop.h>
 #include <kis_types.h>
 #include <kis_color_option.h>
 

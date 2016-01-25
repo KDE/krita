@@ -19,11 +19,12 @@
 #ifndef KIS_TOOL_FREEHAND_H_
 #define KIS_TOOL_FREEHAND_H_
 
+#include <brushengine/kis_paint_information.h>
+#include <brushengine/kis_paintop_settings.h>
+#include <kis_distance_information.h>
+
 #include "kis_types.h"
 #include "kis_tool_paint.h"
-#include "kis_paint_information.h"
-#include "kis_paintop_settings.h"
-#include "kis_distance_information.h"
 #include "kis_smoothing_options.h"
 
 #include "kritaui_export.h"

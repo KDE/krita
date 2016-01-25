@@ -19,7 +19,7 @@
 #ifndef KIS_SPRAY_PAINTOP_H_
 #define KIS_SPRAY_PAINTOP_H_
 
-#include <kis_paintop.h>
+#include <brushengine/kis_paintop.h>
 #include <kis_types.h>
 
 #include "spray_brush.h"

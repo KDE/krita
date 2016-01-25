@@ -36,7 +36,7 @@
 
 #include "ui_wdgfilteroption.h"
 
-#include "kis_paintop_lod_limitations.h"
+#include <brushengine/kis_paintop_lod_limitations.h>
 
 class KisFilterOptionWidget : public QWidget, public Ui::FilterOpOptions
 {

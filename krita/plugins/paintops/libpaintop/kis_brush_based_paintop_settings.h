@@ -19,7 +19,7 @@
 #ifndef KIS_BRUSH_BASED_PAINTOP_SETTINGS_H
 #define KIS_BRUSH_BASED_PAINTOP_SETTINGS_H
 
-#include <kis_paintop_settings.h>
+#include <brushengine/kis_paintop_settings.h>
 #include <kritapaintop_export.h>
 #include <kis_outline_generation_policy.h>
 

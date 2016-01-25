@@ -19,7 +19,7 @@
 #ifndef KIS_SKETCH_PAINTOP_H_
 #define KIS_SKETCH_PAINTOP_H_
 
-#include <kis_paintop.h>
+#include <brushengine/kis_paintop.h>
 #include <kis_types.h>
 
 #include "kis_density_option.h"

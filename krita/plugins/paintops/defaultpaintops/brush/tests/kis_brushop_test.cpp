@@ -21,10 +21,10 @@
 #include <QTest>
 #include <qimage_based_test.h>
 #include <stroke_testing_utils.h>
-#include <kis_paint_information.h>
+#include <brushengine/kis_paint_information.h>
 #include <kis_canvas_resource_provider.h>
-#include <kis_paintop_preset.h>
-#include <kis_paintop_settings.h>
+#include <brushengine/kis_paintop_preset.h>
+#include <brushengine/kis_paintop_settings.h>
 #include <kis_pressure_mirror_option.h>
 #include <kis_pressure_rotation_option.h>
 

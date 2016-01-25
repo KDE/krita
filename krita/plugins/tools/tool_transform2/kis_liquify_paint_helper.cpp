@@ -19,16 +19,13 @@
 #include "kis_liquify_paint_helper.h"
 
 #include "KoPointerEvent.h"
-#include "kis_paint_information.h"
+#include <brushengine/kis_paint_information.h>
 #include "kis_painting_information_builder.h"
 #include "kis_liquify_transform_worker.h"
-#include "kis_paintop_utils.h"
+#include <brushengine/kis_paintop_utils.h>
 #include "kis_coordinates_converter.h"
 #include "kis_liquify_paintop.h"
 #include "kis_liquify_properties.h"
-
-#include "kis_paintop_utils.h"
-
 
 struct KisLiquifyPaintHelper::Private
 {

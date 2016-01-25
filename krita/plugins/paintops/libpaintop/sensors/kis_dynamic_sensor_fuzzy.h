@@ -22,9 +22,9 @@
 #define KIS_DYNAMIC_SENSOR_FUZZY_H
 
 #include "kis_dynamic_sensor.h"
-#include "kis_paint_information.h"
+#include <brushengine/kis_paint_information.h>
 
-#include <kis_paintop.h>
+#include <brushengine/kis_paintop.h>
 #include <KoID.h>
 #include <QCheckBox>
 #include <QHBoxLayout>

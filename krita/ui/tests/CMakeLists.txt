@@ -1,7 +1,9 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-include_directories(  ${KRITA_INCLUDES}   ${CMAKE_SOURCE_DIR}/krita/sdk/tests )
 
 #add_subdirectory(scratchpad)
+include_directories(${CMAKE_SOURCE_DIR}/libs/image/metadata 
+                    ${CMAKE_SOURCE_DIR}/krita/sdk/tests )
+
 
 macro_add_unittest_definitions()
 

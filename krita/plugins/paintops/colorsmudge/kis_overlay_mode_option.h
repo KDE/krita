@@ -22,7 +22,7 @@
 
 #include <kis_paintop_option.h>
 
-#include "kis_paintop_lod_limitations.h"
+#include <brushengine/kis_paintop_lod_limitations.h>
 
 
 class KisOverlayModeOption : public KisPaintOpOption

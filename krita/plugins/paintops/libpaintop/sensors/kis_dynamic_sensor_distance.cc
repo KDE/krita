@@ -22,7 +22,7 @@
 #include <QDomElement>
 #include "ui_SensorDistanceConfiguration.h"
 
-#include "kis_paint_information.h"
+#include <brushengine/kis_paint_information.h>
 
 KisDynamicSensorDistance::KisDynamicSensorDistance()
     : KisDynamicSensor(DISTANCE)

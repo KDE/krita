@@ -28,7 +28,7 @@
 #include "kis_color_source_option.h"
 #include "kis_color_source.h"
 #include <kis_paint_device.h>
-#include "kis_paintop_lod_limitations.h"
+#include <brushengine/kis_paintop_lod_limitations.h>
 
 
 struct KisColorSourceOptionWidget::Private {

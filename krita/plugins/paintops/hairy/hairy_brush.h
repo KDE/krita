@@ -29,7 +29,7 @@
 #include "bristle.h"
 
 #include <kis_paint_device.h>
-#include <kis_paint_information.h>
+#include <brushengine/kis_paint_information.h>
 #include <kis_random_accessor_ng.h>
 
 class KoCompositeOp;

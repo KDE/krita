@@ -20,7 +20,7 @@
 #ifndef KIS_CHALK_PAINTOP_H_
 #define KIS_CHALK_PAINTOP_H_
 
-#include <kis_paintop.h>
+#include <brushengine/kis_paintop.h>
 #include <kis_types.h>
 
 #include "chalk_brush.h"

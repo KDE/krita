@@ -314,6 +314,29 @@ add_definitions(
   -DQT_DISABLE_DEPRECATED_BEFORE=0
 )
 
+# To avoid the confusion of an endless stream of Eigen warnings.
+if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+    add_definitions(-Wno-unused-local-typedefs -Wno-deprecated -Wno-deprecated-declarations)
+endif ()
+
+#
+# The reason for this mode is that the Debug mode disable inlining
+#
+if(CMAKE_COMPILER_IS_GNUCXX)
+    set(CMAKE_CXX_FLAGS_KRITADEVS "-O3 -g" CACHE STRING "" FORCE)
+endif()
+
+if(UNIX)
+    set(CMAKE_REQUIRED_LIBRARIES "${CMAKE_REQUIRED_LIBRARIES};m")
+endif()
+
+if(WIN32)
+    if(MSVC)
+        # C4522: 'class' : multiple assignment operators specified
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -wd4522")
+    endif()
+endif()
+
 # enable exceptions globally
 kde_enable_exceptions()
 
@@ -325,6 +348,16 @@ kde_enable_exceptions()
 if(BUILD_TESTING)
     add_definitions(-DCOMPILING_TESTS)
 endif()
+
+set(KRITA_DEFAULT_TEST_DATA_DIR ${CMAKE_SOURCE_DIR}/krita/sdk/tests/data/)
+macro(macro_add_unittest_definitions)
+  add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
+  add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}")
+  add_definitions(-DFILES_DEFAULT_DATA_DIR="${KRITA_DEFAULT_TEST_DATA_DIR}")
+endmacro()
+
+
+
 
 # overcome some platform incompatibilities
 if(WIN32)
@@ -402,6 +435,7 @@ macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
 macro_optional_find_package(OCIO)
 macro_log_feature(OCIO_FOUND "OCIO" "The OpenColorIO Library" "http://www.opencolorio.org" FALSE "" "Required by the Krita LUT docker")
 macro_bool_to_01(OCIO_FOUND HAVE_OCIO)
+
 ##
 ## Look for OpenGL
 ##
@@ -415,6 +449,13 @@ if (USEOPENGL)
         message(STATUS "Did NOT find QtGui OpenGL support. Check your Qt configuration")
     endif()
 endif()
+
+if(HAVE_OPENGL)
+    message(STATUS "OpenGL found -- krita will be able  to use OpenGL for hardware accelerated rendering.")
+else()
+    message(STATUS "OpenGL NOT found - krita will not be able to use OpenGL for hardware accelerated rendering.")
+endif()
+
 
 ##
 ## Test for GNU Scientific Library
@@ -727,3 +768,9 @@ calligra_product_deps_report("product_deps")
 calligra_log_should_build()
 
 configure_file(KoConfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h )
+configure_file(config_convolution.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_convolution.h)
+configure_file(config-ocio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ocio.h )
+
+check_function_exists(powf HAVE_POWF)
+configure_file(config-powf.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-powf.h)
+

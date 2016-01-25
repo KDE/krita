@@ -24,7 +24,7 @@
 
 #include <KoCompositeOpRegistry.h>
 
-#include <kis_paintop_registry.h>
+#include <brushengine/kis_paintop_registry.h>
 #include "kis_simple_paintop_factory.h"
 #include "kis_filterop.h"
 #include "kis_filterop_settings.h"

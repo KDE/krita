@@ -21,8 +21,8 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_canvas2.h"
 #include "kis_coordinates_converter.h"
-#include "kis_paintop_preset.h"
-#include "kis_paintop_settings.h"
+#include "brushengine/kis_paintop_preset.h"
+#include "brushengine/kis_paintop_settings.h"
 
 
 KisPaintopTransformationConnector::KisPaintopTransformationConnector(KisCanvas2 *canvas, QObject *parent)

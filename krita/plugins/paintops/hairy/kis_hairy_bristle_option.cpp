@@ -19,7 +19,7 @@
 #include <klocalizedstring.h>
 
 #include "ui_wdgbristleoptions.h"
-#include "kis_paintop_lod_limitations.h"
+#include <brushengine/kis_paintop_lod_limitations.h>
 
 
 class KisBristleOptionsWidget: public QWidget, public Ui::WdgBristleOptions

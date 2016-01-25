@@ -18,7 +18,7 @@
 #include "kis_sketchop_option.h"
 
 #include "ui_wdgsketchoptions.h"
-#include "kis_paintop_lod_limitations.h"
+#include <brushengine/kis_paintop_lod_limitations.h>
 
 
 class KisSketchOpOptionsWidget: public QWidget, public Ui::WdgSketchOptions

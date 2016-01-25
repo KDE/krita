@@ -21,7 +21,7 @@
 #define KIS_PRESSURE_MIRROR_OPTION_H
 
 #include "kis_curve_option.h"
-#include <kis_paint_information.h>
+#include <brushengine/kis_paint_information.h>
 #include <kritapaintop_export.h>
 #include <kis_types.h>
 

@@ -26,7 +26,7 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <kis_fixed_paint_device.h>
-#include <kis_paintop.h>
+#include <brushengine/kis_paintop.h>
 
 KisPressureSharpnessOption::KisPressureSharpnessOption()
     : KisCurveOption("Sharpness", KisPaintOpOption::GENERAL, false)

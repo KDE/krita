@@ -31,11 +31,10 @@
 #include <KoInputDevice.h>
 
 #include <kis_types.h>
-#include <kis_paintop_settings.h>
-
-#include "kis_locked_properties_proxy.h"
-#include "kis_locked_properties_server.h"
-#include "kis_locked_properties.h"
+#include <brushengine/kis_paintop_settings.h>
+#include <brushengine/kis_locked_properties_proxy.h>
+#include <brushengine/kis_locked_properties_server.h>
+#include <brushengine/kis_locked_properties.h>
 #include "kritaui_export.h"
 
 

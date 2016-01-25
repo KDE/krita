@@ -21,7 +21,7 @@
 
 #include <kpluginfactory.h>
 
-#include <kis_paintop_registry.h>
+#include <brushengine/kis_paintop_registry.h>
 
 #include "kis_dyna_paintop.h"
 #include "kis_dyna_paintop_settings.h"

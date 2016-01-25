@@ -18,7 +18,7 @@
 #include "kis_experimentop_option.h"
 #include <klocalizedstring.h>
 
-#include "kis_paintop_lod_limitations.h"
+#include <brushengine/kis_paintop_lod_limitations.h>
 
 #include "ui_wdgexperimentoptions.h"
 

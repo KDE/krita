@@ -26,13 +26,13 @@
 #include <KoPointerEvent.h>
 #include <KoCanvasResourceManager.h>
 
-#include "kis_distance_information.h"
+#include <kis_distance_information.h>
 #include "kis_painting_information_builder.h"
 #include "kis_recording_adapter.h"
 #include "kis_image.h"
 #include "kis_painter.h"
-#include "kis_paintop_preset.h"
-#include "kis_paintop_utils.h"
+#include <brushengine/kis_paintop_preset.h>
+#include <brushengine/kis_paintop_utils.h>
 
 #include "kis_update_time_monitor.h"
 

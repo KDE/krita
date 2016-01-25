@@ -23,7 +23,7 @@
 #include "kis_paintop_box.h"
 #include "kis_favorite_resource_manager.h"
 #include "kis_icon_utils.h"
-#include "kis_paintop_preset.h"
+#include <brushengine/kis_paintop_preset.h>
 #include "kis_resource_server_provider.h"
 #include <KoTriangleColorSelector.h>
 #include "KoColorSpaceRegistry.h"
@@ -479,7 +479,7 @@ void KisPopupPalette::mousePressEvent(QMouseEvent* event)
 
 
 
-void KisPopupPalette::tabletEvent(QTabletEvent* event) {
+void KisPopupPalette::tabletEvent(QTabletEvent* /*event*/) {
 }
 
 

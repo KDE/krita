@@ -20,7 +20,7 @@
 #define KIS_EXPERIMENT_PAINTOP_H_
 
 #include <klocalizedstring.h>
-#include <kis_paintop.h>
+#include <brushengine/kis_paintop.h>
 #include <kis_types.h>
 
 #include "kis_experiment_paintop_settings.h"

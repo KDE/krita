@@ -21,9 +21,9 @@
 #include <KoColor.h>
 #include <resources/KoAbstractGradient.h>
 #include <KoCompositeOpRegistry.h>
-#include "kis_paintop_preset.h"
-#include "kis_paintop_settings.h"
-#include "kis_paintop_registry.h"
+#include <brushengine/kis_paintop_preset.h>
+#include <brushengine/kis_paintop_settings.h>
+#include <brushengine/kis_paintop_registry.h>
 #include <kis_threaded_text_rendering_workaround.h>
 #include <resources/KoPattern.h>
 #include "kis_canvas_resource_provider.h"

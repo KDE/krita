@@ -109,7 +109,7 @@
 #include "kis_node.h"
 #include "kis_image.h"
 #include "kis_group_layer.h"
-#include "kis_paintop_settings.h"
+#include <brushengine/kis_paintop_settings.h>
 #include "kis_paintop_box.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"

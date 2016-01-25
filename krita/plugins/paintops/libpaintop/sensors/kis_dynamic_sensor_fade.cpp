@@ -22,7 +22,7 @@
 #include <QDomElement>
 #include "ui_SensorFadeConfiguration.h"
 
-#include "kis_paint_information.h"
+#include <brushengine/kis_paint_information.h>
 
 static const int DEFAULT_LENGTH = 1000;
 

@@ -58,10 +58,10 @@
 
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_registry.h"
-#include "kis_paintop.h"
-#include "kis_paintop_registry.h"
+#include <brushengine/kis_paintop.h>
+#include <brushengine/kis_paintop_registry.h>
 
-#include <kis_paintop_preset.h>
+#include <brushengine/kis_paintop_preset.h>
 #include <KoPattern.h>
 #include <kis_config.h>
 #include <kis_factory2.h>

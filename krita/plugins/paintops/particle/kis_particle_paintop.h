@@ -19,7 +19,7 @@
 #ifndef KIS_PARTICLE_PAINTOP_H_
 #define KIS_PARTICLE_PAINTOP_H_
 
-#include <kis_paintop.h>
+#include <brushengine/kis_paintop.h>
 #include <kis_types.h>
 
 #include "kis_particle_paintop_settings.h"

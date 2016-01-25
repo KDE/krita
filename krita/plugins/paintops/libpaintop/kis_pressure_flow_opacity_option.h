@@ -23,7 +23,7 @@
 #include "kis_curve_option.h"
 #include <kritapaintop_export.h>
 #include <kis_types.h>
-#include <kis_paintop_settings.h>
+#include <brushengine/kis_paintop_settings.h>
 
 class KisPaintInformation;
 class KisPainter;

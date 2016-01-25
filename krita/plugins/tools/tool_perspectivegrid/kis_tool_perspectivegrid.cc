@@ -38,7 +38,7 @@
 #include <canvas/kis_perspective_grid_manager.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_painter.h>
-#include <kis_paintop_registry.h>
+#include <brushengine/kis_paintop_registry.h>
 #include <KisViewManager.h>
 
 #include <canvas/kis_canvas2.h>

@@ -35,7 +35,7 @@
 
 #include <kis_types.h>
 #include <kis_image.h>
-#include <kis_paintop_settings.h>
+#include <brushengine/kis_paintop_settings.h>
 
 #include <resources/KoPattern.h>
 

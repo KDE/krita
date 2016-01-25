@@ -19,7 +19,7 @@
 #ifndef KIS_EXPERIMENT_PAINTOP_SETTINGS_H_
 #define KIS_EXPERIMENT_PAINTOP_SETTINGS_H_
 
-#include <kis_paintop_settings.h>
+#include <brushengine/kis_paintop_settings.h>
 
 class KisExperimentPaintOpSettings : public KisPaintOpSettings
 {

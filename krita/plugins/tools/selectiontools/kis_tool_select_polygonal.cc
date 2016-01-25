@@ -27,7 +27,7 @@
 #include <KoPathShape.h>
 
 #include "kis_painter.h"
-#include "kis_paintop_registry.h"
+#include <brushengine/kis_paintop_registry.h>
 #include "kis_selection_options.h"
 #include "kis_canvas2.h"
 #include "kis_pixel_selection.h"

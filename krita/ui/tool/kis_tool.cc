@@ -47,8 +47,8 @@
 #include <kis_mask.h>
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
-#include <kis_paintop_preset.h>
-#include <kis_paintop_settings.h>
+#include <brushengine/kis_paintop_preset.h>
+#include <brushengine/kis_paintop_settings.h>
 #include <resources/KoPattern.h>
 #include <kis_transaction.h>
 #include <kis_floating_message.h>

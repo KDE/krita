@@ -20,7 +20,7 @@
 #include "kis_dynamic_sensor_fuzzy.h"
 
 #include <QDomElement>
-#include <kis_paint_information.h>
+#include <brushengine/kis_paint_information.h>
 
 #include <QCheckBox>
 #include <QHBoxLayout>

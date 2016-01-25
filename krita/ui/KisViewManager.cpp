@@ -105,7 +105,7 @@
 #include "kis_painting_assistants_manager.h"
 #include <kis_paint_layer.h>
 #include "kis_paintop_box.h"
-#include <kis_paintop_preset.h>
+#include <brushengine/kis_paintop_preset.h>
 #include "KisPart.h"
 #include "KisPrintJob.h"
 #include "kis_progress_widget.h"

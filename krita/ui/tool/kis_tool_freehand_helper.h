@@ -23,9 +23,9 @@
 
 #include "kis_types.h"
 #include "kritaui_export.h"
-#include "kis_paint_information.h"
+#include <brushengine/kis_paint_information.h>
 #include "kis_default_bounds.h"
-#include "kis_paintop_settings.h"
+#include <brushengine/kis_paintop_settings.h>
 #include "kis_smoothing_options.h"
 #include "strokes/freehand_stroke.h"
 

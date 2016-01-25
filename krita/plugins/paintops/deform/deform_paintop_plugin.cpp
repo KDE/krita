@@ -24,7 +24,7 @@
 
 #include <KoCompositeOpRegistry.h>
 
-#include <kis_paintop_registry.h>
+#include <brushengine/kis_paintop_registry.h>
 
 #include "kis_deform_paintop.h"
 #include "kis_global.h"

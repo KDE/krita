@@ -19,13 +19,13 @@
 #include "freehand_stroke.h"
 
 #include "kis_canvas_resource_provider.h"
-#include "kis_paintop_preset.h"
-#include "kis_paintop_settings.h"
+#include <brushengine/kis_paintop_preset.h>
+#include <brushengine/kis_paintop_settings.h>
 #include "kis_painter.h"
 
 #include "kis_update_time_monitor.h"
 
-#include "kis_stroke_random_source.h"
+#include <brushengine/kis_stroke_random_source.h>
 
 
 struct FreehandStrokeStrategy::Private

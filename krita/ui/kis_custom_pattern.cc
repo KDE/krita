@@ -19,7 +19,7 @@
 #include "kis_custom_pattern.h"
 
 #include <KoResourceServerProvider.h>
-#include <KoPattern.h>
+#include <resources/KoPattern.h>
 
 #include <QLabel>
 #include <QImage>

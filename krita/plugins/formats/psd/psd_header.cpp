@@ -41,7 +41,7 @@ PSDHeader::PSDHeader()
     , height(0)
     , width(0)
     , channelDepth(0)
-    , colormode(UNKNOWN)
+    , colormode(COLORMODE_UNKNOWN)
 {
 }
 

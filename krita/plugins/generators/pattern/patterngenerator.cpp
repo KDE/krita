@@ -28,7 +28,7 @@
 
 #include <KoColor.h>
 #include <KoResourceServer.h>
-#include <KoPattern.h>
+#include <resources/KoPattern.h>
 #include <KoResourceServerProvider.h>
 
 #include <kis_debug.h>

@@ -21,12 +21,12 @@
 #include <cfloat>
 
 #include <KoColorSpace.h>
-#include <KoAbstractGradient.h>
+#include <resources/KoAbstractGradient.h>
 #include <KoUpdater.h>
 
 #include "kis_global.h"
 #include "kis_paint_device.h"
-#include "KoPattern.h"
+#include <resources/KoPattern.h>
 #include "kis_selection.h"
 
 #include "kis_iterator_ng.h"

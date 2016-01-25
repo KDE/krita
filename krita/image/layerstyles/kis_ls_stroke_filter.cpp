@@ -22,9 +22,9 @@
 
 #include <QBitArray>
 
-#include <KoPattern.h>
+#include <resources/KoPattern.h>
 
-#include <KoAbstractGradient.h>
+#include <resources/KoAbstractGradient.h>
 
 #include "psd.h"
 
@@ -138,7 +138,7 @@ void KisLsStrokeFilter::processDirectly(KisPaintDeviceSP src,
     applyStroke(src, dst, applyRect, w.config, env);
 }
 
-QRect KisLsStrokeFilter::neededRect(const QRect &rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const
+QRect KisLsStrokeFilter::neededRect(const QRect &rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment */*env*/) const
 {
     Q_UNUSED(style);
     return rect;

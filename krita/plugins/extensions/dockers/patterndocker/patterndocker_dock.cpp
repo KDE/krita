@@ -25,7 +25,7 @@
 #include <kis_canvas_resource_provider.h>
 #include <kis_pattern_chooser.h>
 #include <KisViewManager.h>
-#include <KoPattern.h>
+#include <resources/KoPattern.h>
 
 PatternDockerDock::PatternDockerDock( )
     : QDockWidget(i18n("Patterns"))

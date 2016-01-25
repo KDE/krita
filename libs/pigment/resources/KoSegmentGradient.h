@@ -25,8 +25,8 @@
 #include <QList>
 #include <QColor>
 
-#include <KoResource.h>
-#include "KoAbstractGradient.h"
+#include <resources/KoResource.h>
+#include <resources/KoAbstractGradient.h>
 #include "KoColor.h"
 
 #include <kritapigment_export.h>

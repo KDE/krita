@@ -25,7 +25,7 @@
 #include <KoCanvasObserverBase.h>
 #include <KoResourceServerAdapter.h>
 #include <KoResourceServerObserver.h>
-#include <KoColorSet.h>
+#include <resources/KoColorSet.h>
 
 #include <kis_mainwindow_observer.h>
 

@@ -21,6 +21,7 @@
 #define KIS_DOCUMENT_SECTION_PROPERTY_ACTION_P_H
 
 #include "kis_node_model.h"
+#include <kis_base_node.h>
 #include "KisNodeView.h"
 
 #include <QPersistentModelIndex>
@@ -37,7 +38,7 @@ class KisNodeView::PropertyAction: public QAction
 {
     typedef QAction super;
     Q_OBJECT
-    Model::Property m_property;
+    KisBaseNode::Property m_property;
     int m_num;
     QPersistentModelIndex m_index;
 
@@ -45,7 +46,7 @@ class KisNodeView::PropertyAction: public QAction
         void toggled( bool on, const QPersistentModelIndex &index, int property );
 
     public:
-        PropertyAction( int num, const Model::Property &p, const QPersistentModelIndex &index, QObject *parent = 0 )
+        PropertyAction( int num, const KisBaseNode::Property &p, const QPersistentModelIndex &index, QObject *parent = 0 )
             : QAction( parent ), m_property( p ), m_num( num ), m_index( index )
         {
             connect( this, SIGNAL( triggered( bool ) ), this, SLOT( slotTriggered() ) );

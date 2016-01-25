@@ -38,7 +38,7 @@
 #include <kis_resource_server_provider.h>
 #include <kis_types.h>
 #include <KisViewManager.h>
-#include <KoPattern.h>
+#include <resources/KoPattern.h>
 #include <recorder/kis_action_recorder.h>
 #include <recorder/kis_macro.h>
 #include <recorder/kis_macro_player.h>

@@ -33,6 +33,8 @@
 #include "kis_layer.h"
 #include "kis_layer_utils.h"
 
+#include "kritaui_export.h"
+
 class KisMultinodePropertyInterface;
 class MultinodePropertyBaseConnector;
 template <class PropertyAdapter> class MultinodePropertyBoolConnector;
@@ -112,7 +114,7 @@ struct OpacityAdapter : public BaseAdapter {
     }
 };
 
-inline uint qHash(const KisNodeModel::Property &prop, uint seed = 0) {
+inline uint qHash(const KisBaseNode::Property &prop, uint seed = 0) {
     return qHash(prop.name, seed);
 }
 
@@ -124,8 +126,8 @@ struct LayerPropertyAdapter : public BaseAdapter {
     LayerPropertyAdapter(const QString &propName) : m_propName(propName) {}
 
     ValueType propForNode(KisNodeSP node) {
-        KisNodeModel::PropertyList props = node->sectionModelProperties();
-        Q_FOREACH (const KisNodeModel::Property &prop, props) {
+        KisBaseNode::PropertyList props = node->sectionModelProperties();
+        Q_FOREACH (const KisBaseNode::Property &prop, props) {
             if (prop.name == m_propName) {
                 return prop.state.toBool();
             }
@@ -138,9 +140,9 @@ struct LayerPropertyAdapter : public BaseAdapter {
         Q_UNUSED(index);
         bool stateChanged = false;
 
-        KisNodeModel::PropertyList props = node->sectionModelProperties();
-        KisNodeModel::PropertyList::iterator it = props.begin();
-        KisNodeModel::PropertyList::iterator end = props.end();
+        KisBaseNode::PropertyList props = node->sectionModelProperties();
+        KisBaseNode::PropertyList::iterator it = props.begin();
+        KisBaseNode::PropertyList::iterator end = props.end();
         for (; it != end; ++it) {
             if (it->name == m_propName) {
                 it->state = value;
@@ -158,13 +160,13 @@ struct LayerPropertyAdapter : public BaseAdapter {
         return m_propName;
     }
 
-    static KisNodeModel::PropertyList adaptersList(KisNodeList nodes) {
-        QHash<KisNodeModel::Property, int> adapters;
+    static KisBaseNode::PropertyList adaptersList(KisNodeList nodes) {
+        QHash<KisBaseNode::Property, int> adapters;
 
         Q_FOREACH (KisNodeSP node, nodes) {
             int sortingIndex = 0;
-            KisNodeModel::PropertyList props = node->sectionModelProperties();
-            Q_FOREACH (const KisNodeModel::Property &prop, props) {
+            KisBaseNode::PropertyList props = node->sectionModelProperties();
+            Q_FOREACH (const KisBaseNode::Property &prop, props) {
                 if (prop.state.type() != QVariant::Bool) continue;
 
                 if (!adapters.contains(prop)) {
@@ -176,7 +178,7 @@ struct LayerPropertyAdapter : public BaseAdapter {
             }
         }
 
-        QMultiMap<int, KisNodeModel::Property> sortedAdapters;
+        QMultiMap<int, KisBaseNode::Property> sortedAdapters;
         auto it = adapters.constBegin();
         auto end = adapters.constEnd();
         for (; it != end; ++it) {

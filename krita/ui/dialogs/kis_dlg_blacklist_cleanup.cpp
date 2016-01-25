@@ -25,9 +25,9 @@
 
 #include <kis_paintop_preset.h>
 #include <kis_workspace_resource.h>
-#include <KoColorSet.h>
-#include <KoAbstractGradient.h>
-#include <KoPattern.h>
+#include <resources/KoColorSet.h>
+#include <resources/KoAbstractGradient.h>
+#include <resources/KoPattern.h>
 
 KisDlgBlacklistCleanup::KisDlgBlacklistCleanup()
 {

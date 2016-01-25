@@ -28,6 +28,9 @@ class QUuid;
 #include "kis_types.h"
 #include "kritaimage_export.h"
 
+class KisPSDLayerStyle;
+typedef QSharedPointer<KisPSDLayerStyle> KisPSDLayerStyleSP;
+
 
 /**
  * @brief The KisPSDLayerStyle class implements loading, saving and applying

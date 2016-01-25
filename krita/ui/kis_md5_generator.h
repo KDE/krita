@@ -16,7 +16,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#include <KoMD5Generator.h>
+#include <resources/KoMD5Generator.h>
 
 class KisMD5Generator : public KoMD5Generator
 {

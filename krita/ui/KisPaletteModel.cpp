@@ -21,7 +21,7 @@
 #include <QBrush>
 
 #include <KoColorSpace.h>
-#include <KoColorSet.h>
+#include <resources/KoColorSet.h>
 #include <KoColorDisplayRendererInterface.h>
 
 #include <kis_layer.h>

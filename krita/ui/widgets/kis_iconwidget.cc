@@ -21,7 +21,7 @@
 
 #include <QPainter>
 #include <QIcon>
-#include <KoResource.h>
+#include <resources/KoResource.h>
 #include <KoResourceServerAdapter.h>
 
 

@@ -27,7 +27,7 @@
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoPointerEvent.h>
-#include <KoAbstractGradient.h>
+#include <resources/KoAbstractGradient.h>
 
 #include <kis_cursor.h>
 #include <kis_tool_utils.h>

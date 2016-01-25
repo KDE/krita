@@ -23,10 +23,10 @@
 #include <QDomDocument>
 
 #include <KoCompositeOpRegistry.h>
-#include <KoAbstractGradient.h>
-#include <KoStopGradient.h>
+#include <resources/KoAbstractGradient.h>
+#include <resources/KoStopGradient.h>
 
-#include <KoPattern.h>
+#include <resources/KoPattern.h>
 
 #include "kis_global.h"
 

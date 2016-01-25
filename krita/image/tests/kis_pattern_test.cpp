@@ -19,7 +19,7 @@
 #include "kis_pattern_test.h"
 
 #include <QTest>
-#include "KoPattern.h"
+#include <resources/KoPattern.h>
 
 #include <QCryptographicHash>
 #include <QByteArray>

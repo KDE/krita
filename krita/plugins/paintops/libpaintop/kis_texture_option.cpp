@@ -40,7 +40,7 @@
 #include <kis_pattern_chooser.h>
 #include <kis_slider_spin_box.h>
 #include <kis_multipliers_double_slider_spinbox.h>
-#include <KoPattern.h>
+#include <resources/KoPattern.h>
 #include <kis_paint_device.h>
 #include <kis_fill_painter.h>
 #include <kis_painter.h>

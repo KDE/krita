@@ -39,7 +39,7 @@
 #include <KoGradientHelper.h>
 #include <KoShapeController.h>
 #include <KoShapeBackground.h>
-#include <KoResource.h>
+#include <resources/KoResource.h>
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
 

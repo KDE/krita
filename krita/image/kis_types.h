@@ -246,12 +246,6 @@ class KisProjectionLeaf;
 typedef QSharedPointer<KisProjectionLeaf> KisProjectionLeafSP;
 typedef QWeakPointer<KisProjectionLeaf> KisProjectionLeafWSP;
 
-class KisPSDLayerStyle;
-typedef QSharedPointer<KisPSDLayerStyle> KisPSDLayerStyleSP;
-
-class KoAbstractGradient;
-typedef QSharedPointer<KoAbstractGradient> KoAbstractGradientSP;
-
 class KisKeyframe;
 typedef QSharedPointer<KisKeyframe> KisKeyframeSP;
 typedef QWeakPointer<KisKeyframe> KisKeyframeWSP;

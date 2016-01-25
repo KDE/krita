@@ -20,7 +20,7 @@
 #ifndef KIS_WORKSPACE_RESOURCE_H
 #define KIS_WORKSPACE_RESOURCE_H
 
-#include <KoResource.h>
+#include <resources/KoResource.h>
 #include <kis_properties_configuration.h>
 #include "kritaui_export.h"
 

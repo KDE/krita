@@ -427,18 +427,18 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
         }
         return baseFont;
     }
-    case PropertiesRole: return QVariant::fromValue(node->sectionModelProperties());
-    case AspectRatioRole: return double(m_d->image->width()) / m_d->image->height();
-    case ProgressRole: {
+    case KisBaseNode::PropertiesRole: return QVariant::fromValue(node->sectionModelProperties());
+    case KisBaseNode::AspectRatioRole: return double(m_d->image->width()) / m_d->image->height();
+    case KisBaseNode::ProgressRole: {
         KisNodeProgressProxy *proxy = node->nodeProgressProxy();
         return proxy ? proxy->percentage() : -1;
     }
-    case ActiveRole: {
+    case KisBaseNode::ActiveRole: {
         return m_d->activeNodeIndex == index;
     }
     default:
-        if (role >= int(BeginThumbnailRole) && belongsToIsolatedGroup(node))
-            return node->createThumbnail(role - int(BeginThumbnailRole), role - int(BeginThumbnailRole));
+        if (role >= int(KisBaseNode::BeginThumbnailRole) && belongsToIsolatedGroup(node))
+            return node->createThumbnail(role - int(KisBaseNode::BeginThumbnailRole), role - int(KisBaseNode::BeginThumbnailRole));
         else
             return QVariant();
     }
@@ -457,7 +457,7 @@ Qt::ItemFlags KisNodeModel::flags(const QModelIndex &index) const
 bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
 
-    if (role == ActiveRole || role == AlternateActiveRole) {
+    if (role == KisBaseNode::ActiveRole || role == KisBaseNode::AlternateActiveRole) {
         QModelIndex parentIndex;
         if (!index.isValid() && m_d->parentOfRemovedNode && m_d->dummiesFacade && m_d->indexConverter) {
             parentIndex = m_d->indexConverter->indexFromDummy(m_d->parentOfRemovedNode);
@@ -477,7 +477,7 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
         }
 
         QModelIndex newActiveNode = activatedNode ? indexFromNode(activatedNode) : QModelIndex();
-        if (role == ActiveRole && value.toBool() &&
+        if (role == KisBaseNode::ActiveRole && value.toBool() &&
             m_d->activeNodeIndex == newActiveNode) {
 
             return true;
@@ -489,7 +489,7 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
             m_d->nodeSelectionAdapter->setActiveNode(activatedNode);
         }
 
-        if (role == AlternateActiveRole) {
+        if (role == KisBaseNode::AlternateActiveRole) {
             emit toggleIsolateActiveNode();
         }
 
@@ -507,10 +507,10 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
     case Qt::EditRole:
         node->setName(value.toString());
         break;
-    case PropertiesRole:
+    case KisBaseNode::PropertiesRole:
         {
             // don't record undo/redo for visibility, locked or alpha locked changes
-            PropertyList proplist = value.value<PropertyList>();
+            KisBaseNode::PropertyList proplist = value.value<KisBaseNode::PropertyList>();
             KisNodePropertyListCommand::setNodePropertiesNoUndo(node, m_d->image, proplist);
 
             break;

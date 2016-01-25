@@ -32,7 +32,7 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
     QString compositeOp;
     KoProperties properties;
     bool systemLocked;
-    KisNodeModel::Property hack_visible; //HACK
+    KisBaseNode::Property hack_visible; //HACK
     QUuid id;
     bool collapsed;
     bool supportsLodMoves;
@@ -140,15 +140,15 @@ void KisBaseNode::setCompositeOpId(const QString& compositeOp)
     baseNodeInvalidateAllFramesCallback();
 }
 
-KisNodeModel::PropertyList KisBaseNode::sectionModelProperties() const
+KisBaseNode::PropertyList KisBaseNode::sectionModelProperties() const
 {
-    KisNodeModel::PropertyList l;
+    KisBaseNode::PropertyList l;
     l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::visible, visible(), m_d->hack_visible.isInStasis, m_d->hack_visible.stateInStasis);
     l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::locked, userLocked());
     return l;
 }
 
-void KisBaseNode::setSectionModelProperties(const KisNodeModel::PropertyList &properties)
+void KisBaseNode::setSectionModelProperties(const KisBaseNode::PropertyList &properties)
 {
     setVisible(properties.at(0).state.toBool());
     m_d->hack_visible = properties.at(0);
@@ -304,3 +304,4 @@ void KisBaseNode::setSupportsLodMoves(bool value)
 {
     m_d->supportsLodMoves = value;
 }
+

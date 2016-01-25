@@ -1,7 +1,5 @@
 project( artistictextshape )
 
-add_definitions(-DTRANSLATION_DOMAIN=\"krita_shape_artistictext\")
-
 include_directories(
     ${CMAKE_SOURCE_DIR}/libs/widgets
     ${CMAKE_SOURCE_DIR}/libs/main # for KoFontComboBox.h

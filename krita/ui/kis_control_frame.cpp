@@ -41,13 +41,13 @@
 #include <QAction>
 #include <kactioncollection.h>
 #include <KoDualColorButton.h>
-#include <KoAbstractGradient.h>
+#include <resources/KoAbstractGradient.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerAdapter.h>
 #include <KoResourceServerProvider.h>
 #include <KoColorSpaceRegistry.h>
 
-#include "KoPattern.h"
+#include <resources/KoPattern.h>
 #include "kis_resource_server_provider.h"
 #include "kis_canvas_resource_provider.h"
 

@@ -30,7 +30,7 @@
 #include <klocalizedstring.h>
 #include <QAction>
 
-#include <KoSegmentGradient.h>
+#include <resources/KoSegmentGradient.h>
 
 #define MARGIN 5
 #define HANDLE_SIZE 10

@@ -24,7 +24,7 @@
 #define KO_RESOURCESERVER_ADAPTER_H_
 
 #include "KoResourceServer.h"
-#include <KoResource.h>
+#include <resources/KoResource.h>
 #include <KoResourceFiltering.h>
 
 #include "kritawidgets_export.h"

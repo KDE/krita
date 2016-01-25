@@ -18,7 +18,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "KoPattern.h"
+#include <resources/KoPattern.h>
 
 #include <sys/types.h>
 #include <netinet/in.h>

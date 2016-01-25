@@ -47,7 +47,7 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
-#include "KoPattern.h"
+#include <resources/KoPattern.h>
 #include "KoColorSpace.h"
 #include "kis_transaction.h"
 

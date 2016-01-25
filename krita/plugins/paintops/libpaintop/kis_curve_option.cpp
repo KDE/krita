@@ -355,6 +355,7 @@ double KisCurveOption::computeValue(const KisPaintInformation& info) const
         // add up addivite sensors to the result
         Q_FOREACH (KisDynamicSensorSP s, additiveSensors) {
             qreal t0 = t;
+            Q_UNUSED(t0)
             qreal v = s->parameter(info);
 
             t = fmod(t + v, 1.0);

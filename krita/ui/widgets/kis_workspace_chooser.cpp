@@ -31,9 +31,9 @@
 #include <KoResourceServerAdapter.h>
 #include <KoDockWidgetTitleBar.h>
 #include <KisMainWindow.h>
-#include <KoResource.h>
+#include <resources/KoResource.h>
 
-#include "KoPattern.h"
+#include <resources/KoPattern.h>
 #include "kis_resource_server_provider.h"
 #include "kis_workspace_resource.h"
 #include "KisViewManager.h"

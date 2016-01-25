@@ -25,7 +25,7 @@
 #include "kis_color_source.h"
 #include <kis_painter.h>
 #include <kis_paint_device.h>
-#include <KoPattern.h>
+#include <resources/KoPattern.h>
 
 struct KisColorSourceOption::Private {
     Private()

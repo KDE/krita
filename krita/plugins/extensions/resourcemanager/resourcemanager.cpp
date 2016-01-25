@@ -33,7 +33,7 @@
 #include <kpluginfactory.h>
 
 #include <KoFileDialog.h>
-#include <KoResource.h>
+#include <resources/KoResource.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
 

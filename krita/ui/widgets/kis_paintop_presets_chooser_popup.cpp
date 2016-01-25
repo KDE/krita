@@ -24,7 +24,7 @@
 #include <QCompleter>
 #include <QMenu>
 
-#include <KoResource.h>
+#include <resources/KoResource.h>
 #include <KoResourceItemChooser.h>
 
 #include <ui_wdgpaintoppresets.h>

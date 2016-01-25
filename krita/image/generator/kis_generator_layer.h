@@ -59,7 +59,7 @@ public:
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
     QIcon icon() const;
-    KisNodeModel::PropertyList sectionModelProperties() const;
+    KisBaseNode::PropertyList sectionModelProperties() const;
 
     /**
      * re-run the generator. This happens over the bounds

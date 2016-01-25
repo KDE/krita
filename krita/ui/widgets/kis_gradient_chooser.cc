@@ -25,9 +25,9 @@
 #include <QVBoxLayout>
 
 #include <klocalizedstring.h>
-#include <KoAbstractGradient.h>
-#include <KoResource.h>
-#include <KoSegmentGradient.h>
+#include <resources/KoAbstractGradient.h>
+#include <resources/KoResource.h>
+#include <resources/KoSegmentGradient.h>
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerProvider.h>
 #include <KoResourceServerAdapter.h>

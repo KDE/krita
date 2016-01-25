@@ -22,7 +22,7 @@
 #include <QByteArray>
 
 #include <KoResourceServerProvider.h>
-#include <KoPattern.h>
+#include <resources/KoPattern.h>
 
 #include <kis_properties_configuration.h>
 

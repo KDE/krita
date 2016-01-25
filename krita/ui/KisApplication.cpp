@@ -55,7 +55,7 @@
 #include <KoDpi.h>
 #include "KoGlobal.h"
 #include "KoConfig.h"
-#include <KoHashGeneratorProvider.h>
+#include <resources/KoHashGeneratorProvider.h>
 #include <KoResourcePaths.h>
 
 #include "thememanager.h"

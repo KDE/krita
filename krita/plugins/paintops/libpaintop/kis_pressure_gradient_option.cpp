@@ -21,7 +21,7 @@
 #include <kis_curve_label.h>
 #include <klocalizedstring.h>
 #include <KoColor.h>
-#include <KoAbstractGradient.h>
+#include <resources/KoAbstractGradient.h>
 
 KisPressureGradientOption::KisPressureGradientOption()
     : KisCurveOption("Gradient", KisPaintOpOption::GENERAL, false)

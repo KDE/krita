@@ -21,10 +21,10 @@
 #include <QDomDocument>
 
 #include <KoResourceServerProvider.h>
-#include <KoAbstractGradient.h>
-#include <KoSegmentGradient.h>
-#include <KoStopGradient.h>
-#include <KoPattern.h>
+#include <resources/KoAbstractGradient.h>
+#include <resources/KoSegmentGradient.h>
+#include <resources/KoStopGradient.h>
+#include <resources/KoPattern.h>
 
 #include "kis_dom_utils.h"
 

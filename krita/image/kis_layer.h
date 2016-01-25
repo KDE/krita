@@ -28,10 +28,11 @@
 
 #include "kritaimage_export.h"
 
-#include "kis_node_model.h"
+#include "kis_base_node.h"
 
 #include "kis_types.h"
 #include "kis_node.h"
+#include "kis_psd_layer_style.h"
 
 template <class T>
 class QStack;
@@ -124,8 +125,8 @@ public:
      */
     virtual KisSelectionSP selection() const;
 
-    virtual KisNodeModel::PropertyList sectionModelProperties() const;
-    virtual void setSectionModelProperties(const KisNodeModel::PropertyList &properties);
+    virtual KisBaseNode::PropertyList sectionModelProperties() const;
+    virtual void setSectionModelProperties(const KisBaseNode::PropertyList &properties);
 
     /**
      * set/unset the channel flag for the alpha channel of this layer

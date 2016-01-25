@@ -1,7 +1,5 @@
 project( textPlugin)
 
-add_definitions(-DTRANSLATION_DOMAIN=\"krita_shape_text\")
-
 # KoText depends on koplugin, odf
 set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/plugins/flake/textshape/kotext
                    ${CMAKE_BINARY_DIR}/plugins/flake/textshape/kotext

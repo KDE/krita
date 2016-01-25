@@ -20,7 +20,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "KoSegmentGradient.h"
+#include <resources/KoSegmentGradient.h>
 
 #include <cfloat>
 #include <cmath>

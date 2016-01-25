@@ -40,7 +40,7 @@ QDebug operator<<(QDebug dbg, const KisTimeRange &r)
 void KisTimeRange::calculateTimeRangeRecursive(const KisNode *node, int time, KisTimeRange &range, bool exclusive)
 {
     KisKeyframeChannel *channel =
-        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+            node->getKeyframeChannel(KisKeyframeChannel::Content.id());
 
     if (channel) {
         if (exclusive) {
@@ -57,4 +57,43 @@ void KisTimeRange::calculateTimeRangeRecursive(const KisNode *node, int time, Ki
         calculateTimeRangeRecursive(child, time, range, exclusive);
         child = child->nextSibling();
     }
+}
+
+namespace KisDomUtils {
+
+void saveValue(QDomElement *parent, const QString &tag, const KisTimeRange &range)
+{
+    QDomDocument doc = parent->ownerDocument();
+    QDomElement e = doc.createElement(tag);
+    parent->appendChild(e);
+
+    e.setAttribute("type", "timerange");
+
+    if (range.isValid()) {
+        e.setAttribute("from", Private::numberToString(range.start()));
+
+        if (!range.isInfinite()) {
+            e.setAttribute("to", Private::numberToString(range.end()));
+        }
+    }
+}
+
+
+bool loadValue(const QDomElement &e, KisTimeRange *range)
+{
+    if (!Private::checkType(e, "timerange")) return false;
+
+    int start = Private::stringToInt(e.attribute("from", "-1"));
+    int end = Private::stringToInt(e.attribute("to", "-1"));
+
+    if (start == -1) {
+        range = new KisTimeRange();
+    } else if (end == -1) {
+        *range = KisTimeRange::infinite(start);
+    } else {
+        *range = KisTimeRange::fromTime(start, end);
+    }
+    return true;
+}
+
 }

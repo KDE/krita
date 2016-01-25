@@ -1259,7 +1259,7 @@ void KisMainWindow::dragMoveEvent(QDragMoveEvent * event)
     }
 }
 
-void KisMainWindow::dragLeaveEvent(QDragLeaveEvent * event)
+void KisMainWindow::dragLeaveEvent(QDragLeaveEvent * /*event*/)
 {
     if (d->tabSwitchCompressor->isActive()) {
         d->tabSwitchCompressor->stop();

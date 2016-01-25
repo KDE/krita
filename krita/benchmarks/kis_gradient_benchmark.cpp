@@ -35,7 +35,7 @@
 #include <kis_gradient_painter.h>
 
 #include <KoCompositeOps.h>
-#include <KoStopGradient.h>
+#include <resources/KoStopGradient.h>
 
 void KisGradientBenchmark::initTestCase()
 {

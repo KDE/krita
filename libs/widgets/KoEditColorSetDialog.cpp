@@ -30,7 +30,7 @@
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 
-#include <KoColorSet.h>
+#include <resources/KoColorSet.h>
 #include <KoColorPatch.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoFileDialog.h>

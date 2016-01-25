@@ -26,6 +26,7 @@
 #include <QMetaType>
 #include <boost/operators.hpp>
 #include "kis_types.h"
+#include <kis_dom_utils.h>
 
 class KRITAIMAGE_EXPORT KisTimeRange : public boost::equality_comparable<KisTimeRange>
 {
@@ -133,6 +134,13 @@ private:
     int m_start;
     int m_end;
 };
+
+namespace KisDomUtils {
+    void KRITAIMAGE_EXPORT saveValue(QDomElement *parent, const QString &tag, const KisTimeRange &range);
+    bool KRITAIMAGE_EXPORT loadValue(const QDomElement &e, KisTimeRange *range);
+}
+
+
 
 Q_DECLARE_METATYPE(KisTimeRange);
 

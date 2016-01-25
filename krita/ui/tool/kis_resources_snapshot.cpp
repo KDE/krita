@@ -19,13 +19,13 @@
 #include "kis_resources_snapshot.h"
 
 #include <KoColor.h>
-#include <KoAbstractGradient.h>
+#include <resources/KoAbstractGradient.h>
 #include <KoCompositeOpRegistry.h>
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings.h"
 #include "kis_paintop_registry.h"
 #include <kis_threaded_text_rendering_workaround.h>
-#include "KoPattern.h"
+#include <resources/KoPattern.h>
 #include "kis_canvas_resource_provider.h"
 #include "filter/kis_filter_configuration.h"
 #include "kis_image.h"

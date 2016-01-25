@@ -32,7 +32,7 @@
 #include <KoDocumentInfo.h>
 #include <KoFileDialog.h>
 #include <kis_icon.h>
-#include <KoResource.h>
+#include <resources/KoResource.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
 

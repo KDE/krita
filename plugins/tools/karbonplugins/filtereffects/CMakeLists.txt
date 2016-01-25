@@ -1,6 +1,3 @@
-include_directories( ${KOWIDGETS_INCLUDES} ${FLAKE_INCLUDES} )
-add_definitions(-DTRANSLATION_DOMAIN=\"krita_filtereffects\")
-
 set(karbon_filtereffects_SOURCES
     FilterEffectsPlugin.cpp
     BlurEffect.cpp

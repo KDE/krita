@@ -48,7 +48,7 @@
 #include <kis_psd_layer_style_resource.h>
 #include "kis_png_converter.h"
 #include "kis_keyframe_channel.h"
-
+#include <kis_time_range.h>
 #include "KisDocument.h"
 #include <string>
 #include "kis_dom_utils.h"

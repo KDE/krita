@@ -96,8 +96,8 @@ public:
     };
 
     // metatype is added by the original implementation
-    typedef KisNodeModel::Property Property;
-    typedef KisNodeModel::PropertyList PropertyList;
+    typedef KisBaseNode::Property Property;
+    typedef KisBaseNode::PropertyList PropertyList;
 
     typedef TimelineNodeListKeeper::OtherLayer OtherLayer;
     typedef TimelineNodeListKeeper::OtherLayersList OtherLayersList;

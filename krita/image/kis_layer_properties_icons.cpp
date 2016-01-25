@@ -81,18 +81,18 @@ void KisLayerPropertiesIcons::updateIcons()
     m_d->icons.insert(selectionActive.id(), IconsPair(KisIconUtils::loadIcon("local_selection_active"), KisIconUtils::loadIcon("local_selection_inactive")));
 }
 
-KisNodeModel::Property KisLayerPropertiesIcons::getProperty(const KoID &id, bool state)
+KisBaseNode::Property KisLayerPropertiesIcons::getProperty(const KoID &id, bool state)
 {
     const IconsPair &pair = instance()->m_d->icons[id.id()];
-    return KisNodeModel::Property(id.name(),
+    return KisBaseNode::Property(id.name(),
                                   pair.on, pair.off, state);
 }
 
-KisNodeModel::Property KisLayerPropertiesIcons::getProperty(const KoID &id, bool state,
+KisBaseNode::Property KisLayerPropertiesIcons::getProperty(const KoID &id, bool state,
                                                                        bool isInStasis, bool stateInStasis)
 {
     const IconsPair &pair = instance()->m_d->icons[id.id()];
-    return KisNodeModel::Property(id.name(),
+    return KisBaseNode::Property(id.name(),
                                   pair.on, pair.off, state,
                                   isInStasis, stateInStasis);
 }

@@ -22,7 +22,7 @@
 #include "testutil.h"
 #include "qimage_based_test.h"
 
-#include <KoPattern.h>
+#include <resources/KoPattern.h>
 #include "kis_resource_server_provider.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_filter_strategy.h"

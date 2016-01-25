@@ -35,7 +35,7 @@ KisFpsDecoration::~KisFpsDecoration()
 {
 }
 
-void KisFpsDecoration::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, KisCanvas2* canvas)
+void KisFpsDecoration::drawDecoration(QPainter& gc, const QRectF& /*updateRect*/, const KisCoordinatesConverter */*converter*/, KisCanvas2* /*canvas*/)
 {
     const qreal value = KisOpenglCanvasDebugger::instance()->accumulatedFps();
     const QString text = QString("FPS: %1").arg(value);

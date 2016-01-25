@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <KoVcMultiArchBuildSupport.h> //MSVC requires that Vc come first
+#include <compositeops/KoVcMultiArchBuildSupport.h> //MSVC requires that Vc come first
 #include "recorder/kis_recorded_paint_action.h"
 
 #include <QDomDocument>
@@ -47,8 +47,8 @@
 #include "kis_recorded_action_factory_registry.h"
 #include "kis_recorded_action_load_context.h"
 #include "kis_recorded_action_save_context.h"
-#include <KoAbstractGradient.h>
-#include <KoPattern.h>
+#include <resources/KoAbstractGradient.h>
+#include <resources/KoPattern.h>
 #include <filter/kis_filter_configuration.h>
 #include <generator/kis_generator_registry.h>
 #include <generator/kis_generator.h>

@@ -19,7 +19,7 @@
 #ifndef TASKSET_RESOURCE_H
 #define TASKSET_RESOURCE_H
 
-#include <KoResource.h>
+#include <resources/KoResource.h>
 #include <QStringList>
 
 

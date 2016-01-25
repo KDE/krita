@@ -29,7 +29,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoCompositeOpRegistry.h>
 
-#include "KoStopGradient.h"
+#include <resources/KoStopGradient.h>
 
 #include "krita_utils.h"
 #include "testutil.h"

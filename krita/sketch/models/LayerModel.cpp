@@ -41,6 +41,7 @@
 #include <KoShapeBasedDocumentBase.h>
 #include <KoProperties.h>
 #include <QQmlEngine>
+#include <kis_base_node.h>
 
 struct LayerModelMetaInfo {
     LayerModelMetaInfo()
@@ -563,12 +564,12 @@ void LayerModel::setOpacity(int index, float newOpacity)
 void LayerModel::setVisible(int index, bool newVisible)
 {
     if (index > -1 && index < d->layers.count()) {
-        KisNodeModel::PropertyList props = d->layers[index]->sectionModelProperties();
-        KisNodeModel::Property prop = props[0];
+        KisBaseNode::PropertyList props = d->layers[index]->sectionModelProperties();
+        KisBaseNode::Property prop = props[0];
         if(props[0].state == newVisible)
             return;
-        props[0] = KisNodeModel::Property(prop.name, prop.onIcon, prop.offIcon, newVisible);
-        d->nodeModel->setData( d->nodeModel->indexFromNode(d->layers[index]), QVariant::fromValue<KisNodeModel::PropertyList>(props), KisNodeModel::PropertiesRole );
+        props[0] = KisBaseNode::Property(prop.name, prop.onIcon, prop.offIcon, newVisible);
+        d->nodeModel->setData( d->nodeModel->indexFromNode(d->layers[index]), QVariant::fromValue<KisBaseNode::PropertyList>(props), KisBaseNode::PropertiesRole );
         d->layers[index]->setDirty(d->layers[index]->extent());
         QModelIndex idx = createIndex(index, 0);
         dataChanged(idx, idx);

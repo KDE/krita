@@ -29,7 +29,7 @@
 
 #include <KoCanvasResourceManager.h>
 #include <KoToolBase.h>
-#include <KoAbstractGradient.h>
+#include <resources/KoAbstractGradient.h>
 
 #include <kritaui_export.h>
 
@@ -37,7 +37,7 @@
 #include <kis_image.h>
 #include <kis_paintop_settings.h>
 
-#include <KoPattern.h>
+#include <resources/KoPattern.h>
 
 #include "kis_tool.h"
 #include <QCheckBox>

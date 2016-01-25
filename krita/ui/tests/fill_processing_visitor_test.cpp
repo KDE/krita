@@ -26,7 +26,7 @@
 #include "testutil.h"
 #include "qimage_based_test.h"
 #include "stroke_testing_utils.h"
-#include "KoPattern.h"
+#include <resources/KoPattern.h>
 #include "kis_canvas_resource_provider.h"
 
 #include <processing/fill_processing_visitor.h>

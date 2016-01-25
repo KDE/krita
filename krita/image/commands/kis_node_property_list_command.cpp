@@ -27,7 +27,7 @@
 
 
 
-KisNodePropertyListCommand::KisNodePropertyListCommand(KisNodeSP node, KisNodeModel::PropertyList newPropertyList)
+KisNodePropertyListCommand::KisNodePropertyListCommand(KisNodeSP node, KisBaseNode::PropertyList newPropertyList)
     : KisNodeCommand(kundo2_i18n("Property Changes"), node),
       m_newPropertyList(newPropertyList),
       m_oldPropertyList(node->sectionModelProperties())
@@ -51,19 +51,19 @@ void KisNodePropertyListCommand::undo()
     doUpdate(m_newPropertyList, m_oldPropertyList);
 }
 
-void KisNodePropertyListCommand::doUpdate(const KisNodeModel::PropertyList &oldPropertyList,
-                                          const KisNodeModel::PropertyList &newPropertyList)
+void KisNodePropertyListCommand::doUpdate(const KisBaseNode::PropertyList &oldPropertyList,
+                                          const KisBaseNode::PropertyList &newPropertyList)
 {
     bool oldPassThroughValue = false;
     bool newPassThroughValue = false;
 
-    Q_FOREACH (const KisNodeModel::Property &prop, oldPropertyList) {
+    Q_FOREACH (const KisBaseNode::Property &prop, oldPropertyList) {
         if (prop.name == i18n("Pass Through")) {
             oldPassThroughValue = prop.state.toBool();
         }
     }
 
-    Q_FOREACH (const KisNodeModel::Property &prop, newPropertyList) {
+    Q_FOREACH (const KisBaseNode::Property &prop, newPropertyList) {
         if (prop.name == i18n("Pass Through")) {
             newPassThroughValue = prop.state.toBool();
         }
@@ -83,7 +83,7 @@ void KisNodePropertyListCommand::doUpdate(const KisNodeModel::PropertyList &oldP
 void KisNodePropertyListCommand::setNodePropertiesNoUndo(KisNodeSP node, KisImageSP image, PropertyList proplist)
 {
     bool undo = true;
-    Q_FOREACH (const KisNodeModel::Property &prop, proplist) {
+    Q_FOREACH (const KisBaseNode::Property &prop, proplist) {
         if (prop.name == i18n("Visible") && node->visible() != prop.state.toBool()) undo = false;
         if (prop.name == i18n("Locked") && node->userLocked() != prop.state.toBool()) undo = false;
         if (prop.name == i18n("Active")) {

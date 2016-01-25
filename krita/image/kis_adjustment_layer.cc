@@ -122,12 +122,12 @@ QIcon KisAdjustmentLayer::icon() const
     return KisIconUtils::loadIcon("view-filter");
 }
 
-KisNodeModel::PropertyList KisAdjustmentLayer::sectionModelProperties() const
+KisBaseNode::PropertyList KisAdjustmentLayer::sectionModelProperties() const
 {
     KisSafeFilterConfigurationSP filterConfig = filter();
-    KisNodeModel::PropertyList l = KisLayer::sectionModelProperties();
+    KisBaseNode::PropertyList l = KisLayer::sectionModelProperties();
     if (filterConfig)
-        l << KisNodeModel::Property(i18nc("property of a filter layer, noun", "Filter"), KisFilterRegistry::instance()->value(filterConfig->name())->name());
+        l << KisBaseNode::Property(i18nc("property of a filter layer, noun", "Filter"), KisFilterRegistry::instance()->value(filterConfig->name())->name());
     return l;
 }
 

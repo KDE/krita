@@ -24,13 +24,13 @@
 #include <KoID.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
-#include <KoAbstractGradient.h>
+#include <resources/KoAbstractGradient.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoResourceServerProvider.h>
-#include <KoStopGradient.h>
+#include <resources/KoStopGradient.h>
 #include <KoColorSpaceRegistry.h>
 
-#include <KoPattern.h>
+#include <resources/KoPattern.h>
 #include <kis_paint_device.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_image.h>

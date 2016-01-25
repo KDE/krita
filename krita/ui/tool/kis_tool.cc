@@ -37,7 +37,7 @@
 #include <KoPointerEvent.h>
 #include <KoViewConverter.h>
 #include <KoSelection.h>
-#include <KoAbstractGradient.h>
+#include <resources/KoAbstractGradient.h>
 
 #include <KisViewManager.h>
 #include <kis_selection.h>
@@ -49,7 +49,7 @@
 #include <kis_painter.h>
 #include <kis_paintop_preset.h>
 #include <kis_paintop_settings.h>
-#include <KoPattern.h>
+#include <resources/KoPattern.h>
 #include <kis_transaction.h>
 #include <kis_floating_message.h>
 

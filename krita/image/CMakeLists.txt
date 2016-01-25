@@ -1,13 +1,5 @@
 add_subdirectory( tests )
 
-# Chose a tiles backend
-# 1 - image/tiles
-# 3 - image/tiles3
-
-set(USE_TILESYSTEM 3)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-tiles.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/../config-tiles.h) ### WRONG PLACE???
-
-if(USE_TILESYSTEM EQUAL 3)
 set(libkritatile_SRCS
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tile.cc
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tile_data.cc
@@ -29,7 +21,6 @@ set(libkritatile_SRCS
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/swap/kis_tile_data_swapper.cpp
 )
 add_subdirectory( tiles3 )
-endif()
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/krita/image/metadata
@@ -229,7 +220,6 @@ set(kritaimage_LIB_SRCS
    kis_liquify_transform_worker.cpp
    kis_green_coordinates_math.cpp
    kis_algebra_2d.cpp
-   kis_dom_utils.cpp
    kis_transparency_mask.cc
    kis_undo_store.cpp
    kis_undo_stores.cpp

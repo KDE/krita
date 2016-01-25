@@ -186,9 +186,9 @@ void KisPaintLayer::setImage(KisImageWSP image)
     KisLayer::setImage(image);
 }
 
-KisNodeModel::PropertyList KisPaintLayer::sectionModelProperties() const
+KisBaseNode::PropertyList KisPaintLayer::sectionModelProperties() const
 {
-    KisNodeModel::PropertyList l = KisLayer::sectionModelProperties();
+    KisBaseNode::PropertyList l = KisLayer::sectionModelProperties();
 
     l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::alphaLocked, alphaLocked());
 
@@ -199,9 +199,9 @@ KisNodeModel::PropertyList KisPaintLayer::sectionModelProperties() const
     return l;
 }
 
-void KisPaintLayer::setSectionModelProperties(const KisNodeModel::PropertyList &properties)
+void KisPaintLayer::setSectionModelProperties(const KisBaseNode::PropertyList &properties)
 {
-    Q_FOREACH (const KisNodeModel::Property &property, properties) {
+    Q_FOREACH (const KisBaseNode::Property &property, properties) {
         if (property.name == i18n("Alpha Locked")) {
             setAlphaLocked(property.state.toBool());
         }

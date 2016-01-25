@@ -77,7 +77,7 @@ void KisBaseNodeTest::testContract()
     node->setUserLocked(!node->userLocked());
     QVERIFY(node->userLocked() == true);
 
-    KisNodeModel::PropertyList list = node->sectionModelProperties();
+    KisBaseNode::PropertyList list = node->sectionModelProperties();
     QVERIFY(list.count() == 2);
     QVERIFY(list.at(0).state == node->visible());
     QVERIFY(list.at(1).state == node->userLocked());

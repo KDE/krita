@@ -19,7 +19,7 @@
 #ifndef KIS_PAINTOP_PRESET_H
 #define KIS_PAINTOP_PRESET_H
 
-#include "KoResource.h"
+#include <resources/KoResource.h>
 #include "KoID.h"
 
 #include "kis_types.h"

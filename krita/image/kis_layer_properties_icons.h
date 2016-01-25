@@ -22,8 +22,7 @@
 #include <QScopedPointer>
 #include <KoID.h>
 
-#include "kis_node_model.h"
-
+#include <kis_base_node.h>
 
 class KRITAIMAGE_EXPORT KisLayerPropertiesIcons
 {
@@ -42,8 +41,8 @@ public:
 
     static KisLayerPropertiesIcons* instance();
 
-    static KisNodeModel::Property getProperty(const KoID &id, bool state);
-    static KisNodeModel::Property getProperty(const KoID &id, bool state,
+    static KisBaseNode::Property getProperty(const KoID &id, bool state);
+    static KisBaseNode::Property getProperty(const KoID &id, bool state,
                                               bool isInStasis, bool stateInStasis);
 
 private:

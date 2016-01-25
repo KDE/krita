@@ -23,8 +23,8 @@
 #include <QApplication>
 
 #include <KoCheckerBoardPainter.h>
-#include <KoResource.h>
-#include <KoAbstractGradient.h>
+#include <resources/KoResource.h>
+#include <resources/KoAbstractGradient.h>
 #include "kis_gradient_chooser.h"
 
 KisCmbGradient::KisCmbGradient(QWidget *parent)

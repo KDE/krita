@@ -30,7 +30,7 @@
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
 #endif
 
-#include <KoPattern.h>
+#include <resources/KoPattern.h>
 #include "kis_group_layer.h"
 #include "kis_psd_layer_style.h"
 #include "kis_paint_device_debug_utils.h"

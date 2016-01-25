@@ -59,6 +59,7 @@
 #include <kis_group_layer.h>
 #include <kis_mask.h>
 #include <kis_node.h>
+#include <kis_base_node.h>
 #include <kis_composite_ops_model.h>
 
 #include "kis_action.h"
@@ -432,7 +433,7 @@ void KisLayerBox::setCurrentNode(KisNodeSP node)
 {
     QModelIndex index = node ? m_nodeModel->indexFromNode(node) : QModelIndex();
 
-    m_nodeModel->setData(index, true, KisNodeModel::ActiveRole);
+    m_nodeModel->setData(index, true, KisBaseNode::ActiveRole);
     updateUI();
 }
 

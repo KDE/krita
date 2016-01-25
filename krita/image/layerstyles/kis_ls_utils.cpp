@@ -18,9 +18,9 @@
 
 #include "kis_ls_utils.h"
 
-#include <KoAbstractGradient.h>
+#include <resources/KoAbstractGradient.h>
 #include <KoColorSpace.h>
-#include <KoPattern.h>
+#include <resources/KoPattern.h>
 
 
 #include "psd.h"
@@ -539,9 +539,9 @@ namespace KisLsUtils
                              KisSelectionSP baseSelection,
                              KisPaintDeviceSP srcDevice,
                              KisMultipleProjection *dst,
-                             const QRect &srcRect,
+                             const QRect &/*srcRect*/,
                              const QRect &dstRect,
-                             const psd_layer_effects_context *context,
+                             const psd_layer_effects_context */*context*/,
                              const psd_layer_effects_shadow_base *config,
                              const KisLayerStyleFilterEnvironment *env)
     {

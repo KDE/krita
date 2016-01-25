@@ -40,11 +40,11 @@
 #include "ui_wdgstylesselector.h"
 #include "ui_wdgTexture.h"
 
+#include <kis_psd_layer_style.h>
+
 class QListWidgetItem;
-class KisPSDLayerStyle;
 class KisSignalCompressor;
 class KisCanvasResourceProvider;
-
 
 
 class Contour : public QWidget {

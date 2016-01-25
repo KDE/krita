@@ -303,8 +303,8 @@ else()
     set(HAVE_XCB FALSE)
 endif()
 
-# use sane compile flags
 add_definitions(
+  -DTRANSLATION_DOMAIN=\"krita\"
   -DQT_USE_QSTRINGBUILDER
   -DQT_STRICT_ITERATORS
   -DQT_NO_SIGNALS_SLOTS_KEYWORDS
@@ -637,9 +637,7 @@ set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/pigment
                    ${CMAKE_BINARY_DIR}/libs/pigment
                    ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
-                   ${CMAKE_SOURCE_DIR}/libs/pigment/resources
                    ${Boost_INCLUDE_DIRS}
-
                    )
 
 # flake depends on koodf and pigment

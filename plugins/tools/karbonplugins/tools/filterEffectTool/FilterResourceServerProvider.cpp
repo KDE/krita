@@ -27,8 +27,8 @@
 
 #include <KoResourcePaths.h>
 #include <KoResourceServerProvider.h>
-#include "KoSegmentGradient.h"
-#include "KoStopGradient.h"
+#include <resources/KoSegmentGradient.h>
+#include <resources/KoStopGradient.h>
 
 FilterResourceServerProvider *FilterResourceServerProvider::m_singleton = 0;
 

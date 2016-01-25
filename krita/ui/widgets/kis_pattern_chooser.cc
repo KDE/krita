@@ -34,7 +34,7 @@
 #include "kis_signals_blocker.h"
 
 #include "kis_global.h"
-#include "KoPattern.h"
+#include <resources/KoPattern.h>
 
 KisPatternChooser::KisPatternChooser(QWidget *parent)
         : QFrame(parent)

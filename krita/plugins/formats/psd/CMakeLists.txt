@@ -3,7 +3,8 @@ add_subdirectory(tests)
 configure_file(config_psd.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_psd.h)
 
 include_directories(${ZLIB_INCLUDE_DIR})
-include_directories(${CMAKE_BINARY_DIR}/krita/libpsd)  #For kispsd_include.h
+include_directories(${CMAKE_BINARY_DIR}/libs/psd)  #For kispsd_include.h
+include_directories(${CMAKE_SOURCE_DIR}/libs/psd)  #For kispsd_include.h
 
 set(LIB_PSD_SRCS 
     psd_header.cpp
@@ -16,6 +17,10 @@ set(LIB_PSD_SRCS
     psd_pixel_utils.cpp
     psd_additional_layer_info_block.cpp
 )
+
+#
+# import
+#
 
 set(kritapsdimport_SOURCES
     psd_import.cc
@@ -33,6 +38,10 @@ endif ()
 
 install(TARGETS kritapsdimport DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 
+#
+# export
+#
+
 set(kritapsdexport_SOURCES
     psd_export.cc
     psd_saver.cpp
@@ -42,9 +51,9 @@ set(kritapsdexport_SOURCES
 add_library(kritapsdexport MODULE ${kritapsdexport_SOURCES})
 
 if (WIN32)
-    target_link_libraries(kritapsdexport kritaui ${WIN32_PLATFORM_NET_LIBS} ${ZLIB_LIBRARIES})
+    target_link_libraries(kritapsdexport kritaui kritapsd ${WIN32_PLATFORM_NET_LIBS} ${ZLIB_LIBRARIES})
 else ()	
-    target_link_libraries(kritapsdexport kritaui ${ZLIB_LIBRARIES})
+    target_link_libraries(kritapsdexport kritaui kritapsd ${ZLIB_LIBRARIES})
 endif ()	
 install(TARGETS kritapsdexport DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
 

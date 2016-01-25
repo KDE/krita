@@ -55,7 +55,7 @@ public:
             : KisStrokeJobData(SEQUENTIAL)
         {}
 
-        KisStrokeJobData* createLodClone(int levelOfDetail) {
+        KisStrokeJobData* createLodClone(int /*levelOfDetail*/) {
             return new CancelSilentlyMarker(*this);
         }
     };

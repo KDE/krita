@@ -22,12 +22,10 @@
 
 #include "testutil.h"
 
-
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
-#include <KoPattern.h>
-
+#include <resources/KoPattern.h>
 
 #include "kis_transparency_mask.h"
 #include "kis_paint_layer.h"
@@ -198,7 +196,7 @@ void KisLayerStyleProjectionPlaneTest::testGlow()
     test(style, "glow_outer");
 }
 
-#include "KoStopGradient.h"
+#include <resources/KoStopGradient.h>
 
 void KisLayerStyleProjectionPlaneTest::testGlowGradient()
 {

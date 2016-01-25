@@ -23,7 +23,7 @@
 #include "kundo2command.h"
 #include "kritaimage_export.h"
 #include "kis_types.h"
-
+#include "kis_psd_layer_style.h"
 
 class KRITAIMAGE_EXPORT KisSetLayerStyleCommand : public KUndo2Command
 {

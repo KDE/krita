@@ -25,6 +25,8 @@
 #include <QUrl>
 #include <klocalizedstring.h>
 
+#include <kis_base_node.h>
+
 KisNodeToolTip::KisNodeToolTip()
 {
 }
@@ -37,11 +39,11 @@ QTextDocument *KisNodeToolTip::createDocument(const QModelIndex &index)
 {
     QTextDocument *doc = new QTextDocument(this);
 
-    QImage thumb = index.data(int(Model::BeginThumbnailRole) + 250).value<QImage>();
+    QImage thumb = index.data(int(KisBaseNode::BeginThumbnailRole) + 250).value<QImage>();
     doc->addResource(QTextDocument::ImageResource, QUrl("data:thumbnail"), thumb);
 
     QString name = index.data(Qt::DisplayRole).toString();
-    Model::PropertyList properties = index.data(Model::PropertiesRole).value<Model::PropertyList>();
+    KisBaseNode::PropertyList properties = index.data(KisBaseNode::PropertiesRole).value<KisBaseNode::PropertyList>();
     QString rows;
     const QString row = QString("<tr><td align=\"right\">%1:</td><td align=\"left\">%2</td></tr>");
     QString value;

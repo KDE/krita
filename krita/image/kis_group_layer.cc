@@ -296,18 +296,18 @@ void KisGroupLayer::setPassThroughMode(bool value)
     baseNodeInvalidateAllFramesCallback();
 }
 
-KisNodeModel::PropertyList KisGroupLayer::sectionModelProperties() const
+KisBaseNode::PropertyList KisGroupLayer::sectionModelProperties() const
 {
-    KisNodeModel::PropertyList l = KisLayer::sectionModelProperties();
+    KisBaseNode::PropertyList l = KisLayer::sectionModelProperties();
 
     l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::passThrough, passThroughMode());
 
     return l;
 }
 
-void KisGroupLayer::setSectionModelProperties(const KisNodeModel::PropertyList &properties)
+void KisGroupLayer::setSectionModelProperties(const KisBaseNode::PropertyList &properties)
 {
-    Q_FOREACH (const KisNodeModel::Property &property, properties) {
+    Q_FOREACH (const KisBaseNode::Property &property, properties) {
         if (property.name == i18n("Pass Through")) {
             setPassThroughMode(property.state.toBool());
         }

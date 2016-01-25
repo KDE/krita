@@ -21,7 +21,7 @@
 #include <kis_debug.h>
 #include <QtGlobal>
 
-#include "psd.h"
+#include <psd.h>
 
 class QIODevice;
 

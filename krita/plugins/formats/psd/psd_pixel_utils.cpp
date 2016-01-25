@@ -485,7 +485,7 @@ void readChannels(QIODevice *io,
     case Indexed:
     case MultiChannel:
     case DuoTone:
-    case UNKNOWN:
+    case COLORMODE_UNKNOWN:
     default:
         QString error = QString("Unsupported color mode: %1").arg(colorMode);
         throw KisAslReaderUtils::ASLParseException(error);

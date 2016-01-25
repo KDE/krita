@@ -605,7 +605,7 @@ inline void decodeBaseIndex(QByteArray *encoded, int *row, int *col)
     stream >> size_UNUSED >> *row >> *col;
 }
 
-bool TimelineFramesModel::canDropFrameData(const QMimeData *data, const QModelIndex &index)
+bool TimelineFramesModel::canDropFrameData(const QMimeData */*data*/, const QModelIndex &index)
 {
     if (!index.isValid()) return false;
 

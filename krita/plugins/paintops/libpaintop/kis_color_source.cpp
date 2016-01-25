@@ -18,7 +18,7 @@
 #include "kis_color_source.h"
 #include <kis_paint_device.h>
 
-#include <KoAbstractGradient.h>
+#include <resources/KoAbstractGradient.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorTransformation.h>
 #include <KoMixColorsOp.h>

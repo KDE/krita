@@ -23,8 +23,6 @@
 #include <QUuid>
 #include <QString>
 
-#include "kis_node_model.h"
-
 #include "kis_shared.h"
 #include "kis_paint_device.h"
 #include "kis_processing_visitor.h" // included, not forward declared for msvc
@@ -36,6 +34,8 @@ class KisNodeVisitor;
 class KisUndoAdapter;
 
 #include "kritaimage_export.h"
+
+
 
 /**
  * A KisBaseNode is the base class for all components of an image:
@@ -49,6 +49,99 @@ class KRITAIMAGE_EXPORT KisBaseNode : public QObject, public KisShared
 {
 
     Q_OBJECT
+
+public:
+
+    /// Extensions to Qt::ItemDataRole.
+    enum ItemDataRole
+    {
+        /// Whether the section is the active one
+        ActiveRole = Qt::UserRole + 1,
+
+        /// A list of properties the part has.
+        PropertiesRole,
+
+        /// The aspect ratio of the section as a floating point value: width divided by height.
+        AspectRatioRole,
+
+        /// Use to communicate a progress report to the section delegate on an action (a value of -1 or a QVariant() disable the progress bar
+        ProgressRole,
+
+        /// Speacial activation role which is emitted when the user Atl-clicks on a section
+        /// The item is first activated with ActiveRole, then a separate AlternateActiveRole comes
+        AlternateActiveRole,
+
+        /// This is to ensure that we can extend the data role in the future, since it's not possible to add a role after BeginThumbnailRole (due to "Hack")
+        ReservedRole = 99,
+
+        /**
+         * For values of BeginThumbnailRole or higher, a thumbnail of the layer of which neither dimension
+         * is larger than (int) value - (int) BeginThumbnailRole.
+         * This is a hack to work around the fact that Interview doesn't have a nice way to
+         * request thumbnails of arbitrary size.
+         */
+        BeginThumbnailRole
+    };
+
+    /**
+     *  Describes a property of a document section.
+     *
+     * FIXME: using a QList instead of QMap and not having an untranslated identifier,
+     * either enum or string, forces applications to rely on the order of properties
+     * or to compare the translated strings. This makes it hard to robustly extend the
+     * properties of document section items.
+     */
+    struct Property
+    {
+        /** i18n-ed name, suitable for displaying */
+        QString name;
+
+        /** Whether the property is a boolean (e.g. locked, visible) which can be toggled directly from the widget itself. */
+        bool isMutable;
+
+        /** Provide these if the property isMutable. */
+        QIcon onIcon;
+        QIcon offIcon;
+
+        /** If the property isMutable, provide a boolean. Otherwise, a string suitable for displaying. */
+        QVariant state;
+
+        /** If the property is mutable, specifies whether it can be put into stasis. When a property
+        is in stasis, a new state is created, and the old one is stored in stateInStasis. When
+        stasis ends, the old value is restored and the new one discarded */
+        bool canHaveStasis;
+
+        /** If the property isMutable and canHaveStasis, indicate whether it is in stasis or not */
+        bool isInStasis;
+
+        /** If the property isMutable and canHaveStasis, provide this value to store the property's
+        state while in stasis */
+        bool stateInStasis;
+
+        bool operator==(const Property &rhs) const {
+            return rhs.name == name;
+        }
+
+        /// Default constructor. Use if you want to assign the members manually.
+        Property(): isMutable( false ) { }
+
+        /// Constructor for a mutable property.
+        Property( const QString &n, const QIcon &on, const QIcon &off, bool isOn )
+                : name( n ), isMutable( true ), onIcon( on ), offIcon( off ), state( isOn ), canHaveStasis( false ) { }
+
+        /** Constructor for a mutable property accepting stasis */
+        Property( const QString &n, const QIcon &on, const QIcon &off, bool isOn,
+                  bool isInStasis, bool stateInStasis )
+                : name( n ), isMutable( true ), onIcon( on ), offIcon( off ), state( isOn ),
+                  canHaveStasis( true ), isInStasis( isInStasis ), stateInStasis( stateInStasis ) { }
+
+        /// Constructor for a nonmutable property.
+        Property( const QString &n, const QString &s )
+                : name( n ), isMutable( false ), state( s ) { }
+    };
+
+    /** Return this type for PropertiesRole. */
+    typedef QList<Property> PropertyList;
 
 public:
 
@@ -187,12 +280,12 @@ public:
      * KisLayer defines  opacity = 2, compositeOp = 3
      * KisMask defines active = 2 (KisMask does not inherit kislayer)
      */
-    virtual KisNodeModel::PropertyList sectionModelProperties() const;
+    virtual PropertyList sectionModelProperties() const;
 
     /**
      * Change the section model properties.
      */
-    virtual void setSectionModelProperties(const KisNodeModel::PropertyList &properties);
+    virtual void setSectionModelProperties(const PropertyList &properties);
 
     /**
      * Return all the properties of this layer as a KoProperties-based
@@ -447,6 +540,10 @@ private:
     Private * const m_d;
 
 };
+
+
+Q_DECLARE_METATYPE( KisBaseNode::PropertyList )
+
 
 
 #endif

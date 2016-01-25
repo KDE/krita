@@ -24,6 +24,7 @@
 void KisMathToolboxTest::testCreation()
 {
     KisMathToolbox tb;
+    Q_UNUSED(tb)
 }
 
 

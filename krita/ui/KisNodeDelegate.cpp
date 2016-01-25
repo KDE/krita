@@ -39,6 +39,8 @@
 
 #include <klocalizedstring.h>
 
+#include <kis_base_node.h>
+
 class KisNodeDelegate::Private
 {
 public:
@@ -126,7 +128,7 @@ bool KisNodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, cons
             const int iconWidth = option.decorationSize.width();
             int xPos = mouseEvent->pos().x() - iconsRect_.left();
             if (xPos % (iconWidth + d->margin) < iconWidth) { //it's on an icon, not a margin
-                Model::PropertyList propertyList = index.data(Model::PropertiesRole).value<Model::PropertyList>();
+                KisBaseNode::PropertyList propertyList = index.data(KisBaseNode::PropertiesRole).value<KisBaseNode::PropertyList>();
                 int clickedProperty = -1;
                 // Discover which of all properties was clicked
                 for (int i = 0; i < propertyList.count(); ++i) {
@@ -148,33 +150,33 @@ bool KisNodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, cons
                         for (quint16 i = 0; i < numberOfLeaves; ++i) { // Foreach leaf in the node (index.parent())
                             eachItem = model->index(i, 0, index.parent());
                             // The entire property list has to be altered because model->setData cannot set individual properties
-                            Model::PropertyList eachPropertyList = eachItem.data(Model::PropertiesRole).value<Model::PropertyList>();
+                            KisBaseNode::PropertyList eachPropertyList = eachItem.data(KisBaseNode::PropertiesRole).value<KisBaseNode::PropertyList>();
                             eachPropertyList[clickedProperty].stateInStasis = eachPropertyList[clickedProperty].state.toBool();
                             eachPropertyList[clickedProperty].state = false;
                             eachPropertyList[clickedProperty].isInStasis = true;
-                            model->setData(eachItem, QVariant::fromValue(eachPropertyList), Model::PropertiesRole);
+                            model->setData(eachItem, QVariant::fromValue(eachPropertyList), KisBaseNode::PropertiesRole);
                         }
                         /* Now set the current node's clickedProperty back to True, to save the user time
                         (obviously, if the user is clicking one item with ctrl+click, that item should
                         have a True property, value while the others are in stasis and set to False) */
                         // First refresh propertyList, otherwise old data will be saved back causing bugs
-                        propertyList = index.data(Model::PropertiesRole).value<Model::PropertyList>();
+                        propertyList = index.data(KisBaseNode::PropertiesRole).value<KisBaseNode::PropertyList>();
                         propertyList[clickedProperty].state = true;
-                        model->setData(index, QVariant::fromValue(propertyList), Model::PropertiesRole);
+                        model->setData(index, QVariant::fromValue(propertyList), KisBaseNode::PropertiesRole);
                     } else { // Leave
                         /* Make every leaf of this node go State = stateInStasis */
                         for (quint16 i = 0; i < numberOfLeaves; ++i) {
                             eachItem = model->index(i, 0, index.parent());
                             // The entire property list has to be altered because model->setData cannot set individual properties
-                            Model::PropertyList eachPropertyList = eachItem.data(Model::PropertiesRole).value<Model::PropertyList>();
+                            KisBaseNode::PropertyList eachPropertyList = eachItem.data(KisBaseNode::PropertiesRole).value<KisBaseNode::PropertyList>();
                             eachPropertyList[clickedProperty].state = eachPropertyList[clickedProperty].stateInStasis;
                             eachPropertyList[clickedProperty].isInStasis = false;
-                            model->setData(eachItem, QVariant::fromValue(eachPropertyList), Model::PropertiesRole);
+                            model->setData(eachItem, QVariant::fromValue(eachPropertyList), KisBaseNode::PropertiesRole);
                         }
                     }
                 } else {
                     propertyList[clickedProperty].state = !propertyList[clickedProperty].state.toBool();
-                    model->setData(index, QVariant::fromValue(propertyList), Model::PropertiesRole);
+                    model->setData(index, QVariant::fromValue(propertyList), KisBaseNode::PropertiesRole);
                 }
             }
             return true;
@@ -184,7 +186,7 @@ bool KisNodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, cons
             mouseEvent->modifiers() == Qt::AltModifier) {
 
             d->view->setCurrentIndex(index);
-            model->setData(index, true, Model::AlternateActiveRole);
+            model->setData(index, true, KisBaseNode::AlternateActiveRole);
             return true;
         }
     }
@@ -359,7 +361,7 @@ QRect KisNodeDelegate::iconsRect(const QStyleOptionViewItem &option, const QMode
     if (d->view->displayMode() == View::ThumbnailMode)
         return QRect();
 
-    Model::PropertyList lp = index.data(Model::PropertiesRole).value<Model::PropertyList>();
+    KisBaseNode::PropertyList lp = index.data(KisBaseNode::PropertiesRole).value<KisBaseNode::PropertyList>();
     int propscount = 0;
     for (int i = 0, n = lp.count(); i < n; ++i)
         if (lp[i].isMutable)
@@ -389,7 +391,7 @@ QRect KisNodeDelegate::decorationRect(const QStyleOptionViewItem &option, const 
     switch(d->view->displayMode()) {
     case View::ThumbnailMode: {
         QFont font = option.font;
-        if (index.data(Model::ActiveRole).toBool())
+        if (index.data(KisBaseNode::ActiveRole).toBool())
             font.setBold(!font.bold());
         const QFontMetrics metrics(font);
         const int totalwidth = metrics.width(index.data(Qt::DisplayRole).toString()) + width + d->margin;
@@ -437,7 +439,7 @@ void KisNodeDelegate::drawText(QPainter *p, const QStyleOptionViewItem &option, 
         QPalette::ColorRole cr = (option.state & QStyle::State_Selected) ? QPalette::HighlightedText : QPalette::Text;
         p->setPen(option.palette.color(cg, cr));
 
-        if (index.data(Model::ActiveRole).toBool()) {
+        if (index.data(KisBaseNode::ActiveRole).toBool()) {
             QFont f = p->font();
             f.setBold(!f.bold());
             p->setFont(f);
@@ -459,7 +461,7 @@ void KisNodeDelegate::drawIcons(QPainter *p, const QStyleOptionViewItem &option,
         p->setClipRect(r);
         p->translate(r.left(), r.top());
         int x = 0;
-        Model::PropertyList lp = index.data(Model::PropertiesRole).value<Model::PropertyList>();
+        KisBaseNode::PropertyList lp = index.data(KisBaseNode::PropertiesRole).value<KisBaseNode::PropertyList>();
         for(int i = 0, n = lp.count(); i < n; ++i) {
             if (lp[i].isMutable) {
                 QIcon icon = lp[i].state.toBool() ? lp[i].onIcon : lp[i].offIcon;
@@ -479,10 +481,10 @@ void KisNodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &opt
     {
         p->setClipRect(r);
         const qreal myratio = qreal(r.width()) / r.height();
-        const qreal thumbratio = index.data(Model::AspectRatioRole).toDouble();
+        const qreal thumbratio = index.data(KisBaseNode::AspectRatioRole).toDouble();
         const int s = (myratio > thumbratio) ? r.height() : r.width();
 
-        QImage img = index.data(int(Model::BeginThumbnailRole) + s).value<QImage>();
+        QImage img = index.data(int(KisBaseNode::BeginThumbnailRole) + s).value<QImage>();
         if (!(option.state & QStyle::State_Enabled)) {
             // Make the image grayscale
             // TODO: if someone feel bored a more optimized version of this would be welcome
@@ -517,7 +519,7 @@ void KisNodeDelegate::drawDecoration(QPainter *p, const QStyleOptionViewItem &op
 
 void KisNodeDelegate::drawProgressBar(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    QVariant value = index.data(KisNodeModel::ProgressRole);
+    QVariant value = index.data(KisBaseNode::ProgressRole);
     if (!value.isNull() && (value.toInt() >= 0 && value.toInt() <= 100)) {
         const QRect r = progressBarRect(option, index).translated(option.rect.topLeft());
         p->save();

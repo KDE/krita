@@ -20,7 +20,7 @@
 #define KIS_IMAGE_NODE_PROPERTY_LIST_COMMAND_H_
 
 #include "kis_node_command.h"
-#include "kis_node_model.h"
+#include "kis_base_node.h"
 
 
 /// The command for changing the property list of a layer
@@ -32,21 +32,21 @@ public:
      * Constructor
      * @param node the layer to add
      */
-    KisNodePropertyListCommand(KisNodeSP node, KisNodeModel::PropertyList newPropertyList);
+    KisNodePropertyListCommand(KisNodeSP node, KisBaseNode::PropertyList newPropertyList);
 
     virtual void redo();
     virtual void undo();
 
 
-    typedef KisNodeModel::PropertyList PropertyList;
+    typedef KisBaseNode::PropertyList PropertyList;
     static void setNodePropertiesNoUndo(KisNodeSP node, KisImageSP image, PropertyList proplist);
 
 private:
-    void doUpdate(const KisNodeModel::PropertyList &oldPropertyList,
-                  const KisNodeModel::PropertyList &newPropertyList);
+    void doUpdate(const KisBaseNode::PropertyList &oldPropertyList,
+                  const KisBaseNode::PropertyList &newPropertyList);
 
 private:
-    KisNodeModel::PropertyList m_newPropertyList;
-    KisNodeModel::PropertyList m_oldPropertyList;
+    KisBaseNode::PropertyList m_newPropertyList;
+    KisBaseNode::PropertyList m_oldPropertyList;
 };
 #endif

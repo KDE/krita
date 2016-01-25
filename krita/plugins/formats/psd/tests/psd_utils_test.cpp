@@ -22,7 +22,7 @@
 #include <QCoreApplication>
 #include <klocalizedstring.h>
 #include <QTest>
-#include "../../../../libpsd/psd_utils.h"
+#include "../../../../../libs/psd/psd_utils.h"
 #include <QByteArray>
 #include <QBuffer>
 

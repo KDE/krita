@@ -24,7 +24,7 @@
 #include <QDoubleSpinBox>
 
 #include <KoColorSpace.h>
-#include <KoSegmentGradient.h>
+#include <resources/KoSegmentGradient.h>
 
 #include "kis_debug.h"
 

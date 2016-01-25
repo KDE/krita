@@ -18,7 +18,7 @@
 
 #include "PaletteModel.h"
 
-#include <KoColorSet.h>
+#include <resources/KoColorSet.h>
 #include <KoResourceServerAdapter.h>
 #include <KoResourceServerProvider.h>
 #include <ui/kis_resource_server_provider.h>

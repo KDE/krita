@@ -17,8 +17,8 @@
  */
 #include "psd_colormode_block.h"
 
-#include "psd.h"
-#include "psd_utils.h"
+#include <psd.h>
+#include <psd_utils.h>
 #include <QByteArray>
 #include <QColor>
 

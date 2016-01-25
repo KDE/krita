@@ -20,7 +20,7 @@
 
 #include <QRect>
 
-#include "kis_node_model.h"
+#include "kis_base_node.h"
 
 #include "kis_types.h"
 #include "kis_mask.h"
@@ -56,8 +56,8 @@ public:
     bool accept(KisNodeVisitor &v);
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
-    virtual KisNodeModel::PropertyList sectionModelProperties() const;
-    virtual void setSectionModelProperties(const KisNodeModel::PropertyList &properties);
+    virtual KisBaseNode::PropertyList sectionModelProperties() const;
+    virtual void setSectionModelProperties(const KisBaseNode::PropertyList &properties);
 
     void setVisible(bool visible, bool isLoading = false);
     bool active() const;

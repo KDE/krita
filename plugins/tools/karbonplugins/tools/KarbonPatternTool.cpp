@@ -28,11 +28,11 @@
 #include <KoDocumentResourceManager.h>
 #include <KoShapeBackgroundCommand.h>
 #include <KoPointerEvent.h>
-#include <KoPattern.h>
+#include <resources/KoPattern.h>
 #include <KoPatternBackground.h>
 #include <KoImageCollection.h>
 #include <KoShapeController.h>
-#include <KoResource.h>
+#include <resources/KoResource.h>
 #include <KoResourceServerProvider.h>
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>

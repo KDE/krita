@@ -210,13 +210,13 @@ void KisLayer::setLayerStyle(KisPSDLayerStyleSP layerStyle)
     }
 }
 
-KisNodeModel::PropertyList KisLayer::sectionModelProperties() const
+KisBaseNode::PropertyList KisLayer::sectionModelProperties() const
 {
-    KisNodeModel::PropertyList l = KisBaseNode::sectionModelProperties();
-    l << KisNodeModel::Property(i18n("Opacity"), i18n("%1%", percentOpacity()));
+    KisBaseNode::PropertyList l = KisBaseNode::sectionModelProperties();
+    l << KisBaseNode::Property(i18n("Opacity"), i18n("%1%", percentOpacity()));
 
     if (compositeOp()) {
-        l << KisNodeModel::Property(i18n("Composite Mode"), compositeOp()->description());
+        l << KisBaseNode::Property(i18n("Composite Mode"), compositeOp()->description());
     }
 
     if (m_d->layerStyle && !m_d->layerStyle->isEmpty()) {
@@ -228,11 +228,11 @@ KisNodeModel::PropertyList KisLayer::sectionModelProperties() const
     return l;
 }
 
-void KisLayer::setSectionModelProperties(const KisNodeModel::PropertyList &properties)
+void KisLayer::setSectionModelProperties(const KisBaseNode::PropertyList &properties)
 {
     KisBaseNode::setSectionModelProperties(properties);
 
-    Q_FOREACH (const KisNodeModel::Property &property, properties) {
+    Q_FOREACH (const KisBaseNode::Property &property, properties) {
         if (property.name == i18n("Inherit Alpha")) {
             disableAlphaChannel(property.state.toBool());
         }

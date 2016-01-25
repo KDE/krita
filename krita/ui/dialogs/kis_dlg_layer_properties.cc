@@ -161,8 +161,8 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisNodeList nodes, KisViewManager *
     {
         QVBoxLayout *vbox = new QVBoxLayout;
 
-        KisNodeModel::PropertyList props = LayerPropertyAdapter::adaptersList(nodes);
-        Q_FOREACH (const KisNodeModel::Property &prop, props) {
+        KisBaseNode::PropertyList props = LayerPropertyAdapter::adaptersList(nodes);
+        Q_FOREACH (const KisBaseNode::Property &prop, props) {
             QCheckBox *chk = new QCheckBox(prop.name, this);
             chk->setIcon(prop.onIcon);
             vbox->addWidget(chk);

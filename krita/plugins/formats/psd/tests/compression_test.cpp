@@ -22,7 +22,7 @@
 #include <QCoreApplication>
 #include <klocalizedstring.h>
 #include <QTest>
-#include "../../../../libpsd/compression.h"
+#include "../../../../../libs/psd/compression.h"
 #include <QByteArray>
 #include <QBuffer>
 #include <QDataStream>

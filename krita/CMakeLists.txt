@@ -1,15 +1,5 @@
 project(krita)
 
-add_definitions(
-  -DTRANSLATION_DOMAIN=\"krita\"
-  -DQT_USE_QSTRINGBUILDER
-  -DQT_STRICT_ITERATORS
-  -DQT_NO_URL_CAST_FROM_STRING
-  -DQT_NO_SIGNALS_SLOTS_KEYWORDS
-  -DQT_USE_FAST_OPERATOR_PLUS
-  -DQT_USE_FAST_CONCATENATION
-)
-
 # To avoid the confusion of an endless stream of Eigen warnings.
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-unused-local-typedefs -Wno-deprecated -Wno-deprecated-declarations)
@@ -66,12 +56,9 @@ set(KRITA_INCLUDES
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}/image
 
-    ${CMAKE_SOURCE_DIR}/krita/libpsd
     ${CMAKE_SOURCE_DIR}/krita/image
     ${CMAKE_SOURCE_DIR}/krita/image/brushengine
     ${CMAKE_SOURCE_DIR}/krita/image/tiles
-    ${CMAKE_SOURCE_DIR}/krita/libbrush
-    ${CMAKE_SOURCE_DIR}/krita/libcolor
     ${CMAKE_SOURCE_DIR}/krita/ui
     ${CMAKE_SOURCE_DIR}/krita/ui/canvas
     ${CMAKE_SOURCE_DIR}/krita/ui/tool
@@ -98,10 +85,7 @@ set(KRITA_INCLUDES
 
 include_directories(${KRITA_INCLUDES})
 
-add_subdirectory( libpsd )
 add_subdirectory( image )
-add_subdirectory( libbrush )
-add_subdirectory( libcolor )
 add_subdirectory( ui )
 add_subdirectory( dtd )
 add_subdirectory( plugins )

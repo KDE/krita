@@ -1,7 +1,5 @@
 project( defaulttools )
 
-add_definitions(-DTRANSLATION_DOMAIN=\"krita_flaketools\")
-
 include_directories(
     ${TEXTLAYOUT_INCLUDES} # needed because ConnectionTool.cpp includes TextShape.h to get the id
     ${CMAKE_SOURCE_DIR}/libs/widgets

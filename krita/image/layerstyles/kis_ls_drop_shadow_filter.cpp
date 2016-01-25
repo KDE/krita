@@ -23,7 +23,7 @@
 #include <QBitArray>
 
 #include <KoUpdater.h>
-#include <KoAbstractGradient.h>
+#include <resources/KoAbstractGradient.h>
 
 #include "psd.h"
 

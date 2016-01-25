@@ -20,7 +20,7 @@
 #ifndef FILTEREFFECTRESOURCE_H
 #define FILTEREFFECTRESOURCE_H
 
-#include "KoResource.h"
+#include <resources/KoResource.h>
 #include <KoXmlReader.h>
 
 class KoFilterEffectStack;

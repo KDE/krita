@@ -40,7 +40,7 @@
 
 #include <kis_layer.h>
 #include <kis_painter.h>
-#include <KoPattern.h>
+#include <resources/KoPattern.h>
 #include <kis_fill_painter.h>
 #include <kis_selection.h>
 #include <kis_system_locker.h>

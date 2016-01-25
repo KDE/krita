@@ -22,7 +22,7 @@
 #include "kis_types.h"
 #include "kis_shared.h"
 #include "kritaimage_export.h"
-
+#include "kis_psd_layer_style.h"
 #include <QScopedPointer>
 
 class KisLayerStyleFilterEnvironment;

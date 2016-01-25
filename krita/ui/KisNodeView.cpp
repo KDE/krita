@@ -118,7 +118,7 @@ KisNodeView::DisplayMode KisNodeView::displayMode() const
 
 void KisNodeView::addPropertyActions(QMenu *menu, const QModelIndex &index)
 {
-    Model::PropertyList list = index.data(Model::PropertiesRole).value<Model::PropertyList>();
+    KisBaseNode::PropertyList list = index.data(KisBaseNode::PropertiesRole).value<KisBaseNode::PropertyList>();
     for (int i = 0, n = list.count(); i < n; ++i) {
         if (list.at(i).isMutable) {
             PropertyAction *a = new PropertyAction(i, list.at(i), index, menu);
@@ -266,7 +266,7 @@ void KisNodeView::currentChanged(const QModelIndex &current, const QModelIndex &
     QTreeView::currentChanged(current, previous);
     if (current != previous) {
         Q_ASSERT(!current.isValid() || current.model() == model());
-        model()->setData(current, true, Model::ActiveRole);
+        model()->setData(current, true, KisBaseNode::ActiveRole);
     }
 }
 
@@ -276,7 +276,7 @@ void KisNodeView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bot
     for (int x = topLeft.row(); x <= bottomRight.row(); ++x) {
         for (int y = topLeft.column(); y <= bottomRight.column(); ++y) {
             QModelIndex index = topLeft.sibling(x, y);
-            if (index.data(Model::ActiveRole).toBool()) {
+            if (index.data(KisBaseNode::ActiveRole).toBool()) {
                 if (currentIndex() != index) {
                     setCurrentIndex(index);
                 }
@@ -294,9 +294,9 @@ void KisNodeView::selectionChanged(const QItemSelection &selected, const QItemSe
 
 void KisNodeView::slotActionToggled(bool on, const QPersistentModelIndex &index, int num)
 {
-    Model::PropertyList list = index.data(Model::PropertiesRole).value<Model::PropertyList>();
+    KisBaseNode::PropertyList list = index.data(KisBaseNode::PropertiesRole).value<KisBaseNode::PropertyList>();
     list[num].state = on;
-    const_cast<QAbstractItemModel*>(index.model())->setData(index, QVariant::fromValue(list), Model::PropertiesRole);
+    const_cast<QAbstractItemModel*>(index.model())->setData(index, QVariant::fromValue(list), KisBaseNode::PropertiesRole);
 }
 
 QStyleOptionViewItem KisNodeView::optionForIndex(const QModelIndex &index) const
@@ -371,7 +371,7 @@ QPixmap KisNodeView::createDragPixmap() const
     int x = 0;
     int y = 0;
     Q_FOREACH (const QModelIndex &selectedIndex, selectedIndexes) {
-        const QImage img = selectedIndex.data(int(Model::BeginThumbnailRole) + size).value<QImage>();
+        const QImage img = selectedIndex.data(int(KisBaseNode::BeginThumbnailRole) + size).value<QImage>();
         painter.drawPixmap(x, y, QPixmap().fromImage(img.scaled(QSize(size, size), Qt::KeepAspectRatio)));
 
         x += size + 1;

@@ -23,6 +23,7 @@
 
 #include "kis_types.h"
 
+#include <kis_psd_layer_style.h>
 
 class KisLayerStyleProjectionPlaneTest : public QObject
 {

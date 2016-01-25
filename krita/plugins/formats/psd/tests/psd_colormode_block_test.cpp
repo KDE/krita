@@ -22,7 +22,7 @@
 #include <QCoreApplication>
 #include <klocalizedstring.h>
 #include <QTest>
-#include "../../../../libpsd/psd.h"
+#include "../../../../../libs/psd/psd.h"
 #include "../psd_header.h"
 #include "../psd_colormode_block.h"
 #ifndef FILES_DATA_DIR

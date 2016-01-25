@@ -39,8 +39,8 @@
 #include <QStringList>
 #include <QMessageBox>
 
-#include <KoHashGeneratorProvider.h>
-#include <KoHashGenerator.h>
+#include <resources/KoHashGeneratorProvider.h>
+#include <resources/KoHashGenerator.h>
 #include <kis_resource_server_provider.h>
 #include <kis_workspace_resource.h>
 #include <kis_paintop_preset.h>

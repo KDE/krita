@@ -29,8 +29,8 @@
 #include <QStandardPaths>
 #include <QGlobalStatic>
 
-#include "KoSegmentGradient.h"
-#include "KoStopGradient.h"
+#include <resources/KoSegmentGradient.h>
+#include <resources/KoStopGradient.h>
 #include "KoColorSpaceRegistry.h"
 #include "KoResourcePaths.h"
 #include <iostream>

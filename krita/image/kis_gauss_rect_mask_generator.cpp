@@ -17,7 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <KoVcMultiArchBuildSupport.h> //MSVC requires that Vc come first
+#include <compositeops/KoVcMultiArchBuildSupport.h> //MSVC requires that Vc come first
 #include <cmath>
 #include <algorithm>
 

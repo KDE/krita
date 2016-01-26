@@ -24,8 +24,8 @@
 #include <QQmlContext>
 #include <QQmlEngine>
 #include <QFileInfo>
+#include <QStandardPaths>
 
-#include <KoResourcePaths.h>
 #include <KoDialog.h>
 #include <KoZoomController.h>
 
@@ -111,7 +111,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     view->engine()->addImportPath(appdir.canonicalPath() + "/lib64/calligra/imports");
     QString mainqml = appdir.canonicalPath() + "/share/apps/kritasketch/kritasketch.qml";
 #else
-    QString mainqml = KoResourcePaths::findResource("data", "kritasketch/kritasketch.qml");
+    QString mainqml = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kritasketch/kritasketch.qml");
 #endif
 
     Q_ASSERT(QFile::exists(mainqml));

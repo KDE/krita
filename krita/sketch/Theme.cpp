@@ -30,8 +30,7 @@
 #include <QApplication>
 #include <QWidget>
 #include <QQmlComponent>
-
-#include <KoResourcePaths.h>
+#include <QStandardPaths>
 
 #include "QmlGlobalEngine.h"
 
@@ -102,7 +101,7 @@ void Theme::setId(const QString& newValue)
 {
     if(newValue != d->id) {
         d->id = newValue;
-        const QString themeQmlPath = KoResourcePaths::findResource("data", QString("kritasketch/themes/%1/theme.qml").arg(d->id));
+        const QString themeQmlPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QString("kritasketch/themes/%1/theme.qml").arg(d->id));
         d->basePath = QFileInfo(themeQmlPath).dir().absolutePath();
         emit idChanged();
     }
@@ -362,7 +361,7 @@ Theme* Theme::load(const QString& id, QObject* parent)
     appdir.cdUp();
     qml = QString("%1/share/apps/kritasketch/themes/%2/theme.qml").arg(appdir.canonicalPath(), id);
 #else
-    qml = KoResourcePaths::findResource("data", QString("kritasketch/themes/%1/theme.qml").arg(id));
+    qml = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QString("kritasketch/themes/%1/theme.qml").arg(id));
 #endif
 
     QQmlComponent themeComponent(QmlGlobalEngine::instance()->engine(), parent);

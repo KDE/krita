@@ -34,6 +34,7 @@
 #include <kis_icon.h>
 
 #include "KisViewManager.h"
+#include <kis_canvas2.h>
 #include <kis_canvas_controller.h>
 #include "kis_config.h"
 #include <KisDocument.h>

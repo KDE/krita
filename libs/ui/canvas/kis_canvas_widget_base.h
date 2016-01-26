@@ -22,7 +22,7 @@
 #include <QList>
 #include <Qt>
 
-#include <kis_abstract_canvas_widget.h>
+#include "kis_abstract_canvas_widget.h"
 
 class QColor;
 class QImage;

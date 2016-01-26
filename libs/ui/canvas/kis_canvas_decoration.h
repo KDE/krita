@@ -24,8 +24,8 @@
 
 #include <kritaui_export.h>
 #include <kis_image.h>
-#include <kis_canvas2.h>
-#include <KisView.h>
+#include "kis_canvas2.h"
+#include "KisView.h"
 
 class QRectF;
 class QPainter;

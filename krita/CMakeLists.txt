@@ -1,25 +1,15 @@
 project(krita)
 
 set(KRITA_INCLUDES
-    # For config-*.h
-    ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}/image
-
-    ${CMAKE_SOURCE_DIR}/krita/image
-    ${CMAKE_SOURCE_DIR}/krita/image/brushengine
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles
-    ${CMAKE_SOURCE_DIR}/krita/ui
-    ${CMAKE_SOURCE_DIR}/krita/ui/canvas
-    ${CMAKE_SOURCE_DIR}/krita/ui/tool
-    ${CMAKE_SOURCE_DIR}/krita/ui/flake
-    ${CMAKE_SOURCE_DIR}/krita/ui/widgets
-
-    # For generated files from .ui
-    ${CMAKE_BINARY_DIR}/krita/ui
-
     ${PIGMENT_INCLUDES}
     ${BASICFLAKES_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/libs/ui
+    ${CMAKE_SOURCE_DIR}/libs/ui/canvas
+    ${CMAKE_SOURCE_DIR}/libs/ui/widgets
+    ${CMAKE_SOURCE_DIR}/libs/ui/tool
+    ${CMAKE_SOURCE_DIR}/libs/ui/flake
+    ${CMAKE_SOURCE_DIR}/libs/ui/ora
     ${CMAKE_SOURCE_DIR}/libs/widgets
     ${CMAKE_SOURCE_DIR}/libs/widgets/resources
     ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets
@@ -34,7 +24,6 @@ set(KRITA_INCLUDES
 
 include_directories(${KRITA_INCLUDES})
 
-add_subdirectory( ui )
 add_subdirectory( dtd )
 add_subdirectory( plugins )
 add_subdirectory( data )

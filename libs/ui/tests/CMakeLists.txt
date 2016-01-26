@@ -104,12 +104,12 @@ target_link_libraries(FreehandStrokeTest    kritaui kritaimage Qt5::Test)
 
 set(fill_processing_visitor_test_SRCS fill_processing_visitor_test.cpp ${CMAKE_SOURCE_DIR}/krita/sdk/tests/stroke_testing_utils.cpp)
 kde4_add_unit_test(FillProcessingVisitorTest TESTNAME krita-ui-FillProcessingVisitorTest  ${fill_processing_visitor_test_SRCS})
-target_link_libraries(FillProcessingVisitorTest    kritadefaulttools kritaui kritaimage Qt5::Test)
+target_link_libraries(FillProcessingVisitorTest kritaui kritaimage Qt5::Test)
 
 
 ########### next target ###############
 
-set(filter_stroke_test_SRCS filter_stroke_test.cpp ../../sdk/tests/stroke_testing_utils.cpp)
+set(filter_stroke_test_SRCS filter_stroke_test.cpp ../../../krita/sdk/tests/stroke_testing_utils.cpp)
 kde4_add_unit_test(FilterStrokeTest TESTNAME krita-ui-FilterStrokeTest  ${filter_stroke_test_SRCS})
 target_link_libraries(FilterStrokeTest    kritaui kritaimage Qt5::Test)
 
@@ -122,7 +122,7 @@ set_tests_properties(krita-ui-KisSelectionManagerTest PROPERTIES TIMEOUT 300)
 
 ########### next target ###############
 
-set(kis_selection_decoration_test_SRCS kis_selection_decoration_test.cpp ../../sdk/tests/stroke_testing_utils.cpp)
+set(kis_selection_decoration_test_SRCS kis_selection_decoration_test.cpp ../../../krita/sdk/tests/stroke_testing_utils.cpp)
 kde4_add_unit_test(KisSelectionDecorationTest TESTNAME krita-ui-KisSelectionDecorationTest  ${kis_selection_decoration_test_SRCS})
 target_link_libraries(KisSelectionDecorationTest    kritaui kritaimage Qt5::Test)
 
@@ -134,31 +134,31 @@ target_link_libraries(KisNodeManagerTest    kritaui kritaimage Qt5::Test)
 
 ########### next target ###############
 
-set(kis_node_dummies_graph_test_SRCS kis_node_dummies_graph_test.cpp ../../sdk/tests/testutil.cpp)
+set(kis_node_dummies_graph_test_SRCS kis_node_dummies_graph_test.cpp ../../../krita/sdk/tests/testutil.cpp)
 kde4_add_unit_test(KisNodeDummiesGraphTest TESTNAME krita-ui-KisNodeDummiesGraphTest  ${kis_node_dummies_graph_test_SRCS})
 target_link_libraries(KisNodeDummiesGraphTest    kritaui kritaimage Qt5::Test)
 
 ########### next target ###############
 
-set(kis_node_shapes_graph_test_SRCS kis_node_shapes_graph_test.cpp ../../sdk/tests/testutil.cpp)
+set(kis_node_shapes_graph_test_SRCS kis_node_shapes_graph_test.cpp ../../../krita/sdk/tests/testutil.cpp)
 kde4_add_unit_test(KisNodeShapesGraphTest TESTNAME krita-ui-KisNodeShapesGraphTest  ${kis_node_shapes_graph_test_SRCS})
 target_link_libraries(KisNodeShapesGraphTest    kritaui kritaimage Qt5::Test)
 
 ########### next target ###############
 
-set(kis_dummies_facade_test_SRCS kis_dummies_facade_test.cpp kis_dummies_facade_base_test.cpp ../../sdk/tests/testutil.cpp)
+set(kis_dummies_facade_test_SRCS kis_dummies_facade_test.cpp kis_dummies_facade_base_test.cpp ../../../krita/sdk/tests/testutil.cpp)
 kde4_add_unit_test(KisDummiesFacadeTest TESTNAME krita-ui-KisDummiesFacadeTest  ${kis_dummies_facade_test_SRCS})
 target_link_libraries(KisDummiesFacadeTest    kritaui kritaimage Qt5::Test)
 
 ########### next target ###############
 
-set(kis_model_index_converter_test_SRCS kis_model_index_converter_test.cpp ../../sdk/tests/testutil.cpp)
+set(kis_model_index_converter_test_SRCS kis_model_index_converter_test.cpp ../../../krita/sdk/tests/testutil.cpp)
 kde4_add_unit_test(KisModelIndexConverterTest TESTNAME krita-ui-KisModelIndexConverterTest  ${kis_model_index_converter_test_SRCS})
 target_link_libraries(KisModelIndexConverterTest    kritaui kritaimage Qt5::Test)
 
 ########### next target ###############
 
-set(kis_zoom_and_pan_test_SRCS kis_zoom_and_pan_test.cpp ../../sdk/tests/testutil.cpp)
+set(kis_zoom_and_pan_test_SRCS kis_zoom_and_pan_test.cpp ../../../krita/sdk/tests/testutil.cpp)
 kde4_add_unit_test(KisZoomAndPanTest TESTNAME krita-ui-KisZoomAndPanTest  ${kis_zoom_and_pan_test_SRCS})
 target_link_libraries(KisZoomAndPanTest    kritaui kritaimage Qt5::Test)
 set_tests_properties(krita-ui-KisZoomAndPanTest PROPERTIES TIMEOUT 300)
@@ -207,7 +207,7 @@ target_link_libraries(KisAslLayerStyleSerializerTest kritaui kritaimage ${QT_QTT
 
 ########### next target ###############
 
-set(kis_node_juggler_compressed_test_SRCS kis_node_juggler_compressed_test.cpp  ../../sdk/tests/testutil.cpp)
+set(kis_node_juggler_compressed_test_SRCS kis_node_juggler_compressed_test.cpp  ../../../krita/sdk/tests/testutil.cpp)
 kde4_add_unit_test(KisNodeJugglerCompressedTest TESTNAME krita-image-BaseNodeTest ${kis_node_juggler_compressed_test_SRCS})
 target_link_libraries(KisNodeJugglerCompressedTest kritaimage kritaui Qt5::Test)
 

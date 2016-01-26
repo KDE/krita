@@ -25,8 +25,9 @@
 #include <QLinearGradient>
 #include <QTransform>
 
-#include "kis_coordinates_converter.h"
-#include "kis_algebra_2d.h"
+#include <kis_canvas2.h>
+#include <kis_coordinates_converter.h>
+#include <kis_algebra_2d.h>
 
 #include <math.h>
 #include <limits>

@@ -32,7 +32,7 @@
 
 #include <klocalizedstring.h>
 
-#include "../data/splash/splash_screen.xpm"
+#include "../../krita/data/splash/splash_screen.xpm"
 #include "kis_splash_screen.h"
 
 KisAboutApplication::KisAboutApplication(QWidget *parent)

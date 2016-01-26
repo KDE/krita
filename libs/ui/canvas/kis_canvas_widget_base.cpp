@@ -34,11 +34,11 @@
 
 #include "kis_coordinates_converter.h"
 #include "kis_canvas_decoration.h"
-#include "../kis_config.h"
+#include "kis_config.h"
 #include "kis_canvas2.h"
-#include "../KisViewManager.h"
-#include "../kis_selection_manager.h"
-#include "../KisDocument.h"
+#include "KisViewManager.h"
+#include "kis_selection_manager.h"
+#include "KisDocument.h"
 
 struct KisCanvasWidgetBase::Private
 {

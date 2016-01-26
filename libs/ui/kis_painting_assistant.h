@@ -28,13 +28,13 @@
 #include <KisDocument.h>
 #include <kritaui_export.h>
 #include <kis_shared.h>
-#include <kis_canvas2.h>
 
 class QPainter;
 class QRect;
 class QRectF;
 class KoStore;
 class KisCoordinatesConverter;
+class KisCanvas2;
 
 #include <kis_shared_ptr.h>
 #include <KoGenericRegistry.h>

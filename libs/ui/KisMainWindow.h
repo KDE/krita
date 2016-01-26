@@ -26,7 +26,7 @@
 #include <QPointer>
 #include <QPrinter>
 
-#include <kxmlguiwindow.h>
+#include <xmlgui/kxmlguiwindow.h>
 #include <QUrl>
 #include <KoCanvasObserverBase.h>
 #include <KoCanvasSupervisor.h>

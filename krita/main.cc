@@ -47,7 +47,7 @@
 
 #elif defined HAVE_X11
     #include <wintab/kis_tablet_support_x11.h>
-    #include <ui/input/wintab/kis_xi2_event_filter.h>
+    #include <wintab/kis_xi2_event_filter.h>
 #endif
 
 #if defined HAVE_KCRASH

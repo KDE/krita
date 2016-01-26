@@ -10,6 +10,7 @@ set(KRITA_INCLUDES
     ${CMAKE_SOURCE_DIR}/libs/ui/tool
     ${CMAKE_SOURCE_DIR}/libs/ui/flake
     ${CMAKE_SOURCE_DIR}/libs/ui/ora
+    ${CMAKE_SOURCE_DIR}/libs/ui/input
     ${CMAKE_SOURCE_DIR}/libs/widgets
     ${CMAKE_SOURCE_DIR}/libs/widgets/resources
     ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets

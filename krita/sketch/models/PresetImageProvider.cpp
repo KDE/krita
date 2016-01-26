@@ -19,7 +19,7 @@
 #include "PresetImageProvider.h"
 
 #include <KoResourceServerAdapter.h>
-#include <ui/kis_resource_server_provider.h>
+#include <kis_resource_server_provider.h>
 #include <brushengine/kis_paintop_preset.h>
 
 class PresetImageProvider::Private {

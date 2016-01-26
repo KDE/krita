@@ -3,6 +3,8 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3 
     ${CMAKE_SOURCE_DIR}/sdk/tests
     ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
+    ${EIGEN3_INCLUDE_DIR}
+
 )
 
 

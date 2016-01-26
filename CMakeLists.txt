@@ -762,6 +762,10 @@ endif()
 add_subdirectory(libs)
 add_subdirectory(plugins)
 
+if (NOT WIN32)
+    add_subdirectory( benchmarks )
+endif ()
+
 macro_display_feature_log()
 
 calligra_product_deps_report("product_deps")

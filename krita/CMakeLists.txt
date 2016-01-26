@@ -25,14 +25,9 @@ set(KRITA_INCLUDES
 include_directories(${KRITA_INCLUDES})
 
 add_subdirectory( dtd )
-add_subdirectory( plugins )
 add_subdirectory( data )
 add_subdirectory( integration )
 add_subdirectory( pics/app )
-
-if (NOT WIN32)
-    add_subdirectory( benchmarks )
-endif ()
 
 set(krita_SRCS main.cc)
 

@@ -21,7 +21,7 @@
 #include "kis_auto_brush_test.h"
 
 #include <QTest>
-#include "testutil.h"
+#include <testutil.h>
 #include "../kis_auto_brush.h"
 #include "kis_mask_generator.h"
 #include "kis_paint_device.h"

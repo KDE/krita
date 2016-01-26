@@ -153,7 +153,7 @@ install(FILES     kritasketch.rc                    DESTINATION ${DATA_INSTALL_D
 # Sketch Qt Quick components
 # =============================================================================
 
-add_library(kritasketchplugin SHARED ${kritasketchplugin_SRCS} ${kritasketch_kritaintegrationmodels_SRCS} ${KRITA_COLORSELECTORNG_SOURCE_DIR})
+add_library(kritasketchplugin SHARED ${kritasketchplugin_SRCS} ${kritasketch_kritaintegrationmodels_SRCS} ${KRITA_COLORSELECTORNG_SOURCES})
 
 target_link_libraries(kritasketchplugin
     Qt5::Quick

@@ -36,7 +36,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/processing
     ${CMAKE_CURRENT_SOURCE_DIR}/recorder
     ${CMAKE_CURRENT_SOURCE_DIR}/tiles3
-	${CMAKE_SOURCE_DIR}/krita/sdk/tests
+	${CMAKE_SOURCE_DIR}/sdk/tests
     ${EIGEN3_INCLUDE_DIR}
 )
 

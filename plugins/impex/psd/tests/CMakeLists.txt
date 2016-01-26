@@ -3,7 +3,7 @@ include_directories(${CMAKE_BINARY_DIR}/krita/libpsd)  #For kispsd_include.h
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(
     ${CMAKE_SOURCE_DIR}/..
-    ${CMAKE_SOURCE_DIR}/krita/sdk/tests
+    ${CMAKE_SOURCE_DIR}/sdk/tests
     ${CMAKE_SOURCE_DIR}/libs/psd
 )
 

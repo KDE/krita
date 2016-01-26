@@ -349,7 +349,7 @@ if(BUILD_TESTING)
     add_definitions(-DCOMPILING_TESTS)
 endif()
 
-set(KRITA_DEFAULT_TEST_DATA_DIR ${CMAKE_SOURCE_DIR}/krita/sdk/tests/data/)
+set(KRITA_DEFAULT_TEST_DATA_DIR ${CMAKE_SOURCE_DIR}/sdk/tests/data/)
 macro(macro_add_unittest_definitions)
   add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
   add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}")

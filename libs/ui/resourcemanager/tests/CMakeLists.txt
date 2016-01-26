@@ -5,7 +5,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/krita/ui
     ${CMAKE_SOURCE_DIR}/krita/plugins/paintops/libbrush
     ${CMAKE_SOURCE_DIR}/krita/plugins/paintops/libpaintop
-    ${CMAKE_SOURCE_DIR}/krita/sdk/tests 
+    ${CMAKE_SOURCE_DIR}/sdk/tests 
     ${CMAKE_SOURCE_DIR}/krita/plugins/paintops/resourcemanager)
 
 macro_add_unittest_definitions()

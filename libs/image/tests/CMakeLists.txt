@@ -15,7 +15,7 @@ include_directories(${CMAKE_SOURCE_DIR}/libs/image/metadata
                     ${CMAKE_SOURCE_DIR}/libs/image/brushengine
                     ${CMAKE_SOURCE_DIR}/libs/image/tiles3
                     ${CMAKE_SOURCE_DIR}/libs/image/tiles3/swap
-                    ${CMAKE_SOURCE_DIR}/krita/sdk/tests 
+                    ${CMAKE_SOURCE_DIR}/sdk/tests 
                     ${EIGEN3_INCLUDE_DIR}
                     ${FLAKE_INCLUDES}
 )

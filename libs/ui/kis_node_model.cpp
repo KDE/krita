@@ -64,10 +64,10 @@ struct KisNodeModel::Private
 
     KisModelIndexConverterBase *indexConverter = 0;
     KisDummiesFacadeBase *dummiesFacade = 0;
-    bool needFinishRemoveRows;
-    bool needFinishInsertRows;
-    bool showRootLayer;
-    bool showGlobalSelection;
+    bool needFinishRemoveRows = false;
+    bool needFinishInsertRows = false;
+    bool showRootLayer = false;
+    bool showGlobalSelection = false;
     QPersistentModelIndex activeNodeIndex;
 
     KisNodeDummy* parentOfRemovedNode = 0;
@@ -187,7 +187,7 @@ void KisNodeModel::updateSettings()
     bool oldShowGlobalSelection = m_d->showGlobalSelection;
     m_d->showRootLayer = cfg.showRootLayer();
     m_d->showGlobalSelection = cfg.showGlobalSelection();
-    if(m_d->showRootLayer != oldShowRootLayer || m_d->showGlobalSelection != oldShowGlobalSelection) {
+    if (m_d->showRootLayer != oldShowRootLayer || m_d->showGlobalSelection != oldShowGlobalSelection) {
         resetIndexConverter();
         reset();
     }

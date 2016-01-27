@@ -1,3 +1,4 @@
+add_subdirectory( basictools )
 add_subdirectory( defaulttool )
 add_subdirectory( selectiontools )
 add_subdirectory( tool_crop )

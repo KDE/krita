@@ -36,6 +36,7 @@ include_directories(
     ${EXIV2_INCLUDE_DIR}
     ${EIGEN3_INCLUDE_DIR}
     ${OCIO_INCLUDE_DIR}
+    ${Boost_INCLUDE_DIR}
 )
 
 add_subdirectory( tests )

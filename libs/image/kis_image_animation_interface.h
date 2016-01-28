@@ -140,7 +140,7 @@ Q_SIGNALS:
     void sigPlaybackRangeChanged();
 
 private:
-    struct Private;
+    class Private;
     const QScopedPointer<Private> m_d;
 };
 

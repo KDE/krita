@@ -36,11 +36,10 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/processing
     ${CMAKE_CURRENT_SOURCE_DIR}/recorder
     ${CMAKE_CURRENT_SOURCE_DIR}/tiles3
-	${CMAKE_SOURCE_DIR}/sdk/tests
+    ${CMAKE_SOURCE_DIR}/sdk/tests
     ${EIGEN3_INCLUDE_DIR}
     ${Boost_INCLUDE_DIRS}
 )
-
 
 if(FFTW3_FOUND)
   include_directories(${FFTW3_INCLUDE_DIR})

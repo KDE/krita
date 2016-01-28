@@ -25,7 +25,9 @@
 #define HASH_SIZE (1<< HASH_LOG)
 #define HASH_MASK  (HASH_SIZE-1)
 
+#if !defined _MSC_VER
 #pragma GCC diagnostic ignored "-Wcast-align"
+#endif
 #define UPDATE_HASH(v,p) { v = *((quint16*)p); v ^= *((quint16*)(p+1))^(v>>(16-HASH_LOG)); }
 
 #define MAX_COPY       32

@@ -20,8 +20,17 @@
 #ifndef __KOSTREAMED_MATH_H
 #define __KOSTREAMED_MATH_H
 
+#if defined _MSC_VER
+// Lets shut up the "possible loss of data" and "forcing value to bool 'true' or 'false'
+#pragma warning ( push )
+#pragma warning ( disable : 4244 )
+#pragma warning ( disable : 4800 )
+#endif
 #include <Vc/Vc>
 #include <Vc/IO>
+#if defined _MSC_VER
+#pragma warning ( pop )
+#endif
 
 #include <stdint.h>
 #include <KoAlwaysInline.h>
@@ -29,7 +38,9 @@
 
 #define BLOCKDEBUG 0
 
+#if !defined _MSC_VER
 #pragma GCC diagnostic ignored "-Wcast-align"
+#endif
 
 template<Vc::Implementation _impl>
 struct KoStreamedMath {

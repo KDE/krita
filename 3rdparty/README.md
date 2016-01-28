@@ -187,6 +187,7 @@ On All operating systems:
 
     cmake --build . --config RelWithDebInfo --target ext_png
     cmake --build . --config RelWithDebInfo --target ext_tiff
+    cmake --build . --config RelWithDebInfo --target ext_gsl
     cmake --build . --config RelWithDebInfo --target ext_vc
     cmake --build . --config RelWithDebInfo --target ext_libraw
     cmake --build . --config RelWithDebInfo --target ext_openjpeg

@@ -17,7 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#if !defined _MSC_VER
 #pragma GCC diagnostic ignored "-Wundef"
+#endif
 
 #include "KoOptimizedCompositeOpFactoryPerArch.h"
 #include "KoOptimizedCompositeOpAlphaDarken32.h"

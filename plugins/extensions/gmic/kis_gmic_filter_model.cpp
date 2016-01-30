@@ -26,12 +26,12 @@
 
 // debug
 
-KisGmicFilterModel::KisGmicFilterModel(Component * rootComponent, QObject* parent):
+KisGmicFilterModel::KisGmicFilterModel(Component *rootComponent, QObject* parent):
     QAbstractItemModel(parent),
     m_rootComponent(rootComponent),
     m_blacklister(0)
 {
-
+    Q_ASSERT(rootComponent);
 }
 
 KisGmicFilterModel::~KisGmicFilterModel()
@@ -48,11 +48,9 @@ QModelIndex KisGmicFilterModel::index(int row, int column, const QModelIndex& pa
     }
 
     Component * parentItem;
-    if (!parent.isValid())
-    {
+    if (!parent.isValid()) {
         parentItem = m_rootComponent;
-    } else
-    {
+    } else {
         parentItem = static_cast<Component*>(parent.internalPointer());
     }
 
@@ -89,27 +87,27 @@ int KisGmicFilterModel::rowCount(const QModelIndex& parent) const
      if (parent.column() > 0)
          return 0;
 
-     if (!parent.isValid()){
+     if (!parent.isValid()) {
          parentItem = m_rootComponent;
      }
-     else
-     {
+     else {
          parentItem = static_cast<Component*>(parent.internalPointer());
      }
-
-     return parentItem->childCount();
+     if (parentItem) {
+        return parentItem->childCount();
+     }
+     return 0;
  }
 
 int KisGmicFilterModel::columnCount(const QModelIndex& parent) const
 {
-    if (parent.isValid())
-    {
+    if (parent.isValid()) {
          return static_cast<Component*>(parent.internalPointer())->columnCount();
     }
-    else
-    {
-         return m_rootComponent->columnCount();
+    else if (m_rootComponent) {
+        return m_rootComponent->columnCount();
     }
+    return 0;
 }
 
 QVariant KisGmicFilterModel::data(const QModelIndex& index, int role) const
@@ -117,18 +115,15 @@ QVariant KisGmicFilterModel::data(const QModelIndex& index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    if (role == Qt::DisplayRole)
-    {
+    if (role == Qt::DisplayRole) {
         Component *item = static_cast<Component*>(index.internalPointer());
         return item->data(index.column());
     }
 
-    if (role == CommandRole)
-    {
+    if (role == CommandRole) {
         Component *item = static_cast<Component*>(index.internalPointer());
         Command * commandItem = dynamic_cast<Command *>(item);
-        if (commandItem)
-        {
+        if (commandItem) {
             //KisGmicSettingsWidget * filterSettingsWidget = new  KisGmicSettingsWidget(commandItem);
             /*if (filterSettingsWidget)
             {
@@ -139,8 +134,7 @@ QVariant KisGmicFilterModel::data(const QModelIndex& index, int role) const
         }
     }
 
-    if (role == FilterSettingsRole)
-    {
+    if (role == FilterSettingsRole) {
         Component *item = static_cast<Component*>(index.internalPointer());
         Command * commandItem = dynamic_cast<Command *>(item);
         if (commandItem)
@@ -149,10 +143,8 @@ QVariant KisGmicFilterModel::data(const QModelIndex& index, int role) const
             KisGmicFilterSetting * settings = new KisGmicFilterSetting;
             commandItem->writeConfiguration(settings);
 
-            if (m_blacklister)
-            {
-                if (m_blacklister->isBlacklisted(commandItem->name(), commandItem->parent()->name()))
-                {
+            if (m_blacklister) {
+                if (m_blacklister->isBlacklisted(commandItem->name(), commandItem->parent()->name())) {
                     settings->setBlacklisted(true);
                 }
             }

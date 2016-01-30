@@ -25,7 +25,6 @@
 #include <QTimer>
 #include <kis_debug.h>
 
-#include <CImg.h>
 #include <gmic.h>
 
 

@@ -22,9 +22,10 @@
 #include <QAbstractItemModel>
 #include <QModelIndex>
 #include <QVariant>
+#include <QPointer>
 
-class KisGmicBlacklister;
-class Component;
+#include "Component.h"
+#include "kis_gmic_blacklister.h"
 
 // introduce "rolespace", let's not collide with some other Qt::UserRole + 1 roles e.g. in ui/kis_categorized_list_model.h
 static const int GmicRolespace = 100;
@@ -62,8 +63,8 @@ public:
     void setBlacklister(KisGmicBlacklister * blacklister);
 
 private:
-    Component * m_rootComponent;
-    KisGmicBlacklister * m_blacklister;
+    QPointer<Component> m_rootComponent;
+    QPointer<KisGmicBlacklister> m_blacklister;
 
 };
 

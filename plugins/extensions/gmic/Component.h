@@ -15,19 +15,20 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
-
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
+#include <QObject>
 #include <QString>
 #include <QVariant>
 
-class Component
+class Component : public QObject
 {
+    Q_OBJECT
+
 public:
-    Component(){};
-    virtual ~Component(){};
+    Component();
+    virtual ~Component();
     virtual void add(Component *c) = 0;
     virtual Component * child(int index) const = 0;
     virtual Component * parent() = 0;

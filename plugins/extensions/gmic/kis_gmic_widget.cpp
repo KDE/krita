@@ -40,7 +40,6 @@
 #include <kis_gmic_filter_proxy_model.h>
 #include "kis_gmic_updater.h"
 
-
 static const QString maximizeStr = i18n("Maximize");
 static const QString selectFilterStr = i18n("Select a filter...");
 
@@ -123,34 +122,26 @@ void KisGmicWidget::slotSelectedFilterChanged(const QItemSelection & /*newSelect
     const QModelIndex index = m_filterTree->selectionModel()->currentIndex();
     QString selectedText = index.data(Qt::DisplayRole).toString();
 
-
     QVariant var = index.data(CommandRole);
 
-    Command * gmicCommand(0);
-    if (!var.isValid())
-    {
+    Command *gmicCommand(0);
+    if (!var.isValid()) {
         gmicCommand = 0;
         dbgPlugins << "Invalid QVariant, invalid command? : ';' ";
     }
-    else
-    {
+    else {
         gmicCommand = var.value<Command *>();
     }
 
-
-    if (gmicCommand)
-    {
+    if (gmicCommand)  {
         KisGmicSettingsWidget * filterOptions = new KisGmicSettingsWidget(gmicCommand);
         QObject::connect(filterOptions, SIGNAL(sigConfigurationUpdated()), this, SLOT(slotConfigurationChanged()));
         switchOptionsWidgetFor(filterOptions);
     }
-    else
-    {
+    else {
         switchOptionsWidgetFor(new QLabel(selectFilterStr));
         emit sigPreviewActiveLayer();
     }
-
-
 
 #ifdef DEBUG_MODEL
      //find out the hierarchy level of the selected item

@@ -27,6 +27,8 @@
 
 class Category : public Component
 {
+    Q_OBJECT
+
 public:
     Category(Component * parent = 0);
     virtual ~Category();

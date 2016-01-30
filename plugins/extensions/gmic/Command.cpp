@@ -35,7 +35,8 @@
 
 #include <Parameter.h>
 
-Command::Command(Component* parent): m_parent(parent)
+Command::Command(Component* parent)
+    : m_parent(parent)
 {
 }
 

@@ -1,5 +1,7 @@
 add_subdirectory(tests)
 
+add_subdirectories(${Boost_INCLUDE_DIR})
+
 set(kritatooltransform_SOURCES
     tool_transform.cc
     tool_transform_args.cc

@@ -21,8 +21,9 @@
 #define KORGBF32COLORSPACE_H_
 
 #include "LcmsColorSpace.h"
-#include "KoColorSpaceTraits.h"
 #include "KoColorModelStandardIds.h"
+
+struct KoRgbF32Traits;
 
 class RgbF32ColorSpace : public LcmsColorSpace<KoRgbF32Traits>
 {

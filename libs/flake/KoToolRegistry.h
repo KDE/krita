@@ -22,8 +22,9 @@
 #define KO_TOOL_REGISTRY_H_
 
 #include "KoGenericRegistry.h"
-#include <KoToolFactoryBase.h>
 #include "kritaflake_export.h"
+
+class KoToolFactoryBase;
 
 /**
  * This singleton class keeps a register of all available flake tools,

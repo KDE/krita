@@ -20,7 +20,7 @@
 #ifndef _KOPENCILTOOL_H_
 #define _KOPENCILTOOL_H_
 
-#include <KoToolBase.h>
+#include "KoToolBase.h"
 
 class KoPathShape;
 class KoShapeStroke;

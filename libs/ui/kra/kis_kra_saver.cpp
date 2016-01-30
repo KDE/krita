@@ -28,6 +28,7 @@
 #include <QStringList>
 
 #include <QUrl>
+#include <QBuffer>
 
 #include <KoDocumentInfo.h>
 #include <KoColorSpaceRegistry.h>

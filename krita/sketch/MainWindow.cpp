@@ -25,6 +25,7 @@
 #include <QQmlEngine>
 #include <QFileInfo>
 #include <QStandardPaths>
+#include <QDir>
 
 #include <KoDialog.h>
 #include <KoZoomController.h>

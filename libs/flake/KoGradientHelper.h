@@ -21,9 +21,8 @@
 #define KO_GRADIENT_HELPER_H
 
 #include <kritaflake_export.h>
-#include <QBrush>
 
-class QGradient;
+#include <QGradient>
 
 namespace KoGradientHelper
 {

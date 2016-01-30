@@ -33,11 +33,13 @@
 #include <KoXmlNS.h>
 #include <KoOdfManifestEntry.h>
 #include "KoStyleStack.h"
+#include <KoXmlReader.h>
 
 // Qt
 #include <QStandardPaths>
 #include <QMimeDatabase>
 #include <QMimeType>
+#include <QFile>
 
 
 class Q_DECL_HIDDEN KoOdfLoadingContext::Private

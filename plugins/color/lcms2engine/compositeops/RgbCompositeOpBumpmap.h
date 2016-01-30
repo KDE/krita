@@ -19,7 +19,6 @@
 #ifndef RGBCOMPOSITEOPBUMPMAP_H
 #define RGBCOMPOSITEOPBUMPMAP_H
 
-#include "KoColorSpaceMaths.h"
 #include <KoCompositeOpAlphaBase.h>
 
 template<class _CSTraits>

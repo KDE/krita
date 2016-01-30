@@ -36,6 +36,7 @@
 #include <QInputDialog>
 #include <QTemporaryFile>
 #include <QLineEdit>
+#include <QDir>
 
 #include <klocalizedstring.h>
 #include <kis_icon.h>

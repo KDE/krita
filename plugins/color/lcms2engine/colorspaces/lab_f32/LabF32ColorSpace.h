@@ -21,10 +21,11 @@
 #define LabF32ColorSpace_H_
 
 #include "LcmsColorSpace.h"
-#include "KoColorSpaceTraits.h"
 #include "KoColorModelStandardIds.h"
 
 // XXX: implement normalizedChannelValues?
+
+struct KoLabF32Traits;
 
 class LabF32ColorSpace : public LcmsColorSpace<KoLabF32Traits>
 {

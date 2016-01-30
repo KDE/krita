@@ -20,7 +20,6 @@
 #define KOALPHACOLORSPACE_H
 
 #include <QColor>
-#include <QBitArray>
 
 #include "DebugPigment.h"
 #include "kritapigment_export.h"
@@ -32,6 +31,8 @@
 #include "KoSimpleColorSpaceFactory.h"
 
 typedef KoColorSpaceTrait<quint8, 1, 0> AlphaU8Traits;
+
+class QBitArray;
 
 /**
  * The alpha mask is a special color strategy that treats all pixels as

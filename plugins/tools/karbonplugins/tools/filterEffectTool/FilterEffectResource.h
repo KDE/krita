@@ -22,6 +22,7 @@
 
 #include <resources/KoResource.h>
 #include <KoXmlReader.h>
+#include <QDomDocument>
 
 class KoFilterEffectStack;
 

@@ -20,6 +20,19 @@
 #include "KoToolProxy.h"
 #include "KoToolProxy_p.h"
 
+#include <QMimeData>
+#include <QUrl>
+#include <QTimer>
+#include <QApplication>
+#include <QTouchEvent>
+#include <QClipboard>
+
+#include <kundo2command.h>
+#include <KoProperties.h>
+
+#include <FlakeDebug.h>
+#include <klocalizedstring.h>
+
 #include "KoToolBase.h"
 #include "KoPointerEvent.h"
 #include "KoInputDevice.h"
@@ -34,20 +47,9 @@
 #include "KoShapeRegistry.h"
 #include "KoShapeController.h"
 #include "KoOdf.h"
+#include "KoViewConverter.h"
+#include "KoShapeFactoryBase.h"
 
-#include <kundo2command.h>
-#include <KoProperties.h>
-
-#include <FlakeDebug.h>
-#include <klocalizedstring.h>
-#include <QUrl>
-
-#include <QTimer>
-#include <QApplication>
-#include <QTouchEvent>
-#include <QClipboard>
-
-#include "FlakeDebug.h"
 
 KoToolProxyPrivate::KoToolProxyPrivate(KoToolProxy *p)
     : activeTool(0),

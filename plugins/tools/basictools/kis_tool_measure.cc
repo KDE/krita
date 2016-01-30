@@ -34,6 +34,7 @@
 #include "kis_cursor.h"
 #include "KoPointerEvent.h"
 #include "KoCanvasBase.h"
+#include <KoViewConverter.h>
 
 #define INNER_RADIUS 50
 

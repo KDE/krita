@@ -20,10 +20,6 @@
 #ifndef KOSHAPEPAINTINGCONTEXT_H
 #define KOSHAPEPAINTINGCONTEXT_H
 
-#include <QSet>
-#include <QString>
-#include <QVariant>
-
 #include "kritaflake_export.h"
 
 class KoCanvasBase;

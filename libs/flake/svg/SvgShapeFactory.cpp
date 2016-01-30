@@ -23,6 +23,7 @@
 #include "KoShapeGroupCommand.h"
 #include "KoShapeLoadingContext.h"
 #include "KoShapeRegistry.h"
+#include "FlakeDebug.h"
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
 #include <KoStore.h>

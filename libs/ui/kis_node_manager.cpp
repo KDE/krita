@@ -20,6 +20,7 @@
 
 #include <QDesktopServices>
 #include <QMessageBox>
+#include <QSignalMapper>
 
 #include <kactioncollection.h>
 

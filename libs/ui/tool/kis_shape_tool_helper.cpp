@@ -20,7 +20,7 @@
 
 #include <KoPathShape.h>
 #include <KoShapeRegistry.h>
-
+#include <KoShapeFactoryBase.h>
 
 KoShape* KisShapeToolHelper::createRectangleShape(const QRectF& rect)
 {

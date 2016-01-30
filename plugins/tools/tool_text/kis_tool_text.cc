@@ -30,6 +30,7 @@
 #include <KoToolManager.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
+#include <KoShapeFactoryBase.h>
 
 #include "kis_canvas2.h"
 

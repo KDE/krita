@@ -18,17 +18,20 @@
  */
 
 #include "SvgLoadingContext.h"
-#include "SvgGraphicContext.h"
-#include "SvgUtil.h"
-#include "SvgCssHelper.h"
-#include "SvgStyleParser.h"
+
+#include <QStack>
+#include <QFileInfo>
+#include <QDir>
 
 #include <KoDocumentResourceManager.h>
 
 #include <FlakeDebug.h>
 
-#include <QStack>
-#include <QFileInfo>
+#include "SvgGraphicContext.h"
+#include "SvgUtil.h"
+#include "SvgCssHelper.h"
+#include "SvgStyleParser.h"
+
 
 class Q_DECL_HIDDEN SvgLoadingContext::Private
 {

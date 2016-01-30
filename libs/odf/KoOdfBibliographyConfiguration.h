@@ -23,7 +23,7 @@
 #include <QMetaType>
 #include <QObject>
 
-#include "KoXmlReader.h"
+#include "KoXmlReaderForward.h"
 #include "kritaodf_export.h"
 
 class KoXmlWriter;

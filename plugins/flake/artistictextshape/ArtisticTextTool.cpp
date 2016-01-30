@@ -43,6 +43,7 @@
 #include <KoShapeContainer.h>
 #include <KoInteractionStrategy.h>
 #include <KoIcon.h>
+#include <KoViewConverter.h>
 #include "kis_action_registry.h"
 
 #include <klocalizedstring.h>

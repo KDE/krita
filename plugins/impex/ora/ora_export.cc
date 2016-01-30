@@ -23,6 +23,7 @@
 
 #include <kpluginfactory.h>
 #include <QUrl>
+#include <QApplication>
 
 #include <KisFilterChain.h>
 #include <KisImportExportManager.h>

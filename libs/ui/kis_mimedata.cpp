@@ -47,6 +47,7 @@
 #include <QDomElement>
 #include <QTemporaryFile>
 #include <QDesktopWidget>
+#include <QDir>
 
 KisMimeData::KisMimeData(QList<KisNodeSP> nodes, bool forceCopy)
     : QMimeData()

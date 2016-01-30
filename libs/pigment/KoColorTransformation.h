@@ -21,11 +21,11 @@
 #define _KO_COLOR_TRANSFORMATION_H_
 
 #include <QHash>
-#include <QString>
-#include <QVariant>
-#include <QtGlobal>
 
 #include "kritapigment_export.h"
+
+class QVariant;
+class QString;
 
 
 /**

@@ -21,10 +21,11 @@
 #define LabU16ColorSpace_H_
 
 #include "LcmsColorSpace.h"
-#include "KoColorSpaceTraits.h"
 #include "KoColorModelStandardIds.h"
 
 #define TYPE_LABA_16 (COLORSPACE_SH(PT_Lab) | CHANNELS_SH(3) | BYTES_SH(2) | EXTRA_SH(1))
+
+struct KoLabF32Traits;
 
 class LabU16ColorSpace : public LcmsColorSpace<KoLabU16Traits>
 {

@@ -20,7 +20,6 @@
 #ifndef SVGCSSHELPER_H
 #define SVGCSSHELPER_H
 
-#include <QMap>
 #include <QStringList>
 
 class KoXmlElement;

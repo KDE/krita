@@ -21,7 +21,7 @@
 #define KIS_STRATEGY_COLORSPACE_CMYK_U16_H_
 
 #include <LcmsColorSpace.h>
-#include <KoColorSpaceTraits.h>
+#include <KoCmykColorSpaceTraits.h>
 
 #include "KoColorModelStandardIds.h"
 

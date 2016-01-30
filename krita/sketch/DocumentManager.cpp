@@ -30,6 +30,7 @@
 #include <kis_image.h>
 #include <QMimeDatabase>
 #include <QMimeType>
+#include <QCoreApplication>
 
 class DocumentManager::Private
 {

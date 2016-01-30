@@ -29,6 +29,8 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 
+#include <QUrl>
+
 
 #include "Styles_p.h"
 

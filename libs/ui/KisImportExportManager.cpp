@@ -33,6 +33,8 @@ Boston, MA 02110-1301, USA.
 #include <QList>
 #include <QApplication>
 #include <QByteArray>
+#include <QPluginLoader>
+#include <QFileInfo>
 
 #include <klocalizedstring.h>
 #include <QMessageBox>

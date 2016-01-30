@@ -20,14 +20,12 @@
 #define KOLABCOLORSPACE_H
 
 #include <QColor>
-#include <QBitArray>
-
-#include "DebugPigment.h"
 
 #include "KoSimpleColorSpace.h"
-#include "KoColorSpaceTraits.h"
 #include "KoSimpleColorSpaceFactory.h"
 #include "KoColorModelStandardIds.h"
+
+struct KoLabU16Traits;
 
 /**
  * Basic and simple implementation of the LAB colorspace

@@ -27,6 +27,7 @@
 
 #include <KoShapeContainer.h>
 #include <KoShapeRegistry.h>
+#include <KoShapeFactoryBase.h>
 #include "KisDocument.h"
 #include "kis_shape_layer.h"
 

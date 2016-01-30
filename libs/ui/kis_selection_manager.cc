@@ -25,6 +25,7 @@
 #include <QClipboard>
 #include <QColor>
 #include <QTimer>
+#include <QMimeData>
 
 #include <QAction>
 #include <ktoggleaction.h>

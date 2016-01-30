@@ -21,7 +21,8 @@
 #include <QTimer>
 #include <QFileSystemWatcher>
 #include <QApplication>
-
+#include <QFileInfo>
+#include <QDir>
 #include <QUrl>
 
 #include "KisDocument.h"

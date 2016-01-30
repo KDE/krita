@@ -52,6 +52,8 @@
 #include <QStatusBar>
 #include <QMenu>
 #include <QMenuBar>
+#include <QMimeDatabase>
+#include <QMimeData>
 
 #include <kactioncollection.h>
 #include <QAction>

@@ -31,9 +31,6 @@
 #include <QMetaType>
 
 #include <KoXmlReaderForward.h>
-#include <KoShapeBackground.h>
-
-//#include <KoSnapData.h>
 
 #include "kritaflake_export.h"
 
@@ -59,6 +56,7 @@ class KoShapePaintingContext;
 class KoShapeAnchor;
 class KoBorder;
 struct KoInsets;
+class KoShapeBackground;
 
 
 /**

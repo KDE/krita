@@ -20,6 +20,8 @@
 
 #include <QProgressDialog>
 #include <QDesktopServices>
+#include <QWaitCondition>
+#include <QMimeDatabase>
 
 #include "KoFileDialog.h"
 #include "KisDocument.h"

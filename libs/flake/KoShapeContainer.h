@@ -21,7 +21,6 @@
 #define KOSHAPECONTAINER_H
 
 #include "KoShape.h"
-#include "KoViewConverter.h"
 
 #include <QList>
 
@@ -30,6 +29,7 @@
 class QPainter;
 class KoShapeContainerModel;
 class KoShapeContainerPrivate;
+class KoViewConverter;
 
 /**
  * This is the base class that all Flake group-shapes are based on.

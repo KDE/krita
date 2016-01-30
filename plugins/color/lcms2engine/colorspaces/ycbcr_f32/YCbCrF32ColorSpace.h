@@ -21,11 +21,12 @@
 #define KIS_YCBCR_F32_COLORSPACE_H_
 
 #include <LcmsColorSpace.h>
-#include <KoColorSpaceTraits.h>
 
 #include <KoColorModelStandardIds.h>
 
 #define TYPE_YCbCrA_FLT (FLOAT_SH(1)|COLORSPACE_SH(PT_YCbCr)|CHANNELS_SH(3)|EXTRA_SH(1)|BYTES_SH(4))
+
+struct KoYCbCrF32Traits;
 
 class YCbCrF32ColorSpace : public LcmsColorSpace<KoYCbCrF32Traits>
 {

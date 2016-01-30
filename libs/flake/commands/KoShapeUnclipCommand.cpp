@@ -30,6 +30,7 @@
 #include <KoOdfPaste.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
+#include <KoXmlReader.h>
 
 #include <klocalizedstring.h>
 

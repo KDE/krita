@@ -20,12 +20,10 @@
 #define KOSIMPLECOLORSPACE_H
 
 #include <QColor>
-#include <QBitArray>
 
 #include "DebugPigment.h"
 
 #include "KoColorSpaceAbstract.h"
-#include "KoColorSpaceTraits.h"
 #include "KoSimpleColorSpaceFactory.h"
 #include "KoColorModelStandardIds.h"
 #include "colorprofiles/KoDummyColorProfile.h"

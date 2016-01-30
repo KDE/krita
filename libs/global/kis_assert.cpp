@@ -20,6 +20,9 @@
 
 #include <QString>
 #include <QMessageBox>
+#include <QThread>
+#include <QProcessEnvironment>
+#include <QCoreApplication>
 #include <klocalizedstring.h>
 #include <kis_assert_exception.h>
 #include <string>

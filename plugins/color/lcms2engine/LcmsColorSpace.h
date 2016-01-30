@@ -24,7 +24,8 @@
 
 #include <colorprofiles/LcmsColorProfileContainer.h>
 #include <KoColorSpaceAbstract.h>
-#include <KoColorSpaceRegistry.h>
+
+class LcmsColorProfileContainer;
 
 class KoLcmsInfo
 {

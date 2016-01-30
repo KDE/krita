@@ -19,7 +19,6 @@
 #ifndef RGBCOMPOSITEOPOUT_H
 #define RGBCOMPOSITEOPOUT_H
 
-#include "KoColorSpaceMaths.h"
 #include <KoCompositeOp.h>
 
 #define SCALE_TO_FLOAT( v ) KoColorSpaceMaths< channels_type, float>::scaleToA( v )

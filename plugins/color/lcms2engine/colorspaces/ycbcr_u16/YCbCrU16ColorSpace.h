@@ -21,11 +21,12 @@
 #define KIS_YCBCR_U16_COLORSPACE_H_
 
 #include <LcmsColorSpace.h>
-#include <KoColorSpaceTraits.h>
 
 #include <KoColorModelStandardIds.h>
 
 #define TYPE_YCbCrA_16 (COLORSPACE_SH(PT_YCbCr)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1))
+
+class KoYCbCrU16Traits;
 
 class YCbCrU16ColorSpace : public LcmsColorSpace<KoYCbCrU16Traits>
 {

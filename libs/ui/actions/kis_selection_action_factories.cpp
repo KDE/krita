@@ -18,6 +18,8 @@
 
 #include "kis_selection_action_factories.h"
 
+#include <QMimeData>
+
 #include <klocalizedstring.h>
 #include <kundo2command.h>
 

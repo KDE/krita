@@ -20,6 +20,7 @@
 #include <QApplication>
 
 #include <QUrl>
+#include <QStack>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>

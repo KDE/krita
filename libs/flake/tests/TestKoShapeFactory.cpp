@@ -17,7 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "TestKoShapeFactory.h"
+
 #include <QTest>
+#include <QBuffer>
 
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>

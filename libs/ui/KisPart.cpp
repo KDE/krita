@@ -59,6 +59,7 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QGlobalStatic>
+#include <QMimeDatabase>
 
 #include "KisView.h"
 #include "KisDocument.h"

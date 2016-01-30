@@ -22,6 +22,7 @@
 #include <QGlobalStatic>
 
 #include <KoPluginLoader.h>
+#include "KoInputDeviceHandler.h"
 
 Q_GLOBAL_STATIC(KoInputDeviceHandlerRegistry, s_instance)
 

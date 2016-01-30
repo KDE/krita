@@ -22,30 +22,18 @@
 #ifndef KoShapeManager_p_h
 #define KoShapeManager_p_h
 
-#include "KoShapeManager.h"
 #include "KoSelection.h"
-#include "KoPointerEvent.h"
 #include "KoShape.h"
 #include "KoShape_p.h"
-#include "KoCanvasBase.h"
 #include "KoShapeContainer.h"
-#include "KoShapeStrokeModel.h"
-#include "KoShapeGroup.h"
-#include "KoToolProxy.h"
 #include "KoShapeManagerPaintingStrategy.h"
-#include "KoShapeShadow.h"
-#include "KoShapeLayer.h"
-#include "KoFilterEffect.h"
-#include "KoFilterEffectStack.h"
-#include "KoFilterEffectRenderContext.h"
-#include "KoShapeBackground.h"
 #include <KoRTree.h>
-#include "KoClipPath.h"
-#include "KoShapePaintingContext.h"
 
-#include <QPainter>
-#include <QTimer>
-#include <FlakeDebug.h>
+class KoShapeManager;
+class KoCanvasBase;
+class KoShapeGroup;
+class KoShapePaintingContext;
+class QPainter;
 
 class Q_DECL_HIDDEN KoShapeManager::Private
 {

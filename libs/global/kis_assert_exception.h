@@ -19,8 +19,6 @@
 #ifndef __KIS_ASSERT_EXCEPTION_H
 #define __KIS_ASSERT_EXCEPTION_H
 
-#include <QtCore>
-#include <QtConcurrent>
 #include <stdexcept>
 #include <QException>
 

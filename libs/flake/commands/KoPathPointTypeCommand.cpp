@@ -20,9 +20,10 @@
 
 #include "KoPathPointTypeCommand.h"
 
-#include <KoPathSegment.h>
 #include <klocalizedstring.h>
 #include <math.h>
+
+#include "KoPathSegment.h"
 
 KoPathPointTypeCommand::KoPathPointTypeCommand(
     const QList<KoPathPointData> & pointDataList,

@@ -35,6 +35,8 @@ class QRectF;
 class KoStore;
 class KisCoordinatesConverter;
 class KisCanvas2;
+class QDomDocument;
+class QDomElement;
 
 #include <kis_shared_ptr.h>
 #include <KoGenericRegistry.h>

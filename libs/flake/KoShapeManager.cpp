@@ -42,6 +42,7 @@
 #include <KoRTree.h>
 #include "KoClipPath.h"
 #include "KoShapePaintingContext.h"
+#include "KoViewConverter.h"
 
 #include <QPainter>
 #include <QTimer>

@@ -40,6 +40,7 @@
 #include <KoStyleStack.h>
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
+#include <KoXmlReader.h>
 
 #include "TextDebug.h"
 

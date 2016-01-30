@@ -26,6 +26,8 @@
 #pragma GCC diagnostic ignored "-Wcast-align"
 #endif
 
+#include "KoColorTransformation.h"
+
 template<typename _lab_channels_type_>
 struct KoLabDarkenColorTransformation : public KoColorTransformation {
     KoLabDarkenColorTransformation(qint32 shade, bool compensate, qreal compensation, const KoColorSpace *colorspace) : m_colorSpace(colorspace), m_shade(shade), m_compensate(compensate), m_compensation(compensation) {

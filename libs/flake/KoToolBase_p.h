@@ -25,18 +25,14 @@
 #include "KoCanvasResourceManager.h"
 #include "KoCanvasBase.h"
 #include "KoShapeController.h"
-#include <QMap>
 #include <QHash>
 #include <QWidget>
 #include <QString>
-#include <QSet>
 #include <QPointer>
 #include <string.h> // for the qt version check
 
-class QWidget;
 class QAction;
 class KoToolBase;
-class KoCanvasBase;
 
 class KoToolBasePrivate
 {

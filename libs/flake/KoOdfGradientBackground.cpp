@@ -29,6 +29,7 @@
 #include <KoGenStyles.h>
 #include <KoOdfLoadingContext.h>
 #include <KoStyleStack.h>
+#include <KoOdfStylesReader.h>
 
 #include <QPainter>
 #include <QColor>

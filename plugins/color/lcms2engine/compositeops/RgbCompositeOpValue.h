@@ -19,7 +19,6 @@
 #ifndef RGBCOMPOSITEOPVALUE_H
 #define RGBCOMPOSITEOPVALUE_H
 
-#include "KoColorSpaceMaths.h"
 #include "KoColorConversions.h"
 #include <KoCompositeOp.h>
 

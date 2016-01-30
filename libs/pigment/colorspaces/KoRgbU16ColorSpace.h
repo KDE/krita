@@ -20,14 +20,12 @@
 #define KORGBU16COLORSPACE_H
 
 #include <QColor>
-#include <QBitArray>
-
-#include "DebugPigment.h"
 
 #include "KoSimpleColorSpace.h"
-#include "KoColorSpaceTraits.h"
 #include "KoSimpleColorSpaceFactory.h"
 #include "KoColorModelStandardIds.h"
+
+struct KoBgrU16Traits;
 
 /**
  * The alpha mask is a special color strategy that treats all pixels as

@@ -19,7 +19,6 @@
 #ifndef RGBCOMPOSITEOPSATURATION_H
 #define RGBCOMPOSITEOPSATURATION_H
 
-#include "KoColorSpaceMaths.h"
 #include "KoColorConversions.h"
 #include <KoCompositeOp.h>
 

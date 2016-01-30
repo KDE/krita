@@ -19,7 +19,6 @@
 #ifndef RGBCOMPOSITEOPCLEAR_H
 #define RGBCOMPOSITEOPCLEAR_H
 
-#include "KoColorSpaceMaths.h"
 #include <KoCompositeOp.h>
 
 template<class _CSTraits>

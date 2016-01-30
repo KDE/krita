@@ -19,7 +19,6 @@
 #ifndef RGBCOMPOSITEOPDIFF_H
 #define RGBCOMPOSITEOPDIFF_H
 
-#include "KoColorSpaceMaths.h"
 #include <KoCompositeOpAlphaBase.h>
 
 #define AbsoluteValue(x)  ((x) < 0 ? -(x) : (x))

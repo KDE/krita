@@ -19,11 +19,14 @@
 
 #include "KoMarkerCollection.h"
 
+#include <QFile>
+
 #include "KoMarker.h"
 #include "KoMarkerSharedLoadingData.h"
 #include <KoXmlReader.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
+#include <KoOdfStylesReader.h>
 #include <KoOdfReadStore.h>
 #include <QStandardPaths>
 #include <FlakeDebug.h>

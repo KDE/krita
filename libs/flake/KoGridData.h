@@ -23,14 +23,16 @@
 
 #include "kritaflake_export.h"
 #include <KoXmlReaderForward.h>
-#include <QColor>
-#include <QWidget>
+
+#include <QtGlobal>
 
 class QPainter;
 class QRectF;
 class KoViewConverter;
 class KoXmlWriter;
 class KToggleAction;
+class QColor;
+class QWidget;
 
 /**
  * This class stores application-data for display-grids.

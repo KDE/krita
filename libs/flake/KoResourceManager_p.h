@@ -21,8 +21,6 @@
 #ifndef KO_RESOURCEMANAGER_P_H
 #define KO_RESOURCEMANAGER_P_H
 
-#include <QList>
-#include <QVariant>
 #include <QSizeF>
 #include <QHash>
 
@@ -30,6 +28,7 @@
 #include <KoUnit.h>
 
 class KoShape;
+class QVariant;
 
 class KoResourceManager
 {

@@ -25,6 +25,7 @@
 #include <QMessageBox>
 
 #include <QUrl>
+#include <QBuffer>
 
 #include <KoStore.h>
 #include <KoColorSpaceRegistry.h>

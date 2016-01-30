@@ -20,8 +20,9 @@
 
 #include <klocalizedstring.h>
 #include <LcmsColorSpace.h>
-#include <KoColorSpaceTraits.h>
 #include "KoColorModelStandardIds.h"
+
+struct KoBgrU8Traits;
 
 class RgbU8ColorSpace : public LcmsColorSpace<KoBgrU8Traits>
 {

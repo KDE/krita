@@ -21,8 +21,9 @@
 #define KORGBF16COLORSPACE_H_
 
 #include "LcmsColorSpace.h"
-#include "KoColorSpaceTraits.h"
 #include "KoColorModelStandardIds.h"
+
+class KoRgbF16Traits;
 
 class RgbF16ColorSpace : public LcmsColorSpace<KoRgbF16Traits>
 {

@@ -29,6 +29,7 @@
 #include <QFile>
 #include <QBuffer>
 #include <QCryptographicHash>
+#include <QDomDocument>
 
 double fromPercentage(QString s)
 {

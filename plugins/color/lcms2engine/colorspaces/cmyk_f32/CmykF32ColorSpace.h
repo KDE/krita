@@ -21,9 +21,10 @@
 #define KIS_COLORSPACE_CMYK_F32_H_
 
 #include <LcmsColorSpace.h>
-#include <KoColorSpaceTraits.h>
 
 #include "KoColorModelStandardIds.h"
+
+struct KoCmykF32Traits;
 
 #define TYPE_CMYKA_FLT        (FLOAT_SH(1)|COLORSPACE_SH(PT_CMYK)|EXTRA_SH(1)|CHANNELS_SH(4)|BYTES_SH(4))
 

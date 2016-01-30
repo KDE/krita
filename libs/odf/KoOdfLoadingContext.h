@@ -22,12 +22,15 @@
 #define KOODFLOADINGCONTEXT_H
 
 #include "kritaodf_export.h"
-#include "KoOdfStylesReader.h"
+
+#include <QString>
+#include "KoXmlReaderForward.h"
 
 
 class KoStore;
 class KoOdfManifestEntry;
 class KoStyleStack;
+class KoOdfStylesReader;
 
 
 /**

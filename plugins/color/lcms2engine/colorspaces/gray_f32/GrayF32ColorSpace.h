@@ -19,11 +19,12 @@
 #define COLORSPACE_GRAYSCALE_F32_H_
 
 #include <klocalizedstring.h>
-#include <KoColorSpaceTraits.h>
 #include <KoColorModelStandardIds.h>
 #include "LcmsColorSpace.h"
 
 #define TYPE_GRAYA_FLT         (FLOAT_SH(1)|COLORSPACE_SH(PT_GRAY)|EXTRA_SH(1)|CHANNELS_SH(1)|BYTES_SH(4))
+
+struct KoGrayF32Traits;
 
 class GrayF32ColorSpace : public LcmsColorSpace<KoGrayF32Traits>
 {

@@ -21,11 +21,12 @@
 #define KIS_XYZ_F16_COLORSPACE_H_
 
 #include <LcmsColorSpace.h>
-#include <KoColorSpaceTraits.h>
 
 #define TYPE_XYZA_HALF_FLT (FLOAT_SH(1)|COLORSPACE_SH(PT_XYZ)|EXTRA_SH(1)|CHANNELS_SH(3)|BYTES_SH(2))
 
 #include <KoColorModelStandardIds.h>
+
+class KoXyzF16Traits;
 
 class XyzF16ColorSpace : public LcmsColorSpace<KoXyzF16Traits>
 {

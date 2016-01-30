@@ -41,6 +41,7 @@
 #include "tools/KoZoomTool.h"
 #include "tools/KoPanTool.h"
 #include "kis_action_registry.h"
+#include "KoToolFactoryBase.h"
 
 // Qt + kde
 #include <QWidget>

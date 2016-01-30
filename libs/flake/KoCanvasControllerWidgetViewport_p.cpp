@@ -21,6 +21,18 @@
  */
 
 #include "KoCanvasControllerWidgetViewport_p.h"
+
+#include <limits.h>
+#include <stdlib.h>
+
+#include <QPainter>
+#include <QDragEnterEvent>
+#include <QMimeData>
+
+#include <KoProperties.h>
+
+#include <FlakeDebug.h>
+
 #include "KoShape.h"
 #include "KoShape_p.h"
 #include "KoShapeFactoryBase.h" // for the SHAPE mimetypes
@@ -33,16 +45,9 @@
 #include "KoShapePaste.h"
 #include "KoShapePaintingContext.h"
 #include "KoToolProxy.h"
+#include "KoCanvasControllerWidget.h"
+#include "KoViewConverter.h"
 
-#include <KoProperties.h>
-
-#include <FlakeDebug.h>
-
-#include <QPainter>
-#include <QDragEnterEvent>
-
-#include <limits.h>
-#include <stdlib.h>
 
 // ********** Viewport **********
 Viewport::Viewport(KoCanvasControllerWidget *parent)

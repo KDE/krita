@@ -23,6 +23,7 @@
 
 #include <KoGenericRegistry.h>
 #include <KoShapeFactoryBase.h>
+#include <KoXmlReaderForward.h>
 
 #include "kritaflake_export.h"
 

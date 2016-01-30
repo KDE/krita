@@ -27,6 +27,8 @@
 #include <QDateTime>
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
+#include <QDomDocument>
+#include <KoXmlReader.h>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>

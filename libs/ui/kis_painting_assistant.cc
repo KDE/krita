@@ -31,6 +31,8 @@
 #include <QPen>
 #include <QPainter>
 #include <QPixmapCache>
+#include <QDomElement>
+#include <QDomDocument>
 
 Q_GLOBAL_STATIC(KisPaintingAssistantFactoryRegistry, s_instance)
 

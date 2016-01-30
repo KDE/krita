@@ -36,6 +36,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoXmlNS.h>
 #include <KoShapeRegistry.h>
+#include <KoOdfStylesReader.h>
 
 
 #include <KoShapeBasedDocumentBase.h>

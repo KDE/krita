@@ -20,6 +20,7 @@
 
 #include <QApplication>
 #include <QScrollBar>
+#include <QFileInfo>
 
 #include <kactioncollection.h>
 

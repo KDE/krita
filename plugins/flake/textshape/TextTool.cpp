@@ -75,6 +75,8 @@
 #include <KoTextLayoutRootArea.h>
 //#include <ResizeTableCommand.h>
 #include <KoIcon.h>
+#include <KoViewConverter.h>
+#include <KoShapeFactoryBase.h>
 #include "kis_action_registry.h"
 
 #include <QDebug>
@@ -100,6 +102,7 @@
 #include <QDragLeaveEvent>
 #include <QDragMoveEvent>
 #include <QDropEvent>
+#include <QMimeData>
 
 #include "AnnotationTextShape.h"
 #define AnnotationShape_SHAPEID "AnnotationTextShapeID"

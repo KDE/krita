@@ -21,8 +21,9 @@
 #define KORGBU16COLORSPACE_H_
 
 #include "LcmsColorSpace.h"
-#include "KoColorSpaceTraits.h"
 #include "KoColorModelStandardIds.h"
+
+struct KoBgrU16Traits;
 
 class RgbU16ColorSpace : public LcmsColorSpace<KoBgrU16Traits>
 {

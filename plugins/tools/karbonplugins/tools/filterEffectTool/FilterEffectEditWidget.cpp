@@ -29,6 +29,7 @@
 #include "KoFilterEffect.h"
 #include "KoFilterEffectStack.h"
 #include "KoFilterEffectConfigWidgetBase.h"
+#include "KoFilterEffectFactoryBase.h"
 #include "KoShape.h"
 #include "KoCanvasBase.h"
 #include "KoResourceModel.h"

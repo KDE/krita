@@ -18,6 +18,9 @@
 */
 
 #include "KoShapeLayer.h"
+
+#include <QRectF>
+
 #include "SimpleShapeContainerModel.h"
 #include "KoShapeSavingContext.h"
 #include "KoShapeLoadingContext.h"

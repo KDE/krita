@@ -1,6 +1,6 @@
 add_subdirectory(tests)
 include_directories( ${OCIO_INCLUDE_DIR}
-    ${Boost_INCLUDE_DIR}
+    ${Boost_INCLUDE_DIRS}
 )
 
 set(KRITA_LUTDOCKER_SOURCES

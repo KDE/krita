@@ -17,6 +17,7 @@ include_directories(${CMAKE_SOURCE_DIR}/libs/image/metadata
                     ${CMAKE_SOURCE_DIR}/libs/image/tiles3/swap
                     ${CMAKE_SOURCE_DIR}/sdk/tests 
                     ${EIGEN3_INCLUDE_DIR}
+                    ${Boost_INCLUDE_DIRS}
 )
 
 if(HAVE_VC)

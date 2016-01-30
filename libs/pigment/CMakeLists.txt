@@ -8,7 +8,7 @@ if (WIN32)
     set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
 endif ()
 
-include_directories( ${Boost_INCLUDE_DIR} 
+include_directories( ${Boost_INCLUDE_DIRS} 
                      ${CMAKE_CURRENT_SOURCE_DIR}/resources
                      ${CMAKE_CURRENT_SOURCE_DIR}/compositeops
 )

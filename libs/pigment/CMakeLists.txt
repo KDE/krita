@@ -8,7 +8,10 @@ if (WIN32)
     set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
 endif ()
 
-include_directories( ${PIGMENT_INCLUDES}  ${Boost_INCLUDE_DIR})
+include_directories( ${Boost_INCLUDE_DIR} 
+                     ${CMAKE_CURRENT_SOURCE_DIR}/resources
+                     ${CMAKE_CURRENT_SOURCE_DIR}/compositeops
+)
 
 set(FILE_OPENEXR_SOURCES)
 set(LINK_OPENEXR_LIB)
@@ -91,22 +94,23 @@ add_library(kritapigment SHARED ${kritapigment_SRCS})
 generate_export_header(kritapigment)
 
 if (HAVE_VC)
-    target_link_libraries(kritapigment KF5::I18n KF5::ConfigCore)
-    target_link_libraries(kritapigment LINK_INTERFACE_LIBRARIES KF5::I18n )
+    target_link_libraries(kritapigment PUBLIC KF5::I18n KF5::ConfigCore)
 endif()
 
-target_link_libraries(
-    kritapigment
-    kritaplugin
-    ${EXTRA_LIBRARIES}
-    KF5::I18n 
-    Qt5::Gui
-    Qt5::Xml
-    ${WIN32_PLATFORM_NET_LIBS}
-    )
+target_include_directories( kritapigment
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/resources>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/compositeops>
+)
 
-target_link_libraries(
-    kritapigment LINK_INTERFACE_LIBRARIES kritaplugin Qt5::Xml Qt5::Gui ${EXTRA_LIBRARIES}
+target_link_libraries( kritapigment
+    PUBLIC
+        kritaplugin
+        ${EXTRA_LIBRARIES}
+        KF5::I18n 
+        Qt5::Gui
+        Qt5::Xml
+        ${WIN32_PLATFORM_NET_LIBS}
 )
 
 set_target_properties(kritapigment PROPERTIES

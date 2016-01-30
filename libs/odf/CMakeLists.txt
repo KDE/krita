@@ -1,9 +1,5 @@
 add_subdirectory( tests )
 
-include_directories( ${KOODF_INCLUDES} )
-
-########### libkritaodf ###############
-
 set(kritaodf_LIB_SRCS
     KoOdf.cpp
     KoOdfManifestEntry.cpp

@@ -17,7 +17,7 @@ include_directories( ../colorspaces/cmyk_u16
 if(OPENEXR_FOUND)
     include_directories(${OPENEXR_INCLUDE_DIR})
 endif()
-include_directories( ${PIGMENT_INCLUDES} ${LCMS2_INCLUDE_DIR} )
+include_directories( ${LCMS2_INCLUDE_DIR} )
 
 
 if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))

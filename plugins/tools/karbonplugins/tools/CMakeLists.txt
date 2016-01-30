@@ -1,5 +1,4 @@
 include_directories(
-    ${FLAKE_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/filterEffectTool
 )
 

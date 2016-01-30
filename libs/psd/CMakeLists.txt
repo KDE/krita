@@ -1,4 +1,3 @@
-include_directories(${FLAKE_INCLUDES})
 include_directories(${CMAKE_BINARY_DIR}/libs/psd)  #For kispsd_include.h
 include_directories(${Boost_INCLUDES})
 

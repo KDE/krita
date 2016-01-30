@@ -1,8 +1,6 @@
-include_directories(${KOTEXT_INCLUDES}
-                    ${FONTCONFIG_INCLUDE_DIR}/fontconfig
+include_directories(${FONTCONFIG_INCLUDE_DIR}/fontconfig
                     ${FREETYPE_INCLUDE_DIRS})
 
-########### next target ###############
 set(kritatext_LIB_SRCS
     KoDocumentRdfBase.cpp
     KoText.cpp
@@ -126,6 +124,12 @@ generate_export_header(kritatext BASE_NAME kritatext)
 target_link_libraries(kritatext kritaflake Qt5::Gui kritawidgetutils )
 target_link_libraries(kritatext LINK_INTERFACE_LIBRARIES kritaflake Qt5::Gui )
 
+target_include_directories(kritatext
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/opendocument>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/changetracker>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/styles>
+)
 set_target_properties(kritatext PROPERTIES
    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )

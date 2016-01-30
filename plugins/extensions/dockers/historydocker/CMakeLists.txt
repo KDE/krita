@@ -1,5 +1,3 @@
-include_directories( ${KRITA_INCLUDES} ${FLAKE_INCLUDES} )
-
 set(kritahistorydocker_SOURCES
     History.h
     History.cpp

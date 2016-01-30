@@ -7,10 +7,6 @@ if (CMAKE_COMPILER_IS_GNUCXX)
 endif ()
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/libs/pigment/colorprofiles
-    ${CMAKE_SOURCE_DIR}/libs/widgetutils/xmlgui
-    ${CMAKE_SOURCE_DIR}/libs/widgetutils/config
-    ${CMAKE_SOURCE_DIR}/libs/flake/commands
     ${CMAKE_CURRENT_SOURCE_DIR}/flake
     ${CMAKE_CURRENT_SOURCE_DIR}/ora
     ${CMAKE_CURRENT_SOURCE_DIR}/qtsingleapplication
@@ -523,6 +519,16 @@ if(X11_FOUND)
 endif()
 
 target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush kritapigment KF5::Completion KF5::I18n ${GL_INTERFACE_LIBRARIES})
+
+target_include_directories(kritaui
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/canvas>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/flake>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/ora>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tool>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/widgets>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/input/wintab>
+)
 
 set_target_properties(kritaui
     PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

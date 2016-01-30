@@ -7,20 +7,6 @@ endif()
 # add all the include paths to kritaui that we use, for now.
 
 include_directories(
-    ${PIGMENT_INCLUDES}
-    ${BASICFLAKES_INCLUDES}
-    ${TEXTLAYOUT_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/libs/ui
-    ${CMAKE_SOURCE_DIR}/libs/ui/canvas
-    ${CMAKE_SOURCE_DIR}/libs/ui/widgets
-    ${CMAKE_SOURCE_DIR}/libs/ui/tool
-    ${CMAKE_SOURCE_DIR}/libs/ui/flake
-    ${CMAKE_SOURCE_DIR}/libs/ui/ora
-    ${CMAKE_SOURCE_DIR}/libs/widgets
-    ${CMAKE_SOURCE_DIR}/libs/widgets/resources
-    ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets
-    ${CMAKE_SOURCE_DIR}/libs/widgetutils
-
     ${EIGEN3_INCLUDE_DIR}
     ${Vc_INCLUDE_DIR}
 )

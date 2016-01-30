@@ -1,29 +1,9 @@
 project(krita)
 
-set(KRITA_INCLUDES
-    ${PIGMENT_INCLUDES}
-    ${BASICFLAKES_INCLUDES}
-    ${TEXTLAYOUT_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/libs/ui
-    ${CMAKE_SOURCE_DIR}/libs/ui/canvas
-    ${CMAKE_SOURCE_DIR}/libs/ui/widgets
-    ${CMAKE_SOURCE_DIR}/libs/ui/tool
-    ${CMAKE_SOURCE_DIR}/libs/ui/flake
-    ${CMAKE_SOURCE_DIR}/libs/ui/ora
-    ${CMAKE_SOURCE_DIR}/libs/ui/input
-    ${CMAKE_SOURCE_DIR}/libs/widgets
-    ${CMAKE_SOURCE_DIR}/libs/widgets/resources
-    ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets
-    ${CMAKE_SOURCE_DIR}/libs/widgetutils
-
+include_directories(
     ${EIGEN3_INCLUDE_DIR}
     ${Vc_INCLUDE_DIR}
-
-    # 'Export' this for use by filters
-    CACHE INTERNAL ""
 )
-
-include_directories(${KRITA_INCLUDES})
 
 add_subdirectory( dtd )
 add_subdirectory( data )
@@ -62,6 +42,7 @@ qt5_add_resources(krita_SRCS ${krita_QRCS})
 
 add_executable(krita ${krita_SRCS})
 target_link_libraries(krita 
+    PRIVATE
                       kritaui 
                       Qt5::Core
                       Qt5::Gui
@@ -73,6 +54,7 @@ target_link_libraries(krita
                       Qt5::Concurrent)
 if(HAVE_KCRASH)
     target_link_libraries(krita
+        PRIVATE
                           KF5::Crash
     )
 endif()

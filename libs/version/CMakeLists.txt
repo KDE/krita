@@ -4,7 +4,6 @@ configure_file(calligraversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/calligraversi
 # generate calligragitversion.h
 configure_file(calligragitversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/calligragitversion.h)
 
-
 set(kritaversion_LIB_SRCS
     calligraversion.cpp
     CalligraVersionWrapper.cpp

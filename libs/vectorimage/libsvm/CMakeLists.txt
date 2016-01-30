@@ -1,5 +1,3 @@
-include_directories( ${KOWIDGETS_INCLUDES} )
-
 #add_subdirectory(demo)
 
 

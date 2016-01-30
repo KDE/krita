@@ -1,6 +1,39 @@
 add_subdirectory( tests )
 
-set(libkritatile_SRCS
+add_subdirectory( tiles3 )
+
+include_directories(
+    ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/metadata
+    ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty
+    ${CMAKE_CURRENT_SOURCE_DIR}/brushengine
+    ${CMAKE_CURRENT_SOURCE_DIR}/commands
+    ${CMAKE_CURRENT_SOURCE_DIR}/commands_new
+    ${CMAKE_CURRENT_SOURCE_DIR}/filter
+    ${CMAKE_CURRENT_SOURCE_DIR}/floodfill
+    ${CMAKE_CURRENT_SOURCE_DIR}/generator
+    ${CMAKE_CURRENT_SOURCE_DIR}/layerstyles
+    ${CMAKE_CURRENT_SOURCE_DIR}/processing
+    ${CMAKE_CURRENT_SOURCE_DIR}/recorder
+
+    ${CMAKE_SOURCE_DIR}/sdk/tests
+    
+    ${EIGEN3_INCLUDE_DIR}
+    ${Boost_INCLUDE_DIRS}
+)
+
+if(FFTW3_FOUND)
+  include_directories(${FFTW3_INCLUDE_DIR})
+endif()
+
+if(HAVE_VC)
+  include_directories(${Vc_INCLUDE_DIR} ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS})
+  ko_compile_for_all_implementations(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
+else()
+  set(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
+endif()
+
+set(kritaimage_LIB_SRCS
     tiles3/kis_tile.cc
     tiles3/kis_tile_data.cc
     tiles3/kis_tile_data_store.cc
@@ -19,41 +52,6 @@ set(libkritatile_SRCS
     tiles3/swap/kis_memory_window.cpp
     tiles3/swap/kis_swapped_data_store.cpp
     tiles3/swap/kis_tile_data_swapper.cpp
-)
-add_subdirectory( tiles3 )
-
-include_directories(
-    ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/metadata
-    ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty
-    ${CMAKE_CURRENT_SOURCE_DIR}/brushengine
-    ${CMAKE_CURRENT_SOURCE_DIR}/commands
-    ${CMAKE_CURRENT_SOURCE_DIR}/commands_new
-    ${CMAKE_CURRENT_SOURCE_DIR}/filter
-    ${CMAKE_CURRENT_SOURCE_DIR}/floodfill
-    ${CMAKE_CURRENT_SOURCE_DIR}/generator
-    ${CMAKE_CURRENT_SOURCE_DIR}/layerstyles
-    ${CMAKE_CURRENT_SOURCE_DIR}/processing
-    ${CMAKE_CURRENT_SOURCE_DIR}/recorder
-    ${CMAKE_CURRENT_SOURCE_DIR}/tiles3
-    ${CMAKE_SOURCE_DIR}/sdk/tests
-    ${EIGEN3_INCLUDE_DIR}
-    ${Boost_INCLUDE_DIRS}
-)
-
-if(FFTW3_FOUND)
-  include_directories(${FFTW3_INCLUDE_DIR})
-endif()
-
-if(HAVE_VC)
-  include_directories(${Vc_INCLUDE_DIR} ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS})
-  ko_compile_for_all_implementations(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
-else()
-  set(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
-endif()
-
-set(kritaimage_LIB_SRCS
-   ${libkritatile_SRCS}
    kis_distance_information.cpp
    kis_painter.cc
    kis_progress_updater.cpp
@@ -315,28 +313,48 @@ set(einspline_SRCS
 add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
 generate_export_header(kritaimage BASE_NAME kritaimage)
 
-target_link_libraries(kritaimage kritaversion kritawidgets kritaglobal kritapsd kritaodf kritapigment kritaundo2 kritawidgetutils Qt5::Concurrent)
-target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES kritaversion kritaglobal kritapsd kritaodf kritapigment kritaundo2 kritawidgetutils Qt5::Concurrent)
+target_link_libraries(kritaimage 
+    PUBLIC
+        kritaversion 
+        kritawidgets 
+        kritaglobal kritapsd 
+        kritaodf kritapigment 
+        kritaundo2 
+        kritawidgetutils 
+        Qt5::Concurrent
+)
 
-target_link_libraries(kritaimage ${Boost_SYSTEM_LIBRARY})
+target_link_libraries(kritaimage PUBLIC ${Boost_SYSTEM_LIBRARY})
 
 if(OPENEXR_FOUND)
-  target_link_libraries(kritaimage  ${OPENEXR_LIBRARIES})
+  target_link_libraries(kritaimage PUBLIC ${OPENEXR_LIBRARIES})
 endif()
 
 if(FFTW3_FOUND)
-  target_link_libraries(kritaimage  ${FFTW3_LIBRARIES})
+  target_link_libraries(kritaimage PRIVATE ${FFTW3_LIBRARIES})
 endif()
 
 if(HAVE_VC)
-  target_link_libraries(kritaimage  ${Vc_LIBRARIES})
+  target_link_libraries(kritaimage PUBLIC ${Vc_LIBRARIES})
 endif()
 
 if (NOT GSL_FOUND)
   message (WARNING "KRITA WARNING! No GNU Scientific Library was found! Krita's Shaped Gradients might be non-normalized! Please install GSL library.")
 else ()
-  target_link_libraries(kritaimage ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
+  target_link_libraries(kritaimage PRIVATE ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
 endif ()
+
+target_include_directories(kritaimage
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/brushengine>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filter>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/generator>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/layerstyles>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/metadata>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/metadata/schemes>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/processing>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/recorder>
+)
 
 set_target_properties(kritaimage PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

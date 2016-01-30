@@ -1,4 +1,8 @@
-include_directories( ${VECTORIMAGE_INCLUDES}  )
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/libemf
+    ${CMAKE_CURRENT_SOURCE_DIR}/libsvm
+    ${CMAKE_CURRENT_SOURCE_DIR}/libwmf
+)
 
 set(vectorimage_LIB_SRCS    
     libemf/EmfRecords.cpp
@@ -29,8 +33,15 @@ set(vectorimage_LIB_SRCS
 add_library(kritavectorimage SHARED ${vectorimage_LIB_SRCS})
 generate_export_header(kritavectorimage BASE_NAME kritavectorimage)
 
+target_include_directories(kritavectorimage
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/libemf>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/libwmf>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/libsvm>
+)
+
+
 target_link_libraries(kritavectorimage  KF5::I18n Qt5::Gui Qt5::PrintSupport)
-target_link_libraries(kritavectorimage LINK_INTERFACE_LIBRARIES )
 
 set_target_properties(kritavectorimage PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

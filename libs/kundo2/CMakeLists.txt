@@ -1,5 +1,3 @@
-include_directories(${KUNDO2_INCLUDES})
-
 set(kritaundo2_LIB_SRCS
 	kundo2stack.cpp
 	kundo2group.cpp

@@ -1,10 +1,5 @@
 project(calligradockers)
 
-include_directories(
-     ${FLAKE_INCLUDES}
-     ${KOWIDGETS_INCLUDES}     
-)
-
 set(calligradockers_SRCS
 
     snapguidedocker/SnapGuideDocker.cpp

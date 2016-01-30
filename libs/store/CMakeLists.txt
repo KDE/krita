@@ -1,7 +1,4 @@
-include_directories({KOVERSION_INCLUDES})
 add_subdirectory(tests)
-
-########### libkritastore ###############
 
 set(kritastore_LIB_SRCS
     KoDirectoryStore.cpp
@@ -17,7 +14,7 @@ set(kritastore_LIB_SRCS
 add_library(kritastore SHARED ${kritastore_LIB_SRCS})
 generate_export_header(kritastore BASE_NAME kritastore)
 
-target_link_libraries(kritastore Qt5::Xml Qt5::Gui KF5::Archive)
+target_link_libraries(kritastore kritaversion Qt5::Xml Qt5::Gui KF5::Archive)
 
 set_target_properties(kritastore PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

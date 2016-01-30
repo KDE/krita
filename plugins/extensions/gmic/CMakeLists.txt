@@ -4,7 +4,7 @@
 
 set(GMIC_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/gmic")
 
-include_directories(${KOWIDGETS_INCLUDES} ${GMIC_SOURCE_DIR})
+include_directories( ${GMIC_SOURCE_DIR})
 
 if(NOT MSVC)
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -fPIC")

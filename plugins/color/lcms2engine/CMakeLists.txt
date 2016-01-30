@@ -5,7 +5,7 @@ if(NOT WIN32)
     add_subdirectory(tests)
 endif()
 
-include_directories( ${PIGMENT_INCLUDES} ${LCMS2_INCLUDE_DIR} )
+include_directories( ${LCMS2_INCLUDE_DIR} )
 
 include_directories( 
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/cmyk_u8

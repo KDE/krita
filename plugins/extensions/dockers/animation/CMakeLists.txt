@@ -1,5 +1,7 @@
 add_subdirectory(tests)
 
+include_directories(${Boost_INCLUDE_DIRS})
+
 set(KRITA_ANIMATIONDOCKER_SOURCES
     animation_dockers.cpp
     animation_docker.cpp

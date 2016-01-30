@@ -3,6 +3,7 @@ add_subdirectory(tests)
 configure_file(config_psd.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_psd.h)
 
 include_directories(${ZLIB_INCLUDE_DIR})
+include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${CMAKE_BINARY_DIR}/libs/psd)  #For kispsd_include.h
 include_directories(${CMAKE_SOURCE_DIR}/libs/psd)  #For kispsd_include.h
 

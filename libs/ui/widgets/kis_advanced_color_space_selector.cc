@@ -77,6 +77,7 @@ KisAdvancedColorSpaceSelector::KisAdvancedColorSpaceSelector(QWidget* parent, co
     connect(this, SIGNAL(selectionChanged(bool)),
             this, SLOT(fillDescription()));
     connect(this, SIGNAL(selectionChanged(bool)), d->colorSpaceSelector->TongueWidget, SLOT(repaint()));
+    connect(this, SIGNAL(selectionChanged(bool)), d->colorSpaceSelector->TRCwidget, SLOT(repaint()));
 
     connect(d->colorSpaceSelector->bnInstallProfile, SIGNAL(clicked()), this, SLOT(installProfile()));
 
@@ -168,32 +169,20 @@ void KisAdvancedColorSpaceSelector::fillDescription()
             //QString text = currentColorSpace()->profile()->info() + " =" +
             d->colorSpaceSelector->lblXYZ_W->setText(nameWhitePoint(whitepoint));
             d->colorSpaceSelector->lblXYZ_W->setToolTip(QString::number(whitepoint[0], 'f', 4) + ", " + QString::number(whitepoint[1], 'f', 4) + ", " + QString::number(whitepoint[2], 'f', 4));
-            d->colorSpaceSelector->lblXYZ_R->setText(QString::number(colorants[0], 'f', 4) + ", " + QString::number(colorants[1], 'f', 4) + ", " + QString::number(colorants[2], 'f', 4));
-            d->colorSpaceSelector->lblXYZ_G->setText(QString::number(colorants[3], 'f', 4) + ", " + QString::number(colorants[4], 'f', 4) + ", " + QString::number(colorants[5], 'f', 4));
-            d->colorSpaceSelector->lblXYZ_B->setText(QString::number(colorants[6], 'f', 4) + ", " + QString::number(colorants[7], 'f', 4) + ", " + QString::number(colorants[8], 'f', 4));
-            d->colorSpaceSelector->lblXYZ_R->setToolTip(whatIsColorant);
-            d->colorSpaceSelector->lblXYZ_G->setToolTip(whatIsColorant);
-            d->colorSpaceSelector->lblXYZ_B->setToolTip(whatIsColorant);
+            d->colorSpaceSelector->TongueWidget->setToolTip("<html><head/><body><table><tr><th colspan='4'>"+i18nc("@info:tooltip","This profile has the following xyY colorants:")+"</th></tr><tr><td>"+
+               i18n("Red:")  +"</td><td>"+QString::number(colorants[0], 'f', 4) + "</td><td>" + QString::number(colorants[1], 'f', 4) + "</td><td>" + QString::number(colorants[2], 'f', 4)+"</td></tr><tr><td>"+
+               i18n("Green:")+"</td><td>"+QString::number(colorants[3], 'f', 4) + "</td><td>" + QString::number(colorants[4], 'f', 4) + "</td><td>" + QString::number(colorants[5], 'f', 4)+"</th></tr><tr><td>"+
+               i18n("Blue:") +"</td><td>"+QString::number(colorants[6], 'f', 4) + "</td><td>" + QString::number(colorants[7], 'f', 4) + "</td><td>" + QString::number(colorants[8], 'f', 4)+"</th></tr></table></body></html>");
         } else {
             QVector <double> whitepoint2 = currentColorSpace()->profile()->getWhitePointxyY();
             d->colorSpaceSelector->lblXYZ_W->setText(nameWhitePoint(whitepoint2));
             d->colorSpaceSelector->lblXYZ_W->setToolTip(QString::number(whitepoint2[0], 'f', 4) + ", " + QString::number(whitepoint2[1], 'f', 4) + ", " + QString::number(whitepoint2[2], 'f', 4));
-            d->colorSpaceSelector->lblXYZ_R->setText(notApplicable);
-            d->colorSpaceSelector->lblXYZ_R->setToolTip(notApplicableTooltip);
-            d->colorSpaceSelector->lblXYZ_G->setText(notApplicable);
-            d->colorSpaceSelector->lblXYZ_G->setToolTip(notApplicableTooltip);
-            d->colorSpaceSelector->lblXYZ_B->setText(notApplicable);
-            d->colorSpaceSelector->lblXYZ_B->setToolTip(notApplicableTooltip);
+            d->colorSpaceSelector->TongueWidget->setToolTip(notApplicableTooltip);
         }
     } else {
         d->colorSpaceSelector->lblXYZ_W->setText(notApplicable);
         d->colorSpaceSelector->lblXYZ_W->setToolTip(notApplicableTooltip);
-        d->colorSpaceSelector->lblXYZ_R->setText(notApplicable);
-        d->colorSpaceSelector->lblXYZ_R->setToolTip(notApplicableTooltip);
-        d->colorSpaceSelector->lblXYZ_G->setText(notApplicable);
-        d->colorSpaceSelector->lblXYZ_G->setToolTip(notApplicableTooltip);
-        d->colorSpaceSelector->lblXYZ_B->setText(notApplicable);
-        d->colorSpaceSelector->lblXYZ_B->setToolTip(notApplicableTooltip);
+        d->colorSpaceSelector->TongueWidget->setToolTip(notApplicableTooltip);
     }
 
     //set TRC
@@ -205,95 +194,213 @@ void KisAdvancedColorSpaceSelector::fillDescription()
 
     if (profileList.isEmpty()) {
         d->colorSpaceSelector->TongueWidget->setProfileDataAvailable(false);
+        d->colorSpaceSelector->TRCwidget->setProfileDataAvailable(false);
     }
     else if (currentModelStr == "RGBA") {
-        QVector <double> colorants = currentColorSpace()->profile()->getColorantsxyY();
-        QVector <double> whitepoint = currentColorSpace()->profile()->getWhitePointxyY();
-        d->colorSpaceSelector->TongueWidget->setRGBData(whitepoint, colorants);
-        estimatedTRC = currentColorSpace()->profile()->getEstimatedTRC();
-        if (estimatedTRC[0] == -1) {
-            d->colorSpaceSelector->lbltrc->setToolTip(whatissRGB);
-            d->colorSpaceSelector->lbltrc->setText(estimatedsRGB);
+        QVector <qreal> colorants = currentColorSpace()->profile()->getColorantsxyY();
+        QVector <qreal> whitepoint = currentColorSpace()->profile()->getWhitePointxyY();
+        if (currentColorSpace()->profile()->hasColorants()){
+            d->colorSpaceSelector->TongueWidget->setRGBData(whitepoint, colorants);
         } else {
-            d->colorSpaceSelector->lbltrc->setToolTip(estimatedGamma + QString::number(estimatedTRC[0]) + "," + QString::number(estimatedTRC[1]) + "," + QString::number(estimatedTRC[2]));
-            d->colorSpaceSelector->lbltrc->setText(estimatedGamma + QString::number((estimatedTRC[0] + estimatedTRC[1] + estimatedTRC[2])/3));
+            colorants.fill(0.0);
+            d->colorSpaceSelector->TongueWidget->setRGBData(whitepoint, colorants);
+        }
+        d->colorSpaceSelector->TongueWidget->setGamut(currentColorSpace()->gamutXYY());
+        estimatedTRC = currentColorSpace()->profile()->getEstimatedTRC();
+        QString estimatedCurve = " Estimated curve: ";
+        QPolygonF redcurve;
+        QPolygonF greencurve;
+        QPolygonF bluecurve;
+        if (currentColorSpace()->profile()->hasTRC()){
+            for (int i=0; i<=10; i++) {
+                QVector <qreal> linear(3);
+                linear.fill(i*0.1);            
+                currentColorSpace()->profile()->linearizeFloatValue(linear);
+                estimatedCurve = estimatedCurve + ", " + QString::number(linear[0]);
+                QPointF tonepoint(linear[0],i*0.1);
+                redcurve<<tonepoint;
+                tonepoint.setX(linear[1]);
+                greencurve<<tonepoint;
+                tonepoint.setX(linear[2]);
+                bluecurve<<tonepoint;
+            }
+            d->colorSpaceSelector->TRCwidget->setRGBCurve(redcurve, greencurve, bluecurve);
+        } else {
+            QPolygonF curve = currentColorSpace()->estimatedTRCXYY();
+            redcurve << curve.at(0) << curve.at(1) << curve.at(2) << curve.at(3) << curve.at(4);
+            greencurve << curve.at(5) << curve.at(6) << curve.at(7) << curve.at(8) << curve.at(9);
+            bluecurve << curve.at(10) << curve.at(11) << curve.at(12) << curve.at(13) << curve.at(14);
+            d->colorSpaceSelector->TRCwidget->setRGBCurve(redcurve, greencurve, bluecurve);
+        }
+
+        if (estimatedTRC[0] == -1) {
+            d->colorSpaceSelector->TRCwidget->setToolTip("<html><head/><body>"+whatissRGB+"<br />"+estimatedCurve+"</body></html>");
+        } else {
+            d->colorSpaceSelector->TRCwidget->setToolTip("<html><head/><body>"+estimatedGamma + QString::number(estimatedTRC[0]) + "," + QString::number(estimatedTRC[1]) + "," + QString::number(estimatedTRC[2])+"<br />"+estimatedCurve+"</body></html>");
         }
     }
     else if (currentModelStr == "GRAYA") {
-        QVector <double> whitepoint = currentColorSpace()->profile()->getWhitePointxyY();
+        QVector <qreal> whitepoint = currentColorSpace()->profile()->getWhitePointxyY();
         d->colorSpaceSelector->TongueWidget->setGrayData(whitepoint);
+        d->colorSpaceSelector->TongueWidget->setGamut(currentColorSpace()->gamutXYY());
         estimatedTRC = currentColorSpace()->profile()->getEstimatedTRC();
-        if (estimatedTRC[0] == -1) {
-            d->colorSpaceSelector->lbltrc->setToolTip(whatissRGB);
-            d->colorSpaceSelector->lbltrc->setText(estimatedsRGB);
+        QString estimatedCurve = " Estimated curve: ";
+        QPolygonF tonecurve;
+        if (currentColorSpace()->profile()->hasTRC()){
+            for (int i=0; i<=10; i++) {
+                QVector <qreal> linear(3);
+                linear.fill(i*0.1);            
+                currentColorSpace()->profile()->linearizeFloatValue(linear);
+                estimatedCurve = estimatedCurve + ", " + QString::number(linear[0]);
+                QPointF tonepoint(linear[0],i*0.1);
+                tonecurve<<tonepoint;
+            }
         } else {
-            d->colorSpaceSelector->lbltrc->setToolTip(estimatedGamma + QString::number(estimatedTRC[0]));
-            d->colorSpaceSelector->lbltrc->setText(estimatedGamma + QString::number(estimatedTRC[0]));
+            d->colorSpaceSelector->TRCwidget->setProfileDataAvailable(false);
+        }
+        d->colorSpaceSelector->TRCwidget->setGreyscaleCurve(tonecurve);
+        if (estimatedTRC[0] == -1) {
+            d->colorSpaceSelector->TRCwidget->setToolTip("<html><head/><body>"+whatissRGB+"<br />"+estimatedCurve+"</body></html>");
+        } else {
+            d->colorSpaceSelector->TRCwidget->setToolTip("<html><head/><body>"+estimatedGamma + QString::number(estimatedTRC[0])+"<br />"+estimatedCurve+"</body></html>");
         }
     }
     else if (currentModelStr == "CMYKA") {
-        QVector <double> whitepoint = currentColorSpace()->profile()->getWhitePointxyY();
+        QVector <qreal> whitepoint = currentColorSpace()->profile()->getWhitePointxyY();
         d->colorSpaceSelector->TongueWidget->setCMYKData(whitepoint);
-        d->colorSpaceSelector->lbltrc->setToolTip(i18nc("@info:tooltip","Estimated Gamma cannot be retrieved for CMYK."));
-        d->colorSpaceSelector->lbltrc->setText(estimatedGamma + notApplicable);
+        d->colorSpaceSelector->TongueWidget->setGamut(currentColorSpace()->gamutXYY());
+        QString estimatedCurve = " Estimated curve: ";
+        QPolygonF tonecurve;
+        QPolygonF cyancurve;
+        QPolygonF magentacurve;
+        QPolygonF yellowcurve;
+        if (currentColorSpace()->profile()->hasTRC()){
+            for (int i=0; i<=10; i++) {
+                QVector <qreal> linear(3);
+                linear.fill(i*0.1);            
+                currentColorSpace()->profile()->linearizeFloatValue(linear);
+                estimatedCurve = estimatedCurve + ", " + QString::number(linear[0]);
+                QPointF tonepoint(linear[0],i*0.1);
+                tonecurve<<tonepoint;
+            }
+            d->colorSpaceSelector->TRCwidget->setGreyscaleCurve(tonecurve);
+        } else {
+            QPolygonF curve = currentColorSpace()->estimatedTRCXYY();
+            cyancurve << curve.at(0) << curve.at(1) << curve.at(2) << curve.at(3) << curve.at(4);
+            magentacurve << curve.at(5) << curve.at(6) << curve.at(7) << curve.at(8) << curve.at(9);
+            yellowcurve << curve.at(10) << curve.at(11) << curve.at(12) << curve.at(13) << curve.at(14);
+            tonecurve << curve.at(15) << curve.at(16) << curve.at(17) << curve.at(18) << curve.at(19);
+            d->colorSpaceSelector->TRCwidget->setCMYKCurve(cyancurve, magentacurve, yellowcurve, tonecurve);
+        }
+        d->colorSpaceSelector->TRCwidget->setToolTip(i18nc("@info:tooltip","Estimated Gamma cannot be retrieved for CMYK."));
     }
     else if (currentModelStr == "XYZA") {
-        QVector <double> whitepoint = currentColorSpace()->profile()->getWhitePointxyY();
+        QString estimatedCurve = " Estimated curve: ";
+        estimatedTRC = currentColorSpace()->profile()->getEstimatedTRC();
+        QPolygonF tonecurve;
+        if (currentColorSpace()->profile()->hasTRC()){
+            for (int i=0; i<=10; i++) {
+                QVector <qreal> linear(3);
+                linear.fill(i*0.1);            
+                currentColorSpace()->profile()->linearizeFloatValue(linear);
+                estimatedCurve = estimatedCurve + ", " + QString::number(linear[0]);
+                QPointF tonepoint(linear[0],i*0.1);
+                tonecurve<<tonepoint;
+            }
+            d->colorSpaceSelector->TRCwidget->setGreyscaleCurve(tonecurve);
+        } else {
+            d->colorSpaceSelector->TRCwidget->setProfileDataAvailable(false);
+        }
+        QVector <qreal> whitepoint = currentColorSpace()->profile()->getWhitePointxyY();
         d->colorSpaceSelector->TongueWidget->setXYZData(whitepoint);
-        d->colorSpaceSelector->lbltrc->setToolTip(i18nc("@info:tooltip","XYZ is assumed to be linear Gamma."));
-        d->colorSpaceSelector->lbltrc->setText(estimatedGamma + "1.0");
+        d->colorSpaceSelector->TongueWidget->setGamut(currentColorSpace()->gamutXYY());
+        d->colorSpaceSelector->TRCwidget->setToolTip("<html><head/><body>"+estimatedGamma + QString::number(estimatedTRC[0])+"< br />"+estimatedCurve+"</body></html>");
     }
     else if (currentModelStr == "LABA") {
-        QVector <double> whitepoint = currentColorSpace()->profile()->getWhitePointxyY();
+        estimatedTRC = currentColorSpace()->profile()->getEstimatedTRC();
+        QString estimatedCurve = " Estimated curve: ";
+        QPolygonF tonecurve;
+        if (currentColorSpace()->profile()->hasTRC()){
+            for (int i=0; i<=10; i++) {
+                QVector <qreal> linear(3);
+                linear.fill(i*0.1);            
+                currentColorSpace()->profile()->linearizeFloatValue(linear);
+                estimatedCurve = estimatedCurve + ", " + QString::number(linear[0]);
+                QPointF tonepoint(linear[0],i*0.1);
+                tonecurve<<tonepoint;
+            }
+            d->colorSpaceSelector->TRCwidget->setGreyscaleCurve(tonecurve);
+        } else {
+            d->colorSpaceSelector->TRCwidget->setProfileDataAvailable(false);
+        }
+        QVector <qreal> whitepoint = currentColorSpace()->profile()->getWhitePointxyY();
         d->colorSpaceSelector->TongueWidget->setLABData(whitepoint);
-        d->colorSpaceSelector->lbltrc->setToolTip(i18nc("@info:tooltip","This is assumed to be the L * TRC."));
-        d->colorSpaceSelector->lbltrc->setText(estimatedGamma + "L*");
+        d->colorSpaceSelector->TongueWidget->setGamut(currentColorSpace()->gamutXYY());
+        d->colorSpaceSelector->TRCwidget->setToolTip("<html><head/><body>"+i18nc("@info:tooltip","This is assumed to be the L * TRC. ")+"<br />"+estimatedCurve+"</body></html>");
     }
     else if (currentModelStr == "YCbCrA") {
-        QVector <double> whitepoint = currentColorSpace()->profile()->getWhitePointxyY();
+        QVector <qreal> whitepoint = currentColorSpace()->profile()->getWhitePointxyY();
         d->colorSpaceSelector->TongueWidget->setYCbCrData(whitepoint);
-        d->colorSpaceSelector->lbltrc->setToolTip(i18nc("@info:tooltip","Estimated Gamma cannot be retrieved for YCrCb."));
-        d->colorSpaceSelector->lbltrc->setText(estimatedGamma + notApplicable);
+        QString estimatedCurve = " Estimated curve: ";
+        QPolygonF tonecurve;
+        if (currentColorSpace()->profile()->hasTRC()){
+            for (int i=0; i<=10; i++) {
+                QVector <qreal> linear(3);
+                linear.fill(i*0.1);            
+                currentColorSpace()->profile()->linearizeFloatValue(linear);
+                estimatedCurve = estimatedCurve + ", " + QString::number(linear[0]);
+                QPointF tonepoint(linear[0],i*0.1);
+                tonecurve<<tonepoint;
+            }
+            d->colorSpaceSelector->TRCwidget->setGreyscaleCurve(tonecurve);
+        } else {
+            d->colorSpaceSelector->TRCwidget->setProfileDataAvailable(false);
+        }
+        d->colorSpaceSelector->TongueWidget->setGamut(currentColorSpace()->gamutXYY());
+        d->colorSpaceSelector->TRCwidget->setToolTip(i18nc("@info:tooltip","Estimated Gamma cannot be retrieved for YCrCb."));
     }
 
     d->colorSpaceSelector->textProfileDescription->clear();
     if (profileList.isEmpty()==false) {
         d->colorSpaceSelector->textProfileDescription->append("<h3>"+i18nc("About <Profilename>","About ")  +  currentColorSpace()->name()  +  "/"  +  profileName  +  "</h3>");
+        d->colorSpaceSelector->textProfileDescription->append("<p>"+ i18nc("ICC profile version","ICC Version: ")  + QString::number(currentColorSpace()->profile()->version())  +  "</p>");
+        //d->colorSpaceSelector->textProfileDescription->append("<p>"+ i18nc("Who made the profile?","Manufacturer: ")  + currentColorSpace()->profile()->manufacturer()  +  "</p>"); //This would work if people actually wrote the manufacturer into the manufacturer fiedl...
+        d->colorSpaceSelector->textProfileDescription->append("<p>"+ i18nc("What is the copyright? These are from embedded strings from the icc profile, so they default to english.","Copyright: ")  + currentColorSpace()->profile()->copyright()  +  "</p>");
     } else {
         d->colorSpaceSelector->textProfileDescription->append("<h3>" + profileName  +  "</h3>");
     }
 
     if (currentModelStr == "RGBA") {
-        d->colorSpaceSelector->textProfileDescription->append(i18nc("If the selected model is RGB",
+        d->colorSpaceSelector->textProfileDescription->append("<p>"+i18nc("If the selected model is RGB",
                                                                     "<b><a href=\"https://en.wikipedia.org/wiki/RGB_color_space\">RGB (Red, Green, Blue)</a></b>, is the color model used by screens and other light-based media.<br/>"
                                                                     "RGB is an additive color model: adding colors together makes them brighter. This color "
                                                                     "model is the most extensive of all color models, and is recommended as a model for painting,"
-                                                                    "that you can later convert to other spaces. RGB is also the recommended colorspace for HDR editing."));
+                                                                    "that you can later convert to other spaces. RGB is also the recommended colorspace for HDR editing.")+"</p>");
     } else if (currentModelStr == "CMYKA") {
-        d->colorSpaceSelector->textProfileDescription->append(i18nc("If the selected model is CMYK",
+        d->colorSpaceSelector->textProfileDescription->append("<p>"+i18nc("If the selected model is CMYK",
                                                                     "<b><a href=\"https://en.wikipedia.org/wiki/CMYK_color_model\">CMYK (Cyan, Magenta, Yellow, Key)</a></b>, "
-                                                                    "is the model used by printers and other ink-based media.<p>"
+                                                                    "is the model used by printers and other ink-based media.</br>"
                                                                     "CMYK is a subtractive model, meaning that adding colors together will turn them darker. Because of CMYK "
                                                                     "profiles being very specific per printer, it is recommended to work in RGB space, and then later convert "
                                                                     "to a CMYK profile, preferably one delivered by your printer. <br/>"
                                                                     "CMYK is <b>not</b> recommended for painting."
-                                                                    "Unfortunately, Krita cannot retrieve colorants or the TRC for this space."));
+                                                                    "Unfortunately, Krita cannot retrieve colorants or the TRC for this space.")+"</p>");
     } else if (currentModelStr == "XYZA") {
-        d->colorSpaceSelector->textProfileDescription->append(i18nc("If the selected model is XYZ",
+        d->colorSpaceSelector->textProfileDescription->append("<p>"+i18nc("If the selected model is XYZ",
                                                                     "<b><a href=\"https://en.wikipedia.org/wiki/CIE_1931_color_space\">CIE XYZ</a></b>"
                                                                     "is the space determined by the CIE as the space that encompasses all other colors, and used to "
                                                                     "convert colors between profiles. XYZ is an additive color model, meaning that adding colors together "
                                                                     "makes them brighter. XYZ is <b>not</b> recommended for painting, but can be useful to encode in. The Tone Response "
-                                                                    "Curve is assumed to be linear."));
+                                                                    "Curve is assumed to be linear.")+"</p>");
     } else if (currentModelStr == "GRAYA") {
-        d->colorSpaceSelector->textProfileDescription->append(i18nc("If the selected model is Grayscale",
+        d->colorSpaceSelector->textProfileDescription->append("<p>"+i18nc("If the selected model is Grayscale",
                                                                     "<b><a href=\"https://en.wikipedia.org/wiki/Grayscale\">Grayscale</a></b> only allows for "
                                                                     "gray values and transparent values. Grayscale images use half "
                                                                     "the memory and disk space compared to an RGB image of the same bit-depth.<br/>"
                                                                     "Grayscale is useful for inking and greyscale images. In "
-                                                                    "Krita, you can mix Grayscale and RGB layers in the same image."));
+                                                                    "Krita, you can mix Grayscale and RGB layers in the same image.")+"</p>");
     } else if (currentModelStr == "LABA") {
-        d->colorSpaceSelector->textProfileDescription->append(i18nc("If the selected model is LAB",
+        d->colorSpaceSelector->textProfileDescription->append("<p>"+i18nc("If the selected model is LAB",
                                                                     "<b><a href=\"https://en.wikipedia.org/wiki/Lab_color_space\">L*a*b</a></b>. <b>L<b> stands for Lightness, "
                                                                     "the <b>a</b> and <b>b</b> components represent color channels.<br/>"
                                                                     "L*a*b is a special model for color correction. It is based on human perception, meaning that it "
@@ -302,70 +409,86 @@ void KisAdvancedColorSpaceSelector::fillDescription()
                                                                     "modes do <b>not</b> work as expected here.<br/>"
                                                                     "Similarly, Krita does not support HDR in LAB, meaning that HDR images converted to LAB lose color "
                                                                     "information. This colorspace is <b>not</b> recommended for painting, nor for export, "
-                                                                    "but best as a space to do post-processing in. The Tone Response Curve is assumed to be the L* TRC."));
+                                                                    "but best as a space to do post-processing in. The TRC is assumed to be the L* TRC.")+"</p>");
     } else if (currentModelStr == "YCbCrA") {
-        d->colorSpaceSelector->textProfileDescription->append(i18nc("If the selected model is YCbCr",
+        d->colorSpaceSelector->textProfileDescription->append("<p>"+i18nc("If the selected model is YCbCr",
                                                                     "<b><a href=\"https://en.wikipedia.org/wiki/YCbCr\">YCbCr (Luma, Blue Chroma, Red Chroma)</a></b>, is a "
                                                                     "model designed for video encoding. It is based on human perception, meaning that it tries to "
                                                                     "encode the difference in lightness, red-green balance and yellow-blue balance. Chroma in "
                                                                     "this case is then a word indicating a special type of saturation, in these cases the saturation "
                                                                     "of Red and Blue, of which the desaturated equivalents are Green and Yellow respectively. It "
                                                                     "is available to open up certain images correctly, but Krita does not currently ship a profile for "
-                                                                    "this due to lack of open source ICC profiles for YCrCb."));
+                                                                    "this due to lack of open source ICC profiles for YCrCb.")+"</p>");
     }
 
     QString currentDepthStr = d->colorSpaceSelector->cmbColorDepth->currentItem().id();
 
     if (currentDepthStr == "U8") {
-        d->colorSpaceSelector->textProfileDescription->append(i18nc("When the selected Bitdepth is 8",
+        d->colorSpaceSelector->textProfileDescription->append("<p>"+i18nc("When the selected Bitdepth is 8",
                                                                     "<b>8 bit integer</b>: The default amount of colors per channel. Each channel will have 256 values available, "
                                                                     "leading to a total amount of 256*amount of channels. Recommended to use for images intended for the web, "
-                                                                    "or otherwise simple images."));
+                                                                    "or otherwise simple images.")+"</p>");
     }
     else if (currentDepthStr == "U16") {
-        d->colorSpaceSelector->textProfileDescription->append(i18nc("When the selected Bitdepth is 16",
+        d->colorSpaceSelector->textProfileDescription->append("<p>"+i18nc("When the selected Bitdepth is 16",
                                                                     "<b>16 bit integer</b>: Also known as 'deep color'. 16 bit is ideal for editing images with a linear TRC, large "
                                                                     "color space, or just when you need more precise color blending. This does take twice as much space on "
                                                                     "the RAM and hard-drive than any given 8 bit image of the same properties, and for some devices it "
                                                                     "takes much more processing power. We recommend watching the RAM usage of the file carefully, or "
                                                                     "otherwise use 8 bit if your computer slows down. Take care to disable conversion optimization "
-                                                                    "when converting from 16 bit/channel to 8 bit/channel."));
+                                                                    "when converting from 16 bit/channel to 8 bit/channel.")+"</p>");
     }
     else if (currentDepthStr == "F16") {
-        d->colorSpaceSelector->textProfileDescription->append(i18nc("When the selected Bitdepth is 16 bit float",
+        d->colorSpaceSelector->textProfileDescription->append("<p>"+i18nc("When the selected Bitdepth is 16 bit float",
                                                                     "<b>16 bit floating point</b>: Also known as 'Half Floating Point', and the standard in VFX industry images. "
                                                                     "16 bit float is ideal for editing images with a linear Tone Response Curve, large color space, or just when you need "
                                                                     "more precise color blending. It being floating point is an absolute requirement for Scene Referred "
                                                                     "(HDR) images. This does take twice as much space on the RAM and hard-drive than any given 8 bit image "
                                                                     "of the same properties, and for some devices it takes much more processing power. We recommend watching "
-                                                                    "the RAM usage of the file carefully, or otherwise use 8 bit if your computer slows down."));
+                                                                    "the RAM usage of the file carefully, or otherwise use 8 bit if your computer slows down.")+"</p>");
     }
     else if (currentDepthStr == "F32") {
-        d->colorSpaceSelector->textProfileDescription->append(i18nc("When the selected Bitdepth is 32bit float",
+        d->colorSpaceSelector->textProfileDescription->append("<p>"+i18nc("When the selected Bitdepth is 32bit float",
                                                                     "<b>32 bit float point</b>: Also known as 'Full Floating Point'. 32 bit float is ideal for editing images "
                                                                     "with a linear TRC, large color space, or just when you need more precise color blending. It being "
                                                                     "floating point is an absolute requirement for Scene Referred (HDR) images. This does take four times "
                                                                     "as much space on the RAM and hard-drive than any given 8 bit image of the same properties, and for "
                                                                     "some devices it takes much more processing power. We recommend watching the RAM usage of the file "
-                                                                    "carefully, or otherwise use 8 bit if your computer slows down."));
+                                                                    "carefully, or otherwise use 8 bit if your computer slows down.")+"</p>");
     }
     else if (currentDepthStr == "F64") {
-        d->colorSpaceSelector->textProfileDescription->append(i18nc("When the selected Bitdepth is 64bit float, but this isn't actually available in Krita at the moment.",\
+        d->colorSpaceSelector->textProfileDescription->append("<p>"+i18nc("When the selected Bitdepth is 64bit float, but this isn't actually available in Krita at the moment.",\
                                                                     "<b>64 bit float point</b>: 64 bit float is as precise as it gets in current technology, and this depth is used "
                                                                     "most of the time for images that are generated or used as an input for software. It being floating point "
                                                                     "is an absolute requirement for Scene Referred (HDR) images. This does take eight times as much space on "
                                                                     "the RAM and hard-drive than any given 8 bit image of the same properties, and for some devices it takes "
                                                                     "much more processing power. We recommend watching the RAM usage of the file carefully, or otherwise use "
-                                                                    "8 bit if your computer slows down."));
+                                                                    "8 bit if your computer slows down.")+"</p>");
     }
-
+    if (profileList.isEmpty()==false) {
+        QString possibleConversionIntents = "<p>"+i18n("The following conversion intents are possible: ")+"<ul>";
+        if (currentColorSpace()->profile()->supportsPerceptual()){
+            possibleConversionIntents += "<li>"+i18n("Perceptual")+"</li>";
+        }
+        if (currentColorSpace()->profile()->supportsRelative()){
+            possibleConversionIntents +=  "<li>"+i18n("Relative Colorimetric")+"</li>";
+        }
+        if (currentColorSpace()->profile()->supportsAbsolute()){
+            possibleConversionIntents += "<li>"+i18n("Absolute Colorimetric")+"</li>";
+        }
+        if (currentColorSpace()->profile()->supportsSaturation()){
+            possibleConversionIntents += "<li>"+i18n("Saturation")+"</li>";
+        }
+        possibleConversionIntents += "</ul></ul></p>";
+        d->colorSpaceSelector->textProfileDescription->append(possibleConversionIntents);
+    }
     if (profileName.contains("-elle-")) {
 
-        d->colorSpaceSelector->textProfileDescription->append(i18nc("These are Elle Stone's notes on her profiles that we ship.",
-                                                                    "<p><b>Extra notes on profiles by Elle Stone:</b>"
+        d->colorSpaceSelector->textProfileDescription->append("<p>"+i18nc("These are Elle Stone's notes on her profiles that we ship.",
+                                                                    "<p><b>Extra notes on profiles by Elle Stone:</b></p>"
                                                                     "<p><i>Krita comes with a number of high quality profiles created by "
                                                                     "<a href=\"http://ninedegreesbelow.com\">Elle Stone</a>. This is a summary. Please check "
-                                                                    "<a href=\"http://ninedegreesbelow.com/photography/lcms-make-icc-profiles.html\">the full documentation</a> as well.</i>"));
+                                                                    "<a href=\"http://ninedegreesbelow.com/photography/lcms-make-icc-profiles.html\">the full documentation</a> as well.</i></p>"));
 
                 if (profileName.contains("ACES-")) {
 
@@ -373,69 +496,69 @@ void KisAdvancedColorSpaceSelector::fillDescription()
                                                                         "<p>Quoting Wikipedia, 'Academy Color Encoding System (ACES) is a color image "
                                                                         "encoding system proposed by the Academy of Motion Picture Arts and Sciences that will allow for "
                                                                         "a fully encompassing color accurate workflow, with 'seamless interchange of high quality motion "
-                                                                        "picture images regardless of source'."));
+                                                                        "picture images regardless of source'.</p>"));
         }
         if (profileName.contains("ACEScg-")) {
 
             d->colorSpaceSelector->textProfileDescription->append(i18nc("From Elle's notes.",
                                                                         "<p>The ACEScg color space is smaller than the ACES color space, but large enough to contain the 'Rec-2020 gamut "
                                                                         "and the DCI-P3 gamut', unlike the ACES color space it has no negative values and contains only few colors "
-                                                                        "that fall just barely outside the area of real colors humans can see"));
+                                                                        "that fall just barely outside the area of real colors humans can see</p>"));
         }
         if (profileName.contains("ClayRGB-")) {
 
             d->colorSpaceSelector->textProfileDescription->append(i18nc("From Elle's notes.",
-                                                                        "To avoid possible copyright infringement issues, I used 'ClayRGB' (following ArgyllCMS) as the base name "
+                                                                        "<p>To avoid possible copyright infringement issues, I used 'ClayRGB' (following ArgyllCMS) as the base name "
                                                                         "for these profiles. As used below, 'Compatible with Adobe RGB 1998' is terminology suggested in the preamble "
-                                                                        "to the AdobeRGB 1998 color space specifications.<p>"
+                                                                        "to the AdobeRGB 1998 color space specifications.</p><p>"
                                                                         "The Adobe RGB 1998 color gamut covers a higher "
                                                                         "percentage of real-world cyans, greens, and yellow-greens than sRGB, but still doesn't include all printable "
                                                                         "cyans, greens, yellow-greens, especially when printing using today's high-end, wider gamut, ink jet printers. "
                                                                         "BetaRGB (not included in the profile pack) and Rec.2020 are better matches for the color gamuts of today's "
-                                                                        "wide gamut printers.<p>"
+                                                                        "wide gamut printers.</p><p>"
                                                                         "The Adobe RGB 1998 color gamut is a reasonable approximation to some of today's "
-                                                                        "high-end wide gamut monitors."));
+                                                                        "high-end wide gamut monitors.</p>"));
         }
         if (profileName.contains("AllColorsRGB-")) {
 
             d->colorSpaceSelector->textProfileDescription->append(i18nc("From Elle's notes.",
-                                                                        "This profile's color gamut is roughly the same size and shape as the ACES color space gamut, "
+                                                                        "<p>This profile's color gamut is roughly the same size and shape as the ACES color space gamut, "
                                                                         "and like the ACES color space, AllColorsRGB holds all possible real colors. But AllColorsRGB "
                                                                         "actually has a slightly larger color gamut (to capture some fringe colors that barely qualify "
-                                                                        "as real when viewed by the standard observer) and uses the D50 white point.<p>"
+                                                                        "as real when viewed by the standard observer) and uses the D50 white point.</p><p>"
                                                                         "Just like the ACES color space, AllColorsRGB holds a high percentage of imaginary colors. See the Completely "
                                                                         "<a href=\"http://ninedegreesbelow.com/photography/xyz-rgb.html\">"
                                                                         "Painless Programmer's Guide to XYZ, RGB, ICC, xyY, and TRCs</a> for more information about imaginary "
-                                                                        "colors.<p>"
+                                                                        "colors.</p><p>"
                                                                         "There is no particular reason why anyone would want to use this profile "
                                                                         "for editing, unless one needs to make sure your color space really does hold all "
-                                                                        "possible real colors."));
+                                                                        "possible real colors.</p>"));
         }
         if (profileName.contains("CIERGB-")) {
 
             d->colorSpaceSelector->textProfileDescription->append(i18nc("From Elle's notes.",
-                                                                        "This profile is included mostly for its historical significance. "
+                                                                        "<p>This profile is included mostly for its historical significance. "
                                                                         "It's the color space that was used in the original color matching experiments "
-                                                                        "that led to the creation of the XYZ reference color space.<p>"
+                                                                        "that led to the creation of the XYZ reference color space.</p><p>"
                                                                         "The ASTM E white point "
                                                                         "is probably the right E white point to use when making the CIERGB color space profile. "
                                                                         "It's not clear to me what the correct CIERGB primaries really are. "
                                                                         "Lindbloom gives one set. The LCMS version 1 tutorial gives a different set. "
                                                                         "Experts in the field contend that the real primaries "
-                                                                        "should be calculated from the spectral wavelengths, so I did."));
+                                                                        "should be calculated from the spectral wavelengths, so I did.</p>"));
         }
         if (profileName.contains("IdentityRGB-")) {
 
             d->colorSpaceSelector->textProfileDescription->append(i18nc("From Elle's notes.",
-                                                                        "The IdentityRGB working space is included in the profile pack because it's a mathematically "
+                                                                        "<p>The IdentityRGB working space is included in the profile pack because it's a mathematically "
                                                                         "obvious way to include all possible visible colors, though it has a higher percentage of "
                                                                         "imaginary colors than the ACES and AllColorsRGB color spaces. I cannot think of any reason "
-                                                                        "why you'd ever want to actually edit images in the IdentityRGB working space."));
+                                                                        "why you'd ever want to actually edit images in the IdentityRGB working space.</p>"));
         }
         if (profileName.contains("LargeRGB-")) {
 
             d->colorSpaceSelector->textProfileDescription->append(i18nc("From Elle's notes.",
-                                                                        "To avoid possible copyright infringement issues, I used 'LargeRGB' (following RawTherapee) "
+                                                                        "<p>To avoid possible copyright infringement issues, I used 'LargeRGB' (following RawTherapee) "
                                                                         "as the base name for these profiles.<p>"
                                                                         "Kodak designed the RIMM/ROMM (ProPhotoRGB) color "
                                                                         "gamut to include all printable and most real world colors. It includes some imaginary colors "
@@ -446,29 +569,29 @@ void KisAdvancedColorSpaceSelector::fillDescription()
                                                                         "hard-coded into Adobe products such as Lightroom and the Dng-DCP camera 'profiles'. However, "
                                                                         "other than being large enough to hold a lot of colors, ProPhotoRGB has no particular merit "
                                                                         "as an RGB working space. Personally and for most editing purposes, I recommend BetaRGB, Rec2020, "
-                                                                        "or the ACEScg profiles ProPhotoRGB."));
+                                                                        "or the ACEScg profiles ProPhotoRGB.</p>"));
         }
         if (profileName.contains("Rec2020-")) {
 
             d->colorSpaceSelector->textProfileDescription->append(i18nc("From Elle's notes.",
-                                                                        "Rec.2020 is the up-and-coming replacement for the thoroughly outdated sRGB color space. As of "
+                                                                        "<p>Rec.2020 is the up-and-coming replacement for the thoroughly outdated sRGB color space. As of "
                                                                         "June 2015, very few (if any) display devices (and certainly no affordable display devices) can "
                                                                         "display all of Rec.2020. However, display technology is closing in on Rec.2020, movies are "
                                                                         "already being made for Rec.2020, and various cameras offer support for Rec.2020. And in the "
                                                                         "digital darkroom Rec.2020 is much more suitable as a general RGB working space than the "
-                                                                        "exceedingly small sRGB color space."));
+                                                                        "exceedingly small sRGB color space.</p>"));
         }
         if (profileName.contains("sRGB-")) {
             d->colorSpaceSelector->textProfileDescription->append(i18nc("From Elle's notes.",
-                                                                        "Hewlett-Packard and Microsoft designed sRGB to match the color gamut of consumer-grade CRTs "
+                                                                        "<p>Hewlett-Packard and Microsoft designed sRGB to match the color gamut of consumer-grade CRTs "
                                                                         "from the 1990s. sRGB is the standard color space for the world wide web and is still the best "
-                                                                        "choice for exporting images to the internet.<p>"
+                                                                        "choice for exporting images to the internet.</p><p>"
                                                                         "The sRGB color gamut was a good match to "
                                                                         "calibrated decent quality CRTs. But sRGB is not a good match to many consumer-grade LCD monitors, "
                                                                         "which often cannot display the more saturated sRGB blues and magentas (the good news: as technology "
-                                                                        "progresses, wider gamuts are trickling down to consumer grade monitors).<p>"
+                                                                        "progresses, wider gamuts are trickling down to consumer grade monitors).</p><p>"
                                                                         "Printer color gamuts can easily exceed the sRGB color gamut in cyans, greens, and yellow-greens. Colors from interpolated "
-                                                                        "camera raw files also often exceed the sRGB color gamut.<p>"
+                                                                        "camera raw files also often exceed the sRGB color gamut.</p><p>"
                                                                         "As a very relevant aside, using perceptual "
                                                                         "intent when converting to sRGB does not magically makes otherwise out of gamut colors fit inside the "
                                                                         "sRGB color gamut! The standard sRGB color space (along with all the other the RGB profiles provided "
@@ -476,11 +599,11 @@ void KisAdvancedColorSpaceSelector::fillDescription()
         }
         if (profileName.contains("WideRGB-")) {
             d->colorSpaceSelector->textProfileDescription->append(i18nc("From Elle's notes.",
-                                                                        "To avoid possible copyright infringement issues, I used 'WideRGB' as the base name for these profiles.<p>"
+                                                                        "<p>To avoid possible copyright infringement issues, I used 'WideRGB' as the base name for these profiles.</p><p>"
                                                                         "WideGamutRGB was designed by Adobe to be a wide gamut color space that uses spectral colors "
                                                                         "as its primaries. Pascale's primary values produce a profile that matches old V2 Widegamut profiles "
                                                                         "from Adobe and Canon. It is an interesting color space, but shortly after its introduction, Adobe "
-                                                                        "switched their emphasis to the ProPhotoRGB color space."));
+                                                                        "switched their emphasis to the ProPhotoRGB color space.</p>"));
         }
         if (profileName.contains("Gray-")) {
             d->colorSpaceSelector->textProfileDescription->append(i18nc("From Elle's notes.",
@@ -488,25 +611,25 @@ void KisAdvancedColorSpaceSelector::fillDescription()
                                                                         "The main reason to convert from RGB to Gray is to save the file space needed to encode the image. "
                                                                         "Google places a premium on fast-loading web pages, and images are one of the slower-loading elements "
                                                                         "of a web page. So converting black and white images to Grayscale images does save some kilobytes. "
-                                                                        " For grayscale images uploaded to the internet, convert the image to the V2 Gray profile with the sRGB TRC."));
+                                                                        " For grayscale images uploaded to the internet, convert the image to the V2 Gray profile with the sRGB TRC.</p>"));
         }
         if (profileName.contains("-g10")) {
             d->colorSpaceSelector->textProfileDescription->append(i18nc("From Elle's notes.",
                                                                         "<p>The profiles that end in '-g10.icc' are linear gamma (gamma=1.0, 'linear light', etc) profiles and "
                                                                         "should only be used when editing at high bit depths (16-bit floating point, 16-bit integer, 32-bit "
                                                                         "floating point, 32-bit integer). Many editing operations produce better results in linear gamma color "
-                                                                        "spaces."));
+                                                                        "spaces.</p>"));
         }
         if (profileName.contains("-labl")) {
             d->colorSpaceSelector->textProfileDescription->append(i18nc("From Elle's notes.",
                                                                         "<p>The profiles that end in '-labl.icc' have perceptually uniform TRCs. A few editing operations really "
                                                                         "should be done on perceptually uniform RGB. Make sure you use the V4 versions for editing high bit depth "
-                                                                        "images."));
+                                                                        "images.</p>"));
         }
         if (profileName.contains("-srgbtrc") || profileName.contains("-g22") || profileName.contains("-g18") || profileName.contains("-bt709")) {
             d->colorSpaceSelector->textProfileDescription->append(i18nc("From Elle's notes.",
                                                                         "<p>The profiles that end in '-srgbtrc.icc', '-g22.icc', and '-bt709.icc' have approximately but not exactly "
-                                                                        "perceptually uniform TRCs. ProPhotoRGB's gamma=1.8 TRC is not quite as close to being perceptually uniform."));
+                                                                        "perceptually uniform TRCs. ProPhotoRGB's gamma=1.8 TRC is not quite as close to being perceptually uniform.</p>"));
         }
         if (d->colorSpaceSelector->cmbColorDepth->currentItem().id()=="U8") {
             d->colorSpaceSelector->textProfileDescription->append(i18nc("From Elle's notes.",
@@ -514,17 +637,17 @@ void KisAdvancedColorSpaceSelector::fillDescription()
                                                                         "exactly perceptually uniform TRC. Of the profiles supplied in my profile pack, only the sRGB and AdobeRGB1998 "
                                                                         "(ClayRGB) color spaces are small enough for 8-bit editing. Even with the AdobeRGB1998 color space you need to "
                                                                         "be careful to not cause posterization. And of course you cannot use the linear gamma versions of these profiles "
-                                                                        "for 8-bit editing."));
+                                                                        "for 8-bit editing.</p>"));
         }
         if (profileName.contains("-V4-")) {
             d->colorSpaceSelector->textProfileDescription->append(i18nc("From Elle's notes.",
                                                                         "<p>Use V4 profiles for editing images using high bit depth image editors that use LCMS as the Color Management Module. "
-                                                                        "This includes Krita, digiKam/showFoto, and GIMP 2.9."));
+                                                                        "This includes Krita, digiKam/showFoto, and GIMP 2.9.</p>"));
         }
         if (profileName.contains("-V2-")) {
             d->colorSpaceSelector->textProfileDescription->append(i18nc("From Elle's notes.",
                                                                         "<p>Use V2 profiles for exporting finished images to be uploaded to the web or for use with imaging software that "
-                                                                        "cannot read V4 profiles."));
+                                                                        "cannot read V4 profiles.</p>"));
         }
     }
 

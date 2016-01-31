@@ -40,6 +40,8 @@
 #include <QThreadStorage>
 #include <QByteArray>
 #include <QBitArray>
+#include <QPolygonF>
+#include <QPointF>
 
 
 KoColorSpace::KoColorSpace()
@@ -59,6 +61,10 @@ KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoMixColorsOp
     d->transfoFromRGBA16 = 0;
     d->transfoToLABA16 = 0;
     d->transfoFromLABA16 = 0;
+    d->gamutXYY = QPolygonF();
+    d->TRCXYY = QPolygonF();
+    d->colorants = QVector <qreal> (0);
+    d->lumaCoefficients = QVector <qreal> (0);
     d->deletability = NotOwnedByRegistry;
 }
 
@@ -100,6 +106,183 @@ QString KoColorSpace::id() const
 QString KoColorSpace::name() const
 {
     return d->name;
+}
+
+//Color space info stuff.
+QPolygonF KoColorSpace::gamutXYY() const
+{
+    if (d->gamutXYY.empty()) {
+        //now, let's decide on the boundary. This is a bit tricky because icc profiles can be both matrix-shaper and cLUT at once if the maker so pleases.
+        //first make a list of colors.
+        qreal max = 1.0;
+        if ((colorModelId().id()=="CMYKA" || colorModelId().id()=="LABA") && colorDepthId().id()=="F32") {
+            //boundaries for cmyka/laba have trouble getting the max values for Float, and are pretty awkward in general.
+            max = this->channels()[0]->getUIMax();
+            
+        }
+        int samples = 5;//amount of samples in our color space.
+        QString name = KoColorSpaceRegistry::instance()->colorSpaceFactory("XYZAF16")->defaultProfile();
+        const KoColorSpace* xyzColorSpace = KoColorSpaceRegistry::instance()->colorSpace("XYZA", "F16", name);
+        quint8 data[channelCount()];
+        quint8 data2[4];//xyza is 4.
+        //QVector <qreal> sampleCoordinates(pow(colorChannelCount(),samples));
+        //sampleCoordinates.fill(0.0);
+        QVector <float> channelValuesF(channelCount());//for getting the coordinates.
+        for(int x=0;x<samples;x++){
+            if (colorChannelCount()==1) {//gray
+                channelValuesF[0]=(max/(samples-1))*(x);
+                channelValuesF[1]=max;
+                fromNormalisedChannelsValue(data, channelValuesF);
+                convertPixelsTo(data, data2, xyzColorSpace, 1, KoColorConversionTransformation::IntentAbsoluteColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
+                xyzColorSpace->normalisedChannelsValue(data2,channelValuesF);
+                qreal x = channelValuesF[0]/(channelValuesF[0]+channelValuesF[1]+channelValuesF[2]);
+                qreal y = channelValuesF[1]/(channelValuesF[0]+channelValuesF[1]+channelValuesF[2]);
+                d->gamutXYY<< QPointF(x,y);
+            } else {
+                for(int y=0;y<samples;y++){
+                    for(int z=0;z<samples;z++){
+                        if (colorChannelCount()==4) {
+                            for(int k=0;k<samples;k++){
+                                channelValuesF[0]=(max/(samples-1))*(x);
+                                channelValuesF[1]=(max/(samples-1))*(y);
+                                channelValuesF[2]=(max/(samples-1))*(z);
+                                channelValuesF[3]=(max/(samples-1))*(k);
+                                channelValuesF[4]=max;
+                                fromNormalisedChannelsValue(data, channelValuesF);
+                                convertPixelsTo(data, data2, xyzColorSpace, 1, KoColorConversionTransformation::IntentAbsoluteColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
+                                xyzColorSpace->normalisedChannelsValue(data2,channelValuesF);
+                                qreal x = channelValuesF[0]/(channelValuesF[0]+channelValuesF[1]+channelValuesF[2]);
+                                qreal y = channelValuesF[1]/(channelValuesF[0]+channelValuesF[1]+channelValuesF[2]);
+                                d->gamutXYY<< QPointF(x,y);
+                            }
+                        } else {
+                            channelValuesF[0]=(max/(samples-1))*(x);
+                            channelValuesF[1]=(max/(samples-1))*(y);
+                            channelValuesF[2]=(max/(samples-1))*(z);
+                            channelValuesF[3]=max;
+                            if (colorModelId().id()!="XYZA") { //no need for conversion when using xyz.
+                                fromNormalisedChannelsValue(data, channelValuesF);
+                                convertPixelsTo(data, data2, xyzColorSpace, 1, KoColorConversionTransformation::IntentAbsoluteColorimetric,         KoColorConversionTransformation::adjustmentConversionFlags());
+                                xyzColorSpace->normalisedChannelsValue(data2,channelValuesF);
+                            }
+                            qreal x = channelValuesF[0]/(channelValuesF[0]+channelValuesF[1]+channelValuesF[2]);
+                            qreal y = channelValuesF[1]/(channelValuesF[0]+channelValuesF[1]+channelValuesF[2]);
+                            d->gamutXYY<< QPointF(x,y);
+                        }
+                    }
+                }
+                
+            }
+        }
+        //if we ever implement a boundary-checking thing I'd add it here.
+        return d->gamutXYY;
+    } else {
+        return d->gamutXYY;
+    }
+}
+
+QPolygonF KoColorSpace::estimatedTRCXYY() const
+{
+    if (d->TRCXYY.empty()){
+        qreal max = 1.0;
+        if ((colorModelId().id()=="CMYKA" || colorModelId().id()=="LABA") && colorDepthId().id()=="F32") {
+            //boundaries for cmyka/laba have trouble getting the max values for Float, and are pretty awkward in general.
+            max = this->channels()[0]->getUIMax();
+        }
+        QString name = KoColorSpaceRegistry::instance()->colorSpaceFactory("XYZAF16")->defaultProfile();
+        const KoColorSpace* xyzColorSpace = KoColorSpaceRegistry::instance()->colorSpace("XYZA", "F16", name);
+        quint8 data[channelCount()];
+        quint8 data2[4];//xyza is 4.
+        QVector <float> channelValuesF(channelCount());
+        for (int i=0; i<colorChannelCount(); i++) {
+            qreal colorantY=1.0;
+            if (colorModelId().id()!="CMYKA") {
+                for (int j=5; j>0; j--){
+                    channelValuesF.fill(0.0);
+                    channelValuesF[i] = ((max/4)*(5-j));
+
+                    if (colorModelId().id()!="XYZA") { //no need for conversion when using xyz.
+                        fromNormalisedChannelsValue(data, channelValuesF);
+                        convertPixelsTo(data, data2, xyzColorSpace, 1, KoColorConversionTransformation::IntentAbsoluteColorimetric,         KoColorConversionTransformation::adjustmentConversionFlags());
+                        xyzColorSpace->normalisedChannelsValue(data2,channelValuesF);
+                    }
+
+                    if (j==0) {
+                        colorantY = channelValuesF[1];
+                        if (d->colorants.size()<2){
+                            d->colorants.resize(3*colorChannelCount());
+                            d->colorants[i]  = channelValuesF[0]/(channelValuesF[0]+channelValuesF[1]+channelValuesF[2]);
+                            d->colorants[i+1]= channelValuesF[1]/(channelValuesF[0]+channelValuesF[1]+channelValuesF[2]);
+                            d->colorants[i+2]= channelValuesF[1];
+                        }
+                    }
+                    d->TRCXYY << QPointF(channelValuesF[1]/colorantY, ((1.0/4)*(5-j)));
+                }
+            } else {
+                for (int j=0; j<5; j++){
+                    channelValuesF.fill(0.0);
+                    channelValuesF[i] = ((max/4)*(j));
+                    
+                    fromNormalisedChannelsValue(data, channelValuesF);
+
+                    convertPixelsTo(data, data2, xyzColorSpace, 1, KoColorConversionTransformation::IntentAbsoluteColorimetric,         KoColorConversionTransformation::adjustmentConversionFlags());
+
+                    xyzColorSpace->normalisedChannelsValue(data2,channelValuesF);
+
+                    if (j==0) {
+                        colorantY = channelValuesF[1];
+                        if (d->colorants.size()<2){
+                            d->colorants.resize(3*colorChannelCount());
+                            d->colorants[i]  = channelValuesF[0]/(channelValuesF[0]+channelValuesF[1]+channelValuesF[2]);
+                            d->colorants[i+1]= channelValuesF[1]/(channelValuesF[0]+channelValuesF[1]+channelValuesF[2]);
+                            d->colorants[i+2]= channelValuesF[1];
+                        }
+                    }
+                    d->TRCXYY << QPointF(channelValuesF[1]/colorantY, ((1.0/4)*(j)));
+                }
+            }
+        }
+        return d->TRCXYY;
+    } else {
+        return d->TRCXYY;
+    }
+}
+
+QVector <qreal> KoColorSpace::colorants() const
+{
+    if (d->colorants.size()>1){
+        return d->colorants;
+    } else if (profile() && profile()->hasColorants()) {
+        d->colorants.resize(3*colorChannelCount());
+        d->colorants = profile()->getColorantsxyY();
+        return d->colorants;
+    } else {
+        estimatedTRCXYY();
+        return d->colorants;
+    }
+}
+QVector <qreal> KoColorSpace::lumaCoefficients() const
+{
+    if (d->lumaCoefficients.size()>1){
+        return d->lumaCoefficients;
+    } else {
+        d->lumaCoefficients.resize(3);
+        if (colorModelId().id()!="RGBA") {
+            d->lumaCoefficients.fill(0.33);
+        } else {
+            colorants();
+            if (d->colorants[2]<0 || d->colorants[5]<0 || d->colorants[8]<0) {
+                d->lumaCoefficients[0]=0.2126;
+                d->lumaCoefficients[1]=0.7152;
+                d->lumaCoefficients[2]=0.0722;
+            } else {
+                d->lumaCoefficients[0]=d->colorants[2];
+                d->lumaCoefficients[1]=d->colorants[5];
+                d->lumaCoefficients[2]=d->colorants[8];
+            }
+        }
+        return d->lumaCoefficients;
+    }
 }
 
 QList<KoChannelInfo *> KoColorSpace::channels() const
@@ -336,6 +519,249 @@ KoColorTransformation* KoColorSpace::createColorTransformation(const QString & i
     }
 }
 
+void KoColorSpace::increaseLuminosity(quint8 * pixel, qreal step) const{
+    int channelnumber = abs(channelCount());
+    QVector <double> channelValues(channelnumber);
+    QVector <float> channelValuesF(channelnumber);
+    normalisedChannelsValue(pixel, channelValuesF);
+    for (int i=0;i<channelnumber;i++){
+        channelValues[i]=channelValuesF[i];
+    }
+    if (profile()->hasTRC()){
+        //only linearise and crunch the luma if there's a TRC
+        profile()->linearizeFloatValue(channelValues);
+        qreal hue, sat, luma = 0.0;
+        toHSY(channelValues, &hue, &sat, &luma);
+        luma = pow(luma, 1/2.2);
+        luma += step;
+        luma = pow(luma, 2.2);
+        channelValues = fromHSY(&hue, &sat, &luma);
+    profile()->delinearizeFloatValue(channelValues);
+    } else {
+        qreal hue, sat, luma = 0.0;
+        toHSY(channelValues, &hue, &sat, &luma);
+        luma += step;
+        channelValues = fromHSY(&hue, &sat, &luma);
+    }
+    for (int i=0;i<channelnumber;i++){
+        channelValuesF[i]=channelValues[i];
+    }
+    fromNormalisedChannelsValue(pixel, channelValuesF);
+    setOpacity(pixel, 1.0, 1);
+}
+void KoColorSpace::decreaseLuminosity(quint8 * pixel, qreal step) const {
+    int channelnumber = abs(channelCount());
+    QVector <double> channelValues(channelnumber);
+    QVector <float> channelValuesF(channelnumber);
+    normalisedChannelsValue(pixel, channelValuesF);
+    for (int i=0;i<channelnumber;i++){
+        channelValues[i]=channelValuesF[i];
+    }
+    if (profile()->hasTRC()){
+        //only linearise and crunch the luma if there's a TRC
+        profile()->linearizeFloatValue(channelValues);
+        qreal hue, sat, luma = 0.0;
+        toHSY(channelValues, &hue, &sat, &luma);
+        luma = pow(luma, 1/2.2);
+        if (luma-step<0.0) {
+            luma=0.0;
+        } else {
+            luma -= step;
+        }
+        luma = pow(luma, 2.2);
+        channelValues = fromHSY(&hue, &sat, &luma);
+    profile()->delinearizeFloatValue(channelValues);
+    } else {
+        qreal hue, sat, luma = 0.0;
+        toHSY(channelValues, &hue, &sat, &luma);
+        if (luma-step<0.0) {
+            luma=0.0;
+        } else {
+            luma -= step;
+        }
+        channelValues = fromHSY(&hue, &sat, &luma);
+    }
+    for (int i=0;i<channelnumber;i++){
+        channelValuesF[i]=channelValues[i];
+    }
+    fromNormalisedChannelsValue(pixel, channelValuesF);
+    setOpacity(pixel, 1.0, 1);
+}
+void KoColorSpace::increaseSaturation(quint8 * pixel, qreal step) const{
+    int channelnumber = abs(channelCount());
+    QVector <double> channelValues(channelnumber);
+    QVector <float> channelValuesF(channelnumber);
+    normalisedChannelsValue(pixel, channelValuesF);
+    for (int i=0;i<channelnumber;i++){
+        channelValues[i]=channelValuesF[i];
+    }
+    profile()->linearizeFloatValue(channelValues);
+    qreal hue, sat, luma = 0.0;
+    toHSY(channelValues, &hue, &sat, &luma);
+    sat += step;
+    sat = qBound(0.0, sat, 1.0);
+    channelValues = fromHSY(&hue, &sat, &luma);
+    profile()->delinearizeFloatValue(channelValues);
+    for (int i=0;i<channelnumber;i++){
+        channelValuesF[i]=channelValues[i];
+    }
+    fromNormalisedChannelsValue(pixel, channelValuesF);
+    setOpacity(pixel, 1.0, 1);
+}
+void KoColorSpace::decreaseSaturation(quint8 * pixel, qreal step) const{
+    int channelnumber = abs(channelCount());
+    QVector <double> channelValues(channelnumber);
+    QVector <float> channelValuesF(channelnumber);
+    normalisedChannelsValue(pixel, channelValuesF);
+    for (int i=0;i<channelnumber;i++){
+        channelValues[i]=channelValuesF[i];
+    }
+    profile()->linearizeFloatValue(channelValues);
+    qreal hue, sat, luma = 0.0;
+    toHSY(channelValues, &hue, &sat, &luma);
+    sat -= step;
+    sat = qBound(0.0, sat, 1.0);
+    channelValues = fromHSY(&hue, &sat, &luma);
+    profile()->delinearizeFloatValue(channelValues);
+    for (int i=0;i<channelnumber;i++){
+        channelValuesF[i]=channelValues[i];
+    }
+    fromNormalisedChannelsValue(pixel, channelValuesF);
+    setOpacity(pixel, 1.0, 1);
+}
+void KoColorSpace::increaseHue(quint8 * pixel, qreal step) const{
+    int channelnumber = abs(channelCount()); //doesn't work for cmyka...
+    QVector <double> channelValues(channelnumber);
+    QVector <float> channelValuesF(channelnumber);
+    normalisedChannelsValue(pixel, channelValuesF);
+    for (int i=0;i<channelnumber;i++){
+        channelValues[i]=channelValuesF[i];
+    }
+    profile()->linearizeFloatValue(channelValues);
+    qreal hue, sat, luma = 0.0;
+    toHSY(channelValues, &hue, &sat, &luma);
+    if (hue+step>1.0){
+        hue=(hue+step)- 1.0;
+    } else {
+        hue += step;
+    }
+    channelValues = fromHSY(&hue, &sat, &luma);
+    profile()->delinearizeFloatValue(channelValues);
+    for (int i=0;i<channelnumber;i++){
+        channelValuesF[i]=channelValues[i];
+    }
+    fromNormalisedChannelsValue(pixel, channelValuesF);
+    setOpacity(pixel, 1.0, 1);
+}
+void KoColorSpace::decreaseHue(quint8 * pixel, qreal step) const{
+    int channelnumber = abs(channelCount());
+    QVector <double> channelValues(channelnumber);
+    QVector <float> channelValuesF(channelnumber);
+    normalisedChannelsValue(pixel, channelValuesF);
+    for (int i=0;i<channelnumber;i++){
+        channelValues[i]=channelValuesF[i];
+    }
+    profile()->linearizeFloatValue(channelValues);
+    qreal hue, sat, luma = 0.0;
+    toHSY(channelValues, &hue, &sat, &luma);
+    if (hue-step<0.0){
+        hue=1.0-(step-hue);
+    } else {
+        hue -= step;
+    }
+    channelValues = fromHSY(&hue, &sat, &luma);
+    profile()->delinearizeFloatValue(channelValues);
+    for (int i=0;i<channelnumber;i++){
+        channelValuesF[i]=channelValues[i];
+    }
+    fromNormalisedChannelsValue(pixel, channelValuesF);
+    setOpacity(pixel, 1.0, 1);
+}
+
+void KoColorSpace::increaseRed(quint8 * pixel, qreal step) const{
+    int channelnumber = abs(channelCount());
+    QVector <double> channelValues(channelnumber);
+    QVector <float> channelValuesF(channelnumber);
+    normalisedChannelsValue(pixel, channelValuesF);
+    for (int i=0;i<channelnumber;i++){
+        channelValues[i]=channelValuesF[i];
+    }
+    profile()->linearizeFloatValue(channelValues);
+    qreal y, u, v = 0.0;
+    toYUV(channelValues, &y, &u, &v);
+    u += step;
+    u = qBound(0.0, u, 1.0);
+    channelValues = fromYUV(&y, &u, &v);
+    profile()->delinearizeFloatValue(channelValues);
+    for (int i=0;i<channelnumber;i++){
+        channelValuesF[i]=channelValues[i];
+    }
+    fromNormalisedChannelsValue(pixel, channelValuesF);
+    setOpacity(pixel, 1.0, 1);
+}
+void KoColorSpace::increaseGreen(quint8 * pixel, qreal step) const{
+    int channelnumber = abs(channelCount());
+    QVector <double> channelValues(channelnumber);
+    QVector <float> channelValuesF(channelnumber);
+    normalisedChannelsValue(pixel, channelValuesF);
+    for (int i=0;i<channelnumber;i++){
+        channelValues[i]=channelValuesF[i];
+    }
+    profile()->linearizeFloatValue(channelValues);
+    qreal y, u, v = 0.0;
+    toYUV(channelValues, &y, &u, &v);
+    u -= step;
+    u = qBound(0.0, u, 1.0);
+    channelValues = fromYUV(&y, &u, &v);
+    profile()->delinearizeFloatValue(channelValues);
+    for (int i=0;i<channelnumber;i++){
+        channelValuesF[i]=channelValues[i];
+    }
+    fromNormalisedChannelsValue(pixel, channelValuesF);
+    setOpacity(pixel, 1.0, 1);
+}
+void KoColorSpace::increaseBlue(quint8 * pixel, qreal step) const{
+    int channelnumber = abs(channelCount());
+    QVector <double> channelValues(channelnumber);
+    QVector <float> channelValuesF(channelnumber);
+    normalisedChannelsValue(pixel, channelValuesF);
+    for (int i=0;i<channelnumber;i++){
+        channelValues[i]=channelValuesF[i];
+    }
+    profile()->linearizeFloatValue(channelValues);
+    qreal y, u, v = 0.0;
+    toYUV(channelValues, &y, &u, &v);
+    v += step;
+    v = qBound(0.0, v, 1.0);
+    channelValues = fromYUV(&y, &u, &v);
+    profile()->delinearizeFloatValue(channelValues);
+    for (int i=0;i<channelnumber;i++){
+        channelValuesF[i]=channelValues[i];
+    }
+    fromNormalisedChannelsValue(pixel, channelValuesF);
+    setOpacity(pixel, 1.0, 1);
+}
+void KoColorSpace::increaseYellow(quint8 * pixel, qreal step) const{
+    int channelnumber = abs(channelCount());
+    QVector <double> channelValues(channelnumber);
+    QVector <float> channelValuesF(channelnumber);
+    normalisedChannelsValue(pixel, channelValuesF);
+    for (int i=0;i<channelnumber;i++){
+        channelValues[i]=channelValuesF[i];
+    }
+    profile()->linearizeFloatValue(channelValues);
+    qreal y, u, v = 0.0;
+    toYUV(channelValues, &y, &u, &v);
+    v -= step;
+    v = qBound(0.0, v, 1.0);
+    channelValues = fromYUV(&y, &u, &v);
+    profile()->delinearizeFloatValue(channelValues);
+    for (int i=0;i<channelnumber;i++){
+        channelValuesF[i]=channelValues[i];
+    }
+    fromNormalisedChannelsValue(pixel, channelValuesF);
+    setOpacity(pixel, 1.0, 1);
+}
 QImage KoColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
                                      const KoColorProfile *dstProfile,
                                      KoColorConversionTransformation::Intent renderingIntent,

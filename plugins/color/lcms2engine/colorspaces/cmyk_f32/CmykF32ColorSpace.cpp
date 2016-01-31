@@ -24,6 +24,7 @@
 #include <klocalizedstring.h>
 
 #include "compositeops/KoCompositeOps.h"
+#include <KoColorConversions.h>
 
 CmykF32ColorSpace::CmykF32ColorSpace(const QString &name, KoColorProfile *p)
     : LcmsColorSpace<KoCmykF32Traits>(colorSpaceId(), name,  TYPE_CMYKA_FLT, cmsSigCmykData, p)
@@ -80,3 +81,45 @@ void CmykF32ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) cons
     p->alpha = 1.0;
 }
 
+void CmykF32ColorSpace::toHSY(QVector <double> channelValues, qreal *hue, qreal *sat, qreal *luma) const
+{
+    //we use HSI here because we can't linearise CMYK, and HSY doesn't work right with...
+    CMYKToCMY(&channelValues[0],&channelValues[1],&channelValues[2],&channelValues[3]);
+    channelValues[0] = 1.0-channelValues[0];
+    channelValues[1] = 1.0-channelValues[1];
+    channelValues[2] = 1.0-channelValues[2];
+    RGBToHSI(channelValues[0],channelValues[1],channelValues[2], hue, sat, luma);
+}
+
+QVector <double> CmykF32ColorSpace::fromHSY(qreal *hue, qreal *sat, qreal *luma) const
+{
+    QVector <double> channelValues(5);
+    channelValues.fill(1.0);
+    HSIToRGB(*hue, *sat, *luma, &channelValues[0],&channelValues[1],&channelValues[2]);
+    channelValues[0] = qBound(0.0,1.0-channelValues[0],1.0);
+    channelValues[1] = qBound(0.0,1.0-channelValues[1],1.0);
+    channelValues[2] = qBound(0.0,1.0-channelValues[2],1.0);
+    CMYToCMYK(&channelValues[0],&channelValues[1],&channelValues[2],&channelValues[3]);
+    return channelValues;
+}
+
+void CmykF32ColorSpace::toYUV(QVector <double> channelValues, qreal *y, qreal *u, qreal *v) const
+{
+    CMYKToCMY(&channelValues[0],&channelValues[1],&channelValues[2],&channelValues[3]);
+    channelValues[0] = 1.0-channelValues[0];
+    channelValues[1] = 1.0-channelValues[1];
+    channelValues[2] = 1.0-channelValues[2];
+    RGBToYUV(channelValues[0],channelValues[1],channelValues[2], y, u, v, (1.0 - 0.299),(1.0 - 0.587), (1.0 - 0.114));
+}
+
+QVector <double> CmykF32ColorSpace::fromYUV(qreal *y, qreal *u, qreal *v) const
+{
+    QVector <double> channelValues(5);
+    channelValues.fill(1.0);
+    YUVToRGB(*y, *u, *v, &channelValues[0],&channelValues[1],&channelValues[2], 0.33, 0.33, 0.33);
+    channelValues[0] = qBound(0.0,1.0-channelValues[0],1.0);
+    channelValues[1] = qBound(0.0,1.0-channelValues[1],1.0);
+    channelValues[2] = qBound(0.0,1.0-channelValues[2],1.0);
+    CMYToCMYK(&channelValues[0],&channelValues[1],&channelValues[2],&channelValues[3]);
+    return channelValues;
+}

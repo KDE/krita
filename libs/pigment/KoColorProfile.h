@@ -85,6 +85,13 @@ public:
      * @return the info of this profile
      */
     QString info() const;
+    /** @return manufacturer of the profile
+     */
+    QString manufacturer() const;
+    /**
+     * @return the copyright of the profile
+     */
+    QString copyright() const;
     /**
      * @return the filename of the profile (it might be empty)
      */
@@ -94,6 +101,10 @@ public:
      */
     void setFileName(const QString &filename);
 
+    /**
+     * Return version
+     */
+    virtual float version() const = 0;
     /**
      * @return true if you can use this profile can be used to convert color from a different
      * profile to this one
@@ -109,30 +120,58 @@ public:
     virtual bool isSuitableForDisplay() const = 0;
 
     /**
+     * @return which rendering intents are supported
+     */
+    virtual bool supportsPerceptual() const = 0;
+    virtual bool supportsSaturation() const = 0;
+    virtual bool supportsAbsolute() const = 0;
+    virtual bool supportsRelative() const = 0;
+    /**
      * @return if the profile has colorants.
      */
     virtual bool hasColorants() const = 0;
     /**
      * @return a qvector <double>(9) with the RGB colorants in XYZ
      */
-    virtual QVector <double> getColorantsXYZ() const = 0;
+    virtual QVector <qreal> getColorantsXYZ() const = 0;
     /**
      * @return a qvector <double>(9) with the RGB colorants in xyY
      */
-    virtual QVector <double> getColorantsxyY() const = 0;
+    virtual QVector <qreal> getColorantsxyY() const = 0;
     /**
      * @return a qvector <double>(3) with the whitepoint in XYZ
      */
-    virtual QVector <double> getWhitePointXYZ() const = 0;
+    virtual QVector <qreal> getWhitePointXYZ() const = 0;
     /**
      * @return a qvector <double>(3) with the whitepoint in xyY
      */
-    virtual QVector <double> getWhitePointxyY() const = 0;
+    virtual QVector <qreal> getWhitePointxyY() const = 0;
     
     /**
      * @return estimated gamma for RGB and Grayscale profiles
      */
-    virtual QVector <double> getEstimatedTRC() const = 0;
+    virtual QVector <qreal> getEstimatedTRC() const = 0;
+
+    /**
+     * @return if the profile has a TRC(required for linearisation).
+     */
+    virtual bool hasTRC() const = 0;
+    /**
+     * Linearizes a QVector of 3 doubles long, if it's possible to Linearize
+     * if not, returns the same QVector
+     */
+    virtual void linearizeFloatValue(QVector <qreal> & Value) const = 0;
+    /**
+     * Delinearizes a QVector of 3 doubles long, if it's possible to delinearize
+     * if not, returns the same QVector. Effectively undoes LinearizeFloatValue.
+     */
+    virtual void delinearizeFloatValue(QVector <qreal> & Value) const = 0;
+    /**
+     * More imprecise versions of the above(limited to 16bit, and can't
+     * delinearize above 1.0.) Use this for filters and images.
+     */
+    virtual void linearizeFloatValueFast(QVector <qreal> & Value) const = 0;
+    virtual void delinearizeFloatValueFast(QVector <qreal> & Value) const = 0;
     
     virtual bool operator==(const KoColorProfile&) const = 0;
 
@@ -152,6 +191,14 @@ protected:
      * Allows to set the information string of that profile.
      */
     void setInfo(const QString &info);
+    /**
+     * Allows to set the manufacturer string of that profile.
+     */
+    void setManufacturer(const QString &manufacturer);
+    /**
+     * Allows to set the copyright string of that profile.
+     */
+    void setCopyright(const QString &copyright);
 
 private:
     struct Private;

@@ -44,9 +44,13 @@ KisDlgPngImport::KisDlgPngImport(const QString &path, const QString &colorModelI
     const KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(s);
     if (csf) {
         QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
-
+        QStringList profileNames;
         Q_FOREACH (const KoColorProfile *profile, profileList) {
-            dlgWidget.cmbProfile->addSqueezedItem(profile->name());
+            profileNames.append(profile->name());
+        }
+        qSort(profileNames);
+        Q_FOREACH (QString stringName, profileNames) {
+            dlgWidget.cmbProfile->addSqueezedItem(stringName);
         }
         KisConfig cfg;
         QString profile = cfg.readEntry<QString>("pngImportProfile", csf->defaultProfile());

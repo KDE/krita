@@ -152,7 +152,7 @@
    <item row="0" column="1">
     <widget class="QComboBox" name="cmbType">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <item>
       <property name="text">
@@ -162,6 +162,21 @@
      <item>
       <property name="text">
        <string>Hue/Saturation/Lightness</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Hue/Saturation/Intensity</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Hue/Saturation/Luma</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Blue Chroma/Red Chroma/Luma</string>
       </property>
      </item>
     </widget>

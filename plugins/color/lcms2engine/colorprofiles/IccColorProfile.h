@@ -62,6 +62,8 @@ public:
     public:
         virtual QString name() const = 0;
         virtual QString info() const = 0;
+        virtual QString manufacturer() const = 0;
+        virtual QString copyright() const = 0;
         virtual bool valid() const = 0;
         virtual bool isSuitableForOutput() const = 0;
         virtual bool isSuitableForPrinting() const = 0;
@@ -90,15 +92,25 @@ public:
     */
     QByteArray rawData() const;
     virtual bool valid() const;
+    virtual float version() const;
     virtual bool isSuitableForOutput() const;
     virtual bool isSuitableForPrinting() const;
     virtual bool isSuitableForDisplay() const;
+    virtual bool supportsPerceptual() const;
+    virtual bool supportsSaturation() const;
+    virtual bool supportsAbsolute() const;
+    virtual bool supportsRelative() const;
     virtual bool hasColorants() const;
-    virtual QVector <double> getColorantsXYZ() const;
-    virtual QVector <double> getColorantsxyY() const;
-    virtual QVector <double> getWhitePointXYZ() const;
-    virtual QVector <double> getWhitePointxyY() const;
-    virtual QVector <double> getEstimatedTRC() const;
+    virtual bool hasTRC() const;
+    virtual QVector <qreal> getColorantsXYZ() const;
+    virtual QVector <qreal> getColorantsxyY() const;
+    virtual QVector <qreal> getWhitePointXYZ() const;
+    virtual QVector <qreal> getWhitePointxyY() const;
+    virtual QVector <qreal> getEstimatedTRC() const;
+    virtual void linearizeFloatValue(QVector <qreal> & Value) const;
+    virtual void delinearizeFloatValue(QVector <qreal> & Value) const;
+    virtual void linearizeFloatValueFast(QVector <qreal> & Value) const;
+    virtual void delinearizeFloatValueFast(QVector <qreal> & Value) const;
     virtual bool operator==(const KoColorProfile &) const;
     virtual QString type() const
     {

@@ -127,7 +127,13 @@ bool IccColorProfile::valid() const
     }
     return false;
 }
-
+float IccColorProfile::version() const
+{
+    if (d->shared->lcmsProfile) {
+        return d->shared->lcmsProfile->version();
+    }
+    return 0.0;
+}
 bool IccColorProfile::isSuitableForOutput() const
 {
     if (d->shared->lcmsProfile) {
@@ -151,6 +157,35 @@ bool IccColorProfile::isSuitableForDisplay() const
     }
     return false;
 }
+
+bool IccColorProfile::supportsPerceptual() const
+{
+    if (d->shared->lcmsProfile) {
+        return d->shared->lcmsProfile->supportsPerceptual();
+    }
+    return false;
+}
+bool IccColorProfile::supportsSaturation() const
+{
+    if (d->shared->lcmsProfile) {
+        return d->shared->lcmsProfile->supportsSaturation();
+    }
+    return false;
+}
+bool IccColorProfile::supportsAbsolute() const
+{
+    if (d->shared->lcmsProfile) {
+        return d->shared->lcmsProfile->supportsAbsolute();
+    }
+    return false;
+}
+bool IccColorProfile::supportsRelative() const
+{
+    if (d->shared->lcmsProfile) {
+        return d->shared->lcmsProfile->supportsRelative();
+    }
+    return false;
+}
 bool IccColorProfile::hasColorants() const
 {
     if (d->shared->lcmsProfile) {
@@ -158,47 +193,75 @@ bool IccColorProfile::hasColorants() const
     }
     return false;
 }
-QVector <double> IccColorProfile::getColorantsXYZ() const
+bool IccColorProfile::hasTRC() const
+{
+    if (d->shared->lcmsProfile)
+        return d->shared->lcmsProfile->hasTRC();
+    return false;
+}
+QVector <qreal> IccColorProfile::getColorantsXYZ() const
 {
     if (d->shared->lcmsProfile) {
         return d->shared->lcmsProfile->getColorantsXYZ();
     }
-    return QVector<double>(9);
+    return QVector<qreal>(9);
 }
-QVector <double> IccColorProfile::getColorantsxyY() const
+QVector <qreal> IccColorProfile::getColorantsxyY() const
 {
     if (d->shared->lcmsProfile) {
         return d->shared->lcmsProfile->getColorantsxyY();
     }
-    return QVector<double>(9);
+    return QVector<qreal>(9);
 }
-QVector <double> IccColorProfile::getWhitePointXYZ() const
+QVector <qreal> IccColorProfile::getWhitePointXYZ() const
 {
-    QVector <double> d50Dummy(3);
+    QVector <qreal> d50Dummy(3);
     d50Dummy << 0.9642 << 1.0000 << 0.8249;
     if (d->shared->lcmsProfile) {
         return d->shared->lcmsProfile->getWhitePointXYZ();
     }
     return d50Dummy;
 }
-QVector <double> IccColorProfile::getWhitePointxyY() const
+QVector <qreal> IccColorProfile::getWhitePointxyY() const
 {
-    QVector <double> d50Dummy(3);
+    QVector <qreal> d50Dummy(3);
     d50Dummy << 0.34773 << 0.35952 << 1.0;
     if (d->shared->lcmsProfile) {
         return d->shared->lcmsProfile->getWhitePointxyY();
     }
     return d50Dummy;
 }
-QVector <double> IccColorProfile::getEstimatedTRC() const
+QVector <qreal> IccColorProfile::getEstimatedTRC() const
 {
-    QVector <double> dummy(3);
+    QVector <qreal> dummy(3);
     dummy.fill(2.2);//estimated sRGB trc.
     if (d->shared->lcmsProfile) {
         return d->shared->lcmsProfile->getEstimatedTRC();
     }
     return dummy;
 }
+
+void IccColorProfile::linearizeFloatValue(QVector <qreal> & Value) const
+{
+    if (d->shared->lcmsProfile)
+        d->shared->lcmsProfile->LinearizeFloatValue(Value);
+}
+void IccColorProfile::delinearizeFloatValue(QVector <qreal> & Value) const
+{
+    if (d->shared->lcmsProfile)
+        d->shared->lcmsProfile->DelinearizeFloatValue(Value);
+}
+void IccColorProfile::linearizeFloatValueFast(QVector <qreal> & Value) const
+{
+    if (d->shared->lcmsProfile)
+        d->shared->lcmsProfile->LinearizeFloatValueFast(Value);
+}
+void IccColorProfile::delinearizeFloatValueFast(QVector<qreal> &Value) const
+{
+    if (d->shared->lcmsProfile)
+        d->shared->lcmsProfile->DelinearizeFloatValueFast(Value);
+}
+
 bool IccColorProfile::load()
 {
     QFile file(fileName());
@@ -226,6 +289,8 @@ bool IccColorProfile::init()
     if (d->shared->lcmsProfile->init()) {
         setName(d->shared->lcmsProfile->name());
         setInfo(d->shared->lcmsProfile->info());
+        setManufacturer(d->shared->lcmsProfile->manufacturer());
+        setCopyright(d->shared->lcmsProfile->copyright());
         if (d->shared->lcmsProfile->valid()) {
             calculateFloatUIMinMax();
         }
@@ -276,8 +341,8 @@ void IccColorProfile::calculateFloatUIMinMax(void)
 
     uint16_t in_min_pixel[4] = {0, 0, 0, 0};
     uint16_t in_max_pixel[4] = {0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF};
-    double out_min_pixel[4] = {0, 0, 0, 0};
-    double out_max_pixel[4] = {0, 0, 0, 0};
+    qreal out_min_pixel[4] = {0, 0, 0, 0};
+    qreal out_max_pixel[4] = {0, 0, 0, 0};
 
     cmsHTRANSFORM trans = cmsCreateTransform(
                               cprofile,

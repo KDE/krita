@@ -54,7 +54,12 @@ public:
 
     virtual void colorFromXML(quint8 *pixel, const QDomElement &elt) const;
 
-    virtual quint8 intensity8(const quint8 *src) const;
+    virtual quint8 intensity8(const quint8 * src) const;
+    
+    virtual void toHSY(QVector <double> channelValues, qreal *hue, qreal *sat, qreal *luma) const;
+    virtual QVector <double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const;
+    virtual void toYUV(QVector <double> channelValues, qreal *y, qreal *u, qreal *v) const;
+    virtual QVector <double> fromYUV(qreal *y, qreal *u, qreal *v) const;
 
     static QString colorSpaceId()
     {

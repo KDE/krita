@@ -24,6 +24,7 @@
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
+#include <KoColorProfile.h>
 #include <KoCompositeOpRegistry.h>
 
 #include <kis_brush.h>
@@ -83,16 +84,6 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings,
     m_colorRatePainter->setCompositeOp(painter->compositeOp()->id());
 
     m_rotationOption.applyFanCornersInfo(this);
-
-    /**
-     * Disable handling of the subpixel precision. In the smudge op we
-     * should read from the aligned areas of the image, so having
-     * additional internal offsets, created by the subpixel precision,
-     * will worsen the quality (at least because
-     * QRectF(m_dstDabRect).center() will not point to the real center
-     * of the brush anymore).
-     */
-    m_dabCache->disableSubpixelPrecision();
 }
 
 KisColorSmudgeOp::~KisColorSmudgeOp()
@@ -137,6 +128,29 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     if (!painter()->device() || !brush || !brush->canPaintFor(info)) {
         return KisSpacingInformation(1.0);
     }
+
+    if (m_smudgeRateOption.getMode() == KisSmudgeOption::SMEARING_MODE) {
+        /**
+        * Disable handling of the subpixel precision. In the smudge op we
+        * should read from the aligned areas of the image, so having
+        * additional internal offsets, created by the subpixel precision,
+        * will worsen the quality (at least because
+        * QRectF(m_dstDabRect).center() will not point to the real center
+        * of the brush anymore).
+        * Of course, this only really matters with smearing_mode (bug:327235),
+        * and you only notice the lack of subpixel precision in the dulling methods.
+        */
+        m_dabCache->disableSubpixelPrecision();
+    }
+    
+    //if precision
+    KoColor colorSpaceChanger = painter()->paintColor();
+    const KoColorSpace* preciseColorSpace = colorSpaceChanger.colorSpace();
+    /*if (colorSpaceChanger.colorSpace()->colorDepthId().id() == "U8") {
+	preciseColorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceChanger.colorSpace()->colorModelId().id(), "U16", colorSpaceChanger.profile() );
+        colorSpaceChanger.convertTo(preciseColorSpace);
+    }
+    painter()->setPaintColor(colorSpaceChanger);*/
 
     // get the scaling factor calculated by the size option
     qreal scale    = m_sizeOption.apply(info);
@@ -205,7 +219,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 
     if (m_smudgeRateOption.getMode() == KisSmudgeOption::SMEARING_MODE) {
         m_smudgePainter->bitBlt(QPoint(), painter()->device(), srcDabRect);
-    } else {
+    } else if (m_smudgeRateOption.getMode() == KisSmudgeOption::DULLING_MODE) {
         QPoint pt = (srcDabRect.topLeft() + hotSpot).toPoint();
 
         if (m_smudgeRadiusOption.isChecked()) {
@@ -230,7 +244,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 
     // if the user selected the color smudge option,
     // we will mix some color into the temporary painting device (m_tempDev)
-    if (m_colorRateOption.isChecked()) {
+    if (m_colorRateOption.isChecked() && m_smudgeRateOption.getMode()) {
         // this will apply the opacity (selected by the user) to copyPainter
         // (but fit the rate inbetween the range 0.0 to (1.0-SmudgeRate))
         qreal maxColorRate = qMax<qreal>(1.0 - m_smudgeRateOption.getRate(), 0.2);
@@ -263,6 +277,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 
     // then blit the temporary painting device on the canvas at the current brush position
     // the alpha mask (maskDab) will be used here to only blit the pixels that are in the area (shape) of the brush
+    
     painter()->setCompositeOp(COMPOSITE_COPY);
     painter()->bitBltWithFixedSelection(m_dstDabRect.x(), m_dstDabRect.y(), m_tempDev, m_maskDab, m_dstDabRect.width(), m_dstDabRect.height());
     painter()->renderMirrorMaskSafe(m_dstDabRect, m_tempDev, 0, 0, m_maskDab, !m_dabCache->needSeparateOriginal());

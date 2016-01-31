@@ -24,6 +24,7 @@
 #include <klocalizedstring.h>
 
 #include "compositeops/KoCompositeOps.h"
+#include "KoColorConversions.h"
 
 YCbCrF32ColorSpace::YCbCrF32ColorSpace(const QString &name, KoColorProfile *p)
     : LcmsColorSpace<KoYCbCrF32Traits>(colorSpaceId(), name, TYPE_YCbCrA_FLT, cmsSigXYZData, p)
@@ -78,3 +79,32 @@ void YCbCrF32ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) con
     p->alpha = 1.0;
 }
 
+void YCbCrF32ColorSpace::toHSY(QVector <double> channelValues, qreal *hue, qreal *sat, qreal *luma) const
+{
+    LabToLCH(channelValues[0],channelValues[1],channelValues[2], luma, sat, hue);
+}
+
+QVector <double> YCbCrF32ColorSpace::fromHSY(qreal *hue, qreal *sat, qreal *luma) const
+{
+    QVector <double> channelValues(4);
+    LCHToLab(*luma, *sat, *hue, &channelValues[0],&channelValues[1],&channelValues[2]);
+    channelValues[3]=1.0;
+    return channelValues;
+}
+
+void YCbCrF32ColorSpace::toYUV(QVector <double> channelValues, qreal *y, qreal *u, qreal *v) const
+{
+    *y =channelValues[0];
+    *u=channelValues[1];
+    *v=channelValues[2];
+}
+
+QVector <double> YCbCrF32ColorSpace::fromYUV(qreal *y, qreal *u, qreal *v) const
+{
+    QVector <double> channelValues(4);
+    channelValues[0]=*y;
+    channelValues[1]=*u;
+    channelValues[2]=*v;
+    channelValues[3]=1.0;
+    return channelValues;
+}

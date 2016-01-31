@@ -22,85 +22,46 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  **/
- 
-#ifndef KIS_CIETONGUEWIDGET_H
-#define KIS_CIETONGUEWIDGET_H
- 
-// Qt includes
+
+#ifndef KIS_TONECURVEWIDGET_H
+#define KIS_TONECURVEWIDGET_H
  
 #include <QWidget>
 #include <QColor>
 #include <QPaintEvent>
- 
-// KDE includes
 
-#include <KoColor.h>
-#include <KoColorSpace.h>
-  
 #include <kritaui_export.h>
  
-class KRITAUI_EXPORT KisCIETongueWidget : public QWidget
+class KRITAUI_EXPORT KisToneCurveWidget : public QWidget
 {
     Q_OBJECT
  
 public:
  
-    KisCIETongueWidget(QWidget *parent=0);
-    ~KisCIETongueWidget();
- 
-    //this expects a qvector <double> (9), qvector <double> (3) and whether or not there's profile data?;
-    void setProfileData(QVector <double> p, QVector <double> w, bool profileData = false);
-    void setGamut(QPolygonF gamut);
-    void setRGBData(QVector <double> whitepoint, QVector <double> colorants);
-    void setCMYKData(QVector <double> whitepoint);
-    void setXYZData(QVector <double> whitepoint);
-    void setGrayData(QVector <double> whitepoint);
-    void setLABData(QVector <double> whitepoint);
-    void setYCbCrData(QVector <double> whitepoint);
+    KisToneCurveWidget(QWidget *parent=0);
+    ~KisToneCurveWidget();
+
+    void setGreyscaleCurve(QPolygonF poly);
+    void setRGBCurve(QPolygonF red, QPolygonF green, QPolygonF blue);
+    void setCMYKCurve(QPolygonF cyan, QPolygonF magenta, QPolygonF yellow, QPolygonF key);
     void setProfileDataAvailable(bool dataAvailable);
- 
-    void loadingStarted();
-    void loadingFailed();
-    void uncalibratedColor();
-    
-    enum model {RGBA, CMYKA, XYZA, LABA, GRAYA, YCbCrA};
- 
 protected:
  
     int  grids(double val) const;
- 
-    void outlineTongue();
-    void fillTongue();
-    void drawTongueAxis();
-    void drawTongueGrid();
-    void drawLabels();
- 
-    QRgb colorByCoord(double x, double y);
-    void drawSmallElipse(QPointF xy, int r, int g, int b, int sz);
- 
+    void drawGrid();
     void resizeEvent(QResizeEvent* event);
     void paintEvent(QPaintEvent*);
  
 private:
  
-    void drawColorantTriangle();
-    void drawGamut();
-    void drawWhitePoint();
-    void drawPatches();
     void updatePixmap();
- 
-    void mapPoint(int& icx, int& icy, QPointF xy);
+    void mapPoint(QPointF & xy);
     void biasedLine(int x1, int y1, int x2, int y2);
     void biasedText(int x, int y, const QString& txt);
- 
-private Q_SLOTS:
- 
-    void slotProgressTimerDone();
- 
 private :
  
     class Private;
     Private* const d;
 };
- 
-#endif /* KISCIETONGUEWIDGET_H */
+
+#endif /* KISTONECURVEWIDGET_H */

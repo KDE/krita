@@ -23,6 +23,7 @@
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
+#include <KoColorProfile.h>
 
 KisHSVAdjustmentFilter::KisHSVAdjustmentFilter()
         : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&HSV Adjustment..."))
@@ -53,6 +54,9 @@ KoColorTransformation* KisHSVAdjustmentFilter::createTransformation(const KoColo
 
         params["type"] = config->getInt("type", 1);
         params["colorize"] = config->getBool("colorize", false);
+        params["lumaRed"]   = cs->lumaCoefficients()[0];
+        params["lumaGreen"] = cs->lumaCoefficients()[1];
+        params["lumaBlue"]  = cs->lumaCoefficients()[2];
     }
     return cs->createColorTransformation("hsv_adjustment", params);
 }
@@ -118,14 +122,33 @@ void KisHSVConfigWidget::setConfiguration(const KisPropertiesConfiguration * con
 void KisHSVConfigWidget::switchType(int index)
 {
     emit sigConfigurationItemChanged();
+    m_page->label->setText(i18n("Hue:"));
+    m_page->label_2->setText(i18n("Saturation:"));
+    m_page->hue->setMinimum(-180);
+    m_page->hue->setMaximum(180);
     switch(index) {
     case 0:
         m_page->label_3->setText(i18n("Value:"));
         return;
     case 1:
+        m_page->label_3->setText(i18n("Lightness:"));
+        return;
+    case 2:
+        m_page->label_3->setText(i18n("Intensity:"));
+        return;
+    case 3:
+        m_page->label_3->setText(i18n("Luma:"));
+        return;
+    case 4:
+        m_page->label->setText(i18n("Yellow-Blue:"));
+        m_page->label_2->setText(i18n("Green-Red:"));
+        m_page->label_3->setText(i18n("Luma:"));
+        m_page->hue->setRange(-100, 100, 0);
+        m_page->hue->setValue(0);
     default:
         m_page->label_3->setText(i18n("Lightness:"));
     }
+    
 
 }
 

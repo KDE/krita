@@ -59,3 +59,28 @@ void GrayAU8ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) cons
     p[1] = KoColorSpaceMathsTraits<quint8>::max;
 }
 
+void GrayAU8ColorSpace::toHSY(QVector <double> channelValues, qreal *, qreal *, qreal *luma) const
+{
+    *luma = channelValues[0];
+}
+
+QVector <double> GrayAU8ColorSpace::fromHSY(qreal *, qreal *, qreal *luma) const
+{
+    QVector <double> channelValues(2);
+    channelValues.fill(*luma);
+    channelValues[1]=1.0;
+    return channelValues;
+}
+
+void GrayAU8ColorSpace::toYUV(QVector <double> channelValues, qreal *y, qreal *, qreal *) const
+{
+    *y = channelValues[0];
+}
+
+QVector <double> GrayAU8ColorSpace::fromYUV(qreal *y, qreal *, qreal *) const
+{
+    QVector <double> channelValues(2);
+    channelValues.fill(*y);
+    channelValues[1]=1.0;
+    return channelValues;
+}

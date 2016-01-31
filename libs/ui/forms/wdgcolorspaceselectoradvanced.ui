@@ -201,24 +201,12 @@
          <enum>QFormLayout::ExpandingFieldsGrow</enum>
         </property>
         <item row="0" column="0" colspan="2">
-         <widget class="QLabel" name="lbltrc">
+         <widget class="KisToneCurveWidget" name="TRCwidget" native="true">
           <property name="minimumSize">
            <size>
-            <width>240</width>
-            <height>0</height>
+            <width>150</width>
+            <height>150</height>
            </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>240</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="text">
-           <string notr="true">TRC</string>
-          </property>
-          <property name="wordWrap">
-           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -231,48 +219,6 @@
         </item>
         <item row="1" column="1">
          <widget class="QLabel" name="lblXYZ_W">
-          <property name="text">
-           <string>xyz</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="lblRed">
-          <property name="text">
-           <string>Red:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QLabel" name="lblXYZ_R">
-          <property name="text">
-           <string>xyz</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="lblGreen">
-          <property name="text">
-           <string>Green:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QLabel" name="lblXYZ_G">
-          <property name="text">
-           <string>xyz</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="lblBlue">
-          <property name="text">
-           <string>Blue:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1">
-         <widget class="QLabel" name="lblXYZ_B">
           <property name="text">
            <string>xyz</string>
           </property>
@@ -317,6 +263,12 @@
    <class>KisCIETongueWidget</class>
    <extends>QWidget</extends>
    <header>widgets/kis_cie_tongue_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisToneCurveWidget</class>
+   <extends>QWidget</extends>
+   <header>widgets/kis_tone_curve_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

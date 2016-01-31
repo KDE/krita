@@ -24,6 +24,7 @@
 #include <klocalizedstring.h>
 
 #include "compositeops/KoCompositeOps.h"
+#include "KoColorConversions.h"
 
 XyzU16ColorSpace::XyzU16ColorSpace(const QString &name, KoColorProfile *p) :
     LcmsColorSpace<KoXyzU16Traits>(colorSpaceId(), name, TYPE_XYZA_16, cmsSigXYZData, p)
@@ -72,3 +73,32 @@ void XyzU16ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
     p->alpha = KoColorSpaceMathsTraits<quint16>::max;
 }
 
+void XyzU16ColorSpace::toHSY(QVector <double> channelValues, qreal *hue, qreal *sat, qreal *luma) const
+{
+    qreal xyx, xyy, xyY = 0.0;
+    XYZToxyY(channelValues[0],channelValues[1],channelValues[2], &xyx, &xyy, &xyY);
+    LabToLCH(xyY,xyx,xyY, hue, sat, luma);
+}
+
+QVector <double> XyzU16ColorSpace::fromHSY(qreal *hue, qreal *sat, qreal *luma) const
+{
+    QVector <double> channelValues(4);
+    qreal xyx, xyy, xyY = 0.0;
+    LCHToLab(*luma, *sat, *hue, &xyY,&xyx,&xyy);
+    xyYToXYZ(xyx, xyy, xyY, &channelValues[0],&channelValues[1],&channelValues[2]);
+    channelValues[3]=1.0;
+    return channelValues;
+}
+
+void XyzU16ColorSpace::toYUV(QVector <double> channelValues, qreal *y, qreal *u, qreal *v) const
+{
+    XYZToxyY(channelValues[0],channelValues[1],channelValues[2], u, v, y);
+}
+
+QVector <double> XyzU16ColorSpace::fromYUV(qreal *y, qreal *u, qreal *v) const
+{
+    QVector <double> channelValues(4);
+    xyYToXYZ(*u, *v, *y, &channelValues[0],&channelValues[1],&channelValues[2]);
+    channelValues[3]=1.0;
+    return channelValues;
+}

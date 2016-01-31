@@ -158,6 +158,24 @@ public:
     virtual void colorFromXML(quint8* , const QDomElement&) const {
         warnPigment << i18n("Undefined operation in the alpha color space");
     }
+    virtual void toHSY(QVector <double>, qreal *, qreal *, qreal *) const {
+        warnPigment << i18n("Undefined operation in the alpha color space");
+    }
+    virtual QVector <double> fromHSY(qreal *, qreal *, qreal *) const {
+        warnPigment << i18n("Undefined operation in the alpha color space");
+        QVector <double> channelValues (1);
+        channelValues.fill(0.0);
+        return channelValues;
+    }
+    virtual void toYUV(QVector <double>, qreal *, qreal *, qreal *) const {
+        warnPigment << i18n("Undefined operation in the alpha color space");
+    }
+    virtual QVector <double> fromYUV(qreal *, qreal *, qreal *) const {
+        warnPigment << i18n("Undefined operation in the alpha color space");
+        QVector <double> channelValues (1);
+        channelValues.fill(0.0);
+        return channelValues;
+    }
 
 protected:
     virtual bool preferCompositionInSourceColorSpace() const;

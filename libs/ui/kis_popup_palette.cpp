@@ -38,11 +38,11 @@
 #include "kis_signal_compressor.h"
 #include <QApplication>
 
-#define brushInnerRadius 94.0
-#define brushOuterRadius 145.0
+
 #define colorInnerRadius 72.0
 #define colorOuterRadius 92.0
-#define brushRadius (brushInnerRadius+brushOuterRadius)/2
+#define maxbrushRadius 42.0
+#define widgetSize (colorOuterRadius*2+maxbrushRadius*4)
 
 class PopupColorTriangle : public KoTriangleColorSelector
 {
@@ -95,12 +95,14 @@ KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoCo
     , m_displayRenderer(displayRenderer)
     , m_colorChangeCompressor(new KisSignalCompressor(50, KisSignalCompressor::POSTPONE))
 {
+    
+    const int borderWidth = 3;
     m_triangleColorSelector  = new PopupColorTriangle(displayRenderer, this);
-    m_triangleColorSelector->move(77, 77);
-    m_triangleColorSelector->resize(136, 136);
+    m_triangleColorSelector->move(widgetSize/2-colorInnerRadius+borderWidth, widgetSize/2-colorInnerRadius+borderWidth);
+    m_triangleColorSelector->resize(colorInnerRadius*2-borderWidth*2, colorInnerRadius*2-borderWidth*2);
     m_triangleColorSelector->setVisible(true);
 
-    QRegion maskedRegion(0, 0, 136, 136, QRegion::Ellipse );
+    QRegion maskedRegion(0, 0, m_triangleColorSelector->width(), m_triangleColorSelector->height(), QRegion::Ellipse );
     m_triangleColorSelector->setMask(maskedRegion);
 
     setAttribute(Qt::WA_ContentsPropagated, true);
@@ -241,7 +243,7 @@ void KisPopupPalette::setVisible(bool b)
 
 QSize KisPopupPalette::sizeHint() const
 {
-    return QSize(290, 290);
+    return QSize(widgetSize, widgetSize);
 }
 
 void KisPopupPalette::resizeEvent(QResizeEvent*)
@@ -274,12 +276,8 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     // create an ellipse for the background that is slightly
     // smaller than the clipping mask. This will prevent aliasing
     QPainterPath backgroundContainer;
-
-    qreal backgroundWidth = (qreal)(e->rect().width() );
-    qreal backgroundHeight = (qreal)(e->rect().height() );
-
-    backgroundContainer.addEllipse( (-backgroundWidth/2 +1), (-backgroundHeight/2 +1),
-                                          backgroundWidth - 3 , backgroundHeight - 3 );
+    backgroundContainer.addEllipse( -colorOuterRadius, -colorOuterRadius,
+                                    colorOuterRadius*2, colorOuterRadius*2 );
     painter.fillPath(backgroundContainer,palette().brush(QPalette::Window));
     painter.drawPath(backgroundContainer);
 
@@ -300,6 +298,8 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 
         QRect bounds = path.boundingRect().toAlignedRect();
         painter.drawImage(bounds.topLeft() , images.at(pos).scaled(bounds.size() , Qt::KeepAspectRatioByExpanding));
+        painter.drawPath(path);
+        
         painter.restore();
     }
     if (hoveredPreset() > -1) {
@@ -409,22 +409,21 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent* event)
     QPointF point = event->posF();
     event->accept();
 
-    QPainterPath pathBrush(drawDonutPathFull(width() / 2, height() / 2, brushInnerRadius, brushOuterRadius));
     QPainterPath pathColor(drawDonutPathFull(width() / 2, height() / 2, colorInnerRadius, colorOuterRadius));
 
     setToolTip("");
     setHoveredPreset(-1);
     setHoveredColor(-1);
 
-    if (pathBrush.contains(point)) {
-        //in favorite brushes area
+    {
         int pos = calculatePresetIndex(point, m_resourceManager->numFavoritePresets());
 
         if (pos >= 0 && pos < m_resourceManager->numFavoritePresets()) {
             setToolTip(m_resourceManager->favoritePresetList().at(pos).data()->name());
             setHoveredPreset(pos);
         }
-    } else if (pathColor.contains(point)) {
+    }
+    if (pathColor.contains(point)) {
         int pos = calculateIndex(point, m_resourceManager->recentColorsTotal());
 
         if (pos >= 0 && pos < m_resourceManager->recentColorsTotal()) {
@@ -440,38 +439,35 @@ void KisPopupPalette::mousePressEvent(QMouseEvent* event)
     event->accept();
 
     if (event->button() == Qt::LeftButton) {
-        QPainterPath pathBrush(drawDonutPathFull(width() / 2, height() / 2, brushInnerRadius, brushOuterRadius));
 
-        if (pathBrush.contains(point)) {
-            //in favorite brushes area
-            int pos = calculateIndex(point, m_resourceManager->numFavoritePresets());
-            if (pos >= 0 && pos < m_resourceManager->numFavoritePresets()
-                    && isPointInPixmap(point, pos)) {
-                //setSelectedBrush(pos);
-                update();
-            }
-        } else {
-            int side = qMin(width(), height());
-            QPainterPath settingCircle;
-            settingCircle.addEllipse(width() / 2 + side / 2 - 40, height() / 2 + side / 2 - 40, 40, 40);
-            if (settingCircle.contains(point)) {                
-                KisPaintOpPresetResourceServer* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-                QStringList tags = rServer->tagNamesList();
-                qSort(tags);
+        //in favorite brushes area
+        int pos = calculateIndex(point, m_resourceManager->numFavoritePresets());
+        if (pos >= 0 && pos < m_resourceManager->numFavoritePresets()
+                && isPointInPixmap(point, pos)) {
+            //setSelectedBrush(pos);
+            update();
+        }
 
-                if (!tags.isEmpty()) {
-                    QMenu menu;
-                    Q_FOREACH (const QString& tag, tags) {
-                        menu.addAction(tag);
-                    }
-                    QAction* action = menu.exec(event->globalPos());
-                    if (action) {
-                        m_resourceManager->setCurrentTag(action->text());
-                    }
-                } else {
-                    QWhatsThis::showText(event->globalPos(), 
-                                         i18n("There are no tags available to show in this popup. To add presets, you need to tag them and then select the tag here."));
+        int side = qMin(width(), height());
+        QPainterPath settingCircle;
+        settingCircle.addEllipse(width() / 2 + side / 2 - 40, height() / 2 + side / 2 - 40, 40, 40);
+        if (settingCircle.contains(point)) {                
+            KisPaintOpPresetResourceServer* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+            QStringList tags = rServer->tagNamesList();
+            qSort(tags);
+
+            if (!tags.isEmpty()) {
+                QMenu menu;
+                Q_FOREACH (const QString& tag, tags) {
+                    menu.addAction(tag);
                 }
+                QAction* action = menu.exec(event->globalPos());
+                if (action) {
+                    m_resourceManager->setCurrentTag(action->text());
+                }
+            } else {
+                QWhatsThis::showText(event->globalPos(), 
+                                        i18n("There are no tags available to show in this popup. To add presets, you need to tag them and then select the tag here."));
             }
         }
     }
@@ -489,16 +485,14 @@ void KisPopupPalette::mouseReleaseEvent(QMouseEvent * event)
     event->accept();
 
     if (event->button() == Qt::LeftButton || event->button() == Qt::RightButton) {
-        QPainterPath pathBrush(drawDonutPathFull(width() / 2, height() / 2, brushInnerRadius, brushOuterRadius));
         QPainterPath pathColor(drawDonutPathFull(width() / 2, height() / 2, colorInnerRadius, colorOuterRadius));
 
-        if (pathBrush.contains(point)) {
-            //in favorite brushes area
-            if (hoveredPreset() > -1) {
-                //setSelectedBrush(hoveredBrush());
-                emit sigChangeActivePaintop(hoveredPreset());
-            }
-        } else if (pathColor.contains(point)) {
+        //in favorite brushes area
+        if (hoveredPreset() > -1) {
+            //setSelectedBrush(hoveredBrush());
+            emit sigChangeActivePaintop(hoveredPreset());
+        }
+        if (pathColor.contains(point)) {
             int pos = calculateIndex(point, m_resourceManager->recentColorsTotal());
 
             if (pos >= 0 && pos < m_resourceManager->recentColorsTotal()) {
@@ -542,38 +536,28 @@ KisPopupPalette::~KisPopupPalette()
 
 QPainterPath KisPopupPalette::pathFromPresetIndex(int index)
 {
-    QRect outerRect(-width() / 2, -height() / 2, width(), height());
-    outerRect.adjust(3, 3, -3, -3);
-    int ringSize = brushOuterRadius - colorOuterRadius - 6;
-    QRect innerRect = outerRect.adjusted(ringSize, ringSize, -ringSize, -ringSize);
-
-    qreal angleLength = 360.0 / numSlots();
+    qreal angleLength = 360.0 / numSlots() / 180 * M_PI;
     qreal angle = index * angleLength;
 
+    qreal r = colorOuterRadius * sin(angleLength/2) / ( 1 - sin(angleLength/2));
+    
     QPainterPath path;
-    path.moveTo(brushOuterRadius * cos(angle / 180 * M_PI), -brushOuterRadius * sin(angle / 180 * M_PI));
-    path.arcTo(outerRect, angle, angleLength);
-    path.arcTo(innerRect, angle + angleLength, -angleLength);
+    path.addEllipse((colorOuterRadius+r) * cos(angle)-r, -(colorOuterRadius+r) * sin(angle)-r, 2*r, 2*r);
     path.closeSubpath();
     return path;
 }
 
 int KisPopupPalette::calculatePresetIndex(QPointF point, int /*n*/)
 {
-    int x = point.x() - width() / 2;
-    int y = point.y() - height() / 2;
-
-    qreal radius = sqrt((qreal) x * x + y * y);
-
-    qreal angle;
-    // y coordinate is the reverse of the cartesian one
-    if (y < 0) {
-        angle = acos(x / radius);
-    } else {
-        angle = 2 * M_PI - acos(x / radius);
+    for(int i = 0; i < numSlots(); i++)
+    {
+        QPointF adujustedPoint = point - QPointF(width()/2, height()/2);
+        if(pathFromPresetIndex(i).contains(adujustedPoint))
+        {
+            return i;
+        }
     }
-    int pos = floor(angle / (2 * M_PI / numSlots()));
-    return pos;
+    return -1;
 }
 
 int KisPopupPalette::numSlots()

@@ -305,6 +305,9 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
         else {
             painter.fillPath(path, palette().brush(QPalette::Window));     
         }
+        QPen pen = painter.pen();
+        pen.setWidth(3);
+        painter.setPen(pen);
         painter.drawPath(path);
         
         painter.restore();

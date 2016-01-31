@@ -290,14 +290,21 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 
     //painting favorite brushes pixmap/icon
     QPainterPath path;
-    for (int pos = 0; pos < images.size(); pos++) {
+    for (int pos = 0; pos < numSlots(); pos++) {
         painter.save();
 
         path = pathFromPresetIndex(pos);
-        painter.setClipPath(path);
+        
+        if(pos < images.size())
+        {
+            painter.setClipPath(path);
 
-        QRect bounds = path.boundingRect().toAlignedRect();
-        painter.drawImage(bounds.topLeft() , images.at(pos).scaled(bounds.size() , Qt::KeepAspectRatioByExpanding));
+            QRect bounds = path.boundingRect().toAlignedRect();
+            painter.drawImage(bounds.topLeft() , images.at(pos).scaled(bounds.size() , Qt::KeepAspectRatioByExpanding));
+        }
+        else {
+            painter.fillPath(path, palette().brush(QPalette::Window));     
+        }
         painter.drawPath(path);
         
         painter.restore();

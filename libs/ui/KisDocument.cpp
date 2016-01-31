@@ -109,6 +109,7 @@
 #include "KisImportExportManager.h"
 #include "KisPart.h"
 #include "KisView.h"
+#include "kis_async_action_feedback.h"
 
 
 static const char CURRENT_DTD_VERSION[] = "2.0";
@@ -844,6 +845,12 @@ bool KisDocument::saveNativeFormat(const QString & file)
 
     d->image->unlock();
     setAutoSave(realAutoSaveInterval);
+
+
+    if (!isAutosaving()) {
+        KisAsyncActionFeedback f(i18n("Saving document..."), 0);
+        return f.runAction(std::bind(&KisDocument::saveNativeFormatCalligra, this, store));
+    }
 
     return saveNativeFormatCalligra(store);
 }

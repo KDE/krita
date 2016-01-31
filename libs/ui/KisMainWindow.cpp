@@ -129,6 +129,7 @@
 #include <KisImportExportFilter.h>
 #include <KisDocumentEntry.h>
 #include "kis_signal_compressor_with_param.h"
+#include "dialogs/kis_delayed_save_dialog.h"
 
 class ToolDockerFactory : public KoDockFactoryBase
 {
@@ -848,6 +849,9 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
     if (!document) {
         return true;
     }
+
+    KisDelayedSaveDialog dlg(document->image(), this);
+    dlg.blockIfImageIsBusy();
 
     bool reset_url;
 

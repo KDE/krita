@@ -23,7 +23,7 @@
 #include "LcmsColorSpace.h"
 #include "KoColorModelStandardIds.h"
 
-class KoRgbF16Traits;
+struct KoRgbF16Traits;
 
 class RgbF16ColorSpace : public LcmsColorSpace<KoRgbF16Traits>
 {

@@ -36,7 +36,7 @@ public:
     bool import(QStringList files, int firstFrame, int step);
 
 private:
-    class Private;
+    struct Private;
     QScopedPointer<Private> m_d;
 };
 

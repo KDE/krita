@@ -26,7 +26,7 @@
 
 #define TYPE_YCbCrA_8 (COLORSPACE_SH(PT_YCbCr)|CHANNELS_SH(3)|BYTES_SH(1)|EXTRA_SH(1))
 
-class KoYCbCrU8Traits;
+struct KoYCbCrU8Traits;
 
 class YCbCrU8ColorSpace : public LcmsColorSpace<KoYCbCrU8Traits>
 {

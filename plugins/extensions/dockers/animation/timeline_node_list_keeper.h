@@ -34,7 +34,7 @@ class KRITAANIMATIONDOCKER_EXPORT TimelineNodeListKeeper : public QObject
 {
     Q_OBJECT
 public:
-    class ModelWithExternalNotifications;
+    struct ModelWithExternalNotifications;
 
     struct OtherLayer;
     typedef QList<OtherLayer> OtherLayersList;

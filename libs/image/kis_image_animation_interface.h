@@ -119,7 +119,7 @@ private:
     // interface for:
     friend class KisRegenerateFrameStrokeStrategy;
     friend class KisAnimationFrameCacheTest;
-    friend class KisLayerUtils::SwitchFrameCommand;
+    friend struct KisLayerUtils::SwitchFrameCommand;
     friend class KisImageTest;
     void saveAndResetCurrentTime(int frameId, int *savedValue);
     void restoreCurrentTime(int *savedValue);
@@ -140,7 +140,7 @@ Q_SIGNALS:
     void sigPlaybackRangeChanged();
 
 private:
-    class Private;
+    struct Private;
     const QScopedPointer<Private> m_d;
 };
 

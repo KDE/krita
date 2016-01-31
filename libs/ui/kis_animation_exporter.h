@@ -39,7 +39,7 @@ private Q_SLOTS:
     void cancel();
 
 private:
-    class Private;
+    struct Private;
     QScopedPointer<Private> m_d;
 };
 
@@ -65,7 +65,7 @@ private Q_SLOTS:
     void frameReadyToSave();
 
 private:
-    class Private;
+    struct Private;
     QScopedPointer<Private> m_d;
 };
 

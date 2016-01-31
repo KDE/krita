@@ -26,7 +26,7 @@
 
 #include <KoColorModelStandardIds.h>
 
-class KoXyzF16Traits;
+struct KoXyzF16Traits;
 
 class XyzF16ColorSpace : public LcmsColorSpace<KoXyzF16Traits>
 {

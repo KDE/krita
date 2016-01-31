@@ -25,7 +25,7 @@ class QEvent;
 class QUrl;
 class QStandardItemModel;
 
-class KisDetailsPanePrivate;
+struct KisDetailsPanePrivate;
 
 class KisDetailsPane : public QWidget, public Ui_KisDetailsPaneBase
 {

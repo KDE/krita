@@ -27,7 +27,7 @@
 
 #include <kritaui_export.h>
 
-class KisExposureGammaCorrectionInterface;
+struct KisExposureGammaCorrectionInterface;
 
 /**
  * @brief The KisDisplayFilter class is the base class for filters that

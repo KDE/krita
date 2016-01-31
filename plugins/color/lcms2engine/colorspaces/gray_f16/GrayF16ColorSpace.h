@@ -24,7 +24,7 @@
 
 #define TYPE_GRAYA_HALF_FLT         (FLOAT_SH(1)|COLORSPACE_SH(PT_GRAY)|EXTRA_SH(1)|CHANNELS_SH(1)|BYTES_SH(2))
 
-class KoGrayF16Traits;
+struct KoGrayF16Traits;
 
 class GrayF16ColorSpace : public LcmsColorSpace<KoGrayF16Traits>
 {

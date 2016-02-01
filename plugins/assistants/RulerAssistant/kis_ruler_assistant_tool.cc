@@ -45,6 +45,8 @@
 #include <kis_abstract_perspective_grid.h>
 #include <kis_painting_assistants_decoration.h>
 
+#include <math.h>
+
 KisRulerAssistantTool::KisRulerAssistantTool(KoCanvasBase * canvas)
     : KisTool(canvas, KisCursor::arrowCursor()), m_canvas(dynamic_cast<KisCanvas2*>(canvas)),
       m_assistantDrag(0), m_newAssistant(0), m_optionsWidget(0), m_handleSize(32), m_handleHalfSize(16)

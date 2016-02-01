@@ -61,6 +61,8 @@
 #include <KoResourcePaths.h>
 #include <kundo2command.h>
 
+#include <math.h>
+
 ConnectionTool::ConnectionTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
     , m_editMode(Idle)

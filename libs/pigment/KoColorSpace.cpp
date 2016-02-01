@@ -124,7 +124,7 @@ QPolygonF KoColorSpace::gamutXYY() const
         int samples = 5;//amount of samples in our color space.
         QString name = KoColorSpaceRegistry::instance()->colorSpaceFactory("XYZAF16")->defaultProfile();
         const KoColorSpace* xyzColorSpace = KoColorSpaceRegistry::instance()->colorSpace("XYZA", "F16", name);
-        quint8 data[channelCount()];
+        quint8 *data = new quint8(channelCount());
         quint8 data2[4];//xyza is 4.
         //QVector <qreal> sampleCoordinates(pow(colorChannelCount(),samples));
         //sampleCoordinates.fill(0.0);
@@ -175,6 +175,7 @@ QPolygonF KoColorSpace::gamutXYY() const
                 
             }
         }
+        delete data;
         //if we ever implement a boundary-checking thing I'd add it here.
         return d->gamutXYY;
     } else {
@@ -192,7 +193,7 @@ QPolygonF KoColorSpace::estimatedTRCXYY() const
         }
         QString name = KoColorSpaceRegistry::instance()->colorSpaceFactory("XYZAF16")->defaultProfile();
         const KoColorSpace* xyzColorSpace = KoColorSpaceRegistry::instance()->colorSpace("XYZA", "F16", name);
-        quint8 data[channelCount()];
+        quint8 *data = new quint8(channelCount());
         quint8 data2[4];//xyza is 4.
         QVector <float> channelValuesF(channelCount());
         for (int i=0; i<colorChannelCount(); i++) {

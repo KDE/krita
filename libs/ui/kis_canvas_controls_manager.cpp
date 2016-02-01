@@ -36,6 +36,8 @@
 
 #include <klocalizedstring.h>
 
+#include <math.h>
+
 const int STEP = 25;
 
 KisCanvasControlsManager::KisCanvasControlsManager(KisViewManager * view) : m_view(view)

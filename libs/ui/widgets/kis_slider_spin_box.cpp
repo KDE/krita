@@ -41,7 +41,8 @@ public:
     enum Style {
         STYLE_NOQUIRK,
         STYLE_PLASTIQUE,
-        STYLE_BREEZE
+        STYLE_BREEZE,
+        STYLE_FUSION,
     };
 
     QLineEdit* edit;
@@ -154,6 +155,9 @@ void KisAbstractSliderSpinBox::paintEvent(QPaintEvent* e)
     QPainter painter(this);
 
     switch (d->style) {
+    case KisAbstractSliderSpinBoxPrivate::STYLE_FUSION:
+        paintFusion(painter);
+        break;
     case KisAbstractSliderSpinBoxPrivate::STYLE_PLASTIQUE:
         paintPlastique(painter);
         break;
@@ -205,6 +209,65 @@ void KisAbstractSliderSpinBox::paint(QPainter &painter)
     }
 }
 
+void KisAbstractSliderSpinBox::paintFusion(QPainter &painter)
+{
+    Q_D(KisAbstractSliderSpinBox);
+
+    QStyleOptionSpinBox spinOpts = spinBoxOptions();
+    spinOpts.frame = true;
+    spinOpts.rect.adjust(0, -1, 0, 1);
+    //spinOpts.palette().setBrush(QPalette::Base, palette().highlight());
+    QStyleOptionProgressBar progressOpts = progressBarOptions();
+
+    style()->drawComplexControl(QStyle::CC_SpinBox, &spinOpts, &painter, d->dummySpinBox);
+
+    painter.save();
+
+    QRect rect = progressOpts.rect.adjusted(1,2,-4,-2);
+    QRect leftRect;
+
+    int progressIndicatorPos = (progressOpts.progress - qreal(progressOpts.minimum)) / qMax(qreal(1.0),
+                               qreal(progressOpts.maximum) - progressOpts.minimum) * rect.width();
+
+    if (progressIndicatorPos >= 0 && progressIndicatorPos <= rect.width() && (progressOpts.progress != 0)) {
+        leftRect = QRect(rect.left(), rect.top(), progressIndicatorPos, rect.height());
+    } else if (progressIndicatorPos > rect.width()) {
+        painter.setPen(palette().highlightedText().color());
+    } else {
+        painter.setPen(palette().buttonText().color());
+    }
+
+    QRegion rightRect = rect;
+    rightRect = rightRect.subtracted(leftRect);
+
+    QTextOption textOption(Qt::AlignAbsolute | Qt::AlignHCenter | Qt::AlignVCenter);
+    textOption.setWrapMode(QTextOption::NoWrap);
+
+    if (!(d->edit && d->edit->isVisible())) {
+        painter.setClipRegion(rightRect);
+        painter.setClipping(true);
+        painter.drawText(rect.adjusted(-2,0,2,0), progressOpts.text, textOption);
+        painter.setClipping(false);
+    }
+
+    if (!leftRect.isNull()) {
+        painter.setClipRect(leftRect.adjusted(0, -1, 1, 1));
+        painter.setPen(palette().highlight().color());
+        painter.setBrush(palette().highlight());
+
+        spinOpts.palette.setBrush(QPalette::Base, palette().highlight());
+        style()->drawComplexControl(QStyle::CC_SpinBox, &spinOpts, &painter, d->dummySpinBox);
+
+        if (!(d->edit && d->edit->isVisible())) {
+            painter.setPen(palette().highlightedText().color());
+            painter.setClipping(true);
+            painter.drawText(rect.adjusted(-2,0,2,0), progressOpts.text, textOption);
+        }
+        painter.setClipping(false);
+    }
+
+    painter.restore();
+}
 
 void KisAbstractSliderSpinBox::paintPlastique(QPainter &painter)
 {
@@ -465,6 +528,9 @@ QSize KisAbstractSliderSpinBox::sizeHint() const
     hint += QSize(0, 2);
 
     switch (d->style) {
+    case KisAbstractSliderSpinBoxPrivate::STYLE_FUSION:
+        hint += QSize(8, 6);
+        break;
     case KisAbstractSliderSpinBoxPrivate::STYLE_PLASTIQUE:
         hint += QSize(8, 0);
         break;
@@ -602,7 +668,10 @@ int KisAbstractSliderSpinBox::valueForX(int x, Qt::KeyboardModifiers modifiers) 
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
 
     QRect correctedProgRect;
-    if (d->style == KisAbstractSliderSpinBoxPrivate::STYLE_BREEZE) {
+    if (d->style == KisAbstractSliderSpinBoxPrivate::STYLE_FUSION) {
+        correctedProgRect = progressRect(spinOpts).adjusted(2, 0, -2, 0);
+    }
+    else if (d->style == KisAbstractSliderSpinBoxPrivate::STYLE_BREEZE) {
         correctedProgRect = progressRect(spinOpts);
     }
     else {
@@ -893,7 +962,10 @@ void KisAbstractSliderSpinBox::changeEvent(QEvent *e)
 
     switch (e->type()) {
     case QEvent::StyleChange:
-        if (style()->objectName() == "plastique") {
+        if (style()->objectName() == "fusion") {
+            d->style = KisAbstractSliderSpinBoxPrivate::STYLE_FUSION;
+        }
+        else if (style()->objectName() == "plastique") {
             d->style = KisAbstractSliderSpinBoxPrivate::STYLE_PLASTIQUE;
         }
         else if (style()->objectName() == "breeze") {

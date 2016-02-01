@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>682</width>
-    <height>530</height>
+    <width>685</width>
+    <height>628</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -335,21 +335,24 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QGraphicsView" name="clipPreview">
-          <property name="minimumSize">
-           <size>
-            <width>100</width>
-            <height>100</height>
-           </size>
-          </property>
+         <widget class="QLabel" name="lblPreview">
           <property name="maximumSize">
            <size>
-            <width>300</width>
-            <height>300</height>
+            <width>250</width>
+            <height>250</height>
            </size>
           </property>
-          <property name="interactive">
-           <bool>false</bool>
+          <property name="baseSize">
+           <size>
+            <width>250</width>
+            <height>250</height>
+           </size>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="text">
+           <string>TextLabel</string>
           </property>
          </widget>
         </item>
@@ -365,7 +368,7 @@
      </property>
      <layout class="QVBoxLayout">
       <item>
-       <widget class="KisColorSpaceSelector" name="colorSpaceSelector"/>
+       <widget class="KisColorSpaceSelector" name="colorSpaceSelector" native="true"/>
       </item>
      </layout>
     </widget>
@@ -402,7 +405,7 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="KisDoubleSliderSpinBox" name="sliderOpacity"/>
+          <widget class="KisDoubleSliderSpinBox" name="sliderOpacity" native="true"/>
          </item>
         </layout>
        </widget>
@@ -451,14 +454,14 @@
           <height>0</height>
          </size>
         </property>
-        <property name="value">
-         <number>2</number>
-        </property>
         <property name="minimum">
          <number>1</number>
         </property>
         <property name="maximum">
          <number>200</number>
+        </property>
+        <property name="value">
+         <number>2</number>
         </property>
        </widget>
       </item>
@@ -616,7 +619,6 @@
   <tabstop>bnScreenSize</tabstop>
   <tabstop>txtPredefinedName</tabstop>
   <tabstop>bnSaveAsPredefined</tabstop>
-  <tabstop>clipPreview</tabstop>
   <tabstop>cmbColor</tabstop>
   <tabstop>sliderOpacity</tabstop>
   <tabstop>radioBackgroundAsLayer</tabstop>

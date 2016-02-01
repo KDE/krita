@@ -22,9 +22,7 @@
 #include "kis_global.h"
 #include "kis_properties_configuration.h"
 #include "kis_custom_image_widget.h"
-
-class QGraphicsScene;
-class QGraphicsPixmapItem;
+#include <QPointer>
 
 /**
  * The 'New image from clipboard' widget in the Krita startup widget.
@@ -48,9 +46,7 @@ private Q_SLOTS:
     
 private:   
     void createClipboardPreview();
-private:
-    QGraphicsScene *m_scene;
-    QGraphicsPixmapItem *m_previewItem;
+
 };
 
 #endif

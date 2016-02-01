@@ -43,6 +43,7 @@
 #include <QPolygonF>
 #include <QPointF>
 
+#include <math.h>
 
 KoColorSpace::KoColorSpace()
         : d(new Private())
@@ -520,7 +521,7 @@ KoColorTransformation* KoColorSpace::createColorTransformation(const QString & i
 }
 
 void KoColorSpace::increaseLuminosity(quint8 * pixel, qreal step) const{
-    int channelnumber = abs(channelCount());
+    int channelnumber = channelCount();
     QVector <double> channelValues(channelnumber);
     QVector <float> channelValuesF(channelnumber);
     normalisedChannelsValue(pixel, channelValuesF);
@@ -550,7 +551,7 @@ void KoColorSpace::increaseLuminosity(quint8 * pixel, qreal step) const{
     setOpacity(pixel, 1.0, 1);
 }
 void KoColorSpace::decreaseLuminosity(quint8 * pixel, qreal step) const {
-    int channelnumber = abs(channelCount());
+    int channelnumber = channelCount();
     QVector <double> channelValues(channelnumber);
     QVector <float> channelValuesF(channelnumber);
     normalisedChannelsValue(pixel, channelValuesF);
@@ -588,7 +589,7 @@ void KoColorSpace::decreaseLuminosity(quint8 * pixel, qreal step) const {
     setOpacity(pixel, 1.0, 1);
 }
 void KoColorSpace::increaseSaturation(quint8 * pixel, qreal step) const{
-    int channelnumber = abs(channelCount());
+    int channelnumber = channelCount();
     QVector <double> channelValues(channelnumber);
     QVector <float> channelValuesF(channelnumber);
     normalisedChannelsValue(pixel, channelValuesF);
@@ -609,7 +610,7 @@ void KoColorSpace::increaseSaturation(quint8 * pixel, qreal step) const{
     setOpacity(pixel, 1.0, 1);
 }
 void KoColorSpace::decreaseSaturation(quint8 * pixel, qreal step) const{
-    int channelnumber = abs(channelCount());
+    int channelnumber = channelCount();
     QVector <double> channelValues(channelnumber);
     QVector <float> channelValuesF(channelnumber);
     normalisedChannelsValue(pixel, channelValuesF);
@@ -630,7 +631,7 @@ void KoColorSpace::decreaseSaturation(quint8 * pixel, qreal step) const{
     setOpacity(pixel, 1.0, 1);
 }
 void KoColorSpace::increaseHue(quint8 * pixel, qreal step) const{
-    int channelnumber = abs(channelCount()); //doesn't work for cmyka...
+    int channelnumber = channelCount(); //doesn't work for cmyka...
     QVector <double> channelValues(channelnumber);
     QVector <float> channelValuesF(channelnumber);
     normalisedChannelsValue(pixel, channelValuesF);
@@ -654,7 +655,7 @@ void KoColorSpace::increaseHue(quint8 * pixel, qreal step) const{
     setOpacity(pixel, 1.0, 1);
 }
 void KoColorSpace::decreaseHue(quint8 * pixel, qreal step) const{
-    int channelnumber = abs(channelCount());
+    int channelnumber = channelCount();
     QVector <double> channelValues(channelnumber);
     QVector <float> channelValuesF(channelnumber);
     normalisedChannelsValue(pixel, channelValuesF);
@@ -679,7 +680,7 @@ void KoColorSpace::decreaseHue(quint8 * pixel, qreal step) const{
 }
 
 void KoColorSpace::increaseRed(quint8 * pixel, qreal step) const{
-    int channelnumber = abs(channelCount());
+    int channelnumber = channelCount();
     QVector <double> channelValues(channelnumber);
     QVector <float> channelValuesF(channelnumber);
     normalisedChannelsValue(pixel, channelValuesF);
@@ -700,7 +701,7 @@ void KoColorSpace::increaseRed(quint8 * pixel, qreal step) const{
     setOpacity(pixel, 1.0, 1);
 }
 void KoColorSpace::increaseGreen(quint8 * pixel, qreal step) const{
-    int channelnumber = abs(channelCount());
+    int channelnumber = channelCount();
     QVector <double> channelValues(channelnumber);
     QVector <float> channelValuesF(channelnumber);
     normalisedChannelsValue(pixel, channelValuesF);
@@ -721,7 +722,7 @@ void KoColorSpace::increaseGreen(quint8 * pixel, qreal step) const{
     setOpacity(pixel, 1.0, 1);
 }
 void KoColorSpace::increaseBlue(quint8 * pixel, qreal step) const{
-    int channelnumber = abs(channelCount());
+    int channelnumber = channelCount();
     QVector <double> channelValues(channelnumber);
     QVector <float> channelValuesF(channelnumber);
     normalisedChannelsValue(pixel, channelValuesF);
@@ -742,7 +743,7 @@ void KoColorSpace::increaseBlue(quint8 * pixel, qreal step) const{
     setOpacity(pixel, 1.0, 1);
 }
 void KoColorSpace::increaseYellow(quint8 * pixel, qreal step) const{
-    int channelnumber = abs(channelCount());
+    int channelnumber = channelCount();
     QVector <double> channelValues(channelnumber);
     QVector <float> channelValuesF(channelnumber);
     normalisedChannelsValue(pixel, channelValuesF);

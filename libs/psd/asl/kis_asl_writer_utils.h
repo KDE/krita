@@ -91,33 +91,38 @@ public:
     }
 
     ~OffsetStreamPusher() {
-        if (m_alignOnExit) {
-            qint64 currentPos = m_device->pos();
-            const qint64 alignedPos = alignOffsetCeil(currentPos, m_alignOnExit);
+        try {
+            if (m_alignOnExit) {
+                qint64 currentPos = m_device->pos();
+                const qint64 alignedPos = alignOffsetCeil(currentPos, m_alignOnExit);
 
-            for (; currentPos < alignedPos; currentPos++) {
-                quint8 padding = 0;
-                SAFE_WRITE_EX(m_device, padding);
+                for (; currentPos < alignedPos; currentPos++) {
+                    quint8 padding = 0;
+                    SAFE_WRITE_EX(m_device, padding);
+                }
             }
+
+            const qint64 currentPos = m_device->pos();
+
+            qint64 writtenDataSize = 0;
+            qint64 sizeFiledOffset = 0;
+
+            if (m_externalSizeTagOffset >= 0) {
+                writtenDataSize = currentPos - m_chunkStartPos;
+                sizeFiledOffset = m_externalSizeTagOffset;
+            } else {
+                writtenDataSize = currentPos - m_chunkStartPos - sizeof(OffsetType);
+                sizeFiledOffset = m_chunkStartPos;
+            }
+
+            m_device->seek(sizeFiledOffset);
+            const OffsetType realObjectSize = writtenDataSize;
+            SAFE_WRITE_EX(m_device, realObjectSize);
+            m_device->seek(currentPos);
         }
-
-        const qint64 currentPos = m_device->pos();
-
-        qint64 writtenDataSize = 0;
-        qint64 sizeFiledOffset = 0;
-
-        if (m_externalSizeTagOffset >= 0) {
-            writtenDataSize = currentPos - m_chunkStartPos;
-            sizeFiledOffset = m_externalSizeTagOffset;
-        } else {
-            writtenDataSize = currentPos - m_chunkStartPos - sizeof(OffsetType);
-            sizeFiledOffset = m_chunkStartPos;
+        catch(ASLWriteException &e) {
+            warnKrita << PREPEND_METHOD(e.what());
         }
-
-        m_device->seek(sizeFiledOffset);
-        const OffsetType realObjectSize = writtenDataSize;
-        SAFE_WRITE_EX(m_device, realObjectSize);
-        m_device->seek(currentPos);
     }
 
 private:

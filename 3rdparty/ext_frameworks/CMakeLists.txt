@@ -193,6 +193,22 @@ ExternalProject_Add(
     DEPENDS ext_kitemmodels
 )
 
+ExternalProject_Add(
+    ext_kimageformats
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL http://files.kde.org/krita/build/dependencies/kimageformats-02-02-2016.tgz
+    URL_MD5 09a923703832181455bc61d67c692040
+    INSTALL_DIR ${EXTPREFIX_frameworks}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
+            -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
+                ${GLOBAL_PROFILE}
+                -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
+                -DDEFINE_NO_DEPRECATED=1
+                -DBUILD_TESTING=false
+    UPDATE_COMMAND ""
+    ALWAYS 0
+    DEPENDS ext_kitemviews
+)
 
 ExternalProject_Add(
     ext_kwindowsystem
@@ -209,7 +225,7 @@ ExternalProject_Add(
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
     ALWAYS 0
-    DEPENDS ext_kitemviews
+    DEPENDS ext_kimageformats
 )
 
 

@@ -74,8 +74,6 @@ if (UNIX AND NOT APPLE)
     set(PATCH_COMMAND patch)
 endif ()
 
-
-
 # this list must be dependency-ordered
 if (MSVC)
     add_subdirectory( ext_patch )
@@ -108,6 +106,7 @@ add_subdirectory( ext_freetype)
 if (LINUX)
 add_subdirectory( ext_fontconfig)
 endif()
+add_subdirectory( ext_qt )
 add_subdirectory( ext_poppler )
 add_subdirectory( ext_libraw )
 add_subdirectory( ext_frameworks )

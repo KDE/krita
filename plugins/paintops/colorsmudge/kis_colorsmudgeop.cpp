@@ -219,7 +219,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 
     if (m_smudgeRateOption.getMode() == KisSmudgeOption::SMEARING_MODE) {
         m_smudgePainter->bitBlt(QPoint(), painter()->device(), srcDabRect);
-    } else if (m_smudgeRateOption.getMode() == KisSmudgeOption::DULLING_MODE) {
+    } else {
         QPoint pt = (srcDabRect.topLeft() + hotSpot).toPoint();
 
         if (m_smudgeRadiusOption.isChecked()) {
@@ -244,7 +244,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 
     // if the user selected the color smudge option,
     // we will mix some color into the temporary painting device (m_tempDev)
-    if (m_colorRateOption.isChecked() && m_smudgeRateOption.getMode()) {
+    if (m_colorRateOption.isChecked()) {
         // this will apply the opacity (selected by the user) to copyPainter
         // (but fit the rate inbetween the range 0.0 to (1.0-SmudgeRate))
         qreal maxColorRate = qMax<qreal>(1.0 - m_smudgeRateOption.getRate(), 0.2);

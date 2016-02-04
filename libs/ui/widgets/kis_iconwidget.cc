@@ -19,8 +19,9 @@
 
 #include "widgets/kis_iconwidget.h"
 
-#include <QPainter>
+#include <QStylePainter>
 #include <QIcon>
+#include <QStyleOption>
 #include <resources/KoResource.h>
 #include <KoResourceServerAdapter.h>
 
@@ -30,7 +31,6 @@ KisIconWidget::KisIconWidget(QWidget *parent, const char *name)
 {
     setObjectName(name);
     m_resource = 0;
-    setFixedSize(QSize(26, 26));
 }
 
 void KisIconWidget::slotSetItem(KoResource * resource)
@@ -39,20 +39,35 @@ void KisIconWidget::slotSetItem(KoResource * resource)
     update();
 }
 
-void KisIconWidget::paintEvent(QPaintEvent *)
+void KisIconWidget::paintEvent(QPaintEvent *event)
 {
-    QPainter p(this);
-    qint32 cw = width();
-    qint32 ch = height();
+    QPushButton::paintEvent(event);
+
+    QStylePainter p(this);
+
+    const qint32 cw = width();
+    const qint32 ch = height();
+    const qint32 border = 1;
+    const qint32 iconWidth = cw - (border*2);
+    const qint32 iconHeight = ch - (border*2);
+
+    QRegion clipRegion(border, border, iconWidth, iconHeight);
+    clipRegion -= QRegion(border,border,1,1);
+    clipRegion -= QRegion(cw-(border*2),border,1,1);
+    clipRegion -= QRegion(cw-(border*2),ch-(border*2),1,1);
+    clipRegion -= QRegion(border,ch-(border*2),1,1);
+
+    p.setClipRegion(clipRegion);
+    p.setClipping(true);
+
+    p.setBrush(Qt::white);
+    p.drawRect(QRect(0,0,cw,ch));
+
     if (m_resource) {
-        p.drawImage(QRect(0, 0, 24, 24), m_resource->image());
-    } else {
-        p.fillRect(0, 0, cw, ch, Qt::white);
+        p.drawImage(QRect(border, border, iconWidth, iconHeight), m_resource->image());
     }
-    p.setPen(Qt::gray);
-    p.drawRect(0, 0, cw + 1, ch + 1);
-    (void)p.end();
-    paintPopupArrow();
+
+    p.setClipping(false);
 }
 
 void KisIconWidget::setResourceAdapter(QSharedPointer<KoAbstractResourceServerAdapter> adapter)
@@ -68,5 +83,3 @@ void KisIconWidget::slotAdapterResourceChanged(KoResource* resource)
         update();
     }
 }
-
-

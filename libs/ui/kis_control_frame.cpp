@@ -78,14 +78,12 @@ KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const ch
     m_font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
 
     m_patternWidget = new KisIconWidget(parent, "patterns");
-    m_patternWidget->setText(i18n("Fill Patterns"));
     m_patternWidget->setToolTip(i18n("Fill Patterns"));
-    m_patternWidget->setFixedSize(26, 26);
+    m_patternWidget->setFixedSize(32, 32);
 
     m_gradientWidget = new KisIconWidget(parent, "gradients");
-    m_gradientWidget->setText(i18n("Gradients"));
     m_gradientWidget->setToolTip(i18n("Gradients"));
-    m_gradientWidget->setFixedSize(26, 26);
+    m_gradientWidget->setFixedSize(32, 32);
 
     KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer(false);
     QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoAbstractGradient>(rserver));
@@ -123,7 +121,9 @@ void KisControlFrame::setup(QWidget *parent)
     connect(dual, SIGNAL(backgroundColorChanged(KoColor)), m_viewManager->resourceProvider(), SLOT(slotSetBGColor(KoColor)));
     connect(m_viewManager->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), dual, SLOT(setForegroundColor(KoColor)));
     connect(m_viewManager->resourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), dual, SLOT(setBackgroundColor(KoColor)));
-    dual->setFixedSize(26, 26);
+    connect(m_viewManager->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), m_gradientWidget, SLOT(update()));
+    connect(m_viewManager->resourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), m_gradientWidget, SLOT(update()));
+    dual->setFixedSize(32, 32);
 
     m_paintopBox = new KisPaintopBox(m_viewManager, parent, "paintopbox");
 

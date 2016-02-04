@@ -592,6 +592,7 @@ QMimeData * KisNodeModel::mimeData(const QModelIndexList &indexes) const
 {
     KisNodeList nodes;
     Q_FOREACH (const QModelIndex &idx, indexes) {
+        if (idx.column() != 1) continue;
         nodes << nodeFromIndex(idx);
     }
 

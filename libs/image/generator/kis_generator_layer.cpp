@@ -140,8 +140,9 @@ KisBaseNode::PropertyList KisGeneratorLayer::sectionModelProperties() const
     KisSafeFilterConfigurationSP filterConfig = filter();
 
     KisBaseNode::PropertyList l = KisLayer::sectionModelProperties();
-    l << KisBaseNode::Property(i18n("Generator"),
-                                          KisGeneratorRegistry::instance()->value(filterConfig->name())->name());
+    l << KisBaseNode::Property(KoID("generator", i18n("Generator")),
+                               KisGeneratorRegistry::instance()->value(filterConfig->name())->name());
+
     return l;
 }
 

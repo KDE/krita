@@ -25,6 +25,8 @@
 #include <QPainterPath>
 #include <QPolygonF>
 #include <QPen>
+#include <QPainter>
+
 
 #include <KoColorSpaceRegistry.h>
 
@@ -374,5 +376,33 @@ namespace KritaUtils
         }
 
         return newNode;
+    }
+
+    void renderExactRect(QPainter *p, const QRect &rc) {
+        p->drawRect(rc.adjusted(0,0,-1,-1));
+    }
+
+    void renderExactRect(QPainter *p, const QRect &rc, const QPen &pen) {
+        QPen oldPen = p->pen();
+        p->setPen(pen);
+        renderExactRect(p, rc);
+        p->setPen(oldPen);
+    }
+
+    QImage convertQImageToGrayA(const QImage &image)
+    {
+        QImage dstImage(image.size(), QImage::Format_ARGB32);
+
+        // TODO: if someone feel bored, a more optimized version of this would be welcome
+        const QSize size = image.size();
+        for(int i = 0; i < size.height(); ++i) {
+            for(int j = 0; j < size.width(); ++j) {
+                const QRgb pixel = image.pixel(i,j);
+                const int gray = qGray(pixel);
+                dstImage.setPixel(i, j, qRgba(gray, gray, gray, qAlpha(pixel)));
+            }
+        }
+
+        return dstImage;
     }
 }

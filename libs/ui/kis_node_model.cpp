@@ -153,7 +153,8 @@ KisModelIndexConverterBase *KisNodeModel::createIndexConverter()
 void KisNodeModel::regenerateItems(KisNodeDummy *dummy)
 {
     const QModelIndex &index = m_d->indexConverter->indexFromDummy(dummy);
-    emit dataChanged(index, index);
+    emit dataChanged(this->index(index.row(), 0, index.parent()),
+                     this->index(index.row(), 1, index.parent()));
 
     dummy = dummy->firstChild();
     while (dummy) {
@@ -201,6 +202,8 @@ void KisNodeModel::progressPercentageChanged(int, const KisNodeSP node)
     // still be some signals arriving from another thread
     if (m_d->dummiesFacade->hasDummyForNode(node)) {
         QModelIndex index = indexFromNode(node);
+
+        // no need to update 0st column!
         emit dataChanged(index, index);
     }
 }
@@ -360,7 +363,8 @@ void KisNodeModel::processUpdateQueue()
 {
     Q_FOREACH (KisNodeDummy *dummy, m_d->updateQueue) {
         QModelIndex index = m_d->indexConverter->indexFromDummy(dummy);
-        emit dataChanged(index, index);
+        emit dataChanged(this->index(index.row(), 0, index.parent()),
+                         this->index(index.row(), 1, index.parent()));
     }
     m_d->updateQueue.clear();
 }
@@ -376,6 +380,10 @@ QModelIndex KisNodeModel::index(int row, int col, const QModelIndex &parent) con
         itemIndex = m_d->indexConverter->indexFromDummy(dummy);
     }
 
+    if (itemIndex.isValid() && itemIndex.column() != col) {
+        itemIndex = createIndex(row, col, (void*)dummy);
+    }
+
     return itemIndex;
 }
 
@@ -387,7 +395,22 @@ int KisNodeModel::rowCount(const QModelIndex &parent) const
 
 int KisNodeModel::columnCount(const QModelIndex&) const
 {
-    return 1;
+    /**
+     * We have a bit weird layout of columns in the tree view. That
+     * happens because we need to paint visibility icon *before* the
+     * actual layer tree. Therefore we put a separate column in the
+     * initial position and tell the tree that the position of the
+     * hierarchy is in the second column! So the QTreeView reserves us
+     * a bit of space at the left to put the visibility icon in.
+     *
+     * Later we paint this icon using KisNodeDelegate. There is a hack
+     *  actually: we paint it in a position of the first column using
+     *  the delegate of the second one. That should be fixed in the
+     *  future, but it needs a bit of work, because quite a lot of
+     *  code will need to be shared between the two delegates.
+     */
+
+    return 2;
 }
 
 QModelIndex KisNodeModel::parent(const QModelIndex &index) const
@@ -412,6 +435,14 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
 
     KisNodeSP node = nodeFromIndex(index);
 
+    if (index.column() == 0) {
+        /**
+         * We have no data to return for the zero column, since it is
+         * hi-jacked by the delegate of the first column...
+         */
+        return QVariant();
+    }
+
     switch (role) {
     case Qt::DisplayRole: return node->name();
     case Qt::DecorationRole: return node->icon();
@@ -425,6 +456,9 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
         if (node->projectionLeaf()->isDroppedMask()) {
             baseFont.setStrikeOut(true);
         }
+        if (m_d->activeNodeIndex == index) {
+            baseFont.setBold(true);
+        }
         return baseFont;
     }
     case KisBaseNode::PropertiesRole: return QVariant::fromValue(node->sectionModelProperties());
@@ -435,6 +469,9 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
     }
     case KisBaseNode::ActiveRole: {
         return m_d->activeNodeIndex == index;
+    }
+    case KisBaseNode::ShouldGrayOutRole: {
+        return !node->visible(true);
     }
     default:
         if (role >= int(KisBaseNode::BeginThumbnailRole) && belongsToIsolatedGroup(node))
@@ -493,7 +530,8 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
             emit toggleIsolateActiveNode();
         }
 
-        emit dataChanged(index, index);
+        emit dataChanged(this->index(index.row(), 0, index.parent()),
+                         this->index(index.row(), 1, index.parent()));
         return true;
     }
 
@@ -520,7 +558,8 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
     }
 
     if(result) {
-        emit dataChanged(index, index);
+        emit dataChanged(this->index(index.row(), 0, index.parent()),
+                         this->index(index.row(), 1, index.parent()));
     }
 
     return result;

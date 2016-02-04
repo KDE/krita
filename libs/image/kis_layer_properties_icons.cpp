@@ -84,15 +84,15 @@ void KisLayerPropertiesIcons::updateIcons()
 KisBaseNode::Property KisLayerPropertiesIcons::getProperty(const KoID &id, bool state)
 {
     const IconsPair &pair = instance()->m_d->icons[id.id()];
-    return KisBaseNode::Property(id.name(),
-                                  pair.on, pair.off, state);
+    return KisBaseNode::Property(id,
+                                 pair.on, pair.off, state);
 }
 
 KisBaseNode::Property KisLayerPropertiesIcons::getProperty(const KoID &id, bool state,
                                                                        bool isInStasis, bool stateInStasis)
 {
     const IconsPair &pair = instance()->m_d->icons[id.id()];
-    return KisBaseNode::Property(id.name(),
-                                  pair.on, pair.off, state,
-                                  isInStasis, stateInStasis);
+    return KisBaseNode::Property(id,
+                                 pair.on, pair.off, state,
+                                 isInStasis, stateInStasis);
 }

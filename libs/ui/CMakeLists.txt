@@ -314,8 +314,10 @@ set(kritaui_LIB_SRCS
     KisDocument.cpp
     KisDocumentEntry.cpp
     KisNodeDelegate.cpp
+    kis_node_view_visibility_delegate.cpp
     KisNodeToolTip.cpp
     KisNodeView.cpp
+    kis_node_view_color_scheme.cpp
     KisFilterChain.cpp
     KisFilterChainLink.cpp
     KisFilterChainLinkList.cpp

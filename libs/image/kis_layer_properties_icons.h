@@ -23,6 +23,7 @@
 #include <KoID.h>
 
 #include <kis_base_node.h>
+#include "kritaimage_export.h"
 
 class KRITAIMAGE_EXPORT KisLayerPropertiesIcons
 {

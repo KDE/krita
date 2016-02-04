@@ -36,6 +36,7 @@ set(krita_QRCS
     ${CMAKE_SOURCE_DIR}/krita/data/aboutdata/aboutdata.qrc
     ${CMAKE_SOURCE_DIR}/krita/data/shaders/shaders.qrc
     ${CMAKE_SOURCE_DIR}/krita/data/cursors/cursors.qrc
+    CACHE INTERNAL "krita_QRCS"
 )
 
 qt5_add_resources(krita_SRCS ${krita_QRCS})

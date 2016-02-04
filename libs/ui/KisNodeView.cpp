@@ -19,6 +19,7 @@
 #include "KisNodeView.h"
 #include "KisNodePropertyAction_p.h"
 #include "KisNodeDelegate.h"
+#include "kis_node_view_visibility_delegate.h"
 #include "kis_node_model.h"
 #include "kis_signals_blocker.h"
 
@@ -39,6 +40,9 @@
 #include <QApplication>
 #include <QPainter>
 #include <QScrollBar>
+
+#include "kis_node_view_color_scheme.h"
+
 
 #ifdef HAVE_X11
 #define DRAG_WHILE_DRAG_WORKAROUND
@@ -65,7 +69,7 @@ public:
     {
         KSharedConfigPtr config =  KSharedConfig::openConfig();
         KConfigGroup group = config->group("NodeView");
-        mode = (DisplayMode) group.readEntry("NodeViewMode", (int)DetailedMode);
+        mode = (DisplayMode) group.readEntry("NodeViewMode", (int)MinimalMode);
     }
     KisNodeDelegate delegate;
     DisplayMode mode;
@@ -77,13 +81,17 @@ public:
 #endif
 };
 
+
 KisNodeView::KisNodeView(QWidget *parent)
     : QTreeView(parent)
     , m_draggingFlag(false)
     , d(new Private(this))
 {
+    setItemDelegateForColumn(0, new KisNodeViewVisibilityDelegate(this));
+    setItemDelegateForColumn(1, &d->delegate);
+
     setMouseTracking(true);
-    setSelectionBehavior(SelectItems);
+    setSelectionBehavior(SelectRows);
     setDefaultDropAction(Qt::MoveAction);
     setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -92,7 +100,13 @@ KisNodeView::KisNodeView(QWidget *parent)
     setDragEnabled(true);
     setDragDropMode(QAbstractItemView::DragDrop);
     setAcceptDrops(true);
+
     setDropIndicatorShown(true);
+
+    /**
+     * See a comment in KisNodeModel::columnCount()
+     */
+    setTreePosition(1);
 }
 
 KisNodeView::~KisNodeView()
@@ -387,6 +401,14 @@ QPixmap KisNodeView::createDragPixmap() const
     return dragPixmap;
 }
 
+void KisNodeView::resizeEvent(QResizeEvent * event)
+{
+    KisNodeViewColorScheme scm;
+    header()->resizeSection(0, scm.visibilityColumnWidth());
+    setIndentation(scm.indentation());
+    QTreeView::resizeEvent(event);
+}
+
 void KisNodeView::paintEvent(QPaintEvent *event)
 {
     event->accept();
@@ -409,6 +431,15 @@ void KisNodeView::paintEvent(QPaintEvent *event)
         painter.setOpacity(0.8);
         painter.drawLine(line);
     }
+}
+
+void KisNodeView::drawBranches(QPainter *painter, const QRect &rect,
+                               const QModelIndex &index) const
+{
+    /**
+     * Noop... Everything is going to be painted by KisNodeDelegate.
+     * So this override basically disables painting of Qt's branch-lines.
+     */
 }
 
 void KisNodeView::dropEvent(QDropEvent *ev)

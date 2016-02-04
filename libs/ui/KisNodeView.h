@@ -71,7 +71,10 @@ public:
         MinimalMode
     };
 
+    virtual void resizeEvent(QResizeEvent * event);
     virtual void paintEvent (QPaintEvent *event);
+    virtual void drawBranches(QPainter *painter, const QRect &rect,
+                              const QModelIndex &index) const;
 
     virtual void dropEvent(QDropEvent *ev);
 

@@ -23,6 +23,8 @@
 #include <QUuid>
 #include <QString>
 
+#include <KoID.h>
+
 #include "kis_shared.h"
 #include "kis_paint_device.h"
 #include "kis_processing_visitor.h" // included, not forward declared for msvc
@@ -71,6 +73,9 @@ public:
         /// The item is first activated with ActiveRole, then a separate AlternateActiveRole comes
         AlternateActiveRole,
 
+        // When a layer is not (recursively) visible, then it should be gayed out
+        ShouldGrayOutRole,
+
         /// This is to ensure that we can extend the data role in the future, since it's not possible to add a role after BeginThumbnailRole (due to "Hack")
         ReservedRole = 99,
 
@@ -93,6 +98,8 @@ public:
      */
     struct Property
     {
+        QString id;
+
         /** i18n-ed name, suitable for displaying */
         QString name;
 
@@ -122,22 +129,21 @@ public:
             return rhs.name == name;
         }
 
-        /// Default constructor. Use if you want to assign the members manually.
         Property(): isMutable( false ) { }
 
         /// Constructor for a mutable property.
-        Property( const QString &n, const QIcon &on, const QIcon &off, bool isOn )
-                : name( n ), isMutable( true ), onIcon( on ), offIcon( off ), state( isOn ), canHaveStasis( false ) { }
+        Property( const KoID &n, const QIcon &on, const QIcon &off, bool isOn )
+                : id(n.id()), name( n.name() ), isMutable( true ), onIcon( on ), offIcon( off ), state( isOn ), canHaveStasis( false ) { }
 
         /** Constructor for a mutable property accepting stasis */
-        Property( const QString &n, const QIcon &on, const QIcon &off, bool isOn,
-                  bool isInStasis, bool stateInStasis )
-                : name( n ), isMutable( true ), onIcon( on ), offIcon( off ), state( isOn ),
-                  canHaveStasis( true ), isInStasis( isInStasis ), stateInStasis( stateInStasis ) { }
+        Property( const KoID &n, const QIcon &on, const QIcon &off, bool isOn,
+                  bool _isInStasis, bool _stateInStasis )
+                : id(n.id()), name(n.name()), isMutable( true ), onIcon( on ), offIcon( off ), state( isOn ),
+                  canHaveStasis( true ), isInStasis( _isInStasis ), stateInStasis( _stateInStasis ) { }
 
         /// Constructor for a nonmutable property.
-        Property( const QString &n, const QString &s )
-                : name( n ), isMutable( false ), state( s ) { }
+        Property( const KoID &n, const QString &s )
+                : id(n.id()), name(n.name()), isMutable( false ), state( s ) { }
     };
 
     /** Return this type for PropertiesRole. */

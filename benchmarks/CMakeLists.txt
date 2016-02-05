@@ -2,6 +2,7 @@ set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3 
     ${CMAKE_SOURCE_DIR}/sdk/tests
+    ${CMAKE_SOURCE_DIR}/libs/pigment
     ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
     ${EIGEN3_INCLUDE_DIR}
     ${Boost_INCLUDE_DIRS}

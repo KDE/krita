@@ -153,4 +153,18 @@
  <resource identifier="FX_explode.kpp" >
   <tag>FX</tag>
  </resource>
+ <resource identifier="Pixelart_dither.kpp" >
+  <tag>PixelArt</tag>
+ </resource>
+ <resource identifier="Pixelart_round.kpp" >
+  <tag>PixelArt</tag>
+ </resource>
+ <resource identifier="Pixelart_square.kpp" >
+  <tag>PixelArt</tag>
+ </resource>
+ <resource identifier="pixel1.kpp" >
+  <tag>PixelArt</tag>
+ </resource>
+ 
+ 
 </tags>

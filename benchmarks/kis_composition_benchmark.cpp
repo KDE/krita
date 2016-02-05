@@ -17,21 +17,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_composition_benchmark.h"
-
-#include <QTest>
-
-#include <KoColorSpace.h>
-#include <KoCompositeOp.h>
-#include <KoColorSpaceRegistry.h>
-
-#include <KoColorSpaceTraits.h>
-#include <KoCompositeOpAlphaDarken.h>
-#include <KoCompositeOpOver.h>
-#include "KoOptimizedCompositeOpFactory.h"
-
-
-
 // for calculation of the needed alignment
 #include <config-vc.h>
 #ifdef HAVE_VC
@@ -47,6 +32,19 @@
 #pragma warning ( pop )
 #endif
 
+#include "kis_composition_benchmark.h"
+#include <QTest>
+
+#include <KoColorSpace.h>
+#include <KoCompositeOp.h>
+#include <KoColorSpaceRegistry.h>
+
+#include <KoColorSpaceTraits.h>
+#include <KoCompositeOpAlphaDarken.h>
+#include <KoCompositeOpOver.h>
+#include "KoOptimizedCompositeOpFactory.h"
+
+
 #include <KoOptimizedCompositeOpOver32.h>
 #include <KoOptimizedCompositeOpOver128.h>
 #include <KoOptimizedCompositeOpAlphaDarken32.h>
@@ -56,6 +54,14 @@
 #include <stdlib.h>
 
 #include <kis_debug.h>
+
+#if defined _MSC_VER
+#define MEMALIGN_ALLOC(p, a, s) ((*(p)) = _aligned_malloc((s), (a)), *(p) ? 0 : errno)
+#define MEMALIGN_FREE(p) _aligned_free((p))
+#else
+#define MEMALIGN_ALLOC(p, a, s) posix_memalign((p), (a), (s))
+#define MEMALIGN_FREE(p) free((p))
+#endif
 
 const int alpha_pos = 3;
 
@@ -232,17 +238,17 @@ QVector<Tile> generateTiles(int size,
     const size_t maskAlignment = qMax(size_t(vecSize), size_t(256));
     for (int i = 0; i < size; i++) {
         void *ptr = NULL;
-        int error = posix_memalign(&ptr, pixelAlignment, numPixels * pixelSize + srcAlignmentShift);
+        int error = MEMALIGN_ALLOC(&ptr, pixelAlignment, numPixels * pixelSize + srcAlignmentShift);
         if (error) {
             qFatal("posix_memalign failed: %d", error);
         }
         tiles[i].src = (quint8*)ptr + srcAlignmentShift;
-        error = posix_memalign(&ptr, pixelAlignment, numPixels * pixelSize + dstAlignmentShift);
+        error = MEMALIGN_ALLOC(&ptr, pixelAlignment, numPixels * pixelSize + dstAlignmentShift);
         if (error) {
             qFatal("posix_memalign failed: %d", error);
         }
         tiles[i].dst = (quint8*)ptr + dstAlignmentShift;
-        error = posix_memalign(&ptr, maskAlignment, numPixels);
+        error = MEMALIGN_ALLOC(&ptr, maskAlignment, numPixels);
         if (error) {
             qFatal("posix_memalign failed: %d", error);
         }
@@ -265,9 +271,9 @@ void freeTiles(QVector<Tile> tiles,
                const int dstAlignmentShift)
 {
     Q_FOREACH (const Tile &tile, tiles) {
-        free(tile.src - srcAlignmentShift);
-        free(tile.dst - dstAlignmentShift);
-        free(tile.mask);
+        MEMALIGN_FREE(tile.src - srcAlignmentShift);
+        MEMALIGN_FREE(tile.dst - dstAlignmentShift);
+        MEMALIGN_FREE(tile.mask);
     }
 }
 
@@ -753,12 +759,12 @@ void KisCompositionBenchmark::benchmarkUintFloat()
 #ifdef HAVE_VC
     const int dataSize = 4096;
     void *ptr = NULL;
-    int error = posix_memalign(&ptr, uint8VecAlignment, dataSize);
+    int error = MEMALIGN_ALLOC(&ptr, uint8VecAlignment, dataSize);
     if (error) {
         qFatal("posix_memalign failed: %d", error);
     }
     quint8 *iData = (quint8*)ptr;
-    error = posix_memalign(&ptr, floatVecAlignment, dataSize * sizeof(float));
+    error = MEMALIGN_ALLOC(&ptr, floatVecAlignment, dataSize * sizeof(float));
     if (error) {
         qFatal("posix_memalign failed: %d", error);
     }
@@ -773,8 +779,8 @@ void KisCompositionBenchmark::benchmarkUintFloat()
         }
     }
 
-    free(iData);
-    free(fData);
+    MEMALIGN_FREE(iData);
+    MEMALIGN_FREE(fData);
 #endif
 }
 
@@ -783,12 +789,12 @@ void KisCompositionBenchmark::benchmarkUintIntFloat()
 #ifdef HAVE_VC
     const int dataSize = 4096;
     void *ptr = NULL;
-    int error = posix_memalign(&ptr, uint8VecAlignment, dataSize);
+    int error = MEMALIGN_ALLOC(&ptr, uint8VecAlignment, dataSize);
     if (error) {
         qFatal("posix_memalign failed: %d", error);
     }
     quint8 *iData = (quint8*)ptr;
-    error = posix_memalign(&ptr, floatVecAlignment, dataSize * sizeof(float));
+    error = MEMALIGN_ALLOC(&ptr, floatVecAlignment, dataSize * sizeof(float));
     if (error) {
         qFatal("posix_memalign failed: %d", error);
     }
@@ -803,8 +809,8 @@ void KisCompositionBenchmark::benchmarkUintIntFloat()
         }
     }
 
-    free(iData);
-    free(fData);
+    MEMALIGN_FREE(iData);
+    MEMALIGN_FREE(fData);
 #endif
 }
 
@@ -813,12 +819,12 @@ void KisCompositionBenchmark::benchmarkFloatUint()
 #ifdef HAVE_VC
     const int dataSize = 4096;
     void *ptr = NULL;
-    int error = posix_memalign(&ptr, uint32VecAlignment, dataSize * sizeof(quint32));
+    int error = MEMALIGN_ALLOC(&ptr, uint32VecAlignment, dataSize * sizeof(quint32));
     if (error) {
         qFatal("posix_memalign failed: %d", error);
     }
     quint32 *iData = (quint32*)ptr;
-    error = posix_memalign(&ptr, floatVecAlignment, dataSize * sizeof(float));
+    error = MEMALIGN_ALLOC(&ptr, floatVecAlignment, dataSize * sizeof(float));
     if (error) {
         qFatal("posix_memalign failed: %d", error);
     }
@@ -833,8 +839,8 @@ void KisCompositionBenchmark::benchmarkFloatUint()
         }
     }
 
-    free(iData);
-    free(fData);
+    MEMALIGN_FREE(iData);
+    MEMALIGN_FREE(fData);
 #endif
 }
 
@@ -843,12 +849,12 @@ void KisCompositionBenchmark::benchmarkFloatIntUint()
 #ifdef HAVE_VC
     const int dataSize = 4096;
     void *ptr = NULL;
-    int error = posix_memalign(&ptr, uint32VecAlignment, dataSize * sizeof(quint32));
+    int error = MEMALIGN_ALLOC(&ptr, uint32VecAlignment, dataSize * sizeof(quint32));
     if (error) {
         qFatal("posix_memalign failed: %d", error);
     }
     quint32 *iData = (quint32*)ptr;
-    error = posix_memalign(&ptr, floatVecAlignment, dataSize * sizeof(float));
+    error = MEMALIGN_ALLOC(&ptr, floatVecAlignment, dataSize * sizeof(float));
     if (error) {
         qFatal("posix_memalign failed: %d", error);
     }
@@ -863,8 +869,8 @@ void KisCompositionBenchmark::benchmarkFloatIntUint()
         }
     }
 
-    free(iData);
-    free(fData);
+    MEMALIGN_FREE(iData);
+    MEMALIGN_FREE(fData);
 #endif
 }
 

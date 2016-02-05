@@ -529,7 +529,7 @@ if(HAVE_VC)
 
         macro(ko_compile_for_all_implementations_no_scalar _objs _src)
         if(PACKAGERS_BUILD)
-            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} -fPIC ONLY SSE2 SSSE3 SSE4_1 AVX AVX2)
+            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY SSE2 SSSE3 SSE4_1 AVX AVX2)
         else()
             set(${_objs} ${_src})
         endif()
@@ -698,9 +698,7 @@ endif()
 add_subdirectory(libs)
 add_subdirectory(plugins)
 
-if (NOT WIN32)
-    add_subdirectory( benchmarks )
-endif ()
+add_subdirectory( benchmarks )
 
 macro_display_feature_log()
 

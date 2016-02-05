@@ -31,7 +31,7 @@ set(TestKoLcmsColorProfile_test_SRCS TestKoLcmsColorProfile.cpp )
 
 kde4_add_unit_test(TestKoLcmsColorProfile TESTNAME libs-pigment-TestKoLcmsColorProfile  ${TestKoLcmsColorProfile_test_SRCS})
 
-target_link_libraries(TestKoLcmsColorProfile kritawidgets kritapigment KF5::I18n  Qt5::Test ${LCMS2_LIBRARIES} kritalcmsengine )
+target_link_libraries(TestKoLcmsColorProfile kritawidgets kritapigment KF5::I18n  Qt5::Test ${LCMS2_LIBRARIES} )
 
 ########### next target ###############
 

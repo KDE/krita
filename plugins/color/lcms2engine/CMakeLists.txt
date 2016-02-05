@@ -1,9 +1,6 @@
 project( lcmsengine )
 
-if(NOT WIN32)
-## Only test if on non-Windows system
-    add_subdirectory(tests)
-endif()
+add_subdirectory(tests)
 
 include_directories( 
     ${LCMS2_INCLUDE_DIR} 

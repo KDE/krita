@@ -32,6 +32,11 @@
 #pragma warning ( pop )
 #endif
 
+#include <KoOptimizedCompositeOpOver32.h>
+#include <KoOptimizedCompositeOpOver128.h>
+#include <KoOptimizedCompositeOpAlphaDarken32.h>
+#endif
+
 #include "kis_composition_benchmark.h"
 #include <QTest>
 
@@ -43,12 +48,6 @@
 #include <KoCompositeOpAlphaDarken.h>
 #include <KoCompositeOpOver.h>
 #include "KoOptimizedCompositeOpFactory.h"
-
-
-#include <KoOptimizedCompositeOpOver32.h>
-#include <KoOptimizedCompositeOpOver128.h>
-#include <KoOptimizedCompositeOpAlphaDarken32.h>
-#endif
 
 // for posix_memalign()
 #include <stdlib.h>

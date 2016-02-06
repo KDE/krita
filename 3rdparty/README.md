@@ -21,13 +21,16 @@ Otherwise you risk major confusion.
 Note: on all operating systems the entire procedure is done in a terminal window.
 
 1. git: https://git-scm.com/downloads. Make sure git is in your path
-2. cmake: https://cmake.org/download/. Make sure cmake is in your path.
+2. cmake 3.3.2: https://cmake.org/download/. Make sure cmake is in your path.
 3. Make sure you have a compiler:
     * Linux: gcc, minimum version 4.8
     * OSX: clang, you need to install xcode for this
     * Windows: MSVC 2015 Community Edition: https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx
 
 == Setup your environment ==
+
+Windows Only:
+    When launching the commands from the console, run first "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\amd64\vcvars64.bat" in it, this way all the environment variables for the compiler will be ready.
 
 == Prepare your directory layout ==
 
@@ -223,8 +226,13 @@ Note 2: libcurl still isn't available.
 3. Run 
 
 On Windows
+    Depending on what you want to use, run this command for MSBuild (slower compiling, since it doesn't properly use all the CPU cores, but ships with Visual Studio)
 
-    cmake ..\krita -G"Visual Studio 14 Win64" -DBoost_DEBUG=OFF -DBOOST_INCLUDEDIR=c:\dev\i\include -DBOOST_DEBUG=ON -DBOOST_ROOT=c:\dev\i -DBOOST_LIBRARYDIR=c:\dev\i\lib -DCMAKE_INSTALL_PREFIX=c:\dev\i -DCMAKE_PREFIX_PATH=c:\dev\i -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DHAVE_MEMORY_LEAK_TRACKER=OFF -DPACKAGERS_BUILD=ON -Wno-dev -DDEFINE_NO_DEPRECATED=1...\
+    cmake ..\krita -G "Visual Studio 14 Win64" -DBoost_DEBUG=OFF -DBOOST_INCLUDEDIR=c:\dev\i\include -DBOOST_DEBUG=ON -DBOOST_ROOT=c:\dev\i -DBOOST_LIBRARYDIR=c:\dev\i\lib -DCMAKE_INSTALL_PREFIX=c:\dev\i -DCMAKE_PREFIX_PATH=c:\dev\i -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DHAVE_MEMORY_LEAK_TRACKER=OFF -DPACKAGERS_BUILD=ON -Wno-dev -DDEFINE_NO_DEPRECATED=1
+
+    Or this to later use jom (faster compiling, uses all cores, ships with QtCreator/pre-built Qt binaries):
+
+    cmake ..\krita -G "NMake Makefiles" -DBoost_DEBUG=OFF -DBOOST_INCLUDEDIR=c:\dev\i\include -DBOOST_DEBUG=ON -DBOOST_ROOT=c:\dev\i -DBOOST_LIBRARYDIR=c:\dev\i\lib -DCMAKE_INSTALL_PREFIX=c:\dev\i -DCMAKE_PREFIX_PATH=c:\dev\i -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DHAVE_MEMORY_LEAK_TRACKER=OFF -DPACKAGERS_BUILD=ON -Wno-dev -DDEFINE_NO_DEPRECATED=1
 
 On Linux
 
@@ -242,7 +250,14 @@ On Linux and OSX
     make install
 
 On Windows
+    Either use MSBuild to build:
+
     cmake --build . --config RelWithDebInfo --target INSTALL
+
+    Or use jom which should be in a path similar to C:\Qt\Qt5.6.0\Tools\QtCreator\bin\jom.exe.
+    So, from the same folder, instead of running cmake run:
+
+    "C:\Qt\Qt5.6.0\Tools\QtCreator\bin\jom.exe" install
 
 6. Run krita:
 

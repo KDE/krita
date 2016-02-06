@@ -1,0 +1,14 @@
+diff --git a/src/imageformats/CMakeLists.txt b/src/imageformats/CMakeLists.txt
+index 0db2ae8..e78b55d 100644
+--- a/src/imageformats/CMakeLists.txt
++++ b/src/imageformats/CMakeLists.txt
+@@ -28,6 +28,9 @@ if(OpenEXR_FOUND)
+     add_library(kimg_exr MODULE exr.cpp)
+     target_link_libraries(kimg_exr Qt5::Gui OpenEXR::IlmImf)
+     kde_target_enable_exceptions(kimg_exr PRIVATE)
++    if (WIN32)
++        add_definitions(-DOPENEXR_DLL)
++    endif()
+ 
+     install(TARGETS kimg_exr  DESTINATION ${KDE_INSTALL_QTPLUGINDIR}/imageformats/)
+     install(FILES exr.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR}/qimageioplugins/)

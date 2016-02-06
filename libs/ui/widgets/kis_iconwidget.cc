@@ -19,7 +19,7 @@
 
 #include "widgets/kis_iconwidget.h"
 
-#include <QStylePainter>
+#include <QPainter>
 #include <QIcon>
 #include <QStyleOption>
 #include <resources/KoResource.h>
@@ -43,19 +43,20 @@ void KisIconWidget::paintEvent(QPaintEvent *event)
 {
     QPushButton::paintEvent(event);
 
-    QStylePainter p(this);
+    QPainter p(this);
 
     const qint32 cw = width();
     const qint32 ch = height();
-    const qint32 border = 1;
+    const qint32 border = 3;
     const qint32 iconWidth = cw - (border*2);
     const qint32 iconHeight = ch - (border*2);
 
+    // Round off the corners of the preview
     QRegion clipRegion(border, border, iconWidth, iconHeight);
-    clipRegion -= QRegion(border,border,1,1);
-    clipRegion -= QRegion(cw-(border*2),border,1,1);
-    clipRegion -= QRegion(cw-(border*2),ch-(border*2),1,1);
-    clipRegion -= QRegion(border,ch-(border*2),1,1);
+    clipRegion -= QRegion(border, border, 1, 1);
+    clipRegion -= QRegion(cw-border-1, border, 1, 1);
+    clipRegion -= QRegion(cw-border-1, ch-border-1, 1, 1);
+    clipRegion -= QRegion(border, ch-border-1, 1, 1);
 
     p.setClipRegion(clipRegion);
     p.setClipping(true);

@@ -1,0 +1,28 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource>
+    <file>dark-cloneLayer.svg</file>
+    <file>dark-fileLayer.svg</file>
+    <file>dark-fillLayer.svg</file>
+    <file>dark-filterLayer.svg</file>
+    <file>dark-filterMask.svg</file>
+    <file>dark-groupLayer.svg</file>
+    <file>dark-paintLayer.svg</file>
+    <file>dark-selectionMask.svg</file>
+    <file>dark-transformMask.svg</file>
+    <file>dark-transparencyMask.svg</file>
+    <file>dark-vectorLayer.svg</file>
+    <file>light-cloneLayer.svg</file>
+    <file>light-fileLayer.svg</file>
+    <file>light-fillLayer.svg</file>
+    <file>light-filterLayer.svg</file>
+    <file>light-filterMask.svg</file>
+    <file>light-groupLayer.svg</file>
+    <file>light-paintLayer.svg</file>
+    <file>light-selectionMask.svg</file>
+    <file>light-transformMask.svg</file>
+    <file>light-transparencyMask.svg</file>
+    <file>light-vectorLayer.svg</file>
+ 
+    </qresource>
+</RCC>

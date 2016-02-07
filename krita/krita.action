@@ -601,7 +601,7 @@
       <iconText>Decrease Brush Size</iconText>
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
+      <shortcut>[</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -623,7 +623,7 @@
       <iconText>Increase Brush Size</iconText>
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
+      <shortcut>]</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2306,7 +2306,7 @@
       <iconText>Paint Layer</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
+      <shortcut>Insert</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>

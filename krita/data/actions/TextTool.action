@@ -11,7 +11,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Align Right</text>
-      <defaultShortcut>Ctrl+Alt+R</defaultShortcut>
     </Action>
     <Action name="format_decreaseindent">
       <iconText>Decrease Indent</iconText>
@@ -22,7 +21,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Decrease Indent</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="format_paragraph">
       <iconText>Paragraph</iconText>
@@ -33,7 +31,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Paragraph...</text>
-      <defaultShortcut>Ctrl+Alt+P</defaultShortcut>
     </Action>
     <Action name="format_textcolor">
       <iconText>Text Color</iconText>
@@ -44,7 +41,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Text Color</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="insert_specialchar">
       <iconText>Special Character</iconText>
@@ -55,7 +51,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Special Character...</text>
-      <defaultShortcut>Alt+Shift+C</defaultShortcut>
     </Action>
     <Action name="shrink_to_fit">
       <iconText>Shrink To Fit</iconText>
@@ -66,7 +61,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Shrink To Fit</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="detailed_debug_styles">
       <iconText>Styles Debug</iconText>
@@ -77,7 +71,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Styles Debug</text>
-      <defaultShortcut>Ctrl+Alt+Shift+S</defaultShortcut>
     </Action>
     <Action name="format_increaseindent">
       <iconText>Increase Indent</iconText>
@@ -88,7 +81,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Increase Indent</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="format_underline">
       <iconText>Underline</iconText>
@@ -99,7 +91,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Underline</text>
-      <defaultShortcut>Ctrl+U</defaultShortcut>
     </Action>
     <Action name="grow_to_fit_width">
       <iconText>Grow To Fit Width</iconText>
@@ -110,7 +101,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Grow To Fit Width</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="format_sub">
       <iconText>Subscript</iconText>
@@ -121,7 +111,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Subscript</text>
-      <defaultShortcut>Ctrl+Shift+B</defaultShortcut>
     </Action>
     <Action name="nonbreaking_hyphen">
       <iconText>Insert Non-Breaking Hyphen</iconText>
@@ -132,7 +121,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Insert Non-Breaking Hyphen</text>
-      <defaultShortcut>Ctrl+Shift+-</defaultShortcut>
     </Action>
     <Action name="format_alignleft">
       <iconText>Align Left</iconText>
@@ -143,7 +131,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Align Left</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="insert_annotation">
       <iconText>Insert Comment</iconText>
@@ -154,7 +141,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Insert Comment</text>
-      <defaultShortcut>Ctrl+Shift+C</defaultShortcut>
     </Action>
     <Action name="format_strike">
       <iconText>Strikethrough</iconText>
@@ -165,7 +151,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Strikethrough</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="configure_section">
       <iconText>Configure current section</iconText>
@@ -176,7 +161,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Configure current section</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="change_text_direction">
       <iconText>Change text direction</iconText>
@@ -187,7 +171,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Change text direction</text>
-      <defaultShortcut>Ctrl+Shift+D</defaultShortcut>
     </Action>
     <Action name="nonbreaking_space">
       <iconText>Insert Non-Breaking Space</iconText>
@@ -198,7 +181,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Insert Non-Breaking Space</text>
-      <defaultShortcut>Ctrl+Space</defaultShortcut>
     </Action>
     <Action name="soft_hyphen">
       <iconText>Insert Soft Hyphen</iconText>
@@ -209,7 +191,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Insert Soft Hyphen</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="insert_variable">
       <iconText>Variable</iconText>
@@ -220,7 +201,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Variable</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="format_bulletlist">
       <iconText>Bullet list</iconText>
@@ -231,7 +211,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Bullet list</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="insert_index">
       <iconText>Insert Index</iconText>
@@ -242,7 +221,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Insert Index</text>
-      <defaultShortcut>Ctrl+T</defaultShortcut>
     </Action>
     <Action name="format_aligncenter">
       <iconText>Align Center</iconText>
@@ -253,7 +231,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Align Center</text>
-      <defaultShortcut>Ctrl+Alt+C</defaultShortcut>
     </Action>
     <Action name="format_backgroundcolor">
       <iconText>Background</iconText>
@@ -264,7 +241,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Background</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="fontsizedown">
       <iconText>Decrease Font Size</iconText>
@@ -275,7 +251,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Decrease Font Size</text>
-      <defaultShortcut>Ctrl+&lt;</defaultShortcut>
     </Action>
     <Action name="insert_section">
       <iconText>Insert new section</iconText>
@@ -286,7 +261,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Insert new section</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="split_sections">
       <iconText>Insert Paragraph between sections</iconText>
@@ -297,7 +271,6 @@
       <statusTip></statusTip>
       <isCheckable></isCheckable>
       <text></text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="format_fontsize">
       <iconText>Font Size</iconText>
@@ -308,7 +281,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Font Size</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="format_italic">
       <iconText>Italic</iconText>
@@ -319,7 +291,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Italic</text>
-      <defaultShortcut>Ctrl+I</defaultShortcut>
     </Action>
     <Action name="format_bold">
       <iconText>Bold</iconText>
@@ -330,7 +301,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Bold</text>
-      <defaultShortcut>Ctrl+B</defaultShortcut>
     </Action>
     <Action name="fontsizeup">
       <iconText>Increase Font Size</iconText>
@@ -341,7 +311,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Increase Font Size</text>
-      <defaultShortcut>Ctrl+></defaultShortcut>
     </Action>
     <Action name="format_super">
       <iconText>Superscript</iconText>
@@ -352,7 +321,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Superscript</text>
-      <defaultShortcut>Ctrl+Shift+P</defaultShortcut>
     </Action>
     <Action name="edit_select_all">
       <iconText>Select All</iconText>
@@ -363,7 +331,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Select &amp;All</text>
-      <defaultShortcut>Ctrl+A</defaultShortcut>
     </Action>
     <Action name="format_numberlist">
       <iconText>Numbered list</iconText>
@@ -374,7 +341,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Numbered list</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="format_stylist">
       <iconText>Style Manager</iconText>
@@ -385,7 +351,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Style Manager...</text>
-      <defaultShortcut>Ctrl+Alt+S</defaultShortcut>
     </Action>
     <Action name="format_alignblock">
       <iconText>Align Block</iconText>
@@ -396,7 +361,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Align Block</text>
-      <defaultShortcut>Ctrl+Alt+R</defaultShortcut>
     </Action>
     <Action name="grow_to_fit_height">
       <iconText>Grow To Fit Height</iconText>
@@ -407,7 +371,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Grow To Fit Height</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="detailed_debug_paragraphs">
       <iconText>Paragraph Debug</iconText>
@@ -418,7 +381,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Paragraph Debug</text>
-      <defaultShortcut>Ctrl+Alt+Shift+P</defaultShortcut>
     </Action>
     <Action name="format_fontfamily">
       <iconText>Font Family</iconText>
@@ -429,7 +391,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Font Family</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="format_font">
       <iconText>Font</iconText>
@@ -440,7 +401,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Font...</text>
-      <defaultShortcut>Ctrl+Alt+F</defaultShortcut>
     </Action>
     <Action name="repaint">
       <iconText>Repaint</iconText>
@@ -451,7 +411,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Repaint</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
   </Actions>
 </ActionCollection>

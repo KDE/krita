@@ -11,7 +11,6 @@
       <statusTip></statusTip>
       <isCheckable>true</isCheckable>
       <text>Subscript</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="artistictext_detach_from_path">
       <iconText>Detach Path</iconText>
@@ -22,7 +21,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Detach Path</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="artistictext_font_italic">
       <iconText>Italic text</iconText>
@@ -33,7 +31,6 @@
       <statusTip></statusTip>
       <isCheckable>true</isCheckable>
       <text>Italic text</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="artistictext_anchor_middle">
       <iconText>Anchor at Middle</iconText>
@@ -44,7 +41,6 @@
       <statusTip></statusTip>
       <isCheckable>true</isCheckable>
       <text>Anchor at Middle</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="artistictext_anchor_end">
       <iconText>Anchor at End</iconText>
@@ -55,7 +51,6 @@
       <statusTip></statusTip>
       <isCheckable>true</isCheckable>
       <text>Anchor at End</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="artistictext_convert_to_path">
       <iconText>Convert to Path</iconText>
@@ -66,7 +61,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Convert to Path</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="artistictext_anchor_start">
       <iconText>Anchor at Start</iconText>
@@ -77,7 +71,6 @@
       <statusTip></statusTip>
       <isCheckable>true</isCheckable>
       <text>Anchor at Start</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="artistictext_font_bold">
       <iconText>Bold text</iconText>
@@ -88,7 +81,6 @@
       <statusTip></statusTip>
       <isCheckable>true</isCheckable>
       <text>Bold text</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="edit_deselect_all">
       <iconText>Deselect</iconText>
@@ -99,7 +91,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Dese&amp;lect</text>
-      <defaultShortcut>Ctrl+Shift+A</defaultShortcut>
     </Action>
     <Action name="artistictext_superscript">
       <iconText>Superscript</iconText>
@@ -110,7 +101,6 @@
       <statusTip></statusTip>
       <isCheckable>true</isCheckable>
       <text>Superscript</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
   </Actions>
 </ActionCollection>

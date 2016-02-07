@@ -30,10 +30,13 @@ class MoveToolOptionsWidget : public QWidget, public Ui::WdgMoveTool
 public:
     MoveToolOptionsWidget(QWidget *parent, int resolution, QString toolId);
     int moveStep();
+    double moveScale();
     KisToolMove::MoveToolMode mode();
 
 private Q_SLOTS:
     void on_spinMoveStep_valueChanged(double UIMoveStep);
+
+    void on_spinMoveScale_valueChanged(double UIMoveScale);
 
     void on_cmbUnit_currentIndexChanged(int newUnit);
 
@@ -49,6 +52,7 @@ private:
     int m_resolution;
     int m_moveStep;
     int m_moveStepUnit;
+    qreal m_moveScale;
     KisToolMove::MoveToolMode m_moveToolMode;
 
     KConfigGroup m_configGroup;

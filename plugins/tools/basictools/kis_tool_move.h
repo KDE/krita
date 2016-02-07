@@ -89,7 +89,7 @@ public:
     MoveToolMode moveToolMode() const;
     bool moveInProgress() const;
 public Q_SLOTS:
-    void moveDiscrete(MoveDirection direction);
+    void moveDiscrete(MoveDirection direction, bool big);
 
 Q_SIGNALS:
     void moveToolModeChanged();
@@ -116,11 +116,6 @@ private:
     KisNodeSP m_currentlyProcessingNode;
 
     int m_resolution;
-
-    QAction * m_actionMoveUp;
-    QAction * m_actionMoveDown;
-    QAction * m_actionMoveLeft;
-    QAction * m_actionMoveRight;
 };
 
 

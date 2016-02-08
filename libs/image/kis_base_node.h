@@ -53,41 +53,6 @@ class KRITAIMAGE_EXPORT KisBaseNode : public QObject, public KisShared
     Q_OBJECT
 
 public:
-
-    /// Extensions to Qt::ItemDataRole.
-    enum ItemDataRole
-    {
-        /// Whether the section is the active one
-        ActiveRole = Qt::UserRole + 1,
-
-        /// A list of properties the part has.
-        PropertiesRole,
-
-        /// The aspect ratio of the section as a floating point value: width divided by height.
-        AspectRatioRole,
-
-        /// Use to communicate a progress report to the section delegate on an action (a value of -1 or a QVariant() disable the progress bar
-        ProgressRole,
-
-        /// Speacial activation role which is emitted when the user Atl-clicks on a section
-        /// The item is first activated with ActiveRole, then a separate AlternateActiveRole comes
-        AlternateActiveRole,
-
-        // When a layer is not (recursively) visible, then it should be gayed out
-        ShouldGrayOutRole,
-
-        /// This is to ensure that we can extend the data role in the future, since it's not possible to add a role after BeginThumbnailRole (due to "Hack")
-        ReservedRole = 99,
-
-        /**
-         * For values of BeginThumbnailRole or higher, a thumbnail of the layer of which neither dimension
-         * is larger than (int) value - (int) BeginThumbnailRole.
-         * This is a hack to work around the fact that Interview doesn't have a nice way to
-         * request thumbnails of arbitrary size.
-         */
-        BeginThumbnailRole
-    };
-
     /**
      *  Describes a property of a document section.
      *
@@ -486,6 +451,18 @@ public:
      * returns the collapsed state of this node
      */
     bool collapsed() const;
+
+    /**
+     * Sets a color label index associated to the layer.  The actual
+     * color of the label and the number of available colors is
+     * defined by Krita GUI configuration.
+     */
+    void setColorLabelIndex(int index);
+
+    /**
+     * \see setColorLabelIndex
+     */
+    int colorLabelIndex() const;
 
     /**
      * Returns true if the offset of the node can be changed in a LodN

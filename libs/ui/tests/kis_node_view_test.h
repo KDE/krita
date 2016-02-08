@@ -34,7 +34,8 @@ private Q_SLOTS:
     void init();
     void cleanup();
 
-    void test();
+    void testLayers();
+    void testColorLabels();
 
 private:
     KisDocument *m_doc;

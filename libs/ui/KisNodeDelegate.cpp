@@ -100,13 +100,14 @@ void KisNodeDelegate::paint(QPainter *p, const QStyleOptionViewItem &o, const QM
         QStyle *style = option.widget ? option.widget->style() : QApplication::style();
         style->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, p, option.widget);
 
-        bool shouldGrayOut = index.data(KisBaseNode::ShouldGrayOutRole).toBool();
+        bool shouldGrayOut = index.data(KisNodeModel::ShouldGrayOutRole).toBool();
         if (shouldGrayOut) {
             option.state &= ~QStyle::State_Enabled;
         }
 
         p->setFont(option.font);
 
+        drawColorLabel(p, option, index);
         drawFrame(p, option, index);
         drawThumbnail(p, option, index);
         drawText(p, option, index);
@@ -118,6 +119,23 @@ void KisNodeDelegate::paint(QPainter *p, const QStyleOptionViewItem &o, const QM
         drawProgressBar(p, option, index);
     }
     p->restore();
+}
+
+void KisNodeDelegate::drawColorLabel(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    KisNodeViewColorScheme scm;
+    const int label = index.data(KisNodeModel::ColorLabelIndexRole).toInt();
+    QColor color = scm.colorLabel(label);
+    if (color.alpha() <= 0) return;
+
+    QColor bgColor = qApp->palette().color(QPalette::Base);
+    color = KritaUtils::blendColors(color, bgColor, 0.2);
+
+    const QRect rect = option.state & QStyle::State_Selected ?
+        iconsRect(option, index) :
+        option.rect.adjusted(-scm.indentation(), 0, 0, 0);
+
+    p->fillRect(rect, color);
 }
 
 void KisNodeDelegate::drawFrame(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -179,7 +197,7 @@ void KisNodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &opt
 
     const int thumbSize = scm.thumbnailSize();
 
-    QImage img = index.data(int(KisBaseNode::BeginThumbnailRole) + thumbSize).value<QImage>();
+    QImage img = index.data(int(KisNodeModel::BeginThumbnailRole) + thumbSize).value<QImage>();
     if (!(option.state & QStyle::State_Enabled)) {
         img = KritaUtils::convertQImageToGrayA(img);
     }
@@ -189,10 +207,25 @@ void KisNodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &opt
     QPoint offset;
     offset.setX((fitRect.width() - img.width()) / 2);
     offset.setY((fitRect.height() - img.height()) / 2);
+    offset += fitRect.topLeft();
 
-    p->drawImage(fitRect.topLeft() + offset, img);
+    // {   // paint the checkers: we need a proper GUI design for them to be uncommented
+    //     const int step = scm.thumbnailSize() / 4;
+    //     QImage checkers(2 * step, 2 * step, QImage::Format_ARGB32);
+    //     QPainter gc(&checkers);
+    //     gc.fillRect(QRect(0, 0, step, step), Qt::white);
+    //     gc.fillRect(QRect(step, 0, step, step), Qt::gray);
+    //     gc.fillRect(QRect(step, step, step, step), Qt::white);
+    //     gc.fillRect(QRect(0, step, step, step), Qt::gray);
+    //     QBrush brush(checkers);
+    //     p->setBrushOrigin(offset);
+    //     p->fillRect(img.rect().translated(offset), brush);*/
+    // }
 
-    QRect borderRect = kisGrowRect(img.rect(), 1).translated(fitRect.topLeft() + offset);
+    p->fillRect(img.rect().translated(offset), Qt::white);
+    p->drawImage(offset, img);
+
+    QRect borderRect = kisGrowRect(img.rect(), 1).translated(offset);
     KritaUtils::renderExactRect(p, borderRect, scm.gridColor(option, d->view));
 }
 
@@ -298,7 +331,7 @@ QList<OptionalProperty> KisNodeDelegate::Private::rightmostProperties(const KisB
 
 int KisNodeDelegate::Private::numProperties(const QModelIndex &index) const
 {
-    KisBaseNode::PropertyList props = index.data(KisBaseNode::PropertiesRole).value<KisBaseNode::PropertyList>();
+    KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
     QList<OptionalProperty> realProps = rightmostProperties(props);
     return realProps.size();
 }
@@ -341,7 +374,7 @@ void KisNodeDelegate::drawIcons(QPainter *p, const QStyleOptionViewItem &option,
 
     int x = 0;
     const int y = (scm.rowHeight() - scm.border() - scm.iconSize()) / 2;
-    KisBaseNode::PropertyList props = index.data(KisBaseNode::PropertiesRole).value<KisBaseNode::PropertyList>();
+    KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
     QList<OptionalProperty> realProps = d->rightmostProperties(props);
 
     Q_FOREACH (OptionalProperty prop, realProps) {
@@ -372,16 +405,15 @@ QRect KisNodeDelegate::visibilityClickRect(const QStyleOptionViewItem &option, c
 void KisNodeDelegate::drawVisibilityIconHijack(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     /**
-     * HACK Alert:
+     * Small hack Alert:
      *
-     * Here we paint over an alien (zero'th) column! That is done for
-     * not implementing the second delegate that would have almost the
-     * same functions as this one! Can break in the future..
+     * Here wepaint over the area that sits basically outside our layer's
+     * row. Anyway, just update it later...
      */
 
     KisNodeViewColorScheme scm;
 
-    KisBaseNode::PropertyList props = index.data(KisBaseNode::PropertiesRole).value<KisBaseNode::PropertyList>();
+    KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
     OptionalProperty prop = d->findVisibilityProperty(props);
     if (!prop) return;
 
@@ -448,19 +480,19 @@ void KisNodeDelegate::Private::toggleProperty(KisBaseNode::PropertyList &props, 
             for (quint16 i = 0; i < numberOfLeaves; ++i) { // Foreach leaf in the node (index.parent())
                 eachItem = model->index(i, 1, index.parent());
                 // The entire property list has to be altered because model->setData cannot set individual properties
-                KisBaseNode::PropertyList eachPropertyList = eachItem.data(KisBaseNode::PropertiesRole).value<KisBaseNode::PropertyList>();
+                KisBaseNode::PropertyList eachPropertyList = eachItem.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
                 OptionalProperty prop = findProperty(eachPropertyList, clickedProperty);
                 if (!prop) continue;
                 prop->stateInStasis = prop->state.toBool();
                 prop->state = eachItem == index;
                 prop->isInStasis = true;
-                model->setData(eachItem, QVariant::fromValue(eachPropertyList), KisBaseNode::PropertiesRole);
+                model->setData(eachItem, QVariant::fromValue(eachPropertyList), KisNodeModel::PropertiesRole);
 
             }
 
             for (quint16 i = 0; i < numberOfLeaves; ++i) { // Foreach leaf in the node (index.parent())
                 eachItem = model->index(i, 1, index.parent());
-                KisBaseNode::PropertyList eachPropertyList = eachItem.data(KisBaseNode::PropertiesRole).value<KisBaseNode::PropertyList>();
+                KisBaseNode::PropertyList eachPropertyList = eachItem.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
                 OptionalProperty prop = findProperty(eachPropertyList, clickedProperty);
                 if (!prop) continue;
             }
@@ -469,18 +501,18 @@ void KisNodeDelegate::Private::toggleProperty(KisBaseNode::PropertyList &props, 
             for (quint16 i = 0; i < numberOfLeaves; ++i) {
                 eachItem = model->index(i, 1, index.parent());
                 // The entire property list has to be altered because model->setData cannot set individual properties
-                KisBaseNode::PropertyList eachPropertyList = eachItem.data(KisBaseNode::PropertiesRole).value<KisBaseNode::PropertyList>();
+                KisBaseNode::PropertyList eachPropertyList = eachItem.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
                 OptionalProperty prop = findProperty(eachPropertyList, clickedProperty);
                 if (!prop) continue;
 
                 prop->state = prop->stateInStasis;
                 prop->isInStasis = false;
-                model->setData(eachItem, QVariant::fromValue(eachPropertyList), KisBaseNode::PropertiesRole);
+                model->setData(eachItem, QVariant::fromValue(eachPropertyList), KisNodeModel::PropertiesRole);
             }
         }
     } else {
         clickedProperty->state = !clickedProperty->state.toBool();
-        model->setData(index, QVariant::fromValue(props), KisBaseNode::PropertiesRole);
+        model->setData(index, QVariant::fromValue(props), KisNodeModel::PropertiesRole);
     }
 }
 
@@ -494,24 +526,28 @@ bool KisNodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, cons
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 
         /**
-         * HACK Alert:
+         * Small hack Alert:
          *
-         * Here we do evil things. KisNodeView forwards *all* the
-         * events to this delegate, even not related to the column we
-         * are attached to (the 1st).  So here we choose over which
-         * tree index the cursor is hovering and decide what to do
-         * depending on this info. It can break in the future. If so,
-         * then just split it into a separate delegate, attached to
-         * the 0th column (KisNodeViewVisibilityDelegate), which is
-         * just a noop at the moment.
+         * Here we handle clicking even when it happened outside
+         * the rectangle of the current index. The point is, we
+         * use some virtual scroling offset to move the tree to the
+         * right of the visibility icon. So the icon itself is placed
+         * in an empty area that doesn't belong to any index. But we still
+         * handle it.
          */
 
-        if (mouseEvent->buttons() & Qt::LeftButton && index.column() == 1) {
-            const QRect iconsRect = this->iconsRect(option, index);
-            const bool iconsClicked = iconsRect.isValid() &&
-                iconsRect.contains(mouseEvent->pos());
+        const QRect iconsRect = this->iconsRect(option, index);
+        const bool iconsClicked = iconsRect.isValid() &&
+            iconsRect.contains(mouseEvent->pos());
 
-            KisBaseNode::PropertyList props = index.data(KisBaseNode::PropertiesRole).value<KisBaseNode::PropertyList>();
+        const QRect visibilityRect = visibilityClickRect(option, index);
+        const bool visibilityClicked = visibilityRect.isValid() &&
+            visibilityRect.contains(mouseEvent->pos());
+
+        const bool leftButton = mouseEvent->buttons() & Qt::LeftButton;
+
+        if (leftButton && iconsClicked) {
+            KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
             QList<OptionalProperty> realProps = d->rightmostProperties(props);
             const int numProps = realProps.size();
 
@@ -530,26 +566,19 @@ bool KisNodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, cons
                 d->toggleProperty(props, clickedProperty, mouseEvent->modifiers() == Qt::ControlModifier, index);
                 return true;
             }
-        } else if (mouseEvent->buttons() & Qt::LeftButton && index.column() == 0) {
-            const QRect visibilityRect = visibilityClickRect(option, index);
-            const bool visibilityClicked = visibilityRect.isValid() &&
-                visibilityRect.contains(mouseEvent->pos());
-
-            if (visibilityClicked) {
-                QModelIndex hijackIndex = model->index(index.row(), 1, index.parent());
-                KisBaseNode::PropertyList props = hijackIndex.data(KisBaseNode::PropertiesRole).value<KisBaseNode::PropertyList>();
-                OptionalProperty clickedProperty = d->findVisibilityProperty(props);
-                if (!clickedProperty) return false;
-                d->toggleProperty(props, clickedProperty, mouseEvent->modifiers() == Qt::ControlModifier, hijackIndex);
-                return true;
-            }
+        } else if (leftButton && visibilityClicked) {
+            KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
+            OptionalProperty clickedProperty = d->findVisibilityProperty(props);
+            if (!clickedProperty) return false;
+            d->toggleProperty(props, clickedProperty, mouseEvent->modifiers() == Qt::ControlModifier, index);
+            return true;
         }
 
         if (mouseEvent->button() == Qt::LeftButton &&
             mouseEvent->modifiers() == Qt::AltModifier) {
 
             d->view->setCurrentIndex(index);
-            model->setData(index, true, KisBaseNode::AlternateActiveRole);
+            model->setData(index, true, KisNodeModel::AlternateActiveRole);
             return true;
         }
     }
@@ -679,7 +708,7 @@ QRect KisNodeDelegate::progressBarRect(const QStyleOptionViewItem &option, const
 
 void KisNodeDelegate::drawProgressBar(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    QVariant value = index.data(KisBaseNode::ProgressRole);
+    QVariant value = index.data(KisNodeModel::ProgressRole);
     if (!value.isNull() && (value.toInt() >= 0 && value.toInt() <= 100)) {
         const QRect r = progressBarRect(option, index);
         p->save();

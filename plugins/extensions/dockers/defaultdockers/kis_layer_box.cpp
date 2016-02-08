@@ -42,6 +42,7 @@
 #include <QVector>
 #include <QLabel>
 #include <QMenu>
+#include <QWidgetAction>
 
 #include <kis_debug.h>
 #include <klocalizedstring.h>
@@ -78,6 +79,8 @@
 #include "KisView.h"
 #include "krita_utils.h"
 #include "sync_button_and_action.h"
+#include "kis_color_label_selector_widget.h"
+#include "kis_signals_blocker.h"
 
 #include "ui_wdglayerbox.h"
 
@@ -206,6 +209,11 @@ KisLayerBox::KisLayerBox()
     m_actions.append(showGlobalSelectionMask);
 
     showGlobalSelectionMask->setChecked(cfg.showGlobalSelection());
+
+    m_colorSelector = new KisColorLabelSelectorWidget(this);
+    connect(m_colorSelector, SIGNAL(currentIndexChanged(int)), SLOT(slotColorLabelChanged(int)));
+    m_colorSelectorAction = new QWidgetAction(this);
+    m_colorSelectorAction->setDefaultWidget(m_colorSelector);
 
     m_wdgLayerBox->listLayers->setModel(m_nodeModel);
 
@@ -433,7 +441,7 @@ void KisLayerBox::setCurrentNode(KisNodeSP node)
 {
     QModelIndex index = node ? m_nodeModel->indexFromNode(node) : QModelIndex();
 
-    m_nodeModel->setData(index, true, KisBaseNode::ActiveRole);
+    m_nodeModel->setData(index, true, KisNodeModel::ActiveRole);
     updateUI();
 }
 
@@ -480,16 +488,29 @@ void KisLayerBox::slotSetOpacity(double opacity)
 
 void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &index)
 {
+    KisNodeList nodes = m_nodeManager->selectedNodes();
+    KisNodeSP activeNode = m_nodeManager->activeNode();
+    if (nodes.isEmpty() || !activeNode) return;
+
     if (m_canvas) {
         QMenu menu;
 
-        const bool singleLayer = m_nodeManager->selectedNodes().size() == 1;
+        const bool singleLayer = nodes.size() == 1;
 
         if (index.isValid()) {
             menu.addAction(m_propertiesAction);
 
             if (singleLayer) {
                 addActionToMenu(&menu, "layer_style");
+            }
+
+            {
+                KisSignalsBlocker b(m_colorSelector);
+                m_colorSelector->setCurrentIndex(singleLayer ? activeNode->colorLabelIndex() : -1);
+            }
+            menu.addAction(m_colorSelectorAction);
+
+            if (singleLayer) {
                 menu.addSeparator();
                 addActionToMenu(&menu, "show_in_timeline");
             }
@@ -774,6 +795,16 @@ void KisLayerBox::updateThumbnail()
 void KisLayerBox::slotRenameCurrentNode()
 {
     m_wdgLayerBox->listLayers->edit(m_wdgLayerBox->listLayers->currentIndex());
+}
+
+void KisLayerBox::slotColorLabelChanged(int index)
+{
+    KisNodeList nodes = m_nodeManager->selectedNodes();
+    const int label = m_colorSelector->currentIndex();
+
+    Q_FOREACH(KisNodeSP node, nodes) {
+        node->setColorLabelIndex(label);
+    }
 }
 
 #include "moc_kis_layer_box.cpp"

@@ -39,6 +39,7 @@ public:
     static const KoID onionSkins;
     static const KoID passThrough;
     static const KoID selectionActive;
+    static const KoID colorLabelIndex;
 
     static KisLayerPropertiesIcons* instance();
 

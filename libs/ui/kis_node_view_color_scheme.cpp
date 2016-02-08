@@ -27,7 +27,26 @@ Q_GLOBAL_STATIC(KisNodeViewColorScheme, s_instance)
 
 struct KisNodeViewColorScheme::Private
 {
+    Private() {
+        if (colorLabels.isEmpty()) {
+            colorLabels << Qt::transparent;
+            colorLabels << QColor(252, 235, 87);
+            colorLabels << QColor(251, 183, 76);
+            colorLabels << QColor(160, 127, 110);
+            colorLabels << QColor(151, 202, 63);
+            colorLabels << QColor(123, 166, 209);
+            colorLabels << QColor(178, 138, 173);
+            colorLabels << QColor(238, 50, 51);
+            colorLabels << QColor(216, 218, 213);
+            colorLabels << QColor(145, 147, 142);
+        }
+    }
+
+    static QVector<QColor> colorLabels;
 };
+
+QVector<QColor> KisNodeViewColorScheme::Private::colorLabels;
+
 
 KisNodeViewColorScheme::KisNodeViewColorScheme()
     : m_d(new Private)
@@ -147,4 +166,14 @@ QRect KisNodeViewColorScheme::relExpandButtonRect() const
     QRect rc = relDecorationRect();
     rc.moveTop(newY);
     return rc;
+}
+
+QColor KisNodeViewColorScheme::colorLabel(int index) const
+{
+    return m_d->colorLabels[index % m_d->colorLabels.size()];
+}
+
+QVector<QColor> KisNodeViewColorScheme::allColorLabels() const
+{
+    return m_d->colorLabels;
 }

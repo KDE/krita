@@ -99,6 +99,21 @@ private:
     }
 };
 
+struct ColorLabelAdapter : public BaseAdapter {
+    typedef int ValueType;
+    typedef MultinodePropertyBaseConnector ConnectorType;
+    static const bool forceIgnoreByDefault = false;
+
+    static ValueType propForNode(KisNodeSP node) {
+        return node->colorLabelIndex();
+    }
+
+    static void setPropForNode(KisNodeSP node, const ValueType &value, int index) {
+        Q_UNUSED(index);
+        node->setColorLabelIndex(value);
+    }
+};
+
 struct OpacityAdapter : public BaseAdapter {
     typedef int ValueType;
     typedef MultinodePropertyBaseConnector ConnectorType;
@@ -612,5 +627,6 @@ private:
 typedef KisMultinodeProperty<CompositeOpAdapter> KisMultinodeCompositeOpProperty;
 typedef KisMultinodeProperty<OpacityAdapter> KisMultinodeOpacityProperty;
 typedef KisMultinodeProperty<NameAdapter> KisMultinodeNameProperty;
+typedef KisMultinodeProperty<ColorLabelAdapter> KisMultinodeColorLabelProperty;
 
 #endif /* __KIS_MULTINODE_PROPERTY_H */

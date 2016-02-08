@@ -57,6 +57,7 @@ struct KisDlgLayerProperties::Private
     QSharedPointer<KisMultinodeCompositeOpProperty> compositeOpProperty;
     QSharedPointer<KisMultinodeOpacityProperty> opacityProperty;
     QSharedPointer<KisMultinodeNameProperty> nameProperty;
+    QSharedPointer<KisMultinodeColorLabelProperty> colorLabelProperty;
 
     QList<KisMultinodePropertyInterfaceSP> layerProperties;
     QList<QPointer<QCheckBox> > layerPropCheckboxes;
@@ -73,6 +74,7 @@ struct KisDlgLayerProperties::Private
         props << nameProperty;
         props << layerProperties;
         props << channelFlagsProps;
+        props << colorLabelProperty;
         return props;
     }
 };
@@ -115,6 +117,12 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisNodeList nodes, KisViewManager *
     d->compositeOpProperty->connectValueChangedSignal(this, SLOT(slotCompositeOpValueChangedInternally()));
     d->compositeOpProperty->connectValueChangedSignal(&d->updatesCompressor, SLOT(start()));
     connect(d->page->cmbComposite, SIGNAL(currentIndexChanged(int)), SLOT(slotCompositeOpValueChangedExternally()));
+
+    d->colorLabelProperty.reset(new KisMultinodeColorLabelProperty(nodes));
+    d->colorLabelProperty->connectIgnoreCheckBox(d->page->chkColorLabel);
+    d->colorLabelProperty->connectValueChangedSignal(this, SLOT(slotColorLabelValueChangedInternally()));
+    d->colorLabelProperty->connectValueChangedSignal(&d->updatesCompressor, SLOT(start()));
+    connect(d->page->colorLabelSelector, SIGNAL(currentIndexChanged(int)), SLOT(slotColorLabelValueChangedExternally()));
 
     if (!KisLayerUtils::checkNodesDiffer<const KoColorSpace*>(d->nodes, [](KisNodeSP node) { return node->colorSpace(); })) {
 
@@ -225,6 +233,18 @@ void KisDlgLayerProperties::slotCompositeOpValueChangedExternally()
 {
     if (d->compositeOpProperty->isIgnored()) return;
     d->compositeOpProperty->setValue(d->page->cmbComposite->selectedCompositeOp().id());
+}
+
+void KisDlgLayerProperties::slotColorLabelValueChangedInternally()
+{
+    d->page->colorLabelSelector->setCurrentIndex(d->colorLabelProperty->value());
+    d->page->colorLabelSelector->setEnabled(!d->colorLabelProperty->isIgnored());
+}
+
+void KisDlgLayerProperties::slotColorLabelValueChangedExternally()
+{
+    if (d->colorLabelProperty->isIgnored()) return;
+    d->colorLabelProperty->setValue(d->page->colorLabelSelector->currentIndex());
 }
 
 void KisDlgLayerProperties::slotOpacityValueChangedInternally()

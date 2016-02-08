@@ -100,6 +100,7 @@ namespace KritaUtils
     void KRITAIMAGE_EXPORT renderExactRect(QPainter *p, const QRect &rc, const QPen &pen);
 
     QImage KRITAIMAGE_EXPORT convertQImageToGrayA(const QImage &image);
+    QColor KRITAIMAGE_EXPORT blendColors(const QColor &c1, const QColor &c2, qreal r1);
 }
 
 #endif /* __KRITA_UTILS_H */

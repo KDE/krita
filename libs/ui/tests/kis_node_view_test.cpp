@@ -21,6 +21,7 @@
 #include <QTest>
 #include <QDialog>
 #include <QVBoxLayout>
+#include <QGridLayout>
 
 #include <KisNodeView.h>
 
@@ -52,7 +53,7 @@ void KisNodeViewTest::cleanup()
 }
 
 
-void KisNodeViewTest::test()
+void KisNodeViewTest::testLayers()
 {
     QDialog dlg;
 
@@ -77,6 +78,28 @@ void KisNodeViewTest::test()
     dlg.resize(280, 400);
     view->expandAll();
 
+    dlg.exec();
+}
+
+#include "kis_color_label_selector_widget.h"
+
+void KisNodeViewTest::testColorLabels()
+{
+    QDialog dlg;
+
+    QFont font;
+    font.setPointSizeF(8);
+    dlg.setFont(font);
+
+    KisColorLabelSelectorWidget *widget = new KisColorLabelSelectorWidget(&dlg);
+    QSizePolicy policy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    widget->setSizePolicy(policy);
+
+    QVBoxLayout *layout = new QVBoxLayout(&dlg);
+    layout->addWidget(widget);
+    layout->addStretch(1);
+
+    dlg.resize(280, 400);
     dlg.exec();
 }
 

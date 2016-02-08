@@ -34,6 +34,7 @@ const KoID KisLayerPropertiesIcons::alphaLocked("alpha-locked", i18n("Alpha Lock
 const KoID KisLayerPropertiesIcons::onionSkins("onion-skins", i18n("Onion Skins"));
 const KoID KisLayerPropertiesIcons::passThrough("pass-through", i18n("Pass Through"));
 const KoID KisLayerPropertiesIcons::selectionActive("selection-active", i18n("Active"));
+const KoID KisLayerPropertiesIcons::colorLabelIndex("color-label", i18n("Color Label"));
 
 
 struct IconsPair {

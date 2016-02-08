@@ -60,6 +60,9 @@ public:
     QRect relDecorationRect() const;
     QRect relExpandButtonRect() const;
 
+    QColor colorLabel(int index) const;
+    QVector<QColor> allColorLabels() const;
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

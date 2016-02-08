@@ -120,7 +120,7 @@ QModelIndex KisModelIndexConverter::indexFromDummy(KisNodeDummy *dummy)
         row = rowCount - index - 1;
     }
 
-    return m_model->createIndex(row, 1, (void*)dummy);
+    return m_model->createIndex(row, 0, (void*)dummy);
 }
 
 bool KisModelIndexConverter::indexFromAddedDummy(KisNodeDummy *parentDummy,

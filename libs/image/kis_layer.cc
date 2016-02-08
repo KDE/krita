@@ -233,11 +233,11 @@ void KisLayer::setSectionModelProperties(const KisBaseNode::PropertyList &proper
     KisBaseNode::setSectionModelProperties(properties);
 
     Q_FOREACH (const KisBaseNode::Property &property, properties) {
-        if (property.name == i18n("Inherit Alpha")) {
+        if (property.id == KisLayerPropertiesIcons::inheritAlpha.id()) {
             disableAlphaChannel(property.state.toBool());
         }
 
-        if (property.name == i18n("Layer Style")) {
+        if (property.id == KisLayerPropertiesIcons::layerStyle.id()) {
             if (m_d->layerStyle &&
                 m_d->layerStyle->isEnabled() != property.state.toBool()) {
 

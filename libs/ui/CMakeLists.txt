@@ -254,6 +254,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_tool_button.cpp
     widgets/kis_floating_message.cpp
     widgets/kis_lod_availability_widget.cpp
+    widgets/kis_color_label_selector_widget.cpp
     input/kis_input_manager.cpp
     input/kis_input_manager_p.cpp
     input/kis_extended_modifiers_mapper.cpp

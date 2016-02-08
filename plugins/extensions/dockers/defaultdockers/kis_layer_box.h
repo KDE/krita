@@ -52,6 +52,8 @@ class KisCanvas2;
 class KisNodeModel;
 class Ui_WdgLayerBox;
 class KisNodeJugglerCompressed;
+class KisColorLabelSelectorWidget;
+class QWidgetAction;
 
 /**
  * A widget that shows a visualization of the layer structure.
@@ -115,6 +117,7 @@ private Q_SLOTS:
 
     void selectionChanged(const QModelIndexList selection);
     void slotNodeManagerChangedSelection(const QList<KisNodeSP> &nodes);
+    void slotColorLabelChanged(int index);
 
     void updateThumbnail();
 
@@ -131,6 +134,8 @@ private:
     KisImageWSP m_image;
     QPointer<KisNodeModel> m_nodeModel;
     QPointer<KisNodeManager> m_nodeManager;
+    QPointer<KisColorLabelSelectorWidget> m_colorSelector;
+    QPointer<QWidgetAction> m_colorSelectorAction;
     Ui_WdgLayerBox* m_wdgLayerBox;
     QTimer m_opacityDelayTimer;
     int m_newOpacity;

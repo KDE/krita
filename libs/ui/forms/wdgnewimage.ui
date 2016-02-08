@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>685</width>
-    <height>628</height>
+    <width>697</width>
+    <height>656</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -63,9 +63,6 @@
          <layout class="QHBoxLayout">
           <item>
            <layout class="QVBoxLayout">
-            <property name="margin">
-             <number>0</number>
-            </property>
             <item>
              <widget class="QLabel" name="lblWidth">
               <property name="text">
@@ -96,9 +93,6 @@
           </item>
           <item>
            <layout class="QVBoxLayout">
-            <property name="margin">
-             <number>0</number>
-            </property>
             <item>
              <widget class="QDoubleSpinBox" name="doubleWidth">
               <property name="minimumSize">
@@ -138,9 +132,6 @@
           </item>
           <item>
            <layout class="QVBoxLayout">
-            <property name="margin">
-             <number>0</number>
-            </property>
             <item>
              <widget class="QComboBox" name="cmbWidthUnit"/>
             </item>
@@ -338,8 +329,8 @@
          <widget class="QLabel" name="lblPreview">
           <property name="maximumSize">
            <size>
-            <width>250</width>
-            <height>250</height>
+            <width>75</width>
+            <height>75</height>
            </size>
           </property>
           <property name="baseSize">
@@ -401,7 +392,16 @@
          <enum>QFrame::Plain</enum>
         </property>
         <layout class="QHBoxLayout">
-         <property name="margin">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item>
@@ -482,14 +482,14 @@
         <property name="toolTip">
          <string>Reset the image background color in the Image Properties dialog</string>
         </property>
-        <property name="color">
+        <property name="color" stdset="0">
          <color>
           <red>255</red>
           <green>255</green>
           <blue>255</blue>
          </color>
         </property>
-        <property name="defaultColor">
+        <property name="defaultColor" stdset="0">
          <color>
           <red>255</red>
           <green>255</green>
@@ -549,9 +549,6 @@
    </item>
    <item>
     <layout class="QHBoxLayout">
-     <property name="margin">
-      <number>0</number>
-     </property>
      <item>
       <spacer>
        <property name="orientation">
@@ -593,15 +590,15 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisColorSpaceSelector</class>
-   <extends>QWidget</extends>
-   <header>widgets/kis_color_space_selector.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisColorSpaceSelector</class>
+   <extends>QWidget</extends>
+   <header>widgets/kis_color_space_selector.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

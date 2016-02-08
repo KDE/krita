@@ -119,7 +119,7 @@ void KisImageFromClipboard::createClipboardPreview()
         QByteArray mimeType("application/x-krita-selection");
 
         if ((cbData && cbData->hasFormat(mimeType)) || !qimage.isNull()) {
-            lblPreview->setPixmap(QPixmap::fromImage(qimage));
+            lblPreview->setPixmap(QPixmap::fromImage(qimage.scaled(75, 75, Qt::KeepAspectRatio)));
             lblPreview->show();
             createButton->setEnabled(true);
 

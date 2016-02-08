@@ -1,0 +1,9 @@
+{
+    "Id": "DualBrush",
+    "Type": "Service",
+    "X-KDE-Library": "kritaDualBrushpaintop",
+    "X-KDE-ServiceTypes": [
+        "Krita/Paintop"
+    ],
+    "X-Krita-Version": "28"
+}

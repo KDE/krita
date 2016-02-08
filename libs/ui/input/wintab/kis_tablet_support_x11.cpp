@@ -97,6 +97,7 @@ struct KisX11Data
         WacomTouch,
 
         AiptekStylus,
+        WizardPenTablet,
 
         NPredefinedAtoms,
         NAtoms = NPredefinedAtoms
@@ -137,6 +138,9 @@ static const char kis_x11_atomnames[] = {
 
     // Aiptek drivers (e.g. Hyperpen 12000U) reports non-standard type string
     "Stylus\0"
+
+    // UGTABLET TABLET G5 9x6    
+     "WizardPen Tablet\0"
 
 };
 

@@ -284,6 +284,15 @@ void KisColorLabelSelectorWidget::paintEvent(QPaintEvent *e)
 
 void KisColorLabelSelectorWidget::keyPressEvent(QKeyEvent *e)
 {
+    if (e->key() == Qt::Key_Right || e->key() == Qt::Key_Up) {
+        int newItem = (m_d->selectedItem + 1) % m_d->colors.size();
+        setCurrentIndex(newItem);
+    } else if (e->key() == Qt::Key_Left || e->key() == Qt::Key_Down) {
+        int newItem = m_d->selectedItem < 0 ? m_d->colors.size() - 1 :
+            (m_d->selectedItem + m_d->colors.size() - 1) % m_d->colors.size();
+        setCurrentIndex(newItem);
+    }
+
     QWidget::keyPressEvent(e);
 }
 

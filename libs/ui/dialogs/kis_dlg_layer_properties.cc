@@ -118,6 +118,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisNodeList nodes, KisViewManager *
     d->compositeOpProperty->connectValueChangedSignal(&d->updatesCompressor, SLOT(start()));
     connect(d->page->cmbComposite, SIGNAL(currentIndexChanged(int)), SLOT(slotCompositeOpValueChangedExternally()));
 
+    d->page->colorLabelSelector->setFocusPolicy(Qt::StrongFocus);
     d->colorLabelProperty.reset(new KisMultinodeColorLabelProperty(nodes));
     d->colorLabelProperty->connectIgnoreCheckBox(d->page->chkColorLabel);
     d->colorLabelProperty->connectValueChangedSignal(this, SLOT(slotColorLabelValueChangedInternally()));

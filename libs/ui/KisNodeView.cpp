@@ -452,6 +452,10 @@ void KisNodeView::paintEvent(QPaintEvent *event)
 void KisNodeView::drawBranches(QPainter *painter, const QRect &rect,
                                const QModelIndex &index) const
 {
+    Q_UNUSED(painter);
+    Q_UNUSED(rect);
+    Q_UNUSED(index);
+
     /**
      * Noop... Everything is going to be painted by KisNodeDelegate.
      * So this override basically disables painting of Qt's branch-lines.

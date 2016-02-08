@@ -162,7 +162,7 @@ void KisColorLabelSelectorWidget::Private::updateItemSizes(const QSize &widgetSi
     const int height = qBound(minHeight,
                               heightForWidth(q->width(), minSpacing),
                               q->height());
-    qDebug()  << ppVar(height) << ppVar(q->height());
+
     const int size = height - 2 * border;
     const int numItems = colors.size();
 
@@ -209,7 +209,8 @@ void KisColorLabelSelectorWidget::Private::updateItem(int index)
 enum State {
     NORMAL = 0,
     HOVER,
-    CHECKED
+    CHECKED,
+    DISABLED
 };
 
 void drawToolButton(QWidget *widget, const QRect &rc, State state, const QColor &color, int border)
@@ -220,6 +221,7 @@ void drawToolButton(QWidget *widget, const QRect &rc, State state, const QColor 
     opt.rect = kisGrowRect(rc, border);
 
     switch (state) {
+    case DISABLED:
     case NORMAL:
         opt.state &= ~QStyle::State_Raised;
         break;
@@ -238,7 +240,13 @@ void drawToolButton(QWidget *widget, const QRect &rc, State state, const QColor 
     const int offset = qMax(1, rc.height() / 10);
     const QRect colorBlobRect = kisGrowRect(rc, -offset);
     if (color.alpha() > 0) {
-        p.fillRect(colorBlobRect, color);
+        QColor fillColor = color;
+
+        if (state == DISABLED) {
+            fillColor.setHsl(0, 0, color.lightness());
+        }
+
+        p.fillRect(colorBlobRect, fillColor);
     } else {
         QRect crossRect = kisGrowRect(colorBlobRect, -offset);
 
@@ -252,19 +260,25 @@ void drawToolButton(QWidget *widget, const QRect &rc, State state, const QColor 
 void KisColorLabelSelectorWidget::paintEvent(QPaintEvent *e)
 {
     QWidget::paintEvent(e);
-    for (int i = 0; i < m_d->colors.size(); i++) {
-        if (i == m_d->selectedItem || i == m_d->hoveringItem) {
-            continue;
+    if (isEnabled()) {
+        for (int i = 0; i < m_d->colors.size(); i++) {
+            if (i == m_d->selectedItem || i == m_d->hoveringItem) {
+                continue;
+            }
+            drawToolButton(this, m_d->itemRect(i), NORMAL, m_d->colors[i], m_d->border);
         }
-        drawToolButton(this, m_d->itemRect(i), NORMAL, m_d->colors[i], m_d->border);
-    }
 
-    if (m_d->selectedItem >= 0) {
-        drawToolButton(this, m_d->itemRect(m_d->selectedItem), CHECKED, m_d->colors[m_d->selectedItem], m_d->border);
-    }
+        if (m_d->selectedItem >= 0) {
+            drawToolButton(this, m_d->itemRect(m_d->selectedItem), CHECKED, m_d->colors[m_d->selectedItem], m_d->border);
+        }
 
-    if (m_d->hoveringItem >= 0 && m_d->hoveringItem != m_d->selectedItem) {
-        drawToolButton(this, m_d->itemRect(m_d->hoveringItem), HOVER, m_d->colors[m_d->hoveringItem], m_d->border);
+        if (m_d->hoveringItem >= 0 && m_d->hoveringItem != m_d->selectedItem) {
+            drawToolButton(this, m_d->itemRect(m_d->hoveringItem), HOVER, m_d->colors[m_d->hoveringItem], m_d->border);
+        }
+    } else {
+        for (int i = 0; i < m_d->colors.size(); i++) {
+            drawToolButton(this, m_d->itemRect(i), DISABLED, m_d->colors[i], m_d->border);
+        }
     }
 }
 

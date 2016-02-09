@@ -21,6 +21,7 @@
 #include <KoDialog.h>
 
 #include <QFrame>
+#include <kritaui_export.h>
 
 class KoSegmentGradient;
 class KisViewManager;
@@ -45,7 +46,7 @@ private:
 
 };
 
-class KisGradientChooser : public QFrame
+class KRITAUI_EXPORT KisGradientChooser : public QFrame
 {
 
     Q_OBJECT

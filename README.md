@@ -19,6 +19,10 @@ Development notes and build instructions:
 
   https://community.kde.org/Krita
 
+If you're building on Windows you'll need to build some third-party
+dependencies before you can build Krita. You should look at the README
+in the 3rdparty folder for directions on how to set them up.
+
 Bugs and wishes:
 
   https://bugs.kde.org/buglist.cgi?bug_status=UNCONFIRMED&bug_status=CONFIRMED&bug_status=ASSIGNED&bug_status=REOPENED&list_id=1315444&product=krita&query_format=advanced

@@ -219,7 +219,6 @@ DualBrushOpOption::DualBrushOpOption()
 
 DualBrushOpOption::~DualBrushOpOption()
 {
-    // delete m_options;
 }
 
 void DualBrushOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
@@ -254,9 +253,4 @@ void DualBrushOpOption::readOptionSetting(const KisPropertiesConfiguration* sett
         stack << ps;
     }
     m_dualBrushOptionsWidget->setPresetStack(stack);
-}
-
-void DualBrushProperties::readOptionSetting(const KisPropertiesConfiguration *settings)
-{
-    //radius = settings->getInt(DUALBRUSH_RADIUS);
 }

@@ -32,11 +32,19 @@ class KisPaintOpFactory;
 struct KRITAUI_EXPORT KisPaintOpInfo
 {
     KisPaintOpInfo() { }
-    KisPaintOpInfo(const QString& _id, const QString& _name, const QString& _category, const QPixmap& _icon, qint32 _priority):
-        id(_id),  name(_name), category(_category), icon(_icon), priority(_priority) { }
+    KisPaintOpInfo(const QString& _id, const QString& _name, const QString& _category, const QPixmap& _icon, qint32 _priority)
+        : id(_id)
+        ,  name(_name)
+        , category(_category)
+        , icon(_icon)
+        , priority(_priority)
+    {
+    }
 
-    KisPaintOpInfo(const QString& _id):
-        id(_id) { }
+    KisPaintOpInfo(const QString& _id)
+        : id(_id)
+    {
+    }
 
     bool operator==(const KisPaintOpInfo info) const{
         return (info.id == id);

@@ -197,17 +197,6 @@ public:
 
     KisPaintOpPresetWSP preset() const;
 
-
-    /**
-     * @return filename of the 3D brush model, empty if no brush is set
-     */
-    virtual QString modelName() const;
-
-    /**
-    * Set filename of 3D brush model. By default no brush is set
-    */
-    void setModelName(const QString & modelName);
-
     /// Check if the settings are valid, setting might be invalid through missing brushes etc
     /// Overwrite if the settings of a paintop can be invalid
     /// @return state of the settings, default implementation is true

@@ -63,16 +63,8 @@ public:
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
 private:
-
     DualBrushOpOptionsWidget *m_dualBrushOptionsWidget;
 
-};
-
-class DualBrushProperties
-{
-public:
-
-    void readOptionSetting(const KisPropertiesConfiguration* settings);
 };
 
 #endif

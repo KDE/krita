@@ -22,7 +22,6 @@
 #include <brushengine/kis_paintop.h>
 #include <kis_types.h>
 
-#include "DualBrush.h"
 #include "DualBrushPaintopSettings.h"
 
 class KisPainter;
@@ -39,9 +38,8 @@ public:
 
 private:
     KisPaintDeviceSP m_dab;
-    DualBrushBrush *m_DualBrushBrush;
     KisPressureOpacityOption m_opacityOption;
-    DualBrushProperties m_properties;
+
 };
 
 #endif // KIS_DUALBRUSH_PAINTOP_H_

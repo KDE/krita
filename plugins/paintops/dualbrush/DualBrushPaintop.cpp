@@ -38,19 +38,20 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_lod_transform.h>
 
+#include "StackedPreset.h"
 
-DualBrushPaintOp::DualBrushPaintOp(const DualBrushPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
+DualBrushPaintOp::DualBrushPaintOp(const DualBrushPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
 {
     Q_UNUSED(image);
     Q_UNUSED(node);
+    m_opacityOption.readOptionSetting(settings);
+    m_opacityOption.resetAllSensors();
 
-    m_DualBrushBrush = new DualBrushBrush(&m_properties);
 }
 
 DualBrushPaintOp::~DualBrushPaintOp()
 {
-    delete m_DualBrushBrush;
 }
 
 KisSpacingInformation DualBrushPaintOp::paintAt(const KisPaintInformation& info)
@@ -69,10 +70,10 @@ KisSpacingInformation DualBrushPaintOp::paintAt(const KisPaintInformation& info)
     x1 = info.pos().x();
     y1 = info.pos().y();
 
-    const qreal additionalScale = KisLodTransform::lodToScale(painter()->device());
-
     quint8 origOpacity = m_opacityOption.apply(painter(), info);
-    m_DualBrushBrush->paint(m_dab, x1, y1, painter()->paintColor(), additionalScale);
+
+
+
 
     QRect rc = m_dab->extent();
 

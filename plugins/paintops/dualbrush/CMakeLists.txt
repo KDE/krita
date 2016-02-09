@@ -1,5 +1,4 @@
 set(kritadualbrushpaintop_SOURCES
-    DualBrush.cpp
     DualBrushOption.cpp
     DualBrushPaintop.cpp
     DualBrushPaintopPlugin.cpp

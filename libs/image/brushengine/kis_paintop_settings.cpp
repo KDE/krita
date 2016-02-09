@@ -43,7 +43,6 @@ struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
     Private() : disableDirtyNotifications(false) {}
 
     QPointer<KisPaintOpConfigWidget> settingsWidget;
-    QString modelName;
     KisPaintOpPresetWSP preset;
 
 
@@ -194,16 +193,6 @@ qreal KisPaintOpSettings::paintOpFlow() const
 QString KisPaintOpSettings::paintOpCompositeOp() const
 {
     return getString("CompositeOp", COMPOSITE_OVER);
-}
-
-QString KisPaintOpSettings::modelName() const
-{
-    return d->modelName;
-}
-
-void KisPaintOpSettings::setModelName(const QString & modelName)
-{
-    d->modelName = modelName;
 }
 
 KisPaintOpConfigWidget* KisPaintOpSettings::optionsWidget() const

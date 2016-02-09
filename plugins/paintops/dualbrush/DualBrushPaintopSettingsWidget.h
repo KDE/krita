@@ -30,10 +30,10 @@ class DualBrushPaintOpSettingsWidget : public KisPaintOpSettingsWidget
     Q_OBJECT
 
 public:
-    DualBrushPaintOpSettingsWidget(QWidget* parent = 0);
+    DualBrushPaintOpSettingsWidget(QWidget *parent = 0);
     virtual ~DualBrushPaintOpSettingsWidget();
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfiguration *configuration() const;
 };
 
 #endif

@@ -25,9 +25,11 @@
 #include <QListWidgetItem>
 #include <QToolButton>
 
+#include <kis_icon_utils.h>
 #include <kis_slider_spin_box.h>
 #include <kis_paintop_presets_chooser_popup.h>
 #include <kis_resource_server_provider.h>
+#include <KoCompositeOpRegistry.h>
 
 #define ICON_SIZE 48
 
@@ -51,11 +53,21 @@ KisDualBrushOpOptionsWidget::KisDualBrushOpOptionsWidget(QWidget *parent)
     connect(doubleOpacity, SIGNAL(valueChanged(qreal)), SIGNAL(configurationChanged()));
 
     tableSelected->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
+    tableSelected->setSelectionMode(QAbstractItemView::SingleSelection);
+    connect(tableSelected, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*, QListWidgetItem*)));
 
-    connect(bnAdd, SIGNAL(clicked()), SLOT(presetAdded()));
-    connect(bnRemove, SIGNAL(clicked()), SLOT(presetRemoved()));
+    connect(bnAdd, SIGNAL(clicked()), SLOT(addPreset()));
+    bnAdd->setIcon(KisIconUtils::loadIcon("arrow-right"));
+
+    connect(bnRemove, SIGNAL(clicked()), SLOT(removePreset()));
+    bnRemove->setIcon(KisIconUtils::loadIcon("edit-delete"));
+
     connect(bnUp, SIGNAL(clicked()), SLOT(movePresetUp()));
+    bnUp->setIcon(KisIconUtils::loadIcon("arrow-up"));
+
     connect(bnDown, SIGNAL(clicked()), SLOT(movePresetDown()));
+    bnDown->setIcon(KisIconUtils::loadIcon("arrow-down"));
+
 }
 
 KisDualBrushOpOptionsWidget::~KisDualBrushOpOptionsWidget()
@@ -78,8 +90,15 @@ QPixmap imageToIcon(const QImage &img) {
 
 void KisDualBrushOpOptionsWidget::addPreset()
 {
+    doubleFuzziness->setValue(0.0);
+    doubleOpacity->setValue(0.0);
+    doubleVOffset->setValue(0.0);
+    doubleHOffset->setValue(0.);
+    cmbComposite->selectCompositeOp(KoID(COMPOSITE_OVER));
+
     StackedPreset preset;
     preset.presetName = wdgPresetChooser->currentPaintOp();
+    preset.fuzziness = doubleFuzziness->value();
     preset.compositeOp = cmbComposite->selectedCompositeOp().id();
     preset.opacitiy = doubleOpacity->value();
     preset.verticalOffset = doubleVOffset->value();
@@ -96,17 +115,48 @@ void KisDualBrushOpOptionsWidget::addPreset()
 
 void KisDualBrushOpOptionsWidget::removePreset()
 {
-
+    delete tableSelected->takeItem(tableSelected->currentRow());
 }
 
 void KisDualBrushOpOptionsWidget::movePresetUp()
 {
-
+    int currentRow = tableSelected->currentRow();
+    if (currentRow > 0) {
+        QListWidgetItem *item = tableSelected->takeItem(currentRow);
+        tableSelected->insertItem(currentRow - 1, item);
+        tableSelected->setCurrentRow(currentRow - 1);
+    }
 }
 
 void KisDualBrushOpOptionsWidget::movePresetDown()
 {
+    int currentRow = tableSelected->currentRow();
+    if (currentRow < tableSelected->count() - 1) {
+        QListWidgetItem *item = tableSelected->takeItem(currentRow);
+        tableSelected->insertItem(currentRow + 1, item);
+        tableSelected->setCurrentRow(currentRow + 1);
+    }
+}
 
+void KisDualBrushOpOptionsWidget::itemSelected(QListWidgetItem *current, QListWidgetItem *previous)
+{
+    if (previous) {
+        StackedPreset psPrevious = previous->data(Qt::UserRole).value<StackedPreset>();
+        psPrevious.fuzziness = doubleFuzziness->value();
+        psPrevious.compositeOp = cmbComposite->selectedCompositeOp().id();
+        psPrevious.opacitiy = doubleOpacity->value();
+        psPrevious.verticalOffset = doubleVOffset->value();
+        psPrevious.horizontalOffset = doubleHOffset->value();
+        previous->setData(Qt::UserRole, QVariant::fromValue<StackedPreset>(psPrevious));
+    }
+    if (current) {
+        StackedPreset psCurrent = current->data(Qt::UserRole).value<StackedPreset>();
+        doubleFuzziness->setValue(psCurrent.fuzziness);
+        doubleOpacity->setValue(psCurrent.opacitiy);
+        doubleVOffset->setValue(psCurrent.verticalOffset);
+        doubleHOffset->setValue(psCurrent.horizontalOffset);
+        cmbComposite->selectCompositeOp(KoID(psCurrent.compositeOp));
+    }
 }
 
 KisDualBrushOpOption::KisDualBrushOpOption()

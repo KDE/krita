@@ -25,6 +25,8 @@
 
 #include "StackedPreset.h"
 
+class QListWidgetItem;
+
 class KisDualBrushOpOptionsWidget: public QWidget, public Ui::WdgDualBrushOptions
 {
     Q_OBJECT
@@ -42,6 +44,7 @@ private Q_SLOTS:
     void removePreset();
     void movePresetUp();
     void movePresetDown();
+    void itemSelected(QListWidgetItem *current, QListWidgetItem *previous);
 
 private:
 

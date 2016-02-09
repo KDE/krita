@@ -33,6 +33,7 @@
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_icon.h>
 #include <brushengine/kis_paintop_settings.h>
+#include <kis_preset_chooser.h>
 
 struct KisPaintOpPresetsChooserPopup::Private
 {
@@ -125,5 +126,10 @@ void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KoResource* resource ,
 
 void KisPaintOpPresetsChooserPopup::updateViewSettings()
 {
-   m_d->uiWdgPaintOpPresets.wdgPresetChooser->updateViewSettings();
+    m_d->uiWdgPaintOpPresets.wdgPresetChooser->updateViewSettings();
+}
+
+QString KisPaintOpPresetsChooserPopup::currentPaintOp() const
+{
+    return m_d->uiWdgPaintOpPresets.wdgPresetChooser->currentResource()->name();
 }

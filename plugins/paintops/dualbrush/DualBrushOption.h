@@ -43,6 +43,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
+    void updatePreset();
     void addPreset();
     void removePreset();
     void movePresetUp();

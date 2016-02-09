@@ -68,9 +68,9 @@ void KisPaintOpOption::startReadOptionSetting(const KisPropertiesConfiguration* 
 
 void KisPaintOpOption::startWriteOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    m_d->isWritingSettings = true;
-    writeOptionSetting(setting);
-    m_d->isWritingSettings = false;
+     m_d->isWritingSettings = true;
+     writeOptionSetting(setting);
+     m_d->isWritingSettings = false;
 }
 
 void KisPaintOpOption::lodLimitations(KisPaintopLodLimitations *l) const

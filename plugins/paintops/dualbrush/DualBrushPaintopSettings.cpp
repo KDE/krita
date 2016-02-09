@@ -22,7 +22,6 @@
 
 DualBrushPaintOpSettings::DualBrushPaintOpSettings()
 {
-    qDebug() << "Creating DualBrushPaintOpSettingsWidget";
 }
 
 bool DualBrushPaintOpSettings::paintIncremental()

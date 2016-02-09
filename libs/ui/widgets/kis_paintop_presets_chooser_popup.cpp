@@ -131,5 +131,10 @@ void KisPaintOpPresetsChooserPopup::updateViewSettings()
 
 QString KisPaintOpPresetsChooserPopup::currentPaintOp() const
 {
-    return m_d->uiWdgPaintOpPresets.wdgPresetChooser->currentResource()->name();
+    if (m_d->uiWdgPaintOpPresets.wdgPresetChooser->currentResource()) {
+        return m_d->uiWdgPaintOpPresets.wdgPresetChooser->currentResource()->name();
+    }
+    else {
+        return QString();
+    }
 }

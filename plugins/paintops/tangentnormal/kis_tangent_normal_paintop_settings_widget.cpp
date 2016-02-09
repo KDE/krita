@@ -48,7 +48,7 @@
 KisTangentNormalPaintOpSettingsWidget::KisTangentNormalPaintOpSettingsWidget(QWidget* parent):
     KisBrushBasedPaintopOptionWidget(parent)
 {
-    setObjectName("brush option widget");
+    setObjectName("tangent-normal brush option widget");
     setPrecisionEnabled(true);
 
     addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
@@ -72,7 +72,9 @@ KisTangentNormalPaintOpSettingsWidget::KisTangentNormalPaintOpSettingsWidget(QWi
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")), i18n("Strength"));
 }
 
-KisTangentNormalPaintOpSettingsWidget::~KisTangentNormalPaintOpSettingsWidget() { }
+KisTangentNormalPaintOpSettingsWidget::~KisTangentNormalPaintOpSettingsWidget()
+{
+}
 
 KisPropertiesConfiguration* KisTangentNormalPaintOpSettingsWidget::configuration() const
 {

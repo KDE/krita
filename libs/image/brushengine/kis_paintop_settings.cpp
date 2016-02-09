@@ -84,10 +84,12 @@ void KisPaintOpSettings::setOptionsWidget(KisPaintOpConfigWidget* widget)
 {
     d->settingsWidget = widget;
 }
+
 void KisPaintOpSettings::setPreset(KisPaintOpPresetWSP preset)
 {
     d->preset = preset;
 }
+
 KisPaintOpPresetWSP KisPaintOpSettings::preset() const
 {
     return d->preset;
@@ -101,6 +103,7 @@ bool KisPaintOpSettings::mousePressEvent(const KisPaintInformation &pos, Qt::Key
     setRandomOffset();
     return true; // ignore the event by default
 }
+
 void KisPaintOpSettings::setRandomOffset()
 {
     srand(time(0));

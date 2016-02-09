@@ -34,13 +34,6 @@ public:
     virtual ~DualBrushPaintOpSettingsWidget();
 
     KisPropertiesConfiguration* configuration() const;
-
-    ///Reimplemented
-    void changePaintOpSize(qreal x, qreal y);
-    virtual QSizeF paintOpSize() const;
-
-public:
-    DualBrushOpOption* m_DualBrushOption;
 };
 
 #endif

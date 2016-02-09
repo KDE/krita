@@ -18,12 +18,40 @@
 #ifndef KIS_DUALBRUSHOP_OPTION_H
 #define KIS_DUALBRUSHOP_OPTION_H
 
-#include <kis_paintop_option.h>
+#include <QWidget>
 
-class KisDualBrushOpOptionsWidget;
+#include <kis_paintop_option.h>
+#include "ui_WdgDualBrushOptions.h"
+
+#include "StackedPreset.h"
+
+class KisDualBrushOpOptionsWidget: public QWidget, public Ui::WdgDualBrushOptions
+{
+    Q_OBJECT
+public:
+    KisDualBrushOpOptionsWidget(QWidget *parent = 0);
+    virtual ~KisDualBrushOpOptionsWidget();
+
+Q_SIGNALS:
+
+    void configurationChanged();
+
+private Q_SLOTS:
+
+    void addPreset();
+    void removePreset();
+    void movePresetUp();
+    void movePresetDown();
+
+private:
+
+    QVector<StackedPreset> presetStack;
+
+};
 
 class KisDualBrushOpOption : public KisPaintOpOption
 {
+    Q_OBJECT
 public:
     KisDualBrushOpOption();
     ~KisDualBrushOpOption();
@@ -33,7 +61,7 @@ public:
 
 private:
 
-    KisDualBrushOpOptionsWidget * m_options;
+    KisDualBrushOpOptionsWidget *m_dualBrushOptionsWidget;
 
 };
 

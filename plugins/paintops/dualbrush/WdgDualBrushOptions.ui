@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>548</width>
-    <height>376</height>
+    <height>517</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -45,7 +45,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QListView" name="lstPresets">
+        <widget class="QListWidget" name="tableSelected">
          <property name="dragEnabled">
           <bool>true</bool>
          </property>
@@ -107,15 +107,15 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>&amp;Offset:</string>
+        <string>&amp;Vertical Offset:</string>
        </property>
        <property name="buddy">
-        <cstring>doubleOffset</cstring>
+        <cstring>doubleHOffset</cstring>
        </property>
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="doubleOffset" native="true">
+      <widget class="KisDoubleSliderSpinBox" name="doubleHOffset" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -131,17 +131,17 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>Offset fu&amp;zziness:</string>
+        <string>Horizonta&amp;l Offset:</string>
        </property>
        <property name="buddy">
-        <cstring>doubleFuzziness</cstring>
+        <cstring>doubleHOffset</cstring>
        </property>
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="doubleFuzziness" native="true">
+      <widget class="KisDoubleSliderSpinBox" name="doubleVOffset" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -157,6 +157,32 @@
       </widget>
      </item>
      <item row="2" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Offset fu&amp;zziness:</string>
+       </property>
+       <property name="buddy">
+        <cstring>doubleFuzziness</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="doubleFuzziness" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Layer Opacity</string>
+       </property>
+       <property name="whatsThis">
+        <string>Adjust the transparency of the layer</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
         <string>Blending &amp;mode:</string>
@@ -166,7 +192,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item row="3" column="1">
       <widget class="KisCompositeOpComboBox" name="cmbComposite">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -182,7 +208,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item row="4" column="0">
       <widget class="QLabel" name="opacityLabel">
        <property name="text">
         <string>&amp;Opacity:</string>
@@ -192,7 +218,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item row="4" column="1">
       <widget class="KisDoubleSliderSpinBox" name="doubleOpacity" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">

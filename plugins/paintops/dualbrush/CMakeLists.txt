@@ -5,6 +5,7 @@ set(kritadualbrushpaintop_SOURCES
     DualBrushPaintopPlugin.cpp
     DualBrushPaintopSettings.cpp
     DualBrushPaintopSettingsWidget.cpp
+    StackedPreset.cpp
 )
 
 ki18n_wrap_ui(kritadualbrushpaintop_SOURCES WdgDualBrushOptions.ui )

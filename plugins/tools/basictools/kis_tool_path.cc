@@ -62,6 +62,12 @@ bool KisToolPath::eventFilter(QObject *obj, QEvent *event)
             localTool()->removeLastPoint();
             return true;
         }
+    } else if (event->type() == QEvent::TabletPress) {
+        QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
+        if (tabletEvent->button() == Qt::RightButton) {
+            localTool()->removeLastPoint();
+            return true;
+        }
     }
     return false;
 }

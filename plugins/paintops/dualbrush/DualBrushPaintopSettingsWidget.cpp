@@ -30,7 +30,7 @@ KisDualBrushPaintOpSettingsWidget:: KisDualBrushPaintOpSettingsWidget(QWidget* p
     : KisPaintOpSettingsWidget(parent)
 {
     m_DualBrushOption = new KisDualBrushOpOption();
-    addPaintOpOption(m_DualBrushOption, i18n("Brush size"));
+    addPaintOpOption(m_DualBrushOption, i18n("Brush Stack"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
     addPaintOpOption(new KisPaintActionTypeOption(), i18n("Painting Mode"));
 }

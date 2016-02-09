@@ -91,7 +91,7 @@ private:
     static QHash<QString, DocumentType> sm_extensions;
 };
 
-Q_DECLARE_METATYPE(DocumentListModel::DocumentInfo);
+Q_DECLARE_METATYPE(DocumentListModel::DocumentInfo)
 
 #endif // KRITA_SKETCH_DOCUMENTLISTMODEL_H
 

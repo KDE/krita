@@ -44,9 +44,13 @@ DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const QVariantList
     : QObject(parent)
 {
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisBrushOp, KisBrushBasedPaintOpSettings, KisBrushOpSettingsWidget>(
-        "paintbrush", i18nc("Pixel paintbrush", "Pixel"),
-        KisPaintOpFactory::categoryStable(), "krita-paintbrush.png", QString(), QStringList(), 1));
+    r->add(new KisSimplePaintOpFactory<KisBrushOp, KisBrushBasedPaintOpSettings, KisBrushOpSettingsWidget>("paintbrush",
+                                                                                                           i18nc("Pixel paintbrush", "Pixel"),
+                                                                                                           KisPaintOpFactory::categoryStable(),
+                                                                                                           "krita-paintbrush.png",
+                                                                                                           QStringList(),
+                                                                                                           1));
+
     r->add(new KisSimplePaintOpFactory<KisDuplicateOp, KisDuplicateOpSettings, KisDuplicateOpSettingsWidget>("duplicate",
                                                                                                              i18nc("clone paintbrush (previously \"Duplicate\")", "Clone"),
                                                                                                              KisPaintOpFactory::categoryStable(),

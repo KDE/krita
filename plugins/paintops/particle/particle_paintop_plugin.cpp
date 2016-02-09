@@ -39,7 +39,12 @@ ParticlePaintOpPlugin::ParticlePaintOpPlugin(QObject *parent, const QVariantList
     : QObject(parent)
 {
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisParticlePaintOp, KisParticlePaintOpSettings, KisParticlePaintOpSettingsWidget>("particlebrush", i18n("Particle"), KisPaintOpFactory::categoryStable(), "krita-particle.png", QString(), QStringList(), 11));
+    r->add(new KisSimplePaintOpFactory<KisParticlePaintOp, KisParticlePaintOpSettings, KisParticlePaintOpSettingsWidget>("particlebrush",
+                                                                                                                         i18n("Particle"),
+                                                                                                                         KisPaintOpFactory::categoryStable(),
+                                                                                                                         "krita-particle.png",
+                                                                                                                         QStringList(),
+                                                                                                                         11));
 }
 
 ParticlePaintOpPlugin::~ParticlePaintOpPlugin()

@@ -273,3 +273,11 @@ On OSX
 
     BUILDROOT/i/bin/krita.app/Contents/MacOS/krita
 
+== Common Issues ==
+On Windows, if you get a 'mspdb140.dll' missing alert window, it means you did not run the bat file. Make sure to include the quotes in the command.
+
+"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\amd64\vcvars64.bat"
+
+
+ 
+

@@ -54,11 +54,11 @@ KisSprayShapeOption::KisSprayShapeOption()
     //initializer slider values
     m_options->widthSpin->setRange(1, 1000, 0);
     m_options->widthSpin->setValue(6);
-    m_options->widthSpin->setSuffix(" px");
+    m_options->widthSpin->setSuffix(i18n(" px"));
 
     m_options->heightSpin->setRange(1, 1000, 0);
     m_options->heightSpin->setValue(6);
-    m_options->heightSpin->setSuffix(" px");
+    m_options->heightSpin->setSuffix(i18n(" px"));
 
 
     // UI signals
@@ -189,9 +189,9 @@ void KisSprayShapeOption::changeSizeUI(bool proportionalSize)
     // if proportionalSize is false, pixel size is used
     if (!proportionalSize) {
         m_options->widthSpin->setMaximum(m_maxSize);
-        m_options->widthSpin->setSuffix(" px");
+        m_options->widthSpin->setSuffix(i18n(" px"));
         m_options->heightSpin->setMaximum(m_maxSize);
-        m_options->heightSpin->setSuffix(" px");
+        m_options->heightSpin->setSuffix(i18n(" px"));
     }
     else {
         m_options->widthSpin->setMaximum(100);

@@ -47,7 +47,7 @@ KisBrushSizeOption::KisBrushSizeOption()
     m_options->diameter->setRange(1.0, 1000, 0);
     m_options->diameter->setValue(20);
     m_options->diameter->setExponentRatio(3.0);
-    m_options->diameter->setSuffix(" px");
+    m_options->diameter->setSuffix(i18n(" px"));
 
     m_options->aspectBox->setRange(0.01, 2.0, 2);
     m_options->aspectBox->setValue(1.0);

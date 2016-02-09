@@ -40,11 +40,12 @@
 #include<kis_types.h>
 
 struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
-    Private() : disableDirtyNotifications(false) {}
+    Private()
+        : disableDirtyNotifications(false)
+    {}
 
     QPointer<KisPaintOpConfigWidget> settingsWidget;
     KisPaintOpPresetWSP preset;
-
 
     bool disableDirtyNotifications;
 

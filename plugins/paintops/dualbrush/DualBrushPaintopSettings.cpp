@@ -20,27 +20,28 @@
 #include "DualBrushOption.h"
 #include <kis_paint_action_type_option.h>
 
-KisDualBrushPaintOpSettings::KisDualBrushPaintOpSettings()
+DualBrushPaintOpSettings::DualBrushPaintOpSettings()
 {
+    qDebug() << "Creating DualBrushPaintOpSettingsWidget";
 }
 
-bool KisDualBrushPaintOpSettings::paintIncremental()
+bool DualBrushPaintOpSettings::paintIncremental()
 {
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
-bool KisDualBrushPaintOpSettings::isAirbrushing() const
+bool DualBrushPaintOpSettings::isAirbrushing() const
 {
     // return true if one of the constituent brushes is an airbrush
     return false;
 }
 
-int KisDualBrushPaintOpSettings::rate() const
+int DualBrushPaintOpSettings::rate() const
 {
     return 100;
 }
 
-QPainterPath KisDualBrushPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
+QPainterPath DualBrushPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
     QPainterPath path;
     if (mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline) {

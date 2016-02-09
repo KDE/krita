@@ -27,12 +27,12 @@
 #include <kis_pressure_opacity_option.h>
 
 
-class KisDualBrushPaintOpSettings : public KisPaintOpSettings
+class DualBrushPaintOpSettings : public KisPaintOpSettings
 {
 
 public:
-    KisDualBrushPaintOpSettings();
-    virtual ~KisDualBrushPaintOpSettings() {}
+    DualBrushPaintOpSettings();
+    virtual ~DualBrushPaintOpSettings() {}
 
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
 

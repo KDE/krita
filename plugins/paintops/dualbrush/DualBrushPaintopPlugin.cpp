@@ -33,7 +33,7 @@ DualBrushPaintOpPlugin::DualBrushPaintOpPlugin(QObject *parent, const QVariantLi
     : QObject(parent)
 {
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisDualBrushPaintOp, KisDualBrushPaintOpSettings, KisDualBrushPaintOpSettingsWidget>("DualBrushbrush", i18n("Stacked Brush"),
+    r->add(new KisSimplePaintOpFactory<DualBrushPaintOp, DualBrushPaintOpSettings, DualBrushPaintOpSettingsWidget>("DualBrushbrush", i18n("Stacked Brush"),
             KisPaintOpFactory::categoryStable(), "krita-DualBrush.png"));
 
 }

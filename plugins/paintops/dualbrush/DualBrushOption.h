@@ -27,13 +27,14 @@
 
 class QListWidgetItem;
 
-class KisDualBrushOpOptionsWidget: public QWidget, public Ui::WdgDualBrushOptions
+class DualBrushOpOptionsWidget: public QWidget, public Ui::WdgDualBrushOptions
 {
     Q_OBJECT
 public:
-    KisDualBrushOpOptionsWidget(QWidget *parent = 0);
-    virtual ~KisDualBrushOpOptionsWidget();
+    DualBrushOpOptionsWidget(QWidget *parent = 0);
+    virtual ~DualBrushOpOptionsWidget();
 
+    void setPresetStack(const QVector<StackedPreset> &presetStack);
     QVector<StackedPreset> presetStack() const;
 
 Q_SIGNALS:
@@ -50,19 +51,19 @@ private Q_SLOTS:
 
 };
 
-class KisDualBrushOpOption : public KisPaintOpOption
+class DualBrushOpOption : public KisPaintOpOption
 {
     Q_OBJECT
 public:
-    KisDualBrushOpOption();
-    ~KisDualBrushOpOption();
+    DualBrushOpOption();
+    ~DualBrushOpOption();
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
 private:
 
-    KisDualBrushOpOptionsWidget *m_dualBrushOptionsWidget;
+    DualBrushOpOptionsWidget *m_dualBrushOptionsWidget;
 
 };
 

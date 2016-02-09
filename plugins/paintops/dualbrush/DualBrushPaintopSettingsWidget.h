@@ -23,15 +23,15 @@
 
 #include "ui_WdgDualBrushOptions.h"
 
-class KisDualBrushOpOption;
+class DualBrushOpOption;
 
-class KisDualBrushPaintOpSettingsWidget : public KisPaintOpSettingsWidget
+class DualBrushPaintOpSettingsWidget : public KisPaintOpSettingsWidget
 {
     Q_OBJECT
 
 public:
-    KisDualBrushPaintOpSettingsWidget(QWidget* parent = 0);
-    virtual ~KisDualBrushPaintOpSettingsWidget();
+    DualBrushPaintOpSettingsWidget(QWidget* parent = 0);
+    virtual ~DualBrushPaintOpSettingsWidget();
 
     KisPropertiesConfiguration* configuration() const;
 
@@ -40,7 +40,7 @@ public:
     virtual QSizeF paintOpSize() const;
 
 public:
-    KisDualBrushOpOption* m_DualBrushOption;
+    DualBrushOpOption* m_DualBrushOption;
 };
 
 #endif

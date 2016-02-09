@@ -33,7 +33,7 @@
 
 #define ICON_SIZE 48
 
-KisDualBrushOpOptionsWidget::KisDualBrushOpOptionsWidget(QWidget *parent)
+DualBrushOpOptionsWidget::DualBrushOpOptionsWidget(QWidget *parent)
     : QWidget(parent)
 {
     setupUi(this);
@@ -70,18 +70,10 @@ KisDualBrushOpOptionsWidget::KisDualBrushOpOptionsWidget(QWidget *parent)
 
 }
 
-KisDualBrushOpOptionsWidget::~KisDualBrushOpOptionsWidget()
+DualBrushOpOptionsWidget::~DualBrushOpOptionsWidget()
 {
 }
 
-QVector<StackedPreset> KisDualBrushOpOptionsWidget::presetStack() const
-{
-    QVector<StackedPreset> stack;
-    for(int i = 0; i < tableSelected->count(); i++) {
-        stack << tableSelected->item(i)->data(Qt::UserRole).value<StackedPreset>();
-    }
-    return stack;
-}
 
 // XXX: copy-pasted from dlg_create_bundle, refactor!
 QPixmap imageToIcon(const QImage &img) {
@@ -97,7 +89,27 @@ QPixmap imageToIcon(const QImage &img) {
 }
 
 
-void KisDualBrushOpOptionsWidget::addPreset()
+void DualBrushOpOptionsWidget::setPresetStack(const QVector<StackedPreset> &presetStack)
+{
+    tableSelected->clear();
+    for(int i = 0; i < presetStack.count(); ++i){
+        QListWidgetItem *item = new QListWidgetItem(imageToIcon(presetStack[i].paintop->image()), presetStack[i].presetName);
+        item->setData(Qt::UserRole, QVariant::fromValue<StackedPreset>(presetStack[i]));
+        tableSelected->addItem(item);
+    }
+    tableSelected->setCurrentRow(0);
+}
+
+QVector<StackedPreset> DualBrushOpOptionsWidget::presetStack() const
+{
+    QVector<StackedPreset> stack;
+    for(int i = 0; i < tableSelected->count(); i++) {
+        stack << tableSelected->item(i)->data(Qt::UserRole).value<StackedPreset>();
+    }
+    return stack;
+}
+
+void DualBrushOpOptionsWidget::addPreset()
 {
     doubleFuzziness->setValue(0.0);
     doubleOpacity->setValue(0.0);
@@ -122,12 +134,12 @@ void KisDualBrushOpOptionsWidget::addPreset()
     tableSelected->addItem(item);
 }
 
-void KisDualBrushOpOptionsWidget::removePreset()
+void DualBrushOpOptionsWidget::removePreset()
 {
     delete tableSelected->takeItem(tableSelected->currentRow());
 }
 
-void KisDualBrushOpOptionsWidget::movePresetUp()
+void DualBrushOpOptionsWidget::movePresetUp()
 {
     int currentRow = tableSelected->currentRow();
     if (currentRow > 0) {
@@ -137,7 +149,7 @@ void KisDualBrushOpOptionsWidget::movePresetUp()
     }
 }
 
-void KisDualBrushOpOptionsWidget::movePresetDown()
+void DualBrushOpOptionsWidget::movePresetDown()
 {
     int currentRow = tableSelected->currentRow();
     if (currentRow < tableSelected->count() - 1) {
@@ -147,7 +159,7 @@ void KisDualBrushOpOptionsWidget::movePresetDown()
     }
 }
 
-void KisDualBrushOpOptionsWidget::itemSelected(QListWidgetItem *current, QListWidgetItem *previous)
+void DualBrushOpOptionsWidget::itemSelected(QListWidgetItem *current, QListWidgetItem *previous)
 {
     if (previous) {
         StackedPreset psPrevious = previous->data(Qt::UserRole).value<StackedPreset>();
@@ -168,33 +180,59 @@ void KisDualBrushOpOptionsWidget::itemSelected(QListWidgetItem *current, QListWi
     }
 }
 
-KisDualBrushOpOption::KisDualBrushOpOption()
+DualBrushOpOption::DualBrushOpOption()
     : KisPaintOpOption(KisPaintOpOption::GENERAL, false)
 {
     m_checkable = false;
-    m_dualBrushOptionsWidget = new KisDualBrushOpOptionsWidget();
+    m_dualBrushOptionsWidget = new DualBrushOpOptionsWidget();
     m_dualBrushOptionsWidget->hide();
-    setObjectName("KisDualBrushOpOption");
+    setObjectName("DualBrushOpOption");
     setConfigurationPage(m_dualBrushOptionsWidget);
 }
 
-KisDualBrushOpOption::~KisDualBrushOpOption()
+DualBrushOpOption::~DualBrushOpOption()
 {
     // delete m_options;
 }
 
-void KisDualBrushOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void DualBrushOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    //    setting->setProperty(DUALBRUSH_RADIUS, radius());
+    QVector<StackedPreset> stack = m_dualBrushOptionsWidget->presetStack();
+    qDebug() << "going to write option setting with" << stack.count() << "presets";
+    setting->setProperty("preset_count", stack.count());
+    for(int i = 0; i < stack.count(); i++) {
+        setting->setProperty(QString("preset_%_compositeop").arg(i), stack[i].compositeOp);
+        setting->setProperty(QString("preset_%_fuzziness").arg(i), stack[i].fuzziness);
+        setting->setProperty(QString("preset_%_horizontal_offset").arg(i), stack[i].horizontalOffset);
+        setting->setProperty(QString("preset_%_name").arg(i), stack[i].presetName);
+        setting->setProperty(QString("preset_%_opacity").arg(i), stack[i].opacitiy);
+        setting->setProperty(QString("preset_%_vertical_offset").arg(i), stack[i].verticalOffset);
+    }
+    setting->dump();
 }
 
-void KisDualBrushOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void DualBrushOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    //    m_options->radiusSpinBox->setValue(setting->getInt(DUALBRUSH_RADIUS));
+    setting->dump();
+
+    QVector<StackedPreset> stack;
+    int count = setting->getInt("preset_count");
+    for (int i = 0; i < count; i++) {
+        StackedPreset ps;
+        ps.compositeOp = setting->getString(QString("preset_%_compositeop").arg(i));
+        ps.fuzziness = setting->getDouble(QString("preset_%_fuzziness").arg(i));
+        ps.horizontalOffset = setting->getDouble(QString("preset_%_horizontal_offset").arg(i));
+        ps.opacitiy = setting->getDouble(QString("preset_%_opacity").arg(i));
+        ps.presetName = setting->getString(QString("preset_%_name").arg(i));
+        KisPaintOpPresetResourceServer* server = KisResourceServerProvider::instance()->paintOpPresetServer();
+        ps.paintop = server->resourceByName(ps.presetName);
+        ps.verticalOffset = setting->getDouble(QString("preset_%_vertical_offset").arg(i));
+        stack << ps;
+    }
+    m_dualBrushOptionsWidget->setPresetStack(stack);
 }
 
-
-
-void DualBrushProperties::readOptionSetting(const KisPropertiesConfiguration *settings) {
+void DualBrushProperties::readOptionSetting(const KisPropertiesConfiguration *settings)
+{
     //radius = settings->getInt(DUALBRUSH_RADIUS);
 }

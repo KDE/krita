@@ -39,7 +39,7 @@
 #include <kis_lod_transform.h>
 
 
-KisDualBrushPaintOp::KisDualBrushPaintOp(const KisDualBrushPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
+DualBrushPaintOp::DualBrushPaintOp(const DualBrushPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
 {
     Q_UNUSED(image);
@@ -48,12 +48,12 @@ KisDualBrushPaintOp::KisDualBrushPaintOp(const KisDualBrushPaintOpSettings *sett
     m_DualBrushBrush = new DualBrushBrush(&m_properties);
 }
 
-KisDualBrushPaintOp::~KisDualBrushPaintOp()
+DualBrushPaintOp::~DualBrushPaintOp()
 {
     delete m_DualBrushBrush;
 }
 
-KisSpacingInformation KisDualBrushPaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation DualBrushPaintOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) return KisSpacingInformation(1.0);
 

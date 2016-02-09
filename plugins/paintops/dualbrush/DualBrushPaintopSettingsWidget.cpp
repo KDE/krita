@@ -26,29 +26,30 @@
 #include <kis_paintop_settings_widget.h>
 #include <kis_paint_action_type_option.h>
 
-KisDualBrushPaintOpSettingsWidget:: KisDualBrushPaintOpSettingsWidget(QWidget* parent)
+DualBrushPaintOpSettingsWidget:: DualBrushPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
 {
-    m_DualBrushOption = new KisDualBrushOpOption();
+    m_DualBrushOption = new DualBrushOpOption();
     addPaintOpOption(m_DualBrushOption, i18n("Brush Stack"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
     addPaintOpOption(new KisPaintActionTypeOption(), i18n("Painting Mode"));
 }
 
-KisDualBrushPaintOpSettingsWidget::~ KisDualBrushPaintOpSettingsWidget()
+DualBrushPaintOpSettingsWidget::~ DualBrushPaintOpSettingsWidget()
 {
 }
 
-KisPropertiesConfiguration*  KisDualBrushPaintOpSettingsWidget::configuration() const
+KisPropertiesConfiguration*  DualBrushPaintOpSettingsWidget::configuration() const
 {
-    KisDualBrushPaintOpSettings* config = new KisDualBrushPaintOpSettings();
-    config->setOptionsWidget(const_cast<KisDualBrushPaintOpSettingsWidget*>(this));
+    qDebug() << "creating config";
+    DualBrushPaintOpSettings* config = new DualBrushPaintOpSettings();
+    config->setOptionsWidget(const_cast<DualBrushPaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "DualBrush");
     writeConfiguration(config);
     return config;
 }
 
-void KisDualBrushPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
+void DualBrushPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
 {
     // if the movement is more left<->right then up<->down
     if (qAbs(x) > qAbs(y)) {
@@ -56,7 +57,7 @@ void KisDualBrushPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
     }
 }
 
-QSizeF KisDualBrushPaintOpSettingsWidget::paintOpSize() const
+QSizeF DualBrushPaintOpSettingsWidget::paintOpSize() const
 {
     //qreal width = m_DualBrushOption->radius() * 2.0 + 1.0;
     return QSizeF(1.0, 1.0);

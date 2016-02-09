@@ -52,12 +52,12 @@ void KisDualBrushPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
 {
     // if the movement is more left<->right then up<->down
     if (qAbs(x) > qAbs(y)) {
-        m_DualBrushOption->setRadius(m_DualBrushOption->radius() + qRound(x));
+        //m_DualBrushOption->setRadius(m_DualBrushOption->radius() + qRound(x));
     }
 }
 
 QSizeF KisDualBrushPaintOpSettingsWidget::paintOpSize() const
 {
-    qreal width = m_DualBrushOption->radius() * 2.0 + 1.0;
-    return QSizeF(width, width);
+    //qreal width = m_DualBrushOption->radius() * 2.0 + 1.0;
+    return QSizeF(1.0, 1.0);
 }

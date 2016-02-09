@@ -18,7 +18,6 @@
 
 #include "DualBrushPaintopSettings.h"
 #include "DualBrushOption.h"
-
 #include <kis_paint_action_type_option.h>
 
 KisDualBrushPaintOpSettings::KisDualBrushPaintOpSettings()
@@ -33,12 +32,12 @@ bool KisDualBrushPaintOpSettings::paintIncremental()
 bool KisDualBrushPaintOpSettings::isAirbrushing() const
 {
     // return true if one of the constituent brushes is an airbrush
-    return getBool(AIRBRUSH_ENABLED);
+    return false;
 }
 
 int KisDualBrushPaintOpSettings::rate() const
 {
-    return getInt(AIRBRUSH_RATE);
+    return 100;
 }
 
 QPainterPath KisDualBrushPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const

@@ -17,22 +17,17 @@
  */
 #include "DualBrushPaintopPlugin.h"
 
-
 #include <klocalizedstring.h>
-
-#include <kis_debug.h>
 #include <kpluginfactory.h>
 
+#include <kis_global.h>
+#include <kis_debug.h>
 #include <brushengine/kis_paintop_registry.h>
-
+#include <kis_simple_paintop_factory.h>
 
 #include "DualBrushPaintop.h"
-#include "kis_simple_paintop_factory.h"
-
-#include "kis_global.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(DualBrushPaintOpPluginFactory, "kritadualbrushpaintop.json", registerPlugin<DualBrushPaintOpPlugin>();)
-
 
 DualBrushPaintOpPlugin::DualBrushPaintOpPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
@@ -47,4 +42,5 @@ DualBrushPaintOpPlugin::~DualBrushPaintOpPlugin()
 {
 }
 
-#include "DualBrush_paintop_plugin.moc"
+#include "DualBrushPaintopPlugin.moc"
+

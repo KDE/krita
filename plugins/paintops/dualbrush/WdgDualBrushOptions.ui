@@ -205,7 +205,7 @@
   <customwidget>
    <class>KisPaintOpPresetsChooserPopup</class>
    <extends>QWidget</extends>
-   <header location="global">kis_paintoppresets_chooser_popup.h</header>
+   <header location="global">kis_paintop_presets_chooser_popup.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

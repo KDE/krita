@@ -23,7 +23,7 @@
 
 #include <KoColor.h>
 
-#include "DualBrushopOption.h"
+#include "DualBrushOption.h"
 #include "kis_paint_device.h"
 #include <brushengine/kis_random_source.h>
 

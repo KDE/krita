@@ -61,6 +61,7 @@ public:
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
+    QVector<StackedPreset> presetStack() const;
 
 private:
     DualBrushOpOptionsWidget *m_dualBrushOptionsWidget;

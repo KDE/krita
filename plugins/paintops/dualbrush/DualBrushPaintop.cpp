@@ -32,6 +32,7 @@
 #include <kis_paint_device.h>
 #include <kis_painter.h>
 #include <kis_types.h>
+#include <brushengine/kis_paintop_registry.h>
 #include <brushengine/kis_paintop.h>
 #include <brushengine/kis_paint_information.h>
 
@@ -47,11 +48,19 @@ DualBrushPaintOp::DualBrushPaintOp(const DualBrushPaintOpSettings *settings, Kis
     Q_UNUSED(node);
     m_opacityOption.readOptionSetting(settings);
     m_opacityOption.resetAllSensors();
+    m_dualBrushOption.readOptionSetting(settings);
 
+    m_paintopStack.clear();
+    Q_FOREACH(const StackedPreset &preset, m_dualBrushOption.presetStack()) {
+        m_presetStack << preset;
+        KisPaintOp *paintop = KisPaintOpRegistry::instance()->paintOp(preset.paintopPreset, painter, node, image);
+        m_paintopStack << paintop;
+    }
 }
 
 DualBrushPaintOp::~DualBrushPaintOp()
 {
+    qDeleteAll(m_paintopStack);
 }
 
 KisSpacingInformation DualBrushPaintOp::paintAt(const KisPaintInformation& info)

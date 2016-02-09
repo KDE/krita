@@ -21,8 +21,9 @@
 
 #include <brushengine/kis_paintop.h>
 #include <kis_types.h>
-
+#include "DualBrushOption.h"
 #include "DualBrushPaintopSettings.h"
+#include "StackedPreset.h"
 
 class KisPainter;
 
@@ -39,6 +40,9 @@ public:
 private:
     KisPaintDeviceSP m_dab;
     KisPressureOpacityOption m_opacityOption;
+    DualBrushOpOption m_dualBrushOption;
+    QVector<KisPaintOp*> m_paintopStack;
+    QVector<StackedPreset> m_presetStack;
 
 };
 

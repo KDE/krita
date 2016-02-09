@@ -26,7 +26,7 @@ struct StackedPreset
     StackedPreset();
 
     QString presetName;
-    KisPaintOpPresetSP paintop;
+    KisPaintOpPresetSP paintopPreset;
 
     double fuzziness;
     double verticalOffset;

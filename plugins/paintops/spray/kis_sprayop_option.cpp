@@ -40,7 +40,7 @@ KisSprayOpOption::KisSprayOpOption()
     m_options->diameterSpinBox->setRange(1, 1000, 0);
     m_options->diameterSpinBox->setValue(100);
     m_options->diameterSpinBox->setExponentRatio(1.5);
-    m_options->diameterSpinBox->setSuffix(" px");
+    m_options->diameterSpinBox->setSuffix(i18n(" px"));
 
     m_options->aspectSPBox->setRange(0.0, 2.0, 2);
     m_options->aspectSPBox->setValue(1.0);

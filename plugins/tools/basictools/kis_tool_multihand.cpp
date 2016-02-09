@@ -312,7 +312,7 @@ QWidget* KisToolMultihand::createOptionWidget()
     m_translateRadiusSlider = new KisSliderSpinBox(translateWidget);
     m_translateRadiusSlider->setRange(0, 200);
 
-    m_translateRadiusSlider->setSuffix(" px");
+    m_translateRadiusSlider->setSuffix(i18n(" px"));
     connect(m_translateRadiusSlider,SIGNAL(valueChanged(int)),this,SLOT(slotSetTranslateRadius(int)));
 
     QFormLayout *radiusLayout = new QFormLayout(translateWidget);

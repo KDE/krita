@@ -41,7 +41,7 @@ KisSketchOpOption::KisSketchOpOption()
     // initialize slider values
     m_options->lineWidthSPBox->setRange(1.0, 100.0, 0);
     m_options->lineWidthSPBox->setValue(1.0);
-    m_options->lineWidthSPBox->setSuffix(" px");
+    m_options->lineWidthSPBox->setSuffix(i18n(" px"));
     m_options->lineWidthSPBox->setExponentRatio(1.5);
 
 

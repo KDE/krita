@@ -216,7 +216,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
         slSize->setSingleStep(1);
         slSize->setExponentRatio(3.0);
-        slSize->setSuffix(" px");
+        slSize->setSuffix(i18n(" px"));
         slSize->setMinimumWidth(qMax(sliderWidth, slSize->sizeHint().width()));
         slSize->setFixedHeight(iconsize);
         slSize->setBlockUpdateSignalOnDrag(true);

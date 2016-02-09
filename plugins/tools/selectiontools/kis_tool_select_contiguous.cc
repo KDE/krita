@@ -225,10 +225,10 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         // load configuration settings into tool options
         input->setValue(m_configGroup.readEntry("fuzziness", 20)); // fuzziness
         sizemod->setValue( m_configGroup.readEntry("sizemod", 0)); //grow/shrink
-        sizemod->setSuffix(" px");
+        sizemod->setSuffix(i18n(" px"));
 
         feather->setValue(m_configGroup.readEntry("feather", 0));
-        feather->setSuffix(" px");
+        feather->setSuffix(i18n(" px"));
 
         limitToCurrentLayer->setChecked(m_configGroup.readEntry("limitToCurrentLayer", false));
     }

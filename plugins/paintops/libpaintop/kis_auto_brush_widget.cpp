@@ -54,7 +54,7 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
     inputRadius->setExponentRatio(3.0);
     inputRadius->setSingleStep(1);
     inputRadius->setValue(5);
-    inputRadius->setSuffix(" px");
+    inputRadius->setSuffix(i18n(" px"));
     connect(inputRadius, SIGNAL(valueChanged(qreal)), this, SLOT(spinBoxRadiusChanged(qreal)));
 
     inputRatio->setRange(0.0, 1.0, 2);

@@ -338,7 +338,7 @@ void KisPaintOpPresetsPopup::setCurrentPaintOp(const QString& paintOpId)
     m_d->uiWdgPaintOpPresetSettings.presetWidget->setPresetFilter(paintOpId);
 }
 
-QString KisPaintOpPresetsPopup::currentPaintOp()
+QString KisPaintOpPresetsPopup::currentPaintOp() const
 {
     return m_d->uiWdgPaintOpPresetSettings.paintopList->currentItem();
 }

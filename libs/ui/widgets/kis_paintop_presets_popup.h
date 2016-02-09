@@ -59,9 +59,9 @@ public:
     void setPaintOpList(const QList<KisPaintOpFactory*>& list);
 
     void setCurrentPaintOp(const QString & paintOpId);
-    QString currentPaintOp();
+    QString currentPaintOp() const;
     
-    ///fill the cutoutOverlay rect with the cotent of an image, used to get the image back when selecting a preset
+    ///fill the cutoutOverlay rect with the content of an image, used to get the image back when selecting a preset
     ///@param image image that will be used, should be image of an existing preset resource
     void setPresetImage(const QImage& image);
 

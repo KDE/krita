@@ -37,6 +37,8 @@ public:
     
     void showButtons(bool show);
     void updateViewSettings();
+    QString currentPaintOp() const;
+
 public Q_SLOTS:
     void canvasResourceChanged( KoResource * resource, KisPaintOpPresetSP  preset  );
 Q_SIGNALS:

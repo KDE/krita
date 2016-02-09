@@ -74,6 +74,15 @@ KisDualBrushOpOptionsWidget::~KisDualBrushOpOptionsWidget()
 {
 }
 
+QVector<StackedPreset> KisDualBrushOpOptionsWidget::presetStack() const
+{
+    QVector<StackedPreset> stack;
+    for(int i = 0; i < tableSelected->count(); i++) {
+        stack << tableSelected->item(i)->data(Qt::UserRole).value<StackedPreset>();
+    }
+    return stack;
+}
+
 // XXX: copy-pasted from dlg_create_bundle, refactor!
 QPixmap imageToIcon(const QImage &img) {
     QPixmap pixmap(ICON_SIZE, ICON_SIZE);

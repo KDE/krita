@@ -34,6 +34,8 @@ public:
     KisDualBrushOpOptionsWidget(QWidget *parent = 0);
     virtual ~KisDualBrushOpOptionsWidget();
 
+    QVector<StackedPreset> presetStack() const;
+
 Q_SIGNALS:
 
     void configurationChanged();
@@ -45,10 +47,6 @@ private Q_SLOTS:
     void movePresetUp();
     void movePresetDown();
     void itemSelected(QListWidgetItem *current, QListWidgetItem *previous);
-
-private:
-
-    QVector<StackedPreset> presetStack;
 
 };
 

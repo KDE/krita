@@ -23,7 +23,8 @@ class KisDualBrushOpOptionsWidget: public QWidget, public Ui::WdgDualBrushOption
 {
 public:
     KisDualBrushOpOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent) {
+        : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -45,12 +46,16 @@ KisDualBrushOpOption::~KisDualBrushOpOption()
 
 void KisDualBrushOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-//    setting->setProperty(DUALBRUSH_RADIUS, radius());
-    }
+    //    setting->setProperty(DUALBRUSH_RADIUS, radius());
+}
 
 void KisDualBrushOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-//    m_options->radiusSpinBox->setValue(setting->getInt(DUALBRUSH_RADIUS));
-    }
+    //    m_options->radiusSpinBox->setValue(setting->getInt(DUALBRUSH_RADIUS));
+}
 
 
+
+void DualBrushProperties::readOptionSetting(const KisPropertiesConfiguration *settings) {
+    //radius = settings->getInt(DUALBRUSH_RADIUS);
+}

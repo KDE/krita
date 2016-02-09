@@ -20,11 +20,6 @@
 
 #include <kis_paintop_option.h>
 
-const QString DUALBRUSH_RADIUS = "DualBrush/radius";
-const QString DUALBRUSH_INK_DEPLETION = "DualBrush/inkDepletion";
-const QString DUALBRUSH_USE_OPACITY = "DualBrush/opacity";
-const QString DUALBRUSH_USE_SATURATION = "DualBrush/saturation";
-
 class KisDualBrushOpOptionsWidget;
 
 class KisDualBrushOpOption : public KisPaintOpOption
@@ -45,16 +40,9 @@ private:
 class DualBrushProperties
 {
 public:
-    int radius;
-    bool inkDepletion;
-    bool useOpacity;
-    bool useSaturation;
 
     void readOptionSetting(const KisPropertiesConfiguration* settings) {
-        radius = settings->getInt(DUALBRUSH_RADIUS);
-        inkDepletion = settings->getBool(DUALBRUSH_INK_DEPLETION);
-        useOpacity = settings->getBool(DUALBRUSH_USE_OPACITY);
-        useSaturation = settings->getBool(DUALBRUSH_USE_SATURATION);
+        //radius = settings->getInt(DUALBRUSH_RADIUS);
     }
 };
 

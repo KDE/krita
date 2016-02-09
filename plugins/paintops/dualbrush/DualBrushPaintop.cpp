@@ -44,16 +44,8 @@ KisDualBrushPaintOp::KisDualBrushPaintOp(const KisDualBrushPaintOpSettings *sett
 {
     Q_UNUSED(image);
     Q_UNUSED(node);
-    m_opacityOption.readOptionSetting(settings);
-    m_opacityOption.resetAllSensors();
 
-    m_properties.readOptionSetting(settings);
-
-    KoColorTransformation* transfo = 0;
-    if (m_properties.inkDepletion && m_properties.useSaturation) {
-        transfo = painter->device()->compositionSourceColorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
-    }
-    m_DualBrushBrush = new DualBrushBrush(&m_properties, transfo);
+    m_DualBrushBrush = new DualBrushBrush(&m_properties);
 }
 
 KisDualBrushPaintOp::~KisDualBrushPaintOp()

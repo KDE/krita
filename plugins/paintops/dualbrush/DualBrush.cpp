@@ -22,7 +22,6 @@
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
-#include <KoColorTransformation.h>
 
 #include <QVariant>
 #include <QHash>
@@ -32,81 +31,17 @@
 #include <ctime>
 
 
-DualBrushBrush::DualBrushBrush(const DualBrushProperties* properties, KoColorTransformation* transformation)
+DualBrushBrush::DualBrushBrush(const DualBrushProperties* properties)
 {
-    m_transfo = transformation;
-    if (m_transfo) {
-        m_transfo->setParameter(m_transfo->parameterId("h"), 0.0);
-        m_saturationId = m_transfo->parameterId("s"); // cache for later usage
-        m_transfo->setParameter(m_transfo->parameterId("v"), 0.0);
-	m_transfo->setParameter(3, 1);//sets the type to hsv.
-	m_transfo->setParameter(4, false);//sets the colorize to none.
-    }
-    else {
-        m_saturationId = -1;
-    }
-
-
-    m_counter = 0;
     m_properties = properties;
 }
 
 
 DualBrushBrush::~DualBrushBrush()
 {
-    delete m_transfo;
 }
-
 
 void DualBrushBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, qreal additionalScale)
 {
-    m_inkColor = color;
-    m_counter++;
-
-    qint32 pixelSize = dev->colorSpace()->pixelSize();
-    KisRandomAccessorSP accessor = dev->createRandomAccessorNG((int)x, (int)y);
-
-    qreal result;
-    if (m_properties->inkDepletion) {
-        //count decrementing of saturation and opacity
-        result = log((qreal)m_counter);
-        result = -(result * 10) / 100.0;
-
-        if (m_properties->useSaturation) {
-            if (m_transfo) {
-                m_transfo->setParameter(m_saturationId, 1.0f + result);
-                m_transfo->transform(m_inkColor.data(), m_inkColor.data(), 1);
-            }
-
-        }
-
-        if (m_properties->useOpacity) {
-            qreal opacity = (1.0f + result);
-            m_inkColor.setOpacity(opacity);
-        }
-    }
-
-    int pixelX, pixelY;
-    const int radius = m_properties->radius * additionalScale;
-    const int radiusSquared = pow2(radius);
-    double dirtThreshold = 0.5;
-
-
-    for (int by = -radius; by <= radius; by++) {
-        int bySquared = by * by;
-        for (int bx = -radius; bx <= radius; bx++) {
-            // let's call that noise from ground to DualBrush :)
-            if (((bx * bx + bySquared) > radiusSquared) ||
-                m_randomSource.generateNormalized() < dirtThreshold) {
-                continue;
-            }
-
-            pixelX = qRound(x + bx);
-            pixelY = qRound(y + by);
-
-            accessor->moveTo(pixelX, pixelY);
-            memcpy(accessor->rawData(), m_inkColor.data(), pixelSize);
-        }
-    }
 }
 

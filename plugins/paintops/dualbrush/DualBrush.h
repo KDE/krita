@@ -23,25 +23,21 @@
 
 #include <KoColor.h>
 
-#include "DualBrushOption.h"
-#include "kis_paint_device.h"
+#include <kis_paint_device.h>
 #include <brushengine/kis_random_source.h>
 
+#include "DualBrushOption.h"
 
 class DualBrushBrush
 {
 
 public:
-    DualBrushBrush(const DualBrushProperties * properties, KoColorTransformation* transformation);
+    DualBrushBrush(const DualBrushProperties * properties);
     ~DualBrushBrush();
     void paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, qreal additionalScale);
 
 private:
-    KoColor m_inkColor;
-    int m_counter;
     const DualBrushProperties * m_properties;
-    KoColorTransformation* m_transfo;
-    int m_saturationId;
     KisRandomSource m_randomSource;
 };
 

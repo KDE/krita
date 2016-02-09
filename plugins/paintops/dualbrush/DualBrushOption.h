@@ -41,9 +41,7 @@ class DualBrushProperties
 {
 public:
 
-    void readOptionSetting(const KisPropertiesConfiguration* settings) {
-        //radius = settings->getInt(DUALBRUSH_RADIUS);
-    }
+    void readOptionSetting(const KisPropertiesConfiguration* settings);
 };
 
 #endif

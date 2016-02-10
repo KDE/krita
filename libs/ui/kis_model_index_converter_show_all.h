@@ -42,7 +42,7 @@ public:
 
     QModelIndex indexFromDummy(KisNodeDummy *dummy);
     bool indexFromAddedDummy(KisNodeDummy *parentDummy, int index,
-                             const QString &newNodeMetaObjectType, bool isAnimated,
+                             const QString &newNodeMetaObjectType,
                              QModelIndex &parentIndex, int &row);
 
     int rowCount(QModelIndex parent);

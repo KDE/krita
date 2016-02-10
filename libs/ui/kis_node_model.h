@@ -130,7 +130,7 @@ Q_SIGNALS:
     void toggleIsolateActiveNode();
 
 protected Q_SLOTS:
-    void slotBeginInsertDummy(KisNodeDummy *parent, int index, const QString &metaObjectType, bool isAnimated);
+    void slotBeginInsertDummy(KisNodeDummy *parent, int index, const QString &metaObjectType);
     void slotEndInsertDummy(KisNodeDummy *dummy);
     void slotBeginRemoveDummy(KisNodeDummy *dummy);
     void slotEndRemoveDummy();

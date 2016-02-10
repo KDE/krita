@@ -160,20 +160,20 @@ int KisColorLabelSelectorWidget::Private::heightForWidth(int width, int spacing)
 void KisColorLabelSelectorWidget::Private::updateItemSizes(const QSize &widgetSize)
 {
     const int height = qBound(minHeight,
-                              heightForWidth(q->width(), minSpacing),
-                              q->height());
+                              heightForWidth(widgetSize.width(), minSpacing),
+                              widgetSize.height());
 
     const int size = height - 2 * border;
     const int numItems = colors.size();
 
-    const int rest = q->size().width() - size * numItems - 2 * border - xMenuOffset;
+    const int rest = widgetSize.width() - size * numItems - 2 * border - xMenuOffset;
     const int spacing = qBound(minSpacing,
                                rest / (numItems - 1),
                                maxSpacing);
 
     realItemSize = size;
     realItemSpacing = spacing;
-    yCenteringOffset = qMax(0, (q->height() - height) / 2);
+    yCenteringOffset = qMax(0, (widgetSize.height() - height) / 2);
 }
 
 QRect KisColorLabelSelectorWidget::Private::itemRect(int index) const
@@ -189,7 +189,6 @@ int KisColorLabelSelectorWidget::Private::indexFromPos(const QPoint &pos)
     const int x = pos.x() - border - xMenuOffset;
     const int y = pos.y() - border - yCenteringOffset;
     if (y < 0 || y >= realItemSize) return -1;
-    const bool fallInGap = (x % (realItemSize + realItemSpacing)) > realItemSize;
     int idx = (x + realItemSpacing) / (realItemSize + realItemSpacing);
 
     if (idx < 0 || idx >= colors.size()) {

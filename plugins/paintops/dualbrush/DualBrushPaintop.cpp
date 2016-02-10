@@ -81,7 +81,9 @@ KisSpacingInformation DualBrushPaintOp::paintAt(const KisPaintInformation& info)
 
     quint8 origOpacity = m_opacityOption.apply(painter(), info);
 
-
+    Q_FOREACH(KisPaintOp* op, m_paintopStack) {
+        op->paintAt(info);
+    }
 
 
     QRect rc = m_dab->extent();

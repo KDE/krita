@@ -32,7 +32,7 @@ class DualBrushPaintOp : public KisPaintOp
 
 public:
 
-    DualBrushPaintOp(const DualBrushPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
+    DualBrushPaintOp(const DualBrushPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image);
     virtual ~DualBrushPaintOp();
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);

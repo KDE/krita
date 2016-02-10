@@ -107,6 +107,7 @@ public:
 
 protected:
     friend class KisPaintInformation;
+    friend class DualBrushPaintOp;
     /**
      * The implementation of painting of a dab
      */

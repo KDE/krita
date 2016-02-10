@@ -100,7 +100,7 @@ void DualBrushOpOptionsWidget::setPresetStack(const QVector<StackedPreset> &pres
         if (presetStack[i].paintopPreset) {
             image = presetStack[i].paintopPreset->image();
         }
-
+        qDebug() << "\t" << i << presetStack[i].presetName;
         QListWidgetItem *item = new QListWidgetItem(imageToIcon(image), presetStack[i].presetName);
         item->setData(Qt::UserRole, QVariant::fromValue<StackedPreset>(presetStack[i]));
         tableSelected->addItem(item);
@@ -239,7 +239,7 @@ void DualBrushOpOption::readOptionSetting(const KisPropertiesConfiguration* sett
 {
 
     QVector<StackedPreset> stack;
-    int count = setting->getInt("preset_count");
+    int count = setting->getInt("dualbrush/preset_count");
     for (int i = 0; i < count; ++i) {
         StackedPreset ps;
         ps.compositeOp = setting->getString(QString("dualbrush/preset_%1_compositeop").arg(i));

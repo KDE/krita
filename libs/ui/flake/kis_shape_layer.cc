@@ -286,7 +286,7 @@ void KisShapeLayer::setParent(KoShapeContainer *parent)
 
 QIcon KisShapeLayer::icon() const
 {
-    return KisIconUtils::loadIcon("bookmarks");
+    return KisIconUtils::loadIcon("vectorLayer");
 }
 
 KisPaintDeviceSP KisShapeLayer::original() const

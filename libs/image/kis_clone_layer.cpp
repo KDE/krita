@@ -299,7 +299,7 @@ void KisCloneLayer::setCopyFromInfo(KisCloneInfo info)
 
 QIcon KisCloneLayer::icon() const
 {
-    return KisIconUtils::loadIcon("edit-copy");
+    return KisIconUtils::loadIcon("cloneLayer");
 }
 
 KisBaseNode::PropertyList KisCloneLayer::sectionModelProperties() const

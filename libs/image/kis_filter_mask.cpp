@@ -54,7 +54,7 @@ KisFilterMask::KisFilterMask(const KisFilterMask& rhs)
 
 QIcon KisFilterMask::icon() const
 {
-    return KisIconUtils::loadIcon("view-filter");
+    return KisIconUtils::loadIcon("filterMask");
 }
 
 void KisFilterMask::setFilter(KisFilterConfiguration * filterConfig)

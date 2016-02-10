@@ -119,7 +119,7 @@ void KisAdjustmentLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *u
 
 QIcon KisAdjustmentLayer::icon() const
 {
-    return KisIconUtils::loadIcon("view-filter");
+    return KisIconUtils::loadIcon("filterLayer");
 }
 
 KisBaseNode::PropertyList KisAdjustmentLayer::sectionModelProperties() const

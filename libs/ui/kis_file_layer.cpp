@@ -72,6 +72,11 @@ KisFileLayer::KisFileLayer(const KisFileLayer &rhs)
     m_loader.reloadImage();
 }
 
+QIcon KisFileLayer::icon() const
+{
+    return KisIconUtils::loadIcon("fileLayer");
+}
+
 void KisFileLayer::resetCache()
 {
     m_loader.reloadImage();

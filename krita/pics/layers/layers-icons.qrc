@@ -1,28 +1,28 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
     <qresource>
-    <file>dark-cloneLayer.svg</file>
-    <file>dark-fileLayer.svg</file>
-    <file>dark-fillLayer.svg</file>
-    <file>dark-filterLayer.svg</file>
-    <file>dark-filterMask.svg</file>
-    <file>dark-groupLayer.svg</file>
-    <file>dark-paintLayer.svg</file>
-    <file>dark-selectionMask.svg</file>
-    <file>dark-transformMask.svg</file>
-    <file>dark-transparencyMask.svg</file>
-    <file>dark-vectorLayer.svg</file>
-    <file>light-cloneLayer.svg</file>
-    <file>light-fileLayer.svg</file>
-    <file>light-fillLayer.svg</file>
-    <file>light-filterLayer.svg</file>
-    <file>light-filterMask.svg</file>
-    <file>light-groupLayer.svg</file>
-    <file>light-paintLayer.svg</file>
-    <file>light-selectionMask.svg</file>
-    <file>light-transformMask.svg</file>
-    <file>light-transparencyMask.svg</file>
-    <file>light-vectorLayer.svg</file>
+    <file>dark_cloneLayer.svg</file>
+    <file>dark_fileLayer.svg</file>
+    <file>dark_fillLayer.svg</file>
+    <file>dark_filterLayer.svg</file>
+    <file>dark_filterMask.svg</file>
+    <file>dark_groupLayer.svg</file>
+    <file>dark_paintLayer.svg</file>
+    <file>dark_selectionMask.svg</file>
+    <file>dark_transformMask.svg</file>
+    <file>dark_transparencyMask.svg</file>
+    <file>dark_vectorLayer.svg</file>
+    <file>light_cloneLayer.svg</file>
+    <file>light_fileLayer.svg</file>
+    <file>light_fillLayer.svg</file>
+    <file>light_filterLayer.svg</file>
+    <file>light_filterMask.svg</file>
+    <file>light_groupLayer.svg</file>
+    <file>light_paintLayer.svg</file>
+    <file>light_selectionMask.svg</file>
+    <file>light_transformMask.svg</file>
+    <file>light_transparencyMask.svg</file>
+    <file>light_vectorLayer.svg</file>
  
     </qresource>
 </RCC>

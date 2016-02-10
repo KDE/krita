@@ -537,9 +537,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
 
 
     KisPaintOpFactory* paintOp = KisPaintOpRegistry::instance()->get(paintop.id());
-    QString pixFilename = KoResourcePaths::findResource("kis_images", paintOp->pixmap());
 
-    m_brushEditorPopupButton->setIcon(QIcon(pixFilename));
     m_resourceProvider->setPaintOpPreset(preset);
     m_presetsPopup->setCurrentPaintOp(paintop.id());
 

@@ -100,7 +100,6 @@ void DualBrushOpOptionsWidget::setPresetStack(const QVector<StackedPreset> &pres
         if (presetStack[i].paintopPreset) {
             image = presetStack[i].paintopPreset->image();
         }
-        qDebug() << "\t" << i << presetStack[i].presetName;
         QListWidgetItem *item = new QListWidgetItem(imageToIcon(image), presetStack[i].presetName);
         item->setData(Qt::UserRole, QVariant::fromValue<StackedPreset>(presetStack[i]));
         tableSelected->addItem(item);
@@ -246,7 +245,7 @@ void DualBrushOpOption::readOptionSetting(const KisPropertiesConfiguration* sett
         ps.fuzziness = setting->getDouble(QString("dualbrush/preset_%1_fuzziness").arg(i));
         ps.horizontalOffset = setting->getDouble(QString("dualbrush/preset_%1_horizontal_offset").arg(i));
         ps.opacitiy = setting->getDouble(QString("dualbrush/preset_%1_opacity").arg(i));
-        ps.presetName = setting->getString(QString("pdualbrush/reset_%1_name").arg(i));
+        ps.presetName = setting->getString(QString("dualbrush/preset_%1_name").arg(i));
         KisPaintOpPresetResourceServer* server = KisResourceServerProvider::instance()->paintOpPresetServer();
         ps.paintopPreset = server->resourceByName(ps.presetName);
         ps.verticalOffset = setting->getDouble(QString("dualbrush/preset_%1_vertical_offset").arg(i));

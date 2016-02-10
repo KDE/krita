@@ -22,6 +22,7 @@
 #include <QDialog>
 #include <QVBoxLayout>
 #include <QGridLayout>
+#include <QLabel>
 
 #include <KisNodeView.h>
 
@@ -31,6 +32,7 @@
 #include "flake/kis_shape_controller.h"
 #include "kis_undo_adapter.h"
 #include "kis_node_model.h"
+#include "kis_color_filter_combo.h"
 
 
 void KisNodeViewTest::init()
@@ -73,6 +75,18 @@ void KisNodeViewTest::testLayers()
     model->setDummiesFacade(m_shapeController, m_image, m_shapeController, 0, 0);
 
     QVBoxLayout *layout = new QVBoxLayout(&dlg);
+    KisColorFilterCombo *cb = new KisColorFilterCombo(&dlg);
+
+    QSet<int> labels;
+    for (int i = 0; i < 6; i++) {
+        labels.insert(i);
+    }
+    cb->updateAvailableLabels(labels);
+
+    QHBoxLayout *hbox = new QHBoxLayout(&dlg);
+    hbox->addStretch(1);
+    hbox->addWidget(cb);
+    layout->addLayout(hbox);
     layout->addWidget(view);
 
     dlg.resize(280, 400);

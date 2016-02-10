@@ -126,6 +126,7 @@ set(kritaui_LIB_SRCS
     kis_node_selection_adapter.cpp
     kis_node_insertion_adapter.cpp
     kis_node_model.cpp
+    kis_node_filter_proxy_model.cpp
     kis_model_index_converter_base.cpp
     kis_model_index_converter.cpp
     kis_model_index_converter_show_all.cpp
@@ -255,6 +256,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_floating_message.cpp
     widgets/kis_lod_availability_widget.cpp
     widgets/kis_color_label_selector_widget.cpp
+    widgets/kis_color_filter_combo.cpp
     input/kis_input_manager.cpp
     input/kis_input_manager_p.cpp
     input/kis_extended_modifiers_mapper.cpp

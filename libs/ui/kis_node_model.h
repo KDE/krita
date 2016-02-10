@@ -127,7 +127,6 @@ public:
 
 Q_SIGNALS:
 
-    void nodeActivated(KisNodeSP);
     void toggleIsolateActiveNode();
 
 protected Q_SLOTS:

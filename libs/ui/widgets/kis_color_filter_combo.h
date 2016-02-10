@@ -16,31 +16,39 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_node_view_visibility_delegate.h"
+#ifndef __KIS_COLOR_FILTER_COMBO_H
+#define __KIS_COLOR_FILTER_COMBO_H
 
-#include "kis_node_view_color_scheme.h"
+#include <QScopedPointer>
+#include <QComboBox>
+#include "kritaui_export.h"
+#include "kis_types.h"
 
 
-KisNodeViewVisibilityDelegate::KisNodeViewVisibilityDelegate(QObject *parent)
-    : QAbstractItemDelegate(parent)
+class KRITAUI_EXPORT KisColorFilterCombo : public QComboBox
 {
-}
+    Q_OBJECT
+public:
+    KisColorFilterCombo(QWidget *parent);
+    ~KisColorFilterCombo();
 
-KisNodeViewVisibilityDelegate::~KisNodeViewVisibilityDelegate()
-{
-}
+    void updateAvailableLabels(KisNodeSP rootNode);
+    void updateAvailableLabels(const QSet<int> &labels);
 
-void KisNodeViewVisibilityDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    Q_UNUSED(painter);
-    Q_UNUSED(option);
-    Q_UNUSED(index);
-}
+    QSize minimumSizeHint() const;
+    QSize sizeHint() const;
 
-QSize KisNodeViewVisibilityDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    Q_UNUSED(index);
+    QList<int> selectedColors() const;
 
-    KisNodeViewColorScheme scm;
-    return QSize(option.rect.width(), scm.rowHeight());
-}
+Q_SIGNALS:
+    void selectedColorsChanged();
+
+private:
+    void paintEvent(QPaintEvent *event);
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
+};
+
+#endif /* __KIS_COLOR_FILTER_COMBO_H */

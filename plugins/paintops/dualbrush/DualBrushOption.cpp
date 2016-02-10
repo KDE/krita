@@ -46,8 +46,8 @@ DualBrushOpOptionsWidget::DualBrushOpOptionsWidget(QWidget *parent)
     doubleFuzziness->setRange(0, 100, 1);
     connect(doubleFuzziness, SIGNAL(valueChanged(qreal)), SIGNAL(configurationChanged()));
 
-    doubleOpacity->setValue(100);
     doubleOpacity->setRange(0, 100, 0);
+    doubleOpacity->setValue(100);
     doubleOpacity->setPrefix(QString("%1:  ").arg(i18n("Opacity")));
     doubleOpacity->setSuffix("%");
     connect(doubleOpacity, SIGNAL(valueChanged(qreal)), SIGNAL(configurationChanged()));
@@ -136,9 +136,9 @@ void DualBrushOpOptionsWidget::updatePreset()
 void DualBrushOpOptionsWidget::addPreset()
 {
     doubleFuzziness->setValue(0.0);
-    doubleOpacity->setValue(0.0);
+    doubleOpacity->setValue(100.0);
     doubleVOffset->setValue(0.0);
-    doubleHOffset->setValue(0.);
+    doubleHOffset->setValue(0.0);
     cmbComposite->selectCompositeOp(KoID(COMPOSITE_OVER));
 
     StackedPreset preset;

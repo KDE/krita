@@ -183,7 +183,7 @@
       </widget>
      </item>
      <item row="3" column="0">
-      <widget class="QLabel" name="label_3">
+      <widget class="QLabel" name="lblCompositeOp">
        <property name="text">
         <string>Blending &amp;mode:</string>
        </property>
@@ -209,7 +209,7 @@
       </widget>
      </item>
      <item row="4" column="0">
-      <widget class="QLabel" name="opacityLabel">
+      <widget class="QLabel" name="lblOpacity">
        <property name="text">
         <string>&amp;Opacity:</string>
        </property>

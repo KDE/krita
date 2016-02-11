@@ -67,29 +67,25 @@ KisSpacingInformation DualBrushPaintOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) return KisSpacingInformation(1.0);
 
-    if (!m_dab) {
-        m_dab = source()->createCompositionSourceDevice();
-    }
-    else {
-        m_dab->clear();
-    }
-
-    qreal x1, y1;
-
-    x1 = info.pos().x();
-    y1 = info.pos().y();
-
-    quint8 origOpacity = m_opacityOption.apply(painter(), info);
+    KisSpacingInformation spacing;
 
     Q_FOREACH(KisPaintOp* op, m_paintopStack) {
-        op->paintAt(info);
+        spacing = op->paintAt(info);
     }
 
+    return spacing;
+}
 
-    QRect rc = m_dab->extent();
+void DualBrushPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance)
+{
+    Q_FOREACH(KisPaintOp* op, m_paintopStack) {
+        op->paintLine(pi1, pi2, currentDistance);
+    }
+}
 
-    painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
-    painter()->renderMirrorMask(rc, m_dab);
-    painter()->setOpacity(origOpacity);
-    return KisSpacingInformation(1.0);
+void DualBrushPaintOp::paintBezierCurve(const KisPaintInformation &pi1, const QPointF &control1, const QPointF &control2, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance)
+{
+    Q_FOREACH(KisPaintOp* op, m_paintopStack) {
+        op->paintBezierCurve(pi1, control1, control2, pi2, currentDistance);
+    }
 }

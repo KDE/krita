@@ -46,11 +46,16 @@ DualBrushOpOptionsWidget::DualBrushOpOptionsWidget(QWidget *parent)
     doubleFuzziness->setRange(0, 100, 1);
     connect(doubleFuzziness, SIGNAL(valueChanged(qreal)), SIGNAL(configurationChanged()));
 
+    lblOpacity->setVisible(false);
+    doubleOpacity->setVisible(false);
     doubleOpacity->setRange(0, 100, 0);
     doubleOpacity->setValue(100);
     doubleOpacity->setPrefix(QString("%1:  ").arg(i18n("Opacity")));
     doubleOpacity->setSuffix("%");
     connect(doubleOpacity, SIGNAL(valueChanged(qreal)), SIGNAL(configurationChanged()));
+
+    lblCompositeOp->setVisible(false);
+    cmbComposite->setVisible(false);
 
     tableSelected->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
     tableSelected->setSelectionMode(QAbstractItemView::SingleSelection);

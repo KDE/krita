@@ -36,7 +36,14 @@ public:
     virtual ~DualBrushPaintOp();
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);
-
+    void paintLine(const KisPaintInformation &pi1,
+                           const KisPaintInformation &pi2,
+                           KisDistanceInformation *currentDistance);
+    void paintBezierCurve(const KisPaintInformation &pi1,
+                                  const QPointF &control1,
+                                  const QPointF &control2,
+                                  const KisPaintInformation &pi2,
+                                  KisDistanceInformation *currentDistance);
 private:
     KisPaintDeviceSP m_dab;
     KisPressureOpacityOption m_opacityOption;

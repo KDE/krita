@@ -104,6 +104,7 @@ public:
 
         void setExpanded(bool value) {
             Q_ASSERT(isCategory());
+            if (m_expanded == value) return;
 
             m_expanded = value;
             m_parent->notifyCategoryExpanded(this);
@@ -114,6 +115,8 @@ public:
         }
 
         void setEnabled(bool value) {
+            if (m_enabled == value) return;
+
             m_enabled = value;
             notifyItemChanged();
         }
@@ -123,6 +126,8 @@ public:
         }
 
         void setCheckable(bool value) {
+            if (m_checkable == value) return;
+
             m_checkable = value;
             notifyItemChanged();
         }
@@ -131,8 +136,10 @@ public:
             return m_checked;
         }
 
-        void setChecked(bool value) {  
-            setToggled(value!=m_checked);
+        void setChecked(bool value) {
+            if (m_checked == value) return;
+
+            setToggled(value != m_checked);
             m_checked = value;
             notifyItemChanged();
         }

@@ -536,8 +536,11 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
     connect(m_optionWidget, SIGNAL(sigConfigurationItemChanged()), this, SLOT(slotConfigurationItemChanged()));
 
 
+    // load the current brush engine icon for the brush editor toolbar button
     KisPaintOpFactory* paintOp = KisPaintOpRegistry::instance()->get(paintop.id());
+    QString pixFilename = KoResourcePaths::findResource("kis_images", paintOp->pixmap());
 
+    m_brushEditorPopupButton->setIcon(QIcon(pixFilename));
     m_resourceProvider->setPaintOpPreset(preset);
     m_presetsPopup->setCurrentPaintOp(paintop.id());
 

@@ -237,7 +237,7 @@ KisAutoSaveRecoveryDialog::KisAutoSaveRecoveryDialog(const QStringList &filename
     layout->addWidget(new QLabel(i18n("If you select Cancel, all recoverable files will be kept.\nIf you press OK, selected files will be recovered, the unselected files discarded.")));
     setMainWidget(page);
     
-    setAttribute(Qt::WA_DeleteOnClose, true);
+    setAttribute(Qt::WA_DeleteOnClose, false);
     connect( this, SIGNAL( user1Clicked() ), this, SLOT( slotDeleteAll() ) );
 }
 

@@ -609,6 +609,7 @@ QList<QUrl> KisApplication::checkAutosaveFiles()
             // don't recover any of the files, but don't delete them either
             autoSaveFiles.clear();
         }
+        delete dlg;
     }
 
     QList<QUrl> autosaveUrls;

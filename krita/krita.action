@@ -2359,7 +2359,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_group_layer">
-      <icon>folder</icon>
+      <icon>groupLayer</icon>
       <text>&amp;Group Layer</text>
       <whatsThis></whatsThis>
       <toolTip>Group Layer</toolTip>
@@ -2372,7 +2372,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_clone_layer">
-      <icon>edit-copy</icon>
+      <icon>cloneLayer</icon>
       <text>&amp;Clone Layer</text>
       <whatsThis></whatsThis>
       <toolTip>Clone Layer</toolTip>
@@ -2385,7 +2385,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_shape_layer">
-      <icon>bookmarks</icon>
+      <icon>vectorLayer</icon>
       <text>&amp;Vector Layer</text>
       <whatsThis></whatsThis>
       <toolTip>Vector Layer</toolTip>
@@ -2398,7 +2398,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_adjustment_layer">
-      <icon>view-filter</icon>
+      <icon>filterLayer</icon>
       <text>&amp;Filter Layer...</text>
       <whatsThis></whatsThis>
       <toolTip>Filter Layer</toolTip>
@@ -2411,7 +2411,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_fill_layer">
-      <icon>krita_tool_color_fill</icon>
+      <icon>fillLayer</icon>
       <text>&amp;Fill Layer...</text>
       <whatsThis></whatsThis>
       <toolTip>Fill Layer</toolTip>
@@ -2424,7 +2424,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_file_layer">
-      <icon>document-open</icon>
+      <icon>fileLayer</icon>
       <text>&amp;File Layer...</text>
       <whatsThis></whatsThis>
       <toolTip>File Layer</toolTip>
@@ -2437,7 +2437,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_transparency_mask">
-      <icon>edit-copy</icon>
+      <icon>transparencyMask</icon>
       <text>&amp;Transparency Mask</text>
       <whatsThis></whatsThis>
       <toolTip>Transparency Mask</toolTip>
@@ -2450,7 +2450,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_filter_mask">
-      <icon>bookmarks</icon>
+      <icon>filterMask</icon>
       <text>&amp;Filter Mask...</text>
       <whatsThis></whatsThis>
       <toolTip>Filter Mask</toolTip>
@@ -2463,7 +2463,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_transform_mask">
-      <icon>bookmarks</icon>
+      <icon>transformMask</icon>
       <text>&amp;Transform Mask...</text>
       <whatsThis></whatsThis>
       <toolTip>Transform Mask</toolTip>
@@ -2476,7 +2476,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_selection_mask">
-      <icon>edit-paste</icon>
+      <icon>selectionMask</icon>
       <text>&amp;Local Selection</text>
       <whatsThis></whatsThis>
       <toolTip>Local Selection</toolTip>
@@ -2502,7 +2502,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_new_paint_layer">
-      <icon>document-new</icon>
+      <icon>paintLayer</icon>
       <text>&amp;Paint Layer</text>
       <whatsThis></whatsThis>
       <toolTip>Paint Layer</toolTip>
@@ -2775,7 +2775,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="convert_to_paint_layer">
-      <icon>document-new</icon>
+      <icon>paintLayer</icon>
       <text>to &amp;Paint Layer</text>
       <whatsThis></whatsThis>
       <toolTip>to Paint Layer</toolTip>
@@ -2788,7 +2788,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="convert_to_transparency_mask">
-      <icon>edit-copy</icon>
+      <icon>transparencyMask</icon>
       <text>to &amp;Transparency Mask</text>
       <whatsThis></whatsThis>
       <toolTip>to Transparency Mask</toolTip>
@@ -2801,7 +2801,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="convert_to_filter_mask">
-      <icon>bookmarks</icon>
+      <icon>filterMask</icon>
       <text>to &amp;Filter Mask...</text>
       <whatsThis></whatsThis>
       <toolTip>to Filter Mask</toolTip>
@@ -2814,7 +2814,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="convert_to_selection_mask">
-      <icon>edit-paste</icon>
+      <icon>selectionMask</icon>
       <text>to &amp;Selection Mask</text>
       <whatsThis></whatsThis>
       <toolTip>to Selection Mask</toolTip>
@@ -2827,7 +2827,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="split_alpha_into_mask">
-      <icon>edit-copy</icon>
+      <icon>transparencyMask</icon>
       <text>&amp;Alpha into Mask</text>
       <whatsThis></whatsThis>
       <toolTip>Alpha into Mask</toolTip>

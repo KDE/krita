@@ -2723,7 +2723,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="import_layer_as_paint_layer">
-      <icon>document-new</icon>
+      <icon>paintLayer</icon>
       <text>&amp;as Paint Layer...</text>
       <whatsThis></whatsThis>
       <toolTip>as Paint Layer</toolTip>
@@ -2736,7 +2736,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="import_layer_as_transparency_mask">
-      <icon>edit-copy</icon>
+      <icon>transparencyMask</icon>
       <text>as &amp;Transparency Mask...</text>
       <whatsThis></whatsThis>
       <toolTip>as Transparency Mask</toolTip>
@@ -2749,7 +2749,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="import_layer_as_filter_mask">
-      <icon>bookmarks</icon>
+      <icon>filterMask</icon>
       <text>as &amp;Filter Mask...</text>
       <whatsThis></whatsThis>
       <toolTip>as Filter Mask</toolTip>
@@ -2762,7 +2762,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="import_layer_as_selection_mask">
-      <icon>edit-paste</icon>
+      <icon>selectionMask</icon>
       <text>as &amp;Selection Mask...</text>
       <whatsThis></whatsThis>
       <toolTip>as Selection Mask</toolTip>

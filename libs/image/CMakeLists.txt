@@ -110,6 +110,7 @@ set(kritaimage_LIB_SRCS
    generator/kis_generator_registry.cpp
    floodfill/kis_fill_interval_map.cpp
    floodfill/kis_scanline_fill.cpp
+   lazybrush/kis_min_cut_worker.cpp
    kis_adjustment_layer.cc
    kis_selection_based_layer.cpp
    kis_node_filter_interface.cpp

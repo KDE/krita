@@ -688,3 +688,8 @@ set(kis_asl_parser_test_SRCS kis_asl_parser_test.cpp )
 kde4_add_unit_test(KisAslParserTest TESTNAME kritalibpsd-asl_parser_test ${kis_asl_parser_test_SRCS})
 target_link_libraries(KisAslParserTest kritapsd kritapigment kritawidgetutils  ${QT_QTXML_LIBRARY} Qt5::Test)
 
+########### next target ###############
+
+set(kis_lazy_brush_test_SRCS kis_lazy_brush_test.cpp )
+kde4_add_unit_test(KisLazyBrushTest TESTNAME kritaimage-lazy_brush_test ${kis_lazy_brush_test_SRCS})
+target_link_libraries(KisLazyBrushTest kritaimage ${QT_QTTEST_LIBRARY})

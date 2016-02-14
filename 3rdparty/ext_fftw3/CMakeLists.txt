@@ -9,9 +9,9 @@ if (MSVC)
             INSTALL_DIR ${PREFIX_ext_fftw3}
             CONFIGURE_COMMAND ""
             BUILD_COMMAND ${CMAKE_COMMAND} -E echo deploying fftw3 64 binary
-            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory bin ${PREFIX_ext_fftw3}
-                    COMMAND ${CMAKE_COMMAND} -E copy_directory lib ${PREFIX_ext_fftw3}
-                    COMMAND ${CMAKE_COMMAND} -E copy_directory include ${PREFIX_ext_fftw3}
+            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/bin ${PREFIX_ext_fftw3}/bin
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/lib ${PREFIX_ext_fftw3}/lib
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/include ${PREFIX_ext_fftw3}/include
 
             UPDATE_COMMAND ""
             ALWAYS 0
@@ -25,9 +25,9 @@ if (MSVC)
             INSTALL_DIR ${PREFIX_ext_fftw3}
             CONFIGURE_COMMAND ""
             BUILD_COMMAND ${CMAKE_COMMAND} -E echo deploying fftw3 32 binary
-            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory bin ${PREFIX_ext_fftw3}
-                    COMMAND ${CMAKE_COMMAND} -E copy_directory lib ${PREFIX_ext_fftw3}
-                    COMMAND ${CMAKE_COMMAND} -E copy_directory include ${PREFIX_ext_fftw3}
+            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/bin ${PREFIX_ext_fftw3}/bin
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/lib ${PREFIX_ext_fftw3}/lib
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/include ${PREFIX_ext_fftw3}/include
 
             UPDATE_COMMAND ""
             ALWAYS 0

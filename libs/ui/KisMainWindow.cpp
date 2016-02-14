@@ -2323,7 +2323,7 @@ void KisMainWindow::initializeGeometry()
 
 void KisMainWindow::showManual()
 {
-    QDesktopServices::openUrl(QUrl("https://userbase.kde.org/Special:MyLanguage/Krita/Manual"));
+    QDesktopServices::openUrl(QUrl("https://docs.krita.org"));
 }
 
 void KisMainWindow::showDockerTitleBars(bool show)

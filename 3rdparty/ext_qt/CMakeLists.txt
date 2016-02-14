@@ -4,18 +4,18 @@ ExternalProject_Add(
     ext_qt
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL http://download.qt.io/development_releases/qt/5.6/5.6.0-beta/single/qt-everywhere-opensource-src-5.6.0-beta.zip
-    URL_MD5 d0c366ddf9796256e168ccce6b087175
+    URL_MD5 5b44d298dd14aa861d34d623c162ec22
     PATCH_COMMAND myptch -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/disable-wintab.diff
+          COMMAND myptch -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qtgui-private-headers.diff
 
     INSTALL_DIR ${EXTPREFIX_qt}
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure.bat -no-sql-sqlite -opensource -nomake examples -confirm-license -no-dbus  -prefix ${EXTPREFIX_qt} -I ${EXTPREFIX_qt}/include -L ${EXTPREFIX_qt}/lib -nomake tools -no-compile-examples -opengl desktop -no-iconv -no-angle -no-ssl -no-openssl -no-wmf-backend -no-qml-debug -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtdoc -skip qtenginio -skip qtgraphicaleffects -skip qtlocation -skip qtmultimedia-skip qtsensors -skip qtserialport -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtxmlpatterns -qt-zlib -qt-pcre -no-icu -qt-libpng -qt-libjpeg -no-pch
+    CONFIGURE_COMMAND <SOURCE_DIR>/configure.bat -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtdoc -skip qtenginio -skip qtgraphicaleffects -skip qtlocation -skip qtmultimedia -skip qtsensors -skip qtserialport -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtxmlpatterns -no-sql-sqlite -nomake examples -nomake tools -no-compile-examples -no-dbus -no-iconv -no-angle -no-ssl -no-openssl -no-wmf-backend -no-qml-debug -no-libproxy -no-system-proxies -no-nis -no-icu -no-mtdev -opensource -confirm-license -release -opengl desktop -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg -prefix ${EXTPREFIX_qt}
 
     BUILD_COMMAND nmake
     INSTALL_COMMAND nmake install
     UPDATE_COMMAND ""
     BUILD_IN_SOURCE 1
     ALWAYS 0
-    #DEPENDS  ext_perl 
 )
 else() 
     if (APPLE)

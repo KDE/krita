@@ -83,19 +83,19 @@ QString getInstallationPrefix() {
                                             CFStringGetSystemEncoding());
      QString bundlePath = QString::fromLatin1(pathPtr);
 
-//     //qDebug() << "1" << bundlePath << (bundlePath + QString::fromLatin1("/Contents/MacOS/share"));
+     qDebug() << "1" << bundlePath << (bundlePath + QString::fromLatin1("/Contents/MacOS/share"));
      if (QFile(bundlePath + QString::fromLatin1("/Contents/MacOS/share")).exists()) {
-//         //qDebug() << "running from a deployed bundle";
+         qDebug() << "running from a deployed bundle";
          bundlePath += QString::fromLatin1("/Contents/MacOS/");
      }
      else {
-//         //qDebug() << "running from make install";
-         bundlePath += "/../";
+         qDebug() << "running from make install";
+         bundlePath += "/../../";
      }
 
      CFRelease(appUrlRef);
      CFRelease(macPath);
-
+     qDebug() << ">>>>>>>>>>>" << bundlePath;
      return bundlePath;
  #else
      return qApp->applicationDirPath() + "/../";
@@ -272,12 +272,13 @@ void KoResourcePaths::addResourceDirInternal(const QString &type, const QString 
 QString KoResourcePaths::findResourceInternal(const QString &type, const QString &fileName)
 {
     QStringList aliases = d->aliases(type);
-    //qDebug() << "aliases" << aliases;
+    qDebug() << "aliases" << aliases << getApplicationRoot();
     QString resource = QStandardPaths::locate(QStandardPaths::AppDataLocation, fileName, QStandardPaths::LocateFile);
 
     if (resource.isEmpty()) {
         Q_FOREACH (const QString &alias, aliases) {
             resource = QStandardPaths::locate(d->mapTypeToQStandardPaths(type), alias + '/' + fileName, QStandardPaths::LocateFile);
+            qDebug() << "\t1" << resource;
             if (QFile::exists(resource)) {
                 continue;
             }
@@ -287,6 +288,7 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
         QString approot = getApplicationRoot();
         Q_FOREACH (const QString &alias, aliases) {
             resource = approot + "/share/" + alias + '/' + fileName;
+            qDebug() << "\t1" << resource;
             if (QFile::exists(resource)) {
                 continue;
             }
@@ -296,6 +298,7 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
         QString approot = getApplicationRoot();
         Q_FOREACH (const QString &alias, aliases) {
             resource = approot + "/share/krita/" + alias + '/' + fileName;
+            qDebug() << "\t1" << resource;
             if (QFile::exists(resource)) {
                 continue;
             }

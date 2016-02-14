@@ -272,25 +272,45 @@ void KoResourcePaths::addResourceDirInternal(const QString &type, const QString 
 QString KoResourcePaths::findResourceInternal(const QString &type, const QString &fileName)
 {
     QStringList aliases = d->aliases(type);
-
+    //qDebug() << "aliases" << aliases;
     QString resource = QStandardPaths::locate(QStandardPaths::AppDataLocation, fileName, QStandardPaths::LocateFile);
+
     if (resource.isEmpty()) {
         Q_FOREACH (const QString &alias, aliases) {
             resource = QStandardPaths::locate(d->mapTypeToQStandardPaths(type), alias + '/' + fileName, QStandardPaths::LocateFile);
-            if (!resource.isEmpty()) {
+            if (QFile::exists(resource)) {
                 continue;
             }
         }
     }
-    //Q_ASSERT(!resource.isEmpty());
+    if (resource.isEmpty() || !QFile::exists(resource)) {
+        QString approot = getApplicationRoot();
+        Q_FOREACH (const QString &alias, aliases) {
+            resource = approot + "/share/" + alias + '/' + fileName;
+            if (QFile::exists(resource)) {
+                continue;
+            }
+        }
+    }
+    if (resource.isEmpty() || !QFile::exists(resource)) {
+        QString approot = getApplicationRoot();
+        Q_FOREACH (const QString &alias, aliases) {
+            resource = approot + "/share/krita/" + alias + '/' + fileName;
+            if (QFile::exists(resource)) {
+                continue;
+            }
+        }
+    }
+
     //qDebug() << "findResource: type" << type << "filename" << fileName << "resource" << resource;
+    Q_ASSERT(!resource.isEmpty());
     return resource;
 }
 
 QStringList KoResourcePaths::findDirsInternal(const QString &type, const QString &relDir)
 {
     QStringList aliases = d->aliases(type);
-    //qDebug() << type << aliases << d->mapTypeToQStandardPaths(type);
+    //qDebug() << type << relDir << aliases << d->mapTypeToQStandardPaths(type);
 
     QStringList dirs;
 
@@ -309,6 +329,7 @@ QStringList KoResourcePaths::findDirsInternal(const QString &type, const QString
 
     if (dirs.isEmpty()) {
         dirs.append(getApplicationRoot() + "/share/" + relDir);
+        dirs.append(getApplicationRoot() + "/share/krita/" + relDir);
     }
     //qDebug() << "findDirs: type" << type << "relDir" << relDir<< "resource" << dirs;
     return dirs;

@@ -10,14 +10,8 @@ cmake --build . --config RelWithDebInfo --target ext_patch
 cmake --build . --config RelWithDebInfo --target ext_png2ico
 cmake --build . --config RelWithDebInfo --target ext_pthreads
 cmake --build . --config RelWithDebInfo --target ext_boost
-copy c:\dev\i\lib\boost_system-vc-mt-1_55.dll c:\dev\i\lib\boost_system-vc140-mt-1_55.dll
-copy c:\dev\i\lib\boost_system-vc-mt-1_55.dll c:\dev\i\bin\boost_system-vc140-mt-1_55.dll
-copy c:\dev\i\lib\boost_system-vc-mt-1_55.lib c:\dev\i\lib\boost_system-vc140-mt-1_55.lib
 cmake --build . --config RelWithDebInfo --target ext_eigen3
 cmake --build . --config RelWithDebInfo --target ext_fftw3
-xcopy ext_fftw3\ext_fftw3-prefix\src\ext_fftw3\bin\*.* c:\dev\i\bin
-xcopy ext_fftw3\ext_fftw3-prefix\src\ext_fftw3\lib\*.* c:\dev\i\lib
-xcopy ext_fftw3\ext_fftw3-prefix\src\ext_fftw3\include\*.* c:\dev\i\include
 cmake --build . --config RelWithDebInfo --target ext_ilmbase
 cmake --build . --config RelWithDebInfo --target ext_jpeg
 cmake --build . --config RelWithDebInfo --target ext_lcms2

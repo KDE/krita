@@ -12,7 +12,8 @@ if (MSVC)
 			INSTALL_COMMAND ""
 			INSTALL_DIR ${EXTPREFIX_boost}
 
-			UPDATE_COMMAND ""
+			UPDATE_COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/boost_system-vc-mt-1_55.dll ${PREFIX_ext_boost}/lib/boost_system-vc140-mt-1_55.dll
+			       COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/boost_system-vc-mt-1_55.lib ${PREFIX_ext_boost}/lib/boost_system-vc140-mt-1_55.lib
 			ALWAYS 0
 			BUILD_IN_SOURCE 1
 		)

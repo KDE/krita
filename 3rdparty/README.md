@@ -26,6 +26,7 @@ Note: on all operating systems the entire procedure is done in a terminal window
     * Linux: gcc, minimum version 4.8
     * OSX: clang, you need to install xcode for this
     * Windows: MSVC 2015 Community Edition: https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx
+4. If you compile Qt on Windows, you will also need Python 2.7: https://www.python.org/download/releases/2.7/. Make sure to have python.exe in you path.
 
 == Setup your environment ==
 

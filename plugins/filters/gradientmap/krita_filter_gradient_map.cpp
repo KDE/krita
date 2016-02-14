@@ -27,10 +27,12 @@
 
 KritaFilterGradientMap::KritaFilterGradientMap() : KisColorTransformationFilter(id(), categoryMap(), i18n("&Gradient Map"))
 {
-    setShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::CTRL + Qt::Key_I));
     setColorSpaceIndependence(TO_LAB16);
-    setSupportsPainting(true);
     setShowConfigurationWidget(true);
+    // don't support anything just yet because of thread safety problems
+    setSupportsPainting(false);
+    setSupportsAdjustmentLayers(false);
+    setSupportsThreading(false);
 }
 
 KoColorTransformation* KritaFilterGradientMap::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const

@@ -74,6 +74,8 @@ void KisRulerAssistantTool::activate(ToolActivation toolActivation, const QSet<K
     m_canvas->updateCanvas();
     m_handleDrag = 0;
     m_internalMode = MODE_CREATION;
+    m_assistantHelperYOffset = 10;
+
 }
 
 void KisRulerAssistantTool::deactivate()
@@ -258,7 +260,7 @@ void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
                 m_radius = QLineF(m_dragStart, *assistant->handles()[0]);
                 m_snapIsRadial = true;
             }
-            
+
         } else {
             m_dragStart = assistant->buttonPosition();
             m_snapIsRadial = false;
@@ -278,10 +280,23 @@ void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
 
     m_assistantDrag = 0;
     Q_FOREACH (KisPaintingAssistant* assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
-        QPointF iconPosition = m_canvas->viewConverter()->documentToView(assistant->buttonPosition());
-        QRectF deleteRect(iconPosition - QPointF(32, 32), QSizeF(16, 16));
-        QRectF visibleRect(iconPosition + QPointF(16, 16), QSizeF(16, 16));
-        QRectF moveRect(iconPosition - QPointF(16, 16), QSizeF(32, 32));
+
+        // This code contains the click event behavior. The actual display of the icons are done at the bottom
+        // of the paint even. Make sure the rectangles positions are the same between the two.
+
+        // TODO: These 6 lines are duplicated below in the paint layer. It shouldn't be done like this.
+        QPointF actionsPosition = m_canvas->viewConverter()->documentToView(assistant->buttonPosition());
+        int assistantHeight = calculateAssistantYMax(assistant);
+
+        QPointF iconDeletePosition(actionsPosition + QPointF(78, m_assistantHelperYOffset + 7));
+        QPointF iconSnapPosition(actionsPosition + QPointF(54, m_assistantHelperYOffset + 7));
+        QPointF iconMovePosition(actionsPosition + QPointF(15, m_assistantHelperYOffset));
+
+
+        QRectF deleteRect(iconDeletePosition, QSizeF(16, 16));
+        QRectF visibleRect(iconSnapPosition, QSizeF(16, 16));
+        QRectF moveRect(iconMovePosition, QSizeF(32, 32));
+
         if (moveRect.contains(mousePos)) {
             m_assistantDrag = assistant;
             m_mousePosition = event->point;
@@ -301,7 +316,7 @@ void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
         if (visibleRect.contains(mousePos)) {
             newAssistantAllowed = false;
             if (assistant->snapping()==true){
-            
+
             snappingOff(assistant);
             outlineOff(assistant);
             }
@@ -340,7 +355,7 @@ void KisRulerAssistantTool::continuePrimaryAction(KoPointerEvent *event)
         //ported from the gradient tool... we need to think about this more in the future.
         if (event->modifiers() == Qt::ShiftModifier && m_snapIsRadial) {
             QLineF dragRadius = QLineF(m_dragStart, event->point);
-            dragRadius.setLength(m_radius.length()); 
+            dragRadius.setLength(m_radius.length());
             *m_handleDrag = dragRadius.p2();
         } else if (event->modifiers() == Qt::ShiftModifier ) {
             *m_handleDrag = straightLine(event->point, m_dragStart);
@@ -367,12 +382,12 @@ void KisRulerAssistantTool::continuePrimaryAction(KoPointerEvent *event)
         QPointF adjust = event->point - m_mousePosition;
         Q_FOREACH (KisPaintingAssistantHandleSP handle, m_assistantDrag->handles()) {
             *handle += adjust;
-            
+
         }
         if (m_assistantDrag->id()== "vanishing point"){
             Q_FOREACH (KisPaintingAssistantHandleSP handle, m_assistantDrag->sideHandles()) {
                 *handle += adjust;
-            
+
             }
         }
         m_mousePosition = event->point;
@@ -396,13 +411,13 @@ void KisRulerAssistantTool::continuePrimaryAction(KoPointerEvent *event)
                 }
             }
         }
-        
+
         //this following bit sets the translations for the vanishing-point handles.
         if(m_handleDrag && assistant->id() == "vanishing point" && assistant->sideHandles().size()==4) {
             //for inner handles, the outer handle gets translated.
             if (m_handleDrag == assistant->sideHandles()[0]){
             QLineF perspectiveline = QLineF(*assistant->handles()[0], *assistant->sideHandles()[0]);
-            
+
             qreal length = QLineF(*assistant->sideHandles()[0], *assistant->sideHandles()[1]).length();
             if (length<2.0){length=2.0;}
             length +=perspectiveline.length();
@@ -411,7 +426,7 @@ void KisRulerAssistantTool::continuePrimaryAction(KoPointerEvent *event)
             }
             else if (m_handleDrag == assistant->sideHandles()[2]){
             QLineF perspectiveline = QLineF(*assistant->handles()[0], *assistant->sideHandles()[2]);
-            
+
             qreal length = QLineF(*assistant->sideHandles()[2], *assistant->sideHandles()[3]).length();
             if (length<2.0){length=2.0;}
             length +=perspectiveline.length();
@@ -440,7 +455,7 @@ void KisRulerAssistantTool::continuePrimaryAction(KoPointerEvent *event)
             *assistant->sideHandles()[1] = perspectiveline.p2();
             *assistant->sideHandles()[3] = perspectiveline2.p2();
             }
-        
+
         }
     }
     if (wasHiglightedNode && !m_higlightedNode) {
@@ -548,6 +563,11 @@ QPointF KisRulerAssistantTool::straightLine(QPointF point, QPointF compare)
 
 void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 {
+
+    QPixmap iconDelete = KisIconUtils::loadIcon("dialog-cancel").pixmap(16, 16);
+    QPixmap iconSnapOn = KisIconUtils::loadIcon("visible").pixmap(16, 16);
+    QPixmap iconSnapOff = KisIconUtils::loadIcon("novisible").pixmap(16, 16);
+    QPixmap iconMove = KisIconUtils::loadIcon("transform-move").pixmap(32, 32);
     QColor handlesColor(0, 0, 0, 125);
 
     if (m_newAssistant) {
@@ -559,24 +579,41 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
         }
     }
 
-    Q_FOREACH (const KisPaintingAssistantHandleSP handle, m_handles) {
-        QRectF ellipse(_converter.documentToView(*handle) -  QPointF(6, 6), QSizeF(12, 12));
-        if (handle == m_handleDrag || handle == m_handleCombine) {
-            _gc.save();
-            _gc.setPen(Qt::transparent);
-            _gc.setBrush(handlesColor);
-            _gc.drawEllipse(ellipse);
-            _gc.restore();
+    // TODO: too  many Q_FOREACH loops going through all assistants. Condense this to one to be a little more performant
+
+    // render handles for the asssistant
+    Q_FOREACH (KisPaintingAssistant* assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
+        Q_FOREACH (const KisPaintingAssistantHandleSP handle, m_handles) {
+            QRectF ellipse(_converter.documentToView(*handle) -  QPointF(6, 6), QSizeF(12, 12));
+
+            // render handles when they are being dragged and moved
+            if (handle == m_handleDrag || handle == m_handleCombine) {
+                _gc.save();
+                _gc.setPen(Qt::transparent);
+                _gc.setBrush(handlesColor);
+                _gc.drawEllipse(ellipse);
+                _gc.restore();
+            }
+
+            if ( assistant->id() =="vanishing point") {
+
+                if (assistant->handles().at(0) == handle )  { // vanishing point handle
+                     ellipse = QRectF(_converter.documentToView(*handle) -  QPointF(10, 10), QSizeF(20, 20));
+                     // TODO: change this to be smaller, but fill in with a color
+                }
+
+                //TODO: render outside handles a little bigger than rotation anchor handles
+            }
+
+            QPainterPath path;
+            path.addEllipse(ellipse);
+            KisPaintingAssistant::drawPath(_gc, path);
+
         }
-        QPainterPath path;
-        path.addEllipse(ellipse);
-        KisPaintingAssistant::drawPath(_gc, path);
     }
 
-    QPixmap iconDelete = KisIconUtils::loadIcon("edit-delete").pixmap(16, 16);
-    QPixmap iconSnapOn = KisIconUtils::loadIcon("visible").pixmap(16, 16);
-    QPixmap iconSnapOff = KisIconUtils::loadIcon("novisible").pixmap(16, 16);
-    QPixmap iconMove = KisIconUtils::loadIcon("transform-move").pixmap(32, 32);
+
+
     Q_FOREACH (KisPaintingAssistant* assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
         if(assistant->id()=="perspective") {
             assistant->findHandleLocation();
@@ -600,9 +637,11 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
             QPointF p2 = _converter.documentToView(*assistant->sideHandles()[1]);
             QPointF p3 = _converter.documentToView(*assistant->sideHandles()[2]);
             QPointF p4 = _converter.documentToView(*assistant->sideHandles()[3]);
-            QPainterPath preview;
+
             _gc.setPen(QColor(0, 0, 0, 75));
             // Draw control lines
+            QPen penStyle(QColor(120, 120, 120, 60), 2.0, Qt::DashDotDotLine);
+            _gc.setPen(penStyle);
             _gc.drawLine(p0, p1);
             _gc.drawLine(p0, p3);
             _gc.drawLine(p1, p2);
@@ -613,18 +652,75 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
 
 
     Q_FOREACH (const KisPaintingAssistant* assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
-        QPointF iconDeletePos = _converter.documentToView(assistant->buttonPosition());
-        _gc.drawPixmap(iconDeletePos - QPointF(32, 32), iconDelete);
+
+
+       // We are going to put all of the assistant actions below the bounds of the assistant
+       // so they are out of the way
+        // assistant->buttonPosition() gets the center X/Y position point
+        QPointF actionsPosition = m_canvas->viewConverter()->documentToView(assistant->buttonPosition());
+
+        //int assistantHeight = calculateAssistantYMax(assistant);
+
+        QPointF iconDeletePosition(actionsPosition + QPointF(78, m_assistantHelperYOffset + 7));
+        QPointF iconSnapPosition(actionsPosition + QPointF(54, m_assistantHelperYOffset + 7));
+        QPointF iconMovePosition(actionsPosition + QPointF(15, m_assistantHelperYOffset ));
+
+
+
+        // Background container for helpers
+        QBrush backgroundColor = m_canvas->viewManager()->mainWindow()->palette().window();
+        QPointF actionsBGRectangle(actionsPosition + QPointF(25, m_assistantHelperYOffset));
+
+        _gc.setRenderHint(QPainter::Antialiasing);
+
+        QPainterPath bgPath;
+        bgPath.addRoundedRect(QRectF(actionsBGRectangle.x(), actionsBGRectangle.y(), 80, 30), 6, 6);
+        QPen stroke(QColor(60, 60, 60, 80), 2);
+        _gc.setPen(stroke);
+        _gc.fillPath(bgPath, backgroundColor);
+        _gc.drawPath(bgPath);
+
+
+        QPainterPath movePath;  // render circle behind by move helper
+        _gc.setPen(stroke);
+        movePath.addEllipse(iconMovePosition.x()-5, iconMovePosition.y()-5, 40, 40);// background behind icon
+        _gc.fillPath(movePath, backgroundColor);
+        _gc.drawPath(movePath);
+
+        // Preview/Snap Tool helper
+        _gc.drawPixmap(iconDeletePosition, iconDelete);
         if (assistant->snapping()==true) {
-            _gc.drawPixmap(iconDeletePos + QPointF(16, 16), iconSnapOn);
-            }
-            else
-            {
-            _gc.drawPixmap(iconDeletePos + QPointF(16, 16), iconSnapOff);
-            }
-        _gc.drawPixmap(iconDeletePos - QPointF(16, 16), iconMove);
-    }
+            _gc.drawPixmap(iconSnapPosition, iconSnapOn);
+        }
+        else
+        {
+            _gc.drawPixmap(iconSnapPosition, iconSnapOff);
+        }
+
+
+        // Move Assistant Tool helper
+        _gc.drawPixmap(iconMovePosition, iconMove);
+
+
+  }
 }
+
+int KisRulerAssistantTool::calculateAssistantYMax(const KisPaintingAssistant* assistant)
+{
+    // loop through each handle and get the greatest Y position
+    int maxYhandle = 0;
+    QList<KisPaintingAssistantHandleSP> asst_handles = m_canvas->paintingAssistantsDecoration()->handles();
+    for (int i=0; i < assistant->handles().length(); i++) {
+
+        if (maxYhandle < asst_handles[i].data()->y() ) {
+            maxYhandle = asst_handles[i].data()->y();
+        }
+    }
+
+    //qDebug() << "max Y " << QString::number(maxYhandle);
+    return maxYhandle;
+}
+
 
 void KisRulerAssistantTool::removeAllAssistants()
 {

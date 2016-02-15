@@ -96,6 +96,7 @@ private:
     PerspectiveAssistantEditionMode m_internalMode;
     qint32 m_handleSize, m_handleHalfSize;
     KisPaintingAssistantHandleSP m_selectedNode1, m_selectedNode2, m_higlightedNode;
+    int m_assistantHelperYOffset;
 };
 
 

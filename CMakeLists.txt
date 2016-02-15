@@ -266,7 +266,7 @@ macro_ensure_out_of_source_build("Compiling Calligra inside the source directory
 # Note: OPTIONAL_COMPONENTS does not seem to be reliable
 # (as of ECM 5.15.0, CMake 3.2)
 find_package(Qt5Quick ${MIN_QT_VERSION} QUIET)
-macro_log_feature($PQt5Quick_FOUND} "QtQuick" "Qt Quick" "http://www.qt.io" FALSE "" "Necessary to build the tablet gui for Krita")
+macro_log_feature(${Qt5Quick_FOUND} "QtQuick" "Qt Quick" "http://www.qt.io" FALSE "" "Necessary to build the tablet gui for Krita")
 
 find_package(Qt5DBus ${MIN_QT_VERSION} QUIET)
 set(HAVE_DBUS ${Qt5DBus_FOUND})
@@ -277,7 +277,7 @@ if (NOT WIN32 AND NOT APPLE)
 
         find_package(KF5KIO ${MIN_FRAMEWORKS_VERSION} QUIET)
         macro_bool_to_01(KF5KIO_FOUND HAVE_KIO)
-        macro_log_feature(${KF5KIO_FOUND} "KIO" "KDE's KIO Framework" "http://api.kde.org/frameworks-api/frameworks5-apidocs/kio/html/index.html" FALSE "" "Optionally used to create thumbnailers for Dolphin")
+        macro_log_feature(${KF5KIO_FOUND} "KIO" "KDE's KIO Framework" "http://api.kde.org/frameworks-api/frameworks5-apidocs/kio/html/index.html" FALSE "" "Optionally used for recent document handling")
 
         find_package(KF5Crash ${MIN_FRAMEWORKS_VERSION} QUIET) 
         macro_bool_to_01(KF5Crash_FOUND HAVE_KCRASH)
@@ -303,8 +303,8 @@ else()
     set(HAVE_XCB FALSE)
 endif()
 
-# use sane compile flags
 add_definitions(
+  -DTRANSLATION_DOMAIN=\"krita\"
   -DQT_USE_QSTRINGBUILDER
   -DQT_STRICT_ITERATORS
   -DQT_NO_SIGNALS_SLOTS_KEYWORDS
@@ -313,6 +313,29 @@ add_definitions(
   -DQT_NO_URL_CAST_FROM_STRING
   -DQT_DISABLE_DEPRECATED_BEFORE=0
 )
+
+# To avoid the confusion of an endless stream of Eigen warnings.
+if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+    add_definitions(-Wno-unused-local-typedefs -Wno-deprecated -Wno-deprecated-declarations)
+endif ()
+
+#
+# The reason for this mode is that the Debug mode disable inlining
+#
+if(CMAKE_COMPILER_IS_GNUCXX)
+    set(CMAKE_CXX_FLAGS_KRITADEVS "-O3 -g" CACHE STRING "" FORCE)
+endif()
+
+if(UNIX)
+    set(CMAKE_REQUIRED_LIBRARIES "${CMAKE_REQUIRED_LIBRARIES};m")
+endif()
+
+if(WIN32)
+    if(MSVC)
+        # C4522: 'class' : multiple assignment operators specified
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -wd4522")
+    endif()
+endif()
 
 # enable exceptions globally
 kde_enable_exceptions()
@@ -325,6 +348,16 @@ kde_enable_exceptions()
 if(BUILD_TESTING)
     add_definitions(-DCOMPILING_TESTS)
 endif()
+
+set(KRITA_DEFAULT_TEST_DATA_DIR ${CMAKE_SOURCE_DIR}/sdk/tests/data/)
+macro(macro_add_unittest_definitions)
+  add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
+  add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}")
+  add_definitions(-DFILES_DEFAULT_DATA_DIR="${KRITA_DEFAULT_TEST_DATA_DIR}")
+endmacro()
+
+
+
 
 # overcome some platform incompatibilities
 if(WIN32)
@@ -357,6 +390,14 @@ if (APPLE)
     SET(CMAKE_CXX_FLAGS "-stdlib=libstdc++ -std=c++11")
 #    find_package(Carbon REQUIRED)
 endif ()
+
+##
+## Test for GNU Scientific Library
+##
+find_package(GSL REQUIRED)
+macro_log_feature(GSL_FOUND "GSL" "GNU Scientific Library" "http://www.gnu.org/software/gsl" FALSE "1.7" "Required by Krita's Transform tool.")
+macro_bool_to_01(GSL_FOUND HAVE_GSL)
+configure_file(config-gsl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gsl.h )
 
  ###########################
 ############################
@@ -402,6 +443,7 @@ macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
 macro_optional_find_package(OCIO)
 macro_log_feature(OCIO_FOUND "OCIO" "The OpenColorIO Library" "http://www.opencolorio.org" FALSE "" "Required by the Krita LUT docker")
 macro_bool_to_01(OCIO_FOUND HAVE_OCIO)
+
 ##
 ## Look for OpenGL
 ##
@@ -416,13 +458,12 @@ if (USEOPENGL)
     endif()
 endif()
 
-##
-## Test for GNU Scientific Library
-##
-macro_optional_find_package(GSL)
-macro_log_feature(GSL_FOUND "GSL" "GNU Scientific Library" "http://www.gnu.org/software/gsl" FALSE "1.7" "Required by Krita's Transform tool.")
-macro_bool_to_01(GSL_FOUND HAVE_GSL)
-configure_file(config-gsl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gsl.h )
+if(HAVE_OPENGL)
+    message(STATUS "OpenGL found -- krita will be able  to use OpenGL for hardware accelerated rendering.")
+else()
+    message(STATUS "OpenGL NOT found - krita will not be able to use OpenGL for hardware accelerated rendering.")
+endif()
+
 
 ##
 ## Test for eigen3
@@ -470,13 +511,9 @@ if(HAVE_VC)
     include (VcMacros)
 
     if(Vc_COMPILER_IS_CLANG)
-        set(ADDITIONAL_VC_FLAGS "-Wabi -ffp-contract=fast")
-    else()
-        if (MSVC)
-            set(ADDITIONAL_VC_FLAGS "-fabi-version=0 -ffp-contract=fast")
-        else()
-            set(ADDITIONAL_VC_FLAGS "-Wabi -fabi-version=0 -ffp-contract=fast")
-        endif()
+        set(ADDITIONAL_VC_FLAGS "-Wabi -ffp-contract=fast -fPIC")
+    elseif (NOT MSVC)
+        set(ADDITIONAL_VC_FLAGS "-Wabi -fabi-version=0 -ffp-contract=fast -fPIC")
     endif()
 
     #Handle Vc master
@@ -492,7 +529,7 @@ if(HAVE_VC)
 
         macro(ko_compile_for_all_implementations_no_scalar _objs _src)
         if(PACKAGERS_BUILD)
-            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} -fPIC ONLY SSE2 SSSE3 SSE4_1 AVX AVX2)
+            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY SSE2 SSSE3 SSE4_1 AVX AVX2)
         else()
             set(${_objs} ${_src})
         endif()
@@ -500,7 +537,7 @@ if(HAVE_VC)
 
         macro(ko_compile_for_all_implementations _objs _src)
         if(PACKAGERS_BUILD)
-            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} -fPIC ONLY Scalar SSE2 SSSE3 SSE4_1 AVX AVX2)
+            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY Scalar SSE2 SSSE3 SSE4_1 AVX AVX2)
         else()
             set(${_objs} ${_src})
         endif()
@@ -508,7 +545,7 @@ if(HAVE_VC)
     else()
         macro(ko_compile_for_all_implementations_no_scalar _objs _src)
         if(PACKAGERS_BUILD)
-            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} -fPIC ONLY SSE2 SSSE3 SSE4_1 AVX)
+            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY SSE2 SSSE3 SSE4_1 AVX)
         else()
             set(${_objs} ${_src})
         endif()
@@ -516,7 +553,7 @@ if(HAVE_VC)
 
         macro(ko_compile_for_all_implementations _objs _src)
         if(PACKAGERS_BUILD)
-            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} -fPIC ONLY Scalar SSE2 SSSE3 SSE4_1 AVX)
+            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY Scalar SSE2 SSSE3 SSE4_1 AVX)
         else()
             set(${_objs} ${_src})
         endif()
@@ -600,77 +637,15 @@ include(MacroCalligraAddTest)
 ####################
 
 # for config.h and <toplevel/foo.h> includes (if any?)
-include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/interfaces )
-
-
-# For kis_debug.h and kis_assert.h
-set(KRITAGLOBAL_INCLUDES ${CMAKE_SOURCE_DIR}/krita/libglobal)
-
-
-set(KOVERSION_INCLUDES ${CMAKE_SOURCE_DIR}/libs/version
-                       ${CMAKE_BINARY_DIR}/libs/version
+include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR} 
+                           ${CMAKE_CURRENT_BINARY_DIR} 
+                           ${CMAKE_SOURCE_DIR}/interfaces 
 )
 
-include_directories(${KOVERSION_INCLUDES})
-
-# koplugin is at the bottom of the stack
-set(KOPLUGIN_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koplugin)
-
-set(KUNDO2_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kundo2
-                    ${CMAKE_BINARY_DIR}/libs/kundo2
-                    ${CMAKE_SOURCE_DIR}/libs/widgetutils
-                    ${CMAKE_SOURCE_DIR}/libs/widgetutils/config
-                    ${CMAKE_SOURCE_DIR}/libs/widgetutils/xmlgui
+include_directories(
+   ${CMAKE_SOURCE_DIR}/libs/version
+   ${CMAKE_BINARY_DIR}/libs/version
 )
-
-# koodf is at the bottom of the stack
-set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf
-                   ${CMAKE_SOURCE_DIR}/libs/store
-                   ${CMAKE_BINARY_DIR}/libs/odf
-                   ${CMAKE_BINARY_DIR}/libs/store
-                   ${KOVERSION_INCLUDES}
-                   )
-
-# pigment depends on koplugin and lcms
-set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}
-                   ${KOVERSION_INCLUDES}
-                   ${CMAKE_SOURCE_DIR}/libs/pigment
-                   ${CMAKE_BINARY_DIR}/libs/pigment
-                   ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
-                   ${CMAKE_SOURCE_DIR}/libs/pigment/resources
-                   ${Boost_INCLUDE_DIRS}
-
-                   )
-
-# flake depends on koodf and pigment
-set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake
-                   ${KOODF_INCLUDES}
-                   ${PIGMENT_INCLUDES}
-                   ${KUNDO2_INCLUDES}
-                   ${CMAKE_SOURCE_DIR}/libs/flake/commands
-                   ${CMAKE_SOURCE_DIR}/libs/flake/tools
-                   ${CMAKE_SOURCE_DIR}/libs/flake/svg
-                   ${CMAKE_BINARY_DIR}/libs/flake)
-
-# vectorimage
-set(VECTORIMAGE_INCLUDES
-                   ${CMAKE_SOURCE_DIR}/libs/vectorimage
-                   ${CMAKE_SOURCE_DIR}/libs/vectorimage/libemf
-                   ${CMAKE_SOURCE_DIR}/libs/vectorimage/libsvm
-                   ${CMAKE_SOURCE_DIR}/libs/vectorimage/libwmf)
-
-# Widgets depends on kritatext and flake
-set(KOWIDGETS_INCLUDES ${FLAKE_INCLUDES}
-                   ${CMAKE_SOURCE_DIR}/libs/widgetutils
-                   ${CMAKE_BINARY_DIR}/libs/widgetutils
-                   ${CMAKE_SOURCE_DIR}/libs/widgets
-                   ${CMAKE_BINARY_DIR}/libs/widgets)
-
-# BasicFlakes depends on flake, widgets
-set(BASICFLAKES_INCLUDES ${KOWIDGETS_INCLUDES}
-                   ${CMAKE_SOURCE_DIR}/libs/basicflakes
-                   ${CMAKE_BINARY_DIR}/libs/basicflakes
-                   ${CMAKE_SOURCE_DIR}/libs/basicflakes/tools)
 
  ###################################################
 ####################################################
@@ -723,9 +698,17 @@ endif()
 add_subdirectory(libs)
 add_subdirectory(plugins)
 
+add_subdirectory( benchmarks )
+
 macro_display_feature_log()
 
 calligra_product_deps_report("product_deps")
 calligra_log_should_build()
 
 configure_file(KoConfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h )
+configure_file(config_convolution.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_convolution.h)
+configure_file(config-ocio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ocio.h )
+
+check_function_exists(powf HAVE_POWF)
+configure_file(config-powf.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-powf.h)
+

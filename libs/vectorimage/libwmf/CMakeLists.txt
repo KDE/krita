@@ -1,5 +1,3 @@
-include_directories( ${KOWIDGETS_INCLUDES} )
-
 set(libwmf_LIB_SRCS 
    WmfStack.cpp
    WmfDeviceContext.cpp

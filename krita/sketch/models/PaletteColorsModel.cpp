@@ -20,7 +20,7 @@
 #include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>
 
-#include <KoColorSet.h>
+#include <resources/KoColorSet.h>
 
 class PaletteColorsModel::Private {
 public:

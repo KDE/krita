@@ -11,7 +11,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>To Path</text>
-      <defaultShortcut>P</defaultShortcut>
     </Action>
     <Action name="pathpoint-remove">
       <iconText>Remove point</iconText>
@@ -22,7 +21,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Remove point</text>
-      <defaultShortcut>Backspace</defaultShortcut>
     </Action>
     <Action name="path-break-segment">
       <iconText>Break at segment</iconText>
@@ -33,7 +31,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Break at segment</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="pathsegment-line">
       <iconText>Segment to Line</iconText>
@@ -44,7 +41,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Segment to Line</text>
-      <defaultShortcut>F</defaultShortcut>
     </Action>
     <Action name="path-break-point">
       <iconText>Break at point</iconText>
@@ -55,7 +51,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Break at point</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="pathpoint-line">
       <iconText>Make line point</iconText>
@@ -66,7 +61,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Make line point</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="pathpoint-symmetric">
       <iconText>Symmetric Point</iconText>
@@ -77,7 +71,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Symmetric Point</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="pathpoint-curve">
       <iconText>Make curve point</iconText>
@@ -88,7 +81,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Make curve point</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="pathsegment-curve">
       <iconText>Segment to Curve</iconText>
@@ -99,7 +91,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Segment to Curve</text>
-      <defaultShortcut>C</defaultShortcut>
     </Action>
     <Action name="pathpoint-insert">
       <iconText>Insert point</iconText>
@@ -110,7 +101,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Insert point</text>
-      <defaultShortcut>Ins</defaultShortcut>
     </Action>
     <Action name="pathpoint-corner">
       <iconText>Corner point</iconText>
@@ -121,7 +111,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Corner point</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="pathpoint-merge">
       <iconText>Merge points</iconText>
@@ -132,7 +121,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Merge points</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="pathpoint-join">
       <iconText>Join with segment</iconText>
@@ -143,7 +131,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Join with segment</text>
-      <defaultShortcut>J</defaultShortcut>
     </Action>
     <Action name="pathpoint-smooth">
       <iconText>Smooth point</iconText>
@@ -154,7 +141,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Smooth point</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
   </Actions>
 </ActionCollection>

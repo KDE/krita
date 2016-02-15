@@ -28,6 +28,8 @@
 #include <KoGenStyle.h>
 #include <KoXmlNS.h>
 #include <KoUnit.h>
+#include <KoOdfStylesReader.h>
+#include <KoXmlReader.h>
 
 #include <FlakeDebug.h>
 

@@ -21,8 +21,8 @@
 
 #include "KoGradientEditWidget.h"
 
-#include <KoAbstractGradient.h>
-#include <KoStopGradient.h>
+#include <resources/KoAbstractGradient.h>
+#include <resources/KoStopGradient.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
 #include <KoSliderCombo.h>

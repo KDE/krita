@@ -1,9 +1,5 @@
 project(vectorshape)
 
-add_definitions(-DTRANSLATION_DOMAIN=\"krita_shape_vector\")
-
-include_directories(${KOWIDGETS_INCLUDES} ${VECTORIMAGE_INCLUDES})
-
 set ( VectorShape_SRCS
     VectorShapePlugin.cpp
     VectorShape.cpp

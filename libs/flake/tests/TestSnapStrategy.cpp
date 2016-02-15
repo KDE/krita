@@ -25,6 +25,7 @@
 #include "KoShapeBasedDocumentBase.h"
 #include "MockShapes.h"
 #include "KoPathPoint.h"
+#include "KoViewConverter.h"
 
 //#include <PointProperties.h>
 #include <KoSnapData.h>

@@ -25,6 +25,7 @@
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
 #include <QWidget>
+#include <QTimer>
 
 #include <KoBookmarkManager.h>
 #include <KoTextRangeManager.h>

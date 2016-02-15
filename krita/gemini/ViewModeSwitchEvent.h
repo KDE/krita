@@ -23,11 +23,11 @@
 #include <QEvent>
 #include <QPointF>
 #include <KoColor.h>
-#include <KoAbstractGradient.h>
+#include <resources/KoAbstractGradient.h>
 #include <kis_node.h>
-#include <KoPattern.h>
+#include <resources/KoPattern.h>
 #include <KoGridData.h>
-#include <kis_paintop_preset.h>
+#include <brushengine/kis_paintop_preset.h>
 #include <kis_smoothing_options.h>
 
 struct ViewModeSynchronisationObject {

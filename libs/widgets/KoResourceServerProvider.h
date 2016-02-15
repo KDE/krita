@@ -29,9 +29,9 @@
 #include <WidgetsDebug.h>
 
 #include "KoResourceServer.h"
-#include "KoPattern.h"
-#include "KoAbstractGradient.h"
-#include "KoColorSet.h"
+#include <resources/KoPattern.h>
+#include <resources/KoAbstractGradient.h>
+#include <resources/KoColorSet.h>
 
 /**
  * KoResourceLoaderThread allows threaded loading of the resources of a resource server
@@ -47,6 +47,7 @@ public:
      */
     explicit KoResourceLoaderThread(KoResourceServerBase *server);
     ~KoResourceLoaderThread();
+    void loadSynchronously();
 public Q_SLOTS:
     /**
      * Checks whether the thread has finished loading and waits

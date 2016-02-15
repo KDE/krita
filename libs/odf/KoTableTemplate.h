@@ -20,7 +20,6 @@
 #define KOTABLETEMPLATE_H
 
 #include "KoStyle.h"
-#include "KoCellStyle.h"
 
 #include <QMap>
 

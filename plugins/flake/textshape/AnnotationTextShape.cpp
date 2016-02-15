@@ -35,6 +35,7 @@
 #include <QPainter>
 #include <QPen>
 #include <QTextLayout>
+#include <QDate>
 
 #include <QDebug>
 

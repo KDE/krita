@@ -11,7 +11,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>&amp;Raise</text>
-      <defaultShortcut>Ctrl+]</defaultShortcut>
     </Action>
     <Action name="object_align_horizontal_right">
       <iconText>Align Right</iconText>
@@ -22,7 +21,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Align Right</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="object_ungroup">
       <iconText>Ungroup</iconText>
@@ -33,7 +31,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Ungroup</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="object_order_back">
       <iconText>Send to Back</iconText>
@@ -44,7 +41,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Send to &amp;Back</text>
-      <defaultShortcut>Ctrl+Shift+[</defaultShortcut>
     </Action>
     <Action name="object_order_front">
       <iconText>Bring to Front</iconText>
@@ -55,7 +51,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Bring to &amp;Front</text>
-      <defaultShortcut>Ctrl+Shift+]</defaultShortcut>
     </Action>
     <Action name="object_align_vertical_center">
       <iconText>Vertically Center</iconText>
@@ -66,7 +61,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Vertically Center</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="object_group">
       <iconText>Group</iconText>
@@ -77,7 +71,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Group</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="object_align_horizontal_left">
       <iconText>Align Left</iconText>
@@ -88,7 +81,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Align Left</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="object_align_vertical_top">
       <iconText>Align Top</iconText>
@@ -99,7 +91,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Align Top</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="object_align_horizontal_center">
       <iconText>Horizontally Center</iconText>
@@ -110,7 +101,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Horizontally Center</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
     <Action name="object_order_lower">
       <iconText>Lower</iconText>
@@ -121,7 +111,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>&amp;Lower</text>
-      <defaultShortcut>Ctrl+[</defaultShortcut>
     </Action>
     <Action name="object_align_vertical_bottom">
       <iconText>Align Bottom</iconText>
@@ -132,7 +121,6 @@
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
       <text>Align Bottom</text>
-      <defaultShortcut></defaultShortcut>
     </Action>
   </Actions>
 </ActionCollection>

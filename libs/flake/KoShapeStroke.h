@@ -24,7 +24,6 @@
 #ifndef KOSHAPESTROKE_H
 #define KOSHAPESTROKE_H
 
-#include "KoInsets.h"
 #include "KoShapeStrokeModel.h"
 
 #include "kritaflake_export.h"
@@ -37,6 +36,7 @@ class KoShape;
 class QPainter;
 class QBrush;
 class KoViewConverter;
+struct KoInsets;
 
 /**
  * A border for shapes that draws a single line around the object.

@@ -9,7 +9,6 @@
       <toolTip>Insert footnote with auto number</toolTip>
       <iconText>Insert footnote with auto number</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -20,7 +19,6 @@
       <toolTip>Insert a custom Table of Contents into the document.</toolTip>
       <iconText>Insert Custom</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -31,7 +29,6 @@
       <toolTip>Insert Labeled Footnote</toolTip>
       <iconText>Insert Labeled Footnote</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -42,7 +39,6 @@
       <toolTip></toolTip>
       <iconText></iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -53,7 +49,6 @@
       <toolTip>Settings</toolTip>
       <iconText>Settings</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -64,7 +59,6 @@
       <toolTip>Change writing direction</toolTip>
       <iconText>Change text direction</iconText>
       <shortcut>Ctrl+Shift+D</shortcut>
-      <defaultShortcut>Ctrl+Shift+D</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -75,7 +69,6 @@
       <toolTip>Insert Paragraph between sections</toolTip>
       <iconText>Insert Paragraph between sections</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -86,7 +79,6 @@
       <toolTip>Repaint</toolTip>
       <iconText>Repaint</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -97,7 +89,6 @@
       <toolTip>Insert a weblink or link to a bookmark.</toolTip>
       <iconText>Insert Link</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -108,7 +99,6 @@
       <toolTip>Manage your Bookmarks. Check where are they pointing to, Delete or Rename.</toolTip>
       <iconText>Manage Bookmarks</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -119,7 +109,6 @@
       <toolTip>Change attributes of styles</toolTip>
       <iconText>Style Manager</iconText>
       <shortcut>Ctrl+Alt+S</shortcut>
-      <defaultShortcut>Ctrl+Alt+S</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -130,7 +119,6 @@
       <toolTip>Change character size, font, boldface, italics etc.</toolTip>
       <iconText>Font</iconText>
       <shortcut>Ctrl+Alt+F</shortcut>
-      <defaultShortcut>Ctrl+Alt+F</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -141,7 +129,6 @@
       <toolTip>Font Size</toolTip>
       <iconText>Font Size</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -152,7 +139,6 @@
       <toolTip></toolTip>
       <iconText></iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -163,7 +149,6 @@
       <toolTip>Align Block</toolTip>
       <iconText>Align Block</iconText>
       <shortcut>Ctrl+Alt+R</shortcut>
-      <defaultShortcut>Ctrl+Alt+R</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -174,7 +159,6 @@
       <toolTip>Insert a bibliography into the document.</toolTip>
       <iconText>Insert Bibliography</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -185,7 +169,6 @@
       <toolTip>Insert endnote with auto number</toolTip>
       <iconText>Insert endnote with auto number</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -196,7 +179,6 @@
       <toolTip>Settings</toolTip>
       <iconText>Settings</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -207,7 +189,6 @@
       <toolTip>Display a pop up that hosts the options to add new Bookmark or handle existing Bookmarks</toolTip>
       <iconText>Bookmarks</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -218,7 +199,6 @@
       <toolTip>Numbered list</toolTip>
       <iconText>Numbered list</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -229,7 +209,6 @@
       <toolTip>Subscript</toolTip>
       <iconText>Subscript</iconText>
       <shortcut>Ctrl+Shift+B</shortcut>
-      <defaultShortcut>Ctrl+Shift+B</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -240,7 +219,6 @@
       <toolTip>Decrease Font Size</toolTip>
       <iconText>Decrease Font Size</iconText>
       <shortcut>Ctrl+&lt;</shortcut>
-      <defaultShortcut>Ctrl+&lt;</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -251,7 +229,6 @@
       <toolTip>Insert a citation into the document.</toolTip>
       <iconText>Insert Citation</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -262,7 +239,6 @@
       <toolTip>Configure current section</toolTip>
       <iconText>Configure current section</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -273,7 +249,6 @@
       <toolTip>Insert Index</toolTip>
       <iconText>Insert Index</iconText>
       <shortcut>Ctrl+T</shortcut>
-      <defaultShortcut>Ctrl+T</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -284,7 +259,6 @@
       <toolTip>Italic</toolTip>
       <iconText>Italic</iconText>
       <shortcut>Ctrl+I</shortcut>
-      <defaultShortcut>Ctrl+I</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -295,7 +269,6 @@
       <toolTip>Strikethrough</toolTip>
       <iconText>Strikethrough</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -306,7 +279,6 @@
       <toolTip>Insert a custom Bibliography into the document.</toolTip>
       <iconText>Insert Custom Bibliography</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -317,7 +289,6 @@
       <toolTip>Styles Debug</toolTip>
       <iconText>Styles Debug</iconText>
       <shortcut>Ctrl+Alt+Shift+S</shortcut>
-      <defaultShortcut>Ctrl+Alt+Shift+S</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -328,7 +299,6 @@
       <toolTip>Bullet list</toolTip>
       <iconText>Bullet list</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -339,7 +309,6 @@
       <toolTip>Underline</toolTip>
       <iconText>Underline</iconText>
       <shortcut>Ctrl+U</shortcut>
-      <defaultShortcut>Ctrl+U</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -350,7 +319,6 @@
       <toolTip>Align Center</toolTip>
       <iconText>Align Center</iconText>
       <shortcut>Ctrl+Alt+C</shortcut>
-      <defaultShortcut>Ctrl+Alt+C</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -361,7 +329,6 @@
       <toolTip>Shrink To Fit</toolTip>
       <iconText>Shrink To Fit</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -372,7 +339,6 @@
       <toolTip>Select All</toolTip>
       <iconText>Select All</iconText>
       <shortcut>Ctrl+A</shortcut>
-      <defaultShortcut>Ctrl+A</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -383,7 +349,6 @@
       <toolTip>Increase Indent</toolTip>
       <iconText>Increase Indent</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -394,7 +359,6 @@
       <toolTip>Insert a Table of Contents into the document.</toolTip>
       <iconText>Insert</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -405,7 +369,6 @@
       <toolTip>Paragraph Debug</toolTip>
       <iconText>Paragraph Debug</iconText>
       <shortcut>Ctrl+Alt+Shift+P</shortcut>
-      <defaultShortcut>Ctrl+Alt+Shift+P</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -416,7 +379,6 @@
       <toolTip>Insert Labeled Endnote</toolTip>
       <iconText>Insert Labeled Endnote</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -427,7 +389,6 @@
       <toolTip>Change paragraph margins, text flow, borders, bullets, numbering etc.</toolTip>
       <iconText>Paragraph</iconText>
       <shortcut>Ctrl+Alt+P</shortcut>
-      <defaultShortcut>Ctrl+Alt+P</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -438,7 +399,6 @@
       <toolTip>Insert Non-Breaking Space</toolTip>
       <iconText>Insert Non-Breaking Space</iconText>
       <shortcut>Ctrl+Space</shortcut>
-      <defaultShortcut>Ctrl+Space</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -449,7 +409,6 @@
       <toolTip>Insert Soft Hyphen</toolTip>
       <iconText>Insert Soft Hyphen</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -460,7 +419,6 @@
       <toolTip>Align Right</toolTip>
       <iconText>Align Right</iconText>
       <shortcut>Ctrl+Alt+R</shortcut>
-      <defaultShortcut>Ctrl+Alt+R</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -471,7 +429,6 @@
       <toolTip>Insert Non-Breaking Hyphen</toolTip>
       <iconText>Insert Non-Breaking Hyphen</iconText>
       <shortcut>Ctrl+Shift+-</shortcut>
-      <defaultShortcut>Ctrl+Shift+-</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -482,7 +439,6 @@
       <toolTip>Configure the Table of Contents</toolTip>
       <iconText>Configure</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -493,7 +449,6 @@
       <toolTip>Insert one or more symbols or characters not found on the keyboard</toolTip>
       <iconText>Special Character</iconText>
       <shortcut>Alt+Shift+C</shortcut>
-      <defaultShortcut>Alt+Shift+C</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -504,7 +459,6 @@
       <toolTip>Bold</toolTip>
       <iconText>Bold</iconText>
       <shortcut>Ctrl+B</shortcut>
-      <defaultShortcut>Ctrl+B</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -515,7 +469,6 @@
       <toolTip>Superscript</toolTip>
       <iconText>Superscript</iconText>
       <shortcut>Ctrl+Shift+P</shortcut>
-      <defaultShortcut>Ctrl+Shift+P</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -526,7 +479,6 @@
       <toolTip>Configure the bibliography</toolTip>
       <iconText>Configure</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -537,7 +489,6 @@
       <toolTip>Insert new section</toolTip>
       <iconText>Insert new section</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -548,7 +499,6 @@
       <toolTip>Decrease Indent</toolTip>
       <iconText>Decrease Indent</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -559,7 +509,6 @@
       <toolTip>Increase Font Size</toolTip>
       <iconText>Increase Font Size</iconText>
       <shortcut>Ctrl+></shortcut>
-      <defaultShortcut>Ctrl+></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -570,7 +519,6 @@
       <toolTip>Grow To Fit Height</toolTip>
       <iconText>Grow To Fit Height</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -581,7 +529,6 @@
       <toolTip>Align Left</toolTip>
       <iconText>Align Left</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -592,7 +539,6 @@
       <toolTip>Insert a Bookmark. This is useful to create links that point to areas within the document</toolTip>
       <iconText>Add Bookmark</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -603,7 +549,6 @@
       <toolTip>Variable</toolTip>
       <iconText>Variable</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -614,7 +559,6 @@
       <toolTip>Grow To Fit Width</toolTip>
       <iconText>Grow To Fit Width</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -625,7 +569,6 @@
       <toolTip>Font Family</toolTip>
       <iconText>Font Family</iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -636,7 +579,6 @@
       <toolTip>Insert Comment</toolTip>
       <iconText>Insert Comment</iconText>
       <shortcut>Ctrl+Shift+C</shortcut>
-      <defaultShortcut>Ctrl+Shift+C</defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -647,7 +589,6 @@
       <toolTip></toolTip>
       <iconText></iconText>
       <shortcut></shortcut>
-      <defaultShortcut></defaultShortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>

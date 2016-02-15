@@ -51,6 +51,7 @@
 #include "TextDebug.h"
 
 #include <QTextTable>
+#include <QBuffer>
 
 // A convenience function to get a listId from a list-format
 static KoListStyle::ListIdType ListId(const QTextListFormat &format)

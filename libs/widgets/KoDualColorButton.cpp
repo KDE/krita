@@ -26,7 +26,6 @@
 
 #include <QColorDialog>
 
-#include <QBitmap>
 #include <QBrush>
 #include <QDrag>
 #include <QDragEnterEvent>
@@ -48,17 +47,35 @@ class Q_DECL_HIDDEN KoDualColorButton::Private
 
         , displayRenderer(_displayRenderer)
     {
-        arrowBitmap = QBitmap::fromData( QSize(dcolorarrow_width, dcolorarrow_height),
-                                       (const unsigned char *)dcolorarrow_bits, QImage::Format_MonoLSB );
-        arrowBitmap.setMask( arrowBitmap );
+        updateArrows();
         resetPixmap = QPixmap( (const char **)dcolorreset_xpm );
 
         popDialog = true;
     }
 
+    void updateArrows() {
+        arrowBitmap = QPixmap(12,12);
+        arrowBitmap.fill(Qt::transparent);
+
+        QPainter p(&arrowBitmap);
+        p.setPen(dialogParent->palette().foreground().color());
+
+        // arrow pointing left
+        p.drawLine(0, 3, 7, 3);
+        p.drawLine(1, 2, 1, 4);
+        p.drawLine(2, 1, 2, 5);
+        p.drawLine(3, 0, 3, 6);
+
+        // arrow pointing down
+        p.drawLine(8, 4, 8, 11);
+        p.drawLine(5, 8, 11, 8);
+        p.drawLine(6, 9, 10, 9);
+        p.drawLine(7, 10, 9, 10);
+    }
+
     QWidget* dialogParent;
 
-    QBitmap arrowBitmap;
+    QPixmap arrowBitmap;
     QPixmap resetPixmap;
     bool dragFlag, miniCtlFlag;
     KoColor foregroundColor;
@@ -168,8 +185,8 @@ void KoDualColorButton::paintEvent(QPaintEvent *)
 
   painter.setPen( palette().color( QPalette::Shadow ) );
 
-  painter.drawPixmap( foregroundRect.right() + 1, 0, d->arrowBitmap );
-  painter.drawPixmap( 0, foregroundRect.bottom() + 1, d->resetPixmap );
+  painter.drawPixmap( foregroundRect.right() + 2, 1, d->arrowBitmap );
+  painter.drawPixmap( 1, foregroundRect.bottom() + 2, d->resetPixmap );
 }
 
 void KoDualColorButton::dragEnterEvent( QDragEnterEvent *event )
@@ -303,4 +320,17 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
     }
 
     repaint();
+}
+
+void KoDualColorButton::changeEvent(QEvent *event)
+{
+    QWidget::changeEvent(event);
+
+    switch (event->type()) {
+    case QEvent::StyleChange:
+    case QEvent::PaletteChange:
+        d->updateArrows();
+    default:
+        break;
+    }
 }

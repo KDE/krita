@@ -1,6 +1,3 @@
-include_directories(${TEXTLAYOUT_INCLUDES})
-
-########### next target ###############
 set(textlayout_LIB_SRCS
     KoTextLayoutCellHelper.cpp
     KoTextLayoutArea.cpp

@@ -34,7 +34,7 @@
 
 #include <QTemporaryFile>
 #include <QDomDocument>
-#include "KoResource.h"
+#include "resources/KoResource.h"
 #include "KoResourceServerPolicies.h"
 #include "KoResourceServerObserver.h"
 #include "KoResourceTagStore.h"

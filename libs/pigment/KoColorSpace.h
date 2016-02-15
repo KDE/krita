@@ -101,6 +101,23 @@ protected:
     virtual ~KoColorSpace();
 
 public:
+    //========== Gamut and other basic info ===================================//
+    /*
+     * @returns QPolygonF with 5*channel samples converted to xyY.
+     * maybe convert to 3d space in future?
+     */
+    QPolygonF gamutXYY() const;
+    
+    /*
+     * @returns a polygon with 5 samples per channel converted to xyY, but unlike
+     * gamutxyY it focuses on the luminance. This then can be used to visualise
+     * the approximate trc of a given colorspace.
+     */
+    QPolygonF estimatedTRCXYY() const;
+    
+    QVector <qreal> colorants() const;
+    QVector <qreal> lumaCoefficients() const;
+    
     //========== Channels =====================================================//
 
     /// Return a list describing all the channels this color model has. The order
@@ -476,6 +493,23 @@ public:
      */
     virtual quint8 intensity8(const quint8 * src) const = 0;
 
+    /*
+     *increase luminosity by step
+     */
+    virtual void increaseLuminosity(quint8 * pixel, qreal step) const;
+    virtual void decreaseLuminosity(quint8 * pixel, qreal step) const;
+    virtual void increaseSaturation(quint8 * pixel, qreal step) const;
+    virtual void decreaseSaturation(quint8 * pixel, qreal step) const;
+    virtual void increaseHue(quint8 * pixel, qreal step) const;
+    virtual void decreaseHue(quint8 * pixel, qreal step) const;
+    virtual void increaseRed(quint8 * pixel, qreal step) const;
+    virtual void increaseGreen(quint8 * pixel, qreal step) const;
+    virtual void increaseBlue(quint8 * pixel, qreal step) const;
+    virtual void increaseYellow(quint8 * pixel, qreal step) const;
+    virtual void toHSY(QVector <double> channelValues, qreal *hue, qreal *sat, qreal *luma) const = 0;
+    virtual QVector <double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const = 0;
+    virtual void toYUV(QVector <double> channelValues, qreal *y, qreal *u, qreal *v) const = 0;
+    virtual QVector <double> fromYUV(qreal *y, qreal *u, qreal *v) const = 0;
     /**
      * Compose two arrays of pixels together. If source and target
      * are not the same color model, the source pixels will be

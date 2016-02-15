@@ -22,8 +22,9 @@
 #define KOSUBPATHREMOVECOMMAND_H
 
 #include <kundo2command.h>
-#include "kritaflake_export.h"
+#include <QList>
 #include "KoPathShape.h"
+#include "kritaflake_export.h"
 
 /// The undo / redo command for removing a subpath
 class KRITAFLAKE_EXPORT KoSubpathRemoveCommand : public KUndo2Command

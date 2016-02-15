@@ -24,11 +24,11 @@
 #include "KoResourceItemView.h"
 #include "KoResourceModel.h"
 #include "KoResourceItemDelegate.h"
-#include "KoResource.h"
+#include <resources/KoResource.h>
 #include "KoCheckerBoardPainter.h"
 #include "KoShapeBackground.h"
-#include <KoAbstractGradient.h>
-#include <KoPattern.h>
+#include <resources/KoAbstractGradient.h>
+#include <resources/KoPattern.h>
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
 #include <KoImageCollection.h>

@@ -21,8 +21,6 @@
 #ifndef SVGGRADIENTHELPER_H
 #define SVGGRADIENTHELPER_H
 
-#include <FlakeDebug.h>
-
 #include <QTransform>
 
 class QGradient;

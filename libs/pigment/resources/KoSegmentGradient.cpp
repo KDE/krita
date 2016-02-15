@@ -20,7 +20,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "KoSegmentGradient.h"
+#include <resources/KoSegmentGradient.h>
 
 #include <cfloat>
 #include <cmath>
@@ -490,18 +490,41 @@ KoGradientSegment::RGBColorInterpolationStrategy *KoGradientSegment::RGBColorInt
 
 void KoGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor& dst, qreal t, const KoColor& start, const KoColor& end) const
 {
+    
+    KoColor startDummy, endDummy;
+    //hack to get a color space with the bitdepth of the gradients(8bit), but with the colour profile of the image//
+    const KoColorSpace* mixSpace = KoColorSpaceRegistry::instance()->rgb8(dst.colorSpace()->profile());
+    //convert to the right colorspace for the start and end if we have our mixSpace.
+    if (mixSpace){
+        startDummy = KoColor(start, mixSpace);
+        endDummy = KoColor(end, mixSpace);
+    } else {
+        startDummy = start;
+        endDummy = end;
+    }
+    
     m_start.fromKoColor(start);
     m_end.fromKoColor(end);
-
+    
     const quint8 *colors[2];
-    colors[0] = start.data();
-    colors[1] = end.data();
+    colors[0] = startDummy.data();
+    colors[1] = endDummy.data();
 
     qint16 colorWeights[2];
     colorWeights[0] = static_cast<quint8>((1.0 - t) * 255 + 0.5);
     colorWeights[1] = 255 - colorWeights[0];
 
-    m_colorSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
+    //check if our mixspace exists, it doesn't at startup.
+    if (mixSpace){
+        if ( !(*buffer.colorSpace() == *mixSpace)) {
+            buffer = KoColor(mixSpace);
+            }
+        mixSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
+    }
+    else {
+        buffer = KoColor(m_colorSpace);
+        m_colorSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
+    }
 
     dst.fromKoColor(buffer);
 }

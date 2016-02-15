@@ -18,6 +18,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="file_import_file"/>
       <Action name="file_export_file"/>
       <Action name="file_export_pdf"/>
+      <Action name="file_import_animation"/>
       <Action name="file_export_animation"/>
       <Separator/>
       <Action name="save_incremental_version"/>
@@ -57,7 +58,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
     </Menu>
     <Menu name="view">
       <text>&amp;View</text>
-      <Action name="view_show_just_the_canvas"/>
+      <Action name="view_show_canvas_only"/>
       <Action name="fullscreen"/>
       <Action name="wrap_around_mode"/>
       <Action name="level_of_detail_mode"/>
@@ -69,6 +70,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
           <Action name="zoom_to_100pct" />
           <Action name="rotate_canvas_right" />
           <Action name="rotate_canvas_left" />
+          <Action name="reset_canvas_rotation" />
           <!-- TODO: Something is not right with the way zoom actions are hooked up. These are in the KoZoomController.
                It seems they are not being properly placed in the view manager since the MDI changes were implemented
           -->
@@ -164,6 +166,19 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
         <Action name="convert_to_selection_mask"/>
       </Menu>
       <Separator/>
+      <Menu name="LayerSelect">
+        <text>&amp;Select</text>
+        <Action name="select_all_layers"/>
+        <Action name="select_visible_layers"/>
+        <Action name="select_invisible_layers"/>
+        <Action name="select_locked_layers"/>
+        <Action name="select_unlocked_layers"/>
+      </Menu>
+      <Separator/>
+        <Action name="cut_layer_clipboard"/>
+        <Action name="copy_layer_clipboard"/>
+        <Action name="paste_layer_from_clipboard"/>
+      <Separator/>
       <Menu name="LayerSplitAlpha">
         <text>S&amp;plit Alpha</text>
         <Action name="split_alpha_into_mask"/>
@@ -197,7 +212,11 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="merge_all_shape_layers"/>
       <Action name="flatten_image"/>
       <Action name="merge_selected_layers"/>
+      <Separator/>
       <Action name="layer_style"/>
+      <Separator/>
+      <Action name="create_quick_group"/>
+      <Action name="create_quick_clipping_group"/>
     </Menu>
     <Menu name="Select">
       <text>&amp;Select</text>

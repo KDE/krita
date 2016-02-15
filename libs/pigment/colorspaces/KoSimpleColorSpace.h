@@ -20,12 +20,10 @@
 #define KOSIMPLECOLORSPACE_H
 
 #include <QColor>
-#include <QBitArray>
 
 #include "DebugPigment.h"
 
 #include "KoColorSpaceAbstract.h"
-#include "KoColorSpaceTraits.h"
 #include "KoSimpleColorSpaceFactory.h"
 #include "KoColorModelStandardIds.h"
 #include "colorprofiles/KoDummyColorProfile.h"
@@ -124,6 +122,24 @@ public:
 
     virtual void colorFromXML(quint8* , const QDomElement&) const {
         warnPigment << i18n("Undefined operation in the %1 color space", m_name);
+    }
+    virtual void toHSY(QVector <double>, qreal *, qreal *, qreal *) const {
+        warnPigment << i18n("Undefined operation in the %1 color space", m_name);
+    }
+    virtual QVector <double> fromHSY(qreal *, qreal *, qreal *) const {
+        warnPigment << i18n("Undefined operation in the %1 color space", m_name);
+        QVector <double> channelValues (2);
+        channelValues.fill(0.0);
+        return channelValues;
+    }
+    virtual void toYUV(QVector <double>, qreal *, qreal *, qreal *) const {
+        warnPigment << i18n("Undefined operation in the %1 color space", m_name);
+    }
+    virtual QVector <double> fromYUV(qreal *, qreal *, qreal *) const {
+        warnPigment << i18n("Undefined operation in the %1 color space", m_name);
+        QVector <double> channelValues (2);
+        channelValues.fill(0.0);
+        return channelValues;
     }
 
     virtual void toLabA16(const quint8* src, quint8* dst, quint32 nPixels) const {

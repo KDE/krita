@@ -44,7 +44,7 @@ public:
             /// creates an invalid range of 0,0
             DoubleRange(void) : minVal(0), maxVal(0) { }
             /// creates
-            DoubleRange(double _minVal, double _maxVal) : minVal(_minVal), maxVal(_maxVal) { Q_ASSERT(minVal <= maxVal); }
+            DoubleRange(qreal _minVal, qreal _maxVal) : minVal(_minVal), maxVal(_maxVal) { Q_ASSERT(minVal <= maxVal); }
             /// true if this range is usable
             bool isValid(void) const { return minVal < maxVal; }
     };

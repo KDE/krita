@@ -38,7 +38,7 @@
  </Menu>
 
  <Menu name="View"><text>&amp;View</text>
-  <Action name="view_show_just_the_canvas"/>
+  <Action name="view_show_canvas_only"/>
   <Action name="view_fullscreen"/>
   <Action name="mirror_canvas"/>
   <Action name="wrap_around_mode"/>

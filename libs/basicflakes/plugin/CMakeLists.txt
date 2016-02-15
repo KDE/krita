@@ -1,10 +1,5 @@
 project( basicflakesplugin )
 
-include_directories( ${FLAKE_INCLUDES}  ${BASICFLAKES_INCLUDES})
-
-#add_subdirectory(pics)
-
-
 ########### Basickritaflakes plugin library ###############
 
 set ( basicflakesplugin_SRCS

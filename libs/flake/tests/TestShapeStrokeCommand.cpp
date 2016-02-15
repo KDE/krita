@@ -22,6 +22,7 @@
 #include "KoShapeStrokeModel.h"
 #include "KoShapeStroke.h"
 #include "KoShapeStrokeCommand.h"
+#include <KoInsets.h>
 
 #include <QTest>
 

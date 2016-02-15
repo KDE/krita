@@ -24,7 +24,7 @@
 #include <kactioncollection.h>
 #include <WidgetsDebug.h>
 
-#include "KoResource.h"
+#include <resources/KoResource.h>
 #include "KoResourceServerProvider.h"
 
 void KoResourceTaggingTest::testInitialization()

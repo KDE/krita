@@ -20,8 +20,9 @@
 #ifndef KOSNAPDATA_H
 #define KOSNAPDATA_H
 
-#include <KoPathSegment.h>
 #include <kritaflake_export.h>
+
+#include "KoPathSegment.h"
 
 /**
  * This class is used to provide additional data to the snap guide.

@@ -40,7 +40,7 @@
 #include <klocalizedstring.h>
 #include <WidgetsDebug.h>
 
-#include <KoColorSet.h>
+#include <resources/KoColorSet.h>
 
 class KoColorPatch;
 

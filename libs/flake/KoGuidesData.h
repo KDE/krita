@@ -23,7 +23,7 @@
 
 #include "kritaflake_export.h"
 #include <QList>
-#include <Qt>
+#include <QtGlobal>
 #include "KoXmlReaderForward.h"
 
 class QPainter;

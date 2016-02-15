@@ -27,7 +27,7 @@
 #include <QPair>
 
 #include "kritaodf_export.h"
-#include <KoXmlReader.h>
+#include <KoXmlReaderForward.h>
 
 /**
  *  @brief This class implements a stack for the different styles of an object.

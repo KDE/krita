@@ -1,12 +1,5 @@
 project(calligradockers)
 
-add_definitions(-DTRANSLATION_DOMAIN=\"krita-dockers\")
-
-include_directories(
-     ${FLAKE_INCLUDES}
-     ${KOWIDGETS_INCLUDES}     
-)
-
 set(calligradockers_SRCS
 
     snapguidedocker/SnapGuideDocker.cpp

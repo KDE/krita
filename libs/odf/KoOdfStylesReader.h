@@ -24,7 +24,7 @@
 #include <QHash>
 #include <QList>
 
-#include <KoXmlReader.h>
+#include <KoXmlReaderForward.h>
 
 #include "kritaodf_export.h"
 #include "KoOdfNumberStyles.h"

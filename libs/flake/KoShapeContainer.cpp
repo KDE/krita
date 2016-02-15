@@ -23,6 +23,7 @@
 #include "KoShapeStrokeModel.h"
 #include "KoShapeContainerDefaultModel.h"
 #include "KoShapeSavingContext.h"
+#include "KoViewConverter.h"
 
 #include <QPointF>
 #include <QPainter>

@@ -24,9 +24,13 @@
  */
 
 #include "SvgParser.h"
-#include "SvgUtil.h"
-#include "SvgShape.h"
-#include "SvgGraphicContext.h"
+
+#include <cmath>
+
+#include <FlakeDebug.h>
+
+#include <QColor>
+
 #include <KoShape.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
@@ -47,9 +51,13 @@
 #include <KoClipPath.h>
 #include <KoXmlNS.h>
 
-#include <FlakeDebug.h>
-
-#include <QColor>
+#include "SvgUtil.h"
+#include "SvgShape.h"
+#include "SvgGraphicContext.h"
+#include "SvgPatternHelper.h"
+#include "SvgFilterHelper.h"
+#include "SvgGradientHelper.h"
+#include "SvgClipPathHelper.h"
 
 
 SvgParser::SvgParser(KoDocumentResourceManager *documentResourceManager)
@@ -605,15 +613,15 @@ void SvgParser::applyFillStyle(KoShape *shape)
                     qreal fx = refPoint.x() / tileSize.width();
                     qreal fy = refPoint.y() / tileSize.height();
                     if (fx < 0.0)
-                        fx = floor(fx);
+                        fx = std::floor(fx);
                     else if (fx > 1.0)
-                        fx = ceil(fx);
+                        fx = std::ceil(fx);
                     else
                         fx = 0.0;
                     if (fy < 0.0)
-                        fy = floor(fy);
+                        fy = std::floor(fy);
                     else if (fx > 1.0)
-                        fy = ceil(fy);
+                        fy = std::ceil(fy);
                     else
                         fy = 0.0;
                     qreal offsetX = 100.0 * (refPoint.x() - fx * tileSize.width()) / tileSize.width();

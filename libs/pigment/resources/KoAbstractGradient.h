@@ -22,8 +22,11 @@
 #include <QMetaType>
 
 #include "KoColorSpace.h"
-#include "KoResource.h"
+#include <resources/KoResource.h>
 #include <kritapigment_export.h>
+
+class KoAbstractGradient;
+typedef QSharedPointer<KoAbstractGradient> KoAbstractGradientSP;
 
 class KoColor;
 

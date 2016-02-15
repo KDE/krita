@@ -74,29 +74,29 @@ set(kritasketch_kritaintegrationmodels_SRCS
     models/ColorProfileModel.cpp
 )
 
-
+set(KRITA_COLORSELECTORNG_SOURCE_DIR "${CMAKE_SOURCE_DIR}/plugins/extensions/dockers/advancedcolorselector")
 set(KRITA_COLORSELECTORNG_SOURCES
-../plugins/extensions/dockers/advancedcolorselector/kis_my_paint_shade_selector.cpp
-../plugins/extensions/dockers/advancedcolorselector/kis_color_patches.cpp
-../plugins/extensions/dockers/advancedcolorselector/kis_color_history.cpp
-../plugins/extensions/dockers/advancedcolorselector/kis_color_selector.cpp
-../plugins/extensions/dockers/advancedcolorselector/kis_common_colors.cpp
-../plugins/extensions/dockers/advancedcolorselector/kis_common_colors_recalculation_runner.cpp
-../plugins/extensions/dockers/advancedcolorselector/kis_minimal_shade_selector.cpp
-../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_base_proxy.cpp
-../plugins/extensions/dockers/advancedcolorselector/kis_shade_selector_line.cpp
-../plugins/extensions/dockers/advancedcolorselector/kis_shade_selector_line_editor.cpp
-../plugins/extensions/dockers/advancedcolorselector/kis_shade_selector_line_combo_box.cpp
-../plugins/extensions/dockers/advancedcolorselector/kis_shade_selector_line_combo_box_popup.cpp
-../plugins/extensions/dockers/advancedcolorselector/kis_shade_selector_lines_settings.cpp
-../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_container.cpp
-../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_base.cpp
-../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_component.cpp
-../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_ring.cpp
-../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_triangle.cpp
-../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_simple.cpp
-../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_wheel.cpp
-../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_combo_box.cpp
+${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_my_paint_shade_selector.cpp
+${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_color_patches.cpp
+${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_color_history.cpp
+${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_color_selector.cpp
+${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_common_colors.cpp
+${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_common_colors_recalculation_runner.cpp
+${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_minimal_shade_selector.cpp
+${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_color_selector_base_proxy.cpp
+${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_shade_selector_line.cpp
+${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_shade_selector_line_editor.cpp
+${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_shade_selector_line_combo_box.cpp
+${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_shade_selector_line_combo_box_popup.cpp
+${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_shade_selector_lines_settings.cpp
+${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_color_selector_container.cpp
+${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_color_selector_base.cpp
+${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_color_selector_component.cpp
+${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_color_selector_ring.cpp
+${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_color_selector_triangle.cpp
+${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_color_selector_simple.cpp
+${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_color_selector_wheel.cpp
+${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_color_selector_combo_box.cpp
 )
 
 

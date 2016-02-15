@@ -45,9 +45,9 @@
 
 #if defined Q_OS_WIN
 #include "stdlib.h"
-#include <ui/input/wintab/kis_tablet_support_win.h>
+#include <kis_tablet_support_win.h>
 #elif defined HAVE_X11
-#include <ui/input/wintab/kis_tablet_support_x11.h>
+#include <kis_tablet_support_x11.h>
 #endif
 
 

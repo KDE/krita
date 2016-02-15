@@ -1,0 +1,75 @@
+set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
+include_directories(
+    ${CMAKE_SOURCE_DIR}/krita/image/tiles3 
+    ${CMAKE_SOURCE_DIR}/sdk/tests
+    ${CMAKE_SOURCE_DIR}/libs/pigment
+    ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
+    ${EIGEN3_INCLUDE_DIR}
+    ${Boost_INCLUDE_DIRS}
+)
+
+
+set(LINK_VC_LIB)
+if(HAVE_VC)
+  include_directories(${Vc_INCLUDE_DIR})
+#  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
+  set(LINK_VC_LIB ${Vc_LIBRARIES})
+endif()
+
+macro_add_unittest_definitions()
+
+########### next target ###############
+
+set(kis_datamanager_benchmark_SRCS kis_datamanager_benchmark.cpp)
+set(kis_hiterator_benchmark_SRCS kis_hline_iterator_benchmark.cpp)
+set(kis_viterator_benchmark_SRCS kis_vline_iterator_benchmark.cpp)
+set(kis_random_iterator_benchmark_SRCS kis_random_iterator_benchmark.cpp)
+set(kis_projection_benchmark_SRCS kis_projection_benchmark.cpp)
+set(kis_bcontrast_benchmark_SRCS kis_bcontrast_benchmark.cpp)
+set(kis_blur_benchmark_SRCS kis_blur_benchmark.cpp)
+set(kis_level_filter_benchmark_SRCS kis_level_filter_benchmark.cpp)
+set(kis_painter_benchmark_SRCS kis_painter_benchmark.cpp)
+set(kis_stroke_benchmark_SRCS kis_stroke_benchmark.cpp)
+set(kis_fast_math_benchmark_SRCS kis_fast_math_benchmark.cpp)
+set(kis_floodfill_benchmark_SRCS kis_floodfill_benchmark.cpp)
+set(kis_gradient_benchmark_SRCS kis_gradient_benchmark.cpp)
+set(kis_mask_generator_benchmark_SRCS kis_mask_generator_benchmark.cpp)
+set(kis_low_memory_benchmark_SRCS kis_low_memory_benchmark.cpp)
+set(kis_filter_selections_benchmark_SRCS kis_filter_selections_benchmark.cpp)
+set(kis_composition_benchmark_SRCS kis_composition_benchmark.cpp)
+
+calligra_add_benchmark(KisDatamanagerBenchmark TESTNAME krita-benchmarks-KisDataManager ${kis_datamanager_benchmark_SRCS})
+calligra_add_benchmark(KisHLineIteratorBenchmark TESTNAME krita-benchmarks-KisHLineIterator ${kis_hiterator_benchmark_SRCS})
+calligra_add_benchmark(KisVLineIteratorBenchmark TESTNAME krita-benchmarks-KisVLineIterator ${kis_viterator_benchmark_SRCS})
+calligra_add_benchmark(KisRandomIteratorBenchmark TESTNAME krita-benchmarks-KisRandomIterator ${kis_random_iterator_benchmark_SRCS})
+calligra_add_benchmark(KisProjectionBenchmark TESTNAME krita-benchmarks-KisProjectionBenchmark ${kis_projection_benchmark_SRCS})
+calligra_add_benchmark(KisBContrastBenchmark TESTNAME krita-benchmarks-KisBContrastBenchmark ${kis_bcontrast_benchmark_SRCS})
+calligra_add_benchmark(KisBlurBenchmark TESTNAME krita-benchmarks-KisBlurBenchmark ${kis_blur_benchmark_SRCS})
+calligra_add_benchmark(KisLevelFilterBenchmark TESTNAME krita-benchmarks-KisLevelFilterBenchmark ${kis_level_filter_benchmark_SRCS})
+calligra_add_benchmark(KisPainterBenchmark TESTNAME krita-benchmarks-KisPainterBenchmark ${kis_painter_benchmark_SRCS})
+calligra_add_benchmark(KisStrokeBenchmark TESTNAME krita-benchmarks-KisStrokeBenchmark ${kis_stroke_benchmark_SRCS})
+calligra_add_benchmark(KisFastMathBenchmark TESTNAME krita-benchmarks-KisFastMath ${kis_fast_math_benchmark_SRCS})
+calligra_add_benchmark(KisFloodfillBenchmark TESTNAME krita-benchmarks-KisFloodFill ${kis_floodfill_benchmark_SRCS})
+calligra_add_benchmark(KisGradientBenchmark TESTNAME krita-benchmarks-KisGradientFill ${kis_gradient_benchmark_SRCS})
+calligra_add_benchmark(KisMaskGeneratorBenchmark TESTNAME krita-benchmarks-KisMaskGenerator ${kis_mask_generator_benchmark_SRCS})
+calligra_add_benchmark(KisLowMemoryBenchmark TESTNAME krita-benchmarks-KisLowMemory ${kis_low_memory_benchmark_SRCS})
+calligra_add_benchmark(KisFilterSelectionsBenchmark TESTNAME krita-image-KisFilterSelectionsBenchmark ${kis_filter_selections_benchmark_SRCS})
+calligra_add_benchmark(KisCompositionBenchmark TESTNAME krita-benchmarks-KisComposition ${kis_composition_benchmark_SRCS})
+
+target_link_libraries(KisDatamanagerBenchmark  kritaimage  Qt5::Test)
+target_link_libraries(KisHLineIteratorBenchmark  kritaimage  Qt5::Test)
+target_link_libraries(KisVLineIteratorBenchmark  kritaimage  Qt5::Test)
+target_link_libraries(KisRandomIteratorBenchmark  kritaimage  Qt5::Test)
+target_link_libraries(KisProjectionBenchmark  kritaimage  kritaui Qt5::Test)
+target_link_libraries(KisBContrastBenchmark  kritaimage  Qt5::Test)
+target_link_libraries(KisBlurBenchmark  kritaimage  Qt5::Test)
+target_link_libraries(KisLevelFilterBenchmark kritaimage  Qt5::Test)
+target_link_libraries(KisPainterBenchmark  kritaimage  Qt5::Test)
+target_link_libraries(KisStrokeBenchmark  kritaimage  Qt5::Test)
+target_link_libraries(KisFastMathBenchmark  kritaimage  Qt5::Test)
+target_link_libraries(KisFloodfillBenchmark  kritaimage  Qt5::Test)
+target_link_libraries(KisGradientBenchmark  kritaimage  Qt5::Test)
+target_link_libraries(KisLowMemoryBenchmark  kritaimage  Qt5::Test)
+target_link_libraries(KisFilterSelectionsBenchmark   kritaimage  Qt5::Test)
+target_link_libraries(KisCompositionBenchmark  kritaimage  Qt5::Test ${LINK_VC_LIB})
+target_link_libraries(KisMaskGeneratorBenchmark  kritaimage  Qt5::Test)

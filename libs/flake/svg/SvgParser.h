@@ -22,6 +22,12 @@
 #ifndef SVGPARSER_H
 #define SVGPARSER_H
 
+#include <KoXmlReader.h>
+
+#include <QMap>
+#include <QSizeF>
+#include <QRectF>
+
 #include "kritaflake_export.h"
 #include "SvgGradientHelper.h"
 #include "SvgPatternHelper.h"
@@ -30,13 +36,11 @@
 #include "SvgLoadingContext.h"
 #include "SvgStyleParser.h"
 
-#include <KoXmlReader.h>
-
-#include <QMap>
 
 class KoShape;
 class KoShapeGroup;
 class KoDocumentResourceManager;
+
 
 class KRITAFLAKE_EXPORT SvgParser
 {

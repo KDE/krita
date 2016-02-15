@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WdgMoveTool</class>
+ <widget class="QWidget" name="WdgMoveTool">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>246</width>
+    <height>130</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="grpSelectionMethod">
+     <property name="title">
+      <string>Selection Mode</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QRadioButton" name="radioSelectedLayer">
+        <property name="toolTip">
+         <string>Move the layer that you have currently selected in the layerbox with its masks. Shortcut: ctrl-click.</string>
+        </property>
+        <property name="text">
+         <string>Move current layer</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QRadioButton" name="radioFirstLayer">
+        <property name="toolTip">
+         <string>Move the first layer with visible content at the place where you click. This will also select that layer in the layerbox.</string>
+        </property>
+        <property name="text">
+         <string>Move layer with content</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QRadioButton" name="radioGroup">
+        <property name="toolTip">
+         <string>Move the group containing the first layer that contains visible content. Shortcut: ctrl-shift-click.</string>
+        </property>
+        <property name="text">
+         <string>Move the whole group</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QWidget" name="SpecialSpacer"/>
+   </item>
+   <item row="2" column="0">
+    <widget class="QGroupBox" name="grpMoveStep">
+     <property name="title">
+      <string>Shortcut Move Distance</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0">
+         <widget class="QDoubleSpinBox" name="spinMoveStep">
+           <property name="minimum">
+             <number>1</number>
+           </property>
+           <property name="maximum">
+             <number>100000</number>
+           </property>
+           <property name="value">
+             <number>1</number>
+           </property>
+           <property name="toolTip">
+             <string>Number of pixels to move after move shortcut keypress.</string>
+           </property>
+         </widget>
+       </item>
+      <item row="0" column="1">
+        <widget class="QComboBox" name="cmbUnit"/>
+      </item>
+      <item row="1" column="0">
+        <widget class="QDoubleSpinBox" name="spinMoveScale">
+          <property name="minimum">
+            <number>1</number>
+          </property>
+          <property name="maximum">
+            <number>1000</number>
+          </property>
+          <property name="value">
+            <number>10</number>
+          </property>
+          <property name="toolTip">
+            <string>When holding shift, move keyboard shortcuts scale up by this amount.</string>
+          </property>
+        </widget>
+      </item>
+      <item row="1" column="1">
+        <widget class="QLabel" name="scaleLabel">
+          <property name="text">
+            <string>Large Move Scale</string>
+          </property>
+        </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header location="global">kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

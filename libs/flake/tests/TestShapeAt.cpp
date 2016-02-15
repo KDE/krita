@@ -25,6 +25,7 @@
 #include <KoSelection.h>
 #include <KoShapeStroke.h>
 #include <KoShapeShadow.h>
+#include <KoInsets.h>
 
 #include <QTest>
 

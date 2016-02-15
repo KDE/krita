@@ -1,7 +1,5 @@
 add_subdirectory( tests )
 
-include_directories(${KOWIDGETS_INCLUDES})
-include_directories(${CMAKE_SOURCE_DIR}/libs/widgetutils)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 set(kritawidgets_LIB_SRCS

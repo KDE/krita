@@ -27,10 +27,10 @@
 #include <kis_node_manager.h>
 #include <kis_node.h>
 #include <kis_layer.h>
-#include <kis_paintop_preset.h>
-#include <kis_paintop_settings.h>
-#include <kis_paintop_registry.h>
-#include <kis_paintop_config_widget.h>
+#include <brushengine/kis_paintop_preset.h>
+#include <brushengine/kis_paintop_settings.h>
+#include <brushengine/kis_paintop_registry.h>
+#include <brushengine/kis_paintop_config_widget.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>
 #include <KoToolManager.h>

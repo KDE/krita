@@ -21,13 +21,17 @@ Otherwise you risk major confusion.
 Note: on all operating systems the entire procedure is done in a terminal window.
 
 1. git: https://git-scm.com/downloads. Make sure git is in your path
-2. cmake: https://cmake.org/download/. Make sure cmake is in your path.
+2. cmake 3.3.2: https://cmake.org/download/. Make sure cmake is in your path.
 3. Make sure you have a compiler:
     * Linux: gcc, minimum version 4.8
     * OSX: clang, you need to install xcode for this
     * Windows: MSVC 2015 Community Edition: https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx
+4. If you compile Qt on Windows, you will also need Python 2.7: https://www.python.org/download/releases/2.7/. Make sure to have python.exe in you path.
 
 == Setup your environment ==
+
+Windows Only:
+    When launching the commands from the console, run first "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\amd64\vcvars64.bat" in it, this way all the environment variables for the compiler will be ready.
 
 == Prepare your directory layout ==
 
@@ -114,7 +118,15 @@ When installing from source, you can use these example configure commands:
 
 * Windows
 
-    configure -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtdoc -skip qtenginio -skip qtgraphicaleffects -skip qtlocation -skip qtmultimedia -skip qtsensors -skip qtserialport -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtxmlpatterns -opensource -confirm-license -release -no-qml-debug -no-mtdev -no-openssl -no-libproxy -no-nis -no-dbus  -no-system-proxies -no-libproxy -opengl desktop -prefix %BUILDROOT%\i
+    To do a normal release build use:
+
+    configure -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtdoc -skip qtenginio -skip qtgraphicaleffects -skip qtlocation -skip qtmultimedia -skip qtsensors -skip qtserialport -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtxmlpatterns -no-sql-sqlite -nomake examples -nomake tools -no-compile-examples -no-dbus -no-iconv -no-angle -no-ssl -no-openssl -no-wmf-backend -no-qml-debug -no-libproxy -no-system-proxies -no-nis -no-icu -no-mtdev -opensource -confirm-license -release -opengl desktop -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg -prefix %BUILDROOT%\i
+
+    If a release with debug info for developing purposes is needed, add the -force-debug-info to the configure options above, so that the pdb files will be generated.
+
+    N.B.: if you don't have the Qt 5.6 pre-built binaries already installed, you will need to copy Qt5Core.dll, coming from those binaries inside the Qt build directory, under the path qtbase\bin, otherwise you'll get an error
+    about it missing when using jom and a more cryptic error with nmake. The same has to be done with Qt5Xml.dll, to be copied under qttools\bin.
+    Don't use the dlls coming from the QtCreator folder, they won't work.
 
 == Prepare the externals build ==
 
@@ -151,15 +163,6 @@ On all operating systems:
     cmake --build . --config RelWithDebInfo --target ext_eigen3
     cmake --build . --config RelWithDebInfo --target ext_exiv2
     cmake --build . --config RelWithDebInfo --target ext_fftw3
-
-Note for Windows:
-
-fftw3 is still broken, don't know why. Copy the bin, lib and include folders from 
-
-    \b\ext_fftw3\ext_fftw3-prefix\src\ext_fftw3
-
-manuall to BUILDROOT\i
-
     cmake --build . --config RelWithDebInfo --target ext_ilmbase
     cmake --build . --config RelWithDebInfo --target ext_jpeg
     cmake --build . --config RelWithDebInfo --target ext_lcms2
@@ -174,19 +177,11 @@ for the two utilities correctly, then try to build openexr again.
     install_name_tool -add_rpath $BUILD_ROOT/i/lib $BUILD_ROOT/b/ext_openexr/ext_openexr-prefix/src/ext_openexr-build/IlmImf/./b44ExpLogTable
     install_name_tool -add_rpath $BUILD_ROOT/i/lib $BUILD_ROOT/b/ext_openexr/ext_openexr-prefix/src/ext_openexr-build/IlmImf/./dwaLookups
 
-Note for Windows:
-
-With MSVC 2015, the boost library has a name that later on makes the libraries unfindable, so you need to copy them.
-
-    cd BUILDROOT\i\lib
-    copy boost_system-vc-mt-1_55.dll boost_system140-mt-1_55.ddl
-    copy boost_system-vc-mt-1_55.lib boost_system140-mt-1_55.lib
-
-
-On All operatting systems:
+On All operating systems:
 
     cmake --build . --config RelWithDebInfo --target ext_png
     cmake --build . --config RelWithDebInfo --target ext_tiff
+    cmake --build . --config RelWithDebInfo --target ext_gsl
     cmake --build . --config RelWithDebInfo --target ext_vc
     cmake --build . --config RelWithDebInfo --target ext_libraw
     cmake --build . --config RelWithDebInfo --target ext_openjpeg
@@ -222,16 +217,21 @@ Note 2: libcurl still isn't available.
 3. Run 
 
 On Windows
+    Depending on what you want to use, run this command for MSBuild (slower compiling, since it doesn't properly use all the CPU cores, but ships with Visual Studio)
 
-    cmake ..\krita -G"Visual Studio 14 Win64" -DBoost_DEBUG=OFF -DBOOST_INCLUDEDIR=c:\dev\i\include -DBOOST_DEBUG=ON -DBOOST_ROOT=c:\dev\i -DBOOST_LIBRARYDIR=c:\dev\i\lib -DCMAKE_INSTALL_PREFIX=c:\dev\i -DCMAKE_PREFIX_PATH=c:\dev\i -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DHAVE_MEMORY_LEAK_TRACKER=OFF -DPACKAGERS_BUILD=ON -Wno-dev -DDEFINE_NO_DEPRECATED=1...\
+    cmake ..\krita -G "Visual Studio 14 Win64" -DBoost_DEBUG=OFF -DBOOST_INCLUDEDIR=c:\dev\i\include -DBOOST_DEBUG=ON -DBOOST_ROOT=c:\dev\i -DBOOST_LIBRARYDIR=c:\dev\i\lib -DCMAKE_INSTALL_PREFIX=c:\dev\i -DCMAKE_PREFIX_PATH=c:\dev\i -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DHAVE_MEMORY_LEAK_TRACKER=OFF -DPACKAGERS_BUILD=ON -Wno-dev -DDEFINE_NO_DEPRECATED=1
+
+    Or this to later use jom (faster compiling, uses all cores, ships with QtCreator/pre-built Qt binaries):
+
+    cmake ..\krita -G "NMake Makefiles" -DBoost_DEBUG=OFF -DBOOST_INCLUDEDIR=c:\dev\i\include -DBOOST_DEBUG=ON -DBOOST_ROOT=c:\dev\i -DBOOST_LIBRARYDIR=c:\dev\i\lib -DCMAKE_INSTALL_PREFIX=c:\dev\i -DCMAKE_PREFIX_PATH=c:\dev\i -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DHAVE_MEMORY_LEAK_TRACKER=OFF -DPACKAGERS_BUILD=ON -Wno-dev -DDEFINE_NO_DEPRECATED=1
 
 On Linux
 
-    cmake ../krita -DCMAKE_INSTALL_PREFIX=BUILDROOT/i -DDEFINE_NO_DEPRECATED=1 -DPACKAGERS_BUILD=ON -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF
+    cmake ../krita -DCMAKE_INSTALL_PREFIX=BUILDROOT/i -DDEFINE_NO_DEPRECATED=1 -DPACKAGERS_BUILD=ON -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=RelWithDebInfo
 
 On OSX
 
-    cmake ../krita -DCMAKE_INSTALL_PREFIX=/Users/boud/dev/i -DDEFINE_NO_DEPRECATED=1 -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DPACKAGERS_BUILD=ON  -DBUNDLE_INSTALL_DIR=$HOME/dev/i/bin
+    cmake ../krita -DCMAKE_INSTALL_PREFIX=/Users/boud/dev/i -DDEFINE_NO_DEPRECATED=1 -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DPACKAGERS_BUILD=ON  -DBUNDLE_INSTALL_DIR=$HOME/dev/i/bin -DCMAKE_BUILD_TYPE=RelWithDebInfo
 
 
 4. Run 
@@ -241,7 +241,14 @@ On Linux and OSX
     make install
 
 On Windows
+    Either use MSBuild to build:
+
     cmake --build . --config RelWithDebInfo --target INSTALL
+
+    Or use jom which should be in a path similar to C:\Qt\Qt5.6.0\Tools\QtCreator\bin\jom.exe.
+    So, from the same folder, instead of running cmake run:
+
+    "C:\Qt\Qt5.6.0\Tools\QtCreator\bin\jom.exe" install
 
 6. Run krita:
 
@@ -256,4 +263,11 @@ On Windows
 On OSX
 
     BUILDROOT/i/bin/krita.app/Contents/MacOS/krita
+
+== Common Issues ==
+- On Windows, if you get a 'mspdb140.dll' missing alert window, it means you did not run the bat file. Make sure to include the quotes in the command:
+  "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\amd64\vcvars64.bat"
+
+- On Windows, if you get an error about Qt5Core.dll missing/not found or nmake exit with an error that mention QT_PLUGIN_PATH, you have to copy a couple of dlls in the Qt build directory, look
+  for the N.B. in the Qt instructions at the start of the Readme.
 

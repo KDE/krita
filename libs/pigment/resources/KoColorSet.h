@@ -23,7 +23,7 @@
 #include <QColor>
 #include <QVector>
 
-#include "KoResource.h"
+#include <resources/KoResource.h>
 #include "KoColor.h"
 
 struct KoColorSetEntry {

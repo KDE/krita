@@ -75,6 +75,12 @@
         <file>light_dropframe.svg</file>
         <file>light_droppedframes.svg</file>
         
+        <file>dark_landscape.svg</file>
+        <file>dark_portrait.svg</file>
+        <file>light_landscape.svg</file>
+        <file>light_portrait.svg</file>
+        
+        
 
     </qresource>
 </RCC>

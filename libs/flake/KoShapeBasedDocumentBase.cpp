@@ -22,6 +22,7 @@
 #include "KoShapeBasedDocumentBase.h"
 #include "KoDocumentResourceManager.h"
 #include "KoShapeRegistry.h"
+#include "KoShapeFactoryBase.h"
 
 #include <kconfig.h>
 #include <kconfiggroup.h>

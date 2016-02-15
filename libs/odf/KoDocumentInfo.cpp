@@ -27,6 +27,8 @@
 #include <QDateTime>
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
+#include <QDomDocument>
+#include <KoXmlReader.h>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -41,7 +43,7 @@
 KoDocumentInfo::KoDocumentInfo(QObject *parent) : QObject(parent)
 {
     m_aboutTags << "title" << "description" << "subject" << "comments"
-    << "keyword" << "initial-creator" << "editing-cycles"
+    << "keyword" << "initial-creator" << "editing-cycles" << "editing-time"
     << "date" << "creation-date" << "language";
 
     m_authorTags << "creator" << "initial" << "author-title"
@@ -50,6 +52,7 @@ KoDocumentInfo::KoDocumentInfo(QObject *parent) : QObject(parent)
     << "street" << "position" << "company";
 
     setAboutInfo("editing-cycles", "0");
+    setAboutInfo("time-elapsed", "0");
     setAboutInfo("initial-creator", i18n("Unknown"));
     setAboutInfo("creation-date", QDateTime::currentDateTime()
                  .toString(Qt::ISODate));
@@ -454,6 +457,7 @@ void KoDocumentInfo::resetMetaData()
     setAboutInfo("editing-cycles", QString::number(0));
     setAboutInfo("initial-creator", authorInfo("creator"));
     setAboutInfo("creation-date", QDateTime::currentDateTime().toString(Qt::ISODate));
+    setAboutInfo("editing-time", QString::number(0));
 }
 
 QString KoDocumentInfo::originalGenerator() const

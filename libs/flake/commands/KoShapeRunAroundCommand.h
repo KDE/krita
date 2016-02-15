@@ -23,7 +23,7 @@
 #include "kritaflake_export.h"
 #include <kundo2command.h>
 
-#include <KoShape.h>
+#include "KoShape.h"
 
 /// API docs go here
 class KRITAFLAKE_EXPORT KoShapeRunAroundCommand : public KUndo2Command

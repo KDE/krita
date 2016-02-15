@@ -35,7 +35,7 @@
 
 #include "data/splash/splash_screen.xpm"
 #include "data/splash/splash_holidays.xpm"
-#include "ui/KisDocument.h"
+#include "KisDocument.h"
 #include "kis_splash_screen.h"
 #include "KisPart.h"
 #include "KisApplicationArguments.h"
@@ -43,11 +43,11 @@
 #if defined Q_OS_WIN
 #include <Windows.h>
 #include <stdlib.h>
-#include <ui/input/wintab/kis_tablet_support_win.h>
+#include <kis_tablet_support_win.h>
 
 #elif defined HAVE_X11
-    #include <ui/input/wintab/kis_tablet_support_x11.h>
-    #include <ui/input/wintab/kis_xi2_event_filter.h>
+    #include <kis_tablet_support_x11.h>
+    #include <kis_xi2_event_filter.h>
 #endif
 
 #if defined HAVE_KCRASH
@@ -56,12 +56,6 @@
 extern "C" int main(int argc, char **argv)
 {
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
-
-#ifdef HAVE_X11
-    if (runningInKDE) {
-        qputenv("QT_NO_GLIB", "1");
-    }
-#endif
 
     /**
      * Disable debug output by default. (krita.input enables tablet debugging.)
@@ -73,14 +67,16 @@ extern "C" int main(int argc, char **argv)
      * See: http://doc.qt.io/qt-5/qloggingcategory.html
      */
     QLoggingCategory::setFilterRules("calligra*=false\n"
-                                     "krita*=false\n"
+                                     "calligra*.warning=true\n"
+                                     "krita*.debug=false\n"
+                                     "krita*.warning=true\n"
                                      "krita.tabletlog=true");
-
 
     // A per-user unique string, without /, because QLocalServer cannot use names with a / in it
     QString key = "Krita3" +
                   QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");
     key = key.replace(":", "_").replace("\\","_");
+
 #if defined HAVE_X11
     // we need to call XInitThreads() (which this does) because of gmic (and possibly others)
     // do their own X11 stuff in their own threads
@@ -96,7 +92,6 @@ extern "C" int main(int argc, char **argv)
 
     KLocalizedString::setApplicationDomain("krita");
 
-    QCoreApplication::addLibraryPath(QCoreApplication::applicationDirPath());
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
 

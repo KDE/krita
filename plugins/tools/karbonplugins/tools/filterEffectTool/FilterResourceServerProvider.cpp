@@ -27,15 +27,13 @@
 
 #include <KoResourcePaths.h>
 #include <KoResourceServerProvider.h>
-#include "KoSegmentGradient.h"
-#include "KoStopGradient.h"
+#include <resources/KoSegmentGradient.h>
+#include <resources/KoStopGradient.h>
 
 FilterResourceServerProvider *FilterResourceServerProvider::m_singleton = 0;
 
 FilterResourceServerProvider::FilterResourceServerProvider()
 {
-    KoResourcePaths::addResourceType("ko_effects", "data", "karbon/effects/");
-
     m_filterEffectServer = new KoResourceServerSimpleConstruction<FilterEffectResource>("ko_effects", "*.svg");
     if (!QFileInfo(m_filterEffectServer->saveLocation()).exists()) {
         QDir().mkpath(m_filterEffectServer->saveLocation());

@@ -29,6 +29,7 @@
 #include <KoSelection.h>
 #include <KoParameterShape.h>
 #include <KoUnit.h>
+#include <KoCanvasResourceManager.h>
 
 #include <klocalizedstring.h>
 

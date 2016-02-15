@@ -1,8 +1,4 @@
-# plugin/tools have their own catalog
-add_definitions(-DTRANSLATION_DOMAIN=\"krita_karbontools\")
-
 include_directories(
-    ${FLAKE_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/filterEffectTool
 )
 

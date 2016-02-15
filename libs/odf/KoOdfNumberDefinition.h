@@ -20,7 +20,9 @@
 #ifndef KOODFNUMBERDEFINITION_H
 #define KOODFNUMBERDEFINITION_H
 
-#include "KoXmlReader.h"
+#include <QString>
+
+#include "KoXmlReaderForward.h"
 #include "kritaodf_export.h"
 
 class KoXmlWriter;

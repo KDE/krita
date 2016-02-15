@@ -21,7 +21,7 @@
 #define KOOPTIMIZEDCOMPOSITEOPFACTORYPERARCH_H
 
 
-#include "KoVcMultiArchBuildSupport.h"
+#include <compositeops/KoVcMultiArchBuildSupport.h>
 
 
 class KoCompositeOp;

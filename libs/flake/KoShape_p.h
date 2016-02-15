@@ -26,9 +26,8 @@
 #include <QPaintDevice>
 #include <QTransform>
 
-#include <KoCanvasBase.h>
-
 class KoBorder;
+class KoShapeManager;
 
 
 class KoShapePrivate

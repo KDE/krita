@@ -24,6 +24,7 @@
 #include "KoShapeContainer.h"
 #include "KoShapeManager.h"
 #include "KoShapePaintingContext.h"
+#include "KoViewConverter.h"
 
 #include <MockShapes.h>
 

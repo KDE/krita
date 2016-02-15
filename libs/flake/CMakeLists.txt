@@ -1,6 +1,11 @@
 project(kritaflake)
 
-include_directories(${FLAKE_INCLUDES} )
+include_directories(
+    ${CMAKE_SOURCE_DIR}/libs/flake/commands
+    ${CMAKE_SOURCE_DIR}/libs/flake/tools
+    ${CMAKE_SOURCE_DIR}/libs/flake/svg
+    ${CMAKE_BINARY_DIR}/libs/flake
+)
 
 add_subdirectory(styles)
 add_subdirectory(tests)
@@ -205,6 +210,13 @@ ki18n_wrap_ui(kritaflake_SRCS
 
 add_library(kritaflake SHARED ${kritaflake_SRCS})
 generate_export_header(kritaflake BASE_NAME kritaflake)
+
+target_include_directories(kritaflake
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/commands>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tools>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/svg>
+)
 
 target_link_libraries(kritaflake kritapigment kritawidgetutils kritaodf kritaundo2 KF5::WidgetsAddons Qt5::Svg)
 target_link_libraries(kritaflake LINK_INTERFACE_LIBRARIES kritapigment kritawidgetutils kritaodf kritaundo2 KF5::WidgetsAddons )

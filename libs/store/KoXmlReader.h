@@ -26,32 +26,18 @@
 #include "kritastore_export.h"
 
 #include <QPair>
-#include <QtXml>
-#include <QDomDocument>
+#include <QString>
 
 class QIODevice;
 
-#ifdef KOXML_USE_QDOM
+#ifndef KOXML_USE_QDOM
 
-typedef QDomNode KoXmlNode;
-typedef QDomElement KoXmlElement;
-typedef QDomText KoXmlText;
-typedef QDomCDATASection KoXmlCDATASection;
-typedef QDomDocumentType KoXmlDocumentType;
-typedef QDomDocument KoXmlDocument;
-
-#else
-
-class QString;
 class QXmlStreamReader;
 
-class KoXmlNode;
-class KoXmlText;
-class KoXmlCDATASection;
-class KoXmlDocumentType;
-class KoXmlDocument;
 class KoXmlNodeData;
 class KoXmlDocumentData;
+class QDomDocument;
+class QStringList;
 
 /**
  * The office-text-content-prelude type.

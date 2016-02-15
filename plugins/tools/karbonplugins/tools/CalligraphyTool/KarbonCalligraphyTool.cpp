@@ -35,6 +35,7 @@
 #include <KoColor.h>
 #include <KoShapePaintingContext.h>
 #include <KoFillConfigWidget.h>
+#include <KoViewConverter.h>
 
 #include <QAction>
 #include <QDebug>

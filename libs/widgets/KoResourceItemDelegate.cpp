@@ -19,7 +19,7 @@
 
 #include "KoResourceItemDelegate.h"
 
-#include <KoAbstractGradient.h>
+#include <resources/KoAbstractGradient.h>
 #include <QPainter>
 
 KoResourceItemDelegate::KoResourceItemDelegate( QObject * parent )

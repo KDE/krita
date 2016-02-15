@@ -25,25 +25,13 @@
 #ifndef KoCanvasControllerWidget_p_h
 #define KoCanvasControllerWidget_p_h
 
-#include "KoCanvasControllerWidget.h"
-
-#include "KoCanvasControllerWidgetViewport_p.h"
-#include "KoShape.h"
-#include "KoViewConverter.h"
-#include "KoCanvasBase.h"
-#include "KoCanvasObserverBase.h"
-#include "KoCanvasSupervisor.h"
-#include "KoToolManager_p.h"
-
 #include <FlakeDebug.h>
-#include <QMouseEvent>
-#include <QPainter>
-#include <QScrollBar>
-#include <QEvent>
-#include <QDockWidget>
-#include <QTimer>
 
 #include <KoConfig.h>
+
+class KoCanvasControllerWidget;
+class Viewport;
+class KoCanvasBase;
 
 class Q_DECL_HIDDEN KoCanvasControllerWidget::Private
 {

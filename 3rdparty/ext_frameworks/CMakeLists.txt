@@ -193,14 +193,13 @@ ExternalProject_Add(
     DEPENDS ext_kitemmodels
 )
 
-
 ExternalProject_Add(
-    ext_kwindowsystem
+    ext_kimageformats
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://files.kde.org/krita/build/dependencies/kwindowsystem-5.17.0.zip
-    URL_MD5 990c241d7fa88774ccd5176ec6bdcbdc
+    URL http://files.kde.org/krita/build/dependencies/kimageformats-02-02-2016.tgz
+    URL_MD5 09a923703832181455bc61d67c692040
     INSTALL_DIR ${EXTPREFIX_frameworks}
-     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/kwindowsystem-x11.diff
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/kimageformats.diff
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
             -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
                 ${GLOBAL_PROFILE}
@@ -210,6 +209,24 @@ ExternalProject_Add(
     UPDATE_COMMAND ""
     ALWAYS 0
     DEPENDS ext_kitemviews
+)
+
+ExternalProject_Add(
+    ext_kwindowsystem
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL http://files.kde.org/krita/build/dependencies/kwindowsystem-5.17.0.zip
+    URL_MD5 990c241d7fa88774ccd5176ec6bdcbdc
+    INSTALL_DIR ${EXTPREFIX_frameworks}
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/kwindowsystem-x11.diff
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
+            -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
+                ${GLOBAL_PROFILE}
+                -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
+                -DDEFINE_NO_DEPRECATED=1
+                -DBUILD_TESTING=false
+    UPDATE_COMMAND ""
+    ALWAYS 0
+    DEPENDS ext_kimageformats
 )
 
 

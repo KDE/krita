@@ -22,7 +22,11 @@
 #ifndef _KO_LAB_DARKEN_COLOR_TRANSFORMATION_H_
 #define _KO_LAB_DARKEN_COLOR_TRANSFORMATION_H_
 
+#if !defined _MSC_VER
 #pragma GCC diagnostic ignored "-Wcast-align"
+#endif
+
+#include "KoColorTransformation.h"
 
 template<typename _lab_channels_type_>
 struct KoLabDarkenColorTransformation : public KoColorTransformation {

@@ -1,10 +1,3 @@
-add_definitions(-DTRANSLATION_DOMAIN=\"krita_shape_paths\")
-
-include_directories(
-    ${CMAKE_SOURCE_DIR}/libs/widgets
-    ${FLAKE_INCLUDES}
-)
-
 set(pathshapes_SOURCES
     ellipse/EllipseShape.cpp
     ellipse/EllipseShapeFactory.cpp

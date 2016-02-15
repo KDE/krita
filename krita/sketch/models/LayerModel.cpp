@@ -41,6 +41,7 @@
 #include <KoShapeBasedDocumentBase.h>
 #include <KoProperties.h>
 #include <QQmlEngine>
+#include <kis_base_node.h>
 
 struct LayerModelMetaInfo {
     LayerModelMetaInfo()
@@ -261,7 +262,7 @@ void LayerModel::setView(QObject *newView)
         d->layers.clear();
         d->activeNode.clear();
         d->canvas = 0;
-        d->nodeModel->setDummiesFacade(0, 0, 0, 0);
+        d->nodeModel->setDummiesFacade(0, 0, 0, 0, 0);
 
     }
 
@@ -283,7 +284,7 @@ void LayerModel::setView(QObject *newView)
 
         KisDummiesFacadeBase *kritaDummiesFacade = dynamic_cast<KisDummiesFacadeBase*>(d->canvas->imageView()->document()->shapeController());
         KisShapeController *shapeController = dynamic_cast<KisShapeController*>(d->canvas->imageView()->document()->shapeController());
-        d->nodeModel->setDummiesFacade(kritaDummiesFacade, d->image, shapeController, d->nodeManager->nodeSelectionAdapter());
+        d->nodeModel->setDummiesFacade(kritaDummiesFacade, d->image, shapeController, d->nodeManager->nodeSelectionAdapter(), d->nodeManager->nodeInsertionAdapter());
 
         connect(d->image, SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
         connect(d->image, SIGNAL(sigNodeChanged(KisNodeSP)), SLOT(nodeChanged(KisNodeSP)));
@@ -296,11 +297,6 @@ void LayerModel::setView(QObject *newView)
         // Connection KisNodeManager -> KisLayerBox
         connect(d->nodeManager, SIGNAL(sigUiNeedChangeActiveNode(KisNodeSP)), this, SLOT(currentNodeChanged(KisNodeSP)));
 
-        // Node manipulation methods are forwarded to the node manager
-        connect(d->nodeModel, SIGNAL(requestAddNode(KisNodeSP, KisNodeSP, KisNodeSP)),
-                d->nodeManager, SLOT(addNodeDirect(KisNodeSP, KisNodeSP, KisNodeSP)));
-        connect(d->nodeModel, SIGNAL(requestMoveNode(KisNodeSP, KisNodeSP, KisNodeSP)),
-                d->nodeManager, SLOT(moveNodeDirect(KisNodeSP, KisNodeSP, KisNodeSP)));
         d->rebuildLayerList();
         reset();
     }
@@ -568,12 +564,12 @@ void LayerModel::setOpacity(int index, float newOpacity)
 void LayerModel::setVisible(int index, bool newVisible)
 {
     if (index > -1 && index < d->layers.count()) {
-        KisNodeModel::PropertyList props = d->layers[index]->sectionModelProperties();
-        KisNodeModel::Property prop = props[0];
+        KisBaseNode::PropertyList props = d->layers[index]->sectionModelProperties();
+        KisBaseNode::Property prop = props[0];
         if(props[0].state == newVisible)
             return;
-        props[0] = KisNodeModel::Property(prop.name, prop.onIcon, prop.offIcon, newVisible);
-        d->nodeModel->setData( d->nodeModel->indexFromNode(d->layers[index]), QVariant::fromValue<KisNodeModel::PropertyList>(props), KisNodeModel::PropertiesRole );
+        props[0] = KisBaseNode::Property(prop.name, prop.onIcon, prop.offIcon, newVisible);
+        d->nodeModel->setData( d->nodeModel->indexFromNode(d->layers[index]), QVariant::fromValue<KisBaseNode::PropertyList>(props), KisBaseNode::PropertiesRole );
         d->layers[index]->setDirty(d->layers[index]->extent());
         QModelIndex idx = createIndex(index, 0);
         dataChanged(idx, idx);

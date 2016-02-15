@@ -59,6 +59,16 @@ QCursor KisCursor::roundCursor()
     return load("cursor-round.xpm");
 }
 
+QCursor KisCursor::pixelBlackCursor()
+{
+    return load("cursor-pixel-black.xpm");
+}
+
+QCursor KisCursor::pixelWhiteCursor()
+{
+    return load("cursor-pixel-white.xpm");
+}
+
 QCursor KisCursor::waitCursor()
 {
     return Qt::WaitCursor;

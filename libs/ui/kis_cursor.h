@@ -38,6 +38,8 @@ public:
     static QCursor upArrowCursor();       // upwards arrow
     static QCursor crossCursor();         // crosshair
     static QCursor roundCursor();         // small open circle
+    static QCursor pixelBlackCursor();    // black single pixel
+    static QCursor pixelWhiteCursor();    // white single pixel
     static QCursor waitCursor();          // hourglass/watch
     static QCursor ibeamCursor();         // ibeam/text entry
     static QCursor sizeVerCursor();       // vertical resize

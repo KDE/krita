@@ -196,10 +196,11 @@ void KisNodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &opt
     KisNodeViewColorScheme scm;
 
     const int thumbSize = scm.thumbnailSize();
+    const qreal oldOpacity = p->opacity(); // remember previous opacity
 
     QImage img = index.data(int(KisNodeModel::BeginThumbnailRole) + thumbSize).value<QImage>();
     if (!(option.state & QStyle::State_Enabled)) {
-        img = KritaUtils::convertQImageToGrayA(img);
+        p->setOpacity(0.35);
     }
 
     QRect fitRect = scm.relThumbnailRect().translated(option.rect.topLeft());
@@ -224,6 +225,7 @@ void KisNodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &opt
 
     p->fillRect(img.rect().translated(offset), Qt::white);
     p->drawImage(offset, img);
+    p->setOpacity(oldOpacity); // restore old opacity
 
     QRect borderRect = kisGrowRect(img.rect(), 1).translated(offset);
     KritaUtils::renderExactRect(p, borderRect, scm.gridColor(option, d->view));
@@ -276,14 +278,23 @@ void KisNodeDelegate::drawText(QPainter *p, const QStyleOptionViewItem &option, 
         .adjusted(scm.textMargin(), 0, -scm.textMargin(), 0);
 
     QPen oldPen = p->pen();
-    QPalette::ColorGroup cg = (option.state & QStyle::State_Enabled) ? QPalette::Active : QPalette::Disabled;
-    QPalette::ColorRole cr = (option.state & QStyle::State_Selected) ? QPalette::HighlightedText : QPalette::Text;
-    p->setPen(option.palette.color(cg, cr));
+    const qreal oldOpacity = p->opacity(); // remember previous opacity
+
+    p->setPen(option.palette.color(QPalette::Active,QPalette::Text ));
+
+
+
+    if (!(option.state & QStyle::State_Enabled)) {
+        p->setOpacity(0.55);
+    }
+
 
     const QString text = index.data(Qt::DisplayRole).toString();
     const QString elided = elidedText(p->fontMetrics(), rc.width(), Qt::ElideRight, text);
     p->drawText(rc, Qt::AlignLeft | Qt::AlignVCenter, elided);
-    p->setPen(oldPen);
+
+    p->setPen(oldPen); // restore pen settings
+    p->setOpacity(oldOpacity);
 }
 
 QList<OptionalProperty> KisNodeDelegate::Private::rightmostProperties(const KisBaseNode::PropertyList &props) const
@@ -382,7 +393,20 @@ void KisNodeDelegate::drawIcons(QPainter *p, const QStyleOptionViewItem &option,
         if (prop) {
             QIcon icon = prop->state.toBool() ? prop->onIcon : prop->offIcon;
             bool fullColor = prop->state.toBool() && option.state & QStyle::State_Enabled;
-            p->drawPixmap(x, y, icon.pixmap(scm.iconSize(), fullColor ? QIcon::Normal : QIcon::Disabled));
+            const qreal oldOpacity = p->opacity(); // remember previous opacity
+
+
+            if (fullColor) {              
+                 p->setOpacity(1.0);
+            }
+            else {
+                p->setOpacity(0.35);
+            }
+
+            p->drawPixmap(x, y, icon.pixmap(scm.iconSize(), QIcon::Normal));
+            p->setOpacity(oldOpacity); // restore old opacity
+
+
         }
         x += scm.iconSize() + scm.iconMargin();
         p->drawLine(x, 0, x, scm.rowHeight() - scm.border());
@@ -421,7 +445,8 @@ void KisNodeDelegate::drawVisibilityIconHijack(QPainter *p, const QStyleOptionVi
     const int y = option.rect.top() + (scm.rowHeight() - scm.border() - scm.visibilitySize()) / 2;
 
     QIcon icon = prop->state.toBool() ? prop->onIcon : prop->offIcon;
-    p->drawPixmap(x, y, icon.pixmap(scm.visibilitySize(), (option.state & QStyle::State_Enabled) ? QIcon::Normal : QIcon::Disabled));
+    p->setOpacity(1.0);
+    p->drawPixmap(x, y, icon.pixmap(scm.visibilitySize(),  QIcon::Normal));
 
     //// For debugging purposes only
     // p->save();
@@ -442,7 +467,15 @@ void KisNodeDelegate::drawDecoration(QPainter *p, const QStyleOptionViewItem &op
                         QIcon::Normal : QIcon::Disabled);
 
         const QRect rc = scm.relDecorationRect().translated(option.rect.topLeft());
+        const qreal oldOpacity = p->opacity(); // remember previous opacity
+
+        if (!(option.state & QStyle::State_Enabled)) {
+            p->setOpacity(0.35);
+        }
+
+
         p->drawPixmap(rc.topLeft(), pixmap);
+        p->setOpacity(oldOpacity); // restore old opacity
     }
 }
 

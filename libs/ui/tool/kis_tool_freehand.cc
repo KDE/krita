@@ -110,6 +110,12 @@ void KisToolFreehand::resetCursorStyle()
     case CURSOR_STYLE_TRIANGLE_LEFTHANDED:
         useCursor(KisCursor::triangleLeftHandedCursor());
         break;
+    case CURSOR_STYLE_BLACK_PIXEL:
+        useCursor(KisCursor::pixelBlackCursor());
+        break;
+    case CURSOR_STYLE_WHITE_PIXEL:
+        useCursor(KisCursor::pixelWhiteCursor());
+        break;
     case CURSOR_STYLE_TOOLICON:
     default:
         KisToolPaint::resetCursorStyle();

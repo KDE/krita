@@ -16,6 +16,13 @@ if (MSVC)
 			ALWAYS 0
 			BUILD_IN_SOURCE 1
 		)
+		ExternalProject_Add_Step(
+			ext_boost
+			post_install
+			COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/boost_system-vc-mt-1_55.dll ${PREFIX_ext_boost}/lib/boost_system-vc140-mt-1_55.dll
+			COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/boost_system-vc-mt-1_55.lib ${PREFIX_ext_boost}/lib/boost_system-vc140-mt-1_55.lib
+			DEPENDEES install
+		)
 	else()
 		ExternalProject_Add(
 			ext_boost
@@ -33,6 +40,13 @@ if (MSVC)
 			ALWAYS 0
 			BUILD_IN_SOURCE 1
         )
+        ExternalProject_Add_Step(
+			ext_boost
+			post_install
+			COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/boost_system-vc-mt-1_55.dll ${PREFIX_ext_boost}/lib/boost_system-vc140-mt-1_55.dll
+			COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/boost_system-vc-mt-1_55.lib ${PREFIX_ext_boost}/lib/boost_system-vc140-mt-1_55.lib
+			DEPENDEES install
+		)
 	endif()
 else()
 	ExternalProject_Add( ext_boost

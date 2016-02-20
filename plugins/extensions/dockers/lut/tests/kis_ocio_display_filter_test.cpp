@@ -24,11 +24,11 @@
 
 #include "KoColorModelStandardIds.h"
 
-#include "../../../../../sdk/tests/stroke_testing_utils.h"
-#include "../../../../../sdk/tests/testutil.h"
+#include <stroke_testing_utils.h>
+#include <testutil.h>
 
 #include "kis_exposure_gamma_correction_interface.h"
-#include "../ocio_display_filter.h"
+#include <ocio_display_filter.h>
 #include "kis_display_color_converter.h"
 #include "kis_canvas_resource_provider.h"
 

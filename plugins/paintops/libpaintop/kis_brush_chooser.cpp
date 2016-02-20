@@ -108,7 +108,7 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     m_slSize->setRange(0, 1000, 2);
     m_slSize->setValue(5);
     m_slSize->setExponentRatio(3.0);
-    m_slSize->setSuffix(" px");
+    m_slSize->setSuffix(i18n(" px"));
 
 
     m_slSize->setExponentRatio(3.0);

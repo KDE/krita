@@ -100,8 +100,8 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 
 
     // initialize values for free transform sliders
-    shearXBox->setSuffix(" px");
-    shearYBox->setSuffix(" px");
+    shearXBox->setSuffix(i18n(" px"));
+    shearYBox->setSuffix(i18n(" px"));
     shearXBox->setRange(-5.0, 5.0, 2);
     shearYBox->setRange(-5.0, 5.0, 2);
     shearXBox->setSingleStep(0.01);
@@ -110,8 +110,8 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     shearYBox->setValue(0.0);
 
 
-    translateXBox->setSuffix(" px");
-    translateYBox->setSuffix(" px");
+    translateXBox->setSuffix(i18n(" px"));
+    translateYBox->setSuffix(i18n(" px"));
     translateXBox->setRange(-10000, 10000);
     translateYBox->setRange(-10000, 10000);
 

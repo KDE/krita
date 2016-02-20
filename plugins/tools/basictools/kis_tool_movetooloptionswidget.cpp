@@ -45,6 +45,14 @@ MoveToolOptionsWidget::MoveToolOptionsWidget(QWidget *parent, int resolution, QS
     cmbUnit->addItems(KoUnit::listOfUnitNameForUi());
     cmbUnit->setCurrentIndex(m_moveStepUnit);
     updateUIUnit(m_moveStepUnit);
+
+    // Scale for large moves
+    m_moveScale = m_configGroup.readEntry<int>("moveToolScale", 10.0);
+    spinMoveScale->blockSignals(true);
+    spinMoveScale->setValue(m_moveScale);
+    spinMoveScale->setSuffix("x");
+    spinMoveScale->blockSignals(false);
+
 }
 
 void MoveToolOptionsWidget::updateUIUnit(int newUnit)
@@ -76,6 +84,13 @@ void MoveToolOptionsWidget::on_spinMoveStep_valueChanged(double UIMoveStep)
     m_moveStep = qRound(scaledUiMoveStep);
     m_configGroup.writeEntry("moveToolStep", m_moveStep);
 }
+
+void MoveToolOptionsWidget::on_spinMoveScale_valueChanged(double UIMoveScale)
+{
+    m_moveScale = UIMoveScale;
+    m_configGroup.writeEntry("moveToolScale", m_moveScale);
+}
+
 
 void MoveToolOptionsWidget::on_cmbUnit_currentIndexChanged(int newUnit)
 {
@@ -116,4 +131,9 @@ KisToolMove::MoveToolMode MoveToolOptionsWidget::mode()
 int MoveToolOptionsWidget::moveStep()
 {
   return m_moveStep;
+}
+
+double MoveToolOptionsWidget::moveScale()
+{
+    return m_moveScale;
 }

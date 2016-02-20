@@ -216,7 +216,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
         slSize->setSingleStep(1);
         slSize->setExponentRatio(3.0);
-        slSize->setSuffix(" px");
+        slSize->setSuffix(i18n(" px"));
         slSize->setMinimumWidth(qMax(sliderWidth, slSize->sizeHint().width()));
         slSize->setFixedHeight(iconsize);
         slSize->setBlockUpdateSignalOnDrag(true);
@@ -536,6 +536,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
     connect(m_optionWidget, SIGNAL(sigConfigurationItemChanged()), this, SLOT(slotConfigurationItemChanged()));
 
 
+    // load the current brush engine icon for the brush editor toolbar button
     KisPaintOpFactory* paintOp = KisPaintOpRegistry::instance()->get(paintop.id());
     QString pixFilename = KoResourcePaths::findResource("kis_images", paintOp->pixmap());
 

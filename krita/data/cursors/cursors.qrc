@@ -6,6 +6,8 @@
         <file>color-picker_layer_background.xpm</file>
         <file>color-picker_layer_foreground.xpm</file>
         <file>cursor-cross.xpm</file>
+        <file>cursor-pixel-white.xpm</file>
+        <file>cursor-pixel-black.xpm</file>
         <file>cursor-round.xpm</file>
         <file>cursor-triangle_lefthanded.xpm</file>
         <file>cursor-triangle_righthanded.xpm</file>

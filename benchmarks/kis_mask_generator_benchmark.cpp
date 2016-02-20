@@ -16,8 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <QTest>
-
 #include <config-vc.h>
 #ifdef HAVE_VC
 #if defined _MSC_VER
@@ -33,6 +31,7 @@
 #endif
 #endif
 
+#include <QTest>
 
 #include "kis_mask_generator_benchmark.h"
 

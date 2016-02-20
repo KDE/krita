@@ -370,6 +370,9 @@ set(kritaui_LIB_SRCS
 )
 
 if(WIN32)
+    if (NOT Qt5Gui_PRIVATE_INCLUDE_DIRS)
+        message(FATAL_ERROR "Qt5Gui Private header are missing!")
+    endif()
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
         input/kis_tablet_event.cpp

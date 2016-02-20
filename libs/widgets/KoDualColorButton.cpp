@@ -321,3 +321,16 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
 
     repaint();
 }
+
+void KoDualColorButton::changeEvent(QEvent *event)
+{
+    QWidget::changeEvent(event);
+
+    switch (event->type()) {
+    case QEvent::StyleChange:
+    case QEvent::PaletteChange:
+        d->updateArrows();
+    default:
+        break;
+    }
+}

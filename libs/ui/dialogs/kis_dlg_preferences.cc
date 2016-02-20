@@ -89,6 +89,8 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_cmbCursorShape->addItem(i18n("Crosshair"));
     m_cmbCursorShape->addItem(i18n("Triangle Righthanded"));
     m_cmbCursorShape->addItem(i18n("Triangle Lefthanded"));
+    m_cmbCursorShape->addItem(i18n("Black Pixel"));
+    m_cmbCursorShape->addItem(i18n("White Pixel"));
 
     m_cmbOutlineShape->addItem(i18n("No Outline"));
     m_cmbOutlineShape->addItem(i18n("Circle Outline"));
@@ -514,15 +516,15 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     const int totalRAM = cfg.totalRAM();
     lblTotalMemory->setText(i18n("%1 MiB", totalRAM));
 
-    sliderMemoryLimit->setSuffix(" %");
+    sliderMemoryLimit->setSuffix(i18n(" %"));
     sliderMemoryLimit->setRange(1, 100, 2);
     sliderMemoryLimit->setSingleStep(0.01);
 
-    sliderPoolLimit->setSuffix(" %");
+    sliderPoolLimit->setSuffix(i18n(" %"));
     sliderPoolLimit->setRange(0, 20, 2);
     sliderMemoryLimit->setSingleStep(0.01);
 
-    sliderUndoLimit->setSuffix(" %");
+    sliderUndoLimit->setSuffix(i18n(" %"));
     sliderUndoLimit->setRange(0, 50, 2);
     sliderMemoryLimit->setSingleStep(0.01);
 
@@ -764,18 +766,18 @@ GridSettingsTab::GridSettingsTab(QWidget* parent) : WdgGridSettingsBase(parent)
     colorSubdivision->setColor(cfg.getGridSubdivisionColor());
 
     intHSpacing->setValue(cfg.getGridHSpacing());
-    intHSpacing->setSuffix(" px");
+    intHSpacing->setSuffix(i18n(" px"));
     intVSpacing->setValue(cfg.getGridVSpacing());
-    intVSpacing->setSuffix(" px");
+    intVSpacing->setSuffix(i18n(" px"));
     spacingAspectButton->setKeepAspectRatio(cfg.getGridSpacingAspect());
     linkSpacingToggled(cfg.getGridSpacingAspect());
 
     intSubdivision->setValue(cfg.getGridSubdivisions());
 
     intXOffset->setValue(cfg.getGridOffsetX());
-    intXOffset->setSuffix(" px");
+    intXOffset->setSuffix(i18n(" px"));
     intYOffset->setValue(cfg.getGridOffsetY());
-    intYOffset->setSuffix(" px");
+    intYOffset->setSuffix(i18n(" px"));
     offsetAspectButton->setKeepAspectRatio(cfg.getGridOffsetAspect());
     linkOffsetToggled(cfg.getGridOffsetAspect());
 

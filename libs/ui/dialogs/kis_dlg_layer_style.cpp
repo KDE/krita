@@ -588,13 +588,13 @@ BevelAndEmboss::BevelAndEmboss(Contour *contour, Texture *texture, QWidget *pare
 
     // Structure
     ui.intDepth->setRange(0, 100);
-    ui.intDepth->setSuffix(" %");
+    ui.intDepth->setSuffix(i18n(" %"));
 
     ui.intSize->setRange(0, 250);
-    ui.intSize->setSuffix(" px");
+    ui.intSize->setSuffix(i18n(" px"));
 
     ui.intSoften->setRange(0, 18);
-    ui.intSoften->setSuffix(" px");
+    ui.intSoften->setSuffix(i18n(" px"));
 
     connect(ui.cmbStyle, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.cmbTechnique, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
@@ -605,10 +605,10 @@ BevelAndEmboss::BevelAndEmboss(Contour *contour, Texture *texture, QWidget *pare
 
     // Shading
     ui.intOpacity->setRange(0, 100);
-    ui.intOpacity->setSuffix(" %");
+    ui.intOpacity->setSuffix(i18n(" %"));
 
     ui.intOpacity2->setRange(0, 100);
-    ui.intOpacity2->setSuffix(" %");
+    ui.intOpacity2->setSuffix(i18n(" %"));
 
     connect(ui.dialAngle, SIGNAL(valueChanged(int)), SLOT(slotDialAngleChanged(int)));
     connect(ui.intAngle, SIGNAL(valueChanged(int)), SLOT(slotIntAngleChanged(int)));
@@ -629,7 +629,7 @@ BevelAndEmboss::BevelAndEmboss(Contour *contour, Texture *texture, QWidget *pare
 
     // Contour
     m_contour->ui.intRange->setRange(0, 100);
-    m_contour->ui.intRange->setSuffix(" %");
+    m_contour->ui.intRange->setSuffix(i18n(" %"));
 
     connect(m_contour->ui.cmbContour, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(m_contour->ui.chkAntiAliased, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
@@ -637,10 +637,10 @@ BevelAndEmboss::BevelAndEmboss(Contour *contour, Texture *texture, QWidget *pare
 
     // Texture
     m_texture->ui.intScale->setRange(0, 100);
-    m_texture->ui.intScale->setSuffix(" %");
+    m_texture->ui.intScale->setSuffix(i18n(" %"));
 
     m_texture->ui.intDepth->setRange(-1000, 1000);
-    m_texture->ui.intDepth->setSuffix(" %");
+    m_texture->ui.intDepth->setSuffix(i18n(" %"));
 
     connect(m_texture->ui.patternChooser, SIGNAL(resourceSelected(KoResource*)), SIGNAL(configChanged()));
     connect(m_texture->ui.intScale, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
@@ -790,7 +790,7 @@ ColorOverlay::ColorOverlay(QWidget *parent)
     ui.setupUi(this);
 
     ui.intOpacity->setRange(0, 100);
-    ui.intOpacity->setSuffix(" %");
+    ui.intOpacity->setSuffix(i18n(" %"));
 
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
@@ -823,19 +823,19 @@ DropShadow::DropShadow(Mode mode, QWidget *parent)
     ui.setupUi(this);
 
     ui.intOpacity->setRange(0, 100);
-    ui.intOpacity->setSuffix(" %");
+    ui.intOpacity->setSuffix(i18n(" %"));
 
     ui.intDistance->setRange(0, 30000);
-    ui.intDistance->setSuffix(" px");
+    ui.intDistance->setSuffix(i18n(" px"));
 
     ui.intSpread->setRange(0, 100);
-    ui.intSpread->setSuffix(" %");
+    ui.intSpread->setSuffix(i18n(" %"));
 
     ui.intSize->setRange(0, 250);
-    ui.intSize->setSuffix(" px");
+    ui.intSize->setSuffix(i18n(" px"));
 
     ui.intNoise->setRange(0, 100);
-    ui.intNoise->setSuffix(" %");
+    ui.intNoise->setSuffix(i18n(" %"));
 
     connect(ui.dialAngle, SIGNAL(valueChanged(int)), SLOT(slotDialAngleChanged(int)));
     connect(ui.intAngle, SIGNAL(valueChanged(int)), SLOT(slotIntAngleChanged(int)));
@@ -996,10 +996,10 @@ GradientOverlay::GradientOverlay(KisCanvasResourceProvider *resourceProvider, QW
     ui.setupUi(this);
 
     ui.intOpacity->setRange(0, 100);
-    ui.intOpacity->setSuffix(" %");
+    ui.intOpacity->setSuffix(i18n(" %"));
 
     ui.intScale->setRange(0, 100);
-    ui.intScale->setSuffix(" %");
+    ui.intScale->setSuffix(i18n(" %"));
 
     connect(ui.dialAngle, SIGNAL(valueChanged(int)), SLOT(slotDialAngleChanged(int)));
     connect(ui.intAngle, SIGNAL(valueChanged(int)), SLOT(slotIntAngleChanged(int)));
@@ -1071,22 +1071,22 @@ InnerGlow::InnerGlow(Mode mode, KisCanvasResourceProvider *resourceProvider, QWi
     ui.setupUi(this);
 
     ui.intOpacity->setRange(0, 100);
-    ui.intOpacity->setSuffix(" %");
+    ui.intOpacity->setSuffix(i18n(" %"));
 
     ui.intNoise->setRange(0, 100);
-    ui.intNoise->setSuffix(" %");
+    ui.intNoise->setSuffix(i18n(" %"));
 
     ui.intChoke->setRange(0, 100);
-    ui.intChoke->setSuffix(" %");
+    ui.intChoke->setSuffix(i18n(" %"));
 
     ui.intSize->setRange(0, 250);
-    ui.intSize->setSuffix(" px");
+    ui.intSize->setSuffix(i18n(" px"));
 
     ui.intRange->setRange(0, 100);
-    ui.intRange->setSuffix(" %");
+    ui.intRange->setSuffix(i18n(" %"));
 
     ui.intJitter->setRange(0, 100);
-    ui.intJitter->setSuffix(" %");
+    ui.intJitter->setSuffix(i18n(" %"));
 
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
@@ -1199,10 +1199,10 @@ PatternOverlay::PatternOverlay(QWidget *parent)
     ui.setupUi(this);
 
     ui.intOpacity->setRange(0, 100);
-    ui.intOpacity->setSuffix(" %");
+    ui.intOpacity->setSuffix(i18n(" %"));
 
     ui.intScale->setRange(0, 100);
-    ui.intScale->setSuffix(" %");
+    ui.intScale->setSuffix(i18n(" %"));
 
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
@@ -1240,13 +1240,13 @@ Satin::Satin(QWidget *parent)
     ui.setupUi(this);
 
     ui.intOpacity->setRange(0, 100);
-    ui.intOpacity->setSuffix(" %");
+    ui.intOpacity->setSuffix(i18n(" %"));
 
     ui.intDistance->setRange(0, 250);
-    ui.intDistance->setSuffix(" px");
+    ui.intDistance->setSuffix(i18n(" px"));
 
     ui.intSize->setRange(0, 250);
-    ui.intSize->setSuffix(" px");
+    ui.intSize->setSuffix(i18n(" px"));
 
     connect(ui.dialAngle, SIGNAL(valueChanged(int)), SLOT(slotDialAngleChanged(int)));
     connect(ui.intAngle, SIGNAL(valueChanged(int)), SLOT(slotIntAngleChanged(int)));
@@ -1326,16 +1326,16 @@ Stroke::Stroke(KisCanvasResourceProvider *resourceProvider, QWidget *parent)
     ui.setupUi(this);
 
     ui.intSize->setRange(0, 250);
-    ui.intSize->setSuffix(" px");
+    ui.intSize->setSuffix(i18n(" px"));
 
     ui.intOpacity->setRange(0, 100);
-    ui.intOpacity->setSuffix(" %");
+    ui.intOpacity->setSuffix(i18n(" %"));
 
     ui.intScale->setRange(0, 100);
-    ui.intScale->setSuffix(" %");
+    ui.intScale->setSuffix(i18n(" %"));
 
     ui.intScale_2->setRange(0, 100);
-    ui.intScale_2->setSuffix(" %");
+    ui.intScale_2->setSuffix(i18n(" %"));
 
     connect(ui.cmbFillType, SIGNAL(currentIndexChanged(int)), ui.fillStack, SLOT(setCurrentIndex(int)));
 

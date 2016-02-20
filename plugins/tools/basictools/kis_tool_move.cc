@@ -44,23 +44,41 @@ KisToolMove::KisToolMove(KoCanvasBase * canvas)
     setObjectName("tool_move");
     m_optionsWidget = 0;
     m_moveInProgress = false;
+    QAction *a;
 
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
-    m_actionMoveUp = actionRegistry->makeQAction("movetool-move-up", this);
-    addAction("movetool-move-up", m_actionMoveUp);
-    connect(m_actionMoveUp, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Up);});
+    a = actionRegistry->makeQAction("movetool-move-up", this);
+    addAction("movetool-move-up", a);
+    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Up, false);});
 
-    m_actionMoveDown = actionRegistry->makeQAction("movetool-move-down", this);
-    addAction("movetool-move-down", m_actionMoveDown);
-    connect(m_actionMoveDown, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Down);});
+    a = actionRegistry->makeQAction("movetool-move-down", this);
+    addAction("movetool-move-down", a);
+    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Down, false);});
 
-    m_actionMoveLeft = actionRegistry->makeQAction("movetool-move-left", this);
-    addAction("movetool-move-left", m_actionMoveLeft);
-    connect(m_actionMoveLeft, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Left);});
+    a = actionRegistry->makeQAction("movetool-move-left", this);
+    addAction("movetool-move-left", a);
+    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Left, false);});
 
-    m_actionMoveRight = actionRegistry->makeQAction("movetool-move-right", this);
-    addAction("movetool-move-right", m_actionMoveRight);
-    connect(m_actionMoveRight, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Right);});
+    a = actionRegistry->makeQAction("movetool-move-right", this);
+    addAction("movetool-move-right", a);
+    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Right, false);});
+
+    a = actionRegistry->makeQAction("movetool-move-up-more", this);
+    addAction("movetool-move-up-more", a);
+    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Up, true);});
+
+    a = actionRegistry->makeQAction("movetool-move-down-more", this);
+    addAction("movetool-move-down-more", a);
+    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Down, true);});
+
+    a = actionRegistry->makeQAction("movetool-move-left-more", this);
+    addAction("movetool-move-left-more", a);
+    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Left, true);});
+
+    a = actionRegistry->makeQAction("movetool-move-right-more", this);
+    addAction("movetool-move-right-more", a);
+    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Right, true);});
+
 }
 
 KisToolMove::~KisToolMove()
@@ -75,7 +93,7 @@ void KisToolMove::resetCursorStyle()
     overrideCursorIfNotEditable();
 }
 
-void KisToolMove::moveDiscrete(MoveDirection direction)
+void KisToolMove::moveDiscrete(MoveDirection direction, bool big)
 {
     if (mode() == KisTool::PAINT_MODE) return;  // Don't interact with dragging
 
@@ -128,7 +146,10 @@ void KisToolMove::moveDiscrete(MoveDirection direction)
         m_accumulatedOffset = QPoint();
     }
 
-    int moveStep = m_optionsWidget->moveStep();
+    // Larger movement if "shift" key is pressed.
+    qreal scale = big ? m_optionsWidget->moveScale() : 1.0;
+    qreal moveStep = m_optionsWidget->moveStep() * scale;
+
     QPoint offset = direction == Up   ? QPoint( 0, -moveStep) :
                     direction == Down ? QPoint( 0,  moveStep) :
                     direction == Left ? QPoint(-moveStep,  0) :

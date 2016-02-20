@@ -56,13 +56,20 @@ void KisToolSelectPath::mousePressEvent(KoPointerEvent* event)
 }
 
 // Install an event filter to catch right-click events.
+// This code is duplicated in kis_tool_path.cc
 bool KisToolSelectPath::eventFilter(QObject *obj, QEvent *event)
 {
-    Q_UNUSED(obj)
+    Q_UNUSED(obj);
     if (event->type() == QEvent::MouseButtonPress ||
-            event->type() == QEvent::MouseButtonDblClick) {
+        event->type() == QEvent::MouseButtonDblClick) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         if (mouseEvent->button() == Qt::RightButton) {
+            localTool()->removeLastPoint();
+            return true;
+        }
+    } else if (event->type() == QEvent::TabletPress) {
+        QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
+        if (tabletEvent->button() == Qt::RightButton) {
             localTool()->removeLastPoint();
             return true;
         }

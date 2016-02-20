@@ -29,12 +29,12 @@ set(kritapsdimport_SOURCES
     ${LIB_PSD_SRCS}
 )
 
-add_library(kritapsdimport MODULE ${kritapsdimport_SOURCES})
+add_library(kritapsdimport SHARED ${kritapsdimport_SOURCES})
 
 if (WIN32)
-	target_link_libraries(kritapsdimport kritaui kritapsd  ${WIN32_PLATFORM_NET_LIBS} ${ZLIB_LIBRARIES})
+	target_link_libraries(kritapsdimport kritaglobal kritaui kritapsd KF5::I18n ${WIN32_PLATFORM_NET_LIBS} ${ZLIB_LIBRARIES})
 else ()
-	target_link_libraries(kritapsdimport kritaui kritapsd  ${ZLIB_LIBRARIES})
+	target_link_libraries(kritapsdimport kritaglobal kritaui kritapsd KF5::I18n ${ZLIB_LIBRARIES})
 endif ()
 
 install(TARGETS kritapsdimport DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})

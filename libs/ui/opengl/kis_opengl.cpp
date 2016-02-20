@@ -53,6 +53,7 @@ void KisOpenGL::initialize()
 
     QSurfaceFormat format;
     format.setProfile(QSurfaceFormat::CompatibilityProfile);
+    format.setOptions(QSurfaceFormat::DeprecatedFunctions);
     format.setDepthBufferSize(24);
     format.setStencilBufferSize(8);
     format.setVersion(3, 2);

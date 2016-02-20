@@ -397,6 +397,10 @@ struct LowerRaiseLayer : public KisCommandUtils::AggregateCommand {
 
         KisNodeSP currentAbove = newAbove;
         Q_FOREACH (KisNodeSP node, sortedNodes) {
+            if (node->parent() != newParent && !newParent->allowAsChild(node)) {
+                continue;
+            }
+
             MoveNodeStructSP moveStruct = toQShared(new MoveNodeStruct(m_image, node, newParent, currentAbove));
             addCommand(new KisImageLayerMoveCommand(m_image, node, newParent, currentAbove, false));
             m_updateData->addInitialUpdate(moveStruct);

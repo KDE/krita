@@ -116,7 +116,7 @@ void KisNodeFilterProxyModel::setActiveNode(KisNodeSP node)
 {
     m_d->pendingActiveNode = node;
 
-    if (indexFromNode(node).isValid()) {
+    if (node && indexFromNode(node).isValid()) {
         m_d->activeNodeCompressor.start();
     } else {
         slotUpdateCurrentNodeFilter();

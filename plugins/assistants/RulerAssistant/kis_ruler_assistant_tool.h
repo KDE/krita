@@ -60,7 +60,6 @@ private:
     void outlineOn(KisPaintingAssistant* assistant);
     void outlineOff(KisPaintingAssistant* assistant);
     bool mouseNear(const QPointF& mousep, const QPointF& point);
-    int calculateAssistantYMax(const KisPaintingAssistant* assistant); // for assistant helper tools
     QPointF straightLine(QPointF point, QPointF compare);
     KisPaintingAssistantHandleSP nodeNearPoint(KisPaintingAssistant* grid, QPointF point);
 

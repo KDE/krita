@@ -133,7 +133,7 @@ const KoColorSpace * KisGroupLayer::colorSpace() const
 
 QIcon KisGroupLayer::icon() const
 {
-    return KisIconUtils::loadIcon("folder");
+    return KisIconUtils::loadIcon("groupLayer");
 }
 
 void KisGroupLayer::setImage(KisImageWSP image)

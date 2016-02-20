@@ -201,6 +201,7 @@ void KisNodeModel::progressPercentageChanged(int, const KisNodeSP node)
     // still be some signals arriving from another thread
     if (m_d->dummiesFacade->hasDummyForNode(node)) {
         QModelIndex index = indexFromNode(node);
+
         emit dataChanged(index, index);
     }
 }
@@ -268,8 +269,8 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImag
             connectDummies(rootDummy, true);
         }
 
-        connect(m_d->dummiesFacade, SIGNAL(sigBeginInsertDummy(KisNodeDummy*,int,QString,bool)),
-                SLOT(slotBeginInsertDummy(KisNodeDummy*,int,QString,bool)));
+        connect(m_d->dummiesFacade, SIGNAL(sigBeginInsertDummy(KisNodeDummy*,int,QString)),
+                SLOT(slotBeginInsertDummy(KisNodeDummy*,int,QString)));
         connect(m_d->dummiesFacade, SIGNAL(sigEndInsertDummy(KisNodeDummy*)),
                 SLOT(slotEndInsertDummy(KisNodeDummy*)));
         connect(m_d->dummiesFacade, SIGNAL(sigBeginRemoveDummy(KisNodeDummy*)),
@@ -290,7 +291,7 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImag
     }
 }
 
-void KisNodeModel::slotBeginInsertDummy(KisNodeDummy *parent, int index, const QString &metaObjectType, bool isAnimated)
+void KisNodeModel::slotBeginInsertDummy(KisNodeDummy *parent, int index, const QString &metaObjectType)
 {
     int row = 0;
     QModelIndex parentIndex;
@@ -298,7 +299,6 @@ void KisNodeModel::slotBeginInsertDummy(KisNodeDummy *parent, int index, const Q
     bool willAdd =
         m_d->indexConverter->indexFromAddedDummy(parent, index,
                                                  metaObjectType,
-                                                 isAnimated,
                                                  parentIndex, row);
 
     if(willAdd) {
@@ -356,12 +356,32 @@ void KisNodeModel::slotDummyChanged(KisNodeDummy *dummy)
     m_d->updateTimer.start(1000);
 }
 
+void addChangedIndex(const QModelIndex &index, QSet<QModelIndex> *indexes)
+{
+    if (!index.isValid() || indexes->contains(index)) return;
+
+    indexes->insert(index);
+
+    const int rowCount = index.model()->rowCount(index);
+    for (int i = 0; i < rowCount; i++) {
+        addChangedIndex(index.child(i, 0), indexes);
+    }
+}
+
+
 void KisNodeModel::processUpdateQueue()
 {
+    QSet<QModelIndex> indexes;
+
     Q_FOREACH (KisNodeDummy *dummy, m_d->updateQueue) {
         QModelIndex index = m_d->indexConverter->indexFromDummy(dummy);
+        addChangedIndex(index, &indexes);
+    }
+
+    Q_FOREACH (const QModelIndex &index, indexes) {
         emit dataChanged(index, index);
     }
+
     m_d->updateQueue.clear();
 }
 
@@ -425,20 +445,29 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
         if (node->projectionLeaf()->isDroppedMask()) {
             baseFont.setStrikeOut(true);
         }
+        if (m_d->activeNodeIndex == index) {
+            baseFont.setBold(true);
+        }
         return baseFont;
     }
-    case KisBaseNode::PropertiesRole: return QVariant::fromValue(node->sectionModelProperties());
-    case KisBaseNode::AspectRatioRole: return double(m_d->image->width()) / m_d->image->height();
-    case KisBaseNode::ProgressRole: {
+    case KisNodeModel::PropertiesRole: return QVariant::fromValue(node->sectionModelProperties());
+    case KisNodeModel::AspectRatioRole: return double(m_d->image->width()) / m_d->image->height();
+    case KisNodeModel::ProgressRole: {
         KisNodeProgressProxy *proxy = node->nodeProgressProxy();
         return proxy ? proxy->percentage() : -1;
     }
-    case KisBaseNode::ActiveRole: {
+    case KisNodeModel::ActiveRole: {
         return m_d->activeNodeIndex == index;
     }
+    case KisNodeModel::ShouldGrayOutRole: {
+        return !node->visible(true);
+    }
+    case KisNodeModel::ColorLabelIndexRole: {
+        return node->colorLabelIndex();
+    }
     default:
-        if (role >= int(KisBaseNode::BeginThumbnailRole) && belongsToIsolatedGroup(node))
-            return node->createThumbnail(role - int(KisBaseNode::BeginThumbnailRole), role - int(KisBaseNode::BeginThumbnailRole));
+        if (role >= int(KisNodeModel::BeginThumbnailRole) && belongsToIsolatedGroup(node))
+            return node->createThumbnail(role - int(KisNodeModel::BeginThumbnailRole), role - int(KisNodeModel::BeginThumbnailRole));
         else
             return QVariant();
     }
@@ -457,7 +486,7 @@ Qt::ItemFlags KisNodeModel::flags(const QModelIndex &index) const
 bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
 
-    if (role == KisBaseNode::ActiveRole || role == KisBaseNode::AlternateActiveRole) {
+    if (role == KisNodeModel::ActiveRole || role == KisNodeModel::AlternateActiveRole) {
         QModelIndex parentIndex;
         if (!index.isValid() && m_d->parentOfRemovedNode && m_d->dummiesFacade && m_d->indexConverter) {
             parentIndex = m_d->indexConverter->indexFromDummy(m_d->parentOfRemovedNode);
@@ -477,7 +506,7 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
         }
 
         QModelIndex newActiveNode = activatedNode ? indexFromNode(activatedNode) : QModelIndex();
-        if (role == KisBaseNode::ActiveRole && value.toBool() &&
+        if (role == KisNodeModel::ActiveRole && value.toBool() &&
             m_d->activeNodeIndex == newActiveNode) {
 
             return true;
@@ -489,7 +518,7 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
             m_d->nodeSelectionAdapter->setActiveNode(activatedNode);
         }
 
-        if (role == KisBaseNode::AlternateActiveRole) {
+        if (role == KisNodeModel::AlternateActiveRole) {
             emit toggleIsolateActiveNode();
         }
 
@@ -500,6 +529,7 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
     if(!m_d->dummiesFacade || !index.isValid()) return false;
 
     bool result = true;
+    bool shouldUpdateRecursively = false;
     KisNodeSP node = nodeFromIndex(index);
 
     switch (role) {
@@ -507,11 +537,12 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
     case Qt::EditRole:
         node->setName(value.toString());
         break;
-    case KisBaseNode::PropertiesRole:
+    case KisNodeModel::PropertiesRole:
         {
             // don't record undo/redo for visibility, locked or alpha locked changes
             KisBaseNode::PropertyList proplist = value.value<KisBaseNode::PropertyList>();
             KisNodePropertyListCommand::setNodePropertiesNoUndo(node, m_d->image, proplist);
+            shouldUpdateRecursively = true;
 
             break;
         }
@@ -520,7 +551,15 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
     }
 
     if(result) {
-        emit dataChanged(index, index);
+        if (shouldUpdateRecursively) {
+            QSet<QModelIndex> indexes;
+            addChangedIndex(index, &indexes);
+            Q_FOREACH (const QModelIndex &index, indexes) {
+                emit dataChanged(index, index);
+            }
+        } else {
+            emit dataChanged(index, index);
+        }
     }
 
     return result;

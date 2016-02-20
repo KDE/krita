@@ -25,8 +25,8 @@
 #include <QFont>
 #include <QFontMetrics>
 
-
 #include "kis_debug.h"
+#include "krita_utils.h"
 
 #include <QGlobalStatic>
 Q_GLOBAL_STATIC(TimelineColorScheme, s_instance)
@@ -85,15 +85,6 @@ QBrush TimelineColorScheme::headerActive() const
     return selectorColor();
 }
 
-inline QColor blendColors(const QColor &c1, const QColor &c2, qreal r1) {
-    const qreal r2 = 1.0 - r1;
-
-    return QColor::fromRgbF(
-        c1.redF() * r1 + c2.redF() * r2,
-        c1.greenF() * r1 + c2.greenF() * r2,
-        c1.blueF() * r1 + c2.blueF() * r2);
-}
-
 QColor TimelineColorScheme::frameColor(bool present, bool active) const
 {
     QColor color = Qt::transparent;
@@ -106,7 +97,7 @@ QColor TimelineColorScheme::frameColor(bool present, bool active) const
         color = m_d->baseColor.darker(darkenCoeff);
     } else if (!present && active) {
         QColor bgColor = qApp->palette().color(QPalette::Base);
-        return blendColors(m_d->baseColor, bgColor, 0.2);
+        return KritaUtils::blendColors(m_d->baseColor, bgColor, 0.2);
     }
 
     return color;

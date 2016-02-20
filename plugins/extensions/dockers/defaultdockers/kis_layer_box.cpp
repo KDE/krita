@@ -42,6 +42,7 @@
 #include <QVector>
 #include <QLabel>
 #include <QMenu>
+#include <QWidgetAction>
 
 #include <kis_debug.h>
 #include <klocalizedstring.h>
@@ -69,6 +70,7 @@
 #include "KisViewManager.h"
 #include "kis_node_manager.h"
 #include "kis_node_model.h"
+
 #include "canvas/kis_canvas2.h"
 #include "KisDocument.h"
 #include "kis_dummies_facade_base.h"
@@ -78,6 +80,10 @@
 #include "KisView.h"
 #include "krita_utils.h"
 #include "sync_button_and_action.h"
+#include "kis_color_label_selector_widget.h"
+#include "kis_signals_blocker.h"
+#include "kis_color_filter_combo.h"
+#include "kis_node_filter_proxy_model.h"
 
 #include "ui_wdglayerbox.h"
 
@@ -102,6 +108,7 @@ KisLayerBox::KisLayerBox()
         , m_canvas(0)
         , m_wdgLayerBox(new Ui_WdgLayerBox)
         , m_thumbnailCompressor(500, KisSignalCompressor::FIRST_INACTIVE)
+        , m_colorLabelCompressor(900, KisSignalCompressor::FIRST_INACTIVE)
 {
     KisConfig cfg;
 
@@ -121,28 +128,7 @@ KisLayerBox::KisLayerBox()
     connect(m_wdgLayerBox->listLayers,
             SIGNAL(selectionChanged(const QModelIndexList&)), SLOT(selectionChanged(const QModelIndexList&)));
 
-    m_viewModeMenu = new QMenu(this);
-    QActionGroup *group = new QActionGroup(this);
-    QList<QAction*> actions;
-
-    actions << m_viewModeMenu->addAction(KisIconUtils::loadIcon("view-list-text"),
-                                         i18n("Minimal View"), this, SLOT(slotMinimalView()));
-    actions << m_viewModeMenu->addAction(KisIconUtils::loadIcon("view-list-details"),
-                                         i18n("Detailed View"), this, SLOT(slotDetailedView()));
-    actions << m_viewModeMenu->addAction(KisIconUtils::loadIcon("view-preview"),
-                                         i18n("Thumbnail View"), this, SLOT(slotThumbnailView()));
-
-    for (int i = 0, n = actions.count(); i < n; ++i) {
-        actions[i]->setCheckable(true);
-        actions[i]->setActionGroup(group);
-    }
-
     m_wdgLayerBox->bnAdd->setIcon(KisIconUtils::loadIcon("addlayer"));
-
-    m_wdgLayerBox->bnViewMode->setMenu(m_viewModeMenu);
-    m_wdgLayerBox->bnViewMode->setPopupMode(QToolButton::InstantPopup);
-    m_wdgLayerBox->bnViewMode->setIcon(KisIconUtils::loadIcon("view-choose"));
-    m_wdgLayerBox->bnViewMode->setText(i18n("View mode"));
 
     m_wdgLayerBox->bnDelete->setIcon(KisIconUtils::loadIcon("deletelayer"));
     m_wdgLayerBox->bnDelete->setIconSize(QSize(22, 22));
@@ -185,6 +171,8 @@ KisLayerBox::KisLayerBox()
     m_wdgLayerBox->bnAdd->setPopupMode(QToolButton::MenuButtonPopup);
 
     m_nodeModel = new KisNodeModel(this);
+    m_filteringModel = new KisNodeFilterProxyModel(this);
+    m_filteringModel->setNodeModel(m_nodeModel);
 
     /**
      * Connect model updateUI() to enable/disable controls.
@@ -207,11 +195,22 @@ KisLayerBox::KisLayerBox()
 
     showGlobalSelectionMask->setChecked(cfg.showGlobalSelection());
 
-    m_wdgLayerBox->listLayers->setModel(m_nodeModel);
+    m_colorSelector = new KisColorLabelSelectorWidget(this);
+    connect(m_colorSelector, SIGNAL(currentIndexChanged(int)), SLOT(slotColorLabelChanged(int)));
+    m_colorSelectorAction = new QWidgetAction(this);
+    m_colorSelectorAction->setDefaultWidget(m_colorSelector);
+
+    connect(m_nodeModel, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
+            &m_colorLabelCompressor, SLOT(start()));
+
+    m_wdgLayerBox->listLayers->setModel(m_filteringModel);
+
+    connect(m_wdgLayerBox->cmbFilter, SIGNAL(selectedColorsChanged()), SLOT(updateLayerFiltering()));
 
     setEnabled(false);
 
     connect(&m_thumbnailCompressor, SIGNAL(timeout()), SLOT(updateThumbnail()));
+    connect(&m_colorLabelCompressor, SIGNAL(timeout()), SLOT(updateAvailableLabels()));
 }
 
 KisLayerBox::~KisLayerBox()
@@ -220,24 +219,24 @@ KisLayerBox::~KisLayerBox()
 }
 
 
-void expandNodesRecursively(KisNodeSP root, QPointer<KisNodeModel> nodeModel, KisNodeView *nodeView)
+void expandNodesRecursively(KisNodeSP root, QPointer<KisNodeFilterProxyModel> filteringModel, KisNodeView *nodeView)
 {
     if (!root) return;
-    if (nodeModel.isNull()) return;
+    if (filteringModel.isNull()) return;
     if (!nodeView) return;
 
     nodeView->blockSignals(true);
 
     KisNodeSP node = root->firstChild();
     while (node) {
-        QModelIndex idx = nodeModel->indexFromNode(node);
+        QModelIndex idx = filteringModel->indexFromNode(node);
         if (idx.isValid()) {
             if (node->collapsed()) {
                 nodeView->collapse(idx);
             }
         }
         if (node->childCount() > 0) {
-            expandNodesRecursively(node, nodeModel, nodeView);
+            expandNodesRecursively(node, filteringModel, nodeView);
         }
         node = node->nextSibling();
     }
@@ -293,7 +292,6 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         disconnect(m_image, 0, this, 0);
         disconnect(m_nodeManager, 0, this, 0);
         disconnect(m_nodeModel, 0, m_nodeManager, 0);
-        disconnect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), this, SLOT(updateUI()));
         m_nodeManager->slotSetSelectedNodes(KisNodeList());
     }
 
@@ -335,8 +333,9 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
                 m_nodeManager, SLOT(toggleIsolateActiveNode()));
 
         m_wdgLayerBox->listLayers->expandAll();
-        expandNodesRecursively(m_image->rootLayer(), m_nodeModel, m_wdgLayerBox->listLayers);
+        expandNodesRecursively(m_image->rootLayer(), m_filteringModel, m_wdgLayerBox->listLayers);
         m_wdgLayerBox->listLayers->scrollTo(m_wdgLayerBox->listLayers->currentIndex());
+        updateAvailableLabels();
 
         addActionToMenu(m_newLayerMenu, "add_new_paint_layer");
         addActionToMenu(m_newLayerMenu, "add_new_group_layer");
@@ -366,7 +365,6 @@ void KisLayerBox::unsetCanvas()
     disconnect(m_image, 0, this, 0);
     disconnect(m_nodeManager, 0, this, 0);
     disconnect(m_nodeModel, 0, m_nodeManager, 0);
-    disconnect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), this, SLOT(updateUI()));
     m_nodeManager->slotSetSelectedNodes(KisNodeList());
 
     m_canvas = 0;
@@ -431,9 +429,10 @@ void KisLayerBox::updateUI()
  */
 void KisLayerBox::setCurrentNode(KisNodeSP node)
 {
-    QModelIndex index = node ? m_nodeModel->indexFromNode(node) : QModelIndex();
+    m_filteringModel->setActiveNode(node);
 
-    m_nodeModel->setData(index, true, KisBaseNode::ActiveRole);
+    QModelIndex index = node ? m_filteringModel->indexFromNode(node) : QModelIndex();
+    m_filteringModel->setData(index, true, KisNodeModel::ActiveRole);
     updateUI();
 }
 
@@ -442,7 +441,7 @@ void KisLayerBox::slotModelReset()
     if(m_nodeModel->hasDummiesFacade()) {
         QItemSelection selection;
         Q_FOREACH (const KisNodeSP node, m_nodeManager->selectedNodes()) {
-            const QModelIndex &idx = m_nodeModel->indexFromNode(node);
+            const QModelIndex &idx = m_filteringModel->indexFromNode(node);
             if(idx.isValid()){
                 QItemSelectionRange selectionRange(idx);
                 selection << selectionRange;
@@ -480,16 +479,29 @@ void KisLayerBox::slotSetOpacity(double opacity)
 
 void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &index)
 {
+    KisNodeList nodes = m_nodeManager->selectedNodes();
+    KisNodeSP activeNode = m_nodeManager->activeNode();
+    if (nodes.isEmpty() || !activeNode) return;
+
     if (m_canvas) {
         QMenu menu;
 
-        const bool singleLayer = m_nodeManager->selectedNodes().size() == 1;
+        const bool singleLayer = nodes.size() == 1;
 
         if (index.isValid()) {
             menu.addAction(m_propertiesAction);
 
             if (singleLayer) {
                 addActionToMenu(&menu, "layer_style");
+            }
+
+            {
+                KisSignalsBlocker b(m_colorSelector);
+                m_colorSelector->setCurrentIndex(singleLayer ? activeNode->colorLabelIndex() : -1);
+            }
+            menu.addAction(m_colorSelectorAction);
+
+            if (singleLayer) {
                 menu.addSeparator();
                 addActionToMenu(&menu, "show_in_timeline");
             }
@@ -531,7 +543,7 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
                 addActionToMenu(splitAlphaMenu, "split_alpha_write");
                 addActionToMenu(splitAlphaMenu, "split_alpha_save_merged");
 
-                KisNodeSP node = m_nodeModel->nodeFromIndex(index);
+                KisNodeSP node = m_filteringModel->nodeFromIndex(index);
                 if (node && !node->inherits("KisTransformMask")) {
                     addActionToMenu(&menu, "isolate_layer");
                 }
@@ -622,7 +634,7 @@ void KisLayerBox::slotOpacitySliderMoved(qreal opacity)
 
 void KisLayerBox::slotCollapsed(const QModelIndex &index)
 {
-    KisNodeSP node = m_nodeModel->nodeFromIndex(index);
+    KisNodeSP node = m_filteringModel->nodeFromIndex(index);
     if (node) {
         node->setCollapsed(true);
     }
@@ -630,7 +642,7 @@ void KisLayerBox::slotCollapsed(const QModelIndex &index)
 
 void KisLayerBox::slotExpanded(const QModelIndex &index)
 {
-    KisNodeSP node = m_nodeModel->nodeFromIndex(index);
+    KisNodeSP node = m_filteringModel->nodeFromIndex(index);
     if (node) {
         node->setCollapsed(false);
     }
@@ -648,7 +660,7 @@ void KisLayerBox::slotSelectOpaque()
 void KisLayerBox::slotNodeCollapsedChanged()
 {
     m_wdgLayerBox->listLayers->expandAll();
-    expandNodesRecursively(m_image->rootLayer(), m_nodeModel, m_wdgLayerBox->listLayers);
+    expandNodesRecursively(m_image->rootLayer(), m_filteringModel, m_wdgLayerBox->listLayers);
 }
 
 inline bool isSelectionMask(KisNodeSP node)
@@ -727,7 +739,7 @@ void KisLayerBox::selectionChanged(const QModelIndexList selection)
      */
     if (selection.isEmpty() && m_nodeManager->activeNode()) {
         QModelIndex selectedIndex =
-            m_nodeModel->indexFromNode(m_nodeManager->activeNode());
+            m_filteringModel->indexFromNode(m_nodeManager->activeNode());
 
         m_wdgLayerBox->listLayers->selectionModel()->
             setCurrentIndex(selectedIndex, QItemSelectionModel::ClearAndSelect);
@@ -736,7 +748,7 @@ void KisLayerBox::selectionChanged(const QModelIndexList selection)
 
     QList<KisNodeSP> selectedNodes;
     Q_FOREACH (const QModelIndex &idx, selection) {
-        selectedNodes << m_nodeModel->nodeFromIndex(idx);
+        selectedNodes << m_filteringModel->nodeFromIndex(idx);
     }
 
     m_nodeManager->slotSetSelectedNodes(selectedNodes);
@@ -749,7 +761,7 @@ void KisLayerBox::slotNodeManagerChangedSelection(const KisNodeList &nodes)
 
     QModelIndexList newSelection;
     Q_FOREACH(KisNodeSP node, nodes) {
-        newSelection << m_nodeModel->indexFromNode(node);
+        newSelection << m_filteringModel->indexFromNode(node);
     }
 
     QItemSelectionModel *model = m_wdgLayerBox->listLayers->selectionModel();
@@ -774,6 +786,27 @@ void KisLayerBox::updateThumbnail()
 void KisLayerBox::slotRenameCurrentNode()
 {
     m_wdgLayerBox->listLayers->edit(m_wdgLayerBox->listLayers->currentIndex());
+}
+
+void KisLayerBox::slotColorLabelChanged(int index)
+{
+    KisNodeList nodes = m_nodeManager->selectedNodes();
+    const int label = m_colorSelector->currentIndex();
+
+    Q_FOREACH(KisNodeSP node, nodes) {
+        node->setColorLabelIndex(label);
+    }
+}
+
+void KisLayerBox::updateAvailableLabels()
+{
+    if (!m_image) return;
+    m_wdgLayerBox->cmbFilter->updateAvailableLabels(m_image->root());
+}
+
+void KisLayerBox::updateLayerFiltering()
+{
+    m_filteringModel->setAcceptedLabels(m_wdgLayerBox->cmbFilter->selectedColors());
 }
 
 #include "moc_kis_layer_box.cpp"

@@ -23,6 +23,8 @@
 #include <QUuid>
 #include <QString>
 
+#include <KoID.h>
+
 #include "kis_shared.h"
 #include "kis_paint_device.h"
 #include "kis_processing_visitor.h" // included, not forward declared for msvc
@@ -51,38 +53,6 @@ class KRITAIMAGE_EXPORT KisBaseNode : public QObject, public KisShared
     Q_OBJECT
 
 public:
-
-    /// Extensions to Qt::ItemDataRole.
-    enum ItemDataRole
-    {
-        /// Whether the section is the active one
-        ActiveRole = Qt::UserRole + 1,
-
-        /// A list of properties the part has.
-        PropertiesRole,
-
-        /// The aspect ratio of the section as a floating point value: width divided by height.
-        AspectRatioRole,
-
-        /// Use to communicate a progress report to the section delegate on an action (a value of -1 or a QVariant() disable the progress bar
-        ProgressRole,
-
-        /// Speacial activation role which is emitted when the user Atl-clicks on a section
-        /// The item is first activated with ActiveRole, then a separate AlternateActiveRole comes
-        AlternateActiveRole,
-
-        /// This is to ensure that we can extend the data role in the future, since it's not possible to add a role after BeginThumbnailRole (due to "Hack")
-        ReservedRole = 99,
-
-        /**
-         * For values of BeginThumbnailRole or higher, a thumbnail of the layer of which neither dimension
-         * is larger than (int) value - (int) BeginThumbnailRole.
-         * This is a hack to work around the fact that Interview doesn't have a nice way to
-         * request thumbnails of arbitrary size.
-         */
-        BeginThumbnailRole
-    };
-
     /**
      *  Describes a property of a document section.
      *
@@ -93,6 +63,8 @@ public:
      */
     struct Property
     {
+        QString id;
+
         /** i18n-ed name, suitable for displaying */
         QString name;
 
@@ -122,22 +94,21 @@ public:
             return rhs.name == name;
         }
 
-        /// Default constructor. Use if you want to assign the members manually.
         Property(): isMutable( false ) { }
 
         /// Constructor for a mutable property.
-        Property( const QString &n, const QIcon &on, const QIcon &off, bool isOn )
-                : name( n ), isMutable( true ), onIcon( on ), offIcon( off ), state( isOn ), canHaveStasis( false ) { }
+        Property( const KoID &n, const QIcon &on, const QIcon &off, bool isOn )
+                : id(n.id()), name( n.name() ), isMutable( true ), onIcon( on ), offIcon( off ), state( isOn ), canHaveStasis( false ) { }
 
         /** Constructor for a mutable property accepting stasis */
-        Property( const QString &n, const QIcon &on, const QIcon &off, bool isOn,
-                  bool isInStasis, bool stateInStasis )
-                : name( n ), isMutable( true ), onIcon( on ), offIcon( off ), state( isOn ),
-                  canHaveStasis( true ), isInStasis( isInStasis ), stateInStasis( stateInStasis ) { }
+        Property( const KoID &n, const QIcon &on, const QIcon &off, bool isOn,
+                  bool _isInStasis, bool _stateInStasis )
+                : id(n.id()), name(n.name()), isMutable( true ), onIcon( on ), offIcon( off ), state( isOn ),
+                  canHaveStasis( true ), isInStasis( _isInStasis ), stateInStasis( _stateInStasis ) { }
 
         /// Constructor for a nonmutable property.
-        Property( const QString &n, const QString &s )
-                : name( n ), isMutable( false ), state( s ) { }
+        Property( const KoID &n, const QString &s )
+                : id(n.id()), name(n.name()), isMutable( false ), state( s ) { }
     };
 
     /** Return this type for PropertiesRole. */
@@ -480,6 +451,18 @@ public:
      * returns the collapsed state of this node
      */
     bool collapsed() const;
+
+    /**
+     * Sets a color label index associated to the layer.  The actual
+     * color of the label and the number of available colors is
+     * defined by Krita GUI configuration.
+     */
+    void setColorLabelIndex(int index);
+
+    /**
+     * \see setColorLabelIndex
+     */
+    int colorLabelIndex() const;
 
     /**
      * Returns true if the offset of the node can be changed in a LodN

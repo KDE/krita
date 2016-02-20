@@ -43,6 +43,8 @@ public:
     ~KisFileLayer();
     KisFileLayer(const KisFileLayer& rhs);
 
+    QIcon icon() const;
+
     void resetCache();
 
     virtual const KoColorSpace *colorSpace() const;

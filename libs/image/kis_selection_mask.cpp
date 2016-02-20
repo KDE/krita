@@ -85,7 +85,7 @@ KisSelectionMask::~KisSelectionMask()
 }
 
 QIcon KisSelectionMask::icon() const {
-    return KisIconUtils::loadIcon("edit-paste");
+    return KisIconUtils::loadIcon("selectionMask");
 }
 
 void KisSelectionMask::setSelection(KisSelectionSP selection)
@@ -127,8 +127,7 @@ KisBaseNode::PropertyList KisSelectionMask::sectionModelProperties() const
 
 void KisSelectionMask::setSectionModelProperties(const KisBaseNode::PropertyList &properties)
 {
-    setVisible(properties.at(0).state.toBool());
-    setUserLocked(properties.at(1).state.toBool());
+    KisMask::setSectionModelProperties(properties);
     setActive(properties.at(2).state.toBool());
 }
 

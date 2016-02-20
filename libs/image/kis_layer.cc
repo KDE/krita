@@ -213,10 +213,10 @@ void KisLayer::setLayerStyle(KisPSDLayerStyleSP layerStyle)
 KisBaseNode::PropertyList KisLayer::sectionModelProperties() const
 {
     KisBaseNode::PropertyList l = KisBaseNode::sectionModelProperties();
-    l << KisBaseNode::Property(i18n("Opacity"), i18n("%1%", percentOpacity()));
+    l << KisBaseNode::Property(KoID("opacity", i18n("Opacity")), i18n("%1%", percentOpacity()));
 
     if (compositeOp()) {
-        l << KisBaseNode::Property(i18n("Composite Mode"), compositeOp()->description());
+        l << KisBaseNode::Property(KoID("compositeop", i18n("Composite Mode")), compositeOp()->description());
     }
 
     if (m_d->layerStyle && !m_d->layerStyle->isEmpty()) {
@@ -233,11 +233,11 @@ void KisLayer::setSectionModelProperties(const KisBaseNode::PropertyList &proper
     KisBaseNode::setSectionModelProperties(properties);
 
     Q_FOREACH (const KisBaseNode::Property &property, properties) {
-        if (property.name == i18n("Inherit Alpha")) {
+        if (property.id == KisLayerPropertiesIcons::inheritAlpha.id()) {
             disableAlphaChannel(property.state.toBool());
         }
 
-        if (property.name == i18n("Layer Style")) {
+        if (property.id == KisLayerPropertiesIcons::layerStyle.id()) {
             if (m_d->layerStyle &&
                 m_d->layerStyle->isEnabled() != property.state.toBool()) {
 

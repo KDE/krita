@@ -71,7 +71,10 @@ public:
         MinimalMode
     };
 
+    virtual void resizeEvent(QResizeEvent * event);
     virtual void paintEvent (QPaintEvent *event);
+    virtual void drawBranches(QPainter *painter, const QRect &rect,
+                              const QModelIndex &index) const;
 
     virtual void dropEvent(QDropEvent *ev);
 
@@ -128,6 +131,8 @@ protected:
     QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index,
                                                          const QEvent *event) const;
 
+    virtual QRect visualRect(const QModelIndex &index) const;
+    virtual QModelIndex indexAt(const QPoint &point) const;
     virtual bool viewportEvent(QEvent *event);
     virtual void contextMenuEvent(QContextMenuEvent *event);
     virtual void showContextMenu(const QPoint &globalPos, const QModelIndex &index);

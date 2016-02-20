@@ -50,7 +50,7 @@ KisBaseNode::KisBaseNode()
      * calls provocated, it is safe to work with it in such an
      * environment.
      */
-    setVisible(true);
+    setVisible(true, true);
     setUserLocked(false);
     setCollapsed(false);
     setSupportsLodMoves(true);
@@ -199,7 +199,7 @@ QImage KisBaseNode::createThumbnail(qint32 w, qint32 h)
 
 bool KisBaseNode::visible(bool recursive) const
 {
-    bool isVisible = m_d->properties.boolProperty("visible", true);
+    bool isVisible = m_d->properties.boolProperty(KisLayerPropertiesIcons::visible.id(), true);
     KisBaseNodeSP parentNode = parentCallback();
 
     return recursive && isVisible && parentNode ?
@@ -208,10 +208,10 @@ bool KisBaseNode::visible(bool recursive) const
 
 void KisBaseNode::setVisible(bool visible, bool loading)
 {
-    const bool isVisible = m_d->properties.boolProperty("visible", true);
+    const bool isVisible = m_d->properties.boolProperty(KisLayerPropertiesIcons::visible.id(), true);
     if (!loading && isVisible == visible) return;
 
-    m_d->properties.setProperty("visible", visible);
+    m_d->properties.setProperty(KisLayerPropertiesIcons::visible.id(), visible);
     notifyParentVisibilityChanged(visible);
 
     if (!loading) {
@@ -223,15 +223,15 @@ void KisBaseNode::setVisible(bool visible, bool loading)
 
 bool KisBaseNode::userLocked() const
 {
-    return m_d->properties.boolProperty("locked", false);
+    return m_d->properties.boolProperty(KisLayerPropertiesIcons::locked.id(), false);
 }
 
 void KisBaseNode::setUserLocked(bool locked)
 {
-    const bool isLocked = m_d->properties.boolProperty("locked", true);
+    const bool isLocked = m_d->properties.boolProperty(KisLayerPropertiesIcons::locked.id(), true);
     if (isLocked == locked) return;
 
-    m_d->properties.setProperty("locked", locked);
+    m_d->properties.setProperty(KisLayerPropertiesIcons::locked.id(), locked);
     emit userLockingChanged(locked);
     baseNodeChangedCallback();
 }
@@ -254,7 +254,7 @@ bool KisBaseNode::isEditable(bool checkVisibility) const
 {
     bool editable = true;
     if (checkVisibility) {
-        editable = (m_d->properties.boolProperty("visible", true) && !userLocked() && !systemLocked());
+        editable = (visible(false) && !userLocked() && !systemLocked());
     }
     else {
         editable = (!userLocked() && !systemLocked());
@@ -282,6 +282,21 @@ void KisBaseNode::setCollapsed(bool collapsed)
 bool KisBaseNode::collapsed() const
 {
     return m_d->collapsed;
+}
+
+void KisBaseNode::setColorLabelIndex(int index)
+{
+    const int currentLabel = colorLabelIndex();
+
+    if (currentLabel == index) return;
+
+    m_d->properties.setProperty(KisLayerPropertiesIcons::colorLabelIndex.id(), index);
+    baseNodeChangedCallback();
+}
+
+int KisBaseNode::colorLabelIndex() const
+{
+    return m_d->properties.intProperty(KisLayerPropertiesIcons::colorLabelIndex.id(), 0);
 }
 
 QUuid KisBaseNode::uuid() const

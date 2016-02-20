@@ -89,6 +89,8 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_cmbCursorShape->addItem(i18n("Crosshair"));
     m_cmbCursorShape->addItem(i18n("Triangle Righthanded"));
     m_cmbCursorShape->addItem(i18n("Triangle Lefthanded"));
+    m_cmbCursorShape->addItem(i18n("Black Pixel"));
+    m_cmbCursorShape->addItem(i18n("White Pixel"));
 
     m_cmbOutlineShape->addItem(i18n("No Outline"));
     m_cmbOutlineShape->addItem(i18n("Circle Outline"));

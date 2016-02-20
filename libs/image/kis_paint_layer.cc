@@ -177,7 +177,7 @@ void KisPaintLayer::setDirty(const QRect & rect)
 
 QIcon KisPaintLayer::icon() const
 {
-    return QIcon();
+    return KisIconUtils::loadIcon("paintLayer");
 }
 
 void KisPaintLayer::setImage(KisImageWSP image)

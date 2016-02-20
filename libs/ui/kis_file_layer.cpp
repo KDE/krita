@@ -72,6 +72,11 @@ KisFileLayer::KisFileLayer(const KisFileLayer &rhs)
     m_loader.reloadImage();
 }
 
+QIcon KisFileLayer::icon() const
+{
+    return KisIconUtils::loadIcon("fileLayer");
+}
+
 void KisFileLayer::resetCache()
 {
     m_loader.reloadImage();
@@ -95,7 +100,7 @@ KisPaintDeviceSP KisFileLayer::paintDevice() const
 KisBaseNode::PropertyList KisFileLayer::sectionModelProperties() const
 {
     KisBaseNode::PropertyList l = KisLayer::sectionModelProperties();
-    l << KisBaseNode::Property(i18n("File"), m_filename);
+    l << KisBaseNode::Property(KoID("sourcefile", i18n("File")), m_filename);
     return l;
 }
 

@@ -19,6 +19,7 @@
 #include "KisNodeView.h"
 #include "KisNodePropertyAction_p.h"
 #include "KisNodeDelegate.h"
+#include "kis_node_view_visibility_delegate.h"
 #include "kis_node_model.h"
 #include "kis_signals_blocker.h"
 
@@ -39,6 +40,9 @@
 #include <QApplication>
 #include <QPainter>
 #include <QScrollBar>
+
+#include "kis_node_view_color_scheme.h"
+
 
 #ifdef HAVE_X11
 #define DRAG_WHILE_DRAG_WORKAROUND
@@ -65,7 +69,7 @@ public:
     {
         KSharedConfigPtr config =  KSharedConfig::openConfig();
         KConfigGroup group = config->group("NodeView");
-        mode = (DisplayMode) group.readEntry("NodeViewMode", (int)DetailedMode);
+        mode = (DisplayMode) group.readEntry("NodeViewMode", (int)MinimalMode);
     }
     KisNodeDelegate delegate;
     DisplayMode mode;
@@ -77,13 +81,16 @@ public:
 #endif
 };
 
+
 KisNodeView::KisNodeView(QWidget *parent)
     : QTreeView(parent)
     , m_draggingFlag(false)
     , d(new Private(this))
 {
+    setItemDelegateForColumn(0, &d->delegate);
+
     setMouseTracking(true);
-    setSelectionBehavior(SelectItems);
+    setSelectionBehavior(SelectRows);
     setDefaultDropAction(Qt::MoveAction);
     setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -92,6 +99,7 @@ KisNodeView::KisNodeView(QWidget *parent)
     setDragEnabled(true);
     setDragDropMode(QAbstractItemView::DragDrop);
     setAcceptDrops(true);
+
     setDropIndicatorShown(true);
 }
 
@@ -118,7 +126,7 @@ KisNodeView::DisplayMode KisNodeView::displayMode() const
 
 void KisNodeView::addPropertyActions(QMenu *menu, const QModelIndex &index)
 {
-    KisBaseNode::PropertyList list = index.data(KisBaseNode::PropertiesRole).value<KisBaseNode::PropertyList>();
+    KisBaseNode::PropertyList list = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
     for (int i = 0, n = list.count(); i < n; ++i) {
         if (list.at(i).isMutable) {
             PropertyAction *a = new PropertyAction(i, list.at(i), index, menu);
@@ -177,6 +185,25 @@ QItemSelectionModel::SelectionFlags KisNodeView::selectionCommand(const QModelIn
     return QAbstractItemView::selectionCommand(index, event);
 }
 
+QRect KisNodeView::visualRect(const QModelIndex &index) const
+{
+    QRect rc = QTreeView::visualRect(index);
+    rc.setLeft(0);
+    return rc;
+}
+
+QModelIndex KisNodeView::indexAt(const QPoint &point) const
+{
+    KisNodeViewColorScheme scm;
+
+    QModelIndex index = QTreeView::indexAt(point);
+    if (!index.isValid() && point.x() < scm.visibilityColumnWidth()) {
+        index = QTreeView::indexAt(point + QPoint(scm.visibilityColumnWidth(), 0));
+    }
+
+    return index;
+}
+
 bool KisNodeView::viewportEvent(QEvent *e)
 {
     if (model()) {
@@ -186,6 +213,7 @@ bool KisNodeView::viewportEvent(QEvent *e)
 
             const QPoint pos = static_cast<QMouseEvent*>(e)->pos();
             d->lastPos = pos;
+
             if (!indexAt(pos).isValid()) {
                 return QTreeView::viewportEvent(e);
             }
@@ -266,7 +294,7 @@ void KisNodeView::currentChanged(const QModelIndex &current, const QModelIndex &
     QTreeView::currentChanged(current, previous);
     if (current != previous) {
         Q_ASSERT(!current.isValid() || current.model() == model());
-        model()->setData(current, true, KisBaseNode::ActiveRole);
+        model()->setData(current, true, KisNodeModel::ActiveRole);
     }
 }
 
@@ -276,7 +304,7 @@ void KisNodeView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bot
     for (int x = topLeft.row(); x <= bottomRight.row(); ++x) {
         for (int y = topLeft.column(); y <= bottomRight.column(); ++y) {
             QModelIndex index = topLeft.sibling(x, y);
-            if (index.data(KisBaseNode::ActiveRole).toBool()) {
+            if (index.data(KisNodeModel::ActiveRole).toBool()) {
                 if (currentIndex() != index) {
                     setCurrentIndex(index);
                 }
@@ -294,9 +322,9 @@ void KisNodeView::selectionChanged(const QItemSelection &selected, const QItemSe
 
 void KisNodeView::slotActionToggled(bool on, const QPersistentModelIndex &index, int num)
 {
-    KisBaseNode::PropertyList list = index.data(KisBaseNode::PropertiesRole).value<KisBaseNode::PropertyList>();
+    KisBaseNode::PropertyList list = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
     list[num].state = on;
-    const_cast<QAbstractItemModel*>(index.model())->setData(index, QVariant::fromValue(list), KisBaseNode::PropertiesRole);
+    const_cast<QAbstractItemModel*>(index.model())->setData(index, QVariant::fromValue(list), KisNodeModel::PropertiesRole);
 }
 
 QStyleOptionViewItem KisNodeView::optionForIndex(const QModelIndex &index) const
@@ -371,7 +399,7 @@ QPixmap KisNodeView::createDragPixmap() const
     int x = 0;
     int y = 0;
     Q_FOREACH (const QModelIndex &selectedIndex, selectedIndexes) {
-        const QImage img = selectedIndex.data(int(KisBaseNode::BeginThumbnailRole) + size).value<QImage>();
+        const QImage img = selectedIndex.data(int(KisNodeModel::BeginThumbnailRole) + size).value<QImage>();
         painter.drawPixmap(x, y, QPixmap().fromImage(img.scaled(QSize(size, size), Qt::KeepAspectRatio)));
 
         x += size + 1;
@@ -385,6 +413,16 @@ QPixmap KisNodeView::createDragPixmap() const
     }
 
     return dragPixmap;
+}
+
+void KisNodeView::resizeEvent(QResizeEvent * event)
+{
+    KisNodeViewColorScheme scm;
+    header()->setStretchLastSection(false);
+    header()->setOffset(-scm.visibilityColumnWidth());
+    header()->resizeSection(0, event->size().width() - scm.visibilityColumnWidth());
+    setIndentation(scm.indentation());
+    QTreeView::resizeEvent(event);
 }
 
 void KisNodeView::paintEvent(QPaintEvent *event)
@@ -409,6 +447,19 @@ void KisNodeView::paintEvent(QPaintEvent *event)
         painter.setOpacity(0.8);
         painter.drawLine(line);
     }
+}
+
+void KisNodeView::drawBranches(QPainter *painter, const QRect &rect,
+                               const QModelIndex &index) const
+{
+    Q_UNUSED(painter);
+    Q_UNUSED(rect);
+    Q_UNUSED(index);
+
+    /**
+     * Noop... Everything is going to be painted by KisNodeDelegate.
+     * So this override basically disables painting of Qt's branch-lines.
+     */
 }
 
 void KisNodeView::dropEvent(QDropEvent *ev)

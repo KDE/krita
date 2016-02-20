@@ -34,6 +34,7 @@ const KoID KisLayerPropertiesIcons::alphaLocked("alpha-locked", i18n("Alpha Lock
 const KoID KisLayerPropertiesIcons::onionSkins("onion-skins", i18n("Onion Skins"));
 const KoID KisLayerPropertiesIcons::passThrough("pass-through", i18n("Pass Through"));
 const KoID KisLayerPropertiesIcons::selectionActive("selection-active", i18n("Active"));
+const KoID KisLayerPropertiesIcons::colorLabelIndex("color-label", i18n("Color Label"));
 
 
 struct IconsPair {
@@ -84,15 +85,15 @@ void KisLayerPropertiesIcons::updateIcons()
 KisBaseNode::Property KisLayerPropertiesIcons::getProperty(const KoID &id, bool state)
 {
     const IconsPair &pair = instance()->m_d->icons[id.id()];
-    return KisBaseNode::Property(id.name(),
-                                  pair.on, pair.off, state);
+    return KisBaseNode::Property(id,
+                                 pair.on, pair.off, state);
 }
 
 KisBaseNode::Property KisLayerPropertiesIcons::getProperty(const KoID &id, bool state,
                                                                        bool isInStasis, bool stateInStasis)
 {
     const IconsPair &pair = instance()->m_d->icons[id.id()];
-    return KisBaseNode::Property(id.name(),
-                                  pair.on, pair.off, state,
-                                  isInStasis, stateInStasis);
+    return KisBaseNode::Property(id,
+                                 pair.on, pair.off, state,
+                                 isInStasis, stateInStasis);
 }

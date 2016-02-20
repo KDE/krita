@@ -213,6 +213,13 @@ target_link_libraries(KisNodeJugglerCompressedTest kritaimage kritaui Qt5::Test)
 
 ########### next target ###############
 
+set(kis_node_view_test_SRCS kis_node_view_test.cpp  ../../../sdk/tests/testutil.cpp)
+qt5_add_resources(kis_node_view_test_SRCS ${krita_QRCS})
+kde4_add_unit_test(KisNodeViewTest TESTNAME krita-image-BaseNodeTest ${kis_node_view_test_SRCS})
+target_link_libraries(KisNodeViewTest kritaimage kritaui Qt5::Test)
+
+########### next target ###############
+
 set(kis_multinode_property_test_SRCS kis_multinode_property_test.cpp)
 kde4_add_unit_test(KisMultinodePropertyTest TESTNAME krita-image-BaseNodeTest ${kis_multinode_property_test_SRCS})
 target_link_libraries(KisMultinodePropertyTest kritaimage kritaui Qt5::Test)

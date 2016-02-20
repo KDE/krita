@@ -50,8 +50,11 @@ class QAbstractButton;
 class KoCompositeOp;
 class KisCanvas2;
 class KisNodeModel;
+class KisNodeFilterProxyModel;
 class Ui_WdgLayerBox;
 class KisNodeJugglerCompressed;
+class KisColorLabelSelectorWidget;
+class QWidgetAction;
 
 /**
  * A widget that shows a visualization of the layer structure.
@@ -115,8 +118,11 @@ private Q_SLOTS:
 
     void selectionChanged(const QModelIndexList selection);
     void slotNodeManagerChangedSelection(const QList<KisNodeSP> &nodes);
+    void slotColorLabelChanged(int index);
 
     void updateThumbnail();
+    void updateAvailableLabels();
+    void updateLayerFiltering();
 
 private:
     inline void connectActionToButton(KisViewManager* view, QAbstractButton *button, const QString &id);
@@ -126,11 +132,13 @@ private:
 private:
 
     KisCanvas2* m_canvas;
-    QMenu *m_viewModeMenu;
     QMenu *m_newLayerMenu;
     KisImageWSP m_image;
     QPointer<KisNodeModel> m_nodeModel;
+    QPointer<KisNodeFilterProxyModel> m_filteringModel;
     QPointer<KisNodeManager> m_nodeManager;
+    QPointer<KisColorLabelSelectorWidget> m_colorSelector;
+    QPointer<QWidgetAction> m_colorSelectorAction;
     Ui_WdgLayerBox* m_wdgLayerBox;
     QTimer m_opacityDelayTimer;
     int m_newOpacity;
@@ -140,6 +148,7 @@ private:
     KisAction* m_propertiesAction;
     KisAction* m_selectOpaque;
     KisSignalCompressor m_thumbnailCompressor;
+    KisSignalCompressor m_colorLabelCompressor;
 };
 
 class KisLayerBoxFactory : public KoDockFactoryBase

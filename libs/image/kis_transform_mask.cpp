@@ -115,7 +115,7 @@ KisPaintDeviceSP KisTransformMask::paintDevice() const
 
 QIcon KisTransformMask::icon() const
 {
-    return KisIconUtils::loadIcon("edit-cut");
+    return KisIconUtils::loadIcon("transformMask");
 }
 
 void KisTransformMask::setTransformParams(KisTransformMaskParamsInterfaceSP params)

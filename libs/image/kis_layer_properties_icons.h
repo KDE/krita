@@ -23,6 +23,7 @@
 #include <KoID.h>
 
 #include <kis_base_node.h>
+#include "kritaimage_export.h"
 
 class KRITAIMAGE_EXPORT KisLayerPropertiesIcons
 {
@@ -38,6 +39,7 @@ public:
     static const KoID onionSkins;
     static const KoID passThrough;
     static const KoID selectionActive;
+    static const KoID colorLabelIndex;
 
     static KisLayerPropertiesIcons* instance();
 

@@ -50,7 +50,7 @@ KisBaseNode::KisBaseNode()
      * calls provocated, it is safe to work with it in such an
      * environment.
      */
-    setVisible(true);
+    setVisible(true, true);
     setUserLocked(false);
     setCollapsed(false);
     setSupportsLodMoves(true);

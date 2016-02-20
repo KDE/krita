@@ -1,0 +1,9 @@
+entries = {
+  'src': 'https://chromium.googlesource.com/breakpad/breakpad.git',
+  'src/src/testing': 'https://github.com/google/googlemock.git@release-1.7.0',
+  'src/src/testing/gtest': 'https://github.com/google/googletest.git@release-1.7.0',
+  'src/src/third_party/glog': 'https://github.com/google/glog.git@v0.3.4',
+  'src/src/third_party/lss': 'https://chromium.googlesource.com/linux-syscall-support@9292030109847793f7a6689adac1ddafb412fe14',
+  'src/src/third_party/protobuf/protobuf': 'https://github.com/google/protobuf.git@cb6dd4ef5f82e41e06179dcd57d3b1d9246ad6ac',
+  'src/src/tools/gyp': 'https://chromium.googlesource.com/external/gyp@e8ab0833a42691cd2184bd4c45d779e43821d3e0',
+}

@@ -52,6 +52,9 @@
 
 #if defined HAVE_KCRASH
 #include <kcrash.h>
+
+#elif defined USE_BREAKPAD
+    #include "kis_crash_handler.h"
 #endif
 extern "C" int main(int argc, char **argv)
 {
@@ -105,6 +108,10 @@ extern "C" int main(int argc, char **argv)
 
 #if defined HAVE_KCRASH
     KCrash::initialize();
+#elif defined USE_BREAKPAD
+    qputenv("KDE_DEBUG", "1");
+    KisCrashHandler crashHandler;
+    Q_UNUSED(crashHandler);
 #endif
 
     // If we should clear the config, it has to be done as soon as possible after

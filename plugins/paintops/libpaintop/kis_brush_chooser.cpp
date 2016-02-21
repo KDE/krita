@@ -140,6 +140,7 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     m_itemChooser->setRowHeight(30);
     m_itemChooser->setItemDelegate(new KisBrushDelegate(this));
     m_itemChooser->setCurrentItem(0, 0);
+    m_itemChooser->setSynced(true);
 
     connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)), this, SLOT(update(KoResource *)));
 

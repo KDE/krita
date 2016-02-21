@@ -264,6 +264,10 @@ On OSX
 
     BUILDROOT/i/bin/krita.app/Contents/MacOS/krita
 
+== Packaging a Windows Build ==
+If you want to create a stripped down version of Krita to distribute, after building everything just copy the makepkg.bat file from the "windows" folder inside krita root source folder, next to the install folder and run it.
+That will copy the Krita necessary files into the specified folder and leave behind developer related files, so the resulting folder will be a smaller install folder.
+
 == Common Issues ==
 - On Windows, if you get a 'mspdb140.dll' missing alert window, it means you did not run the bat file. Make sure to include the quotes in the command:
   "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\amd64\vcvars64.bat"

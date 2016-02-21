@@ -446,7 +446,13 @@ KisMainWindow::KisMainWindow()
 
     QString doc;
     QStringList allFiles = KoResourcePaths::findAllResources("data", "krita/krita.rc");
-    KIS_ASSERT(allFiles.size() > 0); // We need at least one krita.rc file!
+    // We need at least one krita.rc file!
+    if (allFiles.size() > 0) {
+        m_errorMessage = i18n("Krita cannot find the configuration file! Krita will quit now.");
+        m_dieOnError = true;
+        QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
+        return;
+    }
     setXMLFile(findMostRecentXMLFile(allFiles, doc));
 
     guiFactory()->addClient(this);

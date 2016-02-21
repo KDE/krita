@@ -447,7 +447,7 @@ KisMainWindow::KisMainWindow()
     QString doc;
     QStringList allFiles = KoResourcePaths::findAllResources("data", "krita/krita.rc");
     // We need at least one krita.rc file!
-    if (allFiles.size() > 0) {
+    if (allFiles.size() == 0) {
         m_errorMessage = i18n("Krita cannot find the configuration file! Krita will quit now.");
         m_dieOnError = true;
         QTimer::singleShot(0, this, SLOT(showErrorAndDie()));

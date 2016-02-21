@@ -140,6 +140,6 @@ void KisPressureHSVOption::apply(KoColorTransformation* transfo, const KisPaintI
     double v = computeValue(info) * (d->max - d->min) + d->min;
 
     transfo->setParameter(d->paramId, v);
-    transfo->setParameter(3, 1);//sets the type to HSV. For some reason 0 is not an option.
-    transfo->setParameter(4, false);//sets the colorize to false.
+    transfo->setParameter(3, 0); //sets the type to HSV.
+    transfo->setParameter(4, false); //sets the colorize to false.
 }

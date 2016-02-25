@@ -73,6 +73,7 @@
 #include "kis_dom_utils.h"
 #include "kis_image_animation_interface.h"
 #include "kis_time_range.h"
+#include "kis_grid_config.h"
 
 /*
 
@@ -292,12 +293,21 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
         }
     }
     KoXmlNode child;
+
+    for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
+        KoXmlElement e = child.toElement();
+        if (e.tagName() == "grid") {
+            loadGrid(e);
+        }
+    }
+
     for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
         KoXmlElement e = child.toElement();
         if (e.tagName() == "assistants") {
             loadAssistantsList(e);
         }
     }
+
     return image;
 }
 
@@ -1042,4 +1052,16 @@ void KisKraLoader::loadAssistantsList(const KoXmlElement &elem)
         count++;
 
     }
+}
+
+void KisKraLoader::loadGrid(const KoXmlElement& elem)
+{
+    QDomDocument dom;
+    KoXml::asQDomElement(dom, elem);
+    QDomElement domElement = dom.firstChildElement();
+
+    KisGridConfig config;
+    config.loadDynamicDataFromXml(domElement);
+    config.loadStaticData();
+    m_d->document->setGridConfig(config);
 }

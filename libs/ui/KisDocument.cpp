@@ -110,6 +110,7 @@
 #include "KisPart.h"
 #include "KisView.h"
 #include "kis_async_action_feedback.h"
+#include "kis_grid_config.h"
 
 
 static const char CURRENT_DTD_VERSION[] = "2.0";
@@ -357,6 +358,7 @@ public:
     KisKraSaver* kraSaver;
 
     QList<KisPaintingAssistant*> assistants;
+    KisGridConfig gridConfig;
 
     bool openFile()
     {
@@ -2101,6 +2103,16 @@ void KisDocument::setProfileReferenceTime(const QTime& referenceTime)
 void KisDocument::clearUndoHistory()
 {
     d->undoStack->clear();
+}
+
+KisGridConfig KisDocument::gridConfig() const
+{
+    return d->gridConfig;
+}
+
+void KisDocument::setGridConfig(const KisGridConfig &config)
+{
+    d->gridConfig = config;
 }
 
 KoGridData &KisDocument::gridData()

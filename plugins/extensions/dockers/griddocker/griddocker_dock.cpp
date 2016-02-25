@@ -30,6 +30,8 @@
 #include "kis_paint_device.h"
 #include "kis_signal_compressor.h"
 #include "grid_config_widget.h"
+#include "kis_grid_manager.h"
+#include "kis_grid_config.h"
 
 
 GridDockerDock::GridDockerDock( )
@@ -37,48 +39,50 @@ GridDockerDock::GridDockerDock( )
     , m_canvas(0)
 {
     m_configWidget = new GridConfigWidget(this);
-    //m_layout = new QVBoxLayout(page);
-
-    //m_gridWidget = new GridWidget(this);
-    //m_gridWidget->setMinimumHeight(50);
-
-    //m_layout->addWidget(m_gridWidget, 1);
-
+    connect(m_configWidget, SIGNAL(valueChanged()), SLOT(slotGuiGridConfigChanged()));
     setWidget(m_configWidget);
+    setEnabled(m_canvas);
+}
+
+GridDockerDock::~GridDockerDock()
+{
 }
 
 void GridDockerDock::setCanvas(KoCanvasBase * canvas)
 {
-    if(m_canvas == canvas)
+    if(canvas && m_canvas == canvas)
         return;
 
-    //setEnabled(canvas != 0);
-
     if (m_canvas) {
+        m_canvasConnections.clear();
         m_canvas->disconnectCanvasObserver(this);
         m_canvas->image()->disconnect(this);
     }
 
-    // if (m_zoomSlider) {
-    //     m_layout->removeWidget(m_zoomSlider);
-    //     delete m_zoomSlider;
-    //     m_zoomSlider = 0;
-    // }
+    m_canvas = canvas ? dynamic_cast<KisCanvas2*>(canvas) : 0;
+    setEnabled(m_canvas);
 
-    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-
-    //m_gridWidget->setCanvas(canvas);
-    if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->zoomController() && m_canvas->viewManager()->zoomController()->zoomAction()) {
-        //m_zoomSlider = m_canvas->viewManager()->zoomController()->zoomAction()->createWidget(m_canvas->imageView()->KisView::statusBar());
-        //m_layout->addWidget(m_zoomSlider);
+    if (m_canvas) {
+        m_canvasConnections.addConnection(
+            m_canvas->viewManager()->gridManager(),
+            SIGNAL(sigRequestUpdateGridConfig(const KisGridConfig&)),
+            this,
+            SLOT(slotGridConfigUpdateRequested(const KisGridConfig&)));
     }
 }
 
 void GridDockerDock::unsetCanvas()
 {
-    //setEnabled(false);
-    m_canvas = 0;
-    //m_gridWidget->unsetCanvas();
+    setCanvas(0);
 }
 
+void GridDockerDock::slotGuiGridConfigChanged()
+{
+    if (!m_canvas) return;
+    m_canvas->viewManager()->gridManager()->setGridConfig(m_configWidget->gridConfig());
+}
 
+void GridDockerDock::slotGridConfigUpdateRequested(const KisGridConfig &config)
+{
+    m_configWidget->setGridConfig(config);
+}

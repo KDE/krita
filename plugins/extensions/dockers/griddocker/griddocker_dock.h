@@ -20,22 +20,31 @@
 
 #include <QDockWidget>
 #include <KoCanvasObserverBase.h>
+#include "kis_signal_auto_connection.h"
 
 class QVBoxLayout;
 class KisCanvas2;
 class GridConfigWidget;
+class KisSignalAutoConnection;
+class KisGridConfig;
 
 class GridDockerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     GridDockerDock();
+    ~GridDockerDock();
     QString observerName() { return "GridDockerDock"; }
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
 
+public Q_SLOTS:
+    void slotGuiGridConfigChanged();
+    void slotGridConfigUpdateRequested(const KisGridConfig &config);
+
 private:
     GridConfigWidget *m_configWidget;
-    KisCanvas2 *m_canvas;
+    QPointer<KisCanvas2> m_canvas;
+    KisSignalAutoConnectionsStore m_canvasConnections;
 };
 
 

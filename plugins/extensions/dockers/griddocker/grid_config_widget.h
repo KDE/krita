@@ -19,10 +19,13 @@
 #define GRID_CONFIG_WIDGET_H
 
 #include <QWidget>
+#include <QScopedPointer>
 
 namespace Ui {
 class GridConfigWidget;
 }
+
+class KisGridConfig;
 
 class GridConfigWidget : public QWidget
 {
@@ -32,8 +35,24 @@ public:
     explicit GridConfigWidget(QWidget *parent = 0);
     ~GridConfigWidget();
 
+    void setGridConfig(const KisGridConfig &value);
+    KisGridConfig gridConfig() const;
+
+private Q_SLOTS:
+    void slotGuiChanged();
+
+Q_SIGNALS:
+    void valueChanged();
+
+private:
+    KisGridConfig fetchGuiGridConfig() const;
+    void setGridConfigImpl(const KisGridConfig &value);
+
 private:
     Ui::GridConfigWidget *ui;
+
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
 #endif // GRID_CONFIG_WIDGET_H

@@ -53,6 +53,7 @@
 #include "KisDocument.h"
 #include <string>
 #include "kis_dom_utils.h"
+#include "kis_grid_config.h"
 
 
 using namespace KRA;
@@ -114,6 +115,7 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageWSP image)
     saveBackgroundColor(doc, imageElement, image);
     saveCompositions(doc, imageElement, image);
     saveAssistantsList(doc,imageElement);
+    saveGrid(doc,imageElement);
 
     QDomElement animationElement = doc.createElement("animation");
     KisDomUtils::saveValue(&animationElement, "framerate", image->animationInterface()->framerate());
@@ -353,6 +355,18 @@ bool KisKraSaver::saveAssistantsList(QDomDocument& doc, QDomElement& element)
         }
         element.appendChild(assistantsElement);
     }
+    return true;
+}
+
+bool KisKraSaver::saveGrid(QDomDocument& doc, QDomElement& element)
+{
+    KisGridConfig config = m_d->doc->gridConfig();
+
+    if (!config.isDefault()) {
+        QDomElement gridElement = config.saveDynamicDataToXml(doc, "grid");
+        element.appendChild(gridElement);
+    }
+
     return true;
 }
 

@@ -373,6 +373,11 @@ QRectF KisCoordinatesConverter::imageRectInViewportPixels() const
     return imageToViewport(m_d->image->bounds());
 }
 
+QRect KisCoordinatesConverter::imageRectInImagePixels() const
+{
+    return m_d->image->bounds();
+}
+
 QSizeF KisCoordinatesConverter::imageSizeInFlakePixels() const
 {
     if(!m_d->image) return QSizeF();

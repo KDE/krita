@@ -1,8 +1,5 @@
 /*
- * This file is part of Krita
- *
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2014 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,30 +16,34 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_GRID_DECORATION_H
-#define KIS_GRID_DECORATION_H
+#ifndef __KIS_ASPECT_RATIO_LOCKER_H
+#define __KIS_ASPECT_RATIO_LOCKER_H
 
 #include <QScopedPointer>
-#include <kis_canvas_decoration.h>
+#include <QObject>
+#include "kritaui_export.h"
 
-class KisGridConfig;
+class QSpinBox;
+class KoAspectButton;
 
-
-class KisGridDecoration : public KisCanvasDecoration
+class KRITAUI_EXPORT KisAspectRatioLocker : public QObject
 {
     Q_OBJECT
 public:
-    KisGridDecoration(KisView* parent);
-    virtual ~KisGridDecoration();
+    KisAspectRatioLocker(QObject *parent);
+    ~KisAspectRatioLocker();
 
-    void setGridConfig(const KisGridConfig &config);
+    void connectSpinBoxes(QSpinBox *spinOne, QSpinBox *spinTwo, KoAspectButton *apectButton);
 
-protected:
-    virtual void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter* converter, KisCanvas2* canvas);
+
+private Q_SLOTS:
+    void slotSpinOneChanged();
+    void slotSpinTwoChanged();
+    void slotAspectButtonChanged();
 
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };
 
-#endif // KIS_GRID_DECORATION_H
+#endif /* __KIS_ASPECT_RATIO_LOCKER_H */

@@ -56,6 +56,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_grid_manager.cpp
     canvas/kis_grid_decoration.cpp
     canvas/kis_grid_painter_configuration.cpp
+    canvas/kis_grid_config.cpp
     canvas/kis_perspective_grid_manager.cpp
     canvas/kis_perspective_grid_decoration.cpp
     canvas/kis_prescaled_projection.cpp
@@ -92,6 +93,7 @@ set(kritaui_LIB_SRCS
     flake/kis_shape_selection_canvas.cpp
     flake/kis_shape_selection_model.cpp
     flake/kis_take_all_shapes_command.cpp
+    kis_aspect_ratio_locker.cpp
     kis_autogradient.cc
     kis_bookmarked_configurations_editor.cc
     kis_bookmarked_configurations_model.cc

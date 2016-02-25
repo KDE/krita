@@ -30,6 +30,7 @@
 
 class KisGridDecoration;
 class KisViewManager;
+class KisGridConfig;
 
 
 class KRITAUI_EXPORT KisGridManager : public QObject
@@ -41,8 +42,12 @@ public:
 public:
 
     void setup(KisActionManager * actionManager);
-
     void setView(QPointer<KisView>imageView);
+
+    void setGridConfig(const KisGridConfig &config);
+
+Q_SIGNALS:
+    void sigRequestUpdateGridConfig(const KisGridConfig &config);
 
 public Q_SLOTS:
 

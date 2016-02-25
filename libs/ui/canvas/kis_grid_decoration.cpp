@@ -23,12 +23,23 @@
 
 #include <QPainter>
 #include <QPen>
+#include <QtMath>
 #include <klocalizedstring.h>
 
-#include "kis_grid_painter_configuration.h"
-#include "kis_config.h"
+#include <KoUnit.h>
 
-KisGridDecoration::KisGridDecoration(KisView* parent) : KisCanvasDecoration("grid", parent)
+
+#include "kis_grid_painter_configuration.h"
+#include "kis_grid_config.h"
+
+struct KisGridDecoration::Private
+{
+    KisGridConfig config;
+};
+
+KisGridDecoration::KisGridDecoration(KisView* parent)
+    : KisCanvasDecoration("grid", parent),
+      m_d(new Private)
 {
 
 }
@@ -38,66 +49,73 @@ KisGridDecoration::~KisGridDecoration()
 
 }
 
+void KisGridDecoration::setGridConfig(const KisGridConfig &config)
+{
+    m_d->config = config;
+}
+
 void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter* converter, KisCanvas2* canvas)
 {
+    if (!m_d->config.showGrid()) return;
+
     Q_UNUSED(canvas);
 
-    KisConfig cfg;
-
-    quint32 offsetx = cfg.getGridOffsetX();
-    quint32 offsety = cfg.getGridOffsetY();
-    quint32 hspacing = cfg.getGridHSpacing();
-    quint32 vspacing = cfg.getGridVSpacing();
-    quint32 subdivision = cfg.getGridSubdivisions() - 1;
-
-    QPen mainPen = KisGridPainterConfiguration::mainPen();
-    QPen subdivisionPen = KisGridPainterConfiguration::subdivisionPen();
-
-    qreal x1, y1, x2, y2;
-    QRectF imageRect = converter->documentToImage(updateArea);
-    imageRect.getCoords(&x1, &y1, &x2, &y2);
-
     QTransform transform = converter->imageToWidgetTransform();
+
+    const qreal scale = KoUnit::approxTransformScale(transform);
+    const int minWidgetSize = 3;
+    const int effectiveSize = qMin(m_d->config.spacing().x(), m_d->config.spacing().y());
+
+    int scaleCoeff = 1;
+    quint32 subdivision = m_d->config.subdivision();
+
+    while (qFloor(scale * scaleCoeff * effectiveSize) <= minWidgetSize) {
+        if (subdivision > 1) {
+            scaleCoeff = subdivision;
+            subdivision = 1;
+        } else {
+            scaleCoeff *= 2;
+        }
+    }
+
+    const QPen mainPen = m_d->config.penMain();
+    const QPen subdivisionPen = m_d->config.penSubdivision();
 
     gc.save();
     gc.setTransform(transform);
 
-    quint32 i;
+    qreal x1, y1, x2, y2;
+    QRectF imageRect =
+        converter->documentToImage(updateArea) &
+        converter->imageRectInImagePixels();
+    imageRect.getCoords(&x1, &y1, &x2, &y2);
 
-    // Draw vertical line
-    i = subdivision - (offsetx / hspacing) % (subdivision + 1);
-    double x = offsetx % hspacing;
-    while (x <= x2) {
-        if (i == subdivision) {
-            gc.setPen(mainPen);
-            i = 0;
-        } else {
-            gc.setPen(subdivisionPen);
-            i++;
+    {   // vertical lines
+        const int offset = m_d->config.offset().x();
+        const int step = scaleCoeff * m_d->config.spacing().x();
+        const int lineIndexFirst = qCeil((x1 - offset) / step);
+        const int lineIndexLast = qFloor((x2 - offset) / step);
+
+        for (int i = lineIndexFirst; i <= lineIndexLast; i++) {
+            int w = offset + i * step;
+
+            gc.setPen(i % subdivision == 0 ? mainPen : subdivisionPen);
+            gc.drawLine(QPointF(w, y1),QPointF(w, y2));
         }
-        if (x >= x1) {
-            // Always draw the full line otherwise the line stippling varies
-            // with the location of area and we get glitchy patterns.
-            gc.drawLine(QPointF(x, y1),QPointF(x, y2));
-        }
-        x += hspacing;
     }
 
-    // Draw horizontal line
-    i = subdivision - (offsety / vspacing) % (subdivision + 1);
-    qreal y = offsety % vspacing;
-    while (y <= y2) {
-        if (i == subdivision) {
-            gc.setPen(mainPen);
-            i = 0;
-        } else {
-            gc.setPen(subdivisionPen);
-            i++;
+    {   // horizontal lines
+        const int offset = m_d->config.offset().y();
+        const int step = scaleCoeff * m_d->config.spacing().y();
+        const int lineIndexFirst = qCeil((y1 - offset) / step);
+        const int lineIndexLast = qFloor((y2 - offset) / step);
+
+        for (int i = lineIndexFirst; i <= lineIndexLast; i++) {
+            int w = offset + i * step;
+
+            gc.setPen(i % subdivision == 0 ? mainPen : subdivisionPen);
+            gc.drawLine(QPointF(x1, w),QPointF(x2, w));
         }
-        if (y >= y1) {
-            gc.drawLine(QPointF(x1, y), QPointF(x2, y));
-        }
-        y += vspacing;
     }
 
     gc.restore();

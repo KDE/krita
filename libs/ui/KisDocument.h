@@ -59,6 +59,7 @@ class KoDocumentInfoDlg;
 class KisUndoStore;
 class KisPaintingAssistant;
 class KisPart;
+class KisGridConfig;
 
 class KisPart;
 
@@ -529,6 +530,9 @@ public:
 
     /// return the grid data for this document.
     KoGridData &gridData();
+
+    KisGridConfig gridConfig() const;
+    void setGridConfig(const KisGridConfig &config);
 
     /// returns the guides data for this document.
     KoGuidesData &guidesData();

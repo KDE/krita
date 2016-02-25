@@ -20,6 +20,7 @@
 
 #include <limits.h>
 
+#include <QtGlobal>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QMutex>
@@ -678,9 +679,8 @@ void KisConfig::setMaxNumberOfThreads(qint32 maxThreads)
 
 quint32 KisConfig::getGridMainStyle(bool defaultValue) const
 {
-    quint32 v = m_cfg.readEntry("gridmainstyle", 0);
-    if (v > 2)
-        v = 2;
+    int v = m_cfg.readEntry("gridmainstyle", 0);
+    v = qBound(0, v, 2);
     return (defaultValue ? 0 : v);
 }
 

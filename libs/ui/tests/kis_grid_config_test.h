@@ -1,8 +1,5 @@
 /*
- * This file is part of Krita
- *
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2014 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,30 +16,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_GRID_DECORATION_H
-#define KIS_GRID_DECORATION_H
+#ifndef __KIS_GRID_CONFIG_TEST_H
+#define __KIS_GRID_CONFIG_TEST_H
 
-#include <QScopedPointer>
-#include <kis_canvas_decoration.h>
+#include <QtTest/QtTest>
 
-class KisGridConfig;
-
-
-class KisGridDecoration : public KisCanvasDecoration
+class KisGridConfigTest : public QObject
 {
     Q_OBJECT
-public:
-    KisGridDecoration(KisView* parent);
-    virtual ~KisGridDecoration();
-
-    void setGridConfig(const KisGridConfig &config);
-
-protected:
-    virtual void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter* converter, KisCanvas2* canvas);
-
-private:
-    struct Private;
-    const QScopedPointer<Private> m_d;
+private Q_SLOTS:
+    void test();
 };
 
-#endif // KIS_GRID_DECORATION_H
+#endif /* __KIS_GRID_CONFIG_TEST_H */

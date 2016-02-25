@@ -35,6 +35,8 @@
 #include "KisViewManager.h"
 #include "KisDocument.h"
 #include "KisView.h"
+#include "kis_grid_config.h"
+
 
 KisGridManager::KisGridManager(KisViewManager * parent) : QObject(parent)
 {
@@ -44,6 +46,17 @@ KisGridManager::KisGridManager(KisViewManager * parent) : QObject(parent)
 KisGridManager::~KisGridManager()
 {
 
+}
+
+void KisGridManager::setGridConfig(const KisGridConfig &config)
+{
+    if (!m_imageView) return;
+
+    config.saveStaticData();
+    m_imageView->document()->setGridConfig(config);
+
+    m_gridDecoration->setGridConfig(config);
+    m_gridDecoration->setVisible(config.showGrid());
 }
 
 void KisGridManager::setup(KisActionManager* actionManager)
@@ -74,8 +87,12 @@ void KisGridManager::setView(QPointer<KisView> imageView)
             m_gridDecoration = new KisGridDecoration(imageView);
             imageView->canvasBase()->addDecoration(m_gridDecoration);
         }
-        checkVisibilityAction(m_gridDecoration->visible());
-        connect(m_toggleGrid, SIGNAL(triggered()), m_gridDecoration, SLOT(toggleVisibility()));
+
+        KisGridConfig config = imageView->document()->gridConfig();
+        emit sigRequestUpdateGridConfig(config);
+
+        //checkVisibilityAction(m_gridDecoration->visible());
+        //connect(m_toggleGrid, SIGNAL(triggered()), m_gridDecoration, SLOT(toggleVisibility()));
     }
 }
 

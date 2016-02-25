@@ -13,7 +13,7 @@ Krita. Stable Krita 2.9 is here:
 
 The user manual is here:
 
-  https://userbase.kde.org/Krita/Manual
+  https://docs.krita.org/Category:User_Manual
 
 Development notes and build instructions:
 

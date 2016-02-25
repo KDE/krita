@@ -31,7 +31,7 @@ Note: on all operating systems the entire procedure is done in a terminal window
 == Setup your environment ==
 
 Windows Only:
-    When launching the commands from the console, run first "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\amd64\vcvars64.bat" in it, this way all the environment variables for the compiler will be ready.
+    When launching the commands from the console, run first "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\amd64\vcvars64.bat" in it (include the quotes). This way all the environment variables for the compiler will be ready.
 
 == Prepare your directory layout ==
 
@@ -49,7 +49,13 @@ Windows Only:
 
 == Qt ==
 
-Install Qt. Either build from source or with the qt.io installer. Make sure qmake is in your path. You need qtbase, qtsvg, qttools, qtscript, qtdeclarative, qtgraphicaleffects, qttranslations. On Windows, you also need qtwinextras, on Linux qtx11extras.
+Install Qt. Either build from source or with the qt.io installer. 
+
+Either way, make sure qmake is in your environment path. If you are using Qt 5.6 for example, this is the default location for Windows:
+C:\Qt\Qt5.6.0\5.6\msvc2015_64\bin
+
+
+You need qtbase, qtsvg, qttools, qtscript, qtdeclarative, qtgraphicaleffects, qttranslations. On Windows, you also need qtwinextras, on Linux qtx11extras.
 
 When installing from source, you can use these example configure commands:
  
@@ -275,3 +281,4 @@ That will copy the Krita necessary files into the specified folder and leave beh
 - On Windows, if you get an error about Qt5Core.dll missing/not found or nmake exit with an error that mention QT_PLUGIN_PATH, you have to copy a couple of dlls in the Qt build directory, look
   for the N.B. in the Qt instructions at the start of the Readme.
 
+- If you receive an error while compiling about "missing QtCore5.cmake", or something similar, check to make sure qmake is in your PATH. Restart your command line after any changes are made.

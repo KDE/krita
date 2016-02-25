@@ -52,11 +52,11 @@ Q_SIGNALS:
 public Q_SLOTS:
 
     void updateGUI();
-    void checkVisibilityAction(bool check);
 
 private Q_SLOTS:
 
-    void toggleSnapToGrid();
+    void slotChangeGridVisibilityTriggered(bool value);
+    void slotSnapToGridTriggered(bool value);
 
 private:
     void setFastConfig(int size);

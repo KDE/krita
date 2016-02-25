@@ -170,7 +170,7 @@ void KisToolGrid::keyPressEvent(QKeyEvent* event)
         if (decoration) {
             decoration->setVisible(true);
         }
-        m_canvas->viewManager()->gridManager()->checkVisibilityAction(true);
+        //m_canvas->viewManager()->gridManager()->checkVisibilityAction(true);
     }
     KoToolBase::keyPressEvent(event);
 }

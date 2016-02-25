@@ -36,6 +36,7 @@
 #include "KisDocument.h"
 #include "KisView.h"
 #include "kis_grid_config.h"
+#include "kis_signals_blocker.h"
 
 
 KisGridManager::KisGridManager(KisViewManager * parent) : QObject(parent)
@@ -57,14 +58,18 @@ void KisGridManager::setGridConfig(const KisGridConfig &config)
 
     m_gridDecoration->setGridConfig(config);
     m_gridDecoration->setVisible(config.showGrid());
+
+    m_toggleGrid->setChecked(config.showGrid());
+    m_toggleSnapToGrid->setChecked(config.snapToGrid());
 }
 
 void KisGridManager::setup(KisActionManager* actionManager)
 {
     m_toggleGrid = actionManager->createAction("view_grid");
+    connect(m_toggleGrid, SIGNAL(toggled(bool)), this, SLOT(slotChangeGridVisibilityTriggered(bool)));
 
     m_toggleSnapToGrid  = actionManager->createAction("view_snap_to_grid");
-    connect(m_toggleSnapToGrid, SIGNAL(triggered()), this, SLOT(toggleSnapToGrid()));
+    connect(m_toggleSnapToGrid, SIGNAL(toggled(bool)), this, SLOT(slotSnapToGridTriggered(bool)));
 }
 
 void KisGridManager::updateGUI()
@@ -75,7 +80,6 @@ void KisGridManager::updateGUI()
 void KisGridManager::setView(QPointer<KisView> imageView)
 {
     if (m_imageView) {
-        m_toggleGrid->disconnect();
         m_gridDecoration = 0;
     }
 
@@ -92,21 +96,31 @@ void KisGridManager::setView(QPointer<KisView> imageView)
         setGridConfig(config);
         emit sigRequestUpdateGridConfig(config);
 
-        //checkVisibilityAction(m_gridDecoration->visible());
-        //connect(m_toggleGrid, SIGNAL(triggered()), m_gridDecoration, SLOT(toggleVisibility()));
+        KisSignalsBlocker b1(m_toggleGrid, m_toggleSnapToGrid);
+        m_toggleGrid->setChecked(config.showGrid());
+        m_toggleSnapToGrid->setChecked(config.snapToGrid());
     }
 }
 
-void KisGridManager::checkVisibilityAction(bool check)
+void KisGridManager::slotChangeGridVisibilityTriggered(bool value)
 {
-    m_toggleGrid->setChecked(check);
+    if (!m_imageView) return;
+
+    KisGridConfig config = m_imageView->document()->gridConfig();
+    config.setShowGrid(value);
+
+    setGridConfig(config);
+    emit sigRequestUpdateGridConfig(config);
 }
 
-void KisGridManager::toggleSnapToGrid()
+void KisGridManager::slotSnapToGridTriggered(bool value)
 {
-    if (m_imageView) {
-        m_imageView->document()->gridData().setSnapToGrid(m_toggleSnapToGrid->isChecked());
-        m_imageView->canvasBase()->updateCanvas();
-    }
+    if (!m_imageView) return;
+
+    KisGridConfig config = m_imageView->document()->gridConfig();
+    config.setSnapToGrid(value);
+
+    setGridConfig(config);
+    emit sigRequestUpdateGridConfig(config);
 }
 

@@ -66,6 +66,7 @@
 #include "kis_exposure_gamma_correction_interface.h"
 #include "KisView.h"
 #include "kis_canvas_controller.h"
+#include "kis_grid_config.h"
 
 #ifdef HAVE_OPENGL
 #include "kis_animation_player.h"
@@ -254,14 +255,15 @@ void KisCanvas2::gridSize(qreal *horizontal, qreal *vertical) const
     Q_ASSERT(vertical);
     QTransform transform = coordinatesConverter()->imageToDocumentTransform();
 
-    QPointF size = transform.map(QPointF(m_d->view->document()->gridData().gridX(), m_d->view->document()->gridData().gridY()));
+    const QPoint spacing = m_d->view->document()->gridConfig().spacing();
+    QPointF size = transform.map(QPointF(spacing.x(), spacing.y()));
     *horizontal = size.x();
     *vertical = size.y();
 }
 
 bool KisCanvas2::snapToGrid() const
 {
-    return m_d->view->document()->gridData().snapToGrid();
+    return m_d->view->document()->gridConfig().snapToGrid();
 }
 
 qreal KisCanvas2::rotationAngle() const

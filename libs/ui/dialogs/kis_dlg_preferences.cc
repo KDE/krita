@@ -756,108 +756,6 @@ void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
 }
 
 //---------------------------------------------------------------------------------------------------
-GridSettingsTab::GridSettingsTab(QWidget* parent) : WdgGridSettingsBase(parent)
-{
-    KisConfig cfg;
-    selectMainStyle->setCurrentIndex(cfg.getGridMainStyle());
-    selectSubdivisionStyle->setCurrentIndex(cfg.getGridSubdivisionStyle());
-
-    colorMain->setColor(cfg.getGridMainColor());
-    colorSubdivision->setColor(cfg.getGridSubdivisionColor());
-
-    intHSpacing->setValue(cfg.getGridHSpacing());
-    intHSpacing->setSuffix(i18n(" px"));
-    intVSpacing->setValue(cfg.getGridVSpacing());
-    intVSpacing->setSuffix(i18n(" px"));
-    spacingAspectButton->setKeepAspectRatio(cfg.getGridSpacingAspect());
-    linkSpacingToggled(cfg.getGridSpacingAspect());
-
-    intSubdivision->setValue(cfg.getGridSubdivisions());
-
-    intXOffset->setValue(cfg.getGridOffsetX());
-    intXOffset->setSuffix(i18n(" px"));
-    intYOffset->setValue(cfg.getGridOffsetY());
-    intYOffset->setSuffix(i18n(" px"));
-    offsetAspectButton->setKeepAspectRatio(cfg.getGridOffsetAspect());
-    linkOffsetToggled(cfg.getGridOffsetAspect());
-
-    connect(spacingAspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(linkSpacingToggled(bool)));
-    connect(offsetAspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(linkOffsetToggled(bool)));
-
-    connect(intHSpacing, SIGNAL(valueChanged(int)), this, SLOT(spinBoxHSpacingChanged(int)));
-    connect(intVSpacing, SIGNAL(valueChanged(int)), this, SLOT(spinBoxVSpacingChanged(int)));
-    connect(intXOffset, SIGNAL(valueChanged(int)), this, SLOT(spinBoxXOffsetChanged(int)));
-    connect(intYOffset, SIGNAL(valueChanged(int)), this, SLOT(spinBoxYOffsetChanged(int)));
-
-
-}
-
-void GridSettingsTab::setDefault()
-{
-    KisConfig cfg;
-    selectMainStyle->setCurrentIndex(cfg.getGridMainStyle(true));
-    selectSubdivisionStyle->setCurrentIndex(cfg.getGridSubdivisionStyle(true));
-
-    colorMain->setColor(cfg.getGridMainColor(true));
-    colorSubdivision->setColor(cfg.getGridSubdivisionColor(true));
-
-    intHSpacing->setValue(cfg.getGridHSpacing(true));
-    intVSpacing->setValue(cfg.getGridVSpacing(true));
-    linkSpacingToggled(cfg.getGridSpacingAspect(true));
-    intSubdivision->setValue(cfg.getGridSubdivisions(true));
-    intXOffset->setValue(cfg.getGridOffsetX(true));
-    intYOffset->setValue(cfg.getGridOffsetY());
-
-    linkOffsetToggled(cfg.getGridOffsetAspect(true));
-}
-
-void GridSettingsTab::spinBoxHSpacingChanged(int v)
-{
-    if (m_linkSpacing) {
-        intVSpacing->setValue(v);
-    }
-}
-
-void GridSettingsTab::spinBoxVSpacingChanged(int v)
-{
-    if (m_linkSpacing) {
-        intHSpacing->setValue(v);
-    }
-}
-
-void GridSettingsTab::linkSpacingToggled(bool b)
-{
-    m_linkSpacing = b;
-
-    if (m_linkSpacing) {
-        intVSpacing->setValue(intHSpacing->value());
-    }
-}
-
-void GridSettingsTab::spinBoxXOffsetChanged(int v)
-{
-    if (m_linkOffset) {
-        intYOffset->setValue(v);
-    }
-}
-
-void GridSettingsTab::spinBoxYOffsetChanged(int v)
-{
-    if (m_linkOffset) {
-        intXOffset->setValue(v);
-    }
-}
-
-void GridSettingsTab::linkOffsetToggled(bool b)
-{
-    m_linkOffset = b;
-
-    if (m_linkOffset) {
-        intYOffset->setValue(intXOffset->value());
-    }
-}
-
-//---------------------------------------------------------------------------------------------------
 FullscreenSettingsTab::FullscreenSettingsTab(QWidget* parent) : WdgFullscreenSettingsBase(parent)
 {
     KisConfig cfg;
@@ -931,15 +829,6 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setIcon(KisIconUtils::loadIcon("applications-system"));
     addPage(page);
     m_performanceSettings = new PerformanceTab(vbox);
-
-    // Grid
-    vbox = new KoVBox();
-    page = new KPageWidgetItem(vbox, i18n("Grid"));
-    page->setObjectName("grid");
-    page->setHeader(i18n("Grid"));
-    page->setIcon(KisIconUtils::loadIcon("view-grid"));
-    addPage(page);
-    m_gridSettings = new GridSettingsTab(vbox);
 
     // Tablet
     vbox = new KoVBox();
@@ -1017,9 +906,6 @@ void KisDlgPreferences::slotDefault()
     }
     else if (currentPage()->objectName() == "performance") {
         m_performanceSettings->load(true);
-    }
-    else if (currentPage()->objectName() == "grid") {
-        m_gridSettings->setDefault();
     }
     else if (currentPage()->objectName() == "tablet") {
         m_tabletSettings->setDefault();
@@ -1118,20 +1004,6 @@ bool KisDlgPreferences::editPreferences()
         cfg.setAntialiasSelectionOutline(dialog->m_displaySettings->chkSelectionOutlineAntialiasing->isChecked());
         cfg.setShowSingleChannelAsColor(dialog->m_displaySettings->chkChannelsAsColor->isChecked());
         cfg.setHidePopups(dialog->m_displaySettings->chkHidePopups->isChecked());
-        // Grid settings
-        cfg.setGridMainStyle(dialog->m_gridSettings->selectMainStyle->currentIndex());
-        cfg.setGridSubdivisionStyle(dialog->m_gridSettings->selectSubdivisionStyle->currentIndex());
-
-        cfg.setGridMainColor(dialog->m_gridSettings->colorMain->color());
-        cfg.setGridSubdivisionColor(dialog->m_gridSettings->colorSubdivision->color());
-
-        cfg.setGridHSpacing(dialog->m_gridSettings->intHSpacing->value());
-        cfg.setGridVSpacing(dialog->m_gridSettings->intVSpacing->value());
-        cfg.setGridSpacingAspect(dialog->m_gridSettings->spacingAspectButton->keepAspectRatio());
-        cfg.setGridSubdivisions(dialog->m_gridSettings->intSubdivision->value());
-        cfg.setGridOffsetX(dialog->m_gridSettings->intXOffset->value());
-        cfg.setGridOffsetY(dialog->m_gridSettings->intYOffset->value());
-        cfg.setGridOffsetAspect(dialog->m_gridSettings->offsetAspectButton->keepAspectRatio());
 
         cfg.setHideDockersFullscreen(dialog->m_fullscreenSettings->chkDockers->checkState());
         cfg.setHideMenuFullscreen(dialog->m_fullscreenSettings->chkMenu->checkState());

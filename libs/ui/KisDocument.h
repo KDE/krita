@@ -28,7 +28,6 @@
 #include <klocalizedstring.h>
 
 #include <KoPageLayout.h>
-#include "KoGridData.h"
 #include "KoGuidesData.h"
 #include <KoXmlReader.h>
 #include <KoDocumentBase.h>
@@ -527,9 +526,6 @@ public:
     void saveUnitOdf(KoXmlWriter *settingsWriter) const;
 
     bool loadNativeFormatFromByteArray(QByteArray &data);
-
-    /// return the grid data for this document.
-    KoGridData &gridData();
 
     KisGridConfig gridConfig() const;
     void setGridConfig(const KisGridConfig &config);

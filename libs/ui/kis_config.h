@@ -185,27 +185,6 @@ public:
     QColor getGridSubdivisionColor(bool defaultValue = false) const;
     void setGridSubdivisionColor(const QColor & v) const;
 
-    quint32 getGridHSpacing(bool defaultValue = false) const;
-    void setGridHSpacing(quint32 v) const;
-
-    quint32 getGridVSpacing(bool defaultValue = false) const;
-    void setGridVSpacing(quint32 v) const;
-
-    bool getGridSpacingAspect(bool defaultValue = false) const;
-    void setGridSpacingAspect(bool v) const;
-
-    quint32 getGridSubdivisions(bool defaultValue = false) const;
-    void setGridSubdivisions(quint32 v) const;
-
-    quint32 getGridOffsetX(bool defaultValue = false) const;
-    void setGridOffsetX(quint32 v) const;
-
-    quint32 getGridOffsetY(bool defaultValue = false) const;
-    void setGridOffsetY(quint32 v) const;
-
-    bool getGridOffsetAspect(bool defaultValue = false) const;
-    void setGridOffsetAspect(bool v) const;
-
     qint32 checkSize(bool defaultValue = false) const;
     void setCheckSize(qint32 checkSize) const;
 

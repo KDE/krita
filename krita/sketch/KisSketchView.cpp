@@ -408,7 +408,7 @@ bool KisSketchView::event( QEvent* event )
 
                 syncObject->activeToolId = KoToolManager::instance()->activeToolId();
 
-                syncObject->gridData = &d->view->document()->gridData();
+                syncObject->gridConfig = d->view->document()->gridConfig();
 
                 syncObject->mirrorHorizontal = provider->mirrorHorizontal();
                 syncObject->mirrorVertical = provider->mirrorVertical();
@@ -470,11 +470,7 @@ bool KisSketchView::event( QEvent* event )
                 provider->setGlobalAlphaLock(syncObject->globalAlphaLock);
                 provider->setCurrentCompositeOp(syncObject->compositeOp);
 
-                d->view->document()->gridData().setGrid(syncObject->gridData->gridX(), syncObject->gridData->gridY());
-                d->view->document()->gridData().setGridColor(syncObject->gridData->gridColor());
-                d->view->document()->gridData().setPaintGridInBackground(syncObject->gridData->paintGridInBackground());
-                d->view->document()->gridData().setShowGrid(syncObject->gridData->showGrid());
-                d->view->document()->gridData().setSnapToGrid(syncObject->gridData->snapToGrid());
+                d->view->document()->setGridConfig(syncObject->gridConfig);
 
                 zoomIn();
                 qApp->processEvents();

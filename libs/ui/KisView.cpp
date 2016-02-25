@@ -623,7 +623,7 @@ bool KisView::event(QEvent *event)
 
         syncObject->activeToolId = KoToolManager::instance()->activeToolId();
 
-        syncObject->gridData = &document()->gridData();
+        syncObject->gridConfig = document()->gridConfig();
 
         syncObject->mirrorHorizontal = provider->mirrorHorizontal();
         syncObject->mirrorVertical = provider->mirrorVertical();
@@ -691,11 +691,7 @@ bool KisView::event(QEvent *event)
             provider->setGlobalAlphaLock(syncObject->globalAlphaLock);
             provider->setCurrentCompositeOp(syncObject->compositeOp);
 
-            document()->gridData().setGrid(syncObject->gridData->gridX(), syncObject->gridData->gridY());
-            document()->gridData().setGridColor(syncObject->gridData->gridColor());
-            document()->gridData().setPaintGridInBackground(syncObject->gridData->paintGridInBackground());
-            document()->gridData().setShowGrid(syncObject->gridData->showGrid());
-            document()->gridData().setSnapToGrid(syncObject->gridData->snapToGrid());
+            document()->setGridConfig(syncObject->gridConfig);
 
             d->actionCollection->action("zoom_in")->trigger();
             qApp->processEvents();

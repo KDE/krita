@@ -317,7 +317,6 @@ public:
 
     KUndo2Stack *undoStack;
 
-    KoGridData gridData;
     KoGuidesData guidesData;
 
     bool isEmpty;
@@ -472,11 +471,6 @@ KisDocument::KisDocument()
     init();
     undoStack()->setUndoLimit(KisConfig().undoStackLimit());
     setBackupFile(KisConfig().backupFile());
-
-    gridData().setShowGrid(false);
-    KisConfig cfg;
-    gridData().setGrid(cfg.getGridHSpacing(), cfg.getGridVSpacing());
-
 }
 
 KisDocument::~KisDocument()
@@ -2113,11 +2107,6 @@ KisGridConfig KisDocument::gridConfig() const
 void KisDocument::setGridConfig(const KisGridConfig &config)
 {
     d->gridConfig = config;
-}
-
-KoGridData &KisDocument::gridData()
-{
-    return d->gridData;
 }
 
 KoGuidesData &KisDocument::guidesData()

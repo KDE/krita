@@ -55,7 +55,6 @@ set(kritaui_LIB_SRCS
     canvas/kis_coordinates_converter.cpp
     canvas/kis_grid_manager.cpp
     canvas/kis_grid_decoration.cpp
-    canvas/kis_grid_painter_configuration.cpp
     canvas/kis_grid_config.cpp
     canvas/kis_perspective_grid_manager.cpp
     canvas/kis_perspective_grid_decoration.cpp

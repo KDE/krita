@@ -27,9 +27,6 @@
 #include <klocalizedstring.h>
 
 #include <KoUnit.h>
-
-
-#include "kis_grid_painter_configuration.h"
 #include "kis_grid_config.h"
 
 struct KisGridDecoration::Private

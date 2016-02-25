@@ -25,8 +25,8 @@
 
 #include <klocalizedstring.h>
 #include "kis_perspective_grid.h"
-#include "canvas/kis_grid_painter_configuration.h"
 #include "KisView.h"
+#include "kis_grid_config.h"
 
 /***************************************************************/
 /*                 Auxiliary line structures                   */
@@ -181,8 +181,10 @@ void KisPerspectiveGridDecoration::drawDecoration(QPainter& gc, const QRectF& up
 
     KisPerspectiveGrid* pGrid = image->perspectiveGrid();
 
-    QPen mainPen = KisGridPainterConfiguration::mainPen();
-    QPen subdivisionPen = KisGridPainterConfiguration::subdivisionPen();
+    KisGridConfig config;
+
+    QPen mainPen = config.penMain();
+    QPen subdivisionPen = config.penSubdivision();
     QPen errorPen = mainPen;
     errorPen.setColor(Qt::red);
 

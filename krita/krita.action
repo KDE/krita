@@ -1515,16 +1515,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="KisToolGrid">
-      <icon></icon>
-      <text>Edit the grid</text>
-      <whatsThis></whatsThis>
-      <toolTip>Edit the grid</toolTip>
-      <iconText>Edit the grid</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="KisToolSelectPolygonal">
       <icon></icon>
       <text>Polygonal Selection Tool</text>

@@ -29,7 +29,6 @@
 
 #include "kis_coordinates_converter.h"
 #include "kis_config.h"
-#include "kis_grid_painter_configuration.h"
 #include "kis_grid_decoration.h"
 #include "kis_image.h"
 #include "KisViewManager.h"

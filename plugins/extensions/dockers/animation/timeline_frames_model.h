@@ -123,6 +123,8 @@ private Q_SLOTS:
     void slotPlaybackFrameChanged();
     void slotPlaybackStopped();
 
+    void slotInternalScrubPreviewRequested(int time);
+
 public Q_SLOTS:
     void slotFramerateChanged();
     void slotCurrentTimeChanged(int time);

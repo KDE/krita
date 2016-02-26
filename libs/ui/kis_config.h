@@ -450,6 +450,9 @@ public:
     bool animationDropFrames(bool defaultValue = false) const;
     void setAnimationDropFrames(bool value);
 
+    int scribbingUpdatesDelay(bool defaultValue = false) const;
+    void setScribbingUpdatesDelay(int value);
+
     bool switchSelectionCtrlAlt(bool defaultValue = false) const;
     void setSwitchSelectionCtrlAlt(bool value);
 

@@ -55,11 +55,12 @@ public:
         if (dstAlpha != zeroValue<channels_type>()) {
             // blend the color channels as if we were painting on the layer below
             for (qint8 channel = 0; channel < channels_nb; ++channel)
-                if(channel != alpha_pos && (allChannelFlags || channelFlags.testBit(channel)))
-                    dst[channel] =    /*each color blended in proportion to their calculated opacity*/
-                    ( (dst[channel] * dstAlpha)     +    (src[channel] * (appliedAlpha - mul(dstAlpha, appliedAlpha))) )
-                    /*------------------------------------------------------------------------------------------------*/
-                                             /  newDstAlpha; /*...divided by total new opacity*/
+                if(channel != alpha_pos && (allChannelFlags || channelFlags.testBit(channel))) {
+                    /*each color blended in proportion to their calculated opacity*/
+                    channels_type srcMult= mul(src[channel], appliedAlpha);
+                    channels_type blendedValue = lerp(srcMult,dst[channel],dstAlpha);
+                    dst[channel] = KoColorSpaceMaths<channels_type>::divide(blendedValue,newDstAlpha);
+                }
         }
         else {
             // don't blend if the color of the destination is undefined (has zero opacity)

@@ -1,3 +1,8 @@
+include_directories(
+	${Boost_INCLUDE_DIRS}
+)
+
+
 set(KRITA_GRIDDOCKER_SOURCES griddocker.cpp griddocker_dock.cpp grid_config_widget.cpp)
 ki18n_wrap_ui(KRITA_GRIDDOCKER_SOURCES
     grid_config_widget.ui

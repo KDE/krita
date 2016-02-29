@@ -25,6 +25,7 @@
 #include <QList>
 #include <QtGlobal>
 #include "KoXmlReaderForward.h"
+#include <boost/operators.hpp>
 
 class QPainter;
 class KoViewConverter;
@@ -35,11 +36,15 @@ class KoXmlWriter;
 /**
  * XXX
  */
-class KRITAFLAKE_EXPORT KoGuidesData
+class KRITAFLAKE_EXPORT KoGuidesData : boost::equality_comparable<KoGuidesData>
 {
 public:
     KoGuidesData();
     ~KoGuidesData();
+
+    KoGuidesData(const KoGuidesData &rhs);
+    KoGuidesData& operator=(const KoGuidesData &rhs);
+    bool operator==(const KoGuidesData &rhs) const;
 
     /**
      * @brief Set the positions of the horizontal guide lines
@@ -73,6 +78,13 @@ public:
      */
     void setShowGuideLines(bool show);
 
+    bool showGuides() const;
+    void setShowGuides(bool value);
+    bool lockGuides() const;
+    void setLockGuides(bool value);
+    bool snapToGuides() const;
+    void setSnapToGuides(bool value);
+
     /// Returns the list of horizontal guide lines.
     QList<qreal> horizontalGuideLines() const;
 
@@ -88,15 +100,7 @@ public:
     /// Returns the color of the guide lines.
     QColor guidesColor() const;
 
-    /// Loads guide lines from the given setting xml document
-    bool loadOdfSettings(const KoXmlDocument &settingsDoc);
-
-    /// Saves guide lines to the given settings xml writer
-    void saveOdfSettings(KoXmlWriter &settingsWriter);
-
 private:
-    Q_DISABLE_COPY(KoGuidesData);
-
     class Private;
     Private * const d;
 };

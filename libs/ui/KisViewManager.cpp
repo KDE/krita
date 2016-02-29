@@ -126,6 +126,8 @@
 #include "widgets/kis_floating_message.h"
 #include "kis_signal_auto_connection.h"
 #include "kis_icon_utils.h"
+#include "kis_guides_manager.h"
+
 
 class BlockingUserInputEventFilter : public QObject
 {
@@ -205,6 +207,7 @@ public:
     KisAction *showGuidesAction;
 
     KisSelectionManager selectionManager;
+    KisGuidesManager guidesManager;
     KisStatusBar statusBar;
 
     KisControlFrame controlFrame;
@@ -367,6 +370,7 @@ void KisViewManager::setCurrentView(KisView *view)
 
     d->filterManager.setView(imageView);
     d->selectionManager.setView(imageView);
+    d->guidesManager.setView(imageView);
     d->nodeManager.setView(imageView);
     d->imageManager.setView(imageView);
     d->canvasControlsManager.setView(imageView);
@@ -641,6 +645,8 @@ void KisViewManager::setupManagers()
     d->filterManager.setup(actionCollection(), actionManager());
 
     d->selectionManager.setup(actionManager());
+
+    d->guidesManager.setup(actionManager());
 
     d->nodeManager.setup(actionCollection(), actionManager());
 

@@ -26,9 +26,10 @@
 struct KisGuidesDecoration::Private
 {
     QColor guidesColor;
+    KoGuidesData guidesData;
 };
 
-KisGuidesDecoration::KisGuidesDecoration(QPointer<KisView>view, KisCanvas2 *canvas)
+KisGuidesDecoration::KisGuidesDecoration(QPointer<KisView> view)
     : KisCanvasDecoration(GUIDES_DECORATION_ID, view),
       m_d(new Private)
 {
@@ -40,11 +41,23 @@ KisGuidesDecoration::~KisGuidesDecoration()
 {
 }
 
+void KisGuidesDecoration::setGuidesData(const KoGuidesData &value)
+{
+    m_d->guidesData = value;
+}
+
+const KoGuidesData& KisGuidesDecoration::guidesData() const
+{
+    return m_d->guidesData;
+}
+
+
 void KisGuidesDecoration::drawDecoration(QPainter &painter, const QRectF& updateArea, const KisCoordinatesConverter *converter, KisCanvas2 *canvas)
 {
+    Q_UNUSED(canvas);
+
     const qreal borderDelta = 2.0;
     const QPen guidesPen(m_d->guidesColor, 0);
-    const KoGuidesData *data = view()->document()->guidesData();
 
     painter.save();
     painter.setPen(guidesPen);
@@ -52,7 +65,7 @@ void KisGuidesDecoration::drawDecoration(QPainter &painter, const QRectF& update
     painter.setRenderHints(QPainter::Antialiasing, false);
     painter.setRenderHints(QPainter::HighQualityAntialiasing, false);
 
-    Q_FOREACH (qreal guide, data->horizontalGuideLines()) {
+    Q_FOREACH (qreal guide, m_d->guidesData.horizontalGuideLines()) {
         if (guide < updateArea.top() - borderDelta ||
             guide > updateArea.bottom() + borderDelta) {
 
@@ -64,7 +77,7 @@ void KisGuidesDecoration::drawDecoration(QPainter &painter, const QRectF& update
         painter.drawLine(p0, p1);
     }
 
-    Q_FOREACH (qreal guide, data->verticalGuideLines()) {
+    Q_FOREACH (qreal guide, m_d->guidesData.verticalGuideLines()) {
         if (guide < updateArea.left() - borderDelta ||
             guide > updateArea.right() + borderDelta) {
 

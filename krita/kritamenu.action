@@ -583,12 +583,36 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="view_show_guides">
+    <Action name="new_show_guides">
       <icon></icon>
       <text>Show Guides</text>
       <whatsThis></whatsThis>
       <toolTip>Show or hide guides</toolTip>
       <iconText>Show Guides</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="new_lock_guides">
+      <icon></icon>
+      <text>Lock Guides</text>
+      <whatsThis></whatsThis>
+      <toolTip>Lock or unlock guides</toolTip>
+      <iconText>Lock Guides</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="new_snap_to_guides">
+      <icon></icon>
+      <text>Snap to Guides</text>
+      <whatsThis></whatsThis>
+      <toolTip>Snap cursor to guides position</toolTip>
+      <iconText>Snap to Guides</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>

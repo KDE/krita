@@ -531,7 +531,7 @@ public:
     void setGridConfig(const KisGridConfig &config);
 
     /// returns the guides data for this document.
-    KoGuidesData &guidesData();
+    KoGuidesData* guidesData();
 
     void clearUndoHistory();
 

@@ -65,6 +65,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_image_patch.cpp
     canvas/kis_image_pyramid.cpp
     canvas/kis_infinity_manager.cpp
+    canvas/kis_guides_decoration.cpp
     dialogs/kis_about_application.cpp
     dialogs/kis_dlg_adj_layer_props.cc
     dialogs/kis_dlg_adjustment_layer.cc

@@ -80,15 +80,6 @@ public:
     QList<qreal> verticalGuideLines() const;
 
     /**
-     * Paints the guides using the given painter and viewconverter.
-     * Only guides intersecting the given area are painted.
-     * @param painter the painter
-     * @param converter the view converter
-     * @param area the area in need of updating
-     */
-    void paintGuides(QPainter &painter, const KoViewConverter &converter, const QRectF &area) const;
-
-    /**
      * Sets the color of the guide lines.
      * @param color the new guides color
      */
@@ -104,6 +95,8 @@ public:
     void saveOdfSettings(KoXmlWriter &settingsWriter);
 
 private:
+    Q_DISABLE_COPY(KoGuidesData);
+
     class Private;
     Private * const d;
 };

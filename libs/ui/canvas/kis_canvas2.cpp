@@ -61,6 +61,7 @@
 #include "flake/kis_shape_selection.h"
 #include "kis_image_config.h"
 #include "kis_infinity_manager.h"
+#include "kis_guides_decoration.h"
 #include "kis_signal_compressor.h"
 #include "kis_display_color_converter.h"
 #include "kis_exposure_gamma_correction_interface.h"
@@ -230,6 +231,13 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
         KisInfinityManager *manager = new KisInfinityManager(m_d->view, this);
         manager->setVisible(true);
         m_d->canvasWidget->addDecoration(manager);
+    }
+
+    // TODO: mode to guides manager
+    if (!m_d->canvasWidget->decoration(GUIDES_DECORATION_ID)) {
+        KisGuidesDecoration *decoration = new KisGuidesDecoration(m_d->view, this);
+        decoration->setVisible(true);
+        m_d->canvasWidget->addDecoration(decoration);
     }
 
     widget->setAutoFillBackground(false);
@@ -898,7 +906,7 @@ bool KisCanvas2::lodAllowedInCanvas() const
 
 KoGuidesData *KisCanvas2::guidesData()
 {
-    return &m_d->view->document()->guidesData();
+    return m_d->view->document()->guidesData();
 }
 
 void KisCanvas2::slotShowPopupPalette(const QPoint &p)

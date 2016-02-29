@@ -290,7 +290,7 @@ void KisZoomManager::zoomTo100()
 
 void KisZoomManager::showGuides(bool toggle)
 {
-    m_view->document()->guidesData().setShowGuideLines(toggle);
+    m_view->document()->guidesData()->setShowGuideLines(toggle);
     m_view->canvasBase()->canvasWidget()->update();
 }
 

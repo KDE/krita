@@ -123,26 +123,6 @@ QList<qreal> KoGuidesData::verticalGuideLines() const
     return d->vertGuideLines;
 }
 
-void KoGuidesData::paintGuides(QPainter &painter, const KoViewConverter &converter, const QRectF &area) const
-{
-    if (! showGuideLines())
-        return;
-
-    painter.setPen(d->guidesColor);
-    Q_FOREACH (qreal guide, d->horzGuideLines) {
-        if (guide < area.top() || guide > area.bottom())
-            continue;
-        painter.drawLine(converter.documentToView(QPointF(area.left(), guide)),
-                         converter.documentToView(QPointF(area.right(), guide)));
-    }
-    Q_FOREACH (qreal guide, d->vertGuideLines) {
-        if (guide < area.left() || guide > area.right())
-            continue;
-        painter.drawLine(converter.documentToView(QPointF(guide, area.top())),
-                         converter.documentToView(QPointF(guide, area.bottom())));
-    }
-}
-
 void KoGuidesData::setGuidesColor(const QColor &color)
 {
     d->guidesColor = color;

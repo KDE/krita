@@ -51,9 +51,14 @@ public Q_SLOTS:
     void setLockGuides(bool value);
     void setSnapToGuides(bool value);
 
+    void slotGuideCreationInProgress(Qt::Orientation orientation, const QPoint &globalPos);
+    void slotGuideCreationFinished(Qt::Orientation orientation, const QPoint &globalPos);
+
 private:
     void setGuidesDataImpl(const KoGuidesData &value);
     void attachEventFilterImpl(bool value);
+    void syncActionsStatus();
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

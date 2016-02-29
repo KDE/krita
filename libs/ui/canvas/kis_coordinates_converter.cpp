@@ -375,7 +375,14 @@ QRectF KisCoordinatesConverter::imageRectInViewportPixels() const
 
 QRect KisCoordinatesConverter::imageRectInImagePixels() const
 {
+    if(!m_d->image) return QRect();
     return m_d->image->bounds();
+}
+
+QRectF KisCoordinatesConverter::imageRectInDocumentPixels() const
+{
+    if(!m_d->image) return QRectF();
+    return imageToDocument(m_d->image->bounds());
 }
 
 QSizeF KisCoordinatesConverter::imageSizeInFlakePixels() const

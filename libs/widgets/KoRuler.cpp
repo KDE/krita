@@ -700,7 +700,8 @@ KoRulerPrivate::KoRulerPrivate(KoRuler *parent, const KoViewConverter *vc, Qt::O
             (PaintingStrategy*)new HorizontalPaintingStrategy() : (PaintingStrategy*)new VerticalPaintingStrategy()),
     distancesPaintingStrategy((PaintingStrategy*)new HorizontalDistancesPaintingStrategy()),
     paintingStrategy(normalPaintingStrategy),
-    ruler(parent)
+    ruler(parent),
+    guideCreationStarted(false)
 {
 }
 
@@ -1062,6 +1063,15 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
         return;
     }
 
+    /**
+     * HACK ALERT: We don't need all that indentation stuff in Krita.
+     *             Just ensure the rulers are created correctly.
+     */
+    if (d->selected == KoRulerPrivate::None) {
+        d->guideCreationStarted = true;
+        return;
+    }
+
     QPoint pos = ev->pos();
 
     if (d->showTabs) {
@@ -1130,7 +1140,10 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
 void KoRuler::mouseReleaseEvent ( QMouseEvent* ev )
 {
     ev->accept();
-    if (d->selected == KoRulerPrivate::Tab) {
+    if (d->selected == KoRulerPrivate::None && d->guideCreationStarted) {
+        d->guideCreationStarted = false;
+        emit guideCreationFinished(d->orientation, ev->globalPos());
+    } else if (d->selected == KoRulerPrivate::Tab) {
         if (d->originalIndex >= 0 && !d->tabMoved) {
             int type = d->tabs[d->currentIndex].type;
             type++;
@@ -1153,6 +1166,13 @@ void KoRuler::mouseReleaseEvent ( QMouseEvent* ev )
 void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
 {
     QPoint pos = ev->pos();
+
+    if (d->selected == KoRulerPrivate::None && d->guideCreationStarted) {
+        emit guideCreationInProgress(d->orientation, ev->globalPos());
+        ev->accept();
+        update();
+        return;
+    }
 
     qreal activeLength = d->effectiveActiveRangeEnd() - d->effectiveActiveRangeStart();
 

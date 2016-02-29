@@ -49,7 +49,6 @@
 #include "kis_lod_transform.h"
 
 
-
 class KisZoomController : public KoZoomController
 {
 public:
@@ -129,7 +128,6 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     m_horizontalRuler->setShowMousePosition(true);
     m_horizontalRuler->createGuideToolConnection(m_view->canvasBase());
 
-//    new KoRulerController(m_horizontalRuler, m_canvasController->canvas()->resourceManager());
     m_verticalRuler = new KoRuler(m_view, Qt::Vertical, m_zoomHandler);
     m_verticalRuler->setShowMousePosition(true);
     m_verticalRuler->createGuideToolConnection(m_view->canvasBase());
@@ -166,6 +164,16 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     KisConfig cfg;
     toggleShowRulers(cfg.showRulers());
 
+}
+
+KoRuler* KisZoomManager::horizontalRuler() const
+{
+    return m_horizontalRuler;
+}
+
+KoRuler* KisZoomManager::verticalRuler() const
+{
+    return m_verticalRuler;
 }
 
 void KisZoomManager::mousePositionChanged(const QPoint &viewPos)

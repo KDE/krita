@@ -257,6 +257,9 @@ Q_SIGNALS:
     /// emitted when the mouse is drag+released outside the ruler
     void guideLineCreated(Qt::Orientation orientation, qreal viewPosition);
 
+    void guideCreationInProgress(Qt::Orientation orientation, const QPoint &globalPos);
+    void guideCreationFinished(Qt::Orientation orientation, const QPoint &globalPos);
+
 protected:
     /// reimplemented
     virtual void paintEvent(QPaintEvent* event);

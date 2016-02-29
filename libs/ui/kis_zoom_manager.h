@@ -60,6 +60,9 @@ public:
 
     QWidget *zoomActionWidget() const;
 
+    KoRuler *horizontalRuler() const;
+    KoRuler *verticalRuler() const;
+
 public Q_SLOTS:
 
     void slotZoomChanged(KoZoomMode::Mode mode, qreal zoom);

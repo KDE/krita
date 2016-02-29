@@ -142,14 +142,19 @@ void KoGuidesData::setSnapToGuides(bool value)
     d->snapToGuides = value;
 }
 
-QList<qreal> KoGuidesData::horizontalGuideLines() const
+const QList<qreal>& KoGuidesData::horizontalGuideLines() const
 {
     return d->horzGuideLines;
 }
 
-QList<qreal> KoGuidesData::verticalGuideLines() const
+const QList<qreal>& KoGuidesData::verticalGuideLines() const
 {
     return d->vertGuideLines;
+}
+
+bool KoGuidesData::hasGuides() const
+{
+    return !d->horzGuideLines.isEmpty() || !d->vertGuideLines.isEmpty();
 }
 
 void KoGuidesData::setGuidesColor(const QColor &color)

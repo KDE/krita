@@ -44,6 +44,8 @@ public:
     bool lockGuides() const;
     bool snapToGuides() const;
 
+    bool eventFilter(QObject *obj, QEvent *event);
+
 public Q_SLOTS:
     void setShowGuides(bool value);
     void setLockGuides(bool value);
@@ -51,7 +53,7 @@ public Q_SLOTS:
 
 private:
     void setGuidesDataImpl(const KoGuidesData &value);
-
+    void attachEventFilterImpl(bool value);
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

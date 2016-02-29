@@ -86,10 +86,12 @@ public:
     void setSnapToGuides(bool value);
 
     /// Returns the list of horizontal guide lines.
-    QList<qreal> horizontalGuideLines() const;
+    const QList<qreal>& horizontalGuideLines() const;
 
     /// Returns the list of vertical guide lines.
-    QList<qreal> verticalGuideLines() const;
+    const QList<qreal>& verticalGuideLines() const;
+
+    bool hasGuides() const;
 
     /**
      * Sets the color of the guide lines.

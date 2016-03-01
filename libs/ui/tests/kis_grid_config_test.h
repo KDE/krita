@@ -25,7 +25,8 @@ class KisGridConfigTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void test();
+    void testGridConfig();
+    void testGuidesConfig();
 };
 
 #endif /* __KIS_GRID_CONFIG_TEST_H */

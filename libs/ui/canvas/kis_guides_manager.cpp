@@ -201,6 +201,8 @@ void KisGuidesManager::setView(QPointer<KisView> view)
             m_d->view->canvasBase()->addDecoration(decoration);
         }
         m_d->decoration = decoration;
+
+        m_d->guidesConfig = m_d->view->document()->guidesConfig();
         setGuidesConfigImpl(m_d->guidesConfig);
 
         m_d->viewConnections.addUniqueConnection(
@@ -351,7 +353,7 @@ bool KisGuidesManager::Private::mouseReleaseHandler(const QPointF &docPos)
 
 bool KisGuidesManager::eventFilter(QObject *obj, QEvent *event)
 {
-    if (obj != m_d->view->canvasBase()->canvasWidget()) return false;
+    if (!m_d->view || obj != m_d->view->canvasBase()->canvasWidget()) return false;
     KisCanvas2 *canvas = m_d->view->canvasBase();
     const KisCoordinatesConverter *converter = canvas->coordinatesConverter();
 

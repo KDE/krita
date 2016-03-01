@@ -20,11 +20,10 @@
 */
 
 #include "kis_guides_config.h"
-#include "KoViewConverter.h"
+
 #include <QDomDocument>
+#include "kis_dom_utils.h"
 
-
-#include <QPainter>
 
 class Q_DECL_HIDDEN KisGuidesConfig::Private
 {
@@ -32,16 +31,14 @@ public:
     Private()
         : showGuides(false),
         snapToGuides(false),
-        lockGuides(false),
-        guidesColor(Qt::lightGray) {}
+        lockGuides(false) {}
 
     bool operator==(const Private &rhs) {
         return horzGuideLines == rhs.horzGuideLines &&
             vertGuideLines == rhs.vertGuideLines &&
             showGuides == rhs.showGuides &&
             snapToGuides == rhs.snapToGuides &&
-            lockGuides == rhs.lockGuides &&
-            guidesColor == rhs.guidesColor;
+            lockGuides == rhs.lockGuides;
     }
 
     QList<qreal> horzGuideLines;
@@ -50,8 +47,6 @@ public:
     bool showGuides;
     bool snapToGuides;
     bool lockGuides;
-
-    QColor guidesColor;
 };
 
 KisGuidesConfig::KisGuidesConfig()
@@ -61,7 +56,6 @@ KisGuidesConfig::KisGuidesConfig()
 
 KisGuidesConfig::~KisGuidesConfig()
 {
-    delete d;
 }
 
 KisGuidesConfig::KisGuidesConfig(const KisGuidesConfig &rhs)
@@ -157,22 +151,35 @@ bool KisGuidesConfig::hasGuides() const
     return !d->horzGuideLines.isEmpty() || !d->vertGuideLines.isEmpty();
 }
 
-void KisGuidesConfig::setGuidesColor(const QColor &color)
-{
-    d->guidesColor = color;
-}
-
-QColor KisGuidesConfig::guidesColor() const
-{
-    return d->guidesColor;
-}
-
 QDomElement KisGuidesConfig::saveToXml(QDomDocument& doc, const QString &tag) const
 {
-    return QDomElement();
+    QDomElement gridElement = doc.createElement(tag);
+    KisDomUtils::saveValue(&gridElement, "showGuides", d->showGuides);
+    KisDomUtils::saveValue(&gridElement, "snapToGuides", d->snapToGuides);
+    KisDomUtils::saveValue(&gridElement, "lockGuides", d->lockGuides);
+
+    KisDomUtils::saveValue(&gridElement, "horizontalGuides", d->horzGuideLines.toVector());
+    KisDomUtils::saveValue(&gridElement, "verticalGuides", d->vertGuideLines.toVector());
+
+    return gridElement;
 }
 
 bool KisGuidesConfig::loadFromXml(const QDomElement &parent)
 {
-    return true;
+    bool result = true;
+
+    result &= KisDomUtils::loadValue(parent, "showGuides", &d->showGuides);
+    result &= KisDomUtils::loadValue(parent, "snapToGuides", &d->snapToGuides);
+    result &= KisDomUtils::loadValue(parent, "lockGuides", &d->lockGuides);
+
+    QVector<qreal> hGuides;
+    QVector<qreal> vGuides;
+
+    result &= KisDomUtils::loadValue(parent, "horizontalGuides", &hGuides);
+    result &= KisDomUtils::loadValue(parent, "verticalGuides", &vGuides);
+
+    d->horzGuideLines = QList<qreal>::fromVector(hGuides);
+    d->vertGuideLines = QList<qreal>::fromVector(vGuides);
+
+    return result;
 }

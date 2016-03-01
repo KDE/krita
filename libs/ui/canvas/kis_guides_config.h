@@ -23,14 +23,10 @@
 #define KOGUIDESDATA_H
 
 #include "kritaui_export.h"
+#include <QScopedPointer>
 #include <QList>
-#include <QtGlobal>
 #include <boost/operators.hpp>
 
-class QPainter;
-class KoViewConverter;
-class QRectF;
-class QColor;
 class QDomElement;
 class QDomDocument;
 
@@ -92,21 +88,12 @@ public:
 
     bool hasGuides() const;
 
-    /**
-     * Sets the color of the guide lines.
-     * @param color the new guides color
-     */
-    void setGuidesColor(const QColor &color);
-
-    /// Returns the color of the guide lines.
-    QColor guidesColor() const;
-
     QDomElement saveToXml(QDomDocument& doc, const QString &tag) const;
     bool loadFromXml(const QDomElement &parent);
 
 private:
-    class Private;
-    Private * const d;
+    struct Private;
+    const QScopedPointer<Private> d;
 };
 
 

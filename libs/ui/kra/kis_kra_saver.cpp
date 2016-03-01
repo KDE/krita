@@ -117,6 +117,7 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageWSP image)
     saveCompositions(doc, imageElement, image);
     saveAssistantsList(doc,imageElement);
     saveGrid(doc,imageElement);
+    saveGuides(doc,imageElement);
 
     QDomElement animationElement = doc.createElement("animation");
     KisDomUtils::saveValue(&animationElement, "framerate", image->animationInterface()->framerate());
@@ -375,9 +376,9 @@ bool KisKraSaver::saveGuides(QDomDocument& doc, QDomElement& element)
 {
     KisGuidesConfig guides = m_d->doc->guidesConfig();
 
-    if (!guides.hasGuides()) {
-        QDomElement gridElement = guides.saveToXml(doc, "guides");
-        element.appendChild(gridElement);
+    if (guides.hasGuides()) {
+        QDomElement guidesElement = guides.saveToXml(doc, "guides");
+        element.appendChild(guidesElement);
     }
 
     return true;

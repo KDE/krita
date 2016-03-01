@@ -20,9 +20,9 @@
 
 #include "KoGuidesData.h"
 #include "KoViewConverter.h"
-#include <KoUnit.h>
-#include <KoOasisSettings.h>
-#include <KoXmlWriter.h>
+#include <QDomDocument>
+
+
 
 #include <QPainter>
 
@@ -165,4 +165,14 @@ void KoGuidesData::setGuidesColor(const QColor &color)
 QColor KoGuidesData::guidesColor() const
 {
     return d->guidesColor;
+}
+
+QDomElement KoGuidesData::saveToXml(QDomDocument& doc, const QString &tag) const
+{
+    return QDomElement();
+}
+
+bool KoGuidesData::loadFromXml(const QDomElement &parent)
+{
+    return true;
 }

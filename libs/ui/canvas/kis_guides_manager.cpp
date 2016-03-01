@@ -17,6 +17,7 @@
  */
 
 #include "kis_guides_manager.h"
+
 #include "kis_guides_decoration.h"
 #include <KoRuler.h>
 #include <KoGuidesData.h>
@@ -28,6 +29,7 @@
 #include "kis_zoom_manager.h"
 #include "kis_signal_auto_connection.h"
 #include "KisViewManager.h"
+#include "KisDocument.h"
 
 
 struct KisGuidesManager::Private
@@ -90,6 +92,11 @@ void KisGuidesManager::setGuidesDataImpl(const KoGuidesData &value)
     if (m_d->decoration && value != m_d->decoration->guidesData()) {
         m_d->decoration->setVisible(value.showGuides());
         m_d->decoration->setGuidesData(value);
+    }
+
+    KisDocument *doc = m_d->view ? m_d->view->document() : 0;
+    if (doc && doc->guidesData() != value) {
+        doc->setGuidesData(value);
     }
 
     const bool shouldFilterEvent =

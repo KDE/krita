@@ -298,12 +298,9 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
         KoXmlElement e = child.toElement();
         if (e.tagName() == "grid") {
             loadGrid(e);
-        }
-    }
-
-    for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
-        KoXmlElement e = child.toElement();
-        if (e.tagName() == "assistants") {
+        } else if (e.tagName() == "guides") {
+            loadGuides(e);
+        } else if (e.tagName() == "assistants") {
             loadAssistantsList(e);
         }
     }
@@ -1064,4 +1061,15 @@ void KisKraLoader::loadGrid(const KoXmlElement& elem)
     config.loadDynamicDataFromXml(domElement);
     config.loadStaticData();
     m_d->document->setGridConfig(config);
+}
+
+void KisKraLoader::loadGuides(const KoXmlElement& elem)
+{
+    QDomDocument dom;
+    KoXml::asQDomElement(dom, elem);
+    QDomElement domElement = dom.firstChildElement();
+
+    KoGuidesData guides;
+    guides.loadFromXml(domElement);
+    m_d->document->setGuidesData(guides);
 }

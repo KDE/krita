@@ -295,11 +295,3 @@ void KisZoomManager::zoomTo100()
     m_zoomController->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
     m_view->canvasBase()->notifyZoomChanged();
 }
-
-void KisZoomManager::showGuides(bool toggle)
-{
-    m_view->document()->guidesData()->setShowGuideLines(toggle);
-    m_view->canvasBase()->canvasWidget()->update();
-}
-
-

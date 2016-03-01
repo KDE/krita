@@ -72,7 +72,6 @@ public Q_SLOTS:
     void changeAspectMode(bool aspectMode);
     void pageOffsetChanged();
     void zoomTo100();
-    void showGuides(bool toggle);
     void applyRulersUnit(const KoUnit &baseUnit);
     void setMinMaxZoom();
 

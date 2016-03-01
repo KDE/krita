@@ -2110,9 +2110,14 @@ void KisDocument::setGridConfig(const KisGridConfig &config)
     d->gridConfig = config;
 }
 
-KoGuidesData* KisDocument::guidesData()
+const KoGuidesData& KisDocument::guidesData() const
 {
-    return &d->guidesData;
+    return d->guidesData;
+}
+
+void KisDocument::setGuidesData(const KoGuidesData &data)
+{
+    d->guidesData = data;
 }
 
 bool KisDocument::isEmpty() const

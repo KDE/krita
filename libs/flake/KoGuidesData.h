@@ -31,7 +31,8 @@ class QPainter;
 class KoViewConverter;
 class QRectF;
 class QColor;
-class KoXmlWriter;
+class QDomElement;
+class QDomDocument;
 
 /**
  * XXX
@@ -101,6 +102,9 @@ public:
 
     /// Returns the color of the guide lines.
     QColor guidesColor() const;
+
+    QDomElement saveToXml(QDomDocument& doc, const QString &tag) const;
+    bool loadFromXml(const QDomElement &parent);
 
 private:
     class Private;

@@ -370,3 +370,15 @@ bool KisKraSaver::saveGrid(QDomDocument& doc, QDomElement& element)
     return true;
 }
 
+bool KisKraSaver::saveGuides(QDomDocument& doc, QDomElement& element)
+{
+    KoGuidesData guides = m_d->doc->guidesData();
+
+    if (!guides.hasGuides()) {
+        QDomElement gridElement = guides.saveToXml(doc, "guides");
+        element.appendChild(gridElement);
+    }
+
+    return true;
+}
+

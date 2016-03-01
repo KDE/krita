@@ -896,11 +896,6 @@ bool KisCanvas2::lodAllowedInCanvas() const
     return m_d->lodAllowedInCanvas;
 }
 
-KoGuidesData *KisCanvas2::guidesData()
-{
-    return m_d->view->document()->guidesData();
-}
-
 void KisCanvas2::slotShowPopupPalette(const QPoint &p)
 {
     if (!m_d->popupPalette) {

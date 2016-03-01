@@ -165,7 +165,6 @@ public:
         , zoomTo100pct(0)
         , zoomIn(0)
         , zoomOut(0)
-        , showGuidesAction(0)
         , selectionManager(_q)
         , statusBar(_q)
         , controlFrame(_q, _q_parent)
@@ -204,7 +203,6 @@ public:
     KisAction *zoomTo100pct;
     KisAction *zoomIn;
     KisAction *zoomOut;
-    KisAction *showGuidesAction;
 
     KisSelectionManager selectionManager;
     KisGuidesManager guidesManager;
@@ -363,7 +361,6 @@ void KisViewManager::setCurrentView(KisView *view)
         d->viewConnections.addUniqueConnection(d->zoomTo100pct, SIGNAL(triggered()), imageView->zoomManager(), SLOT(zoomTo100()));
         d->viewConnections.addUniqueConnection(d->zoomIn, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomIn()));
         d->viewConnections.addUniqueConnection(d->zoomOut, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomOut()));
-        d->viewConnections.addUniqueConnection(d->showGuidesAction, SIGNAL(triggered(bool)), imageView->zoomManager(), SLOT(showGuides(bool)));
 
         showHideScrollbars();
     }
@@ -619,8 +616,6 @@ void KisViewManager::createActions()
     KisConfig cfg;
     d->showRulersAction = actionManager()->createAction("view_ruler");
     d->showRulersAction->setChecked(cfg.showRulers());
-
-    d->showGuidesAction = actionManager()->createAction("view_show_guides");
 
     d->zoomTo100pct = actionManager()->createAction("zoom_to_100pct");
 

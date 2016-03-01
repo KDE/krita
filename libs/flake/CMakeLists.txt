@@ -23,7 +23,6 @@ set(kritaflake_SRCS
     KoDockRegistry.cpp
     KoDataCenterBase.cpp
     KoInsets.cpp
-    KoGuidesData.cpp
     KoPathShape.cpp
     KoPathPoint.cpp
     KoPathSegment.cpp

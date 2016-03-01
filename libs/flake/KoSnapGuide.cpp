@@ -69,7 +69,6 @@ KoSnapGuide::KoSnapGuide(KoCanvasBase *canvas)
     d->strategies.append(new ExtensionSnapStrategy());
     d->strategies.append(new IntersectionSnapStrategy());
     d->strategies.append(new BoundingBoxSnapStrategy());
-    d->strategies.append(new LineGuideSnapStrategy());
 }
 
 KoSnapGuide::~KoSnapGuide()

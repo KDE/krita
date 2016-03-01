@@ -128,15 +128,17 @@ private:
     QPointF m_boxPoints[5];
 };
 
+// KoGuidesData has been moved into Krita. Please port this class!
+//
 /// snaps to line guides
-class KRITAFLAKE_EXPORT LineGuideSnapStrategy : public KoSnapStrategy
-{
-public:
-    LineGuideSnapStrategy();
-    virtual bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance);
-    virtual QPainterPath decoration(const KoViewConverter &converter) const;
-private:
-    int m_orientation;
-};
+// class KRITAFLAKE_EXPORT LineGuideSnapStrategy : public KoSnapStrategy
+// {
+// public:
+//     LineGuideSnapStrategy();
+//     virtual bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance);
+//     virtual QPainterPath decoration(const KoViewConverter &converter) const;
+// private:
+//     int m_orientation;
+// };
 
 #endif // KOSNAPSTRATEGY_H

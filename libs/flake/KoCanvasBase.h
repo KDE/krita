@@ -40,7 +40,6 @@ class KoShapeBasedDocumentBase;
 class KoCanvasController;
 class KoShape;
 class KoSnapGuide;
-class KoGuidesData;
 
 class QWidget;
 class QCursor;
@@ -242,17 +241,6 @@ public:
      * the snapping guide policies object from snapGuide().
      */
     QWidget *createSnapGuideConfigWidget() const;
-
-    /**
-     * Returns the guides data.
-     *
-     * Applications that want to have guides should reimplement this
-     * function and return the KOGuideData object.
-     * The default implementation returns 0.
-     *
-     * @return pointer to the guide data or zero if there is none
-     */
-    virtual KoGuidesData *guidesData();
 
     /// called by KoCanvasController to set the controller that handles this canvas.
     void setCanvasController(KoCanvasController *controller);

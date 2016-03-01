@@ -79,16 +79,13 @@ class MockCanvas : public KoCanvasBase
 {
 public:
     MockCanvas(KoShapeBasedDocumentBase *aKoShapeBasedDocumentBase =0)//made for TestSnapStrategy.cpp
-            : KoCanvasBase(aKoShapeBasedDocumentBase), m_shapeManager(new KoShapeManager(this)), m_guideData(0) {}
+            : KoCanvasBase(aKoShapeBasedDocumentBase), m_shapeManager(new KoShapeManager(this)) {}
     ~MockCanvas() {}
     void setHorz(qreal pHorz){
         m_horz = pHorz;
     }
     void setVert(qreal pVert){
         m_vert = pVert;
-    }
-    void setGuidesData(KoGuidesData* pGuideData){
-        m_guideData = pGuideData;
     }
     void gridSize(qreal *horizontal, qreal *vertical) const {
         *horizontal = m_horz;
@@ -117,16 +114,12 @@ public:
     KoUnit unit() const {
         return KoUnit(KoUnit::Millimeter);
     }
-    KoGuidesData *guidesData(){
-        return m_guideData;
-    }
     void updateInputMethodInfo() {}
     void setCursor(const QCursor &) {}
     private:
         KoShapeManager *m_shapeManager;
         qreal m_horz;
         qreal m_vert;
-        KoGuidesData *m_guideData;
 };
 
 class MockShapeController : public KoShapeBasedDocumentBase

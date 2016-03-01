@@ -120,11 +120,6 @@ KoSnapGuide * KoCanvasBase::snapGuide() const
     return d->snapGuide;
 }
 
-KoGuidesData * KoCanvasBase::guidesData()
-{
-    return 0;
-}
-
 QWidget *KoCanvasBase::createSnapGuideConfigWidget() const
 {
     return new SnapGuideConfigWidget(d->snapGuide);

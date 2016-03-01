@@ -22,6 +22,8 @@
 #include <QScopedPointer>
 #include "kis_canvas_decoration.h"
 
+class KoGuidesData;
+
 static const QString GUIDES_DECORATION_ID = "guides-decoration";
 
 class KRITAUI_EXPORT KisGuidesDecoration : public KisCanvasDecoration

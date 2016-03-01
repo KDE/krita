@@ -788,10 +788,9 @@ void KisLayerBox::slotRenameCurrentNode()
     m_wdgLayerBox->listLayers->edit(m_wdgLayerBox->listLayers->currentIndex());
 }
 
-void KisLayerBox::slotColorLabelChanged(int index)
+void KisLayerBox::slotColorLabelChanged(int label)
 {
     KisNodeList nodes = m_nodeManager->selectedNodes();
-    const int label = m_colorSelector->currentIndex();
 
     Q_FOREACH(KisNodeSP node, nodes) {
         node->setColorLabelIndex(label);

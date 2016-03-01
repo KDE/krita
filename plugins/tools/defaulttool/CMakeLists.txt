@@ -14,11 +14,6 @@ set ( defaulttools_SRCS
     defaulttool/SelectionDecorator.cpp
     defaulttool/SelectionTransformCommand.cpp
 
-    guidestool/GuidesTool.cpp
-    guidestool/GuidesToolFactory.cpp
-    guidestool/GuidesToolOptionWidget.cpp
-    guidestool/InsertGuidesToolOptionWidget.cpp
-
     connectionTool/ConnectionTool.cpp
     connectionTool/ConnectionToolFactory.cpp
     connectionTool/AddConnectionPointCommand.cpp
@@ -32,8 +27,6 @@ ki18n_wrap_ui(defaulttools_SRCS
     defaulttool/DefaultToolWidget.ui
     defaulttool/DefaultToolArrangeWidget.ui
     defaulttool/DefaultToolTransformWidget.ui
-    guidestool/GuidesToolOptionWidget.ui
-    guidestool/InsertGuidesToolOptionWidget.ui
     connectionTool/ConnectionPointWidget.ui
 )
 

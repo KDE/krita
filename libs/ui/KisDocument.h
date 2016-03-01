@@ -28,8 +28,6 @@
 #include <klocalizedstring.h>
 
 #include <KoPageLayout.h>
-#include "KoGuidesData.h"
-#include <KoXmlReader.h>
 #include <KoDocumentBase.h>
 #include <kundo2stack.h>
 
@@ -59,6 +57,8 @@ class KisUndoStore;
 class KisPaintingAssistant;
 class KisPart;
 class KisGridConfig;
+class KisGuidesConfig;
+class QDomDocument;
 
 class KisPart;
 
@@ -531,8 +531,8 @@ public:
     void setGridConfig(const KisGridConfig &config);
 
     /// returns the guides data for this document.
-    const KoGuidesData& guidesData() const;
-    void setGuidesData(const KoGuidesData &data);
+    const KisGuidesConfig& guidesConfig() const;
+    void setGuidesConfig(const KisGuidesConfig &data);
 
     void clearUndoHistory();
 

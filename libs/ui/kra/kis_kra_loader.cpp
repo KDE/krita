@@ -33,7 +33,7 @@
 #include <KoDocumentInfo.h>
 #include <KoFileDialog.h>
 #include <KisImportExportManager.h>
-
+#include <KoXmlReader.h>
 
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
@@ -74,6 +74,7 @@
 #include "kis_image_animation_interface.h"
 #include "kis_time_range.h"
 #include "kis_grid_config.h"
+#include "kis_guides_config.h"
 
 /*
 
@@ -1069,7 +1070,7 @@ void KisKraLoader::loadGuides(const KoXmlElement& elem)
     KoXml::asQDomElement(dom, elem);
     QDomElement domElement = dom.firstChildElement();
 
-    KoGuidesData guides;
+    KisGuidesConfig guides;
     guides.loadFromXml(domElement);
-    m_d->document->setGuidesData(guides);
+    m_d->document->setGuidesConfig(guides);
 }

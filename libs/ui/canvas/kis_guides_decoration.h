@@ -22,7 +22,7 @@
 #include <QScopedPointer>
 #include "kis_canvas_decoration.h"
 
-class KoGuidesData;
+class KisGuidesConfig;
 
 static const QString GUIDES_DECORATION_ID = "guides-decoration";
 
@@ -34,8 +34,8 @@ public:
     ~KisGuidesDecoration();
 
 
-    void setGuidesData(const KoGuidesData &value);
-    const KoGuidesData& guidesData() const;
+    void setGuidesConfig(const KisGuidesConfig &value);
+    const KisGuidesConfig& guidesConfig() const;
 
 protected:
     void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter, KisCanvas2 *canvas);

@@ -54,6 +54,7 @@
 #include <string>
 #include "kis_dom_utils.h"
 #include "kis_grid_config.h"
+#include "kis_guides_config.h"
 
 
 using namespace KRA;
@@ -372,7 +373,7 @@ bool KisKraSaver::saveGrid(QDomDocument& doc, QDomElement& element)
 
 bool KisKraSaver::saveGuides(QDomDocument& doc, QDomElement& element)
 {
-    KoGuidesData guides = m_d->doc->guidesData();
+    KisGuidesConfig guides = m_d->doc->guidesConfig();
 
     if (!guides.hasGuides()) {
         QDomElement gridElement = guides.saveToXml(doc, "guides");

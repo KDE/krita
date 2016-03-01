@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Laurent Montel <montel@kde.org>
    Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+   Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,10 +22,9 @@
 #ifndef KOGUIDESDATA_H
 #define KOGUIDESDATA_H
 
-#include "kritaflake_export.h"
+#include "kritaui_export.h"
 #include <QList>
 #include <QtGlobal>
-#include "KoXmlReaderForward.h"
 #include <boost/operators.hpp>
 
 class QPainter;
@@ -34,18 +34,16 @@ class QColor;
 class QDomElement;
 class QDomDocument;
 
-/**
- * XXX
- */
-class KRITAFLAKE_EXPORT KoGuidesData : boost::equality_comparable<KoGuidesData>
+
+class KRITAUI_EXPORT KisGuidesConfig : boost::equality_comparable<KisGuidesConfig>
 {
 public:
-    KoGuidesData();
-    ~KoGuidesData();
+    KisGuidesConfig();
+    ~KisGuidesConfig();
 
-    KoGuidesData(const KoGuidesData &rhs);
-    KoGuidesData& operator=(const KoGuidesData &rhs);
-    bool operator==(const KoGuidesData &rhs) const;
+    KisGuidesConfig(const KisGuidesConfig &rhs);
+    KisGuidesConfig& operator=(const KisGuidesConfig &rhs);
+    bool operator==(const KisGuidesConfig &rhs) const;
 
     /**
      * @brief Set the positions of the horizontal guide lines

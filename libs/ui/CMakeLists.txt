@@ -67,7 +67,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_infinity_manager.cpp
     canvas/kis_guides_decoration.cpp
     canvas/kis_guides_manager.cpp
-    canvas/KoGuidesData.cpp
+    canvas/kis_guides_config.cpp
     dialogs/kis_about_application.cpp
     dialogs/kis_dlg_adj_layer_props.cc
     dialogs/kis_dlg_adjustment_layer.cc

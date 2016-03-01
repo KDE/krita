@@ -46,6 +46,7 @@
 #include <KoStore.h>
 #include <KoUpdater.h>
 #include <KoXmlWriter.h>
+#include <KoXmlReader.h>
 
 #include <klocalizedstring.h>
 #include <kis_debug.h>
@@ -111,6 +112,7 @@
 #include "KisView.h"
 #include "kis_async_action_feedback.h"
 #include "kis_grid_config.h"
+#include "kis_guides_config.h"
 
 
 static const char CURRENT_DTD_VERSION[] = "2.0";
@@ -317,7 +319,7 @@ public:
 
     KUndo2Stack *undoStack;
 
-    KoGuidesData guidesData;
+    KisGuidesConfig guidesConfig;
 
     bool isEmpty;
 
@@ -2110,14 +2112,14 @@ void KisDocument::setGridConfig(const KisGridConfig &config)
     d->gridConfig = config;
 }
 
-const KoGuidesData& KisDocument::guidesData() const
+const KisGuidesConfig& KisDocument::guidesConfig() const
 {
-    return d->guidesData;
+    return d->guidesConfig;
 }
 
-void KisDocument::setGuidesData(const KoGuidesData &data)
+void KisDocument::setGuidesConfig(const KisGuidesConfig &data)
 {
-    d->guidesData = data;
+    d->guidesConfig = data;
 }
 
 bool KisDocument::isEmpty() const

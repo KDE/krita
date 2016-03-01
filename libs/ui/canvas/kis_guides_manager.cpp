@@ -20,7 +20,7 @@
 
 #include "kis_guides_decoration.h"
 #include <KoRuler.h>
-#include <KoGuidesData.h>
+#include "kis_guides_config.h"
 #include "kis_action_manager.h"
 #include "kis_action.h"
 #include "kis_signals_blocker.h"
@@ -45,7 +45,7 @@ struct KisGuidesManager::Private
     KisGuidesManager *q;
 
     KisGuidesDecoration *decoration;
-    KoGuidesData guidesData;
+    KisGuidesConfig guidesConfig;
     QPointer<KisView> view;
 
     typedef QPair<Qt::Orientation, int> GuideHandle;
@@ -87,16 +87,16 @@ KisCanvasDecoration* KisGuidesManager::decoration() const
     return m_d->decoration;
 }
 
-void KisGuidesManager::setGuidesDataImpl(const KoGuidesData &value)
+void KisGuidesManager::setGuidesConfigImpl(const KisGuidesConfig &value)
 {
-    if (m_d->decoration && value != m_d->decoration->guidesData()) {
+    if (m_d->decoration && value != m_d->decoration->guidesConfig()) {
         m_d->decoration->setVisible(value.showGuides());
-        m_d->decoration->setGuidesData(value);
+        m_d->decoration->setGuidesConfig(value);
     }
 
     KisDocument *doc = m_d->view ? m_d->view->document() : 0;
-    if (doc && doc->guidesData() != value) {
-        doc->setGuidesData(value);
+    if (doc && doc->guidesConfig() != value) {
+        doc->setGuidesConfig(value);
     }
 
     const bool shouldFilterEvent =
@@ -130,42 +130,42 @@ void KisGuidesManager::syncActionsStatus()
     KisAction *snapToGuidesAction = actionManager->actionByName("new_snap_to_guides");
 
     KisSignalsBlocker l(showGuidesAction, lockGuidesAction, snapToGuidesAction);
-    showGuidesAction->setChecked(m_d->guidesData.showGuides());
-    lockGuidesAction->setChecked(m_d->guidesData.lockGuides());
-    snapToGuidesAction->setChecked(m_d->guidesData.snapToGuides());
+    showGuidesAction->setChecked(m_d->guidesConfig.showGuides());
+    lockGuidesAction->setChecked(m_d->guidesConfig.lockGuides());
+    snapToGuidesAction->setChecked(m_d->guidesConfig.snapToGuides());
 }
 
 bool KisGuidesManager::showGuides() const
 {
-    return m_d->guidesData.showGuides();
+    return m_d->guidesConfig.showGuides();
 }
 
 void KisGuidesManager::setShowGuides(bool value)
 {
-    m_d->guidesData.setShowGuides(value);
-    setGuidesDataImpl(m_d->guidesData);
+    m_d->guidesConfig.setShowGuides(value);
+    setGuidesConfigImpl(m_d->guidesConfig);
 }
 
 bool KisGuidesManager::lockGuides() const
 {
-    return m_d->guidesData.lockGuides();
+    return m_d->guidesConfig.lockGuides();
 }
 
 void KisGuidesManager::setLockGuides(bool value)
 {
-    m_d->guidesData.setLockGuides(value);
-    setGuidesDataImpl(m_d->guidesData);
+    m_d->guidesConfig.setLockGuides(value);
+    setGuidesConfigImpl(m_d->guidesConfig);
 }
 
 bool KisGuidesManager::snapToGuides() const
 {
-    return m_d->guidesData.snapToGuides();
+    return m_d->guidesConfig.snapToGuides();
 }
 
 void KisGuidesManager::setSnapToGuides(bool value)
 {
-    m_d->guidesData.setSnapToGuides(value);
-    setGuidesDataImpl(m_d->guidesData);
+    m_d->guidesConfig.setSnapToGuides(value);
+    setGuidesConfigImpl(m_d->guidesConfig);
 }
 
 void KisGuidesManager::setup(KisActionManager *actionManager)
@@ -201,7 +201,7 @@ void KisGuidesManager::setView(QPointer<KisView> view)
             m_d->view->canvasBase()->addDecoration(decoration);
         }
         m_d->decoration = decoration;
-        setGuidesDataImpl(m_d->guidesData);
+        setGuidesConfigImpl(m_d->guidesConfig);
 
         m_d->viewConnections.addUniqueConnection(
             m_d->view->zoomManager()->horizontalRuler(), SIGNAL(guideCreationInProgress(Qt::Orientation, const QPoint&)),
@@ -229,8 +229,8 @@ KisGuidesManager::Private::findGuide(const QPointF &docPos)
     GuideHandle nearestGuide = invalidGuide;
     qreal nearestRadius = std::numeric_limits<int>::max();
 
-    for (int i = 0; i < guidesData.horizontalGuideLines().size(); i++) {
-        const qreal guide = guidesData.horizontalGuideLines()[i];
+    for (int i = 0; i < guidesConfig.horizontalGuideLines().size(); i++) {
+        const qreal guide = guidesConfig.horizontalGuideLines()[i];
         const qreal radius = qAbs(docPos.y() - guide);
         if (radius < snapRadius && radius < nearestRadius) {
             nearestGuide = GuideHandle(Qt::Horizontal, i);
@@ -238,8 +238,8 @@ KisGuidesManager::Private::findGuide(const QPointF &docPos)
         }
     }
 
-    for (int i = 0; i < guidesData.verticalGuideLines().size(); i++) {
-        const qreal guide = guidesData.verticalGuideLines()[i];
+    for (int i = 0; i < guidesConfig.verticalGuideLines().size(); i++) {
+        const qreal guide = guidesConfig.verticalGuideLines()[i];
         const qreal radius = qAbs(docPos.x() - guide);
         if (radius < snapRadius && radius < nearestRadius) {
             nearestGuide = GuideHandle(Qt::Vertical, i);
@@ -258,33 +258,33 @@ bool KisGuidesManager::Private::isGuideValid(const GuideHandle &h)
 qreal KisGuidesManager::Private::guideValue(const GuideHandle &h)
 {
     return h.first == Qt::Horizontal ?
-        guidesData.horizontalGuideLines()[h.second] :
-        guidesData.verticalGuideLines()[h.second];
+        guidesConfig.horizontalGuideLines()[h.second] :
+        guidesConfig.verticalGuideLines()[h.second];
 }
 
 void KisGuidesManager::Private::setGuideValue(const GuideHandle &h, qreal value)
 {
     if (h.first == Qt::Horizontal) {
-        QList<qreal> guides = guidesData.horizontalGuideLines();
+        QList<qreal> guides = guidesConfig.horizontalGuideLines();
         guides[h.second] = value;
-        guidesData.setHorizontalGuideLines(guides);
+        guidesConfig.setHorizontalGuideLines(guides);
     } else {
-        QList<qreal> guides = guidesData.verticalGuideLines();
+        QList<qreal> guides = guidesConfig.verticalGuideLines();
         guides[h.second] = value;
-        guidesData.setVerticalGuideLines(guides);
+        guidesConfig.setVerticalGuideLines(guides);
     }
 }
 
 void KisGuidesManager::Private::deleteGuide(const GuideHandle &h)
 {
     if (h.first == Qt::Horizontal) {
-        QList<qreal> guides = guidesData.horizontalGuideLines();
+        QList<qreal> guides = guidesConfig.horizontalGuideLines();
         guides.removeAt(h.second);
-        guidesData.setHorizontalGuideLines(guides);
+        guidesConfig.setHorizontalGuideLines(guides);
     } else {
-        QList<qreal> guides = guidesData.verticalGuideLines();
+        QList<qreal> guides = guidesConfig.verticalGuideLines();
         guides.removeAt(h.second);
-        guidesData.setVerticalGuideLines(guides);
+        guidesConfig.setVerticalGuideLines(guides);
     }
 }
 
@@ -322,7 +322,7 @@ bool KisGuidesManager::Private::mouseMoveHandler(const QPointF &docPos)
              offset.y() : offset.x());
 
         setGuideValue(currentGuide, newValue);
-        q->setGuidesDataImpl(guidesData);
+        q->setGuidesConfigImpl(guidesConfig);
 
     }
 
@@ -338,7 +338,7 @@ bool KisGuidesManager::Private::mouseReleaseHandler(const QPointF &docPos)
         const QRectF docRect = converter->imageRectInDocumentPixels();
         if (!docRect.contains(docPos)) {
             deleteGuide(currentGuide);
-            q->setGuidesDataImpl(guidesData);
+            q->setGuidesConfigImpl(guidesConfig);
         }
 
         currentGuide = invalidGuide;
@@ -401,7 +401,7 @@ bool KisGuidesManager::eventFilter(QObject *obj, QEvent *event)
 
 void KisGuidesManager::slotGuideCreationInProgress(Qt::Orientation orientation, const QPoint &globalPos)
 {
-    if (m_d->guidesData.lockGuides()) return;
+    if (m_d->guidesConfig.lockGuides()) return;
 
     KisCanvas2 *canvas = m_d->view->canvasBase();
     const KisCoordinatesConverter *converter = canvas->coordinatesConverter();
@@ -411,30 +411,30 @@ void KisGuidesManager::slotGuideCreationInProgress(Qt::Orientation orientation, 
     if (m_d->isGuideValid(m_d->currentGuide)) {
         m_d->mouseMoveHandler(docPos);
     } else {
-        m_d->guidesData.setShowGuides(true);
+        m_d->guidesConfig.setShowGuides(true);
 
         if (orientation == Qt::Horizontal) {
-            QList<qreal> guides = m_d->guidesData.horizontalGuideLines();
+            QList<qreal> guides = m_d->guidesConfig.horizontalGuideLines();
             guides.append(docPos.y());
             m_d->currentGuide.first = orientation;
             m_d->currentGuide.second = guides.size() - 1;
-            m_d->guidesData.setHorizontalGuideLines(guides);
+            m_d->guidesConfig.setHorizontalGuideLines(guides);
         } else {
-            QList<qreal> guides = m_d->guidesData.verticalGuideLines();
+            QList<qreal> guides = m_d->guidesConfig.verticalGuideLines();
             guides.append(docPos.x());
             m_d->currentGuide.first = orientation;
             m_d->currentGuide.second = guides.size() - 1;
-            m_d->guidesData.setVerticalGuideLines(guides);
+            m_d->guidesConfig.setVerticalGuideLines(guides);
         }
 
-        setGuidesDataImpl(m_d->guidesData);
+        setGuidesConfigImpl(m_d->guidesConfig);
     }
 }
 
 void KisGuidesManager::slotGuideCreationFinished(Qt::Orientation orientation, const QPoint &globalPos)
 {
     Q_UNUSED(orientation);
-    if (m_d->guidesData.lockGuides()) return;
+    if (m_d->guidesConfig.lockGuides()) return;
 
     KisCanvas2 *canvas = m_d->view->canvasBase();
     const KisCoordinatesConverter *converter = canvas->coordinatesConverter();

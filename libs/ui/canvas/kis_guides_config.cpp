@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Laurent Montel <montel@kde.org>
    Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+   Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,15 +19,14 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoGuidesData.h"
+#include "kis_guides_config.h"
 #include "KoViewConverter.h"
 #include <QDomDocument>
 
 
-
 #include <QPainter>
 
-class Q_DECL_HIDDEN KoGuidesData::Private
+class Q_DECL_HIDDEN KisGuidesConfig::Private
 {
 public:
     Private()
@@ -54,22 +54,22 @@ public:
     QColor guidesColor;
 };
 
-KoGuidesData::KoGuidesData()
+KisGuidesConfig::KisGuidesConfig()
     : d(new Private())
 {
 }
 
-KoGuidesData::~KoGuidesData()
+KisGuidesConfig::~KisGuidesConfig()
 {
     delete d;
 }
 
-KoGuidesData::KoGuidesData(const KoGuidesData &rhs)
+KisGuidesConfig::KisGuidesConfig(const KisGuidesConfig &rhs)
     : d(new Private(*rhs.d))
 {
 }
 
-KoGuidesData& KoGuidesData::operator=(const KoGuidesData &rhs)
+KisGuidesConfig& KisGuidesConfig::operator=(const KisGuidesConfig &rhs)
 {
     if (&rhs != this) {
         *d = *rhs.d;
@@ -78,22 +78,22 @@ KoGuidesData& KoGuidesData::operator=(const KoGuidesData &rhs)
     return *this;
 }
 
-bool KoGuidesData::operator==(const KoGuidesData &rhs) const
+bool KisGuidesConfig::operator==(const KisGuidesConfig &rhs) const
 {
     return *d == *rhs.d;
 }
 
-void KoGuidesData::setHorizontalGuideLines(const QList<qreal> &lines)
+void KisGuidesConfig::setHorizontalGuideLines(const QList<qreal> &lines)
 {
     d->horzGuideLines = lines;
 }
 
-void KoGuidesData::setVerticalGuideLines(const QList<qreal> &lines)
+void KisGuidesConfig::setVerticalGuideLines(const QList<qreal> &lines)
 {
     d->vertGuideLines = lines;
 }
 
-void KoGuidesData::addGuideLine(Qt::Orientation o, qreal pos)
+void KisGuidesConfig::addGuideLine(Qt::Orientation o, qreal pos)
 {
     if (o == Qt::Horizontal) {
         d->horzGuideLines.append(pos);
@@ -102,77 +102,77 @@ void KoGuidesData::addGuideLine(Qt::Orientation o, qreal pos)
     }
 }
 
-bool KoGuidesData::showGuideLines() const
+bool KisGuidesConfig::showGuideLines() const
 {
     return d->showGuides;
 }
 
-void KoGuidesData::setShowGuideLines(bool show)
+void KisGuidesConfig::setShowGuideLines(bool show)
 {
     d->showGuides = show;
 }
 
-bool KoGuidesData::showGuides() const
+bool KisGuidesConfig::showGuides() const
 {
     return d->showGuides;
 }
 
-void KoGuidesData::setShowGuides(bool value)
+void KisGuidesConfig::setShowGuides(bool value)
 {
     d->showGuides = value;
 }
 
-bool KoGuidesData::lockGuides() const
+bool KisGuidesConfig::lockGuides() const
 {
     return d->lockGuides;
 }
 
-void KoGuidesData::setLockGuides(bool value)
+void KisGuidesConfig::setLockGuides(bool value)
 {
     d->lockGuides = value;
 }
 
-bool KoGuidesData::snapToGuides() const
+bool KisGuidesConfig::snapToGuides() const
 {
     return d->snapToGuides;
 }
 
-void KoGuidesData::setSnapToGuides(bool value)
+void KisGuidesConfig::setSnapToGuides(bool value)
 {
     d->snapToGuides = value;
 }
 
-const QList<qreal>& KoGuidesData::horizontalGuideLines() const
+const QList<qreal>& KisGuidesConfig::horizontalGuideLines() const
 {
     return d->horzGuideLines;
 }
 
-const QList<qreal>& KoGuidesData::verticalGuideLines() const
+const QList<qreal>& KisGuidesConfig::verticalGuideLines() const
 {
     return d->vertGuideLines;
 }
 
-bool KoGuidesData::hasGuides() const
+bool KisGuidesConfig::hasGuides() const
 {
     return !d->horzGuideLines.isEmpty() || !d->vertGuideLines.isEmpty();
 }
 
-void KoGuidesData::setGuidesColor(const QColor &color)
+void KisGuidesConfig::setGuidesColor(const QColor &color)
 {
     d->guidesColor = color;
 }
 
-QColor KoGuidesData::guidesColor() const
+QColor KisGuidesConfig::guidesColor() const
 {
     return d->guidesColor;
 }
 
-QDomElement KoGuidesData::saveToXml(QDomDocument& doc, const QString &tag) const
+QDomElement KisGuidesConfig::saveToXml(QDomDocument& doc, const QString &tag) const
 {
     return QDomElement();
 }
 
-bool KoGuidesData::loadFromXml(const QDomElement &parent)
+bool KisGuidesConfig::loadFromXml(const QDomElement &parent)
 {
     return true;
 }

@@ -25,7 +25,7 @@
 class KisView;
 class KisActionManager;
 class KisCanvasDecoration;
-class KoGuidesData;
+class KisGuidesConfig;
 
 
 class KisGuidesManager : public QObject
@@ -55,7 +55,7 @@ public Q_SLOTS:
     void slotGuideCreationFinished(Qt::Orientation orientation, const QPoint &globalPos);
 
 private:
-    void setGuidesDataImpl(const KoGuidesData &value);
+    void setGuidesConfigImpl(const KisGuidesConfig &value);
     void attachEventFilterImpl(bool value);
     void syncActionsStatus();
 

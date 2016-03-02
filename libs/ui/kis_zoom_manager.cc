@@ -83,9 +83,6 @@ KisZoomManager::KisZoomManager(QPointer<KisView> view, KoZoomHandler * zoomHandl
 
 KisZoomManager::~KisZoomManager()
 {
-    KisConfig cfg;
-    cfg.setShowRulers(m_horizontalRuler->isVisible());
-
     if (m_zoomActionWidget && !m_zoomActionWidget->parent()) {
         delete m_zoomActionWidget;
     }
@@ -149,10 +146,6 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     connect(m_canvasController->proxyObject, SIGNAL(canvasOffsetYChanged(int)),
             this, SLOT(pageOffsetChanged()));
 
-    connect(m_canvasController->proxyObject,
-            SIGNAL(canvasMousePositionChanged(const QPoint &)),
-            SLOT(mousePositionChanged(const QPoint &)));
-
     connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)),
             this, SLOT(slotZoomChanged(KoZoomMode::Mode, qreal)));
 
@@ -160,10 +153,23 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
             this, SLOT(changeAspectMode(bool)));
 
     applyRulersUnit(m_view->document()->unit());
+}
 
-    KisConfig cfg;
-    toggleShowRulers(cfg.showRulers());
+void KisZoomManager::updateMouseTrackingConnections()
+{
+    bool value = m_horizontalRuler->isVisible() &&
+        m_verticalRuler->isVisible() &&
+        m_horizontalRuler->showMousePosition() &&
+        m_verticalRuler->showMousePosition();
 
+    m_mouseTrackingConnections.clear();
+
+    if (value) {
+        connect(m_canvasController->proxyObject,
+                SIGNAL(canvasMousePositionChanged(const QPoint &)),
+                SLOT(mousePositionChanged(const QPoint &)));
+
+    }
 }
 
 KoRuler* KisZoomManager::horizontalRuler() const
@@ -184,20 +190,18 @@ void KisZoomManager::mousePositionChanged(const QPoint &viewPos)
     m_verticalRuler->updateMouseCoordinate(pt.y());
 }
 
-bool KisZoomManager::horizontalRulerVisible() const
-{
-    return m_horizontalRuler->isVisible();
-}
-
-bool KisZoomManager::verticalRulerVisible() const
-{
-    return m_verticalRuler->isVisible();
-}
-
-void KisZoomManager::toggleShowRulers(bool show)
+void KisZoomManager::setShowRulers(bool show)
 {
     m_horizontalRuler->setVisible(show);
     m_verticalRuler->setVisible(show);
+    updateMouseTrackingConnections();
+}
+
+void KisZoomManager::setRulersTrackMouse(bool value)
+{
+    m_horizontalRuler->setShowMousePosition(value);
+    m_verticalRuler->setShowMousePosition(value);
+    updateMouseTrackingConnections();
 }
 
 void KisZoomManager::applyRulersUnit(const KoUnit &baseUnit)

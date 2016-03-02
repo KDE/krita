@@ -161,6 +161,11 @@ public Q_SLOTS:
       */
     void setShowMousePosition(bool show);
 
+    /**
+      * \see setShowMousePosition
+      */
+    bool showMousePosition() const;
+
     /** Update the current position of the mouse pointer, repainting if changed.
       * The ruler offset will be applied before painting.
       * @param coordinate Either the x or y coordinate of the mouse depending

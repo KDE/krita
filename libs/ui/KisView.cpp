@@ -87,6 +87,7 @@
 #include "kis_filter_manager.h"
 #include "krita/gemini/ViewModeSwitchEvent.h"
 #include "krita_utils.h"
+#include "kis_input_manager.h"
 
 
 //static
@@ -273,6 +274,13 @@ void KisView::notifyCurrentStateChanged(bool isCurrent)
 
     if (!d->isCurrent && d->savedFloatingMessage) {
         d->savedFloatingMessage->removeMessage();
+    }
+
+    KisInputManager *inputManager = globalInputManager();
+    if (d->isCurrent) {
+        inputManager->attachPriorityEventFilter(&d->canvasController);
+    } else {
+        inputManager->detachPriorityEventFilter(&d->canvasController);
     }
 }
 

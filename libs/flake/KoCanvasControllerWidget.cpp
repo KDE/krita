@@ -291,9 +291,6 @@ void KoCanvasControllerWidget::changeCanvasWidget(QWidget *widget)
 
     d->viewportWidget->setCanvas(widget);
     setFocusProxy(d->canvas->canvasWidget());
-
-    widget->installEventFilter(this);
-    widget->setMouseTracking(true);
 }
 
 int KoCanvasControllerWidget::visibleHeight() const
@@ -366,16 +363,6 @@ void KoCanvasControllerWidget::updateCanvasOffsetY()
 
     setPreferredCenterFractionY((verticalScrollBar()->value()
                                  + verticalScrollBar()->pageStep() / 2.0) / documentSize().height());
-}
-
-bool KoCanvasControllerWidget::eventFilter(QObject *watched, QEvent *event)
-{
-    if (d->canvas && d->canvas->canvasWidget() && (watched == d->canvas->canvasWidget())) {
-         if (event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove) {
-            d->emitPointerPositionChangedSignals(event);
-        }
-    }
-    return false;
 }
 
 void KoCanvasControllerWidget::ensureVisible(KoShape *shape)

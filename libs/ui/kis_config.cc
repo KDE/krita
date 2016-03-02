@@ -542,6 +542,15 @@ void KisConfig::setShowRulers(bool rulers) const
     m_cfg.writeEntry("showrulers", rulers);
 }
 
+bool KisConfig::rulersTrackMouse(bool defaultValue) const
+{
+    return (defaultValue ? true : m_cfg.readEntry("rulersTrackMouse", true));
+}
+
+void KisConfig::setRulersTrackMouse(bool value) const
+{
+    m_cfg.writeEntry("rulersTrackMouse", value);
+}
 
 qint32 KisConfig::pasteBehaviour(bool defaultValue) const
 {

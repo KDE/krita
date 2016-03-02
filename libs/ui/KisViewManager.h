@@ -226,6 +226,8 @@ private Q_SLOTS:
     void guiUpdateTimeout();
     void changeAuthorProfile(const QString &profileName);
     void slotUpdateAuthorProfileActions();
+    void slotSaveShowRulersState(bool value);
+    void slotSaveRulersTrackMouseState(bool value);
 
 private:
     void createActions();

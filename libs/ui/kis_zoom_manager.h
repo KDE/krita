@@ -27,6 +27,7 @@
 #include <KoZoomAction.h>
 #include <KoZoomHandler.h>
 #include <KoZoomController.h>
+#include "kis_signal_auto_connection.h"
 
 #include "KisView.h"
 
@@ -67,7 +68,8 @@ public Q_SLOTS:
 
     void slotZoomChanged(KoZoomMode::Mode mode, qreal zoom);
     void slotScrollAreaSizeChanged();
-    void toggleShowRulers(bool show);
+    void setShowRulers(bool show);
+    void setRulersTrackMouse(bool value);
     void mousePositionChanged(const QPoint &viewPos);
     void changeAspectMode(bool aspectMode);
     void pageOffsetChanged();
@@ -75,9 +77,8 @@ public Q_SLOTS:
     void applyRulersUnit(const KoUnit &baseUnit);
     void setMinMaxZoom();
 
-public:
-    bool horizontalRulerVisible() const;
-    bool verticalRulerVisible() const;
+private:
+    void updateMouseTrackingConnections();
 
 private:
 
@@ -90,6 +91,8 @@ private:
     KoZoomAction * m_zoomAction;
     QPointer<QWidget> m_zoomActionWidget;
     QPoint m_rulersOffset;
+    KisSignalAutoConnectionsStore m_mouseTrackingConnections;
 };
+
 
 #endif

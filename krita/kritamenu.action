@@ -583,6 +583,18 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="rulers_track_mouse">
+      <icon></icon>
+      <text>Rulers Track Pointer</text>
+      <whatsThis>The rulers will track current mouse position and show it on screen. It can cause suptle performance slowdown</whatsThis>
+      <toolTip>Rulers Track Pointer</toolTip>
+      <iconText>Rulers Track Pointer</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="new_show_guides">
       <icon></icon>
       <text>Show Guides</text>

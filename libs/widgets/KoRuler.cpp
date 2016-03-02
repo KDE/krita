@@ -928,6 +928,11 @@ void KoRuler::setShowMousePosition(bool show)
     update();
 }
 
+bool KoRuler::showMousePosition() const
+{
+    return d->showMousePosition;
+}
+
 void KoRuler::setRightToLeft(bool isRightToLeft)
 {
     d->rightToLeft = isRightToLeft;

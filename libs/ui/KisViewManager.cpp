@@ -161,6 +161,7 @@ public:
         , wrapAroundAction(0)
         , levelOfDetailAction(0)
         , showRulersAction(0)
+        , rulersTrackMouseAction(0)
         , zoomTo100pct(0)
         , zoomIn(0)
         , zoomOut(0)
@@ -198,6 +199,7 @@ public:
     KisAction *wrapAroundAction;
     KisAction *levelOfDetailAction;
     KisAction *showRulersAction;
+    KisAction *rulersTrackMouseAction;
     KisAction *zoomTo100pct;
     KisAction *zoomIn;
     KisAction *zoomOut;
@@ -353,11 +355,14 @@ void KisViewManager::setCurrentView(KisView *view)
 
         d->viewConnections.addUniqueConnection(d->currentImageView->canvasController(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
         d->viewConnections.addUniqueConnection(d->currentImageView->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), d->controlFrame.paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
-        d->viewConnections.addUniqueConnection(d->showRulersAction, SIGNAL(toggled(bool)), imageView->zoomManager(), SLOT(toggleShowRulers(bool)));
-        d->showRulersAction->setChecked(imageView->zoomManager()->horizontalRulerVisible() && imageView->zoomManager()->verticalRulerVisible());
+        d->viewConnections.addUniqueConnection(d->showRulersAction, SIGNAL(toggled(bool)), imageView->zoomManager(), SLOT(setShowRulers(bool)));
+        d->viewConnections.addUniqueConnection(d->rulersTrackMouseAction, SIGNAL(toggled(bool)), imageView->zoomManager(), SLOT(setRulersTrackMouse(bool)));
         d->viewConnections.addUniqueConnection(d->zoomTo100pct, SIGNAL(triggered()), imageView->zoomManager(), SLOT(zoomTo100()));
         d->viewConnections.addUniqueConnection(d->zoomIn, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomIn()));
         d->viewConnections.addUniqueConnection(d->zoomOut, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomOut()));
+
+        imageView->zoomManager()->setShowRulers(d->showRulersAction->isChecked());
+        imageView->zoomManager()->setRulersTrackMouse(d->rulersTrackMouseAction->isChecked());
 
         showHideScrollbars();
     }
@@ -612,6 +617,11 @@ void KisViewManager::createActions()
     KisConfig cfg;
     d->showRulersAction = actionManager()->createAction("view_ruler");
     d->showRulersAction->setChecked(cfg.showRulers());
+    connect(d->showRulersAction, SIGNAL(toggled(bool)), SLOT(slotSaveShowRulersState(bool)));
+
+    d->rulersTrackMouseAction = actionManager()->createAction("rulers_track_mouse");
+    d->rulersTrackMouseAction->setChecked(cfg.rulersTrackMouse());
+    connect(d->rulersTrackMouseAction, SIGNAL(toggled(bool)), SLOT(slotSaveRulersTrackMouseState(bool)));
 
     d->zoomTo100pct = actionManager()->createAction("zoom_to_100pct");
 
@@ -624,8 +634,6 @@ void KisViewManager::createActions()
     slotUpdateAuthorProfileActions();
 
 }
-
-
 
 void KisViewManager::setupManagers()
 {
@@ -1152,6 +1160,18 @@ void KisViewManager::showHideScrollbars()
         d->currentImageView->canvasController()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         d->currentImageView->canvasController()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     }
+}
+
+void KisViewManager::slotSaveShowRulersState(bool value)
+{
+    KisConfig cfg;
+    cfg.setShowRulers(value);
+}
+
+void KisViewManager::slotSaveRulersTrackMouseState(bool value)
+{
+    KisConfig cfg;
+    cfg.setRulersTrackMouse(value);
 }
 
 void KisViewManager::setShowFloatingMessage(bool show)

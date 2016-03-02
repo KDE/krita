@@ -2,7 +2,7 @@
 <kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 name="Krita"
-version="91"
+version="92"
 xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file" noMerge="1">
@@ -85,6 +85,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
 
       <Separator/>
       <Action name="view_ruler"/>
+      <Action name="rulers_track_mouse"/>
       <Action name="new_show_guides"/>
       <Action name="new_lock_guides"/>
       <Action name="new_snap_to_guides"/>

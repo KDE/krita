@@ -141,6 +141,9 @@ public:
     bool showRulers(bool defaultValue = false) const;
     void setShowRulers(bool rulers) const;
 
+    bool rulersTrackMouse(bool defaultValue = false) const;
+    void setRulersTrackMouse(bool value) const;
+
     qint32 pasteBehaviour(bool defaultValue = false) const;
     void setPasteBehaviour(qint32 behaviour) const;
 

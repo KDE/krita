@@ -30,6 +30,7 @@
 #include "kis_signal_auto_connection.h"
 #include "KisViewManager.h"
 #include "KisDocument.h"
+#include "kis_algebra_2d.h"
 
 
 struct KisGuidesManager::Private
@@ -338,7 +339,10 @@ bool KisGuidesManager::Private::mouseReleaseHandler(const QPointF &docPos)
 
     if (isGuideValid(currentGuide)) {
         const QRectF docRect = converter->imageRectInDocumentPixels();
-        if (!docRect.contains(docPos)) {
+        // TODO: enable work rect after we fix painting guides
+        //       outside canvas in openGL mode
+        const QRectF workRect = KisAlgebra2D::blowRect(docRect, 0 /*0.2*/);
+        if (!workRect.contains(docPos)) {
             deleteGuide(currentGuide);
             q->setGuidesConfigImpl(guidesConfig);
         }

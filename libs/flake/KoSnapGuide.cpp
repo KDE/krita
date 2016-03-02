@@ -125,6 +125,13 @@ int KoSnapGuide::snapDistance() const
     return d->snapDistance;
 }
 
+QPointF KoSnapGuide::snap(const QPointF &mousePosition, const QPointF &dragOffset, Qt::KeyboardModifiers modifiers)
+{
+    QPointF pos = mousePosition + dragOffset;
+    pos = snap(pos, modifiers);
+    return pos - dragOffset;
+}
+
 QPointF KoSnapGuide::snap(const QPointF &mousePosition, Qt::KeyboardModifiers modifiers)
 {
     d->currentStrategy = 0;

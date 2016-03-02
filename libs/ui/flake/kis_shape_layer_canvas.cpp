@@ -55,11 +55,11 @@ KisShapeLayerCanvas::~KisShapeLayerCanvas()
     delete m_shapeManager;
 }
 
-void KisShapeLayerCanvas::gridSize(qreal *horizontal, qreal *vertical) const
+void KisShapeLayerCanvas::gridSize(QPointF *offset, QSizeF *spacing) const
 {
     Q_ASSERT(false); // This should never be called as this canvas should have no tools.
-    Q_UNUSED(horizontal);
-    Q_UNUSED(vertical);
+    Q_UNUSED(offset);
+    Q_UNUSED(spacing);
 }
 
 bool KisShapeLayerCanvas::snapToGrid() const

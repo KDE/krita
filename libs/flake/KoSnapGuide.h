@@ -77,6 +77,8 @@ public:
     /// snaps the mouse position, returns if mouse was snapped
     QPointF snap(const QPointF &mousePosition, Qt::KeyboardModifiers modifiers);
 
+    QPointF snap(const QPointF &mousePosition, const QPointF &dragOffset, Qt::KeyboardModifiers modifiers);
+
     /// paints the guide
     void paint(QPainter &painter, const KoViewConverter &converter);
 

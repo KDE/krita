@@ -18,6 +18,7 @@
 
 #include "kis_guides_manager.h"
 
+#include <QGuiApplication>
 #include "kis_guides_decoration.h"
 #include <KoRuler.h>
 #include "kis_guides_config.h"
@@ -31,6 +32,8 @@
 #include "KisViewManager.h"
 #include "KisDocument.h"
 #include "kis_algebra_2d.h"
+#include <KoSnapGuide.h>
+#include "kis_snap_line_strategy.h"
 
 
 struct KisGuidesManager::Private
@@ -59,7 +62,12 @@ struct KisGuidesManager::Private
     const GuideHandle invalidGuide;
 
     bool updateCursor(const QPointF &docPos);
-    bool mouseMoveHandler(const QPointF &docPos);
+
+    void initDragStart(const GuideHandle &guide,
+                       const QPointF &dragStart,
+                       qreal guideValue,
+                       bool snapToStart);
+    bool mouseMoveHandler(const QPointF &docPos, Qt::KeyboardModifiers modifiers);
     bool mouseReleaseHandler(const QPointF &docPos);
 
     GuideHandle currentGuide;
@@ -68,6 +76,7 @@ struct KisGuidesManager::Private
     QCursor oldCursor;
 
     QPointF dragStartDoc;
+    QPointF dragPointerOffset;
     qreal dragStartGuidePos;
 
     KisSignalAutoConnectionsStore viewConnections;
@@ -316,10 +325,35 @@ bool KisGuidesManager::Private::updateCursor(const QPointF &docPos)
     return guideValid;
 }
 
-bool KisGuidesManager::Private::mouseMoveHandler(const QPointF &docPos)
+void KisGuidesManager::Private::initDragStart(const GuideHandle &guide,
+                                              const QPointF &dragStart,
+                                              qreal guideValue,
+                                              bool snapToStart)
+{
+    currentGuide = guide;
+    dragStartDoc = dragStart;
+    dragStartGuidePos = guideValue;
+    dragPointerOffset =
+        guide.first == Qt::Horizontal ?
+        QPointF(0, dragStartGuidePos - dragStartDoc.y()) :
+        QPointF(dragStartGuidePos - dragStartDoc.x(), 0);
+
+    KoSnapGuide *snapGuide = view->canvasBase()->snapGuide();
+    snapGuide->reset();
+
+    if (snapToStart) {
+        KisSnapLineStrategy *strategy = new KisSnapLineStrategy();
+        strategy->addLine(guide.first, guideValue);
+        snapGuide->addCustomSnapStrategy(strategy);
+    }
+}
+
+bool KisGuidesManager::Private::mouseMoveHandler(const QPointF &docPos, Qt::KeyboardModifiers modifiers)
 {
     if (isGuideValid(currentGuide)) {
-        const QPointF offset = docPos - dragStartDoc;
+        KoSnapGuide *snapGuide = view->canvasBase()->snapGuide();
+        const QPointF snappedPos = snapGuide->snap(docPos, dragPointerOffset, modifiers);
+        const QPointF offset = snappedPos - dragStartDoc;
         const qreal newValue = dragStartGuidePos +
             (currentGuide.first == Qt::Horizontal ?
              offset.y() : offset.x());
@@ -349,7 +383,11 @@ bool KisGuidesManager::Private::mouseReleaseHandler(const QPointF &docPos)
 
         currentGuide = invalidGuide;
         dragStartDoc = QPointF();
+        dragPointerOffset = QPointF();
         dragStartGuidePos = 0;
+
+        KoSnapGuide *snapGuide = view->canvasBase()->snapGuide();
+        snapGuide->reset();
     }
 
     return updateCursor(docPos);
@@ -368,22 +406,22 @@ bool KisGuidesManager::eventFilter(QObject *obj, QEvent *event)
     case QEvent::Leave:
     case QEvent::MouseMove: {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-        const QPointF docPos = converter->widgetToDocument(mouseEvent->pos());
 
-        retval = m_d->mouseMoveHandler(docPos);
+        const QPointF docPos = converter->widgetToDocument(mouseEvent->pos());
+        retval = m_d->mouseMoveHandler(docPos, mouseEvent->modifiers());
 
         break;
     }
     case QEvent::MouseButtonPress: {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+        if (mouseEvent->button() != Qt::LeftButton) break;
+
         const QPointF docPos = converter->widgetToDocument(mouseEvent->pos());
         const Private::GuideHandle guide = m_d->findGuide(docPos);
         const bool guideValid = m_d->isGuideValid(guide);
 
         if (guideValid) {
-            m_d->currentGuide = guide;
-            m_d->dragStartDoc = docPos;
-            m_d->dragStartGuidePos = m_d->guideValue(guide);
+            m_d->initDragStart(guide, docPos, m_d->guideValue(guide), true);
         }
 
         retval = m_d->updateCursor(docPos);
@@ -392,8 +430,9 @@ bool KisGuidesManager::eventFilter(QObject *obj, QEvent *event)
     }
     case QEvent::MouseButtonRelease: {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-        const QPointF docPos = converter->widgetToDocument(mouseEvent->pos());
+        if (mouseEvent->button() != Qt::LeftButton) break;
 
+        const QPointF docPos = converter->widgetToDocument(mouseEvent->pos());
         retval = m_d->mouseReleaseHandler(docPos);
 
         break;
@@ -415,7 +454,8 @@ void KisGuidesManager::slotGuideCreationInProgress(Qt::Orientation orientation, 
     const QPointF docPos = converter->widgetToDocument(widgetPos);
 
     if (m_d->isGuideValid(m_d->currentGuide)) {
-        m_d->mouseMoveHandler(docPos);
+        Qt::KeyboardModifiers modifiers = qApp->keyboardModifiers();
+        m_d->mouseMoveHandler(docPos, modifiers);
     } else {
         m_d->guidesConfig.setShowGuides(true);
 
@@ -425,12 +465,14 @@ void KisGuidesManager::slotGuideCreationInProgress(Qt::Orientation orientation, 
             m_d->currentGuide.first = orientation;
             m_d->currentGuide.second = guides.size() - 1;
             m_d->guidesConfig.setHorizontalGuideLines(guides);
+            m_d->initDragStart(m_d->currentGuide, docPos, docPos.y(), false);
         } else {
             QList<qreal> guides = m_d->guidesConfig.verticalGuideLines();
             guides.append(docPos.x());
             m_d->currentGuide.first = orientation;
             m_d->currentGuide.second = guides.size() - 1;
             m_d->guidesConfig.setVerticalGuideLines(guides);
+            m_d->initDragStart(m_d->currentGuide, docPos, docPos.x(), false);
         }
 
         setGuidesConfigImpl(m_d->guidesConfig);

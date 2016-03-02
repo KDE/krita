@@ -46,6 +46,7 @@ class QCursor;
 class QObject;
 class QPointF;
 class QRectF;
+class QSizeF;
 
 /**
  * KoCanvasBase is the interface actual application canvas classes
@@ -78,7 +79,7 @@ public:
      * @param horizontal a pointer to a qreal that will be filled with the horizontal grid-spacing
      * @param vertical a pointer to a qreal that will be filled with the vertical grid-spacing
      */
-    virtual void gridSize(qreal *horizontal, qreal *vertical) const = 0;
+    virtual void gridSize(QPointF *offset, QSizeF *spacing) const = 0;
 
     /**
      * return if snap to grid is enabled.

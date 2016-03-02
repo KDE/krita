@@ -51,7 +51,7 @@ public:
         m_projection = projection;
     }
 
-    void gridSize(qreal *horizontal, qreal *vertical) const;
+    void gridSize(QPointF *offset, QSizeF *spacing) const;
     bool snapToGrid() const;
     void addCommand(KUndo2Command *command);
     KoShapeManager *shapeManager() const;

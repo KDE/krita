@@ -87,9 +87,11 @@ public:
     void setVert(qreal pVert){
         m_vert = pVert;
     }
-    void gridSize(qreal *horizontal, qreal *vertical) const {
-        *horizontal = m_horz;
-        *vertical = m_vert;
+    void gridSize(QPointF *offset, QSizeF *spacing) const {
+        Q_UNUSED(offset);
+
+        spacing->setWidth(m_horz);
+        spacing->setHeight(m_vert);
     }
     bool snapToGrid() const  {
         return true;

@@ -249,16 +249,18 @@ bool KisCanvas2::canvasIsOpenGL()
     return m_d->currentCanvasIsOpenGL;
 }
 
-void KisCanvas2::gridSize(qreal *horizontal, qreal *vertical) const
+void KisCanvas2::gridSize(QPointF *offset, QSizeF *spacing) const
 {
-    Q_ASSERT(horizontal);
-    Q_ASSERT(vertical);
     QTransform transform = coordinatesConverter()->imageToDocumentTransform();
 
-    const QPoint spacing = m_d->view->document()->gridConfig().spacing();
-    QPointF size = transform.map(QPointF(spacing.x(), spacing.y()));
-    *horizontal = size.x();
-    *vertical = size.y();
+    const QPoint intSpacing = m_d->view->document()->gridConfig().spacing();
+    const QPoint intOffset = m_d->view->document()->gridConfig().offset();
+
+    QPointF size = transform.map(QPointF(intSpacing));
+    spacing->rwidth() = size.x();
+    spacing->rheight() = size.y();
+
+    *offset = transform.map(QPointF(intOffset));
 }
 
 bool KisCanvas2::snapToGrid() const

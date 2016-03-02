@@ -83,7 +83,7 @@ public: // KoCanvasBase implementation
 
     bool canvasIsOpenGL();
 
-    void gridSize(qreal *horizontal, qreal *vertical) const;
+    void gridSize(QPointF *offset, QSizeF *spacing) const;
 
     bool snapToGrid() const;
 

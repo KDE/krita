@@ -48,12 +48,10 @@ public:
         delete m_shapeManager;
     }
 
-    virtual void gridSize(qreal *horizontal, qreal *vertical) const
+    virtual void gridSize(QPointF *offset, QSizeF *spacing) const
     {
-        if (horizontal)
-            *horizontal = 0;
-        if (vertical)
-            *vertical = 0;
+        *offset = QPointF();
+        *spacing = QSizeF();
     };
 
     virtual bool snapToGrid() const

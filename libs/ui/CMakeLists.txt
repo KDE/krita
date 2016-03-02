@@ -66,6 +66,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_guides_decoration.cpp
     canvas/kis_guides_manager.cpp
     canvas/kis_guides_config.cpp
+    canvas/kis_snap_line_strategy.cpp
     dialogs/kis_about_application.cpp
     dialogs/kis_dlg_adj_layer_props.cc
     dialogs/kis_dlg_adjustment_layer.cc

@@ -77,20 +77,41 @@ KisHSVConfigWidget::KisHSVConfigWidget(QWidget * parent, Qt::WFlags f) : KisConf
     m_page = new Ui_WdgHSVAdjustment();
     m_page->setupUi(this);
 
-    m_page->hue->setRange(-180, 180, 0);
-    m_page->hue->setValue(0);
+    m_page->hueSlider->setRange(-180, 180);
+    m_page->hueSlider->setValue(0);
+    m_page->hueSpinBox->setRange(-180, 180);
+    m_page->hueSpinBox->setValue(0);
 
-    m_page->saturation->setRange(-100, 100, 0);
-    m_page->saturation->setValue(0);
 
-    m_page->value->setRange(-100, 100, 0);
-    m_page->value->setValue(0);
+    m_page->saturationSlider->setRange(-100, 100);
+    m_page->saturationSlider->setValue(0);
+    m_page->saturationSpinBox->setRange(-100, 100);
+    m_page->saturationSpinBox->setValue(0);
+
+
+
+    m_page->valueSlider->setRange(-100, 100);
+    m_page->valueSlider->setValue(0);
+    m_page->valueSpinBox->setRange(-100, 100);
+    m_page->valueSpinBox->setValue(0);
 
     connect(m_page->cmbType, SIGNAL(activated(int)), SLOT(switchType(int)));
-    connect(m_page->hue, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->value, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->saturation, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->chkColorize, SIGNAL(toggled(bool)), SLOT(switchColorize(bool)));
+
+
+    // connect horizontal sliders
+    connect(m_page->hueSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->saturationSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->valueSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+
+    connect(m_page->hueSpinBox, SIGNAL(valueChanged(int)), m_page->hueSlider, SLOT(setValue(int)));
+    connect(m_page->saturationSpinBox, SIGNAL(valueChanged(int)), m_page->saturationSlider, SLOT(setValue(int)));
+    connect(m_page->valueSpinBox, SIGNAL(valueChanged(int)), m_page->valueSlider, SLOT(setValue(int)));
+
+    connect(m_page->hueSlider, SIGNAL(valueChanged(int)), m_page->hueSpinBox, SLOT(setValue(int)));
+    connect(m_page->saturationSlider, SIGNAL(valueChanged(int)), m_page->saturationSpinBox, SLOT(setValue(int)));
+    connect(m_page->valueSlider, SIGNAL(valueChanged(int)), m_page->valueSpinBox, SLOT(setValue(int)));
+
 }
 
 KisHSVConfigWidget::~KisHSVConfigWidget()
@@ -101,9 +122,9 @@ KisHSVConfigWidget::~KisHSVConfigWidget()
 KisPropertiesConfiguration * KisHSVConfigWidget::configuration() const
 {
     KisColorTransformationConfiguration* c = new KisColorTransformationConfiguration(KisHSVAdjustmentFilter::id().id(), 0);
-    c->setProperty("h", m_page->hue->value());
-    c->setProperty("s", m_page->saturation->value());
-    c->setProperty("v", m_page->value->value());
+    c->setProperty("h", m_page->hueSlider->value());
+    c->setProperty("s", m_page->saturationSlider->value());
+    c->setProperty("v", m_page->valueSlider->value());
     c->setProperty("type", m_page->cmbType->currentIndex());
     c->setProperty("colorize", m_page->chkColorize->isChecked());
     return c;
@@ -112,9 +133,9 @@ KisPropertiesConfiguration * KisHSVConfigWidget::configuration() const
 void KisHSVConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
 {
     m_page->cmbType->setCurrentIndex(config->getInt("type", 1));
-    m_page->hue->setValue(config->getInt("h", 0));
-    m_page->saturation->setValue(config->getInt("s", 0));
-    m_page->value->setValue(config->getInt("v", 0));
+    m_page->hueSlider->setValue(config->getInt("h", 0));
+    m_page->saturationSlider->setValue(config->getInt("s", 0));
+    m_page->valueSlider->setValue(config->getInt("v", 0));
     m_page->chkColorize->setChecked(config->getBool("colorize", false));
     switchType(m_page->cmbType->currentIndex());
 }
@@ -124,8 +145,8 @@ void KisHSVConfigWidget::switchType(int index)
     emit sigConfigurationItemChanged();
     m_page->label->setText(i18n("Hue:"));
     m_page->label_2->setText(i18n("Saturation:"));
-    m_page->hue->setMinimum(-180);
-    m_page->hue->setMaximum(180);
+    m_page->hueSlider->setMinimum(-180);
+    m_page->hueSlider->setMaximum(180);
     switch(index) {
     case 0:
         m_page->label_3->setText(i18n("Value:"));
@@ -143,8 +164,8 @@ void KisHSVConfigWidget::switchType(int index)
         m_page->label->setText(i18n("Yellow-Blue:"));
         m_page->label_2->setText(i18n("Green-Red:"));
         m_page->label_3->setText(i18n("Luma:"));
-        m_page->hue->setRange(-100, 100, 0);
-        m_page->hue->setValue(0);
+        m_page->hueSlider->setRange(-100, 100);
+        m_page->hueSlider->setValue(0);
     default:
         m_page->label_3->setText(i18n("Lightness:"));
     }
@@ -155,20 +176,22 @@ void KisHSVConfigWidget::switchType(int index)
 void KisHSVConfigWidget::switchColorize(bool toggle)
 {
     if (toggle) {
-        m_page->hue->setMinimum(0);
-        m_page->hue->setMaximum(360);
-        m_page->saturation->setMinimum(0);
-        m_page->saturation->setMaximum(100);
-        if (m_page->saturation->value() < m_page->saturation->minimum() || m_page->saturation->value() > m_page->saturation->maximum()) {
-            m_page->saturation->setValue(50);
+        m_page->hueSlider->setMinimum(0);
+        m_page->hueSlider->setMaximum(360);
+
+        m_page->saturationSlider->setMinimum(0);
+        m_page->saturationSlider->setMaximum(100);
+
+        if (m_page->saturationSlider->value() < m_page->saturationSlider->minimum() || m_page->saturationSlider->value() > m_page->saturationSlider->maximum()) {
+            m_page->saturationSlider->setValue(50);
         }
         switchType(1);
     }
     else {
-        m_page->hue->setMinimum(-180);
-        m_page->hue->setMaximum(180);
-        m_page->saturation->setMinimum(-100);
-        m_page->saturation->setMaximum(100);
+        m_page->hueSlider->setMinimum(-180);
+        m_page->hueSlider->setMaximum(180);
+        m_page->saturationSlider->setMinimum(-100);
+        m_page->saturationSlider->setMaximum(100);
 
     }
     emit sigConfigurationItemChanged();

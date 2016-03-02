@@ -75,7 +75,6 @@
 #include "canvas/kis_canvas2.h"
 #include "canvas/kis_canvas_controller.h"
 #include "canvas/kis_grid_manager.h"
-#include "canvas/kis_perspective_grid_manager.h"
 #include "dialogs/kis_dlg_blacklist_cleanup.h"
 #include "input/kis_input_profile_manager.h"
 #include "kis_action_manager.h"
@@ -172,7 +171,6 @@ public:
         , imageManager(_q)
         , gridManager(_q)
         , canvasControlsManager(_q)
-        , perspectiveGridManager(_q)
         , paintingAssistantsManager(_q)
         , actionManager(_q)
         , mainWindow(0)
@@ -213,7 +211,6 @@ public:
     KisImageManager imageManager;
     KisGridManager gridManager;
     KisCanvasControlsManager canvasControlsManager;
-    KisPerspectiveGridManager  perspectiveGridManager;
     KisPaintingAssistantsManager paintingAssistantsManager;
     BlockingUserInputEventFilter blockingEventFilter;
     KisActionManager actionManager;
@@ -375,7 +372,6 @@ void KisViewManager::setCurrentView(KisView *view)
     d->gridManager.setView(imageView);
     d->statusBar.setView(imageView);
     d->paintingAssistantsManager.setView(imageView);
-    d->perspectiveGridManager.setView(imageView);
     d->mirrorManager.setView(imageView);
 
     if (d->currentImageView) {
@@ -649,8 +645,6 @@ void KisViewManager::setupManagers()
 
     d->gridManager.setup(actionManager());
 
-    d->perspectiveGridManager.setup(actionCollection());
-
     d->paintingAssistantsManager.setup(actionManager());
 
     d->canvasControlsManager.setup(actionManager());
@@ -678,11 +672,6 @@ KisNodeManager * KisViewManager::nodeManager() const
 KisActionManager* KisViewManager::actionManager() const
 {
     return &d->actionManager;
-}
-
-KisPerspectiveGridManager* KisViewManager::perspectiveGridManager() const
-{
-    return &d->perspectiveGridManager;
 }
 
 KisGridManager * KisViewManager::gridManager() const
@@ -1131,7 +1120,6 @@ void KisViewManager::guiUpdateTimeout()
         zoomManager()->updateGUI();
     }
     d->gridManager.updateGUI();
-    d->perspectiveGridManager.updateGUI();
     d->actionManager.updateGUI();
 }
 

@@ -53,7 +53,6 @@
 #include "kis_name_server.h"
 #include "kis_paint_layer.h"
 #include "kis_painter.h"
-#include "kis_perspective_grid.h"
 #include "kis_selection.h"
 #include "kis_transaction.h"
 #include "kis_meta_data_merge_strategy.h"
@@ -136,7 +135,6 @@ public:
     KisImage *q;
 
     quint32 lockCount = 0;
-    KisPerspectiveGrid perspectiveGrid;
 
     qint32 width;
     qint32 height;
@@ -1117,11 +1115,6 @@ vKisAnnotationSP_it KisImage::endAnnotations()
 void KisImage::notifyAboutToBeDeleted()
 {
     emit sigAboutToBeDeleted();
-}
-
-KisPerspectiveGrid* KisImage::perspectiveGrid()
-{
-    return &m_d->perspectiveGrid;
 }
 
 KisImageSignalRouter* KisImage::signalRouter()

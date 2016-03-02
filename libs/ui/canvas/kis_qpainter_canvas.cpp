@@ -52,7 +52,6 @@
 #include "KisDocument.h"
 #include "kis_selection_manager.h"
 #include "kis_selection.h"
-#include "kis_perspective_grid_manager.h"
 #include "kis_canvas_updates_compressor.h"
 #include "kis_config_notifier.h"
 #include "kis_group_layer.h"

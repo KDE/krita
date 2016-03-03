@@ -22,6 +22,7 @@
 
 #include "kritaflake_export.h"
 
+#include <QScopedPointer>
 #include <QList>
 #include <Qt>
 
@@ -143,8 +144,8 @@ public:
     void reset();
 
 private:
-    class Private;
-    Private * const d;
+    struct Private;
+    const QScopedPointer<Private> d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KoSnapGuide::Strategies)

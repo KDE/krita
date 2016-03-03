@@ -27,8 +27,8 @@ struct KisSnapLineStrategy::Private
     QList<qreal> verticalLines;
 };
 
-KisSnapLineStrategy::KisSnapLineStrategy()
-    : KoSnapStrategy(KoSnapGuide::CustomSnapping),
+KisSnapLineStrategy::KisSnapLineStrategy(KoSnapGuide::Strategy type)
+    : KoSnapStrategy(type),
       m_d(new Private)
 {
 }

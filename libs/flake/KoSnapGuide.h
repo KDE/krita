@@ -105,6 +105,13 @@ public:
      */
     bool addCustomSnapStrategy(KoSnapStrategy *customStrategy);
 
+    /**
+     * Overrides the first entry of a strategy \p type with a strategy
+     * \p strategy. Note that basically strategy->type() may not be equal
+     * to type and that is ok. \p strategy may also be null.
+     */
+    void overrideSnapStrategy(Strategy type, KoSnapStrategy *strategy);
+
     /// enables the snapping guides
     void enableSnapping(bool on);
 

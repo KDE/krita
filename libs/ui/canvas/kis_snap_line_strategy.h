@@ -27,7 +27,7 @@
 class KisSnapLineStrategy : public KoSnapStrategy
 {
 public:
-    KisSnapLineStrategy();
+    KisSnapLineStrategy(KoSnapGuide::Strategy type = KoSnapGuide::CustomSnapping);
     ~KisSnapLineStrategy();
 
     bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance);

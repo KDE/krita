@@ -70,6 +70,8 @@ struct KisGuidesManager::Private
     bool mouseMoveHandler(const QPointF &docPos, Qt::KeyboardModifiers modifiers);
     bool mouseReleaseHandler(const QPointF &docPos);
 
+    void updateSnappingStatus(const KisGuidesConfig &value);
+
     GuideHandle currentGuide;
 
     bool cursorSwitched;
@@ -114,6 +116,10 @@ void KisGuidesManager::setGuidesConfigImpl(const KisGuidesConfig &value)
 
     attachEventFilterImpl(shouldFilterEvent);
     syncActionsStatus();
+
+    if (!m_d->isGuideValid(m_d->currentGuide)) {
+        m_d->updateSnappingStatus(value);
+    }
 }
 
 void KisGuidesManager::attachEventFilterImpl(bool value)
@@ -143,6 +149,22 @@ void KisGuidesManager::syncActionsStatus()
     showGuidesAction->setChecked(m_d->guidesConfig.showGuides());
     lockGuidesAction->setChecked(m_d->guidesConfig.lockGuides());
     snapToGuidesAction->setChecked(m_d->guidesConfig.snapToGuides());
+}
+
+void KisGuidesManager::Private::updateSnappingStatus(const KisGuidesConfig &value)
+{
+    if (!view) return;
+
+    KoSnapGuide *snapGuide = view->canvasBase()->snapGuide();
+    KisSnapLineStrategy *guidesSnap = 0;
+
+    if (value.snapToGuides()) {
+        guidesSnap = new KisSnapLineStrategy(KoSnapGuide::GuideLineSnapping);
+        guidesSnap->setHorizontalLines(value.horizontalGuideLines());
+        guidesSnap->setVerticalLines(value.verticalGuideLines());
+    }
+
+    snapGuide->overrideSnapStrategy(KoSnapGuide::GuideLineSnapping, guidesSnap);
 }
 
 bool KisGuidesManager::showGuides() const
@@ -197,6 +219,9 @@ void KisGuidesManager::setup(KisActionManager *actionManager)
 void KisGuidesManager::setView(QPointer<KisView> view)
 {
     if (m_d->view) {
+        KoSnapGuide *snapGuide = m_d->view->canvasBase()->snapGuide();
+        snapGuide->overrideSnapStrategy(KoSnapGuide::GuideLineSnapping, 0);
+
         m_d->decoration = 0;
         m_d->viewConnections.clear();
         attachEventFilterImpl(false);
@@ -388,6 +413,8 @@ bool KisGuidesManager::Private::mouseReleaseHandler(const QPointF &docPos)
 
         KoSnapGuide *snapGuide = view->canvasBase()->snapGuide();
         snapGuide->reset();
+
+        updateSnappingStatus(guidesConfig);
     }
 
     return updateCursor(docPos);

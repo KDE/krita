@@ -19,7 +19,7 @@
 #include "kis_snap_line_strategy.h"
 
 #include <QPainterPath>
-
+#include "kis_global.h"
 
 struct KisSnapLineStrategy::Private
 {
@@ -40,28 +40,39 @@ KisSnapLineStrategy::~KisSnapLineStrategy()
 bool KisSnapLineStrategy::snap(const QPointF &mousePosition, KoSnapProxy *proxy, qreal maxSnapDistance)
 {
     QPointF snappedPoint = mousePosition;
-    qreal minDistance = std::numeric_limits<qreal>::max();
+    qreal minXDistance = std::numeric_limits<qreal>::max();
+    qreal minYDistance = std::numeric_limits<qreal>::max();
 
     Q_FOREACH (qreal line, m_d->horizontalLines) {
         const qreal dist = qAbs(mousePosition.y() - line);
 
-        if (dist < maxSnapDistance && dist < minDistance) {
-            minDistance = dist;
-            snappedPoint = QPointF(mousePosition.x(), line);
+        if (dist < maxSnapDistance && dist < minYDistance) {
+            minYDistance = dist;
+            snappedPoint.ry() = line;
         }
     }
 
     Q_FOREACH (qreal line, m_d->verticalLines) {
         const qreal dist = qAbs(mousePosition.x() - line);
 
-        if (dist < maxSnapDistance && dist < minDistance) {
-            minDistance = dist;
-            snappedPoint = QPointF(line, mousePosition.y());
+        if (dist < maxSnapDistance && dist < minXDistance) {
+            minXDistance = dist;
+            snappedPoint.rx() = line;
+        }
+    }
+
+    if (kisDistance(snappedPoint, mousePosition) > maxSnapDistance) {
+        if (minXDistance < minYDistance) {
+            snappedPoint.ry() = mousePosition.y();
+        } else {
+            snappedPoint.rx() = mousePosition.x();
         }
     }
 
     setSnappedPosition(snappedPoint);
-    return minDistance < std::numeric_limits<qreal>::max();
+    return
+        minXDistance < std::numeric_limits<qreal>::max() ||
+        minYDistance < std::numeric_limits<qreal>::max();
 }
 
 QPainterPath KisSnapLineStrategy::decoration(const KoViewConverter &converter) const

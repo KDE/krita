@@ -214,10 +214,21 @@ void KisToolCrop::beginPrimaryAction(KoPointerEvent *event)
     m_finalRect.setCropRect(image()->bounds());
     setMode(KisTool::PAINT_MODE);
 
-    QPoint pos = convertToPixelCoord(event).toPoint();
-    m_dragStart = pos;
+    const QPointF imagePoint = convertToPixelCoord(event);
+    m_mouseOnHandleType = mouseOnHandle(pixelToView(imagePoint));
+
+    if (m_mouseOnHandleType != KisConstrainedRect::None) {
+        QPointF snapPoint = m_finalRect.handleSnapPoint(KisConstrainedRect::HandleType(m_mouseOnHandleType), imagePoint);
+        QPointF snapDocPoint = image()->pixelToDocument(snapPoint);
+        m_dragOffsetDoc = snapDocPoint - event->point;
+    } else {
+        m_dragOffsetDoc = QPointF();
+    }
+
+    QPointF snappedPoint = convertToPixelCoordAndSnap(event, m_dragOffsetDoc);
+
+    m_dragStart = snappedPoint.toPoint();
     m_resettingStroke = false;
-    m_mouseOnHandleType = mouseOnHandle(pixelToView(convertToPixelCoord(event)));
 
     if (!m_haveCropSelection || m_mouseOnHandleType == None) {
         m_lastCanvasUpdateRect = image()->bounds();
@@ -237,8 +248,8 @@ void KisToolCrop::continuePrimaryAction(KoPointerEvent *event)
 {
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
-    QPoint pos = convertToPixelCoord(event).toPoint();
-    QPoint drag = pos - m_dragStart;
+    const QPointF pos = convertToPixelCoordAndSnap(event, m_dragOffsetDoc);
+    const QPoint drag = pos.toPoint() - m_dragStart;
 
     m_finalRect.moveHandle(KisConstrainedRect::HandleType(m_mouseOnHandleType), drag, m_initialDragRect);
 }
@@ -303,13 +314,13 @@ void KisToolCrop::endPrimaryAction(KoPointerEvent *event)
 
     m_finalRect.normalize();
 
-    qint32 type = mouseOnHandle(pixelToView(convertToPixelCoord(event)));
+    qint32 type = mouseOnHandle(pixelToView(convertToPixelCoordAndSnap(event, m_dragOffsetDoc)));
     setMoveResizeCursor(type);
 }
 
 void KisToolCrop::mouseMoveEvent(KoPointerEvent *event)
 {
-    QPointF pos = convertToPixelCoord(event);
+    QPointF pos = convertToPixelCoordAndSnap(event);
 
     if (m_haveCropSelection) {  //if the crop selection is set
         //set resize cursor if we are on one of the handles

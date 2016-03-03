@@ -224,6 +224,9 @@ protected:
     QPointF convertToPixelCoord(KoPointerEvent *e);
     QPointF convertToPixelCoord(const QPointF& pt);
 
+    QPointF convertToPixelCoordAndSnap(KoPointerEvent *e, const QPointF &offset = QPointF());
+    QPointF convertToPixelCoordAndSnap(const QPointF& pt, const QPointF &offset = QPointF());
+
 protected:
     QPointF widgetCenterInWidgetPixels();
     QPointF convertDocumentToWidget(const QPointF& pt);

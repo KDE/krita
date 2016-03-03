@@ -265,6 +265,29 @@ QPointF KisTool::convertToPixelCoord(const QPointF& pt)
 
     return image()->documentToPixel(pt);
 }
+#include <KoSnapGuide.h>
+
+QPointF KisTool::convertToPixelCoordAndSnap(KoPointerEvent *e, const QPointF &offset)
+{
+    if (!image())
+        return e->point;
+
+    KoSnapGuide *snapGuide = canvas()->snapGuide();
+    QPointF pos = snapGuide->snap(e->point, offset, e->modifiers());
+
+    return image()->documentToPixel(pos);
+}
+
+QPointF KisTool::convertToPixelCoordAndSnap(const QPointF& pt, const QPointF &offset)
+{
+    if (!image())
+        return pt;
+
+    KoSnapGuide *snapGuide = canvas()->snapGuide();
+    QPointF pos = snapGuide->snap(pt, offset, Qt::NoModifier);
+
+    return image()->documentToPixel(pos);
+}
 
 QPoint KisTool::convertToIntPixelCoord(KoPointerEvent *e)
 {

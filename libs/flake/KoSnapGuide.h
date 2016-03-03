@@ -66,7 +66,9 @@ public:
         GridSnapping = 0x10,
         BoundingBoxSnapping = 0x20,
         GuideLineSnapping = 0x40,
-        CustomSnapping = 0x80
+        DocumentBoundsSnapping = 0x80,
+        DocumentCenterSnapping = 0x100,
+        CustomSnapping = 0x200
     };
     Q_DECLARE_FLAGS(Strategies, Strategy)
 

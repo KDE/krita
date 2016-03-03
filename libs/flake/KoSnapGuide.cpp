@@ -176,7 +176,9 @@ QPointF KoSnapGuide::snap(const QPointF &mousePosition, Qt::KeyboardModifiers mo
     foreach (Private::KoSnapStrategySP strategy, d->strategies) {
         if (d->usedStrategies & strategy->type() ||
             strategy->type() == GridSnapping ||
-            strategy->type() == GuideLineSnapping||
+            strategy->type() == GuideLineSnapping ||
+            strategy->type() == DocumentBoundsSnapping ||
+            strategy->type() == DocumentCenterSnapping ||
             strategy->type() == CustomSnapping) {
 
             if (! strategy->snap(mousePosition, &proxy, maxSnapDistance))

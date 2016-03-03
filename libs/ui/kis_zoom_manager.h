@@ -59,6 +59,8 @@ public:
         return m_zoomController;
     }
 
+    void updateImageBoundsSnapping();
+
     QWidget *zoomActionWidget() const;
 
     KoRuler *horizontalRuler() const;

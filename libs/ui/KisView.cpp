@@ -947,6 +947,7 @@ void KisView::slotLoadingFinished()
     }
 
     setCurrentNode(activeNode);
+    zoomManager()->updateImageBoundsSnapping();
 }
 
 void KisView::slotSavingFinished()
@@ -964,6 +965,7 @@ KisPrintJob * KisView::createPrintJob()
 void KisView::slotImageResolutionChanged()
 {
     resetImageSizeAndScroll(false);
+    zoomManager()->updateImageBoundsSnapping();
     zoomManager()->updateGUI();
 
     // update KoUnit value for the document
@@ -976,5 +978,6 @@ void KisView::slotImageResolutionChanged()
 void KisView::slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint)
 {
     resetImageSizeAndScroll(true, oldStillPoint, newStillPoint);
+    zoomManager()->updateImageBoundsSnapping();
     zoomManager()->updateGUI();
 }

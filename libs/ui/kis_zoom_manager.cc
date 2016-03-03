@@ -47,6 +47,7 @@
 #include "krita_utils.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_lod_transform.h"
+#include "kis_snap_line_strategy.h"
 
 
 class KisZoomController : public KoZoomController
@@ -153,6 +154,36 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
             this, SLOT(changeAspectMode(bool)));
 
     applyRulersUnit(m_view->document()->unit());
+}
+
+void KisZoomManager::updateImageBoundsSnapping()
+{
+    const QRectF docRect = m_view->canvasBase()->coordinatesConverter()->imageRectInDocumentPixels();
+    const QPointF docCenter = docRect.center();
+
+    KoSnapGuide *snapGuide = m_view->canvasBase()->snapGuide();
+
+    {
+        KisSnapLineStrategy *boundsSnap =
+            new KisSnapLineStrategy(KoSnapGuide::DocumentBoundsSnapping);
+
+        boundsSnap->addLine(Qt::Horizontal, docRect.y());
+        boundsSnap->addLine(Qt::Horizontal, docRect.bottom());
+        boundsSnap->addLine(Qt::Vertical, docRect.x());
+        boundsSnap->addLine(Qt::Vertical, docRect.right());
+
+        snapGuide->overrideSnapStrategy(KoSnapGuide::DocumentBoundsSnapping, boundsSnap);
+    }
+
+    {
+        KisSnapLineStrategy *centerSnap =
+            new KisSnapLineStrategy(KoSnapGuide::DocumentCenterSnapping);
+
+        centerSnap->addLine(Qt::Horizontal, docCenter.y());
+        centerSnap->addLine(Qt::Vertical, docCenter.x());
+
+        snapGuide->overrideSnapStrategy(KoSnapGuide::DocumentCenterSnapping, centerSnap);
+    }
 }
 
 void KisZoomManager::updateMouseTrackingConnections()

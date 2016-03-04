@@ -1216,8 +1216,6 @@ bool KisDocument::openFile()
     d->progressUpdater->setReferenceTime(d->profileReferenceTime);
     d->progressUpdater->start(100, i18n("Opening Document"));
 
-    setupOpenFileSubProgress();
-
     if (!isNativeFormat(typeName.toLatin1())) {
         KisImportExportFilter::ConversionStatus status;
         importedFile = d->filterManager->importDocument(localFilePath(), typeName, status);
@@ -2139,8 +2137,6 @@ void KisDocument::resetURL() {
 int KisDocument::pageCount() const {
     return 1;
 }
-
-void KisDocument::setupOpenFileSubProgress() {}
 
 KoDocumentInfoDlg *KisDocument::createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const
 {

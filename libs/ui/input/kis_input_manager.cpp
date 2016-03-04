@@ -164,20 +164,22 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 
     if (d->eventEater.eventFilter(object, event)) return false;
 
-    Q_FOREACH (QPointer<QObject> filter, d->priorityEventFilter) {
-        if (filter.isNull()) {
-            d->priorityEventFilter.remove(filter);
-            continue;
+    if (!d->matcher.hasRunningShortcut()) {
+        Q_FOREACH (QPointer<QObject> filter, d->priorityEventFilter) {
+            if (filter.isNull()) {
+                d->priorityEventFilter.remove(filter);
+                continue;
+            }
+
+            if (filter->eventFilter(object, event)) return true;
         }
 
-        if (filter->eventFilter(object, event)) return true;
+        // KoToolProxy needs to pre-process some events to ensure the
+        // global shortcuts (not the input manager's ones) are not
+        // executed, in particular, this line will accept events when the
+        // tool is in text editing, preventing shortcut triggering
+        d->toolProxy->processEvent(event);
     }
-
-    // KoToolProxy needs to pre-process some events to ensure the
-    // global shortcuts (not the input manager's ones) are not
-    // executed, in particular, this line will accept events when the
-    // tool is in text editing, preventing shortcut triggering
-    d->toolProxy->processEvent(event);
 
     // Continue with the actual switch statement...
     return eventFilterImpl(event);

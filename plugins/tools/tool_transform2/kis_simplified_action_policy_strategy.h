@@ -26,17 +26,20 @@
 
 class KoPointerEvent;
 class KisCoordinatesConverter;
+class KoSnapGuide;
 
 class KisSimplifiedActionPolicyStrategy : public KisTransformStrategyBase
 {
 public:
-    KisSimplifiedActionPolicyStrategy(const KisCoordinatesConverter *_converter);
+    KisSimplifiedActionPolicyStrategy(const KisCoordinatesConverter *_converter, KoSnapGuide *snapGuide = 0);
     ~KisSimplifiedActionPolicyStrategy();
 
     virtual bool beginPrimaryAction(KoPointerEvent *event);
     virtual void continuePrimaryAction(KoPointerEvent *event);
     virtual bool endPrimaryAction(KoPointerEvent *event);
     virtual void hoverActionCommon(KoPointerEvent *event);
+
+    virtual QPointF handleSnapPoint(const QPointF &imagePos);
 
     virtual void activateAlternateAction(KisTool::AlternateAction action);
     virtual void deactivateAlternateAction(KisTool::AlternateAction action);

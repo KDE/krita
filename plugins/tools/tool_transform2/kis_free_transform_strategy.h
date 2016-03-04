@@ -36,6 +36,7 @@ class KisFreeTransformStrategy : public KisSimplifiedActionPolicyStrategy
     Q_OBJECT
 public:
     KisFreeTransformStrategy(const KisCoordinatesConverter *converter,
+                             KoSnapGuide *snapGuide,
                              ToolTransformArgs &currentArgs,
                              TransformTransactionProperties &transaction);
     ~KisFreeTransformStrategy();

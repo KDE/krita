@@ -49,12 +49,8 @@ public:
         , m_progress(0)
         , m_weight(weight)
         , m_interrupted(false)
-        , m_hasOutput(false)
         , m_parent(parent)
     {
-        if (parent) {
-            m_hasOutput = parent->hasOutput();
-        }
         setObjectName(name);
     }
 
@@ -67,25 +63,6 @@ public:
     int progress() const { return m_progress; }
 
     int weight() const { return m_weight; }
-
-    class TimePoint {
-    public:
-        QTime time;
-        int value;
-
-        explicit TimePoint(int value_) :time(QTime::currentTime()), value(value_) {}
-        TimePoint() {}
-    };
-
-    void addPoint(int value) {
-        if (m_hasOutput) {
-            m_points.append(TimePoint(value));
-        }
-    }
-
-    const QVector<TimePoint> & getPoints() const {
-        return m_points;
-    }
 
 public Q_SLOTS:
 
@@ -112,12 +89,8 @@ private:
     int m_progress; // always in percent
     int m_weight;
     bool m_interrupted;
-    bool m_hasOutput;
 
     KoProgressUpdater *m_parent;
-    QVector<TimePoint> m_points;
 };
-
-Q_DECLARE_TYPEINFO(KoUpdaterPrivate::TimePoint, Q_MOVABLE_TYPE);
 
 #endif

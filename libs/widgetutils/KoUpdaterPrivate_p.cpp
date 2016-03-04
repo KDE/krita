@@ -38,7 +38,7 @@ void KoUpdaterPrivate::interrupt()
 
 void KoUpdaterPrivate::setProgress(int percent)
 {
-    if(m_progress >= percent) {
+    if (m_progress >= percent) {
         return;
     }
     m_progress = percent;

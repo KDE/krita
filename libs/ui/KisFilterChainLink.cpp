@@ -78,6 +78,7 @@ namespace CalligraFilter {
             return KisImportExportFilter::FilterCreationError;
         }
 
+        Q_ASSERT(m_updater);
         if (m_updater) {
             // if there is an updater, use that for progress reporting
             m_filter->setUpdater(m_updater);

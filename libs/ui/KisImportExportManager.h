@@ -60,7 +60,7 @@ public:
      * Create a filter manager for a document
      */
     explicit KisImportExportManager(KisDocument *document,
-                             KoProgressUpdater *progressUpdater = 0);
+                                    KoProgressUpdater *progressUpdater = 0);
 
     /**
      * Create a filter manager for the Shape Collection docker.
@@ -83,7 +83,7 @@ public:
      *        to allow embedding for filters. Most likely you do not have to care.
      */
     explicit KisImportExportManager(const QString& location, const QByteArray& mimetypeHint = QByteArray(),
-                             KisFilterChain * const parentChain = 0);
+                                    KisFilterChain * const parentChain = 0);
 
     virtual ~KisImportExportManager();
 

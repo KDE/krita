@@ -554,17 +554,6 @@ public:
      */
     KUndo2Stack *undoStack();
 
-
-    /**
-     * Set the output stream to report profile information to.
-     */
-    void setProfileStream(QTextStream *profilestream);
-
-    /**
-     * Set the output stream to report profile information to.
-     */
-    void setProfileReferenceTime(const QTime& referenceTime);
-
 public Q_SLOTS:
 
     /**

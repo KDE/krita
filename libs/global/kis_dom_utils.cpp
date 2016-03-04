@@ -230,6 +230,13 @@ bool loadValue(const QDomElement &e, QTransform *t)
     return true;
 }
 
+bool loadValue(const QDomElement &e, QString *value)
+{
+    if (!Private::checkType(e, "value")) return false;
+    *value = e.attribute("value", "no-value");
+    return true;
+}
+
 QDomElement findElementByAttibute(QDomNode parent,
                                   const QString &tag,
                                   const QString &attribute,

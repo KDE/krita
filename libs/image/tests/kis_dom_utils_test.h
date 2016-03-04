@@ -34,6 +34,8 @@ private Q_SLOTS:
     void testR2G();
     void testG2C();
     void testG2R();
+
+    void testIntegralType();
 };
 
 #endif /* __KIS_DOM_UTILS_TEST_H */

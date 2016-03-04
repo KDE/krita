@@ -38,7 +38,8 @@
 #include "kis_signals_blocker.h"
 
 
-KisGridManager::KisGridManager(KisViewManager * parent) : QObject(parent)
+KisGridManager::KisGridManager(KisViewManager * parent)
+    : QObject(parent)
 {
 
 }
@@ -50,10 +51,21 @@ KisGridManager::~KisGridManager()
 
 void KisGridManager::setGridConfig(const KisGridConfig &config)
 {
+    setGridConfigImpl(config, true);
+}
+
+void KisGridManager::setGridConfigImpl(const KisGridConfig &config, bool emitModified)
+{
     if (!m_imageView) return;
 
     config.saveStaticData();
     m_imageView->document()->setGridConfig(config);
+
+    if (emitModified) {
+        // TODO: make editing guides undoable, so that no
+        //       setModified() will be needed
+        m_imageView->document()->setModified(true);
+    }
 
     m_gridDecoration->setGridConfig(config);
     m_gridDecoration->setVisible(config.showGrid());
@@ -92,7 +104,7 @@ void KisGridManager::setView(QPointer<KisView> imageView)
         }
 
         KisGridConfig config = imageView->document()->gridConfig();
-        setGridConfig(config);
+        setGridConfigImpl(config, false);
         emit sigRequestUpdateGridConfig(config);
 
         KisSignalsBlocker b1(m_toggleGrid, m_toggleSnapToGrid);

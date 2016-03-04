@@ -59,6 +59,9 @@ private Q_SLOTS:
     void slotSnapToGridTriggered(bool value);
 
 private:
+    void setGridConfigImpl(const KisGridConfig &config, bool emitModified);
+
+private:
     void setFastConfig(int size);
 
     KisAction *m_toggleGrid;
@@ -66,6 +69,8 @@ private:
 
     QPointer<KisView> m_imageView;
     KisGridDecoration* m_gridDecoration;
+
+    bool m_blockModifiedSignal;
 };
 
 #endif

@@ -55,7 +55,7 @@ public Q_SLOTS:
     void slotGuideCreationFinished(Qt::Orientation orientation, const QPoint &globalPos);
 
 private:
-    void setGuidesConfigImpl(const KisGuidesConfig &value);
+    void setGuidesConfigImpl(const KisGuidesConfig &value, bool emitModified = true);
     void attachEventFilterImpl(bool value);
     void syncActionsStatus();
 

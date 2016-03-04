@@ -99,7 +99,7 @@ KisCanvasDecoration* KisGuidesManager::decoration() const
     return m_d->decoration;
 }
 
-void KisGuidesManager::setGuidesConfigImpl(const KisGuidesConfig &value)
+void KisGuidesManager::setGuidesConfigImpl(const KisGuidesConfig &value, bool emitModified)
 {
     if (m_d->decoration && value != m_d->decoration->guidesConfig()) {
         m_d->decoration->setVisible(value.showGuides());
@@ -109,6 +109,12 @@ void KisGuidesManager::setGuidesConfigImpl(const KisGuidesConfig &value)
     KisDocument *doc = m_d->view ? m_d->view->document() : 0;
     if (doc && doc->guidesConfig() != value) {
         doc->setGuidesConfig(value);
+
+        if (emitModified) {
+            // TODO: make editing guides undoable, so that no
+            //       setModified() will be needed
+            doc->setModified(true);
+        }
     }
 
     const bool shouldFilterEvent =
@@ -238,7 +244,7 @@ void KisGuidesManager::setView(QPointer<KisView> view)
         m_d->decoration = decoration;
 
         m_d->guidesConfig = m_d->view->document()->guidesConfig();
-        setGuidesConfigImpl(m_d->guidesConfig);
+        setGuidesConfigImpl(m_d->guidesConfig, false);
 
         m_d->viewConnections.addUniqueConnection(
             m_d->view->zoomManager()->horizontalRuler(), SIGNAL(guideCreationInProgress(Qt::Orientation, const QPoint&)),

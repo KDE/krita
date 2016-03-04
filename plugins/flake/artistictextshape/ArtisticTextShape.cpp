@@ -47,6 +47,7 @@
 #include <QPainter>
 #include <QFont>
 
+
 ArtisticTextShape::ArtisticTextShape()
     : m_path(0)
     , m_startOffset(0.0)
@@ -55,7 +56,6 @@ ArtisticTextShape::ArtisticTextShape()
     , m_defaultFont("ComicSans", 20)
 {
     setShapeId(ArtisticTextShapeID);
-    cacheGlyphOutlines();
     updateSizeAndPosition();
 }
 
@@ -232,11 +232,8 @@ void ArtisticTextShape::createOutline()
 {
     // reset relevant data
     m_outline = QPainterPath();
-    m_charPositions.clear();
     m_charOffsets.clear();
-
-    // calculate character positions in baseline coordinates
-    m_charPositions = calculateAbstractCharacterPositions();
+    cacheGlyphOutlines();
 
     // the character index within the text shape
     int globalCharIndex = 0;
@@ -324,7 +321,7 @@ void ArtisticTextShape::createOutline()
         Q_FOREACH (const ArtisticTextRange &range, m_ranges) {
             const QString textRange = range.text();
             const int localTextLength = textRange.length();
-            for (int localCharIndex = 0; localCharIndex < localTextLength; ++localCharIndex, ++globalCharIndex) {
+            for (int localCharIndex = 0; localCharIndex < m_charOutlines.size(); ++localCharIndex, ++globalCharIndex) {
                 const QPointF &charPos = m_charPositions[globalCharIndex];
                 if (range.hasRotation(localCharIndex)) {
                     rotation = range.rotation(localCharIndex);
@@ -375,6 +372,11 @@ QString ArtisticTextShape::plainText() const
     return allText;
 }
 
+int ArtisticTextShape::glyphsIndexSize() const
+{
+    return m_charOutlines.size();
+}
+
 QList<ArtisticTextRange> ArtisticTextShape::text() const
 {
     return m_ranges;
@@ -423,7 +425,7 @@ void ArtisticTextShape::setFont(int charIndex, int charCount, const QFont &font)
         return;
     }
 
-    if (charIndex == 0 && charCount == plainText().length()) {
+    if (charIndex == 0 && charCount == glyphsIndexSize()) {
         setFont(font);
         return;
     }
@@ -652,7 +654,7 @@ QList<ArtisticTextRange> ArtisticTextShape::removeText(int charIndex, int charCo
         return extractedRanges;
     }
 
-    if (charIndex == 0 && charCount >= plainText().length()) {
+    if (charIndex == 0 && charCount >= glyphsIndexSize()) {
         beginTextUpdate();
         extractedRanges = m_ranges;
         m_ranges.clear();
@@ -737,7 +739,7 @@ void ArtisticTextShape::insertText(int charIndex, const QString &str)
     if (charIndex < 0) {
         // insert before first character
         charPos = CharIndex(0, 0);
-    } else if (charIndex >= plainText().length()) {
+    } else if (charIndex >= glyphsIndexSize()) {
         // insert after last character
         charPos = CharIndex(m_ranges.count() - 1, m_ranges.last().text().length());
     }
@@ -774,7 +776,7 @@ void ArtisticTextShape::insertText(int charIndex, const QList<ArtisticTextRange>
     if (charIndex < 0) {
         // insert before first character
         charPos = CharIndex(0, 0);
-    } else if (charIndex >= plainText().length()) {
+    } else if (charIndex >= glyphsIndexSize()) {
         // insert after last character
         charPos = CharIndex(m_ranges.count() - 1, m_ranges.last().text().length());
     }
@@ -884,7 +886,7 @@ QRectF ArtisticTextShape::charExtentsAt(int charIndex) const
     if (charIndex < 0 || isEmpty()) {
         charPos = CharIndex(0, 0);
     } else if (charPos.first < 0) {
-        charPos = CharIndex(m_ranges.count() - 1, m_ranges.last().text().length() - 1);
+        charPos = CharIndex(m_ranges.count() - 1, glyphsIndexSize() - 1);
     }
 
     if (charPos.first < m_ranges.size()) {
@@ -947,17 +949,50 @@ void ArtisticTextShape::updateSizeAndPosition(bool global)
 void ArtisticTextShape::cacheGlyphOutlines()
 {
     m_charOutlines.clear();
-
+    m_charPositions.clear();
+    m_charPositions.resize(1);
+    QPointF charPos(0, 0);
+    int globalCharIndex = 0;
+    int glyph_count = 0;
     Q_FOREACH (const ArtisticTextRange &range, m_ranges) {
         const QString rangeText = range.text();
         const QFont rangeFont(range.font(), &m_paintDevice);
-        const int textLength = rangeText.length();
-        for (int charIdx = 0; charIdx < textLength; ++charIdx) {
-            QPainterPath charOutline;
-            charOutline.addText(QPointF(), rangeFont, rangeText[charIdx]);
-            m_charOutlines.append(charOutline);
+        QFontMetrics metrics(rangeFont);
+        QTextLayout layout;
+        layout.setText(rangeText);
+        layout.beginLayout();
+        int leading = metrics.leading();
+        qreal height = QPointF().y();
+        while (1) {
+            QTextLine line = layout.createLine();
+            if (!line.isValid())
+                break;
+            height += leading;
+            line.setPosition(QPointF(QPointF().x(), height));
+            height += line.height();
+        }
+        layout.endLayout();
+        QList<QGlyphRun> runs = layout.glyphRuns();
+
+
+        foreach (QGlyphRun run, runs) {
+            QRawFont rawFont(run.rawFont());
+            QVector<quint32> indexes =run.glyphIndexes();
+            QVector<QPointF> positions = run.positions();
+            glyph_count += positions.size();
+            m_charPositions.resize(glyph_count + 1);
+            for (int i =0; i< indexes.size(); i++, ++globalCharIndex){
+                QPainterPath path;
+                path = rawFont.pathForGlyph(indexes.at(i));
+                m_charOutlines.append(path);
+                qreal yposiotn = positions[i].ry() - positions[0].ry();
+                charPos = QPointF(positions.at(i).x() , yposiotn);
+                m_charPositions[globalCharIndex] = charPos;
+            }
         }
     }
+    m_charPositions[globalCharIndex] = charPos;
+
 }
 
 void ArtisticTextShape::shapeChanged(ChangeType type, KoShape *shape)
@@ -1016,7 +1051,6 @@ void ArtisticTextShape::finishTextUpdate()
         return;
     }
 
-    cacheGlyphOutlines();
     updateSizeAndPosition();
     update();
     notifyChanged();

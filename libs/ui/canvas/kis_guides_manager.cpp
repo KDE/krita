@@ -345,6 +345,7 @@ bool KisGuidesManager::Private::updateCursor(const QPointF &docPos)
 
     if (!guideValid && cursorSwitched) {
         canvas->canvasWidget()->setCursor(oldCursor);
+        cursorSwitched = false;
     }
 
     return guideValid;

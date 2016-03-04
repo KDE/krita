@@ -170,7 +170,7 @@ void KisToolLine::beginPrimaryAction(KoPointerEvent *event)
     m_helper->setUseSensors(m_chkUseSensors->isChecked());
     m_helper->start(event);
 
-    m_startPoint = convertToPixelCoord(event);
+    m_startPoint = convertToPixelCoordAndSnap(event);
     m_endPoint = m_startPoint;
     m_lastUpdatedPoint = m_startPoint;
 
@@ -196,7 +196,7 @@ void KisToolLine::continuePrimaryAction(KoPointerEvent *event)
     // First ensure the old temp line is deleted
     updatePreview();
 
-    QPointF pos = convertToPixelCoord(event);
+    QPointF pos = convertToPixelCoordAndSnap(event);
 
     if (event->modifiers() == Qt::AltModifier) {
         QPointF trans = pos - m_endPoint;
@@ -207,7 +207,7 @@ void KisToolLine::continuePrimaryAction(KoPointerEvent *event)
         pos = straightLine(pos);
         m_helper->addPoint(event, pos);
     } else {
-        m_helper->addPoint(event);
+        m_helper->addPoint(event, pos);
     }
 
     if ((pixelToView(m_lastUpdatedPoint) - pixelToView(pos)).manhattanLength() > 10) {

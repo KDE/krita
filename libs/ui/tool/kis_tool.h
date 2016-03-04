@@ -224,7 +224,7 @@ protected:
     QPointF convertToPixelCoord(KoPointerEvent *e);
     QPointF convertToPixelCoord(const QPointF& pt);
 
-    QPointF convertToPixelCoordAndSnap(KoPointerEvent *e, const QPointF &offset = QPointF());
+    QPointF convertToPixelCoordAndSnap(KoPointerEvent *e, const QPointF &offset = QPointF(), bool useModifiers = true);
     QPointF convertToPixelCoordAndSnap(const QPointF& pt, const QPointF &offset = QPointF());
 
 protected:

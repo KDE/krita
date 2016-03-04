@@ -71,6 +71,7 @@ struct KisGuidesManager::Private
     bool mouseReleaseHandler(const QPointF &docPos);
 
     void updateSnappingStatus(const KisGuidesConfig &value);
+    QPointF alignToPixels(const QPointF docPoint);
 
     GuideHandle currentGuide;
 
@@ -380,6 +381,14 @@ void KisGuidesManager::Private::initDragStart(const GuideHandle &guide,
     }
 }
 
+QPointF KisGuidesManager::Private::alignToPixels(const QPointF docPoint)
+{
+    KisCanvas2 *canvas = view->canvasBase();
+    const KisCoordinatesConverter *converter = canvas->coordinatesConverter();
+    QPoint imagePoint = converter->documentToImage(docPoint).toPoint();
+    return converter->imageToDocument(imagePoint);
+}
+
 bool KisGuidesManager::Private::mouseMoveHandler(const QPointF &docPos, Qt::KeyboardModifiers modifiers)
 {
     if (isGuideValid(currentGuide)) {
@@ -441,7 +450,7 @@ bool KisGuidesManager::eventFilter(QObject *obj, QEvent *event)
     case QEvent::MouseMove: {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 
-        const QPointF docPos = converter->widgetToDocument(mouseEvent->pos());
+        const QPointF docPos = m_d->alignToPixels(converter->widgetToDocument(mouseEvent->pos()));
         retval = m_d->mouseMoveHandler(docPos, mouseEvent->modifiers());
 
         break;
@@ -450,7 +459,7 @@ bool KisGuidesManager::eventFilter(QObject *obj, QEvent *event)
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         if (mouseEvent->button() != Qt::LeftButton) break;
 
-        const QPointF docPos = converter->widgetToDocument(mouseEvent->pos());
+        const QPointF docPos = m_d->alignToPixels(converter->widgetToDocument(mouseEvent->pos()));
         const Private::GuideHandle guide = m_d->findGuide(docPos);
         const bool guideValid = m_d->isGuideValid(guide);
 
@@ -466,7 +475,7 @@ bool KisGuidesManager::eventFilter(QObject *obj, QEvent *event)
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         if (mouseEvent->button() != Qt::LeftButton) break;
 
-        const QPointF docPos = converter->widgetToDocument(mouseEvent->pos());
+        const QPointF docPos = m_d->alignToPixels(converter->widgetToDocument(mouseEvent->pos()));
         retval = m_d->mouseReleaseHandler(docPos);
 
         break;
@@ -485,7 +494,7 @@ void KisGuidesManager::slotGuideCreationInProgress(Qt::Orientation orientation, 
     KisCanvas2 *canvas = m_d->view->canvasBase();
     const KisCoordinatesConverter *converter = canvas->coordinatesConverter();
     const QPointF widgetPos = canvas->canvasWidget()->mapFromGlobal(globalPos);
-    const QPointF docPos = converter->widgetToDocument(widgetPos);
+    const QPointF docPos = m_d->alignToPixels(converter->widgetToDocument(widgetPos));
 
     if (m_d->isGuideValid(m_d->currentGuide)) {
         Qt::KeyboardModifiers modifiers = qApp->keyboardModifiers();
@@ -521,7 +530,7 @@ void KisGuidesManager::slotGuideCreationFinished(Qt::Orientation orientation, co
     KisCanvas2 *canvas = m_d->view->canvasBase();
     const KisCoordinatesConverter *converter = canvas->coordinatesConverter();
     const QPointF widgetPos = canvas->canvasWidget()->mapFromGlobal(globalPos);
-    const QPointF docPos = converter->widgetToDocument(widgetPos);
+    const QPointF docPos = m_d->alignToPixels(converter->widgetToDocument(widgetPos));
 
     m_d->mouseReleaseHandler(docPos);
 }

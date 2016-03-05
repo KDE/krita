@@ -355,8 +355,7 @@ public:
 
     QList<KisPaintingAssistant*> assistants;
 
-    bool openFile()
-    {
+    bool openFile() {
         DocumentProgressProxy *progressProxy = 0;
         if (!document->progressProxy()) {
             KisMainWindow *mainWindow = 0;
@@ -2200,8 +2199,9 @@ bool KisDocument::saveAs( const QUrl &kurl )
 bool KisDocument::save()
 {
     d->m_saveOk = false;
-    if ( d->m_file.isEmpty() ) // document was created empty
+    if ( d->m_file.isEmpty() ) { // document was created empty
         d->prepareSaving();
+    }
 
     updateEditingTime(true);
 

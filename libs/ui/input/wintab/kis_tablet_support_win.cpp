@@ -75,8 +75,8 @@ enum {
  */
 
 QWindowsTabletSupport *QTAB = 0;
-static QWidget *targetWindow = 0; //< Window receiving last tablet event
-static QWidget *qt_tablet_target = 0; //< Widget receiving last tablet event
+static QPointer<QWidget> targetWindow = 0; //< Window receiving last tablet event
+static QPointer<QWidget> qt_tablet_target = 0; //< Widget receiving last tablet event
 
 HWND createDummyWindow(const QString &className, const wchar_t *windowName, WNDPROC wndProc)
 {

@@ -59,8 +59,7 @@ public:
     /**
      * Create a filter manager for a document
      */
-    explicit KisImportExportManager(KisDocument *document,
-                                    KoProgressUpdater *progressUpdater = 0);
+    explicit KisImportExportManager(KisDocument *document);
 
     /**
      * Create a filter manager for the Shape Collection docker.
@@ -149,6 +148,8 @@ public:
      * or in interactive mode (true)
      */
     bool getBatchMode(void) const;
+
+    void setProgresUpdater(KoProgressUpdater *updater);
 
     /**
      * Return the KoProgressUpdater or NULL if there is none.

@@ -436,7 +436,8 @@ KisDocument::KisDocument()
     d->undoStack->setParent(this);
 
     d->isEmpty = true;
-    d->filterManager = new KisImportExportManager(this, d->progressUpdater);
+    d->filterManager = new KisImportExportManager(this);
+    d->filterManager->setProgresUpdater(d->progressUpdater);
 
     connect(&d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
     setAutoSave(defaultAutoSave());
@@ -596,6 +597,7 @@ bool KisDocument::saveFile()
     if (!isNativeFormat(outputMimeType)) {
         dbgUI << "Saving to format" << outputMimeType << "in" << localFilePath();
         // Not native format : save using export filter
+        d->filterManager->setProgresUpdater(d->progressUpdater);
         KisImportExportFilter::ConversionStatus status = d->filterManager->exportDocument(localFilePath(), outputMimeType);
         ret = status == KisImportExportFilter::OK;
         suppressErrorDialog = (status == KisImportExportFilter::UserCancelled || status == KisImportExportFilter::BadConversionGraph);
@@ -1201,16 +1203,12 @@ bool KisDocument::openFile()
 
     // create the main progress monitoring object for loading, this can
     // contain subtasks for filtering and loading
-    KoProgressProxy *progressProxy = 0;
-    if (d->progressProxy) {
-        progressProxy = d->progressProxy;
-    }
-
-    d->progressUpdater = new KoProgressUpdater(progressProxy, KoProgressUpdater::Unthreaded);
+    d->progressUpdater = new KoProgressUpdater(d->progressProxy, KoProgressUpdater::Unthreaded);
     d->progressUpdater->start(100, i18n("Opening Document"));
 
     if (!isNativeFormat(typeName.toLatin1())) {
         KisImportExportFilter::ConversionStatus status;
+
         importedFile = d->filterManager->importDocument(localFilePath(), typeName, status);
         if (status != KisImportExportFilter::OK) {
             QApplication::restoreOverrideCursor();
@@ -1339,8 +1337,7 @@ bool KisDocument::openFile()
     }
 
     if (progressUpdater()) {
-        QPointer<KoUpdater> updater
-                = progressUpdater()->startSubtask(1, "clear undo stack");
+        QPointer<KoUpdater> updater = progressUpdater()->startSubtask(1, "clear undo stack");
         updater->setProgress(0);
         undoStack()->clear();
         updater->setProgress(100);

@@ -412,6 +412,9 @@ public:
 
     /**
      * @return the object to report progress to.
+     *
+     * This is only not zero if loading or saving is in progress.
+     *
      * One can add more KoUpdaters to it to make the progress reporting more
      * accurate. If no active progress reporter is present, 0 is returned.
      **/

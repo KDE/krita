@@ -598,7 +598,7 @@ bool KisDocument::saveFile()
     // create the main progress monitoring object for loading, this can
     // contain subtasks for filtering and loading
     d->progressUpdater = new KoProgressUpdater(d->progressProxy, KoProgressUpdater::Unthreaded);
-    d->progressUpdater->start(100, i18n("Opening Document"));
+    d->progressUpdater->start(100, i18n("Saving Document"));
 
     if (!isNativeFormat(outputMimeType)) {
         dbgUI << "Saving to format" << outputMimeType << "in" << localFilePath();

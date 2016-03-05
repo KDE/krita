@@ -590,10 +590,16 @@ bool KisDocument::saveFile()
         KBackup::backupFile(url().toLocalFile(), d->backupPath);
     }
 
-    emit statusBarMessage(i18n("Saving..."));
     qApp->processEvents();
+
     bool ret = false;
     bool suppressErrorDialog = false;
+
+    // create the main progress monitoring object for loading, this can
+    // contain subtasks for filtering and loading
+    d->progressUpdater = new KoProgressUpdater(d->progressProxy, KoProgressUpdater::Unthreaded);
+    d->progressUpdater->start(100, i18n("Opening Document"));
+
     if (!isNativeFormat(outputMimeType)) {
         dbgUI << "Saving to format" << outputMimeType << "in" << localFilePath();
         // Not native format : save using export filter
@@ -608,13 +614,21 @@ bool KisDocument::saveFile()
         ret = saveNativeFormat(localFilePath());
     }
 
+
     if (ret) {
+        QPointer<KoUpdater> updater = d->progressUpdater->startSubtask(1, "clear undo stack");
+        updater->setProgress(0);
         d->undoStack->setClean();
+        updater->setProgress(100);
+
         removeAutoSaveFiles();
         // Restart the autosave timer
         // (we don't want to autosave again 2 seconds after a real save)
         setAutoSave(d->autoSaveDelay);
     }
+
+    delete d->progressUpdater;
+    d->progressUpdater = 0;
 
     QApplication::restoreOverrideCursor();
     if (!ret) {
@@ -647,7 +661,6 @@ bool KisDocument::saveFile()
         d->mimeType = outputMimeType;
         setConfirmNonNativeSave(isExporting(), false);
     }
-    emit clearStatusBarMessage();
 
     return ret;
 }
@@ -1205,6 +1218,7 @@ bool KisDocument::openFile()
     // contain subtasks for filtering and loading
     d->progressUpdater = new KoProgressUpdater(d->progressProxy, KoProgressUpdater::Unthreaded);
     d->progressUpdater->start(100, i18n("Opening Document"));
+    d->filterManager->setProgresUpdater(d->progressUpdater);
 
     if (!isNativeFormat(typeName.toLatin1())) {
         KisImportExportFilter::ConversionStatus status;
@@ -1336,12 +1350,11 @@ bool KisDocument::openFile()
         emit sigLoadingFinished();
     }
 
-    if (progressUpdater()) {
-        QPointer<KoUpdater> updater = progressUpdater()->startSubtask(1, "clear undo stack");
-        updater->setProgress(0);
-        undoStack()->clear();
-        updater->setProgress(100);
-    }
+    QPointer<KoUpdater> updater = d->progressUpdater->startSubtask(1, "clear undo stack");
+    updater->setProgress(0);
+    undoStack()->clear();
+    updater->setProgress(100);
+
     delete d->progressUpdater;
     d->progressUpdater = 0;
 

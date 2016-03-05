@@ -33,6 +33,7 @@ class KisAutoSaveRecoveryDialog : public KoDialog
 public:
 
     explicit KisAutoSaveRecoveryDialog(const QStringList &filenames, QWidget *parent = 0);
+    ~KisAutoSaveRecoveryDialog();
     QStringList recoverableFiles();
 
 public Q_SLOTS:

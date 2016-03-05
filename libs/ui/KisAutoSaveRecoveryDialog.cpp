@@ -241,6 +241,13 @@ KisAutoSaveRecoveryDialog::KisAutoSaveRecoveryDialog(const QStringList &filename
     connect( this, SIGNAL( user1Clicked() ), this, SLOT( slotDeleteAll() ) );
 }
 
+KisAutoSaveRecoveryDialog::~KisAutoSaveRecoveryDialog()
+{
+    delete m_listView->itemDelegate();
+    delete m_model;
+    delete m_listView;
+}
+
 void KisAutoSaveRecoveryDialog::slotDeleteAll()
 {
     foreach(FileItem* fileItem, m_model->m_fileItems) {

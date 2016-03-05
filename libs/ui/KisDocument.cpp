@@ -2042,12 +2042,6 @@ void KisDocument::setUnit(const KoUnit &unit)
     }
 }
 
-void KisDocument::saveUnitOdf(KoXmlWriter *settingsWriter) const
-{
-    settingsWriter->addConfigItem("unit", unit().symbol());
-}
-
-
 KUndo2Stack *KisDocument::undoStack()
 {
     return d->undoStack;

@@ -526,8 +526,6 @@ public:
      *
      * @param settingsWriter
      */
-    void saveUnitOdf(KoXmlWriter *settingsWriter) const;
-
     bool loadNativeFormatFromByteArray(QByteArray &data);
 
     /// return the grid data for this document.

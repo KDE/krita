@@ -111,14 +111,34 @@ void KisInputManager::toggleTabletLogger()
     KisTabletDebugger::instance()->toggleDebugging();
 }
 
-void KisInputManager::attachPriorityEventFilter(QObject *filter)
+void KisInputManager::attachPriorityEventFilter(QObject *filter, int priority)
 {
-    d->priorityEventFilter.insert(QPointer<QObject>(filter));
+    Private::PriorityList::iterator begin = d->priorityEventFilter.begin();
+    Private::PriorityList::iterator it = begin;
+    Private::PriorityList::iterator end = d->priorityEventFilter.end();
+
+    it = std::find_if(begin, end,
+                      [filter] (const Private::PriorityPair &a) { return a.second == filter; });
+
+    if (it != end) return;
+
+    it = std::find_if(begin, end,
+                      [priority] (const Private::PriorityPair &a) { return a.first > priority; });
+
+    d->priorityEventFilter.insert(it, qMakePair(priority, filter));
 }
 
 void KisInputManager::detachPriorityEventFilter(QObject *filter)
 {
-    d->priorityEventFilter.remove(QPointer<QObject>(filter));
+    Private::PriorityList::iterator it = d->priorityEventFilter.begin();
+    Private::PriorityList::iterator end = d->priorityEventFilter.end();
+
+    it = std::find_if(it, end,
+                      [filter] (const Private::PriorityPair &a) { return a.second == filter; });
+
+    if (it != end) {
+        d->priorityEventFilter.erase(it);
+    }
 }
 
 void KisInputManager::setupAsEventFilter(QObject *receiver)
@@ -165,13 +185,19 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     if (d->eventEater.eventFilter(object, event)) return false;
 
     if (!d->matcher.hasRunningShortcut()) {
-        Q_FOREACH (QPointer<QObject> filter, d->priorityEventFilter) {
+        Private::PriorityList::iterator it = d->priorityEventFilter.begin();
+        Private::PriorityList::iterator end = d->priorityEventFilter.end();
+
+        while (it != end) {
+            const QPointer<QObject> &filter = it->second;
+
             if (filter.isNull()) {
-                d->priorityEventFilter.remove(filter);
+                it = d->priorityEventFilter.erase(it);
                 continue;
             }
 
             if (filter->eventFilter(object, event)) return true;
+            ++it;
         }
 
         // KoToolProxy needs to pre-process some events to ensure the

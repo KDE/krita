@@ -72,7 +72,9 @@ public:
     bool testingCompressBrushEvents = false;
 
 
-    QSet<QPointer<QObject> > priorityEventFilter;
+    typedef QPair<int, QPointer<QObject> > PriorityPair;
+    typedef QList<PriorityPair> PriorityList;
+    PriorityList priorityEventFilter;
 
     void blockMouseEvents();
     void allowMouseEvents();

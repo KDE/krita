@@ -138,7 +138,7 @@ void KisGuidesManager::attachEventFilterImpl(bool value)
     KisInputManager *inputManager = m_d->view->globalInputManager();
     if (inputManager) {
         if (value) {
-            inputManager->attachPriorityEventFilter(this);
+            inputManager->attachPriorityEventFilter(this, 100);
         } else {
             inputManager->detachPriorityEventFilter(this);
         }

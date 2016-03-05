@@ -599,6 +599,7 @@ bool KisDocument::saveFile()
     // contain subtasks for filtering and loading
     d->progressUpdater = new KoProgressUpdater(d->progressProxy, KoProgressUpdater::Unthreaded);
     d->progressUpdater->start(100, i18n("Saving Document"));
+    d->filterManager->setProgresUpdater(d->progressUpdater);
 
     if (!isNativeFormat(outputMimeType)) {
         dbgUI << "Saving to format" << outputMimeType << "in" << localFilePath();
@@ -628,6 +629,7 @@ bool KisDocument::saveFile()
     }
 
     delete d->progressUpdater;
+    d->filterManager->setProgresUpdater(0);
     d->progressUpdater = 0;
 
     QApplication::restoreOverrideCursor();
@@ -1298,6 +1300,7 @@ bool KisDocument::openFile()
 
             d->isLoading = false;
             delete d->progressUpdater;
+            d->filterManager->setProgresUpdater(0);
             d->progressUpdater = 0;
             return false;
         }
@@ -1356,6 +1359,7 @@ bool KisDocument::openFile()
     updater->setProgress(100);
 
     delete d->progressUpdater;
+    d->filterManager->setProgresUpdater(0);
     d->progressUpdater = 0;
 
     d->isLoading = false;

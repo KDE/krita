@@ -626,8 +626,8 @@ private:
     void setDisregardAutosaveFailure(bool disregardFailure);
 
     /**
-     *  Loads a document from KReadOnlyPart::m_file (KParts takes care of downloading
-     *  remote documents).
+     *  Loads a document
+     *
      *  Applies a filter if necessary, and calls loadNativeFormat in any case
      *  You should not have to reimplement, except for very special cases.
      *
@@ -638,8 +638,8 @@ private:
     bool openFile();
 
     /**
-     *  Saves a document to KReadOnlyPart::m_file (KParts takes care of uploading
-     *  remote documents)
+     *  Saves a document
+     *
      *  Applies a filter if necessary, and calls saveNativeFormat in any case
      *  You should not have to reimplement, except for very special cases.
      */

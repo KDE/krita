@@ -25,7 +25,6 @@
 
 struct KisGuidesDecoration::Private
 {
-    QColor guidesColor;
     KisGuidesConfig guidesConfig;
 };
 
@@ -33,8 +32,6 @@ KisGuidesDecoration::KisGuidesDecoration(QPointer<KisView> view)
     : KisCanvasDecoration(GUIDES_DECORATION_ID, view),
       m_d(new Private)
 {
-    KisConfig cfg;
-    m_d->guidesColor = cfg.getGridMainColor();
 }
 
 KisGuidesDecoration::~KisGuidesDecoration()
@@ -57,7 +54,7 @@ void KisGuidesDecoration::drawDecoration(QPainter &painter, const QRectF& update
     Q_UNUSED(canvas);
 
     const qreal borderDelta = 2.0;
-    const QPen guidesPen(m_d->guidesColor, 0);
+    const QPen guidesPen(m_d->guidesConfig.guidesPen());
 
     painter.save();
     painter.setPen(guidesPen);

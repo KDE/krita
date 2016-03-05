@@ -19,6 +19,7 @@
 #include "ui_grid_config_widget.h"
 
 #include "kis_grid_config.h"
+#include "kis_guides_config.h"
 #include "kis_debug.h"
 #include "kis_aspect_ratio_locker.h"
 
@@ -27,7 +28,8 @@ struct GridConfigWidget::Private
 {
     Private() : guiSignalsBlocked(false) {}
 
-    KisGridConfig config;
+    KisGridConfig gridConfig;
+    KisGuidesConfig guidesConfig;
     bool guiSignalsBlocked;
 };
 
@@ -40,8 +42,18 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
 
     ui->colorMain->setAlphaChannelEnabled(true);
     ui->colorSubdivision->setAlphaChannelEnabled(true);
+    ui->colorGuides->setAlphaChannelEnabled(true);
 
-    setGridConfig(m_d->config);
+    setGridConfig(m_d->gridConfig);
+    setGuidesConfig(m_d->guidesConfig);
+
+    connect(ui->chkSpacing, SIGNAL(toggled(bool)), ui->lblXSpacing, SLOT(setVisible(bool)));
+    connect(ui->chkSpacing, SIGNAL(toggled(bool)), ui->lblYSpacing, SLOT(setVisible(bool)));
+    connect(ui->chkSpacing, SIGNAL(toggled(bool)), ui->intHSpacing, SLOT(setVisible(bool)));
+    connect(ui->chkSpacing, SIGNAL(toggled(bool)), ui->intVSpacing, SLOT(setVisible(bool)));
+    connect(ui->chkSpacing, SIGNAL(toggled(bool)), ui->spacingAspectButton, SLOT(setVisible(bool)));
+    connect(ui->chkSpacing, SIGNAL(toggled(bool)), ui->lblSubdivision, SLOT(setVisible(bool)));
+    connect(ui->chkSpacing, SIGNAL(toggled(bool)), ui->intSubdivision, SLOT(setVisible(bool)));
 
     connect(ui->chkOffset, SIGNAL(toggled(bool)), ui->lblXOffset, SLOT(setVisible(bool)));
     connect(ui->chkOffset, SIGNAL(toggled(bool)), ui->lblYOffset, SLOT(setVisible(bool)));
@@ -55,24 +67,33 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
     connect(ui->chkStyle, SIGNAL(toggled(bool)), ui->lblSubdivisionStyle, SLOT(setVisible(bool)));
     connect(ui->chkStyle, SIGNAL(toggled(bool)), ui->selectSubdivisionStyle, SLOT(setVisible(bool)));
     connect(ui->chkStyle, SIGNAL(toggled(bool)), ui->colorSubdivision, SLOT(setVisible(bool)));
+    connect(ui->chkStyle, SIGNAL(toggled(bool)), ui->lblGuidesStyle, SLOT(setVisible(bool)));
+    connect(ui->chkStyle, SIGNAL(toggled(bool)), ui->selectGuidesStyle, SLOT(setVisible(bool)));
+    connect(ui->chkStyle, SIGNAL(toggled(bool)), ui->colorGuides, SLOT(setVisible(bool)));
 
-    connect(ui->chkShowGrid, SIGNAL(stateChanged(int)), SLOT(slotGuiChanged()));
-    connect(ui->chkSnapToGrid, SIGNAL(stateChanged(int)), SLOT(slotGuiChanged()));
+    connect(ui->chkShowGrid, SIGNAL(stateChanged(int)), SLOT(slotGridGuiChanged()));
+    connect(ui->chkSnapToGrid, SIGNAL(stateChanged(int)), SLOT(slotGridGuiChanged()));
 
-    connect(ui->intHSpacing, SIGNAL(valueChanged(int)), SLOT(slotGuiChanged()));
-    connect(ui->intVSpacing, SIGNAL(valueChanged(int)), SLOT(slotGuiChanged()));
-    connect(ui->spacingAspectButton, SIGNAL(keepAspectRatioChanged(bool)), SLOT(slotGuiChanged()));
+    connect(ui->chkShowGuides, SIGNAL(stateChanged(int)), SLOT(slotGuidesGuiChanged()));
+    connect(ui->chkSnapToGuides, SIGNAL(stateChanged(int)), SLOT(slotGuidesGuiChanged()));
+    connect(ui->chkLockGuides, SIGNAL(stateChanged(int)), SLOT(slotGuidesGuiChanged()));
 
-    connect(ui->intXOffset, SIGNAL(valueChanged(int)), SLOT(slotGuiChanged()));
-    connect(ui->intYOffset, SIGNAL(valueChanged(int)), SLOT(slotGuiChanged()));
-    connect(ui->offsetAspectButton, SIGNAL(keepAspectRatioChanged(bool)), SLOT(slotGuiChanged()));
+    connect(ui->intHSpacing, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
+    connect(ui->intVSpacing, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
+    connect(ui->spacingAspectButton, SIGNAL(keepAspectRatioChanged(bool)), SLOT(slotGridGuiChanged()));
 
-    connect(ui->intSubdivision, SIGNAL(valueChanged(int)), SLOT(slotGuiChanged()));
+    connect(ui->intXOffset, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
+    connect(ui->intYOffset, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
+    connect(ui->offsetAspectButton, SIGNAL(keepAspectRatioChanged(bool)), SLOT(slotGridGuiChanged()));
 
-    connect(ui->selectMainStyle, SIGNAL(currentIndexChanged(int)), SLOT(slotGuiChanged()));
-    connect(ui->colorMain, SIGNAL(changed(const QColor&)), SLOT(slotGuiChanged()));
-    connect(ui->selectSubdivisionStyle, SIGNAL(currentIndexChanged(int)), SLOT(slotGuiChanged()));
-    connect(ui->colorSubdivision, SIGNAL(changed(const QColor&)), SLOT(slotGuiChanged()));
+    connect(ui->intSubdivision, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
+
+    connect(ui->selectMainStyle, SIGNAL(currentIndexChanged(int)), SLOT(slotGridGuiChanged()));
+    connect(ui->colorMain, SIGNAL(changed(const QColor&)), SLOT(slotGridGuiChanged()));
+    connect(ui->selectSubdivisionStyle, SIGNAL(currentIndexChanged(int)), SLOT(slotGridGuiChanged()));
+    connect(ui->colorSubdivision, SIGNAL(changed(const QColor&)), SLOT(slotGridGuiChanged()));
+    connect(ui->selectGuidesStyle, SIGNAL(currentIndexChanged(int)), SLOT(slotGuidesGuiChanged()));
+    connect(ui->colorGuides, SIGNAL(changed(const QColor&)), SLOT(slotGuidesGuiChanged()));
 
     ui->chkStyle->setChecked(false);
     ui->chkOffset->setChecked(false);
@@ -97,35 +118,65 @@ void GridConfigWidget::setGridConfig(const KisGridConfig &value)
     setGridConfigImpl(value);
 }
 
+void GridConfigWidget::setGuidesConfig(const KisGuidesConfig &value)
+{
+    KisGuidesConfig currentConfig = fetchGuiGuidesConfig();
+    if (currentConfig == value) return;
+
+    setGuidesConfigImpl(value);
+}
+
 void GridConfigWidget::setGridConfigImpl(const KisGridConfig &value)
 {
-    m_d->config = value;
+    m_d->gridConfig = value;
     m_d->guiSignalsBlocked = true;
 
-    ui->offsetAspectButton->setKeepAspectRatio(m_d->config.offsetAspectLocked());
-    ui->spacingAspectButton->setKeepAspectRatio(m_d->config.spacingAspectLocked());
-    ui->chkShowGrid->setChecked(m_d->config.showGrid());
-    ui->chkSnapToGrid->setChecked(m_d->config.snapToGrid());
-    ui->intHSpacing->setValue(m_d->config.spacing().x());
-    ui->intVSpacing->setValue(m_d->config.spacing().y());
-    ui->intXOffset->setValue(m_d->config.offset().x());
-    ui->intYOffset->setValue(m_d->config.offset().y());
-    ui->intSubdivision->setValue(m_d->config.subdivision());
+    ui->offsetAspectButton->setKeepAspectRatio(m_d->gridConfig.offsetAspectLocked());
+    ui->spacingAspectButton->setKeepAspectRatio(m_d->gridConfig.spacingAspectLocked());
+    ui->chkShowGrid->setChecked(m_d->gridConfig.showGrid());
+    ui->chkSnapToGrid->setChecked(m_d->gridConfig.snapToGrid());
+    ui->intHSpacing->setValue(m_d->gridConfig.spacing().x());
+    ui->intVSpacing->setValue(m_d->gridConfig.spacing().y());
+    ui->intXOffset->setValue(m_d->gridConfig.offset().x());
+    ui->intYOffset->setValue(m_d->gridConfig.offset().y());
+    ui->intSubdivision->setValue(m_d->gridConfig.subdivision());
 
-    ui->selectMainStyle->setCurrentIndex(int(m_d->config.lineTypeMain()));
-    ui->selectSubdivisionStyle->setCurrentIndex(int(m_d->config.lineTypeSubdivision()));
+    ui->selectMainStyle->setCurrentIndex(int(m_d->gridConfig.lineTypeMain()));
+    ui->selectSubdivisionStyle->setCurrentIndex(int(m_d->gridConfig.lineTypeSubdivision()));
 
-    ui->colorMain->setColor(m_d->config.colorMain());
-    ui->colorSubdivision->setColor(m_d->config.colorSubdivision());
+    ui->colorMain->setColor(m_d->gridConfig.colorMain());
+    ui->colorSubdivision->setColor(m_d->gridConfig.colorSubdivision());
 
     m_d->guiSignalsBlocked = false;
 
-    emit valueChanged();
+    emit gridValueChanged();
+}
+
+void GridConfigWidget::setGuidesConfigImpl(const KisGuidesConfig &value)
+{
+    m_d->guidesConfig = value;
+    m_d->guiSignalsBlocked = true;
+
+    ui->chkShowGuides->setChecked(m_d->guidesConfig.showGuides());
+    ui->chkSnapToGuides->setChecked(m_d->guidesConfig.snapToGuides());
+    ui->chkLockGuides->setChecked(m_d->guidesConfig.lockGuides());
+
+    ui->selectGuidesStyle->setCurrentIndex(int(m_d->guidesConfig.guidesLineType()));
+    ui->colorGuides->setColor(m_d->guidesConfig.guidesColor());
+
+    m_d->guiSignalsBlocked = false;
+
+    emit guidesValueChanged();
 }
 
 KisGridConfig GridConfigWidget::gridConfig() const
 {
-    return m_d->config;
+    return m_d->gridConfig;
+}
+
+KisGuidesConfig GridConfigWidget::guidesConfig() const
+{
+    return m_d->guidesConfig;
 }
 
 KisGridConfig GridConfigWidget::fetchGuiGridConfig() const
@@ -159,12 +210,36 @@ KisGridConfig GridConfigWidget::fetchGuiGridConfig() const
     return config;
 }
 
-void GridConfigWidget::slotGuiChanged()
+KisGuidesConfig GridConfigWidget::fetchGuiGuidesConfig() const
+{
+    KisGuidesConfig config = m_d->guidesConfig;
+
+    config.setShowGuides(ui->chkShowGuides->isChecked());
+    config.setSnapToGuides(ui->chkSnapToGuides->isChecked());
+    config.setLockGuides(ui->chkLockGuides->isChecked());
+
+    config.setGuidesLineType(KisGuidesConfig::LineTypeInternal(ui->selectGuidesStyle->currentIndex()));
+    config.setGuidesColor(ui->colorGuides->color());
+
+    return config;
+}
+
+void GridConfigWidget::slotGridGuiChanged()
 {
     if (m_d->guiSignalsBlocked) return;
 
     KisGridConfig currentConfig = fetchGuiGridConfig();
-    if (currentConfig == m_d->config) return;
+    if (currentConfig == m_d->gridConfig) return;
 
     setGridConfigImpl(currentConfig);
+}
+
+void GridConfigWidget::slotGuidesGuiChanged()
+{
+    if (m_d->guiSignalsBlocked) return;
+
+    KisGuidesConfig currentConfig = fetchGuiGuidesConfig();
+    if (currentConfig == m_d->guidesConfig) return;
+
+    setGuidesConfigImpl(currentConfig);
 }

@@ -32,6 +32,8 @@
 #include "grid_config_widget.h"
 #include "kis_grid_manager.h"
 #include "kis_grid_config.h"
+#include "kis_guides_manager.h"
+#include "kis_guides_config.h"
 
 
 GridDockerDock::GridDockerDock( )
@@ -39,7 +41,8 @@ GridDockerDock::GridDockerDock( )
     , m_canvas(0)
 {
     m_configWidget = new GridConfigWidget(this);
-    connect(m_configWidget, SIGNAL(valueChanged()), SLOT(slotGuiGridConfigChanged()));
+    connect(m_configWidget, SIGNAL(gridValueChanged()), SLOT(slotGuiGridConfigChanged()));
+    connect(m_configWidget, SIGNAL(guidesValueChanged()), SLOT(slotGuiGuidesConfigChanged()));
     setWidget(m_configWidget);
     setEnabled(m_canvas);
 }
@@ -68,6 +71,12 @@ void GridDockerDock::setCanvas(KoCanvasBase * canvas)
             SIGNAL(sigRequestUpdateGridConfig(const KisGridConfig&)),
             this,
             SLOT(slotGridConfigUpdateRequested(const KisGridConfig&)));
+
+        m_canvasConnections.addConnection(
+            m_canvas->viewManager()->guidesManager(),
+            SIGNAL(sigRequestUpdateGuidesConfig(const KisGuidesConfig&)),
+            this,
+            SLOT(slotGuidesConfigUpdateRequested(const KisGuidesConfig&)));
     }
 }
 
@@ -85,4 +94,15 @@ void GridDockerDock::slotGuiGridConfigChanged()
 void GridDockerDock::slotGridConfigUpdateRequested(const KisGridConfig &config)
 {
     m_configWidget->setGridConfig(config);
+}
+
+void GridDockerDock::slotGuiGuidesConfigChanged()
+{
+    if (!m_canvas) return;
+    m_canvas->viewManager()->guidesManager()->setGuidesConfig(m_configWidget->guidesConfig());
+}
+
+void GridDockerDock::slotGuidesConfigUpdateRequested(const KisGuidesConfig &config)
+{
+    m_configWidget->setGuidesConfig(config);
 }

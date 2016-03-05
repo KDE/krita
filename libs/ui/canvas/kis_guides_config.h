@@ -29,10 +29,19 @@
 
 class QDomElement;
 class QDomDocument;
+class QColor;
+class QPen;
 
 
 class KRITAUI_EXPORT KisGuidesConfig : boost::equality_comparable<KisGuidesConfig>
 {
+public:
+    enum LineTypeInternal {
+        LINE_SOLID = 0,
+        LINE_DASHED,
+        LINE_DOTTED
+    };
+
 public:
     KisGuidesConfig();
     ~KisGuidesConfig();
@@ -80,6 +89,14 @@ public:
     bool snapToGuides() const;
     void setSnapToGuides(bool value);
 
+    LineTypeInternal guidesLineType() const;
+    void setGuidesLineType(LineTypeInternal value);
+
+    QColor guidesColor() const;
+    void setGuidesColor(const QColor &value);
+
+    QPen guidesPen() const;
+
     /// Returns the list of horizontal guide lines.
     const QList<qreal>& horizontalGuideLines() const;
 
@@ -87,6 +104,9 @@ public:
     const QList<qreal>& verticalGuideLines() const;
 
     bool hasGuides() const;
+
+    void loadStaticData();
+    void saveStaticData() const;
 
     QDomElement saveToXml(QDomDocument& doc, const QString &tag) const;
     bool loadFromXml(const QDomElement &parent);

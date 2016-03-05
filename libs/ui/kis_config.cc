@@ -732,6 +732,29 @@ void KisConfig::setGridSubdivisionColor(const QColor & v) const
     m_cfg.writeEntry("gridsubdivisioncolor", v);
 }
 
+quint32 KisConfig::guidesLineStyle(bool defaultValue) const
+{
+    int v = m_cfg.readEntry("guidesLineStyle", 0);
+    v = qBound(0, v, 2);
+    return (defaultValue ? 0 : v);
+}
+
+void KisConfig::setGuidesLineStyle(quint32 v) const
+{
+    m_cfg.writeEntry("guidesLineStyle", v);
+}
+
+QColor KisConfig::guidesColor(bool defaultValue) const
+{
+    QColor col(99, 99, 99);
+    return (defaultValue ? col : m_cfg.readEntry("guidesColor", col));
+}
+
+void KisConfig::setGuidesColor(const QColor & v) const
+{
+    m_cfg.writeEntry("guidesColor", v);
+}
+
 qint32 KisConfig::checkSize(bool defaultValue) const
 {
     return (defaultValue ? 32 : m_cfg.readEntry("checksize", 32));

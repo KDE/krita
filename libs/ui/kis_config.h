@@ -188,6 +188,11 @@ public:
     QColor getGridSubdivisionColor(bool defaultValue = false) const;
     void setGridSubdivisionColor(const QColor & v) const;
 
+    quint32 guidesLineStyle(bool defaultValue = false) const;
+    void setGuidesLineStyle(quint32 v) const;
+    QColor guidesColor(bool defaultValue = false) const;
+    void setGuidesColor(const QColor & v) const;
+
     qint32 checkSize(bool defaultValue = false) const;
     void setCheckSize(qint32 checkSize) const;
 

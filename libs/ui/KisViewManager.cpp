@@ -687,6 +687,11 @@ KisGridManager * KisViewManager::gridManager() const
     return &d->gridManager;
 }
 
+KisGuidesManager * KisViewManager::guidesManager() const
+{
+    return &d->guidesManager;
+}
+
 KisPaintingAssistantsManager* KisViewManager::paintingAssistantsManager() const
 {
     return &d->paintingAssistantsManager;

@@ -22,6 +22,10 @@
 #include "kis_guides_config.h"
 
 #include <QDomDocument>
+#include <QColor>
+#include <QPen>
+
+#include "kis_config.h"
 #include "kis_dom_utils.h"
 
 
@@ -38,7 +42,9 @@ public:
             vertGuideLines == rhs.vertGuideLines &&
             showGuides == rhs.showGuides &&
             snapToGuides == rhs.snapToGuides &&
-            lockGuides == rhs.lockGuides;
+            lockGuides == rhs.lockGuides &&
+            guidesColor == rhs.guidesColor &&
+            guidesLineType == rhs.guidesLineType;
     }
 
     QList<qreal> horzGuideLines;
@@ -47,11 +53,17 @@ public:
     bool showGuides;
     bool snapToGuides;
     bool lockGuides;
+
+    QColor guidesColor;
+    LineTypeInternal guidesLineType;
+
+    Qt::PenStyle toPenStyle(LineTypeInternal type);
 };
 
 KisGuidesConfig::KisGuidesConfig()
     : d(new Private())
 {
+    loadStaticData();
 }
 
 KisGuidesConfig::~KisGuidesConfig()
@@ -136,6 +148,40 @@ void KisGuidesConfig::setSnapToGuides(bool value)
     d->snapToGuides = value;
 }
 
+KisGuidesConfig::LineTypeInternal
+KisGuidesConfig::guidesLineType() const
+{
+    return d->guidesLineType;
+}
+
+void KisGuidesConfig::setGuidesLineType(LineTypeInternal value)
+{
+    d->guidesLineType = value;
+}
+
+
+QColor KisGuidesConfig::guidesColor() const
+{
+    return d->guidesColor;
+}
+
+void KisGuidesConfig::setGuidesColor(const QColor &value)
+{
+    d->guidesColor = value;
+}
+
+ Qt::PenStyle KisGuidesConfig::Private::toPenStyle(LineTypeInternal type) {
+    return type == LINE_SOLID ? Qt::SolidLine :
+        type == LINE_DASHED ? Qt::DashLine :
+        type == LINE_DOTTED ? Qt::DotLine :
+        Qt::DashDotDotLine;
+}
+
+QPen KisGuidesConfig::guidesPen() const
+{
+    return QPen(d->guidesColor, 0, d->toPenStyle(d->guidesLineType));
+}
+
 const QList<qreal>& KisGuidesConfig::horizontalGuideLines() const
 {
     return d->horzGuideLines;
@@ -151,17 +197,31 @@ bool KisGuidesConfig::hasGuides() const
     return !d->horzGuideLines.isEmpty() || !d->vertGuideLines.isEmpty();
 }
 
+void KisGuidesConfig::loadStaticData()
+{
+    KisConfig cfg;
+    d->guidesLineType = LineTypeInternal(cfg.guidesLineStyle());
+    d->guidesColor = cfg.guidesColor();
+}
+
+void KisGuidesConfig::saveStaticData() const
+{
+    KisConfig cfg;
+    cfg.setGuidesLineStyle(d->guidesLineType);
+    cfg.setGuidesColor(d->guidesColor);
+}
+
 QDomElement KisGuidesConfig::saveToXml(QDomDocument& doc, const QString &tag) const
 {
-    QDomElement gridElement = doc.createElement(tag);
-    KisDomUtils::saveValue(&gridElement, "showGuides", d->showGuides);
-    KisDomUtils::saveValue(&gridElement, "snapToGuides", d->snapToGuides);
-    KisDomUtils::saveValue(&gridElement, "lockGuides", d->lockGuides);
+    QDomElement guidesElement = doc.createElement(tag);
+    KisDomUtils::saveValue(&guidesElement, "showGuides", d->showGuides);
+    KisDomUtils::saveValue(&guidesElement, "snapToGuides", d->snapToGuides);
+    KisDomUtils::saveValue(&guidesElement, "lockGuides", d->lockGuides);
 
-    KisDomUtils::saveValue(&gridElement, "horizontalGuides", d->horzGuideLines.toVector());
-    KisDomUtils::saveValue(&gridElement, "verticalGuides", d->vertGuideLines.toVector());
+    KisDomUtils::saveValue(&guidesElement, "horizontalGuides", d->horzGuideLines.toVector());
+    KisDomUtils::saveValue(&guidesElement, "verticalGuides", d->vertGuideLines.toVector());
 
-    return gridElement;
+    return guidesElement;
 }
 
 bool KisGuidesConfig::loadFromXml(const QDomElement &parent)

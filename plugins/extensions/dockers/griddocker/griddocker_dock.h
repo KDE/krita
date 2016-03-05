@@ -27,6 +27,7 @@ class KisCanvas2;
 class GridConfigWidget;
 class KisSignalAutoConnection;
 class KisGridConfig;
+class KisGuidesConfig;
 
 class GridDockerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
@@ -40,6 +41,9 @@ public:
 public Q_SLOTS:
     void slotGuiGridConfigChanged();
     void slotGridConfigUpdateRequested(const KisGridConfig &config);
+
+    void slotGuiGuidesConfigChanged();
+    void slotGuidesConfigUpdateRequested(const KisGuidesConfig &config);
 
 private:
     GridConfigWidget *m_configWidget;

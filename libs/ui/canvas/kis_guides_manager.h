@@ -21,6 +21,7 @@
 
 #include <QScopedPointer>
 #include <QObject>
+#include "kritaui_export.h"
 
 class KisView;
 class KisActionManager;
@@ -28,7 +29,7 @@ class KisCanvasDecoration;
 class KisGuidesConfig;
 
 
-class KisGuidesManager : public QObject
+class KRITAUI_EXPORT KisGuidesManager : public QObject
 {
     Q_OBJECT
 public:
@@ -38,13 +39,16 @@ public:
     void setup(KisActionManager *actionManager);
     void setView(QPointer<KisView> view);
 
-    KisCanvasDecoration* decoration() const;
+    void setGuidesConfig(const KisGuidesConfig &config);
 
     bool showGuides() const;
     bool lockGuides() const;
     bool snapToGuides() const;
 
     bool eventFilter(QObject *obj, QEvent *event);
+
+Q_SIGNALS:
+    void sigRequestUpdateGuidesConfig(const KisGuidesConfig &config);
 
 public Q_SLOTS:
     void setShowGuides(bool value);

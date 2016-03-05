@@ -26,6 +26,7 @@ class GridConfigWidget;
 }
 
 class KisGridConfig;
+class KisGuidesConfig;
 
 class GridConfigWidget : public QWidget
 {
@@ -38,15 +39,23 @@ public:
     void setGridConfig(const KisGridConfig &value);
     KisGridConfig gridConfig() const;
 
+    void setGuidesConfig(const KisGuidesConfig &value);
+    KisGuidesConfig guidesConfig() const;
+
 private Q_SLOTS:
-    void slotGuiChanged();
+    void slotGridGuiChanged();
+    void slotGuidesGuiChanged();
 
 Q_SIGNALS:
-    void valueChanged();
+    void gridValueChanged();
+    void guidesValueChanged();
 
 private:
     KisGridConfig fetchGuiGridConfig() const;
     void setGridConfigImpl(const KisGridConfig &value);
+
+    KisGuidesConfig fetchGuiGuidesConfig() const;
+    void setGuidesConfigImpl(const KisGuidesConfig &value);
 
 private:
     Ui::GridConfigWidget *ui;

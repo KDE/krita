@@ -97,13 +97,16 @@ KisGuidesManager::~KisGuidesManager()
 {
 }
 
-KisCanvasDecoration* KisGuidesManager::decoration() const
+void KisGuidesManager::setGuidesConfig(const KisGuidesConfig &config)
 {
-    return m_d->decoration;
+    if (config == m_d->guidesConfig) return;
+    setGuidesConfigImpl(config, true);
 }
 
 void KisGuidesManager::setGuidesConfigImpl(const KisGuidesConfig &value, bool emitModified)
 {
+    m_d->guidesConfig = value;
+
     if (m_d->decoration && value != m_d->decoration->guidesConfig()) {
         m_d->decoration->setVisible(value.showGuides());
         m_d->decoration->setGuidesConfig(value);
@@ -112,6 +115,7 @@ void KisGuidesManager::setGuidesConfigImpl(const KisGuidesConfig &value, bool em
     KisDocument *doc = m_d->view ? m_d->view->document() : 0;
     if (doc && doc->guidesConfig() != value) {
         doc->setGuidesConfig(value);
+        value.saveStaticData();
 
         if (emitModified) {
             // TODO: make editing guides undoable, so that no
@@ -129,6 +133,8 @@ void KisGuidesManager::setGuidesConfigImpl(const KisGuidesConfig &value, bool em
     if (!m_d->isGuideValid(m_d->currentGuide)) {
         m_d->updateSnappingStatus(value);
     }
+
+    emit sigRequestUpdateGuidesConfig(m_d->guidesConfig);
 }
 
 void KisGuidesManager::attachEventFilterImpl(bool value)
@@ -488,8 +494,6 @@ Qt::MouseButton KisGuidesManager::Private::getButtonFromEvent(QEvent *event)
 bool KisGuidesManager::eventFilter(QObject *obj, QEvent *event)
 {
     if (!m_d->view || obj != m_d->view->canvasBase()->canvasWidget()) return false;
-    KisCanvas2 *canvas = m_d->view->canvasBase();
-    const KisCoordinatesConverter *converter = canvas->coordinatesConverter();
 
     bool retval = false;
 

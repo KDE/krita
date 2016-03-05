@@ -40,6 +40,7 @@ class KisCanvasResourceProvider;
 class KisDocument;
 class KisFilterManager;
 class KisGridManager;
+class KisGuidesManager;
 class KisImageManager;
 class KisNodeManager;
 class KisPaintingAssistantsManager;
@@ -167,6 +168,7 @@ public:  // Krita specific interfaces
 public:
 
     KisGridManager * gridManager() const;
+    KisGuidesManager * guidesManager() const;
     KisPaintingAssistantsManager* paintingAssistantsManager() const;
 
     /// disable and enable toolbar controls. used for disabling them during painting.

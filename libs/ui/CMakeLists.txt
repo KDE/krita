@@ -7,28 +7,7 @@ if (CMAKE_COMPILER_IS_GNUCXX)
 endif ()
 
 include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/flake
-    ${CMAKE_CURRENT_SOURCE_DIR}/ora
-    ${CMAKE_CURRENT_SOURCE_DIR}/qtsingleapplication
     ${CMAKE_CURRENT_SOURCE_DIR}/qtlockedfile
-    ${CMAKE_CURRENT_SOURCE_DIR}/actions
-    ${CMAKE_CURRENT_SOURCE_DIR}/canvas
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs
-    ${CMAKE_CURRENT_SOURCE_DIR}/forms
-    ${CMAKE_CURRENT_SOURCE_DIR}/input
-    ${CMAKE_CURRENT_SOURCE_DIR}/input/config
-    ${CMAKE_CURRENT_SOURCE_DIR}/input/wintab
-    ${CMAKE_CURRENT_SOURCE_DIR}/kisexiv2
-    ${CMAKE_CURRENT_SOURCE_DIR}/kra
-    ${CMAKE_CURRENT_SOURCE_DIR}/layerstyles
-    ${CMAKE_CURRENT_SOURCE_DIR}/opengl
-    ${CMAKE_CURRENT_SOURCE_DIR}/operations
-    ${CMAKE_CURRENT_SOURCE_DIR}/processing
-    ${CMAKE_CURRENT_SOURCE_DIR}/recorder
-    ${CMAKE_CURRENT_SOURCE_DIR}/resourcemanager
-    ${CMAKE_CURRENT_SOURCE_DIR}/tool
-    ${CMAKE_CURRENT_SOURCE_DIR}/tool/strokes
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets
     ${EXIV2_INCLUDE_DIR}
     ${EIGEN3_INCLUDE_DIR}
     ${OCIO_INCLUDE_DIR}

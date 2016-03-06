@@ -61,8 +61,8 @@ bool testFilterSrcNotIsDev(KisFilterSP f)
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
-    QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "lena_" + f->id() + ".png");
+    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "carrot.png");
+    QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "carrot_" + f->id() + ".png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     KisPaintDeviceSP dstdev = new KisPaintDevice(cs);
     dev->convertFromQImage(qimage, 0, 0, 0);
@@ -92,7 +92,7 @@ bool testFilterSrcNotIsDev(KisFilterSP f)
     QPoint errpoint;
 
     if (!compareQImages(errpoint, result, dstdev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
-        dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save(QString("src_not_is_dst_lena_%1.png").arg(f->id()));
+        dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save(QString("src_not_is_dst_carrot_%1.png").arg(f->id()));
         return false;
     }
     return true;
@@ -102,8 +102,8 @@ bool testFilterNoTransaction(KisFilterSP f)
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
-    QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "lena_" + f->id() + ".png");
+    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "carrot.png");
+    QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "carrot_" + f->id() + ".png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(qimage, 0, 0, 0);
 
@@ -132,7 +132,7 @@ bool testFilterNoTransaction(KisFilterSP f)
     QPoint errpoint;
 
     if (!compareQImages(errpoint, result, dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
-        dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save(QString("no_transactio_lena_%1.png").arg(f->id()));
+        dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save(QString("no_transactio_carrot_%1.png").arg(f->id()));
         return false;
     }
     return true;
@@ -142,8 +142,8 @@ bool testFilter(KisFilterSP f)
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
-    QString resultFileName = QString(FILES_DATA_DIR) + QDir::separator() + "lena_" + f->id() + ".png";
+    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "carrot.png");
+    QString resultFileName = QString(FILES_DATA_DIR) + QDir::separator() + "carrot_" + f->id() + ".png";
     QImage result(resultFileName);
     if (!QFileInfo(resultFileName).exists()) {
         dbgKrita << resultFileName << " not found";
@@ -181,7 +181,7 @@ bool testFilter(KisFilterSP f)
 
     if (!compareQImages(errpoint, result, dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
         dbgKrita << errpoint;
-        dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save(QString("lena_%1.png").arg(f->id()));
+        dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save(QString("carrot_%1.png").arg(f->id()));
         return false;
     }
     return true;
@@ -192,8 +192,8 @@ bool testFilterWithSelections(KisFilterSP f)
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
-    QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "lena_" + f->id() + ".png");
+    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "carrot.png");
+    QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "carrot_" + f->id() + ".png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(qimage, 0, 0, 0);
 
@@ -225,7 +225,7 @@ bool testFilterWithSelections(KisFilterSP f)
     QPoint errpoint;
 
     if (!compareQImages(errpoint, result, dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
-        dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save(QString("sel_lena_%1.png").arg(f->id()));
+        dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save(QString("sel_carrot_%1.png").arg(f->id()));
         return false;
     }
 

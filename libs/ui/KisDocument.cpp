@@ -2119,7 +2119,10 @@ const KisGuidesConfig& KisDocument::guidesConfig() const
 
 void KisDocument::setGuidesConfig(const KisGuidesConfig &data)
 {
+    if (d->guidesConfig == data) return;
+
     d->guidesConfig = data;
+    emit sigGuidesConfigChanged(d->guidesConfig);
 }
 
 bool KisDocument::isEmpty() const

@@ -63,6 +63,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_image_patch.cpp
     canvas/kis_image_pyramid.cpp
     canvas/kis_infinity_manager.cpp
+    canvas/kis_change_guides_command.cpp
     canvas/kis_guides_decoration.cpp
     canvas/kis_guides_manager.cpp
     canvas/kis_guides_config.cpp

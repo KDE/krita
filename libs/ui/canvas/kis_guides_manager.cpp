@@ -34,6 +34,7 @@
 #include "kis_algebra_2d.h"
 #include <KoSnapGuide.h>
 #include "kis_snap_line_strategy.h"
+#include "kis_change_guides_command.h"
 
 
 struct KisGuidesManager::Private
@@ -103,6 +104,12 @@ void KisGuidesManager::setGuidesConfig(const KisGuidesConfig &config)
     setGuidesConfigImpl(config, true);
 }
 
+void KisGuidesManager::slotDocumentRequestedConfig(const KisGuidesConfig &config)
+{
+    if (config == m_d->guidesConfig) return;
+    setGuidesConfigImpl(config, false);
+}
+
 void KisGuidesManager::setGuidesConfigImpl(const KisGuidesConfig &value, bool emitModified)
 {
     m_d->guidesConfig = value;
@@ -113,15 +120,17 @@ void KisGuidesManager::setGuidesConfigImpl(const KisGuidesConfig &value, bool em
     }
 
     KisDocument *doc = m_d->view ? m_d->view->document() : 0;
-    if (doc && doc->guidesConfig() != value) {
-        doc->setGuidesConfig(value);
-        value.saveStaticData();
+    if (doc) {
+        KisSignalsBlocker b(doc);
 
         if (emitModified) {
-            // TODO: make editing guides undoable, so that no
-            //       setModified() will be needed
-            doc->setModified(true);
+            KUndo2Command *cmd = new KisChangeGuidesCommand(doc, value);
+            doc->addCommand(cmd);
+        } else {
+            doc->setGuidesConfig(value);
         }
+
+        value.saveStaticData();
     }
 
     const bool shouldFilterEvent =
@@ -270,6 +279,10 @@ void KisGuidesManager::setView(QPointer<KisView> view)
         m_d->viewConnections.addUniqueConnection(
             m_d->view->zoomManager()->verticalRuler(), SIGNAL(guideCreationFinished(Qt::Orientation, const QPoint&)),
             this, SLOT(slotGuideCreationFinished(Qt::Orientation, const QPoint&)));
+
+        m_d->viewConnections.addUniqueConnection(
+            m_d->view->document(), SIGNAL(sigGuidesConfigChanged(const KisGuidesConfig &)),
+            this, SLOT(slotDocumentRequestedConfig(const KisGuidesConfig &)));
     }
 }
 

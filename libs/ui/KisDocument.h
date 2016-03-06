@@ -624,6 +624,8 @@ Q_SIGNALS:
 
     void sigSavingFinished();
 
+    void sigGuidesConfigChanged(const KisGuidesConfig &config);
+
 private:
 
     friend class KisPart;

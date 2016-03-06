@@ -39,8 +39,6 @@ public:
     void setup(KisActionManager *actionManager);
     void setView(QPointer<KisView> view);
 
-    void setGuidesConfig(const KisGuidesConfig &config);
-
     bool showGuides() const;
     bool lockGuides() const;
     bool snapToGuides() const;
@@ -51,6 +49,9 @@ Q_SIGNALS:
     void sigRequestUpdateGuidesConfig(const KisGuidesConfig &config);
 
 public Q_SLOTS:
+    void setGuidesConfig(const KisGuidesConfig &config);
+    void slotDocumentRequestedConfig(const KisGuidesConfig &config);
+
     void setShowGuides(bool value);
     void setLockGuides(bool value);
     void setSnapToGuides(bool value);

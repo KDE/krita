@@ -36,7 +36,7 @@ class QTimer;
  *
  * FIRST_ACTIVE emits the timeout() event immediately and sets a timer of
  * duration \p delay. If the compressor is triggered during this time, it will
- * fire another signal at the end of the delay period. Further events are
+ * wait until the end of the delay period to fire the signal. Further events are
  * ignored until the timer elapses. Think of it as a queue with size 1, and
  * where the leading element is popped every \p delay ms.
  *

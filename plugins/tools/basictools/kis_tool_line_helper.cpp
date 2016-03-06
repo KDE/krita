@@ -161,3 +161,11 @@ void KisToolLineHelper::cancel()
     cancelPaint();
     m_d->linePoints.clear();
 }
+
+
+void KisToolLineHelper::clearPaint()
+{
+    if (!m_d->enabled) return;
+
+    cancelPaint();
+}

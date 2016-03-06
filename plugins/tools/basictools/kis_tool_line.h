@@ -71,19 +71,21 @@ protected Q_SLOTS:
 private Q_SLOTS:
     void updateStroke();
     void setUseSensors(bool value);
-    void setShowOutline(bool value);
+    void setShowPreview(bool value);
+    void setShowGuideline(bool value);
 
 private:
     void paintLine(QPainter& gc, const QRect& rc);
     QPointF straightLine(QPointF point);
-    void updatePreview();
+    void updateGuideline();
+    void updatePreviewTimer(bool showGuide);
     virtual QWidget* createOptionWidget();
 
     void endStroke();
     void cancelStroke();
 
 private:
-    bool m_showOutline;
+    bool m_showGuideline;
 
     QPointF m_startPoint;
     QPointF m_endPoint;
@@ -93,7 +95,8 @@ private:
 
 
     QCheckBox *m_chkUseSensors;
-    QCheckBox *m_chkShowOutline;
+    QCheckBox *m_chkShowPreview;
+    QCheckBox *m_chkShowGuideline;
 
     QScopedPointer<KisPaintingInformationBuilder> m_infoBuilder;
     QScopedPointer<KisToolLineHelper> m_helper;

@@ -522,6 +522,7 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
             menu.addSeparator();
             addActionToMenu(&menu, "create_quick_group");
             addActionToMenu(&menu, "create_quick_clipping_group");
+            addActionToMenu(&menu, "quick_ungroup");
             menu.addSeparator();
 
             menu.addAction(m_removeAction);

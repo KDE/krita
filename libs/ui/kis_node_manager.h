@@ -212,6 +212,7 @@ public Q_SLOTS:
 
     void createQuickGroup();
     void createQuickClippingGroup();
+    void quickUngroup();
 
     void selectAllNodes();
     void selectVisibleNodes();

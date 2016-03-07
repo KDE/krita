@@ -2384,6 +2384,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="quick_ungroup">
+      <icon></icon>
+      <text>Quick Ungroup</text>
+      <whatsThis></whatsThis>
+      <toolTip>Remove grouping of the layers or remove one layer out of the group</toolTip>
+      <iconText>Quick Ungroup</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut>Ctrl+Alt+G</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="create_quick_clipping_group">
       <icon></icon>
       <text>Quick Clipping Group</text>

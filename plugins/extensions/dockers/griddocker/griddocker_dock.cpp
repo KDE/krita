@@ -37,7 +37,7 @@
 
 
 GridDockerDock::GridDockerDock( )
-    : QDockWidget(i18n("Grid"))
+    : QDockWidget(i18n("Grid and Guides"))
     , m_canvas(0)
 {
     m_configWidget = new GridConfigWidget(this);

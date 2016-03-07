@@ -681,6 +681,7 @@ KisNodeJugglerCompressed::KisNodeJugglerCompressed(const KUndo2MagicString &acti
     connect(m_d->image, SIGNAL(sigStrokeCancellationRequested()), SLOT(slotEndStrokeRequested()));
     connect(m_d->image, SIGNAL(sigUndoDuringStrokeRequested()), SLOT(slotCancelStrokeRequested()));
     connect(m_d->image, SIGNAL(sigStrokeEndRequestedActiveNodeFiltered()), SLOT(slotEndStrokeRequested()));
+    connect(m_d->image, SIGNAL(sigAboutToBeDeleted()), SLOT(slotImageAboutToBeDeleted()));
 
     KisImageSignalVector emitSignals;
     emitSignals << ModifiedSignal;
@@ -869,6 +870,14 @@ void KisNodeJugglerCompressed::slotCancelStrokeRequested()
     if (!m_d->isStarted) return;
 
     m_d->applicator->cancel();
+    cleanup();
+}
+
+void KisNodeJugglerCompressed::slotImageAboutToBeDeleted()
+{
+    if (!m_d->isStarted) return;
+
+    m_d->applicator->end();
     cleanup();
 }
 

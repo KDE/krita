@@ -58,6 +58,7 @@ private Q_SLOTS:
     void slotUpdateTimeout();
     void slotEndStrokeRequested();
     void slotCancelStrokeRequested();
+    void slotImageAboutToBeDeleted();
 
 private:
     void startTimers();

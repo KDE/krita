@@ -144,6 +144,7 @@ public: // KoCanvasBase implementation
     KisInputManager* globalInputManager() const;
 
     KisPaintingAssistantsDecoration* paintingAssistantsDecoration() const;
+    QWidget* createSnapGuideConfigWidget() const;
 
 
 public: // KisCanvas2 methods

@@ -17,12 +17,12 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "SnapGuideConfigWidget.h"
+#include "kis_snap_guide_config_widget.h"
 #include "KoSnapGuide.h"
 
 #include <KoIcon.h>
 
-SnapGuideConfigWidget::SnapGuideConfigWidget(KoSnapGuide * snapGuide, QWidget * parent)
+KisSnapGuideConfigWidget::KisSnapGuideConfigWidget(KoSnapGuide * snapGuide, QWidget * parent)
         : QWidget(parent), m_snapGuide(snapGuide)
 {
     widget.setupUi(this);
@@ -48,11 +48,11 @@ SnapGuideConfigWidget::SnapGuideConfigWidget(KoSnapGuide * snapGuide, QWidget * 
     widget.useSnapGuides->setChecked(snapGuide->isSnapping());
 }
 
-SnapGuideConfigWidget::~SnapGuideConfigWidget()
+KisSnapGuideConfigWidget::~KisSnapGuideConfigWidget()
 {
 }
 
-void SnapGuideConfigWidget::snappingEnabled(bool isEnabled)
+void KisSnapGuideConfigWidget::snappingEnabled(bool isEnabled)
 {
     widget.orthogonalSnapGuide->setEnabled(isEnabled);
     widget.nodeSnapGuide->setEnabled(isEnabled);
@@ -65,7 +65,7 @@ void SnapGuideConfigWidget::snappingEnabled(bool isEnabled)
     m_snapGuide->enableSnapping(isEnabled);
 }
 
-void SnapGuideConfigWidget::strategyChanged()
+void KisSnapGuideConfigWidget::strategyChanged()
 {
     KoSnapGuide::Strategies strategies;
     if (widget.orthogonalSnapGuide->isChecked())
@@ -84,12 +84,12 @@ void SnapGuideConfigWidget::strategyChanged()
     m_snapGuide->enableSnapStrategies(strategies);
 }
 
-void SnapGuideConfigWidget::distanceChanged(int distance)
+void KisSnapGuideConfigWidget::distanceChanged(int distance)
 {
     m_snapGuide->setSnapDistance(distance);
 }
 
-void SnapGuideConfigWidget::updateControls()
+void KisSnapGuideConfigWidget::updateControls()
 {
     const KoSnapGuide::Strategies enabledSnapStrategies = m_snapGuide->enabledSnapStrategies();
 
@@ -103,7 +103,7 @@ void SnapGuideConfigWidget::updateControls()
     widget.snapDistance->setValue(m_snapGuide->snapDistance());
 }
 
-void SnapGuideConfigWidget::showEvent(QShowEvent * event)
+void KisSnapGuideConfigWidget::showEvent(QShowEvent * event)
 {
     Q_UNUSED(event);
     updateControls();

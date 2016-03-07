@@ -20,19 +20,19 @@
 #ifndef SNAPGUIDECONFIGWIDGET_H
 #define SNAPGUIDECONFIGWIDGET_H
 
-#include "ui_SnapGuideConfigWidget.h"
+#include "ui_kis_snap_guide_config_widget.h"
 
 #include <QWidget>
 
 class KoSnapGuide;
 class QShowEvent;
 
-class SnapGuideConfigWidget : public QWidget
+class KisSnapGuideConfigWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SnapGuideConfigWidget(KoSnapGuide *snapGuide, QWidget *parent = 0);
-    ~SnapGuideConfigWidget();
+    explicit KisSnapGuideConfigWidget(KoSnapGuide *snapGuide, QWidget *parent = 0);
+    ~KisSnapGuideConfigWidget();
 
 private Q_SLOTS:
     void snappingEnabled(bool isEnabled);

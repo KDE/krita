@@ -67,6 +67,7 @@
 #include "KisView.h"
 #include "kis_canvas_controller.h"
 #include "kis_grid_config.h"
+#include "kis_snap_guide_config_widget.h"
 
 #ifdef HAVE_OPENGL
 #include "kis_animation_player.h"
@@ -911,4 +912,9 @@ KisPaintingAssistantsDecoration* KisCanvas2::paintingAssistantsDecoration() cons
 {
     KisCanvasDecoration* deco = decoration("paintingAssistantsDecoration");
     return qobject_cast<KisPaintingAssistantsDecoration*>(deco);
+}
+
+QWidget *KisCanvas2::createSnapGuideConfigWidget() const
+{
+    return new KisSnapGuideConfigWidget(snapGuide(), d->view);
 }

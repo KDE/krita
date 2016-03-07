@@ -91,7 +91,6 @@ set(kritaflake_SRCS
     KoSnapProxy.cpp
     KoSnapStrategy.cpp
     KoSnapData.cpp
-    SnapGuideConfigWidget.cpp
     KoShapeShadow.cpp
     KoSharedLoadingData.cpp
     KoSharedSavingData.cpp
@@ -202,7 +201,6 @@ set(kritaflake_SRCS
 ki18n_wrap_ui(kritaflake_SRCS
     tools/PathToolOptionWidgetBase.ui
     KoConnectionShapeConfigWidget.ui
-    SnapGuideConfigWidget.ui
     tools/KoZoomToolWidget.ui
 )
 

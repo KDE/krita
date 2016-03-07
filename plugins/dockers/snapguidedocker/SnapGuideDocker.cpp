@@ -42,7 +42,7 @@ public:
     {}
 
     KoCanvasBase *canvas;
-    QWidget *mainWidget;
+    QPointer<QWidget> mainWidget;
 };
 
 SnapGuideDocker::SnapGuideDocker()
@@ -62,6 +62,9 @@ void SnapGuideDocker::setCanvas(KoCanvasBase *canvas)
 
     if (d->canvas) {
         d->canvas->disconnectCanvasObserver(this); // "Every connection you make emits a signal, so duplicate connections emit two signals"
+        if (d->mainWidget) {
+            d->mainWidget->deleteLater();
+        }
     }
 
     if (canvas) {
@@ -77,6 +80,9 @@ void SnapGuideDocker::unsetCanvas()
     setEnabled(false);
     setWidget(0);
     d->canvas = 0;
+    if (d->mainWidget) {
+        d->mainWidget->deleteLater();
+    }
 }
 
 void SnapGuideDocker::locationChanged(Qt::DockWidgetArea area)

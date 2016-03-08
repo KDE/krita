@@ -1,0 +1,13 @@
+{
+    "Id": "Krita Spriter Export Filter",
+    "NoDisplay": "true",
+    "Type": "Service",
+    "X-KDE-Export": "application/x-spriter",
+    "X-KDE-Import": "application/x-krita",
+    "X-KDE-Library": "kritaspriterexport",
+    "X-KDE-ServiceTypes": [
+        "Krita/FileFilter"
+    ],
+    "X-KDE-Weight": "1",
+    "X-KDE-Extensions" : "scml"
+}

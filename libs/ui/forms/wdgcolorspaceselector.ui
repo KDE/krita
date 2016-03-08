@@ -101,32 +101,6 @@
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QPushButton" name="bnDownloadProfile">
-       <property name="toolTip">
-        <string>Install a new profile from a file</string>
-       </property>
-       <property name="whatsThis">
-        <string>Install a new profile from a file.</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="bnUploadProfile">
-       <property name="toolTip">
-        <string>Install a new profile from a file</string>
-       </property>
-       <property name="whatsThis">
-        <string>Install a new profile from a file.</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
    <item row="3" column="0" colspan="2">

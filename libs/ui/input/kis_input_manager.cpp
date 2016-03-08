@@ -68,6 +68,7 @@ uint qHash(QPointer<T> value) {
 
 #define start_ignore_cursor_events() d->blockMouseEvents()
 #define stop_ignore_cursor_events() d->allowMouseEvents()
+#define break_if_should_ignore_cursor_events() if (d->ignoringQtCursorEvents()) break;
 
 // Touch rejection: if touch is disabled on canvas, no need to block mouse press events
 #define touch_start_block_press_events()  d->touchHasBlockedPressEvents = d->disableTouchOnCanvas;
@@ -192,6 +193,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonDblClick: {
         d->debugEvent<QMouseEvent, true>(event);
+        break_if_should_ignore_cursor_events();
         break_if_touch_blocked_press_events();
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
@@ -208,6 +210,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     }
     case QEvent::MouseButtonRelease: {
         d->debugEvent<QMouseEvent, true>(event);
+        break_if_should_ignore_cursor_events();
         break_if_touch_blocked_press_events();
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
@@ -250,6 +253,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     }
     case QEvent::MouseMove: {
         d->debugEvent<QMouseEvent, true>(event);
+        break_if_should_ignore_cursor_events();
 
         if (!d->matcher.pointerMoved(event)) {
             //Update the current tool so things like the brush outline gets updated.

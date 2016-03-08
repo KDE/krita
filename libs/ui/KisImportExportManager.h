@@ -127,7 +127,7 @@ public:
      * call this for importing. When saving from KoShell we already
      * know the Calligra part we are using.
      */
-    static QStringList mimeFilter();
+//    static QStringList mimeFilter();
 
     /**
      * Method used to check if that filter is available at all.
@@ -200,7 +200,8 @@ private:
     Direction m_direction;
 
     /// A static cache for the availability checks of filters
-    static QMap<QString, bool> m_filterAvailable;
+    static QStringList m_importMimeTypes;
+    static QStringList m_exportMimeTypes;
 
     class Private;
     Private * const d;

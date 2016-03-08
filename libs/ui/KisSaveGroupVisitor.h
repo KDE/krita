@@ -47,7 +47,10 @@ public:
      * @param saveTopLevelOnly: if true, only save the toplevel layers, otherwise 
      *        descend into groups and save the bottom-most groups (groups that do
      *        not contain another group.
-     * @param url
+     * @param url the base location where the images will be saved
+     * @param baseName the basename of the images
+     * @param extension the file format extension
+     * @param mimeFilter the export image type
      */    
     KisSaveGroupVisitor(KisImageWSP image,
                         bool saveInvisible,
@@ -55,8 +58,7 @@ public:
                         const QUrl &url,
                         const QString &baseName,
                         const QString &extension,
-                        const QString &mimeFilter,
-                        bool cropLayers = false);
+                        const QString &mimeFilter);
 
     virtual ~KisSaveGroupVisitor();
 

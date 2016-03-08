@@ -28,8 +28,7 @@ KisSaveGroupVisitor::KisSaveGroupVisitor(KisImageWSP image,
                                          const QUrl &url,
                                          const QString &baseName,
                                          const QString &extension,
-                                         const QString &mimeFilter,
-                                         bool cropLayers)
+                                         const QString &mimeFilter)
     : m_image(image)
     , m_saveInvisible(saveInvisible)
     , m_saveTopLevelOnly(saveTopLevelOnly)
@@ -37,7 +36,6 @@ KisSaveGroupVisitor::KisSaveGroupVisitor(KisImageWSP image,
     , m_baseName(baseName)
     , m_extension(extension)
     , m_mimeFilter(mimeFilter)
-    , m_cropLayers(cropLayers)
 {
 }
 

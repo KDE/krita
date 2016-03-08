@@ -346,6 +346,7 @@ set(kritaui_LIB_SRCS
 
     KisPaletteModel.cpp
     KisColorsetChooser.cpp
+    KisSaveGroupVisitor.cpp
 )
 
 if(WIN32)

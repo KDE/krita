@@ -185,7 +185,7 @@
       <whatsThis></whatsThis>
       <toolTip>Show Brush Editor</toolTip>
       <iconText>Show Brush Editor</iconText>
-      <shortcut>i</shortcut>
+      <shortcut>F5</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -195,7 +195,7 @@
       <whatsThis></whatsThis>
       <toolTip>Show Brush Presets</toolTip>
       <iconText>Show Brush Presets</iconText>
-      <shortcut></shortcut>
+      <shortcut>F6</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>

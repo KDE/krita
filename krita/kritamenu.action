@@ -595,7 +595,7 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="new_show_guides">
+    <Action name="view_show_guides">
       <icon></icon>
       <text>Show Guides</text>
       <whatsThis></whatsThis>
@@ -607,7 +607,7 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="new_lock_guides">
+    <Action name="view_lock_guides">
       <icon></icon>
       <text>Lock Guides</text>
       <whatsThis></whatsThis>
@@ -619,7 +619,7 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="new_snap_to_guides">
+    <Action name="view_snap_to_guides">
       <icon></icon>
       <text>Snap to Guides</text>
       <whatsThis></whatsThis>

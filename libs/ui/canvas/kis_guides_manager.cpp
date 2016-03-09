@@ -178,9 +178,9 @@ void KisGuidesManager::syncActionsStatus()
 {
     if (!m_d->view) return;
 
-    m_d->syncAction("new_show_guides", m_d->guidesConfig.showGuides());
-    m_d->syncAction("new_lock_guides", m_d->guidesConfig.lockGuides());
-    m_d->syncAction("new_snap_to_guides", m_d->guidesConfig.snapToGuides());
+    m_d->syncAction("view_show_guides", m_d->guidesConfig.showGuides());
+    m_d->syncAction("view_lock_guides", m_d->guidesConfig.lockGuides());
+    m_d->syncAction("view_snap_to_guides", m_d->guidesConfig.snapToGuides());
 
     m_d->syncAction("view_snap_orthogonal", m_d->snapConfig.orthogonal());
     m_d->syncAction("view_snap_node", m_d->snapConfig.node());
@@ -255,13 +255,13 @@ void KisGuidesManager::setup(KisActionManager *actionManager)
 {
     KisAction *action = 0;
 
-    action = actionManager->createAction("new_show_guides");
+    action = actionManager->createAction("view_show_guides");
     connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowGuides(bool)));
 
-    action = actionManager->createAction("new_lock_guides");
+    action = actionManager->createAction("view_lock_guides");
     connect(action, SIGNAL(toggled(bool)), this, SLOT(setLockGuides(bool)));
 
-    action = actionManager->createAction("new_snap_to_guides");
+    action = actionManager->createAction("view_snap_to_guides");
     connect(action, SIGNAL(toggled(bool)), this, SLOT(setSnapToGuides(bool)));
 
     action = actionManager->createAction("show_snap_options_popup");
@@ -676,7 +676,7 @@ void KisGuidesManager::slotShowSnapOptions()
 
     menu.addSection(i18n("Snap to:"));
     menu.addAction(m_d->createShortenedAction(i18n("Grid"), "view_snap_to_grid", &menu));
-    menu.addAction(m_d->createShortenedAction(i18n("Guides"), "new_snap_to_guides", &menu));
+    menu.addAction(m_d->createShortenedAction(i18n("Guides"), "view_snap_to_guides", &menu));
     menu.addAction(m_d->createShortenedAction(i18n("Orthogonal"), "view_snap_orthogonal", &menu));
 
     menu.addAction(m_d->createShortenedAction(i18n("Node"), "view_snap_node", &menu));

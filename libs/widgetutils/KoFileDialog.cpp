@@ -30,6 +30,7 @@
 
 #include <QMimeDatabase>
 #include <QMimeType>
+#include <KoJsonTrader.h>
 
 class Q_DECL_HIDDEN KoFileDialog::Private
 {
@@ -347,6 +348,10 @@ QString KoFileDialog::filename()
 
         QMimeDatabase db;
         d->mimeType = db.mimeTypeForFile(url);
+        if (d->mimeType == "application/octet-stream") {
+            KoJsonTrader jt;
+            d->mimeType = jt.mimeTypes(QFileInfo(url).suffix()).first();
+        }
         saveUsedDir(url, d->dialogName);
     }
     return url;

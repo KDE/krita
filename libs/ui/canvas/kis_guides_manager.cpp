@@ -26,7 +26,7 @@
 #include "kis_action_manager.h"
 #include "kis_action.h"
 #include "kis_signals_blocker.h"
-#include "kis_input_manager.h"
+#include "input/kis_input_manager.h"
 #include "kis_coordinates_converter.h"
 #include "kis_zoom_manager.h"
 #include "kis_signal_auto_connection.h"

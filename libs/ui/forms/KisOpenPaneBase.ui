@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>505</width>
-    <height>256</height>
+    <height>270</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -27,10 +27,16 @@
        <item>
         <widget class="QTreeWidget" name="m_sectionList">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>170</width>
+           <height>0</height>
+          </size>
          </property>
          <property name="iconSize">
           <size>
@@ -58,13 +64,6 @@
            <string notr="true">1</string>
           </property>
          </column>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="m_openExistingButton">
-         <property name="text">
-          <string>Open Existing Document</string>
-         </property>
         </widget>
        </item>
        <item>

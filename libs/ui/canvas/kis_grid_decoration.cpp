@@ -73,6 +73,11 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
         } else {
             scaleCoeff *= 2;
         }
+
+        if (scaleCoeff > 32768) {
+            qWarning() << "WARNING: Grid Scale Coeff is too high! That is surely a bug!";
+            return;
+        }
     }
 
     const QPen mainPen = m_d->config.penMain();

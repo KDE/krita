@@ -88,4 +88,4 @@ void MoveStrokeTest::testMoveStroke()
     tester.test();
 }
 
-QTEST_MAIN(MoveStrokeTest)
+QTEST_GUILESS_MAIN(MoveStrokeTest)

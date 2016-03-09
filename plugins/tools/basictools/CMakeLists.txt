@@ -1,4 +1,4 @@
-if (NOT WIN32 AND NOT APPLE)
+if (NOT APPLE)
     add_subdirectory(tests)
 endif ()
 

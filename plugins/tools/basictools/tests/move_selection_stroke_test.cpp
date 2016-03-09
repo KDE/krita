@@ -127,4 +127,4 @@ void MoveSelectionStrokeTest::test()
 
 }
 
-QTEST_MAIN(MoveSelectionStrokeTest)
+QTEST_GUILESS_MAIN(MoveSelectionStrokeTest)

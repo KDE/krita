@@ -117,7 +117,7 @@ void KisInputManager::Private::EventEater::eatOneMousePress()
 #endif
 }
 
-bool KisInputManager::Private::ignoreQtCursorEvents()
+bool KisInputManager::Private::ignoringQtCursorEvents()
 {
     return eventEater.hungry;
 }

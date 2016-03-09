@@ -49,12 +49,11 @@ Boston, MA 02110-1301, USA.
 // static cache for filter availability
 QMap<QString, bool> KisImportExportManager::m_filterAvailable;
 
-KisImportExportManager::KisImportExportManager(KisDocument* document,
-                                               KoProgressUpdater* progressUpdater)
+KisImportExportManager::KisImportExportManager(KisDocument* document)
     : m_document(document)
     , m_parentChain(0)
     , m_graph("")
-    , d(new Private(progressUpdater))
+    , d(new Private(0))
 {
     d->batch = false;
 }
@@ -563,6 +562,11 @@ void KisImportExportManager::setBatchMode(const bool batch)
 bool KisImportExportManager::getBatchMode(void) const
 {
     return d->batch;
+}
+
+void KisImportExportManager::setProgresUpdater(KoProgressUpdater *updater)
+{
+    d->progressUpdater = updater;
 }
 
 KoProgressUpdater* KisImportExportManager::progressUpdater() const

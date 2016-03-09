@@ -14,6 +14,7 @@ endif()
 
 if(PNG_FOUND)
     add_subdirectory(png)
+    add_subdirectory(csv)
 endif()
 
 if(OPENEXR_FOUND)

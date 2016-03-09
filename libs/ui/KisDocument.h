@@ -412,6 +412,9 @@ public:
 
     /**
      * @return the object to report progress to.
+     *
+     * This is only not zero if loading or saving is in progress.
+     *
      * One can add more KoUpdaters to it to make the progress reporting more
      * accurate. If no active progress reporter is present, 0 is returned.
      **/
@@ -523,8 +526,6 @@ public:
      *
      * @param settingsWriter
      */
-    void saveUnitOdf(KoXmlWriter *settingsWriter) const;
-
     bool loadNativeFormatFromByteArray(QByteArray &data);
 
     KisGridConfig gridConfig() const;
@@ -554,17 +555,6 @@ public:
      * Returns the global undo stack
      */
     KUndo2Stack *undoStack();
-
-
-    /**
-     * Set the output stream to report profile information to.
-     */
-    void setProfileStream(QTextStream *profilestream);
-
-    /**
-     * Set the output stream to report profile information to.
-     */
-    void setProfileReferenceTime(const QTime& referenceTime);
 
 public Q_SLOTS:
 
@@ -639,8 +629,8 @@ private:
     void setDisregardAutosaveFailure(bool disregardFailure);
 
     /**
-     *  Loads a document from KReadOnlyPart::m_file (KParts takes care of downloading
-     *  remote documents).
+     *  Loads a document
+     *
      *  Applies a filter if necessary, and calls loadNativeFormat in any case
      *  You should not have to reimplement, except for very special cases.
      *
@@ -651,15 +641,8 @@ private:
     bool openFile();
 
     /**
-     * This method is called by @a openFile() to allow applications to setup there
-     * own KoProgressUpdater-subTasks which are then taken into account for the
-     * displayed progressbar during loading.
-     */
-    void setupOpenFileSubProgress();
-
-    /**
-     *  Saves a document to KReadOnlyPart::m_file (KParts takes care of uploading
-     *  remote documents)
+     *  Saves a document
+     *
      *  Applies a filter if necessary, and calls saveNativeFormat in any case
      *  You should not have to reimplement, except for very special cases.
      */

@@ -136,10 +136,6 @@ KisOpenPane::KisOpenPane(QWidget *parent, const QStringList& mimeFilter, const Q
     d->setupUi(this);
 
     m_mimeFilter = mimeFilter;
-    d->m_openExistingButton->setText(i18n("Open Existing Document"));
-
-    connect(d->m_openExistingButton, SIGNAL(clicked()),
-            this, SLOT(openFileDialog()));
 
     KoSectionListDelegate* delegate = new KoSectionListDelegate(d->m_sectionList);
     d->m_sectionList->setItemDelegate(delegate);

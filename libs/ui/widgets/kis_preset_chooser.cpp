@@ -112,9 +112,15 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     }
     if (option.state & QStyle::State_Selected) {
         painter->setCompositionMode(QPainter::CompositionMode_HardLight);
-        painter->setOpacity(0.65);
+        painter->setOpacity(1.0);
         painter->fillRect(option.rect, option.palette.highlight());
-    }
+
+        // highlight is not strong enough to pick out preset. draw border around it.
+        painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
+        painter->setPen(QPen(option.palette.highlight(), 4, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
+        QRect selectedBorder = option.rect.adjusted(2 , 2, -2, -2); // constrict the rectangle so it doesn't bleed into other presets
+        painter->drawRect(selectedBorder);
+       }
     painter->restore();
 }
 

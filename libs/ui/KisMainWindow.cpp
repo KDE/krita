@@ -944,7 +944,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         else {
             dialog.setDefaultDir(suggestedURL.toLocalFile(), true);
         }
-        dialog.setMimeTypeFilters(mimeFilter, KIS_MIME_TYPE);
+        // Default to all supported file types if user is exporting, otherwise use Krita default
+        dialog.setMimeTypeFilters(mimeFilter, isExporting() ? "" : KIS_MIME_TYPE);
         QUrl newURL = QUrl::fromUserInput(dialog.filename());
 
         if (newURL.isLocalFile()) {

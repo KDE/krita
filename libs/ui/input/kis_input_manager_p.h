@@ -55,7 +55,7 @@ public:
     KisToolProxy *toolProxy = 0;
 
     bool forwardAllEventsToTool = false;
-    bool ignoreQtCursorEvents();
+    bool ignoringQtCursorEvents();
 
     bool disableTouchOnCanvas = false;
     bool touchHasBlockedPressEvents = false;
@@ -85,7 +85,7 @@ public:
     void debugEvent(QEvent *event)
     {
       if (!KisTabletDebugger::instance()->debugEnabled()) return;
-      QString msg1 = useBlocking && ignoreQtCursorEvents() ? "[BLOCKED] " : "[       ]";
+      QString msg1 = useBlocking && ignoringQtCursorEvents() ? "[BLOCKED] " : "[       ]";
       Event *specificEvent = static_cast<Event*>(event);
       dbgTablet << KisTabletDebugger::instance()->eventToString(*specificEvent, msg1);
     }

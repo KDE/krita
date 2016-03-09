@@ -240,7 +240,6 @@ public:
         docInfo(0),
         progressUpdater(0),
         progressProxy(0),
-        profileStream(0),
         filterManager(0),
         specialOutputFlag(0),   // default is native format
         isImporting(false),
@@ -287,8 +286,6 @@ public:
 
     KoProgressUpdater *progressUpdater;
     KoProgressProxy *progressProxy;
-    QTextStream *profileStream;
-    QTime profileReferenceTime;
 
     KoUnit unit;
 
@@ -361,8 +358,7 @@ public:
     QList<KisPaintingAssistant*> assistants;
     KisGridConfig gridConfig;
 
-    bool openFile()
-    {
+    bool openFile() {
         DocumentProgressProxy *progressProxy = 0;
         if (!document->progressProxy()) {
             KisMainWindow *mainWindow = 0;
@@ -428,9 +424,9 @@ public:
 
         if (image) {
             imageIdleConnection.reset(
-                new KisSignalAutoConnection(
-                    &imageIdleWatcher, SIGNAL(startedIdleMode()),
-                    image.data(), SLOT(explicitRegenerateLevelOfDetail())));
+                        new KisSignalAutoConnection(
+                            &imageIdleWatcher, SIGNAL(startedIdleMode()),
+                            image.data(), SLOT(explicitRegenerateLevelOfDetail())));
         }
     }
 };
@@ -442,7 +438,8 @@ KisDocument::KisDocument()
     d->undoStack->setParent(this);
 
     d->isEmpty = true;
-    d->filterManager = new KisImportExportManager(this, d->progressUpdater);
+    d->filterManager = new KisImportExportManager(this);
+    d->filterManager->setProgresUpdater(d->progressUpdater);
 
     connect(&d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
     setAutoSave(defaultAutoSave());
@@ -590,13 +587,21 @@ bool KisDocument::saveFile()
         KBackup::backupFile(url().toLocalFile(), d->backupPath);
     }
 
-    emit statusBarMessage(i18n("Saving..."));
     qApp->processEvents();
+
     bool ret = false;
     bool suppressErrorDialog = false;
+
+    // create the main progress monitoring object for loading, this can
+    // contain subtasks for filtering and loading
+    d->progressUpdater = new KoProgressUpdater(d->progressProxy, KoProgressUpdater::Unthreaded);
+    d->progressUpdater->start(100, i18n("Saving Document"));
+    d->filterManager->setProgresUpdater(d->progressUpdater);
+
     if (!isNativeFormat(outputMimeType)) {
         dbgUI << "Saving to format" << outputMimeType << "in" << localFilePath();
         // Not native format : save using export filter
+        d->filterManager->setProgresUpdater(d->progressUpdater);
         KisImportExportFilter::ConversionStatus status = d->filterManager->exportDocument(localFilePath(), outputMimeType);
         ret = status == KisImportExportFilter::OK;
         suppressErrorDialog = (status == KisImportExportFilter::UserCancelled || status == KisImportExportFilter::BadConversionGraph);
@@ -607,13 +612,22 @@ bool KisDocument::saveFile()
         ret = saveNativeFormat(localFilePath());
     }
 
+
     if (ret) {
+        QPointer<KoUpdater> updater = d->progressUpdater->startSubtask(1, "clear undo stack");
+        updater->setProgress(0);
         d->undoStack->setClean();
+        updater->setProgress(100);
+
         removeAutoSaveFiles();
         // Restart the autosave timer
         // (we don't want to autosave again 2 seconds after a real save)
         setAutoSave(d->autoSaveDelay);
     }
+
+    delete d->progressUpdater;
+    d->filterManager->setProgresUpdater(0);
+    d->progressUpdater = 0;
 
     QApplication::restoreOverrideCursor();
     if (!ret) {
@@ -646,7 +660,6 @@ bool KisDocument::saveFile()
         d->mimeType = outputMimeType;
         setConfirmNonNativeSave(isExporting(), false);
     }
-    emit clearStatusBarMessage();
 
     return ret;
 }
@@ -870,7 +883,7 @@ bool KisDocument::saveNativeFormatCalligra(KoStore *store)
     }
     if (store->open("documentinfo.xml")) {
         QDomDocument doc = KisDocument::createDomDocument("document-info"
-                           /*DTD name*/, "document-info" /*tag name*/, "1.1");
+                                                          /*DTD name*/, "document-info" /*tag name*/, "1.1");
 
 
         doc = d->docInfo->save(doc);
@@ -1032,8 +1045,7 @@ QString KisDocument::autoSaveFile(const QString & path) const
         // Never saved?
 #ifdef Q_OS_WIN
         // On Windows, use the temp location (https://bugs.kde.org/show_bug.cgi?id=314921)
-       retval = QString("%1%2.%3-%4-%5-autosave%6").arg(QDir::tempPath()).arg(QDir::separator()).arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension);
-
+        retval = QString("%1%2.%3-%4-%5-autosave%6").arg(QDir::tempPath()).arg(QDir::separator()).arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension);
 #else
         // On Linux, use a temp file in $HOME then. Mark it with the pid so two instances don't overwrite each other's autosave file
         retval = QString("%1%2.%3-%4-%5-autosave%6").arg(QDir::homePath()).arg(QDir::separator()).arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension);
@@ -1202,22 +1214,13 @@ bool KisDocument::openFile()
 
     // create the main progress monitoring object for loading, this can
     // contain subtasks for filtering and loading
-    KoProgressProxy *progressProxy = 0;
-    if (d->progressProxy) {
-        progressProxy = d->progressProxy;
-    }
-
-    d->progressUpdater = new KoProgressUpdater(progressProxy,
-            KoProgressUpdater::Unthreaded,
-            d->profileStream);
-
-    d->progressUpdater->setReferenceTime(d->profileReferenceTime);
+    d->progressUpdater = new KoProgressUpdater(d->progressProxy, KoProgressUpdater::Unthreaded);
     d->progressUpdater->start(100, i18n("Opening Document"));
-
-    setupOpenFileSubProgress();
+    d->filterManager->setProgresUpdater(d->progressUpdater);
 
     if (!isNativeFormat(typeName.toLatin1())) {
         KisImportExportFilter::ConversionStatus status;
+
         importedFile = d->filterManager->importDocument(localFilePath(), typeName, status);
         if (status != KisImportExportFilter::OK) {
             QApplication::restoreOverrideCursor();
@@ -1293,6 +1296,7 @@ bool KisDocument::openFile()
 
             d->isLoading = false;
             delete d->progressUpdater;
+            d->filterManager->setProgresUpdater(0);
             d->progressUpdater = 0;
             return false;
         }
@@ -1336,7 +1340,7 @@ bool KisDocument::openFile()
 #ifndef NDEBUG
             if (!getenv("CALLIGRA_DEBUG_FILTERS"))
 #endif
-            QFile::remove(importedFile);
+                QFile::remove(importedFile);
         }
     }
 
@@ -1345,14 +1349,13 @@ bool KisDocument::openFile()
         emit sigLoadingFinished();
     }
 
-    if (progressUpdater()) {
-        QPointer<KoUpdater> updater
-                = progressUpdater()->startSubtask(1, "clear undo stack");
-        updater->setProgress(0);
-        undoStack()->clear();
-        updater->setProgress(100);
-    }
+    QPointer<KoUpdater> updater = d->progressUpdater->startSubtask(1, "clear undo stack");
+    updater->setProgress(0);
+    undoStack()->clear();
+    updater->setProgress(100);
+
     delete d->progressUpdater;
+    d->filterManager->setProgresUpdater(0);
     d->progressUpdater = 0;
 
     d->isLoading = false;
@@ -1411,8 +1414,8 @@ bool KisDocument::oldLoadAndParse(KoStore *store, const QString& filename, KoXml
     store->close();
     if (!ok) {
         errUI << "Parsing error in " << filename << "! Aborting!" << endl
-        << " In line: " << errorLine << ", column: " << errorColumn << endl
-        << " Error message: " << errorMsg << endl;
+              << " In line: " << errorLine << ", column: " << errorColumn << endl
+              << " Error message: " << errorMsg << endl;
         d->lastErrorMessage = i18n("Parsing error in %1 at line %2, column %3\nError message: %4"
                                    , filename  , errorLine, errorColumn ,
                                    QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0,
@@ -1489,8 +1492,8 @@ bool KisDocument::loadNativeFormat(const QString & file_)
                 res = completeLoading(0);
         } else {
             errUI << "Parsing Error! Aborting! (in KisDocument::loadNativeFormat (QFile))" << endl
-            << "  Line: " << errorLine << " Column: " << errorColumn << endl
-            << "  Message: " << errorMsg << endl;
+                  << "  Line: " << errorLine << " Column: " << errorColumn << endl
+                  << "  Message: " << errorMsg << endl;
             d->lastErrorMessage = i18n("parsing error in the main document at line %1, column %2\nError message: %3", errorLine, errorColumn, i18n(errorMsg.toUtf8()));
             res = false;
         }
@@ -1791,8 +1794,6 @@ bool KisDocument::completeLoading(KoStore* store)
 
 bool KisDocument::completeSaving(KoStore* store)
 {
-    QString uri = url().url();
-
     d->kraSaver->saveKeyframes(store, url().url(), isStoredExtern());
     d->kraSaver->saveBinaryData(store, d->image, url().url(), isStoredExtern(), isAutosaving());
     bool retval = true;
@@ -1820,8 +1821,8 @@ QDomDocument KisDocument::createDomDocument(const QString& appName, const QStrin
     QDomImplementation impl;
     QString url = QString("http://www.calligra.org/DTD/%1-%2.dtd").arg(appName).arg(version);
     QDomDocumentType dtype = impl.createDocumentType(tagName,
-                             QString("-//KDE//DTD %1 %2//EN").arg(appName).arg(version),
-                             url);
+                                                     QString("-//KDE//DTD %1 %2//EN").arg(appName).arg(version),
+                                                     url);
     // The namespace URN doesn't need to include the version number.
     QString namespaceURN = QString("http://www.calligra.org/DTD/%1").arg(appName);
     QDomDocument doc = impl.createDocument(namespaceURN, tagName, dtype);
@@ -2015,11 +2016,11 @@ static const struct {
     const char *localName;
     const char *documentType;
 } TN2DTArray[] = {
-    { "text", I18N_NOOP("a word processing") },
-    { "spreadsheet", I18N_NOOP("a spreadsheet") },
-    { "presentation", I18N_NOOP("a presentation") },
-    { "chart", I18N_NOOP("a chart") },
-    { "drawing", I18N_NOOP("a drawing") }
+{ "text", I18N_NOOP("a word processing") },
+{ "spreadsheet", I18N_NOOP("a spreadsheet") },
+{ "presentation", I18N_NOOP("a presentation") },
+{ "chart", I18N_NOOP("a chart") },
+{ "drawing", I18N_NOOP("a drawing") }
 };
 static const unsigned int numTN2DT = sizeof(TN2DTArray) / sizeof(*TN2DTArray);
 
@@ -2054,12 +2055,6 @@ void KisDocument::setUnit(const KoUnit &unit)
     }
 }
 
-void KisDocument::saveUnitOdf(KoXmlWriter *settingsWriter) const
-{
-    settingsWriter->addConfigItem("unit", unit().symbol());
-}
-
-
 KUndo2Stack *KisDocument::undoStack()
 {
     return d->undoStack;
@@ -2085,16 +2080,6 @@ void KisDocument::slotUndoStackIndexChanged(int idx)
 {
     // even if the document was already modified, call setModified to re-start autosave timer
     setModified(idx != d->undoStack->cleanIndex());
-}
-
-void KisDocument::setProfileStream(QTextStream *profilestream)
-{
-    d->profileStream = profilestream;
-}
-
-void KisDocument::setProfileReferenceTime(const QTime& referenceTime)
-{
-    d->profileReferenceTime = referenceTime;
 }
 
 void KisDocument::clearUndoHistory()
@@ -2150,8 +2135,6 @@ void KisDocument::resetURL() {
 int KisDocument::pageCount() const {
     return 1;
 }
-
-void KisDocument::setupOpenFileSubProgress() {}
 
 KoDocumentInfoDlg *KisDocument::createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const
 {
@@ -2226,8 +2209,9 @@ bool KisDocument::saveAs( const QUrl &kurl )
 bool KisDocument::save()
 {
     d->m_saveOk = false;
-    if ( d->m_file.isEmpty() ) // document was created empty
+    if ( d->m_file.isEmpty() ) { // document was created empty
         d->prepareSaving();
+    }
 
     updateEditingTime(true);
 
@@ -2345,11 +2329,11 @@ bool KisDocument::newImage(const QString& name, qint32 width, qint32 height, con
 }
 
 bool KisDocument::newImage(const QString& name,
-                       qint32 width, qint32 height,
-                       const KoColorSpace* cs,
-                       const KoColor &bgColor, bool backgroundAsLayer,
-                       int numberOfLayers,
-                       const QString &description, const double imageResolution)
+                           qint32 width, qint32 height,
+                           const KoColorSpace* cs,
+                           const KoColor &bgColor, bool backgroundAsLayer,
+                           int numberOfLayers,
+                           const QString &description, const double imageResolution)
 {
     Q_ASSERT(cs);
 

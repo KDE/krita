@@ -24,15 +24,38 @@
 
 class QTimer;
 
+/**
+ * Sets a timer to delay or throttle activation of a Qt slot. One example of
+ * where this is used is to limit the amount of expensive redraw activity on the
+ * canvas.
+ *
+ * There are three behaviors to choose from.
+ *
+ * POSTPONE resets the timer after each call. Therefore if the calls are made
+ * quickly enough, the timer will never be activated.
+ *
+ * FIRST_ACTIVE emits the timeout() event immediately and sets a timer of
+ * duration \p delay. If the compressor is triggered during this time, it will
+ * fire another signal at the end of the delay period. Further events are
+ * ignored until the timer elapses. Think of it as a queue with size 1, and
+ * where the leading element is popped every \p delay ms.
+ *
+ * FIRST_INACTIVE emits the timeout() event at the end of a timer of duration \p
+ * delay ms. The compressor becomes inactive and all events are ignored until
+ * the timer has elapsed.
+ *
+ */
+
+
 class KRITAIMAGE_EXPORT KisSignalCompressor : public QObject
 {
     Q_OBJECT
 
 public:
     enum Mode {
-        POSTPONE, /* every start() portpones event by \p delay ms */
-        FIRST_ACTIVE, /* fist call to start() emits a signal, the latter will happen not earlier after \p delay ms */
-        FIRST_INACTIVE /* the first signal will be emitted not earlier that after \p delay ms after the first call to start() */
+        POSTPONE, /* Calling start() resets the timer to \p delay ms */
+        FIRST_ACTIVE, /* Emit timeout() signal immediately. Throttle further timeout() to rate of one per \p delay ms */
+        FIRST_INACTIVE /* Set a timer \p delay ms, emit timeout() when it elapses. Ignore all events meanwhile. */
     };
 
 public:

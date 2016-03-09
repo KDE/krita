@@ -32,6 +32,7 @@
 
 class KoColorProfile;
 class KoColorSpace;
+class KisSnapConfig;
 
 class KRITAUI_EXPORT KisConfig
 {
@@ -192,6 +193,9 @@ public:
     void setGuidesLineStyle(quint32 v) const;
     QColor guidesColor(bool defaultValue = false) const;
     void setGuidesColor(const QColor & v) const;
+
+    void loadSnapConfig(KisSnapConfig *config, bool defaultValue = false) const;
+    void saveSnapConfig(const KisSnapConfig &config);
 
     qint32 checkSize(bool defaultValue = false) const;
     void setCheckSize(qint32 checkSize) const;

@@ -237,12 +237,6 @@ public:
      */
     KoSnapGuide *snapGuide() const;
 
-    /**
-     * This factory method creates a new widget for the user to change
-     * the snapping guide policies object from snapGuide().
-     */
-    QWidget *createSnapGuideConfigWidget() const;
-
     /// called by KoCanvasController to set the controller that handles this canvas.
     void setCanvasController(KoCanvasController *controller);
 

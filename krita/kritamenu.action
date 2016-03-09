@@ -666,6 +666,102 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="show_snap_options_popup">
+      <icon></icon>
+      <text>Show Snap Options Popup</text>
+      <whatsThis></whatsThis>
+      <toolTip>Show Snap Options Popup</toolTip>
+      <iconText>Show Snap Options Popup</iconText>
+      <activationFlags>1000</activationFlags>
+      <shortcut>Shift+s</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="view_snap_orthogonal">
+      <icon></icon>
+      <text>Snap Orthogonal</text>
+      <whatsThis></whatsThis>
+      <toolTip>Snap Orthogonal</toolTip>
+      <iconText>Snap Orthogonal</iconText>
+      <activationFlags>1000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="view_snap_node">
+      <icon></icon>
+      <text>Snap Node</text>
+      <whatsThis></whatsThis>
+      <toolTip>Snap Node</toolTip>
+      <iconText>Snap Node</iconText>
+      <activationFlags>1000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="view_snap_extension">
+      <icon></icon>
+      <text>Snap Extension</text>
+      <whatsThis></whatsThis>
+      <toolTip>Snap Extension</toolTip>
+      <iconText>Snap Extension</iconText>
+      <activationFlags>1000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="view_snap_intersection">
+      <icon></icon>
+      <text>Snap Intersection</text>
+      <whatsThis></whatsThis>
+      <toolTip>Snap Intersection</toolTip>
+      <iconText>Snap Intersection</iconText>
+      <activationFlags>1000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="view_snap_bounding_box">
+      <icon></icon>
+      <text>Snap Bounding Box</text>
+      <whatsThis></whatsThis>
+      <toolTip>Snap Bounding Box</toolTip>
+      <iconText>Snap Bounding Box</iconText>
+      <activationFlags>1000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="view_snap_image_bounds">
+      <icon></icon>
+      <text>Snap Image Bounds</text>
+      <whatsThis></whatsThis>
+      <toolTip>Snap Image Bounds</toolTip>
+      <iconText>Snap Image Bounds</iconText>
+      <activationFlags>1000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="view_snap_image_center">
+      <icon></icon>
+      <text>Snap Image Center</text>
+      <whatsThis></whatsThis>
+      <toolTip>Snap Image Center</toolTip>
+      <iconText>Snap Image Center</iconText>
+      <activationFlags>1000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
     <Action name="view_toggle_perspective_grid">
       <icon></icon>
       <text>Show Perspective Grid</text>

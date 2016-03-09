@@ -53,6 +53,7 @@ class QRectF;
  * widget in guiutils.
  *
  */
+
 class KRITAFLAKE_EXPORT KoSnapGuide
 {
 public:
@@ -93,6 +94,9 @@ public:
 
     /// returns the extra shapes to use
     KoShape *editedShape() const;
+
+    void enableSnapStrategy(Strategy type, bool value);
+    bool isStrategyEnabled(Strategy type) const;
 
     /// enables the strategies used for snapping
     void enableSnapStrategies(Strategies strategies);

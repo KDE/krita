@@ -67,8 +67,8 @@ set(kritaui_LIB_SRCS
     canvas/kis_guides_decoration.cpp
     canvas/kis_guides_manager.cpp
     canvas/kis_guides_config.cpp
+    canvas/kis_snap_config.cpp
     canvas/kis_snap_line_strategy.cpp
-    canvas/kis_snap_guide_config_widget.cpp
     dialogs/kis_about_application.cpp
     dialogs/kis_dlg_adj_layer_props.cc
     dialogs/kis_dlg_adjustment_layer.cc
@@ -492,7 +492,6 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
 
     wdgsplash.ui
     input/wintab/kis_screen_size_choice_dialog.ui
-    canvas/kis_snap_guide_config_widget.ui
 )
 
 

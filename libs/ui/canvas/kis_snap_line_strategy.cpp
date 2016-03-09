@@ -39,6 +39,8 @@ KisSnapLineStrategy::~KisSnapLineStrategy()
 
 bool KisSnapLineStrategy::snap(const QPointF &mousePosition, KoSnapProxy *proxy, qreal maxSnapDistance)
 {
+    Q_UNUSED(proxy);
+
     QPointF snappedPoint = mousePosition;
     qreal minXDistance = std::numeric_limits<qreal>::max();
     qreal minYDistance = std::numeric_limits<qreal>::max();
@@ -77,6 +79,7 @@ bool KisSnapLineStrategy::snap(const QPointF &mousePosition, KoSnapProxy *proxy,
 
 QPainterPath KisSnapLineStrategy::decoration(const KoViewConverter &converter) const
 {
+    Q_UNUSED(converter);
     return QPainterPath();
 }
 

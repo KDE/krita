@@ -18,6 +18,7 @@
 
 #include "kis_guides_manager.h"
 
+#include <QMenu>
 #include <QGuiApplication>
 #include "kis_guides_decoration.h"
 #include <KoRuler.h>
@@ -35,6 +36,7 @@
 #include <KoSnapGuide.h>
 #include "kis_snap_line_strategy.h"
 #include "kis_change_guides_command.h"
+#include "kis_snap_config.h"
 
 
 struct KisGuidesManager::Private
@@ -51,6 +53,7 @@ struct KisGuidesManager::Private
 
     KisGuidesDecoration *decoration;
     KisGuidesConfig guidesConfig;
+    KisSnapConfig snapConfig;
     QPointer<KisView> view;
 
     typedef QPair<Qt::Orientation, int> GuideHandle;
@@ -75,6 +78,8 @@ struct KisGuidesManager::Private
     QPointF alignToPixels(const QPointF docPoint);
     QPointF getDocPointFromEvent(QEvent *event);
     Qt::MouseButton getButtonFromEvent(QEvent *event);
+    QAction* createShortenedAction(const QString &text, const QString &parentId, QObject *parent);
+    void syncAction(const QString &actionName, bool value);
 
     GuideHandle currentGuide;
 
@@ -160,19 +165,30 @@ void KisGuidesManager::attachEventFilterImpl(bool value)
     }
 }
 
+void KisGuidesManager::Private::syncAction(const QString &actionName, bool value)
+{
+    KisActionManager *actionManager = view->viewManager()->actionManager();
+    KisAction *action = actionManager->actionByName(actionName);
+    KIS_ASSERT_RECOVER_RETURN(action);
+    KisSignalsBlocker b(action);
+    action->setChecked(value);
+}
+
 void KisGuidesManager::syncActionsStatus()
 {
     if (!m_d->view) return;
 
-    KisActionManager *actionManager = m_d->view->viewManager()->actionManager();
-    KisAction *showGuidesAction = actionManager->actionByName("new_show_guides");
-    KisAction *lockGuidesAction = actionManager->actionByName("new_lock_guides");
-    KisAction *snapToGuidesAction = actionManager->actionByName("new_snap_to_guides");
+    m_d->syncAction("new_show_guides", m_d->guidesConfig.showGuides());
+    m_d->syncAction("new_lock_guides", m_d->guidesConfig.lockGuides());
+    m_d->syncAction("new_snap_to_guides", m_d->guidesConfig.snapToGuides());
 
-    KisSignalsBlocker l(showGuidesAction, lockGuidesAction, snapToGuidesAction);
-    showGuidesAction->setChecked(m_d->guidesConfig.showGuides());
-    lockGuidesAction->setChecked(m_d->guidesConfig.lockGuides());
-    snapToGuidesAction->setChecked(m_d->guidesConfig.snapToGuides());
+    m_d->syncAction("view_snap_orthogonal", m_d->snapConfig.orthogonal());
+    m_d->syncAction("view_snap_node", m_d->snapConfig.node());
+    m_d->syncAction("view_snap_extension", m_d->snapConfig.extension());
+    m_d->syncAction("view_snap_intersection", m_d->snapConfig.intersection());
+    m_d->syncAction("view_snap_bounding_box", m_d->snapConfig.boundingBox());
+    m_d->syncAction("view_snap_image_bounds", m_d->snapConfig.imageBounds());
+    m_d->syncAction("view_snap_image_center", m_d->snapConfig.imageCenter());
 }
 
 void KisGuidesManager::Private::updateSnappingStatus(const KisGuidesConfig &value)
@@ -189,6 +205,17 @@ void KisGuidesManager::Private::updateSnappingStatus(const KisGuidesConfig &valu
     }
 
     snapGuide->overrideSnapStrategy(KoSnapGuide::GuideLineSnapping, guidesSnap);
+    snapGuide->enableSnapStrategy(KoSnapGuide::GuideLineSnapping, guidesSnap);
+
+    snapGuide->enableSnapStrategy(KoSnapGuide::OrthogonalSnapping, snapConfig.orthogonal());
+    snapGuide->enableSnapStrategy(KoSnapGuide::NodeSnapping, snapConfig.node());
+    snapGuide->enableSnapStrategy(KoSnapGuide::ExtensionSnapping, snapConfig.extension());
+    snapGuide->enableSnapStrategy(KoSnapGuide::IntersectionSnapping, snapConfig.intersection());
+    snapGuide->enableSnapStrategy(KoSnapGuide::BoundingBoxSnapping, snapConfig.boundingBox());
+    snapGuide->enableSnapStrategy(KoSnapGuide::DocumentBoundsSnapping, snapConfig.imageBounds());
+    snapGuide->enableSnapStrategy(KoSnapGuide::DocumentCenterSnapping, snapConfig.imageCenter());
+
+    snapConfig.saveStaticData();
 }
 
 bool KisGuidesManager::showGuides() const
@@ -229,14 +256,39 @@ void KisGuidesManager::setup(KisActionManager *actionManager)
     KisAction *action = 0;
 
     action = actionManager->createAction("new_show_guides");
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(setShowGuides(bool)));
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowGuides(bool)));
 
     action = actionManager->createAction("new_lock_guides");
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(setLockGuides(bool)));
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setLockGuides(bool)));
 
     action = actionManager->createAction("new_snap_to_guides");
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(setSnapToGuides(bool)));
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setSnapToGuides(bool)));
 
+    action = actionManager->createAction("show_snap_options_popup");
+    connect(action, SIGNAL(triggered()), this, SLOT(slotShowSnapOptions()));
+
+    action = actionManager->createAction("view_snap_orthogonal");
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setSnapOrthogonal(bool)));
+
+    action = actionManager->createAction("view_snap_node");
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setSnapNode(bool)));
+
+    action = actionManager->createAction("view_snap_extension");
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setSnapExtension(bool)));
+
+    action = actionManager->createAction("view_snap_intersection");
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setSnapIntersection(bool)));
+
+    action = actionManager->createAction("view_snap_bounding_box");
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setSnapBoundingBox(bool)));
+
+    action = actionManager->createAction("view_snap_image_bounds");
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setSnapImageBounds(bool)));
+
+    action = actionManager->createAction("view_snap_image_center");
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setSnapImageCenter(bool)));
+
+    m_d->updateSnappingStatus(m_d->guidesConfig);
     syncActionsStatus();
 }
 
@@ -245,6 +297,7 @@ void KisGuidesManager::setView(QPointer<KisView> view)
     if (m_d->view) {
         KoSnapGuide *snapGuide = m_d->view->canvasBase()->snapGuide();
         snapGuide->overrideSnapStrategy(KoSnapGuide::GuideLineSnapping, 0);
+        snapGuide->enableSnapStrategy(KoSnapGuide::GuideLineSnapping, false);
 
         m_d->decoration = 0;
         m_d->viewConnections.clear();
@@ -599,4 +652,82 @@ void KisGuidesManager::slotGuideCreationFinished(Qt::Orientation orientation, co
     const QPointF docPos = m_d->alignToPixels(converter->widgetToDocument(widgetPos));
 
     m_d->mouseReleaseHandler(docPos);
+}
+
+QAction* KisGuidesManager::Private::createShortenedAction(const QString &text, const QString &parentId, QObject *parent)
+{
+    KisActionManager *actionManager = view->viewManager()->actionManager();
+    QAction *action = 0;
+    KisAction *parentAction = 0;
+
+    action = new QAction(text, parent);
+    action->setCheckable(true);
+    parentAction = actionManager->actionByName(parentId);
+    action->setChecked(parentAction->isChecked());
+    connect(action, SIGNAL(toggled(bool)), parentAction, SLOT(setChecked(bool)));
+
+    return action;
+}
+
+void KisGuidesManager::slotShowSnapOptions()
+{
+    const QPoint pos = QCursor::pos();
+    QMenu menu;
+
+    menu.addSection(i18n("Snap to:"));
+    menu.addAction(m_d->createShortenedAction(i18n("Grid"), "view_snap_to_grid", &menu));
+    menu.addAction(m_d->createShortenedAction(i18n("Guides"), "new_snap_to_guides", &menu));
+    menu.addAction(m_d->createShortenedAction(i18n("Orthogonal"), "view_snap_orthogonal", &menu));
+
+    menu.addAction(m_d->createShortenedAction(i18n("Node"), "view_snap_node", &menu));
+    menu.addAction(m_d->createShortenedAction(i18n("Extension"), "view_snap_extension", &menu));
+    menu.addAction(m_d->createShortenedAction(i18n("Intersection"), "view_snap_intersection", &menu));
+
+    menu.addAction(m_d->createShortenedAction(i18n("Bounding Box"), "view_snap_bounding_box", &menu));
+    menu.addAction(m_d->createShortenedAction(i18n("Image Bounds"), "view_snap_image_bounds", &menu));
+    menu.addAction(m_d->createShortenedAction(i18n("Image Center"), "view_snap_image_center", &menu));
+
+    menu.exec(pos);
+}
+
+void KisGuidesManager::setSnapOrthogonal(bool value)
+{
+    m_d->snapConfig.setOrthogonal(value);
+    m_d->updateSnappingStatus(m_d->guidesConfig);
+}
+
+void KisGuidesManager::setSnapNode(bool value)
+{
+    m_d->snapConfig.setNode(value);
+    m_d->updateSnappingStatus(m_d->guidesConfig);
+}
+
+void KisGuidesManager::setSnapExtension(bool value)
+{
+    m_d->snapConfig.setExtension(value);
+    m_d->updateSnappingStatus(m_d->guidesConfig);
+}
+
+void KisGuidesManager::setSnapIntersection(bool value)
+{
+    m_d->snapConfig.setIntersection(value);
+    m_d->updateSnappingStatus(m_d->guidesConfig);
+}
+
+void KisGuidesManager::setSnapBoundingBox(bool value)
+{
+    m_d->snapConfig.setBoundingBox(value);
+    m_d->updateSnappingStatus(m_d->guidesConfig);
+}
+
+void KisGuidesManager::setSnapImageBounds(bool value)
+{
+    m_d->snapConfig.setImageBounds(value);
+    m_d->updateSnappingStatus(m_d->guidesConfig);
+}
+
+void KisGuidesManager::setSnapImageCenter(bool value)
+{
+    m_d->snapConfig.setImageCenter(value);
+    m_d->updateSnappingStatus(m_d->guidesConfig);
 }

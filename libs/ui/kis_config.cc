@@ -41,6 +41,7 @@
 
 #include "kis_canvas_resource_provider.h"
 #include "kis_config_notifier.h"
+#include "kis_snap_config.h"
 
 #include <config-ocio.h>
 
@@ -753,6 +754,35 @@ QColor KisConfig::guidesColor(bool defaultValue) const
 void KisConfig::setGuidesColor(const QColor & v) const
 {
     m_cfg.writeEntry("guidesColor", v);
+}
+
+void KisConfig::loadSnapConfig(KisSnapConfig *config, bool defaultValue) const
+{
+    KisSnapConfig defaultConfig(false);
+
+    if (defaultValue) {
+        *config = defaultConfig;
+        return;
+    }
+
+    config->setOrthogonal(m_cfg.readEntry("globalSnapOrthogonal", defaultConfig.orthogonal()));
+    config->setNode(m_cfg.readEntry("globalSnapNode", defaultConfig.node()));
+    config->setExtension(m_cfg.readEntry("globalSnapExtension", defaultConfig.extension()));
+    config->setIntersection(m_cfg.readEntry("globalSnapIntersection", defaultConfig.intersection()));
+    config->setBoundingBox(m_cfg.readEntry("globalSnapBoundingBox", defaultConfig.boundingBox()));
+    config->setImageBounds(m_cfg.readEntry("globalSnapImageBounds", defaultConfig.imageBounds()));
+    config->setImageCenter(m_cfg.readEntry("globalSnapImageCenter", defaultConfig.imageCenter()));
+}
+
+void KisConfig::saveSnapConfig(const KisSnapConfig &config)
+{
+    m_cfg.writeEntry("globalSnapOrthogonal", config.orthogonal());
+    m_cfg.writeEntry("globalSnapNode", config.node());
+    m_cfg.writeEntry("globalSnapExtension", config.extension());
+    m_cfg.writeEntry("globalSnapIntersection", config.intersection());
+    m_cfg.writeEntry("globalSnapBoundingBox", config.boundingBox());
+    m_cfg.writeEntry("globalSnapImageBounds", config.imageBounds());
+    m_cfg.writeEntry("globalSnapImageCenter", config.imageCenter());
 }
 
 qint32 KisConfig::checkSize(bool defaultValue) const

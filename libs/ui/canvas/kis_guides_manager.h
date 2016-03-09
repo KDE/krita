@@ -59,6 +59,15 @@ public Q_SLOTS:
     void slotGuideCreationInProgress(Qt::Orientation orientation, const QPoint &globalPos);
     void slotGuideCreationFinished(Qt::Orientation orientation, const QPoint &globalPos);
 
+    void slotShowSnapOptions();
+
+    void setSnapOrthogonal(bool value);
+    void setSnapNode(bool value);
+    void setSnapExtension(bool value);
+    void setSnapIntersection(bool value);
+    void setSnapBoundingBox(bool value);
+    void setSnapImageBounds(bool value);
+    void setSnapImageCenter(bool value);
 private:
     void setGuidesConfigImpl(const KisGuidesConfig &value, bool emitModified = true);
     void attachEventFilterImpl(bool value);

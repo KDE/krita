@@ -90,6 +90,22 @@ KoShape *KoSnapGuide::editedShape() const
     return d->editedShape;
 }
 
+void KoSnapGuide::enableSnapStrategy(Strategy type, bool value)
+{
+    if ((d->usedStrategies & type) ==  value) return;
+
+    if (value) {
+        d->usedStrategies |= type;
+    } else {
+        d->usedStrategies &= ~type;
+    }
+}
+
+bool KoSnapGuide::isStrategyEnabled(Strategy type) const
+{
+    return d->usedStrategies & type;
+}
+
 void KoSnapGuide::enableSnapStrategies(Strategies strategies)
 {
     d->usedStrategies = strategies;

@@ -175,7 +175,7 @@
       <whatsThis></whatsThis>
       <toolTip>Show Tool Options</toolTip>
       <iconText>Show Tool Options</iconText>
-      <shortcut></shortcut>
+      <shortcut>\</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>

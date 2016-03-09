@@ -761,27 +761,6 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
-
-    <Action name="view_toggle_perspective_grid">
-      <icon></icon>
-      <text>Show Perspective Grid</text>
-      <whatsThis></whatsThis>
-      <toolTip>Show Perspective Grid</toolTip>
-      <iconText>Show Perspective Grid</iconText>
-      <shortcut></shortcut>
-      <isCheckable>true</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="view_clear_perspective_grid">
-      <icon></icon>
-      <text>Clear Perspective Grid</text>
-      <whatsThis></whatsThis>
-      <toolTip>Clear Perspective Grid</toolTip>
-      <iconText>Clear Perspective Grid</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="view_toggle_painting_assistants">
       <icon></icon>
       <text>S&amp;how Painting Assistants</text>

@@ -1275,16 +1275,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="KisToolPerspectiveGrid">
-      <icon></icon>
-      <text>Perspective Grid</text>
-      <whatsThis></whatsThis>
-      <toolTip>Edit the perspective grid</toolTip>
-      <iconText>Edit the perspective grid</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="KisToolPolygon">
       <icon></icon>
       <text>Polygon Tool</text>

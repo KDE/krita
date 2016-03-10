@@ -61,6 +61,7 @@ const QString COMPOSITE_EXCLUSION     = "exclusion";
 const QString COMPOSITE_HARD_MIX      = "hard mix";
 const QString COMPOSITE_OVERLAY       = "overlay";
 const QString COMPOSITE_BEHIND        = "behind";
+const QString COMPOSITE_GREATER        = "greater";
 
 const QString COMPOSITE_DARKEN      = "darken";
 const QString COMPOSITE_BURN        = "burn";//this is also known as 'color burn'.

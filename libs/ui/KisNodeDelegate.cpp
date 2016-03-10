@@ -115,10 +115,69 @@ void KisNodeDelegate::paint(QPainter *p, const QStyleOptionViewItem &o, const QM
         drawVisibilityIconHijack(p, option, index);
         drawDecoration(p, option, index);
         drawExpandButton(p, option, index);
+        drawBranch(p, option, index);
 
         drawProgressBar(p, option, index);
     }
     p->restore();
+}
+
+void KisNodeDelegate::drawBranch(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const {
+    KisNodeViewColorScheme scm;
+    const QPoint base = scm.relThumbnailRect().translated(option.rect.topLeft()).topLeft() - QPoint( scm.indentation(), 0);
+
+    // there is no indention if we are starting negative, so don't draw a branch
+    if (base.x() < 0) {
+        return;
+    }
+
+
+    QPen oldPen = p->pen();
+    const qreal oldOpacity = p->opacity(); // remember previous opacity
+    p->setOpacity(1.0);
+
+    QColor color = scm.gridColor(option, d->view);
+    QColor bgColor = option.state & QStyle::State_Selected ?
+        qApp->palette().color(QPalette::Base) :
+        qApp->palette().color(QPalette::Text);
+    color = KritaUtils::blendColors(color, bgColor, 0.9);
+
+
+    // TODO: if we are a mask type, use dotted lines for the branch style
+    // p->setPen(QPen(p->pen().color(), 2, Qt::DashLine, Qt::RoundCap, Qt::RoundJoin));
+    p->setPen(QPen(color, 0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+
+    QPoint p2 = base + QPoint(scm.iconSize() - scm.decorationMargin()*2, scm.iconSize()*0.45);
+    QPoint p3 =  base + QPoint(scm.iconSize() - scm.decorationMargin()*2, scm.iconSize());
+    QPoint p4 = base + QPoint(scm.iconSize()*2, scm.iconSize());
+    p->drawLine(p2, p3);
+    p->drawLine(p3, p4);
+
+
+
+     // draw parent lines (keep drawing until x position is less than 0
+     QPoint p5 = base - QPoint(scm.iconSize()*1.8, -scm.iconSize()*0.45);
+     QPoint p6 = base - QPoint(scm.iconSize()*1.8, -scm.iconSize());
+
+     QPoint parentBase1 = p5;
+     QPoint parentBase2 = p6;
+
+     // indent lines needs to be very subtle to avoid making the docker busy looking
+     color = KritaUtils::blendColors(color, bgColor, 0.9); // makes it a little lighter than L lines
+     p->setPen(QPen(color, 0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+
+     while (parentBase1.x() > 10) {
+         p->drawLine(parentBase1, parentBase2);
+
+         parentBase1 = parentBase1 - QPoint(scm.iconSize()*2.7 - scm.decorationMargin(), 0);
+         parentBase2 = parentBase2 - QPoint(scm.iconSize()*2.7 - scm.decorationMargin(), 0);
+     }
+
+
+
+
+     p->setPen(oldPen);
+     p->setOpacity(oldOpacity);
 }
 
 void KisNodeDelegate::drawColorLabel(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -155,6 +214,18 @@ void KisNodeDelegate::drawFrame(QPainter *p, const QStyleOptionViewItem &option,
     QPoint p6(option.rect.right(), base.y());
 
     QPoint v(0, option.rect.height());
+
+
+    // draw a line that goes the length of the entire frame. one for the
+    // top, and one for the bottom
+    QPoint pTopLeft(0, option.rect.topLeft().y());
+    QPoint pTopRight(option.rect.bottomRight().x(),option.rect.topLeft().y() );
+    p->drawLine(pTopLeft, pTopRight);
+
+    QPoint pBottomLeft(0, option.rect.topLeft().y() + scm.rowHeight());
+    QPoint pBottomRight(option.rect.bottomRight().x(),option.rect.topLeft().y() + scm.rowHeight() );
+    p->drawLine(pBottomLeft, pBottomRight);
+
 
     const bool paintForParent =
         index.parent().isValid() &&

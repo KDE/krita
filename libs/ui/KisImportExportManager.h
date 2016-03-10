@@ -74,15 +74,8 @@ public:
      * the file to the destination mimetype you prefer.
      *
      * @param path The location you want to export
-     * @param mimetypeHint The mimetype of the file you want to export. You have
-     *        to specify this information only if the automatic detection will
-     *        fail because e.g. you saved an embedded stream to a *.tmp file.
-     *        Most likely you do not have to care about that.
-     * @param parentChain The parent filter chain of this filter manager. Used
-     *        to allow embedding for filters. Most likely you do not have to care.
      */
-    explicit KisImportExportManager(const QString& location, const QByteArray& mimetypeHint = QByteArray(),
-                                    KisFilterChain * const parentChain = 0);
+    explicit KisImportExportManager(const QString& location);
 
     virtual ~KisImportExportManager();
 
@@ -161,10 +154,6 @@ private:
     int direction() const {
         return static_cast<int>(m_direction);
     }
-    friend KisFilterChain *KisFilterChain::filterManagerParentChain() const;
-    KisFilterChain *parentChain() const {
-        return m_parentChain;
-    }
 
     // Private API
     KisImportExportManager(const KisImportExportManager& rhs);
@@ -176,10 +165,8 @@ private:
     void importErrorHelper(const QString& mimeType, const bool suppressDialog = false);
 
     KisDocument *m_document;
-    KisFilterChain *const m_parentChain;
     QUrl m_importUrl;
     QUrl m_exportUrl;
-    QByteArray m_importUrlMimetypeHint;  ///< suggested mimetype
     CalligraFilter::Graph m_graph;
     Direction m_direction;
 

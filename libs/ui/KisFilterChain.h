@@ -126,7 +126,6 @@ private:
 
     explicit KisFilterChain(const KisImportExportManager* manager);
 
-    void appendChainLink(KisFilterEntrySP filterEntry, const QByteArray& from, const QByteArray& to);
     void prependChainLink(KisFilterEntrySP filterEntry, const QByteArray& from, const QByteArray& to);
 
     // These methods are friends of KisFilterManager and provide access
@@ -136,7 +135,6 @@ private:
     QString filterManagerExportFile() const;
     KisDocument* filterManagerKisDocument() const;
     int filterManagerDirection() const;
-    KisFilterChain* filterManagerParentChain() const;
 
 
     // Helper methods which keep track of all the temp files, documents,

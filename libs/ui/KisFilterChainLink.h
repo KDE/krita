@@ -39,7 +39,7 @@ public:
 
     ~ChainLink();
 
-    KisImportExportFilter::ConversionStatus invokeFilter(const ChainLink * const parentChainLink);
+    KisImportExportFilter::ConversionStatus invokeFilter();
 
     QByteArray from() const {
         return m_from;
@@ -58,9 +58,6 @@ public:
 private:
     ChainLink(const ChainLink& rhs);
     ChainLink& operator=(const ChainLink& rhs);
-
-    void setupCommunication(const KisImportExportFilter * const parentFilter) const;
-    void setupConnections(const KisImportExportFilter *sender, const KisImportExportFilter *receiver) const;
 
     KisFilterChain *m_chain;
     KisFilterEntrySP m_filterEntry;

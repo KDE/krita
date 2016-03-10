@@ -66,9 +66,6 @@ KisFilterChain::KisFilterChain(const KisImportExportManager* manager)
 KisFilterChain::~KisFilterChain()
 {
     m_chainLinks.deleteAll();
-
-    if (filterManagerParentChain() && filterManagerParentChain()->m_outputStorage)
-        filterManagerParentChain()->m_outputStorage->leaveDirectory();
     manageIO(); // Called for the 2nd time in a row -> clean up
 }
 
@@ -79,16 +76,11 @@ KisImportExportFilter::ConversionStatus KisFilterChain::invokeChain()
     m_state = Beginning;
     int count = m_chainLinks.count();
 
-    // This is needed due to nasty Microsoft design
-    const ChainLink* parentChainLink = 0;
-    if (filterManagerParentChain())
-        parentChainLink = filterManagerParentChain()->m_chainLinks.current();
-
     // No iterator here, as we need m_chainLinks.current() in outputDocument()
     m_chainLinks.first();
     for (; count > 1 && m_chainLinks.current() && status == KisImportExportFilter::OK;
          m_chainLinks.next(), --count) {
-        status = m_chainLinks.current()->invokeFilter(parentChainLink);
+        status = m_chainLinks.current()->invokeFilter();
         m_state = Middle;
         manageIO();
     }
@@ -103,7 +95,7 @@ KisImportExportFilter::ConversionStatus KisFilterChain::invokeChain()
             m_state |= End;
         else
             m_state = End;
-        status = m_chainLinks.current()->invokeFilter(parentChainLink);
+        status = m_chainLinks.current()->invokeFilter();
         manageIO();
     }
 
@@ -206,11 +198,6 @@ KisDocument* KisFilterChain::outputDocument()
     return m_outputDocument;
 }
 
-void KisFilterChain::appendChainLink(KisFilterEntrySP filterEntry, const QByteArray& from, const QByteArray& to)
-{
-    m_chainLinks.append(new ChainLink(this, filterEntry, from, to));
-}
-
 void KisFilterChain::prependChainLink(KisFilterEntrySP filterEntry, const QByteArray& from, const QByteArray& to)
 {
     m_chainLinks.prepend(new ChainLink(this, filterEntry, from, to));
@@ -234,11 +221,6 @@ KisDocument* KisFilterChain::filterManagerKisDocument() const
 int KisFilterChain::filterManagerDirection() const
 {
     return m_manager->direction();
-}
-
-KisFilterChain* KisFilterChain::filterManagerParentChain() const
-{
-    return m_manager->parentChain();
 }
 
 void KisFilterChain::manageIO()
@@ -276,9 +258,7 @@ void KisFilterChain::manageIO()
         m_outputStorageDevice = 0;
         if (m_outputStorage) {
             m_outputStorage->close();
-            // Don't delete the storage if we're just pointing to the
-            // storage of the parent filter chain
-            if (!filterManagerParentChain() || m_outputStorage->mode() != KoStore::Write)
+            if (m_outputStorage->mode() != KoStore::Write)
                 delete m_outputStorage;
             m_outputStorage = 0;
         }

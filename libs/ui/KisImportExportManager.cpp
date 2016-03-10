@@ -52,7 +52,6 @@ QStringList KisImportExportManager::m_exportMimeTypes;
 
 KisImportExportManager::KisImportExportManager(KisDocument* document)
     : m_document(document)
-    , m_parentChain(0)
     , m_graph("")
     , d(new Private(0))
 {
@@ -60,20 +59,19 @@ KisImportExportManager::KisImportExportManager(KisDocument* document)
 }
 
 
-KisImportExportManager::KisImportExportManager(const QString& location, const QByteArray& mimetypeHint,
-                                               KisFilterChain* const parentChain)
+KisImportExportManager::KisImportExportManager(const QString& location)
     : m_document(0)
-    , m_parentChain(parentChain)
     , m_importUrl(locationToUrl(location))
-    , m_importUrlMimetypeHint(mimetypeHint)
     , m_graph("")
     , d(new Private)
 {
     d->batch = false;
 }
 
-KisImportExportManager::KisImportExportManager(const QByteArray& mimeType) :
-    m_document(0), m_parentChain(0), m_graph(""), d(new Private)
+KisImportExportManager::KisImportExportManager(const QByteArray& mimeType)
+    : m_document(0)
+    , m_graph("")
+    , d(new Private)
 {
     d->batch = false;
     d->importMimeType = mimeType;
@@ -213,10 +211,8 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(c
             if (m_graph.isValid())
                 chain = m_graph.chain(this, mimeType);
         }
-    } else if (!m_importUrlMimetypeHint.isEmpty()) {
-        dbgFile << "Using the mimetype hint:" << m_importUrlMimetypeHint;
-        m_graph.setSourceMimeType(m_importUrlMimetypeHint);
-    } else {
+    }
+    else {
         QMimeDatabase db;
         QMimeType t = db.mimeTypeForUrl(m_importUrl);
         if (!t.isValid() || t.isDefault()) {

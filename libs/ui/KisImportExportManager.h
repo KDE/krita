@@ -120,22 +120,6 @@ public:
     static QStringList mimeFilter(const QByteArray& mimetype, Direction direction,
                                   const QStringList& extraNativeMimeTypes = QStringList());
 
-    /**
-     * The same method as KisFilterManager::mimeFilter but suited for KoShell.
-     * We do not need the mimetype, as we will simply use all available
-     * %Calligra mimetypes. The Direction enum is omitted, as we only
-     * call this for importing. When saving from KoShell we already
-     * know the Calligra part we are using.
-     */
-//    static QStringList mimeFilter();
-
-    /**
-     * Method used to check if that filter is available at all.
-     * @note Slow, but cached
-     */
-    static bool filterAvailable(KisFilterEntrySP entry);
-
-    //@}
 
     /**
      * Set the filter manager is batch mode (no dialog shown)

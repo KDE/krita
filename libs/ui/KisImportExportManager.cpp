@@ -303,52 +303,6 @@ QStringList KisImportExportManager::mimeFilter(const QByteArray &mimetype, Direc
     return QStringList();
 }
 
-// Here we check whether the filter is available. This stuff is quite slow,
-// but I don't see any other convenient (for the user) way out :}
-bool KisImportExportManager::filterAvailable(KisFilterEntrySP entry)
-{
-    if (!entry)
-        return false;
-    if (entry->available != "check")
-        return true;
-
-    // QT5TODO
-#if 1
-    return true;
-#else
-    //dbgFile <<"Checking whether" << entry->service()->name() <<" applies.";
-    // generate some "unique" key
-    QString key = entry->service()->name() + " - " + entry->service()->library();
-
-    if (!m_filterAvailable.contains(key)) {
-        //dbgFile <<"Not cached, checking...";
-
-        KLibrary library(QFile::encodeName(entry->service()->library()));
-        if (library.fileName().isEmpty()) {
-            warnFile << "Huh?? Couldn't load the lib: "
-                     << entry->service()->library();
-            m_filterAvailable[ key ] = false;
-            return false;
-        }
-
-        // This code is "borrowed" from klibloader ;)
-        QByteArray symname = "check_" + QString(library.objectName()).toLatin1();
-        KLibrary::void_function_ptr sym = library.resolveFunction(symname);
-        if (!sym) {
-            //            warnFile << "The library " << library.objectName()
-            //                << " does not offer a check_" << library.objectName()
-            //                << " function." << endl;
-            m_filterAvailable[key] = false;
-        } else {
-            typedef int (*t_func)();
-            t_func check = (t_func)sym;
-            m_filterAvailable[ key ] = check() == 1;
-        }
-    }
-    return m_filterAvailable[key];
-#endif
-}
-
 void KisImportExportManager::importErrorHelper(const QString& mimeType, const bool suppressDialog)
 {
     // ###### FIXME: use KLibLoader::lastErrorMessage() here

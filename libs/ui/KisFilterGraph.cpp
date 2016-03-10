@@ -39,9 +39,9 @@ Boston, MA 02110-1301, USA.
 namespace CalligraFilter {
 
 Graph::Graph(const QByteArray& from)
-        : m_from(from)
-        , m_graphValid(false)
-        , d(0)
+    : m_from(from)
+    , m_graphValid(false)
+    , d(0)
 {
     buildGraph();
     shortestPaths();  // Will return after a single lookup if "from" is invalid (->no check here)
@@ -143,25 +143,21 @@ void Graph::buildGraph()
                 m_vertices.insert(key, new Vertex(key));
         }
 
-        // Are we allowed to use this filter at all?
-        if (KisImportExportManager::filterAvailable(filter)) {
+        Q_FOREACH (const QString& exportIt, filter->export_) {
 
-            Q_FOREACH (const QString& exportIt, filter->export_) {
-
-                // First make sure the export vertex is in place
-                const QByteArray key = exportIt.toLatin1();    // latin1 is okay here
-                Vertex* exp = m_vertices.value(key);
-                if (!exp) {
-                    exp = new Vertex(key);
-                    m_vertices.insert(key, exp);
-                }
-                // Then create the appropriate edges
-                Q_FOREACH (const QString& import, filter->import) {
-                    m_vertices[import.toLatin1()]->addEdge(new Edge(exp, filter));
-                }
+            // First make sure the export vertex is in place
+            const QByteArray key = exportIt.toLatin1();    // latin1 is okay here
+            Vertex* exp = m_vertices.value(key);
+            if (!exp) {
+                exp = new Vertex(key);
+                m_vertices.insert(key, exp);
             }
-        } else
-            dbgFile << "Filter:" << filter->loader()->fileName() << " doesn't apply.";
+            // Then create the appropriate edges
+            Q_FOREACH (const QString& import, filter->import) {
+                m_vertices[import.toLatin1()]->addEdge(new Edge(exp, filter));
+            }
+
+        }
     }
 }
 

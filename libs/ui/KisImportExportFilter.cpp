@@ -27,6 +27,7 @@ Boston, MA 02110-1301, USA.
 #include <QStack>
 #include "KisImportExportManager.h"
 #include "KoUpdater.h"
+#include <klocalizedstring.h>
 
 class Q_DECL_HIDDEN KisImportExportFilter::Private
 {
@@ -52,6 +53,77 @@ KisImportExportFilter::~KisImportExportFilter()
     delete d;
 }
 
+QString KisImportExportFilter::conversionStatusString(ConversionStatus status)
+{
+    QString msg;
+    switch (status) {
+    case OK: break;
+
+    case FilterCreationError:
+        msg = i18n("Could not create the filter plugin"); break;
+
+    case CreationError:
+        msg = i18n("Could not create the output document"); break;
+
+    case FileNotFound:
+        msg = i18n("File not found"); break;
+
+    case StorageCreationError:
+        msg = i18n("Cannot create storage"); break;
+
+    case BadMimeType:
+        msg = i18n("Bad MIME type"); break;
+
+    case EmbeddedDocError:
+        msg = i18n("Error in embedded document"); break;
+
+    case WrongFormat:
+        msg = i18n("Format not recognized"); break;
+
+    case NotImplemented:
+        msg = i18n("Not implemented"); break;
+
+    case ParsingError:
+        msg = i18n("Parsing error"); break;
+
+    case PasswordProtected:
+        msg = i18n("Document is password protected"); break;
+
+    case InvalidFormat:
+        msg = i18n("Invalid file format"); break;
+
+    case InternalError:
+    case UnexpectedEOF:
+    case UnexpectedOpcode:
+    case StupidError: // ?? what is this ??
+    case UsageError:
+        msg = i18n("Internal error"); break;
+
+    case OutOfMemory:
+        msg = i18n("Out of memory"); break;
+
+    case FilterEntryNull:
+        msg = i18n("Empty Filter Plugin"); break;
+
+    case NoDocumentCreated:
+        msg = i18n("Trying to load into the wrong kind of document"); break;
+
+    case DownloadFailed:
+        msg = i18n("Failed to download remote file"); break;
+
+    case ProgressCancelled:
+        msg = i18n("Cancelled by user"); break;
+
+    case UserCancelled:
+    case BadConversionGraph:
+        // intentionally we do not prompt the error message here
+        break;
+
+    default: msg = i18n("Unknown error"); break;
+    }
+    return msg;
+}
+
 void KisImportExportFilter::setUpdater(const QPointer<KoUpdater>& updater)
 {
     Q_ASSERT(updater);
@@ -70,5 +142,6 @@ void KisImportExportFilter::slotProgress(int value)
         d->updater->setValue(value);
     }
 }
+
 
 #include <KisImportExportFilter.moc>

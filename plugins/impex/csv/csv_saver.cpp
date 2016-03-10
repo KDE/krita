@@ -29,7 +29,6 @@
 #include <QIODevice>
 #include <QRect>
 #include <QMimeDatabase>
-#include <QProgressDialog>
 
 #include <KisPart.h>
 #include <KisDocument.h>
@@ -39,7 +38,6 @@
 
 #include <kis_annotation.h>
 #include <kis_types.h>
-#include <KisDocument.h>
 
 #include <kis_debug.h>
 #include <kis_image.h>
@@ -53,9 +51,10 @@
 
 #include "csv_layer_record.h"
 
-CSVSaver::CSVSaver(KisDocument *doc)
+CSVSaver::CSVSaver(KisDocument *doc, bool batchMode)
     : m_image(doc->image())
     , m_doc(doc)
+    , m_batchMode(batchMode)
     , m_stop(false)
 {
 }
@@ -165,21 +164,19 @@ KisImageBuilder_Result CSVSaver::encode(const QUrl &uri,const QString &filename)
 
     KisImageBuilder_Result retval= KisImageBuilder_RESULT_OK;
 
-    QProgressDialog progress(i18n("Exporting CSV..."), i18n("Cancel"),
-                             start, end, KisPart::instance()->currentMainwindow(), 0);
-
-    progress.setWindowModality(Qt::ApplicationModal);
-    progress.setMinimumDuration(1000);
-    progress.setValue(start);
-
+    if (!m_batchMode) {
+        emit m_doc->statusBarMessage(i18n("Saving CSV file..."));
+        emit m_doc->sigProgress(0);
+        connect(m_doc, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
+    }
     int frame = start;
     int step = 0;
 
     do {
         qApp->processEvents();
 
-        if (progress.wasCanceled()) {
-            retval = KisImageBuilder_RESULT_FAILURE;
+        if (m_stop) {
+            retval = KisImageBuilder_RESULT_CANCEL;
             break;
         }
 
@@ -280,7 +277,6 @@ KisImageBuilder_Result CSVSaver::encode(const QUrl &uri,const QString &filename)
             break;
 
         default :    //frames
-            progress.setValue(frame);
 
             if (frame > end) {
                 if (f.write("\r\n") < 0)
@@ -289,6 +285,7 @@ KisImageBuilder_Result CSVSaver::encode(const QUrl &uri,const QString &filename)
                 step = 8;
                 break;
             }
+
             ba = QString("\r\n#%1").arg(frame, 5, 10, QChar('0')).toUtf8();
             if (f.write(ba.data()) < 0) {
                 retval = KisImageBuilder_RESULT_FAILURE;
@@ -300,6 +297,10 @@ KisImageBuilder_Result CSVSaver::encode(const QUrl &uri,const QString &filename)
                 keyframe = layer->channel->keyframeAt(frame);
 
                 if (!keyframe.isNull()) {
+                    if (!m_batchMode) {
+                        emit m_doc->sigProgress(((frame - start) * layers.size() + idx) * 100 /
+                                                ((end - start) * layers.size()));
+                    }
                     retval = getLayer(layer, exportDoc.data(), keyframe, path, frame, idx);
 
                     if (retval != KisImageBuilder_RESULT_OK)
@@ -324,6 +325,12 @@ KisImageBuilder_Result CSVSaver::encode(const QUrl &uri,const QString &filename)
 
     qDeleteAll(layers);
     f.close();
+
+    if (!m_batchMode) {
+        disconnect(m_doc, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
+        emit m_doc->sigProgress(100);
+        emit m_doc->clearStatusBarMessage();
+    }
     QApplication::restoreOverrideCursor();
     return retval;
 }
@@ -410,17 +417,19 @@ KisImageBuilder_Result CSVSaver::getLayer(CSVLayerRecord* layer, KisDocument* ex
 
     KisPNGConverter kpc(exportDoc);
 
-    return kpc.buildFile( QUrl::fromLocalFile(filename), image->bounds(),
-                          image->xRes(), image->yRes(), device,
-                          image->beginAnnotations(), image->endAnnotations(),
-                          options, (KisMetaData::Store* )0 );
+    KisImageBuilder_Result result = kpc.buildFile(QUrl::fromLocalFile(filename), image->bounds(),
+                                                  image->xRes(), image->yRes(), device,
+                                                  image->beginAnnotations(), image->endAnnotations(),
+                                                  options, (KisMetaData::Store* )0 );
+
+    return result;
 }
 
 void CSVSaver::createTempImage(KisDocument* exportDoc)
 {
     exportDoc->setAutoSave(0);
     exportDoc->setOutputMimeType("image/png");
-    exportDoc->setSaveInBatchMode(true);
+    exportDoc->setFileBatchMode(true);
 
     KisImageWSP exportImage = new KisImage(exportDoc->createUndoStore(),
                                            m_image->width(), m_image->height(), m_image->colorSpace(),
@@ -446,4 +455,9 @@ KisImageBuilder_Result CSVSaver::buildAnimation(const QUrl &uri,const QString &f
         return KisImageBuilder_RESULT_NOT_EXIST;
 
     return encode(uri, filename);
+}
+
+void CSVSaver::cancel()
+{
+    m_stop = true;
 }

@@ -31,6 +31,7 @@
 #include "kis_global.h"
 #include "kis_annotation.h"
 #include <kritaui_export.h>
+#include <KisImageBuilderResult.h>
 
 class KoStore;
 class KisDocument;
@@ -69,26 +70,6 @@ struct KisPNGOptions {
     QList<const KisMetaData::Filter*> filters;
     QColor transparencyFillColor;
 
-};
-
-/**
- * Image import/export plugins can use these results to report about success or failure.
- */
-enum KisImageBuilder_Result {
-    KisImageBuilder_RESULT_FAILURE = -400,
-    KisImageBuilder_RESULT_NOT_EXIST = -300,
-    KisImageBuilder_RESULT_NOT_LOCAL = -200,
-    KisImageBuilder_RESULT_BAD_FETCH = -100,
-    KisImageBuilder_RESULT_INVALID_ARG = -50,
-    KisImageBuilder_RESULT_OK = 0,
-    KisImageBuilder_RESULT_PROGRESS = 1,
-    KisImageBuilder_RESULT_EMPTY = 100,
-    KisImageBuilder_RESULT_BUSY = 150,
-    KisImageBuilder_RESULT_NO_URI = 200,
-    KisImageBuilder_RESULT_UNSUPPORTED = 300,
-    KisImageBuilder_RESULT_INTR = 400,
-    KisImageBuilder_RESULT_PATH = 500,
-    KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE = 600
 };
 
 /**

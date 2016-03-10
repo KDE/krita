@@ -266,7 +266,9 @@ public:
         nserver(0),
         macroNestDepth(0),
         imageIdleWatcher(2000 /*ms*/),
-        kraLoader(0)
+        kraLoader(0),
+        suppressProgress(false),
+        fileProgressProxy(0)
     {
         if (QLocale().measurementSystem() == QLocale::ImperialSystem) {
             unit = KoUnit::Inch;
@@ -355,27 +357,19 @@ public:
     KisKraLoader* kraLoader;
     KisKraSaver* kraSaver;
 
+    bool suppressProgress;
+    KoProgressProxy* fileProgressProxy;
+
     QList<KisPaintingAssistant*> assistants;
     KisGridConfig gridConfig;
 
     bool openFile() {
-        DocumentProgressProxy *progressProxy = 0;
-        if (!document->progressProxy()) {
-            KisMainWindow *mainWindow = 0;
-            if (KisPart::instance()->mainWindows().count() > 0) {
-                mainWindow = KisPart::instance()->mainWindows()[0];
-            }
-            progressProxy = new DocumentProgressProxy(mainWindow);
-            document->setProgressProxy(progressProxy);
-        }
+        document->setFileProgressProxy();
         document->setUrl(m_url);
 
         bool ok = document->openFile();
 
-        if (progressProxy) {
-            document->setProgressProxy(0);
-            delete progressProxy;
-        }
+        document->clearFileProgressProxy();
         return ok;
     }
 
@@ -591,18 +585,14 @@ bool KisDocument::saveFile()
 
     bool ret = false;
     bool suppressErrorDialog = false;
+    KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
 
-    // create the main progress monitoring object for loading, this can
-    // contain subtasks for filtering and loading
-    d->progressUpdater = new KoProgressUpdater(d->progressProxy, KoProgressUpdater::Unthreaded);
-    d->progressUpdater->start(100, i18n("Saving Document"));
-    d->filterManager->setProgresUpdater(d->progressUpdater);
+    setFileProgressUpdater(i18n("Saving Document"));
 
     if (!isNativeFormat(outputMimeType)) {
         dbgUI << "Saving to format" << outputMimeType << "in" << localFilePath();
-        // Not native format : save using export filter
-        d->filterManager->setProgresUpdater(d->progressUpdater);
-        KisImportExportFilter::ConversionStatus status = d->filterManager->exportDocument(localFilePath(), outputMimeType);
+
+        status = d->filterManager->exportDocument(localFilePath(), outputMimeType);
         ret = status == KisImportExportFilter::OK;
         suppressErrorDialog = (status == KisImportExportFilter::UserCancelled || status == KisImportExportFilter::BadConversionGraph);
         dbgFile << "Export status was" << status;
@@ -614,24 +604,29 @@ bool KisDocument::saveFile()
 
 
     if (ret) {
-        QPointer<KoUpdater> updater = d->progressUpdater->startSubtask(1, "clear undo stack");
-        updater->setProgress(0);
-        d->undoStack->setClean();
-        updater->setProgress(100);
-
+        if (!d->suppressProgress) {
+            QPointer<KoUpdater> updater = d->progressUpdater->startSubtask(1, "clear undo stack");
+            updater->setProgress(0);
+            d->undoStack->setClean();
+            updater->setProgress(100);
+        } else {
+            d->undoStack->setClean();
+        }
         removeAutoSaveFiles();
         // Restart the autosave timer
         // (we don't want to autosave again 2 seconds after a real save)
         setAutoSave(d->autoSaveDelay);
     }
-
-    delete d->progressUpdater;
-    d->filterManager->setProgresUpdater(0);
-    d->progressUpdater = 0;
+    clearFileProgressUpdater();
 
     QApplication::restoreOverrideCursor();
     if (!ret) {
         if (!suppressErrorDialog) {
+
+            if (errorMessage().isEmpty()) {
+                setErrorMessage(KisImportExportFilter::conversionStatusString(status));
+            }
+
             if (errorMessage().isEmpty()) {
                 QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not save\n%1", localFilePath()));
             } else if (errorMessage() != "USER_CANCELED") {
@@ -703,12 +698,12 @@ void KisDocument::setConfirmNonNativeSave(const bool exporting, const bool on)
     d->confirmNonNativeSave [ exporting ? 1 : 0] = on;
 }
 
-bool KisDocument::saveInBatchMode() const
+bool KisDocument::fileBatchMode() const
 {
     return d->filterManager->getBatchMode();
 }
 
-void KisDocument::setSaveInBatchMode(const bool batchMode)
+void KisDocument::setFileBatchMode(const bool batchMode)
 {
     d->filterManager->setBatchMode(batchMode);
 }
@@ -1212,11 +1207,7 @@ bool KisDocument::openFile()
 
     QString importedFile = localFilePath();
 
-    // create the main progress monitoring object for loading, this can
-    // contain subtasks for filtering and loading
-    d->progressUpdater = new KoProgressUpdater(d->progressProxy, KoProgressUpdater::Unthreaded);
-    d->progressUpdater->start(100, i18n("Opening Document"));
-    d->filterManager->setProgresUpdater(d->progressUpdater);
+    setFileProgressUpdater(i18n("Opening Document"));
 
     if (!isNativeFormat(typeName.toLatin1())) {
         KisImportExportFilter::ConversionStatus status;
@@ -1225,80 +1216,15 @@ bool KisDocument::openFile()
         if (status != KisImportExportFilter::OK) {
             QApplication::restoreOverrideCursor();
 
-            QString msg;
-            switch (status) {
-            case KisImportExportFilter::OK: break;
-
-            case KisImportExportFilter::FilterCreationError:
-                msg = i18n("Could not create the filter plugin"); break;
-
-            case KisImportExportFilter::CreationError:
-                msg = i18n("Could not create the output document"); break;
-
-            case KisImportExportFilter::FileNotFound:
-                msg = i18n("File not found"); break;
-
-            case KisImportExportFilter::StorageCreationError:
-                msg = i18n("Cannot create storage"); break;
-
-            case KisImportExportFilter::BadMimeType:
-                msg = i18n("Bad MIME type"); break;
-
-            case KisImportExportFilter::EmbeddedDocError:
-                msg = i18n("Error in embedded document"); break;
-
-            case KisImportExportFilter::WrongFormat:
-                msg = i18n("Format not recognized"); break;
-
-            case KisImportExportFilter::NotImplemented:
-                msg = i18n("Not implemented"); break;
-
-            case KisImportExportFilter::ParsingError:
-                msg = i18n("Parsing error"); break;
-
-            case KisImportExportFilter::PasswordProtected:
-                msg = i18n("Document is password protected"); break;
-
-            case KisImportExportFilter::InvalidFormat:
-                msg = i18n("Invalid file format"); break;
-
-            case KisImportExportFilter::InternalError:
-            case KisImportExportFilter::UnexpectedEOF:
-            case KisImportExportFilter::UnexpectedOpcode:
-            case KisImportExportFilter::StupidError: // ?? what is this ??
-            case KisImportExportFilter::UsageError:
-                msg = i18n("Internal error"); break;
-
-            case KisImportExportFilter::OutOfMemory:
-                msg = i18n("Out of memory"); break;
-
-            case KisImportExportFilter::FilterEntryNull:
-                msg = i18n("Empty Filter Plugin"); break;
-
-            case KisImportExportFilter::NoDocumentCreated:
-                msg = i18n("Trying to load into the wrong kind of document"); break;
-
-            case KisImportExportFilter::DownloadFailed:
-                msg = i18n("Failed to download remote file"); break;
-
-            case KisImportExportFilter::UserCancelled:
-            case KisImportExportFilter::BadConversionGraph:
-                // intentionally we do not prompt the error message here
-                break;
-
-            default: msg = i18n("Unknown error"); break;
-            }
+            QString msg = KisImportExportFilter::conversionStatusString(status);
 
             if (d->autoErrorHandlingEnabled && !msg.isEmpty()) {
                 QString errorMsg(i18n("Could not open %2.\nReason: %1.\n%3", msg, prettyPathOrUrl(), errorMessage()));
                 QMessageBox::critical(0, i18nc("@title:window", "Krita"), errorMsg);
             }
-
             d->isLoading = false;
-            delete d->progressUpdater;
-            d->filterManager->setProgresUpdater(0);
-            d->progressUpdater = 0;
-            return false;
+            clearFileProgressUpdater();
+           return false;
         }
         d->isEmpty = false;
         dbgUI << "importedFile" << importedFile << "status:" << static_cast<int>(status);
@@ -1349,15 +1275,16 @@ bool KisDocument::openFile()
         emit sigLoadingFinished();
     }
 
-    QPointer<KoUpdater> updater = d->progressUpdater->startSubtask(1, "clear undo stack");
-    updater->setProgress(0);
-    undoStack()->clear();
-    updater->setProgress(100);
+    if (!d->suppressProgress) {
+        QPointer<KoUpdater> updater = d->progressUpdater->startSubtask(1, "clear undo stack");
+        updater->setProgress(0);
+        undoStack()->clear();
+        updater->setProgress(100);
 
-    delete d->progressUpdater;
-    d->filterManager->setProgresUpdater(0);
-    d->progressUpdater = 0;
-
+        clearFileProgressUpdater();
+    } else {
+        undoStack()->clear();
+    }
     d->isLoading = false;
 
     return ok;
@@ -2215,23 +2142,12 @@ bool KisDocument::save()
 
     updateEditingTime(true);
 
-    DocumentProgressProxy *progressProxy = 0;
-    if (!d->document->progressProxy()) {
-        KisMainWindow *mainWindow = 0;
-        if (KisPart::instance()->mainwindowCount() > 0) {
-            mainWindow = KisPart::instance()->mainWindows()[0];
-        }
-        progressProxy = new DocumentProgressProxy(mainWindow);
-        d->document->setProgressProxy(progressProxy);
-    }
+    d->document->setFileProgressProxy();
     d->document->setUrl(url());
 
     bool ok = d->document->saveFile();
 
-    if (progressProxy) {
-        d->document->setProgressProxy(0);
-        delete progressProxy;
-    }
+    d->document->clearFileProgressProxy();
 
     if (ok) {
         return saveToUrl();
@@ -2460,6 +2376,49 @@ void KisDocument::prepareForImport()
 {
     if (d->nserver == 0) {
         init();
+    }
+}
+
+void KisDocument::setFileProgressUpdater(const QString &text)
+{
+    d->suppressProgress = d->filterManager->getBatchMode();
+
+    if (!d->suppressProgress) {
+        d->progressUpdater = new KoProgressUpdater(d->progressProxy, KoProgressUpdater::Unthreaded);
+        d->progressUpdater->start(100, text);
+        d->filterManager->setProgresUpdater(d->progressUpdater);
+
+        connect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
+        connect(KisPart::instance()->currentMainwindow(), SIGNAL(sigProgressCanceled()), this, SIGNAL(sigProgressCanceled()));
+    }
+}
+
+void KisDocument::clearFileProgressUpdater()
+{
+    if (!d->suppressProgress && d->progressUpdater) {
+        disconnect(KisPart::instance()->currentMainwindow(), SIGNAL(sigProgressCanceled()), this, SIGNAL(sigProgressCanceled()));
+        disconnect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
+        delete d->progressUpdater;
+        d->filterManager->setProgresUpdater(0);
+        d->progressUpdater = 0;
+    }
+}
+
+void KisDocument::setFileProgressProxy()
+{
+    if (!d->progressProxy && !d->filterManager->getBatchMode()) {
+        d->fileProgressProxy = progressProxy();
+    } else {
+        d->fileProgressProxy = 0;
+    }
+}
+
+void KisDocument::clearFileProgressProxy()
+{
+    if (d->fileProgressProxy) {
+        setProgressProxy(0);
+        delete d->fileProgressProxy;
+        d->fileProgressProxy = 0;
     }
 }
 

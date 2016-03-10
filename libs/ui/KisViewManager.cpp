@@ -851,9 +851,9 @@ void KisViewManager::slotSaveIncremental()
         QMessageBox::critical(mainWindow(), i18nc("@title:window", "Couldn't save incremental version"), i18n("Alternative names exhausted, try manually saving with a higher number"));
         return;
     }
-    document()->setSaveInBatchMode(true);
+    document()->setFileBatchMode(true);
     document()->saveAs(QUrl::fromUserInput(fileName));
-    document()->setSaveInBatchMode(false);
+    document()->setFileBatchMode(false);
 
     if (mainWindow()) {
         mainWindow()->updateCaption();
@@ -959,10 +959,10 @@ void KisViewManager::slotSaveIncrementalBackup()
         } while (fileAlreadyExists);
 
         // Save both as backup and on current file for interapplication workflow
-        document()->setSaveInBatchMode(true);
+        document()->setFileBatchMode(true);
         QFile::copy(fileName, backupFileName);
         document()->saveAs(QUrl::fromUserInput(fileName));
-        document()->setSaveInBatchMode(false);
+        document()->setFileBatchMode(false);
 
         if (mainWindow()) mainWindow()->updateCaption();
     }

@@ -226,14 +226,14 @@ public:
 
 
     /**
-     * @return true if saving/exporting should inhibit the option dialog
+     * @return true if file operations should inhibit the option dialog
      */
-    bool saveInBatchMode() const;
+    bool fileBatchMode() const;
 
     /**
-     * @param batchMode if true, do not show the option dialog when saving or exporting.
+     * @param batchMode if true, do not show the option dialog for file operations.
      */
-    void setSaveInBatchMode(const bool batchMode);
+    void setFileBatchMode(const bool batchMode);
 
     /**
      * Sets the error message to be shown to the user (use i18n()!)
@@ -556,6 +556,7 @@ public:
      */
     KUndo2Stack *undoStack();
 
+
 public Q_SLOTS:
 
     /**
@@ -590,6 +591,12 @@ Q_SIGNALS:
      * KisMainWindow will take care of displaying a progress bar automatically.
      */
     void sigProgress(int value);
+
+    /**
+     * Progress cancel button pressed
+     * This is emitted by KisDocument
+     */
+    void sigProgressCanceled();
 
     /**
      * Emitted e.g. at the beginning of a save operation
@@ -753,6 +760,26 @@ public:
      * Makes an otherwise empty document ready for import/export
      */
     void prepareForImport();
+
+    /**
+     * Adds progressproxy for file operations
+     */
+    void setFileProgressProxy();
+
+    /**
+     * Clears progressproxy for file operations
+     */
+    void clearFileProgressProxy();
+
+    /**
+     * Adds progressupdater for file operations
+     */
+    void setFileProgressUpdater(const QString &text);
+
+    /**
+     * Clears progressupdater for file operations
+     */
+    void clearFileProgressUpdater();
 
     /**
      * Set the current image to the specified image and turn undo on.

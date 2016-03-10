@@ -25,9 +25,10 @@
 #include <QFile>
 #include <QVector>
 #include <QIODevice>
-#include <QProgressDialog>
+#include <QStatusBar>
 
 #include <KisPart.h>
+#include <KisView.h>
 #include <KisDocument.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -43,9 +44,10 @@
 #include "csv_read_line.h"
 #include "csv_layer_record.h"
 
-CSVLoader::CSVLoader(KisDocument *doc)
+CSVLoader::CSVLoader(KisDocument *doc, bool batchMode)
     : m_image(0)
     , m_doc(doc)
+    , m_batchMode(batchMode)
     , m_stop(false)
 {
 }
@@ -101,18 +103,37 @@ KisImageBuilder_Result CSVLoader::decode(const QUrl &uri, const QString &filenam
     CSVReadLine readLine;
     QScopedPointer<KisDocument> importDoc(KisPart::instance()->createDocument());
     importDoc->setAutoSave(0);
-    importDoc->setSaveInBatchMode(true);
+    importDoc->setFileBatchMode(true);
 
-    QProgressDialog progress(i18n("Importing CSV..."), i18n("Cancel"),
-                             0, 0, KisPart::instance()->currentMainwindow(), 0);
+    KisView* setView(0);
 
+    if (!m_batchMode) {
+        //show the statusbar message even if no view
+        Q_FOREACH (KisView* view, KisPart::instance()->views()) {
+            if (view && view->document() == m_doc) {
+                setView= view;
+                break;
+            }
+        }
+
+        if (!setView) {
+            QStatusBar *sb = KisPart::instance()->currentMainwindow()->statusBar();
+            if (sb) {
+                sb->showMessage(i18n("Loading CSV file..."));
+            }
+        } else {
+            emit m_doc->statusBarMessage(i18n("Loading CSV file..."));
+        }
+        emit m_doc->sigProgress(0);
+        connect(m_doc, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
+    }
     int step = 0;
 
     do {
         qApp->processEvents();
 
-        if (progress.wasCanceled()) {
-            retval = KisImageBuilder_RESULT_FAILURE;
+        if (m_stop) {
+            retval = KisImageBuilder_RESULT_CANCEL;
             break;
         }
 
@@ -190,10 +211,6 @@ KisImageBuilder_Result CSVLoader::decode(const QUrl &uri, const QString &filenam
                retval = KisImageBuilder_RESULT_FAILURE;
                break;
             }
-            progress.setWindowModality(Qt::ApplicationModal);
-            progress.setMinimumDuration(1000);
-            progress.setMaximum(frameCount);
-            progress.setValue(0);
 
             retval = createNewImage(width, height, pixelRatio, projName.isNull() ? filename : projName);
             break;
@@ -247,7 +264,6 @@ KisImageBuilder_Result CSVLoader::decode(const QUrl &uri, const QString &filenam
             //no break!
 
         case 5 :    //frames
-            progress.setValue(frame);
 
             if ((field.size() < 2) || (field[0] != '#') || !field[1].isDigit()) break;
 
@@ -255,6 +271,10 @@ KisImageBuilder_Result CSVLoader::decode(const QUrl &uri, const QString &filenam
                 CSVLayerRecord* layer = layers.at(idx);
 
                 if (layer->last != field) {
+                    if (!m_batchMode) {
+                        emit m_doc->sigProgress((frame * layers.size() + idx) * 100 /
+                                                (frameCount * layers.size()));
+                    }
                     retval = setLayer(layer, importDoc.data(), path);
                     layer->last = field;
                     layer->frame = frame;
@@ -304,6 +324,20 @@ KisImageBuilder_Result CSVLoader::decode(const QUrl &uri, const QString &filenam
     }
     qDeleteAll(layers);
     f.close();
+
+    if (!m_batchMode) {
+        disconnect(m_doc, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
+        emit m_doc->sigProgress(100);
+
+        if (!setView) {
+            QStatusBar *sb = KisPart::instance()->currentMainwindow()->statusBar();
+            if (sb) {
+                sb->clearMessage();
+            }
+        } else {
+            emit m_doc->clearStatusBarMessage();
+        }
+    }
     QApplication::restoreOverrideCursor();
     return retval;
 }
@@ -376,7 +410,7 @@ KisImageBuilder_Result CSVLoader::setLayer(CSVLayerRecord* layer, KisDocument *i
         filename.append(layer->last);
 
         result = importDoc->openUrl(QUrl::fromLocalFile(filename),
-                               KisDocument::OPEN_URL_FLAG_DO_NOT_ADD_TO_RECENT_FILES);
+                                    KisDocument::OPEN_URL_FLAG_DO_NOT_ADD_TO_RECENT_FILES);
         if (result)
             layer->channel->importFrame(layer->frame, importDoc->image()->projection(), NULL);
     }
@@ -415,4 +449,9 @@ KisImageBuilder_Result CSVLoader::buildAnimation(const QUrl &uri,const QString &
 KisImageWSP CSVLoader::image()
 {
     return m_image;
+}
+
+void CSVLoader::cancel()
+{
+    m_stop = true;
 }

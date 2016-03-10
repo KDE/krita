@@ -65,7 +65,7 @@ KisImportExportFilter::ConversionStatus KisCSVImport::convert(const QByteArray&,
         if (url.isEmpty())
             return KisImportExportFilter::FileNotFound;
 
-        CSVLoader ib(doc);
+        CSVLoader ib(doc,m_chain->manager()->getBatchMode());
 
         KisImageBuilder_Result result = ib.buildAnimation(url,filename);
 
@@ -84,6 +84,8 @@ KisImportExportFilter::ConversionStatus KisCSVImport::convert(const QByteArray&,
             return KisImportExportFilter::ParsingError;
         case KisImageBuilder_RESULT_FAILURE:
             return KisImportExportFilter::InternalError;
+        case KisImageBuilder_RESULT_CANCEL:
+            return KisImportExportFilter::ProgressCancelled;
         case KisImageBuilder_RESULT_OK:
             doc -> setCurrentImage( ib.image());
             return KisImportExportFilter::OK;

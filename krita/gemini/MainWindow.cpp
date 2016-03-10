@@ -343,7 +343,7 @@ void MainWindow::switchToSketch()
         QTimer::singleShot(50, this, SLOT(sketchChange()));
 
     if (view && view->document()) {
-        view->document()->setSaveInBatchMode(true);
+        view->document()->setFileBatchMode(true);
     }
 }
 
@@ -423,7 +423,7 @@ void MainWindow::switchToDesktop(bool justLoaded)
     }
 
     if (view && view->document()) {
-        view->document()->setSaveInBatchMode(false);
+        view->document()->setFileBatchMode(false);
     }
 }
 

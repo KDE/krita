@@ -348,9 +348,9 @@ QString KoFileDialog::filename()
 
         QMimeDatabase db;
         d->mimeType = db.mimeTypeForFile(url);
-        if (d->mimeType == "application/octet-stream") {
+        if (d->mimeType.name() == "application/octet-stream") {
             KoJsonTrader jt;
-            d->mimeType = jt.mimeTypes(QFileInfo(url).suffix()).first();
+            d->mimeType = db.mimeTypeForName(jt.mimeTypes(QFileInfo(url).suffix()).first());
         }
         saveUsedDir(url, d->dialogName);
     }

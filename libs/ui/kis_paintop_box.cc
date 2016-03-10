@@ -308,19 +308,17 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     if (!cfg.toolOptionsInDocker()) {
         action = new QWidgetAction(this);
         KisActionRegistry::instance()->propertizeAction("show_tool_options", action);
-        // TODO: check how this is serialized, add it to krita.action
-        view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_Backslash));
         view->actionCollection()->addAction("show_tool_options", action);
         connect(action, SIGNAL(triggered()), m_toolOptionsPopupButton, SLOT(showPopupWidget()));
     }
 
     action = new QWidgetAction(this);
     KisActionRegistry::instance()->propertizeAction("show_brush_editor", action);
+    view->actionCollection()->addAction("show_brush_editor", action);
     connect(action, SIGNAL(triggered()), m_brushEditorPopupButton, SLOT(showPopupWidget()));
 
     action = new QWidgetAction(this);
     KisActionRegistry::instance()->propertizeAction("show_brush_presets", action);
-    view->actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::Key_F6));    // TODO: check this
     view->actionCollection()->addAction("show_brush_presets", action);
     connect(action, SIGNAL(triggered()), m_presetSelectorPopupButton, SLOT(showPopupWidget()));
 

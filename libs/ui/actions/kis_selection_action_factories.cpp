@@ -24,7 +24,6 @@
 #include <kundo2command.h>
 
 #include <KisMainWindow.h>
-#include <KisDocumentEntry.h>
 #include <KisDocument.h>
 #include <KisPart.h>
 #include <KoPathShape.h>

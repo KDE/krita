@@ -19,7 +19,6 @@ Boston, MA 02110-1301, USA.
 #include "KisFilterGraph.h"
 
 #include "KisImportExportManager.h"  // KisImportExportManager::filterAvailable, private API
-#include "KisDocumentEntry.h"
 #include "KisFilterEntry.h"
 #include "KisDocument.h"
 

@@ -23,7 +23,6 @@ Boston, MA 02110-1301, USA.
 #include "KisImportExportManager.h"
 #include "KisImportExportManager_p.h"
 #include "KisDocument.h"
-#include "KisDocumentEntry.h"
 #include "KoProgressUpdater.h"
 #include "KoJsonTrader.h"
 

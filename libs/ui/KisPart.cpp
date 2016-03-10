@@ -75,7 +75,7 @@
 #include "kis_idle_watcher.h"
 #include "kis_image.h"
 #include "KisImportExportManager.h"
-#include "KisDocumentEntry.h"
+#include "KisDocument.h"
 #include "KoToolManager.h"
 
 #include "kis_color_manager.h"
@@ -544,7 +544,7 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
     }
     const QStringList mimeFilter = KisImportExportManager::mimeFilter(KIS_MIME_TYPE,
                                                                       KisImportExportManager::Import,
-                                                                      KisDocumentEntry::extraNativeMimeTypes());
+                                                                      KisDocument::extraNativeMimeTypes());
 
     d->startupWidget = new KisOpenPane(0, mimeFilter, templatesResourcePath());
     d->startupWidget->setWindowModality(Qt::WindowModal);

@@ -127,7 +127,7 @@
 #endif
 #include "kis_icon_utils.h"
 #include <KisImportExportFilter.h>
-#include <KisDocumentEntry.h>
+#include <KisDocument.h>
 #include "kis_signal_compressor_with_param.h"
 #include "dialogs/kis_delayed_save_dialog.h"
 
@@ -790,7 +790,7 @@ QStringList KisMainWindow::showOpenFileDialog()
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KIS_MIME_TYPE,
                                                                  KisImportExportManager::Import,
-                                                                 KisDocumentEntry::extraNativeMimeTypes()));
+                                                                 KisDocument::extraNativeMimeTypes()));
     QStringList filters = dialog.nameFilters();
     filters << i18n("All files (*.*)");
     dialog.setNameFilters(filters);

@@ -87,7 +87,6 @@
 #include "kis_config_notifier.h"
 #include "kis_control_frame.h"
 #include "kis_coordinates_converter.h"
-#include <KisDocumentEntry.h>
 #include "KisDocument.h"
 #include "kis_favorite_resource_manager.h"
 #include "kis_filter_manager.h"

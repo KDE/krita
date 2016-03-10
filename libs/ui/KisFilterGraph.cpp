@@ -75,11 +75,7 @@ KisFilterChainSP Graph::chain(const KisImportExportManager* manager, QByteArray&
     if (!isValid() || !manager)
         return KisFilterChainSP();
 
-    if (to.isEmpty()) {    // if the destination is empty we search the closest Calligra part
-        to = findCalligraPart();
-        if (to.isEmpty())    // still empty? strange stuff...
-            return KisFilterChainSP();
-    }
+    Q_ASSERT(!to.isEmpty());
 
     const Vertex* vertex = m_vertices.value(to);
     if (!vertex || vertex->key() == UINT_MAX)
@@ -192,50 +188,4 @@ void Graph::shortestPaths()
     m_graphValid = true;
 }
 
-QByteArray Graph::findCalligraPart() const
-{
-    // Here we simply try to find the closest Calligra mimetype
-    const QList<KisDocumentEntry> parts(KisDocumentEntry::query());
-    QList<KisDocumentEntry>::ConstIterator partIt(parts.constBegin());
-    QList<KisDocumentEntry>::ConstIterator partEnd(parts.constEnd());
-
-    const Vertex *v = 0;
-
-    // Be sure that v gets initialized correctly
-    while (!v && partIt != partEnd) {
-        QStringList nativeMimeTypes = (*partIt).loader()->metaData().value("MetaData").toObject().value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
-        nativeMimeTypes += (*partIt).loader()->metaData().value("MetaData").toObject().value("X-KDE-NativeMimeType").toString();
-        QStringList::ConstIterator it = nativeMimeTypes.constBegin();
-        QStringList::ConstIterator end = nativeMimeTypes.constEnd();
-        for (; !v && it != end; ++it)
-            if (!(*it).isEmpty())
-                v = m_vertices.value((*it).toLatin1());
-        ++partIt;
-    }
-    if (!v)
-        return "";
-
-    // Now we try to find the "cheapest" Calligra vertex
-    while (partIt != partEnd) {
-        QStringList nativeMimeTypes = (*partIt).loader()->metaData().value("MetaData").toObject().value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
-        nativeMimeTypes += (*partIt).loader()->metaData().value("MetaData").toObject().value("X-KDE-NativeMimeType").toString();
-        QStringList::ConstIterator it = nativeMimeTypes.constBegin();
-        QStringList::ConstIterator end = nativeMimeTypes.constEnd();
-        for (; !v && it != end; ++it) {
-            QString key = *it;
-            if (!key.isEmpty()) {
-                Vertex* tmp = m_vertices.value(key.toLatin1());
-                if (!v || (tmp && tmp->key() < v->key()))
-                    v = tmp;
-            }
-        }
-        ++partIt;
-    }
-
-    // It seems it already is a Calligra part
-    if (v->key() == 0)
-        return "";
-
-    return v->mimeType();
-}
 }

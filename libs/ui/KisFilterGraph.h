@@ -64,7 +64,6 @@ private:
 
     void buildGraph();
     void shortestPaths();
-    QByteArray findCalligraPart() const;
 
     QHash<QByteArray, CalligraFilter::Vertex*> m_vertices;
     QByteArray m_from;

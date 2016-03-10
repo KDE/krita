@@ -82,13 +82,6 @@ public:
      */
     static QList<KisDocumentEntry> query(const QString &  mimetype = QString());
 
-    /**
-     *  This is a convenience function.
-     *
-     *  @return a document entry for the Calligra component that supports
-     *          the requested mimetype and fits the user best.
-     */
-    static KisDocumentEntry queryByMimeType(const QString & mimetype);
 
 private:
     QPluginLoader *m_loader;

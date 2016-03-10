@@ -91,29 +91,6 @@ bool KisDocumentEntry::supportsMimeType(const QString & _mimetype) const {
     return mimeTypes().contains(_mimetype);
 }
 
-KisDocumentEntry KisDocumentEntry::queryByMimeType(const QString & mimetype)
-{
-    QList<KisDocumentEntry> vec = query(mimetype);
-
-    if (vec.isEmpty()) {
-        warnUI << "Got no results with " << mimetype;
-        // Fallback to the old way (which was probably wrong, but better be safe)
-        vec = query(mimetype);
-
-        if (vec.isEmpty()) {
-            errUI << "Could not find a plugin to load" << mimetype;
-            return KisDocumentEntry();
-        }
-    }
-
-    // Filthy hack alert -- this'll be properly fixed in the mvc branch.
-    if (qApp->applicationName() == "flow" && vec.size() == 2) {
-        return KisDocumentEntry(vec[1]);
-    }
-
-    return KisDocumentEntry(vec[0]);
-}
-
 QList<KisDocumentEntry> KisDocumentEntry::query(const QString & mimetype)
 {
 

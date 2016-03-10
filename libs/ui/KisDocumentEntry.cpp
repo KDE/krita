@@ -90,25 +90,3 @@ QStringList KisDocumentEntry::mimeTypes() const {
 bool KisDocumentEntry::supportsMimeType(const QString & _mimetype) const {
     return mimeTypes().contains(_mimetype);
 }
-
-QList<KisDocumentEntry> KisDocumentEntry::query(const QString & mimetype)
-{
-
-    QList<KisDocumentEntry> lst;
-
-    // Query the trader
-    const QList<QPluginLoader *> offers = KoJsonTrader::instance()->query("Calligra/Part", mimetype);
-
-    Q_FOREACH (QPluginLoader *pluginLoader, offers) {
-        lst.append(KisDocumentEntry(pluginLoader));
-    }
-
-    if (lst.count() > 1 && !mimetype.isEmpty()) {
-        warnUI << "KisDocumentEntry::query " << mimetype << " got " << lst.count() << " offers!";
-        Q_FOREACH (const KisDocumentEntry &entry, lst) {
-            dbgKrita << entry.name();
-        }
-    }
-
-    return lst;
-}

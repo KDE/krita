@@ -111,21 +111,6 @@ void Graph::dump() const
 // available mime types and filters.
 void Graph::buildGraph()
 {
-    // Make sure that all available parts are added to the graph
-    const QList<KisDocumentEntry> parts(KisDocumentEntry::query());
-
-    Q_FOREACH (const KisDocumentEntry& part, parts) {
-
-        QStringList nativeMimeTypes = part.loader()->metaData().value("MetaData").toObject().value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
-        nativeMimeTypes += part.loader()->metaData().value("MetaData").toObject().value("X-KDE-NativeMimeType").toString();
-
-        Q_FOREACH (const QString& nativeMimeType, nativeMimeTypes) {
-            const QByteArray key = nativeMimeType.toLatin1();
-            if (!m_vertices.contains(key))
-                m_vertices[key] = new Vertex(key);
-        }
-    }
-
     // no constraint here - we want *all* :)
     const QList<KisFilterEntrySP> filters(KisFilterEntry::query());
 

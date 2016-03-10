@@ -72,17 +72,6 @@ public:
      */
     bool supportsMimeType(const QString & _mimetype) const;
 
-        /**
-     *  This function will query ksycoca to find all available components.
-     *  The result will only contain parts, which are embeddable into a document
-     *
-     *  @param _constr is a constraint expression as used by KTrader.
-     *                 You can use it to set additional restrictions on the available
-     *                 components.
-     */
-    static QList<KisDocumentEntry> query(const QString &  mimetype = QString());
-
-
 private:
     QPluginLoader *m_loader;
 };

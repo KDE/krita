@@ -48,10 +48,6 @@ KisFilterChain::KisFilterChain(const KisImportExportManager* manager)
     : KisShared()
     , m_manager(manager)
     , m_state(Beginning)
-    , m_inputStorage(0),
-      m_inputStorageDevice(0)
-    , m_outputStorage(0)
-    , m_outputStorageDevice(0)
     , m_inputDocument(0)
     , m_outputDocument(0)
     , m_inputTempFile(0),
@@ -228,13 +224,6 @@ void KisFilterChain::manageIO()
     m_inputQueried = Nil;
     m_outputQueried = Nil;
 
-    delete m_inputStorageDevice;
-    m_inputStorageDevice = 0;
-    if (m_inputStorage) {
-        m_inputStorage->close();
-        delete m_inputStorage;
-        m_inputStorage = 0;
-    }
     delete m_inputTempFile;  // autodelete
     m_inputTempFile = 0;
     m_inputFile.clear();
@@ -254,14 +243,6 @@ void KisFilterChain::manageIO()
         m_inputTempFile = m_outputTempFile;
         m_outputTempFile = 0;
 
-        delete m_outputStorageDevice;
-        m_outputStorageDevice = 0;
-        if (m_outputStorage) {
-            m_outputStorage->close();
-            if (m_outputStorage->mode() != KoStore::Write)
-                delete m_outputStorage;
-            m_outputStorage = 0;
-        }
     }
 
     if (m_inputDocument != filterManagerKisDocument())

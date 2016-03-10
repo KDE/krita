@@ -137,8 +137,8 @@ private:
     int filterManagerDirection() const;
 
 
-    // Helper methods which keep track of all the temp files, documents,
-    // storages,... and properly delete them as soon as they are not
+    // Helper methods which keep track of all the temp files and documents,
+    // and properly delete them as soon as they are not
     // needed anymore.
     void manageIO();
     void finalizeIO();
@@ -169,11 +169,6 @@ private:
     QString m_inputFile;              // Did we pass around plain files?
     QString m_outputFile;
 
-    KoStore* m_inputStorage;          // ...or was it a storage+device?
-    KoStoreDevice* m_inputStorageDevice;
-    KoStore* m_outputStorage;
-    KoStoreDevice* m_outputStorageDevice;
-
     KisDocument* m_inputDocument;      // ...or even documents?
     KisDocument* m_outputDocument;
 
@@ -182,7 +177,7 @@ private:
 
     // These two flags keep track of the input/output the
     // filter (=user) asked for
-    enum IOState { Nil, File, Storage, Document };
+    enum IOState { Nil, File, Document };
     IOState m_inputQueried, m_outputQueried;
 
     class Private;

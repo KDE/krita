@@ -149,12 +149,6 @@ private:
 
     void inputFileHelper(KisDocument* document, const QString& alternativeFile);
     void outputFileHelper(bool autoDelete);
-    KoStoreDevice* storageNewStreamHelper(KoStore** storage, KoStoreDevice** device, const QString& name);
-    KoStoreDevice* storageHelper(const QString& file, const QString& streamName,
-                                 KoStore::Mode mode, KoStore** storage, KoStoreDevice** device);
-    void storageInit(const QString& file, KoStore::Mode mode, KoStore** storage);
-    KoStoreDevice* storageCreateFirstStream(const QString& streamName, KoStore** storage, KoStoreDevice** device);
-    KoStoreDevice* storageCleanupHelper(KoStore** storage);
 
     KisDocument* createDocument(const QString& file);
     KisDocument* createDocument(const QByteArray& mimeType);

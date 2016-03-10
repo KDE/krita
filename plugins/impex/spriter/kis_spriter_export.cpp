@@ -174,15 +174,15 @@ KisSpriterExport::~KisSpriterExport()
 
 KisImportExportFilter::ConversionStatus KisSpriterExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    dbgFile << "Spriter export! From:" << from << ", To:" << to << "" << m_chain->outputFile();
+    dbgFile << "Spriter export! From:" << from << ", To:" << to << "" << outputFile();
 
     if (from != "application/x-krita") {
         return KisImportExportFilter::NotImplemented;
     }
 
-    KisDocument *input = m_chain->inputDocument();
+    KisDocument *input = inputDocument();
 
-    QString filename = m_chain->outputFile();
+    QString filename = outputFile();
     if (filename.isEmpty()) {
         return KisImportExportFilter::FileNotFound;
     }

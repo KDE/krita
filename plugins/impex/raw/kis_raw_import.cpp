@@ -77,14 +77,14 @@ KisImportExportFilter::ConversionStatus KisRawImport::convert(const QByteArray& 
 
     dbgFile << "Krita importing from Raw";
 
-    KisDocument * doc = m_chain->outputDocument();
+    KisDocument * doc = outputDocument();
     if (!doc) {
         return KisImportExportFilter::NoDocumentCreated;
     }
 
     doc -> prepareForImport();
 
-    QString filename = m_chain->inputFile();
+    QString filename = inputFile();
 
     if (filename.isEmpty()) {
         return KisImportExportFilter::FileNotFound;
@@ -113,7 +113,7 @@ KisImportExportFilter::ConversionStatus KisRawImport::convert(const QByteArray& 
         settings.sixteenBitsImage =  true;
         int width, height, rgbmax;
         KDcraw dcraw;
-        if (!dcraw.decodeRAWImage(m_chain->inputFile(), settings, imageData, width, height, rgbmax)) return KisImportExportFilter::CreationError;
+        if (!dcraw.decodeRAWImage(inputFile(), settings, imageData, width, height, rgbmax)) return KisImportExportFilter::CreationError;
 
         QApplication::restoreOverrideCursor();
 
@@ -166,7 +166,7 @@ void KisRawImport::slotUpdatePreview()
     settings.sixteenBitsImage =  false;
     int width, height, rgbmax;
     KDcraw dcraw;
-    dcraw.decodeHalfRAWImage(m_chain->inputFile(), settings, imageData, width, height, rgbmax);
+    dcraw.decodeHalfRAWImage(inputFile(), settings, imageData, width, height, rgbmax);
     QImage image(width, height, QImage::Format_RGB32);
     for (int y = 0; y < height; ++y) {
         QRgb *pixel= reinterpret_cast<QRgb *>(image.scanLine(y));

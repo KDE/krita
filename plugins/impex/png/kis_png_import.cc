@@ -49,12 +49,12 @@ KisImportExportFilter::ConversionStatus KisPNGImport::convert(const QByteArray&,
     if (to != "application/x-krita")
         return KisImportExportFilter::BadMimeType;
 
-    KisDocument * doc = m_chain->outputDocument();
+    KisDocument * doc = outputDocument();
 
     if (!doc)
         return KisImportExportFilter::NoDocumentCreated;
 
-    QString filename = m_chain->inputFile();
+    QString filename = inputFile();
 
     doc -> prepareForImport();
 
@@ -65,7 +65,7 @@ KisImportExportFilter::ConversionStatus KisPNGImport::convert(const QByteArray&,
         if (url.isEmpty())
             return KisImportExportFilter::FileNotFound;
 
-        KisPNGConverter ib(doc, m_chain->manager()->getBatchMode());
+        KisPNGConverter ib(doc, getBatchMode());
 
 //        if (view != 0)
 //            view -> canvasSubject() ->  progressDisplay() -> setSubject(&ib, false, true);

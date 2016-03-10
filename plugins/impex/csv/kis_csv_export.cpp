@@ -71,14 +71,14 @@ KisImportExportFilter::ConversionStatus KisCSVExport::convert(const QByteArray& 
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    KisDocument* input = m_chain->inputDocument();
-    QString filename = m_chain->outputFile();
+    KisDocument* input = inputDocument();
+    QString filename = outputFile();
 
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;
 
     if (!checkHomogenity(input->image()->rootLayer())) {
-        if (!m_chain->manager()->getBatchMode()) {
+        if (!getBatchMode()) {
             QMessageBox::critical(0,
                                   i18nc("@title:window", "CSV Export Error"),
                                   i18n("Unable to save to the CSV format.\n"

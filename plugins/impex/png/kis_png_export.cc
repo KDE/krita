@@ -73,8 +73,8 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
     dbgFile << "Png export! From:" << from << ", To:" << to << "";
 
 
-    KisDocument *input = m_chain->inputDocument();
-    QString filename = m_chain->outputFile();
+    KisDocument *input = inputDocument();
+    QString filename = outputFile();
 
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;
@@ -105,7 +105,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
 
 
     if (!KisPNGConverter::isColorSpaceSupported(pd->colorSpace())) {
-        if (!m_chain->manager()->getBatchMode()) {
+        if (!getBatchMode()) {
             QMessageBox::critical(0, i18nc("@title:window", "Krita PNG Export"), i18n("You can only save grayscale and RGB images to PNG. Convert your image before exporting to PNG."));
         }
         return KisImportExportFilter::UsageError;
@@ -171,7 +171,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
         kdb->setMainWidget(wdg);
         QApplication::restoreOverrideCursor();
         if (hasVisibleWidgets()) {
-            if (!m_chain->manager()->getBatchMode()) {
+            if (!getBatchMode()) {
                 if (kdb->exec() == QDialog::Rejected) {
                     return KisImportExportFilter::UserCancelled;
                 }

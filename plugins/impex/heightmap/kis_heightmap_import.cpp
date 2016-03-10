@@ -63,7 +63,7 @@ KisHeightMapImport::~KisHeightMapImport()
 KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteArray& from, const QByteArray& to)
 {
 
-    KisDocument * doc = m_chain->outputDocument();
+    KisDocument * doc = outputDocument();
 
     if (!doc) {
         return KisImportExportFilter::NoDocumentCreated;
@@ -86,7 +86,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteA
         return KisImportExportFilter::BadMimeType;
     }
 
-    QString filename = m_chain->inputFile();
+    QString filename = inputFile();
 
     if (filename.isEmpty()) {
         return KisImportExportFilter::FileNotFound;
@@ -143,7 +143,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteA
         optionsHeightMap.radioPC->setChecked(true);
     }
 
-    if (!m_chain->manager()->getBatchMode()) {
+    if (!getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }

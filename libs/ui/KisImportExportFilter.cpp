@@ -45,6 +45,31 @@ KisImportExportFilter::KisImportExportFilter(QObject *parent)
 {
 }
 
+KisDocument *KisImportExportFilter::inputDocument() const
+{
+    return m_chain->inputDocument();
+}
+
+KisDocument *KisImportExportFilter::outputDocument() const
+{
+    return m_chain->outputDocument();
+}
+
+QString KisImportExportFilter::inputFile() const
+{
+    return m_chain->inputFile();
+}
+
+QString KisImportExportFilter::outputFile() const
+{
+    return m_chain->outputFile();
+}
+
+bool KisImportExportFilter::getBatchMode() const
+{
+    return m_chain->manager()->getBatchMode();
+}
+
 KisImportExportFilter::~KisImportExportFilter()
 {
     Q_ASSERT(d->updater);

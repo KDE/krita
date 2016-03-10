@@ -50,8 +50,8 @@ KisImportExportFilter::ConversionStatus KisTGAExport::convert(const QByteArray& 
 {
     dbgFile << "TGA export! From:" << from << ", To:" << to << "";
 
-    KisDocument *input = m_chain->inputDocument();
-    QString filename = m_chain->outputFile();
+    KisDocument *input = inputDocument();
+    QString filename = outputFile();
 
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;

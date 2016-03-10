@@ -63,8 +63,8 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    KisDocument *inputDoc = m_chain->inputDocument();
-    QString filename = m_chain->outputFile();
+    KisDocument *inputDoc = inputDocument();
+    QString filename = outputFile();
 
     if (!inputDoc)
         return KisImportExportFilter::NoDocumentCreated;
@@ -111,7 +111,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
         optionsHeightMap.radioMac->setChecked(true);
     }
 
-    if (!m_chain->manager()->getBatchMode()) {
+    if (!getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }

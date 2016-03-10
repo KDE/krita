@@ -79,15 +79,15 @@ KisImportExportFilter::ConversionStatus psdExport::convert(const QByteArray& fro
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    KisDocument *input = m_chain->inputDocument();
-    QString filename = m_chain->outputFile();
+    KisDocument *input = inputDocument();
+    QString filename = outputFile();
 
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;
 
 
     if (input->image()->width() > 30000 || input->image()->height() > 30000) {
-        if (!m_chain->manager()->getBatchMode()) {
+        if (!getBatchMode()) {
             QMessageBox::critical(0,
                                   i18nc("@title:window", "Photoshop Export Error"),
                                   i18n("Unable to save to the Photoshop format.\n"
@@ -98,7 +98,7 @@ KisImportExportFilter::ConversionStatus psdExport::convert(const QByteArray& fro
 
 
     if (!checkHomogenity(input->image()->rootLayer(), input->image()->colorSpace())) {
-        if (!m_chain->manager()->getBatchMode()) {
+        if (!getBatchMode()) {
             QMessageBox::critical(0,
                                   i18nc("@title:window", "Photoshop Export Error"),
                                   i18n("Unable to save to the Photoshop format.\n"

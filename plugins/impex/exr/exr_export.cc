@@ -62,7 +62,7 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    KisDocument *input = m_chain->inputDocument();
+    KisDocument *input = inputDocument();
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;
     KisImageWSP image = input->image();
@@ -83,7 +83,7 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
 
     widget.flatten->setChecked(cfg.getBool("flatten", false));
 
-    if (!m_chain->manager()->getBatchMode() ) {
+    if (!getBatchMode() ) {
         QApplication::restoreOverrideCursor();
         if (dialog.exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
@@ -97,12 +97,12 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
     cfg.setProperty("flatten", widget.flatten->isChecked());
     KisConfig().setExportConfiguration("EXR", cfg);
 
-    QString filename = m_chain->outputFile();
+    QString filename = outputFile();
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
     QUrl url = QUrl::fromLocalFile(filename);
 
-    exrConverter kpc(input, !m_chain->manager()->getBatchMode());
+    exrConverter kpc(input, !getBatchMode());
 
     KisImageBuilder_Result res;
 

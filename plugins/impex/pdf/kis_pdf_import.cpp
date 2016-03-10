@@ -66,7 +66,7 @@ KisPDFImport::~KisPDFImport()
 
 KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const QByteArray&)
 {
-    QString filename = m_chain->inputFile();
+    QString filename = inputFile();
     dbgFile << "Importing using PDFImport!" << filename;
 
     if (filename.isEmpty())
@@ -118,7 +118,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
     }
 
     // Init kis's doc
-    KisDocument * doc = m_chain->outputDocument();
+    KisDocument * doc = outputDocument();
     if (!doc) {
         delete pdoc;
         delete kdb;
@@ -135,7 +135,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
 
     // create a layer
     QList<int> pages = wdg->pages();
-    QPointer<KoUpdater> loadUpdater =  m_chain->outputDocument()->progressUpdater()->startSubtask(1, "load");
+    QPointer<KoUpdater> loadUpdater =  outputDocument()->progressUpdater()->startSubtask(1, "load");
     loadUpdater->setRange(0, pages.count());
     for (QList<int>::const_iterator it = pages.constBegin(); it != pages.constEnd(); ++it) {
         KisPaintLayer* layer = new KisPaintLayer(image.data(),

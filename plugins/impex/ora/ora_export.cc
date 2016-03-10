@@ -79,8 +79,8 @@ KisImportExportFilter::ConversionStatus OraExport::convert(const QByteArray& fro
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    KisDocument *input = m_chain->inputDocument();
-    QString filename = m_chain->outputFile();
+    KisDocument *input = inputDocument();
+    QString filename = outputFile();
 
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;
@@ -102,14 +102,14 @@ KisImportExportFilter::ConversionStatus OraExport::convert(const QByteArray& fro
     supportedColorDepthIds << Integer8BitsColorDepthID.id() << Integer16BitsColorDepthID.id();
     if (!supportedColorModelIds.contains(pd->colorSpace()->colorModelId().id()) ||
             !supportedColorDepthIds.contains(pd->colorSpace()->colorDepthId().id())) {
-        if (!m_chain->manager()->getBatchMode()) {
+        if (!getBatchMode()) {
             QMessageBox::critical(0, i18nc("@title:window", "Krita OpenRaster Export"), i18n("Cannot export images in this colorspace or channel depth to OpenRaster"));
         }
         return KisImportExportFilter::UsageError;
     }
 
 
-    if (hasShapeLayerChild(image->root()) && !m_chain->manager()->getBatchMode()) {
+    if (hasShapeLayerChild(image->root()) && !getBatchMode()) {
         QMessageBox::information(0,
                                  i18nc("@title:window", "Krita:Warning"),
                                  i18n("This image contains vector, clone or fill layers.\nThese layers will be saved as raster layers."));

@@ -28,6 +28,7 @@
 #include <QUrl>
 #include <QDir>
 #include <QFileInfo>
+#include <QApplication>
 
 #include <kpluginfactory.h>
 
@@ -46,10 +47,10 @@
 #include <kis_shape_layer.h>
 #include <kis_file_layer.h>
 #include <kis_clone_layer.h>
+#include <kis_generator_layer.h>
 #include <kis_adjustment_layer.h>
 #include <KisPart.h>
 #include <kis_types.h>
-
 
 class KRITAUI_EXPORT KisSaveSCMLVisitor : public KisNodeVisitor
 {
@@ -58,14 +59,29 @@ public:
     KisSaveSCMLVisitor(KisImageWSP image,
                         const QString &path,
                         const QString &baseName,
-                        const QDomDocument &scml)
+                        QDomDocument *scml)
         : m_image(image)
         , m_path(path)
         , m_baseName(baseName)
         , m_scml(scml)
         , m_depth(0)
+        , m_fileId(0)
     {
+        m_root = m_scml->createElement("spriter_data");
+        m_scml->appendChild(m_root);
+        m_root.setAttribute("scml_version", 1);
+        m_root.setAttribute("generator", "krita");
+        m_root.setAttribute("generator_version", qApp->applicationVersion());
 
+        m_folder = m_scml->createElement("folder");
+        m_folder.setAttribute("id", 0);
+        m_folder.setAttribute("name", "objects");
+        m_root.appendChild(m_folder);
+
+        m_entity = m_scml->createElement("entity");
+        m_entity.setAttribute("id", 0);
+        m_entity.setAttribute("name", baseName);
+        m_root.appendChild(m_entity);
     }
 
     virtual ~KisSaveSCMLVisitor()
@@ -75,28 +91,34 @@ public:
 
 public:
 
-    bool visit(KisNode* l)
+    bool visit(KisNode* n)
     {
+        qDebug() << "visit node" << n->name();
         return true;
     }
 
     bool visit(KisPaintLayer *l)
     {
+        qDebug() << "visit paint layer" << l->name();
+        saveFolder(l);
         return savePaintDevice(l->projection(), l->objectName());
     }
 
     bool visit(KisAdjustmentLayer *l)
     {
+        saveFolder(l);
         return savePaintDevice(l->projection(), l->objectName());
     }
 
     bool visit(KisExternalLayer *l)
     {
+        saveFolder(l);
         return savePaintDevice(l->projection(), l->objectName());
     }
 
     bool visit(KisCloneLayer *l)
     {
+        saveFolder(l);
         return savePaintDevice(l->projection(), l->objectName());
     }
 
@@ -115,9 +137,10 @@ public:
         return true;
     }
 
-    bool visit(KisGeneratorLayer * )
+    bool visit(KisGeneratorLayer * l)
     {
-        return true;
+        saveFolder(l);
+        return savePaintDevice(l->projection(), l->objectName());
     }
 
     bool visit(KisSelectionMask* )
@@ -132,8 +155,9 @@ public:
 
         m_currentFolder = l->objectName();
 
-        if (m_depth > 1) {
+        if (m_depth > 2) {
             // We don't descend into subgroups; instead the subgroup is saved as a png
+            m_depth--;
             return savePaintDevice(l->projection(), l->objectName());
         }
         else {
@@ -150,7 +174,21 @@ public:
 
 private:
 
-    bool savePaintDevice(KisPaintDeviceSP dev, const QString &fileName) {
+    void saveFolder(KisLayer * l)
+    {
+        qDebug() << "saveFolder" << l->name();
+        QDomElement el = m_scml->createElement("file");
+        el.setAttribute("id", m_fileId);
+        m_fileId++;
+        el.setAttribute("name", m_currentFolder + "/" + l->name() + ".png");
+        QRect rc = l->exactBounds();
+        el.setAttribute("width", rc.width());
+        el.setAttribute("height", rc.height());
+        m_folder.appendChild(el);
+    }
+
+    bool savePaintDevice(KisPaintDeviceSP dev, const QString &fileName)
+    {
         qDebug() << "savePaintDevice" << fileName;
         return true;
     }
@@ -158,9 +196,13 @@ private:
     KisImageWSP m_image;
     QString m_path;
     QString m_baseName;
-    QDomDocument m_scml;
+    QDomDocument *m_scml;
     QString m_currentFolder;
     int m_depth;
+    QDomElement m_root;
+    QDomElement m_folder;
+    QDomElement m_entity;
+    int m_fileId;
 };
 
 
@@ -199,12 +241,12 @@ KisImportExportFilter::ConversionStatus KisSpriterExport::convert(const QByteArr
     QFileInfo fi(filename);
 
     QDomDocument scmlDoc;
-
-    KisSaveSCMLVisitor visitor(input->image(), fi.absolutePath(), fi.baseName(), scmlDoc);
+    KisSaveSCMLVisitor visitor(input->image(), fi.absolutePath(), fi.baseName(), &scmlDoc);
     if (input->image()->rootLayer()->accept(visitor)) {
 
         QFile f(filename);
         f.open(QFile::WriteOnly);
+        f.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
         f.write(scmlDoc.toString().toUtf8());
         f.flush();
         f.close();

@@ -80,7 +80,7 @@ private:
     qreal m_hue;
     qreal m_sat;
     qreal m_val;
-    qreal R, G, B;
+    qreal R, G, B, Gamma;
     bool m_hueupdating;
     bool m_satupdating;
     bool m_toneupdating;

@@ -125,14 +125,15 @@ void KisColorSelectorSimple::setColor(const KoColor &color)
 	qreal hsiH, hsiS, hsiI;
 	qreal hsyH, hsyS, hsyY;
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
-	R = cfg.readEntry("lumaR", 0.2126);
+    R = cfg.readEntry("lumaR", 0.2126);
     G = cfg.readEntry("lumaG", 0.7152);
     B = cfg.readEntry("lumaB", 0.0722);
+    Gamma = cfg.readEntry("gamma", 2.2);
     m_parent->converter()->getHsvF(color, &hsvH, &hsvS, &hsvV);
     m_parent->converter()->getHslF(color, &hslH, &hslS, &hslL);
     //here we add our convertor options
     m_parent->converter()->getHsiF(color, &hsiH, &hsiS, &hsiI);
-	m_parent->converter()->getHsyF(color, &hsyH, &hsyS, &hsyY, R, G, B);
+    m_parent->converter()->getHsyF(color, &hsyH, &hsyS, &hsyY, R, G, B, Gamma);
 
 	//workaround, for some reason the HSI and HSY algorithms are fine, but they don't seem to update the selectors properly.
 	hsiH=hslH;
@@ -351,7 +352,7 @@ KoColor KisColorSelectorSimple::colorAt(int x, int y)
         color = m_parent->converter()->fromHsiF(m_hue, xRel, yRel);
         break;
 	case KisColorSelector::SY:
-        color = m_parent->converter()->fromHsyF(m_hue, xRel, yRel, R, G, B);
+        color = m_parent->converter()->fromHsyF(m_hue, xRel, yRel, R, G, B, Gamma);
         break;
     case KisColorSelector::hsvSH:
         color = m_parent->converter()->fromHsvF(xRel, yRel, m_value);
@@ -363,7 +364,7 @@ KoColor KisColorSelectorSimple::colorAt(int x, int y)
         color = m_parent->converter()->fromHsiF(xRel, yRel, m_intensity);
         break;
 	case KisColorSelector::hsySH:
-        color = m_parent->converter()->fromHsyF(xRel, yRel, m_luma, R, G, B);
+        color = m_parent->converter()->fromHsyF(xRel, yRel, m_luma, R, G, B, Gamma);
         break;
     case KisColorSelector::VH:
         color = m_parent->converter()->fromHsvF(xRel, m_hsvSaturation, yRel);
@@ -375,7 +376,7 @@ KoColor KisColorSelectorSimple::colorAt(int x, int y)
         color = m_parent->converter()->fromHsiF(xRel, m_hsiSaturation, yRel);
         break;
 	case KisColorSelector::YH:
-        color = m_parent->converter()->fromHsyF(xRel, m_hsySaturation, yRel, R, G, B);
+        color = m_parent->converter()->fromHsyF(xRel, m_hsySaturation, yRel, R, G, B, Gamma);
         break;
     case KisColorSelector::H:
         color = m_parent->converter()->fromHsvF(relPos, 1, 1);
@@ -399,10 +400,10 @@ KoColor KisColorSelectorSimple::colorAt(int x, int y)
         color = m_parent->converter()->fromHsiF(m_hue, m_hsiSaturation, relPos);
         break;
 	case KisColorSelector::hsyS:
-        color = m_parent->converter()->fromHsyF(m_hue, relPos, m_luma, R, G, B);
+        color = m_parent->converter()->fromHsyF(m_hue, relPos, m_luma, R, G, B, Gamma);
 		break;
 	case KisColorSelector::Y:
-        color = m_parent->converter()->fromHsyF(m_hue, m_hsySaturation, relPos, R, G, B);
+        color = m_parent->converter()->fromHsyF(m_hue, m_hsySaturation, relPos, R, G, B, Gamma);
         break;
     default:
         Q_ASSERT(false);

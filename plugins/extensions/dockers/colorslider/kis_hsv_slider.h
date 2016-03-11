@@ -39,7 +39,7 @@ public:
     virtual ~KisHSVSlider();
 
 public:
-    void setColors( const KoColor& currentcolor, const int type, qreal hue_backup, qreal l_R=0.2126, qreal l_G=0.7152, qreal l_B=0.0722);
+    void setColors( const KoColor& currentcolor, const int type, qreal hue_backup, qreal l_R=0.2126, qreal l_G=0.7152, qreal l_B=0.0722, qreal gamma=2.2);
     /**
      * Return the current color
      */
@@ -52,7 +52,7 @@ protected:
     struct Private;
     Private* const d;
 private:
-    qreal R, G, B;
+    qreal R, G, B, Gamma;
     KoColorDisplayRendererInterface *m_displayRenderer;
     KisCanvas2* m_canvas;
 };

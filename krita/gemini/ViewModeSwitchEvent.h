@@ -26,12 +26,12 @@
 #include <resources/KoAbstractGradient.h>
 #include <kis_node.h>
 #include <resources/KoPattern.h>
-#include <KoGridData.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_smoothing_options.h>
+#include "kis_grid_config.h"
 
 struct ViewModeSynchronisationObject {
-    ViewModeSynchronisationObject() : initialized(false), gridData(0) { }
+    ViewModeSynchronisationObject() : initialized(false) { }
 
     bool initialized;
 
@@ -52,7 +52,7 @@ struct ViewModeSynchronisationObject {
     bool globalAlphaLock;
     QString activeToolId;
 
-    KoGridData* gridData;
+    KisGridConfig gridConfig;
 
     // Mirror-axes
     QPointF mirrorAxesCenter;

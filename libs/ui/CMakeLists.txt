@@ -34,9 +34,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_coordinates_converter.cpp
     canvas/kis_grid_manager.cpp
     canvas/kis_grid_decoration.cpp
-    canvas/kis_grid_painter_configuration.cpp
-    canvas/kis_perspective_grid_manager.cpp
-    canvas/kis_perspective_grid_decoration.cpp
+    canvas/kis_grid_config.cpp
     canvas/kis_prescaled_projection.cpp
     canvas/kis_qpainter_canvas.cpp
     canvas/kis_projection_backend.cpp
@@ -44,6 +42,12 @@ set(kritaui_LIB_SRCS
     canvas/kis_image_patch.cpp
     canvas/kis_image_pyramid.cpp
     canvas/kis_infinity_manager.cpp
+    canvas/kis_change_guides_command.cpp
+    canvas/kis_guides_decoration.cpp
+    canvas/kis_guides_manager.cpp
+    canvas/kis_guides_config.cpp
+    canvas/kis_snap_config.cpp
+    canvas/kis_snap_line_strategy.cpp
     dialogs/kis_about_application.cpp
     dialogs/kis_dlg_adj_layer_props.cc
     dialogs/kis_dlg_adjustment_layer.cc
@@ -71,6 +75,7 @@ set(kritaui_LIB_SRCS
     flake/kis_shape_selection_canvas.cpp
     flake/kis_shape_selection_model.cpp
     flake/kis_take_all_shapes_command.cpp
+    kis_aspect_ratio_locker.cpp
     kis_autogradient.cc
     kis_bookmarked_configurations_editor.cc
     kis_bookmarked_configurations_model.cc
@@ -406,7 +411,6 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgautogradient.ui
     forms/wdggeneralsettings.ui
     forms/wdgperformancesettings.ui
-    forms/wdggridsettings.ui
     forms/wdggenerators.ui
     forms/wdgcustompalette.ui
     forms/wdgbookmarkedconfigurationseditor.ui

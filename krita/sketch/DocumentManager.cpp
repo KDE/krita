@@ -115,7 +115,7 @@ void DocumentManager::delayedNewDocument()
     d->document = KisPart::instance()->createDocument();
     d->document->setProgressProxy(d->proxy);
     if (qAppName().contains("sketch")) {
-        d->document->setSaveInBatchMode(true);
+        d->document->setFileBatchMode(true);
     }
 
     if(d->newDocOptions.isEmpty())
@@ -193,7 +193,7 @@ void DocumentManager::delayedOpenDocument()
     d->document = KisPart::instance()->createDocument();
     d->document->setProgressProxy(d->proxy);
     if (qAppName().contains("sketch")) {
-        d->document->setSaveInBatchMode(true);
+        d->document->setFileBatchMode(true);
     }
 
     connect(d->document, SIGNAL(completed()), this, SLOT(onLoadCompleted()));

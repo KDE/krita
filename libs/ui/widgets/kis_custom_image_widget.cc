@@ -125,8 +125,6 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
     connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(selectionChanged()), this, SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(changed(QClipboard::Mode)), this, SLOT(clipboardDataChanged()));
-
-    connect(bnScreenSize, SIGNAL(clicked()), this, SLOT(screenSizeClicked()));
     connect(colorSpaceSelector, SIGNAL(selectionChanged(bool)), createButton, SLOT(setEnabled(bool)));
 
     KisConfig cfg;
@@ -310,19 +308,7 @@ void KisCustomImageWidget::clipboardDataChanged()
 {
 }
 
-void KisCustomImageWidget::screenSizeClicked()
-{
-    QSize sz = QApplication::desktop()->screenGeometry(this).size();
 
-    const int index = KoUnit(KoUnit::Pixel).indexInListForUi(KoUnit::ListAll);
-    cmbWidthUnit->setCurrentIndex(index);
-    cmbHeightUnit->setCurrentIndex(index);
-    widthUnitChanged(cmbWidthUnit->currentIndex());
-    heightUnitChanged(cmbHeightUnit->currentIndex());
-
-    doubleWidth->setValue(sz.width());
-    doubleHeight->setValue(sz.height());
-}
 
 void KisCustomImageWidget::fillPredefined()
 {

@@ -68,6 +68,7 @@ uint qHash(QPointer<T> value) {
 
 #define start_ignore_cursor_events() d->blockMouseEvents()
 #define stop_ignore_cursor_events() d->allowMouseEvents()
+#define break_if_should_ignore_cursor_events() if (d->ignoringQtCursorEvents()) break;
 
 // Touch rejection: if touch is disabled on canvas, no need to block mouse press events
 #define touch_start_block_press_events()  d->touchHasBlockedPressEvents = d->disableTouchOnCanvas;
@@ -111,14 +112,34 @@ void KisInputManager::toggleTabletLogger()
     KisTabletDebugger::instance()->toggleDebugging();
 }
 
-void KisInputManager::attachPriorityEventFilter(QObject *filter)
+void KisInputManager::attachPriorityEventFilter(QObject *filter, int priority)
 {
-    d->priorityEventFilter.insert(QPointer<QObject>(filter));
+    Private::PriorityList::iterator begin = d->priorityEventFilter.begin();
+    Private::PriorityList::iterator it = begin;
+    Private::PriorityList::iterator end = d->priorityEventFilter.end();
+
+    it = std::find_if(begin, end,
+                      [filter] (const Private::PriorityPair &a) { return a.second == filter; });
+
+    if (it != end) return;
+
+    it = std::find_if(begin, end,
+                      [priority] (const Private::PriorityPair &a) { return a.first > priority; });
+
+    d->priorityEventFilter.insert(it, qMakePair(priority, filter));
 }
 
 void KisInputManager::detachPriorityEventFilter(QObject *filter)
 {
-    d->priorityEventFilter.remove(QPointer<QObject>(filter));
+    Private::PriorityList::iterator it = d->priorityEventFilter.begin();
+    Private::PriorityList::iterator end = d->priorityEventFilter.end();
+
+    it = std::find_if(it, end,
+                      [filter] (const Private::PriorityPair &a) { return a.second == filter; });
+
+    if (it != end) {
+        d->priorityEventFilter.erase(it);
+    }
 }
 
 void KisInputManager::setupAsEventFilter(QObject *receiver)
@@ -164,20 +185,28 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 
     if (d->eventEater.eventFilter(object, event)) return false;
 
-    Q_FOREACH (QPointer<QObject> filter, d->priorityEventFilter) {
-        if (filter.isNull()) {
-            d->priorityEventFilter.remove(filter);
-            continue;
+    if (!d->matcher.hasRunningShortcut()) {
+        Private::PriorityList::iterator it = d->priorityEventFilter.begin();
+        Private::PriorityList::iterator end = d->priorityEventFilter.end();
+
+        while (it != end) {
+            const QPointer<QObject> &filter = it->second;
+
+            if (filter.isNull()) {
+                it = d->priorityEventFilter.erase(it);
+                continue;
+            }
+
+            if (filter->eventFilter(object, event)) return true;
+            ++it;
         }
 
-        if (filter->eventFilter(object, event)) return true;
+        // KoToolProxy needs to pre-process some events to ensure the
+        // global shortcuts (not the input manager's ones) are not
+        // executed, in particular, this line will accept events when the
+        // tool is in text editing, preventing shortcut triggering
+        d->toolProxy->processEvent(event);
     }
-
-    // KoToolProxy needs to pre-process some events to ensure the
-    // global shortcuts (not the input manager's ones) are not
-    // executed, in particular, this line will accept events when the
-    // tool is in text editing, preventing shortcut triggering
-    d->toolProxy->processEvent(event);
 
     // Continue with the actual switch statement...
     return eventFilterImpl(event);
@@ -192,6 +221,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonDblClick: {
         d->debugEvent<QMouseEvent, true>(event);
+        break_if_should_ignore_cursor_events();
         break_if_touch_blocked_press_events();
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
@@ -208,6 +238,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     }
     case QEvent::MouseButtonRelease: {
         d->debugEvent<QMouseEvent, true>(event);
+        break_if_should_ignore_cursor_events();
         break_if_touch_blocked_press_events();
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
@@ -250,6 +281,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     }
     case QEvent::MouseMove: {
         d->debugEvent<QMouseEvent, true>(event);
+        break_if_should_ignore_cursor_events();
 
         if (!d->matcher.pointerMoved(event)) {
             //Update the current tool so things like the brush outline gets updated.

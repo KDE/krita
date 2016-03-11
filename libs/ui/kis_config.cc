@@ -20,6 +20,7 @@
 
 #include <limits.h>
 
+#include <QtGlobal>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QMutex>
@@ -40,6 +41,7 @@
 
 #include "kis_canvas_resource_provider.h"
 #include "kis_config_notifier.h"
+#include "kis_snap_config.h"
 
 #include <config-ocio.h>
 
@@ -541,6 +543,15 @@ void KisConfig::setShowRulers(bool rulers) const
     m_cfg.writeEntry("showrulers", rulers);
 }
 
+bool KisConfig::rulersTrackMouse(bool defaultValue) const
+{
+    return (defaultValue ? true : m_cfg.readEntry("rulersTrackMouse", true));
+}
+
+void KisConfig::setRulersTrackMouse(bool value) const
+{
+    m_cfg.writeEntry("rulersTrackMouse", value);
+}
 
 qint32 KisConfig::pasteBehaviour(bool defaultValue) const
 {
@@ -678,9 +689,8 @@ void KisConfig::setMaxNumberOfThreads(qint32 maxThreads)
 
 quint32 KisConfig::getGridMainStyle(bool defaultValue) const
 {
-    quint32 v = m_cfg.readEntry("gridmainstyle", 0);
-    if (v > 2)
-        v = 2;
+    int v = m_cfg.readEntry("gridmainstyle", 0);
+    v = qBound(0, v, 2);
     return (defaultValue ? 0 : v);
 }
 
@@ -723,79 +733,56 @@ void KisConfig::setGridSubdivisionColor(const QColor & v) const
     m_cfg.writeEntry("gridsubdivisioncolor", v);
 }
 
-quint32 KisConfig::getGridHSpacing(bool defaultValue) const
+quint32 KisConfig::guidesLineStyle(bool defaultValue) const
 {
-    qint32 v = m_cfg.readEntry("gridhspacing", 10);
-    return (defaultValue ? 10 : (quint32)qMax(1, v));
+    int v = m_cfg.readEntry("guidesLineStyle", 0);
+    v = qBound(0, v, 2);
+    return (defaultValue ? 0 : v);
 }
 
-void KisConfig::setGridHSpacing(quint32 v) const
+void KisConfig::setGuidesLineStyle(quint32 v) const
 {
-    m_cfg.writeEntry("gridhspacing", v);
+    m_cfg.writeEntry("guidesLineStyle", v);
 }
 
-quint32 KisConfig::getGridVSpacing(bool defaultValue) const
+QColor KisConfig::guidesColor(bool defaultValue) const
 {
-    qint32 v = m_cfg.readEntry("gridvspacing", 10);
-    return (defaultValue ? 10 : (quint32)qMax(1, v));
+    QColor col(99, 99, 99);
+    return (defaultValue ? col : m_cfg.readEntry("guidesColor", col));
 }
 
-void KisConfig::setGridVSpacing(quint32 v) const
+void KisConfig::setGuidesColor(const QColor & v) const
 {
-    m_cfg.writeEntry("gridvspacing", v);
+    m_cfg.writeEntry("guidesColor", v);
 }
 
-bool KisConfig::getGridSpacingAspect(bool defaultValue) const
+void KisConfig::loadSnapConfig(KisSnapConfig *config, bool defaultValue) const
 {
-    return (defaultValue ? false : m_cfg.readEntry("gridspacingaspect", false));
+    KisSnapConfig defaultConfig(false);
+
+    if (defaultValue) {
+        *config = defaultConfig;
+        return;
+    }
+
+    config->setOrthogonal(m_cfg.readEntry("globalSnapOrthogonal", defaultConfig.orthogonal()));
+    config->setNode(m_cfg.readEntry("globalSnapNode", defaultConfig.node()));
+    config->setExtension(m_cfg.readEntry("globalSnapExtension", defaultConfig.extension()));
+    config->setIntersection(m_cfg.readEntry("globalSnapIntersection", defaultConfig.intersection()));
+    config->setBoundingBox(m_cfg.readEntry("globalSnapBoundingBox", defaultConfig.boundingBox()));
+    config->setImageBounds(m_cfg.readEntry("globalSnapImageBounds", defaultConfig.imageBounds()));
+    config->setImageCenter(m_cfg.readEntry("globalSnapImageCenter", defaultConfig.imageCenter()));
 }
 
-void KisConfig::setGridSpacingAspect(bool v) const
+void KisConfig::saveSnapConfig(const KisSnapConfig &config)
 {
-    m_cfg.writeEntry("gridspacingaspect", v);
-}
-
-quint32 KisConfig::getGridSubdivisions(bool defaultValue) const
-{
-    qint32 v = m_cfg.readEntry("gridsubsivisons", 2);
-    return (defaultValue ? 2 : (quint32)qMax(1, v));
-}
-
-void KisConfig::setGridSubdivisions(quint32 v) const
-{
-    m_cfg.writeEntry("gridsubsivisons", v);
-}
-
-quint32 KisConfig::getGridOffsetX(bool defaultValue) const
-{
-    qint32 v = m_cfg.readEntry("gridoffsetx", 0);
-    return (defaultValue ? 0 : (quint32)qMax(0, v));
-}
-
-void KisConfig::setGridOffsetX(quint32 v) const
-{
-    m_cfg.writeEntry("gridoffsetx", v);
-}
-
-quint32 KisConfig::getGridOffsetY(bool defaultValue) const
-{
-    qint32 v = m_cfg.readEntry("gridoffsety", 0);
-    return (defaultValue ? 0 : (quint32)qMax(0, v));
-}
-
-void KisConfig::setGridOffsetY(quint32 v) const
-{
-    m_cfg.writeEntry("gridoffsety", v);
-}
-
-bool KisConfig::getGridOffsetAspect(bool defaultValue) const
-{
-    return (defaultValue ? false : m_cfg.readEntry("gridoffsetaspect", false));
-}
-
-void KisConfig::setGridOffsetAspect(bool v) const
-{
-    m_cfg.writeEntry("gridoffsetaspect", v);
+    m_cfg.writeEntry("globalSnapOrthogonal", config.orthogonal());
+    m_cfg.writeEntry("globalSnapNode", config.node());
+    m_cfg.writeEntry("globalSnapExtension", config.extension());
+    m_cfg.writeEntry("globalSnapIntersection", config.intersection());
+    m_cfg.writeEntry("globalSnapBoundingBox", config.boundingBox());
+    m_cfg.writeEntry("globalSnapImageBounds", config.imageBounds());
+    m_cfg.writeEntry("globalSnapImageCenter", config.imageCenter());
 }
 
 qint32 KisConfig::checkSize(bool defaultValue) const
@@ -1653,6 +1640,16 @@ void KisConfig::setAnimationDropFrames(bool value)
 bool KisConfig::animationDropFrames(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("animationDropFrames", true));
+}
+
+int KisConfig::scribbingUpdatesDelay(bool defaultValue) const
+{
+    return (defaultValue ? 30 : m_cfg.readEntry("scribbingUpdatesDelay", 30));
+}
+
+void KisConfig::setScribbingUpdatesDelay(int value)
+{
+    m_cfg.writeEntry("scribbingUpdatesDelay", value);
 }
 
 bool KisConfig::switchSelectionCtrlAlt(bool defaultValue) const

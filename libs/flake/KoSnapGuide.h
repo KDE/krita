@@ -22,6 +22,7 @@
 
 #include "kritaflake_export.h"
 
+#include <QScopedPointer>
 #include <QList>
 #include <Qt>
 
@@ -52,6 +53,7 @@ class QRectF;
  * widget in guiutils.
  *
  */
+
 class KRITAFLAKE_EXPORT KoSnapGuide
 {
 public:
@@ -65,7 +67,9 @@ public:
         GridSnapping = 0x10,
         BoundingBoxSnapping = 0x20,
         GuideLineSnapping = 0x40,
-        CustomSnapping = 0x80
+        DocumentBoundsSnapping = 0x80,
+        DocumentCenterSnapping = 0x100,
+        CustomSnapping = 0x200
     };
     Q_DECLARE_FLAGS(Strategies, Strategy)
 
@@ -76,6 +80,8 @@ public:
 
     /// snaps the mouse position, returns if mouse was snapped
     QPointF snap(const QPointF &mousePosition, Qt::KeyboardModifiers modifiers);
+
+    QPointF snap(const QPointF &mousePosition, const QPointF &dragOffset, Qt::KeyboardModifiers modifiers);
 
     /// paints the guide
     void paint(QPainter &painter, const KoViewConverter &converter);
@@ -88,6 +94,9 @@ public:
 
     /// returns the extra shapes to use
     KoShape *editedShape() const;
+
+    void enableSnapStrategy(Strategy type, bool value);
+    bool isStrategyEnabled(Strategy type) const;
 
     /// enables the strategies used for snapping
     void enableSnapStrategies(Strategies strategies);
@@ -102,6 +111,13 @@ public:
      * are destroyed when calling reset().
      */
     bool addCustomSnapStrategy(KoSnapStrategy *customStrategy);
+
+    /**
+     * Overrides the first entry of a strategy \p type with a strategy
+     * \p strategy. Note that basically strategy->type() may not be equal
+     * to type and that is ok. \p strategy may also be null.
+     */
+    void overrideSnapStrategy(Strategy type, KoSnapStrategy *strategy);
 
     /// enables the snapping guides
     void enableSnapping(bool on);
@@ -134,8 +150,8 @@ public:
     void reset();
 
 private:
-    class Private;
-    Private * const d;
+    struct Private;
+    const QScopedPointer<Private> d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KoSnapGuide::Strategies)

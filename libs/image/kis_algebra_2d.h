@@ -229,7 +229,16 @@ QPainterPath KRITAIMAGE_EXPORT smallArrow();
  * Multiply width and height of \p rect by \p coeff keeping the
  * center of the rectangle pinned
  */
-QRect KRITAIMAGE_EXPORT blowRect(const QRect &rect, qreal coeff);
+template <class Rect>
+Rect blowRect(const Rect &rect, qreal coeff)
+{
+    typedef decltype(rect.x()) CoordType;
+
+    CoordType w = rect.width() * coeff;
+    CoordType h = rect.height() * coeff;
+
+    return rect.adjusted(-w, -h, w, h);
+}
 
 QPoint KRITAIMAGE_EXPORT ensureInRect(QPoint pt, const QRect &bounds);
 QPointF KRITAIMAGE_EXPORT ensureInRect(QPointF pt, const QRectF &bounds);

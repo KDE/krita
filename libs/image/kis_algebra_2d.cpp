@@ -124,14 +124,6 @@ QPainterPath smallArrow()
     return p;
 }
 
-QRect blowRect(const QRect &rect, qreal coeff)
-{
-    int w = rect.width() * coeff;
-    int h = rect.height() * coeff;
-
-    return rect.adjusted(-w, -h, w, h);
-}
-
 template <class Point, class Rect>
 inline Point ensureInRectImpl(Point pt, const Rect &bounds)
 {

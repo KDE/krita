@@ -63,6 +63,8 @@ private:
     QRect progressBarRect(const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void drawProgressBar(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
+
+    void drawBranch(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void drawColorLabel(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void drawFrame(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void drawThumbnail(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;

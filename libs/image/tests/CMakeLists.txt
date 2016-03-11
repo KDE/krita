@@ -439,12 +439,6 @@ kde4_add_unit_test(KoPatternTest TESTNAME krita-image-KoPatternTest ${kis_patter
 target_link_libraries(KoPatternTest   kritaimage Qt5::Test)
 
 ########### next target ###############
-# commented out because it depends on ui???
-#set(kis_perspective_grid_test_SRCS kis_perspective_grid_test.cpp )
-#kde4_add_unit_test(KisPerspectiveGridTest TESTNAME krita-image-KisPerspectiveGridTest ${kis_perspective_grid_test_SRCS})
-#target_link_libraries(KisPerspectiveGridTest   kritaimage Qt5::Test)
-
-########### next target ###############
 
 set(kis_recorded_action_factory_registry_test_SRCS kis_recorded_action_factory_registry_test.cpp )
 kde4_add_unit_test(KisRecordedActionFactoryRegistryTest TESTNAME krita-image-KisRecordedActionFactoryRegistryTest ${kis_recorded_action_factory_registry_test_SRCS})

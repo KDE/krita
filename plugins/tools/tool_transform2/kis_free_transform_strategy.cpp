@@ -133,9 +133,10 @@ struct KisFreeTransformStrategy::Private
 };
 
 KisFreeTransformStrategy::KisFreeTransformStrategy(const KisCoordinatesConverter *converter,
+                                                   KoSnapGuide *snapGuide,
                                                    ToolTransformArgs &currentArgs,
                                                    TransformTransactionProperties &transaction)
-    : KisSimplifiedActionPolicyStrategy(converter),
+    : KisSimplifiedActionPolicyStrategy(converter, snapGuide),
       m_d(new Private(this, converter, currentArgs, transaction))
 {
 }

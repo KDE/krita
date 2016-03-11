@@ -114,8 +114,7 @@ bool KisSaveGroupVisitor::visit(KisGroupLayer *layer)
         dst->refreshGraph();
 
         exportDocument->setOutputMimeType(m_mimeFilter.toLatin1());
-        exportDocument->setSaveInBatchMode(true);
-
+        d->setFileBatchMode(true);`
 
         QUrl url = m_url;
 

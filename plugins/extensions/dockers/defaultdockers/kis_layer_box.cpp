@@ -522,6 +522,7 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
             menu.addSeparator();
             addActionToMenu(&menu, "create_quick_group");
             addActionToMenu(&menu, "create_quick_clipping_group");
+            addActionToMenu(&menu, "quick_ungroup");
             menu.addSeparator();
 
             menu.addAction(m_removeAction);
@@ -788,10 +789,9 @@ void KisLayerBox::slotRenameCurrentNode()
     m_wdgLayerBox->listLayers->edit(m_wdgLayerBox->listLayers->currentIndex());
 }
 
-void KisLayerBox::slotColorLabelChanged(int index)
+void KisLayerBox::slotColorLabelChanged(int label)
 {
     KisNodeList nodes = m_nodeManager->selectedNodes();
-    const int label = m_colorSelector->currentIndex();
 
     Q_FOREACH(KisNodeSP node, nodes) {
         node->setColorLabelIndex(label);

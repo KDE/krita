@@ -2,7 +2,7 @@
 <kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 name="Krita"
-version="90"
+version="92"
 xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file" noMerge="1">
@@ -85,15 +85,14 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
 
       <Separator/>
       <Action name="view_ruler"/>
+      <Action name="rulers_track_mouse"/>
       <Action name="view_show_guides"/>
-      <!--Action name="view_show_guides"/-->
+      <Action name="view_lock_guides"/>
+      <Action name="view_snap_to_guides"/>
       <Action name="showStatusBar" />
       <Separator/>
       <Action name="view_grid"/>
-      <!--Action name="view_snap_to_grid"/-->
-      <Separator/>
-      <Action name="view_toggle_perspective_grid"/>
-      <Action name="view_clear_perspective_grid"/>
+      <Action name="view_snap_to_grid"/>
       <Separator/>
       <Action name="view_toggle_painting_assistants"/>
       <Action name="view_toggle_assistant_previews"/>
@@ -217,6 +216,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Separator/>
       <Action name="create_quick_group"/>
       <Action name="create_quick_clipping_group"/>
+      <Action name="quick_ungroup"/>
     </Menu>
     <Menu name="Select">
       <text>&amp;Select</text>

@@ -81,7 +81,7 @@ public:
     bool eventFilter(QObject* object, QEvent* event );
     bool eventFilterImpl(QEvent * event);
 
-    void attachPriorityEventFilter(QObject *filter);
+    void attachPriorityEventFilter(QObject *filter, int priority = 0);
     void detachPriorityEventFilter(QObject *filter);
 
     /**

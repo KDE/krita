@@ -265,6 +265,9 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     action = actionManager->createAction("create_quick_clipping_group");
     connect(action, SIGNAL(triggered()), this, SLOT(createQuickClippingGroup()));
 
+    action = actionManager->createAction("quick_ungroup");
+    connect(action, SIGNAL(triggered()), this, SLOT(quickUngroup()));
+
     action = actionManager->createAction("select_all_layers");
     connect(action, SIGNAL(triggered()), this, SLOT(selectAllNodes()));
 
@@ -1199,6 +1202,38 @@ void KisNodeManager::createQuickClippingGroup()
     maskLayer->disableAlphaChannel(true);
 
     juggler->addNode(KisNodeList() << maskLayer, parent, above);
+}
+
+void KisNodeManager::quickUngroup()
+{
+    KisNodeSP active = activeNode();
+    if (!active) return;
+
+    KisNodeSP parent = active->parent();
+    KisNodeSP aboveThis = active;
+
+    KUndo2MagicString actionName = kundo2_i18n("Quick Ungroup");
+
+    if (parent && dynamic_cast<KisGroupLayer*>(active.data())) {
+        KisNodeList nodes = active->childNodes(QStringList(), KoProperties());
+
+        KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
+        juggler->moveNode(nodes, parent, active);
+        juggler->removeNode(KisNodeList() << active);
+    } else if (parent && parent->parent()) {
+        KisNodeSP grandParent = parent->parent();
+
+        KisNodeList allChildNodes = parent->childNodes(QStringList(), KoProperties());
+        KisNodeList allSelectedNodes = selectedNodes();
+
+        const bool removeParent = KritaUtils::compareListsUnordered(allChildNodes, allSelectedNodes);
+
+        KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
+        juggler->moveNode(allSelectedNodes, grandParent, parent);
+        if (removeParent) {
+            juggler->removeNode(KisNodeList() << parent);
+        }
+    }
 }
 
 void KisNodeManager::selectLayersImpl(const KoProperties &props, const KoProperties &invertedProps)

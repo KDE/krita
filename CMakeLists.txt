@@ -169,6 +169,8 @@ option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binar
 # get the special macros
 include(CalligraProductSetMacros)
 include(MacroJPEG)
+include(GenerateTestExportHeader)
+
 
 # get the definitions of products, features and product sets
 include(KritaProducts.cmake)

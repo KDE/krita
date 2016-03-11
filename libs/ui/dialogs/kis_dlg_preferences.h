@@ -30,7 +30,6 @@
 
 #include "ui_wdggeneralsettings.h"
 #include "ui_wdgdisplaysettings.h"
-#include "ui_wdggridsettings.h"
 #include "ui_wdgcolorsettings.h"
 #include "ui_wdgtabletsettings.h"
 #include "ui_wdgperformancesettings.h"
@@ -223,40 +222,6 @@ public:
 //=======================
 
 /**
- *  Grid settings tab for preferences dialog
- */
-
-class WdgGridSettingsBase : public QWidget, public Ui::WdgGridSettingsBase
-{
-    Q_OBJECT
-
-public:
-    WdgGridSettingsBase(QWidget *parent) : QWidget(parent) {
-        setupUi(this);
-    }
-};
-
-class GridSettingsTab : public WdgGridSettingsBase
-{
-    Q_OBJECT
-public:
-    GridSettingsTab(QWidget *parent);
-public:
-    void setDefault();
-private Q_SLOTS:
-    void linkSpacingToggled(bool);
-    void spinBoxHSpacingChanged(int);
-    void spinBoxVSpacingChanged(int);
-    void linkOffsetToggled(bool);
-    void spinBoxXOffsetChanged(int);
-    void spinBoxYOffsetChanged(int);
-private:
-    bool m_linkSpacing, m_linkOffset;
-};
-
-//=======================
-
-/**
  *  Full screen settings tab for preferences dialog
  */
 
@@ -306,7 +271,6 @@ protected:
     ColorSettingsTab *m_colorSettings;
     PerformanceTab *m_performanceSettings;
     DisplaySettingsTab  *m_displaySettings;
-    GridSettingsTab *m_gridSettings;
     TabletSettingsTab *m_tabletSettings;
     FullscreenSettingsTab *m_fullscreenSettings;
     KisInputConfigurationPage *m_inputConfiguration;

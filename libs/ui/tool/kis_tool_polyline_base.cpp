@@ -100,7 +100,7 @@ void KisToolPolylineBase::endPrimaryAction(KoPointerEvent *event)
     setMode(KisTool::HOVER_MODE);
 
     if(m_dragging) {
-        m_dragStart = convertToPixelCoord(event);
+        m_dragStart = convertToPixelCoordAndSnap(event);
         m_dragEnd = m_dragStart;
         m_points.append(m_dragStart);
     }
@@ -132,7 +132,7 @@ void KisToolPolylineBase::mouseMoveEvent(KoPointerEvent *event)
         // erase old lines on canvas
         QRectF updateRect = dragBoundingRect();
         // get current mouse position
-        m_dragEnd = convertToPixelCoord(event);
+        m_dragEnd = convertToPixelCoordAndSnap(event);
         // draw new lines on canvas
         updateRect |= dragBoundingRect();
         updateCanvasViewRect(updateRect);

@@ -54,7 +54,7 @@
 // NOTE: we stub out qwindowcontext.cpp::347 to disable Qt's own tablet support.
 
 // Note: The definition of the PACKET structure in pktdef.h depends on this define.
-#define PACKETDATA (PK_X | PK_Y | PK_BUTTONS | PK_NORMAL_PRESSURE | PK_TANGENT_PRESSURE | PK_ORIENTATION | PK_CURSOR | PK_Z)
+#define PACKETDATA (PK_X | PK_Y | PK_BUTTONS | PK_TIME | PK_NORMAL_PRESSURE | PK_TANGENT_PRESSURE | PK_ORIENTATION | PK_CURSOR | PK_Z)
 #include "pktdef.h"
 
 
@@ -183,9 +183,9 @@ void KisTabletSupportWin::init()
 // The work done by processTabletEvent from qguiapplicationprivate is divided
 // between here and translateTabletPacketEvent.
 static void handleTabletEvent(QWidget *windowWidget, const QPointF &local, const QPointF &global,
-                               int device, int pointerType, Qt::MouseButton button, Qt::MouseButtons buttons,
-                               qreal pressure,int xTilt, int yTilt, qreal tangentialPressure, qreal rotation,
-                               int z, qint64 uniqueId, Qt::KeyboardModifiers modifiers, QEvent::Type type)
+                              int device, int pointerType, Qt::MouseButton button, Qt::MouseButtons buttons,
+                              qreal pressure,int xTilt, int yTilt, qreal tangentialPressure, qreal rotation,
+                              int z, qint64 uniqueId, Qt::KeyboardModifiers modifiers, QEvent::Type type, LONG time)
 {
 
     // Lock in target window
@@ -228,7 +228,7 @@ static void handleTabletEvent(QWidget *windowWidget, const QPointF &local, const
         QPointF mapped = finalDestination->mapFromGlobal(global.toPoint()) + delta;
         QTabletEvent ev(type, mapped, global, device, pointerType, pressure, xTilt, yTilt,
                         tangentialPressure, rotation, z, modifiers, uniqueId, button, buttons);
-        ev.setTimestamp(QWindowSystemInterfacePrivate::eventTime.elapsed());
+        ev.setTimestamp(time);
         QGuiApplication::sendEvent(finalDestination, &ev);
 
 
@@ -778,7 +778,7 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
         auto sendTabletEvent = [&](QTabletEvent::Type t){
             handleTabletEvent(w, localPosF, globalPosF, currentDevice, currentPointerType,
                               button, buttons, pressureNew, tiltX, tiltY, tangentialPressure, rotation, z,
-                              m_devices.at(m_currentDevice).uniqueId, keyboardModifiers, t);
+                              m_devices.at(m_currentDevice).uniqueId, keyboardModifiers, t, packet.pkTime);
         };
 
         /**

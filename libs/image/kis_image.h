@@ -49,7 +49,6 @@ class KisImageSignalRouter;
 class KisPostExecutionUndoAdapter;
 class KisFilterStrategy;
 class KoColorProfile;
-class KisPerspectiveGrid;
 class KisLayerComposition;
 class KisSpontaneousJob;
 class KisImageAnimationInterface;
@@ -152,11 +151,6 @@ public:
      * Set the automatic layer name counter one back.
      */
     void rollBackLayerName();
-
-    /**
-     * @return the perspective grid associated to this image
-     */
-    KisPerspectiveGrid* perspectiveGrid();
 
     /**
      * Resize the image to the specified rect. The resize

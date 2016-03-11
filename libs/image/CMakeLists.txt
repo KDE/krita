@@ -207,7 +207,6 @@ set(kritaimage_LIB_SRCS
    kis_paint_device_debug_utils.cpp
    kis_fixed_paint_device.cpp
    kis_paint_layer.cc
-   kis_perspective_grid.cpp
    kis_perspective_math.cpp
    kis_pixel_selection.cpp
    kis_processing_information.cpp

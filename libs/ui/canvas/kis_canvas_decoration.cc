@@ -54,9 +54,10 @@ const QString& KisCanvasDecoration::id() const
 void KisCanvasDecoration::setVisible(bool v)
 {
     d->visible = v;
-    if (d->view && d->view->canvasBase()) {
+    if (d->view &&
+        d->view->canvasBase()) {
 
-        d->view->canvasBase()->canvasWidget()->update();
+        d->view->canvasBase()->updateCanvas();
     }
 }
 

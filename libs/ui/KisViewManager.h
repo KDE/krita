@@ -40,11 +40,11 @@ class KisCanvasResourceProvider;
 class KisDocument;
 class KisFilterManager;
 class KisGridManager;
+class KisGuidesManager;
 class KisImageManager;
 class KisNodeManager;
 class KisPaintingAssistantsManager;
 class KisPaintopBox;
-class KisPerspectiveGridManager;
 class KisSelectionManager;
 class KisStatusBar;
 class KisUndoAdapter;
@@ -168,7 +168,7 @@ public:  // Krita specific interfaces
 public:
 
     KisGridManager * gridManager() const;
-    KisPerspectiveGridManager* perspectiveGridManager() const;
+    KisGuidesManager * guidesManager() const;
     KisPaintingAssistantsManager* paintingAssistantsManager() const;
 
     /// disable and enable toolbar controls. used for disabling them during painting.
@@ -228,6 +228,8 @@ private Q_SLOTS:
     void guiUpdateTimeout();
     void changeAuthorProfile(const QString &profileName);
     void slotUpdateAuthorProfileActions();
+    void slotSaveShowRulersState(bool value);
+    void slotSaveRulersTrackMouseState(bool value);
 
 private:
     void createActions();

@@ -36,7 +36,7 @@ class CSVSaver : public QObject {
     Q_OBJECT
 
 public:
-    CSVSaver(KisDocument* doc);
+    CSVSaver(KisDocument* doc, bool batchMode);
     virtual ~CSVSaver();
 
     KisImageBuilder_Result buildAnimation(const QUrl &, const QString &);
@@ -48,9 +48,13 @@ private:
     void createTempImage(KisDocument* );
     QString convertToBlending(const QString &);
 
+private Q_SLOTS:
+    void cancel();
+
 private:
     KisImageWSP m_image;
     KisDocument* m_doc;
+    bool m_batchMode;
     bool m_stop;
 };
 

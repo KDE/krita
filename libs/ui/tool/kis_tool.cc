@@ -38,6 +38,7 @@
 #include <KoViewConverter.h>
 #include <KoSelection.h>
 #include <resources/KoAbstractGradient.h>
+#include <KoSnapGuide.h>
 
 #include <KisViewManager.h>
 #include <kis_selection.h>
@@ -264,6 +265,28 @@ QPointF KisTool::convertToPixelCoord(const QPointF& pt)
         return pt;
 
     return image()->documentToPixel(pt);
+}
+
+QPointF KisTool::convertToPixelCoordAndSnap(KoPointerEvent *e, const QPointF &offset, bool useModifiers)
+{
+    if (!image())
+        return e->point;
+
+    KoSnapGuide *snapGuide = canvas()->snapGuide();
+    QPointF pos = snapGuide->snap(e->point, offset, useModifiers ? e->modifiers() : Qt::NoModifier);
+
+    return image()->documentToPixel(pos);
+}
+
+QPointF KisTool::convertToPixelCoordAndSnap(const QPointF& pt, const QPointF &offset)
+{
+    if (!image())
+        return pt;
+
+    KoSnapGuide *snapGuide = canvas()->snapGuide();
+    QPointF pos = snapGuide->snap(pt, offset, Qt::NoModifier);
+
+    return image()->documentToPixel(pos);
 }
 
 QPoint KisTool::convertToIntPixelCoord(KoPointerEvent *e)

@@ -30,6 +30,7 @@
 
 class KisGridDecoration;
 class KisViewManager;
+class KisGridConfig;
 
 
 class KRITAUI_EXPORT KisGridManager : public QObject
@@ -41,17 +42,24 @@ public:
 public:
 
     void setup(KisActionManager * actionManager);
-
     void setView(QPointer<KisView>imageView);
+
+    void setGridConfig(const KisGridConfig &config);
+
+Q_SIGNALS:
+    void sigRequestUpdateGridConfig(const KisGridConfig &config);
 
 public Q_SLOTS:
 
     void updateGUI();
-    void checkVisibilityAction(bool check);
 
 private Q_SLOTS:
 
-    void toggleSnapToGrid();
+    void slotChangeGridVisibilityTriggered(bool value);
+    void slotSnapToGridTriggered(bool value);
+
+private:
+    void setGridConfigImpl(const KisGridConfig &config, bool emitModified);
 
 private:
     void setFastConfig(int size);
@@ -61,6 +69,8 @@ private:
 
     QPointer<KisView> m_imageView;
     KisGridDecoration* m_gridDecoration;
+
+    bool m_blockModifiedSignal;
 };
 
 #endif

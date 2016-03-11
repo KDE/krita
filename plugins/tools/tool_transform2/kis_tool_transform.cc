@@ -103,10 +103,12 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     , m_freeStrategy(
         new KisFreeTransformStrategy(
             dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),
+            dynamic_cast<KisCanvas2*>(canvas)->snapGuide(),
             m_currentArgs, m_transaction))
     , m_perspectiveStrategy(
         new KisPerspectiveTransformStrategy(
             dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),
+            dynamic_cast<KisCanvas2*>(canvas)->snapGuide(),
             m_currentArgs, m_transaction))
 {
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);

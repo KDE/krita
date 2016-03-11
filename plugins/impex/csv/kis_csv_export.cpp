@@ -93,7 +93,7 @@ KisImportExportFilter::ConversionStatus KisCSVExport::convert(const QByteArray& 
 
     QUrl url = QUrl::fromLocalFile(filename);
 
-    CSVSaver kpc(input);
+    CSVSaver kpc(input, m_chain->manager()->getBatchMode());
     KisImageBuilder_Result res;
 
     if ((res = kpc.buildAnimation(url, filename)) == KisImageBuilder_RESULT_OK) {
@@ -101,6 +101,10 @@ KisImportExportFilter::ConversionStatus KisCSVExport::convert(const QByteArray& 
         return KisImportExportFilter::OK;
     }
     dbgFile <<" Result =" << res;
+
+    if (res == KisImageBuilder_RESULT_CANCEL)
+        return KisImportExportFilter::ProgressCancelled;
+
     return KisImportExportFilter::InternalError;
 }
 

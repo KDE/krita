@@ -24,6 +24,7 @@ Boston, MA 02110-1301, USA.
 #include <QObject>
 #include <QMap>
 #include <QPointer>
+#include <QString>
 
 #include "kritaui_export.h"
 
@@ -74,6 +75,7 @@ public:
                             UnexpectedOpcode, UserCancelled, OutOfMemory,
                             PasswordProtected, InvalidFormat, FilterEntryNull,
                             NoDocumentCreated, DownloadFailed, FilterCreationError,
+                            ProgressCancelled,
                             JustInCaseSomeBrokenCompilerUsesLessThanAByte = 255
                           };
 
@@ -97,6 +99,11 @@ public:
      * Every emit of the sigProgress signal is reported to the updater.
      */
     void setUpdater(const QPointer<KoUpdater>& updater);
+
+    /**
+     * Get the text version of the status value
+     */
+    static QString conversionStatusString(ConversionStatus status);
 
 Q_SIGNALS:
     /**

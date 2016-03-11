@@ -35,6 +35,7 @@
 #include "compositeops/KoCompositeOpCopy2.h"
 #include "compositeops/KoCompositeOpDissolve.h"
 #include "compositeops/KoCompositeOpBehind.h"
+#include "compositeops/KoCompositeOpGreater.h"
 
 #include "KoOptimizedCompositeOpFactory.h"
 
@@ -108,6 +109,7 @@ struct AddGeneralOps<Traits, true>
          cs->addCompositeOp(new KoCompositeOpCopy2<Traits>(cs));
          cs->addCompositeOp(new KoCompositeOpErase<Traits>(cs));
          cs->addCompositeOp(new KoCompositeOpBehind<Traits>(cs));
+         cs->addCompositeOp(new KoCompositeOpGreater<Traits>(cs));
 
          add<&cfOverlay<Arg>       >(cs, COMPOSITE_OVERLAY       , i18n("Overlay")       , KoCompositeOp::categoryMix());
          add<&cfGrainMerge<Arg>    >(cs, COMPOSITE_GRAIN_MERGE   , i18n("Grain Merge")   , KoCompositeOp::categoryMix());

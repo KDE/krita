@@ -583,12 +583,48 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="rulers_track_mouse">
+      <icon></icon>
+      <text>Rulers Track Pointer</text>
+      <whatsThis>The rulers will track current mouse position and show it on screen. It can cause suptle performance slowdown</whatsThis>
+      <toolTip>Rulers Track Pointer</toolTip>
+      <iconText>Rulers Track Pointer</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="view_show_guides">
       <icon></icon>
       <text>Show Guides</text>
       <whatsThis></whatsThis>
       <toolTip>Show or hide guides</toolTip>
       <iconText>Show Guides</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="view_lock_guides">
+      <icon></icon>
+      <text>Lock Guides</text>
+      <whatsThis></whatsThis>
+      <toolTip>Lock or unlock guides</toolTip>
+      <iconText>Lock Guides</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="view_snap_to_guides">
+      <icon></icon>
+      <text>Snap to Guides</text>
+      <whatsThis></whatsThis>
+      <toolTip>Snap cursor to guides position</toolTip>
+      <iconText>Snap to Guides</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
@@ -630,24 +666,99 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="view_toggle_perspective_grid">
+    <Action name="show_snap_options_popup">
       <icon></icon>
-      <text>Show Perspective Grid</text>
+      <text>Show Snap Options Popup</text>
       <whatsThis></whatsThis>
-      <toolTip>Show Perspective Grid</toolTip>
-      <iconText>Show Perspective Grid</iconText>
+      <toolTip>Show Snap Options Popup</toolTip>
+      <iconText>Show Snap Options Popup</iconText>
+      <activationFlags>1000</activationFlags>
+      <shortcut>Shift+s</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="view_snap_orthogonal">
+      <icon></icon>
+      <text>Snap Orthogonal</text>
+      <whatsThis></whatsThis>
+      <toolTip>Snap Orthogonal</toolTip>
+      <iconText>Snap Orthogonal</iconText>
+      <activationFlags>1000</activationFlags>
       <shortcut></shortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="view_clear_perspective_grid">
+
+    <Action name="view_snap_node">
       <icon></icon>
-      <text>Clear Perspective Grid</text>
+      <text>Snap Node</text>
       <whatsThis></whatsThis>
-      <toolTip>Clear Perspective Grid</toolTip>
-      <iconText>Clear Perspective Grid</iconText>
+      <toolTip>Snap Node</toolTip>
+      <iconText>Snap Node</iconText>
+      <activationFlags>1000</activationFlags>
       <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="view_snap_extension">
+      <icon></icon>
+      <text>Snap Extension</text>
+      <whatsThis></whatsThis>
+      <toolTip>Snap Extension</toolTip>
+      <iconText>Snap Extension</iconText>
+      <activationFlags>1000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="view_snap_intersection">
+      <icon></icon>
+      <text>Snap Intersection</text>
+      <whatsThis></whatsThis>
+      <toolTip>Snap Intersection</toolTip>
+      <iconText>Snap Intersection</iconText>
+      <activationFlags>1000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="view_snap_bounding_box">
+      <icon></icon>
+      <text>Snap Bounding Box</text>
+      <whatsThis></whatsThis>
+      <toolTip>Snap Bounding Box</toolTip>
+      <iconText>Snap Bounding Box</iconText>
+      <activationFlags>1000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="view_snap_image_bounds">
+      <icon></icon>
+      <text>Snap Image Bounds</text>
+      <whatsThis></whatsThis>
+      <toolTip>Snap Image Bounds</toolTip>
+      <iconText>Snap Image Bounds</iconText>
+      <activationFlags>1000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="view_snap_image_center">
+      <icon></icon>
+      <text>Snap Image Center</text>
+      <whatsThis></whatsThis>
+      <toolTip>Snap Image Center</toolTip>
+      <iconText>Snap Image Center</iconText>
+      <activationFlags>1000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="view_toggle_painting_assistants">

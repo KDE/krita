@@ -128,6 +128,11 @@ public:
     void clearCollections();
 
     /**
+     * Clears search area
+     */
+    void clearSearch();
+
+    /**
      * Note: the reason this is so damn complicated is because it's supposed to
      * support having multiple applications running inside of each other through
      * KisParts. That means we have to be able to separate sections within each

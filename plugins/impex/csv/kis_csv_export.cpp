@@ -93,7 +93,7 @@ KisImportExportFilter::ConversionStatus KisCSVExport::convert(const QByteArray& 
 
     QUrl url = QUrl::fromLocalFile(filename);
 
-    CSVSaver kpc(input, m_chain->manager()->getBatchMode());
+    CSVSaver kpc(input, getBatchMode());
     KisImageBuilder_Result res;
 
     if ((res = kpc.buildAnimation(url, filename)) == KisImageBuilder_RESULT_OK) {

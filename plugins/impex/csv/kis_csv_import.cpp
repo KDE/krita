@@ -65,7 +65,7 @@ KisImportExportFilter::ConversionStatus KisCSVImport::convert(const QByteArray&,
         if (url.isEmpty())
             return KisImportExportFilter::FileNotFound;
 
-        CSVLoader ib(doc,m_chain->manager()->getBatchMode());
+        CSVLoader ib(doc, getBatchMode());
 
         KisImageBuilder_Result result = ib.buildAnimation(url,filename);
 

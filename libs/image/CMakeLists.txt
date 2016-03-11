@@ -67,6 +67,7 @@ set(kritaimage_LIB_SRCS
    brushengine/kis_locked_properties_proxy.cpp
    brushengine/kis_locked_properties_server.cpp
    brushengine/kis_paintop_config_widget.cpp
+   brushengine/kis_uniform_paintop_property.cpp
    commands/kis_deselect_global_selection_command.cpp
    commands/kis_image_change_layers_command.cpp
    commands/kis_image_command.cpp

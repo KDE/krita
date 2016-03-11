@@ -75,6 +75,9 @@ set(kritaui_LIB_SRCS
     flake/kis_shape_selection_canvas.cpp
     flake/kis_shape_selection_model.cpp
     flake/kis_take_all_shapes_command.cpp
+    brushhud/kis_uniform_paintop_property_widget.cpp
+    brushhud/kis_brush_hud.cpp
+    brushhud/kis_round_hud_button.cpp
     kis_aspect_ratio_locker.cpp
     kis_autogradient.cc
     kis_bookmarked_configurations_editor.cc

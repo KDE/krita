@@ -160,9 +160,11 @@ public:
     void setFastSliderStep(qreal step);
 
     qreal value();
+    void setSingleStep(qreal value);
+
+public Q_SLOTS:
     void setValue(qreal value);
 
-    void setSingleStep(qreal value);
 protected:
     virtual QString valueString() const;
     virtual void setInternalValue(int value, bool blockUpdateSignal);

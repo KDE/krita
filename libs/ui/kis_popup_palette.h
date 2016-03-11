@@ -30,6 +30,8 @@ class QWidget;
 class KoColor;
 class KoTriangleColorSelector;
 class KisSignalCompressor;
+class KisBrushHud;
+class KisRoundHudButton;
 
 class KisPopupPalette : public QWidget
 {
@@ -88,6 +90,7 @@ private:
     QPainterPath pathFromPresetIndex(int index);
 
     int numSlots();
+    void adjustLayout(const QPoint &p);
 private:
 
     int m_hoveredPreset;
@@ -101,6 +104,10 @@ private:
     const KoColorDisplayRendererInterface *m_displayRenderer;
 
     KisSignalCompressor *m_colorChangeCompressor;
+    KisBrushHud *m_brushHud;
+    KisRoundHudButton *m_settingsButton;
+    KisRoundHudButton *m_brushHudButton;
+    QPoint m_lastCenterPoint;
 
 Q_SIGNALS:
     void sigChangeActivePaintop(int);
@@ -123,6 +130,8 @@ private Q_SLOTS:
     void slotEnableChangeFGColor();
     void slotUpdate() { update(); }
     void slotHide() { showPopupPalette(false); }
+    void slotShowTagsPopup();
+    void showHudWidget(bool visible);
 };
 
 #endif // KIS_POPUP_PALETTE_H

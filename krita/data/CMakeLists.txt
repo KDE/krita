@@ -12,6 +12,7 @@ add_subdirectory( input )
 add_subdirectory( shortcuts )
 add_subdirectory( paintoppresets )
 add_subdirectory( palettes )
+add_subdirectory( mime )
 
 ########### install files ###############
 
@@ -20,12 +21,3 @@ install( FILES
     DESTINATION ${CONFIG_INSTALL_DIR} 
 )
 
-install( FILES
-    krita.xml
-    x-gimp-brush-animated.xml
-    x-gimp-brush.xml
-    DESTINATION ${XDG_MIME_INSTALL_DIR}
-)
-if (SHARED_MIME_INFO_FOUND)
-    update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})
-endif()

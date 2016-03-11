@@ -101,7 +101,12 @@ QValidator::State KoUnitDoubleSpinBox::validate(QString &input, int &pos) const
 
     const double value = valueFromText( number );
     double newVal = 0.0;
+#ifdef Q_CC_MSVC
     if (!isnan(value)) {
+#else
+    if (!std::isnan(value)) {
+#endif
+
         bool ok;
         const KoUnit unit = KoUnit::fromSymbol(unitName, &ok);
         if ( ok )

@@ -26,4 +26,11 @@
          </magic>
          <glob pattern="*.r8"/>
   </mime-type>
+  <mime-type type="image/x-r8">
+         <comment xml:lang="en">Spriter SCML</comment>
+         <magic priority="50">
+             <match type="string" value="spriter_data scml_version" offset="40"/>
+         </magic>
+         <glob pattern="*.scml"/>
+  </mime-type>
 </mime-info>

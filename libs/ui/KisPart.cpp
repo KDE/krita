@@ -123,13 +123,13 @@ public:
 
 // Basically, we are going to insert the current UI/MainWindow ActionCollection
 // into the KisActionRegistry.
-void KisPart::Private::loadActions()
+void KisPart::loadActions()
 {
-    actionCollection = part->currentMainwindow()->viewManager()->actionCollection();
+    d->actionCollection = currentMainwindow()->viewManager()->actionCollection();
 
     KisActionRegistry * actionRegistry = KisActionRegistry::instance();
 
-    Q_FOREACH (auto action, actionCollection->actions()) {
+    Q_FOREACH (auto action, d->actionCollection->actions()) {
         auto name = action->objectName();
         actionRegistry->addAction(action->objectName(), action);
     }
@@ -422,14 +422,6 @@ void KisPart::openExistingFile(const QUrl &url)
         d->startupWidget->hide();
     }
     qApp->restoreOverrideCursor();
-}
-
-void KisPart::configureShortcuts()
-{
-    d->loadActions();
-
-    auto actionRegistry = KisActionRegistry::instance();
-    actionRegistry->configureShortcuts();
 }
 
 void KisPart::updateShortcuts()

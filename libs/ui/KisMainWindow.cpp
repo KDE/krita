@@ -1624,12 +1624,6 @@ void KisMainWindow::exportAnimation()
 #endif
 }
 
-void KisMainWindow::slotConfigureKeys()
-{
-    KisPart::instance()->configureShortcuts();
-    emit keyBindingsChanged();
-}
-
 void KisMainWindow::slotConfigureToolbars()
 {
     KConfigGroup group =  KSharedConfig::openConfig()->group("krita");
@@ -2217,7 +2211,6 @@ void KisMainWindow::createActions()
     actionManager->createStandardAction(KStandardAction::New, this, SLOT(slotFileNew()));
     actionManager->createStandardAction(KStandardAction::Open, this, SLOT(slotFileOpen()));
     actionManager->createStandardAction(KStandardAction::Quit, this, SLOT(slotFileQuit()));
-    actionManager->createStandardAction(KStandardAction::KeyBindings, this, SLOT(slotConfigureKeys()));
     actionManager->createStandardAction(KStandardAction::ConfigureToolbars, this, SLOT(slotConfigureToolbars()));
     actionManager->createStandardAction(KStandardAction::FullScreen, this, SLOT(viewFullscreen(bool)));
 

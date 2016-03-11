@@ -57,6 +57,7 @@
 #include <klocalizedstring.h>
 #include <kundo2stack.h>
 #include <KoResourcePaths.h>
+#include "kis_action_registry.h"
 
 #include "widgets/squeezedcombobox.h"
 #include "kis_clipboard.h"
@@ -244,6 +245,35 @@ void GeneralTab::clearBackgroundImage()
 {
     // clearing the background image text will implicitly make the background color be used
     m_backgroundimage->setText("");
+}
+
+ShortcutSettingsTab::ShortcutSettingsTab(QWidget *parent, const char *name)
+    : QWidget(parent)
+{
+    setObjectName(name);
+
+    QGridLayout * l = new QGridLayout(this);
+    l->setMargin(0);
+    m_page = new WdgShortcutSettings(this);
+    l->addWidget(m_page, 0, 0);
+
+    KisPart::instance()->loadActions();
+    KisActionRegistry::instance()->setupDialog(m_page);
+}
+
+void ShortcutSettingsTab::setDefault()
+{
+    m_page->allDefault();
+}
+
+void ShortcutSettingsTab::saveChanges()
+{
+    KisActionRegistry::instance()->settingsPageSaved();
+}
+
+void ShortcutSettingsTab::revertChanges()
+{
+    m_page->allDefault();
 }
 
 ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
@@ -803,6 +833,24 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     addPage(page);
     m_general = new GeneralTab(vbox);
 
+    // Shortcuts
+    vbox = new KoVBox();
+    page = new KPageWidgetItem(vbox, i18n("Keyboard Shortcuts"));
+    page->setObjectName("shortcuts");
+    page->setHeader(i18n("Shortcuts"));
+    page->setIcon(KisIconUtils::loadIcon("configure-shortcuts"));
+    addPage(page);
+    m_shortcutSettings = new ShortcutSettingsTab(vbox);
+    connect(this, SIGNAL(accepted()), m_shortcutSettings, SLOT(saveChanges()));
+    connect(this, SIGNAL(rejected()), m_shortcutSettings, SLOT(revertChanges()));
+
+    // Canvas input settings
+    m_inputConfiguration = new KisInputConfigurationPage();
+    page = addPage(m_inputConfiguration, i18n("Canvas Input Settings"));
+    page->setHeader(i18n("Canvas Input"));
+    page->setObjectName("canvasinput");
+    page->setIcon(KisIconUtils::loadIcon("applications-system"));
+
     // Display
     vbox = new KoVBox();
     page = new KPageWidgetItem(vbox, i18n("Display"));
@@ -856,13 +904,6 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setIcon(KisIconUtils::loadIcon("im-user"));
 
 
-    // input settings
-    m_inputConfiguration = new KisInputConfigurationPage();
-    page = addPage(m_inputConfiguration, i18n("Canvas Input Settings"));
-    page->setHeader(i18n("Canvas Input"));
-    page->setObjectName("canvasinput");
-    page->setIcon(KisIconUtils::loadIcon("applications-system"));
-
     QPushButton *restoreDefaultsButton = button(QDialogButtonBox::RestoreDefaults);
 
     connect(this, SIGNAL(accepted()), m_inputConfiguration, SLOT(saveChanges()));
@@ -897,6 +938,9 @@ void KisDlgPreferences::slotDefault()
 {
     if (currentPage()->objectName() == "default") {
         m_general->setDefault();
+    }
+    else if (currentPage()->objectName() == "shortcuts") {
+        m_shortcutSettings->setDefault();
     }
     else if (currentPage()->objectName() == "display") {
         m_displaySettings->setDefault();

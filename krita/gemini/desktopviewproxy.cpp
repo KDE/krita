@@ -45,6 +45,7 @@
 #include <kis_config.h>
 #include <KisDocument.h>
 #include <KisViewManager.h>
+#include <kis_action_registry.h>
 
 class DesktopViewProxy::Private
 {
@@ -100,7 +101,9 @@ DesktopViewProxy::DesktopViewProxy(MainWindow* mainWindow, KisMainWindow* parent
 
     connect(d->desktopWindow, SIGNAL(documentSaved()), this, SIGNAL(documentSaved()));
 
-    connect(d->desktopWindow, SIGNAL(keyBindingsChanged()), this, SLOT(updateKeyBindings()));
+    // XXX: Shortcut editor is untested in Gemini since refactoring.
+    connect(KisActionRegistry::instance(), SIGNAL(shortcutsUpdated()), this, SLOT(updateShortcuts()));
+
 }
 
 DesktopViewProxy::~DesktopViewProxy()

@@ -88,7 +88,6 @@ void KisShortcutsDialog::KisShortcutsDialogPrivate::undo()
 void KisShortcutsDialog::KisShortcutsDialogPrivate::save()
 {
     m_shortcutsEditor->save();
-    emit q->saved();
 };
 
 #include "moc_KisShortcutsDialog_p.cpp"

@@ -28,6 +28,7 @@
 class KActionCollection;
 class QDomElement;
 class KConfigBase;
+class KisShortcutsDialog;
 
 /**
  * KisActionRegistry is intended to manage the global action configuration data
@@ -114,9 +115,15 @@ public:
     QStringList allActions();
 
     /**
-     * Display the shortcut configuration dialog.
+     * Setup the shortcut configuration widget.
      */
-    void configureShortcuts();
+    void setupDialog(KisShortcutsDialog *dlg);
+
+
+    /**
+     * Called when "OK" button is pressed in settings dialog.
+     */
+    void settingsPageSaved();
 
 
     /**

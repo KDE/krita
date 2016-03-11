@@ -219,25 +219,19 @@ QAction * KisActionRegistry::makeQAction(const QString &name, QObject *parent)
 };
 
 
-void KisActionRegistry::configureShortcuts()
+void KisActionRegistry::setupDialog(KisShortcutsDialog *dlg)
 {
-    KisShortcutsDialog dlg;
-
     for (auto i = d->actionCollections.constBegin(); i != d->actionCollections.constEnd(); i++ ) {
-        dlg.addCollection(i.value(), i.key());
+        dlg->addCollection(i.value(), i.key());
     }
+}
 
-    /* Testing */
-    // QStringList mainWindowActions;
-    // foreach (auto a, ac->actions()) {
-    //     mainWindowActions << a->objectName();
-    // }
-    // dlg.addCollection(ac, "TESTING: XMLGUI-MAINWINDOW");
-
-   dlg.configure();  // Show the dialog.
-
+void KisActionRegistry::settingsPageSaved()
+{
+   // For now, custom shortcuts are dealt with by writing to file and reloading.
    loadCustomShortcuts();
 
+   // Announce UI should reload current shortcuts.
    emit shortcutsUpdated();
 }
 

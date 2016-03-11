@@ -76,7 +76,7 @@ KShortcutSchemesEditor::KShortcutSchemesEditor(KisShortcutsDialog *parent)
     m_deleteScheme = new QPushButton(i18n("Delete"));
     addWidget(m_deleteScheme);
 
-    QPushButton *moreActions = new QPushButton(i18n("More Actions"));
+    QPushButton *moreActions = new QPushButton(i18n("Save/Load"));
     addWidget(moreActions);
 
     QMenu *moreActionsMenu = new QMenu(m_dialog);
@@ -91,8 +91,6 @@ KShortcutSchemesEditor::KShortcutSchemesEditor(KisShortcutsDialog *parent)
                                this, SLOT(exportShortcutsScheme()));
     moreActionsMenu->addAction(i18n("Import Scheme..."),
                                this, SLOT(importShortcutsScheme()));
-    moreActionsMenu->addAction(i18n("Restore Defaults"),
-                               m_dialog, SLOT(allDefault()));
     moreActions->setMenu(moreActionsMenu);
 
     addStretch(1);

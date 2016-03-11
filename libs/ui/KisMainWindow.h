@@ -287,11 +287,6 @@ private Q_SLOTS:
     void slotFileQuit();
 
     /**
-     *  Configure key bindings.
-     */
-    void slotConfigureKeys();
-
-    /**
      *  Configure toolbars.
      */
     void slotConfigureToolbars();

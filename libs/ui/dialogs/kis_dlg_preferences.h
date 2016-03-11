@@ -34,6 +34,7 @@
 #include "ui_wdgtabletsettings.h"
 #include "ui_wdgperformancesettings.h"
 #include "ui_wdgfullscreensettings.h"
+#include "KisShortcutsDialog.h"
 
 class KoID;
 class KisInputConfigurationPage;
@@ -84,7 +85,47 @@ private Q_SLOTS:
 
 };
 
-//=======================
+
+
+/**
+ *  "Shortcuts" tab for preferences dialog
+ */
+
+class WdgShortcutSettings : public KisShortcutsDialog
+{
+    Q_OBJECT
+
+public:
+    WdgShortcutSettings(QWidget *parent)
+        : KisShortcutsDialog(KisShortcutsEditor::AllActions,
+                             KisShortcutsEditor::LetterShortcutsAllowed,
+                             parent)
+    { }
+};
+
+class ShortcutSettingsTab : public QWidget
+{
+    Q_OBJECT
+
+public:
+
+    ShortcutSettingsTab(QWidget *parent = 0, const char *name = 0);
+
+public:
+    void setDefault();
+    WdgShortcutSettings  *m_page;
+
+
+public Q_SLOTS:
+    void saveChanges();
+    void revertChanges();
+};
+
+
+
+/**
+ *  "Color" tab for preferences dialog
+ */
 
 class WdgColorSettings : public QWidget, public Ui::WdgColorSettings
 {
@@ -268,6 +309,7 @@ protected:
 protected:
 
     GeneralTab *m_general;
+    ShortcutSettingsTab  *m_shortcutSettings;
     ColorSettingsTab *m_colorSettings;
     PerformanceTab *m_performanceSettings;
     DisplaySettingsTab  *m_displaySettings;

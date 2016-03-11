@@ -63,6 +63,7 @@ public:
         , m_path(path)
         , m_baseName(baseName)
         , m_scml(scml)
+        , m_depth(0)
     {
 
     }
@@ -150,6 +151,7 @@ public:
 private:
 
     bool savePaintDevice(KisPaintDeviceSP dev, const QString &fileName) {
+        qDebug() << "savePaintDevice" << fileName;
         return true;
     }
 

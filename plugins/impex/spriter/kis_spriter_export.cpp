@@ -57,15 +57,16 @@ class KRITAUI_EXPORT KisSaveSCMLVisitor : public KisNodeVisitor
 public:
 
     KisSaveSCMLVisitor(KisImageWSP image,
-                        const QString &path,
-                        const QString &baseName,
-                        QDomDocument *scml)
+                       const QString &path,
+                       const QString &baseName,
+                       QDomDocument *scml)
         : m_image(image)
         , m_path(path)
         , m_baseName(baseName)
         , m_scml(scml)
         , m_depth(0)
         , m_fileId(0)
+        , m_hasBone(true)
     {
         m_root = m_scml->createElement("spriter_data");
         m_scml->appendChild(m_root);
@@ -82,6 +83,46 @@ public:
         m_entity.setAttribute("id", 0);
         m_entity.setAttribute("name", baseName);
         m_root.appendChild(m_entity);
+
+        m_animation = m_scml->createElement("animation");
+        m_animation.setAttribute("id", 0);
+        m_animation.setAttribute("name", "default");
+        m_animation.setAttribute("length", 1000);
+        m_animation.setAttribute("looping", false);
+        m_entity.appendChild(m_animation);
+
+        QDomElement mainline = m_scml->createElement("mainline");
+        m_animation.appendChild(mainline);
+        m_key = m_scml->createElement("key");
+        m_key.setAttribute("id", 0);
+        mainline.appendChild(m_key);
+
+        if (m_hasBone) {
+            QDomElement bone_ref = m_scml->createElement("bone_ref");
+            bone_ref.setAttribute("id", 0);
+            bone_ref.setAttribute("timeline", 0);
+            bone_ref.setAttribute("key", 0);
+            m_key.appendChild(bone_ref);
+
+            QDomElement bone_timeline = m_scml->createElement("timeline");
+            bone_timeline.setAttribute("id", 0);
+            bone_timeline.setAttribute("name", "root");
+            bone_timeline.setAttribute("object_type", "bone");
+            m_animation.appendChild(bone_timeline);
+
+            QDomElement bone_key = m_scml->createElement("key");
+            bone_key.setAttribute("id", 0);
+            bone_key.setAttribute("spin", 0);
+            bone_timeline.appendChild(bone_key);
+
+            QDomElement bone = m_scml->createElement("bone");
+            bone.setAttribute("x", 0);
+            bone.setAttribute("y", 0);
+            bone.setAttribute("angle", 0.0);
+            bone.setAttribute("scale_x", 1.0);
+            bone.setAttribute("scale_y", 1.0);
+            bone_key.appendChild(bone);\
+        }
     }
 
     virtual ~KisSaveSCMLVisitor()
@@ -158,6 +199,7 @@ public:
         if (m_depth > 2) {
             // We don't descend into subgroups; instead the subgroup is saved as a png
             m_depth--;
+            saveFolder(l);
             return savePaintDevice(l->projection(), l->objectName());
         }
         else {
@@ -176,15 +218,49 @@ private:
 
     void saveFolder(KisLayer * l)
     {
-        qDebug() << "saveFolder" << l->name();
         QDomElement el = m_scml->createElement("file");
         el.setAttribute("id", m_fileId);
-        m_fileId++;
         el.setAttribute("name", m_currentFolder + "/" + l->name() + ".png");
         QRect rc = l->exactBounds();
         el.setAttribute("width", rc.width());
         el.setAttribute("height", rc.height());
         m_folder.appendChild(el);
+
+        // Key
+        QDomElement object_ref = m_scml->createElement("object_ref");
+        object_ref.setAttribute("id", m_fileId);
+        object_ref.setAttribute("parent", 0);
+        object_ref.setAttribute("timeline", m_hasBone ? m_fileId + 1 : m_fileId);
+        object_ref.setAttribute("key", 0);
+        object_ref.setAttribute("z_index", m_fileId);
+        m_key.appendChild(object_ref);
+
+        // timeline
+        QDomElement object_timeline = m_scml->createElement("timeline");
+        object_timeline.setAttribute("id",  m_hasBone ? m_fileId + 1 : m_fileId);
+        object_timeline.setAttribute("name", l->name());
+        object_timeline.setAttribute("object_type", "object");
+        m_animation.appendChild(object_timeline);
+
+        QDomElement object_key = m_scml->createElement("key");
+        object_key.setAttribute("id", 0);
+        object_key.setAttribute("spin", 0);
+        object_timeline.appendChild(object_key);
+
+        QDomElement object = m_scml->createElement("object");
+        object.setAttribute("folder", 0);
+        object.setAttribute("file", m_fileId); // XXX: In the example, this is inverted
+        object.setAttribute("x", rc.x());
+        object.setAttribute("y", rc.y());
+        object.setAttribute("pivot_x", 0);
+        object.setAttribute("pivot_y", 0);
+        object.setAttribute("angle", 0.0);
+        object.setAttribute("scale_x", 1.0);
+        object.setAttribute("scale_y", 1.0);
+        object_key.appendChild(object);\
+
+        m_fileId++;
+
     }
 
     bool savePaintDevice(KisPaintDeviceSP dev, const QString &fileName)
@@ -202,7 +278,10 @@ private:
     QDomElement m_root;
     QDomElement m_folder;
     QDomElement m_entity;
+    QDomElement m_animation;
+    QDomElement m_key;
     int m_fileId;
+    bool m_hasBone;
 };
 
 
@@ -247,7 +326,7 @@ KisImportExportFilter::ConversionStatus KisSpriterExport::convert(const QByteArr
         QFile f(filename);
         f.open(QFile::WriteOnly);
         f.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-        f.write(scmlDoc.toString().toUtf8());
+        f.write(scmlDoc.toString(5).toUtf8());
         f.flush();
         f.close();
 

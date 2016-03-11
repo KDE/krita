@@ -851,7 +851,7 @@
     </Action>
     <Action name="resizeimagetoselection">
       <icon></icon>
-      <text>Trim to Selection</text>
+      <text>Trim to S&amp;election</text>
       <whatsThis></whatsThis>
       <toolTip>Trim to Selection</toolTip>
       <iconText>Trim to Selection</iconText>

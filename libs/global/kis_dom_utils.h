@@ -171,6 +171,7 @@ bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, QPoint *pt);
 bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, QPointF *pt);
 bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, QVector3D *pt);
 bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, QTransform *t);
+bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, QString *value);
 
 
 namespace Private {
@@ -187,7 +188,8 @@ namespace Private {
  * \see saveValue()
  */
 template <typename T>
-bool loadValue(const QDomElement &e, T *value)
+    typename std::enable_if<std::is_arithmetic<T>::value, bool>::type
+loadValue(const QDomElement &e, T *value)
 {
     if (!Private::checkType(e, "value")) return false;
 

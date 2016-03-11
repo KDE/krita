@@ -161,6 +161,11 @@ public Q_SLOTS:
       */
     void setShowMousePosition(bool show);
 
+    /**
+      * \see setShowMousePosition
+      */
+    bool showMousePosition() const;
+
     /** Update the current position of the mouse pointer, repainting if changed.
       * The ruler offset will be applied before painting.
       * @param coordinate Either the x or y coordinate of the mouse depending
@@ -256,6 +261,9 @@ Q_SIGNALS:
 
     /// emitted when the mouse is drag+released outside the ruler
     void guideLineCreated(Qt::Orientation orientation, qreal viewPosition);
+
+    void guideCreationInProgress(Qt::Orientation orientation, const QPoint &globalPos);
+    void guideCreationFinished(Qt::Orientation orientation, const QPoint &globalPos);
 
 protected:
     /// reimplemented

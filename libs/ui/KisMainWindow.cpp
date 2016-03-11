@@ -43,6 +43,7 @@
 #include <QPrinter>
 #include <QPrintPreviewDialog>
 #include <QProgressBar>
+#include <QToolButton>
 #include <QSignalMapper>
 #include <QTabBar>
 #include <QMoveEvent>
@@ -210,6 +211,7 @@ public:
     QPointer<KisView> activeView;
 
     QPointer<QProgressBar> progress;
+    QPointer<QToolButton> progressCancel;
     QMutex progressMutex;
 
     QList<QAction *> toolbarList;
@@ -446,7 +448,13 @@ KisMainWindow::KisMainWindow()
 
     QString doc;
     QStringList allFiles = KoResourcePaths::findAllResources("data", "krita/krita.rc");
-    KIS_ASSERT(allFiles.size() > 0); // We need at least one krita.rc file!
+    // We need at least one krita.rc file!
+    if (allFiles.size() == 0) {
+        m_errorMessage = i18n("Krita cannot find the configuration file! Krita will quit now.");
+        m_dieOnError = true;
+        QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
+        return;
+    }
     setXMLFile(findMostRecentXMLFile(allFiles, doc));
 
     guiFactory()->addClient(this);
@@ -938,7 +946,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         else {
             dialog.setDefaultDir(suggestedURL.toLocalFile(), true);
         }
-        dialog.setMimeTypeFilters(mimeFilter, KIS_MIME_TYPE);
+        // Default to all supported file types if user is exporting, otherwise use Krita default
+        dialog.setMimeTypeFilters(mimeFilter, isExporting() ? "" : KIS_MIME_TYPE);
         QUrl newURL = QUrl::fromUserInput(dialog.filename());
 
         if (newURL.isLocalFile()) {
@@ -1572,9 +1581,19 @@ void KisMainWindow::importAnimation()
         int firstFrame = dlg.firstFrame();
         int step = dlg.step();
 
-        KisAnimationImporter importer(document->image());
-        importer.import(files, firstFrame, step);
+        document->setFileProgressProxy();
+        document->setFileProgressUpdater(i18n("Import frames"));
+        KisAnimationImporter importer(document);
+        KisImportExportFilter::ConversionStatus status = importer.import(files, firstFrame, step);
+        document->clearFileProgressUpdater();
+        document->clearFileProgressProxy();
 
+        if (status != KisImportExportFilter::OK && status != KisImportExportFilter::InternalError) {
+            QString msg = KisImportExportFilter::conversionStatusString(status);
+
+            if (!msg.isEmpty())
+                QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not finish import animation:\n%1", msg));
+        }
         activeView()->canvasBase()->refetchDataFromImage();
     }
 #endif
@@ -1588,9 +1607,19 @@ void KisMainWindow::exportAnimation()
     KisDocument *document = activeView()->document();
     if (!document) return;
 
+    document->setFileProgressProxy();
+    document->setFileProgressUpdater(i18n("Export frames"));
     KisAnimationExporterUI exporter(this);
-    exporter.exportSequence(document);
+    KisImportExportFilter::ConversionStatus status = exporter.exportSequence(document);
+    document->clearFileProgressUpdater();
+    document->clearFileProgressProxy();
 
+    if (status != KisImportExportFilter::OK && status != KisImportExportFilter::InternalError) {
+        QString msg = KisImportExportFilter::conversionStatusString(status);
+
+        if (!msg.isEmpty())
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not finish export animation:\n%1", msg));
+    }
     activeView()->canvasBase()->refetchDataFromImage();
 #endif
 }
@@ -1671,6 +1700,11 @@ void KisMainWindow::slotProgress(int value)
             statusBar()->removeWidget(d->progress);
             delete d->progress;
             d->progress = 0;
+
+            disconnect(d->progressCancel, SIGNAL(clicked()), this, SLOT(slotProgressCanceled()));
+            statusBar()->removeWidget(d->progressCancel);
+            delete d->progressCancel;
+            d->progressCancel = 0;
         }
         d->firstTime = true;
         d->progressMutex.unlock();
@@ -1689,13 +1723,27 @@ void KisMainWindow::slotProgress(int value)
             statusBar()->removeWidget(d->progress);
             delete d->progress;
             d->progress = 0;
+
+            disconnect(d->progressCancel, SIGNAL(clicked()), this, SLOT(slotProgressCanceled()));
+            statusBar()->removeWidget(d->progressCancel);
+            delete d->progressCancel;
+            d->progress = 0;
         }
+
+        d->progressCancel = new QToolButton(statusBar());
+        d->progressCancel->setMaximumHeight(statusBar()->fontMetrics().height());
+        d->progressCancel->setIcon(KisIconUtils::loadIcon("process-stop"));
+        statusBar()->addPermanentWidget(d->progressCancel);
 
         d->progress = new QProgressBar(statusBar());
         d->progress->setMaximumHeight(statusBar()->fontMetrics().height());
         d->progress->setRange(0, 100);
         statusBar()->addPermanentWidget(d->progress);
+
+        connect(d->progressCancel, SIGNAL(clicked()), this, SLOT(slotProgressCanceled()));
+
         d->progress->show();
+        d->progressCancel->show();
         d->firstTime = false;
     }
     if (!d->progress.isNull()) {
@@ -1704,6 +1752,11 @@ void KisMainWindow::slotProgress(int value)
     qApp->processEvents();
 
     d->progressMutex.unlock();
+}
+
+void KisMainWindow::slotProgressCanceled()
+{
+    emit sigProgressCanceled();
 }
 
 void KisMainWindow::setMaxRecentItems(uint _number)

@@ -23,6 +23,7 @@
 
 #include "KoOptimizedCompositeOpFactoryPerArch.h"
 #include "KoOptimizedCompositeOpAlphaDarken32.h"
+#include "KoOptimizedCompositeOpAlphaDarken128.h"
 #include "KoOptimizedCompositeOpOver32.h"
 #include "KoOptimizedCompositeOpOver128.h"
 
@@ -49,6 +50,14 @@ KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver32>::ReturnType
 KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver32>::create<VC_IMPL>(ParamType param)
 {
     return new KoOptimizedCompositeOpOver32<VC_IMPL>(param);
+}
+
+template<>
+template<>
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarken128>::ReturnType
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarken128>::create<VC_IMPL>(ParamType param)
+{
+    return new KoOptimizedCompositeOpAlphaDarken128<VC_IMPL>(param);
 }
 
 template<>

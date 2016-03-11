@@ -40,13 +40,13 @@ class KoShapeBasedDocumentBase;
 class KoCanvasController;
 class KoShape;
 class KoSnapGuide;
-class KoGuidesData;
 
 class QWidget;
 class QCursor;
 class QObject;
 class QPointF;
 class QRectF;
+class QSizeF;
 
 /**
  * KoCanvasBase is the interface actual application canvas classes
@@ -79,7 +79,7 @@ public:
      * @param horizontal a pointer to a qreal that will be filled with the horizontal grid-spacing
      * @param vertical a pointer to a qreal that will be filled with the vertical grid-spacing
      */
-    virtual void gridSize(qreal *horizontal, qreal *vertical) const = 0;
+    virtual void gridSize(QPointF *offset, QSizeF *spacing) const = 0;
 
     /**
      * return if snap to grid is enabled.
@@ -236,23 +236,6 @@ public:
      * Returns the snap guide of the canvas
      */
     KoSnapGuide *snapGuide() const;
-
-    /**
-     * This factory method creates a new widget for the user to change
-     * the snapping guide policies object from snapGuide().
-     */
-    QWidget *createSnapGuideConfigWidget() const;
-
-    /**
-     * Returns the guides data.
-     *
-     * Applications that want to have guides should reimplement this
-     * function and return the KOGuideData object.
-     * The default implementation returns 0.
-     *
-     * @return pointer to the guide data or zero if there is none
-     */
-    virtual KoGuidesData *guidesData();
 
     /// called by KoCanvasController to set the controller that handles this canvas.
     void setCanvasController(KoCanvasController *controller);

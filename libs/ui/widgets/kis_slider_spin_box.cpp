@@ -529,7 +529,7 @@ QSize KisAbstractSliderSpinBox::sizeHint() const
 
     switch (d->style) {
     case KisAbstractSliderSpinBoxPrivate::STYLE_FUSION:
-        hint += QSize(8, 6);
+        hint += QSize(8, 8);
         break;
     case KisAbstractSliderSpinBoxPrivate::STYLE_PLASTIQUE:
         hint += QSize(8, 0);

@@ -145,9 +145,6 @@ private:
 
     void canvasResourceChanged(int key, const QVariant &res);
 
-    /// selects guide line at given position
-    void selectGuideAtPosition(const QPointF &position);
-
     /// Returns list of editable shapes from the given list of shapes
     QList<KoShape *> filterEditableShapes(const QList<KoShape *> &shapes);
 
@@ -171,9 +168,6 @@ private:
     KoToolSelection *m_selectionHandler;
     friend class SelectionHandler;
     KoInteractionStrategy *m_customEventStrategy;
-
-    class GuideLine;
-    GuideLine *m_guideLine;
 };
 
 #endif

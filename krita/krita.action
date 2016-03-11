@@ -175,7 +175,7 @@
       <whatsThis></whatsThis>
       <toolTip>Show Tool Options</toolTip>
       <iconText>Show Tool Options</iconText>
-      <shortcut></shortcut>
+      <shortcut>\</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -185,7 +185,7 @@
       <whatsThis></whatsThis>
       <toolTip>Show Brush Editor</toolTip>
       <iconText>Show Brush Editor</iconText>
-      <shortcut>i</shortcut>
+      <shortcut>F5</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -195,7 +195,7 @@
       <whatsThis></whatsThis>
       <toolTip>Show Brush Presets</toolTip>
       <iconText>Show Brush Presets</iconText>
-      <shortcut></shortcut>
+      <shortcut>F6</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1275,16 +1275,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="KisToolPerspectiveGrid">
-      <icon></icon>
-      <text>Perspective Grid</text>
-      <whatsThis></whatsThis>
-      <toolTip>Edit the perspective grid</toolTip>
-      <iconText>Edit the perspective grid</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="KisToolPolygon">
       <icon></icon>
       <text>Polygon Tool</text>
@@ -1512,16 +1502,6 @@
       <toolTip>Draw a gradient.</toolTip>
       <iconText>Draw a gradient.</iconText>
       <shortcut>G</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="KisToolGrid">
-      <icon></icon>
-      <text>Edit the grid</text>
-      <whatsThis></whatsThis>
-      <toolTip>Edit the grid</toolTip>
-      <iconText>Edit the grid</iconText>
-      <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -2391,6 +2371,18 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+G</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="quick_ungroup">
+      <icon></icon>
+      <text>Quick Ungroup</text>
+      <whatsThis></whatsThis>
+      <toolTip>Remove grouping of the layers or remove one layer out of the group</toolTip>
+      <iconText>Quick Ungroup</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut>Ctrl+Alt+G</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>

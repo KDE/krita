@@ -95,18 +95,16 @@ void KoZoomTool::mouseDoubleClickEvent(KoPointerEvent *event)
 KoInteractionStrategy *KoZoomTool::createStrategy(KoPointerEvent *event)
 {
     KoZoomStrategy *zs = new KoZoomStrategy(this, m_controller, event->point);
-    if (event->button() == Qt::RightButton) {
-        if (m_zoomInMode) {
-            zs->forceZoomOut();
-        } else {
-            zs->forceZoomIn();
-        }
+    bool shouldZoomIn = m_zoomInMode;
+    if (event->button() == Qt::RightButton ||
+        event->modifiers() == Qt::ControlModifier) {
+        shouldZoomIn = !shouldZoomIn;
+    }
+
+    if (shouldZoomIn) {
+        zs->forceZoomIn();
     } else {
-        if (m_zoomInMode) {
-            zs->forceZoomIn();
-        } else {
-            zs->forceZoomOut();
-        }
+        zs->forceZoomOut();
     }
     return zs;
 }

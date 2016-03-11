@@ -7,28 +7,7 @@ if (CMAKE_COMPILER_IS_GNUCXX)
 endif ()
 
 include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/flake
-    ${CMAKE_CURRENT_SOURCE_DIR}/ora
-    ${CMAKE_CURRENT_SOURCE_DIR}/qtsingleapplication
     ${CMAKE_CURRENT_SOURCE_DIR}/qtlockedfile
-    ${CMAKE_CURRENT_SOURCE_DIR}/actions
-    ${CMAKE_CURRENT_SOURCE_DIR}/canvas
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs
-    ${CMAKE_CURRENT_SOURCE_DIR}/forms
-    ${CMAKE_CURRENT_SOURCE_DIR}/input
-    ${CMAKE_CURRENT_SOURCE_DIR}/input/config
-    ${CMAKE_CURRENT_SOURCE_DIR}/input/wintab
-    ${CMAKE_CURRENT_SOURCE_DIR}/kisexiv2
-    ${CMAKE_CURRENT_SOURCE_DIR}/kra
-    ${CMAKE_CURRENT_SOURCE_DIR}/layerstyles
-    ${CMAKE_CURRENT_SOURCE_DIR}/opengl
-    ${CMAKE_CURRENT_SOURCE_DIR}/operations
-    ${CMAKE_CURRENT_SOURCE_DIR}/processing
-    ${CMAKE_CURRENT_SOURCE_DIR}/recorder
-    ${CMAKE_CURRENT_SOURCE_DIR}/resourcemanager
-    ${CMAKE_CURRENT_SOURCE_DIR}/tool
-    ${CMAKE_CURRENT_SOURCE_DIR}/tool/strokes
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets
     ${EXIV2_INCLUDE_DIR}
     ${EIGEN3_INCLUDE_DIR}
     ${OCIO_INCLUDE_DIR}
@@ -55,9 +34,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_coordinates_converter.cpp
     canvas/kis_grid_manager.cpp
     canvas/kis_grid_decoration.cpp
-    canvas/kis_grid_painter_configuration.cpp
-    canvas/kis_perspective_grid_manager.cpp
-    canvas/kis_perspective_grid_decoration.cpp
+    canvas/kis_grid_config.cpp
     canvas/kis_prescaled_projection.cpp
     canvas/kis_qpainter_canvas.cpp
     canvas/kis_projection_backend.cpp
@@ -65,6 +42,12 @@ set(kritaui_LIB_SRCS
     canvas/kis_image_patch.cpp
     canvas/kis_image_pyramid.cpp
     canvas/kis_infinity_manager.cpp
+    canvas/kis_change_guides_command.cpp
+    canvas/kis_guides_decoration.cpp
+    canvas/kis_guides_manager.cpp
+    canvas/kis_guides_config.cpp
+    canvas/kis_snap_config.cpp
+    canvas/kis_snap_line_strategy.cpp
     dialogs/kis_about_application.cpp
     dialogs/kis_dlg_adj_layer_props.cc
     dialogs/kis_dlg_adjustment_layer.cc
@@ -92,6 +75,7 @@ set(kritaui_LIB_SRCS
     flake/kis_shape_selection_canvas.cpp
     flake/kis_shape_selection_model.cpp
     flake/kis_take_all_shapes_command.cpp
+    kis_aspect_ratio_locker.cpp
     kis_autogradient.cc
     kis_bookmarked_configurations_editor.cc
     kis_bookmarked_configurations_model.cc
@@ -427,7 +411,6 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgautogradient.ui
     forms/wdggeneralsettings.ui
     forms/wdgperformancesettings.ui
-    forms/wdggridsettings.ui
     forms/wdggenerators.ui
     forms/wdgcustompalette.ui
     forms/wdgbookmarkedconfigurationseditor.ui

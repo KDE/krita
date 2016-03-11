@@ -79,8 +79,11 @@ void saveValue(QDomElement *parent, const QString &tag, const KisTimeRange &rang
 }
 
 
-bool loadValue(const QDomElement &e, KisTimeRange *range)
+bool loadValue(const QDomElement &parent, const QString &tag, KisTimeRange *range)
 {
+    QDomElement e;
+    if (!findOnlyElement(parent, tag, &e)) return false;
+
     if (!Private::checkType(e, "timerange")) return false;
 
     int start = Private::stringToInt(e.attribute("from", "-1"));

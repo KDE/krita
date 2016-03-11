@@ -102,10 +102,11 @@ void KisColorSelectorWheel::setColor(const KoColor &color)
 	R = cfg.readEntry("lumaR", 0.2126);
     G = cfg.readEntry("lumaG", 0.7152);
     B = cfg.readEntry("lumaB", 0.0722);
+    Gamma = cfg.readEntry("gamma", 2.2);
     m_parent->converter()->getHsvF(color, &hsvH, &hsvS, &hsvV);
     m_parent->converter()->getHslF(color, &hslH, &hslS, &hslL);
     m_parent->converter()->getHsiF(color, &hsiH, &hsiS, &hsiI);
-    m_parent->converter()->getHsyF(color, &hsyH, &hsyS, &hsyY, R, G, B);
+    m_parent->converter()->getHsyF(color, &hsyH, &hsyS, &hsyY, R, G, B, Gamma);
 
 	//workaround, for some reason the HSI and HSY algorithms are fine, but they don't seem to update the selectors properly.
 	hsiH=hslH;
@@ -244,7 +245,7 @@ KoColor KisColorSelectorWheel::colorAt(int x, int y, bool forceValid)
         color = m_parent->converter()->fromHsiF(angle, radius, m_intensity);
         break;
     case KisColorSelector::hsySH:
-        color = m_parent->converter()->fromHsyF(angle, radius, m_luma, R, G, B);
+        color = m_parent->converter()->fromHsyF(angle, radius, m_luma, R, G, B, Gamma);
         break;
     case KisColorSelector::VH:
         color = m_parent->converter()->fromHsvF(angle, m_hsvSaturation, radius);
@@ -256,7 +257,7 @@ KoColor KisColorSelectorWheel::colorAt(int x, int y, bool forceValid)
         color = m_parent->converter()->fromHsiF(angle, m_hsiSaturation, radius);
         break;
 	case KisColorSelector::YH:
-        color = m_parent->converter()->fromHsyF(angle, m_hsySaturation, radius, R, G, B);
+        color = m_parent->converter()->fromHsyF(angle, m_hsySaturation, radius, R, G, B, Gamma);
         break;
     default:
         Q_ASSERT(false);

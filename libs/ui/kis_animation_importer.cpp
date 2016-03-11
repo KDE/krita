@@ -18,6 +18,8 @@
 
 #include "kis_animation_importer.h"
 
+#include <QStatusBar>
+
 #include "KoColorSpace.h"
 #include "KisPart.h"
 #include "KisDocument.h"
@@ -31,20 +33,44 @@
 struct KisAnimationImporter::Private
 {
     KisImageSP image;
+    KisDocument *document;
+    bool stop;
 };
 
 KisAnimationImporter::KisAnimationImporter(KisImageSP image)
     : m_d(new Private())
 {
+    m_d->document= 0;
     m_d->image = image;
+    m_d->stop = false;
+}
+
+KisAnimationImporter::KisAnimationImporter(KisDocument* document)
+    : m_d(new Private())
+{
+    m_d->document= document;
+    m_d->image = document->image();
+    m_d->stop = false;
 }
 
 KisAnimationImporter::~KisAnimationImporter()
 {}
 
-bool KisAnimationImporter::import(QStringList files, int firstFrame, int step)
+KisImportExportFilter::ConversionStatus KisAnimationImporter::import(QStringList files, int firstFrame, int step)
 {
     Q_ASSERT(step > 0);
+
+    bool batchMode;
+
+    if (m_d->document) {
+        batchMode= m_d->document->fileBatchMode();
+
+        if (!batchMode) {
+            emit m_d->document->statusBarMessage(i18n("Import frames"));
+            emit m_d->document->sigProgress(0);
+            connect(m_d->document, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
+        }
+    } else batchMode = false;
 
     m_d->image->lock();
     KisUndoAdapter *undo = m_d->image->undoAdapter();
@@ -53,8 +79,9 @@ bool KisAnimationImporter::import(QStringList files, int firstFrame, int step)
     KUndo2Command *undoCommand = new KUndo2Command(kundo2_i18n("Import frames"));
 
     QScopedPointer<KisDocument> importDoc(KisPart::instance()->createDocument());
+    importDoc->setFileBatchMode(true);
 
-    bool errors = false;
+    KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
     int frame = firstFrame;
 
     KisRasterKeyframeChannel *contentChannel = 0;
@@ -62,7 +89,12 @@ bool KisAnimationImporter::import(QStringList files, int firstFrame, int step)
     Q_FOREACH(QString file, files) {
         bool successfullyLoaded = importDoc->openUrl(QUrl::fromLocalFile(file), KisDocument::OPEN_URL_FLAG_DO_NOT_ADD_TO_RECENT_FILES);
         if (!successfullyLoaded) {
-            errors = true;
+            status = KisImportExportFilter::InternalError;
+            break;
+        }
+
+        if (m_d->stop) {
+            status = KisImportExportFilter::ProgressCancelled;
             break;
         }
 
@@ -75,13 +107,26 @@ bool KisAnimationImporter::import(QStringList files, int firstFrame, int step)
             contentChannel = qobject_cast<KisRasterKeyframeChannel*>(paintLayer->getKeyframeChannel(KisKeyframeChannel::Content.id()));
         }
 
+        if (!batchMode) {
+            emit m_d->document->sigProgress((frame - firstFrame) * 100 / (step * files.size()));
+        }
         contentChannel->addKeyframe(frame, undoCommand);
         contentChannel->importFrame(frame, importDoc->image()->projection(), undoCommand);
         frame += step;
     }
 
+    if (!batchMode) {
+        disconnect(m_d->document, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
+        emit m_d->document->sigProgress(100);
+        emit m_d->document->clearStatusBarMessage();
+    }
     undo->endMacro();
     m_d->image->unlock();
 
-    return !errors;
+    return status;
+}
+
+void KisAnimationImporter::cancel()
+{
+    m_d->stop = true;
 }

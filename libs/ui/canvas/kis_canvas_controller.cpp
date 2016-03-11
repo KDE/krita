@@ -30,38 +30,43 @@
 #include "kis_image.h"
 #include "KisViewManager.h"
 #include "KisView.h"
-#include "input/kis_tablet_event.h"
 #include "krita_utils.h"
+#include "kis_signal_compressor_with_param.h"
 
+static const int gRulersUpdateDelay = 80 /* ms */;
 
 struct KisCanvasController::Private {
     Private(KisCanvasController *qq)
         : q(qq),
           paintOpTransformationConnector(0)
     {
+        using namespace std::placeholders;
+
+        std::function<void (QPoint)> callback(
+            std::bind(&KisCanvasController::Private::emitPointerPositionChangedSignals, this, _1));
+
+        mousePositionCompressor.reset(
+            new KisSignalCompressorWithParam<QPoint>(
+                gRulersUpdateDelay,
+                callback,
+                KisSignalCompressor::FIRST_ACTIVE));
     }
 
-    QPointer<KisView>view;
+    QPointer<KisView> view;
     KisCoordinatesConverter *coordinatesConverter;
     KisCanvasController *q;
     KisPaintopTransformationConnector *paintOpTransformationConnector;
+    QScopedPointer<KisSignalCompressorWithParam<QPoint> > mousePositionCompressor;
 
-    void emitPointerPositionChangedSignals(QEvent *event);
+    void emitPointerPositionChangedSignals(QPoint pointerPos);
     void updateDocumentSizeAfterTransform();
     void showRotationValueOnCanvas();
     void showMirrorStateOnCanvas();
 };
 
-void KisCanvasController::Private::emitPointerPositionChangedSignals(QEvent *event)
+void KisCanvasController::Private::emitPointerPositionChangedSignals(QPoint pointerPos)
 {
     if (!coordinatesConverter) return;
-
-    QPoint pointerPos;
-    if (QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event)) {
-        pointerPos = mouseEvent->pos();
-    } else if (QTabletEvent *tabletEvent = dynamic_cast<QTabletEvent*>(event)) {
-        pointerPos = tabletEvent->pos();
-    }
 
     QPointF documentPos = coordinatesConverter->widgetToDocument(pointerPos);
 
@@ -105,7 +110,6 @@ void KisCanvasController::setCanvas(KoCanvasBase *canvas)
 
     m_d->paintOpTransformationConnector =
         new KisPaintopTransformationConnector(kritaCanvas, this);
-
 }
 
 void KisCanvasController::changeCanvasWidget(QWidget *widget)
@@ -141,14 +145,17 @@ void KisCanvasController::wheelEvent(QWheelEvent *event)
 bool KisCanvasController::eventFilter(QObject *watched, QEvent *event)
 {
     KoCanvasBase *canvas = this->canvas();
-    if (canvas && canvas->canvasWidget() && (watched == canvas->canvasWidget())) {
-        if (event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove) {
-            m_d->emitPointerPositionChangedSignals(event);
-            return false;
-        }
+    if (!canvas || !canvas->canvasWidget() || canvas->canvasWidget() != watched) return false;
+
+    if (event->type() == QEvent::MouseMove) {
+        QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
+        m_d->mousePositionCompressor->start(mevent->pos());
+    } else if (event->type() == QEvent::TabletMove) {
+        QTabletEvent *tevent = static_cast<QTabletEvent*>(event);
+        m_d->mousePositionCompressor->start(tevent->pos());
     }
 
-    return KoCanvasControllerWidget::eventFilter(watched, event);
+    return false;
 }
 
 void KisCanvasController::updateDocumentSize(const QSize &sz, bool recalculateCenter)

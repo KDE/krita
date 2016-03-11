@@ -155,4 +155,23 @@ void KisDomUtilsTest::testG2R()
     checkLoadData(xmlData);
 }
 
+#include "kis_time_range.h"
+
+void KisDomUtilsTest::testIntegralType()
+{
+    KisTimeRange r1(1, 10);
+    KisTimeRange r2(5, 15);
+
+
+    QDomDocument doc("testdoc");
+
+    QDomElement root = doc.createElement("rootNode");
+    doc.appendChild(root);
+
+    KisDomUtils::saveValue(&root, "timeRange", r1);
+    KisDomUtils::loadValue(root, "timeRange", &r2);
+
+    QCOMPARE(r2, r1);
+}
+
 QTEST_MAIN(KisDomUtilsTest)

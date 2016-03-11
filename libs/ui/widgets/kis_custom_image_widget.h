@@ -64,7 +64,6 @@ private Q_SLOTS:
     void heightChanged(double value);
     void resolutionChanged(double value);
     void clipboardDataChanged();
-    void screenSizeClicked();
     void predefinedClicked(int index);
     void saveAsPredefined();
     void setLandscape();

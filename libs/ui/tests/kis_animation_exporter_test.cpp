@@ -66,8 +66,7 @@ void KisAnimationExporterTest::testAnimationExport()
 
     QVERIFY(spy.isValid());
 
-
-    exporter.startExport();
+    exporter.exportAnimation();
 
     // If we had Qt5 already:
     // spy.wait(100);

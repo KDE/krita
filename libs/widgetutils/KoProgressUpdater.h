@@ -77,8 +77,7 @@ public:
      * Constructor.
      * @param progressBar the progress bar to update.
      */
-    explicit KoProgressUpdater(KoProgressProxy *progressBar, Mode mode = Threaded,
-                               QTextStream *output = 0);
+    explicit KoProgressUpdater(KoProgressProxy *progressBar, Mode mode = Threaded);
 
     /// destructor
     virtual ~KoProgressUpdater();
@@ -117,24 +116,10 @@ public:
     void cancel();
 
     /**
-     * Set the time with respect to which the progress events are logged.
-     */
-    void setReferenceTime(const QTime &referenceTime);
-
-    /**
-     * Get the time with respect to which the progress events are logged.
-     */
-    QTime referenceTime() const;
-
-    /**
      * @return true when the processing is interrupted
      */
     bool interrupted() const;
 
-    /**
-     * @return true when the output has been set
-     */
-    bool hasOutput() const;
 
 private Q_SLOTS:
 

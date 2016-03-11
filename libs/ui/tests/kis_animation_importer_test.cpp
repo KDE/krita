@@ -36,7 +36,7 @@ void KisAnimationImporterTest::testImport()
 
     QStringList files;
     files.append(QString(FILES_DATA_DIR) + QDir::separator() + "file_layer_source.png");
-    files.append(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
+    files.append(QString(FILES_DATA_DIR) + QDir::separator() + "carrot.png");
     files.append(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
 
     importer.import(files, 7, 3);
@@ -65,7 +65,7 @@ void KisAnimationImporterTest::testImport()
     QImage imported3 = importedLayer->projection()->convertToQImage(importedLayer->colorSpace()->profile());
 
     QImage source1(QString(FILES_DATA_DIR) + QDir::separator() + "file_layer_source.png");
-    QImage source2(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
+    QImage source2(QString(FILES_DATA_DIR) + QDir::separator() + "carrot.png");
     QImage source3(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
 
     QPoint pt;

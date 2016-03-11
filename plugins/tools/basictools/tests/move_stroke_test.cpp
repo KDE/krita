@@ -40,7 +40,7 @@ protected:
     void initImage(KisImageWSP image, KisNodeSP activeNode) {
         Q_UNUSED(image);
 
-        QImage src(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
+        QImage src(QString(FILES_DATA_DIR) + QDir::separator() + "carrot.png");
         activeNode->original()->convertFromQImage(src, 0);
     }
 

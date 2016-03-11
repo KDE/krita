@@ -28,9 +28,6 @@
 #include <klocalizedstring.h>
 
 #include <KoPageLayout.h>
-#include "KoGridData.h"
-#include "KoGuidesData.h"
-#include <KoXmlReader.h>
 #include <KoDocumentBase.h>
 #include <kundo2stack.h>
 
@@ -59,6 +56,9 @@ class KoDocumentInfoDlg;
 class KisUndoStore;
 class KisPaintingAssistant;
 class KisPart;
+class KisGridConfig;
+class KisGuidesConfig;
+class QDomDocument;
 
 class KisPart;
 
@@ -226,14 +226,14 @@ public:
 
 
     /**
-     * @return true if saving/exporting should inhibit the option dialog
+     * @return true if file operations should inhibit the option dialog
      */
-    bool saveInBatchMode() const;
+    bool fileBatchMode() const;
 
     /**
-     * @param batchMode if true, do not show the option dialog when saving or exporting.
+     * @param batchMode if true, do not show the option dialog for file operations.
      */
-    void setSaveInBatchMode(const bool batchMode);
+    void setFileBatchMode(const bool batchMode);
 
     /**
      * Sets the error message to be shown to the user (use i18n()!)
@@ -412,6 +412,9 @@ public:
 
     /**
      * @return the object to report progress to.
+     *
+     * This is only not zero if loading or saving is in progress.
+     *
      * One can add more KoUpdaters to it to make the progress reporting more
      * accurate. If no active progress reporter is present, 0 is returned.
      **/
@@ -523,15 +526,14 @@ public:
      *
      * @param settingsWriter
      */
-    void saveUnitOdf(KoXmlWriter *settingsWriter) const;
-
     bool loadNativeFormatFromByteArray(QByteArray &data);
 
-    /// return the grid data for this document.
-    KoGridData &gridData();
+    KisGridConfig gridConfig() const;
+    void setGridConfig(const KisGridConfig &config);
 
     /// returns the guides data for this document.
-    KoGuidesData &guidesData();
+    const KisGuidesConfig& guidesConfig() const;
+    void setGuidesConfig(const KisGuidesConfig &data);
 
     void clearUndoHistory();
 
@@ -554,16 +556,6 @@ public:
      */
     KUndo2Stack *undoStack();
 
-
-    /**
-     * Set the output stream to report profile information to.
-     */
-    void setProfileStream(QTextStream *profilestream);
-
-    /**
-     * Set the output stream to report profile information to.
-     */
-    void setProfileReferenceTime(const QTime& referenceTime);
 
 public Q_SLOTS:
 
@@ -601,6 +593,12 @@ Q_SIGNALS:
     void sigProgress(int value);
 
     /**
+     * Progress cancel button pressed
+     * This is emitted by KisDocument
+     */
+    void sigProgressCanceled();
+
+    /**
      * Emitted e.g. at the beginning of a save operation
      * This is emitted by KisDocument and used by KisView to display a statusbar message
      */
@@ -623,6 +621,8 @@ Q_SIGNALS:
 
     void sigSavingFinished();
 
+    void sigGuidesConfigChanged(const KisGuidesConfig &config);
+
 private:
 
     friend class KisPart;
@@ -636,8 +636,8 @@ private:
     void setDisregardAutosaveFailure(bool disregardFailure);
 
     /**
-     *  Loads a document from KReadOnlyPart::m_file (KParts takes care of downloading
-     *  remote documents).
+     *  Loads a document
+     *
      *  Applies a filter if necessary, and calls loadNativeFormat in any case
      *  You should not have to reimplement, except for very special cases.
      *
@@ -648,15 +648,8 @@ private:
     bool openFile();
 
     /**
-     * This method is called by @a openFile() to allow applications to setup there
-     * own KoProgressUpdater-subTasks which are then taken into account for the
-     * displayed progressbar during loading.
-     */
-    void setupOpenFileSubProgress();
-
-    /**
-     *  Saves a document to KReadOnlyPart::m_file (KParts takes care of uploading
-     *  remote documents)
+     *  Saves a document
+     *
      *  Applies a filter if necessary, and calls saveNativeFormat in any case
      *  You should not have to reimplement, except for very special cases.
      */
@@ -767,6 +760,26 @@ public:
      * Makes an otherwise empty document ready for import/export
      */
     void prepareForImport();
+
+    /**
+     * Adds progressproxy for file operations
+     */
+    void setFileProgressProxy();
+
+    /**
+     * Clears progressproxy for file operations
+     */
+    void clearFileProgressProxy();
+
+    /**
+     * Adds progressupdater for file operations
+     */
+    void setFileProgressUpdater(const QString &text);
+
+    /**
+     * Clears progressupdater for file operations
+     */
+    void clearFileProgressUpdater();
 
     /**
      * Set the current image to the specified image and turn undo on.

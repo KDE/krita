@@ -32,6 +32,7 @@
 
 class KoColorProfile;
 class KoColorSpace;
+class KisSnapConfig;
 
 class KRITAUI_EXPORT KisConfig
 {
@@ -141,6 +142,9 @@ public:
     bool showRulers(bool defaultValue = false) const;
     void setShowRulers(bool rulers) const;
 
+    bool rulersTrackMouse(bool defaultValue = false) const;
+    void setRulersTrackMouse(bool value) const;
+
     qint32 pasteBehaviour(bool defaultValue = false) const;
     void setPasteBehaviour(qint32 behaviour) const;
 
@@ -185,26 +189,13 @@ public:
     QColor getGridSubdivisionColor(bool defaultValue = false) const;
     void setGridSubdivisionColor(const QColor & v) const;
 
-    quint32 getGridHSpacing(bool defaultValue = false) const;
-    void setGridHSpacing(quint32 v) const;
+    quint32 guidesLineStyle(bool defaultValue = false) const;
+    void setGuidesLineStyle(quint32 v) const;
+    QColor guidesColor(bool defaultValue = false) const;
+    void setGuidesColor(const QColor & v) const;
 
-    quint32 getGridVSpacing(bool defaultValue = false) const;
-    void setGridVSpacing(quint32 v) const;
-
-    bool getGridSpacingAspect(bool defaultValue = false) const;
-    void setGridSpacingAspect(bool v) const;
-
-    quint32 getGridSubdivisions(bool defaultValue = false) const;
-    void setGridSubdivisions(quint32 v) const;
-
-    quint32 getGridOffsetX(bool defaultValue = false) const;
-    void setGridOffsetX(quint32 v) const;
-
-    quint32 getGridOffsetY(bool defaultValue = false) const;
-    void setGridOffsetY(quint32 v) const;
-
-    bool getGridOffsetAspect(bool defaultValue = false) const;
-    void setGridOffsetAspect(bool v) const;
+    void loadSnapConfig(KisSnapConfig *config, bool defaultValue = false) const;
+    void saveSnapConfig(const KisSnapConfig &config);
 
     qint32 checkSize(bool defaultValue = false) const;
     void setCheckSize(qint32 checkSize) const;
@@ -470,6 +461,9 @@ public:
 
     bool animationDropFrames(bool defaultValue = false) const;
     void setAnimationDropFrames(bool value);
+
+    int scribbingUpdatesDelay(bool defaultValue = false) const;
+    void setScribbingUpdatesDelay(int value);
 
     bool switchSelectionCtrlAlt(bool defaultValue = false) const;
     void setSwitchSelectionCtrlAlt(bool value);

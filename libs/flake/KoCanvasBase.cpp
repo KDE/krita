@@ -18,13 +18,14 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include <QRectF>
+
 #include "KoCanvasBase.h"
 #include "KoCanvasResourceManager.h"
 #include "KoShapeController.h"
 #include "KoCanvasController.h"
 #include "KoViewConverter.h"
 #include "KoSnapGuide.h"
-#include "SnapGuideConfigWidget.h"
 #include "KoShapeManager.h"
 #include "KoToolProxy.h"
 #include "KoSelection.h"
@@ -118,14 +119,4 @@ void KoCanvasBase::clipToDocument(const KoShape *, QPointF &) const
 KoSnapGuide * KoCanvasBase::snapGuide() const
 {
     return d->snapGuide;
-}
-
-KoGuidesData * KoCanvasBase::guidesData()
-{
-    return 0;
-}
-
-QWidget *KoCanvasBase::createSnapGuideConfigWidget() const
-{
-    return new SnapGuideConfigWidget(d->snapGuide);
 }

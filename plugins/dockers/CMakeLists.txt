@@ -2,9 +2,6 @@ project(calligradockers)
 
 set(calligradockers_SRCS
 
-    snapguidedocker/SnapGuideDocker.cpp
-    snapguidedocker/SnapGuideDockerFactory.cpp
-
     shapeproperties/ShapePropertiesDocker.cpp
     shapeproperties/ShapePropertiesDockerFactory.cpp
 

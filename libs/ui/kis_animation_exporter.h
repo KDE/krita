@@ -21,6 +21,7 @@
 
 #include "kis_types.h"
 #include "kritaui_export.h"
+#include <KisImportExportFilter.h>
 
 class KisDocument;
 
@@ -32,11 +33,7 @@ public:
 
     KisAnimationExporterUI(QWidget *parent);
     ~KisAnimationExporterUI();
-    void exportSequence(KisDocument *document);
-
-private Q_SLOTS:
-    void progress(int currentFrame);
-    void cancel();
+    KisImportExportFilter::ConversionStatus exportSequence(KisDocument *document);
 
 private:
     struct Private;
@@ -51,18 +48,18 @@ public:
     KisAnimationExporter(KisDocument *document, const QString &baseFilename, int fromTime, int toTime);
     ~KisAnimationExporter();
 
-    void startExport();
+    KisImportExportFilter::ConversionStatus exportAnimation();
     void stopExport();
 
 Q_SIGNALS:
-    void sigExportProgress(int currentFrame);
-
     // Internal, used for getting back to main thread
     void sigFrameReadyToSave();
+    void sigFinished();
 
 private Q_SLOTS:
     void frameReadyToCopy(int time);
     void frameReadyToSave();
+    void cancel();
 
 private:
     struct Private;

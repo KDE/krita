@@ -166,6 +166,9 @@ Q_SIGNALS:
 
     void guiLoadingFinished();
 
+    /// This signal is emitted when the user clicked on the progressbar cancel
+    void sigProgressCanceled();
+
 public Q_SLOTS:
 
     /**
@@ -239,6 +242,7 @@ private Q_SLOTS:
     void slotSaveCanceled(const QString &);
     void forceDockTabFonts();
 
+    void slotProgressCanceled();
 
     /**
      * @internal

@@ -213,15 +213,18 @@ KisAutoSaveRecoveryDialog::KisAutoSaveRecoveryDialog(const QStringList &filename
         // get thumbnail -- all calligra apps save a thumbnail
         KoStore* store = KoStore::createStore(path, KoStore::Read);
 
-        if (store && (store->open(QString("Thumbnails/thumbnail.png"))
-                          || store->open(QString("preview.png")))) {
-            // Hooray! No long delay for the user...
-            QByteArray bytes = store->read(store->size());
-            store->close();
+        if (store) {
+            if(store->open(QString("Thumbnails/thumbnail.png"))
+               || store->open(QString("preview.png"))) {
+                // Hooray! No long delay for the user...
+                QByteArray bytes = store->read(store->size());
+                store->close();
+                QImage img;
+                img.loadFromData(bytes);
+                file->thumbnail = img.scaled(QSize(200,200), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            }
+
             delete store;
-            QImage img;
-            img.loadFromData(bytes);
-            file->thumbnail = img.scaled(QSize(200,200), Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
 
         // get the date
@@ -239,6 +242,13 @@ KisAutoSaveRecoveryDialog::KisAutoSaveRecoveryDialog(const QStringList &filename
     
     setAttribute(Qt::WA_DeleteOnClose, false);
     connect( this, SIGNAL( user1Clicked() ), this, SLOT( slotDeleteAll() ) );
+}
+
+KisAutoSaveRecoveryDialog::~KisAutoSaveRecoveryDialog()
+{
+    delete m_listView->itemDelegate();
+    delete m_model;
+    delete m_listView;
 }
 
 void KisAutoSaveRecoveryDialog::slotDeleteAll()

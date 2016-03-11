@@ -18,10 +18,10 @@
 
 #include "kis_animation_exporter.h"
 
-#include <QProgressDialog>
 #include <QDesktopServices>
 #include <QWaitCondition>
 #include <QMimeDatabase>
+#include <QEventLoop>
 
 #include "KoFileDialog.h"
 #include "KisDocument.h"
@@ -37,12 +37,10 @@
 struct KisAnimationExporterUI::Private
 {
     QWidget *parentWidget;
-    QProgressDialog progressDialog;
     KisAnimationExporter *exporter;
 
     Private(QWidget *parent)
         : parentWidget(parent),
-          progressDialog(i18n("Exporting frames..."), i18n("Cancel"), 0, 0),
           exporter(0)
     {}
 };
@@ -50,7 +48,6 @@ struct KisAnimationExporterUI::Private
 KisAnimationExporterUI::KisAnimationExporterUI(QWidget *parent)
     : m_d(new Private(parent))
 {
-    connect(&m_d->progressDialog, SIGNAL(canceled()), this, SLOT(cancel()));
 }
 
 KisAnimationExporterUI::~KisAnimationExporterUI()
@@ -60,7 +57,7 @@ KisAnimationExporterUI::~KisAnimationExporterUI()
     }
 }
 
-void KisAnimationExporterUI::exportSequence(KisDocument *document)
+KisImportExportFilter::ConversionStatus KisAnimationExporterUI::exportSequence(KisDocument *document)
 {
     KoFileDialog dialog(m_d->parentWidget, KoFileDialog::SaveFile, "krita/exportsequence");
     dialog.setCaption(i18n("Export sequence"));
@@ -68,34 +65,14 @@ void KisAnimationExporterUI::exportSequence(KisDocument *document)
     dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export));
     QString filename = dialog.filename();
 
-    if (filename.isEmpty()) return;
+    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
     const KisTimeRange fullClipRange = document->image()->animationInterface()->fullClipRange();
     int firstFrame = fullClipRange.start();
     int lastFrame = fullClipRange.end();
 
-    m_d->progressDialog.setWindowModality(Qt::ApplicationModal);
-    m_d->progressDialog.setMinimum(firstFrame);
-    m_d->progressDialog.setMaximum(lastFrame);
-    m_d->progressDialog.setValue(firstFrame);
-
     m_d->exporter = new KisAnimationExporter(document, filename, firstFrame, lastFrame);
-    connect(m_d->exporter, SIGNAL(sigExportProgress(int)), this, SLOT(progress(int)));
-
-    m_d->exporter->startExport();
-    m_d->progressDialog.exec();
-}
-
-void KisAnimationExporterUI::progress(int currentFrame)
-{
-    m_d->progressDialog.setValue(currentFrame);
-}
-
-void KisAnimationExporterUI::cancel()
-{
-    if (m_d->exporter) {
-        m_d->exporter->stopExport();
-    }
+    return m_d->exporter->exportAnimation();
 }
 
 
@@ -116,6 +93,9 @@ struct KisAnimationExporter::Private
     KisPaintDeviceSP tmpDevice;
 
     bool exporting;
+    bool batchMode;
+    KisImportExportFilter::ConversionStatus status;
+
     QMutex mutex;
     QWaitCondition exportFinished;
 
@@ -125,7 +105,8 @@ struct KisAnimationExporter::Private
           firstFrame(fromTime),
           lastFrame(toTime),
           tmpDoc(KisPart::instance()->createDocument()),
-          exporting(false)
+          exporting(false),
+          batchMode(false)
     {
         tmpDoc->setAutoSave(0);
 
@@ -155,12 +136,13 @@ KisAnimationExporter::KisAnimationExporter(KisDocument *document, const QString 
     } else {
         m_d->filenamePrefix = baseFilename;
     }
+    m_d->batchMode = document->fileBatchMode();
 
     QMimeDatabase db;
     QMimeType mime = db.mimeTypeForFile(baseFilename);
     QString mimefilter = mime.name();
     m_d->tmpDoc->setOutputMimeType(mimefilter.toLatin1());
-    m_d->tmpDoc->setSaveInBatchMode(true);
+    m_d->tmpDoc->setFileBatchMode(true);
 
     connect(this, SIGNAL(sigFrameReadyToSave()), this, SLOT(frameReadyToSave()), Qt::QueuedConnection);
 }
@@ -169,13 +151,25 @@ KisAnimationExporter::~KisAnimationExporter()
 {
 }
 
-void KisAnimationExporter::startExport()
+KisImportExportFilter::ConversionStatus KisAnimationExporter::exportAnimation()
 {
+
+    if (!m_d->batchMode) {
+        emit m_d->document->statusBarMessage(i18n("Export frames"));
+        emit m_d->document->sigProgress(0);
+        connect(m_d->document, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
+    }
+    m_d->status = KisImportExportFilter::OK;
     m_d->exporting = true;
     m_d->currentFrame = m_d->firstFrame;
     connect(m_d->image->animationInterface(), SIGNAL(sigFrameReady(int)), this, SLOT(frameReadyToCopy(int)), Qt::DirectConnection);
-
     m_d->image->animationInterface()->requestFrameRegeneration(m_d->currentFrame, m_d->image->bounds());
+
+    QEventLoop loop;
+    loop.connect(this, SIGNAL(sigFinished()), SLOT(quit()));
+    loop.exec();
+
+    return m_d->status;
 }
 
 void KisAnimationExporter::stopExport()
@@ -185,6 +179,19 @@ void KisAnimationExporter::stopExport()
     m_d->exporting = false;
 
     disconnect(m_d->image->animationInterface(), 0, this, 0);
+
+    if (!m_d->batchMode) {
+        disconnect(m_d->document, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
+        emit m_d->document->sigProgress(100);
+        emit m_d->document->clearStatusBarMessage();
+    }
+    emit sigFinished();
+}
+
+void KisAnimationExporter::cancel()
+{
+    m_d->status = KisImportExportFilter::ProgressCancelled;
+    stopExport();
 }
 
 void KisAnimationExporter::frameReadyToCopy(int time)
@@ -201,16 +208,23 @@ void KisAnimationExporter::frameReadyToSave()
 {
     QString frameNumber = QString("%1").arg(m_d->currentFrame, 4, 10, QChar('0'));
     QString filename = m_d->filenamePrefix + frameNumber + m_d->filenameSuffix;
-    m_d->tmpDoc->exportDocument(QUrl::fromLocalFile(filename));
 
-    emit sigExportProgress(m_d->currentFrame);
+    if (m_d->tmpDoc->exportDocument(QUrl::fromLocalFile(filename))) {
 
-    if (m_d->exporting && m_d->currentFrame < m_d->lastFrame) {
-        m_d->currentFrame++;
-        m_d->image->animationInterface()->requestFrameRegeneration(m_d->currentFrame, m_d->image->bounds());
+        if (m_d->exporting && m_d->currentFrame < m_d->lastFrame) {
+            if (!m_d->batchMode) {
+                emit m_d->document->sigProgress((m_d->currentFrame - m_d->firstFrame) * 100 /
+                                                (m_d->lastFrame - m_d->firstFrame));
+            }
+            m_d->currentFrame++;
+            m_d->image->animationInterface()->requestFrameRegeneration(m_d->currentFrame, m_d->image->bounds());
+            return; //continue
+        }
     } else {
-        stopExport();
+        //error
+        m_d->status = KisImportExportFilter::InternalError;
     }
+    stopExport(); //finish
 }
 
 #include "kis_animation_exporter.moc"

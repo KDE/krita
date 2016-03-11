@@ -137,7 +137,7 @@ private:
 
 namespace KisDomUtils {
     void KRITAIMAGE_EXPORT saveValue(QDomElement *parent, const QString &tag, const KisTimeRange &range);
-    bool KRITAIMAGE_EXPORT loadValue(const QDomElement &e, KisTimeRange *range);
+    bool KRITAIMAGE_EXPORT loadValue(const QDomElement &parent, const QString &tag, KisTimeRange *range);
 }
 
 

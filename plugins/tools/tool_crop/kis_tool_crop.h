@@ -201,6 +201,7 @@ private:
 
     KisConstrainedRect m_finalRect;
     QRect m_initialDragRect;
+    QPointF m_dragOffsetDoc;
 };
 
 class KisToolCropFactory : public KoToolFactoryBase

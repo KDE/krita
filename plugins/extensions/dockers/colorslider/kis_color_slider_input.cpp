@@ -97,7 +97,8 @@ KisHSXColorSliderInput::KisHSXColorSliderInput(QWidget* parent, const int type, 
     m_val(0),
     R(0),
     G(0),
-    B(0)
+    B(0),
+    Gamma(0)
 {
     m_hueupdating = false;
     m_satupdating = false;
@@ -118,6 +119,7 @@ void KisHSXColorSliderInput::setValue(double v)
     R = cfg.readEntry("lumaR", 0.2126);
     G = cfg.readEntry("lumaG", 0.7152);
     B = cfg.readEntry("lumaB", 0.0722);
+    Gamma = cfg.readEntry("gamma", 2.2);
 
     switch (m_type) {
     case 0:
@@ -164,7 +166,7 @@ void KisHSXColorSliderInput::setValue(double v)
         h=m_hue/360.0f;
         s=m_sat/100.0f;
         l=m_val/100.0f;
-        *m_color = this->converter()->fromHsyF(h, s, l, R, G, B);
+        *m_color = this->converter()->fromHsyF(h, s, l, R, G, B, Gamma);
         if (m_hueupdating==false) {
             emit(hueUpdated(static_cast<int>(m_hue)));
         }
@@ -255,7 +257,7 @@ void KisHSXColorSliderInput::setValue(double v)
         h=m_hue/360.0f;
         s=m_sat/100.0f;
         l=m_val/100.0f;
-        *m_color = this->converter()->fromHsyF(h, s, l, R, G, B);
+        *m_color = this->converter()->fromHsyF(h, s, l, R, G, B, Gamma);
         if (m_satupdating==false) {
             emit(satUpdated(static_cast<int>(m_sat), m_type));
         }
@@ -268,7 +270,7 @@ void KisHSXColorSliderInput::setValue(double v)
         h=m_hue/360.0f;
         s=m_sat/100.0f;
         l=m_val/100.0f;
-        *m_color = this->converter()->fromHsyF(h, s, l, R, G, B);
+        *m_color = this->converter()->fromHsyF(h, s, l, R, G, B, Gamma);
         if (m_toneupdating==false) {
             emit(toneUpdated(static_cast<int>(m_val), m_type));
         }
@@ -464,7 +466,7 @@ void KisHSXColorSliderInput::update()
         }
         break;
     case 9:
-        this->converter()->getHsyF(*m_color, &hue, &sat, &val, R, G, B);
+        this->converter()->getHsyF(*m_color, &hue, &sat, &val, R, G, B, Gamma);
         if (m_sliderisupdating==true)
         {
             if((sat*100.0)<m_sat+2 && (sat*100.0)>m_sat-2) {
@@ -483,7 +485,7 @@ void KisHSXColorSliderInput::update()
         }
         break;
     case 10:
-        this->converter()->getHsyF(*m_color, &hue, &sat, &val, R, G, B);
+        this->converter()->getHsyF(*m_color, &hue, &sat, &val, R, G, B, Gamma);
         if (m_sliderisupdating==true)
         {
             if((hue*360.0)<m_hue+2 && (hue*360.0)>m_hue-2) {
@@ -503,7 +505,7 @@ void KisHSXColorSliderInput::update()
         }
         break;
     case 11:
-        this->converter()->getHsyF(*m_color, &hue, &sat, &val, R, G, B);
+        this->converter()->getHsyF(*m_color, &hue, &sat, &val, R, G, B, Gamma);
         if (m_sliderisupdating == true)
         {
             if((sat*100.0)<m_sat+2 && (sat*100.0)>m_sat-2) {
@@ -586,7 +588,7 @@ void KisHSXColorSliderInput::update()
     default:
         Q_ASSERT(false);
     }
-    m_hsvSlider->setColors(*m_color,m_type, m_hue, R, G, B);
+    m_hsvSlider->setColors(*m_color,m_type, m_hue, R, G, B, Gamma);
 }
 
 QWidget* KisHSXColorSliderInput::createInput()

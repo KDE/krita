@@ -101,7 +101,7 @@ void KisToolRectangleBase::beginPrimaryAction(KoPointerEvent *event)
     }
     setMode(KisTool::PAINT_MODE);
 
-    QPointF pos = convertToPixelCoord(event);
+    QPointF pos = convertToPixelCoordAndSnap(event, QPointF(), false);
     m_dragStart = m_dragCenter = pos;
 
     QSizeF area = QSizeF(0,0);
@@ -152,7 +152,7 @@ void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
 
     bool fixedSize = isFixedSize() && !constraintToggle;
 
-    QPointF pos = convertToPixelCoord(event);
+    QPointF pos = convertToPixelCoordAndSnap(event, QPointF(), false);
 
     if (fixedSize) {
       m_dragStart = pos;

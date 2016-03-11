@@ -603,11 +603,11 @@ void KisDisplayColorConverter::getHsiF(const KoColor &srcColor, qreal *h, qreal 
     RGBToHSI(r, g, b, h, s, i);
 }
 
-KoColor KisDisplayColorConverter::fromHsyF(qreal h, qreal s, qreal y, qreal R, qreal G, qreal B)
+KoColor KisDisplayColorConverter::fromHsyF(qreal h, qreal s, qreal y, qreal R, qreal G, qreal B, qreal gamma)
 {
     // generate HSL from sRGB!
     QVector <qreal> channelValues(3);
-    y = pow(y, 2.2);
+    y = pow(y, gamma);
     HSYToRGB(h, s, y, &channelValues[0], &channelValues[1], &channelValues[2], R, G, B);
     KoColorSpaceRegistry::instance()->rgb8()->profile()->delinearizeFloatValueFast(channelValues);
     QColor qcolor;
@@ -615,7 +615,7 @@ KoColor KisDisplayColorConverter::fromHsyF(qreal h, qreal s, qreal y, qreal R, q
     return m_d->approximateFromQColor(qcolor);
 }
 
-void KisDisplayColorConverter::getHsyF(const KoColor &srcColor, qreal *h, qreal *s, qreal *y, qreal R, qreal G, qreal B)
+void KisDisplayColorConverter::getHsyF(const KoColor &srcColor, qreal *h, qreal *s, qreal *y, qreal R, qreal G, qreal B, qreal gamma)
 {
     // we are going through sRGB here!
     QColor color = m_d->approximateToQColor(srcColor);
@@ -626,7 +626,7 @@ void KisDisplayColorConverter::getHsyF(const KoColor &srcColor, qreal *h, qreal 
     //TODO: if we're going to have KoColor here, remember to check whether the TRC of the profile exists...
     KoColorSpaceRegistry::instance()->rgb8()->profile()->linearizeFloatValueFast(channelValues);
     RGBToHSY(channelValues[0], channelValues[1], channelValues[2], h, s, y, R, G, B);
-    *y = pow(*y, 1/2.2);
+    *y = pow(*y, 1/gamma);
 }
 
 #include "moc_kis_display_color_converter.cpp"

@@ -202,7 +202,7 @@ public:
             dst->refreshGraph();
 
             d->setOutputMimeType(m_mimeFilter.toLatin1());
-            d->setSaveInBatchMode(true);
+            d->setFileBatchMode(true);
 
 
             QUrl url = m_url;

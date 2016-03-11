@@ -56,7 +56,6 @@
 #include <kis_pressure_darken_option.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_paint_action_type_option.h>
-#include <kis_perspective_grid.h>
 #include <kis_random_sub_accessor.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_iterator_ng.h>
@@ -157,42 +156,43 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
     // Perspective correction ?
 
 
-    if (m_perspectiveCorrection && m_image && m_image->perspectiveGrid()->countSubGrids() == 1) {
-        Matrix3qreal startM = Matrix3qreal::Identity();
-        Matrix3qreal endM = Matrix3qreal::Identity();
+    // if (m_perspectiveCorrection && m_image && m_image->perspectiveGrid()->countSubGrids() == 1) {
+    //     Matrix3qreal startM = Matrix3qreal::Identity();
+    //     Matrix3qreal endM = Matrix3qreal::Identity();
 
-        // First look for the grid corresponding to the start point
-        KisSubPerspectiveGrid* subGridStart = *m_image->perspectiveGrid()->begin();
-        QRect r = QRect(0, 0, m_image->width(), m_image->height());
+    //     // First look for the grid corresponding to the start point
+    //     KisSubPerspectiveGrid* subGridStart = *m_image->perspectiveGrid()->begin();
+    //     QRect r = QRect(0, 0, m_image->width(), m_image->height());
 
-        if (subGridStart) {
-            startM = KisPerspectiveMath::computeMatrixTransfoFromPerspective(r, *subGridStart->topLeft(), *subGridStart->topRight(), *subGridStart->bottomLeft(), *subGridStart->bottomRight());
-        }
+    //     if (subGridStart) {
+    //         startM = KisPerspectiveMath::computeMatrixTransfoFromPerspective(r, *subGridStart->topLeft(), *subGridStart->topRight(), *subGridStart->bottomLeft(), *subGridStart->bottomRight());
+    //     }
 
-        // Second look for the grid corresponding to the end point
-        KisSubPerspectiveGrid* subGridEnd = *m_image->perspectiveGrid()->begin();
-        if (subGridEnd) {
-            endM = KisPerspectiveMath::computeMatrixTransfoToPerspective(*subGridEnd->topLeft(), *subGridEnd->topRight(), *subGridEnd->bottomLeft(), *subGridEnd->bottomRight(), r);
-        }
+    //     // Second look for the grid corresponding to the end point
+    //     KisSubPerspectiveGrid* subGridEnd = *m_image->perspectiveGrid()->begin();
+    //     if (subGridEnd) {
+    //         endM = KisPerspectiveMath::computeMatrixTransfoToPerspective(*subGridEnd->topLeft(), *subGridEnd->topRight(), *subGridEnd->bottomLeft(), *subGridEnd->bottomRight(), r);
+    //     }
 
-        // Compute the translation in the perspective transformation space:
-        QPointF positionStartPaintingT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart));
-        QPointF duplicateStartPositionT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart) - QPointF(m_settings->offset()));
-        QPointF translat = duplicateStartPositionT - positionStartPaintingT;
+    //     // Compute the translation in the perspective transformation space:
+    //     QPointF positionStartPaintingT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart));
+    //     QPointF duplicateStartPositionT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart) - QPointF(m_settings->offset()));
+    //     QPointF translat = duplicateStartPositionT - positionStartPaintingT;
 
-        KisSequentialIterator dstIt(m_srcdev, QRect(0, 0, sw, sh));
-        KisRandomSubAccessorSP srcAcc = realSourceDevice->createRandomSubAccessor();
+    //     KisSequentialIterator dstIt(m_srcdev, QRect(0, 0, sw, sh));
+    //     KisRandomSubAccessorSP srcAcc = realSourceDevice->createRandomSubAccessor();
 
-        //Action
-        do {
-            QPointF p =  KisPerspectiveMath::matProd(startM, KisPerspectiveMath::matProd(endM, QPointF(dstIt.x() + dstRect.x(), dstIt.y() + dstRect.y())) + translat);
-            srcAcc->moveTo(p);
-            srcAcc->sampledOldRawData(dstIt.rawData());
-        } while (dstIt.nextPixel());
+    //     //Action
+    //     do {
+    //         QPointF p =  KisPerspectiveMath::matProd(startM, KisPerspectiveMath::matProd(endM, QPointF(dstIt.x() + dstRect.x(), dstIt.y() + dstRect.y())) + translat);
+    //         srcAcc->moveTo(p);
+    //         srcAcc->sampledOldRawData(dstIt.rawData());
+    //     } while (dstIt.nextPixel());
 
 
-    }
-    else {
+    // }
+    // else 
+    {
         KisPainter copyPainter(m_srcdev);
         copyPainter.setCompositeOp(COMPOSITE_COPY);
         copyPainter.bitBltOldData(0, 0, realSourceDevice, srcPoint.x(), srcPoint.y(), sw, sh);

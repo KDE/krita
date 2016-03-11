@@ -87,6 +87,11 @@ KisShortcutMatcher::~KisShortcutMatcher()
     delete m_d;
 }
 
+bool KisShortcutMatcher::hasRunningShortcut() const
+{
+    return m_d->runningShortcut;
+}
+
 void KisShortcutMatcher::addShortcut(KisSingleActionShortcut *shortcut)
 {
     m_d->singleActionShortcuts.append(shortcut);

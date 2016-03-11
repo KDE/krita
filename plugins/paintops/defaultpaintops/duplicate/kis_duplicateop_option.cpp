@@ -23,7 +23,6 @@
 
 #include "ui_wdgduplicateop.h"
 #include <kis_image.h>
-#include <kis_perspective_grid.h>
 
 class KisDuplicateOpOptionsWidget: public QWidget, public Ui::DuplicateOpOptionsWidget
 {
@@ -36,7 +35,7 @@ public:
 protected:
     void showEvent(QShowEvent* event) {
         QWidget::showEvent(event);
-        cbPerspective->setEnabled(m_image && m_image->perspectiveGrid() && m_image->perspectiveGrid()->countSubGrids() == 1);
+        //cbPerspective->setEnabled(m_image && m_image->perspectiveGrid() && m_image->perspectiveGrid()->countSubGrids() == 1);
     }
 };
 

@@ -92,6 +92,12 @@ void KisShortcutsEditor::clearCollections()
     QTimer::singleShot(0, this, SLOT(resizeColumns()));
 }
 
+void KisShortcutsEditor::clearSearch()
+{
+    d->ui.searchFilter->searchLine()->clear();
+}
+
+
 void KisShortcutsEditor::addCollection(KActionCollection *collection, const QString &title)
 {
     // KXmlGui add action collections unconditionally. If some plugin doesn't

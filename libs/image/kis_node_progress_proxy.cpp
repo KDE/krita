@@ -23,13 +23,20 @@
 #include "kis_node.h"
 
 struct Q_DECL_HIDDEN KisNodeProgressProxy::Private {
-    Private() : minimum(0), maximum(100), value(100), percentage(-1) {
-    };
+    Private()
+        : minimum(0)
+        , maximum(100)
+        , value(100)
+        , percentage(-1)
+    {
+    }
+
     KisNodeWSP node;
     int minimum;
     int maximum;
     int value;
     int percentage;
+
     bool computePercentage() {
         int old_percentage = percentage;
         if (value == maximum) {

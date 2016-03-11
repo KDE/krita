@@ -11,7 +11,8 @@ add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/..
                     ${CMAKE_CURRENT_SOURCE_DIR}/models
-                    ${CMAKE_CURRENT_BINARY_DIR})
+                    ${CMAKE_CURRENT_BINARY_DIR}
+                    ${Boost_INCLUDE_DIRS})
 
 add_subdirectory(draganddrop)
 

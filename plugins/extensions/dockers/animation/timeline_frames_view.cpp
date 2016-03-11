@@ -419,7 +419,8 @@ void TimelineFramesView::slotDataChanged(const QModelIndex &topLeft, const QMode
     }
 
     if (selectedColumn != index.column() && !m_d->dragInProgress) {
-        setCurrentIndex(m_d->model->index(index.row(), selectedColumn));
+        int row= index.isValid() ? index.row() : 0;
+        setCurrentIndex(m_d->model->index(row, selectedColumn));
     }
 }
 

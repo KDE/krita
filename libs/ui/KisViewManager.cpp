@@ -75,7 +75,6 @@
 #include "canvas/kis_canvas2.h"
 #include "canvas/kis_canvas_controller.h"
 #include "canvas/kis_grid_manager.h"
-#include "canvas/kis_perspective_grid_manager.h"
 #include "dialogs/kis_dlg_blacklist_cleanup.h"
 #include "input/kis_input_profile_manager.h"
 #include "kis_action_manager.h"
@@ -126,6 +125,8 @@
 #include "widgets/kis_floating_message.h"
 #include "kis_signal_auto_connection.h"
 #include "kis_icon_utils.h"
+#include "kis_guides_manager.h"
+
 
 class BlockingUserInputEventFilter : public QObject
 {
@@ -160,10 +161,10 @@ public:
         , wrapAroundAction(0)
         , levelOfDetailAction(0)
         , showRulersAction(0)
+        , rulersTrackMouseAction(0)
         , zoomTo100pct(0)
         , zoomIn(0)
         , zoomOut(0)
-        , showGuidesAction(0)
         , selectionManager(_q)
         , statusBar(_q)
         , controlFrame(_q, _q_parent)
@@ -171,7 +172,6 @@ public:
         , imageManager(_q)
         , gridManager(_q)
         , canvasControlsManager(_q)
-        , perspectiveGridManager(_q)
         , paintingAssistantsManager(_q)
         , actionManager(_q)
         , mainWindow(0)
@@ -199,12 +199,13 @@ public:
     KisAction *wrapAroundAction;
     KisAction *levelOfDetailAction;
     KisAction *showRulersAction;
+    KisAction *rulersTrackMouseAction;
     KisAction *zoomTo100pct;
     KisAction *zoomIn;
     KisAction *zoomOut;
-    KisAction *showGuidesAction;
 
     KisSelectionManager selectionManager;
+    KisGuidesManager guidesManager;
     KisStatusBar statusBar;
 
     KisControlFrame controlFrame;
@@ -212,7 +213,6 @@ public:
     KisImageManager imageManager;
     KisGridManager gridManager;
     KisCanvasControlsManager canvasControlsManager;
-    KisPerspectiveGridManager  perspectiveGridManager;
     KisPaintingAssistantsManager paintingAssistantsManager;
     BlockingUserInputEventFilter blockingEventFilter;
     KisActionManager actionManager;
@@ -355,18 +355,21 @@ void KisViewManager::setCurrentView(KisView *view)
 
         d->viewConnections.addUniqueConnection(d->currentImageView->canvasController(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
         d->viewConnections.addUniqueConnection(d->currentImageView->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), d->controlFrame.paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
-        d->viewConnections.addUniqueConnection(d->showRulersAction, SIGNAL(toggled(bool)), imageView->zoomManager(), SLOT(toggleShowRulers(bool)));
-        d->showRulersAction->setChecked(imageView->zoomManager()->horizontalRulerVisible() && imageView->zoomManager()->verticalRulerVisible());
+        d->viewConnections.addUniqueConnection(d->showRulersAction, SIGNAL(toggled(bool)), imageView->zoomManager(), SLOT(setShowRulers(bool)));
+        d->viewConnections.addUniqueConnection(d->rulersTrackMouseAction, SIGNAL(toggled(bool)), imageView->zoomManager(), SLOT(setRulersTrackMouse(bool)));
         d->viewConnections.addUniqueConnection(d->zoomTo100pct, SIGNAL(triggered()), imageView->zoomManager(), SLOT(zoomTo100()));
         d->viewConnections.addUniqueConnection(d->zoomIn, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomIn()));
         d->viewConnections.addUniqueConnection(d->zoomOut, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomOut()));
-        d->viewConnections.addUniqueConnection(d->showGuidesAction, SIGNAL(triggered(bool)), imageView->zoomManager(), SLOT(showGuides(bool)));
+
+        imageView->zoomManager()->setShowRulers(d->showRulersAction->isChecked());
+        imageView->zoomManager()->setRulersTrackMouse(d->rulersTrackMouseAction->isChecked());
 
         showHideScrollbars();
     }
 
     d->filterManager.setView(imageView);
     d->selectionManager.setView(imageView);
+    d->guidesManager.setView(imageView);
     d->nodeManager.setView(imageView);
     d->imageManager.setView(imageView);
     d->canvasControlsManager.setView(imageView);
@@ -374,7 +377,6 @@ void KisViewManager::setCurrentView(KisView *view)
     d->gridManager.setView(imageView);
     d->statusBar.setView(imageView);
     d->paintingAssistantsManager.setView(imageView);
-    d->perspectiveGridManager.setView(imageView);
     d->mirrorManager.setView(imageView);
 
     if (d->currentImageView) {
@@ -615,8 +617,11 @@ void KisViewManager::createActions()
     KisConfig cfg;
     d->showRulersAction = actionManager()->createAction("view_ruler");
     d->showRulersAction->setChecked(cfg.showRulers());
+    connect(d->showRulersAction, SIGNAL(toggled(bool)), SLOT(slotSaveShowRulersState(bool)));
 
-    d->showGuidesAction = actionManager()->createAction("view_show_guides");
+    d->rulersTrackMouseAction = actionManager()->createAction("rulers_track_mouse");
+    d->rulersTrackMouseAction->setChecked(cfg.rulersTrackMouse());
+    connect(d->rulersTrackMouseAction, SIGNAL(toggled(bool)), SLOT(slotSaveRulersTrackMouseState(bool)));
 
     d->zoomTo100pct = actionManager()->createAction("zoom_to_100pct");
 
@@ -630,8 +635,6 @@ void KisViewManager::createActions()
 
 }
 
-
-
 void KisViewManager::setupManagers()
 {
     // Create the managers for filters, selections, layers etc.
@@ -642,13 +645,13 @@ void KisViewManager::setupManagers()
 
     d->selectionManager.setup(actionManager());
 
+    d->guidesManager.setup(actionManager());
+
     d->nodeManager.setup(actionCollection(), actionManager());
 
     d->imageManager.setup(actionManager());
 
     d->gridManager.setup(actionManager());
-
-    d->perspectiveGridManager.setup(actionCollection());
 
     d->paintingAssistantsManager.setup(actionManager());
 
@@ -679,14 +682,14 @@ KisActionManager* KisViewManager::actionManager() const
     return &d->actionManager;
 }
 
-KisPerspectiveGridManager* KisViewManager::perspectiveGridManager() const
-{
-    return &d->perspectiveGridManager;
-}
-
 KisGridManager * KisViewManager::gridManager() const
 {
     return &d->gridManager;
+}
+
+KisGuidesManager * KisViewManager::guidesManager() const
+{
+    return &d->guidesManager;
 }
 
 KisPaintingAssistantsManager* KisViewManager::paintingAssistantsManager() const
@@ -848,9 +851,9 @@ void KisViewManager::slotSaveIncremental()
         QMessageBox::critical(mainWindow(), i18nc("@title:window", "Couldn't save incremental version"), i18n("Alternative names exhausted, try manually saving with a higher number"));
         return;
     }
-    document()->setSaveInBatchMode(true);
+    document()->setFileBatchMode(true);
     document()->saveAs(QUrl::fromUserInput(fileName));
-    document()->setSaveInBatchMode(false);
+    document()->setFileBatchMode(false);
 
     if (mainWindow()) {
         mainWindow()->updateCaption();
@@ -956,10 +959,10 @@ void KisViewManager::slotSaveIncrementalBackup()
         } while (fileAlreadyExists);
 
         // Save both as backup and on current file for interapplication workflow
-        document()->setSaveInBatchMode(true);
+        document()->setFileBatchMode(true);
         QFile::copy(fileName, backupFileName);
         document()->saveAs(QUrl::fromUserInput(fileName));
-        document()->setSaveInBatchMode(false);
+        document()->setFileBatchMode(false);
 
         if (mainWindow()) mainWindow()->updateCaption();
     }
@@ -1130,7 +1133,6 @@ void KisViewManager::guiUpdateTimeout()
         zoomManager()->updateGUI();
     }
     d->gridManager.updateGUI();
-    d->perspectiveGridManager.updateGUI();
     d->actionManager.updateGUI();
 }
 
@@ -1163,6 +1165,18 @@ void KisViewManager::showHideScrollbars()
         d->currentImageView->canvasController()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         d->currentImageView->canvasController()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     }
+}
+
+void KisViewManager::slotSaveShowRulersState(bool value)
+{
+    KisConfig cfg;
+    cfg.setShowRulers(value);
+}
+
+void KisViewManager::slotSaveRulersTrackMouseState(bool value)
+{
+    KisConfig cfg;
+    cfg.setRulersTrackMouse(value);
 }
 
 void KisViewManager::setShowFloatingMessage(bool show)

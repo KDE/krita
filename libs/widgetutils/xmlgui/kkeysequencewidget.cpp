@@ -442,7 +442,7 @@ bool KKeySequenceWidgetPrivate::conflictWithGlobalShortcuts(const QKeySequence &
 
 bool shortcutsConflictWith(const QList<QKeySequence> &shortcuts, const QKeySequence &needle)
 {
-    if (needle.isEmpty()) {
+    if (needle.isEmpty() || needle.toString(QKeySequence::NativeText).isEmpty()) {
         return false;
     }
 

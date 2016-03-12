@@ -71,6 +71,8 @@ static bool isMouseEventType(QEvent::Type t)
 
 bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* event )
 {
+    Q_UNUSED(target)
+
     auto debugEvent = [&]() {
         if (KisTabletDebugger::instance()->debugEnabled()) {
             QString pre = QString("[BLOCKED]");

@@ -252,13 +252,13 @@ void KisPopupPalette::resizeEvent(QResizeEvent*)
 
 void KisPopupPalette::paintEvent(QPaintEvent* e)
 {
+    Q_UNUSED(e)
+
     float rotationAngle = 0.0;
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.translate(width() / 2, height() / 2);
-
-
 
     //painting background color
     QPainterPath bgColor;

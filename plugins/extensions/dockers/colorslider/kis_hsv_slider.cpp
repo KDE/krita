@@ -48,7 +48,8 @@ KisHSVSlider::KisHSVSlider(QWidget* parent, KoColorDisplayRendererInterface *dis
   : KSelector(parent), d(new Private),
   R(0),
   G(0),
-  B(0)
+  B(0),
+  Gamma(0)
 {
     setMaximum(255);
     d->displayRenderer = displayRenderer;
@@ -69,7 +70,7 @@ KisHSVSlider::~KisHSVSlider()
 }
 
 
-void KisHSVSlider::setColors(const KoColor& currentc, const int type, qreal hue_backup, qreal l_R, qreal l_G, qreal l_B)
+void KisHSVSlider::setColors(const KoColor& currentc, const int type, qreal hue_backup, qreal l_R, qreal l_G, qreal l_B, qreal gamma)
 {
     d->currentColorF = currentc;
     KoColor c = currentc;
@@ -78,6 +79,7 @@ void KisHSVSlider::setColors(const KoColor& currentc, const int type, qreal hue_
     R=l_R;
     G=l_G;
     B=l_B;
+    Gamma=gamma;
 
     d->upToDate = false;
 
@@ -202,19 +204,19 @@ KoColor KisHSVSlider::HSXcolor(int type, qreal t) const
             coordinate_color = this->converter()->fromHsiF( hue, sat, (1.0 - t));
             break;//hsi value
         case 9:
-            this->converter()->getHsyF(c, &hue, &sat, &val, R, G, B);
-            coordinate_color = this->converter()->fromHsyF( (1.0 - t) , sat, val, R, G, B);
+            this->converter()->getHsyF(c, &hue, &sat, &val, R, G, B, Gamma);
+            coordinate_color = this->converter()->fromHsyF( (1.0 - t) , sat, val, R, G, B, Gamma);
             break;//hsy hue
         case 10:
-            this->converter()->getHsyF(c, &hue, &sat, &val, R, G, B);
+            this->converter()->getHsyF(c, &hue, &sat, &val, R, G, B, Gamma);
             if (sat==0 && (1.0-t)>0) {
                 hue=hue_backup;
                 }
-            coordinate_color = this->converter()->fromHsyF( hue, (1.0 - t), val, R, G, B);
+            coordinate_color = this->converter()->fromHsyF( hue, (1.0 - t), val, R, G, B, Gamma);
             break;//hsy sat
         case 11:
-            this->converter()->getHsyF(c, &hue, &sat, &val, R, G, B);
-            coordinate_color = this->converter()->fromHsyF( hue, sat, (1.0 - t), R, G, B);
+            this->converter()->getHsyF(c, &hue, &sat, &val, R, G, B, Gamma);
+            coordinate_color = this->converter()->fromHsyF( hue, sat, (1.0 - t), R, G, B, Gamma);
             break;//hsy value
         }
     return coordinate_color;

@@ -35,6 +35,8 @@
 #include <brushengine/kis_locked_properties.h>
 
 #include <klocalizedstring.h>
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
 #include <math.h>
 
@@ -98,6 +100,9 @@ void KisCanvasControlsManager::transformColor(int step)
     if (!m_view) return;
     if (!m_view->canvasBase()) return;
     if (!m_view->resourceProvider()->resourceManager()) return;
+    KConfigGroup hotkeycfg =  KSharedConfig::openConfig()->group("colorhotkeys");
+    int steps = hotkeycfg.readEntry("steps_lightness", 10);
+
 
     KoColor color = m_view->resourceProvider()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     if (color.colorSpace()->colorModelId().id()=="CMYKA" || color.colorSpace()->colorModelId().id()=="XYZA"){
@@ -114,9 +119,9 @@ void KisCanvasControlsManager::transformColor(int step)
         rgb.setHsv(h,s,v);
         color.fromQColor(rgb);
     } else if (step<0){
-        color.colorSpace()->decreaseLuminosity(color.data(), 0.1);
+        color.colorSpace()->decreaseLuminosity(color.data(), 1.0/steps);
     } else {
-        color.colorSpace()->increaseLuminosity(color.data(), 0.1);
+        color.colorSpace()->increaseLuminosity(color.data(), 1.0/steps);
     }
     m_view->resourceProvider()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, color);
 }
@@ -125,6 +130,8 @@ void KisCanvasControlsManager::transformSaturation(int step)
     if (!m_view) return;
     if (!m_view->canvasBase()) return;
     if (!m_view->resourceProvider()->resourceManager()) return;
+    KConfigGroup hotkeycfg =  KSharedConfig::openConfig()->group("colorhotkeys");
+    int steps = hotkeycfg.readEntry("steps_saturation", 10);
 
     KoColor color = m_view->resourceProvider()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     if (color.colorSpace()->colorModelId().id()=="CMYKA" || color.colorSpace()->colorModelId().id()=="XYZA"){
@@ -136,9 +143,9 @@ void KisCanvasControlsManager::transformSaturation(int step)
         rgb.setHsl(h,s,v);
         color.fromQColor(rgb);
     } else if (step<0){
-        color.colorSpace()->decreaseSaturation(color.data(), 0.1);
+        color.colorSpace()->decreaseSaturation(color.data(), 1.0/steps);
     } else {
-        color.colorSpace()->increaseSaturation(color.data(), 0.1);
+        color.colorSpace()->increaseSaturation(color.data(), 1.0/steps);
     }
     m_view->resourceProvider()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, color);
 }
@@ -147,6 +154,8 @@ void KisCanvasControlsManager::transformHue(int step)
     if (!m_view) return;
     if (!m_view->canvasBase()) return;
     if (!m_view->resourceProvider()->resourceManager()) return;
+    KConfigGroup hotkeycfg =  KSharedConfig::openConfig()->group("colorhotkeys");
+    int steps = hotkeycfg.readEntry("steps_hue", 36);
 
     KoColor color = m_view->resourceProvider()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     if (color.colorSpace()->colorModelId().id()=="CMYKA" || color.colorSpace()->colorModelId().id()=="XYZA"){
@@ -158,9 +167,9 @@ void KisCanvasControlsManager::transformHue(int step)
         rgb.setHsl(h,s,v);
         color.fromQColor(rgb);
     } else if (step<0){
-        color.colorSpace()->increaseHue(color.data(), 1.0/36.0);
+        color.colorSpace()->increaseHue(color.data(), 1.0/steps);
     } else {
-        color.colorSpace()->decreaseHue(color.data(), 1.0/36.0);
+        color.colorSpace()->decreaseHue(color.data(), 1.0/steps);
     }
     m_view->resourceProvider()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, color);
 }
@@ -169,12 +178,14 @@ void KisCanvasControlsManager::transformRed(int step)
     if (!m_view) return;
     if (!m_view->canvasBase()) return;
     if (!m_view->resourceProvider()->resourceManager()) return;
+    KConfigGroup hotkeycfg =  KSharedConfig::openConfig()->group("colorhotkeys");
+    int steps = hotkeycfg.readEntry("steps_redgreen", 10);
 
     KoColor color = m_view->resourceProvider()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     if (step<0){
-        color.colorSpace()->increaseGreen(color.data(), 0.05);
+        color.colorSpace()->increaseGreen(color.data(), 1.0/steps);
     } else {
-        color.colorSpace()->increaseRed(color.data(), 0.05);
+        color.colorSpace()->increaseRed(color.data(), 1.0/steps);
     }
     m_view->resourceProvider()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, color);
 }
@@ -183,12 +194,14 @@ void KisCanvasControlsManager::transformBlue(int step)
     if (!m_view) return;
     if (!m_view->canvasBase()) return;
     if (!m_view->resourceProvider()->resourceManager()) return;
+    KConfigGroup hotkeycfg =  KSharedConfig::openConfig()->group("colorhotkeys");
+    int steps = hotkeycfg.readEntry("steps_blueyellow", 10);
 
     KoColor color = m_view->resourceProvider()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     if (step<0){
-        color.colorSpace()->increaseYellow(color.data(), 0.05);
+        color.colorSpace()->increaseYellow(color.data(), 1.0/steps);
     } else {
-        color.colorSpace()->increaseBlue(color.data(), 0.05);
+        color.colorSpace()->increaseBlue(color.data(), 1.0/steps);
     }
     m_view->resourceProvider()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, color);
 }

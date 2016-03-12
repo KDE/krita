@@ -59,6 +59,7 @@ KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
     /* color docker selector drop down */
     ui->dockerColorSettingsComboBox->addItem(i18n("Advanced Color Selector"));
     ui->dockerColorSettingsComboBox->addItem(i18n("Color Sliders"));
+    ui->dockerColorSettingsComboBox->addItem(i18n("Color Hotkeys"));
     ui->dockerColorSettingsComboBox->setCurrentIndex(0); // start off seeing advanced color selector properties
 
     connect( ui->dockerColorSettingsComboBox, SIGNAL(currentIndexChanged(int)),this, SLOT(changedColorDocker(int)));
@@ -165,6 +166,7 @@ void KisColorSelectorSettings::savePreferences() const
     // write cfg
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
     KConfigGroup hsxcfg =  KSharedConfig::openConfig()->group("hsxColorSlider");
+    KConfigGroup hotkeycfg =  KSharedConfig::openConfig()->group("colorhotkeys");
 
     //  advanced color selector
     cfg.writeEntry("onDockerResize", ui->dockerResizeOptionsComboBox->currentIndex());
@@ -250,6 +252,7 @@ void KisColorSelectorSettings::savePreferences() const
     cfg.writeEntry("lumaR", ui->l_lumaR->value());
     cfg.writeEntry("lumaG", ui->l_lumaG->value());
     cfg.writeEntry("lumaB", ui->l_lumaB->value());
+    cfg.writeEntry("gamma", ui->SP_Gamma->value());
     
     //slider//
     hsxcfg.writeEntry("hsvH", ui->csl_hsvH->isChecked());
@@ -264,6 +267,13 @@ void KisColorSelectorSettings::savePreferences() const
     hsxcfg.writeEntry("hsyH", ui->csl_hsyH->isChecked());
     hsxcfg.writeEntry("hsyS", ui->csl_hsyS->isChecked());
     hsxcfg.writeEntry("hsyY", ui->csl_hsyY->isChecked());
+
+    //hotkeys//
+    hotkeycfg.writeEntry("steps_lightness", ui->sb_lightness->value());
+    hotkeycfg.writeEntry("steps_saturation", ui->sb_saturation->value());
+    hotkeycfg.writeEntry("steps_hue", ui->sb_hue->value());
+    hotkeycfg.writeEntry("steps_redgreen", ui->sb_rg->value());
+    hotkeycfg.writeEntry("steps_blueyellow", ui->sb_by->value());
 
     emit settingsChanged();
 }
@@ -286,14 +296,21 @@ void KisColorSelectorSettings::changedColorDocker(int index)
     // having a situation where too many sections are visible makes the window too large. turn all off before turning more on
     ui->colorSliderOptions->hide();
     ui->advancedColorSelectorOptions->hide();
+    ui->hotKeyOptions->hide();
 
     if (index == 0)     { // advanced color selector options selected
         ui->advancedColorSelectorOptions->show();
         ui->colorSliderOptions->hide();
+        ui->hotKeyOptions->hide();
     }
-    else   {  // color slider options selected
+    else if (index == 1) {  // color slider options selected
         ui->advancedColorSelectorOptions->hide();
+        ui->hotKeyOptions->hide();
         ui->colorSliderOptions->show();
+    } else { 
+       ui->colorSliderOptions->hide();
+       ui->advancedColorSelectorOptions->hide();
+       ui->hotKeyOptions->show();
     }
 }
 
@@ -387,6 +404,7 @@ void KisColorSelectorSettings::loadPreferences()
 
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
     KConfigGroup hsxcfg =  KSharedConfig::openConfig()->group("hsxColorSlider");
+    KConfigGroup hotkeycfg =  KSharedConfig::openConfig()->group("colorhotkeys");
 
 
     // Advanced color selector
@@ -484,6 +502,7 @@ void KisColorSelectorSettings::loadPreferences()
     ui->l_lumaR->setValue(cfg.readEntry("lumaR", 0.2126));
     ui->l_lumaG->setValue(cfg.readEntry("lumaG", 0.7152));
     ui->l_lumaB->setValue(cfg.readEntry("lumaB", 0.0722));
+    ui->SP_Gamma->setValue(cfg.readEntry("gamma", 2.2));
     
     //color sliders//
     ui->csl_hsvH->setChecked(hsxcfg.readEntry("hsvH", false));
@@ -498,6 +517,14 @@ void KisColorSelectorSettings::loadPreferences()
     ui->csl_hsyH->setChecked(hsxcfg.readEntry("hsyH", false));
     ui->csl_hsyS->setChecked(hsxcfg.readEntry("hsyS", false));
     ui->csl_hsyY->setChecked(hsxcfg.readEntry("hsyY", false));
+
+    //hotkeys//
+    ui->sb_lightness->setValue(hotkeycfg.readEntry("steps_lightness", 10));
+    ui->sb_saturation->setValue(hotkeycfg.readEntry("steps_saturation", 10));
+    ui->sb_hue->setValue(hotkeycfg.readEntry("steps_hue", 36));
+    ui->sb_rg->setValue(hotkeycfg.readEntry("steps_redgreen", 10));
+    ui->sb_by->setValue(hotkeycfg.readEntry("steps_blueyellow", 10));
+
     
 }
 
@@ -567,6 +594,7 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->l_lumaR->setValue(0.2126);
     ui->l_lumaG->setValue(0.7152);
     ui->l_lumaB->setValue(0.0722);
+    ui->SP_Gamma->setValue(2.2);
     
     //color sliders//
     ui->csl_hsvH->setChecked(false);
@@ -581,6 +609,14 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->csl_hsyH->setChecked(false);
     ui->csl_hsyS->setChecked(false);
     ui->csl_hsyY->setChecked(false);
+
+    //hotkeys//
+    ui->sb_lightness->setValue(10);
+    ui->sb_saturation->setValue(10);
+    ui->sb_hue->setValue(36);
+    ui->sb_rg->setValue(10);
+    ui->sb_by->setValue(10);
+
 }
 
 KisColorSelectorSettingsDialog::KisColorSelectorSettingsDialog(QWidget *parent) :

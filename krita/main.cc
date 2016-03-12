@@ -89,6 +89,9 @@ extern "C" int main(int argc, char **argv)
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
 #endif
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+#if QT_VERSION >= 0x050600
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
 
     KLocalizedString::setApplicationDomain("krita");
 

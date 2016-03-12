@@ -52,6 +52,7 @@ private:
     qreal R;
     qreal G;
     qreal B;
+    qreal Gamma;
 };
 
 #endif // KIS_COLOR_SELECTOR_WHEEL_H

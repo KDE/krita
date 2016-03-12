@@ -52,6 +52,7 @@ private:
     qreal R;
     qreal G;
     qreal B;
+    qreal Gamma;
 };
 
 #endif

@@ -33,6 +33,7 @@
 #include <kpluginfactory.h>
 
 #include <KoColorSpaceConstants.h>
+#include <KoColorSpaceRegistry.h>
 
 #include <KisDocument.h>
 #include <KisFilterChain.h>
@@ -51,6 +52,7 @@
 #include <kis_adjustment_layer.h>
 #include <KisPart.h>
 #include <kis_types.h>
+#include <kis_png_converter.h>
 
 class KRITAUI_EXPORT KisSaveSCMLVisitor : public KisNodeVisitor
 {
@@ -142,25 +144,25 @@ public:
     {
         qDebug() << "visit paint layer" << l->name();
         saveFolder(l);
-        return savePaintDevice(l->projection(), l->objectName());
+        return savePaintDevice(l->projection(), l->name());
     }
 
     bool visit(KisAdjustmentLayer *l)
     {
         saveFolder(l);
-        return savePaintDevice(l->projection(), l->objectName());
+        return savePaintDevice(l->projection(), l->name());
     }
 
     bool visit(KisExternalLayer *l)
     {
         saveFolder(l);
-        return savePaintDevice(l->projection(), l->objectName());
+        return savePaintDevice(l->projection(), l->name());
     }
 
     bool visit(KisCloneLayer *l)
     {
         saveFolder(l);
-        return savePaintDevice(l->projection(), l->objectName());
+        return savePaintDevice(l->projection(), l->name());
     }
 
     bool visit(KisFilterMask *)
@@ -181,7 +183,7 @@ public:
     bool visit(KisGeneratorLayer * l)
     {
         saveFolder(l);
-        return savePaintDevice(l->projection(), l->objectName());
+        return savePaintDevice(l->projection(), l->name());
     }
 
     bool visit(KisSelectionMask* )
@@ -194,13 +196,16 @@ public:
         m_depth++;
         qDebug() << "saving group layer" << l << m_depth;
 
-        m_currentFolder = l->objectName();
+
+        QDir d(m_path );
+        d.mkpath(l->name());
+        m_currentFolder = d.absolutePath() + "/" + l->name();
 
         if (m_depth > 2) {
             // We don't descend into subgroups; instead the subgroup is saved as a png
             m_depth--;
             saveFolder(l);
-            return savePaintDevice(l->projection(), l->objectName());
+            return savePaintDevice(l->projection(), l->name());
         }
         else {
             KisLayerSP child = dynamic_cast<KisLayer*>(l->firstChild().data());
@@ -265,8 +270,27 @@ private:
 
     bool savePaintDevice(KisPaintDeviceSP dev, const QString &fileName)
     {
-        qDebug() << "savePaintDevice" << fileName;
-        return true;
+        qDebug() << "savePaintDevice" << fileName << dev;
+        QRect rc = dev->exactBounds();
+
+        if (!KisPNGConverter::isColorSpaceSupported(dev->colorSpace())) {
+            dev = new KisPaintDevice(*dev.data());
+            KUndo2Command *cmd = dev->convertTo(KoColorSpaceRegistry::instance()->rgb8());
+            delete cmd;
+        }
+
+        QFile fp(m_currentFolder + "/" + fileName + ".png");
+
+        KisPNGOptions options;
+        options.forceSRGB = true;
+
+        vKisAnnotationSP_it beginIt = m_image->beginAnnotations();
+        vKisAnnotationSP_it endIt = m_image->endAnnotations();
+
+        KisPNGConverter converter(0);
+        KisImageBuilder_Result res = converter.buildFile(&fp, rc, m_image->xRes(), m_image->yRes(), dev, beginIt, endIt, options, 0);
+
+        return (res == KisImageBuilder_RESULT_OK);
     }
 
     KisImageWSP m_image;

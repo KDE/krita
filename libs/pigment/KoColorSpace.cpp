@@ -124,11 +124,14 @@ QPolygonF KoColorSpace::gamutXYY() const
         int samples = 5;//amount of samples in our color space.
         QString name = KoColorSpaceRegistry::instance()->colorSpaceFactory("XYZAF16")->defaultProfile();
         const KoColorSpace* xyzColorSpace = KoColorSpaceRegistry::instance()->colorSpace("XYZA", "F16", name);
-        quint8 *data = new quint8(channelCount());
-        quint8 data2[4];//xyza is 4.
+        quint8 *data = new quint8[pixelSize()];
+        quint8 data2[8]; // xyza is 8 bytes per pixel.
         //QVector <qreal> sampleCoordinates(pow(colorChannelCount(),samples));
         //sampleCoordinates.fill(0.0);
-        QVector <float> channelValuesF(channelCount());//for getting the coordinates.
+
+        // This is fixed to 5 since the maximum number of channels are 5 for CMYKA
+        QVector <float> channelValuesF(5);//for getting the coordinates.
+
         for(int x=0;x<samples;x++){
             if (colorChannelCount()==1) {//gray
                 channelValuesF[0]=(max/(samples-1))*(x);
@@ -175,7 +178,7 @@ QPolygonF KoColorSpace::gamutXYY() const
                 
             }
         }
-        delete data;
+        delete[] data;
         //if we ever implement a boundary-checking thing I'd add it here.
         return d->gamutXYY;
     } else {
@@ -193,9 +196,12 @@ QPolygonF KoColorSpace::estimatedTRCXYY() const
         }
         QString name = KoColorSpaceRegistry::instance()->colorSpaceFactory("XYZAF16")->defaultProfile();
         const KoColorSpace* xyzColorSpace = KoColorSpaceRegistry::instance()->colorSpace("XYZA", "F16", name);
-        quint8 *data = new quint8(channelCount());
-        quint8 data2[4];//xyza is 4.
-        QVector <float> channelValuesF(channelCount());
+        quint8 *data = new quint8[pixelSize()];
+        quint8 data2[8]; // xyza is 8 bytes per pixel.
+
+        // This is fixed to 5 since the maximum number of channels are 5 for CMYKA
+        QVector <float> channelValuesF(5);//for getting the coordinates.
+
         for (int i=0; i<colorChannelCount(); i++) {
             qreal colorantY=1.0;
             if (colorModelId().id()!="CMYKA") {
@@ -244,6 +250,8 @@ QPolygonF KoColorSpace::estimatedTRCXYY() const
                 }
             }
         }
+
+        delete[] data;
         return d->TRCXYY;
     } else {
         return d->TRCXYY;

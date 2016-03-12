@@ -55,7 +55,8 @@ public:
     enum Mode {
         POSTPONE, /* Calling start() resets the timer to \p delay ms */
         FIRST_ACTIVE, /* Emit timeout() signal immediately. Throttle further timeout() to rate of one per \p delay ms */
-        FIRST_INACTIVE /* Set a timer \p delay ms, emit timeout() when it elapses. Ignore all events meanwhile. */
+        FIRST_INACTIVE, /* Set a timer \p delay ms, emit timeout() when it elapses. Ignore all events meanwhile. */
+        UNDEFINED /* KisSignalCompressor is created without an explicit mode */
     };
 
 public:

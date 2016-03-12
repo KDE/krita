@@ -23,6 +23,7 @@
 
 KisSignalCompressor::KisSignalCompressor()
     : QObject(0)
+    , m_mode(UNDEFINED)
     , m_gotSignals(false)
 {
     m_timer.setSingleShot(true);
@@ -46,6 +47,8 @@ void KisSignalCompressor::setDelay(int delay)
 
 void KisSignalCompressor::start()
 {
+    Q_ASSERT(m_mode != UNDEFINED);
+
     switch (m_mode) {
     case POSTPONE:
         m_timer.start();
@@ -72,6 +75,7 @@ void KisSignalCompressor::start()
 
 void KisSignalCompressor::slotTimerExpired()
 {
+    Q_ASSERT(m_mode != UNDEFINED);
     if (m_mode != FIRST_ACTIVE || m_gotSignals) {
         m_gotSignals = false;
         emit timeout();

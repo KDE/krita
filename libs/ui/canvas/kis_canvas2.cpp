@@ -142,8 +142,11 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
      * light.
      */
     m_d->bootsrapLodBlocked = true;
-    connect(view->mainWindow(), SIGNAL(guiLoadingFinished()),
-            SLOT(bootstrapFinished()));
+    connect(view->mainWindow(), SIGNAL(guiLoadingFinished()), SLOT(bootstrapFinished()));
+
+    m_d->updateSignalCompressor.setDelay(10);
+    m_d->updateSignalCompressor.setMode(KisSignalCompressor::FIRST_ACTIVE);
+
 
 }
 
@@ -187,8 +190,6 @@ void KisCanvas2::setup()
             globalShapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 
 
-    m_d->updateSignalCompressor.setDelay(10);
-    m_d->updateSignalCompressor.setMode(KisSignalCompressor::FIRST_ACTIVE);
     connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDoCanvasUpdate()));
 }
 

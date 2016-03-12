@@ -44,7 +44,6 @@ public:
     virtual quint32 priority() {
         return 3;
     }
-
     void beginPrimaryAction(KoPointerEvent *event);
     void continuePrimaryAction(KoPointerEvent *event);
     void endPrimaryAction(KoPointerEvent *event);
@@ -62,6 +61,8 @@ private:
     bool mouseNear(const QPointF& mousep, const QPointF& point);
     QPointF straightLine(QPointF point, QPointF compare);
     KisPaintingAssistantHandleSP nodeNearPoint(KisPaintingAssistant* grid, QPointF point);
+    QPointF snapToGuide(KoPointerEvent *e, const QPointF &offset, bool useModifiers);
+    QPointF snapToGuide(const QPointF& pt, const QPointF &offset);
 
 public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);

@@ -117,11 +117,11 @@ void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
 
     if (m_newAssistant) {
         m_internalMode = MODE_CREATION;
-        *m_newAssistant->handles().back() = event->point;
+        *m_newAssistant->handles().back() = snapToGuide(event, QPointF(), false);
         if (m_newAssistant->handles().size() == m_newAssistant->numHandles()) {
             addAssistant();
         } else {
-            m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point));
+            m_newAssistant->addHandle(new KisPaintingAssistantHandle(snapToGuide(event, QPointF(), false)));
         }
         m_canvas->updateCanvas();
         return;
@@ -129,7 +129,7 @@ void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
     m_handleDrag = 0;
     double minDist = 81.0;
 
-    QPointF mousePos = m_canvas->viewConverter()->documentToView(event->point);
+    QPointF mousePos = m_canvas->viewConverter()->documentToView(snapToGuide(event, QPointF(), false));//m_canvas->viewConverter()->documentToView(event->point);
     Q_FOREACH (KisPaintingAssistant* assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
         Q_FOREACH (const KisPaintingAssistantHandleSP handle, m_handles) {
             double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*handle));
@@ -330,7 +330,7 @@ void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
         QString key = m_options.comboBox->model()->index( m_options.comboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
         m_newAssistant = KisPaintingAssistantFactoryRegistry::instance()->get(key)->createPaintingAssistant();
         m_internalMode = MODE_CREATION;
-        m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point));
+        m_newAssistant->addHandle(new KisPaintingAssistantHandle(snapToGuide(event, QPointF(), false)));
         if (m_newAssistant->numHandles() <= 1) {
             if (key == "vanishing point"){
                 m_newAssistant->addSideHandle(new KisPaintingAssistantHandle(event->point+QPointF(-70,0)));
@@ -340,7 +340,7 @@ void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
                 }
             addAssistant();
         } else {
-            m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point));
+            m_newAssistant->addHandle(new KisPaintingAssistantHandle(snapToGuide(event, QPointF(), false)));
         }
     }
 
@@ -359,7 +359,7 @@ void KisRulerAssistantTool::continuePrimaryAction(KoPointerEvent *event)
         } else if (event->modifiers() == Qt::ShiftModifier ) {
             *m_handleDrag = straightLine(event->point, m_dragStart);
         } else {
-            *m_handleDrag = event->point;
+            *m_handleDrag = snapToGuide(event, QPointF(), false);
         }
         m_handleDrag->uncache();
 
@@ -378,7 +378,7 @@ void KisRulerAssistantTool::continuePrimaryAction(KoPointerEvent *event)
         }
         m_canvas->updateCanvas();
     } else if (m_assistantDrag) {
-        QPointF adjust = event->point - m_mousePosition;
+        QPointF adjust = snapToGuide(event, QPointF(), false) - m_mousePosition;
         Q_FOREACH (KisPaintingAssistantHandleSP handle, m_assistantDrag->handles()) {
             *handle += adjust;
 
@@ -389,7 +389,7 @@ void KisRulerAssistantTool::continuePrimaryAction(KoPointerEvent *event)
 
             }
         }
-        m_mousePosition = event->point;
+        m_mousePosition = snapToGuide(event, QPointF(), false);
         m_canvas->updateCanvas();
 
     } else {
@@ -529,6 +529,30 @@ void KisRulerAssistantTool::outlineOff(KisPaintingAssistant* assistant)
     assistant->setOutline(false);
 }
 
+#include <KoSnapGuide.h>
+
+QPointF KisRulerAssistantTool::snapToGuide(KoPointerEvent *e, const QPointF &offset, bool useModifiers)
+{
+    if (!m_canvas->currentImage())
+        return e->point;
+
+    KoSnapGuide *snapGuide = m_canvas->snapGuide();
+    QPointF pos = snapGuide->snap(e->point, offset, useModifiers ? e->modifiers() : Qt::NoModifier);
+
+    //return m_canvas->currentImage()->documentToPixel(pos);
+    return pos;
+}
+
+QPointF KisRulerAssistantTool::snapToGuide(const QPointF& pt, const QPointF &offset)
+{
+    if (!m_canvas)
+        return pt;
+
+    KoSnapGuide *snapGuide = m_canvas->snapGuide();
+    QPointF pos = snapGuide->snap(pt, offset, Qt::NoModifier);
+
+    return pos;
+}
 
 void KisRulerAssistantTool::mouseMoveEvent(KoPointerEvent *event)
 {

@@ -46,12 +46,7 @@
 #define BEZIER_FLATNESS_THRESHOLD 0.5
 #include <kis_distance_information.h>
 
-#ifdef Q_OS_WIN
-#include <float.h>
-#ifndef __MINGW32__
-#define isnan _isnan
-#endif
-#endif
+#include <qnumeric.h>
 
 struct Q_DECL_HIDDEN KisPaintOp::Private {
     Private(KisPaintOp *_q)
@@ -124,11 +119,7 @@ static void paintBezierCurve(KisPaintOp *paintOp,
     qreal d2 = line.absDistance(control2);
 
     if ((d1 < BEZIER_FLATNESS_THRESHOLD && d2 < BEZIER_FLATNESS_THRESHOLD)
-#ifdef Q_CC_MSVC
-            || isnan(d1) || isnan(d2)) {
-#else
-            || std::isnan(d1) || std::isnan(d2)) {
-#endif
+            || qIsNaN(d1) || qIsNaN(d2)) {
         paintOp->paintLine(pi1, pi2, currentDistance);
     } else {
         // Midpoint subdivision. See Foley & Van Dam Computer Graphics P.508

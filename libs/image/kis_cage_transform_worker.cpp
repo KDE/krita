@@ -28,12 +28,7 @@
 #include "kis_painter.h"
 #include "kis_image.h"
 
-#ifdef Q_OS_WIN
-#include <float.h>
-#ifndef __MINGW32__
-#define isnan _isnan
-#endif
-#endif
+#include <qnumeric.h>
 
 struct Q_DECL_HIDDEN KisCageTransformWorker::Private
 {
@@ -213,15 +208,9 @@ QVector<QPointF> KisCageTransformWorker::Private::calculateTransformedPoints()
     for (int i = 0; i < numValidPoints; i++) {
         transformedPoints[i] = cage.transformedPoint(i, transfCage);
 
-#ifdef Q_CC_MSVC
-        if (isnan(transformedPoints[i].x()) ||
-            isnan(transformedPoints[i].y())) {
-#else
-        if (std::isnan(transformedPoints[i].x()) ||
-            std::isnan(transformedPoints[i].y())) {
-#endif
-
-            warnKrita << "WARNING:     One grid point has been removed from consideration" << validPoints[i];
+        if (qIsNaN(transformedPoints[i].x()) ||
+            qIsNaN(transformedPoints[i].y())) {
+            warnKrita << "WARNING: One grid point has been removed from consideration" << validPoints[i];
             transformedPoints[i] = validPoints[i];
         }
 

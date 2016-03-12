@@ -3,8 +3,8 @@ if (WIN32)
 ExternalProject_Add(
     ext_qt
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://download.qt.io/development_releases/qt/5.6/5.6.0-beta/single/qt-everywhere-opensource-src-5.6.0-beta.zip
-    URL_MD5 5b44d298dd14aa861d34d623c162ec22
+    URL http://download.qt.io/development_releases/qt/5.6/5.6.0-rc/single/qt-everywhere-opensource-src-5.6.0-rc.zip
+    URL_MD5 f710534b82223d85dd2eddb6bbb880d8
     PATCH_COMMAND myptch -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/disable-wintab.diff
           COMMAND myptch -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qtgui-private-headers.diff
 
@@ -22,8 +22,8 @@ else()
         ExternalProject_Add(
            ext_qt
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-           URL http://download.qt.io/development_releases/qt/5.6/5.6.0-beta/single/qt-everywhere-opensource-src-5.6.0-beta.tar.gz
-        URL_MD5 d0c366ddf9796256e168ccce6b087175
+        URL http://download.qt.io/development_releases/qt/5.6/5.6.0-rc/single/qt-everywhere-opensource-src-5.6.0-rc.zip
+        URL_MD5 11c553b42cad709f71db4848433a0d7d
         INSTALL_DIR ${EXTPREFIX_qt}
         CONFIGURE_COMMAND "<SOURCE_DIR>/configure -confirm-license  -opensource -nomake examples \
                 -no-pch -no-dbus -no-icu -no-iconv -no-openssl -no-nis \
@@ -44,8 +44,8 @@ else()
         ExternalProject_Add(
             ext_qt
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL http://download.qt.io/development_releases/qt/5.6/5.6.0-beta/single/qt-everywhere-opensource-src-5.6.0-beta.tar.gz
-            URL_MD5 d0c366ddf9796256e168ccce6b087175
+            URL http://download.qt.io/development_releases/qt/5.6/5.6.0-rc/single/qt-everywhere-opensource-src-5.6.0-rc.zip
+            URL_MD5 11c553b42cad709f71db4848433a0d7d
             INSTALL_DIR ${EXTPREFIX_qt}
             CONFIGURE_COMMAND "<SOURCE_DIR>/configure -prefix ${EXTPREFIX_qt} -I ${EXTPREFIX_qt}/include -L ${EXTPREFIX_qt}/lib  \
             -opensource -confirm-license -nomake examples \

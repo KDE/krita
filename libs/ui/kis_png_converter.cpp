@@ -1125,24 +1125,24 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
 
     // Fill the data structure
     png_byte** row_pointers = new png_byte*[imageRect.height()];
-    for (int y = imageRect.y(); y < imageRect.y() + imageRect.height(); y++) {
-
+    int row = 0;
+    for (int y = imageRect.y(); y < imageRect.y() + imageRect.height(); y++, row++) {
         KisHLineConstIteratorSP it = device->createHLineConstIteratorNG(imageRect.x(), y, imageRect.width());
 
-        row_pointers[y] = new png_byte[imageRect.width() * device->pixelSize()];
+        row_pointers[row] = new png_byte[imageRect.width() * device->pixelSize()];
 
         switch (color_type) {
         case PNG_COLOR_TYPE_GRAY:
         case PNG_COLOR_TYPE_GRAY_ALPHA:
             if (color_nb_bits == 16) {
-                quint16 *dst = reinterpret_cast<quint16 *>(row_pointers[y]);
+                quint16 *dst = reinterpret_cast<quint16 *>(row_pointers[row]);
                 do {
                     const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
                     *(dst++) = d[0];
                     if (options.alpha) *(dst++) = d[1];
                 } while (it->nextPixel());
             } else {
-                quint8 *dst = row_pointers[y];
+                quint8 *dst = row_pointers[row];
                 do {
                     const quint8 *d = it->oldRawData();
                     *(dst++) = d[0];
@@ -1153,7 +1153,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
         case PNG_COLOR_TYPE_RGB:
         case PNG_COLOR_TYPE_RGB_ALPHA:
             if (color_nb_bits == 16) {
-                quint16 *dst = reinterpret_cast<quint16 *>(row_pointers[y]);
+                quint16 *dst = reinterpret_cast<quint16 *>(row_pointers[row]);
                 do {
                     const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
                     *(dst++) = d[2];
@@ -1162,7 +1162,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
                     if (options.alpha) *(dst++) = d[3];
                 } while (it->nextPixel());
             } else {
-                quint8 *dst = row_pointers[y];
+                quint8 *dst = row_pointers[row];
                 do {
                     const quint8 *d = it->oldRawData();
                     *(dst++) = d[2];
@@ -1173,7 +1173,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
             }
             break;
         case PNG_COLOR_TYPE_PALETTE: {
-            quint8 *dst = row_pointers[y];
+            quint8 *dst = row_pointers[row];
             KisPNGWriteStream writestream(dst, color_nb_bits);
             do {
                 const quint8 *d = it->oldRawData();

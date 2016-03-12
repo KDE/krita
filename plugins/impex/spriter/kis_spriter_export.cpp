@@ -194,12 +194,11 @@ public:
     bool visit(KisGroupLayer *l)
     {
         m_depth++;
-        qDebug() << "saving group layer" << l << m_depth;
+        qDebug() << "saving group layer" << l << m_depth << m_path;
 
-
-        QDir d(m_path );
+        QDir d(m_path);
         d.mkpath(l->name());
-        m_currentFolder = d.absolutePath() + "/" + l->name();
+        m_currentFolder = l->name();
 
         if (m_depth > 2) {
             // We don't descend into subgroups; instead the subgroup is saved as a png
@@ -270,7 +269,7 @@ private:
 
     bool savePaintDevice(KisPaintDeviceSP dev, const QString &fileName)
     {
-        qDebug() << "savePaintDevice" << fileName << dev;
+        qDebug() << "savePaintDevice" << m_path + "/" + m_currentFolder + "/" + fileName << dev;
         QRect rc = dev->exactBounds();
 
         if (!KisPNGConverter::isColorSpaceSupported(dev->colorSpace())) {
@@ -279,7 +278,7 @@ private:
             delete cmd;
         }
 
-        QFile fp(m_currentFolder + "/" + fileName + ".png");
+        QFile fp(m_path + "/" + m_currentFolder + "/" + fileName + ".png");
 
         KisPNGOptions options;
         options.forceSRGB = true;

@@ -849,9 +849,9 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const QUrl &uri, const QRect &
     if (!uri.isLocalFile())
         return KisImageBuilder_RESULT_NOT_LOCAL;
     // Open a QIODevice for writing
-    QFile *fp = new QFile(uri.toLocalFile());
-    KisImageBuilder_Result result = buildFile(fp, imageRect, xRes, yRes, device, annotationsStart, annotationsEnd, options, metaData);
-    delete fp;
+    QFile fp (uri.toLocalFile());
+    KisImageBuilder_Result result = buildFile(&fp, imageRect, xRes, yRes, device, annotationsStart, annotationsEnd, options, metaData);
+
     return result;
 }
 

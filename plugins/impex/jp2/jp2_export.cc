@@ -61,8 +61,8 @@ KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& fro
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    KisDocument *input = m_chain->inputDocument();
-    QString filename = m_chain->outputFile();
+    KisDocument *input = inputDocument();
+    QString filename = outputFile();
 
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;
@@ -90,7 +90,7 @@ KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& fro
     kdb->setMainWidget(wdg);
     QApplication::restoreOverrideCursor();
 
-    if (!m_chain->manager()->getBatchMode()) {
+    if (!getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }

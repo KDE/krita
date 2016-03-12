@@ -27,8 +27,10 @@ Boston, MA 02110-1301, USA.
 #include <QString>
 
 #include "kritaui_export.h"
+
 class KisFilterChain;
 class KoUpdater;
+class KisDocument;
 
 /**
  * @brief The base class for import and export filters.
@@ -119,6 +121,13 @@ protected:
      */
     KisImportExportFilter(QObject *parent = 0);
 
+    KisDocument *inputDocument() const;
+    KisDocument *outputDocument() const;
+    QString inputFile() const;
+    QString outputFile() const;
+    bool getBatchMode() const;
+
+private:
     /**
      * Use this pointer to access all information about input/output
      * during the conversion. @em Don't use it in the constructor -

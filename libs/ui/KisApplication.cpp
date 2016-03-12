@@ -60,7 +60,6 @@
 
 #include "thememanager.h"
 #include "KisPrintJob.h"
-#include "KisDocumentEntry.h"
 #include "KisDocument.h"
 #include "KisMainWindow.h"
 #include "KisAutoSaveRecoveryDialog.h"

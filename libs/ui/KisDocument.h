@@ -149,23 +149,14 @@ public:
      * delivers.
      * This comes from the X-KDE-NativeMimeType key in the .desktop file.
      */
-    QByteArray nativeFormatMimeType() const { return KIS_MIME_TYPE; }
-
-    /**
-     * Returns the OASIS OpenDocument mimetype of the document, if supported
-     * This comes from the X-KDE-NativeOasisMimeType key in the
-     * desktop file
-     *
-     * @return the oasis mimetype or, if it hasn't one, the nativeformatmimetype.
-     */
-    virtual QByteArray nativeOasisMimeType() const  { return ""; }
+    static QByteArray nativeFormatMimeType() { return KIS_MIME_TYPE; }
 
     /// Checks whether a given mimetype can be handled natively.
     bool isNativeFormat(const QByteArray& mimetype) const;
 
     /// Returns a list of the mimetypes considered "native", i.e. which can
     /// be saved by KisDocument without a filter, in *addition* to the main one
-    QStringList extraNativeMimeTypes() const { return QStringList() << KIS_MIME_TYPE; }
+    static QStringList extraNativeMimeTypes() { return QStringList() << KIS_MIME_TYPE; }
 
 
     /// Enum values used by specialOutputFlag - note that it's a bitfield for supportedSpecialFormats

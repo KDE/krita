@@ -49,12 +49,12 @@ KisImportExportFilter::ConversionStatus KisCSVImport::convert(const QByteArray&,
     if (to != "application/x-krita")
         return KisImportExportFilter::BadMimeType;
 
-    KisDocument * doc = m_chain->outputDocument();
+    KisDocument * doc = outputDocument();
 
     if (!doc)
         return KisImportExportFilter::NoDocumentCreated;
 
-    QString filename = m_chain->inputFile();
+    QString filename = inputFile();
 
     doc -> prepareForImport();
 
@@ -65,7 +65,7 @@ KisImportExportFilter::ConversionStatus KisCSVImport::convert(const QByteArray&,
         if (url.isEmpty())
             return KisImportExportFilter::FileNotFound;
 
-        CSVLoader ib(doc,m_chain->manager()->getBatchMode());
+        CSVLoader ib(doc, getBatchMode());
 
         KisImageBuilder_Result result = ib.buildAnimation(url,filename);
 

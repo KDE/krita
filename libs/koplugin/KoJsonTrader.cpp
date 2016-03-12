@@ -162,3 +162,34 @@ QStringList KoJsonTrader::mimeTypes(const QString &extension) const
     }
     return mimeTypes;
 }
+
+QStringList KoJsonTrader::extensions(const QString &mimeType) const
+{
+    QSet<QString> extensions;
+    QList<QPluginLoader *>list = query("Krita/FileFilter", "");
+    Q_FOREACH(QPluginLoader *loader, list) {
+        QJsonObject json = loader->metaData().value("MetaData").toObject();
+        QStringList mimetypes = json.value("X-KDE-Import").toString().split(",");
+        mimetypes += json.value("X-KDE-Export").toString().split(",");
+        if (mimetypes.contains(mimeType)) {
+            Q_FOREACH(const QString &extension, json.value("X-KDE-Extensions").toString().split(",")) {
+                extensions += extension;
+            }
+        }
+    }
+    return extensions.toList();
+}
+
+QString KoJsonTrader::mimeName(const QString &mimeType) const
+{
+    QList<QPluginLoader *>list = query("Krita/FileFilter", "");
+    Q_FOREACH(QPluginLoader *loader, list) {
+        QJsonObject json = loader->metaData().value("MetaData").toObject();
+        QStringList mimetypes = json.value("X-KDE-Import").toString().split(",");
+        mimetypes += json.value("X-KDE-Export").toString().split(",");
+        if (mimetypes.contains(mimeType)) {
+            return json.value("X-KDE-Mimename").toString();
+        }
+    }
+    return mimeType;
+}

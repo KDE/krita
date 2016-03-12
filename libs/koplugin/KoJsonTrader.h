@@ -63,8 +63,14 @@ public:
      */
      QList<QPluginLoader *> query(const QString &servicetype, const QString &mimetype) const;
 
-     /// Return the mimetypes for the given extension for Krita/FileFilter plugins
+     /// @return the mimetypes for the given extension for Krita/FileFilter plugins
      QStringList mimeTypes(const QString &extension) const;
+
+     /// @return the extensions that are associated with the given mimetype
+     QStringList extensions(const QString &mimeType) const;
+
+     /// @return the name for the given mimetype
+     QString mimeName(const QString &mimeType) const;
 
      // Note: this should not be used
      KoJsonTrader();

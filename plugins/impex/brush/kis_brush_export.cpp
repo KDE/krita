@@ -64,8 +64,8 @@ KisBrushExport::~KisBrushExport()
 
 KisImportExportFilter::ConversionStatus KisBrushExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    KisDocument *input = m_chain->inputDocument();
-    QString filename = m_chain->outputFile();
+    KisDocument *input = inputDocument();
+    QString filename = outputFile();
 
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;
@@ -97,7 +97,7 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(const QByteArray
     }
     KisGbrBrush *brush;
 
-    if (!m_chain->manager()->getBatchMode()) {
+    if (!getBatchMode()) {
 
         KoDialog* dlgBrushExportOptions = new KoDialog(0);
         dlgBrushExportOptions->setWindowTitle(i18n("Brush Tip Export Options"));

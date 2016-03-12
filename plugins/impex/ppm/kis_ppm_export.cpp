@@ -143,8 +143,8 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& 
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    KisDocument *input = m_chain->inputDocument();
-    QString filename = m_chain->outputFile();
+    KisDocument *input = inputDocument();
+    QString filename = outputFile();
 
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;
@@ -169,7 +169,7 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& 
 
     optionsPPM.type->setCurrentIndex(cfg.getInt("type", 0));
 
-    if (!m_chain->manager()->getBatchMode()) {
+    if (!getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }

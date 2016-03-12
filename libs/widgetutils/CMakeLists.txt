@@ -112,6 +112,7 @@ target_link_libraries(kritawidgetutils
         KF5::GuiAddons
         KF5::WidgetsAddons
         KF5::WindowSystem
+        kritaplugin
         ${KRITA_WIDGET_UTILS_EXTRA_LIBS}
 )
 

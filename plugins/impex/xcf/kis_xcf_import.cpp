@@ -105,12 +105,12 @@ KisImportExportFilter::ConversionStatus KisXCFImport::convert(const QByteArray& 
     if (to != "application/x-krita")
         return KisImportExportFilter::BadMimeType;
 
-    KisDocument * doc = m_chain->outputDocument();
+    KisDocument * doc = outputDocument();
 
     if (!doc)
         return KisImportExportFilter::NoDocumentCreated;
 
-    QString filename = m_chain->inputFile();
+    QString filename = inputFile();
 
     if (filename.isEmpty()) {
         return KisImportExportFilter::FileNotFound;

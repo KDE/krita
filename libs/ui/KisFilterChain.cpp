@@ -20,7 +20,6 @@ Boston, MA 02110-1301, USA.
 #include "KisFilterChain.h"
 
 #include "KisImportExportManager.h"  // KisImportExportManager::filterAvailable, private API
-#include "KisDocumentEntry.h"
 #include "KisDocument.h"
 #include "KisPart.h"
 
@@ -48,10 +47,6 @@ KisFilterChain::KisFilterChain(const KisImportExportManager* manager)
     : KisShared()
     , m_manager(manager)
     , m_state(Beginning)
-    , m_inputStorage(0),
-      m_inputStorageDevice(0)
-    , m_outputStorage(0)
-    , m_outputStorageDevice(0)
     , m_inputDocument(0)
     , m_outputDocument(0)
     , m_inputTempFile(0),
@@ -66,9 +61,6 @@ KisFilterChain::KisFilterChain(const KisImportExportManager* manager)
 KisFilterChain::~KisFilterChain()
 {
     m_chainLinks.deleteAll();
-
-    if (filterManagerParentChain() && filterManagerParentChain()->m_outputStorage)
-        filterManagerParentChain()->m_outputStorage->leaveDirectory();
     manageIO(); // Called for the 2nd time in a row -> clean up
 }
 
@@ -79,16 +71,11 @@ KisImportExportFilter::ConversionStatus KisFilterChain::invokeChain()
     m_state = Beginning;
     int count = m_chainLinks.count();
 
-    // This is needed due to nasty Microsoft design
-    const ChainLink* parentChainLink = 0;
-    if (filterManagerParentChain())
-        parentChainLink = filterManagerParentChain()->m_chainLinks.current();
-
     // No iterator here, as we need m_chainLinks.current() in outputDocument()
     m_chainLinks.first();
     for (; count > 1 && m_chainLinks.current() && status == KisImportExportFilter::OK;
          m_chainLinks.next(), --count) {
-        status = m_chainLinks.current()->invokeFilter(parentChainLink);
+        status = m_chainLinks.current()->invokeFilter();
         m_state = Middle;
         manageIO();
     }
@@ -103,7 +90,7 @@ KisImportExportFilter::ConversionStatus KisFilterChain::invokeChain()
             m_state |= End;
         else
             m_state = End;
-        status = m_chainLinks.current()->invokeFilter(parentChainLink);
+        status = m_chainLinks.current()->invokeFilter();
         manageIO();
     }
 
@@ -206,11 +193,6 @@ KisDocument* KisFilterChain::outputDocument()
     return m_outputDocument;
 }
 
-void KisFilterChain::appendChainLink(KisFilterEntrySP filterEntry, const QByteArray& from, const QByteArray& to)
-{
-    m_chainLinks.append(new ChainLink(this, filterEntry, from, to));
-}
-
 void KisFilterChain::prependChainLink(KisFilterEntrySP filterEntry, const QByteArray& from, const QByteArray& to)
 {
     m_chainLinks.prepend(new ChainLink(this, filterEntry, from, to));
@@ -236,23 +218,11 @@ int KisFilterChain::filterManagerDirection() const
     return m_manager->direction();
 }
 
-KisFilterChain* KisFilterChain::filterManagerParentChain() const
-{
-    return m_manager->parentChain();
-}
-
 void KisFilterChain::manageIO()
 {
     m_inputQueried = Nil;
     m_outputQueried = Nil;
 
-    delete m_inputStorageDevice;
-    m_inputStorageDevice = 0;
-    if (m_inputStorage) {
-        m_inputStorage->close();
-        delete m_inputStorage;
-        m_inputStorage = 0;
-    }
     delete m_inputTempFile;  // autodelete
     m_inputTempFile = 0;
     m_inputFile.clear();
@@ -272,16 +242,6 @@ void KisFilterChain::manageIO()
         m_inputTempFile = m_outputTempFile;
         m_outputTempFile = 0;
 
-        delete m_outputStorageDevice;
-        m_outputStorageDevice = 0;
-        if (m_outputStorage) {
-            m_outputStorage->close();
-            // Don't delete the storage if we're just pointing to the
-            // storage of the parent filter chain
-            if (!filterManagerParentChain() || m_outputStorage->mode() != KoStore::Write)
-                delete m_outputStorage;
-            m_outputStorage = 0;
-        }
     }
 
     if (m_inputDocument != filterManagerKisDocument())
@@ -381,89 +341,6 @@ void KisFilterChain::outputFileHelper(bool autoDelete)
         m_outputTempFile = 0;
 #endif
     }
-}
-
-KoStoreDevice* KisFilterChain::storageNewStreamHelper(KoStore** storage, KoStoreDevice** device,
-                                                      const QString& name)
-{
-    delete *device;
-    *device = 0;
-    if ((*storage)->isOpen())
-        (*storage)->close();
-    if ((*storage)->bad())
-        return storageCleanupHelper(storage);
-    if (!(*storage)->open(name))
-        return 0;
-
-    *device = new KoStoreDevice(*storage);
-    return *device;
-}
-
-KoStoreDevice* KisFilterChain::storageHelper(const QString& file, const QString& streamName,
-                                             KoStore::Mode mode, KoStore** storage,
-                                             KoStoreDevice** device)
-{
-    if (file.isEmpty())
-        return 0;
-    if (*storage) {
-        dbgFile << "Uh-oh, we forgot to clean up...";
-        return 0;
-    }
-
-    storageInit(file, mode, storage);
-
-    if ((*storage)->bad())
-        return storageCleanupHelper(storage);
-
-    // Seems that we got a valid storage, at least. Even if we can't open
-    // the stream the "user" asked us to open, we nonetheless change the
-    // IOState from File to Storage, as it might be possible to open other streams
-    if (mode == KoStore::Read)
-        m_inputQueried = Storage;
-    else // KoStore::Write
-        m_outputQueried = Storage;
-
-    return storageCreateFirstStream(streamName, storage, device);
-}
-
-void KisFilterChain::storageInit(const QString& file, KoStore::Mode mode, KoStore** storage)
-{
-    QByteArray appIdentification("");
-    if (mode == KoStore::Write) {
-        // To create valid storages we also have to add the mimetype
-        // magic "applicationIndentifier" to the storage.
-        // As only filters with a Calligra destination should query
-        // for a storage to write to, we don't check the content of
-        // the mimetype here. It doesn't do a lot of harm if someome
-        // "abuses" this method.
-        appIdentification = m_chainLinks.current()->to();
-    }
-    *storage = KoStore::createStore(file, mode, appIdentification);
-}
-
-KoStoreDevice* KisFilterChain::storageCreateFirstStream(const QString& streamName, KoStore** storage,
-                                                        KoStoreDevice** device)
-{
-    if (!(*storage)->open(streamName))
-        return 0;
-
-    if (*device) {
-        dbgFile << "Uh-oh, we forgot to clean up the storage device!";
-        (*storage)->close();
-        return storageCleanupHelper(storage);
-    }
-    *device = new KoStoreDevice(*storage);
-    return *device;
-}
-
-KoStoreDevice* KisFilterChain::storageCleanupHelper(KoStore** storage)
-{
-    // Take care not to delete the storage of the parent chain
-    if (*storage != m_outputStorage || !filterManagerParentChain() ||
-            (*storage)->mode() != KoStore::Write)
-        delete *storage;
-    *storage = 0;
-    return 0;
 }
 
 KisDocument* KisFilterChain::createDocument(const QString& file)

@@ -72,7 +72,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    KisDocument *input = m_chain->inputDocument();
+    KisDocument *input = inputDocument();
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;
 
@@ -128,7 +128,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
     kdb->setMainWidget(wdg);
     QApplication::restoreOverrideCursor();
 
-    if (!m_chain->manager()->getBatchMode()) {
+    if (!getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {
             delete kdb;
             return KisImportExportFilter::UserCancelled;
@@ -191,7 +191,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
     delete kdb;
     // XXX: Add dialog about flattening layers here
 
-    QString filename = m_chain->outputFile();
+    QString filename = outputFile();
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
@@ -200,7 +200,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
     image->refreshGraph();
     image->lock();
 
-    KisJPEGConverter kpc(input, m_chain->manager()->getBatchMode());
+    KisJPEGConverter kpc(input, getBatchMode());
 
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
     image->unlock();

@@ -59,7 +59,7 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray&
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    KisDocument *input = m_chain->inputDocument();
+    KisDocument *input = inputDocument();
     if (!input) {
         return KisImportExportFilter::NoDocumentCreated;
     }
@@ -79,7 +79,7 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray&
         dlg.optionswdg->alpha->setEnabled(false);
     }
 
-    if (!m_chain->manager()->getBatchMode()) {
+    if (!getBatchMode()) {
         if (dlg.exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }
@@ -96,7 +96,7 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray&
         options.predictor = 3;
     }
 
-    QString filename = m_chain->outputFile();
+    QString filename = outputFile();
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 

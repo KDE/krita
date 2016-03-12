@@ -47,12 +47,12 @@ KisImportExportFilter::ConversionStatus exrImport::convert(const QByteArray&, co
     if (to != "application/x-krita")
         return KisImportExportFilter::BadMimeType;
 
-    KisDocument * doc = m_chain->outputDocument();
+    KisDocument * doc = outputDocument();
 
     if (!doc)
         return KisImportExportFilter::NoDocumentCreated;
 
-    QString filename = m_chain->inputFile();
+    QString filename = inputFile();
 
     doc->prepareForImport();
 
@@ -63,7 +63,7 @@ KisImportExportFilter::ConversionStatus exrImport::convert(const QByteArray&, co
         if (url.isEmpty())
             return KisImportExportFilter::FileNotFound;
 
-        exrConverter ib(doc, !m_chain->manager()->getBatchMode());
+        exrConverter ib(doc, !getBatchMode());
 
 
         switch (ib.buildImage(url)) {

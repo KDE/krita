@@ -103,138 +103,7 @@
 #include "kis_post_execution_undo_adapter.h"
 #include "kis_selection_mask.h"
 
-
-class KisSaveGroupVisitor : public KisNodeVisitor
-{
-public:
-    KisSaveGroupVisitor(KisImageWSP image,
-                        bool saveInvisible,
-                        bool saveTopLevelOnly,
-                        const QUrl &url,
-                        const QString &baseName,
-                        const QString &extension,
-                        const QString &mimeFilter)
-        : m_image(image)
-        , m_saveInvisible(saveInvisible)
-        , m_saveTopLevelOnly(saveTopLevelOnly)
-        , m_url(url)
-        , m_baseName(baseName)
-        , m_extension(extension)
-        , m_mimeFilter(mimeFilter)
-    {
-    }
-
-    virtual ~KisSaveGroupVisitor()
-    {
-    }
-
-public:
-
-    bool visit(KisNode* ) {
-        return true;
-    }
-
-    bool visit(KisPaintLayer *) {
-        return true;
-    }
-
-    bool visit(KisAdjustmentLayer *) {
-        return true;
-    }
-
-
-    bool visit(KisExternalLayer *) {
-        return true;
-    }
-
-
-    bool visit(KisCloneLayer *) {
-        return true;
-    }
-
-
-    bool visit(KisFilterMask *) {
-        return true;
-    }
-
-    bool visit(KisTransformMask *) {
-        return true;
-    }
-
-    bool visit(KisTransparencyMask *) {
-        return true;
-    }
-
-    bool visit(KisGeneratorLayer * ) {
-        return true;
-    }
-
-    bool visit(KisSelectionMask* ) {
-        return true;
-    }
-
-    bool visit(KisGroupLayer *layer)
-    {
-        if (layer == m_image->rootLayer()) {
-            KisLayerSP child = dynamic_cast<KisLayer*>(layer->firstChild().data());
-            while (child) {
-                child->accept(*this);
-                child = dynamic_cast<KisLayer*>(child->nextSibling().data());
-            }
-
-        }
-        else if (layer->visible() || m_saveInvisible) {
-
-            QRect r = m_image->bounds();
-
-            KisDocument *d = KisPart::instance()->createDocument();
-
-            d->prepareForImport();
-
-            KisImageWSP dst = new KisImage(d->createUndoStore(), r.width(), r.height(), m_image->colorSpace(), layer->name());
-            dst->setResolution(m_image->xRes(), m_image->yRes());
-            d->setCurrentImage(dst);
-            KisPaintLayer* paintLayer = new KisPaintLayer(dst, "projection", layer->opacity());
-            KisPainter gc(paintLayer->paintDevice());
-            gc.bitBlt(QPoint(0, 0), layer->projection(), r);
-            dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
-
-            dst->refreshGraph();
-
-            d->setOutputMimeType(m_mimeFilter.toLatin1());
-            d->setFileBatchMode(true);
-
-
-            QUrl url = m_url;
-
-            url = url.adjusted(QUrl::RemoveFilename);
-            url.setPath(url.path() + m_baseName + '_' + layer->name().replace(' ', '_') + '.' + m_extension);
-
-            d->exportDocument(url);
-
-            if (!m_saveTopLevelOnly) {
-                KisGroupLayerSP child = dynamic_cast<KisGroupLayer*>(layer->firstChild().data());
-                while (child) {
-                    child->accept(*this);
-                    child = dynamic_cast<KisGroupLayer*>(child->nextSibling().data());
-                }
-            }
-            delete d;
-        }
-
-        return true;
-    }
-
-private:
-
-    KisImageWSP m_image;
-    bool m_saveInvisible;
-    bool m_saveTopLevelOnly;
-    QUrl m_url;
-    QString m_baseName;
-    QString m_extension;
-    QString m_mimeFilter;
-};
+#include "KisSaveGroupVisitor.h"
 
 KisLayerManager::KisLayerManager(KisViewManager * view)
     : m_view(view)
@@ -797,6 +666,7 @@ void KisLayerManager::saveGroupLayers()
     QBoxLayout *layout = new QVBoxLayout(page);
 
     KisUrlRequester *urlRequester = new KisUrlRequester(page);
+    urlRequester->setMode(KoFileDialog::OpenDirectory);
     urlRequester->setStartDir(QFileInfo(m_view->document()->url().toLocalFile()).absolutePath());
     urlRequester->setMimeTypeFilters(listMimeFilter);
     urlRequester->setUrl(m_view->document()->url());
@@ -811,7 +681,7 @@ void KisLayerManager::saveGroupLayers()
 
     if (!dlg.exec()) return;
 
-    // selectedUrl()( does not return the expuected result. So, build up the QUrl the more complicated way
+    // selectedUrl()( does not return the expected result. So, build up the QUrl the more complicated way
     //return m_fileWidget->selectedUrl();
     QUrl url = urlRequester->url();
     QFileInfo f(url.toLocalFile());

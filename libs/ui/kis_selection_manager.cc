@@ -38,7 +38,6 @@
 #include "KoIntegerMaths.h"
 #include <KisDocument.h>
 #include <KisMainWindow.h>
-#include <KisDocumentEntry.h>
 #include <KoViewConverter.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>

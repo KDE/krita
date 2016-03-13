@@ -54,7 +54,7 @@
 #include <kis_types.h>
 #include <kis_png_converter.h>
 
-class KRITAUI_EXPORT KisSaveSCMLVisitor : public KisNodeVisitor
+class KisSaveSCMLVisitor : public KisNodeVisitor
 {
 public:
 

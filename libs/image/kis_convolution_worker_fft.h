@@ -268,11 +268,11 @@ public:
 
     }
 
-
     inline void limitValue(qreal *value, qreal lowBound, qreal highBound) {
         if (*value > highBound) {
             *value = highBound;
-        } else if (*value < lowBound){
+        } else if (!(*value >= lowBound)) {  // value < lowBound or value == NaN
+            // IEEE compliant comparisons with NaN are always false
             *value = lowBound;
         }
     }
@@ -332,18 +332,30 @@ public:
                                                         info.convChannelList[info.alphaCachePos]->pos(),
                                                         info,
                                                         channelPtr);
-                    qreal alphaValueInv = 1.0 / alphaValue;
 
-                    for (int k = 0; k < channelPtr.size(); ++k) {
-                        if (k != info.alphaCachePos) {
-                            writeOneChannelFromCache<true>(dstPtr,
-                                                           k,
-                                                           info.convChannelList[k]->pos(),
-                                                           info,
-                                                           channelPtr,
-                                                           alphaValueInv);
+                    if (alphaValue > std::numeric_limits<qreal>::epsilon()) {
+                        qreal alphaValueInv = 1.0 / alphaValue;
+
+                        for (int k = 0; k < channelPtr.size(); ++k) {
+                            if (k != info.alphaCachePos) {
+                                writeOneChannelFromCache<true>(dstPtr,
+                                                               k,
+                                                               info.convChannelList[k]->pos(),
+                                                               info,
+                                                               channelPtr,
+                                                               alphaValueInv);
+                            }
+                            ++channelPtr[k];
                         }
-                        ++channelPtr[k];
+                    } else {
+                        for (int k = 0; k < channelPtr.size(); ++k) {
+                            if (k != info.alphaCachePos) {
+                                info.fromDoubleFuncPtr[k](dstPtr,
+                                info.convChannelList[k]->pos(),
+                                0.0);
+                            }
+                            ++channelPtr[k];
+                        }
                     }
                 } else {
                     for (int k = 0; k < channelPtr.size(); ++k) {

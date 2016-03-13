@@ -1,5 +1,5 @@
 diff --git a/qtbase/src/plugins/platforms/windows/qwindowscontext.cpp b/qtbase/src/plugins/platforms/windows/qwindowscontext.cpp
-index f2f6402..9a5bc03 100644
+index 4934b6c..613e8fe 100644
 --- a/qtbase/src/plugins/platforms/windows/qwindowscontext.cpp
 +++ b/qtbase/src/plugins/platforms/windows/qwindowscontext.cpp
 @@ -299,9 +299,6 @@ struct QWindowsContextPrivate {
@@ -42,8 +42,8 @@ index f2f6402..9a5bc03 100644
 -#endif
  }
  
- void QWindowsContext::setProcessDpiAwareness(QtWindows::ProcessDpiAwareness dpiAwareness)
-@@ -777,11 +762,7 @@ QWindowsScreenManager &QWindowsContext::screenManager()
+ int QWindowsContext::processDpiAwareness()
+@@ -792,11 +777,7 @@ QWindowsScreenManager &QWindowsContext::screenManager()
  
  QWindowsTabletSupport *QWindowsContext::tabletSupport() const
  {
@@ -55,7 +55,7 @@ index f2f6402..9a5bc03 100644
  }
  
  /*!
-@@ -1151,10 +1132,6 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
+@@ -1166,10 +1147,6 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
              *result = LRESULT(MA_NOACTIVATE);
              return true;
          }

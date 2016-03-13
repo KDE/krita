@@ -330,7 +330,7 @@ KisPaintopSettingsUpdateProxy* KisPaintOpSettings::updateProxy() const
 
 QList<KisUniformPaintOpPropertySP> KisPaintOpSettings::uniformProperties()
 {
-    if (d->uniformProperties.isEmpty()) {
+    if (0 && d->uniformProperties.isEmpty()) {
         typedef KisCallbackBasedPaintopProperty<KisIntSliderBasedPaintOpProperty> IntSliderProp;
         typedef KisCallbackBasedPaintopProperty<KisDoubleSliderBasedPaintOpProperty> DoubleSliderProp;
 

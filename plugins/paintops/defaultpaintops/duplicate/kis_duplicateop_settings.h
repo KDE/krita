@@ -54,6 +54,8 @@ public:
 
     KisNodeWSP sourceNode() const;
 
+    QList<KisUniformPaintOpPropertySP> uniformProperties();
+
 public:
 
     QPointF m_offset;

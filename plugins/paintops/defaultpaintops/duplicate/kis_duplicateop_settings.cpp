@@ -163,3 +163,16 @@ QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &inf
     return path;
 }
 
+#include "kis_curve_option_uniform_property.h"
+#include "kis_pressure_opacity_option.h"
+
+QList<KisUniformPaintOpPropertySP> KisDuplicateOpSettings::uniformProperties()
+{
+    QList<KisUniformPaintOpPropertySP> baseProperties = KisPaintOpSettings::uniformProperties();
+
+    baseProperties << toQShared(
+        new KisCurveOptionUniformProperty(
+            i18n("Opacity"), new KisPressureOpacityOption(), this, 0));
+
+    return baseProperties;
+}

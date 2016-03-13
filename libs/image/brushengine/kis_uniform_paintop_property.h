@@ -23,6 +23,7 @@
 #include <QObject>
 
 #include "kritaimage_export.h"
+#include "kis_types.h"
 
 
 class KRITAIMAGE_EXPORT KisUniformPaintOpProperty : public QObject
@@ -40,6 +41,7 @@ public:
     KisUniformPaintOpProperty(Type type,
                               const QString &id,
                               const QString &name,
+                              KisPaintOpSettingsSP settings,
                               QObject *parent);
     ~KisUniformPaintOpProperty();
 
@@ -47,26 +49,33 @@ public:
     QString name() const;
     Type type() const;
 
-    int valueInt() const;
-    qreal valueDouble() const;
-    bool valueBool() const;
-    int valueCombo() const;
+    QVariant value() const;
+
+    QWidget *createPropertyWidget();
+
+    KisPaintOpSettingsSP settings();
 
 public Q_SLOTS:
-    void setValueInt(int value);
-    void setValueDouble(qreal value);
-    void setValueBool(bool value);
-    void setValueCombo(int value);
+    void setValue(const QVariant &value);
+    void requestReadValue();
 
 Q_SIGNALS:
-    void sigValueIntChanged(int value);
-    void sigValueDoubleChanged(qreal value);
-    void sigValueBoolChanged(bool value);
-    void sigValueComboChanged(int value);
+    void valueChanged(const QVariant &value);
+
+protected:
+    virtual void readValueImpl();
+    virtual void writeValueImpl();
 
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };
+
+template<class T> class QSharedPointer;
+template<class T> class QWeakPointer;
+template<class T> class QList;
+
+typedef QSharedPointer<KisUniformPaintOpProperty> KisUniformPaintOpPropertySP;
+typedef QWeakPointer<KisUniformPaintOpProperty> KisUniformPaintOpPropertyWSP;
 
 #endif /* __KIS_UNIFORM_PAINT_OP_PROPERTY_H */

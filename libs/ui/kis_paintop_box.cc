@@ -51,6 +51,7 @@
 #include <brushengine/kis_paintop_registry.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <brushengine/kis_paintop_settings.h>
+#include <brushengine/kis_paintop_settings_update_proxy.h>
 #include <kis_config_widget.h>
 #include <kis_image.h>
 #include <kis_node.h>
@@ -530,7 +531,9 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
     m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
 
     Q_ASSERT(m_optionWidget && m_presetSelectorPopupButton);
-    connect(m_optionWidget, SIGNAL(sigConfigurationUpdated()), this, SLOT(slotUpdatePreset()));
+    m_presetConnections.addUniqueConnection(
+        preset->settings()->updateProxy(), SIGNAL(sigSettingsChanged()),
+        this, SLOT(slotUpdatePreset()));
     connect(m_optionWidget, SIGNAL(sigSaveLockedConfig(KisPropertiesConfiguration*)), this, SLOT(slotSaveLockedOptionToPreset(KisPropertiesConfiguration*)));
     connect(m_optionWidget, SIGNAL(sigDropLockedConfig(KisPropertiesConfiguration*)), this, SLOT(slotDropLockedOption(KisPropertiesConfiguration*)));
     connect(m_optionWidget, SIGNAL(sigConfigurationItemChanged()), this, SLOT(slotConfigurationItemChanged()));
@@ -600,16 +603,14 @@ void KisPaintopBox::updateCompositeOp(QString compositeOpID, bool localUpdate)
         if (!node->paintDevice()->colorSpace()->hasCompositeOp(compositeOpID))
             compositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
 
-        m_cmbCompositeOp->blockSignals(true);
-        m_cmbCompositeOp->selectCompositeOp(KoID(compositeOpID));
-        m_cmbCompositeOp->blockSignals(false);
+        {
+            KisSignalsBlocker b1(m_cmbCompositeOp);
+            m_cmbCompositeOp->selectCompositeOp(KoID(compositeOpID));
 
-        m_eraseModeButton->defaultAction()->blockSignals(true);
-        m_eraseModeButton->blockSignals(true);
-        m_eraseModeButton->setChecked(compositeOpID == COMPOSITE_ERASE);
-        m_eraseModeButton->defaultAction()->setChecked(compositeOpID == COMPOSITE_ERASE);
-        m_eraseModeButton->blockSignals(false);
-        m_eraseModeButton->defaultAction()->blockSignals(false);
+            KisSignalsBlocker b2(m_eraseModeButton, m_eraseModeButton->defaultAction());
+            m_eraseModeButton->setChecked(compositeOpID == COMPOSITE_ERASE);
+            m_eraseModeButton->defaultAction()->setChecked(compositeOpID == COMPOSITE_ERASE);
+        }
 
         if (compositeOpID != m_currCompositeOpID) {
             m_resourceProvider->currentPreset()->settings()->setPaintOpCompositeOp(compositeOpID);
@@ -650,9 +651,8 @@ void KisPaintopBox::setSliderValue(const QString& sliderID, qreal value)
 {
     for (int i = 0; i < 3; ++i) {
         KisDoubleSliderSpinBox* slider = m_sliderChooser[i]->getWidget<KisDoubleSliderSpinBox>(sliderID);
-        slider->blockSignals(true);
+        KisSignalsBlocker b(slider);
         slider->setValue(value);
-        slider->blockSignals(false);
     }
 }
 
@@ -986,9 +986,8 @@ void KisPaintopBox::slotOpacityChanged(qreal opacity)
 
     for (int i = 0; i < 3; ++i) {
         KisDoubleSliderSpinBox *opacitySlider = m_sliderChooser[i]->getWidget<KisDoubleSliderSpinBox>("opacity");
-        opacitySlider->blockSignals(true);
+        KisSignalsBlocker b(opacitySlider);
         opacitySlider->setValue(opacity);
-        opacitySlider->blockSignals(false);
     }
     if (m_presetsEnabled) {
         m_resourceProvider->currentPreset()->settings()->setPaintOpOpacity(opacity);

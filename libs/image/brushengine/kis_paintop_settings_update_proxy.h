@@ -16,35 +16,29 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_BRUSH_HUD_H
-#define __KIS_BRUSH_HUD_H
+#ifndef __KIS_PAINTOP_SETTINGS_UPDATE_PROXY_H
+#define __KIS_PAINTOP_SETTINGS_UPDATE_PROXY_H
 
 #include <QScopedPointer>
-#include <QWidget>
+#include <QObject>
 
-class KisCanvasResourceProvider;
 
-class KisBrushHud : public QWidget
+class KisPaintopSettingsUpdateProxy : public QObject
 {
     Q_OBJECT
+
 public:
-    KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent);
-    ~KisBrushHud();
+    KisPaintopSettingsUpdateProxy(QObject *parent = 0);
+    ~KisPaintopSettingsUpdateProxy();
 
-    void updateProperties();
+    void notifySettingsChanged();
 
-protected:
-    void paintEvent(QPaintEvent *event);
-    bool event(QEvent *event);
-    void showEvent(QShowEvent *event);
-    void hideEvent(QHideEvent *event);
-
-private Q_SLOTS:
-    void slotCanvasResourceChanged(int key, const QVariant &resource);
+Q_SIGNALS:
+    void sigSettingsChanged();
 
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_BRUSH_HUD_H */
+#endif /* __KIS_PAINTOP_SETTINGS_UPDATE_PROXY_H */

@@ -16,35 +16,29 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_BRUSH_HUD_H
-#define __KIS_BRUSH_HUD_H
+#include "kis_paintop_settings_update_proxy.h"
 
-#include <QScopedPointer>
-#include <QWidget>
+#include "kis_signal_compressor.h"
 
-class KisCanvasResourceProvider;
 
-class KisBrushHud : public QWidget
+struct KisPaintopSettingsUpdateProxy::Private
 {
-    Q_OBJECT
-public:
-    KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent);
-    ~KisBrushHud();
-
-    void updateProperties();
-
-protected:
-    void paintEvent(QPaintEvent *event);
-    bool event(QEvent *event);
-    void showEvent(QShowEvent *event);
-    void hideEvent(QHideEvent *event);
-
-private Q_SLOTS:
-    void slotCanvasResourceChanged(int key, const QVariant &resource);
-
-private:
-    struct Private;
-    const QScopedPointer<Private> m_d;
+    Private() : updatesCompressor(100, KisSignalCompressor::FIRST_ACTIVE) {}
+    KisSignalCompressor updatesCompressor;
 };
 
-#endif /* __KIS_BRUSH_HUD_H */
+KisPaintopSettingsUpdateProxy::KisPaintopSettingsUpdateProxy(QObject *parent)
+    : QObject(parent),
+      m_d(new Private)
+{
+    connect(&m_d->updatesCompressor, SIGNAL(timeout()), SIGNAL(sigSettingsChanged()));
+}
+
+KisPaintopSettingsUpdateProxy::~KisPaintopSettingsUpdateProxy()
+{
+}
+
+void KisPaintopSettingsUpdateProxy::notifySettingsChanged()
+{
+    m_d->updatesCompressor.start();
+}

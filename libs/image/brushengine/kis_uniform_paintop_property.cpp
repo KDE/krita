@@ -20,26 +20,37 @@
 
 #include <QVariant>
 #include "kis_debug.h"
+#include "kis_paintop_settings.h"
 
 struct KisUniformPaintOpProperty::Private
 {
     Private(Type _type,
             const QString &_id,
-            const QString &_name) : type(_type), id(_id), name(_name) {}
+            const QString &_name,
+            KisPaintOpSettingsSP _settings)
+        : type(_type),
+          id(_id),
+          name(_name),
+          settings(_settings),
+          isReadingValue(false) {}
 
     Type type;
     QString id;
     QString name;
 
     QVariant value;
+
+    bool isReadingValue;
+    KisWeakSharedPtr<KisPaintOpSettings> settings;
 };
 
 KisUniformPaintOpProperty::KisUniformPaintOpProperty(Type type,
                                                      const QString &id,
                                                      const QString &name,
+                                                     KisPaintOpSettingsSP settings,
                                                      QObject *parent)
     : QObject(parent),
-      m_d(new Private(type, id, name))
+      m_d(new Private(type, id, name, settings))
 {
 }
 
@@ -62,63 +73,46 @@ KisUniformPaintOpProperty::Type KisUniformPaintOpProperty::type() const
     return m_d->type;
 }
 
-int KisUniformPaintOpProperty::valueInt() const
+QVariant KisUniformPaintOpProperty::value() const
 {
-    KIS_ASSERT_RECOVER(m_d->type == Int) { return 0; }
-    return m_d->value.toInt();
+    return m_d->value;
 }
 
-qreal KisUniformPaintOpProperty::valueDouble() const
+QWidget *KisUniformPaintOpProperty::createPropertyWidget()
 {
-    KIS_ASSERT_RECOVER(m_d->type == Double) { return 0; }
-    return m_d->value.toReal();
+    return 0;
 }
 
-bool KisUniformPaintOpProperty::valueBool() const
+void KisUniformPaintOpProperty::setValue(const QVariant &value)
 {
-    KIS_ASSERT_RECOVER(m_d->type == Bool) { return 0; }
-    return m_d->value.toBool();
-}
-
-int KisUniformPaintOpProperty::valueCombo() const
-{
-    KIS_ASSERT_RECOVER(m_d->type == Combo) { return 0; }
-    return m_d->value.toInt();
-}
-
-void KisUniformPaintOpProperty::setValueInt(int value)
-{
-    KIS_ASSERT_RECOVER_RETURN(m_d->type == Int);
     if (m_d->value == value) return;
-
     m_d->value = value;
-    emit sigValueIntChanged(value);
+
+    emit valueChanged(value);
+
+    if (!m_d->isReadingValue) {
+        writeValueImpl();
+    }
 }
 
-void KisUniformPaintOpProperty::setValueDouble(qreal value)
+void KisUniformPaintOpProperty::requestReadValue()
 {
-    KIS_ASSERT_RECOVER_RETURN(m_d->type == Double);
-    if (m_d->value == value) return;
-
-    m_d->value = value;
-    emit sigValueDoubleChanged(value);
+    m_d->isReadingValue = true;
+    readValueImpl();
+    m_d->isReadingValue = false;
 }
 
-void KisUniformPaintOpProperty::setValueBool(bool value)
+KisPaintOpSettingsSP KisUniformPaintOpProperty::settings()
 {
-    KIS_ASSERT_RECOVER_RETURN(m_d->type == Bool);
-    if (m_d->value == value) return;
-
-    m_d->value = value;
-    emit sigValueBoolChanged(value);
+    // correct conversion weak-to-strong shared pointer
+    return m_d->settings ? m_d->settings : 0;
 }
 
-void KisUniformPaintOpProperty::setValueCombo(int value)
+void KisUniformPaintOpProperty::readValueImpl()
 {
-    KIS_ASSERT_RECOVER_RETURN(m_d->type == Combo);
-    if (m_d->value == value) return;
+}
 
-    m_d->value = value;
-    emit sigValueComboChanged(value);
+void KisUniformPaintOpProperty::writeValueImpl()
+{
 }
 

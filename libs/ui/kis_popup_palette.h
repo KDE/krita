@@ -32,6 +32,7 @@ class KoTriangleColorSelector;
 class KisSignalCompressor;
 class KisBrushHud;
 class KisRoundHudButton;
+class KisCanvasResourceProvider;
 
 class KisPopupPalette : public QWidget
 {
@@ -42,7 +43,7 @@ class KisPopupPalette : public QWidget
     Q_PROPERTY(int selectedColor READ selectedColor WRITE setSelectedColor)
 
 public:
-    KisPopupPalette(KisFavoriteResourceManager*, const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), QWidget *parent = 0);
+    KisPopupPalette(KisFavoriteResourceManager*, const KoColorDisplayRendererInterface *displayRenderer, KisCanvasResourceProvider *provider, QWidget *parent = 0);
     ~KisPopupPalette();
     QSize sizeHint() const;
 

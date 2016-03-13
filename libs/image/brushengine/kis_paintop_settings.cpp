@@ -36,6 +36,7 @@
 #include <brushengine/kis_paint_information.h>
 #include "kis_paintop_config_widget.h"
 #include <brushengine/kis_paintop_preset.h>
+#include "kis_paintop_settings_update_proxy.h"
 #include <time.h>
 #include<kis_types.h>
 
@@ -45,6 +46,8 @@ struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
     QPointer<KisPaintOpConfigWidget> settingsWidget;
     QString modelName;
     KisPaintOpPresetWSP preset;
+    QScopedPointer<KisPaintopSettingsUpdateProxy> updateProxy;
+    QList<KisUniformPaintOpPropertySP> uniformProperties;
 
 
     bool disableDirtyNotifications;
@@ -299,7 +302,9 @@ void KisPaintOpSettings::setProperty(const QString & name, const QVariant & valu
 
 void KisPaintOpSettings::onPropertyChanged()
 {
-
+    if (d->updateProxy) {
+        d->updateProxy->notifySettingsChanged();
+    }
 }
 
 bool KisPaintOpSettings::isLodUserAllowed(const KisPropertiesConfiguration *config)
@@ -310,4 +315,46 @@ bool KisPaintOpSettings::isLodUserAllowed(const KisPropertiesConfiguration *conf
 void KisPaintOpSettings::setLodUserAllowed(KisPropertiesConfiguration *config, bool value)
 {
     config->setProperty("lodUserAllowed", value);
+}
+
+KisPaintopSettingsUpdateProxy* KisPaintOpSettings::updateProxy() const
+{
+    if (!d->updateProxy) {
+        d->updateProxy.reset(new KisPaintopSettingsUpdateProxy());
+    }
+    return d->updateProxy.data();
+}
+
+#include "kis_callback_based_paintop_property.h"
+#include "kis_slider_based_paintop_property.h"
+
+QList<KisUniformPaintOpPropertySP> KisPaintOpSettings::uniformProperties()
+{
+    if (d->uniformProperties.isEmpty()) {
+        typedef KisCallbackBasedPaintopProperty<KisIntSliderBasedPaintOpProperty> IntSliderProp;
+        typedef KisCallbackBasedPaintopProperty<KisDoubleSliderBasedPaintOpProperty> DoubleSliderProp;
+
+        DoubleSliderProp *prop =
+            new DoubleSliderProp(DoubleSliderProp::Double,
+                                 "opacity",
+                                 i18n("Opacity"),
+                                 this, 0);
+        prop->setRange(0.0, 1.0);
+        prop->setSingleStep(0.01);
+
+        prop->setReadCallback(
+            [](KisUniformPaintOpProperty *prop) {
+                prop->setValue(prop->settings()->paintOpOpacity());
+            });
+        prop->setWriteCallback(
+            [](KisUniformPaintOpProperty *prop) {
+                prop->settings()->setPaintOpOpacity(prop->value().toReal());
+            });
+
+        QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+        prop->requestReadValue();
+        d->uniformProperties.append(toQShared(prop));
+    }
+
+    return d->uniformProperties;
 }

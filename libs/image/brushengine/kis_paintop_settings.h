@@ -28,9 +28,12 @@
 #include "kis_shared.h"
 #include "kis_properties_configuration.h"
 #include <brushengine/kis_paint_information.h>
+#include <brushengine/kis_uniform_paintop_property.h>
+
 
 
 class KisPaintOpConfigWidget;
+class KisPaintopSettingsUpdateProxy;
 
 /**
  * This class is used to cache the settings for a paintop
@@ -232,6 +235,9 @@ public:
      * onPropertyChanged() callback
      */
     void setProperty(const QString & name, const QVariant & value);
+
+    KisPaintopSettingsUpdateProxy* updateProxy() const;
+    virtual QList<KisUniformPaintOpPropertySP> uniformProperties();
 
     static bool isLodUserAllowed(const KisPropertiesConfiguration *config);
     static void setLodUserAllowed(KisPropertiesConfiguration *config, bool value);

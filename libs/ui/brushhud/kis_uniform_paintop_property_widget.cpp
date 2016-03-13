@@ -22,73 +22,104 @@
 
 #include "kis_slider_spin_box.h"
 #include "kis_acyclic_signal_connector.h"
+#include "kis_slider_based_paintop_property.h"
+#include "kis_debug.h"
 
 struct KisUniformPaintOpPropertyWidget::Private
 {
-    Private(KisUniformPaintOpProperty *_property)
-        : property(_property),
-          type(_property->type()){}
+    Private(KisUniformPaintOpPropertySP _property)
+        : property(_property) {}
 
     typedef KisUniformPaintOpProperty::Type Type;
-    KisUniformPaintOpProperty *property;
-    Type type;
+    KisUniformPaintOpPropertySP property;
 };
 
-KisUniformPaintOpPropertyWidget::KisUniformPaintOpPropertyWidget(KisUniformPaintOpProperty *property, QWidget *parent)
+KisUniformPaintOpPropertyWidget::KisUniformPaintOpPropertyWidget(KisUniformPaintOpPropertySP property, QWidget *parent)
     : QWidget(parent),
       m_d(new Private(property))
 {
-    QVBoxLayout *layout = new QVBoxLayout(this);
     KisAcyclicSignalConnector *conn = new KisAcyclicSignalConnector(this);
+    conn->connectForwardVariant(property.data(), SIGNAL(valueChanged(const QVariant&)),
+                                this, SLOT(setValue(const QVariant&)));
 
-    const QString prefix = QString("%1: ").arg(property->name());
-
-    switch (m_d->type) {
-    case Private::Type::Int: {
-        KisSliderSpinBox *slider = new KisSliderSpinBox(this);
-        slider->setBlockUpdateSignalOnDrag(true);
-        slider->setRange(0, 100);
-        slider->setSingleStep(1);
-        slider->setPageStep(10);
-        slider->setPrefix(prefix);
-        slider->setSuffix("px");
-        slider->setValue(property->valueInt());
-
-        conn->connectForwardInt(property, SIGNAL(sigValueIntChanged(int)),
-                                slider, SLOT(setValue(int)));
-
-        conn->connectBackwardInt(slider, SIGNAL(valueChanged(int)),
-                                 property, SLOT(setValueInt(int)));
-
-        layout->addWidget(slider);
-        break;
-    }
-    case Private::Type::Double: {
-        KisDoubleSliderSpinBox *slider = new KisDoubleSliderSpinBox(this);
-        slider->setBlockUpdateSignalOnDrag(true);
-        slider->setRange(0, 100, 2);
-        slider->setSingleStep(0.1);
-        slider->setPrefix(prefix);
-        slider->setSuffix("%");
-        slider->setValue(property->valueDouble());
-
-        conn->connectForwardDouble(property, SIGNAL(sigValueDoubleChanged(qreal)),
-                                   slider, SLOT(setValue(qreal)));
-        conn->connectBackwardDouble(slider, SIGNAL(valueChanged(qreal)),
-                                    property, SLOT(setValueDouble(qreal)));
-
-        layout->addWidget(slider);
-        break;
-    }
-    case Private::Type::Bool:
-        break;
-    case Private::Type::Combo:
-        break;
-    }
-
-    setLayout(layout);
+    conn->connectBackwardVariant(this, SIGNAL(valueChanged(const QVariant&)),
+                                 property.data(), SLOT(setValue(const QVariant&)));
 }
 
 KisUniformPaintOpPropertyWidget::~KisUniformPaintOpPropertyWidget()
 {
+}
+
+KisUniformPaintOpPropertySP KisUniformPaintOpPropertyWidget::property() const
+{
+    return m_d->property;
+}
+
+KisUniformPaintOpPropertyIntSlider::KisUniformPaintOpPropertyIntSlider(KisUniformPaintOpPropertySP property, QWidget *parent)
+    : KisUniformPaintOpPropertyWidget(property, parent)
+{
+    const QString prefix = QString("%1: ").arg(property->name());
+    QVBoxLayout *layout = new QVBoxLayout(this);
+
+    KisIntSliderBasedPaintOpProperty *sliderProperty =
+        dynamic_cast<KisIntSliderBasedPaintOpProperty*>(property.data());
+    KIS_ASSERT_RECOVER_RETURN(sliderProperty);
+
+    m_slider = new KisSliderSpinBox(this);
+    m_slider->setBlockUpdateSignalOnDrag(true);
+    m_slider->setRange(sliderProperty->min(), sliderProperty->max());
+    m_slider->setSingleStep(sliderProperty->singleStep());
+    m_slider->setPageStep(sliderProperty->pageStep());
+    m_slider->setPrefix(prefix);
+    m_slider->setSuffix(sliderProperty->suffix());
+
+    m_slider->setValue(sliderProperty->value().toInt());
+    connect(m_slider, SIGNAL(valueChanged(int)), SLOT(slotSliderChanged(int)));
+
+    layout->addWidget(m_slider);
+    setLayout(layout);
+}
+
+void KisUniformPaintOpPropertyIntSlider::setValue(const QVariant &value)
+{
+    m_slider->setValue(value.toInt());
+}
+
+void KisUniformPaintOpPropertyIntSlider::slotSliderChanged(int value)
+{
+    emit valueChanged(value);
+}
+
+KisUniformPaintOpPropertyDoubleSlider::KisUniformPaintOpPropertyDoubleSlider(KisUniformPaintOpPropertySP property, QWidget *parent)
+    : KisUniformPaintOpPropertyWidget(property, parent)
+{
+    const QString prefix = QString("%1: ").arg(property->name());
+    QVBoxLayout *layout = new QVBoxLayout(this);
+
+    KisDoubleSliderBasedPaintOpProperty *sliderProperty =
+        dynamic_cast<KisDoubleSliderBasedPaintOpProperty*>(property.data());
+    KIS_ASSERT_RECOVER_RETURN(sliderProperty);
+
+    m_slider = new KisDoubleSliderSpinBox(this);
+    m_slider->setBlockUpdateSignalOnDrag(true);
+    m_slider->setRange(sliderProperty->min(), sliderProperty->max(), sliderProperty->decimals());
+    m_slider->setSingleStep(sliderProperty->singleStep());
+    m_slider->setPrefix(prefix);
+    m_slider->setSuffix(sliderProperty->suffix());
+
+    m_slider->setValue(sliderProperty->value().toReal());
+    connect(m_slider, SIGNAL(valueChanged(qreal)), SLOT(slotSliderChanged(qreal)));
+
+    layout->addWidget(m_slider);
+    setLayout(layout);
+}
+
+void KisUniformPaintOpPropertyDoubleSlider::setValue(const QVariant &value)
+{
+    m_slider->setValue(value.toReal());
+}
+
+void KisUniformPaintOpPropertyDoubleSlider::slotSliderChanged(qreal value)
+{
+    emit valueChanged(value);
 }

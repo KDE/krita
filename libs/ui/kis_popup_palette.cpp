@@ -95,7 +95,7 @@ private:
     bool m_dragging;
 };
 
-KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoColorDisplayRendererInterface *displayRenderer, QWidget *parent)
+KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoColorDisplayRendererInterface *displayRenderer, KisCanvasResourceProvider *provider, QWidget *parent)
     : QWidget(parent, Qt::FramelessWindowHint)
     , m_resourceManager(manager)
     , m_triangleColorSelector(0)
@@ -151,7 +151,7 @@ KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoCo
     setHoveredColor(-1);
     setSelectedColor(-1);
 
-    m_brushHud = new KisBrushHud(parent);
+    m_brushHud = new KisBrushHud(provider, parent);
     m_brushHud->setMaximumHeight(widgetSize);
     m_brushHud->setVisible(false);
 
@@ -258,7 +258,13 @@ void KisPopupPalette::showHudWidget(bool visible)
 {
     KIS_ASSERT_RECOVER_RETURN(m_brushHud);
 
-    m_brushHud->setVisible(visible && m_brushHudButton->isChecked());
+    const bool reallyVisible = visible && m_brushHudButton->isChecked();
+
+    if (reallyVisible) {
+        m_brushHud->updateProperties();
+    }
+
+    m_brushHud->setVisible(reallyVisible);
     adjustLayout(m_lastCenterPoint);
 }
 
@@ -293,8 +299,6 @@ QSize KisPopupPalette::sizeHint() const
 void KisPopupPalette::resizeEvent(QResizeEvent*)
 {
 }
-
-
 
 void KisPopupPalette::paintEvent(QPaintEvent* e)
 {

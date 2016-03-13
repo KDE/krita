@@ -36,6 +36,7 @@
 #include <brushengine/kis_locked_properties_server.h>
 #include <brushengine/kis_locked_properties.h>
 #include "kritaui_export.h"
+#include "kis_signal_auto_connection.h"
 
 
 class QToolButton;
@@ -200,6 +201,8 @@ private:
 
     KisAction* m_hMirrorAction;
     KisAction* m_vMirrorAction;
+
+    KisSignalAutoConnectionsStore m_presetConnections;
 
     struct TabletToolID {
         TabletToolID(const KoInputDevice& dev) {

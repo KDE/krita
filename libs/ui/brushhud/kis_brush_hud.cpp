@@ -27,7 +27,12 @@
 #include <QEvent>
 
 #include "kis_uniform_paintop_property.h"
+#include "kis_slider_based_paintop_property.h"
 #include "kis_uniform_paintop_property_widget.h"
+#include "kis_canvas_resource_provider.h"
+#include "kis_paintop_preset.h"
+#include "kis_paintop_settings.h"
+#include "kis_signal_auto_connection.h"
 
 #include "kis_debug.h"
 
@@ -37,12 +42,21 @@ struct KisBrushHud::Private
     QPointer<QLabel> lblPresetName;
     QPointer<QWidget> wdgProperties;
     QPointer<QScrollArea> wdgPropertiesArea;
+    QPointer<QVBoxLayout> propertiesLayout;
+
+    KisCanvasResourceProvider *provider;
+
+    KisSignalAutoConnectionsStore connections;
+
+    KisPaintOpPresetSP currentPreset;
 };
 
-KisBrushHud::KisBrushHud(QWidget *parent)
+KisBrushHud::KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent)
     : QWidget(parent, Qt::FramelessWindowHint),
       m_d(new Private)
 {
+    m_d->provider = provider;
+
     QVBoxLayout *layout = new QVBoxLayout(this);
     m_d->lblPresetName = new QLabel("<Preset Name>", this);
     layout->addWidget(m_d->lblPresetName);
@@ -51,25 +65,17 @@ KisBrushHud::KisBrushHud(QWidget *parent)
     m_d->wdgPropertiesArea->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     m_d->wdgPropertiesArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    m_d->wdgPropertiesArea->setWidgetResizable(true);
+
     m_d->wdgProperties = new QWidget(this);
-    QVBoxLayout *propsLayout = new QVBoxLayout(this);
-    propsLayout->setSpacing(0);
-    propsLayout->setContentsMargins(0, 0, 22, 0);
-    propsLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
+    m_d->propertiesLayout = new QVBoxLayout(this);
+    m_d->propertiesLayout->setSpacing(0);
+    m_d->propertiesLayout->setContentsMargins(0, 0, 22, 0);
+    m_d->propertiesLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
 
-    for (int i = 0; i < 10; i++) {
-        const QString name = QString("Property %1").arg(i);
-        const KisUniformPaintOpProperty::Type type =
-            KisUniformPaintOpProperty::Type(i%2);
+    // not adding any widgets until explicitly requested
 
-        KisUniformPaintOpProperty *prop = new KisUniformPaintOpProperty(type, name, name, this);
-        KisUniformPaintOpPropertyWidget *w = new KisUniformPaintOpPropertyWidget(prop, m_d->wdgProperties);
-
-        w->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-        propsLayout->addWidget(w);
-    }
-
-    m_d->wdgProperties->setLayout(propsLayout);
+    m_d->wdgProperties->setLayout(m_d->propertiesLayout);
     m_d->wdgPropertiesArea->setWidget(m_d->wdgProperties);
     layout->addWidget(m_d->wdgPropertiesArea);
 
@@ -79,6 +85,59 @@ KisBrushHud::KisBrushHud(QWidget *parent)
 
 KisBrushHud::~KisBrushHud()
 {
+}
+
+void KisBrushHud::updateProperties()
+{
+    KisPaintOpPresetSP preset = m_d->provider->currentPreset();
+    KisPaintOpSettingsSP settings = preset->settings();
+
+    if (preset == m_d->currentPreset) return;
+    m_d->currentPreset = preset;
+
+    Q_FOREACH (QWidget *w, m_d->wdgProperties->findChildren<QWidget*>()) {
+        w->deleteLater();
+    }
+
+    m_d->lblPresetName->setText(preset->name());
+
+    QList<KisUniformPaintOpPropertySP> properties = settings->uniformProperties();
+    Q_FOREACH(auto property, properties) {
+        QWidget *w = 0;
+
+        if (property->type() == KisUniformPaintOpProperty::Int) {
+            w = new KisUniformPaintOpPropertyIntSlider(property, m_d->wdgProperties);
+        } else if (property->type() == KisUniformPaintOpProperty::Double) {
+            w = new KisUniformPaintOpPropertyDoubleSlider(property, m_d->wdgProperties);
+        }
+
+        if (w) {
+            w->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+            m_d->propertiesLayout->addWidget(w);
+        }
+    }
+}
+
+void KisBrushHud::showEvent(QShowEvent *event)
+{
+    m_d->connections.clear();
+    m_d->connections.addUniqueConnection(
+        m_d->provider->resourceManager(), SIGNAL(canvasResourceChanged(int, QVariant)),
+        this, SLOT(slotCanvasResourceChanged(int, QVariant)));
+
+    QWidget::showEvent(event);
+}
+
+void KisBrushHud::hideEvent(QHideEvent *event)
+{
+    m_d->connections.clear();
+    QWidget::hideEvent(event);
+}
+
+void KisBrushHud::slotCanvasResourceChanged(int key, const QVariant &resource)
+{
+    if (key != KisCanvasResourceProvider::CurrentPaintOpPreset) return;
+    updateProperties();
 }
 
 void KisBrushHud::paintEvent(QPaintEvent *event)

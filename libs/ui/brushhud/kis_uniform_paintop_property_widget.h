@@ -27,13 +27,59 @@
 
 class KisUniformPaintOpPropertyWidget : public QWidget
 {
+    Q_OBJECT
 public:
-    KisUniformPaintOpPropertyWidget(KisUniformPaintOpProperty *property, QWidget *parent);
+    KisUniformPaintOpPropertyWidget(KisUniformPaintOpPropertySP property, QWidget *parent);
     ~KisUniformPaintOpPropertyWidget();
+
+protected:
+    KisUniformPaintOpPropertySP property() const;
+
+protected Q_SLOTS:
+    virtual void setValue(const QVariant &value) = 0;
+
+Q_SIGNALS:
+    void valueChanged(const QVariant &value);
 
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
+};
+
+class KisSliderSpinBox;
+class KisDoubleSliderSpinBox;
+template <typename T> class KisSliderBasedPaintOpProperty;
+typedef KisSliderBasedPaintOpProperty<int> KisIntSliderBasedPaintOpProperty;
+typedef KisSliderBasedPaintOpProperty<qreal> KisDoubleSliderBasedPaintOpProperty;
+
+class KisUniformPaintOpPropertyIntSlider : public KisUniformPaintOpPropertyWidget
+{
+    Q_OBJECT
+public:
+    KisUniformPaintOpPropertyIntSlider(KisUniformPaintOpPropertySP property, QWidget *parent);
+
+    virtual void setValue(const QVariant &value);
+
+private Q_SLOTS:
+    void slotSliderChanged(int value);
+
+private:
+    KisSliderSpinBox *m_slider;
+};
+
+class KisUniformPaintOpPropertyDoubleSlider : public KisUniformPaintOpPropertyWidget
+{
+    Q_OBJECT
+public:
+    KisUniformPaintOpPropertyDoubleSlider(KisUniformPaintOpPropertySP property, QWidget *parent);
+
+    virtual void setValue(const QVariant &value);
+
+private Q_SLOTS:
+    void slotSliderChanged(qreal value);
+
+private:
+    KisDoubleSliderSpinBox *m_slider;
 };
 
 #endif /* __KIS_UNIFORM_PAINTOP_PROPERTY_WIDGET_H */

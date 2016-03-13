@@ -798,7 +798,7 @@ QPoint KisCanvas2::documentOffset() const
 
 void KisCanvas2::setFavoriteResourceManager(KisFavoriteResourceManager* favoriteResourceManager)
 {
-    m_d->popupPalette = new KisPopupPalette(favoriteResourceManager, displayColorConverter()->displayRendererInterface(), m_d->canvasWidget->widget());
+    m_d->popupPalette = new KisPopupPalette(favoriteResourceManager, displayColorConverter()->displayRendererInterface(), m_d->view->resourceProvider(), m_d->canvasWidget->widget());
     m_d->popupPalette->showPopupPalette(false);
 }
 

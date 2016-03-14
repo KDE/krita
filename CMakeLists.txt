@@ -473,20 +473,20 @@ endif()
 ##
 ## Test for eigen3
 ##
-macro_optional_find_package(Eigen3)
+find_package(Eigen3 REQUIRED)
 macro_log_feature(EIGEN3_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "3.0" "Required by Krita")
 
 ##
 ## Test for exiv2
 ##
 set(EXIV2_MIN_VERSION "0.16")
-macro_optional_find_package(Exiv2)
+find_package(Exiv2 REQUIRED)
 macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata library and tools" "http://www.exiv2.org" FALSE "0.16" "Required by Krita")
 
 ##
 ## Test for lcms
 ##
-macro_optional_find_package(LCMS2)
+find_package(LCMS2 REQUIRED)
 macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.4" "Will be used for color management and is necessary for Krita")
 if(LCMS2_FOUND)
     if(NOT ${LCMS2_VERSION} VERSION_LESS 2040 )

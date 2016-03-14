@@ -61,6 +61,7 @@ public:
     void fromString(const QString& string);
 
     void paintEvent(QPaintEvent *);
+    void resizeEvent(QResizeEvent *);
     void mousePressEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
@@ -82,6 +83,9 @@ private:
     int m_patchCount;
     int m_lineHeight;
     bool m_displayHelpText;
+    qreal m_mouseX;
+    QPoint m_ev;
+    qreal m_width;
 
     friend class KisShadeSelectorLineComboBox;
 

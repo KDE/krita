@@ -61,7 +61,7 @@ KisPaintOpSettingsWidget::KisPaintOpSettingsWidget(QWidget * parent)
     m_d->optionsList = new KisCategorizedListView(false, this);
     m_d->optionsList->setModel(m_d->model);
     m_d->optionsList->setItemDelegate(new KisCategorizedItemDelegate(false, m_d->optionsList));
-    m_d->optionsList->setFixedWidth(128);
+    m_d->optionsList->setFixedWidth(175);
     
     QSizePolicy policy =  QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     policy.setHorizontalStretch(0);

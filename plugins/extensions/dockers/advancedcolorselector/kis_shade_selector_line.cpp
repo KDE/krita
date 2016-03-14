@@ -186,7 +186,6 @@ void KisShadeSelectorLine::paintEvent(QPaintEvent *)
     wpainter.setPen(QColor(175,175,175));
     m_ev.setX(qBound(5.0,m_mouseX,m_width-5));
     wpainter.drawRect(m_ev.x()-5,0,10,renderedImage.height()-1);
-    emit update();
     m_width=width();
 
     if(m_displayHelpText) {
@@ -231,6 +230,7 @@ void KisShadeSelectorLine::mouseMoveEvent(QMouseEvent *e)
         m_ev.setY(5);
         KoColor color(Acs::pickColor(m_realPixelCache, m_ev));
         m_parentProxy->updateColorPreview(color);
+        update();
     }
 }
 

@@ -1,4 +1,4 @@
 #! /bin/sh
-source ../../calligra_xgettext.sh
+source ../../krita_xgettext.sh
 
-calligra_xgettext crashhandler.pot *.cpp
+krita_xgettext crashhandler.pot *.cpp

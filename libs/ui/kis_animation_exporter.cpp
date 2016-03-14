@@ -65,7 +65,8 @@ KisImportExportFilter::ConversionStatus KisAnimationExporterUI::exportSequence(K
     dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export));
     QString filename = dialog.filename();
 
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
+    // if the user presses cancel, it returns empty
+    if (filename.isEmpty()) return KisImportExportFilter::UserCancelled;
 
     const KisTimeRange fullClipRange = document->image()->animationInterface()->fullClipRange();
     int firstFrame = fullClipRange.start();

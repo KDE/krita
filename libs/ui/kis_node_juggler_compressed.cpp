@@ -287,13 +287,11 @@ KisNodeList sortAndFilterNodes(const KisNodeList &nodes, KisImageSP image, bool 
  */
 struct LowerRaiseLayer : public KisCommandUtils::AggregateCommand {
     LowerRaiseLayer(BatchMoveUpdateDataSP updateData,
-                    KisNodeManager *nodeManager,
                     KisImageSP image,
                     const KisNodeList &nodes,
                     KisNodeSP activeNode,
                     bool lower)
         : m_updateData(updateData),
-          m_nodeManager(nodeManager),
           m_image(image),
           m_nodes(nodes),
           m_activeNode(activeNode),
@@ -374,7 +372,6 @@ struct LowerRaiseLayer : public KisCommandUtils::AggregateCommand {
 
 private:
     BatchMoveUpdateDataSP m_updateData;
-    KisNodeManager *m_nodeManager;
     KisImageSP m_image;
     KisNodeList m_nodes;
     KisNodeSP m_activeNode;
@@ -390,7 +387,6 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
 
 
     DuplicateLayers(BatchMoveUpdateDataSP updateData,
-                    KisNodeManager *nodeManager,
                     KisImageSP image,
                     const KisNodeList &nodes,
                     KisNodeSP dstParent,
@@ -398,7 +394,6 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
                     KisNodeSP activeNode,
                     Mode mode)
         : m_updateData(updateData),
-          m_nodeManager(nodeManager),
           m_image(image),
           m_nodes(nodes),
           m_dstParent(dstParent),
@@ -516,7 +511,6 @@ private:
     }
 private:
     BatchMoveUpdateDataSP m_updateData;
-    KisNodeManager *m_nodeManager;
     KisImageSP m_image;
     KisNodeList m_nodes;
     KisNodeSP m_dstParent;
@@ -527,12 +521,10 @@ private:
 
 struct RemoveLayers : private KisLayerUtils::RemoveNodeHelper, public KisCommandUtils::AggregateCommand {
     RemoveLayers(BatchMoveUpdateDataSP updateData,
-                 KisNodeManager *nodeManager,
                  KisImageSP image,
                  const KisNodeList &nodes,
                  KisNodeSP activeNode)
         : m_updateData(updateData),
-          m_nodeManager(nodeManager),
           m_image(image),
           m_nodes(nodes),
           m_activeNode(activeNode){}
@@ -565,7 +557,6 @@ protected:
 
 private:
     BatchMoveUpdateDataSP m_updateData;
-    KisNodeManager *m_nodeManager;
     KisImageSP m_image;
     KisNodeList m_nodes;
     KisNodeSP m_activeNode;
@@ -639,7 +630,7 @@ void KisNodeJugglerCompressed::lowerNode(const KisNodeList &nodes)
     KisNodeSP activeNode = m_d->nodeManager ? m_d->nodeManager->activeNode() : 0;
 
     m_d->applicator->applyCommand(
-        new LowerRaiseLayer(m_d->updateData, m_d->nodeManager,
+        new LowerRaiseLayer(m_d->updateData,
                             m_d->image,
                             nodes, activeNode, true));
 
@@ -651,7 +642,7 @@ void KisNodeJugglerCompressed::raiseNode(const KisNodeList &nodes)
     KisNodeSP activeNode = m_d->nodeManager ? m_d->nodeManager->activeNode() : 0;
 
     m_d->applicator->applyCommand(
-        new LowerRaiseLayer(m_d->updateData, m_d->nodeManager,
+        new LowerRaiseLayer(m_d->updateData,
                             m_d->image,
                             nodes, activeNode, false));
     startTimers();
@@ -662,7 +653,7 @@ void KisNodeJugglerCompressed::removeNode(const KisNodeList &nodes)
     KisNodeSP activeNode = m_d->nodeManager ? m_d->nodeManager->activeNode() : 0;
 
     m_d->applicator->applyCommand(
-        new RemoveLayers(m_d->updateData, m_d->nodeManager,
+        new RemoveLayers(m_d->updateData,
                          m_d->image,
                          nodes, activeNode));
 
@@ -674,7 +665,7 @@ void KisNodeJugglerCompressed::duplicateNode(const KisNodeList &nodes)
     KisNodeSP activeNode = m_d->nodeManager ? m_d->nodeManager->activeNode() : 0;
 
     m_d->applicator->applyCommand(
-        new DuplicateLayers(m_d->updateData, m_d->nodeManager,
+        new DuplicateLayers(m_d->updateData,
                             m_d->image,
                             nodes,
                             KisNodeSP(), KisNodeSP(),
@@ -689,7 +680,7 @@ void KisNodeJugglerCompressed::copyNode(const KisNodeList &nodes, KisNodeSP dstP
     KisNodeSP activeNode = m_d->nodeManager ? m_d->nodeManager->activeNode() : 0;
 
     m_d->applicator->applyCommand(
-        new DuplicateLayers(m_d->updateData, m_d->nodeManager,
+        new DuplicateLayers(m_d->updateData,
                             m_d->image,
                             nodes,
                             dstParent, dstAbove,
@@ -704,7 +695,7 @@ void KisNodeJugglerCompressed::moveNode(const KisNodeList &nodes, KisNodeSP dstP
     KisNodeSP activeNode = m_d->nodeManager ? m_d->nodeManager->activeNode() : 0;
 
     m_d->applicator->applyCommand(
-        new DuplicateLayers(m_d->updateData, m_d->nodeManager,
+        new DuplicateLayers(m_d->updateData,
                             m_d->image,
                             nodes,
                             dstParent, dstAbove,
@@ -719,7 +710,7 @@ void KisNodeJugglerCompressed::addNode(const KisNodeList &nodes, KisNodeSP dstPa
     KisNodeSP activeNode = m_d->nodeManager ? m_d->nodeManager->activeNode() : 0;
 
     m_d->applicator->applyCommand(
-        new DuplicateLayers(m_d->updateData, m_d->nodeManager,
+        new DuplicateLayers(m_d->updateData,
                             m_d->image,
                             nodes,
                             dstParent, dstAbove,

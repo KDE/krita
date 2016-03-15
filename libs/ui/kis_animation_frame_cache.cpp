@@ -39,6 +39,11 @@ struct KisAnimationFrameCache::Private
         image = textures->image();
     }
 
+    ~Private()
+    {
+        qDeleteAll(frames);
+    }
+
     KisOpenGLImageTexturesSP textures;
     KisImageWSP image;
 
@@ -54,7 +59,7 @@ struct KisAnimationFrameCache::Private
 
     QMap<int, Frame*> frames;
 
-    Frame * getFrame(int time)
+    Frame *getFrame(int time)
     {
         if (frames.isEmpty()) return 0;
 

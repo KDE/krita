@@ -102,6 +102,8 @@ public:
     ~Private()
     {
         delete canvasItem;
+        delete startupWidget;
+        delete actionCollection;
     }
 
     KisPart *part;

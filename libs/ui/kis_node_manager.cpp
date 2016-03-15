@@ -508,11 +508,6 @@ void KisNodeManager::createNode(const QString & nodeType, bool quiet, KisPaintDe
 
 }
 
-KisLayerSP KisNodeManager::constructDefaultLayer()
-{
-    return m_d->layerManager.constructDefaultLayer();
-}
-
 KisLayerSP KisNodeManager::createPaintLayer()
 {
     KisNodeSP activeNode = this->activeNode();

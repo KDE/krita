@@ -418,15 +418,9 @@ void KisLayerManager::addLayerCommon(KisNodeSP activeNode, KisLayerSP layer, boo
     m_commandsAdapter->addNode(layer, parent, above, updateImage, updateImage);
 }
 
-KisLayerSP KisLayerManager::constructDefaultLayer()
-{
-    KisImageWSP image = m_view->image();
-    return KisLayerUtils::constructDefaultLayer(image);
-}
-
 KisLayerSP KisLayerManager::addLayer(KisNodeSP activeNode)
 {
-    KisLayerSP layer = constructDefaultLayer();
+    KisLayerSP layer = KisLayerUtils::constructDefaultLayer(m_view->image());
     addLayerCommon(activeNode, layer, false);
 
     return layer;

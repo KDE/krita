@@ -55,8 +55,18 @@ KisMimeData::KisMimeData(QList<KisNodeSP> nodes, bool forceCopy)
     , m_forceCopy(forceCopy)
 {
     Q_ASSERT(m_nodes.size() > 0);
+    m_initialListener = m_nodes.first()->graphListener();
 }
 
+void KisMimeData::deepCopyNodes()
+{
+    KisNodeList newNodes;
+    Q_FOREACH (KisNodeSP node, m_nodes) {
+        newNodes << node->clone();
+    }
+
+    m_nodes = newNodes;
+}
 
 QList<KisNodeSP> KisMimeData::nodes() const
 {
@@ -157,6 +167,7 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
         QDomElement root = doc.createElement("pointer");
         root.setAttribute("application_pid", (qint64)QApplication::applicationPid());
         root.setAttribute("force_copy", m_forceCopy);
+        root.setAttribute("listener_pointer_value", (qint64)m_initialListener);
         doc.appendChild(root);
 
         Q_FOREACH (KisNodeSP node, m_nodes) {
@@ -201,12 +212,14 @@ QList<KisNodeSP> KisMimeData::tryLoadInternalNodes(const QMimeData *data,
 {
     QList<KisNodeSP> nodes;
     bool forceCopy = false;
+    KisNodeGraphListener *initialListener = 0;
 
     // Qt 4.7 and Qt 5.5 way
     const KisMimeData *mimedata = qobject_cast<const KisMimeData*>(data);
     if (mimedata) {
         nodes = mimedata->nodes();
         forceCopy = mimedata->m_forceCopy;
+        initialListener = mimedata->m_initialListener;
     }
 
     // Qt 4.8 way
@@ -219,6 +232,8 @@ QList<KisNodeSP> KisMimeData::tryLoadInternalNodes(const QMimeData *data,
         QDomElement element = doc.documentElement();
         qint64 pid = element.attribute("application_pid").toLongLong();
         forceCopy = element.attribute("force_copy").toInt();
+        qint64 listenerPointerValue = element.attribute("listener_pointer_value").toLongLong();
+        initialListener = reinterpret_cast<KisNodeGraphListener*>(listenerPointerValue);
 
         if (pid == QApplication::applicationPid()) {
 
@@ -238,16 +253,16 @@ QList<KisNodeSP> KisMimeData::tryLoadInternalNodes(const QMimeData *data,
 
     if (!nodes.isEmpty() && (forceCopy || copyNode || nodes.first()->graphListener() != image.data())) {
         QList<KisNodeSP> clones;
-        copyNode = true;
         Q_FOREACH (KisNodeSP node, nodes) {
             node = node->clone();
-            if (nodes.first()->graphListener()) {
+            if ((forceCopy || copyNode) && initialListener == image.data()) {
                 KisLayerUtils::addCopyOfNameTag(node);
             }
             initializeExternalNode(node, image, shapeController);
             clones << node;
         }
         nodes = clones;
+        copyNode = true;
     }
     return nodes;
 }
@@ -333,6 +348,18 @@ QMimeData* KisMimeData::mimeForLayers(const KisNodeList &nodes, KisNodeSP imageR
     if (sortedNodes.isEmpty()) return 0;
 
     KisMimeData* data = new KisMimeData(sortedNodes, forceCopy);
+    return data;
+}
+
+QMimeData* KisMimeData::mimeForLayersDeepCopy(const KisNodeList &nodes, KisNodeSP imageRoot, bool forceCopy)
+{
+    KisNodeList inputNodes = nodes;
+    KisNodeList sortedNodes;
+    KisLayerUtils::sortMergableNodes(imageRoot, inputNodes, sortedNodes);
+    if (sortedNodes.isEmpty()) return 0;
+
+    KisMimeData* data = new KisMimeData(sortedNodes, forceCopy);
+    data->deepCopyNodes();
     return data;
 }
 

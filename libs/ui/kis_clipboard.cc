@@ -387,7 +387,10 @@ QSize KisClipboard::clipSize() const
 
 void KisClipboard::setLayers(KisNodeList nodes, KisNodeSP imageRoot, bool forceCopy)
 {
-    QMimeData *data = KisMimeData::mimeForLayers(nodes, imageRoot, forceCopy);
+    /**
+     * See a comment in KisMimeData::deepCopyNodes()
+     */
+    QMimeData *data = KisMimeData::mimeForLayersDeepCopy(nodes, imageRoot, forceCopy);
     if (!data) return;
 
     QClipboard *cb = QApplication::clipboard();

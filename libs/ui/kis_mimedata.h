@@ -28,6 +28,7 @@
 class KisShapeController;
 class KisNodeDummy;
 class KisNodeInsertionAdapter;
+class KisNodeGraphListener;
 
 /**
  * KisMimeData implements delayed retrieval of nodes for d&d and copy/paste.
@@ -42,6 +43,18 @@ public:
 
     /// return the node set on this mimedata object -- for internal use
     QList<KisNodeSP> nodes() const;
+
+    /**
+     * For Cut/Copy/Paste operations we should detach the contents of
+     * the mime data from the actual image because the user can modify
+     * our image between the Copy/Cut and Paste calls. So we just copy
+     * all our nodes into the internal array.
+     *
+     * It also fixes the problem of Cutting group layers. If we don't copy
+     * the node and all its children, it'll be deleted by the Cut operation
+     * and we will not be able to paste it correctly later.
+     */
+    void deepCopyNodes();
 
     /**
      * KisMimeData provides the following formats if a node has been set:
@@ -77,6 +90,7 @@ private:
 
 public:
     static QMimeData* mimeForLayers(const KisNodeList &nodes, KisNodeSP imageRoot, bool forceCopy = false);
+    static QMimeData* mimeForLayersDeepCopy(const KisNodeList &nodes, KisNodeSP imageRoot, bool forceCopy);
     static bool insertMimeLayers(const QMimeData *data,
                                  KisImageSP image,
                                  KisShapeController *shapeController,
@@ -98,7 +112,7 @@ private:
 
     QList<KisNodeSP> m_nodes;
     bool m_forceCopy;
-
+    KisNodeGraphListener *m_initialListener;
 };
 
 #endif // KIS_MIMEDATA_H

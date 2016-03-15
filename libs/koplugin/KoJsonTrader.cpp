@@ -118,6 +118,7 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
             //qDebug() << mimetype << json << json.value("X-KDE-ServiceTypes");
 
             if (json.isEmpty()) {
+                delete loader;
                 qWarning() << dirIter.filePath() << "has no json!";
             }
             else {
@@ -126,7 +127,7 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
                     qWarning() << dirIter.fileName() << "has no X-KDE-ServiceTypes";
                 }
                 if (!serviceTypes.contains(QJsonValue(servicetype))) {
-
+                    delete loader;
                     continue;
                 }
 
@@ -136,6 +137,7 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
                     mimeTypes += json.value("X-KDE-NativeMimeType").toString();
                     if (! mimeTypes.contains(mimetype)) {
                         qWarning() << dirIter.filePath() << "doesn't contain mimetype" << mimetype << "in" << mimeTypes;
+                        delete loader;
                         continue;
                     }
                 }
@@ -160,6 +162,7 @@ QStringList KoJsonTrader::mimeTypes(const QString &extension) const
             mimeTypes += json.value("X-KDE-NativeMimeType").toString();
         }
     }
+    qDeleteAll(list);
     return mimeTypes;
 }
 
@@ -177,6 +180,7 @@ QStringList KoJsonTrader::extensions(const QString &mimeType) const
             }
         }
     }
+    qDeleteAll(list);
     return extensions.toList();
 }
 
@@ -191,5 +195,6 @@ QString KoJsonTrader::mimeName(const QString &mimeType) const
             return json.value("X-KDE-Mimename").toString();
         }
     }
+    qDeleteAll(list);
     return mimeType;
 }

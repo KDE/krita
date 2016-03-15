@@ -69,6 +69,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     QList<QPluginLoader *> offers = KoJsonTrader::instance()->query(serviceType, QString());
 
     QList<QPluginLoader *> plugins;
+
     bool configChanged = false;
     QList<QString> blacklist; // what we will save out afterwards
     if (config.whiteList && config.blacklist && config.group) {
@@ -95,10 +96,12 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
             }
             if (whiteList.contains(pluginName)) {
                 plugins.append(loader);
-            } else if (!firstStart && !knownList.contains(pluginName)) { // also load newly installed plugins.
+            }
+            else if (!firstStart && !knownList.contains(pluginName)) { // also load newly installed plugins.
                 plugins.append(loader);
                 configChanged = true;
-            } else {
+            }
+            else {
                 blacklist << pluginName;
             }
         }
@@ -152,4 +155,6 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         configGroup.writeEntry(config.whiteList, whiteList);
         configGroup.writeEntry(config.blacklist, blacklist);
     }
+
+    qDeleteAll(offers);
 }

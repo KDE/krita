@@ -42,24 +42,25 @@ KisFilterEntry::KisFilterEntry(QPluginLoader *loader)
     available = loader->metaData().value("MetaData").toObject().value("X-KDE-Available").toString();
 }
 
+KisFilterEntry::~KisFilterEntry()
+{
+    delete m_loader;
+}
+
 QList<KisFilterEntrySP> KisFilterEntry::query()
 {
     QList<KisFilterEntrySP> lst;
 
     QList<QPluginLoader *> offers = KoJsonTrader::instance()->query("Krita/FileFilter", QString());
-
-    QList<QPluginLoader *>::ConstIterator it = offers.constBegin();
     unsigned int max = offers.count();
     dbgFile <<"Query returned" << max <<" offers";
-    for (unsigned int i = 0; i < max; i++) {
+
+    Q_FOREACH(QPluginLoader *pluginLoader, offers) {
         //dbgFile <<"   desktopEntryPath=" << (*it)->entryPath()
         //               << "   library=" << (*it)->library() << endl;
         // Append converted offer
-        lst.append(KisFilterEntrySP(new KisFilterEntry(*it)));
-        // Next service
-        it++;
+        lst.append(KisFilterEntrySP(new KisFilterEntry(pluginLoader)));
     }
-
     return lst;
 }
 

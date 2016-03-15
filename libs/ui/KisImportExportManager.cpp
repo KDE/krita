@@ -276,6 +276,7 @@ QStringList KisImportExportManager::mimeFilter(const QByteArray &mimetype, Direc
                     mimeTypes << mimetype;
                 }
             }
+            qDeleteAll(list);
             m_importMimeTypes = mimeTypes.toList();
         }
         return m_importMimeTypes;
@@ -290,6 +291,7 @@ QStringList KisImportExportManager::mimeFilter(const QByteArray &mimetype, Direc
                     mimeTypes << mimetype;
                 }
             }
+            qDeleteAll(list);
             m_exportMimeTypes = mimeTypes.toList();
         }
         qDebug() << m_exportMimeTypes;

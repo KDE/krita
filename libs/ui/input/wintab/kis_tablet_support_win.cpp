@@ -444,7 +444,11 @@ QWindowsTabletSupport *QWindowsTabletSupport::create()
     LOGCONTEXT lcMine;
     // build our context from the default context
     QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEFSYSCTX, 0, &lcMine);
-    // Go for the raw coordinates, the tablet event will return good stuff
+    // Go for the raw coordinates, the tablet event will return good stuff. The
+    // defaults for lcOut rectangle are the desktop dimensions in pixels, which
+    // means Wintab will do lossy rounding. Instead we specify this trivial
+    // scaling for the output context, then do the scaling ourselves later to
+    // obtain higher resolution coordinates.
     lcMine.lcOptions |= CXO_MESSAGES | CXO_CSRMESSAGES;
     lcMine.lcPktData = lcMine.lcMoveMask = PACKETDATA;
     lcMine.lcPktMode = PacketMode;
@@ -606,6 +610,11 @@ QWindowsTabletDeviceData QWindowsTabletSupport::tabletInit(const quint64 uniqueI
     result.maxY = int(defaultLc.lcInExtY) - int(defaultLc.lcInOrgY);
     result.maxZ = int(defaultLc.lcInExtZ) - int(defaultLc.lcInOrgZ);
     result.currentDevice = deviceType(cursorType);
+
+
+    // These define a rectangle representing the whole screen as seen by Wintab.
+    result.virtualDesktopArea = QRect(defaultLc.lcSysOrgX, defaultLc.lcSysOrgY,
+                                      defaultLc.lcSysExtX, defaultLc.lcSysExtY);
     return result;
 };
 
@@ -677,13 +686,7 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
     //    in which case we snap the position to the mouse position.
     // It seems there is no way to find out the mode programmatically, the LOGCONTEXT orgX/Y/Ext
     // area is always the virtual desktop.
-    const QPlatformScreen *platformScreen = qApp->primaryScreen()->handle();
-    const qreal dpr = qApp->primaryScreen()->devicePixelRatio();
-
-    QRect virtualDesktopArea = platformScreen->geometry();
-    Q_FOREACH(auto s, platformScreen->virtualSiblings()) {
-        virtualDesktopArea |= s->geometry();
-    }
+    const qreal dpr = qApp->activeWindow()->devicePixelRatio();
 
 
 
@@ -715,7 +718,8 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
 
         // This code is to delay the tablet data one cycle to sync with the mouse location.
         QPointF globalPosF = m_oldGlobalPosF / dpr; // Convert from "native" to "device independent pixels."
-        m_oldGlobalPosF = tabletData.scaleCoordinates(packet.pkX, packet.pkY, virtualDesktopArea);
+        m_oldGlobalPosF = tabletData.scaleCoordinates(packet.pkX, packet.pkY,
+                                                      tabletData.virtualDesktopArea);
 
         QPoint globalPos = globalPosF.toPoint();
 

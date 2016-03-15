@@ -79,7 +79,8 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     : KisTool(canvas, cursor),
       m_showColorPreview(false),
       m_colorPreviewShowComparePlate(false),
-      m_colorPickerDelayTimer()
+      m_colorPickerDelayTimer(),
+      m_isOutlineEnabled(true)
 {
     m_specialHoverModifier = false;
     m_optionsWidgetLayout = 0;

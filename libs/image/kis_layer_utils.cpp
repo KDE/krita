@@ -309,6 +309,35 @@ namespace KisLayerUtils {
         const KisMetaData::MergeStrategy *m_strategy;
     };
 
+    KeepNodesSelectedCommand::KeepNodesSelectedCommand(const KisNodeList &selectedBefore,
+                                                       const KisNodeList &selectedAfter,
+                                                       KisNodeSP activeBefore,
+                                                       KisNodeSP activeAfter,
+                                                       KisImageSP image,
+                                                       bool finalize, KUndo2Command *parent)
+        : FlipFlopCommand(finalize, parent),
+          m_selectedBefore(selectedBefore),
+          m_selectedAfter(selectedAfter),
+          m_activeBefore(activeBefore),
+          m_activeAfter(activeAfter),
+          m_image(image)
+    {
+    }
+
+    void KeepNodesSelectedCommand::end() {
+        KisImageSignalType type;
+        if (isFinalizing()) {
+            type = ComplexNodeReselectionSignal(m_activeAfter, m_selectedAfter);
+        } else {
+            type = ComplexNodeReselectionSignal(m_activeBefore, m_selectedBefore);
+        }
+        m_image->signalRouter()->emitNotification(type);
+    }
+
+    KisLayerSP constructDefaultLayer(KisImageSP image) {
+        return new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace());
+    }
+
     RemoveNodeHelper::~RemoveNodeHelper()
     {
     }
@@ -323,6 +352,8 @@ namespace KisLayerUtils {
      * the clone --- first, the source --- last.
      */
     void RemoveNodeHelper::safeRemoveMultipleNodes(QList<KisNodeSP> nodes, KisImageSP image) {
+        const bool lastLayer = scanForLastLayer(image, nodes);
+
         while (!nodes.isEmpty()) {
             QList<KisNodeSP>::iterator it = nodes.begin();
 
@@ -335,6 +366,14 @@ namespace KisLayerUtils {
                     ++it;
                 }
             }
+        }
+
+        if (lastLayer) {
+            KisLayerSP newLayer = constructDefaultLayer(image);
+            addCommandImpl(new KisImageLayerAddCommand(image, newLayer,
+                                                       image->root(),
+                                                       KisNodeSP(),
+                                                       false, false));
         }
     }
 
@@ -350,6 +389,58 @@ namespace KisLayerUtils {
         }
 
         return false;
+    }
+
+    bool RemoveNodeHelper::scanForLastLayer(KisImageWSP image, KisNodeList nodesToRemove) {
+        bool removeLayers = false;
+        Q_FOREACH(KisNodeSP nodeToRemove, nodesToRemove) {
+            if (dynamic_cast<KisLayer*>(nodeToRemove.data())) {
+                removeLayers = true;
+                break;
+            }
+        }
+        if (!removeLayers) return false;
+
+        bool lastLayer = true;
+        KisNodeSP node = image->root()->firstChild();
+        while (node) {
+            if (!nodesToRemove.contains(node) &&
+                dynamic_cast<KisLayer*>(node.data())) {
+
+                lastLayer = false;
+                break;
+            }
+            node = node->nextSibling();
+        }
+
+        return lastLayer;
+    }
+
+    SimpleRemoveLayers::SimpleRemoveLayers(const KisNodeList &nodes,
+                                           KisImageSP image,
+                                           const KisNodeList &selectedNodes,
+                                           KisNodeSP activeNode)
+        : m_nodes(nodes),
+          m_image(image),
+          m_selectedNodes(selectedNodes),
+          m_activeNode(activeNode)
+    {
+    }
+
+    void SimpleRemoveLayers::populateChildCommands() {
+        if (m_nodes.isEmpty()) return;
+
+        addCommand(new KisLayerUtils::KeepNodesSelectedCommand(m_selectedNodes, KisNodeList(),
+                                                               m_activeNode, KisNodeSP(),
+                                                               m_image, false));
+        safeRemoveMultipleNodes(m_nodes, m_image);
+        addCommand(new KisLayerUtils::KeepNodesSelectedCommand(m_selectedNodes, KisNodeList(),
+                                                               m_activeNode, KisNodeSP(),
+                                                               m_image, true));
+    }
+
+    void SimpleRemoveLayers::addCommandImpl(KUndo2Command *cmd) {
+        addCommand(cmd);
     }
 
     struct CleanUpNodes : private RemoveNodeHelper, public KisCommandUtils::AggregateCommand {
@@ -530,6 +621,10 @@ namespace KisLayerUtils {
         KisLayerSP prevLayer = dynamic_cast<KisLayer*>(layer->prevSibling().data());
         if (!prevLayer) return;
 
+        if (!layer->visible() && !prevLayer->visible()) {
+            return;
+        }
+
         KisImageSignalVector emitSignals;
         emitSignals << ModifiedSignal;
 
@@ -538,30 +633,46 @@ namespace KisLayerUtils {
                                            emitSignals,
                                            kundo2_i18n("Merge Down"));
 
-        MergeDownInfoSP info(new MergeDownInfo(image, prevLayer, layer));
+        if (layer->visible() && prevLayer->visible()) {
+            MergeDownInfoSP info(new MergeDownInfo(image, prevLayer, layer));
 
-        applicator.applyCommand(new FillSelectionMasks(info));
-        applicator.applyCommand(new CreateMergedLayer(info), KisStrokeJobData::BARRIER);
+            applicator.applyCommand(new FillSelectionMasks(info));
+            applicator.applyCommand(new CreateMergedLayer(info), KisStrokeJobData::BARRIER);
 
-        if (info->frames.size() > 0) {
-            foreach (int frame, info->frames) {
-                applicator.applyCommand(new SwitchFrameCommand(info->image, frame, false, info->storage));
+            if (info->frames.size() > 0) {
+                foreach (int frame, info->frames) {
+                    applicator.applyCommand(new SwitchFrameCommand(info->image, frame, false, info->storage));
 
-                applicator.applyCommand(new AddNewFrame(info, frame));
+                    applicator.applyCommand(new AddNewFrame(info, frame));
+                    applicator.applyCommand(new RefreshHiddenAreas(info));
+                    applicator.applyCommand(new MergeLayers(info), KisStrokeJobData::BARRIER);
+
+                    applicator.applyCommand(new SwitchFrameCommand(info->image, frame, true, info->storage));
+                }
+            } else {
                 applicator.applyCommand(new RefreshHiddenAreas(info));
                 applicator.applyCommand(new MergeLayers(info), KisStrokeJobData::BARRIER);
-
-                applicator.applyCommand(new SwitchFrameCommand(info->image, frame, true, info->storage));
             }
-        } else {
-            applicator.applyCommand(new RefreshHiddenAreas(info));
-            applicator.applyCommand(new MergeLayers(info), KisStrokeJobData::BARRIER);
-        }
 
-        applicator.applyCommand(new MergeMetaData(info, strategy), KisStrokeJobData::BARRIER);
-        applicator.applyCommand(new CleanUpNodes(info, layer),
-                                KisStrokeJobData::SEQUENTIAL,
-                                KisStrokeJobData::EXCLUSIVE);
+            applicator.applyCommand(new MergeMetaData(info, strategy), KisStrokeJobData::BARRIER);
+            applicator.applyCommand(new CleanUpNodes(info, layer),
+                                    KisStrokeJobData::SEQUENTIAL,
+                                    KisStrokeJobData::EXCLUSIVE);
+        } else if (layer->visible()) {
+            applicator.applyCommand(
+                new SimpleRemoveLayers(KisNodeList() << prevLayer,
+                                       image,
+                                       KisNodeList() << layer, layer),
+                KisStrokeJobData::SEQUENTIAL,
+                KisStrokeJobData::EXCLUSIVE);
+        } else if (prevLayer->visible()) {
+            applicator.applyCommand(
+                new SimpleRemoveLayers(KisNodeList() << layer,
+                                       image,
+                                       KisNodeList() << layer, layer),
+                KisStrokeJobData::SEQUENTIAL,
+                KisStrokeJobData::EXCLUSIVE);
+        }
 
         applicator.end();
     }
@@ -660,6 +771,33 @@ namespace KisLayerUtils {
         return nodes;
     }
 
+    KisNodeList filterInvisibleNodes(const KisNodeList &nodes, KisNodeList *invisibleNodes, KisNodeSP *putAfter) {
+        KIS_ASSERT_RECOVER(invisibleNodes) { return nodes; }
+        KIS_ASSERT_RECOVER(putAfter) { return nodes; }
+
+        KisNodeList visibleNodes;
+        int putAfterIndex = -1;
+
+        Q_FOREACH(KisNodeSP node, nodes) {
+            if (node->visible()) {
+                visibleNodes << node;
+            } else {
+                *invisibleNodes << node;
+
+                if (node == *putAfter) {
+                    putAfterIndex = visibleNodes.size() - 1;
+                }
+            }
+        }
+
+        if (!visibleNodes.isEmpty() && putAfterIndex >= 0) {
+            putAfterIndex = qBound(0, putAfterIndex, visibleNodes.size() - 1);
+            *putAfter = visibleNodes[putAfterIndex];
+        }
+
+        return visibleNodes;
+    }
+
     void mergeMultipleLayersImpl(KisImageSP image, QList<KisNodeSP> mergedNodes, KisNodeSP putAfter, bool flattenSingleLayer, const KUndo2MagicString &actionName)
     {
         filterMergableNodes(mergedNodes);
@@ -681,31 +819,46 @@ namespace KisLayerUtils {
                                            emitSignals,
                                            actionName);
 
-        MergeMultipleInfoSP info(new MergeMultipleInfo(image, mergedNodes));
 
+        KisNodeList originalNodes = mergedNodes;
+        KisNodeList invisibleNodes;
+        mergedNodes = filterInvisibleNodes(originalNodes, &invisibleNodes, &putAfter);
 
-        applicator.applyCommand(new FillSelectionMasks(info));
-        applicator.applyCommand(new CreateMergedLayerMultiple(info), KisStrokeJobData::BARRIER);
-
-        if (info->frames.size() > 0) {
-            foreach (int frame, info->frames) {
-                applicator.applyCommand(new SwitchFrameCommand(info->image, frame, false, info->storage));
-
-                applicator.applyCommand(new AddNewFrame(info, frame));
-                applicator.applyCommand(new RefreshHiddenAreas(info));
-                applicator.applyCommand(new MergeLayersMultiple(info), KisStrokeJobData::BARRIER);
-
-                applicator.applyCommand(new SwitchFrameCommand(info->image, frame, true, info->storage));
-            }
-        } else {
-            applicator.applyCommand(new RefreshHiddenAreas(info));
-            applicator.applyCommand(new MergeLayersMultiple(info), KisStrokeJobData::BARRIER);
+        if (!invisibleNodes.isEmpty()) {
+            applicator.applyCommand(
+                new SimpleRemoveLayers(invisibleNodes,
+                                       image,
+                                       KisNodeList(), KisNodeSP()),
+                KisStrokeJobData::SEQUENTIAL,
+                KisStrokeJobData::EXCLUSIVE);
         }
 
-        //applicator.applyCommand(new MergeMetaData(info, strategy), KisStrokeJobData::BARRIER);
-        applicator.applyCommand(new CleanUpNodes(info, putAfter),
-                                KisStrokeJobData::SEQUENTIAL,
-                                KisStrokeJobData::EXCLUSIVE);
+        if (mergedNodes.size() > 1 || invisibleNodes.isEmpty()) {
+            MergeMultipleInfoSP info(new MergeMultipleInfo(image, mergedNodes));
+
+            applicator.applyCommand(new FillSelectionMasks(info));
+            applicator.applyCommand(new CreateMergedLayerMultiple(info), KisStrokeJobData::BARRIER);
+
+            if (info->frames.size() > 0) {
+                foreach (int frame, info->frames) {
+                    applicator.applyCommand(new SwitchFrameCommand(info->image, frame, false, info->storage));
+
+                    applicator.applyCommand(new AddNewFrame(info, frame));
+                    applicator.applyCommand(new RefreshHiddenAreas(info));
+                    applicator.applyCommand(new MergeLayersMultiple(info), KisStrokeJobData::BARRIER);
+
+                    applicator.applyCommand(new SwitchFrameCommand(info->image, frame, true, info->storage));
+                }
+            } else {
+                applicator.applyCommand(new RefreshHiddenAreas(info));
+                applicator.applyCommand(new MergeLayersMultiple(info), KisStrokeJobData::BARRIER);
+            }
+
+            //applicator.applyCommand(new MergeMetaData(info, strategy), KisStrokeJobData::BARRIER);
+            applicator.applyCommand(new CleanUpNodes(info, putAfter),
+                                    KisStrokeJobData::SEQUENTIAL,
+                                    KisStrokeJobData::EXCLUSIVE);
+        }
 
         applicator.end();
 

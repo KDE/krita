@@ -102,6 +102,7 @@
 #include "commands_new/kis_set_layer_style_command.h"
 #include "kis_post_execution_undo_adapter.h"
 #include "kis_selection_mask.h"
+#include "kis_layer_utils.h"
 
 #include "KisSaveGroupVisitor.h"
 
@@ -420,7 +421,7 @@ void KisLayerManager::addLayerCommon(KisNodeSP activeNode, KisLayerSP layer, boo
 KisLayerSP KisLayerManager::constructDefaultLayer()
 {
     KisImageWSP image = m_view->image();
-    return new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace());
+    return KisLayerUtils::constructDefaultLayer(image);
 }
 
 KisLayerSP KisLayerManager::addLayer(KisNodeSP activeNode)

@@ -83,6 +83,31 @@ namespace KisLayerUtils
         SharedStorageSP m_storage;
     };
 
+    /**
+     * A command to keep correct set of selected/active nodes thoroughout
+     * the action.
+     */
+    class KRITAIMAGE_EXPORT KeepNodesSelectedCommand : public KisCommandUtils::FlipFlopCommand
+    {
+    public:
+    KeepNodesSelectedCommand(const KisNodeList &selectedBefore,
+                             const KisNodeList &selectedAfter,
+                             KisNodeSP activeBefore,
+                             KisNodeSP activeAfter,
+                             KisImageSP image,
+                             bool finalize, KUndo2Command *parent = 0);
+    void end();
+
+    private:
+        KisNodeList m_selectedBefore;
+        KisNodeList m_selectedAfter;
+        KisNodeSP m_activeBefore;
+        KisNodeSP m_activeAfter;
+        KisImageWSP m_image;
+    };
+
+    KRITAIMAGE_EXPORT KisLayerSP constructDefaultLayer(KisImageSP image);
+
     class KRITAIMAGE_EXPORT RemoveNodeHelper {
     public:
         virtual ~RemoveNodeHelper();
@@ -91,7 +116,27 @@ namespace KisLayerUtils
         void safeRemoveMultipleNodes(QList<KisNodeSP> nodes, KisImageSP image);
     private:
         bool checkIsSourceForClone(KisNodeSP src, const QList<KisNodeSP> &nodes);
+        static bool scanForLastLayer(KisImageWSP image, KisNodeList nodesToRemove);
     };
+
+    struct SimpleRemoveLayers : private KisLayerUtils::RemoveNodeHelper, public KisCommandUtils::AggregateCommand {
+        SimpleRemoveLayers(const KisNodeList &nodes,
+                           KisImageSP image,
+                           const KisNodeList &selectedNodes,
+                           KisNodeSP activeNode);
+
+        void populateChildCommands();
+
+    protected:
+        virtual void addCommandImpl(KUndo2Command *cmd);
+
+    private:
+        KisNodeList m_nodes;
+        KisImageSP m_image;
+        KisNodeList m_selectedNodes;
+        KisNodeSP m_activeNode;
+    };
+
 
     class KRITAIMAGE_EXPORT KisSimpleUpdateCommand : public KisCommandUtils::FlipFlopCommand
     {

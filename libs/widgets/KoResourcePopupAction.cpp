@@ -54,8 +54,8 @@ public:
 };
 
 KoResourcePopupAction::KoResourcePopupAction(QSharedPointer<KoAbstractResourceServerAdapter>resourceAdapter, QObject *parent)
-:  QAction(parent)
-, d(new Private())
+    :  QAction(parent)
+    , d(new Private())
 {
     Q_ASSERT(resourceAdapter);
 

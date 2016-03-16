@@ -91,6 +91,7 @@ set(kritaui_LIB_SRCS
     kis_composite_ops_model.cc
     kis_paint_ops_model.cpp
     kis_cursor.cc
+    kis_cursor_cache.cpp
     kis_custom_pattern.cc
     kis_file_layer.cpp
     kis_safe_document_loader.cpp

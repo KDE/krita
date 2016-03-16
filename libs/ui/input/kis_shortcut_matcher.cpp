@@ -54,6 +54,13 @@ public:
         , usingTouch(false)
     {}
 
+    ~Private()
+    {
+        qDeleteAll(singleActionShortcuts);
+        qDeleteAll(strokeShortcuts);
+        qDeleteAll(touchShortcuts);
+    }
+
     QList<KisSingleActionShortcut*> singleActionShortcuts;
     QList<KisStrokeShortcut*> strokeShortcuts;
     QList<KisTouchShortcut*> touchShortcuts;
@@ -82,8 +89,6 @@ KisShortcutMatcher::KisShortcutMatcher()
 
 KisShortcutMatcher::~KisShortcutMatcher()
 {
-    qDeleteAll(m_d->singleActionShortcuts);
-    qDeleteAll(m_d->strokeShortcuts);
     delete m_d;
 }
 
@@ -338,6 +343,7 @@ void KisShortcutMatcher::clearShortcuts()
     qDeleteAll(m_d->singleActionShortcuts);
     m_d->singleActionShortcuts.clear();
     qDeleteAll(m_d->strokeShortcuts);
+    qDeleteAll(m_d->touchShortcuts);
     m_d->strokeShortcuts.clear();
     m_d->candidateShortcuts.clear();
     m_d->runningShortcut = 0;

@@ -266,6 +266,7 @@ void QXcbConnection::finalizeXInput2()
     foreach (XInput2TouchDeviceData *dev, m_touchDevices) {
         if (dev->xiDeviceInfo)
             XIFreeDeviceInfo(dev->xiDeviceInfo);
+        delete dev->qtTouchDevice;
         delete dev;
     }
 }

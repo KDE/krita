@@ -251,8 +251,8 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
     //Check to draw scrollbars after "Canvas only mode" toggle is created.
     this->showHideScrollbars();
 
-    KoCanvasController *dummy = new KoDummyCanvasController(actionCollection());
-    KoToolManager::instance()->registerToolActions(actionCollection(), dummy);
+    QScopedPointer<KoDummyCanvasController> dummy = new KoDummyCanvasController(actionCollection());
+    KoToolManager::instance()->registerToolActions(actionCollection(), dummy.data());
 
     QTimer::singleShot(0, this, SLOT(makeStatusBarVisible()));
 

@@ -45,6 +45,7 @@ public:
     }
 
     ~ColorDataList() {
+        qDeleteAll(m_guiList);
     }
 
     int size() {

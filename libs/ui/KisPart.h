@@ -155,24 +155,27 @@ public:
 public Q_SLOTS:
 
     /**
-     * This slot loads an existing file and deletes the start up widget.
+     * This slot loads an existing file.
      * @param url the file to load
      */
     void openExistingFile(const QUrl &url);
 
-protected Q_SLOTS:
-
     /**
-     * This slot loads a template and deletes the start up widget.
+     * This slot loads a template and deletes the sender.
      * @param url the template to load
      */
     void openTemplate(const QUrl &url);
 
+
+    /**
+     * @brief startCustomDocument adds the given document to the document list and deletes the sender()
+     * @param doc
+     */
+    void startCustomDocument(KisDocument *doc);
+
 private Q_SLOTS:
 
     void viewDestroyed();
-
-    void startCustomDocument(KisDocument *doc);
 
     void updateIdleWatcherConnections();
 
@@ -240,56 +243,8 @@ public:
      */
     QGraphicsItem *canvasItem(KisDocument *document, bool create = true);
 
-    // ------- Startup/openpane etc ---------------
-
-    /**
-     * Template resource path used. This is used by the start up widget to show
-     * the correct templates.
-     */
-    QString templatesResourcePath() const;
-
-    /**
-     * Creates and shows the start up widget.
-     * @param parent the KisMainWindow used as parent for the widget.
-     * @param alwaysShow always show the widget even if the user has configured it to not show.
-     */
-    void showStartUpWidget(KisMainWindow *parent, bool alwaysShow = false);
 
 protected:
-
-    /**
-     * Struct used in the list created by createCustomDocumentWidgets()
-     */
-    struct CustomDocumentWidgetItem {
-        /// Pointer to the custom document widget
-        QWidget *widget;
-        /// title used in the sidebar. If left empty it will be displayed as "Custom Document"
-        QString title;
-        /// icon used in the sidebar. If left empty it will use the unknown icon
-        QString icon;
-    };
-
-    /**
-     * This generates widgets for the startup dialog. It populates the dialog
-     * with widgets providing different ways to load new documents.
-     *
-     * (For example, "blank document", "create from clipboard", "open file")
-     *
-     * Each widget returned from this function should follow a certain format.
-     * The returned widget should provide its own button (preferably 'Create')
-     * and implement the logic to implement the document instance correctly.
-     * The widget should use the signal 'documentSelected(KisDocument*)' to
-     * notify that the startup dialog should close and KisPart should load the
-     * new document.
-     *
-     * @see KisPart::showStartUpWidget()
-     * @see KisDocument::createCustomDocumentWidget()
-     * @see KisOpenPane::createCustomDocumentWidget()
-     *
-     * @param parent the parent of the to be created widget.
-     * @return a list of KisDocument::CustomDocumentWidgetItem.
-     */
-    QList<CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
 
     /**
      * Override this to create a QGraphicsItem that does not rely

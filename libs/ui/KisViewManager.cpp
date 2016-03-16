@@ -716,7 +716,7 @@ int KisViewManager::viewCount() const
 void KisViewManager::slotCreateTemplate()
 {
     if (!document()) return;
-    KisTemplateCreateDia::createTemplate(KisPart::instance()->templatesResourcePath(), ".kra", document(), mainWindow());
+    KisTemplateCreateDia::createTemplate( QStringLiteral("krita/templates/"), ".kra", document(), mainWindow());
 }
 
 void KisViewManager::slotCreateCopy()

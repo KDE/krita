@@ -634,7 +634,7 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
     }
     else {
         QString desktopName(fileName);
-        const QString templatesResourcePath = KisPart::instance()->templatesResourcePath();
+        const QString templatesResourcePath =  QStringLiteral("krita/templates/");
 
         QStringList paths = KoResourcePaths::findAllResources("data", templatesResourcePath + "*/" + desktopName);
         if (paths.isEmpty()) {

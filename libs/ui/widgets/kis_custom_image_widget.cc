@@ -68,6 +68,8 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
     : WdgNewImage(parent)
 {
     setObjectName("KisCustomImageWidget");
+    m_openPane = qobject_cast<KisOpenPane*>(parent);
+    Q_ASSERT(m_openPane);
 
     txtName->setText(imageName);
     m_widthUnit = KoUnit(KoUnit::Pixel, resolution);
@@ -221,7 +223,7 @@ void KisCustomImageWidget::createImage()
     KisDocument *doc = createNewImage();
     if (doc) {
         doc->setModified(false);
-        emit documentSelected(doc);
+        emit m_openPane->documentSelected(doc);
     }
 }
 

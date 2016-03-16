@@ -447,6 +447,20 @@ private Q_SLOTS:
     void switchTab(int index);
 
 private:
+
+
+    /**
+     * Struct used in the list created by createCustomDocumentWidgets()
+     */
+    struct CustomDocumentWidgetItem {
+        /// Pointer to the custom document widget
+        QWidget *widget;
+        /// title used in the sidebar. If left empty it will be displayed as "Custom Document"
+        QString title;
+        /// icon used in the sidebar. If left empty it will use the unknown icon
+        QString icon;
+    };
+
     class Private;
     Private * const d;
 

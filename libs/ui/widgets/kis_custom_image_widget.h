@@ -22,6 +22,7 @@
 #include "kis_global.h"
 #include "KoUnit.h"
 #include "kis_properties_configuration.h"
+#include "KisOpenPane.h"
 
 #include <ui_wdgnewimage.h>
 
@@ -35,7 +36,9 @@ class WdgNewImage : public QWidget, public Ui::WdgNewImage
     Q_OBJECT
 
 public:
-    WdgNewImage(QWidget *parent) : QWidget(parent) {
+    WdgNewImage(QWidget *parent)
+        : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -72,10 +75,6 @@ private Q_SLOTS:
     void createImage();
     void switchPortraitLandscape();
 
-Q_SIGNALS:
-    /// this signal is emitted (as defined by KisDocument) the moment the document is 'ready'
-    void documentSelected(KisDocument*);
-
 protected:
     
     KisDocument *createNewImage();
@@ -83,6 +82,7 @@ protected:
     /// Set the number of layers that will be created
     void setNumberOfLayers(int layers);
 
+    KisOpenPane *m_openPane;
 private:
     
     double m_width, m_height;
@@ -94,6 +94,7 @@ private:
     
     KoUnit m_widthUnit, m_heightUnit;
     QList<KisPropertiesConfiguration*> m_predefined;
+
 };
 
 #endif

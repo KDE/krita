@@ -94,44 +94,48 @@
 #include <KoPluginLoader.h>
 #include <KoColorSpaceEngine.h>
 
-#include "KisView.h"
-#include "KisDocument.h"
-#include "KisImportExportManager.h"
-#include "KisPrintJob.h"
-#include "KisPart.h"
-#include "KisApplication.h"
-
-#include "kis_action.h"
-#include "kis_canvas_controller.h"
-#include "kis_canvas2.h"
-#include "KisViewManager.h"
-#include "KisDocument.h"
-#include "dialogs/kis_dlg_preferences.h"
-#include "kis_config_notifier.h"
-#include "kis_canvas_resource_provider.h"
-#include "kis_node.h"
-#include "kis_image.h"
-#include "kis_group_layer.h"
 #include <brushengine/kis_paintop_settings.h>
-#include "kis_paintop_box.h"
+#include "dialogs/kis_about_application.h"
+#include "dialogs/kis_delayed_save_dialog.h"
+#include "dialogs/kis_dlg_preferences.h"
+#include "kis_action.h"
+#include "kis_action_manager.h"
+#include "KisApplication.h"
+#include "kis_canvas2.h"
+#include "kis_canvas_controller.h"
+#include "kis_canvas_resource_provider.h"
+#include "kis_clipboard.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
-#include "dialogs/kis_about_application.h"
+#include "kis_config_notifier.h"
+#include "kis_custom_image_widget.h"
+#include <KisDocument.h>
+#include "KisDocument.h"
+#include "KisDocument.h"
+#include "kis_group_layer.h"
+#include "kis_icon_utils.h"
+#include "kis_image_from_clipboard_widget.h"
+#include "kis_image.h"
+#include <KisImportExportFilter.h>
+#include "KisImportExportManager.h"
 #include "kis_mainwindow_observer.h"
-#include "kis_action_manager.h"
-#include "thememanager.h"
+#include "kis_node.h"
+#include "KisOpenPane.h"
+#include "kis_paintop_box.h"
+#include "KisPart.h"
+#include "KisPrintJob.h"
 #include "kis_resource_server_provider.h"
+#include "kis_signal_compressor_with_param.h"
+#include "KisView.h"
+#include "KisViewManager.h"
+#include "thememanager.h"
+
+
 #ifdef HAVE_OPENGL
 #include "kis_animation_importer.h"
 #include "dialogs/kis_dlg_import_image_sequence.h"
 #include "kis_animation_exporter.h"
 #endif
-#include "kis_icon_utils.h"
-#include <KisImportExportFilter.h>
-#include <KisDocument.h>
-#include "kis_signal_compressor_with_param.h"
-#include "dialogs/kis_delayed_save_dialog.h"
-
 class ToolDockerFactory : public KoDockFactoryBase
 {
 public:
@@ -1291,7 +1295,68 @@ void KisMainWindow::switchTab(int index)
 
 void KisMainWindow::slotFileNew()
 {
-    KisPart::instance()->showStartUpWidget(this, true /*Always show widget*/);
+    KisOpenPane *startupWidget = 0;
+
+    const QStringList mimeFilter = KisImportExportManager::mimeFilter(KIS_MIME_TYPE,
+                                                                      KisImportExportManager::Import,
+                                                                      KisDocument::extraNativeMimeTypes());
+
+    startupWidget = new KisOpenPane(this, mimeFilter, QStringLiteral("krita/templates/"));
+    startupWidget->setWindowModality(Qt::WindowModal);
+
+    KisConfig cfg;
+
+    int w = cfg.defImageWidth();
+    int h = cfg.defImageHeight();
+    const double resolution = cfg.defImageResolution();
+    const QString colorModel = cfg.defColorModel();
+    const QString colorDepth = cfg.defaultColorDepth();
+    const QString colorProfile = cfg.defColorProfile();
+
+
+    CustomDocumentWidgetItem item;
+    item.widget = new KisCustomImageWidget(startupWidget,
+                                           w,
+                                           h,
+                                           resolution,
+                                           colorModel,
+                                           colorDepth,
+                                           colorProfile,
+                                           i18n("Unnamed"));
+
+    item.icon = "application-x-krita";
+
+    startupWidget->addCustomDocumentWidget(item.widget, item.title, item.icon);
+
+    QSize sz = KisClipboard::instance()->clipSize();
+    if (sz.isValid() && sz.width() != 0 && sz.height() != 0) {
+        w = sz.width();
+        h = sz.height();
+    }
+
+    item.widget = new KisImageFromClipboard(startupWidget,
+                                            w,
+                                            h,
+                                            resolution,
+                                            colorModel,
+                                            colorDepth,
+                                            colorProfile,
+                                            i18n("Unnamed"));
+
+    item.title = i18n("Create from Clipboard");
+    item.icon = "klipper";
+
+    startupWidget->addCustomDocumentWidget(item.widget, item.title, item.icon);
+
+    // calls deleteLater
+    connect(startupWidget, SIGNAL(documentSelected(KisDocument*)), KisPart::instance(), SLOT(startCustomDocument(KisDocument*)));
+    // calls deleteLater
+    connect(startupWidget, SIGNAL(openTemplate(const QUrl&)), KisPart::instance(), SLOT(openTemplate(const QUrl&)));
+
+    startupWidget->exec();
+
+    // Cancel calls deleteLater...
+
 }
 
 void KisMainWindow::slotFileOpen()

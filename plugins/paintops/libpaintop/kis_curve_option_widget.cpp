@@ -80,6 +80,7 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption, const QS
 KisCurveOptionWidget::~KisCurveOptionWidget()
 {
     delete m_curveOption;
+    delete m_curveOptionWidget;
 }
 
 void KisCurveOptionWidget::writeOptionSetting(KisPropertiesConfiguration* setting) const

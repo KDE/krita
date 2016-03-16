@@ -151,10 +151,14 @@ KisImageBuilder_Result CSVSaver::encode(const QUrl &uri,const QString &filename)
         end = start;
 
         for (idx = 0; idx < layers.size(); idx++) {
-            keyframe = layers.at(idx)->channel->lastKeyframe();
+            KisRasterKeyframeChannel *channel = layers.at(idx)->channel;
 
-            if ( (!keyframe.isNull()) && (keyframe->time() > end) )
-                end = keyframe->time();
+            if (channel) {
+                keyframe = channel->lastKeyframe();
+
+                if ( (!keyframe.isNull()) && (keyframe->time() > end) )
+                    end = keyframe->time();
+            }
         }
     }
 
@@ -294,9 +298,20 @@ KisImageBuilder_Result CSVSaver::encode(const QUrl &uri,const QString &filename)
 
             for (idx = 0; idx < layers.size(); idx++) {
                 CSVLayerRecord *layer = layers.at(idx);
-                keyframe = layer->channel->keyframeAt(frame);
+                KisRasterKeyframeChannel *channel = layer->channel;
 
-                if (!keyframe.isNull()) {
+                if (channel) {
+                    if (frame == start) {
+                        keyframe = channel->activeKeyframeAt(frame);
+                    } else {
+                        keyframe = channel->keyframeAt(frame);
+                    }
+                } else {
+                    keyframe.clear(); // without animation
+                }
+
+                if ( !keyframe.isNull() || (frame == start) ) {
+
                     if (!m_batchMode) {
                         emit m_doc->sigProgress(((frame - start) * layers.size() + idx) * 100 /
                                                 ((end - start) * layers.size()));
@@ -375,7 +390,11 @@ KisImageBuilder_Result CSVSaver::getLayer(CSVLayerRecord* layer, KisDocument* ex
     KisImageWSP image = exportDoc->image();
     KisPaintDeviceSP device = image->rootLayer()->firstChild()->projection();
 
-    layer->channel->fetchFrame(keyframe, device);
+    if (!keyframe.isNull()) {
+        layer->channel->fetchFrame(keyframe, device);
+    } else {
+        device->makeCloneFrom(layer->layer->projection(),image->bounds()); // without animation
+    }
     QRect bounds = device->exactBounds();
 
     if (bounds.isEmpty()) {

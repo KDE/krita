@@ -346,8 +346,8 @@ set(kritaui_LIB_SRCS
     KisApplicationArguments.cpp
 
     KisNetworkAccessManager.cpp
-    KisWelcomeScreen.cpp
     KisMultiFeedRSSModel.cpp
+    KisRemoteFileFetcher.cpp
 
     KisPaletteModel.cpp
     KisColorsetChooser.cpp

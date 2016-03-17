@@ -86,6 +86,7 @@ private:
     qreal m_mouseX;
     QPoint m_ev;
     qreal m_width;
+    bool m_isDown;
 
     friend class KisShadeSelectorLineComboBox;
 

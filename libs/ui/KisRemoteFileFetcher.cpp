@@ -47,7 +47,7 @@ bool KisRemoteFileFetcher::fetchFile(const QUrl &remote, QIODevice *io)
     m_request = new QNetworkRequest(remote);
     m_request->setRawHeader("User-Agent", QString("Krita-%1").arg(qApp->applicationVersion()).toUtf8());
     m_reply = manager->get(*m_request);
-    connect(m_reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(serror(QNetworkReply::NetworkError)));
+    connect(m_reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
     connect(m_reply, SIGNAL(finished()), &m_loop, SLOT(quit()));
 
     // Wait until done

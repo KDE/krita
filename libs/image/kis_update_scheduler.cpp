@@ -83,6 +83,7 @@ KisUpdateScheduler::KisUpdateScheduler()
 KisUpdateScheduler::~KisUpdateScheduler()
 {
     delete m_d->progressUpdater;
+    delete m_d;
 }
 
 void KisUpdateScheduler::connectSignals()

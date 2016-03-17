@@ -433,6 +433,10 @@ KisPaintopBox::~KisPaintopBox()
     m_presetsPopup->setPaintOpSettingsWidget(0);
     qDeleteAll(m_paintopOptionWidgets);
     delete m_favoriteResourceManager;
+
+    for (int i = 0; i < 3; ++i) {
+        delete m_sliderChooser[i];
+    }
 }
 
 void KisPaintopBox::restoreResource(KoResource* resource)

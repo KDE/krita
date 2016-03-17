@@ -186,6 +186,9 @@ PaletteDockerDock::~PaletteDockerDock()
         KisConfig cfg;
         cfg.setDefaultPalette(m_currentColorSet->name());
     }
+
+    delete m_wdgPaletteDock->paletteView->itemDelegate();
+    delete m_wdgPaletteDock;
 }
 
 void PaletteDockerDock::setMainWindow(KisViewManager* kisview)

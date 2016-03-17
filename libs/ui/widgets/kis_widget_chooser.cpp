@@ -58,6 +58,8 @@ KisWidgetChooser::KisWidgetChooser(int id, QWidget* parent)
 KisWidgetChooser::~KisWidgetChooser()
 {
     delete m_buttons;
+    delete m_popup;
+    delete m_arrowButton;
 }
 
 void KisWidgetChooser::updateArrowIcon()

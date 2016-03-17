@@ -189,6 +189,7 @@ protected:
     {
         delete d->colorProfile;
         delete[] d->qcolordata;
+        delete d->defaultTransformations;
         delete d;
     }
 

@@ -24,6 +24,7 @@
 #include "kritaui_export.h"
 #include "kis_types.h"
 
+class ComboEventFilter;
 
 class KRITAUI_EXPORT KisColorFilterCombo : public QComboBox
 {
@@ -49,6 +50,7 @@ private:
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
+    QList<ComboEventFilter *> m_eventFilters;
 };
 
 #endif /* __KIS_COLOR_FILTER_COMBO_H */

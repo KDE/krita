@@ -37,7 +37,7 @@ class PAINTOP_EXPORT KisCurveOptionWidget : public KisPaintOpOption
     Q_OBJECT
 public:
     KisCurveOptionWidget(KisCurveOption* curveOption, const QString &minLabel, const QString &maxLabel, bool hideSlider = false);
-    virtual ~KisCurveOptionWidget();
+    ~KisCurveOptionWidget();
 
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);

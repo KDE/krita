@@ -24,8 +24,9 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <QLabel>
+#include <qlineedit.h>
 
-class KLineEdit;
+class QLineEdit;
 class KoResource;
 
 
@@ -73,7 +74,7 @@ protected Q_SLOTS:
 private:
     bool m_closeParentOnTrigger;
     QLabel * m_label;
-    KLineEdit * m_editBox;
+    QLineEdit * m_editBox;
 };
 
 class NewTagAction : public KoLineEditAction

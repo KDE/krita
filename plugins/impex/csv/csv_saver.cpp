@@ -28,7 +28,7 @@
 #include <QVector>
 #include <QIODevice>
 #include <QRect>
-#include <QMimeDatabase>
+#include <KisMimeDatabase.h>
 
 #include <KisPart.h>
 #include <KisDocument.h>

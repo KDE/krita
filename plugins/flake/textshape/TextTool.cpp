@@ -471,8 +471,7 @@ void TextTool::createActions()
 #ifndef NDEBUG
 #include "tests/MockShapes.h"
 #include <kundo2stack.h>
-#include <QMimeDatabase>
-#include <QMimeType>
+#include <KisMimeDatabase.h>
 
 TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     : KoToolBase(canvas),

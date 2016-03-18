@@ -21,7 +21,7 @@
 #include "FileSystemModel.h"
 
 #include <QDateTime>
-#include <QMimeDatabase>
+#include <KisMimeDatabase.h>
 #include <QFileInfo>
 #include <QDir>
 #include <QDesktopServices>
@@ -73,7 +73,7 @@ QVariant FileSystemModel::data(const QModelIndex& index, int role) const
                     return fileInfo.isDir() ? "image://icon/inode-directory" : QString("image://recentimage/%1").arg(fileInfo.absoluteFilePath());
                 break;
             case FileTypeRole:
-                return QMimeDatabase().mimeTypeForFile(fileInfo).name();
+                return KisMimeDatabase::mimeTypeForFile(fileInfo.fileName());
                 break;
             case FileDateRole:
                 return fileInfo.lastModified().toString(Qt::SystemLocaleShortDate);

@@ -88,20 +88,9 @@ QString KisImportExportManager::importDocument(const QString& location,
     QUrl u = locationToUrl(location);
 
     // Find the mime type for the file to be imported.
-    QString  typeName(documentMimeType);
-    QMimeType t;
-    if (documentMimeType.isEmpty()) {
-        QMimeDatabase db;
-        db.mimeTypeForFile(u.path(), QMimeDatabase::MatchExtension);
-        if (t.isValid()) {
-            typeName = t.name();
-        }
-        else {
-            // Find the right mimetype by the extension
-            KoJsonTrader trader;
-            QStringList mimes = trader.instance()->mimeTypes(QFileInfo(location).suffix());
-            typeName = mimes.first();
-        }
+    QString  typeName = documentMimeType;
+    if (typeName.isEmpty()) {
+        typeName = KisMimeDatabase::mimeTypeForFile(location);
     }
     m_graph.setSourceMimeType(typeName.toLatin1()); // .latin1() is okay here (Werner)
 
@@ -212,16 +201,17 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(c
         }
     }
     else {
-        QMimeDatabase db;
-        QMimeType t = db.mimeTypeForUrl(m_importUrl);
-        if (!t.isValid() || t.isDefault()) {
+        QString t = KisMimeDatabase::mimeTypeForFile(m_importUrl.toLocalFile());
+
+        if (t.isEmpty() || t == "application/octet-stream") {
             errFile << "No mimetype found for" << m_importUrl.toDisplayString();
             return KisImportExportFilter::BadMimeType;
         }
-        m_graph.setSourceMimeType(t.name().toLatin1());
+
+        m_graph.setSourceMimeType(t.toLatin1());
 
         if (!m_graph.isValid()) {
-            warnFile << "Can't open" << t.name() << ", trying filter chooser";
+            warnFile << "Can't open" << t << ", trying filter chooser";
 
             QApplication::setOverrideCursor(Qt::ArrowCursor);
             KisFilterChooser chooser(0, KisImportExportManager::mimeFilter("", KisImportExportManager::Export), QString(), m_importUrl);
@@ -338,5 +328,4 @@ QUrl KisImportExportManager::locationToUrl(QString location) const
     return (u.isEmpty()) ? QUrl(location) : u;
 }
 
-#include <QMimeDatabase>
-#include <QMimeType>
+#include <KisMimeDatabase.h>

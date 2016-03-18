@@ -20,7 +20,7 @@
 
 #include <QDesktopServices>
 #include <QWaitCondition>
-#include <QMimeDatabase>
+#include <KisMimeDatabase.h>
 #include <QEventLoop>
 
 #include "KoFileDialog.h"
@@ -139,9 +139,7 @@ KisAnimationExporter::KisAnimationExporter(KisDocument *document, const QString 
     }
     m_d->batchMode = document->fileBatchMode();
 
-    QMimeDatabase db;
-    QMimeType mime = db.mimeTypeForFile(baseFilename);
-    QString mimefilter = mime.name();
+    QString mimefilter = KisMimeDatabase::mimeTypeForFile(baseFilename);
     m_d->tmpDoc->setOutputMimeType(mimefilter.toLatin1());
     m_d->tmpDoc->setFileBatchMode(true);
 

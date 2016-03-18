@@ -25,8 +25,7 @@
 
 #include <QTest>
 #include <half.h>
-#include <QMimeDatabase>
-#include <QMimeType>
+#include <KisMimeDatabase.h>
 #include "filestest.h"
 
 #ifndef FILES_DATA_DIR
@@ -63,10 +62,7 @@ void KisExrTest::testRoundTrip()
     QUrl savedFileURL("file://" + savedFile.fileName());
     QString savedFileName(savedFileURL.toLocalFile());
 
-    QString typeName;
-    QMimeDatabase db;
-    QMimeType t = db.mimeTypeForFile(savedFileURL.path(), QMimeDatabase::MatchExtension);
-    typeName = t.name();
+    QString typeName = KisMimeDatabase::mimeTypeForFile(savedFileURL.toLocalFile());
 
     QByteArray mimeType(typeName.toLatin1());
     status = manager.exportDocument(savedFileName, mimeType);

@@ -29,6 +29,7 @@ Boston, MA 02110-1301, USA.
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 
+#include <KisMimeDatabase.h>
 
 #include <unistd.h>
 
@@ -56,16 +57,11 @@ KisFilterChooser::KisFilterChooser(QWidget *parent, const QStringList &mimeTypes
     page->setLayout(layout);
 
     Q_ASSERT(!m_mimeTypes.isEmpty());
-    for (QStringList::ConstIterator it = m_mimeTypes.constBegin();
-            it != m_mimeTypes.constEnd();
-            ++it) {
-
-        QMimeDatabase db;
-        QMimeType mime = db.mimeTypeForName(*it);
-        const QString name = mime.isValid() ? mime.comment() : *it;
-        if (! name.isEmpty()) {
+    Q_FOREACH(const QString &mimeType, m_mimeTypes) {
+        const QString name = KisMimeDatabase::descriptionForMimeType(mimeType);
+        if (!name.isEmpty()) {
             QListWidgetItem *item = new QListWidgetItem(name, m_filterList);
-            item->setData(32, *it);
+            item->setData(32, mimeType);
         }
     }
 
@@ -89,7 +85,3 @@ QString KisFilterChooser::filterSelected()
     QListWidgetItem *item = m_filterList->currentItem();
     return item->data(32).toString();
 }
-
-#include <KisImportExportManager_p.moc>
-#include <QMimeDatabase>
-#include <QMimeType>

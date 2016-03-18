@@ -20,7 +20,7 @@
 
 #include "KoJsonTrader.h"
 
-#include <QDebug>
+#include "KritaPluginDebug.h"
 
 #include <QCoreApplication>
 #include <QPluginLoader>
@@ -93,7 +93,7 @@ KoJsonTrader::KoJsonTrader()
                 break;
             }
         }
-        qDebug() << "KoJsonTrader will load its plugins from" << m_pluginPath;
+        debugPlugin << "KoJsonTrader will load its plugins from" << m_pluginPath;
     }
 }
 
@@ -111,11 +111,11 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
     while (dirIter.hasNext()) {
         dirIter.next();
         if (dirIter.fileInfo().isFile()) {
-            //qDebug() << dirIter.fileName();
+            debugPlugin << dirIter.fileName();
             QPluginLoader *loader = new QPluginLoader(dirIter.filePath());
             QJsonObject json = loader->metaData().value("MetaData").toObject();
 
-            //qDebug() << mimetype << json << json.value("X-KDE-ServiceTypes");
+            debugPlugin << mimetype << json << json.value("X-KDE-ServiceTypes");
 
             if (json.isEmpty()) {
                 delete loader;
@@ -147,54 +147,4 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
 
     }
     return list;
-}
-
-QStringList KoJsonTrader::mimeTypes(const QString &extension) const
-{
-    QStringList mimeTypes;
-    QList<QPluginLoader *>list = query("Krita/FileFilter", "");
-    Q_FOREACH(QPluginLoader *loader, list) {
-        QJsonObject json = loader->metaData().value("MetaData").toObject();
-        QStringList extensions = json.value("X-KDE-Extensions").toString().split(",");
-        if (extensions.contains(extension)) {
-            mimeTypes += json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
-            mimeTypes += json.value("MimeType").toString().split(';');
-            mimeTypes += json.value("X-KDE-NativeMimeType").toString();
-        }
-    }
-    qDeleteAll(list);
-    return mimeTypes;
-}
-
-QStringList KoJsonTrader::extensions(const QString &mimeType) const
-{
-    QSet<QString> extensions;
-    QList<QPluginLoader *>list = query("Krita/FileFilter", "");
-    Q_FOREACH(QPluginLoader *loader, list) {
-        QJsonObject json = loader->metaData().value("MetaData").toObject();
-        QStringList mimetypes = json.value("X-KDE-Import").toString().split(",");
-        mimetypes += json.value("X-KDE-Export").toString().split(",");
-        if (mimetypes.contains(mimeType)) {
-            Q_FOREACH(const QString &extension, json.value("X-KDE-Extensions").toString().split(",")) {
-                extensions += extension;
-            }
-        }
-    }
-    qDeleteAll(list);
-    return extensions.toList();
-}
-
-QString KoJsonTrader::mimeName(const QString &mimeType) const
-{
-    QList<QPluginLoader *>list = query("Krita/FileFilter", "");
-    Q_FOREACH(QPluginLoader *loader, list) {
-        QJsonObject json = loader->metaData().value("MetaData").toObject();
-        QStringList mimetypes = json.value("X-KDE-Import").toString().split(",");
-        mimetypes += json.value("X-KDE-Export").toString().split(",");
-        if (mimetypes.contains(mimeType)) {
-            return json.value("X-KDE-Mimename").toString();
-        }
-    }
-    qDeleteAll(list);
-    return mimeType;
 }

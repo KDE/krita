@@ -25,7 +25,7 @@
 #include "KoXmlWriter.h"
 #include "KoXmlReader.h"
 
-#include <QMimeDatabase>
+#include <KisMimeDatabase.h>
 #include <QBuffer>
 #include <QPainter>
 #include <QDebug>
@@ -88,9 +88,7 @@ void ImageEffect::save(KoXmlWriter &writer)
     QBuffer buffer(&ba);
     buffer.open(QIODevice::WriteOnly);
     if (m_image.save(&buffer, "PNG")) {
-        QMimeDatabase db;
-        const QString mimeType(db.mimeTypeForData(ba).name());
-        writer.addAttribute("xlink:href", "data:" + mimeType + ";base64," + ba.toBase64());
+        writer.addAttribute("xlink:href", "data:image/png;base64," + ba.toBase64());
     }
 
     writer.endElement();

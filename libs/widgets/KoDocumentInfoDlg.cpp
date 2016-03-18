@@ -38,8 +38,7 @@
 
 #include <QLineEdit>
 #include <QDateTime>
-#include <QMimeDatabase>
-#include <QMimeType>
+#include <KisMimeDatabase.h>
 
 class KoPageWidgetItemAdapter : public KPageWidgetItem
 {
@@ -101,11 +100,7 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
     // Ugly hack, the mimetype should be a parameter, instead
     KoDocumentBase* doc = dynamic_cast< KoDocumentBase* >(d->info->parent());
     if (doc) {
-        QMimeDatabase db;
-        QMimeType mime = db.mimeTypeForName(doc->mimeType());
-        if (mime.isValid()) {
-            page->setIcon(KisIconUtils::loadIcon(mime.iconName()));
-        }
+        page->setIcon(KisIconUtils::loadIcon(KisMimeDatabase::iconNameForMimeType(doc->mimeType())));
     } else {
         // hide all entries not used in pages for KoDocumentInfoPropsPage
         d->aboutUi->filePathInfoLabel->setVisible(false);
@@ -186,10 +181,7 @@ void KoDocumentInfoDlg::initAboutTab()
 
     d->aboutUi->meComments->setPlainText(d->info->aboutInfo("description"));
     if (doc && !doc->mimeType().isEmpty()) {
-        QMimeDatabase db;
-        QMimeType docmime = db.mimeTypeForName(doc->mimeType());
-        if (docmime.isValid())
-            d->aboutUi->lblType->setText(docmime.comment());
+        d->aboutUi->lblType->setText(KisMimeDatabase::descriptionForMimeType(doc->mimeType()));
     }
     if (!d->info->aboutInfo("creation-date").isEmpty()) {
         QDateTime t = QDateTime::fromString(d->info->aboutInfo("creation-date"),

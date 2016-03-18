@@ -28,8 +28,7 @@
 
 #include <KisDocument.h>
 #include <kis_image.h>
-#include <QMimeDatabase>
-#include <QMimeType>
+#include <KisMimeDatabase.h>
 #include <QCoreApplication>
 
 class DocumentManager::Private
@@ -131,8 +130,8 @@ void DocumentManager::delayedNewDocument()
         d->document->undoStack()->clear();
 
         if (ok) {
-            QMimeDatabase db;
-            QString mimeType = db.mimeTypeForFile( url.path(), QMimeDatabase::MatchExtension).name();
+
+            QString mimeType = KisMimeDatabase::mimeTypeForFile(url.toLocalFile());
             // in case this is a open document template remove the -template from the end
             mimeType.remove( QRegExp( "-template$" ) );
             d->document->setMimeTypeAfterLoading(mimeType);

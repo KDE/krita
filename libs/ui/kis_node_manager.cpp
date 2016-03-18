@@ -50,8 +50,7 @@
 #include <kis_image.h>
 #include <kis_painter.h>
 #include <kis_paint_layer.h>
-#include <QMimeDatabase>
-#include <QMimeType>
+#include <KisMimeDatabase.h>
 
 #include "KisPart.h"
 #include "canvas/kis_canvas2.h"
@@ -930,9 +929,7 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
 
     if (url.isEmpty()) return;
 
-QMimeDatabase db;
-    QMimeType mime = db.mimeTypeForUrl(url);
-    QString mimefilter = mime.name();
+    QString mimefilter = KisMimeDatabase::mimeTypeForFile(filename);;
 
     QScopedPointer<KisDocument> d(KisPart::instance()->createDocument());
     d->prepareForImport();

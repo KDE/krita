@@ -63,8 +63,7 @@
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_merge_strategy_registry.h>
 #include <kis_psd_layer_style.h>
-#include <QMimeDatabase>
-#include <QMimeType>
+#include <KisMimeDatabase.h>
 
 #include "KisImportExportManager.h"
 #include "kis_config.h"
@@ -680,11 +679,8 @@ void KisLayerManager::saveGroupLayers()
     //return m_fileWidget->selectedUrl();
     QUrl url = urlRequester->url();
     QFileInfo f(url.toLocalFile());
-
-    QMimeDatabase db;
-    QMimeType mime = db.mimeTypeForUrl(urlRequester->url());
-    QString mimefilter = mime.name();
-    QString extension = db.suffixForFileName(urlRequester->url().toLocalFile());
+    QString mimeType= KisMimeDatabase::mimeTypeForFile(f.fileName());
+    QString extension = KisMimeDatabase::suffixesForMimeType(mimeType).first();
     QString basename = f.baseName();
 
     if (url.isEmpty())
@@ -693,7 +689,7 @@ void KisLayerManager::saveGroupLayers()
     KisImageWSP image = m_view->image();
     if (!image) return;
 
-    KisSaveGroupVisitor v(image, chkInvisible->isChecked(), chkDepth->isChecked(), url, basename, extension, mimefilter);
+    KisSaveGroupVisitor v(image, chkInvisible->isChecked(), chkDepth->isChecked(), url, basename, extension, mimeType);
     image->rootLayer()->accept(v);
 
 }

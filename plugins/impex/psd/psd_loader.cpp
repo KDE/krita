@@ -190,6 +190,14 @@ KisImageBuilder_Result PSDLoader::decode(const QUrl &uri)
     QStack<KisGroupLayerSP> groupStack;
     groupStack.push(m_image->rootLayer());
 
+    /**
+     * PSD has a weird "optimization": if a group layer has only one
+     * child layer, it omits it's 'psd_bounding_divider' section. So
+     * fi you ever see an unbalanced layers group in PSD, most
+     * probably, it is just a single layered group.
+     */
+    KisNodeSP lastAddedLayer;
+
     typedef QPair<QDomDocument, KisLayerSP> LayerStyleMapping;
     QVector<LayerStyleMapping> allStylesXml;
 
@@ -210,8 +218,17 @@ KisImageBuilder_Result PSDLoader::decode(const QUrl &uri)
             }
             else if ((layerRecord->infoBlocks.sectionDividerType == psd_open_folder ||
                       layerRecord->infoBlocks.sectionDividerType == psd_closed_folder) &&
-                     !groupStack.isEmpty()) {
-                KisGroupLayerSP groupLayer = groupStack.pop();
+                     (groupStack.size() > 1 || (lastAddedLayer && !groupStack.isEmpty()))) {
+                KisGroupLayerSP groupLayer;
+
+                if (groupStack.size() <= 1) {
+                    groupLayer = new KisGroupLayer(m_image, "temp", OPACITY_OPAQUE_U8);
+                    m_image->addNode(groupLayer, groupStack.top());
+                    m_image->moveNode(lastAddedLayer, groupLayer, KisNodeSP());
+                } else {
+                    groupLayer = groupStack.pop();
+                }
+
                 groupLayer->setName(layerRecord->layerName);
                 groupLayer->setVisible(layerRecord->visible);
 
@@ -286,6 +303,8 @@ KisImageBuilder_Result PSDLoader::decode(const QUrl &uri)
                 m_image->addNode(mask, newLayer);
             }
         }
+
+        lastAddedLayer = newLayer;
     }
 
     const QVector<QDomDocument> &embeddedPatterns =

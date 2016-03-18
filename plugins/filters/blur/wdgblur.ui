@@ -11,7 +11,16 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item row="0" column="0">
@@ -28,7 +37,11 @@
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="QSpinBox" name="intHalfWidth"/>
+    <widget class="QSpinBox" name="intHalfWidth">
+     <property name="suffix">
+      <string> px</string>
+     </property>
+    </widget>
    </item>
    <item row="0" column="3" rowspan="2">
     <spacer>
@@ -60,7 +73,11 @@
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QSpinBox" name="intHalfHeight"/>
+    <widget class="QSpinBox" name="intHalfHeight">
+     <property name="suffix">
+      <string> px</string>
+     </property>
+    </widget>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="textLabel3">
@@ -103,6 +120,9 @@
    </item>
    <item row="3" column="1">
     <widget class="QSpinBox" name="intAngle">
+     <property name="suffix">
+      <string>°</string>
+     </property>
      <property name="maximum">
       <number>360</number>
      </property>
@@ -168,7 +188,7 @@
     </spacer>
    </item>
    <item row="0" column="2" rowspan="2">
-    <widget class="KoAspectButton" name="aspectButton"/>
+    <widget class="KoAspectButton" name="aspectButton" native="true"/>
    </item>
   </layout>
  </widget>

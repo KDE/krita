@@ -26,7 +26,6 @@
 #include "KoXmlReader.h"
 
 #include <QMimeDatabase>
-#include <QMimeType>
 #include <QBuffer>
 #include <QPainter>
 #include <QDebug>

@@ -43,8 +43,8 @@ KoLineEditAction::KoLineEditAction(QObject* parent)
     pWidget->setLayout(pLayout);
     setDefaultWidget(pWidget);
 
-    connect (m_editBox, SIGNAL(returnPressed(QString)),
-             this, SLOT(onTriggered(QString)));
+    connect (m_editBox, SIGNAL(returnPressed()),
+             this, SLOT(onTriggered()));
 }
 
 KoLineEditAction::~KoLineEditAction()
@@ -68,11 +68,11 @@ bool KoLineEditAction::closeParentOnTrigger()
     return m_closeParentOnTrigger;
 }
 
-void KoLineEditAction::onTriggered(const QString& text)
+void KoLineEditAction::onTriggered()
 {
-    if (!text.isEmpty()) {
-        emit triggered(text);
-        m_editBox->clear();
+    if (! m_editBox->text().isEmpty()) {
+        emit triggered( m_editBox->text());
+        m_editBox->text().clear();
 
         if (m_closeParentOnTrigger) {
             this->parentWidget()->close();

@@ -69,7 +69,7 @@ public:
     void triggered(const QString &tag);
 
 protected Q_SLOTS:
-    void onTriggered(const QString& text);
+    void onTriggered();
 
 private:
     bool m_closeParentOnTrigger;

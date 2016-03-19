@@ -314,12 +314,6 @@ target_link_libraries(KisIteratorBenchmark   kritaimage Qt5::Test)
 
 ########### next target ###############
 
-set(kis_layer_commands_test_SRCS kis_layer_commands_test.cpp )
-kde4_add_unit_test(KisLayerCommandsTest TESTNAME krita-image-KisLayerCommandsTest ${kis_layer_commands_test_SRCS})
-target_link_libraries(KisLayerCommandsTest   kritaimage Qt5::Test)
-
-########### next target ###############
-
 set(kis_walkers_test_SRCS kis_walkers_test.cpp )
 kde4_add_unit_test(KisWalkersTest TESTNAME krita-image-KisWalkersTest ${kis_walkers_test_SRCS})
 target_link_libraries(KisWalkersTest   kritaimage Qt5::Test)

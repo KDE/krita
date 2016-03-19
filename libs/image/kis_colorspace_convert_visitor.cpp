@@ -20,7 +20,6 @@
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_undo_adapter.h"
-#include "commands/kis_layer_props_command.h"
 #include "kis_adjustment_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
@@ -86,13 +85,6 @@ bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
         layer->setFilter(f->defaultConfiguration(0));
     }
 
-    KisLayerPropsCommand* propsCommand = new KisLayerPropsCommand(layer,
-                                                                  layer->opacity(), layer->opacity(),
-                                                                  layer->compositeOpId(), layer->compositeOpId(),
-                                                                  layer->name(), layer->name(),
-                                                                  m_emptyChannelFlags, m_emptyChannelFlags, false);
-    m_image->undoAdapter()->addCommand(propsCommand);
-
     layer->resetCache();
     return true;
 }
@@ -114,14 +106,7 @@ bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
         if ((paintLayer = dynamic_cast<KisPaintLayer*>(layer))) {
             paintLayer->setChannelLockFlags(QBitArray());
         }
-
     }
-
-    KisLayerPropsCommand* propsCommand = new KisLayerPropsCommand(layer,
-                                                                  layer->opacity(), layer->opacity(),
-                                                                  layer->compositeOpId(), layer->compositeOpId(),
-                                                                  layer->name(), layer->name(),
-                                                                  m_emptyChannelFlags, m_emptyChannelFlags, false);
 
     if (layer->original()) {
         KUndo2Command* cmd = layer->original()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags);
@@ -146,9 +131,6 @@ bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
         else
             delete cmd;
     }
-
-
-    m_image->undoAdapter()->addCommand(propsCommand);
 
     layer->setDirty();
     layer->invalidateFrames(KisTimeRange::infinite(0), layer->extent());

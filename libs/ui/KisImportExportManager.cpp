@@ -21,10 +21,6 @@ Boston, MA 02110-1301, USA.
 */
 
 #include "KisImportExportManager.h"
-#include "KisImportExportManager_p.h"
-#include "KisDocument.h"
-#include "KoProgressUpdater.h"
-#include "KoJsonTrader.h"
 
 #include <QFile>
 #include <QLabel>
@@ -34,20 +30,40 @@ Boston, MA 02110-1301, USA.
 #include <QByteArray>
 #include <QPluginLoader>
 #include <QFileInfo>
+#include <QMessageBox>
 
 #include <klocalizedstring.h>
-#include <QMessageBox>
 #include <ksqueezedtextlabel.h>
 
+#include "KoProgressUpdater.h"
+#include "KoJsonTrader.h"
+
 #include <kis_debug.h>
+#include <KisMimeDatabase.h>
+
+#include "KisImportExportFilter.h"
+#include "KisDocument.h"
 
 #include <queue>
-
 #include <unistd.h>
 
 // static cache for import and export mimetypes
 QStringList KisImportExportManager::m_importMimeTypes;
 QStringList KisImportExportManager::m_exportMimeTypes;
+
+class Q_DECL_HIDDEN KisImportExportManager::Private
+{
+public:
+    bool batch;
+    QByteArray importMimeType;
+    QWeakPointer<KoProgressUpdater> progressUpdater;
+
+    Private(KoProgressUpdater *progressUpdater_ = 0)
+        : progressUpdater(progressUpdater_)
+    {
+    }
+
+};
 
 KisImportExportManager::KisImportExportManager(KisDocument* document)
     : m_document(document)
@@ -95,41 +111,10 @@ QString KisImportExportManager::importDocument(const QString& location,
     m_graph.setSourceMimeType(typeName.toLatin1()); // .latin1() is okay here (Werner)
 
     if (!m_graph.isValid()) {
-        bool userCancelled = false;
-
-        warnFile << "Can't open " << typeName << ", trying filter chooser";
-        if (m_document) {
-            if (!m_document->isAutoErrorHandlingEnabled()) {
-                status = KisImportExportFilter::BadConversionGraph;
-                return QString();
-            }
-            QByteArray nativeFormat = m_document->nativeFormatMimeType();
-
-            QApplication::setOverrideCursor(Qt::ArrowCursor);
-            KisFilterChooser chooser(0,
-                                     KisImportExportManager::mimeFilter(nativeFormat, KisImportExportManager::Import,
-                                                                        m_document->extraNativeMimeTypes()), nativeFormat, u);
-            if (chooser.exec()) {
-                QByteArray f = chooser.filterSelected().toLatin1();
-                if (f == nativeFormat) {
-                    status = KisImportExportFilter::OK;
-                    QApplication::restoreOverrideCursor();
-                    return u.toString();
-                }
-
-                m_graph.setSourceMimeType(f);
-            } else
-                userCancelled = true;
-            QApplication::restoreOverrideCursor();
-        }
-
-        if (!m_graph.isValid()) {
-            errFile << "Couldn't create a valid graph for this source mimetype: "
-                    << typeName;
-            importErrorHelper(typeName, userCancelled);
-            status = KisImportExportFilter::BadConversionGraph;
-            return QString();
-        }
+        errFile << "Couldn't create a valid graph for this source mimetype: "
+                << typeName;
+        status = KisImportExportFilter::BadConversionGraph;
+        return QString();
     }
 
     KisFilterChainSP chain(0);
@@ -149,9 +134,11 @@ QString KisImportExportManager::importDocument(const QString& location,
                 chain = newChain;
             ++i;
         }
-    } else if (!d->importMimeType.isEmpty()) {
+    }
+    else if (!d->importMimeType.isEmpty()) {
         chain = m_graph.chain(this, d->importMimeType);
-    } else {
+    }
+    else {
         errFile << "You aren't supposed to use import() from a filter!" << endl;
         status = KisImportExportFilter::UsageError;
         return QString();
@@ -187,6 +174,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(c
     m_exportUrl = locationToUrl(location);
 
     KisFilterChainSP chain;
+
     if (m_document) {
         // We have to pick the right native mimetype as source.
         QStringList nativeMimeTypes;
@@ -202,44 +190,28 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(c
     }
     else {
         QString t = KisMimeDatabase::mimeTypeForFile(m_importUrl.toLocalFile());
-
-        if (t.isEmpty() || t == "application/octet-stream") {
-            errFile << "No mimetype found for" << m_importUrl.toDisplayString();
-            return KisImportExportFilter::BadMimeType;
-        }
-
         m_graph.setSourceMimeType(t.toLatin1());
-
-        if (!m_graph.isValid()) {
-            warnFile << "Can't open" << t << ", trying filter chooser";
-
-            QApplication::setOverrideCursor(Qt::ArrowCursor);
-            KisFilterChooser chooser(0, KisImportExportManager::mimeFilter("", KisImportExportManager::Export), QString(), m_importUrl);
-            if (chooser.exec())
-                m_graph.setSourceMimeType(chooser.filterSelected().toLatin1());
-            else
-                userCancelled = true;
-
-            QApplication::restoreOverrideCursor();
-        }
     }
 
     if (!m_graph.isValid()) {
         errFile << "Couldn't create a valid graph for this source mimetype.";
+        QApplication::restoreOverrideCursor();
         if (!d->batch && !userCancelled) {
             QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not export file: the export filter is missing."));
         }
         return KisImportExportFilter::BadConversionGraph;
     }
 
-    if (!chain)   // already set when coming from the m_document case
+    if (!chain)  {  // already set when coming from the m_document case
         chain = m_graph.chain(this, mimeType);
+    }
 
     if (!chain) {
         errFile << "Couldn't create a valid filter chain to " << mimeType << " !" << endl;
         if (!d->batch) {
             QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not export file: the export filter is missing."));
         }
+        QApplication::restoreOverrideCursor();
         return KisImportExportFilter::BadConversionGraph;
     }
 

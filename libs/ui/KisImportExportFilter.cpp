@@ -139,8 +139,12 @@ QString KisImportExportFilter::conversionStatusString(ConversionStatus status)
     case ProgressCancelled:
         msg = i18n("Cancelled by user"); break;
 
-    case UserCancelled:
     case BadConversionGraph:
+
+        msg = i18n("Unknown file type"); break;
+
+    case UserCancelled:
+
         // intentionally we do not prompt the error message here
         break;
 

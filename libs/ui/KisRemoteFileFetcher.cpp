@@ -75,6 +75,8 @@ void KisRemoteFileFetcher::downloadProgress(qint64 bytesReceived, qint64 bytesTo
 
 void KisRemoteFileFetcher::error(QNetworkReply::NetworkError error)
 {
+    Q_UNUSED(error);
+
     qDebug() << "error" << m_reply->errorString();
     m_loop.quit();
 }

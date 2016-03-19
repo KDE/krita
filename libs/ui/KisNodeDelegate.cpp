@@ -123,6 +123,8 @@ void KisNodeDelegate::paint(QPainter *p, const QStyleOptionViewItem &o, const QM
 }
 
 void KisNodeDelegate::drawBranch(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const {
+    Q_UNUSED(index);
+
     KisNodeViewColorScheme scm;
     const QPoint base = scm.relThumbnailRect().translated(option.rect.topLeft()).topLeft() - QPoint( scm.indentation(), 0);
 
@@ -725,6 +727,7 @@ void KisNodeDelegate::setModelData(QWidget *widget, QAbstractItemModel *model, c
 
 void KisNodeDelegate::updateEditorGeometry(QWidget *widget, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    Q_UNUSED(index);
     widget->setGeometry(option.rect);
 }
 

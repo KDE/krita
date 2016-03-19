@@ -202,7 +202,7 @@ QPolygonF KoColorSpace::estimatedTRCXYY() const
         // This is fixed to 5 since the maximum number of channels are 5 for CMYKA
         QVector <float> channelValuesF(5);//for getting the coordinates.
 
-        for (int i=0; i<colorChannelCount(); i++) {
+        for (quint32 i=0; i<colorChannelCount(); i++) {
             qreal colorantY=1.0;
             if (colorModelId().id()!="CMYKA") {
                 for (int j=5; j>0; j--){

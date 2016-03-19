@@ -320,7 +320,6 @@ void ArtisticTextShape::createOutline()
         qreal rotation = 0.0;
         Q_FOREACH (const ArtisticTextRange &range, m_ranges) {
             const QString textRange = range.text();
-            const int localTextLength = textRange.length();
             for (int localCharIndex = 0; localCharIndex < m_charOutlines.size(); ++localCharIndex, ++globalCharIndex) {
                 const QPointF &charPos = m_charPositions[globalCharIndex];
                 if (range.hasRotation(localCharIndex)) {

@@ -315,6 +315,7 @@ void KisCustomImageWidget::clipboardDataChanged()
 void KisCustomImageWidget::fillPredefined()
 {
     cmbPredefined->clear();
+    qDeleteAll(m_predefined);
     m_predefined.clear();
 
     cmbPredefined->addItem("");

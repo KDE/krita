@@ -1769,8 +1769,6 @@ bool KisDocument::loadXML(const KoXmlDocument& doc, KoStore *store)
     KoXmlNode node;
     KisImageWSP image;
 
-    init();
-
     if (doc.doctype().name() != "DOC") {
         setErrorMessage(i18n("The format is not supported or the file is corrupted"));
         return false;
@@ -2253,8 +2251,6 @@ bool KisDocument::newImage(const QString& name,
 {
     Q_ASSERT(cs);
 
-    init();
-
     KisConfig cfg;
 
     KisImageSP image;
@@ -2374,9 +2370,11 @@ KisNodeSP KisDocument::preActivatedNode() const
 
 void KisDocument::prepareForImport()
 {
-    if (d->nserver == 0) {
-        init();
-    }
+    /* TODO: remove this function? I kept it because it might be useful for
+     * other kind of preparing, but currently it was checking on d->nserver
+     * being null and then calling init() if it was, but the document is always
+     * initialized in the constructor (and init() does other things too).
+     * Moreover, nserver cannot be nulled by some external call.*/
 }
 
 void KisDocument::setFileProgressUpdater(const QString &text)

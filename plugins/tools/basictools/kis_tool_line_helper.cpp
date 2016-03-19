@@ -46,6 +46,7 @@ KisToolLineHelper::KisToolLineHelper(KisPaintingInformationBuilder *infoBuilder,
 
 KisToolLineHelper::~KisToolLineHelper()
 {
+    delete m_d;
 }
 
 void KisToolLineHelper::setEnabled(bool value)

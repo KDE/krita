@@ -686,7 +686,11 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
     //    in which case we snap the position to the mouse position.
     // It seems there is no way to find out the mode programmatically, the LOGCONTEXT orgX/Y/Ext
     // area is always the virtual desktop.
-    const qreal dpr = qApp->activeWindow()->devicePixelRatio();
+    static qreal dpr = 1.0;
+    auto activeWindow = qApp->activeWindow();
+    if (activeWindow) {
+        dpr = activeWindow->devicePixelRatio();
+    }
 
 
 

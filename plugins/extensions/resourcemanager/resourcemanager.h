@@ -41,7 +41,7 @@ private Q_SLOTS:
 
 private:
     class Private;
-    Private *const d;
+    QScopedPointer<Private> d;
 };
 
 #endif // RESOURCEMANAGER_H

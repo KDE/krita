@@ -23,8 +23,8 @@
 #include "operations/kis_operation.h"
 
 KisViewPlugin::KisViewPlugin(QObject* parent)
-    : m_view(0),
-      QObject(parent)
+    : QObject(parent),
+      m_view(0)
 {
     m_view = qobject_cast<KisViewManager*>(parent);
     Q_ASSERT(m_view);

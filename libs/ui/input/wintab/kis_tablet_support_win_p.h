@@ -111,7 +111,7 @@ public:
     void setAbsoluteRange(int a) { m_absoluteRange = a; }
 
 
-    void tabletUpdateCursor(const quint64 uniqueId, const UINT cursorType, const int pkCursor);
+    void tabletUpdateCursor(const int pkCursor);
     static QWindowsWinTab32DLL m_winTab32DLL;
 
 private:

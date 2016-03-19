@@ -643,19 +643,17 @@ bool QWindowsTabletSupport::translateTabletProximityEvent(WPARAM /* wParam */, L
     if (!totalPacks)
         return false;
     UINT pkCursor = proximityBuffer[0].pkCursor;
-    UINT physicalCursorId;
-    QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_CURSORS + pkCursor, CSR_PHYSID, &physicalCursorId);
-    UINT cursorType;
-    QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_CURSORS + pkCursor, CSR_TYPE, &cursorType);
-    const qint64 uniqueId = (qint64(cursorType & DeviceIdMask) << 32L) | qint64(physicalCursorId);
     // initializing and updating the cursor should be done in response to
     // WT_CSRCHANGE. We do it in WT_PROXIMITY because some wintab never send
     // the event WT_CSRCHANGE even if asked with CXO_CSRMESSAGES
-    tabletUpdateCursor(uniqueId, cursorType, pkCursor);
+    tabletUpdateCursor(pkCursor);
     // dbgInput << "enter proximity for device #" << m_currentDevice << m_devices.at(m_currentDevice);
+
     sendProximityEvent(QEvent::TabletEnterProximity);
     return true;
 }
+
+
 
 bool QWindowsTabletSupport::translateTabletPacketEvent()
 {
@@ -802,12 +800,7 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
 
             // Read the new cursor info.
             UINT pkCursor = packet.pkCursor;
-            UINT physicalCursorId;
-            QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_CURSORS + pkCursor, CSR_PHYSID, &physicalCursorId);
-            UINT cursorType;
-            QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_CURSORS + pkCursor, CSR_TYPE, &cursorType);
-            const qint64 uniqueId = (qint64(cursorType & DeviceIdMask) << 32L) | qint64(physicalCursorId);
-            tabletUpdateCursor(uniqueId, cursorType, pkCursor);
+            tabletUpdateCursor(pkCursor);
 
             // Update the local loop variables.
             tabletData = m_devices.at(m_currentDevice);
@@ -827,24 +820,35 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
 
 
 
-void QWindowsTabletSupport::tabletUpdateCursor(const quint64 uniqueId,
-                                               const UINT cursorType,
-                                               const int pkCursor)
+void QWindowsTabletSupport::tabletUpdateCursor(const int pkCursor)
 {
+    UINT physicalCursorId;
+    QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_CURSORS + pkCursor, CSR_PHYSID, &physicalCursorId);
+    UINT cursorType;
+    QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_CURSORS + pkCursor, CSR_TYPE, &cursorType);
+    const qint64 uniqueId = (qint64(cursorType & DeviceIdMask) << 32L) | qint64(physicalCursorId);
+
     m_currentDevice = indexOfDevice(m_devices, uniqueId);
     if (m_currentDevice < 0) {
         m_currentDevice = m_devices.size();
         m_devices.push_back(tabletInit(uniqueId, cursorType));
+
+        // Note: ideally we might check this button map for changes every
+        // update. However there seems to be an issue with Wintab altering the
+        // button map when the user right-clicks in Krita while another
+        // application has focus. This forces Krita to load button settings only
+        // once, when the tablet is first detected.
+        // 
+        // See https://bugs.kde.org/show_bug.cgi?id=359561
+        BYTE logicalButtons[32];
+        memset(logicalButtons, 0, 32);
+        m_winTab32DLL.wTInfo(WTI_CURSORS + pkCursor, CSR_SYSBTNMAP, &logicalButtons);
+        m_devices[m_currentDevice].buttonsMap[0x1] = logicalButtons[0];
+        m_devices[m_currentDevice].buttonsMap[0x2] = logicalButtons[1];
+        m_devices[m_currentDevice].buttonsMap[0x4] = logicalButtons[2];
     }
     m_devices[m_currentDevice].currentPointerType = pointerType(pkCursor);
     currentPkCursor = pkCursor;
-
-    BYTE logicalButtons[32];
-    memset(logicalButtons, 0, 32);
-    m_winTab32DLL.wTInfo(WTI_CURSORS + pkCursor, CSR_SYSBTNMAP, &logicalButtons);
-    m_devices[m_currentDevice].buttonsMap[0x1] = logicalButtons[0];
-    m_devices[m_currentDevice].buttonsMap[0x2] = logicalButtons[1];
-    m_devices[m_currentDevice].buttonsMap[0x4] = logicalButtons[2];
 
     // Check tablet name to enable Surface Pro 3 workaround.
 #ifdef UNICODE

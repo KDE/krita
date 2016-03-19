@@ -34,14 +34,14 @@ Boston, MA 02110-1301, USA.
 #include <unistd.h>
 
 KisFilterChooser::KisFilterChooser(QWidget *parent, const QStringList &mimeTypes, const QString &/*nativeFormat*/, const QUrl &url)
-        : KoDialog(parent),
-        m_mimeTypes(mimeTypes)
+    : KoDialog(parent)
+    , m_mimeTypes(mimeTypes)
 {
     setObjectName("kofilterchooser");
     setInitialSize(QSize(300, 350));
     setButtons(KoDialog::Ok|KoDialog::Cancel);
     setDefaultButton(KoDialog::Ok);
-    setCaption(i18n("Choose Filter"));
+    setCaption(i18n("Choose Filter for %1").arg(url.toDisplayString()));
     setModal(true);
 
     QWidget *page = new QWidget(this);
@@ -49,8 +49,10 @@ KisFilterChooser::KisFilterChooser(QWidget *parent, const QStringList &mimeTypes
 
     QVBoxLayout *layout = new QVBoxLayout(page);
     if (url.isValid()) {
-        KSqueezedTextLabel *l = new KSqueezedTextLabel(url.path(), page);
+        QString mime = KisMimeDatabase::mimeTypeForFile(url.toLocalFile());
+        KSqueezedTextLabel *l = new KSqueezedTextLabel(url.toDisplayString() + " (" + mime + ")", page);
         layout->addWidget(l);
+
     }
     m_filterList = new QListWidget(page);
     layout->addWidget(m_filterList);

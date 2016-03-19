@@ -155,6 +155,11 @@ AnimationDocker::AnimationDocker()
     connect(m_animationWidget->intCurrentTime, SIGNAL(valueChanged(int)), SLOT(slotTimeSpinBoxChanged()));
 }
 
+AnimationDocker::~AnimationDocker()
+{
+    delete m_animationWidget;
+}
+
 void AnimationDocker::setCanvas(KoCanvasBase * canvas)
 {
     if(m_canvas == canvas)

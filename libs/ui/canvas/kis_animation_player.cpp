@@ -106,7 +106,8 @@ public:
 };
 
 KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
-    : m_d(new Private(this))
+    : m_d(new Private(this)),
+      QObject(canvas)
 {
     m_d->useFastFrameUpload = false;
     m_d->playing = false;

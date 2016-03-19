@@ -21,6 +21,7 @@
 #include <QSize>
 #include <QColor>
 #include <QMimeData>
+#include <QPointer>
 
 #include "kis_layer.h"
 #include "kis_config.h"
@@ -85,7 +86,7 @@ struct TimelineFramesModel::Private
     int scrubStartFrame;
 
     KisAnimationFrameCacheSP framesCache;
-    KisAnimationPlayer *animationPlayer;
+    QPointer<KisAnimationPlayer> animationPlayer;
 
     QScopedPointer<NodeManipulationInterface> nodeInterface;
 

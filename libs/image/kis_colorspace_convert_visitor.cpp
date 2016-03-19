@@ -100,10 +100,13 @@ bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
 
     if (*m_dstColorSpace == *layer->colorSpace()) return true;
 
+    bool alphaLock = false;
+
     if (m_srcColorSpace->colorModelId() != m_dstColorSpace->colorModelId()) {
         layer->setChannelFlags(m_emptyChannelFlags);
         KisPaintLayer *paintLayer = 0;
         if ((paintLayer = dynamic_cast<KisPaintLayer*>(layer))) {
+            alphaLock = paintLayer->alphaLocked();
             paintLayer->setChannelLockFlags(QBitArray());
         }
     }
@@ -132,6 +135,10 @@ bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
             delete cmd;
     }
 
+    KisPaintLayer *paintLayer = 0;
+    if ((paintLayer = dynamic_cast<KisPaintLayer*>(layer))) {
+        paintLayer->setAlphaLocked(alphaLock);
+    }
     layer->setDirty();
     layer->invalidateFrames(KisTimeRange::infinite(0), layer->extent());
 

@@ -385,7 +385,7 @@ public:
 
     BackgroundStyle defaultBackgroundStyle(bool defaultValue = false) const;
     void setDefaultBackgroundStyle(BackgroundStyle value);
-    
+
     int lineSmoothingType(bool defaultValue = false) const;
     void setLineSmoothingType(int value);
 
@@ -432,7 +432,7 @@ public:
     void setUseDirtyPresets(bool value);
 
     bool useEraserBrushSize(bool defaultValue = false) const;
-    void setUseEraserBrushSize(bool value);    
+    void setUseEraserBrushSize(bool value);
 
     QColor getMDIBackgroundColor(bool defaultValue = false) const;
     void setMDIBackgroundColor(const QColor & v) const;
@@ -467,6 +467,9 @@ public:
 
     bool switchSelectionCtrlAlt(bool defaultValue = false) const;
     void setSwitchSelectionCtrlAlt(bool value);
+
+    bool convertToImageColorspaceOnImport(bool defaultValue = false) const;
+    void setConvertToImageColorspaceOnImport(bool value);
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

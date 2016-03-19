@@ -738,8 +738,10 @@ bool KisNodeDelegate::eventFilter(QObject *object, QEvent *event)
     case QEvent::MouseButtonPress: {
         if (d->edit) {
             QMouseEvent *me = static_cast<QMouseEvent*>(event);
-            if (!QRect(d->edit->mapToGlobal(QPoint()), d->edit->size()).contains(me->globalPos()))
+            if (!QRect(d->edit->mapToGlobal(QPoint()), d->edit->size()).contains(me->globalPos())) {
+                emit commitData(d->edit);
                 emit closeEditor(d->edit);
+            }
         }
     } break;
     case QEvent::KeyPress: {

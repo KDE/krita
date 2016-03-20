@@ -279,6 +279,9 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
     </Menu>
     <Menu name="settings">
       <text>Setti&amp;ngs</text>
+      <Action name="options_configure"/>
+      <Action name="manage_bundles"/>
+      <Separator/>
       <Action name="options_configure_toolbars"/>
       <Merge name="StandardToolBarMenuHandler" />
       <Separator/>
@@ -290,9 +293,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Separator/>
       <!-- `Configure Shortcuts` was moved into main configuration menu -->
       <!-- <Action name="options_configure_keybinding"/> -->
-      <Action name="options_configure"/>
       <Separator/>
-      <Action name="manage_bundles"/>
       <Action name="switch_application_language"/>
       <Action name="settings_active_author"/>
       <Separator/>

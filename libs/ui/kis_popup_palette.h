@@ -100,7 +100,7 @@ private:
 
     const KoColorDisplayRendererInterface *m_displayRenderer;
 
-    KisSignalCompressor *m_colorChangeCompressor;
+    QScopedPointer<KisSignalCompressor> m_colorChangeCompressor;
 
 Q_SIGNALS:
     void sigChangeActivePaintop(int);

@@ -23,6 +23,7 @@
 
 #include <KoDialog.h>
 #include "kis_action_manager.h"
+#include "resourcemanager.h"
 
 class KisResourceBundle;
 class QListWidget;
@@ -37,7 +38,7 @@ class DlgBundleManager : public KoDialog
 {
     Q_OBJECT
 public:
-    explicit DlgBundleManager(KisActionManager* actionMgr, QWidget *parent = 0);
+    explicit DlgBundleManager(ResourceManager *resourceManager, KisActionManager* actionMgr, QWidget *parent = 0);
 
 private Q_SLOTS:
 
@@ -46,7 +47,7 @@ private Q_SLOTS:
     void removeSelected();
     void itemSelected(QListWidgetItem *current, QListWidgetItem *previous);
     void itemSelected(QListWidgetItem *current);
-    void editBundle();    
+    void editBundle();
     void slotImportResource() ;
     void slotCreateBundle() ;
     void slotDeleteBackupFiles();
@@ -64,7 +65,8 @@ private:
     QMap<QString, KisResourceBundle*> m_activeBundles;
 
     KisResourceBundle *m_currentBundle;
-    KisActionManager* m_actionManager;
+    KisActionManager *m_actionManager;
+    ResourceManager *m_resourceManager;
 };
 
 #endif // DLG_BUNDLE_MANAGER_H

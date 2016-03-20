@@ -35,11 +35,12 @@
 
 #define ICON_SIZE 48
 
-DlgBundleManager::DlgBundleManager(KisActionManager* actionMgr, QWidget *parent)
+DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionManager* actionMgr, QWidget *parent)
     : KoDialog(parent)
     , m_page(new QWidget())
     , m_ui(new Ui::WdgDlgBundleManager)
     , m_currentBundle(0)
+    , m_resourceManager(resourceManager)
 {
     setCaption(i18n("Manage Resource Bundles"));
     m_ui->setupUi(m_page);
@@ -118,7 +119,7 @@ void DlgBundleManager::accept()
         QMessageBox bundleFeedback;
         bundleFeedback.setIcon(QMessageBox::Warning);
         QString feedback = "bundlefeedback";
-        
+
         if (!bundle) {
             // Get it from the blacklisted bundles
             Q_FOREACH (KisResourceBundle *b2, m_blacklistedBundles.values()) {
@@ -128,13 +129,13 @@ void DlgBundleManager::accept()
                 }
             }
         }
-        
+
         if (bundle) {
             if(!bundle->isInstalled()){
                 bundle->install();
                 //this removes the bundle from the blacklist and add it to the server without saving or putting it in front//
                 if(!bundleServer->addResource(bundle, false, false)){
-                
+
                     feedback = i18n("Couldn't add bundle to resource server");
                     bundleFeedback.setText(feedback);
                     bundleFeedback.exec();
@@ -154,7 +155,7 @@ void DlgBundleManager::accept()
         QString feedback = i18n("Bundle doesn't exist!");
         bundleFeedback.setText(feedback);
         bundleFeedback.exec();
-        
+
         }
     }
 
@@ -289,6 +290,7 @@ void DlgBundleManager::editBundle()
         if (dlg.exec() != QDialog::Accepted) {
             return;
         }
+        m_resourceManager->saveBundle(dlg);
     }
 }
 

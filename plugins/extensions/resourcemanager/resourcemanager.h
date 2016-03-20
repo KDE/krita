@@ -25,6 +25,7 @@
 #
 #include <kis_view_plugin.h>
 
+#include "dlg_create_bundle.h"
 #include "KisResourceBundle.h"
 
 class ResourceManager : public KisViewPlugin
@@ -33,6 +34,7 @@ class ResourceManager : public KisViewPlugin
 public:
     ResourceManager(QObject *parent, const QVariantList &);
     virtual ~ResourceManager();
+    void saveBundle(const DlgCreateBundle &dlgCreateBundle);
 
 private Q_SLOTS:
     void slotImport();

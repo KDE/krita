@@ -203,9 +203,13 @@ void ResourceManager::slotCreateBundle()
     if (dlgCreateBundle.exec() != QDialog::Accepted) {
         return;
     }
+    saveBundle(dlgCreateBundle);
+}
 
+void ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateBundle)
+{
     QString bundlePath =  dlgCreateBundle.saveLocation() + "/" + dlgCreateBundle.bundleName() + ".bundle";
-    KisResourceBundle* newBundle = new KisResourceBundle(bundlePath);
+    KisResourceBundle *newBundle = new KisResourceBundle(bundlePath);
 
     newBundle->addMeta("name", dlgCreateBundle.bundleName());
     newBundle->addMeta("author", dlgCreateBundle.authorName());
@@ -267,7 +271,7 @@ void ResourceManager::slotManageBundles()
 {
 
 
-    DlgBundleManager* dlg = new DlgBundleManager(m_view->actionManager());
+    DlgBundleManager* dlg = new DlgBundleManager(this, m_view->actionManager());
     if (dlg->exec() != QDialog::Accepted) {
         return;
     }

@@ -346,6 +346,7 @@ void KisShortcutMatcher::clearShortcuts()
     qDeleteAll(m_d->touchShortcuts);
     m_d->strokeShortcuts.clear();
     m_d->candidateShortcuts.clear();
+    m_d->touchShortcuts.clear();
     m_d->runningShortcut = 0;
     m_d->readyShortcut = 0;
 }

@@ -287,7 +287,6 @@ void KisAnimationPlayer::uploadFrame(int frame)
             emit sigFrameChanged();
         }
     } else {
-        qWarning() << "WARNING: Animation playback can be very slow without openGL support!";
         m_d->canvas->image()->animationInterface()->switchCurrentTimeAsync(frame);
 
         m_d->useFastFrameUpload = false;

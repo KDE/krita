@@ -99,7 +99,6 @@ public:
     ~Private()
     {
         delete canvasItem;
-        delete actionCollection;
     }
 
     KisPart *part;

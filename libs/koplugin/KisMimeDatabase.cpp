@@ -31,12 +31,7 @@ QList<KisMimeDatabase::KisMimeType> KisMimeDatabase::s_mimeDatabase;
 QString KisMimeDatabase::mimeTypeForFile(const QString &file)
 {
     fillMimeData();
-    QMimeDatabase db;
-    QMimeType mime = db.mimeTypeForFile(file);
-    if (mime.name() != "application/octet-stream") {
-        debugPlugin << "mimeTypeForFile(). QMimeDatabase returned" << mime.name() << "for" << file;
-        return mime.name();
-    }
+
     QFileInfo fi(file);
     QString suffix = fi.suffix();
     Q_FOREACH(const KisMimeDatabase::KisMimeType &mimeType, s_mimeDatabase) {
@@ -44,6 +39,13 @@ QString KisMimeDatabase::mimeTypeForFile(const QString &file)
             debugPlugin << "mimeTypeForFile(). KisMimeDatabase returned" << mimeType.mimeType << "for" << file;
             return mimeType.mimeType;
         }
+    }
+
+    QMimeDatabase db;
+    QMimeType mime = db.mimeTypeForFile(file);
+    if (mime.name() != "application/octet-stream") {
+        debugPlugin << "mimeTypeForFile(). QMimeDatabase returned" << mime.name() << "for" << file;
+        return mime.name();
     }
     return QString();
 }
@@ -58,18 +60,20 @@ QString KisMimeDatabase::mimeTypeForSuffix(const QString &suffix)
         s = "*." + s;
     }
 
-    QMimeType mime = db.mimeTypeForFile(s);
-    if (mime.name() != "application/octet-stream") {
-        debugPlugin << "mimeTypeForSuffix(). QMimeDatabase returned" << mime.name() << "for" << s;
-        return mime.name();
-    }
-
     Q_FOREACH(const KisMimeDatabase::KisMimeType &mimeType, s_mimeDatabase) {
         if (mimeType.suffixes.contains(s)) {
             debugPlugin << "mimeTypeForSuffix(). KisMimeDatabase returned" << mimeType.mimeType << "for" << s;
             return mimeType.mimeType;
         }
     }
+
+    QMimeType mime = db.mimeTypeForFile(s);
+    if (mime.name() != "application/octet-stream") {
+        debugPlugin << "mimeTypeForSuffix(). QMimeDatabase returned" << mime.name() << "for" << s;
+        return mime.name();
+    }
+
+
     return QString();
 }
 
@@ -84,27 +88,37 @@ QString KisMimeDatabase::mimeTypeForData(const QByteArray ba)
 QString KisMimeDatabase::descriptionForMimeType(const QString &mimeType)
 {
     fillMimeData();
-    QMimeDatabase db;
-    QMimeType mime = db.mimeTypeForName(mimeType);
-    if (mime.name() != "application/octet-stream") {
-        debugPlugin << "descriptionForMimeType. QMimeDatabase returned" << mime.comment() << "for" << mimeType;
-        return mime.comment();
-    }
+
     Q_FOREACH(const KisMimeDatabase::KisMimeType &m, s_mimeDatabase) {
         if (m.mimeType == mimeType) {
             debugPlugin << "descriptionForMimeType. KisMimeDatabase returned" << m.description << "for" << mimeType;
             return m.description;
         }
     }
+
+    QMimeDatabase db;
+    QMimeType mime = db.mimeTypeForName(mimeType);
+    if (mime.name() != "application/octet-stream") {
+        debugPlugin << "descriptionForMimeType. QMimeDatabase returned" << mime.comment() << "for" << mimeType;
+        return mime.comment();
+    }
+
     return QString();
 }
 
 QStringList KisMimeDatabase::suffixesForMimeType(const QString &mimeType)
 {
     fillMimeData();
+    Q_FOREACH(const KisMimeDatabase::KisMimeType &m, s_mimeDatabase) {
+        if (m.mimeType == mimeType) {
+            debugPlugin << "suffixesForMimeType. KisMimeDatabase returned" << m.suffixes;
+            return m.suffixes;
+        }
+    }
+
     QMimeDatabase db;
     QMimeType mime = db.mimeTypeForName(mimeType);
-    if (mime.name() != "application/octet-stream") {
+    if (mime.name() != "application/octet-stream" && !mime.suffixes().isEmpty()) {
         QString preferredSuffix = mime.preferredSuffix();
         QStringList suffixes = mime.suffixes();
         if (preferredSuffix != suffixes.first()) {
@@ -115,12 +129,7 @@ QStringList KisMimeDatabase::suffixesForMimeType(const QString &mimeType)
         debugPlugin << "suffixesForMimeType. QMimeDatabase returned" << suffixes;
         return suffixes;
     }
-    Q_FOREACH(const KisMimeDatabase::KisMimeType &m, s_mimeDatabase) {
-        if (m.mimeType == mimeType) {
-            debugPlugin << "suffixesForMimeType. KisMimeDatabase returned" << m.suffixes;
-            return m.suffixes;
-        }
-    }
+
     return QStringList(".kra");
 }
 

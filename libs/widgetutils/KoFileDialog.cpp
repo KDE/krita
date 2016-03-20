@@ -449,12 +449,25 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &m
                     if (withAllSupportedEntry) {
                         ret[0].prepend(glob + " ");
                     }
+#ifdef Q_OS_LINUX
+                    oneFilter.prepend(glob.toUpper() + " ");
+                    if (withAllSupportedEntry) {
+                        ret[0].prepend(glob.toUpper() + " ");
+                    }
+#endif
+
                 }
                 else {
                     oneFilter.append(glob + " ");
                     if (withAllSupportedEntry) {
                         ret[0].append(glob + " ");
                     }
+#ifdef Q_OS_LINUX
+                    oneFilter.append(glob.toUpper() + " ");
+                    if (withAllSupportedEntry) {
+                        ret[0].append(glob.toUpper() + " ");
+                    }
+#endif
                 }
             }
             oneFilter = KisMimeDatabase::descriptionForMimeType(mimeType) + " ( " + oneFilter + ")";

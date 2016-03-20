@@ -29,7 +29,7 @@
 #include "filter/kis_filter.h"
 #include "generator/kis_generator_layer.h"
 #include "kis_time_range.h"
-
+#include <kundo2command.h>
 
 KisColorSpaceConvertVisitor::KisColorSpaceConvertVisitor(KisImageWSP image,
                                                          const KoColorSpace *srcColorSpace,

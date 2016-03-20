@@ -55,10 +55,10 @@ KoPluginLoader* KoPluginLoader::instance()
     return pluginLoaderInstance();
 }
 
-void KoPluginLoader::load(const QString & serviceType, const QString & versionString, const PluginsConfig &config, QObject* owner)
+void KoPluginLoader::load(const QString & serviceType, const QString & versionString, const PluginsConfig &config, QObject* owner, bool cache)
 {
     // Don't load the same plugins again
-    if (d->loadedServiceTypes.contains(serviceType)) {
+    if (cache && d->loadedServiceTypes.contains(serviceType)) {
         return;
     }
     d->loadedServiceTypes << serviceType;

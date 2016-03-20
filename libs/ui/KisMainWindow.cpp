@@ -386,7 +386,8 @@ KisMainWindow::KisMainWindow()
     KoPluginLoader::instance()->load("Krita/ViewPlugin",
                                      "Type == 'Service' and ([X-Krita-Version] == 28)",
                                      KoPluginLoader::PluginsConfig(),
-                                     viewManager());
+                                     viewManager(),
+                                     false);
 
     subWindowActivated();
     updateWindowMenu();

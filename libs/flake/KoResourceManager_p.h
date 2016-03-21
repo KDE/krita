@@ -21,17 +21,21 @@
 #ifndef KO_RESOURCEMANAGER_P_H
 #define KO_RESOURCEMANAGER_P_H
 
+#include <QObject>
 #include <QSizeF>
 #include <QHash>
 
+#include "kritaflake_export.h"
 #include <KoColor.h>
 #include <KoUnit.h>
+#include "KoDerivedResourceConverter.h"
 
 class KoShape;
 class QVariant;
 
-class KoResourceManager
+class KRITAFLAKE_EXPORT KoResourceManager : public QObject
 {
+    Q_OBJECT
 public:
 
     KoResourceManager() {}
@@ -139,11 +143,24 @@ public:
      */
     void clearResource(int key);
 
+    void addDerivedResourceConverter(KoDerivedResourceConverterSP converter);
+    bool hasDerivedResourceConverter(int key);
+    void removeDerivedResourceConverter(int key);
+
+Q_SIGNALS:
+    void resourceChanged(int key, const QVariant &value);
+
+private:
+    void notifyResourceChanged(int key, const QVariant &value);
+
 private:
     KoResourceManager(const KoResourceManager&);
     KoResourceManager& operator=(const KoResourceManager&);
 
     QHash<int, QVariant> m_resources;
+
+    QHash<int, KoDerivedResourceConverterSP> m_derivedResources;
+    QMultiHash<int, KoDerivedResourceConverterSP> m_derivedFromSource;
 };
 
 #endif

@@ -46,7 +46,6 @@ class KisFilterConfiguration;
  */
 class KRITAUI_EXPORT KisCanvasResourceProvider : public QObject
 {
-
     Q_OBJECT
 
 public:
@@ -61,6 +60,9 @@ public:
         CurrentPaintOpPreset,
         CurrentGeneratorConfiguration,
         CurrentCompositeOp,
+        CurrentEffectiveCompositeOp,
+        LodAvailability,
+        EraserMode,
         MirrorHorizontal,
         MirrorVertical,
         MirrorAxesCenter,

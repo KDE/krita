@@ -24,6 +24,7 @@
 #include <QObject>
 
 #include "kritaflake_export.h"
+#include "KoDerivedResourceConverter.h"
 
 class KoShape;
 class KoShapeStroke;
@@ -233,6 +234,10 @@ public:
      * @see KoCanvasResourceManager::CanvasResource
      */
     void clearResource(int key);
+
+    void addDerivedResourceConverter(KoDerivedResourceConverterSP converter);
+    bool hasDerivedResourceConverter(int key);
+    void removeDerivedResourceConverter(int key);
 
 Q_SIGNALS:
     /**

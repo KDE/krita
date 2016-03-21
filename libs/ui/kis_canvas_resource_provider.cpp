@@ -340,9 +340,8 @@ void KisCanvasResourceProvider::slotCanvasResourceChanged(int key, const QVarian
 
 void KisCanvasResourceProvider::setCurrentCompositeOp(const QString& compositeOp)
 {
-    QVariant v;
-    v.setValue(compositeOp);
-    m_resourceManager->setResource(CurrentCompositeOp, v);
+    m_resourceManager->setResource(CurrentCompositeOp,
+                                   QVariant::fromValue(compositeOp));
 }
 
 QString KisCanvasResourceProvider::currentCompositeOp() const
@@ -412,7 +411,7 @@ void KisCanvasResourceProvider::setOpacity(qreal opacity)
 
 qreal KisCanvasResourceProvider::opacity() const
 {
-    return m_resourceManager->resource(Opacity).toDouble();
+    return m_resourceManager->resource(Opacity).toReal();
 }
 
 void KisCanvasResourceProvider::setGlobalAlphaLock(bool lock)

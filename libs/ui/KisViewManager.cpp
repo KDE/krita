@@ -125,6 +125,7 @@
 #include "kis_signal_auto_connection.h"
 #include "kis_icon_utils.h"
 #include "kis_guides_manager.h"
+#include "kis_derived_resources.h"
 
 
 class BlockingUserInputEventFilter : public QObject
@@ -183,6 +184,11 @@ public:
         , inputManager(_q)
         , actionAuthor(0)
     {
+        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisCompositeOpResourceConverter));
+        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisEffectiveCompositeOpResourceConverter));
+        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisOpacityResourceConverter));
+        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisLodAvailabilityResourceConverter));
+        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisEraserModeResourceConverter));
     }
 
 public:

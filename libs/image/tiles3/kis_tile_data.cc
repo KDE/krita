@@ -44,7 +44,6 @@ KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataSt
       m_pixelSize(pixelSize),
       m_store(store)
 {
-    m_store->initTileData(this);
     m_store->checkFreeMemory();
     m_data = allocateData(m_pixelSize);
 
@@ -72,8 +71,6 @@ KisTileData::KisTileData(const KisTileData& rhs, bool checkFreeMemory)
       m_pixelSize(rhs.m_pixelSize),
       m_store(rhs.m_store)
 {
-    m_store->initTileData(this);
-
     if(checkFreeMemory) {
         m_store->checkFreeMemory();
     }
@@ -85,7 +82,6 @@ KisTileData::KisTileData(const KisTileData& rhs, bool checkFreeMemory)
 
 KisTileData::~KisTileData()
 {
-    m_store->forgetTileData(this);
     releaseMemory();
 }
 
@@ -105,8 +101,9 @@ void KisTileData::releaseMemory()
         m_data = 0;
     }
 
-    KisTileDataSP clone;
+    KisTileData *clone = 0;
     while(m_clonesStack.pop(clone)) {
+        delete clone;
     }
 
     Q_ASSERT(m_clonesStack.isEmpty());

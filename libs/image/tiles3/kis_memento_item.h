@@ -52,6 +52,8 @@ public:
         if (m_tileData) {
             if (m_committedFlag)
                 m_tileData->acquire();
+            else
+                m_tileData->ref();
         }
     }
 
@@ -64,7 +66,7 @@ public:
      * This memmento item is considered as committed, so we acquire
      * the tile data right at the beginning.
      */
-    KisMementoItem(qint32 col, qint32 row, KisTileDataSP defaultTileData, KisMementoManager *mm) {
+    KisMementoItem(qint32 col, qint32 row, KisTileData* defaultTileData, KisMementoManager *mm) {
         Q_UNUSED(mm);
         m_tileData = defaultTileData;
         /* acquire the tileData deliberately and completely */
@@ -83,6 +85,8 @@ public:
     KisMementoItem(const KisMementoItem &rhs, KisMementoManager *mm) {
         Q_UNUSED(mm);
         m_tileData = rhs.m_tileData;
+        /* Setting counter: m_refCount++ */
+        m_tileData->ref();
         m_col = rhs.m_col;
         m_row = rhs.m_row;
         m_type = CHANGED;
@@ -100,11 +104,15 @@ public:
 
     void reset() {
         releaseTileData();
+        m_tileData = 0;
         m_committedFlag = false;
     }
 
-    void deleteTile(KisTile* tile, KisTileDataSP defaultTileData) {
+    void deleteTile(KisTile* tile, KisTileData* defaultTileData) {
         m_tileData = defaultTileData;
+        /* Setting counter: m_refCount++ */
+        m_tileData->ref();
+
         m_col = tile->col();
         m_row = tile->row();
         m_type = DELETED;
@@ -112,6 +120,8 @@ public:
 
     void changeTile(KisTile* tile) {
         m_tileData = tile->tileData();
+        /* Setting counter: m_refCount++ */
+        m_tileData->ref();
         m_col = tile->col();
         m_row = tile->row();
         m_type = CHANGED;
@@ -126,6 +136,8 @@ public:
              * m_refCount--
              */
             m_tileData->acquire();
+            m_tileData->deref();
+
             m_tileData->setMementoed(true);
         }
         m_committedFlag = true;
@@ -161,7 +173,7 @@ public:
         return m_row;
     }
     inline KisTileData* tileData() const {
-        return m_tileData.data();
+        return m_tileData;
     }
 
     void debugPrintInfo() {
@@ -171,31 +183,33 @@ public:
                    "   parent:\t0x%7 (0x%8)\n"
                    "   next:\t0x%9 (0x%10)\n")
                 .arg((quintptr)this)
-                .arg((quintptr)m_tileData.data())
+                .arg((quintptr)m_tileData)
                 .arg(m_col)
                 .arg(m_row)
                 .arg((m_type == CHANGED) ? 'W' : 'D')
                 .arg(m_committedFlag ? 'C' : '-')
                 .arg((quintptr)m_parent.data())
-                .arg(m_parent ? (quintptr)m_parent->m_tileData.data() : 0)
+                .arg(m_parent ? (quintptr)m_parent->m_tileData : 0)
                 .arg((quintptr)m_next.data())
-                .arg(m_next ? (quintptr)m_next->m_tileData.data() : 0);
+                .arg(m_next ? (quintptr)m_next->m_tileData : 0);
         dbgKrita << s;
     }
 
 protected:
     void releaseTileData() {
-        if (m_tileData.data()) {
+        if (m_tileData) {
             if (m_committedFlag) {
                 m_tileData->setMementoed(false);
                 m_tileData->release();
-                m_tileData.clear();
+            }
+            else {
+                m_tileData->deref();
             }
         }
     }
 
 protected:
-    KisTileDataSP m_tileData;
+    KisTileData *m_tileData;
     bool m_committedFlag;
     enumType m_type;
 

@@ -19,7 +19,7 @@
 #define KIS_TILE_DATA_INTERFACE_H_
 
 #include <QReadWriteLock>
-#include <QSharedPointer>
+#include <QAtomicInt>
 
 #include "kis_lockless_stack.h"
 #include "swap/kis_chunk_allocator.h"
@@ -34,8 +34,7 @@ class KisTileDataStore;
 #define __TILE_DATA_WIDTH 64
 #define __TILE_DATA_HEIGHT 64
 
-typedef QSharedPointer<KisTileData> KisTileDataSP;
-typedef KisLocklessStack<KisTileDataSP> KisTileDataCache;
+typedef KisLocklessStack<KisTileData*> KisTileDataCache;
 
 typedef QLinkedList<KisTileData*> KisTileDataList;
 typedef KisTileDataList::iterator KisTileDataListIterator;
@@ -73,19 +72,33 @@ public:
      * Increments usersCount of a TD and refs shared pointer counter
      * Used by KisTile for COW
      */
-    inline void acquire();
+    inline bool acquire();
 
     /**
      * Decrements usersCount of a TD and derefs shared pointer counter
      * Used by KisTile for COW
      */
-    inline void release();
+    inline bool release();
+
+    /**
+     * Only refs shared pointer counter.
+     * Used only by KisMementoManager without
+     * consideration of COW.
+     */
+    inline bool ref() const;
+
+    /**
+     * Only refs shared pointer counter.
+     * Used only by KisMementoManager without
+     * consideration of COW.
+     */
+    inline bool deref();
 
     /**
      * Creates a clone of the tile data safely.
      * It will try to use the cached clones.
      */
-    inline KisTileDataSP clone();
+    inline KisTileData* clone();
 
     /**
      * Control the access of swapper to the tile data

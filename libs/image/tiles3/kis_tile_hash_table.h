@@ -86,8 +86,8 @@ public:
 
     void clear();
 
-    void setDefaultTileData(KisTileDataSP defaultTileData);
-    KisTileDataSP defaultTileData() const;
+    void setDefaultTileData(KisTileData *defaultTileData);
+    KisTileData* defaultTileData() const;
 
     qint32 numTiles() {
         return m_numTiles;
@@ -101,8 +101,8 @@ private:
     void linkTile(TileTypeSP tile);
     TileTypeSP unlinkTile(qint32 col, qint32 row);
 
-    inline void setDefaultTileDataImp(KisTileDataSP defaultTileData);
-    inline KisTileDataSP defaultTileDataImp() const;
+    inline void setDefaultTileDataImp(KisTileData *defaultTileData);
+    inline KisTileData* defaultTileDataImp() const;
 
     static inline quint32 calculateHash(qint32 col, qint32 row);
 
@@ -116,7 +116,7 @@ private:
     TileTypeSP *m_hashTable;
     qint32 m_numTiles;
 
-    KisTileDataSP m_defaultTileData;
+    KisTileData *m_defaultTileData;
     KisMementoManager *m_mementoManager;
 
     mutable QReadWriteLock m_lock;

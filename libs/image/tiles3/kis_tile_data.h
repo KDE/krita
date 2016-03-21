@@ -44,7 +44,7 @@ inline quint32 KisTileData::pixelSize() const {
     return m_pixelSize;
 }
 
-inline void KisTileData::acquire() {
+inline bool KisTileData::acquire() {
     /**
      * We need to ensure the clones in the stack are
      * consistent with the data. When we have a single
@@ -53,18 +53,38 @@ inline void KisTileData::acquire() {
      * So just clean it up.
      */
     if(m_usersCount == 1) {
-        KisTileDataSP clone;
+        KisTileData *clone = 0;
         while(m_clonesStack.pop(clone)) {
+            delete clone;
         }
     }
+
+    bool _ref = ref();
     m_usersCount.ref();
+    return _ref;
 }
 
-inline void KisTileData::release() {
+inline bool KisTileData::release() {
     m_usersCount.deref();
+    bool _ref = deref();
+    return _ref;
 }
 
-inline KisTileDataSP KisTileData::clone() {
+inline bool KisTileData::ref() const {
+    return m_refCount.ref();
+}
+
+inline bool KisTileData::deref() {
+    bool _ref;
+
+    if (!(_ref = m_refCount.deref())) {
+        m_store->freeTileData(this);
+        return 0;
+    }
+    return _ref;
+}
+
+inline KisTileData* KisTileData::clone() {
     return m_store->duplicateTileData(this);
 }
 

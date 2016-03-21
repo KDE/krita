@@ -50,7 +50,7 @@ class KRITAIMAGE_EXPORT KisTile : public KisShared
 {
 public:
     KisTile(qint32 col, qint32 row,
-            KisTileDataSP defaultTileData, KisMementoManager* mm);
+            KisTileData *defaultTileData, KisMementoManager* mm);
     KisTile(const KisTile& rhs, qint32 col, qint32 row, KisMementoManager* mm);
     KisTile(const KisTile& rhs, KisMementoManager* mm);
     KisTile(const KisTile& rhs);
@@ -109,22 +109,22 @@ public:
         return m_tileData->pixelSize();
     }
 
-    inline KisTileDataSP tileData() const {
+    inline KisTileData*  tileData() const {
         return m_tileData;
     }
 
 private:
     void init(qint32 col, qint32 row,
-              KisTileDataSP defaultTileData, KisMementoManager* mm);
+              KisTileData *defaultTileData, KisMementoManager* mm);
 
     inline void blockSwapping() const;
     inline void unblockSwapping() const;
 
-    inline void safeReleaseOldTileData(KisTileDataSP td);
+    inline void safeReleaseOldTileData(KisTileData *td);
 
 private:
-    KisTileDataSP m_tileData;
-    mutable QStack<KisTileDataSP> m_oldTileData;
+    KisTileData *m_tileData;
+    mutable QStack<KisTileData*> m_oldTileData;
     mutable volatile int m_lockCounter;
 
     qint32 m_col;

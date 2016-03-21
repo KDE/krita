@@ -131,10 +131,6 @@ inline void KisTileDataStore::unregisterTileDataImp(KisTileData *td)
 {
     KisTileDataListIterator tempIterator = td->m_listIterator;
 
-    if (td->m_listIterator == m_tileDataList.end()) {
-        return;
-    }
-
     if(m_clockIterator == tempIterator) {
         m_clockIterator = tempIterator + 1;
     }
@@ -151,40 +147,33 @@ void KisTileDataStore::unregisterTileData(KisTileData *td)
     unregisterTileDataImp(td);
 }
 
-KisTileDataSP KisTileDataStore::allocTileData(qint32 pixelSize, const quint8 *defPixel)
+KisTileData *KisTileDataStore::allocTileData(qint32 pixelSize, const quint8 *defPixel)
 {
-    KisTileDataSP td(new KisTileData(pixelSize, defPixel, this));
-    registerTileData(td.data());
+    KisTileData *td = new KisTileData(pixelSize, defPixel, this);
+    registerTileData(td);
     return td;
 }
 
-KisTileDataSP KisTileDataStore::duplicateTileData(KisTileData *rhs)
+KisTileData *KisTileDataStore::duplicateTileData(KisTileData *rhs)
 {
-    KisTileDataSP td;
+    KisTileData *td = 0;
 
     if (rhs->m_clonesStack.pop(td)) {
         DEBUG_PRECLONE_ACTION("+ Pre-clone HIT", rhs, td);
         DEBUG_COUNT_PRECLONE_HIT(rhs);
     } else {
         rhs->blockSwapping();
-        td= KisTileDataSP(new KisTileData(*rhs));
+        td = new KisTileData(*rhs);
         rhs->unblockSwapping();
         DEBUG_PRECLONE_ACTION("- Pre-clone #MISS#", rhs, td);
         DEBUG_COUNT_PRECLONE_MISS(rhs);
     }
 
-    registerTileData(td.data());
+    registerTileData(td);
     return td;
 }
 
-void KisTileDataStore::initTileData(KisTileData *td)
-{
-    Q_ASSERT(td->m_store == this);
-
-    td->m_listIterator = m_tileDataList.end();
-}
-
-void KisTileDataStore::forgetTileData(KisTileData *td)
+void KisTileDataStore::freeTileData(KisTileData *td)
 {
     Q_ASSERT(td->m_store == this);
 
@@ -202,6 +191,8 @@ void KisTileDataStore::forgetTileData(KisTileData *td)
 
     td->m_swapLock.unlock();
     m_listLock.unlock();
+
+    delete td;
 }
 
 void KisTileDataStore::ensureTileDataLoaded(KisTileData *td)

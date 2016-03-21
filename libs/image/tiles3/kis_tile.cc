@@ -27,7 +27,7 @@
 
 
 void KisTile::init(qint32 col, qint32 row,
-                   KisTileDataSP defaultTileData, KisMementoManager* mm)
+                   KisTileData *defaultTileData, KisMementoManager* mm)
 {
     m_col = col;
     m_row = row;
@@ -46,7 +46,7 @@ void KisTile::init(qint32 col, qint32 row,
 }
 
 KisTile::KisTile(qint32 col, qint32 row,
-                 KisTileDataSP defaultTileData, KisMementoManager* mm)
+                 KisTileData *defaultTileData, KisMementoManager* mm)
 {
     init(col, row, defaultTileData, mm);
 }
@@ -105,7 +105,7 @@ void KisTile::notifyDead()
 
 #ifdef DEBUG_TILE_COWING
 #define DEBUG_COWING(newTD)                                             \
-    printf("### COW done \ttile:\t0x%X (%d, %d) (0x%X -> 0x%X) [mm: 0x%X] ###\n", (quintptr)this, m_col, m_row, (quintptr)m_tileData.data(), (quintptr)newTD, m_mementoManager);
+    printf("### COW done \ttile:\t0x%X (%d, %d) (0x%X -> 0x%X) [mm: 0x%X] ###\n", (quintptr)this, m_col, m_row, (quintptr)m_tileData, (quintptr)newTD, m_mementoManager);
 #else
 #define DEBUG_COWING(newTD)
 #endif
@@ -137,7 +137,7 @@ inline void KisTile::unblockSwapping() const
         m_tileData->unblockSwapping();
 
         if(!m_oldTileData.isEmpty()) {
-            Q_FOREACH (KisTileDataSP td, m_oldTileData) {
+            Q_FOREACH (KisTileData *td, m_oldTileData) {
                 td->unblockSwapping();
                 td->release();
             }
@@ -146,7 +146,7 @@ inline void KisTile::unblockSwapping() const
     }
 }
 
-inline void KisTile::safeReleaseOldTileData(KisTileDataSP td)
+inline void KisTile::safeReleaseOldTileData(KisTileData *td)
 {
     QMutexLocker locker(&m_swapBarrierLock);
     Q_ASSERT(m_lockCounter >= 0);
@@ -184,10 +184,10 @@ void KisTile::lockForWrite()
 
         if (lazyCopying()) {
 
-            KisTileDataSP tileData = m_tileData->clone();
+            KisTileData *tileData = m_tileData->clone();
             tileData->acquire();
             tileData->blockSwapping();
-            KisTileDataSP oldTileData = m_tileData;
+            KisTileData *oldTileData = m_tileData;
             m_tileData = tileData;
             safeReleaseOldTileData(oldTileData);
 

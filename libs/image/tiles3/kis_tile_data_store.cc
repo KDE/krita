@@ -69,6 +69,7 @@ qint64 __preclone_miss_age = 0;
 KisTileDataStore::KisTileDataStore()
     : m_pooler(this),
       m_swapper(this),
+      m_listLock(QMutex::Recursive),
       m_numTiles(0),
       m_memoryMetric(0)
 {

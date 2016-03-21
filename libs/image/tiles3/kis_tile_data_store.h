@@ -90,7 +90,7 @@ public:
     KisTileDataStoreClockIterator* beginClockIteration();
     void endIteration(KisTileDataStoreClockIterator* iterator);
 
-    inline KisTileData* createDefaultTileData(qint32 pixelSize, const quint8 *defPixel) {
+    inline KisTileDataSP createDefaultTileData(qint32 pixelSize, const quint8 *defPixel) {
         return allocTileData(pixelSize, defPixel);
     }
 
@@ -115,9 +115,11 @@ public:
      * in KisTileData. Do not call them directly!
      */
 
-    KisTileData *duplicateTileData(KisTileData *rhs);
+    KisTileDataSP duplicateTileData(KisTileData *rhs);
 
-    void freeTileData(KisTileData *td);
+    void initTileData(KisTileData *td);
+
+    void forgetTileData(KisTileData *td);
 
     /**
      * Ensures that the tile data is totally present in memory
@@ -132,7 +134,7 @@ public:
     void ensureTileDataLoaded(KisTileData *td);
 
 private:
-    KisTileData *allocTileData(qint32 pixelSize, const quint8 *defPixel);
+    KisTileDataSP allocTileData(qint32 pixelSize, const quint8 *defPixel);
 
     void registerTileData(KisTileData *td);
     void unregisterTileData(KisTileData *td);

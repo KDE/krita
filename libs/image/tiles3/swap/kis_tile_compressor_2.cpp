@@ -43,7 +43,7 @@ bool KisTileCompressor2::writeTile(KisTileSP tile, KisPaintDeviceWriter &store)
     qint32 bytesWritten;
 
     tile->lockForRead();
-    compressTileData(tile->tileData(), (quint8*)m_streamingBuffer.data(),
+    compressTileData(tile->tileData().data(), (quint8*)m_streamingBuffer.data(),
                      m_streamingBuffer.size(), bytesWritten);
     tile->unlock();
 
@@ -85,7 +85,7 @@ bool KisTileCompressor2::readTile(QIODevice *stream, KisTiledDataManager *dm)
         stream->read(m_streamingBuffer.data(), dataSize);
 
         tile->lockForWrite();
-        bool res = decompressTileData((quint8*)m_streamingBuffer.data(), dataSize, tile->tileData());
+        bool res = decompressTileData((quint8*)m_streamingBuffer.data(), dataSize, tile->tileData().data());
         tile->unlock();
         return res;
     }

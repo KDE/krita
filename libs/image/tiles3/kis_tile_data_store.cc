@@ -130,6 +130,10 @@ inline void KisTileDataStore::unregisterTileDataImp(KisTileData *td)
 {
     KisTileDataListIterator tempIterator = td->m_listIterator;
 
+    if (td->m_listIterator == m_tileDataList.end()) {
+        return;
+    }
+
     if(m_clockIterator == tempIterator) {
         m_clockIterator = tempIterator + 1;
     }
@@ -146,33 +150,40 @@ void KisTileDataStore::unregisterTileData(KisTileData *td)
     unregisterTileDataImp(td);
 }
 
-KisTileData *KisTileDataStore::allocTileData(qint32 pixelSize, const quint8 *defPixel)
+KisTileDataSP KisTileDataStore::allocTileData(qint32 pixelSize, const quint8 *defPixel)
 {
-    KisTileData *td = new KisTileData(pixelSize, defPixel, this);
-    registerTileData(td);
+    KisTileDataSP td(new KisTileData(pixelSize, defPixel, this));
+    registerTileData(td.data());
     return td;
 }
 
-KisTileData *KisTileDataStore::duplicateTileData(KisTileData *rhs)
+KisTileDataSP KisTileDataStore::duplicateTileData(KisTileData *rhs)
 {
-    KisTileData *td = 0;
+    KisTileDataSP td;
 
     if (rhs->m_clonesStack.pop(td)) {
         DEBUG_PRECLONE_ACTION("+ Pre-clone HIT", rhs, td);
         DEBUG_COUNT_PRECLONE_HIT(rhs);
     } else {
         rhs->blockSwapping();
-        td = new KisTileData(*rhs);
+        td= KisTileDataSP(new KisTileData(*rhs));
         rhs->unblockSwapping();
         DEBUG_PRECLONE_ACTION("- Pre-clone #MISS#", rhs, td);
         DEBUG_COUNT_PRECLONE_MISS(rhs);
     }
 
-    registerTileData(td);
+    registerTileData(td.data());
     return td;
 }
 
-void KisTileDataStore::freeTileData(KisTileData *td)
+void KisTileDataStore::initTileData(KisTileData *td)
+{
+    Q_ASSERT(td->m_store == this);
+
+    td->m_listIterator = m_tileDataList.end();
+}
+
+void KisTileDataStore::forgetTileData(KisTileData *td)
 {
     Q_ASSERT(td->m_store == this);
 
@@ -190,8 +201,6 @@ void KisTileDataStore::freeTileData(KisTileData *td)
 
     td->m_swapLock.unlock();
     m_listLock.unlock();
-
-    delete td;
 }
 
 void KisTileDataStore::ensureTileDataLoaded(KisTileData *td)

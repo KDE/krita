@@ -98,7 +98,7 @@ public:
 
     KisMementoSP currentMemento();
 
-    void setDefaultTileData(KisTileData *defaultTileData);
+    void setDefaultTileData(KisTileDataSP defaultTileData);
 
     void debugPrintInfo();
 

@@ -32,7 +32,7 @@ KisTileHashTableTraits<T>::KisTileHashTableTraits(KisMementoManager *mm)
     Q_CHECK_PTR(m_hashTable);
 
     m_numTiles = 0;
-    m_defaultTileData = 0;
+    m_defaultTileData.clear();
     m_mementoManager = mm;
 }
 
@@ -44,7 +44,7 @@ KisTileHashTableTraits<T>::KisTileHashTableTraits(const KisTileHashTableTraits<T
     QReadLocker locker(&ht.m_lock);
 
     m_mementoManager = mm;
-    m_defaultTileData = 0;
+    m_defaultTileData.clear();
     setDefaultTileDataImp(ht.m_defaultTileData);
 
     m_hashTable = new TileTypeSP [TABLE_SIZE];
@@ -76,7 +76,7 @@ KisTileHashTableTraits<T>::~KisTileHashTableTraits()
 {
     clear();
     delete[] m_hashTable;
-    setDefaultTileDataImp(0);
+    setDefaultTileDataImp(KisTileDataSP(0));
 }
 
 template<class T>
@@ -156,15 +156,15 @@ KisTileHashTableTraits<T>::unlinkTile(qint32 col, qint32 row)
 }
 
 template<class T>
-inline void KisTileHashTableTraits<T>::setDefaultTileDataImp(KisTileData *defaultTileData)
+inline void KisTileHashTableTraits<T>::setDefaultTileDataImp(KisTileDataSP defaultTileData)
 {
-    if (m_defaultTileData) {
+    if (m_defaultTileData.data()) {
         m_defaultTileData->unblockSwapping();
         m_defaultTileData->release();
-        m_defaultTileData = 0;
+        m_defaultTileData.clear();
     }
 
-    if (defaultTileData) {
+    if (defaultTileData.data()) {
         defaultTileData->acquire();
         defaultTileData->blockSwapping();
         m_defaultTileData = defaultTileData;
@@ -172,7 +172,7 @@ inline void KisTileHashTableTraits<T>::setDefaultTileDataImp(KisTileData *defaul
 }
 
 template<class T>
-inline KisTileData* KisTileHashTableTraits<T>::defaultTileDataImp() const
+inline KisTileDataSP KisTileHashTableTraits<T>::defaultTileDataImp() const
 {
     return m_defaultTileData;
 }
@@ -285,14 +285,14 @@ void KisTileHashTableTraits<T>::clear()
 }
 
 template<class T>
-void KisTileHashTableTraits<T>::setDefaultTileData(KisTileData *defaultTileData)
+void KisTileHashTableTraits<T>::setDefaultTileData(KisTileDataSP defaultTileData)
 {
     QWriteLocker locker(&m_lock);
     setDefaultTileDataImp(defaultTileData);
 }
 
 template<class T>
-KisTileData* KisTileHashTableTraits<T>::defaultTileData() const
+KisTileDataSP KisTileHashTableTraits<T>::defaultTileData() const
 {
     QWriteLocker locker(&m_lock);
     return defaultTileDataImp();

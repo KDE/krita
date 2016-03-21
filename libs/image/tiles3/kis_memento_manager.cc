@@ -381,7 +381,7 @@ void KisMementoManager::resetRevisionHistory(KisMementoItemList list)
     }
 }
 
-void KisMementoManager::setDefaultTileData(KisTileData *defaultTileData)
+void KisMementoManager::setDefaultTileData(KisTileDataSP defaultTileData)
 {
     m_headsHashTable.setDefaultTileData(defaultTileData);
     m_index.setDefaultTileData(defaultTileData);

@@ -107,7 +107,7 @@ void KisTiledDataManager::setDefaultPixel(const quint8 *defaultPixel)
 
 void KisTiledDataManager::setDefaultPixelImpl(const quint8 *defaultPixel)
 {
-    KisTileData *td = KisTileDataStore::instance()->createDefaultTileData(pixelSize(), defaultPixel);
+    KisTileDataSP td = KisTileDataStore::instance()->createDefaultTileData(pixelSize(), defaultPixel);
     m_hashTable->setDefaultTileData(td);
     m_mementoManager->setDefaultTileData(td);
 
@@ -360,7 +360,7 @@ void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
     quint32 maxRunLength = qMin(clearRect.width(), KisTileData::WIDTH);
     clearPixelData = duplicatePixel(maxRunLength, clearPixel);
 
-    KisTileData *td = 0;
+    KisTileDataSP td;
     if (!pixelBytesAreDefault &&
         clearRect.width() >= KisTileData::WIDTH &&
         clearRect.height() >= KisTileData::HEIGHT) {
@@ -486,8 +486,7 @@ void KisTiledDataManager::bitBltImpl(KisTiledDataManager *srcDM, const QRect &re
                  m_hashTable->deleteTile(column, row);
 
                  srcTile->lockForRead();
-                 KisTileData *td = srcTile->tileData();
-                 KisTileSP clonedTile = new KisTile(column, row, td, m_mementoManager);
+                 KisTileSP clonedTile = new KisTile(column, row, srcTile->tileData(), m_mementoManager);
                  srcTile->unlock();
 
                  m_hashTable->addTile(clonedTile);
@@ -547,8 +546,7 @@ void KisTiledDataManager::bitBltRoughImpl(KisTiledDataManager *srcDM, const QRec
             m_hashTable->deleteTile(column, row);
 
             srcTile->lockForRead();
-            KisTileData *td = srcTile->tileData();
-            KisTileSP clonedTile = new KisTile(column, row, td, m_mementoManager);
+            KisTileSP clonedTile = new KisTile(column, row, srcTile->tileData(), m_mementoManager);
             srcTile->unlock();
 
             m_hashTable->addTile(clonedTile);

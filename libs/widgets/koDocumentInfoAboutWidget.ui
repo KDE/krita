@@ -159,7 +159,7 @@
     </widget>
    </item>
    <item row="6" column="1" colspan="2">
-    <widget class="QTextEdit" name="meComments"/>
+    <widget class="QTextEdit" name="meDescription"/>
    </item>
    <item row="10" column="1">
     <widget class="QLabel" name="lblModified">
@@ -171,13 +171,13 @@
    <item row="6" column="0">
     <widget class="QLabel" name="lbCommentsDesc">
      <property name="text">
-      <string>Comments:</string>
+      <string>Description:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
      </property>
      <property name="buddy">
-      <cstring>meComments</cstring>
+      <cstring>meDescription</cstring>
      </property>
     </widget>
    </item>

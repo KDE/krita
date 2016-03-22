@@ -2255,7 +2255,7 @@ bool KisDocument::newImage(const QString& name,
     if (name != i18n("Unnamed") && !name.isEmpty()) {
         setUrl(QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) + '/' + name + ".kra"));
     }
-    documentInfo()->setAboutInfo("comments", description);
+    documentInfo()->setAboutInfo("abstract", description);
 
     layer = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, cs);
     Q_CHECK_PTR(layer);

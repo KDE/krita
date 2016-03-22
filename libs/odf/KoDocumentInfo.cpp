@@ -42,7 +42,7 @@
 
 KoDocumentInfo::KoDocumentInfo(QObject *parent) : QObject(parent)
 {
-    m_aboutTags << "title" << "description" << "subject" << "comments"
+    m_aboutTags << "title" << "description" << "subject" << "abstract"
     << "keyword" << "initial-creator" << "editing-cycles" << "editing-time"
     << "date" << "creation-date" << "language";
 
@@ -311,7 +311,7 @@ bool KoDocumentInfo::loadOasisAboutInfo(const KoXmlNode &metaDoc)
             KoXmlElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::dc, tag);
             if (!e.isNull() && !e.text().isEmpty())
                 setAboutInfo("description", aboutInfo("description") + e.text().trimmed());
-        } else if (tag == "comments") {
+        } else if (tag == "abstract") {
             //this was the old way so add it to dc:description
             KoXmlElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::meta, tag);
             if (!e.isNull() && !e.text().isEmpty())
@@ -347,7 +347,7 @@ bool KoDocumentInfo::loadAboutInfo(const KoXmlElement &e)
             continue;
 
         if (tmp.tagName() == "abstract")
-            setAboutInfo("comments", tmp.text());
+            setAboutInfo("abstract", tmp.text());
 
         setAboutInfo(tmp.tagName(), tmp.text());
     }
@@ -361,7 +361,7 @@ QDomElement KoDocumentInfo::saveAboutInfo(QDomDocument &doc)
     QDomElement t;
 
     Q_FOREACH (const QString &tag, m_aboutTags) {
-        if (tag == "comments") {
+        if (tag == "abstract") {
             t = doc.createElement("abstract");
             e.appendChild(t);
             t.appendChild(doc.createCDATASection(aboutInfo(tag)));

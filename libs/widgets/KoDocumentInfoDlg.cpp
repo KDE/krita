@@ -179,7 +179,7 @@ void KoDocumentInfoDlg::initAboutTab()
     if (!d->info->aboutInfo("keyword").isEmpty())
         d->aboutUi->leKeywords->setText(d->info->aboutInfo("keyword"));
 
-    d->aboutUi->meComments->setPlainText(d->info->aboutInfo("description"));
+    d->aboutUi->meDescription->setPlainText(d->info->aboutInfo("abstract"));
     if (doc && !doc->mimeType().isEmpty()) {
         d->aboutUi->lblType->setText(KisMimeDatabase::descriptionForMimeType(doc->mimeType()));
     }
@@ -227,7 +227,7 @@ void KoDocumentInfoDlg::saveAboutData()
     d->info->setAboutInfo("keyword", d->aboutUi->leKeywords->text());
     d->info->setAboutInfo("title", d->aboutUi->leTitle->text());
     d->info->setAboutInfo("subject", d->aboutUi->leSubject->text());
-    d->info->setAboutInfo("description", d->aboutUi->meComments->toPlainText());
+    d->info->setAboutInfo("abstract", d->aboutUi->meDescription->toPlainText());
     d->info->setAboutInfo("language", KoGlobal::tagOfLanguage(d->aboutUi->cbLanguage->currentText()));
 }
 
@@ -264,7 +264,7 @@ QList<KPageWidgetItem*> KoDocumentInfoDlg::pages() const
 
 void KoDocumentInfoDlg::setReadOnly(bool ro)
 {
-    d->aboutUi->meComments->setReadOnly(ro);
+    d->aboutUi->meDescription->setReadOnly(ro);
 
     Q_FOREACH(KPageWidgetItem* page, d->pages) {
         Q_FOREACH(QLineEdit* le, page->widget()->findChildren<QLineEdit *>()) {

@@ -27,6 +27,7 @@
 #include <QImage>
 #include <QRadioButton>
 #include <QApplication>
+#include <QFileInfo>
 
 // KDE's headers
 #include <kis_debug.h>
@@ -69,17 +70,15 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
     QString filename = inputFile();
     dbgFile << "Importing using PDFImport!" << filename;
 
-    if (filename.isEmpty())
-        return KisImportExportFilter::FileNotFound;
-
-
-    QUrl url(filename);
-
-    if (!url.isLocalFile()) {
+    if (filename.isEmpty()) {
         return KisImportExportFilter::FileNotFound;
     }
 
-    Poppler::Document* pdoc = Poppler::Document::load(url.toLocalFile());
+    QFileInfo fi(filename);
+    if (!fi.exists()) {
+        return KisImportExportFilter::FileNotFound;
+    }
+    Poppler::Document* pdoc = Poppler::Document::load(filename);
 
     if (!pdoc) {
         return KisPDFImport::InvalidFormat;

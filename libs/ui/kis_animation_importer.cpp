@@ -110,7 +110,6 @@ KisImportExportFilter::ConversionStatus KisAnimationImporter::import(QStringList
         if (!batchMode) {
             emit m_d->document->sigProgress((frame - firstFrame) * 100 / (step * files.size()));
         }
-        contentChannel->addKeyframe(frame, undoCommand);
         contentChannel->importFrame(frame, importDoc->image()->projection(), undoCommand);
         frame += step;
     }

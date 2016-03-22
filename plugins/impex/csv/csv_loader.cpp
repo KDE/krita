@@ -402,7 +402,7 @@ KisImageBuilder_Result CSVLoader::setLayer(CSVLayerRecord* layer, KisDocument *i
         layer->channel = qobject_cast<KisRasterKeyframeChannel*>
             (paintLayer->getKeyframeChannel(KisKeyframeChannel::Content.id()));
     }
-    layer->channel->addKeyframe(layer->frame);
+
 
     if (!layer->last.isEmpty()) {
         //png image
@@ -413,6 +413,10 @@ KisImageBuilder_Result CSVLoader::setLayer(CSVLayerRecord* layer, KisDocument *i
                                     KisDocument::OPEN_URL_FLAG_DO_NOT_ADD_TO_RECENT_FILES);
         if (result)
             layer->channel->importFrame(layer->frame, importDoc->image()->projection(), NULL);
+
+    } else {
+        //blank
+        layer->channel->addKeyframe(layer->frame);
     }
     return (result) ? KisImageBuilder_RESULT_OK : KisImageBuilder_RESULT_FAILURE;
 }

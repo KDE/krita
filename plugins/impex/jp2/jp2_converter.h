@@ -27,8 +27,6 @@
 #include <KisImageBuilderResult.h>
 class KisDocument;
 
-class QUrl;
-
 struct JP2ConvertOptions {
   int rate;
   int numberresolution;
@@ -47,18 +45,18 @@ public:
     jp2Converter(KisDocument *doc);
     virtual ~jp2Converter();
 public:
-    KisImageBuilder_Result buildImage(const QUrl &uri);
-    KisImageBuilder_Result buildFile(const QUrl &uri, KisPaintLayerSP layer, const JP2ConvertOptions& options);
+    KisImageBuilder_Result buildImage(const QString &filename);
+    KisImageBuilder_Result buildFile(const QString &filename, KisPaintLayerSP layer, const JP2ConvertOptions& options);
     /**
      * Retrieve the constructed image
      */
     KisImageWSP getImage();
 private:
-    KisImageBuilder_Result decode(const QUrl &uri);
+    KisImageBuilder_Result decode(const QString &filename);
 public Q_SLOTS:
     virtual void cancel();
 private:
-    int getFileFormat(const QUrl &uri) const;
+    int getFileFormat(const QString &filename) const;
 private:
     KisImageWSP m_image;
     KisDocument *m_doc;

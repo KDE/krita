@@ -22,7 +22,7 @@
 #include <QDebug>
 #include <QApplication>
 
-#include <QUrl>
+#include <QFileInfo>
 #include <QFile>
 #include <QDir>
 #include <QVector>
@@ -68,7 +68,7 @@ KisImageWSP CSVSaver::image()
     return m_image;
 }
 
-KisImageBuilder_Result CSVSaver::encode(const QUrl &uri,const QString &filename)
+KisImageBuilder_Result CSVSaver::encode(const QString &filename)
 {
     int idx;
     int start, end;
@@ -80,7 +80,7 @@ KisImageBuilder_Result CSVSaver::encode(const QUrl &uri,const QString &filename)
     KisImageAnimationInterface *animation = m_image->animationInterface();
 
     //open the csv file for writing
-    QFile f(uri.toLocalFile());
+    QFile f(filename);
     if (!f.open(QIODevice::WriteOnly)) {
         return KisImageBuilder_RESULT_NOT_LOCAL;
     }
@@ -436,7 +436,7 @@ KisImageBuilder_Result CSVSaver::getLayer(CSVLayerRecord* layer, KisDocument* ex
 
     KisPNGConverter kpc(exportDoc);
 
-    KisImageBuilder_Result result = kpc.buildFile(QUrl::fromLocalFile(filename), image->bounds(),
+    KisImageBuilder_Result result = kpc.buildFile(filename, image->bounds(),
                                                   image->xRes(), image->yRes(), device,
                                                   image->beginAnnotations(), image->endAnnotations(),
                                                   options, (KisMetaData::Store* )0 );
@@ -462,18 +462,11 @@ void CSVSaver::createTempImage(KisDocument* exportDoc)
 }
 
 
-KisImageBuilder_Result CSVSaver::buildAnimation(const QUrl &uri,const QString &filename)
+KisImageBuilder_Result CSVSaver::buildAnimation(const QString &filename)
 {
     if (!m_image)
         return KisImageBuilder_RESULT_EMPTY;
-
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
-
-    if (!uri.isLocalFile())
-        return KisImageBuilder_RESULT_NOT_EXIST;
-
-    return encode(uri, filename);
+    return encode(filename);
 }
 
 void CSVSaver::cancel()

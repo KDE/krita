@@ -59,10 +59,9 @@ void KisExrTest::testRoundTrip()
     savedFile.setAutoRemove(false);
     savedFile.open();
 
-    QUrl savedFileURL("file://" + savedFile.fileName());
-    QString savedFileName(savedFileURL.toLocalFile());
+    QString savedFileName(savedFile.fileName());
 
-    QString typeName = KisMimeDatabase::mimeTypeForFile(savedFileURL.toLocalFile());
+    QString typeName = KisMimeDatabase::mimeTypeForFile(savedFileName);
 
     QByteArray mimeType(typeName.toLatin1());
     status = manager.exportDocument(savedFileName, mimeType);

@@ -26,7 +26,7 @@
 #include <KoProperties.h>
 #include <KoDialog.h>
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KisFilterChain.h>
 

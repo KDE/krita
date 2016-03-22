@@ -30,7 +30,7 @@
 // KDE includes
 
 #include <QList>
-#include <QUrl>
+#include <QFileInfo>
 #include <QDialog>
 
 class QProgressBar;

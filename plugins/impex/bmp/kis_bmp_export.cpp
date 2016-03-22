@@ -23,7 +23,7 @@
 #include <QSlider>
 
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 #include <QApplication>
 
 #include <KisFilterChain.h>
@@ -58,8 +58,6 @@ KisImportExportFilter::ConversionStatus KisBMPExport::convert(const QByteArray& 
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    QUrl url = QUrl::fromLocalFile(filename);
-
     qApp->processEvents(); // For vector layers to be updated
     input->image()->waitForDone();
 
@@ -68,7 +66,7 @@ KisImportExportFilter::ConversionStatus KisBMPExport::convert(const QByteArray& 
     input->image()->lock();
     QImage image = input->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
     input->image()->unlock();
-    image.save(url.toLocalFile());
+    image.save(filename);
     return KisImportExportFilter::OK;
 }
 

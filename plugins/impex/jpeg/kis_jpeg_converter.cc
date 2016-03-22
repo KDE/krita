@@ -41,7 +41,7 @@ extern "C" {
 #include <QMessageBox>
 
 #include <klocalizedstring.h>
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KoDocumentInfo.h>
 #include <KoColorSpace.h>
@@ -123,18 +123,15 @@ KisJPEGConverter::~KisJPEGConverter()
 {
 }
 
-KisImageBuilder_Result KisJPEGConverter::decode(const QUrl &uri)
+KisImageBuilder_Result KisJPEGConverter::decode(const QString &filename)
 {
     struct jpeg_decompress_struct cinfo;
     struct jpeg_error_mgr jerr;
 
     cinfo.err = jpeg_std_error(&jerr);
     jpeg_create_decompress(&cinfo);
-
-    Q_ASSERT(uri.isLocalFile());
-
     // open the file
-    QFile file(uri.toLocalFile());
+    QFile file(filename);
     if (!file.exists()) {
         return (KisImageBuilder_RESULT_NOT_EXIST);
     }
@@ -427,17 +424,9 @@ KisImageBuilder_Result KisJPEGConverter::decode(const QUrl &uri)
 
 
 
-KisImageBuilder_Result KisJPEGConverter::buildImage(const QUrl &uri)
+KisImageBuilder_Result KisJPEGConverter::buildImage(const QString &filename)
 {
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
-
-
-    if (!uri.isLocalFile()) {
-        return KisImageBuilder_RESULT_NOT_EXIST;
-    }
-    return decode(uri);
-
+    return decode(filename);
 }
 
 
@@ -447,7 +436,7 @@ KisImageWSP KisJPEGConverter::image()
 }
 
 
-KisImageBuilder_Result KisJPEGConverter::buildFile(const QUrl &uri, KisPaintLayerSP layer, vKisAnnotationSP_it /*annotationsStart*/, vKisAnnotationSP_it /*annotationsEnd*/, KisJPEGOptions options, KisMetaData::Store* metaData)
+KisImageBuilder_Result KisJPEGConverter::buildFile(const QString &filename, KisPaintLayerSP layer, vKisAnnotationSP_it /*annotationsStart*/, vKisAnnotationSP_it /*annotationsEnd*/, KisJPEGOptions options, KisMetaData::Store* metaData)
 {
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
@@ -455,12 +444,6 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const QUrl &uri, KisPaintLaye
     KisImageWSP image = KisImageWSP(layer->image());
     if (!image)
         return KisImageBuilder_RESULT_EMPTY;
-
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
-
-    if (!uri.isLocalFile())
-        return KisImageBuilder_RESULT_NOT_LOCAL;
 
     const KoColorSpace * cs = layer->colorSpace();
     J_COLOR_SPACE color_type = getColorTypeforColorSpace(cs);
@@ -489,7 +472,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const QUrl &uri, KisPaintLaye
 
 
     // Open file for writing
-    QFile file(uri.toLocalFile());
+    QFile file(filename);
     if (!file.open(QIODevice::WriteOnly)) {
         return (KisImageBuilder_RESULT_FAILURE);
     }

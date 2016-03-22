@@ -25,7 +25,7 @@
 #include <QFileInfo>
 #include <QMessageBox>
 #include <QSlider>
-#include <QUrl>
+#include <QFileInfo>
 #include <QDir>
 #include <QFileInfo>
 #include <QApplication>

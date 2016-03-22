@@ -22,7 +22,7 @@
 #include <QMessageBox>
 
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 #include <QApplication>
 
 #include <KisImportExportManager.h>
@@ -112,12 +112,10 @@ KisImportExportFilter::ConversionStatus psdExport::convert(const QByteArray& fro
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    QUrl url = QUrl::fromLocalFile(filename);
-
     PSDSaver kpc(input);
     KisImageBuilder_Result res;
 
-    if ((res = kpc.buildFile(url)) == KisImageBuilder_RESULT_OK) {
+    if ((res = kpc.buildFile(filename)) == KisImageBuilder_RESULT_OK) {
         dbgFile <<"success !";
         return KisImportExportFilter::OK;
     }

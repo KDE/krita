@@ -35,8 +35,6 @@ extern "C" {
 #include <KisImageBuilderResult.h>
 class KisDocument;
 
-class QUrl;
-
 namespace KisMetaData
 {
 class Filter;
@@ -70,15 +68,15 @@ public:
     KisJPEGConverter(KisDocument *doc, bool batchMode = false);
     virtual ~KisJPEGConverter();
 public:
-    KisImageBuilder_Result buildImage(const QUrl &uri);
-    KisImageBuilder_Result buildFile(const QUrl &uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisMetaData::Store* metaData);
+    KisImageBuilder_Result buildImage(const QString &filename);
+    KisImageBuilder_Result buildFile(const QString &filename, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisMetaData::Store* metaData);
     /** Retrieve the constructed image
     */
     KisImageWSP image();
 public Q_SLOTS:
     virtual void cancel();
 private:
-    KisImageBuilder_Result decode(const QUrl &uri);
+    KisImageBuilder_Result decode(const QString &filename);
 private:
     KisImageWSP m_image;
     KisDocument *m_doc;

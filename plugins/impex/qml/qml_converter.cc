@@ -20,7 +20,7 @@
 #include <QFileInfo>
 #include <QDir>
 
-#include <QUrl>
+#include <QFileInfo>
 
 #include <kis_image.h>
 #include <kis_group_layer.h>
@@ -35,16 +35,9 @@ QMLConverter::~QMLConverter()
 {
 }
 
-KisImageBuilder_Result QMLConverter::buildFile(const QUrl &uri, KisImageWSP image)
+KisImageBuilder_Result QMLConverter::buildFile(const QString &filename, KisImageWSP image)
 {
-
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
-
-    if (!uri.isLocalFile())
-        return KisImageBuilder_RESULT_NOT_LOCAL;
-
-    QFile file(uri.path());
+    QFile file(filename);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
          return KisImageBuilder_RESULT_FAILURE;
     }

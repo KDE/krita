@@ -2087,7 +2087,7 @@ bool KisDocument::closeUrl(bool promptToSave)
 }
 
 
-bool KisDocument::saveAs( const QUrl &kurl )
+bool KisDocument::saveAs(const QUrl &kurl)
 {
     if (!kurl.isValid())
     {

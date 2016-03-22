@@ -25,7 +25,7 @@
 #include <QApplication>
 
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KoColorSpace.h>
 #include <KisFilterChain.h>
@@ -254,19 +254,12 @@ KisImportExportFilter::ConversionStatus KisTGAImport::convert(const QByteArray& 
     doc->prepareForImport();
 
     if (!filename.isEmpty()) {
-        QUrl url(filename);
 
-        if (url.isEmpty())
-            return KisImportExportFilter::FileNotFound;
-
-        if (!url.isLocalFile()) {
+        if (!QFileInfo(filename).exists()) {
             return KisImportExportFilter::FileNotFound;
         }
 
-
-        QString localFile = url.toLocalFile();
-
-        QFile f(localFile);
+        QFile f(filename);
         f.open(QIODevice::ReadOnly);
         QDataStream s(&f);
         s.setByteOrder(QDataStream::LittleEndian);

@@ -22,7 +22,7 @@
 
 #include <QObject>
 
-#include <QUrl>
+#include <QFileInfo>
 
 #include "kis_types.h"
 #include <KisImageBuilderResult.h>
@@ -37,7 +37,7 @@ public:
     PSDLoader(KisDocument *doc);
     virtual ~PSDLoader();
 
-    KisImageBuilder_Result buildImage(const QUrl &uri);
+    KisImageBuilder_Result buildImage(const QString &filename);
 
     KisImageWSP image();
 
@@ -47,7 +47,7 @@ public Q_SLOTS:
 
 private:
 
-    KisImageBuilder_Result decode(const QUrl &uri);
+    KisImageBuilder_Result decode(const QString &filename);
 
 private:
 

@@ -24,7 +24,7 @@
 #include <QFile>
 #include <QApplication>
 
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KoDocumentInfo.h>
 #include <KoUnit.h>
@@ -178,13 +178,13 @@ KisTIFFConverter::~KisTIFFConverter()
 {
 }
 
-KisImageBuilder_Result KisTIFFConverter::decode(const QUrl &uri)
+KisImageBuilder_Result KisTIFFConverter::decode(const QString &filename)
 {
     dbgFile << "Start decoding TIFF File";
     // Opent the TIFF file
     TIFF *image = 0;
-    if ((image = TIFFOpen(QFile::encodeName(uri.toLocalFile()), "r")) == NULL) {
-        dbgFile << "Could not open the file, either it does not exist, either it is not a TIFF :" << uri.toLocalFile();
+    if ((image = TIFFOpen(QFile::encodeName(filename), "r")) == NULL) {
+        dbgFile << "Could not open the file, either it does not exist, either it is not a TIFF :" << filename;
         return (KisImageBuilder_RESULT_BAD_FETCH);
     }
     do {
@@ -286,9 +286,9 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     else {
         dbgFile << "No Profile found";
     }
-    
+
     // Check that the profile is used by the color space
-    
+
     if (profile && !KoColorSpaceRegistry::instance()->colorSpaceFactory(KoColorSpaceRegistry::instance()->colorSpaceId(colorSpaceId.first, colorSpaceId.second))->profileIsCompatible(profile)) {
         warnFile << "The profile " << profile->name() << " is not compatible with the color space model " << colorSpaceId.first << " " << colorSpaceId.second;
         profile = 0;
@@ -606,16 +606,9 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     return KisImageBuilder_RESULT_OK;
 }
 
-KisImageBuilder_Result KisTIFFConverter::buildImage(const QUrl &uri)
+KisImageBuilder_Result KisTIFFConverter::buildImage(const QString &filename)
 {
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
-
-    if (!uri.isLocalFile()) {
-        return KisImageBuilder_RESULT_NOT_EXIST;
-    }
-
-    return decode(uri);
+    return decode(filename);
 }
 
 
@@ -625,22 +618,16 @@ KisImageWSP KisTIFFConverter::image()
 }
 
 
-KisImageBuilder_Result KisTIFFConverter::buildFile(const QUrl &uri, KisImageWSP kisimage, KisTIFFOptions options)
+KisImageBuilder_Result KisTIFFConverter::buildFile(const QString &filename, KisImageWSP kisimage, KisTIFFOptions options)
 {
     dbgFile << "Start writing TIFF File";
     if (!kisimage)
         return KisImageBuilder_RESULT_EMPTY;
 
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
-
-    if (!uri.isLocalFile())
-        return KisImageBuilder_RESULT_NOT_LOCAL;
-
     // Open file for writing
     TIFF *image;
-    if ((image = TIFFOpen(QFile::encodeName(uri.toLocalFile()), "w")) == NULL) {
-        dbgFile << "Could not open the file for writing" << uri.toLocalFile();
+    if ((image = TIFFOpen(QFile::encodeName(filename), "w")) == NULL) {
+        dbgFile << "Could not open the file for writing" << filename;
         TIFFClose(image);
         return (KisImageBuilder_RESULT_FAILURE);
     }

@@ -35,7 +35,7 @@
 #include <KoDialog.h>
 #include <kpluginfactory.h>
 #include <kpassworddialog.h>
-#include <QUrl>
+#include <QFileInfo>
 
 // calligra's headers
 #include <KisFilterChain.h>

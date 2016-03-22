@@ -775,19 +775,11 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 
 }
 
-KisImageBuilder_Result KisPNGConverter::buildImage(const QUrl &uri)
+KisImageBuilder_Result KisPNGConverter::buildImage(const QString &filename)
 {
-    dbgFile << QFile::encodeName(uri.path()) << " " << uri.path() << " " << uri;
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
+    m_path = filename;
 
-    if (!uri.isLocalFile()) {
-        return KisImageBuilder_RESULT_NOT_LOCAL;
-    }
-
-    m_path = uri.toDisplayString();
-
-    QFile fp(uri.toLocalFile());
+    QFile fp(filename);
     if (fp.exists()) {
         return buildImage(&fp);
     }
@@ -840,16 +832,11 @@ bool KisPNGConverter::saveDeviceToStore(const QString &filename, const QRect &im
 }
 
 
-KisImageBuilder_Result KisPNGConverter::buildFile(const QUrl &uri, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
+KisImageBuilder_Result KisPNGConverter::buildFile(const QString &filename, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
 {
-    dbgFile << "Start writing PNG File " << uri;
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
-
-    if (!uri.isLocalFile())
-        return KisImageBuilder_RESULT_NOT_LOCAL;
+    dbgFile << "Start writing PNG File " << filename;
     // Open a QIODevice for writing
-    QFile fp (uri.toLocalFile());
+    QFile fp (filename);
     KisImageBuilder_Result result = buildFile(&fp, imageRect, xRes, yRes, device, annotationsStart, annotationsEnd, options, metaData);
 
     return result;

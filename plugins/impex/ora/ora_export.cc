@@ -22,7 +22,7 @@
 #include <QMessageBox>
 
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 #include <QApplication>
 
 #include <KisFilterChain.h>
@@ -90,8 +90,6 @@ KisImportExportFilter::ConversionStatus OraExport::convert(const QByteArray& fro
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    QUrl url = QUrl::fromLocalFile(filename);
-
     KisImageWSP image = input->image();
     Q_CHECK_PTR(image);
 
@@ -119,7 +117,7 @@ KisImportExportFilter::ConversionStatus OraExport::convert(const QByteArray& fro
 
     KisImageBuilder_Result res;
 
-    if ((res = kpc.buildFile(url, image, input->activeNodes())) == KisImageBuilder_RESULT_OK) {
+    if ((res = kpc.buildFile(filename, image, input->activeNodes())) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         return KisImportExportFilter::OK;
     }

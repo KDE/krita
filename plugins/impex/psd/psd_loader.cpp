@@ -19,7 +19,7 @@
 
 #include <QApplication>
 
-#include <QUrl>
+#include <QFileInfo>
 #include <QStack>
 
 #include <KoColorSpace.h>
@@ -63,10 +63,10 @@ PSDLoader::~PSDLoader()
 {
 }
 
-KisImageBuilder_Result PSDLoader::decode(const QUrl &uri)
+KisImageBuilder_Result PSDLoader::decode(const QString &filename)
 {
     // open the file
-    QFile f(uri.toLocalFile());
+    QFile f(filename);
     if (!f.exists()) {
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
@@ -358,16 +358,9 @@ KisImageBuilder_Result PSDLoader::decode(const QUrl &uri)
     return KisImageBuilder_RESULT_OK;
 }
 
-KisImageBuilder_Result PSDLoader::buildImage(const QUrl &uri)
+KisImageBuilder_Result PSDLoader::buildImage(const QString &filename)
 {
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
-
-    if (!uri.isLocalFile()) {
-        return KisImageBuilder_RESULT_NOT_EXIST;
-    }
-
-    return decode(uri);
+    return decode(filename);
 }
 
 

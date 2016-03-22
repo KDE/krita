@@ -19,7 +19,7 @@
 #include "jp2_import.h"
 
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KisFilterChain.h>
 
@@ -56,15 +56,9 @@ KisImportExportFilter::ConversionStatus jp2Import::convert(const QByteArray&, co
 
     if (!filename.isEmpty()) {
 
-        QUrl url = QUrl::fromLocalFile(filename);
-
-        if (url.isEmpty())
-            return KisImportExportFilter::FileNotFound;
-
         jp2Converter ib(doc);
 
-
-        switch (ib.buildImage(url)) {
+        switch (ib.buildImage(filename)) {
         case KisImageBuilder_RESULT_UNSUPPORTED:
             return KisImportExportFilter::NotImplemented;
             break;

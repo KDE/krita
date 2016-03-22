@@ -25,7 +25,7 @@
 
 #include <KoDialog.h>
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KisFilterChain.h>
 #include <KoColorSpaceConstants.h>
@@ -100,8 +100,6 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
     QString filename = outputFile();
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    QUrl url = QUrl::fromLocalFile(filename);
-
     exrConverter kpc(input, !getBatchMode());
 
     KisImageBuilder_Result res;
@@ -113,12 +111,12 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
         KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
         image->unlock();
 
-        res = kpc.buildFile(url, l);
+        res = kpc.buildFile(filename, l);
     }
     else {
         image->lock();
 
-        res = kpc.buildFile(url, image->rootLayer());
+        res = kpc.buildFile(filename, image->rootLayer());
         image->unlock();
 
     }

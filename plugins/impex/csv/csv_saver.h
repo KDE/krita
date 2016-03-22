@@ -39,11 +39,11 @@ public:
     CSVSaver(KisDocument* doc, bool batchMode);
     virtual ~CSVSaver();
 
-    KisImageBuilder_Result buildAnimation(const QUrl &, const QString &);
+    KisImageBuilder_Result buildAnimation(const QString &filename);
     KisImageWSP image();
 
 private:
-    KisImageBuilder_Result encode(const QUrl &, const QString &);
+    KisImageBuilder_Result encode(const QString &filename);
     KisImageBuilder_Result getLayer(CSVLayerRecord* , KisDocument* , KisKeyframeSP, const QString &, int, int);
     void createTempImage(KisDocument* );
     QString convertToBlending(const QString &);

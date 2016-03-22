@@ -18,7 +18,7 @@
 #include "ora_import.h"
 
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KisFilterChain.h>
 
@@ -55,15 +55,14 @@ KisImportExportFilter::ConversionStatus OraImport::convert(const QByteArray&, co
 
     if (!filename.isEmpty()) {
 
-        QUrl url = QUrl::fromLocalFile(filename);
-
-        if (url.isEmpty())
+        if (!QFileInfo(filename).exists()) {
             return KisImportExportFilter::FileNotFound;
+        }
 
         OraConverter ib(doc);
 
 
-        switch (ib.buildImage(url)) {
+        switch (ib.buildImage(filename)) {
         case KisImageBuilder_RESULT_UNSUPPORTED:
             return KisImportExportFilter::NotImplemented;
             break;

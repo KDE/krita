@@ -36,7 +36,7 @@
 #include <QIcon>
 
 KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, bool themed, QWidget *parent, Qt::WindowFlags f)
-    : QWidget(parent, Qt::SplashScreen | Qt::FramelessWindowHint | f)
+    : QWidget(parent, Qt::SplashScreen | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | f)
 {
     setupUi(this);
     setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));

@@ -365,7 +365,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     // TODO: fix print & exportAsPdf to work without mainwindow shown
     const bool showmainWindow = !exportAs; // would be !batchRun;
 
-    const bool showSplashScreen = !batchRun && !qgetenv("NOSPLASH").isEmpty();
+    const bool showSplashScreen = !batchRun && qgetenv("NOSPLASH").isEmpty();
     if (showSplashScreen) {
         d->splashScreen->show();
         d->splashScreen->repaint();

@@ -34,8 +34,7 @@ KisCompositeOpOption::KisCompositeOpOption(bool createConfigWidget):
     m_eraserMode(false)
 {
     m_checkable         = false;
-    m_prevCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
-    m_currCompositeOpID = m_prevCompositeOpID;
+    m_currCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
 
     if (createConfigWidget) {
         QWidget* widget = new QWidget();
@@ -83,7 +82,6 @@ void KisCompositeOpOption::changeCompositeOp(const KoID& compositeOp)
     if (compositeOp.id() == m_currCompositeOpID)
         return;
 
-    m_prevCompositeOpID = m_currCompositeOpID;
     m_currCompositeOpID = compositeOp.id();
 
     if (m_createConfigWidget) {

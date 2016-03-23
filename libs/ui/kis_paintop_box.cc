@@ -354,7 +354,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_presetsChooserPopup->setFixedSize(500, 600);
     m_presetSelectorPopupButton->setPopupWidget(m_presetsChooserPopup);
 
-    m_prevCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
     m_currCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
 
     slotNodeChanged(view->activeNode());
@@ -378,10 +377,10 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*))      , SLOT(resourceSelected(KoResource*)));
     connect(m_resourceProvider   , SIGNAL(sigNodeChanged(const KisNodeSP))    , SLOT(slotNodeChanged(const KisNodeSP)));
     connect(m_cmbCompositeOp     , SIGNAL(currentIndexChanged(int))           , SLOT(slotSetCompositeMode(int)));
-    connect(m_eraseAction          , SIGNAL(triggered(bool))                    , SLOT(slotToggleEraseMode(bool)));
-    connect(alphaLockAction      , SIGNAL(triggered(bool))                    , SLOT(slotToggleAlphaLockMode(bool)));
-    connect(m_hMirrorAction        , SIGNAL(triggered(bool))                    , SLOT(slotHorizontalMirrorChanged(bool)));
-    connect(m_vMirrorAction        , SIGNAL(triggered(bool))                    , SLOT(slotVerticalMirrorChanged(bool)));
+    connect(m_eraseAction          , SIGNAL(toggled(bool))                    , SLOT(slotToggleEraseMode(bool)));
+    connect(alphaLockAction      , SIGNAL(toggled(bool))                    , SLOT(slotToggleAlphaLockMode(bool)));
+    connect(m_hMirrorAction        , SIGNAL(toggled(bool))                    , SLOT(slotHorizontalMirrorChanged(bool)));
+    connect(m_vMirrorAction        , SIGNAL(toggled(bool))                    , SLOT(slotVerticalMirrorChanged(bool)));
     connect(m_reloadAction         , SIGNAL(triggered())                        , SLOT(slotReloadPreset()));
 
     connect(m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("opacity"), SIGNAL(valueChanged(qreal)), SLOT(slotSlider1Changed()));
@@ -584,7 +583,6 @@ void KisPaintopBox::updateCompositeOp(QString compositeOpID)
             m_resourceProvider->currentPreset()->settings()->setPaintOpCompositeOp(compositeOpID);
             m_optionWidget->setConfiguration(m_resourceProvider->currentPreset()->settings().data());
             m_resourceProvider->setCurrentCompositeOp(compositeOpID);
-            m_prevCompositeOpID = m_currCompositeOpID;
             m_currCompositeOpID = compositeOpID;
         }
     }
@@ -1007,9 +1005,7 @@ void KisPaintopBox::slotSwitchToPreviousPreset()
 
 void KisPaintopBox::slotUnsetEraseMode()
 {
-    if (m_currCompositeOpID == COMPOSITE_ERASE) {
-        updateCompositeOp(m_prevCompositeOpID);
-    }
+    m_eraseAction->setChecked(false);
 }
 
 void KisPaintopBox::slotToggleAlphaLockMode(bool checked)

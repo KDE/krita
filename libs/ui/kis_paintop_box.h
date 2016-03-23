@@ -185,7 +185,6 @@ private:
     KisAction*                          m_eraseAction;
     KisAction*                          m_reloadAction;
 
-    QString             m_prevCompositeOpID;
     QString             m_currCompositeOpID;
     KisNodeWSP          m_previousNode;
 

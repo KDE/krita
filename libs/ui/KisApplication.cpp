@@ -588,6 +588,10 @@ QList<QUrl> KisApplication::checkAutosaveFiles()
 
     // Allow the user to make their selection
     if (autoSaveFiles.size() > 0) {
+        if (d->splashScreen) {
+            // hide the splashscreen to see the dialog
+            d->splashScreen->hide();
+        }
         KisAutoSaveRecoveryDialog *dlg = new KisAutoSaveRecoveryDialog(autoSaveFiles, activeWindow());
         if (dlg->exec() == QDialog::Accepted) {
 

@@ -406,7 +406,9 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
         return 0;
     }
     if (profile) {
+        d->registrylock.lockForRead();
         const KoColorSpace *cs = getCachedColorSpace(csID, profile->name());
+        d->registrylock.unlock();
 
         if (!d->profileMap.contains(profile->name())) {
             addProfile(profile);

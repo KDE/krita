@@ -166,9 +166,11 @@ void KoToolBox::addButton(KoToolAction *toolAction)
 void KoToolBox::setActiveTool(KoCanvasController *canvas, int id)
 {
     Q_UNUSED(canvas);
+
     QAbstractButton *button = d->buttonGroup->button(id);
     if (button) {
         button->setChecked(true);
+        (qobject_cast<KoToolBoxButton*>(button))->setHighlightColor();
     }
     else {
         warnWidgets << "KoToolBox::setActiveTool(" << id << "): no such button found";

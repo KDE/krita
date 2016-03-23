@@ -235,8 +235,19 @@ public:
      */
     void clearResource(int key);
 
+    /**
+     * @see KoReosurceManager::addDerivedResourceConverter()
+     */
     void addDerivedResourceConverter(KoDerivedResourceConverterSP converter);
+
+    /**
+     * @see KoReosurceManager::hasDerivedResourceConverter()
+     */
     bool hasDerivedResourceConverter(int key);
+
+    /**
+     * @see KoReosurceManager::removeDerivedResourceConverter()
+     */
     void removeDerivedResourceConverter(int key);
 
 Q_SIGNALS:

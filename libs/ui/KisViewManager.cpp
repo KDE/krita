@@ -337,6 +337,25 @@ void KisViewManager::setCurrentView(KisView *view)
         d->viewConnections.clear();
     }
 
+    // Restore the last used brush preset
+    if (first) {
+        KisConfig cfg;
+        KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+        QString lastPreset = cfg.readEntry("LastPreset", QString("Basic_tip_default"));
+        KisPaintOpPresetSP preset = rserver->resourceByName(lastPreset);
+        if (!preset) {
+            preset = rserver->resourceByName("Basic_tip_default");
+        }
+
+        if (!preset) {
+            preset = rserver->resources().first();
+        }
+        if (preset) {
+            paintOpBox()->restoreResource(preset.data());
+        }
+
+    }
+
     QPointer<KisView>imageView = qobject_cast<KisView*>(view);
 
     if (imageView) {
@@ -411,25 +430,6 @@ void KisViewManager::setCurrentView(KisView *view)
 
     resourceProvider()->slotImageSizeChanged();
     resourceProvider()->slotOnScreenResolutionChanged();
-
-    // Restore the last used brush preset
-    if (first) {
-        KisConfig cfg;
-        KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-        QString lastPreset = cfg.readEntry("LastPreset", QString("Basic_tip_default"));
-        KisPaintOpPresetSP preset = rserver->resourceByName(lastPreset);
-        if (!preset) {
-            preset = rserver->resourceByName("Basic_tip_default");
-        }
-
-        if (!preset) {
-            preset = rserver->resources().first();
-        }
-        if (preset) {
-            paintOpBox()->restoreResource(preset.data());
-        }
-
-    }
 }
 
 

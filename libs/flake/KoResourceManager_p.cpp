@@ -30,19 +30,19 @@ void KoResourceManager::setResource(int key, const QVariant &value)
 {
     QVariant realValue = value;
     int realKey = key;
+    QVariant currentValue = m_resources.value(key, QVariant());
 
     KoDerivedResourceConverterSP converter =
         m_derivedResources.value(key, KoDerivedResourceConverterSP());
 
-    QVariant currentValue = m_resources.value(realKey, QVariant());
-
     if (converter) {
         realKey = converter->sourceKey();
+        currentValue = m_resources.value(realKey, QVariant());
         realValue = converter->toSource(value, currentValue);
     }
 
     if (m_resources.contains(realKey)) {
-        if (currentValue == realValue)
+        if (!converter && currentValue == realValue)
             return;
         m_resources[realKey] = realValue;
     } else {

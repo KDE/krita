@@ -68,6 +68,8 @@ QVariant KisEffectiveCompositeOpResourceConverter::fromSource(const QVariant &va
 
 QVariant KisEffectiveCompositeOpResourceConverter::toSource(const QVariant &value, const QVariant &sourceValue)
 {
+    Q_UNUSED(value);
+
     // WARNING: we don't save that!
     KisPaintOpPresetSP preset = sourceValue.value<KisPaintOpPresetSP>();
     if (!preset) return sourceValue;

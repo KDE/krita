@@ -510,9 +510,9 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
     }
 
     preset = (!preset) ? activePreset(paintop) : preset;
-
     Q_ASSERT(preset && preset->settings());
 
+    m_resourceProvider->setPaintOpPreset(preset);
 
     if (!m_paintopOptionWidgets.contains(paintop))
         m_paintopOptionWidgets[paintop] = KisPaintOpRegistry::instance()->get(paintop.id())->createConfigWidget(this);
@@ -539,7 +539,6 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
     QString pixFilename = KoResourcePaths::findResource("kis_images", paintOp->pixmap());
 
     m_brushEditorPopupButton->setIcon(QIcon(pixFilename));
-    m_resourceProvider->setPaintOpPreset(preset);
     m_presetsPopup->setCurrentPaintOp(paintop.id());
 
     if (m_presetsPopup->currentPaintOp() != paintop.id()) {
@@ -977,9 +976,7 @@ void KisPaintopBox::slotToolChanged(KoCanvasController* canvas, int toolId)
 
 void KisPaintopBox::slotOpacityChanged(qreal opacity)
 {
-    if (m_blockUpdate) {
-        return;
-    }
+    if (m_blockUpdate || !m_optionWidget) return;
     m_blockUpdate = true;
 
     for (int i = 0; i < 3; ++i) {

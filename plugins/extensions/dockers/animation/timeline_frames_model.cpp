@@ -273,6 +273,7 @@ void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, 
 
     if (m_d->dummiesFacade) {
         slotCurrentTimeChanged(m_d->image->animationInterface()->currentUITime());
+        emit sigInfiniteTimelineUpdateNeeded();
     }
 }
 

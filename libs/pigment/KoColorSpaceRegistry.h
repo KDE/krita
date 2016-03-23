@@ -329,7 +329,16 @@ private:
 
 private:
 
-    bool isCached(const QString & csId, const QString & profileName) const;
+    /**
+     * The function checks if a colorspace with a certain id and profile name can be found in the cache
+     * NOTE: the function doesn't take any lock but it needs to be called inside a d->registryLock
+     * locked either in read or write.
+     * @param csId The colorspace id
+     * @param profileName The colorspace profile name
+     * @retval KoColorSpace The matching colorspace
+     * @retval 0 Null pointer if not match
+     */
+    const KoColorSpace* getCachedColorSpace(const QString & csId, const QString & profileName) const;
 
     QString idsToCacheName(const QString & csId, const QString & profileName) const;
 

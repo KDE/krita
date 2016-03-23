@@ -393,9 +393,9 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
     else {
         Q_ASSERT(cs->id() == csID);
         Q_ASSERT(cs->profile()->name() == profileName);
+        d->registrylock.unlock();
     }
 
-    d->registrylock.unlock();
     return cs;
 }
 

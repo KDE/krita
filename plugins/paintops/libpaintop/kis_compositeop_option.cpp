@@ -30,7 +30,8 @@
 
 KisCompositeOpOption::KisCompositeOpOption(bool createConfigWidget):
     KisPaintOpOption(KisPaintOpOption::GENERAL, true),
-    m_createConfigWidget(createConfigWidget)
+    m_createConfigWidget(createConfigWidget),
+    m_eraserMode(false)
 {
     m_checkable         = false;
     m_prevCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
@@ -64,6 +65,7 @@ KisCompositeOpOption::~KisCompositeOpOption()
 void KisCompositeOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
     setting->setProperty("CompositeOp", m_currCompositeOpID);
+    setting->setProperty("EraserMode", m_eraserMode);
 }
 
 void KisCompositeOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
@@ -71,6 +73,9 @@ void KisCompositeOpOption::readOptionSetting(const KisPropertiesConfiguration* s
     QString ompositeOpID = setting->getString("CompositeOp", KoCompositeOpRegistry::instance().getDefaultCompositeOp().id());
     KoID    compositeOp = KoCompositeOpRegistry::instance().getKoID(ompositeOpID);
     changeCompositeOp(compositeOp);
+
+    const bool eraserMode = setting->getBool("EraserMode", false);;
+    slotEraserToggled(eraserMode);
 }
 
 void KisCompositeOpOption::changeCompositeOp(const KoID& compositeOp)
@@ -83,9 +88,6 @@ void KisCompositeOpOption::changeCompositeOp(const KoID& compositeOp)
 
     if (m_createConfigWidget) {
         m_label->setText(compositeOp.name());
-
-        KisSignalsBlocker b(m_bnEraser);
-        m_bnEraser->setChecked(m_currCompositeOpID == "erase");
     }
 
     emitSettingChanged();
@@ -102,8 +104,12 @@ void KisCompositeOpOption::slotCompositeOpChanged(const QModelIndex& index)
 
 void KisCompositeOpOption::slotEraserToggled(bool toggled)
 {
-    if (toggled)
-        changeCompositeOp(KoCompositeOpRegistry::instance().getKoID("erase"));
-    else
-        changeCompositeOp(KoCompositeOpRegistry::instance().getKoID(m_prevCompositeOpID));
+    if (m_bnEraser->isChecked() != toggled) {
+        KisSignalsBlocker b(m_bnEraser);
+        m_bnEraser->setChecked(toggled);
+    }
+
+    m_eraserMode = toggled;
+
+    emitSettingChanged();
 }

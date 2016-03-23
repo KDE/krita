@@ -349,6 +349,17 @@ QString KisCanvasResourceProvider::currentCompositeOp() const
     return m_resourceManager->resource(CurrentCompositeOp).value<QString>();
 }
 
+bool KisCanvasResourceProvider::eraserMode() const
+{
+    return m_resourceManager->resource(EraserMode).toBool();
+}
+
+void KisCanvasResourceProvider::setEraserMode(bool value)
+{
+    m_resourceManager->setResource(EraserMode,
+                                   QVariant::fromValue(value));
+}
+
 void KisCanvasResourceProvider::slotPainting()
 {
     if (m_fGChanged && m_enablefGChange) {

@@ -613,6 +613,7 @@ void KisSketchView::centerDoc()
 
 void KisSketchView::Private::imageUpdated(const QRect &updated)
 {
+    Q_UNUSED(updated);
     // QT5TODO
 //     if (q->scene()) {
 //         q->scene()->views().at(0)->update(updated);

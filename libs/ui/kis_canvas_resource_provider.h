@@ -95,6 +95,9 @@ public:
     float HDRGamma() const;
     void setHDRGamma(float gamma);
 
+    bool eraserMode() const;
+    void setEraserMode(bool value);
+
     KoPattern *currentPattern() const;
 
     KoAbstractGradient *currentGradient() const;

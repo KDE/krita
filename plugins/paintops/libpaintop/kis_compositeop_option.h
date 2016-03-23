@@ -56,6 +56,7 @@ private:
     QString                   m_prevCompositeOpID;
     QString                   m_currCompositeOpID;
     bool                      m_createConfigWidget;
+    bool                      m_eraserMode;
 
 };
 

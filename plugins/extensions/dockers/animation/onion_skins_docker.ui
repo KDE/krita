@@ -111,10 +111,7 @@
     </layout>
    </item>
   </layout>
-  <zorder></zorder>
-  <zorder></zorder>
   <zorder>lblPrevColor</zorder>
-  <zorder>horizontalSpacer</zorder>
   <zorder>btnBackwardColor</zorder>
   <zorder>btnForwardColor</zorder>
   <zorder>lblNextColor</zorder>

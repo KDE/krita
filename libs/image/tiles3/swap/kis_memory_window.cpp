@@ -36,6 +36,9 @@ KisMemoryWindow::KisMemoryWindow(const QString &swapDir, quint64 writeWindowSize
     bool res = m_file.open();
     Q_ASSERT(res);
     Q_ASSERT(!m_file.fileName().isEmpty());
+    if (!res || m_file.fileName().isEmpty()) {
+        qWarning() << "Could not create or open swapfile";
+    }
 }
 
 KisMemoryWindow::~KisMemoryWindow()

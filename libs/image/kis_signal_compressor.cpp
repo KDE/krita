@@ -66,6 +66,8 @@ void KisSignalCompressor::start()
         if (!m_timer.isActive()) {
             m_timer.start();
         }
+    case UNDEFINED:
+        ; // Should never happen, but do nothing
     };
 
     if (m_mode == POSTPONE || !m_timer.isActive()) {

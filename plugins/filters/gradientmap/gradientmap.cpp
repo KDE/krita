@@ -31,6 +31,7 @@ K_PLUGIN_FACTORY_WITH_JSON(KritaGradientMapFactory, "kritagradientmap.json", reg
 KritaGradientMapConfigWidget::KritaGradientMapConfigWidget(QWidget *parent, KisPaintDeviceSP dev, Qt::WFlags f)
 	: KisConfigWidget(parent, f)
 {
+    Q_UNUSED(dev)
 	m_page = new WdgGradientMap(this);
 	QHBoxLayout *l = new QHBoxLayout(this);
 	Q_CHECK_PTR(l);
@@ -47,6 +48,7 @@ KritaGradientMapConfigWidget::~KritaGradientMapConfigWidget()
 
 void KritaGradientMapConfigWidget::gradientResourceChanged(KoResource* gradient)
 {
+    Q_UNUSED(gradient)
 }
 
 KritaGradientMapFilterConfiguration* KritaGradientMapConfigWidget::configuration() const
@@ -69,10 +71,12 @@ void KritaGradientMapConfigWidget::setConfiguration(const KisPropertiesConfigura
 {
     const KritaGradientMapFilterConfiguration* cfg = dynamic_cast<const KritaGradientMapFilterConfiguration* > (config);
     Q_ASSERT(cfg);
+    Q_UNUSED(cfg);
 }
 
 void KritaGradientMapConfigWidget::setView(KisViewManager *view)
 {
+    Q_UNUSED(view)
 }
 
 //-----------------------------

@@ -182,6 +182,16 @@ QItemSelectionModel::SelectionFlags KisNodeView::selectionCommand(const QModelIn
         }
     }
 
+    /**
+     * Qt 5.6 has a bug: it reads global modifiers, not the ones
+     * passed from event.  So if you paste an item using Ctrl+V it'll
+     * select multiple layers for you
+     */
+    Qt::KeyboardModifiers globalModifiers = QApplication::keyboardModifiers();
+    if (!event && globalModifiers != Qt::NoModifier) {
+        return QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows;
+    }
+
     return QAbstractItemView::selectionCommand(index, event);
 }
 

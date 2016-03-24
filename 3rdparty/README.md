@@ -128,7 +128,7 @@ When installing from source, you can use these example configure commands:
     -no-cups -no-tslib -no-pch \
     -no-dbus  -no-gstreamer -no-system-proxies \
     -no-openssl -no-libproxy -no-pulseaudio \
-    -nomake examples -nomake demos \
+    -nomake examples -nomake tests \
     -prefix $BUILDROOT/i
 
 * Windows

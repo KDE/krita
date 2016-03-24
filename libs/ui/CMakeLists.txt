@@ -193,6 +193,7 @@ set(kritaui_LIB_SRCS
     tool/strokes/freehand_stroke.cpp
     tool/strokes/kis_painter_based_stroke_strategy.cpp
     tool/strokes/kis_filter_stroke_strategy.cpp
+    tool/strokes/kis_color_picker_stroke_strategy.cpp
     widgets/kis_cmb_composite.cc
     widgets/kis_cmb_contour.cpp
     widgets/kis_cmb_gradient.cpp

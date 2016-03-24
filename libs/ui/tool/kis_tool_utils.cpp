@@ -27,24 +27,11 @@
 
 namespace KisToolUtils {
 
-    bool pickWrapped(KisPaintDeviceSP dev, QPoint pos, KoColor *color, KisImageSP image)
-    {
-        if (!image->tryBarrierLock()) return false;
-
-        if (image->wrapAroundModePermitted()) {
-            pos = KisWrappedRect::ptToWrappedPt(pos, image->bounds());
-        }
-
-        bool result = pick(dev, pos, color);
-
-        image->unlock();
-        return result;
-    }
-
     bool pick(KisPaintDeviceSP dev, const QPoint& pos, KoColor *color)
     {
         KIS_ASSERT(dev);
         KoColor pickedColor;
+
         dev->pixel(pos.x(), pos.y(), &pickedColor);
         pickedColor.convertTo(dev->compositionSourceColorSpace());
 

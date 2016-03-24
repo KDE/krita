@@ -52,10 +52,20 @@ Windows Only:
 Install Qt. Either build from source or with the qt.io installer. 
 
 Either way, make sure qmake is in your environment path. If you are using Qt 5.6 for example, this is the default location for Windows:
-C:\Qt\Qt5.6.0\5.6\msvc2015_64\bin
+C:\Qt\Qt5.6.0\5.6\msvc2015_64\bin, when using the qt.io installer.
 
+When building from source, you need the following modules:
+ 
+* qtbase
+* qtdeclarative
+* qtimageformats
+* qtscript
+* qtscript
+* qtsvg
+* qttools
+* qttranslations
 
-You need qtbase, qtsvg, qttools, qtscript, qtdeclarative, qtgraphicaleffects, qttranslations. On Windows, you also need qtwinextras, on Linux qtx11extras.
+ On Windows, you also need qtwinextras, on Linux qtx11extras, on OSX qtmacextras.
 
 When installing from source, you can use these example configure commands:
  
@@ -99,7 +109,6 @@ When installing from source, you can use these example configure commands:
     -skip qtactiveqt \
     -skip qtcanvas3d \
     -skip qtconnectivity \
-    -skip qtdeclarative \
     -skip qtdoc \
     -skip qtenginio \
     -skip qtgraphicaleffects \
@@ -130,9 +139,13 @@ When installing from source, you can use these example configure commands:
 
     If a release with debug info for developing purposes is needed, add the -force-debug-info to the configure options above, so that the pdb files will be generated.
 
-    N.B.: if you don't have the Qt 5.6 pre-built binaries already installed, you will need to copy Qt5Core.dll, coming from those binaries inside the Qt build directory, under the path qtbase\bin, otherwise you'll get an error
-    about it missing when using jom and a more cryptic error with nmake. The same has to be done with Qt5Xml.dll, to be copied under qttools\bin.
-    Don't use the dlls coming from the QtCreator folder, they won't work.
+    N.B.: if you don't have the Qt 5.6 pre-built binaries already
+    installed, you will need to copy Qt5Core.dll, coming from those
+    binaries inside the Qt build directory, under the path qtbase\bin,
+    otherwise you'll get an error about it missing when using jom
+    and a more cryptic error with nmake. The same has to be done with
+    Qt5Xml.dll, to be copied under qttools\bin.  Don't use the dlls
+    coming from the QtCreator folder, they won't work.
 
 == Prepare the externals build ==
 
@@ -146,7 +159,7 @@ When installing from source, you can use these example configure commands:
 
     * Windows 64 bits:
 
-Note that the cmake command needs to point to your buildroot like /dev/d, not c:\dev\d.
+Note that the cmake command needs to point to your BUILDROOT like /dev/d, not c:\dev\d.
 
     set PATH=BUILDROOT\i\bin\;BUILDROOT\i\lib;%PATH%
     cmake ..\krita\3rdparty -DEXTERNALS_DOWNLOAD_DIR=/dev/d -DINSTALL_ROOT=/dev/i   -G "Visual Studio 14 Win64" 
@@ -177,8 +190,7 @@ On all operating systems:
 
 Note for OSX:
 
-On OSX, you need to first build openexr; that will fail; then you need to set the rpath
-for the two utilities correctly, then try to build openexr again.
+On OSX, you need to first build openexr; that will fail; then you need to set the rpath for the two utilities correctly, then try to build openexr again.
 
     install_name_tool -add_rpath $BUILD_ROOT/i/lib $BUILD_ROOT/b/ext_openexr/ext_openexr-prefix/src/ext_openexr-build/IlmImf/./b44ExpLogTable
     install_name_tool -add_rpath $BUILD_ROOT/i/lib $BUILD_ROOT/b/ext_openexr/ext_openexr-prefix/src/ext_openexr-build/IlmImf/./dwaLookups
@@ -271,14 +283,14 @@ On OSX
     BUILDROOT/i/bin/krita.app/Contents/MacOS/krita
 
 == Packaging a Windows Build ==
-If you want to create a stripped down version of Krita to distribute, after building everything just copy the makepkg.bat file from the "windows" folder inside krita root source folder, next to the install folder and run it.
+If you want to create a stripped down version of Krita to distribute, after building everything just copy the makepkg.bat file from the "windows" folder inside krita root source folder to BUILDROOT and run it.
+
 That will copy the Krita necessary files into the specified folder and leave behind developer related files, so the resulting folder will be a smaller install folder.
 
 == Common Issues ==
 - On Windows, if you get a 'mspdb140.dll' missing alert window, it means you did not run the bat file. Make sure to include the quotes in the command:
   "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\amd64\vcvars64.bat"
 
-- On Windows, if you get an error about Qt5Core.dll missing/not found or nmake exit with an error that mention QT_PLUGIN_PATH, you have to copy a couple of dlls in the Qt build directory, look
-  for the N.B. in the Qt instructions at the start of the Readme.
+- On Windows, if you get an error about Qt5Core.dll missing/not found or nmake exit with an error that mention QT_PLUGIN_PATH, you have to copy a couple of dlls in the Qt build directory, look for the N.B. in the Qt instructions at the start of the Readme.
 
 - If you receive an error while compiling about "missing QtCore5.cmake", or something similar, check to make sure qmake is in your PATH. Restart your command line after any changes are made.

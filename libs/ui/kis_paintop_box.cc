@@ -1048,7 +1048,7 @@ void KisPaintopBox::slotSwitchToPreviousPreset()
 void KisPaintopBox::slotUnsetEraseMode()
 {
     if (m_currCompositeOpID == COMPOSITE_ERASE) {
-        updateCompositeOp(m_prevCompositeOpID);
+        slotToggleEraseMode(false);
     }
 }
 

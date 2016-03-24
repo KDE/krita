@@ -206,7 +206,7 @@ KisLayerBox::KisLayerBox()
     m_wdgLayerBox->listLayers->setModel(m_filteringModel);
     // this connection should be done *after* the setModel() call to
     // happen later than the internal selection model
-    connect(m_filteringModel, &KisNodeFilterProxyModel::rowsAboutToBeRemoved,
+    connect(m_filteringModel.data(), &KisNodeFilterProxyModel::rowsAboutToBeRemoved,
             this, &KisLayerBox::slotAboutToRemoveRows);
 
     connect(m_wdgLayerBox->cmbFilter, SIGNAL(selectedColorsChanged()), SLOT(updateLayerFiltering()));

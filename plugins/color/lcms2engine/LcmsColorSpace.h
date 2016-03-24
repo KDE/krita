@@ -339,13 +339,13 @@ public:
         KoLcmsColorTransformation *adj = new KoLcmsColorTransformation(this);
         adj->profiles[0] = cmsCreateLinearizationDeviceLink(this->colorSpaceSignature(), transferFunctions);
         adj->profiles[1] = cmsCreateLinearizationDeviceLink(cmsSigGrayData, alphaTransferFunctions);
-        adj->profiles[2] = NULL;
+        adj->profiles[2] = 0;
         adj->csProfile = d->profile->lcmsProfile();
-        adj->cmstransform  = cmsCreateTransform(adj->profiles[0], this->colorSpaceType(), NULL, this->colorSpaceType(),
+        adj->cmstransform  = cmsCreateTransform(adj->profiles[0], this->colorSpaceType(), 0, this->colorSpaceType(),
                                                 KoColorConversionTransformation::adjustmentRenderingIntent(),
                                                 KoColorConversionTransformation::adjustmentConversionFlags());
 
-        adj->cmsAlphaTransform  = cmsCreateTransform(adj->profiles[1], TYPE_GRAY_DBL, NULL, TYPE_GRAY_DBL,
+        adj->cmsAlphaTransform  = cmsCreateTransform(adj->profiles[1], TYPE_GRAY_DBL, 0, TYPE_GRAY_DBL,
                                   KoColorConversionTransformation::adjustmentRenderingIntent(),
                                   KoColorConversionTransformation::adjustmentConversionFlags());
 

@@ -183,7 +183,7 @@ KisImageBuilder_Result KisTIFFConverter::decode(const QString &filename)
     dbgFile << "Start decoding TIFF File";
     // Opent the TIFF file
     TIFF *image = 0;
-    if ((image = TIFFOpen(QFile::encodeName(filename), "r")) == NULL) {
+    if ((image = TIFFOpen(QFile::encodeName(filename), "r")) == 0) {
         dbgFile << "Could not open the file, either it does not exist, either it is not a TIFF :" << filename;
         return (KisImageBuilder_RESULT_BAD_FETCH);
     }
@@ -626,7 +626,7 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const QString &filename, KisI
 
     // Open file for writing
     TIFF *image;
-    if ((image = TIFFOpen(QFile::encodeName(filename), "w")) == NULL) {
+    if ((image = TIFFOpen(QFile::encodeName(filename), "w")) == 0) {
         dbgFile << "Could not open the file for writing" << filename;
         TIFFClose(image);
         return (KisImageBuilder_RESULT_FAILURE);

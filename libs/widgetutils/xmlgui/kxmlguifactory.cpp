@@ -365,7 +365,7 @@ void KXMLGUIFactoryPrivate::saveDefaultActionProperties(const QList<QAction *> &
     // kxmlguiclient. We only want to execute the following code only once in
     // the lifetime of an action.
     Q_FOREACH (QAction *action, actions) {
-        // Skip NULL actions or those we have seen already.
+        // Skip 0 actions or those we have seen already.
         if (!action || action->property("_k_DefaultShortcut").isValid()) {
             continue;
         }

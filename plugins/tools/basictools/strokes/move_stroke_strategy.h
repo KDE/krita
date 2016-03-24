@@ -62,7 +62,7 @@ public:
 
     /**
      * You can use deferred initialization of the node pointer
-     * To use it you need to pass NULL to the constructor, and
+     * To use it you need to pass 0 to the constructor, and
      * set the node with setNode layer.
      * NOTE: once set, you cannot change the node anymore,
      *       you'll get an assert

@@ -210,7 +210,7 @@ BOOL isWow64()
     fnIsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(
                 GetModuleHandle(TEXT("kernel32")),"IsWow64Process");
 
-    if(NULL != fnIsWow64Process)
+    if(0 != fnIsWow64Process)
     {
         if (!fnIsWow64Process(GetCurrentProcess(),&bIsWow64))
         {

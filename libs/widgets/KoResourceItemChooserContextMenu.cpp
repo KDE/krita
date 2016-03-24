@@ -34,10 +34,10 @@ KoLineEditAction::KoLineEditAction(QObject* parent)
     : QWidgetAction(parent)
     , m_closeParentOnTrigger(false)
 {
-    QWidget* pWidget = new QWidget (NULL);
+    QWidget* pWidget = new QWidget (0);
     QHBoxLayout* pLayout = new QHBoxLayout();
-    m_label = new QLabel(NULL);
-    m_editBox = new QLineEdit(NULL);
+    m_label = new QLabel(0);
+    m_editBox = new QLineEdit(0);
     pLayout->addWidget(m_label);
     pLayout->addWidget(m_editBox);
     pWidget->setLayout(pLayout);

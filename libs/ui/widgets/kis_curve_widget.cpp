@@ -66,11 +66,11 @@ KisCurveWidget::KisCurveWidget(QWidget *parent, Qt::WFlags f)
     d->m_readOnlyMode   = false;
     d->m_guideVisible   = false;
     d->m_pixmapDirty = true;
-    d->m_pixmapCache = NULL;
+    d->m_pixmapCache = 0;
     d->setState(ST_NORMAL);
 
-    d->m_intIn = NULL;
-    d->m_intOut = NULL;
+    d->m_intIn = 0;
+    d->m_intOut = 0;
 
     setMouseTracking(true);
     setAutoFillBackground(false);
@@ -117,7 +117,7 @@ void KisCurveWidget::dropInOutControls()
     disconnect(d->m_intIn, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)));
     disconnect(d->m_intOut, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)));
 
-    d->m_intIn = d->m_intOut = NULL;
+    d->m_intIn = d->m_intOut = 0;
 
 }
 

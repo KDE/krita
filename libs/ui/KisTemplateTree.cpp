@@ -111,19 +111,19 @@ void KisTemplateTree::add(KisTemplateGroup *g)
 {
 
     KisTemplateGroup *group = find(g->name());
-    if (group == NULL)
+    if (group == 0)
         m_groups.append(g);
     else {
         group->addDir(g->dirs().first()); // "...there can be only one..." (Queen)
         delete g;
-        g = NULL;
+        g = 0;
     }
 }
 
 KisTemplateGroup *KisTemplateTree::find(const QString &name) const
 {
     QList<KisTemplateGroup*>::const_iterator it = m_groups.begin();
-    KisTemplateGroup* ret = NULL;
+    KisTemplateGroup* ret = 0;
 
     while (it != m_groups.end()) {
         if ((*it)->name() == name) {

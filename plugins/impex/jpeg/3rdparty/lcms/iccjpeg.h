@@ -40,7 +40,7 @@
 #ifndef ICCJPEG
 #define ICCJPEG
 
-#include <stdio.h>      /* needed to define "FILE", "NULL" */
+#include <stdio.h>      /* needed to define "FILE", "0" */
 #include "jpeglib.h"
 
 

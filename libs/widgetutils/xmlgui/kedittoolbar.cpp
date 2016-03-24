@@ -422,7 +422,7 @@ public:
                               const QString &cName, KActionCollection *collection)
         : m_collection(collection),
           m_widget(widget),
-          m_factory(NULL),
+          m_factory(0),
           m_loadedOnce(false)
     {
         m_componentName = cName;

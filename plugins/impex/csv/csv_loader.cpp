@@ -379,7 +379,7 @@ KisImageBuilder_Result CSVLoader::setLayer(CSVLayerRecord* layer, KisDocument *i
 {
     bool result = true;
 
-    if (layer->channel == NULL) {
+    if (layer->channel == 0) {
         //create a new document layer
 
         float opacity = layer->density;
@@ -413,7 +413,7 @@ KisImageBuilder_Result CSVLoader::setLayer(CSVLayerRecord* layer, KisDocument *i
         result = importDoc->openUrl(QUrl::fromLocalFile(filename),
                                     KisDocument::OPEN_URL_FLAG_DO_NOT_ADD_TO_RECENT_FILES);
         if (result)
-            layer->channel->importFrame(layer->frame, importDoc->image()->projection(), NULL);
+            layer->channel->importFrame(layer->frame, importDoc->image()->projection(), 0);
 
     } else {
         //blank

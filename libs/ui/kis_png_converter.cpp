@@ -342,7 +342,7 @@ public:
         delete[] row_pointer;
     }
     virtual png_bytep readLine() {
-        png_read_row(png_ptr, row_pointer, NULL);
+        png_read_row(png_ptr, row_pointer, 0);
         return row_pointer;
     }
 private:
@@ -437,14 +437,14 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 
     png_infop info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr) {
-        png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
+        png_destroy_read_struct(&png_ptr, (png_infopp)0, (png_infopp)0);
         iod->close();
         return (KisImageBuilder_RESULT_FAILURE);
     }
 
     png_infop end_info = png_create_info_struct(png_ptr);
     if (!end_info) {
-        png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+        png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)0);
         iod->close();
         return (KisImageBuilder_RESULT_FAILURE);
     }
@@ -485,7 +485,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     // Read information about the png
     png_uint_32 width, height;
     int color_nb_bits, color_type, interlace_type;
-    png_get_IHDR(png_ptr, info_ptr, &width, &height, &color_nb_bits, &color_type, &interlace_type, NULL, NULL);
+    png_get_IHDR(png_ptr, info_ptr, &width, &height, &color_nb_bits, &color_type, &interlace_type, 0, 0);
     dbgFile << "width = " << width << " height = " << height << " color_nb_bits = " << color_nb_bits << " color_type = " << color_type << " interlace_type = " << interlace_type << endl;
     // swap byteorder on little endian machines.
 #ifndef WORDS_BIGENDIAN
@@ -672,7 +672,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         if (color_type == PNG_COLOR_TYPE_PALETTE) {
             png_bytep alpha_ptr;
             int num_alpha;
-            png_get_tRNS(png_ptr, info_ptr, &alpha_ptr, &num_alpha, NULL);
+            png_get_tRNS(png_ptr, info_ptr, &alpha_ptr, &num_alpha, 0);
             for (int i = 0; i < num_alpha; ++i) {
                 palette_alpha[i] = alpha_ptr[i];
             }
@@ -885,7 +885,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
 
     png_infop info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr) {
-        png_destroy_write_struct(&png_ptr, (png_infopp)NULL);
+        png_destroy_write_struct(&png_ptr, (png_infopp)0);
         return (KisImageBuilder_RESULT_FAILURE);
     }
 
@@ -1108,7 +1108,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
 #endif
 
     // Write the PNG
-    //     png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
+    //     png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, 0);
 
     // Fill the data structure
     png_byte** row_pointers = new png_byte*[imageRect.height()];
@@ -1209,7 +1209,7 @@ void KisPNGConverter::cancel()
 
 void KisPNGConverter::progress(png_structp png_ptr, png_uint_32 row_number, int pass)
 {
-    if (png_ptr == NULL || row_number > PNG_MAX_UINT || pass > 7) return;
+    if (png_ptr == 0 || row_number > PNG_MAX_UINT || pass > 7) return;
     //     setProgress(row_number);
 }
 

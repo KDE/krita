@@ -93,7 +93,7 @@ public:
 
     /**
      * Returns pointer to the deepest KoSection that covers @p pos
-     * or NULL if there is no such section
+     * or 0 if there is no such section
      */
     KoSection *sectionAtPosition(int pos);
 

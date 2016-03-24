@@ -157,9 +157,9 @@ public:
 
 KKeySequenceWidgetPrivate::KKeySequenceWidgetPrivate(KKeySequenceWidget *q)
     : q(q)
-    , layout(NULL)
-    , keyButton(NULL)
-    , clearButton(NULL)
+    , layout(0)
+    , keyButton(0)
+    , clearButton(0)
     , allowModifierless(false)
     , nKey(0)
     , modifierKeys(0)

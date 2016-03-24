@@ -73,7 +73,7 @@ struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
 KisPaintOpSettings::KisPaintOpSettings()
     : d(new Private)
 {
-    d->preset = NULL;
+    d->preset = 0;
 }
 
 KisPaintOpSettings::~KisPaintOpSettings()

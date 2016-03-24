@@ -113,7 +113,7 @@ public:
 
     /**
      * This will return the name of the XML file as set by setXMLFile().
-     * If setXML() is used directly, then this will return NULL.
+     * If setXML() is used directly, then this will return 0.
      *
      * The filename that this returns is obvious for components as each
      * component has exactly one XML file.  In non-components, however,

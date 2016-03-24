@@ -129,7 +129,7 @@ public:
     void setProgresUpdater(KoProgressUpdater *updater);
 
     /**
-     * Return the KoProgressUpdater or NULL if there is none.
+     * Return the KoProgressUpdater or 0 if there is none.
      **/
     KoProgressUpdater *progressUpdater() const;
 

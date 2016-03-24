@@ -357,7 +357,7 @@ void KXmlGuiWindow::createStandardStatusBarAction()
         d->showStatusBarAction->setChecked(sb->isHidden());
     } else {
         // If the language has changed, we'll need to grab the new text and whatsThis
-        QAction *tmpStatusBar = KStandardAction::showStatusbar(NULL, NULL, NULL);
+        QAction *tmpStatusBar = KStandardAction::showStatusbar(0, 0, 0);
         d->showStatusBarAction->setText(tmpStatusBar->text());
         d->showStatusBarAction->setWhatsThis(tmpStatusBar->whatsThis());
         delete tmpStatusBar;

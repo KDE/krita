@@ -187,7 +187,7 @@ void KisTemplateCreateDia::slotSelectionChanged()
     if ( ! item )
         return;
 
-    if ( item->parent() != NULL )
+    if ( item->parent() != 0 )
     {
         d->m_name->setText( item->text( 0 ) );
     }
@@ -242,7 +242,7 @@ void KisTemplateCreateDia::slotOk() {
         return;
     }
     // is it a group or a template? anyway - get the group :)
-    if(item->parent() != NULL)
+    if(item->parent() != 0)
         item=item->parent();
     if(!item) {    // *very* safe :P
         d->m_tree.writeTemplateTree();
@@ -443,7 +443,7 @@ void KisTemplateCreateDia::slotRemove() {
 
     QString what;
         QString removed;
-        if (item->parent() == NULL) {
+        if (item->parent() == 0) {
                 what =  i18n("Do you really want to remove that group?");
                 removed = i18nc("@title:window", "Remove Group");
         } else {
@@ -459,7 +459,7 @@ void KisTemplateCreateDia::slotRemove() {
         return;
     }
 
-    if(item->parent() == NULL) {
+    if(item->parent() == 0) {
         KisTemplateGroup *group=d->m_tree.find(item->text(0));
         if(group)
             group->setHidden(true);

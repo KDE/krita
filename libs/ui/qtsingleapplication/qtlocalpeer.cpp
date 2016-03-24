@@ -124,7 +124,7 @@ bool QtLocalPeer::sendMessage(const QByteArray &message, int timeout, bool block
         Sleep(DWORD(ms));
 #else
         struct timespec ts = { ms / 1000, (ms % 1000) * 1000 * 1000 };
-        nanosleep(&ts, NULL);
+        nanosleep(&ts, 0);
 #endif
     }
     if (!connOk)

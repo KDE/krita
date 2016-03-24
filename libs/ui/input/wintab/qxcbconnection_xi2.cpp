@@ -368,7 +368,7 @@ void QXcbConnection::xi2Select(xcb_window_t window)
 
 XInput2TouchDeviceData *QXcbConnection::touchDeviceForId(int id)
 {
-    XInput2TouchDeviceData *dev = Q_NULLPTR;
+    XInput2TouchDeviceData *dev = 0;
     QHash<int, XInput2TouchDeviceData*>::const_iterator devIt = m_touchDevices.constFind(id);
     if (devIt != m_touchDevices.cend()) {
         dev = devIt.value();

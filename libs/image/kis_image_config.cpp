@@ -343,7 +343,7 @@ int KisImageConfig::totalRAM()
 #   endif
     size_t len = sizeof(physmem);
 
-    error = sysctl(mib, 2, &physmem, &len, NULL, 0);
+    error = sysctl(mib, 2, &physmem, &len, 0, 0);
     if(!error) {
         totalMemory = physmem >> 20;
     }
@@ -367,7 +367,7 @@ int KisImageConfig::totalRAM()
     size_t len = sizeof(size);
 
     errno = 0;
-    if (sysctl(mib, namelen, &size, &len, NULL, 0) >= 0) {
+    if (sysctl(mib, namelen, &size, &len, 0, 0) >= 0) {
         totalMemory = size >> 20;
         error = 0;
     }

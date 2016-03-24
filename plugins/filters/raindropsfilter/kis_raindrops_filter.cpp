@@ -341,17 +341,17 @@ void KisRainDropsFilter::FreeBoolArray(bool** lpbArray, uint Columns) const
  */
 bool** KisRainDropsFilter::CreateBoolArray(uint Columns, uint Rows) const
 {
-    bool** lpbArray = NULL;
+    bool** lpbArray = 0;
     lpbArray = (bool**) malloc(Columns * sizeof(bool*));
 
-    if (lpbArray == NULL)
-        return (NULL);
+    if (lpbArray == 0)
+        return (0);
 
     for (uint i = 0; i < Columns; ++i) {
         lpbArray[i] = (bool*) malloc(Rows * sizeof(bool));
-        if (lpbArray[i] == NULL) {
+        if (lpbArray[i] == 0) {
             FreeBoolArray(lpbArray, Columns);
-            return (NULL);
+            return (0);
         }
     }
 

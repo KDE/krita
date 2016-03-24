@@ -110,7 +110,7 @@ SvgGradientHelper* SvgParser::findGradient(const QString &id, const QString &hre
             return 0;
     }
 
-    // return successfully parsed gradient or NULL
+    // return successfully parsed gradient or 0
     QString n;
     if (href.isEmpty())
         n = id;
@@ -180,7 +180,7 @@ SvgFilterHelper* SvgParser::findFilter(const QString &id, const QString &href)
             return 0;
     }
 
-    // return successfully parsed filter or NULL
+    // return successfully parsed filter or 0
     QString n;
     if (href.isEmpty())
         n = id;
@@ -217,7 +217,7 @@ SvgClipPathHelper* SvgParser::findClipPath(const QString &id, const QString &hre
             return 0;
     }
 
-    // return successfully parsed clip path or NULL
+    // return successfully parsed clip path or 0
     const QString n = href.isEmpty() ? id : href;
     if (m_clipPaths.contains(n))
         return &m_clipPaths[ n ];

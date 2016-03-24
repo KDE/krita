@@ -132,7 +132,7 @@ void KisShortcutsEditor::addCollection(KActionCollection *collection, const QStr
     hierarchy[KisShortcutsEditorPrivate::Root] = d->ui.list->invisibleRootItem();
     hierarchy[KisShortcutsEditorPrivate::Program] =
       d->findOrMakeItem(hierarchy[KisShortcutsEditorPrivate::Root], collectionTitle);
-    hierarchy[KisShortcutsEditorPrivate::Action] = NULL;
+    hierarchy[KisShortcutsEditorPrivate::Action] = 0;
 
     // Remember which actions we have seen. We will be adding categorized
     // actions first, so this will help us keep track of which actions haven't

@@ -509,5 +509,19 @@ void KisStrokeBenchmark::benchmarkRand()
     Q_UNUSED(j);
 }
 
+void KisStrokeBenchmark::becnhmarkPresetCloning()
+{
+    QString presetFileName = "spray_21_textures1.kpp";
+    KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
+    bool loadedOk = preset->load();
+    KIS_ASSERT_RECOVER_RETURN(loadedOk);
+    KIS_ASSERT_RECOVER_RETURN(preset->settings());
+
+    QBENCHMARK {
+        KisPaintOpPresetSP other = preset->clone();
+        other->settings()->setPaintOpOpacity(0.3);
+    }
+}
+
 
 QTEST_MAIN(KisStrokeBenchmark)

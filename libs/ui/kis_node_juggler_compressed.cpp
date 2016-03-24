@@ -259,11 +259,11 @@ private:
     QList<KisSelectionMaskSP> m_activeAfter;
 };
 
-KisNodeList sortAndFilterNodes(const KisNodeList &nodes, KisImageSP image, bool allowMasks = false) {
+KisNodeList sortAndFilterNodes(const KisNodeList &nodes, KisImageSP image) {
     KisNodeList filteredNodes = nodes;
     KisNodeList sortedNodes;
 
-    KisLayerUtils::filterMergableNodes(filteredNodes, allowMasks);
+    KisLayerUtils::filterMergableNodes(filteredNodes, true);
 
     bool haveExternalNodes = false;
     Q_FOREACH (KisNodeSP node, nodes) {
@@ -297,9 +297,30 @@ struct LowerRaiseLayer : public KisCommandUtils::AggregateCommand {
           m_activeNode(activeNode),
           m_lower (lower) {}
 
+    enum NodesType {
+        AllLayers,
+        Mixed,
+        AllMasks
+    };
+
+    NodesType getNodesType(KisNodeList nodes) {
+        bool hasLayers = false;
+        bool hasMasks = false;
+
+        Q_FOREACH (KisNodeSP node, nodes) {
+            hasLayers |= bool(qobject_cast<KisLayer*>(node.data()));
+            hasMasks |= bool(qobject_cast<KisMask*>(node.data()));
+        }
+
+        return hasLayers && hasMasks ? Mixed :
+            hasLayers ? AllLayers :
+            AllMasks;
+    }
+
     void populateChildCommands() {
         KisNodeList sortedNodes = sortAndFilterNodes(m_nodes, m_image);
         KisNodeSP headNode = m_lower ? sortedNodes.first() : sortedNodes.last();
+        const NodesType nodesType = getNodesType(sortedNodes);
 
         KisNodeSP parent = headNode->parent();
         KisNodeSP grandParent = parent ? parent->parent() : 0;
@@ -311,8 +332,11 @@ struct LowerRaiseLayer : public KisCommandUtils::AggregateCommand {
             KisNodeSP prevNode = headNode->prevSibling();
 
             if (prevNode) {
-                if (prevNode->inherits("KisGroupLayer") &&
-                    !prevNode->collapsed()) {
+                if ((prevNode->inherits("KisGroupLayer") &&
+                     !prevNode->collapsed())
+                    ||
+                    (nodesType == AllMasks &&
+                     prevNode->inherits("KisLayer"))) {
 
                     newAbove = prevNode->lastChild();
                     newParent = prevNode;
@@ -320,18 +344,28 @@ struct LowerRaiseLayer : public KisCommandUtils::AggregateCommand {
                     newAbove = prevNode->prevSibling();
                     newParent = parent;
                 }
-            } else if (grandParent &&
-                       !headNode->inherits("KisMask")) { // TODO
-
+            } else if ((nodesType == AllLayers && grandParent) ||
+                       (nodesType == AllMasks && grandParent && grandParent->parent())) {
                 newAbove = parent->prevSibling();
                 newParent = grandParent;
+
+            } else if (nodesType == AllMasks &&
+                       grandParent && !grandParent->parent() &&
+                       (prevNode = parent->prevSibling()) &&
+                       prevNode->inherits("KisLayer")) {
+
+                newAbove = prevNode->lastChild();
+                newParent = prevNode; // NOTE: this is an updated 'prevNode'!
             }
         } else {
             KisNodeSP nextNode = headNode->nextSibling();
 
             if (nextNode) {
-                if (nextNode->inherits("KisGroupLayer") &&
-                    !nextNode->collapsed()) {
+                if ((nextNode->inherits("KisGroupLayer") &&
+                     !nextNode->collapsed())
+                    ||
+                    (nodesType == AllMasks &&
+                     nextNode->inherits("KisLayer"))) {
 
                     newAbove = 0;
                     newParent = nextNode;
@@ -339,11 +373,18 @@ struct LowerRaiseLayer : public KisCommandUtils::AggregateCommand {
                     newAbove = nextNode;
                     newParent = parent;
                 }
-            } else if (grandParent &&
-                       !headNode->inherits("KisMask")) { // TODO
-
+            } else if ((nodesType == AllLayers && grandParent) ||
+                       (nodesType == AllMasks && grandParent && grandParent->parent())) {
                 newAbove = parent;
                 newParent = grandParent;
+
+            } else if (nodesType == AllMasks &&
+                       grandParent && !grandParent->parent() &&
+                       (nextNode = parent->nextSibling()) &&
+                       nextNode->inherits("KisLayer")) {
+
+                newAbove = 0;
+                newParent = nextNode; // NOTE: this is an updated 'nextNode'!
             }
         }
 
@@ -402,7 +443,7 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
           m_mode(mode) {}
 
     void populateChildCommands() {
-        KisNodeList filteredNodes = sortAndFilterNodes(m_nodes, m_image, true);
+        KisNodeList filteredNodes = sortAndFilterNodes(m_nodes, m_image);
 
         if (filteredNodes.isEmpty()) return;
 

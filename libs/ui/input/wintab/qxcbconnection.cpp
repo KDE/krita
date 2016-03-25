@@ -338,7 +338,14 @@ bool QXcbConnection::xi2MouseEvents() const
 
 void QXcbConnection::notifyEnterEvent(xcb_enter_notify_event_t *event)
 {
-    xcb_window_t window = event->event;
+    xcb_window_t window;
+
+    // first cleaning up deleted windows: assuming 0 is not a valid window id
+
+    while ((window = m_windowMapper.key(0,0)) != 0) {
+        m_windowMapper.remove(window);
+    }
+    window = event->event;
 
     if (!m_windowMapper.contains(window)) {
         QWidget *widget = QWidget::find(window);

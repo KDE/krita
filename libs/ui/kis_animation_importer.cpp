@@ -76,8 +76,6 @@ KisImportExportFilter::ConversionStatus KisAnimationImporter::import(QStringList
     KisUndoAdapter *undo = m_d->image->undoAdapter();
     undo->beginMacro(kundo2_i18n("Import animation"));
 
-    KUndo2Command *undoCommand = new KUndo2Command(kundo2_i18n("Import frames"));
-
     QScopedPointer<KisDocument> importDoc(KisPart::instance()->createDocument());
     importDoc->setFileBatchMode(true);
 
@@ -110,8 +108,7 @@ KisImportExportFilter::ConversionStatus KisAnimationImporter::import(QStringList
         if (!batchMode) {
             emit m_d->document->sigProgress((frame - firstFrame) * 100 / (step * files.size()));
         }
-        contentChannel->addKeyframe(frame, undoCommand);
-        contentChannel->importFrame(frame, importDoc->image()->projection(), undoCommand);
+        contentChannel->importFrame(frame, importDoc->image()->projection(), NULL);
         frame += step;
     }
 

@@ -236,7 +236,7 @@ QVector<Tile> generateTiles(int size,
     const size_t pixelAlignment = qMax(size_t(vecSize * sizeof(float)), size_t(256));
     const size_t maskAlignment = qMax(size_t(vecSize), size_t(256));
     for (int i = 0; i < size; i++) {
-        void *ptr = NULL;
+        void *ptr = 0;
         int error = MEMALIGN_ALLOC(&ptr, pixelAlignment, numPixels * pixelSize + srcAlignmentShift);
         if (error) {
             qFatal("posix_memalign failed: %d", error);
@@ -820,7 +820,7 @@ void KisCompositionBenchmark::benchmarkUintFloat()
 {
 #ifdef HAVE_VC
     const int dataSize = 4096;
-    void *ptr = NULL;
+    void *ptr = 0;
     int error = MEMALIGN_ALLOC(&ptr, uint8VecAlignment, dataSize);
     if (error) {
         qFatal("posix_memalign failed: %d", error);
@@ -850,7 +850,7 @@ void KisCompositionBenchmark::benchmarkUintIntFloat()
 {
 #ifdef HAVE_VC
     const int dataSize = 4096;
-    void *ptr = NULL;
+    void *ptr = 0;
     int error = MEMALIGN_ALLOC(&ptr, uint8VecAlignment, dataSize);
     if (error) {
         qFatal("posix_memalign failed: %d", error);
@@ -880,7 +880,7 @@ void KisCompositionBenchmark::benchmarkFloatUint()
 {
 #ifdef HAVE_VC
     const int dataSize = 4096;
-    void *ptr = NULL;
+    void *ptr = 0;
     int error = MEMALIGN_ALLOC(&ptr, uint32VecAlignment, dataSize * sizeof(quint32));
     if (error) {
         qFatal("posix_memalign failed: %d", error);
@@ -910,7 +910,7 @@ void KisCompositionBenchmark::benchmarkFloatIntUint()
 {
 #ifdef HAVE_VC
     const int dataSize = 4096;
-    void *ptr = NULL;
+    void *ptr = 0;
     int error = MEMALIGN_ALLOC(&ptr, uint32VecAlignment, dataSize * sizeof(quint32));
     if (error) {
         qFatal("posix_memalign failed: %d", error);

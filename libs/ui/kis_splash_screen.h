@@ -19,6 +19,7 @@
 #define KIS_SPLASH_SCREEN_H
 
 #include <QWidget>
+#include <QTimer>
 
 #include "ui_wdgsplash.h"
 
@@ -40,6 +41,10 @@ private Q_SLOTS:
 
     void toggleShowAtStartup(bool toggle);
     void linkClicked(const QString &link);
+
+private:
+
+    QTimer m_timer;
 
 };
 

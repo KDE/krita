@@ -27,7 +27,7 @@
 #include <QCursor>
 
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 #include <KoDialog.h>
 
 #include <KisImportExportManager.h>
@@ -92,16 +92,11 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteA
         return KisImportExportFilter::FileNotFound;
     }
 
-    QUrl url = QUrl::fromLocalFile(filename);
-
-
-    dbgFile << "Import: " << url;
-    if (url.isEmpty())
-        return KisImportExportFilter::FileNotFound;
-
-    if (!url.isLocalFile()) {
+    QFileInfo fi(filename);
+    if (!fi.exists()) {
         return KisImportExportFilter::FileNotFound;
     }
+
 
     QApplication::restoreOverrideCursor();
 
@@ -120,7 +115,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteA
     KisPropertiesConfiguration cfg;
     cfg.fromXML(filterConfig);
 
-    QFile f(url.toLocalFile());
+    QFile f(filename);
 
     int w = 0;
     int h = 0;

@@ -23,7 +23,7 @@
 #include <QSlider>
 
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KisFilterChain.h>
 #include <KoColorSpace.h>
@@ -98,9 +98,9 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray&
 
     QString filename = outputFile();
 
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
-
-    QUrl url = QUrl::fromLocalFile(filename);
+    if (filename.isEmpty()) {
+        return KisImportExportFilter::FileNotFound;
+    }
 
     KisImageSP image;
 
@@ -118,10 +118,8 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray&
     image->lock();
 
     KisTIFFConverter ktc(input);
-    /*    vKisAnnotationSP_it beginIt = image->beginAnnotations();
-        vKisAnnotationSP_it endIt = image->endAnnotations();*/
     KisImageBuilder_Result res;
-    if ((res = ktc.buildFile(url, image, options)) == KisImageBuilder_RESULT_OK) {
+    if ((res = ktc.buildFile(filename, image, options)) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         image->unlock();
         return KisImportExportFilter::OK;

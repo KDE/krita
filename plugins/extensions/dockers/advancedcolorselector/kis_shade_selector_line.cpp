@@ -45,8 +45,7 @@ KisShadeSelectorLine::KisShadeSelectorLine(KisColorSelectorBaseProxy *parentProx
     updateSettings();
     setMouseTracking(true);
     m_mouseX=width()/2;
-    m_ev.setX(0);
-    m_ev.setY(5);
+    m_isDown=false;
 }
 
 KisShadeSelectorLine::KisShadeSelectorLine(qreal hueDelta, qreal satDelta, qreal valDelta,
@@ -59,8 +58,7 @@ KisShadeSelectorLine::KisShadeSelectorLine(qreal hueDelta, qreal satDelta, qreal
     setParam(hueDelta, satDelta, valDelta, hueShift, satShift, valShift);
     updateSettings();
     m_mouseX=width()/2;
-    m_ev.setX(0);
-    m_ev.setY(5);
+    m_isDown=false;
 }
 
 KisShadeSelectorLine::~KisShadeSelectorLine()
@@ -140,10 +138,20 @@ void KisShadeSelectorLine::paintEvent(QPaintEvent *)
         patchSpacing = 3;
     }
     qreal patchWidth = (width()-patchSpacing*patchCount)/qreal(patchCount);
+    qreal hueStep;
+    qreal saturationStep;
+    qreal valueStep;
 
-    qreal hueStep=m_hueDelta/qreal(patchCount-10);
-    qreal saturationStep=m_saturationDelta/qreal(patchCount-10);
-    qreal valueStep=m_valueDelta/qreal(patchCount-10);
+    if(m_gradient){
+       hueStep=m_hueDelta/qreal(patchCount-10);
+       saturationStep=m_saturationDelta/qreal(patchCount-10);
+       valueStep=m_valueDelta/qreal(patchCount-10);
+    }
+    else{
+       hueStep=m_hueDelta/qreal(patchCount);
+       saturationStep=m_saturationDelta/qreal(patchCount);
+       valueStep=m_valueDelta/qreal(patchCount);
+    }
 
     qreal baseHue;
     qreal baseSaturation;
@@ -161,7 +169,7 @@ void KisShadeSelectorLine::paintEvent(QPaintEvent *)
         qreal saturation = qBound<qreal>(0., baseSaturation + (i * saturationStep) + m_saturationShift, 1.);
         qreal value = qBound<qreal>(0., baseValue + (i * valueStep) + m_valueShift, 1.);
 
-        if (qAbs(i) <= 5) {
+        if (qAbs(i) <= 5 && m_gradient) {
             hue = baseHue;
             saturation=baseSaturation;
             value=baseValue;
@@ -179,13 +187,17 @@ void KisShadeSelectorLine::paintEvent(QPaintEvent *)
     QPainter wpainter(this);
     QImage renderedImage = m_parentProxy->converter()->toQImage(m_realPixelCache);
     wpainter.drawImage(0, 0, renderedImage);
-    wpainter.setPen(QColor(175,175,175));
-    wpainter.drawRect(renderedImage.width()/2-5,0,10,renderedImage.height()-1);
-    wpainter.setPen(QColor(75,75,75));
-    wpainter.drawRect(renderedImage.width()/2-4,0,8,renderedImage.height()-1);
-    wpainter.setPen(QColor(175,175,175));
-    m_ev.setX(qBound(5.0,m_mouseX,m_width-5));
-    wpainter.drawRect(m_ev.x()-5,0,10,renderedImage.height()-1);
+    if (m_gradient) {
+        wpainter.setPen(QColor(175,175,175));
+        wpainter.drawRect(renderedImage.width()/2-5,0,10,renderedImage.height()-1);
+        wpainter.setPen(QColor(75,75,75));
+        wpainter.drawRect(renderedImage.width()/2-4,0,8,renderedImage.height()-1);
+        wpainter.setPen(QColor(175,175,175));
+        qreal mouseX = (qBound(5.0,m_mouseX,m_width-5));
+        wpainter.drawRect(mouseX-5,0,10,renderedImage.height()-1);
+        wpainter.setPen(QColor(75,75,75));
+        wpainter.drawRect(mouseX-4,0,8,renderedImage.height()-1);
+    }
     m_width=width();
 
     if(m_displayHelpText) {
@@ -216,19 +228,21 @@ void KisShadeSelectorLine::mousePressEvent(QMouseEvent* e)
         e->setAccepted(false);
         return;
     }
-
-    m_parentProxy->showColorPreview();
-    e->accept();
-    m_mouseX = e->x();
+    if (e->y() > 0 && e->y() < height()) {
+        m_parentProxy->showColorPreview();
+        e->accept();
+        m_mouseX = e->x();
+        m_isDown=true;
+        update();
+     }
 }
 
 void KisShadeSelectorLine::mouseMoveEvent(QMouseEvent *e)
 {
-    if (e->buttons() & Qt::LeftButton){
+    if ((m_isDown) && (e->buttons() & Qt::LeftButton)) {
         m_mouseX=e->x();
-        m_ev.setX(qBound(5.0,m_mouseX,m_width-5));
-        m_ev.setY(5);
-        KoColor color(Acs::pickColor(m_realPixelCache, m_ev));
+        const QPoint mouseEv ((qBound(5.0,m_mouseX,m_width-5)),5);
+        KoColor color(Acs::pickColor(m_realPixelCache, mouseEv));
         m_parentProxy->updateColorPreview(color);
         update();
     }
@@ -241,9 +255,8 @@ void KisShadeSelectorLine::mouseReleaseEvent(QMouseEvent * e)
         return;
     }
     m_mouseX=e->x();
-    m_ev.setX(qBound(5.0,m_mouseX,m_width-5));
-    m_ev.setY(5);
-    KoColor color(Acs::pickColor(m_realPixelCache, m_ev));
+    const QPoint mouseEv ((qBound(5.0,m_mouseX,m_width-5)),5);
+    KoColor color(Acs::pickColor(m_realPixelCache, mouseEv));
     m_parentProxy->updateColorPreview(color);
     Acs::ColorRole role = Acs::buttonToRole(e->button());
 
@@ -258,4 +271,5 @@ void KisShadeSelectorLine::mouseReleaseEvent(QMouseEvent * e)
 
     m_parentProxy->updateColor(color, role, explicitColorReset);
     e->accept();
+    m_isDown=false;
 }

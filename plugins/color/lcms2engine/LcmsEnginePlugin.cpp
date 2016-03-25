@@ -119,7 +119,7 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
 
     // ------------------- LAB ---------------------------------
 
-    KoColorProfile *labProfile = LcmsColorProfileContainer::createFromLcmsProfile(cmsCreateLab2Profile(NULL));
+    KoColorProfile *labProfile = LcmsColorProfileContainer::createFromLcmsProfile(cmsCreateLab2Profile(0));
     registry->addProfile(labProfile);
 
     registry->add(new LabU8ColorSpaceFactory());

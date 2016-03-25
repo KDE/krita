@@ -247,7 +247,7 @@ void KoShapeFactoryBase::getDeferredPlugin()
             d->deferredFactory = plugin;
         }
     }
-
+    qDeleteAll(offers);
 }
 
 void KoShapeFactoryBase::pruneDocumentResourceManager(QObject *obj)

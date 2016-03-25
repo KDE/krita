@@ -57,8 +57,7 @@
 #include <kis_paint_device.h>
 #include <kis_node_manager.h>
 #include <kis_node_commands_adapter.h>
-#include <QMimeDatabase>
-#include <QMimeType>
+#include <KisMimeDatabase.h>
 
 KisChannelSeparator::KisChannelSeparator(KisViewManager * view)
         : m_view(view)
@@ -244,9 +243,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                 if (url.isEmpty())
                     return;
 
-                QMimeDatabase db;
-                QMimeType mime = db.mimeTypeForUrl(url);
-                QString mimefilter = mime.name();
+                QString mimefilter = KisMimeDatabase::mimeTypeForFile(url.toLocalFile());
 
                 KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE_U8, *deviceIt));
                 QRect r = l->exactBounds();

@@ -53,6 +53,7 @@
 #include <QUrl>
 #include <QStatusBar>
 #include <QMoveEvent>
+#include <QTemporaryFile>
 
 #include <kis_image.h>
 #include <kis_node.h>
@@ -88,7 +89,7 @@
 #include "krita/gemini/ViewModeSwitchEvent.h"
 #include "krita_utils.h"
 #include "input/kis_input_manager.h"
-
+#include "KisRemoteFileFetcher.h"
 
 //static
 QString KisView::newObjectName()
@@ -510,20 +511,35 @@ void KisView::dropEvent(QDropEvent *event)
             popup.addAction(cancel);
 
             QAction *action = popup.exec(QCursor::pos());
-
             if (action != 0 && action != cancel) {
-                Q_FOREACH (const QUrl &url, urls) {
+                QTemporaryFile *tmp = 0;
+                Q_FOREACH (QUrl url, urls) {
 
-                    if (action == insertAsNewLayer || action == insertManyLayers) {
-                        d->viewManager->imageManager()->importImage(url);
-                        activateWindow();
+                    if (!url.isLocalFile()) {
+                        // download the file and substitute the url
+                        KisRemoteFileFetcher fetcher;
+                        tmp = new QTemporaryFile();
+                        tmp->setAutoRemove(true);
+                        if (!fetcher.fetchFile(url, tmp)) {
+                            qDebug() << "Fetching" << url << "failed";
+                            continue;
+                        }
+                        url = url.fromLocalFile(tmp->fileName());
                     }
-                    else {
-                        Q_ASSERT(action == openInNewDocument || action == openManyDocuments);
-                        if (mainWindow()) {
-                            mainWindow()->openDocument(url);
+                    if (url.isLocalFile()) {
+                        if (action == insertAsNewLayer || action == insertManyLayers) {
+                            d->viewManager->imageManager()->importImage(url);
+                            activateWindow();
+                        }
+                        else {
+                            Q_ASSERT(action == openInNewDocument || action == openManyDocuments);
+                            if (mainWindow()) {
+                                mainWindow()->openDocument(url);
+                            }
                         }
                     }
+                    delete tmp;
+                    tmp = 0;
                 }
             }
         }

@@ -275,10 +275,15 @@ void KoColorSpaceRegistry::removeProfile(KoColorProfile* profile)
     d->profileMap.remove(profile->name());
 }
 
-bool KoColorSpaceRegistry::isCached(const QString & csID, const QString & profileName) const
+const KoColorSpace* KoColorSpaceRegistry::getCachedColorSpace(const QString & csID, const QString & profileName) const
 {
-    QReadLocker l(&d->registrylock);
-    return !(d->csMap.find(idsToCacheName(csID, profileName)) == d->csMap.end());
+    auto it = d->csMap.find(idsToCacheName(csID, profileName));
+
+    if (it != d->csMap.end()) {
+            return it.value();
+    }
+
+    return 0;
 }
 
 QString KoColorSpaceRegistry::idsToCacheName(const QString & csID, const QString & profileName) const
@@ -312,9 +317,10 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
         return 0;
     }
 
-    if (!isCached(csID, profileName)) {
+    d->registrylock.lockForRead();
+    const KoColorSpace *cs = getCachedColorSpace(csID, profileName);
 
-        d->registrylock.lockForRead();
+    if (!cs) {
         KoColorSpaceFactory *csf = d->colorSpaceFactoryRegistry.value(csID);
         d->registrylock.unlock();
         if (!csf) {
@@ -353,36 +359,44 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
         }
         profileName = p->name();
 
-        const KoColorSpace *cs = csf->grabColorSpace(p);
-        if (!cs) {
-            dbgPigmentCSRegistry << "Unable to create color space";
-            return 0;
-        }
-
         QWriteLocker l(&d->registrylock);
-        dbgPigmentCSRegistry << "colorspace count: " << d->csMap.count()
-                             << ", adding name: " << idsToCacheName(cs->id(), cs->profile()->name())
-                             << "\n\tcsID" << csID
-                             << "\n\tprofileName" << profileName
-                             << "\n\tcs->id()" << cs->id()
-                             << "\n\tcs->profile()->name()" << cs->profile()->name()
-                             << "\n\tpName" << pName;
-        Q_ASSERT(cs->id() == csID);
-        Q_ASSERT(cs->profile()->name() == profileName);
-        d->csMap[idsToCacheName(cs->id(), cs->profile()->name())] = cs;
-        cs->d->deletability = OwnedByRegistryDoNotDelete;
+        /*
+         * We need to check again here, anything could've happened between the unlock and the
+         * write lock.
+         * TODO: We also potentially changed profileName content, which means we maybe are going to
+         * create a colorspace that's actually in the space registry cache, but currently this might
+         * not be an issue because the colorspace should be cached also by the factory, so it won't
+         * create a new instance. That being said, having two caches with the same stuff doesn't make
+         * much sense.
+         */
+        cs = getCachedColorSpace(csID, profileName);
+        if (!cs) {
+            cs = csf->grabColorSpace(p);
+            if (!cs) {
+                dbgPigmentCSRegistry << "Unable to create color space";
+                return 0;
+            }
 
-    }
-    QReadLocker l(&d->registrylock);
-
-    if (d->csMap.contains(idsToCacheName(csID, profileName))) {
-        const KoColorSpace *cs = d->csMap[idsToCacheName(csID, profileName)];
-        Q_ASSERT(cs->profile()->name() == profileName);
-        return cs;
+            dbgPigmentCSRegistry << "colorspace count: " << d->csMap.count()
+                                 << ", adding name: " << idsToCacheName(cs->id(), cs->profile()->name())
+                                 << "\n\tcsID" << csID
+                                 << "\n\tprofileName" << profileName
+                                 << "\n\tcs->id()" << cs->id()
+                                 << "\n\tcs->profile()->name()" << cs->profile()->name()
+                                 << "\n\tpName" << pName;
+            Q_ASSERT(cs->id() == csID);
+            Q_ASSERT(cs->profile()->name() == profileName);
+            d->csMap[idsToCacheName(cs->id(), cs->profile()->name())] = cs;
+            cs->d->deletability = OwnedByRegistryDoNotDelete;
+        }
     }
     else {
-        return 0;
+        Q_ASSERT(cs->id() == csID);
+        Q_ASSERT(cs->profile()->name() == profileName);
+        d->registrylock.unlock();
     }
+
+    return cs;
 }
 
 
@@ -392,10 +406,9 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
         return 0;
     }
     if (profile) {
-        const KoColorSpace *cs = 0;
-        if (isCached(csID, profile->name())) {
-            cs = colorSpace(csID, profile->name());
-        }
+        d->registrylock.lockForRead();
+        const KoColorSpace *cs = getCachedColorSpace(csID, profile->name());
+        d->registrylock.unlock();
 
         if (!d->profileMap.contains(profile->name())) {
             addProfile(profile);
@@ -413,15 +426,20 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
             if (!csf->profileIsCompatible(profile ) ) {
                 return 0;
             }
-            cs = csf->grabColorSpace(profile);
-            if (!cs)
-                return 0;
 
             QWriteLocker l(&d->registrylock);
-            QString name = csID + "<comb>" + profile->name();
-            d->csMap[name] = cs;
-            cs->d->deletability = OwnedByRegistryDoNotDelete;
-            dbgPigmentCSRegistry << "colorspace count: " << d->csMap.count() << ", adding name: " << name;
+            // Check again, anything could've happened between the unlock and the write lock
+            cs = getCachedColorSpace(csID, profile->name());
+            if (!cs) {
+                cs = csf->grabColorSpace(profile);
+                if (!cs)
+                    return 0;
+
+                QString name = idsToCacheName(csID, profile->name());
+                d->csMap[name] = cs;
+                cs->d->deletability = OwnedByRegistryDoNotDelete;
+                dbgPigmentCSRegistry << "colorspace count: " << d->csMap.count() << ", adding name: " << name;
+            }
         }
 
         return cs;

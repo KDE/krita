@@ -148,9 +148,6 @@ private:
     void inputFileHelper(KisDocument* document, const QString& alternativeFile);
     void outputFileHelper(bool autoDelete);
 
-    KisDocument* createDocument(const QString& file);
-    KisDocument* createDocument(const QByteArray& mimeType);
-
     // "A whole is that which has beginning, middle, and end" - Aristotle
     // ...but we also need to signal "Done" state, Mr. Aristotle
     enum Whole { Beginning = 1, Middle = 2, End = 4, Done = 8 };

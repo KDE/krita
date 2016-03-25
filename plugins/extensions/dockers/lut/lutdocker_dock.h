@@ -112,6 +112,7 @@ private:
     QScopedPointer<KisSignalCompressorWithParam<qreal> > m_gammaCompressor;
 
     BlackWhitePointChooser *m_bwPointChooser;
+    bool m_ownDisplayFilter;
 };
 
 

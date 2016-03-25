@@ -24,7 +24,7 @@
 #include <QMessageBox>
 
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 #include <QApplication>
 
 #include <KisImportExportManager.h>
@@ -91,12 +91,10 @@ KisImportExportFilter::ConversionStatus KisCSVExport::convert(const QByteArray& 
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    QUrl url = QUrl::fromLocalFile(filename);
-
     CSVSaver kpc(input, getBatchMode());
     KisImageBuilder_Result res;
 
-    if ((res = kpc.buildAnimation(url, filename)) == KisImageBuilder_RESULT_OK) {
+    if ((res = kpc.buildAnimation(filename)) == KisImageBuilder_RESULT_OK) {
         dbgFile <<"success !";
         return KisImportExportFilter::OK;
     }

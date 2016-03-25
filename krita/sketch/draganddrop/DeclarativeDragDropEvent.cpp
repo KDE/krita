@@ -31,7 +31,7 @@ DeclarativeDragDropEvent::DeclarativeDragDropEvent(QDropEvent* e, DeclarativeDro
     m_y(e->pos().y()),
     m_buttons(e->mouseButtons()),
     m_modifiers(e->keyboardModifiers()),
-    m_data(Q_NULLPTR),
+    m_data(0),
     m_event(e)
 {
 }
@@ -42,7 +42,7 @@ DeclarativeDragDropEvent::DeclarativeDragDropEvent(QDragLeaveEvent* e, Declarati
     m_y(0),
     m_buttons(Qt::NoButton),
     m_modifiers(Qt::NoModifier),
-    m_data(Q_NULLPTR),
+    m_data(0),
     m_event(0)
 {
     Q_UNUSED(e);

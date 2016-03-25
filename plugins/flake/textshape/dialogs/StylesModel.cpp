@@ -205,7 +205,7 @@ QImage StylesModel::stylePreview(int row, const QSize &size)
         }
     } else {
         KoCharacterStyle *usedStyle = 0;
-        if (index(row).internalId() == NoneStyleId) {
+        if (index(row).internalId() == (quintptr)NoneStyleId) {
             usedStyle = static_cast<KoCharacterStyle *>(m_currentParagraphStyle);
             if (!usedStyle) {
                 usedStyle = m_defaultCharacterStyle;

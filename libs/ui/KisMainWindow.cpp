@@ -53,7 +53,7 @@
 #include <QStatusBar>
 #include <QMenu>
 #include <QMenuBar>
-#include <QMimeDatabase>
+#include <KisMimeDatabase.h>
 #include <QMimeData>
 
 #include <kactioncollection.h>
@@ -94,44 +94,49 @@
 #include <KoPluginLoader.h>
 #include <KoColorSpaceEngine.h>
 
-#include "KisView.h"
-#include "KisDocument.h"
-#include "KisImportExportManager.h"
-#include "KisPrintJob.h"
-#include "KisPart.h"
-#include "KisApplication.h"
-
-#include "kis_action.h"
-#include "kis_canvas_controller.h"
-#include "kis_canvas2.h"
-#include "KisViewManager.h"
-#include "KisDocument.h"
-#include "dialogs/kis_dlg_preferences.h"
-#include "kis_config_notifier.h"
-#include "kis_canvas_resource_provider.h"
-#include "kis_node.h"
-#include "kis_image.h"
-#include "kis_group_layer.h"
+#include <KisMimeDatabase.h>
 #include <brushengine/kis_paintop_settings.h>
-#include "kis_paintop_box.h"
+#include "dialogs/kis_about_application.h"
+#include "dialogs/kis_delayed_save_dialog.h"
+#include "dialogs/kis_dlg_preferences.h"
+#include "kis_action.h"
+#include "kis_action_manager.h"
+#include "KisApplication.h"
+#include "kis_canvas2.h"
+#include "kis_canvas_controller.h"
+#include "kis_canvas_resource_provider.h"
+#include "kis_clipboard.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
-#include "dialogs/kis_about_application.h"
+#include "kis_config_notifier.h"
+#include "kis_custom_image_widget.h"
+#include <KisDocument.h>
+#include "KisDocument.h"
+#include "KisDocument.h"
+#include "kis_group_layer.h"
+#include "kis_icon_utils.h"
+#include "kis_image_from_clipboard_widget.h"
+#include "kis_image.h"
+#include <KisImportExportFilter.h>
+#include "KisImportExportManager.h"
 #include "kis_mainwindow_observer.h"
-#include "kis_action_manager.h"
-#include "thememanager.h"
+#include "kis_node.h"
+#include "KisOpenPane.h"
+#include "kis_paintop_box.h"
+#include "KisPart.h"
+#include "KisPrintJob.h"
 #include "kis_resource_server_provider.h"
+#include "kis_signal_compressor_with_param.h"
+#include "KisView.h"
+#include "KisViewManager.h"
+#include "thememanager.h"
+
+
 #ifdef HAVE_OPENGL
 #include "kis_animation_importer.h"
 #include "dialogs/kis_dlg_import_image_sequence.h"
 #include "kis_animation_exporter.h"
 #endif
-#include "kis_icon_utils.h"
-#include <KisImportExportFilter.h>
-#include <KisDocument.h>
-#include "kis_signal_compressor_with_param.h"
-#include "dialogs/kis_delayed_save_dialog.h"
-
 class ToolDockerFactory : public KoDockFactoryBase
 {
 public:
@@ -381,7 +386,8 @@ KisMainWindow::KisMainWindow()
     KoPluginLoader::instance()->load("Krita/ViewPlugin",
                                      "Type == 'Service' and ([X-Krita-Version] == 28)",
                                      KoPluginLoader::PluginsConfig(),
-                                     viewManager());
+                                     viewManager(),
+                                     false);
 
     subWindowActivated();
     updateWindowMenu();
@@ -444,11 +450,11 @@ KisMainWindow::KisMainWindow()
     configChanged();
 
     // If we have customized the toolbars, load that first
-    setLocalXMLFile(KoResourcePaths::locateLocal("data", "krita/krita.rc"));
+    setLocalXMLFile(KoResourcePaths::locateLocal("data", "krita/krita.xmlgui"));
 
     QString doc;
-    QStringList allFiles = KoResourcePaths::findAllResources("data", "krita/krita.rc");
-    // We need at least one krita.rc file!
+    QStringList allFiles = KoResourcePaths::findAllResources("data", "krita/krita.xmlgui");
+    // We need at least one krita.xmlgui file!
     if (allFiles.size() == 0) {
         m_errorMessage = i18n("Krita cannot find the configuration file! Krita will quit now.");
         m_dieOnError = true;
@@ -885,16 +891,14 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
     QUrl suggestedURL = document->url();
 
     QStringList mimeFilter;
-    QMimeDatabase db;
-    QMimeType mime = db.mimeTypeForName(_native_format);
 
     if (specialOutputFlag) {
-        mimeFilter = mime.globPatterns();
+        mimeFilter = KisMimeDatabase::suffixesForMimeType(_native_format);
     }
     else {
         mimeFilter = KisImportExportManager::mimeFilter(_native_format,
-                                                 KisImportExportManager::Export,
-                                                 document->extraNativeMimeTypes());
+                                                        KisImportExportManager::Export,
+                                                        document->extraNativeMimeTypes());
     }
 
 
@@ -910,7 +914,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         if (!suggestedFilename.isEmpty()) {  // ".kra" looks strange for a name
             int c = suggestedFilename.lastIndexOf('.');
 
-            const QString ext = mime.preferredSuffix();
+            const QString ext = KisMimeDatabase::suffixesForMimeType(_native_format).first();
             if (!ext.isEmpty()) {
                 if (c < 0)
                     suggestedFilename += ext;
@@ -953,9 +957,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         if (newURL.isLocalFile()) {
             QString fn = newURL.toLocalFile();
             if (QFileInfo(fn).completeSuffix().isEmpty()) {
-                QMimeDatabase db;
-                QMimeType mime = db.mimeTypeForName(_native_format);
-                fn.append(mime.preferredSuffix());
+                fn.append(KisMimeDatabase::suffixesForMimeType(_native_format).first());
                 newURL = QUrl::fromLocalFile(fn);
             }
         }
@@ -969,8 +971,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         QByteArray outputFormat = _native_format;
 
         if (!specialOutputFlag) {
-            QMimeType mime = db.mimeTypeForUrl(newURL);
-            QString outputFormatString = mime.name();
+            QString outputFormatString = KisMimeDatabase::mimeTypeForFile(newURL.toLocalFile());
             outputFormat = outputFormatString.toLatin1();
         }
 
@@ -994,19 +995,6 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
             QString fileName = newURL.fileName();
             if ( specialOutputFlag== KisDocument::SaveAsDirectoryStore) {
                 //dbgKrita << "save to directory: " << newURL.url();
-            }
-            else if (specialOutputFlag == KisDocument::SaveEncrypted) {
-                int dot = fileName.lastIndexOf('.');
-                dbgKrita << dot;
-                QString ext = mime.preferredSuffix();
-                if (!ext.isEmpty()) {
-                    if (dot < 0) fileName += ext;
-                    else fileName = fileName.left(dot) + ext;
-                } else { // current filename extension wrong anyway
-                    if (dot > 0) fileName = fileName.left(dot);
-                }
-                newURL = newURL.adjusted(QUrl::RemoveFilename);
-                newURL.setPath(newURL.path() + fileName);
             }
         }
 
@@ -1291,7 +1279,68 @@ void KisMainWindow::switchTab(int index)
 
 void KisMainWindow::slotFileNew()
 {
-    KisPart::instance()->showStartUpWidget(this, true /*Always show widget*/);
+    KisOpenPane *startupWidget = 0;
+
+    const QStringList mimeFilter = KisImportExportManager::mimeFilter(KIS_MIME_TYPE,
+                                                                      KisImportExportManager::Import,
+                                                                      KisDocument::extraNativeMimeTypes());
+
+    startupWidget = new KisOpenPane(this, mimeFilter, QStringLiteral("krita/templates/"));
+    startupWidget->setWindowModality(Qt::WindowModal);
+
+    KisConfig cfg;
+
+    int w = cfg.defImageWidth();
+    int h = cfg.defImageHeight();
+    const double resolution = cfg.defImageResolution();
+    const QString colorModel = cfg.defColorModel();
+    const QString colorDepth = cfg.defaultColorDepth();
+    const QString colorProfile = cfg.defColorProfile();
+
+
+    CustomDocumentWidgetItem item;
+    item.widget = new KisCustomImageWidget(startupWidget,
+                                           w,
+                                           h,
+                                           resolution,
+                                           colorModel,
+                                           colorDepth,
+                                           colorProfile,
+                                           i18n("Unnamed"));
+
+    item.icon = "application-x-krita";
+
+    startupWidget->addCustomDocumentWidget(item.widget, item.title, item.icon);
+
+    QSize sz = KisClipboard::instance()->clipSize();
+    if (sz.isValid() && sz.width() != 0 && sz.height() != 0) {
+        w = sz.width();
+        h = sz.height();
+    }
+
+    item.widget = new KisImageFromClipboard(startupWidget,
+                                            w,
+                                            h,
+                                            resolution,
+                                            colorModel,
+                                            colorDepth,
+                                            colorProfile,
+                                            i18n("Unnamed"));
+
+    item.title = i18n("Create from Clipboard");
+    item.icon = "klipper";
+
+    startupWidget->addCustomDocumentWidget(item.widget, item.title, item.icon);
+
+    // calls deleteLater
+    connect(startupWidget, SIGNAL(documentSelected(KisDocument*)), KisPart::instance(), SLOT(startCustomDocument(KisDocument*)));
+    // calls deleteLater
+    connect(startupWidget, SIGNAL(openTemplate(const QUrl&)), KisPart::instance(), SLOT(openTemplate(const QUrl&)));
+
+    startupWidget->exec();
+
+    // Cancel calls deleteLater...
+
 }
 
 void KisMainWindow::slotFileOpen()
@@ -2186,13 +2235,9 @@ void KisMainWindow::applyDefaultSettings(QPrinter &printer) {
     if (title.isEmpty()) {
         title = d->activeView->document()->url().fileName();
         // strip off the native extension (I don't want foobar.kwd.ps when printing into a file)
-        QMimeDatabase db;
-        QMimeType mime = db.mimeTypeForName(d->activeView->document()->outputMimeType());
-        if (mime.isValid()) {
-            QString extension = mime.preferredSuffix();
-
-            if (title.endsWith(extension))
-                title.chop(extension.length());
+        QString extension = KisMimeDatabase::suffixesForMimeType(d->activeView->document()->outputMimeType()).first();
+        if (title.endsWith(extension)) {
+            title.chop(extension.length());
         }
     }
 
@@ -2395,5 +2440,3 @@ void KisMainWindow::moveEvent(QMoveEvent *e)
 
 
 #include <moc_KisMainWindow.cpp>
-#include <QMimeDatabase>
-#include <QMimeType>

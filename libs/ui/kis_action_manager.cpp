@@ -50,6 +50,11 @@ public:
         : viewManager(0)
     {}
 
+    ~Private()
+    {
+        qDeleteAll(uiRegistry.values());
+    }
+
     KisViewManager* viewManager;
     QList<KisAction*> actions;
     KoGenericRegistry<KisOperationUIFactory*> uiRegistry;

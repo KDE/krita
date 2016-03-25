@@ -168,8 +168,11 @@ KisColorFilterCombo::KisColorFilterCombo(QWidget *parent)
     setModel(newModel);
 
     setView(new FullSizedListView);
-    view()->installEventFilter(new ComboEventFilter(this));
-    view()->viewport()->installEventFilter(new ComboEventFilter(this));
+    m_eventFilters.append(new ComboEventFilter(this));
+    m_eventFilters.append(new ComboEventFilter(this));
+
+    view()->installEventFilter(m_eventFilters[0]);
+    view()->viewport()->installEventFilter(m_eventFilters[1]);
 
     KisNodeViewColorScheme scm;
 
@@ -206,6 +209,7 @@ KisColorFilterCombo::KisColorFilterCombo(QWidget *parent)
 
 KisColorFilterCombo::~KisColorFilterCombo()
 {
+    qDeleteAll(m_eventFilters);
 }
 
 void collectAvailableLabels(KisNodeSP root, QSet<int> *labels)

@@ -92,6 +92,7 @@ set(kritaui_LIB_SRCS
     kis_composite_ops_model.cc
     kis_paint_ops_model.cpp
     kis_cursor.cc
+    kis_cursor_cache.cpp
     kis_custom_pattern.cc
     kis_file_layer.cpp
     kis_safe_document_loader.cpp
@@ -193,6 +194,7 @@ set(kritaui_LIB_SRCS
     tool/strokes/freehand_stroke.cpp
     tool/strokes/kis_painter_based_stroke_strategy.cpp
     tool/strokes/kis_filter_stroke_strategy.cpp
+    tool/strokes/kis_color_picker_stroke_strategy.cpp
     widgets/kis_cmb_composite.cc
     widgets/kis_cmb_contour.cpp
     widgets/kis_cmb_gradient.cpp
@@ -313,7 +315,6 @@ set(kritaui_LIB_SRCS
     KisFilterEntry.cpp
     KisFilterGraph.cpp
     KisImportExportManager.cpp
-    KisImportExportManager_p.cpp
     KisFilterVertex.cpp
     KisMainWindow.cpp
     KisOpenPane.cpp
@@ -346,8 +347,8 @@ set(kritaui_LIB_SRCS
     KisApplicationArguments.cpp
 
     KisNetworkAccessManager.cpp
-    KisWelcomeScreen.cpp
     KisMultiFeedRSSModel.cpp
+    KisRemoteFileFetcher.cpp
 
     KisPaletteModel.cpp
     KisColorsetChooser.cpp

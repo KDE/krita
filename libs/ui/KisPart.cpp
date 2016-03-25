@@ -38,7 +38,6 @@
 #include "KisDocument.h"
 #include "KisView.h"
 #include "KisViewManager.h"
-#include "KisOpenPane.h"
 #include "KisImportExportManager.h"
 
 #include <kis_debug.h>
@@ -59,14 +58,11 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QGlobalStatic>
-#include <QMimeDatabase>
+#include <KisMimeDatabase.h>
 
 #include "KisView.h"
 #include "KisDocument.h"
 #include "kis_config.h"
-#include "kis_clipboard.h"
-#include "kis_custom_image_widget.h"
-#include "kis_image_from_clipboard_widget.h"
 #include "kis_shape_controller.h"
 #include "kis_resource_server_provider.h"
 #ifdef HAVE_OPENGL
@@ -77,6 +73,7 @@
 #include "KisImportExportManager.h"
 #include "KisDocument.h"
 #include "KoToolManager.h"
+#include "KisOpenPane.h"
 
 #include "kis_color_manager.h"
 #include "kis_debug.h"
@@ -111,7 +108,6 @@ public:
     QList<QPointer<KisDocument> > documents;
 
     QGraphicsItem *canvasItem{0};
-    KisOpenPane *startupWidget{0};
     KActionCollection *actionCollection{0};
 
     KisIdleWatcher idleWatcher;
@@ -407,20 +403,9 @@ void KisPart::openExistingFile(const QUrl &url)
     document->setModified(false);
     addDocument(document);
 
-    KisMainWindow *mw = 0;
-    if (d->startupWidget) {
-        mw = qobject_cast<KisMainWindow*>(d->startupWidget->parent());
-    }
-    if (!mw) {
-        mw = currentMainwindow();
-    }
-
+    KisMainWindow *mw = currentMainwindow();
     mw->addViewAndNotifyLoadingCompleted(document);
 
-    if (d->startupWidget) {
-        d->startupWidget->setParent(0);
-        d->startupWidget->hide();
-    }
     qApp->restoreOverrideCursor();
 }
 
@@ -464,25 +449,29 @@ void KisPart::openTemplate(const QUrl &url)
     document->undoStack()->clear();
 
     if (ok) {
-        QMimeDatabase db;
-        QString mimeType = db.mimeTypeForFile(url.path(), QMimeDatabase::MatchExtension).name();
+        QString mimeType = KisMimeDatabase::mimeTypeForFile(url.toLocalFile());
         // in case this is a open document template remove the -template from the end
         mimeType.remove( QRegExp( "-template$" ) );
         document->setMimeTypeAfterLoading(mimeType);
         document->resetURL();
         document->setEmpty();
-    } else {
+    }
+    else {
         document->showLoadingErrorDialog();
         document->initEmpty();
     }
     addDocument(document);
 
-    KisMainWindow *mw = qobject_cast<KisMainWindow*>(d->startupWidget->parent());
-    if (!mw) mw = currentMainwindow();
+    KisMainWindow *mw = currentMainwindow();
     mw->addViewAndNotifyLoadingCompleted(document);
 
-    d->startupWidget->setParent(0);
-    d->startupWidget->hide();
+    KisOpenPane *pane = qobject_cast<KisOpenPane*>(sender());
+    if (pane) {
+        pane->hide();
+        delete pane;
+
+    }
+
     qApp->restoreOverrideCursor();
 }
 
@@ -502,127 +491,18 @@ void KisPart::addRecentURLToAllMainWindows(QUrl url)
     }
 }
 
-void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
-{
-
-    if (!alwaysShow) {
-        KConfigGroup cfgGrp( KSharedConfig::openConfig(), "TemplateChooserDialog");
-        QString fullTemplateName = cfgGrp.readPathEntry("AlwaysUseTemplate", QString());
-        if (!fullTemplateName.isEmpty()) {
-            QUrl url(fullTemplateName);
-            QFileInfo fi(url.toLocalFile());
-            if (!fi.exists()) {
-                const QString templatesPath = templatesResourcePath();
-                QString desktopfile = KoResourcePaths::findResource("data", templatesPath + "*/" + fullTemplateName);
-                if (desktopfile.isEmpty()) {
-                    desktopfile = KoResourcePaths::findResource("data", templatesPath + fullTemplateName);
-                }
-                if (desktopfile.isEmpty()) {
-                    fullTemplateName.clear();
-                } else {
-                    KDesktopFile f(desktopfile);
-                    fullTemplateName = QFileInfo(desktopfile).absolutePath() + '/' + f.readUrl();
-                }
-            }
-            if (!fullTemplateName.isEmpty()) {
-                openTemplate(QUrl::fromLocalFile(fullTemplateName));
-                return;
-            }
-        }
-    }
-
-    if (d->startupWidget) {
-        delete d->startupWidget;
-    }
-    const QStringList mimeFilter = KisImportExportManager::mimeFilter(KIS_MIME_TYPE,
-                                                                      KisImportExportManager::Import,
-                                                                      KisDocument::extraNativeMimeTypes());
-
-    d->startupWidget = new KisOpenPane(0, mimeFilter, templatesResourcePath());
-    d->startupWidget->setWindowModality(Qt::WindowModal);
-    QList<CustomDocumentWidgetItem> widgetList = createCustomDocumentWidgets(d->startupWidget);
-    Q_FOREACH (const CustomDocumentWidgetItem & item, widgetList) {
-        d->startupWidget->addCustomDocumentWidget(item.widget, item.title, item.icon);
-        connect(item.widget, SIGNAL(documentSelected(KisDocument*)), this, SLOT(startCustomDocument(KisDocument*)));
-    }
-
-    connect(d->startupWidget, SIGNAL(openExistingFile(const QUrl&)), this, SLOT(openExistingFile(const QUrl&)));
-    connect(d->startupWidget, SIGNAL(openTemplate(const QUrl&)), this, SLOT(openTemplate(const QUrl&)));
-
-    d->startupWidget->setParent(mainWindow);
-    d->startupWidget->setWindowFlags(Qt::Dialog);
-    d->startupWidget->exec();
-}
-
-QList<KisPart::CustomDocumentWidgetItem> KisPart::createCustomDocumentWidgets(QWidget * parent)
-{
-    KisConfig cfg;
-
-    int w = cfg.defImageWidth();
-    int h = cfg.defImageHeight();
-    const double resolution = cfg.defImageResolution();
-    const QString colorModel = cfg.defColorModel();
-    const QString colorDepth = cfg.defaultColorDepth();
-    const QString colorProfile = cfg.defColorProfile();
-
-    QList<KisPart::CustomDocumentWidgetItem> widgetList;
-    {
-        KisPart::CustomDocumentWidgetItem item;
-        item.widget = new KisCustomImageWidget(parent,
-                                               w,
-                                               h,
-                                               resolution,
-                                               colorModel,
-                                               colorDepth,
-                                               colorProfile,
-                                               i18n("Unnamed"));
-
-        item.icon = "application-x-krita";
-        widgetList << item;
-    }
-
-    {
-        QSize sz = KisClipboard::instance()->clipSize();
-        if (sz.isValid() && sz.width() != 0 && sz.height() != 0) {
-            w = sz.width();
-            h = sz.height();
-        }
-
-        KisPart::CustomDocumentWidgetItem item;
-        item.widget = new KisImageFromClipboard(parent,
-                                                w,
-                                                h,
-                                                resolution,
-                                                colorModel,
-                                                colorDepth,
-                                                colorProfile,
-                                                i18n("Unnamed"));
-
-        item.title = i18n("Create from Clipboard");
-        item.icon = "klipper";
-
-        widgetList << item;
-
-    }
-
-    return widgetList;
-}
-
-QString KisPart::templatesResourcePath() const
-{
-    return QStringLiteral("krita/templates/");
-}
 
 void KisPart::startCustomDocument(KisDocument* doc)
 {
     addDocument(doc);
-    KisMainWindow *mw = qobject_cast<KisMainWindow*>(d->startupWidget->parent());
-    if (!mw) mw = currentMainwindow();
-
+    KisMainWindow *mw = currentMainwindow();
+    KisOpenPane *pane = qobject_cast<KisOpenPane*>(sender());
+    if (pane) {
+        pane->hide();
+        delete pane;
+    }
     mw->addViewAndNotifyLoadingCompleted(doc);
 
-    d->startupWidget->setParent(0);
-    d->startupWidget->hide();
 }
 
 KisInputManager* KisPart::currentInputManager()
@@ -630,7 +510,3 @@ KisInputManager* KisPart::currentInputManager()
     return instance()->currentMainwindow()->viewManager()->inputManager();
 }
 
-
-#include <KisPart.moc>
-#include <QMimeDatabase>
-#include <QMimeType>

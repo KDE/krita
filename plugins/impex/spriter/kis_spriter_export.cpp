@@ -25,7 +25,7 @@
 #include <QFileInfo>
 #include <QMessageBox>
 #include <QSlider>
-#include <QUrl>
+#include <QFileInfo>
 #include <QDir>
 #include <QFileInfo>
 #include <QApplication>
@@ -129,10 +129,20 @@ public:
 
     virtual ~KisSaveSCMLVisitor()
     {
-
     }
 
 public:
+
+    void finish()
+    {
+        // Fix up the object id's
+        int objectCount = m_folder.childNodes().count();
+        QDomElement e = m_folder.lastChildElement();
+        for (int i = 0; i < objectCount; i++) {
+            e.setAttribute("id", i);
+            e = e.previousSiblingElement();
+        }
+    }
 
     bool visit(KisNode* n)
     {
@@ -253,7 +263,7 @@ private:
 
         QDomElement object = m_scml->createElement("object");
         object.setAttribute("folder", 0);
-        object.setAttribute("file", m_fileId); // XXX: In the example, this is inverted
+        object.setAttribute("file", m_fileId); // This will be fixed afterwards
         object.setAttribute("x", rc.x());
         object.setAttribute("y", rc.y());
         object.setAttribute("pivot_x", 0);
@@ -345,6 +355,7 @@ KisImportExportFilter::ConversionStatus KisSpriterExport::convert(const QByteArr
     QDomDocument scmlDoc;
     KisSaveSCMLVisitor visitor(input->image(), fi.absolutePath(), fi.baseName(), &scmlDoc);
     if (input->image()->rootLayer()->accept(visitor)) {
+        visitor.finish();
 
         QFile f(filename);
         f.open(QFile::WriteOnly);

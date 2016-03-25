@@ -22,7 +22,7 @@
 
 #include <QObject>
 
-#include <QUrl>
+#include <QFileInfo>
 
 #include "kis_types.h"
 #include <KisImageBuilderResult.h>
@@ -39,7 +39,7 @@ public:
 
 public:
 
-    KisImageBuilder_Result buildFile(const QUrl &uri);
+    KisImageBuilder_Result buildFile(const QString &filename);
 
     KisImageWSP image();
 

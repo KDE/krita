@@ -43,8 +43,7 @@
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
 #include <kis_paint_device.h>
-#include <QMimeDatabase>
-#include <QMimeType>
+#include <KisMimeDatabase.h>
 
 #include "dlg_imagesplit.h"
 
@@ -94,14 +93,9 @@ void Imagesplit::slotImagesplit()
     QStringList listMimeFilter = KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export);
     QStringList filteredMimeTypes;
     QStringList listFileType;
-    Q_FOREACH (const QString & tempStr, listMimeFilter) {
-        QMimeDatabase db;
-        QMimeType type = db.mimeTypeForName(tempStr);
-        dbgKrita << tempStr << type;
-        if (type.isValid()) {
-            listFileType.append(type.comment());
-            filteredMimeTypes.append(tempStr);
-        }
+    Q_FOREACH (const QString & mimeType, listMimeFilter) {
+        listFileType.append(KisMimeDatabase::descriptionForMimeType(mimeType));
+        filteredMimeTypes.append(mimeType);
     }
 
     listMimeFilter = filteredMimeTypes;
@@ -126,10 +120,9 @@ void Imagesplit::slotImagesplit()
         if (dlgImagesplit->autoSave()) {
             for (int i = 0, k = 1; i < (numVerticalLines + 1); i++) {
                 for (int j = 0; j < (numHorizontalLines + 1); j++, k++) {
-                    QMimeDatabase db;
-                    QMimeType mimeTypeSelected = db.mimeTypeForName(listMimeFilter.at(dlgImagesplit->cmbIndex));
+                    QString mimeTypeSelected = listMimeFilter.at(dlgImagesplit->cmbIndex);
                     QString homepath = QDir::homePath();
-                    QString fileName = dlgImagesplit->suffix() + '_' + QString::number(k) + mimeTypeSelected.preferredSuffix();
+                    QString fileName = dlgImagesplit->suffix() + '_' + QString::number(k) + KisMimeDatabase::suffixesForMimeType(mimeTypeSelected).first();
                     QString url = homepath  + '/' + fileName;
                     saveAsImage(QRect((i * img_width), (j * img_height), img_width, img_height), listMimeFilter.at(dlgImagesplit->cmbIndex), url);
                 }
@@ -145,9 +138,7 @@ void Imagesplit::slotImagesplit()
                     dialog.setMimeTypeFilters(listMimeFilter);
                     QUrl url = QUrl::fromUserInput(dialog.filename());
 
-                    QMimeDatabase db;
-                    QMimeType mime = db.mimeTypeForUrl(url);
-                    QString mimefilter = mime.name();
+                    QString mimefilter = KisMimeDatabase::mimeTypeForFile(url.toLocalFile());
 
                     if (url.isEmpty())
                         return;

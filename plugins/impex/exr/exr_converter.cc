@@ -33,7 +33,7 @@
 #include <QApplication>
 #include <QMessageBox>
 
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoCompositeOpRegistry.h>
@@ -557,11 +557,9 @@ bool exrConverter::Private::checkExtraLayersInfoConsistent(const QDomDocument &d
     return result;
 }
 
-KisImageBuilder_Result exrConverter::decode(const QUrl &uri)
+KisImageBuilder_Result exrConverter::decode(const QString &filename)
 {
-    dbgFile << "Load exr: " << uri << " " << QFile::encodeName(uri.toLocalFile());
-
-    Imf::InputFile file(QFile::encodeName(uri.toLocalFile()));
+    Imf::InputFile file(QFile::encodeName(filename));
 
     Imath::Box2i dw = file.header().dataWindow();
     int width = dw.max.x - dw.min.x + 1;
@@ -866,15 +864,9 @@ KisImageBuilder_Result exrConverter::decode(const QUrl &uri)
     return KisImageBuilder_RESULT_OK;
 }
 
-KisImageBuilder_Result exrConverter::buildImage(const QUrl &uri)
+KisImageBuilder_Result exrConverter::buildImage(const QString &filename)
 {
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
-
-    if (!uri.isLocalFile()) {
-        return KisImageBuilder_RESULT_NOT_EXIST;
-    }
-    return decode(uri);
+    return decode(filename);
 
 }
 
@@ -1009,7 +1001,7 @@ void encodeData(Imf::OutputFile& file, const QList<ExrPaintLayerSaveInfo>& infor
     qDeleteAll(encoders);
 }
 
-KisImageBuilder_Result exrConverter::buildFile(const QUrl &uri, KisPaintLayerSP layer)
+KisImageBuilder_Result exrConverter::buildFile(const QString &filename, KisPaintLayerSP layer)
 {
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
@@ -1018,26 +1010,20 @@ KisImageBuilder_Result exrConverter::buildFile(const QUrl &uri, KisPaintLayerSP 
     if (!image)
         return KisImageBuilder_RESULT_EMPTY;
 
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
-
-    if (!uri.isLocalFile())
-        return KisImageBuilder_RESULT_NOT_LOCAL;
-
     // Make the header
     qint32 height = image->height();
     qint32 width = image->width();
     Imf::Header header(width, height);
 
     Imf::PixelType pixelType = Imf::NUM_PIXELTYPES;
-    
+
     if(layer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
         pixelType = Imf::HALF;
     } else if(layer->colorSpace()->colorDepthId() == Float32BitsColorDepthID)
     {
         pixelType = Imf::FLOAT;
     }
-    
+
     if(pixelType >= Imf::NUM_PIXELTYPES)
     {
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
@@ -1058,7 +1044,7 @@ KisImageBuilder_Result exrConverter::buildFile(const QUrl &uri, KisPaintLayerSP 
     info.pixelType = pixelType;
 
     // Open file for writing
-    Imf::OutputFile file(QFile::encodeName(uri.path()), header);
+    Imf::OutputFile file(QFile::encodeName(filename), header);
 
     QList<ExrPaintLayerSaveInfo> informationObjects;
     informationObjects.push_back(info);
@@ -1265,7 +1251,7 @@ QString exrConverter::Private::fetchExtraLayersInfo(QList<ExrPaintLayerSaveInfo>
     return doc.toString();
 }
 
-KisImageBuilder_Result exrConverter::buildFile(const QUrl &uri, KisGroupLayerSP layer)
+KisImageBuilder_Result exrConverter::buildFile(const QString &filename, KisGroupLayerSP layer)
 {
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
@@ -1274,11 +1260,6 @@ KisImageBuilder_Result exrConverter::buildFile(const QUrl &uri, KisGroupLayerSP 
     if (!image)
         return KisImageBuilder_RESULT_EMPTY;
 
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
-
-    if (!uri.isLocalFile())
-        return KisImageBuilder_RESULT_NOT_LOCAL;
 
     qint32 height = image->height();
     qint32 width = image->width();
@@ -1309,7 +1290,7 @@ KisImageBuilder_Result exrConverter::buildFile(const QUrl &uri, KisGroupLayerSP 
     }
 
     // Open file for writing
-    Imf::OutputFile file(QFile::encodeName(uri.path()), header);
+    Imf::OutputFile file(QFile::encodeName(filename), header);
 
     encodeData(file, informationObjects, width, height);
     return KisImageBuilder_RESULT_OK;

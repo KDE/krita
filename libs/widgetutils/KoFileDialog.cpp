@@ -28,8 +28,7 @@
 #include <ksharedconfig.h>
 #include <klocalizedstring.h>
 
-#include <QMimeDatabase>
-#include <QMimeType>
+#include <KisMimeDatabase.h>
 #include <KoJsonTrader.h>
 
 class Q_DECL_HIDDEN KoFileDialog::Private
@@ -96,7 +95,7 @@ public:
     QStringList filterList;
     QString defaultFilter;
     QScopedPointer<QFileDialog> fileDialog;
-    QMimeType mimeType;
+    QString mimeType;
     bool useStaticForNative;
     bool hideDetails;
     bool swapExtensionOrder;
@@ -217,12 +216,7 @@ QString KoFileDialog::selectedNameFilter() const
 
 QString KoFileDialog::selectedMimeType() const
 {
-    if (d->mimeType.isValid()) {
-        return d->mimeType.name();
-    }
-    else {
-        return "";
-    }
+    return d->mimeType;
 }
 
 void KoFileDialog::createFileDialog()
@@ -346,12 +340,7 @@ QString KoFileDialog::filename()
             url.append(extension);
         }
 
-        QMimeDatabase db;
-        d->mimeType = db.mimeTypeForFile(url);
-        if (d->mimeType.name() == "application/octet-stream") {
-            KoJsonTrader jt;
-            d->mimeType = db.mimeTypeForName(jt.mimeTypes(QFileInfo(url).suffix()).first());
-        }
+        d->mimeType = KisMimeDatabase::mimeTypeForFile(url);
         saveUsedDir(url, d->dialogName);
     }
     return url;
@@ -420,19 +409,17 @@ QStringList KoFileDialog::splitNameFilter(const QString &nameFilter, QStringList
         entry = entry.remove("*");
         entry = entry.remove(")");
 
-        QMimeDatabase db;
-        QMimeType mime = db.mimeTypeForName("bla" + entry);
-        if (mime.name() != "application/octet-stream") {
-            if (!mimeList->contains(mime.name())) {
-                mimeList->append(mime.name());
-                filters.append(mime.comment() + " ( *" + entry + " )");
+        QString mimeType = KisMimeDatabase::mimeTypeForSuffix(entry);
+        if (mimeType != "application/octet-stream") {
+            if (!mimeList->contains(mimeType)) {
+                mimeList->append(mimeType);
+                filters.append(KisMimeDatabase::descriptionForMimeType(mimeType) + " ( *" + entry + " )");
             }
         }
         else {
             filters.append(entry.remove(".").toUpper() + " " + description + " ( *." + entry + " )");
         }
     }
-
     return filters;
 }
 
@@ -446,40 +433,53 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &m
         ret << QString();
     }
 
-    for (QStringList::ConstIterator
-         it = mimeList.begin(); it != mimeList.end(); ++it) {
-        QMimeDatabase db;
-        QMimeType mimeType = db.mimeTypeForName(*it);
-        if (!mimeType.isValid()) {
-            continue;
-        }
-        if (!mimeSeen.contains(mimeType.name())) {
+    Q_FOREACH(const QString &mimeType, mimeList) {
+
+        if (!mimeSeen.contains(mimeType)) {
             QString oneFilter;
-            QStringList patterns = mimeType.globPatterns();
-            QStringList::ConstIterator jt;
-            for (jt = patterns.constBegin(); jt != patterns.constEnd(); ++jt) {
+            QStringList patterns = KisMimeDatabase::suffixesForMimeType(mimeType);
+            QStringList globPatterns;
+            Q_FOREACH(const QString &pattern, patterns) {
+                globPatterns << "*." + pattern;
+            }
+
+            Q_FOREACH(const QString &glob, globPatterns) {
                 if (d->swapExtensionOrder) {
-                    oneFilter.prepend(*jt + " ");
+                    oneFilter.prepend(glob + " ");
                     if (withAllSupportedEntry) {
-                        ret[0].prepend(*jt + " ");
+                        ret[0].prepend(glob + " ");
                     }
+#ifdef Q_OS_LINUX
+                    oneFilter.prepend(glob.toUpper() + " ");
+                    if (withAllSupportedEntry) {
+                        ret[0].prepend(glob.toUpper() + " ");
+                    }
+#endif
+
                 }
                 else {
-                    oneFilter.append(*jt + " ");
+                    oneFilter.append(glob + " ");
                     if (withAllSupportedEntry) {
-                        ret[0].append(*jt + " ");
+                        ret[0].append(glob + " ");
                     }
+#ifdef Q_OS_LINUX
+                    oneFilter.append(glob.toUpper() + " ");
+                    if (withAllSupportedEntry) {
+                        ret[0].append(glob.toUpper() + " ");
+                    }
+#endif
                 }
             }
-            oneFilter = mimeType.comment() + " ( " + oneFilter + ")";
+            oneFilter = KisMimeDatabase::descriptionForMimeType(mimeType) + " ( " + oneFilter + ")";
             ret << oneFilter;
-            mimeSeen << mimeType.name();
+            mimeSeen << mimeType;
         }
     }
 
     if (withAllSupportedEntry) {
         ret[0] = i18n("All supported formats") + " ( " + ret[0] + (")");
     }
+
     return ret;
 }
 

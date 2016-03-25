@@ -25,6 +25,7 @@
 #include <QtCore/QVector>
 #include <QtCore/QPointF>
 #include <QMap>
+#include <QRect>
 
 #include "wintab.h"
 
@@ -81,6 +82,7 @@ struct QWindowsTabletDeviceData
     qint64 uniqueId;
     int currentDevice;
     int currentPointerType;
+    QRect virtualDesktopArea;
 
     // Added by Krita
     QMap<quint8, quint8> buttonsMap;
@@ -109,7 +111,7 @@ public:
     void setAbsoluteRange(int a) { m_absoluteRange = a; }
 
 
-    void tabletUpdateCursor(const quint64 uniqueId, const UINT cursorType, const int pkCursor);
+    void tabletUpdateCursor(const int pkCursor);
     static QWindowsWinTab32DLL m_winTab32DLL;
 
 private:

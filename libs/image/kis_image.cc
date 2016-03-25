@@ -232,6 +232,7 @@ KisImage::~KisImage()
      */
     m_d->rootLayer = 0;
 
+    delete m_d->undoStore;
     delete m_d;
     disconnect(); // in case Qt gets confused
 }

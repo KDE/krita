@@ -132,7 +132,7 @@ public:
      * setupGUI() instead of this one since it does more things for free
      * like setting up the toolbar/shortcut edit actions, etc.
      *
-     * If @p xmlfile is NULL,
+     * If @p xmlfile is 0,
      * then it will try to construct a local XML filename like
      * appnameui.rc where 'appname' is your app's name.  If that file
      * does not exist, then the XML UI code will only use the global

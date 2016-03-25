@@ -24,7 +24,7 @@
 
 #include <KoDialog.h>
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KoColorSpaceConstants.h>
 #include <KisFilterChain.h>
@@ -86,7 +86,7 @@ KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& fro
     cfg.fromXML(filterConfig);
     optionsJP2.numberResolutions->setValue(cfg.getInt("number_resolutions", 6));
     optionsJP2.qualityLevel->setValue(cfg.getInt("quality", 100));
-    
+
     kdb->setMainWidget(wdg);
     QApplication::restoreOverrideCursor();
 
@@ -99,7 +99,7 @@ KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& fro
         qApp->processEvents(); // For vector layers to be updated
     }
     image->waitForDone();
-    
+
     JP2ConvertOptions options;
     options.numberresolution = optionsJP2.numberResolutions->value();
     cfg.setProperty("number_resolutions", options.numberresolution);
@@ -108,7 +108,6 @@ KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& fro
 
     KisConfig().setExportConfiguration("JP2", cfg);
 
-    QUrl url = QUrl::fromLocalFile(filename);
 
     image->refreshGraph();
     image->lock();
@@ -121,7 +120,7 @@ KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& fro
 
     KisImageBuilder_Result res;
 
-    if ((res = kpc.buildFile(url, l, options)) == KisImageBuilder_RESULT_OK) {
+    if ((res = kpc.buildFile(filename, l, options)) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         return KisImportExportFilter::OK;
     }

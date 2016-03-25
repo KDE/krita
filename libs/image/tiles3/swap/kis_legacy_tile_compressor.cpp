@@ -82,11 +82,8 @@ void KisLegacyTileCompressor::compressTileData(KisTileData *tileData,
 {
     bytesWritten = 0;
     const qint32 tileDataSize = TILE_DATA_SIZE(tileData->pixelSize());
-#ifdef NDEBUG
     Q_UNUSED(bufferSize);
-#else
     Q_ASSERT(bufferSize >= tileDataSize);
-#endif
     memcpy(buffer, tileData->data(), tileDataSize);
     bytesWritten += tileDataSize;
 }

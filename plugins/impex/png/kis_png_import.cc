@@ -20,7 +20,7 @@
 #include "kis_png_import.h"
 
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KisFilterChain.h>
 #include <KisImportExportManager.h>
@@ -60,17 +60,16 @@ KisImportExportFilter::ConversionStatus KisPNGImport::convert(const QByteArray&,
 
     if (!filename.isEmpty()) {
 
-        QUrl url = QUrl::fromLocalFile(filename);
-
-        if (url.isEmpty())
+        if (!QFileInfo(filename).exists()) {
             return KisImportExportFilter::FileNotFound;
+        }
 
         KisPNGConverter ib(doc, getBatchMode());
 
 //        if (view != 0)
 //            view -> canvasSubject() ->  progressDisplay() -> setSubject(&ib, false, true);
 
-        switch (ib.buildImage(url)) {
+        switch (ib.buildImage(filename)) {
         case KisImageBuilder_RESULT_UNSUPPORTED:
             return KisImportExportFilter::NotImplemented;
             break;

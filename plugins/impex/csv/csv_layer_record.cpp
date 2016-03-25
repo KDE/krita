@@ -20,8 +20,8 @@
 #include "csv_layer_record.h"
 
 CSVLayerRecord::CSVLayerRecord()
-    : channel(NULL)
-    , layer(NULL)
+    : layer(0)
+    , channel(0)
     , last("")
     , frame(0)
 {

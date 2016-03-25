@@ -19,7 +19,7 @@
 
 #include <QApplication>
 
-#include <QUrl>
+#include <QFileInfo>
 #include <QStack>
 
 #include <KoColorSpace.h>
@@ -63,10 +63,10 @@ PSDLoader::~PSDLoader()
 {
 }
 
-KisImageBuilder_Result PSDLoader::decode(const QUrl &uri)
+KisImageBuilder_Result PSDLoader::decode(const QString &filename)
 {
     // open the file
-    QFile f(uri.toLocalFile());
+    QFile f(filename);
     if (!f.exists()) {
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
@@ -190,6 +190,14 @@ KisImageBuilder_Result PSDLoader::decode(const QUrl &uri)
     QStack<KisGroupLayerSP> groupStack;
     groupStack.push(m_image->rootLayer());
 
+    /**
+     * PSD has a weird "optimization": if a group layer has only one
+     * child layer, it omits it's 'psd_bounding_divider' section. So
+     * fi you ever see an unbalanced layers group in PSD, most
+     * probably, it is just a single layered group.
+     */
+    KisNodeSP lastAddedLayer;
+
     typedef QPair<QDomDocument, KisLayerSP> LayerStyleMapping;
     QVector<LayerStyleMapping> allStylesXml;
 
@@ -210,8 +218,17 @@ KisImageBuilder_Result PSDLoader::decode(const QUrl &uri)
             }
             else if ((layerRecord->infoBlocks.sectionDividerType == psd_open_folder ||
                       layerRecord->infoBlocks.sectionDividerType == psd_closed_folder) &&
-                     !groupStack.isEmpty()) {
-                KisGroupLayerSP groupLayer = groupStack.pop();
+                     (groupStack.size() > 1 || (lastAddedLayer && !groupStack.isEmpty()))) {
+                KisGroupLayerSP groupLayer;
+
+                if (groupStack.size() <= 1) {
+                    groupLayer = new KisGroupLayer(m_image, "temp", OPACITY_OPAQUE_U8);
+                    m_image->addNode(groupLayer, groupStack.top());
+                    m_image->moveNode(lastAddedLayer, groupLayer, KisNodeSP());
+                } else {
+                    groupLayer = groupStack.pop();
+                }
+
                 groupLayer->setName(layerRecord->layerName);
                 groupLayer->setVisible(layerRecord->visible);
 
@@ -286,6 +303,8 @@ KisImageBuilder_Result PSDLoader::decode(const QUrl &uri)
                 m_image->addNode(mask, newLayer);
             }
         }
+
+        lastAddedLayer = newLayer;
     }
 
     const QVector<QDomDocument> &embeddedPatterns =
@@ -339,16 +358,9 @@ KisImageBuilder_Result PSDLoader::decode(const QUrl &uri)
     return KisImageBuilder_RESULT_OK;
 }
 
-KisImageBuilder_Result PSDLoader::buildImage(const QUrl &uri)
+KisImageBuilder_Result PSDLoader::buildImage(const QString &filename)
 {
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
-
-    if (!uri.isLocalFile()) {
-        return KisImageBuilder_RESULT_NOT_EXIST;
-    }
-
-    return decode(uri);
+    return decode(filename);
 }
 
 

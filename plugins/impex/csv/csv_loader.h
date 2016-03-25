@@ -21,7 +21,7 @@
 #define CSV_LOADER_H_
 
 #include <QObject>
-#include <QUrl>
+#include <QFileInfo>
 
 #include "kis_image.h"
 #include "kritaui_export.h"
@@ -38,12 +38,12 @@ public:
     CSVLoader(KisDocument* doc, bool batchMode);
     virtual ~CSVLoader();
 
-    KisImageBuilder_Result buildAnimation(const QUrl &, const QString &);
+    KisImageBuilder_Result buildAnimation(QString &filename);
 
     KisImageWSP image();
 
 private:
-    KisImageBuilder_Result decode(const QUrl &, const QString &);
+    KisImageBuilder_Result decode(const QString &);
     KisImageBuilder_Result setLayer(CSVLayerRecord* , KisDocument* ,const QString &);
     KisImageBuilder_Result createNewImage(int, int, float, const QString &);
     QString convertBlending(const QString &);
@@ -52,7 +52,7 @@ private Q_SLOTS:
     void cancel();
 
 private:
-    KisImageWSP m_image; 
+    KisImageWSP m_image;
     KisDocument* m_doc;
     bool m_batchMode;
     bool m_stop;

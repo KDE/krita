@@ -257,8 +257,8 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
     //Check to draw scrollbars after "Canvas only mode" toggle is created.
     this->showHideScrollbars();
 
-    KoCanvasController *dummy = new KoDummyCanvasController(actionCollection());
-    KoToolManager::instance()->registerToolActions(actionCollection(), dummy);
+    QScopedPointer<KoDummyCanvasController> dummy(new KoDummyCanvasController(actionCollection()));
+    KoToolManager::instance()->registerToolActions(actionCollection(), dummy.data());
 
     QTimer::singleShot(0, this, SLOT(makeStatusBarVisible()));
 
@@ -722,7 +722,7 @@ int KisViewManager::viewCount() const
 void KisViewManager::slotCreateTemplate()
 {
     if (!document()) return;
-    KisTemplateCreateDia::createTemplate(KisPart::instance()->templatesResourcePath(), ".kra", document(), mainWindow());
+    KisTemplateCreateDia::createTemplate( QStringLiteral("krita/templates/"), ".kra", document(), mainWindow());
 }
 
 void KisViewManager::slotCreateCopy()

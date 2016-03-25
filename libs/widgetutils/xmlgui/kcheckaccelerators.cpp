@@ -223,7 +223,7 @@ void KCheckAccelerators::createDialog(QWidget *actWin, bool automatic)
     QVBoxLayout *layout = new QVBoxLayout(drklash);
     drklash_view = new QTextBrowser(drklash);
     layout->addWidget(drklash_view);
-    QCheckBox *disableAutoCheck = NULL;
+    QCheckBox *disableAutoCheck = 0;
     if (automatic)  {
         disableAutoCheck = new QCheckBox(i18nc("@option:check", "Disable automatic checking"), drklash);
         connect(disableAutoCheck, SIGNAL(toggled(bool)), SLOT(slotDisableCheck(bool)));

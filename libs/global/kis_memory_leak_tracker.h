@@ -19,6 +19,8 @@
 #ifndef _KIS_MEMORY_LEAK_TRACKER_H_
 #define _KIS_MEMORY_LEAK_TRACKER_H_
 
+#include <QtGlobal>
+
 #include <kritaglobal_export.h>
 
 #include <config-memory-leak-tracker.h>

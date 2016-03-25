@@ -116,7 +116,10 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Red':</string>
+             <string>Red': </string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -245,11 +248,14 @@
          <height>21</height>
         </rect>
        </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
        <property name="text">
-        <string>Color Model Type:</string>
+        <string>Color Model Type: </string>
        </property>
        <property name="alignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
        <property name="buddy">
         <cstring>colorSelectorConfiguration</cstring>
@@ -348,7 +354,7 @@
        </property>
        <property name="geometry">
         <rect>
-         <x>180</x>
+         <x>140</x>
          <y>30</y>
          <width>291</width>
          <height>27</height>
@@ -358,7 +364,7 @@
       <widget class="QComboBox" name="zoomSelectorOptionComboBox">
        <property name="geometry">
         <rect>
-         <x>180</x>
+         <x>140</x>
          <y>60</y>
          <width>291</width>
          <height>27</height>
@@ -368,49 +374,58 @@
       <widget class="QLabel" name="label_3">
        <property name="geometry">
         <rect>
-         <x>30</x>
+         <x>20</x>
          <y>30</y>
-         <width>151</width>
+         <width>121</width>
          <height>21</height>
         </rect>
        </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
        <property name="text">
-        <string>When Docker Resizes:</string>
+        <string>When Docker Resizes: </string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
       <widget class="QLabel" name="label_5">
        <property name="geometry">
         <rect>
-         <x>20</x>
+         <x>10</x>
          <y>60</y>
-         <width>161</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Show Zoom Selector UI:</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_11">
-       <property name="geometry">
-        <rect>
-         <x>50</x>
-         <y>90</y>
          <width>131</width>
          <height>21</height>
         </rect>
        </property>
        <property name="text">
-        <string>Zoom Selector Size:</string>
+        <string>Show Zoom Selector UI: </string>
        </property>
        <property name="alignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_11">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>90</y>
+         <width>111</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Zoom Selector Size: </string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
       <widget class="QSpinBox" name="popupSize">
        <property name="geometry">
         <rect>
-         <x>180</x>
+         <x>140</x>
          <y>90</y>
          <width>82</width>
          <height>27</height>
@@ -435,7 +450,7 @@
       <widget class="QCheckBox" name="hidePopupOnClickCheck">
        <property name="geometry">
         <rect>
-         <x>180</x>
+         <x>140</x>
          <y>120</y>
          <width>161</width>
          <height>26</height>
@@ -633,10 +648,10 @@
          <item row="1" column="0">
           <widget class="QLabel" name="label_6">
            <property name="text">
-            <string>Line Height:</string>
+            <string>Line Height: </string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
          </item>
@@ -656,17 +671,17 @@
          <item row="0" column="0">
           <widget class="QLabel" name="label_2">
            <property name="text">
-            <string>Line Count:</string>
+            <string>Line Count: </string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
          </item>
          <item row="2" column="0">
           <widget class="QLabel" name="patchesPerLineLabel">
            <property name="text">
-            <string>Patches Per Line:</string>
+            <string>Patches Per Line: </string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -797,14 +812,17 @@
         <widget class="QLabel" name="label">
          <property name="geometry">
           <rect>
-           <x>50</x>
+           <x>40</x>
            <y>60</y>
            <width>51</width>
            <height>21</height>
           </rect>
          </property>
          <property name="text">
-          <string>Width:</string>
+          <string>Width: </string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
         <widget class="QSpinBox" name="lastUsedColorsHeight">
@@ -826,14 +844,14 @@
         <widget class="QLabel" name="label_10">
          <property name="geometry">
           <rect>
-           <x>0</x>
+           <x>10</x>
            <y>90</y>
-           <width>101</width>
+           <width>81</width>
            <height>27</height>
           </rect>
          </property>
          <property name="text">
-          <string>Max Patches:</string>
+          <string>Max Patches: </string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -900,7 +918,7 @@
              <string>Columns:</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
             <property name="buddy">
              <cstring>lastUsedColorsNumCols</cstring>
@@ -943,7 +961,7 @@
              <string>Rows:</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
             <property name="buddy">
              <cstring>lastUsedColorsNumRows</cstring>
@@ -1035,7 +1053,7 @@
              <string>Columns:</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
             <property name="buddy">
              <cstring>commonColorsNumCols</cstring>
@@ -1061,7 +1079,7 @@
              <string>Rows:</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
             <property name="buddy">
              <cstring>commonColorsNumRows</cstring>
@@ -1109,7 +1127,7 @@
           <string>Height:</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
         <widget class="QSpinBox" name="commonColorsWidth">
@@ -1134,7 +1152,7 @@
         <widget class="QLabel" name="label_4">
          <property name="geometry">
           <rect>
-           <x>60</x>
+           <x>50</x>
            <y>60</y>
            <width>51</width>
            <height>21</height>
@@ -1142,6 +1160,9 @@
          </property>
          <property name="text">
           <string>Width:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
         <widget class="QSpinBox" name="commonColorsHeight">
@@ -1170,7 +1191,7 @@
           </rect>
          </property>
          <property name="text">
-          <string>Max Patches:</string>
+          <string>Max Patches: </string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1364,7 +1385,7 @@
          <item>
           <widget class="QLabel" name="label_8">
            <property name="text">
-            <string>Lightness</string>
+            <string>Lightness: </string>
            </property>
           </widget>
          </item>
@@ -1376,9 +1397,22 @@
           </widget>
          </item>
          <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
           <widget class="QLabel" name="label_13">
            <property name="text">
-            <string>Saturation</string>
+            <string>Saturation: </string>
            </property>
           </widget>
          </item>
@@ -1390,9 +1424,22 @@
           </widget>
          </item>
          <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
           <widget class="QLabel" name="label_17">
            <property name="text">
-            <string>Hue</string>
+            <string>Hue: </string>
            </property>
           </widget>
          </item>
@@ -1415,7 +1462,7 @@
          <item>
           <widget class="QLabel" name="label_18">
            <property name="text">
-            <string>Redder/Greener</string>
+            <string>Redder/Greener: </string>
            </property>
           </widget>
          </item>
@@ -1427,9 +1474,22 @@
           </widget>
          </item>
          <item>
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
           <widget class="QLabel" name="label_19">
            <property name="text">
-            <string>Bluer/Yellower</string>
+            <string>Bluer/Yellower: </string>
            </property>
           </widget>
          </item>

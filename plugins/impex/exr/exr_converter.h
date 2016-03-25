@@ -28,8 +28,6 @@
 #include <KisImageBuilderResult.h>
 class KisDocument;
 
-class QUrl;
-
 class exrConverter : public QObject
 {
     Q_OBJECT
@@ -37,15 +35,15 @@ public:
     exrConverter(KisDocument *doc, bool showNotifications);
     virtual ~exrConverter();
 public:
-    KisImageBuilder_Result buildImage(const QUrl &uri);
-    KisImageBuilder_Result buildFile(const QUrl &uri, KisPaintLayerSP layer);
-    KisImageBuilder_Result buildFile(const QUrl &uri, KisGroupLayerSP layer);
+    KisImageBuilder_Result buildImage(const QString &filename);
+    KisImageBuilder_Result buildFile(const QString &filename, KisPaintLayerSP layer);
+    KisImageBuilder_Result buildFile(const QString &filename, KisGroupLayerSP layer);
     /**
      * Retrieve the constructed image
      */
     KisImageWSP image();
 private:
-    KisImageBuilder_Result decode(const QUrl &uri);
+    KisImageBuilder_Result decode(const QString &filename);
 public Q_SLOTS:
     virtual void cancel();
 private:

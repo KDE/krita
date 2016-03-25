@@ -109,8 +109,8 @@ KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoCo
     //setAttribute(Qt::WA_TranslucentBackground, true);
 
     connect(m_triangleColorSelector, SIGNAL(realColorChanged(KoColor)),
-            m_colorChangeCompressor, SLOT(start()));
-    connect(m_colorChangeCompressor, SIGNAL(timeout()),
+            m_colorChangeCompressor.data(), SLOT(start()));
+    connect(m_colorChangeCompressor.data(), SIGNAL(timeout()),
             SLOT(slotEmitColorChanged()));
 
     connect(m_resourceManager, SIGNAL(sigChangeFGColorSelector(KoColor)),

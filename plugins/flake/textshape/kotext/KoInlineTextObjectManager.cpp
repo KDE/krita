@@ -256,7 +256,7 @@ void KoInlineTextObjectManager::documentInformationUpdated(const QString &info, 
         setProperty(KoInlineObject::Title, data);
     else if (info == "description")
         setProperty(KoInlineObject::Description, data);
-    else if (info == "comments")
+    else if (info == "abstract")
         setProperty(KoInlineObject::Comments, data);
     else if (info == "subject")
         setProperty(KoInlineObject::Subject, data);

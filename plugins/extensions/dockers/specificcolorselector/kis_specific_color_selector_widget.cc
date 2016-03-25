@@ -76,7 +76,7 @@ KisSpecificColorSelectorWidget::~KisSpecificColorSelectorWidget()
 {
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("");
     cfg.writeEntry("SpecificColorSelector/ShowColorSpaceSelector", m_chkShowColorSpaceSelector->isChecked());
-
+    delete m_fallbackRenderer;
 }
 
 bool KisSpecificColorSelectorWidget::customColorSpaceUsed()

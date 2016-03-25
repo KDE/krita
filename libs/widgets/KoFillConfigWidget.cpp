@@ -296,6 +296,7 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
 
 KoFillConfigWidget::~KoFillConfigWidget()
 {
+    delete d->noFillAction;
     delete d;
 }
 

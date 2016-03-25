@@ -37,6 +37,7 @@
 #include "kis_group_layer.h"
 #include "kis_statusbar.h"
 #include "kis_progress_widget.h"
+#include "kis_config.h"
 #include "KisPart.h"
 
 struct KisImportCatcher::Private
@@ -60,11 +61,10 @@ QString KisImportCatcher::Private::prettyLayerName() const
 
 void KisImportCatcher::Private::importAsPaintLayer(KisPaintDeviceSP device)
 {
-    KisLayerSP newLayer =
-        new KisPaintLayer(view->image(),
-                          prettyLayerName(),
-                          OPACITY_OPAQUE_U8,
-                          device);
+    KisLayerSP newLayer = new KisPaintLayer(view->image(),
+                                            prettyLayerName(),
+                                            OPACITY_OPAQUE_U8,
+                                            device);
 
     KisNodeSP parent = 0;
     KisLayerSP currentActiveLayer = view->activeLayer();
@@ -81,7 +81,7 @@ void KisImportCatcher::Private::importAsPaintLayer(KisPaintDeviceSP device)
     adapter.addNode(newLayer, parent, currentActiveLayer);
 }
 
-KisImportCatcher::KisImportCatcher(const QUrl &url, KisViewManager * view, const QString &layerType)
+KisImportCatcher::KisImportCatcher(const QUrl &url, KisViewManager *view, const QString &layerType)
     : m_d(new Private)
 {
     m_d->doc = KisPart::instance()->createDocument();
@@ -108,8 +108,17 @@ void KisImportCatcher::slotLoadingFinished()
     if (importedImage && importedImage->projection()->exactBounds().isValid()) {
         if (m_d->layerType != "KisPaintLayer") {
             m_d->view->nodeManager()->createNode(m_d->layerType, false, importedImage->projection());
-        } else {
-            m_d->importAsPaintLayer(importedImage->projection());
+        }
+        else {
+            KisConfig cfg;
+            KisPaintDeviceSP dev = importedImage->projection();
+            qDebug() << "dev" << dev->colorSpace() << "image" << m_d->view->image()->colorSpace() << "cfg" << cfg.convertToImageColorspaceOnImport();
+            if (cfg.convertToImageColorspaceOnImport() && dev->colorSpace() != m_d->view->image()->colorSpace()) {
+                /// XXX: do we need intent here?
+                KUndo2Command* cmd = dev->convertTo(m_d->view->image()->colorSpace());
+                delete cmd;
+            }
+            m_d->importAsPaintLayer(dev);
         }
     }
 

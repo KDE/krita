@@ -170,7 +170,7 @@ bool KisPipeBrushParasite::saveToDevice(QIODevice* dev) const
     return true;
 }
 
-bool loadFromDevice(QIODevice *dev)
+bool loadFromDevice(QIODevice */*dev*/)
 {
     // XXX: implement...
     return true;;

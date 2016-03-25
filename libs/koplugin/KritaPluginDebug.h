@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2015 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,19 +15,17 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef FLAKE_DEBUG_H_
+#define FLAKE_DEBUG_H_
 
-#ifndef KIS_LAYER_COMMANDS_TEST_H
-#define KIS_LAYER_COMMANDS_TEST_H
+#include <QDebug>
+#include <QLoggingCategory>
+#include "kritaplugin_export.h"
 
-#include <QtTest>
+extern const KRITAPLUGIN_EXPORT QLoggingCategory &PLUGIN_LOG();
 
-class KisLayerCommandsTest : public QObject
-{
-    Q_OBJECT
-private Q_SLOTS:
-
-    void testCreation();
-
-};
+#define debugPlugin qCDebug(PLUGIN_LOG)
+#define warnPlugin qCWarning(PLUGIN_LOG)
+#define errorPlugin qCCritical(PLUGIN_LOG)
 
 #endif

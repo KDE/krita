@@ -200,7 +200,7 @@ KisWarpTransformWorker::KisWarpTransformWorker(WarpType warpType, KisPaintDevice
         m_warpMathFunction = &rigidTransformMath;
         break;
     default:
-        m_warpMathFunction = NULL;
+        m_warpMathFunction = 0;
         break;
     }
 }

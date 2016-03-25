@@ -41,7 +41,7 @@ extern "C" {
 #include <QMessageBox>
 
 #include <klocalizedstring.h>
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KoDocumentInfo.h>
 #include <KoColorSpace.h>
@@ -123,18 +123,15 @@ KisJPEGConverter::~KisJPEGConverter()
 {
 }
 
-KisImageBuilder_Result KisJPEGConverter::decode(const QUrl &uri)
+KisImageBuilder_Result KisJPEGConverter::decode(const QString &filename)
 {
     struct jpeg_decompress_struct cinfo;
     struct jpeg_error_mgr jerr;
 
     cinfo.err = jpeg_std_error(&jerr);
     jpeg_create_decompress(&cinfo);
-
-    Q_ASSERT(uri.isLocalFile());
-
     // open the file
-    QFile file(uri.toLocalFile());
+    QFile file(filename);
     if (!file.exists()) {
         return (KisImageBuilder_RESULT_NOT_EXIST);
     }
@@ -173,7 +170,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const QUrl &uri)
         memcpy(profile_rawdata.data(), profile_data, profile_len);
         cmsHPROFILE hProfile = cmsOpenProfileFromMem(profile_data, profile_len);
 
-        if (hProfile != (cmsHPROFILE) NULL) {
+        if (hProfile != (cmsHPROFILE) 0) {
             profile = KoColorSpaceRegistry::instance()->createColorProfile(modelId, Integer8BitsColorDepthID.id(), profile_rawdata);
             Q_CHECK_PTR(profile);
             dbgFile <<"profile name:" << profile->name() <<" product information:" << profile->info();
@@ -295,7 +292,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const QUrl &uri)
 
     dbgFile << "Looking for exif information";
 
-    for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != NULL; marker = marker->next) {
+    for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != 0; marker = marker->next) {
         dbgFile << "Marker is" << marker->marker;
         if (marker->marker != (JOCTET)(JPEG_APP0 + 1)
                 || marker->data_length < 14) {
@@ -354,7 +351,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const QUrl &uri)
 
     dbgFile << "Looking for IPTC information";
 
-    for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != NULL; marker = marker->next) {
+    for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != 0; marker = marker->next) {
         dbgFile << "Marker is" << marker->marker;
         if (marker->marker != (JOCTET)(JPEG_APP0 + 13) ||  marker->data_length < 14) {
             continue; /* IPTC data is in an APP13 marker of at least 16 octets */
@@ -389,7 +386,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const QUrl &uri)
 
     dbgFile << "Looking for XMP information";
 
-    for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != NULL; marker = marker->next) {
+    for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != 0; marker = marker->next) {
         dbgFile << "Marker is" << marker->marker;
         if (marker->marker != (JOCTET)(JPEG_APP0 + 1) || marker->data_length < 31) {
             continue; /* XMP data is in an APP1 marker of at least 31 octets */
@@ -427,17 +424,9 @@ KisImageBuilder_Result KisJPEGConverter::decode(const QUrl &uri)
 
 
 
-KisImageBuilder_Result KisJPEGConverter::buildImage(const QUrl &uri)
+KisImageBuilder_Result KisJPEGConverter::buildImage(const QString &filename)
 {
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
-
-
-    if (!uri.isLocalFile()) {
-        return KisImageBuilder_RESULT_NOT_EXIST;
-    }
-    return decode(uri);
-
+    return decode(filename);
 }
 
 
@@ -447,7 +436,7 @@ KisImageWSP KisJPEGConverter::image()
 }
 
 
-KisImageBuilder_Result KisJPEGConverter::buildFile(const QUrl &uri, KisPaintLayerSP layer, vKisAnnotationSP_it /*annotationsStart*/, vKisAnnotationSP_it /*annotationsEnd*/, KisJPEGOptions options, KisMetaData::Store* metaData)
+KisImageBuilder_Result KisJPEGConverter::buildFile(const QString &filename, KisPaintLayerSP layer, vKisAnnotationSP_it /*annotationsStart*/, vKisAnnotationSP_it /*annotationsEnd*/, KisJPEGOptions options, KisMetaData::Store* metaData)
 {
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
@@ -455,12 +444,6 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const QUrl &uri, KisPaintLaye
     KisImageWSP image = KisImageWSP(layer->image());
     if (!image)
         return KisImageBuilder_RESULT_EMPTY;
-
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
-
-    if (!uri.isLocalFile())
-        return KisImageBuilder_RESULT_NOT_LOCAL;
 
     const KoColorSpace * cs = layer->colorSpace();
     J_COLOR_SPACE color_type = getColorTypeforColorSpace(cs);
@@ -489,7 +472,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const QUrl &uri, KisPaintLaye
 
 
     // Open file for writing
-    QFile file(uri.toLocalFile());
+    QFile file(filename);
     if (!file.open(QIODevice::WriteOnly)) {
         return (KisImageBuilder_RESULT_FAILURE);
     }

@@ -227,7 +227,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
 
     QToolButton *capNJoinButton = new QToolButton(this);
     capNJoinButton->setMinimumHeight(25);
-    d->capNJoinMenu = new CapNJoinMenu();
+    d->capNJoinMenu = new CapNJoinMenu(this);
     capNJoinButton->setMenu(d->capNJoinMenu);
     capNJoinButton->setText("...");
     capNJoinButton->setPopupMode(QToolButton::InstantPopup);

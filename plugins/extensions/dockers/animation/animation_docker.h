@@ -35,6 +35,7 @@ class AnimationDocker : public QDockWidget, public KisMainwindowObserver {
     Q_OBJECT
 public:
     AnimationDocker();
+    ~AnimationDocker();
     QString observerName() { return "AnimationDocker"; }
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();

@@ -87,7 +87,15 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisNodeSP currentN
     m_d->currentBgColor = resourceManager->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
     m_d->currentPattern = resourceManager->resource(KisCanvasResourceProvider::CurrentPattern).value<KoPattern*>();
     m_d->currentGradient = resourceManager->resource(KisCanvasResourceProvider::CurrentGradient).value<KoAbstractGradient*>();
-    m_d->currentPaintOpPreset = resourceManager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+
+    /**
+     * We should deep-copy the preset, so that long-runnign actions
+     * will have correct brush parameters. Theoretically this cloniong
+     * can be expensive, but according to measurements, it takes
+     * something like 0.1 ms for an average preset.
+     */
+    m_d->currentPaintOpPreset = resourceManager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>()->clone();
+
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
     KisPaintOpRegistry::instance()->preinitializePaintOpIfNeeded(m_d->currentPaintOpPreset);
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */

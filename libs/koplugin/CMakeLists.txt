@@ -2,6 +2,8 @@
 set(kritaplugin_LIB_SRCS
     KoPluginLoader.cpp
     KoJsonTrader.cpp
+    KisMimeDatabase.cpp
+    KritaPluginDebug.cpp
 )
 
 # help plugin trader find installed plugins when run from uninstalled tests
@@ -18,6 +20,7 @@ target_link_libraries(kritaplugin
     PRIVATE
         KF5::ConfigCore
         KF5::CoreAddons
+        KF5::I18n
 )
 
 set_target_properties(kritaplugin PROPERTIES

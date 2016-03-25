@@ -22,7 +22,7 @@
 #include <kpluginfactory.h>
 
 #include <QDebug>
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KisFilterChain.h>
 #include <KisImportExportManager.h>
@@ -58,16 +58,11 @@ KisImportExportFilter::ConversionStatus KisCSVImport::convert(const QByteArray&,
 
     doc -> prepareForImport();
 
-    if (!filename.isEmpty()) {
-
-        QUrl url = QUrl::fromLocalFile(filename);
-
-        if (url.isEmpty())
-            return KisImportExportFilter::FileNotFound;
+    if (!filename.isEmpty() && QFileInfo(filename).exists()) {
 
         CSVLoader ib(doc, getBatchMode());
 
-        KisImageBuilder_Result result = ib.buildAnimation(url,filename);
+        KisImageBuilder_Result result = ib.buildAnimation(filename);
 
         switch (result) {
         case KisImageBuilder_RESULT_UNSUPPORTED:

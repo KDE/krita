@@ -21,7 +21,7 @@
 #include <QSlider>
 
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 #include <QApplication>
 
 #include <KisFilterChain.h>
@@ -62,8 +62,6 @@ KisImportExportFilter::ConversionStatus QMLExport::convert(const QByteArray& fro
         return KisImportExportFilter::FileNotFound;
     }
 
-    QUrl url = QUrl::fromLocalFile(filename);
-
     KisImageWSP image = input->image();
 
     qApp->processEvents(); // For vector layers to be updated
@@ -72,7 +70,7 @@ KisImportExportFilter::ConversionStatus QMLExport::convert(const QByteArray& fro
     Q_CHECK_PTR(image);
 
     QMLConverter converter;
-    KisImageBuilder_Result result = converter.buildFile(url, image);
+    KisImageBuilder_Result result = converter.buildFile(filename, image);
     if (result == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         return KisImportExportFilter::OK;

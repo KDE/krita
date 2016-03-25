@@ -26,7 +26,7 @@
 #include <KoProperties.h>
 #include <KoDialog.h>
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KisFilterChain.h>
 
@@ -95,7 +95,7 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(const QByteArray
     if (input->image()->dynamicPropertyNames().contains("brushspacing")) {
         exportOptions.spacing = input->image()->property("brushspacing").toFloat();
     }
-    KisGbrBrush *brush;
+    KisGbrBrush *brush = 0;
 
     if (!getBatchMode()) {
 

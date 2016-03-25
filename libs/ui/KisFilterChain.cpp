@@ -35,8 +35,7 @@ Boston, MA 02110-1301, USA.
 #include <kis_debug.h>
 
 #include <limits.h> // UINT_MAX
-#include <QMimeDatabase>
-#include <QMimeType>
+#include <KisMimeDatabase.h>
 
 // Those "defines" are needed in the setupConnections method below.
 // Please always keep the strings and the length in sync!
@@ -167,7 +166,7 @@ KisDocument* KisFilterChain::inputDocument()
             filterManagerKisDocument())
         m_inputDocument = filterManagerKisDocument();
     else if (!m_inputDocument)
-        m_inputDocument = createDocument(inputFile());
+        m_inputDocument = KisPart::instance()->createDocument();
 
     m_inputQueried = Document;
     return m_inputDocument;
@@ -187,7 +186,7 @@ KisDocument* KisFilterChain::outputDocument()
             filterManagerKisDocument())
         m_outputDocument = filterManagerKisDocument();
     else
-        m_outputDocument = createDocument(m_chainLinks.current()->to());
+        m_outputDocument = KisPart::instance()->createDocument();
 
     m_outputQueried = Document;
     return m_outputDocument;
@@ -341,32 +340,6 @@ void KisFilterChain::outputFileHelper(bool autoDelete)
         m_outputTempFile = 0;
 #endif
     }
-}
-
-KisDocument* KisFilterChain::createDocument(const QString& file)
-{
-    QUrl url = QUrl::fromLocalFile(file);
-    QMimeDatabase db;
-    QMimeType t = db.mimeTypeForFile(url.path(), QMimeDatabase::MatchExtension);
-    if (t.isDefault()) {
-        errFile << "No mimetype found for " << file << endl;
-        return 0;
-    }
-
-    KisDocument *doc = createDocument(t.name().toLatin1());
-
-    if (!doc || !doc->loadNativeFormat(file)) {
-        errFile << "Couldn't load from the file" << endl;
-        delete doc;
-        return 0;
-    }
-    return doc;
-}
-
-KisDocument* KisFilterChain::createDocument(const QByteArray& mimeType)
-{
-    Q_UNUSED(mimeType);
-    return KisPart::instance()->createDocument();
 }
 
 int KisFilterChain::weight() const

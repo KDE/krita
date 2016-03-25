@@ -47,29 +47,18 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
     setGridConfig(m_d->gridConfig);
     setGuidesConfig(m_d->guidesConfig);
 
-    connect(ui->chkSpacing, SIGNAL(toggled(bool)), ui->lblXSpacing, SLOT(setVisible(bool)));
-    connect(ui->chkSpacing, SIGNAL(toggled(bool)), ui->lblYSpacing, SLOT(setVisible(bool)));
-    connect(ui->chkSpacing, SIGNAL(toggled(bool)), ui->intHSpacing, SLOT(setVisible(bool)));
-    connect(ui->chkSpacing, SIGNAL(toggled(bool)), ui->intVSpacing, SLOT(setVisible(bool)));
-    connect(ui->chkSpacing, SIGNAL(toggled(bool)), ui->spacingAspectButton, SLOT(setVisible(bool)));
-    connect(ui->chkSpacing, SIGNAL(toggled(bool)), ui->lblSubdivision, SLOT(setVisible(bool)));
-    connect(ui->chkSpacing, SIGNAL(toggled(bool)), ui->intSubdivision, SLOT(setVisible(bool)));
-
     connect(ui->chkOffset, SIGNAL(toggled(bool)), ui->lblXOffset, SLOT(setVisible(bool)));
     connect(ui->chkOffset, SIGNAL(toggled(bool)), ui->lblYOffset, SLOT(setVisible(bool)));
     connect(ui->chkOffset, SIGNAL(toggled(bool)), ui->intXOffset, SLOT(setVisible(bool)));
     connect(ui->chkOffset, SIGNAL(toggled(bool)), ui->intYOffset, SLOT(setVisible(bool)));
     connect(ui->chkOffset, SIGNAL(toggled(bool)), ui->offsetAspectButton, SLOT(setVisible(bool)));
 
-    connect(ui->chkStyle, SIGNAL(toggled(bool)), ui->lblMainStyle, SLOT(setVisible(bool)));
-    connect(ui->chkStyle, SIGNAL(toggled(bool)), ui->selectMainStyle, SLOT(setVisible(bool)));
-    connect(ui->chkStyle, SIGNAL(toggled(bool)), ui->colorMain, SLOT(setVisible(bool)));
-    connect(ui->chkStyle, SIGNAL(toggled(bool)), ui->lblSubdivisionStyle, SLOT(setVisible(bool)));
-    connect(ui->chkStyle, SIGNAL(toggled(bool)), ui->selectSubdivisionStyle, SLOT(setVisible(bool)));
-    connect(ui->chkStyle, SIGNAL(toggled(bool)), ui->colorSubdivision, SLOT(setVisible(bool)));
-    connect(ui->chkStyle, SIGNAL(toggled(bool)), ui->lblGuidesStyle, SLOT(setVisible(bool)));
-    connect(ui->chkStyle, SIGNAL(toggled(bool)), ui->selectGuidesStyle, SLOT(setVisible(bool)));
-    connect(ui->chkStyle, SIGNAL(toggled(bool)), ui->colorGuides, SLOT(setVisible(bool)));
+
+    ui->lblXOffset->setVisible(false);
+    ui->lblYOffset->setVisible(false);
+    ui->intXOffset->setVisible(false);
+    ui->intYOffset->setVisible(false);
+    ui->offsetAspectButton->setVisible(false);
 
     connect(ui->chkShowGrid, SIGNAL(stateChanged(int)), SLOT(slotGridGuiChanged()));
     connect(ui->chkSnapToGrid, SIGNAL(stateChanged(int)), SLOT(slotGridGuiChanged()));
@@ -95,7 +84,6 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
     connect(ui->selectGuidesStyle, SIGNAL(currentIndexChanged(int)), SLOT(slotGuidesGuiChanged()));
     connect(ui->colorGuides, SIGNAL(changed(const QColor&)), SLOT(slotGuidesGuiChanged()));
 
-    ui->chkStyle->setChecked(false);
     ui->chkOffset->setChecked(false);
 
     KisAspectRatioLocker *offsetLocker = new KisAspectRatioLocker(this);

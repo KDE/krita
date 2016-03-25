@@ -360,6 +360,7 @@ void decompress(const QByteArray& input, QByteArray& output)
     } else {
         unsigned int len = decompress(in_data, in_len, out_data, out_len);
         Q_ASSERT(len == out_len);
+        Q_UNUSED(len)
     }
 }
 

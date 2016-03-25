@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2015 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,14 +16,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_layer_commands_test.h"
+#include "KritaPluginDebug.h"
 
-#include <QTest>
-#include "commands/kis_layer_commands.h"
-
-void KisLayerCommandsTest::testCreation()
+const QLoggingCategory &PLUGIN_LOG() \
 {
+    static const QLoggingCategory category("krita.lib.plugin");
+    return category;
 }
 
 
-QTEST_MAIN(KisLayerCommandsTest)

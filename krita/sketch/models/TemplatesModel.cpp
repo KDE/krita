@@ -155,7 +155,7 @@ void TemplatesModel::toggleGroup(const QString& name)
 
 void TemplatesModel::populate()
 {
-    KisTemplateTree templateTree(KisPart::instance()->templatesResourcePath(), true);
+    KisTemplateTree templateTree( QStringLiteral("krita/templates/"), true);
     Q_FOREACH (KisTemplateGroup *group, templateTree.groups()) {
         if (group->isHidden()) {
             continue;

@@ -1389,7 +1389,7 @@ QColor KisConfig::defaultBackgroundColor(bool defaultValue) const
   return (defaultValue ? QColor(Qt::white) : m_cfg.readEntry("BackgroundColorForNewImage", QColor(Qt::white)));
 }
 
-void KisConfig::setDefaultBackgroundColor(QColor value) 
+void KisConfig::setDefaultBackgroundColor(QColor value)
 {
   m_cfg.writeEntry("BackgroundColorForNewImage", value);
 }
@@ -1661,4 +1661,14 @@ void KisConfig::setSwitchSelectionCtrlAlt(bool value)
 {
     m_cfg.writeEntry("switchSelectionCtrlAlt", value);
     KisConfigNotifier::instance()->notifyConfigChanged();
+}
+
+bool KisConfig::convertToImageColorspaceOnImport(bool defaultValue) const
+{
+    return defaultValue ? false : m_cfg.readEntry("ConvertToImageColorSpaceOnImport", false);
+}
+
+void KisConfig::setConvertToImageColorspaceOnImport(bool value)
+{
+    m_cfg.writeEntry("ConvertToImageColorSpaceOnImport", value);
 }

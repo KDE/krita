@@ -36,8 +36,7 @@
 #include <QProcessEnvironment>
 #include <QDir>
 #include <QDesktopWidget>
-#include <QMimeDatabase>
-#include <QMimeType>
+#include <KisMimeDatabase.h>
 #include <QTimer>
 #include <QStyle>
 #include <QStyleFactory>
@@ -211,7 +210,7 @@ BOOL isWow64()
     fnIsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(
                 GetModuleHandle(TEXT("kernel32")),"IsWow64Process");
 
-    if(NULL != fnIsWow64Process)
+    if(0 != fnIsWow64Process)
     {
         if (!fnIsWow64Process(GetCurrentProcess(),&bIsWow64))
         {
@@ -366,7 +365,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     // TODO: fix print & exportAsPdf to work without mainwindow shown
     const bool showmainWindow = !exportAs; // would be !batchRun;
 
-    const bool showSplashScreen = !batchRun && !qgetenv("NOSPLASH").isEmpty();
+    const bool showSplashScreen = !batchRun && qgetenv("NOSPLASH").isEmpty();
     if (showSplashScreen) {
         d->splashScreen->show();
         d->splashScreen->repaint();
@@ -445,22 +444,18 @@ bool KisApplication::start(const KisApplicationArguments &args)
             else {
 
                 if (exportAs) {
-                    QMimeType outputMimetype;
-                    QMimeDatabase db;
-                    outputMimetype = db.mimeTypeForFile(exportFileName);
-                    if (outputMimetype.isDefault()) {
+                    QString outputMimetype = KisMimeDatabase::mimeTypeForFile(exportFileName);
+                    if (outputMimetype == "application/octetstream") {
                         dbgKrita << i18n("Mimetype not found, try using the -mimetype option") << endl;
                         return 1;
                     }
 
                     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-                    QString outputFormat = outputMimetype.name();
-
                     KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
                     KisImportExportManager manager(fileName);
                     manager.setBatchMode(true);
-                    QByteArray mime(outputFormat.toLatin1());
+                    QByteArray mime(outputMimetype.toLatin1());
                     status = manager.exportDocument(exportFileName, mime);
 
                     if (status != KisImportExportFilter::OK) {
@@ -593,6 +588,10 @@ QList<QUrl> KisApplication::checkAutosaveFiles()
 
     // Allow the user to make their selection
     if (autoSaveFiles.size() > 0) {
+        if (d->splashScreen) {
+            // hide the splashscreen to see the dialog
+            d->splashScreen->hide();
+        }
         KisAutoSaveRecoveryDialog *dlg = new KisAutoSaveRecoveryDialog(autoSaveFiles, activeWindow());
         if (dlg->exec() == QDialog::Accepted) {
 
@@ -634,7 +633,7 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
     }
     else {
         QString desktopName(fileName);
-        const QString templatesResourcePath = KisPart::instance()->templatesResourcePath();
+        const QString templatesResourcePath =  QStringLiteral("krita/templates/");
 
         QStringList paths = KoResourcePaths::findAllResources("data", templatesResourcePath + "*/" + desktopName);
         if (paths.isEmpty()) {

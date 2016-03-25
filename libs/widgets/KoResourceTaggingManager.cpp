@@ -134,7 +134,7 @@ void KoResourceTaggingManager::showTaggingBar(bool show)
     if (show) {
         KConfigGroup group =  KSharedConfig::openConfig()->group("SelectedTags");
         tag = group.readEntry<QString>(d->model->serverType(), "All");
-    }
+        }
 
     d->tagChooser->setCurrentIndex(d->tagChooser->findIndexOf(tag));
 }
@@ -310,11 +310,6 @@ void KoResourceTaggingManager::tagChooserIndexChanged(const QString& lineEditTex
 
     d->tagFilter->clear();
     updateTaggedResourceView();
-}
-
-QString KoResourceTaggingManager::currentTag()
-{
-    return d->tagChooser->currentlySelectedTag();
 }
 
 void KoResourceTaggingManager::tagSearchLineEditTextChanged(const QString& lineEditText)

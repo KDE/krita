@@ -19,6 +19,8 @@
 
 #include "kis_tiff_import.h"
 
+#include <QFileInfo>
+
 #include <kpluginfactory.h>
 
 #include <KisFilterChain.h>
@@ -58,18 +60,16 @@ KisImportExportFilter::ConversionStatus KisTIFFImport::convert(const QByteArray&
 
     if (!filename.isEmpty()) {
 
-        QUrl url;
-        url.setPath(filename);
-
-        if (url.isEmpty())
+        if (!QFileInfo(filename).exists()) {
             return KisImportExportFilter::FileNotFound;
+        }
 
         KisTIFFConverter ib(doc);
 
 //        if (view != 0)
 //            view -> canvasSubject() ->  progressDisplay() -> setSubject(&ib, false, true);
 
-        switch (ib.buildImage(url)) {
+        switch (ib.buildImage(filename)) {
         case KisImageBuilder_RESULT_UNSUPPORTED:
             return KisImportExportFilter::NotImplemented;
         case KisImageBuilder_RESULT_INVALID_ARG:

@@ -204,6 +204,10 @@ KisLayerBox::KisLayerBox()
             &m_colorLabelCompressor, SLOT(start()));
 
     m_wdgLayerBox->listLayers->setModel(m_filteringModel);
+    // this connection should be done *after* the setModel() call to
+    // happen later than the internal selection model
+    connect(m_filteringModel.data(), &KisNodeFilterProxyModel::rowsAboutToBeRemoved,
+            this, &KisLayerBox::slotAboutToRemoveRows);
 
     connect(m_wdgLayerBox->cmbFilter, SIGNAL(selectedColorsChanged()), SLOT(updateLayerFiltering()));
 
@@ -754,6 +758,40 @@ void KisLayerBox::selectionChanged(const QModelIndexList selection)
 
     m_nodeManager->slotSetSelectedNodes(selectedNodes);
     updateUI();
+}
+
+void KisLayerBox::slotAboutToRemoveRows(const QModelIndex &parent, int start, int end)
+{
+    /**
+     * Qt has changed its behavior when deleting an item. Previously
+     * the selection priority was on the next item in the list, and
+     * now it has shanged to the previous item. Here we just adjust
+     * the selected item after the node removal. Please take care that
+     * this method overrides what was done by the corresponding method
+     * of QItemSelectionModel, which *has already done* its work. That
+     * is why we use (start - 1) and (end + 1) in the activation
+     * condition.
+     *
+     * See bug: https://bugs.kde.org/show_bug.cgi?id=345601
+     */
+
+    QModelIndex currentIndex = m_wdgLayerBox->listLayers->currentIndex();
+    QAbstractItemModel *model = m_filteringModel;
+
+    if (currentIndex.isValid() && parent == currentIndex.parent()
+        && currentIndex.row() >= start - 1 && currentIndex.row() <= end + 1) {
+        QModelIndex old = currentIndex;
+        if (model && end < model->rowCount(parent) - 1) // there are rows left below the change
+            currentIndex = model->index(end + 1, old.column(), parent);
+        else if (start > 0) // there are rows left above the change
+            currentIndex = model->index(start - 1, old.column(), parent);
+        else // there are no rows left in the table
+            currentIndex = QModelIndex();
+
+        if (currentIndex.isValid() && currentIndex != old) {
+            m_wdgLayerBox->listLayers->setCurrentIndex(currentIndex);
+        }
+    }
 }
 
 void KisLayerBox::slotNodeManagerChangedSelection(const KisNodeList &nodes)

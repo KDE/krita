@@ -21,8 +21,7 @@
 #include "KisMainWindow.h" // XXX: remove
 #include <QMessageBox> // XXX: remove
 
-#include <QMimeDatabase>
-#include <QMimeType>
+#include <KisMimeDatabase.h>
 
 #include <KoCanvasBase.h>
 #include <KoColor.h>
@@ -380,12 +379,9 @@ public:
         if (mimeType.isEmpty()) {
             // get the mimetype of the file
             // using findByUrl() to avoid another string -> url conversion
-            QMimeDatabase db;
-            QMimeType mime = db.mimeTypeForFile(m_url.toLocalFile());
-            if (mime.isValid()) {
-                mimeType = mime.name().toLocal8Bit();
-                m_bAutoDetectedMime = true;
-            }
+            QString mime = KisMimeDatabase::mimeTypeForFile(m_url.toLocalFile());
+            mimeType = mime.toLocal8Bit();
+            m_bAutoDetectedMime = true;
         }
         const bool ret = openFile();
         if (ret) {
@@ -950,20 +946,15 @@ QString KisDocument::checkImageMimeTypes(const QString &mimeType, const QUrl &ur
         warnKrita << "Could not open file to check the mimetype" << url;
     }
     QByteArray ba = f.read(qMin(f.size(), (qint64)512)); // should be enough for images
-    QMimeDatabase db;
-    QMimeType mime = db.mimeTypeForData(ba);
+    QString mimeFromData = KisMimeDatabase::mimeTypeForData(ba);
     f.close();
 
-    if (!mime.isValid()) {
-        return mimeType;
-    }
-
     // Checking the content failed as well, so let's fall back on the extension again
-    if (mime.name() == "application/octet-stream") {
+    if (mimeFromData == "application/octet-stream") {
         return mimeType;
     }
 
-    return mime.name();
+    return mimeFromData;
 }
 
 // Called for embedded documents
@@ -1029,12 +1020,7 @@ QString KisDocument::autoSaveFile(const QString & path) const
     QString retval;
 
     // Using the extension allows to avoid relying on the mime magic when opening
-    QMimeDatabase db;
-    QMimeType mime = db.mimeTypeForName(nativeFormatMimeType());
-    if (!mime.isValid()) {
-        qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", nativeFormatMimeType().constData());
-    }
-    const QString extension = QLatin1Char('.') + mime.preferredSuffix();
+    const QString extension (".kra");
 
     if (path.isEmpty()) {
         // Never saved?
@@ -1168,8 +1154,7 @@ bool KisDocument::openFile()
     QString typeName = mimeType();
 
     if (typeName.isEmpty()) {
-        QMimeDatabase db;
-        typeName = db.mimeTypeForFile(u.path()).name();
+        typeName = KisMimeDatabase::mimeTypeForFile(u.path());
     }
 
     // for images, always check content.
@@ -1180,9 +1165,7 @@ bool KisDocument::openFile()
     // Allow to open backup files, don't keep the mimetype application/x-trash.
     if (typeName == "application/x-trash") {
         QString path = u.path();
-        QMimeDatabase db;
-        QMimeType mime = db.mimeTypeForName(typeName);
-        const QStringList patterns = mime.isValid() ? mime.globPatterns() : QStringList();
+        const QStringList patterns =  KisMimeDatabase::suffixesForMimeType(typeName);
         // Find the extension that makes it a backup file, and remove it
         for (QStringList::ConstIterator it = patterns.begin(); it != patterns.end(); ++it) {
             QString ext = *it;
@@ -1194,7 +1177,7 @@ bool KisDocument::openFile()
                 }
             }
         }
-        typeName = db.mimeTypeForFile(path, QMimeDatabase::MatchExtension).name();
+        typeName = KisMimeDatabase::mimeTypeForFile(path);
     }
 
     // Special case for flat XML files (e.g. using directory store)
@@ -1769,8 +1752,6 @@ bool KisDocument::loadXML(const KoXmlDocument& doc, KoStore *store)
     KoXmlNode node;
     KisImageWSP image;
 
-    init();
-
     if (doc.doctype().name() != "DOC") {
         setErrorMessage(i18n("The format is not supported or the file is corrupted"));
         return false;
@@ -2106,7 +2087,7 @@ bool KisDocument::closeUrl(bool promptToSave)
 }
 
 
-bool KisDocument::saveAs( const QUrl &kurl )
+bool KisDocument::saveAs(const QUrl &kurl)
 {
     if (!kurl.isValid())
     {
@@ -2253,8 +2234,6 @@ bool KisDocument::newImage(const QString& name,
 {
     Q_ASSERT(cs);
 
-    init();
-
     KisConfig cfg;
 
     KisImageSP image;
@@ -2276,7 +2255,7 @@ bool KisDocument::newImage(const QString& name,
     if (name != i18n("Unnamed") && !name.isEmpty()) {
         setUrl(QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) + '/' + name + ".kra"));
     }
-    documentInfo()->setAboutInfo("comments", description);
+    documentInfo()->setAboutInfo("abstract", description);
 
     layer = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, cs);
     Q_CHECK_PTR(layer);
@@ -2374,9 +2353,11 @@ KisNodeSP KisDocument::preActivatedNode() const
 
 void KisDocument::prepareForImport()
 {
-    if (d->nserver == 0) {
-        init();
-    }
+    /* TODO: remove this function? I kept it because it might be useful for
+     * other kind of preparing, but currently it was checking on d->nserver
+     * being null and then calling init() if it was, but the document is always
+     * initialized in the constructor (and init() does other things too).
+     * Moreover, nserver cannot be nulled by some external call.*/
 }
 
 void KisDocument::setFileProgressUpdater(const QString &text)

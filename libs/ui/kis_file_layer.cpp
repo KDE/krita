@@ -172,6 +172,8 @@ KisNodeSP KisFileLayer::clone() const
 
 bool KisFileLayer::allowAsChild(KisNodeSP node) const
 {
+    // Transform masks and file layers don't work together yet
+    if (node->inherits("KisTransformMask")) return false;
     return node->inherits("KisMask");
 }
 

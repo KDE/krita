@@ -91,6 +91,7 @@ LutDockerDock::LutDockerDock()
     : QDockWidget(i18n("LUT Management"))
     , m_canvas(0)
     , m_draggingSlider(false)
+    , m_ownDisplayFilter(false)
 {
     using namespace std::placeholders; // For _1
     m_exposureCompressor.reset(
@@ -176,6 +177,8 @@ LutDockerDock::LutDockerDock()
 
 LutDockerDock::~LutDockerDock()
 {
+    if(m_ownDisplayFilter)
+        delete m_displayFilter;
 }
 
 void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
@@ -192,6 +195,7 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
         if (m_canvas) {
             if (!m_canvas->displayFilter()) {
                 m_displayFilter = new OcioDisplayFilter(this);
+                m_ownDisplayFilter = true;
                 resetOcioConfiguration();
                 updateDisplaySettings();
             }

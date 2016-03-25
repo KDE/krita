@@ -31,8 +31,6 @@
 #include <KisImageBuilderResult.h>
 class KisDocument;
 
-class QUrl;
-
 struct KisTIFFOptions {
     quint16 compressionType;
     quint16 predictor;
@@ -52,15 +50,15 @@ public:
     KisTIFFConverter(KisDocument *doc);
     virtual ~KisTIFFConverter();
 public:
-    KisImageBuilder_Result buildImage(const QUrl &uri);
-    KisImageBuilder_Result buildFile(const QUrl &uri, KisImageWSP layer, KisTIFFOptions);
+    KisImageBuilder_Result buildImage(const QString &filename);
+    KisImageBuilder_Result buildFile(const QString &filename, KisImageWSP layer, KisTIFFOptions);
     /** Retrieve the constructed image
     */
     KisImageWSP image();
 public Q_SLOTS:
     virtual void cancel();
 private:
-    KisImageBuilder_Result decode(const QUrl &uri);
+    KisImageBuilder_Result decode(const QString &filename);
     KisImageBuilder_Result readTIFFDirectory(TIFF* image);
 private:
     KisImageWSP m_image;

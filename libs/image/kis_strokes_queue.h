@@ -61,7 +61,7 @@ public:
 
     void setDesiredLevelOfDetail(int lod);
     void explicitRegenerateLevelOfDetail();
-    void setLod0ToNStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
+    void setLod0ToNStrokeStrategyFactory(const KisLodSyncStrokeStrategyFactory &factory);
     void setSuspendUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
     void setResumeUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
 

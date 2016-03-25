@@ -205,7 +205,10 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
 
         // Each of these lambdas defines a new factory function.
         m_d->scheduler.setLod0ToNStrokeStrategyFactory(
-            [=](){return new KisSyncLodCacheStrokeStrategy(KisImageWSP(this));});
+            [=](bool /*forgettable*/){return
+                    KisLodSyncPair(
+                        new KisSyncLodCacheStrokeStrategy(KisImageWSP(this)),
+                        KisSyncLodCacheStrokeStrategy::createJobsData(KisImageWSP(this)));});
         m_d->scheduler.setSuspendUpdatesStrokeStrategyFactory(
             [=](){return new KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP(this), true);});
         m_d->scheduler.setResumeUpdatesStrokeStrategyFactory(

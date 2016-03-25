@@ -252,7 +252,7 @@ int KisUpdateScheduler::currentLevelOfDetail() const
     return levelOfDetail;
 }
 
-void KisUpdateScheduler::setLod0ToNStrokeStrategyFactory(const KisStrokeStrategyFactory &factory)
+void KisUpdateScheduler::setLod0ToNStrokeStrategyFactory(const KisLodSyncStrokeStrategyFactory &factory)
 {
     m_d->strokesQueue.setLod0ToNStrokeStrategyFactory(factory);
 }

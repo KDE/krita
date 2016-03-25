@@ -46,7 +46,7 @@ struct Q_DECL_HIDDEN KisStrokesQueue::Private {
     int desiredLevelOfDetail;
     int nextDesiredLevelOfDetail;
     QMutex mutex;
-    KisStrokeStrategyFactory lod0ToNStrokeStrategyFactory;
+    KisLodSyncStrokeStrategyFactory lod0ToNStrokeStrategyFactory;
     KisStrokeStrategyFactory suspendUpdatesStrokeStrategyFactory;
     KisStrokeStrategyFactory resumeUpdatesStrokeStrategyFactory;
 
@@ -84,10 +84,16 @@ void KisStrokesQueue::Private::startLod0ToNStroke(int levelOfDetail)
 
     if (!this->lod0ToNStrokeStrategyFactory) return;
 
-    KisStrokeStrategy *lod0ToN = this->lod0ToNStrokeStrategyFactory();
+    KisLodSyncPair syncPair = this->lod0ToNStrokeStrategyFactory(false);
+    KisStrokeStrategy *lod0ToN = syncPair.first;
+    QList<KisStrokeJobData*> jobsData = syncPair.second;
+
     KisStrokeSP sync(new KisStroke(lod0ToN, KisStroke::LODN, levelOfDetail));
     lod0ToN->setCancelStrokeId(sync);
     this->strokesQueue.enqueue(sync);
+    Q_FOREACH (KisStrokeJobData *jobData, jobsData) {
+        sync->addJob(jobData);
+    }
     sync->endStroke();
     this->lodNNeedsSynchronization = false;
 }
@@ -400,7 +406,7 @@ void KisStrokesQueue::notifyUFOChangedImage()
     m_d->lodNNeedsSynchronization = true;
 }
 
-void KisStrokesQueue::setLod0ToNStrokeStrategyFactory(const KisStrokeStrategyFactory &factory)
+void KisStrokesQueue::setLod0ToNStrokeStrategyFactory(const KisLodSyncStrokeStrategyFactory &factory)
 {
     m_d->lod0ToNStrokeStrategyFactory = factory;
 }

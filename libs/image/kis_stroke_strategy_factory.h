@@ -22,4 +22,7 @@
 #include <functional>
 using KisStrokeStrategyFactory = std::function<KisStrokeStrategy*()>;
 
+using KisLodSyncPair = QPair<KisStrokeStrategy*, QList<KisStrokeJobData*>>;
+using KisLodSyncStrokeStrategyFactory = std::function<KisLodSyncPair(bool /*forgettable*/)>;
+
 #endif /* __KIS_STROKE_STRATEGY_FACTORY_H */

@@ -27,7 +27,17 @@ struct KisSyncLodCacheStrokeStrategy::Private
 {
     KisImageWSP image;
 
-    void visitNode(KisNodeSP node);
+    static void collectNodes(KisNodeSP node, QList<KisStrokeJobData*> *jobsData);
+
+    class Data : public KisStrokeJobData {
+    public:
+        Data(KisNodeSP _node)
+            : KisStrokeJobData(CONCURRENT),
+              node(_node)
+            {}
+
+        KisNodeSP node;
+    };
 };
 
 KisSyncLodCacheStrokeStrategy::KisSyncLodCacheStrokeStrategy(KisImageWSP image)
@@ -35,7 +45,7 @@ KisSyncLodCacheStrokeStrategy::KisSyncLodCacheStrokeStrategy(KisImageWSP image)
       m_d(new Private)
 {
     m_d->image = image;
-    enableJob(JOB_INIT, true);
+    enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
 
     setRequestsOtherStrokesToEnd(false);
     setClearsRedoOnStart(false);
@@ -45,19 +55,30 @@ KisSyncLodCacheStrokeStrategy::~KisSyncLodCacheStrokeStrategy()
 {
 }
 
-void KisSyncLodCacheStrokeStrategy::initStrokeCallback()
+void KisSyncLodCacheStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
-    KIS_ASSERT_RECOVER_RETURN(m_d->image);
-    m_d->visitNode(m_d->image->root());
+    Private::Data *d = dynamic_cast<Private::Data*>(data);
+    KIS_ASSERT_RECOVER_RETURN(d);
+
+    d->node->syncLodCache();
 }
 
-void KisSyncLodCacheStrokeStrategy::Private::visitNode(KisNodeSP node)
+QList<KisStrokeJobData*> KisSyncLodCacheStrokeStrategy::createJobsData(KisImageWSP _image)
 {
-    node->syncLodCache();
+    KisImageSP image = _image;
+
+    QList<KisStrokeJobData*> jobsData;
+    Private::collectNodes(image->root(), &jobsData);
+    return jobsData;
+}
+
+void KisSyncLodCacheStrokeStrategy::Private::collectNodes(KisNodeSP node, QList<KisStrokeJobData*> *jobsData)
+{
+    *jobsData << new Private::Data(node);
 
     node = node->firstChild();
     while (node) {
-        visitNode(node);
+        collectNodes(node, jobsData);
         node = node->nextSibling();
     }
 }

@@ -29,6 +29,8 @@
 #include <QPainter>
 #include <QPainterPath>
 
+#include "kis_painting_tweaks.h"
+
 KoShapeContainerPrivate::KoShapeContainerPrivate(KoShapeContainer *q)
     : KoShapePrivate(q),
     model(0)
@@ -173,7 +175,7 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
     m.scale(zoomX, zoomY);
     painter.setClipPath(m.map(outline()), Qt::IntersectClip);
 
-    QRectF toPaintRect = converter.viewToDocument(painter.clipRegion().boundingRect());
+    QRectF toPaintRect = converter.viewToDocument(KisPaintingTweaks::safeClipBoundingRect(painter));
     toPaintRect = transform().mapRect(toPaintRect);
     // We'll use this clipRect to see if our child shapes lie within it.
     // Because shape->boundingRect() uses absoluteTransformation(0) we'll

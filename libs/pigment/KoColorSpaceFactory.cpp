@@ -98,8 +98,9 @@ const KoColorSpace *KoColorSpaceFactory::grabColorSpace(const KoColorProfile * p
             d->availableColorspaces[profile->name()] = cs;
         }
     }
-    else
+    else {
         cs = it.value();
+    }
 
     return cs;
 }

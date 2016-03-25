@@ -43,7 +43,7 @@
  #
 */
 #ifndef gmic_version
-#define gmic_version 169
+#define gmic_version 170
 
 #include <cstdio>
 #include <cstring>
@@ -218,6 +218,11 @@ struct gmic {
             gmic_list<T> &images, gmic_list<char> &images_names,
             float *const p_progress=0, bool *const p_is_abort=0);
 
+  // These functions return (or init) G'MIC-specific paths.
+  static const char* path_user(const char *const custom_path=0);
+  static const char* path_rc(const char *const custom_path=0);
+  static bool init_rc(const char *const custom_path=0);
+
   // Functions below should be considered as *private*, and should not be
   // used in user's code.
   static int _levenshtein(const char *const s, const char *const t,
@@ -229,9 +234,6 @@ struct gmic {
   static const char* basename(const char *const str);
   static char *strreplace_fw(char *const str);
   static char *strreplace_bw(char *const str);
-  static const char* path_user(const char *const custom_path=0);
-  static const char* path_rc(const char *const custom_path=0);
-  static bool init_rc(const char *const custom_path=0);
   static const gmic_image<char>& uncompress_stdlib();
 
   template<typename T>

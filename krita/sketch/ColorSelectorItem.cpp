@@ -32,6 +32,7 @@
 #include <QTimer>
 #include "kis_display_color_converter.h"
 
+#include <math.h>
 
 class ColorSelectorItem::Private
 {

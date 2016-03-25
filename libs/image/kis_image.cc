@@ -128,7 +128,7 @@ public:
         , postExecutionUndoAdapter(u, _q)
         , recorder(_q)
         , signalRouter(_q)
-        , animationInterface(_q)
+        , animationInterface(0)
         , scheduler(_q)
     {}
 
@@ -164,7 +164,7 @@ public:
     QAtomicInt disableUIUpdateSignals;
     KisProjectionUpdatesFilterSP projectionUpdatesFilter;
     KisImageSignalRouter signalRouter;
-    KisImageAnimationInterface animationInterface;
+    KisImageAnimationInterface *animationInterface;
     KisUpdateScheduler scheduler;
     QAtomicInt disableDirtyRequests;
 
@@ -214,6 +214,8 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
 
     setRootLayer(new KisGroupLayer(this, "root", OPACITY_OPAQUE_U8));
 
+    m_d->animationInterface = new KisImageAnimationInterface(this);
+
     connect(this, SIGNAL(sigImageModified()), KisMemoryStatisticsServer::instance(), SLOT(notifyImageChanged()));
 }
 
@@ -225,6 +227,11 @@ KisImage::~KisImage()
      * Request the tools to end currently running strokes
      */
     waitForDone();
+
+    /**
+     * Stop animation interface. It may use the rootLayer.
+     */
+    delete m_d->animationInterface;
 
     /**
      * First delete the nodes, while strokes
@@ -1267,7 +1274,7 @@ void KisImage::refreshGraph(KisNodeSP root, const QRect &rc, const QRect &cropRe
 {
     if (!root) root = m_d->rootLayer;
 
-    m_d->animationInterface.notifyNodeChanged(root.data(), rc, true);
+    m_d->animationInterface->notifyNodeChanged(root.data(), rc, true);
     m_d->scheduler.fullRefresh(root, rc, cropRect);
 }
 
@@ -1296,7 +1303,7 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &c
 {
     if (!root) root = m_d->rootLayer;
 
-    m_d->animationInterface.notifyNodeChanged(root.data(), rc, true);
+    m_d->animationInterface->notifyNodeChanged(root.data(), rc, true);
     m_d->scheduler.fullRefreshAsync(root, rc, cropRect);
 }
 
@@ -1304,7 +1311,7 @@ void KisImage::requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRe
 {
     KIS_ASSERT_RECOVER_RETURN(pseudoFilthy);
 
-    m_d->animationInterface.notifyNodeChanged(pseudoFilthy.data(), rc, false);
+    m_d->animationInterface->notifyNodeChanged(pseudoFilthy.data(), rc, false);
     m_d->scheduler.updateProjectionNoFilthy(pseudoFilthy, rc, cropRect);
 }
 
@@ -1397,7 +1404,7 @@ void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
         return;
     }
 
-    m_d->animationInterface.notifyNodeChanged(node, rect, false);
+    m_d->animationInterface->notifyNodeChanged(node, rect, false);
 
     /**
      * Here we use 'permitted' instead of 'active' intentively,
@@ -1419,12 +1426,12 @@ void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
 
 void KisImage::invalidateFrames(const KisTimeRange &range, const QRect &rect)
 {
-    m_d->animationInterface.invalidateFrames(range, rect);
+    m_d->animationInterface->invalidateFrames(range, rect);
 }
 
 void KisImage::requestTimeSwitch(int time)
 {
-    m_d->animationInterface.requestTimeSwitchNonGUI(time);
+    m_d->animationInterface->requestTimeSwitchNonGUI(time);
 }
 
 QList<KisLayerComposition*> KisImage::compositions()
@@ -1547,5 +1554,5 @@ void KisImage::notifyNodeCollpasedChanged()
 
 KisImageAnimationInterface* KisImage::animationInterface() const
 {
-    return &m_d->animationInterface;
+    return m_d->animationInterface;
 }

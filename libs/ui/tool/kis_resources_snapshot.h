@@ -36,7 +36,7 @@ class KoPattern;
 class KRITAUI_EXPORT KisResourcesSnapshot : public KisShared
 {
 public:
-    KisResourcesSnapshot(KisImageWSP image, KisNodeSP currentNode, KisPostExecutionUndoAdapter *undoAdapter, KoCanvasResourceManager *resourceManager, KisDefaultBoundsBaseSP bounds = 0);
+    KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KisPostExecutionUndoAdapter *undoAdapter, KoCanvasResourceManager *resourceManager, KisDefaultBoundsBaseSP bounds = 0);
     ~KisResourcesSnapshot();
 
     void setupPainter(KisPainter *painter);
@@ -50,7 +50,7 @@ public:
     void setFillStyle(KisPainter::FillStyle fillStyle);
 
     KisNodeSP currentNode() const;
-    KisImageWSP image() const;
+    KisImageSP image() const;
     bool needsIndirectPainting() const;
     QString indirectPaintingCompositeOp() const;
 

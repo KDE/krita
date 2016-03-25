@@ -45,7 +45,7 @@ struct KisResourcesSnapshot::Private {
     {
     }
 
-    KisImageWSP image;
+    KisImageSP image;
     KisDefaultBoundsBaseSP bounds;
     KisPostExecutionUndoAdapter *undoAdapter;
     KoColor currentFgColor;
@@ -73,7 +73,7 @@ struct KisResourcesSnapshot::Private {
     bool presetAllowsLod;
 };
 
-KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisNodeSP currentNode, KisPostExecutionUndoAdapter *undoAdapter, KoCanvasResourceManager *resourceManager, KisDefaultBoundsBaseSP bounds)
+KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KisPostExecutionUndoAdapter *undoAdapter, KoCanvasResourceManager *resourceManager, KisDefaultBoundsBaseSP bounds)
     : m_d(new Private())
 {
     m_d->image = image;
@@ -216,7 +216,7 @@ KisNodeSP KisResourcesSnapshot::currentNode() const
     return m_d->currentNode;
 }
 
-KisImageWSP KisResourcesSnapshot::image() const
+KisImageSP KisResourcesSnapshot::image() const
 {
     return m_d->image;
 }

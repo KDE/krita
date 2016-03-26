@@ -225,7 +225,7 @@ KisOpenGLUpdateInfoSP KisAnimationFrameCache::fetchFrameData(int time) const
         qWarning() << "    "  << ppVar(m_d->image->animationInterface()->currentTime()) << ppVar(time);
     }
 
-    return m_d->textures->updateCacheNoConversion(m_d->image->bounds());
+    return m_d->textures->updateCache(m_d->image->bounds());
 }
 
 void KisAnimationFrameCache::addConvertedFrameData(KisOpenGLUpdateInfoSP info, int time)

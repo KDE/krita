@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>222</width>
-    <height>307</height>
+    <width>441</width>
+    <height>342</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -19,8 +19,8 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_5">
-   <item row="0" column="0">
+  <layout class="QVBoxLayout" name="verticalLayout_3">
+   <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="minimumSize">
       <size>
@@ -35,445 +35,443 @@
       <attribute name="title">
        <string>Grid</string>
       </attribute>
-      <widget class="QWidget" name="verticalLayoutWidget">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>10</y>
-         <width>166</width>
-         <height>244</height>
-        </rect>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <widget class="QCheckBox" name="chkShowGrid">
-            <property name="text">
-             <string>Show grid</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="chkSnapToGrid">
-            <property name="text">
-             <string>Snap to grid</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QGridLayout" name="gridLayout">
-          <property name="rightMargin">
-           <number>6</number>
-          </property>
-          <item row="1" column="0">
-           <widget class="QLabel" name="lblYSpacing">
-            <property name="text">
-             <string>Y spacing:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="lblXSpacing">
-            <property name="text">
-             <string>X spacing:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QSpinBox" name="intHSpacing">
-            <property name="suffix">
-             <string> px</string>
-            </property>
-            <property name="minimum">
-             <number>2</number>
-            </property>
-            <property name="maximum">
-             <number>500</number>
-            </property>
-            <property name="value">
-             <number>10</number>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QSpinBox" name="intVSpacing">
-            <property name="suffix">
-             <string> px</string>
-            </property>
-            <property name="minimum">
-             <number>2</number>
-            </property>
-            <property name="maximum">
-             <number>500</number>
-            </property>
-            <property name="value">
-             <number>10</number>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QSpinBox" name="intSubdivision">
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>10</number>
-            </property>
-            <property name="value">
-             <number>2</number>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="lblSubdivision">
-            <property name="text">
-             <string>Subdivision:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2" rowspan="2">
-           <widget class="KoAspectButton" name="spacingAspectButton" native="true"/>
-          </item>
-          <item row="3" column="0">
-           <widget class="QCheckBox" name="chkOffset">
-            <property name="text">
-             <string>Grid Offset</string>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QGridLayout" name="gridLayout_3">
-          <property name="rightMargin">
-           <number>6</number>
-          </property>
-          <item row="0" column="0">
-           <widget class="QLabel" name="lblXOffset">
-            <property name="text">
-             <string>X offset:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QSpinBox" name="intXOffset">
-            <property name="suffix">
-             <string> px</string>
-            </property>
-            <property name="maximum">
-             <number>500</number>
-            </property>
-            <property name="value">
-             <number>0</number>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QSpinBox" name="intYOffset">
-            <property name="suffix">
-             <string> px</string>
-            </property>
-            <property name="maximum">
-             <number>500</number>
-            </property>
-            <property name="value">
-             <number>0</number>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2" rowspan="2">
-           <widget class="KoAspectButton" name="offsetAspectButton" native="true"/>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="lblYOffset">
-            <property name="text">
-             <string>Y offset:</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QGridLayout" name="gridLayout_2">
-          <property name="rightMargin">
-           <number>6</number>
-          </property>
-          <item row="0" column="0">
-           <widget class="QLabel" name="lblMainStyle">
-            <property name="text">
-             <string>Main Style:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="KComboBox" name="selectMainStyle">
-            <property name="currentIndex">
-             <number>0</number>
-            </property>
-            <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QCheckBox" name="chkShowGrid">
+           <property name="text">
+            <string>Show grid</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="chkSnapToGrid">
+           <property name="text">
+            <string>Snap to grid</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <layout class="QFormLayout" name="formLayout">
+           <item row="0" column="0">
+            <widget class="QLabel" name="lblXSpacing">
              <property name="text">
-              <string>Lines</string>
+              <string>X spacing:</string>
              </property>
-            </item>
-            <item>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QSpinBox" name="intHSpacing">
+             <property name="suffix">
+              <string> px</string>
+             </property>
+             <property name="minimum">
+              <number>2</number>
+             </property>
+             <property name="maximum">
+              <number>500</number>
+             </property>
+             <property name="value">
+              <number>10</number>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="lblYSpacing">
              <property name="text">
-              <string>Dashed</string>
+              <string>Y spacing:</string>
              </property>
-            </item>
-            <item>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QSpinBox" name="intVSpacing">
+             <property name="suffix">
+              <string> px</string>
+             </property>
+             <property name="minimum">
+              <number>2</number>
+             </property>
+             <property name="maximum">
+              <number>500</number>
+             </property>
+             <property name="value">
+              <number>10</number>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="KoAspectButton" name="spacingAspectButton" native="true"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QFormLayout" name="formLayout_3">
+         <item row="0" column="0">
+          <widget class="QLabel" name="lblSubdivision">
+           <property name="text">
+            <string>Subdivision:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QSpinBox" name="intSubdivision">
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>10</number>
+           </property>
+           <property name="value">
+            <number>2</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="chkOffset">
+         <property name="text">
+          <string>Grid Offset</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="KoAspectButton" name="offsetAspectButton" native="true"/>
+       </item>
+       <item>
+        <layout class="QFormLayout" name="formLayout_2">
+         <item row="0" column="0">
+          <widget class="QLabel" name="lblXOffset">
+           <property name="text">
+            <string>X offset:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QSpinBox" name="intXOffset">
+           <property name="suffix">
+            <string> px</string>
+           </property>
+           <property name="maximum">
+            <number>500</number>
+           </property>
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="lblYOffset">
+           <property name="text">
+            <string>Y offset:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QSpinBox" name="intYOffset">
+           <property name="suffix">
+            <string> px</string>
+           </property>
+           <property name="maximum">
+            <number>500</number>
+           </property>
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="lblMainStyle">
+           <property name="text">
+            <string>Main Style:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <item>
+            <widget class="KComboBox" name="selectMainStyle">
+             <property name="currentIndex">
+              <number>0</number>
+             </property>
+             <item>
+              <property name="text">
+               <string>Lines</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Dashed</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Dots</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="KColorButton" name="colorMain">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>30</width>
+               <height>0</height>
+              </size>
+             </property>
              <property name="text">
-              <string>Dots</string>
+              <string/>
              </property>
-            </item>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="KColorButton" name="colorSubdivision">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>30</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="color" stdset="0">
-             <color>
-              <red>0</red>
-              <green>0</green>
-              <blue>0</blue>
-             </color>
-            </property>
-            <property name="defaultColor" stdset="0">
-             <color>
-              <red>0</red>
-              <green>0</green>
-              <blue>0</blue>
-             </color>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="KComboBox" name="selectSubdivisionStyle">
-            <property name="currentIndex">
-             <number>1</number>
-            </property>
-            <item>
+             <property name="color">
+              <color>
+               <red>0</red>
+               <green>0</green>
+               <blue>0</blue>
+              </color>
+             </property>
+             <property name="defaultColor">
+              <color>
+               <red>0</red>
+               <green>0</green>
+               <blue>0</blue>
+              </color>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="lblSubdivisionStyle">
+           <property name="text">
+            <string>Div Style:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <item>
+            <widget class="KComboBox" name="selectSubdivisionStyle">
+             <property name="currentIndex">
+              <number>1</number>
+             </property>
+             <item>
+              <property name="text">
+               <string>Lines</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Dashed</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Dots</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="KColorButton" name="colorSubdivision">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>30</width>
+               <height>0</height>
+              </size>
+             </property>
              <property name="text">
-              <string>Lines</string>
+              <string/>
              </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Dashed</string>
+             <property name="color">
+              <color>
+               <red>0</red>
+               <green>0</green>
+               <blue>0</blue>
+              </color>
              </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Dots</string>
+             <property name="defaultColor">
+              <color>
+               <red>0</red>
+               <green>0</green>
+               <blue>0</blue>
+              </color>
              </property>
-            </item>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="lblSubdivisionStyle">
-            <property name="text">
-             <string>Div Style:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="KColorButton" name="colorMain">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>30</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="color" stdset="0">
-             <color>
-              <red>0</red>
-              <green>0</green>
-              <blue>0</blue>
-             </color>
-            </property>
-            <property name="defaultColor" stdset="0">
-             <color>
-              <red>0</red>
-              <green>0</green>
-              <blue>0</blue>
-             </color>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </widget>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>13</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
        <string>Guides</string>
       </attribute>
-      <widget class="QWidget" name="verticalLayoutWidget_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>0</y>
-         <width>181</width>
-         <height>121</height>
-        </rect>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <layout class="QGridLayout" name="gridLayout_4">
-          <item row="0" column="0">
-           <widget class="QCheckBox" name="chkShowGuides">
-            <property name="text">
-             <string>Show guides</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QCheckBox" name="chkSnapToGuides">
-            <property name="text">
-             <string>Snap to guides</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QCheckBox" name="chkLockGuides">
-            <property name="text">
-             <string>Lock guides</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <item>
-           <widget class="QLabel" name="lblGuidesStyle">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Guides:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="KComboBox" name="selectGuidesStyle">
-            <property name="currentIndex">
-             <number>0</number>
-            </property>
-            <item>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <layout class="QGridLayout" name="gridLayout_4">
+           <item row="0" column="0">
+            <widget class="QCheckBox" name="chkShowGuides">
              <property name="text">
-              <string>Lines</string>
+              <string>Show guides</string>
              </property>
-            </item>
-            <item>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QCheckBox" name="chkSnapToGuides">
              <property name="text">
-              <string>Dashed</string>
+              <string>Snap to guides</string>
              </property>
-            </item>
-            <item>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QCheckBox" name="chkLockGuides">
              <property name="text">
-              <string>Dots</string>
+              <string>Lock guides</string>
              </property>
-            </item>
-           </widget>
-          </item>
-          <item>
-           <widget class="KColorButton" name="colorGuides">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>30</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="color" stdset="0">
-             <color>
-              <red>0</red>
-              <green>0</green>
-              <blue>0</blue>
-             </color>
-            </property>
-            <property name="defaultColor" stdset="0">
-             <color>
-              <red>0</red>
-              <green>0</green>
-              <blue>0</blue>
-             </color>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QLabel" name="lblGuidesStyle">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Guides:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="KComboBox" name="selectGuidesStyle">
+             <property name="currentIndex">
+              <number>0</number>
+             </property>
+             <item>
+              <property name="text">
+               <string>Lines</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Dashed</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Dots</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="KColorButton" name="colorGuides">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>30</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="color">
+              <color>
+               <red>0</red>
+               <green>0</green>
+               <blue>0</blue>
+              </color>
+             </property>
+             <property name="defaultColor">
+              <color>
+               <red>0</red>
+               <green>0</green>
+               <blue>0</blue>
+              </color>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>
   </layout>
-  <zorder>tabWidget</zorder>
-  <zorder>spacingAspectButton</zorder>
  </widget>
  <customwidgets>
   <customwidget>

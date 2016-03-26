@@ -512,6 +512,31 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     int compression_type;
     png_uint_32 proflen;
 
+    // Get the various optional chunks
+
+    // https://www.w3.org/TR/PNG/#11cHRM
+#if defined(PNG_cHRM_SUPPORTED)
+    double whitePointX, whitePointY;
+    double redX, redY;
+    double greenX, greenY;
+    double blueX, blueY;
+    png_get_cHRM(png_ptr,info_ptr, &whitePointX, &whitePointY, &redX, &redY, &greenX, &greenY, &blueX, &blueY);
+    qDebug() << "cHRM:" << whitePointX << whitePointY << redX << redY << greenX << greenY << blueX << blueY;
+#endif
+
+    // https://www.w3.org/TR/PNG/#11gAMA
+#if defined(PNG_GAMMA_SUPPORTED)
+    double gamma;
+    png_get_gAMA(png_ptr, info_ptr, &gamma);
+    qDebug() << "gAMA" << gamma;
+#endif
+
+    // https://www.w3.org/TR/PNG/#11sRGB
+#if defined(PNG_sRGB_SUPPORTED)
+    int sRGBIntent;
+    png_get_sRGB(png_ptr, info_ptr, &sRGBIntent);
+    qDebug() << "sRGB" << sRGBIntent;
+#endif
 
     const KoColorProfile* profile = 0;
     if (png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &proflen)) {
@@ -979,7 +1004,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
 
     bool sRGB = device->colorSpace()->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive);
     if (!options.saveSRGBProfile && sRGB) {
-        png_set_sRGB(png_ptr, info_ptr, PNG_sRGB_INTENT_ABSOLUTE);
+        png_set_sRGB(png_ptr, info_ptr, PNG_sRGB_INTENT_PERCEPTUAL);
     }
     // set the palette
     if (color_type == PNG_COLOR_TYPE_PALETTE) {

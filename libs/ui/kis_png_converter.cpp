@@ -538,6 +538,22 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     qDebug() << "sRGB" << sRGBIntent;
 #endif
 
+bool fromBlender = false;
+
+png_text* text_ptr;
+    int num_comments;
+png_get_text(png_ptr, info_ptr, &text_ptr, &num_comments);
+
+        for (int i = 0; i < num_comments; i++) {
+            QString key = QString(text_ptr[i].key).toLower();
+            if (key == "file") {
+                QString relatedFile = text_ptr[i].text;
+                if (relatedFile.contains(".blend", Qt::CaseInsensitive)){
+                    fromBlender=true;
+                }
+            }
+        }
+
     const KoColorProfile* profile = 0;
     if (png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &proflen)) {
         QByteArray profile_rawdata;
@@ -555,7 +571,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     }
     else {
         dbgFile << "no embedded profile, will use the default profile";
-        if (color_nb_bits == 16 && !qAppName().toLower().contains("test") && !m_batchMode) {
+        if (color_nb_bits == 16 && !fromBlender && !qAppName().toLower().contains("test") && !m_batchMode) {
             KisConfig cfg;
             quint32 behaviour = cfg.pasteBehaviour();
             if (behaviour == PASTE_ASK) {
@@ -637,8 +653,6 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     KisPaintLayerSP layer = new KisPaintLayer(m_image.data(), m_image -> nextLayerName(), UCHAR_MAX);
 
     // Read comments/texts...
-    png_text* text_ptr;
-    int num_comments;
     png_get_text(png_ptr, info_ptr, &text_ptr, &num_comments);
     if (m_doc) {
         KoDocumentInfo * info = m_doc->documentInfo();

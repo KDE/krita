@@ -996,4 +996,15 @@ namespace KisLayerUtils {
             node->setDirty(node->extent());
         }
     }
+
+    void recursiveApplyNodes(KisNodeSP node, std::function<void(KisNodeSP)> func)
+    {
+        func(node);
+
+        node = node->firstChild();
+        while (node) {
+            recursiveApplyNodes(node, func);
+            node = node->nextSibling();
+        }
+    }
 }

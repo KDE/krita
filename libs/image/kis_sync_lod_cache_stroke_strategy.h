@@ -26,13 +26,15 @@
 class KisSyncLodCacheStrokeStrategy : public KisSimpleStrokeStrategy
 {
 public:
-    KisSyncLodCacheStrokeStrategy(KisImageWSP image);
+    KisSyncLodCacheStrokeStrategy(KisImageWSP image, bool forgettable);
     ~KisSyncLodCacheStrokeStrategy();
 
     static QList<KisStrokeJobData*> createJobsData(KisImageWSP image);
 
 private:
     void doStrokeCallback(KisStrokeJobData *data);
+    void finishStrokeCallback();
+    void cancelStrokeCallback();
 
 private:
     struct Private;

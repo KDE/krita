@@ -623,17 +623,24 @@ void KisNode::requestTimeSwitch(int time)
 
 void KisNode::syncLodCache()
 {
+    // noop. everything is done by getLodCapableDevices()
+}
+
+KisPaintDeviceList KisNode::getLodCapableDevices() const
+{
+    KisPaintDeviceList list;
+
     KisPaintDeviceSP device = paintDevice();
     if (device) {
-        QRegion dirtyRegion = device->syncLodCache(device->defaultBounds()->currentLevelOfDetail());
-        Q_UNUSED(dirtyRegion);
+        list << device;
     }
 
     KisPaintDeviceSP originalDevice = original();
     if (originalDevice && originalDevice != device) {
-        QRegion dirtyRegion = originalDevice->syncLodCache(originalDevice->defaultBounds()->currentLevelOfDetail());
-        Q_UNUSED(dirtyRegion);
+        list << originalDevice;
     }
 
-    projectionPlane()->syncLodCache();
+    list << projectionPlane()->getLodCapableDevices();
+
+    return list;
 }

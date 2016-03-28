@@ -1399,6 +1399,33 @@ void fillGradientDevice(KisPaintDeviceSP dev, const QRect &rect, bool flat = fal
         } while (it.nextPixel());
     }
 }
+#include "kis_lod_transform.h"
+void KisPaintDeviceTest::testLodTransform()
+{
+    const int lod = 2; // round to 4
+    KisLodTransform t(lod);
+
+    QRect rc1(-16, -16, 8, 8);
+    QRect rc2(-16, -16, 7, 7);
+    QRect rc3(-15, -15, 7, 7);
+
+    QCOMPARE(t.alignedRect(rc1, lod), rc1);
+    QCOMPARE(t.alignedRect(rc2, lod), rc1);
+    QCOMPARE(t.alignedRect(rc3, lod), rc1);
+}
+
+#include "krita_utils.h"
+void syncLodCache(KisPaintDeviceSP dev, int levelOfDetail)
+{
+    KisPaintDevice::LodDataStruct* s = dev->createLodDataStruct(levelOfDetail);
+
+    QRegion region = dev->regionForLodSyncing();
+    Q_FOREACH(QRect rect2, KritaUtils::splitRegionIntoPatches(region, KritaUtils::optimalPatchSize())) {
+        dev->updateLodDataStruct(s, rect2);
+    }
+
+    dev->uploadLodDataStruct(s);
+}
 
 void KisPaintDeviceTest::testLodDevice()
 {
@@ -1423,7 +1450,7 @@ void KisPaintDeviceTest::testLodDevice()
                                   "lod", "initial"));
 
     bounds->testingSetLevelOfDetail(1);
-    dev->syncLodCache(1);
+    syncLodCache(dev, 1);
     QCOMPARE(dev->exactBounds(), QRect(25,25,15,15));
 
     qDebug() << ppVar(dev->exactBounds());
@@ -1439,7 +1466,7 @@ void KisPaintDeviceTest::testLodDevice()
     /*QVERIFY*/(TestUtil::checkQImage(result, "paint_device_test",
                                   "lod", "lod1"));
 
-    dev->syncLodCache(2);
+    syncLodCache(dev, 2);
     QCOMPARE(dev->exactBounds(), QRect(12,12,8,8));
 
     qDebug() << ppVar(dev->exactBounds());
@@ -1453,7 +1480,7 @@ void KisPaintDeviceTest::testLodDevice()
     dev->setY(10);
 
     bounds->testingSetLevelOfDetail(1);
-    dev->syncLodCache(1);
+    syncLodCache(dev, 1);
 
     QCOMPARE(dev->exactBounds(), QRect(35,30,15,15));
 
@@ -1478,7 +1505,7 @@ void KisPaintDeviceTest::benchmarkLod1Generation()
 
     QBENCHMARK {
         bounds->testingSetLevelOfDetail(1);
-        dev->syncLodCache(1);
+        syncLodCache(dev, 1);
     }
 }
 
@@ -1496,7 +1523,7 @@ void KisPaintDeviceTest::benchmarkLod2Generation()
 
     QBENCHMARK {
         bounds->testingSetLevelOfDetail(2);
-        dev->syncLodCache(2);
+        syncLodCache(dev, 2);
     }
 }
 
@@ -1514,7 +1541,7 @@ void KisPaintDeviceTest::benchmarkLod3Generation()
 
     QBENCHMARK {
         bounds->testingSetLevelOfDetail(3);
-        dev->syncLodCache(3);
+        syncLodCache(dev, 3);
     }
 }
 
@@ -1532,7 +1559,7 @@ void KisPaintDeviceTest::benchmarkLod4Generation()
 
     QBENCHMARK {
         bounds->testingSetLevelOfDetail(4);
-        dev->syncLodCache(4);
+        syncLodCache(dev, 4);
     }
 }
 

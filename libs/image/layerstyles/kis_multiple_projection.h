@@ -40,7 +40,7 @@ public:
 
     void apply(KisPaintDeviceSP dstDevice, const QRect &rect);
 
-    void syncLodCache();
+    KisPaintDeviceList getLodCapableDevices() const;
 
 private:
     struct Private;

@@ -28,6 +28,7 @@ KisStrokeStrategy::KisStrokeStrategy(QString id, const KUndo2MagicString &name)
       m_indirectPaintingCompositeOp(COMPOSITE_ALPHA_DARKEN),
       m_clearsRedoOnStart(true),
       m_requestsOtherStrokesToEnd(true),
+      m_canForgetAboutMe(false),
       m_id(id),
       m_name(name)
 {
@@ -181,4 +182,14 @@ bool KisStrokeStrategy::requestsOtherStrokesToEnd() const
 void KisStrokeStrategy::setRequestsOtherStrokesToEnd(bool value)
 {
     m_requestsOtherStrokesToEnd = value;
+}
+
+bool KisStrokeStrategy::canForgetAboutMe() const
+{
+    return m_canForgetAboutMe;
+}
+
+void KisStrokeStrategy::setCanForgetAboutMe(bool value)
+{
+    m_canForgetAboutMe = value;
 }

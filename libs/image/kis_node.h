@@ -182,6 +182,7 @@ public:
      * default bounds object
      */
     virtual void syncLodCache();
+    virtual KisPaintDeviceList getLodCapableDevices() const;
 
     /**
      * The rendering of the image may not always happen in the order

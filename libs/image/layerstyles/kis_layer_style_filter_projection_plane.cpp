@@ -83,9 +83,9 @@ void KisLayerStyleFilterProjectionPlane::apply(KisPainter *painter, const QRect 
     m_d->projection.apply(painter->device(), rect);
 }
 
-void KisLayerStyleFilterProjectionPlane::syncLodCache()
+KisPaintDeviceList KisLayerStyleFilterProjectionPlane::getLodCapableDevices() const
 {
-    m_d->projection.syncLodCache();
+    return m_d->projection.getLodCapableDevices();
 }
 
 QRect KisLayerStyleFilterProjectionPlane::needRect(const QRect &rect, KisLayer::PositionToFilthy pos) const

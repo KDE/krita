@@ -227,6 +227,8 @@ typedef QSharedPointer<KUndo2Command> KUndo2CommandSP;
 typedef QList<KisNodeSP> KisNodeList;
 typedef QSharedPointer<KisNodeList> KisNodeListSP;
 
+typedef QList<KisPaintDeviceSP> KisPaintDeviceList;
+
 class KisStroke;
 typedef QSharedPointer<KisStroke> KisStrokeSP;
 typedef QWeakPointer<KisStroke> KisStrokeWSP;

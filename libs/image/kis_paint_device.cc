@@ -324,7 +324,11 @@ public:
     void uploadFrame(int dstFrameId, KisPaintDeviceSP srcDevice);
     void uploadFrameData(DataSP srcData, DataSP dstData);
 
-    QRegion syncLodData(int newLod);
+    struct LodDataStruct;
+    LodDataStruct* createLodDataStruct(int lod);
+    void updateLodDataStruct(LodDataStruct *dst, const QRect &srcRect);
+    void uploadLodDataStruct(LodDataStruct *dst);
+    QRegion regionForLodSyncing() const;
 
     void tesingFetchLodDevice(KisPaintDeviceSP targetDevice);
 
@@ -468,42 +472,6 @@ KisPaintDevice::Private::KisPaintDeviceStrategy* KisPaintDevice::Private::curren
     return wrappedStrategy.data();
 }
 
-QRegion KisPaintDevice::Private::syncLodData(int newLod)
-{
-    Data *srcData = currentNonLodData();
-
-    if (!m_lodData) {
-        m_lodData.reset(new Data(srcData, false));
-    }
-
-    int expectedX = KisLodTransform::coordToLodCoord(srcData->x(), newLod);
-    int expectedY = KisLodTransform::coordToLodCoord(srcData->y(), newLod);
-
-    /**
-     * We compare color spaces as pure pointers, because they must be
-     * exactly the same, since they come from the common source.
-     */
-    if (m_lodData->levelOfDetail() != newLod ||
-        m_lodData->colorSpace() != srcData->colorSpace() ||
-        m_lodData->x() != expectedX ||
-        m_lodData->y() != expectedY) {
-
-
-        m_lodData->prepareClone(srcData);
-
-        m_lodData->setLevelOfDetail(newLod);
-        m_lodData->setX(expectedX);
-        m_lodData->setY(expectedY);
-
-        // FIXME: different kind of synchronization
-    }
-
-    QRegion dirtyRegion = syncWholeDevice(srcData);
-    m_lodData->cache()->invalidate();
-
-    return dirtyRegion;
-}
-
 struct KisPaintDevice::Private::StrategyPolicy {
     StrategyPolicy(KisPaintDevice::Private::KisPaintDeviceStrategy *strategy,
                    KisDataManager *dataManager, qint32 offsetX, qint32 offsetY)
@@ -533,22 +501,64 @@ struct KisPaintDevice::Private::StrategyPolicy {
     int m_offsetY;
 };
 
-QRegion KisPaintDevice::Private::syncWholeDevice(Data *srcData)
+struct KisPaintDevice::Private::LodDataStruct
 {
-    KIS_ASSERT_RECOVER(m_lodData) { return QRegion(); }
+    LodDataStruct(Data *_lodData) : lodData(_lodData) {}
+    Data *lodData;
+};
 
-    m_lodData->dataManager()->clear();
+QRegion KisPaintDevice::Private::regionForLodSyncing() const
+{
+    Data *srcData = currentNonLodData();
+    return srcData->dataManager()->region().translated(srcData->x(), srcData->y());
+}
 
-    int lod = m_lodData->levelOfDetail();
-    int srcStepSize = 1 << lod;
+KisPaintDevice::Private::LodDataStruct* KisPaintDevice::Private::createLodDataStruct(int newLod)
+{
+    Data *srcData = currentNonLodData();
 
-    // FIXME:
-    QRect rcFIXME= srcData->dataManager()->extent().translated(srcData->x(), srcData->y());
-    if (!rcFIXME.isValid()) return QRegion();
+    Data *lodData = new Data(srcData, false);
+    LodDataStruct *lodStruct = new LodDataStruct(lodData);
 
-    QRect srcRect = KisLodTransform::alignedRect(rcFIXME, lod);
-    QRect dstRect = KisLodTransform::scaledRect(srcRect, lod);
-    if (!srcRect.isValid() || !dstRect.isValid()) return QRegion();
+    int expectedX = KisLodTransform::coordToLodCoord(srcData->x(), newLod);
+    int expectedY = KisLodTransform::coordToLodCoord(srcData->y(), newLod);
+
+    /**
+     * We compare color spaces as pure pointers, because they must be
+     * exactly the same, since they come from the common source.
+     */
+    if (lodData->levelOfDetail() != newLod ||
+        lodData->colorSpace() != srcData->colorSpace() ||
+        lodData->x() != expectedX ||
+        lodData->y() != expectedY) {
+
+
+        lodData->prepareClone(srcData);
+
+        lodData->setLevelOfDetail(newLod);
+        lodData->setX(expectedX);
+        lodData->setY(expectedY);
+
+        // FIXME: different kind of synchronization
+    }
+
+    //QRegion dirtyRegion = syncWholeDevice(srcData);
+    lodData->cache()->invalidate();
+
+    return lodStruct;
+}
+
+void KisPaintDevice::Private::updateLodDataStruct(LodDataStruct *dst, const QRect &originalRect)
+{
+    Data *lodData = dst->lodData;
+    Data *srcData = currentNonLodData();
+
+    const int lod = lodData->levelOfDetail();
+    const int srcStepSize = 1 << lod;
+
+    const QRect srcRect = KisLodTransform::alignedRect(originalRect, lod);
+    const QRect dstRect = KisLodTransform::scaledRect(srcRect, lod);
+    if (!srcRect.isValid() || !dstRect.isValid()) return;
 
     KIS_ASSERT_RECOVER_NOOP(srcRect.width() / srcStepSize == dstRect.width());
 
@@ -582,7 +592,7 @@ QRegion KisPaintDevice::Private::syncWholeDevice(Data *srcData)
     }
 
     InternalSequentialConstIterator srcIntIt(StrategyPolicy(currentStrategy(), srcData->dataManager().data(), srcData->x(), srcData->y()), srcRect);
-    InternalSequentialIterator dstIntIt(StrategyPolicy(currentStrategy(), m_lodData->dataManager().data(), m_lodData->x(), m_lodData->y()), dstRect);
+    InternalSequentialIterator dstIntIt(StrategyPolicy(currentStrategy(), lodData->dataManager().data(), lodData->x(), lodData->y()), dstRect);
 
     int rowsRemaining = srcRect.height();
     while (rowsRemaining > 0) {
@@ -627,9 +637,14 @@ QRegion KisPaintDevice::Private::syncWholeDevice(Data *srcData)
 
         rowsRemaining--;
     }
+}
 
-    QRegion dirtyRegion(dstRect);
-    return dirtyRegion;
+void KisPaintDevice::Private::uploadLodDataStruct(LodDataStruct *dst)
+{
+    KIS_ASSERT_RECOVER_RETURN(
+        dst->lodData->levelOfDetail() == defaultBounds->currentLevelOfDetail());
+
+    m_lodData.reset(dst->lodData);
 }
 
 void KisPaintDevice::Private::transferFromData(Data *data, KisPaintDeviceSP targetDevice)
@@ -1694,16 +1709,32 @@ KisPaintDevice::MemoryReleaseObject* KisPaintDevice::createMemoryReleaseObject()
     return new MemoryReleaseObject();
 }
 
-QRegion KisPaintDevice::syncLodCache(int levelOfDetail)
+struct KisPaintDevice::LodDataStruct {
+    LodDataStruct(Private::LodDataStruct *_lodData) : lodData(_lodData) {}
+    Private::LodDataStruct *lodData;
+};
+
+QRegion KisPaintDevice::regionForLodSyncing() const
 {
-    QRegion dirtyRegion;
-
-    if (levelOfDetail) {
-        dirtyRegion = m_d->syncLodData(levelOfDetail);
-    }
-
-    return dirtyRegion;
+    return m_d->regionForLodSyncing();
 }
+
+KisPaintDevice::LodDataStruct* KisPaintDevice::createLodDataStruct(int lod)
+{
+    Private::LodDataStruct *lodData = m_d->createLodDataStruct(lod);
+    return new LodDataStruct(lodData);
+}
+
+void KisPaintDevice::updateLodDataStruct(LodDataStruct *dst, const QRect &srcRect)
+{
+    m_d->updateLodDataStruct(dst->lodData, srcRect);
+}
+
+void KisPaintDevice::uploadLodDataStruct(LodDataStruct *dst)
+{
+    m_d->uploadLodDataStruct(dst->lodData);
+}
+
 
 KisPaintDeviceFramesInterface* KisPaintDevice::framesInterface()
 {

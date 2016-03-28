@@ -165,6 +165,8 @@ namespace KisLayerUtils
         }
         return valueDiffers;
     }
+
+    void KRITAIMAGE_EXPORT recursiveApplyNodes(KisNodeSP node, std::function<void(KisNodeSP)> func);
 };
 
 #endif /* __KIS_LAYER_UTILS_H */

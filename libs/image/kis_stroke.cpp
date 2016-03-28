@@ -216,6 +216,11 @@ int KisStroke::worksOnLevelOfDetail() const
     return m_worksOnLevelOfDetail;
 }
 
+bool KisStroke::canForgetAboutMe() const
+{
+    return m_strokeStrategy->canForgetAboutMe();
+}
+
 bool KisStroke::prevJobSequential() const
 {
     return m_prevJobSequential;

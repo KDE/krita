@@ -70,6 +70,17 @@ namespace KritaUtils
         return patches;
     }
 
+    QVector<QRect> splitRegionIntoPatches(const QRegion &region, const QSize &patchSize)
+    {
+        QVector<QRect> patches;
+
+        Q_FOREACH (const QRect rect, region.rects()) {
+            patches << KritaUtils::splitRectIntoPatches(rect, patchSize);
+        }
+
+        return patches;
+    }
+
     bool checkInTriangle(const QRectF &rect,
                          const QPolygonF &triangle)
     {

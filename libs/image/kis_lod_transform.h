@@ -169,7 +169,7 @@ private:
     static inline void alignByPow2ButOneHi(qint32 &value, qint32 alignment)
     {
         qint32 mask = alignment - 1;
-        value = value > 0 ? value | mask : -( -value | mask);
+        value |= mask;
     }
 
     /**
@@ -179,7 +179,7 @@ private:
     static inline void alignByPow2Lo(qint32 &value, qint32 alignment)
     {
         qint32 mask = alignment - 1;
-        value = value > 0 ? value & ~mask : -( -value & ~mask);
+         value &= ~mask;
     }
 
     static inline int divideSafe(int x, int lod) {

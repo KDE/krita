@@ -795,7 +795,12 @@ public:
     static MemoryReleaseObject* createMemoryReleaseObject();
 
 public:
-    QRegion syncLodCache(int levelOfDetail);
+    struct LodDataStruct;
+    QRegion regionForLodSyncing() const;
+    LodDataStruct* createLodDataStruct(int lod);
+    void updateLodDataStruct(LodDataStruct *dst, const QRect &srcRect);
+    void uploadLodDataStruct(LodDataStruct *dst);
+
     void setProjectionDevice(bool value);
     void tesingFetchLodDevice(KisPaintDeviceSP targetDevice);
 

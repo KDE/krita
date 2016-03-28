@@ -162,7 +162,12 @@ void KisImageAnimationInterface::requestFrameRegeneration(int frameId, const QRe
                                              dirtyRegion,
                                              this);
 
+    QList<KisStrokeJobData*> jobs = KisRegenerateFrameStrokeStrategy::createJobsData(m_d->image);
+
     KisStrokeId stroke = m_d->image->startStroke(strategy);
+    Q_FOREACH (KisStrokeJobData* job, jobs) {
+        m_d->image->addJob(stroke, job);
+    }
     m_d->image->endStroke(stroke);
 }
 
@@ -182,6 +187,11 @@ void KisImageAnimationInterface::restoreCurrentTime(int *savedValue)
 void KisImageAnimationInterface::notifyFrameReady()
 {
     emit sigFrameReady(m_d->currentTime);
+}
+
+void KisImageAnimationInterface::notifyFrameCancelled()
+{
+    emit sigFrameCancelled();
 }
 
 KisUpdatesFacade* KisImageAnimationInterface::updatesFacade() const

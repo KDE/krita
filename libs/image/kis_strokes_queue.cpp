@@ -246,7 +246,6 @@ void KisStrokesQueue::addJob(KisStrokeId id, KisStrokeJobData *data)
 
     KisStrokeSP stroke = id.toStrongRef();
     Q_ASSERT(stroke);
-    stroke->addJob(data);
 
     KisStrokeSP buddy = stroke->lodBuddy();
     if (buddy) {
@@ -256,6 +255,8 @@ void KisStrokesQueue::addJob(KisStrokeId id, KisStrokeJobData *data)
 
         buddy->addJob(clonedData);
     }
+
+    stroke->addJob(data);
 }
 
 void KisStrokesQueue::endStroke(KisStrokeId id)

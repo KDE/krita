@@ -124,12 +124,14 @@ private:
     void saveAndResetCurrentTime(int frameId, int *savedValue);
     void restoreCurrentTime(int *savedValue);
     void notifyFrameReady();
+    void notifyFrameCancelled();
     KisUpdatesFacade* updatesFacade() const;
 
     void blockFrameInvalidation(bool value);
 
 Q_SIGNALS:
     void sigFrameReady(int time);
+    void sigFrameCancelled();
     void sigTimeChanged(int newTime);
     void sigFramesChanged(const KisTimeRange &range, const QRect &rect);
 

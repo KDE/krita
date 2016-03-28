@@ -52,13 +52,13 @@ struct KisAnimationCachePopulator::Private
     int idleCounter;
     static const int IDLE_COUNT_THRESHOLD = 4;
     static const int IDLE_CHECK_INTERVAL = 500;
-    static const int WAITING_FOR_FRAME_TIMEOUT = 3000;
+    static const int WAITING_FOR_FRAME_TIMEOUT = 10000;
     static const int BETWEEN_FRAMES_INTERVAL = 10;
 
     int requestedFrame;
     KisAnimationFrameCacheSP requestCache;
     KisOpenGLUpdateInfoSP requestInfo;
-    QScopedPointer<KisSignalAutoConnection> imageRequestConnection;
+    KisSignalAutoConnectionsStore imageRequestConnections;
 
     QFutureWatcher<void> infoConversionWatcher;
 
@@ -96,7 +96,7 @@ struct KisAnimationCachePopulator::Private
     {
         if (frame != requestedFrame) return;
 
-        imageRequestConnection.reset();
+        imageRequestConnections.clear();
         requestInfo = requestCache->fetchFrameData(frame);
 
         /**
@@ -130,7 +130,7 @@ struct KisAnimationCachePopulator::Private
             break;
         case WaitingForFrame:
             // Request timed out :(
-            imageRequestConnection.reset();
+            imageRequestConnections.clear();
             enterState(WaitingForIdle);
             break;
         case WaitingForConvertedFrame:
@@ -252,11 +252,16 @@ struct KisAnimationCachePopulator::Private
         requestCache = cache;
         requestedFrame = frame;
 
-        imageRequestConnection.reset(
-            new KisSignalAutoConnection(
-                image->animationInterface(), SIGNAL(sigFrameReady(int)),
-                q, SLOT(slotFrameReady(int)),
-                Qt::DirectConnection));
+        imageRequestConnections.clear();
+        imageRequestConnections.addConnection(
+            image->animationInterface(), SIGNAL(sigFrameReady(int)),
+            q, SLOT(slotFrameReady(int)),
+            Qt::DirectConnection);
+
+        imageRequestConnections.addConnection(
+            image->animationInterface(), SIGNAL(sigFrameCancelled()),
+            q, SLOT(slotFrameCancelled()),
+            Qt::AutoConnection);
 
         /**
          * We should enter the state before the frame is
@@ -352,6 +357,15 @@ void KisAnimationCachePopulator::slotTimer()
 void KisAnimationCachePopulator::slotFrameReady(int frame)
 {
     m_d->frameReceived(frame);
+}
+
+void KisAnimationCachePopulator::slotFrameCancelled()
+{
+    KIS_ASSERT_RECOVER_RETURN(m_d->state == Private::WaitingForFrame);
+
+    m_d->timer.stop();
+    m_d->imageRequestConnections.clear();
+    m_d->enterState(Private::NotWaitingForAnything);
 }
 
 void KisAnimationCachePopulator::slotInfoConverted()

@@ -23,6 +23,10 @@
 #include "kis_image_animation_interface.h"
 #include "kis_node.h"
 #include "kis_image.h"
+#include "krita_utils.h"
+
+#include "kis_full_refresh_walker.h"
+#include "kis_async_merger.h"
 
 
 struct KisRegenerateFrameStrokeStrategy::Private
@@ -32,6 +36,22 @@ struct KisRegenerateFrameStrokeStrategy::Private
     int previousFrameId;
     QRegion dirtyRegion;
     KisImageAnimationInterface *interface;
+
+    class Data : public KisStrokeJobData {
+    public:
+        Data(KisNodeSP _root, const QRect &_rect, const QRect &_cropRect)
+            : KisStrokeJobData(CONCURRENT),
+              root(_root), rect(_rect), cropRect(_cropRect)
+            {}
+
+        KisStrokeJobData* createLodClone(int levelOfDetail) {
+            return new KisStrokeJobData(CONCURRENT);
+        }
+
+        KisNodeSP root;
+        QRect rect;
+        QRect cropRect;
+    };
 };
 
 KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(int frameId,
@@ -46,15 +66,18 @@ KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(int frameId,
     m_d->dirtyRegion = dirtyRegion;
     m_d->interface = interface;
 
-    enableJob(JOB_INIT, true, KisStrokeJobData::BARRIER);
-    enableJob(JOB_FINISH, true, KisStrokeJobData::BARRIER);
-    enableJob(JOB_CANCEL, true, KisStrokeJobData::BARRIER);
+    enableJob(JOB_INIT);
+    enableJob(JOB_FINISH);
+    enableJob(JOB_CANCEL);
 
-    enableJob(JOB_SUSPEND, true, KisStrokeJobData::BARRIER);
-    enableJob(JOB_RESUME, true, KisStrokeJobData::BARRIER);
+    enableJob(JOB_DOSTROKE);
+
+    enableJob(JOB_SUSPEND);
+    enableJob(JOB_RESUME);
 
     setRequestsOtherStrokesToEnd(false);
     setClearsRedoOnStart(false);
+    setCanForgetAboutMe(true);
 }
 
 KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(KisImageAnimationInterface *interface)
@@ -67,12 +90,12 @@ KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(KisImageAnima
     m_d->dirtyRegion = QRegion();
     m_d->interface = interface;
 
-    enableJob(JOB_INIT, true, KisStrokeJobData::BARRIER);
-    enableJob(JOB_FINISH, true, KisStrokeJobData::BARRIER);
-    enableJob(JOB_CANCEL, true, KisStrokeJobData::BARRIER);
+    enableJob(JOB_INIT);
+    enableJob(JOB_FINISH);
+    enableJob(JOB_CANCEL);
 
-    enableJob(JOB_SUSPEND, true, KisStrokeJobData::BARRIER);
-    enableJob(JOB_RESUME, true, KisStrokeJobData::BARRIER);
+    enableJob(JOB_SUSPEND);
+    enableJob(JOB_RESUME);
 
     // switching frames is a distinct user action, so it should
     // cancel the playback or any action easily
@@ -88,16 +111,25 @@ void KisRegenerateFrameStrokeStrategy::initStrokeCallback()
 {
     if (m_d->type == EXTERNAL_FRAME) {
         m_d->interface->image()->disableUIUpdates();
-
         m_d->interface->saveAndResetCurrentTime(m_d->frameId, &m_d->previousFrameId);
-
-        if (!m_d->dirtyRegion.isEmpty()) {
-            m_d->interface->updatesFacade()->refreshGraphAsync();
-        }
     } else if (m_d->type == CURRENT_FRAME) {
         m_d->interface->blockFrameInvalidation(true);
         m_d->interface->updatesFacade()->refreshGraphAsync();
     }
+}
+
+void KisRegenerateFrameStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
+{
+    Private::Data *d = dynamic_cast<Private::Data*>(data);
+    KIS_ASSERT(d);
+    KIS_ASSERT(!m_d->dirtyRegion.isEmpty());
+    KIS_ASSERT(m_d->type == EXTERNAL_FRAME);
+
+    KisBaseRectsWalkerSP walker = new KisFullRefreshWalker(d->cropRect);
+    walker->collectRects(d->root, d->rect);
+
+    KisAsyncMerger merger;
+    merger.startMerge(*walker);
 }
 
 void KisRegenerateFrameStrokeStrategy::finishStrokeCallback()
@@ -105,7 +137,6 @@ void KisRegenerateFrameStrokeStrategy::finishStrokeCallback()
     if (m_d->type == EXTERNAL_FRAME) {
         m_d->interface->notifyFrameReady();
         m_d->interface->restoreCurrentTime(&m_d->previousFrameId);
-
         m_d->interface->image()->enableUIUpdates();
     } else if (m_d->type == CURRENT_FRAME) {
         m_d->interface->blockFrameInvalidation(false);
@@ -115,6 +146,7 @@ void KisRegenerateFrameStrokeStrategy::finishStrokeCallback()
 void KisRegenerateFrameStrokeStrategy::cancelStrokeCallback()
 {
     if (m_d->type == EXTERNAL_FRAME) {
+        m_d->interface->notifyFrameCancelled();
         m_d->interface->restoreCurrentTime(&m_d->previousFrameId);
         m_d->interface->image()->enableUIUpdates();
     } else if (m_d->type == CURRENT_FRAME) {
@@ -146,4 +178,21 @@ void KisRegenerateFrameStrokeStrategy::resumeStrokeCallback()
     } else if (m_d->type == CURRENT_FRAME) {
         m_d->interface->blockFrameInvalidation(true);
     }
+}
+
+QList<KisStrokeJobData*> KisRegenerateFrameStrokeStrategy::createJobsData(KisImageWSP _image)
+{
+    using KritaUtils::splitRectIntoPatches;
+    using KritaUtils::optimalPatchSize;
+    KisImageSP image = _image;
+
+    const QRect cropRect = image->bounds();
+    QVector<QRect> rects = splitRectIntoPatches(image->bounds(), optimalPatchSize());
+    QList<KisStrokeJobData*> jobsData;
+
+    Q_FOREACH (const QRect &rc, rects) {
+        jobsData << new Private::Data(image->root(), rc, cropRect);
+    }
+
+    return jobsData;
 }

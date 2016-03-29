@@ -405,6 +405,7 @@ void KisToolPaint::endAlternateAction(KoPointerEvent *event, AlternateAction act
         image()->endStroke(m_pickerStrokeId);
         m_pickerStrokeId.clear();
         requestUpdateOutline(event->point, event);
+        setMode(HOVER_MODE);
     } else {
         KisTool::endAlternateAction(event, action);
     }

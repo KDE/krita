@@ -39,6 +39,13 @@ class QOpenGLContext;
 class KRITAUI_EXPORT KisOpenGL
 {
 public:
+    enum FilterMode {
+        NearestFilterMode,  // nearest
+        BilinearFilterMode, // linear, no mipmap
+        TrilinearFilterMode, // LINEAR_MIPMAP_LINEAR
+        HighQualityFiltering // Mipmaps + custom shader
+    };
+public:
 
     /// Request OpenGL version 3.2
     static void initialize();

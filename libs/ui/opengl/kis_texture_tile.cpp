@@ -57,7 +57,7 @@ inline QRectF relativeRect(const QRect &br /* baseRect */,
 
 
 KisTextureTile::KisTextureTile(const QRect &imageRect, const KisGLTexturesInfo *texturesInfo,
-                               const QByteArray &fillData, FilterMode filter,
+                               const QByteArray &fillData, KisOpenGL::FilterMode filter,
                                bool useBuffer, int numMipmapLevels, QOpenGLFunctions *fcn)
 
     : m_textureId(0)
@@ -129,11 +129,8 @@ void KisTextureTile::bindToActiveTexture()
 
 void KisTextureTile::setNeedsMipmapRegeneration()
 {
-    // TODO: when a switch for LoD is implemented, put it there to
-    //       allow mipmapping in that case
-
-    if (m_filter == TrilinearFilterMode ||
-        m_filter == HighQualityFiltering) {
+    if (m_filter == KisOpenGL::TrilinearFilterMode ||
+        m_filter == KisOpenGL::HighQualityFiltering) {
 
         m_needsMipmapRegeneration = true;
     }

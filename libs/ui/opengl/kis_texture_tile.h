@@ -27,6 +27,8 @@
 // no forward-declaration, used to get GL* primitive types defined
 #include <QOpenGLFunctions>
 
+#include "kis_opengl.h"
+
 #if !defined(QT_OPENGL_ES)
 #define USE_PIXEL_BUFFERS
 #endif
@@ -61,15 +63,8 @@ inline QRect stretchRect(const QRect &rc, int delta)
 class KisTextureTile
 {
 public:
-    enum FilterMode {
-        NearestFilterMode,  // nearest
-        BilinearFilterMode, // linear, no mipmap
-        TrilinearFilterMode, // LINEAR_MIPMAP_LINEAR
-        HighQualityFiltering // Mipmaps + custom shader
-    };
-
     KisTextureTile(const QRect &imageRect, const KisGLTexturesInfo *texturesInfo,
-                   const QByteArray &fillData, FilterMode mode,
+                   const QByteArray &fillData, KisOpenGL::FilterMode mode,
                    bool useBuffer, int numMipmapLevels, QOpenGLFunctions *f);
     ~KisTextureTile();
 
@@ -114,7 +109,7 @@ private:
     QRect m_tileRectInImagePixels;
     QRectF m_tileRectInTexturePixels;
     QRect m_textureRectInImagePixels;
-    FilterMode m_filter;
+    KisOpenGL::FilterMode m_filter;
     const KisGLTexturesInfo *m_texturesInfo;
     bool m_needsMipmapRegeneration;
     int m_currentLodPlane;

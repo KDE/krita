@@ -52,6 +52,21 @@ int KisBrushBasedPaintOpSettings::rate() const
     return getInt(AIRBRUSH_RATE);
 }
 
+KisPaintOpSettingsSP KisBrushBasedPaintOpSettings::clone() const
+{
+    KisPaintOpSettingsSP _settings = KisOutlineGenerationPolicy<KisPaintOpSettings>::clone();
+    KisBrushBasedPaintOpSettings *settings =
+        dynamic_cast<KisBrushBasedPaintOpSettings*>(_settings.data());
+    settings->m_savedBrush = this->brush();
+    return settings;
+}
+
+KisBrushSP KisBrushBasedPaintOpSettings::brush() const
+{
+    KisBrushBasedPaintopOptionWidget *widget = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
+    return widget ? widget->brush() : m_savedBrush;
+}
+
 QPainterPath KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInformation &info,
                                                             OutlineMode mode,
                                                             qreal additionalScale,
@@ -60,14 +75,7 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInform
     QPainterPath path;
 
     if (forceOutline || mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline) {
-        KisBrushBasedPaintopOptionWidget *widget = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
-
-        if (!widget) {
-            return KisPaintOpSettings::brushOutline(info, mode);
-        }
-
-
-        KisBrushSP brush = widget->brush();
+        KisBrushSP brush = this->brush();
         qreal finalScale = brush->scale() * additionalScale;
 
         QPainterPath realOutline = brush->outline();

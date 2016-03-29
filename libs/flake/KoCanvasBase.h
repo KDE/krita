@@ -71,7 +71,7 @@ public:
     /**
      * @return true if opengl can be used directly on the canvas
      */
-    virtual bool canvasIsOpenGL() { return false; }
+    virtual bool canvasIsOpenGL() const { return false; }
 
     /**
      * retrieve the grid size setting.

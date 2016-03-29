@@ -46,7 +46,6 @@ class KisFilterConfiguration;
  */
 class KRITAUI_EXPORT KisCanvasResourceProvider : public QObject
 {
-
     Q_OBJECT
 
 public:
@@ -61,6 +60,9 @@ public:
         CurrentPaintOpPreset,
         CurrentGeneratorConfiguration,
         CurrentCompositeOp,
+        CurrentEffectiveCompositeOp,
+        LodAvailability,
+        EraserMode,
         MirrorHorizontal,
         MirrorVertical,
         MirrorAxesCenter,
@@ -92,6 +94,9 @@ public:
 
     float HDRGamma() const;
     void setHDRGamma(float gamma);
+
+    bool eraserMode() const;
+    void setEraserMode(bool value);
 
     KoPattern *currentPattern() const;
 

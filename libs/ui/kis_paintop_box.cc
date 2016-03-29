@@ -79,6 +79,7 @@
 #include "tool/kis_tool.h"
 #include "kis_signals_blocker.h"
 #include "kis_action_manager.h"
+#include "kis_highlighted_button.h"
 
 typedef KoResourceServerSimpleConstruction<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
 typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
@@ -131,37 +132,36 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_presetSelectorPopupButton->setToolTip(i18n("Choose brush preset"));
     m_presetSelectorPopupButton->setFixedSize(iconsize, iconsize);
 
-    m_eraseModeButton = new QToolButton(this);
+    m_eraseModeButton = new KisHighlightedToolButton(this);
     m_eraseModeButton->setFixedSize(iconsize, iconsize);
     m_eraseModeButton->setCheckable(true);
 
     m_eraseAction = m_viewManager->actionManager()->createAction("erase_action");
     m_eraseModeButton->setDefaultAction(m_eraseAction);
 
-    eraserBrushSize = 0; // brush size changed when using erase mode
+    m_eraserBrushSize = 0; // brush size changed when using erase mode
 
     m_reloadButton = new QToolButton(this);
     m_reloadButton->setFixedSize(iconsize, iconsize);
-    m_reloadButton->setCheckable(true);
 
     m_reloadAction = m_viewManager->actionManager()->createAction("reload_preset_action");
     m_reloadButton->setDefaultAction(m_reloadAction);
 
-    m_alphaLockButton = new QToolButton(this);
+    m_alphaLockButton = new KisHighlightedToolButton(this);
     m_alphaLockButton->setFixedSize(iconsize, iconsize);
     m_alphaLockButton->setCheckable(true);
 
     KisAction* alphaLockAction = m_viewManager->actionManager()->createAction("preserve_alpha");
     m_alphaLockButton->setDefaultAction(alphaLockAction);
 
-    m_hMirrorButton = new QToolButton(this);
+    m_hMirrorButton = new KisHighlightedToolButton(this);
     m_hMirrorButton->setFixedSize(iconsize, iconsize);
     m_hMirrorButton->setCheckable(true);
 
     m_hMirrorAction = m_viewManager->actionManager()->createAction("hmirror_action");
     m_hMirrorButton->setDefaultAction(m_hMirrorAction);
 
-    m_vMirrorButton = new QToolButton(this);
+    m_vMirrorButton = new KisHighlightedToolButton(this);
     m_vMirrorButton->setFixedSize(iconsize, iconsize);
     m_vMirrorButton->setCheckable(true);
 
@@ -355,7 +355,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_presetsChooserPopup->setFixedSize(500, 600);
     m_presetSelectorPopupButton->setPopupWidget(m_presetsChooserPopup);
 
-    m_prevCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
     m_currCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
 
     slotNodeChanged(view->activeNode());
@@ -379,10 +378,10 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*))      , SLOT(resourceSelected(KoResource*)));
     connect(m_resourceProvider   , SIGNAL(sigNodeChanged(const KisNodeSP))    , SLOT(slotNodeChanged(const KisNodeSP)));
     connect(m_cmbCompositeOp     , SIGNAL(currentIndexChanged(int))           , SLOT(slotSetCompositeMode(int)));
-    connect(m_eraseAction          , SIGNAL(triggered(bool))                    , SLOT(slotToggleEraseMode(bool)));
-    connect(alphaLockAction      , SIGNAL(triggered(bool))                    , SLOT(slotToggleAlphaLockMode(bool)));
-    connect(m_hMirrorAction        , SIGNAL(triggered(bool))                    , SLOT(slotHorizontalMirrorChanged(bool)));
-    connect(m_vMirrorAction        , SIGNAL(triggered(bool))                    , SLOT(slotVerticalMirrorChanged(bool)));
+    connect(m_eraseAction          , SIGNAL(toggled(bool))                    , SLOT(slotToggleEraseMode(bool)));
+    connect(alphaLockAction      , SIGNAL(toggled(bool))                    , SLOT(slotToggleAlphaLockMode(bool)));
+    connect(m_hMirrorAction        , SIGNAL(toggled(bool))                    , SLOT(slotHorizontalMirrorChanged(bool)));
+    connect(m_vMirrorAction        , SIGNAL(toggled(bool))                    , SLOT(slotVerticalMirrorChanged(bool)));
     connect(m_reloadAction         , SIGNAL(triggered())                        , SLOT(slotReloadPreset()));
 
     connect(m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("opacity"), SIGNAL(valueChanged(qreal)), SLOT(slotSlider1Changed()));
@@ -471,21 +470,6 @@ void KisPaintopBox::resourceSelected(KoResource* resource)
     }
 }
 
-QPixmap KisPaintopBox::paintopPixmap(const KoID& paintop)
-{
-    QString pixmapName = KisPaintOpRegistry::instance()->pixmap(paintop);
-
-    if (pixmapName.isEmpty())
-        return QPixmap();
-
-    return QPixmap(KoResourcePaths::findResource("kis_images", pixmapName));
-}
-
-KoID KisPaintopBox::currentPaintop()
-{
-    return m_resourceProvider->currentPreset()->paintOp();
-}
-
 void KisPaintopBox::setCurrentPaintopAndReload(const KoID& paintop, KisPaintOpPresetSP preset)
 {
     if (!m_dirtyPresetsEnabled) {
@@ -515,9 +499,9 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
     }
 
     preset = (!preset) ? activePreset(paintop) : preset;
-
     Q_ASSERT(preset && preset->settings());
 
+    m_resourceProvider->setPaintOpPreset(preset);
 
     if (!m_paintopOptionWidgets.contains(paintop))
         m_paintopOptionWidgets[paintop] = KisPaintOpRegistry::instance()->get(paintop.id())->createConfigWidget(this);
@@ -533,10 +517,9 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
     m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
 
     Q_ASSERT(m_optionWidget && m_presetSelectorPopupButton);
-    connect(m_optionWidget, SIGNAL(sigConfigurationUpdated()), this, SLOT(slotUpdatePreset()));
+    connect(m_optionWidget, SIGNAL(sigConfigurationUpdated()), this, SLOT(slotGuiChangedCurrentPreset()));
     connect(m_optionWidget, SIGNAL(sigSaveLockedConfig(KisPropertiesConfiguration*)), this, SLOT(slotSaveLockedOptionToPreset(KisPropertiesConfiguration*)));
     connect(m_optionWidget, SIGNAL(sigDropLockedConfig(KisPropertiesConfiguration*)), this, SLOT(slotDropLockedOption(KisPropertiesConfiguration*)));
-    connect(m_optionWidget, SIGNAL(sigConfigurationItemChanged()), this, SLOT(slotConfigurationItemChanged()));
 
 
     // load the current brush engine icon for the brush editor toolbar button
@@ -544,7 +527,6 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
     QString pixFilename = KoResourcePaths::findResource("kis_images", paintOp->pixmap());
 
     m_brushEditorPopupButton->setIcon(QIcon(pixFilename));
-    m_resourceProvider->setPaintOpPreset(preset);
     m_presetsPopup->setCurrentPaintOp(paintop.id());
 
     if (m_presetsPopup->currentPaintOp() != paintop.id()) {
@@ -559,11 +541,6 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
      * so just call the slot directly
      */
     slotUpdatePreset();
-}
-
-KoID KisPaintopBox::defaultPaintOp()
-{
-    return KoID("paintbrush");
 }
 
 KisPaintOpPresetSP KisPaintopBox::defaultPreset(const KoID& paintOp)
@@ -592,7 +569,7 @@ KisPaintOpPresetSP KisPaintopBox::activePreset(const KoID& paintOp)
     return m_paintOpPresetMap[paintOp];
 }
 
-void KisPaintopBox::updateCompositeOp(QString compositeOpID, bool localUpdate)
+void KisPaintopBox::updateCompositeOp(QString compositeOpID)
 {
     if (!m_optionWidget) return;
     KisSignalsBlocker blocker(m_optionWidget);
@@ -607,19 +584,10 @@ void KisPaintopBox::updateCompositeOp(QString compositeOpID, bool localUpdate)
         m_cmbCompositeOp->selectCompositeOp(KoID(compositeOpID));
         m_cmbCompositeOp->blockSignals(false);
 
-        m_eraseModeButton->defaultAction()->blockSignals(true);
-        m_eraseModeButton->blockSignals(true);
-        m_eraseModeButton->setChecked(compositeOpID == COMPOSITE_ERASE);
-        m_eraseModeButton->defaultAction()->setChecked(compositeOpID == COMPOSITE_ERASE);
-        m_eraseModeButton->blockSignals(false);
-        m_eraseModeButton->defaultAction()->blockSignals(false);
-
         if (compositeOpID != m_currCompositeOpID) {
             m_resourceProvider->currentPreset()->settings()->setPaintOpCompositeOp(compositeOpID);
             m_optionWidget->setConfiguration(m_resourceProvider->currentPreset()->settings().data());
-            if (!localUpdate)
-                m_resourceProvider->setCurrentCompositeOp(compositeOpID);
-            m_prevCompositeOpID = m_currCompositeOpID;
+            m_resourceProvider->setCurrentCompositeOp(compositeOpID);
             m_currCompositeOpID = compositeOpID;
         }
     }
@@ -695,7 +663,7 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
     m_currTabletToolID = TabletToolID(inputDevice);
 }
 
-void KisPaintopBox::slotCanvasResourceChanged(int /*key*/, const QVariant& /*v*/)
+void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
 {
     if (m_viewManager) {
         sender()->blockSignals(true);
@@ -708,20 +676,13 @@ void KisPaintopBox::slotCanvasResourceChanged(int /*key*/, const QVariant& /*v*/
         m_presetsChooserPopup->canvasResourceChanged(preset.data(), preset);
 
         if (m_resourceProvider->currentCompositeOp() != m_currCompositeOpID) {
-            QString compositeOp = m_resourceProvider->currentCompositeOp();
-
-            m_cmbCompositeOp->blockSignals(true);
-            m_cmbCompositeOp->selectCompositeOp(KoID(compositeOp));
-            m_cmbCompositeOp->blockSignals(false);
-
-            m_eraseModeButton->defaultAction()->blockSignals(true);
-            m_eraseModeButton->blockSignals(true);
-            m_eraseModeButton->setChecked(compositeOp == COMPOSITE_ERASE);
-            m_eraseModeButton->defaultAction()->setChecked(compositeOp == COMPOSITE_ERASE);
-            m_eraseModeButton->blockSignals(false);
-            m_eraseModeButton->defaultAction()->blockSignals(false);
-            toggleHighlightedButton(m_eraseModeButton);
+            updateCompositeOp(m_resourceProvider->currentCompositeOp());
         }
+
+        if (key == KisCanvasResourceProvider::EraserMode) {
+            m_eraseAction->setChecked(value.toBool());
+        }
+
         sender()->blockSignals(false);
     }
 }
@@ -795,6 +756,15 @@ void KisPaintopBox::slotUpdatePreset()
         setWidgetState(ENABLE_COMPOSITEOP);
     }
 
+    {
+        const bool newEraseMode = m_resourceProvider->eraserMode();
+        if (m_eraseAction->isChecked() != newEraseMode) {
+            KisSignalsBlocker b(m_eraseAction, m_eraseModeButton);
+            m_eraseAction->setChecked(newEraseMode);
+            m_eraseModeButton->setChecked(newEraseMode);
+        }
+    }
+
     m_blockUpdate = false;
 }
 
@@ -831,48 +801,45 @@ void KisPaintopBox::slotColorSpaceChanged(const KoColorSpace* colorSpace)
 
 void KisPaintopBox::slotToggleEraseMode(bool checked)
 {
+    m_resourceProvider->setEraserMode(checked);
+    m_optionWidget->setConfiguration(m_resourceProvider->currentPreset()->settings().data());
+
     if (checked)
     {
-        updateCompositeOp(COMPOSITE_ERASE);
         //add an option to enable eraser brush size
         if (m_eraserBrushSizeEnabled==true)
         {
             // remember brush size. set the eraser size to the normal brush size if not set
-            normalBrushSize = m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("size")->value();
-            if (qFuzzyIsNull(eraserBrushSize))
-                eraserBrushSize = normalBrushSize;
+            m_normalBrushSize = m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("size")->value();
+            if (qFuzzyIsNull(m_eraserBrushSize))
+                m_eraserBrushSize = m_normalBrushSize;
         }
         else
         {
-            normalBrushSize = eraserBrushSize;
-            eraserBrushSize = m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("size")->value();
+            m_normalBrushSize = m_eraserBrushSize;
+            m_eraserBrushSize = m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("size")->value();
         }
     }
 
     else
     {
-        updateCompositeOp(m_prevCompositeOpID);
-
         if (m_eraserBrushSizeEnabled==true)
         {
-            // save eraser brush size as eraserBrushSize (they are all the same, so just grab the first one)
-            eraserBrushSize = m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("size")->value();
+            // save eraser brush size as m_eraserBrushSize (they are all the same, so just grab the first one)
+            m_eraserBrushSize = m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("size")->value();
         }
         else
         {
-            normalBrushSize = m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("size")->value();
+            m_normalBrushSize = m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("size")->value();
         }
     }
 
 
     //update value in UI (this is the main place the value is 'stored' in memory)
-    qreal updateSize = checked ? eraserBrushSize : normalBrushSize;
+    qreal updateSize = checked ? m_eraserBrushSize : m_normalBrushSize;
     m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("size")->setValue(updateSize);
     m_sliderChooser[1]->getWidget<KisDoubleSliderSpinBox>("size")->setValue(updateSize);
     m_sliderChooser[2]->getWidget<KisDoubleSliderSpinBox>("size")->setValue(updateSize);
-
-
-    toggleHighlightedButton(m_eraseModeButton);
 }
 
 void KisPaintopBox::slotSetCompositeMode(int index)
@@ -888,13 +855,11 @@ void KisPaintopBox::slotSetCompositeMode(int index)
 void KisPaintopBox::slotHorizontalMirrorChanged(bool value)
 {
     m_resourceProvider->setMirrorHorizontal(value);
-    toggleHighlightedButton(m_hMirrorButton);
 }
 
 void KisPaintopBox::slotVerticalMirrorChanged(bool value)
 {
     m_resourceProvider->setMirrorVertical(value);
-    toggleHighlightedButton(m_vMirrorButton);
 }
 
 void KisPaintopBox::sliderChanged(int n)
@@ -983,9 +948,7 @@ void KisPaintopBox::slotToolChanged(KoCanvasController* canvas, int toolId)
 
 void KisPaintopBox::slotOpacityChanged(qreal opacity)
 {
-    if (m_blockUpdate) {
-        return;
-    }
+    if (m_blockUpdate || !m_optionWidget) return;
     m_blockUpdate = true;
 
     for (int i = 0; i < 3; ++i) {
@@ -1047,9 +1010,7 @@ void KisPaintopBox::slotSwitchToPreviousPreset()
 
 void KisPaintopBox::slotUnsetEraseMode()
 {
-    if (m_currCompositeOpID == COMPOSITE_ERASE) {
-        slotToggleEraseMode(false);
-    }
+    m_eraseAction->setChecked(false);
 }
 
 void KisPaintopBox::slotToggleAlphaLockMode(bool checked)
@@ -1059,23 +1020,9 @@ void KisPaintopBox::slotToggleAlphaLockMode(bool checked)
     } else {
         m_alphaLockButton->actions()[0]->setIcon(KisIconUtils::loadIcon("transparency-unlocked"));
     }
-    toggleHighlightedButton(m_alphaLockButton);
     m_resourceProvider->setGlobalAlphaLock(checked);
 }
 
-
-void KisPaintopBox::toggleHighlightedButton(QToolButton* m_tool)
-{
-    QPalette p = qApp->palette();
-    if (m_tool->isChecked()) {
-        QPalette palette_highlight(p);
-        palette_highlight.setColor(QPalette::Button, p.color(QPalette::Highlight));
-        m_tool->setPalette(palette_highlight);
-    }
-    else {
-        m_tool->setPalette(p);
-    }
-}
 void KisPaintopBox::slotReloadPreset()
 {
     KisSignalsBlocker blocker(m_optionWidget);
@@ -1091,9 +1038,11 @@ void KisPaintopBox::slotReloadPreset()
     }
     slotUpdatePreset();
 }
-void KisPaintopBox::slotConfigurationItemChanged() // Called only when UI is changed and not when preset is changed
+void KisPaintopBox::slotGuiChangedCurrentPreset() // Called only when UI is changed and not when preset is changed
 {
     m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
+    slotUpdatePreset();
+
     m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset().data());
     m_presetsPopup->updateViewSettings();
 }
@@ -1109,7 +1058,7 @@ void KisPaintopBox::slotSaveLockedOptionToPreset(KisPropertiesConfiguration* p)
         }
 
     }
-    slotConfigurationItemChanged();
+    slotGuiChangedCurrentPreset();
 
 }
 

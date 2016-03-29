@@ -28,6 +28,8 @@ class TestResourceManager : public QObject
 private Q_SLOTS:
     void koShapeResource();
     void testUnitChanged();
+    void testConverters();
+    void testDerivedChanged();
 };
 
 #endif // TESTRESOURCEMANAGER_H

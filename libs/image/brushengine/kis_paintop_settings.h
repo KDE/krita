@@ -193,6 +193,11 @@ public:
      */
     QString paintOpCompositeOp() const;
 
+    void setEraserMode(bool value);
+    bool eraserMode() const;
+
+    QString effectivePaintOpCompositeOp() const;
+
     void setPreset(KisPaintOpPresetWSP preset);
 
     KisPaintOpPresetWSP preset() const;

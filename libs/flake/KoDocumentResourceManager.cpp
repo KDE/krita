@@ -39,6 +39,8 @@ KoDocumentResourceManager::KoDocumentResourceManager(QObject *parent)
         : QObject(parent),
         d(new Private())
 {
+    connect(&d->manager, &KoResourceManager::resourceChanged,
+            this, &KoDocumentResourceManager::resourceChanged);
 }
 
 KoDocumentResourceManager::~KoDocumentResourceManager()
@@ -49,7 +51,6 @@ KoDocumentResourceManager::~KoDocumentResourceManager()
 void KoDocumentResourceManager::setResource(int key, const QVariant &value)
 {
     d->manager.setResource(key, value);
-    emit resourceChanged(key, value);
 }
 
 QVariant KoDocumentResourceManager::resource(int key) const
@@ -112,8 +113,6 @@ bool KoDocumentResourceManager::hasResource(int key) const
 void KoDocumentResourceManager::clearResource(int key)
 {
     d->manager.clearResource(key);
-    QVariant empty;
-    emit resourceChanged(key, empty);
 }
 
 KUndo2Stack *KoDocumentResourceManager::undoStack() const

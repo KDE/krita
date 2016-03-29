@@ -28,22 +28,53 @@
 
 void KoResourceManager::setResource(int key, const QVariant &value)
 {
-    if (m_resources.contains(key)) {
-        if (m_resources.value(key) == value)
+    QVariant realValue = value;
+    int realKey = key;
+    QVariant currentValue = m_resources.value(key, QVariant());
+
+    KoDerivedResourceConverterSP converter =
+        m_derivedResources.value(key, KoDerivedResourceConverterSP());
+
+    if (converter) {
+        realKey = converter->sourceKey();
+        currentValue = m_resources.value(realKey, QVariant());
+        realValue = converter->toSource(value, currentValue);
+    }
+
+    if (m_resources.contains(realKey)) {
+        if (!converter && currentValue == realValue)
             return;
-        m_resources[key] = value;
+        m_resources[realKey] = realValue;
     } else {
-        m_resources.insert(key, value);
+        m_resources.insert(realKey, realValue);
+    }
+
+    notifyResourceChanged(key, value);
+}
+
+void KoResourceManager::notifyResourceChanged(int key, const QVariant &value)
+{
+    emit resourceChanged(key, value);
+
+    QMultiHash<int, KoDerivedResourceConverterSP>::const_iterator it = m_derivedFromSource.constFind(key);
+    QMultiHash<int, KoDerivedResourceConverterSP>::const_iterator end = m_derivedFromSource.constEnd();
+
+    while (it != end && it.key() == key) {
+        KoDerivedResourceConverterSP converter = it.value();
+        notifyResourceChanged(converter->key(), converter->fromSource(value));
+        it++;
     }
 }
 
 QVariant KoResourceManager::resource(int key) const
 {
-    if (!m_resources.contains(key)) {
-        QVariant empty;
-        return empty;
-    } else
-        return m_resources.value(key);
+    KoDerivedResourceConverterSP converter =
+        m_derivedResources.value(key, KoDerivedResourceConverterSP());
+
+    const int realKey = converter ? converter->sourceKey() : key;
+    QVariant value = m_resources.value(realKey, QVariant());
+
+    return converter ? converter->fromSource(value) : value;
 }
 
 void KoResourceManager::setResource(int key, const KoColor &color)
@@ -124,13 +155,42 @@ QSizeF KoResourceManager::sizeResource(int key) const
 
 bool KoResourceManager::hasResource(int key) const
 {
-    return m_resources.contains(key);
+    KoDerivedResourceConverterSP converter =
+        m_derivedResources.value(key, KoDerivedResourceConverterSP());
+
+    const int realKey = converter ? converter->sourceKey() : key;
+    return m_resources.contains(realKey);
 }
 
 void KoResourceManager::clearResource(int key)
 {
-    if (! m_resources.contains(key))
-        return;
-    m_resources.remove(key);
-    QVariant empty;
+    // we cannot remove a derived resource
+    if (m_derivedResources.contains(key)) return;
+
+    if (m_resources.contains(key)) {
+        m_resources.remove(key);
+        notifyResourceChanged(key, QVariant());
+    }
+}
+
+void KoResourceManager::addDerivedResourceConverter(KoDerivedResourceConverterSP converter)
+{
+    Q_ASSERT(!m_derivedResources.contains(converter->key()));
+
+    m_derivedResources.insert(converter->key(), converter);
+    m_derivedFromSource.insertMulti(converter->sourceKey(), converter);
+}
+
+bool KoResourceManager::hasDerivedResourceConverter(int key)
+{
+    return m_derivedResources.contains(key);
+}
+
+void KoResourceManager::removeDerivedResourceConverter(int key)
+{
+    Q_ASSERT(m_derivedResources.contains(key));
+
+    KoDerivedResourceConverterSP converter = m_derivedResources.value(key);
+    m_derivedResources.remove(key);
+    m_derivedFromSource.remove(converter->sourceKey(), converter);
 }

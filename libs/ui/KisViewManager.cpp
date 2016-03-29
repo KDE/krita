@@ -125,6 +125,7 @@
 #include "kis_signal_auto_connection.h"
 #include "kis_icon_utils.h"
 #include "kis_guides_manager.h"
+#include "kis_derived_resources.h"
 
 
 class BlockingUserInputEventFilter : public QObject
@@ -183,6 +184,11 @@ public:
         , inputManager(_q)
         , actionAuthor(0)
     {
+        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisCompositeOpResourceConverter));
+        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisEffectiveCompositeOpResourceConverter));
+        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisOpacityResourceConverter));
+        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisLodAvailabilityResourceConverter));
+        canvasResourceManager.addDerivedResourceConverter(toQShared(new KisEraserModeResourceConverter));
     }
 
 public:
@@ -331,6 +337,25 @@ void KisViewManager::setCurrentView(KisView *view)
         d->viewConnections.clear();
     }
 
+    // Restore the last used brush preset
+    if (first) {
+        KisConfig cfg;
+        KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+        QString lastPreset = cfg.readEntry("LastPreset", QString("Basic_tip_default"));
+        KisPaintOpPresetSP preset = rserver->resourceByName(lastPreset);
+        if (!preset) {
+            preset = rserver->resourceByName("Basic_tip_default");
+        }
+
+        if (!preset) {
+            preset = rserver->resources().first();
+        }
+        if (preset) {
+            paintOpBox()->restoreResource(preset.data());
+        }
+
+    }
+
     QPointer<KisView>imageView = qobject_cast<KisView*>(view);
 
     if (imageView) {
@@ -405,25 +430,6 @@ void KisViewManager::setCurrentView(KisView *view)
 
     resourceProvider()->slotImageSizeChanged();
     resourceProvider()->slotOnScreenResolutionChanged();
-
-    // Restore the last used brush preset
-    if (first) {
-        KisConfig cfg;
-        KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-        QString lastPreset = cfg.readEntry("LastPreset", QString("Basic_tip_default"));
-        KisPaintOpPresetSP preset = rserver->resourceByName(lastPreset);
-        if (!preset) {
-            preset = rserver->resourceByName("Basic_tip_default");
-        }
-
-        if (!preset) {
-            preset = rserver->resources().first();
-        }
-        if (preset) {
-            paintOpBox()->restoreResource(preset.data());
-        }
-
-    }
 }
 
 

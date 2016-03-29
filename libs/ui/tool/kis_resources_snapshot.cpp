@@ -116,7 +116,7 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
     qreal normOpacity = resourceManager->resource(KisCanvasResourceProvider::Opacity).toDouble();
     m_d->opacity = quint8(normOpacity * OPACITY_OPAQUE_U8);
 
-    m_d->compositeOpId = resourceManager->resource(KisCanvasResourceProvider::CurrentCompositeOp).toString();
+    m_d->compositeOpId = resourceManager->resource(KisCanvasResourceProvider::CurrentEffectiveCompositeOp).toString();
     setCurrentNode(currentNode);
 
     /**

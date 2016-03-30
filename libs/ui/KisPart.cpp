@@ -232,7 +232,7 @@ KisView *KisPart::createView(KisDocument *document,
 {
     // If creating the canvas fails, record this and disable OpenGL next time
     KisConfig cfg;
-    KConfigGroup grp( KSharedConfig::openConfig(), "krita/crashprevention");
+    KConfigGroup grp( KSharedConfig::openConfig(), "crashprevention");
     if (grp.readEntry("CreatingCanvas", false)) {
         cfg.setUseOpenGL(false);
     }

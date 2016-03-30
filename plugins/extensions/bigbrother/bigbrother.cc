@@ -213,7 +213,7 @@ KisMacro* BigBrotherPlugin::openMacro()
 
 void BigBrotherPlugin::saveMacro(const KisMacro* macro)
 {
-    KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::SaveFile, "krita/bigbrother");
+    KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::SaveFile, "bigbrother");
     dialog.setCaption(i18n("Save Macro"));
     dialog.setNameFilter(i18n("Recorded actions (*.krarec)"));
 

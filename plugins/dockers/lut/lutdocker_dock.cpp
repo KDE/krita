@@ -63,7 +63,7 @@ OCIO::ConstConfigRcPtr defaultRawProfile()
     /**
      * Copied from OCIO, just a noop profile
      */
-    const char * INTERNAL_RAW_PROFILE = 
+    const char * INTERNAL_RAW_PROFILE =
         "ocio_profile_version: 1\n"
         "strictparsing: false\n"
         "roles:\n"
@@ -420,7 +420,7 @@ void LutDockerDock::selectOcioConfiguration()
 {
     QString filename = m_txtConfigurationPath->text();
 
-    KoFileDialog dialog(this, KoFileDialog::OpenFile, "krita/lutdocker");
+    KoFileDialog dialog(this, KoFileDialog::OpenFile, "lutdocker");
     dialog.setCaption(i18n("Select OpenColorIO Configuration"));
     dialog.setDefaultDir(QDir::cleanPath(filename));
     dialog.setNameFilter(i18n("OpenColorIO configuration (*.ocio)"));
@@ -553,7 +553,7 @@ void LutDockerDock::selectLut()
 {
     QString filename = m_txtLut->text();
 
-    KoFileDialog dialog(this, KoFileDialog::OpenFile, "krita/lutdocker");
+    KoFileDialog dialog(this, KoFileDialog::OpenFile, "lutdocker");
     dialog.setCaption(i18n("Select LUT file"));
     dialog.setDefaultDir(QDir::cleanPath(filename));
     dialog.setNameFilter("*.*");

@@ -445,10 +445,10 @@ KisMainWindow::KisMainWindow()
     configChanged();
 
     // If we have customized the toolbars, load that first
-    setLocalXMLFile(KoResourcePaths::locateLocal("data", "krita/krita.xmlgui"));
+    setLocalXMLFile(KoResourcePaths::locateLocal("data", "krita.xmlgui"));
 
     QString doc;
-    QStringList allFiles = KoResourcePaths::findAllResources("data", "krita/krita.xmlgui");
+    QStringList allFiles = KoResourcePaths::findAllResources("data", "krita.xmlgui");
     // We need at least one krita.xmlgui file!
     if (allFiles.size() == 0) {
         m_errorMessage = i18n("Krita cannot find the configuration file! Krita will quit now.");
@@ -1280,7 +1280,7 @@ void KisMainWindow::slotFileNew()
                                                                       KisImportExportManager::Import,
                                                                       KisDocument::extraNativeMimeTypes());
 
-    startupWidget = new KisOpenPane(this, mimeFilter, QStringLiteral("krita/templates/"));
+    startupWidget = new KisOpenPane(this, mimeFilter, QStringLiteral("templates/"));
     startupWidget->setWindowModality(Qt::WindowModal);
 
     KisConfig cfg;

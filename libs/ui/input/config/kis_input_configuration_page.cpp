@@ -66,7 +66,7 @@ void KisInputConfigurationPage::revertChanges()
 
 void KisInputConfigurationPage::setDefaults()
 {
-    QDir profileDir(KoResourcePaths::saveLocation("data", "krita/input/", false));
+    QDir profileDir(KoResourcePaths::saveLocation("data", "input/", false));
 
     if (profileDir.exists()) {
         QStringList entries = profileDir.entryList(QStringList() << "*.profile", QDir::NoDot | QDir::NoDotDot);

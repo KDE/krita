@@ -118,7 +118,7 @@ void KisCustomBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask)
 
 void KisCustomBrushWidget::slotAddPredefined()
 {
-    QString dir = KoResourcePaths::saveLocation("data", "krita/brushes");
+    QString dir = KoResourcePaths::saveLocation("data", "brushes");
     QString extension;
 
     if (brushStyle->currentIndex() == 0) {

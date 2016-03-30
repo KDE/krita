@@ -90,7 +90,7 @@ CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions
 
 CompositionDockerDock::~CompositionDockerDock()
 {
-    
+
 }
 
 void CompositionDockerDock::setCanvas(KoCanvasBase * canvas)
@@ -179,7 +179,7 @@ void CompositionDockerDock::exportClicked()
     if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->image()) {
         QString path;
 
-        KoFileDialog dialog(0, KoFileDialog::OpenDirectory, "krita/compositiondockerdock");
+        KoFileDialog dialog(0, KoFileDialog::OpenDirectory, "compositiondockerdock");
         dialog.setCaption(i18n("Select a Directory"));
         dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
         path = dialog.filename();

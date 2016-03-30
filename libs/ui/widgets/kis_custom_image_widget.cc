@@ -133,15 +133,15 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
     intNumLayers->setValue(cfg.numDefaultLayers());
     cmbColor->setColor(cfg.defaultBackgroundColor());
     setBackgroundOpacity(cfg.defaultBackgroundOpacity());
-    
+
     KisConfig::BackgroundStyle bgStyle = cfg.defaultBackgroundStyle();
-    
+
     if (bgStyle == KisConfig::LAYER) {
       radioBackgroundAsLayer->setChecked(true);
     } else {
       radioBackgroundAsProjection->setChecked(true);
     }
-    
+
     fillPredefined();
     switchPortraitLandscape();
 }
@@ -320,7 +320,7 @@ void KisCustomImageWidget::fillPredefined()
 
     cmbPredefined->addItem("");
 
-    QStringList definitions = KoResourcePaths::findAllResources("data", "krita/predefined_image_sizes/*.predefinedimage", KoResourcePaths::Recursive | KoResourcePaths::NoDuplicates);
+    QStringList definitions = KoResourcePaths::findAllResources("data", "predefined_image_sizes/*.predefinedimage", KoResourcePaths::Recursive | KoResourcePaths::NoDuplicates);
     definitions.sort();
 
     if (!definitions.empty()) {
@@ -374,7 +374,7 @@ void KisCustomImageWidget::saveAsPredefined()
     if (fileName.isEmpty()) {
         return;
     }
-    QString saveLocation = KoResourcePaths::saveLocation("data", "krita/predefined_image_sizes/", true);
+    QString saveLocation = KoResourcePaths::saveLocation("data", "predefined_image_sizes/", true);
     QFile f(saveLocation + '/' + fileName.replace(' ', '_').replace('(', '_').replace(')', '_') + ".predefinedimage");
 
     f.open(QIODevice::WriteOnly | QIODevice::Truncate);

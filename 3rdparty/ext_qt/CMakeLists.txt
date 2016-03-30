@@ -3,7 +3,7 @@ if (WIN32)
 ExternalProject_Add(
     ext_qt
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://download.qt.io/development_releases/qt/5.6/5.6.0-rc/single/qt-everywhere-opensource-src-5.6.0.zip
+    URL http://download.qt.io/official_releases/qt/5.6/5.6.0-rc/single/qt-everywhere-opensource-src-5.6.0.zip
     URL_MD5 03402708f260dcc917abae9bc559c1df
     PATCH_COMMAND myptch -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/disable-wintab.diff
           COMMAND myptch -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qtgui-private-headers.diff
@@ -22,7 +22,7 @@ else()
         ExternalProject_Add(
            ext_qt
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL http://download.qt.io/development_releases/qt/5.6/5.6.0-rc/single/qt-everywhere-opensource-src-5.6.0.tar.gz
+        URL http://download.qt.io/official_releases/qt/5.6/5.6.0-rc/single/qt-everywhere-opensource-src-5.6.0.tar.gz
         URL_MD5 7a2a867bc12384f4161809136d49d4be
         INSTALL_DIR ${EXTPREFIX_qt}
         CONFIGURE_COMMAND "<SOURCE_DIR>/configure -confirm-license  -opensource -nomake examples \
@@ -44,7 +44,7 @@ else()
         ExternalProject_Add(
             ext_qt
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL http://download.qt.io/development_releases/qt/5.6/5.6.0-rc/single/qt-everywhere-opensource-src-5.6.0.tar.gz
+            URL http://download.qt.io/official_releases/qt/5.6/5.6.0-rc/single/qt-everywhere-opensource-src-5.6.0.tar.gz
             URL_MD5 7a2a867bc12384f4161809136d49d4be
             INSTALL_DIR ${EXTPREFIX_qt}
             CONFIGURE_COMMAND "<SOURCE_DIR>/configure -prefix ${EXTPREFIX_qt} -I ${EXTPREFIX_qt}/include -L ${EXTPREFIX_qt}/lib  -opensource -confirm-license -nomake examples -no-sql-sqlite -no-openssl -no-qml-debug -no-mtdev  -no-journald  -no-syslog -no-glib  -no-pulseaudio -no-alsa  -no-gtkstyle  -no-nis  -no-cups  -no-iconv   -no-tslib   -no-icu  -no-directfb   -no-linuxfb  -no-gstreamer -no-pch -qt-zlib -qt-pcre -no-icu -qt-libpng -qt-libjpeg  -qt-harfbuzz  -no-libproxy -qt-freetype -qt-xcb -qt-xkbcommon-x11 -optimized-qmake  -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtenginio -skip qtgraphicaleffects -skip qtlocation -skip qtmultimedia -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtxmlpatterns"

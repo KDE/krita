@@ -254,6 +254,7 @@ void addResourceTypes()
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/patterns/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/taskset/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/workspaces/");
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/input/");
 }
 
 void KisApplication::loadResources()
@@ -361,7 +362,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     const bool showSplashScreen = !batchRun && qgetenv("NOSPLASH").isEmpty();
     if (showSplashScreen) {
         d->splashScreen->show();
-        d->splashScreen->repaint();        
+        d->splashScreen->repaint();
         processEvents();
     }
 

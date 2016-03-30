@@ -284,9 +284,10 @@ void KisInputProfileManager::loadProfiles()
 
 void KisInputProfileManager::saveProfiles()
 {
-    QString storagePath = KoResourcePaths::saveLocation("data", "input/");
+    QString storagePath = KoResourcePaths::saveLocation("data", "input/", true);
     Q_FOREACH(KisInputProfile * p, d->profiles) {
         QString fileName = d->profileFileName(p->name());
+
         KConfig config(storagePath + fileName, KConfig::SimpleConfig);
 
         config.group("General").writeEntry("name", p->name());

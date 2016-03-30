@@ -162,12 +162,12 @@ public:
     }
 
     KisDataManagerSP frameDataManager(int frameId) const {
-        Data *data = m_frames[frameId].data();
+        DataSP data = m_frames[frameId];
         return data->dataManager();
     }
 
     void invalidateFrameCache(int frameId) {
-        Data *data = m_frames[frameId].data();
+        DataSP data = m_frames[frameId];
         return data->cache()->invalidate();
     }
 
@@ -224,10 +224,11 @@ public:
             data = m_data;
             m_data.clear();
         } else if (copy) {
-            data = toQShared(new Data(m_frames[copySrc].data(), true));
+            DataSP srcData = m_frames[copySrc];
+            data = toQShared(new Data(srcData.data(), true));
         } else {
-            Data *srcData = m_frames.begin().value().data();
-            data = toQShared(new Data(srcData, false));
+            DataSP srcData = m_frames.begin().value();
+            data = toQShared(new Data(srcData.data(), false));
         }
 
         if (!copy) {
@@ -272,7 +273,7 @@ public:
 
     QRect frameBounds(int frameId)
     {
-        Data *data = m_frames[frameId].data();
+        DataSP data = m_frames[frameId];
 
         QRect extent = data->dataManager()->extent();
         extent.translate(data->x(), data->y());
@@ -281,12 +282,12 @@ public:
     }
 
     QPoint frameOffset(int frameId) const {
-        Data *data = m_frames[frameId].data();
+        DataSP data = m_frames[frameId];
         return QPoint(data->x(), data->y());
     }
 
     void setFrameOffset(int frameId, const QPoint &offset) {
-        Data *data = m_frames[frameId].data();
+        DataSP data = m_frames[frameId];
         data->setX(offset.x());
         data->setY(offset.y());
     }
@@ -298,24 +299,24 @@ public:
 
     bool readFrame(QIODevice *stream, int frameId) {
         bool retval = false;
-        Data *data = m_frames[frameId].data();
+        DataSP data = m_frames[frameId];
         retval = data->dataManager()->read(stream);
         data->cache()->invalidate();
         return retval;
     }
 
     bool writeFrame(KisPaintDeviceWriter &store, int frameId) {
-        Data *data = m_frames[frameId].data();
+        DataSP data = m_frames[frameId];
         return data->dataManager()->write(store);
     }
 
     void setFrameDefaultPixel(const quint8 *defPixel, int frameId) {
-        Data *data = m_frames[frameId].data();
+        DataSP data = m_frames[frameId];
         data->dataManager()->setDefaultPixel(defPixel);
     }
 
     const quint8* frameDefaultPixel(int frameId) const {
-        Data *data = m_frames[frameId].data();
+        DataSP data = m_frames[frameId];
         return data->dataManager()->defaultPixel();
     }
 
@@ -371,18 +372,22 @@ private:
         return data;
     }
 
+    inline void ensureLodDataPreset() const {
+        if (!m_lodData) {
+            Data *srcData = currentNonLodData();
+
+            QMutexLocker l(&m_dataSwitchLock);
+            if (!m_lodData) {
+                m_lodData.reset(new Data(srcData, false));
+            }
+        }
+    }
+
     inline Data* currentData() const {
         Data *data = m_data.data();
 
         if (defaultBounds->currentLevelOfDetail()) {
-            if (!m_lodData) {
-                Data *srcData = currentNonLodData();
-
-                QMutexLocker l(&m_dataSwitchLock);
-                if (!m_lodData) {
-                    m_lodData.reset(new Data(srcData, false));
-                }
-            }
+            ensureLodDataPreset();
             data = m_lodData.data();
         } else {
             data = currentNonLodData();
@@ -644,7 +649,10 @@ void KisPaintDevice::Private::uploadLodDataStruct(LodDataStruct *dst)
     KIS_ASSERT_RECOVER_RETURN(
         dst->lodData->levelOfDetail() == defaultBounds->currentLevelOfDetail());
 
-    m_lodData.reset(dst->lodData);
+    ensureLodDataPreset();
+
+    m_lodData->prepareClone(dst->lodData);
+    m_lodData->dataManager()->bitBltRough(dst->lodData->dataManager(), dst->lodData->dataManager()->extent());
 }
 
 void KisPaintDevice::Private::transferFromData(Data *data, KisPaintDeviceSP targetDevice)
@@ -658,8 +666,8 @@ void KisPaintDevice::Private::transferFromData(Data *data, KisPaintDeviceSP targ
 
 void KisPaintDevice::Private::fetchFrame(int frameId, KisPaintDeviceSP targetDevice)
 {
-    Data *data = m_frames[frameId].data();
-    transferFromData(data, targetDevice);
+    DataSP data = m_frames[frameId];
+    transferFromData(data.data(), targetDevice);
 }
 
 void KisPaintDevice::Private::uploadFrame(int srcFrameId, int dstFrameId, KisPaintDeviceSP srcDevice)

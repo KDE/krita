@@ -8,11 +8,11 @@ macro_add_unittest_definitions()
 ########### next target ###############
 
 set(move_stroke_test_SRCS move_stroke_test.cpp ${CMAKE_SOURCE_DIR}/sdk/tests/stroke_testing_utils.cpp ../strokes/move_stroke_strategy.cpp)
-kde4_add_unit_test(MoveStrokeTest TESTNAME krita-ui-MoveStrokeTest  ${move_stroke_test_SRCS})
+kde4_add_broken_unit_test(MoveStrokeTest TESTNAME krita-basictools-MoveStrokeTest  ${move_stroke_test_SRCS})
 target_link_libraries(MoveStrokeTest kritabasicflakes kritaui Qt5::Test)
 
 ########### next target ###############
 
 set(move_selection_stroke_test_SRCS move_selection_stroke_test.cpp ${CMAKE_SOURCE_DIR}/sdk/tests/stroke_testing_utils.cpp ../strokes/move_selection_stroke_strategy.cpp)
-kde4_add_unit_test(MoveSelectionStrokeTest TESTNAME krita-ui-MoveSelectionStrokeTest  ${move_selection_stroke_test_SRCS})
+kde4_add_unit_test(MoveSelectionStrokeTest TESTNAME krita-basictools-MoveSelectionStrokeTest  ${move_selection_stroke_test_SRCS})
 target_link_libraries(MoveSelectionStrokeTest kritabasicflakes kritaui Qt5::Test)

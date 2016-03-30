@@ -58,7 +58,7 @@ target_link_libraries(KisNodeFacadeTest   kritaimage Qt5::Test)
 ########### next target ###############
 
 set(kis_paint_device_test_SRCS kis_paint_device_test.cpp )
-kde4_add_unit_test(KisPaintDeviceTest TESTNAME krita-image-KisPaintDeviceTest ${kis_paint_device_test_SRCS})
+kde4_add_broken_unit_test(KisPaintDeviceTest TESTNAME krita-image-KisPaintDeviceTest ${kis_paint_device_test_SRCS})
 target_link_libraries(KisPaintDeviceTest   kritaimage kritaodf Qt5::Test)
 
 ########### next target ###############
@@ -154,7 +154,7 @@ target_link_libraries(KisGroupLayerTest   kritaimage Qt5::Test)
 
 set(kis_filter_mask_test_SRCS kis_filter_mask_test.cpp )
 
-kde4_add_unit_test(KisFilterMaskTest TESTNAME krita-image-KisFilterMaskTest ${kis_filter_mask_test_SRCS})
+kde4_add_broken_unit_test(KisFilterMaskTest TESTNAME krita-image-KisFilterMaskTest ${kis_filter_mask_test_SRCS})
 
 target_link_libraries(KisFilterMaskTest   kritaimage Qt5::Test)
 
@@ -162,7 +162,7 @@ target_link_libraries(KisFilterMaskTest   kritaimage Qt5::Test)
 
 set(kis_transform_mask_test_SRCS kis_transform_mask_test.cpp )
 
-kde4_add_unit_test(KisTransformMaskTest TESTNAME krita-image-KisTransformMaskTest ${kis_transform_mask_test_SRCS})
+kde4_add_broken_unit_test(KisTransformMaskTest TESTNAME krita-image-KisTransformMaskTest ${kis_transform_mask_test_SRCS})
 
 target_link_libraries(KisTransformMaskTest   kritaimage Qt5::Test)
 
@@ -279,7 +279,7 @@ target_link_libraries(KisGradientPainterTest   kritaimage Qt5::Test)
 ########### next target ###############
 
 set(kis_histogram_test_SRCS kis_histogram_test.cpp )
-kde4_add_unit_test(KisHistogramTest TESTNAME krita-image-KisHistogramTest ${kis_histogram_test_SRCS})
+kde4_add_broken_unit_test(KisHistogramTest TESTNAME krita-image-KisHistogramTest ${kis_histogram_test_SRCS})
 target_link_libraries(KisHistogramTest   kritaimage Qt5::Test)
 
 ########### next target ###############
@@ -315,13 +315,13 @@ target_link_libraries(KisIteratorBenchmark   kritaimage Qt5::Test)
 ########### next target ###############
 
 set(kis_walkers_test_SRCS kis_walkers_test.cpp )
-kde4_add_unit_test(KisWalkersTest TESTNAME krita-image-KisWalkersTest ${kis_walkers_test_SRCS})
+kde4_add_broken_unit_test(KisWalkersTest TESTNAME krita-image-KisWalkersTest ${kis_walkers_test_SRCS})
 target_link_libraries(KisWalkersTest   kritaimage Qt5::Test)
 
 ########### next target ###############
 
 set(kis_async_merger_test_SRCS kis_async_merger_test.cpp )
-kde4_add_unit_test(KisAsyncMergerTest TESTNAME krita-image-KisAsyncMergerTest ${kis_async_merger_test_SRCS})
+kde4_add_broken_unit_test(KisAsyncMergerTest TESTNAME krita-image-KisAsyncMergerTest ${kis_async_merger_test_SRCS})
 target_link_libraries(KisAsyncMergerTest   kritaimage Qt5::Test)
 
 ########### next target ###############
@@ -339,7 +339,7 @@ target_link_libraries(KisSimpleUpdateQueueTest   kritaimage Qt5::Test)
 ########### next target ###############
 
 set(kis_update_scheduler_test_SRCS kis_update_scheduler_test.cpp )
-kde4_add_unit_test(KisUpdateSchedulerTest TESTNAME krita-image-KisUpdateSchedulerTest ${kis_update_scheduler_test_SRCS})
+kde4_add_broken_unit_test(KisUpdateSchedulerTest TESTNAME krita-image-KisUpdateSchedulerTest ${kis_update_scheduler_test_SRCS})
 target_link_libraries(KisUpdateSchedulerTest   kritaimage Qt5::Test)
 
 ########### next target ###############
@@ -369,7 +369,7 @@ target_link_libraries(KisStrokesQueueTest   kritaimage Qt5::Test)
 ########### next target ###############
 
 set(kis_queues_progress_updater_test_SRCS kis_queues_progress_updater_test.cpp )
-kde4_add_unit_test(KisQueuesProgressUpdaterTest TESTNAME krita-image-KisQueuesProgressUpdaterTest ${kis_queues_progress_updater_test_SRCS})
+kde4_add_broken_unit_test(KisQueuesProgressUpdaterTest TESTNAME krita-image-KisQueuesProgressUpdaterTest ${kis_queues_progress_updater_test_SRCS})
 target_link_libraries(KisQueuesProgressUpdaterTest   kritaimage Qt5::Test)
 
 ########### next target ###############
@@ -489,7 +489,7 @@ target_link_libraries(KisWarpTransformWorkerTest   kritaimage Qt5::Test)
 ########### next target ###############
 
 set(kis_cage_transform_worker_test_SRCS  kis_cage_transform_worker_test.cpp)
-kde4_add_unit_test(KisCageTransformWorkerTest TESTNAME krita-image-KisCageTransformWorkerTest ${kis_cage_transform_worker_test_SRCS})
+kde4_add_broken_unit_test(KisCageTransformWorkerTest TESTNAME krita-image-KisCageTransformWorkerTest ${kis_cage_transform_worker_test_SRCS})
 target_link_libraries(KisCageTransformWorkerTest   kritaimage Qt5::Test)
 
 ########### next target ###############
@@ -526,13 +526,13 @@ target_link_libraries(KisFilterConfigWidgetTest   kritaimage Qt5::Test)
 ########### next target ###############
 
 set(kis_meta_data_test_SRCS kis_meta_data_test.cpp )
-kde4_add_unit_test(KisMetaDataTest TESTNAME krita-image-KisMetaDataTest ${kis_meta_data_test_SRCS})
+kde4_add_broken_unit_test(KisMetaDataTest TESTNAME krita-image-KisMetaDataTest ${kis_meta_data_test_SRCS})
 target_link_libraries(KisMetaDataTest  kritaimage Qt5::Test)
 
 ########### next target ###############
 
 set(kis_random_generator_test_SRCS kis_random_generator_test.cpp )
-kde4_add_unit_test(KisRandomGeneratorTest TESTNAME krita-image-KisRandomGeneratorTest ${kis_random_generator_test_SRCS})
+kde4_add_broken_unit_test(KisRandomGeneratorTest TESTNAME krita-image-KisRandomGeneratorTest ${kis_random_generator_test_SRCS})
 target_link_libraries(KisRandomGeneratorTest  kritaimage Qt5::Test)
 
 ########### next target ###############
@@ -606,7 +606,7 @@ target_link_libraries(KisScanlineFillTest   kritaimage Qt5::Test)
 ########### next target ###############
 
 set(kis_keyframing_test_SRCS kis_keyframing_test.cpp )
-kde4_add_unit_test(KisKeyframingTest TESTNAME krita-image-Keyframing-Test ${kis_keyframing_test_SRCS})
+kde4_add_broken_unit_test(KisKeyframingTest TESTNAME krita-image-Keyframing-Test ${kis_keyframing_test_SRCS})
 target_link_libraries(KisKeyframingTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
@@ -624,18 +624,18 @@ target_link_libraries(KisDomUtilsTest   kritaimage Qt5::Test)
 ########### next target ###############
 
 set(kis_image_animation_interface_test_SRCS kis_image_animation_interface_test.cpp )
-kde4_add_unit_test(KisImageAnimationInterfaceTest TESTNAME krita-image-ImageAnimationInterface-Test ${kis_image_animation_interface_test_SRCS})
+kde4_add_broken_unit_test(KisImageAnimationInterfaceTest TESTNAME krita-image-ImageAnimationInterface-Test ${kis_image_animation_interface_test_SRCS})
 target_link_libraries(KisImageAnimationInterfaceTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 ########### next target ###############
 
 set(kis_onion_skin_compositor_test_SRCS kis_onion_skin_compositor_test.cpp )
-kde4_add_unit_test(KisOnionSkinCompositorTest TESTNAME krita-image-OnionSkinCompositor-Test ${kis_onion_skin_compositor_test_SRCS})
+kde4_add_broken_unit_test(KisOnionSkinCompositorTest TESTNAME krita-image-OnionSkinCompositor-Test ${kis_onion_skin_compositor_test_SRCS})
 target_link_libraries(KisOnionSkinCompositorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(kis_layer_styles_test_SRCS kis_layer_styles_test.cpp )
-kde4_add_unit_test(KisLayerStylesTest TESTNAME krita-image-LayerStylesTest  ${kis_layer_styles_test_SRCS})
+kde4_add_broken_unit_test(KisLayerStylesTest TESTNAME krita-image-LayerStylesTest  ${kis_layer_styles_test_SRCS})
 target_link_libraries(KisLayerStylesTest    kritaimage Qt5::Test)
 
 ########### next target ###############

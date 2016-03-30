@@ -250,11 +250,12 @@ bool KisCanvas2::canvasIsOpenGL() const
     return m_d->currentCanvasIsOpenGL;
 }
 
+#ifdef HAVE_OPENGL
 KisOpenGL::FilterMode KisCanvas2::openGLFilterMode() const
 {
     return KisOpenGL::FilterMode(m_d->openGLFilterMode);
 }
-
+#endif
 void KisCanvas2::gridSize(QPointF *offset, QSizeF *spacing) const
 {
     QTransform transform = coordinatesConverter()->imageToDocumentTransform();

@@ -18,10 +18,6 @@
 #ifndef KIS_TEXTURE_TILE_H_
 #define KIS_TEXTURE_TILE_H_
 
-#include <KoConfig.h> // for HAVE_OPENGL
-
-#ifdef HAVE_OPENGL
-
 #include <QRect>
 #include <QRectF>
 // no forward-declaration, used to get GL* primitive types defined
@@ -118,9 +114,6 @@ private:
     QOpenGLFunctions *f;
     Q_DISABLE_COPY(KisTextureTile)
 };
-
-
-#endif /* HAVE_OPENGL */
 
 #endif /* KIS_TEXTURE_TILE_H_ */
 

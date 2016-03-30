@@ -18,7 +18,6 @@
 
 #include "opengl/kis_opengl_image_textures.h"
 
-#ifdef HAVE_OPENGL
 #include <QOpenGLFunctions>
 #include <QOpenGLContext>
 
@@ -604,7 +603,4 @@ void KisOpenGLImageTextures::updateTextureFormat()
                                                      destinationColorDepthId.id(),
                                                      profile);
 }
-
-
-#endif // HAVE_OPENGL
 

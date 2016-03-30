@@ -20,7 +20,6 @@
 #include "kis_texture_tile.h"
 #include "kis_texture_tile_update_info.h"
 
-#ifdef HAVE_OPENGL
 #include <kis_debug.h>
 #if !defined(QT_OPENGL_ES)
 #include <QOpenGLBuffer>
@@ -352,6 +351,3 @@ void KisTextureTile::createTextureBuffer(const char *data, int size)
     }
 }
 #endif
-
-#endif /* HAVE_OPENGL */
-

@@ -24,7 +24,7 @@
 #include "kis_image_patch.h"
 #include "kis_shared.h"
 #include "kritaui_export.h"
-#include <KoConfig.h> // for HAVE_OPENGL
+#include "opengl/kis_texture_tile_update_info.h"
 
 #include "kis_ui_types.h"
 
@@ -40,8 +40,6 @@ public:
 
 Q_DECLARE_METATYPE(KisUpdateInfoSP)
 
-#ifdef HAVE_OPENGL
-#include "opengl/kis_texture_tile_update_info.h"
 
 struct ConversionOptions {
     ConversionOptions() : m_needsConversion(false) {}
@@ -84,7 +82,7 @@ private:
     QRect m_dirtyImageRect;
     ConversionOptions m_options;
 };
-#endif /* HAVE_OPENGL */
+
 
 class KisPPUpdateInfo : public KisUpdateInfo
 {

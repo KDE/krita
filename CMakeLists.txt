@@ -143,11 +143,6 @@ message(STATUS "Release build: ${RELEASE_BUILD}")
 #############
 ############
 
-if (APPLE)
-    set(USEOPENGL OFF)
-else()
-    option(USEOPENGL "Allow the use of OpenGL for Krita" ON)
-endif()
 option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only." OFF)
 if (WIN32)
     option(USE_BREAKPAD "Build the crash handler for Krita (only on windows)" OFF)
@@ -256,11 +251,9 @@ find_package(Qt5 ${MIN_QT_VERSION}
 
 set(QT_QTTEST_LIBRARY Qt5::Test)
 
-if (USEOPENGL)
-    if (NOT WIN32 AND NOT APPLE)
-        find_package(Qt5 ${MIN_QT_VERSION} REQUIRED X11Extras)
-    endif()
-endif ()
+if (NOT WIN32 AND NOT APPLE)
+    find_package(Qt5 ${MIN_QT_VERSION} REQUIRED X11Extras)
+endif()
 
 include (MacroLibrary)
 include (MacroAdditionalCleanFiles)
@@ -452,23 +445,12 @@ macro_bool_to_01(OCIO_FOUND HAVE_OCIO)
 ##
 ## Look for OpenGL
 ##
-set(HAVE_OPENGL 0)
-if (USEOPENGL)
-    # TODO: see if there is a better check for QtGui being built with opengl support (and thus the QOpenGL* classes)
-    if(Qt5Gui_OPENGL_IMPLEMENTATION)
-        message(STATUS "Found QtGui OpenGL support")
-        set(HAVE_OPENGL 1)
-    else()
-        message(STATUS "Did NOT find QtGui OpenGL support. Check your Qt configuration")
-    endif()
-endif()
-
-if(HAVE_OPENGL)
-    message(STATUS "OpenGL found -- krita will be able  to use OpenGL for hardware accelerated rendering.")
+# TODO: see if there is a better check for QtGui being built with opengl support (and thus the QOpenGL* classes)
+if(Qt5Gui_OPENGL_IMPLEMENTATION)
+    message(STATUS "Found QtGui OpenGL support")
 else()
-    message(STATUS "OpenGL NOT found - krita will not be able to use OpenGL for hardware accelerated rendering.")
+    message(FATAL_ERROR "Did NOT find QtGui OpenGL support. Check your Qt configuration.")
 endif()
-
 
 ##
 ## Test for eigen3

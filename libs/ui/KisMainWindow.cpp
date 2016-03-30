@@ -130,13 +130,10 @@
 #include "KisView.h"
 #include "KisViewManager.h"
 #include "thememanager.h"
-
-
-#ifdef HAVE_OPENGL
 #include "kis_animation_importer.h"
 #include "dialogs/kis_dlg_import_image_sequence.h"
 #include "kis_animation_exporter.h"
-#endif
+
 class ToolDockerFactory : public KoDockFactoryBase
 {
 public:
@@ -234,10 +231,8 @@ public:
     KisAction *printAction;
     KisAction *printActionPreview;
     KisAction *exportPdf;
-#ifdef HAVE_OPENGL
     KisAction *importAnimation;
     KisAction *exportAnimation;
-#endif
     KisAction *closeAll;
 //    KisAction *reloadFile;
     KisAction *importFile;
@@ -1617,7 +1612,6 @@ KisPrintJob* KisMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFile
 
 void KisMainWindow::importAnimation()
 {
-#ifdef HAVE_OPENGL
     if (!activeView()) return;
 
     KisDocument *document = activeView()->document();
@@ -1645,12 +1639,10 @@ void KisMainWindow::importAnimation()
         }
         activeView()->canvasBase()->refetchDataFromImage();
     }
-#endif
 }
 
 void KisMainWindow::exportAnimation()
 {
-#ifdef HAVE_OPENGL
     if (!activeView()) return;
 
     KisDocument *document = activeView()->document();
@@ -1670,7 +1662,6 @@ void KisMainWindow::exportAnimation()
             QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not finish export animation:\n%1", msg));
     }
     activeView()->canvasBase()->refetchDataFromImage();
-#endif
 }
 
 void KisMainWindow::slotConfigureToolbars()
@@ -2285,13 +2276,11 @@ void KisMainWindow::createActions()
     d->exportPdf  = actionManager->createAction("file_export_pdf");
     connect(d->exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));
 
-#ifdef HAVE_OPENGL
     d->importAnimation  = actionManager->createAction("file_import_animation");
     connect(d->importAnimation, SIGNAL(triggered()), this, SLOT(importAnimation()));
 
     d->exportAnimation  = actionManager->createAction("file_export_animation");
     connect(d->exportAnimation, SIGNAL(triggered()), this, SLOT(exportAnimation()));
-#endif
 
     d->closeAll = actionManager->createAction("file_close_all");
     connect(d->closeAll, SIGNAL(triggered()), this, SLOT(slotFileCloseAll()));

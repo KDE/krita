@@ -54,9 +54,7 @@
 #include <kis_transaction.h>
 #include <kis_floating_message.h>
 
-#ifdef HAVE_OPENGL
 #include "opengl/kis_opengl_canvas2.h"
-#endif
 #include "kis_canvas_resource_provider.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_coordinates_converter.h"
@@ -592,16 +590,13 @@ QWidget* KisTool::createOptionWidget()
 
 void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 {
-#ifdef HAVE_OPENGL
     KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(canvas()->canvasWidget());
     if (canvasWidget)  {
         painter->beginNativePainting();
         canvasWidget->paintToolOutline(path);
         painter->endNativePainting();
     }
-    else
-#endif // HAVE_OPENGL
-    {
+    else {
         painter->setCompositionMode(QPainter::RasterOp_SourceXorDestination);
         painter->setPen(QColor(128, 255, 128));
         painter->drawPath(path);

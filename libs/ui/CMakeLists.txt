@@ -367,7 +367,6 @@ if(WIN32)
         )
       include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 endif()
-if (HAVE_OPENGL)
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
         kis_animation_frame_cache.cpp
@@ -376,7 +375,6 @@ if (HAVE_OPENGL)
         kis_animation_exporter.cpp
         kis_animation_importer.cpp
     )
-endif()
 
 if(UNIX)
     set(kritaui_LIB_SRCS
@@ -499,15 +497,11 @@ if(APPLE)
 endif ()
 
 
-if(HAVE_OPENEXR)
-    target_link_libraries(kritaui ${OPENEXR_LIBRARIES})
-endif()
+target_link_libraries(kritaui ${OPENEXR_LIBRARIES})
 
-if(HAVE_OPENGL)
-    # Add VSync disable workaround
-    if(NOT WIN32 AND NOT APPLE)
-      target_link_libraries(kritaui ${CMAKE_DL_LIBS} Qt5::X11Extras)
-    endif()
+# Add VSync disable workaround
+if(NOT WIN32 AND NOT APPLE)
+    target_link_libraries(kritaui ${CMAKE_DL_LIBS} Qt5::X11Extras)
 endif()
 
 if(X11_FOUND)

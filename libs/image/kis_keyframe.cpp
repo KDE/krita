@@ -19,9 +19,12 @@
 #include "kis_keyframe.h"
 #include "kis_keyframe_channel.h"
 
+#include <QPointer>
+
+
 struct KisKeyframe::Private
 {
-    KisKeyframeChannel *channel;
+    QPointer<KisKeyframeChannel> channel;
     int time;
     quintptr data;
 
@@ -31,13 +34,11 @@ struct KisKeyframe::Private
 };
 
 KisKeyframe::KisKeyframe(KisKeyframeChannel *channel, int time, void* data)
-    : QObject(channel)
-    , m_d(new Private(channel, time, (quintptr)data))
+    : m_d(new Private(channel, time, (quintptr)data))
 {}
 
 KisKeyframe::KisKeyframe(KisKeyframeChannel *channel, int time, quint32 value)
-    : QObject(channel)
-    , m_d(new Private(channel, time, value))
+    : m_d(new Private(channel, time, value))
 {}
 
 KisKeyframe::~KisKeyframe()

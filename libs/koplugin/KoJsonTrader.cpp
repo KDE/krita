@@ -45,7 +45,7 @@ KoJsonTrader::KoJsonTrader()
         QDir appDir(qApp->applicationDirPath());
         appDir.cdUp();
 #ifdef Q_OS_MAC
-        // Help Krita run without deplo
+        // Help Krita run without deployment
         QDir d(appDir);
         d.cd("../../../");
         searchDirs << d;
@@ -59,7 +59,11 @@ KoJsonTrader::KoJsonTrader()
             Q_FOREACH (QString entry, dir.entryList()) {
                 QFileInfo info(dir, entry);
 #ifdef Q_OS_MAC
-                if (info.isDir() && (info.fileName().contains("lib") || info.fileName().contains("PlugIns"))) {
+                if (info.isDir() && info.fileName().contains("PlugIns")) {
+                    m_pluginPath = info.absoluteFilePath();
+                    break;
+                }
+                else if (info.isDir() && (info.fileName().contains("lib"))) {
 #else
                 if (info.isDir() && info.fileName().contains("lib")) {
 #endif
@@ -93,7 +97,7 @@ KoJsonTrader::KoJsonTrader()
                 break;
             }
         }
-        debugPlugin << "KoJsonTrader will load its plugins from" << m_pluginPath;
+        qInfo() << "KoJsonTrader will load its plugins from" << m_pluginPath;
     }
 }
 
@@ -110,7 +114,7 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
     QDirIterator dirIter(m_pluginPath, QDirIterator::Subdirectories);
     while (dirIter.hasNext()) {
         dirIter.next();
-        if (dirIter.fileInfo().isFile()) {
+        if (dirIter.fileInfo().isFile() && dirIter.fileName().startsWith("krita")) {
             debugPlugin << dirIter.fileName();
             QPluginLoader *loader = new QPluginLoader(dirIter.filePath());
             QJsonObject json = loader->metaData().value("MetaData").toObject();

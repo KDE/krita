@@ -18,11 +18,11 @@
 
 
 #include "ColorSelectorItem.h"
-#include <plugins/extensions/dockers/advancedcolorselector/kis_color_selector_component.h>
-#include <plugins/extensions/dockers/advancedcolorselector/kis_color_selector_ring.h>
-#include <plugins/extensions/dockers/advancedcolorselector/kis_color_selector_triangle.h>
-#include <plugins/extensions/dockers/advancedcolorselector/kis_color_selector_simple.h>
-#include <plugins/extensions/dockers/advancedcolorselector/kis_color_selector_wheel.h>
+#include <plugins/dockers/advancedcolorselector/kis_color_selector_component.h>
+#include <plugins/dockers/advancedcolorselector/kis_color_selector_ring.h>
+#include <plugins/dockers/advancedcolorselector/kis_color_selector_triangle.h>
+#include <plugins/dockers/advancedcolorselector/kis_color_selector_simple.h>
+#include <plugins/dockers/advancedcolorselector/kis_color_selector_wheel.h>
 #include <kis_canvas2.h>
 #include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>

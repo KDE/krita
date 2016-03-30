@@ -29,7 +29,11 @@ set(kritapsdimport_SOURCES
     ${LIB_PSD_SRCS}
 )
 
-add_library(kritapsdimport SHARED ${kritapsdimport_SOURCES})
+if (WIN32)
+    add_library(kritapsdimport SHARED ${kritapsdimport_SOURCES})
+else ()
+    add_library(kritapsdimport MODULE ${kritapsdimport_SOURCES})
+endif()
 
 if (WIN32)
 	target_link_libraries(kritapsdimport kritaglobal kritaui kritapsd KF5::I18n ${WIN32_PLATFORM_NET_LIBS} ${ZLIB_LIBRARIES})

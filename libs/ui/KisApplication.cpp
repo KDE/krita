@@ -65,6 +65,7 @@
 #include "KisPart.h"
 #include <kis_icon.h>
 #include "kis_md5_generator.h"
+#include "kis_splash_screen.h"
 #include "kis_config.h"
 #include "flake/kis_shape_selection.h"
 #include <filter/kis_filter.h>
@@ -255,19 +256,30 @@ void addResourceTypes()
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/workspaces/");
 }
 
-void loadResources()
+void KisApplication::loadResources()
 {
-    // Load base resources
+    setSplashScreenLoadingText(i18n("Loading Gradients..."));
     KoResourceServerProvider::instance()->gradientServer(true);
+
+    // Load base resources
+    setSplashScreenLoadingText(i18n("Loading Patterns..."));
     KoResourceServerProvider::instance()->patternServer(true);
+
+    setSplashScreenLoadingText(i18n("Loading Palettes..."));
     KoResourceServerProvider::instance()->paletteServer(false);
+
+    setSplashScreenLoadingText(i18n("Loading Brushes..."));
     KisBrushServer::instance()->brushServer(true);
+
     // load paintop presets
+    setSplashScreenLoadingText(i18n("Loading Paint Operations..."));
     KisResourceServerProvider::instance()->paintOpPresetServer(true);
+
+    setSplashScreenLoadingText(i18n("Loading Resource Bundles..."));
     KisResourceServerProvider::instance()->resourceBundleServer();
 }
 
-void loadPlugins()
+void KisApplication::loadPlugins()
 {
     KoShapeRegistry* r = KoShapeRegistry::instance();
     r->add(new KisShapeSelectionFactory());
@@ -277,16 +289,20 @@ void loadPlugins()
     KisGeneratorRegistry::instance();
     KisPaintOpRegistry::instance();
     KoColorSpaceRegistry::instance();
+
     // Load the krita-specific tools
+    setSplashScreenLoadingText(i18n("Loading Plugins for Krita/Tool..."));
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
                                      QString::fromLatin1("[X-Krita-Version] == 28"));
 
+
     // Load dockers
+    setSplashScreenLoadingText(i18n("Loading Plugins for Krita/Dock..."));
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
                                      QString::fromLatin1("[X-Krita-Version] == 28"));
 
-
     // XXX_EXIV: make the exiv io backends real plugins
+    setSplashScreenLoadingText(i18n("Loading Plugins Exiv/IO..."));
     KisExiv2::initialize();
 }
 
@@ -325,6 +341,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
 #endif
 
+    setSplashScreenLoadingText(i18n("Initializing Globals"));
     initializeGlobals(args);
 
     const bool doTemplate = args.doTemplate();
@@ -344,7 +361,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     const bool showSplashScreen = !batchRun && qgetenv("NOSPLASH").isEmpty();
     if (showSplashScreen) {
         d->splashScreen->show();
-        d->splashScreen->repaint();
+        d->splashScreen->repaint();        
         processEvents();
     }
 
@@ -361,16 +378,21 @@ bool KisApplication::start(const KisApplicationArguments &args)
     Q_UNUSED(resetStarting);
 
     // Make sure we can save resources and tags
+    setSplashScreenLoadingText(i18n("Adding resource types"));
     addResourceTypes();
+
     // Load all resources and tags before the plugins do that
     loadResources();
+
     // Load the plugins
     loadPlugins();
+
 
     KisMainWindow *mainWindow = 0;
 
     if (needsMainWindow) {
         // show a mainWindow asap, if we want that
+        setSplashScreenLoadingText(i18n("Loading Main Window..."));
         mainWindow = KisPart::instance()->createMainWindow();
 
         if (showmainWindow) {
@@ -380,14 +402,20 @@ bool KisApplication::start(const KisApplicationArguments &args)
     short int numberOfOpenDocuments = 0; // number of documents open
 
 
+
+
     // Check for autosave files that can be restored, if we're not running a batchrun (test, print, export to pdf)
     QList<QUrl> urls = checkAutosaveFiles();
     if (!batchRun && mainWindow) {
+
+        setSplashScreenLoadingText(i18n("Retrieving Auto save files..."));
         Q_FOREACH (const QUrl &url, urls) {
             KisDocument *doc = KisPart::instance()->createDocument();
             mainWindow->openDocumentInternal(url, doc);
         }
     }
+
+    setSplashScreenLoadingText(""); // done loading, so clear out label
 
     // Get the command line arguments which we have to parse
     int argsCount = args.filenames().count();
@@ -482,6 +510,12 @@ KisApplication::~KisApplication()
 void KisApplication::setSplashScreen(QWidget *splashScreen)
 {
     d->splashScreen = splashScreen;
+}
+
+void KisApplication::setSplashScreenLoadingText(QString textToLoad)
+{
+   static_cast<KisSplashScreen *>(d->splashScreen)->loadingLabel->setText(textToLoad);
+   static_cast<KisSplashScreen *>(d->splashScreen)->repaint();
 }
 
 bool KisApplication::notify(QObject *receiver, QEvent *event)

@@ -55,12 +55,13 @@ void KisColorPickerStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
     KoColor color;
     bool result = KisToolUtils::pick(d->dev, d->pt, &color);
-
+    Q_UNUSED(result);
     emit sigColorUpdated(color);
 }
 
 KisStrokeStrategy* KisColorPickerStrokeStrategy::createLodClone(int levelOfDetail)
 {
+    Q_UNUSED(levelOfDetail);
     m_d->shouldSkipWork = true;
 
     KisColorPickerStrokeStrategy *lodStrategy = new KisColorPickerStrokeStrategy();

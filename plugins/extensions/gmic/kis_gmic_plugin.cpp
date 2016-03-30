@@ -106,11 +106,11 @@ void KisGmicPlugin::dumpCompiletimeFeatures()
     dbgPlugins << "PTHREADS ON";
 #endif
 
-#if cimg_use_fftw3
+#ifdef cimg_use_fftw3
     dbgPlugins << "FFTW3 ON";
 #endif
 
-#if cimg_use_png
+#ifdef cimg_use_png
     dbgPlugins << "PNG ON";
 #endif
 

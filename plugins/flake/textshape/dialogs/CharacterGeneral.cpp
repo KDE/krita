@@ -105,7 +105,7 @@ void CharacterGeneral::setStyle(KoCharacterStyle *style)
     if (m_styleManager) {
         KoCharacterStyle *parentStyle = style->parentStyle();
         if (parentStyle) {
-            widget.inheritStyle->setCurrentIndex(m_characterInheritedStyleModel->indexOf(*parentStyle).row());
+            widget.inheritStyle->setCurrentIndex(m_characterInheritedStyleModel->indexOf(parentStyle).row());
         }
     }
 
@@ -178,7 +178,7 @@ void CharacterGeneral::updateNextStyleCombo(KoParagraphStyle *style)
         return;
     }
 
-    widget.nextStyle->setCurrentIndex(m_paragraphStyleModel->indexOf(*style).row());
+    widget.nextStyle->setCurrentIndex(m_paragraphStyleModel->indexOf(style).row());
     m_paragraphStyleModel->setCurrentParagraphStyle(style->styleId());
 }
 

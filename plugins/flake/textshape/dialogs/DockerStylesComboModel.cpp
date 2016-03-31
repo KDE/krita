@@ -115,7 +115,7 @@ void DockerStylesComboModel::setStyleManager(KoStyleManager *sm)
 
 void DockerStylesComboModel::styleApplied(const KoCharacterStyle *style)
 {
-    QModelIndex sourceIndex = m_sourceModel->indexOf(*style);
+    QModelIndex sourceIndex = m_sourceModel->indexOf(style);
     if (!sourceIndex.isValid()) {
         return; // Probably default style.
     }

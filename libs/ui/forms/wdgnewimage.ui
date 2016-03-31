@@ -162,12 +162,6 @@
                 </item>
                 <item row="0" column="1">
                  <widget class="QDoubleSpinBox" name="doubleWidth">
-                  <property name="minimumSize">
-                   <size>
-                    <width>80</width>
-                    <height>0</height>
-                   </size>
-                  </property>
                   <property name="decimals">
                    <number>2</number>
                   </property>
@@ -194,12 +188,6 @@
                 </item>
                 <item row="2" column="1">
                  <widget class="QDoubleSpinBox" name="doubleResolution">
-                  <property name="minimumSize">
-                   <size>
-                    <width>80</width>
-                    <height>0</height>
-                   </size>
-                  </property>
                   <property name="decimals">
                    <number>0</number>
                   </property>
@@ -220,12 +208,6 @@
                 </item>
                 <item row="1" column="1">
                  <widget class="QDoubleSpinBox" name="doubleHeight">
-                  <property name="minimumSize">
-                   <size>
-                    <width>80</width>
-                    <height>0</height>
-                   </size>
-                  </property>
                   <property name="minimum">
                    <double>1.000000000000000</double>
                   </property>
@@ -541,14 +523,14 @@
          <property name="toolTip">
           <string>Reset the image background color in the Image Properties dialog</string>
          </property>
-         <property name="color">
+         <property name="color" stdset="0">
           <color>
            <red>255</red>
            <green>255</green>
            <blue>255</blue>
           </color>
          </property>
-         <property name="defaultColor">
+         <property name="defaultColor" stdset="0">
           <color>
            <red>255</red>
            <green>255</green>
@@ -566,7 +548,16 @@
           <enum>QFrame::Plain</enum>
          </property>
          <layout class="QHBoxLayout" name="_2">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
@@ -673,24 +664,24 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>tabWidget</tabstop>
   <tabstop>txtName</tabstop>
   <tabstop>cmbPredefined</tabstop>
   <tabstop>txtPredefinedName</tabstop>
   <tabstop>bnSaveAsPredefined</tabstop>
   <tabstop>doubleWidth</tabstop>
+  <tabstop>doubleHeight</tabstop>
+  <tabstop>doubleResolution</tabstop>
   <tabstop>cmbWidthUnit</tabstop>
+  <tabstop>cmbHeightUnit</tabstop>
   <tabstop>bnLandscape</tabstop>
   <tabstop>bnPortrait</tabstop>
-  <tabstop>tabWidget</tabstop>
-  <tabstop>cmbHeightUnit</tabstop>
-  <tabstop>doubleResolution</tabstop>
   <tabstop>createButton</tabstop>
   <tabstop>intNumLayers</tabstop>
   <tabstop>cmbColor</tabstop>
   <tabstop>radioBackgroundAsLayer</tabstop>
   <tabstop>radioBackgroundAsProjection</tabstop>
   <tabstop>txtDescription</tabstop>
-  <tabstop>doubleHeight</tabstop>
  </tabstops>
  <resources/>
  <connections/>

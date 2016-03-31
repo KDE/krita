@@ -200,7 +200,6 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("DockWidget sharedtooldocker");
     d->tabbed = cfg.readEntry("TabbedMode", false);
 
-    toggleViewAction()->setVisible(false); //should always be visible, so hide option in menu
     setFeatures(DockWidgetMovable|DockWidgetFloatable);
     setTitleBarWidget(new KoDockWidgetTitleBar(this));
 

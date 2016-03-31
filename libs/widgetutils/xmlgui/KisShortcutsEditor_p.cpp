@@ -233,8 +233,6 @@ more important things):
 */
 void KisShortcutsEditorPrivate::printShortcuts() const
 {
-// Can't successfully print on Windows CE
-#ifndef _WIN32_WCE
     QTreeWidgetItem *root = ui.list->invisibleRootItem();
     QTextDocument doc;
 
@@ -342,5 +340,4 @@ void KisShortcutsEditorPrivate::printShortcuts() const
         doc.print(&printer);
     }
     delete dlg;
-#endif
 }

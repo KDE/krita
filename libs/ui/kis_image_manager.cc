@@ -178,7 +178,7 @@ void KisImageManager::slotImageProperties()
 
 void updateImageBackgroundColor(KisImageSP image, const QColorDialog *dlg)
 {
-    QColor newColor = dlg->selectedColor();
+    QColor newColor = dlg->currentColor();
     KoColor bg = image->defaultProjectionColor();
     bg.fromQColor(newColor);
     image->setDefaultProjectionColor(bg);
@@ -201,7 +201,7 @@ void KisImageManager::slotImageColor()
     std::function<void ()> updateCall(std::bind(updateImageBackgroundColor, image, &dlg));
     SignalToFunctionProxy proxy(updateCall);
 
-    connect(&dlg, SIGNAL(colorSelected(const QColor&)), &compressor, SLOT(start()));
+    connect(&dlg, SIGNAL(currentColorChanged(QColor)), &compressor, SLOT(start()));
     connect(&compressor, SIGNAL(timeout()), &proxy, SLOT(start()));
 
     dlg.exec();

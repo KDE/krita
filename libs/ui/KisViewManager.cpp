@@ -1092,7 +1092,7 @@ void KisViewManager::toggleTabletLogger()
 
 void KisViewManager::openResourcesDirectory()
 {
-    QString dir = KoResourcePaths::locateLocal("data", "krita");
+    QString dir = KoResourcePaths::locateLocal("data", "");
     QDesktopServices::openUrl(QUrl::fromLocalFile(dir));
 }
 

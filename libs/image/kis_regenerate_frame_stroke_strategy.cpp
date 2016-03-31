@@ -157,7 +157,14 @@ void KisRegenerateFrameStrokeStrategy::cancelStrokeCallback()
 KisStrokeStrategy* KisRegenerateFrameStrokeStrategy::createLodClone(int levelOfDetail)
 {
     Q_UNUSED(levelOfDetail);
-    return new KisSimpleStrokeStrategy("dumb-lodn-KisRegenerateFrameStrokeStrategy");
+
+    /**
+     * We need to regenerate animation frames on LodN level only if
+     * we are processing current frame. Return dummy stroke otherwise
+     */
+    return m_d->type == CURRENT_FRAME ?
+        new KisRegenerateFrameStrokeStrategy(m_d->interface) :
+        new KisSimpleStrokeStrategy("dumb-lodn-KisRegenerateFrameStrokeStrategy");
 }
 
 void KisRegenerateFrameStrokeStrategy::suspendStrokeCallback()

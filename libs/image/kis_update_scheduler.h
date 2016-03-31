@@ -65,7 +65,7 @@ public:
      *
      * \see processQueues()
      */
-    void unlock();
+    void unlock(bool resetLodLevels = true);
 
     /**
      * Called when it is necessary to reread configuration

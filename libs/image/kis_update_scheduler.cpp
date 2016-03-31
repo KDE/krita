@@ -64,8 +64,6 @@ struct Q_DECL_HIDDEN KisUpdateScheduler::Private {
     QAtomicInt updatesLockCounter;
     QReadWriteLock updatesStartLock;
     KisLazyWaitCondition updatesFinishedCondition;
-
-    void unlockImpl(bool resetLodLevels);
 };
 
 KisUpdateScheduler::KisUpdateScheduler(KisProjectionUpdateListener *projectionUpdateListener)
@@ -168,7 +166,7 @@ void KisUpdateScheduler::fullRefresh(KisNodeSP root, const QRect& rc, const QRec
     m_d->updaterContext.waitForDone();
 
     m_d->updaterContext.unlock();
-    if(needLock) unlock();
+    if(needLock) unlock(true);
 }
 
 void KisUpdateScheduler::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
@@ -281,23 +279,18 @@ void KisUpdateScheduler::lock()
     m_d->updaterContext.waitForDone();
 }
 
-void KisUpdateScheduler::Private::unlockImpl(bool resetLodLevels)
+void KisUpdateScheduler::unlock(bool resetLodLevels)
 {
     if (resetLodLevels) {
         /**
          * Legacy strokes may have changed the image while we didn't
          * control it. Notify the queue to take it into account.
          */
-        this->strokesQueue.notifyUFOChangedImage();
+        m_d->strokesQueue.notifyUFOChangedImage();
     }
 
-    this->processingBlocked = false;
-    q->processQueues();
-}
-
-void KisUpdateScheduler::unlock()
-{
-    m_d->unlockImpl(true);
+    m_d->processingBlocked = false;
+    processQueues();
 }
 
 bool KisUpdateScheduler::isIdle()
@@ -306,7 +299,7 @@ bool KisUpdateScheduler::isIdle()
 
     if (tryBarrierLock()) {
         result = true;
-        m_d->unlockImpl(false);
+        unlock(false);
     }
 
     return result;

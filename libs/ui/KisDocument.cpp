@@ -815,7 +815,7 @@ bool KisDocument::saveNativeFormat(const QString & file)
     const int realAutoSaveInterval = KisConfig().autoSaveInterval();
     const int emergencyAutoSaveInterval = 10; // sec
 
-    if (!d->image->tryBarrierLock()) {
+    if (!d->image->tryBarrierLock(true)) {
         if (isAutosaving()) {
             setDisregardAutosaveFailure(true);
             if (realAutoSaveInterval) {
@@ -825,7 +825,7 @@ bool KisDocument::saveNativeFormat(const QString & file)
         } else {
             d->image->requestStrokeEnd();
             QApplication::processEvents();
-            if (!d->image->tryBarrierLock()) {
+            if (!d->image->tryBarrierLock(true)) {
                 return false;
             }
         }

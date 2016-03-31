@@ -708,8 +708,8 @@ public Q_SLOTS:
 
     bool isIdle();
 
-    void barrierLock();
-    bool tryBarrierLock();
+    void barrierLock(bool readOnly = false);
+    bool tryBarrierLock(bool readOnly = false);
     void waitForDone();
 
     KisStrokeId startStroke(KisStrokeStrategy *strokeStrategy);

@@ -119,6 +119,7 @@ class KisImage::KisImagePrivate
 public:
     KisImagePrivate(KisImage *_q, qint32 w, qint32 h, const KoColorSpace *c, KisUndoStore *u)
         : q(_q)
+        , lockedForReadOnly(false)
         , width(w)
         , height(h)
         , colorSpace(c)
@@ -135,6 +136,7 @@ public:
     KisImage *q;
 
     quint32 lockCount = 0;
+    bool lockedForReadOnly;
 
     qint32 width;
     qint32 height;
@@ -382,25 +384,31 @@ bool KisImage::locked() const
     return m_d->lockCount != 0;
 }
 
-void KisImage::barrierLock()
+void KisImage::barrierLock(bool readOnly)
 {
     if (!locked()) {
         requestStrokeEnd();
         m_d->scheduler.barrierLock();
+        m_d->lockedForReadOnly = readOnly;
+    } else {
+        m_d->lockedForReadOnly &= readOnly;
     }
+
     m_d->lockCount++;
 }
 
-bool KisImage::tryBarrierLock()
+bool KisImage::tryBarrierLock(bool readOnly)
 {
     bool result = true;
 
     if (!locked()) {
         result = m_d->scheduler.tryBarrierLock();
+        m_d->lockedForReadOnly = readOnly;
     }
 
     if (result) {
         m_d->lockCount++;
+        m_d->lockedForReadOnly &= readOnly;
     }
 
     return result;
@@ -418,6 +426,7 @@ void KisImage::lock()
         m_d->scheduler.lock();
     }
     m_d->lockCount++;
+    m_d->lockedForReadOnly = false;
 }
 
 void KisImage::unlock()
@@ -428,7 +437,7 @@ void KisImage::unlock()
         m_d->lockCount--;
 
         if (m_d->lockCount == 0) {
-            m_d->scheduler.unlock();
+            m_d->scheduler.unlock(!m_d->lockedForReadOnly);
         }
     }
 }

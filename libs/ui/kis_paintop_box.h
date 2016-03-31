@@ -188,9 +188,6 @@ private:
     QString             m_currCompositeOpID;
     KisNodeWSP          m_previousNode;
 
-    qreal m_normalBrushSize; // when toggling between eraser mode
-    qreal m_eraserBrushSize;
-
     KisAction* m_hMirrorAction;
     KisAction* m_vMirrorAction;
 

@@ -20,9 +20,8 @@
 
 #include <QDebug>
 #include <QLoggingCategory>
-#include <kritawidgetutils_export.h>
 
-extern const KRITAWIDGETUTILS_EXPORT QLoggingCategory &KRITAWIDGETUTILS_LOG();
+extern const QLoggingCategory &KRITAWIDGETUTILS_LOG();
 
 #define debugWidgetUtils qCDebug(KRITAWIDGETUTILS_LOG)
 #define warnWidgetUtils qCWarning(KRITAWIDGETUTILS_LOG)

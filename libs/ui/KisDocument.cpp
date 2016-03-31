@@ -499,6 +499,9 @@ KisDocument::~KisDocument()
     d->image->requestStrokeCancellation();
     d->image->waitForDone();
 
+    // clear undo commands that can still point to the image
+    d->undoStack->clear();
+
     KisImageWSP sanityCheckPointer = d->image;
 
     // The following line trigger the deletion of the image

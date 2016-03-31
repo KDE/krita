@@ -244,7 +244,7 @@ Note 2: libcurl still isn't available.
 
 On Windows
 
-    Depending on what you want to use, run this command for MSBuild (slower compiling, since it doesn't properly use all the CPU cores, but ships with Visual Studio)
+    Depending on what you want to use, run this command for MSBuild: 
 
     cmake ..\krita -G "Visual Studio 14 Win64" -DBoost_DEBUG=OFF -DBOOST_INCLUDEDIR=c:\dev\i\include -DBOOST_DEBUG=ON -DBOOST_ROOT=c:\dev\i -DBOOST_LIBRARYDIR=c:\dev\i\lib -DCMAKE_INSTALL_PREFIX=c:\dev\i -DCMAKE_PREFIX_PATH=c:\dev\i -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DHAVE_MEMORY_LEAK_TRACKER=OFF -DPACKAGERS_BUILD=ON -Wno-dev -DDEFINE_NO_DEPRECATED=1
 
@@ -268,9 +268,9 @@ On Linux and OSX
     make install
 
 On Windows
-    Either use MSBuild to build:
+    Either use MSBuild to build (-- /m tells msbuild to use all your cores):
 
-    cmake --build . --config RelWithDebInfo --target INSTALL
+    cmake --build . --config RelWithDebInfo --target INSTALL -- /m
 
     Or use jom which should be in a path similar to C:\Qt\Qt5.6.0\Tools\QtCreator\bin\jom.exe.
     So, from the same folder, instead of running cmake run:

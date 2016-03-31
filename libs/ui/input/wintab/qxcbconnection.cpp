@@ -576,20 +576,43 @@ void processTabletEvent(QWindowSystemInterfacePrivate::TabletEvent *e)
 
     QWidget *targetWidget = 0;
 
-    if (e->window) {
-        targetWidget = qobject_cast<QWidget*>(e->window.data());
+    if (tabletPressWidget) {
+        targetWidget = tabletPressWidget;
+        localValid = false;
+    } else if (e->window) {
+        /**
+         * Here we use a weird way of converting QWindow into a
+         * QWidget.  The problem is that the Qt itself does it by just
+         * converting QWindow into QWidgetWindow. But the latter one
+         * is private, so we cannot use it.
+         *
+         * We also cannot use QApplication::widegtAt(). We *MUST NOT*!
+         * There is some but in XCB: if we call
+         * QApplication::topLevelAt() during the event processing, the
+         * Enter/Leave events stop arriving. Or, more precisely, they
+         * start to errive at random points in time. Which makes
+         * KisShortcutMatcher go crazy of course.
+         *
+         * So instead of just fetching the toplevel window we decrypt
+         * the pointer using WinId mapping.
+         */
+
+        targetWidget = QWidget::find(e->window->winId());
+
+        if (targetWidget) {
+            QWidget *childWidget = targetWidget->childAt(e->local.toPoint());
+            if (childWidget) {
+                targetWidget = childWidget;
+                localValid = false;
+            }
+        }
     }
 
     if (!targetWidget) {
-        if (tabletPressWidget) {
-            targetWidget = tabletPressWidget;
-            localValid = false;
-        } else {
-            targetWidget = QApplication::widgetAt(e->global.toPoint());
-            localValid = false;
+        targetWidget = QApplication::widgetAt(e->global.toPoint());
+        localValid = false;
 
-            if (!targetWidget) return;
-        }
+        if (!targetWidget) return;
     }
 
     if (type == QEvent::TabletPress) {

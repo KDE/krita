@@ -372,7 +372,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         retval = d->matcher.buttonReleased(tabletEvent->button(), tabletEvent);
         retval = true;
         event->setAccepted(true);
-        stop_ignore_cursor_events();
         break;
     }
 

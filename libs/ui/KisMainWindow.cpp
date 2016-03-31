@@ -169,8 +169,8 @@ public:
         , showDocumentInfo(0)
         , saveAction(0)
         , saveActionAs(0)
-        , printAction(0)
-        , printActionPreview(0)
+//        , printAction(0)
+//        , printActionPreview(0)
         , exportPdf(0)
         , closeAll(0)
 //        , reloadFile(0)
@@ -228,8 +228,8 @@ public:
     KisAction *showDocumentInfo;
     KisAction *saveAction;
     KisAction *saveActionAs;
-    KisAction *printAction;
-    KisAction *printActionPreview;
+//    KisAction *printAction;
+//    KisAction *printActionPreview;
     KisAction *exportPdf;
     KisAction *importAnimation;
     KisAction *exportAnimation;
@@ -2261,11 +2261,11 @@ void KisMainWindow::createActions()
     d->saveActionAs = actionManager->createStandardAction(KStandardAction::SaveAs, this, SLOT(slotFileSaveAs()));
     d->saveActionAs->setActivationFlags(KisAction::ACTIVE_IMAGE);
 
-    d->printAction = actionManager->createStandardAction(KStandardAction::Print, this, SLOT(slotFilePrint()));
-    d->printAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
+//    d->printAction = actionManager->createStandardAction(KStandardAction::Print, this, SLOT(slotFilePrint()));
+//    d->printAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
 
-    d->printActionPreview = actionManager->createStandardAction(KStandardAction::PrintPreview, this, SLOT(slotFilePrintPreview()));
-    d->printActionPreview->setActivationFlags(KisAction::ACTIVE_IMAGE);
+//    d->printActionPreview = actionManager->createStandardAction(KStandardAction::PrintPreview, this, SLOT(slotFilePrintPreview()));
+//    d->printActionPreview->setActivationFlags(KisAction::ACTIVE_IMAGE);
 
     d->undo = actionManager->createStandardAction(KStandardAction::Undo, this, SLOT(undo()));
     d->undo ->setActivationFlags(KisAction::ACTIVE_IMAGE);

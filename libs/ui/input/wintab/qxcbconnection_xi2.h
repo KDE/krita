@@ -40,6 +40,7 @@
 #include <QVector2D>
 #include <QTouchEvent>
 #include <QWindow>
+#include <QPointer>
 #include <QtCore/QLoggingCategory>
 #include <xcb/xcb.h>
 
@@ -421,7 +422,7 @@ private:
     int m_xiOpCode, m_xiEventBase, m_xiErrorBase;
     QVector<TabletData> m_tabletData;
 
-    QHash<xcb_window_t, QWindow*> m_windowMapper;
+    QHash<xcb_window_t, QPointer<QWindow>> m_windowMapper;
 
     QHash<int, XInput2TouchDeviceData*> m_touchDevices;
     bool m_xiGrab;

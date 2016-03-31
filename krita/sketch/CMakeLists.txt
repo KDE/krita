@@ -75,7 +75,7 @@ set(kritasketch_kritaintegrationmodels_SRCS
     models/ColorProfileModel.cpp
 )
 
-set(KRITA_COLORSELECTORNG_SOURCE_DIR "${CMAKE_SOURCE_DIR}/plugins/extensions/dockers/advancedcolorselector")
+set(KRITA_COLORSELECTORNG_SOURCE_DIR "${CMAKE_SOURCE_DIR}/plugins/dockers/advancedcolorselector")
 set(KRITA_COLORSELECTORNG_SOURCES
 ${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_my_paint_shade_selector.cpp
 ${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_color_patches.cpp

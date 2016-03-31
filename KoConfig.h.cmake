@@ -43,9 +43,6 @@
 /* Defines if your system has the OpenEXR library */
 #cmakedefine HAVE_OPENEXR 1
 
-/* Defines if you have GL (Mesa, OpenGL, ...) and Qt GL support */
-#cmakedefine HAVE_OPENGL 1
-
 /* Defines if we use lcms2 */
 #cmakedefine HAVE_LCMS2 1
 

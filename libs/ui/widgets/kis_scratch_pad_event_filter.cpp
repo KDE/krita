@@ -42,14 +42,12 @@ QWidget* KisScratchPadEventFilter::parentWidget()
 
 KoPointerEvent* KisScratchPadEventFilter::createMouseEvent(QEvent *event)
 {
-    qDebug() << "Dispatching mouse event to KisScratchPad";
     QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
     return new KoPointerEvent(mouseEvent, m_widgetToDocument.map(mouseEvent->pos()));
 }
 
 KoPointerEvent* KisScratchPadEventFilter::createTabletEvent(QEvent *event)
 {
-    qDebug() << "Dispatching tablet event to KisScratchPad";
     QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
     const QPointF pos = tabletEvent->hiResGlobalPos();
 

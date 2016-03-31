@@ -65,6 +65,7 @@
 #include "KisPart.h"
 #include <kis_icon.h>
 #include "kis_md5_generator.h"
+#include "kis_splash_screen.h"
 #include "kis_config.h"
 #include "flake/kis_shape_selection.h"
 #include <filter/kis_filter.h>
@@ -82,9 +83,7 @@
 #include <kis_resource_server_provider.h>
 #include <KoResourceServerProvider.h>
 
-#ifdef HAVE_OPENGL
 #include "opengl/kis_opengl.h"
-#endif
 
 #include <CalligraVersionWrapper.h>
 
@@ -169,29 +168,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
         }
     }
 
-
-#ifdef HAVE_OPENGL
     KisOpenGL::initialize();
-
-    /**
-     * Warn about Intel's broken video drivers
-     */
-#if defined HAVE_OPENGL && defined Q_OS_WIN
-    KisConfig cfg;
-    QString renderer = KisOpenGL::renderer();
-    if (cfg.useOpenGL() && renderer.startsWith("Intel") && !cfg.readEntry("WarnedAboutIntel", false)) {
-        QMessageBox::information(0,
-                                 i18nc("@title:window", "Krita: Warning"),
-                                 i18n("You have an Intel(R) HD Graphics video adapter.\n"
-                                      "If you experience problems like a black or blank screen,"
-                                      "please update your display driver to the latest version.\n\n"
-                                      "You can also disable OpenGL rendering in Krita's Settings.\n"));
-        cfg.writeEntry("WarnedAboutIntel", true);
-    }
-#endif
-
-#endif
-
 }
 
 #if defined(Q_OS_WIN) && defined(ENV32BIT)
@@ -277,21 +254,33 @@ void addResourceTypes()
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/patterns/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/taskset/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/workspaces/");
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/input/");
 }
 
-void loadResources()
+void KisApplication::loadResources()
 {
-    // Load base resources
+    setSplashScreenLoadingText(i18n("Loading Gradients..."));
     KoResourceServerProvider::instance()->gradientServer(true);
+
+    // Load base resources
+    setSplashScreenLoadingText(i18n("Loading Patterns..."));
     KoResourceServerProvider::instance()->patternServer(true);
+
+    setSplashScreenLoadingText(i18n("Loading Palettes..."));
     KoResourceServerProvider::instance()->paletteServer(false);
+
+    setSplashScreenLoadingText(i18n("Loading Brushes..."));
     KisBrushServer::instance()->brushServer(true);
+
     // load paintop presets
+    setSplashScreenLoadingText(i18n("Loading Paint Operations..."));
     KisResourceServerProvider::instance()->paintOpPresetServer(true);
+
+    setSplashScreenLoadingText(i18n("Loading Resource Bundles..."));
     KisResourceServerProvider::instance()->resourceBundleServer();
 }
 
-void loadPlugins()
+void KisApplication::loadPlugins()
 {
     KoShapeRegistry* r = KoShapeRegistry::instance();
     r->add(new KisShapeSelectionFactory());
@@ -301,16 +290,20 @@ void loadPlugins()
     KisGeneratorRegistry::instance();
     KisPaintOpRegistry::instance();
     KoColorSpaceRegistry::instance();
+
     // Load the krita-specific tools
+    setSplashScreenLoadingText(i18n("Loading Plugins for Krita/Tool..."));
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
                                      QString::fromLatin1("[X-Krita-Version] == 28"));
 
+
     // Load dockers
+    setSplashScreenLoadingText(i18n("Loading Plugins for Krita/Dock..."));
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
                                      QString::fromLatin1("[X-Krita-Version] == 28"));
 
-
     // XXX_EXIV: make the exiv io backends real plugins
+    setSplashScreenLoadingText(i18n("Loading Plugins Exiv/IO..."));
     KisExiv2::initialize();
 }
 
@@ -349,6 +342,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
 #endif
 
+    setSplashScreenLoadingText(i18n("Initializing Globals"));
     initializeGlobals(args);
 
     const bool doTemplate = args.doTemplate();
@@ -385,16 +379,21 @@ bool KisApplication::start(const KisApplicationArguments &args)
     Q_UNUSED(resetStarting);
 
     // Make sure we can save resources and tags
+    setSplashScreenLoadingText(i18n("Adding resource types"));
     addResourceTypes();
+
     // Load all resources and tags before the plugins do that
     loadResources();
+
     // Load the plugins
     loadPlugins();
+
 
     KisMainWindow *mainWindow = 0;
 
     if (needsMainWindow) {
         // show a mainWindow asap, if we want that
+        setSplashScreenLoadingText(i18n("Loading Main Window..."));
         mainWindow = KisPart::instance()->createMainWindow();
 
         if (showmainWindow) {
@@ -404,14 +403,20 @@ bool KisApplication::start(const KisApplicationArguments &args)
     short int numberOfOpenDocuments = 0; // number of documents open
 
 
+
+
     // Check for autosave files that can be restored, if we're not running a batchrun (test, print, export to pdf)
     QList<QUrl> urls = checkAutosaveFiles();
     if (!batchRun && mainWindow) {
+
+        setSplashScreenLoadingText(i18n("Retrieving Auto save files..."));
         Q_FOREACH (const QUrl &url, urls) {
             KisDocument *doc = KisPart::instance()->createDocument();
             mainWindow->openDocumentInternal(url, doc);
         }
     }
+
+    setSplashScreenLoadingText(""); // done loading, so clear out label
 
     // Get the command line arguments which we have to parse
     int argsCount = args.filenames().count();
@@ -506,6 +511,12 @@ KisApplication::~KisApplication()
 void KisApplication::setSplashScreen(QWidget *splashScreen)
 {
     d->splashScreen = splashScreen;
+}
+
+void KisApplication::setSplashScreenLoadingText(QString textToLoad)
+{
+   static_cast<KisSplashScreen *>(d->splashScreen)->loadingLabel->setText(textToLoad);
+   static_cast<KisSplashScreen *>(d->splashScreen)->repaint();
 }
 
 bool KisApplication::notify(QObject *receiver, QEvent *event)
@@ -633,7 +644,7 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
     }
     else {
         QString desktopName(fileName);
-        const QString templatesResourcePath =  QStringLiteral("krita/templates/");
+        const QString templatesResourcePath =  QStringLiteral("templates/");
 
         QStringList paths = KoResourcePaths::findAllResources("data", templatesResourcePath + "*/" + desktopName);
         if (paths.isEmpty()) {

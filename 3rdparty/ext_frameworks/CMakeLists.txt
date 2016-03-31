@@ -58,7 +58,6 @@ ExternalProject_Add(
             -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
                 ${GLOBAL_PROFILE}
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
-                -DDEFINE_NO_DEPRECATED=1
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
     ALWAYS 0
@@ -77,7 +76,6 @@ ExternalProject_Add(
             -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
                 ${GLOBAL_PROFILE}
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
-                -DDEFINE_NO_DEPRECATED=1
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
     ALWAYS 0
@@ -95,7 +93,6 @@ ExternalProject_Add(
             -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
                 ${GLOBAL_PROFILE}
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
-                -DDEFINE_NO_DEPRECATED=1
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
     ALWAYS 0
@@ -114,7 +111,6 @@ ExternalProject_Add(
             -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
                 ${GLOBAL_PROFILE}
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
-                -DDEFINE_NO_DEPRECATED=1
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
     ALWAYS 0
@@ -132,7 +128,6 @@ ExternalProject_Add(
             -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
                 ${GLOBAL_PROFILE}
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
-                -DDEFINE_NO_DEPRECATED=1
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
     ALWAYS 0
@@ -151,7 +146,6 @@ ExternalProject_Add(
             -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
                 ${GLOBAL_PROFILE}
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
-                -DDEFINE_NO_DEPRECATED=1
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
     ALWAYS 0
@@ -169,7 +163,6 @@ ExternalProject_Add(
             -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
                 ${GLOBAL_PROFILE}
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
-                -DDEFINE_NO_DEPRECATED=1
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
     ALWAYS 0
@@ -186,7 +179,6 @@ ExternalProject_Add(
             -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
                 ${GLOBAL_PROFILE}
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
-                -DDEFINE_NO_DEPRECATED=1
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
     ALWAYS 0
@@ -204,7 +196,6 @@ ExternalProject_Add(
             -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
                 ${GLOBAL_PROFILE}
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
-                -DDEFINE_NO_DEPRECATED=1
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
     ALWAYS 0
@@ -222,7 +213,6 @@ ExternalProject_Add(
             -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
                 ${GLOBAL_PROFILE}
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
-                -DDEFINE_NO_DEPRECATED=1
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
     ALWAYS 0
@@ -241,7 +231,6 @@ ExternalProject_Add(
             -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
                 ${GLOBAL_PROFILE}
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
-                -DDEFINE_NO_DEPRECATED=1
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
     ALWAYS 0

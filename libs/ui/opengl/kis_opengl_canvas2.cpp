@@ -20,8 +20,6 @@
 #define GL_GLEXT_PROTOTYPES
 
 #include "opengl/kis_opengl_canvas2.h"
-
-#ifdef HAVE_OPENGL
 #include "opengl/kis_opengl_canvas2_p.h"
 
 #include "opengl/kis_opengl_canvas_debugger.h"
@@ -802,5 +800,3 @@ KisOpenGLImageTexturesSP KisOpenGLCanvas2::openGLImageTextures() const
 {
     return d->openGLImageTextures;
 }
-
-#endif // HAVE_OPENGL

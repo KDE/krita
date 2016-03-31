@@ -611,9 +611,8 @@ void KisSketchView::centerDoc()
     d->viewManager->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
 }
 
-void KisSketchView::Private::imageUpdated(const QRect &updated)
+void KisSketchView::Private::imageUpdated(const QRect &/*updated*/)
 {
-    Q_UNUSED(updated);
     // QT5TODO
 //     if (q->scene()) {
 //         q->scene()->views().at(0)->update(updated);

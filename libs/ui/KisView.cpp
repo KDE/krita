@@ -57,6 +57,7 @@
 
 #include <kis_image.h>
 #include <kis_node.h>
+
 #include <kis_group_layer.h>
 #include <kis_layer.h>
 #include <kis_mask.h>

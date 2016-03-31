@@ -33,9 +33,10 @@ class Q_DECL_HIDDEN KisGuidesConfig::Private
 {
 public:
     Private()
-        : showGuides(false),
-        snapToGuides(false),
-        lockGuides(false) {}
+        : showGuides(false)
+        , snapToGuides(false)
+        , lockGuides(false)
+    {}
 
     bool operator==(const Private &rhs) {
         return horzGuideLines == rhs.horzGuideLines &&

@@ -20,10 +20,7 @@
 
 #include <QObject>
 
-#include <KoConfig.h> // for HAVE_OPENGL
-#ifdef HAVE_OPENGL
 #include <qopengl.h>
-#endif
 
 #include <kritaui_export.h>
 
@@ -39,10 +36,8 @@ class KRITAUI_EXPORT KisDisplayFilter : public QObject
 public:
     explicit KisDisplayFilter(QObject *parent = 0);
 
-#ifdef HAVE_OPENGL
     virtual QString program() const = 0;
     virtual GLuint lutTexture() const = 0;
-#endif
     virtual void filter(quint8 *pixels, quint32 numPixels) = 0;
     virtual void approximateInverseTransformation(quint8 *pixels, quint32 numPixels) = 0;
     virtual void approximateForwardTransformation(quint8 *pixels, quint32 numPixels) = 0;

@@ -68,12 +68,9 @@
 #include "kis_canvas_controller.h"
 #include "kis_grid_config.h"
 
-#ifdef HAVE_OPENGL
 #include "kis_animation_player.h"
 #include "kis_animation_frame_cache.h"
 #include "opengl/kis_opengl_canvas2.h"
-#endif
-
 #include "opengl/kis_opengl.h"
 #include "kis_fps_decoration.h"
 
@@ -104,9 +101,7 @@ public:
     KisAbstractCanvasWidget *canvasWidget = 0;
     KoShapeManager shapeManager;
     bool currentCanvasIsOpenGL;
-#ifdef HAVE_OPENGL
     int openGLFilterMode;
-#endif
     KisToolProxy toolProxy;
     KisPrescaledProjectionSP prescaledProjection;
     bool vastScrolling;
@@ -120,10 +115,8 @@ public:
     KisDisplayColorConverter displayColorConverter;
 
     KisCanvasUpdatesCompressor projectionUpdatesCompressor;
-#ifdef HAVE_OPENGL
     KisAnimationPlayer *animationPlayer;
     KisAnimationFrameCacheSP frameCache;
-#endif
     bool lodAllowedInCanvas;
     bool bootsrapLodBlocked;
 
@@ -160,9 +153,7 @@ void KisCanvas2::setup()
     createCanvas(cfg.useOpenGL());
 
     setLodAllowedInCanvas(m_d->lodAllowedInCanvas);
-#ifdef HAVE_OPENGL
     m_d->animationPlayer = new KisAnimationPlayer(this);
-#endif
     connect(m_d->view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved(QPoint)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
 
@@ -195,11 +186,9 @@ void KisCanvas2::setup()
 
 KisCanvas2::~KisCanvas2()
 {
-#ifdef HAVE_OPENGL
     if (m_d->animationPlayer->isPlaying()) {
         m_d->animationPlayer->forcedStopOnExit();
     }
-#endif
     delete m_d;
 }
 
@@ -408,7 +397,6 @@ void KisCanvas2::createQPainterCanvas()
 
 void KisCanvas2::createOpenGLCanvas()
 {
-#ifdef HAVE_OPENGL
     KisConfig cfg;
     m_d->openGLFilterMode = cfg.openGLFilteringMode();
     m_d->currentCanvasIsOpenGL = true;
@@ -421,18 +409,13 @@ void KisCanvas2::createOpenGLCanvas()
     if (canvasWidget->needsFpsDebugging() && !decoration(KisFpsDecoration::idTag)) {
         addDecoration(new KisFpsDecoration(imageView()));
     }
-#else
-    qFatal("Bad use of createOpenGLCanvas(). It shouldn't have happened =(");
-#endif
 }
 
 void KisCanvas2::createCanvas(bool useOpenGL)
 {
     // deinitialize previous canvas structures
     m_d->prescaledProjection = 0;
-#ifdef HAVE_OPENGL
     m_d->frameCache = 0;
-#endif
 
     KisConfig cfg;
     QDesktopWidget dw;
@@ -440,7 +423,6 @@ void KisCanvas2::createCanvas(bool useOpenGL)
     m_d->displayColorConverter.setMonitorProfile(profile);
 
     if (useOpenGL) {
-#ifdef HAVE_OPENGL
         if (KisOpenGL::hasOpenGL()) {
             createOpenGLCanvas();
             if (cfg.canvasState() == "OPENGL_FAILED") {
@@ -452,13 +434,11 @@ void KisCanvas2::createCanvas(bool useOpenGL)
             warnKrita << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
             createQPainterCanvas();
         }
-#else
-        warnKrita << "User requested an OpenGL canvas, but Krita was compiled without OpenGL support. Falling back to QPainter.";
-        createQPainterCanvas();
-#endif
-    } else {
+    } 
+    else {
         createQPainterCanvas();
     }
+    
     if (m_d->popupPalette) {
         m_d->popupPalette->setParent(m_d->canvasWidget->widget());
     }
@@ -501,7 +481,6 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
     if (!m_d->canvasWidget) {
         return;
     }
-#ifdef HAVE_OPENGL
     KisConfig cfg;
     bool needReset = (m_d->currentCanvasIsOpenGL != useOpenGL) ||
         (m_d->currentCanvasIsOpenGL &&
@@ -512,10 +491,6 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
         connectCurrentCanvas();
         notifyZoomChanged();
     }
-#else
-    Q_UNUSED(useOpenGL)
-#endif
-
     updateCanvasWidgetImpl();
 }
 
@@ -813,7 +788,6 @@ void KisCanvas2::setCursor(const QCursor &cursor)
     canvasWidget()->setCursor(cursor);
 }
 
-#ifdef HAVE_OPENGL
 KisAnimationFrameCacheSP KisCanvas2::frameCache() const
 {
     return m_d->frameCache;
@@ -823,7 +797,7 @@ KisAnimationPlayer *KisCanvas2::animationPlayer() const
 {
     return m_d->animationPlayer;
 }
-#endif
+
 void KisCanvas2::slotSelectionChanged()
 {
     KisShapeLayer* shapeLayer = dynamic_cast<KisShapeLayer*>(viewManager()->activeLayer().data());
@@ -878,16 +852,11 @@ void KisCanvas2::bootstrapFinished()
 
 void KisCanvas2::setLodAllowedInCanvas(bool value)
 {
-#ifdef HAVE_OPENGL
     m_d->lodAllowedInCanvas =
         value &&
         m_d->currentCanvasIsOpenGL &&
         (m_d->openGLFilterMode == KisOpenGL::TrilinearFilterMode ||
          m_d->openGLFilterMode == KisOpenGL::HighQualityFiltering);
-#else
-    Q_UNUSED(value);
-    m_d->lodAllowedInCanvas = false;
-#endif
 
     KisImageSP image = this->image();
 

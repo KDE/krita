@@ -512,6 +512,47 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     int compression_type;
     png_uint_32 proflen;
 
+    // Get the various optional chunks
+
+    // https://www.w3.org/TR/PNG/#11cHRM
+#if defined(PNG_cHRM_SUPPORTED)
+    double whitePointX, whitePointY;
+    double redX, redY;
+    double greenX, greenY;
+    double blueX, blueY;
+    png_get_cHRM(png_ptr,info_ptr, &whitePointX, &whitePointY, &redX, &redY, &greenX, &greenY, &blueX, &blueY);
+    qDebug() << "cHRM:" << whitePointX << whitePointY << redX << redY << greenX << greenY << blueX << blueY;
+#endif
+
+    // https://www.w3.org/TR/PNG/#11gAMA
+#if defined(PNG_GAMMA_SUPPORTED)
+    double gamma;
+    png_get_gAMA(png_ptr, info_ptr, &gamma);
+    qDebug() << "gAMA" << gamma;
+#endif
+
+    // https://www.w3.org/TR/PNG/#11sRGB
+#if defined(PNG_sRGB_SUPPORTED)
+    int sRGBIntent;
+    png_get_sRGB(png_ptr, info_ptr, &sRGBIntent);
+    qDebug() << "sRGB" << sRGBIntent;
+#endif
+
+bool fromBlender = false;
+
+png_text* text_ptr;
+    int num_comments;
+png_get_text(png_ptr, info_ptr, &text_ptr, &num_comments);
+
+        for (int i = 0; i < num_comments; i++) {
+            QString key = QString(text_ptr[i].key).toLower();
+            if (key == "file") {
+                QString relatedFile = text_ptr[i].text;
+                if (relatedFile.contains(".blend", Qt::CaseInsensitive)){
+                    fromBlender=true;
+                }
+            }
+        }
 
     const KoColorProfile* profile = 0;
     if (png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &proflen)) {
@@ -530,7 +571,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     }
     else {
         dbgFile << "no embedded profile, will use the default profile";
-        if (color_nb_bits == 16 && !qAppName().toLower().contains("test") && !m_batchMode) {
+        if (color_nb_bits == 16 && !fromBlender && !qAppName().toLower().contains("test") && !m_batchMode) {
             KisConfig cfg;
             quint32 behaviour = cfg.pasteBehaviour();
             if (behaviour == PASTE_ASK) {
@@ -612,8 +653,6 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     KisPaintLayerSP layer = new KisPaintLayer(m_image.data(), m_image -> nextLayerName(), UCHAR_MAX);
 
     // Read comments/texts...
-    png_text* text_ptr;
-    int num_comments;
     png_get_text(png_ptr, info_ptr, &text_ptr, &num_comments);
     if (m_doc) {
         KoDocumentInfo * info = m_doc->documentInfo();
@@ -978,9 +1017,14 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
     // set sRGB only if the profile is sRGB  -- http://www.w3.org/TR/PNG/#11sRGB says sRGB and iCCP should not both be present
 
     bool sRGB = device->colorSpace()->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive);
-    if (!options.saveSRGBProfile && sRGB) {
-        png_set_sRGB(png_ptr, info_ptr, PNG_sRGB_INTENT_ABSOLUTE);
-    }
+    /*
+     * This automatically writes the correct gamma and chroma chunks along with the sRGB chunk, but firefox's
+     * color management is bugged, so once you give it any incentive to start color managing an sRGB image it
+     * will turn, for example, a nice desaturated rusty red into bright poppy red. So this is disabled for now.
+     */    
+    /*if (!options.saveSRGBProfile && sRGB) {
+	    png_set_sRGB_gAMA_and_cHRM(png_ptr, info_ptr, PNG_sRGB_INTENT_PERCEPTUAL);
+    }*/
     // set the palette
     if (color_type == PNG_COLOR_TYPE_PALETTE) {
         png_set_PLTE(png_ptr, info_ptr, palette, num_palette);

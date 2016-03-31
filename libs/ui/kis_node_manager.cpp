@@ -917,7 +917,7 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
                                                 qreal yRes,
                                                 quint8 opacity)
 {
-    KoFileDialog dialog(view->mainWindow(), KoFileDialog::SaveFile, "krita/savenodeasimage");
+    KoFileDialog dialog(view->mainWindow(), KoFileDialog::SaveFile, "savenodeasimage");
     dialog.setCaption(i18n("Export \"%1\"", defaultName));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export));

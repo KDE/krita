@@ -317,12 +317,15 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
         return 0;
     }
 
-    d->registrylock.lockForRead();
-    const KoColorSpace *cs = getCachedColorSpace(csID, profileName);
+    const KoColorSpace *cs = 0;
+    {
+        QReadLocker l(&d->registrylock);
+        cs = getCachedColorSpace(csID, profileName);
+    }
 
     if (!cs) {
         KoColorSpaceFactory *csf = d->colorSpaceFactoryRegistry.value(csID);
-        d->registrylock.unlock();
+
         if (!csf) {
             dbgPigmentCSRegistry << "Unknown color space type :" << csf;
             return 0;
@@ -361,8 +364,8 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
 
         QWriteLocker l(&d->registrylock);
         /*
-         * We need to check again here, anything could've happened between the unlock and the
-         * write lock.
+         * We need to check again here, a thread requesting the same colorspace could've added it
+         * already, in between the read unlock and write lock.
          * TODO: We also potentially changed profileName content, which means we maybe are going to
          * create a colorspace that's actually in the space registry cache, but currently this might
          * not be an issue because the colorspace should be cached also by the factory, so it won't
@@ -393,7 +396,6 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
     else {
         Q_ASSERT(cs->id() == csID);
         Q_ASSERT(cs->profile()->name() == profileName);
-        d->registrylock.unlock();
     }
 
     return cs;

@@ -271,7 +271,6 @@ void KisCanvasController::slotToggleLevelOfDetailMode(bool value)
         if (!kritaCanvas->canvasIsOpenGL()) {
             reason = i18n("Instant Preview is only supported with OpenGL activated");
         }
-#ifdef HAVE_OPENGL
         else if (kritaCanvas->openGLFilterMode() == KisOpenGL::BilinearFilterMode ||
                    kritaCanvas->openGLFilterMode() == KisOpenGL::NearestFilterMode) {
             QString filteringMode =
@@ -279,7 +278,6 @@ void KisCanvasController::slotToggleLevelOfDetailMode(bool value)
                 i18n("Bilinear") : i18n("Nearest Neighbour");
             reason = i18n("Instant Preview is supported\n in Trilinear of High Quality filtering modes.\nCurrent mode is %1", filteringMode);
         }
-#endif
 
         m_d->view->viewManager()->showFloatingMessage(
             i18n("Failed activating Instant Preview mode!\n\n%1", reason),

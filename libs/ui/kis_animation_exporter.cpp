@@ -59,7 +59,7 @@ KisAnimationExporterUI::~KisAnimationExporterUI()
 
 KisImportExportFilter::ConversionStatus KisAnimationExporterUI::exportSequence(KisDocument *document)
 {
-    KoFileDialog dialog(m_d->parentWidget, KoFileDialog::SaveFile, "krita/exportsequence");
+    KoFileDialog dialog(m_d->parentWidget, KoFileDialog::SaveFile, "exportsequence");
     dialog.setCaption(i18n("Export sequence"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export));

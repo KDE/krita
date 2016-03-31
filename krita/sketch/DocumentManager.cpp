@@ -223,7 +223,7 @@ void DocumentManager::onLoadCompleted()
     emit documentChanged();
 }
 
-void DocumentManager::onLoadCanceled(const QString &errMsg)
+void DocumentManager::onLoadCanceled(const QString &/*errMsg*/)
 {
 //     if (!errMsg.isEmpty())   // empty when canceled by user
 //         QMessageBox::critical(this, i18nc("@title:window", "Krita"), errMsg);

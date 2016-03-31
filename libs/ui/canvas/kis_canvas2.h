@@ -32,9 +32,7 @@
 #include <kis_types.h>
 #include <KoPointerEvent.h>
 
-#ifdef HAVE_OPENGL
 #include "opengl/kis_opengl.h"
-#endif
 
 #include "kis_ui_types.h"
 #include "kis_coordinates_converter.h"
@@ -87,9 +85,7 @@ public: // KoCanvasBase implementation
 
     bool canvasIsOpenGL() const;
 
-#ifdef HAVE_OPENGL
     KisOpenGL::FilterMode openGLFilterMode() const;
-#endif
 
     void gridSize(QPointF *offset, QSizeF *spacing) const;
 
@@ -171,10 +167,8 @@ public: // KisCanvas2 methods
     KisExposureGammaCorrectionInterface* exposureGammaCorrectionInterface() const;
 
     void setCursor(const QCursor &cursor);
-#ifdef HAVE_OPENGL
     KisAnimationFrameCacheSP frameCache() const;
     KisAnimationPlayer *animationPlayer() const;
-#endif
     void refetchDataFromImage();
 
 Q_SIGNALS:

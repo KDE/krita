@@ -722,7 +722,7 @@ int KisViewManager::viewCount() const
 void KisViewManager::slotCreateTemplate()
 {
     if (!document()) return;
-    KisTemplateCreateDia::createTemplate( QStringLiteral("krita/templates/"), ".kra", document(), mainWindow());
+    KisTemplateCreateDia::createTemplate( QStringLiteral("templates/"), ".kra", document(), mainWindow());
 }
 
 void KisViewManager::slotCreateCopy()
@@ -1098,7 +1098,7 @@ void KisViewManager::toggleTabletLogger()
 
 void KisViewManager::openResourcesDirectory()
 {
-    QString dir = KoResourcePaths::locateLocal("data", "krita");
+    QString dir = KoResourcePaths::locateLocal("data", "");
     QDesktopServices::openUrl(QUrl::fromLocalFile(dir));
 }
 

@@ -685,7 +685,6 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 {
     KisConfig cfg;
 
-#ifdef HAVE_OPENGL
     if (!KisOpenGL::hasOpenGL()) {
         grpOpenGL->setEnabled(false);
         grpOpenGL->setChecked(false);
@@ -711,10 +710,6 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
        grpOpenGL->setVisible(false);
        grpOpenGL->setMaximumHeight(0);
     }
-#else
-    grpOpenGL->setEnabled(false);
-    grpOpenGL->setChecked(false);
-#endif
 
     KoColor c;
     c.fromQColor(cfg.selectionOverlayMaskColor());
@@ -741,7 +736,6 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 void DisplaySettingsTab::setDefault()
 {
     KisConfig cfg;
-#ifdef HAVE_OPENGL
     if (!KisOpenGL::hasOpenGL()) {
         grpOpenGL->setEnabled(false);
         grpOpenGL->setChecked(false);
@@ -762,10 +756,6 @@ void DisplaySettingsTab::setDefault()
         cmbFilterMode->setEnabled(true);
         cmbFilterMode->setCurrentIndex(cfg.openGLFilteringMode(true));
     }
-#else
-    grpOpenGL->setEnabled(false);
-    grpOpenGL->setChecked(false);
-#endif
 
     chkMoving->setChecked(cfg.scrollCheckers(true));
     intCheckSize->setValue(cfg.checkSize(true));
@@ -782,14 +772,10 @@ void DisplaySettingsTab::setDefault()
 
 void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
 {
-#ifdef HAVE_OPENGL
     chkUseTextureBuffer->setEnabled(isChecked);
     chkDisableDoubleBuffering->setEnabled(isChecked);
     chkDisableVsync->setEnabled(isChecked);
     cmbFilterMode->setEnabled(isChecked);
-#else
-    Q_UNUSED(isChecked);
-#endif
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -1035,7 +1021,6 @@ bool KisDlgPreferences::editPreferences()
 
         dialog->m_performanceSettings->save();
 
-#ifdef HAVE_OPENGL
         if (!cfg.useOpenGL() && dialog->m_displaySettings->grpOpenGL->isChecked())
             cfg.setCanvasState("TRY_OPENGL");
         cfg.setUseOpenGL(dialog->m_displaySettings->grpOpenGL->isChecked());
@@ -1043,7 +1028,6 @@ bool KisDlgPreferences::editPreferences()
         cfg.setOpenGLFilteringMode(dialog->m_displaySettings->cmbFilterMode->currentIndex());
         cfg.setDisableDoubleBuffering(dialog->m_displaySettings->chkDisableDoubleBuffering->isChecked());
         cfg.setDisableVSync(dialog->m_displaySettings->chkDisableVsync->isChecked());
-#endif
 
         cfg.setCheckSize(dialog->m_displaySettings->intCheckSize->value());
         cfg.setScrollingCheckers(dialog->m_displaySettings->chkMoving->isChecked());

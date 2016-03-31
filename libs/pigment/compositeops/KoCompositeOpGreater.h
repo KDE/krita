@@ -60,7 +60,12 @@ public:
         
         float w = 1.0/(1.0+exp(-40.0*(dA - scale<float>(appliedAlpha))));
 		float a = dA*w + scale<float>(appliedAlpha)*(1.0-w);               
-        if (a<0.0f) a=0.0f; if (a>1.0f) a=1.0f;
+        if (a < 0.0f) {
+            a = 0.0f; 
+        }
+        if (a > 1.0f) {
+            a = 1.0f;
+        }
         
         // For a standard Over, the resulting alpha is: a = opacity*dstAlpha + (1-opacity)*srcAlpha
         // Let us assume we're blending with a color with srcAlpha = 1 here

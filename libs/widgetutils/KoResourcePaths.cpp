@@ -453,8 +453,12 @@ QString KoResourcePaths::saveLocationInternal(const QString &type, const QString
         path = QStandardPaths::writableLocation(d->mapTypeToQStandardPaths(type)) + '/' + aliases.first();
     }
     else {
-        path = QStandardPaths::writableLocation(d->mapTypeToQStandardPaths(type)) + '/' + (suffix.isEmpty() ? "krita" : suffix);
+        path = QStandardPaths::writableLocation(d->mapTypeToQStandardPaths(type));
+        if (!path.endsWith("krita")) {
+            path + '/' + (suffix.isEmpty() ? "krita" : suffix);
+        }
     }
+
     QDir d(path);
 
     if (!d.exists() && create) {

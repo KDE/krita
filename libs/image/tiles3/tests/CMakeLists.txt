@@ -59,12 +59,12 @@ target_link_libraries(KisSwappedDataStoreTest   kritaimage Qt5::Test ${Boost_SYS
 
 ########### next target ###############
 set(kis_tile_data_store_test_SRCS kis_tile_data_store_test.cpp ../kis_tile_data.cc)
-kde4_add_unit_test(KisTileDataStoreTest TESTNAME krita-image-KisTileDataStoreTest  ${kis_tile_data_store_test_SRCS})
+kde4_add_broken_unit_test(KisTileDataStoreTest TESTNAME krita-image-KisTileDataStoreTest  ${kis_tile_data_store_test_SRCS})
 target_link_libraries(KisTileDataStoreTest   kritaimage Qt5::Test ${Boost_SYSTEM_LIBRARY})
 
 ########### next target ###############
 set(kis_store_limits_test_SRCS kis_store_limits_test.cpp ../kis_tile_data.cc )
-kde4_add_unit_test(KisStoreLimitsTest TESTNAME krita-image-KisStoreLimitsTest  ${kis_store_limits_test_SRCS})
+kde4_add_broken_unit_test(KisStoreLimitsTest TESTNAME krita-image-KisStoreLimitsTest  ${kis_store_limits_test_SRCS})
 target_link_libraries(KisStoreLimitsTest   kritaimage Qt5::Test ${Boost_SYSTEM_LIBRARY})
 
 ########### next target ###############

@@ -44,7 +44,7 @@
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_brush_server.h>
-
+#include <kis_paintop_settings.h>
 #include "dlg_bundle_manager.h"
 #include "dlg_create_bundle.h"
 
@@ -247,6 +247,13 @@ void ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateBundle)
         KisPaintOpPresetSP preset = d->paintopServer->resourceByFilename(r);
         KoResource *res = preset.data();
         newBundle->addResource("kis_paintoppresets", res->filename(), d->paintopServer->assignedTagsList(res), res->md5());
+        KisPaintOpSettingsSP settings = preset->settings();
+        if (settings->hasProperty("requiredBrushFile")) {
+            QString brushFile = settings->getString("requiredBrushFile");
+            KisBrush *brush = d->brushServer->resourceByFilename(brushFile).data();
+            newBundle->addResource("kis_brushes", brushFile, d->brushServer->assignedTagsList(brush), brush->md5());
+        }
+
     }
 
     res = dlgCreateBundle.selectedWorkspaces();

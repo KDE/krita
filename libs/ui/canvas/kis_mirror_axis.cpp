@@ -25,10 +25,8 @@
 #include <QToolButton>
 #include <QApplication>
 #include <QPaintEngine>
-#ifdef HAVE_OPENGL
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
-#endif
 
 #include <kis_icon.h>
 
@@ -151,7 +149,6 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
     gc.setBrush(Qt::white);
     gc.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
-#if defined(HAVE_OPENGL)
     QOpenGLContext *ctx = QOpenGLContext::currentContext();
     bool hasMultisample = ((gc.paintEngine()->type() == QPaintEngine::OpenGL2) &&
                            (ctx->hasExtension("GL_ARB_multisample")));
@@ -163,7 +160,6 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
         ctx->functions()->glEnable(GL_MULTISAMPLE);
         gc.endNativePainting();
     }
-#endif
 
     float halfHandleSize = d->handleSize / 2;
 
@@ -217,13 +213,12 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
         }
     }
 
-#if defined(HAVE_OPENGL)
     if (hasMultisample) {
         gc.beginNativePainting();
         ctx->functions()->glDisable(GL_MULTISAMPLE);
         gc.endNativePainting();
     }
-#endif
+
 }
 
 bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)

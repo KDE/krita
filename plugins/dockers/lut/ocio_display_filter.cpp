@@ -27,12 +27,10 @@
 
 #include <kis_config.h>
 
-#ifdef HAVE_OPENGL
 #include <opengl/kis_opengl.h>
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
 #include <QOpenGLFunctions_3_2_Core>
-#endif
 
 
 static const int LUT3D_EDGE_SIZE = 32;
@@ -44,9 +42,7 @@ OcioDisplayFilter::OcioDisplayFilter(KisExposureGammaCorrectionInterface *interf
     , view(0)
     , swizzle(RGBA)
     , m_interface(interface)
-    #ifdef HAVE_OPENGL
     , m_lut3dTexID(0)
-    #endif
 {
 }
 
@@ -101,8 +97,6 @@ void OcioDisplayFilter::setLockCurrentColorVisualRepresentation(bool value)
     m_lockCurrentColorVisualRepresentation = value;
 }
 
-#ifdef HAVE_OPENGL
-
 QString OcioDisplayFilter::program() const
 {
     return m_program;
@@ -112,7 +106,6 @@ GLuint OcioDisplayFilter::lutTexture() const
 {
     return m_lut3dTexID;
 }
-#endif
 
 void OcioDisplayFilter::updateProcessor()
 {
@@ -240,8 +233,6 @@ void OcioDisplayFilter::updateProcessor()
         //m_revereseApproximationProcessor;
     }
 
-#ifdef HAVE_OPENGL
-
     // check whether we are allowed to use shaders -- though that should
     // work for everyone these days
     KisConfig cfg;
@@ -307,8 +298,5 @@ void OcioDisplayFilter::updateProcessor()
 
         m_program = QString::fromLatin1(os.str().c_str());
     }
-
-
-#endif
 
 }

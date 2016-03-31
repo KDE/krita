@@ -18,7 +18,6 @@
 #ifndef OCIO_DISPLAY_FILTER_H
 #define OCIO_DISPLAY_FILTER_H
 
-#include <KoConfig.h> // for HAVE_OPENGL
 #include "kritalutdocker_export.h"
 #include <kis_display_filter.h>
 #include <OpenColorIO/OpenColorIO.h>
@@ -53,10 +52,8 @@ public:
 
     KisExposureGammaCorrectionInterface *correctionInterface() const;
 
-#ifdef HAVE_OPENGL
     virtual QString program() const;
     GLuint lutTexture() const;
-#endif
 
     void updateProcessor();
 
@@ -82,16 +79,11 @@ private:
 
     bool m_lockCurrentColorVisualRepresentation;
 
-#ifdef HAVE_OPENGL
     QString m_program;
     GLuint m_lut3dTexID;
     QVector<float> m_lut3d;
     QString m_lut3dcacheid;
     QString m_shadercacheid;
-#endif
-
-
-
 };
 
 #endif // OCIO_DISPLAY_FILTER_H

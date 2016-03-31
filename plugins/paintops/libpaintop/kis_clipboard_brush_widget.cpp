@@ -120,7 +120,7 @@ void KisClipboardBrushWidget::slotAddPredefined()
     if(!m_brush)
         return;
 
-    QString dir = KoResourcePaths::saveLocation("data", "krita/brushes");
+    QString dir = KoResourcePaths::saveLocation("data", "brushes");
     QString extension = ".gbr";
     QString name = nameEdit->text();
 

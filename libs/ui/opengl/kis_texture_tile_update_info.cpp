@@ -18,9 +18,5 @@
 
 #include "kis_texture_tile_update_info.h"
 
-#ifdef HAVE_OPENGL
-
 ConversionCache KisTextureTileUpdateInfo::m_patchPixelsCache;
 ConversionCache KisTextureTileUpdateInfo::m_conversionCache;
-
-#endif /* HAVE_OPENGL */

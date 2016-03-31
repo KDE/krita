@@ -8,7 +8,7 @@ if (MSVC)
 			URL_MD5 8aca361a4713a1f491b0a5e33fee0f1f
 
 			CONFIGURE_COMMAND <SOURCE_DIR>/bootstrap.bat --prefix=${PREFIX_ext_boost}
-			BUILD_COMMAND <SOURCE_DIR>/b2.exe --with-system --build-dir=build-dir --prefix=${PREFIX_ext_boost} toolset=msvc variant=release link=shared  threading=multi architecture=x86 address-model=64 variant=release install
+			BUILD_COMMAND <SOURCE_DIR>/b2.exe --with-system --build-dir=build-dir --prefix=${PREFIX_ext_boost} toolset=msvc-14.0 variant=release link=shared  threading=multi architecture=x86 address-model=64 variant=release install
 			INSTALL_COMMAND ""
 			INSTALL_DIR ${EXTPREFIX_boost}
 
@@ -19,8 +19,7 @@ if (MSVC)
 		ExternalProject_Add_Step(
 			ext_boost
 			post_install
-			COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/boost_system-vc-mt-1_55.dll ${PREFIX_ext_boost}/lib/boost_system-vc140-mt-1_55.dll
-			COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/boost_system-vc-mt-1_55.lib ${PREFIX_ext_boost}/lib/boost_system-vc140-mt-1_55.lib
+			COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/boost_system-vc140-mt-1_55.dll ${PREFIX_ext_boost}/bin/boost_system-vc140-mt-1_55.dll
 			DEPENDEES install
 		)
 	else()
@@ -32,7 +31,7 @@ if (MSVC)
 			URL_MD5 8aca361a4713a1f491b0a5e33fee0f1f
 
 			CONFIGURE_COMMAND <SOURCE_DIR>/bootstrap.bat --prefix=${PREFIX_ext_boost}
-			BUILD_COMMAND <SOURCE_DIR>/b2.exe --with-system --build-dir=build-dir --prefix=${PREFIX_ext_boost} toolset=msvc variant=release link=shared  threading=multi architecture=x86 variant=release install
+			BUILD_COMMAND <SOURCE_DIR>/b2.exe --with-system --build-dir=build-dir --prefix=${PREFIX_ext_boost} toolset=msvc-14.0 variant=release link=shared  threading=multi architecture=x86 variant=release install
 			INSTALL_COMMAND ""
 			INSTALL_DIR ${EXTPREFIX_boost}
 
@@ -43,8 +42,7 @@ if (MSVC)
         ExternalProject_Add_Step(
 			ext_boost
 			post_install
-			COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/boost_system-vc-mt-1_55.dll ${PREFIX_ext_boost}/lib/boost_system-vc140-mt-1_55.dll
-			COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/boost_system-vc-mt-1_55.lib ${PREFIX_ext_boost}/lib/boost_system-vc140-mt-1_55.lib
+			COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/boost_system-vc140-mt-1_55.dll ${PREFIX_ext_boost}/bin/boost_system-vc140-mt-1_55.dll
 			DEPENDEES install
 		)
 	endif()

@@ -122,7 +122,7 @@ void KoPathPoint::setPoint(const QPointF &point)
 
 void KoPathPoint::setControlPoint1(const QPointF &point)
 {
-    if (!qIsNaNPoint(point)) return;
+    if (qIsNaNPoint(point)) return;
 
     d->controlPoint1 = point;
     d->activeControlPoint1 = true;
@@ -132,7 +132,7 @@ void KoPathPoint::setControlPoint1(const QPointF &point)
 
 void KoPathPoint::setControlPoint2(const QPointF &point)
 {
-    if (!qIsNaNPoint(point)) return;
+    if (qIsNaNPoint(point)) return;
 
     d->controlPoint2 = point;
     d->activeControlPoint2 = true;

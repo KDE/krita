@@ -57,7 +57,7 @@ KisImportExportFilter::ConversionStatus KisBMPImport::convert(const QByteArray& 
     if (to != "application/x-krita")
         return KisImportExportFilter::BadMimeType;
 
-        KisDocument * doc = outputDocument();
+    KisDocument * doc = outputDocument();
 
     if (!doc)
         return KisImportExportFilter::NoDocumentCreated;

@@ -111,19 +111,19 @@ int main( int argc, char** argv )
 
     // QT5TODO: untested replacement of KIconLoader::global()->addAppDir("krita");
     QStringList themeSearchPaths = QIcon::themeSearchPaths();
-    themeSearchPaths.append(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "krita/pics", QStandardPaths::LocateDirectory));
+    themeSearchPaths.append(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "pics", QStandardPaths::LocateDirectory));
     QIcon::setThemeSearchPaths(themeSearchPaths);
 
     // Initialize all Calligra directories etc.
     KoGlobal::initialize();
 
     // for cursors
-    KoResourcePaths::addResourceType("kis_pics", "data", "krita/pics/");
+    KoResourcePaths::addResourceType("kis_pics", "data", "pics/");
 
     // for images in the paintop box
-    KoResourcePaths::addResourceType("kis_images", "data", "krita/images/");
+    KoResourcePaths::addResourceType("kis_images", "data", "images/");
 
-    KoResourcePaths::addResourceType("icc_profiles", "data", "krita/profiles/");
+    KoResourcePaths::addResourceType("icc_profiles", "data", "profiles/");
 
     KisOpenGL::initialize();
 

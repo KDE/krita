@@ -209,7 +209,7 @@ bool SketchDeclarativeView::eventFilter(QObject* watched, QEvent* e)
             {
                 //QGraphicsScene is silly and will not forward unknown events to its items, so emulate that
                 //functionality.s
-                KisTabletEvent* ev = static_cast<KisTabletEvent*>(e);
+//                KisTabletEvent* ev = static_cast<KisTabletEvent*>(e);
                 // QT5TODO
 //                 QList<QGraphicsItem*> items = scene()->items(ev->pos());
 //                 Q_FOREACH(QGraphicsItem* item, items)

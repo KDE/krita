@@ -49,7 +49,11 @@ Windows Only:
 
 == Qt ==
 
-Install Qt. Either build from source or with the qt.io installer. 
+Install Qt. You have three options:
+
+* build from source yourself
+* install with the qt.io installer. 
+* build using the krita/3rdparty/ext_qt project as detailed in the next section.
 
 Either way, make sure qmake is in your environment path. If you are using Qt 5.6 for example, this is the default location for Windows:
 C:\Qt\Qt5.6.0\5.6\msvc2015_64\bin, when using the qt.io installer.
@@ -175,7 +179,11 @@ On Windows:
     cmake --build . --config RelWithDebInfo --target ext_png2ico
     cmake --build . --config RelWithDebInfo --target ext_pthreads
 
+On all operation systems, if you have decided to build Qt using the ext_qt project:
 
+    cmake --build . --config RelWithDebInfo --target ext_qt
+
+    
 On all operating systems:
 
     cmake --build . --config RelWithDebInfo --target ext_boost
@@ -235,6 +243,7 @@ Note 2: libcurl still isn't available.
 3. Run 
 
 On Windows
+
     Depending on what you want to use, run this command for MSBuild (slower compiling, since it doesn't properly use all the CPU cores, but ships with Visual Studio)
 
     cmake ..\krita -G "Visual Studio 14 Win64" -DBoost_DEBUG=OFF -DBOOST_INCLUDEDIR=c:\dev\i\include -DBOOST_DEBUG=ON -DBOOST_ROOT=c:\dev\i -DBOOST_LIBRARYDIR=c:\dev\i\lib -DCMAKE_INSTALL_PREFIX=c:\dev\i -DCMAKE_PREFIX_PATH=c:\dev\i -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DHAVE_MEMORY_LEAK_TRACKER=OFF -DPACKAGERS_BUILD=ON -Wno-dev -DDEFINE_NO_DEPRECATED=1

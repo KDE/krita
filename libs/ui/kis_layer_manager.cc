@@ -414,6 +414,11 @@ void KisLayerManager::addLayerCommon(KisNodeSP activeNode, KisLayerSP layer, boo
     KisNodeSP above;
     adjustLayerPosition(layer, activeNode, parent, above);
 
+
+    KisGroupLayer *group = dynamic_cast<KisGroupLayer*>(parent.data());
+    const bool parentForceUpdate = group && !group->projectionIsValid();
+    updateImage |= parentForceUpdate;
+
     m_commandsAdapter->addNode(layer, parent, above, updateImage, updateImage);
 }
 

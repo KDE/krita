@@ -165,7 +165,8 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
                                                  ProcessingFlags flags,
                                                  KisImageSignalVector emitSignals,
                                                  const KUndo2MagicString &name,
-                                                 KUndo2CommandExtraData *extraData)
+                                                 KUndo2CommandExtraData *extraData,
+                                                 int macroId)
     : m_image(image),
       m_node(node),
       m_flags(flags),
@@ -183,6 +184,8 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
     if (extraData) {
         strategy->setCommandExtraData(extraData);
     }
+
+    strategy->setMacroId(macroId);
 
     m_strokeId = m_image->startStroke(strategy);
     if(!m_emitSignals.isEmpty()) {

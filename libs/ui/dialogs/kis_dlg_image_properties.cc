@@ -41,6 +41,8 @@
 #include "kis_annotation.h"
 #include "kis_config.h"
 #include "kis_signal_compressor.h"
+#include "kis_processing_applicator.h"
+#include "commands_new/kis_change_projection_color_command.h"
 #include "widgets/kis_cmb_idlist.h"
 #include "widgets/squeezedcombobox.h"
 
@@ -111,8 +113,18 @@ const KoColorSpace * KisDlgImageProperties::colorSpace()
 
 void KisDlgImageProperties::setCurrentColor()
 {
-    m_image->setDefaultProjectionColor(m_defaultColorAction->currentKoColor());
-    m_image->refreshGraphAsync();
+    KisImageSignalVector emitSignals;
+    emitSignals << ModifiedSignal;
+
+    KisProcessingApplicator applicator(m_image,
+                                       m_image->root(),
+                                       KisProcessingApplicator::RECURSIVE,
+                                       emitSignals,
+                                       kundo2_i18n("Change projection color"),
+                                       0,
+                                       142857 + 1);
+    applicator.applyCommand(new KisChangeProjectionColorCommand(m_image, m_defaultColorAction->currentKoColor()));
+    applicator.end();
 }
 
 void KisDlgImageProperties::setAnnotation(const QString &type)

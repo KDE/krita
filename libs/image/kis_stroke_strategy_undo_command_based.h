@@ -89,6 +89,15 @@ public:
     void setCommandExtraData(KUndo2CommandExtraData *data);
 
     /**
+     * Sets the id of this action. Will be used for merging the undo commands
+     *
+     * The \p value must be set *before* the stroke has been started.
+     * Setting the \p value after the stroke has been started with
+     * image->startStroke(strokeId) leads to an undefined behaviour.
+     */
+    void setMacroId(int value);
+
+    /**
      * The undo-command-based is a low-level strategy, so it allows
      * changing its wraparound mode status.
      *
@@ -110,7 +119,7 @@ protected:
     KisStrokeStrategyUndoCommandBased(const KisStrokeStrategyUndoCommandBased &rhs,
                                       bool suppressUndo);
 
-    virtual void postProcessToplevelCommand(KUndo2Command *command);
+    virtual void postProcessToplevelCommand(KisSavedMacroCommand *command);
 
 private:
     void executeCommand(KUndo2CommandSP command, bool undo);
@@ -122,6 +131,7 @@ private:
     KisPostExecutionUndoAdapter *m_undoAdapter;
 
     QScopedPointer<KUndo2CommandExtraData> m_commandExtraData;
+    int m_macroId;
 
     // protects done commands only
     QMutex m_mutex;

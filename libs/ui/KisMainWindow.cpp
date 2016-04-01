@@ -345,7 +345,10 @@ KisMainWindow::KisMainWindow()
         QDockWidget *dw = createDockWidget(factory);
         dockwidgetActions[dw->toggleViewAction()->text()] = dw->toggleViewAction();
     }
-    dockwidgetActions[d->toolOptionsDocker->toggleViewAction()->text()] = d->toolOptionsDocker->toggleViewAction();
+
+    if (d->toolOptionsDocker) {
+        dockwidgetActions[d->toolOptionsDocker->toggleViewAction()->text()] = d->toolOptionsDocker->toggleViewAction();
+    }
 
     Q_FOREACH (QString title, dockwidgetActions.keys()) {
         d->dockWidgetMenu->addAction(dockwidgetActions[title]);

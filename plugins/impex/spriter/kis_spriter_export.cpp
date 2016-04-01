@@ -152,6 +152,7 @@ public:
 
     bool visit(KisPaintLayer *l)
     {
+        if (!l->visible()) return true;
         qDebug() << "visit paint layer" << l->name();
         saveFolder(l);
         return savePaintDevice(l->projection(), l->name());
@@ -159,18 +160,21 @@ public:
 
     bool visit(KisAdjustmentLayer *l)
     {
+        if (!l->visible()) return true;
         saveFolder(l);
         return savePaintDevice(l->projection(), l->name());
     }
 
     bool visit(KisExternalLayer *l)
     {
+        if (!l->visible()) return true;
         saveFolder(l);
         return savePaintDevice(l->projection(), l->name());
     }
 
     bool visit(KisCloneLayer *l)
     {
+        if (!l->visible()) return true;
         saveFolder(l);
         return savePaintDevice(l->projection(), l->name());
     }
@@ -192,6 +196,7 @@ public:
 
     bool visit(KisGeneratorLayer * l)
     {
+        if (!l->visible()) return true;
         saveFolder(l);
         return savePaintDevice(l->projection(), l->name());
     }
@@ -203,6 +208,7 @@ public:
 
     bool visit(KisGroupLayer *l)
     {
+        if (!l->visible()) return true;
         m_depth++;
         qDebug() << "saving group layer" << l << m_depth << m_path;
 
@@ -264,8 +270,8 @@ private:
         QDomElement object = m_scml->createElement("object");
         object.setAttribute("folder", 0);
         object.setAttribute("file", m_fileId); // This will be fixed afterwards
-        object.setAttribute("x", rc.x());
-        object.setAttribute("y", rc.y());
+        object.setAttribute("x", rc.x() + rc.width() / 2);
+        object.setAttribute("y", rc.y() + rc.height() / 2);
         object.setAttribute("pivot_x", 0);
         object.setAttribute("pivot_y", 0);
         object.setAttribute("angle", 0.0);

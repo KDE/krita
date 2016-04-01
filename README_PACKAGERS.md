@@ -2,7 +2,7 @@
 
 == Package Contents ==
 
-We recommend that all of Krita packaged in one package: there is no need to split Krita up.
+We recommend that all of Krita packaged in one package: there is no need to split Krita up. In particular, do not make a separate package out of the plugins directory; without the plugins Krita will not even start.
 
 Krita does not install header files, so there is no need for a corresponding -dev(el) package.
 
@@ -26,6 +26,10 @@ Packagers must build krita with the PACKAGERS_BUILD flag enabled. This makes sur
 
 Krita no longer supports a build without OpenGL.
 
+For alpha and beta packages, please build with debug output enabled, but for production packages the -DCMAKE_CXX_FLAGS="-DKDE_NO_DEBUG_OUTPUT" is recommended. A significant performance increase will be the result.
+
+If you build Krita with RelWithDebInfo to be able to create a corresponding  -dbg package, please define -DQT_NO_DEBUG=1 as well to disable asserts. 
+
 == Dependencies ==
 
 Krita depends on:
@@ -48,7 +52,7 @@ Krita depends on:
   * pthreads   
   * qt-5: Note that Qt 5.6 is _strongly_ recommended. Qt 5.5 has bugs that interfere with proper handling of tablet events
   * tiff  
-  * vc
+  * vc: this is a build-time dependency only
   * zlib
 
 And the following KDE Frameworks:

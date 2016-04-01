@@ -83,6 +83,17 @@ namespace KritaUtils
         return true;
     }
 
+    template <class C>
+        void makeContainerUnique(C &container) {
+        std::sort(container.begin(), container.end());
+        auto newEnd = std::unique(container.begin(), container.end());
+
+        while (newEnd != container.end()) {
+            container.erase(newEnd);
+            ++newEnd;
+        }
+    }
+
     /**
      * When drawing a rect Qt uses quite a weird algorithm. It
      * draws 4 lines:

@@ -140,6 +140,8 @@ QList<KisStrokeJobData*> KisSyncLodCacheStrokeStrategy::createJobsData(KisImageW
                             deviceList << node->getLodCapableDevices();
                         });
 
+    KritaUtils::makeContainerUnique(deviceList);
+
     Q_FOREACH (KisPaintDeviceSP device, deviceList) {
         jobsData << new Private::InitData(device);
     }

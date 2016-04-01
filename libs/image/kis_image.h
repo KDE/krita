@@ -416,9 +416,15 @@ public:
      */
     void mergeMultipleLayers(QList<KisNodeSP> mergedLayers, KisNodeSP putAfter);
 
-    /// This overrides interface for KisDefaultBounds
     /// @return the exact bounds of the image in pixel coordinates.
     QRect bounds() const;
+
+    /**
+     * Returns the actual bounds of the image, taking LevelOfDetail
+     * into account.  This value is used as a bounds() value of
+     * KisDefaultBounds object.
+     */
+    QRect effectiveLodBounds() const;
 
     /// use if the layers have changed _completely_ (eg. when flattening)
     void notifyLayersChanged();

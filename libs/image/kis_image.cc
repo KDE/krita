@@ -1015,6 +1015,19 @@ QRect KisImage::bounds() const
     return QRect(0, 0, width(), height());
 }
 
+QRect KisImage::effectiveLodBounds() const
+{
+    QRect boundRect = bounds();
+
+    const int lod = currentLevelOfDetail();
+    if (lod > 0) {
+        KisLodTransform t(lod);
+        boundRect = t.map(boundRect);
+    }
+
+    return boundRect;
+}
+
 KisPostExecutionUndoAdapter* KisImage::postExecutionUndoAdapter() const
 {
     return &m_d->postExecutionUndoAdapter;
@@ -1404,6 +1417,8 @@ void KisImage::requestProjectionUpdateImpl(KisNode *node,
                                            const QRect &rect,
                                            const QRect &cropRect)
 {
+    if (rect.isEmpty()) return;
+
     KisNodeGraphListener::requestProjectionUpdate(node, rect);
     m_d->scheduler.updateProjection(node, rect, cropRect);
 }
@@ -1425,7 +1440,7 @@ void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
      * supporting the wrap-around mode will not make much harm.
      */
     if (m_d->wrapAroundModePermitted) {
-        QRect boundRect = bounds();
+        const QRect boundRect = effectiveLodBounds();
         KisWrappedRect splitRect(rect, boundRect);
 
         Q_FOREACH (const QRect &rc, splitRect) {

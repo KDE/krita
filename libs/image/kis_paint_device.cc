@@ -471,7 +471,7 @@ KisPaintDevice::Private::KisPaintDeviceStrategy* KisPaintDevice::Private::curren
 
     QRect wrapRect = defaultBounds->bounds();
     if (!wrappedStrategy || wrappedStrategy->wrapRect() != wrapRect) {
-        wrappedStrategy.reset(new KisPaintDeviceWrappedStrategy(defaultBounds->bounds(), q, this));
+        wrappedStrategy.reset(new KisPaintDeviceWrappedStrategy(wrapRect, q, this));
     }
 
     return wrappedStrategy.data();

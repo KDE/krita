@@ -1148,9 +1148,6 @@ void KisNodeManager::createQuickGroupImpl(KisNodeJugglerCompressed *juggler,
     KisNodeSP active = activeNode();
     if (!active) return;
 
-    KisNodeSP parent = active->parent();
-    KisNodeSP aboveThis = active;
-
     KisImageSP image = m_d->view->image();
     QString groupName = !overrideGroupName.isEmpty() ? overrideGroupName : image->nextLayerName();
     KisGroupLayerSP group = new KisGroupLayer(image.data(), groupName, OPACITY_OPAQUE_U8);
@@ -1160,6 +1157,14 @@ void KisNodeManager::createQuickGroupImpl(KisNodeJugglerCompressed *juggler,
 
     KisNodeList nodes2;
     nodes2 = KisLayerUtils::sortMergableNodes(image->root(), selectedNodes());
+    KisLayerUtils::filterMergableNodes(nodes2);
+
+    if (KisLayerUtils::checkIsChildOf(active, nodes2)) {
+        active = nodes2.first();
+    }
+
+    KisNodeSP parent = active->parent();
+    KisNodeSP aboveThis = active;
 
     juggler->addNode(nodes1, parent, aboveThis);
     juggler->moveNode(nodes2, group, 0);

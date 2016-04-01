@@ -84,28 +84,10 @@ public:
      */
     void setImageFilters();
 
-    /**
-     * @brief setNameFilters set a list of description/extension pairs.
-     *
-     * These are not registered mimetypes. In contrast with Qt's filedialog namefilters,
-     * you can only have _one_ pair per line. I.e.
-     *
-     * Gif Image (*gif)
-     * Tiff Image (*tif)
-     *
-     * And NOT Images (*gif *tif)
-     *
-     * @param filterList
-     * @param defaultFilter
-     */
-    void setNameFilters(const QStringList &filterList,
-                        QString defaultFilter = QString());
-
     void setMimeTypeFilters(const QStringList &filterList,
                             QString defaultFilter = QString());
-    void setHideNameFilterDetailsOption();
 
-    QStringList nameFilters() const;
+    void setHideNameFilterDetailsOption();
 
     QStringList filenames();
     QString filename();

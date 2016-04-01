@@ -154,8 +154,13 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes << "*.gbr,*vbr";
         s_mimeDatabase << mimeType;
 
-        mimeType.mimeType = "image/x-gimp-brush";
+        mimeType.mimeType = "image/x-gimp-imagehosebrush";
         mimeType.description = i18nc("description of a file type", "Gimp Image Hose Brush");
+        mimeType.suffixes << "*.gih";
+        s_mimeDatabase << mimeType;
+
+        mimeType.mimeType = "image/x-adobe-brushlibrary";
+        mimeType.description = i18nc("description of a file type", "Adobe Brush Library");
         mimeType.suffixes << "*.gih";
         s_mimeDatabase << mimeType;
 
@@ -201,7 +206,7 @@ void KisMimeDatabase::fillMimeData()
 
         mimeType.mimeType = "application/x-gimp-color-palette";
         mimeType.description = i18nc("description of a file type", "Gimp Color Palette");
-        mimeType.suffixes << "*.gpl";
+        mimeType.suffixes << "*.gpl" << "*.pal" << "*.act" << "*.aco" << "*.colors";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "application/x-opencolorio-configuration";
@@ -212,6 +217,31 @@ void KisMimeDatabase::fillMimeData()
         mimeType.mimeType = "application/x-krita-recorded-macro";
         mimeType.description = i18nc("description of a file type", "Krita Recorded Action");
         mimeType.suffixes << "*.krarec";
+        s_mimeDatabase << mimeType;
+
+        mimeType.mimeType = "application/x-gimp-gradient";
+        mimeType.description = i18nc("description of a file type", "GIMP Gradients");
+        mimeType.suffixes << "*.ggr";
+        s_mimeDatabase << mimeType;
+
+        mimeType.mimeType = "application/x-gimp-pattern";
+        mimeType.description = i18nc("description of a file type", "GIMP Patterns");
+        mimeType.suffixes << "*.pat";
+        s_mimeDatabase << mimeType;
+
+        mimeType.mimeType = "application/x-karbon-gradient";
+        mimeType.description = i18nc("description of a file type", "Karbon Gradients");
+        mimeType.suffixes << "*.kgr";
+        s_mimeDatabase << mimeType;
+
+        mimeType.mimeType = "application/x-krita-bundle";
+        mimeType.description = i18nc("description of a file type", "Krita Resource Bundle");
+        mimeType.suffixes << "*.bundle";
+        s_mimeDatabase << mimeType;
+
+        mimeType.mimeType = "application/x-krita-workspace";
+        mimeType.description = i18nc("description of a file type", "Krita Workspace");
+        mimeType.suffixes << "*.kts";
         s_mimeDatabase << mimeType;
 
         debugPlugin << "Filled mimedatabase with" << s_mimeDatabase.count() << "special mimetypes";

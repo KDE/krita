@@ -800,9 +800,6 @@ QStringList KisMainWindow::showOpenFileDialog()
     dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KIS_MIME_TYPE,
                                                                  KisImportExportManager::Import,
                                                                  KisDocument::extraNativeMimeTypes()));
-    QStringList filters = dialog.nameFilters();
-    filters << i18n("All files (*.*)");
-    dialog.setNameFilters(filters);
     dialog.setHideNameFilterDetailsOption();
     dialog.setCaption(isImporting() ? i18n("Import Images") : i18n("Open Images"));
 

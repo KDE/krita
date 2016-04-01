@@ -141,32 +141,6 @@ void KoFileDialog::setImageFilters()
     setMimeTypeFilters(imageFilters);
 }
 
-void KoFileDialog::setNameFilters(const QStringList &filterList,
-                                  QString defaultFilter)
-{
-    d->filterList.clear();
-
-    if (d->type == KoFileDialog::SaveFile) {
-        QStringList mimeList;
-        Q_FOREACH (const QString &filter, filterList) {
-            d->filterList << splitNameFilter(filter, &mimeList);
-        }
-
-        if (!defaultFilter.isEmpty()) {
-            mimeList.clear();
-            QStringList defaultFilters = splitNameFilter(defaultFilter, &mimeList);
-            if (defaultFilters.size() > 0) {
-                defaultFilter = defaultFilters.first();
-            }
-        }
-    }
-    else {
-        d->filterList = filterList;
-    }
-    d->defaultFilter = defaultFilter;
-
-}
-
 void KoFileDialog::setMimeTypeFilters(const QStringList &filterList,
                                       QString defaultFilter)
 {
@@ -184,11 +158,6 @@ void KoFileDialog::setMimeTypeFilters(const QStringList &filterList,
 void KoFileDialog::setHideNameFilterDetailsOption()
 {
     d->hideDetails = true;
-}
-
-QStringList KoFileDialog::nameFilters() const
-{
-    return d->filterList;
 }
 
 QString KoFileDialog::selectedNameFilter() const

@@ -43,6 +43,7 @@ OcioDisplayFilter::OcioDisplayFilter(KisExposureGammaCorrectionInterface *interf
     , swizzle(RGBA)
     , m_interface(interface)
     , m_lut3dTexID(0)
+    , m_shaderDirty(true)
 {
 }
 
@@ -233,12 +234,20 @@ void OcioDisplayFilter::updateProcessor()
         //m_revereseApproximationProcessor;
     }
 
+    m_shaderDirty = true;
+}
+
+void OcioDisplayFilter::updateShader()
+{
     // check whether we are allowed to use shaders -- though that should
     // work for everyone these days
     KisConfig cfg;
     if (!cfg.useOpenGL()) return;
 
+    if (!m_shaderDirty) return;
+
     QOpenGLFunctions_3_2_Core *glFuncs3 = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_2_Core>();
+
     const int lut3DEdgeSize = cfg.ocioLutEdgeSize();
 
     if (m_lut3d.size() == 0) {
@@ -257,8 +266,8 @@ void OcioDisplayFilter::updateProcessor()
         glFuncs3->glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glFuncs3->glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
         glFuncs3->glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB16F_ARB,
-                              lut3DEdgeSize, lut3DEdgeSize, lut3DEdgeSize,
-                              0, GL_RGB, GL_FLOAT, &m_lut3d.constData()[0]);
+                               lut3DEdgeSize, lut3DEdgeSize, lut3DEdgeSize,
+                               0, GL_RGB, GL_FLOAT, &m_lut3d.constData()[0]);
     }
 
     // Step 1: Create a GPU Shader Description
@@ -280,11 +289,10 @@ void OcioDisplayFilter::updateProcessor()
 
         glFuncs3->glBindTexture(GL_TEXTURE_3D, m_lut3dTexID);
         glFuncs3->glTexSubImage3D(GL_TEXTURE_3D, 0,
-                                 0, 0, 0,
-                                 lut3DEdgeSize, lut3DEdgeSize, lut3DEdgeSize,
-                                 GL_RGB, GL_FLOAT, &m_lut3d[0]);
+                                  0, 0, 0,
+                                  lut3DEdgeSize, lut3DEdgeSize, lut3DEdgeSize,
+                                  GL_RGB, GL_FLOAT, &m_lut3d[0]);
     }
-
 
     // Step 3: Generate the shader text
     QString shaderCacheID = QString::fromLatin1(m_processor->getGpuShaderTextCacheID(shaderDesc));
@@ -299,4 +307,5 @@ void OcioDisplayFilter::updateProcessor()
         m_program = QString::fromLatin1(os.str().c_str());
     }
 
+    m_shaderDirty = false;
 }

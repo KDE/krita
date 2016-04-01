@@ -50,6 +50,8 @@ public:
     bool lockCurrentColorVisualRepresentation() const;
     void setLockCurrentColorVisualRepresentation(bool value);
 
+    void updateShader();
+
     KisExposureGammaCorrectionInterface *correctionInterface() const;
 
     virtual QString program() const;
@@ -84,6 +86,8 @@ private:
     QVector<float> m_lut3d;
     QString m_lut3dcacheid;
     QString m_shadercacheid;
+
+    bool m_shaderDirty;
 };
 
 #endif // OCIO_DISPLAY_FILTER_H

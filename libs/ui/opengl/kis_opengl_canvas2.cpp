@@ -743,6 +743,10 @@ void KisOpenGLCanvas2::renderCanvasGL()
     glClearColor(widgetBackgroundColor.redF(), widgetBackgroundColor.greenF(), widgetBackgroundColor.blueF(), 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    if (d->displayFilter) {
+        d->displayFilter->updateShader();
+    }
+
     drawCheckers();
     drawImage();
 }

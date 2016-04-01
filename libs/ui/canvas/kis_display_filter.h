@@ -44,6 +44,7 @@ public:
     virtual bool useInternalColorManagement() const = 0;
     virtual KisExposureGammaCorrectionInterface *correctionInterface() const = 0;
     virtual bool lockCurrentColorVisualRepresentation() const = 0;
+    virtual void updateShader() = 0;
 };
 
 

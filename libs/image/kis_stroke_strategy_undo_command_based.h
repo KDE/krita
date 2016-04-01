@@ -119,7 +119,7 @@ protected:
     KisStrokeStrategyUndoCommandBased(const KisStrokeStrategyUndoCommandBased &rhs,
                                       bool suppressUndo);
 
-    virtual void postProcessToplevelCommand(KisSavedMacroCommand *command);
+    virtual void postProcessToplevelCommand(KUndo2Command *command);
 
 private:
     void executeCommand(KUndo2CommandSP command, bool undo);

@@ -157,11 +157,14 @@ void KisStrokeStrategyUndoCommandBased::setMacroId(int value)
     m_macroId = value;
 }
 
-void KisStrokeStrategyUndoCommandBased::postProcessToplevelCommand(KisSavedMacroCommand *command)
+void KisStrokeStrategyUndoCommandBased::postProcessToplevelCommand(KUndo2Command *command)
 {
     if (m_commandExtraData) {
         command->setExtraData(m_commandExtraData.take());
     }
 
-    command->setMacroId(m_macroId);
+    KisSavedMacroCommand *savedCommand = dynamic_cast<KisSavedMacroCommand*>(command);
+    if (savedCommand) {
+        savedCommand->setMacroId(m_macroId);
+    }
 }

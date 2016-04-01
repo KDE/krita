@@ -45,6 +45,7 @@ struct KisRegenerateFrameStrokeStrategy::Private
             {}
 
         KisStrokeJobData* createLodClone(int levelOfDetail) {
+            Q_UNUSED(levelOfDetail);
             return new KisStrokeJobData(CONCURRENT);
         }
 

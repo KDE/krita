@@ -164,7 +164,7 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes << "*.kpp";
         s_mimeDatabase << mimeType;
 
-        mimeType.mimeType = "applicat/x-krita-assistant";
+        mimeType.mimeType = "application/x-krita-assistant";
         mimeType.description = i18nc("description of a file type", "Krita Assistant");
         mimeType.suffixes << "*.paintingassistant";
         s_mimeDatabase << mimeType;
@@ -184,11 +184,6 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes << "*.scml";
         s_mimeDatabase << mimeType;
 
-        mimeType.mimeType = "";
-        mimeType.description = i18nc("description of a file type", "");
-        mimeType.suffixes << "*.";
-        s_mimeDatabase << mimeType;
-
         mimeType.mimeType = "image/x-svm";
         mimeType.description = i18nc("description of a file type", "Starview Metafile");
         mimeType.suffixes << "*.svm";
@@ -197,6 +192,26 @@ void KisMimeDatabase::fillMimeData()
         mimeType.mimeType = "image/openraster";
         mimeType.description = i18nc("description of a file type", "OpenRaster Image");
         mimeType.suffixes << "*.ora";
+        s_mimeDatabase << mimeType;
+
+        mimeType.mimeType = "application/x-photoshop-style-library";
+        mimeType.description = i18nc("description of a file type", "Photoshop Layer Style Library");
+        mimeType.suffixes << "*.asl";
+        s_mimeDatabase << mimeType;
+
+        mimeType.mimeType = "application/x-gimp-color-palette";
+        mimeType.description = i18nc("description of a file type", "Gimp Color Palette");
+        mimeType.suffixes << "*.gpl";
+        s_mimeDatabase << mimeType;
+
+        mimeType.mimeType = "application/x-opencolorio-configuration";
+        mimeType.description = i18nc("description of a file type", "OpenColorIO Configuration");
+        mimeType.suffixes << "*.ocio";
+        s_mimeDatabase << mimeType;
+
+        mimeType.mimeType = "application/x-krita-recorded-macro";
+        mimeType.description = i18nc("description of a file type", "Krita Recorded Action");
+        mimeType.suffixes << "*.krarec";
         s_mimeDatabase << mimeType;
 
         debugPlugin << "Filled mimedatabase with" << s_mimeDatabase.count() << "special mimetypes";

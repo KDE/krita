@@ -43,7 +43,7 @@
 
 #include <KoIcon.h>
 #include <KoFileDialog.h>
-
+#include <KisMimeDatabase.h>
 #include "KoResourceServerAdapter.h"
 #include "KoResourceItemView.h"
 #include "KoResourceItemDelegate.h"
@@ -196,12 +196,13 @@ void KoResourceItemChooser::slotButtonClicked(int button)
 {
     if (button == Button_Import) {
         QString extensions = d->model->extensions();
-        QString filter = QString("%1")
-                         .arg(extensions.replace(QString(":"), QString(" ")));
-
+        QStringList mimeTypes;
+        Q_FOREACH(const QString &suffix, extensions.split(";")) {
+            mimeTypes << KisMimeDatabase::mimeTypeForSuffix(suffix);
+        }
 
         KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
-        dialog.setNameFilter(filter);
+        dialog.setMimeTypeFilters(mimeTypes);
         dialog.setCaption(i18nc("@title:window", "Choose File to Add"));
         QString filename = dialog.filename();
 

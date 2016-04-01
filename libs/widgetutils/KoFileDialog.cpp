@@ -141,19 +141,6 @@ void KoFileDialog::setImageFilters()
     setMimeTypeFilters(imageFilters);
 }
 
-void KoFileDialog::setNameFilter(const QString &filter)
-{
-    d->filterList.clear();
-    if (d->type == KoFileDialog::SaveFile) {
-        QStringList mimeList;
-        d->filterList << splitNameFilter(filter, &mimeList);
-        d->defaultFilter = d->filterList.first();
-    }
-    else {
-        d->filterList << filter;
-    }
-}
-
 void KoFileDialog::setNameFilters(const QStringList &filterList,
                                   QString defaultFilter)
 {

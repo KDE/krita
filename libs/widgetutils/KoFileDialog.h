@@ -84,8 +84,6 @@ public:
      */
     void setImageFilters();
 
-    void setNameFilter(const QString &filter);
-
     /**
      * @brief setNameFilters set a list of description/extension pairs.
      *
@@ -102,6 +100,7 @@ public:
      */
     void setNameFilters(const QStringList &filterList,
                         QString defaultFilter = QString());
+
     void setMimeTypeFilters(const QStringList &filterList,
                             QString defaultFilter = QString());
     void setHideNameFilterDetailsOption();

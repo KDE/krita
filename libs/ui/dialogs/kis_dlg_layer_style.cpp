@@ -262,8 +262,7 @@ void KisDlgLayerStyle::slotLoadStyle()
 
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "layerstyle");
     dialog.setCaption(i18n("Select ASL file"));
-    //dialog.setDefaultDir(QDir::cleanPath(filename));
-    dialog.setNameFilter(i18n("Layer style library (*.asl)"));
+    dialog.setMimeTypeFilters(QStringList() << "application/x-photoshop-style-library", "application/x-photoshop-style-library");
     filename = dialog.filename();
 
     m_stylesSelector->loadCollection(filename);
@@ -276,8 +275,7 @@ void KisDlgLayerStyle::slotSaveStyle()
 
     KoFileDialog dialog(this, KoFileDialog::SaveFile, "layerstyle");
     dialog.setCaption(i18n("Select ASL file"));
-    //dialog.setDefaultDir(QDir::cleanPath(filename));
-    dialog.setNameFilter(i18n("Layer style configuration (*.asl)"));
+    dialog.setMimeTypeFilters(QStringList() << "application/x-photoshop-style-library", "application/x-photoshop-style-library");
     filename = dialog.filename();
 
     QScopedPointer<KisPSDLayerStyleCollectionResource> collection(

@@ -89,8 +89,7 @@ namespace KritaUtils
         auto newEnd = std::unique(container.begin(), container.end());
 
         while (newEnd != container.end()) {
-            container.erase(newEnd);
-            ++newEnd;
+            newEnd = container.erase(newEnd);
         }
     }
 

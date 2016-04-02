@@ -84,7 +84,6 @@ endif ()
 
 install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
-install(FILES  krita.xmlgui DESTINATION ${DATA_INSTALL_DIR}/krita)
 install(FILES  krita.action kritamenu.action DESTINATION ${DATA_INSTALL_DIR}/krita/actions)
 install(FILES  krita.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/ )
 

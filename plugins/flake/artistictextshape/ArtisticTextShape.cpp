@@ -232,7 +232,6 @@ void ArtisticTextShape::createOutline()
 {
     // reset relevant data
     m_outline = QPainterPath();
-    m_outline.setFillRule(Qt::WindingFill);
     m_charOffsets.clear();
     cacheGlyphOutlines();
 
@@ -330,9 +329,7 @@ void ArtisticTextShape::createOutline()
                 QTransform m;
                 m.translate(charPos.x(), charPos.y());
                 m.rotate(rotation);
-                if (m_charOutlines.size() < globalCharIndex) {
-                    m_outline.addPath(m.map(m_charOutlines[globalCharIndex]));
-                }
+                m_outline.addPath(m.map(m_charOutlines[globalCharIndex]));
             }
         }
     }

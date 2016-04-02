@@ -90,9 +90,10 @@ extern "C" int main(int argc, char **argv)
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
-#if QT_VERSION >= 0x050600
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-#endif
+// This breaks the canvas!
+//#if QT_VERSION >= 0x050600
+//    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+//#endif
 
     KLocalizedString::setApplicationDomain("krita");
 

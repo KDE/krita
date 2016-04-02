@@ -244,7 +244,7 @@ void ResourceManager::slotImportGradients()
 
 void ResourceManager::slotImportBundles()
 {
-    QStringList resources = importResources(i18n("Import Bundles"), QStringList() << "application-x-krita-bundle");
+    QStringList resources = importResources(i18n("Import Bundles"), QStringList() << "application/x-krita-bundle");
     Q_FOREACH (const QString &res, resources) {
         KisResourceBundle *bundle = KisResourceServerProvider::instance()->resourceBundleServer()->createResource(res);
         bundle->load();

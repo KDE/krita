@@ -338,7 +338,7 @@ protected:
      * undocumented). Do not do this anymore after porting to KXMLGUI_INSTALL_DIR, use
      * setComponentName("componentname") and setXMLFile("filename").
      **/
-    virtual void setXMLFile(const QString &file, bool merge = false, bool setXMLDoc = true);
+    void setXMLFile(const QString &file, bool merge = false, bool setXMLDoc = true);
 
     /**
      * Return the full path to the ui_standards.xmlgui, might return a resource path.
@@ -358,7 +358,7 @@ protected:
      * toolbar and shortcut changes. You normally don't need to call this,
      * if you pass a simple filename to setXMLFile.
      */
-    virtual void setLocalXMLFile(const QString &file);
+    void setLocalXMLFile(const QString &file);
 
     /**
      * Sets the XML for the part.
@@ -366,7 +366,7 @@ protected:
      * Call this in the Part-inherited class constructor if you
      *  don't call setXMLFile().
      **/
-    virtual void setXML(const QString &document, bool merge = false);
+    void setXML(const QString &document, bool merge = false);
 
     /**
      * Sets the Document for the part, describing the layout of the GUI.
@@ -383,7 +383,7 @@ protected:
      * to something specific like app/local-client.xml, using replaceXMLFile.
      * See kdepimlibs/kontactinterface/plugin.cpp for an example.
      */
-    virtual void setDOMDocument(const QDomDocument &document, bool merge = false);
+    void setDOMDocument(const QDomDocument &document, bool merge = false);
 
     /**
      * Actions can collectively be assigned a "State". To accomplish this

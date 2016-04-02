@@ -226,7 +226,7 @@ void KoFileDialog::createFileDialog()
 
 QString KoFileDialog::filename()
 {
-    qDebug() << "static:" << d->useStaticForNative;
+    //qDebug() << "static:" << d->useStaticForNative;
 
     QString url;
     if (!d->useStaticForNative) {
@@ -303,7 +303,7 @@ QString KoFileDialog::filename()
 
 QStringList KoFileDialog::filenames()
 {
-    qDebug() << "static:" << d->useStaticForNative;
+    //qDebug() << "static:" << d->useStaticForNative;
 
     QStringList urls;
 
@@ -383,17 +383,26 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &m
 {
     QStringList mimeSeen;
 
+    // 1
+    QString allSupported;
+    // 2
+    QString kritaNative;
+    // 3
+    QString ora;
+
     QStringList ret;
-    if (withAllSupportedEntry) {
-        ret << QString();
-    }
 
     Q_FOREACH(const QString &mimeType, mimeList) {
-        qDebug() << "mimeType" << mimeType << "seen" << mimeSeen.contains(mimeType) << "swap extension order" << d->swapExtensionOrder;
+        //qDebug() << "mimeType" << mimeType << "seen" << mimeSeen.contains(mimeType) << "swap extension order" << d->swapExtensionOrder;
+
         if (!mimeSeen.contains(mimeType)) {
+            QString description = KisMimeDatabase::descriptionForMimeType(mimeType);
+            //qDebug() << "\tdescription:" << description;
+
+
             QString oneFilter;
             QStringList patterns = KisMimeDatabase::suffixesForMimeType(mimeType);
-            qDebug() << "\tpatterns:" << patterns;
+            //qDebug() << "\tpatterns:" << patterns;
             QStringList globPatterns;
             Q_FOREACH(const QString &pattern, patterns) {
                 if (pattern.startsWith(".")) {
@@ -411,12 +420,12 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &m
                 if (d->swapExtensionOrder) {
                     oneFilter.prepend(glob + " ");
                     if (withAllSupportedEntry) {
-                        ret[0].prepend(glob + " ");
+                        allSupported.prepend(glob + " ");
                     }
 #ifdef Q_OS_LINUX
                     oneFilter.prepend(glob.toUpper() + " ");
                     if (withAllSupportedEntry) {
-                        ret[0].prepend(glob.toUpper() + " ");
+                        allSupported.prepend(glob.toUpper() + " ");
                     }
 #endif
 
@@ -424,24 +433,30 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &m
                 else {
                     oneFilter.append(glob + " ");
                     if (withAllSupportedEntry) {
-                        ret[0].append(glob + " ");
+                        allSupported.append(glob + " ");
                     }
 #ifdef Q_OS_LINUX
                     oneFilter.append(glob.toUpper() + " ");
                     if (withAllSupportedEntry) {
-                        ret[0].append(glob.toUpper() + " ");
+                        allSupported.append(glob.toUpper() + " ");
                     }
 #endif
                 }
             }
-            QString description = KisMimeDatabase::descriptionForMimeType(mimeType);
-            qDebug() << "\tdescription:" << description;
 
             Q_ASSERT(!description.isEmpty());
 
             oneFilter = description + " ( " + oneFilter + ")";
+            //qDebug() << ">>>>>>>>>>>>>>>>>>>" << oneFilter;
+
+
             if (mimeType == "application/x-krita") {
-                ret.prepend(oneFilter);
+                kritaNative = oneFilter;
+                continue;
+            }
+            if (mimeType == "image/openraster") {
+                ora = oneFilter;
+                continue;
             }
             else {
                 ret << oneFilter;
@@ -450,12 +465,15 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &m
         }
     }
 
-    if (withAllSupportedEntry) {
-        ret[0] = i18n("All supported formats") + " ( " + ret[0] + (")");
-    }
+    ret.sort();
+    ret.removeDuplicates();
 
-    qDebug() << "Result:\n" << ret;
-    qDebug() << "===============================";
+    if (!ora.isEmpty()) ret.prepend(ora);
+    if (!kritaNative.isEmpty())  ret.prepend(kritaNative);
+    if (!allSupported.isEmpty()) ret.prepend(i18n("All supported formats") + " ( " + allSupported + (")"));
+
+    //qDebug() << "Result:\n" << ret;
+    //qDebug() << "===============================";
 
 
     return ret;

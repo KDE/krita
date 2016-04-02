@@ -47,7 +47,7 @@ QString KisMimeDatabase::mimeTypeForFile(const QString &file)
         debugPlugin << "mimeTypeForFile(). QMimeDatabase returned" << mime.name() << "for" << file;
         return mime.name();
     }
-    return QString();
+    return "";
 }
 
 QString KisMimeDatabase::mimeTypeForSuffix(const QString &suffix)
@@ -72,9 +72,7 @@ QString KisMimeDatabase::mimeTypeForSuffix(const QString &suffix)
         debugPlugin << "mimeTypeForSuffix(). QMimeDatabase returned" << mime.name() << "for" << s;
         return mime.name();
     }
-
-
-    return QString();
+    return "";
 }
 
 QString KisMimeDatabase::mimeTypeForData(const QByteArray ba)
@@ -99,11 +97,11 @@ QString KisMimeDatabase::descriptionForMimeType(const QString &mimeType)
     QMimeDatabase db;
     QMimeType mime = db.mimeTypeForName(mimeType);
     if (mime.name() != "application/octet-stream") {
-        debugPlugin << "descriptionForMimeType. QMimeDatabase returned" << mime.comment() << "for" << mimeType;
+        debugPlugin  << "descriptionForMimeType. QMimeDatabase returned" << mime.comment() << "for" << mimeType;
         return mime.comment();
     }
 
-    return QString();
+    return mimeType;
 }
 
 QStringList KisMimeDatabase::suffixesForMimeType(const QString &mimeType)
@@ -129,8 +127,7 @@ QStringList KisMimeDatabase::suffixesForMimeType(const QString &mimeType)
         debugPlugin << "suffixesForMimeType. QMimeDatabase returned" << suffixes;
         return suffixes;
     }
-
-    return QStringList(".kra");
+    return QStringList();
 }
 
 QString KisMimeDatabase::iconNameForMimeType(const QString &mimeType)
@@ -154,7 +151,7 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "*.gbr" << "*.vbr";
         s_mimeDatabase << mimeType;
 
-        mimeType.mimeType = "image/x-gimp-imagehosebrush";
+        mimeType.mimeType = "image/x-gimp-brush-animated";
         mimeType.description = i18nc("description of a file type", "Gimp Image Hose Brush");
         mimeType.suffixes = QStringList() << "*.gih";
         s_mimeDatabase << mimeType;
@@ -244,10 +241,17 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "*.kts";
         s_mimeDatabase << mimeType;
 
-        mimeType.mimeType = "application/x-krita-raw";
+        mimeType.mimeType = "image/x-krita-raw";
         mimeType.description = i18nc("description of a file type", "Camera Raw Files");
         mimeType.suffixes = QStringList() << "*.nef" << "*.cr2" << "*.sr2" << "*.crw" << "*.pef" << "*.x3f" << "*.kdc" << "*.mrw" << "*.arw" << "*.k25" << "*.dcr" << "*.orf" << "*.raw" << "*.raw" << "*.raf" << "*.srf" << "*.dng";
         s_mimeDatabase << mimeType;
+
+        mimeType.mimeType = "application/x-extension-exr";
+        mimeType.description = i18nc("description of a file type", "OpenEXR (Extended)");
+        mimeType.suffixes = QStringList() << "*.exr";
+        s_mimeDatabase << mimeType;
+
+
 
         debugPlugin << "Filled mimedatabase with" << s_mimeDatabase.count() << "special mimetypes";
     }

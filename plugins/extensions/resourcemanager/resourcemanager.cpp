@@ -215,7 +215,7 @@ QStringList ResourceManager::importResources(const QString &title, const QString
 void ResourceManager::slotImportBrushes()
 {
     QStringList resources = importResources(i18n("Import Brushes"), QStringList() << "image/x-gimp-brush"
-                                   << "image/x-gimp-imagehosebrush"
+                                   << "image/x-gimp-x-gimp-brush-animated"
                                    << "image/x-adobe-brushlibrary"
                                    << "image/png"
                                    << "image/svg+xml");

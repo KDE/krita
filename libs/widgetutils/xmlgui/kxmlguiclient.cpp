@@ -180,7 +180,7 @@ QString KXMLGUIClient::localXMLFile() const
 
 void KXMLGUIClient::reloadXML()
 {
-    // TODO: this method can't be used for the KXmlGuiWindow, since it doesn't merge in ui_standards.rc!
+    // TODO: this method can't be used for the KXmlGuiWindow, since it doesn't merge in ui_standards.xmlgui!
     //   -> KDE5: load ui_standards_rc in setXMLFile using a flag, and remember that flag?
     //            and then KEditToolBar can use reloadXML.
     QString file(xmlFile());
@@ -201,10 +201,10 @@ void KXMLGUIClient::setComponentName(const QString &componentName, const QString
 
 QString KXMLGUIClient::standardsXmlFileLocation()
 {
-    QString file = QStandardPaths::locate(QStandardPaths::GenericConfigLocation, QStringLiteral("ui/ui_standards.rc"));
+    QString file = QStandardPaths::locate(QStandardPaths::GenericConfigLocation, QStringLiteral("ui/ui_standards.xmlgui"));
     if (file.isEmpty()) {
         // fallback to resource, to allow to use the rc file compiled into this framework, must exist!
-        file = QStringLiteral(":/kxmlgui5/ui_standards.rc");
+        file = QStringLiteral(":/kxmlgui5/ui_standards.xmlgui");
         Q_ASSERT(QFile::exists(file));
     }
     return file;
@@ -255,11 +255,11 @@ void KXMLGUIClient::setXMLFile(const QString &_file, bool merge, bool setXMLDoc)
     if (allFiles.isEmpty() && !_file.isEmpty()) {
         // if a non-empty file gets passed and we can't find it,
         // inform the developer using some debug output
-        qWarning() << "cannot find .rc file" << _file << "for component" << componentName();
+        qWarning() << "cannot find .xmlgui file" << _file << "for component" << componentName();
     }
 
     // make sure to merge the settings from any file specified by setLocalXMLFile()
-    if (!d->m_localXMLFile.isEmpty() && !file.endsWith(QStringLiteral("ui_standards.rc"))) {
+    if (!d->m_localXMLFile.isEmpty() && !file.endsWith(QStringLiteral("ui_standards.xmlgui"))) {
         const bool exists = QDir::isRelativePath(d->m_localXMLFile) || QFile::exists(d->m_localXMLFile);
         if (exists && !allFiles.contains(d->m_localXMLFile)) {
             allFiles.prepend(d->m_localXMLFile);
@@ -271,7 +271,7 @@ void KXMLGUIClient::setXMLFile(const QString &_file, bool merge, bool setXMLDoc)
         file = findMostRecentXMLFile(allFiles, doc);
     }
 
-    // Always call setXML, even on error, so that we don't keep all ui_standards.rc menus.
+    // Always call setXML, even on error, so that we don't keep all ui_standards.xmlgui menus.
     setXML(doc, merge);
 }
 
@@ -326,7 +326,7 @@ void KXMLGUIClient::setXML(const QString &document, bool merge)
     QString errorMsg;
     int errorLine, errorColumn;
     // QDomDocument raises a parse error on empty document, but we accept no app-specific document,
-    // in which case you only get ui_standards.rc layout.
+    // in which case you only get ui_standards.xmlgui layout.
     bool result = document.isEmpty() || doc.setContent(document, &errorMsg, &errorLine, &errorColumn);
     if (result) {
         propagateTranslationDomain(doc, d->m_textTagNames);
@@ -334,7 +334,7 @@ void KXMLGUIClient::setXML(const QString &document, bool merge)
     } else {
 #ifdef NDEBUG
         qCritical() << "Error parsing XML document:" << errorMsg << "at line" << errorLine << "column" << errorColumn;
-        setDOMDocument(QDomDocument(), merge); // otherwise empty menus from ui_standards.rc stay around
+        setDOMDocument(QDomDocument(), merge); // otherwise empty menus from ui_standards.xmlgui stay around
 #else
         qCritical() << "Error parsing XML document:" << errorMsg << "at line" << errorLine << "column" << errorColumn;
         abort();

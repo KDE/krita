@@ -21,7 +21,7 @@ set(kritagemini_SRCS
 
 
 if (WIN32)
-    set(kritagemini_SRCS ${kritagemini_SRCS} KritaGeminiWin.rc)
+    set(kritagemini_SRCS ${kritagemini_SRCS} KritaGeminiWin.xmlgui)
 else ()
     ecm_add_app_icon(kritagemini_SRCS ICONS kritagemini.png)
 endif ()
@@ -44,6 +44,6 @@ target_link_libraries(kritagemini
 #install(PROGRAMS  kritagemini.desktop               DESTINATION ${XDG_APPS_#install_DIR})
 #install(FILES     kritageminirc kritageminipanelsrc DESTINATION ${CONFIG_#install_DIR} )
 #install(FILES     kritagemini.qml                   DESTINATION ${DATA_#install_DIR}/kritagemini)
-#install(FILES     kritagemini.rc                    DESTINATION ${DATA_#install_DIR}/kritagemini)
+#install(FILES     kritagemini.xmlgui                    DESTINATION ${DATA_#install_DIR}/kritagemini)
 
 add_subdirectory(icon)

@@ -207,7 +207,7 @@ public:
      * menu file whose contents depend on the mimetype of the file that
      * is selected, then you can achieve this using ActionLists. It
      * works as follows:
-     * In your xxxui.rc file ( the one that you set in setXMLFile() / pass to setupGUI()
+     * In your xxxui.xmlgui file ( the one that you set in setXMLFile() / pass to setupGUI()
      * ), you put a tag <tt>\<ActionList name="xxx"\></tt>.
      *
      * Example:
@@ -327,7 +327,7 @@ protected:
      * Since KF 5.1, the file will then be assumed to be installed in DATADIR/kxmlgui5/, under a directory
      * named after the component name.
      * You should use ${KXMLGUI_INSTALL_DIR}/componentname in your CMakeLists.txt file, to install
-     * the .rc file(s).
+     * the .xmlgui file(s).
      *
      * Since KF 5.4, the file will then be assumed to be installed in a Qt resource in :/kxmlgui5/,
      * under a directory named after the component name.
@@ -341,14 +341,14 @@ protected:
     virtual void setXMLFile(const QString &file, bool merge = false, bool setXMLDoc = true);
 
     /**
-     * Return the full path to the ui_standards.rc, might return a resource path.
-     * @return full path to ui_standards.rc, always non-empty.
+     * Return the full path to the ui_standards.xmlgui, might return a resource path.
+     * @return full path to ui_standards.xmlgui, always non-empty.
      * @since 5.16
      */
     static QString standardsXmlFileLocation();
 
     /**
-     * Load the ui_standards.rc file. Usually followed by setXMLFile(xmlFile, true), for merging.
+     * Load the ui_standards.xmlgui file. Usually followed by setXMLFile(xmlFile, true), for merging.
      * @since 4.6
      */
     void loadStandardsXmlFile();

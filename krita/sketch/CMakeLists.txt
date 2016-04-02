@@ -102,7 +102,7 @@ ${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_color_selector_combo_box.cpp
 
 
 if (WIN32)
-    set(kritasketch_SRCS ${kritasketch_SRCS} KritaSketchWin.rc)
+    set(kritasketch_SRCS ${kritasketch_SRCS} KritaSketchWin.xmlgui)
 else ()
     file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/icon/*-apps-kritasketch.png")
     ecm_add_app_icon(kritasketch_SRCS ICONS ${ICONS_SRCS})
@@ -149,7 +149,7 @@ install(TARGETS   kritasketch ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS  kritasketch.desktop               DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(FILES     kritasketchrc kritasketchpanelsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 install(FILES     kritasketch.qml                   DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
-install(FILES     kritasketch.rc                    DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
+install(FILES     kritasketch.xmlgui                    DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
 
 # Sketch Qt Quick components
 # =============================================================================

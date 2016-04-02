@@ -230,11 +230,7 @@ QString KoFileDialog::filename()
 
     QString url;
     if (!d->useStaticForNative) {
-
-        if (!d->fileDialog) {
-            createFileDialog();
-        }
-
+        createFileDialog();
         if (d->fileDialog->exec() == QDialog::Accepted) {
             url = d->fileDialog->selectedFiles().first();
         }
@@ -312,9 +308,7 @@ QStringList KoFileDialog::filenames()
     QStringList urls;
 
     if (!d->useStaticForNative) {
-        if (!d->fileDialog) {
-            createFileDialog();
-        }
+        createFileDialog();
         if (d->fileDialog->exec() == QDialog::Accepted) {
             urls = d->fileDialog->selectedFiles();
         }

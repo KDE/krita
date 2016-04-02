@@ -213,12 +213,11 @@ Microdump::Microdump(const string& contents)
       in_microdump = true;
       continue;
     }
-    if (line.find(kMicrodumpEnd) != string::npos) {
-      break;
-    }
-
     if (!in_microdump) {
       continue;
+    }
+    if (line.find(kMicrodumpEnd) != string::npos) {
+      break;
     }
 
     size_t pos;

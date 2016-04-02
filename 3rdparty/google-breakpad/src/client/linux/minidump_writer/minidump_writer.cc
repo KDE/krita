@@ -567,7 +567,7 @@ class MinidumpWriter {
 
     char file_name[NAME_MAX];
     char file_path[NAME_MAX];
-    LinuxDumper::GetMappingEffectiveNameAndPath(
+    dumper_->GetMappingEffectiveNameAndPath(
         mapping, file_path, sizeof(file_path), file_name, sizeof(file_name));
 
     const size_t file_name_len = my_strlen(file_name);

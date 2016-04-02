@@ -39,6 +39,16 @@
 
 using namespace google_breakpad;
 
+TEST(LinuxCoreDumperTest, GetMappingAbsolutePath) {
+  const LinuxCoreDumper dumper(getpid(), "core", "/tmp", "/mnt/root");
+  const MappingInfo mapping = { 0, 0, 0, false, "/usr/lib/libc.so" };
+
+  char path[PATH_MAX];
+  dumper.GetMappingAbsolutePath(mapping, path);
+
+  EXPECT_STREQ("/mnt/root/usr/lib/libc.so", path);
+}
+
 TEST(LinuxCoreDumperTest, BuildProcPath) {
   const pid_t pid = getpid();
   const char procfs_path[] = "/procfs_copy";

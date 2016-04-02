@@ -45,6 +45,7 @@
 #ifndef GOOGLE_BREAKPAD_PROCESSOR_CALL_STACK_H__
 #define GOOGLE_BREAKPAD_PROCESSOR_CALL_STACK_H__
 
+#include <cstdint>
 #include <vector>
 
 namespace google_breakpad {
@@ -61,8 +62,13 @@ class CallStack {
 
   // Resets the CallStack to its initial empty state
   void Clear();
-  
+
   const vector<StackFrame*>* frames() const { return &frames_; }
+
+  // Set the TID associated with this call stack.
+  void set_tid(uint32_t tid) { tid_ = tid; }
+
+  uint32_t tid() { return tid_; }
 
  private:
   // Stackwalker is responsible for building the frames_ vector.
@@ -70,6 +76,10 @@ class CallStack {
 
   // Storage for pushed frames.
   vector<StackFrame*> frames_;
+
+  // The TID associated with this call stack. Default to 0 if it's not
+  // available.
+  uint32_t tid_;
 };
 
 }  // namespace google_breakpad

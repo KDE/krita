@@ -1,4 +1,6 @@
-// Copyright (c) 2006, Google Inc.
+// -*- mode: c++ -*-
+
+// Copyright (c) 2011 Google Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -27,28 +29,31 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-// call_stack.cc: A call stack comprised of stack frames.
-//
-// See call_stack.h for documentation.
-//
-// Author: Mark Mentovai
+// symbol_upload.h: helper functions for linux symbol upload tool.
 
-#include "google_breakpad/processor/call_stack.h"
-#include "google_breakpad/processor/stack_frame.h"
+#ifndef COMMON_LINUX_SYMBOL_UPLOAD_H_
+#define COMMON_LINUX_SYMBOL_UPLOAD_H_
+
+#include <string>
+
+#include "common/using_std_string.h"
 
 namespace google_breakpad {
+namespace sym_upload {
 
-CallStack::~CallStack() {
-  Clear();
-}
+typedef struct {
+  string symbolsPath;
+  string uploadURLStr;
+  string proxy;
+  string proxy_user_pwd;
+  string version;
+  bool success;
+} Options;
 
-void CallStack::Clear() {
-  for (vector<StackFrame *>::const_iterator iterator = frames_.begin();
-       iterator != frames_.end();
-       ++iterator) {
-    delete *iterator;
-  }
-  tid_ = 0;
-}
+// Starts upload to symbol server with options.
+void Start(Options* options);
 
+}  // namespace sym_upload
 }  // namespace google_breakpad
+
+#endif  // COMMON_LINUX_SYMBOL_UPLOAD_H_

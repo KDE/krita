@@ -267,6 +267,7 @@ ProcessResult MinidumpProcessor::Process(
       // one bad thread.
       BPLOG(ERROR) << "No stackwalker for " << thread_string;
     }
+    stack->set_tid(thread_id);
     process_state->threads_.push_back(stack.release());
     process_state->thread_memory_regions_.push_back(thread_memory);
   }
@@ -745,6 +746,19 @@ string MinidumpProcessor::GetCrashReason(Minidump *dump, uint64_t *address) {
                     BPLOG(INFO) << "Unknown exception reason " << reason;
                     break;
                 }
+              } else if (raw_system_info->processor_architecture ==
+                         MD_CPU_ARCHITECTURE_X86 ||
+                         raw_system_info->processor_architecture ==
+                         MD_CPU_ARCHITECTURE_AMD64) {
+                switch (exception_flags) {
+                  case MD_EXCEPTION_CODE_MAC_X86_GENERAL_PROTECTION_FAULT:
+                    reason.append("EXC_I386_GPFLT");
+                    break;
+                  default:
+                    reason.append(flags_string);
+                    BPLOG(INFO) << "Unknown exception reason " << reason;
+                    break;
+                }
               } else {
                 reason.append(flags_string);
                 BPLOG(INFO) << "Unknown exception reason " << reason;
@@ -795,25 +809,26 @@ string MinidumpProcessor::GetCrashReason(Minidump *dump, uint64_t *address) {
               }
               break;
             }
+            case MD_CPU_ARCHITECTURE_AMD64:
             case MD_CPU_ARCHITECTURE_X86: {
               switch (exception_flags) {
                 case MD_EXCEPTION_CODE_MAC_X86_INVALID_OPERATION:
                   reason.append("EXC_I386_INVOP");
                   break;
                 case MD_EXCEPTION_CODE_MAC_X86_INVALID_TASK_STATE_SEGMENT:
-                  reason.append("EXC_INVTSSFLT");
+                  reason.append("EXC_I386_INVTSSFLT");
                   break;
                 case MD_EXCEPTION_CODE_MAC_X86_SEGMENT_NOT_PRESENT:
-                  reason.append("EXC_SEGNPFLT");
+                  reason.append("EXC_I386_SEGNPFLT");
                   break;
                 case MD_EXCEPTION_CODE_MAC_X86_STACK_FAULT:
-                  reason.append("EXC_STKFLT");
+                  reason.append("EXC_I386_STKFLT");
                   break;
                 case MD_EXCEPTION_CODE_MAC_X86_GENERAL_PROTECTION_FAULT:
-                  reason.append("EXC_GPFLT");
+                  reason.append("EXC_I386_GPFLT");
                   break;
                 case MD_EXCEPTION_CODE_MAC_X86_ALIGNMENT_FAULT:
-                  reason.append("EXC_ALIGNFLT");
+                  reason.append("EXC_I386_ALIGNFLT");
                   break;
                 default:
                   reason.append(flags_string);
@@ -866,6 +881,7 @@ string MinidumpProcessor::GetCrashReason(Minidump *dump, uint64_t *address) {
               }
               break;
             }
+            case MD_CPU_ARCHITECTURE_AMD64:
             case MD_CPU_ARCHITECTURE_X86: {
               switch (exception_flags) {
                 case MD_EXCEPTION_CODE_MAC_X86_DIV:
@@ -966,6 +982,7 @@ string MinidumpProcessor::GetCrashReason(Minidump *dump, uint64_t *address) {
               }
               break;
             }
+            case MD_CPU_ARCHITECTURE_AMD64:
             case MD_CPU_ARCHITECTURE_X86: {
               switch (exception_flags) {
                 case MD_EXCEPTION_CODE_MAC_X86_SGL:

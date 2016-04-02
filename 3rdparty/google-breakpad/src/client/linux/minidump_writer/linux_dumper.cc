@@ -88,14 +88,16 @@ namespace google_breakpad {
 // All interesting auvx entry types are below AT_SYSINFO_EHDR
 #define AT_MAX AT_SYSINFO_EHDR
 
-LinuxDumper::LinuxDumper(pid_t pid)
+LinuxDumper::LinuxDumper(pid_t pid, const char* root_prefix)
     : pid_(pid),
+      root_prefix_(root_prefix),
       crash_address_(0),
       crash_signal_(0),
       crash_thread_(pid),
       threads_(&allocator_, 8),
       mappings_(&allocator_),
       auxv_(&allocator_, AT_MAX + 1) {
+  assert(root_prefix_ && my_strlen(root_prefix_) < PATH_MAX);
   // The passed-in size to the constructor (above) is only a hint.
   // Must call .resize() to do actual initialization of the elements.
   auxv_.resize(AT_MAX + 1);
@@ -139,14 +141,9 @@ LinuxDumper::ElfFileIdentifierForMapping(const MappingInfo& mapping,
     return FileID::ElfFileIdentifierFromMappedFile(linux_gate, identifier);
   }
 
-  char filename[NAME_MAX];
-  size_t filename_len = my_strlen(mapping.name);
-  if (filename_len >= NAME_MAX) {
-    assert(false);
+  char filename[PATH_MAX];
+  if (!GetMappingAbsolutePath(mapping, filename))
     return false;
-  }
-  my_memcpy(filename, mapping.name, filename_len);
-  filename[filename_len] = '\0';
   bool filename_modified = HandleDeletedFileInMapping(filename);
 
   MemoryMappedFile mapped_file(filename, mapping.offset);
@@ -156,11 +153,17 @@ LinuxDumper::ElfFileIdentifierForMapping(const MappingInfo& mapping,
   bool success =
       FileID::ElfFileIdentifierFromMappedFile(mapped_file.data(), identifier);
   if (success && member && filename_modified) {
-    mappings_[mapping_id]->name[filename_len -
+    mappings_[mapping_id]->name[my_strlen(mapping.name) -
                                 sizeof(kDeletedSuffix) + 1] = '\0';
   }
 
   return success;
+}
+
+bool LinuxDumper::GetMappingAbsolutePath(const MappingInfo& mapping,
+                                         char path[PATH_MAX]) const {
+  return my_strlcpy(path, root_prefix_, PATH_MAX) < PATH_MAX &&
+         my_strlcat(path, mapping.name, PATH_MAX) < PATH_MAX;
 }
 
 namespace {
@@ -212,23 +215,16 @@ bool ElfFileSoNameFromMappedFile(
 // for |mapping|. If the SONAME is found copy it into the passed buffer
 // |soname| and return true. The size of the buffer is |soname_size|.
 // The SONAME will be truncated if it is too long to fit in the buffer.
-bool ElfFileSoName(
+bool ElfFileSoName(const LinuxDumper& dumper,
     const MappingInfo& mapping, char* soname, size_t soname_size) {
   if (IsMappedFileOpenUnsafe(mapping)) {
     // Not safe
     return false;
   }
 
-  char filename[NAME_MAX];
-  size_t filename_len = my_strlen(mapping.name);
-  if (filename_len >= NAME_MAX) {
-    assert(false);
-    // name too long
+  char filename[PATH_MAX];
+  if (!dumper.GetMappingAbsolutePath(mapping, filename))
     return false;
-  }
-
-  my_memcpy(filename, mapping.name, filename_len);
-  filename[filename_len] = '\0';
 
   MemoryMappedFile mapped_file(filename, mapping.offset);
   if (!mapped_file.data() || mapped_file.size() < SELFMAG) {
@@ -242,7 +238,6 @@ bool ElfFileSoName(
 }  // namespace
 
 
-// static
 void LinuxDumper::GetMappingEffectiveNameAndPath(const MappingInfo& mapping,
                                                  char* file_path,
                                                  size_t file_path_size,
@@ -255,8 +250,10 @@ void LinuxDumper::GetMappingEffectiveNameAndPath(const MappingInfo& mapping,
   // apk on Android). We try to find the name of the shared object (SONAME) by
   // looking in the file for ELF sections.
   bool mapped_from_archive = false;
-  if (mapping.exec && mapping.offset != 0)
-    mapped_from_archive = ElfFileSoName(mapping, file_name, file_name_size);
+  if (mapping.exec && mapping.offset != 0) {
+    mapped_from_archive =
+        ElfFileSoName(*this, mapping, file_name, file_name_size);
+  }
 
   if (mapped_from_archive) {
     // Some tools (e.g., stackwalk) extract the basename from the pathname. In
@@ -354,7 +351,8 @@ bool LinuxDumper::EnumerateMappings() {
             MappingInfo* module = mappings_.back();
             if ((start_addr == module->start_addr + module->size) &&
                 (my_strlen(name) == my_strlen(module->name)) &&
-                (my_strncmp(name, module->name, my_strlen(name)) == 0)) {
+                (my_strncmp(name, module->name, my_strlen(name)) == 0) &&
+                (exec == module->exec)) {
               module->size = end_addr - module->start_addr;
               line_reader->PopLine(line_len);
               continue;
@@ -580,10 +578,13 @@ bool LinuxDumper::HandleDeletedFileInMapping(char* path) const {
 
   // Check |path| against the /proc/pid/exe 'symlink'.
   char exe_link[NAME_MAX];
-  char new_path[NAME_MAX];
   if (!BuildProcPath(exe_link, pid_, "exe"))
     return false;
-  if (!SafeReadLink(exe_link, new_path))
+  MappingInfo new_mapping = {0};
+  if (!SafeReadLink(exe_link, new_mapping.name))
+    return false;
+  char new_path[PATH_MAX];
+  if (!GetMappingAbsolutePath(new_mapping, new_path))
     return false;
   if (my_strcmp(path, new_path) != 0)
     return false;

@@ -414,6 +414,7 @@ TEST_F(MinidumpProcessorTest, TestBasicProcessing) {
   ASSERT_EQ(state.crash_reason(), "EXCEPTION_ACCESS_VIOLATION_WRITE");
   ASSERT_EQ(state.crash_address(), 0x45U);
   ASSERT_EQ(state.threads()->size(), size_t(1));
+  EXPECT_EQ((*state.threads())[0]->tid(), 3060);
   ASSERT_EQ(state.requesting_thread(), 0);
   EXPECT_EQ(1171480435U, state.time_date_stamp());
   EXPECT_EQ(1171480435U, state.process_create_time());

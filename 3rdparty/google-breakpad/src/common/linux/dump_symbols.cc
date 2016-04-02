@@ -684,32 +684,61 @@ bool LoadSymbols(const string& obj_file,
     }
 
     // See if there are export symbols available.
-    const Shdr* dynsym_section =
-      FindElfSectionByName<ElfClass>(".dynsym", SHT_DYNSYM,
-                                     sections, names, names_end,
-                                     elf_header->e_shnum);
-    const Shdr* dynstr_section =
-      FindElfSectionByName<ElfClass>(".dynstr", SHT_STRTAB,
-                                     sections, names, names_end,
-                                     elf_header->e_shnum);
-    if (dynsym_section && dynstr_section) {
-      info->LoadedSection(".dynsym");
+    const Shdr* symtab_section =
+        FindElfSectionByName<ElfClass>(".symtab", SHT_SYMTAB,
+                                       sections, names, names_end,
+                                       elf_header->e_shnum);
+    const Shdr* strtab_section =
+        FindElfSectionByName<ElfClass>(".strtab", SHT_STRTAB,
+                                       sections, names, names_end,
+                                       elf_header->e_shnum);
+    if (symtab_section && strtab_section) {
+      info->LoadedSection(".symtab");
 
-      const uint8_t* dynsyms =
+      const uint8_t* symtab =
           GetOffset<ElfClass, uint8_t>(elf_header,
-                                       dynsym_section->sh_offset);
-      const uint8_t* dynstrs =
+                                       symtab_section->sh_offset);
+      const uint8_t* strtab =
           GetOffset<ElfClass, uint8_t>(elf_header,
-                                       dynstr_section->sh_offset);
+                                       strtab_section->sh_offset);
       bool result =
-          ELFSymbolsToModule(dynsyms,
-                             dynsym_section->sh_size,
-                             dynstrs,
-                             dynstr_section->sh_size,
+          ELFSymbolsToModule(symtab,
+                             symtab_section->sh_size,
+                             strtab,
+                             strtab_section->sh_size,
                              big_endian,
                              ElfClass::kAddrSize,
                              module);
       found_usable_info = found_usable_info || result;
+    } else {
+      // Look in dynsym only if full symbol table was not available.
+      const Shdr* dynsym_section =
+          FindElfSectionByName<ElfClass>(".dynsym", SHT_DYNSYM,
+                                         sections, names, names_end,
+                                         elf_header->e_shnum);
+      const Shdr* dynstr_section =
+          FindElfSectionByName<ElfClass>(".dynstr", SHT_STRTAB,
+                                         sections, names, names_end,
+                                         elf_header->e_shnum);
+      if (dynsym_section && dynstr_section) {
+        info->LoadedSection(".dynsym");
+
+        const uint8_t* dynsyms =
+            GetOffset<ElfClass, uint8_t>(elf_header,
+                                         dynsym_section->sh_offset);
+        const uint8_t* dynstrs =
+            GetOffset<ElfClass, uint8_t>(elf_header,
+                                         dynstr_section->sh_offset);
+        bool result =
+            ELFSymbolsToModule(dynsyms,
+                               dynsym_section->sh_size,
+                               dynstrs,
+                               dynstr_section->sh_size,
+                               big_endian,
+                               ElfClass::kAddrSize,
+                               module);
+        found_usable_info = found_usable_info || result;
+      }
     }
   }
 

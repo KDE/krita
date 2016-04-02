@@ -212,6 +212,17 @@ TEST_F(MicrodumpProcessorTest, TestProcessX86) {
   // names.
 }
 
+TEST_F(MicrodumpProcessorTest, TestProcessMultiple) {
+  ProcessState state;
+  AnalyzeDump("microdump-multiple.dmp", false /* omit_symbols */,
+              6 /* expected_cpu_count */, &state);
+  ASSERT_EQ(133U, state.modules()->module_count());
+  ASSERT_EQ("arm", state.system_info()->cpu);
+  ASSERT_EQ("lge/p1_tmo_us/p1:6.0/MRA58K/1603210524c8d:user/release-keys",
+            state.system_info()->os_version);
+  ASSERT_EQ(2U, state.threads()->at(0)->frames()->size());
+}
+
 }  // namespace
 
 int main(int argc, char* argv[]) {

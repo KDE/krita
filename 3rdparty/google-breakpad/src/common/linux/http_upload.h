@@ -74,6 +74,9 @@ class HTTPUpload {
   // any quote (") characters.  Returns true if so.
   static bool CheckParameters(const map<string, string> &parameters);
 
+  // Checks the curl_lib parameter points to a valid curl lib.
+  static bool CheckCurlLib(void* curl_lib);
+
   // No instances of this class should be created.
   // Disallow all constructors, destructors, and operator=.
   HTTPUpload();

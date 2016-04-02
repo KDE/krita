@@ -580,6 +580,7 @@ src_tools_linux_symupload_minidump_upload_LDADD = -ldl
 
 src_tools_linux_symupload_sym_upload_SOURCES = \
 	src/common/linux/http_upload.cc \
+	src/common/linux/symbol_upload.cc \
 	src/tools/linux/symupload/sym_upload.cc
 src_tools_linux_symupload_sym_upload_LDADD = -ldl
 
@@ -1254,6 +1255,8 @@ EXTRA_DIST = \
 	src/common/linux/guid_creator.h \
 	src/common/linux/http_upload.cc \
 	src/common/linux/http_upload.h \
+	src/common/linux/symbol_upload.cc \
+	src/common/linux/symbol_upload.h \
 	src/common/mac/HTTPMultipartUpload.h \
 	src/common/mac/HTTPMultipartUpload.m \
 	src/common/mac/dump_syms.h \

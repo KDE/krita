@@ -210,7 +210,7 @@ bool FindAndLoadOmapTable(const wchar_t* name,
                           reinterpret_cast<BYTE*>(&table->at(0)),
                           &count_read))) {
     fprintf(stderr, "IDiaEnumDebugStreamData::Next failed while reading "
-                    "data from stream \"%ws\"\n");
+                    "data from stream \"%ws\"\n", name);
     return false;
   }
 

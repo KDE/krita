@@ -277,7 +277,7 @@ void KXmlGuiWindow::createGUI(const QString &xmlfile)
         }
     }
 
-    const QString windowXmlFile = xmlfile.isNull() ? componentName() + QStringLiteral("ui.rc") : xmlfile;
+    const QString windowXmlFile = xmlfile.isNull() ? componentName() + QStringLiteral("ui.xmlgui") : xmlfile;
 
     // Help beginners who call setXMLFile and then setupGUI...
     if (!xmlFile().isEmpty() && xmlFile() != windowXmlFile) {

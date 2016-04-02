@@ -423,7 +423,7 @@ void LutDockerDock::selectOcioConfiguration()
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "lutdocker");
     dialog.setCaption(i18n("Select OpenColorIO Configuration"));
     dialog.setDefaultDir(QDir::cleanPath(filename));
-    dialog.setNameFilter(i18n("OpenColorIO configuration (*.ocio)"));
+    dialog.setMimeTypeFilters(QStringList() << "application/x-opencolorio-configuration", "x-opencolorio-configuration");
     filename = dialog.filename();
     QFile f(filename);
     if (f.exists()) {
@@ -556,7 +556,7 @@ void LutDockerDock::selectLut()
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "lutdocker");
     dialog.setCaption(i18n("Select LUT file"));
     dialog.setDefaultDir(QDir::cleanPath(filename));
-    dialog.setNameFilter("*.*");
+    dialog.setMimeTypeFilters(QStringList() << "application/octet-stream", "application/octet-stream");
     filename = dialog.filename();
 
     QFile f(filename);

@@ -26,7 +26,7 @@ else()
         URL_MD5 7a2a867bc12384f4161809136d49d4be
         INSTALL_DIR ${EXTPREFIX_qt}
         CONFIGURE_COMMAND "<SOURCE_DIR>/configure -confirm-license  -opensource -nomake examples \
-                -no-pch -no-dbus -no-icu -no-iconv -no-openssl -no-nis \
+                -no-openssl \
                 -no-compile-examples -qt-freetype -qt-harfbuzz -opengl desktop \
                 -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg 
                 -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity \
@@ -47,7 +47,7 @@ else()
             URL http://download.qt.io/official_releases/qt/5.6/5.6.0/single/qt-everywhere-opensource-src-5.6.0.tar.gz
             URL_MD5 7a2a867bc12384f4161809136d49d4be
             INSTALL_DIR ${EXTPREFIX_qt}
-            CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_qt} -I ${EXTPREFIX_qt}/include -L ${EXTPREFIX_qt}/lib  -opensource -confirm-license -nomake examples -no-sql-sqlite -no-openssl -no-qml-debug -no-mtdev  -no-journald  -no-syslog -no-glib  -no-pulseaudio -no-alsa  -no-gtkstyle  -no-nis  -no-cups  -no-iconv   -no-tslib   -no-icu  -no-directfb   -no-linuxfb  -no-gstreamer -no-pch -qt-zlib -qt-pcre -no-icu -qt-libpng -qt-libjpeg  -qt-harfbuzz  -no-libproxy -qt-freetype -qt-xcb -qt-xkbcommon-x11 -optimized-qmake  -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtenginio -skip qtgraphicaleffects -skip qtlocation -skip qtmultimedia -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview 
+            CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_qt} -opensource -confirm-license -nomake examples -no-sql-sqlite -no-openssl -no-qml-debug -no-mtdev  -no-journald  -no-syslog -no-nis  -no-cups -no-tslib -no-directfb -no-linuxfb -no-libproxy -no-pch -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg  -qt-harfbuzz -qt-freetype -qt-xcb -qt-xkbcommon-x11 -optimized-qmake -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtenginio -skip qtgraphicaleffects -skip qtlocation -skip qtmultimedia -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview 
             
             BUILD_COMMAND make
             INSTALL_COMMAND make install

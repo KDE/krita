@@ -18,4 +18,4 @@ ki18n_wrap_ui(kritamodifyselection_SOURCES
 add_library(kritamodifyselection MODULE ${kritamodifyselection_SOURCES})
 target_link_libraries(kritamodifyselection kritaui)
 install(TARGETS kritamodifyselection  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
-install( FILES  modify_selection.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
+install( FILES  modify_selection.xmlgui  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)

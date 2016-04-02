@@ -462,7 +462,7 @@ public:
 
     QString xmlFile(const QString &xml_file) const
     {
-        return xml_file.isEmpty() ? m_componentName + QStringLiteral("ui.rc") : xml_file;
+        return xml_file.isEmpty() ? m_componentName + QStringLiteral("ui.xmlgui") : xml_file;
     }
 
     /**
@@ -830,7 +830,7 @@ void KEditToolBarWidgetPrivate::initOldStyle(const QString &resourceFile,
 
     // handle the merging
     if (global) {
-        m_widget->loadStandardsXmlFile();    // ui_standards.rc
+        m_widget->loadStandardsXmlFile();    // ui_standards.xmlgui
     }
     const QString localXML = loadXMLFile(resourceFile);
     m_widget->setXML(localXML, global ? true /*merge*/ : false);
@@ -981,7 +981,7 @@ void KEditToolBarWidget::rebuildKXMLGUIClients()
             // passing an empty stream forces the clients to reread the XML
             client->setXMLGUIBuildDocument(QDomDocument());
 
-            // for the shell, merge in ui_standards.rc
+            // for the shell, merge in ui_standards.xmlgui
             if (client == firstClient) { // same assumption as in the ctor: first==shell
                 client->loadStandardsXmlFile();
             }
@@ -989,7 +989,7 @@ void KEditToolBarWidget::rebuildKXMLGUIClients()
             // and this forces it to use the *new* XML file
             client->setXMLFile(file, client == firstClient /* merge if shell */);
 
-            // [we can't use reloadXML, it doesn't load ui_standards.rc]
+            // [we can't use reloadXML, it doesn't load ui_standards.xmlgui]
         }
     }
 

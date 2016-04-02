@@ -349,7 +349,6 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                 {
                     urlRequester = new KisUrlRequester;
                     urlRequester->setMode(KoFileDialog::OpenFile);
-                    urlRequester->setNameFilter(i18n("All files (*)"));
 
                     m_widgetToParameterIndexMapper[ urlRequester ] = i;
                     mapParameterWidget(fileParam, urlRequester);

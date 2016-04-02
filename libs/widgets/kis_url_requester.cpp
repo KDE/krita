@@ -92,12 +92,6 @@ void KisUrlRequester::setMimeTypeFilters(const QStringList &filterList,
     m_mime_default_filter = defaultFilter;
 }
 
-void KisUrlRequester::setNameFilter(const QString& filter)
-{
-    m_nameFilter = filter;
-}
-
-
 void KisUrlRequester::slotSelectFile()
 {
     KoFileDialog dialog(this, m_mode, "OpenDocument");
@@ -113,13 +107,7 @@ void KisUrlRequester::slotSelectFile()
     dialog.setDefaultDir(m_basePath.isEmpty() ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) : m_basePath);
 
     Q_ASSERT(!m_mime_filter_list.isEmpty());
-//        dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
     dialog.setMimeTypeFilters(m_mime_filter_list, m_mime_default_filter);
-
-    if (!m_nameFilter.isEmpty())
-    {
-        dialog.setNameFilter(m_nameFilter);
-    }
 
     QString url = dialog.filename();
 

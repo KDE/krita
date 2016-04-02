@@ -151,97 +151,102 @@ void KisMimeDatabase::fillMimeData()
 
         mimeType.mimeType = "image/x-gimp-brush";
         mimeType.description = i18nc("description of a file type", "Gimp Brush");
-        mimeType.suffixes << "*.gbr,*vbr";
+        mimeType.suffixes = QStringList() << "*.gbr" << "*.vbr";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "image/x-gimp-imagehosebrush";
         mimeType.description = i18nc("description of a file type", "Gimp Image Hose Brush");
-        mimeType.suffixes << "*.gih";
+        mimeType.suffixes = QStringList() << "*.gih";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "image/x-adobe-brushlibrary";
         mimeType.description = i18nc("description of a file type", "Adobe Brush Library");
-        mimeType.suffixes << "*.gih";
+        mimeType.suffixes = QStringList() << "*.abr";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "application/x-krita-paintoppreset";
         mimeType.description = i18nc("description of a file type", "Krita Brush Preset");
-        mimeType.suffixes << "*.kpp";
+        mimeType.suffixes = QStringList() << "*.kpp";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "application/x-krita-assistant";
         mimeType.description = i18nc("description of a file type", "Krita Assistant");
-        mimeType.suffixes << "*.paintingassistant";
+        mimeType.suffixes = QStringList() << "*.paintingassistant";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "image/x-r16";
         mimeType.description = i18nc("description of a file type", "R16 Heightmap");
-        mimeType.suffixes << "*.r16";
+        mimeType.suffixes = QStringList() <<  "*.r16";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "image/x-r8";
         mimeType.description = i18nc("description of a file type", "R8 Heightmap");
-        mimeType.suffixes << "*.r8";
+        mimeType.suffixes = QStringList() << "*.r8";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "application/x-spriter";
         mimeType.description = i18nc("description of a file type", "Spriter SCML");
-        mimeType.suffixes << "*.scml";
+        mimeType.suffixes = QStringList() << "*.scml";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "image/x-svm";
         mimeType.description = i18nc("description of a file type", "Starview Metafile");
-        mimeType.suffixes << "*.svm";
+        mimeType.suffixes = QStringList() << "*.svm";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "image/openraster";
         mimeType.description = i18nc("description of a file type", "OpenRaster Image");
-        mimeType.suffixes << "*.ora";
+        mimeType.suffixes = QStringList() << "*.ora";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "application/x-photoshop-style-library";
         mimeType.description = i18nc("description of a file type", "Photoshop Layer Style Library");
-        mimeType.suffixes << "*.asl";
+        mimeType.suffixes = QStringList() << "*.asl";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "application/x-gimp-color-palette";
         mimeType.description = i18nc("description of a file type", "Gimp Color Palette");
-        mimeType.suffixes << "*.gpl" << "*.pal" << "*.act" << "*.aco" << "*.colors";
+        mimeType.suffixes = QStringList() << "*.gpl" << "*.pal" << "*.act" << "*.aco" << "*.colors";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "application/x-opencolorio-configuration";
         mimeType.description = i18nc("description of a file type", "OpenColorIO Configuration");
-        mimeType.suffixes << "*.ocio";
+        mimeType.suffixes = QStringList() << "*.ocio";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "application/x-krita-recorded-macro";
         mimeType.description = i18nc("description of a file type", "Krita Recorded Action");
-        mimeType.suffixes << "*.krarec";
+        mimeType.suffixes = QStringList() << "*.krarec";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "application/x-gimp-gradient";
         mimeType.description = i18nc("description of a file type", "GIMP Gradients");
-        mimeType.suffixes << "*.ggr";
+        mimeType.suffixes = QStringList() << "*.ggr";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "application/x-gimp-pattern";
         mimeType.description = i18nc("description of a file type", "GIMP Patterns");
-        mimeType.suffixes << "*.pat";
+        mimeType.suffixes = QStringList() << "*.pat";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "application/x-karbon-gradient";
         mimeType.description = i18nc("description of a file type", "Karbon Gradients");
-        mimeType.suffixes << "*.kgr";
+        mimeType.suffixes = QStringList() << "*.kgr";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "application/x-krita-bundle";
         mimeType.description = i18nc("description of a file type", "Krita Resource Bundle");
-        mimeType.suffixes << "*.bundle";
+        mimeType.suffixes = QStringList() << "*.bundle";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "application/x-krita-workspace";
         mimeType.description = i18nc("description of a file type", "Krita Workspace");
-        mimeType.suffixes << "*.kts";
+        mimeType.suffixes = QStringList() << "*.kts";
+        s_mimeDatabase << mimeType;
+
+        mimeType.mimeType = "application/x-krita-raw";
+        mimeType.description = i18nc("description of a file type", "Camera Raw Files");
+        mimeType.suffixes = QStringList() << "*.nef" << "*.cr2" << "*.sr2" << "*.crw" << "*.pef" << "*.x3f" << "*.kdc" << "*.mrw" << "*.arw" << "*.k25" << "*.dcr" << "*.orf" << "*.raw" << "*.raw" << "*.raf" << "*.srf" << "*.dng";
         s_mimeDatabase << mimeType;
 
         debugPlugin << "Filled mimedatabase with" << s_mimeDatabase.count() << "special mimetypes";

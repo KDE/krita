@@ -452,17 +452,9 @@ KisMainWindow::KisMainWindow()
 
     // If we have customized the toolbars, load that first
     setLocalXMLFile(KoResourcePaths::locateLocal("data", "krita.xmlgui"));
-
-    QString doc;
-    QStringList allFiles = KoResourcePaths::findAllResources("data", "krita.xmlgui");
-    // We need at least one krita.xmlgui file!
-    if (allFiles.size() == 0) {
-        m_errorMessage = i18n("Krita cannot find the configuration file! Krita will quit now.");
-        m_dieOnError = true;
-        QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
-        return;
-    }
-    setXMLFile(findMostRecentXMLFile(allFiles, doc));
+    QFile doc(":/kxmlgui5/krita.xmlgui");
+    doc.open(QFile::ReadOnly);
+    setXML(doc.readAll());
 
     guiFactory()->addClient(this);
 

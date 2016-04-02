@@ -2,11 +2,11 @@
 source krita_xgettext.sh
 
 $EXTRACTRC `find . -name \*.ui | grep -v '/tests/'` >> rc.cpp
-RCFILES=`find . -name \*.rc                                                   \
-	| grep -v plugins/extensions/metadataeditor/editors/dublincore.rc     \
-	| grep -v plugins/extensions/metadataeditor/editors/exif.rc           \
-	| grep -v sketch/KritaSketchWin.rc                                    \
-	| grep -v gemini/KritaGeminiWin.rc
+RCFILES=`find . -name \*.xmlgui                                               \
+	| grep -v plugins/extensions/metadataeditor/editors/dublincore.xmlgui \
+	| grep -v plugins/extensions/metadataeditor/editors/exif.xmlgui       \
+	| grep -v krita/sketch/KritaSketchWin.xmlgui                          \
+	| grep -v krita/gemini/KritaGeminiWin.xmlgui
          `
 $EXTRACTRC $RCFILES >> rc.cpp
 

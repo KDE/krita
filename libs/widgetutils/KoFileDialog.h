@@ -89,7 +89,10 @@ public:
 
     void setHideNameFilterDetailsOption();
 
+    /// Get the file names the user selected in the file dialog
     QStringList filenames();
+
+    /// Get the file name the user selected in the file dialog
     QString filename();
 
     /**

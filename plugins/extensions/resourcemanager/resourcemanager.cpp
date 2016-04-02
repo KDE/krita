@@ -77,9 +77,33 @@ ResourceManager::ResourceManager(QObject *parent, const QVariantList &)
     : KisViewPlugin(parent)
     , d(new Private())
 {
-    KisAction *action = new KisAction(i18n("Import Resources or Bundles..."), this);
-    addAction("import_resources", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(slotimportResources()));
+    KisAction *action = new KisAction(i18n("Import Bundles..."), this);
+    addAction("import_bundles", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImportBundles()));
+
+    action = new KisAction(i18n("Import Brushes..."), this);
+    addAction("import_brushes", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImportBrushes()));
+
+    action = new KisAction(i18n("Import Gradients..."), this);
+    addAction("import_gradients", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImportGradients()));
+
+    action = new KisAction(i18n("Import Palettes..."), this);
+    addAction("import_palettes", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImportPalettes()));
+
+    action = new KisAction(i18n("Import Patterns..."), this);
+    addAction("import_patterns", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImportPatterns()));
+
+    action = new KisAction(i18n("Import Presets..."), this);
+    addAction("import_presets", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImportPresets()));
+
+    action = new KisAction(i18n("Import Workspaces..."), this);
+    addAction("import_workspaces", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImportWorkspaces()));
 
     action = new KisAction(i18n("Create Resource Bundle..."), this);
     addAction("create_bundle", action);

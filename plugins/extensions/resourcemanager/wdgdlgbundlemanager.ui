@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>835</width>
-    <height>646</height>
+    <height>712</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -137,49 +137,49 @@
    <item row="0" column="3">
     <layout class="QVBoxLayout" name="verticalLayout_5">
      <item>
-      <widget class="QPushButton" name="importBundleButton">
+      <widget class="QPushButton" name="bnImportBundles">
        <property name="text">
         <string>Import Bundles</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="importBundleButton_2">
+      <widget class="QPushButton" name="bnImportBrushes">
        <property name="text">
         <string>Import Brushes</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="importBundleButton_3">
+      <widget class="QPushButton" name="bnImportPatterns">
        <property name="text">
-        <string>Import Palettes</string>
+        <string>Import Patterns</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="importBundleButton_4">
+      <widget class="QPushButton" name="bnImportGradients">
        <property name="text">
         <string>Import Gradients</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="importBundleButton_5">
+      <widget class="QPushButton" name="bnImportPresets">
        <property name="text">
         <string>Import Presets</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="importBundleButton_6">
+      <widget class="QPushButton" name="bnImportPalettes">
        <property name="text">
         <string>Import Palettes</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="importBundleButton_7">
+      <widget class="QPushButton" name="bnImportWorkspaces">
        <property name="text">
         <string>Import Workspaces</string>
        </property>

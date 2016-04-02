@@ -74,7 +74,15 @@ DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionMa
 
     connect(m_ui->bnEditBundle, SIGNAL(clicked()), SLOT(editBundle()));
 
-    connect(m_ui->importBundleButton, SIGNAL(clicked()), SLOT(slotImportResource()));
+    connect(m_ui->bnImportBrushes, SIGNAL(clicked()), SLOT(slotImportResource()));
+    connect(m_ui->bnImportGradients, SIGNAL(clicked()), SLOT(slotImportResource()));
+    connect(m_ui->bnImportPalettes, SIGNAL(clicked()), SLOT(slotImportResource()));
+    connect(m_ui->bnImportPatterns, SIGNAL(clicked()), SLOT(slotImportResource()));
+    connect(m_ui->bnImportPresets, SIGNAL(clicked()), SLOT(slotImportResource()));
+    connect(m_ui->bnImportWorkspaces, SIGNAL(clicked()), SLOT(slotImportResource()));
+    connect(m_ui->bnImportBundles, SIGNAL(clicked()), SLOT(slotImportResource()));
+
+
     connect(m_ui->createBundleButton, SIGNAL(clicked()), SLOT(slotCreateBundle()));
     connect(m_ui->deleteBackupFilesButton, SIGNAL(clicked()), SLOT(slotDeleteBackupFiles()));
     connect(m_ui->openResourceFolderButton, SIGNAL(clicked()), SLOT(slotOpenResourceFolder()));
@@ -320,11 +328,34 @@ void DlgBundleManager::fillListWidget(QList<KisResourceBundle *> bundles, QListW
 }
 
 
-void DlgBundleManager::slotImportResource() {
+void DlgBundleManager::slotImportResource()
+{
+    if (m_actionManager) {
+        QObject *button = sender();
+        QString buttonName = button->objectName();
+        KisAction *action = 0;
+        if (buttonName == "bnImportBundles") {
+            action = m_actionManager->actionByName("import_bundles");
+        }
+        else if (buttonName == "bnImportBrushes") {
+            action = m_actionManager->actionByName("import_brushes");
+        }
+        else if (buttonName == "bnImportGradients") {
+            action = m_actionManager->actionByName("import_gradients");
+        }
+        else if (buttonName == "bnImportPalettes") {
+            action = m_actionManager->actionByName("import_palettes");
+        }
+        else if (buttonName == "bnImportPatterns") {
+            action = m_actionManager->actionByName("import_patterns");
+        }
+        else if (buttonName == "bnImportPresets") {
+            action = m_actionManager->actionByName("import_presets");
+        }
+        else if (buttonName == "bnImportWorkspaces") {
+            action = m_actionManager->actionByName("import_workspaces");
+        }
 
-    if (m_actionManager)
-    {
-        KisAction *action = m_actionManager->actionByName("import_resources");
         action->trigger();
         refreshListData();
     }
@@ -332,8 +363,7 @@ void DlgBundleManager::slotImportResource() {
 
 void DlgBundleManager::slotCreateBundle() {
 
-    if (m_actionManager)
-    {
+    if (m_actionManager) {
         KisAction *action = m_actionManager->actionByName("create_bundle");
         action->trigger();
     }
@@ -341,8 +371,7 @@ void DlgBundleManager::slotCreateBundle() {
 
 void DlgBundleManager::slotDeleteBackupFiles() {
 
-    if (m_actionManager)
-    {
+    if (m_actionManager) {
         KisAction *action = m_actionManager->actionByName("edit_blacklist_cleanup");
         action->trigger();
     }
@@ -350,8 +379,7 @@ void DlgBundleManager::slotDeleteBackupFiles() {
 
 void DlgBundleManager::slotOpenResourceFolder() {
 
-    if (m_actionManager)
-    {
+    if (m_actionManager) {
         KisAction *action = m_actionManager->actionByName("open_resources_directory");
         action->trigger();
     }

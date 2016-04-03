@@ -72,16 +72,14 @@ public:
     KisImageBuilder_Result buildFile(const QString &filename, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisMetaData::Store* metaData);
     /** Retrieve the constructed image
     */
-    KisImageWSP image();
+    KisImageSP image();
 public Q_SLOTS:
     virtual void cancel();
 private:
     KisImageBuilder_Result decode(const QString &filename);
 private:
-    KisImageWSP m_image;
-    KisDocument *m_doc;
-    bool m_stop;
-    bool m_batchMode;
+    struct Private;
+    QScopedPointer<Private> m_d;
 };
 
 #endif

@@ -1774,7 +1774,7 @@ bool KisDocument::loadXML(const KoXmlDocument& doc, KoStore *store)
 
     KoXmlElement root;
     KoXmlNode node;
-    KisImageWSP image;
+    KisImageSP image;
 
     if (doc.doctype().name() != "DOC") {
         setErrorMessage(i18n("The format is not supported or the file is corrupted"));
@@ -2433,9 +2433,9 @@ KisImageWSP KisDocument::image() const
 }
 
 
-void KisDocument::setCurrentImage(KisImageWSP image)
+void KisDocument::setCurrentImage(KisImageSP image)
 {
-    if (!image || !image.isValid()) return;
+    if (!image) return;
 
     if (d->image) {
         // Disconnect existing sig/slot connections

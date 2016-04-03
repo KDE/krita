@@ -112,10 +112,22 @@ QString getColorSpaceModelForColorType(J_COLOR_SPACE color_type)
 
 }
 
+struct KisJPEGConverter::Private
+{
+    Private(KisDocument *doc, bool batchMode)
+        : doc(doc),
+          stop(false),
+          batchMode(batchMode)
+    {}
+
+    KisImageSP image;
+    KisDocument *doc;
+    bool stop;
+    bool batchMode;
+};
+
 KisJPEGConverter::KisJPEGConverter(KisDocument *doc, bool batchMode)
-    : m_doc(doc)
-    , m_stop(false)
-    , m_batchMode(batchMode)
+    : m_d(new Private(doc, batchMode))
 {
 }
 
@@ -215,10 +227,10 @@ KisImageBuilder_Result KisJPEGConverter::decode(const QString &filename)
         transform = 0;
     }
 
-    // Creating the KisImageWSP
-    if (! m_image) {
-        m_image = new KisImage(m_doc->createUndoStore(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
-        Q_CHECK_PTR(m_image);
+    // Creating the KisImageSP
+    if (!m_d->image) {
+        m_d->image = new KisImage(m_d->doc->createUndoStore(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
+        Q_CHECK_PTR(m_d->image);
     }
 
     // Set resolution
@@ -236,10 +248,10 @@ KisImageBuilder_Result KisJPEGConverter::decode(const QString &filename)
     if (yres < 72) {
         yres = 72;
     }
-    m_image->setResolution(POINT_TO_INCH(xres), POINT_TO_INCH(yres));   // It is the "invert" macro because we convert from pointer-per-inchs to points
+    m_d->image->setResolution(POINT_TO_INCH(xres), POINT_TO_INCH(yres));   // It is the "invert" macro because we convert from pointer-per-inchs to points
 
     // Create layer
-    KisPaintLayerSP layer = KisPaintLayerSP(new KisPaintLayer(m_image.data(), m_image -> nextLayerName(), quint8_MAX));
+    KisPaintLayerSP layer = KisPaintLayerSP(new KisPaintLayer(m_d->image.data(), m_d->image -> nextLayerName(), quint8_MAX));
 
     // Read data
     JSAMPROW row_pointer = new JSAMPLE[cinfo.image_width*cinfo.num_components];
@@ -286,7 +298,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const QString &filename)
         }
     }
 
-    m_image->addNode(KisNodeSP(layer.data()), m_image->rootLayer().data());
+    m_d->image->addNode(KisNodeSP(layer.data()), m_d->image->rootLayer().data());
 
     // Read exif information
 
@@ -411,7 +423,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const QString &filename)
         double xres = layer->metaData()->getEntry("tiff:XResolution").value().asDouble();
         double yres = layer->metaData()->getEntry("tiff:YResolution").value().asDouble();
         if (xres != 0 && yres != 0) {
-            m_image->setResolution(POINT_TO_INCH(xres), POINT_TO_INCH(yres));   // It is the "invert" macro because we convert from pointer-per-inchs to points
+            m_d->image->setResolution(POINT_TO_INCH(xres), POINT_TO_INCH(yres));   // It is the "invert" macro because we convert from pointer-per-inchs to points
         }
     }
 
@@ -430,9 +442,9 @@ KisImageBuilder_Result KisJPEGConverter::buildImage(const QString &filename)
 }
 
 
-KisImageWSP KisJPEGConverter::image()
+KisImageSP KisJPEGConverter::image()
 {
-    return m_image;
+    return m_d->image;
 }
 
 
@@ -448,12 +460,12 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const QString &filename, KisP
     const KoColorSpace * cs = layer->colorSpace();
     J_COLOR_SPACE color_type = getColorTypeforColorSpace(cs);
 
-    if (!m_batchMode && cs->colorDepthId() != Integer8BitsColorDepthID) {
+    if (!m_d->batchMode && cs->colorDepthId() != Integer8BitsColorDepthID) {
         QMessageBox::information(0, i18nc("@title:window", "Krita"), i18n("Warning: JPEG only supports 8 bits per channel. Your image uses: %1. Krita will save your image as 8 bits per channel.", cs->name()));
     }
 
     if (color_type == JCS_UNKNOWN) {
-        if (!m_batchMode) {
+        if (!m_d->batchMode) {
             QMessageBox::information(0, i18nc("@title:window", "Krita"), i18n("Cannot export images in %1.\nWill save as RGB.", cs->name()));
         }
         KUndo2Command *tmp = layer->paintDevice()->convertTo(KoColorSpaceRegistry::instance()->rgb8(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
@@ -720,7 +732,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const QString &filename, KisP
 
 void KisJPEGConverter::cancel()
 {
-    m_stop = true;
+    m_d->stop = true;
 }
 
 

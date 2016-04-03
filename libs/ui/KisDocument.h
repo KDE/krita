@@ -775,7 +775,7 @@ public:
     /**
      * Set the current image to the specified image and turn undo on.
      */
-    void setCurrentImage(KisImageWSP image);
+    void setCurrentImage(KisImageSP image);
 
     KisUndoStore* createUndoStore();
 

@@ -59,6 +59,8 @@ void KisDelayedSaveDialog::blockIfImageIsBusy()
 {
     if (m_d->image->isIdle()) return;
 
+    m_d->image->requestStrokeEnd();
+
     m_d->updateTimer.start(200);
     exec();
     m_d->updateTimer.stop();

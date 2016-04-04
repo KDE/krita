@@ -25,6 +25,33 @@
 
 
 struct KisFilterStrokeStrategy::Private {
+    Private()
+        : updatesFacade(0),
+          cancelSilently(false),
+          secondaryTransaction(0),
+          levelOfDetail(0)
+    {
+    }
+
+    Private(const Private &rhs)
+        : filter(rhs.filter),
+          filterConfig(rhs.filterConfig),
+          node(rhs.node),
+          updatesFacade(rhs.updatesFacade),
+          cancelSilently(rhs.cancelSilently),
+          filterDevice(),
+          filterDeviceBounds(),
+          secondaryTransaction(0),
+          progressHelper(),
+          levelOfDetail(0)
+    {
+        KIS_ASSERT_RECOVER_RETURN(!rhs.filterDevice);
+        KIS_ASSERT_RECOVER_RETURN(rhs.filterDeviceBounds.isEmpty());
+        KIS_ASSERT_RECOVER_RETURN(!rhs.secondaryTransaction);
+        KIS_ASSERT_RECOVER_RETURN(!rhs.progressHelper);
+        KIS_ASSERT_RECOVER_RETURN(!rhs.levelOfDetail);
+    }
+
     KisFilterSP filter;
     KisSafeFilterConfigurationSP filterConfig;
     KisNodeSP node;
@@ -34,6 +61,7 @@ struct KisFilterStrokeStrategy::Private {
     KisPaintDeviceSP filterDevice;
     QRect filterDeviceBounds;
     KisTransaction *secondaryTransaction;
+    QScopedPointer<KisProcessingVisitor::ProgressHelper> progressHelper;
 
     int levelOfDetail;
 };
@@ -95,6 +123,8 @@ void KisFilterStrokeStrategy::initStrokeCallback()
     } else {
         m_d->filterDevice = dev;
     }
+
+    m_d->progressHelper.reset(new KisProcessingVisitor::ProgressHelper(m_d->node));
 }
 
 void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
@@ -112,10 +142,9 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
             return;
         }
 
-        KisProcessingVisitor::ProgressHelper helper(m_d->node);
-
         m_d->filter->processImpl(m_d->filterDevice, rc,
-                                 m_d->filterConfig.data(), helper.updater());
+                                 m_d->filterConfig.data(),
+                                 m_d->progressHelper->updater());
 
         if (m_d->secondaryTransaction) {
             KisPainter::copyAreaOptimized(rc.topLeft(), m_d->filterDevice, targetDevice(), rc, activeSelection());

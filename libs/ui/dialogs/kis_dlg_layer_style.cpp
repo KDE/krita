@@ -862,7 +862,7 @@ DropShadow::DropShadow(Mode mode, QWidget *parent)
     if (m_mode == InnerShadowMode) {
         ui.chkLayerKnocksOutDropShadow->setVisible(false);
         ui.grpMain->setTitle(i18n("Inner Shadow"));
-        ui.lblSpread->setText(i18n("Choke"));
+        ui.lblSpread->setText(i18n("Choke:"));
     }
 }
 
@@ -1109,7 +1109,7 @@ InnerGlow::InnerGlow(Mode mode, KisCanvasResourceProvider *resourceProvider, QWi
     if (m_mode == OuterGlowMode) {
         ui.cmbSource->hide();
         ui.lblSource->hide();
-        ui.lblChoke->setText(i18nc("layer styles parameter", "Spread"));
+        ui.lblChoke->setText(i18nc("layer styles parameter", "Spread:"));
     }
 
 }

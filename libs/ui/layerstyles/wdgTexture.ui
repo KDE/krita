@@ -74,7 +74,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="KisSliderSpinBox" name="intScale">
+          <widget class="KisSliderSpinBox" name="intScale" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -89,7 +89,7 @@
          <item row="2" column="0">
           <widget class="QLabel" name="label_10">
            <property name="text">
-            <string>&amp;Depth</string>
+            <string>&amp;Depth:</string>
            </property>
            <property name="buddy">
             <cstring>intScale</cstring>
@@ -97,7 +97,7 @@
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="KisSliderSpinBox" name="intDepth">
+          <widget class="KisSliderSpinBox" name="intDepth" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>

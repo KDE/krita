@@ -63,7 +63,7 @@
          <item row="1" column="0">
           <widget class="QLabel" name="label_14">
            <property name="text">
-            <string>&amp;Opacity</string>
+            <string>&amp;Opacity:</string>
            </property>
            <property name="buddy">
             <cstring>intOpacity</cstring>
@@ -71,7 +71,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="KisSliderSpinBox" name="intOpacity">
+          <widget class="KisSliderSpinBox" name="intOpacity" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
              <horstretch>0</horstretch>

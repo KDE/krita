@@ -26,9 +26,12 @@
 
 struct KisBusyProgressIndicator::Private
 {
-    Private() : numEmptyTicks(0), isStarted(false) {}
+    Private(KisBusyProgressIndicator *_q)
+        : timer(new QTimer(_q)),
+          numEmptyTicks(0),
+          isStarted(false) {}
 
-    QTimer timer;
+    QTimer *timer; // owned by QObject hierarchy
     int numEmptyTicks;
     QAtomicInt numUpdates;
     QAtomicInt timerStarted;
@@ -52,11 +55,11 @@ struct KisBusyProgressIndicator::Private
 
 
 KisBusyProgressIndicator::KisBusyProgressIndicator(KoProgressProxy *progressProxy)
-    : m_d(new Private)
+    : m_d(new Private(this))
 {
-    connect(&m_d->timer, SIGNAL(timeout()), SLOT(timerFinished()));
+    connect(m_d->timer, SIGNAL(timeout()), SLOT(timerFinished()));
     connect(this, SIGNAL(sigStartTimer()), SLOT(slotStartTimer()));
-    m_d->timer.setInterval(200);
+    m_d->timer->setInterval(200);
     m_d->progressProxy = progressProxy;
 }
 
@@ -79,7 +82,7 @@ void KisBusyProgressIndicator::timerFinished()
 
         if (m_d->numEmptyTicks > 2) {
             m_d->timerStarted = 0;
-            m_d->timer.stop();
+            m_d->timer->stop();
             m_d->stopProgressReport();
         }
     } else {
@@ -99,6 +102,6 @@ void KisBusyProgressIndicator::update()
 void KisBusyProgressIndicator::slotStartTimer()
 {
     m_d->timerStarted.ref();
-    m_d->timer.start();
+    m_d->timer->start();
     m_d->startProgressReport();
 }

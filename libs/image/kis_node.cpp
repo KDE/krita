@@ -206,6 +206,7 @@ KisNode::KisNode(const KisNode & rhs)
     }
 
     m_d->processDuplicatedClones(&rhs, this, this);
+    this->moveToThread(rhs.thread());
 }
 
 KisNode::~KisNode()
@@ -580,6 +581,9 @@ void KisNode::createNodeProgressProxy()
     if (!m_d->nodeProgressProxy) {
         m_d->nodeProgressProxy = new KisNodeProgressProxy(this);
         m_d->busyProgressIndicator = new KisBusyProgressIndicator(m_d->nodeProgressProxy);
+
+        m_d->nodeProgressProxy->moveToThread(this->thread());
+        m_d->busyProgressIndicator->moveToThread(this->thread());
     }
 }
 

@@ -823,8 +823,9 @@ DropShadow::DropShadow(Mode mode, QWidget *parent)
     ui.intOpacity->setRange(0, 100);
     ui.intOpacity->setSuffix(i18n(" %"));
 
-    ui.intDistance->setRange(0, 30000);
+    ui.intDistance->setRange(0, 500);
     ui.intDistance->setSuffix(i18n(" px"));
+    ui.intDistance->setExponentRatio(3.0);
 
     ui.intSpread->setRange(0, 100);
     ui.intSpread->setSuffix(i18n(" %"));

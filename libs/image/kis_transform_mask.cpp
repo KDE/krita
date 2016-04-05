@@ -45,6 +45,7 @@
 
 #include "kis_image_config.h"
 
+//#include "kis_paint_device_debug_utils.h"
 //#define DEBUG_RENDERING
 //#define DUMP_RECT QRect(0,0,512,512)
 
@@ -241,7 +242,7 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         KisPainter::copyAreaOptimized(updatedRect.topLeft(), m_d->staticCacheDevice, dst, updatedRect);
 
 #ifdef DEBUG_RENDERING
-        dbgKrita << "Recalculate" << name() << ppVar(src->exactBounds()) << ppVar(dst->exactBounds()) << ppVar(rc);
+        qDebug() << "Recalculate" << name() << ppVar(src->exactBounds()) << ppVar(dst->exactBounds()) << ppVar(rc);
         KIS_DUMP_DEVICE_2(src, DUMP_RECT, "recalc_src", "dd");
         KIS_DUMP_DEVICE_2(dst, DUMP_RECT, "recalc_dst", "dd");
 #endif /* DEBUG_RENDERING */
@@ -250,7 +251,7 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         m_d->worker.runPartialDst(src, dst, rc);
 
 #ifdef DEBUG_RENDERING
-        dbgKrita << "Partial" << name() << ppVar(src->exactBounds()) << ppVar(src->extent()) << ppVar(dst->exactBounds()) << ppVar(dst->extent()) << ppVar(rc);
+        qDebug() << "Partial" << name() << ppVar(src->exactBounds()) << ppVar(src->extent()) << ppVar(dst->exactBounds()) << ppVar(dst->extent()) << ppVar(rc);
         KIS_DUMP_DEVICE_2(src, DUMP_RECT, "partial_src", "dd");
         KIS_DUMP_DEVICE_2(dst, DUMP_RECT, "partial_dst", "dd");
 #endif /* DEBUG_RENDERING */
@@ -259,7 +260,7 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         KisPainter::copyAreaOptimized(rc.topLeft(), m_d->staticCacheDevice, dst, rc);
 
 #ifdef DEBUG_RENDERING
-        dbgKrita << "Fetch" << name() << ppVar(src->exactBounds()) << ppVar(dst->exactBounds()) << ppVar(rc);
+        qDebug() << "Fetch" << name() << ppVar(src->exactBounds()) << ppVar(dst->exactBounds()) << ppVar(rc);
         KIS_DUMP_DEVICE_2(src, DUMP_RECT, "fetch_src", "dd");
         KIS_DUMP_DEVICE_2(dst, DUMP_RECT, "fetch_dst", "dd");
 #endif /* DEBUG_RENDERING */

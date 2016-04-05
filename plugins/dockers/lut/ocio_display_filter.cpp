@@ -30,8 +30,7 @@
 #include <opengl/kis_opengl.h>
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
-#include <QOpenGLFunctions_3_2_Core>
-
+#include <QOpenGLFunctions_3_0>
 
 static const int LUT3D_EDGE_SIZE = 32;
 
@@ -246,7 +245,7 @@ void OcioDisplayFilter::updateShader()
 
     if (!m_shaderDirty) return;
 
-    QOpenGLFunctions_3_2_Core *glFuncs3 = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_2_Core>();
+    QOpenGLFunctions_3_0 *glFuncs3 = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_0>();
 
     const int lut3DEdgeSize = cfg.ocioLutEdgeSize();
 

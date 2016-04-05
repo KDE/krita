@@ -24,23 +24,42 @@
 #include "commands_new/kis_update_command.h"
 #include "commands_new/kis_node_move_command2.h"
 #include "kis_layer_utils.h"
+#include "krita_utils.h"
 
 
 MoveStrokeStrategy::MoveStrokeStrategy(KisNodeList nodes,
                                        KisUpdatesFacade *updatesFacade,
                                        KisPostExecutionUndoAdapter *undoAdapter)
     : KisStrokeStrategyUndoCommandBased(kundo2_i18n("Move"), false, undoAdapter),
-      m_nodes(KisLayerUtils::sortAndFilterMergableInternalNodes(nodes, true)),
+      m_nodes(),
       m_updatesFacade(updatesFacade),
       m_undoEnabled(true),
       m_updatesEnabled(true)
 {
+    m_nodes = KisLayerUtils::sortAndFilterMergableInternalNodes(nodes, true);
+
+    KritaUtils::filterContainer(m_nodes,
+                                [this](KisNodeSP node) {
+                                    return !KisLayerUtils::checkIsCloneOf(node, m_nodes);
+                                });
+
+    Q_FOREACH(KisNodeSP subtree, m_nodes) {
+        KisLayerUtils::recursiveApplyNodes(
+            subtree,
+            [this](KisNodeSP node) {
+                if (KisLayerUtils::checkIsCloneOf(node, m_nodes)) {
+                    m_blacklistedNodes.insert(node);
+                }
+            });
+    }
+
     setSupportsWrapAroundMode(true);
 }
 
 MoveStrokeStrategy::MoveStrokeStrategy(const MoveStrokeStrategy &rhs, bool suppressUndo)
     : KisStrokeStrategyUndoCommandBased(rhs, suppressUndo),
       m_nodes(rhs.m_nodes),
+      m_blacklistedNodes(rhs.m_blacklistedNodes),
       m_updatesFacade(rhs.m_updatesFacade),
       m_finalOffset(rhs.m_finalOffset),
       m_dirtyRect(rhs.m_dirtyRect),
@@ -52,7 +71,9 @@ MoveStrokeStrategy::MoveStrokeStrategy(const MoveStrokeStrategy &rhs, bool suppr
 
 void MoveStrokeStrategy::saveInitialNodeOffsets(KisNodeSP node)
 {
-    m_initialNodeOffsets.insert(node, QPoint(node->x(), node->y()));
+    if (!m_blacklistedNodes.contains(node)) {
+        m_initialNodeOffsets.insert(node, QPoint(node->x(), node->y()));
+    }
 
     KisNodeSP child = node->firstChild();
     while(child) {
@@ -138,19 +159,23 @@ void MoveStrokeStrategy::moveAndUpdate(QPoint offset)
 
 QRect MoveStrokeStrategy::moveNode(KisNodeSP node, QPoint offset)
 {
-    QRect dirtyRect = node->extent();
-    QPoint newOffset = m_initialNodeOffsets[node] + offset;
+    QRect dirtyRect;
 
-    /**
-     * Some layers, e.g. clones need an update to change extent(), so
-     * calculate the dirty rect manually
-     */
-    QPoint currentOffset(node->x(), node->y());
-    dirtyRect |= dirtyRect.translated(newOffset - currentOffset);
+    if (!m_blacklistedNodes.contains(node)) {
+        dirtyRect = node->extent();
+        QPoint newOffset = m_initialNodeOffsets[node] + offset;
 
-    node->setX(newOffset.x());
-    node->setY(newOffset.y());
-    KisNodeMoveCommand2::tryNotifySelection(node);
+        /**
+         * Some layers, e.g. clones need an update to change extent(), so
+         * calculate the dirty rect manually
+         */
+        QPoint currentOffset(node->x(), node->y());
+        dirtyRect |= dirtyRect.translated(newOffset - currentOffset);
+
+        node->setX(newOffset.x());
+        node->setY(newOffset.y());
+        KisNodeMoveCommand2::tryNotifySelection(node);
+    }
 
     KisNodeSP child = node->firstChild();
     while(child) {
@@ -163,9 +188,10 @@ QRect MoveStrokeStrategy::moveNode(KisNodeSP node, QPoint offset)
 
 void MoveStrokeStrategy::addMoveCommands(KisNodeSP node, KUndo2Command *parent)
 {
-    QPoint nodeOffset(node->x(), node->y());
-
-    new KisNodeMoveCommand2(node, nodeOffset - m_finalOffset, nodeOffset, parent);
+    if (!m_blacklistedNodes.contains(node)) {
+        QPoint nodeOffset(node->x(), node->y());
+        new KisNodeMoveCommand2(node, nodeOffset - m_finalOffset, nodeOffset, parent);
+    }
 
     KisNodeSP child = node->firstChild();
     while(child) {
@@ -184,21 +210,14 @@ void MoveStrokeStrategy::setUpdatesEnabled(bool value)
     m_updatesEnabled = value;
 }
 
-bool checkSupportsLodMoves(KisNodeSP node)
+bool checkSupportsLodMoves(KisNodeSP subtree)
 {
-    if (!node->supportsLodMoves()) {
-        return false;
-    }
-
-    KisNodeSP child = node->firstChild();
-    while(child) {
-        if (!checkSupportsLodMoves(child)) {
-            return false;
-        }
-        child = child->nextSibling();
-    }
-
-    return true;
+    return
+        !KisLayerUtils::recursiveFindNode(
+            subtree,
+            [](KisNodeSP node) -> bool {
+                return !node->supportsLodMoves();
+            });
 }
 
 

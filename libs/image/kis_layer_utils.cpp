@@ -696,6 +696,35 @@ namespace KisLayerUtils {
         return false;
     }
 
+    bool checkIsCloneOf(KisNodeSP node, const KisNodeList &nodes)
+    {
+        bool result = false;
+
+        KisCloneLayer *clone = dynamic_cast<KisCloneLayer*>(node.data());
+        if (clone) {
+            KisNodeSP cloneSource = KisNodeSP(clone->copyFrom());
+
+            Q_FOREACH(KisNodeSP subtree, nodes) {
+                result =
+                    recursiveFindNode(subtree,
+                                      [cloneSource](KisNodeSP node) -> bool
+                                      {
+                                          return node == cloneSource;
+                                      });
+
+                if (!result) {
+                    result = checkIsCloneOf(cloneSource, nodes);
+                }
+
+                if (result) {
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
     void filterMergableNodes(KisNodeList &nodes, bool allowMasks)
     {
         KisNodeList::iterator it = nodes.begin();
@@ -1029,5 +1058,23 @@ namespace KisLayerUtils {
             recursiveApplyNodes(node, func);
             node = node->nextSibling();
         }
+    }
+
+    KisNodeSP recursiveFindNode(KisNodeSP node, std::function<bool(KisNodeSP)> func)
+    {
+        if (func(node)) {
+            return node;
+        }
+
+        node = node->firstChild();
+        while (node) {
+            KisNodeSP resultNode = recursiveFindNode(node, func);
+            if (resultNode) {
+                return resultNode;
+            }
+            node = node->nextSibling();
+        }
+
+        return 0;
     }
 }

@@ -40,6 +40,15 @@ namespace KisLayerUtils
     KRITAIMAGE_EXPORT void filterMergableNodes(KisNodeList &nodes, bool allowMasks = false);
     KRITAIMAGE_EXPORT bool checkIsChildOf(KisNodeSP node, const KisNodeList &parents);
 
+    /**
+     * Returns true if:
+     *     o \p node is a clone of some layer in \p nodes
+     *     o \p node is a clone any child layer of any layer in \p nodes
+     *     o \p node is a clone of a clone of a ..., that in the end points
+     *       to any layer in \p nodes of their children.
+     */
+    KRITAIMAGE_EXPORT bool checkIsCloneOf(KisNodeSP node, const KisNodeList &nodes);
+
     KRITAIMAGE_EXPORT KisNodeList sortAndFilterMergableInternalNodes(KisNodeList nodes, bool allowMasks = false);
 
     KRITAIMAGE_EXPORT void mergeDown(KisImageSP image, KisLayerSP layer, const KisMetaData::MergeStrategy* strategy);
@@ -169,7 +178,18 @@ namespace KisLayerUtils
         return valueDiffers;
     }
 
+    /**
+     * Applies \p func to \p node and all its children recursively
+     */
     void KRITAIMAGE_EXPORT recursiveApplyNodes(KisNodeSP node, std::function<void(KisNodeSP)> func);
+
+    /**
+     * Walks through \p node and all its children recursively until
+     * \p func returns true. When \p func returns true, the node is
+     * considered to be found, the search is stopped and the found
+     * node is returned to the caller.
+     */
+    KisNodeSP KRITAIMAGE_EXPORT recursiveFindNode(KisNodeSP node, std::function<bool(KisNodeSP)> func);
 };
 
 #endif /* __KIS_LAYER_UTILS_H */

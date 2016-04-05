@@ -79,6 +79,7 @@ private:
 
 private:
     KisNodeList m_nodes;
+    QSet<KisNodeSP> m_blacklistedNodes;
     KisUpdatesFacade *m_updatesFacade;
     QPoint m_finalOffset;
     QRect m_dirtyRect;

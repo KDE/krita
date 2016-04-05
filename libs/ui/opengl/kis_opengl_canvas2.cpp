@@ -145,6 +145,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
                                                  colorConverter->monitorProfile(),
                                                  colorConverter->renderingIntent(),
                                                  colorConverter->conversionFlags());
+
     setAcceptDrops(true);
     setFocusPolicy(Qt::StrongFocus);
     setAttribute(Qt::WA_NoSystemBackground);

@@ -142,7 +142,8 @@ KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP im
                                                                   KoColorConversionTransformation::Intent renderingIntent,
                                                                   KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
-    if (imageCanShareTextures()) {
+    // Disabled until we figure out why we're deleting the shared textures on closing the second view on a single image
+    if (false && imageCanShareTextures()) {
         ImageTexturesMap::iterator it = imageTexturesMap.find(image);
 
         if (it != imageTexturesMap.end()) {
@@ -221,7 +222,7 @@ void KisOpenGLImageTextures::createImageTextureTiles()
 
 void KisOpenGLImageTextures::destroyImageTextureTiles()
 {
-    if(m_textureTiles.isEmpty()) return;
+    if (m_textureTiles.isEmpty()) return;
 
     Q_FOREACH (KisTextureTile *tile, m_textureTiles) {
         delete tile;

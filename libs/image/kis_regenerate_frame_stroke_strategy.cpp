@@ -27,6 +27,7 @@
 
 #include "kis_full_refresh_walker.h"
 #include "kis_async_merger.h"
+#include "kis_projection_updates_filter.h"
 
 
 struct KisRegenerateFrameStrokeStrategy::Private
@@ -36,6 +37,7 @@ struct KisRegenerateFrameStrokeStrategy::Private
     int previousFrameId;
     QRegion dirtyRegion;
     KisImageAnimationInterface *interface;
+    KisProjectionUpdatesFilterSP prevUpdatesFilter;
 
     class Data : public KisStrokeJobData {
     public:
@@ -53,6 +55,16 @@ struct KisRegenerateFrameStrokeStrategy::Private
         QRect rect;
         QRect cropRect;
     };
+
+    void saveAndResetUpdatesFilter() {
+        prevUpdatesFilter = interface->image()->projectionUpdatesFilter();
+        interface->image()->setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP());
+    }
+
+    void restoreUpdatesFilter() {
+        interface->image()->setProjectionUpdatesFilter(prevUpdatesFilter);
+        prevUpdatesFilter.clear();
+    }
 };
 
 KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(int frameId,
@@ -68,8 +80,8 @@ KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(int frameId,
     m_d->interface = interface;
 
     enableJob(JOB_INIT);
-    enableJob(JOB_FINISH);
-    enableJob(JOB_CANCEL);
+    enableJob(JOB_FINISH, true, KisStrokeJobData::BARRIER);
+    enableJob(JOB_CANCEL, true, KisStrokeJobData::BARRIER);
 
     enableJob(JOB_DOSTROKE);
 
@@ -92,8 +104,8 @@ KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(KisImageAnima
     m_d->interface = interface;
 
     enableJob(JOB_INIT);
-    enableJob(JOB_FINISH);
-    enableJob(JOB_CANCEL);
+    enableJob(JOB_FINISH, true, KisStrokeJobData::BARRIER);
+    enableJob(JOB_CANCEL, true, KisStrokeJobData::BARRIER);
 
     enableJob(JOB_SUSPEND);
     enableJob(JOB_RESUME);
@@ -111,6 +123,7 @@ KisRegenerateFrameStrokeStrategy::~KisRegenerateFrameStrokeStrategy()
 void KisRegenerateFrameStrokeStrategy::initStrokeCallback()
 {
     if (m_d->type == EXTERNAL_FRAME) {
+        m_d->saveAndResetUpdatesFilter();
         m_d->interface->image()->disableUIUpdates();
         m_d->interface->saveAndResetCurrentTime(m_d->frameId, &m_d->previousFrameId);
     } else if (m_d->type == CURRENT_FRAME) {
@@ -139,6 +152,7 @@ void KisRegenerateFrameStrokeStrategy::finishStrokeCallback()
         m_d->interface->notifyFrameReady();
         m_d->interface->restoreCurrentTime(&m_d->previousFrameId);
         m_d->interface->image()->enableUIUpdates();
+        m_d->restoreUpdatesFilter();
     } else if (m_d->type == CURRENT_FRAME) {
         m_d->interface->blockFrameInvalidation(false);
     }
@@ -150,6 +164,7 @@ void KisRegenerateFrameStrokeStrategy::cancelStrokeCallback()
         m_d->interface->notifyFrameCancelled();
         m_d->interface->restoreCurrentTime(&m_d->previousFrameId);
         m_d->interface->image()->enableUIUpdates();
+        m_d->restoreUpdatesFilter();
     } else if (m_d->type == CURRENT_FRAME) {
         m_d->interface->blockFrameInvalidation(false);
     }
@@ -173,6 +188,7 @@ void KisRegenerateFrameStrokeStrategy::suspendStrokeCallback()
     if (m_d->type == EXTERNAL_FRAME) {
         m_d->interface->restoreCurrentTime(&m_d->previousFrameId);
         m_d->interface->image()->enableUIUpdates();
+        m_d->restoreUpdatesFilter();
     } else if (m_d->type == CURRENT_FRAME) {
         m_d->interface->blockFrameInvalidation(false);
     }
@@ -181,6 +197,7 @@ void KisRegenerateFrameStrokeStrategy::suspendStrokeCallback()
 void KisRegenerateFrameStrokeStrategy::resumeStrokeCallback()
 {
     if (m_d->type == EXTERNAL_FRAME) {
+        m_d->saveAndResetUpdatesFilter();
         m_d->interface->image()->disableUIUpdates();
         m_d->interface->saveAndResetCurrentTime(m_d->frameId, &m_d->previousFrameId);
     } else if (m_d->type == CURRENT_FRAME) {

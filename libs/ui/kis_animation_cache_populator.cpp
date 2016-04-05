@@ -180,14 +180,22 @@ struct KisAnimationCachePopulator::Private
                 if (activeNode) {
                     int currentTime = activeCanvas->currentImage()->animationInterface()->currentUITime();
 
-                    KisKeyframeChannel *channel;
-                    Q_FOREACH (channel, activeNode->keyframeChannels()) {
-                        skipRange |= channel->affectedFrames(currentTime);
+                    const QList<KisKeyframeChannel*> channels =
+                        activeNode->keyframeChannels();
+
+                    if (!channels.isEmpty()) {
+                        Q_FOREACH (const KisKeyframeChannel *channel, channels) {
+                            skipRange |= channel->affectedFrames(currentTime);
+                        }
+                    } else {
+                        skipRange = KisTimeRange::infinite(0);
                     }
                 }
 
-                bool requested = tryRequestGeneration(activeDocumentCache, skipRange);
-                if (requested) return true;
+                if (!skipRange.isInfinite()) {
+                    bool requested = tryRequestGeneration(activeDocumentCache, skipRange);
+                    if (requested) return true;
+                }
             }
         }
 
@@ -213,6 +221,8 @@ struct KisAnimationCachePopulator::Private
 
         KisImageAnimationInterface *animation = image->animationInterface();
         KisTimeRange currentRange = animation->fullClipRange();
+
+        if (!animation->hasAnimation()) return false;
 
         if (currentRange.isValid()) {
             Q_ASSERT(!currentRange.isInfinite());

@@ -41,6 +41,11 @@ public:
     ~KisImageAnimationInterface();
 
     /**
+     * Returns true of the image has at least one animated layer
+     */
+    bool hasAnimation() const;
+
+    /**
      * Returns currently active frame of the underlying image. Some strokes
      * can override this value and it will report a different value.
      */

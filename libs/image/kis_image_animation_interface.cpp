@@ -26,7 +26,7 @@
 
 #include "kis_post_execution_undo_adapter.h"
 #include "commands_new/kis_switch_current_time_command.h"
-
+#include "kis_layer_utils.h"
 
 
 struct KisImageAnimationInterface::Private
@@ -67,6 +67,19 @@ KisImageAnimationInterface::KisImageAnimationInterface(KisImage *image)
 
 KisImageAnimationInterface::~KisImageAnimationInterface()
 {
+}
+
+bool KisImageAnimationInterface::hasAnimation() const
+{
+    bool hasAnimation = false;
+
+    KisLayerUtils::recursiveApplyNodes(
+        m_d->image->root(),
+        [&hasAnimation](KisNodeSP node) {
+            hasAnimation |= node->isAnimated();
+        });
+
+    return hasAnimation;
 }
 
 int KisImageAnimationInterface::currentTime() const

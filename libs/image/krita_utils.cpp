@@ -389,11 +389,13 @@ namespace KritaUtils
         return newNode;
     }
 
-    void renderExactRect(QPainter *p, const QRect &rc) {
+    void renderExactRect(QPainter *p, const QRect &rc)
+    {
         p->drawRect(rc.adjusted(0,0,-1,-1));
     }
 
-    void renderExactRect(QPainter *p, const QRect &rc, const QPen &pen) {
+    void renderExactRect(QPainter *p, const QRect &rc, const QPen &pen)
+    {
         QPen oldPen = p->pen();
         p->setPen(pen);
         renderExactRect(p, rc);

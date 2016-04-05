@@ -478,14 +478,16 @@ namespace KisLayerUtils {
                                                        true, false));
                 addCommand(new KisImageChangeLayersCommand(m_info->image, oldRoot, newRoot));
 
-            } else {
+            }
+            else {
                 if (parent == m_putAfter->parent()) {
                     addCommand(new KisImageLayerAddCommand(m_info->image,
                                                            m_info->dstNode,
                                                            parent,
                                                            m_putAfter,
                                                            true, false));
-                } else {
+                }
+                else {
                     addCommand(new KisImageLayerAddCommand(m_info->image,
                                                            m_info->dstNode,
                                                            parent,
@@ -823,7 +825,8 @@ namespace KisLayerUtils {
         return nodes;
     }
 
-    KisNodeList filterInvisibleNodes(const KisNodeList &nodes, KisNodeList *invisibleNodes, KisNodeSP *putAfter) {
+    KisNodeList filterInvisibleNodes(const KisNodeList &nodes, KisNodeList *invisibleNodes, KisNodeSP *putAfter)
+    {
         KIS_ASSERT_RECOVER(invisibleNodes) { return nodes; }
         KIS_ASSERT_RECOVER(putAfter) { return nodes; }
 

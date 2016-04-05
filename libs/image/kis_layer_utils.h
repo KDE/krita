@@ -37,8 +37,10 @@ namespace KisLayerUtils
 {
     KRITAIMAGE_EXPORT void sortMergableNodes(KisNodeSP root, QList<KisNodeSP> &inputNodes, QList<KisNodeSP> &outputNodes);
     KRITAIMAGE_EXPORT KisNodeList sortMergableNodes(KisNodeSP root, KisNodeList nodes);
-    KRITAIMAGE_EXPORT void filterMergableNodes(QList<KisNodeSP> &nodes, bool allowMasks = false);
+    KRITAIMAGE_EXPORT void filterMergableNodes(KisNodeList &nodes, bool allowMasks = false);
     KRITAIMAGE_EXPORT bool checkIsChildOf(KisNodeSP node, const QList<KisNodeSP> &parents);
+
+    KRITAIMAGE_EXPORT KisNodeList sortAndFilterMergableInternalNodes(KisNodeList nodes, bool allowMasks = false);
 
     KRITAIMAGE_EXPORT void mergeDown(KisImageSP image, KisLayerSP layer, const KisMetaData::MergeStrategy* strategy);
 
@@ -116,7 +118,7 @@ namespace KisLayerUtils
         virtual void addCommandImpl(KUndo2Command *cmd) = 0;
         void safeRemoveMultipleNodes(QList<KisNodeSP> nodes, KisImageSP image);
     private:
-        bool checkIsSourceForClone(KisNodeSP src, const QList<KisNodeSP> &nodes);
+        bool checkIsSourceForClone(KisNodeSP src, const KisNodeList &nodes);
         static bool scanForLastLayer(KisImageWSP image, KisNodeList nodesToRemove);
     };
 

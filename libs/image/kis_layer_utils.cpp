@@ -377,7 +377,7 @@ namespace KisLayerUtils {
         }
     }
 
-    bool RemoveNodeHelper::checkIsSourceForClone(KisNodeSP src, const QList<KisNodeSP> &nodes) {
+    bool RemoveNodeHelper::checkIsSourceForClone(KisNodeSP src, const KisNodeList &nodes) {
         foreach (KisNodeSP node, nodes) {
             if (node == src) continue;
 
@@ -696,7 +696,7 @@ namespace KisLayerUtils {
         return false;
     }
 
-    void filterMergableNodes(QList<KisNodeSP> &nodes, bool allowMasks)
+    void filterMergableNodes(KisNodeList &nodes, bool allowMasks)
     {
         QList<KisNodeSP>::iterator it = nodes.begin();
 
@@ -741,6 +741,29 @@ namespace KisLayerUtils {
     {
         KisNodeList result;
         sortMergableNodes(root, nodes, result);
+        return result;
+    }
+
+    KisNodeList sortAndFilterMergableInternalNodes(KisNodeList nodes, bool allowMasks)
+    {
+        KIS_ASSERT_RECOVER(!nodes.isEmpty()) { return nodes; }
+
+        KisNodeSP root;
+        Q_FOREACH(KisNodeSP node, nodes) {
+            KisNodeSP localRoot = node;
+            while (localRoot->parent()) {
+                localRoot = localRoot->parent();
+            }
+
+            if (!root) {
+                root = localRoot;
+            }
+            KIS_ASSERT_RECOVER(root == localRoot) { return nodes; }
+        }
+
+        KisNodeList result;
+        sortMergableNodes(root, nodes, result);
+        filterMergableNodes(result, allowMasks);
         return result;
     }
 

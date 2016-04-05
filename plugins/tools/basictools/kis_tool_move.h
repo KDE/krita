@@ -100,6 +100,8 @@ private:
     void cancelStroke();
     QPoint applyModifiers(Qt::KeyboardModifiers modifiers, QPoint pos);
 
+    bool startStrokeImpl(MoveToolMode mode, const QPoint *pos);
+
 private Q_SLOTS:
     void endStroke();
 
@@ -113,7 +115,7 @@ private:
     KisStrokeId m_strokeId;
 
     bool m_moveInProgress;
-    KisNodeSP m_currentlyProcessingNode;
+    KisNodeList m_currentlyProcessingNodes;
 
     int m_resolution;
 };

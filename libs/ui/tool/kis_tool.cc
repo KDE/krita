@@ -41,6 +41,7 @@
 #include <KoSnapGuide.h>
 
 #include <KisViewManager.h>
+#include "kis_node_manager.h"
 #include <kis_selection.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
@@ -410,6 +411,13 @@ KisNodeSP KisTool::currentNode()
 {
     KisNodeSP node = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
     return node;
+}
+
+KisNodeList KisTool::selectedNodes() const
+{
+    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+    KisViewManager* viewManager = kiscanvas->viewManager();
+    return viewManager->nodeManager()->selectedNodes();
 }
 
 KoColor KisTool::currentFgColor()

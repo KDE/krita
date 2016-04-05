@@ -57,18 +57,8 @@ public:
     };
 
 public:
-    MoveStrokeStrategy(KisNodeSP node, KisUpdatesFacade *updatesFacade,
+    MoveStrokeStrategy(KisNodeList nodes, KisUpdatesFacade *updatesFacade,
                        KisPostExecutionUndoAdapter *undoAdapter);
-
-    /**
-     * You can use deferred initialization of the node pointer
-     * To use it you need to pass 0 to the constructor, and
-     * set the node with setNode layer.
-     * NOTE: once set, you cannot change the node anymore,
-     *       you'll get an assert
-     */
-
-    void setNode(KisNodeSP node);
 
     void initStrokeCallback();
     void finishStrokeCallback();
@@ -88,10 +78,11 @@ private:
     void saveInitialNodeOffsets(KisNodeSP node);
 
 private:
-    KisNodeSP m_node;
+    KisNodeList m_nodes;
     KisUpdatesFacade *m_updatesFacade;
     QPoint m_finalOffset;
     QRect m_dirtyRect;
+    QHash<KisNodeSP, QRect> m_dirtyRects;
     bool m_undoEnabled;
     bool m_updatesEnabled;
     QHash<KisNodeSP, QPoint> m_initialNodeOffsets;

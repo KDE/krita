@@ -286,6 +286,7 @@ protected:
     KoPattern* currentPattern();
     KoAbstractGradient *currentGradient();
     KisNodeSP currentNode();
+    KisNodeList selectedNodes() const;
     KoColor currentFgColor();
     KoColor currentBgColor();
     KisPaintOpPresetSP currentPaintOpPreset();

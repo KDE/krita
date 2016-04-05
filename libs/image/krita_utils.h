@@ -31,6 +31,8 @@ class QPainter;
 #include <QVector>
 #include "kritaimage_export.h"
 #include "kis_types.h"
+#include <functional>
+
 
 namespace KritaUtils
 {
@@ -88,6 +90,15 @@ namespace KritaUtils
         std::sort(container.begin(), container.end());
         auto newEnd = std::unique(container.begin(), container.end());
 
+        while (newEnd != container.end()) {
+            newEnd = container.erase(newEnd);
+        }
+    }
+
+    template <class C>
+        void filterContainer(C &container, std::function<bool(typename C::reference)> keepIf) {
+
+        auto newEnd = std::remove_if(container.begin(), container.end(), std::unary_negate<decltype(keepIf)>(keepIf));
         while (newEnd != container.end()) {
             newEnd = container.erase(newEnd);
         }

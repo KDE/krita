@@ -51,7 +51,7 @@ protected:
         Q_UNUSED(indirectPainting);
 
         KisNodeSP node = resources->currentNode();
-        return new MoveStrokeStrategy(node, image.data(), resources->postExecutionUndoAdapter());
+        return new MoveStrokeStrategy({node}, image.data(), resources->postExecutionUndoAdapter());
     }
 
     using utils::StrokeTester::addPaintingJobs;

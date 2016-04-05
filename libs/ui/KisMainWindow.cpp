@@ -2134,8 +2134,7 @@ void KisMainWindow::configChanged()
 void KisMainWindow::newView(QObject *document)
 {
     KisDocument *doc = qobject_cast<KisDocument*>(document);
-    KisView *view = KisPart::instance()->createView(doc, resourceManager(), actionCollection(), this);
-    addView(view);
+    addViewAndNotifyLoadingCompleted(doc);
     d->actionManager()->updateGUI();
 }
 

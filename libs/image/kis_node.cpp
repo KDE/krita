@@ -24,6 +24,7 @@
 #include <QWriteLocker>
 #include <QPainterPath>
 #include <QRect>
+#include <QCoreApplication>
 
 #include <KoProperties.h>
 
@@ -185,6 +186,7 @@ KisNode::KisNode()
 {
     m_d->parent = 0;
     m_d->graphListener = 0;
+    moveToThread(qApp->thread());
 }
 
 KisNode::KisNode(const KisNode & rhs)
@@ -193,6 +195,7 @@ KisNode::KisNode(const KisNode & rhs)
 {
     m_d->parent = 0;
     m_d->graphListener = 0;
+    moveToThread(qApp->thread());
 
     // NOTE: the nodes are not supposed to be added/removed while
     // creation of another node, so we do *no* locking here!
@@ -206,7 +209,6 @@ KisNode::KisNode(const KisNode & rhs)
     }
 
     m_d->processDuplicatedClones(&rhs, this, this);
-    this->moveToThread(rhs.thread());
 }
 
 KisNode::~KisNode()

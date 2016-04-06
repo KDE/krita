@@ -133,9 +133,7 @@ namespace KisLayerUtils
 
     struct SimpleRemoveLayers : private KisLayerUtils::RemoveNodeHelper, public KisCommandUtils::AggregateCommand {
         SimpleRemoveLayers(const KisNodeList &nodes,
-                           KisImageSP image,
-                           const KisNodeList &selectedNodes,
-                           KisNodeSP activeNode);
+                           KisImageSP image);
 
         void populateChildCommands();
 

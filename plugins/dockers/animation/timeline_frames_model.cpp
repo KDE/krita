@@ -85,7 +85,7 @@ struct TimelineFramesModel::Private
     bool scrubInProgress;
     int scrubStartFrame;
 
-    KisAnimationFrameCacheSP framesCache;
+    KisAnimationFrameCacheWSP framesCache;
     QPointer<KisAnimationPlayer> animationPlayer;
 
     QScopedPointer<NodeManipulationInterface> nodeInterface;
@@ -208,7 +208,7 @@ bool TimelineFramesModel::hasConnectionToCanvas() const
 
 void TimelineFramesModel::setFrameCache(KisAnimationFrameCacheSP cache)
 {
-    if (m_d->framesCache == cache) return;
+    if (KisAnimationFrameCacheSP(m_d->framesCache) == cache) return;
 
     if (m_d->framesCache) {
         m_d->framesCache->disconnect(this);

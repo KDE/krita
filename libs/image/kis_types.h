@@ -162,6 +162,7 @@ typedef vKisAnnotationSP::const_iterator vKisAnnotationSP_cit;
 
 class KisAnimationFrameCache;
 typedef KisSharedPtr<KisAnimationFrameCache> KisAnimationFrameCacheSP;
+typedef KisWeakSharedPtr<KisAnimationFrameCache> KisAnimationFrameCacheWSP;
 
 // Repeat iterators
 class KisHLineIterator2;

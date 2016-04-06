@@ -38,10 +38,10 @@ MoveStrokeStrategy::MoveStrokeStrategy(KisNodeList nodes,
 {
     m_nodes = KisLayerUtils::sortAndFilterMergableInternalNodes(nodes, true);
 
-//    KritaUtils::filterContainer(m_nodes,
-//                                [this](KisNodeSP node) {
-//                                    return !KisLayerUtils::checkIsCloneOf(node, m_nodes);
-//                                });
+    KritaUtils::filterContainer<KisNodeList>(m_nodes,
+                                             [this](KisNodeSP node) {
+                                                 return !KisLayerUtils::checkIsCloneOf(node, m_nodes);
+                                             });
 
     Q_FOREACH(KisNodeSP subtree, m_nodes) {
         KisLayerUtils::recursiveApplyNodes(

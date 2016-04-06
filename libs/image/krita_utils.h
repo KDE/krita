@@ -97,7 +97,7 @@ namespace KritaUtils
 
 
     template <class C>
-        void filterContainer(C &container, std::function<bool(typename C::value_type)> keepIf) {
+        void filterContainer(C &container, std::function<bool(typename C::reference)> keepIf) {
 
             auto newEnd = std::remove_if(container.begin(), container.end(), std::unary_negate<decltype(keepIf)>(keepIf));
             while (newEnd != container.end()) {

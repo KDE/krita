@@ -114,10 +114,10 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
     if (nodes.isEmpty()) {
         nodes = this->selectedNodes();
 
-//        KritaUtils::filterContainer<KisNodeList>(nodes,
-//                                    [](KisNodeSP node) {
-//                                        return node->isEditable();
-//                                    });
+        KritaUtils::filterContainer<KisNodeList>(nodes,
+                                                 [](KisNodeSP node) {
+                                                     return node->isEditable();
+                                                 });
     }
 
     if (nodes.size() == 1) {

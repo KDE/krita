@@ -340,12 +340,17 @@ void KSwitchLanguageDialogPrivate::fillApplicationLanguages(KLanguageButton *but
     Q_FOREACH (const QLocale &l, allLocales) {
         QString languageCode = l.name();
         if (l != cLocale) {
+            const QString nativeName = l.nativeLanguageName();
+            // For some languages the native name might be empty.
+            // In this case use the non native language name as fallback.
+            // See: QTBUG-51323
+            const QString languageName = nativeName.isEmpty() ? QLocale::languageToString(l.language()) : nativeName;
             if (!insertedLanguges.contains(languageCode) && KLocalizedString::isApplicationTranslatedInto(languageCode)) {
-                button->insertLanguage(languageCode, l.nativeLanguageName());
+                button->insertLanguage(languageCode, languageName);
                 insertedLanguges << languageCode;
             } else if (stripCountryCode(&languageCode)) {
                 if (!insertedLanguges.contains(languageCode) && KLocalizedString::isApplicationTranslatedInto(languageCode)) {
-                    button->insertLanguage(languageCode, l.nativeLanguageName());
+                    button->insertLanguage(languageCode, languageName);
                     insertedLanguges << languageCode;
                 }
             }

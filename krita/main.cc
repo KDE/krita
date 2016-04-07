@@ -29,9 +29,12 @@
 #include <QDir>
 #include <QDate>
 #include <QLoggingCategory>
+#include <QLocale>
+#include <QSettings>
 
 #include <KisApplication.h>
 #include <KoConfig.h>
+#include <KoResourcePaths.h>
 
 #include "data/splash/splash_screen.xpm"
 #include "data/splash/splash_holidays.xpm"
@@ -99,6 +102,46 @@ extern "C" int main(int argc, char **argv)
 
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
+
+#ifdef Q_OS_LINUX
+    qputenv("XDG_DATA_DIRS", QFile::encodeName(KoResourcePaths::getApplicationRoot() + "share") + ":" + qgetenv("XDG_DATA_DIRS"));
+#else
+    qputenv("XDG_DATA_DIRS", QFile::encodeName(KoResourcePaths::getApplicationRoot() + "share"));
+#endif
+
+    qDebug() << "Setting XDG_DATA_DIRS" << qgetenv("XDG_DATA_DIRS");
+    qDebug() << "Available translations" << KLocalizedString::availableApplicationTranslations();
+    qDebug() << "Available domain translations" << KLocalizedString::availableDomainTranslations("krita");
+
+    // Now that the paths are set, set the language. First check the override from the langage
+    // selection dialog.
+    KLocalizedString::clearLanguages();
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
+    languageoverride.beginGroup(QStringLiteral("Language"));
+    QString language = languageoverride.value(qAppName(), "").toString();
+    if (!language.isEmpty()) {
+        KLocalizedString::setLanguages(language.split(":"));
+    }
+    else {
+        // And if there isn't one, check the one set by the system.
+        // XXX: This doesn't work, for some !@#$% reason.
+        QLocale locale = QLocale::system();
+        if (locale.bcp47Name() != QStringLiteral("en")) {
+            KLocalizedString::setLanguages(QStringList() << locale.bcp47Name());
+        }
+    }
+
+    QDir appdir(KoResourcePaths::getApplicationRoot());
+#ifdef Q_OS_WIN
+    qputenv("PATH", QFile::encodeName(appdir.absolutePath() + "/bin" + ";"
+                                      + appdir.absolutePath() + "/lib" + ";"
+                                      + appdir.absolutePath() + "/lib/kde4" + ";"
+                                      + appdir.absolutePath() + "/Frameworks" + ";"
+                                      + appdir.absolutePath()));
+
+    qDebug() << "PATH" << qgetenv("PATH");
+#endif
 
     if (qApp->applicationDirPath().contains(KRITA_BUILD_DIR)) {
         qFatal("FATAL: You're trying to run krita from the build location. You can only run Krita from the installation location.");

@@ -27,21 +27,22 @@
 #include <tchar.h>
 #endif
 
-#include <QMessageBox>
-#include <QFile>
-#include <QWidget>
-#include <QSysInfo>
-#include <QStringList>
 #include <QDesktopServices>
-#include <QProcessEnvironment>
-#include <QDir>
 #include <QDesktopWidget>
-#include <KisMimeDatabase.h>
-#include <QTimer>
+#include <QDir>
+#include <QFile>
+#include <QLocale>
+#include <QMessageBox>
+#include <QMessageBox>
+#include <QProcessEnvironment>
+#include <QSettings>
+#include <QStandardPaths>
+#include <QStringList>
 #include <QStyle>
 #include <QStyleFactory>
-#include <QStandardPaths>
-#include <QMessageBox>
+#include <QSysInfo>
+#include <QTimer>
+#include <QWidget>
 
 #include <klocalizedstring.h>
 #include <kdesktopfile.h>
@@ -56,7 +57,7 @@
 #include "KoConfig.h"
 #include <resources/KoHashGeneratorProvider.h>
 #include <KoResourcePaths.h>
-
+#include <KisMimeDatabase.h>
 #include "thememanager.h"
 #include "KisPrintJob.h"
 #include "KisDocument.h"
@@ -323,25 +324,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
     }
 #endif
 #endif
-    QDir appdir(applicationDirPath());
-    appdir.cdUp();
-
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    // If there's no kdehome, set it and restart the process.
-    #ifdef Q_OS_LINUX
-    qputenv("XDG_DATA_DIRS", QFile::encodeName(KoResourcePaths::getApplicationRoot() + "/share") + ":" + qgetenv("XDG_DATA_DIRS"));
-#else
-    qputenv("XDG_DATA_DIRS", QFile::encodeName(KoResourcePaths::getApplicationRoot() + "/share"));
-#endif
-    //qDebug() << "Setting XDG_DATA_DIRS" << qgetenv("XDG_DATA_DIRS");
-
-    qputenv("PATH", QFile::encodeName(appdir.absolutePath() + "/bin" + ";"
-                                      + appdir.absolutePath() + "/lib" + ";"
-                                      + appdir.absolutePath() + "/lib/kde4" + ";"
-                                      + appdir.absolutePath() + "/Frameworks" + ";"
-                                      + appdir.absolutePath()));
-
-
 
     setSplashScreenLoadingText(i18n("Initializing Globals"));
     initializeGlobals(args);
@@ -403,9 +385,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
     }
     short int numberOfOpenDocuments = 0; // number of documents open
 
-
-
-
     // Check for autosave files that can be restored, if we're not running a batchrun (test, print, export to pdf)
     QList<QUrl> urls = checkAutosaveFiles();
     if (!batchRun && mainWindow) {
@@ -430,7 +409,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
                 && profileFile.open(QFile::WriteOnly | QFile::Truncate)) {
             profileoutput.setDevice(&profileFile);
         }
-
 
         // Loop through arguments
         short int nPrinted = 0;

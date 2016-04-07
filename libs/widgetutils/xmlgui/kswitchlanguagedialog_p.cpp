@@ -50,14 +50,14 @@ static QSettingsPtr localeOverridesSettings()
     if (!configDir.exists()) {
         configDir.mkpath(QStringLiteral("."));
     }
-
-    return QSettingsPtr(new QSettings(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::NativeFormat));
+    return QSettingsPtr(new QSettings(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat));
 }
 
 static QByteArray getApplicationSpecificLanguage(const QByteArray &defaultCode = QByteArray())
 {
     QSettingsPtr settings = localeOverridesSettings();
     settings->beginGroup(QStringLiteral("Language"));
+    qDebug() << "our language" << settings->value(qAppName(), defaultCode).toByteArray();
     return settings->value(qAppName(), defaultCode).toByteArray();
 }
 
@@ -85,6 +85,7 @@ static void initializeLanguages()
             qputenv("LANGUAGE", languageCode + ":" + languages);
         }
     }
+    qDebug() << ">>>>>>>>>>>>>> LANGUAGE" << qgetenv("LANGUAGE");
 }
 
 Q_COREAPP_STARTUP_FUNCTION(initializeLanguages)

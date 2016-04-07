@@ -36,7 +36,7 @@
 #include <KisImportExportManager.h>
 
 //
-#include <kis_url_requester.h>
+#include <kis_file_name_requester.h>
 #include <kcolorbutton.h>
 #include <klocalizedstring.h>
 #include <kseparator.h>
@@ -309,18 +309,18 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
             case Parameter::FOLDER_P:
             {
                 FolderParameter * folderParam = static_cast<FolderParameter *>(p);
-                KisUrlRequester * urlRequester(0);
+                KisFileNameRequester * urlRequester(0);
                 if (role == CreateRole)
                 {
-                    urlRequester = new KisUrlRequester;
+                    urlRequester = new KisFileNameRequester;
                     urlRequester->setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
                     urlRequester->setMode(KoFileDialog::OpenDirectory);
 
                     m_widgetToParameterIndexMapper[ urlRequester ] = i;
                     mapParameterWidget(folderParam, urlRequester);
 
-                    connect(urlRequester, SIGNAL(urlSelected(QUrl)), this, SIGNAL(sigConfigurationItemChanged()));
-                    connect(urlRequester, SIGNAL(urlSelected(QUrl)), this, SLOT(setFolderPathValue(QUrl)));
+                    connect(urlRequester, SIGNAL(fileSelected(QString)), this, SIGNAL(sigConfigurationItemChanged()));
+                    connect(urlRequester, SIGNAL(fileSelected(QString)), this, SLOT(setFolderPathValue(QString)));
 
                     gridLayout->addWidget(new QLabel(folderParam->name()), row, 0);
                     gridLayout->addWidget(urlRequester, row, 1, 1, 3);
@@ -328,7 +328,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                 }
                 else if (role == LoadRole)
                 {
-                    urlRequester = qobject_cast<KisUrlRequester *>(widget(folderParam));
+                    urlRequester = qobject_cast<KisFileNameRequester *>(widget(folderParam));
                 }
 
                 if (urlRequester)
@@ -344,17 +344,17 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
             case Parameter::FILE_P:
             {
                 FileParameter * fileParam = static_cast<FileParameter *>(p);
-                KisUrlRequester * urlRequester(0);
+                KisFileNameRequester * urlRequester(0);
                 if (role == CreateRole)
                 {
-                    urlRequester = new KisUrlRequester;
+                    urlRequester = new KisFileNameRequester;
                     urlRequester->setMode(KoFileDialog::OpenFile);
 
                     m_widgetToParameterIndexMapper[ urlRequester ] = i;
                     mapParameterWidget(fileParam, urlRequester);
 
-                    connect(urlRequester, SIGNAL(urlSelected(QUrl)), this, SIGNAL(sigConfigurationItemChanged()));
-                    connect(urlRequester, SIGNAL(urlSelected(QUrl)), this, SLOT(setFilePathValue(QUrl)));
+                    connect(urlRequester, SIGNAL(fileSelected(QString)), this, SIGNAL(sigConfigurationItemChanged()));
+                    connect(urlRequester, SIGNAL(fileSelected(QString)), this, SLOT(setFilePathValue(QString)));
 
                     gridLayout->addWidget(new QLabel(fileParam->name()), row, 0);
                     gridLayout->addWidget(urlRequester, row, 1, 1, 3);
@@ -362,7 +362,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                 }
                 else if (role == LoadRole)
                 {
-                    urlRequester = qobject_cast<KisUrlRequester *>(widget(fileParam));
+                    urlRequester = qobject_cast<KisFileNameRequester *>(widget(fileParam));
                 }
 
                 if (urlRequester)
@@ -632,7 +632,7 @@ QWidget* KisGmicSettingsWidget::widget(Parameter* parameter)
 
 
 
-void KisGmicSettingsWidget::setFolderPathValue(const QUrl &kurl)
+void KisGmicSettingsWidget::setFolderPathValue(const QString &path)
 {
     Parameter * p = parameter(sender());
     if (!p)
@@ -646,10 +646,10 @@ void KisGmicSettingsWidget::setFolderPathValue(const QUrl &kurl)
     }
 
     FolderParameter * folderParam = static_cast<FolderParameter *>(p);
-    folderParam->fromUiValue(kurl.path());
+    folderParam->fromUiValue(path);
 }
 
-void KisGmicSettingsWidget::setFilePathValue(const QUrl &kurl)
+void KisGmicSettingsWidget::setFilePathValue(const QString &path)
 {
     Parameter * p = parameter(sender());
     if (!p)
@@ -663,7 +663,7 @@ void KisGmicSettingsWidget::setFilePathValue(const QUrl &kurl)
     }
 
     FileParameter * fileParam = static_cast<FileParameter *>(p);
-    fileParam->fromUiValue(kurl.path());
+    fileParam->fromUiValue(path);
 }
 
 void KisGmicSettingsWidget::mapParameterWidget(Parameter* parameter, QWidget* widget)

@@ -21,7 +21,7 @@
 #include <QImage>
 #include <QFile>
 #include <KisImportExportManager.h>
-#include <kis_url_requester.h>
+#include <kis_file_name_requester.h>
 
 #include "ui_wdgsprayshapeoptions.h"
 

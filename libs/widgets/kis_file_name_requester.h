@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_URL_REQUESTER_H
-#define KIS_URL_REQUESTER_H
+#ifndef KIS_FILE_NAME_REQUESTER_H
+#define KIS_FILE_NAME_REQUESTER_H
 
 #include "kritawidgets_export.h"
 
@@ -28,7 +28,7 @@
 
 
 namespace Ui {
-    class WdgUrlRequester;
+    class WdgFileNameRequester;
 }
 
 /**
@@ -39,13 +39,13 @@ namespace Ui {
  * Signals are fired when the user changes the text
  * or selects a new file via the button/file chooser.
  */
-class KRITAWIDGETS_EXPORT KisUrlRequester : public QWidget
+class KRITAWIDGETS_EXPORT KisFileNameRequester : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit KisUrlRequester(QWidget *parent = 0);
-    ~KisUrlRequester();
+    explicit KisFileNameRequester(QWidget *parent = 0);
+    ~KisFileNameRequester();
 
     void setStartDir(const QString &path);
 
@@ -68,14 +68,14 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void textChanged(const QString &fileName);
-    void urlSelected(const QUrl &url);
+    void fileSelected(const QString &fileName);
 
 private:
-    QScopedPointer<Ui::WdgUrlRequester> m_ui;
+    QScopedPointer<Ui::WdgFileNameRequester> m_ui;
     QString m_basePath;
     KoFileDialog::DialogType m_mode;
     QStringList m_mime_filter_list;
     QString m_mime_default_filter;
 };
 
-#endif // KIS_URL_REQUESTER_H
+#endif // KIS_FILE_NAME_REQUESTER_H

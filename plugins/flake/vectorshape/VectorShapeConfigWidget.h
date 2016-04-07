@@ -25,7 +25,7 @@
 #include <QWidget>
 
 class VectorShape;
-class KisUrlRequester;
+class KisFileNameRequester;
 
 class VectorShapeConfigWidget : public KoShapeConfigWidgetBase
 {
@@ -45,7 +45,7 @@ public:
 
 private:
     VectorShape *m_shape;
-    KisUrlRequester *m_fileWidget;
+    KisFileNameRequester *m_fileWidget;
 };
 
 #endif //VECTORSHAPECONFIGWIDGET_H

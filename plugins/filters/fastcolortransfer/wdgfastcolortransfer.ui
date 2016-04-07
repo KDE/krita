@@ -40,7 +40,7 @@
     </widget>
    </item>
    <item>
-    <widget class="KisUrlRequester" name="fileNameURLRequester"/>
+    <widget class="KisFileNameRequester" name="fileNameURLRequester"/>
    </item>
    <item>
     <layout class="QHBoxLayout">
@@ -69,9 +69,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisUrlRequester</class>
+   <class>KisFileNameRequester</class>
    <extends>QWidget</extends>
-   <header location="global">kis_url_requester.h</header>
+   <header location="global">kis_file_name_requester.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -32,7 +32,7 @@
 #include <QMessageBox>
 #include <QUrl>
 
-#include <kis_url_requester.h>
+#include <kis_file_name_requester.h>
 #include <kis_icon.h>
 #include <KisImportExportManager.h>
 #include <KisDocument.h>
@@ -664,7 +664,7 @@ void KisLayerManager::saveGroupLayers()
     dlg.setMainWidget(page);
     QBoxLayout *layout = new QVBoxLayout(page);
 
-    KisUrlRequester *urlRequester = new KisUrlRequester(page);
+    KisFileNameRequester *urlRequester = new KisFileNameRequester(page);
     urlRequester->setMode(KoFileDialog::OpenDirectory);
     urlRequester->setStartDir(QFileInfo(m_view->document()->url().toLocalFile()).absolutePath());
     urlRequester->setMimeTypeFilters(listMimeFilter);

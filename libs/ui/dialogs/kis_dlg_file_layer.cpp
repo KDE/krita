@@ -28,7 +28,7 @@
 #include <KoFileDialog.h>
 #include <KisApplication.h>
 #include <KisImportExportManager.h>
-#include <kis_url_requester.h>
+#include <kis_file_name_requester.h>
 #include <kis_config_widget.h>
 #include <kis_paint_device.h>
 #include <kis_transaction.h>

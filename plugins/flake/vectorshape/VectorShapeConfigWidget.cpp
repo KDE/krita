@@ -28,7 +28,7 @@
 
 #include <klocalizedstring.h>
 
-#include <kis_url_requester.h>
+#include <kis_file_name_requester.h>
 
 VectorShapeConfigWidget::VectorShapeConfigWidget()
     : m_shape(0)
@@ -47,7 +47,7 @@ void VectorShapeConfigWidget::open(KoShape *shape)
     Q_ASSERT(m_shape);
     delete m_fileWidget;
     QVBoxLayout *layout = new QVBoxLayout(this);
-    m_fileWidget = new KisUrlRequester(this);
+    m_fileWidget = new KisFileNameRequester(this);
     m_fileWidget->setMode(KoFileDialog::OpenFile);
     const QStringList mimetypes = QStringList()
                                   << QLatin1String("image/x-wmf")

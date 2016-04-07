@@ -77,7 +77,7 @@ set(kritawidgets_LIB_SRCS
     
     WidgetsDebug.cpp
 
-    kis_url_requester.cpp
+    kis_file_name_requester.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS
@@ -87,7 +87,7 @@ ki18n_wrap_ui( kritawidgets_LIB_SRCS
     KoEditColorSet.ui
     KoPageLayoutWidget.ui
     KoShadowConfigWidget.ui
-    wdg_url_requester.ui
+    wdg_file_name_requester.ui
 )
 
 add_library(kritawidgets SHARED ${kritawidgets_LIB_SRCS})

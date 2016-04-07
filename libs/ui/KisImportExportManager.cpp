@@ -76,7 +76,7 @@ KisImportExportManager::KisImportExportManager(KisDocument* document)
 
 KisImportExportManager::KisImportExportManager(const QString& location)
     : m_document(0)
-    , m_importUrl(locationToUrl(location))
+    , m_importFileName(location)
     , m_graph("")
     , d(new Private)
 {
@@ -101,8 +101,6 @@ QString KisImportExportManager::importDocument(const QString& location,
                                                const QString& documentMimeType,
                                                KisImportExportFilter::ConversionStatus& status)
 {
-    QUrl u = locationToUrl(location);
-
     // Find the mime type for the file to be imported.
     QString  typeName = documentMimeType;
     if (typeName.isEmpty()) {
@@ -153,11 +151,11 @@ QString KisImportExportManager::importDocument(const QString& location,
 
     // Okay, let's invoke the filters one after the other
     m_direction = Import; // vital information!
-    m_importUrl = u;
-    m_exportUrl.clear();
+    m_importFileName = location;
+    m_exportFileName.clear();
     status = chain->invokeChain();
 
-    m_importUrl.clear();  // Reset the import URL
+    m_importFileName.clear();  // Reset the import URL
 
     if (status == KisImportExportFilter::OK)
         return chain->chainOutput();
@@ -171,7 +169,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(c
     // The import url should already be set correctly (null if we have a KisDocument
     // file manager and to the correct URL if we have an embedded manager)
     m_direction = Export; // vital information!
-    m_exportUrl = locationToUrl(location);
+    m_exportFileName = location;
 
     KisFilterChainSP chain;
 
@@ -189,7 +187,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(c
         }
     }
     else {
-        QString t = KisMimeDatabase::mimeTypeForFile(m_importUrl.toLocalFile());
+        QString t = KisMimeDatabase::mimeTypeForFile(m_importFileName);
         m_graph.setSourceMimeType(t.toLatin1());
     }
 
@@ -292,12 +290,6 @@ KoProgressUpdater* KisImportExportManager::progressUpdater() const
         return 0;
     }
     return d->progressUpdater.data();
-}
-
-QUrl KisImportExportManager::locationToUrl(QString location) const
-{
-    QUrl u = QUrl::fromUserInput(location);
-    return (u.isEmpty()) ? QUrl(location) : u;
 }
 
 #include <KisMimeDatabase.h>

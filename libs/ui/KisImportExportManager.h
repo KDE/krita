@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+﻿/* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
                  2000, 2001 Werner Trobin <trobin@kde.org>
    Copyright (C) 2004 Nicolas Goutte <goutte@kde.org>
@@ -140,11 +140,11 @@ private:
     // pretty safe.
     friend QString KisFilterChain::filterManagerImportFile() const;
     QString importFile() const {
-        return m_importUrl.toLocalFile();
+        return m_importFileName;
     }
     friend QString KisFilterChain::filterManagerExportFile() const;
     QString exportFile() const {
-        return m_exportUrl.toLocalFile();
+        return m_exportFileName;
     }
     friend KisDocument *KisFilterChain::filterManagerKisDocument() const;
     KisDocument *document() const {
@@ -165,8 +165,8 @@ private:
     void importErrorHelper(const QString& mimeType, const bool suppressDialog = false);
 
     KisDocument *m_document;
-    QUrl m_importUrl;
-    QUrl m_exportUrl;
+    QString m_importFileName;
+    QString m_exportFileName;
     CalligraFilter::Graph m_graph;
     Direction m_direction;
 

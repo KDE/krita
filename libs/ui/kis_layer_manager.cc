@@ -668,7 +668,7 @@ void KisLayerManager::saveGroupLayers()
     urlRequester->setMode(KoFileDialog::OpenDirectory);
     urlRequester->setStartDir(QFileInfo(m_view->document()->url().toLocalFile()).absolutePath());
     urlRequester->setMimeTypeFilters(listMimeFilter);
-    urlRequester->setUrl(m_view->document()->url());
+    urlRequester->setFileName(m_view->document()->url().toLocalFile());
     layout->addWidget(urlRequester);
 
     QCheckBox *chkInvisible = new QCheckBox(i18n("Convert Invisible Groups"), page);
@@ -682,19 +682,18 @@ void KisLayerManager::saveGroupLayers()
 
     // selectedUrl()( does not return the expected result. So, build up the QUrl the more complicated way
     //return m_fileWidget->selectedUrl();
-    QUrl url = urlRequester->url();
-    QFileInfo f(url.toLocalFile());
+    QString path = urlRequester->fileName();
+    if (path.isEmpty()) return;
+
+    QFileInfo f(path);
     QString mimeType= KisMimeDatabase::mimeTypeForFile(f.fileName());
     QString extension = KisMimeDatabase::suffixesForMimeType(mimeType).first();
     QString basename = f.baseName();
 
-    if (url.isEmpty())
-        return;
-
     KisImageWSP image = m_view->image();
     if (!image) return;
 
-    KisSaveGroupVisitor v(image, chkInvisible->isChecked(), chkDepth->isChecked(), url, basename, extension, mimeType);
+    KisSaveGroupVisitor v(image, chkInvisible->isChecked(), chkDepth->isChecked(), QUrl(path), basename, extension, mimeType);
     image->rootLayer()->accept(v);
 
 }

@@ -107,7 +107,7 @@ void KisSprayShapeOption::writeOptionSetting(KisPropertiesConfiguration* setting
     setting->setProperty(SPRAYSHAPE_PROPORTIONAL, m_options->proportionalBox->isChecked());
     setting->setProperty(SPRAYSHAPE_WIDTH, m_options->widthSpin->value());
     setting->setProperty(SPRAYSHAPE_HEIGHT, m_options->heightSpin->value());
-    setting->setProperty(SPRAYSHAPE_IMAGE_URL, m_options->imageUrl->url().toLocalFile());
+    setting->setProperty(SPRAYSHAPE_IMAGE_URL, m_options->imageUrl->fileName());
 }
 
 
@@ -120,13 +120,13 @@ void KisSprayShapeOption::readOptionSetting(const KisPropertiesConfiguration* se
     m_options->aspectButton->setKeepAspectRatio(setting->getBool(SPRAYSHAPE_USE_ASPECT, false));
     m_options->widthSpin->setValue(setting->getInt(SPRAYSHAPE_WIDTH));
     m_options->heightSpin->setValue(setting->getInt(SPRAYSHAPE_HEIGHT));
-    m_options->imageUrl->setUrl(QUrl::fromUserInput(setting->getString(SPRAYSHAPE_IMAGE_URL)));
+    m_options->imageUrl->setFileName(setting->getString(SPRAYSHAPE_IMAGE_URL));
 }
 
 
 void KisSprayShapeOption::prepareImage()
 {
-    QString path = m_options->imageUrl->url().toLocalFile();
+    QString path = m_options->imageUrl->fileName();
     if (QFile::exists(path)) {
         QImage image(path);
         if (!image.isNull()) {

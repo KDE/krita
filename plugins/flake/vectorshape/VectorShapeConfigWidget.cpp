@@ -68,7 +68,7 @@ void VectorShapeConfigWidget::save()
     if (!m_shape) {
         return;
     }
-    QString fn = m_fileWidget->url().toLocalFile();
+    QString fn = m_fileWidget->fileName();
     if (!fn.isEmpty()) {
         QFile f(fn);
         if (f.exists()) {

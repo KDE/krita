@@ -82,7 +82,7 @@ KisFileLayer::ScalingMethod KisDlgFileLayer::scaleToImageResolution() const
 
 QString KisDlgFileLayer::fileName() const
 {
-    QString path = dlgWidget.wdgUrlRequester->url().path();
+    QString path = dlgWidget.wdgUrlRequester->fileName();
 
     if (!m_basePath.isEmpty() && QFileInfo(path).isAbsolute()) {
         QDir directory(m_basePath);

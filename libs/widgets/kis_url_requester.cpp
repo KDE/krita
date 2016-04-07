@@ -47,32 +47,21 @@ void KisUrlRequester::setStartDir(const QString &path)
 
 void KisUrlRequester::setFileName(const QString &path)
 {
-    m_ui->txtFileName->setText(path);
-    QUrl url(path);
+    QString realPath = path;
+
+    if (!m_basePath.isEmpty()) {
+        QDir d(m_basePath);
+        realPath = d.relativeFilePath(path);
+    }
+
+    m_ui->txtFileName->setText(realPath);
+    QUrl url(realPath);
     emit urlSelected(url);
 }
 
 QString KisUrlRequester::fileName() const
 {
     return m_ui->txtFileName->text();
-}
-
-QUrl KisUrlRequester::url() const
-{
-    return QUrl::fromLocalFile(fileName());
-}
-
-void KisUrlRequester::setUrl(const QUrl &urlObj)
-{
-    QString url = urlObj.path();
-
-    if (m_basePath.isEmpty()) {
-        setFileName(url);
-    }
-    else {
-        QDir d(m_basePath);
-        setFileName(d.relativeFilePath(url));
-    }
 }
 
 void KisUrlRequester::setMode(KoFileDialog::DialogType mode)
@@ -109,16 +98,5 @@ void KisUrlRequester::slotSelectFile()
     Q_ASSERT(!m_mime_filter_list.isEmpty());
     dialog.setMimeTypeFilters(m_mime_filter_list, m_mime_default_filter);
 
-    QString url = dialog.filename();
-
-    if (m_basePath.isEmpty())
-    {
-        setFileName(url);
-    }
-    else
-    {
-        QDir d(m_basePath);
-        setFileName(d.relativeFilePath(url));
-    }
-
+    setFileName(dialog.filename());
 }

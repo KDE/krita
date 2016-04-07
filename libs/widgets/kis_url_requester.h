@@ -49,8 +49,8 @@ public:
 
     void setStartDir(const QString &path);
 
-    QUrl url() const;
-    void setUrl(const QUrl &url);
+    QString fileName() const;
+    void setFileName(const QString &path);
 
     void setMode(KoFileDialog::DialogType mode);
     KoFileDialog::DialogType mode() const;
@@ -69,10 +69,6 @@ public Q_SLOTS:
 Q_SIGNALS:
     void textChanged(const QString &fileName);
     void urlSelected(const QUrl &url);
-
-private:
-    QString fileName() const;
-    void setFileName(const QString &path);
 
 private:
     QScopedPointer<Ui::WdgUrlRequester> m_ui;

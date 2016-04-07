@@ -333,7 +333,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
 
                 if (urlRequester)
                 {
-                    urlRequester->setUrl(QUrl(folderParam->toUiValue()));
+                    urlRequester->setFileName(folderParam->toUiValue());
                 }
                 else
                 {
@@ -367,7 +367,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
 
                 if (urlRequester)
                 {
-                    urlRequester->setUrl(QUrl(fileParam->toUiValue()));
+                    urlRequester->setFileName(fileParam->toUiValue());
                 }
                 else
                 {

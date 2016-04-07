@@ -132,8 +132,8 @@ extern "C" int main(int argc, char **argv)
         }
     }
 
-    QDir appdir(KoResourcePaths::getApplicationRoot());
 #ifdef Q_OS_WIN
+    QDir appdir(KoResourcePaths::getApplicationRoot());
     qputenv("PATH", QFile::encodeName(appdir.absolutePath() + "/bin" + ";"
                                       + appdir.absolutePath() + "/lib" + ";"
                                       + appdir.absolutePath() + "/lib/kde4" + ";"

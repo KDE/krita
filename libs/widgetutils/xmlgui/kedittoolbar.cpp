@@ -760,17 +760,14 @@ void KEditToolBarPrivate::okClicked()
         return;
     }
 
-    if (!m_widget->save()) {
-        // some error box here is needed
-    } else {
-        // Do not emit the "newToolBarConfig" signal again here if the "Apply"
-        // button was already pressed and no further changes were made.
-        if (m_buttonBox->button(QDialogButtonBox::Apply)->isEnabled()) {
-            emit q->newToolBarConfig();
-            emit q->newToolbarConfig(); // compat
-        }
-        q->accept();
+    // Do not rebuild GUI and emit the "newToolBarConfig" signal again here if the "Apply"
+    // button was already pressed and no further changes were made.
+    if (m_buttonBox->button(QDialogButtonBox::Apply)->isEnabled()) {
+        m_widget->save();
+        emit q->newToolBarConfig();
+        emit q->newToolbarConfig(); // compat
     }
+    q->accept();
 }
 
 void KEditToolBarPrivate::applyClicked()
@@ -906,7 +903,7 @@ void KEditToolBarWidgetPrivate::initFromFactory(KXMLGUIFactory *factory,
     }
 }
 
-bool KEditToolBarWidget::save()
+void KEditToolBarWidget::save()
 {
     //qDebug(240) << "KEditToolBarWidget::save";
     XmlDataList::Iterator it = d->m_xmlFiles.begin();
@@ -940,12 +937,10 @@ bool KEditToolBarWidget::save()
     }
 
     if (!d->m_factory) {
-        return true;
+        return;
     }
 
     rebuildKXMLGUIClients();
-
-    return true;
 }
 
 void KEditToolBarWidget::rebuildKXMLGUIClients()

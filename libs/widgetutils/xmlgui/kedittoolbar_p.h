@@ -217,9 +217,8 @@ public:
      * filename will be the one specified in the constructor.. or the
      * made up one if the filename was NULL.
      *
-     * @return The status of whether or not the save succeeded.
      */
-    bool save();
+    void save();
 
     /**
      * Remove and readd all KMXLGUIClients to update the GUI

@@ -482,22 +482,22 @@ KisDocument::~KisDocument()
 
     if (d->image) {
         d->image->notifyAboutToBeDeleted();
+
+        /**
+         * WARNING: We should wait for all the internal image jobs to
+         * finish before entering KisImage's destructor. The problem is,
+         * while execution of KisImage::~KisImage, all the weak shared
+         * pointers pointing to the image enter an inconsistent
+         * state(!). The shared counter is already zero and destruction
+         * has started, but the weak reference doesn't know about it,
+         * because KisShared::~KisShared hasn't been executed yet. So all
+         * the threads running in background and having weak pointers will
+         * enter the KisImage's destructor as well.
+         */
+
+        d->image->requestStrokeCancellation();
+        d->image->waitForDone();
     }
-
-    /**
-     * WARNING: We should wait for all the internal image jobs to
-     * finish before entering KisImage's destructor. The problem is,
-     * while execution of KisImage::~KisImage, all the weak shared
-     * pointers pointing to the image enter an inconsistent
-     * state(!). The shared counter is already zero and destruction
-     * has started, but the weak reference doesn't know about it,
-     * because KisShared::~KisShared hasn't been executed yet. So all
-     * the threads running in background and having weak pointers will
-     * enter the KisImage's destructor as well.
-     */
-
-    d->image->requestStrokeCancellation();
-    d->image->waitForDone();
 
     // clear undo commands that can still point to the image
     d->undoStack->clear();

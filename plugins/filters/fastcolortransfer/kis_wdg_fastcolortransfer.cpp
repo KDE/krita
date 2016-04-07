@@ -63,7 +63,7 @@ void KisWdgFastColorTransfer::setConfiguration(const KisPropertiesConfiguration*
 KisPropertiesConfiguration* KisWdgFastColorTransfer::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("colortransfer", 1);
-    QString fileName = this->widget()->fileNameURLRequester->url().url();
+    QString fileName = this->widget()->fileNameURLRequester->url().toLocalFile();
 
     if (fileName.isEmpty()) return config;
 

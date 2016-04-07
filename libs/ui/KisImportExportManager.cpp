@@ -296,7 +296,7 @@ KoProgressUpdater* KisImportExportManager::progressUpdater() const
 
 QUrl KisImportExportManager::locationToUrl(QString location) const
 {
-    QUrl u = QUrl::fromLocalFile(location);
+    QUrl u = QUrl::fromUserInput(location);
     return (u.isEmpty()) ? QUrl(location) : u;
 }
 

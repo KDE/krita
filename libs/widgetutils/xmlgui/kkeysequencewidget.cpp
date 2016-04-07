@@ -628,6 +628,12 @@ bool KKeySequenceButton::event(QEvent *e)
         return true;
     }
 
+    if (d->isRecording && e->type() == QEvent::ContextMenu) {
+        // is caused by Qt::Key_Menu
+        e->accept();
+        return true;
+    }
+
     return QPushButton::event(e);
 }
 
@@ -672,7 +678,6 @@ void KKeySequenceButton::keyPressEvent(QKeyEvent *e)
     case Qt::Key_Meta:
     case Qt::Key_Super_L:
     case Qt::Key_Super_R:
-    case Qt::Key_Menu: //unused (yes, but why?)
         d->controlModifierlessTimout();
         d->updateShortcutDisplay();
         break;

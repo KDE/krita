@@ -29,17 +29,17 @@
 template<>
 template<>
 MaskApplicatorFactory<KisMaskGenerator, KisBrushMaskScalarApplicator>::ReturnType
-MaskApplicatorFactory<KisMaskGenerator, KisBrushMaskScalarApplicator>::create<VC_IMPL>(ParamType maskGenerator)
+MaskApplicatorFactory<KisMaskGenerator, KisBrushMaskScalarApplicator>::create<Vc::CurrentImplementation::current()>(ParamType maskGenerator)
 {
-    return new KisBrushMaskScalarApplicator<KisMaskGenerator,VC_IMPL>(maskGenerator);
+    return new KisBrushMaskScalarApplicator<KisMaskGenerator,Vc::CurrentImplementation::current()>(maskGenerator);
 }
 
 template<>
 template<>
 MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator>::ReturnType
-MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator>::create<VC_IMPL>(ParamType maskGenerator)
+MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator>::create<Vc::CurrentImplementation::current()>(ParamType maskGenerator)
 {
-    return new KisBrushMaskVectorApplicator<KisCircleMaskGenerator,VC_IMPL>(maskGenerator);
+    return new KisBrushMaskVectorApplicator<KisCircleMaskGenerator,Vc::CurrentImplementation::current()>(maskGenerator);
 }
 
 #if defined HAVE_VC
@@ -57,7 +57,7 @@ struct KisCircleMaskGenerator::FastRowProcessor
 };
 
 template<> void KisCircleMaskGenerator::
-FastRowProcessor::process<VC_IMPL>(float* buffer, int width, float y, float cosa, float sina,
+FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, int width, float y, float cosa, float sina,
                                    float centerX, float centerY)
 {
     const bool useSmoothing = d->copyOfAntialiasEdges;

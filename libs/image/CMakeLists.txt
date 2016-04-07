@@ -335,6 +335,9 @@ endif()
 
 if(HAVE_VC)
   target_link_libraries(kritaimage PUBLIC ${Vc_LIBRARIES})
+  if (NOT PACKAGERS_BUILD)
+      set_property(TARGET kritaimage APPEND PROPERTY COMPILE_OPTIONS "${Vc_ARCHITECTURE_FLAGS}")
+  endif()
 endif()
 
 if (NOT GSL_FOUND)

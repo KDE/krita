@@ -943,44 +943,6 @@ bool KisDocument::saveToStream(QIODevice *dev)
     return nwritten == (int)s.size();
 }
 
-QString KisDocument::checkImageMimeTypes(const QString &mimeType, const QUrl &url) const
-{
-    if (!url.isLocalFile()) return mimeType;
-
-    if (url.toLocalFile().endsWith(".kpp")) return "image/png";
-
-    QStringList imageMimeTypes;
-    imageMimeTypes << "image/jpeg"
-                   << "image/x-psd" << "image/photoshop" << "image/x-photoshop" << "image/x-vnd.adobe.photoshop" << "image/vnd.adobe.photoshop"
-                   << "image/x-portable-pixmap" << "image/x-portable-graymap" << "image/x-portable-bitmap"
-                   << "application/pdf"
-                   << "image/x-exr"
-                   << "image/x-xcf"
-                   << "image/x-eps"
-                   << "image/png"
-                   << "image/bmp" << "image/x-xpixmap" << "image/gif" << "image/x-xbitmap"
-                   << "image/tiff"
-                   << "image/x-gimp-brush" << "image/x-gimp-brush-animated"
-                   << "image/jp2";
-
-    if (!imageMimeTypes.contains(mimeType)) return mimeType;
-
-    QFile f(url.toLocalFile());
-    if (!f.open(QIODevice::ReadOnly)) {
-        warnKrita << "Could not open file to check the mimetype" << url;
-    }
-    QByteArray ba = f.read(qMin(f.size(), (qint64)512)); // should be enough for images
-    QString mimeFromData = KisMimeDatabase::mimeTypeForData(ba);
-    f.close();
-
-    // Checking the content failed as well, so let's fall back on the extension again
-    if (mimeFromData == "application/octet-stream") {
-        return mimeType;
-    }
-
-    return mimeFromData;
-}
-
 // Called for embedded documents
 bool KisDocument::saveToStore(KoStore *_store, const QString & _path)
 {
@@ -1172,43 +1134,28 @@ bool KisDocument::openFile()
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     d->specialOutputFlag = 0;
-    QByteArray _native_format = nativeFormatMimeType();
 
-    QUrl u = QUrl::fromLocalFile(localFilePath());
+    QString filename = localFilePath();
     QString typeName = mimeType();
 
     if (typeName.isEmpty()) {
-        typeName = KisMimeDatabase::mimeTypeForFile(u.path());
+        typeName = KisMimeDatabase::mimeTypeForFile(filename);
     }
 
-    // for images, always check content.
-    typeName = checkImageMimeTypes(typeName, u);
-
-    //dbgUI << "mimetypes 4:" << typeName;
+    //qDebug() << "mimetypes 4:" << typeName;
 
     // Allow to open backup files, don't keep the mimetype application/x-trash.
     if (typeName == "application/x-trash") {
-        QString path = u.path();
-        const QStringList patterns =  KisMimeDatabase::suffixesForMimeType(typeName);
-        // Find the extension that makes it a backup file, and remove it
-        for (QStringList::ConstIterator it = patterns.begin(); it != patterns.end(); ++it) {
-            QString ext = *it;
-            if (!ext.isEmpty() && ext[0] == '*') {
-                ext.remove(0, 1);
-                if (path.endsWith(ext)) {
-                    path.chop(ext.length());
-                    break;
-                }
+        QString path = filename;
+        while (path.length() > 0) {
+            path.chop(1);
+            typeName = KisMimeDatabase::mimeTypeForFile(path);
+            //qDebug() << "\t" << path << typeName;
+            if (!typeName.isEmpty()) {
+                break;
             }
         }
-        typeName = KisMimeDatabase::mimeTypeForFile(path);
-    }
-
-    // Special case for flat XML files (e.g. using directory store)
-    if (u.fileName() == "maindoc.xml" || u.fileName() == "content.xml" || typeName == "inode/directory") {
-        typeName = _native_format; // Hmm, what if it's from another app? ### Check mimetype
-        d->specialOutputFlag = SaveAsDirectoryStore;
-        dbgUI << "loading" << u.fileName() << ", using directory store for" << localFilePath() << "; typeName=" << typeName;
+        //qDebug() << "chopped" << filename  << "to" << path << "Was trash, is" << typeName;
     }
     dbgUI << localFilePath() << "type:" << typeName;
 
@@ -1234,7 +1181,7 @@ bool KisDocument::openFile()
            return false;
         }
         d->isEmpty = false;
-        dbgUI << "importedFile" << importedFile << "status:" << static_cast<int>(status);
+        //qDebug() << "importedFile" << importedFile << "status:" << static_cast<int>(status);
     }
 
     QApplication::restoreOverrideCursor();

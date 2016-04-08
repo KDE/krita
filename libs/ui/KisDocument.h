@@ -819,8 +819,6 @@ private:
 
     bool saveToStream(QIODevice *dev);
 
-    QString checkImageMimeTypes(const QString &mimeType, const QUrl &url) const;
-
     bool loadNativeFormatFromStoreInternal(KoStore *store);
 
     bool savePreview(KoStore *store);

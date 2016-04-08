@@ -111,6 +111,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     lblRecent->setText(recent);
     connect(lblRecent, SIGNAL(linkActivated(QString)), SLOT(linkClicked(QString)));
     connect(&m_timer, SIGNAL(timeout()), SLOT(raise()));
+    m_timer.setSingleShot(true);
     m_timer.start(10);
 }
 

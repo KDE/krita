@@ -227,7 +227,7 @@ QVector<Tile> generateTiles(int size,
     QVector<Tile> tiles(size);
 
 #ifdef HAVE_VC
-    const int vecSize = Vc::float_v::Size;
+    const int vecSize = Vc::float_v::size();
 #else
     const int vecSize = 1;
 #endif
@@ -472,7 +472,7 @@ void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1, quint32
     QVector<Tile> tiles =
         generateTiles(2, 0, 0, ALPHA_RANDOM, ALPHA_RANDOM, pixelSize);
 
-    const int vecSize = Vc::float_v::Size;
+    const int vecSize = Vc::float_v::size();
 
     const int numBlocks = numPixels / vecSize;
 
@@ -810,7 +810,7 @@ void KisCompositionBenchmark::benchmarkMemcpy()
 }
 
 #ifdef HAVE_VC
-    const int vecSize = Vc::float_v::Size;
+    const int vecSize = Vc::float_v::size();
     const size_t uint8VecAlignment = qMax(vecSize * sizeof(quint8), sizeof(void*));
     const size_t uint32VecAlignment = qMax(vecSize * sizeof(quint32), sizeof(void*));
     const size_t floatVecAlignment = qMax(vecSize * sizeof(float), sizeof(void*));
@@ -835,7 +835,7 @@ void KisCompositionBenchmark::benchmarkUintFloat()
     float *fData = (float*)ptr;
 
     QBENCHMARK {
-        for (int i = 0; i < dataSize; i += Vc::float_v::Size) {
+        for (int i = 0; i < dataSize; i += Vc::float_v::size()) {
             // convert uint -> float directly, this causes
             // static_cast helper be called
             Vc::float_v b(uint_v(iData + i));
@@ -868,7 +868,7 @@ void KisCompositionBenchmark::benchmarkUintIntFloat()
     float *fData = (float*)ptr;
 
     QBENCHMARK {
-        for (int i = 0; i < dataSize; i += Vc::float_v::Size) {
+        for (int i = 0; i < dataSize; i += Vc::float_v::size()) {
             // convert uint->int->float, that avoids special sign
             // treating, and gives 2.6 times speedup
             Vc::float_v b(int_v(uint_v(iData + i)));
@@ -900,7 +900,7 @@ void KisCompositionBenchmark::benchmarkFloatUint()
     float *fData = (float*)ptr;
 
     QBENCHMARK {
-        for (int i = 0; i < dataSize; i += Vc::float_v::Size) {
+        for (int i = 0; i < dataSize; i += Vc::float_v::size()) {
             // conversion float -> uint
             uint_v b(Vc::float_v(fData + i));
 
@@ -933,7 +933,7 @@ void KisCompositionBenchmark::benchmarkFloatIntUint()
     float *fData = (float*)ptr;
 
     QBENCHMARK {
-        for (int i = 0; i < dataSize; i += Vc::float_v::Size) {
+        for (int i = 0; i < dataSize; i += Vc::float_v::size()) {
             // conversion float -> int -> uint
             uint_v b(int_v(Vc::float_v(fData + i)));
 

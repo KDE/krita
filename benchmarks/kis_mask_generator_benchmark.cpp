@@ -52,20 +52,38 @@ void KisMaskGeneratorBenchmark::benchmarkCircle()
     }
 }
 
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include "kis_fixed_paint_device.h"
+#include "kis_types.h"
+#include "kis_brush_mask_applicator_base.h"
+#include "krita_utils.h"
+
+
 void KisMaskGeneratorBenchmark::benchmarkSIMD()
 {
 #ifdef HAVE_VC
-    int width = 1000;
-    float *buffer = Vc::malloc<float, Vc::AlignOnVector>(width);
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(cs);
+    dev->setRect(QRect(0, 0, 100, 100));
+    dev->initialize();
 
-    KisCircleMaskGenerator gen(1000, 0.5, 0.5, 0.5, 2, true);
+    MaskProcessingData data(dev, cs,
+                            0.0, 1.0,
+                            50, 50, 0);
+
+    KisCircleMaskGenerator gen(100, 0.5, 0.5, 0.5, 2, false);
+
+    KisBrushMaskApplicatorBase *applicator = gen.applicator();
+    applicator->initializeData(&data);
+
+    QVector<QRect> rects = KritaUtils::splitRectIntoPatches(dev->bounds(), QSize(63, 63));
+
     QBENCHMARK{
-        for(int y = 0; y < 1000; ++y)
-        {
-//            gen.processRowFast(buffer, width, y, 0.0f, 1.0f, 500.0f, 500.0f, 0.5f, 0.5f);
+        Q_FOREACH (const QRect &rc, rects) {
+            applicator->process(rc);
         }
     }
-    Vc::free(buffer);
 #endif
 }
 

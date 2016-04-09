@@ -443,7 +443,7 @@ void KisBorderSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
     delete [] out;
 
     for (qint32 i = 0; i < 3; i++)
-        delete buf[i];
+        delete[] buf[i];
 
     max -= m_xRadius;
     delete[] max;

@@ -481,14 +481,16 @@ endif()
 ##
 ## Test for Vc
 ##
-set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
-macro_optional_find_package(Vc 1.0.0)
-macro_log_feature(Vc_FOUND "Vc" "Portable, zero-overhead SIMD library for C++" "https://github.com/VcDevel/Vc" FALSE "" "Required by the Krita for vectorization")
-macro_bool_to_01(Vc_FOUND HAVE_VC)
-macro_bool_to_01(PACKAGERS_BUILD DO_PACKAGERS_BUILD)
-
-configure_file(config-vc.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-vc.h )
+set(HAVE_VC FALSE)
+if( NOT MSVC)
+    set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
+    set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
+    macro_optional_find_package(Vc 1.0.0)
+    macro_log_feature(Vc_FOUND "Vc" "Portable, zero-overhead SIMD library for C++" "https://github.com/VcDevel/Vc" FALSE "" "Required by the Krita for vectorization")
+    macro_bool_to_01(Vc_FOUND HAVE_VC)
+    macro_bool_to_01(PACKAGERS_BUILD DO_PACKAGERS_BUILD)
+    configure_file(config-vc.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-vc.h )
+endif()
 
 if(HAVE_VC)
     message(STATUS "Vc found!")

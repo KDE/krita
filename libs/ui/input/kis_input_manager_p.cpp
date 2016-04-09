@@ -281,6 +281,9 @@ void KisInputManager::Private::addStrokeShortcut(KisAbstractInputAction* action,
         strokeShortcut->setButtons(QSet<Qt::Key>::fromList(modifiers), QSet<Qt::MouseButton>::fromList(buttonList));
         matcher.addShortcut(strokeShortcut);
     }
+    else {
+        delete strokeShortcut;
+    }
 }
 
 void KisInputManager::Private::addKeyShortcut(KisAbstractInputAction* action, int index,

@@ -60,17 +60,19 @@ void KisMaskGeneratorBenchmark::benchmarkCircle()
 #include "krita_utils.h"
 
 
-void benchmarkSIMD(qreal fade) {
+void KisMaskGeneratorBenchmark::benchmarkSIMD()
+{
+#ifdef HAVE_VC
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(cs);
-    dev->setRect(QRect(0, 0, 1000, 1000));
+    dev->setRect(QRect(0, 0, 100, 100));
     dev->initialize();
 
     MaskProcessingData data(dev, cs,
                             0.0, 1.0,
-                            500, 500, 0);
+                            50, 50, 0);
 
-    KisCircleMaskGenerator gen(1000, 1.0, fade, fade, 2, false);
+    KisCircleMaskGenerator gen(100, 0.5, 0.5, 0.5, 2, false);
 
     KisBrushMaskApplicatorBase *applicator = gen.applicator();
     applicator->initializeData(&data);
@@ -82,16 +84,7 @@ void benchmarkSIMD(qreal fade) {
             applicator->process(rc);
         }
     }
-}
-
-void KisMaskGeneratorBenchmark::benchmarkSIMD_SharpBrush()
-{
-    benchmarkSIMD(1.0);
-}
-
-void KisMaskGeneratorBenchmark::benchmarkSIMD_FadedBrush()
-{
-    benchmarkSIMD(0.5);
+#endif
 }
 
 void KisMaskGeneratorBenchmark::benchmarkSquare()

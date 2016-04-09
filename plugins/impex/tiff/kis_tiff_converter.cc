@@ -484,6 +484,14 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
         tiffReader = new KisTIFFReaderTarget32bit(layer->paintDevice(), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, transform, postprocessor, alphaValue.i);
     }
 
+    if (!tiffReader) {
+        delete postprocessor;
+        delete[] lineSizeCoeffs;
+        TIFFClose(image);
+        dbgFile << "Image has an invalid/unsupported color type: " << color_type;
+        return KisImageBuilder_RESULT_INVALID_ARG;
+    }
+
     if (TIFFIsTiled(image)) {
         dbgFile << "tiled image";
         uint32 tileWidth, tileHeight;

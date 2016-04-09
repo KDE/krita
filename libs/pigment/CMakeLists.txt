@@ -95,9 +95,6 @@ generate_export_header(kritapigment)
 
 if (HAVE_VC)
     target_link_libraries(kritapigment PUBLIC KF5::I18n KF5::ConfigCore)
-    if (NOT PACKAGERS_BUILD)
-        set_property(TARGET kritapigment APPEND PROPERTY COMPILE_OPTIONS "${Vc_ARCHITECTURE_FLAGS}")
-    endif()
 endif()
 
 target_include_directories( kritapigment

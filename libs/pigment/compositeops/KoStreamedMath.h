@@ -205,7 +205,7 @@ static inline void write_channels_32(quint8 *data,
     uint_v v4 = uint_v(int_v(Vc::round(c3))) & mask;
     v1 = v1 | v2;
     v3 = v3 | v4;
-    (v1 | v3).store((quint32*)data, Vc::Aligned);
+    *((uint_v*)data) = v1 | v3;
 }
 
 /**

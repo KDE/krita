@@ -259,10 +259,10 @@ KisView::~KisView()
         KoProgressProxy *proxy = d->viewManager->statusBar()->progress()->progressProxy();
         KIS_ASSERT_RECOVER_NOOP(proxy);
         image()->compositeProgressProxy()->removeProxy(proxy);
-    }
 
-    if (d->viewManager->filterManager()->isStrokeRunning()) {
-        d->viewManager->filterManager()->cancel();
+        if (d->viewManager->filterManager()->isStrokeRunning()) {
+            d->viewManager->filterManager()->cancel();
+        }
     }
 
     KisPart::instance()->removeView(this);

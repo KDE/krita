@@ -111,7 +111,7 @@ static inline quint8 lerp_mixed_u8_float(quint8 a, quint8 b, float alpha) {
 }
 
 /**
- * Get a vector containing first Vc::float_v::size() values of mask.
+ * Get a vector containing first Vc::float_v::Size values of mask.
  * Each source mask element is considered to be a 8-bit integer
  */
 static inline Vc::float_v fetch_mask_8(const quint8 *data) {
@@ -120,7 +120,7 @@ static inline Vc::float_v fetch_mask_8(const quint8 *data) {
 }
 
 /**
- * Get an alpha values from Vc::float_v::size() pixels 32-bit each
+ * Get an alpha values from Vc::float_v::Size pixels 32-bit each
  * (4 channels, 8 bit per channel).  The alpha value is considered
  * to be stored in the most significat byte of the pixel
  *
@@ -144,7 +144,7 @@ static inline Vc::float_v fetch_alpha_32(const quint8 *data) {
 }
 
 /**
- * Get color values from Vc::float_v::size() pixels 32-bit each
+ * Get color values from Vc::float_v::Size pixels 32-bit each
  * (4 channels, 8 bit per channel).  The color data is considered
  * to be stored in the 3 least significant bytes of the pixel.
  *
@@ -176,7 +176,7 @@ static inline void fetch_colors_32(const quint8 *data,
 }
 
 /**
- * Pack color and alpha values to Vc::float_v::size() pixels 32-bit each
+ * Pack color and alpha values to Vc::float_v::Size pixels 32-bit each
  * (4 channels, 8 bit per channel).  The color data is considered
  * to be stored in the 3 least significant bytes of the pixel, alpha -
  * in the most significant byte
@@ -218,7 +218,7 @@ template<bool useMask, bool useFlow, class Compositor, int pixelSize>
 {
     using namespace Arithmetic;
 
-    const int vectorSize = Vc::float_v::size();
+    const int vectorSize = Vc::float_v::Size;
     const qint32 vectorInc = pixelSize * vectorSize;
     const qint32 linearInc = pixelSize;
     qint32 srcVectorInc = vectorInc;

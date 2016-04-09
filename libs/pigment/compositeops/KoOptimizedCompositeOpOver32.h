@@ -109,7 +109,7 @@ struct OverCompositor32 {
 
         } else {
             if (!haveMask && !haveOpacity) {
-                memcpy(dst, src, 4 * Vc::float_v::size());
+                memcpy(dst, src, 4 * Vc::float_v::Size);
                 return;
             } else {
                 // opacity has changed the alpha of the source,

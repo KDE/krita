@@ -71,7 +71,7 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
 
     Vc::float_v currentIndices = Vc::float_v::IndexesFromZero();
 
-    Vc::float_v increment((float)Vc::float_v::size());
+    Vc::float_v increment((float)Vc::float_v::Size);
     Vc::float_v vCenterX(centerX);
 
     Vc::float_v vCosa(cosa);
@@ -87,7 +87,7 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
 
     Vc::float_v vOne(Vc::One);
 
-    for (int i=0; i < width; i+= Vc::float_v::size()){
+    for (int i=0; i < width; i+= Vc::float_v::Size){
 
         Vc::float_v x_ = currentIndices - vCenterX;
 
@@ -130,7 +130,7 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
 
         currentIndices = currentIndices + increment;
 
-        bufferPointer += Vc::float_v::size();
+        bufferPointer += Vc::float_v::Size;
     }
 }
 

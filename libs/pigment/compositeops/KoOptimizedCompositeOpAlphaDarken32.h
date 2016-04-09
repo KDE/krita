@@ -42,7 +42,7 @@ struct AlphaDarkenCompositor32 {
 
     /**
      * This is a vector equivalent of compositeOnePixelScalar(). It is considered
-     * to process Vc::float_v::size() pixels in a single pass.
+     * to process Vc::float_v::Size pixels in a single pass.
      *
      * o the \p haveMask parameter points whether the real (non-null) mask
      *   pointer is passed to the function.
@@ -111,7 +111,7 @@ struct AlphaDarkenCompositor32 {
         } else if (srcAlphaIsUnit) {
             bool dstAlphaIsUnit = (dst_alpha == uint8Max).isFull();
             if (dstAlphaIsUnit) {
-                memcpy(dst, src, 4 * Vc::float_v::size());
+                memcpy(dst, src, 4 * Vc::float_v::Size);
                 return;
             } else {
                 dst_c1 = src_c1;

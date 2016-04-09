@@ -232,7 +232,7 @@ template<bool useMask, bool useFlow, class Compositor, int pixelSize>
     if (!params.srcRowStride) {
         if (pixelSize == 4) {
             quint32 *buf = Vc::malloc<quint32, Vc::AlignOnVector>(vectorSize);
-            *((uint_v*)buf) = uint_v(*((const quint32*)params.srcRowStart));
+            *((Vc::uint_v*)buf) = Vc::uint_v(*((const quint32*)params.srcRowStart));
             srcRowStart = reinterpret_cast<quint8*>(buf);
             srcLinearInc = 0;
             srcVectorInc = 0;

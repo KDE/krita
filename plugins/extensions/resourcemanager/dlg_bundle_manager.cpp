@@ -355,6 +355,10 @@ void DlgBundleManager::slotImportResource()
         else if (buttonName == "bnImportWorkspaces") {
             action = m_actionManager->actionByName("import_workspaces");
         }
+        else {
+            warnUI << "Unhandled bundle manager import button " << buttonName;
+            return;
+        }
 
         action->trigger();
         refreshListData();

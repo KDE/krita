@@ -526,16 +526,17 @@ void KoStrokeConfigWidget::setCanvas( KoCanvasBase *canvas )
         connect(canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
                 this, SLOT(canvasResourceChanged(int, const QVariant &)));
         setUnit(canvas->unit());
+
+        KoDocumentResourceManager *resourceManager = canvas->shapeController()->resourceManager();
+        if (resourceManager) {
+            KoMarkerCollection *collection = resourceManager->resource(KoDocumentResourceManager::MarkerCollection).value<KoMarkerCollection*>();
+            if (collection) {
+                updateMarkers(collection->markers());
+            }
+        }
     }
 
     d->canvas = canvas;
-    KoDocumentResourceManager *resourceManager = canvas->shapeController()->resourceManager();
-    if (resourceManager) {
-        KoMarkerCollection *collection = resourceManager->resource(KoDocumentResourceManager::MarkerCollection).value<KoMarkerCollection*>();
-        if (collection) {
-            updateMarkers(collection->markers());
-        }
-    }
 }
 
 void KoStrokeConfigWidget::canvasResourceChanged(int key, const QVariant &value)

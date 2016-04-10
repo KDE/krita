@@ -53,6 +53,7 @@ if (MSVC)
 endif()
 
 if (MSYS)
+	set(PATCH_COMMAND patch)
         set(GLOBAL_PROFILE ${GLOBAL_PROFILE} -DCMAKE_TOOLCHAIN_FILE=/data/mxe/mxe/usr/i686-w64-mingw32/share/cmake/mxe-conf.cmake 
                            -DCMAKE_FIND_PREFIX_PATH=${CMAKE_PREFIX_PATH}
                            -DCMAKE_SYSTEM_INCLUDE_PATH=${CMAKE_PREFIX_PATH}/include

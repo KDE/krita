@@ -86,6 +86,7 @@ static void initializeLanguages()
         }
     }
     qDebug() << ">>>>>>>>>>>>>> LANGUAGE" << qgetenv("LANGUAGE");
+    qDebug() << ">>>>>>>>>>>>>> DATADIRS" << qgetenv("XDG_DATA_DIRS");
 }
 
 Q_COREAPP_STARTUP_FUNCTION(initializeLanguages)

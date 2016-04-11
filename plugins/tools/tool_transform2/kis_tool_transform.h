@@ -213,7 +213,7 @@ private:
     bool clearDevices(KisNodeSP node, bool recursive);
     void transformDevices(KisNodeSP node, bool recursive);
 
-    void startStroke(ToolTransformArgs::TransformMode mode);
+    void startStroke(ToolTransformArgs::TransformMode mode, bool forceReset);
     void endStroke();
     void cancelStroke();
 

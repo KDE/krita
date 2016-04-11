@@ -17,7 +17,7 @@
  */
 #include "psd_layer_record.h"
 
-#include <netinet/in.h> // htonl
+#include <QtEndian>
 
 #include <QIODevice>
 #include <QBuffer>

@@ -22,7 +22,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <sys/types.h>
-#include <netinet/in.h> // htonl
+#include <QtEndian>
 
 #include "kis_gbr_brush.h"
 
@@ -176,19 +176,19 @@ bool KisGbrBrush::init()
     }
 
     memcpy(&bh, d->data, sizeof(GimpBrushHeader));
-    bh.header_size = ntohl(bh.header_size);
+    bh.header_size = qFromBigEndian(bh.header_size);
     d->header_size = bh.header_size;
 
-    bh.version = ntohl(bh.version);
+    bh.version = qFromBigEndian(bh.version);
     d->version = bh.version;
 
-    bh.width = ntohl(bh.width);
-    bh.height = ntohl(bh.height);
+    bh.width = qFromBigEndian(bh.width);
+    bh.height = qFromBigEndian(bh.height);
 
-    bh.bytes = ntohl(bh.bytes);
+    bh.bytes = qFromBigEndian(bh.bytes);
     d->bytes = bh.bytes;
 
-    bh.magic_number = ntohl(bh.magic_number);
+    bh.magic_number = qFromBigEndian(bh.magic_number);
     d->magic_number = bh.magic_number;
 
     if (bh.version == 1) {
@@ -196,7 +196,7 @@ bool KisGbrBrush::init()
         bh.spacing = static_cast<int>(DEFAULT_SPACING * 100);
     }
     else {
-        bh.spacing = ntohl(bh.spacing);
+        bh.spacing = qFromBigEndian(bh.spacing);
 
         if (bh.spacing > 1000) {
             return false;
@@ -327,19 +327,19 @@ bool KisGbrBrush::saveToDevice(QIODevice* dev) const
     int nameLength = qstrlen(name);
     int wrote;
 
-    bh.header_size = htonl(sizeof(GimpBrushHeader) + nameLength + 1);
-    bh.version = htonl(2); // Only RGBA8 data needed atm, no cinepaint stuff
-    bh.width = htonl(width());
-    bh.height = htonl(height());
+    bh.header_size = qToBigEndian((quint32)sizeof(GimpBrushHeader) + nameLength + 1);
+    bh.version = qToBigEndian((quint32)2); // Only RGBA8 data needed atm, no cinepaint stuff
+    bh.width = qToBigEndian((quint32)width());
+    bh.height = qToBigEndian((quint32)height());
     // Hardcoded, 4 bytes RGBA or 1 byte GREY
     if (!hasColor()) {
-        bh.bytes = htonl(1);
+        bh.bytes = qToBigEndian((quint32)1);
     }
     else {
-        bh.bytes = htonl(4);
+        bh.bytes = qToBigEndian((quint32)4);
     }
-    bh.magic_number = htonl(GimpV2BrushMagic);
-    bh.spacing = htonl(static_cast<quint32>(spacing() * 100.0));
+    bh.magic_number = qToBigEndian((quint32)GimpV2BrushMagic);
+    bh.spacing = qToBigEndian(static_cast<quint32>(spacing() * 100.0));
 
     // Write header: first bh, then the name
     QByteArray bytes = QByteArray::fromRawData(reinterpret_cast<char*>(&bh), sizeof(GimpBrushHeader));

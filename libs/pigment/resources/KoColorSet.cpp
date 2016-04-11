@@ -19,7 +19,7 @@
 #include <resources/KoColorSet.h>
 
 #include <sys/types.h>
-#include <netinet/in.h> // htonl
+#include <QtEndian> // qFromLittleEndian
 
 #include <QImage>
 #include <QPoint>
@@ -377,7 +377,7 @@ bool KoColorSet::loadRiff()
 
     RiffHeader header;
     memcpy(&header, m_data.constData(), sizeof(RiffHeader));
-    header.colorcount = ntohl(header.colorcount);
+    header.colorcount = qFromBigEndian(header.colorcount);
 
     for (int i = sizeof(RiffHeader);
          (i < (int)(sizeof(RiffHeader) + header.colorcount) && i < m_data.size());
@@ -442,7 +442,7 @@ quint16 readShort(QIODevice *io) {
     quint16 val;
     quint64 read = io->read((char*)&val, 2);
     if (read != 2) return false;
-    return ntohs(val);
+    return qFromBigEndian(val);
 }
 
 bool KoColorSet::loadAco()

@@ -108,6 +108,7 @@ target_link_libraries( kritapigment
         kritaplugin
         ${EXTRA_LIBRARIES}
         KF5::I18n 
+        Qt5::Core
         Qt5::Gui
         Qt5::Xml
         ${WIN32_PLATFORM_NET_LIBS}

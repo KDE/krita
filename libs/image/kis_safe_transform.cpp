@@ -30,6 +30,8 @@
 
 struct Q_DECL_HIDDEN KisSafeTransform::Private
 {
+    bool needsClipping = true;
+
     QRect bounds;
     QTransform forwardTransform;
     QTransform backwardTransform;
@@ -133,23 +135,26 @@ KisSafeTransform::KisSafeTransform(const QTransform &transform,
     m_d->forwardTransform = transform;
     m_d->backwardTransform = transform.inverted();
 
-    m_d->srcClipPolygon = QPolygonF(QRectF(m_d->bounds));
-    m_d->dstClipPolygon = QPolygonF(QRectF(m_d->bounds));
+    m_d->needsClipping = transform.type() > QTransform::TxShear;
 
-    qreal crossCoeff = 1.0;
+    if (m_d->needsClipping) {
+        m_d->srcClipPolygon = QPolygonF(QRectF(m_d->bounds));
+        m_d->dstClipPolygon = QPolygonF(QRectF(m_d->bounds));
 
-    QLineF srcHorizon;
-    if (m_d->getHorizon(m_d->backwardTransform, &srcHorizon)) {
-        crossCoeff = m_d->getCrossSign(srcHorizon, srcInterestRect);
-        m_d->srcClipPolygon = m_d->getCroppedPolygon(srcHorizon, m_d->bounds, crossCoeff);
+        qreal crossCoeff = 1.0;
+
+        QLineF srcHorizon;
+        if (m_d->getHorizon(m_d->backwardTransform, &srcHorizon)) {
+            crossCoeff = m_d->getCrossSign(srcHorizon, srcInterestRect);
+            m_d->srcClipPolygon = m_d->getCroppedPolygon(srcHorizon, m_d->bounds, crossCoeff);
+        }
+
+        QLineF dstHorizon;
+        if (m_d->getHorizon(m_d->forwardTransform, &dstHorizon)) {
+            crossCoeff = m_d->getCrossSign(dstHorizon, mapRectForward(srcInterestRect));
+            m_d->dstClipPolygon = m_d->getCroppedPolygon(dstHorizon, m_d->bounds, crossCoeff);
+        }
     }
-
-    QLineF dstHorizon;
-    if (m_d->getHorizon(m_d->forwardTransform, &dstHorizon)) {
-        crossCoeff = m_d->getCrossSign(dstHorizon, mapRectForward(srcInterestRect));
-        m_d->dstClipPolygon = m_d->getCroppedPolygon(dstHorizon, m_d->bounds, crossCoeff);
-    }
-
 }
 
 KisSafeTransform::~KisSafeTransform()
@@ -168,14 +173,30 @@ QPolygonF KisSafeTransform::dstClipPolygon() const
 
 QPolygonF KisSafeTransform::mapForward(const QPolygonF &p)
 {
-    QPolygonF poly = m_d->srcClipPolygon.intersected(p);
-    return m_d->forwardTransform.map(poly).intersected(QRectF(m_d->bounds));
+    QPolygonF poly;
+
+    if (!m_d->needsClipping) {
+        poly = m_d->forwardTransform.map(p);
+    } else {
+        poly = m_d->srcClipPolygon.intersected(p);
+        poly = m_d->forwardTransform.map(poly).intersected(QRectF(m_d->bounds));
+    }
+
+    return poly;
 }
 
 QPolygonF KisSafeTransform::mapBackward(const QPolygonF &p)
 {
-    QPolygonF poly = m_d->dstClipPolygon.intersected(p);
-    return m_d->backwardTransform.map(poly).intersected(QRectF(m_d->bounds));
+    QPolygonF poly;
+
+    if (!m_d->needsClipping) {
+        poly = m_d->backwardTransform.map(p);
+    } else {
+        poly = m_d->dstClipPolygon.intersected(p);
+        poly = m_d->backwardTransform.map(poly).intersected(QRectF(m_d->bounds));
+    }
+
+    return poly;
 }
 
 QRectF KisSafeTransform::mapRectForward(const QRectF &rc)

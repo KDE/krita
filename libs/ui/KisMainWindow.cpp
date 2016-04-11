@@ -452,7 +452,6 @@ KisMainWindow::KisMainWindow()
 
     // If we have customized the toolbars, load that first
     setLocalXMLFile(KoResourcePaths::locateLocal("data", "krita.xmlgui"));
-    QString doc;
     setXMLFile(":/kxmlgui5/krita.xmlgui");
 
     guiFactory()->addClient(this);

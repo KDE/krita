@@ -45,7 +45,16 @@
 #else /* HAVE_VC */
 
 namespace Vc {
-    typedef enum {ScalarImpl} CurrentImplementation;
+    enum Implementation /*: std::uint_least32_t*/ {
+            ScalarImpl,
+    };
+    class CurrentImplementation {
+        public:
+            static constexpr Implementation current()
+            {
+                return static_cast<Implementation>(ScalarImpl);
+            }
+    };
 }
 
 #ifdef DO_PACKAGERS_BUILD

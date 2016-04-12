@@ -134,7 +134,7 @@ public:
     KoResourceServer(const QString& type, const QString& extensions)
         : KoResourceServerBase(type, extensions)
     {
-        m_blackListFile = KoResourcePaths::locateLocal("data", "krita/" + type + ".blacklist");
+        m_blackListFile = KoResourcePaths::locateLocal("data", type + ".blacklist");
         m_blackListFileNames = readBlackListFile();
         m_tagStore = new KoResourceTagStore(this);
         m_tagStore->loadTags();

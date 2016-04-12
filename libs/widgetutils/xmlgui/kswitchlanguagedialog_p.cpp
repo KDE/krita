@@ -57,7 +57,7 @@ static QByteArray getApplicationSpecificLanguage(const QByteArray &defaultCode =
 {
     QSettingsPtr settings = localeOverridesSettings();
     settings->beginGroup(QStringLiteral("Language"));
-    qDebug() << "our language" << settings->value(qAppName(), defaultCode).toByteArray();
+    //qDebug() << "our language" << settings->value(qAppName(), defaultCode).toByteArray();
     return settings->value(qAppName(), defaultCode).toByteArray();
 }
 
@@ -85,8 +85,8 @@ static void initializeLanguages()
             qputenv("LANGUAGE", languageCode + ":" + languages);
         }
     }
-    qDebug() << ">>>>>>>>>>>>>> LANGUAGE" << qgetenv("LANGUAGE");
-    qDebug() << ">>>>>>>>>>>>>> DATADIRS" << qgetenv("XDG_DATA_DIRS");
+    //qDebug() << ">>>>>>>>>>>>>> LANGUAGE" << qgetenv("LANGUAGE");
+    //qDebug() << ">>>>>>>>>>>>>> DATADIRS" << qgetenv("XDG_DATA_DIRS");
 }
 
 Q_COREAPP_STARTUP_FUNCTION(initializeLanguages)

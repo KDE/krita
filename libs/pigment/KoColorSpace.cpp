@@ -122,10 +122,10 @@ QPolygonF KoColorSpace::gamutXYY() const
             
         }
         int samples = 5;//amount of samples in our color space.
-        QString name = KoColorSpaceRegistry::instance()->colorSpaceFactory("XYZAF16")->defaultProfile();
-        const KoColorSpace* xyzColorSpace = KoColorSpaceRegistry::instance()->colorSpace("XYZA", "F16", name);
+        QString name = KoColorSpaceRegistry::instance()->colorSpaceFactory("XYZAF32")->defaultProfile();
+        const KoColorSpace* xyzColorSpace = KoColorSpaceRegistry::instance()->colorSpace("XYZA", "F32", name);
         quint8 *data = new quint8[pixelSize()];
-        quint8 data2[8]; // xyza is 8 bytes per pixel.
+        quint8 data2[16]; // xyza f32 is 4 floats, that is 16 bytes per pixel.
         //QVector <qreal> sampleCoordinates(pow(colorChannelCount(),samples));
         //sampleCoordinates.fill(0.0);
 
@@ -138,25 +138,25 @@ QPolygonF KoColorSpace::gamutXYY() const
                 channelValuesF[1]=max;
                 fromNormalisedChannelsValue(data, channelValuesF);
                 convertPixelsTo(data, data2, xyzColorSpace, 1, KoColorConversionTransformation::IntentAbsoluteColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
-                xyzColorSpace->normalisedChannelsValue(data2,channelValuesF);
+                xyzColorSpace->normalisedChannelsValue(data2, channelValuesF);
                 qreal x = channelValuesF[0]/(channelValuesF[0]+channelValuesF[1]+channelValuesF[2]);
                 qreal y = channelValuesF[1]/(channelValuesF[0]+channelValuesF[1]+channelValuesF[2]);
-                d->gamutXYY<< QPointF(x,y);
+                d->gamutXYY << QPointF(x,y);
             } else {
                 for(int y=0;y<samples;y++){
                     for(int z=0;z<samples;z++){
                         if (colorChannelCount()==4) {
                             for(int k=0;k<samples;k++){
-                                channelValuesF[0]=(max/(samples-1))*(x);
-                                channelValuesF[1]=(max/(samples-1))*(y);
-                                channelValuesF[2]=(max/(samples-1))*(z);
-                                channelValuesF[3]=(max/(samples-1))*(k);
-                                channelValuesF[4]=max;
+                                channelValuesF[0] = (max / (samples - 1)) * (x);
+                                channelValuesF[1] = (max / (samples - 1)) * (y);
+                                channelValuesF[2] = (max / (samples - 1)) * (z);
+                                channelValuesF[3] = (max / (samples - 1)) * (k);
+                                channelValuesF[4] = max;
                                 fromNormalisedChannelsValue(data, channelValuesF);
                                 convertPixelsTo(data, data2, xyzColorSpace, 1, KoColorConversionTransformation::IntentAbsoluteColorimetric, KoColorConversionTransformation::adjustmentConversionFlags());
-                                xyzColorSpace->normalisedChannelsValue(data2,channelValuesF);
-                                qreal x = channelValuesF[0]/(channelValuesF[0]+channelValuesF[1]+channelValuesF[2]);
-                                qreal y = channelValuesF[1]/(channelValuesF[0]+channelValuesF[1]+channelValuesF[2]);
+                                xyzColorSpace->normalisedChannelsValue(data2, channelValuesF);
+                                qreal x = channelValuesF[0] / (channelValuesF[0] + channelValuesF[1] + channelValuesF[2]);
+                                qreal y = channelValuesF[1] / (channelValuesF[0] + channelValuesF[1] + channelValuesF[2]);
                                 d->gamutXYY<< QPointF(x,y);
                             }
                         } else {

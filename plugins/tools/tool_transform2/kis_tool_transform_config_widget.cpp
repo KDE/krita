@@ -300,6 +300,18 @@ void KisToolTransformConfigWidget::slotUpdateIcons()
     liquifyOffset->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_offset"));
     liquifyUndo->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_erase"));
 
+
+
+    middleRightButton->setIcon(KisIconUtils::loadIcon("arrow-right"));
+    topRightButton->setIcon(KisIconUtils::loadIcon("arrow-topright"));
+    middleTopButton->setIcon(KisIconUtils::loadIcon("arrow-up"));
+    topLeftButton->setIcon(KisIconUtils::loadIcon("arrow-topleft"));
+    middleLeftButton->setIcon(KisIconUtils::loadIcon("arrow-left"));
+    bottomLeftButton->setIcon(KisIconUtils::loadIcon("arrow-downleft"));
+    middleBottomButton->setIcon(KisIconUtils::loadIcon("arrow-down"));
+    bottomRightButton->setIcon(KisIconUtils::loadIcon("arrow-downright"));
+
+
     // pressure icons
     liquifySizePressureBox->setIcon(KisIconUtils::loadIcon("transform_icons_penPressure"));
     liquifyAmountPressureBox->setIcon(KisIconUtils::loadIcon("transform_icons_penPressure"));

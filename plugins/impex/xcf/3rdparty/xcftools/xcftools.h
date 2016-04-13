@@ -55,9 +55,7 @@ typedef signed long int   int32_t ;
 # define __ATTRIBUTE__(x)
 #endif
 
-#if HAVE_NETINET_IN_H
-# include <netinet/in.h>
-#elif HAVE_ARPA_INET_H
+#if HAVE_ARPA_INET_H
 # include <arpa/inet.h>
 #elif WORDS_BIGENDIAN
 # define ntohl(x) (x)

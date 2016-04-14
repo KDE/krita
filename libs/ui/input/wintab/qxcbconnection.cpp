@@ -690,7 +690,7 @@ void QWindowSystemInterface::handleWheelEvent(QWindow *tlw, ulong timestamp, con
     // In addition high-resolution pixel-based deltas are also supported.
     // Platforms that does not support these may pass a null point here.
     // Angle deltas must always be sent in addition to pixel deltas.
-    QWindowSystemInterfacePrivate::WheelEvent *e;
+    QScopedPointer<QWindowSystemInterfacePrivate::WheelEvent> e;
 
     // Pass Qt::ScrollBegin and Qt::ScrollEnd through
     // even if the wheel delta is null.
@@ -699,28 +699,28 @@ void QWindowSystemInterface::handleWheelEvent(QWindow *tlw, ulong timestamp, con
 
     // Simple case: vertical deltas only:
     if (angleDelta.y() != 0 && angleDelta.x() == 0) {
-        e = new QWindowSystemInterfacePrivate::WheelEvent(tlw, timestamp, local, global, pixelDelta, angleDelta, angleDelta.y(), Qt::Vertical, mods, phase, source);
-        processWheelEvent(e);
+        e.reset(new QWindowSystemInterfacePrivate::WheelEvent(tlw, timestamp, local, global, pixelDelta, angleDelta, angleDelta.y(), Qt::Vertical, mods, phase, source));
+        processWheelEvent(e.data());
         return;
     }
 
     // Simple case: horizontal deltas only:
     if (angleDelta.y() == 0 && angleDelta.x() != 0) {
-        e = new QWindowSystemInterfacePrivate::WheelEvent(tlw, timestamp, local, global, pixelDelta, angleDelta, angleDelta.x(), Qt::Horizontal, mods, phase, source);
-        processWheelEvent(e);
+        e.reset(new QWindowSystemInterfacePrivate::WheelEvent(tlw, timestamp, local, global, pixelDelta, angleDelta, angleDelta.x(), Qt::Horizontal, mods, phase, source));
+        processWheelEvent(e.data());
         return;
     }
 
     // Both horizontal and vertical deltas: Send two wheel events.
     // The first event contains the Qt 5 pixel and angle delta as points,
     // and in addition the Qt 4 compatibility vertical angle delta.
-    e = new QWindowSystemInterfacePrivate::WheelEvent(tlw, timestamp, local, global, pixelDelta, angleDelta, angleDelta.y(), Qt::Vertical, mods, phase, source);
-    processWheelEvent(e);
+    e.reset(new QWindowSystemInterfacePrivate::WheelEvent(tlw, timestamp, local, global, pixelDelta, angleDelta, angleDelta.y(), Qt::Vertical, mods, phase, source));
+    processWheelEvent(e.data());
 
     // The second event contains null pixel and angle points and the
     // Qt 4 compatibility horizontal angle delta.
-    e = new QWindowSystemInterfacePrivate::WheelEvent(tlw, timestamp, local, global, QPoint(), QPoint(), angleDelta.x(), Qt::Horizontal, mods, phase, source);
-    processWheelEvent(e);
+    e.reset(new QWindowSystemInterfacePrivate::WheelEvent(tlw, timestamp, local, global, QPoint(), QPoint(), angleDelta.x(), Qt::Horizontal, mods, phase, source));
+    processWheelEvent(e.data());
 }
 
 void processWheelEvent(QWindowSystemInterfacePrivate::WheelEvent *e)

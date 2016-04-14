@@ -13,7 +13,8 @@ export PATH=$BUILDROOT/mxe/usr/bin:$BUILDROOT/mxe/usr/x86_64-w64-mingw32.shared/
 
 # note: poppler-qt5 and gsl don't work yet
 # Use  i686-w64-mingw32.shared for 32 bits builds
-
+# note: vc is 1.2, so we either need zagge's branch, or you need to build Vc 0.75
+# yourself. Make sure you use -DBUILD_TESTING=OFF for Vc
 make MXE_TARGETS=x86_64-w64-mingw32.shared gcc boost curl eigen exiv2 expat fftw fontconfig freetype gettext ilmbase openexr jpeg lcms libpng libraw opencolorio openjpeg qt5 qtscript tiff vc zlib
 
 cd $BUILDROOT
@@ -27,11 +28,17 @@ cd b
 x86_64-w64-mingw32.shared-cmake ../krita/3rdparty/ -DEXTERNALS_DOWNLOAD_DIR=$BUILDROOT/d -DINSTALL_ROOT=$BUILDROOT/mxe/usr/x86_64-w64-mingw32.shared -DMXE_TOOLCHAIN=${BUILDROOT}/mxe/usr/x86_64-w64-mingw32.shared/share/cmake/mxe-conf.cmake
 
 x86_64-w64-mingw32.shared-cmake  --build . --target ext_kwindowsystem
-x86_64-w64-mingw32.shared-cmake  --build . --target ext_gsl
 x86_64-w64-mingw32.shared-cmake  --build . --target ext_poppler
+
+# You might want to build gsl and vc 0.75 manually
 
 
 # build krita
 cd ../build
 x86_64-w64-mingw32.shared-cmake ../krita  -DDEFINE_NO_DEPRECATED=1 -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DPACKAGERS_BUILD=ON 
 make -j4 install
+
+# to test, configure wine
+# WINEARCH=win64 WINEPREFIX=~/.wine64 winecfg
+# Go to the bin directory and test krita:
+# WINEPREFIX=~/.wine64 wine ./krita.exe

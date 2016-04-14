@@ -131,7 +131,6 @@ Comment[x-test]=xxDigital Paintingxx
 Type=Application
 Icon=calligrakrita
 Categories=Qt;KDE;Graphics;
-X-KDE-ServiceTypes=Calligra/Application
 X-Calligra-DefaultMimeTypes=application/x-krita
 X-KDE-NativeMimeType=application/x-krita
 X-KDE-ExtraNativeMimeTypes=

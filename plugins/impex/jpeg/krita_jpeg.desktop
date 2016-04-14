@@ -67,7 +67,6 @@ Name[zh_TW]=繪圖_Krita
 StartupNotify=true
 Terminal=false
 Type=Application
-X-KDE-ServiceTypes=Calligra/Application
 X-Calligra-DefaultMimeTypes=image/jpeg
 X-KDE-SubstituteUID=false
 X-KDE-Username=

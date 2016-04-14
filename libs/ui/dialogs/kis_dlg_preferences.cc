@@ -275,6 +275,7 @@ void ShortcutSettingsTab::setDefault()
 
 void ShortcutSettingsTab::saveChanges()
 {
+    m_page->save();
     KisActionRegistry::instance()->settingsPageSaved();
 }
 

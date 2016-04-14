@@ -1,7 +1,6 @@
 #ifndef QUIRK_NETINET_IN_H
 #define QUIRK_NETINET_IN_H
 
-#if defined (_MSC_VER)
 /*
  * this is used for htonl mostly.
  *
@@ -12,6 +11,5 @@
  */
 
 #pragma message("winquirk: no netinet/in.h!")
-#include <Winsock2.h>
-#endif
+#include <winsock2.h>
 #endif

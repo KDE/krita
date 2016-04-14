@@ -395,8 +395,6 @@ if(UNIX)
     endif()
 endif()
 
-kde_enable_exceptions()
-
 if(WIN32)
     #ki18n_wrap_ui(
     #    input/wintab/kis_screen_size_choice_dialog.ui

@@ -2,4 +2,4 @@ set(INDEXCOLORS_SOURCE kiswdgindexcolors.cpp indexcolors.cpp indexcolorpalette.c
 ki18n_wrap_ui(INDEXCOLORS_SOURCE kiswdgindexcolors.ui)
 add_library(kritaindexcolors MODULE ${INDEXCOLORS_SOURCE})
 target_link_libraries(kritaindexcolors kritaui)
-install(TARGETS kritaindexcolors          DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritaindexcolors          DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

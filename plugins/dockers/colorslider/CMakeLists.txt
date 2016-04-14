@@ -10,4 +10,4 @@ set(kritacolorslider_SOURCES
 
 add_library(kritacolorslider MODULE ${kritacolorslider_SOURCES})
 target_link_libraries(kritacolorslider kritaui ${OPENEXR_LIBRARIES})
-install(TARGETS kritacolorslider  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritacolorslider  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

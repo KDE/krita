@@ -14,7 +14,7 @@ add_definitions(${PNG_DEFINITIONS} ${KDE4_ENABLE_EXCEPTIONS})
 
 target_link_libraries(kritapngimport kritaui ${PNG_LIBRARIES} )
 
-install(TARGETS kritapngimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritapngimport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 set(kritapngexport_SOURCES
     kis_png_export.cc
@@ -26,6 +26,6 @@ add_library(kritapngexport MODULE ${kritapngexport_SOURCES})
 
 target_link_libraries(kritapngexport kritaui ${PNG_LIBRARIES})
 
-install(TARGETS kritapngexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritapngexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 install( PROGRAMS  krita_png.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

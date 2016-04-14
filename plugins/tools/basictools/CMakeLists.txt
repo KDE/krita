@@ -34,7 +34,7 @@ generate_export_header(kritadefaulttools BASE_NAME kritadefaulttools)
 target_link_libraries(kritadefaulttools kritaui kritabasicflakes)
 target_link_libraries(kritadefaulttools ${Boost_SYSTEM_LIBRARY})
 
-install(TARGETS kritadefaulttools  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritadefaulttools  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

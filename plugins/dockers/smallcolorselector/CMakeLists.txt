@@ -1,4 +1,4 @@
 set(KRITA_smallCOLORSELECTOR_SOURCES smallcolorselector.cc smallcolorselector_dock.cc kis_small_color_widget.cc )
 add_library(kritasmallcolorselector MODULE ${KRITA_smallCOLORSELECTOR_SOURCES})
 target_link_libraries(kritasmallcolorselector kritaui)
-install(TARGETS kritasmallcolorselector  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritasmallcolorselector  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

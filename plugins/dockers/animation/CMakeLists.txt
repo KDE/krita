@@ -41,6 +41,6 @@ add_library(kritaanimationdocker MODULE ${KRITA_ANIMATIONDOCKER_SOURCES})
 
 generate_export_header(kritaanimationdocker BASE_NAME kritaanimationdocker EXPORT_MACRO_NAME KRITAANIMATIONDOCKER_EXPORT)
 target_link_libraries(kritaanimationdocker kritaui)
-install(TARGETS kritaanimationdocker  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritaanimationdocker  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 

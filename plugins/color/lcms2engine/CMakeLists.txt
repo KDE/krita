@@ -93,5 +93,5 @@ endif ()
 add_library(kritalcmsengine MODULE ${lcmsengine_SRCS})
 
 target_link_libraries(kritalcmsengine kritapigment kritawidgetutils KF5::I18n KF5::CoreAddons ${LCMS2_LIBRARIES}  ${LINK_OPENEXR_LIB})
-install(TARGETS kritalcmsengine DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritalcmsengine DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

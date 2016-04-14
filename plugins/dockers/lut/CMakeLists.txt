@@ -21,4 +21,4 @@ add_library(kritalutdocker MODULE ${KRITA_LUTDOCKER_SOURCES})
 
 generate_export_header(kritalutdocker BASE_NAME kritalutdocker)
 target_link_libraries(kritalutdocker kritaui ${Boost_SYSTEM_LIBRARY} ${OCIO_LIBRARIES})
-install(TARGETS kritalutdocker  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritalutdocker  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

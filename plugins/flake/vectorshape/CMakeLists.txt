@@ -14,7 +14,7 @@ add_library(krita_shape_vector MODULE ${VectorShape_SRCS})
 
 target_link_libraries(krita_shape_vector kritaflake kritawidgets kritavectorimage KF5::I18n Qt5::Svg)
 
-install(TARGETS krita_shape_vector DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS krita_shape_vector DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 if (SHARED_MIME_INFO_FOUND)
     install(FILES krita_svm.xml DESTINATION ${XDG_MIME_INSTALL_DIR})

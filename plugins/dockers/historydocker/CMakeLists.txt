@@ -11,4 +11,4 @@ set(kritahistorydocker_SOURCES
 
 add_library(kritahistorydocker MODULE ${kritahistorydocker_SOURCES})
 target_link_libraries(kritahistorydocker kritaimage kritaui)
-install(TARGETS kritahistorydocker  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritahistorydocker  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

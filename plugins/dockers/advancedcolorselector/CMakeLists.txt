@@ -38,7 +38,7 @@ add_library(kritacolorselectorng MODULE ${KRITA_COLORSELECTORNG_SOURCES})
 
 target_link_libraries(kritacolorselectorng kritaui)
 
-install(TARGETS kritacolorselectorng  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritacolorselectorng  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 install( FILES  kis_colselng_color_patches.png
 		kis_colselng_color_triangle.png

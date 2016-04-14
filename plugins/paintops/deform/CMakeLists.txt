@@ -13,5 +13,5 @@ add_library(kritadeformpaintop MODULE ${kritadeformpaintop_SOURCES})
 
 target_link_libraries(kritadeformpaintop kritaui kritalibpaintop)
 
-install(TARGETS kritadeformpaintop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritadeformpaintop  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( FILES  krita-deform.png DESTINATION ${DATA_INSTALL_DIR}/krita/images )

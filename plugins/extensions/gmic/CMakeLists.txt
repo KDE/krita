@@ -183,7 +183,7 @@ target_link_libraries(gmicparser Qt5::Core Qt5::Gui Qt5::Network kritaui gmic ${
 ########### install files ###############
 set(GMIC_INSTALL_DIR ${DATA_INSTALL_DIR}/krita/gmic)
 
-install(TARGETS kritagmic  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritagmic  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install(TARGETS gmicparser  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES  gmic.xmlgui DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)

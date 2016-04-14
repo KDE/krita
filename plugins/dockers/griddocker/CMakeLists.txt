@@ -10,4 +10,4 @@ ki18n_wrap_ui(KRITA_GRIDDOCKER_SOURCES
 
 add_library(kritagriddocker MODULE ${KRITA_GRIDDOCKER_SOURCES})
 target_link_libraries(kritagriddocker kritaui)
-install(TARGETS kritagriddocker  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritagriddocker  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

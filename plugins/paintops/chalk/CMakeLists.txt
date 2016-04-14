@@ -13,6 +13,6 @@ add_library(kritachalkpaintop MODULE ${kritachalkpaintop_SOURCES})
 
 target_link_libraries(kritachalkpaintop kritalibpaintop)
 
-install(TARGETS kritachalkpaintop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritachalkpaintop  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( FILES
     krita-chalk.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)

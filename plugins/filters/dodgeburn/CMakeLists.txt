@@ -4,4 +4,4 @@ ki18n_wrap_ui(kritadodgeburn_SOURCES
     )
 add_library(kritadodgeburn MODULE ${kritadodgeburn_SOURCES})
 target_link_libraries(kritadodgeburn kritaui)
-install(TARGETS kritadodgeburn  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritadodgeburn  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

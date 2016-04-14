@@ -22,7 +22,7 @@ add_library(kritadefaultpaintops MODULE ${kritadefaultpaintops_SOURCES})
 
 target_link_libraries(kritadefaultpaintops kritalibpaintop)
 
-install(TARGETS kritadefaultpaintops  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritadefaultpaintops  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( FILES
     krita-paintbrush.png
     krita-eraser.png

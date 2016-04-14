@@ -21,6 +21,6 @@ add_library(kritarulerassistanttool MODULE ${kritarulerassistanttool_SOURCES})
 
 target_link_libraries(kritarulerassistanttool kritaui kritaflake   )
 
-install(TARGETS kritarulerassistanttool  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritarulerassistanttool  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 install( FILES krita_tool_ruler_assistant.png dark_krita_tool_ruler_assistant.png light_krita_tool_ruler_assistant.png DESTINATION ${DATA_INSTALL_DIR}/krita/pics)

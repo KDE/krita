@@ -40,4 +40,4 @@ add_library(krita_shape_artistictext MODULE ${ArtisticTextShape_SRCS} )
 
 target_link_libraries(krita_shape_artistictext kritaflake)
 
-install( TARGETS krita_shape_artistictext DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR} )
+install( TARGETS krita_shape_artistictext DESTINATION ${KRITA_PLUGIN_INSTALL_DIR} )

@@ -14,7 +14,7 @@ add_library(kritagridpaintop MODULE ${kritagridpaintop_SOURCES})
 
 target_link_libraries(kritagridpaintop kritalibpaintop)
 
-install(TARGETS kritagridpaintop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritagridpaintop  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( FILES
     krita-grid.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
 

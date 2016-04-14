@@ -13,7 +13,7 @@ add_library(kritajp2import MODULE ${kritajp2import_SOURCES})
 
 target_link_libraries(kritajp2import kritaui  ${OPENJPEG_LIBRARIES} )
 
-install(TARGETS kritajp2import  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritajp2import  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 set(kritajp2export_SOURCES
     jp2_export.cc
@@ -26,5 +26,5 @@ add_library(kritajp2export MODULE ${kritajp2export_SOURCES})
 
 target_link_libraries(kritajp2export kritaui  ${OPENJPEG_LIBRARIES} )
 
-install(TARGETS kritajp2export  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritajp2export  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( PROGRAMS  krita_jp2.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

@@ -18,4 +18,4 @@ ki18n_wrap_ui(kritadefaultdockers_SOURCES
 add_library(kritadefaultdockers MODULE ${kritadefaultdockers_SOURCES} ${kritadefaultdockers_PART_HEADERS})
 generate_export_header(kritadefaultdockers BASE_NAME kritadefaultdockers EXPORT_MACRO_NAME KRITADEFAULTDOCKERS_EXPORT)
 target_link_libraries(kritadefaultdockers kritaui)
-install(TARGETS kritadefaultdockers  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritadefaultdockers  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

@@ -8,4 +8,4 @@ ki18n_wrap_ui(kritanoisefilter_SOURCES
 
 add_library(kritanoisefilter MODULE ${kritanoisefilter_SOURCES})
 target_link_libraries(kritanoisefilter kritaui)
-install(TARGETS kritanoisefilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritanoisefilter  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

@@ -12,7 +12,7 @@ add_library(kritatoolcrop MODULE ${kritatoolcrop_SOURCES})
 
 target_link_libraries(kritatoolcrop kritaui)
 
-install(TARGETS kritatoolcrop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritatoolcrop  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 install( FILES
     KisToolCrop.action

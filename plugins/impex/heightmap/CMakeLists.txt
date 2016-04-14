@@ -10,7 +10,7 @@ add_library(kritaheightmapimport MODULE ${kritaheightmapimport_SOURCES})
 
 target_link_libraries(kritaheightmapimport kritaui )
 
-install(TARGETS kritaheightmapimport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritaheightmapimport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 set(kritaheightmapexport_SOURCES
     kis_heightmap_export.cpp
@@ -22,5 +22,5 @@ add_library(kritaheightmapexport MODULE ${kritaheightmapexport_SOURCES})
 
 target_link_libraries(kritaheightmapexport kritaui  )
 
-install(TARGETS kritaheightmapexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritaheightmapexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( PROGRAMS  krita_heightmap.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

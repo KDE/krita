@@ -36,7 +36,7 @@ add_library(kritapsdimport MODULE ${kritapsdimport_SOURCES})
 
 target_link_libraries(kritapsdimport kritaglobal kritaui kritapsd KF5::I18n ${ZLIB_LIBRARIES})
 
-install(TARGETS kritapsdimport DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritapsdimport DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 #
 # export
@@ -56,6 +56,6 @@ else ()
     target_link_libraries(kritapsdexport kritaui kritapsd ${ZLIB_LIBRARIES})
 endif ()	
 
-install(TARGETS kritapsdexport DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritapsdexport DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 install( PROGRAMS  krita_psd.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

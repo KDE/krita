@@ -21,15 +21,11 @@
 
 #include <limits.h>
 
-#include <calligraversion.h>
-
 #include <KoConfig.h>
 #include "kis_assert.h"
 
 #include <QPoint>
 #include <QPointF>
-
-#define KRITA_VERSION CALLIGRA_VERSION
 
 const quint8 quint8_MAX = UCHAR_MAX;
 const quint16 quint16_MAX = 65535;

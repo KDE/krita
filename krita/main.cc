@@ -44,7 +44,7 @@
 #include "KisApplicationArguments.h"
 
 #if defined Q_OS_WIN
-#include <Windows.h>
+#include <windows.h>
 #include <stdlib.h>
 #include <kis_tablet_support_win.h>
 

@@ -423,10 +423,12 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &m
                         allSupported.prepend(glob + " ");
                     }
 #ifdef Q_OS_LINUX
+                if (qgetenv("XDG_CURRENT_DESKTOP") == "GNOME") {
                     oneFilter.prepend(glob.toUpper() + " ");
-                    if (withAllSupportedEntry) {
-                        allSupported.prepend(glob.toUpper() + " ");
-                    }
+                        if (withAllSupportedEntry) {
+                            allSupported.prepend(glob.toUpper() + " ");
+                        }
+                }
 #endif
 
                 }
@@ -436,9 +438,11 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &m
                         allSupported.append(glob + " ");
                     }
 #ifdef Q_OS_LINUX
-                    oneFilter.append(glob.toUpper() + " ");
-                    if (withAllSupportedEntry) {
-                        allSupported.append(glob.toUpper() + " ");
+                    if (qgetenv("XDG_CURRENT_DESKTOP") == "GNOME") {
+                        oneFilter.append(glob.toUpper() + " ");
+                        if (withAllSupportedEntry) {
+                            allSupported.append(glob.toUpper() + " ");
+                        }
                     }
 #endif
                 }

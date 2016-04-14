@@ -283,22 +283,22 @@ void KisNodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &opt
     offset.setY((fitRect.height() - img.height()) / 2);
     offset += fitRect.topLeft();
 
-    // {   // paint the checkers: we need a proper GUI design for them to be uncommented
-    //     const int step = scm.thumbnailSize() / 4;
-    //     QImage checkers(2 * step, 2 * step, QImage::Format_ARGB32);
-    //     QPainter gc(&checkers);
-    //     gc.fillRect(QRect(0, 0, step, step), Qt::white);
-    //     gc.fillRect(QRect(step, 0, step, step), Qt::gray);
-    //     gc.fillRect(QRect(step, step, step, step), Qt::white);
-    //     gc.fillRect(QRect(0, step, step, step), Qt::gray);
-    //     QBrush brush(checkers);
-    //     p->setBrushOrigin(offset);
-    //     p->fillRect(img.rect().translated(offset), brush);*/
-    // }
+    KisConfig cfg;
 
-    p->fillRect(img.rect().translated(offset), Qt::white);
-    p->drawImage(offset, img);
-    p->setOpacity(oldOpacity); // restore old opacity
+    // paint the checkers: we need a proper GUI design for them to be uncommented
+    const int step = scm.thumbnailSize() / 6;
+     QImage checkers(2 * step, 2 * step, QImage::Format_ARGB32);
+     QPainter gc(&checkers);
+     gc.fillRect(QRect(0, 0, step, step), cfg.checkersColor1());
+     gc.fillRect(QRect(step, 0, step, step), cfg.checkersColor2());
+     gc.fillRect(QRect(step, step, step, step), cfg.checkersColor1());
+     gc.fillRect(QRect(0, step, step, step), cfg.checkersColor2());
+     QBrush brush(checkers);
+     p->setBrushOrigin(offset);
+     p->fillRect(img.rect().translated(offset), brush);
+
+     p->drawImage(offset, img);
+     p->setOpacity(oldOpacity); // restore old opacity
 
     QRect borderRect = kisGrowRect(img.rect(), 1).translated(offset);
     KritaUtils::renderExactRect(p, borderRect, scm.gridColor(option, d->view));

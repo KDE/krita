@@ -9,7 +9,7 @@ mkdir cross/krita-build
 
 git clone git@github.com:boudewijnrempt/mxe.git
 cd mxe
-export PATH=$BUILDROOT/mxe/usr:$BUILDROOT/mxe/usr/x86_64-w64-mingw32.shared/qt5/bin:$PATH
+export PATH=$BUILDROOT/mxe/usr/bin:$BUILDROOT/mxe/usr/x86_64-w64-mingw32.shared/qt5/bin:$PATH
 
 # note: poppler-qt5 and gsl don't work yet
 # Use  i686-w64-mingw32.shared for 32 bits builds
@@ -19,8 +19,19 @@ make MXE_TARGETS=x86_64-w64-mingw32.shared gcc boost curl eigen exiv2 expat fftw
 cd $BUILDROOT
 git clone git://anongit.kde.org/krita.git
 
+
+# build the deps that aren't in mxe
+
 cd b
 
-x86_64-w64-mingw32.shared-cmake ../krita/3rdparty/ -DEXTERNALS_DOWNLOAD_DIR=$BUILDROOT/d -DINSTALL_ROOT=$BUILDROOT/mxe/usr/x86_64-w64-mingw32.shared -DMXE_TOOLCHAIN=${BUILDROOT}/mxe/usr/i686-w64-mingw32.shared/share/cmake/mxe-conf.cmake
+x86_64-w64-mingw32.shared-cmake ../krita/3rdparty/ -DEXTERNALS_DOWNLOAD_DIR=$BUILDROOT/d -DINSTALL_ROOT=$BUILDROOT/mxe/usr/x86_64-w64-mingw32.shared -DMXE_TOOLCHAIN=${BUILDROOT}/mxe/usr/x86_64-w64-mingw32.shared/share/cmake/mxe-conf.cmake
 
-cmake --build . --target ext_kwindowsystem
+x86_64-w64-mingw32.shared-cmake  --build . --target ext_kwindowsystem
+x86_64-w64-mingw32.shared-cmake  --build . --target ext_gsl
+x86_64-w64-mingw32.shared-cmake  --build . --target ext_poppler
+
+
+# build krita
+cd ../build
+x86_64-w64-mingw32.shared-cmake ../krita  -DDEFINE_NO_DEPRECATED=1 -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DPACKAGERS_BUILD=ON 
+make -j4 install

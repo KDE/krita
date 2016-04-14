@@ -114,7 +114,7 @@ endif ()
 add_library(kritasketchlib SHARED ${kritasketchlib_SRCS})
 generate_export_header(kritasketchlib BASE_NAME krita_sketch)
 set_target_properties(kritasketchlib
-    PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    PROPERTIES VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 
 

@@ -42,6 +42,6 @@ target_link_libraries(kritaodf kritaversion kritaplugin kritastore KF5::CoreAddo
 target_link_libraries(kritaodf LINK_INTERFACE_LIBRARIES kritastore KF5::CoreAddons KF5::I18n Qt5::PrintSupport Qt5::Gui Qt5::Xml)
 
 set_target_properties(kritaodf PROPERTIES
-    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 install(TARGETS kritaodf ${INSTALL_TARGETS_DEFAULT_ARGS} )

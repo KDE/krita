@@ -14,7 +14,7 @@ target_link_libraries(kritaversion Qt5::Core)
 generate_export_header(kritaversion BASE_NAME kritaversion)
 
 set_target_properties(kritaversion PROPERTIES
-    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 install(TARGETS kritaversion ${INSTALL_TARGETS_DEFAULT_ARGS} )
 

@@ -16,7 +16,7 @@ target_link_libraries(kritacolor kritaglobal ${QT_QTCORE_LIBRARY} KF5::I18n  ${k
 target_link_libraries(kritacolor LINK_INTERFACE_LIBRARIES kritaglobal ${QT_QTCORE_LIBRARY})
 
 set_target_properties(kritacolor PROPERTIES
-    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 
 install(TARGETS kritacolor  ${INSTALL_TARGETS_DEFAULT_ARGS})

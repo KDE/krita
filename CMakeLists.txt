@@ -90,18 +90,18 @@ endif()
 
 message(STATUS "Krita version: ${CALLIGRA_VERSION_STRING}")
 
-# Define the generic version of the Calligra libraries here
-# This makes it easy to advance it when the next Calligra release comes.
-# 14 was the last GENERIC_CALLIGRA_LIB_VERSION_MAJOR of the previous Calligra series
+# Define the generic version of the Krita libraries here
+# This makes it easy to advance it when the next Krita release comes.
+# 14 was the last GENERIC_KRITA_LIB_VERSION_MAJOR of the previous Krita series
 # (2.x) so we're starting with 15 in 3.x series.
 if(CALLIGRA_STABLE_VERSION_MAJOR EQUAL 3)
-    math(EXPR GENERIC_CALLIGRA_LIB_VERSION_MAJOR "${CALLIGRA_STABLE_VERSION_MINOR} + 15")
+    math(EXPR GENERIC_KRITA_LIB_VERSION_MAJOR "${CALLIGRA_STABLE_VERSION_MINOR} + 15")
 else()
     # let's make sure we won't forget to update the "15"
-    message(FATAL_ERROR "Reminder: please update offset == 15 used to compute GENERIC_CALLIGRA_LIB_VERSION_MAJOR to something bigger")
+    message(FATAL_ERROR "Reminder: please update offset == 15 used to compute GENERIC_KRITA_LIB_VERSION_MAJOR to something bigger")
 endif()
-set(GENERIC_CALLIGRA_LIB_VERSION "${GENERIC_CALLIGRA_LIB_VERSION_MAJOR}.0.0")
-set(GENERIC_CALLIGRA_LIB_SOVERSION "${GENERIC_CALLIGRA_LIB_VERSION_MAJOR}")
+set(GENERIC_KRITA_LIB_VERSION "${GENERIC_KRITA_LIB_VERSION_MAJOR}.0.0")
+set(GENERIC_KRITA_LIB_SOVERSION "${GENERIC_KRITA_LIB_VERSION_MAJOR}")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
                       "${CMAKE_SOURCE_DIR}/cmake/modules")

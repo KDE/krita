@@ -225,5 +225,3 @@ void KisAnimationExporter::frameReadyToSave()
     }
     stopExport(); //finish
 }
-
-#include "kis_animation_exporter.moc"

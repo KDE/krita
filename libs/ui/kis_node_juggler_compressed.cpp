@@ -840,5 +840,3 @@ bool KisNodeJugglerCompressed::isEnded() const
 {
     return !m_d->isStarted;
 }
-
-#include "kis_node_juggler_compressed.moc"

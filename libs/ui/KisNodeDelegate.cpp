@@ -840,6 +840,3 @@ void KisNodeDelegate::drawProgressBar(QPainter *p, const QStyleOptionViewItem &o
         p->restore();
     }
 }
-
-
-#include <KisNodeDelegate.moc>

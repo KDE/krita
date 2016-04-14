@@ -401,5 +401,3 @@ void KisAnimationCachePopulator::slotPrivateStartWaitingForConvertedFrame()
 
     m_d->infoConversionWatcher.setFuture(requestFuture);
 }
-
-#include "kis_animation_cache_populator.moc"

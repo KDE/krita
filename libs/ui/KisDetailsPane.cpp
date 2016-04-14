@@ -111,5 +111,3 @@ QStandardItemModel* KisDetailsPane::model() const
 {
     return &d->m_model;
 }
-
-#include <KisDetailsPane.moc>

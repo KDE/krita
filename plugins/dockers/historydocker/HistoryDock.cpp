@@ -48,5 +48,3 @@ void HistoryDock::setCanvas(KoCanvasBase *canvas) {
     m_undoView->setCanvas( myCanvas );
 
 }
-
-#include <HistoryDock.moc>

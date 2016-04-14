@@ -171,5 +171,3 @@ void TestKoLcmsColorProfile::testConversion()
 }
 
 QTEST_MAIN(TestKoLcmsColorProfile)
-#include <TestKoLcmsColorProfile.moc>
-

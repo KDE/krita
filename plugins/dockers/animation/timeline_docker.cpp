@@ -140,5 +140,3 @@ void TimelineDocker::setMainWindow(KisViewManager *view)
         actionManager->addAction(it.key(), it.value());
     }
 }
-
-#include "timeline_docker.moc"

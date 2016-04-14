@@ -73,5 +73,3 @@ KisKeyframeChannel *KisKeyframe::channel() const
 {
     return m_d->channel;
 }
-
-#include "kis_keyframe.moc"

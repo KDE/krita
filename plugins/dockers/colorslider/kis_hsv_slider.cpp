@@ -266,5 +266,3 @@ void KisHSVSlider::drawArrow(QPainter *painter, const QPoint &pos)
     style()->drawPrimitive(arrowPE, &o, painter, this);
 
 }
-
-#include <kis_hsv_slider.moc>

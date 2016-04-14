@@ -96,5 +96,3 @@ void KisAnimationExporterTest::testAnimationExport()
 }
 
 QTEST_MAIN(KisAnimationExporterTest)
-#include "kis_animation_exporter_test.moc"
-

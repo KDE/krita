@@ -170,6 +170,3 @@ void KisImportExportFilter::slotProgress(int value)
         d->updater->setValue(value);
     }
 }
-
-
-#include <KisImportExportFilter.moc>

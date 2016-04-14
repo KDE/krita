@@ -557,5 +557,3 @@ void KisNodeView::setDraggingFlag(bool flag)
 {
     m_draggingFlag = flag;
 }
-
-#include <KisNodeView.moc>

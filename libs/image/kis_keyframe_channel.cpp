@@ -484,5 +484,3 @@ void KisKeyframeChannel::requestUpdate(const KisTimeRange &range, const QRect &r
         m_d->node->invalidateFrames(range, rect);
     }
 }
-
-#include "kis_keyframe_channel.moc"

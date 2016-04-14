@@ -564,5 +564,3 @@ void AnimationDocker::slotDropFramesChanged(bool value)
         updateDropFramesIcon();
     }
 }
-
-#include "animation_docker.moc"

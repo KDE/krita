@@ -63,11 +63,11 @@ qreal KisTransformUtils::effectiveSize(const QRectF &rc) {
     return 0.5 * (rc.width(), rc.height());
 }
 
-QRectF KisTransformUtils::handleRect(qreal radius, const QTransform &t, const QRectF &limitingRect, qreal *dOut) {
+QRectF handleRectImpl(qreal radius, const QTransform &t, const QRectF &limitingRect, const QPointF &basePoint, qreal *dOut) {
     qreal handlesExtraScale =
-        scaleFromPerspectiveMatrix(t, limitingRect.center());
+        KisTransformUtils::scaleFromPerspectiveMatrix(t, basePoint);
 
-    const qreal maxD = 0.2 * effectiveSize(limitingRect);
+    const qreal maxD = 0.2 * KisTransformUtils::effectiveSize(limitingRect);
     const qreal d = qMin(maxD, radius / handlesExtraScale);
 
     QRectF handleRect(-0.5 * d, -0.5 * d, d, d);
@@ -77,6 +77,15 @@ QRectF KisTransformUtils::handleRect(qreal radius, const QTransform &t, const QR
     }
 
     return handleRect;
+
+}
+
+QRectF KisTransformUtils::handleRect(qreal radius, const QTransform &t, const QRectF &limitingRect, qreal *dOut) {
+    return handleRectImpl(radius, t, limitingRect, limitingRect.center(), dOut);
+}
+
+QRectF KisTransformUtils::handleRect(qreal radius, const QTransform &t, const QRectF &limitingRect, const QPointF &basePoint) {
+    return handleRectImpl(radius, t, limitingRect, basePoint, 0);
 }
 
 QPointF KisTransformUtils::clipInRect(QPointF p, QRectF r)

@@ -111,8 +111,8 @@ message("Module path:" ${CMAKE_MODULE_PATH})
 
 # fetch git revision for the current build
 
-set(CALLIGRA_GIT_SHA1_STRING "")
-set(CALLIGRA_GIT_BRANCH_STRING "")
+set(KRITA_GIT_SHA1_STRING "")
+set(KRITA_GIT_BRANCH_STRING "")
 
 include(GetGitRevisionDescription)
 get_git_head_revision(GIT_REFSPEC GIT_SHA1)
@@ -120,8 +120,8 @@ get_git_branch(GIT_BRANCH)
 
 if(GIT_SHA1 AND GIT_BRANCH)
     string(SUBSTRING ${GIT_SHA1} 0 7 GIT_SHA1)
-    set(CALLIGRA_GIT_SHA1_STRING ${GIT_SHA1})
-    set(CALLIGRA_GIT_BRANCH_STRING ${GIT_BRANCH})
+    set(KRITA_GIT_SHA1_STRING ${GIT_SHA1})
+    set(KRITA_GIT_BRANCH_STRING ${GIT_BRANCH})
 endif()
 
 if(NOT DEFINED RELEASE_BUILD)

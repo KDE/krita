@@ -39,7 +39,7 @@
 #include "sketch/SketchInputContext.h"
 
 #include <calligraversion.h>
-#include <calligragitversion.h>
+#include <kritagitversion.h>
 
 #if defined Q_OS_WIN
 #include "stdlib.h"
@@ -55,8 +55,8 @@ int main( int argc, char** argv )
     QString version;
 
 
-#ifdef CALLIGRA_GIT_SHA1_STRING
-    QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
+#ifdef KRITA_GIT_SHA1_STRING
+    QString gitVersion(KRITA_GIT_SHA1_STRING);
     version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion).toLatin1();
 #else
     version = calligraVersion;

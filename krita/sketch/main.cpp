@@ -32,7 +32,7 @@
 #include <KoResourcePaths.h>
 
 #include <calligraversion.h>
-#include <calligragitversion.h>
+#include <kritagitversion.h>
 #include <opengl/kis_opengl.h>
 #include <kis_icon.h>
 
@@ -57,8 +57,8 @@ int main( int argc, char** argv )
     QString version;
 
 
-#ifdef CALLIGRA_GIT_SHA1_STRING
-    QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
+#ifdef KRITA_GIT_SHA1_STRING
+    QString gitVersion(KRITA_GIT_SHA1_STRING);
     version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion).toLatin1();
 #else
     version = calligraVersion;

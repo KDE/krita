@@ -18,21 +18,21 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef __CALLIGRA_GIT_VERSION_H
-#define __CALLIGRA_GIT_VERSION_H
+#ifndef __KRITA_GIT_VERSION_H
+#define __KRITA_GIT_VERSION_H
 
 /**
- * @def CALLIGRA_GIT_SHA1_STRING
- * @ingroup CalligraMacros
- * @brief Indicates the git sha1 commit which was used for compilation of Calligra
+ * @def KRITA_GIT_SHA1_STRING
+ * @ingroup KritaMacros
+ * @brief Indicates the git sha1 commit which was used for compilation of Krita
  */
-#cmakedefine CALLIGRA_GIT_SHA1_STRING "@CALLIGRA_GIT_SHA1_STRING@"
+#cmakedefine KRITA_GIT_SHA1_STRING "@KRITA_GIT_SHA1_STRING@"
 
 /**
- * @def CALLIGRA_GIT_BRANCH_STRING
- * @ingroup CalligraMacros
- * @brief Indicates the git branch name which was used for compilation of Calligra
+ * @def KRITA_GIT_BRANCH_STRING
+ * @ingroup KritaMacros
+ * @brief Indicates the git branch name which was used for compilation of Krita
  */
-#cmakedefine CALLIGRA_GIT_BRANCH_STRING "@CALLIGRA_GIT_BRANCH_STRING@"
+#cmakedefine KRITA_GIT_BRANCH_STRING "@KRITA_GIT_BRANCH_STRING@"
 
-#endif /* __CALLIGRA_GIT_VERSION_H */
+#endif /* __KRITA_GIT_VERSION_H */

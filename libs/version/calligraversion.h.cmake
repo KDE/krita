@@ -161,29 +161,6 @@
     CALLIGRA_MAKE_VERSION(CALLIGRA_VERSION_MAJOR,CALLIGRA_VERSION_MINOR,CALLIGRA_VERSION_RELEASE)
 
 /**
- * @ingroup CalligraMacros
- * @brief Check if the Calligra version matches a certain version or is higher
- *
- * This macro is typically used to compile conditionally a part of code:
- * @code
- * #if CALLIGRA_IS_VERSION(2,3,0)
- * // Code for Calligra 2.3.0
- * #else
- * // Code for older Calligra
- * #endif
- * @endcode
- *
- * @warning Especially during development phases of Calligra, be careful
- * when choosing the version number that you are checking against.
- * Otherwise you might risk to break the next Calligra release.
- * Therefore be careful that development version have a
- * version number lower than the released version, so do not check
- * e.g. for Calligra 4.3 with CALLIGRA_IS_VERSION(4,3,0)
- * but with the actual version number at a time a needed feature was introduced, e.g. 4.3.2.
- */
-#define CALLIGRA_IS_VERSION(a,b,c) ( CALLIGRA_VERSION >= CALLIGRA_MAKE_VERSION(a,b,c) )
-
-/**
  * @def CALLIGRA_YEAR
  * @ingroup CalligraMacros
  * @brief Year of the Calligra release, set at compile time
@@ -192,46 +169,5 @@
 */
 #define CALLIGRA_YEAR "@CALLIGRA_YEAR@"
 
-/**
- * Namespace for general Calligra functions.
- */
-namespace Calligra
-{
-/**
- * Returns the encoded number of Calligra's version, see the CALLIGRA_VERSION macro.
- * In contrary to that macro this function returns the number of the actually
- * installed Calligra version, not the number of the Calligra version that was
- * installed when the program was compiled.
- * @return the version number, encoded in a single uint
- */
-KRITAVERSION_EXPORT unsigned int version();
-
-/**
- * Returns the major number of Calligra's version, e.g.
- * 1 for Calligra 1.2.3.
- * @return the major version number
- */
-KRITAVERSION_EXPORT unsigned int versionMajor();
-
-/**
- * Returns the minor number of Calligra's version, e.g.
- * 2 for Calligra 1.2.3.
- * @return the minor version number
- */
-KRITAVERSION_EXPORT unsigned int versionMinor();
-
-/**
- * Returns the release of Calligra's version, e.g.
- * 3 for Calligra 1.2.3.
- * @return the release number
- */
-KRITAVERSION_EXPORT unsigned int versionRelease();
-
-/**
- * Returns the Calligra version as string, e.g. "1.2.3".
- * @return the Calligra version. You can keep the string forever.
- */
-KRITAVERSION_EXPORT const char *versionString();
-}
 
 #endif // _CALLIGRA_VERSION_H_

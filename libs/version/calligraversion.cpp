@@ -18,28 +18,3 @@
 */
 
 #include "calligraversion.h"
-
-unsigned int Calligra::version()
-{
-    return CALLIGRA_VERSION;
-}
-
-unsigned int Calligra::versionMajor()
-{
-    return CALLIGRA_VERSION_MAJOR;
-}
-
-unsigned int Calligra::versionMinor()
-{
-    return CALLIGRA_VERSION_MINOR;
-}
-
-unsigned int Calligra::versionRelease()
-{
-    return CALLIGRA_VERSION_RELEASE;
-}
-
-const char *Calligra::versionString()
-{
-    return CALLIGRA_VERSION_STRING;
-}

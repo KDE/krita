@@ -6,7 +6,7 @@ configure_file(calligragitversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/calligragi
 
 set(kritaversion_LIB_SRCS
     calligraversion.cpp
-    CalligraVersionWrapper.cpp
+    KritaVersionWrapper.cpp
 )
 
 add_library(kritaversion SHARED ${kritaversion_LIB_SRCS})

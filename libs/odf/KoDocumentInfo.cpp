@@ -37,7 +37,7 @@
 #include <kuser.h>
 #include <kemailsettings.h>
 
-#include <CalligraVersionWrapper.h>
+#include <KritaVersionWrapper.h>
 
 
 KoDocumentInfo::KoDocumentInfo(QObject *parent) : QObject(parent)
@@ -124,7 +124,7 @@ bool KoDocumentInfo::saveOasis(KoStore *store)
 
     xmlWriter->startElement("meta:generator");
     xmlWriter->addTextNode(QString("Calligra/%1")
-                           .arg(CalligraVersionWrapper::versionString()));
+                           .arg(KritaVersionWrapper::versionString()));
     xmlWriter->endElement();
 
     if (!saveOasisAboutInfo(*xmlWriter))

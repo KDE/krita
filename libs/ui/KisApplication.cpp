@@ -87,7 +87,7 @@
 
 #include "opengl/kis_opengl.h"
 
-#include <CalligraVersionWrapper.h>
+#include <KritaVersionWrapper.h>
 namespace {
 const QTime appStartTime(QTime::currentTime());
 }
@@ -152,7 +152,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
 //    setOrganizationName("krita");
     setOrganizationDomain("krita.org");
 
-    QString version = CalligraVersionWrapper::versionString(true);
+    QString version = KritaVersionWrapper::versionString(true);
     setApplicationVersion(version);
     setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
 

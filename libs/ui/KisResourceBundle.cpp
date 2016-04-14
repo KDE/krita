@@ -47,14 +47,14 @@
 #include <kis_brush_server.h>
 #include <kis_debug.h>
 
-#include <CalligraVersionWrapper.h>
+#include <KritaVersionWrapper.h>
 
 KisResourceBundle::KisResourceBundle(QString const& fileName)
     : KoResource(fileName),
       m_bundleVersion("1")
 {
     setName(QFileInfo(fileName).baseName());
-    m_metadata["generator"] = "Krita (" + CalligraVersionWrapper::versionString(true) + ")";
+    m_metadata["generator"] = "Krita (" + KritaVersionWrapper::versionString(true) + ")";
 }
 
 KisResourceBundle::~KisResourceBundle()

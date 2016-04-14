@@ -259,7 +259,7 @@ include (MacroLibrary)
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
 
-macro_ensure_out_of_source_build("Compiling Calligra inside the source directory is not possible. Please refer to the build instruction http://community.kde.org/Calligra/Building/Building_Calligra")
+macro_ensure_out_of_source_build("Compiling Krita inside the source directory is not possible. Please refer to the build instruction https://community.kde.org/Krita#Build_Instructions")
 
 # Note: OPTIONAL_COMPONENTS does not seem to be reliable
 # (as of ECM 5.15.0, CMake 3.2)

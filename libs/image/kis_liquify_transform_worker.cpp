@@ -20,6 +20,7 @@
 
 #include "kis_grid_interpolation_tools.h"
 #include "kis_dom_utils.h"
+#include "krita_utils.h"
 
 
 struct Q_DECL_HIDDEN KisLiquifyTransformWorker::Private
@@ -426,6 +427,33 @@ void KisLiquifyTransformWorker::run(KisPaintDeviceSP device)
                                                     m_d->gridSize,
                                                     m_d->originalPoints,
                                                     m_d->transformedPoints);
+}
+
+QRect KisLiquifyTransformWorker::approxChangeRect(const QRect &rc)
+{
+    const int margin = 0.05;
+
+    /**
+     * Here we just return the full area occupied by the transformed grid.
+     * We sample grid points for not doing too much work.
+     */
+    const int maxSamplePoints = 200;
+    const int minStep = 3;
+    const int step = qMax(minStep, m_d->transformedPoints.size() / maxSamplePoints);
+
+    QVector<QPoint> samplePoints;
+    for (int i = 0; i < m_d->transformedPoints.size(); i += step) {
+        samplePoints << m_d->transformedPoints[i].toPoint();
+    }
+
+    QRect resultRect = KritaUtils::approximateRectFromPoints(samplePoints);
+    return KisAlgebra2D::blowRect(resultRect | rc, margin);
+}
+
+QRect KisLiquifyTransformWorker::approxNeedRect(const QRect &rc, const QRect &fullBounds)
+{
+    Q_UNUSED(rc);
+    return fullBounds;
 }
 
 #include <functional>

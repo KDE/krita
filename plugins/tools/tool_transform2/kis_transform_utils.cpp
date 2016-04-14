@@ -281,3 +281,69 @@ void KisTransformUtils::transformDevice(const ToolTransformArgs &config,
         }
     }
 }
+
+QRect KisTransformUtils::needRect(const ToolTransformArgs &config,
+                                  const QRect &rc,
+                                  const QRect &srcBounds)
+{
+    QRect result = rc;
+
+    if (config.mode() == ToolTransformArgs::WARP) {
+        KisWarpTransformWorker worker(config.warpType(),
+                                      0,
+                                      config.origPoints(),
+                                      config.transfPoints(),
+                                      config.alpha(),
+                                      0);
+
+        result = worker.approxNeedRect(rc, srcBounds);
+
+    } else if (config.mode() == ToolTransformArgs::CAGE) {
+        KisCageTransformWorker worker(0,
+                                      config.origPoints(),
+                                      0,
+                                      8);
+        worker.setTransformedCage(config.transfPoints());
+        result = worker.approxNeedRect(rc, srcBounds);
+    } else if (config.mode() == ToolTransformArgs::LIQUIFY) {
+        result = config.liquifyWorker() ?
+            config.liquifyWorker()->approxNeedRect(rc, srcBounds) : rc;
+    } else {
+        KIS_ASSERT_RECOVER_NOOP(0 && "this works for non-affine transformations only!");
+    }
+
+    return result;
+}
+
+QRect KisTransformUtils::changeRect(const ToolTransformArgs &config,
+                                    const QRect &rc)
+{
+    QRect result = rc;
+
+    if (config.mode() == ToolTransformArgs::WARP) {
+        KisWarpTransformWorker worker(config.warpType(),
+                                      0,
+                                      config.origPoints(),
+                                      config.transfPoints(),
+                                      config.alpha(),
+                                      0);
+
+        result = worker.approxChangeRect(rc);
+
+    } else if (config.mode() == ToolTransformArgs::CAGE) {
+        KisCageTransformWorker worker(0,
+                                      config.origPoints(),
+                                      0,
+                                      8);
+
+        worker.setTransformedCage(config.transfPoints());
+        result = worker.approxChangeRect(rc);
+    } else if (config.mode() == ToolTransformArgs::LIQUIFY) {
+        result = config.liquifyWorker() ?
+            config.liquifyWorker()->approxChangeRect(rc) : rc;
+    } else {
+        KIS_ASSERT_RECOVER_NOOP(0 && "this works for non-affine transformations only!");
+    }
+
+    return result;
+}

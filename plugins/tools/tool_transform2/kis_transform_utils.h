@@ -93,6 +93,13 @@ public:
                                 KisPaintDeviceSP device,
                                 KisProcessingVisitor::ProgressHelper *helper);
 
+    static QRect needRect(const ToolTransformArgs &config,
+                          const QRect &rc,
+                          const QRect &srcBounds);
+
+    static QRect changeRect(const ToolTransformArgs &config,
+                            const QRect &rc);
+
     template<typename Function>
     class HandleChooser {
     public:

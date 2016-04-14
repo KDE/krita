@@ -292,27 +292,35 @@ QRect KisTransformMask::changeRect(const QRect &rect, PositionToFilthy pos) cons
      * on the higher/lower level
      */
     if (rect.isEmpty()) return rect;
-    if (!m_d->params->isAffine()) return rect;
 
-    QRect bounds;
-    QRect interestRect;
-    KisNodeSP parentNode = parent();
+    QRect changeRect = rect;
 
-    if (parentNode) {
-        bounds = parentNode->original()->defaultBounds()->bounds();
-        interestRect = parentNode->original()->extent();
+    if (m_d->params->isAffine()) {
+        QRect bounds;
+        QRect interestRect;
+        KisNodeSP parentNode = parent();
+
+        if (parentNode) {
+            bounds = parentNode->original()->defaultBounds()->bounds();
+            interestRect = parentNode->original()->extent();
+        } else {
+            bounds = QRect(0,0,777,777);
+            interestRect = QRect(0,0,888,888);
+            warnKrita << "WARNING: transform mask has no parent (change rect)."
+                      << "Cannot run safe transformations."
+                      << "Will limit bounds to" << ppVar(bounds);
+        }
+
+        const QRect limitingRect = KisAlgebra2D::blowRect(bounds, m_d->offBoundsReadArea);
+
+        KisSafeTransform transform(m_d->worker.forwardTransform(), limitingRect, interestRect);
+        changeRect = transform.mapRectForward(rect);
     } else {
-        bounds = QRect(0,0,777,777);
-        interestRect = QRect(0,0,888,888);
-        warnKrita << "WARNING: transform mask has no parent (change rect)."
-                   << "Cannot run safe transformations."
-                   << "Will limit bounds to" << ppVar(bounds);
+        QRect interestRect;
+        interestRect = parent() ? parent()->original()->extent() : QRect();
+
+        changeRect = m_d->params->nonAffineChangeRect(rect);
     }
-
-    const QRect limitingRect = KisAlgebra2D::blowRect(bounds, m_d->offBoundsReadArea);
-
-    KisSafeTransform transform(m_d->worker.forwardTransform(), limitingRect, interestRect);
-    QRect changeRect = transform.mapRectForward(rect);
 
     return changeRect;
 }
@@ -343,10 +351,17 @@ QRect KisTransformMask::needRect(const QRect& rect, PositionToFilthy pos) const
                    << "Will limit bounds to" << ppVar(bounds);
     }
 
-    const QRect limitingRect = KisAlgebra2D::blowRect(bounds, m_d->offBoundsReadArea);
+    QRect needRect = rect;
 
-    KisSafeTransform transform(m_d->worker.forwardTransform(), limitingRect, interestRect);
-    QRect needRect = transform.mapRectBackward(rect);
+    if (m_d->params->isAffine()) {
+        const QRect limitingRect = KisAlgebra2D::blowRect(bounds, m_d->offBoundsReadArea);
+
+        KisSafeTransform transform(m_d->worker.forwardTransform(), limitingRect, interestRect);
+        needRect = transform.mapRectBackward(rect);
+
+    } else {
+        needRect = m_d->params->nonAffineNeedRect(rect, interestRect);
+    }
 
     return needRect;
 }

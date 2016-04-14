@@ -27,6 +27,7 @@
 #include "kis_selection.h"
 #include "kis_painter.h"
 #include "kis_image.h"
+#include "krita_utils.h"
 
 #include <qnumeric.h>
 
@@ -280,6 +281,65 @@ struct KisCageTransformWorker::Private::MapIndexesOp {
     KisCageTransformWorker::Private *m_d;
     QPolygonF m_srcCagePolygon;
 };
+
+QRect KisCageTransformWorker::approxChangeRect(const QRect &rc)
+{
+    const int margin = 0.30;
+
+    QVector<QPointF> cageSamplePoints;
+
+    const int minStep = 3;
+    const int maxSamples = 200;
+
+    const int totalPixels = rc.width() * rc.height();
+    const int realStep = qMax(minStep, totalPixels / maxSamples);
+    const QPolygonF cagePolygon(m_d->origCage);
+
+    for (int i = 0; i < totalPixels; i += realStep) {
+        const int x = rc.x() + i % rc.width();
+        const int y = rc.y() + i / rc.width();
+
+        const QPointF pt(x, y);
+        if (cagePolygon.containsPoint(pt, Qt::OddEvenFill)) {
+            cageSamplePoints << pt;
+        }
+    }
+
+    if (cageSamplePoints.isEmpty()) {
+        return rc;
+    }
+
+    KisGreenCoordinatesMath cage;
+    cage.precalculateGreenCoordinates(m_d->origCage, cageSamplePoints);
+    cage.generateTransformedCageNormals(m_d->transfCage);
+
+    const int numValidPoints = cageSamplePoints.size();
+    QVector<QPointF> transformedPoints(numValidPoints);
+
+    int failedPoints = 0;
+
+    for (int i = 0; i < numValidPoints; i++) {
+        transformedPoints[i] = cage.transformedPoint(i, m_d->transfCage);
+
+        if (qIsNaN(transformedPoints[i].x()) ||
+            qIsNaN(transformedPoints[i].y())) {
+
+            transformedPoints[i] = cageSamplePoints[i];
+            failedPoints++;
+        }
+    }
+
+    QRect resultRect =
+        KritaUtils::approximateRectFromPoints(transformedPoints).toAlignedRect();
+
+    return KisAlgebra2D::blowRect(resultRect | rc, margin);
+}
+
+QRect KisCageTransformWorker::approxNeedRect(const QRect &rc, const QRect &fullBounds)
+{
+    Q_UNUSED(rc);
+    return fullBounds;
+}
 
 void KisCageTransformWorker::run()
 {

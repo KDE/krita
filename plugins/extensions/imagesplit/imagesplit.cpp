@@ -64,12 +64,12 @@ void Imagesplit::saveAsImage(const QRect &imgSize, const QString &mimeType, cons
 {
     KisImageWSP image = m_view->image();
 
-    KisDocument *d = KisPart::instance()->createDocument();
-    d->prepareForImport();
+    KisDocument *document = KisPart::instance()->createDocument();
+    document->prepareForImport();
 
-    KisImageWSP dst = new KisImage(d->createUndoStore(), imgSize.width(), imgSize.height(), image->colorSpace(), image->objectName());
+    KisImageWSP dst = new KisImage(document->createUndoStore(), imgSize.width(), imgSize.height(), image->colorSpace(), image->objectName());
     dst->setResolution(image->xRes(), image->yRes());
-    d->setCurrentImage(dst);
+    document->setCurrentImage(dst);
 
     KisPaintLayer* paintLayer = new KisPaintLayer(dst, dst->nextLayerName(), 255);
     KisPainter gc(paintLayer->paintDevice());
@@ -77,10 +77,11 @@ void Imagesplit::saveAsImage(const QRect &imgSize, const QString &mimeType, cons
 
     dst->addNode(paintLayer, KisNodeSP(0));
     dst->refreshGraph();
-    d->setOutputMimeType(mimeType.toLatin1());
-    d->exportDocument(QUrl::fromLocalFile(url));
+    document->setFileBatchMode(true);
+    document->setOutputMimeType(mimeType.toLatin1());
+    document->exportDocument(QUrl::fromLocalFile(url));
 
-    delete d;
+    delete document;
 }
 
 void Imagesplit::slotImagesplit()
@@ -91,6 +92,7 @@ void Imagesplit::slotImagesplit()
 
     // Getting all mime types and converting them into names which are displayed at combo box
     QStringList listMimeFilter = KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export);
+    listMimeFilter.sort();
     QStringList filteredMimeTypes;
     QStringList listFileType;
     Q_FOREACH (const QString & mimeType, listMimeFilter) {
@@ -102,7 +104,7 @@ void Imagesplit::slotImagesplit()
 
     Q_ASSERT(listMimeFilter.size() == listFileType.size());
 
-    DlgImagesplit * dlgImagesplit = new DlgImagesplit(m_view, suffix, listFileType);
+    DlgImagesplit *dlgImagesplit = new DlgImagesplit(m_view, suffix, listFileType);
     dlgImagesplit->setObjectName("Imagesplit");
     Q_CHECK_PTR(dlgImagesplit);
 
@@ -122,7 +124,17 @@ void Imagesplit::slotImagesplit()
                 for (int j = 0; j < (numHorizontalLines + 1); j++, k++) {
                     QString mimeTypeSelected = listMimeFilter.at(dlgImagesplit->cmbIndex);
                     QString homepath = QDir::homePath();
-                    QString fileName = dlgImagesplit->suffix() + '_' + QString::number(k) + KisMimeDatabase::suffixesForMimeType(mimeTypeSelected).first();
+                    QString suffix = KisMimeDatabase::suffixesForMimeType(mimeTypeSelected).first();
+                    qDebug() << "suffix" << suffix;
+                    if (suffix.startsWith("*.")) {
+                        suffix = suffix.remove(0, 1);
+                    }
+                    qDebug() << "\tsuffix" << suffix;
+                    if (!suffix.startsWith(".")) {
+                        suffix = suffix.prepend('.');
+                    }
+                    qDebug() << "\tsuffix" << suffix;
+                    QString fileName = dlgImagesplit->suffix() + '_' + QString::number(k) + suffix;
                     QString url = homepath  + '/' + fileName;
                     saveAsImage(QRect((i * img_width), (j * img_height), img_width, img_height), listMimeFilter.at(dlgImagesplit->cmbIndex), url);
                 }

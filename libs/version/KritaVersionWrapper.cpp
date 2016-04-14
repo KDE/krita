@@ -20,11 +20,6 @@
 #include <calligraversion.h>
 #include <calligragitversion.h>
 
-QString KritaVersionWrapper::versionYear()
-{
-    return QLatin1Literal(CALLIGRA_YEAR);
-}
-
 QString KritaVersionWrapper::versionString(bool checkGit)
 {
     QString calligraVersion(CALLIGRA_VERSION_STRING);

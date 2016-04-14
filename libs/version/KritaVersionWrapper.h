@@ -23,7 +23,6 @@
 
 namespace KritaVersionWrapper {
 
-    KRITAVERSION_EXPORT QString versionYear();
     KRITAVERSION_EXPORT QString versionString(bool checkGit = false);
 }
 

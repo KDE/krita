@@ -69,6 +69,5 @@ NoDisplay=true
 StartupNotify=true
 Terminal=false
 Type=Application
-X-Calligra-DefaultMimeTypes=image/x-portable-pixmap,image/x-portable-graymap,image/x-portable-bitmap
 X-KDE-SubstituteUID=false
 X-KDE-Username=

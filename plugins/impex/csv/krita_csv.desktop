@@ -66,5 +66,4 @@ Type=Application
 Icon=calligrakrita
 Categories=Qt;KDE;Office;Graphics;
 StartupNotify=true
-X-Calligra-DefaultMimeTypes=text/csv
 NoDisplay=true

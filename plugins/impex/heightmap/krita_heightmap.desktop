@@ -69,6 +69,5 @@ NoDisplay=true
 StartupNotify=true
 Terminal=false
 Type=Application
-X-Calligra-DefaultMimeTypes=image/x-r16,image/x-8
 X-KDE-SubstituteUID=false
 X-KDE-Username=

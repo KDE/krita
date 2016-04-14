@@ -68,6 +68,5 @@ NoDisplay=true
 StartupNotify=true
 Terminal=false
 Type=Application
-X-Calligra-DefaultMimeTypes=image/x-psd,image/photoshop,image/x-photoshop,image/x-vnd.adobe.photoshop,image/vnd.adobe.photoshop
 X-KDE-SubstituteUID=false
 X-KDE-Username=

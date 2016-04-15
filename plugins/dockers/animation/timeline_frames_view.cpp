@@ -775,10 +775,7 @@ void TimelineFramesView::slotRemoveFrame()
 {
     QModelIndexList indexes = selectionModel()->selectedIndexes();
 
-    QModelIndexList::iterator it = indexes.begin();
-    QModelIndexList::iterator end = indexes.end();
-
-    while (it != end) {
+    for (auto it = indexes.begin(); it != indexes.end(); /*noop*/) {
         if (!m_d->model->data(*it, TimelineFramesModel::FrameEditableRole).toBool()) {
             it = indexes.erase(it);
         } else {

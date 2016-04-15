@@ -306,11 +306,8 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info, KoUpd
         painter2.setOpacity(d->opacity * 255);
 
         QVector<QRect> dirtyRects = painter->takeDirtyRegion();
-        QVector<QRect>::iterator it = dirtyRects.begin();
-        QVector<QRect>::iterator end = dirtyRects.end();
-        while (it != end) {
-            painter2.bitBlt(it->topLeft(), target, *it);
-            ++it;
+        Q_FOREACH (const QRect &rc, dirtyRects) {
+            painter2.bitBlt(rc.topLeft(), target, rc);
         }
 
         node->setDirty(painter2.takeDirtyRegion());

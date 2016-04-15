@@ -1031,9 +1031,7 @@ namespace KisLayerUtils {
     {
         QList<KisSelectionMaskSP> selectionMasks;
 
-        KisNodeList::iterator it = mergedNodes.begin();
-        KisNodeList::iterator end = mergedNodes.end();
-        while (it != end) {
+        for (auto it = mergedNodes.begin(); it != mergedNodes.end(); /*noop*/) {
             KisSelectionMaskSP mask = dynamic_cast<KisSelectionMask*>(it->data());
             if (!mask) {
                 it = mergedNodes.erase(it);

@@ -127,10 +127,7 @@ bool KoSnapGuide::addCustomSnapStrategy(KoSnapStrategy *customStrategy)
 
 void KoSnapGuide::overrideSnapStrategy(Strategy type, KoSnapStrategy *strategy)
 {
-    Private::StrategiesList::iterator it = d->strategies.begin();
-    Private::StrategiesList::iterator end = d->strategies.end();
-
-    while (it != end) {
+    for (auto it = d->strategies.begin(); it != d->strategies.end(); /*noop*/) {
         if ((*it)->type() == type) {
             if (strategy) {
                 *it = toQShared(strategy);

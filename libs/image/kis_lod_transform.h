@@ -82,17 +82,6 @@ public:
         return pi;
     }
 
-    /*vQPointF map(vQPointF v) const {
-        vQPointF::iterator it = v.begin();
-        vQPointF::iterator end = v.end();
-
-        while (it != end) {
-            *it = m_transform.map(*it);
-        }
-
-        return v;
-        }*/
-
     template <class T>
     T map(const T &object) const {
         return m_transform.map(object);

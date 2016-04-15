@@ -186,10 +186,8 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     if (d->eventEater.eventFilter(object, event)) return false;
 
     if (!d->matcher.hasRunningShortcut()) {
-        Private::PriorityList::iterator it = d->priorityEventFilter.begin();
-        Private::PriorityList::iterator end = d->priorityEventFilter.end();
 
-        while (it != end) {
+        for (auto it = d->priorityEventFilter.begin(); it != d->priorityEventFilter.end(); /*noop*/) {
             const QPointer<QObject> &filter = it->second;
 
             if (filter.isNull()) {

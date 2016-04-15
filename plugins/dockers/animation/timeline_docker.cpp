@@ -133,8 +133,8 @@ void TimelineDocker::setMainWindow(KisViewManager *view)
 
     QMap<QString, KisAction*> actions = m_d->view->globalActions();
 
-    QMap<QString, KisAction*>::iterator it = actions.begin();
-    QMap<QString, KisAction*>::iterator end = actions.end();
+    QMap<QString, KisAction*>::const_iterator it = actions.constBegin();
+    QMap<QString, KisAction*>::const_iterator end = actions.constEnd();
 
     for (; it != end; ++it) {
         actionManager->addAction(it.key(), it.value());

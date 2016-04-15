@@ -206,22 +206,13 @@ void ToolTransformArgs::translate(const QPointF &offset)
         m_rotationCenterOffset += offset;
         m_transformedCenter += offset;
     } else if(m_mode == WARP || m_mode == CAGE) {
-        {
-            QVector<QPointF>::iterator it = m_origPoints.begin();
-            QVector<QPointF>::iterator end = m_origPoints.end();
-            for (; it != end; ++it) {
-                *it += offset;
-            }
+        for (auto &pt : m_origPoints) {
+            pt += offset;
         }
 
-        {
-            QVector<QPointF>::iterator it = m_transfPoints.begin();
-            QVector<QPointF>::iterator end = m_transfPoints.end();
-            for (; it != end; ++it) {
-                *it += offset;
-            }
+        for (auto &pt : m_transfPoints) {
+            pt += offset;
         }
-
     } else if (m_mode == LIQUIFY) {
         KIS_ASSERT_RECOVER_RETURN(m_liquifyWorker);
         m_liquifyWorker->translate(offset);

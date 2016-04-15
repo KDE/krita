@@ -391,36 +391,18 @@ namespace KritaUtils
                 continue;
             }
 
-            QList<QPainterPath>::iterator it = resultList.begin();
-            QList<QPainterPath>::iterator end = resultList.end();
-            QList<QPainterPath>::iterator savedIt = end;
+            QPainterPath mergedPath = testPath;
 
-            bool wasMerged = false;
-
-            while (it != end) {
-                bool skipIncrement = false;
-
+            for (auto it = resultList.begin(); it != resultList.end(); /*noop*/) {
                 if (it->intersects(testPath)) {
-                    if (savedIt == end) {
-                        it->addPath(testPath);
-                        savedIt = it;
-                    } else {
-                        savedIt->addPath(*it);
-                        it = resultList.erase(it);
-                        skipIncrement = true;
-                    }
-
-                    wasMerged = true;
-                }
-
-                if (!skipIncrement) {
+                    mergedPath.addPath(*it);
+                    it = resultList.erase(it);
+                } else {
                     ++it;
                 }
             }
 
-            if (!wasMerged) {
-                resultList.append(testPath);
-            }
+            resultList.append(mergedPath);
         }
 
         return resultList;

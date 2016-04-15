@@ -684,8 +684,8 @@ KisImageBuilder_Result exrConverter::decode(const QString &filename)
         else if (info.channelMap.size() == 2) {
             modelId = GrayAColorModelID.id();
 
-            QMap<QString,QString>::iterator it = info.channelMap.begin();
-            QMap<QString,QString>::iterator end = info.channelMap.end();
+            QMap<QString,QString>::const_iterator it = info.channelMap.constBegin();
+            QMap<QString,QString>::const_iterator end = info.channelMap.constEnd();
 
             QString failingChannelKey;
 

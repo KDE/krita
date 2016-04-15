@@ -233,12 +233,9 @@ void KoColorSet::add(const KoColorSetEntry & c)
 
 void KoColorSet::remove(const KoColorSetEntry & c)
 {
-    QVector<KoColorSetEntry>::iterator it = m_colors.begin();
-    QVector<KoColorSetEntry>::iterator end = m_colors.end();
-
-    while (it != end) {
+    for (auto it = m_colors.begin(); it != m_colors.end(); /*noop*/) {
         if ((*it) == c) {
-            m_colors.erase(it);
+            it = m_colors.erase(it);
             return;
         }
         ++it;

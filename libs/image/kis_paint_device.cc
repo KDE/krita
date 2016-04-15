@@ -1857,8 +1857,8 @@ KisPaintDeviceFramesInterface::testingGetDataObjects() const
 
     typedef KisPaintDevice::Private::FramesHash FramesHash;
 
-    FramesHash::iterator it = q->m_d->m_frames.begin();
-    FramesHash::iterator end = q->m_d->m_frames.end();
+    FramesHash::const_iterator it = q->m_d->m_frames.constBegin();
+    FramesHash::const_iterator end = q->m_d->m_frames.constEnd();
 
     for (; it != end; ++it) {
         objects.m_frames.insert(it.key(), it.value().data());

@@ -144,11 +144,17 @@ void KisStroke::cancelStroke()
 
     if(!m_strokeInitialized) {
         /**
-         * FIXME: this assert is probably a bit too optimistic,
-         *        because the LODN stroke that suspends the other one
-         *        can be easily non-initialized
+         * Lod0 stroke cannot be suspended and !initialized at the
+         * same time, because the suspend job is created iff the
+         * stroke has already done some meaningful work.
+         *
+         * At the same time, LodN stroke can be prepended with a
+         * 'suspend' job even when it has not been started yet. That
+         * is obvious: we should suspend the other stroke before doing
+         * anything else.
          */
-        KIS_ASSERT_RECOVER_NOOP(sanityCheckAllJobsAreCancellable());
+        KIS_ASSERT_RECOVER_NOOP(type() == LODN ||
+                                sanityCheckAllJobsAreCancellable());
         clearQueueOnCancel();
     }
     else if(m_strokeInitialized &&

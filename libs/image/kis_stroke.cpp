@@ -185,9 +185,8 @@ bool KisStroke::sanityCheckAllJobsAreCancellable() const
 void KisStroke::clearQueueOnCancel()
 {
     QQueue<KisStrokeJob*>::iterator it = m_jobsQueue.begin();
-    QQueue<KisStrokeJob*>::iterator end = m_jobsQueue.end();
 
-    while (it != end) {
+    while (it != m_jobsQueue.end()) {
         if ((*it)->isCancellable()) {
             delete (*it);
             it = m_jobsQueue.erase(it);

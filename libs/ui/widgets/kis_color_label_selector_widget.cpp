@@ -251,9 +251,11 @@ void drawToolButton(QWidget *widget, const QRect &rc, State state, const QColor 
 
         p.fillRect(colorBlobRect, fillColor);
     } else {
+
+        // draw an X for no color for the first item
         QRect crossRect = kisGrowRect(colorBlobRect, -offset);
 
-        QColor shade = opt.palette.dark().color();
+        QColor shade = opt.palette.text().color();
         p.setPen(QPen(shade, 2));
         p.drawLine(crossRect.topLeft(), crossRect.bottomRight());
         p.drawLine(crossRect.bottomLeft(), crossRect.topRight());

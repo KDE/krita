@@ -170,7 +170,11 @@ inline QPixmap KisPerChannelConfigWidget::getHistogram()
     int i;
     int height = 256;
     QPixmap pix(256, height);
-    pix.fill();
+
+    QPalette appPalette = QApplication::palette();
+
+    pix.fill(QColor(appPalette.color(QPalette::Base)));
+
     QPainter p(&pix);
     p.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
 

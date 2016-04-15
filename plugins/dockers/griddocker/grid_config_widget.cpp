@@ -67,14 +67,6 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
     connect(ui->chkSnapToGuides, SIGNAL(stateChanged(int)), SLOT(slotGuidesGuiChanged()));
     connect(ui->chkLockGuides, SIGNAL(stateChanged(int)), SLOT(slotGuidesGuiChanged()));
 
-    connect(ui->intHSpacing, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
-    connect(ui->intVSpacing, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
-    connect(ui->spacingAspectButton, SIGNAL(keepAspectRatioChanged(bool)), SLOT(slotGridGuiChanged()));
-
-    connect(ui->intXOffset, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
-    connect(ui->intYOffset, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
-    connect(ui->offsetAspectButton, SIGNAL(keepAspectRatioChanged(bool)), SLOT(slotGridGuiChanged()));
-
     connect(ui->intSubdivision, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
 
     connect(ui->selectMainStyle, SIGNAL(currentIndexChanged(int)), SLOT(slotGridGuiChanged()));
@@ -91,6 +83,12 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
 
     KisAspectRatioLocker *spacingLocker = new KisAspectRatioLocker(this);
     spacingLocker->connectSpinBoxes(ui->intHSpacing, ui->intVSpacing, ui->spacingAspectButton);
+
+    connect(offsetLocker, SIGNAL(sliderValueChanged()), SLOT(slotGridGuiChanged()));
+    connect(offsetLocker, SIGNAL(aspectButtonChanged()), SLOT(slotGridGuiChanged()));
+
+    connect(spacingLocker, SIGNAL(sliderValueChanged()), SLOT(slotGridGuiChanged()));
+    connect(spacingLocker, SIGNAL(aspectButtonChanged()), SLOT(slotGridGuiChanged()));
 }
 
 GridConfigWidget::~GridConfigWidget()

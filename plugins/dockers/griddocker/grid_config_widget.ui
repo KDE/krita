@@ -68,7 +68,7 @@
               <string> px</string>
              </property>
              <property name="minimum">
-              <number>2</number>
+              <number>1</number>
              </property>
              <property name="maximum">
               <number>500</number>
@@ -91,7 +91,7 @@
               <string> px</string>
              </property>
              <property name="minimum">
-              <number>2</number>
+              <number>1</number>
              </property>
              <property name="maximum">
               <number>500</number>
@@ -238,14 +238,14 @@
              <property name="text">
               <string/>
              </property>
-             <property name="color">
+             <property name="color" stdset="0">
               <color>
                <red>0</red>
                <green>0</green>
                <blue>0</blue>
               </color>
              </property>
-             <property name="defaultColor">
+             <property name="defaultColor" stdset="0">
               <color>
                <red>0</red>
                <green>0</green>
@@ -307,14 +307,14 @@
              <property name="text">
               <string/>
              </property>
-             <property name="color">
+             <property name="color" stdset="0">
               <color>
                <red>0</red>
                <green>0</green>
                <blue>0</blue>
               </color>
              </property>
-             <property name="defaultColor">
+             <property name="defaultColor" stdset="0">
               <color>
                <red>0</red>
                <green>0</green>
@@ -431,14 +431,14 @@
              <property name="text">
               <string/>
              </property>
-             <property name="color">
+             <property name="color" stdset="0">
               <color>
                <red>0</red>
                <green>0</green>
                <blue>0</blue>
               </color>
              </property>
-             <property name="defaultColor">
+             <property name="defaultColor" stdset="0">
               <color>
                <red>0</red>
                <green>0</green>

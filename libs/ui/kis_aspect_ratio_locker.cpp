@@ -66,6 +66,7 @@ void KisAspectRatioLocker::slotSpinOneChanged()
         KisSignalsBlocker b(m_d->spinTwo);
         m_d->spinTwo->setValue(qRound(m_d->aspectRatio * m_d->spinOne->value()));
     }
+    emit sliderValueChanged();
 }
 
 void KisAspectRatioLocker::slotSpinTwoChanged()
@@ -74,6 +75,8 @@ void KisAspectRatioLocker::slotSpinTwoChanged()
         KisSignalsBlocker b(m_d->spinOne);
         m_d->spinOne->setValue(qRound(m_d->spinTwo->value() / m_d->aspectRatio));
     }
+
+    emit sliderValueChanged();
 }
 
 void KisAspectRatioLocker::slotAspectButtonChanged()
@@ -86,4 +89,6 @@ void KisAspectRatioLocker::slotAspectButtonChanged()
     } else {
         m_d->aspectRatio = 1.0;
     }
+
+    emit aspectButtonChanged();
 }

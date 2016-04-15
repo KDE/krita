@@ -63,6 +63,7 @@
 #include <kedittoolbar.h>
 #include <khelpmenu.h>
 #include <klocalizedstring.h>
+#include <kaboutdata.h>
 
 #ifdef HAVE_KIO
 #include <krecentdocument.h>
@@ -395,7 +396,16 @@ KisMainWindow::KisMainWindow()
 
 
     if (isHelpMenuEnabled() && !d->helpMenu) {
-        d->helpMenu = new KHelpMenu(this, "Dummy Text That Is Not Used In Frameworks 5", false);
+        // workaround for KHelpMenu (or rather KAboutData::applicationData()) internally
+        // not using the Q*Application metadata ATM, which results e.g. in the bugreport wizard
+        // not having the app version preset
+        // fixed hopefully in KF5 5.22.0, patch pending
+        QGuiApplication *app = qApp;
+        KAboutData aboutData(app->applicationName(), app->applicationDisplayName(), app->applicationVersion());
+        aboutData.setOrganizationDomain(app->organizationDomain().toUtf8());
+        d->helpMenu = new KHelpMenu(this, aboutData, false);
+        // workaround-less version:
+        // d->helpMenu = new KHelpMenu(this, QString()/*unused*/, false);
 
         // The difference between using KActionCollection->addAction() is that
         // these actions do not get tied to the MainWindow.  What does this all do?

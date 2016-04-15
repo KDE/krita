@@ -144,6 +144,15 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
 
     fillPredefined();
     switchPortraitLandscape();
+
+    // this makes the portrait and landscape buttons more
+    // obvious what is selected by changing the higlight color
+    QPalette p = QApplication::palette();
+    QPalette palette_highlight(p );
+    QColor c = p.color(QPalette::Highlight);
+    palette_highlight.setColor(QPalette::Button, c);
+    bnLandscape->setPalette(palette_highlight);
+    bnPortrait->setPalette(palette_highlight);
 }
 
 void KisCustomImageWidget::showEvent(QShowEvent *)

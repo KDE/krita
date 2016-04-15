@@ -37,6 +37,7 @@
 #include <QKeyEvent>
 #include <QPaintEvent>
 #include <QList>
+#include <QApplication>
 
 #include <QSpinBox>
 
@@ -262,13 +263,15 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
 
     QPainter p(this);
 
+    QPalette appPalette = QApplication::palette();
+
     // Antialiasing is not a good idea here, because
     // the grid will drift one pixel to any side due to rounding of int
     // FIXME: let's user tell the last word (in config)
     //p.setRenderHint(QPainter::Antialiasing);
 
     // fill with color to show widget bounds
-     p.fillRect(rect(), palette().base());
+     p.fillRect(rect(), appPalette.color(QPalette::Base));
 
     //  draw background
     if (!d->m_pix.isNull()) {
@@ -297,7 +300,7 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
 
     QPolygonF poly;
 
-    p.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+    p.setPen(QPen(appPalette.color(QPalette::Text), 2, Qt::SolidLine));
     for (x = 0 ; x < wWidth ; x++) {
         normalizedX = double(x) / wWidth;
         curY = wHeight - d->m_curve.value(normalizedX) * wHeight;

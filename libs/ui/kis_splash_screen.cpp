@@ -62,16 +62,16 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
                            "<body>"
                            "<p align=\"center\"><span style=\" color:%1;\"><b>Links</b></span></p>"
 
-                           "<p><a href=\"https://krita.org/support-us/donations/\"><span style=\" text-decoration: underline; color:%1;\">Support Krita</span></a></p>"
+                           "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: underline; color:%1;\">Support Krita</span></a></p>"
 
-                           "<p><a href=\"http://krita.org/resources\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</span></a></p>"
-                           "<p><a href=\"http://docs.krita.org\"><span style=\" text-decoration: underline; color:%1;\">Manual</span></a></p>"
-                           "<p><a href=\"http://krita.org\"><span style=\" text-decoration: underline; color:%1;\">Krita Website</span></a></p>"
-                           "<p><a href=\"http://forum.kde.org/viewforum.php?f=136\"><span style=\" text-decoration: underline; color:%1;\">User Community</span></a></p>"
+                           "<p><a href=\"https://docs.krita.org/Category:Getting_Started\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</span></a></p>"
+                           "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: underline; color:%1;\">Manual</span></a></p>"
+                           "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; color:%1;\">Krita Website</span></a></p>"
+                           "<p><a href=\"https://forum.kde.org/viewforum.php?f=136\"><span style=\" text-decoration: underline; color:%1;\">User Community</span></a></p>"
 
-                           "<p><a href=\"https://projects.kde.org/projects/calligra\"><span style=\" text-decoration: underline; color:%1;\">Source Code</span></a></p>"
+                           "<p><a href=\"https://quickgit.kde.org/?p=krita.git\"><span style=\" text-decoration: underline; color:%1;\">Source Code</span></a></p>"
 
-                           "<p><a href=\"http://store.steampowered.com/app/280680/\"><span style=\" text-decoration: underline; color:%1;\">Krita on Steam</span></a></p>"
+                           "<p><a href=\"https://store.steampowered.com/app/280680/\"><span style=\" text-decoration: underline; color:%1;\">Krita on Steam</span></a></p>"
                            "</body>"
                            "</html>", color));
 

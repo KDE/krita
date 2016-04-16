@@ -138,7 +138,8 @@ void KisToolInvocationAction::end(QEvent *event)
 void KisToolInvocationAction::inputEvent(QEvent* event)
 {
     if (!d->active) return;
-
+    if (!inputManager()) return;
+    if (!inputManager()->toolProxy()) return;
 
     inputManager()->toolProxy()->
         forwardEvent(KisToolProxy::CONTINUE, KisTool::Primary, event, event);

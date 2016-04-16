@@ -163,8 +163,10 @@ void KisLevelConfigWidget::slotDrawHistogram(bool logarithmic)
         m_histlog = logarithmic;
     }
 
+    QPalette appPalette = QApplication::palette();
     QPixmap pix(wWidth-100, wHeight);
-    pix.fill();
+
+    pix.fill(QColor(appPalette.color(QPalette::Base)));
     QPainter p(&pix);
 
     p.setPen(QPen(Qt::gray, 1, Qt::SolidLine));

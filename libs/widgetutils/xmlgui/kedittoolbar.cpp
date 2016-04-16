@@ -1053,23 +1053,23 @@ void KEditToolBarWidgetPrivate::setupLayout()
     // The buttons in the middle
 
     m_upAction     = new QToolButton(m_widget);
-    m_upAction->setIcon(KisIconUtils::loadIcon(QStringLiteral("go-up")));
+    m_upAction->setIcon(KisIconUtils::loadIcon(QStringLiteral("arrow-up")));
     m_upAction->setEnabled(false);
     m_upAction->setAutoRepeat(true);
     QObject::connect(m_upAction, SIGNAL(clicked()), m_widget, SLOT(slotUpButton()));
 
     m_insertAction = new QToolButton(m_widget);
-    m_insertAction->setIcon(KisIconUtils::loadIcon(QApplication::isRightToLeft() ? QStringLiteral("go-previous") : QLatin1String("go-next")));
+    m_insertAction->setIcon(KisIconUtils::loadIcon(QApplication::isRightToLeft() ? QStringLiteral("arrow-left") : QLatin1String("arrow-right")));
     m_insertAction->setEnabled(false);
     QObject::connect(m_insertAction, SIGNAL(clicked()), m_widget, SLOT(slotInsertButton()));
 
     m_removeAction = new QToolButton(m_widget);
-    m_removeAction->setIcon(KisIconUtils::loadIcon(QApplication::isRightToLeft() ? QStringLiteral("go-next") : QLatin1String("go-previous")));
+    m_removeAction->setIcon(KisIconUtils::loadIcon(QApplication::isRightToLeft() ? QStringLiteral("arrow-right") : QLatin1String("arrow-left")));
     m_removeAction->setEnabled(false);
     QObject::connect(m_removeAction, SIGNAL(clicked()), m_widget, SLOT(slotRemoveButton()));
 
     m_downAction   = new QToolButton(m_widget);
-    m_downAction->setIcon(KisIconUtils::loadIcon(QStringLiteral("go-down")));
+    m_downAction->setIcon(KisIconUtils::loadIcon(QStringLiteral("arrow-down")));
     m_downAction->setEnabled(false);
     m_downAction->setAutoRepeat(true);
     QObject::connect(m_downAction, SIGNAL(clicked()), m_widget, SLOT(slotDownButton()));

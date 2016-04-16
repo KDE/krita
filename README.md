@@ -7,7 +7,7 @@ code repository is provided by KDE:  https://phabricator.kde.org/diffusion/KRITA
 
 This repository contains the current, Qt5-based, development version of Krita. The Krita 2.9 repository is located from KDE: https://phabricator.kde.org/diffusion/CALLIGRA/
 
-![Picture] (https://krita.org/wp-content/uploads/2015/12/user-interface.png)
+![Picture] (https://krita.org/wp-content/uploads/2016/04/krita-30-screenshot.jpg)
 
 
 ### User Manual

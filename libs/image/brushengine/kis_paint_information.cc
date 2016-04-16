@@ -213,8 +213,8 @@ KisPaintInformation::createHoveringModeInfo(const QPointF &pos,
         qreal tangentialPressure,
         qreal perspective,
         qreal speed,
-	    int canvasrotation,
-	    bool canvasMirroredH)
+        int canvasrotation,
+        bool canvasMirroredH)
 {
     KisPaintInformation info(pos,
                              pressure,
@@ -241,8 +241,8 @@ void KisPaintInformation::setCanvasRotation(int rotation)
     } else {
         d->canvasRotation= rotation % 360;
     }
-    
-} 
+
+}
 
 bool KisPaintInformation::canvasMirroredH() const
 {
@@ -252,7 +252,7 @@ bool KisPaintInformation::canvasMirroredH() const
 void KisPaintInformation::setCanvasHorizontalMirrorState(bool mir)
 {
     d->canvasMirroredH = mir;
-    
+
 }
 
 void KisPaintInformation::toXML(QDomDocument&, QDomElement& e) const
@@ -412,7 +412,6 @@ qreal KisPaintInformation::currentTime() const
 KisRandomSourceSP KisPaintInformation::randomSource() const
 {
     if (!d->randomSource) {
-        qWarning() << "WARNING: accessing a paint info object without a random source!";
         d->randomSource = new KisRandomSource();
     }
 

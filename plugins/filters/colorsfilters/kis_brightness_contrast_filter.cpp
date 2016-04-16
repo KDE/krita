@@ -231,8 +231,11 @@ KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * p
 
     KoHistogramProducer *producer = new KoGenericLabHistogramProducer();
     KisHistogram histogram(dev, dev->exactBounds(), producer, LINEAR);
+
+    QPalette appPalette = QApplication::palette();
     QPixmap pix(256, height);
-    pix.fill();
+    pix.fill(QColor(appPalette.color(QPalette::Base)));
+
     QPainter p(&pix);
     p.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
 

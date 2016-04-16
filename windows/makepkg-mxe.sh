@@ -10,8 +10,10 @@ BUILDROOT=/data2/cross
 MXEROOT=/data2/cross/mxe/usr/x86_64-w64-mingw32.shared
 APP=krita
 
-VER=$(grep "#define CALLIGRA_VERSION_STRING" build/libs/version/calligraversion.h | cut -d '"' -f 2)
-cd krita
+cd ${BUILDROOT}
+
+VER=$(grep "#define CALLIGRA_VERSION_STRING" /build/libs/version/calligraversion.h | cut -d '"' -f 2)
+cd ${BUILDROOT}/krita
 BRANCH=$( git branch | cut -d ' ' -f 2)
 REVISION=$(git rev-parse --short HEAD)
 cd ..

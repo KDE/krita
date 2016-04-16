@@ -110,23 +110,23 @@ HWND createDummyWindow(const QString &className, const wchar_t *windowName, WNDP
 
 void printContext(const LOGCONTEXT &lc)
 {
-    dbgInput << "# Getting current context data:";
-    dbgInput << ppVar(lc.lcName);
-    dbgInput << ppVar(lc.lcDevice);
-    dbgInput << ppVar(lc.lcInOrgX);
-    dbgInput << ppVar(lc.lcInOrgY);
-    dbgInput << ppVar(lc.lcInExtX);
-    dbgInput << ppVar(lc.lcInExtY);
-    dbgInput << ppVar(lc.lcOutOrgX);
-    dbgInput << ppVar(lc.lcOutOrgY);
-    dbgInput << ppVar(lc.lcOutExtX);
-    dbgInput << ppVar(lc.lcOutExtY);
-    dbgInput << ppVar(lc.lcSysOrgX);
-    dbgInput << ppVar(lc.lcSysOrgY);
-    dbgInput << ppVar(lc.lcSysExtX);
-    dbgInput << ppVar(lc.lcSysExtY);
+    dbgTablet << "# Getting current context data:";
+    dbgTablet << ppVar(lc.lcName);
+    dbgTablet << ppVar(lc.lcDevice);
+    dbgTablet << ppVar(lc.lcInOrgX);
+    dbgTablet << ppVar(lc.lcInOrgY);
+    dbgTablet << ppVar(lc.lcInExtX);
+    dbgTablet << ppVar(lc.lcInExtY);
+    dbgTablet << ppVar(lc.lcOutOrgX);
+    dbgTablet << ppVar(lc.lcOutOrgY);
+    dbgTablet << ppVar(lc.lcOutExtX);
+    dbgTablet << ppVar(lc.lcOutExtY);
+    dbgTablet << ppVar(lc.lcSysOrgX);
+    dbgTablet << ppVar(lc.lcSysOrgY);
+    dbgTablet << ppVar(lc.lcSysExtX);
+    dbgTablet << ppVar(lc.lcSysExtY);
 
-    dbgInput << "Qt Desktop Geometry" << QApplication::desktop()->geometry();
+    dbgTablet << "Qt Desktop Geometry" << QApplication::desktop()->geometry();
 }
 
 
@@ -191,9 +191,9 @@ static void handleTabletEvent(QWidget *windowWidget, const QPointF &local, const
     // Lock in target window
     if (type == QEvent::TabletPress) {
         targetWindow = windowWidget;
-        dbgInput << "Locking target window" << targetWindow;
+        dbgTablet << "Locking target window" << targetWindow;
     } else if ((type == QEvent::TabletRelease || buttons == Qt::NoButton) && (targetWindow != 0)) {
-        dbgInput << "Releasing target window" << targetWindow;
+        dbgTablet << "Releasing target window" << targetWindow;
         targetWindow = 0;
     }
     if (!windowWidget) // Should never happen
@@ -218,7 +218,7 @@ static void handleTabletEvent(QWidget *windowWidget, const QPointF &local, const
 
 
     if ((type == QEvent::TabletRelease || buttons == Qt::NoButton) && (qt_tablet_target != 0)) {
-        dbgInput << "releasing tablet target" << qt_tablet_target;
+        dbgTablet << "releasing tablet target" << qt_tablet_target;
         qt_tablet_target = 0;
     }
 
@@ -233,11 +233,11 @@ static void handleTabletEvent(QWidget *windowWidget, const QPointF &local, const
 
 
         if (ev.isAccepted()) {
-            // dbgInput << "Tablet event" << type << "accepted" << "by target widget" << finalDestination;
+            // dbgTablet << "Tablet event" << type << "accepted" << "by target widget" << finalDestination;
         }
         else {
             // Turn off eventEater send a synthetic mouse event.
-            // dbgInput << "Tablet event" << type << "rejected; sending mouse event to" << finalDestination;
+            // dbgTablet << "Tablet event" << type << "rejected; sending mouse event to" << finalDestination;
             qt_tablet_target = 0;
 
             // We shouldn't ever get a widget accepting a tablet event from this
@@ -458,7 +458,7 @@ QWindowsTabletSupport *QWindowsTabletSupport::create()
     lcMine.lcOutExtY = -lcMine.lcInExtY;
     const HCTX context = QWindowsTabletSupport::m_winTab32DLL.wTOpen(window, &lcMine, true);
     if (!context) {
-        dbgInput << __FUNCTION__ << "Unable to open tablet.";
+        dbgTablet << __FUNCTION__ << "Unable to open tablet.";
         DestroyWindow(window);
         return 0;
     }
@@ -474,7 +474,7 @@ QWindowsTabletSupport *QWindowsTabletSupport::create()
             } // cannot restore old size
         } // cannot set
     } // mismatch
-    dbgInput << "Opened tablet context " << context << " on window "
+    dbgTablet << "Opened tablet context " << context << " on window "
              <<  window << "changed packet queue size " << currentQueueSize
              << "->" <<  TabletPacketQSize;
     return new QWindowsTabletSupport(window, context);
@@ -520,7 +520,7 @@ void QWindowsTabletSupport::notifyActivate()
     // Cooperate with other tablet applications, but when we get focus, I want to use the tablet.
     const bool result = QWindowsTabletSupport::m_winTab32DLL.wTEnable(m_context, true)
                         && QWindowsTabletSupport::m_winTab32DLL.wTOverlap(m_context, true);
-    dbgInput << __FUNCTION__ << result;
+    dbgTablet << __FUNCTION__ << result;
 }
 
 static inline int indexOfDevice(const QVector<QWindowsTabletDeviceData> &devices, qint64 uniqueId)
@@ -634,7 +634,7 @@ bool QWindowsTabletSupport::translateTabletProximityEvent(WPARAM /* wParam */, L
     };
 
     if (!LOWORD(lParam)) {
-        // dbgInput << "leave proximity for device #" << m_currentDevice;
+        // dbgTablet << "leave proximity for device #" << m_currentDevice;
         sendProximityEvent(QEvent::TabletLeaveProximity);
         return true;
     }
@@ -647,7 +647,7 @@ bool QWindowsTabletSupport::translateTabletProximityEvent(WPARAM /* wParam */, L
     // WT_CSRCHANGE. We do it in WT_PROXIMITY because some wintab never send
     // the event WT_CSRCHANGE even if asked with CXO_CSRMESSAGES
     tabletUpdateCursor(pkCursor);
-    // dbgInput << "enter proximity for device #" << m_currentDevice << m_devices.at(m_currentDevice);
+    // dbgTablet << "enter proximity for device #" << m_currentDevice << m_devices.at(m_currentDevice);
 
     sendProximityEvent(QEvent::TabletEnterProximity);
     return true;
@@ -772,7 +772,7 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
 
         // This is adds *a lot* of noise to the output log
         if (false) {
-            dbgInput
+            dbgTablet
                 << "Packet #" << (i+1) << '/' << packetCount << "button:" << packet.pkButtons
                 << globalPosF << z << "to:" << w << localPos << "(packet" << packet.pkX
                 << packet.pkY << ") dev:" << currentDevice << "pointer:"
@@ -794,7 +794,7 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
          */
         if (isSurfacePro3 && (packet.pkCursor != currentPkCursor)) {
 
-            dbgInput << "Got an inline tool switch.";
+            dbgTablet << "Got an inline tool switch.";
             // Send tablet release event.
             sendTabletEvent(QTabletEvent::TabletRelease);
 
@@ -838,7 +838,7 @@ void QWindowsTabletSupport::tabletUpdateCursor(const int pkCursor)
         // button map when the user right-clicks in Krita while another
         // application has focus. This forces Krita to load button settings only
         // once, when the tablet is first detected.
-        // 
+        //
         // See https://bugs.kde.org/show_bug.cgi?id=359561
         BYTE logicalButtons[32];
         memset(logicalButtons, 0, 32);
@@ -857,11 +857,11 @@ void QWindowsTabletSupport::tabletUpdateCursor(const int pkCursor)
         TCHAR* dvcName = new TCHAR[nameLength + 1];
         QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEVICES, DVC_NAME, dvcName);
         QString qDvcName = QString::fromWCharArray((const wchar_t*)dvcName);
-        dbgInput << "DVC_NAME =" << qDvcName;
+        dbgTablet << "DVC_NAME =" << qDvcName;
         // Name changed between older and newer Surface Pro 3 drivers
         if (qDvcName == QString::fromLatin1("N-trig DuoSense device") ||
             qDvcName == QString::fromLatin1("Microsoft device")) {
-            dbgInput << "This looks like a Surface Pro 3. Enabling eraser workaround.";
+            dbgTablet << "This looks like a Surface Pro 3. Enabling eraser workaround.";
             isSurfacePro3 = true;
         }
         delete[] dvcName;

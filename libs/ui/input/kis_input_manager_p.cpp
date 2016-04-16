@@ -100,7 +100,7 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
 void KisInputManager::Private::EventEater::activate()
 {
     if (!hungry && (KisTabletDebugger::instance()->debugEnabled()))
-        dbgTablet << "Start ignoring mouse events.";
+        qDebug() << "Start ignoring mouse events.";
     hungry = true;
 }
 

@@ -1,0 +1,87 @@
+/*
+ *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *
+ *  This library is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation; version 2.1 of the License.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+#include "texteditor.h"
+
+#include <stdlib.h>
+
+#include <QTimer>
+
+
+#include <kpluginfactory.h>
+#include <klocalizedstring.h>
+
+#include <KoDockFactoryBase.h>
+
+#include <kis_debug.h>
+#include "kis_config.h"
+#include "kis_cursor.h"
+#include "kis_global.h"
+#include "kis_types.h"
+#include "KisViewManager.h"
+
+#include "texteditor_dock.h"
+#include <KoDockRegistry.h>
+
+K_PLUGIN_FACTORY_WITH_JSON(TextEditorPluginFactory, "krita_texteditor.json", registerPlugin<TextEditorPlugin>();)
+
+class TextEditorDockFactory : public KoDockFactoryBase {
+public:
+    TextEditorDockFactory()
+    {
+    }
+
+    virtual QString id() const
+    {
+        return QString( "TextEditor" );
+    }
+
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const
+    {
+        return Qt::RightDockWidgetArea;
+    }
+
+    virtual QDockWidget* createDockWidget()
+    {
+        TextEditorDock * dockWidget = new TextEditorDock();
+        dockWidget->setObjectName(id());
+
+        return dockWidget;
+    }
+
+    DockPosition defaultDockPosition() const
+    {
+        return DockMinimized;
+    }
+private:
+
+
+};
+
+
+TextEditorPlugin::TextEditorPlugin(QObject *parent, const QVariantList &)
+    : QObject(parent)
+{
+    KoDockRegistry::instance()->add(new TextEditorDockFactory());
+}
+
+TextEditorPlugin::~TextEditorPlugin()
+{
+    m_view = 0;
+}
+
+#include "texteditor.moc"

@@ -1,4 +1,6 @@
-add_subdirectory(tests)
+if (NOT WIN32 AND NOT APPLE)
+    add_subdirectory(tests)
+endif()
 
 include_directories(${Boost_INCLUDE_DIRS})
 
@@ -27,11 +29,7 @@ set(kritatooltransform_SOURCES
 qt5_add_resources(kritatooltransform_SOURCES tool_transform.qrc)
 ki18n_wrap_ui(kritatooltransform_SOURCES wdg_tool_transform.ui)
 
-if (WIN32)
-    add_library(kritatooltransform SHARED ${kritatooltransform_SOURCES})
-else()
-    add_library(kritatooltransform MODULE ${kritatooltransform_SOURCES})
-endif()
+add_library(kritatooltransform MODULE ${kritatooltransform_SOURCES})
 
 generate_export_header(kritatooltransform BASE_NAME kritatooltransform)
 

@@ -1,4 +1,6 @@
-add_subdirectory(tests)
+if (NOT WIN32 AND NOT APPLE)
+    add_subdirectory(tests)
+endif()    
 
 include_directories(${Boost_INCLUDE_DIRS})
 
@@ -35,11 +37,7 @@ ki18n_wrap_ui(KRITA_ANIMATIONDOCKER_SOURCES
     onion_skins_docker.ui
 )
 
-if (WIN32)
-    add_library(kritaanimationdocker SHARED ${KRITA_ANIMATIONDOCKER_SOURCES})
-else()
-    add_library(kritaanimationdocker MODULE ${KRITA_ANIMATIONDOCKER_SOURCES})
-endif()
+add_library(kritaanimationdocker MODULE ${KRITA_ANIMATIONDOCKER_SOURCES})
 
 generate_export_header(kritaanimationdocker BASE_NAME kritaanimationdocker EXPORT_MACRO_NAME KRITAANIMATIONDOCKER_EXPORT)
 target_link_libraries(kritaanimationdocker kritaui)

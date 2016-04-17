@@ -50,6 +50,8 @@ endif()
 if(OPENMP_FOUND)
     message("G'Mic: using OpenMP")
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    add_definitions(-Dcimg_use_openmp)
+    add_definitions(-fopenmp)
 endif()
 
 #FFTW
@@ -99,6 +101,11 @@ if(APPLE)
     add_definitions(-D_APPLE)
 endif()
 
+if (MSYS)
+    add_definitions(-Dcimg_OS=2)
+    add_definitions(-Dcimg_display=2)
+endif()
+
 add_library(gmic STATIC ${gmic_sources_SRCS} ${gmic_headers_SRCS})
 
 if(FFTW3_FOUND)
@@ -112,6 +119,10 @@ endif()
 
 if(CURL_FOUND)
     target_link_libraries(gmic ${CURL_LIBRARIES})
+endif()
+
+if(OPENMP_FOUND)
+    target_link_libraries(gmic ${OPENMP_LIBRARIES})
 endif()
 
 target_link_libraries(gmic ${ZLIB_LIBRARIES})

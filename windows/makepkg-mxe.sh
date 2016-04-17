@@ -74,7 +74,8 @@ rm -rf locale
 
 wget http://nonaynever.ru/pub/l10n-win/krita-3.0-l10n-win-current.tar.gz
 tar -xf krita-3.0-l10n-win-current.tar.gz
-cp -r $BUILDROOT/locale $BUILDROOT/out/$PACKAGENAME/share
+mkdir $BUILDROOT/out/$PACKAGENAME/bin/data
+cp -r $BUILDROOT/locale $BUILDROOT/out/$PACKAGENAME/bin/data
 
 cd $BUILDROOT/out/
 

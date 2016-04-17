@@ -32,6 +32,7 @@ mkdir -p $BUILDROOT/out/$PACKAGENAME/share
 cp $MXEROOT/bin/krita.exe $BUILDROOT/out/$PACKAGENAME/bin
 cp $MXEROOT/bin/*.dll $BUILDROOT/out/$PACKAGENAME/bin
 cp $MXEROOT/bin/*.dll $BUILDROOT/out/$PACKAGENAME/bin
+cp $MXEROOT/lib/libOpenColorIO.dll $BUILDROOT/out/$PACKAGENAME/bin
 cp -r $MXEROOT/lib/plugins $BUILDROOT/out/$PACKAGENAME/bin
 cp -r $MXEROOT/lib/kritaplugins $BUILDROOT/out/$PACKAGENAME/lib
 

@@ -378,11 +378,31 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         d->debugEvent<QTabletEvent, false>(event);
         QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
 
-        if (!d->matcher.pointerMoved(tabletEvent)) {
-            d->toolProxy->forwardHoverEvent(tabletEvent);
+        /**
+         * Compress the events if the tool doesn't need high resolution input
+         */
+        if (tabletEvent->type() == QEvent::TabletMove &&
+            (!d->matcher.supportsHiResInputEvents() ||
+             d->testingCompressBrushEvents)) {
+
+            d->compressedMoveEvent.reset(new QTabletEvent(*tabletEvent));
+            d->moveEventCompressor.start();
+
+            /**
+             * On Linux Qt eats the rest of unneeded events if we
+             * ignore the first of the chunk of tablet events. So
+             * generally we should never activate this feature. Only
+             * for testing purposes!
+             */
+            if (d->testingAcceptCompressedTabletEvents) {
+                tabletEvent->setAccepted(true);
+            }
+
+            retval = true;
+        } else {
+            slotCompressedMoveEvent();
+            retval = d->handleCompressedTabletEvent(tabletEvent);
         }
-        retval = true;
-        event->setAccepted(true);
 
         /**
          * The flow of tablet events means the tablet is in the
@@ -392,6 +412,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
          * area)
          */
         start_ignore_cursor_events();
+
         break;
     }
 
@@ -452,11 +473,9 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 void KisInputManager::slotCompressedMoveEvent()
 {
     if (d->compressedMoveEvent) {
-
         // touch_stop_block_press_events();
 
-        (void) d->handleCompressedTabletEvent(d->eventsReceiver, d->compressedMoveEvent.data());
-
+        (void) d->handleCompressedTabletEvent(d->compressedMoveEvent.data());
         d->compressedMoveEvent.reset();
         dbgKrita << "Compressed move event received.";
     } else {

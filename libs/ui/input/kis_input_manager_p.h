@@ -47,7 +47,7 @@ public:
     bool processUnhandledEvent(QEvent *event);
     void setupActions();
     void saveTouchEvent( QTouchEvent* event );
-    bool handleCompressedTabletEvent(QObject *object, QTabletEvent *tevent);
+    bool handleCompressedTabletEvent(QTabletEvent *tevent);
 
     KisInputManager *q;
 

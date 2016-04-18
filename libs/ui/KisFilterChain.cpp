@@ -163,10 +163,12 @@ KisDocument* KisFilterChain::inputDocument()
 
     if ((m_state & Beginning) &&
             static_cast<KisImportExportManager::Direction>(filterManagerDirection()) == KisImportExportManager::Export &&
-            filterManagerKisDocument())
+            filterManagerKisDocument()) {
         m_inputDocument = filterManagerKisDocument();
-    else if (!m_inputDocument)
+    }
+    else if (!m_inputDocument) {
         m_inputDocument = KisPart::instance()->createDocument();
+    }
 
     m_inputQueried = Document;
     return m_inputDocument;

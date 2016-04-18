@@ -426,15 +426,15 @@ void KisInputManager::Private::eatOneMousePress()
     eventEater.eatOneMousePress();
 }
 
-bool KisInputManager::Private::handleCompressedTabletEvent(QTabletEvent *tevent)
+bool KisInputManager::Private::handleCompressedTabletEvent(QEvent *event)
 {
     bool retval = false;
 
-    if (!matcher.pointerMoved(tevent)) {
-        toolProxy->forwardHoverEvent(tevent);
+    if (!matcher.pointerMoved(event)) {
+        toolProxy->forwardHoverEvent(event);
     }
     retval = true;
-    tevent->setAccepted(true);
+    event->setAccepted(true);
 
     return retval;
 }

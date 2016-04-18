@@ -47,7 +47,7 @@ public:
     bool processUnhandledEvent(QEvent *event);
     void setupActions();
     void saveTouchEvent( QTouchEvent* event );
-    bool handleCompressedTabletEvent(QTabletEvent *tevent);
+    bool handleCompressedTabletEvent(QEvent *event);
 
     KisInputManager *q;
 
@@ -67,7 +67,7 @@ public:
 
     QObject *eventsReceiver = 0;
     KisSignalCompressor moveEventCompressor;
-    QScopedPointer<QTabletEvent> compressedMoveEvent;
+    QScopedPointer<QEvent> compressedMoveEvent;
     bool testingAcceptCompressedTabletEvents = false;
     bool testingCompressBrushEvents = false;
 

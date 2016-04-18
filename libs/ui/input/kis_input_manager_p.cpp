@@ -132,6 +132,7 @@ void KisInputManager::Private::maskSyntheticEvents(bool value)
 KisInputManager::Private::Private(KisInputManager *qq)
     : q(qq)
     , moveEventCompressor(10 /* ms */, KisSignalCompressor::FIRST_ACTIVE)
+    , priorityEventFilterSeqNo(0)
     , canvasSwitcher(this, qq)
 {
     KisConfig cfg;

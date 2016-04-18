@@ -75,6 +75,7 @@ public:
     typedef QPair<int, QPointer<QObject> > PriorityPair;
     typedef QList<PriorityPair> PriorityList;
     PriorityList priorityEventFilter;
+    int priorityEventFilterSeqNo;
 
     void blockMouseEvents();
     void allowMouseEvents();

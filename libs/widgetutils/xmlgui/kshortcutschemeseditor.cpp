@@ -162,15 +162,14 @@ void KShortcutSchemesEditor::exportShortcutsScheme()
                     i18n("Shortcuts (*.shortcuts)"));
     dlg.setDefaultSuffix(QStringLiteral(".shortcuts"));
     dlg.setAcceptMode(QFileDialog::AcceptSave);
-    dlg.exec();
-    auto path = dlg.selectedFiles().first();
+    if (dlg.exec()) {
+        auto path = dlg.selectedFiles().first();
 
-    // Parent, caption, dir, filter
-    if (path.isEmpty()) {
-        return;
+        if (!path.isEmpty()) {
+            m_dialog->exportConfiguration(path);
+        }
+
     }
-
-    m_dialog->exportConfiguration(path);
 }
 
 void KShortcutSchemesEditor::saveCustomShortcuts()
@@ -182,14 +181,13 @@ void KShortcutSchemesEditor::saveCustomShortcuts()
                     i18n("Shortcuts (*.shortcuts)"));
     dlg.setDefaultSuffix(QStringLiteral(".shortcuts"));
     dlg.setAcceptMode(QFileDialog::AcceptSave);
-    dlg.exec();
-    auto path = dlg.selectedFiles().first();
+    if (dlg.exec()) {
+        auto path = dlg.selectedFiles().first();
 
-    if (path.isEmpty()) {
-        return;
+        if (!path.isEmpty()) {
+            m_dialog->saveCustomShortcuts(path);
+        }
     }
-
-    m_dialog->saveCustomShortcuts(path);
 }
 
 

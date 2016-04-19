@@ -28,6 +28,7 @@
 
 #include <QPainter>
 
+#include <QApplication>
 #include <QHeaderView>
 #include <QDropEvent>
 #include <QToolButton>
@@ -62,6 +63,7 @@ struct TimelineFramesView::Private
           zoomStillPointIndex(-1),
           zoomStillPointOriginalOffset(0),
           dragInProgress(false),
+          dragWasSuccessful(false),
           modifiersCatcher(0),
           selectionChangedCompressor(300, KisSignalCompressor::FIRST_INACTIVE)
     {}
@@ -94,6 +96,7 @@ struct TimelineFramesView::Private
     KisDraggableToolButton *zoomDragButton;
 
     bool dragInProgress;
+    bool dragWasSuccessful;
 
     KisCustomModifiersCatcher *modifiersCatcher;
     QPoint lastPressedPosition;
@@ -362,6 +365,51 @@ void TimelineFramesView::currentChanged(const QModelIndex &current, const QModel
     }
 }
 
+QItemSelectionModel::SelectionFlags TimelineFramesView::selectionCommand(const QModelIndex &index,
+                                                                         const QEvent *event) const
+{
+    // WARNING: Copy-pasted from KisNodeView! Please keep in sync!
+
+    /**
+     * Qt has a bug: when we Ctrl+click on an item, the item's
+     * selections gets toggled on mouse *press*, whereas usually it is
+     * done on mouse *release*.  Therefore the user cannot do a
+     * Ctrl+D&D with the default configuration. This code fixes the
+     * problem by manually returning QItemSelectionModel::NoUpdate
+     * flag when the user clicks on an item and returning
+     * QItemSelectionModel::Toggle on release.
+     */
+
+    if (event &&
+        (event->type() == QEvent::MouseButtonPress ||
+         event->type() == QEvent::MouseButtonRelease) &&
+        index.isValid()) {
+
+        const QMouseEvent *mevent = static_cast<const QMouseEvent*>(event);
+
+        if (mevent->button() == Qt::RightButton &&
+            selectionModel()->selectedIndexes().contains(index)) {
+
+            // Allow calling context menu for multiple layers
+            return QItemSelectionModel::NoUpdate;
+        }
+
+        if (event->type() == QEvent::MouseButtonPress &&
+            (mevent->modifiers() & Qt::ControlModifier)) {
+
+            return QItemSelectionModel::NoUpdate;
+        }
+
+        if (event->type() == QEvent::MouseButtonRelease &&
+            (mevent->modifiers() & Qt::ControlModifier)) {
+
+            return QItemSelectionModel::Toggle;
+        }
+    }
+
+    return QAbstractItemView::selectionCommand(index, event);
+}
+
 void TimelineFramesView::slotSelectionChanged()
 {
     int minColumn = std::numeric_limits<int>::max();
@@ -548,8 +596,56 @@ void TimelineFramesView::startDrag(Qt::DropActions supportedActions)
             }
         }
     } else {
+        /**
+         * Workaround for Qt5's bugs:
+         *
+         * 1) Qt doesn't treat selection the selection on D&D
+         *    correctly, so we save it in advance and restore
+         *    afterwards.
+         *
+         * 2) There is a private variable in QAbstractItemView:
+         *    QAbstractItemView::Private::currentSelectionStartIndex.
+         *    It is initialized *only* when the setCurrentIndex() is called
+         *    explicitly on the view object, not on the selection model.
+         *    Therefore we should explicitly call setCurrentIndex() after
+         *    D&D, even if it already has *correct* value!
+         *
+         * 2) We should also call selectionModel()->select()
+         *    explicitly.  There are two reasons for it: 1) Qt doesn't
+         *    maintain selection over D&D; 2) when reselecting single
+         *    element after D&D, Qt goes crazy, because it tries to
+         *    read *global* keyboard modifiers. Therefore if we are
+         *    dragging with Shift or Ctrl pressed it'll get crazy. So
+         *    just reset it explicitly.
+         */
+
+        QModelIndexList selectionBefore = selectionModel()->selectedIndexes();
+        QModelIndex currentBefore = selectionModel()->currentIndex();
+
+        // initialize a global status variable
+        m_d->dragWasSuccessful = false;
         QAbstractItemView::startDrag(supportedActions);
-        setCurrentIndex(currentIndex());
+
+        QModelIndex newCurrent;
+        QPoint selectionOffset;
+
+        if (m_d->dragWasSuccessful) {
+            newCurrent = currentIndex();
+            selectionOffset = QPoint(newCurrent.column() - currentBefore.column(),
+                                     newCurrent.row() - currentBefore.row());
+        } else {
+            newCurrent = currentBefore;
+            selectionOffset = QPoint();
+        }
+
+        setCurrentIndex(newCurrent);
+        selectionModel()->clearSelection();
+        Q_FOREACH (const QModelIndex &idx, selectionBefore) {
+            QModelIndex newIndex =
+                model()->index(idx.row() + selectionOffset.y(),
+                               idx.column() + selectionOffset.x());
+            selectionModel()->select(newIndex, QItemSelectionModel::Select);
+        }
     }
 }
 
@@ -584,7 +680,7 @@ void TimelineFramesView::dropEvent(QDropEvent *event)
     m_d->model->setScrubState(false);
 
     QAbstractItemView::dropEvent(event);
-    setCurrentIndex(currentIndex());
+    m_d->dragWasSuccessful = event->isAccepted();
 }
 
 void TimelineFramesView::dragLeaveEvent(QDragLeaveEvent *event)

@@ -79,6 +79,9 @@ private:
     void updateShowInTimeline();
 
 protected:
+    QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index,
+                                                         const QEvent *event) const;
+
     void currentChanged(const QModelIndex &current, const QModelIndex &previous);
     void startDrag(Qt::DropActions supportedActions);
     void dragEnterEvent(QDragEnterEvent *event);

@@ -116,10 +116,11 @@ void KShortcutSchemesEditor::newScheme()
         return;
     }
 
-    const QString newSchemeFileName = KShortcutSchemesHelper::shortcutSchemeFileName(newName);
+    const QString newSchemeFileName = KShortcutSchemesHelper::shortcutSchemeFileName(newName) + ".shortcuts";
 
     QFile schemeFile(newSchemeFileName);
     if (!schemeFile.open(QFile::WriteOnly | QFile::Truncate)) {
+        qDebug() << "Could not open scheme file.";
         return;
     }
     schemeFile.close();

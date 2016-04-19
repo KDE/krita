@@ -15,7 +15,7 @@ export PATH=$BUILDROOT/mxe/usr/bin:$BUILDROOT/mxe/usr/x86_64-w64-mingw32.shared/
 # Use  i686-w64-mingw32.shared for 32 bits builds
 # note: vc is 1.2, so we either need zagge's branch, or you need to build Vc 0.75
 # yourself. Make sure you use -DBUILD_TESTING=OFF for Vc
-make MXE_TARGETS=x86_64-w64-mingw32.shared gcc boost curl eigen exiv2 expat fftw fontconfig freetype gettext ilmbase openexr jpeg lcms libpng libraw opencolorio openjpeg qt5 qtscript tiff vc zlib
+make MXE_TARGETS=x86_64-w64-mingw32.shared gcc boost curl eigen exiv2 expat fftw fontconfig freetype gettext ilmbase openexr jpeg lcms libpng libraw opencolorio openjpeg qt5 qtscript tiff vc zlib gsl
 
 cd $BUILDROOT
 git clone git://anongit.kde.org/krita.git

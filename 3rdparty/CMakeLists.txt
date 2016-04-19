@@ -55,6 +55,7 @@ endif()
 if (MSYS)
 	set(PATCH_COMMAND patch)
     set(GLOBAL_PROFILE ${GLOBAL_PROFILE} 
+                           -DCMAKE_TOOLCHAIN_FILE=${MXE_TOOLCHAIN}
                            -DCMAKE_FIND_PREFIX_PATH=${CMAKE_PREFIX_PATH}
                            -DCMAKE_SYSTEM_INCLUDE_PATH=${CMAKE_PREFIX_PATH}/include
                            -DCMAKE_INCLUDE_PATH=${CMAKE_PREFIX_PATH}/include 

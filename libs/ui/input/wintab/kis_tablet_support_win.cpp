@@ -191,9 +191,9 @@ static void handleTabletEvent(QWidget *windowWidget, const QPointF &local, const
     // Lock in target window
     if (type == QEvent::TabletPress) {
         targetWindow = windowWidget;
-        dbgTablet << "Locking target window" << targetWindow;
+        dbgInput << "Locking target window" << targetWindow;
     } else if ((type == QEvent::TabletRelease || buttons == Qt::NoButton) && (targetWindow != 0)) {
-        dbgTablet << "Releasing target window" << targetWindow;
+        dbgInput << "Releasing target window" << targetWindow;
         targetWindow = 0;
     }
     if (!windowWidget) // Should never happen
@@ -857,11 +857,11 @@ void QWindowsTabletSupport::tabletUpdateCursor(const int pkCursor)
         TCHAR* dvcName = new TCHAR[nameLength + 1];
         QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEVICES, DVC_NAME, dvcName);
         QString qDvcName = QString::fromWCharArray((const wchar_t*)dvcName);
-        dbgTablet << "DVC_NAME =" << qDvcName;
+        dbgInput << "DVC_NAME =" << qDvcName;
         // Name changed between older and newer Surface Pro 3 drivers
         if (qDvcName == QString::fromLatin1("N-trig DuoSense device") ||
             qDvcName == QString::fromLatin1("Microsoft device")) {
-            dbgTablet << "This looks like a Surface Pro 3. Enabling eraser workaround.";
+            dbgInput << "This looks like a Surface Pro 3. Enabling eraser workaround.";
             isSurfacePro3 = true;
         }
         delete[] dvcName;

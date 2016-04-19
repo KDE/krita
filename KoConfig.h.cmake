@@ -1,6 +1,6 @@
 // Check windows
 #ifdef Q_OS_WIN
-   #if _WIN64
+   #ifdef _WIN64
      #define ENV64BIT
   #else
     #define ENV32BIT

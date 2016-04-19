@@ -434,10 +434,10 @@ bool KisApplication::start(const KisApplicationArguments &args)
                         return 1;
                     }
 
-                    QApplication::setOverrideCursor(Qt::WaitCursor);
-
+                    KisDocument *doc = KisPart::instance()->createDocument();
+                    doc->openUrl(QUrl::fromLocalFile(fileName));
                     KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
-                    KisImportExportManager manager(fileName);
+                    KisImportExportManager manager(doc);
                     manager.setBatchMode(true);
                     QByteArray mime(outputMimetype.toLatin1());
                     status = manager.exportDocument(exportFileName, mime);

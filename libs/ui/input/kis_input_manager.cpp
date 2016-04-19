@@ -127,6 +127,7 @@ void KisInputManager::attachPriorityEventFilter(QObject *filter, int priority)
                       [priority] (const Private::PriorityPair &a) { return a.first > priority; });
 
     d->priorityEventFilter.insert(it, qMakePair(priority, filter));
+    d->priorityEventFilterSeqNo++;
 }
 
 void KisInputManager::detachPriorityEventFilter(QObject *filter)
@@ -187,15 +188,29 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 
     if (!d->matcher.hasRunningShortcut()) {
 
+        int savedPriorityEventFilterSeqNo = d->priorityEventFilterSeqNo;
+
         for (auto it = d->priorityEventFilter.begin(); it != d->priorityEventFilter.end(); /*noop*/) {
             const QPointer<QObject> &filter = it->second;
 
             if (filter.isNull()) {
                 it = d->priorityEventFilter.erase(it);
+
+                d->priorityEventFilterSeqNo++;
+                savedPriorityEventFilterSeqNo++;
                 continue;
             }
 
             if (filter->eventFilter(object, event)) return true;
+
+            /**
+             * If the filter removed itself from the filters list or
+             * added something there, just exit the loop
+             */
+            if (d->priorityEventFilterSeqNo != savedPriorityEventFilterSeqNo) {
+                return true;
+            }
+
             ++it;
         }
 

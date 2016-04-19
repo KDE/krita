@@ -483,6 +483,7 @@ bool KisGuidesManager::Private::mouseMoveHandler(const QPointF &docPos, Qt::Keyb
 
 bool KisGuidesManager::Private::mouseReleaseHandler(const QPointF &docPos)
 {
+    bool result = false;
     KisCanvas2 *canvas = view->canvasBase();
     const KisCoordinatesConverter *converter = canvas->coordinatesConverter();
 
@@ -494,6 +495,14 @@ bool KisGuidesManager::Private::mouseReleaseHandler(const QPointF &docPos)
         if (!workRect.contains(docPos)) {
             deleteGuide(currentGuide);
             q->setGuidesConfigImpl(guidesConfig);
+
+            /**
+             * When we delete a guide, it might happen that we are
+             * delting the last guide. Therefore we should eat the
+             * corresponding event so that the event filter would stop
+             * the filter processing.
+             */
+            result = true;
         }
 
         currentGuide = invalidGuide;
@@ -507,7 +516,7 @@ bool KisGuidesManager::Private::mouseReleaseHandler(const QPointF &docPos)
         updateSnappingStatus(guidesConfig);
     }
 
-    return updateCursor(docPos);
+    return updateCursor(docPos) | result;
 }
 
 QPointF KisGuidesManager::Private::getDocPointFromEvent(QEvent *event)

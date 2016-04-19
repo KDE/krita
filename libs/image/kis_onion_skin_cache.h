@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,38 +16,27 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_ONION_SKIN_COMPOSITOR_H
-#define KIS_ONION_SKIN_COMPOSITOR_H
+#ifndef __KIS_ONION_SKIN_CACHE_H
+#define __KIS_ONION_SKIN_CACHE_H
 
+#include <QScopedPointer>
 #include "kis_types.h"
-#include "kritaimage_export.h"
 
-class KRITAIMAGE_EXPORT KisOnionSkinCompositor : public QObject
+
+class KisOnionSkinCache
 {
-    Q_OBJECT
-
 public:
-    KisOnionSkinCompositor();
-    ~KisOnionSkinCompositor();
-    static KisOnionSkinCompositor *instance();
+    KisOnionSkinCache();
+    ~KisOnionSkinCache();
 
-    void composite(const KisPaintDeviceSP sourceDevice, KisPaintDeviceSP targetDevice, const QRect &rect);
+    KisPaintDeviceSP projection(KisPaintDeviceSP source);
+    void reset();
 
-    QRect calculateFullExtent(const KisPaintDeviceSP device);
-    QRect calculateExtent(const KisPaintDeviceSP device);
-
-    int configSeqNo() const;
-
-public Q_SLOTS:
-    void configChanged();
-
-Q_SIGNALS:
-    void sigOnionSkinChanged();
+    KisPaintDeviceSP lodCapableDevice() const;
 
 private:
     struct Private;
-    QScopedPointer<Private> m_d;
-
+    const QScopedPointer<Private> m_d;
 };
 
-#endif
+#endif /* __KIS_ONION_SKIN_CACHE_H */

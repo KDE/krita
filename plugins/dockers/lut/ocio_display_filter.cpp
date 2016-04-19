@@ -246,6 +246,7 @@ void OcioDisplayFilter::updateShader()
     if (!m_shaderDirty) return;
 
     QOpenGLFunctions_3_0 *glFuncs3 = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_0>();
+    KIS_ASSERT_RECOVER_RETURN(glFuncs3);
 
     const int lut3DEdgeSize = cfg.ocioLutEdgeSize();
 

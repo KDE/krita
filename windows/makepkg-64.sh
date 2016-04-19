@@ -10,10 +10,10 @@ BUILDROOT=/data2/cross
 MXEROOT=/data2/cross/mxe/usr/x86_64-w64-mingw32.shared
 APP=krita
 
-cd ${BUILDROOT}
+cd $BUILDROOT
 
 VER=$(grep "#define CALLIGRA_VERSION_STRING" /build/libs/version/calligraversion.h | cut -d '"' -f 2)
-cd ${BUILDROOT}/krita
+cd $BUILDROOT/krita
 BRANCH=$( git branch | cut -d ' ' -f 2)
 REVISION=$(git rev-parse --short HEAD)
 cd ..
@@ -33,7 +33,6 @@ cp $MXEROOT/bin/krita.exe $BUILDROOT/out/$PACKAGENAME/bin
 cp $MXEROOT/bin/*.dll $BUILDROOT/out/$PACKAGENAME/bin
 cp $MXEROOT/bin/*.dll $BUILDROOT/out/$PACKAGENAME/bin
 cp $MXEROOT/lib/libOpenColorIO.dll $BUILDROOT/out/$PACKAGENAME/bin
-cp -r $MXEROOT/lib/plugins $BUILDROOT/out/$PACKAGENAME/bin
 cp -r $MXEROOT/lib/kritaplugins $BUILDROOT/out/$PACKAGENAME/lib
 
 cp $MXEROOT/qt5/bin/Qt5Concurrent.dll $BUILDROOT/out/$PACKAGENAME/bin
@@ -52,12 +51,11 @@ cp $MXEROOT/qt5/bin/Qt5Widgets.dll $BUILDROOT/out/$PACKAGENAME/bin
 cp $MXEROOT/qt5/bin/Qt5WinExtras.dll $BUILDROOT/out/$PACKAGENAME/bin
 cp $MXEROOT/qt5/bin/Qt5Xml.dll $BUILDROOT/out/$PACKAGENAME/bin
 
-x86_64-w64-mingw32.shared-strip $BUILDROOT/out/$PACKAGENAME/bin/*
-
-cp -r $MXEROOT/qt5/plugins/iconengines $BUILDROOT/out/$PACKAGENAME/bin/plugins
-cp -r $MXEROOT/qt5/plugins/imageformats $BUILDROOT/out/$PACKAGENAME/bin/plugins
-cp -r $MXEROOT/qt5/plugins/printsupport $BUILDROOT/out/$PACKAGENAME/bin/plugins
+cp -r $MXEROOT/qt5/plugins/iconengines $BUILDROOT/out/$PACKAGENAME/bin/
+cp -r $MXEROOT/qt5/plugins/imageformats $BUILDROOT/out/$PACKAGENAME/bin/
+cp -r $MXEROOT/qt5/plugins/printsupport $BUILDROOT/out/$PACKAGENAME/bin/
 cp -r $MXEROOT/qt5/plugins/platforms $BUILDROOT/out/$PACKAGENAME/bin/
+cp -r $MXEROOT/lib/plugins/imageformats/* $BUILDROOT/out/$PACKAGENAME/bin/imageformats/
 
 cp -r $MXEROOT/qt5/translations $BUILDROOT/out/$PACKAGENAME/bin/
 
@@ -79,4 +77,15 @@ cp -r $BUILDROOT/locale $BUILDROOT/out/$PACKAGENAME/bin/data
 
 cd $BUILDROOT/out/
 
+zip -r $PACKAGENAME-dbg.zip $PACKAGENAME
+sha1sum $PACKAGENAME-dbg.zip > $PACKAGENAME-dbg.sha1
+
+exit 0 
+
+find $BUILDROOT/out/$PACKAGENAME/bin -name \*exe | xargs $BUILDROOT/mxe/usr/bin/x86_64-w64-mingw32.shared-strip
+find $BUILDROOT/out/$PACKAGENAME/bin -name \*dll | xargs $BUILDROOT/mxe/usr/bin/x86_64-w64-mingw32.shared-strip
+find $BUILDROOT/out/$PACKAGENAME/lib -name \*dll | xargs $BUILDROOT/mxe/usr/bin/x86_64-w64-mingw32.shared-strip
+
 zip -r $PACKAGENAME.zip $PACKAGENAME
+sha1sum $PACKAGENAME.zip > $PACKAGENAME.sha1
+

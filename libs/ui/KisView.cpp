@@ -329,6 +329,16 @@ void KisView::setViewManager(KisViewManager *view)
     connect(image(), SIGNAL(sigResolutionChanged(double,double)), this, SLOT(slotImageResolutionChanged()));
 
     // executed in a context of an image thread
+    connect(image(), SIGNAL(sigNodeAddedAsync(KisNodeSP)),
+            SLOT(slotImageNodeAdded(KisNodeSP)),
+            Qt::DirectConnection);
+
+    // executed in a context of the gui thread
+    connect(this, SIGNAL(sigContinueAddNode(KisNodeSP)),
+            SLOT(slotContinueAddNode(KisNodeSP)),
+            Qt::AutoConnection);
+
+    // executed in a context of an image thread
     connect(image(), SIGNAL(sigRemoveNodeAsync(KisNodeSP)),
             SLOT(slotImageNodeRemoved(KisNodeSP)),
             Qt::DirectConnection);
@@ -356,6 +366,29 @@ KisViewManager* KisView::viewManager() const
 {
     return d->viewManager;
 }
+
+void KisView::slotImageNodeAdded(KisNodeSP node)
+{
+    emit sigContinueAddNode(node);
+}
+
+void KisView::slotContinueAddNode(KisNodeSP newActiveNode)
+{
+    /**
+     * When deleting the last layer, root node got selected. We should
+     * fix it when the first layer is added back.
+     *
+     * Here we basically reimplement what Qt's view/model do. But
+     * since they are not connected, we should do it manually.
+     */
+
+    if (!d->isCurrent &&
+        (!d->currentNode || !d->currentNode->parent())) {
+
+        d->currentNode = newActiveNode;
+    }
+}
+
 
 void KisView::slotImageNodeRemoved(KisNodeSP node)
 {

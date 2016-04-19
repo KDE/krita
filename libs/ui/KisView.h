@@ -220,6 +220,9 @@ public Q_SLOTS:
     bool queryClose();
 
 private Q_SLOTS:
+    void slotImageNodeAdded(KisNodeSP node);
+    void slotContinueAddNode(KisNodeSP newActiveNode);
+
     void slotImageNodeRemoved(KisNodeSP node);
     void slotContinueRemoveNode(KisNodeSP newActiveNode);
 
@@ -230,6 +233,7 @@ Q_SIGNALS:
     void sigColorSpaceChanged(const KoColorSpace*  cs);
     void titleModified(QString,bool);
 
+    void sigContinueAddNode(KisNodeSP newActiveNode);
     void sigContinueRemoveNode(KisNodeSP newActiveNode);
 
 protected:

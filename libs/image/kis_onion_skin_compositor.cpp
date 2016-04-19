@@ -30,15 +30,15 @@
 
 Q_GLOBAL_STATIC(KisOnionSkinCompositor, s_instance);
 
-
 struct KisOnionSkinCompositor::Private
 {
-    int numberOfSkins;
-    int tintFactor;
+    int numberOfSkins = 0;
+    int tintFactor = 0;
     QColor backwardTintColor;
     QColor forwardTintColor;
     QVector<int> backwardOpacities;
     QVector<int> forwardOpacities;
+    int configSeqNo = 0;
 
     int skinOpacity(int offset)
     {
@@ -90,6 +90,8 @@ struct KisOnionSkinCompositor::Private
             backwardOpacities[i] = scaleFactor * backwardState * config.onionSkinOpacity(-(i + 1));
             forwardOpacities[i] = scaleFactor * forwardState * config.onionSkinOpacity(i + 1);
         }
+
+        configSeqNo++;
     }
 };
 
@@ -106,6 +108,11 @@ KisOnionSkinCompositor::KisOnionSkinCompositor()
 
 KisOnionSkinCompositor::~KisOnionSkinCompositor()
 {}
+
+int KisOnionSkinCompositor::configSeqNo() const
+{
+    return m_d->configSeqNo;
+}
 
 void KisOnionSkinCompositor::composite(const KisPaintDeviceSP sourceDevice, KisPaintDeviceSP targetDevice, const QRect& rect)
 {

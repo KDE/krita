@@ -44,6 +44,8 @@
 #include "kis_signal_auto_connection.h"
 #include "kis_layer_properties_icons.h"
 
+#include "kis_onion_skin_cache.h"
+
 struct Q_DECL_HIDDEN KisPaintLayer::Private
 {
 public:
@@ -56,6 +58,7 @@ public:
     KisRasterKeyframeChannel *contentChannel;
 
     KisSignalAutoConnectionsStore onionSkinConnection;
+    KisOnionSkinCache onionSkinCache;
 };
 
 KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, KisPaintDeviceSP dev)
@@ -163,10 +166,20 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
         onionSkinEnabled() &&
         !m_d->paintDevice->defaultBounds()->externalFrameActive()) {
 
-        KisOnionSkinCompositor *compositor = KisOnionSkinCompositor::instance();
-        compositor->composite(m_d->paintDevice, projection, rect);
+        KisPaintDeviceSP skins = m_d->onionSkinCache.projection(m_d->paintDevice);
+
+        KisPainter gcDest(projection);
+        gcDest.setCompositeOp(m_d->paintDevice->colorSpace()->compositeOp(COMPOSITE_BEHIND));
+        gcDest.bitBlt(rect.topLeft(), skins, rect);
+        gcDest.end();
     }
 
+    if (!m_d->contentChannel ||
+        (m_d->contentChannel && m_d->contentChannel->keyframeCount() <= 1) ||
+        !onionSkinEnabled()) {
+
+        m_d->onionSkinCache.reset();
+    }
     unlockTemporaryTarget();
 }
 
@@ -325,4 +338,16 @@ void KisPaintLayer::enableAnimation()
     m_d->contentChannel->setOnionSkinsEnabled(onionSkinEnabled());
 
     KisLayer::enableAnimation();
+}
+
+KisPaintDeviceList KisPaintLayer::getLodCapableDevices() const
+{
+    KisPaintDeviceList list = KisLayer::getLodCapableDevices();
+
+    KisPaintDeviceSP onionSkinsDevice = m_d->onionSkinCache.lodCapableDevice();
+    if (onionSkinsDevice) {
+        list << onionSkinsDevice;
+    }
+
+    return list;
 }

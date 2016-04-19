@@ -544,10 +544,12 @@ void TimelineFramesView::startDrag(Qt::DropActions supportedActions)
                 drag->setMimeData(data);
                 drag->setHotSpot(m_d->lastPressedPosition - rect.topLeft());
                 drag->exec(supportedActions, Qt::MoveAction);
+                setCurrentIndex(currentIndex());
             }
         }
     } else {
         QAbstractItemView::startDrag(supportedActions);
+        setCurrentIndex(currentIndex());
     }
 }
 
@@ -591,7 +593,6 @@ void TimelineFramesView::dragLeaveEvent(QDragLeaveEvent *event)
     m_d->model->setScrubState(false);
 
     QAbstractItemView::dragLeaveEvent(event);
-    setCurrentIndex(currentIndex());
 }
 
 void TimelineFramesView::mousePressEvent(QMouseEvent *event)

@@ -230,7 +230,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_scratch_pad.cpp
     widgets/kis_scratch_pad_event_filter.cpp
     widgets/kis_preset_selector_strip.cpp
-    widgets/kis_tree_view_popup.cc
     widgets/kis_slider_spin_box.cpp
     widgets/kis_size_group.cpp
     widgets/kis_size_group_p.cpp

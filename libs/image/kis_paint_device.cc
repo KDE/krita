@@ -225,8 +225,15 @@ public:
         DataSP data;
 
         if (m_frames.isEmpty()) {
-            data = m_data;
-            m_data.clear();
+            /**
+             * Here we move the contents of the paint device to the
+             * new frame and clear m_data to make the "background" for
+             * the areas where there is no frame at all.
+             */
+            data = toQShared(new Data(m_data.data(), true));
+            m_data->dataManager()->clear();
+            m_data->cache()->invalidate();
+
         } else if (copy) {
             DataSP srcData = m_frames[copySrc];
             data = toQShared(new Data(srcData.data(), true));
@@ -266,13 +273,6 @@ public:
                                       frame, false,
                                       parentCommand);
         cmd->redo();
-
-        if (m_frames.isEmpty()) {
-            // the original m_data will be deleted by shared poiter
-            // when the command will be destroyed, so just create a
-            // new one for m_data
-            m_data = toQShared(new Data(deletedData.data(), false));
-        }
     }
 
     QRect frameBounds(int frameId)
@@ -344,16 +344,17 @@ private:
     inline DataSP currentFrameData() const {
         DataSP data;
 
-        if (contentChannel->keyframeCount() > 1) {
+        const int numberOfFrames = contentChannel->keyframeCount();
+
+        if (numberOfFrames > 1) {
             int frameId = contentChannel->frameIdAt(defaultBounds->currentTime());
             KIS_ASSERT_RECOVER(m_frames.contains(frameId)) { return m_frames.begin().value(); }
             data = m_frames[frameId];
-        } else {
+        } else if (numberOfFrames == 1) {
             data = m_frames.begin().value();
+        } else {
+            data = m_data;
         }
-
-        // sanity check!
-        KIS_ASSERT_RECOVER_NOOP(!m_data);
 
         return data;
     }

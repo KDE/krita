@@ -1,5 +1,12 @@
 = Notes for Packagers =
 
+== Patching Qt ==
+
+Qt 5.6 is currently the recommended version to build Krita with on all platforms. However, Qt 5.6 on Linux needs to be patched for https://bugreports.qt.io/browse/QTBUG-44964 .
+
+The patch in 3rdparty/ext_qt/qt-no-motion-compression.diff 
+
+
 == Package Contents ==
 
 We recommend that all of Krita packaged in one package: there is no need to split Krita up. In particular, do not make a separate package out of the plugins directory; without the plugins Krita will not even start.

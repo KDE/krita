@@ -611,13 +611,13 @@ macro_log_feature(OPENMP_FOUND "OpenMP" "A low-level parallel execution library"
 macro_optional_find_package(CURL)
 macro_log_feature(CURL_FOUND "CURL" "A tool to fetch remote data" "http://curl.haxx.se/" FALSE "" "Optionally used by the G'Mic plugin")
 
- ###############################
-################################
-## Add Calligra helper macros ##
-################################
-###############################
+ ############################
+#############################
+## Add Krita helper macros ##
+#############################
+############################
 
-include(MacroCalligraAddBenchmark)
+include(MacroKritaAddBenchmark)
 include(MacroCalligraAddTest)
 
  ####################

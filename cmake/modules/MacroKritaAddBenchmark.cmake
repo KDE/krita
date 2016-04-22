@@ -8,7 +8,7 @@
 
 add_custom_target(benchmark)
 
-macro (CALLIGRA_ADD_BENCHMARK _test_NAME)
+macro (KRITA_ADD_BENCHMARK _test_NAME)
 
     set(_srcList ${ARGN})
     set(_targetName ${_test_NAME})
@@ -16,7 +16,7 @@ macro (CALLIGRA_ADD_BENCHMARK _test_NAME)
         set(_targetName ${ARGV2})
         list(REMOVE_AT _srcList 0 1)
     endif()
-    
+
     set(_nogui)
     list(GET ${_srcList} 0 first_PARAM)
     if( ${first_PARAM} STREQUAL "NOGUI" )
@@ -55,7 +55,7 @@ macro (CALLIGRA_ADD_BENCHMARK _test_NAME)
         set(_executable "${loc}.shell")
       endif ()
     endif()
-    
+
     if (using_qtest AND KDE4_TEST_OUTPUT STREQUAL "xml")
         #MESSAGE(STATUS "${_targetName} : Using QTestLib, can produce XML report.")
         add_custom_target( ${_targetName} COMMAND ${_executable} -xml -o ${_targetName}.tml )
@@ -79,4 +79,4 @@ macro (CALLIGRA_ADD_BENCHMARK _test_NAME)
         endif ()
     endif ()
 
-endmacro (CALLIGRA_ADD_BENCHMARK)
+endmacro (KRITA_ADD_BENCHMARK)

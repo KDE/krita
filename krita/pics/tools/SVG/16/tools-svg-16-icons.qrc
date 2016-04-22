@@ -65,5 +65,9 @@
         <file>light_tool_polygonal_selection.svg</file>
         <file>light_tool_rect_selection.svg</file>
         <file>light_tool_similar_selection.svg</file>
+        <file>dark_shape_handling.svg</file>
+        <file>dark_artistic_text.svg</file>
+        <file>light_artistic_text.svg</file>
+        <file>light_shape_handling.svg</file>
     </qresource>
 </RCC>

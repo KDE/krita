@@ -49,6 +49,7 @@ private Q_SLOTS:
     void testOpacity();
     void testExactBoundsWeirdNullAlphaCase();
     void benchmarkExactBoundsNullDefaultPixel();
+    void testAmortizedExactBounds();
     void testNonDefaultPixelArea();
     void testExactBoundsNonTransparent();
 

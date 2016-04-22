@@ -722,6 +722,34 @@ void KisPaintDeviceTest::benchmarkExactBoundsNullDefaultPixel()
     QCOMPARE(measuredRect, fillRect);
 }
 
+void KisPaintDeviceTest::testAmortizedExactBounds()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    QVERIFY(dev->exactBounds().isEmpty());
+
+    QRect fillRect(60,60, 833, 833);
+    QRect extent(0,0,896,896);
+
+    dev->fill(fillRect, KoColor(Qt::white, cs));
+
+    QCOMPARE(dev->exactBounds(), fillRect);
+    QCOMPARE(dev->extent(), extent);
+
+    QCOMPARE(dev->exactBoundsAmortized(), fillRect);
+
+    dev->setDirty();
+    QCOMPARE(dev->exactBoundsAmortized(), fillRect);
+
+    dev->setDirty();
+    QCOMPARE(dev->exactBoundsAmortized(), extent);
+
+    QTest::qSleep(1100);
+
+    QCOMPARE(dev->exactBoundsAmortized(), fillRect);
+}
+
 void KisPaintDeviceTest::testNonDefaultPixelArea()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();

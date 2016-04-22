@@ -208,6 +208,15 @@ public:
     QRect exactBounds() const;
 
     /**
+     * Relaxed version of the exactBounds() that can be used in tight
+     * loops.  If the exact bounds value is present in the paint
+     * device cache, returns this value.  If the cache is invalidated,
+     * returns extent() and tries to recalculate the exact bounds not
+     * faster than once in 1000 ms.
+     */
+    QRect exactBoundsAmortized() const;
+
+    /**
      * Retuns exact rectangle of the paint device that contains
      * non-default pixels. For paint devices with fully transparent
      * default pixel is equivalent to exactBounds().

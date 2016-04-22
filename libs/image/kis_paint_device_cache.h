@@ -20,6 +20,7 @@
 #define __KIS_PAINT_DEVICE_CACHE_H
 
 #include "kis_lock_free_cache.h"
+#include <QElapsedTimer>
 
 
 class KisPaintDeviceCache
@@ -54,6 +55,26 @@ public:
 
     QRect exactBounds() {
         return m_exactBoundsCache.getValue();
+    }
+
+    QRect exactBoundsAmortized() {
+        QRect bounds;
+        bool result = m_exactBoundsCache.tryGetValue(bounds);
+
+        const int msecThreshold = 1000;
+
+        if (!result) {
+            if (!m_lastCalculatedExactBounds.isValid() ||
+                m_lastCalculatedExactBounds.elapsed() > msecThreshold) {
+
+                m_lastCalculatedExactBounds.restart();
+                bounds = exactBounds();
+            } else {
+                bounds = m_paintDevice->extent();
+            }
+        }
+
+        return bounds;
     }
 
     QRect nonDefaultPixelArea() {
@@ -133,6 +154,7 @@ private:
     ExactBoundsCache m_exactBoundsCache;
     NonDefaultPixelCache m_nonDefaultPixelAreaCache;
     RegionCache m_regionCache;
+    QElapsedTimer m_lastCalculatedExactBounds;
 
     bool m_thumbnailsValid;
     QMap<int, QMap<int, QImage> > m_thumbnails;

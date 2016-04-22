@@ -1030,6 +1030,11 @@ QRect KisPaintDevice::exactBounds() const
     return m_d->cache()->exactBounds();
 }
 
+QRect KisPaintDevice::exactBoundsAmortized() const
+{
+    return m_d->cache()->exactBoundsAmortized();
+}
+
 namespace Impl {
 
 struct CheckFullyTransparent

@@ -35,6 +35,7 @@
 #include <kis_layer.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
+#include "KoColorModelStandardIds.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(KritaExampleFactory, "kritaexample.json", registerPlugin<KritaExample>();)
 
@@ -54,12 +55,19 @@ KisFilterInvert::KisFilterInvert() : KisColorTransformationFilter(id(), category
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
     setShowConfigurationWidget(false);
+    setSupportsLevelOfDetail(true);
 }
 
 KoColorTransformation* KisFilterInvert::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
 {
     Q_UNUSED(config);
     return cs->createInvertTransformation();
+}
+
+bool KisFilterInvert::needsTransparentPixels(const KisFilterConfiguration *config, const KoColorSpace *cs) const
+{
+    Q_UNUSED(config);
+    return cs->colorModelId() == AlphaColorModelID;
 }
 
 #include "example.moc"

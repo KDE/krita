@@ -252,7 +252,15 @@ void KisFilterManager::apply(KisSafeFilterConfigurationSP filterConfig)
         d->currentStrokeId.clear();
     } else {
         image->waitForDone();
-        d->currentApplyRect = d->view->activeNode()->exactBounds();
+    }
+
+    d->currentApplyRect = d->view->activeNode()->exactBounds();
+
+    KisPaintDeviceSP paintDevice = d->view->activeNode()->paintDevice();
+    if (paintDevice &&
+        filter->needsTransparentPixels(filterConfig.data(), paintDevice->colorSpace())) {
+
+        d->currentApplyRect |= image->bounds();
     }
 
     KisPostExecutionUndoAdapter *undoAdapter =

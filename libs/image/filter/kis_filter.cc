@@ -164,3 +164,11 @@ void KisFilter::setSupportsLevelOfDetail(bool value)
 {
     m_supportsLevelOfDetail = value;
 }
+
+bool KisFilter::needsTransparentPixels(const KisFilterConfiguration *config, const KoColorSpace *cs) const
+{
+    Q_UNUSED(config);
+    Q_UNUSED(cs);
+
+    return false;
+}

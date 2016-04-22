@@ -45,6 +45,7 @@ public:
         return KoID("invert", i18n("Invert"));
     }
 
+    bool needsTransparentPixels(const KisFilterConfiguration *config, const KoColorSpace *cs) const;
 };
 
 #endif

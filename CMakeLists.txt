@@ -618,7 +618,6 @@ macro_log_feature(CURL_FOUND "CURL" "A tool to fetch remote data" "http://curl.h
 ############################
 
 include(MacroKritaAddBenchmark)
-include(MacroCalligraAddTest)
 
  ####################
 #####################

@@ -85,18 +85,32 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
 	rgbColorSpace = currentColor.colorSpace();
     }
     QVector <float> channelValues(4);
-
-    channelValues[0] = 1.0;//blue
-    channelValues[1] = 0.5;//green
-    channelValues[2] = 0.5;//red
-    channelValues[3] = 1.0;//alpha, leave alone.
-
     qreal r, g, b;
-    m_tangentTiltOption.apply(info, &r, &g, &b);
 
-    channelValues[0] = b;//blue
-    channelValues[1] = g;//green
-    channelValues[2] = r;//red
+    if (currentColor.colorSpace()->colorDepthId().id()=="F16" || currentColor.colorSpace()->colorDepthId().id()=="F32"){
+        channelValues[0] = 0.5;//red
+        channelValues[1] = 0.5;//green
+        channelValues[2] = 1.0;//blue
+        channelValues[3] = 1.0;//alpha, leave alone.
+
+
+        m_tangentTiltOption.apply(info, &r, &g, &b);
+
+        channelValues[0] = r;//red
+        channelValues[1] = g;//green
+        channelValues[2] = b;//blue
+    } else {
+        channelValues[0] = 1.0;//blue
+        channelValues[1] = 0.5;//green
+        channelValues[2] = 0.5;//red
+        channelValues[3] = 1.0;//alpha, leave alone.
+
+        m_tangentTiltOption.apply(info, &r, &g, &b);
+
+        channelValues[0] = b;//blue
+        channelValues[1] = g;//green
+        channelValues[2] = r;//red
+    }
 
     quint8 data[4];
     rgbColorSpace->fromNormalisedChannelsValue(data, channelValues);
@@ -178,18 +192,32 @@ void KisTangentNormalPaintOp::paintLine(const KisPaintInformation& pi1, const Ki
 	    rgbColorSpace = currentColor.colorSpace();
 	}
 	QVector <float> channelValues(4);
+    qreal r, g, b;
 
-	channelValues[0] = 1.0;//blue
-	channelValues[1] = 0.5;//green
-	channelValues[2] = 0.5;//red
-	channelValues[3] = 1.0;//alpha, leave alone.
+	if (currentColor.colorSpace()->colorDepthId().id()=="F16" || currentColor.colorSpace()->colorDepthId().id()=="F32"){
+        channelValues[0] = 0.5;//red
+        channelValues[1] = 0.5;//green
+        channelValues[2] = 1.0;//blue
+        channelValues[3] = 1.0;//alpha, leave alone.
 
-	qreal r, g, b;
-	m_tangentTiltOption.apply(pi2, &r, &g, &b);
 
-	channelValues[0] = b;//blue
-	channelValues[1] = g;//green
-	channelValues[2] = r;//red
+        m_tangentTiltOption.apply(pi2, &r, &g, &b);
+
+        channelValues[0] = r;//red
+        channelValues[1] = g;//green
+        channelValues[2] = b;//blue
+    } else {
+        channelValues[0] = 1.0;//blue
+        channelValues[1] = 0.5;//green
+        channelValues[2] = 0.5;//red
+        channelValues[3] = 1.0;//alpha, leave alone.
+
+        m_tangentTiltOption.apply(pi2, &r, &g, &b);
+
+        channelValues[0] = b;//blue
+        channelValues[1] = g;//green
+        channelValues[2] = r;//red
+    }
 
 	quint8 data[4];
 	rgbColorSpace->fromNormalisedChannelsValue(data, channelValues);

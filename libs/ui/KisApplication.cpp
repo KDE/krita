@@ -83,6 +83,7 @@
 #include <kis_brush_server.h>
 #include <kis_resource_server_provider.h>
 #include <KoResourceServerProvider.h>
+#include "kis_image_barrier_locker.h"
 
 #include "opengl/kis_opengl.h"
 

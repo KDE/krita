@@ -62,7 +62,7 @@ KisImportExportFilter::ConversionStatus KisTGAExport::convert(const QByteArray& 
         return KisImportExportFilter::NotImplemented;
 
     // the image must be locked at the higher levels
-    KIS_ASSERT_RECOVER_NOOP(input->image()->locked());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
 
     QRect rc = input->image()->bounds();
     QImage image = input->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());

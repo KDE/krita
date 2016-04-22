@@ -185,7 +185,7 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& 
     KisImageWSP image = input->image();
     Q_CHECK_PTR(image);
     // the image must be locked at the higher levels
-    KIS_ASSERT_RECOVER_NOOP(input->image()->locked());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
 
     // Test color space

@@ -110,7 +110,7 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray&
     }
 
     // the image must be locked at the higher levels
-    KIS_ASSERT_RECOVER_NOOP(input->image()->locked());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
 
     KisTIFFConverter ktc(input);
     KisImageBuilder_Result res;

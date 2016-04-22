@@ -139,7 +139,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
 
 
     // the image must be locked at the higher levels
-    KIS_ASSERT_RECOVER_NOOP(image->locked());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(image->locked());
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
 
     QFile f(filename);

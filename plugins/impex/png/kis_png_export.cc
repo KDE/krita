@@ -94,7 +94,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
     KisImageWSP image = input->image();
 
     // the image must be locked at the higher levels
-    KIS_ASSERT_RECOVER_NOOP(image->locked());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(image->locked());
     KisPaintDeviceSP pd;
     pd = new KisPaintDevice(*image->projection());
     KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);

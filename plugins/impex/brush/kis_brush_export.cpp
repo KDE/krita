@@ -142,7 +142,7 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(const QByteArray
     }
 
     // the image must be locked at the higher levels
-    KIS_ASSERT_RECOVER_NOOP(input->image()->locked());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
 
     QRect rc = input->image()->bounds();
 

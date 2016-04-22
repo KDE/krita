@@ -148,6 +148,9 @@ if (WIN32)
     option(USE_BREAKPAD "Build the crash handler for Krita (only on windows)" OFF)
 endif ()
 
+option(HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal." ON)
+configure_file(config-hide-safe-asserts.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hide-safe-asserts.h)
+
  #######################
 ########################
 ## Productset setting ##
@@ -698,4 +701,3 @@ configure_file(config-ocio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ocio.h )
 
 check_function_exists(powf HAVE_POWF)
 configure_file(config-powf.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-powf.h)
-

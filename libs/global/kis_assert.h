@@ -26,6 +26,8 @@ KRITAGLOBAL_EXPORT void kis_assert_exception(const char *assertion, const char *
 KRITAGLOBAL_EXPORT void kis_assert_recoverable(const char *assertion, const char *file, int line);
 KRITAGLOBAL_EXPORT void kis_assert_x_exception(const char *assertion, const char *where, const char *what, const char *file, int line);
 
+KRITAGLOBAL_EXPORT void kis_safe_assert_recoverable(const char *assertion, const char *file, int line);
+
 
 /**
  * KIS_ASSERT family of macros allows the user to choose whether to
@@ -104,5 +106,38 @@ KRITAGLOBAL_EXPORT void kis_assert_x_exception(const char *assertion, const char
  *
  */
 #define KIS_ASSERT_RECOVER_NOOP(cond) KIS_ASSERT_RECOVER(cond) { qt_noop(); }
+
+
+/**
+ * This set of macros work in exactly the same way as their non-safe
+ * counterparts, but they are automatically converted into console
+ * warnings in release builds. That is the user will not see any
+ * message box, just a warning message wil be printed in a terminal
+ * and a recovery branch will be taken automatically.
+ *
+ * Rules when to use "safe" asserts. Use them if the following
+ * conditions are met:
+ *
+ * 1) The condition in the assert shows that a real *bug* has
+ *    happened. It is not just a warning. It is a bug that should be
+ *    fixed.
+ *
+ * 2) The recovery branch will *workaround* the bug and the user will
+ *    be able to continue his work *as if nothing has
+ *    happened*. Again, please mark the assert "safe" if and only if
+ *    you are 100% sure Krita will not crash in a minute after you
+ *    faced that bug. The user is not notified about this bug, so he
+ *    is not going to take any emergency steps like saving his work
+ *    and restarting Krita!
+ *
+ * 3) If you think that Krita should be better restarted after this
+ *    bug, please use a usual KIS_ASSRT_RECOVER.
+ */
+
+#define KIS_SAFE_ASSERT_RECOVER(cond) if (!(cond) && (kis_safe_assert_recoverable(#cond,__FILE__,__LINE__), true))
+#define KIS_SAFE_ASSERT_RECOVER_BREAK(cond) KIS_SAFE_ASSERT_RECOVER(cond) { break; }
+#define KIS_SAFE_ASSERT_RECOVER_RETURN(cond) KIS_SAFE_ASSERT_RECOVER(cond) { return; }
+#define KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(cond, val) KIS_SAFE_ASSERT_RECOVER(cond) { return (val); }
+#define KIS_SAFE_ASSERT_RECOVER_NOOP(cond) KIS_SAFE_ASSERT_RECOVER(cond) { qt_noop(); }
 
 #endif /* __KIS_ASSERT_H */

@@ -344,10 +344,10 @@ KisImageBuilder_Result PSDLoader::decode(const QString &filename)
             new KisPSDLayerStyleCollectionResource("Embedded PSD Styles.asl");
 
         collection->setName(i18nc("Auto-generated layer style collection name for embedded styles (collection)", "<%1> (embedded)", m_image->objectName()));
-        KIS_ASSERT_RECOVER_NOOP(!collection->valid());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!collection->valid());
 
         collection->setLayerStyles(allStylesForServer);
-        KIS_ASSERT_RECOVER_NOOP(collection->valid());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(collection->valid());
 
         KoResourceServer<KisPSDLayerStyleCollectionResource> *server = KisResourceServerProvider::instance()->layerStyleCollectionServer();
         server->addResource(collection, false);

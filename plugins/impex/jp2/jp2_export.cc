@@ -106,7 +106,7 @@ KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& fro
 
 
     // the image must be locked at the higher levels
-    KIS_ASSERT_RECOVER_NOOP(input->image()->locked());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
     jp2Converter kpc(input);
 
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());

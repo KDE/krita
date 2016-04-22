@@ -192,7 +192,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
     // the image must be locked at the higher levels
-    KIS_ASSERT_RECOVER_NOOP(input->image()->locked());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
 
     KisJPEGConverter kpc(input, getBatchMode());

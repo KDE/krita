@@ -102,7 +102,7 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
 
     if (widget.flatten->isChecked()) {
         // the image must be locked at the higher levels
-        KIS_ASSERT_RECOVER_NOOP(input->image()->locked());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
 
         KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
         KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
@@ -111,7 +111,7 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
     }
     else {
         // the image must be locked at the higher levels
-        KIS_ASSERT_RECOVER_NOOP(input->image()->locked());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
 
         res = kpc.buildFile(filename, image->rootLayer());
     }

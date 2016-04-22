@@ -60,7 +60,7 @@ KisImportExportFilter::ConversionStatus KisBMPExport::convert(const QByteArray& 
 
     QRect rc = input->image()->bounds();
     // the image must be locked at the higher levels
-    KIS_ASSERT_RECOVER_NOOP(input->image()->locked());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
     QImage image = input->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
     image.save(filename);
     return KisImportExportFilter::OK;

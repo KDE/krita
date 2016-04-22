@@ -86,8 +86,6 @@ KisImportExportFilter::ConversionStatus KisCSVExport::convert(const QByteArray& 
         }
         return KisImportExportFilter::InvalidFormat;
     }
-    qApp->processEvents(); // For vector layers to be updated
-    input->image()->waitForDone();
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 

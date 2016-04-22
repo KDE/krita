@@ -107,9 +107,6 @@ KisImportExportFilter::ConversionStatus psdExport::convert(const QByteArray& fro
         return KisImportExportFilter::InvalidFormat;
     }
 
-    qApp->processEvents(); // For vector layers to be updated
-    input->image()->waitForDone();
-
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
     PSDSaver kpc(input);

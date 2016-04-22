@@ -92,15 +92,12 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
     kdb->setButtons(KoDialog::Ok | KoDialog::Cancel);
 
     KisImageWSP image = input->image();
-    qApp->processEvents(); // For vector layers to be updated
-    input->image()->waitForDone();
 
-    image->refreshGraph();
-    image->lock();
+    // the image must be locked at the higher levels
+    KIS_ASSERT_RECOVER_NOOP(image->locked());
     KisPaintDeviceSP pd;
     pd = new KisPaintDevice(*image->projection());
     KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
-    image->unlock();
 
 
     if (!KisPNGConverter::isColorSpaceSupported(pd->colorSpace())) {

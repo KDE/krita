@@ -353,9 +353,6 @@ KisImportExportFilter::ConversionStatus KisSpriterExport::convert(const QByteArr
         return KisImportExportFilter::NoDocumentCreated;
     }
 
-    qApp->processEvents(); // For vector layers to be updated
-    input->image()->waitForDone();
-
     QFileInfo fi(filename);
 
     QDomDocument scmlDoc;

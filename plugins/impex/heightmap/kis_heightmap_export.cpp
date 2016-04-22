@@ -116,10 +116,6 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
             return KisImportExportFilter::UserCancelled;
         }
     }
-    else {
-        qApp->processEvents(); // For vector layers to be updated
-    }
-    inputDoc->image()->waitForDone();
 
     if (optionsHeightMap.radioMac->isChecked()) {
         cfg.setProperty("endianness", 0);
@@ -141,10 +137,10 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
                           == QMessageBox::Yes);
     }
 
-    image->refreshGraph();
-    image->lock();
+
+    // the image must be locked at the higher levels
+    KIS_ASSERT_RECOVER_NOOP(image->locked());
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
-    image->unlock();
 
     QFile f(filename);
     f.open(QIODevice::WriteOnly);

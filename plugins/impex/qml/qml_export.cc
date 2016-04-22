@@ -63,10 +63,6 @@ KisImportExportFilter::ConversionStatus QMLExport::convert(const QByteArray& fro
     }
 
     KisImageWSP image = input->image();
-
-    qApp->processEvents(); // For vector layers to be updated
-    image->waitForDone();
-
     Q_CHECK_PTR(image);
 
     QMLConverter converter;

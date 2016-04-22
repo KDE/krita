@@ -106,7 +106,6 @@ KisImageBuilder_Result CSVSaver::encode(const QString &filename)
     //according to the QT docs, the slash is a universal directory separator
     path.append("/");
 
-    m_image->lock();
     node = m_image->rootLayer()->firstChild();
 
     //TODO: correct handling of the layer tree.
@@ -335,8 +334,6 @@ KisImageBuilder_Result CSVSaver::encode(const QString &filename)
         }
         step++;
     } while((retval == KisImageBuilder_RESULT_OK) && (step < 8));
-
-    m_image->unlock();
 
     qDeleteAll(layers);
     f.close();

@@ -84,11 +84,6 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray&
             return KisImportExportFilter::UserCancelled;
         }
     }
-    else {
-        qApp->processEvents(); // For vector layers to be updated
-
-    }
-    input->image()->waitForDone();
 
     KisTIFFOptions options = dlg.options();
 
@@ -114,17 +109,16 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray&
         image = input->image();
     }
 
-    image->refreshGraph();
-    image->lock();
+    // the image must be locked at the higher levels
+    KIS_ASSERT_RECOVER_NOOP(input->image()->locked());
 
     KisTIFFConverter ktc(input);
     KisImageBuilder_Result res;
     if ((res = ktc.buildFile(filename, image, options)) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
-        image->unlock();
         return KisImportExportFilter::OK;
     }
-    image->unlock();
+
     dbgFile << " Result =" << res;
     return KisImportExportFilter::InternalError;
 }

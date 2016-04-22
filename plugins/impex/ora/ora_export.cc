@@ -82,11 +82,9 @@ KisImportExportFilter::ConversionStatus OraExport::convert(const QByteArray& fro
     KisDocument *input = inputDocument();
     QString filename = outputFile();
 
-    if (!input)
+    if (!input) {
         return KisImportExportFilter::NoDocumentCreated;
-
-    qApp->processEvents(); // For vector layers to be updated
-    input->image()->waitForDone();
+    }
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 

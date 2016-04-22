@@ -230,6 +230,54 @@ private:
     KisDocument *m_doc;
 };
 
+class SafeSavingLocker {
+public:
+    SafeSavingLocker(KisDocument *doc)
+        : m_doc(doc),
+          m_locked(false)
+    {
+        const int realAutoSaveInterval = KisConfig().autoSaveInterval();
+        const int emergencyAutoSaveInterval = 10; // sec
+
+        if (!m_doc->image()->tryBarrierLock(true)) {
+            if (m_doc->isAutosaving()) {
+                m_doc->setDisregardAutosaveFailure(true);
+                if (realAutoSaveInterval) {
+                    m_doc->setAutoSave(emergencyAutoSaveInterval);
+                }
+                m_locked = false;
+            } else {
+                m_doc->image()->requestStrokeEnd();
+                QApplication::processEvents();
+                m_locked = m_doc->image()->tryBarrierLock(true);
+            }
+        } else {
+            m_locked = true;
+        }
+
+        if (m_locked) {
+            m_doc->setDisregardAutosaveFailure(false);
+        }
+    }
+
+    ~SafeSavingLocker() {
+         if (m_locked) {
+             m_doc->image()->unlock();
+
+             const int realAutoSaveInterval = KisConfig().autoSaveInterval();
+             m_doc->setAutoSave(realAutoSaveInterval);
+         }
+     }
+
+    bool successfullyLocked() const {
+        return m_locked;
+    }
+
+private:
+    KisDocument *m_doc;
+    bool m_locked;
+};
+
 class Q_DECL_HIDDEN KisDocument::Private
 {
 public:
@@ -612,7 +660,13 @@ bool KisDocument::saveFile()
     if (!isNativeFormat(outputMimeType)) {
         dbgUI << "Saving to format" << outputMimeType << "in" << localFilePath();
 
-        status = d->filterManager->exportDocument(localFilePath(), outputMimeType);
+        SafeSavingLocker locker(this);
+        if (locker.successfullyLocked()) {
+            status = d->filterManager->exportDocument(localFilePath(), outputMimeType);
+        } else {
+            status = KisImportExportFilter::UsageError;
+        }
+
         ret = status == KisImportExportFilter::OK;
         suppressErrorDialog = (status == KisImportExportFilter::UserCancelled || status == KisImportExportFilter::BadConversionGraph);
         dbgFile << "Export status was" << status;
@@ -812,26 +866,8 @@ bool KisDocument::isModified() const
 
 bool KisDocument::saveNativeFormat(const QString & file)
 {
-    const int realAutoSaveInterval = KisConfig().autoSaveInterval();
-    const int emergencyAutoSaveInterval = 10; // sec
-
-    if (!d->image->tryBarrierLock(true)) {
-        if (isAutosaving()) {
-            setDisregardAutosaveFailure(true);
-            if (realAutoSaveInterval) {
-                setAutoSave(emergencyAutoSaveInterval);
-            }
-            return false;
-        } else {
-            d->image->requestStrokeEnd();
-            QApplication::processEvents();
-            if (!d->image->tryBarrierLock(true)) {
-                return false;
-            }
-        }
-    }
-
-    setDisregardAutosaveFailure(false);
+    SafeSavingLocker locker(this);
+    if (!locker.successfullyLocked()) return false;
 
     d->lastErrorMessage.clear();
     //dbgUI <<"Saving to store";
@@ -863,22 +899,18 @@ bool KisDocument::saveNativeFormat(const QString & file)
     if (store->bad()) {
         d->lastErrorMessage = i18n("Could not create the file for saving");   // more details needed?
         delete store;
-        d->image->unlock();
-        setAutoSave(realAutoSaveInterval);
-
         return false;
     }
 
-    d->image->unlock();
-    setAutoSave(realAutoSaveInterval);
-
+    bool result = false;
 
     if (!isAutosaving()) {
         KisAsyncActionFeedback f(i18n("Saving document..."), 0);
-        return f.runAction(std::bind(&KisDocument::saveNativeFormatCalligra, this, store));
+        result = f.runAction(std::bind(&KisDocument::saveNativeFormatCalligra, this, store));
+    } else {
+        result = saveNativeFormatCalligra(store);
     }
-
-    return saveNativeFormatCalligra(store);
+    return result;
 }
 
 bool KisDocument::saveNativeFormatCalligra(KoStore *store)

@@ -89,10 +89,6 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
             return KisImportExportFilter::UserCancelled;
         }
     }
-    else {
-        qApp->processEvents(); // For vector layers to be updated
-    }
-    image->waitForDone();
 
     cfg.setProperty("flatten", widget.flatten->isChecked());
     KisConfig().setExportConfiguration("EXR", cfg);
@@ -105,20 +101,19 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
     KisImageBuilder_Result res;
 
     if (widget.flatten->isChecked()) {
-        image->refreshGraph();
-        image->lock();
+        // the image must be locked at the higher levels
+        KIS_ASSERT_RECOVER_NOOP(input->image()->locked());
+
         KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
         KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
-        image->unlock();
 
         res = kpc.buildFile(filename, l);
     }
     else {
-        image->lock();
+        // the image must be locked at the higher levels
+        KIS_ASSERT_RECOVER_NOOP(input->image()->locked());
 
         res = kpc.buildFile(filename, image->rootLayer());
-        image->unlock();
-
     }
 
     dbgFile << " Result =" << res;

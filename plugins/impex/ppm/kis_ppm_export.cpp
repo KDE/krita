@@ -174,11 +174,6 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& 
             return KisImportExportFilter::UserCancelled;
         }
     }
-    else {
-        qApp->processEvents(); // For vector layers to be updated
-    }
-    input->image()->waitForDone();
-
 
     bool rgb = (to == "image/x-portable-pixmap");
     bool binary = optionsPPM.type->currentIndex() == 0;
@@ -189,10 +184,9 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& 
 
     KisImageWSP image = input->image();
     Q_CHECK_PTR(image);
-    image->refreshGraph();
-    image->lock();
+    // the image must be locked at the higher levels
+    KIS_ASSERT_RECOVER_NOOP(input->image()->locked());
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
-    image->unlock();
 
     // Test color space
     if (((rgb && (pd->colorSpace()->id() != "RGBA" && pd->colorSpace()->id() != "RGBA16"))

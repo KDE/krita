@@ -436,6 +436,10 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
                     KisDocument *doc = KisPart::instance()->createDocument();
                     doc->openUrl(QUrl::fromLocalFile(fileName));
+
+                    qApp->processEvents(); // For vector layers to be updated
+                    KisImageBarrierLocker locker(doc->image());
+
                     KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
                     KisImportExportManager manager(doc);
                     manager.setBatchMode(true);

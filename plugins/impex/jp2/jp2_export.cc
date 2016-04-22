@@ -95,10 +95,6 @@ KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& fro
             return KisImportExportFilter::UserCancelled;
         }
     }
-    else {
-        qApp->processEvents(); // For vector layers to be updated
-    }
-    image->waitForDone();
 
     JP2ConvertOptions options;
     options.numberresolution = optionsJP2.numberResolutions->value();
@@ -109,14 +105,12 @@ KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& fro
     KisConfig().setExportConfiguration("JP2", cfg);
 
 
-    image->refreshGraph();
-    image->lock();
-
+    // the image must be locked at the higher levels
+    KIS_ASSERT_RECOVER_NOOP(input->image()->locked());
     jp2Converter kpc(input);
 
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
     KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
-    image->unlock();
 
     KisImageBuilder_Result res;
 

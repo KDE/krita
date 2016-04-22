@@ -141,11 +141,10 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(const QByteArray
         qApp->processEvents(); // For vector layers to be updated
     }
 
+    // the image must be locked at the higher levels
+    KIS_ASSERT_RECOVER_NOOP(input->image()->locked());
 
-    input->image()->waitForDone();
     QRect rc = input->image()->bounds();
-    input->image()->refreshGraph();
-    input->image()->lock();
 
     brush->setName(exportOptions.name);
     brush->setSpacing(exportOptions.spacing);
@@ -199,8 +198,6 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(const QByteArray
 
     brush->setWidth(w);
     brush->setHeight(h);
-
-    input->image()->unlock();
 
     QFile f(filename);
     f.open(QIODevice::WriteOnly);

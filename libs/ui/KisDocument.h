@@ -617,6 +617,7 @@ Q_SIGNALS:
 private:
 
     friend class KisPart;
+    friend class SafeSavingLocker;
 
     /**
      * Generate a name for the document.

@@ -134,10 +134,6 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
             return KisImportExportFilter::UserCancelled;
         }
     }
-    else {
-        qApp->processEvents(); // For vector layers to be updated
-    }
-    image->waitForDone();
 
     KisJPEGOptions options;
     options.progressive = wdgUi.progressive->isChecked();
@@ -195,13 +191,11 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    image->refreshGraph();
-    image->lock();
+    // the image must be locked at the higher levels
+    KIS_ASSERT_RECOVER_NOOP(input->image()->locked());
+    KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
 
     KisJPEGConverter kpc(input, getBatchMode());
-
-    KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
-    image->unlock();
     KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
 
     vKisAnnotationSP_it beginIt = image->beginAnnotations();

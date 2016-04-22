@@ -719,16 +719,16 @@ void KisMainWindow::updateCaption()
 void KisMainWindow::updateCaption(const QString & caption, bool mod)
 {
     dbgUI << "KisMainWindow::updateCaption(" << caption << "," << mod << ")";
-#ifdef CALLIGRA_ALPHA
-    setCaption(QString("ALPHA %1: %2").arg(CALLIGRA_ALPHA).arg(caption), mod);
+#ifdef KRITA_ALPHA
+    setCaption(QString("ALPHA %1: %2").arg(KRITA_ALPHA).arg(caption), mod);
     return;
 #endif
-#ifdef CALLIGRA_BETA
-    setCaption(QString("BETA %1: %2").arg(CALLIGRA_BETA).arg(caption), mod);
+#ifdef KRITA_BETA
+    setCaption(QString("BETA %1: %2").arg(KRITA_BETA).arg(caption), mod);
     return;
 #endif
-#ifdef CALLIGRA_RC
-    setCaption(QString("RELEASE CANDIDATE %1: %2").arg(CALLIGRA_RC).arg(caption), mod);
+#ifdef KRITA_RC
+    setCaption(QString("RELEASE CANDIDATE %1: %2").arg(KRITA_RC).arg(caption), mod);
     return;
 #endif
 

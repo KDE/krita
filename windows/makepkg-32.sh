@@ -12,7 +12,7 @@ APP=krita
 
 cd $BUILDROOT
 
-VER=$(grep "#define CALLIGRA_VERSION_STRING" /build/libs/version/calligraversion.h | cut -d '"' -f 2)
+VER=$(grep "#define KRITA_VERSION_STRING" /build/libs/version/kritaversion.h | cut -d '"' -f 2)
 cd $BUILDROOT/krita
 BRANCH=$( git branch | cut -d ' ' -f 2)
 REVISION=$(git rev-parse --short HEAD)

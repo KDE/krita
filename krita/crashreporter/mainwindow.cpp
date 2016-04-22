@@ -25,7 +25,7 @@
 #include <klocalizedstring.h>
 #include <KoResourcePaths.h>
 
-#include <calligraversion.h>
+#include <kritaversion.h>
 #include <kritagitversion.h>
 
 #include <cstdlib>
@@ -283,15 +283,15 @@ void MainWindow::startUpload()
     typedef QPair<QByteArray, QByteArray> Field;
     QList<Field> fields;
 
-    QString calligraVersion(CALLIGRA_VERSION_STRING);
+    QString kritaVersion(KRITA_VERSION_STRING);
     QString version;
 
 
 #ifdef KRITA_GIT_SHA1_STRING
     QString gitVersion(KRITA_GIT_SHA1_STRING);
-    version = QString("%1-%2").arg(calligraVersion).arg(gitVersion).toLatin1();
+    version = QString("%1-%2").arg(kritaVersion).arg(gitVersion).toLatin1();
 #else
-    version = calligraVersion;
+    version = kritaVersion;
 #endif
 
     fields << Field("BuildID", KRITA_GIT_SHA1_STRING)

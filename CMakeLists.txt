@@ -73,29 +73,29 @@ endif()
 #######################
 ######################
 
-# define common versions of Calligra applications, used to generate calligraversion.h
+# define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(CALLIGRA_VERSION_STRING "3.0 Beta")
-set(CALLIGRA_STABLE_VERSION_MAJOR 3) # 3 for 3.x, 4 for 4.x, etc.
-set(CALLIGRA_STABLE_VERSION_MINOR 0) # 0 for 3.0, 1 for 3.1, etc.
-set(CALLIGRA_VERSION_RELEASE 90)     # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
-#set(CALLIGRA_ALPHA 1) # uncomment only for Alpha
-set(CALLIGRA_BETA 1) # uncomment only for Beta
-#set(CALLIGRA_RC 1) # uncomment only for RC
-set(CALLIGRA_YEAR 2016) # update every year
+set(KRITA_VERSION_STRING "3.0 Beta")
+set(KRITA_STABLE_VERSION_MAJOR 3) # 3 for 3.x, 4 for 4.x, etc.
+set(KRITA_STABLE_VERSION_MINOR 0) # 0 for 3.0, 1 for 3.1, etc.
+set(KRITA_VERSION_RELEASE 90)     # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
+#set(KRITA_ALPHA 1) # uncomment only for Alpha
+set(KRITA_BETA 1) # uncomment only for Beta
+#set(KRITA_RC 1) # uncomment only for RC
+set(KRITA_YEAR 2016) # update every year
 
-if(NOT DEFINED CALLIGRA_ALPHA AND NOT DEFINED CALLIGRA_BETA AND NOT DEFINED CALLIGRA_RC)
-    set(CALLIGRA_STABLE 1) # do not edit
+if(NOT DEFINED KRITA_ALPHA AND NOT DEFINED KRITA_BETA AND NOT DEFINED KRITA_RC)
+    set(KRITA_STABLE 1) # do not edit
 endif()
 
-message(STATUS "Krita version: ${CALLIGRA_VERSION_STRING}")
+message(STATUS "Krita version: ${KRITA_VERSION_STRING}")
 
 # Define the generic version of the Krita libraries here
 # This makes it easy to advance it when the next Krita release comes.
 # 14 was the last GENERIC_KRITA_LIB_VERSION_MAJOR of the previous Krita series
 # (2.x) so we're starting with 15 in 3.x series.
-if(CALLIGRA_STABLE_VERSION_MAJOR EQUAL 3)
-    math(EXPR GENERIC_KRITA_LIB_VERSION_MAJOR "${CALLIGRA_STABLE_VERSION_MINOR} + 15")
+if(KRITA_STABLE_VERSION_MAJOR EQUAL 3)
+    math(EXPR GENERIC_KRITA_LIB_VERSION_MAJOR "${KRITA_STABLE_VERSION_MINOR} + 15")
 else()
     # let's make sure we won't forget to update the "15"
     message(FATAL_ERROR "Reminder: please update offset == 15 used to compute GENERIC_KRITA_LIB_VERSION_MAJOR to something bigger")

@@ -27,23 +27,23 @@
 #include <KAboutData>
 #include <kis_debug.h>
 
-#include <calligraversion.h>
+#include <kritaversion.h>
 #include <kritagitversion.h>
 
 #include "mainwindow.h"
 
 int main( int argc, char **argv )
 {
-    QString calligraVersion(CALLIGRA_VERSION_STRING);
+    QString kritaVersion(KRITA_VERSION_STRING);
     QString version;
 
     KLocalizedString::setApplicationDomain( "crashhandler" );
 
 #ifdef KRITA_GIT_SHA1_STRING
     QString gitVersion(KRITA_GIT_SHA1_STRING);
-    version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion).toLatin1();
+    version = QString("%1 (git %2)").arg(kritaVersion).arg(gitVersion).toLatin1();
 #else
-    version = calligraVersion;
+    version = kritaVersion;
 #endif
     KAboutData aboutData("krita",
                          i18n("Krita Crash Reporter"),

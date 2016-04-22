@@ -1,11 +1,10 @@
-# generate calligraversion.h
-configure_file(calligraversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/calligraversion.h)
+# generate kritaversion.h
+configure_file(kritaversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/kritaversion.h)
 
 # generate kritagitversion.h
 configure_file(kritagitversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/kritagitversion.h)
 
 set(kritaversion_LIB_SRCS
-    calligraversion.cpp
     KritaVersionWrapper.cpp
 )
 

@@ -17,18 +17,18 @@
  */
 #include <KritaVersionWrapper.h>
 
-#include <calligraversion.h>
+#include <kritaversion.h>
 #include <kritagitversion.h>
 
 QString KritaVersionWrapper::versionString(bool checkGit)
 {
-    QString calligraVersion(CALLIGRA_VERSION_STRING);
-    QString version = calligraVersion;
+    QString kritaVersion(KRITA_VERSION_STRING);
+    QString version = kritaVersion;
 
     if (checkGit) {
 #ifdef KRITA_GIT_SHA1_STRING
         QString gitVersion(KRITA_GIT_SHA1_STRING);
-        version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion).toLatin1();
+        version = QString("%1 (git %2)").arg(kritaVersion).arg(gitVersion).toLatin1();
 #endif
     }
     return version;

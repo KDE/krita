@@ -38,7 +38,7 @@
 
 #include "sketch/SketchInputContext.h"
 
-#include <calligraversion.h>
+#include <kritaversion.h>
 #include <kritagitversion.h>
 
 #if defined Q_OS_WIN
@@ -51,15 +51,15 @@
 
 int main( int argc, char** argv )
 {
-    QString calligraVersion(CALLIGRA_VERSION_STRING);
+    QString kritaVersion(KRITA_VERSION_STRING);
     QString version;
 
 
 #ifdef KRITA_GIT_SHA1_STRING
     QString gitVersion(KRITA_GIT_SHA1_STRING);
-    version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion).toLatin1();
+    version = QString("%1 (git %2)").arg(kritaVersion).arg(gitVersion).toLatin1();
 #else
-    version = calligraVersion;
+    version = kritaVersion;
 #endif
 
 
@@ -69,7 +69,7 @@ int main( int argc, char** argv )
                          version.toLatin1(),
                          ki18n("Krita Gemini: Painting at Home and on the Go for Artists"),
                          KAboutData::License_GPL,
-                         ki18n("(c) 1999-%1 The Krita team.\n").subs(CALLIGRA_YEAR),
+                         ki18n("(c) 1999-%1 The Krita team.\n").subs(KRITA_YEAR),
                          KLocalizedString(),
                          "http://www.kritastudio.com",
                          "submit@bugs.kde.org");

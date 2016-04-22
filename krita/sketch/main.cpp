@@ -31,7 +31,7 @@
 #include "KoGlobal.h"
 #include <KoResourcePaths.h>
 
-#include <calligraversion.h>
+#include <kritaversion.h>
 #include <kritagitversion.h>
 #include <opengl/kis_opengl.h>
 #include <kis_icon.h>
@@ -53,15 +53,15 @@
 
 int main( int argc, char** argv )
 {
-    QString calligraVersion(CALLIGRA_VERSION_STRING);
+    QString kritaVersion(KRITA_VERSION_STRING);
     QString version;
 
 
 #ifdef KRITA_GIT_SHA1_STRING
     QString gitVersion(KRITA_GIT_SHA1_STRING);
-    version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion).toLatin1();
+    version = QString("%1 (git %2)").arg(kritaVersion).arg(gitVersion).toLatin1();
 #else
-    version = calligraVersion;
+    version = kritaVersion;
 #endif
 
     KLocalizedString::setApplicationDomain("krita");
@@ -71,7 +71,7 @@ int main( int argc, char** argv )
                          QStringLiteral("0.1"),
                          i18n("Krita Sketch: Painting on the Go for Artists"),
                          KAboutLicense::GPL,
-                         i18n("(c) 1999-%1 The Krita team.\n").arg(CALLIGRA_YEAR),
+                         i18n("(c) 1999-%1 The Krita team.\n").arg(KRITA_YEAR),
                          QString(),
                          QStringLiteral("https://www.krita.org"),
                          QStringLiteral("submit@bugs.kde.org"));

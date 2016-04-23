@@ -352,7 +352,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
     KoHashGeneratorProvider::instance()->setGenerator("MD5", new KisMD5Generator());
 
-    // Initialize all Calligra directories etc.
+    // Initialize all Krita directories etc.
     KoGlobal::initialize();
 
     KConfigGroup group(KSharedConfig::openConfig(), "theme");

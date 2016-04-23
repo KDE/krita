@@ -30,7 +30,7 @@ class QUrl;
 class KoStorePrivate;
 
 /**
- * Saves and loads Calligra documents using various backends. Currently supported
+ * Saves and loads Krita documents using various backends. Currently supported
  * backends are zip and directory.
  * We call a "store" the file on the hard disk (the one the users sees)
  * and call a "file" a file inside the store.
@@ -43,7 +43,7 @@ public:
     enum Backend { Auto, Zip, Directory };
 
     /**
-     * Open a store (i.e. the representation on disk of a Calligra document).
+     * Open a store (i.e. the representation on disk of a Krita document).
      *
      * @param fileName the name of the file to open
      * @param mode if KoStore::Read, open an existing store to read it.
@@ -75,7 +75,7 @@ public:
                                 Backend backend = Auto, bool writeMimetype = true);
 
     /**
-     * Open a store (i.e. the representation on disk of a Calligra document).
+     * Open a store (i.e. the representation on disk of a Krita document).
      *
      * @param url URL of the file to open
      * @param mode if KoStore::Read, open an existing store to read it.

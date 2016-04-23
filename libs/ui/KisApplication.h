@@ -31,13 +31,13 @@ class KisApplicationArguments;
 #include <KisImportExportManager.h>
 
 /**
- *  @brief Base class for all %Calligra apps
+ *  @brief Base class for the %Krita app
  *
  *  This class handles arguments given on the command line and
- *  shows a generic about dialog for all Calligra apps.
+ *  shows a generic about dialog for the Krita app.
  *
- *  In addition it adds the standard directories where Calligra applications
- *  can find their images etc.
+ *  In addition it adds the standard directories where Krita
+ *  can find its images etc.
  *
  *  If the last mainwindow becomes closed, KisApplication automatically
  *  calls QApplication::quit.

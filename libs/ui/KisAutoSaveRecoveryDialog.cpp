@@ -210,7 +210,7 @@ KisAutoSaveRecoveryDialog::KisAutoSaveRecoveryDialog(const QStringList &filename
         QString path = QDir::homePath() + "/" + filename;
 #endif
 
-        // get thumbnail -- all calligra apps save a thumbnail
+        // get thumbnail -- almost all Krita-supported formats save a thumbnail
         KoStore* store = KoStore::createStore(path, KoStore::Read);
 
         if (store) {

@@ -76,7 +76,7 @@ KoJsonTrader::KoJsonTrader()
                     }
 
                     // on debian at least the actual libdir is a subdir named like "lib/x86_64-linux-gnu"
-                    // so search there for the calligra subdir which will contain our plugins
+                    // so search there for the Krita subdir which will contain our plugins
                     Q_FOREACH (QString subEntry, libDir.entryList()) {
                         QFileInfo subInfo(libDir, subEntry);
                         if (subInfo.isDir()) {

@@ -324,6 +324,14 @@ cp ../AppImageKit/AppRun .
 cp ./usr/share/applications/krita.desktop krita.desktop
 cp /krita/krita/pics/app/64-apps-calligrakrita.png calligrakrita.png
 
+#
+# Fetch and install the translations
+#
+cd /
+wget http://nonaynever.ru/pub/l10n-win/krita-3.0-l10n-win-current.tar.gz
+tar -xf krita-3.0-l10n-win-current.tar.gz
+cd /krita/appdir/usr/share
+tar -xf /krita-3.0-l10n-win-current.tar.gz
 
 # replace krita with the lib-checking startup script.
 #cd /krita.appdir/usr/bin
@@ -334,7 +342,7 @@ cd /
 
 APP=Krita
 
-VER=$(grep "#define CALLIGRA_VERSION_STRING" krita_build/libs/version/calligraversion.h | cut -d '"' -f 2)
+VER=$(grep "#define KRITA_VERSION_STRING" krita_build/libs/version/kritaversion.h | cut -d '"' -f 2)
 cd krita
 BRANCH=$( git branch | cut -d ' ' -f 2)
 REVISION=$(git rev-parse --short HEAD)

@@ -260,8 +260,13 @@ void KisActionRegistry::updateShortcut(const QString &name, QAction *action)
 {
     const ActionInfoItem info = d->actionInfo(name);
     action->setShortcut(preferredShortcut(info));
-    auto propertizedShortcut = qVariantFromValue(QList<QKeySequence>() << info.defaultShortcut);
-    action->setProperty("defaultShortcuts", propertizedShortcut);
+
+    auto defaultShortcutsList = QList<QKeySequence>();
+    if (info.defaultShortcut != QKeySequence("")) {
+        // Use the empty list to represent no shortcut
+        defaultShortcutsList << info.defaultShortcut;
+    }
+    action->setProperty("defaultShortcuts", qVariantFromValue(defaultShortcutsList));
 }
 
 

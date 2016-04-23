@@ -587,16 +587,9 @@ void KActionCollection::writeSettings(KConfigGroup *config,
                 // not set to its default value. Write it
                 QString s = QKeySequence::listToString(action->shortcuts());
                 if (s.isEmpty()) {
-                    if (writeScheme) {
-                        // A scheme file should explicitly set "none" for the shortcut
-                        s = QStringLiteral("none");
-                        config->writeEntry(actionName, s, flags);
-                    } else {
-                        config->deleteEntry(actionName, flags);
-                    }
-                } else {
-                    config->writeEntry(actionName, s, flags);
+                    s = QStringLiteral("none");
                 }
+                config->writeEntry(actionName, s, flags);
             } else if (bConfigHasAction) {
                 // This key is the same as default but exists in config file.
                 // Remove it.

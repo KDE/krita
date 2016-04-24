@@ -4,10 +4,15 @@ endif()
 
 configure_file(config_psd.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_psd.h)
 
-include_directories(${ZLIB_INCLUDE_DIR})
-include_directories(${Boost_INCLUDE_DIRS})
-include_directories(${CMAKE_BINARY_DIR}/libs/psd)  #For kispsd_include.h
-include_directories(${CMAKE_SOURCE_DIR}/libs/psd)  #For kispsd_include.h
+include_directories(
+    ${CMAKE_BINARY_DIR}/libs/psd
+    ${CMAKE_SOURCE_DIR}/libs/psd
+)  #For kispsd_include.h
+
+include_directories(SYSTEM
+    ${ZLIB_INCLUDE_DIR}
+    ${Boost_INCLUDE_DIRS}
+)
 
 set(LIB_PSD_SRCS 
     psd_header.cpp

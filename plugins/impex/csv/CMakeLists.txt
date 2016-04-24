@@ -1,8 +1,10 @@
 add_subdirectory(tests)
 
 include_directories( 
-${CMAKE_SOURCE_DIR}/krita/image/metadata 
-${Boost_INCLUDE_DIRS}
+    ${CMAKE_SOURCE_DIR}/krita/image/metadata
+)
+include_directories(SYSTEM
+    ${Boost_INCLUDE_DIRS}
 )
 
 # import

@@ -8,6 +8,9 @@ endif ()
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/qtlockedfile
+)
+
+include_directories(SYSTEM
     ${EXIV2_INCLUDE_DIR}
     ${EIGEN3_INCLUDE_DIR}
     ${OCIO_INCLUDE_DIR}

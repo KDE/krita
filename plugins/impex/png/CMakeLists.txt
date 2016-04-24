@@ -8,7 +8,7 @@ set(kritapngimport_SOURCES
 
 add_library(kritapngimport MODULE ${kritapngimport_SOURCES})
 
-include_directories(${PNG_INCLUDE_DIR})
+include_directories(SYSTEM ${PNG_INCLUDE_DIR})
 
 add_definitions(${PNG_DEFINITIONS} ${KDE4_ENABLE_EXCEPTIONS})
 

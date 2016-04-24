@@ -315,11 +315,6 @@ add_definitions(
   -DQT_DISABLE_DEPRECATED_BEFORE=0
 )
 
-# To avoid the confusion of an endless stream of Eigen warnings.
-if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
-    add_definitions(-Wno-unused-local-typedefs -Wno-deprecated -Wno-deprecated-declarations)
-endif ()
-
 #
 # The reason for this mode is that the Debug mode disable inlining
 #
@@ -381,7 +376,7 @@ find_package(PNG REQUIRED)
 
 if (APPLE)
     # this is not added correctly on OSX -- see http://forum.kde.org/viewtopic.php?f=139&t=101867&p=221242#p221242
-    include_directories(${PNG_INCLUDE_DIR})
+    include_directories(SYSTEM ${PNG_INCLUDE_DIR})
 endif()
 
 add_definitions(-DBOOST_ALL_NO_LIB)
@@ -419,7 +414,7 @@ macro_log_feature(OPENEXR_FOUND "OpenEXR" "High dynamic-range (HDR) image file f
 macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
 set(LINK_OPENEXR_LIB)
 if(OPENEXR_FOUND)
-    include_directories(${OPENEXR_INCLUDE_DIR})
+    include_directories(SYSTEM ${OPENEXR_INCLUDE_DIR})
     set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
     add_definitions(${OPENEXR_DEFINITIONS})
 endif()

@@ -1,7 +1,9 @@
 macro_add_unittest_definitions()
-include_directories( ${OCIO_INCLUDE_DIR}
+include_directories(${CMAKE_SOURCE_DIR}/sdk/tests)
+include_directories(SYSTEM
+    ${OCIO_INCLUDE_DIR}
     ${Boost_INCLUDE_DIRS}
-    ${CMAKE_SOURCE_DIR}/sdk/tests)
+    )
 
 ########### next target ###############
 

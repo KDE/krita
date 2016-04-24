@@ -6,7 +6,7 @@ endif()
 
 # add all the include paths to kritaui that we use, for now.
 
-include_directories(
+include_directories(SYSTEM
     ${EIGEN3_INCLUDE_DIR}
     ${Vc_INCLUDE_DIR}
 )

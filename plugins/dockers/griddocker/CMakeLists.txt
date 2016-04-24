@@ -1,4 +1,4 @@
-include_directories(
+include_directories(SYSTEM
 	${Boost_INCLUDE_DIRS}
 )
 

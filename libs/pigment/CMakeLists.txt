@@ -8,15 +8,17 @@ if (WIN32)
     set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
 endif ()
 
-include_directories( ${Boost_INCLUDE_DIRS} 
-                     ${CMAKE_CURRENT_SOURCE_DIR}/resources
-                     ${CMAKE_CURRENT_SOURCE_DIR}/compositeops
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/resources
+    ${CMAKE_CURRENT_SOURCE_DIR}/compositeops)
+include_directories(SYSTEM
+    ${Boost_INCLUDE_DIRS}
 )
 
 set(FILE_OPENEXR_SOURCES)
 set(LINK_OPENEXR_LIB)
 if(OPENEXR_FOUND)
-    include_directories(${OPENEXR_INCLUDE_DIR})
+    include_directories(SYSTEM ${OPENEXR_INCLUDE_DIR})
     set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
     add_definitions(${OPENEXR_DEFINITIONS})
 endif()
@@ -24,7 +26,7 @@ endif()
 set(LINK_VC_LIB)
 
 if(HAVE_VC)
-    include_directories(${Vc_INCLUDE_DIR})
+    include_directories(SYSTEM ${Vc_INCLUDE_DIR})
     set(LINK_VC_LIB ${Vc_LIBRARIES})
     ko_compile_for_all_implementations_no_scalar(__per_arch_factory_objs compositeops/KoOptimizedCompositeOpFactoryPerArch.cpp)
 

@@ -2,7 +2,8 @@ if (NOT WIN32 AND NOT APPLE)
     add_subdirectory(tests)
 endif()
 
-include_directories( ${OCIO_INCLUDE_DIR}
+include_directories(SYSTEM
+    ${OCIO_INCLUDE_DIR}
     ${Boost_INCLUDE_DIRS}
 )
 

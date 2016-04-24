@@ -4,6 +4,8 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/sdk/tests
     ${CMAKE_SOURCE_DIR}/libs/pigment
     ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
+)
+include_directories(SYSTEM
     ${EIGEN3_INCLUDE_DIR}
     ${Boost_INCLUDE_DIRS}
 )

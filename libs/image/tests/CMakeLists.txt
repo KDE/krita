@@ -9,15 +9,19 @@ if(NOT ${CMAKE_VERSION} VERSION_LESS 3.1.3 AND
     return()
 endif()
 
-include_directories(${CMAKE_SOURCE_DIR}/libs/image/metadata 
-                    ${CMAKE_BINARY_DIR}/libs/image/
-                    ${CMAKE_SOURCE_DIR}/libs/image/
-                    ${CMAKE_SOURCE_DIR}/libs/image/brushengine
-                    ${CMAKE_SOURCE_DIR}/libs/image/tiles3
-                    ${CMAKE_SOURCE_DIR}/libs/image/tiles3/swap
-                    ${CMAKE_SOURCE_DIR}/sdk/tests 
-                    ${EIGEN3_INCLUDE_DIR}
-                    ${Boost_INCLUDE_DIRS}
+include_directories(
+    ${CMAKE_SOURCE_DIR}/libs/image/metadata
+    ${CMAKE_BINARY_DIR}/libs/image/
+    ${CMAKE_SOURCE_DIR}/libs/image/
+    ${CMAKE_SOURCE_DIR}/libs/image/brushengine
+    ${CMAKE_SOURCE_DIR}/libs/image/tiles3
+    ${CMAKE_SOURCE_DIR}/libs/image/tiles3/swap
+    ${CMAKE_SOURCE_DIR}/sdk/tests
+)
+
+include_Directories(SYSTEM
+    ${EIGEN3_INCLUDE_DIR}
+    ${Boost_INCLUDE_DIRS}
 )
 
 if(HAVE_VC)

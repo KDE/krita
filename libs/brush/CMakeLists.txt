@@ -1,6 +1,6 @@
 add_subdirectory( tests )
 
-include_directories(
+include_directories(SYSTEM
     ${EIGEN3_INCLUDE_DIR}
 )
 
@@ -35,7 +35,7 @@ endif ()
 
 
 if(HAVE_VC)
-  include_directories(${Vc_INCLUDE_DIR})
+  include_directories(SYSTEM ${Vc_INCLUDE_DIR})
   target_link_libraries(kritalibbrush  ${Vc_LIBRARIES})
 #  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
 endif()

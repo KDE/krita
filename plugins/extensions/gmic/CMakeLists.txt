@@ -59,20 +59,20 @@ if(FFTW3_FOUND)
     message("G'Mic: using FFTW3")
     add_definitions(-Dcimg_use_fftw3 )
     add_definitions(-Dcimg_use_fftw3_singlethread )
-    include_directories(${FFTW3_INCLUDE_DIR})
+    include_directories(SYSTEM ${FFTW3_INCLUDE_DIR})
 endif()
 
 # PNG
 if (PNG_FOUND)
     add_definitions(${PNG_DEFINITIONS})
     add_definitions(-Dcimg_use_png)
-    include_directories(${PNG_INCLUDE_DIR})
+    include_directories(SYSTEM ${PNG_INCLUDE_DIR})
 endif()
 
 # ZLIB
 if (ZLIB_FOUND)
     add_definitions(-Dcimg_use_zlib)
-    include_directories( ${ZLIB_INCLUDE_DIRS} )
+    include_directories(SYSTEM ${ZLIB_INCLUDE_DIRS} )
 endif()
 
 
@@ -80,7 +80,7 @@ endif()
 if (CURL_FOUND)
     message("G'Mic: using Curl")
     add_definitions(-Dcimg_use_curl)
-    include_directories( ${CURL_INCLUDE_DIRS} )
+    include_directories(SYSTEM ${CURL_INCLUDE_DIRS} )
 endif()
 
 # X11

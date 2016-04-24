@@ -2,7 +2,7 @@ if (NOT WIN32 AND NOT APPLE)
     add_subdirectory(tests)
 endif()    
 
-include_directories(${Boost_INCLUDE_DIRS})
+include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 set(KRITA_ANIMATIONDOCKER_SOURCES
     animation_dockers.cpp

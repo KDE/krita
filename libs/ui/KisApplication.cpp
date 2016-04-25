@@ -84,7 +84,6 @@
 #include <kis_resource_server_provider.h>
 #include <KoResourceServerProvider.h>
 #include "kis_image_barrier_locker.h"
-
 #include "opengl/kis_opengl.h"
 
 #include <KritaVersionWrapper.h>
@@ -372,7 +371,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
     // Load the plugins
     loadPlugins();
 
-
     KisMainWindow *mainWindow = 0;
 
     if (needsMainWindow) {
@@ -387,14 +385,8 @@ bool KisApplication::start(const KisApplicationArguments &args)
     short int numberOfOpenDocuments = 0; // number of documents open
 
     // Check for autosave files that can be restored, if we're not running a batchrun (test, print, export to pdf)
-    QList<QUrl> urls = checkAutosaveFiles();
-    if (!batchRun && mainWindow) {
-
-        setSplashScreenLoadingText(i18n("Retrieving Auto save files..."));
-        Q_FOREACH (const QUrl &url, urls) {
-            KisDocument *doc = KisPart::instance()->createDocument();
-            mainWindow->openDocumentInternal(url, doc);
-        }
+    if (!batchRun) {
+        checkAutosaveFiles();
     }
 
     setSplashScreenLoadingText(""); // done loading, so clear out label
@@ -424,7 +416,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                 if (createNewDocFromTemplate(fileName, mainWindow)) {
                     ++numberOfOpenDocuments;
                 }
-            // now try to load
+                // now try to load
             }
             else {
 
@@ -465,15 +457,15 @@ bool KisApplication::start(const KisApplicationArguments &args)
                             KisPrintJob *job = mainWindow->exportToPdf(exportFileName);
                             if (job)
                                 connect (job, SIGNAL(destroyed(QObject*)), mainWindow,
-                                        SLOT(slotFileQuit()), Qt::QueuedConnection);
+                                         SLOT(slotFileQuit()), Qt::QueuedConnection);
                             nPrinted++;
                         } else {
                             // Normal case, success
                             numberOfOpenDocuments++;
                         }
                     } else {
-                    // .... if failed
-                    // delete doc; done by openDocument
+                        // .... if failed
+                        // delete doc; done by openDocument
                     }
                 }
             }
@@ -563,11 +555,10 @@ void KisApplication::fileOpenRequested(const QString &url)
 }
 
 
-QList<QUrl> KisApplication::checkAutosaveFiles()
+void KisApplication::checkAutosaveFiles()
 {
     // Check for autosave files from a previous run. There can be several, and
     // we want to offer a restore for every one. Including a nice thumbnail!
-    QStringList autoSaveFiles;
 
     QStringList filters;
     filters << QString(".krita-*-*-autosave.kra");
@@ -587,22 +578,30 @@ QList<QUrl> KisApplication::checkAutosaveFiles()
             // hide the splashscreen to see the dialog
             d->splashScreen->hide();
         }
-        KisAutoSaveRecoveryDialog *dlg = new KisAutoSaveRecoveryDialog(autoSaveFiles, activeWindow());
-        if (dlg->exec() == QDialog::Accepted) {
+        dlg = new KisAutoSaveRecoveryDialog(autoSaveFiles, activeWindow());
+        connect(dlg, SIGNAL(finished(int)), this, SLOT(onAutoSaveFinished(int)));
+        dlg->exec();
+    }
+}
 
-            QStringList filesToRecover = dlg->recoverableFiles();
-            Q_FOREACH (const QString &autosaveFile, autoSaveFiles) {
-                if (!filesToRecover.contains(autosaveFile)) {
-                    QFile::remove(dir.absolutePath() + "/" + autosaveFile);
-                }
+void KisApplication::onAutoSaveFinished(int result) {
+
+#ifdef Q_OS_WIN
+    QDir dir = QDir::temp();
+#else
+    QDir dir = QDir::home();
+#endif
+
+    if (result == QDialog::Accepted) {
+        QStringList filesToRecover = dlg->recoverableFiles();
+        Q_FOREACH (const QString &autosaveFile, autoSaveFiles) {
+            if (!filesToRecover.contains(autosaveFile)) {
+                QFile::remove(dir.absolutePath() + "/" + autosaveFile);
             }
-            autoSaveFiles = filesToRecover;
         }
-        else {
-            // don't recover any of the files, but don't delete them either
-            autoSaveFiles.clear();
-        }
-        delete dlg;
+        autoSaveFiles = filesToRecover;
+    } else {
+        autoSaveFiles.clear();
     }
 
     QList<QUrl> autosaveUrls;
@@ -614,7 +613,12 @@ QList<QUrl> KisApplication::checkAutosaveFiles()
         }
     }
 
-    return autosaveUrls;
+    if (mainWindow) {
+        Q_FOREACH (const QUrl &url, autosaveUrls) {
+            KisDocument *doc = KisPart::instance()->createDocument();
+            mainWindow->openDocumentInternal(url, doc);
+        }
+    }
 }
 
 bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWindow *mainWindow)

@@ -22,11 +22,13 @@
 
 #include <qtsingleapplication/qtsingleapplication.h>
 #include "kritaui_export.h"
+#include <KisAutoSaveRecoveryDialog.h>
 
 class KisMainWindow;
 class KisApplicationPrivate;
 class QWidget;
 class KisApplicationArguments;
+class KisAutoSaveRecoveryDialog;
 
 #include <KisImportExportManager.h>
 
@@ -98,9 +100,11 @@ public Q_SLOTS:
     void remoteArguments(QByteArray message, QObject*socket);
     void fileOpenRequested(const QString & url);
 
+    void onAutoSaveFinished(int result);
+
 private:
     /// @return the number of autosavefiles opened
-    QList<QUrl> checkAutosaveFiles();
+    void checkAutosaveFiles();
     bool createNewDocFromTemplate(const QString &fileName, KisMainWindow *mainWindow);
     void clearConfig();
     void loadResources();
@@ -110,6 +114,9 @@ private:
     KisApplicationPrivate * const d;
     class ResetStarting;
     friend class ResetStarting;
+    KisAutoSaveRecoveryDialog *dlg;
+    QStringList autoSaveFiles;
+    KisMainWindow *mainWindow;
 };
 
 #endif

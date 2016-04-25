@@ -17,6 +17,21 @@ endif ()
 
 set(krita_SRCS main.cc)
 
+if (NOT APPLE)
+    file(GLOB ICON_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/*-apps-calligrakrita.png")
+else()
+    set(ICON_SRCS
+         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/16-apps-calligrakrita.png"
+         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/32-apps-calligrakrita.png"
+         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/48-apps-calligrakrita.png"
+         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/128-apps-calligrakrita.png"
+         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/256-apps-calligrakrita.png"
+         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/512-apps-calligrakrita.png"
+         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/1024-apps-calligrakrita.png"
+    )
+endif() 
+ecm_add_app_icon(krita_SRCS ICONS ${ICON_SRCS})
+
 if(WIN32 AND USE_BREAKPAD)
     set(krita_SRCS ${krita_SRCS} kis_crash_handler.cpp)
     find_library(BREAKPAD_LIBS breakpad)
@@ -25,10 +40,6 @@ if(WIN32 AND USE_BREAKPAD)
     endif()
 endif()
 
-if (NOT APPLE)
-    file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/*-apps-calligrakrita.png")
-    ecm_add_app_icon(krita_SRCS ICONS ${ICONS_SRCS})
-endif()
 
 # separate listing, both used by Krita and KritaSketch
 set(krita_QRCS
@@ -80,6 +91,11 @@ if (APPLE)
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.krita")
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Krita")
+    set_target_properties(krita PROPERTIES MACOSX_BUNDLE_ICON_FILE "krita_SRCS.icns")
+    set_target_properties(krita PROPERTIES MACOSX_BUNDLE_LONG_VERSION_STRING ${KRITA_VERSION_STRING})
+    set_target_properties(krita PROPERTIES MACOSX_BUNDLE_SHORT_VERSION_STRING ${KRITA_VERSION_STRING})
+    set_target_properties(krita PROPERTIES MACOSX_BUNDLE_VERSION ${KRITA_VERSION_STRING})
+    set_target_properties(krita PROPERTIES MACOSX_BUNDLE_COPYRIGHT "GNU Public License, V2 or, at your option, any later version.")
 endif ()
 
 install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})

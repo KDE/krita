@@ -92,8 +92,6 @@ KoShape *KoSnapGuide::editedShape() const
 
 void KoSnapGuide::enableSnapStrategy(Strategy type, bool value)
 {
-    if ((d->usedStrategies & type) ==  value) return;
-
     if (value) {
         d->usedStrategies |= type;
     } else {

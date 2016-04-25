@@ -50,8 +50,11 @@ endif()
 
 if (APPLE)
     set(APPLE_SUPPRESS_X11_WARNING TRUE)
-    set(CMAKE_MACOSX_RPATH ON)
-endif ()
+    set(KDE_SKIP_RPATH_SETTINGS TRUE)
+    set(CMAKE_MACOSX_RPATH 1)
+    set(BUILD_WITH_INSTALL_RPATH 1)
+    add_definitions(-Wno-deprecated-register)
+endif()
 
 # QT5TODO: remove KDE4_BUILD_TESTS once all kde4_add_unit_test have been converted
 # transitional forward compatibility:
@@ -382,11 +385,6 @@ endif()
 add_definitions(-DBOOST_ALL_NO_LIB)
 find_package(Boost REQUIRED COMPONENTS system) # for pigment and stage
 
-if (APPLE)
-    SET(CMAKE_CXX_FLAGS "-stdlib=libstdc++ -std=c++11")
-#    find_package(Carbon REQUIRED)
-endif ()
-
 ##
 ## Test for GNU Scientific Library
 ##
@@ -447,7 +445,7 @@ macro_bool_to_01(OCIO_FOUND HAVE_OCIO)
 if(Qt5Gui_OPENGL_IMPLEMENTATION)
     message(STATUS "Found QtGui OpenGL support")
 else()
-    message(FATAL_ERROR "Did NOT find QtGui OpenGL support. Check your Qt configuration.")
+    message(FATAL_ERROR  "Did NOT find QtGui OpenGL support. Check your Qt configuration. You cannot build Krita without Qt OpenGL support.")
 endif()
 
 ##

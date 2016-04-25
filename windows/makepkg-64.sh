@@ -80,8 +80,6 @@ cd $BUILDROOT/out/
 zip -r $PACKAGENAME-dbg.zip $PACKAGENAME
 sha1sum $PACKAGENAME-dbg.zip > $PACKAGENAME-dbg.sha1
 
-exit 0 
-
 find $BUILDROOT/out/$PACKAGENAME/bin -name \*exe | xargs $BUILDROOT/mxe/usr/bin/x86_64-w64-mingw32.shared-strip
 find $BUILDROOT/out/$PACKAGENAME/bin -name \*dll | xargs $BUILDROOT/mxe/usr/bin/x86_64-w64-mingw32.shared-strip
 find $BUILDROOT/out/$PACKAGENAME/lib -name \*dll | xargs $BUILDROOT/mxe/usr/bin/x86_64-w64-mingw32.shared-strip

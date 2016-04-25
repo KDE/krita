@@ -81,6 +81,7 @@ public:
     ToolTransformArgs& operator=(const ToolTransformArgs& args);
 
     bool operator==(const ToolTransformArgs& other) const;
+    bool isSameMode(const ToolTransformArgs& other) const;
 
     inline TransformMode mode() const {
         return m_mode;

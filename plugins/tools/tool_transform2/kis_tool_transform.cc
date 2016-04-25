@@ -1100,7 +1100,20 @@ void KisToolTransform::slotResetTransform()
     if (m_currentArgs.continuedTransform()) {
         ToolTransformArgs::TransformMode savedMode = m_currentArgs.mode();
 
-        if (m_currentArgs.continuedTransform()->mode() == savedMode) {
+        /**
+         * Our reset transform button can be used for two purposes:
+         *
+         * 1) Reset current transform to the initial one, which was
+         *    loaded from the previous user action.
+         *
+         * 2) Reset transform frame to infinity when the frame is unchanged
+         */
+
+        const bool transformDiffers = !m_currentArgs.continuedTransform()->isSameMode(m_currentArgs);
+
+        if (transformDiffers &&
+            m_currentArgs.continuedTransform()->mode() == savedMode) {
+
             m_currentArgs.restoreContinuedState();
             initGuiAfterTransformMode();
             slotEditingFinished();

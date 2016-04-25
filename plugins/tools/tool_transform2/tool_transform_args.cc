@@ -158,6 +158,53 @@ bool ToolTransformArgs::operator==(const ToolTransformArgs& other) const
          || m_liquifyWorker == other.m_liquifyWorker);
 }
 
+bool ToolTransformArgs::isSameMode(const ToolTransformArgs& other) const
+{
+    if (m_mode != other.m_mode) return false;
+
+    bool result = true;
+
+    if (m_mode == FREE_TRANSFORM) {
+        result &= m_transformedCenter == other.m_transformedCenter;
+        result &= m_originalCenter == other.m_originalCenter;
+        result &= m_scaleX == other.m_scaleX;
+        result &= m_scaleY == other.m_scaleY;
+        result &= m_shearX == other.m_shearX;
+        result &= m_shearY == other.m_shearY;
+        result &= m_aX == other.m_aX;
+        result &= m_aY == other.m_aY;
+        result &= m_aZ == other.m_aZ;
+
+    } else if (m_mode == PERSPECTIVE_4POINT) {
+        result &= m_transformedCenter == other.m_transformedCenter;
+        result &= m_originalCenter == other.m_originalCenter;
+        result &= m_scaleX == other.m_scaleX;
+        result &= m_scaleY == other.m_scaleY;
+        result &= m_shearX == other.m_shearX;
+        result &= m_shearY == other.m_shearY;
+        result &= m_flattenedPerspectiveTransform == other.m_flattenedPerspectiveTransform;
+
+    } else if(m_mode == WARP || m_mode == CAGE) {
+        result &= m_origPoints == other.m_origPoints;
+        result &= m_transfPoints == other.m_transfPoints;
+
+    } else if (m_mode == LIQUIFY) {
+        result &= m_liquifyProperties &&
+            (m_liquifyProperties == other.m_liquifyProperties ||
+             *m_liquifyProperties == *other.m_liquifyProperties);
+
+        result &=
+            (m_liquifyWorker && other.m_liquifyWorker &&
+             *m_liquifyWorker == *other.m_liquifyWorker)
+            || m_liquifyWorker == other.m_liquifyWorker;
+
+    } else {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "unknown transform mode");
+    }
+
+    return result;
+}
+
 ToolTransformArgs::ToolTransformArgs(TransformMode mode,
                                      QPointF transformedCenter,
                                      QPointF originalCenter,

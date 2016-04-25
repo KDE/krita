@@ -239,7 +239,7 @@ struct KisAnimationCachePopulator::Private
                     }
                 }
 
-                if (!cache->frameStatus(frame) == KisAnimationFrameCache::Cached) {
+                if (cache->frameStatus(frame) != KisAnimationFrameCache::Cached) {
                     return regenerate(cache, frame);
                 }
             }

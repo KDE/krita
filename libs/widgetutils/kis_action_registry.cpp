@@ -69,11 +69,12 @@ namespace {
         if (s.isEmpty()) {
             return s;
         }
-        if (i18n(s.toUtf8().constData()).isEmpty()) {
+        QString translatedString = i18nc("action", s.toUtf8());
+        if (translatedString.isEmpty()) {
             dbgAction << "No translation found for" << s;
             return s;
         }
-        return i18n(s.toUtf8().constData());
+        return translatedString;
     };
 
 

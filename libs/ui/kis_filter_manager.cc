@@ -67,7 +67,7 @@ struct KisFilterManager::Private {
     KisSafeFilterConfigurationSP lastConfiguration;
     KisSafeFilterConfigurationSP currentlyAppliedConfiguration;
     KisStrokeId currentStrokeId;
-    QRect currentApplyRect;
+    QRect initialApplyRect;
 
     QSignalMapper actionsMapper;
 
@@ -252,15 +252,16 @@ void KisFilterManager::apply(KisSafeFilterConfigurationSP filterConfig)
         d->currentStrokeId.clear();
     } else {
         image->waitForDone();
+        d->initialApplyRect = d->view->activeNode()->exactBounds();
     }
 
-    d->currentApplyRect = d->view->activeNode()->exactBounds();
+    QRect applyRect = d->initialApplyRect;
 
     KisPaintDeviceSP paintDevice = d->view->activeNode()->paintDevice();
     if (paintDevice &&
         filter->needsTransparentPixels(filterConfig.data(), paintDevice->colorSpace())) {
 
-        d->currentApplyRect |= image->bounds();
+        applyRect |= image->bounds();
     }
 
     KisPostExecutionUndoAdapter *undoAdapter =
@@ -279,7 +280,7 @@ void KisFilterManager::apply(KisSafeFilterConfigurationSP filterConfig)
                                                        KisSafeFilterConfigurationSP(filterConfig),
                                                        resources));
 
-    QRect processRect = filter->changedRect(d->currentApplyRect, filterConfig.data(), 0);
+    QRect processRect = filter->changedRect(applyRect, filterConfig.data(), 0);
     processRect &= image->bounds();
 
     if (filter->supportsThreading()) {

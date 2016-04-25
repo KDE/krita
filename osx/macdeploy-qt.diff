@@ -78,7 +78,7 @@ index d20b219..4a9aa1f 100644
 +        // deploy all found plugins
 +        foreach (const QString &plugin, pluginList) {
 +            QString sourcePath = extraPluginDir + "/" + plugin;
-+            const QString destinationPath = pluginDestinationPath + "/" + plugin;
++            const QString destinationPath = pluginDestinationPath + "/" + extraPluginDir.split("/", QString::SkipEmptyParts).last() + "/" + plugin;
 +            QDir dir;
 +            dir.mkpath(QFileInfo(destinationPath).path());
 +

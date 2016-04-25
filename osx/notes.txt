@@ -37,9 +37,14 @@ cp -r ~/dev/i/bin/krita.app ~
 cp -r ~/dev/i/share ~/krita.app/Contents/
 macdeployqt ~/krita.app \
     -verbose=1 \
-    -extra-plugins=$HOME/dev/i/lib/krita/ \
+    -extra-plugins=$HOME/dev/i/lib/kritaplugins/ \
+    -extra-plugins=$HOME/dev/i/lib/kf5/ \
     -extra-plugins=$HOME/dev/i/lib/plugins/ \
     -extra-plugins=$HOME/dev/i/plugins/ \
     -dmg
-mkdir ~/krita.app/Contents/PlugIns/krita
-mv ~/krita.app/Contents/PlugIns/*so ~/krita.app/Contents/PlugIns/krita
+mkdir ~/krita.app/Contents/PlugIns/kritaplugins
+mv ~/krita.app/Contents/PlugIns/*so ~/krita.app/Contents/PlugIns/kritaplugins
+
+To make open_exr build, manual step after it fails because dwalookups cannot find Half:
+install_name_tool -add_rpath /Users/boud/dev/i/lib /Users/boud/dev/b/ext_openexr/ext_openexr-prefix/src/ext_openexr-build/IlmImf/./b44ExpLogTable 
+install_name_tool -add_rpath /Users/boud/dev/i/lib /Users/boud/dev/b/ext_openexr/ext_openexr-prefix/src/ext_openexr-build/IlmImf/./dwaLookups

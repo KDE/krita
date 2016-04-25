@@ -63,7 +63,8 @@ namespace {
 
     ActionInfoItem emptyActionInfo;  // Used as default return value
 
-
+    // Use Krita debug logging categories instead of KDE's default qDebug() for
+    // harmless empty strings and translations
     QString quietlyTranslate(const QString &s) {
         if (s.isEmpty()) {
             return s;
@@ -286,7 +287,7 @@ bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
 
     // Note: the fields in the .action documents marked for translation are determined by extractrc.
     QString icon      = getChildContent(actionXml, "icon");
-    QString text      = getChildContent(actionXml, "text");
+    QString text      = getChildContent_i18n("text");
     QString whatsthis = getChildContent_i18n("whatsThis");
     QString toolTip   = getChildContent_i18n("toolTip");
     QString statusTip = getChildContent_i18n("statusTip");

@@ -130,22 +130,14 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
 
     m_d->horizontalRuler = new TimelineRulerHeader(this);
 
-#if QT_VERSION < 0x050000
-    m_d->horizontalRuler->setResizeMode(QHeaderView::Fixed);
-#else
     m_d->horizontalRuler->setSectionResizeMode(QHeaderView::Fixed);
-#endif
 
     m_d->horizontalRuler->setDefaultSectionSize(18);
     this->setHorizontalHeader(m_d->horizontalRuler);
 
     m_d->layersHeader = new TimelineLayersHeader(this);
 
-#if QT_VERSION < 0x050000
-    m_d->layersHeader->setResizeMode(QHeaderView::Fixed);
-#else
     m_d->layersHeader->setSectionResizeMode(QHeaderView::Fixed);
-#endif
 
     m_d->layersHeader->setDefaultSectionSize(24);
     m_d->layersHeader->setMinimumWidth(60);

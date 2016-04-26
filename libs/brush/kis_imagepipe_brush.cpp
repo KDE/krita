@@ -106,6 +106,13 @@ protected:
         quint32 brushIndex = 0;
 
         if (!m_isInitialized) {
+            /**
+             * Reset all the indexes to the initial values and do the
+             * generation based on parameters.
+             */
+            for (int i = 0; i < m_parasite.dim; i++) {
+                m_parasite.index[i] = 0;
+            }
             updateBrushIndexes(info);
             m_isInitialized = true;
         }

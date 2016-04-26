@@ -202,6 +202,11 @@ QRect KisNodeView::visualRect(const QModelIndex &index) const
     return rc;
 }
 
+QRect KisNodeView::originalVisualRect(const QModelIndex &index) const
+{
+    return QTreeView::visualRect(index);
+}
+
 QModelIndex KisNodeView::indexAt(const QPoint &point) const
 {
     KisNodeViewColorScheme scm;

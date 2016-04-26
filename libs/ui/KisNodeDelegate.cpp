@@ -151,7 +151,7 @@ void KisNodeDelegate::drawBranch(QPainter *p, const QStyleOptionViewItem &option
 
     QPoint p2 = base + QPoint(scm.iconSize() - scm.decorationMargin()*2, scm.iconSize()*0.45);
     QPoint p3 =  base + QPoint(scm.iconSize() - scm.decorationMargin()*2, scm.iconSize());
-    QPoint p4 = base + QPoint(scm.iconSize()*2, scm.iconSize());
+    QPoint p4 = base + QPoint(scm.iconSize()*1.4, scm.iconSize());
     p->drawLine(p2, p3);
     p->drawLine(p3, p4);
 
@@ -209,7 +209,7 @@ void KisNodeDelegate::drawFrame(QPainter *p, const QStyleOptionViewItem &option,
     const QPoint base = option.rect.topLeft();
 
     QPoint p2 = base + QPoint(-scm.indentation() - 1, 0);
-    QPoint p3 = base + QPoint(-2 * scm.border() - 2 * scm.decorationMargin() - scm.decorationSize(), 0);
+    QPoint p3 = base + QPoint(2 * scm.decorationMargin() + scm.decorationSize(), 0);
     QPoint p4 = base + QPoint(-1, 0);
     QPoint p5(iconsRect(option,
                            index).left() - 1, base.y());
@@ -335,11 +335,16 @@ QRect KisNodeDelegate::textRect(const QStyleOptionViewItem &option, const QModel
         minbearing = option.fontMetrics.minLeftBearing() + option.fontMetrics.minRightBearing();
     }
 
+    const int decorationOffset =
+        2 * scm.border() +
+        2 * scm.decorationMargin() +
+        scm.decorationSize();
+
     const int width =
         iconsRect(option, index).left() - option.rect.x() -
-        scm.border() + minbearing;
+        scm.border() + minbearing - decorationOffset;
 
-    return QRect(option.rect.x() - minbearing,
+    return QRect(option.rect.x() - minbearing + decorationOffset,
                  option.rect.y() + scm.border(),
                  width,
                  scm.rowHeight() - scm.border());
@@ -500,6 +505,19 @@ QRect KisNodeDelegate::visibilityClickRect(const QStyleOptionViewItem &option, c
                  scm.rowHeight() - scm.border());
 }
 
+QRect KisNodeDelegate::decorationClickRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    Q_UNUSED(option);
+    Q_UNUSED(index);
+    KisNodeViewColorScheme scm;
+
+    QRect realVisualRect = d->view->originalVisualRect(index);
+
+    return QRect(realVisualRect.left(), scm.border() + realVisualRect.top(),
+                 2 * scm.decorationMargin() + scm.decorationSize(),
+                 scm.rowHeight() - scm.border());
+}
+
 void KisNodeDelegate::drawVisibilityIconHijack(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     /**
@@ -651,6 +669,10 @@ bool KisNodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, cons
         const bool visibilityClicked = visibilityRect.isValid() &&
             visibilityRect.contains(mouseEvent->pos());
 
+        const QRect decorationRect = decorationClickRect(option, index);
+        const bool decorationClicked = decorationRect.isValid() &&
+            decorationRect.contains(mouseEvent->pos());
+
         const bool leftButton = mouseEvent->buttons() & Qt::LeftButton;
 
         if (leftButton && iconsClicked) {
@@ -679,6 +701,13 @@ bool KisNodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, cons
             if (!clickedProperty) return false;
             d->toggleProperty(props, clickedProperty, mouseEvent->modifiers() == Qt::ControlModifier, index);
             return true;
+        } else if (leftButton && decorationClicked) {
+            bool isExpandable = model->hasChildren(index);
+            if (isExpandable) {
+                bool isExpanded = d->view->isExpanded(index);
+                d->view->setExpanded(index, !isExpanded);
+                return true;
+            }
         }
 
         if (mouseEvent->button() == Qt::LeftButton &&

@@ -138,11 +138,8 @@ int KisNodeViewColorScheme::indentation() const
 {
     return
         2 * thumbnailMargin() + thumbnailSize() +
-        border() +
-        2 * decorationMargin() + decorationSize() +
         border();
 }
-
 
 QRect KisNodeViewColorScheme::relThumbnailRect() const
 {
@@ -154,7 +151,7 @@ QRect KisNodeViewColorScheme::relThumbnailRect() const
 
 QRect KisNodeViewColorScheme::relDecorationRect() const
 {
-    return QRect(-border() - decorationMargin() - decorationSize(),
+    return QRect(border() + decorationMargin(),
                  border() + decorationMargin(),
                  decorationSize(),
                  decorationSize());

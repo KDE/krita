@@ -73,6 +73,7 @@ private:
     void drawText(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void drawIcons(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QRect visibilityClickRect(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    QRect decorationClickRect(const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void drawVisibilityIconHijack(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void drawDecoration(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void drawExpandButton(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;

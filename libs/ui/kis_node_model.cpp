@@ -466,10 +466,17 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
         return node->colorLabelIndex();
     }
     default:
-        if (role >= int(KisNodeModel::BeginThumbnailRole) && belongsToIsolatedGroup(node))
-            return node->createThumbnail(role - int(KisNodeModel::BeginThumbnailRole), role - int(KisNodeModel::BeginThumbnailRole));
-        else
+        if (role >= int(KisNodeModel::BeginThumbnailRole) && belongsToIsolatedGroup(node)) {
+
+            const int maxSize = role - int(KisNodeModel::BeginThumbnailRole);
+
+            QSize size = node->extent().size();
+            size.scale(maxSize, maxSize, Qt::KeepAspectRatio);
+
+            return node->createThumbnail(size.width(), size.height());
+        } else {
             return QVariant();
+        }
     }
 
     return QVariant();

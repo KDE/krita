@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Halt on errors
-#set -e
+set -e
 
 # Be verbose
 set -x
@@ -12,7 +12,7 @@ APP=krita
 
 cd $BUILDROOT
 
-VER=$(grep "#define KRITA_VERSION_STRING" /build/libs/version/kritaversion.h | cut -d '"' -f 2)
+VER=$(grep "#define KRITA_VERSION_STRING" $BUILDROOT/build/libs/version/kritaversion.h | cut -d '"' -f 2)
 cd $BUILDROOT/krita
 BRANCH=$( git branch | cut -d ' ' -f 2)
 REVISION=$(git rev-parse --short HEAD)
@@ -23,7 +23,6 @@ echo $VERSION
 
 PACKAGENAME=$APP"-"$VERSION"-x86"
 
-#rm -rf $BUILDROOT/out/* || true
 mkdir -p $BUILDROOT/out/$PACKAGENAME
 mkdir -p $BUILDROOT/out/$PACKAGENAME/bin
 mkdir -p $BUILDROOT/out/$PACKAGENAME/lib

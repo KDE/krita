@@ -297,6 +297,17 @@ void KisShortcutsEditor::printShortcuts() const
     d->printShortcuts();
 }
 
+void KisShortcutsEditor::searchUpdated(QString s)
+{
+    if (s.isEmpty()) {
+        // Reset the tree area
+        d->ui.list->collapseAll();
+        d->ui.list->expandToDepth(0);
+    } else {
+        d->ui.list->expandAll();
+    }
+}
+
 KisShortcutsEditor::ActionTypes KisShortcutsEditor::actionTypes() const
 {
     return d->actionTypes;

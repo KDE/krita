@@ -233,6 +233,11 @@ public Q_SLOTS:
      */
     void printShortcuts() const;
 
+    /**
+     * Expand or collapse the tree view when the search text changes
+     */
+    void searchUpdated(QString s);
+
 private:
     Q_PRIVATE_SLOT(d, void capturedShortcut(QVariant, const QModelIndex &))
 

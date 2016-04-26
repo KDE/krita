@@ -85,6 +85,9 @@ void KisShortcutsEditorPrivate::initGUI(KisShortcutsEditor::ActionTypes types,
     //hide the editor widget chen its item becomes hidden
     QObject::connect(ui.searchFilter->searchLine(), SIGNAL(hiddenChanged(QTreeWidgetItem*,bool)),
                      delegate, SLOT(hiddenBySearchLine(QTreeWidgetItem*,bool)));
+    //Expand items when searching
+    QObject::connect(ui.searchFilter->searchLine(), SIGNAL(searchUpdated(QString)),
+                     q, SLOT(searchUpdated(QString)));
 
     ui.searchFilter->setFocus();
 }

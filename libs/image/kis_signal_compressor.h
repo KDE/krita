@@ -34,6 +34,13 @@ class QTimer;
  * POSTPONE resets the timer after each call. Therefore if the calls are made
  * quickly enough, the timer will never be activated.
  *
+ * FIRST_ACTIVE_POSTPONE_NEXT emits the first signal and postpones all
+ * the other actions the other action like in POSTPONE. This mode is
+ * used e.g.  in move/remove layer functionality. If you remove a
+ * single layer, you'll see the result immediately. But if you want to
+ * remove multiple layers, you should wait until all the actions are
+ * finished.
+ *
  * FIRST_ACTIVE emits the timeout() event immediately and sets a timer of
  * duration \p delay. If the compressor is triggered during this time, it will
  * wait until the end of the delay period to fire the signal. Further events are
@@ -54,6 +61,7 @@ class KRITAIMAGE_EXPORT KisSignalCompressor : public QObject
 public:
     enum Mode {
         POSTPONE, /* Calling start() resets the timer to \p delay ms */
+        FIRST_ACTIVE_POSTPONE_NEXT, /* emits the first signal and postpones all the next ones */
         FIRST_ACTIVE, /* Emit timeout() signal immediately. Throttle further timeout() to rate of one per \p delay ms */
         FIRST_INACTIVE, /* Set a timer \p delay ms, emit timeout() when it elapses. Ignore all events meanwhile. */
         UNDEFINED /* KisSignalCompressor is created without an explicit mode */

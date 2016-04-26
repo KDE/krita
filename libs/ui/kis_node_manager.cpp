@@ -735,7 +735,7 @@ KisNodeJugglerCompressed* KisNodeManager::Private::lazyGetJuggler(const KUndo2Ma
         (nodeJuggler &&
          !nodeJuggler->canMergeAction(actionName))) {
 
-        nodeJuggler = new KisNodeJugglerCompressed(actionName, image, q, 1000);
+        nodeJuggler = new KisNodeJugglerCompressed(actionName, image, q, 750);
         nodeJuggler->setAutoDelete(true);
     }
 

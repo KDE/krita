@@ -53,6 +53,7 @@ void KisSignalCompressor::start()
     case POSTPONE:
         m_timer.start();
         break;
+    case FIRST_ACTIVE_POSTPONE_NEXT:
     case FIRST_ACTIVE:
         if (!m_timer.isActive()) {
             m_gotSignals = false;
@@ -60,6 +61,9 @@ void KisSignalCompressor::start()
             emit timeout();
         } else {
             m_gotSignals = true;
+            if (m_mode == FIRST_ACTIVE_POSTPONE_NEXT) {
+                m_timer.start();
+            }
         }
         break;
     case FIRST_INACTIVE:

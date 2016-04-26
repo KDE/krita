@@ -136,6 +136,12 @@ class BatchMoveUpdateData {
 
     QMutex m_mutex;
 
+    KisNodeJugglerCompressed *m_parentJuggler;
+
+public:
+    BatchMoveUpdateData(KisNodeJugglerCompressed *parentJuggler)
+        : m_parentJuggler(parentJuggler) {}
+
 private:
 
     static void addToHashLazy(MovedNodesHash *hash, MoveNodeStructSP moveStruct) {
@@ -168,6 +174,7 @@ public:
     void addInitialUpdate(MoveNodeStructSP moveStruct) {
         QMutexLocker l(&m_mutex);
         addToHashLazy(&m_movedNodesInitial, moveStruct);
+        emit m_parentJuggler->requestUpdateAsyncFromCommand();
     }
 
     void emitFinalUpdates(bool undo) {
@@ -605,13 +612,13 @@ private:
 
 struct KisNodeJugglerCompressed::Private
 {
-    Private(const KUndo2MagicString &_actionName, KisImageSP _image, KisNodeManager *_nodeManager, int _timeout)
+    Private(KisNodeJugglerCompressed *juggler, const KUndo2MagicString &_actionName, KisImageSP _image, KisNodeManager *_nodeManager, int _timeout)
         : actionName(_actionName),
           image(_image),
           nodeManager(_nodeManager),
-          compressor(_timeout, KisSignalCompressor::POSTPONE),
+          compressor(_timeout, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT),
           selfDestructionCompressor(3 * _timeout, KisSignalCompressor::POSTPONE),
-          updateData(new BatchMoveUpdateData),
+          updateData(new BatchMoveUpdateData(juggler)),
           autoDelete(false),
           isStarted(false)
     {}
@@ -631,7 +638,7 @@ struct KisNodeJugglerCompressed::Private
 };
 
 KisNodeJugglerCompressed::KisNodeJugglerCompressed(const KUndo2MagicString &actionName, KisImageSP image, KisNodeManager *nodeManager, int timeout)
-    : m_d(new Private(actionName, image, nodeManager, timeout))
+    : m_d(new Private(this, actionName, image, nodeManager, timeout))
 {
     connect(m_d->image, SIGNAL(sigStrokeCancellationRequested()), SLOT(slotEndStrokeRequested()));
     connect(m_d->image, SIGNAL(sigUndoDuringStrokeRequested()), SLOT(slotCancelStrokeRequested()));
@@ -646,6 +653,7 @@ KisNodeJugglerCompressed::KisNodeJugglerCompressed(const KUndo2MagicString &acti
                                     KisProcessingApplicator::NONE,
                                     emitSignals,
                                     actionName));
+    connect(this, SIGNAL(requestUpdateAsyncFromCommand()), SLOT(startTimers()));
     connect(&m_d->compressor, SIGNAL(timeout()), SLOT(slotUpdateTimeout()));
 
     m_d->applicator->applyCommand(
@@ -675,7 +683,6 @@ void KisNodeJugglerCompressed::lowerNode(const KisNodeList &nodes)
                             m_d->image,
                             nodes, activeNode, true));
 
-    startTimers();
 }
 
 void KisNodeJugglerCompressed::raiseNode(const KisNodeList &nodes)
@@ -686,7 +693,6 @@ void KisNodeJugglerCompressed::raiseNode(const KisNodeList &nodes)
         new LowerRaiseLayer(m_d->updateData,
                             m_d->image,
                             nodes, activeNode, false));
-    startTimers();
 }
 
 void KisNodeJugglerCompressed::removeNode(const KisNodeList &nodes)
@@ -697,8 +703,6 @@ void KisNodeJugglerCompressed::removeNode(const KisNodeList &nodes)
         new RemoveLayers(m_d->updateData,
                          m_d->image,
                          nodes, activeNode));
-
-    startTimers();
 }
 
 void KisNodeJugglerCompressed::duplicateNode(const KisNodeList &nodes)
@@ -712,8 +716,6 @@ void KisNodeJugglerCompressed::duplicateNode(const KisNodeList &nodes)
                             KisNodeSP(), KisNodeSP(),
                             activeNode,
                             DuplicateLayers::COPY));
-
-    startTimers();
 }
 
 void KisNodeJugglerCompressed::copyNode(const KisNodeList &nodes, KisNodeSP dstParent, KisNodeSP dstAbove)
@@ -727,8 +729,6 @@ void KisNodeJugglerCompressed::copyNode(const KisNodeList &nodes, KisNodeSP dstP
                             dstParent, dstAbove,
                             activeNode,
                             DuplicateLayers::COPY));
-
-    startTimers();
 }
 
 void KisNodeJugglerCompressed::moveNode(const KisNodeList &nodes, KisNodeSP dstParent, KisNodeSP dstAbove)
@@ -742,8 +742,6 @@ void KisNodeJugglerCompressed::moveNode(const KisNodeList &nodes, KisNodeSP dstP
                             dstParent, dstAbove,
                             activeNode,
                             DuplicateLayers::MOVE));
-
-    startTimers();
 }
 
 void KisNodeJugglerCompressed::addNode(const KisNodeList &nodes, KisNodeSP dstParent, KisNodeSP dstAbove)
@@ -757,8 +755,6 @@ void KisNodeJugglerCompressed::addNode(const KisNodeList &nodes, KisNodeSP dstPa
                             dstParent, dstAbove,
                             activeNode,
                             DuplicateLayers::ADD));
-
-    startTimers();
 }
 
 void KisNodeJugglerCompressed::moveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP above)
@@ -768,7 +764,6 @@ void KisNodeJugglerCompressed::moveNode(KisNodeSP node, KisNodeSP parent, KisNod
     MoveNodeStructSP moveStruct = toQShared(new MoveNodeStruct(m_d->image, node, parent, above));
 
     m_d->updateData->addInitialUpdate(moveStruct);
-    startTimers();
 }
 
 void KisNodeJugglerCompressed::startTimers()

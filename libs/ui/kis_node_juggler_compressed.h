@@ -55,13 +55,16 @@ public Q_SLOTS:
     void end();
 
 private Q_SLOTS:
+    void startTimers();
     void slotUpdateTimeout();
     void slotEndStrokeRequested();
     void slotCancelStrokeRequested();
     void slotImageAboutToBeDeleted();
 
+Q_SIGNALS:
+    void requestUpdateAsyncFromCommand();
+
 private:
-    void startTimers();
     void cleanup();
 
 private:

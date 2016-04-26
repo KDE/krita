@@ -177,7 +177,7 @@ void ShortcutEditWidget::setCustom(const QKeySequence &seq)
 
 void ShortcutEditWidget::setKeySequence(const QKeySequence &activeSeq)
 {
-    if (activeSeq.toString(QKeySequence::NativeText) == m_defaultLabel->text()) {
+    if (activeSeq.toString(QKeySequence::NativeText) == m_defaultKeySequence.toString(QKeySequence::NativeText)) {
         m_defaultRadio->setChecked(true);
         m_customEditor->clearKeySequence();
     } else {

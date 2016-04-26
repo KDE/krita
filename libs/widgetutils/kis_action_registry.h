@@ -62,23 +62,22 @@ public:
     /**
      * Get shortcut for an action
      */
-    QKeySequence getPreferredShortcut(const QString &name);
+    QList<QKeySequence> getPreferredShortcut(const QString &name);
 
     /**
      * Get shortcut for an action
      */
-    QKeySequence getDefaultShortcut(const QString &name);
+    QList<QKeySequence> getDefaultShortcut(const QString &name);
 
     /**
      * Get custom shortcut for an action
      */
-    QKeySequence getCustomShortcut(const QString &name);
-
+    QList<QKeySequence> getCustomShortcut(const QString &name);
 
     /**
      * Get category name
      */
-    QKeySequence getCategory(const QString &name);
+    QString getCategory(const QString &name);
 
     /**
      * @return value @p property for an action @p name.

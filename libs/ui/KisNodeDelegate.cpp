@@ -158,8 +158,8 @@ void KisNodeDelegate::drawBranch(QPainter *p, const QStyleOptionViewItem &option
 
 
      // draw parent lines (keep drawing until x position is less than 0
-     QPoint p5 = base - QPoint(scm.iconSize()*1.8, -scm.iconSize()*0.45);
-     QPoint p6 = base - QPoint(scm.iconSize()*1.8, -scm.iconSize());
+    QPoint p5 = p2 - QPoint(scm.indentation(), 0);
+    QPoint p6 = p3 - QPoint(scm.indentation(), 0);
 
      QPoint parentBase1 = p5;
      QPoint parentBase2 = p6;
@@ -168,11 +168,11 @@ void KisNodeDelegate::drawBranch(QPainter *p, const QStyleOptionViewItem &option
      color = KritaUtils::blendColors(color, bgColor, 0.9); // makes it a little lighter than L lines
      p->setPen(QPen(color, 0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
-     while (parentBase1.x() > 10) {
+     while (parentBase1.x() > scm.visibilityColumnWidth()) {
          p->drawLine(parentBase1, parentBase2);
 
-         parentBase1 = parentBase1 - QPoint(scm.iconSize()*2.7 - scm.decorationMargin(), 0);
-         parentBase2 = parentBase2 - QPoint(scm.iconSize()*2.7 - scm.decorationMargin(), 0);
+         parentBase1 = parentBase1 - QPoint(scm.indentation(), 0);
+         parentBase2 = parentBase2 - QPoint(scm.indentation(), 0);
      }
 
 

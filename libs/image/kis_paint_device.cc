@@ -223,6 +223,7 @@ public:
         KIS_ASSERT_RECOVER(parentCommand) { return -1; }
 
         DataSP data;
+        bool initialFrame = false;
 
         if (m_frames.isEmpty()) {
             /**
@@ -233,6 +234,7 @@ public:
             data = toQShared(new Data(m_data.data(), true));
             m_data->dataManager()->clear();
             m_data->cache()->invalidate();
+            initialFrame = true;
 
         } else if (copy) {
             DataSP srcData = m_frames[copySrc];
@@ -242,7 +244,7 @@ public:
             data = toQShared(new Data(srcData.data(), false));
         }
 
-        if (!copy) {
+        if (!initialFrame && !copy) {
             data->setX(offset.x());
             data->setY(offset.y());
         }

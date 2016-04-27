@@ -81,6 +81,10 @@ public:
     inline bool actionsSuppressed() const {
         return suppressAllActions || !cursorEntered;
     }
+
+    inline bool actionsSuppressedIgnoreFocus() const {
+        return suppressAllActions;
+    }
 };
 
 KisShortcutMatcher::KisShortcutMatcher()
@@ -360,7 +364,7 @@ bool KisShortcutMatcher::tryRunWheelShortcut(KisSingleActionShortcut::WheelActio
 template<typename T, typename U>
 bool KisShortcutMatcher::tryRunSingleActionShortcutImpl(T param, U *event, const QSet<Qt::Key> &keysState)
 {
-    if (m_d->actionsSuppressed()) {
+    if (m_d->actionsSuppressedIgnoreFocus()) {
         DEBUG_EVENT_ACTION("Event suppressed", event)
         return false;
     }

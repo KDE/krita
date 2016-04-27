@@ -31,7 +31,6 @@
 #include "kis_touch_shortcut.h"
 #include "kis_input_profile_manager.h"
 
-
 /**
  * This hungry class EventEater encapsulates event masking logic.
  *
@@ -147,8 +146,18 @@ KisInputManager::Private::Private(KisInputManager *qq)
 KisInputManager::Private::CanvasSwitcher::CanvasSwitcher(Private *_d, QObject *p)
     : QObject(p),
       d(_d),
-      eatOneMouseStroke(false)
+      eatOneMouseStroke(false),
+      focusSwitchThreshold(2000)
 {
+}
+
+void KisInputManager::Private::CanvasSwitcher::setupFocusThreshold(QObject* object)
+{
+    QWidget *widget = qobject_cast<QWidget*>(object);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(widget);
+
+    thresholdConnections.clear();
+    thresholdConnections.addConnection(&focusSwitchThreshold, SIGNAL(timeout()), widget, SLOT(setFocus()));
 }
 
 void KisInputManager::Private::CanvasSwitcher::addCanvas(KisCanvas2 *canvas)
@@ -159,6 +168,9 @@ void KisInputManager::Private::CanvasSwitcher::addCanvas(KisCanvas2 *canvas)
         canvasResolver.insert(canvasWidget, canvas);
         d->q->setupAsEventFilter(canvasWidget);
         canvasWidget->installEventFilter(this);
+
+        setupFocusThreshold(canvasWidget);
+        focusSwitchThreshold.setEnabled(false);
 
         d->canvas = canvas;
         d->toolProxy = dynamic_cast<KisToolProxy*>(canvas->toolProxy());
@@ -186,9 +198,11 @@ bool KisInputManager::Private::CanvasSwitcher::eventFilter(QObject* object, QEve
         switch (event->type()) {
         case QEvent::FocusIn: {
             QFocusEvent *fevent = static_cast<QFocusEvent*>(event);
-            eatOneMouseStroke = 2 * (fevent->reason() == Qt::MouseFocusReason);
-
             KisCanvas2 *canvas = canvasResolver.value(object);
+            if (canvas != d->canvas) {
+                eatOneMouseStroke = 2 * (fevent->reason() == Qt::MouseFocusReason);
+            }
+
             d->canvas = canvas;
             d->toolProxy = dynamic_cast<KisToolProxy*>(canvas->toolProxy());
 
@@ -197,11 +211,24 @@ bool KisInputManager::Private::CanvasSwitcher::eventFilter(QObject* object, QEve
             object->removeEventFilter(this);
             object->installEventFilter(this);
 
+            setupFocusThreshold(object);
+            focusSwitchThreshold.setEnabled(false);
+
             QEvent event(QEvent::Enter);
             d->q->eventFilter(object, &event);
             break;
         }
-
+        case QEvent::FocusOut: {
+            focusSwitchThreshold.setEnabled(true);
+            break;
+        }
+        case QEvent::Enter: {
+            break;
+        }
+        case QEvent::Leave: {
+            focusSwitchThreshold.stop();
+            break;
+        }
         case QEvent::Wheel: {
             QWidget *widget = static_cast<QWidget*>(object);
             widget->setFocus();
@@ -211,15 +238,22 @@ bool KisInputManager::Private::CanvasSwitcher::eventFilter(QObject* object, QEve
         case QEvent::MouseButtonRelease:
         case QEvent::TabletPress:
         case QEvent::TabletRelease:
+            focusSwitchThreshold.forceDone();
+
             if (eatOneMouseStroke) {
                 eatOneMouseStroke--;
                 return true;
             }
             break;
         case QEvent::MouseButtonDblClick:
+            focusSwitchThreshold.forceDone();
             if (eatOneMouseStroke) {
                 return true;
             }
+            break;
+        case QEvent::MouseMove:
+        case QEvent::TabletMove:
+            focusSwitchThreshold.start();
             break;
         default:
             break;

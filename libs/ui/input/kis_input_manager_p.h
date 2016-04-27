@@ -31,6 +31,9 @@
 #include "kis_tool_proxy.h"
 #include "kis_signal_compressor.h"
 #include "input/kis_tablet_debugger.h"
+#include "kis_timed_signal_threshold.h"
+#include "kis_signal_auto_connection.h"
+
 
 class KisToolInvocationAction;
 
@@ -109,9 +112,14 @@ public:
         bool eventFilter(QObject* object, QEvent* event );
 
     private:
+        void setupFocusThreshold(QObject *object);
+
+    private:
         KisInputManager::Private *d;
         QMap<QObject*, KisCanvas2*> canvasResolver;
         int eatOneMouseStroke;
+        KisTimedSignalThreshold focusSwitchThreshold;
+        KisSignalAutoConnectionsStore thresholdConnections;
     };
     CanvasSwitcher canvasSwitcher;
 
@@ -133,6 +141,5 @@ public:
     };
     EventEater eventEater;
 
-    bool focusOnEnter = true;
     bool containsPointer = true;
 };

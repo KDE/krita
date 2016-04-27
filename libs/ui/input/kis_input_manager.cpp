@@ -163,17 +163,8 @@ void KisInputManager::stopIgnoringEvents()
 
 void KisInputManager::slotFocusOnEnter(bool value)
 {
-    if (d->focusOnEnter == value) {
-        return;
-    }
-
-    d->focusOnEnter = value;
-
-    if (d->focusOnEnter && d->containsPointer) {
-        if (d->canvas) {
-            d->canvas->canvasWidget()->setFocus();
-        }
-    }
+    Q_UNUSED(value);
+    // not used anymore
 }
 
 #if defined (__clang__)
@@ -376,10 +367,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         d->containsPointer = true;
         //Make sure the input actions know we are active.
         KisAbstractInputAction::setInputManager(this);
-        //Ensure we have focus so we get key events.
-        if (d->focusOnEnter) {
-            d->canvas->canvasWidget()->setFocus();
-        }
+
         stop_ignore_cursor_events();
         touch_stop_block_press_events();
 

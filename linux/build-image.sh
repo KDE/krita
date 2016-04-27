@@ -200,7 +200,7 @@ cp /krita/krita/pics/app/64-apps-calligrakrita.png calligrakrita.png
 #
 cd /
 rm -f krita-3.0-l10-win-current.tar.gz || true
-wget http://www.valdyas.org/~boud/krita-3.0-l10n-win-current.tar.gz
+wget http://files.kde.org/krita/build/krita-3.0-l10n-win-current.tar.gz
 tar -xf krita-3.0-l10n-win-current.tar.gz
 cd /krita.appdir/usr/share
 tar -xf /krita-3.0-l10n-win-current.tar.gz

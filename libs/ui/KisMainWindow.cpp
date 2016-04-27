@@ -1194,6 +1194,11 @@ void KisMainWindow::saveWindowSettings()
                 dockGroup.writeEntry("Collapsed", i.value()->widget()->isHidden());
                 dockGroup.writeEntry("Locked", i.value()->property("Locked").toBool());
                 dockGroup.writeEntry("DockArea", (int) dockWidgetArea(i.value()));
+                dockGroup.writeEntry("xPosition", (int) i.value()->widget()->x());
+                dockGroup.writeEntry("yPosition", (int) i.value()->widget()->y());
+
+                dockGroup.writeEntry("width", (int) i.value()->widget()->width());
+                dockGroup.writeEntry("height", (int) i.value()->widget()->height());
             }
         }
 

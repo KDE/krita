@@ -24,7 +24,7 @@ echo $VERSION
 PACKAGENAME=$APP"-"$VERSION"-x64"
 
 mkdir -p $BUILDROOT/out/$PACKAGENAME
-mkdir -p $BUILDROOT/out/$PACKAGENAME/bin
+mkdir -p $BUILDROOT/out/$PACKAGENAME/bin/data
 mkdir -p $BUILDROOT/out/$PACKAGENAME/lib
 mkdir -p $BUILDROOT/out/$PACKAGENAME/share
 
@@ -62,16 +62,16 @@ cp -r $MXEROOT/share/color $BUILDROOT/out/$PACKAGENAME/share
 cp -r $MXEROOT/share/color-schemes $BUILDROOT/out/$PACKAGENAME/share
 cp -r $MXEROOT/share/kf5 $BUILDROOT/out/$PACKAGENAME/share
 cp -r $MXEROOT/share/krita $BUILDROOT/out/$PACKAGENAME/share
-cp -r $MXEROOT/share/locale $BUILDROOT/out/$PACKAGENAME/share
+cp -r $MXEROOT/share/locale $BUILDROOT/out/$PACKAGENAME/bin/data
 cp -r $MXEROOT/share/mime $BUILDROOT/out/$PACKAGENAME/share
 cp -r $MXEROOT/share/ocio $BUILDROOT/out/$PACKAGENAME/share
 
+cd $BUILDROOT
 rm krita-3.0-l10n-win-current.tar.gz || true
 rm -rf locale
 
-wget http://nonaynever.ru/pub/l10n-win/krita-3.0-l10n-win-current.tar.gz
+wget http://files.kde.org/krita/build/krita-3.0-l10n-win-current.tar.gz
 tar -xf krita-3.0-l10n-win-current.tar.gz
-mkdir $BUILDROOT/out/$PACKAGENAME/bin/data
 cp -r $BUILDROOT/locale $BUILDROOT/out/$PACKAGENAME/bin/data
 
 cd $BUILDROOT/out/

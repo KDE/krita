@@ -20,8 +20,13 @@ grep -r "CentOS release 6" /etc/redhat-release || exit 1
 # Also we do not want to download and build the dependencies every
 # time we build Krita on travis in the docker image. In order to
 # use newer dependencies, we re-build the docker image instead.
-unset DO_NOT_BUILD_KRITA
-NO_DOWNLOAD=1
+#unset DO_NOT_BUILD_KRITA
+#NO_DOWNLOAD=1
+
+# clean up
+rm -f krita-3.0-l10n-win-current.tar.gz
+rm -rf /out/*
+rm -rf /krita.appdir
 
 # qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment. That's
 # not always set correctly in CentOS 6.7
@@ -39,160 +44,26 @@ fi
 # if the library path doesn't point to our usr/lib, linking will be broken and we won't find all deps either
 export LD_LIBRARY_PATH=/usr/lib64/:/usr/lib:/krita.appdir/usr/lib
 
-git_pull_rebase_helper()
-{
-	git reset --hard HEAD
-        git pull
-}
-
-if [ -z "$NO_DOWNLOAD" ] ; then
-yum -y install epel-release 
-# we need to be up to date in order to install the xcb-keysyms dependency
-yum -y update
-# base dependencies and Qt5.
-yum -y install wget tar bzip2 git libtool which fuse fuse-devel libpng-devel automake libtool mesa-libEGL cppunit-devel cmake glibc-headers libstdc++-devel gcc-c++ freetype-devel fontconfig-devel libxml2-devel libstdc++-devel libXrender-devel patch xcb-util-keysyms-devel libXi-devel mesa-libGL-devel libxcb libxcb-devel xcb-util xcb-util-devel
-
-# Newer compiler than what comes with CentOS 6
-wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
-yum -y install devtoolset-2-gcc devtoolset-2-gcc-c++ devtoolset-2-binutils
-
-# Make sure we build from the /, parts of this script depends on that. We also need to run as root...
-cd  /
-
-# Build AppImageKit
-if [ ! -d AppImageKit ] ; then
-  git clone  --depth 1 https://github.com/probonopd/AppImageKit.git /AppImageKit
-fi
-
-cd /AppImageKit/
-git_pull_rebase_helper
-./build.sh
 cd /
-fi # [ -z "$NO_DOWNLOAD" ]
-
-
-# Workaround for:
-# /usr/lib/librevenge-stream-0.0.so: undefined reference to `std::__detail::_List_node_base::_M_hook(std::__detail::_List_node_base*)'
-# Use the new compiler
-. /opt/rh/devtoolset-2/enable
-
-
-# Workaround for: On CentOS 6, .pc files in /usr/lib/pkgconfig are not recognized
-# However, this is where .pc files get installed when bulding libraries... (FIXME)
-# I found this by comparing the output of librevenge's "make install" command
-# between Ubuntu and CentOS 6
-ln -sf /usr/share/pkgconfig /usr/lib/pkgconfig
-
-
-# A krita build layout looks like this:
-# krita/ -- the source directory
-# krita/3rdparty -- the cmake definitions for the dependencies
-# d -- downloads of the dependencies from files.kde.org
-# b -- build directory for the dependencies
-# krita_build -- build directory for krita itself
-# krita.appdir -- install directory for krita and the dependencies
-
-# Get Krita
-if [ ! -d /krita ] ; then
-	git clone  --depth 1 https://github.com/KDE/krita.git /krita
-fi
-
-cd /krita/
-git_pull_rebase_helper
-
-# Create the build dir for the 3rdparty deps
-if [ ! -d /b ] ; then
-    mkdir /b
-fi    
-if [ ! -d /d ] ; then
-    mkdir /d
-fi
 
 # Prepare the install location
 rm -rf /krita.appdir/ || true
-mkdir -p /krita.appdir/usr
+mkdir -p /krita.appdir/usr/bin
 
 # make sure lib and lib64 are the same thing
 mkdir -p /krita.appdir/usr/lib
 cd  /krita.appdir/usr
 ln -s lib lib64
 
-# start building the deps
-cd /b
-
-if [ -z "$NO_DOWNLOAD" ] ; then
-
-rm -rf /b/* || true
-
-cmake /krita/3rdparty \
-    -DCMAKE_INSTALL_PREFIX:PATH=/usr \
-    -DINSTALL_ROOT=/usr \
-    -DEXTERNALS_DOWNLOAD_DIR=/d
-    
-cmake --build . --config RelWithDebInfo --target ext_qt
-cmake --build . --config RelWithDebInfo --target ext_boost
-cmake --build . --config RelWithDebInfo --target ext_eigen3
-cmake --build . --config RelWithDebInfo --target ext_exiv2
-cmake --build . --config RelWithDebInfo --target ext_fftw3
-cmake --build . --config RelWithDebInfo --target ext_lcms2
-cmake --build . --config RelWithDebInfo --target ext_ocio
-cmake --build . --config RelWithDebInfo --target ext_openexr
-cmake --build . --config RelWithDebInfo --target ext_vc
-#cmake --build . --config RelWithDebInfo --target ext_png
-cmake --build . --config RelWithDebInfo --target ext_tiff
-cmake --build . --config RelWithDebInfo --target ext_jpeg
-cmake --build . --config RelWithDebInfo --target ext_libraw
-# XXX: this builds, but cmake never manages to find the library
-#cmake --build . --config RelWithDebInfo --target ext_openjpeg
-cmake --build . --config RelWithDebInfo --target ext_kcrash
-# XXX: this builds, but pulls in ext_png, which leads to big conflicts
-#cmake --build . --config RelWithDebInfo --target ext_poppler
-cmake --build . --config RelWithDebInfo --target ext_gsl
-
-fi # if [ -z "$NO_DOWNLOAD" ]
-    
-cd ..
-
-# If the environment variable DO_NOT_BUILD_KRITA is set to something,
-# then stop here. This is for docker hub which has a timeout that
-# prevents us from building in one go.
-# if [ ! -z "$DO_NOT_BUILD_KRITA" ] ; then
-#  exit 0
-# fi
-
-mkdir -p /krita_build
 cd /krita_build
-cmake ../krita \
-    -DCMAKE_INSTALL_PREFIX:PATH=/krita.appdir/usr \
-    -DDEFINE_NO_DEPRECATED=1 \
-    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-    -DPACKAGERS_BUILD=1 \
-    -DBUILD_TESTING=FALSE \
-    -DKDE4_BUILD_TESTS=FALSE \
-    -DHAVE_MEMORY_LEAK_TRACKER=FALSE
-    
-# Install into the AppDir
 make -j4 install
 
 cd /krita.appdir
 
 # FIXME: How to find out which subset of plugins is really needed? I used strace when running the binary
-mkdir -p ./usr/lib/qt5/plugins/
-
-if [ -e $(dirname /usr/li*/qt5/plugins/bearer) ] ; then
-  PLUGINS=$(dirname /usr/li*/qt5/plugins/bearer)
-else
-  PLUGINS=../../5.5/gc*/plugins/
-fi
-echo $PLUGINS # /usr/lib64/qt5/plugins if build system Qt is found
-cp -r $PLUGINS/bearer ./usr/lib/qt5/plugins/
-cp -r $PLUGINS/generic ./usr/lib/qt5/plugins/
-cp -r $PLUGINS/imageformats ./usr/lib/qt5/plugins/
-cp -r $PLUGINS/platforms ./usr/lib/qt5/plugins/
-cp -r $PLUGINS/iconengines ./usr/lib/qt5/plugins/
-cp -r $PLUGINS/platforminputcontexts ./usr/lib/qt5/plugins/
-cp -r $PLUGINS/platformthemes ./usr/lib/qt5/plugins/
-cp -r $PLUGINS/xcbglintegrations ./usr/lib/qt5/plugins/
+cp -r /usr/plugins ./usr/bin/
+# copy the Qt translation
+cp -r /usr/translations ./usr
 
 cp $(ldconfig -p | grep libsasl2.so.2 | cut -d ">" -f 2 | xargs) ./usr/lib/
 cp $(ldconfig -p | grep libGL.so.1 | cut -d ">" -f 2 | xargs) ./usr/lib/ # otherwise segfaults!?
@@ -212,7 +83,7 @@ ldd usr/bin/krita | grep "=>" | awk '{print $3}' | xargs -I '{}' cp -v '{}' ./us
 #ldd usr/lib64/krita/*.so  | grep "=>" | awk '{print $3}' | xargs -I '{}' cp -v '{}' ./usr/lib || true
 #ldd usr/lib64/plugins/imageformats/*.so  | grep "=>" | awk '{print $3}' | xargs -I '{}' cp -v '{}' ./usr/lib || true
 
-ldd usr/lib/qt5/plugins/platforms/libqxcb.so | grep "=>" | awk '{print $3}'  |  xargs -I '{}' cp -v '{}' ./usr/lib || true
+ldd usr/bin/plugins/platforms/libqxcb.so | grep "=>" | awk '{print $3}'  |  xargs -I '{}' cp -v '{}' ./usr/lib || true
 
 # Copy in the indirect dependencies
 FILES=$(find . -type f -executable)
@@ -275,7 +146,7 @@ rm -f usr/lib/libwind.so.0 || true
 # Remove these libraries, we need to use the system versions; this means 11.04 is not supported (12.04 is our baseline)
 rm -f usr/lib/libGL.so.* || true
 rm -f usr/lib/libdrm.so.* || true
-
+rm -f usr/lib/libX11.so.* || true
 #rm -f usr/lib/libz.so.1 || true
 
 # These seem to be available on most systems but not Ubuntu 11.04
@@ -309,7 +180,7 @@ cd usr/ ; find . -type f -exec sed -i -e 's|/usr|././|g' {} \; ; cd ..
 
 # We do not bundle this, so let's not search that inside the AppImage. 
 # Fixes "Qt: Failed to create XKB context!" and lets us enter text
-sed -i -e 's|././/share/X11/|/usr/share/X11/|g' ./usr/lib/qt5/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so
+sed -i -e 's|././/share/X11/|/usr/share/X11/|g' ./usr/bin/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so
 sed -i -e 's|././/share/X11/|/usr/share/X11/|g' ./usr/lib/libQt5XcbQpa.so.5
 
 # Workaround for:
@@ -328,9 +199,10 @@ cp /krita/krita/pics/app/64-apps-calligrakrita.png calligrakrita.png
 # Fetch and install the translations
 #
 cd /
-wget http://nonaynever.ru/pub/l10n-win/krita-3.0-l10n-win-current.tar.gz
+rm -f krita-3.0-l10-win-current.tar.gz || true
+wget http://www.valdyas.org/~boud/krita-3.0-l10n-win-current.tar.gz
 tar -xf krita-3.0-l10n-win-current.tar.gz
-cd /krita/appdir/usr/share
+cd /krita.appdir/usr/share
 tar -xf /krita-3.0-l10n-win-current.tar.gz
 
 # replace krita with the lib-checking startup script.
@@ -340,7 +212,7 @@ tar -xf /krita-3.0-l10n-win-current.tar.gz
 #chmod a+rx krita
 cd / 
 
-APP=Krita
+APP=krita
 
 VER=$(grep "#define KRITA_VERSION_STRING" krita_build/libs/version/kritaversion.h | cut -d '"' -f 2)
 cd krita
@@ -352,10 +224,10 @@ VERSION="$(sed s/\ /-/g <<<$VERSION)"
 echo $VERSION
 
 if [[ "$ARCH" = "x86_64" ]] ; then
-	APPIMAGE=$APP"-"$VERSION"-x86_64.AppImage"
+	APPIMAGE=$APP"-"$VERSION"-x86_64.appimage"
 fi
 if [[ "$ARCH" = "i686" ]] ; then
-	APPIMAGE=$APP"-"$VERSION"-i386.AppImage"
+	APPIMAGE=$APP"-"$VERSION"-i386.appimage"
 fi
 echo $APPIMAGE
 
@@ -366,5 +238,7 @@ AppImageKit/AppImageAssistant.AppDir/package /krita.appdir/ /out/$APPIMAGE
 
 chmod a+rwx /out/$APPIMAGE # So that we can edit the AppImage outside of the Docker container
 
-# Test the resulting AppImage on my local system
-# sudo /tmp/*/union/AppImageKit/AppImageAssistant.AppDir/testappimage /isodevice/boot/iso/Fedora-Live-Workstation-x86_64-22-3.iso /tmp/*/union/Scribus.AppDir/
+cd /krita.appdir
+mv AppRun krita
+cd /
+mv krita.appdir $APP"-"$VERSION"-x86_64

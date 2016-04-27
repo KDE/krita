@@ -177,7 +177,9 @@ inline QPixmap KisPerChannelConfigWidget::getHistogram()
     pix.fill(QColor(appPalette.color(QPalette::Base)));
 
     QPainter p(&pix);
-    p.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
+    p.setPen(QColor(appPalette.color(QPalette::Text)));
+    p.save();
+    p.setOpacity(0.2);
 
     const VirtualChannelInfo &info = m_virtualChannels[m_activeVChannel];
 
@@ -200,6 +202,9 @@ inline QPixmap KisPerChannelConfigWidget::getHistogram()
             }
         }
     }
+
+    p.restore();
+
     return pix;
 }
 

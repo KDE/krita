@@ -307,11 +307,10 @@ void KisColorSelector::mouseEvent(QMouseEvent *e)
         m_grabbingComponent->mouseEvent(e->x(), e->y());
 
         KoColor color = m_mainComponent->currentColor();
-        m_currentRealColor = color;
-        updateColorPreview(color);
-
         Acs::ColorRole role = Acs::buttonsToRole(e->button(), e->buttons());
-        updateColor(color, role, false);
+        m_currentRealColor = color;
+
+        requestUpdateColorAndPreview(color, role);
     }
 }
 

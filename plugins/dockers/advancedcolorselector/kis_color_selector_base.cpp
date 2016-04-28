@@ -109,6 +109,10 @@ KisColorSelectorBase::KisColorSelectorBase(QWidget *parent) :
     m_hideTimer->setInterval(0);
     m_hideTimer->setSingleShot(true);
     connect(m_hideTimer, SIGNAL(timeout()), this, SLOT(hidePopup()));
+
+    using namespace std::placeholders; // For _1 placeholder
+    auto function = std::bind(&KisColorSelectorBase::slotUpdateColorAndPreview, this, _1);
+    m_updateColorCompressor.reset(new ColorCompressorType(20 /* ms */, function));
 }
 
 KisColorSelectorBase::~KisColorSelectorBase()
@@ -329,6 +333,17 @@ void KisColorSelectorBase::updateColor(const KoColor &color, Acs::ColorRole role
     if (needsExplicitColorReset) {
         setColor(color);
     }
+}
+
+void KisColorSelectorBase::requestUpdateColorAndPreview(const KoColor &color, Acs::ColorRole role)
+{
+    m_updateColorCompressor->start(qMakePair(color, role));
+}
+
+void KisColorSelectorBase::slotUpdateColorAndPreview(QPair<KoColor, Acs::ColorRole> color)
+{
+    updateColorPreview(color.first);
+    updateColor(color.first, color.second, false);
 }
 
 void KisColorSelectorBase::setColor(const KoColor& color)

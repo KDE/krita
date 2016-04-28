@@ -23,6 +23,8 @@
 #include <QPointer>
 #include <kis_canvas2.h>
 #include "kis_acs_types.h"
+#include "kis_signal_compressor_with_param.h"
+
 
 class KoColor;
 class QTimer;
@@ -80,6 +82,7 @@ protected:
     void setHidingTime(int time);
     bool isPopup() const { return m_isPopup; }
     void mouseMoveEvent(QMouseEvent *event);
+    void requestUpdateColorAndPreview(const KoColor &color, Acs::ColorRole role);
 
 private:
     void commitColor(const KoColor& koColor, Acs::ColorRole role);
@@ -90,6 +93,11 @@ protected Q_SLOTS:
 
     /// if you overwrite this, keep in mind, that you should set the colour only, if m_colorUpdateAllowed is true
     virtual void canvasResourceChanged(int key, const QVariant& v);
+
+public Q_SLOTS:
+    // This is a private interface for signal compressor, don't use it.
+    // Use requestUpdateColorAndPreview() instead
+    void slotUpdateColorAndPreview(QPair<KoColor, Acs::ColorRole> color);
 
 private:
     void lazyCreatePopup();
@@ -109,6 +117,9 @@ private:
     bool m_isPopup; //this instance is a popup
     bool m_hideOnMouseClick;
     KisColorPreviewPopup* m_colorPreviewPopup;
+
+    typedef KisSignalCompressorWithParam<QPair<KoColor, Acs::ColorRole>> ColorCompressorType;
+    QScopedPointer<ColorCompressorType> m_updateColorCompressor;
 };
 
 #endif

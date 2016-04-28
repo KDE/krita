@@ -30,8 +30,6 @@
 #include <QClipboard>
 #include <QDesktopWidget>
 #include <QFile>
-#include <QGraphicsPixmapItem>
-#include <QGraphicsScene>
 
 #include <kis_debug.h>
 

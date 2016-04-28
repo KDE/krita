@@ -29,8 +29,6 @@
 #include <QClipboard>
 #include <QDesktopWidget>
 #include <QFile>
-#include <QGraphicsPixmapItem>
-#include <QGraphicsScene>
 #include <QSpacerItem>
 
 #include <QMessageBox>

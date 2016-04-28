@@ -52,9 +52,7 @@
 #include <QKeySequence>
 
 #include <QDialog>
-#include <QGraphicsScene>
 #include <QApplication>
-#include <QGraphicsProxyWidget>
 #include <QDomDocument>
 #include <QDomElement>
 #include <QGlobalStatic>
@@ -94,7 +92,6 @@ public:
 
     ~Private()
     {
-        delete canvasItem;
     }
 
     KisPart *part;
@@ -103,7 +100,6 @@ public:
     QList<QPointer<KisMainWindow> > mainWindows;
     QList<QPointer<KisDocument> > documents;
 
-    QGraphicsItem *canvasItem{0};
     KActionCollection *actionCollection{0};
 
     KisIdleWatcher idleWatcher;
@@ -313,24 +309,6 @@ int KisPart::viewCount(KisDocument *doc) const
     }
 }
 
-QGraphicsItem *KisPart::canvasItem(KisDocument *document, bool create)
-{
-    if (create && !d->canvasItem) {
-        d->canvasItem = createCanvasItem(document);
-    }
-    return d->canvasItem;
-}
-
-QGraphicsItem *KisPart::createCanvasItem(KisDocument *document)
-{
-    if (!document) return 0;
-
-    KisView *view = createView(document, 0, 0, 0);
-    QGraphicsProxyWidget *proxy = new QGraphicsProxyWidget();
-    QWidget *canvasController = view->findChild<KoCanvasControllerWidget*>();
-    proxy->setWidget(canvasController);
-    return proxy;
-}
 
 void KisPart::removeMainWindow(KisMainWindow *mainWindow)
 {

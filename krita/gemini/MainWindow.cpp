@@ -28,7 +28,6 @@
 #include <QDeclarativeView>
 #include <QDeclarativeContext>
 #include <QDeclarativeEngine>
-#include <QGraphicsObject>
 #include <QDir>
 #include <QFile>
 #include <QToolButton>

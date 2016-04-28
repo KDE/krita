@@ -21,7 +21,6 @@
 #include <QQuickItem>
 #include <QEvent>
 #include <QCoreApplication>
-#include <QGraphicsSceneMouseEvent>
 #include <QTouchEvent>
 
 struct TrackedItem {

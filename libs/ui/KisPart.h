@@ -37,7 +37,6 @@ namespace KIO {
 
 class KisDocument;
 class KisView;
-class QGraphicsItem;
 class KisDocument;
 class KisIdleWatcher;
 class KisAnimationCachePopulator;
@@ -231,25 +230,6 @@ public:
      * @return number of views this document is displayed in
      */
     int viewCount(KisDocument *doc) const;
-
-    /**
-     * @return a QGraphicsItem canvas displaying this document. There is only one QGraphicsItem canvas that can
-     * be shown by many QGraphicsView subclasses (those should reimplement KoCanvasController
-     * as well).
-     *
-     * @param create if true, a new canvas item is created if there wasn't one.
-     */
-    QGraphicsItem *canvasItem(KisDocument *document, bool create = true);
-
-
-protected:
-
-    /**
-     * Override this to create a QGraphicsItem that does not rely
-     * on proxying a KoCanvasController.
-     */
-    QGraphicsItem *createCanvasItem(KisDocument *document);
-
 
 private:
 

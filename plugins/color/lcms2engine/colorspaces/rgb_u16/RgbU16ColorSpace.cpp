@@ -25,6 +25,7 @@
 
 #include "compositeops/KoCompositeOps.h"
 #include "compositeops/RgbCompositeOps.h"
+#include "kis_dom_utils.h"
 
 RgbU16ColorSpace::RgbU16ColorSpace(const QString &name, KoColorProfile *p) :
     LcmsColorSpace<KoBgrU16Traits>(colorSpaceId(), name, TYPE_BGRA_16, cmsSigRgbData, p)
@@ -70,9 +71,9 @@ void RgbU16ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomEl
 void RgbU16ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
     KoBgrU16Traits::Pixel *p = reinterpret_cast<KoBgrU16Traits::Pixel *>(pixel);
-    p->red = KoColorSpaceMaths< qreal, KoBgrU16Traits::channels_type >::scaleToA(elt.attribute("r").toDouble());
-    p->green = KoColorSpaceMaths< qreal, KoBgrU16Traits::channels_type >::scaleToA(elt.attribute("g").toDouble());
-    p->blue = KoColorSpaceMaths< qreal, KoBgrU16Traits::channels_type >::scaleToA(elt.attribute("b").toDouble());
+    p->red = KoColorSpaceMaths< qreal, KoBgrU16Traits::channels_type >::scaleToA(KisDomUtils::Private::stringToDouble(elt.attribute("r")));
+    p->green = KoColorSpaceMaths< qreal, KoBgrU16Traits::channels_type >::scaleToA(KisDomUtils::Private::stringToDouble(elt.attribute("g")));
+    p->blue = KoColorSpaceMaths< qreal, KoBgrU16Traits::channels_type >::scaleToA(KisDomUtils::Private::stringToDouble(elt.attribute("b")));
     p->alpha = KoColorSpaceMathsTraits<quint16>::max;
 }
 

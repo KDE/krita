@@ -94,7 +94,7 @@ protected Q_SLOTS:
     /// if you overwrite this, keep in mind, that you should set the colour only, if m_colorUpdateAllowed is true
     virtual void canvasResourceChanged(int key, const QVariant& v);
 
-public Q_SLOTS:
+public:
     // This is a private interface for signal compressor, don't use it.
     // Use requestUpdateColorAndPreview() instead
     void slotUpdateColorAndPreview(QPair<KoColor, Acs::ColorRole> color);

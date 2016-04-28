@@ -46,12 +46,16 @@ KisColorSelector::KisColorSelector(QWidget* parent, KisColor::Type type):
     m_inverseSaturation(false),
     m_relativeLight(false),
     m_light(0.5f),
-    m_selectedColorIsFgColor(true),
+    m_selectedColorRole(Acs::Foreground),
     m_clickedRing(-1)
 {
     recalculateRings(9, 12);
     recalculateAreas(9);
     selectColor(KisColor(Qt::red, KisColor::HSY));
+
+    using namespace std::placeholders; // For _1 placeholder
+    auto function = std::bind(&KisColorSelector::slotUpdateColorAndPreview, this, _1);
+    m_updateColorCompressor.reset(new ColorCompressorType(20 /* ms */, function));
 }
 
 void KisColorSelector::setColorSpace(KisColor::Type type)
@@ -317,18 +321,23 @@ void KisColorSelector::createRing(ColorRing& ring, quint8 numPieces, qreal inner
     }
 }
 
-void KisColorSelector::setSelectedColor(const KisColor& color, bool selectAsFgColor, bool emitSignal)
+void KisColorSelector::requestUpdateColorAndPreview(const KisColor &color, Acs::ColorRole role)
 {
-    if (selectAsFgColor) { m_fgColor = color; }
-    else                 { m_bgColor = color; }
-    
-    m_selectedColor          = color;
-    m_selectedColorIsFgColor = selectAsFgColor;
-    
-    if (emitSignal) {
-        if (selectAsFgColor) { emit sigFgColorChanged(m_selectedColor); }
-        else                 { emit sigBgColorChanged(m_selectedColor); }
-    }
+    m_updateColorCompressor->start(qMakePair(color, role));
+}
+
+void KisColorSelector::slotUpdateColorAndPreview(QPair<KisColor, Acs::ColorRole> color)
+{
+    const bool selectAsFgColor = color.second == Acs::Foreground;
+
+    if (selectAsFgColor) { m_fgColor = color.first; }
+    else                 { m_bgColor = color.first; }
+
+    m_selectedColor          = color.first;
+    m_selectedColorRole = color.second;
+
+    if (selectAsFgColor) { emit sigFgColorChanged(m_selectedColor); }
+    else                 { emit sigBgColorChanged(m_selectedColor); }
 }
 
 void KisColorSelector::drawRing(QPainter& painter, KisColorSelector::ColorRing& ring, const QRect& rect)
@@ -547,7 +556,7 @@ void KisColorSelector::mousePressEvent(QMouseEvent* event)
     if (clickedLightPiece >= 0) {
         setLight(getLight(event->posF()), m_relativeLight);
         m_selectedLightPiece = clickedLightPiece;
-        setSelectedColor(m_selectedColor, !(m_pressedButtons & Qt::RightButton), true);
+        requestUpdateColorAndPreview(m_selectedColor, Acs::buttonsToRole(Qt::NoButton, m_pressedButtons));
         m_mouseMoved   = true;
     }
     else if (m_clickedRing >= 0) {
@@ -560,7 +569,7 @@ void KisColorSelector::mousePressEvent(QMouseEvent* event)
             m_selectedColor.setH(angle.scaled(0.0f, 1.0f));
             m_selectedColor.setS(getSaturation(m_clickedRing));
             m_selectedColor.setX(getLight(m_light, m_selectedColor.getH(), m_relativeLight));
-            setSelectedColor(m_selectedColor, !(m_pressedButtons & Qt::RightButton), true);
+            requestUpdateColorAndPreview(m_selectedColor, Acs::buttonsToRole(Qt::NoButton, m_pressedButtons));
             m_selectedRing = m_clickedRing;
             m_mouseMoved   = true;
             update();
@@ -576,7 +585,7 @@ void KisColorSelector::mouseMoveEvent(QMouseEvent* event)
     if (clickedLightPiece >= 0) {
         setLight(getLight(event->posF()), m_relativeLight);
         m_selectedLightPiece = clickedLightPiece;
-        setSelectedColor(m_selectedColor, m_selectedColorIsFgColor, true);
+        requestUpdateColorAndPreview(m_selectedColor, m_selectedColorRole);
     }
     
     if (m_clickedRing < 0)
@@ -604,7 +613,7 @@ void KisColorSelector::mouseMoveEvent(QMouseEvent* event)
                 color.setX(getLight(m_light, color.getH(), m_relativeLight));
                 
                 m_selectedPiece = getHueIndex(angle, m_colorRings[m_clickedRing].getShift());
-                setSelectedColor(color, m_selectedColorIsFgColor, true);
+                requestUpdateColorAndPreview(color, m_selectedColorRole);
             }
             
             m_mouseMoved = true;
@@ -614,7 +623,7 @@ void KisColorSelector::mouseMoveEvent(QMouseEvent* event)
         Radian angle = std::atan2(dragPos.x(), dragPos.y()) - RAD_90;
         m_selectedColor.setH(angle.scaled(0.0f, 1.0f));
         m_selectedColor.setX(getLight(m_light, m_selectedColor.getH(), m_relativeLight));
-        setSelectedColor(m_selectedColor, m_selectedColorIsFgColor, true);
+        requestUpdateColorAndPreview(m_selectedColor, m_selectedColorRole);
     }
     
     update();
@@ -636,10 +645,10 @@ void KisColorSelector::mouseReleaseEvent(QMouseEvent* /*event*/)
         m_selectedColor.setS(getSaturation(m_selectedRing));
         m_selectedColor.setX(getLight(m_light, m_selectedColor.getH(), m_relativeLight));
         
-        setSelectedColor(m_selectedColor, !(m_pressedButtons & Qt::RightButton));
+        requestUpdateColorAndPreview(m_selectedColor, Acs::buttonsToRole(Qt::NoButton, m_pressedButtons));
     }
     else if (m_mouseMoved)
-        setSelectedColor(m_selectedColor, m_selectedColorIsFgColor);
+        requestUpdateColorAndPreview(m_selectedColor, m_selectedColorRole);
     
     m_clickedRing = -1;
     update();

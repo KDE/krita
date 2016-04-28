@@ -26,6 +26,8 @@
 
 #include "kis_color.h"
 #include "kis_radian.h"
+#include "kis_acs_types.h"
+#include "kis_signal_compressor_with_param.h"
 
 class QPainter;
 class QPainter;
@@ -84,7 +86,7 @@ public:
     qreal          getLight            () const { return m_light;             }
     bool           isSaturationInverted() const { return m_inverseSaturation; }
     bool           islightRelative     () const { return m_relativeLight;     }
-    
+
 Q_SIGNALS:
     void sigFgColorChanged(const KisColor& color);
     void sigBgColorChanged(const KisColor& color);
@@ -95,16 +97,17 @@ private:
     virtual void mouseReleaseEvent(QMouseEvent* event);
     virtual void resizeEvent(QResizeEvent* event);
     virtual void paintEvent(QPaintEvent* event);
-    
+
+    void requestUpdateColorAndPreview(const KisColor &color, Acs::ColorRole role);
+
     void recalculateAreas(quint8 numLightPieces);
     void recalculateRings(quint8 numRings, quint8 numPieces);
     void createRing(ColorRing& wheel, quint8 numPieces, qreal innerRadius, qreal outerRadius);
-    
+
     void drawRing(QPainter& painter, ColorRing& wheel, const QRect& rect);
     void drawOutline(QPainter& painter, const QRect& rect);
     void drawLightStrip(QPainter& painter, const QRect& rect);
-    void setSelectedColor(const KisColor& color, bool selectAsFgColor, bool emitSignal=true);
-    
+
     qint8 getHueIndex(Radian hue, Radian shift=0.0f) const;
     qreal getHue(int hueIdx, Radian shift=0.0f) const;
     qint8 getLightIndex(const QPointF& pt) const;
@@ -116,7 +119,12 @@ private:
     qreal getSaturation(int saturationIdx) const;
     
     QPointF mapCoord(const QPointF& pt, const QRectF& rect) const;
-    
+
+public:
+    // This is a private interface for signal compressor, don't use it.
+    // Use requestUpdateColorAndPreview() instead
+    void slotUpdateColorAndPreview(QPair<KisColor, Acs::ColorRole> color);
+
 private:
     KisColor::Type     m_colorSpace;
     quint8             m_numPieces;
@@ -134,11 +142,14 @@ private:
     QRect              m_renderArea;
     QRect              m_lightStripArea;
     bool               m_mouseMoved;
-    bool               m_selectedColorIsFgColor;
+    Acs::ColorRole     m_selectedColorRole;
     QPointF            m_clickPos;
     qint8              m_clickedRing;
     QVector<ColorRing> m_colorRings;
     Qt::MouseButtons   m_pressedButtons;
+
+    typedef KisSignalCompressorWithParam<QPair<KisColor, Acs::ColorRole>> ColorCompressorType;
+    QScopedPointer<ColorCompressorType> m_updateColorCompressor;
 };
 
 #endif // H_KIS_COLOR_SELECTOR_H

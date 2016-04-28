@@ -380,6 +380,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
         if (showmainWindow) {
             QTimer::singleShot(1, mainWindow, SLOT(show()));
+            QTimer::singleShot(1, mainWindow, SLOT(initializeGeometry()));
         }
     }
     short int numberOfOpenDocuments = 0; // number of documents open

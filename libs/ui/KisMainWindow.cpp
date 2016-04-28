@@ -327,8 +327,6 @@ KisMainWindow::KisMainWindow()
 
     actionCollection()->addAssociatedWidget(this);
 
-    QMetaObject::invokeMethod(this, "initializeGeometry", Qt::QueuedConnection);
-
     KoToolBoxFactory toolBoxFactory;
     QDockWidget *toolbox = createDockWidget(&toolBoxFactory);
     toolbox->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetClosable);

@@ -21,7 +21,7 @@ set(kritagemini_SRCS
 
 
 if (WIN32)
-    set(kritagemini_SRCS ${kritagemini_SRCS} KritaGeminiWin.xmlgui)
+    set(kritagemini_SRCS ${kritagemini_SRCS} KritaGeminiWin.rc)
 else ()
     ecm_add_app_icon(kritagemini_SRCS ICONS kritagemini.png)
 endif ()

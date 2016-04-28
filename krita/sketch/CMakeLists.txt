@@ -107,7 +107,7 @@ ${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_color_selector_combo_box.cpp
 
 
 if (WIN32)
-    set(kritasketch_SRCS ${kritasketch_SRCS} KritaSketchWin.xmlgui)
+    set(kritasketch_SRCS ${kritasketch_SRCS} KritaSketchWin.rc)
 else ()
     file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/icon/*-apps-kritasketch.png")
     ecm_add_app_icon(kritasketch_SRCS ICONS ${ICONS_SRCS})

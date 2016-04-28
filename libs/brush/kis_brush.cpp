@@ -628,9 +628,7 @@ QPainterPath KisBrush::outline() const
 
 void KisBrush::lodLimitations(KisPaintopLodLimitations *l) const
 {
-    if (autoSpacingActive()) {
-        l->limitations << KoID("auto-spacing", i18nc("PaintOp instant preview limitation", "Auto Spacing"));
-    } else if (spacing() > 0.5) {
+    if (spacing() > 0.5) {
         l->limitations << KoID("huge-spacing", i18nc("PaintOp instant preview limitation", "Spacing > 0.5, consider disabling Instant Preview"));
     }
 }

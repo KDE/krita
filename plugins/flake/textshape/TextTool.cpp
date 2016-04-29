@@ -2472,7 +2472,7 @@ void TextTool::setFontFamily(const QString &font)
 
 void TextTool::setFontSize(qreal size)
 {
-    if (!m_allowActions || !m_textEditor.data()) {
+    if (!m_allowActions || !m_textEditor.data() || m_textEditor.isNull()) {
         return;
     }
     m_textEditor.data()->setFontSize(size);

@@ -18,6 +18,8 @@ add_subdirectory( layersplit )
 # Allow to skip building GMIC plugin
 option(WITH_GMIC "Build the G'Mic plugin" ON)
 if(WITH_GMIC)
+# Only build gmic with gcc; msvc is broken, and now dtschump tells is that on OSX
+# gcc should be used as well because clang is broken.
 if (CMAKE_COMPILER_IS_GNUCC AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.8.3)
     add_subdirectory( gmic )
 endif()

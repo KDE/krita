@@ -166,6 +166,50 @@ inline int expandRight(int x0, int x1, int maxExpand)
     return qMin(x0 + maxExpand, qMax(x0, x1));
 }
 
+inline QPoint getPointFromEvent(QEvent *event)
+{
+    QPoint result;
+
+    if (event->type() == QEvent::MouseMove ||
+        event->type() == QEvent::MouseButtonPress ||
+        event->type() == QEvent::MouseButtonRelease) {
+
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+        result = mouseEvent->pos();
+
+    } else if (event->type() == QEvent::TabletMove ||
+               event->type() == QEvent::TabletPress ||
+               event->type() == QEvent::TabletRelease) {
+
+        QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
+        result = tabletEvent->pos();
+    }
+
+    return result;
+}
+
+inline Qt::MouseButton getButtonFromEvent(QEvent *event)
+{
+    Qt::MouseButton button = Qt::NoButton;
+
+    if (event->type() == QEvent::MouseMove ||
+        event->type() == QEvent::MouseButtonPress ||
+        event->type() == QEvent::MouseButtonRelease) {
+
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+        button = mouseEvent->button();
+
+    } else if (event->type() == QEvent::TabletMove ||
+               event->type() == QEvent::TabletPress ||
+               event->type() == QEvent::TabletRelease) {
+
+        QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
+        button = tabletEvent->button();
+    }
+
+    return button;
+}
+
 bool KisInfinityManager::eventFilter(QObject *obj, QEvent *event)
 {
     /**
@@ -183,10 +227,11 @@ bool KisInfinityManager::eventFilter(QObject *obj, QEvent *event)
     switch (event->type()) {
     case QEvent::Enter:
     case QEvent::Leave:
-    case QEvent::MouseMove: {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+    case QEvent::MouseMove:
+    case QEvent::TabletMove: {
+        QPoint pos = getPointFromEvent(event);
 
-        if (m_decorationPath.contains(mouseEvent->pos())) {
+        if (m_decorationPath.contains(pos)) {
             if (!m_cursorSwitched) {
                 m_oldCursor = m_canvas->canvasWidget()->cursor();
                 m_cursorSwitched = true;
@@ -199,22 +244,24 @@ bool KisInfinityManager::eventFilter(QObject *obj, QEvent *event)
         }
         break;
     }
-    case QEvent::MouseButtonPress: {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-        retval = mouseEvent->button() == Qt::LeftButton && m_cursorSwitched;
+    case QEvent::MouseButtonPress:
+    case QEvent::TabletPress: {
+        Qt::MouseButton button = getButtonFromEvent(event);
+        retval = button == Qt::LeftButton && m_cursorSwitched;
 
-        if (mouseEvent->button() == Qt::RightButton) {
+        if (button == Qt::RightButton) {
             imagePositionChanged();
         }
 
         break;
     }
-    case QEvent::MouseButtonRelease: {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-        retval = mouseEvent->button() == Qt::LeftButton && m_cursorSwitched;
+    case QEvent::MouseButtonRelease:
+    case QEvent::TabletRelease: {
+        Qt::MouseButton button = getButtonFromEvent(event);
+        retval = button == Qt::LeftButton && m_cursorSwitched;
 
         if (retval) {
-            QPoint pos = mouseEvent->pos();
+            QPoint pos = getPointFromEvent(event);
 
             const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
             QRect widgetRect = converter->widgetToImage(m_canvas->canvasWidget()->rect()).toAlignedRect();

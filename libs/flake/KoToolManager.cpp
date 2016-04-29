@@ -502,6 +502,11 @@ void KoToolManager::updateToolShortcuts()
     // }
 }
 
+void KoToolManager::initializeCurrentToolForCanvas()
+{
+    d->postSwitchTool(false);
+}
+
 KoToolManager* KoToolManager::instance()
 {
     return s_instance;

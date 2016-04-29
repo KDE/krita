@@ -577,6 +577,30 @@ void KisMainWindow::showView(KisView *imageView)
         subwin->setOption(QMdiSubWindow::RubberBandResize, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
         subwin->setWindowIcon(qApp->windowIcon());
 
+        setActiveView(imageView);
+
+        /**
+         * Hack alert!
+         *
+         * Here we explicitly request KoToolManager to emit all the tool
+         * activation signals, to reinitialize the tool options docker.
+         *
+         * That is needed due to a design flaw we have in the
+         * initialization procedure.  The tool in the KoToolManager is
+         * initialized in KisView::setViewManager() calls, which
+         * happens early enough. During this call the tool manager
+         * requests KoCanvasControllerWidget to emit the signal to
+         * update the widgets in the tool docker. *But* at that moment
+         * of time the view is not yet connected to the main window,
+         * because it happens in KisViewManager::setCurrentView a bit
+         * later. This fact makes the widgets updating signals be lost
+         * and never reach the tool docker.
+         *
+         * So here we just explicitly call the tool activation stub.
+         */
+
+        KoToolManager::instance()->initializeCurrentToolForCanvas();
+
         if (d->mdiArea->subWindowList().size() == 1) {
             imageView->showMaximized();
         }
@@ -584,7 +608,6 @@ void KisMainWindow::showView(KisView *imageView)
             imageView->show();
         }
 
-        setActiveView(imageView);
         updateWindowMenu();
         updateCaption();
     }

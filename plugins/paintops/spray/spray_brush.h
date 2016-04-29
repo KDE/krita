@@ -55,6 +55,7 @@ public:
         m_shapeProperties = shapeProperties;
         m_shapeDynamicsProperties = shapeDynamicsProperties;
         m_brush = brush;
+        m_brush->notifyStrokeStarted();
     }
 
     void setFixedDab(KisFixedPaintDeviceSP dab);

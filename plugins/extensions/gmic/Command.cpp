@@ -42,7 +42,8 @@ Command::Command(Component* parent)
 
 Command::~Command()
 {
-
+    qDeleteAll(m_parameters);
+    m_parameters.clear();
 }
 
 

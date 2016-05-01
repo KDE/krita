@@ -35,7 +35,6 @@ class Parameter;
 /* This class represents one filter definition: command for preview and filter and parameters for filter */
 class Command : public Component
 {
-    Q_OBJECT
 public:
     Command(Component * parent = 0);
     virtual ~Command();

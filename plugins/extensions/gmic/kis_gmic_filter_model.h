@@ -22,7 +22,6 @@
 #include <QAbstractItemModel>
 #include <QModelIndex>
 #include <QVariant>
-#include <QPointer>
 
 #include "Component.h"
 #include "kis_gmic_blacklister.h"
@@ -63,8 +62,8 @@ public:
     void setBlacklister(KisGmicBlacklister * blacklister);
 
 private:
-    QPointer<Component> m_rootComponent;
-    QPointer<KisGmicBlacklister> m_blacklister;
+    Component * m_rootComponent;
+    KisGmicBlacklister * m_blacklister;
 
 };
 

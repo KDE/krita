@@ -40,9 +40,8 @@ private:
     QQueue<const Component *> m_queue;
 };
 
-class KisGmicBlacklister : public QObject
+class KisGmicBlacklister
 {
-    Q_OBJECT
 public:
     KisGmicBlacklister(const QString& filePath);
     ~KisGmicBlacklister();

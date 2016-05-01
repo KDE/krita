@@ -18,13 +18,11 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
-#include <QObject>
 #include <QString>
 #include <QVariant>
 
-class Component : public QObject
+class Component
 {
-    Q_OBJECT
 
 public:
     Component();

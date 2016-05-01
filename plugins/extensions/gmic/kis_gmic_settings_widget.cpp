@@ -165,7 +165,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                 if (role == CreateRole)
                 {
                     combo = new QComboBox;
-                    QStringListModel *model = new QStringListModel();
+                    QStringListModel *model = new QStringListModel(combo);
                     model->setStringList(choiceParam->m_choices);
                     combo->setModel(model);
 

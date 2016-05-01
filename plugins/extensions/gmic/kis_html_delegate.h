@@ -25,8 +25,10 @@
 
 class QPainter;
 
-class HtmlDelegate : public QStyledItemDelegate
+class KisHtmlDelegate : public QStyledItemDelegate
 {
+public: 
+    KisHtmlDelegate(QObject * parent = Q_NULLPTR);
 protected:
     void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
     QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const;

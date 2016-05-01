@@ -22,7 +22,14 @@
 #include <QAbstractTextDocumentLayout>
 #include <QPainter>
 
-void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+KisHtmlDelegate::KisHtmlDelegate(QObject* parent)
+    : QStyledItemDelegate(parent)
+{
+
+}
+
+
+void KisHtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QStyleOptionViewItemV4 optionV4 = option;
     initStyleOption(&optionV4, index);
@@ -50,7 +57,7 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     painter->restore();
 }
 
-QSize HtmlDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+QSize KisHtmlDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QStyleOptionViewItemV4 optionV4 = option;
     initStyleOption(&optionV4, index);
@@ -60,3 +67,4 @@ QSize HtmlDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
     doc.setTextWidth(optionV4.rect.width());
     return QSize(doc.idealWidth(), doc.size().height());
 }
+

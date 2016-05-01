@@ -71,8 +71,6 @@ KisGmicWidget::~KisGmicWidget()
 
 void KisGmicWidget::createMainLayout()
 {
-
-
     connect(m_inputOutputOptions->previewCheckBox, SIGNAL(toggled(bool)), this, SLOT(slotPreviewChanged(bool)));
     connect(m_inputOutputOptions->previewSizeCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(slotPreviewSizeChanged()));
     connect(m_inputOutputOptions->previewSizeCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(slotConfigurationChanged()));
@@ -84,7 +82,7 @@ void KisGmicWidget::createMainLayout()
     proxyModel->setSourceModel(m_filterModel);
     proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     m_filterTree->setModel(proxyModel);
-    m_filterTree->setItemDelegate(new HtmlDelegate());
+    m_filterTree->setItemDelegate(new KisHtmlDelegate(this));
 
     connect(m_filterTree->selectionModel(), SIGNAL(selectionChanged (const QItemSelection &, const QItemSelection &)),
             this, SLOT(slotSelectedFilterChanged(const QItemSelection &, const QItemSelection &)));

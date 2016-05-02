@@ -23,6 +23,7 @@
 #include <kis_group_layer.h>
 #include <kis_wrapped_rect.h>
 #include <kis_image.h>
+#include <kis_transaction.h>
 
 
 namespace KisToolUtils {
@@ -81,4 +82,29 @@ namespace KisToolUtils {
         return foundNode;
     }
 
+    bool clearImage(KisImageSP image, KisNodeSP node, KisSelectionSP selection)
+    {
+        if(node && node->hasEditablePaintDevice()) {
+            KisPaintDeviceSP device = node->paintDevice();
+
+            image->barrierLock();
+            KisTransaction transaction(kundo2_i18n("Clear"), device);
+
+            QRect dirtyRect;
+            if (selection) {
+                dirtyRect = selection->selectedRect();
+                device->clearSelection(selection);
+            }
+            else {
+                dirtyRect = device->extent();
+                device->clear();
+            }
+
+            transaction.commit(image->undoAdapter());
+            device->setDirty(dirtyRect);
+            image->unlock();
+            return true;
+        }
+        return false;
+    }
 }

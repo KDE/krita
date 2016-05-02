@@ -52,7 +52,6 @@
 #include <brushengine/kis_paintop_preset.h>
 #include <brushengine/kis_paintop_settings.h>
 #include <resources/KoPattern.h>
-#include <kis_transaction.h>
 #include <kis_floating_message.h>
 
 #include "opengl/kis_opengl_canvas2.h"
@@ -68,6 +67,7 @@
 #include "kis_resources_snapshot.h"
 #include <KisView.h>
 #include "kis_action_registry.h"
+#include "kis_tool_utils.h"
 
 
 
@@ -551,30 +551,7 @@ void KisTool::deleteSelection()
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(image(), currentNode(), 0, this->canvas()->resourceManager());
 
-    KisSelectionSP selection = resources->activeSelection();
-    KisNodeSP node = resources->currentNode();
-
-    if(node && node->hasEditablePaintDevice()) {
-        KisPaintDeviceSP device = node->paintDevice();
-
-        image()->barrierLock();
-        KisTransaction transaction(kundo2_i18n("Clear"), device);
-
-        QRect dirtyRect;
-        if (selection) {
-            dirtyRect = selection->selectedRect();
-            device->clearSelection(selection);
-        }
-        else {
-            dirtyRect = device->extent();
-            device->clear();
-        }
-
-        transaction.commit(image()->undoAdapter());
-        device->setDirty(dirtyRect);
-        image()->unlock();
-    }
-    else {
+    if (!KisToolUtils::clearImage(image(), resources->currentNode(), resources->activeSelection())) {
         KoToolBase::deleteSelection();
     }
 }

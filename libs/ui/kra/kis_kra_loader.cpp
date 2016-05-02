@@ -206,20 +206,20 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
             m_d->errorMessages << i18n("Image does not specify a width.");
             return KisImageWSP(0);
         }
-        width = KisDomUtils::Private::stringToInt(attr);
+        width = KisDomUtils::toInt(attr);
 
         if ((attr = element.attribute(HEIGHT)).isNull()) {
             m_d->errorMessages << i18n("Image does not specify a height.");
             return KisImageWSP(0);
         }
 
-        height = KisDomUtils::Private::stringToInt(attr);
+        height = KisDomUtils::toInt(attr);
 
         m_d->imageComment = element.attribute(DESCRIPTION);
 
         xres = 100.0 / 72.0;
         if (!(attr = element.attribute(X_RESOLUTION)).isNull()) {
-            qreal value = KisDomUtils::Private::stringToDouble(attr);
+            qreal value = KisDomUtils::toDouble(attr);
 
             if (value > 1.0) {
                 xres = value / 72.0;
@@ -228,7 +228,7 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
 
         yres = 100.0 / 72.0;
         if (!(attr = element.attribute(Y_RESOLUTION)).isNull()) {
-            qreal value = KisDomUtils::Private::stringToDouble(attr);
+            qreal value = KisDomUtils::toDouble(attr);
             if (value > 1.0) {
                 yres = value / 72.0;
             }

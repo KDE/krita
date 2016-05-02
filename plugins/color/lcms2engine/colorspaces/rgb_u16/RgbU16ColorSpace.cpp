@@ -71,9 +71,9 @@ void RgbU16ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomEl
 void RgbU16ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
     KoBgrU16Traits::Pixel *p = reinterpret_cast<KoBgrU16Traits::Pixel *>(pixel);
-    p->red = KoColorSpaceMaths< qreal, KoBgrU16Traits::channels_type >::scaleToA(KisDomUtils::Private::stringToDouble(elt.attribute("r")));
-    p->green = KoColorSpaceMaths< qreal, KoBgrU16Traits::channels_type >::scaleToA(KisDomUtils::Private::stringToDouble(elt.attribute("g")));
-    p->blue = KoColorSpaceMaths< qreal, KoBgrU16Traits::channels_type >::scaleToA(KisDomUtils::Private::stringToDouble(elt.attribute("b")));
+    p->red = KoColorSpaceMaths< qreal, KoBgrU16Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("r")));
+    p->green = KoColorSpaceMaths< qreal, KoBgrU16Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("g")));
+    p->blue = KoColorSpaceMaths< qreal, KoBgrU16Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("b")));
     p->alpha = KoColorSpaceMathsTraits<quint16>::max;
 }
 

@@ -70,10 +70,10 @@ void saveValue(QDomElement *parent, const QString &tag, const KisTimeRange &rang
     e.setAttribute("type", "timerange");
 
     if (range.isValid()) {
-        e.setAttribute("from", Private::numberToString(range.start()));
+        e.setAttribute("from", toString(range.start()));
 
         if (!range.isInfinite()) {
-            e.setAttribute("to", Private::numberToString(range.end()));
+            e.setAttribute("to", toString(range.end()));
         }
     }
 }
@@ -86,8 +86,8 @@ bool loadValue(const QDomElement &parent, const QString &tag, KisTimeRange *rang
 
     if (!Private::checkType(e, "timerange")) return false;
 
-    int start = Private::stringToInt(e.attribute("from", "-1"));
-    int end = Private::stringToInt(e.attribute("to", "-1"));
+    int start = toInt(e.attribute("from", "-1"));
+    int end = toInt(e.attribute("to", "-1"));
 
     if (start == -1) {
         range = new KisTimeRange();

@@ -32,8 +32,8 @@ void saveValue(QDomElement *parent, const QString &tag, const QSize &size)
 
     e.setAttribute("type", "size");
 
-    e.setAttribute("w", Private::numberToString(size.width()));
-    e.setAttribute("h", Private::numberToString(size.height()));
+    e.setAttribute("w", toString(size.width()));
+    e.setAttribute("h", toString(size.height()));
 }
 
 void saveValue(QDomElement *parent, const QString &tag, const QRect &rc)
@@ -44,10 +44,10 @@ void saveValue(QDomElement *parent, const QString &tag, const QRect &rc)
 
     e.setAttribute("type", "rect");
 
-    e.setAttribute("x", Private::numberToString(rc.x()));
-    e.setAttribute("y", Private::numberToString(rc.y()));
-    e.setAttribute("w", Private::numberToString(rc.width()));
-    e.setAttribute("h", Private::numberToString(rc.height()));
+    e.setAttribute("x", toString(rc.x()));
+    e.setAttribute("y", toString(rc.y()));
+    e.setAttribute("w", toString(rc.width()));
+    e.setAttribute("h", toString(rc.height()));
 }
 
 void saveValue(QDomElement *parent, const QString &tag, const QPoint &pt)
@@ -58,8 +58,8 @@ void saveValue(QDomElement *parent, const QString &tag, const QPoint &pt)
 
     e.setAttribute("type", "point");
 
-    e.setAttribute("x", Private::numberToString(pt.x()));
-    e.setAttribute("y", Private::numberToString(pt.y()));
+    e.setAttribute("x", toString(pt.x()));
+    e.setAttribute("y", toString(pt.y()));
 }
 
 void saveValue(QDomElement *parent, const QString &tag, const QPointF &pt)
@@ -70,8 +70,8 @@ void saveValue(QDomElement *parent, const QString &tag, const QPointF &pt)
 
     e.setAttribute("type", "pointf");
 
-    e.setAttribute("x", Private::numberToString(pt.x()));
-    e.setAttribute("y", Private::numberToString(pt.y()));
+    e.setAttribute("x", toString(pt.x()));
+    e.setAttribute("y", toString(pt.y()));
 }
 
 void saveValue(QDomElement *parent, const QString &tag, const QVector3D &pt)
@@ -82,9 +82,9 @@ void saveValue(QDomElement *parent, const QString &tag, const QVector3D &pt)
 
     e.setAttribute("type", "vector3d");
 
-    e.setAttribute("x", Private::numberToString(pt.x()));
-    e.setAttribute("y", Private::numberToString(pt.y()));
-    e.setAttribute("z", Private::numberToString(pt.z()));
+    e.setAttribute("x", toString(pt.x()));
+    e.setAttribute("y", toString(pt.y()));
+    e.setAttribute("z", toString(pt.z()));
 }
 
 void saveValue(QDomElement *parent, const QString &tag, const QTransform &t)
@@ -95,17 +95,17 @@ void saveValue(QDomElement *parent, const QString &tag, const QTransform &t)
 
     e.setAttribute("type", "transform");
 
-    e.setAttribute("m11", Private::numberToString(t.m11()));
-    e.setAttribute("m12", Private::numberToString(t.m12()));
-    e.setAttribute("m13", Private::numberToString(t.m13()));
+    e.setAttribute("m11", toString(t.m11()));
+    e.setAttribute("m12", toString(t.m12()));
+    e.setAttribute("m13", toString(t.m13()));
 
-    e.setAttribute("m21", Private::numberToString(t.m21()));
-    e.setAttribute("m22", Private::numberToString(t.m22()));
-    e.setAttribute("m23", Private::numberToString(t.m23()));
+    e.setAttribute("m21", toString(t.m21()));
+    e.setAttribute("m22", toString(t.m22()));
+    e.setAttribute("m23", toString(t.m23()));
 
-    e.setAttribute("m31", Private::numberToString(t.m31()));
-    e.setAttribute("m32", Private::numberToString(t.m32()));
-    e.setAttribute("m33", Private::numberToString(t.m33()));
+    e.setAttribute("m31", toString(t.m31()));
+    e.setAttribute("m32", toString(t.m32()));
+    e.setAttribute("m33", toString(t.m33()));
 }
 
 bool findOnlyElement(const QDomElement &parent, const QString &tag, QDomElement *el, QStringList *errorMessages)
@@ -142,14 +142,14 @@ namespace Private {
 bool loadValue(const QDomElement &e, float *v)
 {
     if (!Private::checkType(e, "value")) return false;
-    *v = Private::stringToDouble(e.attribute("value", "0"));
+    *v = toDouble(e.attribute("value", "0"));
     return true;
 }
 
 bool loadValue(const QDomElement &e, double *v)
 {
     if (!Private::checkType(e, "value")) return false;
-    *v = Private::stringToDouble(e.attribute("value", "0"));
+    *v = toDouble(e.attribute("value", "0"));
     return true;
 }
 
@@ -157,8 +157,8 @@ bool loadValue(const QDomElement &e, QSize *size)
 {
     if (!Private::checkType(e, "size")) return false;
 
-    size->setWidth(Private::stringToInt(e.attribute("w", "0")));
-    size->setHeight(Private::stringToInt(e.attribute("h", "0")));
+    size->setWidth(toInt(e.attribute("w", "0")));
+    size->setHeight(toInt(e.attribute("h", "0")));
 
     return true;
 }
@@ -167,10 +167,10 @@ bool loadValue(const QDomElement &e, QRect *rc)
 {
     if (!Private::checkType(e, "rect")) return false;
 
-    rc->setX(Private::stringToInt(e.attribute("x", "0")));
-    rc->setY(Private::stringToInt(e.attribute("y", "0")));
-    rc->setWidth(Private::stringToInt(e.attribute("w", "0")));
-    rc->setHeight(Private::stringToInt(e.attribute("h", "0")));
+    rc->setX(toInt(e.attribute("x", "0")));
+    rc->setY(toInt(e.attribute("y", "0")));
+    rc->setWidth(toInt(e.attribute("w", "0")));
+    rc->setHeight(toInt(e.attribute("h", "0")));
 
     return true;
 }
@@ -179,8 +179,8 @@ bool loadValue(const QDomElement &e, QPoint *pt)
 {
     if (!Private::checkType(e, "point")) return false;
 
-    pt->setX(Private::stringToInt(e.attribute("x", "0")));
-    pt->setY(Private::stringToInt(e.attribute("y", "0")));
+    pt->setX(toInt(e.attribute("x", "0")));
+    pt->setY(toInt(e.attribute("y", "0")));
 
     return true;
 }
@@ -189,8 +189,8 @@ bool loadValue(const QDomElement &e, QPointF *pt)
 {
     if (!Private::checkType(e, "pointf")) return false;
 
-    pt->setX(Private::stringToDouble(e.attribute("x", "0")));
-    pt->setY(Private::stringToDouble(e.attribute("y", "0")));
+    pt->setX(toDouble(e.attribute("x", "0")));
+    pt->setY(toDouble(e.attribute("y", "0")));
 
     return true;
 }
@@ -199,9 +199,9 @@ bool loadValue(const QDomElement &e, QVector3D *pt)
 {
     if (!Private::checkType(e, "vector3d")) return false;
 
-    pt->setX(Private::stringToDouble(e.attribute("x", "0")));
-    pt->setY(Private::stringToDouble(e.attribute("y", "0")));
-    pt->setZ(Private::stringToDouble(e.attribute("z", "0")));
+    pt->setX(toDouble(e.attribute("x", "0")));
+    pt->setY(toDouble(e.attribute("y", "0")));
+    pt->setZ(toDouble(e.attribute("z", "0")));
 
     return true;
 }
@@ -210,17 +210,17 @@ bool loadValue(const QDomElement &e, QTransform *t)
 {
     if (!Private::checkType(e, "transform")) return false;
 
-    qreal m11 = Private::stringToDouble(e.attribute("m11", "1.0"));
-    qreal m12 = Private::stringToDouble(e.attribute("m12", "0.0"));
-    qreal m13 = Private::stringToDouble(e.attribute("m13", "0.0"));
+    qreal m11 = toDouble(e.attribute("m11", "1.0"));
+    qreal m12 = toDouble(e.attribute("m12", "0.0"));
+    qreal m13 = toDouble(e.attribute("m13", "0.0"));
 
-    qreal m21 = Private::stringToDouble(e.attribute("m21", "0.0"));
-    qreal m22 = Private::stringToDouble(e.attribute("m22", "1.0"));
-    qreal m23 = Private::stringToDouble(e.attribute("m23", "0.0"));
+    qreal m21 = toDouble(e.attribute("m21", "0.0"));
+    qreal m22 = toDouble(e.attribute("m22", "1.0"));
+    qreal m23 = toDouble(e.attribute("m23", "0.0"));
 
-    qreal m31 = Private::stringToDouble(e.attribute("m31", "0.0"));
-    qreal m32 = Private::stringToDouble(e.attribute("m32", "0.0"));
-    qreal m33 = Private::stringToDouble(e.attribute("m33", "1.0"));
+    qreal m31 = toDouble(e.attribute("m31", "0.0"));
+    qreal m32 = toDouble(e.attribute("m32", "0.0"));
+    qreal m33 = toDouble(e.attribute("m33", "1.0"));
 
     t->setMatrix(
         m11, m12, m13,

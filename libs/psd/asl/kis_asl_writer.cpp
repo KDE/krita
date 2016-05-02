@@ -82,14 +82,14 @@ void parseElement(const QDomElement &el, QIODevice *device, bool forceTypeInfo =
             child = child.nextSibling();
         }
     } else if (type == "Double") {
-        double v = KisDomUtils::Private::stringToDouble(el.attribute("value", "0"));
+        double v = KisDomUtils::toDouble(el.attribute("value", "0"));
 
         writeVarString(key, device);
         writeFixedString("doub", device);
         SAFE_WRITE_EX(device, v);
 
     } else if (type == "UnitFloat") {
-        double v = KisDomUtils::Private::stringToDouble(el.attribute("value", "0"));
+        double v = KisDomUtils::toDouble(el.attribute("value", "0"));
         QString unit = el.attribute("unit", "#Pxl");
 
         writeVarString(key, device);
@@ -109,12 +109,12 @@ void parseElement(const QDomElement &el, QIODevice *device, bool forceTypeInfo =
         writeVarString(typeId, device);
         writeVarString(v, device);
     } else if (type == "Integer") {
-        quint32 v = KisDomUtils::Private::stringToInt(el.attribute("value", "0"));
+        quint32 v = KisDomUtils::toInt(el.attribute("value", "0"));
         writeVarString(key, device);
         writeFixedString("long", device);
         SAFE_WRITE_EX(device, v);
     } else if (type == "Boolean") {
-        quint8 v = KisDomUtils::Private::stringToInt(el.attribute("value", "0"));
+        quint8 v = KisDomUtils::toInt(el.attribute("value", "0"));
 
         writeVarString(key, device);
         writeFixedString("bool", device);

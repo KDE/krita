@@ -574,12 +574,6 @@ include (TestBigEndian)
 test_big_endian(CMAKE_WORDS_BIGENDIAN)
 
 ##
-## Test SharedMimeInfo
-##
-macro_optional_find_package(SharedMimeInfo)
-macro_log_feature(SHARED_MIME_INFO_FOUND "SharedMimeInfo" "Shared Mime Info" "http://freedesktop.org/wiki/Software/shared-mime-info" FALSE "" "Required to determine file types OpenRaster (Krita default format).")
-
-##
 ## Test for qt-poppler
 ##
 macro_optional_find_package(Poppler)

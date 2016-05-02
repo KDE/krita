@@ -16,8 +16,3 @@ target_link_libraries(krita_shape_vector kritaflake kritawidgets kritavectorimag
 
 install(TARGETS krita_shape_vector DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
-if (SHARED_MIME_INFO_FOUND)
-    install(FILES krita_svm.xml DESTINATION ${XDG_MIME_INSTALL_DIR})
-    update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})
-endif ()
-

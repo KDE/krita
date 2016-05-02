@@ -108,7 +108,9 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
     if (mode != MoveSelectedLayer && pos) {
         bool wholeGroup = !selection &&  mode == MoveGroup;
         node = KisToolUtils::findNode(image->root(), *pos, wholeGroup);
-        nodes = {node};
+        if (node) {
+            nodes = {node};
+        }
     }
 
     if (nodes.isEmpty()) {

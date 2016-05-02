@@ -28,20 +28,21 @@
     </Action>
     <Action name="file_open_recent">
       <icon>document-open-recent</icon>
-      <text>Save Incremental &amp;Backup</text>
+      <text>Open &amp;Recent</text>
       <whatsThis></whatsThis>
-      <toolTip>Save Incremental Backup</toolTip>
-      <iconText>Save Incremental Backup</iconText>
+      <toolTip>Open a document which was recently opened</toolTip>
+      <iconText>Open Recent</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut>F4</shortcut>
+      <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="file_save">
       <icon>document-save</icon>
+      <text>&amp;Save</text>
       <whatsThis></whatsThis>
-      <toolTip>Save as .krita-6301-document_0-autosave.kra</toolTip>
+      <toolTip>Save</toolTip>
       <iconText>Save</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
@@ -63,13 +64,13 @@
     </Action>
     <Action name="file_reload_file">
       <icon></icon>
-      <text>Save Incremental &amp;Backup</text>
+      <text>Reload</text>
       <whatsThis></whatsThis>
-      <toolTip>Save Incremental Backup</toolTip>
-      <iconText>Save Incremental Backup</iconText>
+      <toolTip>Reload</toolTip>
+      <iconText>Reload</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut>F4</shortcut>
+      <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>

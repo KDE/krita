@@ -60,6 +60,9 @@ make -j4 install
 
 cd /krita.appdir
 
+# Remove the mimedir, it confuses the file dialog on redhat-derived distributions
+rm -rf usr/share/mime
+
 # FIXME: How to find out which subset of plugins is really needed? I used strace when running the binary
 cp -r /usr/plugins ./usr/bin/
 # copy the Qt translation

@@ -92,16 +92,16 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageWSP image)
     Q_ASSERT(image);
     imageElement.setAttribute(NAME, m_d->imageName);
     imageElement.setAttribute(MIME, NATIVE_MIMETYPE);
-    imageElement.setAttribute(WIDTH, image->width());
-    imageElement.setAttribute(HEIGHT, image->height());
+    imageElement.setAttribute(WIDTH, KisDomUtils::Private::numberToString(image->width()));
+    imageElement.setAttribute(HEIGHT, KisDomUtils::Private::numberToString(image->height()));
     imageElement.setAttribute(COLORSPACE_NAME, image->colorSpace()->id());
     imageElement.setAttribute(DESCRIPTION, m_d->doc->documentInfo()->aboutInfo("comment"));
     // XXX: Save profile as blob inside the image, instead of the product name.
     if (image->profile() && image->profile()-> valid()) {
         imageElement.setAttribute(PROFILE, image->profile()->name());
     }
-    imageElement.setAttribute(X_RESOLUTION, image->xRes()*72.0);
-    imageElement.setAttribute(Y_RESOLUTION, image->yRes()*72.0);
+    imageElement.setAttribute(X_RESOLUTION, KisDomUtils::Private::numberToString(image->xRes()*72.0));
+    imageElement.setAttribute(Y_RESOLUTION, KisDomUtils::Private::numberToString(image->yRes()*72.0));
 
     quint32 count = 1; // We don't save the root layer, but it does count
     KisSaveXmlVisitor visitor(doc, imageElement, count, m_d->doc->url().toLocalFile(), true);

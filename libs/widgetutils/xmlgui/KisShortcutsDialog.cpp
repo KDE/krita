@@ -121,27 +121,27 @@ void KisShortcutsDialog::allDefault()
 
 void KisShortcutsDialog::importConfiguration(const QString &path)
 {
-    KConfig config(path);
-    d->m_shortcutsEditor->importConfiguration(static_cast<KConfigBase *>(&config), true);
+    auto config = KSharedConfig::openConfig(path);
+    d->m_shortcutsEditor->importConfiguration(config.data(), true);
 }
 
 void KisShortcutsDialog::exportConfiguration(const QString &path) const
 {
-    KConfig config(path);
-    d->m_shortcutsEditor->exportConfiguration(static_cast<KConfigBase *>(&config));
+    auto config = KSharedConfig::openConfig(path);
+    d->m_shortcutsEditor->exportConfiguration(config.data());
 }
 
 void KisShortcutsDialog::saveCustomShortcuts(const QString &path) const
 {
-  KConfig config(path);
-  KConfigGroup cg(&config, QStringLiteral("Shortcuts"));
-  d->m_shortcutsEditor->saveShortcuts(&cg);
+    auto cg = KSharedConfig::openConfig(path)->group(QStringLiteral("Shortcuts"));
+    d->m_shortcutsEditor->saveShortcuts(&cg);
+    d->m_shortcutsEditor->commit();
 }
 
 void KisShortcutsDialog::loadCustomShortcuts(const QString &path)
 {
-    KConfig config(path);
-    d->m_shortcutsEditor->importConfiguration(static_cast<KConfigBase *>(&config), false);
+    auto config = KSharedConfig::openConfig(path);
+    d->m_shortcutsEditor->importConfiguration(config.data(), false);
 }
 
 #include "moc_KisShortcutsDialog.cpp"

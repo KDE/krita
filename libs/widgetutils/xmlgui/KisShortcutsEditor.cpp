@@ -222,8 +222,7 @@ void KisShortcutsEditor::exportConfiguration(KConfigBase *config) const
     }
 
     if (d->actionTypes) {
-        QString groupName(QStringLiteral("Shortcuts"));
-        KConfigGroup group(config, groupName);
+        KConfigGroup group(config,QStringLiteral("Shortcuts"));
         foreach (KActionCollection *collection, d->actionCollections) {
             collection->writeSettings(&group, true);
         }

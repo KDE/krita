@@ -265,11 +265,10 @@ void KisActionRegistry::applyShortcutScheme(const KConfigBase *config)
 
 void KisActionRegistry::updateShortcut(const QString &name, QAction *action)
 {
-    const ActionInfoItem info = d->actionInfo(name);
-    auto newShortcuts = preferredShortcuts(info);
-    action->setShortcuts(newShortcuts);
+    const ActionInfoItem &info = d->actionInfo(name);
+    action->setShortcuts(preferredShortcuts(info));
 
-    action->setProperty("defaultShortcuts", qVariantFromValue(newShortcuts));
+    action->setProperty("defaultShortcuts", qVariantFromValue(info.defaultShortcuts));
 }
 
 

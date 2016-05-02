@@ -584,9 +584,9 @@ KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSp
     }
 
     QVector<KoColorTransformation*> allTransforms;
-    allTransforms << lightnessTransform;
-    allTransforms << allColorsTransform;
     allTransforms << colorTransform;
+    allTransforms << allColorsTransform;
+    allTransforms << lightnessTransform;
 
     return KoCompositeColorTransformation::createOptimizedCompositeTransform(allTransforms);
 }

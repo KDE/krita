@@ -85,7 +85,7 @@ Q_SIGNALS:
     void timeout();
 
 private:
-    QTimer m_timer;
+    QTimer *m_timer;
     Mode m_mode;
     bool m_gotSignals;
 };

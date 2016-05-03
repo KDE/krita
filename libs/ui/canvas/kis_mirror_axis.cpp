@@ -107,13 +107,6 @@ KisMirrorAxis::KisMirrorAxis(KisCanvasResourceProvider* provider, QPointer<KisVi
     int imageHeight = parent->canvasBase()->image()->height();
     QPointF point(imageWidth / 2, imageHeight / 2);
     d->resourceProvider->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxesCenter, point);
-
-    parent->installEventFilter(this);
-
-    KisInputManager *inputManager = parent->canvasBase()->globalInputManager();
-    if (inputManager) {
-        inputManager->attachPriorityEventFilter(this);
-    }
 }
 
 KisMirrorAxis::~KisMirrorAxis()
@@ -223,7 +216,12 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
 
 bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
 {
-    if (!view() || target != view()->canvasBase()->canvasWidget()) return false;
+    if (!visible()) return false;
+
+    QObject *expectedCanvasWidget = view() ?
+        view()->canvasBase()->canvasWidget() : 0;
+
+    if (!expectedCanvasWidget || target != expectedCanvasWidget) return false;
 
     if(event->type() == QEvent::MouseButtonPress || event->type() == QEvent::TabletPress) {
         QMouseEvent *me = dynamic_cast<QMouseEvent*>(event);
@@ -315,6 +313,21 @@ void KisMirrorAxis::mirrorModeChanged()
     d->mirrorHorizontal = d->resourceProvider->mirrorHorizontal();
     d->mirrorVertical = d->resourceProvider->mirrorVertical();
     setVisible(d->mirrorHorizontal || d->mirrorVertical);
+}
+
+void KisMirrorAxis::setVisible(bool v)
+{
+    KisCanvasDecoration::setVisible(v);
+
+
+    KisInputManager *inputManager = view() ? view()->canvasBase()->globalInputManager() : 0;
+    if (!inputManager) return;
+
+    if (v) {
+        inputManager->attachPriorityEventFilter(this);
+    } else {
+        inputManager->detachPriorityEventFilter(this);
+    }
 }
 
 void KisMirrorAxis::Private::setAxisPosition(float x, float y)

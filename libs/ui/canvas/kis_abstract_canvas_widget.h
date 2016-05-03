@@ -55,9 +55,9 @@ public:
 
     virtual KisCanvasDecoration* decoration(const QString& id) const = 0;
 
-    virtual void setDecorations(const QList<KisCanvasDecoration*> &) = 0;
+    virtual void setDecorations(const QList<QPointer<KisCanvasDecoration>> &) = 0;
 
-    virtual QList<KisCanvasDecoration*> decorations() const = 0;
+    virtual QList<QPointer<KisCanvasDecoration>> decorations() const = 0;
 
     /// set the specified display filter on the canvas
     virtual void setDisplayFilter(KisDisplayFilter *displayFilter) = 0;

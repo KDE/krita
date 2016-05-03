@@ -36,6 +36,7 @@ public:
 
     float handleSize() const;
     void setHandleSize(float newSize);
+    void setVisible(bool v);
 
 Q_SIGNALS:
     void handleSizeChanged();

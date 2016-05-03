@@ -52,7 +52,7 @@ public:
         , borderColor(Qt::gray)
     {}
 
-    QList<KisCanvasDecoration*> decorations;
+    QList<QPointer<KisCanvasDecoration>> decorations;
     KisCanvas2 * canvas;
     KisCoordinatesConverter *coordinatesConverter;
     const KoViewConverter * viewConverter;
@@ -71,6 +71,14 @@ KisCanvasWidgetBase::KisCanvasWidgetBase(KisCanvas2 * canvas, KisCoordinatesConv
 
 KisCanvasWidgetBase::~KisCanvasWidgetBase()
 {
+    /**
+     * Clear all the attached decoration. Oherwise they might decide
+     * to process some events or signals after the canvas has been
+     * destroyed
+     */
+    qDeleteAll(m_d->decorations);
+    m_d->decorations.clear();
+
     delete m_d;
 }
 
@@ -154,7 +162,7 @@ void KisCanvasWidgetBase::addDecoration(KisCanvasDecoration* deco)
 
 KisCanvasDecoration* KisCanvasWidgetBase::decoration(const QString& id) const
 {
-    Q_FOREACH (KisCanvasDecoration* deco, m_d->decorations) {
+    Q_FOREACH (QPointer<KisCanvasDecoration> deco, m_d->decorations) {
         if (deco->id() == id) {
             return deco;
         }
@@ -162,12 +170,12 @@ KisCanvasDecoration* KisCanvasWidgetBase::decoration(const QString& id) const
     return 0;
 }
 
-void KisCanvasWidgetBase::setDecorations(const QList<KisCanvasDecoration*> &decorations)
+void KisCanvasWidgetBase::setDecorations(const QList<QPointer<KisCanvasDecoration> > &decorations)
 {
     m_d->decorations=decorations;
 }
 
-QList<KisCanvasDecoration*> KisCanvasWidgetBase::decorations() const
+QList<QPointer<KisCanvasDecoration> > KisCanvasWidgetBase::decorations() const
 {
     return m_d->decorations;
 }

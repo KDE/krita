@@ -58,8 +58,8 @@ public: // KisAbstractCanvasWidget
     virtual void addDecoration(KisCanvasDecoration* deco);
     virtual KisCanvasDecoration* decoration(const QString& id) const;
 
-    virtual void setDecorations(const QList<KisCanvasDecoration*> &);
-    virtual QList<KisCanvasDecoration*> decorations() const;
+    virtual void setDecorations(const QList<QPointer<KisCanvasDecoration> > &);
+    virtual QList<QPointer<KisCanvasDecoration> > decorations() const;
 
     virtual void setWrapAroundViewingMode(bool value);
 

@@ -43,12 +43,6 @@ KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->lbl_lastUsedNumRows->hide();
-    ui->lastUsedColorsNumRows->hide();
-
-    ui->lbl_commonColorsNumCols->hide();
-    ui->commonColorsNumCols->hide();
-    
     resize(minimumSize());
 
     ui->colorSelectorConfiguration->setColorSpace(ui->colorSpace->currentColorSpace());
@@ -106,6 +100,10 @@ KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
     ui->commonColorsAlignVertical->setChecked(true);
     ui->commonColorsAlignHorizontal->setChecked(true);
     connect( ui->commonColorsAlignHorizontal, SIGNAL(toggled(bool)), this, SLOT(changedACSColorAlignment(bool)));
+    connect( ui->lastUsedColorsAlignHorizontal, SIGNAL(toggled(bool)), this, SLOT(changedACSLastUsedColorAlignment(bool)));
+
+    changedACSColorAlignment(ui->commonColorsAlignHorizontal->isChecked());
+    changedACSLastUsedColorAlignment(ui->lastUsedColorsAlignHorizontal->isChecked());
 
 
     connect(ui->colorSpace,                 SIGNAL(colorSpaceChanged(const KoColorSpace*)),
@@ -343,25 +341,23 @@ void KisColorSelectorSettings::changedACSColorAlignment(bool toggled)
     // this slot is tied to the horizontal radio button's state being changed
     // you can infer the vertical state
 
-    if (toggled) {  // horizontal layout. show rows
-        ui->lbl_commonColorsNumCols->hide();
-        ui->commonColorsNumCols->hide();
+    ui->lbl_commonColorsNumCols->setDisabled(toggled);
+    ui->commonColorsNumCols->setDisabled(toggled);
 
-        ui->lbl_commonColorsNumRows->show();
-        ui->commonColorsNumRows->show();
+    ui->lbl_commonColorsNumRows->setEnabled(toggled);
+    ui->commonColorsNumRows->setEnabled(toggled);
+}
 
-    } else {
-        ui->lbl_commonColorsNumCols->show();
-        ui->commonColorsNumCols->show();
+void KisColorSelectorSettings::changedACSLastUsedColorAlignment(bool toggled)
+{
+    // this slot is tied to the horizontal radio button's state being changed
+    // you can infer the vertical state
 
-        ui->lbl_commonColorsNumRows->hide();
-        ui->commonColorsNumRows->hide();
+    ui->lbl_lastUsedNumCols->setDisabled(toggled);
+    ui->lastUsedColorsNumCols->setDisabled(toggled);
 
-    }
-
-
-
-
+    ui->lbl_lastUsedNumRows->setEnabled(toggled);
+    ui->lastUsedColorsNumRows->setEnabled(toggled);
 }
 
 
@@ -384,13 +380,7 @@ void KisColorSelectorSettings::changedACSShadeSelectorType(int index)
         ui->myPaintColorModelLabel->hide();
         ui->ACSshadeSelectorMyPaintColorModelComboBox->hide();
     }
-
-
-
 }
-
-
-
 
 void KisColorSelectorSettings::useDifferentColorSpaceChecked(bool enabled)
 {

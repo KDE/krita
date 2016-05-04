@@ -278,12 +278,9 @@ void KSwitchLanguageDialog::slotOk()
         //list is different from defaults or saved languages list
         setApplicationSpecificLanguage(languageString.toLatin1());
 
-        KMessageBox::information(
-            this,
-            i18n("The language for this application has been changed. The change will take effect the next time the application is started."), //text
-            i18n("Application Language Changed"), //caption
-            QStringLiteral("ApplicationLanguageChangedWarning") //dontShowAgainName
-        );
+        QMessageBox::information(this,
+                                 i18nc("@title:window:", "Application Language Changed"), //caption
+                                 i18n("The language for this application has been changed. The change will take effect the next time the application is started."));
     }
 
     accept();

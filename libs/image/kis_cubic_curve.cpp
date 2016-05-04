@@ -24,6 +24,7 @@
 #include <QList>
 #include <QSharedData>
 #include <QStringList>
+#include "kis_dom_utils.h"
 
 template <typename T>
 class KisTridiagonalSystem
@@ -455,8 +456,8 @@ void KisCubicCurve::fromString(const QString& string)
     Q_FOREACH (const QString & pair, data) {
         if (pair.indexOf(',') > -1) {
             QPointF p;
-            p.rx() = pair.section(',', 0, 0).toDouble();
-            p.ry() = pair.section(',', 1, 1).toDouble();
+            p.rx() = KisDomUtils::toDouble(pair.section(',', 0, 0));
+            p.ry() = KisDomUtils::toDouble(pair.section(',', 1, 1));
             points.append(p);
         }
     }

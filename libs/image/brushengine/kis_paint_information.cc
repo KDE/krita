@@ -25,6 +25,7 @@
 #include "kis_algebra_2d.h"
 #include "kis_lod_transform.h"
 
+#include <kis_dom_utils.h>
 
 struct KisPaintInformation::Private {
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -274,16 +275,16 @@ void KisPaintInformation::toXML(QDomDocument&, QDomElement& e) const
 
 KisPaintInformation KisPaintInformation::fromXML(const QDomElement& e)
 {
-    qreal pointX = qreal(e.attribute("pointX", "0.0").toDouble());
-    qreal pointY = qreal(e.attribute("pointY", "0.0").toDouble());
-    qreal pressure = qreal(e.attribute("pressure", "0.0").toDouble());
-    qreal rotation = qreal(e.attribute("rotation", "0.0").toDouble());
-    qreal tangentialPressure = qreal(e.attribute("tangentialPressure", "0.0").toDouble());
-    qreal perspective = qreal(e.attribute("perspective", "0.0").toDouble());
-    qreal xTilt = qreal(e.attribute("xTilt", "0.0").toDouble());
-    qreal yTilt = qreal(e.attribute("yTilt", "0.0").toDouble());
-    qreal time = e.attribute("time", "0").toDouble();
-    qreal speed = e.attribute("speed", "0").toDouble();
+    qreal pointX = qreal(KisDomUtils::toDouble(e.attribute("pointX", "0.0")));
+    qreal pointY = qreal(KisDomUtils::toDouble(e.attribute("pointY", "0.0")));
+    qreal pressure = qreal(KisDomUtils::toDouble(e.attribute("pressure", "0.0")));
+    qreal rotation = qreal(KisDomUtils::toDouble(e.attribute("rotation", "0.0")));
+    qreal tangentialPressure = qreal(KisDomUtils::toDouble(e.attribute("tangentialPressure", "0.0")));
+    qreal perspective = qreal(KisDomUtils::toDouble(e.attribute("perspective", "0.0")));
+    qreal xTilt = qreal(KisDomUtils::toDouble(e.attribute("xTilt", "0.0")));
+    qreal yTilt = qreal(KisDomUtils::toDouble(e.attribute("yTilt", "0.0")));
+    qreal time = KisDomUtils::toDouble(e.attribute("time", "0"));
+    qreal speed = KisDomUtils::toDouble(e.attribute("speed", "0"));
 
     return KisPaintInformation(QPointF(pointX, pointY), pressure, xTilt, yTilt,
                                rotation, tangentialPressure, perspective, time, speed);

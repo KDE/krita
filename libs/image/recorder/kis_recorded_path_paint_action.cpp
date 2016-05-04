@@ -38,6 +38,7 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_node_query_path.h"
+#include <kis_dom_utils.h>
 
 struct Q_DECL_HIDDEN KisRecordedPathPaintAction::Private {
     struct BezierCurveSlice {
@@ -239,10 +240,10 @@ KisRecordedAction* KisRecordedPathPaintActionFactory::fromXML(const QDomElement&
                     QDomElement control1Elt = eWp.firstChildElement("Control1");
                     QDomElement control2Elt = eWp.firstChildElement("Control2");
                     rplpa->addCurve(KisPaintInformation::fromXML(eWp.firstChildElement("Point1")),
-                                    QPointF(control1Elt.attribute("x", "0.0").toDouble(),
-                                            control1Elt.attribute("y", "0.0").toDouble()),
-                                    QPointF(control2Elt.attribute("x", "0.0").toDouble(),
-                                            control2Elt.attribute("y", "0.0").toDouble()),
+                                    QPointF(KisDomUtils::toDouble(control1Elt.attribute("x", "0.0")),
+                                            KisDomUtils::toDouble(control1Elt.attribute("y", "0.0"))),
+                                    QPointF(KisDomUtils::toDouble(control2Elt.attribute("x", "0.0")),
+                                            KisDomUtils::toDouble(control2Elt.attribute("y", "0.0"))),
                                     KisPaintInformation::fromXML(eWp.firstChildElement("Point2")));
                 } else {
                     dbgImage << "Unsupported <" << eWp.tagName() << " /> element";

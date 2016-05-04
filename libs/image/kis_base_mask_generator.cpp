@@ -36,7 +36,7 @@
 #include "kis_cubic_curve.h"
 #include "kis_curve_circle_mask_generator.h"
 #include "kis_curve_rect_mask_generator.h"
-
+#include <kis_dom_utils.h>
 
 struct KisMaskGenerator::Private {
     qreal diameter, ratio;
@@ -128,34 +128,17 @@ void KisMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
 
 KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)
 {
-    QLocale c(QLocale::German);
-    bool result;
-
     double diameter = 1.0;
     // backward compatibility -- it was mistakenly named radius for 2.2
     if (elt.hasAttribute("radius")){
-        diameter = elt.attribute("radius", "1.0").toDouble(&result);
-        if (!result) {
-            diameter = c.toDouble(elt.attribute("radius"));
-        }
-    }else /*if (elt.hasAttribute("diameter"))*/{
-        diameter = elt.attribute("diameter", "1.0").toDouble(&result);
-        if (!result) {
-            diameter = c.toDouble(elt.attribute("diameter"));
-        }
+        diameter = KisDomUtils::toDouble(elt.attribute("radius", "1.0"));
     }
-    double ratio = elt.attribute("ratio", "1.0").toDouble(&result);
-    if (!result) {
-        ratio = c.toDouble(elt.attribute("ratio"));
+    else /*if (elt.hasAttribute("diameter"))*/{
+        diameter = KisDomUtils::toDouble(elt.attribute("diameter", "1.0"));
     }
-    double hfade = elt.attribute("hfade", "0.0").toDouble(&result);
-    if (!result) {
-        hfade = c.toDouble(elt.attribute("hfade"));
-    }
-    double vfade = elt.attribute("vfade", "0.0").toDouble(&result);
-    if (!result) {
-        vfade = c.toDouble(elt.attribute("vfade"));
-    }
+    double ratio = KisDomUtils::toDouble(elt.attribute("ratio", "1.0"));
+    double hfade = KisDomUtils::toDouble(elt.attribute("hfade", "0.0"));
+    double vfade = KisDomUtils::toDouble(elt.attribute("vfade", "0.0"));
 
     int spikes = elt.attribute("spikes", "2").toInt();
     QString typeShape = elt.attribute("type", "circle");

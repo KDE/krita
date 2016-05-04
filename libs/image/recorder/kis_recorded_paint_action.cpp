@@ -41,7 +41,7 @@
 #include "kis_layer.h"
 #include "kis_play_info.h"
 #include "kis_node_query_path.h"
-
+#include <kis_dom_utils.h>
 // Recorder
 #include "kis_recorded_action_factory_registry.h"
 #include "kis_recorded_action_load_context.h"
@@ -448,12 +448,12 @@ KoColor KisRecordedPaintActionFactory::colorFromXML(const QDomElement& elt, cons
 
 qreal KisRecordedPaintActionFactory::opacityFromXML(const QDomElement& elt)
 {
-    return elt.attribute("opacity", "1.0").toDouble();
+    return KisDomUtils::toDouble(elt.attribute("opacity", "1.0"));
 }
 
 bool KisRecordedPaintActionFactory::paintIncrementalFromXML(const QDomElement& elt)
 {
-    return elt.attribute("paintIncremental", "1").toInt();
+    return KisDomUtils::toInt(elt.attribute("paintIncremental", "1"));
 }
 
 QString KisRecordedPaintActionFactory::compositeOpFromXML(const QDomElement& elt)

@@ -121,3 +121,9 @@ QPointF KoPanTool::documentToViewport(const QPointF &p)
 
     return viewportPoint;
 }
+
+void KoPanTool::mouseDoubleClickEvent(KoPointerEvent *event)
+{
+    mousePressEvent(event);
+}
+

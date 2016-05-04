@@ -19,6 +19,7 @@
 #include "kis_abr_translator.h"
 #include <kis_debug.h>
 #include <QStringList>
+#include <kis_dom_utils.h>
 
 KisAbrTranslator::KisAbrTranslator()
 {
@@ -127,9 +128,7 @@ void AbrBrushProperties::setupProperty(const QString& attributeName, const QStri
         list = value.split(' ');
         //e.g. "#Pxl 10" -> ['#Pxl','10']
         Q_ASSERT(list.count() == 2);
-        bool ok;
-        valueDbl = list.at(1).toDouble(&ok);
-        Q_ASSERT(ok);
+        valueDbl = KisDomUtils::toDouble(list.at(1));
     }
 
     if (attributeName == OBJECT_NAME_BRUSH) {
@@ -233,9 +232,7 @@ void AbrTipDynamicsProperties::setupProperty(const QString& attributeName, const
         list = value.split(' ');
         //e.g. "#Pxl 10" -> ['#Pxl','10']
         Q_ASSERT(list.count() == 2);
-        bool ok;
-        valueDbl = list.at(1).toDouble(&ok);
-        Q_ASSERT(ok);
+        valueDbl = KisDomUtils::toDouble(list.at(1));
     }
 
     if (m_groupType.isNull()) {
@@ -314,9 +311,7 @@ void AbrGroupProperties::setupProperty(const QString& attributeName, const QStri
         list = value.split(' ');
         //e.g. "#Pxl 10" -> ['#Pxl','10']
         Q_ASSERT(list.count() == 2);
-        bool ok;
-        valueDbl = list.at(1).toDouble(&ok);
-        Q_ASSERT(ok);
+        valueDbl = KisDomUtils::toDouble(list.at(1));
     }
 
     if (attributeName == ABR_DYNAMICS_FADE_STEP) {

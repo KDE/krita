@@ -19,7 +19,7 @@
 
 #include <QString>
 #include <QFont>
-
+#include <kis_dom_utils.h>
 #include "kis_text_brush.h"
 
 KisBrushSP KisTextBrushFactory::getOrCreateBrush(const QDomElement& brushDefinition)
@@ -27,7 +27,7 @@ KisBrushSP KisTextBrushFactory::getOrCreateBrush(const QDomElement& brushDefinit
     QString text = brushDefinition.attribute("text", "The quick brown fox ate your text");
     QFont font;
     font.fromString(brushDefinition.attribute("font"));
-    double spacing = brushDefinition.attribute("spacing", "1.0").toDouble();
+    double spacing = KisDomUtils::toDouble(brushDefinition.attribute("spacing", "1.0"));
     QString pipeMode = brushDefinition.attribute("pipe", "false");
     bool pipe = (pipeMode == "true") ? true : false;
 

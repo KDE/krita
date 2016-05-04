@@ -9,5 +9,5 @@
         "Krita/FileFilter"
     ],
     "X-KDE-Weight": "1",
-    "X-KDE-Extensions" : "png"
+    "X-KDE-Extensions" : "png,kpp"
 }

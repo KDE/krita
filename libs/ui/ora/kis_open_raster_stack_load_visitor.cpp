@@ -34,6 +34,7 @@
 #include <kis_paint_layer.h>
 #include <kis_png_converter.h>
 #include <kis_selection.h>
+#include <kis_dom_utils.h>
 
 #include "KisDocument.h"
 
@@ -91,13 +92,13 @@ void KisOpenRasterStackLoadVisitor::loadImage()
             }
 
             d->xRes = 75.0/72; // Setting the default value of the X Resolution = 75ppi
-            if(!subelem.attribute("xres").isNull()){
-                d->xRes = (subelem.attribute("xres").toDouble() / 72);
+            if (!subelem.attribute("xres").isNull()){
+                d->xRes = (KisDomUtils::toDouble(subelem.attribute("xres")) / 72);
             }
 
             d->yRes = 75.0/72;
-            if(!subelem.attribute("yres").isNull()){
-                d->yRes = (subelem.attribute("yres").toDouble() / 72);
+            if (!subelem.attribute("yres").isNull()){
+                d->yRes = (KisDomUtils::toDouble(subelem.attribute("yres")) / 72);
             }
 
             dbgFile << ppVar(width) << ppVar(height);

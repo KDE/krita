@@ -161,10 +161,6 @@ bool KisKraSaveVisitor::visit(KisGeneratorLayer * layer)
         m_errorMessages << i18n("Failed to save the selection for layer %1.", layer->name());
         return false;
     }
-    if (!saveAnnotations(layer)) {
-        m_errorMessages << i18n("Failed to save the annotations for layer %1.", layer->name());
-        return false;   // generator layers can have a profile because they have their own pixel data
-    }
     if (!saveFilterConfiguration(layer)) {
         m_errorMessages << i18n("Failed to save the generator configuration for layer %1.", layer->name());
         return false;

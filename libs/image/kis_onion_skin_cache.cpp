@@ -28,6 +28,8 @@
 #include "kis_default_bounds.h"
 #include "kis_image.h"
 
+#include "kis_raster_keyframe_channel.h"
+
 
 struct KisOnionSkinCache::Private
 {
@@ -35,21 +37,29 @@ struct KisOnionSkinCache::Private
 
     int cacheTime = 0;
     int cacheConfigSeqNo = 0;
+    int framesHash = 0;
     QReadWriteLock lock;
 
     bool checkCacheValid(KisPaintDeviceSP source, KisOnionSkinCompositor *compositor) {
+        const KisRasterKeyframeChannel *keyframes = source->keyframeChannel();
+
         const int time = source->defaultBounds()->currentTime();
         const int seqNo = compositor->configSeqNo();
+        const int hash = keyframes->framesHash();
 
-        return time == cacheTime && cacheConfigSeqNo == seqNo;
+        return time == cacheTime && cacheConfigSeqNo == seqNo && framesHash == hash;
     }
 
     void updateCacheMetrics(KisPaintDeviceSP source, KisOnionSkinCompositor *compositor) {
+        const KisRasterKeyframeChannel *keyframes = source->keyframeChannel();
+
         const int time = source->defaultBounds()->currentTime();
         const int seqNo = compositor->configSeqNo();
+        const int hash = keyframes->framesHash();
 
         cacheTime = time;
         cacheConfigSeqNo = seqNo;
+        framesHash = hash;
     }
 };
 
@@ -70,6 +80,7 @@ KisPaintDeviceSP KisOnionSkinCache::projection(KisPaintDeviceSP source)
 
     QReadLocker readLocker(&m_d->lock);
     cachedProjection = m_d->cachedProjection;
+
     if (!cachedProjection || !m_d->checkCacheValid(source, compositor)) {
 
         readLocker.unlock();

@@ -278,6 +278,21 @@ KisKeyframeSP KisKeyframeChannel::lastKeyframe() const
     return (m_d->keys.end()-1).value();
 }
 
+int KisKeyframeChannel::framesHash() const
+{
+    KeyframesMap::const_iterator it = m_d->keys.constBegin();
+    KeyframesMap::const_iterator end = m_d->keys.constEnd();
+
+    int hash = 0;
+
+    while (it != end) {
+        hash += it.key();
+        ++it;
+    }
+
+    return hash;
+}
+
 QSet<int> KisKeyframeChannel::allKeyframeIds() const
 {
     QSet<int> frames;

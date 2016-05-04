@@ -180,7 +180,6 @@ void KisOpenRasterStackLoadVisitor::loadPaintLayer(const QDomElement& elem, KisP
 void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisGroupLayerSP gL)
 {
     dbgFile << "Loading group layer";
-    QLocale c(QLocale::German);
     loadLayerInfo(elem, gL);
     for (QDomNode node = elem.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement()) {
@@ -188,11 +187,7 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
             if (node.nodeName() == "stack") {
                 double opacity = 1.0;
                 if (!subelem.attribute("opacity").isNull()) {
-                    bool result;
-                    opacity = subelem.attribute("opacity", "1.0").toDouble(&result);
-                    if (!result) {
-                        opacity = c.toDouble(subelem.attribute("radius"));
-                    }
+                    opacity = KisDomUtils::toDouble(subelem.attribute("opacity", "1.0"));
                 }
                 KisGroupLayerSP layer = new KisGroupLayer(d->image, "", opacity * 255);
                 d->image->addNode(layer.data(), gL.data(), 0);
@@ -201,11 +196,7 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
                 QString filename = subelem.attribute("src");
                 if (!filename.isNull()) {
                     double opacity = 1.0;
-                    bool result;
-                    opacity = subelem.attribute("opacity", "1.0").toDouble(&result);
-                    if (!result) {
-                        opacity = c.toDouble(subelem.attribute("radius"));
-                    }
+                    opacity = KisDomUtils::toDouble(subelem.attribute("opacity", "1.0"));
                     KisImageWSP pngImage = d->loadContext->loadDeviceData(filename);
                     if (pngImage) {
                         // If ORA doesn't have resolution info, load the default value(75 ppi) else fetch from stack.xml

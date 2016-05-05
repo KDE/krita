@@ -145,8 +145,7 @@ void KisHSVConfigWidget::switchType(int index)
     emit sigConfigurationItemChanged();
     m_page->label->setText(i18n("Hue:"));
     m_page->label_2->setText(i18n("Saturation:"));
-    m_page->hueSlider->setMinimum(-180);
-    m_page->hueSlider->setMaximum(180);
+
     switch(index) {
     case 0:
         m_page->label_3->setText(i18n("Value:"));

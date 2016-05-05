@@ -155,8 +155,8 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->addLayersButton->setPopupMode(QToolButton::InstantPopup);
 
     m_d->layerEditingMenu = new QMenu(this);
-    m_d->layerEditingMenu->addAction("New Layer", this, SLOT(slotAddNewLayer()));
-    m_d->existingLayersMenu = m_d->layerEditingMenu->addMenu("Add Existing Layer");
+    m_d->layerEditingMenu->addAction(KisAnimationUtils::newLayerActionName, this, SLOT(slotAddNewLayer()));
+    m_d->existingLayersMenu = m_d->layerEditingMenu->addMenu(KisAnimationUtils::addExistingLayerActionName);
     m_d->layerEditingMenu->addSeparator();
 
     m_d->showHideLayerAction = new KisAction(KisAnimationUtils::showLayerActionName, this);
@@ -166,7 +166,7 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->globalActions.insert("show_in_timeline", m_d->showHideLayerAction);
     m_d->layerEditingMenu->addAction(m_d->showHideLayerAction);
 
-    m_d->layerEditingMenu->addAction("Remove Layer", this, SLOT(slotRemoveLayer()));
+    m_d->layerEditingMenu->addAction(KisAnimationUtils::removeLayerActionName, this, SLOT(slotRemoveLayer()));
 
     connect(m_d->existingLayersMenu, SIGNAL(aboutToShow()), SLOT(slotUpdateLayersMenu()));
     connect(m_d->existingLayersMenu, SIGNAL(triggered(QAction*)), SLOT(slotAddExistingLayer(QAction*)));

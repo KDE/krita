@@ -39,6 +39,10 @@ namespace KisAnimationUtils {
     const QString dropFramesActionName = i18n("Drop Frames");
     const QString showLayerActionName = i18n("Show in Timeline");
 
+    const QString newLayerActionName = i18n("New Layer");
+    const QString addExistingLayerActionName = i18n("Add Existing Layer");
+    const QString removeLayerActionName = i18n("Remove Layer");
+
 
     bool createKeyframeLazy(KisImageSP image, KisNodeSP node, int time, bool copy) {
         KisKeyframeChannel *content =

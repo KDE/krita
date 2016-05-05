@@ -142,6 +142,7 @@ rm -f usr/lib/libSM.so.6 || true
 rm -f usr/lib/libusb-1.0.so.0 || true
 rm -f usr/lib/libuuid.so.1 || true
 rm -f usr/lib/libwind.so.0 || true
+rm -f usr/lib/libfontconfig.so.* || true
 
 # Remove these libraries, we need to use the system versions; this means 11.04 is not supported (12.04 is our baseline)
 rm -f usr/lib/libGL.so.* || true

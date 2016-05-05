@@ -50,40 +50,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="windows_next">
-      <icon></icon>
-      <text>N&amp;ext</text>
-      <whatsThis></whatsThis>
-      <toolTip>Next</toolTip>
-      <iconText>Next</iconText>
-      <activationFlags>10</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="windows_previous">
-      <icon></icon>
-      <text>Previous</text>
-      <whatsThis></whatsThis>
-      <toolTip>Previous</toolTip>
-      <iconText>Previous</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="view_newwindow">
-      <icon>window-new</icon>
-      <text>&amp;New Window</text>
-      <whatsThis></whatsThis>
-      <toolTip>New Window</toolTip>
-      <iconText>New Window</iconText>
-      <activationFlags>0</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="import_resources">
       <icon></icon>
       <text>Import Resources or Bundles...</text>

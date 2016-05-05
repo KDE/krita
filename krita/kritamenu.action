@@ -440,6 +440,44 @@
     </Action>
   </Actions>
 
+  <Actions category="Window">
+    <text>Window</text>
+    <Action name="view_newwindow">
+      <icon>window-new</icon>
+      <text>&amp;New Window</text>
+      <whatsThis></whatsThis>
+      <toolTip>New Window</toolTip>
+      <iconText>New Window</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="windows_next">
+      <icon></icon>
+      <text>N&amp;ext</text>
+      <whatsThis></whatsThis>
+      <toolTip>Next</toolTip>
+      <iconText>Next</iconText>
+      <activationFlags>10</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="windows_previous">
+      <icon></icon>
+      <text>Previous</text>
+      <whatsThis></whatsThis>
+      <toolTip>Previous</toolTip>
+      <iconText>Previous</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+  </Actions>
+
   <Actions category="View">
     <text>View</text>
     <Action name="view_show_canvas_only">
@@ -1358,14 +1396,40 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="options_configure_toolbars">
+  </Actions>
+
+  <Actions category="Settings">
+    <text>Settings</text>
+    <Action name="options_configure">
       <icon>configure</icon>
-      <text>Configure Tool&amp;bars...</text>
+      <text>&amp;Configure Krita...</text>
       <whatsThis></whatsThis>
-      <toolTip>Configure Toolbars</toolTip>
-      <iconText>Configure Toolbars</iconText>
+      <toolTip>Configure Krita</toolTip>
+      <iconText>Configure Krita</iconText>
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="manage_bundles">
+      <icon></icon>
+      <text>&amp;Manage Resources...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Manage Resources</toolTip>
+      <iconText>Manage Resources</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="switch_application_language">
+      <icon>preferences-desktop-locale</icon>
+      <text>Switch Application &amp;Language...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Switch Application Language</toolTip>
+      <iconText>Switch Application Language</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
@@ -1392,6 +1456,18 @@
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
       <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="options_configure_toolbars">
+      <icon>configure</icon>
+      <text>Configure Tool&amp;bars...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Configure Toolbars</toolTip>
+      <iconText>Configure Toolbars</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="settings_dockers_menu">
@@ -1432,40 +1508,6 @@
       <iconText>Configure Shortcuts</iconText>
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="options_configure">
-      <icon>configure</icon>
-      <text>&amp;Configure Krita...</text>
-      <whatsThis></whatsThis>
-      <toolTip>Configure Krita</toolTip>
-      <iconText>Configure Krita</iconText>
-      <activationFlags>0</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="manage_bundles">
-      <icon></icon>
-      <text>&amp;Manage Resources...</text>
-      <whatsThis></whatsThis>
-      <toolTip>Manage Resources</toolTip>
-      <iconText>Manage Resources</iconText>
-      <activationFlags>0</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="switch_application_language">
-      <icon>preferences-desktop-locale</icon>
-      <text>Switch Application &amp;Language...</text>
-      <whatsThis></whatsThis>
-      <toolTip>Switch Application Language</toolTip>
-      <iconText>Switch Application Language</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>

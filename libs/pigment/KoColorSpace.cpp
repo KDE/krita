@@ -580,7 +580,7 @@ void KoColorSpace::decreaseLuminosity(quint8 * pixel, qreal step) const {
         }
         luma = pow(luma, 2.2);
         channelValues = fromHSY(&hue, &sat, &luma);
-    profile()->delinearizeFloatValue(channelValues);
+        profile()->delinearizeFloatValue(channelValues);
     } else {
         qreal hue, sat, luma = 0.0;
         toHSY(channelValues, &hue, &sat, &luma);

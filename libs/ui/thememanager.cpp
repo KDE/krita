@@ -251,7 +251,7 @@ void ThemeManager::populateThemeMenu()
 
 
     QAction * action;
-    const QStringList schemeFiles = KoResourcePaths::findAllResources("data", "color-schemes/*.colors", KoResourcePaths::NoDuplicates);
+    const QStringList schemeFiles = KoResourcePaths::findAllResources("data", "color-schemes/*.colors");
 
     QMap<QString, QAction*> actionMap;
     for (int i = 0; i < schemeFiles.size(); ++i)
@@ -351,7 +351,7 @@ QString ThemeManager::currentKDEdefaultTheme() const
 
 void ThemeManager::populateThemeMap()
 {
-    const QStringList schemeFiles = KoResourcePaths::findAllResources("data", "color-schemes/*.colors", KoResourcePaths::NoDuplicates);
+    const QStringList schemeFiles = KoResourcePaths::findAllResources("data", "color-schemes/*.colors");
     for (int i = 0; i < schemeFiles.size(); ++i)
     {
         const QString filename  = schemeFiles.at(i);

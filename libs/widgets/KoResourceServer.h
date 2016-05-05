@@ -82,7 +82,7 @@ public:
         QStringList fileNames;
 
         foreach (const QString &extension, extensionList) {
-            fileNames += KoResourcePaths::findAllResources(type().toLatin1(), extension, KoResourcePaths::Recursive | KoResourcePaths::NoDuplicates);
+            fileNames += KoResourcePaths::findAllResources(type().toLatin1(), extension, KoResourcePaths::Recursive);
 
         }
         return fileNames;

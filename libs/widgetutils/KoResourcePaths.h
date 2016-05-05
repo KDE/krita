@@ -49,7 +49,6 @@ public:
 
     enum SearchOption { NoSearchOptions = 0,
                         Recursive = 1,
-                        NoDuplicates = 2,
                         IgnoreExecBit = 4
                       };
     Q_DECLARE_FLAGS(SearchOptions, SearchOption)
@@ -155,8 +154,7 @@ public:
      *        wildcard expression. E.g. <tt>"images\*.jpg"</tt>.
      *        Use QString() if you do not want a filter.
      * @param options if the flags passed include Recursive, subdirectories
-     *        will also be search; if NoDuplicates is passed then only entries with
-     *        unique filenames will be returned eliminating duplicates.
+     *        will also be search.
      *
      * @return List of all the files whose filename matches the
      *         specified filter.

@@ -377,9 +377,8 @@ void KisActionRegistry::writeCustomShortcuts(KConfigBase *config) const
 
 void KisActionRegistry::Private::loadActionFiles()
 {
-    auto searchType = KoResourcePaths::Recursive | KoResourcePaths::NoDuplicates;
     QStringList actionDefinitions =
-        KoResourcePaths::findAllResources("kis_actions", "*.action", searchType);
+        KoResourcePaths::findAllResources("kis_actions", "*.action", KoResourcePaths::Recursive);
 
     // Extract actions all XML .action files.
     Q_FOREACH (const QString &actionDefinition, actionDefinitions)  {

@@ -396,10 +396,9 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
     debugWidgetUtils << "=====================================================";
     debugWidgetUtils << type << _filter << QStandardPaths::standardLocations(d->mapTypeToQStandardPaths(type));
 
-    bool noDuplicates = options & KoResourcePaths::NoDuplicates;
     bool recursive = options & KoResourcePaths::Recursive;
 
-    debugWidgetUtils << "findAllResources: type" << type << "filter" << _filter << "no dups" << noDuplicates << "recursive" << recursive;
+    debugWidgetUtils << "findAllResources: type" << type << "filter" << _filter << "recursive" << recursive;
 
     QStringList aliases = d->aliases(type);
     QString filter = _filter;
@@ -416,7 +415,7 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
         QStringList standardResources =
             QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type),
                                       filter, QStandardPaths::LocateFile);
-        appendResources(&resources, standardResources, noDuplicates);
+        appendResources(&resources, standardResources, true);
     }
 
     debugWidgetUtils << "\tresources from qstandardpaths:" << resources.size();
@@ -432,7 +431,7 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
         Q_FOREACH (const QString &dir, dirs) {
             appendResources(&resources,
                             filesInDir(dir, filter, recursive),
-                            noDuplicates);
+                            true);
         }
     }
 
@@ -444,7 +443,7 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
         QStringList prefixResources;
         prefixResources << filesInDir(getInstallationPrefix() + "share/" + fi.path(), fi.fileName(), false);
         prefixResources << filesInDir(getInstallationPrefix() + "share/krita/" + fi.path(), fi.fileName(), false);
-        appendResources(&resources, prefixResources, noDuplicates);
+        appendResources(&resources, prefixResources, true);
     }
 
     debugWidgetUtils << "\tresources from installation:" << resources.size();

@@ -249,6 +249,7 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
     connect(d->document, SIGNAL(sigSavingFinished()), this, SLOT(slotSavingFinished()));
 
     d->canvas.addDecoration(&d->paintingAssistantsDecoration);
+    d->paintingAssistantsDecoration.setVisible(true);
 
     d->showFloatingMessage = cfg.showCanvasMessages();
 }
@@ -963,11 +964,6 @@ void KisView::slotLoadingFinished()
         image()->blockSignals(false);
         image()->unlock();
     }
-
-    Q_FOREACH (KisPaintingAssistant* assist, document()->preLoadedAssistants()) {
-        d->paintingAssistantsDecoration.addAssistant(assist);
-    }
-    d->paintingAssistantsDecoration.setVisible(true);
 
     canvasBase()->initializeImage();
 

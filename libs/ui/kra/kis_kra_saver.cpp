@@ -290,10 +290,10 @@ bool KisKraSaver::saveAssistants(KoStore* store, QString uri, bool external)
     QString location;
     QMap<QString, int> assistantcounters;
     QByteArray data;
-    QList<KisPaintingAssistant*> assistants =  m_d->doc->assistants();
+    QList<KisPaintingAssistantSP> assistants =  m_d->doc->assistants();
     QMap<KisPaintingAssistantHandleSP, int> handlemap;
     if (!assistants.isEmpty()) {
-        Q_FOREACH (KisPaintingAssistant* assist, assistants){
+        Q_FOREACH (KisPaintingAssistantSP assist, assistants){
             if (!assistantcounters.contains(assist->id())){
                 assistantcounters.insert(assist->id(),0);
             }
@@ -314,10 +314,10 @@ bool KisKraSaver::saveAssistants(KoStore* store, QString uri, bool external)
 bool KisKraSaver::saveAssistantsList(QDomDocument& doc, QDomElement& element)
 {
     int count_ellipse = 0, count_perspective = 0, count_ruler = 0, count_vanishingpoint = 0,count_infiniteruler = 0, count_parallelruler = 0, count_concentricellipse = 0, count_fisheyepoint = 0, count_spline = 0;
-    QList<KisPaintingAssistant*> assistants =  m_d->doc->assistants();
+    QList<KisPaintingAssistantSP> assistants =  m_d->doc->assistants();
     if (!assistants.isEmpty()) {
         QDomElement assistantsElement = doc.createElement("assistants");
-        Q_FOREACH (KisPaintingAssistant* assist, assistants){
+        Q_FOREACH (KisPaintingAssistantSP assist, assistants){
             if (assist->id() == "ellipse"){
                 assist->saveXmlList(doc, assistantsElement, count_ellipse);
                 count_ellipse++;

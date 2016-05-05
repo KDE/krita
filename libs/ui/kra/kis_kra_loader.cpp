@@ -124,7 +124,7 @@ public:
     int syntaxVersion; // version of the fileformat we are loading
     vKisNodeSP selectedNodes; // the nodes that were active when saving the document.
     QMap<QString, QString> assistantsFilenames;
-    QList<KisPaintingAssistant*> assistants;
+    QList<KisPaintingAssistantSP> assistants;
     QMap<KisNode*, QString> keyframeFilenames;
     QStringList errorMessages;
 };
@@ -467,7 +467,7 @@ vKisNodeSP KisKraLoader::selectedNodes() const
     return m_d->selectedNodes;
 }
 
-QList<KisPaintingAssistant *> KisKraLoader::assistants() const
+QList<KisPaintingAssistantSP> KisKraLoader::assistants() const
 {
     return m_d->assistants;
 }
@@ -494,7 +494,7 @@ void KisKraLoader::loadAssistants(KoStore *store, const QString &uri, bool exter
             assistant->loadXml(store, handleMap, file_path);
             //If an assistant has too few handles than it should according to it's own setup, just don't load it//
             if (assistant->handles().size()==assistant->numHandles()){
-                m_d->assistants.append(assistant);
+                m_d->assistants.append(toQShared(assistant));
             }
         }
         loadedAssistant++;

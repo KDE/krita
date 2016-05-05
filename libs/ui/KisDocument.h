@@ -803,16 +803,8 @@ public:
      */
     KisNodeSP preActivatedNode() const;
 
-    /**
-      *@return a list of all the assistants in all current views
-      */
-    QList<KisPaintingAssistant *> assistants();
-
-    /**
-     * @return a list of assistants loaded from a document
-     */
-    QList<KisPaintingAssistant *> preLoadedAssistants();
-
+    QList<KisPaintingAssistantSP> assistants() const;
+    void setAssistants(const QList<KisPaintingAssistantSP> value);
 
 private:
 

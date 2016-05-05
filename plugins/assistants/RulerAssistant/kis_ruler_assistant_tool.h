@@ -53,14 +53,14 @@ public:
 
 private:
     void addAssistant();
-    void removeAssistant(KisPaintingAssistant *assistant);
-    void snappingOn(KisPaintingAssistant* assistant);
-    void snappingOff(KisPaintingAssistant* assistant);
-    void outlineOn(KisPaintingAssistant* assistant);
-    void outlineOff(KisPaintingAssistant* assistant);
+    void removeAssistant(KisPaintingAssistantSP assistant);
+    void snappingOn(KisPaintingAssistantSP assistant);
+    void snappingOff(KisPaintingAssistantSP assistant);
+    void outlineOn(KisPaintingAssistantSP assistant);
+    void outlineOff(KisPaintingAssistantSP assistant);
     bool mouseNear(const QPointF& mousep, const QPointF& point);
     QPointF straightLine(QPointF point, QPointF compare);
-    KisPaintingAssistantHandleSP nodeNearPoint(KisPaintingAssistant* grid, QPointF point);
+    KisPaintingAssistantHandleSP nodeNearPoint(KisPaintingAssistantSP grid, QPointF point);
     QPointF snapToGuide(KoPointerEvent *e, const QPointF &offset, bool useModifiers);
     QPointF snapToGuide(const QPointF& pt, const QPointF &offset);
 
@@ -82,8 +82,8 @@ protected:
     QList<KisPaintingAssistantHandleSP> m_handles, m_sideHandles;
     KisPaintingAssistantHandleSP m_handleDrag;
     KisPaintingAssistantHandleSP m_handleCombine;
-    KisPaintingAssistant* m_assistantDrag;
-    KisPaintingAssistant* m_newAssistant;
+    KisPaintingAssistantSP m_assistantDrag;
+    KisPaintingAssistantSP m_newAssistant;
     QPointF m_mousePosition;
     Ui::AssistantsToolOptions m_options;
     QWidget* m_optionsWidget;

@@ -232,5 +232,14 @@ inline QSharedPointer<T> toQShared(T* ptr) {
     return QSharedPointer<T>(ptr);
 }
 
+template <class A, template <class C> class List>
+List<QSharedPointer<A>> listToQShared(const List<A*> list) {
+    List<QSharedPointer<A>> newList;
+    Q_FOREACH(A* value, list) {
+        newList.append(toQShared(value));
+    }
+    return newList;
+}
+
 #endif // KISGLOBAL_H_
 

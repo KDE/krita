@@ -407,7 +407,7 @@ public:
     bool suppressProgress;
     KoProgressProxy* fileProgressProxy;
 
-    QList<KisPaintingAssistant*> assistants;
+    QList<KisPaintingAssistantSP> assistants;
     KisGridConfig gridConfig;
 
     bool openFile() {
@@ -2327,21 +2327,14 @@ vKisNodeSP KisDocument::activeNodes() const
     return nodes;
 }
 
-QList<KisPaintingAssistant*> KisDocument::assistants()
-{
-    QList<KisPaintingAssistant*> assistants;
-    Q_FOREACH (KisView *view, KisPart::instance()->views()) {
-        if (view && view->document() == this) {
-            KisPaintingAssistantsDecoration* assistantsDecoration = view->canvasBase()->paintingAssistantsDecoration();
-            assistants.append(assistantsDecoration->assistants());
-        }
-    }
-    return assistants;
-}
-
-QList<KisPaintingAssistant *> KisDocument::preLoadedAssistants()
+QList<KisPaintingAssistantSP> KisDocument::assistants() const
 {
     return d->assistants;
+}
+
+void KisDocument::setAssistants(const QList<KisPaintingAssistantSP> value)
+{
+    d->assistants = value;
 }
 
 void KisDocument::setPreActivatedNode(KisNodeSP activatedNode)

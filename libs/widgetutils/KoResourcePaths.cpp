@@ -25,9 +25,9 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QDebug>
-#include <QSet>
 #include <QApplication>
 #include <QMutex>
+#include "kis_debug.h"
 
 #include "WidgetUtilsDebug.h"
 
@@ -61,6 +61,16 @@ static QStringList cleanupDirs(const QStringList &pathList)
     cleanedPathList << cleanupDirs(path);
   }
   return cleanedPathList;
+}
+
+void appendResources(QStringList *dst, const QStringList &src, bool eliminateDuplicates)
+{
+    Q_FOREACH (const QString &resource, src) {
+        QString realPath = QDir::cleanPath(resource);
+        if (!eliminateDuplicates || !dst->contains(realPath)) {
+            *dst << realPath;
+        }
+    }
 }
 
 
@@ -319,31 +329,43 @@ QStringList KoResourcePaths::findDirsInternal(const QString &type, const QString
 
     QStringList dirs;
 
-#ifdef Q_OS_MAC
-    QString bundlePath = getApplicationRoot() + "/share/" + relDir;
-    dirs << bundlePath;
-    bundlePath = getApplicationRoot() + "/../share/" + relDir;
-    dirs << bundlePath;
-#endif
-
-    dirs << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), relDir, QStandardPaths::LocateDirectory);
+    {
+        QStringList standardDirs =
+            QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), relDir, QStandardPaths::LocateDirectory);
+        appendResources(&dirs, standardDirs, true);
+    }
 
     Q_FOREACH (const QString &alias, aliases) {
-        dirs << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias + '/' + relDir, QStandardPaths::LocateDirectory);
+        QStringList aliasDirs =
+            QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias + '/' + relDir, QStandardPaths::LocateDirectory);
+        appendResources(&dirs, aliasDirs, true);
     }
 
-    if (dirs.isEmpty()) {
-        dirs.append(getApplicationRoot() + "/share/" + relDir);
-        dirs.append(getApplicationRoot() + "/share/krita/" + relDir);
+#ifdef Q_OS_MAC
+
+    {
+        QStringList bundlePaths;
+        bundlePaths << getApplicationRoot() + "/share/" + relDir;
+        bundlePaths << getApplicationRoot() + "/../share/" + relDir;
+        appendResources(&dirs, bundlePaths, true);
     }
+#endif
+
+    if (dirs.isEmpty()) {
+        QStringList fallbackPaths;
+        fallbackPaths << getApplicationRoot() + "/share/" + relDir;
+        fallbackPaths << getApplicationRoot() + "/share/krita/" + relDir;
+        appendResources(&dirs, fallbackPaths, true);
+    }
+
     debugWidgetUtils << "findDirs: type" << type << "relDir" << relDir<< "resource" << dirs;
     return dirs;
 }
 
 
-QStringList filesInDir(const QString &startdir, const QString & filter, bool noduplicates, bool recursive)
+QStringList filesInDir(const QString &startdir, const QString & filter, bool recursive)
 {
-    debugWidgetUtils << "filesInDir: startdir" << startdir << "filter" << filter << "noduplicates" << noduplicates << "recursive" << recursive;
+    debugWidgetUtils << "filesInDir: startdir" << startdir << "filter" << filter << "recursive" << recursive;
     QStringList result;
 
     // First the entries in this path
@@ -361,7 +383,7 @@ QStringList filesInDir(const QString &startdir, const QString & filter, bool nod
         const QStringList entries = QDir(startdir).entryList(QDir::Dirs | QDir::NoDotAndDotDot);
         Q_FOREACH (const QString &subdir, entries) {
             debugWidgetUtils << "\tGoing to look in subdir" << subdir << "of" << startdir;
-            result << filesInDir(startdir + '/' + subdir, filter, noduplicates, recursive);
+            result << filesInDir(startdir + '/' + subdir, filter, recursive);
         }
     }
     return result;
@@ -373,6 +395,7 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
 {
     debugWidgetUtils << "=====================================================";
     debugWidgetUtils << type << _filter << QStandardPaths::standardLocations(d->mapTypeToQStandardPaths(type));
+
     bool noDuplicates = options & KoResourcePaths::NoDuplicates;
     bool recursive = options & KoResourcePaths::Recursive;
 
@@ -390,21 +413,26 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
 
     QStringList resources;
     if (aliases.isEmpty()) {
-        resources << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), filter, QStandardPaths::LocateFile);
+        QStringList standardResources =
+            QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type),
+                                      filter, QStandardPaths::LocateFile);
+        appendResources(&resources, standardResources, noDuplicates);
     }
 
     debugWidgetUtils << "\tresources from qstandardpaths:" << resources.size();
 
     Q_FOREACH (const QString &alias, aliases) {
         debugWidgetUtils << "\t\talias:" << alias;
-        const QStringList dirs = QStringList() << getInstallationPrefix() + "share/" + alias + "/"
-                                               << getInstallationPrefix() + "share/krita/" + alias + "/"
-                                               << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias, QStandardPaths::LocateDirectory);
-        QSet<QString> s = QSet<QString>::fromList(dirs);
+        QStringList dirs;
 
-        debugWidgetUtils << "\t\tdirs:" << dirs;
-        Q_FOREACH (const QString &dir, s) {
-            resources << filesInDir(dir, filter, noDuplicates, recursive);
+        dirs << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias, QStandardPaths::LocateDirectory)
+             << getInstallationPrefix() + "share/" + alias + "/"
+             << getInstallationPrefix() + "share/krita/" + alias + "/";
+
+        Q_FOREACH (const QString &dir, dirs) {
+            appendResources(&resources,
+                            filesInDir(dir, filter, recursive),
+                            noDuplicates);
         }
     }
 
@@ -412,17 +440,14 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
 
     if (resources.isEmpty()) {
         QFileInfo fi(filter);
-        resources << filesInDir(getInstallationPrefix() + "share/" + fi.path(), fi.fileName(), noDuplicates, false);
-        resources << filesInDir(getInstallationPrefix() + "share/krita/" + fi.path(), fi.fileName(), noDuplicates, false);
+
+        QStringList prefixResources;
+        prefixResources << filesInDir(getInstallationPrefix() + "share/" + fi.path(), fi.fileName(), false);
+        prefixResources << filesInDir(getInstallationPrefix() + "share/krita/" + fi.path(), fi.fileName(), false);
+        appendResources(&resources, prefixResources, noDuplicates);
     }
 
     debugWidgetUtils << "\tresources from installation:" << resources.size();
-
-    if (noDuplicates) {
-        QSet<QString> s = QSet<QString>::fromList(resources);
-        resources = s.toList();
-    }
-
     debugWidgetUtils << "=====================================================";
 
     return resources;
@@ -434,12 +459,16 @@ QStringList KoResourcePaths::resourceDirsInternal(const QString &type)
     QStringList aliases = d->aliases(type);
 
     Q_FOREACH (const QString &alias, aliases) {
-        resourceDirs << getInstallationPrefix() + "share/" + alias + "/"
-                                               << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias, QStandardPaths::LocateDirectory);
-        resourceDirs << getInstallationPrefix() + "share/krita/" + alias + "/"
-                                               << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias, QStandardPaths::LocateDirectory);
+        QStringList aliasDirs;
 
-        resourceDirs << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias, QStandardPaths::LocateDirectory);
+        aliasDirs << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias, QStandardPaths::LocateDirectory);
+
+        aliasDirs << getInstallationPrefix() + "share/" + alias + "/"
+                  << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias, QStandardPaths::LocateDirectory);
+        aliasDirs << getInstallationPrefix() + "share/krita/" + alias + "/"
+                  << QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias, QStandardPaths::LocateDirectory);
+
+        appendResources(&resourceDirs, aliasDirs, true);
     }
 
     debugWidgetUtils << "resourceDirs: type" << type << resourceDirs;

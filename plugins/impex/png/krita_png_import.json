@@ -3,7 +3,7 @@
     "NoDisplay": "true",
     "Type": "Service",
     "X-KDE-Export": "application/x-krita",
-    "X-KDE-Import": "image/png",
+    "X-KDE-Import": "image/png,application/x-krita-paintoppreset",
     "X-KDE-Library": "kritapngimport",
     "X-KDE-ServiceTypes": [
         "Krita/FileFilter"

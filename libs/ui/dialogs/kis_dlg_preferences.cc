@@ -900,7 +900,6 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
 
     connect(this, SIGNAL(accepted()), m_inputConfiguration, SLOT(saveChanges()));
     connect(this, SIGNAL(rejected()), m_inputConfiguration, SLOT(revertChanges()));
-    connect(restoreDefaultsButton, SIGNAL(clicked(bool)), m_inputConfiguration, SLOT(setDefaults()));
 
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
     Q_FOREACH (KisAbstractPreferenceSetFactory *preferenceSetFactory, preferenceSetRegistry->values()) {
@@ -928,7 +927,7 @@ KisDlgPreferences::~KisDlgPreferences()
 
 void KisDlgPreferences::slotDefault()
 {
-    if (currentPage()->objectName() == "default") {
+    if (currentPage()->objectName() == "general") {
         m_general->setDefault();
     }
     else if (currentPage()->objectName() == "shortcuts") {

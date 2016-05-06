@@ -306,9 +306,9 @@ void KisUndoView::mousePressEvent(QMouseEvent *event)
         QMenu menu(this);
         QAction* action1 = menu.addAction(KisIconUtils::loadIcon("link"),stack()->useCumulativeUndoRedo()?i18n("Disable Cumulative Undo"):i18n("Enable Cumulative Undo"));
         connect(action1, SIGNAL(triggered()), this, SLOT(toggleCumulativeUndoRedo()));
-        QLabel *l = new QLabel("Start merging time");
+        QLabel *l = new QLabel(i18n("Start merging time"));
         QDoubleSpinBox *s = new QDoubleSpinBox();
-        s->setToolTip("The amount of time after a merged stroke before merging again");
+        s->setToolTip(i18nc("@info:tooltip", "The amount of time after a merged stroke before merging again"));
         s->setRange(3,10);
         s->setValue(stack()->timeT1());
         QGridLayout *g = new QGridLayout();
@@ -321,9 +321,9 @@ void KisUndoView::mousePressEvent(QMouseEvent *event)
         action2->setDefaultWidget(w);
         connect(s,SIGNAL(valueChanged(double)),SLOT(setStackT1(double)));
 
-        QLabel *l1 = new QLabel("Group time");
+        QLabel *l1 = new QLabel(i18n("Group time"));
         QDoubleSpinBox *s1 = new QDoubleSpinBox();
-        s1->setToolTip("The amount of time every stroke should be \napart from its previous stroke\nto be classified in one group");
+        s1->setToolTip(i18nc("@info:tooltip", "The amount of time every stroke should be \napart from its previous stroke\nto be classified in one group"));
         s1->setRange(0.3,s->value());
         s1->setValue(stack()->timeT2());
         QGridLayout *g1 = new QGridLayout();
@@ -336,9 +336,9 @@ void KisUndoView::mousePressEvent(QMouseEvent *event)
         action3->setDefaultWidget(w1);
         connect(s1,SIGNAL(valueChanged(double)),SLOT(setStackT2(double)));
 
-        QLabel *l2 = new QLabel("Split Strokes");
+        QLabel *l2 = new QLabel(i18n("Split Strokes"));
         QSpinBox *s2 = new QSpinBox();
-        s2->setToolTip("The number of last strokes which Krita should store separately");
+        s2->setToolTip(i18nc("@info:tooltip", "The number of last strokes which Krita should store separately"));
         s2->setRange(1,stack()->undoLimit());
         s2->setValue(stack()->strokesN());
         QGridLayout *g2 = new QGridLayout();

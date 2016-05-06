@@ -51,7 +51,7 @@ KisRecordedFilterActionEditor::KisRecordedFilterActionEditor(QWidget* parent, Ki
         m_configWidget->setConfiguration(m_action->filterConfiguration());
         connect(m_configWidget, SIGNAL(sigConfigurationItemChanged()), SLOT(configurationUpdated()));
     } else {
-        m_gridLayout->addWidget(new QLabel("No configuration option.", this));
+        m_gridLayout->addWidget(new QLabel(i18n("No configuration option."), this));
     }
 }
 

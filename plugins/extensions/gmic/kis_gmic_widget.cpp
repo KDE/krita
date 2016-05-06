@@ -89,12 +89,10 @@ void KisGmicWidget::createMainLayout()
     connect(m_filterTree->selectionModel(), SIGNAL(selectionChanged (const QItemSelection &, const QItemSelection &)),
             this, SLOT(slotSelectedFilterChanged(const QItemSelection &, const QItemSelection &)));
 
-    if (!m_updateUrl.isEmpty())
-    {
-        updateBtn->setToolTip("Fetching definitions from : " + m_updateUrl);
+    if (!m_updateUrl.isEmpty()) {
+        updateBtn->setToolTip(i18nc("@info:tooltip", "Fetching definitions from: " + m_updateUrl));
     }
-    else
-    {
+    else {
         updateBtn->setEnabled(false);
     }
 

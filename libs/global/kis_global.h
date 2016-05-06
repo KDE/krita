@@ -241,5 +241,25 @@ List<QSharedPointer<A>> listToQShared(const List<A*> list) {
     return newList;
 }
 
+template <class T>
+struct BoostLockableWrapper {
+    BoostLockableWrapper(T *lock) : m_lock(lock) {}
+
+    void lock() {
+        m_lock->lock();
+    }
+
+    bool try_lock() {
+        return m_lock->tryLock();
+    }
+
+    void unlock() {
+        m_lock->unlock();
+    }
+
+private:
+    T *m_lock;
+};
+
 #endif // KISGLOBAL_H_
 

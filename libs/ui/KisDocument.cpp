@@ -112,6 +112,8 @@
 #include "kis_async_action_feedback.h"
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
+#include <boost/thread.hpp>
+#include "kis_image_barrier_lock_adapter.h"
 
 
 static const char CURRENT_DTD_VERSION[] = "2.0";
@@ -230,54 +232,6 @@ private:
     KisDocument *m_doc;
 };
 
-class SafeSavingLocker {
-public:
-    SafeSavingLocker(KisDocument *doc)
-        : m_doc(doc),
-          m_locked(false)
-    {
-        const int realAutoSaveInterval = KisConfig().autoSaveInterval();
-        const int emergencyAutoSaveInterval = 10; // sec
-
-        if (!m_doc->image()->tryBarrierLock(true)) {
-            if (m_doc->isAutosaving()) {
-                m_doc->setDisregardAutosaveFailure(true);
-                if (realAutoSaveInterval) {
-                    m_doc->setAutoSave(emergencyAutoSaveInterval);
-                }
-                m_locked = false;
-            } else {
-                m_doc->image()->requestStrokeEnd();
-                QApplication::processEvents();
-                m_locked = m_doc->image()->tryBarrierLock(true);
-            }
-        } else {
-            m_locked = true;
-        }
-
-        if (m_locked) {
-            m_doc->setDisregardAutosaveFailure(false);
-        }
-    }
-
-    ~SafeSavingLocker() {
-         if (m_locked) {
-             m_doc->image()->unlock();
-
-             const int realAutoSaveInterval = KisConfig().autoSaveInterval();
-             m_doc->setAutoSave(realAutoSaveInterval);
-         }
-     }
-
-    bool successfullyLocked() const {
-        return m_locked;
-    }
-
-private:
-    KisDocument *m_doc;
-    bool m_locked;
-};
-
 class Q_DECL_HIDDEN KisDocument::Private
 {
 public:
@@ -293,7 +247,7 @@ public:
         isExporting(false),
         password(QString()),
         modifiedAfterAutosave(false),
-        autosaving(false),
+        isAutosaving(false),
         shouldCheckAutoSaveFile(true),
         autoErrorHandlingEnabled(true),
         backupFile(true),
@@ -354,7 +308,7 @@ public:
     QString lastErrorMessage; // see openFile()
     int autoSaveDelay; // in seconds, 0 to disable.
     bool modifiedAfterAutosave;
-    bool autosaving;
+    bool isAutosaving;
     bool shouldCheckAutoSaveFile; // usually true
     bool autoErrorHandlingEnabled; // usually true
     bool backupFile;
@@ -381,6 +335,7 @@ public:
     QUrl m_url; // Remote (or local) url - the one displayed to the user.
     QString m_file; // Local file - the only one the part implementation should deal with.
     QEventLoop m_eventLoop;
+    QMutex savingMutex;
 
     bool modified;
     bool readwrite;
@@ -467,6 +422,72 @@ public:
                             image.data(), SLOT(explicitRegenerateLevelOfDetail())));
         }
     }
+
+    class SafeSavingLocker;
+};
+
+class KisDocument::Private::SafeSavingLocker {
+public:
+    SafeSavingLocker(KisDocument::Private *_d)
+        : d(_d),
+          m_locked(false),
+          m_imageLock(d->image, true),
+          m_savingLock(&d->savingMutex)
+    {
+        const int realAutoSaveInterval = KisConfig().autoSaveInterval();
+        const int emergencyAutoSaveInterval = 10; // sec
+
+        /**
+         * Initial try to lock both objects. Locking the image guards
+         * us from any i,age composition threads running in the
+         * background, while savingMutex guards us from entering the
+         * saving code twice by autosave and main threads.
+         *
+         * Since we are trying to lock multiple objects, so we should
+         * do it in a safe manner.
+         */
+        m_locked = boost::try_lock(m_imageLock, m_savingLock) < 0;
+
+        if (!m_locked) {
+            if (d->isAutosaving) {
+                d->disregardAutosaveFailure = true;
+                if (realAutoSaveInterval) {
+                    d->document->setAutoSave(emergencyAutoSaveInterval);
+                }
+            } else {
+                d->image->requestStrokeEnd();
+                QApplication::processEvents();
+
+                // one more try...
+                m_locked = boost::try_lock(m_imageLock, m_savingLock) < 0;
+            }
+        }
+
+        if (m_locked) {
+            d->disregardAutosaveFailure = false;
+        }
+    }
+
+    ~SafeSavingLocker() {
+         if (m_locked) {
+             m_imageLock.unlock();
+             m_savingLock.unlock();
+
+             const int realAutoSaveInterval = KisConfig().autoSaveInterval();
+             d->document->setAutoSave(realAutoSaveInterval);
+         }
+     }
+
+    bool successfullyLocked() const {
+        return m_locked;
+    }
+
+private:
+    KisDocument::Private *d;
+    bool m_locked;
+
+    KisImageBarrierLockAdapter m_imageLock;
+    BoostLockableWrapper<QMutex> m_savingLock;
 };
 
 KisDocument::KisDocument()
@@ -660,7 +681,7 @@ bool KisDocument::saveFile()
     if (!isNativeFormat(outputMimeType)) {
         dbgUI << "Saving to format" << outputMimeType << "in" << localFilePath();
 
-        SafeSavingLocker locker(this);
+        Private::SafeSavingLocker locker(d);
         if (locker.successfullyLocked()) {
             status = d->filterManager->exportDocument(localFilePath(), outputMimeType);
         } else {
@@ -817,14 +838,14 @@ void KisDocument::slotAutoSave()
         } else {
             connect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
             emit statusBarMessage(i18n("Autosaving..."));
-            d->autosaving = true;
+            d->isAutosaving = true;
             bool ret = saveNativeFormat(autoSaveFile(localFilePath()));
             setModified(true);
             if (ret) {
                 d->modifiedAfterAutosave = false;
                 d->autoSaveTimer.stop(); // until the next change
             }
-            d->autosaving = false;
+            d->isAutosaving = false;
             emit clearStatusBarMessage();
             disconnect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
             if (!ret && !d->disregardAutosaveFailure) {
@@ -866,7 +887,7 @@ bool KisDocument::isModified() const
 
 bool KisDocument::saveNativeFormat(const QString & file)
 {
-    SafeSavingLocker locker(this);
+    Private::SafeSavingLocker locker(d);
     if (!locker.successfullyLocked()) return false;
 
     d->lastErrorMessage.clear();
@@ -904,7 +925,7 @@ bool KisDocument::saveNativeFormat(const QString & file)
 
     bool result = false;
 
-    if (!isAutosaving()) {
+    if (!d->isAutosaving) {
         KisAsyncActionFeedback f(i18n("Saving document..."), 0);
         result = f.runAction(std::bind(&KisDocument::saveNativeFormatCalligra, this, store));
     } else {
@@ -941,7 +962,7 @@ bool KisDocument::saveNativeFormatCalligra(KoStore *store)
         (void)store->close();
     }
 
-    if (!isAutosaving()) {
+    if (!d->isAutosaving) {
         if (store->open("preview.png")) {
             // ### TODO: missing error checking (The partition could be full!)
             savePreview(store);
@@ -1056,11 +1077,6 @@ QString KisDocument::autoSaveFile(const QString & path) const
         retval = QString("%1%2.%3-autosave%4").arg(dir).arg(QDir::separator()).arg(filename).arg(extension);
     }
     return retval;
-}
-
-void KisDocument::setDisregardAutosaveFailure(bool disregardFailure)
-{
-    d->disregardAutosaveFailure = disregardFailure;
 }
 
 bool KisDocument::importDocument(const QUrl &_url)
@@ -1576,7 +1592,7 @@ void KisDocument::setModified(bool mod)
         updateEditingTime(false);
     }
 
-    if (isAutosaving())   // ignore setModified calls due to autosaving
+    if (d->isAutosaving)   // ignore setModified calls due to autosaving
         return;
 
     if ( !d->readwrite && d->modified ) {
@@ -1708,7 +1724,7 @@ bool KisDocument::completeLoading(KoStore* store)
 bool KisDocument::completeSaving(KoStore* store)
 {
     d->kraSaver->saveKeyframes(store, url().url(), isStoredExtern());
-    d->kraSaver->saveBinaryData(store, d->image, url().url(), isStoredExtern(), isAutosaving());
+    d->kraSaver->saveBinaryData(store, d->image, url().url(), isStoredExtern(), d->isAutosaving);
     bool retval = true;
     if (!d->kraSaver->errorMessages().isEmpty()) {
         setErrorMessage(d->kraSaver->errorMessages().join(".\n"));
@@ -1860,11 +1876,6 @@ void KisDocument::showLoadingErrorDialog()
     else if (errorMessage() != "USER_CANCELED") {
         QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not open %1\nReason: %2", localFilePath(), errorMessage()));
     }
-}
-
-bool KisDocument::isAutosaving() const
-{
-    return d->autosaving;
 }
 
 bool KisDocument::isLoading() const
@@ -2440,3 +2451,7 @@ KisUndoStore* KisDocument::createUndoStore()
     return new KisDocumentUndoStore(this);
 }
 
+bool KisDocument::isAutosaving() const
+{
+    return d->isAutosaving;
+}

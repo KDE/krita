@@ -365,11 +365,6 @@ public:
     void setAutoSave(int delay);
 
     /**
-     * Checks whether the document is currently in the process of autosaving
-     */
-    bool isAutosaving() const;
-
-    /**
      * Set whether the next openUrl call should check for an auto-saved file
      * and offer to open it. This is usually true, but can be turned off
      * (e.g. for the preview module). This only checks for names auto-saved
@@ -625,7 +620,6 @@ private:
     QString newObjectName();
 
     QString autoSaveFile(const QString & path) const;
-    void setDisregardAutosaveFailure(bool disregardFailure);
 
     /**
      *  Loads a document
@@ -685,6 +679,12 @@ private:
      *  otherwise, File --> Export will not work properly.
      */
     bool isExporting() const;
+
+    /**
+     * Legacy method from KoDocumentBase. Don't use it anywhere
+     * outside KisDocument!
+     */
+    bool isAutosaving() const;
 
 public:
 

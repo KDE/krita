@@ -301,7 +301,7 @@ int KisPart::viewCount(KisDocument *doc) const
     else {
         int count = 0;
         Q_FOREACH (QPointer<KisView> view, d->views) {
-            if (view->document() == doc) {
+            if (view && view->isVisible() && view->document() == doc) {
                 count++;
             }
         }

@@ -241,6 +241,12 @@ List<QSharedPointer<A>> listToQShared(const List<A*> list) {
     return newList;
 }
 
+/**
+ * A special wrapper object that converts Qt-style mutexes and locks
+ * into an object that supports Boost's "Lockable" concept. Basically,
+ * it converts tryLock() into try_lock() to comply with the syntax.
+ */
+
 template <class T>
 struct BoostLockableWrapper {
     BoostLockableWrapper(T *lock) : m_lock(lock) {}

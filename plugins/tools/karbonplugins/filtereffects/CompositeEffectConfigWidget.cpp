@@ -37,12 +37,12 @@ CompositeEffectConfigWidget::CompositeEffectConfigWidget(QWidget *parent)
     g->addWidget(new QLabel(i18n("Operation"), this), 0, 0);
 
     m_operation = new KComboBox(this);
-    m_operation->addItem(i18n("Over"));
-    m_operation->addItem(i18n("In"));
-    m_operation->addItem(i18n("Out"));
-    m_operation->addItem(i18n("Atop"));
-    m_operation->addItem(i18n("Xor"));
-    m_operation->addItem(i18n("Arithmetic"));
+    m_operation->addItem(i18nc("blending mode", "Over"));
+    m_operation->addItem(i18nc("blending mode", "In"));
+    m_operation->addItem(i18nc("blending mode", "Out"));
+    m_operation->addItem(i18nc("blending mode", "Atop"));
+    m_operation->addItem(i18nc("blending mode", "Xor"));
+    m_operation->addItem(i18nc("blending mode", "Arithmetic"));
     g->addWidget(m_operation, 0, 1);
 
     m_arithmeticWidget = new QWidget(this);

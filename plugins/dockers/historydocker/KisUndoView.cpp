@@ -323,7 +323,7 @@ void KisUndoView::mousePressEvent(QMouseEvent *event)
 
         QLabel *l1 = new QLabel(i18n("Group time"));
         QDoubleSpinBox *s1 = new QDoubleSpinBox();
-        s1->setToolTip(i18nc("@info:tooltip", "The amount of time every stroke should be \napart from its previous stroke\nto be classified in one group"));
+        s1->setToolTip(i18nc("@info:tooltip", "The amount of time every stroke should be apart from its previous stroke to be classified in one group"));
         s1->setRange(0.3,s->value());
         s1->setValue(stack()->timeT2());
         QGridLayout *g1 = new QGridLayout();

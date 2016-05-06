@@ -112,7 +112,7 @@
 #include "kis_async_action_feedback.h"
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
-#include <boost/thread.hpp>
+#include <boost/thread/lock_algorithms.hpp>
 #include "kis_image_barrier_lock_adapter.h"
 
 
@@ -439,7 +439,7 @@ public:
 
         /**
          * Initial try to lock both objects. Locking the image guards
-         * us from any i,age composition threads running in the
+         * us from any image composition threads running in the
          * background, while savingMutex guards us from entering the
          * saving code twice by autosave and main threads.
          *

@@ -470,14 +470,20 @@ void KisActionRegistry::Private::loadCustomShortcuts(QString filename)
         return;
     }
 
+    // Distinguish between two "null" states for custom shortcuts.
     for (auto i = actionInfoList.begin(); i != actionInfoList.end(); ++i) {
         if (localShortcuts.hasKey(i.key())) {
             QString entry = localShortcuts.readEntry(i.key(), QString());
-            if (entry != QStringLiteral("none")) {
+            if (entry == QStringLiteral("none")) {
+                // A shortcut list with a single entry "" means the user has disabled the shortcut.
+                // This occurs after stealing the shortcut without assigning a new one.
+                i.value().customShortcuts = QKeySequence::listFromString("")
+            } else {
                 i.value().customShortcuts = QKeySequence::listFromString(entry);
-                continue;
             }
+        } else {
+            // An empty shortcut list means no custom shortcut has been set.
+            i.value().customShortcuts = QList<QKeySequence>();
         }
-        i.value().customShortcuts = QList<QKeySequence>();
     }
 };

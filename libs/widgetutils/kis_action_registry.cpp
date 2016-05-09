@@ -477,7 +477,7 @@ void KisActionRegistry::Private::loadCustomShortcuts(QString filename)
             if (entry == QStringLiteral("none")) {
                 // A shortcut list with a single entry "" means the user has disabled the shortcut.
                 // This occurs after stealing the shortcut without assigning a new one.
-                i.value().customShortcuts = QKeySequence::listFromString("")
+                i.value().customShortcuts = QKeySequence::listFromString("");
             } else {
                 i.value().customShortcuts = QKeySequence::listFromString(entry);
             }

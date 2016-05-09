@@ -309,7 +309,7 @@
       <bool>true</bool>
      </property>
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -331,6 +331,9 @@
      </property>
      <property name="indent">
       <number>0</number>
+     </property>
+     <property name="scaledContents">
+       <bool>true</bool>
      </property>
     </widget>
    </item>

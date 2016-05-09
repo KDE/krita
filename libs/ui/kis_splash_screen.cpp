@@ -46,7 +46,9 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
         color = "#000000";
     }
 
-    lblSplash->setPixmap(pixmap);
+    // Maintain the aspect ratio on high DPI screens when scaling
+    lblSplash->setPixmap(pixmap.scaled(lblSplash->width(),lblSplash->height(),Qt::KeepAspectRatio));
+
     bnClose->hide();
     connect(bnClose, SIGNAL(clicked()), this, SLOT(close()));
     chkShowAtStartup->hide();

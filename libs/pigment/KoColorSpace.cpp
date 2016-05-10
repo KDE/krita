@@ -543,14 +543,14 @@ void KoColorSpace::increaseLuminosity(quint8 * pixel, qreal step) const{
         qreal hue, sat, luma = 0.0;
         toHSY(channelValues, &hue, &sat, &luma);
         luma = pow(luma, 1/2.2);
-        luma += step;
+        luma = qMin(1.0, luma + step);
         luma = pow(luma, 2.2);
         channelValues = fromHSY(&hue, &sat, &luma);
     profile()->delinearizeFloatValue(channelValues);
     } else {
         qreal hue, sat, luma = 0.0;
         toHSY(channelValues, &hue, &sat, &luma);
-        luma += step;
+        luma = qMin(1.0, luma + step);
         channelValues = fromHSY(&hue, &sat, &luma);
     }
     for (int i=0;i<channelnumber;i++){

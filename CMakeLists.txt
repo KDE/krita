@@ -266,9 +266,6 @@ macro_ensure_out_of_source_build("Compiling Krita inside the source directory is
 
 # Note: OPTIONAL_COMPONENTS does not seem to be reliable
 # (as of ECM 5.15.0, CMake 3.2)
-find_package(Qt5Quick ${MIN_QT_VERSION} QUIET)
-macro_log_feature(${Qt5Quick_FOUND} "QtQuick" "Qt Quick" "http://www.qt.io" FALSE "" "Necessary to build the tablet gui for Krita")
-
 if (NOT WIN32 AND NOT APPLE)
 
     find_package(Qt5 ${MIN_QT_VERSION} REQUIRED X11Extras)

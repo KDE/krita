@@ -1,6 +1,0 @@
-module org.krita.sketch
-
-KritaSketchBase 1.0 KritaSketchBase.qml
-MainPage 1.0 MainPage.qml
-WelcomePage 1.0 WelcomePage.qml
-plugin kritasketchplugin

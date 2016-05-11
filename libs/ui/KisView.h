@@ -241,7 +241,6 @@ protected:
     // QWidget overrides
     void dragEnterEvent(QDragEnterEvent * event);
     void dropEvent(QDropEvent * event);
-    bool event( QEvent* event );
     void closeEvent(QCloseEvent *event);
 
     /**

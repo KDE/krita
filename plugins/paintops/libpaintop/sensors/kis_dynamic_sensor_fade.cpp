@@ -47,7 +47,7 @@ qreal KisDynamicSensorFade::value(const KisPaintInformation&  pi)
         }
     }
 
-    qreal result =  1.0 - (m_counter / qreal(m_length));
+    qreal result =  m_counter / qreal(m_length);
     m_counter++;
 
     return result;

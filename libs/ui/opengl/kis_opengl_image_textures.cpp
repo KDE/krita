@@ -331,6 +331,7 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect,
     }
 
     info->assignDirtyImageRect(rect);
+    info->assignLevelOfDetail(levelOfDetail);
     return info;
 }
 

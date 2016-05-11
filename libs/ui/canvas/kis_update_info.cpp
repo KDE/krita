@@ -50,8 +50,14 @@ QRect KisPPUpdateInfo::dirtyImageRect() const {
     return dirtyImageRectVar;
 }
 
+int KisPPUpdateInfo::levelOfDetail() const
+{
+    return 0;
+}
+
 KisOpenGLUpdateInfo::KisOpenGLUpdateInfo(ConversionOptions options)
-    : m_options(options)
+    : m_options(options),
+      m_levelOfDetail(0)
 {
 }
 
@@ -63,6 +69,11 @@ QRect KisOpenGLUpdateInfo::dirtyViewportRect() {
 void KisOpenGLUpdateInfo::assignDirtyImageRect(const QRect &rect)
 {
     m_dirtyImageRect = rect;
+}
+
+void KisOpenGLUpdateInfo::assignLevelOfDetail(int lod)
+{
+    m_levelOfDetail = lod;
 }
 
 QRect KisOpenGLUpdateInfo::dirtyImageRect() const
@@ -85,3 +96,7 @@ void KisOpenGLUpdateInfo::convertColorSpace()
     }
 }
 
+int KisOpenGLUpdateInfo::levelOfDetail() const
+{
+    return m_levelOfDetail;
+}

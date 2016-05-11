@@ -36,6 +36,7 @@ public:
 
     virtual QRect dirtyViewportRect();
     virtual QRect dirtyImageRect() const = 0;
+    virtual int levelOfDetail() const = 0;
 };
 
 Q_DECLARE_METATYPE(KisUpdateInfoSP)
@@ -74,13 +75,17 @@ public:
     QRect dirtyImageRect() const;
 
     void assignDirtyImageRect(const QRect &rect);
+    void assignLevelOfDetail(int lod);
 
     bool needsConversion() const;
     void convertColorSpace();
 
+    int levelOfDetail() const;
+
 private:
     QRect m_dirtyImageRect;
     ConversionOptions m_options;
+    int m_levelOfDetail;
 };
 
 
@@ -94,6 +99,7 @@ public:
 
     QRect dirtyViewportRect();
     QRect dirtyImageRect() const;
+    int levelOfDetail() const;
 
     /**
      * The rect that was reported by KisImage as dirty

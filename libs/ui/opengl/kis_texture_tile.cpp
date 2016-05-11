@@ -166,6 +166,37 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
     }
 #endif
 
+    /**
+     * In some special case, when the Lod0 stroke is cancelled the
+     * following situation is possible:
+     *
+     * 1)  The stroke  is  cancelled,  Lod0 update  is  issued by  the
+     *     image. LodN level of the openGL times is still dirty.
+     *
+     * 2) [here, ideally, the canvas should be re-rendered, so that
+     *     the mipmap would be regenerated in bindToActiveTexture()
+     *     call, by in some cases (if you cancel and paint to quickly,
+     *     that doesn't have time to happen]
+     *
+     * 3) The new LodN stroke issues a *partial* update of a LodN
+     *    plane of the tile. But the plane is still *dirty*! We update
+     *    a part of it, but we cannot regenerate the mipmap anymore,
+     *    because the Lod0 level is not known yet!
+     *
+     * To avoid this issue, we should regenerate the dirty mipmap
+     * *before* doing anything with the low-resolution plane.
+     */
+    if (patchLevelOfDetail > 0 &&
+        m_needsMipmapRegeneration &&
+        !updateInfo.isEntireTileUpdated()) {
+
+        f->glBindTexture(GL_TEXTURE_2D, m_textureId);
+        f->glGenerateMipmap(GL_TEXTURE_2D);
+        f->glBindTexture(GL_TEXTURE_2D, 0);
+        m_needsMipmapRegeneration = false;
+    }
+
+
     if (updateInfo.isEntireTileUpdated()) {
 
 #ifdef USE_PIXEL_BUFFERS

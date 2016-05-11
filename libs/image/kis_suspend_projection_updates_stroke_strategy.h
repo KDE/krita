@@ -33,6 +33,8 @@ private:
     void finishStrokeCallback();
     void cancelStrokeCallback();
 
+    void finishStrokeCallbackImpl(bool dropUpdates);
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

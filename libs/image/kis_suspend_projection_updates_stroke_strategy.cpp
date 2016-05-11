@@ -127,6 +127,11 @@ KisSuspendProjectionUpdatesStrokeStrategy::~KisSuspendProjectionUpdatesStrokeStr
 
 void KisSuspendProjectionUpdatesStrokeStrategy::finishStrokeCallback()
 {
+    finishStrokeCallbackImpl(false);
+}
+
+void KisSuspendProjectionUpdatesStrokeStrategy::finishStrokeCallbackImpl(bool dropUpdates)
+{
     KIS_ASSERT_RECOVER_RETURN(m_d->image);
 
     if (m_d->suspend) {
@@ -145,14 +150,24 @@ void KisSuspendProjectionUpdatesStrokeStrategy::finishStrokeCallback()
 
         if (localFilter) {
             m_d->image->setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP());
-            localFilter->notifyUpdates(m_d->image.data());
+
+            if (!dropUpdates) {
+                localFilter->notifyUpdates(m_d->image.data());
+            }
         }
     }
 }
 
 void KisSuspendProjectionUpdatesStrokeStrategy::cancelStrokeCallback()
 {
-    finishStrokeCallback();
+    /**
+     * We shouldn't emit any ad-hoc updates when cancelling the
+     * stroke.  It generates weird temporary holes on the canvas,
+     * making the user feel awful, thinking his image got
+     * corrupted. We will just emit a common refreshGraphAsync() that
+     * will do all the work in a beautiful way
+     */
+    finishStrokeCallbackImpl(true);
 
     if (!m_d->suspend) {
         // FIXME: optimize

@@ -348,8 +348,31 @@ qreal KisPaintInformation::drawingAngle() const
         return 0.0;
     }
 
+    if (d->currentDistanceInfo->hasLockedDrawingAngle()) {
+        return d->currentDistanceInfo->lockedDrawingAngle();
+    }
+
     QVector2D diff(pos() - d->currentDistanceInfo->lastPosition());
     return atan2(diff.y(), diff.x());
+}
+
+void KisPaintInformation::lockCurrentDrawingAngle(qreal alpha) const
+{
+    if (!d->currentDistanceInfo) {
+        warnKrita << "KisPaintInformation::lockCurrentDrawingAngle()" << "Cannot access Distance Info last dab data";
+        return;
+    }
+
+
+    const qreal angle = drawingAngle();
+    qreal newAngle = angle;
+
+    if (d->currentDistanceInfo->hasLockedDrawingAngle()) {
+        newAngle = (1.0 - alpha) * angle +
+            alpha * d->currentDistanceInfo->lockedDrawingAngle();
+    }
+
+    d->currentDistanceInfo->setLockedDrawingAngle(newAngle);
 }
 
 QPointF KisPaintInformation::drawingDirectionVector() const

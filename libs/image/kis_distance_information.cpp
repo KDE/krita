@@ -41,6 +41,8 @@ struct Q_DECL_HIDDEN KisDistanceInformation::Private {
     KisPaintInformation lastPaintInformation;
     qreal lastAngle;
     bool lastPaintInfoValid;
+
+    QSharedPointer<qreal> lockedDrawingAngle;
 };
 
 KisDistanceInformation::KisDistanceInformation()
@@ -226,4 +228,19 @@ qreal KisDistanceInformation::getNextPointPositionAnisotropic(const QPointF &sta
     }
 
     return t;
+}
+
+bool KisDistanceInformation::hasLockedDrawingAngle() const
+{
+    return m_d->lockedDrawingAngle;
+}
+
+qreal KisDistanceInformation::lockedDrawingAngle() const
+{
+    return m_d->lockedDrawingAngle ? *m_d->lockedDrawingAngle : 0.0;
+}
+
+void KisDistanceInformation::setLockedDrawingAngle(qreal angle)
+{
+    m_d->lockedDrawingAngle = toQShared(new qreal(angle));
 }

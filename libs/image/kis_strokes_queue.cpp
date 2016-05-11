@@ -126,6 +126,8 @@ bool KisStrokesQueue::Private::canUseLodN() const
 bool KisStrokesQueue::Private::shouldWrapInSuspendUpdatesStroke() const
 {
     Q_FOREACH (KisStrokeSP stroke, strokesQueue) {
+        if (stroke->isCancelled()) continue;
+
         if (stroke->type() == KisStroke::RESUME) {
             return false;
         }
@@ -140,6 +142,8 @@ StrokesQueueIterator KisStrokesQueue::Private::findNewLod0Pos()
     StrokesQueueIterator end = strokesQueue.end();
 
     for (; it != end; ++it) {
+        if ((*it)->isCancelled()) continue;
+
         if ((*it)->type() == KisStroke::RESUME) {
             return it;
         }
@@ -154,6 +158,8 @@ StrokesQueueIterator KisStrokesQueue::Private::findNewLodNPos(KisStrokeSP lodN)
     StrokesQueueIterator end = strokesQueue.end();
 
     for (; it != end; ++it) {
+        if ((*it)->isCancelled()) continue;
+
         if ((*it)->type() == KisStroke::LOD0 ||
             (*it)->type() == KisStroke::SUSPEND ||
             (*it)->type() == KisStroke::RESUME) {

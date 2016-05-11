@@ -206,6 +206,11 @@ bool KisStroke::isEnded() const
     return m_strokeEnded;
 }
 
+bool KisStroke::isCancelled() const
+{
+    return m_isCancelled;
+}
+
 bool KisStroke::isExclusive() const
 {
     return m_strokeStrategy->isExclusive();

@@ -60,6 +60,7 @@ public:
 
     bool isInitialized() const;
     bool isEnded() const;
+    bool isCancelled() const;
 
     bool isExclusive() const;
     bool supportsWrapAroundMode() const;

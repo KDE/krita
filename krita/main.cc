@@ -87,8 +87,7 @@ extern "C" int main(int argc, char **argv)
                                      "krita.tabletlog=true");
 
     // A per-user unique string, without /, because QLocalServer cannot use names with a / in it
-    QString key = "Krita3" +
-                  QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");
+    QString key = "Krita3" + QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");
     key = key.replace(":", "_").replace("\\","_");
 
 #if defined HAVE_X11
@@ -130,6 +129,8 @@ extern "C" int main(int argc, char **argv)
     QString language = languageoverride.value(qAppName(), "").toString();
     if (!language.isEmpty()) {
         KLocalizedString::setLanguages(language.split(":"));
+        // And override Qt's locale, too
+        QLocale::setDefault(language.split(":").first());
     }
     else {
         // And if there isn't one, check the one set by the system.

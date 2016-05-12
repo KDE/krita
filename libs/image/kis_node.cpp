@@ -485,6 +485,24 @@ QList<KisNodeSP> KisNode::childNodes(const QStringList & nodeTypes, const KoProp
     return nodes;
 }
 
+KisNodeSP KisNode::findChildByName(const QString &name)
+{
+    KisNodeSP child = firstChild();
+    while (child) {
+        if (child->name() == name) {
+            return child;
+        }
+        if (child->childCount() > 0) {
+            KisNodeSP grandChild = child->findChildByName(name);
+            if (grandChild) {
+                return grandChild;
+            }
+        }
+        child = child->nextSibling();
+    }
+    return 0;
+}
+
 bool KisNode::add(KisNodeSP newNode, KisNodeSP aboveThis)
 {
     Q_ASSERT(newNode);

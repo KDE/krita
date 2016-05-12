@@ -345,6 +345,13 @@ public: // Graph methods
      */
     QList<KisNodeSP> childNodes(const QStringList & nodeTypes, const KoProperties & properties) const;
 
+    /**
+     * @brief findChildByName finds the first child that has the given name
+     * @param name the name to look for
+     * @return the first child with the given name
+     */
+    KisNodeSP findChildByName(const QString &name);
+
 public:
 
     /**

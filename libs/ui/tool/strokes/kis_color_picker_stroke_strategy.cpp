@@ -68,7 +68,8 @@ KisStrokeStrategy* KisColorPickerStrokeStrategy::createLodClone(int levelOfDetai
 
     KisColorPickerStrokeStrategy *lodStrategy = new KisColorPickerStrokeStrategy();
     connect(lodStrategy, &KisColorPickerStrokeStrategy::sigColorUpdated,
-            this, &KisColorPickerStrokeStrategy::sigColorUpdated);
+            this, &KisColorPickerStrokeStrategy::sigColorUpdated,
+            Qt::DirectConnection);
     return lodStrategy;
 }
 

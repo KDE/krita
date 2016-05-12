@@ -422,9 +422,9 @@ int KisToolPaint::colorPreviewResourceId(AlternateAction action)
 
 void KisToolPaint::slotColorPickingFinished(const KoColor &color)
 {
-    if (!m_pickerStrokeId) return;
-
     canvas()->resourceManager()->setResource(m_pickingResource, color);
+
+    if (!m_showColorPreview) return;
 
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas);

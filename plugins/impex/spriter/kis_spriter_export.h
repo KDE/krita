@@ -21,8 +21,87 @@
 #define _KIS_SPRITER_EXPORT_H_
 
 #include <QVariant>
+#include <QDomDocument>
+#include <QList>
 
 #include <KisImportExportFilter.h>
+#include <kis_types.h>
+
+struct SpriterFile {
+    qreal id;
+    QString name;
+    QString pathName;
+    QString baseName;
+    QString layerName;
+    qreal width;
+    qreal height;
+    qreal x;
+    qreal y;
+};
+
+struct Folder {
+    qreal id;
+    QString name;
+    QString pathName;
+    QString baseName;
+    QString groupName;
+    QList<SpriterFile> files;
+};
+
+struct Bone {
+    qreal id;
+    const Bone *parentBone;
+    QString name;
+    qreal x;
+    qreal y;
+    qreal width;
+    qreal height;
+    qreal localX;
+    qreal localY;
+    qreal localAngle;
+    qreal localScaleX;
+    qreal localScaleY;
+    qreal fixLocalX;
+    qreal fixLocalY;
+    qreal fixLocalAngle;
+    qreal fixLocalScaleX;
+    qreal fixLocalScaleY;
+    QList<Bone*> bones;
+
+    ~Bone() {
+        qDeleteAll(bones);
+        bones.clear();;
+    }
+};
+
+struct SpriterSlot {
+    QString name;
+    bool defaultAttachmentFlag;
+};
+
+struct SpriterObject {
+    qreal id;
+    qreal folderId;
+    qreal fileId;
+    Bone *bone;
+    SpriterSlot *slot;
+    qreal x;
+    qreal y;
+    qreal localX;
+    qreal localY;
+    qreal localAngle;
+    qreal localScaleX;
+    qreal localScaleY;
+    qreal fixLocalX;
+    qreal fixLocalY;
+    qreal fixLocalAngle;
+    qreal fixLocalScaleX;
+    qreal fixLocalScaleY;
+
+    ~SpriterObject() {
+        delete slot;
+    }
+};
 
 class KisSpriterExport : public KisImportExportFilter
 {
@@ -32,6 +111,24 @@ public:
     virtual ~KisSpriterExport();
 public:
     virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+private:
+
+    bool savePaintDevice(KisPaintDeviceSP dev, const QString &fileName);
+    void parseFolder(KisGroupLayerSP parentGroup, const QString &folderName, const QString &basePath);
+    Bone *parseBone(const Bone *parent, KisGroupLayerSP groupLayer);
+    void fixBone(Bone *bone);
+    void fillScml(QDomDocument &scml, const QString &entityName);
+    void writeBoneRef(const Bone *bone, QDomElement &mainline, QDomDocument &scml);
+    void writeBone(const Bone *bone, QDomElement &timeline, QDomDocument &scml);
+
+    KisImageWSP m_image;
+    qreal m_timelineid;
+    QList<Folder> m_folders;
+    Bone *m_rootBone;
+    QList<SpriterObject> m_objects;
+    KisGroupLayerSP m_rootLayer; // Not the image's root later, but the one that is named "root"
+    KisLayerSP m_boneLayer;
+
 };
 
 #endif

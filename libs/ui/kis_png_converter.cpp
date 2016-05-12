@@ -658,13 +658,14 @@ png_get_text(png_ptr, info_ptr, &text_ptr, &num_comments);
         KoDocumentInfo * info = m_doc->documentInfo();
         dbgFile << "There are " << num_comments << " comments in the text";
         for (int i = 0; i < num_comments; i++) {
-            QString key = text_ptr[i].key;
+            QString key = QString(text_ptr[i].key).toLower();
             dbgFile << "key is |" << text_ptr[i].key << "| containing " << text_ptr[i].text << " " << (key ==  "Raw profile type exif ");
             if (key == "title") {
                 info->setAboutInfo("title", text_ptr[i].text);
-            } else if (key == "abstract") {
-                info->setAboutInfo("description", text_ptr[i].text);
+            } else if (key == "description") {
+                info->setAboutInfo("comment", text_ptr[i].text);
             } else if (key == "author") {
+		qDebug()<<"Author:"<<text_ptr[i].text;
                 info->setAuthorInfo("creator", text_ptr[i].text);
             } else if (key.contains("Raw profile type exif")) {
                 decode_meta_data(text_ptr + i, layer->metaData(), "exif", 6);
@@ -1072,23 +1073,24 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
     }
 
     // read comments from the document information
+    // warning: according to the official png spec, the keys need to be capitalised!
     if (m_doc) {
         png_text texts[3];
         int nbtexts = 0;
         KoDocumentInfo * info = m_doc->documentInfo();
-        QString title = info->aboutInfo("creator");
+        QString title = info->aboutInfo("title");
         if (!title.isEmpty()) {
-            fillText(texts + nbtexts, "title", title);
+            fillText(texts + nbtexts, "Title", title);
             nbtexts++;
         }
-        QString abstract = info->aboutInfo("description");
+        QString abstract = info->aboutInfo("comment");
         if (!abstract.isEmpty()) {
-            fillText(texts + nbtexts, "abstract", abstract);
+            fillText(texts + nbtexts, "Description", abstract);
             nbtexts++;
         }
         QString author = info->authorInfo("creator");
         if (!author.isEmpty()) {
-            fillText(texts + nbtexts, "author", author);
+            fillText(texts + nbtexts, "Author", author);
             nbtexts++;
         }
 

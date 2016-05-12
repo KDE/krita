@@ -82,6 +82,7 @@ QWidget* KisDynamicSensorDrawingAngle::createConfigurationWidget(QWidget* parent
     QWidget *w = new QWidget(parent);
 
     m_chkLockedMode = new QCheckBox(i18n("Lock"), w);
+    m_chkLockedMode->setChecked(m_lockedAngleMode);
 
     connect(m_chkLockedMode, SIGNAL(stateChanged(int)), SLOT(setLockedAngleMode(int)));
     connect(m_chkLockedMode, SIGNAL(stateChanged(int)), SLOT(updateGUI()));

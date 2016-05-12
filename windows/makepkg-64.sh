@@ -68,7 +68,6 @@ cp -r $MXEROOT/share/color-schemes $BUILDROOT/out/$PACKAGENAME/share
 cp -r $MXEROOT/share/kf5 $BUILDROOT/out/$PACKAGENAME/share
 cp -r $MXEROOT/share/krita $BUILDROOT/out/$PACKAGENAME/share
 cp -r $MXEROOT/share/locale $BUILDROOT/out/$PACKAGENAME/bin/data
-cp -r $MXEROOT/share/mime $BUILDROOT/out/$PACKAGENAME/share
 cp -r $MXEROOT/share/ocio $BUILDROOT/out/$PACKAGENAME/share
 
 cd $BUILDROOT

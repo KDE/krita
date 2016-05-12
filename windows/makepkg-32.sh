@@ -68,8 +68,8 @@ cp -r $MXEROOT/share/color-schemes $BUILDROOT/out/$PACKAGENAME/share
 cp -r $MXEROOT/share/kf5 $BUILDROOT/out/$PACKAGENAME/share
 cp -r $MXEROOT/share/krita $BUILDROOT/out/$PACKAGENAME/share
 cp -r $MXEROOT/share/locale $BUILDROOT/out/$PACKAGENAME/bin/data
-cp -r $MXEROOT/share/mime $BUILDROOT/out/$PACKAGENAME/share
 cp -r $MXEROOT/share/ocio $BUILDROOT/out/$PACKAGENAME/share
+
 
 cd $BUILDROOT
 rm krita-3.0-l10n-win-current.tar.gz || true

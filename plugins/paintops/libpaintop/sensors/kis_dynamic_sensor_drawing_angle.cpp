@@ -55,7 +55,7 @@ qreal KisDynamicSensorDrawingAngle::value(const KisPaintInformation& info)
     if (!info.isHoveringMode() && m_lockedAngleMode) {
         if (!m_dabIndex) {
             info.lockCurrentDrawingAngle(1.0);
-        } else if (m_dabIndex < 3) {
+        } else {
             info.lockCurrentDrawingAngle(0.5);
         }
         m_dabIndex++;

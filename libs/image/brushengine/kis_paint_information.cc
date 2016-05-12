@@ -356,20 +356,32 @@ qreal KisPaintInformation::drawingAngle() const
     return atan2(diff.y(), diff.x());
 }
 
-void KisPaintInformation::lockCurrentDrawingAngle(qreal alpha) const
+void KisPaintInformation::lockCurrentDrawingAngle(qreal alpha_unused) const
 {
+    Q_UNUSED(alpha_unused);
+
     if (!d->currentDistanceInfo) {
         warnKrita << "KisPaintInformation::lockCurrentDrawingAngle()" << "Cannot access Distance Info last dab data";
         return;
     }
 
+    const QVector2D diff(pos() - d->currentDistanceInfo->lastPosition());
+    const qreal angle = atan2(diff.y(), diff.x());
 
-    const qreal angle = drawingAngle();
     qreal newAngle = angle;
 
     if (d->currentDistanceInfo->hasLockedDrawingAngle()) {
-        newAngle = (1.0 - alpha) * angle +
-            alpha * d->currentDistanceInfo->lockedDrawingAngle();
+        const qreal stabilizingCoeff = 20.0;
+        const qreal dist = stabilizingCoeff * d->currentDistanceInfo->currentSpacing().scalarApprox();
+        const qreal alpha = qMax(0.0, dist - d->currentDistanceInfo->scalarDistanceApprox()) / dist;
+
+        const qreal oldAngle = d->currentDistanceInfo->lockedDrawingAngle();
+
+        if (shortestAngularDistance(oldAngle, newAngle) < M_PI / 6) {
+            newAngle = (1.0 - alpha) * oldAngle + alpha * newAngle;
+        } else {
+            newAngle = oldAngle;
+        }
     }
 
     d->currentDistanceInfo->setLockedDrawingAngle(newAngle);

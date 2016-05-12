@@ -115,6 +115,8 @@ public:
     qreal lockedDrawingAngle() const;
     void setLockedDrawingAngle(qreal angle);
 
+    qreal scalarDistanceApprox() const;
+
 private:
     qreal getNextPointPositionIsotropic(const QPointF &start,
                                         const QPointF &end);

@@ -30,7 +30,8 @@
 
 struct Q_DECL_HIDDEN KisDistanceInformation::Private {
     Private() : lastDabInfoValid(false),
-                lastPaintInfoValid(false) {}
+        lastPaintInfoValid(false),
+        totalDistance(0.0) {}
 
     QPointF distance;
     KisSpacingInformation spacing;
@@ -43,6 +44,7 @@ struct Q_DECL_HIDDEN KisDistanceInformation::Private {
     bool lastPaintInfoValid;
 
     QSharedPointer<qreal> lockedDrawingAngle;
+    qreal totalDistance;
 };
 
 KisDistanceInformation::KisDistanceInformation()
@@ -132,6 +134,8 @@ bool KisDistanceInformation::isStarted() const
 void KisDistanceInformation::registerPaintedDab(const KisPaintInformation &info,
                                                 const KisSpacingInformation &spacing)
 {
+    m_d->totalDistance += KisAlgebra2D::norm(info.pos() - m_d->lastPosition);
+
     m_d->lastAngle = info.drawingAngleSafe(*this);
     m_d->lastPaintInformation = info;
     m_d->lastPaintInfoValid = true;
@@ -243,4 +247,9 @@ qreal KisDistanceInformation::lockedDrawingAngle() const
 void KisDistanceInformation::setLockedDrawingAngle(qreal angle)
 {
     m_d->lockedDrawingAngle = toQShared(new qreal(angle));
+}
+
+qreal KisDistanceInformation::scalarDistanceApprox() const
+{
+    return m_d->totalDistance;
 }

@@ -85,7 +85,7 @@ KoOdfLoadingContext::KoOdfLoadingContext(KoOdfStylesReader &stylesReader, KoStor
     if (!defaultStylesResourcePath.isEmpty()) {
         Q_ASSERT(defaultStylesResourcePath.endsWith(QLatin1Char('/')));
         const QString fileName =
-            QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+            QStandardPaths::locate(QStandardPaths::AppDataLocation,
                                    defaultStylesResourcePath + "defaultstyles.xml");
         if ( ! fileName.isEmpty() ) {
             QFile file( fileName );

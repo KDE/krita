@@ -316,7 +316,7 @@ void KisInputProfileManager::saveProfiles()
 
 void KisInputProfileManager::resetAll()
 {
-    QString kdeHome = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+    QString kdeHome = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     QStringList profiles = KoResourcePaths::findAllResources("data", "input/*", KoResourcePaths::Recursive);
 
     Q_FOREACH (const QString &profile, profiles) {

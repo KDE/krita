@@ -72,7 +72,7 @@ bool KisSpriterExport::savePaintDevice(KisPaintDeviceSP dev, const QString &file
     QFileInfo fi(fileName);
 
     QDir d = fi.absoluteDir();
-    bool r = d.mkpath(d.path());
+    d.mkpath(d.path());
     QRect rc = dev->exactBounds();
 
     if (!KisPNGConverter::isColorSpaceSupported(dev->colorSpace())) {
@@ -124,16 +124,24 @@ void KisSpriterExport::parseFolder(KisGroupLayerSP parentGroup, const QString &f
     child = parentGroup->lastChild();
     while (child) {
         if (child->visible() && !child->inherits("KisGroupLayer") && !child->inherits("KisMask")) {
-            QRect bounds = child->exactBounds();
+            QRectF rc(child->exactBounds());
             QString layerBaseName = child->name().split(" ").first();
             SpriterFile file;
             file.id = fileId++;
-            file.name = folderName + "/" + layerBaseName + ".png";
             file.pathName = pathName;
             file.baseName = layerBaseName;
-            file.width = bounds.width();
-            file.height = bounds.height();
             file.layerName = child->name();
+            file.name = folderName + "/" + layerBaseName + ".png";
+
+            qreal xmin = rc.left();
+            qreal ymin = rc.top();
+            qreal xmax = rc.right();
+            qreal ymax = rc.bottom();
+
+            file.width = xmax - xmin;
+            file.height = ymax - ymin;
+            file.x = xmin;
+            file.y = ymin;
             //qDebug() << "Created file" << file.id << file.name << file.pathName << file.baseName << file.width << file.height << file.layerName;
 
             savePaintDevice(child->projection(), basePath + file.name);
@@ -363,7 +371,6 @@ void KisSpriterExport::fillScml(QDomDocument &scml, const QString &entityName)
     QDomElement key = scml.createElement("key");
     mainline.appendChild(key);
     key.setAttribute("id", "0");
-    mainline.setAttribute("id", "0");
 
     m_timelineid = 0;
     writeBoneRef(m_rootBone, key, scml);
@@ -406,13 +413,12 @@ void KisSpriterExport::fillScml(QDomDocument &scml, const QString &entityName)
 
         QString objectName = "object-" + file.baseName;
 
-
         qreal pivotX = (0.0 -(object.fixLocalX / file.width));
         qreal pivotY = (1.0 -(object.fixLocalY / file.height));
 
         QDomElement timeline = scml.createElement("timeline");
         animation.appendChild(timeline);
-        timeline.setAttribute("id", m_timelineid);
+        timeline.setAttribute("id", m_timelineid++);
         timeline.setAttribute("name", objectName);
 
         QDomElement key = scml.createElement("key");
@@ -420,7 +426,7 @@ void KisSpriterExport::fillScml(QDomDocument &scml, const QString &entityName)
         key.setAttribute("id", "0");
         key.setAttribute("spin", "0");
 
-        QDomElement objectEl = scml.createElement("folder");
+        QDomElement objectEl = scml.createElement("object");
         key.appendChild(objectEl);
         objectEl.setAttribute("folder", object.folderId);
         objectEl.setAttribute("file", object.fileId);
@@ -553,8 +559,8 @@ KisImportExportFilter::ConversionStatus KisSpriterExport::convert(const QByteArr
             }
 
             spriterObject.localAngle = 0;
-            spriterObject.localScaleX = 0;
-            spriterObject.localScaleY = 0;
+            spriterObject.localScaleX = 1.0;
+            spriterObject.localScaleY = 1.0;
 
             SpriterSlot *slot = 0;
 

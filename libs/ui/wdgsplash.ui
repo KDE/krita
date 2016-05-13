@@ -326,14 +326,14 @@
      <property name="pixmap">
       <pixmap>../../2.8/krita/data/splash/splash_screen.xpm</pixmap>
      </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
      </property>
      <property name="indent">
       <number>0</number>
-     </property>
-     <property name="scaledContents">
-       <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -382,7 +382,7 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
      <property name="leftMargin">
       <number>10</number>
      </property>
@@ -419,6 +419,12 @@
      </item>
      <item>
       <widget class="QLabel" name="lblRecent">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;left&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Recent files&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>

@@ -42,9 +42,17 @@ private Q_SLOTS:
     void toggleShowAtStartup(bool toggle);
     void linkClicked(const QString &link);
 
+protected:
+    void resizeEvent(QResizeEvent *event);
+
+private:
+    void updateText();
+    QString colorString() const;
+
 private:
 
     QTimer m_timer;
+    bool m_themed;
 
 };
 

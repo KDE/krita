@@ -146,7 +146,7 @@ KRITAGLOBAL_EXPORT QString kisBacktrace();
  *
  * Use this macro to display in the output stream the name of a variable followed by its value.
  */
-#define ppVar( var ) #var << "=" << var
+#define ppVar( var ) #var << "=" << (var)
 
 #  ifndef QT_NO_DEBUG
 #    undef Q_ASSERT

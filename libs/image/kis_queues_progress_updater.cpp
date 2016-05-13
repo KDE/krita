@@ -65,7 +65,7 @@ KisQueuesProgressUpdater::KisQueuesProgressUpdater(KoProgressProxy *progressProx
     m_d->startDelayTimer.setInterval(Private::PROGRESS_DELAY);
     m_d->startDelayTimer.setSingleShot(true);
 
-    connect(&m_d->timer, SIGNAL(timeout()), &m_d->timer, SLOT(start()));
+    connect(&m_d->startDelayTimer, SIGNAL(timeout()), &m_d->timer, SLOT(start()));
     connect(&m_d->startDelayTimer, SIGNAL(timeout()), SLOT(timerTicked()));
 }
 

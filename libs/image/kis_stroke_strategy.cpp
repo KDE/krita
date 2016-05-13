@@ -41,6 +41,7 @@ KisStrokeStrategy::KisStrokeStrategy(const KisStrokeStrategy &rhs)
       m_indirectPaintingCompositeOp(rhs.m_indirectPaintingCompositeOp),
       m_clearsRedoOnStart(rhs.m_clearsRedoOnStart),
       m_requestsOtherStrokesToEnd(rhs.m_requestsOtherStrokesToEnd),
+      m_canForgetAboutMe(false),
       m_id(rhs.m_id),
       m_name(rhs.m_name)
 {

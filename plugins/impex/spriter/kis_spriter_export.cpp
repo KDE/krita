@@ -284,6 +284,7 @@ void KisSpriterExport::fixBone(Bone *bone)
 
 void KisSpriterExport::writeBoneRef(const Bone *bone, QDomElement &key, QDomDocument &scml)
 {
+    if (!bone) return;
     QDomElement boneRef = scml.createElement("bone_ref");
     key.appendChild(boneRef);
     boneRef.setAttribute("id", bone->id);
@@ -299,6 +300,7 @@ void KisSpriterExport::writeBoneRef(const Bone *bone, QDomElement &key, QDomDocu
 
 void KisSpriterExport::writeBone(const Bone *bone, QDomElement &animation, QDomDocument &scml)
 {
+    if (!bone) return;
     QDomElement timeline = scml.createElement("timeline");
     animation.appendChild(timeline);
     timeline.setAttribute("id", m_timelineid);
@@ -442,6 +444,7 @@ void KisSpriterExport::fillScml(QDomDocument &scml, const QString &entityName)
 
 Bone *findBoneByName(Bone *startBone, const QString &name)
 {
+    if (!startBone) return 0;
     //qDebug() << "findBoneByName" << name << "starting with" << startBone->name;
 
     if (startBone->name == name) {
@@ -498,8 +501,11 @@ KisImportExportFilter::ConversionStatus KisSpriterExport::convert(const QByteArr
 
     parseFolder(input->image()->rootLayer(), "", fi.absolutePath());
 
-    m_rootBone = parseBone(0, m_rootLayer);
+    m_rootBone = 0;
 
+    if (m_rootLayer) {
+        m_rootBone = parseBone(0, m_rootLayer);
+    }
     // Generate objects
     int objectId = 0;
     for (int folderIndex = 0, folderCount = m_folders.size(); folderIndex < folderCount; ++folderIndex) {
@@ -525,11 +531,11 @@ KisImportExportFilter::ConversionStatus KisSpriterExport::convert(const QByteArr
 
 
             // layer.name format: "base_name"
-            if (!bone) {
+            if (!bone && m_rootBone) {
                 bone = findBoneByName(m_rootBone, file.layerName);
             }
             // group.name format: "base_name bone(bone_name)"
-            if (!bone) {
+            if (!bone && m_rootBone) {
                 if (folder.groupName.contains("bone(")) {
                     int start = folder.groupName.indexOf("bone(") + 5;
                     int end = folder.groupName.indexOf(')', start);

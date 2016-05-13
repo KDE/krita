@@ -100,6 +100,12 @@ void KisEqualizerWidget::setValues(const EqualizerValues &v)
     }
 }
 
+void KisEqualizerWidget::toggleMasterSwitch()
+{
+    const bool currentState = m_d->columns[0]->state();
+    m_d->columns[0]->setState(!currentState);
+}
+
 void KisEqualizerWidget::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);

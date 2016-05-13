@@ -27,6 +27,9 @@
 #include "kis_image_config.h"
 #include "kis_onion_skin_compositor.h"
 #include "kis_signals_blocker.h"
+#include "KisViewManager.h"
+#include "kis_action_manager.h"
+#include "kis_action.h"
 
 #include "kis_equalizer_widget.h"
 
@@ -36,7 +39,8 @@ static const int MAX_SKIN_COUNT = 10;
 OnionSkinsDocker::OnionSkinsDocker(QWidget *parent) :
     QDockWidget(i18n("Onion Skins"), parent),
     ui(new Ui::OnionSkinsDocker),
-    m_updatesCompressor(300, KisSignalCompressor::FIRST_ACTIVE)
+    m_updatesCompressor(300, KisSignalCompressor::FIRST_ACTIVE),
+    m_toggleOnionSkinsAction(0)
 {
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
@@ -94,9 +98,27 @@ void OnionSkinsDocker::unsetCanvas()
 {
 }
 
-void OnionSkinsDocker::setMainWindow(KisViewManager *kisview)
+void OnionSkinsDocker::setMainWindow(KisViewManager *view)
 {
-    Q_UNUSED(kisview);
+    KisActionManager *actionManager = view->actionManager();
+
+    m_toggleOnionSkinsAction = actionManager->createAction("toggle_onion_skin");
+    connect(m_toggleOnionSkinsAction, SIGNAL(triggered()), SLOT(slotToggleOnionSkins()));
+
+    slotUpdateIcons();
+    connect(view->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotUpdateIcons()));
+}
+
+void OnionSkinsDocker::slotToggleOnionSkins()
+{
+    m_equalizerWidget->toggleMasterSwitch();
+}
+
+void OnionSkinsDocker::slotUpdateIcons()
+{
+    if (m_toggleOnionSkinsAction) {
+        m_toggleOnionSkinsAction->setIcon(KisIconUtils::loadIcon("onion_skin_options"));
+    }
 }
 
 void OnionSkinsDocker::slotShowAdditionalSettings(bool value)

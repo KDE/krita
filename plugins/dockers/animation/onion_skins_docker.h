@@ -24,6 +24,8 @@
 #include <kis_mainwindow_observer.h>
 #include "kis_signal_compressor.h"
 
+class KisAction;
+
 namespace Ui {
 class OnionSkinsDocker;
 }
@@ -48,6 +50,7 @@ private:
 
     KisSignalCompressor m_updatesCompressor;
     KisEqualizerWidget *m_equalizerWidget;
+    KisAction *m_toggleOnionSkinsAction;
 
 private:
     void loadSettings();
@@ -55,6 +58,8 @@ private:
 private Q_SLOTS:
     void changed();
     void slotShowAdditionalSettings(bool value);
+    void slotUpdateIcons();
+    void slotToggleOnionSkins();
 };
 
 #endif // ONION_SKINS_DOCKER_H

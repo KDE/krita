@@ -44,6 +44,8 @@ public:
     EqualizerValues getValues() const;
     void setValues(const EqualizerValues &values);
 
+    void toggleMasterSwitch();
+
     void resizeEvent(QResizeEvent *event);
 
     void mouseMoveEvent(QMouseEvent *ev);

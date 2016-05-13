@@ -112,8 +112,8 @@
 #include "kis_async_action_feedback.h"
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
-#include <boost/thread/lock_algorithms.hpp>
 #include "kis_image_barrier_lock_adapter.h"
+#include <mutex>
 
 
 static const char CURRENT_DTD_VERSION[] = "2.0";
@@ -446,7 +446,7 @@ public:
          * Since we are trying to lock multiple objects, so we should
          * do it in a safe manner.
          */
-        m_locked = boost::try_lock(m_imageLock, m_savingLock) < 0;
+        m_locked = std::try_lock(m_imageLock, m_savingLock) < 0;
 
         if (!m_locked) {
             if (d->isAutosaving) {
@@ -459,7 +459,7 @@ public:
                 QApplication::processEvents();
 
                 // one more try...
-                m_locked = boost::try_lock(m_imageLock, m_savingLock) < 0;
+                m_locked = std::try_lock(m_imageLock, m_savingLock) < 0;
             }
         }
 
@@ -487,7 +487,7 @@ private:
     bool m_locked;
 
     KisImageBarrierLockAdapter m_imageLock;
-    BoostLockableWrapper<QMutex> m_savingLock;
+    StdLockableWrapper<QMutex> m_savingLock;
 };
 
 KisDocument::KisDocument()

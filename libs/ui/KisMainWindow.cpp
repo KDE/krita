@@ -135,6 +135,9 @@
 #include "dialogs/kis_dlg_import_image_sequence.h"
 #include "kis_animation_exporter.h"
 
+#include <mutex>
+
+
 class ToolDockerFactory : public KoDockFactoryBase
 {
 public:
@@ -279,6 +282,7 @@ public:
     int lastExportSpecialOutputFlag;
     QScopedPointer<KisSignalCompressorWithParam<int> > tabSwitchCompressor;
     bool geometryInitialized;
+    QMutex savingEntryMutex;
 
     KisActionManager * actionManager() {
         return viewManager->actionManager();
@@ -882,8 +886,23 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         return true;
     }
 
+    /**
+     * Make sure that we cannot enter this method twice!
+     *
+     * The lower level functions may call processEvents() so
+     * double-entry is quite possible to achive. Here we try to lock
+     * the mutex, and if it is failed, just cancel saving.
+     */
+    StdLockableWrapper<QMutex> wrapper(&d->savingEntryMutex);
+    std::unique_lock<StdLockableWrapper<QMutex>> l(wrapper, std::try_to_lock);
+    if (!l.owns_lock()) return false;
+
     KisDelayedSaveDialog dlg(document->image(), this);
     dlg.blockIfImageIsBusy();
+
+    if (dlg.result() != QDialog::Accepted) {
+        return false;
+    }
 
     bool reset_url;
 

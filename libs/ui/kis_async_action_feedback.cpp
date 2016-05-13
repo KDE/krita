@@ -31,7 +31,7 @@ KisAsyncActionFeedback::KisAsyncActionFeedback(const QString &message, QWidget *
     : m_d(new Private)
 {
     m_d->progress.reset(new QProgressDialog(message, "", 0, 0, parent));
-    m_d->progress->setWindowModality(Qt::WindowModal);
+    m_d->progress->setWindowModality(Qt::ApplicationModal);
     m_d->progress->setCancelButton(0);
     m_d->progress->setMinimumDuration(1000);
     m_d->progress->setValue(0);

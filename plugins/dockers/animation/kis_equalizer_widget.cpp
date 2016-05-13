@@ -92,8 +92,8 @@ void KisEqualizerWidget::setValues(const EqualizerValues &v)
 {
     for (int i = -m_d->maxDistance; i <= m_d->maxDistance; i++) {
         if (qAbs(i) <= v.maxDistance) {
-            m_d->columns[i]->setState(v.state[i]);
             m_d->columns[i]->setValue(v.value[i]);
+            m_d->columns[i]->setState(v.state[i]);
         } else {
             m_d->columns[i]->setState(false);
         }

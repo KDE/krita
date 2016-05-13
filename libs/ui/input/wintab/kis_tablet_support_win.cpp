@@ -77,6 +77,7 @@ enum {
 QWindowsTabletSupport *QTAB = 0;
 static QPointer<QWidget> targetWindow = 0; //< Window receiving last tablet event
 static QPointer<QWidget> qt_tablet_target = 0; //< Widget receiving last tablet event
+static bool dialogOpen = false;  //< KisTabletSupportWin is not a Q_OBJECT and can't accept dialog signals
 
 HWND createDummyWindow(const QString &className, const wchar_t *windowName, WNDPROC wndProc)
 {
@@ -630,6 +631,7 @@ QWindowsTabletDeviceData QWindowsTabletSupport::tabletInit(const quint64 uniqueI
     result.maxTanPressure = int(axis.axMax);
 
     LOGCONTEXT defaultLc;
+
     /* get default region */
     QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEFCONTEXT, 0, &defaultLc);
     result.maxX = int(defaultLc.lcInExtX) - int(defaultLc.lcInOrgX);
@@ -637,10 +639,35 @@ QWindowsTabletDeviceData QWindowsTabletSupport::tabletInit(const quint64 uniqueI
     result.maxZ = int(defaultLc.lcInExtZ) - int(defaultLc.lcInOrgZ);
     result.currentDevice = deviceType(cursorType);
 
+    // Define a rectangle representing the whole screen as seen by Wintab.
+    QRect qtDesktopRect = QApplication::desktop()->geometry();
+    QRect wintabDesktopRect(defaultLc.lcSysOrgX, defaultLc.lcSysOrgY,
+                            defaultLc.lcSysExtX, defaultLc.lcSysExtY);
+    qDebug() << ppVar(qtDesktopRect);
+    qDebug() << ppVar(wintabDesktopRect);
 
-    // These define a rectangle representing the whole screen as seen by Wintab.
-    result.virtualDesktopArea = QRect(defaultLc.lcSysOrgX, defaultLc.lcSysOrgY,
-                                      defaultLc.lcSysExtX, defaultLc.lcSysExtY);
+    // Show screen choice dialog
+    {
+        KisScreenSizeChoiceDialog dlg(0,
+                                      wintabDesktopRect,
+                                      qtDesktopRect);
+
+        KisExtendedModifiersMapper mapper;
+        KisExtendedModifiersMapper::ExtendedModifiers modifiers =
+            mapper.queryExtendedModifiers();
+
+        if (modifiers.contains(Qt::Key_Shift) ||
+            (!dlg.canUseDefaultSettings() &&
+             qtDesktopRect != wintabDesktopRect)) {
+
+            dialogOpen = true;
+            dlg.exec();
+        }
+
+        result.virtualDesktopArea = dlg.screenRect();
+        dialogOpen = false;
+    }
+
     return result;
 };
 
@@ -685,7 +712,7 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
 {
     static PACKET localPacketBuf[TabletPacketQSize];  // our own tablet packet queue.
     const int packetCount = QWindowsTabletSupport::m_winTab32DLL.wTPacketsGet(m_context, TabletPacketQSize, &localPacketBuf);
-    if (!packetCount || m_currentDevice < 0)
+    if (!packetCount || m_currentDevice < 0 || dialogOpen)
         return false;
 
     // In contrast to Qt, these will not be "const" during our loop.

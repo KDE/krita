@@ -28,7 +28,6 @@
 #include <QFont>
 #include <QPainterPath>
 #include <QVector>
-#include <QTextLayout>
 
 class QPainter;
 class KoPathShape;
@@ -76,12 +75,6 @@ public:
 
     /// Returns the plain text content
     QString plainText() const;
-
-    /// Returns the glyphs index size
-    int glyphsIndexSize() const;
-
-    /// Returns  the QTextLayout opject
-    QTextLayout textLayout() const;
 
     /// Returns formatted text
     QList<ArtisticTextRange> text() const;
@@ -200,7 +193,7 @@ public:
 
     /// reimplemented from KoShape
     virtual void shapeChanged(ChangeType type, KoShape *shape);
-    QList<QPainterPath> m_charOutlines;
+
 private:
     void updateSizeAndPosition(bool global = false);
     void cacheGlyphOutlines();
@@ -228,6 +221,7 @@ private:
     QList<ArtisticTextRange> m_ranges;
     KoPostscriptPaintDevice m_paintDevice;
     KoPathShape *m_path;  ///< the path shape we are attached to
+    QList<QPainterPath> m_charOutlines; ///< cached character oulines
     qreal m_startOffset; ///< the offset from the attached path start point
     QPointF m_outlineOrigin; ///< the top-left corner of the non-normalized text outline
     QPainterPath m_outline; ///< the actual text outline

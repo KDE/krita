@@ -6,7 +6,9 @@
 if(NOT ${CMAKE_VERSION} VERSION_LESS 3.1.3 AND
    NOT ${CMAKE_VERSION} VERSION_GREATER 3.2.3)
     message(WARNING "Skipping krita/image/tests, CMake in at least versions 3.1.3 - 3.2.3 seems to have a problem with automoc.  \n(FRIENDLY REMINDER: PLEASE DON'T BREAK THE TESTS!)")
-    return()
+    set (HAVE_FAILING_CMAKE TRUE)
+else()
+    set (HAVE_FAILING_CMAKE FALSE)
 endif()
 
 include_directories(
@@ -61,9 +63,13 @@ target_link_libraries(KisNodeFacadeTest   kritaimage Qt5::Test)
 
 ########### next target ###############
 
-set(kis_paint_device_test_SRCS kis_paint_device_test.cpp )
-kde4_add_broken_unit_test(KisPaintDeviceTest TESTNAME krita-image-KisPaintDeviceTest ${kis_paint_device_test_SRCS})
-target_link_libraries(KisPaintDeviceTest   kritaimage kritaodf Qt5::Test)
+if (NOT HAVE_FAILING_CMAKE)
+  set(kis_paint_device_test_SRCS kis_paint_device_test.cpp )
+  kde4_add_broken_unit_test(KisPaintDeviceTest TESTNAME krita-image-KisPaintDeviceTest ${kis_paint_device_test_SRCS})
+  target_link_libraries(KisPaintDeviceTest   kritaimage kritaodf Qt5::Test)
+else()
+  message(WARNING "Skipping KisPaintDeviceTest!!!!!!!!!!!!!!")
+endif()
 
 ########### next target ###############
 
@@ -156,11 +162,13 @@ target_link_libraries(KisGroupLayerTest   kritaimage Qt5::Test)
 
 ########### next target ###############
 
-set(kis_filter_mask_test_SRCS kis_filter_mask_test.cpp )
-
-kde4_add_broken_unit_test(KisFilterMaskTest TESTNAME krita-image-KisFilterMaskTest ${kis_filter_mask_test_SRCS})
-
-target_link_libraries(KisFilterMaskTest   kritaimage Qt5::Test)
+if (NOT HAVE_FAILING_CMAKE)
+  set(kis_filter_mask_test_SRCS kis_filter_mask_test.cpp )
+  kde4_add_broken_unit_test(KisFilterMaskTest TESTNAME krita-image-KisFilterMaskTest ${kis_filter_mask_test_SRCS})
+  target_link_libraries(KisFilterMaskTest   kritaimage Qt5::Test)
+else()
+  message(WARNING "Skipping KisFilterMaskTest!!!!!!!!!!!!!!")
+endif()
 
 ########### next target ###############
 

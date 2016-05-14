@@ -423,17 +423,22 @@ void KisCanvas2::createCanvas(bool useOpenGL)
     m_d->displayColorConverter.setMonitorProfile(profile);
 
     if (useOpenGL) {
-        createOpenGLCanvas();
-        if (cfg.canvasState() == "OPENGL_FAILED") {
-            // Creating the opengl canvas failed, fall back
-            warnKrita << "OpenGL Canvas initialization returned OPENGL_FAILED. Falling back to QPainter.";
+        if (KisOpenGL::hasOpenGL()) {
+            createOpenGLCanvas();
+            if (cfg.canvasState() == "OPENGL_FAILED") {
+                // Creating the opengl canvas failed, fall back
+                warnKrita << "OpenGL Canvas initialization returned OPENGL_FAILED. Falling back to QPainter.";
+                createQPainterCanvas();
+            }
+        } else {
+            warnKrita << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
             createQPainterCanvas();
         }
-    }
+    } 
     else {
         createQPainterCanvas();
     }
-
+    
     if (m_d->popupPalette) {
         m_d->popupPalette->setParent(m_d->canvasWidget->widget());
     }

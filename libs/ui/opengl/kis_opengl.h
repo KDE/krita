@@ -49,6 +49,9 @@ public:
     /// Initialize shared OpenGL context
     static int initializeContext(QOpenGLContext* s);
 
+    /// Check for OpenGL
+    static bool hasOpenGL();
+
     /**
      * @brief supportsFilter
      * @return True if OpenGL provides fence sync methods.

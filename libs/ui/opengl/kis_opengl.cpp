@@ -52,13 +52,13 @@ public:
         QSurfaceFormat format;
 
         // 3.2 Compatibility
-        format.setMajorVersion(3);
-        format.setMinorVersion(2);
-        format.setProfile(QSurfaceFormat::CoreProfile);
+        format.setMajorVersion( 3 );
+        format.setMinorVersion( 2 );
+        format.setProfile( QSurfaceFormat::CoreProfile );
         setFormat( format );
         // Create an OpenGL context
         context = new QOpenGLContext;
-        context->setFormat(format);
+        context->setFormat( format );
         context->create();
         context->makeCurrent(this);
         QOpenGLFunctions_3_2_Core *f0 = context->versionFunctions<QOpenGLFunctions_3_2_Core>();
@@ -66,11 +66,11 @@ public:
         delete context;
 
         // 3.2 Core
-        format.setProfile(QSurfaceFormat::CompatibilityProfile);
+        format.setProfile( QSurfaceFormat::CompatibilityProfile );
         setFormat( format );
         // Create an OpenGL context
         context = new QOpenGLContext;
-        context->setFormat(format);
+        context->setFormat( format );
         context->create();
         context->makeCurrent(this);
         QOpenGLFunctions_3_2_Compatibility *f1 = context->versionFunctions<QOpenGLFunctions_3_2_Compatibility>();
@@ -78,12 +78,12 @@ public:
         delete context;
 
         // 2.1
-        format.setMajorVersion(2);
-        format.setMinorVersion(1);
+        format.setMajorVersion( 3 );
+        format.setMinorVersion( 2 );
         setFormat( format );
         // Create an OpenGL context
         context = new QOpenGLContext;
-        context->setFormat(format);
+        context->setFormat( format );
         context->create();
         context->makeCurrent(this);
         QOpenGLFunctions_2_1 *f2 = context->versionFunctions<QOpenGLFunctions_2_1>();
@@ -100,6 +100,8 @@ public:
 
 void KisOpenGL::initialize()
 {
+//    KisConfig cfg;
+
     {
         TestWindow w;
         qDebug() << "3.2 core" << w.version32Core << "3.2 compatibility" << w.version32Compatibility << "2.1" << w.version21;
@@ -179,3 +181,10 @@ QString KisOpenGL::renderer()
     return Renderer;
 }
 
+bool KisOpenGL::hasOpenGL()
+{
+    glVersion = 100 * QSurfaceFormat::defaultFormat().majorVersion() + QSurfaceFormat::defaultFormat().minorVersion();
+    qDebug() << "GL Version:" << glVersion << QSurfaceFormat::defaultFormat().swapInterval() << QSurfaceFormat::defaultFormat().swapBehavior();
+
+    return glVersion > 302;
+}

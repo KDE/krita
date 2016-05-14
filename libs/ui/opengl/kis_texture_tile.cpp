@@ -353,6 +353,15 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         }
     }
 
+    //// Uncomment this warning if you see any weird flickering when
+    //// Instant Preview updates
+    //
+    // if (!patchLevelOfDetail &&
+    //     m_currentLodPlane &&
+    //     !updateInfo.isEntireTileUpdated()) {
+    //     qDebug() << "WARNING: LodN -> Lod0 switch is requested for the partial tile udpate! Flickering is possible..." << ppVar(patchSize);
+    // }
+
     if (!patchLevelOfDetail) {
         setNeedsMipmapRegeneration();
     } else {

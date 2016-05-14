@@ -105,6 +105,12 @@ void KisOpenGL::initialize()
     {
         TestWindow w;
         qDebug() << "3.2 core" << w.version32Core << "3.2 compatibility" << w.version32Compatibility << "2.1" << w.version21;
+
+        // And that allows us to use opengl
+        if (w.version32Compatibility) {
+            glVersion = 303;
+        }
+
     }
 
     QSurfaceFormat format;
@@ -165,9 +171,6 @@ int KisOpenGL::initializeContext(QOpenGLContext* s) {
 
 bool KisOpenGL::supportsFenceSync()
 {
-    glVersion = 100 * QSurfaceFormat::defaultFormat().majorVersion() + QSurfaceFormat::defaultFormat().minorVersion();
-    dbgOpenGL << "GL Version:" << glVersion << QSurfaceFormat::defaultFormat().swapInterval() << QSurfaceFormat::defaultFormat().swapBehavior();
-
     return glVersion > 302;
 }
 
@@ -183,8 +186,5 @@ QString KisOpenGL::renderer()
 
 bool KisOpenGL::hasOpenGL()
 {
-    glVersion = 100 * QSurfaceFormat::defaultFormat().majorVersion() + QSurfaceFormat::defaultFormat().minorVersion();
-    qDebug() << "GL Version:" << glVersion << QSurfaceFormat::defaultFormat().swapInterval() << QSurfaceFormat::defaultFormat().swapBehavior();
-
     return glVersion > 302;
 }

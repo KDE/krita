@@ -255,12 +255,12 @@ void KisUpdateScheduler::setLod0ToNStrokeStrategyFactory(const KisLodSyncStrokeS
     m_d->strokesQueue.setLod0ToNStrokeStrategyFactory(factory);
 }
 
-void KisUpdateScheduler::setSuspendUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory)
+void KisUpdateScheduler::setSuspendUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyFactory &factory)
 {
     m_d->strokesQueue.setSuspendUpdatesStrokeStrategyFactory(factory);
 }
 
-void KisUpdateScheduler::setResumeUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory)
+void KisUpdateScheduler::setResumeUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyFactory &factory)
 {
     m_d->strokesQueue.setResumeUpdatesStrokeStrategyFactory(factory);
 }

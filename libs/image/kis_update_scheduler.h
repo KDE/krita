@@ -167,12 +167,12 @@ public:
      * every time when the scheduler needs to postpone all the updates
      * of the *LOD0* strokes.
      */
-    void setSuspendUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
+    void setSuspendUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyFactory &factory);
 
     /**
      * \see setSuspendUpdatesStrokeStrategyFactory()
      */
-    void setResumeUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
+    void setResumeUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyFactory &factory);
 
     /**
      * tryCancelCurrentStrokeAsync() checks whether there is a

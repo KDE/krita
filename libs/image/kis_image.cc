@@ -207,14 +207,25 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
 
         // Each of these lambdas defines a new factory function.
         m_d->scheduler.setLod0ToNStrokeStrategyFactory(
-            [=](bool forgettable){return
-                    KisLodSyncPair(
-                        new KisSyncLodCacheStrokeStrategy(KisImageWSP(this), forgettable),
-                        KisSyncLodCacheStrokeStrategy::createJobsData(KisImageWSP(this)));});
+            [=](bool forgettable) {
+                return KisLodSyncPair(
+                    new KisSyncLodCacheStrokeStrategy(KisImageWSP(this), forgettable),
+                    KisSyncLodCacheStrokeStrategy::createJobsData(KisImageWSP(this)));
+            });
+
         m_d->scheduler.setSuspendUpdatesStrokeStrategyFactory(
-            [=](){return new KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP(this), true);});
+            [=]() {
+                return KisSuspendResumePair(
+                    new KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP(this), true),
+                    KisSuspendProjectionUpdatesStrokeStrategy::createSuspendJobsData(KisImageWSP(this)));
+            });
+
         m_d->scheduler.setResumeUpdatesStrokeStrategyFactory(
-            [=](){return new KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP(this), false);});
+            [=]() {
+                return KisSuspendResumePair(
+                    new KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP(this), false),
+                    KisSuspendProjectionUpdatesStrokeStrategy::createResumeJobsData(KisImageWSP(this)));
+            });
     }
 
     setRootLayer(new KisGroupLayer(this, "root", OPACITY_OPAQUE_U8));

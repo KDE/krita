@@ -25,4 +25,7 @@ using KisStrokeStrategyFactory = std::function<KisStrokeStrategy*()>;
 using KisLodSyncPair = QPair<KisStrokeStrategy*, QList<KisStrokeJobData*>>;
 using KisLodSyncStrokeStrategyFactory = std::function<KisLodSyncPair(bool /*forgettable*/)>;
 
+using KisSuspendResumePair = QPair<KisStrokeStrategy*, QList<KisStrokeJobData*>>;
+using KisSuspendResumeStrategyFactory = std::function<KisSuspendResumePair()>;
+
 #endif /* __KIS_STROKE_STRATEGY_FACTORY_H */

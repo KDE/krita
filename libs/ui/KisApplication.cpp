@@ -169,6 +169,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     }
 
     KisOpenGL::initialize();
+    qDebug() << "krita has opengl" << KisOpenGL::hasOpenGL();
 }
 
 #if defined(Q_OS_WIN) && defined(ENV32BIT)

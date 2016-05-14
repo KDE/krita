@@ -197,7 +197,7 @@ void KoResourceItemChooser::slotButtonClicked(int button)
     if (button == Button_Import) {
         QString extensions = d->model->extensions();
         QStringList mimeTypes;
-        Q_FOREACH(const QString &suffix, extensions.split(";")) {
+        Q_FOREACH(const QString &suffix, extensions.split(":")) {
             mimeTypes << KisMimeDatabase::mimeTypeForSuffix(suffix);
         }
 

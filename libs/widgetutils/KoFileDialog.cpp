@@ -393,23 +393,18 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &m
     QStringList ret;
 
     Q_FOREACH(const QString &mimeType, mimeList) {
-        qDebug() << "mimeType" << mimeType << "seen" << mimeSeen.contains(mimeType) << "swap extension order" << d->swapExtensionOrder;
-
         if (!mimeSeen.contains(mimeType)) {
             QString description = KisMimeDatabase::descriptionForMimeType(mimeType);
-            qDebug() << "\tdescription:" << description;
-            if (description.isEmpty()) {
+            if (description.isEmpty() && !mimeType.isEmpty()) {
                 description = mimeType.split("/")[1];
                 if (description.startsWith("x-")) {
                     description = description.remove(0, 2);
                 }
-                qDebug() << "\t\tdescription:" << description;
             }
 
 
             QString oneFilter;
             QStringList patterns = KisMimeDatabase::suffixesForMimeType(mimeType);
-            qDebug() << "\tpatterns:" << patterns;
             QStringList globPatterns;
             Q_FOREACH(const QString &pattern, patterns) {
                 if (pattern.startsWith(".")) {
@@ -458,7 +453,6 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &m
             Q_ASSERT(!description.isEmpty());
 
             oneFilter = description + " ( " + oneFilter + ")";
-            qDebug() << ">>>>>>>>>>>>>>>>>>>" << oneFilter;
 
 
             if (mimeType == "application/x-krita") {
@@ -482,10 +476,6 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &m
     if (!ora.isEmpty()) ret.prepend(ora);
     if (!kritaNative.isEmpty())  ret.prepend(kritaNative);
     if (!allSupported.isEmpty()) ret.prepend(i18n("All supported formats") + " ( " + allSupported + (")"));
-
-    qDebug() << "Result:\n" << ret;
-    qDebug() << "===============================";
-
 
     return ret;
 

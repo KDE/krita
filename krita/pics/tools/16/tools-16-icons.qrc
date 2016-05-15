@@ -29,11 +29,13 @@
         <file>dark_tool_crop.png</file>
         <file>dark_tool_elliptical_selection.png</file>
         <file>dark_tool_outline_selection.png</file>
+        <file>dark_tool_pan.png</file>
         <file>dark_tool_path_selection.png</file>
         <file>dark_tool_perspectivegrid.png</file>
         <file>dark_tool_polygonal_selection.png</file>
         <file>dark_tool_rect_selection.png</file>
         <file>dark_tool_similar_selection.png</file>
+        <file>dark_tool_zoom.png</file>
         
         <file>light_calligraphy.png</file>
         <file>light_draw-text.png</file>
@@ -62,12 +64,14 @@
         <file>light_tool_crop.png</file>
         <file>light_tool_elliptical_selection.png</file>
         <file>light_tool_outline_selection.png</file>
+        <file>light_tool_pan.png</file>
         <file>light_tool_path_selection.png</file>
         <file>light_tool_perspectivegrid.png</file>
         <file>light_tool_polygon.png</file>
         <file>light_tool_polygonal_selection.png</file>
         <file>light_tool_rect_selection.png</file>
         <file>light_tool_similar_selection.png</file>
+        <file>light_tool_zoom.png</file>
 
     </qresource>
 </RCC>

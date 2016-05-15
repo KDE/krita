@@ -28,11 +28,13 @@
         <file>dark_tool_crop.svg</file>
         <file>dark_tool_elliptical_selection.svg</file>
         <file>dark_tool_outline_selection.svg</file>
+        <file>dark_tool_pan.svg</file>
         <file>dark_tool_path_selection.svg</file>
         <file>dark_tool_perspectivegrid.svg</file>
         <file>dark_tool_polygonal_selection.svg</file>
         <file>dark_tool_rect_selection.svg</file>
         <file>dark_tool_similar_selection.svg</file>
+        <file>dark_tool_zoom.svg</file>
         <file>light_calligraphy.svg</file>
         <file>light_draw-text.svg</file>
         <file>light_format-fill-color.svg</file>
@@ -60,11 +62,13 @@
         <file>light_tool_crop.svg</file>
         <file>light_tool_elliptical_selection.svg</file>
         <file>light_tool_outline_selection.svg</file>
+        <file>light_tool_pan.svg</file>
         <file>light_tool_path_selection.svg</file>
         <file>light_tool_perspectivegrid.svg</file>
         <file>light_tool_polygonal_selection.svg</file>
         <file>light_tool_rect_selection.svg</file>
         <file>light_tool_similar_selection.svg</file>
+        <file>light_tool_zoom.svg</file>
         <file>dark_shape_handling.svg</file>
         <file>dark_artistic_text.svg</file>
         <file>light_artistic_text.svg</file>

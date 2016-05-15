@@ -117,6 +117,8 @@ public:
 
     qreal scalarDistanceApprox() const;
 
+    void overrideLastValues(const QPointF &lastPosition, qreal lastTime);
+
 private:
     qreal getNextPointPositionIsotropic(const QPointF &start,
                                         const QPointF &end);

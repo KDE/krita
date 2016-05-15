@@ -140,10 +140,25 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
          * When LoD mode is active it may happen that the helper has
          * already started a stroke, but it painted noting, because
          * all the work is being calculated by the scaled-down LodN
-         * stroke. So we check it there is at least something has been
-         * painted with this distance information object.
+         * stroke. So at first we try to fetch the data from the lodN
+         * stroke ("buddy") and then check if there is at least
+         * something has been painted with this distance information
+         * object.
          */
-        if (m_d->painterInfos.first()->dragDistance->isStarted()) {
+        KisDistanceInformation *buddyDistance =
+            m_d->painterInfos.first()->buddyDragDistance();
+
+        if (buddyDistance) {
+            /**
+             * Tiny hack alert: here we fetch the distance information
+             * directly from the LodN stroke. Ideally, we should
+             * upscale its data, but here we just override it with our
+             * local copy of the coordinates.
+             */
+            distanceInfo = *buddyDistance;
+            distanceInfo.overrideLastValues(m_d->lastOutlinePos.pushThroughHistory(savedCursorPos), 0);
+
+        } else if (m_d->painterInfos.first()->dragDistance->isStarted()) {
             distanceInfo = *m_d->painterInfos.first()->dragDistance;
         }
     }

@@ -31,26 +31,41 @@
 
 KisPainterBasedStrokeStrategy::PainterInfo::PainterInfo()
     : painter(new KisPainter()),
-      dragDistance(new KisDistanceInformation())
+      dragDistance(new KisDistanceInformation()),
+      m_parentPainterInfo(0),
+      m_childPainterInfo(0)
 {
 }
 
 KisPainterBasedStrokeStrategy::PainterInfo::PainterInfo(const QPointF &lastPosition, int lastTime)
     : painter(new KisPainter()),
-      dragDistance(new KisDistanceInformation(lastPosition, lastTime))
+      dragDistance(new KisDistanceInformation(lastPosition, lastTime)),
+      m_parentPainterInfo(0),
+      m_childPainterInfo(0)
 {
 }
 
-KisPainterBasedStrokeStrategy::PainterInfo::PainterInfo(const PainterInfo &rhs, int levelOfDetail)
+KisPainterBasedStrokeStrategy::PainterInfo::PainterInfo(PainterInfo *rhs, int levelOfDetail)
     : painter(new KisPainter()),
-      dragDistance(new KisDistanceInformation(*rhs.dragDistance, levelOfDetail))
+      dragDistance(new KisDistanceInformation(*rhs->dragDistance, levelOfDetail)),
+      m_parentPainterInfo(rhs)
 {
+    rhs->m_childPainterInfo = this;
 }
 
 KisPainterBasedStrokeStrategy::PainterInfo::~PainterInfo()
 {
+    if (m_parentPainterInfo) {
+        m_parentPainterInfo->m_childPainterInfo = 0;
+    }
+
     delete(painter);
     delete(dragDistance);
+}
+
+KisDistanceInformation* KisPainterBasedStrokeStrategy::PainterInfo::buddyDragDistance()
+{
+    return m_childPainterInfo ? m_childPainterInfo->dragDistance : 0;
 }
 
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
@@ -99,7 +114,7 @@ KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const KisPainterBas
       m_useMergeID(rhs.m_useMergeID)
 {
     Q_FOREACH (PainterInfo *info, rhs.m_painterInfos) {
-        m_painterInfos.append(new PainterInfo(*info, levelOfDetail));
+        m_painterInfos.append(new PainterInfo(info, levelOfDetail));
     }
 
     KIS_ASSERT_RECOVER_NOOP(

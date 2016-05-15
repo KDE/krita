@@ -89,6 +89,14 @@ KisDistanceInformation& KisDistanceInformation::operator=(const KisDistanceInfor
     return *this;
 }
 
+void KisDistanceInformation::overrideLastValues(const QPointF &lastPosition, qreal lastTime)
+{
+    m_d->lastPosition = lastPosition;
+    m_d->lastTime = lastTime;
+
+    m_d->lastDabInfoValid = true;
+}
+
 KisDistanceInformation::~KisDistanceInformation()
 {
     delete m_d;

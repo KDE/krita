@@ -100,8 +100,6 @@ public:
 
 void KisOpenGL::initialize()
 {
-//    KisConfig cfg;
-
     {
         TestWindow w;
         qDebug() << "3.2 core" << w.version32Core << "3.2 compatibility" << w.version32Compatibility << "2.1" << w.version21;
@@ -168,7 +166,7 @@ bool KisOpenGL::supportsFenceSync()
     glVersion = 100 * QSurfaceFormat::defaultFormat().majorVersion() + QSurfaceFormat::defaultFormat().minorVersion();
     dbgOpenGL << "GL Version:" << glVersion << QSurfaceFormat::defaultFormat().swapInterval() << QSurfaceFormat::defaultFormat().swapBehavior();
 
-    return glVersion > 302;
+    return glVersion >= 302;
 }
 
 bool KisOpenGL::needsFenceWorkaround()
@@ -186,5 +184,5 @@ bool KisOpenGL::hasOpenGL()
     glVersion = 100 * QSurfaceFormat::defaultFormat().majorVersion() + QSurfaceFormat::defaultFormat().minorVersion();
     qDebug() << "GL Version:" << glVersion << QSurfaceFormat::defaultFormat().swapInterval() << QSurfaceFormat::defaultFormat().swapBehavior();
 
-    return glVersion > 302;
+    return glVersion >= 302;
 }

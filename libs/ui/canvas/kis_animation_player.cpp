@@ -285,10 +285,11 @@ void KisAnimationPlayer::uploadFrame(int frame)
         m_d->useFastFrameUpload = true;
         emit sigFrameChanged();
     } else {
+        m_d->useFastFrameUpload = false;
+
         // no OpenGL cache or the frame just not cached yet
         m_d->canvas->image()->animationInterface()->switchCurrentTimeAsync(frame);
 
-        m_d->useFastFrameUpload = false;
         emit sigFrameChanged();
     }
 

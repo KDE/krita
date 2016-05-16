@@ -422,6 +422,8 @@ public:
     bool testingAcceptCompressedTabletEvents(bool defaultValue = false) const;
     void setTestingAcceptCompressedTabletEvents(bool value);
 
+    bool shouldEatDriverShortcuts(bool defaultValue = false) const;
+
     bool testingCompressBrushEvents(bool defaultValue = false) const;
     void setTestingCompressBrushEvents(bool value);
 

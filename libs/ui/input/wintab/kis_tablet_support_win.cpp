@@ -294,9 +294,35 @@ struct DefaultButtonsConverter
                  * Qt::NoButton here.
                  */
                 if (convertedButton == Qt::NoButton) {
-                    *button = Qt::NoButton;
-                    *buttons = Qt::NoButton;
-                    break;
+
+                    /**
+                     * Sometimes the driver-handled sortcuts are just
+                     * keyboard modifiers, so ideally we should handle
+                     * them as well. The problem is that we cannot
+                     * know if the shortcut was a pan/zoom action or a
+                     * shortcut. So here we use a "hackish" approash.
+                     * We just check if any modifier has been pressed
+                     * and, if so, pass the button to Krita. Of
+                     * course, if the driver uses some really complex
+                     * shortcuts like "Shift + stylus btn" to generate
+                     * some recorded shortcut, it will not work. But I
+                     * guess it will be ok for th emost of the
+                     * usecases.
+                     *
+                     * WARNING: this hack will *not* work if you bind
+                     *          any non-modifier key to the stylus
+                     *          button, e.g. Space.
+                     */
+
+                    const Qt::KeyboardModifiers keyboardModifiers = QApplication::queryKeyboardModifiers();
+
+                    if (KisTabletDebugger::instance()->shouldEatDriverShortcuts() ||
+                        keyboardModifiers == Qt::NoModifier) {
+
+                        *button = Qt::NoButton;
+                        *buttons = Qt::NoButton;
+                        break;
+                    }
                 }
             }
         }

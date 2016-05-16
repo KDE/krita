@@ -1525,6 +1525,11 @@ void KisConfig::setTestingAcceptCompressedTabletEvents(bool value)
     m_cfg.writeEntry("testingAcceptCompressedTabletEvents", value);
 }
 
+bool KisConfig::shouldEatDriverShortcuts(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("shouldEatDriverShortcuts", false));
+}
+
 bool KisConfig::testingCompressBrushEvents(bool defaultValue) const
 {
     return (defaultValue ? false : m_cfg.readEntry("testingCompressBrushEvents", false));

@@ -22,6 +22,7 @@
 #include <QMessageBox>
 
 #include <kis_debug.h>
+#include <kis_config.h>
 
 #include <QGlobalStatic>
 #include <QMessageBox>
@@ -87,6 +88,8 @@ QString KisTabletDebugger::exTypeToString(QEvent::Type type) {
 KisTabletDebugger::KisTabletDebugger()
     : m_debugEnabled(false)
 {
+    KisConfig cfg;
+    m_shouldEatDriverShortcuts = cfg.shouldEatDriverShortcuts();
 }
 
 KisTabletDebugger* KisTabletDebugger::instance()
@@ -123,6 +126,11 @@ bool KisTabletDebugger::debugRawTabletValues() const
 {
     // FIXME: make configurable!
     return m_debugEnabled;
+}
+
+bool KisTabletDebugger::shouldEatDriverShortcuts() const
+{
+    return m_shouldEatDriverShortcuts;
 }
 
 QString KisTabletDebugger::eventToString(const QMouseEvent &ev, const QString &prefix)

@@ -49,14 +49,7 @@ public:
                        KisColorProperties * colorProperties,
                        KisShapeProperties * shapeProperties,
                        KisShapeDynamicsProperties * shapeDynamicsProperties,
-                       KisBrushSP brush) {
-        m_properties = properties;
-        m_colorProperties = colorProperties;
-        m_shapeProperties = shapeProperties;
-        m_shapeDynamicsProperties = shapeDynamicsProperties;
-        m_brush = brush;
-        m_brush->notifyStrokeStarted();
-    }
+                       KisBrushSP brush);
 
     void setFixedDab(KisFixedPaintDeviceSP dab);
 

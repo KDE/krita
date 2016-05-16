@@ -64,6 +64,21 @@ SprayBrush::~SprayBrush()
     delete m_rand;
 }
 
+void SprayBrush::setProperties(KisSprayProperties * properties,
+                               KisColorProperties * colorProperties,
+                               KisShapeProperties * shapeProperties,
+                               KisShapeDynamicsProperties * shapeDynamicsProperties,
+                               KisBrushSP brush)
+{
+    m_properties = properties;
+    m_colorProperties = colorProperties;
+    m_shapeProperties = shapeProperties;
+    m_shapeDynamicsProperties = shapeDynamicsProperties;
+    m_brush = brush;
+    if (m_brush) {
+        m_brush->notifyStrokeStarted();
+    }
+}
 
 qreal SprayBrush::rotationAngle(KisRandomSourceSP randomSource)
 {

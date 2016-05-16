@@ -123,7 +123,7 @@ void KisDlgImageProperties::setCurrentColor()
                                        kundo2_i18n("Change projection color"),
                                        0,
                                        142857 + 1);
-    applicator.applyCommand(new KisChangeProjectionColorCommand(m_image, m_defaultColorAction->currentKoColor()));
+    applicator.applyCommand(new KisChangeProjectionColorCommand(m_image, m_defaultColorAction->currentKoColor()), KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
     applicator.end();
 }
 

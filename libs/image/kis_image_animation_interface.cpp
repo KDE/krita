@@ -145,6 +145,16 @@ void KisImageAnimationInterface::requestTimeSwitchWithUndo(int time)
     m_d->image->postExecutionUndoAdapter()->addCommand(toQShared(cmd));
 }
 
+void KisImageAnimationInterface::setDefaultProjectionColor(const KoColor &color)
+{
+    int savedTime = 0;
+    saveAndResetCurrentTime(currentTime(), &savedTime);
+
+    m_d->image->setDefaultProjectionColor(color);
+
+    restoreCurrentTime(&savedTime);
+}
+
 void KisImageAnimationInterface::requestTimeSwitchNonGUI(int time)
 {
     emit sigInternalRequestTimeSwitch(time);

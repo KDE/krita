@@ -27,6 +27,7 @@
 
 class KisUpdatesFacade;
 class KisTimeRange;
+class KoColor;
 
 namespace KisLayerUtils {
     struct SwitchFrameCommand;
@@ -100,6 +101,13 @@ public:
 
     void notifyNodeChanged(const KisNode *node, const QRect &rect, bool recursive);
     void invalidateFrames(const KisTimeRange &range, const QRect &rect);
+
+    /**
+     * Changes the default color of the "external frame" projection of
+     * the image's root layer. Please note that this command should be
+     * executed from a context of an exclusive job!
+     */
+    void setDefaultProjectionColor(const KoColor &color);
 
     /**
      * The current time range selected by user.

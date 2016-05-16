@@ -479,7 +479,7 @@ void KisGbrBrush::makeMaskImage()
     clearBrushPyramid();
 }
 
-KisGbrBrush* KisGbrBrush::clone() const
+KisBrush* KisGbrBrush::clone() const
 {
     return new KisGbrBrush(*this);
 }

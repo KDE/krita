@@ -28,6 +28,15 @@ private Q_SLOTS:
 
     void testCircleSerialisation();
     void testSquareSerialisation();
+
+    void testCopyCtorCircle();
+    void testCopyCtorRect();
+
+    void testCopyCtorCurveCircle();
+    void testCopyCtorCurveRect();
+
+    void testCopyCtorGaussCircle();
+    void testCopyCtorGaussRect();
 };
 
 #endif

@@ -48,6 +48,24 @@ KisAbrBrush::KisAbrBrush(const QString& filename, KisAbrBrushCollection *parent)
     setSpacing(DEFAULT_SPACING);
 }
 
+KisAbrBrush::KisAbrBrush(const KisAbrBrush& rhs)
+    : KisBrush(rhs),
+      m_parent(0)
+{
+    // Warning! The brush became detached from the parent!
+}
+
+KisAbrBrush::KisAbrBrush(const KisAbrBrush& rhs, KisAbrBrushCollection *parent)
+    : KisBrush(rhs),
+      m_parent(parent)
+{
+}
+
+KisBrush* KisAbrBrush::clone() const
+{
+    return new KisAbrBrush(*this);
+}
+
 bool KisAbrBrush::load()
 {
     return true;

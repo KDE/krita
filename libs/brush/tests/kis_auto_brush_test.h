@@ -31,6 +31,8 @@ private Q_SLOTS:
     void testSizeRotation();
     void testCopyMasking();
 
+    void testClone();
+
 };
 
 #endif

@@ -33,20 +33,16 @@ class KRITAIMAGE_EXPORT KisGaussRectangleMaskGenerator : public KisMaskGenerator
 public:
 
     KisGaussRectangleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges);
+    KisGaussRectangleMaskGenerator(const KisGaussRectangleMaskGenerator &rhs);
     virtual ~KisGaussRectangleMaskGenerator();
+    KisMaskGenerator* clone() const;
 
     virtual quint8 valueAt(qreal x, qreal y) const;
     void setScale(qreal scaleX, qreal scaleY);
 
 private:
-
-    qreal norme(qreal a, qreal b) const {
-        return a*a + b*b;
-    }
-
-private:
     struct Private;
-    Private* const d;
+    const QScopedPointer<Private> d;
 };
 
 #endif

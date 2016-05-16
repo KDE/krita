@@ -37,13 +37,22 @@ struct Q_DECL_HIDDEN KisCurveRectangleMaskGenerator::Private
     {
     }
 
+    Private(const Private &rhs)
+        : xcoeff(rhs.xcoeff),
+        ycoeff(rhs.ycoeff),
+        curveResolution(rhs.curveResolution),
+        curveData(rhs.curveData),
+        curvePoints(rhs.curvePoints),
+        dirty(rhs.dirty),
+        fadeMaker(rhs.fadeMaker, *this)
+    {
+    }
+
+    qreal xcoeff, ycoeff;
+    qreal curveResolution;
     QVector<qreal> curveData;
     QList<QPointF> curvePoints;
-    int curveResolution;
     bool dirty;
-
-    qreal xcoeff;
-    qreal ycoeff;
 
     KisAntialiasingFadeMaker2D<Private> fadeMaker;
 
@@ -60,6 +69,17 @@ KisCurveRectangleMaskGenerator::KisCurveRectangleMaskGenerator(qreal diameter, q
     d->dirty = false;
 
     setScale(1.0, 1.0);
+}
+
+KisCurveRectangleMaskGenerator::KisCurveRectangleMaskGenerator(const KisCurveRectangleMaskGenerator &rhs)
+    : KisMaskGenerator(rhs),
+      d(new Private(*rhs.d))
+{
+}
+
+KisMaskGenerator* KisCurveRectangleMaskGenerator::clone() const
+{
+    return new KisCurveRectangleMaskGenerator(*this);
 }
 
 void KisCurveRectangleMaskGenerator::setScale(qreal scaleX, qreal scaleY)

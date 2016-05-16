@@ -32,7 +32,10 @@ public:
         qDeleteAll(m_brushes);
         m_brushes.clear();
         Q_FOREACH (BrushType * brush, rhs.m_brushes) {
-            m_brushes.append(brush->clone());
+            BrushType *clonedBrush = dynamic_cast<BrushType*>(brush->clone());
+            KIS_ASSERT_RECOVER(clonedBrush) {continue;}
+
+            m_brushes.append(clonedBrush);
         }
     }
 

@@ -50,14 +50,27 @@
 
 
 KisCircleMaskGenerator::KisCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges)
-    : KisMaskGenerator(diameter, ratio, fh, fv, spikes, antialiasEdges, CIRCLE, DefaultId), d(new Private)
+    : KisMaskGenerator(diameter, ratio, fh, fv, spikes, antialiasEdges, CIRCLE, DefaultId),
+      d(new Private)
 {
     setScale(1.0, 1.0);
 
     // store the variable locally to allow vector implementation read it easily
     d->copyOfAntialiasEdges = antialiasEdges;
 
-    d->applicator = createOptimizedClass<MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator> >(this);
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator> >(this));
+}
+
+KisCircleMaskGenerator::KisCircleMaskGenerator(const KisCircleMaskGenerator &rhs)
+    : KisMaskGenerator(rhs),
+      d(new Private(*rhs.d))
+{
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator> >(this));
+}
+
+KisMaskGenerator* KisCircleMaskGenerator::clone() const
+{
+    return new KisCircleMaskGenerator(*this);
 }
 
 void KisCircleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
@@ -74,8 +87,6 @@ void KisCircleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
 
 KisCircleMaskGenerator::~KisCircleMaskGenerator()
 {
-    delete d->applicator;
-    delete d;
 }
 
 bool KisCircleMaskGenerator::shouldSupersample() const
@@ -90,7 +101,7 @@ bool KisCircleMaskGenerator::shouldVectorize() const
 
 KisBrushMaskApplicatorBase* KisCircleMaskGenerator::applicator()
 {
-    return d->applicator;
+    return d->applicator.data();
 }
 
 quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const

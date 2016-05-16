@@ -37,7 +37,7 @@ KisBrushSP KisPredefinedBrushFactory::getOrCreateBrush(const QDomElement& brushD
 {
     KisBrushResourceServer *rServer = KisBrushServer::instance()->brushServer();
     QString brushFileName = brushDefinition.attribute("filename", "");
-    KisBrushSP brush = rServer->resourceByFilename(brushFileName);
+    KisBrushSP brush = rServer->resourceByFilename(brushFileName)->clone();
 
     //Fallback for files that still use the old format
     if (!brush) {

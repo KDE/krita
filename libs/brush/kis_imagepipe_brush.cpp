@@ -412,7 +412,7 @@ bool KisImagePipeBrush::canPaintFor(const KisPaintInformation& info)
     return (!m_d->brushesPipe.parasite().needsMovement || info.drawingDistance() >= 0.5);
 }
 
-KisImagePipeBrush* KisImagePipeBrush::clone() const
+KisBrush* KisImagePipeBrush::clone() const
 {
     return new KisImagePipeBrush(*this);
 }

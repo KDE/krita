@@ -20,6 +20,8 @@
 #ifndef _KIS_MASK_GENERATOR_H_
 #define _KIS_MASK_GENERATOR_H_
 
+#include <QScopedPointer>
+
 #include <compositeops/KoVcMultiArchBuildSupport.h> //MSVC requires that Vc come first
 #include <KoID.h>
 #include <klocalizedstring.h>
@@ -57,8 +59,11 @@ public:
      * @param fv vertical fade (fv \< h / 2 )
      */
     KisMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges, Type type, const KoID& id = DefaultId);
+    KisMaskGenerator(const KisMaskGenerator &rhs);
 
     virtual ~KisMaskGenerator();
+
+    virtual KisMaskGenerator* clone() const = 0;
 
 private:
 
@@ -116,7 +121,7 @@ protected:
 
 private:
     struct Private;
-    Private* d;
+    const QScopedPointer<Private> d;
     const KoID& m_id;
 };
 

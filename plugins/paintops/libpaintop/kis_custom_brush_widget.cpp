@@ -146,7 +146,7 @@ void KisCustomBrushWidget::slotAddPredefined()
     // Add it to the brush server, so that it automatically gets to the mediators, and
     // so to the other brush choosers can pick it up, if they want to
     if (m_rServerAdapter) {
-        KisGbrBrush * resource = static_cast<KisGbrBrush*>(m_brush.data())->clone();
+        KisGbrBrush *resource = dynamic_cast<KisGbrBrush*>(m_brush->clone());
         resource->setFilename(tempFileName);
 
         if (nameLineEdit->text().isEmpty()) {

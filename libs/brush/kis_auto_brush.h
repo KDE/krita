@@ -22,6 +22,8 @@
 #include "kritabrush_export.h"
 #include "kis_brush.h"
 
+#include <QScopedPointer>
+
 class KisMaskGenerator;
 
 /**
@@ -33,6 +35,8 @@ class BRUSH_EXPORT KisAutoBrush : public KisBrush
 public:
 
     KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, qreal density = 1.0);
+    KisAutoBrush(const KisAutoBrush& rhs);
+    KisBrush* clone() const;
 
     virtual ~KisAutoBrush();
 
@@ -83,7 +87,8 @@ private:
 
     QImage createBrushPreview();
 
+private:
     struct Private;
-    Private* const d;
+    const QScopedPointer<Private> d;
 };
 #endif // _KIS_AUTOBRUSH_RESOURCE_H_

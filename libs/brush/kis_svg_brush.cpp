@@ -33,6 +33,17 @@ KisSvgBrush::KisSvgBrush(const QString& filename)
 
 }
 
+KisSvgBrush::KisSvgBrush(const KisSvgBrush& rhs)
+    : KisBrush(rhs),
+      m_svg(rhs.m_svg)
+{
+}
+
+KisBrush* KisSvgBrush::clone() const
+{
+    return new KisSvgBrush(*this);
+}
+
 bool KisSvgBrush::load()
 {
     QFile f(filename());

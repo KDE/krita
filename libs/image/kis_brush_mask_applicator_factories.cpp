@@ -47,7 +47,7 @@ MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator>::cre
 struct KisCircleMaskGenerator::FastRowProcessor
 {
     FastRowProcessor(KisCircleMaskGenerator *maskGenerator)
-        : d(maskGenerator->d) {}
+        : d(maskGenerator->d.data()) {}
 
     template<Vc::Implementation _impl>
     void process(float* buffer, int width, float y, float cosa, float sina,

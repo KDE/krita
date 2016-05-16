@@ -45,6 +45,9 @@ public:
 
     /// Construct brush to load filename later as brush
     KisAbrBrush(const QString& filename, KisAbrBrushCollection *parent);
+    KisAbrBrush(const KisAbrBrush& rhs);
+    KisAbrBrush(const KisAbrBrush& rhs, KisAbrBrushCollection *parent);
+    KisBrush* clone() const;
 
     virtual bool load();
 

@@ -48,6 +48,16 @@ struct Q_DECL_HIDDEN KisGaussCircleMaskGenerator::Private
     {
     }
 
+    Private(const Private &rhs)
+        : ycoef(ycoef),
+        fade(fade),
+        center(center),
+        distfactor(distfactor),
+        alphafactor(alphafactor),
+        fadeMaker(rhs.fadeMaker, *this)
+    {
+    }
+
     qreal ycoef;
     qreal fade;
     qreal center, distfactor, alphafactor;
@@ -57,7 +67,8 @@ struct Q_DECL_HIDDEN KisGaussCircleMaskGenerator::Private
 };
 
 KisGaussCircleMaskGenerator::KisGaussCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges)
-    : KisMaskGenerator(diameter, ratio, fh, fv, spikes, antialiasEdges, CIRCLE, GaussId), d(new Private(antialiasEdges))
+    : KisMaskGenerator(diameter, ratio, fh, fv, spikes, antialiasEdges, CIRCLE, GaussId),
+      d(new Private(antialiasEdges))
 {
     d->ycoef = 1.0 / ratio;
     d->fade = 1.0 - (fh + fv) / 2.0;
@@ -65,6 +76,17 @@ KisGaussCircleMaskGenerator::KisGaussCircleMaskGenerator(qreal diameter, qreal r
     else if (d->fade == 1.0) d->fade = 1.0 - 1e-6; // would become undefined for fade == 0 or 1
     d->center = (2.5 * (6761.0*d->fade-10000.0))/(M_SQRT_2*6761.0*d->fade);
     d->alphafactor = 255.0 / (2.0 * erf(d->center));
+}
+
+KisGaussCircleMaskGenerator::KisGaussCircleMaskGenerator(const KisGaussCircleMaskGenerator &rhs)
+    : KisMaskGenerator(rhs),
+      d(new Private(*rhs.d))
+{
+}
+
+KisMaskGenerator* KisGaussCircleMaskGenerator::clone() const
+{
+    return new KisGaussCircleMaskGenerator(*this);
 }
 
 void KisGaussCircleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
@@ -77,7 +99,6 @@ void KisGaussCircleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
 
 KisGaussCircleMaskGenerator::~KisGaussCircleMaskGenerator()
 {
-    delete d;
 }
 
 inline quint8 KisGaussCircleMaskGenerator::Private::value(qreal dist) const

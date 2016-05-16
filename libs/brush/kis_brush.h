@@ -320,6 +320,8 @@ public:
 
     virtual void lodLimitations(KisPaintopLodLimitations *l) const;
 
+    virtual KisBrush* clone() const = 0;
+
 //protected:
 
     KisBrush(const KisBrush& rhs);

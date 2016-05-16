@@ -65,6 +65,8 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
     m_chkShowColorSpaceSelector->setChecked(cfg.readEntry("SpecificColorSelector/ShowColorSpaceSelector", true));
 
     m_colorspaceSelector->setVisible(m_chkShowColorSpaceSelector->isChecked());
+    m_colorspaceSelector->showColorBrowserButton(false);
+
     m_layout->addWidget(m_chkShowColorSpaceSelector);
     m_layout->addWidget(m_colorspaceSelector);
 

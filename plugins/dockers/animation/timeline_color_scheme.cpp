@@ -77,7 +77,9 @@ QBrush TimelineColorScheme::headerEmpty() const
 
 QBrush TimelineColorScheme::headerCachedFrame() const
 {
-    return headerEmpty().color().darker(115);
+    QColor bgColor = qApp->palette().color(QPalette::Base);
+    int darkenCoeff = bgColor.value() > 128 ? 150 : 50;
+    return headerEmpty().color().darker(darkenCoeff);
 }
 
 QBrush TimelineColorScheme::headerActive() const

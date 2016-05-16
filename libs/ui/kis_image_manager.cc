@@ -41,6 +41,7 @@
 #include "commands/kis_image_commands.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
+#include "kis_layer_utils.h"
 
 #include "kis_signal_compressor_with_param.h"
 
@@ -181,8 +182,8 @@ void updateImageBackgroundColor(KisImageSP image, const QColorDialog *dlg)
     QColor newColor = dlg->currentColor();
     KoColor bg = image->defaultProjectionColor();
     bg.fromQColor(newColor);
-    image->setDefaultProjectionColor(bg);
-    image->refreshGraphAsync();
+
+    KisLayerUtils::changeImageDefaultProjectionColor(image, bg);
 }
 
 void KisImageManager::slotImageColor()

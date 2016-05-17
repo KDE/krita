@@ -142,7 +142,6 @@ KoPatternBackground::KoPatternBackground(KoImageCollection * imageCollection)
 KoPatternBackground::~KoPatternBackground()
 {
     Q_D(KoPatternBackground);
-    delete d->imageCollection;
 }
 
 void KoPatternBackground::setTransform(const QTransform &matrix)

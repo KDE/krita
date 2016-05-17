@@ -407,7 +407,6 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
     loadAssistants(store, uri, external);
 }
 
-
 vKisNodeSP KisKraLoader::selectedNodes() const
 {
     return m_d->selectedNodes;
@@ -667,7 +666,6 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
     }
 
     if (element.hasAttribute(KEYFRAME_FILE)) {
-        node->enableAnimation();
         m_d->keyframeFilenames.insert(node.data(), element.attribute(KEYFRAME_FILE));
     }
 

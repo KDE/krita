@@ -94,15 +94,15 @@ AnimationDocker::AnimationDocker()
     m_animationWidget->btnPlay->setDefaultAction(m_playPauseAction);
 
     m_addBlankFrameAction = new KisAction(KisAnimationUtils::addFrameActionName, m_animationWidget->btnAddKeyframe);
-    m_addBlankFrameAction->setActivationFlags(KisAction::ACTIVE_LAYER);
+    m_addBlankFrameAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
     m_animationWidget->btnAddKeyframe->setDefaultAction(m_addBlankFrameAction);
 
     m_addDuplicateFrameAction = new KisAction(KisAnimationUtils::duplicateFrameActionName, m_animationWidget->btnAddDuplicateFrame);
-    m_addDuplicateFrameAction->setActivationFlags(KisAction::ACTIVE_LAYER);
+    m_addDuplicateFrameAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
     m_animationWidget->btnAddDuplicateFrame->setDefaultAction(m_addDuplicateFrameAction);
 
     m_deleteKeyframeAction = new KisAction(KisAnimationUtils::removeFrameActionName, m_animationWidget->btnDeleteKeyframe);
-    m_deleteKeyframeAction->setActivationFlags(KisAction::ACTIVE_LAYER);
+    m_deleteKeyframeAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
     m_animationWidget->btnDeleteKeyframe->setDefaultAction(m_deleteKeyframeAction);
 
     {

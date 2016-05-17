@@ -178,6 +178,8 @@ public:
 
     void testingInitSelection(const QRect &rect, KisLayerSP parentLayer);
 
+    void enableAnimation();
+
 protected:
     /**
      * Apply the effect the projection using the mask as a selection.

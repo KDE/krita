@@ -56,6 +56,11 @@ public:
 
     QString frameFilename(int frameId) const;
 
+    /**
+     * When choosing filenames for frames, this will be appended to the node filename
+     */
+    void setFilenameSuffix(const QString suffix);
+
     bool hasScalarValue() const;
     qreal minScalarValue() const;
     qreal maxScalarValue() const;

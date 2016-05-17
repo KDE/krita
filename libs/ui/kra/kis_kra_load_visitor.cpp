@@ -280,6 +280,9 @@ void KisKraLoadVisitor::initSelectionForMask(KisMask *mask)
 bool KisKraLoadVisitor::visit(KisFilterMask *mask)
 {
     initSelectionForMask(mask);
+
+    loadNodeKeyframes(mask);
+
     bool result = true;
     result = loadSelection(getLocation(mask), mask->selection());
     result = loadFilterConfiguration(mask->filter().data(), getLocation(mask, DOT_FILTERCONFIG));
@@ -338,6 +341,8 @@ bool KisKraLoadVisitor::visit(KisTransformMask *mask)
 bool KisKraLoadVisitor::visit(KisTransparencyMask *mask)
 {
     initSelectionForMask(mask);
+
+    loadNodeKeyframes(mask);
 
     return loadSelection(getLocation(mask), mask->selection());
 }
@@ -566,6 +571,8 @@ QString KisKraLoadVisitor::getLocation(const QString &filename, const QString& s
 void KisKraLoadVisitor::loadNodeKeyframes(KisNode *node)
 {
     if (!m_keyframeFilenames.contains(node)) return;
+
+    node->enableAnimation();
 
     const QString &location = getLocation(m_keyframeFilenames[node]);
 

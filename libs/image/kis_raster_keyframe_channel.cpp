@@ -29,25 +29,27 @@
 
 struct KisRasterKeyframeChannel::Private
 {
-  Private(KisPaintDeviceWSP paintDevice)
+  Private(KisPaintDeviceWSP paintDevice, const QString filenameSuffix)
       : paintDevice(paintDevice),
+        filenameSuffix(filenameSuffix),
         onionSkinsEnabled(false)
   {}
 
   KisPaintDeviceWSP paintDevice;
   QMap<int, QString> frameFilenames;
+  QString filenameSuffix;
   bool onionSkinsEnabled;
 };
 
 KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KoID &id, const KisNodeWSP node, const KisPaintDeviceWSP paintDevice)
     : KisKeyframeChannel(id, node),
-      m_d(new Private(paintDevice))
+      m_d(new Private(paintDevice, QString()))
 {
 }
 
 KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KisRasterKeyframeChannel &rhs, const KisNodeWSP newParentNode, const KisPaintDeviceWSP newPaintDevice)
     : KisKeyframeChannel(rhs, newParentNode),
-      m_d(new Private(newPaintDevice))
+      m_d(new Private(newPaintDevice, rhs.m_d->filenameSuffix))
 {
     KIS_ASSERT_RECOVER_NOOP(&rhs != this);
 
@@ -89,6 +91,11 @@ QString KisRasterKeyframeChannel::frameFilename(int frameId) const
     return m_d->frameFilenames.value(frameId, QString());
 }
 
+void KisRasterKeyframeChannel::setFilenameSuffix(const QString suffix)
+{
+    m_d->filenameSuffix = suffix;
+}
+
 void KisRasterKeyframeChannel::setFrameFilename(int frameId, const QString &filename)
 {
     Q_ASSERT(!m_d->frameFilenames.contains(frameId));
@@ -102,9 +109,9 @@ QString KisRasterKeyframeChannel::chooseFrameFilename(int frameId, const QString
     int firstFrame = constKeys().begin().value()->value();
     if (frameId == firstFrame) {
         // Use legacy naming convention for first keyframe
-        filename = layerFilename;
+        filename = layerFilename + m_d->filenameSuffix;
     } else {
-        filename = layerFilename + ".f" + QString::number(frameId);
+        filename = layerFilename + m_d->filenameSuffix + ".f" + QString::number(frameId);
     }
 
     setFrameFilename(frameId, filename);

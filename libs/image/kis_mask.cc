@@ -41,6 +41,7 @@
 #include "kis_cached_paint_device.h"
 #include "kis_mask_projection_plane.h"
 
+#include "kis_raster_keyframe_channel.h"
 
 struct Q_DECL_HIDDEN KisMask::Private {
     Private(KisMask *_q)
@@ -357,5 +358,19 @@ void KisMask::testingInitSelection(const QRect &rect, KisLayerSP parentLayer)
     m_d->selection->pixelSelection()->select(rect, OPACITY_OPAQUE_U8);
     m_d->selection->updateProjection(rect);
     m_d->selection->setParentNode(this);
+}
+
+void KisMask::enableAnimation()
+{
+    KisPaintDeviceSP device = paintDevice();
+
+    if (device) {
+        KisRasterKeyframeChannel *contentChannel = device->createKeyframeChannel(KisKeyframeChannel::Content, this);
+        addKeyframeChannel(contentChannel);
+
+        contentChannel->setFilenameSuffix(".pixelselection");
+
+        KisNode::enableAnimation();
+    }
 }
 

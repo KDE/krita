@@ -38,6 +38,7 @@ public:
     KisKraLoadVisitor(KisImageWSP image,
                       KoStore *store,
                       QMap<KisNode *, QString> &layerFilenames,
+                      QMap<KisNode *, QString> &keyframeFilenames,
                       const QString & name,
                       int syntaxVersion);
 
@@ -74,6 +75,7 @@ private:
     bool loadSelection(const QString& location, KisSelectionSP dstSelection);
     QString getLocation(KisNode* node, const QString& suffix = QString());
     QString getLocation(const QString &filename, const QString &suffix = QString());
+    void loadNodeKeyframes(KisNode *node);
 
 private:
     KisImageWSP m_image;
@@ -81,6 +83,7 @@ private:
     bool m_external;
     QString m_uri;
     QMap<KisNode *, QString> m_layerFilenames;
+    QMap<KisNode *, QString> m_keyframeFilenames;
     QString m_name;
     int m_syntaxVersion;
     QStringList m_errorMessages;

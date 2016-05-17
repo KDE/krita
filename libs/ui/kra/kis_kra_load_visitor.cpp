@@ -197,6 +197,8 @@ bool KisKraLoadVisitor::visit(KisGroupLayer *layer)
 
 bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
 {
+    loadNodeKeyframes(layer);
+
     // Adjustmentlayers are tricky: there's the 1.x style and the 2.x
     // style, which has selections with selection components
     bool result = true;
@@ -228,6 +230,8 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
         return false;
     }
     bool result = true;
+
+    loadNodeKeyframes(layer);
 
     result = loadSelection(getLocation(layer), layer->internalSelection());
 

@@ -35,6 +35,8 @@
 #include "filter/kis_filter_registry.h"
 #include "filter/kis_filter.h"
 
+#include "kis_raster_keyframe_channel.h"
+
 
 struct Q_DECL_HIDDEN KisSelectionBasedLayer::Private
 {
@@ -238,6 +240,16 @@ void KisSelectionBasedLayer::setY(qint32 y)
 void KisSelectionBasedLayer::setDirty(const QRect & rect)
 {
     KisLayer::setDirty(rect);
+}
+
+void KisSelectionBasedLayer::enableAnimation()
+{
+    KisRasterKeyframeChannel * contentChannel = m_d->selection->pixelSelection()->createKeyframeChannel(KisKeyframeChannel::Content, this);
+    addKeyframeChannel(contentChannel);
+
+    contentChannel->setFilenameSuffix(".pixelselection");
+
+    KisLayer::enableAnimation();
 }
 
 void KisSelectionBasedLayer::setDirty()

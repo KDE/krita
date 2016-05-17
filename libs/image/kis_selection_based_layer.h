@@ -87,6 +87,8 @@ public:
     void setDirty();
     void setDirty(const QRect & rect);
 
+    void enableAnimation();
+
 public:
 
     /**

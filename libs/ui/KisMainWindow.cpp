@@ -609,6 +609,11 @@ void KisMainWindow::showView(KisView *imageView)
             imageView->show();
         }
 
+        // No, no, no: do not try to call this _before_ the show() has
+        // been called on the view; only when that has happened is the
+        // opengl context active, and very bad things happen if we tell
+        // the dockers to update themselves with a view if the opengl
+        // context is not active.
         setActiveView(imageView);
 
         updateWindowMenu();

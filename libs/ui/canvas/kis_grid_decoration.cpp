@@ -27,7 +27,9 @@
 #include <klocalizedstring.h>
 
 #include <KoUnit.h>
+
 #include "kis_grid_config.h"
+#include "kis_coordinates_converter.h"
 
 struct KisGridDecoration::Private
 {

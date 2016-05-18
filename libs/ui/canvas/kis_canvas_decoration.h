@@ -24,23 +24,27 @@
 
 #include <kritaui_export.h>
 #include <kis_image.h>
-#include "kis_canvas2.h"
 #include "KisView.h"
+#include <kis_shared.h>
 
+class KisCanvas2;
 class QRectF;
 class QPainter;
 class KisCoordinatesConverter;
 
+class KisCanvasDecoration;
+typedef KisSharedPtr<KisCanvasDecoration> KisCanvasDecorationSP;
 
 /**
  * This class is the base class for object that draw a decoration on the canvas,
  * for instance, selections, grids, tools, ...
  */
-class KRITAUI_EXPORT KisCanvasDecoration : public QObject
+class KRITAUI_EXPORT KisCanvasDecoration : public QObject, public KisShared
 {
     Q_OBJECT
 public:
     KisCanvasDecoration(const QString& id, QPointer<KisView>parent);
+
     ~KisCanvasDecoration();
 
     void setView(QPointer<KisView> imageView);

@@ -24,12 +24,11 @@
 #include <QPointer>
 
 #include "KisView.h"
+#include "kis_painting_assistants_decoration.h"
 
 class KisViewManager;
-class KisPaintingAssistantsDecoration;
 class KisAction;
 class KisActionManager;
-
 
 class KisPaintingAssistantsManager : public QObject
 {
@@ -47,8 +46,8 @@ private Q_SLOTS:
     void updateAction();
 
 private:
-    KisPaintingAssistantsDecoration* decoration();
-    
+    KisPaintingAssistantsDecorationSP decoration();
+
     QPointer<KisView> m_imageView;
     KisAction* m_toggleAssistant;
     KisAction* m_togglePreview;

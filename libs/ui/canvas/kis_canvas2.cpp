@@ -750,12 +750,12 @@ void KisCanvas2::slotSetDisplayProfile(const KoColorProfile *monitorProfile)
     refetchDataFromImage();
 }
 
-void KisCanvas2::addDecoration(KisCanvasDecoration* deco)
+void KisCanvas2::addDecoration(KisCanvasDecorationSP deco)
 {
     m_d->canvasWidget->addDecoration(deco);
 }
 
-KisCanvasDecoration* KisCanvas2::decoration(const QString& id) const
+KisCanvasDecorationSP KisCanvas2::decoration(const QString& id) const
 {
     return m_d->canvasWidget->decoration(id);
 }
@@ -821,7 +821,7 @@ bool KisCanvas2::isPopupPaletteVisible() const
 
 void KisCanvas2::setWrapAroundViewingMode(bool value)
 {
-    KisCanvasDecoration *infinityDecoration =
+    KisCanvasDecorationSP infinityDecoration =
         m_d->canvasWidget->decoration(INFINITY_DECORATION_ID);
 
     if (infinityDecoration) {
@@ -833,7 +833,7 @@ void KisCanvas2::setWrapAroundViewingMode(bool value)
 
 bool KisCanvas2::wrapAroundViewingMode() const
 {
-    KisCanvasDecoration *infinityDecoration =
+    KisCanvasDecorationSP infinityDecoration =
         m_d->canvasWidget->decoration(INFINITY_DECORATION_ID);
 
     if (infinityDecoration) {
@@ -889,8 +889,8 @@ void KisCanvas2::slotShowPopupPalette(const QPoint &p)
     m_d->popupPalette->showPopupPalette(p);
 }
 
-KisPaintingAssistantsDecoration* KisCanvas2::paintingAssistantsDecoration() const
+KisPaintingAssistantsDecorationSP KisCanvas2::paintingAssistantsDecoration() const
 {
-    KisCanvasDecoration* deco = decoration("paintingAssistantsDecoration");
-    return qobject_cast<KisPaintingAssistantsDecoration*>(deco);
+    KisCanvasDecorationSP deco = decoration("paintingAssistantsDecoration");
+    return qobject_cast<KisPaintingAssistantsDecoration*>(deco.data());
 }

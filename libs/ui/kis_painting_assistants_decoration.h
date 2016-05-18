@@ -28,6 +28,9 @@
 
 class KisView;
 
+class KisPaintingAssistantsDecoration;
+typedef KisSharedPtr<KisPaintingAssistantsDecoration> KisPaintingAssistantsDecorationSP;
+
 /**
  * This class hold a list of painting assistants.
  */

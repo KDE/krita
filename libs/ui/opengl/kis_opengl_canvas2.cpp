@@ -178,12 +178,10 @@ void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilter* displayFilter) {
 
 void KisOpenGLCanvas2::setDisplayFilterImpl(KisDisplayFilter* displayFilter, bool initializing)
 {
-
     bool needsInternalColorManagement =
             !displayFilter || displayFilter->useInternalColorManagement();
 
-    bool needsFullRefresh = d->openGLImageTextures->
-            setInternalColorManagementActive(needsInternalColorManagement);
+    bool needsFullRefresh = d->openGLImageTextures->setInternalColorManagementActive(needsInternalColorManagement);
 
     d->displayFilter = displayFilter;
     if (d->canvasInitialized) {

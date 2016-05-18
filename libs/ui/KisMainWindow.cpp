@@ -580,8 +580,6 @@ void KisMainWindow::showView(KisView *imageView)
         subwin->setOption(QMdiSubWindow::RubberBandResize, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
         subwin->setWindowIcon(qApp->windowIcon());
 
-        setActiveView(imageView);
-
         /**
          * Hack alert!
          *
@@ -610,6 +608,8 @@ void KisMainWindow::showView(KisView *imageView)
         else {
             imageView->show();
         }
+
+        setActiveView(imageView);
 
         updateWindowMenu();
         updateCaption();

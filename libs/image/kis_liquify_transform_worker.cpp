@@ -431,7 +431,7 @@ void KisLiquifyTransformWorker::run(KisPaintDeviceSP device)
 
 QRect KisLiquifyTransformWorker::approxChangeRect(const QRect &rc)
 {
-    const int margin = 0.05;
+    const qreal margin = 0.05;
 
     /**
      * Here we just return the full area occupied by the transformed grid.

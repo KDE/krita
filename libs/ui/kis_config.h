@@ -160,9 +160,6 @@ public:
     bool useOpenGLTextureBuffer(bool defaultValue = false) const;
     void setUseOpenGLTextureBuffer(bool useBuffer);
 
-    bool disableDoubleBuffering(bool defaultValue = false) const;
-    void setDisableDoubleBuffering(bool disableDoubleBuffering);
-
     bool disableVSync(bool defaultValue = false) const;
     void setDisableVSync(bool disableVSync);
 

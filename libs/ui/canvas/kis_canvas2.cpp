@@ -118,10 +118,10 @@ public:
     KisAnimationPlayer *animationPlayer;
     KisAnimationFrameCacheSP frameCache;
     bool lodAllowedInCanvas;
-    bool bootsrapLodBlocked;
+    bool bootstrapLodBlocked;
 
     bool effectiveLodAllowedInCanvas() {
-        return lodAllowedInCanvas && !bootsrapLodBlocked;
+        return lodAllowedInCanvas && !bootstrapLodBlocked;
     }
 };
 
@@ -134,7 +134,7 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
      * loading and zoom level settled down, LoD is given a green
      * light.
      */
-    m_d->bootsrapLodBlocked = true;
+    m_d->bootstrapLodBlocked = true;
     connect(view->mainWindow(), SIGNAL(guiLoadingFinished()), SLOT(bootstrapFinished()));
 
     m_d->updateSignalCompressor.setDelay(10);
@@ -434,11 +434,11 @@ void KisCanvas2::createCanvas(bool useOpenGL)
             warnKrita << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
             createQPainterCanvas();
         }
-    } 
+    }
     else {
         createQPainterCanvas();
     }
-    
+
     if (m_d->popupPalette) {
         m_d->popupPalette->setParent(m_d->canvasWidget->widget());
     }
@@ -844,19 +844,24 @@ bool KisCanvas2::wrapAroundViewingMode() const
 
 void KisCanvas2::bootstrapFinished()
 {
-    if (!m_d->bootsrapLodBlocked) return;
+    if (!m_d->bootstrapLodBlocked) return;
 
-    m_d->bootsrapLodBlocked = false;
+    m_d->bootstrapLodBlocked = false;
     setLodAllowedInCanvas(m_d->lodAllowedInCanvas);
 }
 
 void KisCanvas2::setLodAllowedInCanvas(bool value)
 {
+    if (!KisOpenGL::supportsGLSL13()) {
+        qWarning() << "WARNING: Level of Detail functionality is available only with openGL + GLSL 1.3 support";
+    }
+
     m_d->lodAllowedInCanvas =
-        value &&
-        m_d->currentCanvasIsOpenGL &&
-        (m_d->openGLFilterMode == KisOpenGL::TrilinearFilterMode ||
-         m_d->openGLFilterMode == KisOpenGL::HighQualityFiltering);
+            value &&
+            m_d->currentCanvasIsOpenGL &&
+            KisOpenGL::supportsGLSL13() &&
+            (m_d->openGLFilterMode == KisOpenGL::TrilinearFilterMode ||
+             m_d->openGLFilterMode == KisOpenGL::HighQualityFiltering);
 
     KisImageSP image = this->image();
 

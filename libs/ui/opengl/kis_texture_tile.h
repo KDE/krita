@@ -35,6 +35,14 @@ class QOpenGLBuffer;
 
 struct KisGLTexturesInfo {
 
+    KisGLTexturesInfo()
+        : width(0)
+        , height(0)
+        , effectiveWidth(1)
+        , effectiveHeight(1)
+        , border(0)
+    {}
+
     // real width and height
     int width;
     int height;

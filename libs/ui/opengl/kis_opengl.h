@@ -47,7 +47,9 @@ public:
     static void initialize();
 
     /// Initialize shared OpenGL context
-    static int initializeContext(QOpenGLContext* s);
+    static void initializeContext(QOpenGLContext *ctx);
+
+    static bool supportsGLSL13();
 
     /// Check for OpenGL
     static bool hasOpenGL();
@@ -64,9 +66,10 @@ public:
      */
     static bool needsFenceWorkaround();
 
-    static QString renderer();
-
 private:
+
+    static void setDefaultFormat();
+
     KisOpenGL();
 
 

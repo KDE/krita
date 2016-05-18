@@ -17,7 +17,7 @@
  */
 
 #include "kis_canvas_decoration.h"
-#include "kis_canvas2.h"5
+#include "kis_canvas2.h"
 #include "kis_debug.h"
 
 struct KisCanvasDecoration::Private {

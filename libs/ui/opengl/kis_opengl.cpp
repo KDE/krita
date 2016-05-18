@@ -121,7 +121,7 @@ void KisOpenGL::initializeContext(QOpenGLContext *ctx)
 bool KisOpenGL::supportsGLSL13()
 {
     initialize();
-    return glMajorVersion >= 3;
+    return glMajorVersion >= 3 && supportsDeprecatedFunctions;
 }
 
 bool KisOpenGL::supportsFenceSync()
@@ -140,14 +140,16 @@ void KisOpenGL::setDefaultFormat()
 {
     QSurfaceFormat format;
 #ifdef Q_OS_MAC
-    format.setProfile(QSurfaceFormat::CoreProfile);
+//    format.setProfile(QSurfaceFormat::CoreProfile);
+//    format.setOptions(QSurfaceFormat::DeprecatedFunctions);
+    format.setVersion(2, 1);
 #else
     format.setProfile(QSurfaceFormat::CompatibilityProfile);
-#endif
     format.setOptions(QSurfaceFormat::DeprecatedFunctions);
+    format.setVersion(3, 0);
+#endif
     format.setDepthBufferSize(24);
     format.setStencilBufferSize(8);
-    format.setVersion(3, 0);
     format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
     KisConfig cfg;
     if (cfg.disableVSync()) {
@@ -158,6 +160,6 @@ void KisOpenGL::setDefaultFormat()
 
 bool KisOpenGL::hasOpenGL()
 {
-    //return ((glMajorVersion * 100 + glMinorVersion) >= 201);
-    return (glMajorVersion >= 3 && supportsDeprecatedFunctions);
+    return ((glMajorVersion * 100 + glMinorVersion) >= 201);
+    //return (glMajorVersion >= 3 && supportsDeprecatedFunctions);
 }

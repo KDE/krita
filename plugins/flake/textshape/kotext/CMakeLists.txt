@@ -1,4 +1,4 @@
-include_directories(${FONTCONFIG_INCLUDE_DIR}/fontconfig
+include_directories(${FONTCONFIG_INCLUDE_DIR}
                     ${FREETYPE_INCLUDE_DIRS})
 
 set(kritatext_LIB_SRCS

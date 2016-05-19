@@ -334,7 +334,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
     const bool exportAs = args.exportAs();
     const bool exportAsPdf = args.exportAsPdf();
     const QString exportFileName = args.exportFileName();
-    const QString profileFileName = args.profileFileName();
 
     const bool batchRun = (print || exportAs || exportAsPdf);
     // print & exportAsPdf do user interaction ATM
@@ -395,14 +394,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
     // Get the command line arguments which we have to parse
     int argsCount = args.filenames().count();
     if (argsCount > 0) {
-
-        QTextStream profileoutput;
-        profileoutput.setCodec("UTF-8");
-        QFile profileFile(profileFileName);
-        if (!profileFileName.isEmpty()
-                && profileFile.open(QFile::WriteOnly | QFile::Truncate)) {
-            profileoutput.setDevice(&profileFile);
-        }
 
         // Loop through arguments
         short int nPrinted = 0;

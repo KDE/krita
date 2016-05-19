@@ -49,11 +49,11 @@ struct Q_DECL_HIDDEN KisGaussCircleMaskGenerator::Private
     }
 
     Private(const Private &rhs)
-        : ycoef(ycoef),
-        fade(fade),
-        center(center),
-        distfactor(distfactor),
-        alphafactor(alphafactor),
+        : ycoef(rhs.ycoef),
+        fade(rhs.fade),
+        center(rhs.center),
+        distfactor(rhs.distfactor),
+        alphafactor(rhs.alphafactor),
         fadeMaker(rhs.fadeMaker, *this)
     {
     }

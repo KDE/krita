@@ -130,7 +130,7 @@
       <image>http://heap.kogmbh.net/downloads/krita_appdata_2.png</image>
     </screenshot>
   </screenshots>
-  <x-updatecontact>foundation@krita.org</x-updatecontact>
+  <update_contact>foundation@krita.org</update_contact>
   <project_group>KDE</project_group>
   <provides>
     <binary>krita</binary>

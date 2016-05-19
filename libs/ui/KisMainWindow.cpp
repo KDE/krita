@@ -688,13 +688,13 @@ void KisMainWindow::addRecentURL(const QUrl &url)
                     ok = false; // it's in the tmp resource
 #ifdef HAVE_KIO
             if (ok) {
-                KRecentDocument::add(path);
+                KRecentDocument::add(QUrl::fromLocalFile(path));
             }
 #endif
         }
 #ifdef HAVE_KIO
         else {
-            KRecentDocument::add(url.url(QUrl::StripTrailingSlash), true);
+            KRecentDocument::add(url.adjusted(QUrl::StripTrailingSlash));
         }
 #endif
         if (ok) {

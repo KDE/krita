@@ -976,6 +976,7 @@ KisDefaultBoundsBaseSP KisPaintDevice::defaultBounds() const
 void KisPaintDevice::move(const QPoint &pt)
 {
     m_d->currentStrategy()->move(pt);
+    m_d->cache()->invalidate();
 }
 
 void KisPaintDevice::move(qint32 x, qint32 y)

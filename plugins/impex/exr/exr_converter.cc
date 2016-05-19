@@ -323,7 +323,7 @@ void exrConverter::Private::unmultiplyAlpha(typename WrapperType::pixel_type *pi
                           "color channels. Krita will have to modify those pixels to have "
                           "at least some alpha. The initial values will <i>not</i> "
                           "be reverted on saving the image back."
-                          "<br/><br>"
+                          "<br/><br/>"
                           "This will hardly make any visual difference just keep it in mind."
                           "<br/><br/>"
                           "<note>Modified alpha will have a range from %1 to %2</note>",

@@ -173,7 +173,12 @@ void ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateBundle)
         if (settings->hasProperty("requiredBrushFile")) {
             QString brushFile = settings->getString("requiredBrushFile");
             KisBrush *brush = d->brushServer->resourceByFilename(brushFile).data();
-            newBundle->addResource("kis_brushes", brushFile, d->brushServer->assignedTagsList(brush), brush->md5());
+            if (brush) {
+                newBundle->addResource("kis_brushes", brushFile, d->brushServer->assignedTagsList(brush), brush->md5());
+            }
+            else {
+                qWarning() << "There is no brush with name" << brushFile;
+            }
         }
 
     }

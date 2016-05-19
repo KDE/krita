@@ -2,7 +2,7 @@ add_subdirectory(tests)
 
 set(ICCJPEG_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/lcms")
 
-include_directories(${ICCJPEG_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/krita/image/metadata)
+include_directories(${ICCJPEG_SOURCE_DIR})
 
 include_directories(SYSTEM
     ${LCMS2_INCLUDE_DIR}

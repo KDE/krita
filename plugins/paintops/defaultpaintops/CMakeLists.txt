@@ -1,8 +1,6 @@
 add_subdirectory(brush/tests)
 
 include_directories(brush)
-include_directories(pen)
-include_directories(eraser)
 include_directories(duplicate)
 
 

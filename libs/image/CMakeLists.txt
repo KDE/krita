@@ -354,7 +354,6 @@ target_include_directories(kritaimage
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/generator>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/layerstyles>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/metadata>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/metadata/schemes>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/processing>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/recorder>
 )

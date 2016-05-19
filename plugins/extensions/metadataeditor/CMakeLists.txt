@@ -1,5 +1,3 @@
-include_directories(${CMAKE_SOURCE_DIR}/krita/image/metadata)
-
 set(kritametadataeditor_SOURCES metadataeditor.cc kis_entry_editor.cc kis_meta_data_editor.cc kis_meta_data_model.cpp )
 
 ki18n_wrap_ui(kritametadataeditor_SOURCES 

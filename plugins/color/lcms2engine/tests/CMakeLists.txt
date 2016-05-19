@@ -4,9 +4,7 @@ set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories( ../colorspaces/cmyk_u16
     ../colorspaces/cmyk_u8
     ../colorspaces/gray_u16
-    ../colorspaces/gray_u16_no_alpha
     ../colorspaces/gray_u8
-    ../colorspaces/gray_u8_no_alpha
     ../colorspaces/lab_u16
     ../colorspaces/rgb_u16
     ../colorspaces/rgb_u8

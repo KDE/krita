@@ -189,4 +189,3 @@ void KisOnionSkinCompositorTest::testSettings()
 }
 
 QTEST_MAIN(KisOnionSkinCompositorTest)
-#include "kis_onion_skin_compositor_test.moc"

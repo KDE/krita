@@ -926,10 +926,10 @@
     </Action>
     <Action name="rotateImageCCW90">
       <icon>object-rotate-left</icon>
-      <text>Rotate Image &amp;90° to the Right</text>
+      <text>Rotate Image &amp;90° to the Left</text>
       <whatsThis></whatsThis>
-      <toolTip>Rotate Image 90° to the Right</toolTip>
-      <iconText>Rotate Image 90° to the Right</iconText>
+      <toolTip>Rotate Image 90° to the Left</toolTip>
+      <iconText>Rotate Image 90° to the Left</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>

@@ -87,8 +87,6 @@ public:
     void setMimeTypeFilters(const QStringList &filterList,
                             QString defaultFilter = QString());
 
-    void setHideNameFilterDetailsOption();
-
     /// Get the file names the user selected in the file dialog
     QStringList filenames();
 
@@ -103,10 +101,6 @@ public:
     QString selectedNameFilter() const;
 
     QString selectedMimeType() const;
-
-private Q_SLOTS:
-
-    void filterSelected(const QString &filter);
 
 private:
     /**

@@ -136,6 +136,7 @@ void KoFileDialog::createFileDialog()
     d->fileDialog.reset(new QFileDialog(d->parent, d->caption, d->defaultDirectory));
     d->fileDialog->setOption(QFileDialog::DontUseNativeDialog, true);
     d->fileDialog->setOption(QFileDialog::DontConfirmOverwrite, false);
+    d->fileDialog->setOption(QFileDialog::HideNameFilterDetails, true);
 
     if (d->type == SaveFile) {
         d->fileDialog->setAcceptMode(QFileDialog::AcceptSave);

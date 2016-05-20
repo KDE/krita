@@ -28,8 +28,8 @@ mkdir -p $BUILDROOT/out/$PACKAGENAME/bin/data
 mkdir -p $BUILDROOT/out/$PACKAGENAME/lib
 mkdir -p $BUILDROOT/out/$PACKAGENAME/share
 
-cp $BUILDROOT/krita/windows/krita.lnk  $BUILDROOT/out/$PACKAGENAME
-cp $BUILDROOT/krita/windows/qt.conf  $BUILDROOT/out/$PACKAGENAME/bin
+cp $BUILDROOT/krita/packaging/windows/krita.lnk  $BUILDROOT/out/$PACKAGENAME
+cp $BUILDROOT/krita/packaging/windows/qt.conf  $BUILDROOT/out/$PACKAGENAME/bin
 
 cp $MXEROOT/bin/krita.exe $BUILDROOT/out/$PACKAGENAME/bin
 cp $MXEROOT/bin/*.dll $BUILDROOT/out/$PACKAGENAME/bin

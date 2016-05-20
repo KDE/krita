@@ -71,7 +71,8 @@ void KisHistogramWidget::setPaintDevice(KisPaintDeviceSP dev, const QRect &bound
     m_from = m_histogramView->currentProducer()->viewFrom();
     m_width = m_histogramView->currentProducer()->viewWidth();
 
-    connect(grpType, SIGNAL(clicked(int)), this, SLOT(slotTypeSwitched(int)));
+    connect(radioLinear,SIGNAL(clicked()), this, SLOT(slotTypeSwitched()));
+    connect(radioLog,SIGNAL(clicked()), this, SLOT(slotTypeSwitched()));
     connect(cmbChannel, SIGNAL(activated(int)), this, SLOT(setActiveChannel(int)));
     connect(zoomIn, SIGNAL(clicked()), this, SLOT(slotZoomIn()));
     connect(zoomOut, SIGNAL(clicked()), this, SLOT(slotZoomOut()));
@@ -84,12 +85,9 @@ void KisHistogramWidget::setActiveChannel(int channel)
     updateEnabled();
 }
 
-void KisHistogramWidget::slotTypeSwitched(int id)
+void KisHistogramWidget::slotTypeSwitched(void)
 {
-    if (id == LINEAR)
-        m_histogramView->setHistogramType(LINEAR);
-    else if (id == LOGARITHMIC)
-        m_histogramView->setHistogramType(LOGARITHMIC);
+    m_histogramView->setHistogramType( radioLinear->isChecked()?LINEAR:LOGARITHMIC );
 }
 
 void KisHistogramWidget::setView(double from, double size)

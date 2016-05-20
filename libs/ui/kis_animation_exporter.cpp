@@ -62,7 +62,7 @@ KisImportExportFilter::ConversionStatus KisAnimationExporterUI::exportSequence(K
     KoFileDialog dialog(m_d->parentWidget, KoFileDialog::SaveFile, "exportsequence");
     dialog.setCaption(i18n("Export sequence"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export));
+    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Export));
     QString filename = dialog.filename();
 
     // if the user presses cancel, it returns empty

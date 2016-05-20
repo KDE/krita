@@ -43,7 +43,7 @@ KisDlgFileLayer::KisDlgFileLayer(const QString &basePath, const QString & name, 
     setDefaultButton(Ok);
     QWidget * page = new QWidget(this);
     dlgWidget.setupUi(page);
-    dlgWidget.wdgUrlRequester->setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
+    dlgWidget.wdgUrlRequester->setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
     setMainWidget(page);
 
     //dlgWidget.wdgUrlRequester->setBasePath(m_basePath);

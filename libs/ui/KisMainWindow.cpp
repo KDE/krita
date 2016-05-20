@@ -826,9 +826,7 @@ QStringList KisMainWindow::showOpenFileDialog()
 {
     KoFileDialog dialog(this, KoFileDialog::ImportFiles, "OpenDocument");
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KIS_MIME_TYPE,
-                                                                 KisImportExportManager::Import,
-                                                                 KisDocument::extraNativeMimeTypes()));
+    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
     dialog.setHideNameFilterDetailsOption();
     dialog.setCaption(isImporting() ? i18n("Import Images") : i18n("Open Images"));
 
@@ -938,9 +936,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         mimeFilter = KisMimeDatabase::suffixesForMimeType(_native_format);
     }
     else {
-        mimeFilter = KisImportExportManager::mimeFilter(_native_format,
-                                                        KisImportExportManager::Export,
-                                                        document->extraNativeMimeTypes());
+        mimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
     }
 
 
@@ -1348,9 +1344,7 @@ void KisMainWindow::slotFileNew()
 {
     KisOpenPane *startupWidget = 0;
 
-    const QStringList mimeFilter = KisImportExportManager::mimeFilter(KIS_MIME_TYPE,
-                                                                      KisImportExportManager::Import,
-                                                                      KisDocument::extraNativeMimeTypes());
+    const QStringList mimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Import);
 
     startupWidget = new KisOpenPane(this, mimeFilter, QStringLiteral("templates/"));
     startupWidget->setWindowModality(Qt::WindowModal);

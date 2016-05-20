@@ -657,7 +657,7 @@ void KisLayerManager::layersUpdated()
 
 void KisLayerManager::saveGroupLayers()
 {
-    QStringList listMimeFilter = KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export);
+    QStringList listMimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
 
     KoDialog dlg;
     QWidget *page = new QWidget(&dlg);

@@ -50,44 +50,44 @@ public:
         , hideDetails(false)
         , swapExtensionOrder(false)
     {
-        // Force the native file dialogs on Windows. Except for KDE, the native file dialogs are only possible
-        // using the static methods. The Qt documentation is wrong here, if it means what it says " By default,
-        // the native file dialog is used unless you use a subclass of QFileDialog that contains the Q_OBJECT
-        // macro."
-#ifdef Q_OS_WIN
-        useStaticForNative = true;
-#endif
-        // Non-static KDE file is broken when called with QFileDialog::AcceptSave:
-        // then the directory above defaultdir is opened, and defaultdir is given as the default file name...
-        //
-        // So: in X11, use static methods inside KDE, which give working native dialogs, but non-static outside
-        // KDE, which gives working Qt dialogs.
-        //
-        // Only show the GTK dialog in Gnome, where people deserve it
-#ifdef HAVE_X11
-        if (qgetenv("KDE_FULL_SESSION").size() > 0) {
-            useStaticForNative = true;
-        }
-        if (qgetenv("XDG_CURRENT_DESKTOP") == "GNOME") {
-            useStaticForNative = true;
-            // The GTK file dialog interferes with the Qt clipboard; so disable that
-            QClipboard *cb = QApplication::clipboard();
-            cb->blockSignals(true);
-            swapExtensionOrder = true;
-        }
+//        // Force the native file dialogs on Windows. Except for KDE, the native file dialogs are only possible
+//        // using the static methods. The Qt documentation is wrong here, if it means what it says " By default,
+//        // the native file dialog is used unless you use a subclass of QFileDialog that contains the Q_OBJECT
+//        // macro."
+//#ifdef Q_OS_WIN
+//        useStaticForNative = true;
+//#endif
+//        // Non-static KDE file is broken when called with QFileDialog::AcceptSave:
+//        // then the directory above defaultdir is opened, and defaultdir is given as the default file name...
+//        //
+//        // So: in X11, use static methods inside KDE, which give working native dialogs, but non-static outside
+//        // KDE, which gives working Qt dialogs.
+//        //
+//        // Only show the GTK dialog in Gnome, where people deserve it
+//#ifdef HAVE_X11
+//        if (qgetenv("KDE_FULL_SESSION").size() > 0) {
+//            useStaticForNative = true;
+//        }
+//        if (qgetenv("XDG_CURRENT_DESKTOP") == "GNOME") {
+//            useStaticForNative = true;
+//            // The GTK file dialog interferes with the Qt clipboard; so disable that
+//            QClipboard *cb = QApplication::clipboard();
+//            cb->blockSignals(true);
+//            swapExtensionOrder = true;
+//        }
 
-#endif
+//#endif
         // And OSX? That is apparently the only OS where creating a QFileDialog object, instead of using the
         // static functions does call the native dialog...
     }
 
     ~Private()
     {
-        if (qgetenv("XDG_CURRENT_DESKTOP") == "GNOME") {
-            // And re-enable the clipboard.
-            QClipboard *cb = QApplication::clipboard();
-            cb->blockSignals(false);
-        }
+//        if (qgetenv("XDG_CURRENT_DESKTOP") == "GNOME") {
+//            // And re-enable the clipboard.
+//            QClipboard *cb = QApplication::clipboard();
+//            cb->blockSignals(false);
+//        }
     }
 
     QWidget *parent;
@@ -181,7 +181,8 @@ QString KoFileDialog::selectedMimeType() const
 void KoFileDialog::createFileDialog()
 {
     d->fileDialog.reset(new QFileDialog(d->parent, d->caption, d->defaultDirectory));
-
+    d->fileDialog->setOption(QFileDialog::DontUseNativeDialog, true);
+    d->fileDialog->setOption(QFileDialog::DontConfirmOverwrite, false);
     if (d->type == SaveFile) {
         d->fileDialog->setAcceptMode(QFileDialog::AcceptSave);
         d->fileDialog->setFileMode(QFileDialog::AnyFile);

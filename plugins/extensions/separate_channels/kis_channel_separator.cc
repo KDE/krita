@@ -237,7 +237,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                 KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::SaveFile, "OpenDocument");
                 dialog.setCaption(i18n("Export Layer") + '(' + ch->name() + ')');
                 dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-                dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export));
+                dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Export));
                 QUrl url = QUrl::fromUserInput(dialog.filename());
 
                 if (url.isEmpty())

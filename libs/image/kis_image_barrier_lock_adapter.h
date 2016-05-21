@@ -30,7 +30,6 @@ public:
     }
 
     inline ~KisImageBarrierLockAdapterImpl() {
-        m_image->unlock();
     }
 
     inline void lock() {

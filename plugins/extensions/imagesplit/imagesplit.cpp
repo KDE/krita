@@ -91,7 +91,7 @@ void Imagesplit::slotImagesplit()
     QString suffix = strList.at(0);
 
     // Getting all mime types and converting them into names which are displayed at combo box
-    QStringList listMimeFilter = KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export);
+    QStringList listMimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
     listMimeFilter.sort();
     QStringList filteredMimeTypes;
     QStringList listFileType;

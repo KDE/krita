@@ -90,13 +90,6 @@ extern "C" int main(int argc, char **argv)
     QString key = "Krita3" + QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");
     key = key.replace(":", "_").replace("\\","_");
 
-#if defined HAVE_X11
-    // we need to call XInitThreads() (which this does) because of gmic (and possibly others)
-    // do their own X11 stuff in their own threads
-    // this call must happen before the creation of the application (see AA_X11InitThreads docs)
-    QCoreApplication::setAttribute(Qt::AA_X11InitThreads, true);
-#endif
-
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);

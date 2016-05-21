@@ -142,6 +142,7 @@ public:
 KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     : QtSingleApplication(key, argc, argv)
     , d(new KisApplicationPrivate)
+    , m_batchRun()
 {
     QCoreApplication::addLibraryPath(QCoreApplication::applicationDirPath());
 
@@ -335,14 +336,14 @@ bool KisApplication::start(const KisApplicationArguments &args)
     const bool exportAsPdf = args.exportAsPdf();
     const QString exportFileName = args.exportFileName();
 
-    const bool batchRun = (print || exportAs || exportAsPdf);
+    m_batchRun = (print || exportAs || exportAsPdf);
     // print & exportAsPdf do user interaction ATM
     const bool needsMainWindow = !exportAs;
     // only show the mainWindow when no command-line mode option is passed
     // TODO: fix print & exportAsPdf to work without mainwindow shown
     const bool showmainWindow = !exportAs; // would be !batchRun;
 
-    const bool showSplashScreen = !batchRun && qgetenv("NOSPLASH").isEmpty();
+    const bool showSplashScreen = !m_batchRun && qgetenv("NOSPLASH").isEmpty();
     if (showSplashScreen) {
         d->splashScreen->show();
         d->splashScreen->repaint();
@@ -385,7 +386,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     short int numberOfOpenDocuments = 0; // number of documents open
 
     // Check for autosave files that can be restored, if we're not running a batchrun (test, print, export to pdf)
-    if (!batchRun) {
+    if (!m_batchRun) {
         checkAutosaveFiles();
     }
 
@@ -402,7 +403,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
             // are we just trying to open a template?
             if (doTemplate) {
                 // called in mix with batch options? ignore and silently skip
-                if (batchRun) {
+                if (m_batchRun) {
                     continue;
                 }
                 if (createNewDocFromTemplate(fileName, mainWindow)) {
@@ -463,7 +464,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
             }
         }
 
-        if (batchRun) {
+        if (m_batchRun) {
             return nPrinted > 0;
         }
     }
@@ -549,6 +550,8 @@ void KisApplication::fileOpenRequested(const QString &url)
 
 void KisApplication::checkAutosaveFiles()
 {
+    if (m_batchRun) return;
+
     // Check for autosave files from a previous run. There can be several, and
     // we want to offer a restore for every one. Including a nice thumbnail!
 
@@ -576,7 +579,9 @@ void KisApplication::checkAutosaveFiles()
     }
 }
 
-void KisApplication::onAutoSaveFinished(int result) {
+void KisApplication::onAutoSaveFinished(int result)
+{
+    if (m_batchRun) return;
 
 #ifdef Q_OS_WIN
     QDir dir = QDir::temp();

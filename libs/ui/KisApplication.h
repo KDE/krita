@@ -83,14 +83,11 @@ public:
     /**
      * Tell KisApplication to show this splashscreen when you call start();
      * when start returns, the splashscreen is hidden. Use KSplashScreen
-     * to have the splash show correctly on Xinerama displays. 
+     * to have the splash show correctly on Xinerama displays.
      */
     void setSplashScreen(QWidget *splash);
 
     void setSplashScreenLoadingText(QString);
-
-
-
 
     /// Overridden to handle exceptions from event handlers.
     bool notify(QObject *receiver, QEvent *event);
@@ -117,6 +114,7 @@ private:
     KisAutoSaveRecoveryDialog *dlg;
     QStringList autoSaveFiles;
     KisMainWindow *mainWindow;
+    bool m_batchRun;
 };
 
 #endif

@@ -956,7 +956,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
                 if (c < 0)
                     suggestedFilename += ext;
                 else
-                    suggestedFilename = suggestedFilename.left(c) + ext;
+                    suggestedFilename = suggestedFilename.left(c) + "." + ext;
             } else { // current filename extension wrong anyway
                 if (c > 0) {
                     // this assumes that a . signifies an extension, not just a .

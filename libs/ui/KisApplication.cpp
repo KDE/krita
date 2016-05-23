@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+ /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 2009 Thomas Zander <zander@kde.org>
    Copyright (C) 2012 Boudewijn Rempt <boud@valdyas.org>
@@ -118,10 +118,11 @@ public:
                 m_splash->hide();
             }
             else {
-                m_splash->setWindowFlags(Qt::Tool | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+                m_splash->setWindowFlags(Qt::Tool);
                 QRect r(QPoint(), m_splash->size());
                 m_splash->move(QApplication::desktop()->availableGeometry().center() - r.center());
                 m_splash->setWindowTitle(qAppName());
+                m_splash->setParent(qApp->activeWindow());
                 Q_FOREACH (QObject *o, m_splash->children()) {
                     QWidget *w = qobject_cast<QWidget*>(o);
                     if (w && w->isHidden()) {

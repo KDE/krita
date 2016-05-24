@@ -97,13 +97,13 @@ public:
     KisApplicationPrivate()
         : splashScreen(0)
     {}
-    QWidget *splashScreen;
+    KisSplashScreen *splashScreen;
 };
 
 class KisApplication::ResetStarting
 {
 public:
-    ResetStarting(QWidget *splash = 0)
+    ResetStarting(KisSplashScreen *splash = 0)
         : m_splash(splash)
     {
     }
@@ -135,7 +135,7 @@ public:
         }
     }
 
-    QWidget *m_splash;
+    KisSplashScreen *m_splash;
 };
 
 
@@ -344,7 +344,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     // TODO: fix print & exportAsPdf to work without mainwindow shown
     const bool showmainWindow = !exportAs; // would be !batchRun;
 
-    const bool showSplashScreen = !m_batchRun && qgetenv("NOSPLASH").isEmpty();
+    const bool showSplashScreen = !m_batchRun && qgetenv("NOSPLASH").isEmpty() &&  qgetenv("XDG_CURRENT_DESKTOP") != "GNOME";
     if (showSplashScreen) {
         d->splashScreen->show();
         d->splashScreen->repaint();
@@ -480,13 +480,13 @@ KisApplication::~KisApplication()
 
 void KisApplication::setSplashScreen(QWidget *splashScreen)
 {
-    d->splashScreen = splashScreen;
+    d->splashScreen = qobject_cast<KisSplashScreen*>(splashScreen);
 }
 
 void KisApplication::setSplashScreenLoadingText(QString textToLoad)
 {
-   static_cast<KisSplashScreen *>(d->splashScreen)->loadingLabel->setText(textToLoad);
-   static_cast<KisSplashScreen *>(d->splashScreen)->repaint();
+   d->splashScreen->loadingLabel->setText(textToLoad);
+   d->splashScreen->repaint();
 }
 
 bool KisApplication::notify(QObject *receiver, QEvent *event)

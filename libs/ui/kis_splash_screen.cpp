@@ -162,7 +162,9 @@ void KisSplashScreen::show()
     if (isVisible()) {
         repaint();
     }
-
+    m_timer.setSingleShot(true);
+    m_timer.start(1);
+    QWidget::show();
 }
 
 void KisSplashScreen::toggleShowAtStartup(bool toggle)

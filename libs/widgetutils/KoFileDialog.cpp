@@ -71,10 +71,20 @@ KoFileDialog::KoFileDialog(QWidget *parent,
                            const QString &dialogName)
     : d(new Private(parent, type, "", getUsedDir(dialogName), dialogName))
 {
+    if (qgetenv("XDG_CURRENT_DESKTOP") == "GNOME") {
+        // The GTK file dialog interferes with the Qt clipboard; so disable that
+        QClipboard *cb = QApplication::clipboard();
+        cb->blockSignals(true);
+    }
 }
 
 KoFileDialog::~KoFileDialog()
 {
+    if (qgetenv("XDG_CURRENT_DESKTOP") == "GNOME") {
+        // And re-enable the clipboard.
+        QClipboard *cb = QApplication::clipboard();
+        cb->blockSignals(false);
+    }
     delete d;
 }
 
@@ -134,7 +144,7 @@ void KoFileDialog::createFileDialog()
     //qDebug() << "createFIleDialog. Parent:" << d->parent << "Caption:" << d->caption << "Default directory:" << d->defaultDirectory << "Default iflter:" << d->defaultFilter;
 
     d->fileDialog.reset(new QFileDialog(d->parent, d->caption, d->defaultDirectory));
-    d->fileDialog->setOption(QFileDialog::DontUseNativeDialog, true);
+    d->fileDialog->setOption(QFileDialog::DontUseNativeDialog, false);
     d->fileDialog->setOption(QFileDialog::DontConfirmOverwrite, false);
     d->fileDialog->setOption(QFileDialog::HideNameFilterDetails, true);
 
@@ -196,14 +206,20 @@ QString KoFileDialog::filename()
     }
 
     if (!url.isEmpty()) {
-        //qDebug() << ">>>>>>>>>>>>>>>>>> url" << url;
         if (d->type == SaveFile && QFileInfo(url).suffix().isEmpty()) {
-            int start = d->defaultFilter.lastIndexOf("*.") + 1;
-            int end = d->defaultFilter.lastIndexOf(" )");
+            QString selectedFilter;
+            // index 0 is all supported; if that is chosen, saveDocument will automatically make it .kra
+            for (int i = 1; i < d->filterList.size(); ++i) {
+                if (d->filterList[i].startsWith(d->fileDialog->selectedNameFilter())) {
+                    selectedFilter = d->filterList[i];
+                    break;
+                }
+            }
+            int start = selectedFilter.indexOf("*.") + 1;
+            int end = selectedFilter.indexOf(" ", start);
             int n = end - start;
-            QString extension = d->defaultFilter.mid(start, n);
-            //qDebug() << "extension" << extension;
-            url.append(extension);
+            QString extension = selectedFilter.mid(start, n);
+            url = url + "." + extension;
         }
 
         d->mimeType = KisMimeDatabase::mimeTypeForFile(url);

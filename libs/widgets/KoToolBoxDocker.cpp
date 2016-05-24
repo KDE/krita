@@ -44,12 +44,11 @@ KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
 
 void KoToolBoxDocker::setCanvas(KoCanvasBase *canvas)
 {
-    setEnabled(canvas != 0);
+    Q_UNUSED(canvas);
 }
 
 void KoToolBoxDocker::unsetCanvas()
 {
-    setEnabled(false);
 }
 
 void KoToolBoxDocker::updateToolBoxOrientation(Qt::DockWidgetArea area)

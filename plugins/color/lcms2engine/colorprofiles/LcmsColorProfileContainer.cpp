@@ -52,7 +52,6 @@ public:
     bool hasColorants;
     bool hasTRC;
     bool adaptedFromD50;
-    cmsNAMEDCOLORLIST *namedColorList;
     cmsCIEXYZ mediaWhitePoint;
     cmsCIExyY whitePoint;
     cmsCIEXYZTRIPLE colorants;

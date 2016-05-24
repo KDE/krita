@@ -110,7 +110,7 @@ public:
      */
     bool existsGoodPath(const QString& srcModelId, const QString& srcDepthId, const QString& srcProfileName, const QString& dstModelId, const QString& dstDepthId, const QString& dstProfileName) const;
 private:
-    QString vertexToDot(Vertex* v, QString options) const;
+    QString vertexToDot(Vertex* v, const QString &options) const;
 private:
     /**
      * Insert an engine.

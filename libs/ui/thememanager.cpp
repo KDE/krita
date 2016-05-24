@@ -92,7 +92,7 @@ ThemeManager::ThemeManager(const QString &theme, QObject *parent)
     , d(new ThemeManagerPriv)
 {
     //qDebug() << "Creating theme manager with theme" << theme;
-    d->defaultThemeName = theme;
+    d->defaultThemeName = "Default";
     d->currentThemeName = theme;
     populateThemeMap();
 }

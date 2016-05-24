@@ -158,7 +158,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
 
     qDebug() << "Current Style" << style()->objectName();
-    QStringList styles = QStringList() << "breeze"  << "fusion" << "plastique";
+    QStringList styles = QStringList() << "fusion" << "plastique";
     if (!styles.contains(style()->objectName().toLower())) {
         Q_FOREACH (const QString & style, styles) {
             if (!setStyle(style)) {

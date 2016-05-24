@@ -122,10 +122,15 @@ extern "C" int main(int argc, char **argv)
     QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
     languageoverride.beginGroup(QStringLiteral("Language"));
     QString language = languageoverride.value(qAppName(), "").toString();
+
+    qDebug() << "Override language:" << language;
+
     if (!language.isEmpty()) {
         KLocalizedString::setLanguages(language.split(":"));
         // And override Qt's locale, too
-        QLocale::setDefault(language.split(":").first());
+        QLocale locale(language.split(":").first());
+        QLocale::setDefault(locale);
+        qDebug() << "Qt ui languages" << locale.uiLanguages();
     }
     else {
         // And if there isn't one, check the one set by the system.

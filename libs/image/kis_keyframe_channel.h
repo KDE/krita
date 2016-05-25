@@ -26,6 +26,7 @@
 #include "KoID.h"
 #include "kritaimage_export.h"
 #include "kis_keyframe.h"
+#include "kis_default_bounds.h"
 
 class KisTimeRange;
 
@@ -40,7 +41,7 @@ public:
     static const KoID Content;
 
 public:
-    KisKeyframeChannel(const KoID& id, KisNodeWSP node);
+    KisKeyframeChannel(const KoID& id, KisNodeWSP node, KisDefaultBoundsBaseSP defaultBounds);
     KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP newParentNode);
     ~KisKeyframeChannel();
 
@@ -57,6 +58,7 @@ public:
 
     KisKeyframeSP keyframeAt(int time) const;
     KisKeyframeSP activeKeyframeAt(int time) const;
+    KisKeyframeSP currentlyActiveKeyframe() const;
 
     KisKeyframeSP firstKeyframe() const;
     KisKeyframeSP nextKeyframe(KisKeyframeSP keyframe) const;
@@ -125,6 +127,8 @@ protected:
 
     virtual KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode) = 0;
     virtual void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) = 0;
+
+    int currentTime() const;
 
 private:
     void insertKeyframeLogical(KisKeyframeSP keyframe);

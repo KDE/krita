@@ -39,8 +39,8 @@ public:
     struct SetValueCommand;
 };
 
-KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID &id, KisNodeWSP node, qreal minValue, qreal maxValue)
-    : KisKeyframeChannel(id, node),
+KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID &id, KisNodeWSP node, qreal minValue, qreal maxValue, KisDefaultBoundsBaseSP defaultBounds)
+    : KisKeyframeChannel(id, node, defaultBounds),
       m_d(new Private(minValue, maxValue))
 {
 }

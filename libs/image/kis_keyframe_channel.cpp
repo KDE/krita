@@ -23,7 +23,6 @@
 #include "kis_time_range.h"
 #include "kundo2command.h"
 
-
 #include <QMap>
 
 const KoID KisKeyframeChannel::Content = KoID("content", ki18n("Content"));
@@ -35,11 +34,13 @@ struct KisKeyframeChannel::Private
         keys = rhs.keys;
         node = newParentNode;
         id = rhs.id;
+        defaultBounds = rhs.defaultBounds;
     }
 
     KeyframesMap keys;
     KisNodeWSP node;
     KoID id;
+    KisDefaultBoundsBaseSP defaultBounds;
 };
 
 struct KisKeyframeChannel::InsertFrameCommand : public KUndo2Command
@@ -101,11 +102,12 @@ private:
     int m_newTime;
 };
 
-KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisNodeWSP node)
+KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisNodeWSP node, KisDefaultBoundsBaseSP defaultBounds)
     : m_d(new Private)
 {
     m_d->id = id;
     m_d->node = node;
+    m_d->defaultBounds = defaultBounds;
 }
 
 KisKeyframeChannel::KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP newParentNode)
@@ -244,6 +246,11 @@ KisKeyframeSP KisKeyframeChannel::keyframeAt(int time) const
 KisKeyframeSP KisKeyframeChannel::activeKeyframeAt(int time) const
 {
     return activeKeyIterator(time).value();
+}
+
+KisKeyframeSP KisKeyframeChannel::currentlyActiveKeyframe() const
+{
+    return activeKeyframeAt(currentTime());
 }
 
 KisKeyframeSP KisKeyframeChannel::firstKeyframe() const
@@ -498,4 +505,9 @@ void KisKeyframeChannel::requestUpdate(const KisTimeRange &range, const QRect &r
     if (m_d->node) {
         m_d->node->invalidateFrames(range, rect);
     }
+}
+
+int KisKeyframeChannel::currentTime() const
+{
+    return m_d->defaultBounds->currentTime();
 }

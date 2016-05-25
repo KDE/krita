@@ -32,7 +32,7 @@ public:
     virtual ~KisCategorizedListView();
     virtual void setModel(QAbstractItemModel* model);
 
-
+    QSize sizeHint() const;
 
 
 Q_SIGNALS:

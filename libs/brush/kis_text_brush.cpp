@@ -26,7 +26,7 @@
 
 #include "kis_gbr_brush.h"
 #include "kis_brushes_pipe.h"
-
+#include <kis_dom_utils.h>
 #include <kis_threaded_text_rendering_workaround.h>
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
@@ -239,7 +239,7 @@ void KisTextBrush::toXML(QDomDocument& doc, QDomElement& e) const
     Q_UNUSED(doc);
 
     e.setAttribute("type", "kis_text_brush");
-    e.setAttribute("spacing", spacing());
+    e.setAttribute("spacing", KisDomUtils::toString(spacing()));
     e.setAttribute("text", m_text);
     e.setAttribute("font", m_font.toString());
     e.setAttribute("pipe", (brushType() == PIPE_MASK) ? "true" : "false");
@@ -249,7 +249,7 @@ void KisTextBrush::toXML(QDomDocument& doc, QDomElement& e) const
 void KisTextBrush::updateBrush()
 {
     Q_ASSERT((brushType() == PIPE_MASK) || (brushType() == MASK));
-    
+
     if (brushType() == PIPE_MASK) {
         m_brushesPipe->setText(m_text, m_font);
         setBrushTipImage(m_brushesPipe->firstBrush()->brushTipImage());

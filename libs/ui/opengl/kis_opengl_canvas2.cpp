@@ -301,6 +301,8 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
 
     // XXX: glLogicOp not in ES 2.0 -- it would be better to use another method.
     // It is defined in 3.1 core profile onward.
+    // Actually, https://www.opengl.org/sdk/docs/man/html/glLogicOp.xhtml says it's in 2.0 onwards,
+    // only not in ES, but we don't care about ES, so we could use the function directly.
     glEnable(GL_COLOR_LOGIC_OP);
     if (ptr_glLogicOp) {
         ptr_glLogicOp(GL_XOR);

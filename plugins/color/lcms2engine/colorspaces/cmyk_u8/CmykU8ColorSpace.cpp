@@ -26,6 +26,7 @@
 
 #include "compositeops/KoCompositeOps.h"
 #include <KoColorConversions.h>
+#include <kis_dom_utils.h>
 
 CmykU8ColorSpace::CmykU8ColorSpace(const QString &name, KoColorProfile *p)
     : LcmsColorSpace<CmykU8Traits>(colorSpaceId(), name,  TYPE_CMYKA_8, cmsSigCmykData, p)
@@ -59,10 +60,10 @@ void CmykU8ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomEl
 {
     const CmykU8Traits::Pixel *p = reinterpret_cast<const CmykU8Traits::Pixel *>(pixel);
     QDomElement labElt = doc.createElement("CMYK");
-    labElt.setAttribute("c", KoColorSpaceMaths< CmykU8Traits::channels_type, qreal>::scaleToA(p->cyan));
-    labElt.setAttribute("m", KoColorSpaceMaths< CmykU8Traits::channels_type, qreal>::scaleToA(p->magenta));
-    labElt.setAttribute("y", KoColorSpaceMaths< CmykU8Traits::channels_type, qreal>::scaleToA(p->yellow));
-    labElt.setAttribute("k", KoColorSpaceMaths< CmykU8Traits::channels_type, qreal>::scaleToA(p->black));
+    labElt.setAttribute("c", KisDomUtils::toString(KoColorSpaceMaths< CmykU8Traits::channels_type, qreal>::scaleToA(p->cyan)));
+    labElt.setAttribute("m", KisDomUtils::toString(KoColorSpaceMaths< CmykU8Traits::channels_type, qreal>::scaleToA(p->magenta)));
+    labElt.setAttribute("y", KisDomUtils::toString(KoColorSpaceMaths< CmykU8Traits::channels_type, qreal>::scaleToA(p->yellow)));
+    labElt.setAttribute("k", KisDomUtils::toString(KoColorSpaceMaths< CmykU8Traits::channels_type, qreal>::scaleToA(p->black)));
     labElt.setAttribute("space", profile()->name());
     colorElt.appendChild(labElt);
 }
@@ -70,10 +71,10 @@ void CmykU8ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomEl
 void CmykU8ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
     CmykU8Traits::Pixel *p = reinterpret_cast<CmykU8Traits::Pixel *>(pixel);
-    p->cyan = KoColorSpaceMaths< qreal, CmykU8Traits::channels_type >::scaleToA(elt.attribute("c").toDouble());
-    p->magenta = KoColorSpaceMaths< qreal, CmykU8Traits::channels_type >::scaleToA(elt.attribute("m").toDouble());
-    p->yellow = KoColorSpaceMaths< qreal, CmykU8Traits::channels_type >::scaleToA(elt.attribute("y").toDouble());
-    p->black = KoColorSpaceMaths< qreal, CmykU8Traits::channels_type >::scaleToA(elt.attribute("k").toDouble());
+    p->cyan = KoColorSpaceMaths< qreal, CmykU8Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("c")));
+    p->magenta = KoColorSpaceMaths< qreal, CmykU8Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("m")));
+    p->yellow = KoColorSpaceMaths< qreal, CmykU8Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("y")));
+    p->black = KoColorSpaceMaths< qreal, CmykU8Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("k")));
     p->alpha = KoColorSpaceMathsTraits<quint8>::max;
 }
 

@@ -26,6 +26,7 @@
 #include <KoColorSpaceRegistry.h>
 
 #include "compositeops/KoCompositeOps.h"
+#include <kis_dom_utils.h>
 
 GrayAU8ColorSpace::GrayAU8ColorSpace(const QString &name, KoColorProfile *p)
     : LcmsColorSpace<GrayAU8Traits>(colorSpaceId(), name,  TYPE_GRAYA_8, cmsSigGrayData, p)
@@ -47,7 +48,7 @@ void GrayAU8ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomE
 {
     const GrayAU8Traits::channels_type *p = reinterpret_cast<const GrayAU8Traits::channels_type *>(pixel);
     QDomElement labElt = doc.createElement("Gray");
-    labElt.setAttribute("g", KoColorSpaceMaths< GrayAU8Traits::channels_type, qreal>::scaleToA(p[0]));
+    labElt.setAttribute("g", KisDomUtils::toString(KoColorSpaceMaths< GrayAU8Traits::channels_type, qreal>::scaleToA(p[0])));
     labElt.setAttribute("space", profile()->name());
     colorElt.appendChild(labElt);
 }
@@ -55,7 +56,7 @@ void GrayAU8ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomE
 void GrayAU8ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
     GrayAU8Traits::channels_type *p = reinterpret_cast<GrayAU8Traits::channels_type *>(pixel);
-    p[0] = KoColorSpaceMaths< qreal, GrayAU8Traits::channels_type >::scaleToA(elt.attribute("g").toDouble());
+    p[0] = KoColorSpaceMaths< qreal, GrayAU8Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("g")));
     p[1] = KoColorSpaceMathsTraits<quint8>::max;
 }
 

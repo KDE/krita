@@ -24,7 +24,8 @@
 #include <klocalizedstring.h>
 
 #include "compositeops/KoCompositeOps.h"
-#include "KoColorConversions.h"
+#include <KoColorConversions.h>
+#include <kis_dom_utils.h>
 
 XyzU16ColorSpace::XyzU16ColorSpace(const QString &name, KoColorProfile *p) :
     LcmsColorSpace<KoXyzU16Traits>(colorSpaceId(), name, TYPE_XYZA_16, cmsSigXYZData, p)
@@ -57,9 +58,9 @@ void XyzU16ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomEl
 {
     const KoXyzU16Traits::Pixel *p = reinterpret_cast<const KoXyzU16Traits::Pixel *>(pixel);
     QDomElement labElt = doc.createElement("XYZ");
-    labElt.setAttribute("x", KoColorSpaceMaths< KoXyzU16Traits::channels_type, qreal>::scaleToA(p->x));
-    labElt.setAttribute("y", KoColorSpaceMaths< KoXyzU16Traits::channels_type, qreal>::scaleToA(p->y));
-    labElt.setAttribute("z", KoColorSpaceMaths< KoXyzU16Traits::channels_type, qreal>::scaleToA(p->z));
+    labElt.setAttribute("x", KisDomUtils::toString(KoColorSpaceMaths< KoXyzU16Traits::channels_type, qreal>::scaleToA(p->x)));
+    labElt.setAttribute("y", KisDomUtils::toString(KoColorSpaceMaths< KoXyzU16Traits::channels_type, qreal>::scaleToA(p->y)));
+    labElt.setAttribute("z", KisDomUtils::toString(KoColorSpaceMaths< KoXyzU16Traits::channels_type, qreal>::scaleToA(p->z)));
     labElt.setAttribute("space", profile()->name());
     colorElt.appendChild(labElt);
 }
@@ -67,9 +68,9 @@ void XyzU16ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomEl
 void XyzU16ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
     KoXyzU16Traits::Pixel *p = reinterpret_cast<KoXyzU16Traits::Pixel *>(pixel);
-    p->x = KoColorSpaceMaths< qreal, KoXyzU16Traits::channels_type >::scaleToA(elt.attribute("x").toDouble());
-    p->y = KoColorSpaceMaths< qreal, KoXyzU16Traits::channels_type >::scaleToA(elt.attribute("y").toDouble());
-    p->z = KoColorSpaceMaths< qreal, KoXyzU16Traits::channels_type >::scaleToA(elt.attribute("z").toDouble());
+    p->x = KoColorSpaceMaths< qreal, KoXyzU16Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("x")));
+    p->y = KoColorSpaceMaths< qreal, KoXyzU16Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("y")));
+    p->z = KoColorSpaceMaths< qreal, KoXyzU16Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("z")));
     p->alpha = KoColorSpaceMathsTraits<quint16>::max;
 }
 

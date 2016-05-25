@@ -61,9 +61,9 @@ void RgbU16ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomEl
 {
     const KoBgrU16Traits::Pixel *p = reinterpret_cast<const KoBgrU16Traits::Pixel *>(pixel);
     QDomElement labElt = doc.createElement("RGB");
-    labElt.setAttribute("r", KoColorSpaceMaths< KoBgrU16Traits::channels_type, qreal>::scaleToA(p->red));
-    labElt.setAttribute("g", KoColorSpaceMaths< KoBgrU16Traits::channels_type, qreal>::scaleToA(p->green));
-    labElt.setAttribute("b", KoColorSpaceMaths< KoBgrU16Traits::channels_type, qreal>::scaleToA(p->blue));
+    labElt.setAttribute("r", KisDomUtils::toString(KoColorSpaceMaths< KoBgrU16Traits::channels_type, qreal>::scaleToA(p->red)));
+    labElt.setAttribute("g", KisDomUtils::toString(KoColorSpaceMaths< KoBgrU16Traits::channels_type, qreal>::scaleToA(p->green)));
+    labElt.setAttribute("b", KisDomUtils::toString(KoColorSpaceMaths< KoBgrU16Traits::channels_type, qreal>::scaleToA(p->blue)));
     labElt.setAttribute("space", profile()->name());
     colorElt.appendChild(labElt);
 }

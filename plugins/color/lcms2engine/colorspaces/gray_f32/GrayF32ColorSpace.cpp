@@ -27,6 +27,7 @@
 #include <KoColorSpaceRegistry.h>
 
 #include "compositeops/KoCompositeOps.h"
+#include <kis_dom_utils.h>
 
 GrayF32ColorSpace::GrayF32ColorSpace(const QString &name, KoColorProfile *p)
     : LcmsColorSpace<KoGrayF32Traits>(colorSpaceId(), name,  TYPE_GRAYA_FLT, cmsSigGrayData, p)
@@ -53,7 +54,7 @@ void GrayF32ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomE
 {
     const KoGrayF32Traits::channels_type *p = reinterpret_cast<const KoGrayF32Traits::channels_type *>(pixel);
     QDomElement labElt = doc.createElement("Gray");
-    labElt.setAttribute("g", KoColorSpaceMaths< KoGrayF32Traits::channels_type, qreal>::scaleToA(p[0]));
+    labElt.setAttribute("g", KisDomUtils::toString(KoColorSpaceMaths< KoGrayF32Traits::channels_type, qreal>::scaleToA(p[0])));
     labElt.setAttribute("space", profile()->name());
     colorElt.appendChild(labElt);
 }
@@ -61,7 +62,7 @@ void GrayF32ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomE
 void GrayF32ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
     KoGrayF32Traits::channels_type *p = reinterpret_cast<KoGrayF32Traits::channels_type *>(pixel);
-    p[0] = KoColorSpaceMaths< qreal, KoGrayF32Traits::channels_type >::scaleToA(elt.attribute("g").toDouble());
+    p[0] = KoColorSpaceMaths< qreal, KoGrayF32Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("g")));
     p[1] = 1.0;
 }
 

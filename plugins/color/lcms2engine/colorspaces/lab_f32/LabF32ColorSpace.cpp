@@ -24,7 +24,8 @@
 #include <klocalizedstring.h>
 
 #include "../compositeops/KoCompositeOps.h"
-#include "KoColorConversions.h"
+#include <KoColorConversions.h>
+#include <kis_dom_utils.h>
 
 LabF32ColorSpace::LabF32ColorSpace(const QString &name, KoColorProfile *p)
     : LcmsColorSpace<KoLabF32Traits>(colorSpaceId(), name, TYPE_LabA_FLT, cmsSigLabData, p)
@@ -62,9 +63,9 @@ void LabF32ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomEl
 {
     const KoLabF32Traits::Pixel *p = reinterpret_cast<const KoLabF32Traits::Pixel *>(pixel);
     QDomElement labElt = doc.createElement("Lab");
-    labElt.setAttribute("L", KoColorSpaceMaths< KoLabF32Traits::channels_type, qreal>::scaleToA(p->L));
-    labElt.setAttribute("a", KoColorSpaceMaths< KoLabF32Traits::channels_type, qreal>::scaleToA(p->a));
-    labElt.setAttribute("b", KoColorSpaceMaths< KoLabF32Traits::channels_type, qreal>::scaleToA(p->b));
+    labElt.setAttribute("L", KisDomUtils::toString(KoColorSpaceMaths< KoLabF32Traits::channels_type, qreal>::scaleToA(p->L)));
+    labElt.setAttribute("a", KisDomUtils::toString(KoColorSpaceMaths< KoLabF32Traits::channels_type, qreal>::scaleToA(p->a)));
+    labElt.setAttribute("b", KisDomUtils::toString(KoColorSpaceMaths< KoLabF32Traits::channels_type, qreal>::scaleToA(p->b)));
     labElt.setAttribute("space", profile()->name());
     colorElt.appendChild(labElt);
 }
@@ -72,9 +73,9 @@ void LabF32ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomEl
 void LabF32ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
     KoLabF32Traits::Pixel *p = reinterpret_cast<KoLabF32Traits::Pixel *>(pixel);
-    p->L = KoColorSpaceMaths< qreal, KoLabF32Traits::channels_type >::scaleToA(elt.attribute("L").toDouble());
-    p->a = KoColorSpaceMaths< qreal, KoLabF32Traits::channels_type >::scaleToA(elt.attribute("a").toDouble());
-    p->b = KoColorSpaceMaths< qreal, KoLabF32Traits::channels_type >::scaleToA(elt.attribute("b").toDouble());
+    p->L = KoColorSpaceMaths< qreal, KoLabF32Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("L")));
+    p->a = KoColorSpaceMaths< qreal, KoLabF32Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("a")));
+    p->b = KoColorSpaceMaths< qreal, KoLabF32Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("b")));
     p->alpha = 1.0;
 }
 

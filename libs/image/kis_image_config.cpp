@@ -27,7 +27,7 @@
 #include <QThread>
 #include <QApplication>
 #include <QColor>
-#include <QStandardPaths>
+#include <QDir>
 
 #include "kis_global.h"
 #include <cmath>
@@ -218,7 +218,7 @@ void KisImageConfig::setMemoryPoolLimitPercent(qreal value)
 
 QString KisImageConfig::swapDir(bool requestDefault)
 {
-    QString swap = QStandardPaths::locate(QStandardPaths::TempLocation, "krita", QStandardPaths::LocateDirectory);
+    QString swap = QDir::tempPath();
     return !requestDefault ?
             m_config.readEntry("swaplocation", swap) : swap;
 }

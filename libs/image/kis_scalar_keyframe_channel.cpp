@@ -144,7 +144,7 @@ private:
 
 KisKeyframeSP KisScalarKeyframeChannel::createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand)
 {
-    qreal value = (copySrc != 0) ? scalarValue(copySrc) : 0;
+    qreal value = (copySrc.isNull() ? 0 : scalarValue(copySrc));
     int index = m_d->firstFreeIndex++;
 
     KUndo2Command *cmd = new Private::InsertValueCommand(m_d.data(), index, value, true, parentCommand);

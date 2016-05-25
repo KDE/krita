@@ -210,6 +210,8 @@ bool KisKeyframeChannel::moveKeyframe(KisKeyframeSP keyframe, int newTime, KUndo
 {
     LAZY_INITIALIZE_PARENT_COMMAND(parentCommand);
 
+    if (newTime == keyframe->time()) return false;
+
     KisKeyframeSP other = keyframeAt(newTime);
     if (other) {
         deleteKeyframeImpl(other, parentCommand, false);

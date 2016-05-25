@@ -74,17 +74,18 @@ void KisKeyframingTest::testScalarChannel()
     key = channel->keyframeAt(42);
     QCOMPARE(channel->scalarValue(key), 7.0);
 
-    // Adding a keyframe where one exists
-
-    KisKeyframeSP key2 = channel->addKeyframe(42);
-    QVERIFY(key2 == key);
-
     // Copying a keyframe
 
-    key2 = channel->copyKeyframe(key, 13);
+    KisKeyframeSP key2 = channel->copyKeyframe(key, 13);
     QVERIFY(key2 != 0);
     QVERIFY(channel->keyframeAt(13) == key2);
     QCOMPARE(channel->scalarValue(key2), 7.0);
+
+    // Adding a keyframe where one exists
+
+    key2 = channel->addKeyframe(13);
+    QVERIFY(key2 != key);
+    QCOMPARE(channel->keyframeCount(), 2);
 
     // Moving keyframes
 
@@ -97,12 +98,13 @@ void KisKeyframingTest::testScalarChannel()
 
     // Moving a keyframe where another one exists
     ok = channel->moveKeyframe(key, 13);
-    QCOMPARE(ok, false);
-    QVERIFY(channel->keyframeAt(13) == key2);
+    QCOMPARE(ok, true);
+    QVERIFY(channel->keyframeAt(13) != key2);
 
+    // Deleting a keyframe
     channel->deleteKeyframe(key);
-
     QVERIFY(channel->keyframeAt(10) == 0);
+    QCOMPARE(channel->keyframeCount(), 0);
 
     delete channel;
 }

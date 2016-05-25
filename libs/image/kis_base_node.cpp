@@ -26,6 +26,7 @@
 #include "kis_paint_device.h"
 #include "kis_layer_properties_icons.h"
 
+#include "kis_keyframe_channel.h"
 
 struct Q_DECL_HIDDEN KisBaseNode::Private
 {
@@ -36,6 +37,16 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
     QUuid id;
     bool collapsed;
     bool supportsLodMoves;
+
+    QMap<QString, KisKeyframeChannel*> keyframeChannels;
+    bool animated;
+    bool useInTimeline;
+
+    Private()
+        : animated(false)
+        , useInTimeline(false)
+    {
+    }
 };
 
 KisBaseNode::KisBaseNode()
@@ -320,3 +331,44 @@ void KisBaseNode::setSupportsLodMoves(bool value)
     m_d->supportsLodMoves = value;
 }
 
+
+QList<KisKeyframeChannel*> KisBaseNode::keyframeChannels() const
+{
+    return m_d->keyframeChannels.values();
+}
+
+KisKeyframeChannel * KisBaseNode::getKeyframeChannel(const QString &id) const
+{
+    QMap<QString, KisKeyframeChannel*>::iterator i = m_d->keyframeChannels.find(id);
+    if (i == m_d->keyframeChannels.end()) return 0;
+    return i.value();
+}
+
+bool KisBaseNode::isAnimated() const
+{
+    return m_d->animated;
+}
+
+void KisBaseNode::enableAnimation()
+{
+    m_d->animated = true;
+    baseNodeChangedCallback();
+}
+
+bool KisBaseNode::useInTimeline() const
+{
+    return m_d->useInTimeline;
+}
+
+void KisBaseNode::setUseInTimeline(bool value)
+{
+    if (value == m_d->useInTimeline) return;
+
+    m_d->useInTimeline = value;
+    baseNodeChangedCallback();
+}
+
+void KisBaseNode::addKeyframeChannel(KisKeyframeChannel *channel)
+{
+    m_d->keyframeChannels.insert(channel->id(), channel);
+}

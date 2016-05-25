@@ -34,6 +34,7 @@ class KoColorSpace;
 class KoCompositeOp;
 class KisNodeVisitor;
 class KisUndoAdapter;
+class KisKeyframeChannel;
 
 #include "kritaimage_export.h"
 
@@ -470,6 +471,25 @@ public:
      */
     bool supportsLodMoves() const;
 
+    /**
+     * Return the keyframe channels associated with this node
+     * @return list of keyframe channels
+     */
+    QList<KisKeyframeChannel *> keyframeChannels() const;
+
+    /**
+     * Get the keyframe channel with given id.
+     * @param id internal name for channel
+     * @return keyframe channel with the id, or null if not found
+     */
+    KisKeyframeChannel *getKeyframeChannel(const QString &id) const;
+
+    bool useInTimeline() const;
+    void setUseInTimeline(bool value);
+
+    bool isAnimated() const;
+    virtual void enableAnimation();
+
 protected:
 
     void setSupportsLodMoves(bool value);
@@ -501,6 +521,16 @@ protected:
 
     virtual void baseNodeInvalidateAllFramesCallback() {
     }
+
+    /**
+     * Add a keyframe channel for this node. The channel will be added
+     * to the common hash table which will be available to the UI.
+     *
+     * WARNING: the \p channel object *NOT* become owned by the node!
+     *          The caller must ensure manually that the lifetime of
+     *          the object coincide with the lifetime of the node.
+     */
+    void addKeyframeChannel(KisKeyframeChannel* channel);
 
 Q_SIGNALS:
 

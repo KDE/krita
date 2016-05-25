@@ -133,6 +133,8 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     , d(new Private())
 {
 
+
+
     QSurfaceFormat format;
     format.setDepthBufferSize(24);
     setFormat(format);
@@ -147,11 +149,15 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
                                                      colorConverter->conversionFlags());
 
     setAcceptDrops(true);
-    setFocusPolicy(Qt::StrongFocus);
-    setAttribute(Qt::WA_NoSystemBackground);
-    setAttribute(Qt::WA_AcceptTouchEvents);
     setAutoFillBackground(false);
 
+    setFocusPolicy(Qt::StrongFocus);
+    setAttribute(Qt::WA_NoSystemBackground, true);
+#ifdef Q_OS_MAC
+    setAttribute(Qt::WA_AcceptTouchEvents, false);
+#else
+    setAttribute(Qt::WA_AcceptTouchEvents, true);
+#endif
     setAttribute(Qt::WA_InputMethodEnabled, true);
     setAttribute(Qt::WA_DontCreateNativeAncestors, true);
 

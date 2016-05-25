@@ -60,8 +60,7 @@ cp -r $MXEROOT/qt5/plugins/platforms $BUILDROOT/out/$PACKAGENAME/bin/
 cp -r $MXEROOT/lib/plugins/imageformats/* $BUILDROOT/out/$PACKAGENAME/bin/imageformats/
 
 mkdir $BUILDROOT/out/$PACKAGENAME/bin/translations
-cp -r $MXEROOT/qt5/translations/qt_* $BUILDROOT/out/$PACKAGENAME/bin/translations
-cp -r $MXEROOT/qt5/translations/qtbase* $BUILDROOT/out/$PACKAGENAME/bin/translations
+cp -r $BUILDROOT/qt-translations/qt_* $BUILDROOT/out/$PACKAGENAME/bin/translations
 
 cp -r $MXEROOT/share/color $BUILDROOT/out/$PACKAGENAME/share
 cp -r $MXEROOT/share/color-schemes $BUILDROOT/out/$PACKAGENAME/share

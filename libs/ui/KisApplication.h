@@ -20,6 +20,7 @@
 #ifndef KIS_APPLICATION_H
 #define KIS_APPLICATION_H
 
+#include <QPointer>
 #include <qtsingleapplication/qtsingleapplication.h>
 #include "kritaui_export.h"
 #include <KisAutoSaveRecoveryDialog.h>
@@ -102,7 +103,7 @@ public Q_SLOTS:
 private:
     /// @return the number of autosavefiles opened
     void checkAutosaveFiles();
-    bool createNewDocFromTemplate(const QString &fileName, KisMainWindow *mainWindow);
+    bool createNewDocFromTemplate(const QString &fileName, KisMainWindow *m_mainWindow);
     void clearConfig();
     void loadResources();
     void loadPlugins();
@@ -111,9 +112,9 @@ private:
     KisApplicationPrivate * const d;
     class ResetStarting;
     friend class ResetStarting;
-    KisAutoSaveRecoveryDialog *dlg;
-    QStringList autoSaveFiles;
-    KisMainWindow *mainWindow;
+    KisAutoSaveRecoveryDialog *m_autosaveDialog;
+    QStringList m_autosaveFiles;
+    QPointer<KisMainWindow> m_mainWindow; // The first mainwindow we create on startup
     bool m_batchRun;
 };
 

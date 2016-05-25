@@ -144,6 +144,8 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     : QtSingleApplication(key, argc, argv)
     , d(new KisApplicationPrivate)
     , m_batchRun()
+    , m_autosaveDialog(0)
+    , m_mainWindow(0)
 {
     QCoreApplication::addLibraryPath(QCoreApplication::applicationDirPath());
 
@@ -374,15 +376,13 @@ bool KisApplication::start(const KisApplicationArguments &args)
     // Load the plugins
     loadPlugins();
 
-    KisMainWindow *mainWindow = 0;
-
     if (needsMainWindow) {
         // show a mainWindow asap, if we want that
         setSplashScreenLoadingText(i18n("Loading Main Window..."));
-        mainWindow = KisPart::instance()->createMainWindow();
+        m_mainWindow = KisPart::instance()->createMainWindow();
 
         if (showmainWindow) {
-            QTimer::singleShot(1, mainWindow, SLOT(show()));
+            QTimer::singleShot(1, m_mainWindow, SLOT(show()));
         }
     }
     short int numberOfOpenDocuments = 0; // number of documents open
@@ -408,7 +408,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                 if (m_batchRun) {
                     continue;
                 }
-                if (createNewDocFromTemplate(fileName, mainWindow)) {
+                if (createNewDocFromTemplate(fileName, m_mainWindow)) {
                     ++numberOfOpenDocuments;
                 }
                 // now try to load
@@ -440,18 +440,18 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     nPrinted++;
                     QTimer::singleShot(0, this, SLOT(quit()));
                 }
-                else if (mainWindow) {
+                else if (m_mainWindow) {
                     KisDocument *doc = KisPart::instance()->createDocument();
-                    if (mainWindow->openDocumentInternal(QUrl::fromLocalFile(fileName), doc)) {
+                    if (m_mainWindow->openDocumentInternal(QUrl::fromLocalFile(fileName), doc)) {
                         if (print) {
-                            mainWindow->slotFilePrint();
+                            m_mainWindow->slotFilePrint();
                             nPrinted++;
                             // TODO: trigger closing of app once printing is done
                         }
                         else if (exportAsPdf) {
-                            KisPrintJob *job = mainWindow->exportToPdf(exportFileName);
+                            KisPrintJob *job = m_mainWindow->exportToPdf(exportFileName);
                             if (job)
-                                connect (job, SIGNAL(destroyed(QObject*)), mainWindow,
+                                connect (job, SIGNAL(destroyed(QObject*)), m_mainWindow,
                                          SLOT(slotFileQuit()), Qt::QueuedConnection);
                             nPrinted++;
                         } else {
@@ -567,17 +567,17 @@ void KisApplication::checkAutosaveFiles()
 #endif
 
     // all autosave files for our application
-    autoSaveFiles = dir.entryList(filters, QDir::Files | QDir::Hidden);
+    m_autosaveFiles = dir.entryList(filters, QDir::Files | QDir::Hidden);
 
     // Allow the user to make their selection
-    if (autoSaveFiles.size() > 0) {
+    if (m_autosaveFiles.size() > 0) {
         if (d->splashScreen) {
             // hide the splashscreen to see the dialog
             d->splashScreen->hide();
         }
-        dlg = new KisAutoSaveRecoveryDialog(autoSaveFiles, activeWindow());
-        connect(dlg, SIGNAL(finished(int)), this, SLOT(onAutoSaveFinished(int)));
-        dlg->exec();
+        m_autosaveDialog = new KisAutoSaveRecoveryDialog(m_autosaveFiles, activeWindow());
+        connect(m_autosaveDialog, SIGNAL(finished(int)), this, SLOT(onAutoSaveFinished(int)));
+        m_autosaveDialog->exec();
     }
 }
 
@@ -592,30 +592,30 @@ void KisApplication::onAutoSaveFinished(int result)
 #endif
 
     if (result == QDialog::Accepted) {
-        QStringList filesToRecover = dlg->recoverableFiles();
-        Q_FOREACH (const QString &autosaveFile, autoSaveFiles) {
+        QStringList filesToRecover = m_autosaveDialog->recoverableFiles();
+        Q_FOREACH (const QString &autosaveFile, m_autosaveFiles) {
             if (!filesToRecover.contains(autosaveFile)) {
                 QFile::remove(dir.absolutePath() + "/" + autosaveFile);
             }
         }
-        autoSaveFiles = filesToRecover;
+        m_autosaveFiles = filesToRecover;
     } else {
-        autoSaveFiles.clear();
+        m_autosaveFiles.clear();
     }
 
     QList<QUrl> autosaveUrls;
-    if (autoSaveFiles.size() > 0) {
+    if (m_autosaveFiles.size() > 0) {
 
-        Q_FOREACH (const QString &autoSaveFile, autoSaveFiles) {
+        Q_FOREACH (const QString &autoSaveFile, m_autosaveFiles) {
             const QUrl url = QUrl::fromLocalFile(dir.absolutePath() + QLatin1Char('/') + autoSaveFile);
             autosaveUrls << url;
         }
     }
 
-    if (mainWindow) {
+    if (m_mainWindow) {
         Q_FOREACH (const QUrl &url, autosaveUrls) {
             KisDocument *doc = KisPart::instance()->createDocument();
-            mainWindow->openDocumentInternal(url, doc);
+            m_mainWindow->openDocumentInternal(url, doc);
         }
     }
 }

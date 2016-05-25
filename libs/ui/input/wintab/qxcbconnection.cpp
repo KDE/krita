@@ -556,7 +556,7 @@ struct EventTimerStaticInitializer
 EventTimerStaticInitializer __timerStaticInitializer;
 
 Qt::MouseButtons tabletState = Qt::NoButton;
-QWidget *tabletPressWidget = 0;
+QPointer<QWidget> tabletPressWidget = 0;
 
 void QWindowSystemInterface::handleTabletEvent(QWindow *w, const QPointF &local, const QPointF &global,
                                                int device, int pointerType, Qt::MouseButtons buttons, qreal pressure, int xTilt, int yTilt,

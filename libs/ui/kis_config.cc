@@ -1104,7 +1104,11 @@ void KisConfig::setHideStatusbarFullscreen(const bool value) const
 
 bool KisConfig::hideTitlebarFullscreen(bool defaultValue) const
 {
+#ifdef Q_OS_WINDOWS
+    return false;
+#else
     return (defaultValue ? true : m_cfg.readEntry("hideTitleBarFullscreen", true));
+#endif
 }
 
 void KisConfig::setHideTitlebarFullscreen(const bool value) const

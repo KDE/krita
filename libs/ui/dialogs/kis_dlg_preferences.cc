@@ -782,6 +782,9 @@ FullscreenSettingsTab::FullscreenSettingsTab(QWidget* parent) : WdgFullscreenSet
     chkMenu->setChecked(cfg.hideMenuFullscreen());
     chkScrollbars->setChecked(cfg.hideScrollbarsFullscreen());
     chkStatusbar->setChecked(cfg.hideStatusbarFullscreen());
+#ifdef Q_OS_WINDOWS
+    chkTitlebar->setVisible(false);
+#endif
     chkTitlebar->setChecked(cfg.hideTitlebarFullscreen());
     chkToolbar->setChecked(cfg.hideToolbarFullscreen());
 

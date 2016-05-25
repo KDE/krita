@@ -141,7 +141,12 @@ KisShapeLayer::KisShapeLayer(KoShapeBasedDocumentBase* controller,
     initShapeLayer(controller);
 }
 
-KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs)
+KisShapeLayer::KisShapeLayer(const KisShapeLayer& rhs)
+    : KisShapeLayer(rhs, rhs.m_d->controller)
+{
+}
+
+KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeBasedDocumentBase* controller)
         : KisExternalLayer(_rhs)
         , KoShapeLayer(new ShapeLayerContainerModel(this)) //no _rhs here otherwise both layer have the same KoShapeContainerModel
         , m_d(new Private())
@@ -149,7 +154,7 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs)
     // Make sure our new layer is visible otherwise the shapes cannot be painted.
     setVisible(true);
 
-    initShapeLayer(_rhs.m_d->controller);
+    initShapeLayer(controller);
 
     KoShapeOdfSaveHelper saveHelper(_rhs.shapes());
     KoDrag drag;

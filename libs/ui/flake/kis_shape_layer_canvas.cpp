@@ -39,7 +39,7 @@
 //#define DEBUG_REPAINT
 
 KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KoViewConverter * viewConverter)
-        : QObject(parent)
+        : QObject()
         , KoCanvasBase(0)
         , m_viewConverter(viewConverter)
         , m_shapeManager(new KoShapeManager(this))

@@ -237,6 +237,7 @@ void KisShapeLayer::initShapeLayer(KoShapeBasedDocumentBase* controller)
 
     m_d->canvas = new KisShapeLayerCanvas(this, m_d->converter);
     m_d->canvas->setProjection(m_d->paintDevice);
+    m_d->canvas->moveToThread(this->thread());
     m_d->controller = controller;
 
     m_d->canvas->shapeManager()->selection()->disconnect(this);

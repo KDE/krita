@@ -40,14 +40,18 @@ MoveStrokeStrategy::MoveStrokeStrategy(KisNodeList nodes,
 
     KritaUtils::filterContainer<KisNodeList>(m_nodes,
                                              [this](KisNodeSP node) {
-                                                 return !KisLayerUtils::checkIsCloneOf(node, m_nodes);
+                                                 return
+                                                     !KisLayerUtils::checkIsCloneOf(node, m_nodes) &&
+                                                     node->isEditable();
                                              });
 
     Q_FOREACH(KisNodeSP subtree, m_nodes) {
         KisLayerUtils::recursiveApplyNodes(
             subtree,
             [this](KisNodeSP node) {
-                if (KisLayerUtils::checkIsCloneOf(node, m_nodes)) {
+                if (KisLayerUtils::checkIsCloneOf(node, m_nodes) ||
+                    !node->isEditable()) {
+
                     m_blacklistedNodes.insert(node);
                 }
             });

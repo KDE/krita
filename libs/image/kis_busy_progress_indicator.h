@@ -29,7 +29,7 @@ class KisBusyProgressIndicator : public QObject
 {
     Q_OBJECT
 public:
-    KisBusyProgressIndicator(KoProgressProxy *progressProxy);
+    explicit KisBusyProgressIndicator(KoProgressProxy *progressProxy);
     ~KisBusyProgressIndicator();
 
     void endUpdatesBeforeDestroying();

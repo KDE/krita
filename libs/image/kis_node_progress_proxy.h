@@ -38,7 +38,7 @@ class KRITAIMAGE_EXPORT KisNodeProgressProxy : public QObject, public KoProgress
      * with a node, it will report progress in the node progress bar. This proxy
      * will be deleted when @p _node is deleted.
      */
-    KisNodeProgressProxy(KisNode* _node);
+    explicit KisNodeProgressProxy(KisNode* _node);
     ~KisNodeProgressProxy();
 
 public:

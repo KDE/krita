@@ -43,6 +43,7 @@ typedef KisSafeReadList<KisNodeSP> KisSafeReadNodeList;
 #include "kis_abstract_projection_plane.h"
 #include "kis_projection_leaf.h"
 #include "kis_undo_adapter.h"
+#include "kis_keyframe_channel.h"
 
 /**
  *The link between KisProjection ans KisImageUpdater
@@ -326,6 +327,12 @@ void KisNode::baseNodeInvalidateAllFramesCallback()
     if(m_d->graphListener) {
         m_d->graphListener->invalidateAllFrames();
     }
+}
+
+void KisNode::addKeyframeChannel(KisKeyframeChannel *channel)
+{
+    channel->setNode(this);
+    KisBaseNode::addKeyframeChannel(channel);
 }
 
 KisNodeSP KisNode::firstChild() const

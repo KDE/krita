@@ -530,7 +530,7 @@ protected:
      *          The caller must ensure manually that the lifetime of
      *          the object coincide with the lifetime of the node.
      */
-    void addKeyframeChannel(KisKeyframeChannel* channel);
+    virtual void addKeyframeChannel(KisKeyframeChannel* channel);
 
 Q_SIGNALS:
 

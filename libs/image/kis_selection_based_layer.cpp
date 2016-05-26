@@ -244,7 +244,7 @@ void KisSelectionBasedLayer::setDirty(const QRect & rect)
 
 void KisSelectionBasedLayer::enableAnimation()
 {
-    KisRasterKeyframeChannel * contentChannel = m_d->selection->pixelSelection()->createKeyframeChannel(KisKeyframeChannel::Content, this);
+    KisRasterKeyframeChannel * contentChannel = m_d->selection->pixelSelection()->createKeyframeChannel(KisKeyframeChannel::Content);
     addKeyframeChannel(contentChannel);
 
     contentChannel->setFilenameSuffix(".pixelselection");

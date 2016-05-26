@@ -346,6 +346,9 @@ protected:
     void notifyParentVisibilityChanged(bool value);
     void baseNodeChangedCallback();
     void baseNodeInvalidateAllFramesCallback();
+
+protected:
+    virtual void addKeyframeChannel(KisKeyframeChannel* channel);
 private:
 
     friend class KisNodeFacade;

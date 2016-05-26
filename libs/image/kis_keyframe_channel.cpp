@@ -102,11 +102,11 @@ private:
     int m_newTime;
 };
 
-KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisNodeWSP node, KisDefaultBoundsBaseSP defaultBounds)
+KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP defaultBounds)
     : m_d(new Private)
 {
     m_d->id = id;
-    m_d->node = node;
+    m_d->node = 0;
     m_d->defaultBounds = defaultBounds;
 }
 
@@ -127,6 +127,11 @@ QString KisKeyframeChannel::id() const
 QString KisKeyframeChannel::name() const
 {
     return m_d->id.name();
+}
+
+void KisKeyframeChannel::setNode(KisNodeWSP node)
+{
+    m_d->node = node;
 }
 
 KisNodeWSP KisKeyframeChannel::node() const

@@ -703,7 +703,7 @@ public:
      * @param node the parent node for the channel
      * @return keyframe channel
      */
-    KisRasterKeyframeChannel *createKeyframeChannel(const KoID &id, const KisNodeWSP node);
+    KisRasterKeyframeChannel *createKeyframeChannel(const KoID &id);
 
     KisRasterKeyframeChannel* keyframeChannel() const;
 

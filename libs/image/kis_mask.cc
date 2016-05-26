@@ -365,7 +365,7 @@ void KisMask::enableAnimation()
     KisPaintDeviceSP device = paintDevice();
 
     if (device) {
-        KisRasterKeyframeChannel *contentChannel = device->createKeyframeChannel(KisKeyframeChannel::Content, this);
+        KisRasterKeyframeChannel *contentChannel = device->createKeyframeChannel(KisKeyframeChannel::Content);
         addKeyframeChannel(contentChannel);
 
         contentChannel->setFilenameSuffix(".pixelselection");

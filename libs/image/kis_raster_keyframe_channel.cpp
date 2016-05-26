@@ -41,8 +41,8 @@ struct KisRasterKeyframeChannel::Private
   bool onionSkinsEnabled;
 };
 
-KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KoID &id, const KisNodeWSP node, const KisPaintDeviceWSP paintDevice, KisDefaultBoundsBaseSP defaultBounds)
-    : KisKeyframeChannel(id, node, defaultBounds),
+KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KoID &id, const KisPaintDeviceWSP paintDevice, KisDefaultBoundsBaseSP defaultBounds)
+    : KisKeyframeChannel(id, defaultBounds),
       m_d(new Private(paintDevice, QString()))
 {
 }

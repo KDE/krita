@@ -332,7 +332,7 @@ void KisPaintLayer::slotExternalUpdateOnionSkins()
 
 void KisPaintLayer::enableAnimation()
 {
-    m_d->contentChannel = m_d->paintDevice->createKeyframeChannel(KisKeyframeChannel::Content, this);
+    m_d->contentChannel = m_d->paintDevice->createKeyframeChannel(KisKeyframeChannel::Content);
     addKeyframeChannel(m_d->contentChannel);
 
     m_d->contentChannel->setOnionSkinsEnabled(onionSkinEnabled());

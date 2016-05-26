@@ -185,7 +185,7 @@ void KisTransactionTest::testUndoWithUnswitchedFrames()
     TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();
     dev->setDefaultBounds(bounds);
 
-    KisRasterKeyframeChannel *channel = dev->createKeyframeChannel(KisKeyframeChannel::Content, 0);
+    KisRasterKeyframeChannel *channel = dev->createKeyframeChannel(KisKeyframeChannel::Content);
     QVERIFY(channel);
 
     KisPaintDeviceFramesInterface *i = dev->framesInterface();

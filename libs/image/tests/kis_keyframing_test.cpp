@@ -56,7 +56,7 @@ void KisKeyframingTest::cleanupTestCase()
 
 void KisKeyframingTest::testScalarChannel()
 {
-    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), 0, -17, 31, 0);
+    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), -17, 31, 0);
     KisKeyframeSP key;
     bool ok;
 
@@ -111,7 +111,7 @@ void KisKeyframingTest::testScalarChannel()
 
 void KisKeyframingTest::testScalarChannelUndoRedo()
 {
-    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), 0, -17, 31, 0);
+    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), -17, 31, 0);
     KisKeyframeSP key;
 
     QCOMPARE(channel->hasScalarValue(), true);
@@ -155,7 +155,7 @@ void KisKeyframingTest::testRasterChannel()
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->setDefaultBounds(bounds);
 
-    KisRasterKeyframeChannel * channel = dev->createKeyframeChannel(KoID(), 0);
+    KisRasterKeyframeChannel * channel = dev->createKeyframeChannel(KoID());
 
     QCOMPARE(channel->hasScalarValue(), false);
     QCOMPARE(channel->keyframeCount(), 1);
@@ -230,7 +230,7 @@ void KisKeyframingTest::testRasterChannel()
 
 void KisKeyframingTest::testChannelSignals()
 {
-    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), 0, -17, 31, 0);
+    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), -17, 31, 0);
     KisKeyframeSP key;
     KisKeyframe *resKey;
 
@@ -305,7 +305,7 @@ void KisKeyframingTest::testRasterFrameFetching()
     KisPaintDeviceSP devTarget = new KisPaintDevice(cs);
     dev->setDefaultBounds(bounds);
 
-    KisRasterKeyframeChannel * channel = dev->createKeyframeChannel(KoID(), 0);
+    KisRasterKeyframeChannel * channel = dev->createKeyframeChannel(KoID());
 
     channel->addKeyframe(0);
     channel->addKeyframe(10);
@@ -356,7 +356,7 @@ void KisKeyframingTest::testDeleteFirstRasterChannel()
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->setDefaultBounds(bounds);
 
-    KisRasterKeyframeChannel * channel = dev->createKeyframeChannel(KoID(), 0);
+    KisRasterKeyframeChannel * channel = dev->createKeyframeChannel(KoID());
 
     QCOMPARE(channel->hasScalarValue(), false);
     QCOMPARE(channel->keyframeCount(), 1);
@@ -406,7 +406,7 @@ void KisKeyframingTest::testDeleteFirstRasterChannel()
 
 void KisKeyframingTest::testAffectedFrames()
 {
-    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), 0, -17, 31, 0);
+    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), -17, 31, 0);
     KisTimeRange range;
 
     channel->addKeyframe(10);

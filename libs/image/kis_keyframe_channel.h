@@ -41,13 +41,14 @@ public:
     static const KoID Content;
 
 public:
-    KisKeyframeChannel(const KoID& id, KisNodeWSP node, KisDefaultBoundsBaseSP defaultBounds);
+    KisKeyframeChannel(const KoID& id, KisDefaultBoundsBaseSP defaultBounds);
     KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP newParentNode);
     ~KisKeyframeChannel();
 
     QString id() const;
     QString name() const;
 
+    void setNode(KisNodeWSP node);
     KisNodeWSP node() const;
 
     KisKeyframeSP addKeyframe(int time, KUndo2Command *parentCommand = 0);

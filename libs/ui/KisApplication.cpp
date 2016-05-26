@@ -340,7 +340,9 @@ bool KisApplication::start(const KisApplicationArguments &args)
     const bool exportAsPdf = args.exportAsPdf();
     const QString exportFileName = args.exportFileName();
 
-    m_batchRun = (print || exportAs || exportAsPdf);
+    qDebug() << "print" << print << "exportAs" << exportAs << "exportAsPdf" << exportAsPdf << "exportFileName" << exportFileName;
+
+    m_batchRun = (print || exportAs || exportAsPdf || !exportFileName.isEmpty());
     // print & exportAsPdf do user interaction ATM
     const bool needsMainWindow = !exportAs;
     // only show the mainWindow when no command-line mode option is passed
@@ -423,6 +425,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     }
 
                     KisDocument *doc = KisPart::instance()->createDocument();
+                    doc->setFileBatchMode(m_batchRun);
                     doc->openUrl(QUrl::fromLocalFile(fileName));
 
                     qApp->processEvents(); // For vector layers to be updated
@@ -442,6 +445,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                 }
                 else if (m_mainWindow) {
                     KisDocument *doc = KisPart::instance()->createDocument();
+                    doc->setFileBatchMode(m_batchRun);
                     if (m_mainWindow->openDocumentInternal(QUrl::fromLocalFile(fileName), doc)) {
                         if (print) {
                             m_mainWindow->slotFilePrint();
@@ -534,6 +538,7 @@ void KisApplication::remoteArguments(QByteArray message, QObject *socket)
             }
             else if (QFile(filename).exists()) {
                 KisDocument *doc = KisPart::instance()->createDocument();
+                doc->setFileBatchMode(m_batchRun);
                 mw->openDocumentInternal(QUrl::fromLocalFile(filename), doc);
             }
         }
@@ -545,6 +550,7 @@ void KisApplication::fileOpenRequested(const QString &url)
     KisMainWindow *mainWindow = KisPart::instance()->mainWindows().first();
     if (mainWindow) {
         KisDocument *doc = KisPart::instance()->createDocument();
+        doc->setFileBatchMode(m_batchRun);
         mainWindow->openDocumentInternal(QUrl::fromLocalFile(url), doc);
     }
 }
@@ -615,6 +621,7 @@ void KisApplication::onAutoSaveFinished(int result)
     if (m_mainWindow) {
         Q_FOREACH (const QUrl &url, autosaveUrls) {
             KisDocument *doc = KisPart::instance()->createDocument();
+            doc->setFileBatchMode(m_batchRun);
             m_mainWindow->openDocumentInternal(url, doc);
         }
     }
@@ -659,6 +666,7 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
         templateURL.setPath(templateBase.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path() + '/' + templateName);
 
         KisDocument *doc = KisPart::instance()->createDocument();
+        doc->setFileBatchMode(m_batchRun);
         if (mainWindow->openDocumentInternal(templateURL, doc)) {
             doc->resetURL();
             doc->setEmpty();

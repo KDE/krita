@@ -33,11 +33,10 @@ QString KisPredefinedBrushFactory::id() const
     return m_id;
 }
 
-KisBrushSP KisPredefinedBrushFactory::getOrCreateBrush(const QDomElement& brushDefinition)
+KisBrushSP KisPredefinedBrushFactory::getOrCreateBrush(const QDomElement& brushDefinition, bool forceCopy)
 {
     KisBrushResourceServer *rServer = KisBrushServer::instance()->brushServer();
     QString brushFileName = brushDefinition.attribute("filename", "");
-    //KisBrushSP brush = rServer->resourceByFilename(brushFileName)->clone();
     KisBrushSP brush = rServer->resourceByFilename(brushFileName);
 
     //Fallback for files that still use the old format
@@ -51,6 +50,10 @@ KisBrushSP KisPredefinedBrushFactory::getOrCreateBrush(const QDomElement& brushD
     }
 
     Q_ASSERT(brush);
+
+    if (forceCopy) {
+        brush = brush->clone();
+    }
 
     double spacing = KisDomUtils::toDouble(brushDefinition.attribute("spacing", "0.25"));
     brush->setSpacing(spacing);

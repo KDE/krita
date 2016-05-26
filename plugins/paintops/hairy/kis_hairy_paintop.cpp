@@ -49,7 +49,7 @@ KisHairyPaintOp::KisHairyPaintOp(const KisBrushBasedPaintOpSettings *settings, K
     m_dev = node ? node->paintDevice() : 0;
 
     KisBrushOption brushOption;
-    brushOption.readOptionSetting(settings);
+    brushOption.readOptionSetting(settings, true);
     KisBrushSP brush = brushOption.brush();
     KisFixedPaintDeviceSP dab = cachedDab(painter->device()->compositionSourceColorSpace());
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {

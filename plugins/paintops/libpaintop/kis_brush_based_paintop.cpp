@@ -40,7 +40,7 @@ TextBrushInitializationWorkaround *TextBrushInitializationWorkaround::instance()
 void TextBrushInitializationWorkaround::preinitialize(const KisPropertiesConfiguration *settings) {
     if (KisBrushOption::isTextBrush(settings)) {
         KisBrushOption brushOption;
-        brushOption.readOptionSetting(settings);
+        brushOption.readOptionSetting(settings, true);
         m_brush = brushOption.brush();
         m_settings = settings;
     }
@@ -84,7 +84,7 @@ KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPropertiesConfiguration* set
 
     if (!m_brush) {
         KisBrushOption brushOption;
-        brushOption.readOptionSetting(settings);
+        brushOption.readOptionSetting(settings, true);
         m_brush = brushOption.brush();
     }
 

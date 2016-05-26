@@ -26,8 +26,10 @@
 #include "kis_mask_generator.h"
 #include <kis_dom_utils.h>
 
-KisBrushSP KisAutoBrushFactory::getOrCreateBrush(const QDomElement& brushDefinition)
+KisBrushSP KisAutoBrushFactory::getOrCreateBrush(const QDomElement& brushDefinition, bool forceCopy)
 {
+    Q_UNUSED(forceCopy);
+
     KisMaskGenerator* mask = KisMaskGenerator::fromXML(brushDefinition.firstChildElement("MaskGenerator"));
     double angle = KisDomUtils::toDouble(brushDefinition.attribute("angle", "0.0"));
     double randomness = KisDomUtils::toDouble(brushDefinition.attribute("randomness", "0.0"));

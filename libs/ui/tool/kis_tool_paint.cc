@@ -647,7 +647,7 @@ void KisToolPaint::increaseBrushSize()
     std::vector<int>::iterator result =
         std::upper_bound(m_standardBrushSizes.begin(),
                          m_standardBrushSizes.end(),
-                         (int)paintopSize);
+                         qRound(paintopSize));
 
     int newValue = result != m_standardBrushSizes.end() ? *result : m_standardBrushSizes.back();
 

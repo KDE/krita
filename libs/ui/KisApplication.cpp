@@ -143,9 +143,9 @@ public:
 KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     : QtSingleApplication(key, argc, argv)
     , d(new KisApplicationPrivate)
-    , m_batchRun()
     , m_autosaveDialog(0)
     , m_mainWindow(0)
+    , m_batchRun(false)
 {
     QCoreApplication::addLibraryPath(QCoreApplication::applicationDirPath());
 

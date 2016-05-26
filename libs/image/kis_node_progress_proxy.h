@@ -42,10 +42,6 @@ class KRITAIMAGE_EXPORT KisNodeProgressProxy : public QObject, public KoProgress
     ~KisNodeProgressProxy();
 
 public:
-    /**
-     * @return the node associated with this proxy.
-     */
-    const KisNodeSP node() const;
     virtual int maximum() const ;
     virtual void setValue(int value);
     virtual void setRange(int minimum, int maximum);

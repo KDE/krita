@@ -62,11 +62,6 @@ KisNodeProgressProxy::~KisNodeProgressProxy()
     delete d;
 }
 
-const KisNodeSP KisNodeProgressProxy::node() const
-{
-    return d->node;
-}
-
 int KisNodeProgressProxy::maximum() const
 {
     return d->maximum;

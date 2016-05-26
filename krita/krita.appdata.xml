@@ -124,10 +124,16 @@
   <url type="help">https://docs.krita.org/Category:Tutorials</url>
   <screenshots>
     <screenshot type="default">
-      <image>http://heap.kogmbh.net/downloads/krita_appdata_1.png</image>
+      <image>http://files.kde.org/krita/marketing/appdata/2016-05-24_screenshot_002.png</image>
     </screenshot>
-    <screenshot>
-      <image>http://heap.kogmbh.net/downloads/krita_appdata_2.png</image>
+    <screenshot type="default">
+      <image>http://files.kde.org/krita/marketing/appdata/2016-05-24_screenshot_003.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <image>http://files.kde.org/krita/marketing/appdata/2016-05-24_screenshot_004.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <image>http://files.kde.org/krita/marketing/appdata/2016-05-24_screenshot_005.png</image>
     </screenshot>
   </screenshots>
   <update_contact>foundation@krita.org</update_contact>

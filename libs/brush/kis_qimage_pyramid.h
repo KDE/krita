@@ -38,11 +38,11 @@ public:
                                      qreal scale, qreal rotation);
 
     QImage createImage(qreal scale, qreal rotation,
-                       qreal subPixelX, qreal subPixelY);
+                       qreal subPixelX, qreal subPixelY) const;
 
 private:
     friend class KisBrushTest;
-    int findNearestLevel(qreal scale, qreal *baseScale);
+    int findNearestLevel(qreal scale, qreal *baseScale) const;
     void appendPyramidLevel(const QImage &image);
 
     static void calculateParams(qreal scale, qreal rotation,

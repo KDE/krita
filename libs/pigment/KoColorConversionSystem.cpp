@@ -101,8 +101,9 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
                 Q_ASSERT(engine);
                 NodeKey engineKey(engine->id(), engine->id(), engine->id());
                 Node* engineNode = 0;
-                if (d->graph.contains(engineKey)) {
-                    engineNode = d->graph[engineKey];
+                QHash<NodeKey, Node*>::ConstIterator it = d->graph.constFind(engineKey);
+                if (it != d->graph.constEnd()) {
+                    engineNode = it.value();
                 } else {
                     engineNode = insertEngine(engine);
                 }
@@ -221,8 +222,9 @@ KoColorConversionSystem::Node* KoColorConversionSystem::nodeFor(const QString& _
 
 KoColorConversionSystem::Node* KoColorConversionSystem::nodeFor(const KoColorConversionSystem::NodeKey& key)
 {
-    if (d->graph.contains(key)) {
-        return d->graph.value(key);
+    QHash<NodeKey, Node*>::ConstIterator it = d->graph.constFind(key);
+    if (it != d->graph.constEnd()) {
+        return it.value();
     } else {
         return createNode(key.modelId, key.depthId, key.profileName);
     }
@@ -474,14 +476,15 @@ inline KoColorConversionSystem::Path KoColorConversionSystem::findBestPathImpl2(
                         }
                     } else {
                         // This is an incomplete path. Check if there's a better way to get to its endpoint.
-                        if (node2path.contains(newEndNode)) {
-                            Path p2 = node2path[newEndNode];
+                        Node2PathHash::Iterator it = node2path.find(newEndNode);
+                        if (it != node2path.end()) {
+                            Path &p2 = it.value();
                             if (pQC.lessWorseThan(newP, p2)) {
-                                node2path[ newEndNode ] = newP;
+                                p2 = newP;
                                 possiblePaths.append(newP);
                             }
                         } else {
-                            node2path[ newEndNode ] = newP;
+                            node2path.insert(newEndNode, newP);
                             possiblePaths.append(newP);
                         }
                     }

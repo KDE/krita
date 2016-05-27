@@ -341,8 +341,10 @@ KoConvolutionOp* KoColorSpace::convolutionOp() const
 
 const KoCompositeOp * KoColorSpace::compositeOp(const QString & id) const
 {
-    if (d->compositeOps.contains(id))
-        return d->compositeOps.value(id);
+    const QHash<QString, KoCompositeOp*>::ConstIterator it = d->compositeOps.constFind(id);
+    if (it != d->compositeOps.constEnd()) {
+        return it.value();
+    }
     else {
         warnPigment << "Asking for non-existent composite operation " << id << ", returning " << COMPOSITE_OVER;
         return d->compositeOps.value(COMPOSITE_OVER);

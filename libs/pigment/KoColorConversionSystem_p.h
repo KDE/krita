@@ -149,6 +149,7 @@ struct KoColorConversionSystem::NodeKey {
     QString depthId;
     QString profileName;
 };
+Q_DECLARE_TYPEINFO(KoColorConversionSystem::NodeKey, Q_MOVABLE_TYPE);
 
 struct KoColorConversionSystem::Path {
 
@@ -235,6 +236,7 @@ struct KoColorConversionSystem::Path {
     bool isGood;
     int cost;
 };
+Q_DECLARE_TYPEINFO(KoColorConversionSystem::Path, Q_MOVABLE_TYPE);
 
 typedef QHash<KoColorConversionSystem::Node*, KoColorConversionSystem::Path > Node2PathHash;
 

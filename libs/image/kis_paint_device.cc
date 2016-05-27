@@ -563,6 +563,7 @@ KisPaintDevice::LodDataStruct* KisPaintDevice::Private::createLodDataStruct(int 
 void KisPaintDevice::Private::updateLodDataStruct(LodDataStruct *_dst, const QRect &originalRect)
 {
     LodDataStructImpl *dst = dynamic_cast<LodDataStructImpl*>(_dst);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(dst);
 
     Data *lodData = dst->lodData.data();
     Data *srcData = currentNonLodData();
@@ -656,8 +657,9 @@ void KisPaintDevice::Private::updateLodDataStruct(LodDataStruct *_dst, const QRe
 void KisPaintDevice::Private::uploadLodDataStruct(LodDataStruct *_dst)
 {
     LodDataStructImpl *dst = dynamic_cast<LodDataStructImpl*>(_dst);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(dst);
 
-    KIS_ASSERT_RECOVER_RETURN(
+    KIS_SAFE_ASSERT_RECOVER_RETURN(
         dst->lodData->levelOfDetail() == defaultBounds->currentLevelOfDetail());
 
     ensureLodDataPresent();

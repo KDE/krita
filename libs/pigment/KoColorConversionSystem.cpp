@@ -455,9 +455,9 @@ inline KoColorConversionSystem::Path KoColorConversionSystem::findBestPathImpl2(
     while (possiblePaths.size() > 0) {
 
         // Loop through all paths and explore one step further
-        QList<Path> currentPaths = possiblePaths;
-        for (Path p : currentPaths) {
-            Node* endNode = p.endNode();
+        const QList<Path> currentPaths = possiblePaths;
+        for (const Path &p : currentPaths) {
+            const Node* endNode = p.endNode();
             for (Vertex* v : endNode->outputVertexes) {
                 if (!p.contains(v->dstNode) &&  v->dstNode->isInitialized) {
                     Path newP = p;  // Candidate

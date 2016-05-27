@@ -188,11 +188,8 @@ void ThemeManager::slotChangePalette()
     //qDebug() << ">>>>>>>>>>>>>>>>>> going to set palette on app" << theme;
     qApp->setPalette(palette);
 
-    QColor background = qApp->palette().background().color();
-    bool isLight = background.value() < 100;
-
 #ifdef Q_OS_MAC
-    if (isLight || theme.isEmpty()) {
+    if (theme == "Krita bright" || theme.isEmpty()) {
         qApp->setStyle("Macintosh");
         qApp->style()->polish(qApp);
     } else {

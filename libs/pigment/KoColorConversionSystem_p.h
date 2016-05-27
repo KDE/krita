@@ -164,7 +164,7 @@ struct KoColorConversionSystem::Path {
         return (vertexes.first())->srcNode;
     }
 
-    bool operator==(const Path &other) {
+    bool operator==(const Path &other) const {
       return other.vertexes == vertexes;
     }
 

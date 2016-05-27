@@ -280,7 +280,7 @@ struct PathQualityChecker {
     /**
      * Compare two paths.
      */
-    inline bool lessWorseThan(KoColorConversionSystem::Path &path1, KoColorConversionSystem::Path &path2) const {
+    inline bool lessWorseThan(const KoColorConversionSystem::Path &path1, const KoColorConversionSystem::Path &path2) const {
         // There is no point in comparing two paths which doesn't start from the same node or doesn't end at the same node
         if (!ignoreHdr) {
             CHECK_ONE_AND_NOT_THE_OTHER(keepDynamicRange)

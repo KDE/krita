@@ -804,7 +804,10 @@ public:
     static MemoryReleaseObject* createMemoryReleaseObject();
 
 public:
-    struct LodDataStruct;
+    struct LodDataStruct {
+        virtual ~LodDataStruct();
+    };
+
     QRegion regionForLodSyncing() const;
     LodDataStruct* createLodDataStruct(int lod);
     void updateLodDataStruct(LodDataStruct *dst, const QRect &srcRect);

@@ -24,7 +24,6 @@
 
 class KoProgressProxy;
 
-
 class KisBusyProgressIndicator : public QObject
 {
     Q_OBJECT
@@ -32,12 +31,24 @@ public:
     explicit KisBusyProgressIndicator(KoProgressProxy *progressProxy);
     ~KisBusyProgressIndicator();
 
-    void endUpdatesBeforeDestroying();
+public:
+    /**
+     * To be called when progressProxy is and will be no longer available
+     * and this object is going to be deleted as well.
+     */
+    void prepareDestroying();
 
 public Q_SLOTS:
+    /**
+     * Trigger update of progress state.
+     */
     void update();
 
 private Q_SLOTS:
+    /**
+     * Call only via emitting sigStartTimer, to ensure it is called in
+     * the context of the QObject's thread.
+     */
     void slotStartTimer();
     void timerFinished();
 

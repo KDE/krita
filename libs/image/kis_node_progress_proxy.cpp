@@ -62,6 +62,12 @@ KisNodeProgressProxy::~KisNodeProgressProxy()
     delete d;
 }
 
+void KisNodeProgressProxy::prepareDestroying()
+{
+    d->node = 0;
+}
+
+
 int KisNodeProgressProxy::maximum() const
 {
     return d->maximum;

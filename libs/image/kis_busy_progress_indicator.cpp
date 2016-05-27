@@ -39,14 +39,20 @@ struct KisBusyProgressIndicator::Private
 
     bool isStarted;
 
-    void startProgressReport() {
+    void startProgressReport()
+    {
+        if (!progressProxy) {
+            return;
+        }
         isStarted = true;
         progressProxy->setRange(0, 0);
     }
 
-    void stopProgressReport() {
-        if (!isStarted) return;
-
+    void stopProgressReport()
+    {
+        if (!isStarted || !progressProxy) {
+            return;
+        }
         progressProxy->setRange(0, 100);
         progressProxy->setValue(100);
         isStarted = false;
@@ -68,9 +74,9 @@ KisBusyProgressIndicator::~KisBusyProgressIndicator()
     m_d->stopProgressReport();
 }
 
-void KisBusyProgressIndicator::endUpdatesBeforeDestroying()
+void KisBusyProgressIndicator::prepareDestroying()
 {
-    m_d->stopProgressReport();
+    m_d->progressProxy = 0;
 }
 
 void KisBusyProgressIndicator::timerFinished()

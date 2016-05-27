@@ -57,6 +57,14 @@ Q_SIGNALS:
      * @param _node is the node that own this \ref KisNodeProgressProxy
      */
     void percentageChanged(int _percentage, const KisNodeSP& _node);
+
+private:
+    /**
+     * To be called when the node is and will be no longer available
+     * and this object is going to be deleted as well.
+     */
+    void prepareDestroying();
+
 private:
     struct Private;
     Private* const d;

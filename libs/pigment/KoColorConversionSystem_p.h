@@ -82,6 +82,7 @@ struct KoColorConversionSystem::Node {
     bool isEngine;
     const KoColorSpaceEngine* engine;
 };
+Q_DECLARE_TYPEINFO(KoColorConversionSystem::Node, Q_MOVABLE_TYPE);
 
 struct KoColorConversionSystem::Vertex {
 

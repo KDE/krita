@@ -238,8 +238,14 @@ void KisMimeDatabase::fillMimeData()
 
         mimeType.mimeType = "application/x-krita-workspace";
         mimeType.description = i18nc("description of a file type", "Krita Workspace");
+        mimeType.suffixes = QStringList() << "*.kws";
+        s_mimeDatabase << mimeType;
+
+        mimeType.mimeType = "application/x-krita-taskset";
+        mimeType.description = i18nc("description of a file type", "Krita Taskset");
         mimeType.suffixes = QStringList() << "*.kts";
         s_mimeDatabase << mimeType;
+
 
         mimeType.mimeType = "image/x-krita-raw";
         mimeType.description = i18nc("description of a file type", "Camera Raw Files");

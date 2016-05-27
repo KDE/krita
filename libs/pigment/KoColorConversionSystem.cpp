@@ -459,7 +459,7 @@ inline KoColorConversionSystem::Path KoColorConversionSystem::findBestPathImpl2(
         for (const Path &p : currentPaths) {
             const Node* endNode = p.endNode();
             for (Vertex* v : endNode->outputVertexes) {
-                if (!p.contains(v->dstNode) &&  v->dstNode->isInitialized) {
+                if (v->dstNode->isInitialized && !p.contains(v->dstNode)) {
                     Path newP = p;  // Candidate
                     newP.appendVertex(v);
                     Node* newEndNode = newP.endNode();

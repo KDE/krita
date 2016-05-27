@@ -40,7 +40,7 @@ KoColorConversionSystem::KoColorConversionSystem() : d(new Private)
     d->alphaNode->crossingCost = 1000000;
     d->alphaNode->isInitialized = true;
     d->alphaNode->isGray = true; // <- FIXME: it's a little bit hacky as alpha doesn't really have color information
-    d->graph[ NodeKey(d->alphaNode->modelId, d->alphaNode->depthId, "default")] = d->alphaNode;
+    d->graph.insert(NodeKey(d->alphaNode->modelId, d->alphaNode->depthId, "default"), d->alphaNode);
 
     Vertex* v = createVertex(d->alphaNode, d->alphaNode);
     v->setFactoryFromSrc(new KoCopyColorConversionTransformationFactory(AlphaColorModelID.id(), Integer8BitsColorDepthID.id(), "default"));
@@ -71,7 +71,7 @@ KoColorConversionSystem::Node* KoColorConversionSystem::insertEngine(const KoCol
     n->depthId = engine->id();
     n->profileName = engine->id();
     n->referenceDepth = 64; // engine don't have reference depth,
-    d->graph[ key ] = n;
+    d->graph.insert(key, n);
     n->init(engine);
     return n;
 }
@@ -186,7 +186,7 @@ KoColorConversionSystem::Node* KoColorConversionSystem::createNode(const QString
     n->modelId = _modelId;
     n->depthId = _depthId;
     n->profileName = _profileName;
-    d->graph[ NodeKey(_modelId, _depthId, _profileName)] = n;
+    d->graph.insert(NodeKey(_modelId, _depthId, _profileName), n);
     Q_ASSERT(vertexBetween(d->alphaNode, n) == 0); // The two color spaces should not be connected yet
     Vertex* vFromAlpha = createVertex(d->alphaNode, n);
     vFromAlpha->setFactoryFromSrc(new KoColorConversionFromAlphaTransformationFactory(_modelId, _depthId, _profileName));
@@ -444,7 +444,7 @@ inline KoColorConversionSystem::Path KoColorConversionSystem::findBestPathImpl2(
                 return p;
             } else {
                 Q_ASSERT(!node2path.contains(endNode));   // That would be a total fuck up if there are two vertexes between two nodes
-                node2path[ endNode ] = p;
+                node2path.insert(endNode, p);
                 possiblePaths.append(p);
             }
         }

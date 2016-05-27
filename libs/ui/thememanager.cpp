@@ -41,6 +41,7 @@
 #include <QMenuBar>
 #include <QStatusBar>
 #include <QDebug>
+#include <QStandardPaths>
 
 // KDE includes
 
@@ -73,13 +74,11 @@ class ThemeManager::ThemeManagerPriv
 public:
 
     ThemeManagerPriv()
-        : defaultThemeName(i18nc("default theme name", "Default"))
-        , themeMenuActionGroup(0)
+        : themeMenuActionGroup(0)
         , themeMenuAction(0)
     {
     }
 
-    QString          defaultThemeName;
     QString                currentThemeName;
     QMap<QString, QString> themeMap;            // map<theme name, theme config path>
 
@@ -92,7 +91,6 @@ ThemeManager::ThemeManager(const QString &theme, QObject *parent)
     , d(new ThemeManagerPriv)
 {
     //qDebug() << "Creating theme manager with theme" << theme;
-    d->defaultThemeName = "Default";
     d->currentThemeName = theme;
     populateThemeMap();
 }
@@ -102,12 +100,6 @@ ThemeManager::~ThemeManager()
     delete d;
 }
 
-QString ThemeManager::defaultThemeName() const
-{
-    //qDebug() << "defaultThemeName()" << d->defaultThemeName;
-    return d->defaultThemeName;
-}
-
 QString ThemeManager::currentThemeName() const
 {
     //qDebug() << "getting current themename";
@@ -115,21 +107,20 @@ QString ThemeManager::currentThemeName() const
     if (d->themeMenuAction && d->themeMenuActionGroup) {
 
         QAction* action = d->themeMenuActionGroup->checkedAction();
-        themeName = (!action ? defaultThemeName() : action->text().remove('&'));
+        if (action) {
+            themeName = action->text().remove('&');
+        }
 
         //qDebug() << "\tthemename from action" << themeName;
     }
     else if (!d->currentThemeName.isEmpty()) {
 
         //qDebug() << "\tcurrent themename" << d->currentThemeName;
-
         themeName = d->currentThemeName;
     }
     else {
-
-        //qDebug() << "\tdefault theme name" << d->defaultThemeName;
-
-        themeName = d->defaultThemeName;
+        //qDebug() << "\tfallback";
+        themeName = "Krita dark";
     }
     //qDebug() << "\tresult" << themeName;
     return themeName;
@@ -138,16 +129,12 @@ QString ThemeManager::currentThemeName() const
 void ThemeManager::setCurrentTheme(const QString& name)
 {
     //qDebug() << "setCurrentTheme();" << d->currentThemeName << "to" << name;
-    if (d->currentThemeName == name) return;
-
     d->currentThemeName = name;
 
     if (d->themeMenuAction  && d->themeMenuActionGroup) {
         QList<QAction*> list = d->themeMenuActionGroup->actions();
-        Q_FOREACH (QAction* action, list)
-        {
-            if (action->text().remove('&') == name)
-            {
+        Q_FOREACH (QAction* action, list) {
+            if (action->text().remove('&') == name) {
                 action->setChecked(true);
             }
         }
@@ -158,17 +145,8 @@ void ThemeManager::setCurrentTheme(const QString& name)
 void ThemeManager::slotChangePalette()
 {
     //qDebug() << "slotChangePalette" << sender();
-    updateCurrentKDEdefaultThemePreview();
 
     QString theme(currentThemeName());
-
-    // Windows doesn't do well with KDE theming
-    #if defined (Q_OS_LINUX) || defined (__APPLE__)
-    if (theme == defaultThemeName() || theme.isEmpty()) {
-        theme = currentKDEdefaultTheme();
-    }
-    #endif
-
     QString filename        = d->themeMap.value(theme);
     KSharedConfigPtr config = KSharedConfig::openConfig(filename);
 
@@ -177,8 +155,8 @@ void ThemeManager::slotChangePalette()
     // TT thinks tooltips shouldn't use active, so we use our active colors for all states
     KColorScheme schemeTooltip(QPalette::Active, KColorScheme::Tooltip, config);
 
-    for ( int i = 0; i < 3 ; ++i )
-    {
+    for ( int i = 0; i < 3 ; ++i ) {
+
         QPalette::ColorGroup state = states[i];
         KColorScheme schemeView(state,      KColorScheme::View,      config);
         KColorScheme schemeWindow(state,    KColorScheme::Window,    config);
@@ -210,17 +188,18 @@ void ThemeManager::slotChangePalette()
     //qDebug() << ">>>>>>>>>>>>>>>>>> going to set palette on app" << theme;
     qApp->setPalette(palette);
 
-    if (theme == defaultThemeName() || theme.isEmpty()) {
-#ifdef __APPLE__
+    QColor background = qApp->palette().background().color();
+    bool isLight = background.value() < 100;
+
+#ifdef Q_OS_MAC
+    if (isLight || theme.isEmpty()) {
         qApp->setStyle("Macintosh");
         qApp->style()->polish(qApp);
-#endif
     } else {
-#ifdef __APPLE__
         qApp->setStyle("Fusion");
         qApp->style()->polish(qApp);
-#endif
     }
+#endif
     emit signalThemeChanged();
 }
 
@@ -240,8 +219,6 @@ void ThemeManager::populateThemeMenu()
 {
     if (!d->themeMenuAction) return;
 
-    QString theme(currentThemeName());
-
     d->themeMenuAction->menu()->clear();
     delete d->themeMenuActionGroup;
 
@@ -249,20 +226,18 @@ void ThemeManager::populateThemeMenu()
     connect(d->themeMenuActionGroup, SIGNAL(triggered(QAction*)),
             this, SLOT(slotChangePalette()));
 
-
     QAction * action;
     const QStringList schemeFiles = KoResourcePaths::findAllResources("data", "color-schemes/*.colors");
 
     QMap<QString, QAction*> actionMap;
-    for (int i = 0; i < schemeFiles.size(); ++i)
-    {
+    for (int i = 0; i < schemeFiles.size(); ++i) {
         const QString filename  = schemeFiles.at(i);
         const QFileInfo info(filename);
         KSharedConfigPtr config = KSharedConfig::openConfig(filename);
-        QIcon icon              = createSchemePreviewIcon(config);
+        QIcon icon = createSchemePreviewIcon(config);
         KConfigGroup group(config, "General");
-        const QString name      = group.readEntry("Name", info.baseName());
-        action                  = new QAction(name, d->themeMenuActionGroup);
+        const QString name = group.readEntry("Name", info.baseName());
+        action = new QAction(name, d->themeMenuActionGroup);
         action->setIcon(icon);
         action->setCheckable(true);
         actionMap.insert(name, action);
@@ -272,31 +247,11 @@ void ThemeManager::populateThemeMenu()
     QStringList actionMapKeys = actionMap.keys();
     actionMapKeys.sort();
 
-    Q_FOREACH (const QString& name, actionMapKeys)
-    {
+    Q_FOREACH (const QString& name, actionMapKeys) {
         if ( name ==  currentThemeName()) {
             actionMap.value(name)->setChecked(true);
         }
-
         d->themeMenuAction->addAction(actionMap.value(name));
-    }
-
-    updateCurrentKDEdefaultThemePreview();
-}
-
-void ThemeManager::updateCurrentKDEdefaultThemePreview()
-{
-    if (!d->themeMenuActionGroup) return;
-
-    QList<QAction*> list = d->themeMenuActionGroup->actions();
-    Q_FOREACH (QAction* action, list)
-    {
-        if (action->text().remove('&') == defaultThemeName())
-        {
-            KSharedConfigPtr config = KSharedConfig::openConfig(d->themeMap.value(currentKDEdefaultTheme()));
-            QIcon icon              = createSchemePreviewIcon(config);
-            action->setIcon(icon);
-        }
     }
 }
 
@@ -340,25 +295,15 @@ QPixmap ThemeManager::createSchemePreviewIcon(const KSharedConfigPtr& config)
     return pixmap;
 }
 
-QString ThemeManager::currentKDEdefaultTheme() const
-{
-    KSharedConfigPtr config = KSharedConfig::openConfig("kdeglobals");
-    KConfigGroup group(config, "General");
-    QString colorScheme = group.readEntry("ColorScheme");
-    //qDebug() << "currentKDEdefaultTheme()" << colorScheme;
-    return colorScheme;
-}
-
 void ThemeManager::populateThemeMap()
 {
     const QStringList schemeFiles = KoResourcePaths::findAllResources("data", "color-schemes/*.colors");
-    for (int i = 0; i < schemeFiles.size(); ++i)
-    {
+    for (int i = 0; i < schemeFiles.size(); ++i) {
         const QString filename  = schemeFiles.at(i);
         const QFileInfo info(filename);
         KSharedConfigPtr config = KSharedConfig::openConfig(filename);
         KConfigGroup group(config, "General");
-        const QString name      = group.readEntry("Name", info.baseName());
+        const QString name = group.readEntry("Name", info.baseName());
         d->themeMap.insert(name, filename);
     }
 

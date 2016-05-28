@@ -808,7 +808,7 @@ KisImageBuilder_Result exrConverter::decode(const QString &filename)
             case 1:
             case 2:
                 // Decode the data
-                switch (imageType) {
+                switch (info.imageType) {
                 case IT_FLOAT16:
                     m_d->decodeData1<half>(file, info, layer, width, dx, dy, height, Imf::HALF);
                     break;
@@ -823,7 +823,7 @@ KisImageBuilder_Result exrConverter::decode(const QString &filename)
             case 3:
             case 4:
                 // Decode the data
-                switch (imageType) {
+                switch (info.imageType) {
                 case IT_FLOAT16:
                     m_d->decodeData4<half>(file, info, layer, width, dx, dy, height, Imf::HALF);
                     break;

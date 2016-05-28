@@ -274,7 +274,6 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     painter.fillPath(fgColor, m_displayRenderer->toQColor(m_triangleColorSelector->realColor()));
     painter.drawPath(fgColor);
 
-
     // create an ellipse for the background that is slightly
     // smaller than the clipping mask. This will prevent aliasing
     QPainterPath backgroundContainer;
@@ -293,12 +292,11 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 
         path = pathFromPresetIndex(pos);
 
-        if(pos < images.size())
-        {
+        if (pos < images.size()) {
             painter.setClipPath(path);
 
             QRect bounds = path.boundingRect().toAlignedRect();
-            painter.drawImage(bounds.topLeft() , images.at(pos).scaled(bounds.size() , Qt::KeepAspectRatioByExpanding));
+            painter.drawImage(bounds.topLeft() , images.at(pos).scaled(bounds.size() , Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation));
         }
         else {
             painter.fillPath(path, palette().brush(QPalette::Window));

@@ -4,15 +4,15 @@
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either 
+  License as published by the Free Software Foundation; either
   version 2.1 of the License, or (at your option) any later version.
-  
+
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public 
+  You should have received a copy of the GNU Lesser General Public
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
@@ -72,9 +72,8 @@ void EmfViewer::loadFile( const QString &fileName )
     parser.load( QString( fileName ) );
 
     QPixmap pixmap = QPixmap::fromImage( image );
-    m_label->setPixmap( pixmap.scaled( m_size, Qt::KeepAspectRatio, 
-                                       Qt::SmoothTransformation ) );
-    
+    m_label->setPixmap( pixmap.scaled(m_size, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
     m_label->show();
 
 

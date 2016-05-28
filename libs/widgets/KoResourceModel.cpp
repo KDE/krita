@@ -117,7 +117,7 @@ QVariant KoResourceModel::data( const QModelIndex &index, int role ) const
                 int thumbW = static_cast<int>( imageSize.width() * scale );
                 int thumbH = static_cast<int>( imageSize.height() * scale );
 
-                return QVariant(resource->image().scaled( thumbW, thumbH, Qt::IgnoreAspectRatio ));
+                return QVariant(resource->image().scaled( thumbW, thumbH, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
             }
             else
                 return QVariant(resource->image());

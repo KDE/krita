@@ -159,7 +159,6 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     setApplicationVersion(version);
     setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
 
-    qDebug() << "Current Style" << style()->objectName();
     QStringList styles = QStringList() << "fusion" << "plastique";
     if (!styles.contains(style()->objectName().toLower())) {
         Q_FOREACH (const QString & style, styles) {
@@ -339,8 +338,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
     const bool exportAs = args.exportAs();
     const bool exportAsPdf = args.exportAsPdf();
     const QString exportFileName = args.exportFileName();
-
-    qDebug() << "print" << print << "exportAs" << exportAs << "exportAsPdf" << exportAsPdf << "exportFileName" << exportFileName;
 
     m_batchRun = (print || exportAs || exportAsPdf || !exportFileName.isEmpty());
     // print & exportAsPdf do user interaction ATM

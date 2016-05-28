@@ -95,7 +95,7 @@ KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoCo
     , m_displayRenderer(displayRenderer)
     , m_colorChangeCompressor(new KisSignalCompressor(50, KisSignalCompressor::POSTPONE))
 {
-    
+
     const int borderWidth = 3;
     m_triangleColorSelector  = new PopupColorTriangle(displayRenderer, this);
     m_triangleColorSelector->move(widgetSize/2-colorInnerRadius+borderWidth, widgetSize/2-colorInnerRadius+borderWidth);
@@ -258,6 +258,8 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
+    painter.setRenderHint(QPainter::SmoothPixmapTransform);
+
     painter.translate(width() / 2, height() / 2);
 
     //painting background color
@@ -281,10 +283,6 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     painter.fillPath(backgroundContainer,palette().brush(QPalette::Window));
     painter.drawPath(backgroundContainer);
 
-
-
-
-
     //painting favorite brushes
     QList<QImage> images(m_resourceManager->favoritePresetImages());
 
@@ -294,7 +292,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
         painter.save();
 
         path = pathFromPresetIndex(pos);
-        
+
         if(pos < images.size())
         {
             painter.setClipPath(path);
@@ -303,13 +301,13 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
             painter.drawImage(bounds.topLeft() , images.at(pos).scaled(bounds.size() , Qt::KeepAspectRatioByExpanding));
         }
         else {
-            painter.fillPath(path, palette().brush(QPalette::Window));     
+            painter.fillPath(path, palette().brush(QPalette::Window));
         }
         QPen pen = painter.pen();
         pen.setWidth(3);
         painter.setPen(pen);
         painter.drawPath(path);
-        
+
         painter.restore();
     }
     if (hoveredPreset() > -1) {
@@ -388,7 +386,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 
     QPixmap settingIcon = KisIconUtils::loadIcon("configure").pixmap(QSize(22,22));
     painter.drawPixmap(side / 2 - 40 + 9, side / 2 - 40 + 9, settingIcon);
-    
+
 }
 
 QPainterPath KisPopupPalette::drawDonutPathFull(int x, int y, int inner_radius, int outer_radius)
@@ -461,7 +459,7 @@ void KisPopupPalette::mousePressEvent(QMouseEvent* event)
         int side = qMin(width(), height());
         QPainterPath settingCircle;
         settingCircle.addEllipse(width() / 2 + side / 2 - 40, height() / 2 + side / 2 - 40, 40, 40);
-        if (settingCircle.contains(point)) {                
+        if (settingCircle.contains(point)) {
             KisPaintOpPresetResourceServer* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
             QStringList tags = rServer->tagNamesList();
             qSort(tags);
@@ -476,7 +474,7 @@ void KisPopupPalette::mousePressEvent(QMouseEvent* event)
                     m_resourceManager->setCurrentTag(action->text());
                 }
             } else {
-                QWhatsThis::showText(event->globalPos(), 
+                QWhatsThis::showText(event->globalPos(),
                                         i18n("There are no tags available to show in this popup. To add presets, you need to tag them and then select the tag here."));
             }
         }
@@ -550,7 +548,7 @@ QPainterPath KisPopupPalette::pathFromPresetIndex(int index)
     qreal angle = index * angleLength;
 
     qreal r = colorOuterRadius * sin(angleLength/2) / ( 1 - sin(angleLength/2));
-    
+
     QPainterPath path;
     path.addEllipse((colorOuterRadius+r) * cos(angle)-r, -(colorOuterRadius+r) * sin(angle)-r, 2*r, 2*r);
     path.closeSubpath();

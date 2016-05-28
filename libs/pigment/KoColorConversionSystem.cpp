@@ -437,7 +437,7 @@ inline KoColorConversionSystem::Path KoColorConversionSystem::findBestPathImpl2(
         if (v->dstNode->isInitialized) {
             Path p;
             p.appendVertex(v);
-            Node* endNode = p.endNode();
+            Node* endNode = v->dstNode;
             if (endNode == dstNode) {
                 Q_ASSERT(pQC.isGoodPath(p));  // <- it's a direct link, it has to be a good path
                 p.isGood = true;
@@ -462,7 +462,7 @@ inline KoColorConversionSystem::Path KoColorConversionSystem::findBestPathImpl2(
                 if (v->dstNode->isInitialized && !p.contains(v->dstNode)) {
                     Path newP = p;  // Candidate
                     newP.appendVertex(v);
-                    Node* newEndNode = newP.endNode();
+                    Node* newEndNode = v->dstNode;
                     if (newEndNode == dstNode) {
                         if (pQC.isGoodPath(newP)) { // Victory
                             newP.isGood = true;

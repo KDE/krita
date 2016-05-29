@@ -26,7 +26,6 @@
 #include <QMouseEvent>
 
 #include "kis_types.h"
-#include "KoHistogramProducer.h"
 #include "kis_histogram.h"
 
 #include <kritaui_export.h>
@@ -52,8 +51,6 @@ class KoChannelInfo;
  * listProducers(). Setting a histogram will discard info on the
  * layer, and setting a layer will discard info on the histogram.
  *
- * XXX: make beautiful, for instance by using alpha and a bit of a
- * gradient!
  **/
 class KRITAUI_EXPORT KisHistogramView : public QLabel
 {
@@ -65,35 +62,24 @@ public:
 
     virtual ~KisHistogramView();
 
-    void setPaintDevice(KisPaintDeviceSP dev, const QRect &bounds);
+    void setPaintDevice(KisPaintDeviceSP dev, KoHistogramProducer *producer, const QRect &bounds);
 
-    void setHistogram(KisHistogramSP histogram);
+    //void setHistogram(KisHistogramSP histogram);
 
     void setView(double from, double size);
 
     KoHistogramProducer *currentProducer();
 
-    QStringList channelStrings();
-
-    /** Lists all producers currently available */
-    QList<QString> producers();
-
-    /** Sets the currently displayed channels to channels of the producer with producerID as ID*/
-    void setCurrentChannels(const KoID& producerID, QList<KoChannelInfo *> channels);
-
-    /** Be careful, producer will be modified */
-    void setCurrentChannels(KoHistogramProducer *producer, QList<KoChannelInfo *> channels);
-
     bool hasColor();
 
     void setColor(bool set);
 
+    void setProducer(KoHistogramProducer* producer);
+    void setChannels(QList<KoChannelInfo*> & channels);
+    virtual void resizeEvent(QResizeEvent * event);
+
 public Q_SLOTS:
-
-    void setActiveChannel(int channel);
-
     void setHistogramType(enumHistogramType type);
-
     void updateHistogram();
 
 Q_SIGNALS:
@@ -106,28 +92,16 @@ protected:
 
 private:
 
-    void setChannels();
+    void setChannels(void);
 
     void addProducerChannels(KoHistogramProducer *producer);
 
-    typedef struct {
-        bool isProducer;
-        KoHistogramProducer *producer;
-        KoChannelInfo * channel;
-    } ComboboxInfo;
-
-    QVector<ComboboxInfo> m_comboInfo;
     QPixmap m_pix;
     KisHistogramSP m_histogram;
-    const KoColorSpace* m_cs;
     KoHistogramProducer *m_currentProducer;
-    QList<KoChannelInfo *> m_channels;
-    // Maps the channels in m_channels to a real channel offset in the producer->channels()
     QVector<qint32> m_channelToOffset;
-    QStringList m_channelStrings;
+    QList<KoChannelInfo *> m_channels;
     bool m_color;
-    double m_from;
-    double m_width;
 };
 
 #endif // _KIS_HISTOGRAM_VIEW_

@@ -28,6 +28,7 @@
 #include <kis_debug.h>
 
 #include "KoChannelInfo.h"
+#include "KoBasicHistogramProducers.h"
 #include "kis_histogram_view.h"
 
 #include "kis_histogram.h"
@@ -49,17 +50,145 @@ KisHistogramWidget::~KisHistogramWidget()
 {
 }
 
+QList<QString> KisHistogramWidget::producers()
+{
+    if (m_cs)
+        return KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(m_cs);
+    return QList<QString>();
+}
+
+
+void KisHistogramWidget::setChannels(void)
+{
+    m_comboInfo.clear();
+    m_channelStrings.clear();
+    m_channels.clear();
+    m_channelToOffset.clear();
+
+    QList<QString> list = KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(m_cs);
+
+    if (list.count() == 0) {
+        // XXX: No native histogram for this colorspace. Using converted RGB. We should have a warning
+        KoGenericRGBHistogramProducerFactory f;
+        addProducerChannels(f.generate());
+    } else {
+        Q_FOREACH (const QString &id, list) {
+            KoHistogramProducer *producer = KoHistogramProducerFactoryRegistry::instance()->value(id)->generate();
+            if (producer) {
+                addProducerChannels(producer);
+            }
+        }
+    }
+
+    m_currentProducer = m_comboInfo.at(0).producer;
+    m_color = false;
+    // The currently displayed channel and its offset
+    m_channels.append(m_comboInfo.at(1).channel);
+    m_channelToOffset.append(0);
+}
+
+void KisHistogramWidget::setCurrentChannels(const KoID& producerID, QList<KoChannelInfo *> channels)
+{
+    setCurrentChannels(
+        KoHistogramProducerFactoryRegistry::instance()->value(producerID.id())->generate(),
+        channels);
+}
+
+void KisHistogramWidget::setCurrentChannels(KoHistogramProducer *producer, QList<KoChannelInfo *> channels)
+{
+    m_currentProducer = producer;
+    m_currentProducer->setView(m_from, m_width);
+    m_histogramView->setProducer(m_currentProducer);
+    //m_histogram->setChannel(0); // Set a default channel, just being nice
+
+    m_channels.clear();
+    m_channelToOffset.clear();
+
+    if (channels.count() == 0) {
+        m_histogramView->updateHistogram();
+        return;
+    }
+
+    QList<KoChannelInfo *> producerChannels = m_currentProducer->channels();
+
+    for (int i = 0; i < channels.count(); i++) {
+        // Also makes sure the channel is actually in the producer's list
+        for (int j = 0; j < producerChannels.count(); j++) {
+            if (channels.at(i)->name() == producerChannels.at(j)->name()) {
+                m_channelToOffset.append(m_channels.count()); // The first we append maps to 0
+                m_channels.append(channels.at(i));
+            }
+        }
+    }
+    m_histogramView->setChannels(m_channels);
+    m_histogramView->updateHistogram();
+}
+
+void KisHistogramWidget::addProducerChannels(KoHistogramProducer *producer)
+{
+    if (!producer) return;
+
+    ComboboxInfo info;
+    info.isProducer = true;
+    info.producer = producer;
+    m_comboInfo.append(info);
+    m_channelStrings.append(producer->id().name());
+}
+
+void KisHistogramWidget::setActiveChannel(int channel)
+{
+    ComboboxInfo info = m_comboInfo.at(channel);
+    if (info.producer != m_currentProducer) {
+        m_currentProducer = info.producer;
+        m_currentProducer->setView(m_from, m_width);
+        m_histogramView->setProducer(m_currentProducer);
+    }
+
+    m_channels.clear();
+    m_channelToOffset.clear();
+
+    if (info.isProducer) {
+        m_color = true;
+        m_channels = m_currentProducer->channels();
+        for (int i = 0; i < m_channels.count(); i++)
+            m_channelToOffset.append(i);
+        //setChannel(0); // Set a default channel, just being nice
+    } else {
+        m_color = false;
+        QList<KoChannelInfo *> channels = m_currentProducer->channels();
+        for (int i = 0; i < channels.count(); i++) {
+            KoChannelInfo* channel = channels.at(i);
+            if (channel->name() == info.channel->name()) {
+                m_channels.append(channel);
+                m_channelToOffset.append(i);
+                break;
+            }
+        }
+    }
+    updateEnabled();
+    m_histogramView->updateHistogram();
+}
+
+QStringList KisHistogramWidget::channelStrings()
+{
+    return m_channelStrings;
+}
+
 void KisHistogramWidget::setPaintDevice(KisPaintDeviceSP dev, const QRect &bounds)
 {
-    grpType->disconnect(this);
+    radioLinear->disconnect(this);
+    radioLog->disconnect(this);
     cmbChannel->disconnect(this);
 
-    m_histogramView->setPaintDevice(dev, bounds);
+    m_cs = dev->colorSpace();
+
+    setChannels(); // Sets m_currentProducer to the first in the list
+    m_histogramView->setPaintDevice(dev, m_currentProducer, bounds);
     setActiveChannel(0); // So we have the colored one if there are colors
 
     // The channels
     cmbChannel->clear();
-    cmbChannel->addItems(m_histogramView->channelStrings());
+    cmbChannel->addItems(this->channelStrings());
     cmbChannel->setCurrentIndex(0);
 
     // View display
@@ -79,11 +208,6 @@ void KisHistogramWidget::setPaintDevice(KisPaintDeviceSP dev, const QRect &bound
     connect(currentView, SIGNAL(valueChanged(int)), this, SLOT(slide(int)));
 }
 
-void KisHistogramWidget::setActiveChannel(int channel)
-{
-    m_histogramView->setActiveChannel(channel);
-    updateEnabled();
-}
 
 void KisHistogramWidget::slotTypeSwitched(void)
 {

@@ -61,7 +61,7 @@ void GrayAU16ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) con
     p[1] = KoColorSpaceMathsTraits<quint16>::max;
 }
 
-void GrayAU16ColorSpace::toHSY(QVector <double> channelValues, qreal *, qreal *, qreal *luma) const
+void GrayAU16ColorSpace::toHSY(const QVector<double> &channelValues, qreal *, qreal *, qreal *luma) const
 {
     *luma = channelValues[0];
 }
@@ -74,7 +74,7 @@ QVector <double> GrayAU16ColorSpace::fromHSY(qreal *, qreal *, qreal *luma) cons
     return channelValues;
 }
 
-void GrayAU16ColorSpace::toYUV(QVector <double> channelValues, qreal *y, qreal *, qreal *) const
+void GrayAU16ColorSpace::toYUV(const QVector<double> &channelValues, qreal *y, qreal *, qreal *) const
 {
     *y = channelValues[0];
 }

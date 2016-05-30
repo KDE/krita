@@ -80,7 +80,7 @@ KoColorConversionSystem::Node* KoColorConversionSystem::insertEngine(const KoCol
 void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
 {
     dbgPigment << "Inserting color space " << csf->name() << " (" << csf->id() << ") Model: " << csf->colorModelId() << " Depth: " << csf->colorDepthId() << " into the CCS";
-    QList<const KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor(csf);
+    const QList<const KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor(csf);
     QString modelId = csf->colorModelId().id();
     QString depthId = csf->colorDepthId().id();
     if (profiles.isEmpty()) { // There is no profile for this CS, create a node without profile name if the color engine isn't icc-based
@@ -112,7 +112,7 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
         }
     }
     // Construct a link for "custom" transformation
-    QList<KoColorConversionTransformationFactory*> cctfs = csf->colorConversionLinks();
+    const QList<KoColorConversionTransformationFactory*> cctfs = csf->colorConversionLinks();
     Q_FOREACH (KoColorConversionTransformationFactory* cctf, cctfs) {
         Node* srcNode = nodeFor(cctf->srcColorModelId(), cctf->srcColorDepthId(), cctf->srcProfile());
         Q_ASSERT(srcNode);
@@ -150,7 +150,7 @@ void KoColorConversionSystem::insertColorProfile(const KoColorProfile* _profile)
             Q_ASSERT(engineNode);
             connectToEngine(n, engineNode);
         }
-        QList<KoColorConversionTransformationFactory*> cctfs = factory->colorConversionLinks();
+        const QList<KoColorConversionTransformationFactory*> cctfs = factory->colorConversionLinks();
         Q_FOREACH (KoColorConversionTransformationFactory* cctf, cctfs) {
             Node* srcNode = nodeFor(cctf->srcColorModelId(), cctf->srcColorDepthId(), cctf->srcProfile());
             Q_ASSERT(srcNode);
@@ -261,7 +261,7 @@ KoColorConversionTransformation* KoColorConversionSystem::createColorConverter(c
     return transfo;
 }
 
-void KoColorConversionSystem::createColorConverters(const KoColorSpace* colorSpace, QList< QPair<KoID, KoID> >& possibilities, KoColorConversionTransformation*& fromCS, KoColorConversionTransformation*& toCS) const
+void KoColorConversionSystem::createColorConverters(const KoColorSpace* colorSpace, const QList< QPair<KoID, KoID> >& possibilities, KoColorConversionTransformation*& fromCS, KoColorConversionTransformation*& toCS) const
 {
     // TODO This function currently only select the best conversion only based on the transformation
     // from colorSpace to one of the color spaces in the list, but not the other way around
@@ -304,7 +304,7 @@ KoColorConversionTransformation* KoColorConversionSystem::createTransformationFr
 
     KoColorConversionTransformation* transfo;
 
-    QList< Path::node2factory > pathOfNode = path.compressedPath();
+    const QList< Path::node2factory > pathOfNode = path.compressedPath();
 
     if (pathOfNode.size() == 2) { // Direct connection
         transfo = pathOfNode[1].second->createColorTransformation(srcColorSpace, dstColorSpace, renderingIntent, conversionFlags);

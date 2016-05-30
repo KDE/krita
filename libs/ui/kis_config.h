@@ -470,6 +470,10 @@ public:
     bool convertToImageColorspaceOnImport(bool defaultValue = false) const;
     void setConvertToImageColorspaceOnImport(bool value);
 
+    int stabilizerSampleSize(bool defaultValue = false) const;
+    void setStabilizerSampleSize(int value);
+
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

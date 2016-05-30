@@ -1104,7 +1104,7 @@ void KisConfig::setHideStatusbarFullscreen(const bool value) const
 
 bool KisConfig::hideTitlebarFullscreen(bool defaultValue) const
 {
-#ifdef Q_OS_WINDOWS
+#ifdef Q_OS_WIN
     return false;
 #else
     return (defaultValue ? true : m_cfg.readEntry("hideTitleBarFullscreen", true));
@@ -1654,4 +1654,21 @@ bool KisConfig::convertToImageColorspaceOnImport(bool defaultValue) const
 void KisConfig::setConvertToImageColorspaceOnImport(bool value)
 {
     m_cfg.writeEntry("ConvertToImageColorSpaceOnImport", value);
+}
+
+int KisConfig::stabilizerSampleSize(bool defaultValue) const
+{
+#ifdef Q_OS_WIN
+    const int defaultSampleSize = 50;
+#else
+    const int defaultSampleSize = 15;
+#endif
+
+    return defaultValue ?
+        defaultSampleSize : m_cfg.readEntry("stabilizerSampleSize", defaultSampleSize);
+}
+
+void KisConfig::setStabilizerSampleSize(int value)
+{
+    m_cfg.writeEntry("stabilizerSampleSize", value);
 }

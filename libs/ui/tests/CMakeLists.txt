@@ -253,3 +253,9 @@ target_link_libraries(KisAnimationFrameCacheTest kritaui kritaimage ${QT_QTTEST_
 set(ResourceBundleTest_SRCS ResourceBundleTest.cpp)
 kde4_add_broken_unit_test(ResourceBundleTest TESTNAME krita-resourcemanager-ResourceBundleTest ${ResourceBundleTest_SRCS})
 target_link_libraries(ResourceBundleTest kritaui kritalibbrush kritalibpaintop Qt5::Test )
+
+########### next target ###############
+
+set(kis_stabilized_events_sampler_test_SRCS kis_stabilized_events_sampler_test.cpp)
+kde4_add_unit_test(KisStabilizedEventsSamplerTest TESTNAME krita-ui-StabilizedEventsSamplerTest ${kis_stabilized_events_sampler_test_SRCS})
+target_link_libraries(KisStabilizedEventsSamplerTest kritaui Qt5::Test)

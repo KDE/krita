@@ -182,6 +182,7 @@ set(kritaui_LIB_SRCS
     tool/kis_tool_freehand.cc
     tool/kis_speed_smoother.cpp
     tool/kis_painting_information_builder.cpp
+    tool/kis_stabilized_events_sampler.cpp
     tool/kis_tool_freehand_helper.cpp
     tool/kis_tool_multihand_helper.cpp
     tool/kis_figure_painting_tool_helper.cpp

@@ -1118,6 +1118,8 @@ bool KisDocument::openUrl(const QUrl &_url, KisDocument::OpenUrlFlags flags)
         QString file = url.toLocalFile();
         QString asf = autoSaveFile(file);
         if (QFile::exists(asf)) {
+            KisApplication *kisApp = static_cast<KisApplication*>(qApp);
+            kisApp->hideSplashScreen();
             //dbgUI <<"asf=" << asf;
             // ## TODO compare timestamps ?
             int res = QMessageBox::warning(0,

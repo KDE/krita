@@ -178,8 +178,6 @@ public:
 
     void testingInitSelection(const QRect &rect, KisLayerSP parentLayer);
 
-    void enableAnimation();
-
 protected:
     /**
      * Apply the effect the projection using the mask as a selection.
@@ -190,6 +188,8 @@ protected:
                                KisPaintDeviceSP &dst,
                                const QRect & rc,
                                PositionToFilthy maskPos) const;
+
+    KisKeyframeChannel *requestKeyframeChannel(const QString &id);
 
 private:
     friend class KisMaskProjectionPlane;

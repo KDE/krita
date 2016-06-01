@@ -360,17 +360,17 @@ void KisMask::testingInitSelection(const QRect &rect, KisLayerSP parentLayer)
     m_d->selection->setParentNode(this);
 }
 
-void KisMask::enableAnimation()
+KisKeyframeChannel *KisMask::requestKeyframeChannel(const QString &id)
 {
-    KisPaintDeviceSP device = paintDevice();
-
-    if (device) {
-        KisRasterKeyframeChannel *contentChannel = device->createKeyframeChannel(KisKeyframeChannel::Content);
-        addKeyframeChannel(contentChannel);
-
-        contentChannel->setFilenameSuffix(".pixelselection");
-
-        KisNode::enableAnimation();
+    if (id == KisKeyframeChannel::Content.id()) {
+        KisPaintDeviceSP device = paintDevice();
+        if (device) {
+            KisRasterKeyframeChannel *contentChannel = device->createKeyframeChannel(KisKeyframeChannel::Content);
+            contentChannel->setFilenameSuffix(".pixelselection");
+            return contentChannel;
+       }
     }
+
+    return KisNode::requestKeyframeChannel(id);
 }
 

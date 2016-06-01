@@ -651,7 +651,7 @@ void KisImageTest::testMergeDownMultipleFrames()
     {
         KisLayerSP l = p.layer5;
         l->enableAnimation();
-        KisKeyframeChannel *channel = l->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        KisKeyframeChannel *channel = l->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
         channel->addKeyframe(10);
         channel->addKeyframe(20);
         channel->addKeyframe(30);

@@ -252,7 +252,12 @@ KisKeyframeSP KisKeyframeChannel::keyframeAt(int time) const
 
 KisKeyframeSP KisKeyframeChannel::activeKeyframeAt(int time) const
 {
-    return activeKeyIterator(time).value();
+    KeyframesMap::const_iterator i = activeKeyIterator(time);
+    if (i != m_d->keys.constEnd()) {
+        return i.value();
+    }
+
+    return KisKeyframeSP();
 }
 
 KisKeyframeSP KisKeyframeChannel::currentlyActiveKeyframe() const
@@ -267,19 +272,19 @@ KisKeyframeSP KisKeyframeChannel::firstKeyframe() const
 
 KisKeyframeSP KisKeyframeChannel::nextKeyframe(KisKeyframeSP keyframe) const
 {
-    KeyframesMap::iterator i = m_d->keys.find(keyframe->time());
-    if (i == m_d->keys.end()) return KisKeyframeSP(0);
+    KeyframesMap::const_iterator i = m_d->keys.constFind(keyframe->time());
+    if (i == m_d->keys.constEnd()) return KisKeyframeSP(0);
 
     i++;
 
-    if (i == m_d->keys.end()) return KisKeyframeSP(0);
+    if (i == m_d->keys.constEnd()) return KisKeyframeSP(0);
     return i.value();
 }
 
 KisKeyframeSP KisKeyframeChannel::previousKeyframe(KisKeyframeSP keyframe) const
 {
-    KeyframesMap::iterator i = m_d->keys.find(keyframe->time());
-    if (i == m_d->keys.begin() || i == m_d->keys.end()) return KisKeyframeSP(0);
+    KeyframesMap::const_iterator i = m_d->keys.constFind(keyframe->time());
+    if (i == m_d->keys.constBegin() || i == m_d->keys.constEnd()) return KisKeyframeSP(0);
     i--;
 
     return i.value();
@@ -332,15 +337,17 @@ KisTimeRange KisKeyframeChannel::identicalFrames(int time) const
     if (m_d->keys.isEmpty()) return KisTimeRange::infinite(0);
 
     KeyframesMap::const_iterator active = activeKeyIterator(time);
-    KeyframesMap::const_iterator next = active + 1;
+    KeyframesMap::const_iterator next;
 
     int from;
 
-    if (active == m_d->keys.constBegin()) {
-        // First key affects even the frames before it
+    if (active == m_d->keys.constEnd()) {
+        // No active keyframe, ie. time is before the first keyframe
         from = 0;
+        next = m_d->keys.constBegin();
     } else {
         from = active.key();
+        next = active + 1;
     }
 
     if (next == m_d->keys.constEnd()) {
@@ -502,9 +509,8 @@ KisKeyframeChannel::activeKeyIterator(int time) const
 {
     KeyframesMap::const_iterator i = const_cast<const KeyframesMap*>(&m_d->keys)->upperBound(time);
 
-    if (i != m_d->keys.constBegin()) i--;
-
-    return i;
+    if (i == m_d->keys.constBegin()) return m_d->keys.constEnd();
+    return --i;
 }
 
 void KisKeyframeChannel::requestUpdate(const KisTimeRange &range, const QRect &rect)

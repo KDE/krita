@@ -87,8 +87,6 @@ public:
     void setDirty();
     void setDirty(const QRect & rect);
 
-    void enableAnimation();
-
 public:
 
     /**
@@ -189,6 +187,8 @@ protected:
      * Must be called only once in the child's constructor
      */
     void setUseSelectionInProjection(bool value) const;
+
+    KisKeyframeChannel *requestKeyframeChannel(const QString &id);
 
 public Q_SLOTS:
 

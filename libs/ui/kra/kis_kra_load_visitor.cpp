@@ -605,7 +605,7 @@ void KisKraLoadVisitor::loadNodeKeyframes(KisNode *node)
     for (QDomElement child = root.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
         if (child.nodeName().toUpper() == "CHANNEL") {
             QString id = child.attribute("name");
-            KisKeyframeChannel *channel = node->getKeyframeChannel(id);
+            KisKeyframeChannel *channel = node->getKeyframeChannel(id, true);
 
             if (!channel) {
                 m_errorMessages << i18n("unknown keyframe channel type: %1 in %2", id, location);

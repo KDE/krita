@@ -339,9 +339,26 @@ QList<KisKeyframeChannel*> KisBaseNode::keyframeChannels() const
 
 KisKeyframeChannel * KisBaseNode::getKeyframeChannel(const QString &id) const
 {
-    QMap<QString, KisKeyframeChannel*>::iterator i = m_d->keyframeChannels.find(id);
-    if (i == m_d->keyframeChannels.end()) return 0;
+    QMap<QString, KisKeyframeChannel*>::const_iterator i = m_d->keyframeChannels.constFind(id);
+    if (i == m_d->keyframeChannels.constEnd()) {
+        return 0;
+    }
     return i.value();
+}
+
+KisKeyframeChannel * KisBaseNode::getKeyframeChannel(const QString &id, bool create)
+{
+    KisKeyframeChannel *channel = getKeyframeChannel(id);
+
+    if (!channel && create) {
+        channel = requestKeyframeChannel(id);
+
+        if (channel) {
+            addKeyframeChannel(channel);
+        }
+    }
+
+    return channel;
 }
 
 bool KisBaseNode::isAnimated() const
@@ -371,4 +388,9 @@ void KisBaseNode::setUseInTimeline(bool value)
 void KisBaseNode::addKeyframeChannel(KisKeyframeChannel *channel)
 {
     m_d->keyframeChannels.insert(channel->id(), channel);
+}
+
+KisKeyframeChannel *KisBaseNode::requestKeyframeChannel(const QString &id)
+{
+    return 0;
 }

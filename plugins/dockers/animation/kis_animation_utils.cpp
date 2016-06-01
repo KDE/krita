@@ -52,7 +52,7 @@ namespace KisAnimationUtils {
         if (!content) {
             node->enableAnimation();
             content =
-                node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+                node->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
             if (!content) return false;
 
             newContent = true;

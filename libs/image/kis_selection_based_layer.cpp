@@ -242,14 +242,15 @@ void KisSelectionBasedLayer::setDirty(const QRect & rect)
     KisLayer::setDirty(rect);
 }
 
-void KisSelectionBasedLayer::enableAnimation()
+KisKeyframeChannel *KisSelectionBasedLayer::requestKeyframeChannel(const QString &id)
 {
-    KisRasterKeyframeChannel * contentChannel = m_d->selection->pixelSelection()->createKeyframeChannel(KisKeyframeChannel::Content);
-    addKeyframeChannel(contentChannel);
+    if (id == KisKeyframeChannel::Content.id()) {
+        KisRasterKeyframeChannel *contentChannel = m_d->selection->pixelSelection()->createKeyframeChannel(KisKeyframeChannel::Content);
+        contentChannel->setFilenameSuffix(".pixelselection");
+        return contentChannel;
+    }
 
-    contentChannel->setFilenameSuffix(".pixelselection");
-
-    KisLayer::enableAnimation();
+    return KisLayer::requestKeyframeChannel(id);
 }
 
 void KisSelectionBasedLayer::setDirty()

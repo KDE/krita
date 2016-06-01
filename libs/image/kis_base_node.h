@@ -479,9 +479,13 @@ public:
 
     /**
      * Get the keyframe channel with given id.
+     * If the channel does not yet exist and the node supports the requested
+     * channel, it will be created if create is true.
      * @param id internal name for channel
+     * @param create attempt to create the channel if it does not exist yet
      * @return keyframe channel with the id, or null if not found
      */
+    KisKeyframeChannel *getKeyframeChannel(const QString &id, bool create);
     KisKeyframeChannel *getKeyframeChannel(const QString &id) const;
 
     bool useInTimeline() const;
@@ -531,6 +535,14 @@ protected:
      *          the object coincide with the lifetime of the node.
      */
     virtual void addKeyframeChannel(KisKeyframeChannel* channel);
+
+    /**
+     * Attempt to create the requested channel. Used internally by getKeyframeChannel.
+     * Subclasses should implement this method to catch any new channel types they support.
+     * @param id channel to create
+     * @return newly created channel or null
+     */
+    virtual KisKeyframeChannel * requestKeyframeChannel(const QString &id);
 
 Q_SIGNALS:
 

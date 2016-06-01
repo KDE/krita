@@ -83,6 +83,10 @@ void KisCircleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
     d->yfadecoef = (verticalFade() == 0)   ? 1 : (2.0 / (verticalFade() * effectiveSrcHeight()));
     d->transformedFadeX = KisMaskGenerator::softness() * d->xfadecoef;
     d->transformedFadeY = KisMaskGenerator::softness() * d->yfadecoef;
+
+    d->noFading = !d->copyOfAntialiasEdges &&
+        qFuzzyCompare(d->xcoef, d->transformedFadeX) &&
+        qFuzzyCompare(d->ycoef, d->transformedFadeY);
 }
 
 KisCircleMaskGenerator::~KisCircleMaskGenerator()

@@ -26,9 +26,10 @@ class KisMaskGeneratorBenchmark : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void benchmarkCircle();
-    void benchmarkSIMD();
+    void benchmarkSIMD_SharpBrush();
+    void benchmarkSIMD_FadedBrush();
     void benchmarkSquare();
-    
+
 };
 
 #endif

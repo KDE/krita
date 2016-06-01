@@ -24,6 +24,7 @@
 #include <QVector>
 #include <QStringList>
 #include <QMouseEvent>
+#include <QSharedPointer>
 
 #include "kis_types.h"
 #include "kis_histogram.h"
@@ -64,26 +65,22 @@ public:
 
     void setPaintDevice(KisPaintDeviceSP dev, KoHistogramProducer *producer, const QRect &bounds);
 
-    //void setHistogram(KisHistogramSP histogram);
-
     void setView(double from, double size);
 
     KoHistogramProducer *currentProducer();
 
     bool hasColor();
-
     void setColor(bool set);
-
     void setProducer(KoHistogramProducer* producer);
     void setChannels(QList<KoChannelInfo*> & channels);
-    virtual void resizeEvent(QResizeEvent * event);
+    virtual void paintEvent(QPaintEvent* event);
+    virtual void updateHistogramCalculation();
+
 
 public Q_SLOTS:
-    void setHistogramType(enumHistogramType type);
-    void updateHistogram();
+    virtual void setHistogramType(enumHistogramType type);
 
 Q_SIGNALS:
-
     void rightClicked(const QPoint& pos);
 
 protected:
@@ -96,12 +93,13 @@ private:
 
     void addProducerChannels(KoHistogramProducer *producer);
 
-    QPixmap m_pix;
     KisHistogramSP m_histogram;
+    KisPaintDeviceSP m_currentDev;
+    QRect m_currentBounds;
     KoHistogramProducer *m_currentProducer;
-    QVector<qint32> m_channelToOffset;
     QList<KoChannelInfo *> m_channels;
     bool m_color;
+    enumHistogramType m_histogram_type;
 };
 
 #endif // _KIS_HISTOGRAM_VIEW_

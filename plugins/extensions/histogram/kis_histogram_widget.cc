@@ -105,7 +105,6 @@ void KisHistogramWidget::setCurrentChannels(KoHistogramProducer *producer, QList
     m_channelToOffset.clear();
 
     if (channels.count() == 0) {
-        m_histogramView->updateHistogram();
         return;
     }
 
@@ -121,7 +120,6 @@ void KisHistogramWidget::setCurrentChannels(KoHistogramProducer *producer, QList
         }
     }
     m_histogramView->setChannels(m_channels);
-    m_histogramView->updateHistogram();
 }
 
 void KisHistogramWidget::addProducerChannels(KoHistogramProducer *producer)
@@ -166,7 +164,6 @@ void KisHistogramWidget::setActiveChannel(int channel)
         }
     }
     updateEnabled();
-    m_histogramView->updateHistogram();
 }
 
 QStringList KisHistogramWidget::channelStrings()

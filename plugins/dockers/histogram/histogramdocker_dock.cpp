@@ -29,7 +29,7 @@
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_signal_compressor.h"
-
+#include "kis_histogram_view.h"
 
 HistogramDockerDock::HistogramDockerDock( )
     : QDockWidget(i18n("Histogram"))
@@ -38,12 +38,18 @@ HistogramDockerDock::HistogramDockerDock( )
     QWidget *page = new QWidget(this);
     m_layout = new QVBoxLayout(page);
 
-    m_histogramWidget = new HistogramWidget(this);
+    m_histogramWidget = new KisHistogramView(this);
     m_histogramWidget->setMinimumHeight(50);
-
     m_layout->addWidget(m_histogramWidget, 1);
-
     setWidget(page);
+}
+
+void HistogramDockerDock::setPaintDevice(KisPaintDeviceSP dev, const QRect &bounds )
+{
+    auto cs = m_canvas->image()->colorSpace();
+    QList<QString> producers = KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(cs);
+    KoHistogramProducer *producer = KoHistogramProducerFactoryRegistry::instance()->get(producers.at(0))->generate();
+    m_histogramWidget->setPaintDevice( dev, producer, bounds );
 }
 
 void HistogramDockerDock::setCanvas(KoCanvasBase * canvas)
@@ -57,27 +63,13 @@ void HistogramDockerDock::setCanvas(KoCanvasBase * canvas)
         m_canvas->disconnectCanvasObserver(this);
         m_canvas->image()->disconnect(this);
     }
-
-//    if (m_zoomSlider) {
-//        m_layout->removeWidget(m_zoomSlider);
-//        delete m_zoomSlider;
-//        m_zoomSlider = 0;
-//    }
-
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-
-    m_histogramWidget->setCanvas(canvas);
-//    if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->zoomController() && m_canvas->viewManager()->zoomController()->zoomAction()) {
-//        m_zoomSlider = m_canvas->viewManager()->zoomController()->zoomAction()->createWidget(m_canvas->imageView()->KisView::statusBar());
-//        m_layout->addWidget(m_zoomSlider);
-//    }
 }
 
 void HistogramDockerDock::unsetCanvas()
 {
     setEnabled(false);
     m_canvas = 0;
-    m_histogramWidget->unsetCanvas();
 }
 
 

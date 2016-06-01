@@ -20,10 +20,11 @@
 
 #include <QDockWidget>
 #include <KoCanvasObserverBase.h>
+#include <kis_paint_device.h>
 
 class QVBoxLayout;
 class KisCanvas2;
-class HistogramWidget;
+class KisHistogramView;
 
 class HistogramDockerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
@@ -31,11 +32,12 @@ public:
     HistogramDockerDock();
     QString observerName() { return "HistogramDockerDock"; }
     virtual void setCanvas(KoCanvasBase *canvas);
+    virtual void setPaintDevice(KisPaintDeviceSP dev, const QRect &bounds );
     virtual void unsetCanvas();
 
 private:
     QVBoxLayout *m_layout;
-    HistogramWidget *m_histogramWidget;
+    KisHistogramView *m_histogramWidget;
     //QWidget *m_zoomSlider;
     KisCanvas2 *m_canvas;
 };

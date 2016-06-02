@@ -26,7 +26,7 @@
 #include "kis_paint_device.h"
 #include "kis_layer_properties_icons.h"
 
-#include "kis_keyframe_channel.h"
+#include "kis_scalar_keyframe_channel.h"
 
 struct Q_DECL_HIDDEN KisBaseNode::Private
 {
@@ -41,6 +41,8 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
     QMap<QString, KisKeyframeChannel*> keyframeChannels;
     bool animated;
     bool useInTimeline;
+
+    QScopedPointer<KisScalarKeyframeChannel> opacityChannel;
 
     Private()
         : animated(false)
@@ -114,11 +116,27 @@ KisPaintDeviceSP KisBaseNode::projection() const
 
 quint8 KisBaseNode::opacity() const
 {
+    if (m_d->opacityChannel) {
+        KisKeyframeSP activeKeyframe = m_d->opacityChannel->currentlyActiveKeyframe();
+
+        if (!activeKeyframe.isNull()) {
+            return m_d->opacityChannel->scalarValue(activeKeyframe);
+        }
+    }
+
     return nodeProperties().intProperty("opacity", OPACITY_OPAQUE_U8);
 }
 
 void KisBaseNode::setOpacity(quint8 val)
 {
+    if (m_d->opacityChannel) {
+        KisKeyframeSP activeKeyframe = m_d->opacityChannel->currentlyActiveKeyframe();
+
+        if (activeKeyframe) {
+            m_d->opacityChannel->setScalarValue(activeKeyframe, val);
+        }
+    }
+
     if (opacity() == val) return;
 
     nodeProperties().setProperty("opacity", val);
@@ -392,5 +410,23 @@ void KisBaseNode::addKeyframeChannel(KisKeyframeChannel *channel)
 
 KisKeyframeChannel *KisBaseNode::requestKeyframeChannel(const QString &id)
 {
+    if (id == KisKeyframeChannel::Opacity.id()) {
+        Q_ASSERT(m_d->opacityChannel.isNull());
+
+        KisPaintDeviceSP device = original();
+
+        if (device) {
+            KisScalarKeyframeChannel * channel = new KisScalarKeyframeChannel(
+                KisKeyframeChannel::Opacity,
+                0, 255,
+                device->defaultBounds()
+            );
+
+            m_d->opacityChannel.reset(channel);
+
+            return channel;
+        }
+    }
+
     return 0;
 }

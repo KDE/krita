@@ -39,6 +39,7 @@ public:
     // Standard Keyframe Ids
 
     static const KoID Content;
+    static const KoID Opacity;
 
 public:
     KisKeyframeChannel(const KoID& id, KisDefaultBoundsBaseSP defaultBounds);

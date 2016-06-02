@@ -19,6 +19,7 @@
 #include "kis_scalar_keyframe_channel.h"
 #include "kis_node.h"
 #include "kundo2command.h"
+#include "kis_time_range.h"
 
 #include "kis_global.h"
 
@@ -70,29 +71,40 @@ qreal KisScalarKeyframeChannel::scalarValue(const KisKeyframeSP keyframe) const
 
 struct KisScalarKeyframeChannel::Private::SetValueCommand : public KUndo2Command
 {
-    SetValueCommand(KisScalarKeyframeChannel::Private *d, int index, qreal oldValue, qreal newValue, KUndo2Command *parentCommand)
+    SetValueCommand(KisScalarKeyframeChannel *channel, KisKeyframeSP keyframe, qreal oldValue, qreal newValue, KUndo2Command *parentCommand)
         : KUndo2Command(parentCommand),
-          m_d(d),
-          m_index(index),
+          m_channel(channel),
+          m_keyframe(keyframe),
           m_oldValue(oldValue),
           m_newValue(newValue)
     {
     }
 
     void redo() {
-        m_d->values[m_index] = m_newValue;
+        m_channel->setScalarValueImpl(m_keyframe, m_newValue);
     }
 
     void undo() {
-        m_d->values[m_index] = m_oldValue;
+        m_channel->setScalarValueImpl(m_keyframe, m_oldValue);
     }
 
 private:
-    KisScalarKeyframeChannel::Private *m_d;
-    int m_index;
+    KisScalarKeyframeChannel *m_channel;
+    KisKeyframeSP m_keyframe;
     qreal m_oldValue;
     qreal m_newValue;
 };
+
+void KisScalarKeyframeChannel::setScalarValueImpl(KisKeyframeSP keyframe, qreal value)
+{
+    int index = keyframe->value();
+    m_d->values[index] = value;
+
+    QRect rect = affectedRect(keyframe);
+    KisTimeRange range = affectedFrames(keyframe->time());
+
+    requestUpdate(range, rect);
+}
 
 void KisScalarKeyframeChannel::setScalarValue(KisKeyframeSP keyframe, qreal value, KUndo2Command *parentCommand)
 {
@@ -103,7 +115,7 @@ void KisScalarKeyframeChannel::setScalarValue(KisKeyframeSP keyframe, qreal valu
     }
 
     int index = keyframe->value();
-    KUndo2Command *cmd = new Private::SetValueCommand(m_d.data(), index, m_d->values[index], value, parentCommand);
+    KUndo2Command *cmd = new Private::SetValueCommand(this, keyframe, m_d->values[index], value, parentCommand);
     cmd->redo();
 }
 

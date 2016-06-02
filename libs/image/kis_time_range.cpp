@@ -39,10 +39,9 @@ QDebug operator<<(QDebug dbg, const KisTimeRange &r)
 
 void KisTimeRange::calculateTimeRangeRecursive(const KisNode *node, int time, KisTimeRange &range, bool exclusive)
 {
-    KisKeyframeChannel *channel =
-            node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    const QList<KisKeyframeChannel*> channels = node->keyframeChannels();
 
-    if (channel) {
+    Q_FOREACH (const KisKeyframeChannel *channel, channels) {
         if (exclusive) {
             // Intersection
             range &= channel->affectedFrames(time);

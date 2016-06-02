@@ -45,6 +45,8 @@ protected:
     KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode);
 
 private:
+    void setScalarValueImpl(KisKeyframeSP keyframe, qreal value);
+
     struct Private;
     QScopedPointer<Private> m_d;
 };

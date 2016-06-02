@@ -23,6 +23,10 @@
 #include "kis_global.h"
 #include "kis_base_node.h"
 #include "kis_paint_device.h"
+#include "testutil.h"
+#include "kis_scalar_keyframe_channel.h"
+#include "KoColor.h"
+#include "kis_image_animation_interface.h"
 
 #include <KoProperties.h>
 
@@ -118,6 +122,53 @@ void KisBaseNodeTest::testProperties()
         props.setProperty("blablabla", 12);
         QVERIFY(!node->check(props));
     }
+}
+
+void KisBaseNodeTest::testOpacityKeyframing()
+{
+    TestUtil::MaskParent p;
+
+    KisPaintLayerSP layer2 = new KisPaintLayer(p.image, "paint2", OPACITY_OPAQUE_U8);
+    p.image->addNode(layer2);
+
+    KisPaintDeviceSP dev1 = p.layer->paintDevice();
+    dev1->fill(QRect(0,0,32,32), KoColor(Qt::red, dev1->colorSpace()));
+
+    KisPaintDeviceSP dev2 = layer2->paintDevice();
+    dev2->fill(QRect(0,0,32,32), KoColor(Qt::green, dev2->colorSpace()));
+
+    layer2->setOpacity(192);
+
+    KisKeyframeChannel *channel = layer2->getKeyframeChannel(KisKeyframeChannel::Opacity.id(), true);
+    KisScalarKeyframeChannel *opacityChannel = dynamic_cast<KisScalarKeyframeChannel*>(channel);
+    QVERIFY(opacityChannel);
+
+    KisKeyframeSP key = opacityChannel->addKeyframe(7);
+    opacityChannel->setScalarValue(key, 128);
+
+    key = opacityChannel->addKeyframe(20);
+    opacityChannel->setScalarValue(key, 64);
+
+    p.image->refreshGraph();
+
+    QColor sample;
+    p.image->projection()->pixel(16, 16, &sample);
+    QCOMPARE(sample, QColor(63, 192, 0, 255));
+
+    p.image->animationInterface()->requestTimeSwitchNonGUI(10);
+    p.image->waitForDone();
+    p.image->projection()->pixel(16, 16, &sample);
+    QCOMPARE(sample, QColor(127, 128, 0, 255));
+
+    p.image->animationInterface()->requestTimeSwitchNonGUI(30);
+
+    layer2->setOpacity(32);
+    QCOMPARE(opacityChannel->scalarValue(key), 32.0);
+
+    p.image->waitForDone();
+    p.image->projection()->pixel(16, 16, &sample);
+    QCOMPARE(sample, QColor(223, 32, 0, 255));
+
 }
 
 QTEST_MAIN(KisBaseNodeTest)

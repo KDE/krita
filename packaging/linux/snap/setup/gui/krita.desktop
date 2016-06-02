@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=Krita
+Exec=krita %U
+GenericName=Digital Painting
+MimeType=application/x-krita;image/openraster;application/x-krita-paintoppreset;
+Comment=Pixel-based image manipulation program for the Calligra Suite
+Type=Application
+Icon=${SNAP}/meta/gui/calligrakrita.png
+Categories=Qt;KDE;Graphics;
+X-KDE-NativeMimeType=application/x-krita
+X-KDE-ExtraNativeMimeTypes=
+StartupNotify=true
+X-Krita-Version=28

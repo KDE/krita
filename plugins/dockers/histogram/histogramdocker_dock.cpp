@@ -32,8 +32,9 @@
 #include "kis_histogram_view.h"
 
 HistogramDockerDock::HistogramDockerDock( )
-    : QDockWidget(i18n("Histogram"))
-    , m_canvas(0)
+    : QDockWidget(i18n("Histogram")),
+      m_compressor(new KisSignalCompressor(100, KisSignalCompressor::POSTPONE, this)),
+      m_canvas(0), m_producer(nullptr)
 {
     QWidget *page = new QWidget(this);
     m_layout = new QVBoxLayout(page);
@@ -42,15 +43,9 @@ HistogramDockerDock::HistogramDockerDock( )
     m_histogramWidget->setMinimumHeight(50);
     m_layout->addWidget(m_histogramWidget, 1);
     setWidget(page);
+    connect(m_compressor,SIGNAL(timeout()),SLOT(startUpdateCanvasProjection()));
 }
 
-void HistogramDockerDock::setPaintDevice(KisPaintDeviceSP dev, const QRect &bounds )
-{
-    auto cs = m_canvas->image()->colorSpace();
-    QList<QString> producers = KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(cs);
-    KoHistogramProducer *producer = KoHistogramProducerFactoryRegistry::instance()->get(producers.at(0))->generate();
-    m_histogramWidget->setPaintDevice( dev, producer, bounds );
-}
 
 void HistogramDockerDock::setCanvas(KoCanvasBase * canvas)
 {
@@ -64,6 +59,19 @@ void HistogramDockerDock::setCanvas(KoCanvasBase * canvas)
         m_canvas->image()->disconnect(this);
     }
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+    if (m_canvas && m_canvas->imageView() && m_canvas->imageView()->image() ) {
+
+        QPointer<KisView> view = m_canvas->imageView();
+        KisPaintDeviceSP dev = view->image()->projection();
+        auto cs = m_canvas->image()->colorSpace();
+
+        QList<QString> producers = KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(cs);
+        m_producer = KoHistogramProducerFactoryRegistry::instance()->get(producers.at(0))->generate();
+        m_histogramWidget->setPaintDevice( dev, m_producer, m_canvas->image()->bounds() );
+
+        connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), m_compressor, SLOT(start()), Qt::UniqueConnection);
+        m_compressor->start();
+    }
 }
 
 void HistogramDockerDock::unsetCanvas()
@@ -72,4 +80,8 @@ void HistogramDockerDock::unsetCanvas()
     m_canvas = 0;
 }
 
+void HistogramDockerDock::startUpdateCanvasProjection()
+{
+    m_histogramWidget->startUpdateCanvasProjection();
+}
 

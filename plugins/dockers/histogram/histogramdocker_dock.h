@@ -25,21 +25,27 @@
 class QVBoxLayout;
 class KisCanvas2;
 class KisHistogramView;
+class KisSignalCompressor;
+class KoHistogramProducer;
 
 class HistogramDockerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     HistogramDockerDock();
+
     QString observerName() { return "HistogramDockerDock"; }
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void setPaintDevice(KisPaintDeviceSP dev, const QRect &bounds );
     virtual void unsetCanvas();
+
+public Q_SLOTS:
+    virtual void startUpdateCanvasProjection();
 
 private:
     QVBoxLayout *m_layout;
+    KisSignalCompressor *m_compressor;
     KisHistogramView *m_histogramWidget;
-    //QWidget *m_zoomSlider;
     KisCanvas2 *m_canvas;
+    KoHistogramProducer *m_producer;
 };
 
 

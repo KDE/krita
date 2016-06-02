@@ -41,11 +41,13 @@
 
 #include "kis_global.h"
 #include "kis_layer.h"
-
+#include <kis_signal_compressor.h>
 #include "kis_paint_device.h"
 
 KisHistogramView::KisHistogramView(QWidget *parent, const char *name, Qt::WFlags f)
-        : QLabel(parent, f), m_currentDev(nullptr), m_currentProducer(nullptr)
+        : QLabel(parent, f),
+          m_currentDev(nullptr), m_currentProducer(nullptr),
+          m_histogram_type(LINEAR)
 {
     setObjectName(name);
 }
@@ -60,6 +62,11 @@ KoHistogramProducer *KisHistogramView::currentProducer()
     return m_currentProducer;
 }
 
+void KisHistogramView::startUpdateCanvasProjection()
+{
+    updateHistogramCalculation();
+}
+
 void KisHistogramView::setChannels(QList<KoChannelInfo*> & channels)
 {
     m_channels = channels;
@@ -70,6 +77,9 @@ void KisHistogramView::setProducer(KoHistogramProducer* producer)
 {
     m_currentProducer = producer;
     m_channels = m_currentProducer->channels();
+    if( !m_histogram.isNull() ){
+        m_histogram->setProducer( m_currentProducer );
+    }
     updateHistogramCalculation();
 }
 
@@ -79,6 +89,8 @@ void KisHistogramView::setPaintDevice(KisPaintDeviceSP dev, KoHistogramProducer*
     m_channels = m_currentProducer->channels();
     m_currentDev = dev;
     m_currentBounds = bounds;
+    m_histogram = new KisHistogram(m_currentDev, m_currentBounds, m_currentProducer, m_histogram_type);
+
     updateHistogramCalculation();
 }
 
@@ -113,12 +125,9 @@ void KisHistogramView::setHistogramType(enumHistogramType type)
 
 void KisHistogramView::updateHistogramCalculation()
 {
-    if (!m_currentProducer || m_currentDev.isNull() ) { // Something's very wrong: no producer for this colorspace to update histogram with!
+    if (!m_currentProducer || m_currentDev.isNull() || m_histogram.isNull() ) { // Something's very wrong: not initialized
         return;
     }
-    if( m_histogram.isNull() )
-        m_histogram = new KisHistogram(m_currentDev, m_currentBounds, m_currentProducer, m_histogram_type);
-    m_histogram->setProducer(m_currentProducer);
     m_histogram->updateHistogram();
     update();
 }
@@ -193,7 +202,7 @@ void KisHistogramView::paintEvent(QPaintEvent *event)
                 m_histogram->setChannel(chan);
                 path.moveTo(QPointF(-1,highest));
                 for (qint32 i = 0; i < bins; ++i) {
-                    float v = (m_histogram_type==LINEAR)? highest-int(m_histogram->getValue(i)): highest-std::log2(m_histogram->getValue(i));
+                    float v = (m_histogram_type==LINEAR)? highest-m_histogram->getValue(i): highest-std::log2(m_histogram->getValue(i));
                     path.lineTo(QPointF(i,v));
                 }
                 path.lineTo(QPointF(bins+1,highest));

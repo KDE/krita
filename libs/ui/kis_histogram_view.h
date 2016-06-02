@@ -79,6 +79,7 @@ public:
 
 public Q_SLOTS:
     virtual void setHistogramType(enumHistogramType type);
+    virtual void startUpdateCanvasProjection();
 
 Q_SIGNALS:
     void rightClicked(const QPoint& pos);
@@ -92,7 +93,6 @@ private:
     void setChannels(void);
 
     void addProducerChannels(KoHistogramProducer *producer);
-
     KisHistogramSP m_histogram;
     KisPaintDeviceSP m_currentDev;
     QRect m_currentBounds;

@@ -906,9 +906,42 @@ void QWindowsTabletSupport::tabletUpdateCursor(const int pkCursor)
     // Check tablet name to enable Surface Pro 3 workaround.
 #ifdef UNICODE
     if (!isSurfacePro3) {
-        UINT nameLength = QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEVICES, DVC_NAME, 0);
+        /**
+         * Some really "nice" tablet drivers don't know that trhey are
+         * supposed to return their name length when the buffer is
+         * null and they try to write into it effectively causing a
+         * suicide. So we cannot rely on it :(
+         *
+         * We workaround it by just allocating a big array and hoping
+         * for the best.
+         *
+         * Failing tablets:
+         *   - Adesso Cybertablet M14
+         *   - Peritab-302
+         *   - Trust Tablet TB7300
+         *   - VisTablet Realm Pro
+         *   - Aiptek 14000u (latest driver: v5.03, 2013-10-21)
+         *   - Genius G-Pen F350
+         *   - Genius G-Pen 560 (supported on win7 only)
+         */
+
+        // we cannot use the correct api :(
+        // UINT nameLength = QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEVICES, DVC_NAME, 0);
+
+        // 1024 chars should be enough for everyone! (c)
+        UINT nameLength = 1024;
+
         TCHAR* dvcName = new TCHAR[nameLength + 1];
-        QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEVICES, DVC_NAME, dvcName);
+        memset(dvcName, 0, sizeof(TCHAR) * nameLength);
+        UINT writtenBytes = QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEVICES, DVC_NAME, dvcName);
+
+        if (writtenBytes > sizeof(TCHAR) * nameLength) {
+            qWarning() << "WINTAB WARNING: tablet name is too long!" << writtenBytes;
+
+            // avoid crash when trying to read it
+            dvcName[nameLength - 1] = (TCHAR)0;
+        }
+
         QString qDvcName = QString::fromWCharArray((const wchar_t*)dvcName);
         dbgInput << "DVC_NAME =" << qDvcName;
         // Name changed between older and newer Surface Pro 3 drivers

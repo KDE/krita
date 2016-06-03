@@ -149,7 +149,7 @@ struct TimelineFramesModel::Private
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return false;
 
-        return KisAnimationUtils::createKeyframeLazy(image, dummy->node(), column, copy);
+        return KisAnimationUtils::createKeyframeLazy(image, dummy->node(), KisKeyframeChannel::Content.id(), column, copy);
     }
 
     bool addNewLayer(int row) {
@@ -655,8 +655,8 @@ bool TimelineFramesModel::offsetFrames(QVector<QPoint> srcIndexes, const QPoint 
         KisNodeDummy *dstDummy = m_d->converter->dummyFromRow(dstRow);
         if (!srcDummy || !dstDummy) continue;
 
-        srcFrameItems << KisAnimationUtils::FrameItem(srcDummy->node(), srcColumn);
-        dstFrameItems << KisAnimationUtils::FrameItem(dstDummy->node(), dstColumn);
+        srcFrameItems << KisAnimationUtils::FrameItem(srcDummy->node(), KisKeyframeChannel::Content.id(), srcColumn);
+        dstFrameItems << KisAnimationUtils::FrameItem(dstDummy->node(), KisKeyframeChannel::Content.id(), dstColumn);
 
         if (!copyFrames) {
             updateIndexes << index(srcRow, srcColumn);
@@ -810,7 +810,7 @@ bool TimelineFramesModel::removeFrames(const QModelIndexList &indexes)
         KisNodeDummy *dummy = m_d->converter->dummyFromRow(index.row());
         if (!dummy) continue;
 
-        frameItems << KisAnimationUtils::FrameItem(dummy->node(), index.column());
+        frameItems << KisAnimationUtils::FrameItem(dummy->node(), KisKeyframeChannel::Content.id(), index.column());
     }
 
     if (frameItems.isEmpty()) return false;

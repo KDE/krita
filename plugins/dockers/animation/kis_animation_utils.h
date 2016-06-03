@@ -24,27 +24,28 @@
 
 namespace KisAnimationUtils
 {
-    bool createKeyframeLazy(KisImageSP image, KisNodeSP node, int time, bool copy);
+    bool createKeyframeLazy(KisImageSP image, KisNodeSP node, const QString &channel, int time, bool copy);
 
     struct FrameItem {
         FrameItem() : time(-1) {}
-        FrameItem(KisNodeSP _node, int _time) : node(_node), time(_time) {}
+        FrameItem(KisNodeSP _node, const QString &_channel, int _time) : node(_node), channel(_channel), time(_time) {}
 
         KisNodeSP node;
+        QString channel;
         int time;
     };
 
     typedef QVector<FrameItem> FrameItemList;
 
     bool removeKeyframes(KisImageSP image, const FrameItemList &frames);
-    bool removeKeyframe(KisImageSP image, KisNodeSP node, int time);
+    bool removeKeyframe(KisImageSP image, KisNodeSP node, const QString &channel, int time);
 
     void sortPointsForSafeMove(QVector<QPoint> *points, const QPoint &offset);
     bool moveKeyframes(KisImageSP image,
                        const FrameItemList &srcFrames,
                        const FrameItemList &dstFrames,
                        bool copy = false);
-    bool moveKeyframe(KisImageSP image, KisNodeSP node, int srcTime, int dstTime);
+    bool moveKeyframe(KisImageSP image, KisNodeSP node, const QString &channel, int srcTime, int dstTime);
 
 
     extern const QString addFrameActionName;
@@ -58,6 +59,9 @@ namespace KisAnimationUtils
     extern const QString newLayerActionName;
     extern const QString addExistingLayerActionName;
     extern const QString removeLayerActionName;
+
+    extern const QString addOpacityKeyframeActionName;
+    extern const QString removeOpacityKeyframeActionName;
 };
 
 #endif /* __KIS_ANIMATION_UTILS_H */

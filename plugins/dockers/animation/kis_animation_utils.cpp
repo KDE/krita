@@ -43,35 +43,35 @@ namespace KisAnimationUtils {
     const QString addExistingLayerActionName = i18n("Add Existing Layer");
     const QString removeLayerActionName = i18n("Remove Layer");
 
+    const QString addOpacityKeyframeActionName = i18n("Add opacity keyframe");
+    const QString removeOpacityKeyframeActionName = i18n("Remove opacity keyframe");
 
-    bool createKeyframeLazy(KisImageSP image, KisNodeSP node, int time, bool copy) {
-        KisKeyframeChannel *content =
-            node->getKeyframeChannel(KisKeyframeChannel::Content.id());
-        bool newContent = false;
+    bool createKeyframeLazy(KisImageSP image, KisNodeSP node, const QString &channelId, int time, bool copy) {
+        KisKeyframeChannel *channel = node->getKeyframeChannel(channelId);
+        bool createdChannel = false;
 
-        if (!content) {
+        if (!channel) {
             node->enableAnimation();
-            content =
-                node->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
-            if (!content) return false;
+            channel = node->getKeyframeChannel(channelId, true);
+            if (!channel) return false;
 
-            newContent = true;
+            createdChannel = true;
         }
 
         if (copy) {
-            if (content->keyframeAt(time)) return false;
+            if (channel->keyframeAt(time)) return false;
 
             KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Copy Keyframe"));
-            KisKeyframeSP srcFrame = content->activeKeyframeAt(time);
+            KisKeyframeSP srcFrame = channel->activeKeyframeAt(time);
 
-            content->copyKeyframe(srcFrame, time, cmd);
+            channel->copyKeyframe(srcFrame, time, cmd);
             image->postExecutionUndoAdapter()->addCommand(toQShared(cmd));
         } else {
-            if (content->keyframeAt(time)) {
+            if (channel->keyframeAt(time)) {
 
-                if (newContent) return false;
+                if (createdChannel) return false;
 
-                if (image->animationInterface()->currentTime() == time) {
+                if (image->animationInterface()->currentTime() == time && channelId == KisKeyframeChannel::Content.id()) {
                     //shortcut: clearing the image instead
 
                     if (KisToolUtils::clearImage(image, node, 0)) {
@@ -81,7 +81,7 @@ namespace KisAnimationUtils {
                 //fallback: erasing the keyframe and creating it again
             }
             KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Add Keyframe"));
-            content->addKeyframe(time, cmd);
+            channel->addKeyframe(time, cmd);
             image->postExecutionUndoAdapter()->addCommand(toQShared(cmd));
         }
 
@@ -100,15 +100,14 @@ namespace KisAnimationUtils {
             const int time = item.time;
             KisNodeSP node = item.node;
 
-            KisKeyframeChannel *content =
-                node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+            KisKeyframeChannel *channel = node->getKeyframeChannel(item.channel);
 
-            if (!content) continue;
+            if (!channel) continue;
 
-            KisKeyframeSP keyframe = content->keyframeAt(time);
+            KisKeyframeSP keyframe = channel->keyframeAt(time);
             if (!keyframe) continue;
 
-            content->deleteKeyframe(keyframe, cmd.data());
+            channel->deleteKeyframe(keyframe, cmd.data());
 
             result = true;
         }
@@ -120,9 +119,9 @@ namespace KisAnimationUtils {
         return result;
     }
 
-    bool removeKeyframe(KisImageSP image, KisNodeSP node, int time) {
+    bool removeKeyframe(KisImageSP image, KisNodeSP node, const QString &channel, int time) {
         QVector<FrameItem> frames;
-        frames << FrameItem(node, time);
+        frames << FrameItem(node, channel, time);
         return removeKeyframes(image, frames);
     }
 
@@ -217,12 +216,12 @@ namespace KisAnimationUtils {
         return result;
     }
 
-    bool moveKeyframe(KisImageSP image, KisNodeSP node, int srcTime, int dstTime) {
+    bool moveKeyframe(KisImageSP image, KisNodeSP node, const QString &channel, int srcTime, int dstTime) {
         QVector<FrameItem> srcFrames;
-        srcFrames << FrameItem(node, srcTime);
+        srcFrames << FrameItem(node, channel, srcTime);
 
         QVector<FrameItem> dstFrames;
-        dstFrames << FrameItem(node, dstTime);
+        dstFrames << FrameItem(node, channel, dstTime);
 
         return moveKeyframes(image, srcFrames, dstFrames);
     }

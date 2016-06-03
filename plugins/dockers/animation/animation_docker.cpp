@@ -22,6 +22,7 @@
 
 #include "kis_canvas2.h"
 #include "kis_image.h"
+#include <QMenu>
 #include <kis_icon.h>
 #include "KisViewManager.h"
 #include "kis_action_manager.h"
@@ -36,6 +37,7 @@
 #include "kis_image_config.h"
 #include "kis_config.h"
 #include "kis_signals_blocker.h"
+#include "kis_node_manager.h"
 
 
 #include "ui_wdg_animation.h"
@@ -63,7 +65,6 @@ AnimationDocker::AnimationDocker()
     setWidget(mainWidget);
 
     m_animationWidget->setupUi(mainWidget);
-
 
     m_previousFrameAction = new KisAction(i18n("Previous Frame"), m_animationWidget->btnPreviousFrame);
     m_previousFrameAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
@@ -105,6 +106,17 @@ AnimationDocker::AnimationDocker()
     m_deleteKeyframeAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
     m_animationWidget->btnDeleteKeyframe->setDefaultAction(m_deleteKeyframeAction);
 
+    m_newKeyframeMenu = new QMenu(this);
+    m_animationWidget->btnAddKeyframe->setMenu(m_newKeyframeMenu);
+    m_animationWidget->btnAddKeyframe->setPopupMode(QToolButton::MenuButtonPopup);
+
+    m_deleteKeyframeMenu = new QMenu(this);
+    m_animationWidget->btnDeleteKeyframe->setMenu(m_deleteKeyframeMenu);
+    m_animationWidget->btnDeleteKeyframe->setPopupMode(QToolButton::MenuButtonPopup);
+
+    m_addOpacityKeyframeAction = new KisAction(KisAnimationUtils::addOpacityKeyframeActionName);
+    m_deleteOpacityKeyframeAction = new KisAction(KisAnimationUtils::removeOpacityKeyframeActionName);
+
     {
         KisImageConfig cfg;
         setupActionButton(KisAnimationUtils::lazyFrameCreationActionName,
@@ -145,6 +157,9 @@ AnimationDocker::AnimationDocker()
     connect(m_lazyFrameAction, SIGNAL(toggled(bool)), this, SLOT(slotLazyFrameChanged(bool)));
     connect(m_dropFramesAction, SIGNAL(toggled(bool)), this, SLOT(slotDropFramesChanged(bool)));
 
+    connect(m_addOpacityKeyframeAction, SIGNAL(triggered(bool)), this, SLOT(slotAddOpacityKeyframe()));
+    connect(m_deleteOpacityKeyframeAction, SIGNAL(triggered(bool)), this, SLOT(slotDeleteOpacityKeyframe()));
+
     m_animationWidget->btnOnionSkinOptions->setToolTip(i18n("Onion Skins"));
     connect(m_animationWidget->btnOnionSkinOptions, SIGNAL(clicked()), this, SLOT(slotOnionSkinOptions()));
 
@@ -172,6 +187,7 @@ void AnimationDocker::setCanvas(KoCanvasBase * canvas)
         m_canvas->image()->disconnect(this);
         m_canvas->image()->animationInterface()->disconnect(this);
         m_canvas->animationPlayer()->disconnect(this);
+        m_canvas->viewManager()->nodeManager()->disconnect(this);
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
@@ -198,7 +214,11 @@ void AnimationDocker::setCanvas(KoCanvasBase * canvas)
                 m_canvas->animationPlayer(),
                 SLOT(slotUpdatePlaybackSpeed(double)));
 
+        connect(m_canvas->viewManager()->nodeManager(), SIGNAL(sigNodeActivated(KisNodeSP)),
+                this, SLOT(slotCurrentNodeChanged(KisNodeSP)));
+
         slotGlobalTimeChanged();
+        slotCurrentNodeChanged(m_canvas->viewManager()->nodeManager()->activeNode());
     }
 }
 
@@ -237,35 +257,27 @@ void AnimationDocker::setMainWindow(KisViewManager *view)
 
 void AnimationDocker::slotAddBlankFrame()
 {
-    if (!m_canvas) return;
-
-    KisNodeSP node = m_canvas->viewManager()->activeNode();
-    if (!node) return;
-
-    const int time = m_canvas->image()->animationInterface()->currentTime();
-    KisAnimationUtils::createKeyframeLazy(m_canvas->image(), node, time, false);
+    addKeyframe(KisKeyframeChannel::Content.id(), false);
 }
 
 void AnimationDocker::slotAddDuplicateFrame()
 {
-    if (!m_canvas) return;
-
-    KisNodeSP node = m_canvas->viewManager()->activeNode();
-    if (!node) return;
-
-    const int time = m_canvas->image()->animationInterface()->currentTime();
-    KisAnimationUtils::createKeyframeLazy(m_canvas->image(), node, time, true);
+    addKeyframe(KisKeyframeChannel::Content.id(), true);
 }
 
 void AnimationDocker::slotDeleteKeyframe()
 {
-    if (!m_canvas) return;
+    deleteKeyframe(KisKeyframeChannel::Content.id());
+}
 
-    KisNodeSP node = m_canvas->viewManager()->activeNode();
-    if (!node) return;
+void AnimationDocker::slotAddOpacityKeyframe()
+{
+    addKeyframe(KisKeyframeChannel::Opacity.id(), false);
+}
 
-    const int time = m_canvas->image()->animationInterface()->currentTime();
-    KisAnimationUtils::removeKeyframe(m_canvas->image(), node, time);
+void AnimationDocker::slotDeleteOpacityKeyframe()
+{
+    deleteKeyframe(KisKeyframeChannel::Opacity.id());
 }
 
 void AnimationDocker::slotUIRangeChanged()
@@ -563,4 +575,52 @@ void AnimationDocker::slotDropFramesChanged(bool value)
         cfg.setAnimationDropFrames(value);
         updateDropFramesIcon();
     }
+}
+
+void AnimationDocker::slotCurrentNodeChanged(KisNodeSP node)
+{
+    bool isNodeAnimatable = false;
+
+    m_newKeyframeMenu->clear();
+    m_deleteKeyframeMenu->clear();
+
+    if (!node.isNull()) {
+        if (node->inherits("KisLayer") || node->inherits("KisMask") || node->inherits("KisSelectionBasedLayer")) {
+            isNodeAnimatable = true;
+            m_newKeyframeMenu->addAction(m_addBlankFrameAction);
+            m_deleteKeyframeMenu->addAction(m_deleteKeyframeAction);
+        }
+
+        if (node->inherits("KisLayer")) {
+            isNodeAnimatable = true;
+            m_newKeyframeMenu->addAction(m_addOpacityKeyframeAction);
+            m_deleteKeyframeMenu->addAction(m_deleteOpacityKeyframeAction);
+        }
+    }
+
+    m_animationWidget->btnAddKeyframe->setEnabled(isNodeAnimatable);
+    m_animationWidget->btnAddDuplicateFrame->setEnabled(isNodeAnimatable);
+    m_animationWidget->btnDeleteKeyframe->setEnabled(isNodeAnimatable);
+}
+
+void AnimationDocker::addKeyframe(const QString &channel, bool copy)
+{
+    if (!m_canvas) return;
+
+    KisNodeSP node = m_canvas->viewManager()->activeNode();
+    if (!node) return;
+
+    const int time = m_canvas->image()->animationInterface()->currentTime();
+    KisAnimationUtils::createKeyframeLazy(m_canvas->image(), node, channel, time, copy);
+}
+
+void AnimationDocker::deleteKeyframe(const QString &channel)
+{
+    if (!m_canvas) return;
+
+    KisNodeSP node = m_canvas->viewManager()->activeNode();
+    if (!node) return;
+
+    const int time = m_canvas->image()->animationInterface()->currentTime();
+    KisAnimationUtils::removeKeyframe(m_canvas->image(), node, channel, time);
 }

@@ -57,6 +57,9 @@ private Q_SLOTS:
     void slotAddDuplicateFrame();
     void slotDeleteKeyframe();
 
+    void slotAddOpacityKeyframe();
+    void slotDeleteOpacityKeyframe();
+
     void slotUIRangeChanged();
     void slotUIFramerateChanged();
 
@@ -73,6 +76,8 @@ private Q_SLOTS:
 
     void slotLazyFrameChanged(bool value);
     void slotDropFramesChanged(bool value);
+
+    void slotCurrentNodeChanged(KisNodeSP node);
 
 private:
 
@@ -96,7 +101,15 @@ private:
     KisAction *m_lazyFrameAction;
     KisAction *m_dropFramesAction;
 
+    QMenu *m_newKeyframeMenu;
+    KisAction *m_addOpacityKeyframeAction;
+    QMenu *m_deleteKeyframeMenu;
+    KisAction *m_deleteOpacityKeyframeAction;
+
     KisMainWindow *m_mainWindow;
+
+    void addKeyframe(const QString &channel, bool copy);
+    void deleteKeyframe(const QString &channel);
 };
 
 

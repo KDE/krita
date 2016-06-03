@@ -91,10 +91,9 @@ KisPaintDeviceSP KisOnionSkinCache::projection(KisPaintDeviceSP source)
             if (!cachedProjection) {
                 cachedProjection = new KisPaintDevice(source->colorSpace());
             } else {
+                cachedProjection->setDefaultBounds(new KisDefaultBounds());
                 cachedProjection->clear();
             }
-
-            cachedProjection->setDefaultBounds(new KisDefaultBounds());
 
             const QRect extent = compositor->calculateExtent(source);
             compositor->composite(source, cachedProjection, extent);

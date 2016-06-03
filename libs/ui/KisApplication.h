@@ -90,6 +90,8 @@ public:
 
     void setSplashScreenLoadingText(QString);
 
+    void hideSplashScreen();
+
     /// Overridden to handle exceptions from event handlers.
     bool notify(QObject *receiver, QEvent *event);
 

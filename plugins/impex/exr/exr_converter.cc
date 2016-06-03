@@ -233,7 +233,7 @@ struct RgbPixelWrapper
     inline bool checkUnmultipliedColorsConsistent(const Rgba<T> &mult) const {
         const T alpha = pixel.a;
 
-        return alpha >= alphaNoiseThreshold<T>() ||
+        return abs(alpha) >= alphaNoiseThreshold<T>() ||
                 (pixel.r * alpha == mult.r &&
                  pixel.g * alpha == mult.g &&
                  pixel.b * alpha == mult.b);

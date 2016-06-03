@@ -240,7 +240,7 @@ void KisImageConfig::setNumberOfOnionSkins(int value)
 
 int KisImageConfig::onionSkinTintFactor() const
 {
-    return m_config.readEntry("onionSkinTintFactor", 0);
+    return m_config.readEntry("onionSkinTintFactor", 192);
 }
 
 void KisImageConfig::setOnionSkinTintFactor(int value)
@@ -268,7 +268,8 @@ void KisImageConfig::setOnionSkinOpacity(int offset, int value)
 
 bool KisImageConfig::onionSkinState(int offset) const
 {
-    return m_config.readEntry("onionSkinState_" + QString::number(offset), false);
+    bool enableByDefault = (qAbs(offset) <= 2);
+    return m_config.readEntry("onionSkinState_" + QString::number(offset), enableByDefault);
 }
 
 void KisImageConfig::setOnionSkinState(int offset, bool value)

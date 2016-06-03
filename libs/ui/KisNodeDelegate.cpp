@@ -190,7 +190,7 @@ void KisNodeDelegate::drawColorLabel(QPainter *p, const QStyleOptionViewItem &op
     if (color.alpha() <= 0) return;
 
     QColor bgColor = qApp->palette().color(QPalette::Base);
-    color = KritaUtils::blendColors(color, bgColor, 0.2);
+    color = KritaUtils::blendColors(color, bgColor, 0.3);
 
     const QRect rect = option.state & QStyle::State_Selected ?
         iconsRect(option, index) :

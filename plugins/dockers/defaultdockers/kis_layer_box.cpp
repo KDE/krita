@@ -85,6 +85,8 @@
 #include "kis_color_filter_combo.h"
 #include "kis_node_filter_proxy_model.h"
 
+#include "kis_layer_utils.h"
+
 #include "ui_wdglayerbox.h"
 
 inline void KisLayerBox::connectActionToButton(KisViewManager* view, QAbstractButton *button, const QString &id)
@@ -828,7 +830,12 @@ void KisLayerBox::slotColorLabelChanged(int label)
     KisNodeList nodes = m_nodeManager->selectedNodes();
 
     Q_FOREACH(KisNodeSP node, nodes) {
-        node->setColorLabelIndex(label);
+        auto applyLabelFunc =
+            [label](KisNodeSP node) {
+                node->setColorLabelIndex(label);
+            };
+
+        KisLayerUtils::recursiveApplyNodes(node, applyLabelFunc);
     }
 }
 

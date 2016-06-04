@@ -70,7 +70,7 @@ void KisHistogramView::startUpdateCanvasProjection()
 void KisHistogramView::setChannels(QList<KoChannelInfo*> & channels)
 {
     m_channels = channels;
-    update();
+    updateHistogramCalculation();
 }
 
 void KisHistogramView::setProducer(KoHistogramProducer* producer)

@@ -39,6 +39,8 @@ public:
 
 public Q_SLOTS:
     virtual void startUpdateCanvasProjection();
+    //virtual void sigProfileChanged(const KoColorProfile* cp);
+    virtual void sigColorSpaceChanged(const KoColorSpace* cs);
 
 private:
     QVBoxLayout *m_layout;

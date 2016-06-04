@@ -16,7 +16,6 @@
  */
 
 #include "histogramdocker_dock.h"
-#include "histogramwidget.h"
 
 #include <QLabel>
 #include <QVBoxLayout>
@@ -61,18 +60,22 @@ void HistogramDockerDock::setCanvas(KoCanvasBase * canvas)
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     if (m_canvas && m_canvas->imageView() && m_canvas->imageView()->image() ) {
 
-        QPointer<KisView> view = m_canvas->imageView();
-        KisPaintDeviceSP dev = view->image()->projection();
+        KisPaintDeviceSP dev = m_canvas->image()->projection();
         auto cs = m_canvas->image()->colorSpace();
 
-        QList<QString> producers = KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(cs);
+        QList<QString> producers = KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(cs,true);
         m_producer = KoHistogramProducerFactoryRegistry::instance()->get(producers.at(0))->generate();
         m_histogramWidget->setPaintDevice( dev, m_producer, m_canvas->image()->bounds() );
 
         connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), m_compressor, SLOT(start()), Qt::UniqueConnection);
+        //connect(m_canvas->image(), SIGNAL(sigProfileChanged(const KoColorProfile *)), this, SLOT(sigProfileChanged(const KoColorProfile *)), Qt::UniqueConnection);
+        connect(m_canvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), this, SLOT(sigColorSpaceChanged(const KoColorSpace*)), Qt::UniqueConnection);
+
         m_compressor->start();
     }
 }
+
+
 
 void HistogramDockerDock::unsetCanvas()
 {
@@ -83,5 +86,12 @@ void HistogramDockerDock::unsetCanvas()
 void HistogramDockerDock::startUpdateCanvasProjection()
 {
     m_histogramWidget->startUpdateCanvasProjection();
+}
+
+void HistogramDockerDock::sigColorSpaceChanged(const KoColorSpace *cs)
+{
+    QList<QString> producers = KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(cs,true);
+    m_producer = KoHistogramProducerFactoryRegistry::instance()->get(producers.at(0))->generate();
+    m_histogramWidget->setProducer(m_producer);
 }
 

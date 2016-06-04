@@ -53,7 +53,7 @@ KisHistogramWidget::~KisHistogramWidget()
 QList<QString> KisHistogramWidget::producers()
 {
     if (m_cs)
-        return KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(m_cs);
+        return KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(m_cs,true);
     return QList<QString>();
 }
 
@@ -65,7 +65,7 @@ void KisHistogramWidget::setChannels(void)
     m_channels.clear();
     m_channelToOffset.clear();
 
-    QList<QString> list = KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(m_cs);
+    QList<QString> list = KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(m_cs,false);
 
     if (list.count() == 0) {
         // XXX: No native histogram for this colorspace. Using converted RGB. We should have a warning

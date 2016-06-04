@@ -75,7 +75,7 @@ public:
     void setChannels(QList<KoChannelInfo*> & channels);
     virtual void paintEvent(QPaintEvent* event);
     virtual void updateHistogramCalculation();
-
+    void setSmoothHistogram(bool smoothHistogram);
 
 public Q_SLOTS:
     virtual void setHistogramType(enumHistogramType type);
@@ -99,6 +99,7 @@ private:
     KoHistogramProducer *m_currentProducer;
     QList<KoChannelInfo *> m_channels;
     bool m_color;
+    bool m_smoothHistogram;
     enumHistogramType m_histogram_type;
 };
 

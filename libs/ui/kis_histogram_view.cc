@@ -47,7 +47,7 @@
 KisHistogramView::KisHistogramView(QWidget *parent, const char *name, Qt::WFlags f)
         : QLabel(parent, f),
           m_currentDev(nullptr), m_currentProducer(nullptr),
-          m_histogram_type(LINEAR)
+          m_smoothHistogram(false),m_histogram_type(LINEAR)
 {
     setObjectName(name);
 }
@@ -140,6 +140,11 @@ void KisHistogramView::mousePressEvent(QMouseEvent * e)
         QLabel::mousePressEvent(e);
 }
 
+void KisHistogramView::setSmoothHistogram(bool smoothHistogram)
+{
+    m_smoothHistogram = smoothHistogram;
+}
+
 
 void KisHistogramView::paintEvent(QPaintEvent *event)
 {
@@ -197,17 +202,6 @@ void KisHistogramView::paintEvent(QPaintEvent *event)
 
         for (int chan = 0; chan < nChannels; chan++) {
             if( m_channels.at(chan)->channelType() != KoChannelInfo::ALPHA ){
-                QPainterPath path;
-
-                m_histogram->setChannel(chan);
-                path.moveTo(QPointF(-1,highest));
-                for (qint32 i = 0; i < bins; ++i) {
-                    float v = (m_histogram_type==LINEAR)? highest-m_histogram->getValue(i): highest-std::log2(m_histogram->getValue(i));
-                    path.lineTo(QPointF(i,v));
-                }
-                path.lineTo(QPointF(bins+1,highest));
-                path.closeSubpath();
-
                 auto color = m_channels.at(chan)->color();
                 auto fill_color = color;
                 fill_color.setAlphaF(.25);
@@ -216,7 +210,29 @@ void KisHistogramView::paintEvent(QPaintEvent *event)
                 pen.setWidth(0);
                 painter.setPen(pen);
 
-                painter.drawPath(path);
+                if (m_smoothHistogram){
+                    QPainterPath path;
+
+                    m_histogram->setChannel(chan);
+                    path.moveTo(QPointF(-1,highest));
+                    for (qint32 i = 0; i < bins; ++i) {
+                        float v = (m_histogram_type==LINEAR)? highest-m_histogram->getValue(i): highest-std::log2(m_histogram->getValue(i));
+                        path.lineTo(QPointF(i,v));
+
+                    }
+                    path.lineTo(QPointF(bins+1,highest));
+                    path.closeSubpath();
+                    painter.drawPath(path);
+                }
+                else {
+                    pen.setWidth(1);
+                    painter.setPen(pen);
+                    m_histogram->setChannel(chan);
+                    for (qint32 i = 0; i < bins; ++i) {
+                        float v = (m_histogram_type==LINEAR)? highest-m_histogram->getValue(i): highest-std::log2(m_histogram->getValue(i));
+                        painter.drawLine(QPointF(i,highest),QPointF(i,v));
+                    }
+                }
             }
         }
     }

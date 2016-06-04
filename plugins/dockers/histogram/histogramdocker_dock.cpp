@@ -32,7 +32,7 @@
 
 HistogramDockerDock::HistogramDockerDock( )
     : QDockWidget(i18n("Histogram")),
-      m_compressor(new KisSignalCompressor(100, KisSignalCompressor::POSTPONE, this)),
+      m_compressor(new KisSignalCompressor(200, KisSignalCompressor::POSTPONE, this)),
       m_canvas(0), m_producer(nullptr)
 {
     QWidget *page = new QWidget(this);
@@ -40,6 +40,7 @@ HistogramDockerDock::HistogramDockerDock( )
 
     m_histogramWidget = new KisHistogramView(this);
     m_histogramWidget->setMinimumHeight(50);
+    m_histogramWidget->setSmoothHistogram(true);
     m_layout->addWidget(m_histogramWidget, 1);
     setWidget(page);
     connect(m_compressor,SIGNAL(timeout()),SLOT(startUpdateCanvasProjection()));
@@ -74,8 +75,6 @@ void HistogramDockerDock::setCanvas(KoCanvasBase * canvas)
         m_compressor->start();
     }
 }
-
-
 
 void HistogramDockerDock::unsetCanvas()
 {

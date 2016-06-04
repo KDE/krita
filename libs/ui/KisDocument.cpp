@@ -248,7 +248,6 @@ public:
         password(QString()),
         modifiedAfterAutosave(false),
         isAutosaving(false),
-        shouldCheckAutoSaveFile(true),
         autoErrorHandlingEnabled(true),
         backupFile(true),
         backupPath(QString()),
@@ -309,7 +308,6 @@ public:
     int autoSaveDelay; // in seconds, 0 to disable.
     bool modifiedAfterAutosave;
     bool isAutosaving;
-    bool shouldCheckAutoSaveFile; // usually true
     bool autoErrorHandlingEnabled; // usually true
     bool backupFile;
     QString backupPath;
@@ -813,11 +811,6 @@ bool KisDocument::isExporting() const
     return d->isExporting;
 }
 
-void KisDocument::setCheckAutoSaveFile(bool b)
-{
-    d->shouldCheckAutoSaveFile = b;
-}
-
 void KisDocument::setAutoErrorHandlingEnabled(bool b)
 {
     d->autoErrorHandlingEnabled = b;
@@ -1121,10 +1114,12 @@ bool KisDocument::openUrl(const QUrl &_url, KisDocument::OpenUrlFlags flags)
     QUrl url(_url);
     bool autosaveOpened = false;
     d->isLoading = true;
-    if (url.isLocalFile() && d->shouldCheckAutoSaveFile) {
+    if (url.isLocalFile() && !fileBatchMode()) {
         QString file = url.toLocalFile();
         QString asf = autoSaveFile(file);
         if (QFile::exists(asf)) {
+            KisApplication *kisApp = static_cast<KisApplication*>(qApp);
+            kisApp->hideSplashScreen();
             //dbgUI <<"asf=" << asf;
             // ## TODO compare timestamps ?
             int res = QMessageBox::warning(0,

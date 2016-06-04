@@ -61,17 +61,14 @@ public:
         QRect bounds;
         bool result = m_exactBoundsCache.tryGetValue(bounds);
 
-        const int msecThreshold = 1000;
-
         if (!result) {
-            if (!m_lastCalculatedExactBounds.isValid() ||
-                m_lastCalculatedExactBounds.elapsed() > msecThreshold) {
-
-                m_lastCalculatedExactBounds.restart();
-                bounds = exactBounds();
-            } else {
-                bounds = m_paintDevice->extent();
-            }
+            /**
+             * The calculation of the exact bounds might be too slow
+             * in some special cases, e.g. for an empty canvas of 7k
+             * by 6k.  So we just always return extent, when the exact
+             * bounds is not available.
+             */
+            bounds = m_paintDevice->extent();
         }
 
         return bounds;
@@ -154,7 +151,6 @@ private:
     ExactBoundsCache m_exactBoundsCache;
     NonDefaultPixelCache m_nonDefaultPixelAreaCache;
     RegionCache m_regionCache;
-    QElapsedTimer m_lastCalculatedExactBounds;
 
     bool m_thumbnailsValid;
     QMap<int, QMap<int, QImage> > m_thumbnails;

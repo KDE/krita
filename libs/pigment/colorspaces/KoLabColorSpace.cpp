@@ -165,7 +165,7 @@ void KoLabColorSpace::toQColor(const quint8 * src, QColor *c, const KoColorProfi
     c->setRgba(qRgba(R, G, B, A));
 }
 
-void KoLabColorSpace::toHSY(QVector <double> channelValues, qreal *hue, qreal *sat, qreal *luma) const
+void KoLabColorSpace::toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const
 {
     LabToLCH(channelValues[0],channelValues[1],channelValues[2], luma, sat, hue);
 }
@@ -178,7 +178,7 @@ QVector <double> KoLabColorSpace::fromHSY(qreal *hue, qreal *sat, qreal *luma) c
     return channelValues;
 }
 
-void KoLabColorSpace::toYUV(QVector <double> channelValues, qreal *y, qreal *u, qreal *v) const
+void KoLabColorSpace::toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const
 {
     *y =channelValues[0];
     *v=channelValues[1];

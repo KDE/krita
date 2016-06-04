@@ -782,6 +782,9 @@ FullscreenSettingsTab::FullscreenSettingsTab(QWidget* parent) : WdgFullscreenSet
     chkMenu->setChecked(cfg.hideMenuFullscreen());
     chkScrollbars->setChecked(cfg.hideScrollbarsFullscreen());
     chkStatusbar->setChecked(cfg.hideStatusbarFullscreen());
+#ifdef Q_OS_WINDOWS
+    chkTitlebar->setVisible(false);
+#endif
     chkTitlebar->setChecked(cfg.hideTitlebarFullscreen());
     chkToolbar->setChecked(cfg.hideToolbarFullscreen());
 
@@ -830,7 +833,6 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     addPage(page);
     m_shortcutSettings = new ShortcutSettingsTab(vbox);
     connect(this, SIGNAL(accepted()), m_shortcutSettings, SLOT(saveChanges()));
-    connect(this, SIGNAL(rejected()), m_shortcutSettings, SLOT(revertChanges()));
 
     // Canvas input settings
     m_inputConfiguration = new KisInputConfigurationPage();

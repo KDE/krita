@@ -39,33 +39,33 @@
 template<>
 template<>
 KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarken32>::ReturnType
-KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarken32>::create<VC_IMPL>(ParamType param)
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarken32>::create<Vc::CurrentImplementation::current()>(ParamType param)
 {
-    return new KoOptimizedCompositeOpAlphaDarken32<VC_IMPL>(param);
+    return new KoOptimizedCompositeOpAlphaDarken32<Vc::CurrentImplementation::current()>(param);
 }
 
 template<>
 template<>
 KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver32>::ReturnType
-KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver32>::create<VC_IMPL>(ParamType param)
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver32>::create<Vc::CurrentImplementation::current()>(ParamType param)
 {
-    return new KoOptimizedCompositeOpOver32<VC_IMPL>(param);
+    return new KoOptimizedCompositeOpOver32<Vc::CurrentImplementation::current()>(param);
 }
 
 template<>
 template<>
 KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarken128>::ReturnType
-KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarken128>::create<VC_IMPL>(ParamType param)
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarken128>::create<Vc::CurrentImplementation::current()>(ParamType param)
 {
-    return new KoOptimizedCompositeOpAlphaDarken128<VC_IMPL>(param);
+    return new KoOptimizedCompositeOpAlphaDarken128<Vc::CurrentImplementation::current()>(param);
 }
 
 template<>
 template<>
 KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver128>::ReturnType
-KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver128>::create<VC_IMPL>(ParamType param)
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver128>::create<Vc::CurrentImplementation::current()>(ParamType param)
 {
-    return new KoOptimizedCompositeOpOver128<VC_IMPL>(param);
+    return new KoOptimizedCompositeOpOver128<Vc::CurrentImplementation::current()>(param);
 }
 
 #define __stringify(_s) #_s
@@ -78,15 +78,13 @@ inline void printFeatureSupported(const QString &feature, Vc::Implementation imp
 
 template<>
 KoReportCurrentArch::ReturnType
-KoReportCurrentArch::create<VC_IMPL>(ParamType)
+KoReportCurrentArch::create<Vc::CurrentImplementation::current()>(ParamType)
 {
-    dbgPigment << "Compiled for arch:" << stringify(VC_IMPL);
+    dbgPigment << "Compiled for arch:" << Vc::CurrentImplementation::current();
     dbgPigment << "Features supported:";
     printFeatureSupported("SSE2", Vc::SSE2Impl);
     printFeatureSupported("SSSE3", Vc::SSSE3Impl);
     printFeatureSupported("SSE4.1", Vc::SSE41Impl);
     printFeatureSupported("AVX ", Vc::AVXImpl);
-#if VC_VERSION_NUMBER >= VC_VERSION_CHECK(0, 8, 0)
     printFeatureSupported("AVX2 ", Vc::AVX2Impl);
-#endif
 }

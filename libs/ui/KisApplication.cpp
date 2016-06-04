@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+ /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 2009 Thomas Zander <zander@kde.org>
    Copyright (C) 2012 Boudewijn Rempt <boud@valdyas.org>
@@ -97,13 +97,13 @@ public:
     KisApplicationPrivate()
         : splashScreen(0)
     {}
-    QWidget *splashScreen;
+    KisSplashScreen *splashScreen;
 };
 
 class KisApplication::ResetStarting
 {
 public:
-    ResetStarting(QWidget *splash = 0)
+    ResetStarting(KisSplashScreen *splash = 0)
         : m_splash(splash)
     {
     }
@@ -118,10 +118,11 @@ public:
                 m_splash->hide();
             }
             else {
-                m_splash->setWindowFlags(Qt::Tool | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+                m_splash->setWindowFlags(Qt::Tool);
                 QRect r(QPoint(), m_splash->size());
                 m_splash->move(QApplication::desktop()->availableGeometry().center() - r.center());
                 m_splash->setWindowTitle(qAppName());
+                m_splash->setParent(qApp->activeWindow());
                 Q_FOREACH (QObject *o, m_splash->children()) {
                     QWidget *w = qobject_cast<QWidget*>(o);
                     if (w && w->isHidden()) {
@@ -134,7 +135,7 @@ public:
         }
     }
 
-    QWidget *m_splash;
+    KisSplashScreen *m_splash;
 };
 
 
@@ -142,6 +143,9 @@ public:
 KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     : QtSingleApplication(key, argc, argv)
     , d(new KisApplicationPrivate)
+    , m_autosaveDialog(0)
+    , m_mainWindow(0)
+    , m_batchRun(false)
 {
     QCoreApplication::addLibraryPath(QCoreApplication::applicationDirPath());
 
@@ -155,8 +159,8 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     setApplicationVersion(version);
     setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
 
-    QStringList styles = QStringList() << "Fusion" << "Plastique";
-    if (!styles.contains(style()->objectName())) {
+    QStringList styles = QStringList() << "fusion" << "plastique";
+    if (!styles.contains(style()->objectName().toLower())) {
         Q_FOREACH (const QString & style, styles) {
             if (!setStyle(style)) {
                 qDebug() << "No" << style << "available.";
@@ -335,14 +339,14 @@ bool KisApplication::start(const KisApplicationArguments &args)
     const bool exportAsPdf = args.exportAsPdf();
     const QString exportFileName = args.exportFileName();
 
-    const bool batchRun = (print || exportAs || exportAsPdf);
+    m_batchRun = (print || exportAs || exportAsPdf || !exportFileName.isEmpty());
     // print & exportAsPdf do user interaction ATM
     const bool needsMainWindow = !exportAs;
     // only show the mainWindow when no command-line mode option is passed
     // TODO: fix print & exportAsPdf to work without mainwindow shown
     const bool showmainWindow = !exportAs; // would be !batchRun;
 
-    const bool showSplashScreen = !batchRun && qgetenv("NOSPLASH").isEmpty();
+    const bool showSplashScreen = !m_batchRun && qgetenv("NOSPLASH").isEmpty() &&  qgetenv("XDG_CURRENT_DESKTOP") != "GNOME";
     if (showSplashScreen) {
         d->splashScreen->show();
         d->splashScreen->repaint();
@@ -371,21 +375,19 @@ bool KisApplication::start(const KisApplicationArguments &args)
     // Load the plugins
     loadPlugins();
 
-    KisMainWindow *mainWindow = 0;
-
     if (needsMainWindow) {
         // show a mainWindow asap, if we want that
         setSplashScreenLoadingText(i18n("Loading Main Window..."));
-        mainWindow = KisPart::instance()->createMainWindow();
+        m_mainWindow = KisPart::instance()->createMainWindow();
 
         if (showmainWindow) {
-            QTimer::singleShot(1, mainWindow, SLOT(show()));
+            QTimer::singleShot(1, m_mainWindow, SLOT(show()));
         }
     }
     short int numberOfOpenDocuments = 0; // number of documents open
 
     // Check for autosave files that can be restored, if we're not running a batchrun (test, print, export to pdf)
-    if (!batchRun) {
+    if (!m_batchRun) {
         checkAutosaveFiles();
     }
 
@@ -402,10 +404,10 @@ bool KisApplication::start(const KisApplicationArguments &args)
             // are we just trying to open a template?
             if (doTemplate) {
                 // called in mix with batch options? ignore and silently skip
-                if (batchRun) {
+                if (m_batchRun) {
                     continue;
                 }
-                if (createNewDocFromTemplate(fileName, mainWindow)) {
+                if (createNewDocFromTemplate(fileName, m_mainWindow)) {
                     ++numberOfOpenDocuments;
                 }
                 // now try to load
@@ -420,6 +422,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     }
 
                     KisDocument *doc = KisPart::instance()->createDocument();
+                    doc->setFileBatchMode(m_batchRun);
                     doc->openUrl(QUrl::fromLocalFile(fileName));
 
                     qApp->processEvents(); // For vector layers to be updated
@@ -437,18 +440,19 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     nPrinted++;
                     QTimer::singleShot(0, this, SLOT(quit()));
                 }
-                else if (mainWindow) {
+                else if (m_mainWindow) {
                     KisDocument *doc = KisPart::instance()->createDocument();
-                    if (mainWindow->openDocumentInternal(QUrl::fromLocalFile(fileName), doc)) {
+                    doc->setFileBatchMode(m_batchRun);
+                    if (m_mainWindow->openDocumentInternal(QUrl::fromLocalFile(fileName), doc)) {
                         if (print) {
-                            mainWindow->slotFilePrint();
+                            m_mainWindow->slotFilePrint();
                             nPrinted++;
                             // TODO: trigger closing of app once printing is done
                         }
                         else if (exportAsPdf) {
-                            KisPrintJob *job = mainWindow->exportToPdf(exportFileName);
+                            KisPrintJob *job = m_mainWindow->exportToPdf(exportFileName);
                             if (job)
-                                connect (job, SIGNAL(destroyed(QObject*)), mainWindow,
+                                connect (job, SIGNAL(destroyed(QObject*)), m_mainWindow,
                                          SLOT(slotFileQuit()), Qt::QueuedConnection);
                             nPrinted++;
                         } else {
@@ -463,7 +467,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
             }
         }
 
-        if (batchRun) {
+        if (m_batchRun) {
             return nPrinted > 0;
         }
     }
@@ -478,13 +482,21 @@ KisApplication::~KisApplication()
 
 void KisApplication::setSplashScreen(QWidget *splashScreen)
 {
-    d->splashScreen = splashScreen;
+    d->splashScreen = qobject_cast<KisSplashScreen*>(splashScreen);
 }
 
 void KisApplication::setSplashScreenLoadingText(QString textToLoad)
 {
-   static_cast<KisSplashScreen *>(d->splashScreen)->loadingLabel->setText(textToLoad);
-   static_cast<KisSplashScreen *>(d->splashScreen)->repaint();
+   d->splashScreen->loadingLabel->setText(textToLoad);
+   d->splashScreen->repaint();
+}
+
+void KisApplication::hideSplashScreen()
+{
+    if (d->splashScreen) {
+        // hide the splashscreen to see the dialog
+        d->splashScreen->hide();
+    }
 }
 
 bool KisApplication::notify(QObject *receiver, QEvent *event)
@@ -531,6 +543,7 @@ void KisApplication::remoteArguments(QByteArray message, QObject *socket)
             }
             else if (QFile(filename).exists()) {
                 KisDocument *doc = KisPart::instance()->createDocument();
+                doc->setFileBatchMode(m_batchRun);
                 mw->openDocumentInternal(QUrl::fromLocalFile(filename), doc);
             }
         }
@@ -542,6 +555,7 @@ void KisApplication::fileOpenRequested(const QString &url)
     KisMainWindow *mainWindow = KisPart::instance()->mainWindows().first();
     if (mainWindow) {
         KisDocument *doc = KisPart::instance()->createDocument();
+        doc->setFileBatchMode(m_batchRun);
         mainWindow->openDocumentInternal(QUrl::fromLocalFile(url), doc);
     }
 }
@@ -549,6 +563,8 @@ void KisApplication::fileOpenRequested(const QString &url)
 
 void KisApplication::checkAutosaveFiles()
 {
+    if (m_batchRun) return;
+
     // Check for autosave files from a previous run. There can be several, and
     // we want to offer a restore for every one. Including a nice thumbnail!
 
@@ -562,21 +578,23 @@ void KisApplication::checkAutosaveFiles()
 #endif
 
     // all autosave files for our application
-    autoSaveFiles = dir.entryList(filters, QDir::Files | QDir::Hidden);
+    m_autosaveFiles = dir.entryList(filters, QDir::Files | QDir::Hidden);
 
     // Allow the user to make their selection
-    if (autoSaveFiles.size() > 0) {
+    if (m_autosaveFiles.size() > 0) {
         if (d->splashScreen) {
             // hide the splashscreen to see the dialog
             d->splashScreen->hide();
         }
-        dlg = new KisAutoSaveRecoveryDialog(autoSaveFiles, activeWindow());
-        connect(dlg, SIGNAL(finished(int)), this, SLOT(onAutoSaveFinished(int)));
-        dlg->exec();
+        m_autosaveDialog = new KisAutoSaveRecoveryDialog(m_autosaveFiles, activeWindow());
+        connect(m_autosaveDialog, SIGNAL(finished(int)), this, SLOT(onAutoSaveFinished(int)));
+        m_autosaveDialog->exec();
     }
 }
 
-void KisApplication::onAutoSaveFinished(int result) {
+void KisApplication::onAutoSaveFinished(int result)
+{
+    if (m_batchRun) return;
 
 #ifdef Q_OS_WIN
     QDir dir = QDir::temp();
@@ -585,30 +603,31 @@ void KisApplication::onAutoSaveFinished(int result) {
 #endif
 
     if (result == QDialog::Accepted) {
-        QStringList filesToRecover = dlg->recoverableFiles();
-        Q_FOREACH (const QString &autosaveFile, autoSaveFiles) {
+        QStringList filesToRecover = m_autosaveDialog->recoverableFiles();
+        Q_FOREACH (const QString &autosaveFile, m_autosaveFiles) {
             if (!filesToRecover.contains(autosaveFile)) {
                 QFile::remove(dir.absolutePath() + "/" + autosaveFile);
             }
         }
-        autoSaveFiles = filesToRecover;
+        m_autosaveFiles = filesToRecover;
     } else {
-        autoSaveFiles.clear();
+        m_autosaveFiles.clear();
     }
 
     QList<QUrl> autosaveUrls;
-    if (autoSaveFiles.size() > 0) {
+    if (m_autosaveFiles.size() > 0) {
 
-        Q_FOREACH (const QString &autoSaveFile, autoSaveFiles) {
+        Q_FOREACH (const QString &autoSaveFile, m_autosaveFiles) {
             const QUrl url = QUrl::fromLocalFile(dir.absolutePath() + QLatin1Char('/') + autoSaveFile);
             autosaveUrls << url;
         }
     }
 
-    if (mainWindow) {
+    if (m_mainWindow) {
         Q_FOREACH (const QUrl &url, autosaveUrls) {
             KisDocument *doc = KisPart::instance()->createDocument();
-            mainWindow->openDocumentInternal(url, doc);
+            doc->setFileBatchMode(m_batchRun);
+            m_mainWindow->openDocumentInternal(url, doc);
         }
     }
 }
@@ -652,6 +671,7 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
         templateURL.setPath(templateBase.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path() + '/' + templateName);
 
         KisDocument *doc = KisPart::instance()->createDocument();
+        doc->setFileBatchMode(m_batchRun);
         if (mainWindow->openDocumentInternal(templateURL, doc)) {
             doc->resetURL();
             doc->setEmpty();

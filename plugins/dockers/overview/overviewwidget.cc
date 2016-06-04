@@ -84,9 +84,9 @@ QPolygonF OverviewWidget::previewPolygon()
         const KisCoordinatesConverter* converter = m_canvas->coordinatesConverter();
         QPolygonF canvasPoly = QPolygonF(QRectF(m_canvas->canvasWidget()->rect()));
         QPolygonF imagePoly = converter->widgetToImage<QPolygonF>(canvasPoly);
-        
+
         QTransform imageToPreview = imageToPreviewTransform();
-      
+
         return imageToPreview.map(imagePoly);
     }
     return QPolygonF();
@@ -129,7 +129,7 @@ void OverviewWidget::resizeEvent(QResizeEvent *event)
     if (m_canvas) {
         if (!m_pixmap.isNull()) {
             QSize newSize = calculatePreviewSize();
-            m_pixmap = m_pixmap.scaled(newSize);
+            m_pixmap = m_pixmap.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
         m_compressor->start();
     }
@@ -139,7 +139,7 @@ void OverviewWidget::mousePressEvent(QMouseEvent* event)
 {
     if (m_canvas) {
         QPointF previewPos = event->pos() - previewOrigin();
-        
+
         if (previewPolygon().containsPoint(previewPos, Qt::WindingFill)) {
             m_lastPos = previewPos;
             m_dragging = true;
@@ -160,10 +160,10 @@ void OverviewWidget::mouseMoveEvent(QMouseEvent* event)
 
         QPointF lastImagePos = previewToImage.map(m_lastPos);
         QPointF newImagePos = previewToImage.map(previewPos);
-        
+
         QPointF lastWidgetPos = converter->imageToWidget<QPointF>(lastImagePos);
         QPointF newWidgetPos = converter->imageToWidget<QPointF>(newImagePos);
-        
+
         QPointF diff = newWidgetPos - lastWidgetPos;
         m_canvas->canvasController()->pan(diff.toPoint());
         m_lastPos = previewPos;
@@ -181,7 +181,7 @@ void OverviewWidget::mouseReleaseEvent(QMouseEvent* event)
 void OverviewWidget::wheelEvent(QWheelEvent* event)
 {
     float delta = event->delta();
-    
+
     if (delta > 0) {
         m_canvas->viewManager()->zoomController()->zoomAction()->zoomIn();
     } else {
@@ -197,7 +197,7 @@ void OverviewWidget::paintEvent(QPaintEvent* event)
     if (m_canvas) {
         QPainter p(this);
         p.translate(previewOrigin());
-        
+
         p.drawPixmap(0, 0, m_pixmap.width(), m_pixmap.height(), m_pixmap);
 
         QRect r = rect().translated(-previewOrigin().toPoint());

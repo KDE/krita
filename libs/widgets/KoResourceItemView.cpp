@@ -48,7 +48,11 @@ bool KoResourceItemView::viewportEvent(QEvent *event)
 
 void KoResourceItemView::selectionChanged(const QItemSelection &selected, const QItemSelection &/*deselected*/)
 {
-    emit currentResourceChanged(selected.indexes().first());
+    if (selected.isEmpty()) {
+        emit currentResourceChanged(QModelIndex());
+    } else {
+        emit currentResourceChanged(selected.indexes().first());
+    }
 }
 
 void KoResourceItemView::contextMenuEvent(QContextMenuEvent *event)

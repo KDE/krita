@@ -53,7 +53,6 @@ KisTemplateTree::~KisTemplateTree()
 
 void KisTemplateTree::readTemplateTree()
 {
-
     readGroups();
     readTemplates();
 }
@@ -139,7 +138,6 @@ KisTemplateGroup *KisTemplateTree::find(const QString &name) const
 
 void KisTemplateTree::readGroups()
 {
-
     QStringList dirs = KoResourcePaths::findDirs("data", m_templatesResourcePath);
 
     Q_FOREACH (const QString & dirName, dirs) {

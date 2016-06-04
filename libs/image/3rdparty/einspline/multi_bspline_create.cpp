@@ -120,7 +120,7 @@ create_multi_UBspline_1d_s (Ugrid x_grid, BCtype_s xBC, int num_splines)
   x_grid.delta_inv = 1.0/x_grid.delta;
   spline->x_grid   = x_grid;
 #ifndef HAVE_POSIX_MEMALIGN
-  spline->coefs = new float[Nx*N];
+  spline->coefs = (float*)malloc (sizeof(float)*Nx*N);
 #else
   posix_memalign ((void**)&spline->coefs, 64, (sizeof(float)*Nx*N));
 #endif
@@ -195,7 +195,7 @@ create_multi_UBspline_2d_s (Ugrid x_grid, Ugrid y_grid,
   spline->y_stride = N;
 
 #ifndef HAVE_POSIX_MEMALIGN
-  spline->coefs = new float[Nx*Ny*N];
+  spline->coefs = (float*)malloc (sizeof(float)*Nx*Ny*N);
 #else
   posix_memalign ((void**)&spline->coefs, 64, 
 		  sizeof(float)*Nx*Ny*N);
@@ -414,7 +414,7 @@ create_multi_UBspline_1d_c (Ugrid x_grid, BCtype_c xBC, int num_splines)
   spline->x_grid   = x_grid;
   spline->x_stride = num_splines;
 #ifndef HAVE_POSIX_MEMALIGN
-  spline->coefs = new complex_float[N*num_splines];
+  spline->coefs = (complex_float*)malloc (2*sizeof(float)*N*num_splines);
 #else
   posix_memalign ((void**)&spline->coefs, 64, 2*sizeof(float)*N*num_splines);
 #endif
@@ -498,8 +498,8 @@ create_multi_UBspline_2d_c (Ugrid x_grid, Ugrid y_grid,
   spline->y_stride = N;
 
 #ifndef HAVE_POSIX_MEMALIGN
-  spline->coefs = new complex_float[Nx*Ny*N];
-  spline->lapl2 = new complex_float[2*N];
+  spline->coefs = (complex_float*)malloc (2*sizeof(float)*Nx*Ny*N);
+  spline->lapl2 = (complex_float*)malloc (4*sizeof(float)*N);
 #else
   posix_memalign ((void**)&spline->coefs, 64, 
 		  2*sizeof(float)*Nx*Ny*N);
@@ -629,8 +629,8 @@ create_multi_UBspline_3d_c (Ugrid x_grid, Ugrid y_grid, Ugrid z_grid,
   spline->z_stride = N;
 
 #ifndef HAVE_POSIX_MEMALIGN
-  spline->coefs = new complex_float[Nx*Ny*Nz*N];
-  spline->lapl3 = new complex_float[3*N];
+  spline->coefs = (complex_float*)malloc (2*sizeof(float)*Nx*Ny*Nz*N);
+  spline->lapl3 = (complex_float*)malloc (6*sizeof(float)*N);
 #else
   posix_memalign ((void**)&spline->coefs, 64, 2*sizeof(float)*Nx*Ny*Nz*N);
   posix_memalign ((void**)&spline->lapl3, 64, 6*sizeof(float)*N);  
@@ -801,7 +801,7 @@ create_multi_UBspline_1d_d (Ugrid x_grid, BCtype_d xBC, int num_splines)
   spline->x_stride = N;
 
 #ifndef HAVE_POSIX_MEMALIGN
-  spline->coefs = new double[Nx*N];
+  spline->coefs = (double*)malloc (sizeof(double)*Nx*N);
 
 #else
   posix_memalign ((void**)&spline->coefs, 64, sizeof(double)*Nx*N);
@@ -883,7 +883,7 @@ create_multi_UBspline_2d_d (Ugrid x_grid, Ugrid y_grid,
   spline->y_stride = N;
 
 #ifndef HAVE_POSIX_MEMALIGN
-  spline->coefs = new double[Nx*Ny*N];
+  spline->coefs = (double*)malloc (sizeof(double)*Nx*Ny*N);
 #else
   posix_memalign ((void**)&spline->coefs, 64, (sizeof(double)*Nx*Ny*N));
 #endif
@@ -1118,7 +1118,7 @@ create_multi_UBspline_1d_z (Ugrid x_grid, BCtype_z xBC, int num_splines)
   spline->x_stride = num_splines;
 
 #ifndef HAVE_POSIX_MEMALIGN
-  spline->coefs = new complex_double[Nx*num_splines];
+  spline->coefs = (complex_double*)malloc (2*sizeof(double)*Nx*num_splines);
 #else
   posix_memalign ((void**)&spline->coefs, 64, 2*sizeof(double)*Nx*num_splines);
 #endif
@@ -1235,8 +1235,8 @@ create_multi_UBspline_2d_z (Ugrid x_grid, Ugrid y_grid,
   spline->y_stride = num_splines;
 
 #ifndef HAVE_POSIX_MEMALIGN
-  spline->coefs = new complex_double[Nx*Ny*num_splines];
-  spline->lapl2 = new complex_double[2*num_splines];
+  spline->coefs = (complex_double*)malloc (2*sizeof(double)*Nx*Ny*num_splines);
+  spline->lapl2 = (complex_double*)malloc (4*sizeof(double)*num_splines);
 #else
   posix_memalign ((void**)&spline->coefs, 64, 2*sizeof(double)*Nx*Ny*num_splines);
   posix_memalign ((void**)&spline->lapl2, 64, 4*sizeof(double)*num_splines);

@@ -142,12 +142,14 @@ KisInputManager::Private::Private(KisInputManager *qq)
     testingCompressBrushEvents = cfg.testingCompressBrushEvents();
 }
 
+static const int InputWidgetsThreshold = 2000;
+static const int OtherWidgetsThreshold = 400;
 
 KisInputManager::Private::CanvasSwitcher::CanvasSwitcher(Private *_d, QObject *p)
     : QObject(p),
       d(_d),
       eatOneMouseStroke(false),
-      focusSwitchThreshold(2000)
+      focusSwitchThreshold(InputWidgetsThreshold)
 {
 }
 
@@ -190,6 +192,29 @@ void KisInputManager::Private::CanvasSwitcher::removeCanvas(KisCanvas2 *canvas)
     }
 
     widget->removeEventFilter(this);
+}
+
+bool isInputWidget(QWidget *w)
+{
+    if (!w) return false;
+
+
+    QList<QLatin1String> types;
+    types << QLatin1String("QAbstractSlider");
+    types << QLatin1String("QAbstractSpinBox");
+    types << QLatin1String("QLineEdit");
+    types << QLatin1String("QTextEdit");
+    types << QLatin1String("QPlainTextEdit");
+    types << QLatin1String("QComboBox");
+    types << QLatin1String("QKeySequenceEdit");
+
+    Q_FOREACH (const QLatin1String &type, types) {
+        if (w->inherits(type.data())) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool KisInputManager::Private::CanvasSwitcher::eventFilter(QObject* object, QEvent* event )
@@ -252,8 +277,19 @@ bool KisInputManager::Private::CanvasSwitcher::eventFilter(QObject* object, QEve
             }
             break;
         case QEvent::MouseMove:
-        case QEvent::TabletMove:
-            focusSwitchThreshold.start();
+        case QEvent::TabletMove: {
+
+            QWidget *widget = static_cast<QWidget*>(object);
+
+            if (!widget->hasFocus()) {
+                const int delay =
+                    isInputWidget(QApplication::focusWidget()) ?
+                    InputWidgetsThreshold : OtherWidgetsThreshold;
+
+                focusSwitchThreshold.setDelayThreshold(delay);
+                focusSwitchThreshold.start();
+            }
+        }
             break;
         default:
             break;

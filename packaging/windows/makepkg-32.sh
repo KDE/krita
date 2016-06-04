@@ -28,8 +28,8 @@ mkdir -p $BUILDROOT/out/$PACKAGENAME/bin/data
 mkdir -p $BUILDROOT/out/$PACKAGENAME/lib
 mkdir -p $BUILDROOT/out/$PACKAGENAME/share
 
-cp $BUILDROOT/krita/windows/krita.lnk  $BUILDROOT/out/$PACKAGENAME
-cp $BUILDROOT/krita/windows/qt.conf  $BUILDROOT/out/$PACKAGENAME/bin
+cp $BUILDROOT/krita/packaging/windows/krita.lnk  $BUILDROOT/out/$PACKAGENAME
+cp $BUILDROOT/krita/packaging/windows/qt.conf  $BUILDROOT/out/$PACKAGENAME/bin
 
 cp $MXEROOT/bin/krita.exe $BUILDROOT/out/$PACKAGENAME/bin
 cp $MXEROOT/bin/*.dll $BUILDROOT/out/$PACKAGENAME/bin
@@ -60,8 +60,7 @@ cp -r $MXEROOT/qt5/plugins/platforms $BUILDROOT/out/$PACKAGENAME/bin/
 cp -r $MXEROOT/lib/plugins/imageformats/* $BUILDROOT/out/$PACKAGENAME/bin/imageformats/
 
 mkdir $BUILDROOT/out/$PACKAGENAME/bin/translations
-cp -r $MXEROOT/qt5/translations/qt_* $BUILDROOT/out/$PACKAGENAME/bin/translations
-cp -r $MXEROOT/qt5/translations/qtbase* $BUILDROOT/out/$PACKAGENAME/bin/translations
+cp -r $BUILDROOT/qt-translations/qt_* $BUILDROOT/out/$PACKAGENAME/bin/translations
 
 cp -r $MXEROOT/share/color $BUILDROOT/out/$PACKAGENAME/share
 cp -r $MXEROOT/share/color-schemes $BUILDROOT/out/$PACKAGENAME/share

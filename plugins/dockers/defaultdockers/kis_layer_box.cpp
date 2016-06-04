@@ -85,6 +85,8 @@
 #include "kis_color_filter_combo.h"
 #include "kis_node_filter_proxy_model.h"
 
+#include "kis_layer_utils.h"
+
 #include "ui_wdglayerbox.h"
 
 inline void KisLayerBox::connectActionToButton(KisViewManager* view, QAbstractButton *button, const QString &id)
@@ -235,9 +237,7 @@ void expandNodesRecursively(KisNodeSP root, QPointer<KisNodeFilterProxyModel> fi
     while (node) {
         QModelIndex idx = filteringModel->indexFromNode(node);
         if (idx.isValid()) {
-            if (node->collapsed()) {
-                nodeView->collapse(idx);
-            }
+            nodeView->setExpanded(idx, !node->collapsed());
         }
         if (node->childCount() > 0) {
             expandNodesRecursively(node, filteringModel, nodeView);
@@ -336,7 +336,6 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         connect(m_nodeModel, SIGNAL(toggleIsolateActiveNode()),
                 m_nodeManager, SLOT(toggleIsolateActiveNode()));
 
-        m_wdgLayerBox->listLayers->expandAll();
         expandNodesRecursively(m_image->rootLayer(), m_filteringModel, m_wdgLayerBox->listLayers);
         m_wdgLayerBox->listLayers->scrollTo(m_wdgLayerBox->listLayers->currentIndex());
         updateAvailableLabels();
@@ -664,7 +663,6 @@ void KisLayerBox::slotSelectOpaque()
 
 void KisLayerBox::slotNodeCollapsedChanged()
 {
-    m_wdgLayerBox->listLayers->expandAll();
     expandNodesRecursively(m_image->rootLayer(), m_filteringModel, m_wdgLayerBox->listLayers);
 }
 
@@ -832,7 +830,12 @@ void KisLayerBox::slotColorLabelChanged(int label)
     KisNodeList nodes = m_nodeManager->selectedNodes();
 
     Q_FOREACH(KisNodeSP node, nodes) {
-        node->setColorLabelIndex(label);
+        auto applyLabelFunc =
+            [label](KisNodeSP node) {
+                node->setColorLabelIndex(label);
+            };
+
+        KisLayerUtils::recursiveApplyNodes(node, applyLabelFunc);
     }
 }
 

@@ -52,6 +52,7 @@
 #include <generator/kis_generator_registry.h>
 #include <generator/kis_generator.h>
 
+
 struct Q_DECL_HIDDEN KisRecordedPaintAction::Private {
     KisPaintOpPresetSP paintOpPreset;
     KoColor foregroundColor;
@@ -120,7 +121,7 @@ void KisRecordedPaintAction::toXML(QDomDocument& doc, QDomElement& elt, KisRecor
     elt.appendChild(backgroundColorElt);
 
     // Opacity
-    elt.setAttribute("opacity", d->opacity);
+    elt.setAttribute("opacity", KisDomUtils::toString(d->opacity));
 
     // paintIncremental
     elt.setAttribute("paintIncremental", d->paintIncremental);

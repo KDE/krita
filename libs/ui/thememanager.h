@@ -58,8 +58,6 @@ public:
     QString currentThemeName() const;
     void    setCurrentTheme(const QString& name);
 
-    QString defaultThemeName() const;
-
     void    setThemeMenuAction(KActionMenu* const action);
     void    registerThemeActions(KActionCollection *actionCollection);
 
@@ -72,12 +70,9 @@ private Q_SLOTS:
     void slotChangePalette();
 
 private:
-
     void    populateThemeMap();
     void    populateThemeMenu();
     QPixmap createSchemePreviewIcon(const KSharedConfigPtr& config);
-    QString currentKDEdefaultTheme() const;
-    void    updateCurrentKDEdefaultThemePreview();
 
 private:
 

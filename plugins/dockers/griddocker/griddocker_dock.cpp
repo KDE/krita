@@ -77,6 +77,9 @@ void GridDockerDock::setCanvas(KoCanvasBase * canvas)
             SIGNAL(sigRequestUpdateGuidesConfig(const KisGuidesConfig&)),
             this,
             SLOT(slotGuidesConfigUpdateRequested(const KisGuidesConfig&)));
+
+        QRect rc = m_canvas->image()->bounds();
+        m_configWidget->setGridDivision(rc.width() / 2, rc.height() / 2);
     }
 }
 

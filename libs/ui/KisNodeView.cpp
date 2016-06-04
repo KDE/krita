@@ -62,7 +62,7 @@ class Q_DECL_HIDDEN KisNodeView::Private
 public:
     Private(KisNodeView* _q)
         : delegate(_q, _q)
-	, mode(DetailedMode)
+    , mode(DetailedMode)
 #ifdef DRAG_WHILE_DRAG_WORKAROUND
         , isDragging(false)
 #endif
@@ -415,7 +415,7 @@ QPixmap KisNodeView::createDragPixmap() const
     int y = 0;
     Q_FOREACH (const QModelIndex &selectedIndex, selectedIndexes) {
         const QImage img = selectedIndex.data(int(KisNodeModel::BeginThumbnailRole) + size).value<QImage>();
-        painter.drawPixmap(x, y, QPixmap().fromImage(img.scaled(QSize(size, size), Qt::KeepAspectRatio)));
+        painter.drawPixmap(x, y, QPixmap().fromImage(img.scaled(QSize(size, size), Qt::KeepAspectRatio, Qt::SmoothTransformation)));
 
         x += size + 1;
         if (x >= dragPixmap.width()) {

@@ -87,7 +87,7 @@ public:
      * @param toCS the revert conversion to the source color space will be affected to this
      *             variable
      */
-    void createColorConverters(const KoColorSpace* colorSpace, QList< QPair<KoID, KoID> >& possibilities, KoColorConversionTransformation*& fromCS, KoColorConversionTransformation*& toCS) const;
+    void createColorConverters(const KoColorSpace* colorSpace, const QList< QPair<KoID, KoID> >& possibilities, KoColorConversionTransformation*& fromCS, KoColorConversionTransformation*& toCS) const;
 public:
     /**
      * This function return a text that can be compiled using dot to display
@@ -110,7 +110,7 @@ public:
      */
     bool existsGoodPath(const QString& srcModelId, const QString& srcDepthId, const QString& srcProfileName, const QString& dstModelId, const QString& dstDepthId, const QString& dstProfileName) const;
 private:
-    QString vertexToDot(Vertex* v, QString options) const;
+    QString vertexToDot(Vertex* v, const QString &options) const;
 private:
     /**
      * Insert an engine.

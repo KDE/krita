@@ -506,9 +506,9 @@ public:
     virtual void increaseGreen(quint8 * pixel, qreal step) const;
     virtual void increaseBlue(quint8 * pixel, qreal step) const;
     virtual void increaseYellow(quint8 * pixel, qreal step) const;
-    virtual void toHSY(QVector <double> channelValues, qreal *hue, qreal *sat, qreal *luma) const = 0;
+    virtual void toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const = 0;
     virtual QVector <double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const = 0;
-    virtual void toYUV(QVector <double> channelValues, qreal *y, qreal *u, qreal *v) const = 0;
+    virtual void toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const = 0;
     virtual QVector <double> fromYUV(qreal *y, qreal *u, qreal *v) const = 0;
     /**
      * Compose two arrays of pixels together. If source and target

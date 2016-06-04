@@ -393,7 +393,7 @@
       <icon></icon>
       <text>&amp;Invert Selection</text>
       <whatsThis></whatsThis>
-      <toolTip>foo</toolTip>
+      <toolTip>Invert current selection</toolTip>
       <iconText>Invert Selection</iconText>
       <activationFlags>10000000000</activationFlags>
       <activationConditions>100</activationConditions>

@@ -78,13 +78,13 @@ endif()
 
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(KRITA_VERSION_STRING "3.0 RC 1")
+set(KRITA_VERSION_STRING "3.1 Alpha")
 set(KRITA_STABLE_VERSION_MAJOR 3) # 3 for 3.x, 4 for 4.x, etc.
-set(KRITA_STABLE_VERSION_MINOR 0) # 0 for 3.0, 1 for 3.1, etc.
-set(KRITA_VERSION_RELEASE 91)     # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
-#set(KRITA_ALPHA 1) # uncomment only for Alpha
+set(KRITA_STABLE_VERSION_MINOR 1) # 0 for 3.0, 1 for 3.1, etc.
+set(KRITA_VERSION_RELEASE 89)     # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
+set(KRITA_ALPHA 1) # uncomment only for Alpha
 #set(KRITA_BETA 1) # uncomment only for Beta
-set(KRITA_RC 1) # uncomment only for RC
+#set(KRITA_RC 1) # uncomment only for RC
 set(KRITA_YEAR 2016) # update every year
 
 if(NOT DEFINED KRITA_ALPHA AND NOT DEFINED KRITA_BETA AND NOT DEFINED KRITA_RC)
@@ -475,11 +475,13 @@ endif()
 ##
 set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
-macro_optional_find_package(Vc 0.6.70)
-macro_log_feature(Vc_FOUND "Vc" "Portable, zero-overhead SIMD library for C++" "https://github.com/VcDevel/Vc" FALSE "" "Required by the Krita for vectorization")
-macro_bool_to_01(Vc_FOUND HAVE_VC)
-macro_bool_to_01(PACKAGERS_BUILD DO_PACKAGERS_BUILD)
-
+set(HAVE_VC FALSE)
+if( NOT MSVC)
+    macro_optional_find_package(Vc 1.1.0)
+    macro_log_feature(Vc_FOUND "Vc" "Portable, zero-overhead SIMD library for C++" "https://github.com/VcDevel/Vc" FALSE "" "Required by the Krita for vectorization")
+    macro_bool_to_01(Vc_FOUND HAVE_VC)
+    macro_bool_to_01(PACKAGERS_BUILD DO_PACKAGERS_BUILD)
+endif()
 configure_file(config-vc.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-vc.h )
 
 if(HAVE_VC)
@@ -496,48 +498,28 @@ if(HAVE_VC)
     endif()
 
     #Handle Vc master
-    if(Vc_VERSION_MAJOR GREATER 0 OR Vc_VERSION_MINOR GREATER 7)
-        message(STATUS "Vc version is greater than 0.7, enabling AVX2 support")
-
-        if(Vc_COMPILER_IS_GCC OR Vc_COMPILER_IS_CLANG)
-            AddCompilerFlag("-std=c++11" _ok)
-            if(NOT _ok)
-                AddCompilerFlag("-std=c++0x" _ok)
-            endif()
+    if(Vc_COMPILER_IS_GCC OR Vc_COMPILER_IS_CLANG)
+        AddCompilerFlag("-std=c++11" _ok)
+        if(NOT _ok)
+            AddCompilerFlag("-std=c++0x" _ok)
         endif()
-
-        macro(ko_compile_for_all_implementations_no_scalar _objs _src)
-        if(PACKAGERS_BUILD)
-            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY SSE2 SSSE3 SSE4_1 AVX AVX2)
-        else()
-            set(${_objs} ${_src})
-        endif()
-        endmacro()
-
-        macro(ko_compile_for_all_implementations _objs _src)
-        if(PACKAGERS_BUILD)
-            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY Scalar SSE2 SSSE3 SSE4_1 AVX AVX2)
-        else()
-            set(${_objs} ${_src})
-        endif()
-        endmacro()
-    else()
-        macro(ko_compile_for_all_implementations_no_scalar _objs _src)
-        if(PACKAGERS_BUILD)
-            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY SSE2 SSSE3 SSE4_1 AVX)
-        else()
-            set(${_objs} ${_src})
-        endif()
-        endmacro()
-
-        macro(ko_compile_for_all_implementations _objs _src)
-        if(PACKAGERS_BUILD)
-            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY Scalar SSE2 SSSE3 SSE4_1 AVX)
-        else()
-            set(${_objs} ${_src})
-        endif()
-        endmacro()
     endif()
+
+    macro(ko_compile_for_all_implementations_no_scalar _objs _src)
+    if(PACKAGERS_BUILD)
+        vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY SSE2 SSSE3 SSE4_1 AVX AVX2+FMA+BMI2)
+    else()
+        set(${_objs} ${_src})
+    endif()
+    endmacro()
+
+    macro(ko_compile_for_all_implementations _objs _src)
+    if(PACKAGERS_BUILD)
+        vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY Scalar SSE2 SSSE3 SSE4_1 AVX AVX2+FMA+BMI2)
+    else()
+        set(${_objs} ${_src})
+    endif()
+    endmacro()
 
     if (NOT PACKAGERS_BUILD)
         # Optimize everything for the current architecture

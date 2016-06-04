@@ -25,12 +25,14 @@ struct KisTimedSignalThreshold::Private
 {
     Private(int _delay, int _cancelDelay)
         : delay(_delay),
-          cancelDelay(_cancelDelay),
+          cancelDelay(0),
           enabled(true)
     {
-        if (cancelDelay < 0) {
-            cancelDelay = 2 * delay;
-        }
+        setCancelDelay(_cancelDelay);
+    }
+
+    void setCancelDelay(int value) {
+        cancelDelay = value >= 0 ? value : 2 * delay;
     }
 
     QElapsedTimer timer;
@@ -58,9 +60,11 @@ void KisTimedSignalThreshold::forceDone()
 
 void KisTimedSignalThreshold::start()
 {
+    if (!m_d->enabled) return;
+
     if (!m_d->timer.isValid()) {
         m_d->timer.start();
-    } else if (m_d->timer.elapsed() > 2 * m_d->delay) {
+    } else if (m_d->timer.elapsed() > m_d->cancelDelay) {
         stop();
     } else if (m_d->timer.elapsed() > m_d->delay) {
         forceDone();
@@ -80,3 +84,8 @@ void KisTimedSignalThreshold::setEnabled(bool value)
     }
 }
 
+void KisTimedSignalThreshold::setDelayThreshold(int delay, int cancelDelay)
+{
+    m_d->delay = delay;
+    m_d->setCancelDelay(cancelDelay);
+}

@@ -98,10 +98,10 @@ void KisRecordedShapePaintAction::toXML(QDomDocument& doc, QDomElement& elt, Kis
 {
     KisRecordedPaintAction::toXML(doc, elt, context);
     QDomElement rectangleElt = doc.createElement("Rectangle");
-    rectangleElt.setAttribute("x", d->rectangle.x());
-    rectangleElt.setAttribute("y", d->rectangle.y());
-    rectangleElt.setAttribute("width", d->rectangle.width());
-    rectangleElt.setAttribute("height", d->rectangle.height());
+    rectangleElt.setAttribute("x", KisDomUtils::toString(d->rectangle.x()));
+    rectangleElt.setAttribute("y", KisDomUtils::toString(d->rectangle.y()));
+    rectangleElt.setAttribute("width", KisDomUtils::toString(d->rectangle.width()));
+    rectangleElt.setAttribute("height", KisDomUtils::toString(d->rectangle.height()));
     elt.appendChild(rectangleElt);
     switch(d->shape)
     {

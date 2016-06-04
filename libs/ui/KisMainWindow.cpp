@@ -954,9 +954,9 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
             const QString ext = KisMimeDatabase::suffixesForMimeType(_native_format).first();
             if (!ext.isEmpty()) {
                 if (c < 0)
-                    suggestedFilename += ext;
+                    suggestedFilename = suggestedFilename + "." + ext;
                 else
-                    suggestedFilename = suggestedFilename.left(c) + ext;
+                    suggestedFilename = suggestedFilename.left(c) + "." + ext;
             } else { // current filename extension wrong anyway
                 if (c > 0) {
                     // this assumes that a . signifies an extension, not just a .
@@ -1778,6 +1778,9 @@ void KisMainWindow::slotToolbarToggled(bool toggle)
 void KisMainWindow::viewFullscreen(bool fullScreen)
 {
     KisConfig cfg;
+#ifdef Q_OS_WIN
+    cfg.setFullscreenMode(false);
+#else
     cfg.setFullscreenMode(fullScreen);
 
     if (fullScreen) {
@@ -1785,6 +1788,7 @@ void KisMainWindow::viewFullscreen(bool fullScreen)
     } else {
         setWindowState(windowState() & ~Qt::WindowFullScreen);   // reset
     }
+#endif
 }
 
 void KisMainWindow::slotProgress(int value)
@@ -2312,8 +2316,9 @@ void KisMainWindow::createActions()
     actionManager->createStandardAction(KStandardAction::Open, this, SLOT(slotFileOpen()));
     actionManager->createStandardAction(KStandardAction::Quit, this, SLOT(slotFileQuit()));
     actionManager->createStandardAction(KStandardAction::ConfigureToolbars, this, SLOT(slotConfigureToolbars()));
+#ifndef Q_OS_WIN
     actionManager->createStandardAction(KStandardAction::FullScreen, this, SLOT(viewFullscreen(bool)));
-
+#endif
     d->recentFiles = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(QUrl)), actionCollection());
     connect(d->recentFiles, SIGNAL(recentListCleared()), this, SLOT(saveRecentFiles()));
     KSharedConfigPtr configPtr =  KSharedConfig::openConfig();

@@ -42,6 +42,8 @@ public:
     void setGuidesConfig(const KisGuidesConfig &value);
     KisGuidesConfig guidesConfig() const;
 
+    void setGridDivision(int w, int h);
+
 private Q_SLOTS:
     void slotGridGuiChanged();
     void slotGuidesGuiChanged();

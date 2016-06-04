@@ -38,14 +38,10 @@ class KRITAIMAGE_EXPORT KisNodeProgressProxy : public QObject, public KoProgress
      * with a node, it will report progress in the node progress bar. This proxy
      * will be deleted when @p _node is deleted.
      */
-    KisNodeProgressProxy(KisNode* _node);
+    explicit KisNodeProgressProxy(KisNode* _node);
     ~KisNodeProgressProxy();
 
 public:
-    /**
-     * @return the node associated with this proxy.
-     */
-    const KisNodeSP node() const;
     virtual int maximum() const ;
     virtual void setValue(int value);
     virtual void setRange(int minimum, int maximum);
@@ -61,6 +57,14 @@ Q_SIGNALS:
      * @param _node is the node that own this \ref KisNodeProgressProxy
      */
     void percentageChanged(int _percentage, const KisNodeSP& _node);
+
+private:
+    /**
+     * To be called when the node is and will be no longer available
+     * and this object is going to be deleted as well.
+     */
+    void prepareDestroying();
+
 private:
     struct Private;
     Private* const d;

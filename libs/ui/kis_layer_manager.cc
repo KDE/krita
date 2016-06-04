@@ -345,6 +345,14 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
     KisImageWSP image = m_view->image();
     if (!image) return;
 
+
+    KisLayer *srcLayer = dynamic_cast<KisLayer*>(source.data());
+    if (srcLayer) {
+        image->flattenLayer(srcLayer);
+        return;
+    }
+
+
     KisPaintDeviceSP srcDevice =
         source->paintDevice() ? source->projection() : source->original();
 

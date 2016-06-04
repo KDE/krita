@@ -178,13 +178,13 @@ void KisRecordedPathPaintAction::toXML(QDomDocument& doc, QDomElement& elt, KisR
                 infoElt.appendChild(point1Elt);
                 // Control1
                 QDomElement control1Elt = doc.createElement("Control1");
-                control1Elt.setAttribute("x", slice.control1.x());
-                control1Elt.setAttribute("y", slice.control1.y());
+                control1Elt.setAttribute("x", KisDomUtils::toString(slice.control1.x()));
+                control1Elt.setAttribute("y", KisDomUtils::toString(slice.control1.y()));
                 infoElt.appendChild(control1Elt);
                 // Control2
                 QDomElement control2Elt = doc.createElement("Control2");
-                control2Elt.setAttribute("x", slice.control2.x());
-                control2Elt.setAttribute("y", slice.control2.y());
+                control2Elt.setAttribute("x", KisDomUtils::toString(slice.control2.x()));
+                control2Elt.setAttribute("y", KisDomUtils::toString(slice.control2.y()));
                 infoElt.appendChild(control2Elt);
                 // Point2
                 QDomElement point2Elt = doc.createElement("Point2");

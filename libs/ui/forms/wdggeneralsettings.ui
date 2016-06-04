@@ -44,7 +44,16 @@
          <property name="verticalSpacing">
           <number>10</number>
          </property>
-         <property name="margin">
+         <property name="leftMargin">
+          <number>10</number>
+         </property>
+         <property name="topMargin">
+          <number>10</number>
+         </property>
+         <property name="rightMargin">
+          <number>10</number>
+         </property>
+         <property name="bottomMargin">
           <number>10</number>
          </property>
          <item row="0" column="0">
@@ -154,7 +163,16 @@
        </item>
        <item row="1" column="0">
         <layout class="QGridLayout" name="gridLayout_6">
-         <property name="margin">
+         <property name="leftMargin">
+          <number>10</number>
+         </property>
+         <property name="topMargin">
+          <number>10</number>
+         </property>
+         <property name="rightMargin">
+          <number>10</number>
+         </property>
+         <property name="bottomMargin">
           <number>10</number>
          </property>
          <property name="spacing">
@@ -240,14 +258,14 @@
            <property name="text">
             <string/>
            </property>
-           <property name="color">
+           <property name="color" stdset="0">
             <color>
              <red>0</red>
              <green>0</green>
              <blue>0</blue>
             </color>
            </property>
-           <property name="defaultColor">
+           <property name="defaultColor" stdset="0">
             <color>
              <red>0</red>
              <green>0</green>
@@ -304,7 +322,7 @@
            <item>
             <widget class="QLabel" name="label_6">
              <property name="text">
-              <string>Don't show contents when moving sub-windows:</string>
+              <string>Don't show contents when moving sub-windows</string>
              </property>
             </widget>
            </item>
@@ -381,7 +399,16 @@
          <property name="spacing">
           <number>10</number>
          </property>
-         <property name="margin">
+         <property name="leftMargin">
+          <number>10</number>
+         </property>
+         <property name="topMargin">
+          <number>10</number>
+         </property>
+         <property name="rightMargin">
+          <number>10</number>
+         </property>
+         <property name="bottomMargin">
           <number>10</number>
          </property>
          <item>
@@ -454,7 +481,16 @@
       <layout class="QGridLayout" name="gridLayout_5">
        <item row="0" column="0">
         <layout class="QGridLayout" name="gridLayout_7">
-         <property name="margin">
+         <property name="leftMargin">
+          <number>10</number>
+         </property>
+         <property name="topMargin">
+          <number>10</number>
+         </property>
+         <property name="rightMargin">
+          <number>10</number>
+         </property>
+         <property name="bottomMargin">
           <number>10</number>
          </property>
          <property name="spacing">

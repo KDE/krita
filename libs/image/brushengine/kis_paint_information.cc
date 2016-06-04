@@ -269,8 +269,8 @@ void KisPaintInformation::toXML(QDomDocument&, QDomElement& e) const
     e.setAttribute("rotation", QString::number(rotation(), 'g', 15));
     e.setAttribute("tangentialPressure", QString::number(tangentialPressure(), 'g', 15));
     e.setAttribute("perspective", QString::number(perspective(), 'g', 15));
-    e.setAttribute("time", d->time);
-    e.setAttribute("speed", d->speed);
+    e.setAttribute("time", QString::number(d->time, 'g', 15));
+    e.setAttribute("speed", QString::number(d->speed, 'g', 15));
 }
 
 KisPaintInformation KisPaintInformation::fromXML(const QDomElement& e)

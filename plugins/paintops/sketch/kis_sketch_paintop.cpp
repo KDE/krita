@@ -72,7 +72,7 @@ KisSketchPaintOp::KisSketchPaintOp(const KisSketchPaintOpSettings *settings, Kis
     m_sizeOption.readOptionSetting(settings);
     m_rotationOption.readOptionSetting(settings);
     m_sketchProperties.readOptionSetting(settings);
-    m_brushOption.readOptionSetting(settings);
+    m_brushOption.readOptionSetting(settings, true);
     m_densityOption.readOptionSetting(settings);
     m_lineWidthOption.readOptionSetting(settings);
     m_offsetScaleOption.readOptionSetting(settings);

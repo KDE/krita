@@ -365,14 +365,6 @@ public:
     void setAutoSave(int delay);
 
     /**
-     * Set whether the next openUrl call should check for an auto-saved file
-     * and offer to open it. This is usually true, but can be turned off
-     * (e.g. for the preview module). This only checks for names auto-saved
-     * files, unnamed auto-saved files are only checked on KisApplication startup.
-     */
-    void setCheckAutoSaveFile(bool b);
-
-    /**
      * Set whether the next openUrl call should show error message boxes in case
      * of errors. This is usually the case, but e.g. not when generating thumbnail
      * previews.

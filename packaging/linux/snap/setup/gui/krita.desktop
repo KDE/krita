@@ -97,6 +97,7 @@ GenericName[x-test]=xxDigital Paintingxx
 MimeType=application/x-krita;image/openraster;application/x-krita-paintoppreset;
 Comment=Pixel-based image manipulation program for the Calligra Suite
 Comment[ca]=Programa de manipulació d'imatges basades en píxels per a la Suite Calligra
+Comment[ca@valencia]=Programa de manipulació d'imatges basades en píxels per a la Suite Calligra
 Comment[de]=Pixelbasiertes Bildbearbeitungsprogramm für die Calligra-Suite
 Comment[es]=Programa de manipulación de imágenes basado en píxeles para la suite Calligra
 Comment[nl]=Afbeeldingsbewerkingsprogramma gebaseerd op pixels voor de Calligra Suite

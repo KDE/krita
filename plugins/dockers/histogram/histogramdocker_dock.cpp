@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2016 Eugene Ingerman <geneing at gmail dot com>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -19,7 +19,6 @@
 
 #include <QLabel>
 #include <QVBoxLayout>
-#include <QStatusBar>
 #include <klocalizedstring.h>
 
 #include "kis_canvas2.h"
@@ -69,7 +68,6 @@ void HistogramDockerDock::setCanvas(KoCanvasBase * canvas)
         m_histogramWidget->setPaintDevice( dev, m_producer, m_canvas->image()->bounds() );
 
         connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), m_compressor, SLOT(start()), Qt::UniqueConnection);
-        //connect(m_canvas->image(), SIGNAL(sigProfileChanged(const KoColorProfile *)), this, SLOT(sigProfileChanged(const KoColorProfile *)), Qt::UniqueConnection);
         connect(m_canvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), this, SLOT(sigColorSpaceChanged(const KoColorSpace*)), Qt::UniqueConnection);
 
         m_compressor->start();

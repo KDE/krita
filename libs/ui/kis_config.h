@@ -285,6 +285,9 @@ public:
     bool showDockerTitleBars(bool defaultValue = false) const;
     void setShowDockerTitleBars(const bool value) const;
 
+    bool showStatusBar(bool defaultValue = false) const;
+    void setShowStatusBar(const bool value) const;
+
     bool hideMenuFullscreen(bool defaultValue = false) const;
     void setHideMenuFullscreen(const bool value) const;
 

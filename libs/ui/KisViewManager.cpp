@@ -260,7 +260,7 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
     QScopedPointer<KoDummyCanvasController> dummy(new KoDummyCanvasController(actionCollection()));
     KoToolManager::instance()->registerToolActions(actionCollection(), dummy.data());
 
-    QTimer::singleShot(0, this, SLOT(makeStatusBarVisible()));
+    QTimer::singleShot(0, this, SLOT(initializeStatusBarVisibility()));
 
     connect(KoToolManager::instance(), SIGNAL(inputDeviceChanged(KoInputDevice)),
             d->controlFrame.paintopBox(), SLOT(slotInputDeviceChanged(KoInputDevice)));
@@ -573,6 +573,8 @@ KisUndoAdapter * KisViewManager::undoAdapter()
 
 void KisViewManager::createActions()
 {
+    KisConfig cfg;
+
     d->saveIncremental = actionManager()->createAction("save_incremental_version");
     connect(d->saveIncremental, SIGNAL(triggered()), this, SLOT(slotSaveIncremental()));
 
@@ -603,7 +605,7 @@ void KisViewManager::createActions()
     d->levelOfDetailAction = actionManager()->createAction("level_of_detail_mode");
 
     KisAction *tAction = actionManager()->createAction("showStatusBar");
-    tAction->setChecked(true);
+    tAction->setChecked(cfg.showStatusBar());
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
     tAction = actionManager()->createAction("view_show_canvas_only");
@@ -619,7 +621,6 @@ void KisViewManager::createActions()
     a = actionManager()->createAction("edit_blacklist_cleanup");
     connect(a, SIGNAL(triggered()), this, SLOT(slotBlacklistCleanup()));
 
-    KisConfig cfg;
     d->showRulersAction = actionManager()->createAction("view_ruler");
     d->showRulersAction->setChecked(cfg.showRulers());
     connect(d->showRulersAction, SIGNAL(toggled(bool)), SLOT(slotSaveShowRulersState(bool)));
@@ -995,8 +996,11 @@ void KisViewManager::enableControls()
 
 void KisViewManager::showStatusBar(bool toggled)
 {
-    if (d->currentImageView && d->currentImageView->statusBar()) {
-        d->currentImageView->statusBar()->setVisible(toggled);
+    KisMainWindow *mw = mainWindow();
+    if(mw && mw->statusBar()) {
+        mw->statusBar()->setVisible(toggled);
+        KisConfig cfg;
+        cfg.setShowStatusBar(toggled);
     }
 }
 
@@ -1124,9 +1128,10 @@ void KisViewManager::updateIcons()
         }
     }
 }
-void KisViewManager::makeStatusBarVisible()
+void KisViewManager::initializeStatusBarVisibility()
 {
-    d->mainWindow->statusBar()->setVisible(true);
+    KisConfig cfg;
+    d->mainWindow->statusBar()->setVisible(cfg.showStatusBar());
 }
 
 void KisViewManager::guiUpdateTimeout()

@@ -183,15 +183,6 @@ QRect KisRasterKeyframeChannel::affectedRect(KisKeyframeSP key)
     return rect;
 }
 
-void KisRasterKeyframeChannel::requestUpdate(const KisTimeRange &range, const QRect &rect)
-{
-    KisKeyframeChannel::requestUpdate(range, rect);
-
-    if (range.contains(m_d->paintDevice->defaultBounds()->currentTime())) {
-        m_d->paintDevice->setDirty(rect);
-    }
-}
-
 QDomElement KisRasterKeyframeChannel::toXML(QDomDocument doc, const QString &layerFilename)
 {
     m_d->frameFilenames.clear();

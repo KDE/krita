@@ -79,7 +79,6 @@ protected:
     void uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame);
 
     QRect affectedRect(KisKeyframeSP key);
-    void requestUpdate(const KisTimeRange &range, const QRect &rect);
 
     void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename);
     KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode);

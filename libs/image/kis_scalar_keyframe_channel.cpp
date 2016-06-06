@@ -193,7 +193,12 @@ void KisScalarKeyframeChannel::uploadExternalKeyframe(KisKeyframeChannel *srcCha
 QRect KisScalarKeyframeChannel::affectedRect(KisKeyframeSP key)
 {
     Q_UNUSED(key);
-    return QRect();
+
+    if (node()) {
+        return node()->extent();
+    } else {
+        return QRect();
+    }
 }
 
 void KisScalarKeyframeChannel::saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename)

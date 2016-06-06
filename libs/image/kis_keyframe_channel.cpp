@@ -518,6 +518,11 @@ void KisKeyframeChannel::requestUpdate(const KisTimeRange &range, const QRect &r
 {
     if (m_d->node) {
         m_d->node->invalidateFrames(range, rect);
+
+        int currentTime = m_d->defaultBounds->currentTime();
+        if (range.contains(currentTime)) {
+            m_d->node->setDirty(rect);
+        }
     }
 }
 

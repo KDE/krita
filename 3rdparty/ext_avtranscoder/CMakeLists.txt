@@ -1,0 +1,12 @@
+SET(EXTPREFIX_avtranscoder "${EXTPREFIX}" )
+ExternalProject_Add( ext_avtranscoder
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL http://files.kde.org/krita/build/dependencies/avTranscoder-0.9.5_krita_1.zip
+    URL_MD5 d63eaca4eb696f0e0876a5238cbae46d
+
+    INSTALL_DIR ${EXTPREFIX_avtranscoder}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_avtranscoder} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DAVTRANSCODER_DISABLE_APPS=TRUE -DAVTRANSCODER_DISABLE_BINDINGS=TRUE
+
+    UPDATE_COMMAND ""
+    ALWAYS 0
+)

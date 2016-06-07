@@ -211,6 +211,7 @@ On All operating systems:
     cmake --build . --config RelWithDebInfo --target ext_vc
     cmake --build . --config RelWithDebInfo --target ext_libraw
     cmake --build . --config RelWithDebInfo --target ext_openjpeg
+    cmake --build . --config RelWithDebInfo --target ext_avtranscoder
 
 On Windows and OSX
 

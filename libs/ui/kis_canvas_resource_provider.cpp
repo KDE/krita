@@ -450,9 +450,6 @@ bool KisCanvasResourceProvider::mirrorHorizontalHideDecorations() {
 
 void KisCanvasResourceProvider::setMirrorHorizontalHideDecorations(bool hide)
 {
-    qDebug() << QString::number(hide);
-
-
     m_resourceManager->setResource(MirrorHorizontalHideDecorations, hide);
     emit mirrorModeChanged();
 }

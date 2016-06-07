@@ -313,7 +313,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                 if (role == CreateRole)
                 {
                     urlRequester = new KisFileNameRequester;
-                    urlRequester->setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
+                    urlRequester->setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
                     urlRequester->setMode(KoFileDialog::OpenDirectory);
 
                     m_widgetToParameterIndexMapper[ urlRequester ] = i;

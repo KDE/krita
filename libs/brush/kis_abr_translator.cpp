@@ -179,18 +179,18 @@ void AbrBrushProperties::toXML(QDomDocument& doc, QDomElement& root) const
     QDomElement e = d.createElement("Brush");
 
     QDomElement shapeElement = d.createElement("MaskGenerator");
-    shapeElement.setAttribute("radius", (m_diameter * 0.5)); // radius == diameter / 2
-    shapeElement.setAttribute("ratio", m_roundness / 100.0); // roundness in (0..100) to ratio in (0.0..1.0)
-    shapeElement.setAttribute("hfade", m_hardness / 100.0); // same here
-    shapeElement.setAttribute("vfade", m_hardness / 100.0); // and here too
-    shapeElement.setAttribute("spikes", 2); // just circle so far
+    shapeElement.setAttribute("radius", KisDomUtils::toString(m_diameter * 0.5)); // radius == diameter / 2
+    shapeElement.setAttribute("ratio", KisDomUtils::toString(m_roundness / 100.0)); // roundness in (0..100) to ratio in (0.0..1.0)
+    shapeElement.setAttribute("hfade", KisDomUtils::toString(m_hardness / 100.0)); // same here
+    shapeElement.setAttribute("vfade", KisDomUtils::toString(m_hardness / 100.0)); // and here too
+    shapeElement.setAttribute("spikes", KisDomUtils::toString(2)); // just circle so far
     shapeElement.setAttribute("type", "circle");
     e.appendChild(shapeElement);
 
     e.setAttribute("type", "auto_brush");
-    e.setAttribute("spacing", m_spacing / 100.0); // spacing from 0..1000 to
-    e.setAttribute("angle", m_angle < 0 ? m_angle + 360.0 : m_angle); // angle from -180..180 to 0..360
-    e.setAttribute("randomness", 0);  // default here
+    e.setAttribute("spacing", KisDomUtils::toString(m_spacing / 100.0)); // spacing from 0..1000 to
+    e.setAttribute("angle", KisDomUtils::toString(m_angle < 0 ? m_angle + 360.0 : m_angle)); // angle from -180..180 to 0..360
+    e.setAttribute("randomness", "0");  // default here
     d.appendChild(e);
 
     QDomElement elementParam = doc.createElement("param");
@@ -275,24 +275,24 @@ void AbrTipDynamicsProperties::toXML(QDomDocument& doc, QDomElement& root) const
 
     el = doc.createElement("angleDynamics");
 
-    el.setAttribute("angleJitter", m_angleProperties.m_sizeJitter);
-    el.setAttribute("angleController", m_angleProperties.m_bVTy);
-    el.setAttribute("angleFadeStep", m_angleProperties.m_fadeStep);
+    el.setAttribute("angleJitter", KisDomUtils::toString(m_angleProperties.m_sizeJitter));
+    el.setAttribute("angleController", KisDomUtils::toString(m_angleProperties.m_bVTy));
+    el.setAttribute("angleFadeStep", KisDomUtils::toString(m_angleProperties.m_fadeStep));
     root.appendChild(el);
 
     el = doc.createElement("roundnessDynamics");
-    el.setAttribute("minumumRoundness", m_minumumRoundness);
-    el.setAttribute("roundnessJitter", m_RoundnessProperties.m_sizeJitter);
-    el.setAttribute("roundnessController", m_RoundnessProperties.m_bVTy);
-    el.setAttribute("roundnessFadeStep", m_RoundnessProperties.m_fadeStep);
+    el.setAttribute("minumumRoundness", KisDomUtils::toString(m_minumumRoundness));
+    el.setAttribute("roundnessJitter", KisDomUtils::toString(m_RoundnessProperties.m_sizeJitter));
+    el.setAttribute("roundnessController", KisDomUtils::toString(m_RoundnessProperties.m_bVTy));
+    el.setAttribute("roundnessFadeStep", KisDomUtils::toString(m_RoundnessProperties.m_fadeStep));
     root.appendChild(el);
 
     el = doc.createElement("sizeDynamics");
-    el.setAttribute("tiltScale", m_tiltScale);
-    el.setAttribute("minumumDiameter", m_minumumDiameter);
-    el.setAttribute("roundnessJitter", m_RoundnessProperties.m_sizeJitter);
-    el.setAttribute("roundnessController", m_RoundnessProperties.m_bVTy);
-    el.setAttribute("roundnessFadeStep", m_RoundnessProperties.m_fadeStep);
+    el.setAttribute("tiltScale", KisDomUtils::toString(m_tiltScale));
+    el.setAttribute("minumumDiameter", KisDomUtils::toString(m_minumumDiameter));
+    el.setAttribute("roundnessJitter", KisDomUtils::toString(m_RoundnessProperties.m_sizeJitter));
+    el.setAttribute("roundnessController", KisDomUtils::toString(m_RoundnessProperties.m_bVTy));
+    el.setAttribute("roundnessFadeStep", KisDomUtils::toString(m_RoundnessProperties.m_fadeStep));
     root.appendChild(el);
 
 }

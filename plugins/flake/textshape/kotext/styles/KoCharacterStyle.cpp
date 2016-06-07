@@ -43,8 +43,8 @@
 
 #ifdef SHOULD_BUILD_FONT_CONVERSION
 #include <string.h>
-#include <fontconfig.h>
-#include <fcfreetype.h>
+#include <fontconfig/fontconfig.h>
+#include <fontconfig/fcfreetype.h>
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_GLYPH_H

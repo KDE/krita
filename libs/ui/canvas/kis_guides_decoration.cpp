@@ -21,7 +21,7 @@
 #include <KisDocument.h>
 #include "kis_config.h"
 #include "kis_guides_config.h"
-
+#include "kis_coordinates_converter.h"
 
 struct KisGuidesDecoration::Private
 {

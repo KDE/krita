@@ -24,7 +24,9 @@
 #include <klocalizedstring.h>
 
 #include "compositeops/KoCompositeOps.h"
-#include "KoColorConversions.h"
+#include <KoColorConversions.h>
+
+#include <kis_dom_utils.h>
 
 YCbCrU8ColorSpace::YCbCrU8ColorSpace(const QString &name, KoColorProfile *p)
     : LcmsColorSpace<KoYCbCrU8Traits>(colorSpaceId(), name, TYPE_YCbCrA_8, cmsSigXYZData, p)
@@ -53,9 +55,9 @@ void YCbCrU8ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomE
 {
     const KoYCbCrU8Traits::Pixel *p = reinterpret_cast<const KoYCbCrU8Traits::Pixel *>(pixel);
     QDomElement labElt = doc.createElement("YCbCr");
-    labElt.setAttribute("Y",  KoColorSpaceMaths< KoYCbCrU8Traits::channels_type, qreal>::scaleToA(p->Y));
-    labElt.setAttribute("Cb", KoColorSpaceMaths< KoYCbCrU8Traits::channels_type, qreal>::scaleToA(p->Cb));
-    labElt.setAttribute("Cr", KoColorSpaceMaths< KoYCbCrU8Traits::channels_type, qreal>::scaleToA(p->Cr));
+    labElt.setAttribute("Y",  KisDomUtils::toString(KoColorSpaceMaths< KoYCbCrU8Traits::channels_type, qreal>::scaleToA(p->Y)));
+    labElt.setAttribute("Cb", KisDomUtils::toString(KoColorSpaceMaths< KoYCbCrU8Traits::channels_type, qreal>::scaleToA(p->Cb)));
+    labElt.setAttribute("Cr", KisDomUtils::toString(KoColorSpaceMaths< KoYCbCrU8Traits::channels_type, qreal>::scaleToA(p->Cr)));
     labElt.setAttribute("space", profile()->name());
     colorElt.appendChild(labElt);
 }
@@ -63,13 +65,13 @@ void YCbCrU8ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomE
 void YCbCrU8ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
     KoYCbCrU8Traits::Pixel *p = reinterpret_cast<KoYCbCrU8Traits::Pixel *>(pixel);
-    p->Y = KoColorSpaceMaths< qreal, KoYCbCrU8Traits::channels_type >::scaleToA(elt.attribute("Y").toDouble());
-    p->Cb = KoColorSpaceMaths< qreal, KoYCbCrU8Traits::channels_type >::scaleToA(elt.attribute("Cb").toDouble());
-    p->Cr = KoColorSpaceMaths< qreal, KoYCbCrU8Traits::channels_type >::scaleToA(elt.attribute("Cr").toDouble());
+    p->Y = KoColorSpaceMaths< qreal, KoYCbCrU8Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("Y")));
+    p->Cb = KoColorSpaceMaths< qreal, KoYCbCrU8Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("Cb")));
+    p->Cr = KoColorSpaceMaths< qreal, KoYCbCrU8Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("Cr")));
     p->alpha = KoColorSpaceMathsTraits<quint8>::max;
 }
 
-void YCbCrU8ColorSpace::toHSY(QVector <double> channelValues, qreal *hue, qreal *sat, qreal *luma) const
+void YCbCrU8ColorSpace::toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const
 {
     LabToLCH(channelValues[0],channelValues[1],channelValues[2], luma, sat, hue);
 }
@@ -81,7 +83,7 @@ QVector <double> YCbCrU8ColorSpace::fromHSY(qreal *hue, qreal *sat, qreal *luma)
     channelValues[3]=1.0;
     return channelValues;
 }
-void YCbCrU8ColorSpace::toYUV(QVector <double> channelValues, qreal *y, qreal *u, qreal *v) const
+void YCbCrU8ColorSpace::toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const
 {
     *y =channelValues[0];
     *u=channelValues[1];

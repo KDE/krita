@@ -22,8 +22,10 @@
 #include <kis_dom_utils.h>
 #include "kis_text_brush.h"
 
-KisBrushSP KisTextBrushFactory::getOrCreateBrush(const QDomElement& brushDefinition)
+KisBrushSP KisTextBrushFactory::getOrCreateBrush(const QDomElement& brushDefinition, bool forceCopy)
 {
+    Q_UNUSED(forceCopy);
+
     QString text = brushDefinition.attribute("text", "The quick brown fox ate your text");
     QFont font;
     font.fromString(brushDefinition.attribute("font"));

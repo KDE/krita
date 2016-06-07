@@ -35,7 +35,7 @@ Windows Only:
 
 == Prepare your directory layout ==
 
-1. Make a toplevel build directory, say $HOME/dev or c:\dev. We'll refer to this directory as BUILDROOT. You can use a variable for this, on WINDOWS %BUILDROOT%, on OSX and Linux $BUILDROOT. 
+1. Make a toplevel build directory, say $HOME/dev or c:\dev. We'll refer to this directory as BUILDROOT. You can use a variable for this, on WINDOWS %BUILDROOT%, on OSX and Linux $BUILDROOT. You will have to replace BUILDROOT with $BUILDROOT or %BUILDROOT whenever you copy and paste a command, depending on your operating system.
 
 2. Checkout krita in BUILDROOT
     cd BUILDROOT

@@ -345,6 +345,14 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
     KisImageWSP image = m_view->image();
     if (!image) return;
 
+
+    KisLayer *srcLayer = dynamic_cast<KisLayer*>(source.data());
+    if (srcLayer) {
+        image->flattenLayer(srcLayer);
+        return;
+    }
+
+
     KisPaintDeviceSP srcDevice =
         source->paintDevice() ? source->projection() : source->original();
 
@@ -657,7 +665,7 @@ void KisLayerManager::layersUpdated()
 
 void KisLayerManager::saveGroupLayers()
 {
-    QStringList listMimeFilter = KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export);
+    QStringList listMimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
 
     KoDialog dlg;
     QWidget *page = new QWidget(&dlg);

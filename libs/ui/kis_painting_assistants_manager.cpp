@@ -18,11 +18,12 @@
  */
 
 #include "kis_painting_assistants_manager.h"
-#include "kis_painting_assistants_decoration.h"
+
 #include "KisViewManager.h"
 #include "kis_action_manager.h"
 #include "kis_action.h"
 
+#include "kis_canvas2.h"
 #include <klocalizedstring.h>
 #include <kguiitem.h>
 #include <ktoggleaction.h>
@@ -82,7 +83,7 @@ void KisPaintingAssistantsManager::updateAction()
     }
 }
 
-KisPaintingAssistantsDecoration* KisPaintingAssistantsManager::decoration()
+KisPaintingAssistantsDecorationSP KisPaintingAssistantsManager::decoration()
 {
     if (m_imageView) {
         return m_imageView->canvasBase()->paintingAssistantsDecoration();

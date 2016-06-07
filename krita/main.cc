@@ -90,13 +90,6 @@ extern "C" int main(int argc, char **argv)
     QString key = "Krita3" + QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");
     key = key.replace(":", "_").replace("\\","_");
 
-#if defined HAVE_X11
-    // we need to call XInitThreads() (which this does) because of gmic (and possibly others)
-    // do their own X11 stuff in their own threads
-    // this call must happen before the creation of the application (see AA_X11InitThreads docs)
-    QCoreApplication::setAttribute(Qt::AA_X11InitThreads, true);
-#endif
-
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
@@ -129,10 +122,16 @@ extern "C" int main(int argc, char **argv)
     QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
     languageoverride.beginGroup(QStringLiteral("Language"));
     QString language = languageoverride.value(qAppName(), "").toString();
+
+    qDebug() << "Override language:" << language;
+
     if (!language.isEmpty()) {
         KLocalizedString::setLanguages(language.split(":"));
         // And override Qt's locale, too
-        QLocale::setDefault(language.split(":").first());
+        qputenv("LANG", language.toLatin1());
+        QLocale locale(language.split(":").first());
+        QLocale::setDefault(locale);
+        qDebug() << "Qt ui languages" << locale.uiLanguages();
     }
     else {
         // And if there isn't one, check the one set by the system.

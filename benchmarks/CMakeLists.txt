@@ -1,6 +1,5 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles3 
     ${CMAKE_SOURCE_DIR}/sdk/tests
     ${CMAKE_SOURCE_DIR}/libs/pigment
     ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
@@ -74,4 +73,7 @@ target_link_libraries(KisGradientBenchmark  kritaimage  Qt5::Test)
 target_link_libraries(KisLowMemoryBenchmark  kritaimage  Qt5::Test)
 target_link_libraries(KisFilterSelectionsBenchmark   kritaimage  Qt5::Test)
 target_link_libraries(KisCompositionBenchmark  kritaimage  Qt5::Test ${LINK_VC_LIB})
+if(HAVE_VC)
+    set_property(TARGET KisCompositionBenchmark APPEND PROPERTY COMPILE_OPTIONS "${Vc_ARCHITECTURE_FLAGS}")
+endif()
 target_link_libraries(KisMaskGeneratorBenchmark  kritaimage  Qt5::Test)

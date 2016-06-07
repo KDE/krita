@@ -207,11 +207,12 @@ KisNode::KisNode(const KisNode & rhs)
 KisNode::~KisNode()
 {
     if (m_d->busyProgressIndicator) {
-        m_d->busyProgressIndicator->endUpdatesBeforeDestroying();
+        m_d->busyProgressIndicator->prepareDestroying();
         m_d->busyProgressIndicator->deleteLater();
     }
 
     if (m_d->nodeProgressProxy) {
+        m_d->nodeProgressProxy->prepareDestroying();
         m_d->nodeProgressProxy->deleteLater();
     }
 

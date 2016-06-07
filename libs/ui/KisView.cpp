@@ -104,7 +104,8 @@ bool KisView::s_firstView = true;
 class Q_DECL_HIDDEN KisView::Private
 {
 public:
-    Private(KisView *_q, KisDocument *document,
+    Private(KisView *_q,
+            KisDocument *document,
             KoCanvasResourceManager *resourceManager,
             KActionCollection *actionCollection)
         : actionCollection(actionCollection)
@@ -112,7 +113,7 @@ public:
         , canvasController(_q, actionCollection)
         , canvas(&viewConverter, resourceManager, _q, document->shapeController())
         , zoomManager(_q, &this->viewConverter, &this->canvasController)
-        , paintingAssistantsDecoration(_q)
+        , paintingAssistantsDecoration(new KisPaintingAssistantsDecoration(_q))
         , floatingMessageCompressor(100, KisSignalCompressor::POSTPONE)
     {
     }
@@ -140,7 +141,7 @@ public:
     KisZoomManager zoomManager;
     KisViewManager *viewManager = 0;
     KisNodeSP currentNode;
-    KisPaintingAssistantsDecoration paintingAssistantsDecoration;
+    KisPaintingAssistantsDecorationSP paintingAssistantsDecoration;
     bool isCurrent = false;
     bool showFloatingMessage = false;
     QPointer<KisFloatingMessage> savedFloatingMessage;
@@ -247,8 +248,8 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
     connect(d->document, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
     connect(d->document, SIGNAL(sigSavingFinished()), this, SLOT(slotSavingFinished()));
 
-    d->canvas.addDecoration(&d->paintingAssistantsDecoration);
-    d->paintingAssistantsDecoration.setVisible(true);
+    d->canvas.addDecoration(d->paintingAssistantsDecoration);
+    d->paintingAssistantsDecoration->setVisible(true);
 
     d->showFloatingMessage = cfg.showCanvasMessages();
 }

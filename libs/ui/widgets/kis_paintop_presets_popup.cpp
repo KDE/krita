@@ -262,8 +262,9 @@ QImage KisPaintOpPresetsPopup::cutOutOverlay()
     return m_d->uiWdgPaintOpPresetSettings.scratchPad->cutoutOverlay();
 }
 
-void KisPaintOpPresetsPopup::contextMenuEvent(QContextMenuEvent *e) {
-
+void KisPaintOpPresetsPopup::contextMenuEvent(QContextMenuEvent *e)
+{
+#if 0
     QMenu menu(this);
     QAction* action = menu.addAction(m_d->detached ? i18n("Attach to Toolbar") : i18n("Detach from Toolbar"));
     connect(action, SIGNAL(triggered()), this, SLOT(switchDetached()));
@@ -276,6 +277,7 @@ void KisPaintOpPresetsPopup::contextMenuEvent(QContextMenuEvent *e) {
     showScratchPad->setChecked(m_d->uiWdgPaintOpPresetSettings.scratchPad->isVisible());
     connect(showScratchPad, SIGNAL(triggered(bool)), this, SLOT(slotSwitchScratchpad(bool)));
     menu.exec(e->globalPos());
+#endif
 }
 
 void KisPaintOpPresetsPopup::switchDetached(bool show)

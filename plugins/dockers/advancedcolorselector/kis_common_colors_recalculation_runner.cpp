@@ -193,10 +193,10 @@ QList<QRgb> KisCommonColorsRecalculationRunner::getColors()
     int pixelCount = height*width;
     if(pixelCount> (1<<16)) {
         qreal factor = sqrt((1<<16)/(qreal) pixelCount);
-        tmpImage=m_imageData.scaledToWidth(width*factor);
+        tmpImage = m_imageData.scaledToWidth(width*factor);
     }
     else {
-        tmpImage=m_imageData;
+        tmpImage = m_imageData;
     }
     width=tmpImage.width();
     height=tmpImage.height();

@@ -34,11 +34,21 @@
 #include "kis_antialiasing_fade_maker.h"
 
 
-
 struct Q_DECL_HIDDEN KisCurveCircleMaskGenerator::Private
 {
     Private(bool enableAntialiasing)
         : fadeMaker(*this, enableAntialiasing)
+    {
+    }
+
+    Private(const Private &rhs)
+        : xcoef(rhs.xcoef),
+        ycoef(rhs.ycoef),
+        curveResolution(rhs.curveResolution),
+        curveData(rhs.curveData),
+        curvePoints(rhs.curvePoints),
+        dirty(true),
+        fadeMaker(rhs.fadeMaker,*this)
     {
     }
 
@@ -65,6 +75,21 @@ KisCurveCircleMaskGenerator::KisCurveCircleMaskGenerator(qreal diameter, qreal r
     setScale(1.0, 1.0);
 }
 
+KisCurveCircleMaskGenerator::KisCurveCircleMaskGenerator(const KisCurveCircleMaskGenerator &rhs)
+    : KisMaskGenerator(rhs),
+      d(new Private(*rhs.d))
+{
+}
+
+KisCurveCircleMaskGenerator::~KisCurveCircleMaskGenerator()
+{
+}
+
+KisMaskGenerator* KisCurveCircleMaskGenerator::clone() const
+{
+    return new KisCurveCircleMaskGenerator(*this);
+}
+
 void KisCurveCircleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
 {
     KisMaskGenerator::setScale(scaleX, scaleY);
@@ -76,11 +101,6 @@ void KisCurveCircleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
     d->ycoef = 2.0 / height;
 
     d->fadeMaker.setSquareNormCoeffs(d->xcoef, d->ycoef);
-}
-
-KisCurveCircleMaskGenerator::~KisCurveCircleMaskGenerator()
-{
-    delete d;
 }
 
 bool KisCurveCircleMaskGenerator::shouldSupersample() const

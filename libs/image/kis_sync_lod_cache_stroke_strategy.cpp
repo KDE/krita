@@ -121,6 +121,7 @@ void KisSyncLodCacheStrokeStrategy::finishStrokeCallback()
         dev->uploadLodDataStruct(it.value());
     }
 
+    qDeleteAll(m_d->dataObjects);
     m_d->dataObjects.clear();
 }
 

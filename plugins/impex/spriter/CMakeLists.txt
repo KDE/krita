@@ -1,6 +1,3 @@
-include_directories( 
-    ${CMAKE_SOURCE_DIR}/krita/image/metadata 
-)
 include_directories(SYSTEM
     ${Boost_INCLUDE_DIRS}
 )

@@ -161,10 +161,10 @@ namespace KisAnimationUtils {
         QScopedPointer<KUndo2Command> cmd(
             new KUndo2Command(!copy ?
                               kundo2_i18np("Move Keyframe",
-                                           "Move Keyframes",
+                                           "Move %1 Keyframes",
                                            srcFrames.size()) :
                               kundo2_i18np("Copy Keyframe",
-                                           "Copy Keyframes",
+                                           "Copy %1 Keyframes",
                                            srcFrames.size()))); // lisp-lovers present ;)
 
         for (int i = 0; i < srcFrames.size(); i++) {

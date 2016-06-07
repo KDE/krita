@@ -160,9 +160,6 @@ public:
     bool useOpenGLTextureBuffer(bool defaultValue = false) const;
     void setUseOpenGLTextureBuffer(bool useBuffer);
 
-    bool disableDoubleBuffering(bool defaultValue = false) const;
-    void setDisableDoubleBuffering(bool disableDoubleBuffering);
-
     bool disableVSync(bool defaultValue = false) const;
     void setDisableVSync(bool disableVSync);
 
@@ -287,6 +284,9 @@ public:
 
     bool showDockerTitleBars(bool defaultValue = false) const;
     void setShowDockerTitleBars(const bool value) const;
+
+    bool showStatusBar(bool defaultValue = false) const;
+    void setShowStatusBar(const bool value) const;
 
     bool hideMenuFullscreen(bool defaultValue = false) const;
     void setHideMenuFullscreen(const bool value) const;
@@ -422,6 +422,8 @@ public:
     bool testingAcceptCompressedTabletEvents(bool defaultValue = false) const;
     void setTestingAcceptCompressedTabletEvents(bool value);
 
+    bool shouldEatDriverShortcuts(bool defaultValue = false) const;
+
     bool testingCompressBrushEvents(bool defaultValue = false) const;
     void setTestingCompressBrushEvents(bool value);
 
@@ -470,6 +472,10 @@ public:
 
     bool convertToImageColorspaceOnImport(bool defaultValue = false) const;
     void setConvertToImageColorspaceOnImport(bool value);
+
+    int stabilizerSampleSize(bool defaultValue = false) const;
+    void setStabilizerSampleSize(int value);
+
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

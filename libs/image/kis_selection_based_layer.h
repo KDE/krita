@@ -191,6 +191,7 @@ protected:
     KisKeyframeChannel *requestKeyframeChannel(const QString &id);
 
 public Q_SLOTS:
+    void slotImageSizeChanged();
 
     /**
      * gets this layer. Overriddes function in

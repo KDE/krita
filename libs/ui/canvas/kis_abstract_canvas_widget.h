@@ -26,14 +26,14 @@ class QRect;
 
 class KoToolProxy;
 
-class KisCanvasDecoration;
+#include <kis_canvas_decoration.h>
+
 class KisDisplayFilter;
 class KisDisplayColorConverter;
 class QBitArray;
 
 #include "kis_types.h"
 #include "kis_ui_types.h"
-
 
 class KisAbstractCanvasWidget
 {
@@ -51,13 +51,13 @@ public:
     /// Draw the specified decorations on the view.
     virtual void drawDecorations(QPainter & gc, const QRect &updateWidgetRect) const = 0;
 
-    virtual void addDecoration(KisCanvasDecoration* deco) = 0;
+    virtual void addDecoration(KisCanvasDecorationSP deco) = 0;
 
-    virtual KisCanvasDecoration* decoration(const QString& id) const = 0;
+    virtual KisCanvasDecorationSP decoration(const QString& id) const = 0;
 
-    virtual void setDecorations(const QList<QPointer<KisCanvasDecoration>> &) = 0;
+    virtual void setDecorations(const QList<KisCanvasDecorationSP> &) = 0;
 
-    virtual QList<QPointer<KisCanvasDecoration>> decorations() const = 0;
+    virtual QList<KisCanvasDecorationSP> decorations() const = 0;
 
     /// set the specified display filter on the canvas
     virtual void setDisplayFilter(KisDisplayFilter *displayFilter) = 0;

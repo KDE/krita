@@ -26,8 +26,10 @@
 #include "kis_mask_generator.h"
 #include <kis_dom_utils.h>
 
-KisBrushSP KisAutoBrushFactory::getOrCreateBrush(const QDomElement& brushDefinition)
+KisBrushSP KisAutoBrushFactory::getOrCreateBrush(const QDomElement& brushDefinition, bool forceCopy)
 {
+    Q_UNUSED(forceCopy);
+
     KisMaskGenerator* mask = KisMaskGenerator::fromXML(brushDefinition.firstChildElement("MaskGenerator"));
     double angle = KisDomUtils::toDouble(brushDefinition.attribute("angle", "0.0"));
     double randomness = KisDomUtils::toDouble(brushDefinition.attribute("randomness", "0.0"));
@@ -35,7 +37,7 @@ KisBrushSP KisAutoBrushFactory::getOrCreateBrush(const QDomElement& brushDefinit
     double spacing = KisDomUtils::toDouble(brushDefinition.attribute("spacing", "1.0"));
     bool useAutoSpacing = KisDomUtils::toInt(brushDefinition.attribute("useAutoSpacing", "0"));
     qreal autoSpacingCoeff = KisDomUtils::toDouble(brushDefinition.attribute("autoSpacingCoeff", "1.0"));
-\
+
     KisBrushSP brush = new KisAutoBrush(mask, angle, randomness, density);
     brush->setSpacing(spacing);
     brush->setAutoSpacing(useAutoSpacing, autoSpacingCoeff);

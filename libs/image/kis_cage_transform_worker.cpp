@@ -284,7 +284,7 @@ struct KisCageTransformWorker::Private::MapIndexesOp {
 
 QRect KisCageTransformWorker::approxChangeRect(const QRect &rc)
 {
-    const int margin = 0.30;
+    const qreal margin = 0.30;
 
     QVector<QPointF> cageSamplePoints;
 

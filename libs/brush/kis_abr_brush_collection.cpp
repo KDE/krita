@@ -527,6 +527,22 @@ KisAbrBrushCollection::KisAbrBrushCollection(const QString& filename)
 {
 }
 
+KisAbrBrushCollection::KisAbrBrushCollection(const KisAbrBrushCollection& rhs)
+    : KisBrush(rhs)
+{
+    for (auto it = rhs.m_abrBrushes.begin();
+         it != rhs.m_abrBrushes.end();
+         ++it) {
+
+        m_abrBrushes.insert(it.key(), new KisAbrBrush(*it.value(), this));
+    }
+}
+
+KisBrush* KisAbrBrushCollection::clone() const
+{
+    return new KisAbrBrushCollection(*this);
+}
+
 bool KisAbrBrushCollection::load()
 {
     QFile file(filename());

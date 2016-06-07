@@ -339,6 +339,9 @@ endif()
 
 if(HAVE_VC)
   target_link_libraries(kritaimage PUBLIC ${Vc_LIBRARIES})
+  if (NOT PACKAGERS_BUILD)
+      set_property(TARGET kritaimage APPEND PROPERTY COMPILE_OPTIONS "${Vc_ARCHITECTURE_FLAGS}")
+  endif()
 endif()
 
 if (NOT GSL_FOUND)
@@ -354,7 +357,6 @@ target_include_directories(kritaimage
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/generator>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/layerstyles>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/metadata>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/metadata/schemes>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/processing>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/recorder>
 )

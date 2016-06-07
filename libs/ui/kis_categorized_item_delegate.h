@@ -31,13 +31,12 @@
 class KRITAUI_EXPORT KisCategorizedItemDelegate: public QStyledItemDelegate
 {
 public:
-    KisCategorizedItemDelegate(bool indicateError, QObject *parent);
+    KisCategorizedItemDelegate(QObject *parent);
     virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
 
 private:
     void paintTriangle(QPainter* painter, qint32 x, qint32 y, qint32 size, bool rotate) const;
-    bool           m_indicateError;
     mutable qint32 m_minimumItemHeight;
 };
 

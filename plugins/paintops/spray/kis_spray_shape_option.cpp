@@ -31,7 +31,7 @@ public:
     KisShapeOptionsWidget(QWidget *parent = 0)
         : QWidget(parent) {
         setupUi(this);
-        imageUrl->setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
+        imageUrl->setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
     }
 
 };

@@ -21,8 +21,8 @@
 #include "kundo2command.h"
 #include "kis_time_range.h"
 
-#include "kis_global.h"
-
+#include <kis_global.h>
+#include <kis_dom_utils.h>
 
 struct KisScalarKeyframeChannel::Private
 {
@@ -204,17 +204,17 @@ QRect KisScalarKeyframeChannel::affectedRect(KisKeyframeSP key)
 void KisScalarKeyframeChannel::saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename)
 {
     Q_UNUSED(layerFilename);
-    keyframeElement.setAttribute("value", m_d->values[keyframe->value()]);
+    keyframeElement.setAttribute("value", KisDomUtils::toString(m_d->values[keyframe->value()]));
 }
 
 KisKeyframeSP KisScalarKeyframeChannel::loadKeyframe(const QDomElement &keyframeNode)
 {
     int time = keyframeNode.toElement().attribute("time").toUInt();
-    QVariant value = keyframeNode.toElement().attribute("value");
+    qreal value = KisDomUtils::toDouble(keyframeNode.toElement().attribute("value"));
 
     KUndo2Command tempParentCommand;
     KisKeyframeSP keyframe = createKeyframe(time, KisKeyframeSP(), &tempParentCommand);
-    setScalarValue(keyframe, value.toReal());
+    setScalarValue(keyframe, value);
 
     return keyframe;
 }

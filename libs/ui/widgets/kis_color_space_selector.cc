@@ -163,6 +163,10 @@ void KisColorSpaceSelector::setCurrentColorSpace(const KoColorSpace* colorSpace)
   setCurrentProfile(colorSpace->profile()->name());
 }
 
+void KisColorSpaceSelector::showColorBrowserButton(bool showButton) {
+ d->colorSpaceSelector->bnAdvanced->setVisible(showButton);
+}
+
 void KisColorSpaceSelector::colorSpaceChanged()
 {
     bool valid = d->colorSpaceSelector->cmbProfile->count() != 0;

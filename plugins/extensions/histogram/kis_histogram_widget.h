@@ -49,7 +49,7 @@ public:
 
 private Q_SLOTS:
     void setActiveChannel(int channel);
-    void slotTypeSwitched(int id);
+    void slotTypeSwitched(void);
     void slotZoomIn();
     void slotZoomOut();
     void slide(int val);

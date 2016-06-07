@@ -83,7 +83,7 @@ void KisBrushOptionWidget::writeOptionSetting(KisPropertiesConfiguration* settin
 void KisBrushOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
     m_brushSelectionWidget->readOptionSetting(setting);
-    m_brushOption.readOptionSetting(setting);
+    m_brushOption.readOptionSetting(setting, false);
     m_brushSelectionWidget->setCurrentBrush(m_brushOption.brush());
 }
 

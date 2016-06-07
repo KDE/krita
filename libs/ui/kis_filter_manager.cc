@@ -104,7 +104,9 @@ void KisFilterManager::setup(KActionCollection * ac, KisActionManager *actionMan
     connect(&d->actionsMapper, SIGNAL(mapped(const QString&)), SLOT(showFilterDialog(const QString&)));
 
     // Setup list of filters
-    Q_FOREACH (const QString &filterName, KisFilterRegistry::instance()->keys()) {
+    QStringList keys = KisFilterRegistry::instance()->keys();
+    keys.sort();
+    Q_FOREACH (const QString &filterName, keys) {
         insertFilter(filterName);
     }
 

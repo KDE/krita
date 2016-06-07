@@ -64,6 +64,7 @@ KisSelectionBasedLayer::KisSelectionBasedLayer(KisImageWSP image,
         setInternalSelection(selection);
 
     m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image));
+    connect(image.data(), SIGNAL(sigSizeChanged(QPointF,QPointF)), SLOT(slotImageSizeChanged()));
 }
 
 KisSelectionBasedLayer::KisSelectionBasedLayer(const KisSelectionBasedLayer& rhs)
@@ -86,15 +87,30 @@ KisSelectionBasedLayer::~KisSelectionBasedLayer()
 void KisSelectionBasedLayer::initSelection()
 {
     m_d->selection = new KisSelection(new KisDefaultBounds(image()));
-    m_d->selection->pixelSelection()->select(image()->bounds());
+    quint8 newDefaultPixel = MAX_SELECTED;
+    m_d->selection->pixelSelection()->setDefaultPixel(&newDefaultPixel);
     m_d->selection->setParentNode(this);
     m_d->selection->updateProjection();
+}
+
+void KisSelectionBasedLayer::slotImageSizeChanged()
+{
+    if (m_d->selection) {
+        /**
+         * Make sure exactBounds() of the selection got recalculated after
+         * the image changed
+         */
+        m_d->selection->pixelSelection()->setDirty();
+        setDirty();
+    }
 }
 
 void KisSelectionBasedLayer::setImage(KisImageWSP image)
 {
     m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(image));
     KisLayer::setImage(image);
+
+    connect(image.data(), SIGNAL(sigSizeChanged(QPointF,QPointF)), SLOT(slotImageSizeChanged()));
 }
 
 bool KisSelectionBasedLayer::allowAsChild(KisNodeSP node) const

@@ -39,6 +39,43 @@
 #include <kis_dom_utils.h>
 
 struct KisMaskGenerator::Private {
+    Private()
+        : diameter(1.0),
+          ratio(1.0),
+          softness(1.0),
+          fh(1.0),
+          fv(1.0),
+          cs(0.0),
+          ss(0.0),
+          cachedSpikesAngle(0.0),
+          spikes(2),
+          empty(true),
+          antialiasEdges(false),
+          type(CIRCLE),
+          scaleX(1.0),
+          scaleY(1.0)
+    {
+    }
+
+    Private(const Private &rhs)
+        : diameter(rhs.diameter),
+          ratio(rhs.ratio),
+          softness(rhs.softness),
+          fh(rhs.fh),
+          fv(rhs.fv),
+          cs(rhs.cs),
+          ss(rhs.ss),
+          cachedSpikesAngle(rhs.cachedSpikesAngle),
+          spikes(rhs.spikes),
+          empty(rhs.empty),
+          antialiasEdges(rhs.antialiasEdges),
+          type(rhs.type),
+          curveString(rhs.curveString),
+          scaleX(rhs.scaleX),
+          scaleY(rhs.scaleY)
+    {
+    }
+
     qreal diameter, ratio;
     qreal softness;
     qreal fh, fv;
@@ -51,7 +88,7 @@ struct KisMaskGenerator::Private {
     QString curveString;
     qreal scaleX;
     qreal scaleY;
-    KisBrushMaskApplicatorBase *defaultMaskProcessor;
+    QScopedPointer<KisBrushMaskApplicatorBase> defaultMaskProcessor;
 };
 
 
@@ -66,7 +103,6 @@ KisMaskGenerator::KisMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal 
     d->spikes = spikes;
     d->cachedSpikesAngle = M_PI / d->spikes;
     d->type = type;
-    d->defaultMaskProcessor = 0;
     d->antialiasEdges = antialiasEdges;
     d->scaleX = 1.0;
     d->scaleY = 1.0;
@@ -75,8 +111,12 @@ KisMaskGenerator::KisMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal 
 
 KisMaskGenerator::~KisMaskGenerator()
 {
-    delete d->defaultMaskProcessor;
-    delete d;
+}
+
+KisMaskGenerator::KisMaskGenerator(const KisMaskGenerator &rhs)
+    : d(new Private(*rhs.d)),
+      m_id(rhs.m_id)
+{
 }
 
 void KisMaskGenerator::init()
@@ -105,11 +145,11 @@ bool KisMaskGenerator::isEmpty() const
 KisBrushMaskApplicatorBase* KisMaskGenerator::applicator()
 {
     if (!d->defaultMaskProcessor) {
-        d->defaultMaskProcessor =
-            createOptimizedClass<MaskApplicatorFactory<KisMaskGenerator, KisBrushMaskScalarApplicator> >(this);
+        d->defaultMaskProcessor.reset(
+            createOptimizedClass<MaskApplicatorFactory<KisMaskGenerator, KisBrushMaskScalarApplicator> >(this));
     }
 
-    return d->defaultMaskProcessor;
+    return d->defaultMaskProcessor.data();
 }
 
 void KisMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const

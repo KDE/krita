@@ -26,6 +26,9 @@ class BRUSH_EXPORT KisSvgBrush : public KisBrush
 public:
     /// Construct brush to load filename later as brush
     KisSvgBrush(const QString& filename);
+    KisSvgBrush(const KisSvgBrush& rhs);
+    KisBrush* clone() const;
+
     virtual bool load();
     virtual bool loadFromDevice(QIODevice *dev);
     virtual bool save();

@@ -1,5 +1,3 @@
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../RulerAssistantCommon)
-
 set(kritarulerassistanttool_SOURCES
     RulerAssistant.cc
     EllipseAssistant.cc

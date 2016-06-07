@@ -2,7 +2,6 @@ project( artistictextshape )
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/libs/widgets
-    ${CMAKE_SOURCE_DIR}/libs/main # for KoFontComboBox.h
 )
 
 set ( ArtisticTextShape_SRCS

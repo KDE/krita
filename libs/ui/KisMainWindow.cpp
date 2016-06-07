@@ -580,8 +580,6 @@ void KisMainWindow::showView(KisView *imageView)
         subwin->setOption(QMdiSubWindow::RubberBandResize, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
         subwin->setWindowIcon(qApp->windowIcon());
 
-        setActiveView(imageView);
-
         /**
          * Hack alert!
          *
@@ -610,6 +608,13 @@ void KisMainWindow::showView(KisView *imageView)
         else {
             imageView->show();
         }
+
+        // No, no, no: do not try to call this _before_ the show() has
+        // been called on the view; only when that has happened is the
+        // opengl context active, and very bad things happen if we tell
+        // the dockers to update themselves with a view if the opengl
+        // context is not active.
+        setActiveView(imageView);
 
         updateWindowMenu();
         updateCaption();
@@ -683,13 +688,13 @@ void KisMainWindow::addRecentURL(const QUrl &url)
                     ok = false; // it's in the tmp resource
 #ifdef HAVE_KIO
             if (ok) {
-                KRecentDocument::add(path);
+                KRecentDocument::add(QUrl::fromLocalFile(path));
             }
 #endif
         }
 #ifdef HAVE_KIO
         else {
-            KRecentDocument::add(url.url(QUrl::StripTrailingSlash), true);
+            KRecentDocument::add(url.adjusted(QUrl::StripTrailingSlash));
         }
 #endif
         if (ok) {
@@ -821,10 +826,7 @@ QStringList KisMainWindow::showOpenFileDialog()
 {
     KoFileDialog dialog(this, KoFileDialog::ImportFiles, "OpenDocument");
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KIS_MIME_TYPE,
-                                                                 KisImportExportManager::Import,
-                                                                 KisDocument::extraNativeMimeTypes()));
-    dialog.setHideNameFilterDetailsOption();
+    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
     dialog.setCaption(isImporting() ? i18n("Import Images") : i18n("Open Images"));
 
     return dialog.filenames();
@@ -933,9 +935,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
         mimeFilter = KisMimeDatabase::suffixesForMimeType(_native_format);
     }
     else {
-        mimeFilter = KisImportExportManager::mimeFilter(_native_format,
-                                                        KisImportExportManager::Export,
-                                                        document->extraNativeMimeTypes());
+        mimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
     }
 
 
@@ -954,9 +954,9 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
             const QString ext = KisMimeDatabase::suffixesForMimeType(_native_format).first();
             if (!ext.isEmpty()) {
                 if (c < 0)
-                    suggestedFilename += ext;
+                    suggestedFilename = suggestedFilename + "." + ext;
                 else
-                    suggestedFilename = suggestedFilename.left(c) + ext;
+                    suggestedFilename = suggestedFilename.left(c) + "." + ext;
             } else { // current filename extension wrong anyway
                 if (c > 0) {
                     // this assumes that a . signifies an extension, not just a .
@@ -988,7 +988,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool silent
             dialog.setDefaultDir(suggestedURL.toLocalFile(), true);
         }
         // Default to all supported file types if user is exporting, otherwise use Krita default
-        dialog.setMimeTypeFilters(mimeFilter, isExporting() ? "" : KIS_MIME_TYPE);
+        dialog.setMimeTypeFilters(mimeFilter);
         QUrl newURL = QUrl::fromUserInput(dialog.filename());
 
         if (newURL.isLocalFile()) {
@@ -1343,9 +1343,7 @@ void KisMainWindow::slotFileNew()
 {
     KisOpenPane *startupWidget = 0;
 
-    const QStringList mimeFilter = KisImportExportManager::mimeFilter(KIS_MIME_TYPE,
-                                                                      KisImportExportManager::Import,
-                                                                      KisDocument::extraNativeMimeTypes());
+    const QStringList mimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Import);
 
     startupWidget = new KisOpenPane(this, mimeFilter, QStringLiteral("templates/"));
     startupWidget->setWindowModality(Qt::WindowModal);
@@ -1780,6 +1778,9 @@ void KisMainWindow::slotToolbarToggled(bool toggle)
 void KisMainWindow::viewFullscreen(bool fullScreen)
 {
     KisConfig cfg;
+#ifdef Q_OS_WIN
+    cfg.setFullscreenMode(false);
+#else
     cfg.setFullscreenMode(fullScreen);
 
     if (fullScreen) {
@@ -1787,6 +1788,7 @@ void KisMainWindow::viewFullscreen(bool fullScreen)
     } else {
         setWindowState(windowState() & ~Qt::WindowFullScreen);   // reset
     }
+#endif
 }
 
 void KisMainWindow::slotProgress(int value)
@@ -2314,8 +2316,9 @@ void KisMainWindow::createActions()
     actionManager->createStandardAction(KStandardAction::Open, this, SLOT(slotFileOpen()));
     actionManager->createStandardAction(KStandardAction::Quit, this, SLOT(slotFileQuit()));
     actionManager->createStandardAction(KStandardAction::ConfigureToolbars, this, SLOT(slotConfigureToolbars()));
+#ifndef Q_OS_WIN
     actionManager->createStandardAction(KStandardAction::FullScreen, this, SLOT(viewFullscreen(bool)));
-
+#endif
     d->recentFiles = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(QUrl)), actionCollection());
     connect(d->recentFiles, SIGNAL(recentListCleared()), this, SLOT(saveRecentFiles()));
     KSharedConfigPtr configPtr =  KSharedConfig::openConfig();

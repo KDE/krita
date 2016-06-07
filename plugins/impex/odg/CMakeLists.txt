@@ -1,5 +1,3 @@
-include_directories( ${CMAKE_SOURCE_DIR}/krita/image/metadata )
-
 set(kritaodgimport_SOURCES
     kis_odg_import.cc
 )

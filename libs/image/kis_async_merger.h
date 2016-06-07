@@ -33,7 +33,7 @@ public:
 private:
     inline void resetProjection();
     inline void setupProjection(KisProjectionLeafSP currentLeaf, const QRect& rect, bool useTempProjection);
-    inline void writeProjection(KisProjectionLeafSP topmostLeaf, bool useTempProjection, QRect rect);
+    inline void writeProjection(KisProjectionLeafSP topmostLeaf, bool useTempProjection, const QRect &rect);
     inline bool compositeWithProjection(KisProjectionLeafSP leaf, const QRect &rect);
     inline void doNotifyClones(KisBaseRectsWalker &walker);
 

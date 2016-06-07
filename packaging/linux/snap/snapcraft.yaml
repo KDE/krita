@@ -1,0 +1,143 @@
+name: krita
+version: 3.0-snap11
+summary: Pixel-based image manipulation program for the Calligra Suite
+description: Krita is a creative application for raster images. Whether you want to create
+ from scratch or work with existing images, Krita is for you. You can work with
+ photos or scanned images, or start with a blank slate. Krita supports most
+ graphics tablets out of the box.
+
+
+apps:
+  krita:
+    command: qt5-launch usr/bin/krita
+    plugs: [x11, unity7, home, opengl, network, network-bind]
+
+parts:
+  qt:
+    plugin: nil
+    stage-packages:
+        - libqt5concurrent5
+        - libqt5core5a
+        - libqt5dbus5
+        - libqt5gui5
+        - libqt5network5
+        - libqt5printsupport5
+        - libqt5svg5
+        - libqt5widgets5
+        - libqt5x11extras5
+        - libqt5xml5
+    
+  kdeframeworks:
+    plugin: nil
+    stage-packages:
+        - libkf5archive5
+        - libkf5completion5
+        - libkf5configcore5
+        - libkf5configgui5
+        - libkf5coreaddons5
+        - libkf5guiaddons5
+        - libkf5i18n5
+        - libkf5itemviews5
+        - libkf5widgetsaddons5
+        - libkf5windowsystem5
+    after: [qt]
+    
+  krita:
+    plugin: cmake
+# Using -DKDE_NO_DEBUG_OUTPUT was causing compilation failure for some reason
+#    configflags: [-DCMAKE_INSTALL_PREFIX=/usr, -DQT_NO_DEBUG=1, -DCMAKE_CXX_FLAGS="-DKDE_NO_DEBUG_OUTPUT"]
+    configflags: [-DCMAKE_INSTALL_PREFIX=/usr, -DQT_NO_DEBUG=1]
+    source: ../../../
+# Use these instead to build from the git source
+#    source: git://anongit.kde.org/krita.git
+#    source-type: git
+#    source-branch: krita/3.0
+    build-packages:
+        - build-essential
+        - cmake
+        - libboost-dev
+        - libboost-system-dev
+        - libeigen3-dev
+        - libexiv2-dev
+        - libfftw3-dev
+        - libfontconfig1-dev
+        - libfreetype6-dev
+        - libgl1-mesa-dev
+        - libglew-dev
+        - libglib2.0-dev
+        - libglu1-mesa-dev
+        - libgsf-1-dev
+        - libgsl-dev
+        - libjpeg-dev
+        - liblcms2-dev
+        - libopenexr-dev
+        - libopenjpeg-dev
+        - libpng12-dev
+        - libpoppler-qt4-dev
+        - libtiff5-dev
+        - libvc-dev
+        - libopencolorio-dev
+        - libx11-dev
+        - libxml2-dev
+        - libxslt1-dev
+        - libxi-dev
+        - pkg-config
+        - pkg-kde-tools
+        - vc-dev
+        - zlib1g-dev
+        - libkdcraw-dev
+        - shared-mime-info
+        - libopenimageio-dev
+        - extra-cmake-modules
+        - libkf5archive-dev
+        - libkf5coreaddons-dev
+        - libkf5guiaddons-dev
+        - libkf5itemmodels-dev
+        - libkf5itemviews-dev
+        - libkf5widgetsaddons-dev
+        - libkf5i18n-dev
+        - libkf5windowsystem-dev
+        - libkf5completion-dev
+        - libkf5iconthemes-dev
+        - libkf5kiocore5
+        - libqt5svg5-dev
+        - libqt5x11extras5-dev
+        - libqt5opengl5-dev
+    stage-packages:      
+        - libboost-system1.58.0
+        - libexiv2-14
+        - libfftw3-double3
+        - libgomp1
+        - libgsl2
+        - libilmbase12
+        - libjpeg8
+        - liblcms2-2
+        - libopencolorio1v5
+        - libopenexr22
+        - libopenjpeg5
+        - libpng12-0
+        - libstdc++6
+        - libtiff5
+        - libx11-6
+        - libxcb1
+        - libxi6
+        - zlib1g
+        - libraw15
+        - libkf5crash5
+        - libpoppler-qt5-1
+        - curl
+    after: [qt, kdeframeworks]
+    
+  integration:
+    plugin: nil
+    stage-packages:
+      - ttf-ubuntu-font-family
+    snap:
+      - usr/share
+      - -usr/share/doc
+
+  launcher:
+    plugin: copy
+    files:
+      qt5-launch: bin/qt5-launch
+

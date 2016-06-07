@@ -36,17 +36,18 @@
 
 #include "kis_ui_types.h"
 #include "kis_coordinates_converter.h"
+#include "kis_canvas_decoration.h"
+#include "kis_painting_assistants_decoration.h"
 
 class KoToolProxy;
 class KoColorProfile;
 
-class KisCanvasDecoration;
+
 class KisViewManager;
 class KisFavoriteResourceManager;
 class KisDisplayFilter;
 class KisDisplayColorConverter;
 struct KisExposureGammaCorrectionInterface;
-class KisPaintingAssistantsDecoration;
 class KisView;
 class KisInputManager;
 class KisAnimationPlayer;
@@ -147,7 +148,7 @@ public: // KoCanvasBase implementation
      */
     KisInputManager* globalInputManager() const;
 
-    KisPaintingAssistantsDecoration* paintingAssistantsDecoration() const;
+    KisPaintingAssistantsDecorationSP paintingAssistantsDecoration() const;
 
 
 public: // KisCanvas2 methods
@@ -157,8 +158,8 @@ public: // KisCanvas2 methods
     QPointer<KisView> imageView() const;
 
     /// @return true if the canvas image should be displayed in vertically mirrored mode
-    void addDecoration(KisCanvasDecoration* deco);
-    KisCanvasDecoration* decoration(const QString& id) const;
+    void addDecoration(KisCanvasDecorationSP deco);
+    KisCanvasDecorationSP decoration(const QString& id) const;
 
     void setDisplayFilter(KisDisplayFilter *displayFilter);
     KisDisplayFilter *displayFilter() const;

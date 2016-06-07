@@ -307,6 +307,14 @@ public:
     virtual void connectIgnoreCheckBox(QCheckBox *ignoreBox) = 0;
     void connectValueChangedSignal(const QObject *receiver, const char *method, Qt::ConnectionType type = Qt::AutoConnection);
 
+    /**
+     * Clicking on this widget will automatically enable it,
+     * setting "Ignored" property to false.
+     *
+     * Default implementation does nothing.
+     */
+    virtual void connectAutoEnableWidget(QWidget *widget);
+
 Q_SIGNALS:
     void sigValueChanged();
 
@@ -332,6 +340,8 @@ public:
 
     void connectIgnoreCheckBox(QCheckBox *ignoreBox);
     void notifyIgnoreChanged();
+
+    void connectAutoEnableWidget(QWidget *widget);
 
 protected:
     void slotIgnoreCheckBoxChanged(int state);
@@ -467,6 +477,8 @@ public:
     virtual void connectValueChangedSignal(const QObject *receiver, const char *method, Qt::ConnectionType type = Qt::AutoConnection) = 0;
     virtual void connectIgnoreCheckBox(QCheckBox *ignoreBox) = 0;
 
+    virtual void connectAutoEnableWidget(QWidget *widget) = 0;
+
     virtual KUndo2Command* createPostExecutionUndoCommand() = 0;
 };
 
@@ -592,6 +604,10 @@ public:
 
     void connectValueChangedSignal(const QObject *receiver, const char *method, Qt::ConnectionType type = Qt::AutoConnection) {
         m_connector->connectValueChangedSignal(receiver, method, type);
+    }
+
+    void connectAutoEnableWidget(QWidget *widget) {
+        m_connector->connectAutoEnableWidget(widget);
     }
 
     /**

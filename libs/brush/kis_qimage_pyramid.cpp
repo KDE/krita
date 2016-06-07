@@ -75,7 +75,7 @@ KisQImagePyramid::~KisQImagePyramid()
 {
 }
 
-int KisQImagePyramid::findNearestLevel(qreal scale, qreal *baseScale)
+int KisQImagePyramid::findNearestLevel(qreal scale, qreal *baseScale) const
 {
     const qreal scale_epsilon = 1e-6;
 
@@ -257,7 +257,7 @@ void KisQImagePyramid::appendPyramidLevel(const QImage &image)
 }
 
 QImage KisQImagePyramid::createImage(qreal scale, qreal rotation,
-                                     qreal subPixelX, qreal subPixelY)
+                                     qreal subPixelX, qreal subPixelY) const
 {
     qreal baseScale = -1.0;
     int level = findNearestLevel(scale, &baseScale);

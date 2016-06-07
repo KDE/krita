@@ -31,11 +31,13 @@
 #include <QPainter>
 
 struct KisPaintingAssistantsDecoration::Private {
-    Private() : assistantVisible(false),
-                outlineVisible(false),
-                snapOnlyOneAssistant(true),
-                firstAssistant(0),
-                aFirstStroke(false){}
+    Private()
+        : assistantVisible(false)
+        , outlineVisible(false)
+        , snapOnlyOneAssistant(true)
+        , firstAssistant(0)
+        , aFirstStroke(false)
+    {}
 
     bool assistantVisible;
     bool outlineVisible;
@@ -45,8 +47,8 @@ struct KisPaintingAssistantsDecoration::Private {
 };
 
 KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(QPointer<KisView> parent) :
-        KisCanvasDecoration("paintingAssistantsDecoration", parent),
-        d(new Private)
+    KisCanvasDecoration("paintingAssistantsDecoration", parent),
+    d(new Private)
 {
     setAssistantVisible(true);
     setOutlineVisible(true);
@@ -96,10 +98,10 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
     if (assistants.empty()) return point;
     if (assistants.count() == 1) {
         if(assistants.first()->snapping()==true){
-        QPointF newpoint = assistants.first()->adjustPosition(point, strokeBegin);
-        // check for NaN
-        if (newpoint.x() != newpoint.x()) return point;
-        return newpoint;
+            QPointF newpoint = assistants.first()->adjustPosition(point, strokeBegin);
+            // check for NaN
+            if (newpoint.x() != newpoint.x()) return point;
+            return newpoint;
         }
     }
     QPointF best = point;
@@ -138,10 +140,10 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
     }
     //this is here to be compatible with the movement in the perspective tool.
     qreal dx = point.x() - strokeBegin.x(), dy = point.y() - strokeBegin.y();
-        if (dx * dx + dy * dy >= 4.0) {
-            // allow some movement before snapping
-            d->aFirstStroke=true;
-        }
+    if (dx * dx + dy * dy >= 4.0) {
+        // allow some movement before snapping
+        d->aFirstStroke=true;
+    }
     return best;
 }
 
@@ -164,7 +166,7 @@ void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF&
     QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
 
     Q_FOREACH (KisPaintingAssistantSP assistant, assistants) {
-            assistant->drawAssistant(gc, updateRect, converter, true, canvas, assistantVisibility(), outlineVisibility());
+        assistant->drawAssistant(gc, updateRect, converter, true, canvas, assistantVisibility(), outlineVisibility());
     }
 }
 //drawPreview//
@@ -223,7 +225,7 @@ void KisPaintingAssistantsDecoration::uncache()
     QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
 
     Q_FOREACH (KisPaintingAssistantSP assistant, assistants) {
-            assistant->uncache();
+        assistant->uncache();
     }
 }
 void KisPaintingAssistantsDecoration::toggleAssistantVisible()

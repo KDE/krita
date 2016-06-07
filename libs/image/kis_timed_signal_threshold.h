@@ -60,6 +60,12 @@ public Q_SLOTS:
      */
     void setEnabled(bool value);
 
+
+    /**
+     * The peiod of time, after which the the signal will be emitted
+     */
+    void setDelayThreshold(int delay, int cancelDelay = -1);
+
 Q_SIGNALS:
     void timeout();
 

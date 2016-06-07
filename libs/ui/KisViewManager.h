@@ -224,7 +224,7 @@ private Q_SLOTS:
     void showStatusBar(bool toggled);
     void toggleTabletLogger();
     void openResourcesDirectory();
-    void makeStatusBarVisible();
+    void initializeStatusBarVisibility();
     void guiUpdateTimeout();
     void changeAuthorProfile(const QString &profileName);
     void slotUpdateAuthorProfileActions();

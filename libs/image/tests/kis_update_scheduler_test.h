@@ -40,6 +40,8 @@ private Q_SLOTS:
     void testBlockUpdates();
 
     void testTimeMonitor();
+
+    void testLodSync();
 };
 
 #endif /* KIS_UPDATE_SCHEDULER_TEST_H */

@@ -34,6 +34,11 @@ KisPngBrush::KisPngBrush(const QString& filename)
     setHasColor(false);
 }
 
+KisBrush* KisPngBrush::clone() const
+{
+    return new KisPngBrush(*this);
+}
+
 bool KisPngBrush::load()
 {
     QFile f(filename());

@@ -48,7 +48,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
 #ifdef Q_OS_MAC
     lblSplash->setPixmap(pixmap);
 #else
-    lblSplash->setPixmap(pixmap.scaled(lblSplash->width(),lblSplash->height(),Qt::KeepAspectRatio));
+    lblSplash->setPixmap(pixmap.scaled(lblSplash->width(),lblSplash->height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
 #endif
     bnClose->hide();
     connect(bnClose, SIGNAL(clicked()), this, SLOT(close()));
@@ -162,7 +162,9 @@ void KisSplashScreen::show()
     if (isVisible()) {
         repaint();
     }
-
+    m_timer.setSingleShot(true);
+    m_timer.start(1);
+    QWidget::show();
 }
 
 void KisSplashScreen::toggleShowAtStartup(bool toggle)

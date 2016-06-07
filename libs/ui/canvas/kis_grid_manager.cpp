@@ -27,6 +27,7 @@
 
 #include <kis_icon.h>
 
+#include "kis_canvas2.h"
 #include "kis_coordinates_converter.h"
 #include "kis_config.h"
 #include "kis_grid_decoration.h"
@@ -97,7 +98,7 @@ void KisGridManager::setView(QPointer<KisView> imageView)
     m_imageView = imageView;
 
     if (imageView) {
-        m_gridDecoration = qobject_cast<KisGridDecoration*>(imageView->canvasBase()->decoration("grid"));
+        m_gridDecoration = qobject_cast<KisGridDecoration*>(imageView->canvasBase()->decoration("grid").data());
         if (!m_gridDecoration) {
             m_gridDecoration = new KisGridDecoration(imageView);
             imageView->canvasBase()->addDecoration(m_gridDecoration);

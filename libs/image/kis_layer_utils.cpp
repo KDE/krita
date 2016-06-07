@@ -43,6 +43,8 @@
 #include "kis_image_animation_interface.h"
 #include "kis_keyframe_channel.h"
 #include "kis_command_utils.h"
+#include "kis_processing_applicator.h"
+#include "commands_new/kis_change_projection_color_command.h"
 
 
 namespace KisLayerUtils {
@@ -904,6 +906,22 @@ namespace KisLayerUtils {
         }
 
         return visibleNodes;
+    }
+
+    void changeImageDefaultProjectionColor(KisImageSP image, const KoColor &color)
+    {
+        KisImageSignalVector emitSignals;
+        emitSignals << ModifiedSignal;
+
+        KisProcessingApplicator applicator(image,
+                                           image->root(),
+                                           KisProcessingApplicator::RECURSIVE,
+                                           emitSignals,
+                                           kundo2_i18n("Change projection color"),
+                                           0,
+                                           142857 + 1);
+        applicator.applyCommand(new KisChangeProjectionColorCommand(image, color), KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
+        applicator.end();
     }
 
     void mergeMultipleLayersImpl(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter, bool flattenSingleLayer, const KUndo2MagicString &actionName)

@@ -165,7 +165,7 @@ private:
      * then effectively, there is no conversion happens. That is used
      * for working with OCIO.
      */
-    const KoColorSpace* m_tilesDestinationColorSpace;
+    const KoColorSpace *m_tilesDestinationColorSpace;
 
     /**
      * Shows whether the internal color management should be enabled or not.

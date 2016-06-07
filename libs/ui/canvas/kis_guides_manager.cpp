@@ -37,7 +37,8 @@
 #include "kis_snap_line_strategy.h"
 #include "kis_change_guides_command.h"
 #include "kis_snap_config.h"
-
+#include "kis_coordinates_converter.h"
+#include  "kis_canvas2.h"
 
 struct KisGuidesManager::Private
 {
@@ -307,7 +308,7 @@ void KisGuidesManager::setView(QPointer<KisView> view)
     m_d->view = view;
 
     if (m_d->view) {
-        KisGuidesDecoration* decoration = qobject_cast<KisGuidesDecoration*>(m_d->view->canvasBase()->decoration(GUIDES_DECORATION_ID));
+        KisGuidesDecoration* decoration = qobject_cast<KisGuidesDecoration*>(m_d->view->canvasBase()->decoration(GUIDES_DECORATION_ID).data());
         if (!decoration) {
             decoration = new KisGuidesDecoration(m_d->view);
             m_d->view->canvasBase()->addDecoration(decoration);

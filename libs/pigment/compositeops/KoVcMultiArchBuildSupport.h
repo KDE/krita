@@ -35,6 +35,7 @@
 #pragma warning ( disable : 4244 )
 #pragma warning ( disable : 4800 )
 #endif
+#include <Vc/global.h>
 #include <Vc/Vc>
 #include <Vc/support.h>
 #if defined _MSC_VER
@@ -44,10 +45,17 @@
 #else /* HAVE_VC */
 
 namespace Vc {
-    typedef enum {ScalarImpl} Implementation;
+    enum Implementation /*: std::uint_least32_t*/ {
+            ScalarImpl,
+    };
+    class CurrentImplementation {
+        public:
+            static constexpr Implementation current()
+            {
+                return static_cast<Implementation>(ScalarImpl);
+            }
+    };
 }
-
-#define VC_IMPL ::Vc::ScalarImpl
 
 #ifdef DO_PACKAGERS_BUILD
 #ifdef __GNUC__
@@ -90,12 +98,9 @@ createOptimizedClass(typename FactoryType::ParamType param)
      *
      * TODO: Add FMA3/4 when it is adopted by Vc
      */
-#if VC_VERSION_NUMBER >= VC_VERSION_CHECK(0, 8, 0)
     if (Vc::isImplementationSupported(Vc::AVX2Impl)) {
         return FactoryType::template create<Vc::AVX2Impl>(param);
-    } else
-#endif
-    if (Vc::isImplementationSupported(Vc::AVXImpl)) {
+    } else if (Vc::isImplementationSupported(Vc::AVXImpl)) {
         return FactoryType::template create<Vc::AVXImpl>(param);
     } else if (Vc::isImplementationSupported(Vc::SSE41Impl)) {
         return FactoryType::template create<Vc::SSE41Impl>(param);
@@ -119,7 +124,7 @@ template<class FactoryType>
 typename FactoryType::ReturnType
 createOptimizedClass(typename FactoryType::ParamType param)
 {
-    return FactoryType::template create<VC_IMPL>(param);
+    return FactoryType::template create<Vc::CurrentImplementation::current()>(param);
 }
 
 #endif /* DO_PACKAGERS_BUILD */

@@ -165,6 +165,12 @@ KisGuidesConfig GridConfigWidget::guidesConfig() const
     return m_d->guidesConfig;
 }
 
+void GridConfigWidget::setGridDivision(int w, int h)
+{
+    ui->intHSpacing->setMaximum(w);
+    ui->intVSpacing->setMaximum(h);
+}
+
 KisGridConfig GridConfigWidget::fetchGuiGridConfig() const
 {
     KisGridConfig config;

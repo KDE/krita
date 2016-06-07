@@ -178,7 +178,7 @@ void KisCanvasController::Private::showMirrorStateOnCanvas()
 
 void KisCanvasController::mirrorCanvas(bool enable)
 {
-    KisCanvasDecoration *decorator = dynamic_cast<KisCanvas2*>(this->canvas())->decoration("mirror_axis");
+    KisCanvasDecorationSP decorator = dynamic_cast<KisCanvas2*>(this->canvas())->decoration("mirror_axis");
     KIS_ASSERT_RECOVER_RETURN(decorator);
     decorator->setVisible(enable);
 

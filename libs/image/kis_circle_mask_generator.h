@@ -22,6 +22,7 @@
 #include "kritaimage_export.h"
 
 #include "kis_mask_generator.h"
+#include <QScopedPointer>
 
 
 /**
@@ -33,7 +34,9 @@ public:
     struct FastRowProcessor;
 public:
     KisCircleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges);
+    KisCircleMaskGenerator(const KisCircleMaskGenerator &rhs);
     virtual ~KisCircleMaskGenerator();
+    KisMaskGenerator* clone() const;
 
     virtual quint8 valueAt(qreal x, qreal y) const;
 
@@ -54,7 +57,7 @@ private:
 
 private:
     struct Private;
-    Private* const d;
+    const QScopedPointer<Private> d;
 };
 
 #endif

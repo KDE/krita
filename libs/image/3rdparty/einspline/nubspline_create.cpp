@@ -259,7 +259,7 @@ create_NUBspline_1d_s (NUgrid* x_grid, BCtype_s xBC, float *data)
   int N = x_grid->num_points + 2;
 
   // Allocate coefficients and solve  
-  spline->coefs = new float[N];
+  spline->coefs = (float*)malloc (sizeof(float)*N);
   find_NUBcoefs_1d_s (spline->x_basis, xBC, data, 1, spline->coefs, 1);
     
   return spline;
@@ -292,7 +292,7 @@ create_NUBspline_2d_s (NUgrid* x_grid, NUgrid* y_grid,
     
   spline->x_stride = Ny;
 #ifndef HAVE_SSE2
-  spline->coefs = new float[Nx*Ny];
+  spline->coefs = (float*)malloc (sizeof(float)*Nx*Ny);
 #else
   posix_memalign ((void**)&spline->coefs, 16, sizeof(float)*Nx*Ny);
 #endif
@@ -350,7 +350,7 @@ create_NUBspline_3d_s (NUgrid* x_grid, NUgrid* y_grid, NUgrid* z_grid,
   spline->x_stride = Ny*Nz;
   spline->y_stride = Nz;
 #ifndef HAVE_SSE2
-  spline->coefs = new float[Nx*Ny*Nz];
+  spline->coefs = (float*)malloc (sizeof(float)*Nx*Ny*Nz);
 #else
   posix_memalign ((void**)&spline->coefs, 16, sizeof(float)*Nx*Ny*Nz);
 #endif
@@ -599,7 +599,7 @@ create_NUBspline_1d_d (NUgrid* x_grid, BCtype_d xBC, double *data)
   int N = x_grid->num_points + 2;
 
   // Allocate coefficients and solve
-  spline->coefs = new double[N];
+  spline->coefs = (double*)malloc (sizeof(double)*N);
   find_NUBcoefs_1d_d (spline->x_basis, xBC, data, 1, spline->coefs, 1);
     
   return spline;
@@ -632,7 +632,7 @@ create_NUBspline_2d_d (NUgrid* x_grid, NUgrid* y_grid,
   
   spline->x_stride = Ny;
 #ifndef HAVE_SSE2
-  spline->coefs = new double[Nx*Ny];
+  spline->coefs = (double*)malloc (sizeof(double)*Nx*Ny);
 #else
   posix_memalign ((void**)&spline->coefs, 16, sizeof(double)*Nx*Ny);
 #endif
@@ -690,7 +690,7 @@ create_NUBspline_3d_d (NUgrid* x_grid, NUgrid* y_grid, NUgrid* z_grid,
   spline->x_stride = Ny*Nz;
   spline->y_stride = Nz;
 #ifndef HAVE_SSE2
-  spline->coefs = new double[Nx*Ny*Nz];
+  spline->coefs = (double*)malloc (sizeof(double)*Nx*Ny*Nz);
 #else
   posix_memalign ((void**)&spline->coefs, 16, sizeof(double)*Nx*Ny*Nz);
 #endif
@@ -771,7 +771,7 @@ create_NUBspline_1d_c (NUgrid* x_grid, BCtype_c xBC, complex_float *data)
   int N = x_grid->num_points + 2;
 
   // Allocate coefficients and solve  
-  spline->coefs = new complex_float[N];
+  spline->coefs = (complex_float*)malloc (sizeof(complex_float)*N);
   find_NUBcoefs_1d_c (spline->x_basis, xBC, data, 1, spline->coefs, 1);
     
   return spline;
@@ -803,7 +803,7 @@ create_NUBspline_2d_c (NUgrid* x_grid, NUgrid* y_grid,
     
   spline->x_stride = Ny;
 #ifndef HAVE_SSE2
-  spline->coefs = new complex_float[Nx*Ny];
+  spline->coefs = (complex_float*)malloc (sizeof(complex_float)*Nx*Ny);
 #else
   posix_memalign ((void**)&spline->coefs, 16, sizeof(complex_float)*Nx*Ny);
 #endif
@@ -860,7 +860,7 @@ create_NUBspline_3d_c (NUgrid* x_grid, NUgrid* y_grid, NUgrid* z_grid,
   spline->x_stride = Ny*Nz;
   spline->y_stride = Nz;
 #ifndef HAVE_SSE2
-  spline->coefs = new complex_float[Nx*Ny*Nz];
+  spline->coefs = (complex_float*)malloc (sizeof(complex_float)*Nx*Ny*Nz);
 #else
   posix_memalign ((void**)&spline->coefs, 16, sizeof(complex_float)*Nx*Ny*Nz);
 #endif
@@ -940,7 +940,7 @@ create_NUBspline_1d_z (NUgrid* x_grid, BCtype_z xBC, complex_double *data)
   int N = x_grid->num_points + 2;
 
   // Allocate coefficients and solve  
-  spline->coefs = new complex_double[N];
+  spline->coefs = (complex_double*)malloc (sizeof(complex_double)*N);
   find_NUBcoefs_1d_z (spline->x_basis, xBC, data, 1, spline->coefs, 1);
     
   return spline;
@@ -972,7 +972,7 @@ create_NUBspline_2d_z (NUgrid* x_grid, NUgrid* y_grid,
     
   spline->x_stride = Ny;
 #ifndef HAVE_SSE2
-  spline->coefs = new complex_double[Nx*Ny];
+  spline->coefs = (complex_double*)malloc (sizeof(complex_double)*Nx*Ny);
 #else
   posix_memalign ((void**)&spline->coefs, 16, sizeof(complex_double)*Nx*Ny);
 #endif
@@ -1032,7 +1032,7 @@ create_NUBspline_3d_z (NUgrid* x_grid, NUgrid* y_grid, NUgrid* z_grid,
   spline->x_stride = Ny*Nz;
   spline->y_stride = Nz;
 #ifndef HAVE_SSE2
-  spline->coefs = new complex_double[Nx*Ny*Nz];
+  spline->coefs = (complex_double*)malloc (sizeof(complex_double)*Nx*Ny*Nz);
 #else
   posix_memalign ((void**)&spline->coefs, 16, sizeof(complex_double)*Nx*Ny*Nz);
 #endif

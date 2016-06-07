@@ -688,7 +688,6 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         grpOpenGL->setEnabled(false);
         grpOpenGL->setChecked(false);
         chkUseTextureBuffer->setEnabled(false);
-        chkDisableDoubleBuffering->setEnabled(false);
         chkDisableVsync->setEnabled(false);
         cmbFilterMode->setEnabled(false);
     } else {
@@ -696,14 +695,15 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         grpOpenGL->setChecked(cfg.useOpenGL());
         chkUseTextureBuffer->setEnabled(cfg.useOpenGL());
         chkUseTextureBuffer->setChecked(cfg.useOpenGLTextureBuffer());
-        chkDisableDoubleBuffering->setVisible(cfg.showAdvancedOpenGLSettings());
-        chkDisableDoubleBuffering->setEnabled(cfg.useOpenGL());
-        chkDisableDoubleBuffering->setChecked(cfg.disableDoubleBuffering());
         chkDisableVsync->setVisible(cfg.showAdvancedOpenGLSettings());
         chkDisableVsync->setEnabled(cfg.useOpenGL());
         chkDisableVsync->setChecked(cfg.disableVSync());
         cmbFilterMode->setEnabled(cfg.useOpenGL());
         cmbFilterMode->setCurrentIndex(cfg.openGLFilteringMode());
+        // Don't show the high quality filtering mode if it's not available
+        if (!KisOpenGL::supportsGLSL13()) {
+            cmbFilterMode->removeItem(3);
+        }
     }
     if (qApp->applicationName() == "kritasketch" || qApp->applicationName() == "kritagemini") {
        grpOpenGL->setVisible(false);
@@ -739,7 +739,6 @@ void DisplaySettingsTab::setDefault()
         grpOpenGL->setEnabled(false);
         grpOpenGL->setChecked(false);
         chkUseTextureBuffer->setEnabled(false);
-        chkDisableDoubleBuffering->setEnabled(false);
         chkDisableVsync->setEnabled(false);
         cmbFilterMode->setEnabled(false);
     }
@@ -748,8 +747,6 @@ void DisplaySettingsTab::setDefault()
         grpOpenGL->setChecked(cfg.useOpenGL(true));
         chkUseTextureBuffer->setChecked(cfg.useOpenGLTextureBuffer(true));
         chkUseTextureBuffer->setEnabled(true);
-        chkDisableDoubleBuffering->setEnabled(true);
-        chkDisableDoubleBuffering->setChecked(cfg.disableDoubleBuffering(true));
         chkDisableVsync->setEnabled(true);
         chkDisableVsync->setChecked(cfg.disableVSync(true));
         cmbFilterMode->setEnabled(true);
@@ -772,7 +769,6 @@ void DisplaySettingsTab::setDefault()
 void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
 {
     chkUseTextureBuffer->setEnabled(isChecked);
-    chkDisableDoubleBuffering->setEnabled(isChecked);
     chkDisableVsync->setEnabled(isChecked);
     cmbFilterMode->setEnabled(isChecked);
 }
@@ -786,6 +782,9 @@ FullscreenSettingsTab::FullscreenSettingsTab(QWidget* parent) : WdgFullscreenSet
     chkMenu->setChecked(cfg.hideMenuFullscreen());
     chkScrollbars->setChecked(cfg.hideScrollbarsFullscreen());
     chkStatusbar->setChecked(cfg.hideStatusbarFullscreen());
+#ifdef Q_OS_WINDOWS
+    chkTitlebar->setVisible(false);
+#endif
     chkTitlebar->setChecked(cfg.hideTitlebarFullscreen());
     chkToolbar->setChecked(cfg.hideToolbarFullscreen());
 
@@ -834,7 +833,6 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     addPage(page);
     m_shortcutSettings = new ShortcutSettingsTab(vbox);
     connect(this, SIGNAL(accepted()), m_shortcutSettings, SLOT(saveChanges()));
-    connect(this, SIGNAL(rejected()), m_shortcutSettings, SLOT(revertChanges()));
 
     // Canvas input settings
     m_inputConfiguration = new KisInputConfigurationPage();
@@ -1024,7 +1022,6 @@ bool KisDlgPreferences::editPreferences()
         cfg.setUseOpenGL(dialog->m_displaySettings->grpOpenGL->isChecked());
         cfg.setUseOpenGLTextureBuffer(dialog->m_displaySettings->chkUseTextureBuffer->isChecked());
         cfg.setOpenGLFilteringMode(dialog->m_displaySettings->cmbFilterMode->currentIndex());
-        cfg.setDisableDoubleBuffering(dialog->m_displaySettings->chkDisableDoubleBuffering->isChecked());
         cfg.setDisableVSync(dialog->m_displaySettings->chkDisableVsync->isChecked());
 
         cfg.setCheckSize(dialog->m_displaySettings->intCheckSize->value());

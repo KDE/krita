@@ -110,8 +110,7 @@ public:
      * information here.
      * Optionally, @p extraNativeMimeTypes are added after the native mimetype.
      */
-    static QStringList mimeFilter(const QByteArray& mimetype, Direction direction,
-                                  const QStringList& extraNativeMimeTypes = QStringList());
+    static QStringList mimeFilter(Direction direction);
 
 
     /**

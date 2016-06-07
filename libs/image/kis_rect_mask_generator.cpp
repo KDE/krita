@@ -52,6 +52,21 @@ KisRectangleMaskGenerator::KisRectangleMaskGenerator(qreal radius, qreal ratio, 
     setScale(1.0, 1.0);
 }
 
+KisRectangleMaskGenerator::KisRectangleMaskGenerator(const KisRectangleMaskGenerator &rhs)
+    : KisMaskGenerator(rhs),
+      d(new Private(*rhs.d))
+{
+}
+
+KisMaskGenerator* KisRectangleMaskGenerator::clone() const
+{
+    return new KisRectangleMaskGenerator(*this);
+}
+
+KisRectangleMaskGenerator::~KisRectangleMaskGenerator()
+{
+}
+
 void KisRectangleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
 {
     KisMaskGenerator::setScale(scaleX, scaleY);
@@ -70,11 +85,6 @@ void KisRectangleMaskGenerator::setSoftness(qreal softness)
 
     d->transformedFadeX = d->xfadecoeff * safeSoftnessCoeff;
     d->transformedFadeY = d->yfadecoeff * safeSoftnessCoeff;
-}
-
-KisRectangleMaskGenerator::~KisRectangleMaskGenerator()
-{
-    delete d;
 }
 
 bool KisRectangleMaskGenerator::shouldSupersample() const

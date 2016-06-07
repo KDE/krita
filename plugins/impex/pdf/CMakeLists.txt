@@ -1,4 +1,4 @@
-include_directories( ${CMAKE_BINARY_DIR}/filters/ ${POPPLER_INCLUDE_DIR} )
+include_directories( ${POPPLER_INCLUDE_DIR} )
 
 set(kritapdfimport_SOURCES kis_pdf_import.cpp kis_pdf_import_widget.cpp )
 

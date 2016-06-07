@@ -27,6 +27,7 @@
 #include "kis_command_utils.h"
 
 class KoProperties;
+class KoColor;
 
 namespace KisMetaData
 {
@@ -64,6 +65,8 @@ namespace KisLayerUtils
 
     KRITAIMAGE_EXPORT void addCopyOfNameTag(KisNodeSP node);
     KRITAIMAGE_EXPORT KisNodeList findNodesWithProps(KisNodeSP root, const KoProperties &props, bool excludeRoot);
+
+    KRITAIMAGE_EXPORT void changeImageDefaultProjectionColor(KisImageSP image, const KoColor &color);
 
     typedef QMap<int, QSet<KisNodeSP> > FrameJobs;
     void updateFrameJobs(FrameJobs *jobs, KisNodeSP node);

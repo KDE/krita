@@ -204,7 +204,6 @@ void KisOpenPane::openFileDialog()
                           ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
                           : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
     dialog.setMimeTypeFilters(m_mimeFilter);
-    dialog.setHideNameFilterDetailsOption();
     Q_FOREACH (const QString &filename, dialog.filenames()) {
         emit openExistingFile(QUrl::fromUserInput(filename));
     }
@@ -212,8 +211,6 @@ void KisOpenPane::openFileDialog()
 
 void KisOpenPane::initTemplates(const QString& templatesResourcePath)
 {
-    qDebug() << "initTemplates();" << templatesResourcePath;
-
     QTreeWidgetItem* selectItem = 0;
     QTreeWidgetItem* firstItem = 0;
     const int templateOffset = 1000;

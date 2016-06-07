@@ -136,7 +136,7 @@ void KisClipboardBrushWidget::slotAddPredefined()
     tempFileName = fileInfo.filePath();
 
     if (m_rServerAdapter) {
-        KisGbrBrush* resource = static_cast<KisGbrBrush*>(m_brush.data())->clone();
+        KisGbrBrush *resource = dynamic_cast<KisGbrBrush*>(m_brush->clone());
         resource->setFilename(tempFileName);
 
         if (nameEdit->text().isEmpty()) {

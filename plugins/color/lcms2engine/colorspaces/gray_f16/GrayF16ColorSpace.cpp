@@ -26,6 +26,7 @@
 #include <KoColorSpaceRegistry.h>
 
 #include "compositeops/KoCompositeOps.h"
+#include <kis_dom_utils.h>
 
 GrayF16ColorSpace::GrayF16ColorSpace(const QString &name, KoColorProfile *p)
     : LcmsColorSpace<KoGrayF16Traits>(colorSpaceId(), name,  TYPE_GRAYA_HALF_FLT, cmsSigGrayData, p)
@@ -50,7 +51,7 @@ void GrayF16ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomE
 {
     const KoGrayF16Traits::channels_type *p = reinterpret_cast<const KoGrayF16Traits::channels_type *>(pixel);
     QDomElement labElt = doc.createElement("Gray");
-    labElt.setAttribute("g", KoColorSpaceMaths< KoGrayF16Traits::channels_type, qreal>::scaleToA(p[0]));
+    labElt.setAttribute("g", KisDomUtils::toString(KoColorSpaceMaths< KoGrayF16Traits::channels_type, qreal>::scaleToA(p[0])));
     labElt.setAttribute("space", profile()->name());
     colorElt.appendChild(labElt);
 }
@@ -58,11 +59,11 @@ void GrayF16ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomE
 void GrayF16ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
     KoGrayF16Traits::channels_type *p = reinterpret_cast<KoGrayF16Traits::channels_type *>(pixel);
-    p[0] = KoColorSpaceMaths< qreal, KoGrayF16Traits::channels_type >::scaleToA(elt.attribute("g").toDouble());
+    p[0] = KoColorSpaceMaths< qreal, KoGrayF16Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("g")));
     p[1] = 1.0;
 }
 
-void GrayF16ColorSpace::toHSY(QVector <double> channelValues, qreal *, qreal *, qreal *luma) const
+void GrayF16ColorSpace::toHSY(const QVector<double> &channelValues, qreal *, qreal *, qreal *luma) const
 {
     *luma = channelValues[0];
 }
@@ -75,7 +76,7 @@ QVector <double> GrayF16ColorSpace::fromHSY(qreal *, qreal *, qreal *luma) const
     return channelValues;
 }
 
-void GrayF16ColorSpace::toYUV(QVector <double> channelValues, qreal *y, qreal *, qreal *) const
+void GrayF16ColorSpace::toYUV(const QVector<double> &channelValues, qreal *y, qreal *, qreal *) const
 {
     *y = channelValues[0];
 }

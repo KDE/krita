@@ -77,6 +77,7 @@ enum {
 QWindowsTabletSupport *QTAB = 0;
 static QPointer<QWidget> targetWindow = 0; //< Window receiving last tablet event
 static QPointer<QWidget> qt_tablet_target = 0; //< Widget receiving last tablet event
+static bool dialogOpen = false;  //< KisTabletSupportWin is not a Q_OBJECT and can't accept dialog signals
 
 HWND createDummyWindow(const QString &className, const wchar_t *windowName, WNDPROC wndProc)
 {
@@ -294,9 +295,35 @@ struct DefaultButtonsConverter
                  * Qt::NoButton here.
                  */
                 if (convertedButton == Qt::NoButton) {
-                    *button = Qt::NoButton;
-                    *buttons = Qt::NoButton;
-                    break;
+
+                    /**
+                     * Sometimes the driver-handled sortcuts are just
+                     * keyboard modifiers, so ideally we should handle
+                     * them as well. The problem is that we cannot
+                     * know if the shortcut was a pan/zoom action or a
+                     * shortcut. So here we use a "hackish" approash.
+                     * We just check if any modifier has been pressed
+                     * and, if so, pass the button to Krita. Of
+                     * course, if the driver uses some really complex
+                     * shortcuts like "Shift + stylus btn" to generate
+                     * some recorded shortcut, it will not work. But I
+                     * guess it will be ok for th emost of the
+                     * usecases.
+                     *
+                     * WARNING: this hack will *not* work if you bind
+                     *          any non-modifier key to the stylus
+                     *          button, e.g. Space.
+                     */
+
+                    const Qt::KeyboardModifiers keyboardModifiers = QApplication::queryKeyboardModifiers();
+
+                    if (KisTabletDebugger::instance()->shouldEatDriverShortcuts() ||
+                        keyboardModifiers == Qt::NoModifier) {
+
+                        *button = Qt::NoButton;
+                        *buttons = Qt::NoButton;
+                        break;
+                    }
                 }
             }
         }
@@ -604,6 +631,7 @@ QWindowsTabletDeviceData QWindowsTabletSupport::tabletInit(const quint64 uniqueI
     result.maxTanPressure = int(axis.axMax);
 
     LOGCONTEXT defaultLc;
+
     /* get default region */
     QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEFCONTEXT, 0, &defaultLc);
     result.maxX = int(defaultLc.lcInExtX) - int(defaultLc.lcInOrgX);
@@ -611,10 +639,35 @@ QWindowsTabletDeviceData QWindowsTabletSupport::tabletInit(const quint64 uniqueI
     result.maxZ = int(defaultLc.lcInExtZ) - int(defaultLc.lcInOrgZ);
     result.currentDevice = deviceType(cursorType);
 
+    // Define a rectangle representing the whole screen as seen by Wintab.
+    QRect qtDesktopRect = QApplication::desktop()->geometry();
+    QRect wintabDesktopRect(defaultLc.lcSysOrgX, defaultLc.lcSysOrgY,
+                            defaultLc.lcSysExtX, defaultLc.lcSysExtY);
+    qDebug() << ppVar(qtDesktopRect);
+    qDebug() << ppVar(wintabDesktopRect);
 
-    // These define a rectangle representing the whole screen as seen by Wintab.
-    result.virtualDesktopArea = QRect(defaultLc.lcSysOrgX, defaultLc.lcSysOrgY,
-                                      defaultLc.lcSysExtX, defaultLc.lcSysExtY);
+    // Show screen choice dialog
+    {
+        KisScreenSizeChoiceDialog dlg(0,
+                                      wintabDesktopRect,
+                                      qtDesktopRect);
+
+        KisExtendedModifiersMapper mapper;
+        KisExtendedModifiersMapper::ExtendedModifiers modifiers =
+            mapper.queryExtendedModifiers();
+
+        if (modifiers.contains(Qt::Key_Shift) ||
+            (!dlg.canUseDefaultSettings() &&
+             qtDesktopRect != wintabDesktopRect)) {
+
+            dialogOpen = true;
+            dlg.exec();
+        }
+
+        result.virtualDesktopArea = dlg.screenRect();
+        dialogOpen = false;
+    }
+
     return result;
 };
 
@@ -659,7 +712,7 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
 {
     static PACKET localPacketBuf[TabletPacketQSize];  // our own tablet packet queue.
     const int packetCount = QWindowsTabletSupport::m_winTab32DLL.wTPacketsGet(m_context, TabletPacketQSize, &localPacketBuf);
-    if (!packetCount || m_currentDevice < 0)
+    if (!packetCount || m_currentDevice < 0 || dialogOpen)
         return false;
 
     // In contrast to Qt, these will not be "const" during our loop.
@@ -853,9 +906,42 @@ void QWindowsTabletSupport::tabletUpdateCursor(const int pkCursor)
     // Check tablet name to enable Surface Pro 3 workaround.
 #ifdef UNICODE
     if (!isSurfacePro3) {
-        UINT nameLength = QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEVICES, DVC_NAME, 0);
+        /**
+         * Some really "nice" tablet drivers don't know that trhey are
+         * supposed to return their name length when the buffer is
+         * null and they try to write into it effectively causing a
+         * suicide. So we cannot rely on it :(
+         *
+         * We workaround it by just allocating a big array and hoping
+         * for the best.
+         *
+         * Failing tablets:
+         *   - Adesso Cybertablet M14
+         *   - Peritab-302
+         *   - Trust Tablet TB7300
+         *   - VisTablet Realm Pro
+         *   - Aiptek 14000u (latest driver: v5.03, 2013-10-21)
+         *   - Genius G-Pen F350
+         *   - Genius G-Pen 560 (supported on win7 only)
+         */
+
+        // we cannot use the correct api :(
+        // UINT nameLength = QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEVICES, DVC_NAME, 0);
+
+        // 1024 chars should be enough for everyone! (c)
+        UINT nameLength = 1024;
+
         TCHAR* dvcName = new TCHAR[nameLength + 1];
-        QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEVICES, DVC_NAME, dvcName);
+        memset(dvcName, 0, sizeof(TCHAR) * nameLength);
+        UINT writtenBytes = QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEVICES, DVC_NAME, dvcName);
+
+        if (writtenBytes > sizeof(TCHAR) * nameLength) {
+            qWarning() << "WINTAB WARNING: tablet name is too long!" << writtenBytes;
+
+            // avoid crash when trying to read it
+            dvcName[nameLength - 1] = (TCHAR)0;
+        }
+
         QString qDvcName = QString::fromWCharArray((const wchar_t*)dvcName);
         dbgInput << "DVC_NAME =" << qDvcName;
         // Name changed between older and newer Surface Pro 3 drivers

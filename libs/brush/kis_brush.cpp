@@ -106,7 +106,6 @@ struct KisBrush::Private {
         , scale(1.0)
         , hasColor(false)
         , brushType(INVALID)
-        , brushPyramid(0)
         , autoSpacingActive(false)
         , autoSpacingCoeff(1.0)
     {}
@@ -126,7 +125,7 @@ struct KisBrush::Private {
     double spacing;
     QPointF hotSpot;
 
-    mutable KisQImagePyramid *brushPyramid;
+    mutable QSharedPointer<const KisQImagePyramid> brushPyramid;
 
     QImage brushTipImage;
 
@@ -163,7 +162,14 @@ KisBrush::KisBrush(const KisBrush& rhs)
     d->autoSpacingActive = rhs.d->autoSpacingActive;
     d->autoSpacingCoeff = rhs.d->autoSpacingCoeff;
     setFilename(rhs.filename());
-    clearBrushPyramid();
+
+    /**
+     * Be careful! The pyramid is shared between two brush objects,
+     * therefore you cannot change it, only recreate! That i sthe
+     * reason why it is defined as const!
+     */
+    d->brushPyramid = rhs.d->brushPyramid;
+
     // don't copy the boundary, it will be regenerated -- see bug 291910
 }
 
@@ -339,9 +345,9 @@ void KisBrush::toXML(QDomDocument& /*document*/ , QDomElement& element) const
     element.setAttribute("BrushVersion", "2");
 }
 
-KisBrushSP KisBrush::fromXML(const QDomElement& element)
+KisBrushSP KisBrush::fromXML(const QDomElement& element, bool forceCopy)
 {
-    KisBrushSP brush = KisBrushRegistry::instance()->getOrCreateBrush(element);
+    KisBrushSP brush = KisBrushRegistry::instance()->getOrCreateBrush(element, forceCopy);
     if (brush && element.attribute("BrushVersion", "1") == "1") {
         brush->setScale(brush->scale() * 2.0);
     }
@@ -433,14 +439,13 @@ void KisBrush::notifyCachedDabPainted(const KisPaintInformation& info)
 void KisBrush::prepareBrushPyramid() const
 {
     if (!d->brushPyramid) {
-        d->brushPyramid = new KisQImagePyramid(brushTipImage());
+        d->brushPyramid = toQShared(new KisQImagePyramid(brushTipImage()));
     }
 }
 
 void KisBrush::clearBrushPyramid()
 {
-    delete d->brushPyramid;
-    d->brushPyramid = 0;
+    d->brushPyramid.clear();
 }
 
 void KisBrush::mask(KisFixedPaintDeviceSP dst, double scaleX, double scaleY, double angle, const KisPaintInformation& info , double subPixelX, double subPixelY, qreal softnessFactor) const

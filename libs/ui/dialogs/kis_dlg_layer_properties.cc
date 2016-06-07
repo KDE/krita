@@ -101,6 +101,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisNodeList nodes, KisViewManager *
     d->page->editName->setFocus();
     d->nameProperty.reset(new KisMultinodeNameProperty(nodes));
     d->nameProperty->connectIgnoreCheckBox(d->page->chkName);
+    d->nameProperty->connectAutoEnableWidget(d->page->editName);
     d->nameProperty->connectValueChangedSignal(this, SLOT(slotNameValueChangedInternally()));
     connect(d->page->editName, SIGNAL(textChanged(const QString &)), SLOT(slotNameValueChangedExternally()));
 
@@ -108,12 +109,14 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisNodeList nodes, KisViewManager *
     d->page->intOpacity->setSuffix("%");
     d->opacityProperty.reset(new KisMultinodeOpacityProperty(nodes));
     d->opacityProperty->connectIgnoreCheckBox(d->page->chkOpacity);
+    d->opacityProperty->connectAutoEnableWidget(d->page->intOpacity);
     d->opacityProperty->connectValueChangedSignal(this, SLOT(slotOpacityValueChangedInternally()));
     d->opacityProperty->connectValueChangedSignal(&d->updatesCompressor, SLOT(start()));
     connect(d->page->intOpacity, SIGNAL(valueChanged(int)), SLOT(slotOpacityValueChangedExternally()));
 
     d->compositeOpProperty.reset(new KisMultinodeCompositeOpProperty(nodes));
     d->compositeOpProperty->connectIgnoreCheckBox(d->page->chkCompositeOp);
+    d->compositeOpProperty->connectAutoEnableWidget(d->page->cmbComposite);
     d->compositeOpProperty->connectValueChangedSignal(this, SLOT(slotCompositeOpValueChangedInternally()));
     d->compositeOpProperty->connectValueChangedSignal(&d->updatesCompressor, SLOT(start()));
     connect(d->page->cmbComposite, SIGNAL(currentIndexChanged(int)), SLOT(slotCompositeOpValueChangedExternally()));
@@ -121,6 +124,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisNodeList nodes, KisViewManager *
     d->page->colorLabelSelector->setFocusPolicy(Qt::StrongFocus);
     d->colorLabelProperty.reset(new KisMultinodeColorLabelProperty(nodes));
     d->colorLabelProperty->connectIgnoreCheckBox(d->page->chkColorLabel);
+    d->colorLabelProperty->connectAutoEnableWidget(d->page->colorLabelSelector);
     d->colorLabelProperty->connectValueChangedSignal(this, SLOT(slotColorLabelValueChangedInternally()));
     d->colorLabelProperty->connectValueChangedSignal(&d->updatesCompressor, SLOT(start()));
     connect(d->page->colorLabelSelector, SIGNAL(currentIndexChanged(int)), SLOT(slotColorLabelValueChangedExternally()));

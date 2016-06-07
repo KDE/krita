@@ -439,4 +439,3 @@ void KisKeyframingTest::testAffectedFrames()
 }
 
 QTEST_MAIN(KisKeyframingTest)
-#include "kis_keyframing_test.moc"

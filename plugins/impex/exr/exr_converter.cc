@@ -233,7 +233,7 @@ struct RgbPixelWrapper
     inline bool checkUnmultipliedColorsConsistent(const Rgba<T> &mult) const {
         const T alpha = pixel.a;
 
-        return alpha >= alphaNoiseThreshold<T>() ||
+        return abs(alpha) >= alphaNoiseThreshold<T>() ||
                 (pixel.r * alpha == mult.r &&
                  pixel.g * alpha == mult.g &&
                  pixel.b * alpha == mult.b);
@@ -321,12 +321,12 @@ void exrConverter::Private::unmultiplyAlpha(typename WrapperType::pixel_type *pi
                     i18nc("@info",
                           "The image contains pixels with zero alpha channel and non-zero "
                           "color channels. Krita will have to modify those pixels to have "
-                          "at least some alpha. The initial values will <emphasis>not</emphasis> "
+                          "at least some alpha. The initial values will <i>not</i> "
                           "be reverted on saving the image back."
-                          "<nl/><nl/>"
+                          "<br/><br/>"
                           "This will hardly make any visual difference just keep it in mind."
-                          "<nl/><nl/>"
-                          "<note>Modified alpha will have a range from <numid>%1</numid> to <numid>%2</numid></note>",
+                          "<br/><br/>"
+                          "<note>Modified alpha will have a range from %1 to %2</note>",
                           alphaEpsilon<channel_type>(),
                           alphaNoiseThreshold<channel_type>());
 
@@ -808,7 +808,7 @@ KisImageBuilder_Result exrConverter::decode(const QString &filename)
             case 1:
             case 2:
                 // Decode the data
-                switch (imageType) {
+                switch (info.imageType) {
                 case IT_FLOAT16:
                     m_d->decodeData1<half>(file, info, layer, width, dx, dy, height, Imf::HALF);
                     break;
@@ -823,7 +823,7 @@ KisImageBuilder_Result exrConverter::decode(const QString &filename)
             case 3:
             case 4:
                 // Decode the data
-                switch (imageType) {
+                switch (info.imageType) {
                 case IT_FLOAT16:
                     m_d->decodeData4<half>(file, info, layer, width, dx, dy, height, Imf::HALF);
                     break;

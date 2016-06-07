@@ -1,5 +1,3 @@
-include_directories( ${CMAKE_SOURCE_DIR}/krita/ui/ora ${CMAKE_SOURCE_DIR}/krita/image/metadata)
-
 set(libkritaconverter_LIB_SRCS
     ora_converter.cc
     )

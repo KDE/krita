@@ -41,6 +41,7 @@
 #include "commands/kis_image_commands.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
+#include "kis_layer_utils.h"
 
 #include "kis_signal_compressor_with_param.h"
 
@@ -116,7 +117,7 @@ qint32 KisImageManager::importImage(const QUrl &urlArg, const QString &layerType
         KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::OpenFiles, "OpenDocument");
         dialog.setCaption(i18n("Import Image"));
         dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-        dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
+        dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
         QStringList fileNames = dialog.filenames();
         Q_FOREACH (const QString &fileName, fileNames) {
             urls << QUrl::fromLocalFile(fileName);
@@ -181,8 +182,8 @@ void updateImageBackgroundColor(KisImageSP image, const QColorDialog *dlg)
     QColor newColor = dlg->currentColor();
     KoColor bg = image->defaultProjectionColor();
     bg.fromQColor(newColor);
-    image->setDefaultProjectionColor(bg);
-    image->refreshGraphAsync();
+
+    KisLayerUtils::changeImageDefaultProjectionColor(image, bg);
 }
 
 void KisImageManager::slotImageColor()

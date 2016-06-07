@@ -305,7 +305,7 @@ public:
      */
     virtual void toXML(QDomDocument& , QDomElement&) const;
 
-    static KisBrushSP fromXML(const QDomElement& element);
+    static KisBrushSP fromXML(const QDomElement& element, bool forceCopy = false);
 
     virtual const KisBoundary* boundary() const;
     virtual QPainterPath outline() const;
@@ -319,6 +319,8 @@ public:
     void clearBrushPyramid();
 
     virtual void lodLimitations(KisPaintopLodLimitations *l) const;
+
+    virtual KisBrush* clone() const = 0;
 
 //protected:
 

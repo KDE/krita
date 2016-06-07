@@ -97,7 +97,7 @@ class ImageListModel: public QAbstractListModel
 public:
     void addImage(const QPixmap& pixmap, const QString& text, qint64 id) {
         Data data;
-        data.icon = pixmap.scaled(70, 70, Qt::KeepAspectRatio);
+        data.icon = pixmap.scaled(70, 70, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         data.text = text;
         data.id   = id;
         emit layoutAboutToBeChanged();

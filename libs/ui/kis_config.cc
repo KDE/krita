@@ -581,29 +581,13 @@ void KisConfig::setRenderIntent(qint32 renderIntent) const
 
 bool KisConfig::useOpenGL(bool defaultValue) const
 {
-
-    if (qApp->applicationName() == "krita") {
-        if (defaultValue) {
-#ifdef Q_WS_MAC
-            return false;
-#else
-            return true;
-#endif
-        }
-
-        //dbgKrita << "use opengl" << m_cfg.readEntry("useOpenGL", true) << "success" << m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
-        QString canvasState = m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
-#ifdef Q_WS_MAC
-        return (m_cfg.readEntry("useOpenGL", false) && (canvasState == "OPENGL_SUCCESS" || canvasState == "TRY_OPENGL"));
-#else
-        return (m_cfg.readEntry("useOpenGL", true) && (canvasState == "OPENGL_SUCCESS" || canvasState == "TRY_OPENGL"));
-#endif
+    if (defaultValue) {
+        return true;
     }
-    else if (qApp->applicationName() == "kritasketch" || qApp->applicationName() == "kritagemini") {
-        return true; // for sketch and gemini
-    } else {
-        return false;
-    }
+
+    //dbgKrita << "use opengl" << m_cfg.readEntry("useOpenGL", true) << "success" << m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
+    QString canvasState = m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
+    return (m_cfg.readEntry("useOpenGL", true) && (canvasState == "OPENGL_SUCCESS" || canvasState == "TRY_OPENGL"));
 }
 
 void KisConfig::setUseOpenGL(bool useOpenGL) const
@@ -634,17 +618,6 @@ void KisConfig::setUseOpenGLTextureBuffer(bool useBuffer)
 int KisConfig::openGLTextureSize(bool defaultValue) const
 {
     return (defaultValue ? 256 : m_cfg.readEntry("textureSize", 256));
-}
-
-
-bool KisConfig::disableDoubleBuffering(bool defaultValue) const
-{
-    return (defaultValue ? true : m_cfg.readEntry("disableDoubleBuffering", true));
-}
-
-void KisConfig::setDisableDoubleBuffering(bool disableDoubleBuffering)
-{
-    m_cfg.writeEntry("disableDoubleBuffering", disableDoubleBuffering);
 }
 
 bool KisConfig::disableVSync(bool defaultValue) const
@@ -1099,6 +1072,16 @@ void KisConfig::setShowDockerTitleBars(const bool value) const
     m_cfg.writeEntry("showDockerTitleBars", value);
 }
 
+bool KisConfig::showStatusBar(bool defaultValue) const
+{
+    return (defaultValue ? true : m_cfg.readEntry("showStatusBar", true));
+}
+
+void KisConfig::setShowStatusBar(const bool value) const
+{
+    m_cfg.writeEntry("showStatusBar", value);
+}
+
 bool KisConfig::hideMenuFullscreen(bool defaultValue) const
 {
     return (defaultValue ? true: m_cfg.readEntry("hideMenuFullScreen", true));
@@ -1131,7 +1114,11 @@ void KisConfig::setHideStatusbarFullscreen(const bool value) const
 
 bool KisConfig::hideTitlebarFullscreen(bool defaultValue) const
 {
+#ifdef Q_OS_WIN
+    return false;
+#else
     return (defaultValue ? true : m_cfg.readEntry("hideTitleBarFullscreen", true));
+#endif
 }
 
 void KisConfig::setHideTitlebarFullscreen(const bool value) const
@@ -1525,6 +1512,11 @@ void KisConfig::setTestingAcceptCompressedTabletEvents(bool value)
     m_cfg.writeEntry("testingAcceptCompressedTabletEvents", value);
 }
 
+bool KisConfig::shouldEatDriverShortcuts(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("shouldEatDriverShortcuts", false));
+}
+
 bool KisConfig::testingCompressBrushEvents(bool defaultValue) const
 {
     return (defaultValue ? false : m_cfg.readEntry("testingCompressBrushEvents", false));
@@ -1672,4 +1664,21 @@ bool KisConfig::convertToImageColorspaceOnImport(bool defaultValue) const
 void KisConfig::setConvertToImageColorspaceOnImport(bool value)
 {
     m_cfg.writeEntry("ConvertToImageColorSpaceOnImport", value);
+}
+
+int KisConfig::stabilizerSampleSize(bool defaultValue) const
+{
+#ifdef Q_OS_WIN
+    const int defaultSampleSize = 50;
+#else
+    const int defaultSampleSize = 15;
+#endif
+
+    return defaultValue ?
+        defaultSampleSize : m_cfg.readEntry("stabilizerSampleSize", defaultSampleSize);
+}
+
+void KisConfig::setStabilizerSampleSize(int value)
+{
+    m_cfg.writeEntry("stabilizerSampleSize", value);
 }

@@ -89,7 +89,8 @@ void DeformBrush::initDeformAction()
     }
 }
 
-bool DeformBrush::setupAction(DeformModes mode, const QPointF& pos)
+bool DeformBrush::setupAction(
+    DeformModes mode, const QPointF& pos, QTransform const& rotation)
 {
 
     switch (mode) {
@@ -130,7 +131,10 @@ bool DeformBrush::setupAction(DeformModes mode, const QPointF& pos)
             return false;
         }
         else {
-            static_cast<DeformMove*>(m_deformAction)->setDistance(pos.x() - m_prevX, pos.y() - m_prevY);
+            qreal xDistance = pos.x() - m_prevX;
+            qreal yDistance = pos.y() - m_prevY;
+            rotation.map(xDistance, yDistance, &xDistance, &yDistance);
+            static_cast<DeformMove*>(m_deformAction)->setDistance(xDistance, yDistance);
             m_prevX = pos.x();
             m_prevY = pos.y();
         }
@@ -184,15 +188,17 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
 
     qreal distance;
 
-    // if can't paint, stop
-    if (!setupAction(DeformModes(m_properties->action - 1), pos)) {
-        return 0;
-    }
-
     QTransform forwardRotationMatrix;
     forwardRotationMatrix.rotateRadians(-rotation);
     QTransform reverseRotationMatrix;
     reverseRotationMatrix.rotateRadians(rotation);
+
+    // if can't paint, stop
+    if (!setupAction(DeformModes(m_properties->action - 1),
+                     pos, forwardRotationMatrix))
+    {
+        return 0;
+    }
 
     mask->setRect(dab->bounds());
     mask->initialize();
@@ -208,7 +214,9 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
             qreal maskY = y - centerY;
             forwardRotationMatrix.map(maskX, maskY, &maskX, &maskY);
 
+            forwardRotationMatrix.map(maskX, maskY, &maskX, &maskY);
             distance = norme(maskX * majorAxis, maskY * minorAxis);
+
             if (distance > 1.0) {
                 // leave there OPACITY TRANSPARENT pixel (default pixel)
 
@@ -231,7 +239,6 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
 
             m_deformAction->transform(&maskX, &maskY, distance);
             reverseRotationMatrix.map(maskX, maskY, &maskX, &maskY);
-
 
             maskX += pos.x();
             maskY += pos.y();

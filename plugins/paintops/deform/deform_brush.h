@@ -216,7 +216,8 @@ public:
 
 private:
     // return true if can paint
-    bool setupAction(DeformModes mode, const QPointF &pos);
+    bool setupAction(
+        DeformModes mode, const QPointF& pos, QTransform const& rotation);
     void debugColor(const quint8* data, KoColorSpace * cs);
 
     qreal maskWidth(qreal scale) {

@@ -49,6 +49,8 @@ public:
         , mirrorVertical(false)
         , lockHorizontal(false)
         , lockVertical(false)
+        , hideVerticalDecoration(false)
+        , hideHorizontalDecoration(false)
         , handleSize(32.f)
         , xActive(false)
         , yActive(false)
@@ -73,6 +75,8 @@ public:
 
     bool lockHorizontal;
     bool lockVertical;
+    bool hideVerticalDecoration;
+    bool hideHorizontalDecoration;
 
 
 
@@ -166,7 +170,7 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
 
     d->recomputeVisibleAxes(gc.viewport());
 
-    if(d->mirrorHorizontal) {
+    if(d->mirrorHorizontal && !d->hideHorizontalDecoration) {
         if (!d->horizontalAxis.isNull()) {
            // QPointF horizontalIndicatorCenter = d->horizontalAxis.unitVector().pointAt(15);
            // QRectF horizontalIndicator = QRectF(horizontalIndicatorCenter.x() - halfHandleSize, horizontalIndicatorCenter.y() - halfHandleSize, d->handleSize, d->handleSize);
@@ -193,7 +197,7 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
         }
     }
 
-    if(d->mirrorVertical) {
+    if(d->mirrorVertical && !d->hideVerticalDecoration) {
         if (!d->verticalAxis.isNull()) {
 
             gc.setPen(QPen(QColor(0, 0, 0, 64), 2, Qt::DashDotDotLine, Qt::RoundCap, Qt::RoundJoin));
@@ -244,14 +248,14 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
 
 
 
-        if(d->mirrorHorizontal && d->horizontalHandle.contains(pos) && !d->lockHorizontal ) {
+        if(d->mirrorHorizontal && d->horizontalHandle.contains(pos) && !d->lockHorizontal && !d->hideHorizontalDecoration ) {
             d->xActive = true;
             QApplication::setOverrideCursor(Qt::ClosedHandCursor);
             event->accept();
             return true;
         }
 
-        if(d->mirrorVertical && d->verticalHandle.contains(pos) && !d->lockVertical) {
+        if(d->mirrorVertical && d->verticalHandle.contains(pos) && !d->lockVertical && !d->hideVerticalDecoration) {
             d->yActive = true;
             QApplication::setOverrideCursor(Qt::ClosedHandCursor);
             event->accept();
@@ -282,7 +286,7 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
             event->accept();
             return true;
         }
-        if(d->mirrorHorizontal) {
+        if(d->mirrorHorizontal && !d->hideHorizontalDecoration) {
             if(d->horizontalHandle.contains(pos) && !d->lockHorizontal) {
                 if(!d->horizontalContainsCursor) {
                     QApplication::setOverrideCursor(Qt::OpenHandCursor);
@@ -293,7 +297,7 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
                 d->horizontalContainsCursor = false;
             }
         }
-        if(d->mirrorVertical) {
+        if(d->mirrorVertical && !d->hideVerticalDecoration) {
             if(d->verticalHandle.contains(pos) && !d->lockVertical) {
                 if(!d->verticalContainsCursor) {
                     QApplication::setOverrideCursor(Qt::OpenHandCursor);
@@ -331,6 +335,9 @@ void KisMirrorAxis::mirrorModeChanged()
 
     d->lockHorizontal = d->resourceProvider->mirrorHorizontalLock();
     d->lockVertical = d->resourceProvider->mirrorVerticalLock();
+
+    d->hideHorizontalDecoration = d->resourceProvider->mirrorHorizontalHideDecorations();
+    d->hideVerticalDecoration = d->resourceProvider->mirrorVerticalHideDecorations();
 
     setVisible(d->mirrorHorizontal || d->mirrorVertical);
 

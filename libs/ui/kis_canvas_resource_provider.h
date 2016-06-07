@@ -67,6 +67,8 @@ public:
         MirrorVertical,
         MirrorHorizontalLock,
         MirrorVerticalLock,
+        MirrorVerticalHideDecorations,
+        MirrorHorizontalHideDecorations,
         MirrorAxesCenter,
         Opacity,
         HdrGamma,
@@ -132,9 +134,18 @@ public:
 
     // options for horizontal and vertical mirror toolbar
     void setMirrorHorizontalLock(bool isLocked);
-    void setMirrorVerticalLock(bool isLocked);
     bool mirrorHorizontalLock();
+    void setMirrorVerticalLock(bool isLocked);
     bool mirrorVerticalLock();
+
+    void setMirrorVerticalHideDecorations(bool hide);
+    bool mirrorVerticalHideDecorations();
+
+    void setMirrorHorizontalHideDecorations(bool hide);
+    bool mirrorHorizontalHideDecorations();
+
+
+
 
 
     void setOpacity(qreal opacity);

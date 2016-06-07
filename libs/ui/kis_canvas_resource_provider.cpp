@@ -432,6 +432,36 @@ void KisCanvasResourceProvider::setMirrorVerticalLock(bool isLocked)
 }
 
 
+
+bool KisCanvasResourceProvider::mirrorVerticalHideDecorations() {
+     return m_resourceManager->resource(MirrorVerticalHideDecorations).toBool();
+}
+
+void KisCanvasResourceProvider::setMirrorVerticalHideDecorations(bool hide)
+{
+    m_resourceManager->setResource(MirrorVerticalHideDecorations, hide);
+    emit mirrorModeChanged();
+}
+
+
+bool KisCanvasResourceProvider::mirrorHorizontalHideDecorations() {
+     return m_resourceManager->resource(MirrorHorizontalHideDecorations).toBool();
+}
+
+void KisCanvasResourceProvider::setMirrorHorizontalHideDecorations(bool hide)
+{
+    qDebug() << QString::number(hide);
+
+
+    m_resourceManager->setResource(MirrorHorizontalHideDecorations, hide);
+    emit mirrorModeChanged();
+}
+
+
+
+
+
+
 bool KisCanvasResourceProvider::mirrorVerticalLock() {
      return m_resourceManager->resource(MirrorVerticalLock).toBool();
 }

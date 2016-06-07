@@ -1201,6 +1201,15 @@ void KisPaintopBox::slotLockYMirrorToggle(bool toggleLock) {
     m_resourceProvider->setMirrorVerticalLock(toggleLock);
 }
 
+void KisPaintopBox::slotHideDecorationMirrorX(bool toggled) {
+    m_resourceProvider->setMirrorHorizontalHideDecorations(toggled);
+}
+
+void KisPaintopBox::slotHideDecorationMirrorY(bool toggled) {
+    m_resourceProvider->setMirrorVerticalHideDecorations(toggled);
+}
+
+
 
 void KisPaintopBox::slotMoveToCenterMirrorX() {
  // m_resourceProvider->setLockMirrorVertical(toggleLock);
@@ -1220,11 +1229,5 @@ void KisPaintopBox::slotMoveToPreviousLocationMirrorY() {
  // m_resourceProvider->setLockMirrorVertical(toggleLock);
 }
 
-void KisPaintopBox::slotHideDecorationMirrorX(bool toggled) {
- // m_resourceProvider->setLockMirrorVertical(toggleLock);
-}
 
-void KisPaintopBox::slotHideDecorationMirrorY(bool toggled) {
- // m_resourceProvider->setLockMirrorVertical(toggleLock);
-}
 

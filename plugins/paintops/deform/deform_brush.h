@@ -238,12 +238,6 @@ private:
     qreal m_prevX, m_prevY;
     int m_counter;
 
-    qreal m_centerX;
-    qreal m_centerY;
-    qreal m_majorAxis;
-    qreal m_minorAxis;
-    qreal m_inverseScale;
-    qreal m_maskRadius;
     QRectF m_maskRect;
 
     DeformBase * m_deformAction;

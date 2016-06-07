@@ -176,20 +176,12 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
         dab->clear(m_maskRect.toRect());
     }
 
-    m_centerX = dstWidth  * 0.5  + subPixelX;
-    m_centerY = dstHeight * 0.5  + subPixelY;
+    qreal const centerX = dstWidth  * 0.5  + subPixelX;
+    qreal const centerY = dstHeight * 0.5  + subPixelY;
 
-    // major axis
-    m_majorAxis = 2.0 / fWidth;
-    // minor axis
-    m_minorAxis = 2.0 / fHeight;
-    // inverse square
-    m_inverseScale = 1.0 / scale;
-    // amount of precomputed data
-    m_maskRadius = 0.5 * fWidth;
+    qreal const majorAxis = 2.0 / fWidth;
+    qreal const minorAxis = 2.0 / fHeight;
 
-    qreal maskX;
-    qreal maskY;
     qreal distance;
 
     // if can't paint, stop
@@ -214,13 +206,12 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
 
     for (int y = 0; y <  dstHeight; y++) {
         for (int x = 0; x < dstWidth; x++) {
-            maskX = x - m_centerX;
-            maskY = y - m_centerY;
+            qreal maskX = x - centerX;
+            qreal maskY = y - centerY;
             qreal rmaskX = cosa * maskX - sina * maskY;
             qreal rmaskY = sina * maskX + cosa * maskY;
 
-
-            distance = norme(rmaskX * m_majorAxis, rmaskY * m_minorAxis);
+            distance = norme(maskX * majorAxis, maskY * minorAxis);
             if (distance > 1.0) {
                 // leave there OPACITY TRANSPARENT pixel (default pixel)
 

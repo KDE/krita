@@ -144,7 +144,8 @@ public:
     void setMirrorHorizontalHideDecorations(bool hide);
     bool mirrorHorizontalHideDecorations();
 
-
+    void mirrorVerticalMoveCanvasToCenter();
+    void mirrorHorizontalMoveCanvasToCenter();
 
 
 
@@ -205,6 +206,9 @@ Q_SIGNALS:
     void sigLoadingWorkspace(KisWorkspaceResource* workspace);
 
     void mirrorModeChanged();
+    void moveMirrorVerticalCenter();
+    void moveMirrorHorizontalCenter();
+
 
 private:
 

@@ -455,13 +455,18 @@ void KisCanvasResourceProvider::setMirrorHorizontalHideDecorations(bool hide)
 }
 
 
-
-
-
-
 bool KisCanvasResourceProvider::mirrorVerticalLock() {
      return m_resourceManager->resource(MirrorVerticalLock).toBool();
 }
+
+void KisCanvasResourceProvider::mirrorVerticalMoveCanvasToCenter() {
+     emit moveMirrorVerticalCenter();
+}
+
+void KisCanvasResourceProvider::mirrorHorizontalMoveCanvasToCenter() {
+     emit moveMirrorHorizontalCenter();
+}
+
 
 
 void KisCanvasResourceProvider::setOpacity(qreal opacity)

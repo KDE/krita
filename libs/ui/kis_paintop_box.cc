@@ -236,8 +236,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     connect(lockActionX, SIGNAL(toggled(bool)), this, SLOT(slotLockXMirrorToggle(bool)));
     connect(lockActionY, SIGNAL(toggled(bool)), this, SLOT(slotLockYMirrorToggle(bool)));
 
-    connect(moveToCenterActionX, SIGNAL(changed()), this, SLOT(slotMoveToCenterMirrorX()));
-    connect(moveToCenterActionY, SIGNAL(changed()), this, SLOT(slotMoveToCenterMirrorY()));
+    connect(moveToCenterActionX, SIGNAL(triggered(bool)), this, SLOT(slotMoveToCenterMirrorX()));
+    connect(moveToCenterActionY, SIGNAL(triggered(bool)), this, SLOT(slotMoveToCenterMirrorY()));
 
     connect(moveToPreviousLocationActionX, SIGNAL(changed()), this, SLOT(slotMoveToPreviousLocationMirrorX()));
     connect(moveToPreviousLocationActionY, SIGNAL(changed()), this, SLOT(slotMoveToPreviousLocationMirrorY()));
@@ -1212,11 +1212,11 @@ void KisPaintopBox::slotHideDecorationMirrorY(bool toggled) {
 
 
 void KisPaintopBox::slotMoveToCenterMirrorX() {
- // m_resourceProvider->setLockMirrorVertical(toggleLock);
+  m_resourceProvider->mirrorHorizontalMoveCanvasToCenter();
 }
 
 void KisPaintopBox::slotMoveToCenterMirrorY() {
- // m_resourceProvider->setLockMirrorVertical(toggleLock);
+  m_resourceProvider->mirrorVerticalMoveCanvasToCenter();
 }
 
 

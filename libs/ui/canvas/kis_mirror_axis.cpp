@@ -45,6 +45,7 @@ public:
     Private(KisMirrorAxis* qq)
         : q(qq)
         , resourceProvider(0)
+        , image(0)
         , mirrorHorizontal(false)
         , mirrorVertical(false)
         , lockHorizontal(false)
@@ -70,6 +71,7 @@ public:
     KisMirrorAxis* q;
 
     KisCanvasResourceProvider* resourceProvider;
+    KisImageWSP image;
     bool mirrorHorizontal;
     bool mirrorVertical;
 
@@ -107,6 +109,9 @@ KisMirrorAxis::KisMirrorAxis(KisCanvasResourceProvider* provider, QPointer<KisVi
 {
     d->resourceProvider = provider;
     connect(d->resourceProvider, SIGNAL(mirrorModeChanged()), SLOT(mirrorModeChanged()));
+    connect(d->resourceProvider, SIGNAL(moveMirrorVerticalCenter()), SLOT(moveVerticalAxisToCenter()));
+    connect(d->resourceProvider, SIGNAL(moveMirrorHorizontalCenter()), SLOT(moveHorizontalAxisToCenter()));
+
     d->mirrorHorizontal = d->resourceProvider->mirrorHorizontal();
     d->mirrorVertical = d->resourceProvider->mirrorVertical();
     d->horizontalIcon = KisIconUtils::loadIcon("mirrorAxis-HorizontalMove").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
@@ -115,8 +120,11 @@ KisMirrorAxis::KisMirrorAxis(KisCanvasResourceProvider* provider, QPointer<KisVi
     d->verticalHandleIcon = KisIconUtils::loadIcon("transform-move").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
     setVisible(d->mirrorHorizontal || d->mirrorVertical);
 
-    int imageWidth = parent->canvasBase()->image()->width();
-    int imageHeight = parent->canvasBase()->image()->height();
+
+    d->image = parent->canvasBase()->image();
+
+    int imageWidth = d->image->width();
+    int imageHeight = d->image->height();
     QPointF point(imageWidth / 2, imageHeight / 2);
     d->resourceProvider->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxesCenter, point);
 }
@@ -358,6 +366,18 @@ void KisMirrorAxis::setVisible(bool v)
     }
 }
 
+void KisMirrorAxis::moveHorizontalAxisToCenter()
+{
+    d->setAxisPosition(d->image->width()/2, d->axisPosition.y());
+}
+
+void KisMirrorAxis::moveVerticalAxisToCenter()
+{
+    d->setAxisPosition(d->axisPosition.x(), d->image->height()/2 );
+}
+
+
+
 void KisMirrorAxis::Private::setAxisPosition(float x, float y)
 {
     QPointF newPosition = QPointF(x, y);
@@ -366,6 +386,7 @@ void KisMirrorAxis::Private::setAxisPosition(float x, float y)
 
     q->view()->canvasBase()->updateCanvas();
 }
+
 
 void KisMirrorAxis::Private::recomputeVisibleAxes(QRect viewport)
 {

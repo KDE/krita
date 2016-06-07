@@ -160,6 +160,17 @@ private Q_SLOTS:
     void slotEraserBrushSizeToggled(bool);    
     void slotUpdateSelectionIcon();
 
+    void slotLockXMirrorToggle(bool);
+    void slotLockYMirrorToggle(bool);
+    void slotMoveToCenterMirrorX();
+    void slotMoveToCenterMirrorY();
+    void slotMoveToPreviousLocationMirrorX();
+    void slotMoveToPreviousLocationMirrorY();
+    void slotHideDecorationMirrorX(bool);
+    void slotHideDecorationMirrorY(bool);
+
+
+
 private:
     KisCanvasResourceProvider*          m_resourceProvider;
     QHBoxLayout*                        m_layout;

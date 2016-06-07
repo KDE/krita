@@ -8,13 +8,22 @@ else (AvTranscoder_FOUND)
  return()
 endif (AvTranscoder_FOUND)
 
+# Find package ffmpeg/libav: avtranscoder needs to have the ffmpeg include directories in order to build
+find_package(FFmpeg COMPONENTS avcodec avformat avutil swscale avfilter swresample avresample)
+if(NOT swresample_FOUND)
+    message(SEND_ERROR "libav is not supported as an ffmpeg alternative")
+endif()
+
+
+
 ## If the necessary libraries are present, continue with building the
 ## plugin
 
 add_subdirectory(tests)
 
 include_directories(SYSTEM
-  ${AvTranscoder_INCLUDE_DIR}
+    ${AvTranscoder_INCLUDE_DIR}
+    ${FFMPEG_INCLUDE_DIR}
 )
 
 # export

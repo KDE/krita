@@ -47,6 +47,8 @@ public:
         , resourceProvider(0)
         , mirrorHorizontal(false)
         , mirrorVertical(false)
+        , lockHorizontal(false)
+        , lockVertical(false)
         , handleSize(32.f)
         , xActive(false)
         , yActive(false)
@@ -68,6 +70,11 @@ public:
     KisCanvasResourceProvider* resourceProvider;
     bool mirrorHorizontal;
     bool mirrorVertical;
+
+    bool lockHorizontal;
+    bool lockVertical;
+
+
 
     float handleSize;
     QPixmap horizontalHandleIcon;
@@ -174,9 +181,12 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
            // gc.drawEllipse(horizontalIndicator);
           //  gc.drawPixmap(horizontalIndicator.adjusted(5, 5, -5, -5).toRect(), d->horizontalIcon);
 
-            gc.setPen(QPen(QColor(0, 0, 0, 128), 2));
-            gc.drawEllipse(d->horizontalHandle);
-            gc.drawPixmap(d->horizontalHandle.adjusted(5, 5, -5, -5).toRect(), d->horizontalIcon);
+            // don't draw the handles if we are locking the axis for movement
+            if (!d->lockHorizontal) {
+                gc.setPen(QPen(QColor(0, 0, 0, 128), 2));
+                gc.drawEllipse(d->horizontalHandle);
+                gc.drawPixmap(d->horizontalHandle.adjusted(5, 5, -5, -5).toRect(), d->horizontalIcon);
+            }
 
         } else {
             d->horizontalHandle = QRectF();
@@ -197,11 +207,13 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
             QPointF verticalHandleCenter = d->verticalAxis.unitVector().pointAt(verticalHandlePosition);
             d->verticalHandle = QRectF(verticalHandleCenter.x() - halfHandleSize, verticalHandleCenter.y() - halfHandleSize, d->handleSize, d->handleSize);
 
-           // gc.drawEllipse(verticalIndicator);
-          //  gc.drawPixmap(verticalIndicator.adjusted(5, 5, -5, -5).toRect(), d->verticalIcon);
-            gc.setPen(QPen(QColor(0, 0, 0, 128), 2));
-            gc.drawEllipse(d->verticalHandle);
-            gc.drawPixmap(d->verticalHandle.adjusted(5, 5, -5, -5).toRect(), d->verticalIcon);
+            // don't draw the handles if we are locking the axis for movement
+            if (!d->lockVertical) {
+                gc.setPen(QPen(QColor(0, 0, 0, 128), 2));
+                gc.drawEllipse(d->verticalHandle);
+                gc.drawPixmap(d->verticalHandle.adjusted(5, 5, -5, -5).toRect(), d->verticalIcon);
+            }
+
         } else {
             d->verticalHandle = QRectF();
         }
@@ -229,14 +241,17 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
         QTabletEvent *te = dynamic_cast<QTabletEvent*>(event);
         QPoint pos = me ? me->pos() : (te ? te->pos() : QPoint(77,77));
 
-        if(d->mirrorHorizontal && d->horizontalHandle.contains(pos)) {
+
+
+
+        if(d->mirrorHorizontal && d->horizontalHandle.contains(pos) && !d->lockHorizontal ) {
             d->xActive = true;
             QApplication::setOverrideCursor(Qt::ClosedHandCursor);
             event->accept();
             return true;
         }
 
-        if(d->mirrorVertical && d->verticalHandle.contains(pos)) {
+        if(d->mirrorVertical && d->verticalHandle.contains(pos) && !d->lockVertical) {
             d->yActive = true;
             QApplication::setOverrideCursor(Qt::ClosedHandCursor);
             event->accept();
@@ -268,7 +283,7 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
             return true;
         }
         if(d->mirrorHorizontal) {
-            if(d->horizontalHandle.contains(pos)) {
+            if(d->horizontalHandle.contains(pos) && !d->lockHorizontal) {
                 if(!d->horizontalContainsCursor) {
                     QApplication::setOverrideCursor(Qt::OpenHandCursor);
                     d->horizontalContainsCursor = true;
@@ -279,7 +294,7 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
             }
         }
         if(d->mirrorVertical) {
-            if(d->verticalHandle.contains(pos)) {
+            if(d->verticalHandle.contains(pos) && !d->lockVertical) {
                 if(!d->verticalContainsCursor) {
                     QApplication::setOverrideCursor(Qt::OpenHandCursor);
                     d->verticalContainsCursor = true;
@@ -313,7 +328,12 @@ void KisMirrorAxis::mirrorModeChanged()
 {
     d->mirrorHorizontal = d->resourceProvider->mirrorHorizontal();
     d->mirrorVertical = d->resourceProvider->mirrorVertical();
+
+    d->lockHorizontal = d->resourceProvider->mirrorHorizontalLock();
+    d->lockVertical = d->resourceProvider->mirrorVerticalLock();
+
     setVisible(d->mirrorHorizontal || d->mirrorVertical);
+
 }
 
 void KisMirrorAxis::setVisible(bool v)

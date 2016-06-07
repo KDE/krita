@@ -65,6 +65,8 @@ public:
         EraserMode,
         MirrorHorizontal,
         MirrorVertical,
+        MirrorHorizontalLock,
+        MirrorVerticalLock,
         MirrorAxesCenter,
         Opacity,
         HdrGamma,
@@ -127,6 +129,13 @@ public:
 
     void setMirrorVertical(bool mirrorVertical);
     bool mirrorVertical() const;
+
+    // options for horizontal and vertical mirror toolbar
+    void setMirrorHorizontalLock(bool isLocked);
+    void setMirrorVerticalLock(bool isLocked);
+    bool mirrorHorizontalLock();
+    bool mirrorVerticalLock();
+
 
     void setOpacity(qreal opacity);
     qreal opacity() const;

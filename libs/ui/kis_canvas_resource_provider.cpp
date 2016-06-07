@@ -415,6 +415,28 @@ bool KisCanvasResourceProvider::mirrorVertical() const
     return m_resourceManager->resource(MirrorVertical).toBool();
 }
 
+void KisCanvasResourceProvider::setMirrorHorizontalLock(bool isLocked)
+{
+    m_resourceManager->setResource(MirrorHorizontalLock, isLocked);
+    emit mirrorModeChanged();
+}
+
+bool KisCanvasResourceProvider::mirrorHorizontalLock() {
+     return m_resourceManager->resource(MirrorHorizontalLock).toBool();
+}
+
+void KisCanvasResourceProvider::setMirrorVerticalLock(bool isLocked)
+{
+    m_resourceManager->setResource(MirrorVerticalLock, isLocked);
+    emit mirrorModeChanged();
+}
+
+
+bool KisCanvasResourceProvider::mirrorVerticalLock() {
+     return m_resourceManager->resource(MirrorVerticalLock).toBool();
+}
+
+
 void KisCanvasResourceProvider::setOpacity(qreal opacity)
 {
     m_resourceManager->setResource(Opacity, opacity);

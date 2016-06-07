@@ -1194,11 +1194,11 @@ void KisPaintopBox::slotUpdateSelectionIcon()
 }
 
 void KisPaintopBox::slotLockXMirrorToggle(bool toggleLock) {
- // m_resourceProvider->setLockMirrorHorizontal(toggleLock);
+    m_resourceProvider->setMirrorHorizontalLock(toggleLock);
 }
 
 void KisPaintopBox::slotLockYMirrorToggle(bool toggleLock) {
- // m_resourceProvider->setLockMirrorVertical(toggleLock);
+    m_resourceProvider->setMirrorVerticalLock(toggleLock);
 }
 
 

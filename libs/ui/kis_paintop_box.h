@@ -164,8 +164,6 @@ private Q_SLOTS:
     void slotLockYMirrorToggle(bool);
     void slotMoveToCenterMirrorX();
     void slotMoveToCenterMirrorY();
-    void slotMoveToPreviousLocationMirrorX();
-    void slotMoveToPreviousLocationMirrorY();
     void slotHideDecorationMirrorX(bool);
     void slotHideDecorationMirrorY(bool);
 

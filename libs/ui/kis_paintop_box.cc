@@ -161,6 +161,11 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     // mirror tool options for the X Mirror
     QMenu *toolbarMenuXMirror = new QMenu();
 
+    KisAction* hideCanvasDecorationsX = m_viewManager->actionManager()->createAction("mirrorX-hideDecorations");
+    hideCanvasDecorationsX->setCheckable(true);
+    hideCanvasDecorationsX->setText(i18n("Hide Mirror Line"));
+    toolbarMenuXMirror->addAction(hideCanvasDecorationsX);
+
     KisAction* lockActionX = m_viewManager->actionManager()->createAction("mirrorX-lock");
     lockActionX->setText(i18n("Lock"));
     lockActionX->setCheckable(true);
@@ -172,21 +177,15 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     toolbarMenuXMirror->addAction(moveToCenterActionX);
 
 
-    KisAction* moveToPreviousLocationActionX = m_viewManager->actionManager()->createAction("mirrorX-moveToPreviousPosition");
-    moveToPreviousLocationActionX->setText(i18n("Move to Previous Position"));
-    moveToPreviousLocationActionX->setCheckable(false);
-    moveToPreviousLocationActionX->setEnabled(false);
-    toolbarMenuXMirror->addAction(moveToPreviousLocationActionX);
-
-
-    KisAction* hideCanvasDecorationsX = m_viewManager->actionManager()->createAction("mirrorX-hideDecorations");
-    hideCanvasDecorationsX->setCheckable(true);
-    hideCanvasDecorationsX->setText(i18n("Hide Mirror Line"));
-    toolbarMenuXMirror->addAction(hideCanvasDecorationsX);
-
 
     // mirror tool options for the Y Mirror
     QMenu *toolbarMenuYMirror = new QMenu();
+
+    KisAction* hideCanvasDecorationsY = m_viewManager->actionManager()->createAction("mirrorY-hideDecorations");
+    hideCanvasDecorationsY->setCheckable(true);
+    hideCanvasDecorationsY->setText(i18n("Hide Mirror Line"));
+    toolbarMenuYMirror->addAction(hideCanvasDecorationsY);
+
 
     KisAction* lockActionY = m_viewManager->actionManager()->createAction("mirrorY-lock");
     lockActionY->setText(i18n("Lock"));
@@ -199,24 +198,13 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     toolbarMenuYMirror->addAction(moveToCenterActionY);
 
 
-    KisAction* moveToPreviousLocationActionY = m_viewManager->actionManager()->createAction("mirrorY-moveToPreviousPosition");
-    moveToPreviousLocationActionY->setText(i18n("Move to Previous Position"));
-    moveToPreviousLocationActionY->setCheckable(false);
-    moveToPreviousLocationActionY->setEnabled(false);
-    toolbarMenuYMirror->addAction(moveToPreviousLocationActionY);
-
-    KisAction* hideCanvasDecorationsY = m_viewManager->actionManager()->createAction("mirrorY-hideDecorations");
-    hideCanvasDecorationsY->setCheckable(true);
-    hideCanvasDecorationsY->setText(i18n("Hide Mirror Line"));
-    toolbarMenuYMirror->addAction(hideCanvasDecorationsY);
-
-
 
 
     // create horizontal and vertical mirror buttons
 
     m_hMirrorButton = new KisHighlightedToolButton(this);
-    m_hMirrorButton->setFixedSize(iconsize, iconsize);
+    int menuPadding = 10;
+    m_hMirrorButton->setFixedSize(iconsize + menuPadding, iconsize);
     m_hMirrorButton->setCheckable(true);
     m_hMirrorAction = m_viewManager->actionManager()->createAction("hmirror_action");
     m_hMirrorButton->setDefaultAction(m_hMirrorAction);
@@ -224,7 +212,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_hMirrorButton->setPopupMode(QToolButton::MenuButtonPopup);
 
     m_vMirrorButton = new KisHighlightedToolButton(this);
-    m_vMirrorButton->setFixedSize(iconsize, iconsize);
+    m_vMirrorButton->setFixedSize(iconsize + menuPadding, iconsize);
     m_vMirrorButton->setCheckable(true);
     m_vMirrorAction = m_viewManager->actionManager()->createAction("vmirror_action");
     m_vMirrorButton->setDefaultAction(m_vMirrorAction);
@@ -238,9 +226,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     connect(moveToCenterActionX, SIGNAL(triggered(bool)), this, SLOT(slotMoveToCenterMirrorX()));
     connect(moveToCenterActionY, SIGNAL(triggered(bool)), this, SLOT(slotMoveToCenterMirrorY()));
-
-    connect(moveToPreviousLocationActionX, SIGNAL(changed()), this, SLOT(slotMoveToPreviousLocationMirrorX()));
-    connect(moveToPreviousLocationActionY, SIGNAL(changed()), this, SLOT(slotMoveToPreviousLocationMirrorY()));
 
     connect(hideCanvasDecorationsX, SIGNAL(toggled(bool)), this, SLOT(slotHideDecorationMirrorX(bool)));
     connect(hideCanvasDecorationsY, SIGNAL(toggled(bool)), this, SLOT(slotHideDecorationMirrorY(bool)));
@@ -1218,16 +1203,3 @@ void KisPaintopBox::slotMoveToCenterMirrorX() {
 void KisPaintopBox::slotMoveToCenterMirrorY() {
   m_resourceProvider->mirrorVerticalMoveCanvasToCenter();
 }
-
-
-void KisPaintopBox::slotMoveToPreviousLocationMirrorX() {
- // m_resourceProvider->setLockMirrorVertical(toggleLock);
-}
-
-
-void KisPaintopBox::slotMoveToPreviousLocationMirrorY() {
- // m_resourceProvider->setLockMirrorVertical(toggleLock);
-}
-
-
-

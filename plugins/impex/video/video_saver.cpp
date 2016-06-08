@@ -98,6 +98,12 @@ struct FrameUploader {
 
 KisImageBuilder_Result VideoSaver::encode(const QString &filename, const QMap<QString, QString> &additionalOptions)
 {
+    if (qEnvironmentVariableIsSet("KRITA_DEBUG_FFMPEG")) {
+        avtranscoder::Logger::setLogLevel(AV_LOG_DEBUG);
+    } else {
+        avtranscoder::Logger::setLogLevel(AV_LOG_QUIET);
+    }
+
     const QFileInfo fileInfo(filename);
     const QString suffix = fileInfo.suffix().toLower();
 
@@ -120,7 +126,6 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, const QMap<QS
         videoProfile[avProfileType] = avProfileTypeVideo;
         videoProfile[avProfilePixelFormat] = "yuv422p";
         videoProfile[avProfileCodec] = "theora";
-        //videoProfile[avProfileBitRate] = "140000";
     }
 
     for (auto it = additionalOptions.constBegin();
@@ -140,7 +145,6 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, const QMap<QS
 
     try {
         avtranscoder::preloadCodecsAndFormats();
-        avtranscoder::Logger::setLogLevel(AV_LOG_DEBUG);
 
         avtranscoder::OutputFile outputFile(filename.toStdString());
 

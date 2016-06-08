@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>376</width>
-    <height>205</height>
+    <width>698</width>
+    <height>506</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -62,6 +62,26 @@
        <item row="1" column="1">
         <widget class="QComboBox" name="cmbPreset"/>
        </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Profile:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QComboBox" name="cmbProfile"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Tune:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QComboBox" name="cmbTune"/>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="page_2">
@@ -98,7 +118,7 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>44</height>
+       <height>205</height>
       </size>
      </property>
     </spacer>

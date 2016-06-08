@@ -13,25 +13,45 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_VIDEO_EXPORT_H_
-#define _KIS_VIDEO_EXPORT_H_
+#ifndef VIDEO_EXPORT_OPTIONS_DIALOG_H
+#define VIDEO_EXPORT_OPTIONS_DIALOG_H
 
-#include <QVariant>
+#include <QDialog>
+#include "video_saver.h"
 
-#include <KisImportExportFilter.h>
+#include <QScopedPointer>
 
-class KisVideoExport : public KisImportExportFilter
+namespace Ui {
+class VideoExportOptionsDialog;
+}
+
+class VideoExportOptionsDialog : public QDialog
 {
     Q_OBJECT
+
 public:
-    KisVideoExport(QObject *parent, const QVariantList &);
-    virtual ~KisVideoExport();
+    enum CodecIndex {
+        CODEC_H264 = 0,
+        CODEC_THEORA
+    };
+
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    explicit VideoExportOptionsDialog(QWidget *parent = 0);
+    ~VideoExportOptionsDialog();
+
+    void setCodec(CodecIndex index);
+
+    VideoSaver::AdditionalOptions getOptions() const;
+
+private:
+    Ui::VideoExportOptionsDialog *ui;
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
-#endif
+#endif // VIDEO_EXPORT_OPTIONS_DIALOG_H

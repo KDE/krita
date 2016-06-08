@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Laszlo Fazekas <mneko@freemail.hu>
+ *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,6 +38,10 @@
 #include <kis_paint_device.h>
 
 #include "video_saver.h"
+#include "video_export_options_dialog.h"
+
+#include "kis_cursor_override_hijacker.h"
+
 
 K_PLUGIN_FACTORY_WITH_JSON(KisVideoExportFactory, "krita_video_export.json", registerPlugin<KisVideoExport>();)
 
@@ -64,8 +68,43 @@ KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
+    bool askForOptions = false;
+
+    const QFileInfo fileInfo(filename);
+    const QString suffix = fileInfo.suffix().toLower();
+
+    VideoExportOptionsDialog::CodecIndex codecIndex =
+        VideoExportOptionsDialog::CODEC_H264;
+
+    if (suffix == "mkv" || suffix == "mp4") {
+        codecIndex = VideoExportOptionsDialog::CODEC_H264;
+        askForOptions = true;
+    } else if (suffix == "ogv") {
+        codecIndex = VideoExportOptionsDialog::CODEC_THEORA;
+        askForOptions = true;
+    }
+
+    VideoSaver::AdditionalOptions additionalOptions;
+
+    askForOptions &=
+        !qApp->applicationName().toLower().contains("test") &
+        !getBatchMode();
+
+    if (askForOptions) {
+        KisCursorOverrideHijacker badGuy;
+
+        VideoExportOptionsDialog dlg;
+        dlg.setCodec(codecIndex);
+
+        if (dlg.exec() == QDialog::Accepted) {
+            additionalOptions = dlg.getOptions();
+        } else {
+            return KisImportExportFilter::UserCancelled;
+        }
+    }
+
     VideoSaver kpc(input, getBatchMode());
-    KisImageBuilder_Result res = kpc.encode(filename);
+    KisImageBuilder_Result res = kpc.encode(filename, additionalOptions);
 
     if (res == KisImageBuilder_RESULT_OK) {
         return KisImportExportFilter::OK;

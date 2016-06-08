@@ -13,25 +13,35 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_VIDEO_EXPORT_H_
-#define _KIS_VIDEO_EXPORT_H_
+#ifndef __KIS_CURSOR_OVERRIDE_HIJACKER_H
+#define __KIS_CURSOR_OVERRIDE_HIJACKER_H
 
-#include <QVariant>
+#include <QCursor>
+#include <QStack>
+#include <QApplication>
 
-#include <KisImportExportFilter.h>
 
-class KisVideoExport : public KisImportExportFilter
+class KisCursorOverrideHijacker
 {
-    Q_OBJECT
 public:
-    KisVideoExport(QObject *parent, const QVariantList &);
-    virtual ~KisVideoExport();
-public:
-    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    KisCursorOverrideHijacker() {
+        while (qApp->overrideCursor()) {
+            m_cursorStack.push(*qApp->overrideCursor());
+            qApp->restoreOverrideCursor();
+        }
+    }
+
+    ~KisCursorOverrideHijacker() {
+        while (!m_cursorStack.isEmpty()) {
+            qApp->setOverrideCursor(m_cursorStack.pop());
+        }
+    }
+
+private:
+    QStack<QCursor> m_cursorStack;
 };
 
-#endif
+#endif /* __KIS_CURSOR_OVERRIDE_HIJACKER_H */

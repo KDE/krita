@@ -20,17 +20,9 @@
 #include "video_saver.h"
 
 #include <QDebug>
-// #include <QApplication>
 
 #include <QFileInfo>
-// #include <QFile>
-// #include <QDir>
-// #include <QVector>
-// #include <QIODevice>
-// #include <QRect>
-// #include <KisMimeDatabase.h>
 
-// #include <KisPart.h>
 #include <KisDocument.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>

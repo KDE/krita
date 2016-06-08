@@ -172,31 +172,6 @@ public:
      */
     void resetContainer(const QString &containerName, bool useTagName = false);
 
-    /**
-     * Use this method to reset and reread action properties (shortcuts, etc.) for all actions.
-     * This is needed, for example, when you change shortcuts scheme at runtime.
-     */
-    void refreshActionProperties();
-
-public Q_SLOTS:
-    /**
-     * Show a standard configure shortcut for every action in this factory.
-     *
-     * This slot can be connected directly to the action to configure shortcuts. This is very simple to
-     * do that by adding a single line
-     * \code
-     * KStandardAction::keyBindings( guiFactory(), SLOT( configureShortcuts() ), actionCollection() );
-     * \endcode
-     *
-     * @param bAllowLetterShortcuts Set to false if unmodified alphanumeric
-     *      keys ('A', '1', etc.) are not permissible shortcuts.
-     * @param bSaveSettings if true, the settings will also be saved back to
-     *      the *uirc file which they were intially read from.
-     */
-    int configureShortcuts(bool bAllowLetterShortcuts = true, bool bSaveSettings = true);
-
-    void changeShortcutScheme(const QString &scheme);
-
 Q_SIGNALS:
     void clientAdded(KXMLGUIClient *client);
     void clientRemoved(KXMLGUIClient *client);

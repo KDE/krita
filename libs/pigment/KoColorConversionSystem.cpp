@@ -356,7 +356,7 @@ KoColorConversionSystem::Vertex* KoColorConversionSystem::createVertex(Node* src
 
 // -- Graph visualization functions --
 
-QString KoColorConversionSystem::vertexToDot(KoColorConversionSystem::Vertex* v, QString options) const
+QString KoColorConversionSystem::vertexToDot(KoColorConversionSystem::Vertex* v, const QString &options) const
 {
     return QString("  \"%1\" -> \"%2\" %3\n").arg(v->srcNode->id()).arg(v->dstNode->id()).arg(options);
 }

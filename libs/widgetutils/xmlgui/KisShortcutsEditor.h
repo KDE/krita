@@ -44,7 +44,7 @@ class KisShortcutsEditorPrivate;
  * already free of conflicts. If it is not, nothing will crash, but your users
  * won't like the resulting behavior.
  *
- * TODO: What exactly is the problem?
+ * TODO: Find the right place to check for conflicts.
  */
 
 
@@ -102,20 +102,6 @@ public:
     };
 
     /**
-     * Constructor.
-     *
-     * @param collection the KActionCollection to configure
-     * @param parent parent widget
-     * @param actionTypes types of actions to display in this widget.
-     * @param allowLetterShortcuts set to LetterShortcutsDisallowed if unmodified alphanumeric
-     *  keys ('A', '1', etc.) are not permissible shortcuts.
-     */
-    KisShortcutsEditor(KActionCollection *collection,
-                       QWidget *parent,
-                       ActionTypes actionTypes = AllActions,
-                       LetterShortcuts allowLetterShortcuts = LetterShortcutsAllowed);
-
-    /**
      * \overload
      *
      * Creates a key chooser without a starting action collection.
@@ -140,6 +126,11 @@ public:
      * Removes all action collections from the editor
      */
     void clearCollections();
+
+    /**
+     * Clears search area
+     */
+    void clearSearch();
 
     /**
      * Note: the reason this is so damn complicated is because it's supposed to
@@ -170,9 +161,7 @@ public:
     void save();
 
     /**
-     * Commit the changes without saving.
-     *
-     * This commits the changes without saving.
+     * Update the dialog entries without saving.
      *
      * @since 4.2
      */
@@ -184,16 +173,29 @@ public:
     void clearConfiguration();
 
     /**
-     * Write the current settings to the \p config object.
+     * Write the current custom shortcut settings to the \p config object.
      *
      * @param config Config object to save to. Default is kritashortcutsrc.
      *
      */
-    void writeConfiguration(KConfigGroup *config = 0) const;
+    void saveShortcuts(KConfigGroup *config = 0) const;
 
+
+    /**
+     * Write the current shortcuts to a new scheme to configuration file
+     *
+     * @param config Config object to save to.
+     */
     void exportConfiguration(KConfigBase *config) const;
 
-    void importConfiguration(KConfigBase *config);
+
+    /**
+     * Import a shortcut configuration file.
+     *
+     * @param config Config object to load from.
+     * @param isScheme true for shortcut scheme, false for custom shortcuts
+     */
+    void importConfiguration(KConfigBase *config, bool isScheme);
 
     /**
      * Sets the types of actions to display in this widget.
@@ -230,6 +232,11 @@ public Q_SLOTS:
      * Opens a printing dialog to print all the shortcuts
      */
     void printShortcuts() const;
+
+    /**
+     * Expand or collapse the tree view when the search text changes
+     */
+    void searchUpdated(QString s);
 
 private:
     Q_PRIVATE_SLOT(d, void capturedShortcut(QVariant, const QModelIndex &))

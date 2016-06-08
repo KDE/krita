@@ -1,0 +1,20 @@
+diff --git a/IlmImf/CMakeLists.txt b/IlmImf/CMakeLists.txt
+index 18d90ed..6c2f48c 100644
+--- a/IlmImf/CMakeLists.txt
++++ b/IlmImf/CMakeLists.txt
+@@ -5,6 +5,7 @@ SET(CMAKE_INCLUDE_CURRENT_DIR 1)
+ ADD_EXECUTABLE ( b44ExpLogTable
+   b44ExpLogTable.cpp
+ )
++set_target_properties(b44ExpLogTable PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;${CMAKE_INSTALL_PREFIX}/bin")
+ 
+ TARGET_LINK_LIBRARIES ( b44ExpLogTable
+   Half
+@@ -22,6 +23,7 @@ ADD_CUSTOM_COMMAND (
+ ADD_EXECUTABLE ( dwaLookups
+   dwaLookups.cpp
+ )
++set_target_properties(dwaLookups PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;${CMAKE_INSTALL_PREFIX}/bin")
+ 
+ TARGET_LINK_LIBRARIES ( dwaLookups
+   Half

@@ -1,0 +1,58 @@
+--- windows/libiconv.rc.orig	Sun May 27 18:38:24 2007
++++ windows/libiconv.rc	Wed Feb  4 19:50:47 2009
+@@ -3,8 +3,8 @@
+ #include <winver.h>
+ 
+ VS_VERSION_INFO VERSIONINFO
+- FILEVERSION PACKAGE_VERSION_MAJOR,PACKAGE_VERSION_MINOR,PACKAGE_VERSION_SUBMINOR,0
+- PRODUCTVERSION PACKAGE_VERSION_MAJOR,PACKAGE_VERSION_MINOR,PACKAGE_VERSION_SUBMINOR,0
++ FILEVERSION 1,13,1,0
++ PRODUCTVERSION 1,13,1,0
+  FILEFLAGSMASK 0x3fL /* VS_FFI_FILEFLAGSMASK */
+ #ifdef _DEBUG
+  FILEFLAGS 0x1L  /* VS_FF_DEBUG */
+@@ -22,13 +22,13 @@
+             VALUE "Comments", "This library is free software; you can redistribute it and/or modify it under the terms of the GNU Library General Public License. You should have received a copy of the GNU Library General Public License along with this library; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA\0"
+             VALUE "CompanyName", "Free Software Foundation\0"
+             VALUE "FileDescription", "LGPLed libiconv for Windows NT/2000/XP/Vista and Windows 95/98/ME\0"
+-            VALUE "FileVersion", PACKAGE_VERSION_STRING "\0"
++            VALUE "FileVersion", "1.13.1" "\0"
+             VALUE "InternalName", "iconv.dll\0"
+             VALUE "LegalCopyright", "Copyright (C) 1999-2007\0"
+             VALUE "LegalTrademarks", "\0"
+             VALUE "OriginalFilename", "iconv.dll\0"
+             VALUE "ProductName", "libiconv: character set conversion library\0"
+-            VALUE "ProductVersion", PACKAGE_VERSION_STRING "\0"
++            VALUE "ProductVersion", "1.13.1" "\0"
+         END
+     END
+     BLOCK "VarFileInfo"
+--- windows/iconv.rc.orig	Sun Oct  7 18:25:21 2007
++++ windows/iconv.rc	Wed Feb  4 19:50:50 2009
+@@ -3,8 +3,8 @@
+ #include <winver.h>
+ 
+ VS_VERSION_INFO VERSIONINFO
+- FILEVERSION PACKAGE_VERSION_MAJOR,PACKAGE_VERSION_MINOR,PACKAGE_VERSION_SUBMINOR,0
+- PRODUCTVERSION PACKAGE_VERSION_MAJOR,PACKAGE_VERSION_MINOR,PACKAGE_VERSION_SUBMINOR,0
++ FILEVERSION 1,13,1,0
++ PRODUCTVERSION 1,13,1,0
+  FILEFLAGSMASK 0x3fL /* VS_FFI_FILEFLAGSMASK */
+ #ifdef _DEBUG
+  FILEFLAGS 0x1L  /* VS_FF_DEBUG */
+@@ -22,13 +22,13 @@
+             VALUE "Comments", "This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License. You should have received a copy of the GNU General Public License along with this program. If not, see <http://www.gnu.org/licenses/>.\0"
+             VALUE "CompanyName", "Free Software Foundation\0"
+             VALUE "FileDescription", "GPLed iconv for Windows NT/2000/XP/Vista\0"
+-            VALUE "FileVersion", PACKAGE_VERSION_STRING "\0"
++            VALUE "FileVersion", "1.13.1" "\0"
+             VALUE "InternalName", "iconv.exe\0"
+             VALUE "LegalCopyright", "Copyright (C) 1999-2009\0"
+             VALUE "LegalTrademarks", "\0"
+             VALUE "OriginalFilename", "iconv.exe\0"
+             VALUE "ProductName", "iconv: character set conversion program\0"
+-            VALUE "ProductVersion", PACKAGE_VERSION_STRING "\0"
++            VALUE "ProductVersion", "1.13.1" "\0"
+         END
+     END
+     BLOCK "VarFileInfo"

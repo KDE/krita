@@ -3,6 +3,9 @@
     <qresource prefix="/kconfig">
         <file alias="kritarc">data/kritarc</file>
     </qresource>
+    <qresource prefix="/kxmlgui5">
+        <file alias="krita.xmlgui">krita.xmlgui</file>
+    </qresource>
     <qresource>
         <file>pics/broken-preset.png</file>
         <file>pics/dark_layer-locked.png</file>
@@ -24,7 +27,6 @@
         <file>pics/hi16-add_dialog.png</file>
         <file>pics/hi16-palette_library.png</file>
         <file>pics/icon-kritasketch-256.png</file>
-        <file>pics/landscape.png</file>
         <file>pics/layer-style-disabled.png</file>
         <file>pics/layer-style-enabled.png</file>
         <file>pics/light_layer-locked.png</file>
@@ -47,7 +49,6 @@
         <file>pics/novisible.svg</file>
         <file>pics/offset_horizontal.png</file>
         <file>pics/offset_vertical.png</file>
-        <file>pics/portrait.png</file>
         <file>pics/ratio_icon.png</file>
         <file>pics/select_pixel.png</file>
         <file>pics/select_shape.png</file>

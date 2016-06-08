@@ -21,6 +21,8 @@
 #ifndef KO_INVERT_COLOR_TRANSFORMATION_H
 #define KO_INVERT_COLOR_TRANSFORMATION_H
 
+#include "KoColorTransformation.h"
+
 class KoInvertColorTransformation : public KoColorTransformation
 {
 

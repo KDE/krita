@@ -1,0 +1,9 @@
+{
+    "Id": "Selection Tools",
+    "Type": "Service",
+    "X-KDE-Library": "kritaselectiontools",
+    "X-KDE-ServiceTypes": [
+        "Krita/Tool"
+    ],
+    "X-Krita-Version": "28"
+}

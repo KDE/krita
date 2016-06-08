@@ -35,7 +35,7 @@
 #include <QModelIndex>
 #include <QtCore/QList>
 #include <QtCore/QCollator>
-#include <QGroupBox>
+#include <QHBoxLayout>
 
 class QLabel;
 class QTreeWidget;
@@ -46,10 +46,10 @@ class KActionCollection;
 class QPushButton;
 class QComboBox;
 class KisShortcutsDialog;
+class KShortcutSchemesEditor;
 class QAction;
 
 
-// What is this for??  (will use abbreviation WTF)
 enum ColumnDesignation {
     Name = 0,
     LocalPrimary,
@@ -67,7 +67,6 @@ enum MyRoles {
 
 /**
  * Type used for QTreeWidgetItems
- * WTF?
  *
  * @internal
  */
@@ -92,10 +91,11 @@ public:
     void undo();
     void save();
 
-    QList<KActionCollection *> m_collections;
+    QHash<QString, KActionCollection *> m_collections;
     KisShortcutsDialog *q;
     KisShortcutsEditor *m_shortcutsEditor;
-    bool m_saveSettings{false};
+
+    KShortcutSchemesEditor *m_schemeEditor{0};
 };
 
 
@@ -232,7 +232,5 @@ private:
     bool m_isUpdating;
     QObject *m_action;
 };
-
-
 
 #endif /* KISSHORTCUTSDIALOG_P_H */

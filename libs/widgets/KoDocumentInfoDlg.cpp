@@ -27,7 +27,6 @@
 #include "KoDocumentBase.h"
 #include "KoGlobal.h"
 #include "KoPageWidgetItem.h"
-#include <KoDocumentRdfBase.h>
 #include <KoIcon.h>
 
 
@@ -39,15 +38,14 @@
 
 #include <QLineEdit>
 #include <QDateTime>
-#include <QMimeDatabase>
-#include <QMimeType>
+#include <KisMimeDatabase.h>
 
 class KoPageWidgetItemAdapter : public KPageWidgetItem
 {
 public:
     KoPageWidgetItemAdapter(KoPageWidgetItem *item)
-      : KPageWidgetItem(item->widget(), item->name())
-      , m_item(item)
+        : KPageWidgetItem(item->widget(), item->name())
+        , m_item(item)
     {
         setHeader(item->name());
         setIcon(KisIconUtils::loadIcon(item->iconName()));
@@ -85,7 +83,7 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
     d->info = docInfo;
 
     setWindowTitle(i18n("Document Information"));
-//    setInitialSize(QSize(500, 500));
+    //    setInitialSize(QSize(500, 500));
     setFaceType(KPageDialog::List);
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     button(QDialogButtonBox::Ok)->setDefault(true);
@@ -102,11 +100,7 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
     // Ugly hack, the mimetype should be a parameter, instead
     KoDocumentBase* doc = dynamic_cast< KoDocumentBase* >(d->info->parent());
     if (doc) {
-        QMimeDatabase db;
-        QMimeType mime = db.mimeTypeForName(doc->mimeType());
-        if (mime.isValid()) {
-            page->setIcon(KisIconUtils::loadIcon(mime.iconName()));
-        }
+        page->setIcon(KisIconUtils::loadIcon(KisMimeDatabase::iconNameForMimeType(doc->mimeType())));
     } else {
         // hide all entries not used in pages for KoDocumentInfoPropsPage
         d->aboutUi->filePathInfoLabel->setVisible(false);
@@ -185,12 +179,9 @@ void KoDocumentInfoDlg::initAboutTab()
     if (!d->info->aboutInfo("keyword").isEmpty())
         d->aboutUi->leKeywords->setText(d->info->aboutInfo("keyword"));
 
-    d->aboutUi->meComments->setPlainText(d->info->aboutInfo("description"));
+    d->aboutUi->meDescription->setPlainText(d->info->aboutInfo("abstract"));
     if (doc && !doc->mimeType().isEmpty()) {
-        QMimeDatabase db;
-        QMimeType docmime = db.mimeTypeForName(doc->mimeType());
-        if (docmime.isValid())
-            d->aboutUi->lblType->setText(docmime.comment());
+        d->aboutUi->lblType->setText(KisMimeDatabase::descriptionForMimeType(doc->mimeType()));
     }
     if (!d->info->aboutInfo("creation-date").isEmpty()) {
         QDateTime t = QDateTime::fromString(d->info->aboutInfo("creation-date"),
@@ -207,6 +198,8 @@ void KoDocumentInfoDlg::initAboutTab()
     }
 
     d->aboutUi->lblRevision->setText(d->info->aboutInfo("editing-cycles"));
+
+    updateEditingTime();
 
     connect(d->aboutUi->pbReset, SIGNAL(clicked()),
             this, SLOT(slotResetMetaData()));
@@ -234,7 +227,7 @@ void KoDocumentInfoDlg::saveAboutData()
     d->info->setAboutInfo("keyword", d->aboutUi->leKeywords->text());
     d->info->setAboutInfo("title", d->aboutUi->leTitle->text());
     d->info->setAboutInfo("subject", d->aboutUi->leSubject->text());
-    d->info->setAboutInfo("description", d->aboutUi->meComments->toPlainText());
+    d->info->setAboutInfo("abstract", d->aboutUi->meDescription->toPlainText());
     d->info->setAboutInfo("language", KoGlobal::tagOfLanguage(d->aboutUi->cbLanguage->currentText()));
 }
 
@@ -271,7 +264,7 @@ QList<KPageWidgetItem*> KoDocumentInfoDlg::pages() const
 
 void KoDocumentInfoDlg::setReadOnly(bool ro)
 {
-    d->aboutUi->meComments->setReadOnly(ro);
+    d->aboutUi->meDescription->setReadOnly(ro);
 
     Q_FOREACH(KPageWidgetItem* page, d->pages) {
         Q_FOREACH(QLineEdit* le, page->widget()->findChildren<QLineEdit *>()) {
@@ -289,4 +282,42 @@ void KoDocumentInfoDlg::addPageItem(KoPageWidgetItem *item)
 
     addPage(page);
     d->pages.append(page);
+}
+
+void KoDocumentInfoDlg::updateEditingTime()
+{
+    const int timeElapsed = d->info->aboutInfo("editing-time").toInt();
+
+    const int secondsElapsed = timeElapsed % 60;
+    const int minutesElapsed = (timeElapsed / 60) % 60;
+    const int hoursElapsed = (timeElapsed / 3600) % 24;
+    const int daysElapsed = (timeElapsed / 86400) % 7;
+    const int weeksElapsed = timeElapsed / 604800;
+
+    QString majorTimeUnit;
+    QString minorTimeUnit;
+
+    if (weeksElapsed > 0) {
+        majorTimeUnit = i18np("%1 week", "%1 weeks", weeksElapsed);
+        minorTimeUnit = i18np("%1 day", "%1 days", daysElapsed);
+    } else if (daysElapsed > 0) {
+        majorTimeUnit = i18np("%1 day", "%1 days", daysElapsed);
+        minorTimeUnit = i18np("%1 hour", "%1 hours", hoursElapsed);
+    } else if (hoursElapsed > 0) {
+        majorTimeUnit = i18np("%1 hour", "%1 hours", hoursElapsed);
+        minorTimeUnit = i18np("%1 minute", "%1 minutes", minutesElapsed);
+    } else if (minutesElapsed > 0) {
+        majorTimeUnit = i18np("%1 minute", "%1 minutes", minutesElapsed);
+        minorTimeUnit = i18np("%1 second", "%1 seconds", secondsElapsed);
+    } else {
+        d->aboutUi->lblEditing->setText(i18np("%1 second", "%1 seconds", secondsElapsed));
+        return;
+    }
+
+    d->aboutUi->lblEditing->setText(i18nc(
+                                        "major time unit and minor time unit",
+                                        "%1 and %2",
+                                        majorTimeUnit,
+                                        minorTimeUnit
+                                        ));
 }

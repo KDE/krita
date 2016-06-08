@@ -7,6 +7,7 @@
   <summary xml:lang="bs">Digitalno crtanje, kreativna sloboda</summary>
   <summary xml:lang="ca">Dibuix digital, Llibertat creativa</summary>
   <summary xml:lang="ca-valencia">Dibuix digital, Llibertat creativa</summary>
+  <summary xml:lang="cs">Digitální malování, svoboda tvorby</summary>
   <summary xml:lang="da">Digital tegning, kunstnerisk frihed</summary>
   <summary xml:lang="de">Digitales Malen, kreative Freiheit</summary>
   <summary xml:lang="en-GB">Digital Painting, Creative Freedom</summary>
@@ -120,16 +121,22 @@
   <url type="homepage">https://www.krita.org/</url>
   <url type="faq">https://krita.org/about/faq/</url>
   <url type="donation">https://krita.org/support-us/donations/</url>
-  <url type="help">https://krita.org/learn/tutorials/</url>
+  <url type="help">https://docs.krita.org/Category:Tutorials</url>
   <screenshots>
     <screenshot type="default">
-      <image>http://heap.kogmbh.net/downloads/krita_appdata_1.png</image>
+      <image>http://files.kde.org/krita/marketing/appdata/2016-05-24_screenshot_002.png</image>
     </screenshot>
-    <screenshot>
-      <image>http://heap.kogmbh.net/downloads/krita_appdata_2.png</image>
+    <screenshot type="default">
+      <image>http://files.kde.org/krita/marketing/appdata/2016-05-24_screenshot_003.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <image>http://files.kde.org/krita/marketing/appdata/2016-05-24_screenshot_004.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <image>http://files.kde.org/krita/marketing/appdata/2016-05-24_screenshot_005.png</image>
     </screenshot>
   </screenshots>
-  <x-updatecontact>foundation@krita.org</x-updatecontact>
+  <update_contact>foundation@krita.org</update_contact>
   <project_group>KDE</project_group>
   <provides>
     <binary>krita</binary>

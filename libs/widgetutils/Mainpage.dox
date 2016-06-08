@@ -1,10 +1,10 @@
 /**
  * \mainpage
  *
- * KoWidgetUtils is a library which contains utilities for Calligra. It has
- * light dependencies compared to the KoWidgets library; the only dependency
+ * KritaWidgetUtils is a library which contains utilities for Krita. It has
+ * light dependencies compared to the KritaWidgets library; the only dependency
  * are QtCore and QtGui (QWidgets).
  */
 
-// DOXYGEN_SET_PROJECT_NAME = KoWidgetUtils
+// DOXYGEN_SET_PROJECT_NAME = KritaWidgetUtils
 // DOXYGEN_SET_IGNORE_PREFIX = Ko K

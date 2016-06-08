@@ -1,0 +1,9 @@
+{
+    "Id": "Sobel Filter",
+    "Type": "Service",
+    "X-KDE-Library": "kritasobelfilter",
+    "X-KDE-ServiceTypes": [
+        "Krita/Filter"
+    ],
+    "X-Krita-Version": "28"
+}

@@ -26,7 +26,7 @@
 #include <QColor>
 #include <QMetaType>
 #include <QPointF>
-#include <QSharedData>
+#include <QSharedDataPointer>
 
 class KoShadowStylePrivate;
 

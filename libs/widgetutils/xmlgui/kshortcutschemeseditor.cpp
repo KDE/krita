@@ -16,7 +16,8 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
-#include "kshortcutsdialog_p.h"
+#include "kshortcutschemeseditor.h"
+#include "KisShortcutsDialog_p.h"
 
 #include <QDir>
 #include <QLabel>
@@ -29,65 +30,70 @@
 #include <QStandardPaths>
 #include <QInputDialog>
 #include <QComboBox>
+#include <QHBoxLayout>
+#include <QDebug>
 
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
 #include <ksharedconfig.h>
 
-#include "kshortcutsdialog.h"
+#include "KisShortcutsDialog.h"
 #include "kshortcutschemeshelper_p.h"
 #include "kactioncollection.h"
 #include "kxmlguiclient.h"
 
-KShortcutSchemesEditor::KShortcutSchemesEditor(KShortcutsDialog *parent)
-    : QGroupBox(i18n("Shortcut Schemes"), parent), m_dialog(parent)
+#include "KoResourcePaths.h"
+
+
+KShortcutSchemesEditor::KShortcutSchemesEditor(KisShortcutsDialog *parent)
+    : QHBoxLayout(parent)
+    , m_dialog(parent)
 {
     KConfigGroup group(KSharedConfig::openConfig(), "Shortcut Schemes");
 
     QStringList schemes;
     schemes << QStringLiteral("Default");
-    // List files in the shortcuts subdir, each one is a theme. See KShortcutSchemesHelper::{shortcutSchemeFileName,exportActionCollection}
-    const QStringList shortcutsDir = QStandardPaths::locateAll(QStandardPaths::DataLocation, QStringLiteral("shortcuts"), QStandardPaths::LocateDirectory);
-    Q_FOREACH (const QString &dir, shortcutsDir) {
-        Q_FOREACH (const QString &file, QDir(dir).entryList(QDir::NoDotAndDotDot)) {
-            schemes << file;
-        }
-    }
+
+    auto schemeFileLocations = KShortcutSchemesHelper::schemeFileLocations();
+    schemes << schemeFileLocations.keys();
 
     const QString currentScheme = group.readEntry("Current Scheme", "Default");
+    setMargin(0);
 
-    QHBoxLayout *l = new QHBoxLayout(this);
-    l->setMargin(0);
+    QLabel *schemesLabel = new QLabel(i18n("Shortcut Schemes:"), m_dialog);
+    addWidget(schemesLabel);
 
-    QLabel *schemesLabel = new QLabel(i18n("Current scheme:"), this);
-    l->addWidget(schemesLabel);
-
-    m_schemesList = new QComboBox(this);
+    m_schemesList = new QComboBox(m_dialog);
     m_schemesList->setEditable(false);
     m_schemesList->addItems(schemes);
     m_schemesList->setCurrentIndex(m_schemesList->findText(currentScheme));
     schemesLabel->setBuddy(m_schemesList);
-    l->addWidget(m_schemesList);
+    addWidget(m_schemesList);
 
     m_newScheme = new QPushButton(i18n("New..."));
-    l->addWidget(m_newScheme);
+    addWidget(m_newScheme);
 
     m_deleteScheme = new QPushButton(i18n("Delete"));
-    l->addWidget(m_deleteScheme);
+    addWidget(m_deleteScheme);
 
-    QPushButton *moreActions = new QPushButton(i18n("More Actions"));
-    l->addWidget(moreActions);
+    QPushButton *moreActions = new QPushButton(i18n("Save/Load"));
+    addWidget(moreActions);
 
-    QMenu *moreActionsMenu = new QMenu(this);
-    moreActionsMenu->addAction(i18n("Save as Scheme Defaults"),
-                               this, SLOT(saveAsDefaultsForScheme()));
+    QMenu *moreActionsMenu = new QMenu(m_dialog);
+    // moreActionsMenu->addAction(i18n("Save as Scheme Defaults"),
+                               // this, SLOT(saveAsDefaultsForScheme()));
+
+    moreActionsMenu->addAction(i18n("Save Custom Shortcuts"),
+                               this, SLOT(saveCustomShortcuts()));
+    moreActionsMenu->addAction(i18n("Load Custom Shortcuts"),
+                               this, SLOT(loadCustomShortcuts()));
     moreActionsMenu->addAction(i18n("Export Scheme..."),
                                this, SLOT(exportShortcutsScheme()));
     moreActionsMenu->addAction(i18n("Import Scheme..."),
                                this, SLOT(importShortcutsScheme()));
     moreActions->setMenu(moreActionsMenu);
 
-    l->addStretch(1);
+    addStretch(1);
 
     connect(m_schemesList, SIGNAL(activated(QString)),
             this, SIGNAL(shortcutsSchemeChanged(QString)));
@@ -99,58 +105,44 @@ KShortcutSchemesEditor::KShortcutSchemesEditor(KShortcutsDialog *parent)
 void KShortcutSchemesEditor::newScheme()
 {
     bool ok;
-    const QString newName = QInputDialog::getText(this, i18n("Name for New Scheme"),
+    const QString newName = QInputDialog::getText(m_dialog, i18n("Name for New Scheme"),
                             i18n("Name for new scheme:"), QLineEdit::Normal, i18n("New Scheme"), &ok);
     if (!ok) {
         return;
     }
 
     if (m_schemesList->findText(newName) != -1) {
-        KMessageBox::sorry(this, i18n("A scheme with this name already exists."));
+        KMessageBox::sorry(m_dialog, i18n("A scheme with this name already exists."));
         return;
     }
 
-    const QString newSchemeFileName = KShortcutSchemesHelper::applicationShortcutSchemeFileName(newName);
+    const QString newSchemeFileName = KShortcutSchemesHelper::shortcutSchemeFileName(newName) + ".shortcuts";
 
     QFile schemeFile(newSchemeFileName);
     if (!schemeFile.open(QFile::WriteOnly | QFile::Truncate)) {
+        qDebug() << "Could not open scheme file.";
         return;
     }
+    schemeFile.close();
 
-    QDomDocument doc;
-    QDomElement docElem = doc.createElement(QStringLiteral("kpartgui"));
-    doc.appendChild(docElem);
-    QDomElement elem = doc.createElement(QStringLiteral("ActionProperties"));
-    docElem.appendChild(elem);
-
-    QTextStream out(&schemeFile);
-    out << doc.toString(4);
-
+    m_dialog->exportConfiguration(newSchemeFileName);
     m_schemesList->addItem(newName);
     m_schemesList->setCurrentIndex(m_schemesList->findText(newName));
+    m_schemeFileLocations.insert(newName, newSchemeFileName);
     updateDeleteButton();
     emit shortcutsSchemeChanged(newName);
 }
 
 void KShortcutSchemesEditor::deleteScheme()
 {
-    if (KMessageBox::questionYesNo(this,
+    if (KMessageBox::questionYesNo(m_dialog,
                                    i18n("Do you really want to delete the scheme %1?\n\
 Note that this will not remove any system wide shortcut schemes.", currentScheme())) == KMessageBox::No) {
         return;
     }
 
     //delete the scheme for the app itself
-    QFile::remove(KShortcutSchemesHelper::applicationShortcutSchemeFileName(currentScheme()));
-
-    //delete all scheme files we can find for xmlguiclients in the user directories
-    foreach (KActionCollection *collection, m_dialog->actionCollections()) {
-        const KXMLGUIClient *client = collection->parentGUIClient();
-        if (!client) {
-            continue;
-        }
-        QFile::remove(KShortcutSchemesHelper::shortcutSchemeFileName(client, currentScheme()));
-    }
+    QFile::remove(KShortcutSchemesHelper::shortcutSchemeFileName(currentScheme()));
 
     m_schemesList->removeItem(m_schemesList->findText(currentScheme()));
     updateDeleteButton();
@@ -165,18 +157,62 @@ QString KShortcutSchemesEditor::currentScheme()
 void KShortcutSchemesEditor::exportShortcutsScheme()
 {
     //ask user about dir
-    QString path = QFileDialog::getSaveFileName(this, i18n("Export Shortcuts"), QDir::currentPath(), i18n("Shortcuts (*.shortcuts)"));
+    QFileDialog dlg(m_dialog,
+                    i18n("Export Shortcuts"),
+                    KoResourcePaths::saveLocation("kis_shortcuts"),
+                    i18n("Shortcuts (*.shortcuts)"));
+    dlg.setDefaultSuffix(QStringLiteral(".shortcuts"));
+    dlg.setAcceptMode(QFileDialog::AcceptSave);
+    if (dlg.exec()) {
+        auto path = dlg.selectedFiles().first();
+
+        if (!path.isEmpty()) {
+            m_dialog->exportConfiguration(path);
+        }
+
+    }
+}
+
+void KShortcutSchemesEditor::saveCustomShortcuts()
+{
+    //ask user about dir
+    QFileDialog dlg(m_dialog,
+                    i18n("Save Shortcuts"),
+                    QDir::currentPath(),
+                    i18n("Shortcuts (*.shortcuts)"));
+    dlg.setDefaultSuffix(QStringLiteral(".shortcuts"));
+    dlg.setAcceptMode(QFileDialog::AcceptSave);
+    if (dlg.exec()) {
+        auto path = dlg.selectedFiles().first();
+
+        if (!path.isEmpty()) {
+            m_dialog->saveCustomShortcuts(path);
+        }
+    }
+}
+
+
+void KShortcutSchemesEditor::loadCustomShortcuts()
+{
+    auto path = QFileDialog::getOpenFileName(m_dialog,
+                                             i18n("Import Shortcuts"),
+                                             QDir::currentPath(),
+                                             i18n("Shortcuts (*.shortcuts)"));
+
     if (path.isEmpty()) {
         return;
     }
 
-    m_dialog->exportConfiguration(path);
+    // auto ar = KisActionRegistry::instance();
+    // ar->loadCustomShortcuts(path);
+    m_dialog->loadCustomShortcuts(path);
+
 }
 
 void KShortcutSchemesEditor::importShortcutsScheme()
 {
     //ask user about dir
-    QString path = QFileDialog::getOpenFileName(this, i18n("Import Shortcuts"), QDir::currentPath(), i18n("Shortcuts (*.shortcuts)"));
+    QString path = QFileDialog::getOpenFileName(m_dialog, i18n("Import Shortcuts"), QDir::currentPath(), i18n("Shortcuts (*.shortcuts)"));
     if (path.isEmpty()) {
         return;
     }
@@ -184,12 +220,15 @@ void KShortcutSchemesEditor::importShortcutsScheme()
     m_dialog->importConfiguration(path);
 }
 
+#if 0
+// XXX: Not implemented
 void KShortcutSchemesEditor::saveAsDefaultsForScheme()
 {
     foreach (KActionCollection *collection, m_dialog->actionCollections()) {
         KShortcutSchemesHelper::exportActionCollection(collection, currentScheme());
     }
 }
+#endif
 
 void KShortcutSchemesEditor::updateDeleteButton()
 {

@@ -26,6 +26,7 @@
 
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
+#include <KoXmlReader.h>
 
 #include "KoCanvasBase.h"
 #include "KoShapeController.h"
@@ -38,6 +39,7 @@
 #include "KoCanvasController.h"
 #include "KoDocumentResourceManager.h"
 #include "commands/KoShapeCreateCommand.h"
+#include "KoViewConverter.h"
 
 class Q_DECL_HIDDEN KoShapePaste::Private
 {

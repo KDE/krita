@@ -69,7 +69,7 @@ public:
         NoCompressCalls = 0,
         CompressCalls
     };
-    void setSettingsDirty(CallCompression callCompression = NoCompressCalls);
+    void setSettingsDirty(CallCompression callCompression = CompressCalls);
     void setSizeDirty();
 };
 

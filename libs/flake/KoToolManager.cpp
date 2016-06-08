@@ -41,6 +41,7 @@
 #include "tools/KoZoomTool.h"
 #include "tools/KoPanTool.h"
 #include "kis_action_registry.h"
+#include "KoToolFactoryBase.h"
 
 // Qt + kde
 #include <QWidget>
@@ -499,6 +500,11 @@ void KoToolManager::updateToolShortcuts()
     //         actionRegistry->updateShortcut(it.key(), it.value());
     //     }
     // }
+}
+
+void KoToolManager::initializeCurrentToolForCanvas()
+{
+    d->postSwitchTool(false);
 }
 
 KoToolManager* KoToolManager::instance()

@@ -1,0 +1,9 @@
+{
+    "Id": "Emboss Filter",
+    "Type": "Service",
+    "X-KDE-Library": "kritaembossfilter",
+    "X-KDE-ServiceTypes": [
+        "Krita/Filter"
+    ],
+    "X-Krita-Version": "28"
+}

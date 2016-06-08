@@ -69,8 +69,7 @@ if (GSL_FOUND)
      endif()
 else ()
      if (GSL_FIND_REQUIRED)
-	MESSAGE (STATUS "GNU Scientific Library not found. "
-                        "Calligra Sheets' solver plugin won't be compiled.")
+	MESSAGE (FATAL_ERROR "Required package gsl NOT found")
      endif ()
 endif ()
 

@@ -1,0 +1,9 @@
+{
+    "Id": "Index Colors Filter",
+    "Type": "Service",
+    "X-KDE-Library": "kritaindexcolors",
+    "X-KDE-ServiceTypes": [
+        "Krita/Filter"
+    ],
+    "X-Krita-Version": "28"
+}

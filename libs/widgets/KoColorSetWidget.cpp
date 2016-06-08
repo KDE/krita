@@ -38,7 +38,7 @@
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
 
-#include <KoColorSet.h>
+#include <resources/KoColorSet.h>
 #include <KoColorPatch.h>
 #include <KoEditColorSetDialog.h>
 #include <KoColorSpaceRegistry.h>

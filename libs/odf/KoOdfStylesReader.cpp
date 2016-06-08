@@ -25,6 +25,7 @@
 #include "KoOdfNumberDefinition.h"
 #include "KoOdfLineNumberingConfiguration.h"
 #include "KoOdfBibliographyConfiguration.h"
+#include "KoXmlReader.h"
 
 #include <OdfDebug.h>
 

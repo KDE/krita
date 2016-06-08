@@ -34,6 +34,7 @@
 #include <QPrintDialog>
 #include <ksharedconfig.h>
 #include <KConfigGroup>
+#include "kis_action_registry.h"
 
 //---------------------------------------------------------------------
 // KisShortcutsEditorPrivate
@@ -84,6 +85,9 @@ void KisShortcutsEditorPrivate::initGUI(KisShortcutsEditor::ActionTypes types,
     //hide the editor widget chen its item becomes hidden
     QObject::connect(ui.searchFilter->searchLine(), SIGNAL(hiddenChanged(QTreeWidgetItem*,bool)),
                      delegate, SLOT(hiddenBySearchLine(QTreeWidgetItem*,bool)));
+    //Expand items when searching
+    QObject::connect(ui.searchFilter->searchLine(), SIGNAL(searchUpdated(QString)),
+                     q, SLOT(searchUpdated(QString)));
 
     ui.searchFilter->setFocus();
 }
@@ -212,31 +216,6 @@ void KisShortcutsEditorPrivate::clearConfiguration()
     }
 }
 
-void KisShortcutsEditorPrivate::importConfiguration(KConfigBase *config)
-{
-    Q_ASSERT(config);
-    if (!config) {
-        return;
-    }
-
-    const KConfigGroup localShortcutsGroup(config, QStringLiteral("Shortcuts"));
-    for (QTreeWidgetItemIterator it(ui.list); (*it); ++it) {
-
-        if (!(*it)->parent()) {
-            continue;
-        }
-        KisShortcutsEditorItem *item = static_cast<KisShortcutsEditorItem *>(*it);
-        const QString actionId = item->data(Id).toString();
-        if (!localShortcutsGroup.hasKey(actionId))
-            continue;
-
-        QList<QKeySequence> sc = QKeySequence::listFromString(localShortcutsGroup.readEntry(actionId, QString()));
-        changeKeyShortcut(item, LocalPrimary, primarySequence(sc));
-        changeKeyShortcut(item, LocalAlternate, alternateSequence(sc));
-    }
-}
-
-
 /*TODO for the printShortcuts function
 Nice to have features (which I'm not sure I can do before may due to
 more important things):
@@ -257,8 +236,6 @@ more important things):
 */
 void KisShortcutsEditorPrivate::printShortcuts() const
 {
-// Can't successfully print on Windows CE
-#ifndef _WIN32_WCE
     QTreeWidgetItem *root = ui.list->invisibleRootItem();
     QTextDocument doc;
 
@@ -366,5 +343,4 @@ void KisShortcutsEditorPrivate::printShortcuts() const
         doc.print(&printer);
     }
     delete dlg;
-#endif
 }

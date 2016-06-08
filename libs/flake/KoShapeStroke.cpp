@@ -41,6 +41,7 @@
 #include "KoShapeSavingContext.h"
 #include "KoPathShape.h"
 #include "KoMarkerData.h"
+#include "KoInsets.h"
 
 
 class Q_DECL_HIDDEN KoShapeStroke::Private

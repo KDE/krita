@@ -1,0 +1,20 @@
+diff -Nru -x '*~' expat-2.1.0.orig/lib/libexpat.def expat-2.1.0/lib/libexpat.def
+--- expat-2.1.0.orig/lib/libexpat.def	2007-05-11 19:20:24.000000000 +0200
++++ expat-2.1.0/lib/libexpat.def	2013-03-11 10:57:39.156121700 +0100
+@@ -1,6 +1,5 @@
+ ; DEF file for MS VC++
+ 
+-LIBRARY
+ EXPORTS
+   XML_DefaultCurrent @1
+   XML_ErrorString @2
+diff -Nru -x '*~' expat-2.1.0.orig/lib/libexpatw.def expat-2.1.0/lib/libexpatw.def
+--- expat-2.1.0.orig/lib/libexpatw.def	2007-05-11 19:20:24.000000000 +0200
++++ expat-2.1.0/lib/libexpatw.def	2013-03-11 10:57:48.157279100 +0100
+@@ -1,6 +1,5 @@
+ ; DEF file for MS VC++
+ 
+-LIBRARY
+ EXPORTS
+   XML_DefaultCurrent @1
+   XML_ErrorString @2

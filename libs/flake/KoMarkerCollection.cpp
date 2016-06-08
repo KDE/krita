@@ -19,11 +19,14 @@
 
 #include "KoMarkerCollection.h"
 
+#include <QFile>
+
 #include "KoMarker.h"
 #include "KoMarkerSharedLoadingData.h"
 #include <KoXmlReader.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
+#include <KoOdfStylesReader.h>
 #include <KoOdfReadStore.h>
 #include <QStandardPaths>
 #include <FlakeDebug.h>
@@ -75,7 +78,7 @@ void KoMarkerCollection::loadDefaultMarkers()
     KoOdfLoadingContext odfContext(markerReader, 0);
     KoShapeLoadingContext shapeContext(odfContext, 0);
     KoXmlDocument doc;
-    QString filePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "krita/styles/markers.xml");
+    QString filePath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "styles/markers.xml");
 
     if (!filePath.isEmpty()) {
         QFile file(filePath);

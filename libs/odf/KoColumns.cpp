@@ -19,6 +19,8 @@
 
 #include "KoColumns.h"
 
+#include <QBuffer>
+
 #include "KoXmlWriter.h"
 #include "KoGenStyle.h"
 #include "KoXmlReader.h"

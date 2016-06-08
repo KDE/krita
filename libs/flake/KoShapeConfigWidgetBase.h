@@ -20,8 +20,6 @@
 #ifndef KOSHAPECONFIGWIDGETBASE_H
 #define KOSHAPECONFIGWIDGETBASE_H
 
-#include "KoCanvasResourceManager.h"
-
 #include <QWidget>
 
 #include "kritaflake_export.h"
@@ -29,6 +27,7 @@
 class KoShape;
 class KUndo2Command;
 class KoUnit;
+class KoCanvasResourceManager;
 
 /**
  * Base widget for shape-configuration panels.

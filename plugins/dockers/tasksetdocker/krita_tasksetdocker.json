@@ -1,0 +1,9 @@
+{
+    "Id": "Taskset Docker",
+    "Type": "Service",
+    "X-KDE-Library": "kritatasksetdocker",
+    "X-KDE-ServiceTypes": [
+        "Krita/Dock"
+    ],
+    "X-Krita-Version": "28"
+}

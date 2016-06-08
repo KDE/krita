@@ -1,8 +1,8 @@
 /**
  * \mainpage
  *
- * KoStore is a library which contains a wrapper around karchive
+ * KritaStore is a library which contains a wrapper around karchive
  */
 
-// DOXYGEN_SET_PROJECT_NAME = KoStore
+// DOXYGEN_SET_PROJECT_NAME = KritaStore
 // DOXYGEN_SET_IGNORE_PREFIX = Ko K

@@ -28,6 +28,8 @@
 #include "KoDocumentResourceManager.h"
 #include "KoShapePaintingContext.h"
 #include "KoShapeStroke.h"
+#include "KoStrokeConfigWidget.h"
+#include "KoCanvasBase.h"
 #include <KoColor.h>
 
 #include <klocalizedstring.h>

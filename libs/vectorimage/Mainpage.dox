@@ -1,7 +1,7 @@
 /**
  * \mainpage
  *
- * KoVectorImage is a library bundling libemf, libsvm and libwmf.
+ * KritaVectorImage is a library bundling libemf, libsvm and libwmf.
  */
 
-// DOXYGEN_SET_PROJECT_NAME = KoVectorImage
+// DOXYGEN_SET_PROJECT_NAME = KritaVectorImage

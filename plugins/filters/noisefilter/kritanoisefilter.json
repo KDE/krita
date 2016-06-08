@@ -1,0 +1,9 @@
+{
+    "Id": "Noise Filter",
+    "Type": "Service",
+    "X-KDE-Library": "kritanoisefilter",
+    "X-KDE-ServiceTypes": [
+        "Krita/Filter"
+    ],
+    "X-Krita-Version": "28"
+}

@@ -119,7 +119,7 @@ void KoZipStore::init(const QByteArray& appIdentification)
         }
 
         m_pZip->setCompression(KZip::DeflateCompression);
-        // We don't need the extra field in Calligra - so we leave it as "no extra field".
+        // We don't need the extra field in Krita - so we leave it as "no extra field".
     } else {
         d->good = m_pZip->directory() != 0;
     }

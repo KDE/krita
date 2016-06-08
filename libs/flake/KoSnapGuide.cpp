@@ -30,6 +30,10 @@
 
 #include <math.h>
 
+template <class T>
+inline QSharedPointer<T> toQShared(T* ptr) {
+    return QSharedPointer<T>(ptr);
+}
 
 class Q_DECL_HIDDEN KoSnapGuide::Private
 {
@@ -43,15 +47,16 @@ public:
 
     ~Private()
     {
-        qDeleteAll(strategies);
         strategies.clear();
     }
 
     KoCanvasBase *canvas;
     KoShape *editedShape;
 
-    QList<KoSnapStrategy*> strategies;
-    KoSnapStrategy *currentStrategy;
+    typedef QSharedPointer<KoSnapStrategy> KoSnapStrategySP;
+    typedef QList<KoSnapStrategySP> StrategiesList;
+    StrategiesList strategies;
+    KoSnapStrategySP currentStrategy;
 
     KoSnapGuide::Strategies usedStrategies;
     bool active;
@@ -63,18 +68,16 @@ public:
 KoSnapGuide::KoSnapGuide(KoCanvasBase *canvas)
     : d(new Private(canvas))
 {
-    d->strategies.append(new GridSnapStrategy());
-    d->strategies.append(new NodeSnapStrategy());
-    d->strategies.append(new OrthogonalSnapStrategy());
-    d->strategies.append(new ExtensionSnapStrategy());
-    d->strategies.append(new IntersectionSnapStrategy());
-    d->strategies.append(new BoundingBoxSnapStrategy());
-    d->strategies.append(new LineGuideSnapStrategy());
+    d->strategies.append(toQShared(new GridSnapStrategy()));
+    d->strategies.append(toQShared(new NodeSnapStrategy()));
+    d->strategies.append(toQShared(new OrthogonalSnapStrategy()));
+    d->strategies.append(toQShared(new ExtensionSnapStrategy()));
+    d->strategies.append(toQShared(new IntersectionSnapStrategy()));
+    d->strategies.append(toQShared(new BoundingBoxSnapStrategy()));
 }
 
 KoSnapGuide::~KoSnapGuide()
 {
-    delete d;
 }
 
 void KoSnapGuide::setEditedShape(KoShape *shape)
@@ -85,6 +88,20 @@ void KoSnapGuide::setEditedShape(KoShape *shape)
 KoShape *KoSnapGuide::editedShape() const
 {
     return d->editedShape;
+}
+
+void KoSnapGuide::enableSnapStrategy(Strategy type, bool value)
+{
+    if (value) {
+        d->usedStrategies |= type;
+    } else {
+        d->usedStrategies &= ~type;
+    }
+}
+
+bool KoSnapGuide::isStrategyEnabled(Strategy type) const
+{
+    return d->usedStrategies & type;
 }
 
 void KoSnapGuide::enableSnapStrategies(Strategies strategies)
@@ -102,8 +119,28 @@ bool KoSnapGuide::addCustomSnapStrategy(KoSnapStrategy *customStrategy)
     if (!customStrategy || customStrategy->type() != CustomSnapping)
         return false;
 
-    d->strategies.append(customStrategy);
+    d->strategies.append(toQShared(customStrategy));
     return true;
+}
+
+void KoSnapGuide::overrideSnapStrategy(Strategy type, KoSnapStrategy *strategy)
+{
+    for (auto it = d->strategies.begin(); it != d->strategies.end(); /*noop*/) {
+        if ((*it)->type() == type) {
+            if (strategy) {
+                *it = toQShared(strategy);
+            } else {
+                it = d->strategies.erase(it);
+            }
+            return;
+        } else {
+            ++it;
+        }
+    }
+
+    if (strategy) {
+        d->strategies.append(toQShared(strategy));
+    }
 }
 
 void KoSnapGuide::enableSnapping(bool on)
@@ -126,9 +163,16 @@ int KoSnapGuide::snapDistance() const
     return d->snapDistance;
 }
 
+QPointF KoSnapGuide::snap(const QPointF &mousePosition, const QPointF &dragOffset, Qt::KeyboardModifiers modifiers)
+{
+    QPointF pos = mousePosition + dragOffset;
+    pos = snap(pos, modifiers);
+    return pos - dragOffset;
+}
+
 QPointF KoSnapGuide::snap(const QPointF &mousePosition, Qt::KeyboardModifiers modifiers)
 {
-    d->currentStrategy = 0;
+    d->currentStrategy.clear();
 
     if (! d->active || (modifiers & Qt::ShiftModifier))
         return mousePosition;
@@ -140,9 +184,11 @@ QPointF KoSnapGuide::snap(const QPointF &mousePosition, Qt::KeyboardModifiers mo
     qreal maxSnapDistance = d->canvas->viewConverter()->viewToDocument(QSizeF(d->snapDistance,
                 d->snapDistance)).width();
 
-    foreach (KoSnapStrategy *strategy, d->strategies) {
-        if (d->usedStrategies & strategy->type()
-                || strategy->type() == GridSnapping || strategy->type() == CustomSnapping) {
+    foreach (Private::KoSnapStrategySP strategy, d->strategies) {
+        if (d->usedStrategies & strategy->type() ||
+            strategy->type() == GridSnapping ||
+            strategy->type() == CustomSnapping) {
+
             if (! strategy->snap(mousePosition, &proxy, maxSnapDistance))
                 continue;
 
@@ -220,7 +266,7 @@ QList<KoShape*> KoSnapGuide::ignoredShapes() const
 
 void KoSnapGuide::reset()
 {
-    d->currentStrategy = 0;
+    d->currentStrategy.clear();
     d->editedShape = 0;
     d->ignoredPoints.clear();
     d->ignoredShapes.clear();
@@ -228,7 +274,6 @@ void KoSnapGuide::reset()
     int strategyCount = d->strategies.count();
     for (int i = strategyCount-1; i >= 0; --i) {
         if (d->strategies[i]->type() == CustomSnapping) {
-            delete d->strategies[i];
             d->strategies.removeAt(i);
         }
     }

@@ -35,6 +35,7 @@
 
 
 #include "kis_action_registry.h"
+#include "kshortcutschemeshelper_p.h"
 
 
 namespace {
@@ -49,8 +50,8 @@ namespace {
      */
     struct ActionInfoItem {
         QDomElement  xmlData;
-        QKeySequence defaultShortcut;
-        QKeySequence customShortcut;
+        QList<QKeySequence> defaultShortcuts;
+        QList<QKeySequence> customShortcuts;
         QString      collectionName;
         QString      categoryName;
     };
@@ -62,24 +63,30 @@ namespace {
 
     ActionInfoItem emptyActionInfo;  // Used as default return value
 
-
+    // Use Krita debug logging categories instead of KDE's default qDebug() for
+    // harmless empty strings and translations
     QString quietlyTranslate(const QString &s) {
         if (s.isEmpty()) {
             return s;
         }
-        if (i18n(s.toUtf8().constData()).isEmpty()) {
+        QString translatedString = i18nc("action", s.toUtf8());
+        if (translatedString == s) {
+            translatedString = i18n(s.toUtf8());
+        }
+        if (translatedString.isEmpty()) {
             dbgAction << "No translation found for" << s;
             return s;
         }
-        return i18n(s.toUtf8().constData());
+
+        return translatedString;
     };
 
 
-    QKeySequence preferredShortcut(ActionInfoItem action) {
-        if (action.customShortcut.isEmpty()) {
-            return action.defaultShortcut;
+    QList<QKeySequence> preferredShortcuts(ActionInfoItem action) {
+        if (action.customShortcuts.isEmpty()) {
+            return action.defaultShortcuts;
         } else {
-            return action.customShortcut;
+            return action.customShortcuts;
         }
     };
 
@@ -98,8 +105,11 @@ public:
     void loadActionFiles();
     void loadActionCollections();
     void loadCustomShortcuts(QString filename = QStringLiteral("kritashortcutsrc"));
-    ActionInfoItem actionInfo(const QString &name) {
-        return actionInfoList.value(name, emptyActionInfo);
+    ActionInfoItem &actionInfo(const QString &name) {
+        if (!actionInfoList.contains(name)) {
+            dbgAction << "Tried to look up info for unknown action" << name;
+        }
+        return actionInfoList[name];
     };
 
     KisActionRegistry *q;
@@ -120,16 +130,25 @@ KisActionRegistry::KisActionRegistry()
     : d(new KisActionRegistry::Private(this))
 {
     d->loadActionFiles();
-    d->loadCustomShortcuts();
+
+    KConfigGroup cg = KSharedConfig::openConfig()->group("Shortcut Schemes");
+    QString schemeName = cg.readEntry("Current Scheme", "Default");
+    loadShortcutScheme(schemeName);
+    loadCustomShortcuts();
+
 }
 
-// Not the most efficient logic, but simple and readable.
-QKeySequence KisActionRegistry::getPreferredShortcut(const QString &name)
+QList<QKeySequence> KisActionRegistry::getCustomShortcut(const QString &name)
 {
-    return preferredShortcut(d->actionInfo(name));
+    return d->actionInfo(name).customShortcuts;
 };
 
-QKeySequence KisActionRegistry::getCategory(const QString &name)
+QList<QKeySequence> KisActionRegistry::getPreferredShortcut(const QString &name)
+{
+    return preferredShortcuts(d->actionInfo(name));
+};
+
+QString KisActionRegistry::getCategory(const QString &name)
 {
     return d->actionInfo(name).categoryName;
 };
@@ -150,7 +169,7 @@ void KisActionRegistry::addAction(const QString &name, QAction *a)
 
     KActionCollection *collection = d->actionCollections.value(info.collectionName);
     if (!collection) {
-        qDebug() << "No collection found for action" << name;
+        dbgAction << "No collection found for action" << name;
         return;
     }
     if (collection->action(name)) {
@@ -167,6 +186,32 @@ void KisActionRegistry::notifySettingsUpdated()
     d->loadCustomShortcuts();
 };
 
+void KisActionRegistry::loadCustomShortcuts(const QString &path)
+{
+    if (path.isEmpty()) {
+        d->loadCustomShortcuts();
+    } else {
+        d->loadCustomShortcuts(path);
+    }
+};
+
+void KisActionRegistry::loadShortcutScheme(const QString &schemeName)
+{
+    // Load scheme file
+    if (schemeName != QStringLiteral("Default")) {
+        QString schemeFileName = KShortcutSchemesHelper::schemeFileLocations().value(schemeName);
+        if (schemeFileName.isEmpty()) {
+            // qDebug() << "No configuration file found for scheme" << schemeName;
+            return;
+        }
+        KConfig schemeConfig(schemeFileName, KConfig::SimpleConfig);
+        applyShortcutScheme(&schemeConfig);
+    } else {
+        // Apply default scheme, updating KisActionRegistry data
+        applyShortcutScheme();
+    }
+}
+
 QAction * KisActionRegistry::makeQAction(const QString &name, QObject *parent)
 {
 
@@ -180,37 +225,57 @@ QAction * KisActionRegistry::makeQAction(const QString &name, QObject *parent)
 };
 
 
-void KisActionRegistry::configureShortcuts(KActionCollection *ac)
+void KisActionRegistry::setupDialog(KisShortcutsDialog *dlg)
 {
-    KisShortcutsDialog dlg;
-
     for (auto i = d->actionCollections.constBegin(); i != d->actionCollections.constEnd(); i++ ) {
-        dlg.addCollection(i.value(), i.key());
+        dlg->addCollection(i.value(), i.key());
     }
+}
 
-    /* Testing */
-    // QStringList mainWindowActions;
-    // foreach (auto a, ac->actions()) {
-    //     mainWindowActions << a->objectName();
-    // }
-    // dlg.addCollection(ac, "TESTING: XMLGUI-MAINWINDOW");
+void KisActionRegistry::settingsPageSaved()
+{
+   // For now, custom shortcuts are dealt with by writing to file and reloading.
+   loadCustomShortcuts();
 
-   dlg.configure();  // Show the dialog.
-
-   d->loadCustomShortcuts();
+   // Announce UI should reload current shortcuts.
+   emit shortcutsUpdated();
 }
 
 
+void KisActionRegistry::applyShortcutScheme(const KConfigBase *config)
+{
+    // First, update the things in KisActionRegistry
+    if (config == 0) {
+        // Use default shortcut scheme. Simplest just to reload everything.
+        d->actionInfoList.clear();
+        d->loadActionFiles();
+        loadCustomShortcuts();
+    } else {
+        const auto schemeEntries = config->group(QStringLiteral("Shortcuts")).entryMap();
+        // Load info item for each shortcut, reset custom shortcuts
+        auto it = schemeEntries.constBegin();
+        while (it != schemeEntries.end()) {
+            ActionInfoItem &info = d->actionInfo(it.key());
+            if (!it.value().isEmpty())
+                info.defaultShortcuts = QKeySequence::listFromString(it.value());
+            it++;
+        }
+    }
+}
+
 void KisActionRegistry::updateShortcut(const QString &name, QAction *action)
 {
-    action->setShortcut(preferredShortcut(d->actionInfo(name)));
+    const ActionInfoItem &info = d->actionInfo(name);
+    action->setShortcuts(preferredShortcuts(info));
+
+    action->setProperty("defaultShortcuts", qVariantFromValue(info.defaultShortcuts));
 }
 
 
 bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
 {
 
-    ActionInfoItem info = d->actionInfo(name);
+    const ActionInfoItem info = d->actionInfo(name);
     QDomElement actionXml = info.xmlData;
     if (actionXml.text().isEmpty()) {
         dbgAction << "No XML data found for action" << name;
@@ -223,7 +288,7 @@ bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
 
     // Note: the fields in the .action documents marked for translation are determined by extractrc.
     QString icon      = getChildContent(actionXml, "icon");
-    QString text      = getChildContent(actionXml, "text");
+    QString text      = getChildContent_i18n("text");
     QString whatsthis = getChildContent_i18n("whatsThis");
     QString toolTip   = getChildContent_i18n("toolTip");
     QString statusTip = getChildContent_i18n("statusTip");
@@ -243,32 +308,28 @@ bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
     a->setIconText(iconText);
     a->setCheckable(isCheckable);
 
-
-    a->setShortcut(preferredShortcut(info));
-    auto propertizedShortcut = qVariantFromValue(QList<QKeySequence>() << info.defaultShortcut);
-    a->setProperty("defaultShortcuts", propertizedShortcut);
+    updateShortcut(name, a);
 
 
 
-    // TODO: check for colliding shortcuts, either with some code like this, or
-    // by relying on the code existing inside kactioncollection
-    //
-    // QMap<QKeySequence, QAction*> existingShortcuts;
-    // Q_FOREACH (QAction* action, actionCollection->actions()) {
-    //     if(action->shortcut() == QKeySequence(0)) {
-    //         continue;
-    //     }
-    //     if (existingShortcuts.contains(action->shortcut())) {
-    //         dbgAction << QString("Actions %1 and %2 have the same shortcut: %3") \
-    //             .arg(action->text())                                             \
-    //             .arg(existingShortcuts[action->shortcut()]->text())              \
-    //             .arg(action->shortcut());
-    //     }
-    //     else {
-    //         existingShortcuts[action->shortcut()] = action;
-    //     }
-    // }
-
+    // TODO: check for colliding shortcuts in .action files either here or in loading code
+#if 0
+     QMap<QKeySequence, QAction*> existingShortcuts;
+     Q_FOREACH (QAction* action, actionCollection->actions()) {
+         if(action->shortcut() == QKeySequence(0)) {
+             continue;
+         }
+         if (existingShortcuts.contains(action->shortcut())) {
+             dbgAction << QString("Actions %1 and %2 have the same shortcut: %3") \
+                 .arg(action->text())                                             \
+                 .arg(existingShortcuts[action->shortcut()]->text())              \
+                 .arg(action->shortcut());
+         }
+         else {
+             existingShortcuts[action->shortcut()] = action;
+         }
+     }
+#endif
 
     return true;
 }
@@ -289,13 +350,35 @@ QString KisActionRegistry::getActionProperty(const QString &name, const QString 
 }
 
 
-void KisActionRegistry::Private::loadActionFiles()
+void KisActionRegistry::writeCustomShortcuts(KConfigBase *config) const
 {
 
-    KoResourcePaths::addResourceType("kis_actions", "data", "krita/actions");
-    auto searchType = KoResourcePaths::Recursive | KoResourcePaths::NoDuplicates;
+    KConfigGroup cg;
+    if (config == 0) {
+        cg = KConfigGroup(KSharedConfig::openConfig("kritashortcutsrc"),
+                          QStringLiteral("Shortcuts"));
+    } else {
+        cg = KConfigGroup(config, QStringLiteral("Shortcuts"));
+    }
+
+    for (auto it = d->actionInfoList.constBegin();
+         it != d->actionInfoList.constEnd(); ++it) {
+
+        QString actionName = it.key();
+        QString s = QKeySequence::listToString(it.value().customShortcuts);
+        if (s.isEmpty()) {
+            cg.deleteEntry(actionName, KConfigGroup::Persistent);
+        } else {
+            cg.writeEntry(actionName, s, KConfigGroup::Persistent);
+        }
+    }
+    cg.sync();
+}
+
+void KisActionRegistry::Private::loadActionFiles()
+{
     QStringList actionDefinitions =
-        KoResourcePaths::findAllResources("kis_actions", "*.action", searchType);
+        KoResourcePaths::findAllResources("kis_actions", "*.action", KoResourcePaths::Recursive);
 
     // Extract actions all XML .action files.
     Q_FOREACH (const QString &actionDefinition, actionDefinitions)  {
@@ -330,8 +413,8 @@ void KisActionRegistry::Private::loadActionFiles()
             // <text> field
             QDomElement categoryTextNode = actions.firstChild().toElement();
             QString categoryName         = quietlyTranslate(categoryTextNode.text());
-            KActionCategory *category    = actionCollection->getCategory(categoryName);
-            dbgAction << "Using category" << categoryName;
+            // KActionCategory *category    = actionCollection->getCategory(categoryName);
+            // dbgAction << "Using category" << categoryName;
 
             // <action></action> tags
             QDomElement actionXml  = categoryTextNode.nextSiblingElement();
@@ -354,8 +437,12 @@ void KisActionRegistry::Private::loadActionFiles()
                     else {
                         ActionInfoItem info;
                         info.xmlData         = actionXml;
-                        info.defaultShortcut = getChildContent(actionXml, "shortcut");
-                        info.customShortcut  = QKeySequence();
+
+                        // Use empty list to signify no shortcut
+                        QString shortcutText = getChildContent(actionXml, "shortcut");
+                        if (!shortcutText.isEmpty())
+                            info.defaultShortcuts << QKeySequence(shortcutText);
+
                         info.categoryName    = categoryName;
                         info.collectionName  = collectionName;
 
@@ -375,9 +462,7 @@ void KisActionRegistry::Private::loadActionFiles()
 
 void KisActionRegistry::Private::loadCustomShortcuts(QString filename)
 {
-    Q_UNUSED(filename);
-
-    const KConfigGroup localShortcuts(KSharedConfig::openConfig("kritashortcutsrc"),
+    const KConfigGroup localShortcuts(KSharedConfig::openConfig(filename),
                                       QStringLiteral("Shortcuts"));
 
 
@@ -385,10 +470,20 @@ void KisActionRegistry::Private::loadCustomShortcuts(QString filename)
         return;
     }
 
+    // Distinguish between two "null" states for custom shortcuts.
     for (auto i = actionInfoList.begin(); i != actionInfoList.end(); ++i) {
         if (localShortcuts.hasKey(i.key())) {
             QString entry = localShortcuts.readEntry(i.key(), QString());
-            i.value().customShortcut = QKeySequence(entry);
+            if (entry == QStringLiteral("none")) {
+                // A shortcut list with a single entry "" means the user has disabled the shortcut.
+                // This occurs after stealing the shortcut without assigning a new one.
+                i.value().customShortcuts = QKeySequence::listFromString("");
+            } else {
+                i.value().customShortcuts = QKeySequence::listFromString(entry);
+            }
+        } else {
+            // An empty shortcut list means no custom shortcut has been set.
+            i.value().customShortcuts = QList<QKeySequence>();
         }
     }
 };

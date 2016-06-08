@@ -89,15 +89,19 @@ const KoColorSpace *KoColorSpaceFactory::grabColorSpace(const KoColorProfile * p
 {
     QMutexLocker l(&d->mutex);
     Q_ASSERT(profile);
-    KoColorSpace* cs = 0;
-    if (!d->availableColorspaces.contains(profile->name())) {
+    auto it = d->availableColorspaces.find(profile->name());
+    KoColorSpace* cs;
+
+    if (it == d->availableColorspaces.end()) {
         cs = createColorSpace(profile);
         if (cs) {
             d->availableColorspaces[profile->name()] = cs;
         }
-    } else {
-        cs = d->availableColorspaces[profile->name()];
     }
+    else {
+        cs = it.value();
+    }
+
     return cs;
 }
 

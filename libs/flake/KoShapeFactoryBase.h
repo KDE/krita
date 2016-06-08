@@ -23,7 +23,6 @@
 #define KOSHAPEFACTORYBASE_H
 
 #include <QObject>
-#include <QStringList>
 #include <QString>
 #include <QList>
 
@@ -36,6 +35,7 @@ class KoProperties;
 class KoShapeConfigWidgetBase;
 class KoShapeLoadingContext;
 class KoDocumentResourceManager;
+class QStringList;
 
 #define SHAPETEMPLATE_MIMETYPE "application/x-flake-shapetemplate"
 #define SHAPEID_MIMETYPE "application/x-flake-shapeId"

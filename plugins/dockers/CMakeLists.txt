@@ -1,31 +1,23 @@
-project(calligradockers)
-
-add_definitions(-DTRANSLATION_DOMAIN=\"krita-dockers\")
-
-include_directories(
-     ${FLAKE_INCLUDES}
-     ${KOWIDGETS_INCLUDES}     
-)
-
-set(calligradockers_SRCS
-
-    snapguidedocker/SnapGuideDocker.cpp
-    snapguidedocker/SnapGuideDockerFactory.cpp
-
-    shapeproperties/ShapePropertiesDocker.cpp
-    shapeproperties/ShapePropertiesDockerFactory.cpp
-
-    shapecollection/CollectionShapeFactory.cpp
-    shapecollection/ShapeCollectionDocker.cpp
-    shapecollection/CollectionItemModel.cpp
-    shapecollection/OdfCollectionLoader.cpp
-
-    Plugin.cpp
-)
-
-add_library(krita_docker_defaults MODULE ${calligradockers_SRCS})
-kcoreaddons_desktop_to_json(krita_docker_defaults calligra_docker_defaults.desktop)
-
-target_link_libraries(krita_docker_defaults kritawidgets)
-
-install(TARGETS krita_docker_defaults DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+add_subdirectory(defaultdockers)
+add_subdirectory(smallcolorselector)
+add_subdirectory(specificcolorselector)
+add_subdirectory(digitalmixer)
+add_subdirectory(advancedcolorselector)
+add_subdirectory(presetdocker)
+add_subdirectory(historydocker)
+add_subdirectory(channeldocker)
+add_subdirectory(imagedocker)
+add_subdirectory(artisticcolorselector)
+add_subdirectory(tasksetdocker)
+add_subdirectory(compositiondocker)
+add_subdirectory(patterndocker)
+add_subdirectory(griddocker)
+if(HAVE_OCIO)
+    add_subdirectory(lut)
+endif()
+add_subdirectory(overview)
+add_subdirectory(palettedocker)
+add_subdirectory(colorslider)
+add_subdirectory(animation)
+add_subdirectory(presethistory)
+add_subdirectory(shapedockers)

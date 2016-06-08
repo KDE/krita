@@ -20,6 +20,19 @@
 #include "KoToolProxy.h"
 #include "KoToolProxy_p.h"
 
+#include <QMimeData>
+#include <QUrl>
+#include <QTimer>
+#include <QApplication>
+#include <QTouchEvent>
+#include <QClipboard>
+
+#include <kundo2command.h>
+#include <KoProperties.h>
+
+#include <FlakeDebug.h>
+#include <klocalizedstring.h>
+
 #include "KoToolBase.h"
 #include "KoPointerEvent.h"
 #include "KoInputDevice.h"
@@ -34,20 +47,9 @@
 #include "KoShapeRegistry.h"
 #include "KoShapeController.h"
 #include "KoOdf.h"
+#include "KoViewConverter.h"
+#include "KoShapeFactoryBase.h"
 
-#include <kundo2command.h>
-#include <KoProperties.h>
-
-#include <FlakeDebug.h>
-#include <klocalizedstring.h>
-#include <QUrl>
-
-#include <QTimer>
-#include <QApplication>
-#include <QTouchEvent>
-#include <QClipboard>
-
-#include "FlakeDebug.h"
 
 KoToolProxyPrivate::KoToolProxyPrivate(KoToolProxy *p)
     : activeTool(0),
@@ -222,18 +224,8 @@ void KoToolProxy::touchEvent(QTouchEvent *event)
 
 void KoToolProxy::tabletEvent(QTabletEvent *event, const QPointF &point)
 {
-    // don't process tablet events for stylus middle and right mouse button
-    // they will be re-send as mouse events with the correct button. there is no possibility to get the button from the QTabletEvent.
-    if(qFuzzyIsNull(event->pressure()) && d->tabletPressed==false && event->type()!=QEvent::TabletMove) {
-        //debugFlake<<"don't accept tablet event: "<< point;
-        return;
-    }
-    else {
-        // Accept the tablet events as they are useless to parent widgets and they will
-        // get re-send as mouseevents if we don't accept them.
-        //debugFlake<<"accept tablet event: "<< point;
-        event->accept();
-    }
+    // We get these events exclusively from KisToolProxy - accept them
+    event->accept();
 
     KoInputDevice id(event->device(), event->pointerType(), event->uniqueId());
     KoToolManager::instance()->priv()->switchInputDevice(id);

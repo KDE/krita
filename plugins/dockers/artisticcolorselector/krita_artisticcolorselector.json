@@ -1,0 +1,9 @@
+{
+    "Id": "Artistic color selector",
+    "Type": "Service",
+    "X-KDE-Library": "kritaartisticcolorselector",
+    "X-KDE-ServiceTypes": [
+        "Krita/Dock"
+    ],
+    "X-Krita-Version": "28"
+}

@@ -21,7 +21,7 @@
 #define KOOPTIMIZEDCOMPOSITEOPFACTORYPERARCH_H
 
 
-#include "KoVcMultiArchBuildSupport.h"
+#include <compositeops/KoVcMultiArchBuildSupport.h>
 
 
 class KoCompositeOp;
@@ -33,6 +33,9 @@ class KoOptimizedCompositeOpAlphaDarken32;
 
 template<Vc::Implementation _impl>
 class KoOptimizedCompositeOpOver32;
+
+template<Vc::Implementation _impl>
+class KoOptimizedCompositeOpAlphaDarken128;
 
 template<Vc::Implementation _impl>
 class KoOptimizedCompositeOpOver128;

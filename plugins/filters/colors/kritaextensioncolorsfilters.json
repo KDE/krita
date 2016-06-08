@@ -1,0 +1,10 @@
+{
+    "Icon": "",
+    "Id": "Color Filters (Extension)",
+    "Type": "Service",
+    "X-KDE-Library": "kritaextensioncolorsfilters",
+    "X-KDE-ServiceTypes": [
+        "Krita/Filter"
+    ],
+    "X-Krita-Version": "28"
+}

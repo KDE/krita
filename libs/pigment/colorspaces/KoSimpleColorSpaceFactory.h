@@ -22,7 +22,6 @@
 #ifndef KOSIMPLECOLORSPACEFACTORY_H_
 #define KOSIMPLECOLORSPACEFACTORY_H_
 
-#include <KoColorSpaceAbstract.h>
 #include "KoColorConversionTransformationFactory.h"
 #include <colorprofiles/KoDummyColorProfile.h>
 

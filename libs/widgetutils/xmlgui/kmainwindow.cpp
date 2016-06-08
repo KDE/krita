@@ -129,7 +129,7 @@ KMWSessionManager::~KMWSessionManager()
 {
 }
 
-bool KMWSessionManager::saveState(QSessionManager &sm)
+bool KMWSessionManager::saveState(QSessionManager &)
 {
 #if 0
     KConfigGui::setSessionConfig(sm.sessionId(), sm.sessionKey());
@@ -182,11 +182,6 @@ KMainWindow::KMainWindow(KMainWindowPrivate &dd, QWidget *parent, Qt::WindowFlag
 
 void KMainWindowPrivate::init(KMainWindow *_q)
 {
-    // We set allow quit to true when the first mainwindow is created, so that when the refcounting
-    // reaches 0 the application can quit. We don't want this to happen before the first mainwindow
-    // is created, otherwise running a job in main would exit the app too early.
-    QCoreApplication::setQuitLockEnabled(true);
-
     q = _q;
 
     q->setAnimated(q->style()->styleHint(QStyle::SH_Widget_Animate, 0, q));
@@ -373,7 +368,7 @@ bool KMainWindow::canBeRestored(int number)
     return number >= 1 && number <= n;
 }
 
-const QString KMainWindow::classNameOfToplevel(int number)
+const QString KMainWindow::classNameOfToplevel(int )
 {
     return QString();
 #if 0
@@ -394,7 +389,7 @@ const QString KMainWindow::classNameOfToplevel(int number)
 #endif
 }
 
-bool KMainWindow::restore(int number, bool show)
+bool KMainWindow::restore(int , bool )
 {
 #if 0
     if (!canBeRestored(number)) {

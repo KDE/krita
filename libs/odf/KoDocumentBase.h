@@ -77,12 +77,6 @@ public:
     virtual void setUrl(const QUrl &url) = 0;
 
     /**
-     * Returns the OASIS OpenDocument mimetype of the document, if supported
-     * This comes from the X-KDE-NativeOasisMimeType key in the .desktop file
-     */
-    virtual QByteArray nativeOasisMimeType() const = 0;
-
-    /**
      *  @brief Saves a document to a store.
      */
     virtual bool saveToStore(KoStore *store, const QString &path) = 0;

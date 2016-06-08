@@ -1,5 +1,3 @@
-include_directories(${KUNDO2_INCLUDES})
-
 set(kritaundo2_LIB_SRCS
 	kundo2stack.cpp
 	kundo2group.cpp
@@ -22,6 +20,6 @@ target_link_libraries(kritaundo2
 )
 
 set_target_properties(kritaundo2 PROPERTIES
-    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 install(TARGETS kritaundo2 ${INSTALL_TARGETS_DEFAULT_ARGS})

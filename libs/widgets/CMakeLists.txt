@@ -1,7 +1,5 @@
 add_subdirectory( tests )
 
-include_directories(${KOWIDGETS_INCLUDES})
-include_directories(${CMAKE_SOURCE_DIR}/libs/widgetutils)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 set(kritawidgets_LIB_SRCS
@@ -51,7 +49,7 @@ set(kritawidgets_LIB_SRCS
     KoResourceItemView.cpp
     KoResourceTagStore.cpp
     KoRuler.cpp
-    KoRulerController.cpp
+    #KoRulerController.cpp
     KoItemToolTip.cpp
     KoCheckerBoardPainter.cpp
     KoResourceServerAdapter.cpp
@@ -79,7 +77,7 @@ set(kritawidgets_LIB_SRCS
     
     WidgetsDebug.cpp
 
-    kis_url_requester.cpp
+    kis_file_name_requester.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS
@@ -89,21 +87,21 @@ ki18n_wrap_ui( kritawidgets_LIB_SRCS
     KoEditColorSet.ui
     KoPageLayoutWidget.ui
     KoShadowConfigWidget.ui
-    wdg_url_requester.ui
+    wdg_file_name_requester.ui
 )
 
 add_library(kritawidgets SHARED ${kritawidgets_LIB_SRCS})
 generate_export_header(kritawidgets BASE_NAME kritawidgets)
-target_link_libraries(kritawidgets kritatext kritapigment kritawidgetutils KF5::GuiAddons KF5::WidgetsAddons KF5::ConfigCore KF5::Completion)
+target_link_libraries(kritawidgets kritaodf kritaflake kritapigment kritawidgetutils Qt5::PrintSupport KF5::CoreAddons KF5::ConfigGui KF5::GuiAddons KF5::WidgetsAddons KF5::ConfigCore KF5::Completion)
 
 if(X11_FOUND)
     target_link_libraries(kritawidgets Qt5::X11Extras ${X11_LIBRARIES})
 endif()
 
-target_link_libraries(kritawidgets LINK_INTERFACE_LIBRARIES kritatext kritapigment kritawidgetutils)
+target_link_libraries(kritawidgets LINK_INTERFACE_LIBRARIES  kritaodf kritaflake kritapigment kritawidgetutils Qt5::PrintSupport KF5::CoreAddons KF5::ConfigGui KF5::GuiAddons KF5::WidgetsAddons KF5::ConfigCore KF5::Completion)
 
 set_target_properties(kritawidgets PROPERTIES
-    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 
 install(TARGETS kritawidgets  ${INSTALL_TARGETS_DEFAULT_ARGS})

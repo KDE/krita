@@ -193,6 +193,8 @@ public:
 
     KoRuler *ruler;
 
+    bool guideCreationStarted;
+
     qreal numberStepForUnit() const;
     /// @return The rounding of value to the nearest multiple of stepValue
     qreal doSnapping(const qreal value) const;

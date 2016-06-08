@@ -57,22 +57,6 @@ KoGlobal::~KoGlobal()
     delete m_calligraConfig;
 }
 
-QFont KoGlobal::_defaultFont()
-{
-    QFont font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
-    // we have to use QFontInfo, in case the font was specified with a pixel size
-    if (font.pointSize() == -1) {
-        // cache size into m_pointSize, since QFontInfo loads the font -> slow
-        if (m_pointSize == -1)
-            m_pointSize = QFontInfo(font).pointSize();
-        Q_ASSERT(m_pointSize != -1);
-        font.setPointSize(m_pointSize);
-    }
-    //debugWidgets<<"QFontInfo(font).pointSize() :"<<QFontInfo(font).pointSize();
-    //debugWidgets<<"font.name() :"<<font.family ();
-    return font;
-}
-
 QStringList KoGlobal::_listOfLanguageTags()
 {
     if (m_langMap.isEmpty())
@@ -165,7 +149,7 @@ QString KoGlobal::languageFromTag(const QString &langTag)
 KConfig* KoGlobal::_calligraConfig()
 {
     if (!m_calligraConfig) {
-        m_calligraConfig = new KConfig("calligrarc");
+        m_calligraConfig = new KConfig("kritarc");
     }
     return m_calligraConfig;
 }

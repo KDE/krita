@@ -1,0 +1,22 @@
+diff --git a/jconfig.cfg b/jconfig.cfg
+index c4548fc..6e5d2dc 100644
+--- a/jconfig.cfg
++++ b/jconfig.cfg
+@@ -18,8 +18,7 @@
+ #undef INCOMPLETE_TYPES_BROKEN
+ 
+ /* Define "boolean" as unsigned char, not enum, on Windows systems. */
+-#ifdef _WIN32
+-#ifndef __RPCNDR_H__		/* don't conflict if rpcndr.h already read */
++#ifndef boolean		/* don't conflict if rpcndr.h already read */
+ typedef unsigned char boolean;
+ #endif
+ #ifndef FALSE			/* in case these macros already exist */
+@@ -29,7 +28,6 @@ typedef unsigned char boolean;
+ #define TRUE	1
+ #endif
+ #define HAVE_BOOLEAN		/* prevent jmorecfg.h from redefining it */
+-#endif
+ 
+ #ifdef JPEG_INTERNALS
+ 

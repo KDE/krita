@@ -28,7 +28,7 @@
 #include <QStringList>
 
 #include "kritaodf_export.h"
-#include <KoXmlReader.h>
+#include <KoXmlReaderForward.h>
 
 class QDomDocument;
 class QDomElement;

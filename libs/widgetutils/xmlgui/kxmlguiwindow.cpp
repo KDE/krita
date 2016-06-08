@@ -277,7 +277,7 @@ void KXmlGuiWindow::createGUI(const QString &xmlfile)
         }
     }
 
-    const QString windowXmlFile = xmlfile.isNull() ? componentName() + QStringLiteral("ui.rc") : xmlfile;
+    const QString windowXmlFile = xmlfile.isNull() ? componentName() + QStringLiteral("ui.xmlgui") : xmlfile;
 
     // Help beginners who call setXMLFile and then setupGUI...
     if (!xmlFile().isEmpty() && xmlFile() != windowXmlFile) {
@@ -357,7 +357,7 @@ void KXmlGuiWindow::createStandardStatusBarAction()
         d->showStatusBarAction->setChecked(sb->isHidden());
     } else {
         // If the language has changed, we'll need to grab the new text and whatsThis
-        QAction *tmpStatusBar = KStandardAction::showStatusbar(NULL, NULL, NULL);
+        QAction *tmpStatusBar = KStandardAction::showStatusbar(0, 0, 0);
         d->showStatusBarAction->setText(tmpStatusBar->text());
         d->showStatusBarAction->setWhatsThis(tmpStatusBar->whatsThis());
         delete tmpStatusBar;

@@ -8,7 +8,6 @@ CMakeLists.txt.user*
 .directory
 *.rej
 *.orig
-*.patch
 *.autosave
 *.swp
 .gdb_history
@@ -20,8 +19,6 @@ CMakeLists.txt.user*
 *.includes
 .DS_Store
 *.kate-swap
-*.diff
-*.patch
 .idea
 GTAGS
 GPATH

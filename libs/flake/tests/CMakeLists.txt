@@ -1,5 +1,4 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-include_directories( ${FLAKE_INCLUDES} )
 
 ########### next target ###############
 
@@ -16,7 +15,7 @@ target_link_libraries(TestSelection  kritaflake Qt5::Test)
 ########### next target ###############
 
 set(TestPathShape_test_SRCS TestPathShape.cpp )
-kde4_add_unit_test(TestPathShape TESTNAME libs-kritaflake-TestPathShape ${TestPathShape_test_SRCS})
+kde4_add_broken_unit_test(TestPathShape TESTNAME libs-kritaflake-TestPathShape ${TestPathShape_test_SRCS})
 target_link_libraries(TestPathShape  kritaflake Qt5::Test)
 
 ########### next target ###############
@@ -28,25 +27,25 @@ target_link_libraries(TestPathTool  kritaflake Qt5::Test)
 ########### next target ###############
 
 set(TestControlPointMoveCommand_test_SRCS TestControlPointMoveCommand.cpp )
-kde4_add_unit_test(TestControlPointMoveCommand TESTNAME libs-kritaflake-TestControlPointMoveCommand ${TestControlPointMoveCommand_test_SRCS})
+kde4_add_broken_unit_test(TestControlPointMoveCommand TESTNAME libs-kritaflake-TestControlPointMoveCommand ${TestControlPointMoveCommand_test_SRCS})
 target_link_libraries(TestControlPointMoveCommand  kritaflake Qt5::Test)
 
 ########### next target ###############
 
 set(TestPointTypeCommand_test_SRCS TestPointTypeCommand.cpp )
-kde4_add_unit_test(TestPointTypeCommand TESTNAME libs-kritaflake-TestPointTypeCommand ${TestPointTypeCommand_test_SRCS})
+kde4_add_broken_unit_test(TestPointTypeCommand TESTNAME libs-kritaflake-TestPointTypeCommand ${TestPointTypeCommand_test_SRCS})
 target_link_libraries(TestPointTypeCommand  kritaflake Qt5::Test)
 
 ########### next target ###############
 
 set(TestPointRemoveCommand_test_SRCS TestPointRemoveCommand.cpp )
-kde4_add_unit_test(TestPointRemoveCommand TESTNAME libs-kritaflake-TestPointRemoveCommand  ${TestPointRemoveCommand_test_SRCS})
+kde4_add_broken_unit_test(TestPointRemoveCommand TESTNAME libs-kritaflake-TestPointRemoveCommand  ${TestPointRemoveCommand_test_SRCS})
 target_link_libraries(TestPointRemoveCommand  kritaflake Qt5::Test)
 
 ########### next target ###############
 
 set(TestRemoveSubpathCommand_test_SRCS TestRemoveSubpathCommand.cpp )
-kde4_add_unit_test(TestRemoveSubpathCommand TESTNAME libs-kritaflake-TestRemoveSubpathCommand ${TestRemoveSubpathCommand_test_SRCS})
+kde4_add_broken_unit_test(TestRemoveSubpathCommand TESTNAME libs-kritaflake-TestRemoveSubpathCommand ${TestRemoveSubpathCommand_test_SRCS})
 target_link_libraries(TestRemoveSubpathCommand  kritaflake Qt5::Test)
 
 ########### next target ###############
@@ -94,7 +93,7 @@ target_link_libraries(TestShapeReorderCommand  kritaflake Qt5::Test)
 ########### next target ###############
 
 set(TestPathSegment_test_SRCS TestPathSegment.cpp )
-kde4_add_unit_test(TestPathSegment TESTNAME libs-kritaflake-TestPathSegment ${TestPathSegment_test_SRCS})
+kde4_add_broken_unit_test(TestPathSegment TESTNAME libs-kritaflake-TestPathSegment ${TestPathSegment_test_SRCS})
 target_link_libraries(TestPathSegment  kritaflake Qt5::Test)
 
 ########### next target ###############
@@ -130,13 +129,13 @@ target_link_libraries(TestShapeShadowCommand  kritaflake Qt5::Test)
 ########### end ###############
 
 set(TestSegmentTypeCommand_test_SRCS TestSegmentTypeCommand.cpp )
-kde4_add_unit_test(TestSegmentTypeCommand TESTNAME libs-kritaflake-TestSegmentTypeCommand  ${TestSegmentTypeCommand_test_SRCS})
+kde4_add_broken_unit_test(TestSegmentTypeCommand TESTNAME libs-kritaflake-TestSegmentTypeCommand  ${TestSegmentTypeCommand_test_SRCS})
 target_link_libraries(TestSegmentTypeCommand  kritaflake Qt5::Test)
 
 ########### end ###############
 
 set(TestPointMergeCommand_test_SRCS TestPointMergeCommand.cpp )
-kde4_add_unit_test(TestPointMergeCommand TESTNAME libs-kritaflake-TestPointMergeCommand  ${TestPointMergeCommand_test_SRCS})
+kde4_add_broken_unit_test(TestPointMergeCommand TESTNAME libs-kritaflake-TestPointMergeCommand  ${TestPointMergeCommand_test_SRCS})
 target_link_libraries(TestPointMergeCommand  kritaflake Qt5::Test)
 
 ########### end ###############

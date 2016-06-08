@@ -52,8 +52,6 @@
 #define INT16_MIN -32768
 #endif
 
-// #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
-
 typedef unsigned int uint;
 
 template<typename _T_, typename _T2_, typename _T3_>

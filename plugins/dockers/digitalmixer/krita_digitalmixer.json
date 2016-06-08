@@ -1,0 +1,9 @@
+{
+    "Id": "DigitalMixer",
+    "Type": "Service",
+    "X-KDE-Library": "kritadigitalmixer",
+    "X-KDE-ServiceTypes": [
+        "Krita/Dock"
+    ],
+    "X-Krita-Version": "28"
+}

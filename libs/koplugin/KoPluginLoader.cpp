@@ -1,6 +1,5 @@
-/* This file is part of the KDE project
- * Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (c) 2007 Thomas Zander <zander@kde.org>
+/*
+ * Copyright (c) 2006-2016 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,7 +23,8 @@
 
 #include <QJsonObject>
 #include <QPluginLoader>
-#include <QDebug>
+
+#include "KritaPluginDebug.h"
 
 #include <KConfig>
 #include <KSharedConfig>
@@ -54,10 +54,10 @@ KoPluginLoader* KoPluginLoader::instance()
     return pluginLoaderInstance();
 }
 
-void KoPluginLoader::load(const QString & serviceType, const QString & versionString, const PluginsConfig &config, QObject* owner)
+void KoPluginLoader::load(const QString & serviceType, const QString & versionString, const PluginsConfig &config, QObject* owner, bool cache)
 {
     // Don't load the same plugins again
-    if (d->loadedServiceTypes.contains(serviceType)) {
+    if (cache && d->loadedServiceTypes.contains(serviceType)) {
         return;
     }
     d->loadedServiceTypes << serviceType;
@@ -67,11 +67,13 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     }
 
     QList<QPluginLoader *> offers = KoJsonTrader::instance()->query(serviceType, QString());
+
     QList<QPluginLoader *> plugins;
+
     bool configChanged = false;
     QList<QString> blacklist; // what we will save out afterwards
     if (config.whiteList && config.blacklist && config.group) {
-//        qDebug() << "Loading" << serviceType << "with checking the config";
+        debugPlugin << "Loading" << serviceType << "with checking the config";
         KConfigGroup configGroup(KSharedConfig::openConfig(), config.group);
         QList<QString> whiteList = configGroup.readEntry(config.whiteList, config.defaults);
         QList<QString> knownList;
@@ -84,7 +86,9 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         }
         Q_FOREACH (QPluginLoader *loader, offers) {
             QJsonObject json = loader->metaData().value("MetaData").toObject();
-            json = json.value("KPlugin").toObject();
+            if (json.contains("KPlugin")) {
+                json = json.value("KPlugin").toObject();
+            }
             const QString pluginName = json.value("Id").toString();
             if (pluginName.isEmpty()) {
                 qWarning() << "Loading plugin" << loader->fileName() << "failed, has no X-KDE-PluginInfo-Name.";
@@ -92,10 +96,12 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
             }
             if (whiteList.contains(pluginName)) {
                 plugins.append(loader);
-            } else if (!firstStart && !knownList.contains(pluginName)) { // also load newly installed plugins.
+            }
+            else if (!firstStart && !knownList.contains(pluginName)) { // also load newly installed plugins.
                 plugins.append(loader);
                 configChanged = true;
-            } else {
+            }
+            else {
                 blacklist << pluginName;
             }
         }
@@ -123,7 +129,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
 
     QList<QString> whiteList;
     Q_FOREACH (const QString &serviceName, serviceNames.keys()) {
-//        qDebug() << "loading" << serviceName;
+        debugPlugin << "loading" << serviceName;
         QPluginLoader *loader = serviceNames[serviceName];
         KPluginFactory *factory = qobject_cast<KPluginFactory *>(loader->instance());
         QObject *plugin = 0;
@@ -135,7 +141,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
             json = json.value("KPlugin").toObject();
             const QString pluginName = json.value("Id").toString();
             whiteList << pluginName;
-//             qDebug() << "Loaded plugin" << loader->fileName() << owner;
+            debugPlugin << "Loaded plugin" << loader->fileName() << owner;
             if (!owner) {
                 delete plugin;
             }
@@ -149,4 +155,6 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         configGroup.writeEntry(config.whiteList, whiteList);
         configGroup.writeEntry(config.blacklist, blacklist);
     }
+
+    qDeleteAll(offers);
 }

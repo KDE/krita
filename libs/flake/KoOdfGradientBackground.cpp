@@ -29,12 +29,12 @@
 #include <KoGenStyles.h>
 #include <KoOdfLoadingContext.h>
 #include <KoStyleStack.h>
+#include <KoOdfStylesReader.h>
 
 #include <QPainter>
 #include <QColor>
 #include <QImage>
 #include <qmath.h>
-
 
 class KoOdfGradientBackgroundPrivate : public KoShapeBackgroundPrivate
 {

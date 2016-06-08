@@ -1,0 +1,9 @@
+{
+    "Id": "Hairy brushes",
+    "Type": "Service",
+    "X-KDE-Library": "kritahairypaintop",
+    "X-KDE-ServiceTypes": [
+        "Krita/Paintop"
+    ],
+    "X-Krita-Version": "28"
+}

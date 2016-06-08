@@ -23,6 +23,7 @@
 #include "KoShapeGroupCommand.h"
 #include "KoShapeLoadingContext.h"
 #include "KoShapeRegistry.h"
+#include "FlakeDebug.h"
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
 #include <KoStore.h>
@@ -121,12 +122,24 @@ KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShap
         QList<KoShape*> shapes = parser.parseSvg(xmlDoc.documentElement());
         if (shapes.isEmpty())
             return 0;
-        if (shapes.count() == 1)
-            return shapes.first();
+
+        int zIndex = 0;
+        if (element.hasAttributeNS(KoXmlNS::draw, "z-index")) {
+            zIndex = element.attributeNS(KoXmlNS::draw, "z-index").toInt();
+        } else {
+            zIndex = context.zIndex();
+        }
+
+        if (shapes.count() == 1) {
+            KoShape *shape = shapes.first();
+            shape->setZIndex(zIndex);
+            return shape;
+        }
 
         KoShapeGroup *svgGroup = new KoShapeGroup;
         KoShapeGroupCommand cmd(svgGroup, shapes);
         cmd.redo();
+        svgGroup->setZIndex(zIndex);
 
         return svgGroup;
     }

@@ -23,7 +23,7 @@
 #include <QFont>
 
 #include "KoGenericRegistry.h"
-#include "KoDockFactoryBase.h"
+#include <KoDockFactoryBase.h>
 
 #include "kritaflake_export.h"
 

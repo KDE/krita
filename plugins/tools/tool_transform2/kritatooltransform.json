@@ -1,0 +1,9 @@
+{
+    "Id": "Transform Tool",
+    "Type": "Service",
+    "X-KDE-Library": "kritatooltransform",
+    "X-KDE-ServiceTypes": [
+        "Krita/Tool"
+    ],
+    "X-Krita-Version": "28"
+}

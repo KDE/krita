@@ -13,8 +13,9 @@
    height="22"
    id="svg3813"
    version="1.1"
-   inkscape:version="0.48+devel r"
-   sodipodi:docname="character-set.svg">
+   inkscape:version="0.91+devel r"
+   sodipodi:docname="character-set.svg"
+   viewBox="0 0 22 22">
   <defs
      id="defs3815" />
   <sodipodi:namedview
@@ -24,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="32.625"
-     inkscape:cx="9.7370461"
-     inkscape:cy="12.001128"
+     inkscape:zoom="65.25"
+     inkscape:cx="12.282097"
+     inkscape:cy="11.922229"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -34,10 +35,10 @@
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     inkscape:window-width="1366"
-     inkscape:window-height="668"
-     inkscape:window-x="-2"
-     inkscape:window-y="23"
+     inkscape:window-width="2560"
+     inkscape:window-height="957"
+     inkscape:window-x="-4"
+     inkscape:window-y="29"
      inkscape:window-maximized="1"
      inkscape:showpageshadow="false"
      showguides="true">
@@ -123,9 +124,9 @@
      id="layer1"
      transform="translate(-378.85714,-540.07647)">
     <path
-       style="opacity:1;fill:#f2f2f2;fill-opacity:1;stroke:none"
-       d="M 4.5 3 C 3.669002 3 3 3.669002 3 4.5 C 3 5.1542387 3.4180788 5.7021979 4 5.9082031 L 4 19 L 5 19 L 5 13 L 12 13 L 12 14 L 19 14 L 19 13 L 19 8 L 19 7 L 13 7 L 13 6 L 5 6 L 5 5.9082031 C 5.5819212 5.7021979 6 5.1542387 6 4.5 C 6 3.669002 5.330998 3 4.5 3 z M 6 7 L 12 7 L 12 8 L 12 12 L 6 12 L 6 7 z M 13 8 L 18 8 L 18 13 L 13 13 L 13 8 z "
+       style="opacity:1;fill:#4d4d4d;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 4.5 3 A 1.4999964 1.4999965 0 0 0 3 4.5 A 1.4999964 1.4999965 0 0 0 4 5.9121094 L 4 6 L 4 13 L 4 19 L 5 19 L 5 13 L 12 13 L 12 14 L 19 14 L 19 7 L 13 7 L 13 6 L 5 6 L 5 5.9121094 A 1.4999964 1.4999965 0 0 0 6 4.5 A 1.4999964 1.4999965 0 0 0 4.5 3 z M 5 7 L 12 7 L 12 12 L 5 12 L 5 7 z M 13 8 L 18 8 L 18 13 L 13 13 L 13 8 z "
        transform="translate(378.85714,540.07647)"
-       id="rect4117" />
+       id="rect4155" />
   </g>
 </svg>

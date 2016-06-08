@@ -1,0 +1,9 @@
+{
+    "Id": "Channel Docker",
+    "Type": "Service",
+    "X-KDE-Library": "kritachanneldocker",
+    "X-KDE-ServiceTypes": [
+        "Krita/Dock"
+    ],
+    "X-Krita-Version": "28"
+}

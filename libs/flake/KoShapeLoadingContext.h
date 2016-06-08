@@ -24,7 +24,6 @@
 
 #include <QSet>
 #include <QString>
-#include <QVariant>
 #include <QPair>
 
 #include "kritaflake_export.h"
@@ -38,6 +37,8 @@ class KoImageCollection;
 class KoSharedLoadingData;
 class KoDocumentResourceManager;
 class KoSectionModel;
+class QVariant;
+class QObject;
 
 /**
  * Context passed to shapes during loading.

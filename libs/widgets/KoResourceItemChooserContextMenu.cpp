@@ -26,25 +26,25 @@
 
 #include <KoIcon.h>
 #include <klocalizedstring.h>
-#include <klineedit.h>
+#include <qlineedit.h>
 
-#include "KoResource.h"
+#include <resources/KoResource.h>
 
 KoLineEditAction::KoLineEditAction(QObject* parent)
     : QWidgetAction(parent)
     , m_closeParentOnTrigger(false)
 {
-    QWidget* pWidget = new QWidget (NULL);
+    QWidget* pWidget = new QWidget (0);
     QHBoxLayout* pLayout = new QHBoxLayout();
-    m_label = new QLabel(NULL);
-    m_editBox = new KLineEdit(NULL);
+    m_label = new QLabel(0);
+    m_editBox = new QLineEdit(0);
     pLayout->addWidget(m_label);
     pLayout->addWidget(m_editBox);
     pWidget->setLayout(pLayout);
     setDefaultWidget(pWidget);
 
-    connect (m_editBox, SIGNAL(returnPressed(QString)),
-             this, SLOT(onTriggered(QString)));
+    connect (m_editBox, SIGNAL(returnPressed()),
+             this, SLOT(onTriggered()));
 }
 
 KoLineEditAction::~KoLineEditAction()
@@ -68,11 +68,11 @@ bool KoLineEditAction::closeParentOnTrigger()
     return m_closeParentOnTrigger;
 }
 
-void KoLineEditAction::onTriggered(const QString& text)
+void KoLineEditAction::onTriggered()
 {
-    if (!text.isEmpty()) {
-        emit triggered(text);
-        m_editBox->clear();
+    if (! m_editBox->text().isEmpty()) {
+        emit triggered( m_editBox->text());
+        m_editBox->text().clear();
 
         if (m_closeParentOnTrigger) {
             this->parentWidget()->close();

@@ -43,6 +43,9 @@ KoCanvasResourceManager::KoCanvasResourceManager(QObject *parent)
     setForegroundColor(KoColor(Qt::black, cs));
     setBackgroundColor(KoColor(Qt::white, cs));
     setResource(ApplicationSpeciality, NoSpecial);
+
+    connect(&d->manager, &KoResourceManager::resourceChanged,
+            this, &KoCanvasResourceManager::canvasResourceChanged);
 }
 
 KoCanvasResourceManager::~KoCanvasResourceManager()
@@ -53,7 +56,6 @@ KoCanvasResourceManager::~KoCanvasResourceManager()
 void KoCanvasResourceManager::setResource(int key, const QVariant &value)
 {
     d->manager.setResource(key, value);
-    emit canvasResourceChanged(key, value);
 }
 
 QVariant KoCanvasResourceManager::resource(int key) const
@@ -162,6 +164,19 @@ bool KoCanvasResourceManager::hasResource(int key) const
 void KoCanvasResourceManager::clearResource(int key)
 {
     d->manager.clearResource(key);
-    QVariant empty;
-    emit canvasResourceChanged(key, empty);
+}
+
+void KoCanvasResourceManager::addDerivedResourceConverter(KoDerivedResourceConverterSP converter)
+{
+    d->manager.addDerivedResourceConverter(converter);
+}
+
+bool KoCanvasResourceManager::hasDerivedResourceConverter(int key)
+{
+    return d->manager.hasDerivedResourceConverter(key);
+}
+
+void KoCanvasResourceManager::removeDerivedResourceConverter(int key)
+{
+    d->manager.removeDerivedResourceConverter(key);
 }

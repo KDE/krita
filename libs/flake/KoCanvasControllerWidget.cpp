@@ -43,11 +43,7 @@
 #include <QTimer>
 #include <QPointer>
 
-#include <KoConfig.h> // for HAVE_OPENGL
-
-#ifdef HAVE_OPENGL
 #include <QOpenGLWidget>
-#endif
 
 #include <math.h>
 
@@ -64,17 +60,8 @@ void KoCanvasControllerWidget::Private::setDocumentOffset()
     QWidget *canvasWidget = canvas->canvasWidget();
 
     if (canvasWidget) {
-        bool isCanvasOpenGL = false;
-        QWidget *canvasWidget = canvas->canvasWidget();
-        if (canvasWidget) {
-#ifdef HAVE_OPENGL
-            if (qobject_cast<QOpenGLWidget*>(canvasWidget) != 0) {
-                isCanvasOpenGL = true;
-            }
-#endif
-        }
-
-        if (!isCanvasOpenGL) {
+        // If it isn't an OpenGL canvas
+        if (qobject_cast<QOpenGLWidget*>(canvasWidget) == 0) {
             QPoint diff = q->documentOffset() - pt;
             if (q->canvasMode() == Spreadsheet && canvasWidget->layoutDirection() == Qt::RightToLeft) {
                 canvasWidget->scroll(-diff.x(), diff.y());
@@ -291,9 +278,6 @@ void KoCanvasControllerWidget::changeCanvasWidget(QWidget *widget)
 
     d->viewportWidget->setCanvas(widget);
     setFocusProxy(d->canvas->canvasWidget());
-
-    widget->installEventFilter(this);
-    widget->setMouseTracking(true);
 }
 
 int KoCanvasControllerWidget::visibleHeight() const
@@ -366,16 +350,6 @@ void KoCanvasControllerWidget::updateCanvasOffsetY()
 
     setPreferredCenterFractionY((verticalScrollBar()->value()
                                  + verticalScrollBar()->pageStep() / 2.0) / documentSize().height());
-}
-
-bool KoCanvasControllerWidget::eventFilter(QObject *watched, QEvent *event)
-{
-    if (d->canvas && d->canvas->canvasWidget() && (watched == d->canvas->canvasWidget())) {
-         if (event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove) {
-            d->emitPointerPositionChangedSignals(event);
-        }
-    }
-    return false;
 }
 
 void KoCanvasControllerWidget::ensureVisible(KoShape *shape)

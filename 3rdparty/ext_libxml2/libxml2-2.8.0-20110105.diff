@@ -1,0 +1,1634 @@
+diff -Nru -x '*.rej' -x '*.orig' tmp\libxml2-2.8.0/catalog.c libxml2-2.8.0/catalog.c
+--- tmp\libxml2-2.8.0/catalog.c	2012-05-21 04:19:21.000000000 +0200
++++ libxml2-2.8.0/catalog.c	2012-05-23 20:10:09.985126400 +0200
+@@ -79,8 +79,31 @@
+ static char XML_XML_DEFAULT_CATALOG[256] = "file:///etc/xml/catalog";
+ #if defined(_WIN32_WCE)
+ /* Windows CE don't have a A variant */
+-#define GetModuleHandleA GetModuleHandle
+-#define GetModuleFileNameA GetModuleFileName
++
++static void *
++my_GetModuleHandleA(const char* path)
++{
++  TCHAR pathUnc[MAX_PATH+1];
++  if (!path)
++    return GetModuleHandle(NULL);
++  MultiByteToWideChar(CP_ACP, 0, path, -1, pathUnc, MAX_PATH);
++  return GetModuleHandle(pathUnc);
++}
++#undef GetModuleHandleA
++#define GetModuleHandleA my_GetModuleHandleA
++
++static unsigned long
++my_GetModuleFileNameA(void *handle, char *buf, unsigned long bufsize)
++{
++  /* FIXME: Error checking and size length comparison.  */
++  unsigned long res;
++  TCHAR pathUnc[MAX_PATH+1];
++  res = GetModuleFileName (handle, pathUnc, MAX_PATH);
++  WideCharToMultiByte(CP_ACP, 0, pathUnc, -1, buf, bufsize, 0, 0);
++  return res;
++}
++#undef GetModuleFileNameA
++#define GetModuleFileNameA my_GetModuleFileNameA
+ #else
+ void* __stdcall GetModuleHandleA(const char*);
+ unsigned long __stdcall GetModuleFileNameA(void*, char*, unsigned long);
+diff -Nru -x '*.rej' -x '*.orig' tmp\libxml2-2.8.0/cmake/modules/FindLibiconv.cmake libxml2-2.8.0/cmake/modules/FindLibiconv.cmake
+--- tmp\libxml2-2.8.0/cmake/modules/FindLibiconv.cmake	1970-01-01 01:00:00.000000000 +0100
++++ libxml2-2.8.0/cmake/modules/FindLibiconv.cmake	2012-05-23 20:10:10.022129800 +0200
+@@ -0,0 +1,33 @@
++# Try to find Libiconv functionality
++# Once done this will define
++#
++#  LIBICONV_FOUND - system has Libiconv
++#  LIBICONV_INCLUDE_DIR - Libiconv include directory
++#  LIBICONV_LIBRARIES - Libraries needed to use Libiconv
++#
++# Copyright (c) 2010, Patrick Spendrin, <ps_ml@gmx.de>
++#
++# Redistribution and use is allowed according to the terms of the BSD license.
++
++if(LIBICONV_INCLUDE_DIR AND LIBICONV_LIB_FOUND)
++  set(Libiconv_FIND_QUIETLY TRUE)
++endif(LIBICONV_INCLUDE_DIR AND LIBICONV_LIB_FOUND)
++
++find_path(LIBICONV_INCLUDE_DIR iconv.h)
++
++set(LIBICONV_LIB_FOUND FALSE)
++
++if(LIBICONV_INCLUDE_DIR)
++    find_library(LIBICONV_LIBRARIES NAMES iconv iconv2 iconv-2 libiconv libiconv2 libiconv-2 )
++    if(LIBICONV_LIBRARIES)
++      set(LIBICONV_LIB_FOUND TRUE)
++    endif(LIBICONV_LIBRARIES)
++endif(LIBICONV_INCLUDE_DIR)
++
++# I have no idea what this is about, but it seems to be used quite often, so I add this here
++set(LIBICONV_CONST const)
++
++include(FindPackageHandleStandardArgs)
++find_package_handle_standard_args(Libiconv  DEFAULT_MSG  LIBICONV_LIBRARIES  LIBICONV_LIB_FOUND)
++
++mark_as_advanced(LIBICONV_INCLUDE_DIR  LIBICONV_LIBRARIES  LIBICONV_CONST  LIBICONV_LIB_FOUND)
+diff -Nru -x '*.rej' -x '*.orig' tmp\libxml2-2.8.0/cmake/modules/FindWcecompat.cmake libxml2-2.8.0/cmake/modules/FindWcecompat.cmake
+--- tmp\libxml2-2.8.0/cmake/modules/FindWcecompat.cmake	1970-01-01 01:00:00.000000000 +0100
++++ libxml2-2.8.0/cmake/modules/FindWcecompat.cmake	2012-05-23 20:10:10.042124600 +0200
+@@ -0,0 +1,33 @@
++# Try to find Wcecompat functionality
++# Once done this will define
++#
++#  WCECOMPAT_FOUND - system has Wcecompat
++#  WCECOMPAT_INCLUDE_DIR - Wcecompat include directory
++#  WCECOMPAT_LIBRARIES - Libraries needed to use Wcecompat
++#
++# Copyright (c) 2010, Andreas Holzammer, <andy@kdab.com>
++#
++# Redistribution and use is allowed according to the terms of the BSD license.
++
++if(WCECOMPAT_INCLUDE_DIR AND WCECOMPAT_LIB_FOUND)
++  set(Wcecompat_FIND_QUIETLY TRUE)
++endif(WCECOMPAT_INCLUDE_DIR AND WCECOMPAT_LIB_FOUND)
++
++find_path(WCECOMPAT_INCLUDE_DIR errno.h PATH_SUFFIXES wcecompat)
++
++set(WCECOMPAT_LIB_FOUND FALSE)
++
++if(WCECOMPAT_INCLUDE_DIR)
++    find_library(WCECOMPAT_LIBRARIES NAMES wcecompat wcecompatex )
++    if(WCECOMPAT_LIBRARIES)
++      set(WCECOMPAT_LIB_FOUND TRUE)
++    endif(WCECOMPAT_LIBRARIES)
++endif(WCECOMPAT_INCLUDE_DIR)
++
++# I have no idea what this is about, but it seems to be used quite often, so I add this here
++set(WCECOMPAT_CONST const)
++
++include(FindPackageHandleStandardArgs)
++find_package_handle_standard_args(Wcecompat  DEFAULT_MSG  WCECOMPAT_LIBRARIES  WCECOMPAT_LIB_FOUND)
++
++mark_as_advanced(WCECOMPAT_INCLUDE_DIR  WCECOMPAT_LIBRARIES  WCECOMPAT_CONST  WCECOMPAT_LIB_FOUND)
+diff -Nru -x '*.rej' -x '*.orig' tmp\libxml2-2.8.0/CMakeLists.txt libxml2-2.8.0/CMakeLists.txt
+--- tmp\libxml2-2.8.0/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ libxml2-2.8.0/CMakeLists.txt	2012-05-23 20:30:06.625279900 +0200
+@@ -0,0 +1,315 @@
++# This file is copyrighted under the BSD-license for buildsystem files of KDE
++# copyright 2010, Patrick Spendrin <ps_ml@gmx.de>
++
++project(libxml2)
++
++cmake_minimum_required(VERSION 2.6)
++
++set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
++
++set(PACKAGE "libxml2")
++set(VERSION "2.7.8")
++
++find_package(ZLIB)
++find_package(Libiconv REQUIRED)
++
++include_directories(
++    ${CMAKE_BINARY_DIR} 
++    ${CMAKE_BINARY_DIR}/include
++    ${CMAKE_SOURCE_DIR}/include 
++    ${ZLIB_INCLUDE_DIR}
++    ${Libiconv_INCLUDE_DIR}
++    ${CMAKE_SOURCE_DIR}/win32/wince
++)
++
++if(WINCE)
++    find_package(Wcecompat REQUIRED)
++    include_directories(${WCECOMPAT_INCLUDE_DIR})
++    set(CMAKE_REQUIRED_INCLUDES ${WCECOMPAT_INCLUDE_DIR})
++    set(CMAKE_REQUIRED_LIBRARIES ${WCECOMPAT_LIBRARIES})
++endif(WINCE)
++
++option(SUPPORT_IP6 "support IPv6" ON)
++option(ENABLE_THREADS "enable threading in libxml" ON)
++option(ENABLE_TRIO "enable trio IO in libxml" OFF)
++option(BUILD_tests "build all the test executables in libxml" ON)
++option(WITH_ICU "build with ICU support" OFF)
++
++if(ENABLE_TRIO)
++    set(WITH_TRIO 1)
++else()
++    set(WITH_TRIO 0)
++endif()    
++
++if(ENABLE_THREADS)
++    set(WITH_THREADS 1)
++else()
++    set(WITH_THREADS 0)
++endif()    
++set(WITH_TREE 1)
++set(WITH_OUTPUT 1)
++set(WITH_PUSH 1)
++set(WITH_READER 1)
++set(WITH_PATTERN 1)
++set(WITH_WRITER 1)
++set(WITH_SAX1 1)
++set(WITH_FTP 1)
++set(WITH_HTTP 1)
++set(WITH_VALID 1)
++set(WITH_HTML 1)
++set(WITH_LEGACY 1)
++set(WITH_C14N 1)
++set(WITH_CATALOG 1)
++set(WITH_DOCB 1)
++set(WITH_XPATH 1)
++set(WITH_XPTR 1)
++set(WITH_XINCLUDE 1)
++set(WITH_ICONV 1)
++set(WITH_ISO8859X 1)
++set(WITH_DEBUG 0) #setting to one may result into a crash in case http://mail.gnome.org/archives/xml/2011-April/msg00011.html has not been fixed
++set(WITH_MEM_DEBUG 0)
++set(WITH_RUN_DEBUG 0) #setting to one may result into a crash in case http://mail.gnome.org/archives/xml/2011-April/msg00011.html has not been fixed
++set(WITH_REGEXPS 1)
++set(WITH_SCHEMAS 1)
++set(WITH_SCHEMATRON 1)
++set(WITH_MODULES 1)
++set(WITH_LZMA 0)
++if(ZLIB_FOUND)
++    set(WITH_ZLIB 1)
++else()
++    set(WITH_ZLIB 0)
++endif()
++
++set (LIBXML_VERSION_EXTRA 0)
++STRING(REPLACE "." "0" LIBXML_VERSION_NUMBER ${VERSION})
++
++include(ConfigureChecks.cmake)
++
++######################################### Library ###############################################
++
++set(libxml2_SRCS
++    SAX.c 
++    entities.c 
++    encoding.c 
++    error.c 
++    parserInternals.c
++    parser.c
++    tree.c
++    hash.c
++    list.c
++    xmlIO.c
++    xmlmemory.c
++    uri.c
++    valid.c
++    xlink.c
++    HTMLparser.c
++    HTMLtree.c
++    debugXML.c
++    xpath.c
++    xpointer.c
++    xinclude.c
++    nanohttp.c
++    nanoftp.c
++    DOCBparser.c
++    catalog.c
++    globals.c
++    threads.c
++    c14n.c
++    xmlstring.c
++    xmlregexp.c
++    xmlschemas.c
++    xmlschemastypes.c
++    xmlunicode.c
++    xmlreader.c
++    relaxng.c
++    dict.c
++    SAX2.c
++    xmlwriter.c
++    legacy.c
++    chvalid.c
++    pattern.c
++    xmlsave.c
++    xmlmodule.c
++    schematron.c
++)
++
++# the trio code is yet untested, you need to change the xmlversion.h for that too
++# this is currently not supported as you'd need to configure the xmlversion.h.in
++if(ENABLE_TRIO)
++    set(libxml2_SRCS
++        ${libxml2_SRCS}
++        triostr.c 
++        trio.c
++    )
++endif(ENABLE_TRIO)
++
++if(WINCE)
++add_library(xml2 STATIC ${libxml2_SRCS})
++else(WINCE)
++add_library(xml2 SHARED ${libxml2_SRCS})
++endif(WINCE)
++target_link_libraries(xml2 ${LIBICONV_LIBRARIES})
++install(TARGETS xml2    RUNTIME DESTINATION bin
++                        LIBRARY DESTINATION lib
++                        ARCHIVE DESTINATION lib)
++
++if(WIN32)
++    if(MSVC)
++        set_target_properties(xml2 PROPERTIES OUTPUT_NAME libxml2)
++    endif(MSVC)
++    if(WINCE)
++        target_link_libraries(xml2 ws2)
++    else(WINCE)
++        target_link_libraries(xml2 ws2_32)
++    endif(WINCE)
++    if(ENABLE_THREADS AND MINGW)
++        target_link_libraries(xml2 winpthread)
++    endif(ENABLE_THREADS AND MINGW)
++endif(WIN32)
++
++if(ZLIB_FOUND)
++    target_link_libraries(xml2 ${ZLIB_LIBRARIES})
++endif(ZLIB_FOUND)
++
++
++
++######################################### Utilities ###############################################
++
++# For WINCE the utils are not compiled
++if(NOT WINCE)
++add_executable(xmllint xmllint.c)
++target_link_libraries(xmllint xml2)
++install(TARGETS xmllint RUNTIME DESTINATION bin
++                        LIBRARY DESTINATION lib
++                        ARCHIVE DESTINATION lib)
++
++add_executable(xmlcatalog xmlcatalog.c)
++target_link_libraries(xmlcatalog xml2)
++install(TARGETS xmlcatalog  RUNTIME DESTINATION bin
++                            LIBRARY DESTINATION lib
++                            ARCHIVE DESTINATION lib)
++                            
++endif(NOT WINCE)
++
++######################################### headers & docs ###############################################
++set(libxml2_HDRS
++include/libxml/SAX.h
++include/libxml/entities.h
++include/libxml/encoding.h
++include/libxml/parser.h
++include/libxml/parserInternals.h
++include/libxml/xmlerror.h
++include/libxml/HTMLparser.h
++include/libxml/HTMLtree.h
++include/libxml/debugXML.h
++include/libxml/tree.h
++include/libxml/list.h
++include/libxml/hash.h
++include/libxml/xpath.h
++include/libxml/xpathInternals.h
++include/libxml/xpointer.h
++include/libxml/xinclude.h
++include/libxml/xmlIO.h
++include/libxml/xmlmemory.h
++include/libxml/nanohttp.h
++include/libxml/nanoftp.h
++include/libxml/uri.h
++include/libxml/valid.h
++include/libxml/xlink.h
++${CMAKE_BINARY_DIR}/include/libxml/xmlversion.h
++include/libxml/DOCBparser.h
++include/libxml/catalog.h
++include/libxml/threads.h
++include/libxml/globals.h
++include/libxml/c14n.h
++include/libxml/xmlautomata.h
++include/libxml/xmlregexp.h
++include/libxml/xmlmodule.h
++include/libxml/xmlschemas.h
++include/libxml/schemasInternals.h
++include/libxml/xmlschemastypes.h
++include/libxml/xmlstring.h
++include/libxml/xmlunicode.h
++include/libxml/xmlreader.h
++include/libxml/relaxng.h
++include/libxml/dict.h
++include/libxml/SAX2.h
++include/libxml/xmlexports.h
++include/libxml/xmlwriter.h
++include/libxml/chvalid.h
++include/libxml/pattern.h
++include/libxml/xmlsave.h
++include/libxml/schematron.h)
++
++if(WINCE)
++set(libxml2_HDRS
++    ${libxml2_HDRS}
++    win32/wince/wincecompat.h)
++endif(WINCE)
++
++install(FILES ${libxml2_HDRS} DESTINATION include/libxml)
++
++set(_html_DOCS 
++doc/xml.html
++doc/encoding.html
++doc/FAQ.html
++doc/structure.gif
++doc/DOM.gif
++doc/smallfootonly.gif
++doc/redhat.gif
++doc/libxml.gif
++doc/w3c.png
++doc/Libxml2-Logo-180x168.gif
++doc/Libxml2-Logo-90x34.gif
++)
++
++file(GLOB html_DOCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/doc/html/*.html")
++file(GLOB png_DOCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/doc/html/*.png")
++install(FILES ${html_DOCS} ${png_DOCS} DESTINATION doc/libxml/html)
++
++file(GLOB tut_DOCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/doc/tutorial/*.*")
++install(FILES ${tut_DOCS} DESTINATION doc/libxml/html/tutorial)
++
++
++######################################### Tests ###############################################
++if(BUILD_tests)
++macro(buildTests)
++    foreach(target ${ARGN})
++        add_executable(${target} ${target}.c)
++        target_link_libraries(${target} xml2)
++        if(WINCE)
++            target_link_libraries(${target} ${WCECOMPAT_LIBRARIES})
++        endif(WINCE)
++    endforeach(target ${ARGN})
++endmacro(buildTests)
++
++buildTests(
++    testSchemas 
++    testRelax 
++    testSAX 
++    testHTML 
++    testXPath 
++    testURI
++    testC14N
++    testAutomata
++    testRegexp
++    testReader
++    testapi
++    testModule
++    runtest
++    runsuite
++    testchar
++    testdict
++    runxmlconf
++    testrecurse
++)
++if(WIN32)
++    buildTests(
++        testThreadsWin32
++    )
++else(WIN32)
++    buildTests(
++        testThreads
++    )
++endif(WIN32)
++endif(BUILD_tests)
+diff -Nru -x '*.rej' -x '*.orig' tmp\libxml2-2.8.0/config.h.cmake libxml2-2.8.0/config.h.cmake
+--- tmp\libxml2-2.8.0/config.h.cmake	1970-01-01 01:00:00.000000000 +0100
++++ libxml2-2.8.0/config.h.cmake	2012-05-23 20:10:10.063122900 +0200
+@@ -0,0 +1,312 @@
++/* config.h.in.  Generated from configure.in by autoheader.  */
++#cmakedefine PACKAGE
++#cmakedefine VERSION
++#cmakedefine HAVE_LIBZ
++#cmakedefine HAVE_LIBM
++#cmakedefine HAVE_ISINF
++#cmakedefine HAVE_ISNAN
++#cmakedefine HAVE_LIBHISTORY
++#cmakedefine HAVE_LIBREADLINE
++#cmakedefine HAVE_LIBPTHREAD
++#cmakedefine HAVE_PTHREAD_H
++
++/* Define if IPV6 support is there */
++#cmakedefine SUPPORT_IP6
++
++/* Define if getaddrinfo is there */
++#cmakedefine HAVE_GETADDRINFO
++
++/* Define to 1 if you have the <ansidecl.h> header file. */
++#cmakedefine HAVE_ANSIDECL_H
++
++/* Define to 1 if you have the <arpa/inet.h> header file. */
++#cmakedefine HAVE_ARPA_INET_H
++
++/* Define to 1 if you have the <arpa/nameser.h> header file. */
++#cmakedefine HAVE_ARPA_NAMESER_H
++
++/* Whether struct sockaddr::__ss_family exists */
++#cmakedefine HAVE_BROKEN_SS_FAMILY
++
++/* Define to 1 if you have the `class' function. */
++#cmakedefine HAVE_CLASS
++
++/* Define to 1 if you have the <ctype.h> header file. */
++#cmakedefine HAVE_CTYPE_H
++
++/* Define to 1 if you have the <dirent.h> header file. */
++#cmakedefine HAVE_DIRENT_H
++
++/* Define to 1 if you have the <dlfcn.h> header file. */
++#cmakedefine HAVE_DLFCN_H
++
++/* Have dlopen based dso */
++#cmakedefine HAVE_DLOPEN
++
++/* Define to 1 if you have the <dl.h> header file. */
++#cmakedefine HAVE_DL_H
++
++/* Define to 1 if you have the <errno.h> header file. */
++#cmakedefine HAVE_ERRNO_H
++
++/* Define to 1 if you have the <fcntl.h> header file. */
++#cmakedefine HAVE_FCNTL_H
++
++/* Define to 1 if you have the `finite' function. */
++#cmakedefine HAVE_FINITE
++
++/* Define to 1 if you have the <float.h> header file. */
++#cmakedefine HAVE_FLOAT_H
++
++/* Define to 1 if you have the `fpclass' function. */
++#cmakedefine HAVE_FPCLASS
++
++/* Define to 1 if you have the `fprintf' function. */
++#cmakedefine HAVE_FPRINTF
++
++/* Define to 1 if you have the `fp_class' function. */
++#cmakedefine HAVE_FP_CLASS
++
++/* Define to 1 if you have the <fp_class.h> header file. */
++#cmakedefine HAVE_FP_CLASS_H
++
++/* Define to 1 if you have the `ftime' function. */
++#cmakedefine HAVE_FTIME
++
++/* Define if getaddrinfo is there */
++#cmakedefine HAVE_GETADDRINFO
++
++/* Define to 1 if you have the `gettimeofday' function. */
++#cmakedefine HAVE_GETTIMEOFDAY
++
++/* Define to 1 if you have the <ieeefp.h> header file. */
++#cmakedefine HAVE_IEEEFP_H
++
++/* Define to 1 if you have the <inttypes.h> header file. */
++#cmakedefine HAVE_INTTYPES_H
++
++/* Define to 1 if you have the <inttypes.h.h> header file. */
++#cmakedefine HAVE_INTTYPES_H_H
++
++/* Define if isinf is there */
++#cmakedefine HAVE_ISINF
++
++/* Define if isnan is there */
++#cmakedefine HAVE_ISNAN
++
++/* Define to 1 if you have the `isnand' function. */
++#cmakedefine HAVE_ISNAND
++
++/* Define if history library is there (-lhistory) */
++#cmakedefine HAVE_LIBHISTORY
++
++/* Define if pthread library is there (-lpthread) */
++#cmakedefine HAVE_LIBPTHREAD
++
++/* Define if readline library is there (-lreadline) */
++#cmakedefine HAVE_LIBREADLINE
++
++/* Have compression library */
++#cmakedefine HAVE_LIBZ
++
++/* Define to 1 if you have the <limits.h> header file. */
++#cmakedefine HAVE_LIMITS_H
++
++/* Define to 1 if you have the `localtime' function. */
++#cmakedefine HAVE_LOCALTIME
++
++/* Define to 1 if you have the <malloc.h> header file. */
++#cmakedefine HAVE_MALLOC_H
++
++/* Define to 1 if you have the <math.h> header file. */
++#cmakedefine HAVE_MATH_H
++
++/* Define to 1 if you have the <memory.h> header file. */
++#cmakedefine HAVE_MEMORY_H
++
++/* Define to 1 if you have the <nan.h> header file. */
++#cmakedefine HAVE_NAN_H
++
++/* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
++#cmakedefine HAVE_NDIR_H
++
++/* Define to 1 if you have the <netdb.h> header file. */
++#cmakedefine HAVE_NETDB_H
++
++/* Define to 1 if you have the <netinet/in.h> header file. */
++#cmakedefine HAVE_NETINET_IN_H
++
++/* Define to 1 if you have the <poll.h> header file. */
++#cmakedefine HAVE_POLL_H
++
++/* Define to 1 if you have the `printf' function. */
++#cmakedefine HAVE_PRINTF
++
++/* Define if <pthread.h> is there */
++#cmakedefine HAVE_PTHREAD_H
++
++/* Define to 1 if you have the <resolv.h> header file. */
++#cmakedefine HAVE_RESOLV_H
++
++/* Have shl_load based dso */
++#cmakedefine HAVE_SHLLOAD
++
++/* Define to 1 if you have the `signal' function. */
++#cmakedefine HAVE_SIGNAL
++
++/* Define to 1 if you have the <signal.h> header file. */
++#cmakedefine HAVE_SIGNAL_H
++
++/* Define to 1 if you have the `snprintf' function. */
++#cmakedefine HAVE_SNPRINTF
++
++/* Define to 1 if you have the `sprintf' function. */
++#cmakedefine HAVE_SPRINTF
++
++/* Define to 1 if you have the `sscanf' function. */
++#cmakedefine HAVE_SSCANF
++
++/* Define to 1 if you have the `stat' function. */
++#cmakedefine HAVE_STAT
++
++/* Define to 1 if you have the <stdarg.h> header file. */
++#cmakedefine HAVE_STDARG_H
++
++/* Define to 1 if you have the <stdint.h> header file. */
++#cmakedefine HAVE_STDINT_H
++
++/* Define to 1 if you have the <stdlib.h> header file. */
++#cmakedefine HAVE_STDLIB_H
++
++/* Define to 1 if you have the `strdup' function. */
++#cmakedefine HAVE_STRDUP
++
++/* Define to 1 if you have the `strerror' function. */
++#cmakedefine HAVE_STRERROR
++
++/* Define to 1 if you have the `strftime' function. */
++#cmakedefine HAVE_STRFTIME
++
++/* Define to 1 if you have the <strings.h> header file. */
++#cmakedefine HAVE_STRINGS_H
++
++/* Define to 1 if you have the <string.h> header file. */
++#cmakedefine HAVE_STRING_H
++
++/* Define to 1 if you have the `strndup' function. */
++#cmakedefine HAVE_STRNDUP
++
++/* Define to 1 if you have the <sys/dir.h> header file, and it defines `DIR'.
++   */
++#cmakedefine HAVE_SYS_DIR_H
++
++/* Define to 1 if you have the <sys/mman.h> header file. */
++#cmakedefine HAVE_SYS_MMAN_H
++
++/* Define to 1 if you have the <sys/ndir.h> header file, and it defines `DIR'.
++   */
++#cmakedefine HAVE_SYS_NDIR_H
++
++/* Define to 1 if you have the <sys/select.h> header file. */
++#cmakedefine HAVE_SYS_SELECT_H
++
++/* Define to 1 if you have the <sys/socket.h> header file. */
++#cmakedefine HAVE_SYS_SOCKET_H
++
++/* Define to 1 if you have the <sys/stat.h> header file. */
++#cmakedefine HAVE_SYS_STAT_H
++
++/* Define to 1 if you have the <sys/timeb.h> header file. */
++#cmakedefine HAVE_SYS_TIMEB_H
++
++/* Define to 1 if you have the <sys/time.h> header file. */
++#cmakedefine HAVE_SYS_TIME_H
++
++/* Define to 1 if you have the <sys/types.h> header file. */
++#cmakedefine HAVE_SYS_TYPES_H
++
++/* Define to 1 if you have the <time.h> header file. */
++#cmakedefine HAVE_TIME_H
++
++/* Define to 1 if you have the <unistd.h> header file. */
++#cmakedefine HAVE_UNISTD_H 1
++
++/* Whether va_copy() is available */
++#cmakedefine HAVE_VA_COPY
++
++/* Define to 1 if you have the `vfprintf' function. */
++#cmakedefine HAVE_VFPRINTF
++
++/* Define to 1 if you have the `vsnprintf' function. */
++#cmakedefine HAVE_VSNPRINTF
++
++/* Define to 1 if you have the `vsprintf' function. */
++#cmakedefine HAVE_VSPRINTF
++
++/* Define to 1 if you have the <zlib.h> header file. */
++#cmakedefine HAVE_ZLIB_H
++
++/* Define to 1 if you have the `_stat' function. */
++#cmakedefine HAVE__STAT
++
++/* Whether __va_copy() is available */
++#cmakedefine HAVE___VA_COPY
++
++/* Define as const if the declaration of iconv() needs const. */
++#cmakedefine ICONV_CONST @ICONV_CONST@
++
++/* Define to the sub-directory in which libtool stores uninstalled libraries.
++   */
++#cmakedefine LT_OBJDIR
++
++/* Name of package */
++#cmakedefine PACKAGE
++
++/* Define to the address where bug reports for this package should be sent. */
++#cmakedefine PACKAGE_BUGREPORT
++
++/* Define to the full name of this package. */
++#cmakedefine PACKAGE_NAME
++
++/* Define to the full name and version of this package. */
++#cmakedefine PACKAGE_STRING
++
++/* Define to the one symbol short name of this package. */
++#cmakedefine PACKAGE_TARNAME
++
++/* Define to the version of this package. */
++#cmakedefine PACKAGE_VERSION
++
++/* Define to 1 if the C compiler supports function prototypes. */
++#cmakedefine PROTOTYPES
++
++/* Define to 1 if you have the ANSI C header files. */
++#cmakedefine STDC_HEADERS
++
++/* Support for IPv6 */
++#cmakedefine SUPPORT_IP6
++
++/* Version number of package */
++#cmakedefine VERSION
++
++/* Determine what socket length (socklen_t) data type is */
++#cmakedefine XML_SOCKLEN_T
++
++/* Using the Win32 Socket implementation */
++#cmakedefine _WINSOCKAPI_
++
++/* Define like PROTOTYPES; this can be used by system headers. */
++#cmakedefine __PROTOTYPES
++
++/* Win32 Std C name mangling work-around */
++#cmakedefine snprintf
++
++/* ss_family is not defined here, use __ss_family instead */
++#cmakedefine ss_family
++
++/* Win32 Std C name mangling work-around */
++#cmakedefine vsnprintf
++
++#ifdef _MSC_VER
++//#define snprintf _snprintf
++#endif
+diff -Nru -x '*.rej' -x '*.orig' tmp\libxml2-2.8.0/ConfigureChecks.cmake libxml2-2.8.0/ConfigureChecks.cmake
+--- tmp\libxml2-2.8.0/ConfigureChecks.cmake	1970-01-01 01:00:00.000000000 +0100
++++ libxml2-2.8.0/ConfigureChecks.cmake	2012-05-23 20:10:10.076124500 +0200
+@@ -0,0 +1,141 @@
++#some configure checks
++
++# LIBXML_ENABLE_THREADS
++if(ENABLE_THREADS)
++    if(UNIX)
++        add_definitions(-DLIBXML_THREAD_ENABLED)
++    else(UNIX)
++        add_definitions(-DHAVE_WIN32_THREADS)
++    endif(UNIX)
++endif(ENABLE_THREADS)
++
++# set ICONV_CONST
++set(ICONV_CONST ${LIBICONV_CONST})
++
++# HAVE_LIBZ
++if(ZLIB_FOUND)
++    set(HAVE_LIBZ ON)
++endif(ZLIB_FOUND)
++
++# HAVE_LIBM
++if(UNIX)
++    set(HAVE_LIBM ON)
++endif(UNIX)
++
++# HAVE_LIBPTHREAD
++if(CMAKE_SYSTEM_NAME STREQUAL GNU)
++    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -pthread")
++    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -pthread")
++    set(HAVE_LIBPTHREAD ON)
++endif(CMAKE_SYSTEM_NAME STREQUAL GNU)
++
++# HAVE_LIBHISTORY
++# HAVE_LIBREADLINE
++
++set(CMAKE_REQUIRED_INCLUDES ${ZLIB_INCLUDE_DIR} ${CMAKE_REQUIRED_INCLUDES})
++set(CMAKE_REQUIRED_LIBRARIES ${ZLIB_LIBRARIES} ${CMAKE_REQUIRED_LIBRARIES})
++include(CheckIncludeFile)
++include(CheckFunctionExists)
++include(CheckSymbolExists)
++
++check_include_file("fcntl.h" HAVE_FCNTL_H)
++check_include_file("pthread.h" HAVE_PTHREAD_H)
++check_include_file("ansidecl.h" HAVE_ANSIDECL_H)
++check_include_file("arpa/inet.h" HAVE_ARPA_INET_H)
++check_include_file("arpa/nameser.h" HAVE_ARPA_NAMESER_H)
++check_include_file("ctype.h" HAVE_CTYPE_H)
++check_include_file("dirent.h" HAVE_DIRENT_H)
++check_include_file("dlfcn.h" HAVE_DLFCN_H)
++check_include_file("dl.h" HAVE_DL_H)
++check_include_file("errno.h" HAVE_ERRNO_H)
++check_include_file("float.h" HAVE_FLOAT_H)
++check_include_file("fp_class.h" HAVE_FP_CLASS_H)
++check_include_file("ieeefp.h" HAVE_IEEEFP_H)
++check_include_file("inttypes.h" HAVE_INTTYPES_H)
++check_include_file("inttypes.h.h" HAVE_INTTYPES_H_H)
++check_include_file("limits.h" HAVE_LIMITS_H)
++check_include_file("malloc.h" HAVE_MALLOC_H)
++check_include_file("math.h" HAVE_MATH_H)
++check_include_file("memory.h" HAVE_MEMORY_H)
++check_include_file("nan.h" HAVE_NAN_H)
++check_include_file("ndir.h" HAVE_NDIR_H)
++check_include_file("netdb.h" HAVE_NETDB_H)
++check_include_file("netinet/in.h" HAVE_NETINET_IN_H)
++check_include_file("poll.h" HAVE_POLL_H)
++check_include_file("pthread.h" HAVE_PTHREAD_H)
++check_include_file("resolv.h" HAVE_RESOLV_H)
++check_include_file("signal.h" HAVE_SIGNAL_H)
++check_include_file("stdarg.h" HAVE_STDARG_H)
++check_include_file("stdint.h" HAVE_STDINT_H)
++check_include_file("stdlib.h" HAVE_STDLIB_H)
++check_include_file("strings.h" HAVE_STRINGS_H)
++check_include_file("string.h" HAVE_STRING_H)
++check_include_file("sys/dir.h" HAVE_SYS_DIR_H)
++check_include_file("sys/mman.h" HAVE_SYS_MMAN_H)
++check_include_file("sys/ndir.h" HAVE_SYS_NDIR_H)
++check_include_file("sys/select.h" HAVE_SYS_SELECT_H)
++check_include_file("sys/socket.h" HAVE_SYS_SOCKET_H)
++check_include_file("sys/stat.h" HAVE_SYS_STAT_H)
++check_include_file("sys/timeb.h" HAVE_SYS_TIMEB_H)
++check_include_file("sys/time.h" HAVE_SYS_TIME_H)
++check_include_file("sys/types.h" HAVE_SYS_TYPES_H)
++check_include_file("time.h" HAVE_TIME_H)
++check_include_file("unistd.h" HAVE_UNISTD_H)
++check_include_file("zlib.h" HAVE_ZLIB_H)
++
++if(NOT HAVE_RESOLV_H)
++set(SUPPORT_IP6 OFF)
++endif(NOT HAVE_RESOLV_H)
++
++#/* Whether struct sockaddr::__ss_family exists */ ???
++#cmakedefine HAVE_BROKEN_SS_FAMILY
++
++check_function_exists("strdup" HAVE_STRDUP)
++check_function_exists("getaddrinfo" HAVE_GETADDRINFO)
++check_function_exists("class" HAVE_CLASS)
++check_function_exists("dlopen" HAVE_DLOPEN)
++check_function_exists("shl_load" HAVE_SHLLOAD)
++check_function_exists("finite" HAVE_FINITE)
++check_function_exists("fpclass" HAVE_FPCLASS)
++check_function_exists("fprintf" HAVE_FPRINTF)
++check_function_exists("fp_class" HAVE_FP_CLASS)
++check_function_exists("ftime" HAVE_FTIME)
++check_function_exists("gettimeofday" HAVE_GETTIMEOFDAY)
++check_function_exists("isinf" HAVE_ISINF)
++check_function_exists("isnan" HAVE_ISNAN)
++check_function_exists("isnand" HAVE_ISNAND)
++check_function_exists("localtime" HAVE_LOCALTIME)
++check_function_exists("printf" HAVE_PRINTF)
++check_function_exists("signal" HAVE_SIGNAL)
++check_function_exists("snprintf" HAVE_SNPRINTF)
++check_function_exists("sprintf" HAVE_SPRINTF)
++check_function_exists("sscanf" HAVE_SSCANF)
++check_function_exists("stat" HAVE_STAT)
++check_function_exists("strdup" HAVE_STRDUP)
++check_function_exists("strerror" HAVE_STRERROR)
++check_function_exists("strftime" HAVE_STRFTIME)
++check_function_exists("strndup" HAVE_STRNDUP)
++check_function_exists("vfprintf" HAVE_VFPRINTF)
++check_function_exists("vsnprintf" HAVE_VSNPRINTF)
++check_function_exists("vsprintf" HAVE_VSPRINTF)
++check_function_exists("va_copy" HAVE_VA_COPY)
++check_function_exists("_stat" HAVE__STAT)
++check_function_exists("__va_copy" HAVE___VA_COPY)
++
++if(MSVC)
++    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
++endif(MSVC)
++
++if(ZLIB_FOUND)
++    # disable large file support in case the functions are not contained in the dll
++    check_symbol_exists("gzopen64" "zlib.h" GZOPEN64)
++    if(NOT GZOPEN64)
++        add_definitions(-DNO_LARGEFILE_SOURCE)
++        message(STATUS "No Large File Support in libz!")
++    endif(NOT GZOPEN64)
++endif(ZLIB_FOUND)
++
++configure_file(config.h.cmake config.h)
++
++configure_file(include/libxml/xmlversion.h.in ${CMAKE_BINARY_DIR}/include/libxml/xmlversion.h)
++
+diff -Nru -x '*.rej' -x '*.orig' tmp\libxml2-2.8.0/debugXML.c libxml2-2.8.0/debugXML.c
+--- tmp\libxml2-2.8.0/debugXML.c	2012-05-07 13:52:06.000000000 +0200
++++ libxml2-2.8.0/debugXML.c	2012-05-23 20:10:10.102121800 +0200
+@@ -116,6 +116,8 @@
+ 	    while (cur != NULL) {
+ 	        if (cur == ns)
+ 		    return(1);
++        if (xmlStrEqual(cur->prefix, ns->prefix) && xmlStrEqual(cur->href, ns->href))
++            return(1);
+ 		if (xmlStrEqual(cur->prefix, ns->prefix))
+ 		    return(-2);
+ 		cur = cur->next;
+diff -Nru -x '*.rej' -x '*.orig' tmp\libxml2-2.8.0/include/libxml/nanoftp.h libxml2-2.8.0/include/libxml/nanoftp.h
+--- tmp\libxml2-2.8.0/include/libxml/nanoftp.h	2010-12-20 13:56:24.000000000 +0100
++++ libxml2-2.8.0/include/libxml/nanoftp.h	2012-05-23 20:10:10.121122000 +0200
+@@ -16,7 +16,7 @@
+ #ifdef LIBXML_FTP_ENABLED
+ 
+ /* Needed for portability to Windows 64 bits */
+-#if defined(__MINGW32__) || defined(_WIN32_WCE)
++#if defined(__MINGW32__) || defined(_WIN32_WCE) || defined (_WIN32)
+ #include <winsock2.h>
+ #else
+ /**
+diff -Nru -x '*.rej' -x '*.orig' tmp\libxml2-2.8.0/include/libxml/xmlversion.h libxml2-2.8.0/include/libxml/xmlversion.h
+--- tmp\libxml2-2.8.0/include/libxml/xmlversion.h	2012-05-23 10:56:44.000000000 +0200
++++ libxml2-2.8.0/include/libxml/xmlversion.h	1970-01-01 01:00:00.000000000 +0100
+@@ -1,476 +0,0 @@
+-/*
+- * Summary: compile-time version informations
+- * Description: compile-time version informations for the XML library
+- *
+- * Copy: See Copyright for the status of this software.
+- *
+- * Author: Daniel Veillard
+- */
+-
+-#ifndef __XML_VERSION_H__
+-#define __XML_VERSION_H__
+-
+-#include <libxml/xmlexports.h>
+-
+-#ifdef __cplusplus
+-extern "C" {
+-#endif
+-
+-/*
+- * use those to be sure nothing nasty will happen if
+- * your library and includes mismatch
+- */
+-#ifndef LIBXML2_COMPILING_MSCCDEF
+-XMLPUBFUN void XMLCALL xmlCheckVersion(int version);
+-#endif /* LIBXML2_COMPILING_MSCCDEF */
+-
+-/**
+- * LIBXML_DOTTED_VERSION:
+- *
+- * the version string like "1.2.3"
+- */
+-#define LIBXML_DOTTED_VERSION "2.8.0"
+-
+-/**
+- * LIBXML_VERSION:
+- *
+- * the version number: 1.2.3 value is 10203
+- */
+-#define LIBXML_VERSION 20800
+-
+-/**
+- * LIBXML_VERSION_STRING:
+- *
+- * the version number string, 1.2.3 value is "10203"
+- */
+-#define LIBXML_VERSION_STRING "20800"
+-
+-/**
+- * LIBXML_VERSION_EXTRA:
+- *
+- * extra version information, used to show a CVS compilation
+- */
+-#define LIBXML_VERSION_EXTRA "-GITv2.8.0-rc2-1-g22030ef"
+-
+-/**
+- * LIBXML_TEST_VERSION:
+- *
+- * Macro to check that the libxml version in use is compatible with
+- * the version the software has been compiled against
+- */
+-#define LIBXML_TEST_VERSION xmlCheckVersion(20800);
+-
+-#ifndef VMS
+-#if 0
+-/**
+- * WITH_TRIO:
+- *
+- * defined if the trio support need to be configured in
+- */
+-#define WITH_TRIO
+-#else
+-/**
+- * WITHOUT_TRIO:
+- *
+- * defined if the trio support should not be configured in
+- */
+-#define WITHOUT_TRIO
+-#endif
+-#else /* VMS */
+-/**
+- * WITH_TRIO:
+- *
+- * defined if the trio support need to be configured in
+- */
+-#define WITH_TRIO 1
+-#endif /* VMS */
+-
+-/**
+- * LIBXML_THREAD_ENABLED:
+- *
+- * Whether the thread support is configured in
+- */
+-#if 1
+-#if defined(_REENTRANT) || defined(__MT__) || \
+-    (defined(_POSIX_C_SOURCE) && (_POSIX_C_SOURCE - 0 >= 199506L))
+-#define LIBXML_THREAD_ENABLED
+-#endif
+-#endif
+-
+-/**
+- * LIBXML_TREE_ENABLED:
+- *
+- * Whether the DOM like tree manipulation API support is configured in
+- */
+-#if 1
+-#define LIBXML_TREE_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_OUTPUT_ENABLED:
+- *
+- * Whether the serialization/saving support is configured in
+- */
+-#if 1
+-#define LIBXML_OUTPUT_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_PUSH_ENABLED:
+- *
+- * Whether the push parsing interfaces are configured in
+- */
+-#if 1
+-#define LIBXML_PUSH_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_READER_ENABLED:
+- *
+- * Whether the xmlReader parsing interface is configured in
+- */
+-#if 1
+-#define LIBXML_READER_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_PATTERN_ENABLED:
+- *
+- * Whether the xmlPattern node selection interface is configured in
+- */
+-#if 1
+-#define LIBXML_PATTERN_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_WRITER_ENABLED:
+- *
+- * Whether the xmlWriter saving interface is configured in
+- */
+-#if 1
+-#define LIBXML_WRITER_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_SAX1_ENABLED:
+- *
+- * Whether the older SAX1 interface is configured in
+- */
+-#if 1
+-#define LIBXML_SAX1_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_FTP_ENABLED:
+- *
+- * Whether the FTP support is configured in
+- */
+-#if 1
+-#define LIBXML_FTP_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_HTTP_ENABLED:
+- *
+- * Whether the HTTP support is configured in
+- */
+-#if 1
+-#define LIBXML_HTTP_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_VALID_ENABLED:
+- *
+- * Whether the DTD validation support is configured in
+- */
+-#if 1
+-#define LIBXML_VALID_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_HTML_ENABLED:
+- *
+- * Whether the HTML support is configured in
+- */
+-#if 1
+-#define LIBXML_HTML_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_LEGACY_ENABLED:
+- *
+- * Whether the deprecated APIs are compiled in for compatibility
+- */
+-#if 1
+-#define LIBXML_LEGACY_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_C14N_ENABLED:
+- *
+- * Whether the Canonicalization support is configured in
+- */
+-#if 1
+-#define LIBXML_C14N_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_CATALOG_ENABLED:
+- *
+- * Whether the Catalog support is configured in
+- */
+-#if 1
+-#define LIBXML_CATALOG_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_DOCB_ENABLED:
+- *
+- * Whether the SGML Docbook support is configured in
+- */
+-#if 1
+-#define LIBXML_DOCB_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_XPATH_ENABLED:
+- *
+- * Whether XPath is configured in
+- */
+-#if 1
+-#define LIBXML_XPATH_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_XPTR_ENABLED:
+- *
+- * Whether XPointer is configured in
+- */
+-#if 1
+-#define LIBXML_XPTR_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_XINCLUDE_ENABLED:
+- *
+- * Whether XInclude is configured in
+- */
+-#if 1
+-#define LIBXML_XINCLUDE_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_ICONV_ENABLED:
+- *
+- * Whether iconv support is available
+- */
+-#if 1
+-#define LIBXML_ICONV_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_ICU_ENABLED:
+- *
+- * Whether icu support is available
+- */
+-#if 0
+-#define LIBXML_ICU_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_ISO8859X_ENABLED:
+- *
+- * Whether ISO-8859-* support is made available in case iconv is not
+- */
+-#if 1
+-#define LIBXML_ISO8859X_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_DEBUG_ENABLED:
+- *
+- * Whether Debugging module is configured in
+- */
+-#if 1
+-#define LIBXML_DEBUG_ENABLED
+-#endif
+-
+-/**
+- * DEBUG_MEMORY_LOCATION:
+- *
+- * Whether the memory debugging is configured in
+- */
+-#if 0
+-#define DEBUG_MEMORY_LOCATION
+-#endif
+-
+-/**
+- * LIBXML_DEBUG_RUNTIME:
+- *
+- * Whether the runtime debugging is configured in
+- */
+-#if 0
+-#define LIBXML_DEBUG_RUNTIME
+-#endif
+-
+-/**
+- * LIBXML_UNICODE_ENABLED:
+- *
+- * Whether the Unicode related interfaces are compiled in
+- */
+-#if 1
+-#define LIBXML_UNICODE_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_REGEXP_ENABLED:
+- *
+- * Whether the regular expressions interfaces are compiled in
+- */
+-#if 1
+-#define LIBXML_REGEXP_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_AUTOMATA_ENABLED:
+- *
+- * Whether the automata interfaces are compiled in
+- */
+-#if 1
+-#define LIBXML_AUTOMATA_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_EXPR_ENABLED:
+- *
+- * Whether the formal expressions interfaces are compiled in
+- */
+-#if 1
+-#define LIBXML_EXPR_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_SCHEMAS_ENABLED:
+- *
+- * Whether the Schemas validation interfaces are compiled in
+- */
+-#if 1
+-#define LIBXML_SCHEMAS_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_SCHEMATRON_ENABLED:
+- *
+- * Whether the Schematron validation interfaces are compiled in
+- */
+-#if 1
+-#define LIBXML_SCHEMATRON_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_MODULES_ENABLED:
+- *
+- * Whether the module interfaces are compiled in
+- */
+-#if 1
+-#define LIBXML_MODULES_ENABLED
+-/**
+- * LIBXML_MODULE_EXTENSION:
+- *
+- * the string suffix used by dynamic modules (usually shared libraries)
+- */
+-#define LIBXML_MODULE_EXTENSION ".so" 
+-#endif
+-
+-/**
+- * LIBXML_ZLIB_ENABLED:
+- *
+- * Whether the Zlib support is compiled in
+- */
+-#if 1
+-#define LIBXML_ZLIB_ENABLED
+-#endif
+-
+-/**
+- * LIBXML_LZMA_ENABLED:
+- *
+- * Whether the Lzma support is compiled in
+- */
+-#if 1
+-#define LIBXML_LZMA_ENABLED
+-#endif
+-
+-#ifdef __GNUC__
+-#ifdef HAVE_ANSIDECL_H
+-#include <ansidecl.h>
+-#endif
+-
+-/**
+- * ATTRIBUTE_UNUSED:
+- *
+- * Macro used to signal to GCC unused function parameters
+- */
+-
+-#ifndef ATTRIBUTE_UNUSED
+-#define ATTRIBUTE_UNUSED __attribute__((unused))
+-#endif
+-
+-/**
+- * LIBXML_ATTR_ALLOC_SIZE:
+- *
+- * Macro used to indicate to GCC this is an allocator function
+- */
+-
+-#ifndef LIBXML_ATTR_ALLOC_SIZE
+-# if ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 3)))
+-#  define LIBXML_ATTR_ALLOC_SIZE(x) __attribute__((alloc_size(x)))
+-# else
+-#  define LIBXML_ATTR_ALLOC_SIZE(x)
+-# endif
+-#else
+-# define LIBXML_ATTR_ALLOC_SIZE(x)
+-#endif
+-
+-/**
+- * LIBXML_ATTR_FORMAT:
+- *
+- * Macro used to indicate to GCC the parameter are printf like
+- */
+-
+-#ifndef LIBXML_ATTR_FORMAT
+-# if ((__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 3)))
+-#  define LIBXML_ATTR_FORMAT(fmt,args) __attribute__((__format__(__printf__,fmt,args)))
+-# else
+-#  define LIBXML_ATTR_FORMAT(fmt,args)
+-# endif
+-#else
+-# define LIBXML_ATTR_FORMAT(fmt,args)
+-#endif
+-
+-#else /* ! __GNUC__ */
+-/**
+- * ATTRIBUTE_UNUSED:
+- *
+- * Macro used to signal to GCC unused function parameters
+- */
+-#define ATTRIBUTE_UNUSED
+-/**
+- * LIBXML_ATTR_ALLOC_SIZE:
+- *
+- * Macro used to indicate to GCC this is an allocator function
+- */
+-#define LIBXML_ATTR_ALLOC_SIZE(x)
+-/**
+- * LIBXML_ATTR_FORMAT:
+- *
+- * Macro used to indicate to GCC the parameter are printf like
+- */
+-#define LIBXML_ATTR_FORMAT(fmt,args)
+-#endif /* __GNUC__ */
+-
+-#ifdef __cplusplus
+-}
+-#endif /* __cplusplus */
+-#endif
+-
+-
+diff -Nru -x '*.rej' -x '*.orig' tmp\libxml2-2.8.0/include/win32config.h libxml2-2.8.0/include/win32config.h
+--- tmp\libxml2-2.8.0/include/win32config.h	2009-07-30 17:24:34.000000000 +0200
++++ libxml2-2.8.0/include/win32config.h	2012-05-23 20:10:10.152120600 +0200
+@@ -9,7 +9,9 @@
+ #if defined(_WIN32_WCE)
+ #undef HAVE_ERRNO_H
+ #include <windows.h>
+-#include "wincecompat.h"
++#include <io.h>
++#include <errno.h>
++#include <fcntl.h>
+ #else
+ #define HAVE_SYS_STAT_H
+ #define HAVE__STAT
+diff -Nru -x '*.rej' -x '*.orig' tmp\libxml2-2.8.0/include/wsockcompat.h libxml2-2.8.0/include/wsockcompat.h
+--- tmp\libxml2-2.8.0/include/wsockcompat.h	2012-05-09 09:10:59.000000000 +0200
++++ libxml2-2.8.0/include/wsockcompat.h	2012-05-23 20:10:10.166120400 +0200
+@@ -6,7 +6,7 @@
+ #define __XML_WSOCKCOMPAT_H__
+ 
+ #ifdef _WIN32_WCE
+-#include <winsock.h>
++#include <winsock2.h>
+ #else
+ #undef HAVE_ERRNO_H
+ #include <winsock2.h>
+diff -Nru -x '*.rej' -x '*.orig' tmp\libxml2-2.8.0/nanoftp.c libxml2-2.8.0/nanoftp.c
+--- tmp\libxml2-2.8.0/nanoftp.c	2012-04-02 09:43:28.000000000 +0200
++++ libxml2-2.8.0/nanoftp.c	2012-05-23 20:10:10.252117700 +0200
+@@ -77,7 +77,7 @@
+ #endif
+ 
+ 
+-#if defined(__MINGW32__) || defined(_WIN32_WCE)
++#if defined(__MINGW32__) || defined(_WIN32_WCE) || defined(_WIN32)
+ #ifndef _WINSOCKAPI_
+ #define _WINSOCKAPI_
+ #endif
+diff -Nru -x '*.rej' -x '*.orig' tmp\libxml2-2.8.0/nanohttp.c libxml2-2.8.0/nanohttp.c
+--- tmp\libxml2-2.8.0/nanohttp.c	2012-05-11 04:09:01.000000000 +0200
++++ libxml2-2.8.0/nanohttp.c	2012-05-23 20:10:10.271119600 +0200
+@@ -74,7 +74,7 @@
+ #define XML_SOCKLEN_T unsigned int
+ #endif
+ 
+-#if defined(__MINGW32__) || defined(_WIN32_WCE)
++#if defined(__MINGW32__) || defined(_WIN32_WCE) || defined(_WIN32)
+ #ifndef _WINSOCKAPI_
+ #define _WINSOCKAPI_
+ #endif
+diff -Nru -x '*.rej' -x '*.orig' tmp\libxml2-2.8.0/threads.c libxml2-2.8.0/threads.c
+--- tmp\libxml2-2.8.0/threads.c	2010-12-20 13:56:24.000000000 +0100
++++ libxml2-2.8.0/threads.c	2012-05-23 20:10:10.287118400 +0200
+@@ -28,6 +28,9 @@
+ #include <pthread.h>
+ #elif defined HAVE_WIN32_THREADS
+ #include <windows.h>
++#if _WIN32_WCE
++#include <process.h>
++#endif
+ #ifndef HAVE_COMPILER_TLS
+ #include <process.h>
+ #endif
+@@ -141,6 +144,14 @@
+  *   - xmlLibraryLock a global lock
+  *   - globalkey used for per-thread data
+  */
++ 
++#ifdef _WIN32_WCE
++/* TLS_OUT_OF_INDEXES not defined on WinCE */
++#ifndef TLS_OUT_OF_INDEXES
++#define TLS_OUT_OF_INDEXES 0xffffffff
++#endif
++#endif
++
+ 
+ #ifdef HAVE_PTHREAD_H
+ static pthread_key_t globalkey;
+@@ -414,8 +425,10 @@
+     }
+     pthread_mutex_unlock(&tok->lock);
+ #elif defined HAVE_WIN32_THREADS
+-    if (!--tok->count)
++    if (tok->count) {
++	tok->count--;
+         LeaveCriticalSection(&tok->cs);
++    }
+ #elif defined HAVE_BEOS_THREADS
+     if (tok->lock->tid == find_thread(NULL)) {
+         tok->count--;
+@@ -708,11 +721,16 @@
+ 	}
+         p->memory = tsd;
+ #if defined(LIBXML_STATIC) && !defined(LIBXML_STATIC_FOR_DLL)
++#ifndef _WIN32_WCE
++	/* Windows CE can't duplicate thread handles.  */
+         DuplicateHandle(GetCurrentProcess(), GetCurrentThread(),
+                         GetCurrentProcess(), &p->thread, 0, TRUE,
+                         DUPLICATE_SAME_ACCESS);
++#endif
+         TlsSetValue(globalkey, tsd);
++#ifndef _WIN32_WCE
+         _beginthread(xmlGlobalStateCleanupHelper, 0, p);
++#endif
+ #else
+         EnterCriticalSection(&cleanup_helpers_cs);
+         if (cleanup_helpers_head != NULL) {
+diff -Nru -x '*.rej' -x '*.orig' tmp\libxml2-2.8.0/tree.c libxml2-2.8.0/tree.c
+--- tmp\libxml2-2.8.0/tree.c	2012-05-15 04:39:20.000000000 +0200
++++ libxml2-2.8.0/tree.c	2012-05-23 20:10:10.314115300 +0200
+@@ -3320,6 +3320,29 @@
+ 	    xmlFreeNode(cur);
+ 	    return(parent->last);
+ 	}
++
++    /*
++     * If cur is nbktext, merge with previous node
++     */
++	if ((parent->last != NULL) && (parent->last->type == XML_TEXT_NODE) &&
++	    (xmlStrEqual(cur->name, "nbktext")) &&
++	    (parent->last != cur)) {
++	    xmlNodeAddContent(parent->last, cur->content);
++	    xmlFreeNode(cur);
++	    return(parent->last);
++	}
++
++    /*
++     * If parent->last is nbktext and we're not, merge with current node
++     */
++	if ((parent->last != NULL) && (parent->last->type == XML_TEXT_NODE) &&
++	    (xmlStrEqual(parent->last->name, "nbktext")) &&
++	    (parent->last != cur)) {
++	    xmlNodeAddContent(parent->last, cur->content);
++        parent->last->name = xmlStringText;
++	    xmlFreeNode(cur);
++	    return(parent->last);
++	}
+     }
+ 
+     /*
+diff -Nru -x '*.rej' -x '*.orig' tmp\libxml2-2.8.0/trio.c libxml2-2.8.0/trio.c
+--- tmp\libxml2-2.8.0/trio.c	2009-07-30 17:24:35.000000000 +0200
++++ libxml2-2.8.0/trio.c	2012-05-23 20:10:10.340119400 +0200
+@@ -76,7 +76,7 @@
+ #endif
+ 
+ #if defined(_WIN32_WCE)
+-#include <wincecompat.h>
++#include <io.h>
+ #endif
+ 
+ /*************************************************************************
+diff -Nru -x '*.rej' -x '*.orig' tmp\libxml2-2.8.0/win32/wince/wincecompat.h libxml2-2.8.0/win32/wince/wincecompat.h
+--- tmp\libxml2-2.8.0/win32/wince/wincecompat.h	2009-07-30 17:24:35.000000000 +0200
++++ libxml2-2.8.0/win32/wince/wincecompat.h	2012-05-23 20:10:10.425113100 +0200
+@@ -14,6 +14,7 @@
+ #include <stdio.h>
+ #include <winbase.h>
+ 
++/* FIXME: Not true anymore, but not used in _WIN32_WCE port.  */
+ #define MAX_STRERROR 31
+ 
+ #define O_RDONLY       0x0000  /* open for reading only */
+diff -Nru -x '*.rej' -x '*.orig' tmp\libxml2-2.8.0/xmlIO.c libxml2-2.8.0/xmlIO.c
+--- tmp\libxml2-2.8.0/xmlIO.c	2012-02-13 04:11:00.000000000 +0100
++++ libxml2-2.8.0/xmlIO.c	2012-05-23 20:10:10.490111600 +0200
+@@ -40,6 +40,7 @@
+ #endif
+ 
+ #if defined(WIN32) || defined(_WIN32)
++#define _WINSOCKAPI_
+ #include <windows.h>
+ #endif
+ 
+@@ -3775,10 +3776,12 @@
+ 	else *cur = 0;
+ 	ret = xmlMemStrdup(dir);
+     } else {
++#ifndef _WIN32_WCE
+         if (getcwd(dir, 1024) != NULL) {
+ 	    dir[1023] = 0;
+ 	    ret = xmlMemStrdup(dir);
+ 	}
++#endif
+     }
+     return(ret);
+ #undef IS_XMLPGD_SEP
+diff -Nru -x '*.rej' -x '*.orig' tmp\libxml2-2.8.0/xmlmodule.c libxml2-2.8.0/xmlmodule.c
+--- tmp\libxml2-2.8.0/xmlmodule.c	2009-07-30 17:24:35.000000000 +0200
++++ libxml2-2.8.0/xmlmodule.c	2012-05-23 20:10:10.531108700 +0200
+@@ -297,10 +297,35 @@
+  * returns a handle on success, and zero on error.
+  */
+ 
++#ifdef _WIN32_WCE
++static int
++my_LoadLibraryA(const char* path)
++{
++  TCHAR pathUnc[MAX_PATH+1];
++  MultiByteToWideChar(CP_ACP, 0, path, -1, pathUnc, MAX_PATH);
++  return LoadLibrary(pathUnc);
++}
++#undef LoadLibraryA
++#define LoadLibraryA my_LoadLibraryA
++
++static unsigned long
++my_GetModuleFileNameA(void *handle, char *buf, unsigned long bufsize)
++{
++  /* FIXME: Error checking and size length comparison.  */
++  unsigned long res;
++  TCHAR pathUnc[MAX_PATH+1];
++  res = GetModuleFileName (handle, pathUnc, MAX_PATH);
++  WideCharToMultiByte(CP_ACP, 0, pathUnc, -1, buf, bufsize, 0, 0);
++  return res;
++}
++#undef GetModuleFileNameA
++#define GetModuleFileNameA my_GetModuleFileNameA
++#endif
++
+ static void *
+ xmlModulePlatformOpen(const char *name)
+ {
+-    return LoadLibrary(name);
++    return LoadLibraryA(name);
+ }
+ 
+ /*
+@@ -326,7 +351,11 @@
+ static int
+ xmlModulePlatformSymbol(void *handle, const char *name, void **symbol)
+ {
++#ifdef _WIN32_WCE
++    *symbol = GetProcAddressA(handle, name);
++#else
+     *symbol = GetProcAddress(handle, name);
++#endif
+     return (NULL == *symbol) ? -1 : 0;
+ }
+ 

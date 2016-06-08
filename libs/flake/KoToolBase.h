@@ -229,6 +229,22 @@ public:
      */
     virtual void customMoveEvent(KoPointerEvent *event);
 
+
+
+    /**
+     * @return true if synthetic mouse events on the canvas should be eaten.
+     *
+     * For example, the guides tool should allow click and drag with touch,
+     * while the same touch events should be rejected by the freehand tool.
+     *
+     * These events are sent by the OS in Windows
+     */
+    bool maskSyntheticEvents() const;
+
+
+    /**
+     * @return true if the tool will accept raw QTouchEvents.
+     */
     virtual bool wantsTouch() const;
 
     /**
@@ -498,6 +514,11 @@ protected:
       * are able to type. If you don't set it, then single key shortcuts will get the key event and not this tool.
       */
     void setTextMode(bool value);
+
+    /**
+     * Allows subclasses to specify whether synthetic mouse events should be accepted.
+     */
+    void setMaskSyntheticEvents(bool value);
 
 protected:
     KoToolBase(KoToolBasePrivate &dd);

@@ -1,0 +1,9 @@
+{
+    "Id": "Dyna Tool",
+    "Type": "Service",
+    "X-KDE-Library": "kritatooldyna",
+    "X-KDE-ServiceTypes": [
+        "Krita/Tool"
+    ],
+    "X-Krita-Version": "28"
+}

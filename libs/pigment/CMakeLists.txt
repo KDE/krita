@@ -8,12 +8,17 @@ if (WIN32)
     set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
 endif ()
 
-include_directories( ${PIGMENT_INCLUDES}  ${Boost_INCLUDE_DIR})
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/resources
+    ${CMAKE_CURRENT_SOURCE_DIR}/compositeops)
+include_directories(SYSTEM
+    ${Boost_INCLUDE_DIRS}
+)
 
 set(FILE_OPENEXR_SOURCES)
 set(LINK_OPENEXR_LIB)
 if(OPENEXR_FOUND)
-    include_directories(${OPENEXR_INCLUDE_DIR})
+    include_directories(SYSTEM ${OPENEXR_INCLUDE_DIR})
     set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
     add_definitions(${OPENEXR_DEFINITIONS})
 endif()
@@ -21,9 +26,8 @@ endif()
 set(LINK_VC_LIB)
 
 if(HAVE_VC)
-    include_directories(${Vc_INCLUDE_DIR})
+    include_directories(SYSTEM ${Vc_INCLUDE_DIR})
     set(LINK_VC_LIB ${Vc_LIBRARIES})
-    kde_enable_exceptions()
     ko_compile_for_all_implementations_no_scalar(__per_arch_factory_objs compositeops/KoOptimizedCompositeOpFactoryPerArch.cpp)
 
     message("Following objects are generated from the per-arch lib")
@@ -92,26 +96,28 @@ add_library(kritapigment SHARED ${kritapigment_SRCS})
 generate_export_header(kritapigment)
 
 if (HAVE_VC)
-    target_link_libraries(kritapigment KF5::I18n KF5::ConfigCore)
-    target_link_libraries(kritapigment LINK_INTERFACE_LIBRARIES KF5::I18n )
+    target_link_libraries(kritapigment PUBLIC KF5::I18n KF5::ConfigCore)
 endif()
 
-target_link_libraries(
-    kritapigment
-    kritaplugin
-    ${EXTRA_LIBRARIES}
-    KF5::I18n 
-    Qt5::Gui
-    Qt5::Xml
-    ${WIN32_PLATFORM_NET_LIBS}
-    )
+target_include_directories( kritapigment
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/resources>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/compositeops>
+)
 
-target_link_libraries(
-    kritapigment LINK_INTERFACE_LIBRARIES kritaplugin Qt5::Xml Qt5::Gui ${EXTRA_LIBRARIES}
+target_link_libraries( kritapigment
+    PUBLIC
+        kritaplugin
+        ${EXTRA_LIBRARIES}
+        KF5::I18n 
+        Qt5::Core
+        Qt5::Gui
+        Qt5::Xml
+        ${WIN32_PLATFORM_NET_LIBS}
 )
 
 set_target_properties(kritapigment PROPERTIES
-    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 
 install(TARGETS kritapigment  ${INSTALL_TARGETS_DEFAULT_ARGS})

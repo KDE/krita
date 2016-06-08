@@ -22,6 +22,7 @@
 
 #include "KoPathPointData.h"
 #include "KoPathPoint.h"
+#include "KoPathShape.h"
 #include <klocalizedstring.h>
 
 KoSubpathRemoveCommand::KoSubpathRemoveCommand(KoPathShape *pathShape, int subpathIndex, KUndo2Command *parent)

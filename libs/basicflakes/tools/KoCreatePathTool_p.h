@@ -23,18 +23,19 @@
 #define KOCREATEPATHTOOL_P_H
 
 #include "KoCreatePathTool.h"
-#include "KoStrokeConfigWidget.h"
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
 #include "KoPathPointMergeCommand.h"
-#include "KoCanvasBase.h"
 #include "KoParameterShape.h"
-#include "KoViewConverter.h"
 #include "KoShapeManager.h"
 #include "KoSnapStrategy.h"
 #include "KoToolBase_p.h"
+#include <KoViewConverter.h>
 
 #include "math.h"
+
+class KoStrokeConfigWidget;
+class KoConverter;
 
 /// Small helper to keep track of a path point and its parent path shape
 struct PathConnectionPoint {

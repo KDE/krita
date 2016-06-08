@@ -1,0 +1,9 @@
+{
+    "Id": "Raindrops Filter",
+    "Type": "Service",
+    "X-KDE-Library": "kritaraindropsfilter",
+    "X-KDE-ServiceTypes": [
+        "Krita/Filter"
+    ],
+    "X-Krita-Version": "28"
+}

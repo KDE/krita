@@ -29,38 +29,49 @@
 #include <QDir>
 #include <QDate>
 #include <QLoggingCategory>
+#include <QLocale>
+#include <QSettings>
 
 #include <KisApplication.h>
 #include <KoConfig.h>
+#include <KoResourcePaths.h>
 
 #include "data/splash/splash_screen.xpm"
 #include "data/splash/splash_holidays.xpm"
-#include "ui/KisDocument.h"
+#include "KisDocument.h"
 #include "kis_splash_screen.h"
 #include "KisPart.h"
 #include "KisApplicationArguments.h"
 
 #if defined Q_OS_WIN
-#include <Windows.h>
+#include <windows.h>
 #include <stdlib.h>
-#include <ui/input/wintab/kis_tablet_support_win.h>
+#include <kis_tablet_support_win.h>
 
 #elif defined HAVE_X11
-    #include <ui/input/wintab/kis_tablet_support_x11.h>
+    #include <kis_tablet_support_x11.h>
+    #include <kis_xi2_event_filter.h>
 #endif
 
 #if defined HAVE_KCRASH
 #include <kcrash.h>
+
+#elif defined USE_BREAKPAD
+    #include "kis_crash_handler.h"
 #endif
 extern "C" int main(int argc, char **argv)
 {
-    bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
-
-#ifdef HAVE_X11
-    if (runningInKDE) {
-        qputenv("QT_NO_GLIB", "1");
-    }
+    /**
+     * Add a workaround for Qt 5.6, which implemented compression of the tablet events.
+     * Since Qt 5.6.1 there will be this hacky environment variable option. After that,
+     * Qt developers promised to give us better control for that. Please make sure the env
+     * variable is set *before* the construction of QApplication!
+     */
+#if defined Q_OS_LINUX && QT_VERSION >= 0x050600
+    qputenv("QT_XCB_NO_EVENT_COMPRESSION", "1");
 #endif
+
+    bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
 
     /**
      * Disable debug output by default. (krita.input enables tablet debugging.)
@@ -71,35 +82,88 @@ extern "C" int main(int argc, char **argv)
      *
      * See: http://doc.qt.io/qt-5/qloggingcategory.html
      */
-    QLoggingCategory::setFilterRules("calligra*=false\n"
-                                     "krita*=false\n"
+    QLoggingCategory::setFilterRules("krita*.debug=false\n"
+                                     "krita*.warning=true\n"
                                      "krita.tabletlog=true");
 
-
     // A per-user unique string, without /, because QLocalServer cannot use names with a / in it
-    QString key = "Krita3" +
-                  QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");
+    QString key = "Krita3" + QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");
     key = key.replace(":", "_").replace("\\","_");
-#if defined HAVE_X11
-    // we need to call XInitThreads() (which this does) because of gmic (and possibly others)
-    // do their own X11 stuff in their own threads
-    // this call must happen before the creation of the application (see AA_X11InitThreads docs)
-    QCoreApplication::setAttribute(Qt::AA_X11InitThreads, true);
-#endif
 
-#if defined HAVE_OPENGL
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
-#endif
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+
+#if QT_VERSION >= 0x050600
+    if (!qgetenv("KRITA_HIDPI").isEmpty()) {
+        QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    }
+#endif
 
     KLocalizedString::setApplicationDomain("krita");
 
-    QCoreApplication::addLibraryPath(QCoreApplication::applicationDirPath());
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
+
+#ifdef Q_OS_LINUX
+    qputenv("XDG_DATA_DIRS", QFile::encodeName(KoResourcePaths::getApplicationRoot() + "share") + ":" + qgetenv("XDG_DATA_DIRS"));
+#else
+    qputenv("XDG_DATA_DIRS", QFile::encodeName(KoResourcePaths::getApplicationRoot() + "share"));
+#endif
+
+    qDebug() << "Setting XDG_DATA_DIRS" << qgetenv("XDG_DATA_DIRS");
+    qDebug() << "Available translations" << KLocalizedString::availableApplicationTranslations();
+    qDebug() << "Available domain translations" << KLocalizedString::availableDomainTranslations("krita");
+
+    // Now that the paths are set, set the language. First check the override from the langage
+    // selection dialog.
+    KLocalizedString::clearLanguages();
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
+    languageoverride.beginGroup(QStringLiteral("Language"));
+    QString language = languageoverride.value(qAppName(), "").toString();
+
+    qDebug() << "Override language:" << language;
+
+    if (!language.isEmpty()) {
+        KLocalizedString::setLanguages(language.split(":"));
+        // And override Qt's locale, too
+        qputenv("LANG", language.toLatin1());
+        QLocale locale(language.split(":").first());
+        QLocale::setDefault(locale);
+        qDebug() << "Qt ui languages" << locale.uiLanguages();
+    }
+    else {
+        // And if there isn't one, check the one set by the system.
+        // XXX: This doesn't work, for some !@#$% reason.
+        QLocale locale = QLocale::system();
+        if (locale.bcp47Name() != QStringLiteral("en")) {
+            KLocalizedString::setLanguages(QStringList() << locale.bcp47Name());
+        }
+    }
+
+#ifdef Q_OS_WIN
+    QDir appdir(KoResourcePaths::getApplicationRoot());
+    qputenv("PATH", QFile::encodeName(appdir.absolutePath() + "/bin" + ";"
+                                      + appdir.absolutePath() + "/lib" + ";"
+                                      + appdir.absolutePath() + "/lib/kde4" + ";"
+                                      + appdir.absolutePath() + "/Frameworks" + ";"
+                                      + appdir.absolutePath()));
+
+    qDebug() << "PATH" << qgetenv("PATH");
+#endif
+
+    if (qApp->applicationDirPath().contains(KRITA_BUILD_DIR)) {
+        qFatal("FATAL: You're trying to run krita from the build location. You can only run Krita from the installation location.");
+    }
+
+
 #if defined HAVE_KCRASH
     KCrash::initialize();
+#elif defined USE_BREAKPAD
+    qputenv("KDE_DEBUG", "1");
+    KisCrashHandler crashHandler;
+    Q_UNUSED(crashHandler);
 #endif
 
     // If we should clear the config, it has to be done as soon as possible after
@@ -127,6 +191,10 @@ extern "C" int main(int argc, char **argv)
         app.setAttribute(Qt::AA_DontShowIconsInMenus);
     }
 
+#if defined HAVE_X11
+    app.installNativeEventFilter(KisXi2EventFilter::instance());
+#endif
+
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,
     // so use an xpm.
@@ -142,6 +210,12 @@ extern "C" int main(int argc, char **argv)
 
     app.setSplashScreen(splash);
 
+
+#if defined Q_OS_WIN
+    KisTabletSupportWin::init();
+    // app.installNativeEventFilter(new KisTabletSupportWin());
+#endif
+
     if (!app.start(args)) {
         return 1;
     }
@@ -152,7 +226,6 @@ extern "C" int main(int argc, char **argv)
 
     QObject::connect(&app, SIGNAL(fileOpenRequest(QString)),
                      &app, SLOT(fileOpenRequested(QString)));
-
 
     int state = app.exec();
 

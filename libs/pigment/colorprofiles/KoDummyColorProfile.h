@@ -29,15 +29,25 @@ public:
     virtual ~KoDummyColorProfile();
     virtual KoColorProfile* clone() const;
     virtual bool valid() const;
+    virtual float version() const;
     virtual bool isSuitableForOutput() const;
     virtual bool isSuitableForPrinting() const;
     virtual bool isSuitableForDisplay() const;
+    virtual bool supportsPerceptual() const;
+    virtual bool supportsSaturation() const;
+    virtual bool supportsAbsolute() const;
+    virtual bool supportsRelative() const;
     virtual bool hasColorants() const;
+    virtual bool hasTRC() const;
     virtual QVector <double> getColorantsXYZ() const;
     virtual QVector <double> getColorantsxyY() const;
     virtual QVector <double> getWhitePointXYZ() const;
     virtual QVector <double> getWhitePointxyY() const;
     virtual QVector <double> getEstimatedTRC() const;
+    virtual void linearizeFloatValue(QVector <double> & Value) const;
+    virtual void delinearizeFloatValue(QVector <double> & Value) const;
+    virtual void linearizeFloatValueFast(QVector <double> & Value) const;
+    virtual void delinearizeFloatValueFast(QVector <double> & Value) const;
     virtual bool operator==(const KoColorProfile&) const;
 };
 

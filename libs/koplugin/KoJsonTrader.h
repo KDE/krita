@@ -59,11 +59,9 @@ public:
      * @param servicetype A service type like 'KMyApp/Plugin' or 'KFilePlugin'.
      * @param mimetype    A MimeType to constrain the search.
      *
-     *
      * @return A list of QPluginLoader that satisfy the query
      */
-     QList<QPluginLoader *> query(const QString &servicetype, const QString &mimetype);
-
+     QList<QPluginLoader *> query(const QString &servicetype, const QString &mimetype) const;
 
      // Note: this should not be used
      KoJsonTrader();

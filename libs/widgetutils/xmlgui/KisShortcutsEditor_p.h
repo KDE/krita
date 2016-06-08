@@ -69,9 +69,6 @@ public:
     // clear all shortcuts
     void clearConfiguration();
 
-    // Import shortcuts from file
-    void importConfiguration(KConfigBase *config);
-
     //changeXXX were described as "conflict resolution functions"
     void changeKeyShortcut(KisShortcutsEditorItem *item, uint column, const QKeySequence &capture);
 

@@ -37,15 +37,16 @@ KoHashGeneratorProvider::~KoHashGeneratorProvider()
     qDeleteAll(hashGenerators);
 }
 
-KoHashGenerator *KoHashGeneratorProvider::getGenerator(QString algorithm)
+KoHashGenerator *KoHashGeneratorProvider::getGenerator(const QString &algorithm)
 {
     QMutexLocker locker(&mutex);
     return hashGenerators.value(algorithm);
 }
 
-void KoHashGeneratorProvider::setGenerator(QString algorithm, KoHashGenerator *generator)
+void KoHashGeneratorProvider::setGenerator(const QString &algorithm, KoHashGenerator *generator)
 {
-    if(hashGenerators.contains(algorithm)) {
+    if (hashGenerators.contains(algorithm)) {
+        delete hashGenerators.take(algorithm);
         hashGenerators[algorithm] = generator;
     }
     else

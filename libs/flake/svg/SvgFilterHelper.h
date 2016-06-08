@@ -20,8 +20,10 @@
 #ifndef SVGFILTERHELPER_H
 #define SVGFILTERHELPER_H
 
-#include <KoXmlReader.h>
 #include <QSizeF>
+#include <QPointF>
+
+#include <KoXmlReader.h>
 
 class QRectF;
 

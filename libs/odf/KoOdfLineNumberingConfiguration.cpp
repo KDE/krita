@@ -22,6 +22,7 @@
 #include "KoXmlNS.h"
 #include "KoUnit.h"
 #include "KoXmlWriter.h"
+#include "KoXmlReader.h"
 #include "KoOdfNumberDefinition.h"
 
 class Q_DECL_HIDDEN KoOdfLineNumberingConfiguration::Private

@@ -48,9 +48,6 @@ public:
     explicit KoCanvasControllerWidget(KActionCollection * actionCollection, QWidget *parent = 0);
     virtual ~KoCanvasControllerWidget();
 
-    /// Reimplemented from QObject
-    virtual bool eventFilter(QObject *watched, QEvent *event);
-
     /**
      * Reimplemented from QAbstractScrollArea.
      */

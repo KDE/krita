@@ -21,6 +21,7 @@
 #include "KoStyleStack.h"
 #include "KoUnit.h"
 #include "KoXmlNS.h"
+#include "KoXmlReader.h"
 
 #include <OdfDebug.h>
 

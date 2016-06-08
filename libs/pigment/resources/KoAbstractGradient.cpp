@@ -18,7 +18,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "KoAbstractGradient.h"
+#include <resources/KoAbstractGradient.h>
 #include "KoColorSpaceRegistry.h"
 
 #include <KoColor.h>

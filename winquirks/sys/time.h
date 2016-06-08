@@ -3,9 +3,9 @@
 
 #include <time.h>
 #include <windows.h>
-#include <WinSock2.h>
 
 #if defined(_MSC_VER) || defined(_MSC_EXTENSIONS)
+  #include <WinSock2.h>
   #define DELTA_EPOCH_IN_MICROSECS  11644473600000000Ui64
 #else
   #define DELTA_EPOCH_IN_MICROSECS  11644473600000000ULL

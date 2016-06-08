@@ -22,7 +22,6 @@
 #include <QList>
 #include <QObject>
 #include <QString>
-#include <QTimer>
 #include <QHash>
 
 #include <QKeySequence>

@@ -27,7 +27,6 @@
 
 #include "kritaflake_export.h"
 
-class QGraphicsObject;
 class KUndo2Command;
 
 class KoUnit;
@@ -40,13 +39,13 @@ class KoShapeBasedDocumentBase;
 class KoCanvasController;
 class KoShape;
 class KoSnapGuide;
-class KoGuidesData;
 
 class QWidget;
 class QCursor;
 class QObject;
 class QPointF;
 class QRectF;
+class QSizeF;
 
 /**
  * KoCanvasBase is the interface actual application canvas classes
@@ -71,7 +70,7 @@ public:
     /**
      * @return true if opengl can be used directly on the canvas
      */
-    virtual bool canvasIsOpenGL() { return false; }
+    virtual bool canvasIsOpenGL() const { return false; }
 
     /**
      * retrieve the grid size setting.
@@ -79,7 +78,7 @@ public:
      * @param horizontal a pointer to a qreal that will be filled with the horizontal grid-spacing
      * @param vertical a pointer to a qreal that will be filled with the vertical grid-spacing
      */
-    virtual void gridSize(qreal *horizontal, qreal *vertical) const = 0;
+    virtual void gridSize(QPointF *offset, QSizeF *spacing) const = 0;
 
     /**
      * return if snap to grid is enabled.
@@ -149,16 +148,6 @@ public:
      * Return the widget that will be added to the scrollArea.
      */
     virtual const QWidget *canvasWidget() const = 0;
-
-    /**
-     * Return the widget that will be added to the scrollArea.
-     */
-    virtual QGraphicsObject *canvasItem() { return 0; }
-
-    /**
-     * Return the widget that will be added to the scrollArea.
-     */
-    virtual const QGraphicsObject *canvasItem() const{ return 0; }
 
     /**
      * Return the unit of the current document for initialization of the widgets created
@@ -236,23 +225,6 @@ public:
      * Returns the snap guide of the canvas
      */
     KoSnapGuide *snapGuide() const;
-
-    /**
-     * This factory method creates a new widget for the user to change
-     * the snapping guide policies object from snapGuide().
-     */
-    QWidget *createSnapGuideConfigWidget() const;
-
-    /**
-     * Returns the guides data.
-     *
-     * Applications that want to have guides should reimplement this
-     * function and return the KOGuideData object.
-     * The default implementation returns 0.
-     *
-     * @return pointer to the guide data or zero if there is none
-     */
-    virtual KoGuidesData *guidesData();
 
     /// called by KoCanvasController to set the controller that handles this canvas.
     void setCanvasController(KoCanvasController *controller);

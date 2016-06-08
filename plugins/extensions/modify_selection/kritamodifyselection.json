@@ -1,0 +1,9 @@
+{
+    "Id": "Modify Selection",
+    "Type": "Service",
+    "X-KDE-Library": "kritamodifyselection",
+    "X-KDE-ServiceTypes": [
+        "Krita/ViewPlugin"
+    ],
+    "X-Krita-Version": "28"
+}

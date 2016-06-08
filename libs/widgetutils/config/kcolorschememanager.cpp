@@ -76,7 +76,7 @@ void KColorSchemeModel::init()
     beginResetModel();
     m_data.clear();
 
-    const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
+    const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::AppDataLocation,
                              QStringLiteral("color-schemes"),
                              QStandardPaths::LocateDirectory);
     QStringList schemeFiles;

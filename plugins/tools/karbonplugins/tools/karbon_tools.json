@@ -1,0 +1,11 @@
+{
+    "Id": "Karbon Tools",
+    "Type": "Service",
+    "X-Flake-MinVersion": "28",
+    "X-Flake-PluginVersion": "28",
+    "X-KDE-Library": "krita_karbon_tools",
+    "X-KDE-PluginInfo-Name": "krita_karbontools",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Tool"
+    ]
+}

@@ -21,18 +21,21 @@
 #ifndef KO_RESOURCEMANAGER_P_H
 #define KO_RESOURCEMANAGER_P_H
 
-#include <QList>
-#include <QVariant>
+#include <QObject>
 #include <QSizeF>
 #include <QHash>
 
+#include "kritaflake_export.h"
 #include <KoColor.h>
 #include <KoUnit.h>
+#include "KoDerivedResourceConverter.h"
 
 class KoShape;
+class QVariant;
 
-class KoResourceManager
+class KRITAFLAKE_EXPORT KoResourceManager : public QObject
 {
+    Q_OBJECT
 public:
 
     KoResourceManager() {}
@@ -140,11 +143,49 @@ public:
      */
     void clearResource(int key);
 
+    /**
+     * Some of the resources may be "derive" from the other. For
+     * example opacity, composite op and erase mode properties are
+     * contained inside a paintop preset, so we need not create a
+     * separate resource for them. Instead we created a derived resource,
+     * that loads/saves values from/to another resource, but has its own
+     * "resource changed" signal (via a different key).
+     *
+     * When a parent resource changes, the resource manager emits
+     * update signals for all its derived resources. 
+     */
+    void addDerivedResourceConverter(KoDerivedResourceConverterSP converter);
+
+    /**
+     * @return true if the resource with \p key is a derived resource
+     *         (has a converter installed)
+     *
+     * @see addDerivedResourceConverter()
+     */
+    bool hasDerivedResourceConverter(int key);
+
+    /**
+     * Removes a derived resource converter. If you rty to add a
+     * resource with \p key it will be treated as a usual resource.
+     *
+     * @see addDerivedResourceConverter()
+     */
+    void removeDerivedResourceConverter(int key);
+
+Q_SIGNALS:
+    void resourceChanged(int key, const QVariant &value);
+
+private:
+    void notifyResourceChanged(int key, const QVariant &value);
+
 private:
     KoResourceManager(const KoResourceManager&);
     KoResourceManager& operator=(const KoResourceManager&);
 
     QHash<int, QVariant> m_resources;
+
+    QHash<int, KoDerivedResourceConverterSP> m_derivedResources;
+    QMultiHash<int, KoDerivedResourceConverterSP> m_derivedFromSource;
 };
 
 #endif

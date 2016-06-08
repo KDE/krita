@@ -20,7 +20,7 @@
 
 const QLoggingCategory &STORE_LOG() \
 {
-    static const QLoggingCategory category("calligra.lib.store");
+    static const QLoggingCategory category("krita.lib.store");
     return category;
 }
 

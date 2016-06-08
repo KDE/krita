@@ -1,5 +1,4 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-include_directories(  ${KOWIDGETS_INCLUDES}  ${CMAKE_SOURCE_DIR}/libs/widgets)
 
 add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
 add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}")
@@ -21,7 +20,7 @@ target_link_libraries(zoomcontroller_test  kritawidgets Qt5::Test)
 ########### next target ###############
 
 set(KoResourceTaggingTest_SRCS KoResourceTaggingTest.cpp )
-kde4_add_unit_test(KoResourceTaggingTest TESTNAME libs-widgets-KoResourceTaggingTest  ${KoResourceTaggingTest_SRCS})
+kde4_add_broken_unit_test(KoResourceTaggingTest TESTNAME libs-widgets-KoResourceTaggingTest  ${KoResourceTaggingTest_SRCS})
 target_link_libraries(KoResourceTaggingTest  kritawidgets Qt5::Test)
 
 ########### end ###############

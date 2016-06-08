@@ -24,7 +24,6 @@
 #include <kundo2command.h>
 #include <QList>
 #include "KoPathBaseCommand.h"
-//#include "KoPathShape.h"
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
 #include "kritaflake_export.h"

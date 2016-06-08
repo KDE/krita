@@ -1,0 +1,9 @@
+{
+    "Id": "Krita Undo History Docker plugin",
+    "Type": "Service",
+    "X-KDE-Library": "kritahistorydocker",
+    "X-KDE-ServiceTypes": [
+        "Krita/Dock"
+    ],
+    "X-Krita-Version": "28"
+}

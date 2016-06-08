@@ -1,0 +1,9 @@
+{
+    "Id": "Default Tools",
+    "Type": "Service",
+    "X-KDE-Library": "kritadefaulttools",
+    "X-KDE-ServiceTypes": [
+        "Krita/Tool"
+    ],
+    "X-Krita-Version": "28"
+}

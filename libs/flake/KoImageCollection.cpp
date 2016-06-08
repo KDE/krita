@@ -28,8 +28,7 @@
 
 #include <QMap>
 #include <FlakeDebug.h>
-#include <QMimeDatabase>
-#include <QMimeType>
+#include <KisMimeDatabase.h>
 
 
 class Q_DECL_HIDDEN KoImageCollection::Private
@@ -86,8 +85,7 @@ bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWrit
                 store->close();
                 // TODO error handling
                 if (ok) {
-                    QMimeDatabase db;
-                    const QString mimetype(db.mimeTypeForFile(imagesToSaveIter.value(), QMimeDatabase::MatchExtension).name());
+                    const QString mimetype = KisMimeDatabase::mimeTypeForFile(imagesToSaveIter.value());
                     manifestWriter->addManifestEntry(imagesToSaveIter.value(), mimetype);
                 } else {
                     warnFlake << "saving image" << imagesToSaveIter.value() << "failed";

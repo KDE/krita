@@ -1,0 +1,9 @@
+{
+    "Id": "Tangent Normal Brush",
+    "Type": "Service",
+    "X-KDE-Library": "kritatangentnormalpaintop",
+    "X-KDE-ServiceTypes": [
+        "Krita/Paintop"
+    ],
+    "X-Krita-Version": "28"
+}

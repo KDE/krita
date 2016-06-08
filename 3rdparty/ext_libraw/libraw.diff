@@ -1,0 +1,17 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c5a1919..3b6fb6b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -577,9 +577,9 @@ INSTALL(TARGETS raw_r
+         ARCHIVE DESTINATION lib${LIB_SUFFIX}
+        )
+ 
+-# Install find cmake script to the system for client applications.
+-INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/FindLibRaw.cmake
+-        DESTINATION ${CMAKE_ROOT}/Modules)
++## Install find cmake script to the system for client applications.
++#INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/FindLibRaw.cmake
++#        DESTINATION ${CMAKE_ROOT}/Modules)
+ 
+ # Install doc data files.
+ IF(NOT WIN32)

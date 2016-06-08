@@ -16,10 +16,10 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-#include "KoColorSet.h"
+#include <resources/KoColorSet.h>
 
 #include <sys/types.h>
-#include <netinet/in.h> // htonl
+#include <QtEndian> // qFromLittleEndian
 
 #include <QImage>
 #include <QPoint>
@@ -233,12 +233,9 @@ void KoColorSet::add(const KoColorSetEntry & c)
 
 void KoColorSet::remove(const KoColorSetEntry & c)
 {
-    QVector<KoColorSetEntry>::iterator it = m_colors.begin();
-    QVector<KoColorSetEntry>::iterator end = m_colors.end();
-
-    while (it != end) {
+    for (auto it = m_colors.begin(); it != m_colors.end(); /*noop*/) {
         if ((*it) == c) {
-            m_colors.erase(it);
+            it = m_colors.erase(it);
             return;
         }
         ++it;
@@ -377,7 +374,7 @@ bool KoColorSet::loadRiff()
 
     RiffHeader header;
     memcpy(&header, m_data.constData(), sizeof(RiffHeader));
-    header.colorcount = ntohl(header.colorcount);
+    header.colorcount = qFromBigEndian(header.colorcount);
 
     for (int i = sizeof(RiffHeader);
          (i < (int)(sizeof(RiffHeader) + header.colorcount) && i < m_data.size());
@@ -442,7 +439,7 @@ quint16 readShort(QIODevice *io) {
     quint16 val;
     quint64 read = io->read((char*)&val, 2);
     if (read != 2) return false;
-    return ntohs(val);
+    return qFromBigEndian(val);
 }
 
 bool KoColorSet::loadAco()

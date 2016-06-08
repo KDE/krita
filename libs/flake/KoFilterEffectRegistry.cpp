@@ -22,6 +22,7 @@
 #include <QGlobalStatic>
 
 #include "KoFilterEffect.h"
+#include "KoFilterEffectFactoryBase.h"
 #include <KoPluginLoader.h>
 
 #include <FlakeDebug.h>

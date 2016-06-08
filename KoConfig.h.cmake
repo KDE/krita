@@ -1,6 +1,6 @@
 // Check windows
 #ifdef Q_OS_WIN
-   #if _WIN64
+   #ifdef _WIN64
      #define ENV64BIT
   #else
     #define ENV32BIT
@@ -28,6 +28,9 @@
 #cmakedefine WORDS_BIGENDIAN ${CMAKE_WORDS_BIGENDIAN}
 #endif
 
+/* Defines if the krita crash handler is built */
+#cmakedefine USE_BREAKPAD 1
+
 /* Number of bits in a file offset, on hosts where this is settable. */
 #define _FILE_OFFSET_BITS 64
 
@@ -39,9 +42,6 @@
 
 /* Defines if your system has the OpenEXR library */
 #cmakedefine HAVE_OPENEXR 1
-
-/* Defines if you have GL (Mesa, OpenGL, ...) and Qt GL support */
-#cmakedefine HAVE_OPENGL 1
 
 /* Defines if we use lcms2 */
 #cmakedefine HAVE_LCMS2 1
@@ -58,6 +58,5 @@
 /* Defines if KCrash is present */
 #cmakedefine HAVE_KCRASH 1
 
-/* This file contains all the paths that change when changing the installation prefix */
-#define CALLIGRAPREFIX "${CMAKE_INSTALL_PREFIX}"
-
+/* This variable contains the path to the current build directory */
+#define KRITA_BUILD_DIR "${CMAKE_BINARY_DIR}"

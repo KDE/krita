@@ -1,9 +1,9 @@
 /**
  * \mainpage
  *
- * KoOdf is a library which contains all kind of classes for ODF
- * (OpenDocument Format) in Calligra.
+ * KritaOdf is a library which contains all kind of classes for ODF
+ * (OpenDocument Format) in Krita.
  */
 
-// DOXYGEN_SET_PROJECT_NAME = KoOdf
+// DOXYGEN_SET_PROJECT_NAME = KritaOdf
 // DOXYGEN_SET_IGNORE_PREFIX = Ko K

@@ -1,5 +1,3 @@
-include_directories( ${KOWIDGETS_INCLUDES} )
-
 #add_subdirectory(demo)
 
 
@@ -13,5 +11,5 @@ set(libsvm_LIB_SRCS
 
 #target_link_libraries(libsvm   Qt5::Gui )
 
-#set_target_properties(libsvm PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+#set_target_properties(libsvm PROPERTIES VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION} )
 

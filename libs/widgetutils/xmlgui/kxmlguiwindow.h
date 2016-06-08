@@ -132,9 +132,9 @@ public:
      * setupGUI() instead of this one since it does more things for free
      * like setting up the toolbar/shortcut edit actions, etc.
      *
-     * If @p xmlfile is NULL,
+     * If @p xmlfile is 0,
      * then it will try to construct a local XML filename like
-     * appnameui.rc where 'appname' is your app's name.  If that file
+     * appnameui.xmlgui where 'appname' is your app's name.  If that file
      * does not exist, then the XML UI code will only use the global
      * (standard) XML file for the layout purposes.
      *
@@ -154,7 +154,7 @@ public:
      * If your application uses a non-standard xmlgui resource file then you can
      * specify the exact position of the menu / menu item by adding a
      * &lt;Merge name="StandardToolBarMenuHandler" /&gt;
-     * line to the settings menu section of your resource file ( usually appname.rc ).
+     * line to the settings menu section of your resource file ( usually appname.xmlgui ).
      *
      * Note that you should enable this feature before calling createGUI() ( or similar ) .
      */

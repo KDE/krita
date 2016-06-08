@@ -1,0 +1,11 @@
+{
+    "Id": "Artistic Text Shape",
+    "Type": "Service",
+    "X-Flake-MinVersion": "28",
+    "X-Flake-PluginVersion": "28",
+    "X-KDE-Library": "krita_shape_artistictext",
+    "X-KDE-PluginInfo-Name": "krita_artistictextshape",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Shape"
+    ]
+}

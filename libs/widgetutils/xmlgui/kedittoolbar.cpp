@@ -422,7 +422,7 @@ public:
                               const QString &cName, KActionCollection *collection)
         : m_collection(collection),
           m_widget(widget),
-          m_factory(NULL),
+          m_factory(0),
           m_loadedOnce(false)
     {
         m_componentName = cName;
@@ -462,7 +462,7 @@ public:
 
     QString xmlFile(const QString &xml_file) const
     {
-        return xml_file.isEmpty() ? m_componentName + QStringLiteral("ui.rc") : xml_file;
+        return xml_file.isEmpty() ? m_componentName + QStringLiteral("ui.xmlgui") : xml_file;
     }
 
     /**
@@ -708,7 +708,7 @@ void KEditToolBarPrivate::defaultClicked()
         if (slash) {
             m_file = m_file.mid(slash);
         }
-        const QString xml_file = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +
+        const QString xml_file = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) +
             QStringLiteral("/kxmlgui5/") + QCoreApplication::instance()->applicationName() + QLatin1Char('/') + m_file;
 
         if (QFile::exists(xml_file))
@@ -760,17 +760,14 @@ void KEditToolBarPrivate::okClicked()
         return;
     }
 
-    if (!m_widget->save()) {
-        // some error box here is needed
-    } else {
-        // Do not emit the "newToolBarConfig" signal again here if the "Apply"
-        // button was already pressed and no further changes were made.
-        if (m_buttonBox->button(QDialogButtonBox::Apply)->isEnabled()) {
-            emit q->newToolBarConfig();
-            emit q->newToolbarConfig(); // compat
-        }
-        q->accept();
+    // Do not rebuild GUI and emit the "newToolBarConfig" signal again here if the "Apply"
+    // button was already pressed and no further changes were made.
+    if (m_buttonBox->button(QDialogButtonBox::Apply)->isEnabled()) {
+        m_widget->save();
+        emit q->newToolBarConfig();
+        emit q->newToolbarConfig(); // compat
     }
+    q->accept();
 }
 
 void KEditToolBarPrivate::applyClicked()
@@ -830,7 +827,7 @@ void KEditToolBarWidgetPrivate::initOldStyle(const QString &resourceFile,
 
     // handle the merging
     if (global) {
-        m_widget->loadStandardsXmlFile();    // ui_standards.rc
+        m_widget->loadStandardsXmlFile();    // ui_standards.xmlgui
     }
     const QString localXML = loadXMLFile(resourceFile);
     m_widget->setXML(localXML, global ? true /*merge*/ : false);
@@ -906,7 +903,7 @@ void KEditToolBarWidgetPrivate::initFromFactory(KXMLGUIFactory *factory,
     }
 }
 
-bool KEditToolBarWidget::save()
+void KEditToolBarWidget::save()
 {
     //qDebug(240) << "KEditToolBarWidget::save";
     XmlDataList::Iterator it = d->m_xmlFiles.begin();
@@ -940,12 +937,10 @@ bool KEditToolBarWidget::save()
     }
 
     if (!d->m_factory) {
-        return true;
+        return;
     }
 
     rebuildKXMLGUIClients();
-
-    return true;
 }
 
 void KEditToolBarWidget::rebuildKXMLGUIClients()
@@ -981,7 +976,7 @@ void KEditToolBarWidget::rebuildKXMLGUIClients()
             // passing an empty stream forces the clients to reread the XML
             client->setXMLGUIBuildDocument(QDomDocument());
 
-            // for the shell, merge in ui_standards.rc
+            // for the shell, merge in ui_standards.xmlgui
             if (client == firstClient) { // same assumption as in the ctor: first==shell
                 client->loadStandardsXmlFile();
             }
@@ -989,7 +984,7 @@ void KEditToolBarWidget::rebuildKXMLGUIClients()
             // and this forces it to use the *new* XML file
             client->setXMLFile(file, client == firstClient /* merge if shell */);
 
-            // [we can't use reloadXML, it doesn't load ui_standards.rc]
+            // [we can't use reloadXML, it doesn't load ui_standards.xmlgui]
         }
     }
 
@@ -1058,23 +1053,23 @@ void KEditToolBarWidgetPrivate::setupLayout()
     // The buttons in the middle
 
     m_upAction     = new QToolButton(m_widget);
-    m_upAction->setIcon(KisIconUtils::loadIcon(QStringLiteral("go-up")));
+    m_upAction->setIcon(KisIconUtils::loadIcon(QStringLiteral("arrow-up")));
     m_upAction->setEnabled(false);
     m_upAction->setAutoRepeat(true);
     QObject::connect(m_upAction, SIGNAL(clicked()), m_widget, SLOT(slotUpButton()));
 
     m_insertAction = new QToolButton(m_widget);
-    m_insertAction->setIcon(KisIconUtils::loadIcon(QApplication::isRightToLeft() ? QStringLiteral("go-previous") : QLatin1String("go-next")));
+    m_insertAction->setIcon(KisIconUtils::loadIcon(QApplication::isRightToLeft() ? QStringLiteral("arrow-left") : QLatin1String("arrow-right")));
     m_insertAction->setEnabled(false);
     QObject::connect(m_insertAction, SIGNAL(clicked()), m_widget, SLOT(slotInsertButton()));
 
     m_removeAction = new QToolButton(m_widget);
-    m_removeAction->setIcon(KisIconUtils::loadIcon(QApplication::isRightToLeft() ? QStringLiteral("go-next") : QLatin1String("go-previous")));
+    m_removeAction->setIcon(KisIconUtils::loadIcon(QApplication::isRightToLeft() ? QStringLiteral("arrow-right") : QLatin1String("arrow-left")));
     m_removeAction->setEnabled(false);
     QObject::connect(m_removeAction, SIGNAL(clicked()), m_widget, SLOT(slotRemoveButton()));
 
     m_downAction   = new QToolButton(m_widget);
-    m_downAction->setIcon(KisIconUtils::loadIcon(QStringLiteral("go-down")));
+    m_downAction->setIcon(KisIconUtils::loadIcon(QStringLiteral("arrow-down")));
     m_downAction->setEnabled(false);
     m_downAction->setAutoRepeat(true);
     QObject::connect(m_downAction, SIGNAL(clicked()), m_widget, SLOT(slotDownButton()));

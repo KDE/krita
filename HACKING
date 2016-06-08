@@ -26,6 +26,8 @@ C++11 and C++14
 
     Before using other new features, discuss on #krita so we can expand this list.
 
+    Our minimum gcc version is 4.5, shipped with Ubuntu 12.04
+
 
 Indentation
 
@@ -40,7 +42,13 @@ Includes
 Initializers
 
 	Avoid as much as possible initializers in the body of the constructor. Use
-	initializer lists instead.
+	initializer lists instead. Write the initializers as followed:
+
+    Class(A a, B b)
+        : Subclass(a)
+        , m_b(b)
+    {
+    }
 
 Scope prefixes
 
@@ -62,10 +70,8 @@ Getter/setter
 Class naming
 
 	If you use a well-known design pattern, name the class according to the design
-	pattern. All files should start with 'kis_', all classes with the 'Kis' prefix.
-	In filenames, separate words with an underscore; in classnames use capital letters. 
-    New implementation files end in .cpp, not in .cc anymore.
-	Example: kis_new_class.h/KisNewClass.
+	pattern. All files should start with 'Kis', all classes with the 'Kis' prefix.
+    This filename should be the same as the classname: KisNewClass.h, KisNewClass.
 
 Function naming
 

@@ -19,7 +19,7 @@
 #include "DebugPigment.h"
 const QLoggingCategory &PIGMENT_log() \
 {
-    static const QLoggingCategory category("calligra.lib.pigment");
+    static const QLoggingCategory category("krita.lib.pigment");
     return category;
 }
 

@@ -119,7 +119,7 @@ public:
 
     /**
      * The name (absolute or relative) of your application's UI resource file
-     * is assumed to be share/apps/appname/appnameui.rc though this can be
+     * is assumed to be share/apps/appname/appnameui.xmlgui though this can be
      * overridden by calling this method.
      *
      * The global parameter controls whether or not the

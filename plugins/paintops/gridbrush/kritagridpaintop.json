@@ -1,0 +1,9 @@
+{
+    "Id": "Grid Brush",
+    "Type": "Service",
+    "X-KDE-Library": "kritagridpaintop",
+    "X-KDE-ServiceTypes": [
+        "Krita/Paintop"
+    ],
+    "X-Krita-Version": "28"
+}

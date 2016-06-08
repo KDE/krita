@@ -1,0 +1,9 @@
+{
+    "Id": "Dyna",
+    "Type": "Service",
+    "X-KDE-Library": "kritadynapaintop",
+    "X-KDE-ServiceTypes": [
+        "Krita/Paintop"
+    ],
+    "X-Krita-Version": "28"
+}

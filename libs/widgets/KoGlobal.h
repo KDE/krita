@@ -40,18 +40,8 @@ public:
         (void)self(); // I don't want to make KGlobal instances public, so self() is private
     }
     /**
-     * Return the default font for Calligra programs.
-     * This is (currently) the same as the KDE-global default font,
-     * except that it is guaranteed to have a point size set,
-     * never a pixel size (see @ref QFont).
-     */
-    static QFont defaultFont()  {
-        return self()->_defaultFont();
-    }
-
-    /**
-     * @return the global KConfig object around calligrarc.
-     * calligrarc is used for Calligra-wide settings, from totally unrelated classes,
+     * @return the global KConfig object around kritarc.
+     * kritarc is used for Calligra-wide settings, from totally unrelated classes,
      * so this is the centralization of the KConfig object so that the file is
      * parsed only once
      */
@@ -79,7 +69,6 @@ public:
 private:
     static KoGlobal* self();
 
-    QFont _defaultFont();
     QStringList _listOfLanguages();
     QStringList _listOfLanguageTags();
     KConfig* _calligraConfig();

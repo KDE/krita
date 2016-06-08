@@ -1,0 +1,6 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource>
+        <file>extended_color_selector.png</file>
+    </qresource>
+</RCC>

@@ -20,8 +20,9 @@
 #ifndef SVGLOADINGCONTEXT_H
 #define SVGLOADINGCONTEXT_H
 
-#include "kritaflake_export.h"
+#include <QStringList>
 #include <KoXmlReader.h>
+#include "kritaflake_export.h"
 
 class SvgGraphicsContext;
 class SvgStyleParser;

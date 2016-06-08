@@ -31,6 +31,8 @@
 #include "KoIntegerMaths.h"
 #include "compositeops/KoCompositeOps.h"
 
+#include "KoColorConversions.h"
+
 
 KoRgbU8ColorSpace::KoRgbU8ColorSpace() :
 
@@ -79,4 +81,31 @@ void KoRgbU8ColorSpace::toQColor(const quint8 * src, QColor *c, const KoColorPro
     QVector<float> channelValues(4);
     normalisedChannelsValue(src, channelValues);
     c->setRgbF(channelValues[2], channelValues[1], channelValues[0], channelValues[3]);
+}
+
+void KoRgbU8ColorSpace::toHSY(QVector <double> channelValues, qreal *hue, qreal *sat, qreal *luma) const
+{
+    
+    RGBToHSY(channelValues[0],channelValues[1],channelValues[2], hue, sat, luma);
+}
+
+QVector <double> KoRgbU8ColorSpace::fromHSY(qreal *hue, qreal *sat, qreal *luma) const
+{
+    QVector <double> channelValues(4);
+    HSYToRGB(*hue, *sat, *luma, &channelValues[0],&channelValues[1],&channelValues[2]);
+    channelValues[3]=1.0;
+    return channelValues;
+}
+
+void KoRgbU8ColorSpace::toYUV(QVector <double> channelValues, qreal *y, qreal *u, qreal *v) const
+{
+    RGBToYUV(channelValues[0],channelValues[1],channelValues[2], y, u, v);
+}
+
+QVector <double> KoRgbU8ColorSpace::fromYUV(qreal *y, qreal *u, qreal *v) const
+{
+    QVector <double> channelValues(4);
+    YUVToRGB(*y, *u, *v, &channelValues[0],&channelValues[1],&channelValues[2]);
+    channelValues[3]=1.0;
+    return channelValues;
 }

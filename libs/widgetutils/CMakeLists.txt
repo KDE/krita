@@ -1,11 +1,13 @@
 add_subdirectory(tests)
 
+configure_file(xmlgui/config-xmlgui.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-xmlgui.h )
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/config)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/xmlgui)
 
-configure_file(xmlgui/config-xmlgui.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-xmlgui.h )
-
 set(kritawidgetutils_LIB_SRCS
+
+    WidgetUtilsDebug.cpp
 
     kis_icon_utils.cpp
     kis_action_registry.cpp
@@ -33,8 +35,8 @@ set(kritawidgetutils_LIB_SRCS
     xmlgui/KisShortcutsEditor.cpp
     xmlgui/KisShortcutsEditor_p.cpp
 
-    # xmlgui/kshortcutschemeseditor.cpp
-    # xmlgui/kshortcutschemeshelper.cpp
+    xmlgui/kshortcutschemeseditor.cpp
+    xmlgui/kshortcutschemeshelper.cpp
 
     xmlgui/kaboutkdedialog_p.cpp
     xmlgui/kactioncategory.cpp
@@ -76,9 +78,14 @@ ki18n_wrap_ui(kritawidgetutils_LIB_SRCS
 
 qt5_add_resources(kritawidgetutils_LIB_SRCS xmlgui/kxmlgui.qrc)
 
-include_directories(${KRITAGLOBAL_INCLUDES})
-
 add_library(kritawidgetutils SHARED ${kritawidgetutils_LIB_SRCS})
+
+target_include_directories(kritawidgetutils
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/config>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/xmlgui>
+)
+
 generate_export_header(kritawidgetutils BASE_NAME kritawidgetutils)
 
 if (HAVE_DBUS)
@@ -107,11 +114,12 @@ target_link_libraries(kritawidgetutils
         KF5::GuiAddons
         KF5::WidgetsAddons
         KF5::WindowSystem
+        kritaplugin
         ${KRITA_WIDGET_UTILS_EXTRA_LIBS}
 )
 
 set_target_properties(kritawidgetutils
-    PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    PROPERTIES VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 
 install(TARGETS kritawidgetutils ${INSTALL_TARGETS_DEFAULT_ARGS})

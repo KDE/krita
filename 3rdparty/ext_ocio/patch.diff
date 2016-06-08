@@ -1,0 +1,48 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b539ea1..ab47729 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -9,6 +9,12 @@ if(NOT DEFINED CMAKE_FIRST_RUN)
+     SET(CMAKE_FIRST_RUN 1 CACHE INTERNAL "")
+ endif()
+ 
++if (MSVC)
++    set(PATCH myptch)
++else()
++    set(PATCH patch)
++endif ()
++
+ ###############################################################################
+ ### GLOBAL ###
+ 
+@@ -183,7 +189,7 @@ else(USE_EXTERNAL_TINYXML)
+     endif()
+     ExternalProject_Add(tinyxml
+         URL ${CMAKE_SOURCE_DIR}/ext/tinyxml_${TINYXML_VERSION}.tar.gz
+-        PATCH_COMMAND patch -f -p1 < ${CMAKE_SOURCE_DIR}/ext/tinyxml_${TINYXML_VERSION}.patch
++        PATCH_COMMAND ${PATCH} --binary -f -p1 < ${CMAKE_SOURCE_DIR}/ext/tinyxml_${TINYXML_VERSION}.patch
+         BINARY_DIR ext/build/tinyxml
+         INSTALL_DIR ext/dist
+         CMAKE_ARGS ${TINYXML_CMAKE_ARGS}
+@@ -252,7 +258,7 @@ else(USE_EXTERNAL_YAML)
+     ExternalProject_Add(YAML_CPP_LOCAL
+         URL ${CMAKE_SOURCE_DIR}/ext/yaml-cpp-${YAML_CPP_VERSION}.tar.gz
+         BINARY_DIR ext/build/yaml-cpp
+-        PATCH_COMMAND patch -p1 < ${CMAKE_SOURCE_DIR}/ext/yaml-cpp-${YAML_CPP_VERSION}.patch
++        PATCH_COMMAND ${PATCH} --binary -p1 < ${CMAKE_SOURCE_DIR}/ext/yaml-cpp-${YAML_CPP_VERSION}.patch
+         INSTALL_DIR ext/dist
+         CMAKE_ARGS ${YAML_CPP_CMAKE_ARGS}
+     )
+diff --git a/docs/CMakeLists.txt b/docs/CMakeLists.txt
+index db42c2f..538b3a7 100644
+--- a/docs/CMakeLists.txt
++++ b/docs/CMakeLists.txt
+@@ -55,7 +55,7 @@ set(SPHINX_VERSION 1.2b3)
+ ExternalProject_Add(Sphinx
+     DEPENDS setuptools docutils Jinja2 Pygments
+     URL ${CMAKE_SOURCE_DIR}/ext/Sphinx-${SPHINX_VERSION}.tar.gz
+-    PATCH_COMMAND patch -p1 < ${CMAKE_SOURCE_DIR}/ext/Sphinx-${SPHINX_VERSION}.patch
++    PATCH_COMMAND patch --binary -p1 < ${CMAKE_SOURCE_DIR}/ext/Sphinx-${SPHINX_VERSION}.patch
+     BUILD_IN_SOURCE 1
+     CONFIGURE_COMMAND ${CMAKE_COMMAND} -E make_directory ${EXTDIST_PYTHONPATH}
+     BUILD_COMMAND PYTHONPATH=${PYTHONPATH} ${PYTHON} setup.py build

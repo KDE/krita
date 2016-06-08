@@ -37,7 +37,7 @@
 #include "KoTagFilterWidget.h"
 #include "KoTagChooserWidget.h"
 #include "KoResourceModel.h"
-#include "KoResource.h"
+#include <resources/KoResource.h>
 #include "KoResourceItemChooserContextMenu.h"
 
 #include <kconfiggroup.h>
@@ -135,8 +135,9 @@ void KoResourceTaggingManager::showTaggingBar(bool show)
         KConfigGroup group =  KSharedConfig::openConfig()->group("SelectedTags");
         tag = group.readEntry<QString>(d->model->serverType(), "All");
     }
-
-    d->tagChooser->setCurrentIndex(d->tagChooser->findIndexOf(tag));
+    int idx = d->tagChooser->findIndexOf(tag);
+    if (idx < 0) idx = 0;
+    d->tagChooser->setCurrentIndex(idx);
 }
 
 void KoResourceTaggingManager::purgeTagUndeleteList()
@@ -153,10 +154,10 @@ void KoResourceTaggingManager::undeleteTag(const QString & tagToUndelete)
     if (allTags.contains(tagName)) {
         bool ok;
         tagName = QInputDialog::getText(
-                      d->tagChooser, i18n("Unable to undelete tag"),
-                      i18n("<qt>The tag you are trying to undelete already exists in tag list.<br>Please enter a new, unique name for it.</qt>"),
-                      QLineEdit::Normal,
-                      tagName, &ok);
+                    d->tagChooser, i18n("Unable to undelete tag"),
+                    i18n("<qt>The tag you are trying to undelete already exists in tag list.<br>Please enter a new, unique name for it.</qt>"),
+                    QLineEdit::Normal,
+                    tagName, &ok);
 
         if (!ok || allTags.contains(tagName) || tagName.isEmpty()) {
             QMessageBox msgBox;
@@ -310,11 +311,6 @@ void KoResourceTaggingManager::tagChooserIndexChanged(const QString& lineEditTex
 
     d->tagFilter->clear();
     updateTaggedResourceView();
-}
-
-QString KoResourceTaggingManager::currentTag()
-{
-    return d->tagChooser->currentlySelectedTag();
 }
 
 void KoResourceTaggingManager::tagSearchLineEditTextChanged(const QString& lineEditText)

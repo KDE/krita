@@ -1,0 +1,690 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e69de29..51f7c8e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -0,0 +1,111 @@
++# This file is copyrighted under the BSD-license for buildsystem files of KDE
++# copyright 2010, Patrick Spendrin <ps_ml@gmx.de>
++
++project(libxslt)
++
++set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
++
++cmake_minimum_required(VERSION 2.6)
++set(PACKAGE_NAME "libxslt")
++set(PACKAGE_VERSION "1.1.26")
++set(PACKAGE_BUGREPORT) 
++set(PACKAGE_STRING "libxslt")
++set(VERSION "1.1.26")
++set(PACKAGE_VERSION "${VERSION}")
++
++set(LIBXSLT_DOTTED_VERSION "${VERSION}")
++set(LIBXSLT_VERSION_NUMBER "10126")
++set(LIBXSLT_VERSION_EXTRA "-GITv${VERSION}")
++
++if(WINCE)
++    find_package(Wcecompat REQUIRED)
++    include_directories(${WCECOMPAT_INCLUDE_DIR})
++endif(WINCE)
++
++find_package(LibXml2 REQUIRED)
++include(ConfigureChecks.cmake)
++include_directories(
++    ${CMAKE_BINARY_DIR} 
++    ${CMAKE_SOURCE_DIR} 
++    ${CMAKE_SOURCE_DIR}/libxslt 
++    ${CMAKE_SOURCE_DIR}/libexslt
++    ${LIBXML2_INCLUDE_DIR}
++    ${CMAKE_INCLUDE_PATH}
++)
++if(MSVC)
++    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
++endif(MSVC)
++
++set(xslt_SRCS
++libxslt/attrvt.c
++libxslt/xslt.c
++libxslt/xsltlocale.c
++libxslt/xsltutils.c
++libxslt/pattern.c
++libxslt/templates.c
++libxslt/variables.c
++libxslt/keys.c
++libxslt/numbers.c
++libxslt/extensions.c
++libxslt/extra.c
++libxslt/functions.c
++libxslt/namespaces.c
++libxslt/imports.c
++libxslt/attributes.c
++libxslt/documents.c
++libxslt/preproc.c
++libxslt/transform.c
++libxslt/security.c
++)
++
++add_library(xslt SHARED ${xslt_SRCS})
++#set_target_properties(xslt PROPERTIES DEFINE_SYMBOL IN_LIBXSLT)
++target_link_libraries(xslt ${LIBXML2_LIBRARIES})
++target_link_libraries(xslt ${LIBXML2_LIBRARIES})
++if(MSVC)
++    set_target_properties(xslt PROPERTIES OUTPUT_NAME libxslt)
++endif(MSVC)
++if(WINCE)
++    target_link_libraries(xslt ${WCECOMPAT_LIBRARIES})
++endif(WINCE)
++
++set(exslt_SRCS
++libexslt/exslt.c
++libexslt/common.c
++libexslt/crypto.c
++libexslt/math.c
++libexslt/sets.c
++libexslt/functions.c
++libexslt/strings.c
++libexslt/date.c
++libexslt/saxon.c
++libexslt/dynamic.c
++)
++
++add_library(exslt SHARED ${exslt_SRCS})
++target_link_libraries(exslt xslt)
++if(MSVC)
++    set_target_properties(exslt PROPERTIES OUTPUT_NAME libexslt)
++endif(MSVC)
++
++set(xsltproc_SRCS 
++xsltproc/xsltproc.c
++)
++
++add_executable(xsltproc ${xsltproc_SRCS})
++target_link_libraries(xsltproc xslt exslt)
++
++install(TARGETS xslt exslt xsltproc RUNTIME DESTINATION bin
++                                    LIBRARY DESTINATION lib
++                                    ARCHIVE DESTINATION lib)
++
++file(GLOB LIBXSLT_HDRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/libxslt/*.h")
++file(GLOB LIBEXSLT_HDRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/libexslt/*.h")
++install(FILES ${LIBXSLT_HDRS} DESTINATION include/libxslt)
++install(FILES ${LIBEXSLT_HDRS} DESTINATION include/libexslt)
++
++install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libxslt/xsltconfig.h DESTINATION include/libxslt)
++#install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libexslt/exsltconfig.h DESTINATION include/libexslt)
++
++
++#install(FILES doc/xmlwf.1 DESTINATION man/man1)
+diff --git a/ConfigureChecks.cmake b/ConfigureChecks.cmake
+index e69de29..55dc315 100644
+--- a/ConfigureChecks.cmake
++++ b/ConfigureChecks.cmake
+@@ -0,0 +1,116 @@
++include(CheckIncludeFile)
++include(CheckFunctionExists)
++include(CheckSymbolExists)
++
++check_include_file("ansidecl.h" HAVE_ANSIDECL_H)
++check_include_file("dlfcn.h" HAVE_DLFCN_H)
++check_include_file("float.h" HAVE_FLOAT_H)
++check_include_file("fp_class.h" HAVE_FP_CLASS_H)
++check_include_file("ieeefp.h" HAVE_IEEEFP_H)
++check_include_file("inttypes.h" HAVE_INTTYPES_H)
++check_include_file("locale.h" HAVE_LOCALE_H)
++check_include_file("math.h" HAVE_MATH_H)
++check_include_file("memory.h" HAVE_MEMORY_H)
++check_include_file("nan.h" HAVE_NAN_H)
++check_include_file("pthread.h" HAVE_PTHREAD_H)
++check_include_file("stdarg.h" HAVE_STDARG_H)
++check_include_file("stdint.h" HAVE_STDINT_H)
++check_include_file("stdlib.h" HAVE_STDLIB_H)
++check_include_file("strings.h" HAVE_STRINGS_H)
++check_include_file("string.h" HAVE_STRING_H)
++check_include_file("sys/select.h" HAVE_SYS_SELECT_H)
++check_include_file("sys/stat.h" HAVE_SYS_STAT_H)
++check_include_file("sys/timeb.h" HAVE_SYS_TIMEB_H)
++check_include_file("sys/time.h" HAVE_SYS_TIME_H)
++check_include_file("sys/types.h" HAVE_SYS_TYPES_H)
++check_include_file("time.h" HAVE_TIME_H)
++check_include_file("unistd.h" HAVE_UNISTD_H)
++check_include_file("xlocale.h" HAVE_XLOCALE_H)
++
++check_function_exists("asctime" HAVE_ASCTIME)
++check_function_exists("fprintf" HAVE_FPRINTF)
++check_function_exists("ftime" HAVE_FTIME)
++check_function_exists("gettimeofday" HAVE_GETTIMEOFDAY)
++check_function_exists("gmtime_r" HAVE_GMTIME_R)
++check_function_exists("localtime" HAVE_LOCALTIME)
++check_function_exists("localtime_r" HAVE_LOCALTIME_R)
++check_function_exists("mktime" HAVE_MKTIME)
++check_function_exists("printf" HAVE_PRINTF)
++check_function_exists("snprintf" HAVE_SNPRINTF)
++check_function_exists("sprintf" HAVE_SPRINTF)
++check_function_exists("sscanf" HAVE_SSCANF)
++check_function_exists("stat" HAVE_STAT)
++check_function_exists("time" HAVE_TIME)
++check_function_exists("vfprintf" HAVE_VFPRINTF)
++check_function_exists("vsnprintf" HAVE_VSNPRINTF)
++check_function_exists("vsprintf" HAVE_VSPRINTF)
++check_function_exists("_stat" HAVE__STAT)
++
++#/* Define if gcrypt library is available. */
++#undef HAVE_GCRYPT
++#/* Define if pthread library is there (-lpthread) */
++#undef HAVE_LIBPTHREAD
++#/* Define to the sub-directory in which libtool stores uninstalled libraries.   */
++#undef LT_OBJDIR
++
++
++#/* Define to 1 if you have the ANSI C header files. */
++#undef STDC_HEADERS
++
++#/* Enable extensions on AIX 3, Interix.  */
++#ifndef _ALL_SOURCE
++# undef _ALL_SOURCE
++#endif
++#/* Enable GNU extensions on systems that have them.  */
++#ifndef _GNU_SOURCE
++# undef _GNU_SOURCE
++#endif
++#/* Enable threading extensions on Solaris.  */
++#ifndef _POSIX_PTHREAD_SEMANTICS
++# undef _POSIX_PTHREAD_SEMANTICS
++#endif
++#/* Enable extensions on HP NonStop.  */
++#ifndef _TANDEM_SOURCE
++# undef _TANDEM_SOURCE
++#endif
++#/* Enable general extensions on Solaris.  */
++#ifndef __EXTENSIONS__
++# undef __EXTENSIONS__
++#endif
++#/* Define to 1 if on MINIX. */
++#undef _MINIX
++
++#/* Define to 2 if the system does not provide POSIX.1 features except with this defined. */
++#undef _POSIX_1_SOURCE
++
++#/* Define to 1 if you need to in order for `stat' and other things to work. */
++#undef _POSIX_SOURCE
++
++#/* Win32 Std C name mangling work-around */
++#undef snprintf
++
++#/* Win32 Std C name mangling work-around */
++#undef vsnprintf
++
++set(WITH_XSLT_DEBUG 1)
++set(XSLT_LOCALE_WINAPI 0)
++set(XSLT_LOCALE_XLOCALE 0)
++set(WITH_MEM_DEBUG 1)
++set(WITH_TRIO 0)
++set(WITH_DEBUGGER 1)
++set(WITH_MODULES 1)
++if(WIN32)
++    if(NOT WINCE)
++        set(XSLT_LOCALE_WINAPI 1)
++    else(NOT WINCE)
++        set(XSLT_LOCALE_NONE 1)
++    endif(NOT WINCE)
++    set(LIBXSLT_DEFAULT_PLUGINS_PATH "")
++else(WIN32)
++    set(XSLT_LOCALE_XLOCALE 1)
++    set(LIBXSLT_DEFAULT_PLUGINS_PATH "/usr/lib/libxslt-plugins")
++endif(WIN32)
++
++configure_file(libxslt/xsltconfig.h.in libxslt/xsltconfig.h)
++#configure_file(libexslt/exsltconfig.h.in libexslt/exsltconfig.h)
++configure_file(config.h.cmake config.h)
+\ No newline at end of file
+diff --git a/cmake/modules/FindWcecompat.cmake b/cmake/modules/FindWcecompat.cmake
+index e69de29..4276975 100644
+--- a/cmake/modules/FindWcecompat.cmake
++++ b/cmake/modules/FindWcecompat.cmake
+@@ -0,0 +1,33 @@
++# Try to find Wcecompat functionality
++# Once done this will define
++#
++#  WCECOMPAT_FOUND - system has Wcecompat
++#  WCECOMPAT_INCLUDE_DIR - Wcecompat include directory
++#  WCECOMPAT_LIBRARIES - Libraries needed to use Wcecompat
++#
++# Copyright (c) 2010, Andreas Holzammer, <andy@kdab.com>
++#
++# Redistribution and use is allowed according to the terms of the BSD license.
++
++if(WCECOMPAT_INCLUDE_DIR AND WCECOMPAT_LIB_FOUND)
++  set(Wcecompat_FIND_QUIETLY TRUE)
++endif(WCECOMPAT_INCLUDE_DIR AND WCECOMPAT_LIB_FOUND)
++
++find_path(WCECOMPAT_INCLUDE_DIR errno.h PATH_SUFFIXES wcecompat)
++
++set(WCECOMPAT_LIB_FOUND FALSE)
++
++if(WCECOMPAT_INCLUDE_DIR)
++    find_library(WCECOMPAT_LIBRARIES NAMES wcecompat wcecompatex )
++    if(WCECOMPAT_LIBRARIES)
++      set(WCECOMPAT_LIB_FOUND TRUE)
++    endif(WCECOMPAT_LIBRARIES)
++endif(WCECOMPAT_INCLUDE_DIR)
++
++# I have no idea what this is about, but it seems to be used quite often, so I add this here
++set(WCECOMPAT_CONST const)
++
++include(FindPackageHandleStandardArgs)
++find_package_handle_standard_args(Wcecompat  DEFAULT_MSG  WCECOMPAT_LIBRARIES  WCECOMPAT_LIB_FOUND)
++
++mark_as_advanced(WCECOMPAT_INCLUDE_DIR  WCECOMPAT_LIBRARIES  WCECOMPAT_CONST  WCECOMPAT_LIB_FOUND)
+diff --git a/config.h.cmake b/config.h.cmake
+index e69de29..34212d8 100644
+--- a/config.h.cmake
++++ b/config.h.cmake
+@@ -0,0 +1,208 @@
++/* config.h.in.  Generated from configure.in by autoheader.  */
++#cmakedefine HAVE_ISINF
++#cmakedefine HAVE_ISNAN
++#cmakedefine HAVE_POW
++#cmakedefine HAVE_FLOOR
++#cmakedefine HAVE_FABS
++#cmakedefine WITH_DEBUGGER
++
++/* Define to 1 if you have the <ansidecl.h> header file. */
++#cmakedefine HAVE_ANSIDECL_H
++
++/* Define to 1 if you have the `asctime' function. */
++#cmakedefine HAVE_ASCTIME
++
++/* Define to 1 if you have the <dlfcn.h> header file. */
++#cmakedefine HAVE_DLFCN_H
++
++/* Define to 1 if you have the <float.h> header file. */
++#cmakedefine HAVE_FLOAT_H
++
++/* Define to 1 if you have the `fprintf' function. */
++#cmakedefine HAVE_FPRINTF
++
++/* Define to 1 if you have the <fp_class.h> header file. */
++#cmakedefine HAVE_FP_CLASS_H
++
++/* Define to 1 if you have the `ftime' function. */
++#cmakedefine HAVE_FTIME
++
++/* Define if gcrypt library is available. */
++#cmakedefine HAVE_GCRYPT
++
++/* Define to 1 if you have the `gettimeofday' function. */
++#cmakedefine HAVE_GETTIMEOFDAY
++
++/* Define to 1 if you have the `gmtime_r' function. */
++#cmakedefine HAVE_GMTIME_R
++
++/* Define to 1 if you have the <ieeefp.h> header file. */
++#cmakedefine HAVE_IEEEFP_H
++
++/* Define to 1 if you have the <inttypes.h> header file. */
++#cmakedefine HAVE_INTTYPES_H
++
++/* Define if pthread library is there (-lpthread) */
++#cmakedefine HAVE_LIBPTHREAD
++
++/* Define to 1 if you have the <locale.h> header file. */
++#cmakedefine HAVE_LOCALE_H
++
++/* Define to 1 if you have the `localtime' function. */
++#cmakedefine HAVE_LOCALTIME
++
++/* Define to 1 if you have the `localtime_r' function. */
++#cmakedefine HAVE_LOCALTIME_R
++
++/* Define to 1 if you have the <math.h> header file. */
++#cmakedefine HAVE_MATH_H
++
++/* Define to 1 if you have the <memory.h> header file. */
++#cmakedefine HAVE_MEMORY_H
++
++/* Define to 1 if you have the `mktime' function. */
++#cmakedefine HAVE_MKTIME
++
++/* Define to 1 if you have the <nan.h> header file. */
++#cmakedefine HAVE_NAN_H
++
++/* Define to 1 if you have the `printf' function. */
++#cmakedefine HAVE_PRINTF
++
++/* Define if <pthread.h> is there */
++#cmakedefine HAVE_PTHREAD_H
++
++/* Define to 1 if you have the `snprintf' function. */
++#cmakedefine HAVE_SNPRINTF
++
++/* Define to 1 if you have the `sprintf' function. */
++#cmakedefine HAVE_SPRINTF
++
++/* Define to 1 if you have the `sscanf' function. */
++#cmakedefine HAVE_SSCANF
++
++/* Define to 1 if you have the `stat' function. */
++#cmakedefine HAVE_STAT
++
++/* Define to 1 if you have the <stdarg.h> header file. */
++#cmakedefine HAVE_STDARG_H
++
++/* Define to 1 if you have the <stdint.h> header file. */
++#cmakedefine HAVE_STDINT_H
++
++/* Define to 1 if you have the <stdlib.h> header file. */
++#cmakedefine HAVE_STDLIB_H
++
++/* Define to 1 if you have the <strings.h> header file. */
++#cmakedefine HAVE_STRINGS_H
++
++/* Define to 1 if you have the <string.h> header file. */
++#cmakedefine HAVE_STRING_H
++
++/* Define to 1 if you have the <sys/select.h> header file. */
++#cmakedefine HAVE_SYS_SELECT_H
++
++/* Define to 1 if you have the <sys/stat.h> header file. */
++#cmakedefine HAVE_SYS_STAT_H
++
++/* Define to 1 if you have the <sys/timeb.h> header file. */
++#cmakedefine HAVE_SYS_TIMEB_H
++
++/* Define to 1 if you have the <sys/time.h> header file. */
++#cmakedefine HAVE_SYS_TIME_H
++
++/* Define to 1 if you have the <sys/types.h> header file. */
++#cmakedefine HAVE_SYS_TYPES_H
++
++/* Define to 1 if you have the `time' function. */
++#cmakedefine HAVE_TIME
++
++/* Define to 1 if you have the <time.h> header file. */
++#cmakedefine HAVE_TIME_H
++
++/* Define to 1 if you have the <unistd.h> header file. */
++#cmakedefine HAVE_UNISTD_H
++
++/* Define to 1 if you have the `vfprintf' function. */
++#cmakedefine HAVE_VFPRINTF
++
++/* Define to 1 if you have the `vsnprintf' function. */
++#cmakedefine HAVE_VSNPRINTF
++
++/* Define to 1 if you have the `vsprintf' function. */
++#cmakedefine HAVE_VSPRINTF
++
++/* Define to 1 if you have the <xlocale.h> header file. */
++#cmakedefine HAVE_XLOCALE_H
++
++/* Define to 1 if you have the `_stat' function. */
++#cmakedefine HAVE__STAT
++
++/* Define to the sub-directory in which libtool stores uninstalled libraries.
++   */
++#cmakedefine LT_OBJDIR
++
++/* Name of package */
++#cmakedefine PACKAGE
++
++/* Define to the address where bug reports for this package should be sent. */
++#cmakedefine PACKAGE_BUGREPORT
++
++/* Define to the full name of this package. */
++#cmakedefine PACKAGE_NAME
++
++/* Define to the full name and version of this package. */
++#cmakedefine PACKAGE_STRING
++
++/* Define to the one symbol short name of this package. */
++#cmakedefine PACKAGE_TARNAME
++
++/* Define to the version of this package. */
++#cmakedefine PACKAGE_VERSION
++
++/* Define to 1 if you have the ANSI C header files. */
++#cmakedefine STDC_HEADERS
++
++/* Enable extensions on AIX 3, Interix.  */
++#ifndef _ALL_SOURCE
++#cmakedefine _ALL_SOURCE
++#endif
++/* Enable GNU extensions on systems that have them.  */
++#ifndef _GNU_SOURCE
++#cmakedefine _GNU_SOURCE
++#endif
++/* Enable threading extensions on Solaris.  */
++#ifndef _POSIX_PTHREAD_SEMANTICS
++#cmakedefine _POSIX_PTHREAD_SEMANTICS
++#endif
++/* Enable extensions on HP NonStop.  */
++#ifndef _TANDEM_SOURCE
++#cmakedefine _TANDEM_SOURCE
++#endif
++/* Enable general extensions on Solaris.  */
++#ifndef __EXTENSIONS__
++#cmakedefine __EXTENSIONS__
++#endif
++
++
++/* Version number of package */
++#cmakedefine VERSION
++
++/* Define to 1 if on MINIX. */
++#cmakedefine _MINIX
++
++/* Define to 2 if the system does not provide POSIX.1 features except with
++   this defined. */
++#cmakedefine _POSIX_1_SOURCE
++
++/* Define to 1 if you need to in order for `stat' and other things to work. */
++#cmakedefine _POSIX_SOURCE
++
++/* Using the Win32 Socket implementation */
++#cmakedefine _WINSOCKAPI_
++
++/* Win32 Std C name mangling work-around */
++#cmakedefine snprintf
++
++/* Win32 Std C name mangling work-around */
++#cmakedefine vsnprintf
+diff --git a/configure b/configure
+index c6ab565..85c2f4d 100755
+--- a/configure
++++ b/configure
+@@ -15970,7 +15970,7 @@ _ACEOF
+ 
+ 
+ cat >>confdefs.h <<\_ACEOF
+-#define snprintf _snprintf
++//#define snprintf _snprintf
+ _ACEOF
+ 
+ 
+@@ -17031,7 +17031,8 @@ $debug ||
+ if test -n "$CONFIG_FILES"; then
+ 
+ 
+-ac_cr=''
++ac_cr='
++'
+ ac_cs_awk_cr=`$AWK 'BEGIN { print "a\rb" }' </dev/null 2>/dev/null`
+ if test "$ac_cs_awk_cr" = "a${ac_cr}b"; then
+   ac_cs_awk_cr='\\r'
+diff --git a/libexslt/crypto.c b/libexslt/crypto.c
+index e2700d6..657afca 100644
+--- a/libexslt/crypto.c
++++ b/libexslt/crypto.c
+@@ -121,7 +121,11 @@ exsltCryptoHex2Bin (const unsigned char *hex, int hexlen,
+ 
+ #include <windows.h>
+ #include <wincrypt.h>
++#ifndef _WIN32_WCE
+ #pragma comment(lib, "advapi32.lib")
++#else
++#pragma comment(lib, "coredll.lib")
++#endif
+ 
+ static void
+ exsltCryptoCryptoApiReportError (xmlXPathParserContextPtr ctxt,
+diff --git a/libexslt/math.c b/libexslt/math.c
+index a1971e0..877a951 100644
+--- a/libexslt/math.c
++++ b/libexslt/math.c
+@@ -503,7 +503,7 @@ exsltMathRandomFunction (xmlXPathParserContextPtr ctxt, int nargs) {
+ 
+ #endif /* defined(HAVE_STDLIB_H) && defined(RAND_MAX) */
+ 
+-#if HAVE_MATH_H
++#ifdef HAVE_MATH_H
+ 
+ /**
+  * exsltMathAbs:
+@@ -1067,7 +1067,7 @@ exsltMathRegister (void) {
+ 				   EXSLT_MATH_NAMESPACE,
+ 				   exsltMathRandomFunction);
+ #endif
+-#if HAVE_MATH_H
++#ifdef HAVE_MATH_H
+     xsltRegisterExtModuleFunction ((const xmlChar *) "abs",
+ 				   EXSLT_MATH_NAMESPACE,
+ 				   exsltMathAbsFunction);
+@@ -1142,7 +1142,7 @@ exsltMathXpathCtxtRegister (xmlXPathContextPtr ctxt, const xmlChar *prefix)
+                                    (const xmlChar *) EXSLT_MATH_NAMESPACE,
+                                    exsltMathRandomFunction)
+ #endif
+-#if HAVE_MATH_H
++#ifdef HAVE_MATH_H
+         && !xmlXPathRegisterFuncNS(ctxt,
+                                    (const xmlChar *) "abs",
+                                    (const xmlChar *) EXSLT_MATH_NAMESPACE,
+diff --git a/libxslt/extensions.c b/libxslt/extensions.c
+index 6187b7a..c39dd68 100644
+--- a/libxslt/extensions.c
++++ b/libxslt/extensions.c
+@@ -34,7 +34,7 @@
+ 
+ #ifdef _WIN32
+ #include <stdlib.h>             /* for _MAX_PATH */
+-#ifndef PATH_MAX
++#if !defined(PATH_MAX) && !defined(_WIN32_WCE)
+ #define PATH_MAX _MAX_PATH
+ #endif
+ #endif
+diff --git a/libxslt/security.c b/libxslt/security.c
+index b766cf7..d95bd22 100644
+--- a/libxslt/security.c
++++ b/libxslt/security.c
+@@ -343,7 +343,11 @@ xsltCheckWritePath(xsltSecurityPrefsPtr sec,
+ 	    }
+ 	    ret = xsltCheckWritePath(sec, ctxt, directory);
+ 	    if (ret == 1)
+-		ret = mkdir(directory, 0755);
++#if defined(_WIN32) && !defined(_WIN32_WCE) 
++	    ret = mkdir(directory);
++#else
++	    ret = mkdir(directory, 0755);
++#endif
+ 	}
+ 	xmlFree(directory);
+ 	if (ret < 0)
+diff --git a/libxslt/win32config.h b/libxslt/win32config.h
+index 00ba2a0..f357528 100644
+--- a/libxslt/win32config.h
++++ b/libxslt/win32config.h
+@@ -77,9 +77,8 @@ static int isnan (double d) {
+ #endif /* _MSC_VER */
+ 
+ #include <direct.h>
+-#if defined(_MSC_VER) || defined(__MINGW32__)
++#if (defined(_MSC_VER) || defined(__MINGW32__)) && !defined(_WIN32_WCE)
+ #define mkdir(p,m) _mkdir(p)
+-#define snprintf _snprintf
+ #if _MSC_VER < 1500
+ #define vsnprintf(b,c,f,a) _vsnprintf(b,c,f,a)
+ #endif
+diff --git a/libxslt/xsltlocale.h b/libxslt/xsltlocale.h
+index 59343b0..ba85d02 100644
+--- a/libxslt/xsltlocale.h
++++ b/libxslt/xsltlocale.h
+@@ -11,6 +11,10 @@
+ #ifndef __XML_XSLTLOCALE_H__
+ #define __XML_XSLTLOCALE_H__
+ 
++#undef XSLT_LOCALE_XLOCALE
++#if defined(XSLT_LOCALE_XLOCALE)
++#error 1
++#endif
+ #include <libxml/xmlstring.h>
+ 
+ #ifdef XSLT_LOCALE_XLOCALE
+diff --git a/libxslt/xsltutils.c b/libxslt/xsltutils.c
+index 9565e15..4e560ac 100644
+--- a/libxslt/xsltutils.c
++++ b/libxslt/xsltutils.c
+@@ -45,13 +45,21 @@
+ #if defined(WIN32) && !defined(__CYGWIN__)
+ #ifdef _MSC_VER
+ #include <winsock2.h>
++#ifndef _WIN32_WCE
+ #pragma comment(lib, "ws2_32.lib")
++#else
++#pragma comment(lib, "ws2.lib")
++#endif
+ #define gettimeofday(p1,p2)
+ #define HAVE_GETTIMEOFDAY
+ #define XSLT_WIN32_PERFORMANCE_COUNTER
+ #endif /* _MS_VER */
+ #endif /* WIN32 */
+ 
++#ifdef _WIN32_WCE
++#define vsnprintf _vsnprintf
++#endif
++
+ /************************************************************************
+  * 									*
+  * 			Convenience function				*
+diff --git a/xsltproc/xsltproc.c b/xsltproc/xsltproc.c
+index e978a63..ee3aad3 100644
+--- a/xsltproc/xsltproc.c
++++ b/xsltproc/xsltproc.c
+@@ -6,6 +6,19 @@
+  * daniel@veillard.com
+  */
+ 
++#if defined(WIN32) && !defined (__CYGWIN__)
++#if defined(_MSC_VER) || defined(__MINGW32__)
++#include <winsock2.h>
++#define gettimeofday(p1,p2)
++#endif /* _MS_VER */
++#else /* WIN32 */
++#if defined(HAVE_SYS_TIME_H)
++#include <sys/time.h>
++#elif defined(HAVE_TIME_H)
++#include <time.h>
++#endif
++#endif /* WIN32 */
++
+ #include "libxslt/libxslt.h"
+ #include "libexslt/exslt.h"
+ #include <stdio.h>
+@@ -53,19 +66,7 @@
+ 
+ #include <libexslt/exsltconfig.h>
+ 
+-#if defined(WIN32) && !defined (__CYGWIN__)
+-#if defined(_MSC_VER) || defined(__MINGW32__)
+-#include <winsock2.h>
+-#define gettimeofday(p1,p2)
+-#define snprintf _snprintf
+-#endif /* _MS_VER */
+-#else /* WIN32 */
+-#if defined(HAVE_SYS_TIME_H)
+-#include <sys/time.h>
+-#elif defined(HAVE_TIME_H)
+-#include <time.h>
+-#endif
+-#endif /* WIN32 */
++
+ 
+ #ifdef HAVE_SYS_TIMEB_H
+ #include <sys/timeb.h>

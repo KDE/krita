@@ -26,17 +26,15 @@
 
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
-#include "KoColorSpaceConstants.h"
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpaceRegistry.h>
-#include <KoIntegerMaths.h>
-#include "KoColorTransformation.h"
 #include "KoFallBackColorTransformation.h"
 #include "KoLabDarkenColorTransformation.h"
 #include "KoMixColorsOpImpl.h"
 
 #include "KoConvolutionOpImpl.h"
 #include "KoInvertColorTransformation.h"
+
 
 /**
  * This in an implementation of KoColorSpace which can be used as a base for colorspaces with as many
@@ -144,10 +142,6 @@ public:
 
     virtual KoColorTransformation *createDarkenAdjustment(qint32 shade, bool compensate, qreal compensation) const {
         return new KoFallBackColorTransformation(this, KoColorSpaceRegistry::instance()->lab16(""), new KoLabDarkenColorTransformation<quint16>(shade, compensate, compensation, KoColorSpaceRegistry::instance()->lab16("")));
-    }
-
-    virtual KoID mathToolboxId() const {
-        return KoID("Basic");
     }
 
     virtual bool convertPixelsTo(const quint8 *src,

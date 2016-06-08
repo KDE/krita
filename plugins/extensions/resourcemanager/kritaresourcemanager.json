@@ -1,0 +1,9 @@
+{
+    "Id": "Resource Manager",
+    "Type": "Service",
+    "X-KDE-Library": "kritaresourcemanager",
+    "X-KDE-ServiceTypes": [
+        "Krita/ViewPlugin"
+    ],
+    "X-Krita-Version": "28"
+}

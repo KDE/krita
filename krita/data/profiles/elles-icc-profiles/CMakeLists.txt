@@ -94,4 +94,4 @@ install(FILES
     Lab-D50-Identity-elle-V2.icc
     Lab-D50-Identity-elle-V4.icc
     XYZ-D50-Identity-elle-V4.icc
-DESTINATION ${CMAKE_INSTALL_PREFIX}/share/color/icc/krita)
+DESTINATION ${SHARE_INSTALL_PREFIX}/color/icc/krita)

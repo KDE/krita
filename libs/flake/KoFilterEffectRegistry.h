@@ -27,6 +27,7 @@
 
 class KoXmlElement;
 class KoFilterEffectLoadingContext;
+class KoFilterEffect;
 
 class KRITAFLAKE_EXPORT KoFilterEffectRegistry : public KoGenericRegistry<KoFilterEffectFactoryBase*>
 {

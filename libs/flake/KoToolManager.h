@@ -236,6 +236,8 @@ public:
     /// Returns the toolId of the currently active tool
     QString activeToolId() const;
 
+    void initializeCurrentToolForCanvas();
+
     class Private;
     /**
      * \internal return the private object for the toolmanager.

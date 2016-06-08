@@ -31,6 +31,7 @@
 #include <KoOdfStylesReader.h>
 #include <KoUnit.h>
 #include <KoViewConverter.h>
+#include <KoXmlReader.h>
 
 #include <FlakeDebug.h>
 
@@ -140,6 +141,7 @@ KoPatternBackground::KoPatternBackground(KoImageCollection * imageCollection)
 
 KoPatternBackground::~KoPatternBackground()
 {
+    Q_D(KoPatternBackground);
 }
 
 void KoPatternBackground::setTransform(const QTransform &matrix)

@@ -1,0 +1,11 @@
+{
+    "Id": "Krita Brush Import Filter",
+    "X-KDE-ServiceTypes": [
+        "Krita/FileFilter"
+    ],
+    "NoDisplay": "true",
+    "X-KDE-Export": "application/x-krita",
+    "X-KDE-Import": "image/x-gimp-brush,image/x-gimp-brush-animated",
+    "X-KDE-Weight": "1",
+    "X-KDE-Extensions" : "gih,gbr"
+}

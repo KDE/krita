@@ -1,0 +1,9 @@
+{
+    "Id": "Dodge and Burn Filter",
+    "Type": "Service",
+    "X-KDE-Library": "kritadodgeburn",
+    "X-KDE-ServiceTypes": [
+        "Krita/Filter"
+    ],
+    "X-Krita-Version": "28"
+}

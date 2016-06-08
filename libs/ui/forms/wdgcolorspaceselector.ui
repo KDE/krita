@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WdgColorSpaceSelector</class>
+ <widget class="QWidget" name="WdgColorSpaceSelector">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>411</width>
+    <height>74</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="lblColorSpaces">
+       <property name="text">
+        <string>&amp;Model:</string>
+       </property>
+       <property name="buddy">
+        <cstring>cmbColorModels</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KisCmbIDList" name="cmbColorModels">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="lblColorModels">
+       <property name="text">
+        <string>Depth:</string>
+       </property>
+       <property name="buddy">
+        <cstring>cmbColorModels</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KisCmbIDList" name="cmbColorDepth">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="bnAdvanced">
+       <property name="text">
+        <string>Color Space Browser</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="lblProfiles">
+       <property name="text">
+        <string>Profi&amp;le:</string>
+       </property>
+       <property name="buddy">
+        <cstring>cmbProfile</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="SqueezedComboBox" name="cmbProfile">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="bnInstallProfile">
+       <property name="toolTip">
+        <string>Install a new profile from a file</string>
+       </property>
+       <property name="whatsThis">
+        <string>Install a new profile from a file.</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+  <zorder>lblColorSpaces</zorder>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisCmbIDList</class>
+   <extends>QComboBox</extends>
+   <header>widgets/kis_cmb_idlist.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SqueezedComboBox</class>
+   <extends>QComboBox</extends>
+   <header>squeezedcombobox.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

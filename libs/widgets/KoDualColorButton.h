@@ -156,6 +156,7 @@ class KRITAWIDGETS_EXPORT KoDualColorButton : public QWidget
     virtual void mouseReleaseEvent( QMouseEvent *event );
     virtual void dragEnterEvent( QDragEnterEvent *event );
     virtual void dropEvent( QDropEvent *event );
+    virtual void changeEvent(QEvent *event);
 
   private:
     class Private;

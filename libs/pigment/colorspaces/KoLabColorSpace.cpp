@@ -30,6 +30,7 @@
 #include "KoChannelInfo.h"
 #include "KoID.h"
 #include "KoIntegerMaths.h"
+#include "KoColorConversions.h"
 
 #include "../compositeops/KoCompositeOps.h"
 
@@ -162,4 +163,34 @@ void KoLabColorSpace::toQColor(const quint8 * src, QColor *c, const KoColorProfi
     quint8 B = BB < 0 ? 0 : BB > 255 ? 255 : BB;
 
     c->setRgba(qRgba(R, G, B, A));
+}
+
+void KoLabColorSpace::toHSY(QVector <double> channelValues, qreal *hue, qreal *sat, qreal *luma) const
+{
+    LabToLCH(channelValues[0],channelValues[1],channelValues[2], luma, sat, hue);
+}
+
+QVector <double> KoLabColorSpace::fromHSY(qreal *hue, qreal *sat, qreal *luma) const
+{
+    QVector <double> channelValues(4);
+    LCHToLab(*luma, *sat, *hue, &channelValues[0],&channelValues[1],&channelValues[2]);
+    channelValues[3]=1.0;
+    return channelValues;
+}
+
+void KoLabColorSpace::toYUV(QVector <double> channelValues, qreal *y, qreal *u, qreal *v) const
+{
+    *y =channelValues[0];
+    *v=channelValues[1];
+    *u=channelValues[2];
+}
+
+QVector <double> KoLabColorSpace::fromYUV(qreal *y, qreal *u, qreal *v) const
+{
+    QVector <double> channelValues(4);
+    channelValues[0]=*y;
+    channelValues[1]=*v;
+    channelValues[2]=*u;
+    channelValues[3]=1.0;
+    return channelValues;
 }

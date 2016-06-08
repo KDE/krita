@@ -22,3 +22,5 @@ if (CMAKE_COMPILER_IS_GNUCC)
     add_subdirectory( gmic )
 endif()
 endif()
+
+add_subdirectory( pykrita )

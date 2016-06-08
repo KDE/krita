@@ -113,6 +113,12 @@ VideoExportOptionsDialog::VideoExportOptionsDialog(QWidget *parent) :
     ui->cmbCodec->setCurrentIndex(0);
     ui->cmbCodec->setEnabled(false);
 
+    // TODO: temporarily hidden! Some combinations of 'tune' and
+    //       'profile' options make ffmpeg generate empty file.
+    //       We should not let the user shoot into his own foot!
+    ui->cmbTune->setVisible(false);
+    ui->lblTune->setVisible(false);
+
     setModal(true);
     connect(this, SIGNAL(accepted()), SLOT(slotAccepted()));
 }
@@ -159,6 +165,10 @@ VideoSaver::AdditionalOptions VideoExportOptionsDialog::getOptions() const
             options["pix_fmt"] = "yuv420p";
         }
 
+
+        // Disabled! see the comment in c-tor!
+        //const int tuneIndex = ui->cmbTune->currentIndex();
+        //options["tune"] = m_d->tunes[tuneIndex].id();
 
     } else if (ui->cmbCodec->currentIndex() == int(CODEC_THEORA)) {
         const qint64 bitRate = ui->intBitrate->value() * 1024;

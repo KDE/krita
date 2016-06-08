@@ -34,13 +34,14 @@ class KisDocument;
 class KRITAVIDEOEXPORT_EXPORT VideoSaver : public QObject {
 
     Q_OBJECT
-
+public:
+    typedef QMap<QString, QString> AdditionalOptions;
 public:
     VideoSaver(KisDocument* doc, bool batchMode);
     virtual ~VideoSaver();
 
     KisImageWSP image();
-    KisImageBuilder_Result encode(const QString &filename);
+    KisImageBuilder_Result encode(const QString &filename, const AdditionalOptions &additionalOptions = AdditionalOptions());
 
 private Q_SLOTS:
     void cancel();

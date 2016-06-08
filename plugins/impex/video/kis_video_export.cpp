@@ -65,16 +65,13 @@ KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
     VideoSaver kpc(input, getBatchMode());
-    KisImageBuilder_Result res;
+    KisImageBuilder_Result res = kpc.encode(filename);
 
-    // if ((res = kpc.buildAnimation(filename)) == KisImageBuilder_RESULT_OK) {
-    //     dbgFile <<"success !";
-    //     return KisImportExportFilter::OK;
-    // }
-    // dbgFile <<" Result =" << res;
-
-    if (res == KisImageBuilder_RESULT_CANCEL)
+    if (res == KisImageBuilder_RESULT_OK) {
+        return KisImportExportFilter::OK;
+    } else if (res == KisImageBuilder_RESULT_CANCEL) {
         return KisImportExportFilter::ProgressCancelled;
+    }
 
     return KisImportExportFilter::InternalError;
 }

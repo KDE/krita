@@ -120,7 +120,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
         }
     } while (it.nextPixel());
 
-    if (qApp->applicationName() != "qttest") {
+    if (!qApp->applicationName().toLower().contains("test")) {
 
         bool sRGB = (cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive)
                      && !cs->profile()->name().contains(QLatin1String("g10")));

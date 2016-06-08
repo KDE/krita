@@ -42,7 +42,8 @@ void KisVideoPluginTest::testFiles()
 
 
     VideoSaver saver(doc, false);
-    saver.encode("testfile.mkv");
+    //saver.encode("testfile.gif");
+    saver.encode("testfile.ogg");
 }
 QTEST_MAIN(KisVideoPluginTest)
 

@@ -22,7 +22,7 @@
 #include <QDebug>
 // #include <QApplication>
 
-// #include <QFileInfo>
+#include <QFileInfo>
 // #include <QFile>
 // #include <QDir>
 // #include <QVector>
@@ -32,22 +32,15 @@
 
 // #include <KisPart.h>
 #include <KisDocument.h>
-// #include <KoColorSpace.h>
-// #include <KoColorSpaceRegistry.h>
-// #include <KoColorModelStandardIds.h>
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoColorModelStandardIds.h>
 
-// #include <kis_annotation.h>
-// #include <kis_types.h>
-
-// #include <kis_debug.h>
 #include <kis_image.h>
-// #include <kis_group_layer.h>
-// #include <kis_paint_layer.h>
-// #include <kis_paint_device.h>
-// #include <kis_raster_keyframe_channel.h>
-// #include <kis_image_animation_interface.h>
-// #include <kis_time_range.h>
-// #include <kis_iterator_ng.h>
+#include <kis_image_animation_interface.h>
+#include <kis_time_range.h>
+
+#include "kis_animation_exporter.h"
 
 #include <AvTranscoder/transcoder/Transcoder.hpp>
 #include <AvTranscoder/file/OutputFile.hpp>
@@ -73,32 +66,96 @@ KisImageWSP VideoSaver::image()
     return m_image;
 }
 
-KisImageBuilder_Result VideoSaver::encode(const QString &filename1)
+struct FrameUploader {
+    FrameUploader(avtranscoder::StreamTranscoder &_transcoder,
+                const avtranscoder::VideoFrameDesc& frameDesc,
+                const QRect &_bounds,
+                const KoColorSpace *_dstCS)
+        : transcoder(_transcoder),
+          frameData(frameDesc),
+          dstCS(_dstCS),
+          bounds(_bounds)
+    {
+        generator =
+            dynamic_cast<avtranscoder::VideoGenerator*>(transcoder.getCurrentDecoder());
+        KIS_ASSERT_RECOVER_NOOP(generator);
+
+        buffer.resize(dstCS->pixelSize() * frameDesc._width * frameDesc._height);
+    }
+
+    KisImportExportFilter::ConversionStatus
+    operator() (int time, KisPaintDeviceSP dev) {
+        Q_UNUSED(time);
+
+        dev->convertTo(dstCS);
+        dev->readBytes(buffer.data(), bounds);
+        frameData.assign(buffer.constData());
+        generator->setNextFrame(frameData);
+        transcoder.processFrame();
+
+        return KisImportExportFilter::OK;
+    }
+
+    avtranscoder::StreamTranscoder &transcoder;
+    avtranscoder::VideoGenerator *generator;
+    avtranscoder::VideoFrame frameData;
+    const KoColorSpace *dstCS;
+    QRect bounds;
+    QVector<quint8> buffer;
+};
+
+KisImageBuilder_Result VideoSaver::encode(const QString &filename, const QMap<QString, QString> &additionalOptions)
 {
+    const QFileInfo fileInfo(filename);
+    const QString suffix = fileInfo.suffix().toLower();
+
+    using namespace avtranscoder::constants;
+    avtranscoder::ProfileLoader::Profile videoProfile;
+
+    if (suffix == "gif") {
+        videoProfile[avProfileIdentificator] = "gif";
+        videoProfile[avProfileIdentificatorHuman] = "GIF format codec";
+        videoProfile[avProfileType] = avProfileTypeVideo;
+        videoProfile[avProfilePixelFormat] = "bgr8";
+        videoProfile[avProfileCodec] = "gif";
+        videoProfile["gifflags"] = "-transdiff";
+    } else if (suffix == "mkv" || suffix == "mp4") {
+        avtranscoder::ProfileLoader loader(true);
+        videoProfile = loader.getProfile("h264-hq");
+    } else if (suffix == "ogv") {
+        videoProfile[avProfileIdentificator] = "theora";
+        videoProfile[avProfileIdentificatorHuman] = "Xiph.Org Theora";
+        videoProfile[avProfileType] = avProfileTypeVideo;
+        videoProfile[avProfilePixelFormat] = "yuv422p";
+        videoProfile[avProfileCodec] = "theora";
+        //videoProfile[avProfileBitRate] = "140000";
+    }
+
+    for (auto it = additionalOptions.constBegin();
+         it != additionalOptions.constEnd(); ++it) {
+
+        videoProfile[it.key().toStdString()] = it.value().toStdString();
+    }
+
+
     KisImageBuilder_Result retval= KisImageBuilder_RESULT_OK;
+
+    KisImageAnimationInterface *animation = m_image->animationInterface();
+    const KoColorSpace *dstCS = KoColorSpaceRegistry::instance()->rgb8();
+    const QRect saveRect = m_image->bounds();
+
+    AVPixelFormat inputPixelFormat = AV_PIX_FMT_BGRA;
 
     try {
         avtranscoder::preloadCodecsAndFormats();
         avtranscoder::Logger::setLogLevel(AV_LOG_DEBUG);
 
-        avtranscoder::OutputFile outputFile(filename1.toStdString());
-
-        using namespace avtranscoder::constants;
-        avtranscoder::ProfileLoader::Profile profile;
-        profile[avProfileIdentificator] = "mymkv";
-        profile[avProfileIdentificatorHuman] = "mymkv";
-        profile[avProfileType] = avProfileTypeFormat;
-        profile[avProfileFormat] = "mkv";
-        outputFile.setupWrapping(profile);
+        avtranscoder::OutputFile outputFile(filename.toStdString());
 
         avtranscoder::VideoCodec inputCodec(avtranscoder::eCodecTypeDecoder, AV_CODEC_ID_RAWVIDEO);
-        avtranscoder::VideoFrameDesc imageDesc(1920, 1080, AV_PIX_FMT_RGBA);
-        imageDesc._fps = 25.0;
+        avtranscoder::VideoFrameDesc imageDesc(saveRect.width(), saveRect.height(), inputPixelFormat);
+        imageDesc._fps = animation->framerate();
         inputCodec.setImageParameters(imageDesc);
-
-        avtranscoder::ProfileLoader loader(true);
-        avtranscoder::ProfileLoader::Profile videoProfile = loader.getProfile("h264-lq");
-        videoProfile["profile"] = "main";
 
         avtranscoder::StreamTranscoder transcoder(inputCodec, outputFile, videoProfile);
 
@@ -107,24 +164,23 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename1)
             dynamic_cast<avtranscoder::VideoGenerator*>(transcoder.getCurrentDecoder());
         KIS_ASSERT_RECOVER_NOOP(generator);
 
-        QImage canvas(imageDesc._width, imageDesc._height, QImage::Format_RGBA8888);
-        QPainter gc(&canvas);
-
-
-        avtranscoder::VideoFrame intermediateBuffer(imageDesc);
-
         {
             outputFile.beginWrap();
             transcoder.preProcessCodecLatency();
 
-            for (int i = 0; i < 50; i++) {
+            KisTimeRange clipRange = animation->fullClipRange();
+            KisAnimationExporter exporter(m_doc, clipRange.start(), clipRange.end());
 
+            FrameUploader uploader(transcoder, imageDesc, saveRect, dstCS);
+            exporter.setSaveFrameCallback(uploader);
 
-                gc.fillRect(i * 10, i * 10, 50, 50, Qt::red);
-                intermediateBuffer.assign(canvas.constBits());
-                generator->setNextFrame(intermediateBuffer);
+            KisImportExportFilter::ConversionStatus status =
+                exporter.exportAnimation();
 
-                transcoder.processFrame();
+            if (status == KisImportExportFilter::UserCancelled) {
+                retval =  KisImageBuilder_RESULT_CANCEL;
+            } else if (status != KisImportExportFilter::OK) {
+                retval =  KisImageBuilder_RESULT_FAILURE;
             }
 
             outputFile.endWrap();

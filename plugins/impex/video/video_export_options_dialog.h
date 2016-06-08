@@ -46,6 +46,9 @@ public:
 
     VideoSaver::AdditionalOptions getOptions() const;
 
+private Q_SLOTS:
+    void slotAccepted();
+
 private:
     Ui::VideoExportOptionsDialog *ui;
 

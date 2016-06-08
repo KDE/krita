@@ -21,6 +21,9 @@
 
 #include <KoID.h>
 
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
+
 
 struct VideoExportOptionsDialog::Private
 {
@@ -36,19 +39,12 @@ struct VideoExportOptionsDialog::Private
         presets << KoID("veryslow", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "veryslow"));
         presets << KoID("placebo", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "placebo"));
 
-        defaultPreset = 5;
-        defaultBitrate = 5000;
-        defaultConstantRateFactor = 23;
-
-
         profiles << KoID("baseline", i18nc("h264 profile name, check simplescreenrecorder for standard translations", "baseline"));
         profiles << KoID("main", i18nc("h264 profile name, check simplescreenrecorder for standard translations", "main"));
         profiles << KoID("high", i18nc("h264 profile name, check simplescreenrecorder for standard translations", "high"));
         profiles << KoID("high10", i18nc("h264 profile name, check simplescreenrecorder for standard translations", "high10"));
         profiles << KoID("high422", i18nc("h264 profile name, check simplescreenrecorder for standard translations", "high422"));
         profiles << KoID("high444", i18nc("h264 profile name, check simplescreenrecorder for standard translations", "high444"));
-
-        defaultProfile = 4;
 
         tunes << KoID("film", i18nc("h264 tune option name, check simplescreenrecorder for standard translations", "film"));
         tunes << KoID("animation", i18nc("h264 tune option name, check simplescreenrecorder for standard translations", "animation"));
@@ -59,7 +55,14 @@ struct VideoExportOptionsDialog::Private
         tunes << KoID("fastdecode", i18nc("h264 tune option name, check simplescreenrecorder for standard translations", "fastdecode"));
         tunes << KoID("zerolatency", i18nc("h264 tune option name, check simplescreenrecorder for standard translations", "zerolatency"));
 
-        defaultTune = 1;
+
+        KConfigGroup cfg = KSharedConfig::openConfig()->group("VideoExportPlugin");
+
+        defaultPreset = cfg.readEntry("h264PresetIndex", 5);
+        defaultConstantRateFactor = cfg.readEntry("h264ConstantRateFactor", 23);
+        defaultProfile = cfg.readEntry("h264ProfileIndex", 4);
+        defaultTune = cfg.readEntry("h264TuneIndex", 1);
+        defaultBitrate = cfg.readEntry("TheoraBitrate", 5000);
     }
 
     QVector<KoID> presets;
@@ -111,11 +114,23 @@ VideoExportOptionsDialog::VideoExportOptionsDialog(QWidget *parent) :
     ui->cmbCodec->setEnabled(false);
 
     setModal(true);
+    connect(this, SIGNAL(accepted()), SLOT(slotAccepted()));
 }
 
 VideoExportOptionsDialog::~VideoExportOptionsDialog()
 {
     delete ui;
+}
+
+void VideoExportOptionsDialog::slotAccepted()
+{
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("VideoExportPlugin");
+
+    cfg.writeEntry("h264PresetIndex", ui->cmbPreset->currentIndex());
+    cfg.writeEntry("h264ConstantRateFactor", ui->intConstantRateFactor->value());
+    cfg.writeEntry("h264ProfileIndex", ui->cmbProfile->currentIndex());
+    cfg.writeEntry("h264TuneIndex", ui->cmbTune->currentIndex());
+    cfg.writeEntry("TheoraBitrate", ui->intBitrate->value());
 }
 
 void VideoExportOptionsDialog::setCodec(CodecIndex index)
@@ -136,8 +151,14 @@ VideoSaver::AdditionalOptions VideoExportOptionsDialog::getOptions() const
         const int profileIndex = ui->cmbProfile->currentIndex();
         options["profile"] = m_d->profiles[profileIndex].id();
 
-        const int tuneIndex = ui->cmbTune->currentIndex();
-        options["tune"] = m_d->tunes[tuneIndex].id();
+        if (m_d->profiles[profileIndex].id() == "high422") {
+            options["pix_fmt"] = "yuv422p";
+        } else if (m_d->profiles[profileIndex].id() == "high444") {
+            options["pix_fmt"] = "yuv444p";
+        } else {
+            options["pix_fmt"] = "yuv420p";
+        }
+
 
     } else if (ui->cmbCodec->currentIndex() == int(CODEC_THEORA)) {
         const qint64 bitRate = ui->intBitrate->value() * 1024;

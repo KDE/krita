@@ -39,6 +39,7 @@ OcioDisplayFilter::OcioDisplayFilter(KisExposureGammaCorrectionInterface *interf
     , inputColorSpaceName(0)
     , displayDevice(0)
     , view(0)
+    , look(0)
     , swizzle(RGBA)
     , m_interface(interface)
     , m_lut3dTexID(0)
@@ -124,11 +125,24 @@ void OcioDisplayFilter::updateProcessor()
     if (!inputColorSpaceName) {
         inputColorSpaceName = config->getColorSpaceNameByIndex(0);
     }
+    if (!look) {
+	look = config->getColorSpaceNameByIndex(0);
+    }
+
+    if (!displayDevice || !view || !inputColorSpaceName) {
+        return;
+    }
 
     OCIO::DisplayTransformRcPtr transform = OCIO::DisplayTransform::Create();
     transform->setInputColorSpaceName(inputColorSpaceName);
     transform->setDisplay(displayDevice);
     transform->setView(view);
+
+    //Add looks, no idea if this is working right...
+    if (config->getLook(look)) {
+       transform->setLooksOverride(look);
+       transform->setLooksOverrideEnabled(true);
+    }
 
     OCIO::GroupTransformRcPtr approximateTransform = OCIO::GroupTransform::Create();
 

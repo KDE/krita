@@ -108,7 +108,7 @@ public:
     virtual KoHistogramProducer *generate() = 0;
 
     /// Returns if a colorspace can be used with this producer
-    virtual bool isCompatibleWith(const KoColorSpace* colorSpace) const = 0;
+    virtual bool isCompatibleWith(const KoColorSpace* colorSpace, bool strict = false) const = 0;
 
     /// Returns a float in the [0.0, 1.0] range, 0.0 means this is a very generic method
     virtual float preferrednessLevelWith(const KoColorSpace* colorSpace) const = 0;
@@ -133,7 +133,7 @@ public:
     virtual ~KoHistogramProducerFactoryRegistry();
     static KoHistogramProducerFactoryRegistry* instance();
     /// returns a list, sorted by preferrence: higher preferance comes first
-    QList<QString> keysCompatibleWith(const KoColorSpace* colorSpace) const;
+    QList<QString> keysCompatibleWith(const KoColorSpace* colorSpace, bool isStrict=false) const;
 
 private:
     KoHistogramProducerFactoryRegistry(const KoHistogramProducerFactoryRegistry&);

@@ -126,7 +126,7 @@ void OcioDisplayFilter::updateProcessor()
         inputColorSpaceName = config->getColorSpaceNameByIndex(0);
     }
     if (!look) {
-	look = config->getColorSpaceNameByIndex(0);
+	look = config->getLookNameByIndex(0);
     }
 
     if (!displayDevice || !view || !inputColorSpaceName) {

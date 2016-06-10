@@ -27,6 +27,7 @@
 #include <kis_pressure_darken_option.h>
 #include <kis_pressure_flow_opacity_option.h>
 #include <kis_pressure_size_option.h>
+#include <kis_pressure_ratio_option.h>
 #include <kis_pressure_flow_option.h>
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_mix_option.h>
@@ -36,7 +37,6 @@
 #include <kis_pressure_sharpness_option.h>
 #include <kis_color_source_option.h>
 #include <kis_pressure_spacing_option.h>
-
 
 class KisBrushBasedPaintOpSettings;
 
@@ -58,6 +58,7 @@ public:
 private:
     KisColorSource *m_colorSource;
     KisPressureSizeOption m_sizeOption;
+    KisPressureRatioOption m_ratioOption;
     KisPressureSpacingOption m_spacingOption;
     KisPressureFlowOption m_flowOption;
     KisFlowOpacityOption m_opacityOption;

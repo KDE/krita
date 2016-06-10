@@ -53,6 +53,9 @@ public:
 Q_SIGNALS:
     void sigConfigChanged();
 
+private Q_SLOTS:
+    void slotMasterColumnChanged(int, bool, int);
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

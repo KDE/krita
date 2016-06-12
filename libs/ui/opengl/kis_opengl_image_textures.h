@@ -157,6 +157,7 @@ private:
     KisImageWSP m_image;
     QRect m_storedImageBounds;
     const KoColorProfile *m_monitorProfile;
+    const KoColorProfile *m_proofingProfile;
     KoColorConversionTransformation::Intent m_renderingIntent;
     KoColorConversionTransformation::ConversionFlags m_conversionFlags;
 

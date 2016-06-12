@@ -94,6 +94,81 @@ public:
 private:
     mutable cmsHTRANSFORM m_transform;
 };
+class KoLcmsColorProofingConversionTransformation : public KoColorProofingConversionTransformation
+{
+public:
+    KoLcmsColorProofingConversionTransformation(const KoColorSpace *srcCs, quint32 srcColorSpaceType, LcmsColorProfileContainer *srcProfile,
+                                        const KoColorSpace *dstCs, quint32 dstColorSpaceType, LcmsColorProfileContainer *dstProfile,
+                                        const KoColorSpace *proofingSpace,
+                                        Intent renderingIntent,
+                                        ConversionFlags conversionFlags
+                                        )
+        : KoColorProofingConversionTransformation(srcCs, dstCs, proofingSpace, renderingIntent, conversionFlags)
+        , m_transform(0)
+    {
+        Q_ASSERT(srcCs);
+        Q_ASSERT(dstCs);
+        Q_ASSERT(renderingIntent < 4);
+
+        if (srcCs->colorDepthId() == Integer8BitsColorDepthID
+                || srcCs->colorDepthId() == Integer16BitsColorDepthID) {
+
+            if ((srcProfile->name().contains(QLatin1String("linear"), Qt::CaseInsensitive) ||
+                 dstProfile->name().contains(QLatin1String("linear"), Qt::CaseInsensitive)) &&
+                    !conversionFlags.testFlag(KoColorProofingConversionTransformation::NoOptimization)) {
+                conversionFlags |= KoColorProofingConversionTransformation::NoOptimization;
+            }
+        }
+
+        quint16 alarm[4];//cyan!
+        alarm[0] = 65535;
+        alarm[1] = 0;
+        alarm[2] = 0;
+        alarm[3] = 65535;
+        cmsSetAlarmCodes(alarm);
+
+        m_transform = cmsCreateProofingTransform(srcProfile->lcmsProfile(),
+                                         srcColorSpaceType,
+                                         dstProfile->lcmsProfile(),
+                                         dstColorSpaceType,
+                                         dynamic_cast<const IccColorProfile *>(proofingSpace->profile())->asLcms()->lcmsProfile(),
+                                         renderingIntent,
+                                         renderingIntent,
+                                         conversionFlags);
+
+        Q_ASSERT(m_transform);
+    }
+
+    ~KoLcmsColorProofingConversionTransformation()
+    {
+        cmsDeleteTransform(m_transform);
+    }
+
+public:
+
+    virtual void transform(const quint8 *src, quint8 *dst, qint32 numPixels) const
+    {
+        Q_ASSERT(m_transform);
+
+        qint32 srcPixelSize = srcColorSpace()->pixelSize();
+        qint32 dstPixelSize = dstColorSpace()->pixelSize();
+
+        cmsDoTransform(m_transform, const_cast<quint8 *>(src), dst, numPixels);
+
+        // Lcms does nothing to the destination alpha channel so we must convert that manually.
+        while (numPixels > 0) {
+            qreal alpha = srcColorSpace()->opacityF(src);
+            dstColorSpace()->setOpacity(dst, alpha, 1);
+
+            src += srcPixelSize;
+            dst += dstPixelSize;
+            numPixels--;
+        }
+
+    }
+private:
+    mutable cmsHTRANSFORM m_transform;
+};
 
 struct IccColorSpaceEngine::Private {
 };
@@ -161,6 +236,23 @@ KoColorConversionTransformation *IccColorSpaceEngine::createColorTransformation(
                dynamic_cast<const IccColorProfile *>(dstColorSpace->profile())->asLcms(), renderingIntent, conversionFlags);
 
 }
+KoColorProofingConversionTransformation *IccColorSpaceEngine::createColorProofingTransformation(const KoColorSpace *srcColorSpace,
+        const KoColorSpace *dstColorSpace,
+        const KoColorSpace *proofingSpace,
+        KoColorProofingConversionTransformation::Intent renderingIntent,
+        KoColorProofingConversionTransformation::ConversionFlags conversionFlags
+        ) const
+{
+    Q_ASSERT(srcColorSpace);
+    Q_ASSERT(dstColorSpace);
+
+    return new KoLcmsColorProofingConversionTransformation(
+                srcColorSpace, computeColorSpaceType(srcColorSpace),
+                dynamic_cast<const IccColorProfile *>(srcColorSpace->profile())->asLcms(), dstColorSpace, computeColorSpaceType(dstColorSpace),
+                dynamic_cast<const IccColorProfile *>(dstColorSpace->profile())->asLcms(), proofingSpace, renderingIntent, conversionFlags
+                );
+}
+
 quint32 IccColorSpaceEngine::computeColorSpaceType(const KoColorSpace *cs) const
 {
     Q_ASSERT(cs);

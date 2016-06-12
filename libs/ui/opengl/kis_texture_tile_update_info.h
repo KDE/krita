@@ -209,6 +209,25 @@ public:
         }
     }
 
+    void proofTo(const KoColorSpace* dstCS, const KoColorSpace* proofingSpace,
+                   KoColorProofingConversionTransformation::Intent renderingIntent,
+                   KoColorProofingConversionTransformation::ConversionFlags conversionFlags)
+    {
+        if (dstCS == m_patchColorSpace && conversionFlags == KoColorProofingConversionTransformation::Empty) return;
+
+        if (m_patchRect.isValid()) {
+            const qint32 numPixels = m_patchRect.width() * m_patchRect.height();
+            const quint32 conversionCacheLength = numPixels * dstCS->pixelSize();
+
+            m_conversionCache.ensureNotSmaller(conversionCacheLength);
+            m_patchColorSpace->proofPixelsTo(m_patchPixels.data(), m_conversionCache.data(), dstCS, proofingSpace, numPixels, renderingIntent, conversionFlags);
+
+            m_patchColorSpace = dstCS;
+            m_conversionCache.swap(m_patchPixels);
+            m_patchPixelsLength = conversionCacheLength;
+        }
+    }
+
     inline quint8* data() const {
         return m_patchPixels.data();
     }

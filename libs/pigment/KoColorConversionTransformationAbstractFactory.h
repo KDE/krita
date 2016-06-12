@@ -23,6 +23,7 @@
 #include "kritapigment_export.h"
 
 #include <KoColorConversionTransformation.h>
+#include <KoColorProofingConversionTransformation.h>
 
 class KRITAPIGMENT_EXPORT KoColorConversionTransformationAbstractFactory
 {
@@ -40,6 +41,21 @@ public:
                                                                        const KoColorSpace* dstColorSpace,
                                                                        KoColorConversionTransformation::Intent renderingIntent,
                                                                        KoColorConversionTransformation::ConversionFlags conversionFlags) const = 0;
+
+    virtual KoColorProofingConversionTransformation* createColorProofingTransformation(const KoColorSpace* srcColorSpace,
+                                                                       const KoColorSpace* dstColorSpace,
+                                                                       const KoColorSpace* proofingSpace,
+                                                                       KoColorProofingConversionTransformation::Intent renderingIntent,
+                                                                       KoColorProofingConversionTransformation::ConversionFlags conversionFlags) const
+    {
+        Q_UNUSED(srcColorSpace);
+        Q_UNUSED(dstColorSpace);
+        Q_UNUSED(proofingSpace);
+        Q_UNUSED(renderingIntent);
+        Q_UNUSED(conversionFlags);
+        qFatal("createColorProofinTransform undefined.");
+        return 0;
+    }
 };
 
 #endif

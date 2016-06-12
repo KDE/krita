@@ -29,6 +29,7 @@
 
 #include "KoColorSpaceConstants.h"
 #include "KoColorConversionTransformation.h"
+#include "KoColorProofingConversionTransformation.h"
 #include "KoCompositeOp.h"
 #include <KoID.h>
 #include "kritapigment_export.h"
@@ -354,6 +355,10 @@ public:
     virtual KoColorConversionTransformation* createColorConverter(const KoColorSpace * dstColorSpace,
                                                                   KoColorConversionTransformation::Intent renderingIntent,
                                                                   KoColorConversionTransformation::ConversionFlags conversionFlags) const;
+    virtual KoColorProofingConversionTransformation* createColorProofingConverter(const KoColorSpace * dstColorSpace,
+                                                                  const KoColorSpace * proofingSpace,
+                                                                  KoColorProofingConversionTransformation::Intent renderingIntent,
+                                                                  KoColorProofingConversionTransformation::ConversionFlags conversionFlags) const;
 
     /**
      * Convert a byte array of srcLen pixels *src to the specified color space
@@ -370,6 +375,12 @@ public:
                                  quint32 numPixels,
                                  KoColorConversionTransformation::Intent renderingIntent,
                                  KoColorConversionTransformation::ConversionFlags conversionFlags) const;
+    virtual bool proofPixelsTo(const quint8 * src,
+                                 quint8 * dst, const KoColorSpace * dstColorSpace,
+                                 const KoColorSpace * proofingSpace,
+                                 quint32 numPixels,
+                                 KoColorProofingConversionTransformation::Intent renderingIntent,
+                                 KoColorProofingConversionTransformation::ConversionFlags conversionFlags) const;
 
 //============================== Manipulation functions ==========================//
 

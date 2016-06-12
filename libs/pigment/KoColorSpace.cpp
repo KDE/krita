@@ -417,6 +417,11 @@ KoColorConversionTransformation* KoColorSpace::createColorConverter(const KoColo
     }
 }
 
+KoColorProofingConversionTransformation* KoColorSpace::createColorProofingConverter(const KoColorSpace * dstColorSpace, const KoColorSpace *proofingSpace, KoColorProofingConversionTransformation::Intent renderingIntent, KoColorProofingConversionTransformation::ConversionFlags conversionFlags) const
+{
+    return KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorProofingConverter(this, dstColorSpace, proofingSpace, renderingIntent, conversionFlags);
+}
+
 bool KoColorSpace::convertPixelsTo(const quint8 * src,
                                    quint8 * dst,
                                    const KoColorSpace * dstColorSpace,
@@ -434,7 +439,24 @@ bool KoColorSpace::convertPixelsTo(const quint8 * src,
     }
     return true;
 }
-
+bool KoColorSpace::proofPixelsTo(const quint8 * src,
+                                   quint8 * dst,
+                                   const KoColorSpace * dstColorSpace,
+                                   const KoColorSpace * proofingSpace,
+                                   quint32 numPixels,
+                                   KoColorProofingConversionTransformation::Intent renderingIntent,
+                                   KoColorProofingConversionTransformation::ConversionFlags conversionFlags) const
+{
+    if (*this == *dstColorSpace && *this == *proofingSpace) {
+        if (src != dst) {
+            memcpy(dst, src, numPixels * sizeof(quint8) * pixelSize());
+        }
+    } else {
+        KoColorProofingConversionTransformation cct = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorProofingConverter(this, dstColorSpace, proofingSpace, renderingIntent, conversionFlags);
+        cct->transform(src, dst, numPixels);
+    }
+    return true;
+}
 
 void KoColorSpace::bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::ParameterInfo& params, const KoCompositeOp* op,
                           KoColorConversionTransformation::Intent renderingIntent,

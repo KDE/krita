@@ -27,6 +27,7 @@ class KoColorSpaceEngine;
 class KoID;
 
 #include "KoColorConversionTransformation.h"
+#include "KoColorProofingConversionTransformation.h"
 
 #include <QList>
 #include <QPair>
@@ -69,6 +70,7 @@ public:
      * the best possible path between the two color space.
      */
     KoColorConversionTransformation* createColorConverter(const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) const;
+    KoColorProofingConversionTransformation* createColorProofingConverter(const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, const KoColorSpace *proofingSpace, KoColorProofingConversionTransformation::Intent renderingIntent, KoColorProofingConversionTransformation::ConversionFlags conversionFlags) const;
 
     /**
      * This function creates two transformations, one from the color space and one to the

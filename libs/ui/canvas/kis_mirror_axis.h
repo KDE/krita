@@ -51,6 +51,8 @@ private:
 
 private Q_SLOTS:
     void mirrorModeChanged();
+    void moveHorizontalAxisToCenter();
+    void moveVerticalAxisToCenter();
 };
 
 #endif // KISMIRRORAXIS_H

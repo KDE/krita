@@ -45,7 +45,6 @@ public:
     Private(KisMirrorAxis* qq)
         : q(qq)
         , resourceProvider(0)
-        , image(0)
         , mirrorHorizontal(false)
         , mirrorVertical(false)
         , lockHorizontal(false)

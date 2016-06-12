@@ -1,6 +1,9 @@
 ########### install files ###############
 
 install(FILES
+BreezeDark.colors
+BreezeHighContrast.colors
+BreezeLight.colors
 KritaNeutral.colors
 KritaBlender.colors
 KritaBright.colors

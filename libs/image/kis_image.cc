@@ -1594,3 +1594,9 @@ KisImageAnimationInterface* KisImage::animationInterface() const
 {
     return m_d->animationInterface;
 }
+
+KisProofingConfiguration *KisImage::proofingConfiguration() const
+{
+    // XXXX
+    return 0;
+}

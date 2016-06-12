@@ -53,7 +53,7 @@ class KisLayerComposition;
 class KisSpontaneousJob;
 class KisImageAnimationInterface;
 class KUndo2MagicString;
-
+class KisProofingConfiguration;
 
 namespace KisMetaData
 {
@@ -562,6 +562,12 @@ public:
     void notifyNodeCollpasedChanged();
 
     KisImageAnimationInterface *animationInterface() const;
+
+    /**
+     * @brief proofingConfiguration
+     * @return
+     */
+    KisProofingConfiguration *proofingConfiguration() const;
 
 public:
     bool startIsolatedMode(KisNodeSP node);

@@ -32,16 +32,22 @@
 #include <kis_group_layer.h>
 #include <kis_layer.h>
 #include <kis_paint_device.h>
+#include "kis_signal_compressor.h"
 #include <KisView.h>
 
-ChannelDockerDock::ChannelDockerDock( ) : QDockWidget(i18n("Channels")), m_canvas(0)
+ChannelDockerDock::ChannelDockerDock( ) :
+    QDockWidget(i18n("Channels")),
+    m_compressor(new KisSignalCompressor(200, KisSignalCompressor::POSTPONE, this)),
+    m_canvas(0)
 {
     m_channelTable = new QTableView(this);
     m_model = new ChannelModel(this);
     m_channelTable->setModel(m_model);
     m_channelTable->setShowGrid(false);
     m_channelTable->verticalHeader()->setVisible(false);
+    m_channelTable->horizontalHeader()->setVisible(false);
     setWidget(m_channelTable);
+    connect(m_compressor, SIGNAL(timeout()),SLOT(updateData()));
 }
 
 void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
@@ -55,13 +61,23 @@ void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     if (m_canvas && m_canvas->imageView() && m_canvas->imageView()->image()) {
         QPointer<KisView> view = m_canvas->imageView();
-        m_model->slotLayerActivated(view->image()->rootLayer());
+        m_model->slotSetCanvas(m_canvas);
+
         KisPaintDeviceSP dev = view->image()->projection();
+
+        connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), m_compressor, SLOT(start()), Qt::UniqueConnection);
         connect(dev, SIGNAL(colorSpaceChanged(const KoColorSpace*)), m_model, SLOT(slotColorSpaceChanged(const KoColorSpace*)));
         connect(dev, SIGNAL(colorSpaceChanged(const KoColorSpace*)), m_canvas, SLOT(channelSelectionChanged()));
     }
 
     connect(m_model, SIGNAL(channelFlagsChanged()), m_canvas, SLOT(channelSelectionChanged()));
+}
+
+void ChannelDockerDock::updateData()
+{
+    m_model->updateData();
+    m_channelTable->resizeRowsToContents();
+    m_channelTable->resizeColumnsToContents();
 }
 
 

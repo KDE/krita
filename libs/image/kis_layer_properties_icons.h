@@ -29,7 +29,7 @@ class KRITAIMAGE_EXPORT KisLayerPropertiesIcons
 {
 public:
     KisLayerPropertiesIcons();
-    ~KisLayerPropertiesIcons();
+    //~KisLayerPropertiesIcons();
 
     static const KoID locked;
     static const KoID visible;

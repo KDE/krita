@@ -45,6 +45,7 @@ public:
     const QString& name() const;
     virtual void addProfile(const QString &filename) = 0;
     virtual void removeProfile(const QString &filename) = 0;
+
 private:
     struct Private;
     Private* const d;

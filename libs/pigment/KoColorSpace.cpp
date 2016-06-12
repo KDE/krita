@@ -36,6 +36,7 @@
 #include "KoMixColorsOp.h"
 #include "KoConvolutionOp.h"
 #include "KoCompositeOpRegistry.h"
+#include "KoColorSpaceEngine.h"
 
 #include <QThreadStorage>
 #include <QByteArray>
@@ -119,7 +120,7 @@ QPolygonF KoColorSpace::gamutXYY() const
         if ((colorModelId().id()=="CMYKA" || colorModelId().id()=="LABA") && colorDepthId().id()=="F32") {
             //boundaries for cmyka/laba have trouble getting the max values for Float, and are pretty awkward in general.
             max = this->channels()[0]->getUIMax();
-            
+
         }
         int samples = 5;//amount of samples in our color space.
         QString name = KoColorSpaceRegistry::instance()->colorSpaceFactory("XYZAF32")->defaultProfile();
@@ -175,7 +176,7 @@ QPolygonF KoColorSpace::gamutXYY() const
                         }
                     }
                 }
-                
+
             }
         }
         delete[] data;
@@ -230,7 +231,7 @@ QPolygonF KoColorSpace::estimatedTRCXYY() const
                 for (int j=0; j<5; j++){
                     channelValuesF.fill(0.0);
                     channelValuesF[i] = ((max/4)*(j));
-                    
+
                     fromNormalisedChannelsValue(data, channelValuesF);
 
                     convertPixelsTo(data, data2, xyzColorSpace, 1, KoColorConversionTransformation::IntentAbsoluteColorimetric,         KoColorConversionTransformation::adjustmentConversionFlags());
@@ -417,11 +418,6 @@ KoColorConversionTransformation* KoColorSpace::createColorConverter(const KoColo
     }
 }
 
-KoColorProofingConversionTransformation* KoColorSpace::createColorProofingConverter(const KoColorSpace * dstColorSpace, const KoColorSpace *proofingSpace, KoColorProofingConversionTransformation::Intent renderingIntent, KoColorProofingConversionTransformation::ConversionFlags conversionFlags) const
-{
-    return KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorProofingConverter(this, dstColorSpace, proofingSpace, renderingIntent, conversionFlags);
-}
-
 bool KoColorSpace::convertPixelsTo(const quint8 * src,
                                    quint8 * dst,
                                    const KoColorSpace * dstColorSpace,
@@ -444,17 +440,24 @@ bool KoColorSpace::proofPixelsTo(const quint8 * src,
                                    const KoColorSpace * dstColorSpace,
                                    const KoColorSpace * proofingSpace,
                                    quint32 numPixels,
-                                   KoColorProofingConversionTransformation::Intent renderingIntent,
-                                   KoColorProofingConversionTransformation::ConversionFlags conversionFlags) const
+                                   KoColorConversionTransformation::Intent renderingIntent,
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
     if (*this == *dstColorSpace && *this == *proofingSpace) {
         if (src != dst) {
             memcpy(dst, src, numPixels * sizeof(quint8) * pixelSize());
         }
-    } else {
-        KoColorProofingConversionTransformation cct = KoColorSpaceRegistry::instance()->colorConversionSystem()->createColorProofingConverter(this, dstColorSpace, proofingSpace, renderingIntent, conversionFlags);
-        cct->transform(src, dst, numPixels);
+        return true;
     }
+    // Only the icc engine can do this kind of stuff
+    KoColorSpaceEngine *engine = KoColorSpaceEngineRegistry::instance()->get("icc");
+    qDebug() << ">>>>>>>>>>>>>>>>>>>> we got a proofing engine";
+    if (!engine) return false;
+    KoColorConversionTransformation *transform = engine->createColorProofingTransformation(this, dstColorSpace, proofingSpace, renderingIntent, conversionFlags);
+
+    Q_UNUSED(transform);
+
+    delete transform;
     return true;
 }
 

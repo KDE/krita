@@ -48,7 +48,7 @@ public:
                 || srcCs->colorDepthId() == Integer16BitsColorDepthID) {
 
             if ((srcProfile->name().contains(QLatin1String("linear"), Qt::CaseInsensitive) ||
-                    dstProfile->name().contains(QLatin1String("linear"), Qt::CaseInsensitive)) &&
+                 dstProfile->name().contains(QLatin1String("linear"), Qt::CaseInsensitive)) &&
                     !conversionFlags.testFlag(KoColorConversionTransformation::NoOptimization)) {
                 conversionFlags |= KoColorConversionTransformation::NoOptimization;
             }
@@ -94,15 +94,16 @@ public:
 private:
     mutable cmsHTRANSFORM m_transform;
 };
+
 class KoLcmsColorProofingConversionTransformation : public KoColorProofingConversionTransformation
 {
 public:
     KoLcmsColorProofingConversionTransformation(const KoColorSpace *srcCs, quint32 srcColorSpaceType, LcmsColorProfileContainer *srcProfile,
-                                        const KoColorSpace *dstCs, quint32 dstColorSpaceType, LcmsColorProfileContainer *dstProfile,
-                                        const KoColorSpace *proofingSpace,
-                                        Intent renderingIntent,
-                                        ConversionFlags conversionFlags
-                                        )
+                                                const KoColorSpace *dstCs, quint32 dstColorSpaceType, LcmsColorProfileContainer *dstProfile,
+                                                const KoColorSpace *proofingSpace,
+                                                Intent renderingIntent,
+                                                ConversionFlags conversionFlags
+                                                )
         : KoColorProofingConversionTransformation(srcCs, dstCs, proofingSpace, renderingIntent, conversionFlags)
         , m_transform(0)
     {
@@ -115,8 +116,8 @@ public:
 
             if ((srcProfile->name().contains(QLatin1String("linear"), Qt::CaseInsensitive) ||
                  dstProfile->name().contains(QLatin1String("linear"), Qt::CaseInsensitive)) &&
-                    !conversionFlags.testFlag(KoColorProofingConversionTransformation::NoOptimization)) {
-                conversionFlags |= KoColorProofingConversionTransformation::NoOptimization;
+                    !conversionFlags.testFlag(KoColorConversionTransformation::NoOptimization)) {
+                conversionFlags |= KoColorConversionTransformation::NoOptimization;
             }
         }
 
@@ -128,13 +129,13 @@ public:
         cmsSetAlarmCodes(alarm);
 
         m_transform = cmsCreateProofingTransform(srcProfile->lcmsProfile(),
-                                         srcColorSpaceType,
-                                         dstProfile->lcmsProfile(),
-                                         dstColorSpaceType,
-                                         dynamic_cast<const IccColorProfile *>(proofingSpace->profile())->asLcms()->lcmsProfile(),
-                                         renderingIntent,
-                                         renderingIntent,
-                                         conversionFlags);
+                                                 srcColorSpaceType,
+                                                 dstProfile->lcmsProfile(),
+                                                 dstColorSpaceType,
+                                                 dynamic_cast<const IccColorProfile *>(proofingSpace->profile())->asLcms()->lcmsProfile(),
+                                                 renderingIntent,
+                                                 renderingIntent,
+                                                 conversionFlags);
 
         Q_ASSERT(m_transform);
     }
@@ -223,25 +224,25 @@ void IccColorSpaceEngine::removeProfile(const QString &filename)
 }
 
 KoColorConversionTransformation *IccColorSpaceEngine::createColorTransformation(const KoColorSpace *srcColorSpace,
-        const KoColorSpace *dstColorSpace,
-        KoColorConversionTransformation::Intent renderingIntent,
-        KoColorConversionTransformation::ConversionFlags conversionFlags) const
+                                                                                const KoColorSpace *dstColorSpace,
+                                                                                KoColorConversionTransformation::Intent renderingIntent,
+                                                                                KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
     Q_ASSERT(srcColorSpace);
     Q_ASSERT(dstColorSpace);
 
     return new KoLcmsColorConversionTransformation(
-               srcColorSpace, computeColorSpaceType(srcColorSpace),
-               dynamic_cast<const IccColorProfile *>(srcColorSpace->profile())->asLcms(), dstColorSpace, computeColorSpaceType(dstColorSpace),
-               dynamic_cast<const IccColorProfile *>(dstColorSpace->profile())->asLcms(), renderingIntent, conversionFlags);
+                srcColorSpace, computeColorSpaceType(srcColorSpace),
+                dynamic_cast<const IccColorProfile *>(srcColorSpace->profile())->asLcms(), dstColorSpace, computeColorSpaceType(dstColorSpace),
+                dynamic_cast<const IccColorProfile *>(dstColorSpace->profile())->asLcms(), renderingIntent, conversionFlags);
 
 }
 KoColorProofingConversionTransformation *IccColorSpaceEngine::createColorProofingTransformation(const KoColorSpace *srcColorSpace,
-        const KoColorSpace *dstColorSpace,
-        const KoColorSpace *proofingSpace,
-        KoColorProofingConversionTransformation::Intent renderingIntent,
-        KoColorProofingConversionTransformation::ConversionFlags conversionFlags
-        ) const
+                                                                                                const KoColorSpace *dstColorSpace,
+                                                                                                const KoColorSpace *proofingSpace,
+                                                                                                KoColorConversionTransformation::Intent renderingIntent,
+                                                                                                KoColorConversionTransformation::ConversionFlags conversionFlags
+                                                                                                ) const
 {
     Q_ASSERT(srcColorSpace);
     Q_ASSERT(dstColorSpace);

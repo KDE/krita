@@ -30,6 +30,7 @@ class KRITAPIGMENT_EXPORT KoColorConversionTransformationAbstractFactory
 public:
     KoColorConversionTransformationAbstractFactory() {}
     virtual ~KoColorConversionTransformationAbstractFactory() {}
+
     /**
      * Creates a color transformation between the source color space and the destination
      * color space.

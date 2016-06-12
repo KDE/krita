@@ -36,8 +36,8 @@ public:
     virtual KoColorProofingConversionTransformation *createColorProofingTransformation(const KoColorSpace *srcColorSpace,
             const KoColorSpace *dstColorSpace,
             const KoColorSpace *proofingSpace,
-            KoColorProofingConversionTransformation::Intent renderingIntent,
-            KoColorProofingConversionTransformation::ConversionFlags conversionFlags) const;
+            KoColorConversionTransformation::Intent renderingIntent,
+            KoColorConversionTransformation::ConversionFlags conversionFlags) const;
     quint32 computeColorSpaceType(const KoColorSpace *cs) const;
 private:
     struct Private;

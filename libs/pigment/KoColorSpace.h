@@ -108,17 +108,17 @@ public:
      * maybe convert to 3d space in future?
      */
     QPolygonF gamutXYY() const;
-    
+
     /*
      * @returns a polygon with 5 samples per channel converted to xyY, but unlike
      * gamutxyY it focuses on the luminance. This then can be used to visualise
      * the approximate trc of a given colorspace.
      */
     QPolygonF estimatedTRCXYY() const;
-    
+
     QVector <qreal> colorants() const;
     QVector <qreal> lumaCoefficients() const;
-    
+
     //========== Channels =====================================================//
 
     /// Return a list describing all the channels this color model has. The order
@@ -355,10 +355,6 @@ public:
     virtual KoColorConversionTransformation* createColorConverter(const KoColorSpace * dstColorSpace,
                                                                   KoColorConversionTransformation::Intent renderingIntent,
                                                                   KoColorConversionTransformation::ConversionFlags conversionFlags) const;
-    virtual KoColorProofingConversionTransformation* createColorProofingConverter(const KoColorSpace * dstColorSpace,
-                                                                  const KoColorSpace * proofingSpace,
-                                                                  KoColorProofingConversionTransformation::Intent renderingIntent,
-                                                                  KoColorProofingConversionTransformation::ConversionFlags conversionFlags) const;
 
     /**
      * Convert a byte array of srcLen pixels *src to the specified color space
@@ -375,12 +371,24 @@ public:
                                  quint32 numPixels,
                                  KoColorConversionTransformation::Intent renderingIntent,
                                  KoColorConversionTransformation::ConversionFlags conversionFlags) const;
+
+    /**
+     * @brief proofPixelsTo
+     * @param src
+     * @param dst
+     * @param dstColorSpace
+     * @param proofingSpace
+     * @param numPixels
+     * @param renderingIntent
+     * @param conversionFlags
+     * @return
+     */
     virtual bool proofPixelsTo(const quint8 * src,
                                  quint8 * dst, const KoColorSpace * dstColorSpace,
                                  const KoColorSpace * proofingSpace,
                                  quint32 numPixels,
-                                 KoColorProofingConversionTransformation::Intent renderingIntent,
-                                 KoColorProofingConversionTransformation::ConversionFlags conversionFlags) const;
+                                 KoColorConversionTransformation::Intent renderingIntent,
+                                 KoColorConversionTransformation::ConversionFlags conversionFlags) const;
 
 //============================== Manipulation functions ==========================//
 

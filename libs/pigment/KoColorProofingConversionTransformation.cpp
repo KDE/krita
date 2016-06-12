@@ -21,85 +21,23 @@
 
 #include "KoColorSpace.h"
 
-struct Q_DECL_HIDDEN KoColorProofingConversionTransformation::Private {
-    const KoColorSpace* srcColorSpace;
-    const KoColorSpace* dstColorSpace;
-    const KoColorSpace* proofingSpace;
-    Intent renderingIntent;
-    ConversionFlags conversionFlags;
-};
 
 KoColorProofingConversionTransformation::KoColorProofingConversionTransformation(const KoColorSpace* srcCs,
                                                                  const KoColorSpace* dstCs,
                                                                  const KoColorSpace* proofingSpace,
                                                                  Intent renderingIntent,
                                                                  ConversionFlags conversionFlags)
-    : d(new Private)
+    : KoColorConversionTransformation(srcCs, dstCs, renderingIntent, conversionFlags)
 {
-    Q_ASSERT(srcCs);
-    Q_ASSERT(dstCs);
     Q_ASSERT(proofingSpace);
-
-    d->srcColorSpace = srcCs;
-    d->dstColorSpace = dstCs;
-    d->proofingSpace = proofingSpace;
-    d->renderingIntent = renderingIntent;
-    d->conversionFlags = conversionFlags;
+    m_proofingSpace = proofingSpace;
 }
 
 KoColorProofingConversionTransformation::~KoColorProofingConversionTransformation()
 {
-    delete d;
-}
-
-const KoColorSpace* KoColorProofingConversionTransformation::srcColorSpace() const
-{
-    return d->srcColorSpace;
-}
-
-const KoColorSpace* KoColorProofingConversionTransformation::dstColorSpace() const
-{
-    return d->dstColorSpace;
 }
 
 const KoColorSpace* KoColorProofingConversionTransformation::proofingSpace() const
 {
-    return d->proofingSpace;
-}
-
-KoColorProofingConversionTransformation::Intent KoColorProofingConversionTransformation::renderingIntent() const
-{
-    return d->renderingIntent;
-}
-
-KoColorProofingConversionTransformation::ConversionFlags KoColorProofingConversionTransformation::conversionFlags() const
-{
-    return d->conversionFlags;
-}
-
-void KoColorProofingConversionTransformation::setSrcColorSpace(const KoColorSpace* cs) const
-{
-    Q_ASSERT(*d->srcColorSpace == *cs);
-    d->srcColorSpace = cs;
-}
-
-void KoColorProofingConversionTransformation::setDstColorSpace(const KoColorSpace* cs) const
-{
-    Q_ASSERT(*d->dstColorSpace == *cs);
-    d->dstColorSpace = cs;
-}
-
-void KoColorProofingConversionTransformation::setProofingSpace(const KoColorSpace* cs) const
-{
-    Q_ASSERT(*d->proofingSpace == *cs);
-    d->proofingSpace = cs;
-}
-
-void KoColorProofingConversionTransformation::setIntent(Intent renderingIntent) const
-{
-    d->renderingIntent = renderingIntent;
-}
-void KoColorProofingConversionTransformation::setConversionFlags(ConversionFlags conversionFlags) const
-{
-    d->conversionFlags = conversionFlags;
+    return m_proofingSpace;
 }

@@ -25,7 +25,6 @@
 
 #include "KoColorConversionAlphaTransformation.h"
 #include "KoColorConversionTransformation.h"
-#include "KoColorProofingConversionTransformation.h"
 #include "KoColorProfile.h"
 #include "KoColorSpace.h"
 #include "KoCopyColorConversionTransformation.h"
@@ -256,28 +255,6 @@ KoColorConversionTransformation* KoColorConversionSystem::createColorConverter(c
                      nodeFor(dstColorSpace));
     Q_ASSERT(path.length() > 0);
     KoColorConversionTransformation* transfo = createTransformationFromPath(path, srcColorSpace, dstColorSpace, renderingIntent, conversionFlags);
-    Q_ASSERT(*transfo->srcColorSpace() == *srcColorSpace);
-    Q_ASSERT(*transfo->dstColorSpace() == *dstColorSpace);
-    Q_ASSERT(transfo);
-    return transfo;
-}
-
-KoColorProofingConversionTransformation* KoColorConversionSystem::createColorProofingConverter(const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, const KoColorSpace *proofingSpace, KoColorProofingConversionTransformation::Intent renderingIntent, KoColorProofingConversionTransformation::ConversionFlags conversionFlags) const
-{
-    /*if (*srcColorSpace == *dstColorSpace && *srcColorSpace == *proofingSpace) {
-        return new KoCopyColorConversionTransformation(srcColorSpace);
-    }*/
-    Q_ASSERT(srcColorSpace);
-    Q_ASSERT(dstColorSpace);
-    dbgPigmentCCS << srcColorSpace->id() << (srcColorSpace->profile() ? srcColorSpace->profile()->name() : "default");
-    dbgPigmentCCS << dstColorSpace->id() << (dstColorSpace->profile() ? dstColorSpace->profile()->name() : "default");
-    Path path = findBestPath(
-                     nodeFor(srcColorSpace),
-                     nodeFor(dstColorSpace));
-    Q_ASSERT(path.length() > 0);
-    const QList< Path::node2factory > pathOfNode = path.compressedPath();
-    //Let's hack our way around tis for now.
-    KoColorProofingConversionTransformation* transfo = pathOfNode[0].second->createColorProofingTransformation(srcColorSpace, dstColorSpace, proofingSpace, renderingIntent, conversionFlags);
     Q_ASSERT(*transfo->srcColorSpace() == *srcColorSpace);
     Q_ASSERT(*transfo->dstColorSpace() == *dstColorSpace);
     Q_ASSERT(transfo);

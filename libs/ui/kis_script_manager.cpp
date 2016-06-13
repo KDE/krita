@@ -18,7 +18,7 @@
 
 #include "kis_script_manager.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 

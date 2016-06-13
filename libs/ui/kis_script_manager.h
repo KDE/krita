@@ -28,6 +28,9 @@ class QAction;
 class KisViewManager;
 class KActionCollection;
 
+/**
+ * @brief The KisScriptManager class is responsible for adding scripts to the menu
+ */
 class KRITAUI_EXPORT KisScriptManager : public QObject
 {
     Q_OBJECT

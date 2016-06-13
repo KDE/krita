@@ -1,4 +1,4 @@
-qt4_wrap_cpp(UNIT_TESTS_HEADERS_MOC version_checker_test.h)
+qt5_wrap_cpp(UNIT_TESTS_HEADERS_MOC version_checker_test.h)
 
 add_executable(
     unit_tests

@@ -2,6 +2,7 @@
 
 %Import QtCore/QtCoremod.sip
 %Import QtGui/QtGuimod.sip
+%Import QtWidgets/QtWidgetsmod.sip
 
 %ModuleHeaderCode
 #pragma GCC visibility push(default)

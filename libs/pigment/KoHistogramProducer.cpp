@@ -44,13 +44,14 @@ KoHistogramProducerFactoryRegistry* KoHistogramProducerFactoryRegistry::instance
 
 }
 
-QList<QString> KoHistogramProducerFactoryRegistry::keysCompatibleWith(const KoColorSpace* colorSpace) const
+QList<QString> KoHistogramProducerFactoryRegistry::keysCompatibleWith(const KoColorSpace* colorSpace, bool isStrict) const
 {
     QList<QString> list;
     QList<float> preferredList;
     Q_FOREACH (const QString &id, keys()) {
         KoHistogramProducerFactory *f = value(id);
-        if (f->isCompatibleWith(colorSpace)) {
+
+        if (f->isCompatibleWith(colorSpace, isStrict)) {
             float preferred = f->preferrednessLevelWith(colorSpace);
             QList<float>::iterator pit = preferredList.begin();
             QList<float>::iterator pend = preferredList.end();

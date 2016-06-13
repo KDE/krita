@@ -60,7 +60,7 @@ Q_SIGNALS:
     void toneUpdated(int, int);
 private:
     QList<KisColorSliderInput*> m_inputs;
-    const KoColorSpace* m_colorSpace;
+//    const KoColorSpace* m_colorSpace;
     QVBoxLayout *m_layout;
     KoColor m_color;
     bool m_updateAllowed;

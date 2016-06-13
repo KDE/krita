@@ -160,8 +160,6 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
 
-    setCurrentScale(scale);
-    setCurrentRotation(rotation);
 
     QPointF scatteredPos =
         m_scatterOption.apply(info,

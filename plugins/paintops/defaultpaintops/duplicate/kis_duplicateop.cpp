@@ -125,7 +125,6 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
     qreal scale = m_sizeOption.apply(info);
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
 
-    setCurrentScale(scale);
 
     static const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
     static KoColor color(Qt::black, cs);

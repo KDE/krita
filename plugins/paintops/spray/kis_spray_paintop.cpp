@@ -113,8 +113,6 @@ KisSpacingInformation KisSprayPaintOp::paintAt(const KisPaintInformation& info)
     const qreal scale = m_sizeOption.apply(info);
     const qreal additionalScale = KisLodTransform::lodToScale(painter()->device());
 
-    setCurrentRotation(rotation);
-    setCurrentScale(scale * additionalScale);
 
     m_sprayBrush.paint(m_dab,
                        m_node->paintDevice(),

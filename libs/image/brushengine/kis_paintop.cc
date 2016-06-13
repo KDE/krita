@@ -51,8 +51,6 @@
 struct Q_DECL_HIDDEN KisPaintOp::Private {
     Private(KisPaintOp *_q)
         : q(_q), dab(0),
-          currentScale(1.0),
-          currentRotation(0),
           fanCornersEnabled(false),
           fanCornersStep(1.0) {}
 
@@ -60,8 +58,6 @@ struct Q_DECL_HIDDEN KisPaintOp::Private {
 
     KisFixedPaintDeviceSP dab;
     KisPainter* painter;
-    qreal currentScale;
-    qreal currentRotation;
 
     bool fanCornersEnabled;
     qreal fanCornersStep;
@@ -173,24 +169,3 @@ KisPaintDeviceSP KisPaintOp::source() const
 {
     return d->painter->device();
 }
-
-qreal KisPaintOp::currentRotation() const
-{
-    return d->currentRotation;
-}
-
-qreal KisPaintOp::currentScale() const
-{
-    return d->currentScale;
-}
-
-void KisPaintOp::setCurrentRotation(qreal rotation)
-{
-    d->currentRotation = rotation;
-}
-
-void KisPaintOp::setCurrentScale(qreal scale)
-{
-    d->currentScale = scale;
-}
-

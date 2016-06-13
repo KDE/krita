@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>367</width>
-    <height>380</height>
+    <width>395</width>
+    <height>387</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,7 +24,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="2">
-       <widget class="QSpinBox" name="newWidth">
+       <widget class="KisIntParseSpinBox" name="newWidth">
         <property name="minimum">
          <number>1</number>
         </property>
@@ -47,10 +47,10 @@
        <widget class="QComboBox" name="heightUnit"/>
       </item>
       <item row="0" column="4" rowspan="2">
-       <widget class="KoAspectButton" name="aspectRatioBtn"/>
+       <widget class="KoAspectButton" name="aspectRatioBtn" native="true"/>
       </item>
       <item row="1" column="2">
-       <widget class="QSpinBox" name="newHeight">
+       <widget class="KisIntParseSpinBox" name="newHeight">
         <property name="minimum">
          <number>1</number>
         </property>
@@ -70,7 +70,7 @@
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="QDoubleSpinBox" name="newWidthDouble">
+       <widget class="KisDoubleParseSpinBox" name="newWidthDouble">
         <property name="decimals">
          <number>4</number>
         </property>
@@ -86,7 +86,7 @@
        </widget>
       </item>
       <item row="1" column="2">
-       <widget class="QDoubleSpinBox" name="newHeightDouble">
+       <widget class="KisDoubleParseSpinBox" name="newHeightDouble">
         <property name="decimals">
          <number>4</number>
         </property>
@@ -204,7 +204,7 @@
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="QSpinBox" name="xOffset">
+       <widget class="KisIntParseSpinBox" name="xOffset">
         <property name="minimum">
          <number>-100000</number>
         </property>
@@ -214,7 +214,7 @@
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="QDoubleSpinBox" name="xOffsetDouble">
+       <widget class="KisDoubleParseSpinBox" name="xOffsetDouble">
         <property name="decimals">
          <number>4</number>
         </property>
@@ -266,7 +266,7 @@
        </widget>
       </item>
       <item row="1" column="2">
-       <widget class="QSpinBox" name="yOffset">
+       <widget class="KisIntParseSpinBox" name="yOffset">
         <property name="minimum">
          <number>-100000</number>
         </property>
@@ -276,7 +276,7 @@
        </widget>
       </item>
       <item row="1" column="2">
-       <widget class="QDoubleSpinBox" name="yOffsetDouble">
+       <widget class="KisDoubleParseSpinBox" name="yOffsetDouble">
         <property name="decimals">
          <number>4</number>
         </property>
@@ -331,7 +331,7 @@
           <number>2</number>
          </property>
          <item>
-          <widget class="KCanvasPreview" name="canvasPreview"/>
+          <widget class="KCanvasPreview" name="canvasPreview" native="true"/>
          </item>
         </layout>
        </widget>
@@ -651,6 +651,16 @@
    <extends>QWidget</extends>
    <header>kcanvaspreview.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleParseSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_doubleparsespinbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_intparsespinbox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

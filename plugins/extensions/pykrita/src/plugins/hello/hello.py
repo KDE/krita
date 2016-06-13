@@ -1,4 +1,4 @@
-from PyQt4.QtGui import *
+from PyQt5.QtGui import *
 from krita import *
 
 def hello():

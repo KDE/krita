@@ -25,7 +25,7 @@ namespace Ui
 class ManagerPage;
 }
 
-class KIcon;
+class QIcon;
 
 class PyQtPluginSettings : public KisPreferenceSet
 {
@@ -38,7 +38,7 @@ public:
     virtual QString id();
     virtual QString name();
     virtual QString header();
-    virtual KIcon icon();
+    virtual QIcon icon();
 
 public Q_SLOTS:
     void savePreferences() const;

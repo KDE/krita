@@ -26,7 +26,7 @@ import contextlib
 import os
 import sys
 
-from PyKrita4.krita import *
+from PyKrita.krita import *
 
 import pykrita
 
@@ -41,11 +41,11 @@ def objectIsAlive(obj):
     return True
 
 
-def kDebug(text):
+def qDebug(text):
     '''Use KDE way to show debug info
 
         TODO Add a way to control debug output from partucular plugins (?)
     '''
     plugin = sys._getframe(1).f_globals['__name__']
-    pykrita.kDebug('{}: {}'.format(plugin, text))
+    pykrita.qDebug('{}: {}'.format(plugin, text))
 

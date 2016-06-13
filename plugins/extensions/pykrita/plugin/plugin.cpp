@@ -19,7 +19,7 @@
 #include "engine.h"
 #include "utilities.h"
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
@@ -30,8 +30,7 @@
 #include <libkis/viewextension.h>
 #include <libkis/viewmanager.h>
 
-K_PLUGIN_FACTORY(KritaPyQtPluginFactory, registerPlugin<KritaPyQtPlugin>();)
-K_EXPORT_PLUGIN(KritaPyQtPluginFactory("krita"))
+K_PLUGIN_FACTORY_WITH_JSON(KritaPyQtPluginFactory, "kritapykrita.json", registerPlugin<KritaPyQtPlugin>();)
 
 KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
     : KisViewPlugin(parent)
@@ -79,3 +78,4 @@ KritaPyQtPlugin::~KritaPyQtPlugin()
 
 }
 
+#include "plugin.moc"

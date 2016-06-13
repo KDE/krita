@@ -70,7 +70,7 @@ QString PyQtPluginSettings::header()
 }
 
 
-KIcon PyQtPluginSettings::icon()
+QIcon PyQtPluginSettings::icon()
 {
     return koIcon("applications-development");
 }

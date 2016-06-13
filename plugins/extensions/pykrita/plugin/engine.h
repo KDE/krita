@@ -28,15 +28,48 @@
 
 # include "version_checker.h"
 
-# include <kservice.h>
-# include <kurl.h>
-
 # include <QAbstractItemModel>
 # include <QList>
 # include <QStringList>
 
 namespace PyKrita
 {
+
+/**
+ * @brief The PyPlugin class describes a plugin written in Python and loaded into the system
+ */
+class PyPlugin {
+
+public:
+
+    QString name() const
+    {
+        return m_name;
+    }
+
+    QString library() const
+    {
+        return m_libraryPath;
+    }
+
+    QVariant property(const QString &name) const
+    {
+        return m_properties.value(name, "");
+    }
+
+    QString comment() const
+    {
+        return m_comment;
+    }
+
+private:
+
+    QString m_name;
+    QString m_libraryPath;
+    QMap<QString, QVariant> m_properties;
+    QString m_comment;
+};
+
 class Python;                                               // fwd decl
 
 /**
@@ -82,7 +115,7 @@ public:
         /// Transfort Python module name into a file path part
         QString moduleFilePathPart() const;
 
-        KService::Ptr m_service;
+        PyPlugin *m_pythonPlugin;
         QString m_pythonModule;
         QString m_errorReason;
         bool m_enabled;
@@ -106,9 +139,6 @@ public:
     virtual Qt::ItemFlags flags(const QModelIndex&) const /*override*/;
     virtual bool setData(const QModelIndex&, const QVariant&, int) /*override*/;
     //END QAbstractItemModel interface
-
-    void readSessionPluginsConfiguration(KConfigBase*);
-    void writeSessionPluginsConfiguration(KConfigBase*);
 
     void setEnabledPlugins(const QStringList&);             ///< Set enabled plugins to the model
     void tryLoadEnabledPlugins();                           ///< Try to load enabled plugins
@@ -138,7 +168,7 @@ private:
         };
     };
 
-    static bool isServiceUsable(const KService::Ptr&);      ///< Make sure that service is usable
+    static bool isPythonPluginUsable(const PyPlugin *pyPlugin);      ///< Make sure that service is usable
     static bool setModuleProperties(PluginState&);
     static void verifyDependenciesSetStatus(PluginState&);
     static QPair<QString, version_checker> parseDependency(const QString&);
@@ -153,12 +183,12 @@ private:
 
 inline QString Engine::PluginState::pythonModuleName() const
 {
-    return m_service->library();
+    return m_pythonPlugin->library();
 }
 inline QString PyKrita::Engine::PluginState::moduleFilePathPart() const
 {
     /// \todo Use \c QString::split() and \c KUrl to form a valid path
-    return m_service->library().replace(".", "/");
+    return m_pythonPlugin->library().replace(".", "/");
 }
 inline const QString& Engine::PluginState::errorReason() const
 {

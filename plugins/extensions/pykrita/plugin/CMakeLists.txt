@@ -10,24 +10,22 @@ set(SOURCES
     engine.cpp
 )
 
-kde4_add_ui_files(SOURCES 
+ki18n_wrap_ui(SOURCES 
     info.ui 
     manager.ui
 )
 
-kde4_add_plugin(kritapykrita ${SOURCES})
+add_library(kritapykrita MODULE ${SOURCES})
 
 target_link_libraries(
     kritapykrita
     ${PYTHON_LIBRARY}
     kritaui
-    kritalibbrush
     kritalibkis
   )
 
-install(TARGETS kritapykrita DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES kritapyqt.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
-install(FILES kritapyqtplugin.rc DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
+install(TARGETS kritapykrita DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
+install(FILES kritapyqtplugin.xmlgui DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
 
 install(FILES kritapyqtplugin.desktop  DESTINATION  ${SERVICETYPES_INSTALL_DIR})
 
@@ -39,5 +37,5 @@ install(
 )
 
 add_subdirectory(plugins)
-add_subdirectory(test)
+#add_subdirectory(test)
 

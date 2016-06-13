@@ -5,15 +5,15 @@ import sys
 from .api import *
 from .decorators import *
 from .dockwidgetfactory import *
-from PyKrita4.krita import *
+from PyKrita.krita import *
 
-def kDebug(text):
+def qDebug(text):
     '''Use KDE way to show debug info
 
         TODO Add a way to control debug output from partucular plugins (?)
     '''
     plugin = sys._getframe(1).f_globals['__name__']
-    pykrita.kDebug('{}: {}'.format(plugin, text))
+    pykrita.qDebug('{}: {}'.format(plugin, text))
 
 
 @pykritaEventHandler('_pluginLoaded')
@@ -36,12 +36,12 @@ def on_unload(plugin):
 
 @pykritaEventHandler('_pykritaLoaded')
 def on_pykrita_loaded():
-    kDebug('PYKRITA LOADED')
+    qDebug('PYKRITA LOADED')
     return True
 
 
 @pykritaEventHandler('_pykritaUnloading')
 def on_pykrita_unloading():
-    kDebug('UNLOADING PYKRITA')
+    qDebug('UNLOADING PYKRITA')
     return True
 

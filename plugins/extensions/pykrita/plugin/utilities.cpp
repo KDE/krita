@@ -36,7 +36,7 @@
 
 #include <kconfigbase.h>
 #include <kconfiggroup.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <kis_debug.h>
 
@@ -164,7 +164,7 @@ QString Python::lastTraceback() const
 void Python::libraryLoad()
 {
     if (!s_pythonLibrary) {
-        kDebug() << "Creating s_pythonLibrary";
+        qDebug() << "Creating s_pythonLibrary";
         s_pythonLibrary = new QLibrary(PYKRITA_PYTHON_LIBRARY);
         if (!s_pythonLibrary)
             errScript << "Could not create" << PYKRITA_PYTHON_LIBRARY;
@@ -457,7 +457,7 @@ void Python::updateConfigurationFromDictionary(KConfigBase* const config, PyObje
 
 void Python::updateDictionaryFromConfiguration(PyObject* const dictionary, const KConfigBase* const config)
 {
-    kDebug() << config->groupList();
+    qDebug() << config->groupList();
     Q_FOREACH(QString groupName, config->groupList()) {
         KConfigGroup group = config->group(groupName);
         PyObject* groupDictionary = PyDict_New();

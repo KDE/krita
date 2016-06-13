@@ -79,7 +79,7 @@ def init(func):
         and the configuration has been initiated
     '''
     plugin = sys._getframe(1).f_globals['__name__']
-    kDebug('@init: {}/{}'.format(plugin, func.__name__))
+    qDebug('@init: {}/{}'.format(plugin, func.__name__))
     return _registerCallback(plugin, init, func)
 
 
@@ -94,11 +94,11 @@ def unload(func):
             quit everything is dead already!
     '''
     plugin = sys._getframe(1).f_globals['__name__']
-    kDebug('@unload: {}/{}'.format(plugin, func.__name__))
+    qDebug('@unload: {}/{}'.format(plugin, func.__name__))
     def _module_cleaner():
-        kDebug('@unload/cleaner: {}/{}'.format(plugin, func.__name__))
+        qDebug('@unload/cleaner: {}/{}'.format(plugin, func.__name__))
         if plugin in init.functions:
-            kDebug('@unload/init-cleaner: {}/{}'.format(plugin, func.__name__))
+            qDebug('@unload/init-cleaner: {}/{}'.format(plugin, func.__name__))
             del init.functions[plugin]
 
         func()

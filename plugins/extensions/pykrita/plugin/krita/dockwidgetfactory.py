@@ -1,5 +1,5 @@
 from PyQt5.QtGui import *
-from PyKrita4.krita import *
+from PyKrita.krita import *
 
 class DockWidgetFactory(DockWidgetFactoryBase):
   def __init__(self, _id, _dockPosition, _klass):

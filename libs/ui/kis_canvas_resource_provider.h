@@ -65,6 +65,10 @@ public:
         EraserMode,
         MirrorHorizontal,
         MirrorVertical,
+        MirrorHorizontalLock,
+        MirrorVerticalLock,
+        MirrorVerticalHideDecorations,
+        MirrorHorizontalHideDecorations,
         MirrorAxesCenter,
         Opacity,
         HdrGamma,
@@ -128,6 +132,23 @@ public:
     void setMirrorVertical(bool mirrorVertical);
     bool mirrorVertical() const;
 
+    // options for horizontal and vertical mirror toolbar
+    void setMirrorHorizontalLock(bool isLocked);
+    bool mirrorHorizontalLock();
+    void setMirrorVerticalLock(bool isLocked);
+    bool mirrorVerticalLock();
+
+    void setMirrorVerticalHideDecorations(bool hide);
+    bool mirrorVerticalHideDecorations();
+
+    void setMirrorHorizontalHideDecorations(bool hide);
+    bool mirrorHorizontalHideDecorations();
+
+    void mirrorVerticalMoveCanvasToCenter();
+    void mirrorHorizontalMoveCanvasToCenter();
+
+
+
     void setOpacity(qreal opacity);
     qreal opacity() const;
 
@@ -185,6 +206,9 @@ Q_SIGNALS:
     void sigLoadingWorkspace(KisWorkspaceResource* workspace);
 
     void mirrorModeChanged();
+    void moveMirrorVerticalCenter();
+    void moveMirrorHorizontalCenter();
+
 
 private:
 

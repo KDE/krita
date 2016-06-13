@@ -1,6 +1,6 @@
 # Find PyQt5
 # ~~~~~~~~~~
-# Copyright (c) 2007-2008, Simon Edwards <simon@simonzone.com>
+# Copyright (c) 2014, Simon Edwards <simon@simonzone.com>
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
@@ -12,7 +12,7 @@
 # This file defines the following variables:
 #
 # PYQT5_VERSION - The version of PyQt5 found expressed as a 6 digit hex number
-#     suitable for comparision as a string
+#     suitable for comparison as a string
 #
 # PYQT5_VERSION_STR - The version of PyQt5 as a human readable string.
 #
@@ -29,19 +29,16 @@ ELSE(EXISTS PYQT5_VERSION)
 
   FIND_FILE(_find_pyqt5_py FindPyQt5.py PATHS ${CMAKE_MODULE_PATH})
 
-  EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} ${_find_pyqt5_py} OUTPUT_VARIABLE pyqt_config)
-  IF(pyqt_config)
-    STRING(REGEX REPLACE "^pyqt_version:([^\n]+).*$" "\\1" PYQT5_VERSION ${pyqt_config})
-    STRING(REGEX REPLACE ".*\npyqt_version_str:([^\n]+).*$" "\\1" PYQT5_VERSION_STR ${pyqt_config})
-    STRING(REGEX REPLACE ".*\npyqt_version_tag:([^\n]+).*$" "\\1" PYQT5_VERSION_TAG ${pyqt_config})
-    STRING(REGEX REPLACE ".*\npyqt_version_num:([^\n]+).*$" "\\1" PYQT5_VERSION_NUM ${pyqt_config})
-    STRING(REGEX REPLACE ".*\npyqt_mod_dir:([^\n]+).*$" "\\1" PYQT5_MOD_DIR ${pyqt_config})
-    STRING(REGEX REPLACE ".*\npyqt_sip_dir:([^\n]+).*$" "\\1" PYQT5_SIP_DIR ${pyqt_config})
-    STRING(REGEX REPLACE ".*\npyqt_sip_flags:([^\n]+).*$" "\\1" PYQT5_SIP_FLAGS ${pyqt_config})
-    STRING(REGEX REPLACE ".*\npyqt_bin_dir:([^\n]+).*$" "\\1" PYQT5_BIN_DIR ${pyqt_config})
+  EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} ${_find_pyqt5_py} OUTPUT_VARIABLE pyqt5_config)
+  IF(pyqt5_config)
+    STRING(REGEX REPLACE "^pyqt_version:([^\n]+).*$" "\\1" PYQT5_VERSION ${pyqt5_config})
+    STRING(REGEX REPLACE ".*\npyqt_version_str:([^\n]+).*$" "\\1" PYQT5_VERSION_STR ${pyqt5_config})
+    STRING(REGEX REPLACE ".*\npyqt_version_tag:([^\n]+).*$" "\\1" PYQT5_VERSION_TAG ${pyqt5_config})
+    STRING(REGEX REPLACE ".*\npyqt_sip_dir:([^\n]+).*$" "\\1" PYQT5_SIP_DIR ${pyqt5_config})
+    STRING(REGEX REPLACE ".*\npyqt_sip_flags:([^\n]+).*$" "\\1" PYQT5_SIP_FLAGS ${pyqt5_config})
 
     SET(PYQT5_FOUND TRUE)
-  ENDIF(pyqt_config)
+  ENDIF(pyqt5_config)
 
   IF(PYQT5_FOUND)
     IF(NOT PYQT5_FIND_QUIETLY)
@@ -49,7 +46,7 @@ ELSE(EXISTS PYQT5_VERSION)
     ENDIF(NOT PYQT5_FIND_QUIETLY)
   ELSE(PYQT5_FOUND)
     IF(PYQT5_FIND_REQUIRED)
-      MESSAGE(FATAL_ERROR "Could not find Python")
+      MESSAGE(FATAL_ERROR "Could not find PyQt5.")
     ENDIF(PYQT5_FIND_REQUIRED)
   ENDIF(PYQT5_FOUND)
 

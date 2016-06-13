@@ -9,11 +9,11 @@
 # This file defines the following variables:
 #
 # SIP_VERSION - The version of SIP found expressed as a 6 digit hex number
-#     suitable for comparision as a string.
+#     suitable for comparison as a string.
 #
 # SIP_VERSION_STR - The version of SIP found as a human readable string.
 #
-# SIP_BINARY_PATH - Path and filename of the SIP command line executable.
+# SIP_EXECUTABLE - Path and filename of the SIP command line executable.
 #
 # SIP_INCLUDE_DIR - Directory holding the SIP C++ header file.
 #
@@ -36,13 +36,19 @@ ELSE(SIP_VERSION)
   EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} ${_find_sip_py} OUTPUT_VARIABLE sip_config)
   IF(sip_config)
     STRING(REGEX REPLACE "^sip_version:([^\n]+).*$" "\\1" SIP_VERSION ${sip_config})
-    STRING(REGEX REPLACE ".*\nsip_version_num:([^\n]+).*$" "\\1" SIP_VERSION_NUM ${sip_config})
     STRING(REGEX REPLACE ".*\nsip_version_str:([^\n]+).*$" "\\1" SIP_VERSION_STR ${sip_config})
-    STRING(REGEX REPLACE ".*\nsip_bin:([^\n]+).*$" "\\1" SIP_BINARY_PATH ${sip_config})
-    STRING(REGEX REPLACE ".*\ndefault_sip_dir:([^\n]+).*$" "\\1" SIP_DEFAULT_SIP_DIR ${sip_config})
+    STRING(REGEX REPLACE ".*\nsip_bin:([^\n]+).*$" "\\1" SIP_EXECUTABLE ${sip_config})
+    IF(NOT SIP_DEFAULT_SIP_DIR)
+        STRING(REGEX REPLACE ".*\ndefault_sip_dir:([^\n]+).*$" "\\1" SIP_DEFAULT_SIP_DIR ${sip_config})
+    ENDIF(NOT SIP_DEFAULT_SIP_DIR)
     STRING(REGEX REPLACE ".*\nsip_inc_dir:([^\n]+).*$" "\\1" SIP_INCLUDE_DIR ${sip_config})
-    STRING(REGEX REPLACE ".*\nsip_mod_dir:([^\n]+).*$" "\\1" SIP_MOD_DIR ${sip_config})
-    SET(SIP_FOUND TRUE)
+    FILE(TO_CMAKE_PATH ${SIP_DEFAULT_SIP_DIR} SIP_DEFAULT_SIP_DIR)
+    FILE(TO_CMAKE_PATH ${SIP_INCLUDE_DIR} SIP_INCLUDE_DIR)
+    IF(EXISTS ${SIP_EXECUTABLE})
+      SET(SIP_FOUND TRUE)
+    ELSE()
+      MESSAGE(STATUS "Found SIP configuration but the sip executable could not be found.")
+    ENDIF()
   ENDIF(sip_config)
 
   IF(SIP_FOUND)

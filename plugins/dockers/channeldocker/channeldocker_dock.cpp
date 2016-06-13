@@ -37,7 +37,7 @@
 
 ChannelDockerDock::ChannelDockerDock( ) :
     QDockWidget(i18n("Channels")),
-    m_compressor(new KisSignalCompressor(200, KisSignalCompressor::POSTPONE, this)),
+    m_compressor(new KisSignalCompressor(500, KisSignalCompressor::POSTPONE, this)),
     m_canvas(0)
 {
     m_channelTable = new QTableView(this);
@@ -47,17 +47,26 @@ ChannelDockerDock::ChannelDockerDock( ) :
     m_channelTable->verticalHeader()->setVisible(false);
     m_channelTable->horizontalHeader()->setVisible(false);
     setWidget(m_channelTable);
-    connect(m_compressor, SIGNAL(timeout()),SLOT(updateData()));
+    connect(m_compressor, SIGNAL(timeout()),SLOT(startUpdateCanvasProjection()));
 }
 
 void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
 {
+    if(m_canvas == canvas)
+        return;
+
     setEnabled(canvas != 0);
+
+    if (m_canvas) {
+        m_canvas->disconnectCanvasObserver(this);
+        m_canvas->image()->disconnect(this);
+    }
 
     if (!canvas) {
         m_canvas = 0;
         return;
     }
+
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     if (m_canvas && m_canvas->imageView() && m_canvas->imageView()->image()) {
         QPointer<KisView> view = m_canvas->imageView();
@@ -68,16 +77,26 @@ void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
         connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), m_compressor, SLOT(start()), Qt::UniqueConnection);
         connect(dev, SIGNAL(colorSpaceChanged(const KoColorSpace*)), m_model, SLOT(slotColorSpaceChanged(const KoColorSpace*)));
         connect(dev, SIGNAL(colorSpaceChanged(const KoColorSpace*)), m_canvas, SLOT(channelSelectionChanged()));
+        connect(m_model, SIGNAL(channelFlagsChanged()), m_canvas, SLOT(channelSelectionChanged()));
+        m_channelTable->resizeRowsToContents();
+        m_channelTable->resizeColumnsToContents();
     }
 
-    connect(m_model, SIGNAL(channelFlagsChanged()), m_canvas, SLOT(channelSelectionChanged()));
 }
 
-void ChannelDockerDock::updateData()
+void ChannelDockerDock::startUpdateCanvasProjection()
 {
-    m_model->updateData();
-    m_channelTable->resizeRowsToContents();
-    m_channelTable->resizeColumnsToContents();
+    if (m_canvas && m_canvas->image()){
+        if( m_canvas->image()->currentLevelOfDetail() !=0 ){
+            m_compressor->start();
+            qDebug() << "Wrong LOD";
+            return;
+        }
+
+        m_model->updateData();
+        m_channelTable->resizeRowsToContents();
+        m_channelTable->resizeColumnsToContents();
+    }
 }
 
 

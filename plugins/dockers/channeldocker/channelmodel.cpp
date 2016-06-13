@@ -24,6 +24,7 @@
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
 #include <kis_iterator_ng.h>
+#include <kis_default_bounds.h>
 
 #include <kis_canvas2.h>
 
@@ -31,7 +32,7 @@ ChannelModel::ChannelModel(QObject* parent):
     QAbstractTableModel(parent),
     m_currentLayer(0), m_canvas(nullptr), m_skipCount(1), m_oversampleRatio(4)
 {
-    setThumbnailSizeLimit(QSize(128,128));
+    setThumbnailSizeLimit(QSize(64,64));
 }
 
 ChannelModel::~ChannelModel()
@@ -142,14 +143,14 @@ void ChannelModel::slotLayerActivated(KisLayerSP layer)
 
 void ChannelModel::slotSetCanvas(KisCanvas2 *canvas)
 {
-    beginResetModel();
-    m_canvas = canvas;
-    if( m_canvas && m_canvas->image() ){
-        auto image = m_canvas->image();
-        initThumbnailImages(QSize(image->width(), image->height()), image->colorSpace()->channelCount());
+    if( m_canvas != canvas ){
+        beginResetModel();
+        m_canvas = canvas;
+        if( m_canvas && m_canvas->image() ){
+            updateThumbnails();
+        }
+        endResetModel();
     }
-    updateThumbnails();
-    endResetModel();
 }
 
 void ChannelModel::slotColorSpaceChanged(const KoColorSpace *colorSpace)
@@ -173,11 +174,19 @@ void ChannelModel::updateData()
 //doesn't need to be high, so we use fast but not very accurate algorithm.
 void ChannelModel::updateThumbnails(void)
 {
+
+
     if( m_canvas && m_canvas->image() ){
         auto cs = m_canvas->image()->colorSpace();
-        auto pixelSize = cs->pixelSize();
         auto channelCount = cs->channelCount();
+
+//        //need to make sure that LOD is at default value.
+//        m_canvas->image()->setDesiredLevelOfDetail(0);
+//        m_canvas->image()->waitForDone();
+
         KisPaintDeviceSP dev = m_canvas->image()->projection();
+
+        initThumbnailImages( m_canvas->image()->size(), channelCount );
 
         int width = m_thumbnails[0].width();
         int height = m_thumbnails[0].height();
@@ -189,19 +198,22 @@ void ChannelModel::updateThumbnails(void)
         KisHLineConstIteratorSP it = dev->createHLineConstIteratorNG(0,0,m_canvas->image()->width());
         for( int y=0; y<height; y++){
             for(int i=0; i<thumbnailPointerCache.count(); ++i){
-                thumbnailPointerCache[i]=m_thumbnails[i].scanLine(y); //.bits() is expensive, cache values for reuse
+                //.scanline() is expensive, cache values for reuse
+                //because of alignment, can't use x+width*y, have to ask
+                //qimage for first byte of the row.
+                thumbnailPointerCache[i]=m_thumbnails[i].scanLine(y);
             }
             for( int x=0; x<width; x++){
-                for( int i=0; i<channelCount; ++i){
+                for( quint32 i=0; i<channelCount; ++i){
+                    //channel thumbnails are grayscale 8 bit images.
                     quint8 pixel = cs->scaleToU8(it->rawDataConst(),i);
                     *(thumbnailPointerCache[i]+x)=pixel;
-                    //m_thumbnails[i].setPixel(x,y,pixel);
                 }
                 if(!it->nextPixels(m_skipCount))
                     break;
             }
-            it->resetPixelPos();
-            for( int i=0; i<m_skipCount; it->nextRow(), ++i );
+            it->resetPixelPos(); //this is required. otherwise x coordinate of the iterator is not reset.
+            for( int i=0; i<m_skipCount; it->nextRow(), ++i ); //since there is no nextRows(n), emulate it here.
         }
 
         //step 2. Smooth downsampling to the final thumbnail size. Slower, but image is small at this time.
@@ -210,32 +222,32 @@ void ChannelModel::updateThumbnails(void)
             sz /= m_oversampleRatio;
             //for better quality we apply smooth transformation
             //speed is not an issue, because thumbnail image has been decimated and is small.
-            QString fname="/home/eugening/Projects/thumb";
-            fname = fname + QString::number(i) + ".png";
-            m_thumbnails[i].save(fname);
-
             m_thumbnails[i] = m_thumbnails[i].scaled( sz, Qt::KeepAspectRatio, Qt::SmoothTransformation );
-
-            fname = fname + QString::number(i) + ".png";
-            m_thumbnails[i].save(fname);
         }
     }
 }
 
+//Compute thumbnail size.
+//Preallocate qimage for thumbnail generation
 void ChannelModel::initThumbnailImages(QSize size, int nChannels)
 {
     m_thumbnails.clear();
     m_thumbnails.resize(nChannels);
 
     QSize thumbnailSizeOversample = m_thumbnailSizeLimit;
+
+    //We allocate space for image that is oversampleRatio times larger than the end image
     thumbnailSizeOversample *= m_oversampleRatio;
 
-    m_skipCount = 1+static_cast<int>(std::max( size.width()/thumbnailSizeOversample.width(), size.height()/thumbnailSizeOversample.height() ));
+    //compute decimation step size
+    m_skipCount = static_cast<int>(std::max( size.width()/thumbnailSizeOversample.width(), size.height()/thumbnailSizeOversample.height() ));
+    m_skipCount = std::max(m_skipCount, 1); //skip count of 1, means we are getting back the original image. Can't go lower.
 
     thumbnailSizeOversample = size;
     thumbnailSizeOversample /= m_skipCount;
 
     for(int i=0; i<nChannels; ++i){
+        //channel thumbnails are grayscale images.
         m_thumbnails[i]=QImage(thumbnailSizeOversample,QImage::Format_Grayscale8);
     }
 }

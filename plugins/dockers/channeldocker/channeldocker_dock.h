@@ -35,7 +35,7 @@ public:
     virtual void unsetCanvas() { m_canvas = 0; setEnabled(false);}
 
 public Q_SLOTS:
-    void updateData();
+    virtual void startUpdateCanvasProjection();
 
 private:
 

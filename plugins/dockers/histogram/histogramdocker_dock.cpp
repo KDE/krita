@@ -31,7 +31,7 @@
 
 HistogramDockerDock::HistogramDockerDock( )
     : QDockWidget(i18n("Histogram")),
-      m_compressor(new KisSignalCompressor(200, KisSignalCompressor::POSTPONE, this)),
+      m_compressor(new KisSignalCompressor(500, KisSignalCompressor::POSTPONE, this)),
       m_canvas(0), m_producer(nullptr)
 {
     QWidget *page = new QWidget(this);

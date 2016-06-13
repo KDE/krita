@@ -22,7 +22,6 @@
 #include <QtGlobal>
 
 #include <kis_paintop_option.h>
-#include <kritapaintop_export.h>
 
 class KisBrushSizeOptionsWidget;
 
@@ -36,7 +35,7 @@ const QString BRUSH_DENSITY = "Brush/density";
 const QString BRUSH_JITTER_MOVEMENT = "Brush/jitterMovement";
 const QString BRUSH_JITTER_MOVEMENT_ENABLED = "Brush/jitterMovementEnabled";
 
-class PAINTOP_EXPORT KisBrushSizeOption : public KisPaintOpOption
+class KisBrushSizeOption : public KisPaintOpOption
 {
 public:
     KisBrushSizeOption();
@@ -57,7 +56,7 @@ private:
     KisBrushSizeOptionsWidget * m_options;
 };
 
-class PAINTOP_EXPORT KisBrushSizeProperties
+class KisBrushSizeProperties
 {
 
 public:

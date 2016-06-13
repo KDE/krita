@@ -165,7 +165,10 @@ public:
         return producer;
 
     }
-    virtual bool isCompatibleWith(const KoColorSpace* colorSpace) const {
+    virtual bool isCompatibleWith(const KoColorSpace* colorSpace, bool strict = false) const {
+        if( strict ){
+            return colorSpace->colorDepthId().id() == m_depthId;
+        }
         return colorSpace->colorModelId().id() == m_modelId || colorSpace->colorDepthId().id() == m_depthId;
     }
     virtual float preferrednessLevelWith(const KoColorSpace* colorSpace) const {
@@ -205,7 +208,8 @@ public:
         return new KoGenericRGBHistogramProducer();
     }
 
-    virtual bool isCompatibleWith(const KoColorSpace*) const {
+    virtual bool isCompatibleWith(const KoColorSpace*, bool strict = false) const {
+        Q_UNUSED(strict);
         return true;
     }
 
@@ -244,7 +248,8 @@ public:
         return new KoGenericLabHistogramProducer();
     }
 
-    virtual bool isCompatibleWith(const KoColorSpace*) const {
+    virtual bool isCompatibleWith(const KoColorSpace*, bool strict = false) const {
+        Q_UNUSED(strict);
         return true;
     }
 

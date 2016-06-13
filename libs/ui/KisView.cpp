@@ -147,6 +147,9 @@ public:
     QPointer<KisFloatingMessage> savedFloatingMessage;
     KisSignalCompressor floatingMessageCompressor;
 
+    bool softProofing;
+    bool gamutCheck;
+
     // Hmm sorry for polluting the private class with such a big inner class.
     // At the beginning it was a little struct :)
     class StatusBarItem
@@ -880,4 +883,9 @@ void KisView::slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &
     resetImageSizeAndScroll(true, oldStillPoint, newStillPoint);
     zoomManager()->updateImageBoundsSnapping();
     zoomManager()->updateGUI();
+}
+
+void KisView::setProofingOptions(bool softProofing, bool gamutCheck)
+{
+    canvasBase()->setProofingOptions(softProofing, gamutCheck);
 }

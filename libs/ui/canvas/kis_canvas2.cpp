@@ -74,6 +74,9 @@
 #include "opengl/kis_opengl.h"
 #include "kis_fps_decoration.h"
 
+#include "KoColorConversionTransformation.h"
+#include "KisProofingConfiguration.h"
+
 #include <kis_favorite_resource_manager.h>
 #include <kis_popup_palette.h>
 
@@ -110,6 +113,9 @@ public:
     QRect savedUpdateRect;
 
     QBitArray channelFlags;
+    KisProofingConfiguration *proofingConfig = 0;
+    bool softProofing = false;
+    bool gamutCheck = false;
 
     KisPopupPalette *popupPalette = 0;
     KisDisplayColorConverter displayColorConverter;
@@ -542,6 +548,50 @@ KisExposureGammaCorrectionInterface* KisCanvas2::exposureGammaCorrectionInterfac
     return displayFilter ?
         displayFilter->correctionInterface() :
         KisDumbExposureGammaCorrectionInterface::instance();
+}
+
+void KisCanvas2::setProofingOptions(bool softProof, bool gamutCheck)
+{
+    m_d->proofingConfig = this->image()->proofingConfiguration();
+    if (!m_d->proofingConfig) {
+        qDebug()<<"Canvas: No proofing config found, generating one.";
+        m_d->proofingConfig = new KisProofingConfiguration();
+    }
+    KoColorConversionTransformation::ConversionFlags conversionFlags = m_d->proofingConfig->conversionFlags;
+
+    if (softProof) {
+        conversionFlags |= KoColorConversionTransformation::SoftProofing;
+        qDebug()<<"setting softproofing in canvas";
+    }
+    if (gamutCheck) {
+        conversionFlags |= KoColorConversionTransformation::GamutCheck;
+        qDebug()<<"setting gamutChecking in canvas";
+    }
+    m_d->proofingConfig->conversionFlags = conversionFlags;
+
+    startUpdateInPatches(this->image()->bounds());
+
+}
+
+void KisCanvas2::slotSoftProofing(bool softProofing)
+{
+    m_d->softProofing = softProofing;
+    setProofingOptions(m_d->softProofing, m_d->gamutCheck);
+}
+
+void KisCanvas2::slotGamutCheck(bool gamutCheck)
+{
+    m_d->gamutCheck = gamutCheck;
+    setProofingOptions(m_d->softProofing, m_d->gamutCheck);
+}
+
+KisProofingConfiguration *KisCanvas2::proofingConfiguration() const
+{
+    if (!m_d->proofingConfig) {
+        qDebug()<<"No proofing config found, generating one";
+        m_d->proofingConfig = new KisProofingConfiguration();
+    }
+    return m_d->proofingConfig;
 }
 
 void KisCanvas2::startResizingImage()

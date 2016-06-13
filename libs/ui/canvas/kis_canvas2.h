@@ -164,8 +164,10 @@ public: // KisCanvas2 methods
     void setDisplayFilter(KisDisplayFilter *displayFilter);
     KisDisplayFilter *displayFilter() const;
 
-    KisDisplayColorConverter* displayColorConverter() const;
+    KisDisplayColorConverter *displayColorConverter() const;
     KisExposureGammaCorrectionInterface* exposureGammaCorrectionInterface() const;
+    void setProofingOptions(bool softProof, bool gamutCheck);
+    KisProofingConfiguration *proofingConfiguration() const;
 
     void setCursor(const QCursor &cursor);
     KisAnimationFrameCacheSP frameCache() const;
@@ -196,6 +198,8 @@ public Q_SLOTS:
     /// Bools indicating canvasmirroring.
     bool xAxisMirrored() const;
     bool yAxisMirrored() const;
+    void slotSoftProofing(bool softProofing);
+    void slotGamutCheck(bool gamutCheck);
 
     void channelSelectionChanged();
 

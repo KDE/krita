@@ -443,15 +443,16 @@ bool KoColorSpace::proofPixelsTo(const quint8 * src,
                                    KoColorConversionTransformation::Intent renderingIntent,
                                    KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
-    if (*this == *dstColorSpace && *this == *proofingSpace) {
+    /*if (*this == *dstColorSpace) {
         if (src != dst) {
             memcpy(dst, src, numPixels * sizeof(quint8) * pixelSize());
         }
         return true;
-    }
+    }*/
     // Only the icc engine can do this kind of stuff
+    //Can we cache this, maybe???
     KoColorSpaceEngine *engine = KoColorSpaceEngineRegistry::instance()->get("icc");
-    qDebug() << ">>>>>>>>>>>>>>>>>>>> we got a proofing engine";
+    //qDebug() << ">>>>>>>>>>>>>>>>>>>> we got a proofing engine";
     if (!engine) return false;
     KoColorConversionTransformation *transform = engine->createColorProofingTransformation(this, dstColorSpace, proofingSpace, renderingIntent, conversionFlags);
 

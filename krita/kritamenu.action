@@ -528,6 +528,26 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="softProof">
+      <icon></icon>
+      <text>Soft Proofing</text>
+      <whatsThis></whatsThis>
+      <toolTip>Turns on Softproofing</toolTip>
+      <iconText>Turns on Softproofing</iconText>
+      <shortcut>Ctrl+Y</shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="gamutCheck">
+      <icon></icon>
+      <text>Out of Gamut Warnings</text>
+      <whatsThis></whatsThis>
+      <toolTip>Turns on Warnings for colors our of proofed gamut, needs soft proofing to be turned on.</toolTip>
+      <iconText>Turns on Warnings for colors our of proofed gamut, needs soft proofing to be turned on.</iconText>
+      <shortcut>Ctrl+Shift+Y</shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="mirror_canvas">
       <icon></icon>
       <text>Mirror View</text>

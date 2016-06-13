@@ -27,6 +27,7 @@
 
 #include "canvas/kis_update_info.h"
 #include "opengl/kis_texture_tile.h"
+#include "KisProofingConfiguration.h"
 
 class KisOpenGLImageTextures;
 class QOpenGLFunctions;
@@ -79,6 +80,7 @@ public:
     void initGL(QOpenGLFunctions *f);
 
     void setChannelFlags(const QBitArray &channelFlags);
+    void setProofingConfig(KisProofingConfiguration*);
 
     bool internalColorManagementActive() const;
     bool setInternalColorManagementActive(bool value);
@@ -157,9 +159,9 @@ private:
     KisImageWSP m_image;
     QRect m_storedImageBounds;
     const KoColorProfile *m_monitorProfile;
-    const KoColorProfile *m_proofingProfile;
     KoColorConversionTransformation::Intent m_renderingIntent;
     KoColorConversionTransformation::ConversionFlags m_conversionFlags;
+    KisProofingConfiguration *m_proofingConfig;
 
     /**
      * If the destination color space coincides with the one of the image,

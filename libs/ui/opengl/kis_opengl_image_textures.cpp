@@ -58,6 +58,7 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
     , m_allChannelsSelected(true)
     , m_useOcio(false)
     , m_initialized(false)
+    , m_proofingConfig(0)
 {
     KisConfig cfg;
     m_renderingIntent = (KoColorConversionTransformation::Intent)cfg.monitorRenderIntent();
@@ -65,7 +66,6 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
     m_conversionFlags = KoColorConversionTransformation::HighQuality;
     if (cfg.useBlackPointCompensation()) m_conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
     if (!cfg.allowLCMSOptimization()) m_conversionFlags |= KoColorConversionTransformation::NoOptimization;
-
     m_useOcio = cfg.useOcio();
 }
 
@@ -325,7 +325,16 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect,
                 tileInfo->retrieveData(m_image, channelFlags, m_onlyOneChannelSelected, m_selectedChannelIndex);
 
                 if (convertColorSpace) {
-                    tileInfo->convertTo(dstCS, m_renderingIntent, m_conversionFlags);
+                    if (m_proofingConfig && m_proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::SoftProofing)) {
+                        //qDebug()<<"model: "<<m_proofingConfig->proofingModel<<", depth: "<<m_proofingConfig->proofingDepth<<", profile: "<<m_proofingConfig->proofingProfile;
+                        const KoColorSpace *proofingSpace = KoColorSpaceRegistry::instance()->colorSpace(m_proofingConfig->proofingModel,m_proofingConfig->proofingDepth,m_proofingConfig->proofingProfile);
+                        if (!proofingSpace){
+                            qDebug()<<"Proofing space is incorrect";
+                        }
+                        tileInfo->proofTo(dstCS, proofingSpace, m_proofingConfig->intent, m_proofingConfig->conversionFlags);
+                    } else {
+                        tileInfo->convertTo(dstCS, m_renderingIntent, m_conversionFlags);
+                    }
                 }
 
                 info->tileList.append(tileInfo);
@@ -447,6 +456,11 @@ void KisOpenGLImageTextures::setChannelFlags(const QBitArray &channelFlags)
     }
     m_allChannelsSelected = (selectedChannels == m_channelFlags.size());
     m_onlyOneChannelSelected = (selectedChannels == 1);
+}
+
+void KisOpenGLImageTextures::setProofingConfig(KisProofingConfiguration *proofingConfig)
+{
+    m_proofingConfig = proofingConfig;
 }
 
 void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)

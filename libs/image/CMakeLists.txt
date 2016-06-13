@@ -247,6 +247,7 @@ set(kritaimage_LIB_SRCS
    kis_outline_generator.cpp
    kis_layer_composition.cpp
    kis_selection_filters.cpp
+   KisProofingConfiguration.h
    metadata/kis_meta_data_entry.cc
    metadata/kis_meta_data_filter.cc
    metadata/kis_meta_data_filter_p.cc

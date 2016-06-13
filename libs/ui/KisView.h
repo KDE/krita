@@ -254,7 +254,9 @@ public Q_SLOTS:
     void slotImageResolutionChanged();
     void slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
 
+
 private:
+    void setProofingOptions(bool softProofing, bool gamutCheck);
 
     class Private;
     Private * const d;

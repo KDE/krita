@@ -19,13 +19,13 @@
 #ifndef LIBKIS_VIEWEXTENSION_H
 #define LIBKIS_VIEWEXTENSION_H
 
-#include "libkis_export.h"
+#include "kritalibkis_export.h"
 
 #include <QObject>
 
 class ViewManager;
 
-class LIBKIS_EXPORT ViewExtension : public QObject
+class KRITALIBKIS_EXPORT ViewExtension : public QObject
 {
     Q_OBJECT
 public:

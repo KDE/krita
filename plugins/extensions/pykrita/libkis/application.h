@@ -19,8 +19,8 @@
 #define LIBKIS_APPLICATION_H
 
 #include <QObject>
-#include "libkis_export.h"
-class LIBKIS_EXPORT Application : public QObject
+#include "kritalibkis_export.h"
+class KRITALIBKIS_EXPORT Application : public QObject
 {
     Q_OBJECT
 public:

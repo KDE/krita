@@ -18,13 +18,13 @@
 #ifndef LIBKIS_DOCUMENT_H
 #define LIBKIS_DOCUMENT_H
 
-#include "libkis_export.h"
+#include "kritalibkis_export.h"
 #include <QPointer>
 
 class KisDocument;
 class Image;
 
-class LIBKIS_EXPORT Document : public QObject
+class KRITALIBKIS_EXPORT Document : public QObject
 {
     Q_OBJECT
 public:

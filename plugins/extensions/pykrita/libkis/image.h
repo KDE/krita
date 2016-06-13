@@ -20,9 +20,9 @@
 
 #include <QObject>
 #include <kis_image.h>
-#include "libkis_export.h"
+#include "kritalibkis_export.h"
 
-class LIBKIS_EXPORT Image : public QObject
+class KRITALIBKIS_EXPORT Image : public QObject
 {
     Q_OBJECT
 public:

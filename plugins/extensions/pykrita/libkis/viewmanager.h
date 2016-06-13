@@ -20,12 +20,12 @@
 
 #include <QObject>
 
-#include "libkis_export.h"
+#include "kritalibkis_export.h"
 
 class KisViewManager;
 class QAction;
 
-class LIBKIS_EXPORT ViewManager : public QObject
+class KRITALIBKIS_EXPORT ViewManager : public QObject
 {
     Q_OBJECT
 public:

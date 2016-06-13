@@ -15,7 +15,9 @@ set(kritalibkis_LIB_SRCS
     viewmanager.cpp
 )
 
-kde4_add_library(kritalibkis SHARED ${kritalibkis_LIB_SRCS} )
+add_library(kritalibkis SHARED ${kritalibkis_LIB_SRCS} )
+generate_export_header(kritalibkis)
+
 
 if (WIN32)
     target_link_libraries(kritalibkis kritaui kritaimage ${WIN32_PLATFORM_NET_LIBS})

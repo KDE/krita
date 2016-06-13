@@ -28,12 +28,12 @@
 #include "document.h"
 #include "image.h"
 
-#include "libkis_export.h"
+#include "kritalibkis_export.h"
 
 class DockWidgetFactoryBase;
 class ViewExtension;
 
-class LIBKIS_EXPORT Krita : public QObject
+class KRITALIBKIS_EXPORT Krita : public QObject
 {
     Q_OBJECT
 public:

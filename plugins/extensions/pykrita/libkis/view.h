@@ -20,11 +20,11 @@
 
 #include <QObject>
 
-#include "libkis_export.h"
+#include "kritalibkis_export.h"
 
 class KisView;
 
-class LIBKIS_EXPORT View : public QObject
+class KRITALIBKIS_EXPORT View : public QObject
 {
     Q_OBJECT
 public:

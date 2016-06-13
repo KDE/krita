@@ -22,9 +22,9 @@
 #include <QString>
 #include <KoDockFactoryBase.h>
 
-#include "libkis_export.h"
+#include "kritalibkis_export.h"
 
-class LIBKIS_EXPORT DockWidgetFactoryBase : public KoDockFactoryBase
+class KRITALIBKIS_EXPORT DockWidgetFactoryBase : public KoDockFactoryBase
 {
 public:
     DockWidgetFactoryBase(const QString& _id, DockPosition _dockPosition, bool _isCollapsable = true, bool _defaultCollapsed = false);

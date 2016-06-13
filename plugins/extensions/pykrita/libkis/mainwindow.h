@@ -19,10 +19,10 @@
 #define LIBKIS_MAINWINDOW_H
 
 #include <QObject>
-#include "libkis_export.h"
+#include "kritalibkis_export.h"
 class KisMainWindow;
 
-class LIBKIS_EXPORT MainWindow : public QObject
+class KRITALIBKIS_EXPORT MainWindow : public QObject
 {
     Q_OBJECT
 public:

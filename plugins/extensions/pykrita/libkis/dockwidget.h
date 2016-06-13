@@ -22,9 +22,9 @@
 #include <QDockWidget>
 #include <KoCanvasObserverBase.h>
 
-#include "libkis_export.h"
+#include "kritalibkis_export.h"
 
-class LIBKIS_EXPORT DockWidget : public QDockWidget, public KoCanvasObserverBase {
+class KRITALIBKIS_EXPORT DockWidget : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     DockWidget();

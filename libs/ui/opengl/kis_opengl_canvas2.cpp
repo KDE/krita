@@ -138,13 +138,6 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     , KisCanvasWidgetBase(canvas, coordinatesConverter)
     , d(new Private())
 {
-
-
-
-    QSurfaceFormat format;
-    format.setDepthBufferSize(24);
-    setFormat(format);
-
     KisConfig cfg;
     cfg.writeEntry("canvasState", "OPENGL_STARTED");
 

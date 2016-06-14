@@ -68,6 +68,10 @@ KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoMixColorsOp
     d->colorants = QVector <qreal> (0);
     d->lumaCoefficients = QVector <qreal> (0);
     d->iccEngine = 0;
+    d->proofingSpace = "";
+    d->softProofing = false;
+    d->gamutCheck = false;
+    d->proofingTransform = 0;
     d->deletability = NotOwnedByRegistry;
 }
 
@@ -91,6 +95,7 @@ KoColorSpace::~KoColorSpace()
     delete d->transfoFromRGBA16;
     delete d->transfoToLABA16;
     delete d->transfoFromLABA16;
+    delete d->proofingTransform;
     delete d;
 }
 
@@ -457,12 +462,17 @@ bool KoColorSpace::proofPixelsTo(const quint8 * src,
         qDebug() << ">>>>>>>>>>>>>>>>>>>> we got a proofing engine";
     }
     if (!d->iccEngine) return false;
-    KoColorConversionTransformation *transform = d->iccEngine->createColorProofingTransformation(this, dstColorSpace, proofingSpace, renderingIntent, conversionFlags);
 
+    if (d->proofingSpace!=proofingSpace->name()+dstColorSpace->name() || d->softProofing!=conversionFlags.testFlag(KoColorConversionTransformation::SoftProofing) || d->gamutCheck!=conversionFlags.testFlag(KoColorConversionTransformation::GamutCheck)) {
+        d->proofingTransform = d->iccEngine->createColorProofingTransformation(this, dstColorSpace, proofingSpace, renderingIntent, conversionFlags);
+        d->proofingSpace = proofingSpace->name()+dstColorSpace->name();
+        d->softProofing = conversionFlags.testFlag(KoColorConversionTransformation::SoftProofing);
+        d->gamutCheck = conversionFlags.testFlag(KoColorConversionTransformation::GamutCheck);
+    }
     //Q_UNUSED(transform);
-    transform->transform(src, dst, numPixels);
+    d->proofingTransform->transform(src, dst, numPixels);
 
-    delete transform;
+    //the transform is deleted in the destructor.
     return true;
 }
 

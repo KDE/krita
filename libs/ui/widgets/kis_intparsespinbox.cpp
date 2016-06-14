@@ -32,19 +32,25 @@ KisIntParseSpinBox::KisIntParseSpinBox(QWidget *parent) :
     connect(this, SIGNAL(noMoreParsingError()),
 					this, SLOT(clearErrorStyle()));
 
+	//hack to let the clearError be called, even if the value changed method is the one from QSpinBox.
+	connect(this, SIGNAL(valueChanged(int)),
+					this, SLOT(clearError()));
+
 	connect(this, SIGNAL(errorWhileParsing(QString)),
 					this, SLOT(setErrorStyle()));
 
 }
 
-KisIntParseSpinBox::~KisIntParseSpinBox(){
+KisIntParseSpinBox::~KisIntParseSpinBox()
+{
 
     //needed to avoid a segfault during destruction.
     delete _lastExprParsed;
 
 }
 
-int KisIntParseSpinBox::valueFromText(const QString & text) const{
+int KisIntParseSpinBox::valueFromText(const QString & text) const
+{
 
     *_lastExprParsed = text;
 
@@ -52,13 +58,13 @@ int KisIntParseSpinBox::valueFromText(const QString & text) const{
 
     int val = KisNumericParser::parseIntegerMathExpr(text, &ok);
 
-    if(text.trimmed().isEmpty()){ //an empty text is considered valid in this case.
+	if (text.trimmed().isEmpty()) { //an empty text is considered valid in this case.
             ok = true;
     }
 
-	if(!ok){
+	if (!ok) {
 
-			if(_isLastValid == true){
+			if (_isLastValid == true) {
 				_oldVal = value();
 			}
 
@@ -67,7 +73,7 @@ int KisIntParseSpinBox::valueFromText(const QString & text) const{
 			val = _oldVal;
     } else {
 
-			if(_isLastValid == false){
+			if (_isLastValid == false) {
 				_oldVal = val;
 			}
 
@@ -79,9 +85,10 @@ int KisIntParseSpinBox::valueFromText(const QString & text) const{
 
 }
 
-QString KisIntParseSpinBox::textFromValue(int val) const{
+QString KisIntParseSpinBox::textFromValue(int val) const
+{
 
-    if(!_isLastValid){
+	if (!_isLastValid) {
             emit errorWhileParsing(*_lastExprParsed);
             return *_lastExprParsed;
     }
@@ -91,16 +98,20 @@ QString KisIntParseSpinBox::textFromValue(int val) const{
 
 }
 
-QValidator::State KisIntParseSpinBox::validate ( QString & input, int & pos ) const{
+QValidator::State KisIntParseSpinBox::validate ( QString & input, int & pos ) const
+{
 
     Q_UNUSED(input);
     Q_UNUSED(pos);
 
+	//this simple definition is sufficient for the moment
+	//TODO: see if needed to get something more complex.
     return QValidator::Acceptable;
 
 }
 
-void KisIntParseSpinBox::stepBy(int steps){
+void KisIntParseSpinBox::stepBy(int steps)
+{
 
     _isLastValid = true;
     emit noMoreParsingError();
@@ -109,30 +120,35 @@ void KisIntParseSpinBox::stepBy(int steps){
 
 }
 
-void KisIntParseSpinBox::setValue(int val){
+void KisIntParseSpinBox::setValue(int val)
+{
 
-	if(!hasFocus()){
+	if (!hasFocus()) {
 		clearError();
 	}
 
 	QSpinBox::setValue(val);
 }
 
-void KisIntParseSpinBox::setErrorStyle(){
-    if(!_isLastValid){
+void KisIntParseSpinBox::setErrorStyle()
+{
+	if (!_isLastValid) {
         setStyleSheet("Background: red; color: white;");
     }
 }
 
-void KisIntParseSpinBox::clearErrorStyle(){
-    if(_isLastValid){
+void KisIntParseSpinBox::clearErrorStyle()
+{
+	if (_isLastValid) {
         setStyleSheet("");
     }
 }
 
 
-void KisIntParseSpinBox::clearError(){
+void KisIntParseSpinBox::clearError()
+{
 	_isLastValid = true;
+	emit noMoreParsingError();
 	_oldVal = value();
 	clearErrorStyle();
 }

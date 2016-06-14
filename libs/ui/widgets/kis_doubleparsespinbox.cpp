@@ -30,6 +30,7 @@ KisDoubleParseSpinBox::KisDoubleParseSpinBox(QWidget *parent) :
 	connect(this, SIGNAL(noMoreParsingError()),
 					this, SLOT(clearErrorStyle()));
 
+	//hack to let the clearError be called, even if the value changed method is the one from QDoubleSpinBox.
 	connect(this, SIGNAL(valueChanged(double)),
 					this, SLOT(clearError()));
 
@@ -40,14 +41,16 @@ KisDoubleParseSpinBox::KisDoubleParseSpinBox(QWidget *parent) :
 
 }
 
-KisDoubleParseSpinBox::~KisDoubleParseSpinBox(){
+KisDoubleParseSpinBox::~KisDoubleParseSpinBox()
+{
 
 	//needed to avoid a segfault during destruction.
 	delete _lastExprParsed;
 
 }
 
-double KisDoubleParseSpinBox::valueFromText(const QString & text) const{
+double KisDoubleParseSpinBox::valueFromText(const QString & text) const
+{
 
 	*_lastExprParsed = text;
 
@@ -55,28 +58,29 @@ double KisDoubleParseSpinBox::valueFromText(const QString & text) const{
 
 	double ret = KisNumericParser::parseSimpleMathExpr(text, &ok);
 
-			if(!ok){
-					if(_isLastValid){
-						_oldValue = value();
-					}
+	if (!ok) {
+		if (_isLastValid) {
+			_oldValue = value();
+		}
 
-					_isLastValid = false;
-					ret = _oldValue; //in case of error set to minimum.
-			} else {
+		_isLastValid = false;
+		ret = _oldValue; //in case of error set to minimum.
+	} else {
 
-					if(!_isLastValid){
-						_oldValue = ret;
-					}
+		if (!_isLastValid) {
+			_oldValue = ret;
+		}
 
-					_isLastValid = true;
-			}
+		_isLastValid = true;
+	}
 
 	return ret;
 
 }
-QString KisDoubleParseSpinBox::textFromValue(double val) const{
+QString KisDoubleParseSpinBox::textFromValue(double val) const
+{
 
-	if(!_isLastValid){
+	if (!_isLastValid) {
 			emit errorWhileParsing(*_lastExprParsed);
 			return *_lastExprParsed;
 	}
@@ -86,7 +90,8 @@ QString KisDoubleParseSpinBox::textFromValue(double val) const{
 
 }
 
-QValidator::State KisDoubleParseSpinBox::validate ( QString & input, int & pos ) const{
+QValidator::State KisDoubleParseSpinBox::validate ( QString & input, int & pos ) const
+{
 
 	Q_UNUSED(input);
 	Q_UNUSED(pos);
@@ -95,7 +100,8 @@ QValidator::State KisDoubleParseSpinBox::validate ( QString & input, int & pos )
 
 }
 
-void KisDoubleParseSpinBox::stepBy(int steps){
+void KisDoubleParseSpinBox::stepBy(int steps)
+{
 
 	_isLastValid = true; //reset to valid state so we can use the up and down buttons.
 	emit noMoreParsingError();
@@ -104,26 +110,31 @@ void KisDoubleParseSpinBox::stepBy(int steps){
 
 }
 
-void KisDoubleParseSpinBox::setValue(double value){
-	if(!hasFocus()){
+void KisDoubleParseSpinBox::setValue(double value)
+{
+	if (!hasFocus()) {
 		clearError();
 	}
 	QDoubleSpinBox::setValue(value);
 }
 
-void KisDoubleParseSpinBox::setErrorStyle(){
-	if(!_isLastValid){
+void KisDoubleParseSpinBox::setErrorStyle()
+{
+	if (!_isLastValid) {
 			setStyleSheet("Background: red; color: white;");
 	}
 }
 
-void KisDoubleParseSpinBox::clearErrorStyle(){
-	if(_isLastValid){
+void KisDoubleParseSpinBox::clearErrorStyle()
+{
+	if (_isLastValid) {
 			setStyleSheet("");
 	}
 }
-void KisDoubleParseSpinBox::clearError(){
+void KisDoubleParseSpinBox::clearError()
+{
 	_isLastValid = true;
+	emit noMoreParsingError();
 	_oldValue = value();
 	clearErrorStyle();
 }

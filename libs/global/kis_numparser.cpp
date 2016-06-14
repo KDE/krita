@@ -51,37 +51,59 @@ int treatFuncsInt(QString const& expr, bool & noProblem);
 
 namespace KisNumericParser {
 
-double parseSimpleMathExpr(const QString &expr, bool *ok){
+/*!
+ * \param expr the expression to parse
+ * \param noProblem if provided, the value pointed to will be se to true is no problem appeared, false otherwise.
+ * \return the numerical value the expression eval to (or 0 in case of error).
+ */
+double parseSimpleMathExpr(const QString &expr, bool *noProblem)
+{
 
-        bool oke = true;
+		bool ok = true; //intermediate variable to pass by reference to the sublevel parser (if no pointer is provided).
 
         //then go down each 3 levels of operation priority.
-        if(ok != nullptr) {
-                return treatLevel1(expr, *ok);
+		if (noProblem != nullptr) {
+				return treatLevel1(expr, *noProblem);
         }
 
-        return treatLevel1(expr, oke);
+		return treatLevel1(expr, ok);
 
 }
 
-int parseIntegerMathExpr(QString const& expr, bool* ok){
+/*!
+ * \param expr the expression to parse
+ * \param noProblem if provided, the value pointed to will be se to true is no problem appeared, false otherwise.
+ * \return the numerical value the expression eval to (or 0 in case of error).
+ */
+int parseIntegerMathExpr(QString const& expr, bool* noProblem)
+{
 
-        bool oke = true;
+		bool ok = true; //intermediate variable to pass by reference to the sublevel parser (if no pointer is provided).
 
-        if(ok != nullptr) {
-                return treatLevel1Int(expr, *ok);
+		if (noProblem != nullptr) {
+				return treatLevel1Int(expr, *noProblem);
         }
 
-        return treatLevel1Int(expr, oke);
+		return treatLevel1Int(expr, ok);
 
 }
 
-} //namespace utils.
+} //namespace KisNumericParser.
 
 
 //intermediate functions
 
-inline void cutLevel1(QString const& expr, QStringList & readyToTreat, QVector<char> & op, bool & noProblem){
+/*!
+ * \brief cutLevel1 cut an expression into many subparts using the level1 operations (+-) outside of parenthesis as separator. Return some results by reference.
+ * \param expr The expression to cut.
+ * \param readyToTreat A reference to a string list to hold the subparts.
+ * \param op A list of operations stored as char ('+' and '-') and returned by reference.
+ * \param noProblem A reference to a bool, set to true if there was no problem, false otherwise.
+ *
+ * The function won't cut the expression if the + or - operation is nested within parenthesis. The subexpression in the parenthesis will be treated recursivly later on.
+ */
+inline void cutLevel1(QString const& expr, QStringList & readyToTreat, QVector<char> & op, bool & noProblem)
+{
 
         readyToTreat.clear();
         op.clear();
@@ -93,28 +115,28 @@ inline void cutLevel1(QString const& expr, QStringList & readyToTreat, QVector<c
 
         for(int i = 0; i < expr.size(); i++){
 
-                if(expr.at(i) == '('){
+				if (expr.at(i) == '(') {
                         subCount++;
                 }
 
-                if(expr.at(i) == ')'){
+				if (expr.at(i) == ')') {
                         subCount--;
                 }
 
-                if(subCount < 0){
+				if (subCount < 0) {
                         noProblem = false;
                         return;
                 }
 
                 if( (expr.at(i) == '+' || expr.at(i) == '-') &&
-                                subCount == 0){
+								subCount == 0) {
 
-                        if(expr.at(i) == '-' &&
-                                        i < expr.size()-1){
+						if (expr.at(i) == '-' &&
+										i < expr.size()-1) {
 
                                 bool cond = !expr.at(i+1).isSpace();
 
-                                if(cond && !lastMetIsNumber){
+								if (cond && !lastMetIsNumber) {
                                         continue;
                                 }
 
@@ -126,10 +148,10 @@ inline void cutLevel1(QString const& expr, QStringList & readyToTreat, QVector<c
 
                 }
 
-                if(expr.at(i).isDigit()){
+				if (expr.at(i).isDigit()) {
                         lastMetIsNumber = true;
-                } else if(expr.at(i) != '.' &&
-                                  !expr.at(i).isSpace()){
+				} else if (expr.at(i) != '.' &&
+								  !expr.at(i).isSpace()) {
                         lastMetIsNumber = false;
                 }
         }
@@ -137,7 +159,18 @@ inline void cutLevel1(QString const& expr, QStringList & readyToTreat, QVector<c
         readyToTreat.push_back(expr.mid(lastPos).trimmed());
 
 }
-inline void cutLevel2(QString const& expr, QStringList & readyToTreat, QVector<char> & op, bool & noProblem){
+
+/*!
+ * \brief cutLeve2 cut an expression into many subparts using the level2 operations (* and /) outside of parenthesis as separator. Return some results by reference.
+ * \param expr The expression to cut.
+ * \param readyToTreat A reference to a string list to hold the subparts.
+ * \param op A list of operations stored as char ('*' and '/') and returned by reference.
+ * \param noProblem A reference to a bool, set to true if there was no problem, false otherwise.
+ *
+ * The function won't cut the expression if the * or / operation is nested within parenthesis. The subexpression in the parenthesis will be treated recursivly later on.
+ */
+inline void cutLevel2(QString const& expr, QStringList & readyToTreat, QVector<char> & op, bool & noProblem)
+{
 
         readyToTreat.clear();
         op.clear();
@@ -145,23 +178,23 @@ inline void cutLevel2(QString const& expr, QStringList & readyToTreat, QVector<c
         int subCount = 0;
         int lastPos = 0;
 
-        for(int i = 0; i < expr.size(); i++){
+		for (int i = 0; i < expr.size(); i++) {
 
-                if(expr.at(i) == '('){
+				if (expr.at(i) == '(') {
                         subCount++;
                 }
 
-                if(expr.at(i) == ')'){
+				if (expr.at(i) == ')') {
                         subCount--;
                 }
 
-                if(subCount < 0){
+				if (subCount < 0) {
                         noProblem = false;
                         return;
                 }
 
-                if( (expr.at(i) == '*' || expr.at(i) == '/') &&
-                                subCount == 0){
+				if ( (expr.at(i) == '*' || expr.at(i) == '/') &&
+								subCount == 0) {
 
                         readyToTreat.push_back(expr.mid(lastPos, i-lastPos).trimmed());
                         lastPos = i+1;
@@ -173,7 +206,14 @@ inline void cutLevel2(QString const& expr, QStringList & readyToTreat, QVector<c
         readyToTreat.push_back(expr.mid(lastPos).trimmed());
 }
 
-double treatLevel1(const QString &expr, bool & noProblem){
+/*!
+ * \brief treatLevel1 treat an expression at the first level of recursion.
+ * \param expr The expression to treat.
+ * \param noProblem A reference to a bool set to true if no problem happened, false otherwise.
+ * \return The value of the parsed expression or subexpression or 0 in case of error.
+ */
+double treatLevel1(const QString &expr, bool & noProblem)
+{
 
         noProblem = true;
 
@@ -181,35 +221,35 @@ double treatLevel1(const QString &expr, bool & noProblem){
         QVector<char> op;
 
         cutLevel1(expr, readyToTreat, op, noProblem);
-        if(!noProblem){
+		if (!noProblem) {
                 return 0.0;
         }
 
-        if(readyToTreat.contains("")){
+		if (readyToTreat.contains("")) {
                 noProblem = false;
                 return 0.0;
         }
 
-        if(op.size() != readyToTreat.size()-1){
+		if (op.size() != readyToTreat.size()-1) {
                 noProblem = false;
                 return 0.0;
         }
 
         double result = 0.0;
 
-        for(int i = 0; i < readyToTreat.size(); i++){
+		for (int i = 0; i < readyToTreat.size(); i++) {
 
-                if(i == 0){
+				if (i == 0) {
                         result += treatLevel2(readyToTreat[i], noProblem);
                 } else {
-                        if(op[i-1] == '+'){
+						if (op[i-1] == '+') {
                                 result += treatLevel2(readyToTreat[i], noProblem);
-                        } else if(op[i-1] == '-'){
+						} else if (op[i-1] == '-') {
                                 result -= treatLevel2(readyToTreat[i], noProblem);
                         }
                 }
 
-                if(noProblem == false){
+				if (noProblem == false) {
                         return 0.0;
                 }
         }
@@ -218,7 +258,16 @@ double treatLevel1(const QString &expr, bool & noProblem){
 
 }
 
-double treatLevel2(QString const& expr, bool & noProblem){
+/*!
+ * \brief treatLevel2 treat a subexpression at the second level of recursion.
+ * \param expr The subexpression to treat.
+ * \param noProblem A reference to a bool set to true if no problem happened, false otherwise.
+ * \return The value of the parsed subexpression or 0 in case of error.
+ *
+ * The expression should not contain first level operations not nested in parenthesis.
+ */
+double treatLevel2(QString const& expr, bool & noProblem)
+{
 
         noProblem = true;
 
@@ -226,36 +275,36 @@ double treatLevel2(QString const& expr, bool & noProblem){
         QVector<char> op;
 
         cutLevel2(expr, readyToTreat, op, noProblem);
-        if(!noProblem){
+		if (!noProblem) {
                 return 0.0;
         }
 
-        if(readyToTreat.contains("")){
+		if (readyToTreat.contains("")) {
                 noProblem = false;
                 return 0.0;
         }
 
-        if(op.size() != readyToTreat.size()-1){
+		if (op.size() != readyToTreat.size()-1) {
                 noProblem = false;
                 return 0.0;
         }
 
         double result = 0.0;
 
-        for(int i = 0; i < readyToTreat.size(); i++){
+		for (int i = 0; i < readyToTreat.size(); i++) {
 
-                if(i == 0){
+				if (i == 0) {
                         result += treatLevel3(readyToTreat[i], noProblem);
                 } else {
-                        if(op[i-1] == '*'){
+						if (op[i-1] == '*') {
                                 result *= treatLevel3(readyToTreat[i], noProblem);
-                        } else if(op[i-1] == '/'){
+						} else if(op[i-1] == '/') {
                                 //may become infinity or NAN.
                                 result /= treatLevel3(readyToTreat[i], noProblem);
                         }
                 }
 
-                if(noProblem == false){
+				if (noProblem == false) {
                         return 0.0;
                 }
         }
@@ -263,7 +312,16 @@ double treatLevel2(QString const& expr, bool & noProblem){
         return result;
 }
 
-double treatLevel3(const QString &expr, bool & noProblem){
+/*!
+ * \brief treatLevel3 treat a subexpression at the third level of recursion.
+ * \param expr The subexpression to treat.
+ * \param noProblem A reference to a bool set to true if no problem happened, false otherwise.
+ * \return The value of the parsed subexpression or 0 in case of error.
+ *
+ * The expression should not contain first or second level operations not nested in parenthesis.
+ */
+double treatLevel3(const QString &expr, bool & noProblem)
+{
 
         noProblem = true;
 
@@ -271,29 +329,29 @@ double treatLevel3(const QString &expr, bool & noProblem){
         int indexCount = 0;
         int subLevels = 0;
 
-        for(int i = 0; i < expr.size(); i++){
-                if(expr.at(i) == '('){
+		for (int i = 0; i < expr.size(); i++) {
+				if (expr.at(i) == '(') {
                         subLevels++;
-                } else if(expr.at(i) == ')'){
+				} else if(expr.at(i) == ')') {
                         subLevels--;
-                        if(subLevels < 0){
+						if (subLevels < 0) {
                                 noProblem = false;
                                 return 0.0;
                         }
-                } else if (expr.at(i) == '^'){
-                        if(subLevels == 0){
+				} else if (expr.at(i) == '^') {
+						if (subLevels == 0) {
                                 indexPower = i;
                                 indexCount++;
                         }
                 }
         }
 
-        if(indexCount > 1){
+		if (indexCount > 1) {
                 noProblem = false;
                 return 0.0;
         }
 
-        if(indexPower > -1){
+		if (indexPower > -1) {
 
                 QStringList subExprs = expr.split('^');
 
@@ -305,7 +363,7 @@ double treatLevel3(const QString &expr, bool & noProblem){
 
                 return qPow(base, power);
 
-        } else{
+		} else {
                 return treatFuncs(expr, noProblem);
         }
 
@@ -314,14 +372,23 @@ double treatLevel3(const QString &expr, bool & noProblem){
 
 }
 
-double treatFuncs(QString const& expr, bool & noProblem){
+/*!
+ * \brief treatFuncs treat the last level of recursion: parenthesis and functions.
+ * \param expr The expression to parse.
+ * \param noProblem A reference to a bool set to true if no problem happened, false otherwise.
+ * \return The value of the parsed subexpression or 0 in case of error.
+ *
+ * The expression should not contain operators not nested anymore. The subexpressions within parenthesis will be treated by recalling the level 1 function.
+ */
+double treatFuncs(QString const& expr, bool & noProblem)
+{
 
         noProblem = true;
 
         QRegExp funcExp = funcExpr; //copy the expression in the current execution stack, to avoid errors for example when multiple thread call this function.
         QRegExp numExp = numberExpr;
 
-        if(funcExp.exactMatch(expr.trimmed())){
+		if (funcExp.exactMatch(expr.trimmed())) {
 
                 int sign = funcExp.capturedTexts()[1].isEmpty() ? 1 : -1;
                 QString func = funcExp.capturedTexts()[2].toLower();
@@ -329,44 +396,44 @@ double treatFuncs(QString const& expr, bool & noProblem){
 
                 double val = treatLevel1(subExpr, noProblem);
 
-                if(!noProblem){
+				if (!noProblem) {
                         return 0.0;
                 }
 
-                if(func.isEmpty()){
+				if (func.isEmpty()) {
                         return sign*val;
                 }
 
-                if(!supportedFuncs.contains(func)){
+				if (!supportedFuncs.contains(func)) {
                         noProblem = false;
                         return 0.0;
                 }
 
                 //trigonometry is done in degree
-                if(func == "cos"){
+				if (func == "cos") {
                         val = qCos(val/180*qAcos(-1));
-                } else if (func == "sin"){
+				} else if (func == "sin") {
                         val = qSin(val/180*qAcos(-1));
-                } else if (func == "tan"){
+				} else if (func == "tan") {
                         val = qTan(val/180*qAcos(-1));
-                } else if(func == "acos"){
+				} else if(func == "acos") {
                         val = qAcos(val)*180/qAcos(-1);
-                } else if (func == "asin"){
+				} else if (func == "asin") {
                         val = qAsin(val)*180/qAcos(-1);
-                } else if (func == "atan"){
+				} else if (func == "atan") {
                         val = qAtan(val)*180/qAcos(-1);
-                }else if (func == "exp"){
+				} else if (func == "exp") {
                         val = qExp(val);
-                }else if (func == "ln"){
+				} else if (func == "ln") {
                         val = qLn(val);
-                }else if (func == "log10"){
+				} else if (func == "log10") {
                         val = qLn(val)/qLn(10.0);
-                }else if (func == "abs"){
+				} else if (func == "abs") {
                         val = qAbs(val);
                 }
 
                 return sign*val;
-        } else if(numExp.exactMatch(expr.trimmed())){
+		} else if(numExp.exactMatch(expr.trimmed())) {
                 return expr.toDouble(&noProblem);
         }
 
@@ -376,7 +443,14 @@ double treatFuncs(QString const& expr, bool & noProblem){
 }
 
 //int functions
-int treatLevel1Int(QString const& expr, bool & noProblem){
+/*!
+ * \brief treatLevel1 treat an expression at the first level of recursion.
+ * \param expr The expression to treat.
+ * \param noProblem A reference to a bool set to true if no problem happened, false otherwise.
+ * \return The value of the parsed expression or subexpression or 0 in case of error.
+ */
+int treatLevel1Int(QString const& expr, bool & noProblem)
+{
 
         noProblem = true;
 
@@ -384,35 +458,35 @@ int treatLevel1Int(QString const& expr, bool & noProblem){
         QVector<char> op;
 
         cutLevel1(expr, readyToTreat, op, noProblem);
-        if(!noProblem){
+		if (!noProblem) {
                 return 0.0;
         }
 
-        if(readyToTreat.contains("")){
+		if (readyToTreat.contains("")) {
                 noProblem = false;
                 return 0;
         }
 
-        if(op.size() != readyToTreat.size()-1){
+		if (op.size() != readyToTreat.size()-1) {
                 noProblem = false;
                 return 0;
         }
 
         int result = 0;
 
-        for(int i = 0; i < readyToTreat.size(); i++){
+		for (int i = 0; i < readyToTreat.size(); i++) {
 
-                if(i == 0){
+				if (i == 0) {
                         result += treatLevel2Int(readyToTreat[i], noProblem);
                 } else {
-                        if(op[i-1] == '+'){
+						if (op[i-1] == '+') {
                                 result += treatLevel2Int(readyToTreat[i], noProblem);
-                        } else if(op[i-1] == '-'){
+						} else if(op[i-1] == '-') {
                                 result -= treatLevel2Int(readyToTreat[i], noProblem);
                         }
                 }
 
-                if(noProblem == false){
+				if (noProblem == false) {
                         return 0;
                 }
         }
@@ -421,7 +495,16 @@ int treatLevel1Int(QString const& expr, bool & noProblem){
 
 }
 
-int treatLevel2Int(const QString &expr, bool &noProblem){
+/*!
+ * \brief treatLevel2 treat a subexpression at the second level of recursion.
+ * \param expr The subexpression to treat.
+ * \param noProblem A reference to a bool set to true if no problem happened, false otherwise.
+ * \return The value of the parsed subexpression or 0 in case of error.
+ *
+ * The expression should not contain first level operations not nested in parenthesis.
+ */
+int treatLevel2Int(const QString &expr, bool &noProblem)
+{
 
         noProblem = true;
 
@@ -429,34 +512,34 @@ int treatLevel2Int(const QString &expr, bool &noProblem){
         QVector<char> op;
 
         cutLevel2(expr, readyToTreat, op, noProblem);
-        if(!noProblem){
+		if (!noProblem) {
                 return 0.0;
         }
 
-        if(readyToTreat.contains("")){
+		if (readyToTreat.contains("")) {
                 noProblem = false;
                 return 0;
         }
 
-        if(op.size() != readyToTreat.size()-1){
+		if (op.size() != readyToTreat.size()-1) {
                 noProblem = false;
                 return 0;
         }
 
         int result = 0;
 
-        for(int i = 0; i < readyToTreat.size(); i++){
+		for (int i = 0; i < readyToTreat.size(); i++) {
 
-                if(i == 0){
+				if (i == 0) {
                         result += treatFuncsInt(readyToTreat[i], noProblem);
                 } else {
-                        if(op[i-1] == '*'){
+						if (op[i-1] == '*') {
                                 result *= treatFuncsInt(readyToTreat[i], noProblem);
-                        } else if(op[i-1] == '/'){
+						} else if(op[i-1] == '/') {
                                 int value = treatFuncsInt(readyToTreat[i], noProblem);
 
                                 //int int airthmetic it's impossible to divide by 0.
-                                if(value == 0){
+								if (value == 0) {
                                         noProblem = false;
                                         return 0;
                                 }
@@ -465,7 +548,7 @@ int treatLevel2Int(const QString &expr, bool &noProblem){
                         }
                 }
 
-                if(noProblem == false){
+				if (noProblem == false) {
                         return 0;
                 }
         }
@@ -474,7 +557,16 @@ int treatLevel2Int(const QString &expr, bool &noProblem){
 
 }
 
-int treatFuncsInt(QString const& expr, bool & noProblem){
+/*!
+ * \brief treatFuncs treat the last level of recursion: parenthesis
+ * \param expr The expression to parse.
+ * \param noProblem A reference to a bool set to true if no problem happened, false otherwise.
+ * \return The value of the parsed subexpression or 0 in case of error.
+ *
+ * The expression should not contain operators not nested anymore. The subexpressions within parenthesis will be treated by recalling the level 1 function.
+ */
+int treatFuncsInt(QString const& expr, bool & noProblem)
+{
 
         noProblem = true;
 
@@ -482,22 +574,22 @@ int treatFuncsInt(QString const& expr, bool & noProblem){
         QRegExp integerExp = integerExpr;
         QRegExp numberExp = numberExpr;
 
-        if(funcExpInteger.exactMatch(expr.trimmed())){
+		if (funcExpInteger.exactMatch(expr.trimmed())) {
 
                 int sign = funcExpInteger.capturedTexts()[1].isEmpty() ? 1 : -1;
                 QString subExpr = funcExpInteger.capturedTexts()[2];
 
                 int val = treatLevel1Int(subExpr, noProblem);
 
-                if(!noProblem){
+				if (!noProblem) {
                         return 0;
                 }
 
                 return sign*val;
 
-        } else if(integerExp.exactMatch(expr.trimmed())){
+		} else if(integerExp.exactMatch(expr.trimmed())) {
                 return QVariant(expr).toInt(&noProblem);
-        } else if(numberExp.exactMatch(expr.trimmed())){
+		} else if(numberExp.exactMatch(expr.trimmed())) {
                 double value = qFloor( QVariant(expr).toDouble(&noProblem));
                 return (value > 0.0) ? value: value + 1;
         }

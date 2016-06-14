@@ -64,7 +64,7 @@ protected:
 
 		mutable QString* _lastExprParsed;
 		mutable bool _isLastValid;
-		mutable int _oldVal;
+		mutable int _oldVal; //store the last correctly evaluated value, to
 };
 
 #endif // KISINTPARSESPINBOX_H

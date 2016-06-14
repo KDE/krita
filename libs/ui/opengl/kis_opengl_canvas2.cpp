@@ -39,6 +39,8 @@
 #include <QThread>
 #include <QFile>
 #include <QOpenGLShaderProgram>
+#include <QOpenGLVertexArrayObject>
+
 #include <QMessageBox>
 
 #define NEAR_VAL -1000.0
@@ -60,6 +62,7 @@ static kis_glLogicOp ptr_glLogicOp = 0;
 struct KisOpenGLCanvas2::Private
 {
 public:
+
     ~Private() {
         delete displayShader;
         delete checkerShader;
@@ -98,6 +101,9 @@ public:
     GLsync glSyncObject{0};
 
     bool wrapAroundMode{false};
+
+    GLuint vboHandles[3];
+    QOpenGLVertexArrayObject vao;
 
     int xToColWithWrapCompensation(int x, const QRect &imageRect) {
         int firstImageColumn = openGLImageTextures->xToCol(imageRect.left());

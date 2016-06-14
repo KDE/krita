@@ -157,7 +157,8 @@ void KisCanvas2::setup()
     m_d->vastScrolling = cfg.vastScrolling();
     m_d->lodAllowedInCanvas = cfg.levelOfDetailEnabled();
 
-    createCanvas(cfg.useOpenGL());
+    qWarning() << "NOTE: QPainter Canvas is explicitly disabled!";
+    createCanvas(true);//cfg.useOpenGL());
 
     setLodAllowedInCanvas(m_d->lodAllowedInCanvas);
     m_d->animationPlayer = new KisAnimationPlayer(this);
@@ -431,11 +432,11 @@ void KisCanvas2::createCanvas(bool useOpenGL)
     if (useOpenGL) {
         if (KisOpenGL::hasOpenGL()) {
             createOpenGLCanvas();
-            if (cfg.canvasState() == "OPENGL_FAILED") {
-                // Creating the opengl canvas failed, fall back
-                warnKrita << "OpenGL Canvas initialization returned OPENGL_FAILED. Falling back to QPainter.";
-                createQPainterCanvas();
-            }
+//            if (cfg.canvasState() == "OPENGL_FAILED") {
+//                // Creating the opengl canvas failed, fall back
+//                warnKrita << "OpenGL Canvas initialization returned OPENGL_FAILED. Falling back to QPainter.";
+//                createQPainterCanvas();
+//            }
         } else {
             warnKrita << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
             createQPainterCanvas();

@@ -280,20 +280,24 @@ void KisOpenGLCanvas2::paintGL()
 
     KisOpenglCanvasDebugger::instance()->nofityPaintRequested();
 
-    QPainter gc(this);
-    gc.beginNativePainting();
-
+    d->vao.bind();
     renderCanvasGL();
+    d->vao.release();
 
     if (d->glSyncObject) {
         Sync::deleteSync(d->glSyncObject);
     }
     d->glSyncObject = Sync::getSync();
-    gc.endNativePainting();
 
-    renderDecorations(&gc);
+    QPainter gc(this);
+    // renderDecorations(&gc);
+    QPen pen;
+    pen.setWidth(3);
+    pen.setJoinStyle(Qt::RoundJoin);
+    pen.setBrush(Qt::green);
+    gc.setPen(pen);
+    gc.drawRect(200, 200, 100, 100);
     gc.end();
-
 
     if (!OPENGL_SUCCESS) {
         KisConfig cfg;
@@ -359,8 +363,12 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
             QPointF p = polygon.at(j);
             vertices << QVector3D(p.x(), p.y(), 0.f);
         }
-        cursorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
-        cursorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
+
+        glBindBuffer(GL_ARRAY_BUFFER, d->vboHandles[2]);
+        glBufferData(GL_ARRAY_BUFFER,
+                     3 * vertices.size() * sizeof(float),
+                     vertices.constData(),
+                     QOpenGLBuffer::StreamDraw);
 
         glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
 
@@ -403,7 +411,10 @@ void KisOpenGLCanvas2::drawCheckers()
     textureTransform *= QTransform::fromScale(d->checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE,
                                               d->checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE);
 
-    d->checkerShader->bind();
+    if (!d->checkerShader->bind()) {
+        qWarning() << "Could not bind checker shader";
+        return;
+    }
 
     QMatrix4x4 projectionMatrix;
     projectionMatrix.setToIdentity();
@@ -413,6 +424,7 @@ void KisOpenGLCanvas2::drawCheckers()
     QMatrix4x4 modelMatrix(modelTransform);
     modelMatrix.optimize();
     modelMatrix = projectionMatrix * modelMatrix;
+
     d->checkerShader->setUniformValue(d->checkerUniformLocationModelViewProjection, modelMatrix);
 
     QMatrix4x4 textureMatrix(textureTransform);
@@ -420,12 +432,12 @@ void KisOpenGLCanvas2::drawCheckers()
 
     //Setup the geometry for rendering
     rectToVertices(d->vertices, modelRect);
-    d->checkerShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
-    d->checkerShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, d->vertices);
+    glBindBuffer(GL_ARRAY_BUFFER, d->vboHandles[0]);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, 3 * 6 * sizeof(float), d->vertices);
 
     rectToTexCoords(d->texCoords, textureRect);
-    d->checkerShader->enableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
-    d->checkerShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, d->texCoords);
+    glBindBuffer(GL_ARRAY_BUFFER, d->vboHandles[1]);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, 2 * 6 * sizeof(float), d->texCoords);
 
     // render checkers
     glActiveTexture(GL_TEXTURE0);
@@ -435,6 +447,7 @@ void KisOpenGLCanvas2::drawCheckers()
 
     glBindTexture(GL_TEXTURE_2D, 0);
     d->checkerShader->release();
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void KisOpenGLCanvas2::drawImage()
@@ -533,12 +546,12 @@ void KisOpenGLCanvas2::drawImage()
 
             //Setup the geometry for rendering
             rectToVertices(d->vertices, modelRect);
-            d->displayShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
-            d->displayShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, d->vertices);
+            glBindBuffer(GL_ARRAY_BUFFER, d->vboHandles[0]);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, 3 * 6 * sizeof(float), d->vertices);
 
             rectToTexCoords(d->texCoords, textureRect);
-            d->displayShader->enableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
-            d->displayShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, d->texCoords);
+            glBindBuffer(GL_ARRAY_BUFFER, d->vboHandles[1]);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, 2 * 6 * sizeof(float), d->texCoords);
 
             if (d->displayFilter) {
                 glActiveTexture(GL_TEXTURE0 + 1);
@@ -589,6 +602,8 @@ void KisOpenGLCanvas2::drawImage()
 
     glBindTexture(GL_TEXTURE_2D, 0);
     d->displayShader->release();
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
 }
 
 void KisOpenGLCanvas2::reportShaderLinkFailedAndExit(bool result, const QString &context, const QString &log)
@@ -661,7 +676,7 @@ QByteArray KisOpenGLCanvas2::buildFragmentShader()
 
     if (haveGLSL13) {
         filename = "highq_downscale.frag";
-        shaderText.append("#version 130\n");
+        shaderText.append("#version 150\n");
     } else {
         filename = "simple_texture_legacy.frag";
     }

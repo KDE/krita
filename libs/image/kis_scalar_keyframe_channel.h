@@ -25,7 +25,7 @@ class KRITAIMAGE_EXPORT KisScalarKeyframeChannel : public KisKeyframeChannel
     Q_OBJECT
 
 public:
-    KisScalarKeyframeChannel(const KoID& id, qreal minValue, qreal maxValue, KisDefaultBoundsBaseSP defaultBounds);
+    KisScalarKeyframeChannel(const KoID& id, qreal minValue, qreal maxValue, KisDefaultBoundsBaseSP defaultBounds, KisKeyframe::InterpolationMode defaultInterpolation=KisKeyframe::Constant);
     ~KisScalarKeyframeChannel();
 
     bool hasScalarValue() const;
@@ -35,6 +35,7 @@ public:
     void setScalarValue(KisKeyframeSP keyframe, qreal value, KUndo2Command *parentCommand = 0);
 
     qreal interpolatedValue(int time) const;
+    qreal currentValue() const;
 
 protected:
     KisKeyframeSP createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand);

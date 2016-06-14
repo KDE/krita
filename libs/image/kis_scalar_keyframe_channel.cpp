@@ -27,8 +27,8 @@
 struct KisScalarKeyframeChannel::Private
 {
 public:
-    Private(qreal min, qreal max)
-        : minValue(min), maxValue(max), firstFreeIndex(0)
+    Private(qreal min, qreal max, KisKeyframe::InterpolationMode defaultInterpolation)
+        : minValue(min), maxValue(max), firstFreeIndex(0), defaultInterpolation(defaultInterpolation)
     {}
 
     qreal minValue;
@@ -36,13 +36,15 @@ public:
     QMap<int, qreal> values;
     int firstFreeIndex;
 
+    KisKeyframe::InterpolationMode defaultInterpolation;
+
     struct InsertValueCommand;
     struct SetValueCommand;
 };
 
-KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID &id, qreal minValue, qreal maxValue, KisDefaultBoundsBaseSP defaultBounds)
+KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID &id, qreal minValue, qreal maxValue, KisDefaultBoundsBaseSP defaultBounds, KisKeyframe::InterpolationMode defaultInterpolation)
     : KisKeyframeChannel(id, defaultBounds),
-      m_d(new Private(minValue, maxValue))
+      m_d(new Private(minValue, maxValue, defaultInterpolation))
 {
 }
 
@@ -193,6 +195,11 @@ qreal KisScalarKeyframeChannel::interpolatedValue(int time) const
     return res;
 }
 
+qreal KisScalarKeyframeChannel::currentValue() const
+{
+    return interpolatedValue(currentTime());
+}
+
 struct KisScalarKeyframeChannel::Private::InsertValueCommand : public KUndo2Command
 {
     InsertValueCommand(KisScalarKeyframeChannel::Private *d, int index, qreal value, bool insert, KUndo2Command *parentCommand)
@@ -236,7 +243,9 @@ KisKeyframeSP KisScalarKeyframeChannel::createKeyframe(int time, const KisKeyfra
     KUndo2Command *cmd = new Private::InsertValueCommand(m_d.data(), index, value, true, parentCommand);
     cmd->redo();
 
-    return toQShared(new KisKeyframe(this, time, index));
+    KisKeyframeSP keyframe = toQShared(new KisKeyframe(this, time, index));
+    keyframe->setInterpolationMode(m_d->defaultInterpolation);
+    return keyframe;
 }
 
 void KisScalarKeyframeChannel::destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand)

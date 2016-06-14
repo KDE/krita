@@ -117,10 +117,10 @@ KisPaintDeviceSP KisBaseNode::projection() const
 quint8 KisBaseNode::opacity() const
 {
     if (m_d->opacityChannel) {
-        KisKeyframeSP activeKeyframe = m_d->opacityChannel->currentlyActiveKeyframe();
+        qreal value = m_d->opacityChannel->currentValue();
 
-        if (!activeKeyframe.isNull()) {
-            return m_d->opacityChannel->scalarValue(activeKeyframe);
+        if (!qIsNaN(value)) {
+            return value;
         }
     }
 
@@ -419,7 +419,8 @@ KisKeyframeChannel *KisBaseNode::requestKeyframeChannel(const QString &id)
             KisScalarKeyframeChannel * channel = new KisScalarKeyframeChannel(
                 KisKeyframeChannel::Opacity,
                 0, 255,
-                device->defaultBounds()
+                device->defaultBounds(),
+                KisKeyframe::Linear
             );
 
             m_d->opacityChannel.reset(channel);

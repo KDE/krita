@@ -288,16 +288,44 @@ void KisScalarKeyframeChannel::saveKeyframe(KisKeyframeSP keyframe, QDomElement 
 {
     Q_UNUSED(layerFilename);
     keyframeElement.setAttribute("value", KisDomUtils::toString(m_d->values[keyframe->value()]));
+
+    QString interpolation;
+    if (keyframe->interpolationMode() == KisKeyframe::Linear) interpolation = "linear";
+    if (keyframe->interpolationMode() == KisKeyframe::Sharp) interpolation = "sharp";
+    if (keyframe->interpolationMode() == KisKeyframe::Smooth) interpolation = "smooth";
+
+    if (!interpolation.isEmpty()) {
+        keyframeElement.setAttribute("interpolation", interpolation);
+        KisDomUtils::saveValue(&keyframeElement, "leftTangent", keyframe->leftTangent());
+        KisDomUtils::saveValue(&keyframeElement, "rightTangent", keyframe->rightTangent());
+    }
 }
 
 KisKeyframeSP KisScalarKeyframeChannel::loadKeyframe(const QDomElement &keyframeNode)
 {
     int time = keyframeNode.toElement().attribute("time").toUInt();
     qreal value = KisDomUtils::toDouble(keyframeNode.toElement().attribute("value"));
+    QString interpolation = keyframeNode.toElement().attribute("interpolation");
 
     KUndo2Command tempParentCommand;
     KisKeyframeSP keyframe = createKeyframe(time, KisKeyframeSP(), &tempParentCommand);
     setScalarValue(keyframe, value);
+
+    if (interpolation == "constant") {
+        keyframe->setInterpolationMode(KisKeyframe::Constant);
+    } else if (interpolation == "linear") {
+        keyframe->setInterpolationMode(KisKeyframe::Linear);
+    } else if (interpolation == "sharp") {
+        keyframe->setInterpolationMode(KisKeyframe::Sharp);
+    } else if (interpolation == "smooth") {
+        keyframe->setInterpolationMode(KisKeyframe::Smooth);
+    }
+
+    QPointF leftTangent;
+    QPointF rightTangent;
+    KisDomUtils::loadValue(keyframeNode, "leftTangent", &leftTangent);
+    KisDomUtils::loadValue(keyframeNode, "rightTangent", &rightTangent);
+    keyframe->setInterpolationTangents(leftTangent, rightTangent);
 
     return keyframe;
 }

@@ -1,5 +1,6 @@
 # Copyright (C) 2012, 2013 Shaheed Haque <srhaque@theiet.org>
 # Copyright (C) 2013 Alex Turbov <i.zaufi@gmail.com>
+# Copyright (C) 2014-2016 Boudewijn Rempt <boud@valdyas.org>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -39,7 +40,7 @@ function(install_pykrita_plugin name)
     endif()
     if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${name}.py)
         install(FILES kritapykrita_${name}.desktop DESTINATION ${SERVICES_INSTALL_DIR}/krita)
-        foreach(_f ${name}.py ${name}.ui ${name}_ui.rc ${install_pykrita_plugin_FILE})
+        foreach(_f ${name}.py ${name}.ui ${name}_ui.xmlgui ${install_pykrita_plugin_FILE})
             if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${_f})
                 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${_f} DESTINATION ${DATA_INSTALL_DIR}/krita/pykrita)
             endif()
@@ -52,7 +53,7 @@ function(install_pykrita_plugin name)
             FILES_MATCHING
                 PATTERN "*.py"
                 PATTERN "*.ui"
-                PATTERN "*_ui.rc"
+                PATTERN "*_ui.xmlgui"
                 PATTERN "__pycache__*" EXCLUDE
            )
         # TODO Is there any way to form a long PATTERN options string

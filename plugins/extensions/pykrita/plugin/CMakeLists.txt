@@ -27,8 +27,6 @@ target_link_libraries(
 install(TARGETS kritapykrita DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install(FILES kritapyqtplugin.xmlgui DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
 
-install(FILES kritapyqtplugin.desktop  DESTINATION  ${SERVICETYPES_INSTALL_DIR})
-
 # Install "built-in" plugins
 install(
     DIRECTORY krita

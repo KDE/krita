@@ -32,10 +32,10 @@
 namespace KisNumericParser {
 
         //! \brief parse an expression to a double.
-        KRITAGLOBAL_EXPORT double parseSimpleMathExpr(QString const& expr, bool* ok = 0);
+		KRITAGLOBAL_EXPORT double parseSimpleMathExpr(QString const& expr, bool* noProblem = 0);
 
         //! \brief parse an expression to an int.
-        KRITAGLOBAL_EXPORT int parseIntegerMathExpr(QString const& expr, bool* ok = 0);
+		KRITAGLOBAL_EXPORT int parseIntegerMathExpr(QString const& expr, bool* noProblem = 0);
 }
 
 #endif // KIS_NUMPARSER_H

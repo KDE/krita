@@ -11,5 +11,5 @@ add_sip_python_module(PyKrita.krita ./krita/kritamod.sip kritalibkis kritaui kri
 
 install(FILES
     ./__init__.py
-    DESTINATION ${PYTHON_SITE_PACKAGES_INSTALL_DIR}/PyKrita/)
+    DESTINATION ${DATA_INSTALL_DIR}/krita/pykrita/PyKrita)
 

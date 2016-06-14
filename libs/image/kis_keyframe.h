@@ -30,16 +30,30 @@ class KisKeyframeChannel;
 class KRITAIMAGE_EXPORT KisKeyframe
 {
 public:
+    enum InterpolationMode {
+        Constant,
+        Linear,
+        Sharp,
+        Smooth
+    };
+
     KisKeyframe(KisKeyframeChannel *channel, int time, void *data);
     KisKeyframe(KisKeyframeChannel *channel, int time, quint32 value);
     ~KisKeyframe();
 
     quint32 value() const;
     void *data() const;
-
     void setValue(quint32 value);
+
     int time() const;
     void setTime(int time);
+
+    void setInterpolationMode(InterpolationMode mode);
+    InterpolationMode interpolationMode() const;
+    void setInterpolationTangents(QPointF leftTangent, QPointF rightTangent);
+    QPointF leftTangent() const;
+    QPointF rightTangent() const;
+
     KisKeyframeChannel *channel() const;
 
 private:

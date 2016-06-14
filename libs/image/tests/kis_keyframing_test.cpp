@@ -148,6 +148,49 @@ void KisKeyframingTest::testScalarChannelUndoRedo()
     delete channel;
 }
 
+void KisKeyframingTest::testScalarInterpolation()
+{
+    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), 0, 30, 0);
+
+    KisKeyframeSP key1 = channel->addKeyframe(0);
+    channel->setScalarValue(key1, 15);
+
+    KisKeyframeSP key2 = channel->addKeyframe(10);
+    channel->setScalarValue(key2, 30);
+
+    // Constant
+
+    key1->setInterpolationMode(KisKeyframe::Constant);
+
+    QCOMPARE(channel->interpolatedValue(4), 15.0f);
+
+    // Bezier
+
+    key1->setInterpolationMode(KisKeyframe::Sharp);
+    key1->setInterpolationTangents(QPointF(), QPointF(1,4));
+    key2->setInterpolationTangents(QPointF(-4,2), QPointF());
+
+    QVERIFY(qAbs(channel->interpolatedValue(4) - 24.9812f) < 0.1f);
+
+    // Bezier, self-intersecting curve (auto-correct)
+
+    channel->setScalarValue(key2, 15);
+    key1->setInterpolationTangents(QPointF(), QPointF(13,10));
+    key2->setInterpolationTangents(QPointF(-13,10), QPointF());
+
+    QVERIFY(qAbs(channel->interpolatedValue(5) - 20.769f) < 0.1f);
+
+    // Bezier, result outside allowed range (clamp)
+
+    channel->setScalarValue(key2, 15);
+    key1->setInterpolationTangents(QPointF(), QPointF(0, 50));
+    key2->setInterpolationTangents(QPointF(0, 50), QPointF());
+
+    QCOMPARE(channel->interpolatedValue(5), 30.0f);
+
+    delete channel;
+}
+
 void KisKeyframingTest::testRasterChannel()
 {
     TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();

@@ -34,6 +34,8 @@ public:
     qreal scalarValue(const KisKeyframeSP keyframe) const;
     void setScalarValue(KisKeyframeSP keyframe, qreal value, KUndo2Command *parentCommand = 0);
 
+    qreal interpolatedValue(int time) const;
+
 protected:
     KisKeyframeSP createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand);
     void destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand);

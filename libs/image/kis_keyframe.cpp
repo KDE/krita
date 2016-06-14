@@ -28,8 +28,12 @@ struct KisKeyframe::Private
     int time;
     quintptr data;
 
+    InterpolationMode interpolationMode;
+    QPointF leftTangent;
+    QPointF rightTangent;
+
     Private(KisKeyframeChannel *channel, int time, quintptr data)
-        : channel(channel), time(time), data(data)
+        : channel(channel), time(time), data(data), interpolationMode(Constant)
     {}
 };
 
@@ -67,6 +71,32 @@ int KisKeyframe::time() const
 void KisKeyframe::setTime(int time)
 {
     m_d->time = time;
+}
+
+void KisKeyframe::setInterpolationMode(KisKeyframe::InterpolationMode mode)
+{
+    m_d->interpolationMode = mode;
+}
+
+KisKeyframe::InterpolationMode KisKeyframe::interpolationMode() const
+{
+    return m_d->interpolationMode;
+}
+
+void KisKeyframe::setInterpolationTangents(QPointF leftTangent, QPointF rightTangent)
+{
+    m_d->leftTangent = leftTangent;
+    m_d->rightTangent = rightTangent;
+}
+
+QPointF KisKeyframe::leftTangent() const
+{
+    return m_d->leftTangent;
+}
+
+QPointF KisKeyframe::rightTangent() const
+{
+    return m_d->rightTangent;
 }
 
 KisKeyframeChannel *KisKeyframe::channel() const

@@ -17,6 +17,11 @@ include_directories(SYSTEM
     ${Boost_INCLUDE_DIRS}
 )
 
+include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS}
+    ${Qt5Core_PRIVATE_INCLUDE_DIRS}
+    ${Qt5Widgets_PRIVATE_INCLUDE_DIRS}
+)
+
 add_subdirectory( tests )
 
 if (APPLE)
@@ -356,6 +361,21 @@ set(kritaui_LIB_SRCS
     KisPaletteModel.cpp
     KisColorsetChooser.cpp
     KisSaveGroupVisitor.cpp
+    
+    opengl/paintengine/qopengl2pexvertexarray.cpp
+    opengl/paintengine/qopenglcustomshaderstage.cpp
+    opengl/paintengine/qopenglengineshadermanager.cpp
+    opengl/paintengine/qopenglgradientcache.cpp
+    opengl/paintengine/qopenglpaintengine.cpp
+    opengl/paintengine/qopengltextureblitter.cpp
+    opengl/paintengine/qopengltexturecache.cpp
+    opengl/paintengine/qopengltextureglyphcache.cpp
+    opengl/paintengine/qopengltexturehelper.cpp
+    opengl/paintengine/qtriangulatingstroker.cpp
+    opengl/paintengine/qtriangulator.cpp
+    opengl/paintengine/qopenglwidget.cpp
+    opengl/paintengine/qopenglpaintdevice.cpp
+
 )
 
 if(WIN32)

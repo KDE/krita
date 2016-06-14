@@ -42,6 +42,8 @@ public:
 
 		virtual void stepBy(int steps);
 
+		void setValue(double value); //polymorphism won't work directly, we use a signal/slot hack to do so but if signals are disabled this function will still be usefull.
+
 Q_SIGNALS:
 
 		//! \brief signal emmitted when the last parsed expression create an error.
@@ -62,6 +64,7 @@ protected:
 
 		mutable QString* _lastExprParsed;
 		mutable bool _isLastValid;
+		mutable double _oldValue;
 };
 
 #endif // KISDOUBLEPARSESPINBOX_H

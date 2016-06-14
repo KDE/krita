@@ -20,6 +20,9 @@
 
 #include "kis_numparser.h"
 
+#include <QDebug>
+#include <iostream>
+
 KisIntParseSpinBox::KisIntParseSpinBox(QWidget *parent) :
     QSpinBox(parent),
     _isLastValid(true)
@@ -27,12 +30,10 @@ KisIntParseSpinBox::KisIntParseSpinBox(QWidget *parent) :
     _lastExprParsed = new QString("0");
 
     connect(this, SIGNAL(noMoreParsingError()),
-                    this, SLOT(clearErrorStyle()));
-    connect(this, SIGNAL(valueChanged(int)),
-            this, SLOT(clearError()));
+					this, SLOT(clearErrorStyle()));
 
-    connect(this, SIGNAL(errorWhileParsing(QString)),
-                    this, SLOT(setErrorStyle()));
+	connect(this, SIGNAL(errorWhileParsing(QString)),
+					this, SLOT(setErrorStyle()));
 
 }
 
@@ -55,10 +56,21 @@ int KisIntParseSpinBox::valueFromText(const QString & text) const{
             ok = true;
     }
 
-    if(!ok){
+	if(!ok){
+
+			if(_isLastValid == true){
+				_oldVal = value();
+			}
+
             _isLastValid = false;
             //emit errorWhileParsing(text); //if uncommented become red everytime the string is wrong.
+			val = _oldVal;
     } else {
+
+			if(_isLastValid == false){
+				_oldVal = val;
+			}
+
             _isLastValid = true;
             //emit noMoreParsingError();
     }
@@ -97,6 +109,15 @@ void KisIntParseSpinBox::stepBy(int steps){
 
 }
 
+void KisIntParseSpinBox::setValue(int val){
+
+	if(!hasFocus()){
+		clearError();
+	}
+
+	QSpinBox::setValue(val);
+}
+
 void KisIntParseSpinBox::setErrorStyle(){
     if(!_isLastValid){
         setStyleSheet("Background: red; color: white;");
@@ -111,6 +132,7 @@ void KisIntParseSpinBox::clearErrorStyle(){
 
 
 void KisIntParseSpinBox::clearError(){
-    _isLastValid = true;
-    clearErrorStyle();
+	_isLastValid = true;
+	_oldVal = value();
+	clearErrorStyle();
 }

@@ -561,14 +561,19 @@ void KisCanvas2::setProofingOptions(bool softProof, bool gamutCheck)
 
     if (softProof) {
         conversionFlags |= KoColorConversionTransformation::SoftProofing;
-        qDebug()<<"setting softproofing in canvas";
+    } else {
+        conversionFlags = conversionFlags &  ~KoColorConversionTransformation::SoftProofing;
     }
     if (gamutCheck) {
         conversionFlags |= KoColorConversionTransformation::GamutCheck;
-        qDebug()<<"setting gamutChecking in canvas";
+    } else {
+        conversionFlags = conversionFlags & ~KoColorConversionTransformation::GamutCheck;
     }
     m_d->proofingConfig->conversionFlags = conversionFlags;
 
+    qDebug()<<"setting softproofing in canvas: "<<softProof <<", "<<gamutCheck;
+    qDebug()<<conversionFlags.testFlag(KoColorConversionTransformation::SoftProofing);
+    qDebug()<<conversionFlags.testFlag(KoColorConversionTransformation::GamutCheck);
     startUpdateInPatches(this->image()->bounds());
 
 }

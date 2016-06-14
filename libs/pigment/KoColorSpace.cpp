@@ -67,6 +67,7 @@ KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoMixColorsOp
     d->TRCXYY = QPolygonF();
     d->colorants = QVector <qreal> (0);
     d->lumaCoefficients = QVector <qreal> (0);
+    d->iccEngine = 0;
     d->deletability = NotOwnedByRegistry;
 }
 
@@ -451,10 +452,12 @@ bool KoColorSpace::proofPixelsTo(const quint8 * src,
     }*/
     // Only the icc engine can do this kind of stuff
     //Can we cache this, maybe???
-    KoColorSpaceEngine *engine = KoColorSpaceEngineRegistry::instance()->get("icc");
-    //qDebug() << ">>>>>>>>>>>>>>>>>>>> we got a proofing engine";
-    if (!engine) return false;
-    KoColorConversionTransformation *transform = engine->createColorProofingTransformation(this, dstColorSpace, proofingSpace, renderingIntent, conversionFlags);
+    if (d->iccEngine) {
+        d->iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
+        //qDebug() << ">>>>>>>>>>>>>>>>>>>> we got a proofing engine";
+    }
+    if (!d->iccEngine) return false;
+    KoColorConversionTransformation *transform = d->iccEngine->createColorProofingTransformation(this, dstColorSpace, proofingSpace, renderingIntent, conversionFlags);
 
     Q_UNUSED(transform);
 

@@ -36,6 +36,8 @@ KisDoubleParseSpinBox::KisDoubleParseSpinBox(QWidget *parent) :
 	connect(this, SIGNAL(errorWhileParsing(QString)),
 					this, SLOT(setErrorStyle()));
 
+	_oldValue = value();
+
 }
 
 KisDoubleParseSpinBox::~KisDoubleParseSpinBox(){
@@ -54,12 +56,19 @@ double KisDoubleParseSpinBox::valueFromText(const QString & text) const{
 	double ret = KisNumericParser::parseSimpleMathExpr(text, &ok);
 
 			if(!ok){
+					if(_isLastValid){
+						_oldValue = value();
+					}
+
 					_isLastValid = false;
-					return ret;
+					ret = _oldValue; //in case of error set to minimum.
 			} else {
 
+					if(!_isLastValid){
+						_oldValue = ret;
+					}
+
 					_isLastValid = true;
-					return ret;
 			}
 
 	return ret;
@@ -95,6 +104,13 @@ void KisDoubleParseSpinBox::stepBy(int steps){
 
 }
 
+void KisDoubleParseSpinBox::setValue(double value){
+	if(!hasFocus()){
+		clearError();
+	}
+	QDoubleSpinBox::setValue(value);
+}
+
 void KisDoubleParseSpinBox::setErrorStyle(){
 	if(!_isLastValid){
 			setStyleSheet("Background: red; color: white;");
@@ -108,5 +124,6 @@ void KisDoubleParseSpinBox::clearErrorStyle(){
 }
 void KisDoubleParseSpinBox::clearError(){
 	_isLastValid = true;
+	_oldValue = value();
 	clearErrorStyle();
 }

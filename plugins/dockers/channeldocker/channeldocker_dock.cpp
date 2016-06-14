@@ -68,18 +68,15 @@ void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    if (m_canvas && m_canvas->imageView() && m_canvas->imageView()->image()) {
-        QPointer<KisView> view = m_canvas->imageView();
-        m_model->slotSetCanvas(m_canvas);
-
-        KisPaintDeviceSP dev = view->image()->projection();
+    if ( m_canvas && m_canvas->image() ) {
+        KisPaintDeviceSP dev = m_canvas->image()->projection();
 
         connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), m_compressor, SLOT(start()), Qt::UniqueConnection);
         connect(dev, SIGNAL(colorSpaceChanged(const KoColorSpace*)), m_model, SLOT(slotColorSpaceChanged(const KoColorSpace*)));
         connect(dev, SIGNAL(colorSpaceChanged(const KoColorSpace*)), m_canvas, SLOT(channelSelectionChanged()));
         connect(m_model, SIGNAL(channelFlagsChanged()), m_canvas, SLOT(channelSelectionChanged()));
-        m_channelTable->resizeRowsToContents();
-        m_channelTable->resizeColumnsToContents();
+
+        m_compressor->start();
     }
 
 }
@@ -93,7 +90,7 @@ void ChannelDockerDock::startUpdateCanvasProjection()
             return;
         }
 
-        m_model->updateData();
+        m_model->updateData(m_canvas);
         m_channelTable->resizeRowsToContents();
         m_channelTable->resizeColumnsToContents();
     }

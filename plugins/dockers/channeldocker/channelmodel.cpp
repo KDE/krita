@@ -131,7 +131,7 @@ Qt::ItemFlags ChannelModel::flags(const QModelIndex& /*index*/) const
 void ChannelModel::setThumbnailSizeLimit(QSize size)
 {
     m_thumbnailSizeLimit = size;
-    updateData();
+    updateData(m_canvas);
 }
 
 void ChannelModel::slotLayerActivated(KisLayerSP layer)
@@ -161,9 +161,10 @@ void ChannelModel::slotColorSpaceChanged(const KoColorSpace *colorSpace)
     endResetModel();
 }
 
-void ChannelModel::updateData()
+void ChannelModel::updateData( KisCanvas2 *canvas )
 {
     beginResetModel();
+    m_canvas = canvas;
     updateThumbnails();
     endResetModel();
 }
@@ -175,14 +176,9 @@ void ChannelModel::updateData()
 void ChannelModel::updateThumbnails(void)
 {
 
-
     if( m_canvas && m_canvas->image() ){
         auto cs = m_canvas->image()->colorSpace();
         auto channelCount = cs->channelCount();
-
-//        //need to make sure that LOD is at default value.
-//        m_canvas->image()->setDesiredLevelOfDetail(0);
-//        m_canvas->image()->waitForDone();
 
         KisPaintDeviceSP dev = m_canvas->image()->projection();
 

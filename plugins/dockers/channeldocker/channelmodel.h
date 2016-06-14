@@ -46,13 +46,13 @@ public Q_SLOTS:
     void slotLayerActivated(KisLayerSP layer);
     void slotSetCanvas(KisCanvas2* canvas);
     void slotColorSpaceChanged(const KoColorSpace *colorSpace);
-    void updateData();
+    void updateData( KisCanvas2 *canvas );
 
 Q_SIGNALS:
     void channelFlagsChanged();
 
 private:
-    void updateThumbnails( void );
+    void updateThumbnails( );
     void initThumbnailImages(QSize size, int nChannels );
 
 private:

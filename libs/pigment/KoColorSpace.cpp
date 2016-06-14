@@ -452,14 +452,15 @@ bool KoColorSpace::proofPixelsTo(const quint8 * src,
     }*/
     // Only the icc engine can do this kind of stuff
     //Can we cache this, maybe???
-    if (d->iccEngine) {
+    if (!d->iccEngine) {
         d->iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
-        //qDebug() << ">>>>>>>>>>>>>>>>>>>> we got a proofing engine";
+        qDebug() << ">>>>>>>>>>>>>>>>>>>> we got a proofing engine";
     }
     if (!d->iccEngine) return false;
     KoColorConversionTransformation *transform = d->iccEngine->createColorProofingTransformation(this, dstColorSpace, proofingSpace, renderingIntent, conversionFlags);
 
-    Q_UNUSED(transform);
+    //Q_UNUSED(transform);
+    transform->transform(src, dst, numPixels);
 
     delete transform;
     return true;

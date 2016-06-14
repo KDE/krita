@@ -79,7 +79,6 @@ public:
         qint32 dstPixelSize = dstColorSpace()->pixelSize();
 
         cmsDoTransform(m_transform, const_cast<quint8 *>(src), dst, numPixels);
-
         // Lcms does nothing to the destination alpha channel so we must convert that manually.
         while (numPixels > 0) {
             qreal alpha = srcColorSpace()->opacityF(src);
@@ -121,12 +120,15 @@ public:
             }
         }
 
-        quint16 alarm[4];//cyan!
-        alarm[0] = 65535;
-        alarm[1] = 0;
-        alarm[2] = 0;
-        alarm[3] = 65535;
+        quint16 alarm[cmsMAXCHANNELS];//cyan!
+        alarm[0] = 0;
+        alarm[1] = 65535;
+        alarm[2] = 65535;
         cmsSetAlarmCodes(alarm);
+
+        qDebug()<<"Test gamut check";
+        qDebug()<<conversionFlags.testFlag(KoColorConversionTransformation::GamutCheck);
+        qDebug()<<conversionFlags.testFlag(KoColorConversionTransformation::SoftProofing);
 
         m_transform = cmsCreateProofingTransform(srcProfile->lcmsProfile(),
                                                  srcColorSpaceType,
@@ -155,7 +157,6 @@ public:
         qint32 dstPixelSize = dstColorSpace()->pixelSize();
 
         cmsDoTransform(m_transform, const_cast<quint8 *>(src), dst, numPixels);
-
         // Lcms does nothing to the destination alpha channel so we must convert that manually.
         while (numPixels > 0) {
             qreal alpha = srcColorSpace()->opacityF(src);

@@ -330,11 +330,6 @@ QSet<int> KisKeyframeChannel::allKeyframeIds() const
 
 KisTimeRange KisKeyframeChannel::affectedFrames(int time) const
 {
-    return identicalFrames(time);
-}
-
-KisTimeRange KisKeyframeChannel::identicalFrames(int time) const
-{
     if (m_d->keys.isEmpty()) return KisTimeRange::infinite(0);
 
     KeyframesMap::const_iterator active = activeKeyIterator(time);
@@ -356,6 +351,19 @@ KisTimeRange KisKeyframeChannel::identicalFrames(int time) const
     } else {
         return KisTimeRange::fromTime(from, next.key() - 1);
     }
+}
+
+KisTimeRange KisKeyframeChannel::identicalFrames(int time) const
+{
+    KeyframesMap::const_iterator active = activeKeyIterator(time);
+
+    if (active != m_d->keys.constEnd() && (active+1) != m_d->keys.constEnd()) {
+        if (active->data()->interpolationMode() != KisKeyframe::Constant) {
+            return KisTimeRange::fromTime(time, time);
+        }
+    }
+
+    return affectedFrames(time);
 }
 
 int KisKeyframeChannel::keyframeCount() const

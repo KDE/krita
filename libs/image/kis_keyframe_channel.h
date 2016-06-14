@@ -85,7 +85,7 @@ public:
      * results, compared to the given frame.
      *
      * Note: this set may be different than the set of affected frames
-     * (eg. due to interpolation, once implemented)
+     * due to interpolation.
      */
     KisTimeRange identicalFrames(int time) const;
 

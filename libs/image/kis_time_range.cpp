@@ -46,7 +46,7 @@ void KisTimeRange::calculateTimeRangeRecursive(const KisNode *node, int time, Ki
     Q_FOREACH (const KisKeyframeChannel *channel, channels) {
         if (exclusive) {
             // Intersection
-            range &= channel->affectedFrames(time);
+            range &= channel->identicalFrames(time);
         } else {
             // Union
             range |= channel->affectedFrames(time);

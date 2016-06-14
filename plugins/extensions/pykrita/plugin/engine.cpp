@@ -679,7 +679,7 @@ void PyKrita::Engine::scanPlugins()
 //        }
 
 //        // Make a new state
-//        PluginState plugin;
+        PluginState plugin;
 //        plugin.m_pythonPlugin = service;
 
 //        if (!setModuleProperties(plugin)) {

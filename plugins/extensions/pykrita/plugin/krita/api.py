@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-# This file is part of Pate, Kate' Python scripting plugin.
-#
 # Copyright (C) 2006 Paul Giannaros <paul@giannaros.org>
 # Copyright (C) 2013 Shaheed Haque <srhaque@theiet.org>
 # Copyright (C) 2013 Alex Turbov <i.zaufi@gmail.com>
+# Copyright (C) 2014-2016 Boudewijn Rempt <boud@valdyas.org>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Library General Public

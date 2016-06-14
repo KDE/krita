@@ -175,15 +175,8 @@ bool KisOpenGL::needsPixmapCacheWorkaround()
 void KisOpenGL::setDefaultFormat()
 {
     QSurfaceFormat format;
-#ifdef Q_OS_MAC
-//    format.setProfile(QSurfaceFormat::CoreProfile);
-//    format.setOptions(QSurfaceFormat::DeprecatedFunctions);
-    format.setVersion(2, 1);
-#else
-    format.setProfile(QSurfaceFormat::CompatibilityProfile);
-    format.setOptions(QSurfaceFormat::DeprecatedFunctions);
-    format.setVersion(3, 0);
-#endif
+    format.setProfile(QSurfaceFormat::CoreProfile);
+    format.setVersion(3, 2);
     format.setDepthBufferSize(24);
     format.setStencilBufferSize(8);
     format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);

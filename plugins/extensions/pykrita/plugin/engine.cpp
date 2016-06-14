@@ -31,6 +31,7 @@
 
 #include <Python.h>
 
+#include <QSettings>
 #include <QLibrary>
 #include <QFileInfo>
 
@@ -215,7 +216,7 @@ void PyKrita::Engine::unloadAllModules()
  */
 QString PyKrita::Engine::tryInitializeGetFailureReason()
 {
-    dbgScript << "Construct the Python engine for Python" << PY_MAJOR_VERSION << PY_MINOR_VERSION;
+    dbgScript << "Construct the Python engine for Python" << PY_MAJOR_VERSION << "," << PY_MINOR_VERSION;
     if (0 != PyImport_AppendInittab(Python::PYKRITA_ENGINE, PYKRITA_INIT)) {
         return i18nc("@info:tooltip ", "Cannot load built-in <icode>pykrita</icode> module");
     }
@@ -269,6 +270,7 @@ QString PyKrita::Engine::tryInitializeGetFailureReason()
 
     // Get plugins available
     scanPlugins();
+
     // NOTE Empty failure reson string indicates success!
     m_engineIsUsable = true;
     return QString();
@@ -323,9 +325,9 @@ QVariant PyKrita::Engine::data(const QModelIndex& index, const int role) const
     case Qt::DisplayRole:
         switch (index.column()) {
         case Column::NAME:
-            return m_plugins[index.row()].m_pythonPlugin->name();
+            return m_plugins[index.row()].m_pythonPlugin.name();
         case Column::COMMENT:
-            return m_plugins[index.row()].m_pythonPlugin->comment();
+            return m_plugins[index.row()].m_pythonPlugin.comment();
         default:
             break;
         }
@@ -390,7 +392,7 @@ QStringList PyKrita::Engine::enabledPlugins() const
     QStringList result;
     Q_FOREACH(const PluginState & plugin, m_plugins)
     if (plugin.isEnabled()) {
-        result.append(plugin.m_pythonPlugin->name());
+        result.append(plugin.m_pythonPlugin.name());
     }
     return result;
 }
@@ -438,14 +440,6 @@ bool PyKrita::Engine::isPythonPluginUsable(const PyPlugin *pythonPlugin)
         return false;
     }
 #endif
-    // ATTENTION If some module is Python 2 only, it must be marked w/
-    // the property 'X-Python-2-Only' of type bool and ANY (valid) value...
-    const QVariant is_py2_only = pythonPlugin->property("X-Python-2-Only").toBool();
-    if (is_py2_only.isValid()) {
-        dbgScript << pythonPlugin->name() << "is marked as Python 2 ONLY... >/dev/null";
-        // Do not even show incompatible modules in the manager...
-        return false;
-    }
 
     return true;
 }
@@ -479,7 +473,7 @@ bool PyKrita::Engine::setModuleProperties(PluginState& plugin)
         plugin.m_errorReason = i18nc(
                                    "@info:tooltip"
                                    , "Unable to find the module specified <application>%1</application>"
-                                   , plugin.m_pythonPlugin->library()
+                                   , plugin.m_pythonPlugin.library()
                                );
         dbgScript << "Plugin is " << plugin.m_errorReason;
         return false;
@@ -566,7 +560,7 @@ PyKrita::version PyKrita::Engine::tryObtainVersionFromString(PyObject* version_o
  */
 void PyKrita::Engine::verifyDependenciesSetStatus(PluginState& plugin)
 {
-    QStringList dependencies = plugin.m_pythonPlugin->property("X-Python-Dependencies").toStringList();
+    QStringList dependencies = plugin.m_pythonPlugin.property("X-Python-Dependencies").toStringList();
 #if PY_MAJOR_VERSION < 3
     {
         // Try to get Py2 only dependencies
@@ -602,7 +596,7 @@ void PyKrita::Engine::verifyDependenciesSetStatus(PluginState& plugin)
             PyObject* version_obj = py.itemString("__version__", PQ(dependency));
             if (!version_obj) {
                 dbgScript << "No __version__ for " << dependency
-                          << "[" << plugin.m_pythonPlugin->name() << "]:\n" << py.lastTraceback()
+                          << "[" << plugin.m_pythonPlugin.name() << "]:\n" << py.lastTraceback()
                           ;
                 plugin.m_unstable = true;
                 reason += i18nc(
@@ -631,7 +625,7 @@ void PyKrita::Engine::verifyDependenciesSetStatus(PluginState& plugin)
                           );
             } else if (!checker(dep_version)) {
                 dbgScript << "Version requirement check failed ["
-                          << plugin.m_pythonPlugin->name() << "] for "
+                          << plugin.m_pythonPlugin.name() << "] for "
                           << dependency << ": wanted " << checker.operationToString()
                           << QString(checker.required())
                           << ", but found" << QString(dep_version)
@@ -650,7 +644,7 @@ void PyKrita::Engine::verifyDependenciesSetStatus(PluginState& plugin)
             // Do not need this module anymore...
             Py_DECREF(module);
         } else {
-            dbgScript << "Load failure [" << plugin.m_pythonPlugin->name() << "]:\n" << py.lastTraceback();
+            dbgScript << "Load failure [" << plugin.m_pythonPlugin.name() << "]:\n" << py.lastTraceback();
             plugin.m_broken = true;
             reason += i18nc(
                           "@info:tooltip"
@@ -667,35 +661,49 @@ void PyKrita::Engine::verifyDependenciesSetStatus(PluginState& plugin)
 
 void PyKrita::Engine::scanPlugins()
 {
-    m_plugins.clear();                                      // Clear current state.
+    m_plugins.clear(); // Clear current state.
 
-//    dbgScript << "Seeking for installed plugins...";
-//    KService::List services = KoServiceLocator::instance()->entries("Krita/PythonPlugin");
-//    Q_FOREACH(KService::Ptr service, services) {
+    QStringList desktopFiles = KoResourcePaths::findAllResources("data", "pykrita/*desktop");
+    qDebug() << desktopFiles;
 
-//        if (!isPythonPluginUsable(service)) {
-//            dbgScript << service->name() << "is not usable";
-//            continue;
-//        }
+    Q_FOREACH(const QString &desktopFile, desktopFiles) {
 
-//        // Make a new state
-        PluginState plugin;
-//        plugin.m_pythonPlugin = service;
+        QSettings s(desktopFile, QSettings::IniFormat);
+        s.beginGroup("Desktop Entry");
+        dbgScript << "Loading" << desktopFile << s.allKeys() << s.value("ServiceTypes");
 
-//        if (!setModuleProperties(plugin)) {
-//            dbgScript << "Cannot load" << service->name() << ": broken"<< plugin.isBroken() << "because:" << plugin.errorReason();
-//            continue;
-//        }
+        if (s.value("ServiceTypes").toString() == "Krita/PythonPlugin") {
+            PyPlugin pyplugin;
+            pyplugin.m_comment = s.value("Comment").toString();
+            pyplugin.m_name = s.value("Name").toString();
+            pyplugin.m_libraryPath = s.value("X-KDE-Library").toString();
+            pyplugin.m_properties["X-Python-2-Compatible"] = s.value("X-Python-2-Compatible", false).toBool();
 
-//        verifyDependenciesSetStatus(plugin);
-//        m_plugins.append(plugin);
-//    }
+            if (!isPythonPluginUsable(&pyplugin)) {
+                dbgScript << pyplugin.name() << "is not usable";
+                continue;
+            }
+
+            PluginState pluginState;
+            pluginState.m_pythonPlugin = pyplugin;
+
+            if (!setModuleProperties(pluginState)) {
+                dbgScript << "Cannot load" << pyplugin.name() << ": broken"
+                          << pluginState.isBroken()
+                          << "because:" << pluginState.errorReason();
+                continue;
+            }
+
+            verifyDependenciesSetStatus(pluginState);
+            m_plugins.append(pluginState);
+        }
+    }
 }
 
 void PyKrita::Engine::setEnabledPlugins(const QStringList& enabled_plugins)
 {
     for (int i = 0; i < m_plugins.size(); ++i) {
-        m_plugins[i].m_enabled = enabled_plugins.indexOf(m_plugins[i].m_pythonPlugin->name()) != -1;
+        m_plugins[i].m_enabled = enabled_plugins.indexOf(m_plugins[i].m_pythonPlugin.name()) != -1;
     }
 }
 

@@ -41,6 +41,12 @@ class PyPlugin {
 
 public:
 
+    PyPlugin()
+    {
+        m_properties["X-Python-Dependencies"] = QStringList();
+        m_properties["X-Python-2-Dependencies"] = QStringList();
+    }
+
     QString name() const
     {
         return m_name;
@@ -60,8 +66,6 @@ public:
     {
         return m_comment;
     }
-
-private:
 
     QString m_name;
     QString m_libraryPath;
@@ -114,7 +118,7 @@ public:
         /// Transfort Python module name into a file path part
         QString moduleFilePathPart() const;
 
-        PyPlugin *m_pythonPlugin;
+        PyPlugin m_pythonPlugin;
         QString m_pythonModule;
         QString m_errorReason;
         bool m_enabled;
@@ -182,11 +186,11 @@ private:
 
 inline QString Engine::PluginState::pythonModuleName() const
 {
-    return m_pythonPlugin->library();
+    return m_pythonPlugin.library();
 }
 inline QString PyKrita::Engine::PluginState::moduleFilePathPart() const
 {
-    return m_pythonPlugin->library().replace(".", "/");
+    return m_pythonPlugin.library().replace(".", "/");
 }
 inline const QString& Engine::PluginState::errorReason() const
 {

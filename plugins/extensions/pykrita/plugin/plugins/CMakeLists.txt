@@ -39,17 +39,17 @@ function(install_pykrita_plugin name)
         message(FATAL_ERROR "Plugin filename is not given")
     endif()
     if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${name}.py)
-        install(FILES kritapykrita_${name}.desktop DESTINATION ${KRITA_PLUGIN_INSTALL_DIR}/pykrita)
+        install(FILES kritapykrita_${name}.desktop DESTINATION ${DATA_INSTALL_DIR}/krita/pykrita)
         foreach(_f ${name}.py ${name}.ui ${name}_ui.xmlgui ${install_pykrita_plugin_FILE})
             if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${_f})
                 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${_f} DESTINATION ${DATA_INSTALL_DIR}/krita/pykrita)
             endif()
         endforeach()
     elseif(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${name})
-        install(FILES ${name}/kritapykrita_${name}.desktop DESTINATION ${KRITA_PLUGIN_INSTALL_DIR}/pykrita)
+        install(FILES ${name}/kritapykrita_${name}.desktop DESTINATION ${DATA_INSTALL_DIR}/krita/pykrita)
         install(
             DIRECTORY ${name}
-            DESTINATION ${KRITA_PLUGIN_INSTALL_DIR}/pykrita
+            DESTINATION ${DATA_INSTALL_DIR}/krita/pykrita
             FILES_MATCHING
                 PATTERN "*.py"
                 PATTERN "*.ui"

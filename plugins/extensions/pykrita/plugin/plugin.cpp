@@ -38,7 +38,6 @@ KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
     , m_autoReload(false)
 {
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
-
     PyQtPluginSettingsFactory* settingsFactory = new PyQtPluginSettingsFactory(&m_engine);
 
     //load and save preferences
@@ -60,7 +59,7 @@ KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
     if (pykritaPackage)  {
         dbgScript << "Loaded pykrita, now load plugins";
         m_engine.tryLoadEnabledPlugins();
-        py.functionCall("_pykritaLoaded", PyKrita::Python::PYKRITA_ENGINE);
+        //py.functionCall("_pykritaLoaded", PyKrita::Python::PYKRITA_ENGINE);
     }
     else  {
         dbgScript << "Cannot load pykrita module";

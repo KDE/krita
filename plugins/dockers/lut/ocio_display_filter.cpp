@@ -278,7 +278,7 @@ void OcioDisplayFilter::updateShader()
     // Step 1: Create a GPU Shader Description
     OCIO::GpuShaderDesc shaderDesc;
 
-    if (KisOpenGL::supportsGLSL13()) {
+    if (KisOpenGL::hasOpenGL3()) {
         shaderDesc.setLanguage(OCIO::GPU_LANGUAGE_GLSL_1_3);
     }
     else {

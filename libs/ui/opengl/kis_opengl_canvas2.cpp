@@ -633,7 +633,7 @@ void KisOpenGLCanvas2::initializeCheckerShader()
 
     bool result;
 
-    if (KisOpenGL::supportsGLSL13()) {
+    if (KisOpenGL::hasOpenGL3()) {
         vertexShaderName = ":/matrix_transform.vert";
         fragmentShaderName = ":/simple_texture.frag";
     }
@@ -668,11 +668,10 @@ QByteArray KisOpenGLCanvas2::buildFragmentShader()
 
     bool haveDisplayFilter = d->displayFilter && !d->displayFilter->program().isEmpty();
     bool useHiQualityFiltering = d->filterMode == KisOpenGL::HighQualityFiltering;
-    bool haveGLSL13 = KisOpenGL::supportsGLSL13();
 
     QString filename;
 
-    if (haveGLSL13) {
+    if (KisOpenGL::hasOpenGL3()) {
         filename = "highq_downscale.frag";
         shaderText.append("#version 150\n");
     } else {
@@ -684,10 +683,10 @@ QByteArray KisOpenGLCanvas2::buildFragmentShader()
         shaderText.append(d->displayFilter->program().toLatin1());
     }
 
-    if (haveGLSL13 && useHiQualityFiltering) {
+    if (KisOpenGL::hasOpenGL3() && useHiQualityFiltering) {
         shaderText.append("#define HIGHQ_SCALING\n");
     }
-    if (haveGLSL13) {
+    if (KisOpenGL::hasOpenGL3()) {
         shaderText.append("#define DIRECT_LOD_FETCH\n");
     }
 
@@ -710,7 +709,7 @@ void KisOpenGLCanvas2::initializeDisplayShader()
     bool result = d->displayShader->addShaderFromSourceCode(QOpenGLShader::Fragment, buildFragmentShader());
     reportShaderLinkFailedAndExit(result, "Display fragment shader", d->displayShader->log());
 
-    if (KisOpenGL::supportsGLSL13()) {
+    if (KisOpenGL::hasOpenGL3()) {
         result = d->displayShader->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/matrix_transform.vert");
     }
     else {
@@ -745,7 +744,7 @@ void KisOpenGLCanvas2::initializeDisplayShader()
 
     // lod
     d->displayUniformLocationFixedLodLevel =
-            KisOpenGL::supportsGLSL13() ?
+            KisOpenGL::hasOpenGL3() ?
                 d->displayShader->uniformLocation("fixedLodLevel") : -1;
 }
 

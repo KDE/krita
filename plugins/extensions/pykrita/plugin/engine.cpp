@@ -655,8 +655,9 @@ void PyKrita::Engine::verifyDependenciesSetStatus(PluginState& plugin)
         }
     }
 
-    if (plugin.isBroken() || plugin.isUnstable())
+    if (plugin.isBroken() || plugin.isUnstable()) {
         plugin.m_errorReason = reason;
+    }
 }
 
 void PyKrita::Engine::scanPlugins()
@@ -670,8 +671,6 @@ void PyKrita::Engine::scanPlugins()
 
         QSettings s(desktopFile, QSettings::IniFormat);
         s.beginGroup("Desktop Entry");
-        dbgScript << "Loading" << desktopFile << s.allKeys() << s.value("ServiceTypes");
-
         if (s.value("ServiceTypes").toString() == "Krita/PythonPlugin") {
             PyPlugin pyplugin;
             pyplugin.m_comment = s.value("Comment").toString();
@@ -769,7 +768,7 @@ void PyKrita::Engine::loadModule(const int idx)
                                );
     }
     plugin.m_broken = true;
-    warnScript << "Error loading plugin" << module_name << ":" << plugin.m_errorReason;
+    warnScript << "Error loading plugin" << module_name;
 }
 
 void PyKrita::Engine::unloadModule(int idx)

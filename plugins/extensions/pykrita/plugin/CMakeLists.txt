@@ -30,7 +30,7 @@ install(FILES kritapyqtplugin.xmlgui DESTINATION ${DATA_INSTALL_DIR}/kritaplugin
 # Install "built-in" plugins
 install(
     DIRECTORY krita
-    DESTINATION ${DATA_INSTALL_DIR}/krita/plugins/pykrita
+    DESTINATION ${DATA_INSTALL_DIR}/krita/pykrita
     FILES_MATCHING PATTERN "*.py"
 )
 

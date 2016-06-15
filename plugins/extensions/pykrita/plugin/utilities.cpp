@@ -324,7 +324,11 @@ void Python::traceback(const QString& description)
         Py_DECREF(exc_val);
     }
     m_traceback += description;
-    errScript << m_traceback;
+
+    QStringList l = m_traceback.split("\n");
+    Q_FOREACH(const QString &s, l) {
+        errScript << s;
+    }
     /// \todo How about to show it somewhere else than "console output"?
 }
 

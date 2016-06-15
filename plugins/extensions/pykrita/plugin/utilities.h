@@ -186,7 +186,7 @@ public:
      * A PyObject * for an arbitrary Qt/KDE object using SIP wrapping. Nifty.
      *
      * @param o         The object to be wrapped.
-     * @param className The full class name of o, e.g. "PyQt5.QtGui.QWidget".
+     * @param className The full class name of o, e.g. "PyQt5.QtWidgets.QWidget".
      * @return @c 0 or a new reference to the object.
      */
     PyObject* objectWrap(void* o, const QString& className);

@@ -48,9 +48,15 @@ public:
 
 private Q_SLOTS:
     void slotAccepted();
+    void slotCustomLineToggled(bool value);
+    void slotSaveCustomLine();
+    void slotResetCustomLine();
 
 private:
     Ui::VideoExportOptionsDialog *ui;
+
+private:
+    QStringList generateCustomLine() const;
 
 private:
     struct Private;

@@ -63,6 +63,12 @@ struct VideoExportOptionsDialog::Private
         defaultProfile = cfg.readEntry("h264ProfileIndex", 4);
         defaultTune = cfg.readEntry("h264TuneIndex", 1);
         defaultBitrate = cfg.readEntry("TheoraBitrate", 5000);
+        defaultCustomLine = cfg.readEntry("CustomLineValue", "");
+    }
+
+    void updateDefaultCustomLine() {
+        KConfigGroup cfg = KSharedConfig::openConfig()->group("VideoExportPlugin");
+        defaultCustomLine = cfg.readEntry("CustomLineValue", "");
     }
 
     QVector<KoID> presets;
@@ -75,6 +81,8 @@ struct VideoExportOptionsDialog::Private
 
     QVector<KoID> tunes;
     int defaultTune;
+
+    QString defaultCustomLine;
 };
 
 
@@ -121,6 +129,13 @@ VideoExportOptionsDialog::VideoExportOptionsDialog(QWidget *parent) :
 
     setModal(true);
     connect(this, SIGNAL(accepted()), SLOT(slotAccepted()));
+
+    ui->chkCustomLine->setChecked(!m_d->defaultCustomLine.isEmpty());
+    slotCustomLineToggled(!m_d->defaultCustomLine.isEmpty());
+    connect(ui->chkCustomLine, SIGNAL(toggled(bool)), SLOT(slotCustomLineToggled(bool)));
+
+    connect(ui->txtCustomLine, SIGNAL(editingFinished()), SLOT(slotSaveCustomLine()));
+    connect(ui->btnResetCustomLine, SIGNAL(clicked()), SLOT(slotResetCustomLine()));
 }
 
 VideoExportOptionsDialog::~VideoExportOptionsDialog()
@@ -137,6 +152,37 @@ void VideoExportOptionsDialog::slotAccepted()
     cfg.writeEntry("h264ProfileIndex", ui->cmbProfile->currentIndex());
     cfg.writeEntry("h264TuneIndex", ui->cmbTune->currentIndex());
     cfg.writeEntry("TheoraBitrate", ui->intBitrate->value());
+    slotSaveCustomLine();
+}
+
+void VideoExportOptionsDialog::slotCustomLineToggled(bool value)
+{
+    m_d->updateDefaultCustomLine();
+    QString customLine = m_d->defaultCustomLine;
+
+    if (customLine.isEmpty() && value) {
+        customLine = generateCustomLine().join(" ");
+    } else if (!value) {
+        customLine = "";
+    }
+
+    ui->txtCustomLine->setText(customLine);
+
+    ui->stackedWidget->setEnabled(!value);
+    ui->txtCustomLine->setEnabled(value);
+    ui->btnResetCustomLine->setEnabled(value);
+}
+
+void VideoExportOptionsDialog::slotSaveCustomLine()
+{
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("VideoExportPlugin");
+    cfg.writeEntry("CustomLineValue", ui->txtCustomLine->text());
+}
+
+void VideoExportOptionsDialog::slotResetCustomLine()
+{
+    ui->txtCustomLine->setText(generateCustomLine().join(" "));
+    slotSaveCustomLine();
 }
 
 void VideoExportOptionsDialog::setCodec(CodecIndex index)
@@ -145,6 +191,13 @@ void VideoExportOptionsDialog::setCodec(CodecIndex index)
 }
 
 QStringList VideoExportOptionsDialog::customUserOptions() const
+{
+    return ui->chkCustomLine->isChecked() ?
+        ui->txtCustomLine->text().split(" ", QString::SkipEmptyParts) :
+        generateCustomLine();
+}
+
+QStringList VideoExportOptionsDialog::generateCustomLine() const
 {
     QStringList options;
 

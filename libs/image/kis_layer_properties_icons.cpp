@@ -60,9 +60,9 @@ KisLayerPropertiesIcons::KisLayerPropertiesIcons()
     updateIcons();
 }
 
-//KisLayerPropertiesIcons::~KisLayerPropertiesIcons()
-//{
-//}
+KisLayerPropertiesIcons::~KisLayerPropertiesIcons()
+{
+}
 
 KisLayerPropertiesIcons *KisLayerPropertiesIcons::instance()
 {

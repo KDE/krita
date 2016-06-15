@@ -19,9 +19,11 @@
 #include <QImage>
 #include <KoColorSpace.h>
 #include <KoChannelInfo.h>
-#include <kis_layer.h>
+//#include <kis_layer.h>
+#include <kis_painter.h>
+
 #include <kis_group_layer.h>
-#include <kis_paint_layer.h>
+//#include <kis_paint_layer.h>
 #include <kis_paint_device.h>
 #include <kis_iterator_ng.h>
 #include <kis_default_bounds.h>
@@ -30,7 +32,7 @@
 
 ChannelModel::ChannelModel(QObject* parent):
     QAbstractTableModel(parent),
-    m_currentLayer(0), m_canvas(nullptr), m_skipCount(1), m_oversampleRatio(4)
+    m_canvas(nullptr), m_skipCount(1), m_oversampleRatio(4)
 {
     setThumbnailSizeLimit(QSize(64,64));
 }
@@ -42,7 +44,10 @@ ChannelModel::~ChannelModel()
 QVariant ChannelModel::data(const QModelIndex& index, int role) const
 {
     if (m_canvas && index.isValid()) {
-        QList<KoChannelInfo*> channels = m_canvas->image()->colorSpace()->channels();
+        auto rootLayer = m_canvas->image()->rootLayer();
+        auto cs = rootLayer->colorSpace();
+        auto channels = cs->channels();
+
         int channelIndex = KoChannelInfo::displayPositionToChannelIndex(index.row(), channels);
 
         switch (role) {
@@ -65,7 +70,7 @@ QVariant ChannelModel::data(const QModelIndex& index, int role) const
             Q_ASSERT(index.column() < columnCount());
             
             if (index.column() == 0) {
-                QBitArray flags = m_canvas->image()->rootLayer()->channelFlags();
+                QBitArray flags = rootLayer->channelFlags();
                 return (flags.isEmpty() || flags.testBit(channelIndex)) ? Qt::Checked : Qt::Unchecked;
             }
             return QVariant();
@@ -100,27 +105,65 @@ int ChannelModel::columnCount(const QModelIndex& /*parent*/) const
 bool ChannelModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
     if( m_canvas && m_canvas->image() ){
-        auto cs = m_canvas->image()->colorSpace();
+        auto rootLayer = m_canvas->image()->rootLayer();
+        auto cs = rootLayer->colorSpace();
         auto channels = cs->channels();
+        Q_ASSERT(index.row() <= channels.count());
+
         int channelIndex = KoChannelInfo::displayPositionToChannelIndex(index.row(), channels);
 
         if (role == Qt::CheckStateRole) {
-            Q_ASSERT(index.row() < rowCount());
-            Q_ASSERT(index.column() < columnCount());
-            
-            auto currentLayer = m_canvas->image()->rootLayer();
-            QBitArray flags = currentLayer->channelFlags();
+            QBitArray flags = cs->channelFlags(true,true);
+            Q_ASSERT(!flags.isEmpty());
+            if( flags.isEmpty())
+                return false;
 
-            flags = flags.isEmpty() ? currentLayer->colorSpace()->channelFlags(true, true) : flags;
+            //flags = flags.isEmpty() ? cs->channelFlags(true, true) : flags;
             flags.setBit(channelIndex, value.toInt() == Qt::Checked);
-            currentLayer->setChannelFlags(flags);
+            rootLayer->setChannelFlags(flags);
 
             emit channelFlagsChanged();
+            emit dataChanged(this->index(0,0),this->index(channels.count(),0));
             return true;
         }
     }
     return false;
 }
+
+
+//User double clicked on a row (but on channel checkbox)
+//we select this channel, and deselect all other channels (except alpha, which we don't touch)
+//this makes it fast to select single color channel
+void ChannelModel::rowActivated(const QModelIndex &index)
+{
+    if( m_canvas && m_canvas->image() ){
+        auto rootLayer = m_canvas->image()->rootLayer();
+        auto cs = rootLayer->colorSpace();
+        auto channels = cs->channels();
+        Q_ASSERT(index.row() <= channels.count());
+
+        int channelIndex = KoChannelInfo::displayPositionToChannelIndex(index.row(), channels);
+
+        QBitArray flags = cs->channelFlags(true,true);
+        Q_ASSERT(!flags.isEmpty());
+        if(flags.isEmpty())
+            return;
+
+        for(int i=0; i<channels.count(); ++i){
+            if(channels[i]->channelType() != KoChannelInfo::ALPHA){
+                flags.setBit( i, (i==channelIndex) );
+            }
+        }
+
+
+        rootLayer->setChannelFlags(flags);
+
+        emit channelFlagsChanged();
+        emit dataChanged(this->index(0,0),this->index(channels.count(),0));
+
+    }
+}
+
 
 Qt::ItemFlags ChannelModel::flags(const QModelIndex& /*index*/) const
 {
@@ -132,13 +175,6 @@ void ChannelModel::setThumbnailSizeLimit(QSize size)
 {
     m_thumbnailSizeLimit = size;
     updateData(m_canvas);
-}
-
-void ChannelModel::slotLayerActivated(KisLayerSP layer)
-{
-    beginResetModel();
-    m_currentLayer = layer;
-    endResetModel();
 }
 
 void ChannelModel::slotSetCanvas(KisCanvas2 *canvas)
@@ -168,7 +204,6 @@ void ChannelModel::updateData( KisCanvas2 *canvas )
     updateThumbnails();
     endResetModel();
 }
-
 
 //Create thumbnails from full image.
 //Assumptions: thumbnail size is small compared to the original image and thumbnail quality

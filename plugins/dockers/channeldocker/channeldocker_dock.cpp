@@ -44,9 +44,15 @@ ChannelDockerDock::ChannelDockerDock( ) :
     m_model = new ChannelModel(this);
     m_channelTable->setModel(m_model);
     m_channelTable->setShowGrid(false);
+    m_channelTable->horizontalHeader()->setStretchLastSection(true);
     m_channelTable->verticalHeader()->setVisible(false);
     m_channelTable->horizontalHeader()->setVisible(false);
+    m_channelTable->setSelectionBehavior( QAbstractItemView::SelectRows );
+
     setWidget(m_channelTable);
+
+    connect(m_channelTable,&QTableView::activated, m_model, &ChannelModel::rowActivated);
+
     connect(m_compressor, SIGNAL(timeout()),SLOT(startUpdateCanvasProjection()));
 }
 
@@ -95,6 +101,7 @@ void ChannelDockerDock::startUpdateCanvasProjection()
         m_channelTable->resizeColumnsToContents();
     }
 }
+
 
 
 

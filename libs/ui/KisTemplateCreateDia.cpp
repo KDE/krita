@@ -95,7 +95,6 @@ KisTemplateCreateDia::KisTemplateCreateDia(const QString &templatesResourcePath,
   : KoDialog(parent)
   , d(new KisTemplateCreateDiaPrivate(templatesResourcePath, filePath, thumbnail))
 {
-
     setButtons( KoDialog::Ok|KoDialog::Cancel );
     setDefaultButton( KoDialog::Ok );
     setCaption( i18n( "Create Template" ) );
@@ -173,7 +172,7 @@ KisTemplateCreateDia::KisTemplateCreateDia(const QString &templatesResourcePath,
     connect(d->m_groups, SIGNAL(itemSelectionChanged()), this, SLOT(slotSelectionChanged()));
 
     d->m_remove->setEnabled(d->m_groups->currentItem());
-    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
+    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
 }
 
 KisTemplateCreateDia::~KisTemplateCreateDia() {
@@ -197,21 +196,22 @@ void KisTemplateCreateDia::createTemplate(const QString &templatesResourcePath,
                                          const char *suffix,
                                          KisDocument *document, QWidget *parent)
 {
-    QTemporaryFile *tempFile = new QTemporaryFile(QDir::tempPath() + QLatin1String("/krita_XXXXXX") + QLatin1String(QLatin1String(suffix)));
-    //Check that creation of temp file was successful
-    if (!tempFile->open()) {
-        delete tempFile;
-        qWarning("Creation of temporary file to store template failed.");
+    Q_UNUSED(suffix);
+    QString fileName;
+    {
+        QTemporaryFile tempFile;
+        if (!tempFile.open()) {
+            qWarning("Creation of temporary file to store template failed.");
+            return;
+        }
+        fileName = tempFile.fileName();
+    }
+    bool retval = document->saveNativeFormat(fileName);
+    if (!retval) {
+        qWarning("Could not save template");
         return;
     }
-    const QString fileName = tempFile->fileName();
-    tempFile->close(); // need to close on Windows before we can open it again to save
-    delete tempFile; // now the file has disappeared and we can create a new file with the generated name
-
-    document->saveNativeFormat(fileName);
-
     const QPixmap thumbnail = document->generatePreview(QSize(thumbnailExtent, thumbnailExtent));
-
     KisTemplateCreateDia *dia = new KisTemplateCreateDia(templatesResourcePath, fileName, thumbnail, parent);
     dia->exec();
     delete dia;
@@ -265,38 +265,30 @@ void KisTemplateCreateDia::slotOk() {
 
     // copy the tmp file and the picture the app provides
     QString dir = KoResourcePaths::saveLocation("data", d->m_tree.templatesResourcePath());
-    dir+=group->name();
-    QString templateDir=dir+"/.source/";
-    QString iconDir=dir+"/.icon/";
+    dir += group->name();
+    QString templateDir = dir+"/.source/";
+    QString iconDir = dir+"/.icon/";
 
-    QString file=KisTemplates::trimmed(d->m_name->text());
-    QString tmpIcon=".icon/"+file;
-    tmpIcon+=".png";
+    QString file = KisTemplates::trimmed(d->m_name->text());
+    QString tmpIcon = ".icon/"+file;
+    tmpIcon += ".png";
     QString icon=iconDir+file;
-    icon+=".png";
+    icon += ".png";
 
-    // try to find the extension for the template file :P
-    const int pos = d->m_filePath.lastIndexOf(QLatin1Char('.'));
-    QString ext;
-    if ( pos > -1 )
-        ext = d->m_filePath.mid(pos);
-    else
-        warnUI << "Template extension not found!";
+    QString ext = ".kra";
 
-    QUrl dest;
-    dest.setPath(templateDir+file+ext);
-    if (QFile::exists(dest.toLocalFile())) {
+    QString dest = templateDir + file + ext;
+    if (QFile::exists(dest)) {
         do {
-            file.prepend( '_' );
-            dest.setPath( templateDir + file + ext );
+            file = file.prepend( '_' );
+            dest = templateDir + file + ext;
             tmpIcon=".icon/" + file + ".png";
             icon=iconDir + file + ".png";
         }
-        while (QFile(dest.toLocalFile()).exists());
+        while (QFile(dest).exists());
     }
     bool ignore = false;
-    dbgUI <<"Trying to create template:" << d->m_name->text() <<"URL=" <<".source/"+file+ext <<" ICON=" << tmpIcon;
-    KisTemplate *t=new KisTemplate(d->m_name->text(), QString(), ".source/"+file+ext, tmpIcon, "", "", false, true);
+    KisTemplate *t = new KisTemplate(d->m_name->text(), QString(), ".source/ "+ file + ext, tmpIcon, "", "", false, true);
     if (!group->add(t)) {
         KisTemplate *existingTemplate=group->find(d->m_name->text());
         if (existingTemplate && !existingTemplate->isHidden()) {
@@ -323,12 +315,14 @@ void KisTemplateCreateDia::slotOk() {
         return;
     }
 
-    QUrl orig;
-    orig.setPath(d->m_filePath);
+    QString orig;
+    orig = d->m_filePath;
     // don't overwrite the hidden template file with a new non-hidden one
-    if ( !ignore )
-    {
-        QFile::copy(d->m_filePath, dest.toLocalFile());
+    if (!ignore) {
+        if (!QFile::copy(d->m_filePath, dest)) {
+            qWarning() << QString("Could not copy %1 to %2.").arg(d->m_filePath).arg(dest).toUtf8();
+        }
+
         // save the picture as icon
         if(d->m_default->isChecked() && !d->m_thumbnail.isNull()) {
             saveAsQuadraticPng(d->m_thumbnail, icon);
@@ -344,13 +338,13 @@ void KisTemplateCreateDia::slotOk() {
     QStringList tmp=group->dirs();
     for(QStringList::ConstIterator it=tmp.constBegin(); it!=tmp.constEnd() && !ready; ++it) {
         if((*it).contains(dir)==0) {
-            orig.setPath( (*it)+".directory" );
+            orig = (*it) + ".directory";
             // Check if we can read the file
-            if (QFile(orig.toLocalFile()).exists()) {
-                dest.setPath(dir + "/.directory");
+            if (QFile(orig).exists()) {
+                dest = dir + "/.directory";
                 // We copy the file with overwrite
-                if (!QFile(orig.toLocalFile()).copy(dest.toLocalFile())) {
-                    warnKrita << "Failed to copy from" << orig.toLocalFile() << "to" << dest.toLocalFile();
+                if (!QFile(orig).copy(dest)) {
+                    warnKrita << "Failed to copy from" << orig << "to" << dest;
                 }
                 ready = true;
             }

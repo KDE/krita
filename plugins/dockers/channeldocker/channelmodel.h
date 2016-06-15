@@ -43,10 +43,10 @@ public:
     virtual void setThumbnailSizeLimit(QSize size);
 
 public Q_SLOTS:
-    void slotLayerActivated(KisLayerSP layer);
     void slotSetCanvas(KisCanvas2* canvas);
     void slotColorSpaceChanged(const KoColorSpace *colorSpace);
     void updateData( KisCanvas2 *canvas );
+    void rowActivated(const QModelIndex &index);
 
 Q_SIGNALS:
     void channelFlagsChanged();
@@ -56,7 +56,6 @@ private:
     void initThumbnailImages(QSize size, int nChannels );
 
 private:
-    KisLayerWSP m_currentLayer;
     KisCanvas2* m_canvas;
     QVector<QImage> m_thumbnails;
     QSize m_thumbnailSizeLimit;

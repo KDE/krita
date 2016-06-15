@@ -219,7 +219,11 @@ QString KoFileDialog::filename()
             int end = selectedFilter.indexOf(" ", start);
             int n = end - start;
             QString extension = selectedFilter.mid(start, n);
-            url = url + "." + extension;
+            if (!(extension.contains(".") || url.endsWith("."))) {
+                extension = "." + extension;
+            }
+            url = url + extension;
+
         }
 
         d->mimeType = KisMimeDatabase::mimeTypeForFile(url);

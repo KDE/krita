@@ -117,6 +117,7 @@ public:
         QStringList args;
         args << "-v" << "debug"
              << "-nostdin"
+             << "-progress" << progressFile.fileName()
              << specialArgs;
 
         m_cancelled = false;

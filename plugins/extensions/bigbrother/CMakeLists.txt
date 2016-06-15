@@ -9,5 +9,4 @@ ki18n_wrap_ui(kritabigbrother_SOURCES
 
 add_library(kritabigbrother MODULE ${kritabigbrother_SOURCES})
 target_link_libraries(kritabigbrother kritaui)
-#install(TARGETS kritabigbrother  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
-#install( FILES  bigbrother.xmlgui  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
+install(TARGETS kritabigbrother  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

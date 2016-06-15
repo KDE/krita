@@ -188,7 +188,6 @@ set(GMIC_INSTALL_DIR ${DATA_INSTALL_DIR}/krita/gmic)
 install(TARGETS kritagmic  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install(TARGETS gmicparser  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-install( FILES  gmic.xmlgui DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
 install( FILES
   #${GMIC_SOURCE_DIR}/gmic_def.gmic
   #${GMIC_SOURCE_DIR}/update1610.gmic

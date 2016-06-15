@@ -70,9 +70,6 @@ K_PLUGIN_FACTORY_WITH_JSON(KisGmicPluginFactory, "kritagmic.json", registerPlugi
 
 const QString STANDARD_GMIC_DEFINITION = "gmic_def.gmic";
 
-
-
-
 KisGmicPlugin::KisGmicPlugin(QObject *parent, const QVariantList &)
         :   KisViewPlugin(parent),
             m_gmicWidget(0),

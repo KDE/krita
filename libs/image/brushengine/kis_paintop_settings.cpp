@@ -289,7 +289,7 @@ QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, O
     return path;
 }
 
-QPainterPath KisPaintOpSettings::ellipseOutline(qreal width, qreal height, qreal scale, qreal rotation) const
+QPainterPath KisPaintOpSettings::ellipseOutline(qreal width, qreal height, qreal scale, qreal rotation)
 {
     QPainterPath path;
     QRectF ellipse(0, 0, width * scale, height * scale);

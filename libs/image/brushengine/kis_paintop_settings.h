@@ -144,7 +144,8 @@ public:
     /**
     * Useful for simple elliptical brush outline.
     */
-    QPainterPath ellipseOutline(qreal width, qreal height, qreal scale, qreal rotation) const;
+    static QPainterPath ellipseOutline(qreal width, qreal height, qreal scale, qreal rotation);
+
 
     /**
      * The behaviour might be different per paintop. Most of the time

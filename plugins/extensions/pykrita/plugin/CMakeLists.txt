@@ -26,7 +26,7 @@ target_link_libraries(
 
 install(TARGETS kritapykrita DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
-# Install "built-in" plugins
+# Install "built-in" api
 install(
     DIRECTORY krita
     DESTINATION ${DATA_INSTALL_DIR}/krita/pykrita

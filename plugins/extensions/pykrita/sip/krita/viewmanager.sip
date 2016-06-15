@@ -2,7 +2,7 @@
 %Import QtGui/QtGuimod.sip
 %Import QtWidgets/QtWidgetsmod.sip
 
-class ViewManager : public QObject /NoDefaultCtors/ 
+class ViewManager : public QObject /NoDefaultCtors/
 {
 %TypeHeaderCode
 #include "viewmanager.h"
@@ -10,5 +10,6 @@ class ViewManager : public QObject /NoDefaultCtors/
 
 public:
     QAction *createAction(const QString &text);
+    QWidget *mainWindow() const;
 
 };

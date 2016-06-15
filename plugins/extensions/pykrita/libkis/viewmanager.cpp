@@ -20,10 +20,15 @@
 #include <kis_action.h>
 #include <kis_script_manager.h>
 #include <KisViewManager.h>
+#include "mainwindow.h"
 
 ViewManager::ViewManager(KisViewManager *viewManager, QObject *parent)
     : QObject(parent)
     , m_viewManager(viewManager)
+{
+}
+
+ViewManager::~ViewManager()
 {
 }
 
@@ -32,4 +37,9 @@ QAction *ViewManager::createAction(const QString& text)
     KisAction *action = new KisAction(text, m_viewManager);
     m_viewManager->scriptManager()->addAction(action);
     return action;
+}
+
+QWidget *ViewManager::mainWindow() const
+{
+    return m_viewManager->mainWindow();
 }

@@ -30,11 +30,10 @@ class KRITALIBKIS_EXPORT ViewManager : public QObject
     Q_OBJECT
 public:
     explicit ViewManager(KisViewManager *viewManager, QObject *parent = 0);
+    virtual ~ViewManager();
     QAction *createAction(const QString &text);
-
-Q_SIGNALS:
-
-public Q_SLOTS:
+    /// Return the mainwindow this viewmanager works for
+    QWidget *mainWindow() const;
 
 private:
 

@@ -6,8 +6,10 @@ def hello():
     QMessageBox.information(QWidget(), "Test", "Hello World")
 
 class HelloViewExtension(ViewExtension):
+
   def __init__(self, parent):
       super().__init__(parent)
+
   def setup(self, viewManager):
       action = viewManager.createAction("Hello")
       action.triggered.connect(hello)
@@ -19,5 +21,9 @@ class HelloDocker(DockWidget):
       super().__init__()
       label = QLabel("Hello", self)
       self.setWidget(label)
+      self.label = label
+
+  def canvasChanged(self, canvas):
+      self.label.setText("canvas changed");
 
 Krita.instance().addDockWidgetFactory(DockWidgetFactory("hello", DockWidgetFactoryBase.DockRight, HelloDocker))

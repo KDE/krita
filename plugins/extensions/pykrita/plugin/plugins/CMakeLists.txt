@@ -40,7 +40,7 @@ function(install_pykrita_plugin name)
     endif()
     if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${name}.py)
         install(FILES kritapykrita_${name}.desktop DESTINATION ${DATA_INSTALL_DIR}/krita/pykrita)
-        foreach(_f ${name}.py ${name}.ui ${name}_ui.xmlgui ${install_pykrita_plugin_FILE})
+        foreach(_f ${name}.py ${name}.ui ${install_pykrita_plugin_FILE})
             if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${_f})
                 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${_f} DESTINATION ${DATA_INSTALL_DIR}/krita/pykrita)
             endif()
@@ -53,7 +53,6 @@ function(install_pykrita_plugin name)
             FILES_MATCHING
                 PATTERN "*.py"
                 PATTERN "*.ui"
-                PATTERN "*_ui.xmlgui"
                 PATTERN "__pycache__*" EXCLUDE
            )
         # TODO Is there any way to form a long PATTERN options string

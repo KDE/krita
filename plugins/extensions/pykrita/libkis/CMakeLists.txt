@@ -1,8 +1,6 @@
-include_directories(${KOMAIN_INCLUDES} ${KRITA_INCLUDES}) 
-
-
 set(kritalibkis_LIB_SRCS
     application.cpp
+    canvas.cpp
     document.cpp
     dockwidget.cpp
     dockwidgetfactorybase.cpp
@@ -18,14 +16,7 @@ set(kritalibkis_LIB_SRCS
 add_library(kritalibkis SHARED ${kritalibkis_LIB_SRCS} )
 generate_export_header(kritalibkis)
 
-
-if (WIN32)
-    target_link_libraries(kritalibkis kritaui kritaimage ${WIN32_PLATFORM_NET_LIBS})
-else (WIN32)
-    target_link_libraries(kritalibkis kritaui kritaimage)
-endif (WIN32)
-
-
+target_link_libraries(kritalibkis kritaui kritaimage)
 target_link_libraries(kritalibkis LINK_INTERFACE_LIBRARIES kritaimage kritaui)
 
 set_target_properties(kritalibkis PROPERTIES

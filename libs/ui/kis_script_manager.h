@@ -25,6 +25,7 @@
 
 class QAction;
 
+class KisActionManager;
 class KisViewManager;
 class KActionCollection;
 
@@ -38,7 +39,7 @@ public:
     explicit KisScriptManager(KisViewManager * view);
     ~KisScriptManager();
 
-    void setup(KActionCollection * ac);
+    void setup(KActionCollection * ac, KisActionManager *actionManager);
     void updateGUI();
 
     void addAction(QAction *action);

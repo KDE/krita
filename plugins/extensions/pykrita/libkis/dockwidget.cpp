@@ -17,23 +17,30 @@
  */
 
 #include "dockwidget.h"
+#include <canvas.h>
+#include <QDebug>
 
-DockWidget::DockWidget(): QDockWidget()
+DockWidget::DockWidget()
+    : QDockWidget()
+    , m_canvas(0)
 {
-
 }
 
 DockWidget::~DockWidget()
 {
-
+    qDebug() << "Deleting DockWidget";
+    delete m_canvas;
 }
 
 void DockWidget::setCanvas(KoCanvasBase* canvas)
 {
-
+    qDebug() << "New canvas" << canvas;
+    m_canvas = new Canvas(canvas);
+    canvasChanged(m_canvas);
 }
 
 void DockWidget::unsetCanvas()
 {
-
+    delete m_canvas;
+    m_canvas = 0;
 }

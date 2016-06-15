@@ -19,12 +19,15 @@
 #ifndef LIBKIS_DOCKWIDGET_H
 #define LIBKIS_DOCKWIDGET_H
 
+#include "kritalibkis_export.h"
+
 #include <QDockWidget>
 #include <KoCanvasObserverBase.h>
 
-#include "kritalibkis_export.h"
+class Canvas;
 
-class KRITALIBKIS_EXPORT DockWidget : public QDockWidget, public KoCanvasObserverBase {
+class KRITALIBKIS_EXPORT DockWidget : public QDockWidget, public KoCanvasObserverBase
+{
     Q_OBJECT
 public:
     DockWidget();
@@ -32,6 +35,10 @@ public:
 protected:
     virtual void setCanvas(KoCanvasBase* canvas);
     virtual void unsetCanvas();
+protected:
+    virtual void canvasChanged(Canvas *canvas) = 0;
+private:
+    Canvas *m_canvas;
 };
 
 #endif

@@ -13,3 +13,6 @@ class SelectionsBagDocker(DockWidget):
       uic.loadUi(os.path.dirname(os.path.realpath(__file__)) + '/selectionsbagdocker.ui', widget)
       self.setWidget(widget)
       self.setWindowTitle("Selections bag")
+
+  def canvasChanged(self, canvas):
+      print("Canvas", canvas)

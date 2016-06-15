@@ -668,7 +668,7 @@ void KisViewManager::setupManagers()
 
     d->mirrorManager.setup(actionCollection());
 
-    d->scriptManager.setup(actionCollection());
+    d->scriptManager.setup(actionCollection(), actionManager());
 }
 
 void KisViewManager::updateGUI()

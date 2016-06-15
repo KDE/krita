@@ -1,4 +1,4 @@
-%Module PyKrita4.krita
+%Module PyKrita.krita
 
 %Import QtCore/QtCoremod.sip
 %Import QtGui/QtGuimod.sip
@@ -13,6 +13,7 @@
 %Import QtXml/QtXmlmod.sip
 
 %Include application.sip
+%Include canvas.sip
 %Include document.sip
 %Include dockwidget.sip
 %Include dockwidgetfactorybase.sip

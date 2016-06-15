@@ -22,19 +22,20 @@
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 
+#include <kis_action_manager.h>
 #include "KisViewManager.h"
 
 struct KisScriptManager::Private {
     Private()
         : actionCollection(0)
+        , actionManager(0)
         , view(0)
         , scriptMenu(0)
     {
     }
 
-    QHash<KisFilter*, QAction*> script2Action;
-
     KActionCollection *actionCollection;
+    KisActionManager *actionManager;
     KisViewManager *view;
     KActionMenu *scriptMenu;
 };
@@ -53,11 +54,13 @@ KisScriptManager::~KisScriptManager()
 }
 
 
-void KisScriptManager::setup(KActionCollection * ac)
+void KisScriptManager::setup(KActionCollection * ac, KisActionManager *actionManager)
 {
     d->actionCollection = ac;
+    d->actionManager = actionManager;
+
     d->scriptMenu = new KActionMenu(i18n("Scripts"),this);
-    d->actionCollection->addAction("scripting", d->scriptMenu);
+    d->actionCollection->addAction("scripts", d->scriptMenu);
 }
 
 void KisScriptManager::updateGUI()
@@ -78,5 +81,6 @@ void KisScriptManager::updateGUI()
 
 void KisScriptManager::addAction(QAction *action)
 {
+    Q_ASSERT(d->actionCollection);
     d->scriptMenu->addAction(action);
 }

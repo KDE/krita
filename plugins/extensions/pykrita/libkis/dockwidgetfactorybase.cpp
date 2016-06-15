@@ -18,6 +18,7 @@
 
 #include "dockwidgetfactorybase.h"
 #include <QDebug>
+
 DockWidgetFactoryBase::DockWidgetFactoryBase(const QString& _id, KoDockFactoryBase::DockPosition _dockPosition, bool _isCollapsable, bool _defaultCollapsed)
     : m_id(_id),
     m_dockPosition(_dockPosition),

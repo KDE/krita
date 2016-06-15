@@ -20,12 +20,12 @@
 
 #include <QDebug>
 
-ViewExtension::ViewExtension(QObject* parent): QObject(parent)
+ViewExtension::ViewExtension(QObject* parent)
+    : QObject(parent)
 {
-
 }
 
 ViewExtension::~ViewExtension()
 {
-    qDebug() << "~";
+    qDebug() << "deleting View Extension";
 }

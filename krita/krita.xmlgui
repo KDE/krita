@@ -278,7 +278,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="gmic"/>
 
     </Menu>
-    <Menu name="tools">
+    <!--Menu name="tools">
       <text>&amp;Tools</text>
       <Menu name="Recording">
         <text>Recording</text>
@@ -290,7 +290,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
         <Action name="Macro_Open_Play"/>
         <Action name="Macro_Open_Edit"/>
       </Menu>
-    </Menu>
+    </Menu-->
     <Menu name="settings">
       <text>Setti&amp;ngs</text>
       <Action name="options_configure"/>

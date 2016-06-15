@@ -80,6 +80,8 @@ public:
 
     KisImportExportFilter::ConversionStatus exportAnimation();
 
+    QString savedFilesMask() const;
+
 private:
     KisImportExportFilter::ConversionStatus saveFrameCallback(int time, KisPaintDeviceSP frame);
 

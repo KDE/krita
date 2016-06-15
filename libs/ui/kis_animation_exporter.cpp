@@ -319,3 +319,8 @@ KisImportExportFilter::ConversionStatus KisAnimationExportSaver::saveFrameCallba
 
     return status;
 }
+
+QString KisAnimationExportSaver::savedFilesMask() const
+{
+    return m_d->filenamePrefix + "%04d" + m_d->filenameSuffix;
+}

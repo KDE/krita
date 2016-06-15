@@ -27,6 +27,8 @@
 #include "KisImageBuilderResult.h"
 #include "kritavideoexport_export.h"
 
+class KisFFMpegRunner;
+
 /* The KisImageBuilder_Result definitions come from kis_png_converter.h here */
 
 class KisDocument;
@@ -35,13 +37,11 @@ class KRITAVIDEOEXPORT_EXPORT VideoSaver : public QObject {
 
     Q_OBJECT
 public:
-    typedef QMap<QString, QString> AdditionalOptions;
-public:
     VideoSaver(KisDocument* doc, bool batchMode);
     virtual ~VideoSaver();
 
-    KisImageWSP image();
-    KisImageBuilder_Result encode(const QString &filename, const AdditionalOptions &additionalOptions = AdditionalOptions());
+    KisImageSP image();
+    KisImageBuilder_Result encode(const QString &filename, const QStringList &additionalOptionsList = QStringList());
 
 private Q_SLOTS:
     void cancel();
@@ -50,7 +50,7 @@ private:
     KisImageSP m_image;
     KisDocument* m_doc;
     bool m_batchMode;
-    bool m_stop;
+    QScopedPointer<KisFFMpegRunner> m_runner;
 };
 
 #endif

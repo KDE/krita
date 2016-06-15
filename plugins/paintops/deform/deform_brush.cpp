@@ -213,8 +213,6 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
             qreal maskX = x - centerX;
             qreal maskY = y - centerY;
             forwardRotationMatrix.map(maskX, maskY, &maskX, &maskY);
-
-            forwardRotationMatrix.map(maskX, maskY, &maskX, &maskY);
             distance = norme(maskX * majorAxis, maskY * minorAxis);
 
             if (distance > 1.0) {

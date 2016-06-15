@@ -44,7 +44,7 @@ public:
 
     void setCodec(CodecIndex index);
 
-    VideoSaver::AdditionalOptions getOptions() const;
+    QStringList customUserOptions() const;
 
 private Q_SLOTS:
     void slotAccepted();

@@ -144,35 +144,33 @@ void VideoExportOptionsDialog::setCodec(CodecIndex index)
     ui->cmbCodec->setCurrentIndex(int(index));
 }
 
-VideoSaver::AdditionalOptions VideoExportOptionsDialog::getOptions() const
+QStringList VideoExportOptionsDialog::customUserOptions() const
 {
-    VideoSaver::AdditionalOptions options;
+    QStringList options;
 
     if (ui->cmbCodec->currentIndex() == int(CODEC_H264)) {
-        options["crf"] = QString::number(ui->intConstantRateFactor->value());
+        options << "-crf" << QString::number(ui->intConstantRateFactor->value());
 
         const int presetIndex = ui->cmbPreset->currentIndex();
-        options["preset"] = m_d->presets[presetIndex].id();
+        options << "-preset" << m_d->presets[presetIndex].id();
 
         const int profileIndex = ui->cmbProfile->currentIndex();
-        options["profile"] = m_d->profiles[profileIndex].id();
+        options << "-profile" << m_d->profiles[profileIndex].id();
 
         if (m_d->profiles[profileIndex].id() == "high422") {
-            options["pix_fmt"] = "yuv422p";
+            options << "-pix_fmt" << "yuv422p";
         } else if (m_d->profiles[profileIndex].id() == "high444") {
-            options["pix_fmt"] = "yuv444p";
+            options << "-pix_fmt" << "yuv444p";
         } else {
-            options["pix_fmt"] = "yuv420p";
+            options << "-pix_fmt" << "yuv420p";
         }
-
 
         // Disabled! see the comment in c-tor!
         //const int tuneIndex = ui->cmbTune->currentIndex();
-        //options["tune"] = m_d->tunes[tuneIndex].id();
+        //options << "-tune" << m_d->tunes[tuneIndex].id();
 
     } else if (ui->cmbCodec->currentIndex() == int(CODEC_THEORA)) {
-        const qint64 bitRate = ui->intBitrate->value() * 1024;
-        options["bit_rate"] = bitRate;
+        options << "-b" << QString::number(ui->intBitrate->value()) + "k";
     }
 
     return options;

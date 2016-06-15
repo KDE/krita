@@ -84,7 +84,7 @@ KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray
         askForOptions = true;
     }
 
-    VideoSaver::AdditionalOptions additionalOptions;
+    QStringList additionalOptionsList;
 
     askForOptions &=
         !qApp->applicationName().toLower().contains("test") &
@@ -97,14 +97,14 @@ KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray
         dlg.setCodec(codecIndex);
 
         if (dlg.exec() == QDialog::Accepted) {
-            additionalOptions = dlg.getOptions();
+            additionalOptionsList = dlg.customUserOptions();
         } else {
             return KisImportExportFilter::UserCancelled;
         }
     }
 
     VideoSaver kpc(input, getBatchMode());
-    KisImageBuilder_Result res = kpc.encode(filename, additionalOptions);
+    KisImageBuilder_Result res = kpc.encode(filename, additionalOptionsList);
 
     if (res == KisImageBuilder_RESULT_OK) {
         return KisImportExportFilter::OK;

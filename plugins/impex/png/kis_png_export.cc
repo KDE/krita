@@ -201,7 +201,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
 
     }
     else {
-        options.alpha = isThereAlpha;
+        options.alpha = true;
         options.interlace = false;
         options.compression = 9;
         options.tryToSaveAsIndexed = false;

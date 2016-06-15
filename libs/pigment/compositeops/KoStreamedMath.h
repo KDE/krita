@@ -45,6 +45,9 @@
 template<Vc::Implementation _impl>
 struct KoStreamedMath {
 
+using int_v = Vc::SimdArray<int, Vc::float_v::size()>;
+using uint_v = Vc::SimdArray<unsigned int, Vc::float_v::size()>;
+
 /**
  * Composes src into dst without using vector instructions
  */
@@ -108,16 +111,16 @@ static inline quint8 lerp_mixed_u8_float(quint8 a, quint8 b, float alpha) {
 }
 
 /**
- * Get a vector containing first Vc::float_v::Size values of mask.
+ * Get a vector containing first Vc::float_v::size() values of mask.
  * Each source mask element is considered to be a 8-bit integer
  */
 static inline Vc::float_v fetch_mask_8(const quint8 *data) {
-    Vc::uint_v data_i(data);
-    return Vc::float_v(Vc::int_v(data_i));
+    uint_v data_i(data);
+    return Vc::float_v(int_v(data_i));
 }
 
 /**
- * Get an alpha values from Vc::float_v::Size pixels 32-bit each
+ * Get an alpha values from Vc::float_v::size() pixels 32-bit each
  * (4 channels, 8 bit per channel).  The alpha value is considered
  * to be stored in the most significat byte of the pixel
  *
@@ -130,18 +133,18 @@ static inline Vc::float_v fetch_mask_8(const quint8 *data) {
  */
 template <bool aligned>
 static inline Vc::float_v fetch_alpha_32(const quint8 *data) {
-    Vc::uint_v data_i;
+    uint_v data_i;
     if (aligned) {
         data_i.load((const quint32*)data, Vc::Aligned);
     } else {
         data_i.load((const quint32*)data, Vc::Unaligned);
     }
 
-    return Vc::float_v(Vc::int_v(data_i >> 24));
+    return Vc::float_v(int_v(data_i >> 24));
 }
 
 /**
- * Get color values from Vc::float_v::Size pixels 32-bit each
+ * Get color values from Vc::float_v::size() pixels 32-bit each
  * (4 channels, 8 bit per channel).  The color data is considered
  * to be stored in the 3 least significant bytes of the pixel.
  *
@@ -157,7 +160,7 @@ static inline void fetch_colors_32(const quint8 *data,
                             Vc::float_v &c1,
                             Vc::float_v &c2,
                             Vc::float_v &c3) {
-    Vc::uint_v data_i;
+    int_v data_i;
     if (aligned) {
         data_i.load((const quint32*)data, Vc::Aligned);
     } else {
@@ -165,57 +168,15 @@ static inline void fetch_colors_32(const quint8 *data,
     }
 
     const quint32 lowByteMask = 0xFF;
-    Vc::uint_v mask(lowByteMask);
+    uint_v mask(lowByteMask);
 
-    c1 = Vc::float_v(Vc::int_v((data_i >> 16) & mask));
-    c2 = Vc::float_v(Vc::int_v((data_i >> 8)  & mask));
-    c3 = Vc::float_v(Vc::int_v( data_i        & mask));
+    c1 = Vc::float_v(int_v((data_i >> 16) & mask));
+    c2 = Vc::float_v(int_v((data_i >> 8)  & mask));
+    c3 = Vc::float_v(int_v( data_i        & mask));
 }
 
 /**
- *
- */
-template <bool aligned>
-static inline void fetch_all_32(const quint8 *data,
-                            Vc::float_v &alpha,
-                            Vc::float_v &c1,
-                            Vc::float_v &c2,
-                            Vc::float_v &c3) {
-    Vc::uint_v data_i;
-    if (aligned) {
-        data_i.load((const quint32*)data, Vc::Aligned);
-    } else {
-        data_i.load((const quint32*)data, Vc::Unaligned);
-    }
-
-    const quint32 lowByteMask = 0xFF;
-    Vc::uint_v mask(lowByteMask);
-
-    alpha = Vc::float_v(Vc::int_v(data_i >> 24));
-    c1 = Vc::float_v(Vc::int_v((data_i >> 16) & mask));
-    c2 = Vc::float_v(Vc::int_v((data_i >> 8)  & mask));
-    c3 = Vc::float_v(Vc::int_v( data_i        & mask));
-}
-
-template <bool aligned>
-static inline void fetch_8_offset(const quint8 *data,
-                                  Vc::float_v &value,
-                                  const quint32 offset) {
-    Vc::uint_v data_i;
-    if (aligned) {
-        data_i.load((const quint32*)data, Vc::Aligned);
-    } else {
-        data_i.load((const quint32*)data, Vc::Unaligned);
-    }
-
-    const quint32 lowByteMask = 0xFF;
-    Vc::uint_v mask(lowByteMask);
-
-    value = Vc::float_v(Vc::int_v((data_i >> offset) & mask));
-}
-
-/**
- * Pack color and alpha values to Vc::float_v::Size pixels 32-bit each
+ * Pack color and alpha values to Vc::float_v::size() pixels 32-bit each
  * (4 channels, 8 bit per channel).  The color data is considered
  * to be stored in the 3 least significant bytes of the pixel, alpha -
  * in the most significant byte
@@ -233,19 +194,18 @@ static inline void write_channels_32(quint8 *data,
      */
 
     const quint32 lowByteMask = 0xFF;
-    Vc::uint_v mask(lowByteMask);
 
     // FIXME: Use single-instruction rounding + conversion
     //        The achieve that we need to implement Vc::iRound()
 
-    Vc::uint_v v1 = Vc::uint_v(Vc::int_v(Vc::round(alpha))) << 24;
-    Vc::uint_v v2 = (Vc::uint_v(Vc::int_v(Vc::round(c1))) & mask) << 16;
-    Vc::uint_v v3 = (Vc::uint_v(Vc::int_v(Vc::round(c2))) & mask) <<  8;
+    uint_v mask(lowByteMask);
+    uint_v v1 = uint_v(int_v(Vc::round(alpha))) << 24;
+    uint_v v2 = (uint_v(int_v(Vc::round(c1))) & mask) << 16;
+    uint_v v3 = (uint_v(int_v(Vc::round(c2))) & mask) <<  8;
+    uint_v v4 = uint_v(int_v(Vc::round(c3))) & mask;
     v1 = v1 | v2;
-    Vc::uint_v v4 = Vc::uint_v(Vc::int_v(Vc::round(c3))) & mask;
     v3 = v3 | v4;
-
-    *((Vc::uint_v*)data) = v1 | v3;
+    (v1 | v3).store((quint32*)data, Vc::Aligned);
 }
 
 /**
@@ -258,7 +218,7 @@ template<bool useMask, bool useFlow, class Compositor, int pixelSize>
 {
     using namespace Arithmetic;
 
-    const int vectorSize = Vc::float_v::Size;
+    const int vectorSize = Vc::float_v::size();
     const qint32 vectorInc = pixelSize * vectorSize;
     const qint32 linearInc = pixelSize;
     qint32 srcVectorInc = vectorInc;
@@ -272,7 +232,7 @@ template<bool useMask, bool useFlow, class Compositor, int pixelSize>
     if (!params.srcRowStride) {
         if (pixelSize == 4) {
             quint32 *buf = Vc::malloc<quint32, Vc::AlignOnVector>(vectorSize);
-            *((Vc::uint_v*)buf) = Vc::uint_v(*((const quint32*)params.srcRowStart));
+            *((uint_v*)buf) = uint_v(*((const quint32*)params.srcRowStart));
             srcRowStart = reinterpret_cast<quint8*>(buf);
             srcLinearInc = 0;
             srcVectorInc = 0;

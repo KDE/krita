@@ -88,25 +88,31 @@ static const Qt::CaseSensitivity cs = Qt::CaseSensitive;
 
 QString getInstallationPrefix() {
 #ifdef Q_OS_MAC
-     CFURLRef appUrlRef = CFBundleCopyBundleURL(CFBundleGetMainBundle());
-     CFStringRef macPath = CFURLCopyFileSystemPath(appUrlRef,
-                                            kCFURLPOSIXPathStyle);
-     const char *pathPtr = CFStringGetCStringPtr(macPath,
-                                            CFStringGetSystemEncoding());
-     QString bundlePath = QString::fromLatin1(pathPtr);
+     QString appPath = qApp->applicationDirPath();
 
-     debugWidgetUtils << "1" << bundlePath << (bundlePath + QString::fromLatin1("/Contents/MacOS/share"));
-     if (QFile(bundlePath + QString::fromLatin1("/Contents/share")).exists()) {
-         debugWidgetUtils << "running from a deployed bundle";
-         bundlePath += QString::fromLatin1("/Contents/");
+     debugWidgetUtils << "1" << appPath;
+     appPath.chop(QString("MacOS/").length());
+     debugWidgetUtils << "2" << appPath;
+
+     bool makeInstall = QDir(appPath + "/../../../share/kritaplugins").exists();
+     bool inBundle = QDir(appPath + "/Resources/kritaplugins").exists();
+
+     debugWidgetUtils << "3. After make install" << makeInstall;
+     debugWidgetUtils << "4. In Bundle" << inBundle;
+
+     QString bundlePath;
+
+     if (inBundle) {
+        bundlePath = appPath + "/";
+     }
+     else if (makeInstall) {
+         appPath.chop(QString("Contents/").length());
+         bundlePath = appPath + "/../../";
      }
      else {
-         debugWidgetUtils << "running from make install";
-         bundlePath += "/../../";
+         qFatal("Cannot calculate the bundle path from the app path");
      }
 
-     CFRelease(appUrlRef);
-     CFRelease(macPath);
      debugWidgetUtils << ">>>>>>>>>>>" << bundlePath;
      return bundlePath;
  #else
@@ -342,12 +348,14 @@ QStringList KoResourcePaths::findDirsInternal(const QString &type, const QString
     }
 
 #ifdef Q_OS_MAC
-
     {
+        debugWidgetUtils << "MAC:" << getApplicationRoot();
         QStringList bundlePaths;
-        bundlePaths << getApplicationRoot() + "/share/" + relDir;
-        bundlePaths << getApplicationRoot() + "/../share/" + relDir;
+        bundlePaths << getApplicationRoot() + "/share/krita/" + relDir;
+        bundlePaths << getApplicationRoot() + "/../share/krita/" + relDir;
+        debugWidgetUtils << "bundlePaths" << bundlePaths;
         appendResources(&dirs, bundlePaths, true);
+        Q_ASSERT(!dirs.isEmpty());
     }
 #endif
 

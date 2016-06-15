@@ -491,6 +491,14 @@ void KisApplication::setSplashScreenLoadingText(QString textToLoad)
    d->splashScreen->repaint();
 }
 
+void KisApplication::hideSplashScreen()
+{
+    if (d->splashScreen) {
+        // hide the splashscreen to see the dialog
+        d->splashScreen->hide();
+    }
+}
+
 bool KisApplication::notify(QObject *receiver, QEvent *event)
 {
     try {

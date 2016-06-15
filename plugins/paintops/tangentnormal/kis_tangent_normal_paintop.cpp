@@ -129,8 +129,6 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
 
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
 
-    setCurrentScale(scale);
-    setCurrentRotation(rotation);
 
     QPointF cursorPos =
         m_scatterOption.apply(info,

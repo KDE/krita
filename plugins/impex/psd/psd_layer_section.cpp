@@ -519,7 +519,7 @@ void PSDLayerMaskSection::writeImpl(QIODevice* io, KisNodeSP rootLayer)
                 QRect layerRect;
 
                 if (layerContentDevice) {
-                    QRect rc = layerContentDevice->extent();
+                    QRect rc = layerContentDevice->exactBounds();
                     rc = rc.normalized();
 
                     // keep to the max of photoshop's capabilities

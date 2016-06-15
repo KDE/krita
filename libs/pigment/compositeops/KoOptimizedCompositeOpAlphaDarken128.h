@@ -47,7 +47,7 @@ struct AlphaDarkenCompositor128 {
 
     /**
      * This is a vector equivalent of compositeOnePixelScalar(). It is considered
-     * to process Vc::float_v::Size pixels in a single pass.
+     * to process Vc::float_v::size() pixels in a single pass.
      *
      * o the \p haveMask parameter points whether the real (non-null) mask
      *   pointer is passed to the function.

@@ -77,16 +77,8 @@ bool WmfPainterBackend::play(QPaintDevice& target)
 
 bool WmfPainterBackend::play()
 {
-    // If there is already a painter and it's owned by us, then delete it.
-    if (mPainter && mIsInternalPainter)
-        delete mPainter;
-
-    mTarget = mPainter->device();
-
     // Play the wmf file
-    bool ret = m_parser->play(this);
-
-    return ret;
+    return m_parser->play(this);
 }
 
 
@@ -114,7 +106,7 @@ bool WmfPainterBackend::begin(const QRect &boundingBox)
     //mPainter->setBrush(QBrush(Qt::NoBrush));
 
 #if DEBUG_WMFPAINT
-    debugVectorImage << "Using QPainter: " << mPainter->pen() << mPainter->brush() 
+    debugVectorImage << "Using QPainter: " << mPainter->pen() << mPainter->brush()
                   << "Background: " << mPainter->background() << " " << mPainter->backgroundMode();
 #endif
 
@@ -290,15 +282,15 @@ void WmfPainterBackend::recalculateWorldTransform()
     mWorldTransform.scale(windowViewportScaleX, windowViewportScaleY);
     if (mViewportExtIsSet) {
         mWorldTransform.translate(mViewportOrg.x(), mViewportOrg.y());
-    } 
+    }
     else {
         // If viewport is not set, but window is *and* the window
         // width/height is negative, then we must compensate for this.
         // If the width/height is positive, we already did it with the
         // first translate before the scale() above.
-        if (mWindowExt.width() < 0) 
+        if (mWindowExt.width() < 0)
             mWorldTransform.translate(mWindowOrg.x() + mWindowExt.width(), qreal(0.0));
-        if (mWindowExt.height() < 0) 
+        if (mWindowExt.height() < 0)
             mWorldTransform.translate(qreal(0.0), mWindowOrg.y() + mWindowExt.height());
     }
     //debugVectorImage << "After window viewport calculation" << mWorldTransform;
@@ -677,7 +669,7 @@ void WmfPainterBackend::drawText(WmfDeviceContext &context, int x, int y, const 
     else if ((context.textAlign & TA_RIGHT) == TA_RIGHT)
         x -= width;
 
-    // Vertical align. 
+    // Vertical align.
     if ((context.textAlign & TA_BASELINE) == TA_BASELINE)
         y -= fm.ascent();  // (height - fm.descent()) is used in qwmf.  This should be the same.
     else if ((context.textAlign & TA_BOTTOM) == TA_BOTTOM) {
@@ -802,8 +794,8 @@ void WmfPainterBackend::updateFromDeviceContext(WmfDeviceContext &context)
     // Output surface not supported
     //DCViewportExt
     //DCViewportorg
-    //DCWindowExt  
-    //DCWindoworg  
+    //DCWindowExt
+    //DCWindoworg
 
     //----------------------------------------------------------------
     // Graphic Properties

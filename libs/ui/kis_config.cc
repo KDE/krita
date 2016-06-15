@@ -1072,6 +1072,16 @@ void KisConfig::setShowDockerTitleBars(const bool value) const
     m_cfg.writeEntry("showDockerTitleBars", value);
 }
 
+bool KisConfig::showStatusBar(bool defaultValue) const
+{
+    return (defaultValue ? true : m_cfg.readEntry("showStatusBar", true));
+}
+
+void KisConfig::setShowStatusBar(const bool value) const
+{
+    m_cfg.writeEntry("showStatusBar", value);
+}
+
 bool KisConfig::hideMenuFullscreen(bool defaultValue) const
 {
     return (defaultValue ? true: m_cfg.readEntry("hideMenuFullScreen", true));

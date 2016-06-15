@@ -31,6 +31,7 @@
 #include <KisFilterChain.h>
 #include <KoColorSpaceConstants.h>
 
+#include "KisPart.h"
 #include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
@@ -55,7 +56,7 @@ KisVideoExport::~KisVideoExport()
 
 KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    dbgFile << "Video export! From:" << from << ", To:" << to << "";
+    Q_UNUSED(to);
 
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
@@ -104,6 +105,22 @@ KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray
     }
 
     VideoSaver kpc(input, getBatchMode());
+
+    if (!kpc.hasFFMpeg()) {
+        const QString warningMessage =
+            i18n("Couldn not find \'ffmpeg\' binary. Saving to video formats is impossible.");
+
+        if (askForOptions) {
+            QMessageBox::critical(KisPart::instance()->currentMainwindow(),
+                                  i18n("Video Export Error"),
+                                  warningMessage);
+        } else {
+            qWarning() << "WARNING:" << warningMessage;
+        }
+
+        return KisImportExportFilter::UsageError;
+    }
+
     KisImageBuilder_Result res = kpc.encode(filename, additionalOptionsList);
 
     if (res == KisImageBuilder_RESULT_OK) {

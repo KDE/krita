@@ -42,8 +42,12 @@ void KisVideoPluginTest::testFiles()
 
 
     VideoSaver saver(doc, false);
-    //saver.encode("testfile.gif");
-    saver.encode("testfile.ogg");
+
+    KisImageBuilder_Result result =
+        //saver.encode("testfile.gif");
+        saver.encode("testfile.ogg");
+
+    QCOMPARE(result, KisImageBuilder_RESULT_OK);
 }
 QTEST_MAIN(KisVideoPluginTest)
 

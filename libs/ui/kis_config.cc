@@ -1672,3 +1672,13 @@ void KisConfig::setStabilizerSampleSize(int value)
 {
     m_cfg.writeEntry("stabilizerSampleSize", value);
 }
+
+QString KisConfig::customFFMpegPath(bool defaultValue) const
+{
+    return defaultValue ? QString() : m_cfg.readEntry("ffmpegExecutablePath", QString());
+}
+
+void KisConfig::setCustomFFMpegPath(const QString &value) const
+{
+    m_cfg.writeEntry("ffmpegExecutablePath", value);
+}

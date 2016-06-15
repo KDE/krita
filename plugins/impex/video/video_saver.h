@@ -43,13 +43,19 @@ public:
     KisImageSP image();
     KisImageBuilder_Result encode(const QString &filename, const QStringList &additionalOptionsList = QStringList());
 
+    bool hasFFMpeg() const;
+
 private Q_SLOTS:
     void cancel();
+
+private:
+    static QString findFFMpeg();
 
 private:
     KisImageSP m_image;
     KisDocument* m_doc;
     bool m_batchMode;
+    QString m_ffmpegPath;
     QScopedPointer<KisFFMpegRunner> m_runner;
 };
 

@@ -27,11 +27,14 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
+#include <KoResourcePaths.h>
+
 
 #include <kis_image.h>
 #include <kis_image_animation_interface.h>
 #include <kis_time_range.h>
 
+#include "kis_config.h"
 #include "kis_animation_exporter.h"
 
 #include <QFileSystemWatcher>
@@ -97,8 +100,9 @@ private:
 class KisFFMpegRunner
 {
 public:
-    KisFFMpegRunner()
-        : m_cancelled(false) {}
+    KisFFMpegRunner(const QString &ffmpegPath)
+        : m_cancelled(false),
+          m_ffmpegPath(ffmpegPath) {}
 public:
     KisImageBuilder_Result runFFMpeg(const QStringList &specialArgs,
                                      const QString &actionName,
@@ -116,7 +120,7 @@ public:
              << specialArgs;
 
         m_cancelled = false;
-        m_process.start("ffmpeg", args);
+        m_process.start(m_ffmpegPath, args);
         return waitForFFMpegProcess(actionName, progressFile, m_process, totalFrames);
     }
 
@@ -167,6 +171,7 @@ private:
 private:
     QProcess m_process;
     bool m_cancelled;
+    QString m_ffmpegPath;
 };
 
 
@@ -174,8 +179,10 @@ VideoSaver::VideoSaver(KisDocument *doc, bool batchMode)
     : m_image(doc->image())
     , m_doc(doc)
     , m_batchMode(batchMode)
-    , m_runner(new KisFFMpegRunner)
+    , m_ffmpegPath(findFFMpeg())
+    , m_runner(new KisFFMpegRunner(m_ffmpegPath))
 {
+
 }
 
 VideoSaver::~VideoSaver()
@@ -187,8 +194,49 @@ KisImageSP VideoSaver::image()
     return m_image;
 }
 
+bool VideoSaver::hasFFMpeg() const
+{
+    return !m_ffmpegPath.isEmpty();
+}
+
+QString VideoSaver::findFFMpeg()
+{
+    QString result;
+
+    QStringList proposedPaths;
+
+    QString customPath = KisConfig().customFFMpegPath();
+    proposedPaths << customPath;
+    proposedPaths << customPath + QDir::separator() + "ffmpeg";
+
+    proposedPaths << "ffmpeg";
+    proposedPaths << KoResourcePaths::getApplicationRoot() +
+        QDir::separator() + "bin" + QDir::separator() + "ffmpeg";
+
+    Q_FOREACH (const QString &path, proposedPaths) {
+        if (path.isEmpty()) continue;
+
+        QProcess testProcess;
+        testProcess.start(path, QStringList() << "-version");
+        testProcess.waitForFinished(1000);
+
+        const bool successfulStart =
+            testProcess.state() == QProcess::NotRunning &&
+            testProcess.error() == QProcess::UnknownError;
+
+        if (successfulStart) {
+            result = path;
+            break;
+        }
+    }
+
+    return result;
+}
+
 KisImageBuilder_Result VideoSaver::encode(const QString &filename, const QStringList &additionalOptionsList)
 {
+    if (m_ffmpegPath.isEmpty()) return KisImageBuilder_RESULT_FAILURE;
+
     KisImageBuilder_Result retval= KisImageBuilder_RESULT_OK;
 
     KisImageAnimationInterface *animation = m_image->animationInterface();

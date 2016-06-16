@@ -332,18 +332,17 @@ public:
 void QOpenGL2PaintEngineExPrivate::setVertexAttributePointer(unsigned int arrayIndex, const GLfloat *pointer)
 {
     Q_ASSERT(arrayIndex < 3);
-        printf("sVAP Pointer: %p\n", pointer);
-        qDebug() << "Setting attribute1: " << *pointer << " " << funcs.glGetError();
-        if (pointer == vertexAttribPointers[arrayIndex]) {
-            qDebug() << "Setting attribute return" << funcs.glGetError();;return;}
 
-        qDebug() << "Setting attribute2" << funcs.glGetError();
+    if (pointer == vertexAttribPointers[arrayIndex]) {
+        return;
+    }
+
     vertexAttribPointers[arrayIndex] = pointer;
     funcs.glDisable(GL_BLEND);
-    if (arrayIndex == QT_OPACITY_ATTR) {
-        funcs.glVertexAttribPointer(arrayIndex, 1, GL_FLOAT, GL_FALSE, 0, pointer); qDebug() << "Setting attributep1" << funcs.glGetError();}
-    else {
-        funcs.glVertexAttribPointer(arrayIndex, 2, GL_FLOAT, GL_FALSE, 0, 0); qDebug() << "Setting attributep2" << funcs.glGetError();}
+    if (arrayIndex == QT_OPACITY_ATTR)
+        funcs.glVertexAttribPointer(arrayIndex, 1, GL_FLOAT, GL_FALSE, 0, pointer);
+    else
+        funcs.glVertexAttribPointer(arrayIndex, 2, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
 QT_END_NAMESPACE

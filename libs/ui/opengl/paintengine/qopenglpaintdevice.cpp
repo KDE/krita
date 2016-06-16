@@ -40,6 +40,7 @@
 #include <private/qopenglcontext_p.h>
 #include <private/qopenglframebufferobject_p.h>
 #include "qopenglpaintengine_p.h"
+#include "execinfo.h"
 
 // for qt_defaultDpiX/Y
 #include <private/qfont_p.h>
@@ -253,6 +254,15 @@ void QOpenGLPaintDevice::setDevicePixelRatio(qreal devicePixelRatio)
 
 int QOpenGLPaintDevice::metric(QPaintDevice::PaintDeviceMetric metric) const
 {
+    void* buffer = malloc(3 * 4);
+    int symcount = backtrace(&buffer, 3);
+    printf("Symcount: %d\n", symcount);
+    char** symbols = backtrace_symbols(&buffer, 3);
+    printf("buffer : %s\n", symbols[0]);
+    printf("buffer : %s\n", symbols[1]);
+    printf("buffer : %s\n", symbols[2]);
+
+    qDebug() << "Metric: " << metric;
     switch (metric) {
     case PdmWidth:
         return d_ptr->size.width();

@@ -1321,6 +1321,7 @@ void QOpenGL2PaintEngineEx::stroke(const QVectorPath &path, const QPen &pen)
     ensureActive();
     d->setBrush(penBrush);
     d->stroke(path, pen);
+    qDebug() << "Exiting QOpenGL2PaintEngineEx::stroke with error: " << d->funcs.glGetError();
 }
 
 void QOpenGL2PaintEngineExPrivate::stroke(const QVectorPath &path, const QPen &pen)
@@ -1347,8 +1348,8 @@ void QOpenGL2PaintEngineExPrivate::stroke(const QVectorPath &path, const QPen &p
                                                         ? q->state()->rectangleClip
                                                         : QRectF(0, 0, width, height));
 
-    if (penStyle == Qt::SolidLine) {qDebug() << "SIZE: " << stroker.vertexCount() * sizeof(float);
-        stroker.process(path, pen, clip, s->renderHints);qDebug() << "POST_SIZE: " << stroker.vertexCount() * sizeof(float);
+    if (penStyle == Qt::SolidLine) {
+        stroker.process(path, pen, clip, s->renderHints);
 
     } else { // Some sort of dash
         dasher.process(path, pen, clip, s->renderHints);
@@ -1365,11 +1366,6 @@ void QOpenGL2PaintEngineExPrivate::stroke(const QVectorPath &path, const QPen &p
 
     if (opaque) {
         prepareForDraw(opaque);
-            qDebug() << "Pre Stroke: " << funcs.glGetError();
-            GLint current_vao;
-            funcs.glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &current_vao);
-            qDebug() << "Current Stroke VAO: " << current_vao;
-            qDebug() << "Pre Bind error: " << funcs.glGetError();
         funcs.glEnableVertexAttribArray(0);
         QOpenGLBuffer buffer1(QOpenGLBuffer::VertexBuffer);
         buffer1.create();
@@ -1383,14 +1379,9 @@ void QOpenGL2PaintEngineExPrivate::stroke(const QVectorPath &path, const QPen &p
         // }
 
         buffer1.allocate(stroker.vertices(), stroker.vertexCount() * sizeof(float));
-            qDebug() << "Post Bind error: " << funcs.glGetError();
-            GLint current_vbo;
-            funcs.glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &current_vbo);
-            qDebug() << "We are currently using engine VBO: " << current_vbo;
+
         setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, stroker.vertices());
-            qDebug() << "Post Stroke: " << funcs.glGetError();
-            QOpenGLShaderProgram* currentProg = shaderManager->currentProgram();
-            qDebug() << "CURR PROG: " << currentProg->log();
+
         funcs.glDrawArrays(GL_TRIANGLE_STRIP, 0, stroker.vertexCount() / 2);
 
         buffer1.release();

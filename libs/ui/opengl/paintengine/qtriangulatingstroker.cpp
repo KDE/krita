@@ -80,8 +80,6 @@ void QTriangulatingStroker::process(const QVectorPath &path, const QPen &pen, co
     const qreal *pts = path.points();
     const QPainterPath::ElementType *types = path.elements();
     int count = path.elementCount();
-    qDebug() << "ElementCount" << count;
-    printf("ElementType: %d\n", !types);
 
     if (count < 2)
         return;
@@ -165,8 +163,8 @@ void QTriangulatingStroker::process(const QVectorPath &path, const QPen &pen, co
 
         if (endsAtStart || path.hasImplicitClose())
             m_cap_style = Qt::FlatCap;
+
         moveTo(pts);
-qDebug() << "m_vertices SIZE MOVE: " << vertexCount();
         m_cap_style = cap;
         pts += 2;
         skipDuplicatePoints(&pts, endPts);
@@ -176,7 +174,6 @@ qDebug() << "m_vertices SIZE MOVE: " << vertexCount();
 
         while (pts < endPts) {
             join(pts);
-qDebug() << "m_vertices SIZE JOIN: " << vertexCount();
             lineTo(pts);
 
             pts += 2;
@@ -184,7 +181,6 @@ qDebug() << "m_vertices SIZE JOIN: " << vertexCount();
         }
 
         endCapOrJoinClosed(startPts, pts-2, path.hasImplicitClose(), endsAtStart);
-qDebug() << "m_vertices SIZE END: " << vertexCount();
 
     } else {
         bool endsAtStart = false;
@@ -355,7 +351,6 @@ void QTriangulatingStroker::join(const qreal *pts)
 {
     // Creates a join to the next segment (m_cx, m_cy) -> (pts[0], pts[1])
     normalVector(m_cx, m_cy, pts[0], pts[1], &m_nvx, &m_nvy);
-    qDebug() << m_cx << " " << m_cy << " " << m_nvx << " " << m_nvy;
 
     switch (m_join_style) {
     case Qt::BevelJoin:

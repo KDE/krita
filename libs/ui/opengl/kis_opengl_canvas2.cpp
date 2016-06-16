@@ -290,7 +290,7 @@ void KisOpenGLCanvas2::paintGL()
     d->glSyncObject = Sync::getSync();
 
     QPainter gc(this);
-    // renderDecorations(&gc);
+    renderDecorations(&gc);
     QPen pen;
     pen.setWidth(3);
     pen.setJoinStyle(Qt::RoundJoin);

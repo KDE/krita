@@ -271,16 +271,7 @@ QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, O
         path = ellipseOutline(10, 10, 1.0, 0);
         
         if (mode == CursorTiltOutline) {
-            QPainterPath tiltLine;
-            QLineF tiltAngle(QPointF(0.0,0.0), QPointF(0.0,3.0));
-            tiltAngle.setLength(50.0 * (1 - info.tiltElevation(info, 60.0, 60.0, true)));
-            tiltAngle.setAngle((360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0))-2.0);
-            tiltLine.moveTo(tiltAngle.p1());
-            tiltLine.lineTo(tiltAngle.p2());
-            tiltAngle.setAngle((360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0))+2.0);
-            tiltLine.lineTo(tiltAngle.p2());
-            tiltLine.lineTo(tiltAngle.p1());
-            path.addPath(tiltLine);
+            path.addPath(makeTiltIndicator(info, QPointF(0.0, 0.0), 0.0, 2.0));
         }
 
         path.translate(info.pos());
@@ -301,6 +292,25 @@ QPainterPath KisPaintOpSettings::ellipseOutline(qreal width, qreal height, qreal
     m.rotate(rotation);
     path = m.map(path);
     return path;
+}
+
+QPainterPath KisPaintOpSettings::makeTiltIndicator(KisPaintInformation const& info,
+    QPointF const& start, qreal maxLength, qreal angle)
+{
+    if (maxLength == 0.0) maxLength = 50.0;
+    maxLength = qMax(maxLength, 50.0);
+    qreal const length = maxLength * (1 - info.tiltElevation(info, 60.0, 60.0, true));
+    qreal const baseAngle = 360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0);
+
+    QLineF guideLine = QLineF::fromPolar(length, baseAngle + angle);
+    guideLine.translate(start);
+    QPainterPath ret;
+    ret.moveTo(guideLine.p1());
+    ret.lineTo(guideLine.p2());
+    guideLine.setAngle(baseAngle - angle);
+    ret.lineTo(guideLine.p2());
+    ret.lineTo(guideLine.p1());
+    return ret;
 }
 
 void KisPaintOpSettings::setCanvasRotation(qreal angle)

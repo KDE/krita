@@ -96,6 +96,23 @@ KisBrushOp::~KisBrushOp()
     delete m_hsvTransformation;
 }
 
+    struct Point {
+        Point() {}
+        Point(QPointF _cursorPos,
+              qreal _scale,
+              qreal _rotation,
+              KisPaintInformation _info)
+            : cursorPos(_cursorPos),
+              scale(_scale),
+              rotation(_rotation),
+              info(_info) {}
+
+        QPointF cursorPos;
+        qreal scale;
+        qreal rotation;
+        KisPaintInformation info;
+    };
+
 KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()->device()) return KisSpacingInformation(1.0);
@@ -137,27 +154,53 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
         m_colorSource->applyColorTransformation(m_hsvTransformation);
     }
 
-    QRect dabRect;
-    KisFixedPaintDeviceSP dab = m_dabCache->fetchDab(device->compositionSourceColorSpace(),
-                                m_colorSource,
-                                cursorPos,
-                                scale, scale,
-                                rotation,
-                                info,
-                                m_softnessOption.apply(info),
-                                &dabRect);
+    static int onePointTime = 1;
 
-    // sanity check for the size calculation code
-    if (dab->bounds().size() != dabRect.size()) {
-        warnKrita << "KisBrushOp: dab bounds is not dab rect. See bug 327156" << dab->bounds().size() << dabRect.size();
+
+    static QVector<Point> points;
+
+    points << Point(cursorPos, scale, rotation, info);
+
+    const int expectedJobTime = onePointTime * points.size();
+
+    if (expectedJobTime > 60 ||
+        points.size() > 15) {
+
+        QTime brushTime;
+        brushTime.start();
+
+        foreach (const Point &pt, points) {
+
+            QRect dabRect;
+            KisFixedPaintDeviceSP dab = m_dabCache->fetchDab(device->compositionSourceColorSpace(),
+                                                             m_colorSource,
+                                                             pt.cursorPos,
+                                                             pt.scale, pt.scale,
+                                                             pt.rotation,
+                                                             pt.info,
+                                                             m_softnessOption.apply(pt.info),
+                                                             &dabRect);
+
+            // sanity check for the size calculation code
+            if (dab->bounds().size() != dabRect.size()) {
+                warnKrita << "KisBrushOp: dab bounds is not dab rect. See bug 327156" << dab->bounds().size() << dabRect.size();
+            }
+
+            painter()->bltFixed(dabRect.topLeft(), dab, dab->bounds());
+
+            painter()->renderMirrorMaskSafe(dabRect,
+                                            dab,
+                                            !m_dabCache->needSeparateOriginal());
+            painter()->setOpacity(origOpacity);
+
+        }
+
+        onePointTime = brushTime.elapsed() / points.size();
+
+        qDebug() << ppVar(brushTime.elapsed()) << ppVar(onePointTime);
+        points.clear();
+
     }
-
-    painter()->bltFixed(dabRect.topLeft(), dab, dab->bounds());
-
-    painter()->renderMirrorMaskSafe(dabRect,
-                                    dab,
-                                    !m_dabCache->needSeparateOriginal());
-    painter()->setOpacity(origOpacity);
 
     return effectiveSpacing(scale, rotation,
                             m_spacingOption, info);

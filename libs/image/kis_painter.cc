@@ -375,7 +375,15 @@ QVector<QRect> KisPainter::takeDirtyRegion()
 {
     QVector<QRect> vrect = d->dirtyRects;
     d->dirtyRects.clear();
-    return vrect;
+
+
+    QRegion rects;
+
+    for(int i = 0; i < vrect.size(); i++) {
+        rects += vrect[i];
+    }
+
+    return rects.rects();
 }
 
 

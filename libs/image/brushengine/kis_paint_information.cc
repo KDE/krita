@@ -59,7 +59,7 @@ struct KisPaintInformation::Private {
 
 
     ~Private() {
-        KIS_ASSERT_RECOVER_NOOP(!currentDistanceInfo);
+        //KIS_ASSERT_RECOVER_NOOP(!currentDistanceInfo);
     }
     Private(const Private &rhs) {
         copy(rhs);

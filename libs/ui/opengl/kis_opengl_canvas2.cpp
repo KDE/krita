@@ -103,6 +103,7 @@ public:
 
     bool wrapAroundMode{false};
 
+    QOpenGLBuffer buffers[3];
     GLuint vboHandles[3] {0, 0, 0};
     QOpenGLVertexArrayObject vao;
 
@@ -250,9 +251,14 @@ void KisOpenGLCanvas2::initializeGL()
 
     glGenBuffers(3, d->vboHandles);
 
-    glBindBuffer(GL_ARRAY_BUFFER, d->vboHandles[0]);
-    glBufferData(GL_ARRAY_BUFFER, 6 * 3 * sizeof(float), d->vertices, QOpenGLBuffer::StaticDraw);
-    glVertexAttribPointer(PROGRAM_VERTEX_ATTRIBUTE, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    buffers[0].create();
+    buffers[0].setUsagePattern(QOpenGLBuffer::StaticDraw);
+    buffers[0].bind();
+    buffers[0].allocate(d->vertices, 6 * 3 * sizeof(float));
+    // glVertexAttribPointer(PROGRAM_VERTEX_ATTRIBUTE, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    // glBindBuffer(GL_ARRAY_BUFFER, d->vboHandles[0]);
+    // glBufferData(GL_ARRAY_BUFFER, 6 * 3 * sizeof(float), d->vertices, QOpenGLBuffer::StaticDraw);
+    // glVertexAttribPointer(PROGRAM_VERTEX_ATTRIBUTE, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glBindBuffer(GL_ARRAY_BUFFER, d->vboHandles[1]);
     glBufferData(GL_ARRAY_BUFFER, 6 * 2 * sizeof(float), d->texCoords, QOpenGLBuffer::StaticDraw);
     glVertexAttribPointer(PROGRAM_TEXCOORD_ATTRIBUTE, 2, GL_FLOAT, GL_FALSE, 0, 0);
@@ -290,7 +296,7 @@ void KisOpenGLCanvas2::paintGL()
     d->glSyncObject = Sync::getSync();
 
     QPainter gc(this);
-    renderDecorations(&gc);
+    //renderDecorations(&gc);
     QPen pen;
     pen.setWidth(3);
     pen.setJoinStyle(Qt::RoundJoin);
@@ -432,8 +438,10 @@ void KisOpenGLCanvas2::drawCheckers()
 
     //Setup the geometry for rendering
     rectToVertices(d->vertices, modelRect);
-    glBindBuffer(GL_ARRAY_BUFFER, d->vboHandles[0]);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, 3 * 6 * sizeof(float), d->vertices);
+    //glBindBuffer(GL_ARRAY_BUFFER, d->vboHandles[0]);
+    //glBufferSubData(GL_ARRAY_BUFFER, 0, 3 * 6 * sizeof(float), d->vertices);
+    buffers[0].bind();
+    buffers[0].write(0, d->vertices, 3 * 6 * sizeof(float));
 
     rectToTexCoords(d->texCoords, textureRect);
     glBindBuffer(GL_ARRAY_BUFFER, d->vboHandles[1]);
@@ -546,8 +554,10 @@ void KisOpenGLCanvas2::drawImage()
 
             //Setup the geometry for rendering
             rectToVertices(d->vertices, modelRect);
-            glBindBuffer(GL_ARRAY_BUFFER, d->vboHandles[0]);
-            glBufferSubData(GL_ARRAY_BUFFER, 0, 3 * 6 * sizeof(float), d->vertices);
+            //glBindBuffer(GL_ARRAY_BUFFER, d->vboHandles[0]);
+            //glBufferSubData(GL_ARRAY_BUFFER, 0, 3 * 6 * sizeof(float), d->vertices);
+            buffers[0].bind();
+            buffers[0].write(0, d->vertices, 3 * 6 * sizeof(float));
 
             rectToTexCoords(d->texCoords, textureRect);
             glBindBuffer(GL_ARRAY_BUFFER, d->vboHandles[1]);

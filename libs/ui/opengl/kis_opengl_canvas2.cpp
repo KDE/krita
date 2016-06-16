@@ -250,8 +250,8 @@ void KisOpenGLCanvas2::initializeGL()
     d->buffers[0].setUsagePattern(QOpenGLBuffer::StaticDraw);
     d->buffers[1].create();
     d->buffers[2].setUsagePattern(QOpenGLBuffer::StaticDraw);
-    d->buffers[3].create();
-    d->buffers[3].setUsagePattern(QOpenGLBuffer::StreamDraw);
+    d->buffers[2].create();
+    d->buffers[2].setUsagePattern(QOpenGLBuffer::StreamDraw);
 
     d->buffers[0].bind();
     d->buffers[0].allocate(d->vertices, 6 * 3 * sizeof(float));

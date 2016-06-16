@@ -671,7 +671,7 @@ void QOpenGL2PaintEngineExPrivate::resetGLState()
         float color[] = { 1.0f, 1.0f, 1.0f, 1.0f };
         funcs.glVertexAttrib4fv(3, color);
     }
-    vao->release();
+    vao.release();
 }
 
 void QOpenGL2PaintEngineEx::endNativePainting()
@@ -1222,36 +1222,24 @@ void QOpenGL2PaintEngineExPrivate::composite(const QOpenGLRect& boundingRect)
 {
     setCoords(staticVertexCoordinateArray, boundingRect);
 
-    //////////////
-qDebug() << "Pre Fill: " << funcs.glGetError();
-GLint current_vao;
-funcs.glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &current_vao);
-qDebug() << "Current Stroke VAO: " << current_vao;
-qDebug() << "Pre Bind error: " << funcs.glGetError();
-    funcs.glEnableVertexAttribArray(0);
-    QOpenGLBuffer buffer1(QOpenGLBuffer::VertexBuffer);
-    buffer1.create();
-    buffer1.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    buffer1.bind();
-// float[] vertices = {
-//
-// }
+qDebug() << "CALLING PAINTENGINE::COMPOSITE()";
+    funcs.glEnableVertexAttribArray(GL_VERTEX_ARRAY_BINDING);
+    QOpenGLBuffer buffer(QOpenGLBuffer::VertexBuffer);
+    buffer.create();
+    buffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    buffer.bind();
+
     for (int i = 0; i < 8; i++) {
         qDebug() << staticVertexCoordinateArray[i];
     }
-qDebug() << "SIZE: " << 8 * sizeof(float);
-    buffer1.allocate(staticVertexCoordinateArray, 8 * sizeof(float));
-qDebug() << "Post Bind error: " << funcs.glGetError();
-GLint current_vbo;
-funcs.glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &current_vbo);
-qDebug() << "We are currently using engine VBO: " << current_vbo;
+
+    buffer.allocate(staticVertexCoordinateArray, 8 * sizeof(float));
+
     setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, staticVertexCoordinateArray);
-qDebug() << "Post Stroke: " << funcs.glGetError();
-QOpenGLShaderProgram* currentProg = shaderManager->currentProgram();
-qDebug() << "CURR PROG: " << currentProg->log();
+
     funcs.glDrawArrays(GL_TRIANGLE_FAN, 0, 8 / 2);
 
-    buffer1.release();
+    buffer.release();
     /////////////////////
 
     //setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, staticVertexCoordinateArray);
@@ -2143,17 +2131,9 @@ bool QOpenGL2PaintEngineEx::begin(QPaintDevice *pdev)
     d->funcs.initializeOpenGLFunctions();
 //    qDebug() << "We have no vao yet, so it's: " << d->vao;
 
-    if (d->vao == nullptr) {
-        //d->funcs.glGenVertexArrays(1, &d->vao);
-        d->vao = new QOpenGLVertexArrayObject();
-        d->vao->create();
-        qDebug() << "We generate a new VAO for the engine: " << d->vao->objectId();
-    }
-
-    //d->vao = new QOpenGLVertexArrayObject();
-    //d->vao
-    //d->funcs.glBindVertexArray(d->vao);
-    d->vao->bind();
+    d->vao.create();
+    d->vao.bind();
+    qDebug() << "We generate a new VAO for the engine: " << d->vao.objectId();
     qDebug() << "We bound our engine vao with error: " << d->funcs.glGetError();
 
     GLint current_vao;
@@ -2247,7 +2227,7 @@ void QOpenGL2PaintEngineEx::ensureActive()
 {
     Q_D(QOpenGL2PaintEngineEx);
     QOpenGLContext *ctx = d->ctx;
-    d->vao->bind();
+    d->vao.bind();
     if (isActive() && ctx->d_func()->active_engine != this) {
         ctx->d_func()->active_engine = this;
         d->needsSync = true;

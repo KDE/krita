@@ -301,8 +301,7 @@ public:
     GLfloat staticVertexCoordinateArray[8];
     GLfloat staticTextureCoordinateArray[8];
 
-    QOpenGLVertexArrayObject* vao;
-    //GLuint vao;
+    QOpenGLVertexArrayObject vao;
 
     bool snapToPixelGrid;
     bool nativePaintingActive;

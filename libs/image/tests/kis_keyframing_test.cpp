@@ -268,7 +268,7 @@ void KisKeyframingTest::testRasterChannel()
 
     // Fetching current keyframe before the first one should
     // return the first keyframe
-    QCOMPARE(channel->frameIdAt(0), (int)key_10->value());
+    QCOMPARE(channel->frameIdAt(0), channel->frameIdAt(key_10->time()));
 }
 
 void KisKeyframingTest::testChannelSignals()
@@ -471,7 +471,7 @@ void KisKeyframingTest::testAffectedFrames()
     // Before first frame
     range = channel->affectedFrames(5);
     QCOMPARE(range.start(), 0);
-    QCOMPARE(range.end(), 19);
+    QCOMPARE(range.end(), 9);
     QCOMPARE(range.isInfinite(), false);
 
     // After last frame

@@ -37,13 +37,8 @@ public:
         Smooth
     };
 
-    KisKeyframe(KisKeyframeChannel *channel, int time, void *data);
-    KisKeyframe(KisKeyframeChannel *channel, int time, quint32 value);
-    ~KisKeyframe();
-
-    quint32 value() const;
-    void *data() const;
-    void setValue(quint32 value);
+    KisKeyframe(KisKeyframeChannel *channel, int time);
+    virtual ~KisKeyframe();
 
     int time() const;
     void setTime(int time);

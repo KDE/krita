@@ -62,10 +62,6 @@ public:
     void setFilenameSuffix(const QString suffix);
 
     bool hasScalarValue() const;
-    qreal minScalarValue() const;
-    qreal maxScalarValue() const;
-    qreal scalarValue(const KisKeyframeSP keyframe) const;
-    void setScalarValue(KisKeyframeSP keyframe, qreal value, KUndo2Command *parentCommand);
 
     QDomElement toXML(QDomDocument doc, const QString &layerFilename);
     void loadXML(const QDomElement &channelNode);
@@ -86,6 +82,7 @@ protected:
 private:
     void setFrameFilename(int frameId, const QString &filename);
     QString chooseFrameFilename(int frameId, const QString &layerFilename);
+    int frameId(KisKeyframeSP keyframe) const;
 
     struct Private;
     QScopedPointer<Private> m_d;

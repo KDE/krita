@@ -24,6 +24,16 @@
 #include <kis_global.h>
 #include <kis_dom_utils.h>
 
+struct KisScalarKeyframe : public KisKeyframe
+{
+    KisScalarKeyframe(KisKeyframeChannel *channel, int time, qreal value)
+        : KisKeyframe(channel, time)
+        , value(value)
+    {}
+
+    qreal value;
+};
+
 struct KisScalarKeyframeChannel::Private
 {
 public:
@@ -33,12 +43,10 @@ public:
 
     qreal minValue;
     qreal maxValue;
-    QMap<int, qreal> values;
     int firstFreeIndex;
 
     KisKeyframe::InterpolationMode defaultInterpolation;
 
-    struct InsertValueCommand;
     struct SetValueCommand;
 };
 
@@ -68,7 +76,9 @@ qreal KisScalarKeyframeChannel::maxScalarValue() const
 
 qreal KisScalarKeyframeChannel::scalarValue(const KisKeyframeSP keyframe) const
 {
-    return m_d->values[keyframe->value()];
+    KisScalarKeyframe *key = dynamic_cast<KisScalarKeyframe*>(keyframe.data());
+    Q_ASSERT(key != 0);
+    return key->value;
 }
 
 struct KisScalarKeyframeChannel::Private::SetValueCommand : public KUndo2Command
@@ -99,8 +109,10 @@ private:
 
 void KisScalarKeyframeChannel::setScalarValueImpl(KisKeyframeSP keyframe, qreal value)
 {
-    int index = keyframe->value();
-    m_d->values[index] = value;
+    KisScalarKeyframe *key = dynamic_cast<KisScalarKeyframe*>(keyframe.data());
+    Q_ASSERT(key != 0);
+
+    key->value = value;
 
     QRect rect = affectedRect(keyframe);
     KisTimeRange range = affectedFrames(keyframe->time());
@@ -116,8 +128,8 @@ void KisScalarKeyframeChannel::setScalarValue(KisKeyframeSP keyframe, qreal valu
         parentCommand = tempCommand.data();
     }
 
-    int index = keyframe->value();
-    KUndo2Command *cmd = new Private::SetValueCommand(this, keyframe, m_d->values[index], value, parentCommand);
+    qreal oldValue = scalarValue(keyframe);
+    KUndo2Command *cmd = new Private::SetValueCommand(this, keyframe, oldValue, value, parentCommand);
     cmd->redo();
 }
 
@@ -200,62 +212,18 @@ qreal KisScalarKeyframeChannel::currentValue() const
     return interpolatedValue(currentTime());
 }
 
-struct KisScalarKeyframeChannel::Private::InsertValueCommand : public KUndo2Command
-{
-    InsertValueCommand(KisScalarKeyframeChannel::Private *d, int index, qreal value, bool insert, KUndo2Command *parentCommand)
-        : KUndo2Command(parentCommand),
-          m_d(d),
-          m_index(index),
-          m_value(value),
-          m_insert(insert)
-    {
-    }
-
-    void redo() {
-        doSwap(m_insert);
-    }
-
-    void undo() {
-        doSwap(!m_insert);
-    }
-
-private:
-    void doSwap(bool insert) {
-        if (insert) {
-            m_d->values[m_index] = m_value;
-        } else {
-            m_d->values.remove(m_index);
-        }
-    }
-
-private:
-    KisScalarKeyframeChannel::Private *m_d;
-    int m_index;
-    qreal m_value;
-    bool m_insert;
-};
-
 KisKeyframeSP KisScalarKeyframeChannel::createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand)
 {
     qreal value = (copySrc.isNull() ? 0 : scalarValue(copySrc));
-    int index = m_d->firstFreeIndex++;
+    KisScalarKeyframe *keyframe = new KisScalarKeyframe(this, time, value);
 
-    KUndo2Command *cmd = new Private::InsertValueCommand(m_d.data(), index, value, true, parentCommand);
-    cmd->redo();
-
-    KisKeyframeSP keyframe = toQShared(new KisKeyframe(this, time, index));
     keyframe->setInterpolationMode(m_d->defaultInterpolation);
-    return keyframe;
+
+    return toQShared(keyframe);
 }
 
 void KisScalarKeyframeChannel::destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand)
 {
-    int index = key->value();
-
-    KIS_ASSERT_RECOVER_RETURN(m_d->values.contains(index));
-
-    KUndo2Command *cmd = new Private::InsertValueCommand(m_d.data(), index, m_d->values[index], false, parentCommand);
-    cmd->redo();
 }
 
 void KisScalarKeyframeChannel::uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame)
@@ -266,11 +234,9 @@ void KisScalarKeyframeChannel::uploadExternalKeyframe(KisKeyframeChannel *srcCha
     KisKeyframeSP srcFrame = srcScalarChannel->keyframeAt(srcTime);
     KIS_ASSERT_RECOVER_RETURN(srcFrame);
 
-    const qreal newValue = scalarValue(srcFrame);
+    const qreal newValue = srcChannel->scalarValue(srcFrame);
 
-    const int dstId = dstFrame->value();
-    KIS_ASSERT_RECOVER_RETURN(m_d->values.contains(dstId));
-    m_d->values[dstId] = newValue;
+    setScalarValueImpl(dstFrame, newValue);
 }
 
 QRect KisScalarKeyframeChannel::affectedRect(KisKeyframeSP key)
@@ -287,7 +253,7 @@ QRect KisScalarKeyframeChannel::affectedRect(KisKeyframeSP key)
 void KisScalarKeyframeChannel::saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename)
 {
     Q_UNUSED(layerFilename);
-    keyframeElement.setAttribute("value", KisDomUtils::toString(m_d->values[keyframe->value()]));
+    keyframeElement.setAttribute("value", KisDomUtils::toString(scalarValue(keyframe)));
 
     QString interpolation;
     if (keyframe->interpolationMode() == KisKeyframe::Linear) interpolation = "linear";

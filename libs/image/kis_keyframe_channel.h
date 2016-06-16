@@ -97,10 +97,10 @@ public:
     int keyframeInsertionRow(int time) const;
 
     virtual bool hasScalarValue() const = 0;
-    virtual qreal minScalarValue() const = 0;
-    virtual qreal maxScalarValue() const = 0;
-    virtual qreal scalarValue(const KisKeyframeSP keyframe) const = 0;
-    virtual void setScalarValue(KisKeyframeSP keyframe, qreal value, KUndo2Command *parentCommand = 0) = 0;
+    virtual qreal minScalarValue() const;
+    virtual qreal maxScalarValue() const;
+    virtual qreal scalarValue(const KisKeyframeSP keyframe) const;
+    virtual void setScalarValue(KisKeyframeSP keyframe, qreal value, KUndo2Command *parentCommand = 0);
 
     virtual QDomElement toXML(QDomDocument doc, const QString &layerFilename);
     virtual void loadXML(const QDomElement &channelNode);

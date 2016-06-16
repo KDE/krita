@@ -538,3 +538,28 @@ int KisKeyframeChannel::currentTime() const
 {
     return m_d->defaultBounds->currentTime();
 }
+
+
+qreal KisKeyframeChannel::minScalarValue() const
+{
+    return 0;
+}
+
+qreal KisKeyframeChannel::maxScalarValue() const
+{
+    return 0;
+}
+
+qreal KisKeyframeChannel::scalarValue(const KisKeyframeSP keyframe) const
+{
+    Q_UNUSED(keyframe);
+
+    return 0;
+}
+
+void KisKeyframeChannel::setScalarValue(KisKeyframeSP keyframe, qreal value, KUndo2Command *parentCommand)
+{
+    Q_UNUSED(keyframe);
+    Q_UNUSED(value);
+    Q_UNUSED(parentCommand);
+}

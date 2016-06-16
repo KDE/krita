@@ -26,42 +26,23 @@ struct KisKeyframe::Private
 {
     QPointer<KisKeyframeChannel> channel;
     int time;
-    quintptr data;
 
     InterpolationMode interpolationMode;
     QPointF leftTangent;
     QPointF rightTangent;
 
-    Private(KisKeyframeChannel *channel, int time, quintptr data)
-        : channel(channel), time(time), data(data), interpolationMode(Constant)
+    Private(KisKeyframeChannel *channel, int time)
+        : channel(channel), time(time), interpolationMode(Constant)
     {}
 };
 
-KisKeyframe::KisKeyframe(KisKeyframeChannel *channel, int time, void* data)
-    : m_d(new Private(channel, time, (quintptr)data))
+KisKeyframe::KisKeyframe(KisKeyframeChannel *channel, int time)
+    : m_d(new Private(channel, time))
 {}
 
-KisKeyframe::KisKeyframe(KisKeyframeChannel *channel, int time, quint32 value)
-    : m_d(new Private(channel, time, value))
-{}
 
 KisKeyframe::~KisKeyframe()
 {}
-
-quint32 KisKeyframe::value() const
-{
-    return m_d->data;
-}
-
-void *KisKeyframe::data() const
-{
-    return (void*)m_d->data;
-}
-
-void KisKeyframe::setValue(quint32 value)
-{
-    m_d->data = value;
-}
 
 int KisKeyframe::time() const
 {

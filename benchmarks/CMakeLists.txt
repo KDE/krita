@@ -38,6 +38,8 @@ set(kis_mask_generator_benchmark_SRCS kis_mask_generator_benchmark.cpp)
 set(kis_low_memory_benchmark_SRCS kis_low_memory_benchmark.cpp)
 set(kis_filter_selections_benchmark_SRCS kis_filter_selections_benchmark.cpp)
 set(kis_composition_benchmark_SRCS kis_composition_benchmark.cpp)
+set(kis_thumbnail_benchmark_SRCS kis_thumbnail_benchmark.cpp)
+
 
 krita_add_benchmark(KisDatamanagerBenchmark TESTNAME krita-benchmarks-KisDataManager ${kis_datamanager_benchmark_SRCS})
 krita_add_benchmark(KisHLineIteratorBenchmark TESTNAME krita-benchmarks-KisHLineIterator ${kis_hiterator_benchmark_SRCS})
@@ -56,6 +58,7 @@ krita_add_benchmark(KisMaskGeneratorBenchmark TESTNAME krita-benchmarks-KisMaskG
 krita_add_benchmark(KisLowMemoryBenchmark TESTNAME krita-benchmarks-KisLowMemory ${kis_low_memory_benchmark_SRCS})
 krita_add_benchmark(KisFilterSelectionsBenchmark TESTNAME krita-image-KisFilterSelectionsBenchmark ${kis_filter_selections_benchmark_SRCS})
 krita_add_benchmark(KisCompositionBenchmark TESTNAME krita-benchmarks-KisComposition ${kis_composition_benchmark_SRCS})
+krita_add_benchmark(KisThumbnailBenchmark TESTNAME krita-benchmarks-KisThumbnail ${kis_thumbnail_benchmark_SRCS})
 
 target_link_libraries(KisDatamanagerBenchmark  kritaimage  Qt5::Test)
 target_link_libraries(KisHLineIteratorBenchmark  kritaimage  Qt5::Test)
@@ -77,3 +80,4 @@ if(HAVE_VC)
     set_property(TARGET KisCompositionBenchmark APPEND PROPERTY COMPILE_OPTIONS "${Vc_ARCHITECTURE_FLAGS}")
 endif()
 target_link_libraries(KisMaskGeneratorBenchmark  kritaimage  Qt5::Test)
+target_link_libraries(KisThumbnailBenchmark  kritaimage  Qt5::Test)

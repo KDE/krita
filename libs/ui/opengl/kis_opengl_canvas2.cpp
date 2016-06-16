@@ -72,9 +72,6 @@ public:
 
     bool canvasInitialized{false};
 
-    QVector3D vertices[6];
-    QVector2D texCoords[6];
-
     KisOpenGLImageTexturesSP openGLImageTextures;
 
     QOpenGLShaderProgram *displayShader{0};
@@ -102,8 +99,11 @@ public:
 
     bool wrapAroundMode{false};
 
-    QOpenGLBuffer buffers[3];
     QOpenGLVertexArrayObject vao;
+    QOpenGLBuffer buffers[3];
+
+    QVector3D vertices[6];
+    QVector2D texCoords[6];
 
     int xToColWithWrapCompensation(int x, const QRect &imageRect) {
         int firstImageColumn = openGLImageTextures->xToCol(imageRect.left());
@@ -246,10 +246,12 @@ void KisOpenGLCanvas2::initializeGL()
     glEnableVertexAttribArray(PROGRAM_VERTEX_ATTRIBUTE);
     glEnableVertexAttribArray(PROGRAM_TEXCOORD_ATTRIBUTE);
 
-    for (int i = 0; i < 3; i++) {
-        d->buffers[i].create();
-        d->buffers[i].setUsagePattern(QOpenGLBuffer::StaticDraw);
-    }
+    d->buffers[0].create();
+    d->buffers[0].setUsagePattern(QOpenGLBuffer::StaticDraw);
+    d->buffers[1].create();
+    d->buffers[2].setUsagePattern(QOpenGLBuffer::StaticDraw);
+    d->buffers[3].create();
+    d->buffers[3].setUsagePattern(QOpenGLBuffer::StreamDraw);
 
     d->buffers[0].bind();
     d->buffers[0].allocate(d->vertices, 6 * 3 * sizeof(float));

@@ -154,8 +154,6 @@ void KisSketchPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
         drawConnection(prevMouse, mousePosition, currentLineWidth);
     }
 
-    setCurrentScale(scale);
-    setCurrentRotation(rotation);
 
     qreal thresholdDistance = 0.0;
 

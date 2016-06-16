@@ -98,7 +98,6 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
 
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
 
-    setCurrentScale(scale);
 
     qreal rotation = m_rotationOption.apply(info);
 

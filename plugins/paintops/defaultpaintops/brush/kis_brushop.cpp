@@ -117,8 +117,6 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
 
     qreal rotation = m_rotationOption.apply(info);
 
-    setCurrentScale(scale);
-    setCurrentRotation(rotation);
 
     QPointF cursorPos =
         m_scatterOption.apply(info,

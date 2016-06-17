@@ -45,9 +45,9 @@ double treatLevel2(QString const& expr, bool & noProblem);
 double treatLevel3(QString const& expr, bool & noProblem);
 
 //int functions
-int treatLevel1Int(QString const& expr, bool & noProblem);
-int treatLevel2Int(QString const& expr, bool & noProblem);
-int treatFuncsInt(QString const& expr, bool & noProblem);
+double treatLevel1Int(QString const& expr, bool & noProblem);
+double treatLevel2Int(QString const& expr, bool & noProblem);
+double treatFuncsInt(QString const& expr, bool & noProblem);
 
 namespace KisNumericParser {
 
@@ -84,7 +84,7 @@ int parseIntegerMathExpr(QString const& expr, bool* noProblem)
 				return treatLevel1Int(expr, *noProblem);
         }
 
-		return treatLevel1Int(expr, ok);
+		return qRound(treatLevel1Int(expr, ok));
 
 }
 
@@ -449,7 +449,7 @@ double treatFuncs(QString const& expr, bool & noProblem)
  * \param noProblem A reference to a bool set to true if no problem happened, false otherwise.
  * \return The value of the parsed expression or subexpression or 0 in case of error.
  */
-int treatLevel1Int(QString const& expr, bool & noProblem)
+double treatLevel1Int(QString const& expr, bool & noProblem)
 {
 
         noProblem = true;
@@ -472,7 +472,7 @@ int treatLevel1Int(QString const& expr, bool & noProblem)
                 return 0;
         }
 
-        int result = 0;
+		double result = 0;
 
 		for (int i = 0; i < readyToTreat.size(); i++) {
 
@@ -503,7 +503,7 @@ int treatLevel1Int(QString const& expr, bool & noProblem)
  *
  * The expression should not contain first level operations not nested in parenthesis.
  */
-int treatLevel2Int(const QString &expr, bool &noProblem)
+double treatLevel2Int(const QString &expr, bool &noProblem)
 {
 
         noProblem = true;
@@ -526,7 +526,7 @@ int treatLevel2Int(const QString &expr, bool &noProblem)
                 return 0;
         }
 
-        int result = 0;
+		double result = 0;
 
 		for (int i = 0; i < readyToTreat.size(); i++) {
 
@@ -565,7 +565,7 @@ int treatLevel2Int(const QString &expr, bool &noProblem)
  *
  * The expression should not contain operators not nested anymore. The subexpressions within parenthesis will be treated by recalling the level 1 function.
  */
-int treatFuncsInt(QString const& expr, bool & noProblem)
+double treatFuncsInt(QString const& expr, bool & noProblem)
 {
 
         noProblem = true;
@@ -579,7 +579,7 @@ int treatFuncsInt(QString const& expr, bool & noProblem)
                 int sign = funcExpInteger.capturedTexts()[1].isEmpty() ? 1 : -1;
                 QString subExpr = funcExpInteger.capturedTexts()[2];
 
-                int val = treatLevel1Int(subExpr, noProblem);
+				double val = treatLevel1Int(subExpr, noProblem);
 
 				if (!noProblem) {
                         return 0;
@@ -587,11 +587,9 @@ int treatFuncsInt(QString const& expr, bool & noProblem)
 
                 return sign*val;
 
-		} else if(integerExp.exactMatch(expr.trimmed())) {
-                return QVariant(expr).toInt(&noProblem);
 		} else if(numberExp.exactMatch(expr.trimmed())) {
-                double value = qFloor( QVariant(expr).toDouble(&noProblem));
-                return (value > 0.0) ? value: value + 1;
+				double value = QVariant(expr).toDouble(&noProblem);
+				return value;
         }
 
         noProblem = false;

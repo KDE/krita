@@ -464,14 +464,35 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         }
         // d->resetSavedTabletEvent(event->type());
         break;
-    case QEvent::TouchUpdate:
-        touch_start_block_press_events();
-        KisAbstractInputAction::setInputManager(this);
+    case QEvent::TouchUpdate: {
+        QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
+#ifdef Q_OS_MAC
+        int count = 0;
+        Q_FOREACH (const QTouchEvent::TouchPoint &point, tevent->touchPoints()) {
+            if (point.state() != Qt::TouchPointReleased) {
+                count++;
+            }
+        }
 
-        retval = d->matcher.touchUpdateEvent(static_cast<QTouchEvent*>(event));
+        if (count < 2 && tevent->touchPoints().length() > count) {
+            touch_stop_block_press_events();
+            d->saveTouchEvent(tevent);
+            retval = d->matcher.touchEndEvent(tevent);
+            delete d->lastTouchEvent;
+            d->lastTouchEvent = 0;
+        } else {
+#endif
+            touch_start_block_press_events();
+            KisAbstractInputAction::setInputManager(this);
+            retval = d->matcher.touchUpdateEvent(tevent);
+#ifdef Q_OS_MAC
+        }
+#endif
         event->accept();
+
         // d->resetSavedTabletEvent(event->type());
         break;
+    }
     case QEvent::TouchEnd:
         touch_stop_block_press_events();
         d->saveTouchEvent(static_cast<QTouchEvent*>(event));

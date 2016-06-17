@@ -1224,22 +1224,20 @@ void QOpenGL2PaintEngineExPrivate::composite(const QOpenGLRect& boundingRect)
 
 qDebug() << "CALLING PAINTENGINE::COMPOSITE()";
     funcs.glEnableVertexAttribArray(GL_VERTEX_ARRAY_BINDING);
-    QOpenGLBuffer buffer(QOpenGLBuffer::VertexBuffer);
-    buffer.create();
-    buffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    buffer.bind();
+
+    vbo.bind();
 
     for (int i = 0; i < 8; i++) {
         qDebug() << staticVertexCoordinateArray[i];
     }
 
-    buffer.allocate(staticVertexCoordinateArray, 8 * sizeof(float));
+    vbo.allocate(staticVertexCoordinateArray, 8 * sizeof(float));
 
     setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, staticVertexCoordinateArray);
 
     funcs.glDrawArrays(GL_TRIANGLE_FAN, 0, 8 / 2);
 
-    buffer.release();
+    vbo.release();
     /////////////////////
 
     //setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, staticVertexCoordinateArray);
@@ -1354,11 +1352,9 @@ void QOpenGL2PaintEngineExPrivate::stroke(const QVectorPath &path, const QPen &p
 
     if (opaque) {
         prepareForDraw(opaque);
-        funcs.glEnableVertexAttribArray(0);
-        QOpenGLBuffer buffer1(QOpenGLBuffer::VertexBuffer);
-        buffer1.create();
-        buffer1.setUsagePattern(QOpenGLBuffer::StaticDraw);
-        buffer1.bind();
+        funcs.glEnableVertexAttribArray(QT_VERTEX_COORDS_ATTR);
+
+        vbo.bind();
         // float[] vertices = {
         //
         // }
@@ -1366,13 +1362,13 @@ void QOpenGL2PaintEngineExPrivate::stroke(const QVectorPath &path, const QPen &p
         //     qDebug() << stroker.vertices()[i];
         // }
 
-        buffer1.allocate(stroker.vertices(), stroker.vertexCount() * sizeof(float));
+        vbo.allocate(stroker.vertices(), stroker.vertexCount() * sizeof(float));
 
         setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, stroker.vertices());
 
         funcs.glDrawArrays(GL_TRIANGLE_STRIP, 0, stroker.vertexCount() / 2);
 
-        buffer1.release();
+        vbo.release();
 
 //         QBrush b(Qt::green);
 //         d->setBrush(&b);
@@ -2140,12 +2136,12 @@ bool QOpenGL2PaintEngineEx::begin(QPaintDevice *pdev)
     d->funcs.glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &current_vao);
     qDebug() << "We are currently using engine VAO: " << current_vao;
 
+    d->vbo.create();
+    d->vbo.setUsagePattern(QOpenGLBuffer::StaticDraw);
     // GLuint vao;
     // d->funcs.glGenVertexArrays(1, &vao);
     // qDebug() << "Vao: " << vao;
     // d->funcs.glBindVertexArray(vao);
-
-
 
     for (int i = 0; i < QT_GL_VERTEX_ARRAY_TRACKED_COUNT; ++i)
         d->vertexAttributeArraysEnabledState[i] = false;

@@ -358,6 +358,8 @@ set(kritaui_LIB_SRCS
     KisPaletteModel.cpp
     KisColorsetChooser.cpp
     KisSaveGroupVisitor.cpp
+
+    utils/kis_numparser.cpp
 )
 
 if(WIN32)
@@ -520,6 +522,7 @@ target_include_directories(kritaui
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/flake>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/ora>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tool>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/widgets>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/input/wintab>
 )

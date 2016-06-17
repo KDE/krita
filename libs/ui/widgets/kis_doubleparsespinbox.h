@@ -23,6 +23,8 @@
 
 #include <kritaui_export.h>
 
+class QLabel;
+
 /*!
  * \brief The KisDoubleParseSpinBox class is a cleverer doubleSpinBox, able to parse arithmetic expressions.
  *
@@ -42,7 +44,7 @@ public:
 
 		virtual void stepBy(int steps);
 
-		void setValue(double value); //polymorphism won't work directly, we use a signal/slot hack to do so but if signals are disabled this function will still be usefull.
+		void setValue(double value); //polymorphism won't work directly, we use a signal/slot hack to do so but if signals are disabled this function will still be useful.
 
 Q_SIGNALS:
 
@@ -53,9 +55,9 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-		//! \brief usefull to let the widget change it's stylesheet when an error occured in the last expression.
+		//! \brief useful to let the widget change it's stylesheet when an error occured in the last expression.
 		void setErrorStyle();
-		//! \brief usefull to let the widget reset it's stylesheet when there's no more error.
+		//! \brief useful to let the widget reset it's stylesheet when there's no more error.
 		void clearErrorStyle();
 		//! \brief say the widget to return to an error free state.
 		void clearError();
@@ -65,6 +67,8 @@ protected:
 		mutable QString* _lastExprParsed;
 		mutable bool _isLastValid;
 		mutable double _oldValue;
+
+		QLabel* _warningIcon;
 };
 
 #endif // KISDOUBLEPARSESPINBOX_H

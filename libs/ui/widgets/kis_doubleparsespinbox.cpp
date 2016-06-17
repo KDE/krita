@@ -20,6 +20,10 @@
 
 #include "kis_numparser.h"
 
+#include <QLabel>
+#include <QPixmap>
+#include <QIcon>
+
 KisDoubleParseSpinBox::KisDoubleParseSpinBox(QWidget *parent) :
 	QDoubleSpinBox(parent),
 	_isLastValid(true)
@@ -38,6 +42,12 @@ KisDoubleParseSpinBox::KisDoubleParseSpinBox(QWidget *parent) :
 					this, SLOT(setErrorStyle()));
 
 	_oldValue = value();
+
+	_warningIcon = new QLabel(this);
+	_warningIcon->setPixmap(QIcon(":/./16_light_warning.svg").pixmap(16, 16));
+	_warningIcon->setStyleSheet("background:transparent;");
+	_warningIcon->move(1, 1);
+	_warningIcon->setVisible(false);
 
 }
 
@@ -121,14 +131,17 @@ void KisDoubleParseSpinBox::setValue(double value)
 void KisDoubleParseSpinBox::setErrorStyle()
 {
 	if (!_isLastValid) {
-			setStyleSheet("Background: red; color: white;");
+		setStyleSheet("Background: red; color: white; padding-left: 18px;");
+		_warningIcon->move(-14, size().height()/2 - 16/2);
+		_warningIcon->setVisible(true);
 	}
 }
 
 void KisDoubleParseSpinBox::clearErrorStyle()
 {
 	if (_isLastValid) {
-			setStyleSheet("");
+		_warningIcon->setVisible(false);
+		setStyleSheet("");
 	}
 }
 void KisDoubleParseSpinBox::clearError()

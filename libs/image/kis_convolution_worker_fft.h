@@ -169,7 +169,7 @@ public:
 
     struct FFTInfo {
         FFTInfo(qreal _fftScale,
-                QList<KoChannelInfo*> _convChannelList,
+                const QList<KoChannelInfo*> &_convChannelList,
                 const KisConvolutionKernelSP kernel,
                 const KoColorSpace */*colorSpace*/)
             : fftScale(_fftScale),
@@ -470,7 +470,7 @@ private:
         }
     }
 
-    void fftLogMatrix(double* channel, QString f)
+    void fftLogMatrix(double* channel, const QString &f)
     {
         KisConvolutionWorkerFFTLock::fftwMutex.lock();
         QString filename(QDir::homePath() + "/log_" + f + ".txt");

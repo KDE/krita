@@ -295,8 +295,9 @@ KoColor KoColor::fromXML(const QDomElement& elt, const QString & bitDepthId, con
     QString profileName;
     if (elt.tagName() != "sRGB") {
         profileName = elt.attribute("space", "");
-        if (aliases.contains(profileName)) {
-            profileName = aliases.value(profileName);
+        const QHash<QString, QString>::ConstIterator it = aliases.find(profileName);
+        if (it != aliases.end()) {
+            profileName = it.value();
         }
         if (!KoColorSpaceRegistry::instance()->profileByName(profileName)) {
             profileName.clear();

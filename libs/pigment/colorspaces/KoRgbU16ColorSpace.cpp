@@ -69,7 +69,7 @@ void KoRgbU16ColorSpace::toQColor(const quint8 * src, QColor *c, const KoColorPr
     normalisedChannelsValue(src, channelValues);
     c->setRgbF(channelValues[2], channelValues[1], channelValues[0], channelValues[3]);
 }
-void KoRgbU16ColorSpace::toHSY(QVector <double> channelValues, qreal *hue, qreal *sat, qreal *luma) const
+void KoRgbU16ColorSpace::toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const
 {
     
     RGBToHSY(channelValues[0],channelValues[1],channelValues[2], hue, sat, luma);
@@ -84,7 +84,7 @@ QVector <double> KoRgbU16ColorSpace::fromHSY(qreal *hue, qreal *sat, qreal *luma
 
 }
 
-void KoRgbU16ColorSpace::toYUV(QVector <double> channelValues, qreal *y, qreal *u, qreal *v) const
+void KoRgbU16ColorSpace::toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const
 {
     RGBToYUV(channelValues[0],channelValues[1],channelValues[2], y, u, v);
 }

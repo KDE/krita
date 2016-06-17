@@ -66,7 +66,7 @@ void GrayF32ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) cons
     p[1] = 1.0;
 }
 
-void GrayF32ColorSpace::toHSY(QVector <double> channelValues, qreal *, qreal *, qreal *luma) const
+void GrayF32ColorSpace::toHSY(const QVector<double> &channelValues, qreal *, qreal *, qreal *luma) const
 {
     *luma = channelValues[0];
 }
@@ -79,7 +79,7 @@ QVector <double> GrayF32ColorSpace::fromHSY(qreal *, qreal *, qreal *luma) const
     return channelValues;
 }
 
-void GrayF32ColorSpace::toYUV(QVector <double> channelValues, qreal *y, qreal *, qreal *) const
+void GrayF32ColorSpace::toYUV(const QVector<double> &channelValues, qreal *y, qreal *, qreal *) const
 {
     *y = channelValues[0];
 }

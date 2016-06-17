@@ -295,11 +295,16 @@ void KisOpenGLCanvas2::paintGL()
     QPainter gc(this);
     //renderDecorations(&gc);
     QPen pen;
-    pen.setWidth(3);
-    pen.setJoinStyle(Qt::RoundJoin);
+    pen.setWidth(10);
     pen.setBrush(Qt::green);
+
+    pen.setJoinStyle(Qt::RoundJoin);
     gc.setPen(pen);
     gc.drawRect(200, 200, 100, 100);
+
+    pen.setJoinStyle(Qt::BevelJoin);
+    gc.setPen(pen);
+    gc.drawRect(400, 200, 100, 100);
     gc.end();
 
     if (!OPENGL_SUCCESS) {

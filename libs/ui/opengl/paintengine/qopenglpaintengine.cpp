@@ -2127,21 +2127,22 @@ bool QOpenGL2PaintEngineEx::begin(QPaintDevice *pdev)
     d->funcs.initializeOpenGLFunctions();
 //    qDebug() << "We have no vao yet, so it's: " << d->vao;
 
-    d->vao.create();
+    if (!d->vao.isCreated()) {
+        d->vao.create();
+        qDebug() << "BEGIN:: We generate a new VAO for the engine: " << d->vao.objectId();
+    }
+
     d->vao.bind();
-    qDebug() << "We generate a new VAO for the engine: " << d->vao.objectId();
-    qDebug() << "We bound our engine vao with error: " << d->funcs.glGetError();
 
-    GLint current_vao;
-    d->funcs.glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &current_vao);
-    qDebug() << "We are currently using engine VAO: " << current_vao;
+    qDebug() << "BEGIN:: We are currently using engine VAO: " << d->vao.objectId();
 
-    d->vbo.create();
-    d->vbo.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    // GLuint vao;
-    // d->funcs.glGenVertexArrays(1, &vao);
-    // qDebug() << "Vao: " << vao;
-    // d->funcs.glBindVertexArray(vao);
+    if (!d->vbo.isCreated()) {
+        d->vbo.create();
+        d->vbo.setUsagePattern(QOpenGLBuffer::StaticDraw);
+        qDebug() << "BEGIN:: We generate a new VBO for the engine: " << d->vbo.bufferId();
+    }
+
+    qDebug() << "BEGIN:: We are using engine VBO: " << d->vbo.bufferId();
 
     for (int i = 0; i < QT_GL_VERTEX_ARRAY_TRACKED_COUNT; ++i)
         d->vertexAttributeArraysEnabledState[i] = false;
@@ -2198,6 +2199,8 @@ bool QOpenGL2PaintEngineEx::end()
     d->transferMode(BrushDrawingMode);
 
     ctx->d_func()->active_engine = 0;
+
+    //d->vbo.destroy();
 
     d->resetGLState();
 

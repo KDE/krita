@@ -20,8 +20,9 @@
 
 #include "kis_numparser.h"
 
-#include <QDebug>
-#include <iostream>
+#include <QLabel>
+#include <QPixmap>
+#include <QIcon>
 
 KisIntParseSpinBox::KisIntParseSpinBox(QWidget *parent) :
     QSpinBox(parent),
@@ -38,6 +39,14 @@ KisIntParseSpinBox::KisIntParseSpinBox(QWidget *parent) :
 
 	connect(this, SIGNAL(errorWhileParsing(QString)),
 					this, SLOT(setErrorStyle()));
+
+	_oldVal = value();
+
+	_warningIcon = new QLabel(this);
+	_warningIcon->setPixmap(QIcon(":/./16_light_warning.svg").pixmap(16, 16));
+	_warningIcon->setStyleSheet("background:transparent;");
+	_warningIcon->move(1, 1);
+	_warningIcon->setVisible(false);
 
 }
 
@@ -133,13 +142,16 @@ void KisIntParseSpinBox::setValue(int val)
 void KisIntParseSpinBox::setErrorStyle()
 {
 	if (!_isLastValid) {
-        setStyleSheet("Background: red; color: white;");
+		setStyleSheet("Background: red; color: white; padding-left: 18px;");
+		_warningIcon->move(-14, size().height()/2 - 16/2);
+		_warningIcon->setVisible(true);
     }
 }
 
 void KisIntParseSpinBox::clearErrorStyle()
 {
 	if (_isLastValid) {
+		_warningIcon->setVisible(false);
         setStyleSheet("");
     }
 }

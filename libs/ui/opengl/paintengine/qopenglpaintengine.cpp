@@ -93,6 +93,9 @@ QOpenGL2PaintEngineExPrivate::~QOpenGL2PaintEngineExPrivate()
 {
     delete shaderManager;
 
+    vbo.destroy();
+    vao.destroy();
+
     while (pathCaches.size()) {
         QVectorPath::CacheEntry *e = *(pathCaches.constBegin());
         e->cleanup(e->engine, e->data);

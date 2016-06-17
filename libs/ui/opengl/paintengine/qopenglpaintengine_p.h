@@ -56,6 +56,7 @@
 #include <private/qdatabuffer_p.h>
 #include <private/qtriangulatingstroker_p.h>
 #include <qopenglvertexarrayobject.h>
+#include <qopenglbuffer.h>
 
 #include <private/qopenglextensions_p.h>
 #include <stdio.h>
@@ -189,7 +190,8 @@ public:
             nativePaintingActive(false),
             inverseScale(1),
             lastTextureUnitUsed(QT_UNKNOWN_TEXTURE_UNIT),
-            vao(0)
+            vao(0),
+            vbo(QOpenGLBuffer::VertexBuffer)
     { }
 
     ~QOpenGL2PaintEngineExPrivate();
@@ -302,6 +304,7 @@ public:
     GLfloat staticTextureCoordinateArray[8];
 
     QOpenGLVertexArrayObject vao;
+    QOpenGLBuffer vbo;
 
     bool snapToPixelGrid;
     bool nativePaintingActive;

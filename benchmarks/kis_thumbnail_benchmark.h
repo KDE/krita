@@ -32,14 +32,21 @@ class KisThumbnailBenchmark : public QObject
 private:
     const KoColorSpace * m_colorSpace;
     KisPaintDeviceSP m_dev;
+    QVector<QImage> m_thumbnails;
+    QSize m_thumbnailSizeLimit;
+    int m_oversampleRatio;
+    int m_skipCount;
 
-private Q_SLOTS:
-
+    private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
 
     // createThumbnail
     void benchmarkCreateThumbnail();
+
+    void benchmarkCreateThumbnailHiQ();
+
+    void benchmarkCreateThumbnailHiQThumbnailIterator();
 };
 
 

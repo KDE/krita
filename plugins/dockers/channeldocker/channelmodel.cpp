@@ -30,7 +30,7 @@
 
 ChannelModel::ChannelModel(QObject* parent):
     QAbstractTableModel(parent),
-    m_canvas(nullptr), m_skipCount(1), m_oversampleRatio(4)
+    m_canvas(nullptr), m_oversampleRatio(4)
 {
     setThumbnailSizeLimit(QSize(64,64));
 }
@@ -80,6 +80,7 @@ QVariant ChannelModel::data(const QModelIndex& index, int role) const
 
 QVariant ChannelModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+    Q_UNUSED(section); Q_UNUSED( orientation ); Q_UNUSED(role);
     return QVariant();
 }
 
@@ -210,76 +211,44 @@ void ChannelModel::updateThumbnails(void)
 {
 
     if( m_canvas && m_canvas->image() ){
-        auto cs = m_canvas->image()->colorSpace();
+        auto canvas_image = m_canvas->image();
+        auto cs = canvas_image->colorSpace();
         auto channelCount = cs->channelCount();
 
-        KisPaintDeviceSP dev = m_canvas->image()->projection();
+        KisPaintDeviceSP dev = canvas_image->projection();
 
-        initThumbnailImages( m_canvas->image()->size(), channelCount );
+        float ratio = std::min( (float)m_thumbnailSizeLimit.width()/canvas_image->width(),  (float)m_thumbnailSizeLimit.height()/canvas_image->height());
+        QSize thumbnailSize = ratio*canvas_image->size();
+        QSize thumbnailSizeOversample = m_oversampleRatio*thumbnailSize;
 
-        int width = m_thumbnails[0].width();
-        int height = m_thumbnails[0].height();
+        m_thumbnails.resize(channelCount);
 
-        QVector<uchar*> thumbnailPointerCache(m_thumbnails.count());
+        QVector<uchar*> image_cache(channelCount);
+        auto image_cache_iterator = image_cache.begin();
+        for(auto &img: m_thumbnails ){
+            img = QImage(thumbnailSizeOversample,QImage::Format_Grayscale8);
+            *(image_cache_iterator++) = img.bits();
+        }
 
         //step 1 - decimating the image to 4x the thumbnail size. We pick up pixels every skipCount.
         //This is inaccurate, but fast.
-        KisHLineConstIteratorSP it = dev->createHLineConstIteratorNG(0,0,m_canvas->image()->width());
-        for( int y=0; y<height; y++){
-            for(int i=0; i<thumbnailPointerCache.count(); ++i){
-                //.scanline() is expensive, cache values for reuse
-                //because of alignment, can't use x+width*y, have to ask
-                //qimage for first byte of the row.
-                thumbnailPointerCache[i]=m_thumbnails[i].scanLine(y);
+        auto thumbnailDev = dev->createThumbnailDevice(thumbnailSizeOversample.width(), thumbnailSizeOversample.height());
+        KisSequentialConstIterator it( thumbnailDev, QRect(0,0,thumbnailSizeOversample.width(), thumbnailSizeOversample.height()));
+
+        do{
+            const quint8* pixel = it.rawDataConst();
+            for(quint32 i=0; i<channelCount; ++i){
+                *(image_cache[i]++)=cs->scaleToU8(pixel,i);
             }
-            for( int x=0; x<width; x++){
-                for( quint32 i=0; i<channelCount; ++i){
-                    //channel thumbnails are grayscale 8 bit images.
-                    quint8 pixel = cs->scaleToU8(it->rawDataConst(),i);
-                    *(thumbnailPointerCache[i]+x)=pixel;
-                }
-                if(!it->nextPixels(m_skipCount))
-                    break;
-            }
-            it->resetPixelPos(); //this is required. otherwise x coordinate of the iterator is not reset.
-            for( int i=0; i<m_skipCount; it->nextRow(), ++i ); //since there is no nextRows(n), emulate it here.
-        }
+        }while(it.nextPixel());
 
         //step 2. Smooth downsampling to the final thumbnail size. Slower, but image is small at this time.
-        for(int i=0; i<m_thumbnails.count(); ++i){
-            QSize sz = m_thumbnails[i].size();
-            sz /= m_oversampleRatio;
+        for(auto &img: m_thumbnails ){
             //for better quality we apply smooth transformation
             //speed is not an issue, because thumbnail image has been decimated and is small.
-            m_thumbnails[i] = m_thumbnails[i].scaled( sz, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+            img = img.scaled(thumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation );
         }
     }
 }
-
-//Compute thumbnail size.
-//Preallocate qimage for thumbnail generation
-void ChannelModel::initThumbnailImages(QSize size, int nChannels)
-{
-    m_thumbnails.clear();
-    m_thumbnails.resize(nChannels);
-
-    QSize thumbnailSizeOversample = m_thumbnailSizeLimit;
-
-    //We allocate space for image that is oversampleRatio times larger than the end image
-    thumbnailSizeOversample *= m_oversampleRatio;
-
-    //compute decimation step size
-    m_skipCount = static_cast<int>(std::max( size.width()/thumbnailSizeOversample.width(), size.height()/thumbnailSizeOversample.height() ));
-    m_skipCount = std::max(m_skipCount, 1); //skip count of 1, means we are getting back the original image. Can't go lower.
-
-    thumbnailSizeOversample = size;
-    thumbnailSizeOversample /= m_skipCount;
-
-    for(int i=0; i<nChannels; ++i){
-        //channel thumbnails are grayscale images.
-        m_thumbnails[i]=QImage(thumbnailSizeOversample,QImage::Format_Grayscale8);
-    }
-}
-
 
 #include "moc_channelmodel.cpp"

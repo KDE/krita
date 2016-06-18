@@ -53,13 +53,11 @@ Q_SIGNALS:
 
 private:
     void updateThumbnails( );
-    void initThumbnailImages(QSize size, int nChannels );
 
 private:
     KisCanvas2* m_canvas;
     QVector<QImage> m_thumbnails;
     QSize m_thumbnailSizeLimit;
-    int m_skipCount;
     int m_oversampleRatio;
 };
 

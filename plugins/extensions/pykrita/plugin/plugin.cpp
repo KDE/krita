@@ -22,6 +22,7 @@
 #include <klocalizedstring.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
+#include <KoResourcePaths.h>
 
 #include <kis_preference_set_registry.h>
 #include <pyqtpluginsettings.h>
@@ -39,6 +40,14 @@ KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
 {
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
     PyQtPluginSettingsFactory* settingsFactory = new PyQtPluginSettingsFactory(&m_engine);
+
+    QByteArray pythonPath = qgetenv("PYTHONPATH");
+    QStringList pluginDirectories = KoResourcePaths::findDirs("data", "pykrita/");
+    Q_FOREACH(const QString pluginDir, pluginDirectories) {
+        pythonPath.prepend(pluginDir + ":");
+    }
+    qputenv("PYTHONPATH", pythonPath);
+
 
     //load and save preferences
     //if something in kritarc is missing, then the default from this load function will be used and saved back to kconfig.

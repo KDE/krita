@@ -26,7 +26,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="16"
-     inkscape:cx="9.4075593"
+     inkscape:cx="-9.0611907"
      inkscape:cy="11.806452"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -49,7 +49,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -76,18 +76,14 @@
        inkscape:transform-center-x="0.03785892"
        inkscape:transform-center-y="-2.4009558"
        transform="matrix(0.8625497,0,0,0.90178074,24.231758,37.961365)" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:12.54406357px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
-       x="185.87758"
-       y="385.91849"
-       id="text8070"
-       sodipodi:linespacing="125%"
-       transform="scale(0.9780062,1.0224884)"><tspan
-         sodipodi:role="line"
-         id="tspan8072"
-         x="185.87758"
-         y="385.91849"
-         style="fill:#ffffff;fill-opacity:1;">!</tspan></text>
+    <g
+       transform="scale(0.9780062,1.0224884)"
+       style="font-style:normal;font-weight:normal;font-size:12.54406357px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="text8070">
+      <path
+         d="m 187.77021,384.36273 1.24338,0 0,1.55576 -1.24338,0 0,-1.55576 z m 0,-7.58891 1.24338,0 0,4.01189 -0.1225,2.18664 -0.99225,0 -0.12863,-2.18664 0,-4.01189 z"
+         style="fill:#ffffff;fill-opacity:1"
+         id="path8069" />
+    </g>
   </g>
 </svg>

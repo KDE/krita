@@ -81,7 +81,7 @@ int parseIntegerMathExpr(QString const& expr, bool* noProblem)
 		bool ok = true; //intermediate variable to pass by reference to the sublevel parser (if no pointer is provided).
 
 		if (noProblem != nullptr) {
-				return treatLevel1Int(expr, *noProblem);
+				return qRound(treatLevel1Int(expr, *noProblem));
         }
 
 		return qRound(treatLevel1Int(expr, ok));

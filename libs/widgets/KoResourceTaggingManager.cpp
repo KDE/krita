@@ -295,6 +295,7 @@ void KoResourceTaggingManager::updateTaggedResourceView()
     d->model->setCurrentTag(d->currentTag);
     d->model->updateServer();
     d->originalResources = d->model->currentlyVisibleResources();
+    emit updateView();
 }
 
 void KoResourceTaggingManager::tagChooserIndexChanged(const QString& lineEditText)

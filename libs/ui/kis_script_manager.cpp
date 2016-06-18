@@ -66,17 +66,6 @@ void KisScriptManager::setup(KActionCollection * ac, KisActionManager *actionMan
 void KisScriptManager::updateGUI()
 {
     if (!d->view) return;
-
-//    bool enable = false;
-
-//    KisNodeSP activeNode = d->view->activeNode();
-//    enable = activeNode && activeNode->hasEditablePaintDevice();
-
-//    d->reapplyAction->setEnabled(enable);
-
-//    foreach(KAction *action, d->script2Action.values()) {
-//        action->setEnabled(enable);
-    //    }
 }
 
 void KisScriptManager::addAction(QAction *action)

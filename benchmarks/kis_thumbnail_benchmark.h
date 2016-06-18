@@ -41,7 +41,6 @@ private:
     void initTestCase();
     void cleanupTestCase();
 
-    // createThumbnail
     void benchmarkCreateThumbnail();
 
     void benchmarkCreateThumbnailHiQ();

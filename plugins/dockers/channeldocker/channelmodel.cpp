@@ -39,25 +39,26 @@ ChannelModel::~ChannelModel()
 {
 }
 
-QVariant ChannelModel::data(const QModelIndex& index, int role) const
+QVariant ChannelModel::data (const QModelIndex& index, int role) const
 {
     if (m_canvas && index.isValid()) {
         auto rootLayer = m_canvas->image()->rootLayer();
         auto cs = rootLayer->colorSpace();
         auto channels = cs->channels();
 
-        int channelIndex = KoChannelInfo::displayPositionToChannelIndex(index.row(), channels);
+        int channelIndex = KoChannelInfo::displayPositionToChannelIndex (index.row(), channels);
 
         switch (role) {
         case Qt::DisplayRole:
         {
-            if( index.column()==2 )
+            if (index.column() == 2) {
                 return channels.at(channelIndex)->name();
+            }
             return QVariant();
         }
         case Qt::DecorationRole:
         {
-            if( index.column()==1 ){
+            if (index.column()==1) {
                 Q_ASSERT(m_thumbnails.count()>index.row());
                 return QVariant(m_thumbnails.at(index.row()));
             }
@@ -103,7 +104,7 @@ int ChannelModel::columnCount(const QModelIndex& /*parent*/) const
 
 bool ChannelModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-    if( m_canvas && m_canvas->image() ){
+    if (m_canvas && m_canvas->image()) {
         auto rootLayer = m_canvas->image()->rootLayer();
         auto cs = rootLayer->colorSpace();
         auto channels = cs->channels();
@@ -135,7 +136,7 @@ bool ChannelModel::setData(const QModelIndex& index, const QVariant& value, int 
 //this makes it fast to select single color channel
 void ChannelModel::rowActivated(const QModelIndex &index)
 {
-    if( m_canvas && m_canvas->image() ){
+    if (m_canvas && m_canvas->image()) {
         auto rootLayer = m_canvas->image()->rootLayer();
         auto cs = rootLayer->colorSpace();
         auto channels = cs->channels();
@@ -153,7 +154,6 @@ void ChannelModel::rowActivated(const QModelIndex &index)
                 flags.setBit( i, (i==channelIndex) );
             }
         }
-
 
         rootLayer->setChannelFlags(flags);
 
@@ -178,10 +178,10 @@ void ChannelModel::setThumbnailSizeLimit(QSize size)
 
 void ChannelModel::slotSetCanvas(KisCanvas2 *canvas)
 {
-    if( m_canvas != canvas ){
+    if (m_canvas != canvas) {
         beginResetModel();
         m_canvas = canvas;
-        if( m_canvas && m_canvas->image() ){
+        if (m_canvas && m_canvas->image()) {
             updateThumbnails();
         }
         endResetModel();
@@ -210,7 +210,7 @@ void ChannelModel::updateData( KisCanvas2 *canvas )
 void ChannelModel::updateThumbnails(void)
 {
 
-    if( m_canvas && m_canvas->image() ){
+    if (m_canvas && m_canvas->image()) {
         auto canvas_image = m_canvas->image();
         auto cs = canvas_image->colorSpace();
         auto channelCount = cs->channelCount();
@@ -225,7 +225,7 @@ void ChannelModel::updateThumbnails(void)
 
         QVector<uchar*> image_cache(channelCount);
         auto image_cache_iterator = image_cache.begin();
-        for(auto &img: m_thumbnails ){
+        for (auto &img: m_thumbnails ) {
             img = QImage(thumbnailSizeOversample,QImage::Format_Grayscale8);
             *(image_cache_iterator++) = img.bits();
         }
@@ -233,17 +233,17 @@ void ChannelModel::updateThumbnails(void)
         //step 1 - decimating the image to 4x the thumbnail size. We pick up pixels every skipCount.
         //This is inaccurate, but fast.
         auto thumbnailDev = dev->createThumbnailDevice(thumbnailSizeOversample.width(), thumbnailSizeOversample.height());
-        KisSequentialConstIterator it( thumbnailDev, QRect(0,0,thumbnailSizeOversample.width(), thumbnailSizeOversample.height()));
+        KisSequentialConstIterator it (thumbnailDev, QRect(0,0,thumbnailSizeOversample.width(), thumbnailSizeOversample.height()));
 
         do{
             const quint8* pixel = it.rawDataConst();
-            for(quint32 i=0; i<channelCount; ++i){
+            for (quint32 i=0; i<channelCount; ++i) {
                 *(image_cache[i]++)=cs->scaleToU8(pixel,i);
             }
-        }while(it.nextPixel());
+        }while (it.nextPixel());
 
         //step 2. Smooth downsampling to the final thumbnail size. Slower, but image is small at this time.
-        for(auto &img: m_thumbnails ){
+        for (auto &img: m_thumbnails) {
             //for better quality we apply smooth transformation
             //speed is not an issue, because thumbnail image has been decimated and is small.
             img = img.scaled(thumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation );

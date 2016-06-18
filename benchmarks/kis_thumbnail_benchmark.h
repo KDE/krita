@@ -37,7 +37,7 @@ private:
     int m_oversampleRatio;
     int m_skipCount;
 
-    private Q_SLOTS:
+private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
 

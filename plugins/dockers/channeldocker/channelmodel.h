@@ -31,7 +31,7 @@ class ChannelModel : public QAbstractTableModel
 public:
     ChannelModel(QObject* parent = 0);
     virtual ~ChannelModel();
-    
+
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -45,14 +45,14 @@ public:
 public Q_SLOTS:
     void slotSetCanvas(KisCanvas2* canvas);
     void slotColorSpaceChanged(const KoColorSpace *colorSpace);
-    void updateData( KisCanvas2 *canvas );
+    void updateData(KisCanvas2 *canvas);
     void rowActivated(const QModelIndex &index);
 
 Q_SIGNALS:
     void channelFlagsChanged();
 
 private:
-    void updateThumbnails( );
+    void updateThumbnails();
 
 private:
     KisCanvas2* m_canvas;

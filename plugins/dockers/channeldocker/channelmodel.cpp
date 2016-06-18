@@ -32,34 +32,32 @@ ChannelModel::ChannelModel(QObject* parent):
     QAbstractTableModel(parent),
     m_canvas(nullptr), m_oversampleRatio(4)
 {
-    setThumbnailSizeLimit(QSize(64,64));
+    setThumbnailSizeLimit(QSize(64, 64));
 }
 
 ChannelModel::~ChannelModel()
 {
 }
 
-QVariant ChannelModel::data (const QModelIndex& index, int role) const
+QVariant ChannelModel::data(const QModelIndex& index, int role) const
 {
     if (m_canvas && index.isValid()) {
         auto rootLayer = m_canvas->image()->rootLayer();
         auto cs = rootLayer->colorSpace();
         auto channels = cs->channels();
 
-        int channelIndex = KoChannelInfo::displayPositionToChannelIndex (index.row(), channels);
+        int channelIndex = KoChannelInfo::displayPositionToChannelIndex(index.row(), channels);
 
         switch (role) {
-        case Qt::DisplayRole:
-        {
+        case Qt::DisplayRole: {
             if (index.column() == 2) {
                 return channels.at(channelIndex)->name();
             }
             return QVariant();
         }
-        case Qt::DecorationRole:
-        {
-            if (index.column()==1) {
-                Q_ASSERT(m_thumbnails.count()>index.row());
+        case Qt::DecorationRole: {
+            if (index.column() == 1) {
+                Q_ASSERT(m_thumbnails.count() > index.row());
                 return QVariant(m_thumbnails.at(index.row()));
             }
             return QVariant();
@@ -67,7 +65,7 @@ QVariant ChannelModel::data (const QModelIndex& index, int role) const
         case Qt::CheckStateRole: {
             Q_ASSERT(index.row() < rowCount());
             Q_ASSERT(index.column() < columnCount());
-            
+
             if (index.column() == 0) {
                 QBitArray flags = rootLayer->channelFlags();
                 return (flags.isEmpty() || flags.testBit(channelIndex)) ? Qt::Checked : Qt::Unchecked;
@@ -81,7 +79,7 @@ QVariant ChannelModel::data (const QModelIndex& index, int role) const
 
 QVariant ChannelModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    Q_UNUSED(section); Q_UNUSED( orientation ); Q_UNUSED(role);
+    Q_UNUSED(section); Q_UNUSED(orientation); Q_UNUSED(role);
     return QVariant();
 }
 
@@ -113,9 +111,9 @@ bool ChannelModel::setData(const QModelIndex& index, const QVariant& value, int 
         int channelIndex = KoChannelInfo::displayPositionToChannelIndex(index.row(), channels);
 
         if (role == Qt::CheckStateRole) {
-            QBitArray flags = cs->channelFlags(true,true);
+            QBitArray flags = cs->channelFlags(true, true);
             Q_ASSERT(!flags.isEmpty());
-            if( flags.isEmpty())
+            if (flags.isEmpty())
                 return false;
 
             //flags = flags.isEmpty() ? cs->channelFlags(true, true) : flags;
@@ -123,7 +121,7 @@ bool ChannelModel::setData(const QModelIndex& index, const QVariant& value, int 
             rootLayer->setChannelFlags(flags);
 
             emit channelFlagsChanged();
-            emit dataChanged(this->index(0,0),this->index(channels.count(),0));
+            emit dataChanged(this->index(0, 0), this->index(channels.count(), 0));
             return true;
         }
     }
@@ -144,21 +142,21 @@ void ChannelModel::rowActivated(const QModelIndex &index)
 
         int channelIndex = KoChannelInfo::displayPositionToChannelIndex(index.row(), channels);
 
-        QBitArray flags = cs->channelFlags(true,true);
+        QBitArray flags = cs->channelFlags(true, true);
         Q_ASSERT(!flags.isEmpty());
-        if(flags.isEmpty())
+        if (flags.isEmpty())
             return;
 
-        for(int i=0; i<channels.count(); ++i){
-            if(channels[i]->channelType() != KoChannelInfo::ALPHA){
-                flags.setBit( i, (i==channelIndex) );
+        for (int i = 0; i < channels.count(); ++i) {
+            if (channels[i]->channelType() != KoChannelInfo::ALPHA) {
+                flags.setBit(i, (i == channelIndex));
             }
         }
 
         rootLayer->setChannelFlags(flags);
 
         emit channelFlagsChanged();
-        emit dataChanged(this->index(0,0),this->index(channels.count(),0));
+        emit dataChanged(this->index(0, 0), this->index(channels.count(), 0));
 
     }
 }
@@ -196,7 +194,7 @@ void ChannelModel::slotColorSpaceChanged(const KoColorSpace *colorSpace)
     endResetModel();
 }
 
-void ChannelModel::updateData( KisCanvas2 *canvas )
+void ChannelModel::updateData(KisCanvas2 *canvas)
 {
     beginResetModel();
     m_canvas = canvas;
@@ -217,36 +215,36 @@ void ChannelModel::updateThumbnails(void)
 
         KisPaintDeviceSP dev = canvas_image->projection();
 
-        float ratio = std::min( (float)m_thumbnailSizeLimit.width()/canvas_image->width(),  (float)m_thumbnailSizeLimit.height()/canvas_image->height());
-        QSize thumbnailSize = ratio*canvas_image->size();
-        QSize thumbnailSizeOversample = m_oversampleRatio*thumbnailSize;
+        float ratio = std::min((float)m_thumbnailSizeLimit.width() / canvas_image->width(), (float)m_thumbnailSizeLimit.height() / canvas_image->height());
+        QSize thumbnailSize = ratio * canvas_image->size();
+        QSize thumbnailSizeOversample = m_oversampleRatio * thumbnailSize;
 
         m_thumbnails.resize(channelCount);
 
         QVector<uchar*> image_cache(channelCount);
         auto image_cache_iterator = image_cache.begin();
-        for (auto &img: m_thumbnails ) {
-            img = QImage(thumbnailSizeOversample,QImage::Format_Grayscale8);
+        for (auto &img : m_thumbnails) {
+            img = QImage(thumbnailSizeOversample, QImage::Format_Grayscale8);
             *(image_cache_iterator++) = img.bits();
         }
 
-        //step 1 - decimating the image to 4x the thumbnail size. We pick up pixels every skipCount.
-        //This is inaccurate, but fast.
+        //This is a simple anti-aliasing method.
+        //step 1 - nearest neighbor interpolation to 4x the thumbnail size. This is inaccurate, but fast.
         auto thumbnailDev = dev->createThumbnailDevice(thumbnailSizeOversample.width(), thumbnailSizeOversample.height());
-        KisSequentialConstIterator it (thumbnailDev, QRect(0,0,thumbnailSizeOversample.width(), thumbnailSizeOversample.height()));
+        KisSequentialConstIterator it(thumbnailDev, QRect(0, 0, thumbnailSizeOversample.width(), thumbnailSizeOversample.height()));
 
-        do{
+        do {
             const quint8* pixel = it.rawDataConst();
-            for (quint32 i=0; i<channelCount; ++i) {
-                *(image_cache[i]++)=cs->scaleToU8(pixel,i);
+            for (quint32 i = 0; i < channelCount; ++i) {
+                *(image_cache[i]++) = cs->scaleToU8(pixel, i);
             }
-        }while (it.nextPixel());
+        } while (it.nextPixel());
 
-        //step 2. Smooth downsampling to the final thumbnail size. Slower, but image is small at this time.
-        for (auto &img: m_thumbnails) {
+        //step 2. Smooth downsampling to the final thumbnail size. Slower, but the image is small at this time.
+        for (auto &img : m_thumbnails) {
             //for better quality we apply smooth transformation
             //speed is not an issue, because thumbnail image has been decimated and is small.
-            img = img.scaled(thumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+            img = img.scaled(thumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
     }
 }

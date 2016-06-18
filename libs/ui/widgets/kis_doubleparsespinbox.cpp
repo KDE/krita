@@ -23,6 +23,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QIcon>
+#include <QFile>
 
 KisDoubleParseSpinBox::KisDoubleParseSpinBox(QWidget *parent) :
 	QDoubleSpinBox(parent),
@@ -44,7 +45,13 @@ KisDoubleParseSpinBox::KisDoubleParseSpinBox(QWidget *parent) :
 	_oldValue = value();
 
 	_warningIcon = new QLabel(this);
-	_warningIcon->setPixmap(QIcon(":/./16_light_warning.svg").pixmap(16, 16));
+
+	if (QFile(":/./16_light_warning.svg").exists()) {
+		_warningIcon->setPixmap(QIcon(":/./16_light_warning.svg").pixmap(16, 16));
+	} else {
+		_warningIcon->setText("!");
+	}
+
 	_warningIcon->setStyleSheet("background:transparent;");
 	_warningIcon->move(1, 1);
 	_warningIcon->setVisible(false);
@@ -67,6 +74,10 @@ double KisDoubleParseSpinBox::valueFromText(const QString & text) const
 	bool ok;
 
 	double ret = KisNumericParser::parseSimpleMathExpr(text, &ok);
+
+	if(isnan(ret) || isinf(ret)){
+		ok = false;
+	}
 
 	if (!ok) {
 		if (_isLastValid) {

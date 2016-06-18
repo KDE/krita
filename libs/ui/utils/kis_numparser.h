@@ -21,7 +21,7 @@
 
 #include <QString>
 
-#include "kritaglobal_export.h"
+#include "kritaui_export.h"
 
 /*!
  * \brief the namespace contains functions to transform math expression written as QString in numbers.
@@ -32,10 +32,10 @@
 namespace KisNumericParser {
 
         //! \brief parse an expression to a double.
-		KRITAGLOBAL_EXPORT double parseSimpleMathExpr(QString const& expr, bool* noProblem = 0);
+		KRITAUI_EXPORT double parseSimpleMathExpr(QString const& expr, bool* noProblem = 0);
 
         //! \brief parse an expression to an int.
-		KRITAGLOBAL_EXPORT int parseIntegerMathExpr(QString const& expr, bool* noProblem = 0);
+		KRITAUI_EXPORT int parseIntegerMathExpr(QString const& expr, bool* noProblem = 0);
 }
 
 #endif // KIS_NUMPARSER_H

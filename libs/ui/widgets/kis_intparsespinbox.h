@@ -46,6 +46,8 @@ public:
 
 		void setValue(int val); //polymorphism won't work directly, we use a signal/slot hack to do so but if signals are disabled this function will still be useful.
 
+		bool isLastValid() const{ return _isLastValid; }
+
 Q_SIGNALS:
 
 		//! \brief signal emmitted when the last parsed expression create an error.

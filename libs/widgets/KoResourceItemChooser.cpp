@@ -173,6 +173,7 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     d->viewModeButton->setVisible(false);
 
     d->tagManager = new KoResourceTaggingManager(d->model, this);
+    connect(d->tagManager, SIGNAL(updateView()), this, SLOT(updateView()));
 
     layout->addWidget(d->tagManager->tagChooserWidget(), 0, 0);
     layout->addWidget(d->viewModeButton, 0, 1);

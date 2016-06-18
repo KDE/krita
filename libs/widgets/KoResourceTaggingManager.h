@@ -59,6 +59,9 @@ public:
     KoTagFilterWidget* tagFilterWidget();
     KoTagChooserWidget* tagChooserWidget();
 
+Q_SIGNALS:
+    void updateView();
+    
 private Q_SLOTS:
 
     void undeleteTag(const QString& tagToUndelete);

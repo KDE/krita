@@ -54,7 +54,7 @@ jp2Export::~jp2Export()
 {
 }
 
-KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     dbgFile << "JP2 export! From:" << from << ", To:" << to << "";
 

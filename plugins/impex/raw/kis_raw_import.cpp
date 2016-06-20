@@ -68,7 +68,7 @@ inline quint16 correctIndian(quint16 v)
 #endif
 }
 
-KisImportExportFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     dbgFile << from << " " << to << "";
     if (/*from != "image/x-raw" || */to != "application/x-krita") { // too many from to check, and I don't think it can happen an unsupported from

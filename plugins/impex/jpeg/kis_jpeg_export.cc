@@ -65,7 +65,7 @@ KisJPEGExport::~KisJPEGExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     dbgFile << "JPEG export! From:" << from << ", To:" << to << "";
 

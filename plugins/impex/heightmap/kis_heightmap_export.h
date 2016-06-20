@@ -30,7 +30,7 @@ public:
     KisHeightMapExport(QObject *parent, const QVariantList &);
     virtual ~KisHeightMapExport();
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0);
 };
 
 #endif

@@ -56,7 +56,7 @@ KisHeightMapExport::~KisHeightMapExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     dbgFile << "HeightMap export! From:" << from << ", To:" << to;
 

@@ -38,7 +38,7 @@ jp2Import::~jp2Import()
 {
 }
 
-KisImportExportFilter::ConversionStatus jp2Import::convert(const QByteArray&, const QByteArray& to)
+KisImportExportFilter::ConversionStatus jp2Import::convert(const QByteArray&, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     dbgFile << "Importing using JP2Import!";
 

@@ -55,7 +55,7 @@ exrExport::~exrExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     dbgFile << "EXR export! From:" << from << ", To:" << to << "";
 

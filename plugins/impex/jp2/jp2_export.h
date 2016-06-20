@@ -30,7 +30,7 @@ public:
     jp2Export(QObject *parent, const QVariantList &);
     virtual ~jp2Export();
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0);
 };
 
 #endif

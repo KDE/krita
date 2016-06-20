@@ -136,7 +136,7 @@ private:
     quint8 m_current;
 };
 
-KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     dbgFile << "PPM export! From:" << from << ", To:" << to << "";
 

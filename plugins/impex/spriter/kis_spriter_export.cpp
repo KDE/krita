@@ -463,7 +463,7 @@ Bone *findBoneByName(Bone *startBone, const QString &name)
     return 0;
 }
 
-KisImportExportFilter::ConversionStatus KisSpriterExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisSpriterExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     dbgFile << "Spriter export! From:" << from << ", To:" << to << "" << outputFile();
 

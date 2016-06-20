@@ -110,16 +110,21 @@ public:
 
     /**
      * @brief defaultConfiguration defines the default settings for the given import export filter
+     * @param from The mimetype of the source file/document
+     * @param to The mimetype of the destination file/document
      * @return a serializable KisPropertiesConfiguration object gthat
      */
-    KisPropertiesConfigurationSP defaultConfiguration() const;
+    KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from, const QByteArray& to) const;
 
     /**
      * @brief createConfigurationWidget creates a widget that can be used to define the settings for a given import/export filter
      * @param parent the ownder of the widget; the caller is responsible for deleting
+     * @param from The mimetype of the source file/document
+     * @param to The mimetype of the destination file/document
+     *
      * @return the widget
      */
-    KisConfigWidget *createConfigurationWidget(QWidget *parent) const;
+    KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from, const QByteArray& to) const;
 
 
 Q_SIGNALS:

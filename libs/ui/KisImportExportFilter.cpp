@@ -152,12 +152,12 @@ QString KisImportExportFilter::conversionStatusString(ConversionStatus status)
     return msg;
 }
 
-KisPropertiesConfigurationSP KisImportExportFilter::defaultConfiguration() const
+KisPropertiesConfigurationSP KisImportExportFilter::defaultConfiguration(const QByteArray &from, const QByteArray &to) const
 {
     return 0;
 }
 
-KisConfigWidget *KisImportExportFilter::createConfigurationWidget(QWidget *) const
+KisConfigWidget *KisImportExportFilter::createConfigurationWidget(QWidget *, const QByteArray &from, const QByteArray &to) const
 {
     return 0;
 }

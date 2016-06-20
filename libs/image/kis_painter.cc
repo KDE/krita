@@ -66,6 +66,7 @@
 #include "tiles3/kis_random_accessor.h"
 #include <kis_distance_information.h>
 
+
 // Maximum distance from a Bezier control point to the line through the start
 // and end points for the curve to be considered flat.
 #define BEZIER_FLATNESS_THRESHOLD 0.5
@@ -90,7 +91,7 @@ struct Q_DECL_HIDDEN KisPainter::Private {
     KisPaintOp*                 paintOp;
     KoColor                     paintColor;
     KoColor                     backgroundColor;
-    const KisFilterConfiguration* generator;
+    KisFilterConfigurationSP    generator;
     KisPaintLayer*              sourceLayer;
     FillStyle                   fillStyle;
     StrokeStyle                 strokeStyle;
@@ -2469,12 +2470,12 @@ const KoColor &KisPainter::backgroundColor() const
     return d->backgroundColor;
 }
 
-void KisPainter::setGenerator(const KisFilterConfiguration * generator)
+void KisPainter::setGenerator(KisFilterConfigurationSP  generator)
 {
     d->generator = generator;
 }
 
-const KisFilterConfiguration * KisPainter::generator() const
+const KisFilterConfigurationSP  KisPainter::generator() const
 {
     return d->generator;
 }

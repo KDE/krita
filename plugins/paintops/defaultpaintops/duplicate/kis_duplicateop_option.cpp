@@ -102,7 +102,7 @@ void KisDuplicateOpOption::setCloneFromProjection(bool cloneFromProjection)
     m_optionWidget->chkCloneProjection->setChecked(cloneFromProjection);
 }
 
-void KisDuplicateOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisDuplicateOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     setting->setProperty(DUPLICATE_HEALING, healing());
     setting->setProperty(DUPLICATE_CORRECT_PERSPECTIVE, correctPerspective());
@@ -110,7 +110,7 @@ void KisDuplicateOpOption::writeOptionSetting(KisPropertiesConfiguration* settin
     setting->setProperty(DUPLICATE_CLONE_FROM_PROJECTION, cloneFromProjection());
 }
 
-void KisDuplicateOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisDuplicateOpOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     m_optionWidget->cbHealing->setChecked(setting->getBool(DUPLICATE_HEALING, false));
     m_optionWidget->cbPerspective->setChecked(setting->getBool(DUPLICATE_CORRECT_PERSPECTIVE, false));

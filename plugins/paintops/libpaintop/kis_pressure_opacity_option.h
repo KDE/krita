@@ -47,8 +47,8 @@ public:
 
     qreal  getOpacityf(const KisPaintInformation& info);
 
-    virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
+    virtual void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    virtual void readOptionSetting(const KisPropertiesConfigurationSP setting);
 
 };
 

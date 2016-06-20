@@ -60,7 +60,7 @@ KisConfigWidget * KisLevelFilter::createConfigurationWidget(QWidget* parent, con
     return new KisLevelConfigWidget(parent, dev);
 }
 
-KoColorTransformation* KisLevelFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
+KoColorTransformation* KisLevelFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const
 {
     if (!config) {
         warnKrita << "No configuration object for level filter\n";
@@ -272,7 +272,7 @@ void KisLevelConfigWidget::slotAutoLevel(void)
     }
 }
 
-KisPropertiesConfiguration * KisLevelConfigWidget::configuration() const
+KisPropertiesConfigurationSP  KisLevelConfigWidget::configuration() const
 {
     KisColorTransformationConfiguration * config = new KisColorTransformationConfiguration(KisLevelFilter::id().id(), 1);
 
@@ -285,7 +285,7 @@ KisPropertiesConfiguration * KisLevelConfigWidget::configuration() const
     return config;
 }
 
-void KisLevelConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
+void KisLevelConfigWidget::setConfiguration(const KisPropertiesConfigurationSP  config)
 {
     QVariant value;
     if (config->getProperty("blackvalue", value)) {

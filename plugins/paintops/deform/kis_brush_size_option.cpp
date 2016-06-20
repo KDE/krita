@@ -110,7 +110,7 @@ qreal KisBrushSizeOption::brushAspect() const
 }
 
 
-void KisBrushSizeOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisBrushSizeOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     setting->setProperty(BRUSH_DIAMETER, m_options->diameter->value());
     setting->setProperty(BRUSH_ASPECT, m_options->aspectBox->value());
@@ -122,7 +122,7 @@ void KisBrushSizeOption::writeOptionSetting(KisPropertiesConfiguration* setting)
     setting->setProperty(BRUSH_JITTER_MOVEMENT_ENABLED, m_options->jitterMoveBox->isChecked());
 }
 
-void KisBrushSizeOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisBrushSizeOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     m_options->diameter->setValue(setting->getDouble(BRUSH_DIAMETER));
     m_options->aspectBox->setValue(setting->getDouble(BRUSH_ASPECT));

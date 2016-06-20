@@ -58,7 +58,7 @@ KisFilterPosterize::KisFilterPosterize() : KisColorTransformationFilter(id(), ca
     setShowConfigurationWidget(true);
 }
 
-KoColorTransformation* KisFilterPosterize::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
+KoColorTransformation* KisFilterPosterize::createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const
 {
     return new KisPosterizeColorTransformation(config->getInt("steps", 16), cs);
 }
@@ -77,9 +77,9 @@ KisConfigWidget* KisFilterPosterize::createConfigurationWidget(QWidget* parent, 
     return new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param);
 }
 
-KisFilterConfiguration* KisFilterPosterize::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisFilterPosterize::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisColorTransformationConfiguration* config = new KisColorTransformationConfiguration(id().id(), 0);
+    KisColorTransformationConfigurationSP config = new KisColorTransformationConfiguration(id().id(), 0);
     config->setProperty("steps", 16);
     return config;
 }

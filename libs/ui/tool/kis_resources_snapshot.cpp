@@ -55,7 +55,7 @@ struct KisResourcesSnapshot::Private {
     KisPaintOpPresetSP currentPaintOpPreset;
     KisNodeSP currentNode;
     qreal currentExposure;
-    KisFilterConfiguration *currentGenerator;
+    KisFilterConfigurationSP currentGenerator;
 
     QPointF axesCenter;
     bool mirrorMaskHorizontal;

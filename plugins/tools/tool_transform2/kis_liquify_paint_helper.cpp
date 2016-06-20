@@ -71,7 +71,7 @@ void KisLiquifyPaintHelper::Private::updatePreviousPaintInfo(const KisPaintInfor
     previousPaintInfo = info;
 }
 
-QPainterPath KisLiquifyPaintHelper::brushOutline(const KisLiquifyProperties &props) const
+QPainterPath KisLiquifyPaintHelper::brushOutline(const KisLiquifyProperties &props)
 {
     KisPaintInformation::DistanceInformationRegistrar registrar =
         m_d->previousPaintInfo.registerDistanceInformation(&m_d->previousDistanceInfo);

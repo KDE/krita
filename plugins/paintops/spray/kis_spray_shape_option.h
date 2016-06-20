@@ -42,8 +42,8 @@ public:
     /// 0 - ellipse, 1 - rectangle, 2 - anti-aliased pixel, 2 - pixel
     int shape() const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
 
 private:
     KisShapeOptionsWidget * m_options;
@@ -80,7 +80,7 @@ public:
 
 public:
 
-    void loadSettings(const KisPropertiesConfiguration* settings, qreal proportionalWidth, qreal proportionalHeight) {
+    void loadSettings(const KisPropertiesConfigurationSP settings, qreal proportionalWidth, qreal proportionalHeight) {
         enabled = settings->getBool(SPRAYSHAPE_ENABLED, true);
 
         width = settings->getInt(SPRAYSHAPE_WIDTH);

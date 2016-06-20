@@ -53,14 +53,14 @@ bool KisPressureMirrorOption::isVerticalMirrorEnabled()
     return m_enableVerticalMirror;
 }
 
-void KisPressureMirrorOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisPressureMirrorOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
     setting->setProperty(MIRROR_HORIZONTAL_ENABLED, m_enableHorizontalMirror);
     setting->setProperty(MIRROR_VERTICAL_ENABLED, m_enableVerticalMirror);
 }
 
-void KisPressureMirrorOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisPressureMirrorOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     KisCurveOption::readOptionSetting(setting);
     m_enableHorizontalMirror = setting->getBool(MIRROR_HORIZONTAL_ENABLED, false);

@@ -63,7 +63,7 @@ KisDeformOption::~KisDeformOption()
     delete m_options;
 }
 
-void  KisDeformOption::readOptionSetting(const KisPropertiesConfiguration * config)
+void  KisDeformOption::readOptionSetting(const KisPropertiesConfigurationSP  config)
 {
     m_options->deformAmount->setValue(config->getDouble(DEFORM_AMOUNT));
     m_options->interpolationChBox->setChecked(config->getBool(DEFORM_USE_BILINEAR));
@@ -98,7 +98,7 @@ void  KisDeformOption::readOptionSetting(const KisPropertiesConfiguration * conf
 }
 
 
-void KisDeformOption::writeOptionSetting(KisPropertiesConfiguration* config) const
+void KisDeformOption::writeOptionSetting(KisPropertiesConfigurationSP config) const
 {
     config->setProperty(DEFORM_AMOUNT, m_options->deformAmount->value());
     config->setProperty(DEFORM_ACTION, deformAction());

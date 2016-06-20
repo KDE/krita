@@ -34,7 +34,7 @@ public:
     KisChalkPaintOpSettings();
     virtual ~KisChalkPaintOpSettings() {}
 
-    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode);
 
     bool paintIncremental();
     bool isAirbrushing() const;

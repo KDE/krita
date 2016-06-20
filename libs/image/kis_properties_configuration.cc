@@ -49,8 +49,8 @@ KisPropertiesConfiguration::~KisPropertiesConfiguration()
 }
 
 KisPropertiesConfiguration::KisPropertiesConfiguration(const KisPropertiesConfiguration& rhs)
-        : KisSerializableConfiguration(rhs)
-        , d(new Private(*rhs.d))
+    : KisSerializableConfiguration(rhs)
+    , d(new Private(*rhs.d))
 {
 }
 
@@ -300,14 +300,14 @@ KisPropertiesConfigurationFactory::~KisPropertiesConfigurationFactory()
     delete d;
 }
 
-KisSerializableConfiguration* KisPropertiesConfigurationFactory::createDefault()
+KisSerializableConfigurationSP KisPropertiesConfigurationFactory::createDefault()
 {
     return new KisPropertiesConfiguration();
 }
 
-KisSerializableConfiguration* KisPropertiesConfigurationFactory::create(const QDomElement& e)
+KisSerializableConfigurationSP KisPropertiesConfigurationFactory::create(const QDomElement& e)
 {
-    KisPropertiesConfiguration* pc = new KisPropertiesConfiguration();
+    KisPropertiesConfigurationSP pc = new KisPropertiesConfiguration();
     pc->fromXML(e);
     return pc;
 }

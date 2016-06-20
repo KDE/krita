@@ -50,7 +50,7 @@ public:
 KisSelectionBasedLayer::KisSelectionBasedLayer(KisImageWSP image,
         const QString &name,
         KisSelectionSP selection,
-        KisFilterConfiguration *filterConfig,
+        KisFilterConfigurationSP filterConfig,
         bool useGeneratorRegistry)
         : KisLayer(image.data(), name, OPACITY_OPAQUE_U8),
           KisNodeFilterInterface(filterConfig, useGeneratorRegistry),

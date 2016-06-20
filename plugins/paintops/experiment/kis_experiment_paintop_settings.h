@@ -25,7 +25,7 @@ class KisExperimentPaintOpSettings : public KisPaintOpSettings
 {
 public:
     bool paintIncremental();
-    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode);
 };
 
 #endif

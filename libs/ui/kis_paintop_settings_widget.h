@@ -45,10 +45,10 @@ public:
     void addPaintOpOption(KisPaintOpOption * option, const QString &label);
 
     /// Reimplemented
-    virtual void setConfiguration(const KisPropertiesConfiguration * config);
+    virtual void setConfiguration(const KisPropertiesConfigurationSP  config);
 
     /// Reimplemented
-    virtual void writeConfiguration(KisPropertiesConfiguration *config) const;
+    virtual void writeConfiguration(KisPropertiesConfigurationSP config) const;
 
     virtual KisPaintopLodLimitations lodLimitations() const;
 

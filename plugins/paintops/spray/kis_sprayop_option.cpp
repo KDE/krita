@@ -93,7 +93,7 @@ KisSprayOpOption::~KisSprayOpOption()
     delete m_options;
 }
 
-void KisSprayOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisSprayOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     setting->setProperty(SPRAY_DIAMETER, m_options->diameterSpinBox->value());
     setting->setProperty(SPRAY_ASPECT, m_options->aspectSPBox->value());
@@ -108,7 +108,7 @@ void KisSprayOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
     setting->setProperty(SPRAY_USE_DENSITY, m_options->densityRadioButton->isChecked());
 }
 
-void KisSprayOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisSprayOpOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     m_options->diameterSpinBox->setValue(setting->getInt(SPRAY_DIAMETER));
     m_options->aspectSPBox->setValue(setting->getDouble(SPRAY_ASPECT));

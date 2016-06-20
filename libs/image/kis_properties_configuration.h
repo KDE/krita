@@ -142,13 +142,15 @@ private:
     Private* const d;
 };
 
+typedef KisSharedPtr<KisPropertiesConfiguration> KisPropertiesConfigurationSP;
+
 class KRITAIMAGE_EXPORT KisPropertiesConfigurationFactory : public KisSerializableConfigurationFactory
 {
 public:
     KisPropertiesConfigurationFactory();
     virtual ~KisPropertiesConfigurationFactory();
-    virtual KisSerializableConfiguration* createDefault();
-    virtual KisSerializableConfiguration* create(const QDomElement& e);
+    virtual KisSerializableConfigurationSP createDefault();
+    virtual KisSerializableConfigurationSP create(const QDomElement& e);
 private:
     struct Private;
     Private* const d;

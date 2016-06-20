@@ -47,7 +47,7 @@
 #define drand48() (static_cast<double>(qrand()) / static_cast<double>(RAND_MAX))
 #endif
 
-KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
+KisDeformPaintOp::KisDeformPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
 {
     Q_UNUSED(image);

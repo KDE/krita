@@ -143,7 +143,7 @@ qreal KisGridOpOption::scale() const
     return m_options->scaleDSPBox->value();
 }
 
-void KisGridOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisGridOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     setting->setProperty(GRID_WIDTH, gridWidth());
     setting->setProperty(GRID_HEIGHT, gridHeight());
@@ -155,7 +155,7 @@ void KisGridOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) co
     setting->setProperty(GRID_RANDOM_BORDER, randomBorder());
 }
 
-void KisGridOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisGridOpOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     m_options->gridWidthSPBox->setValue(setting->getInt(GRID_WIDTH));
     m_options->gridHeightSPBox->setValue(setting->getInt(GRID_HEIGHT));

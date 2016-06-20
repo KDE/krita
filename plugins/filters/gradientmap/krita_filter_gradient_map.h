@@ -30,7 +30,7 @@ public:
     KritaFilterGradientMap();
 public:
 
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
+    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const;
 
     static inline KoID id() {
         return KoID("gradientmap", i18n("Gradient Map"));

@@ -25,7 +25,6 @@
 #include <QImage>
 #include <QScopedPointer>
 
-#include "kis_shared.h"
 #include "kis_properties_configuration.h"
 #include <brushengine/kis_paint_information.h>
 
@@ -45,14 +44,14 @@ class KisPaintOpConfigWidget;
  * property of KisPaintOpPreset. Whenever the settings are changed/modified from the original -- the preset is
  * set to dirty.
  */
-class KRITAIMAGE_EXPORT KisPaintOpSettings : public KisPropertiesConfiguration, public KisShared
+class KRITAIMAGE_EXPORT KisPaintOpSettings : public KisPropertiesConfiguration
 {
 
 public:
 
     KisPaintOpSettings();
-
     virtual ~KisPaintOpSettings();
+    KisPaintOpSettings(const KisPaintOpSettings &rhs);
 
     /**
      *
@@ -139,7 +138,7 @@ public:
      * Outline mode has to be passed to the paintop which builds the outline as some paintops have to paint outline
      * always like clone paintop indicating the duplicate position
      */
-    virtual QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
+    virtual QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode);
 
     /**
     * Useful for simple elliptical brush outline.
@@ -242,8 +241,8 @@ public:
      */
     void setProperty(const QString & name, const QVariant & value);
 
-    static bool isLodUserAllowed(const KisPropertiesConfiguration *config);
-    static void setLodUserAllowed(KisPropertiesConfiguration *config, bool value);
+    static bool isLodUserAllowed(const KisPropertiesConfigurationSP config);
+    static void setLodUserAllowed(KisPropertiesConfigurationSP config, bool value);
 
 protected:
     /**
@@ -261,5 +260,7 @@ private:
     struct Private;
     const QScopedPointer<Private> d;
 };
+
+typedef KisSharedPtr<KisPaintOpSettings> KisPaintOpSettingsSP;
 
 #endif

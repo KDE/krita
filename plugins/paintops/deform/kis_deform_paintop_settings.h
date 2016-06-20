@@ -30,7 +30,7 @@ class KisDeformPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSet
 public:
     KisDeformPaintOpSettings();
 
-    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode);
 
     bool paintIncremental();
     bool isAirbrushing() const;

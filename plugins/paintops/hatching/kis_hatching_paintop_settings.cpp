@@ -35,8 +35,10 @@ KisHatchingPaintOpSettings::~KisHatchingPaintOpSettings()
 {
 }
 
-void KisHatchingPaintOpSettings::initializeTwin(KisHatchingPaintOpSettings* convenienttwin) const
+void KisHatchingPaintOpSettings::initializeTwin(KisPaintOpSettingsSP settings) const
 {
+    // XXX: this is a nice way to reinvent the copy constructor?
+
     /*--------DO NOT REMOVE please, use this to review the XML config tree
     QMap<QString, QVariant> rofl = QMap<QString, QVariant>(getProperties());
 
@@ -44,6 +46,8 @@ void KisHatchingPaintOpSettings::initializeTwin(KisHatchingPaintOpSettings* conv
     for (i = rofl.constBegin(); i != rofl.constEnd(); ++i)
         dbgKrita << i.key() << ":" << i.value();
     /----------DO NOT REMOVE----------------*/
+
+    KisHatchingPaintOpSettings *convenienttwin = static_cast<KisHatchingPaintOpSettings*>(settings.data());
 
     convenienttwin->enabledcurvecrosshatching = getBool("PressureCrosshatching");
     convenienttwin->enabledcurveopacity = getBool("PressureOpacity");

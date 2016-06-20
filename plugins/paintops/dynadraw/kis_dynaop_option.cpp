@@ -137,7 +137,7 @@ qreal KisDynaOpOption::lineSpacing() const
     return m_options->lineSpacingSPBox->value();
 }
 
-void KisDynaOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisDynaOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     setting->setProperty(DYNA_WIDTH, initWidth());
     setting->setProperty(DYNA_MASS , mass());
@@ -154,7 +154,7 @@ void KisDynaOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) co
 
 }
 
-void KisDynaOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisDynaOpOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     switch (setting->getInt(DYNA_ACTION)) {
     case 0: m_options->circleRBox->setChecked(true); break;

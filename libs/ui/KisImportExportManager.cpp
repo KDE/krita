@@ -220,7 +220,6 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(c
 // graph this mimetype has a connection to.
 QStringList KisImportExportManager::mimeFilter(Direction direction)
 {
-
     // Find the right mimetype by the extension
     QSet<QString> mimeTypes;
 //    mimeTypes << KisDocument::nativeFormatMimeType() << "application/x-krita-paintoppreset" << "image/openraster";

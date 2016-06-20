@@ -69,9 +69,9 @@ KisConfigWidget * KisFilterFastColorTransfer::createConfigurationWidget(QWidget*
     return new KisWdgFastColorTransfer(parent);
 }
 
-KisFilterConfiguration* KisFilterFastColorTransfer::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisFilterFastColorTransfer::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 1);
     config->setProperty("filename", "");  // TODO: put an exemple image in share/krita, like a sunset that what's give the best results
     return config;
 }
@@ -80,7 +80,7 @@ KisFilterConfiguration* KisFilterFastColorTransfer::factoryConfiguration(const K
 
 void KisFilterFastColorTransfer::processImpl(KisPaintDeviceSP device,
                                              const QRect& applyRect,
-                                             const KisFilterConfiguration* config,
+                                             const KisFilterConfigurationSP config,
                                              KoUpdater* progressUpdater) const
 {
     Q_ASSERT(device != 0);

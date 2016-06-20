@@ -45,13 +45,13 @@ public:
 
     virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
+    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const;
 
     static inline KoID id() {
         return KoID("hsvadjustment", i18n("HSV/HSL Adjustment"));
     }
 
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfigurationSP factoryConfiguration(const KisPaintDeviceSP) const;
 
 };
 
@@ -65,8 +65,8 @@ public:
     KisHSVConfigWidget(QWidget * parent, Qt::WFlags f = 0);
     virtual ~KisHSVConfigWidget();
 
-    virtual KisPropertiesConfiguration * configuration() const;
-    virtual void setConfiguration(const KisPropertiesConfiguration* config);
+    virtual KisPropertiesConfigurationSP  configuration() const;
+    virtual void setConfiguration(const KisPropertiesConfigurationSP config);
     Ui_WdgHSVAdjustment * m_page;
 
 private Q_SLOTS:

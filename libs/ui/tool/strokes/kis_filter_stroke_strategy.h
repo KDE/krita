@@ -62,7 +62,7 @@ public:
 
 public:
     KisFilterStrokeStrategy(KisFilterSP filter,
-                            KisSafeFilterConfigurationSP filterConfig,
+                            KisFilterConfigurationSP filterConfig,
                             KisResourcesSnapshotSP resources);
     KisFilterStrokeStrategy(const KisFilterStrokeStrategy &rhs, int levelOfDetail);
 

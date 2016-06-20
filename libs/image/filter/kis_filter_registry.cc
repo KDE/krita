@@ -70,11 +70,11 @@ void KisFilterRegistry::add(const QString &id, KisFilterSP item)
     emit(filterAdded(id));
 }
 
-KisFilterConfiguration* KisFilterRegistry::cloneConfiguration(KisFilterConfiguration* kfc)
+KisFilterConfigurationSP KisFilterRegistry::cloneConfiguration(const KisFilterConfigurationSP kfc)
 {
     Q_ASSERT(kfc);
     KisFilterSP filter = value(kfc->name());
-    KisFilterConfiguration* newkfc = filter->defaultConfiguration(0);
+    KisFilterConfigurationSP newkfc = filter->defaultConfiguration(0);
     newkfc->fromXML(kfc->toXML());
     return newkfc;
 }

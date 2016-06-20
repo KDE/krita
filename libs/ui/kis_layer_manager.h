@@ -101,7 +101,7 @@ private Q_SLOTS:
     void addShapeLayer(KisNodeSP activeNode);
 
     void addAdjustmentLayer(KisNodeSP activeNode);
-    KisAdjustmentLayerSP addAdjustmentLayer(KisNodeSP activeNode, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection);
+    KisAdjustmentLayerSP addAdjustmentLayer(KisNodeSP activeNode, const QString & name, KisFilterConfigurationSP  filter, KisSelectionSP selection);
 
     void addGeneratorLayer(KisNodeSP activeNode);
 

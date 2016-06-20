@@ -152,6 +152,16 @@ QString KisImportExportFilter::conversionStatusString(ConversionStatus status)
     return msg;
 }
 
+KisPropertiesConfigurationSP KisImportExportFilter::defaultConfiguration() const
+{
+    return 0;
+}
+
+KisConfigWidget *KisImportExportFilter::createConfigurationWidget(QWidget *) const
+{
+    return 0;
+}
+
 void KisImportExportFilter::setUpdater(const QPointer<KoUpdater>& updater)
 {
     Q_ASSERT(updater);

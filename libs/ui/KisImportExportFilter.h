@@ -25,12 +25,15 @@ Boston, MA 02110-1301, USA.
 #include <QMap>
 #include <QPointer>
 #include <QString>
-
+#include <QSharedPointer>
+#include <kis_properties_configuration.h>
 #include "kritaui_export.h"
 
 class KisFilterChain;
 class KoUpdater;
 class KisDocument;
+class KisConfigWidget;
+
 
 /**
  * @brief The base class for import and export filters.
@@ -92,7 +95,7 @@ public:
      * @return The error status, see the @ref #ConversionStatus enum.
      *         KisImportExportFilter::OK means that everything is alright.
      */
-    virtual ConversionStatus convert(const QByteArray& from, const QByteArray& to) = 0;
+    virtual ConversionStatus convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration = 0) = 0;
 
     /**
      * Set the updater to which the filter will report progress.
@@ -104,6 +107,20 @@ public:
      * Get the text version of the status value
      */
     static QString conversionStatusString(ConversionStatus status);
+
+    /**
+     * @brief defaultConfiguration defines the default settings for the given import export filter
+     * @return a serializable KisPropertiesConfiguration object gthat
+     */
+    KisPropertiesConfigurationSP defaultConfiguration() const;
+
+    /**
+     * @brief createConfigurationWidget creates a widget that can be used to define the settings for a given import/export filter
+     * @param parent the ownder of the widget; the caller is responsible for deleting
+     * @return the widget
+     */
+    KisConfigWidget *createConfigurationWidget(QWidget *parent) const;
+
 
 Q_SIGNALS:
     /**

@@ -67,8 +67,8 @@ public:
     KisMultiIntegerFilterWidget(const QString& filterid, QWidget* parent, const QString& caption, vKisIntegerWidgetParam iwparam);
     ~KisMultiIntegerFilterWidget();
 
-    virtual void setConfiguration(const KisPropertiesConfiguration* config);
-    virtual KisPropertiesConfiguration* configuration() const;
+    virtual void setConfiguration(const KisPropertiesConfigurationSP config);
+    virtual KisPropertiesConfigurationSP configuration() const;
 
 private:
 
@@ -77,7 +77,7 @@ private:
 
     QVector<KisDelayedActionIntegerInput*> m_integerWidgets;
     QString m_filterid;
-    KisPropertiesConfiguration* m_config;
+    KisPropertiesConfigurationSP m_config;
 };
 
 #endif

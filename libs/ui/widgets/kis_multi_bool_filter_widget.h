@@ -47,9 +47,9 @@ public:
 
     KisMultiBoolFilterWidget(const QString & filterid, QWidget * parent,  const QString & caption, vKisBoolWidgetParam iwparam);
 
-    virtual void setConfiguration(const KisPropertiesConfiguration* cfg);
+    virtual void setConfiguration(const KisPropertiesConfigurationSP cfg);
 
-    virtual KisPropertiesConfiguration* configuration() const;
+    virtual KisPropertiesConfigurationSP configuration() const;
 
 public:
 

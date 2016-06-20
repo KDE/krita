@@ -44,14 +44,14 @@
 
 #include <KoColorSpaceRegistry.h>
 
-KisHatchingPaintOp::KisHatchingPaintOp(const KisHatchingPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
+KisHatchingPaintOp::KisHatchingPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
     , m_image(image)
 {
     Q_UNUSED(node);
 
     m_settings = new KisHatchingPaintOpSettings();
-    settings->initializeTwin(m_settings);
+    static_cast<const KisHatchingPaintOpSettings*>(settings.data())->initializeTwin(m_settings);
 
     m_hatchingBrush = new HatchingBrush(m_settings);
 

@@ -47,8 +47,8 @@ public:
     */
     void applyThreshold(KisFixedPaintDeviceSP dab);
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
 
     /// threshold has 100 levels (like opacity)
     void setThreshold(qint32 threshold) {

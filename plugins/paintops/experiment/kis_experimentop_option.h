@@ -41,8 +41,8 @@ public:
     KisExperimentOpOption();
     ~KisExperimentOpOption();
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
 
     void lodLimitations(KisPaintopLodLimitations *l) const;
 
@@ -69,7 +69,7 @@ public:
     bool windingFill;
     bool hardEdge;
 
-    void readOptionSetting(const KisPropertiesConfiguration* setting) {
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) {
         isDisplacementEnabled = setting->getBool(EXPERIMENT_DISPLACEMENT_ENABLED);
         displacement = setting->getDouble(EXPERIMENT_DISPLACEMENT_VALUE, 50.0);
         isSpeedEnabled = setting->getBool(EXPERIMENT_SPEED_ENABLED);

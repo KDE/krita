@@ -39,7 +39,7 @@
 #include <kis_lod_transform.h>
 
 
-KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings, KisPainter* painter, KisNodeSP node, KisImageSP image)
+KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
     , m_firstRun(true)
     , m_image(image)
@@ -147,7 +147,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     KoColor colorSpaceChanger = painter()->paintColor();
     const KoColorSpace* preciseColorSpace = colorSpaceChanger.colorSpace();
     if (colorSpaceChanger.colorSpace()->colorDepthId().id() == "U8") {
-	preciseColorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceChanger.colorSpace()->colorModelId().id(), "U16", colorSpaceChanger.profile() );
+    preciseColorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceChanger.colorSpace()->colorModelId().id(), "U16", colorSpaceChanger.profile() );
         colorSpaceChanger.convertTo(preciseColorSpace);
     }
     painter()->setPaintColor(colorSpaceChanger);
@@ -276,7 +276,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 
     // then blit the temporary painting device on the canvas at the current brush position
     // the alpha mask (maskDab) will be used here to only blit the pixels that are in the area (shape) of the brush
-    
+
     painter()->setCompositeOp(COMPOSITE_COPY);
     painter()->bitBltWithFixedSelection(m_dstDabRect.x(), m_dstDabRect.y(), m_tempDev, m_maskDab, m_dstDabRect.width(), m_dstDabRect.height());
     painter()->renderMirrorMaskSafe(m_dstDabRect, m_tempDev, 0, 0, m_maskDab, !m_dabCache->needSeparateOriginal());

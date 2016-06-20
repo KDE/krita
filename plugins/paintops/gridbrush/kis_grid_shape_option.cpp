@@ -51,13 +51,13 @@ int KisGridShapeOption::shape() const
     return m_options->shapeCBox->currentIndex();
 }
 
-void KisGridShapeOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisGridShapeOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     setting->setProperty(GRIDSHAPE_SHAPE, shape());
 }
 
 
-void KisGridShapeOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisGridShapeOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     m_options->shapeCBox->setCurrentIndex(setting->getInt(GRIDSHAPE_SHAPE));
 }

@@ -23,17 +23,23 @@ class QDomDocument;
 class QString;
 
 #include "kritaimage_export.h"
+#include "kis_shared.h"
+#include "kis_shared_ptr.h"
 
 /**
  * This is an interface for objects that are serializable and unserializable.
  * It can be used together with the factory in case the type of configuration object
  * is also unknown at creation time.
  */
-class KRITAIMAGE_EXPORT KisSerializableConfiguration
+class KRITAIMAGE_EXPORT KisSerializableConfiguration : public KisShared
 {
 public:
 
-    virtual ~KisSerializableConfiguration() {};
+    KisSerializableConfiguration();
+
+    virtual ~KisSerializableConfiguration() {}
+
+    KisSerializableConfiguration(const KisSerializableConfiguration &rhs);
 
     /**
      * Fill the object from the XML encoded representation in s.
@@ -56,6 +62,8 @@ public:
     virtual QString toXML() const;
 };
 
+typedef KisSharedPtr<KisSerializableConfiguration> KisSerializableConfigurationSP;
+
 /**
  * This is an interface for a factory of serializable configuration objects.
  */
@@ -66,12 +74,13 @@ public:
     /**
      * @return an empty object with a sane default configuration
      */
-    virtual KisSerializableConfiguration* createDefault() = 0;
+    virtual KisSerializableConfigurationSP createDefault() = 0;
     /**
      * @return an unserialied version of the configuration
      */
-    virtual KisSerializableConfiguration* create(const QDomElement&) = 0;
+    virtual KisSerializableConfigurationSP create(const QDomElement&) = 0;
 };
+
 
 
 #endif

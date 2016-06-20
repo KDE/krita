@@ -64,11 +64,11 @@
 #include "kis_duplicateop_settings_widget.h"
 #include "kis_duplicateop_option.h"
 
-KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
+KisDuplicateOp::KisDuplicateOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
     , m_image(image)
     , m_node(node)
-    , m_settings(settings)
+    , m_settings(static_cast<KisDuplicateOpSettings*>(const_cast<KisPaintOpSettings*>(settings.data())))
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
@@ -190,7 +190,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
 
     // }
-    // else 
+    // else
     {
         KisPainter copyPainter(m_srcdev);
         copyPainter.setCompositeOp(COMPOSITE_COPY);

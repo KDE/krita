@@ -24,6 +24,7 @@
 #include "kis_config_widget.h"
 #include "kis_image.h"
 #include <kis_debug.h>
+#include <kis_properties_configuration.h>
 
 class KisPaintopLodLimitations;
 
@@ -42,8 +43,8 @@ public:
      * Write the settings in this widget to the given properties
      * configuration, which is cleared first.
      */
-    virtual void writeConfiguration(KisPropertiesConfiguration *config) const;
-    virtual void setConfiguration(const KisPropertiesConfiguration * config);
+    virtual void writeConfiguration(KisPropertiesConfigurationSP config) const;
+    virtual void setConfiguration(const KisPropertiesConfigurationSP  config);
 
     virtual KisPaintopLodLimitations lodLimitations() const = 0;
 

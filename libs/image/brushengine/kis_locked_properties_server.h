@@ -40,11 +40,11 @@ public:
     static KisLockedPropertiesServer* instance();
 
     KisLockedProperties* lockedProperties();
-    void addToLockedProperties(KisPropertiesConfiguration *p);
-    void removeFromLockedProperties(KisPropertiesConfiguration *p);
+    void addToLockedProperties(KisPropertiesConfigurationSP p);
+    void removeFromLockedProperties(KisPropertiesConfigurationSP p);
     void setPropertiesFromLocked(bool value);
     bool propertiesFromLocked();
-    KisLockedPropertiesProxy* createLockedPropertiesProxy(const KisPropertiesConfiguration*);
+    KisLockedPropertiesProxySP createLockedPropertiesProxy(const KisPropertiesConfigurationSP);
     bool hasProperty(const QString &p);
 
 private:

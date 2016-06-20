@@ -46,9 +46,9 @@ private:
     bool cloneFromProjection() const;
     void setCloneFromProjection(bool cloneFromProjection);
 public:
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
 
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
 
     void setImage(KisImageWSP image);
 

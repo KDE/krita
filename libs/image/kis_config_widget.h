@@ -23,9 +23,9 @@
 #include <kritaimage_export.h>
 
 #include "kis_signal_compressor.h"
+#include <kis_properties_configuration.h>
 
 class KisViewManager;
-class KisPropertiesConfiguration;
 
 /**
  * Empty base class. Configurable resources like filters, paintops etc.
@@ -50,12 +50,12 @@ public:
     /**
      * @param config the configuration for this configuration widget.
      */
-    virtual void setConfiguration(const KisPropertiesConfiguration * config) = 0;
+    virtual void setConfiguration(const KisPropertiesConfigurationSP  config) = 0;
 
     /**
      * @return the configuration
      */
-    virtual KisPropertiesConfiguration* configuration() const = 0;
+    virtual KisPropertiesConfigurationSP configuration() const = 0;
 
     /**
      * Sets the view object that can be used by the configuration
@@ -77,8 +77,8 @@ Q_SIGNALS:
      * widget.
      */
     void sigConfigurationItemChanged();
-    void sigSaveLockedConfig(KisPropertiesConfiguration* p);
-    void sigDropLockedConfig(KisPropertiesConfiguration* p);
+    void sigSaveLockedConfig(KisPropertiesConfigurationSP p);
+    void sigDropLockedConfig(KisPropertiesConfigurationSP p);
 
 private Q_SLOTS:
 

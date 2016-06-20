@@ -31,8 +31,8 @@ public:
     KisHatchingOptions();
     ~KisHatchingOptions();
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
     void lodLimitations(KisPaintopLodLimitations *l) const;
 
 private:

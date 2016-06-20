@@ -55,7 +55,7 @@ double KisPressureRotationOption::apply(const KisPaintInformation & info) const
     return fmod(rotationCoeff * 2.0 * M_PI + baseAngle, 2.0 * M_PI);
  }
 
-void KisPressureRotationOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisPressureRotationOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     m_defaultAngle = setting->getDouble("runtimeCanvasRotation", 0.0) * M_PI / 180.0;
     KisCurveOption::readOptionSetting(setting);

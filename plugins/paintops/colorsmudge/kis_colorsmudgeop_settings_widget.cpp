@@ -70,9 +70,9 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
 
 KisColorSmudgeOpSettingsWidget::~KisColorSmudgeOpSettingsWidget() { }
 
-KisPropertiesConfiguration* KisColorSmudgeOpSettingsWidget::configuration() const
+KisPropertiesConfigurationSP KisColorSmudgeOpSettingsWidget::configuration() const
 {
-    KisBrushBasedPaintOpSettings *config = new KisBrushBasedPaintOpSettings();
+    KisBrushBasedPaintOpSettingsSP config = new KisBrushBasedPaintOpSettings();
     config->setOptionsWidget(const_cast<KisColorSmudgeOpSettingsWidget*>(this));
     config->setProperty("paintop", "colorsmudge");
     writeConfiguration(config);

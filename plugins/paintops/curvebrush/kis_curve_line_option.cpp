@@ -58,7 +58,7 @@ KisCurveOpOption::~KisCurveOpOption()
 {
 }
 
-void KisCurveOpOption::writeOptionSetting(KisPropertiesConfiguration* config) const
+void KisCurveOpOption::writeOptionSetting(KisPropertiesConfigurationSP config) const
 {
     config->setProperty(CURVE_PAINT_CONNECTION_LINE, m_options->connectionCHBox->isChecked());
     config->setProperty(CURVE_SMOOTHING, m_options->smoothingCHBox->isChecked());
@@ -67,7 +67,7 @@ void KisCurveOpOption::writeOptionSetting(KisPropertiesConfiguration* config) co
     config->setProperty(CURVE_CURVES_OPACITY, m_options->curvesOpacitySlider->value());
 }
 
-void KisCurveOpOption::readOptionSetting(const KisPropertiesConfiguration* config)
+void KisCurveOpOption::readOptionSetting(const KisPropertiesConfigurationSP config)
 {
     m_options->connectionCHBox->setChecked(config->getBool(CURVE_PAINT_CONNECTION_LINE));
     m_options->smoothingCHBox->setChecked(config->getBool(CURVE_SMOOTHING));

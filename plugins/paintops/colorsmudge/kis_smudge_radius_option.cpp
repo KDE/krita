@@ -149,12 +149,12 @@ void KisSmudgeRadiusOption::apply(KisPainter& painter,
 
 }
 
-void KisSmudgeRadiusOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisSmudgeRadiusOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
 }
 
-void KisSmudgeRadiusOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisSmudgeRadiusOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     KisCurveOption::readOptionSetting(setting);
 }

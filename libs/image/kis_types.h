@@ -240,7 +240,7 @@ typedef QWeakPointer<KisStroke> KisStrokeWSP;
 typedef KisStrokeWSP KisStrokeId;
 
 class KisFilterConfiguration;
-typedef QSharedPointer<KisFilterConfiguration> KisSafeFilterConfigurationSP;
+typedef KisSharedPtr<KisFilterConfiguration> KisFilterConfigurationSP;
 
 class KisProjectionUpdatesFilter;
 typedef QSharedPointer<KisProjectionUpdatesFilter> KisProjectionUpdatesFilterSP;
@@ -256,6 +256,8 @@ typedef QWeakPointer<KisProjectionLeaf> KisProjectionLeafWSP;
 class KisKeyframe;
 typedef QSharedPointer<KisKeyframe> KisKeyframeSP;
 typedef QWeakPointer<KisKeyframe> KisKeyframeWSP;
+
+
 
 #include <QSharedPointer>
 #include <QWeakPointer>

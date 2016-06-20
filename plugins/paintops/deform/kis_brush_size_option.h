@@ -49,8 +49,8 @@ public:
 
     qreal brushAspect() const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
 
 private:
     KisBrushSizeOptionsWidget * m_options;
@@ -72,7 +72,7 @@ public:
     bool jitterEnabled;
 
 public:
-    void readOptionSetting(const KisPropertiesConfiguration * settings) {
+    void readOptionSetting(const KisPropertiesConfigurationSP  settings) {
         //TODO: shape
         shape = 0;
         diameter = quint16(settings->getDouble(BRUSH_DIAMETER));

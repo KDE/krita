@@ -35,15 +35,15 @@ KritaFilterGradientMap::KritaFilterGradientMap() : KisColorTransformationFilter(
     setSupportsThreading(false);
 }
 
-KoColorTransformation* KritaFilterGradientMap::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
+KoColorTransformation* KritaFilterGradientMap::createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const
 {
-	auto gradient = static_cast<const KoAbstractGradient *>(dynamic_cast<const KritaGradientMapFilterConfiguration *>(config)->gradient());
+    auto gradient = static_cast<const KoAbstractGradient *>(dynamic_cast<const KritaGradientMapFilterConfiguration *>(config.data())->gradient());
 
-	return new KritaGradientMapColorTransformation(gradient, cs);
+    return new KritaGradientMapColorTransformation(gradient, cs);
 }
 
 KisConfigWidget * KritaFilterGradientMap::createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev) const
 {
-	return new KritaGradientMapConfigWidget(parent, dev);
+    return new KritaGradientMapConfigWidget(parent, dev);
 }
 

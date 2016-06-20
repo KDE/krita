@@ -47,9 +47,9 @@
 #endif
 
 
-KisGridPaintOp::KisGridPaintOp(const KisGridPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
+KisGridPaintOp::KisGridPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
-    , m_settings(settings)
+    , m_settings(static_cast<KisGridPaintOpSettings*>(const_cast<KisPaintOpSettings*>(settings.data())))
     , m_image(image)
     , m_node(node)
 {
@@ -240,7 +240,7 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     return KisSpacingInformation(m_spacing * additionalScale);
 }
 
-void KisGridProperties::fillProperties(const KisPropertiesConfiguration* setting)
+void KisGridProperties::fillProperties(const KisPropertiesConfigurationSP setting)
 {
     gridWidth = qMax(1, setting->getInt(GRID_WIDTH));
     gridHeight = qMax(1, setting->getInt(GRID_HEIGHT));

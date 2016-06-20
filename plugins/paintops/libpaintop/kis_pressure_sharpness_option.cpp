@@ -34,13 +34,13 @@ KisPressureSharpnessOption::KisPressureSharpnessOption()
     m_threshold = 40;
 }
 
-void KisPressureSharpnessOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisPressureSharpnessOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
     setting->setProperty(SHARPNESS_THRESHOLD, m_threshold);
 }
 
-void KisPressureSharpnessOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisPressureSharpnessOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     KisCurveOption::readOptionSetting(setting);
     m_threshold = setting->getInt(SHARPNESS_THRESHOLD, 4);

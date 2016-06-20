@@ -97,7 +97,7 @@ void WdgFeatherSelection::updateRadiusUIValue(double value)
     }
 }
 
-void WdgFeatherSelection::getConfiguration(KisOperationConfiguration* config)
+void WdgFeatherSelection::getConfiguration(KisOperationConfigurationSP config)
 {
     config->setProperty("radius", m_radius);
 }

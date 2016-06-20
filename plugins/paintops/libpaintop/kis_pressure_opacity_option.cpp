@@ -29,13 +29,13 @@ KisPressureOpacityOption::KisPressureOpacityOption()
 }
 
 
-void KisPressureOpacityOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisPressureOpacityOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
     setting->setProperty("OpacityVersion", "2");
 }
 
-void KisPressureOpacityOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisPressureOpacityOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     KisCurveOption::readOptionSetting(setting);
     if (setting->getString("OpacityVersion", "1") == "1") {

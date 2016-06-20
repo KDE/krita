@@ -125,10 +125,10 @@ KisSmoothingOptionsSP KisToolFreehandHelper::smoothingOptions() const
 
 QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos,
                                                    const KoPointerEvent *event,
-                                                   const KisPaintOpSettings *globalSettings,
+                                                   const KisPaintOpSettingsSP globalSettings,
                                                    KisPaintOpSettings::OutlineMode mode) const
 {
-    const KisPaintOpSettings *settings = globalSettings;
+    KisPaintOpSettingsSP settings = globalSettings;
     KisPaintInformation info = m_d->infoBuilder->hover(savedCursorPos, event);
     info.setCanvasRotation(m_d->canvasRotation);
     info.setCanvasHorizontalMirrorState( m_d->canvasMirroredH );
@@ -845,7 +845,7 @@ int KisToolFreehandHelper::canvasRotation()
 
 void KisToolFreehandHelper::setCanvasRotation(int rotation)
 {
-   m_d->canvasRotation = rotation; 
+   m_d->canvasRotation = rotation;
 }
 bool KisToolFreehandHelper::canvasMirroredH()
 {
@@ -854,6 +854,6 @@ bool KisToolFreehandHelper::canvasMirroredH()
 
 void KisToolFreehandHelper::setCanvasHorizontalMirrorState(bool mirrored)
 {
-   m_d->canvasMirroredH = mirrored; 
+   m_d->canvasMirroredH = mirrored;
 }
 

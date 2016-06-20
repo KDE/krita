@@ -417,7 +417,7 @@ bool KisKraSaveVisitor::saveFilterConfiguration(KisNode* node)
     KisNodeFilterInterface *filterInterface =
             dynamic_cast<KisNodeFilterInterface*>(node);
 
-    KisSafeFilterConfigurationSP filter;
+    KisFilterConfigurationSP filter;
 
     if (filterInterface) {
         filter = filterInterface->filter();

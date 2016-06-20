@@ -34,7 +34,7 @@ class KisCurvePaintOp : public KisPaintOp
 {
 
 public:
-    KisCurvePaintOp(const KisCurvePaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
+    KisCurvePaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
     virtual ~KisCurvePaintOp();
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);

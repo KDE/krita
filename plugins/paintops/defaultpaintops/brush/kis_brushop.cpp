@@ -43,8 +43,10 @@
 #include <kis_lod_transform.h>
 
 
-KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
-    : KisBrushBasedPaintOp(settings, painter), m_opacityOption(node), m_hsvTransformation(0)
+KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
+    : KisBrushBasedPaintOp(settings, painter)
+    , m_opacityOption(node)
+    , m_hsvTransformation(0)
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);
@@ -180,8 +182,8 @@ void KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInforma
 
         QRect rc = m_lineCacheDevice->extent();
         painter()->bitBlt(rc.x(), rc.y(), m_lineCacheDevice, rc.x(), rc.y(), rc.width(), rc.height());
-	//fixes Bug 338011
-	painter()->renderMirrorMask(rc, m_lineCacheDevice);
+    //fixes Bug 338011
+    painter()->renderMirrorMask(rc, m_lineCacheDevice);
     }
     else {
         KisPaintOp::paintLine(pi1, pi2, currentDistance);

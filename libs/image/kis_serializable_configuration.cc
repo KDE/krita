@@ -18,10 +18,18 @@
 
 #include "kis_serializable_configuration.h"
 
-
 #include <QDomElement>
 #include <QDomDocument>
 #include <QString>
+
+KisSerializableConfiguration::KisSerializableConfiguration()
+{
+}
+
+KisSerializableConfiguration::KisSerializableConfiguration(const KisSerializableConfiguration &)
+    : KisShared()
+{
+}
 
 void KisSerializableConfiguration::fromXML(const QString & s)
 {

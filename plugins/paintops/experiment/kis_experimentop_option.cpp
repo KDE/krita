@@ -75,7 +75,7 @@ KisExperimentOpOption::~KisExperimentOpOption()
     delete m_options;
 }
 
-void KisExperimentOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisExperimentOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     setting->setProperty(EXPERIMENT_DISPLACEMENT_ENABLED, m_options->displaceCHBox->isChecked());
     setting->setProperty(EXPERIMENT_DISPLACEMENT_VALUE, m_options->displaceStrength->value());
@@ -87,7 +87,7 @@ void KisExperimentOpOption::writeOptionSetting(KisPropertiesConfiguration* setti
     setting->setProperty(EXPERIMENT_HARD_EDGE, m_options->hardEdgeCHBox->isChecked());
 }
 
-void KisExperimentOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisExperimentOpOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     ExperimentOption op;
     op.readOptionSetting(setting);

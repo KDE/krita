@@ -24,11 +24,11 @@
 struct KisBookmarkedConfigurationsEditor::Private {
     Ui_WdgBookmarkedConfigurationsEditor editorUi;
     KisBookmarkedConfigurationsModel* model;
-    const KisSerializableConfiguration* currentConfig;
+    KisSerializableConfigurationSP currentConfig;
 };
 
 
-KisBookmarkedConfigurationsEditor::KisBookmarkedConfigurationsEditor(QWidget* parent, KisBookmarkedConfigurationsModel* model, const KisSerializableConfiguration* currentConfig) : QDialog(parent), d(new Private)
+KisBookmarkedConfigurationsEditor::KisBookmarkedConfigurationsEditor(QWidget* parent, KisBookmarkedConfigurationsModel* model, const KisSerializableConfigurationSP currentConfig) : QDialog(parent), d(new Private)
 {
     d->editorUi.setupUi(this);
     d->model = model;

@@ -59,8 +59,8 @@ public:
     //takes the RGB values and will deform them depending on tilt.
     void apply(const KisPaintInformation& info, qreal *r, qreal *g, qreal *b);
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
 private:
     KisTangentTiltOptionWidget * m_options;
 };

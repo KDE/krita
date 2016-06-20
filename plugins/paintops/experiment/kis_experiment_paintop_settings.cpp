@@ -28,7 +28,7 @@ bool KisExperimentPaintOpSettings::paintIncremental()
     return false;
 }
 
-QPainterPath KisExperimentPaintOpSettings::brushOutline(const KisPaintInformation &info, KisPaintOpSettings::OutlineMode mode) const
+QPainterPath KisExperimentPaintOpSettings::brushOutline(const KisPaintInformation &info, KisPaintOpSettings::OutlineMode mode)
 {
     QPainterPath path;
     if (mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline) {
@@ -57,7 +57,7 @@ QPainterPath KisExperimentPaintOpSettings::brushOutline(const KisPaintInformatio
         }
 
         path.translate(info.pos());
-        
+
     }
     return path;
 }

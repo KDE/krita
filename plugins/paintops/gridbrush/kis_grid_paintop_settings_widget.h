@@ -35,7 +35,7 @@ public:
     virtual void changePaintOpSize(qreal x, qreal y);
     virtual QSizeF paintOpSize() const;
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfigurationSP configuration() const;
 
 public:
     KisGridOpOption *m_gridOption;

@@ -31,7 +31,7 @@ public:
     KisDeformPaintOpSettingsWidget(QWidget* parent = 0);
     virtual ~KisDeformPaintOpSettingsWidget();
 
-    virtual KisPropertiesConfiguration* configuration() const;
+    virtual KisPropertiesConfigurationSP configuration() const;
     virtual void changePaintOpSize(qreal x, qreal y);
     virtual QSizeF paintOpSize() const;
 

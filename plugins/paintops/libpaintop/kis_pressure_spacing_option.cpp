@@ -48,13 +48,13 @@ bool KisPressureSpacingOption::isotropicSpacing() const
     return m_isotropicSpacing;
 }
 
-void KisPressureSpacingOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisPressureSpacingOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
     setting->setProperty(ISOTROPIC_SPACING, m_isotropicSpacing);
 }
 
-void KisPressureSpacingOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisPressureSpacingOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     KisCurveOption::readOptionSetting(setting);
     m_isotropicSpacing = setting->getBool(ISOTROPIC_SPACING, false);

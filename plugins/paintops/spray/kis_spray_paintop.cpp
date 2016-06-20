@@ -40,9 +40,9 @@
 #include <kis_lod_transform.h>
 
 
-KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
+KisSprayPaintOp::KisSprayPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
-    , m_settings(settings)
+    , m_settings(static_cast<KisSprayPaintOpSettings*>(const_cast<KisPaintOpSettings*>(settings.data())))
     , m_isPresetValid(true)
     , m_node(node)
 {

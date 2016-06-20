@@ -30,11 +30,11 @@ KisPaintOpConfigWidget::KisPaintOpConfigWidget(QWidget * parent, Qt::WFlags f)
 KisPaintOpConfigWidget::~KisPaintOpConfigWidget() {
 }
 
-void KisPaintOpConfigWidget::writeConfiguration(KisPropertiesConfiguration *config) const {
+void KisPaintOpConfigWidget::writeConfiguration(KisPropertiesConfigurationSP config) const {
     KisPaintOpSettings::setLodUserAllowed(config, m_userAllowedLod);
 }
 
-void KisPaintOpConfigWidget::setConfiguration(const KisPropertiesConfiguration * config) {
+void KisPaintOpConfigWidget::setConfiguration(const KisPropertiesConfigurationSP  config) {
     m_userAllowedLod = KisPaintOpSettings::isLodUserAllowed(config);
     emit sigUserChangedLodAvailability(m_userAllowedLod);
 }

@@ -97,7 +97,7 @@ KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(const QString & filterid,
 
 }
 
-void KisMultiDoubleFilterWidget::setConfiguration(const KisPropertiesConfiguration * config)
+void KisMultiDoubleFilterWidget::setConfiguration(const KisPropertiesConfigurationSP  config)
 {
     if (!config) return;
 
@@ -111,9 +111,9 @@ void KisMultiDoubleFilterWidget::setConfiguration(const KisPropertiesConfigurati
     }
 }
 
-KisPropertiesConfiguration* KisMultiDoubleFilterWidget::configuration() const
+KisPropertiesConfigurationSP KisMultiDoubleFilterWidget::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration(m_filterid, 0);
+    KisFilterConfigurationSP config = new KisFilterConfiguration(m_filterid, 0);
     for (int i = 0; i < nbValues(); ++i) {
         config->setProperty(m_doubleWidgets[i]->objectName(), m_doubleWidgets[i]->value());
     }

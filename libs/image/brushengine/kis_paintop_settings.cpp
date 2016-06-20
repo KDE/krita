@@ -40,12 +40,13 @@
 #include<kis_types.h>
 
 struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
-    Private() : disableDirtyNotifications(false) {}
+    Private()
+        : disableDirtyNotifications(false)
+    {}
 
     QPointer<KisPaintOpConfigWidget> settingsWidget;
     QString modelName;
     KisPaintOpPresetWSP preset;
-
 
     bool disableDirtyNotifications;
 
@@ -78,6 +79,15 @@ KisPaintOpSettings::KisPaintOpSettings()
 
 KisPaintOpSettings::~KisPaintOpSettings()
 {
+}
+
+KisPaintOpSettings::KisPaintOpSettings(const KisPaintOpSettings &rhs)
+    : KisPropertiesConfiguration(rhs)
+    , d(new Private)
+{
+    d->settingsWidget = 0;
+    d->preset = rhs.preset();
+    d->modelName = rhs.modelName();
 }
 
 void KisPaintOpSettings::setOptionsWidget(KisPaintOpConfigWidget* widget)
@@ -264,12 +274,12 @@ QString KisPaintOpSettings::indirectPaintingCompositeOp() const
     return COMPOSITE_ALPHA_DARKEN;
 }
 
-QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
+QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
 {
     QPainterPath path;
     if (mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline) {
         path = ellipseOutline(10, 10, 1.0, 0);
-        
+
         if (mode == CursorTiltOutline) {
             QPainterPath tiltLine;
             QLineF tiltAngle(QPointF(0.0,0.0), QPointF(0.0,3.0));
@@ -340,12 +350,12 @@ void KisPaintOpSettings::onPropertyChanged()
 
 }
 
-bool KisPaintOpSettings::isLodUserAllowed(const KisPropertiesConfiguration *config)
+bool KisPaintOpSettings::isLodUserAllowed(const KisPropertiesConfigurationSP config)
 {
     return config->getBool("lodUserAllowed", true);
 }
 
-void KisPaintOpSettings::setLodUserAllowed(KisPropertiesConfiguration *config, bool value)
+void KisPaintOpSettings::setLodUserAllowed(KisPropertiesConfigurationSP config, bool value)
 {
     config->setProperty("lodUserAllowed", value);
 }

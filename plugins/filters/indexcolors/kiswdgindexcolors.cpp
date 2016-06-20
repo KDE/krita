@@ -122,9 +122,9 @@ void KisWdgIndexColors::setup(QStringList shadesLabels, int ramps)
 }
 
 
-KisPropertiesConfiguration* KisWdgIndexColors::configuration() const
+KisPropertiesConfigurationSP KisWdgIndexColors::configuration() const
 {
-    KisColorTransformationConfiguration* config = new KisColorTransformationConfiguration("indexcolors", 1);
+    KisColorTransformationConfigurationSP config = new KisColorTransformationConfiguration("indexcolors", 1);
 
     PaletteGeneratorConfig palCfg;
 
@@ -157,7 +157,7 @@ KisPropertiesConfiguration* KisWdgIndexColors::configuration() const
     return config;
 }
 
-void KisWdgIndexColors::setConfiguration(const KisPropertiesConfiguration* config)
+void KisWdgIndexColors::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     PaletteGeneratorConfig palCfg;
     palCfg.fromByteArray(config->getProperty("paletteGen").toByteArray());

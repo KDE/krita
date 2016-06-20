@@ -81,7 +81,7 @@ public:
     KisPainter::FillStyle fillStyle() const;
     void setPattern(const KoPattern* );
     void setGradient(const KoAbstractGradient* gradient);
-    void setGenerator(const KisFilterConfiguration * generator);
+    void setGenerator(const KisFilterConfigurationSP  generator);
 private:
 
     struct Private;

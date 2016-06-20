@@ -516,8 +516,8 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
 
     Q_ASSERT(m_optionWidget && m_presetSelectorPopupButton);
     connect(m_optionWidget, SIGNAL(sigConfigurationUpdated()), this, SLOT(slotGuiChangedCurrentPreset()));
-    connect(m_optionWidget, SIGNAL(sigSaveLockedConfig(KisPropertiesConfiguration*)), this, SLOT(slotSaveLockedOptionToPreset(KisPropertiesConfiguration*)));
-    connect(m_optionWidget, SIGNAL(sigDropLockedConfig(KisPropertiesConfiguration*)), this, SLOT(slotDropLockedOption(KisPropertiesConfiguration*)));
+    connect(m_optionWidget, SIGNAL(sigSaveLockedConfig(KisPropertiesConfigurationSP)), this, SLOT(slotSaveLockedOptionToPreset(KisPropertiesConfigurationSP)));
+    connect(m_optionWidget, SIGNAL(sigDropLockedConfig(KisPropertiesConfigurationSP)), this, SLOT(slotDropLockedOption(KisPropertiesConfigurationSP)));
 
 
     // load the current brush engine icon for the brush editor toolbar button
@@ -875,11 +875,9 @@ void KisPaintopBox::sliderChanged(int n)
         m_resourceProvider->currentPreset()->settings()->setPaintOpOpacity(opacity);
         m_resourceProvider->currentPreset()->settings()->setPaintOpFlow(flow);
 
-        KisLockedPropertiesProxy *propertiesProxy = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(m_resourceProvider->currentPreset()->settings());
+        KisLockedPropertiesProxySP propertiesProxy = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(m_resourceProvider->currentPreset()->settings());
         propertiesProxy->setProperty("OpacityValue", opacity);
         propertiesProxy->setProperty("FlowValue", flow);
-        delete propertiesProxy;
-
         m_optionWidget->setConfiguration(m_resourceProvider->currentPreset()->settings().data());
     }
 
@@ -1033,7 +1031,7 @@ void KisPaintopBox::slotGuiChangedCurrentPreset() // Called only when UI is chan
     m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset().data());
     m_presetsPopup->updateViewSettings();
 }
-void KisPaintopBox::slotSaveLockedOptionToPreset(KisPropertiesConfiguration* p)
+void KisPaintopBox::slotSaveLockedOptionToPreset(KisPropertiesConfigurationSP p)
 {
 
     QMapIterator<QString, QVariant> i(p->getProperties());
@@ -1049,7 +1047,7 @@ void KisPaintopBox::slotSaveLockedOptionToPreset(KisPropertiesConfiguration* p)
 
 }
 
-void KisPaintopBox::slotDropLockedOption(KisPropertiesConfiguration* p)
+void KisPaintopBox::slotDropLockedOption(KisPropertiesConfigurationSP p)
 {
     KisSignalsBlocker blocker(m_optionWidget);
     KisPaintOpPresetSP preset = m_resourceProvider->currentPreset();

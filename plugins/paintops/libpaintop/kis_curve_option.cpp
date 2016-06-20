@@ -82,7 +82,7 @@ void KisCurveOption::resetAllSensors()
     }
 }
 
-void KisCurveOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisCurveOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     if (m_checkable) {
         setting->setProperty("Pressure" + m_name, isChecked());
@@ -110,7 +110,7 @@ void KisCurveOption::writeOptionSetting(KisPropertiesConfiguration* setting) con
 
 }
 
-void KisCurveOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisCurveOption::readOptionSetting(KisPropertiesConfigurationSP setting)
 {
     m_curveCache.clear();
     readNamedOptionSetting(m_name, setting);
@@ -121,7 +121,7 @@ void KisCurveOption::lodLimitations(KisPaintopLodLimitations *l) const
     Q_UNUSED(l);
 }
 
-void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisPropertiesConfiguration* setting)
+void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisPropertiesConfigurationSP setting)
 {
     if (!setting) return;
     //dbgKrita << "readNamedOptionSetting" << prefix;

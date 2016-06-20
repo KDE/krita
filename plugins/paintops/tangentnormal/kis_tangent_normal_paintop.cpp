@@ -33,7 +33,7 @@
 #include <kis_lod_transform.h>
 
 
-KisTangentNormalPaintOp::KisTangentNormalPaintOp(const KisBrushBasedPaintOpSettings* settings, KisPainter* painter, KisNodeSP node, KisImageSP image):
+KisTangentNormalPaintOp::KisTangentNormalPaintOp(const KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP image):
     KisBrushBasedPaintOp(settings, painter),
     m_opacityOption(node),
     m_tempDev(painter->device()->createCompositionSourceDevice())
@@ -80,9 +80,9 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
     QString currentSpace = currentColor.colorSpace()->colorModelId().id();
     const KoColorSpace* rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
     if (currentSpace != "RGBA") {
-	rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
     } else {
-	rgbColorSpace = currentColor.colorSpace();
+    rgbColorSpace = currentColor.colorSpace();
     }
     QVector <float> channelValues(4);
     qreal r, g, b;
@@ -181,18 +181,18 @@ void KisTangentNormalPaintOp::paintLine(const KisPaintInformation& pi1, const Ki
         }
 
         KisPainter p(m_lineCacheDevice);
-	KoColor currentColor = painter()->paintColor();
-	QString currentSpace = currentColor.colorSpace()->colorModelId().id();
-	const KoColorSpace* rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
-	if (currentSpace != "RGBA") {
-	    rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
-	} else {
-	    rgbColorSpace = currentColor.colorSpace();
-	}
-	QVector <float> channelValues(4);
+    KoColor currentColor = painter()->paintColor();
+    QString currentSpace = currentColor.colorSpace()->colorModelId().id();
+    const KoColorSpace* rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    if (currentSpace != "RGBA") {
+        rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    } else {
+        rgbColorSpace = currentColor.colorSpace();
+    }
+    QVector <float> channelValues(4);
     qreal r, g, b;
 
-	if (currentColor.colorSpace()->colorDepthId().id()=="F16" || currentColor.colorSpace()->colorDepthId().id()=="F32"){
+    if (currentColor.colorSpace()->colorDepthId().id()=="F16" || currentColor.colorSpace()->colorDepthId().id()=="F32"){
         channelValues[0] = 0.5;//red
         channelValues[1] = 0.5;//green
         channelValues[2] = 1.0;//blue
@@ -217,15 +217,15 @@ void KisTangentNormalPaintOp::paintLine(const KisPaintInformation& pi1, const Ki
         channelValues[2] = r;//red
     }
 
-	quint8 data[4];
-	rgbColorSpace->fromNormalisedChannelsValue(data, channelValues);
-	KoColor color(data, rgbColorSpace);
+    quint8 data[4];
+    rgbColorSpace->fromNormalisedChannelsValue(data, channelValues);
+    KoColor color(data, rgbColorSpace);
         p.setPaintColor(color);
         p.drawDDALine(pi1.pos(), pi2.pos());
 
         QRect rc = m_lineCacheDevice->extent();
         painter()->bitBlt(rc.x(), rc.y(), m_lineCacheDevice, rc.x(), rc.y(), rc.width(), rc.height());
-	painter()->renderMirrorMask(rc, m_lineCacheDevice);
+    painter()->renderMirrorMask(rc, m_lineCacheDevice);
     }
     else {
         KisPaintOp::paintLine(pi1, pi2, currentDistance);

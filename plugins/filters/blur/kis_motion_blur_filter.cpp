@@ -54,9 +54,9 @@ KisConfigWidget * KisMotionBlurFilter::createConfigurationWidget(QWidget* parent
     return new KisWdgMotionBlur(parent);
 }
 
-KisFilterConfiguration* KisMotionBlurFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfigurationSP KisMotionBlurFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 1);
     config->setProperty("blurAngle", 0);
     config->setProperty("blurLength", 5);
 
@@ -65,7 +65,7 @@ KisFilterConfiguration* KisMotionBlurFilter::factoryConfiguration(const KisPaint
 
 void KisMotionBlurFilter::processImpl(KisPaintDeviceSP device,
                                       const QRect& rect,
-                                      const KisFilterConfiguration* config,
+                                      const KisFilterConfigurationSP _config,
                                       KoUpdater* progressUpdater
                                       ) const
 {
@@ -73,7 +73,7 @@ void KisMotionBlurFilter::processImpl(KisPaintDeviceSP device,
 
     Q_ASSERT(device != 0);
 
-    if (!config) config = new KisFilterConfiguration(id().id(), 1);
+    KisFilterConfigurationSP config = _config ? _config : new KisFilterConfiguration(id().id(), 1);
 
     QVariant value;
     config->getProperty("blurAngle", value);
@@ -115,7 +115,7 @@ void KisMotionBlurFilter::processImpl(KisPaintDeviceSP device,
     QPainter imagePainter(&kernelRepresentation);
     imagePainter.setRenderHint(QPainter::Antialiasing);
     imagePainter.setPen(QPen(QColor::fromRgb(255, 255, 255), 1.0));
-    imagePainter.drawLine(QPointF(kernelWidth / 2 - halfWidth, kernelHeight / 2 + halfHeight), 
+    imagePainter.drawLine(QPointF(kernelWidth / 2 - halfWidth, kernelHeight / 2 + halfHeight),
                           QPointF(kernelWidth / 2 + halfWidth, kernelHeight / 2 - halfHeight));
 
     // construct kernel from image
@@ -135,7 +135,7 @@ void KisMotionBlurFilter::processImpl(KisPaintDeviceSP device,
     painter.applyMatrix(kernel, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
 }
 
-QRect KisMotionBlurFilter::neededRect(const QRect & rect, const KisFilterConfiguration* _config, int lod) const
+QRect KisMotionBlurFilter::neededRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const
 {
     KisLodTransformScalar t(lod);
 
@@ -150,7 +150,7 @@ QRect KisMotionBlurFilter::neededRect(const QRect & rect, const KisFilterConfigu
     return rect.adjusted(-halfWidth * 2, -halfHeight * 2, halfWidth * 2, halfHeight * 2);
 }
 
-QRect KisMotionBlurFilter::changedRect(const QRect & rect, const KisFilterConfiguration* _config, int lod) const
+QRect KisMotionBlurFilter::changedRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const
 {
     KisLodTransformScalar t(lod);
 

@@ -21,7 +21,6 @@
 
 #include "kis_properties_configuration.h"
 
-
 /**
  * This class acts as a proxy for all transfers between KisLockedPropertiesServer
  * and KisPaintOpSettings while using setConfiguration and writeConfiguration
@@ -41,15 +40,19 @@ class KisLockedPropertiesProxy: public KisPropertiesConfiguration
 {
 public:
     KisLockedPropertiesProxy() ;
-    KisLockedPropertiesProxy(KisLockedProperties* p);
-    KisLockedPropertiesProxy(const KisPropertiesConfiguration *, KisLockedProperties *);
+    KisLockedPropertiesProxy(KisLockedProperties *p);
+    KisLockedPropertiesProxy(KisPropertiesConfigurationSP , KisLockedProperties *);
+
     using KisPropertiesConfiguration::getProperty;
     QVariant getProperty(const QString &name) const;
     using KisPropertiesConfiguration::setProperty;
     void setProperty(const QString & name, const QVariant & value);
 private:
+    Q_DISABLE_COPY(KisLockedPropertiesProxy)
     KisLockedProperties *m_lockedProperties;
-    const KisPropertiesConfiguration *m_parent;
+    KisPropertiesConfigurationSP m_parent;
 };
+
+typedef KisSharedPtr<KisLockedPropertiesProxy> KisLockedPropertiesProxySP;
 
 #endif // KIS_LOCKED_PROPERTIES_PROXY_H

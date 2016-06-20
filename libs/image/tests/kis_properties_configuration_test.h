@@ -36,8 +36,8 @@ private Q_SLOTS:
     void testDefaultValues();
     void testNotSavedValues();
 private:
-    KisPropertiesConfiguration* createConfig();
-    void testConfig(KisPropertiesConfiguration* config);
+    KisPropertiesConfigurationSP createConfig();
+    void testConfig(KisPropertiesConfigurationSP config);
 private:
     int v1;
     QString v2;

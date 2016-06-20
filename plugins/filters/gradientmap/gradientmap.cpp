@@ -29,21 +29,21 @@
 K_PLUGIN_FACTORY_WITH_JSON(KritaGradientMapFactory, "kritagradientmap.json", registerPlugin<KritaGradientMap>();)
 
 KritaGradientMapConfigWidget::KritaGradientMapConfigWidget(QWidget *parent, KisPaintDeviceSP dev, Qt::WFlags f)
-	: KisConfigWidget(parent, f)
+    : KisConfigWidget(parent, f)
 {
     Q_UNUSED(dev)
-	m_page = new WdgGradientMap(this);
-	QHBoxLayout *l = new QHBoxLayout(this);
-	Q_CHECK_PTR(l);
-	l->addWidget(m_page);
-	l->setContentsMargins(0, 0, 0, 0);
+    m_page = new WdgGradientMap(this);
+    QHBoxLayout *l = new QHBoxLayout(this);
+    Q_CHECK_PTR(l);
+    l->addWidget(m_page);
+    l->setContentsMargins(0, 0, 0, 0);
 
     connect(m_page->gradientchooser, SIGNAL(resourceSelected(KoResource*)), SIGNAL(sigConfigurationItemChanged()));
 }
 
 KritaGradientMapConfigWidget::~KritaGradientMapConfigWidget()
 {
-	delete m_page;
+    delete m_page;
 }
 
 void KritaGradientMapConfigWidget::gradientResourceChanged(KoResource* gradient)
@@ -51,25 +51,25 @@ void KritaGradientMapConfigWidget::gradientResourceChanged(KoResource* gradient)
     Q_UNUSED(gradient)
 }
 
-KritaGradientMapFilterConfiguration* KritaGradientMapConfigWidget::configuration() const
+KisPropertiesConfigurationSP KritaGradientMapConfigWidget::configuration() const
 {
     KritaGradientMapFilterConfiguration* cfg = new KritaGradientMapFilterConfiguration();
-	const KoResource* gradient;
-	if (!(gradient = m_page->gradientchooser->currentResource()))
-	{
-		m_page->gradientchooser->setCurrentItem(0, 0);
-		gradient = m_page->gradientchooser->currentResource();
-	}
-	cfg->setGradient(gradient);
+    const KoResource* gradient;
+    if (!(gradient = m_page->gradientchooser->currentResource()))
+    {
+        m_page->gradientchooser->setCurrentItem(0, 0);
+        gradient = m_page->gradientchooser->currentResource();
+    }
+    cfg->setGradient(gradient);
 
     return cfg;
 }
 
 //-----------------------------
 
-void KritaGradientMapConfigWidget::setConfiguration(const KisPropertiesConfiguration* config)
+void KritaGradientMapConfigWidget::setConfiguration(const KisPropertiesConfigurationSP config)
 {
-    const KritaGradientMapFilterConfiguration* cfg = dynamic_cast<const KritaGradientMapFilterConfiguration* > (config);
+    const KritaGradientMapFilterConfiguration* cfg = dynamic_cast<const KritaGradientMapFilterConfiguration* > (config.data());
     Q_ASSERT(cfg);
     Q_UNUSED(cfg);
 }

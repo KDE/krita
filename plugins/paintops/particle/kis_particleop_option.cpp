@@ -106,7 +106,7 @@ qreal KisParticleOpOption::gravity() const
     return m_options->gravSPBox->value();
 }
 
-void KisParticleOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisParticleOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     setting->setProperty(PARTICLE_COUNT, particleCount());
     setting->setProperty(PARTICLE_ITERATIONS, iterations());
@@ -116,7 +116,7 @@ void KisParticleOpOption::writeOptionSetting(KisPropertiesConfiguration* setting
     setting->setProperty(PARTICLE_SCALE_Y, scale().y());
 }
 
-void KisParticleOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisParticleOpOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
 
     m_options->particleSpinBox->setValue((qreal)setting->getInt(PARTICLE_COUNT));

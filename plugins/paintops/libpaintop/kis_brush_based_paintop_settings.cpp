@@ -55,8 +55,7 @@ int KisBrushBasedPaintOpSettings::rate() const
 KisPaintOpSettingsSP KisBrushBasedPaintOpSettings::clone() const
 {
     KisPaintOpSettingsSP _settings = KisOutlineGenerationPolicy<KisPaintOpSettings>::clone();
-    KisBrushBasedPaintOpSettings *settings =
-        dynamic_cast<KisBrushBasedPaintOpSettings*>(_settings.data());
+    KisBrushBasedPaintOpSettingsSP settings = dynamic_cast<KisBrushBasedPaintOpSettings*>(_settings.data());
     settings->m_savedBrush = this->brush();
     return settings;
 }
@@ -70,7 +69,7 @@ KisBrushSP KisBrushBasedPaintOpSettings::brush() const
 QPainterPath KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInformation &info,
                                                             OutlineMode mode,
                                                             qreal additionalScale,
-                                                            bool forceOutline) const
+                                                            bool forceOutline)
 {
     QPainterPath path;
 
@@ -107,7 +106,7 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInform
     return path;
 }
 
-QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
+QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
 {
     return brushOutlineImpl(info, mode, 1.0);
 }
@@ -128,3 +127,4 @@ bool KisBrushBasedPaintOpSettings::isLoadable()
 {
     return (KisBrushServer::instance()->brushServer()->resources().count() > 0);
 }
+

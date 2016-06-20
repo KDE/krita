@@ -36,9 +36,7 @@
 #include <kis_pressure_sharpness_option.h>
 #include <kis_color_source_option.h>
 #include <kis_pressure_spacing_option.h>
-
-
-class KisBrushBasedPaintOpSettings;
+#include <kis_brush_based_paintop_settings.h>
 
 class KisPainter;
 class KisColorSource;
@@ -49,7 +47,7 @@ class KisBrushOp : public KisBrushBasedPaintOp
 
 public:
 
-    KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
+    KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
     ~KisBrushOp();
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);

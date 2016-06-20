@@ -31,10 +31,14 @@ class KisGridPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSetti
 {
 public:
     KisGridPaintOpSettings();
+    virtual ~KisGridPaintOpSettings() {}
 
-    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode);
     bool paintIncremental();
-
+private:
+    Q_DISABLE_COPY(KisGridPaintOpSettings)
 };
+
+typedef KisSharedPtr<KisGridPaintOpSettings> KisGridPaintOpSettingsSP;
 
 #endif

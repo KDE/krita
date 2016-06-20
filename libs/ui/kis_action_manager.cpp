@@ -367,7 +367,7 @@ void KisActionManager::registerOperation(KisOperation* operation)
 
 void KisActionManager::runOperation(const QString& id)
 {
-    KisOperationConfiguration* config = new KisOperationConfiguration(id);
+    KisOperationConfigurationSP config = new KisOperationConfiguration(id);
 
     KisOperationUIFactory* uiFactory = d->uiRegistry.get(id);
     if (uiFactory) {
@@ -379,7 +379,7 @@ void KisActionManager::runOperation(const QString& id)
     runOperationFromConfiguration(config);
 }
 
-void KisActionManager::runOperationFromConfiguration(KisOperationConfiguration* config)
+void KisActionManager::runOperationFromConfiguration(KisOperationConfigurationSP config)
 {
     KisOperation* operation = d->operationRegistry.get(config->id());
     Q_ASSERT(operation);

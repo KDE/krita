@@ -62,7 +62,7 @@
 
 // shaded: probabity : paint always - 0.0 density
 
-KisSketchPaintOp::KisSketchPaintOp(const KisSketchPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
+KisSketchPaintOp::KisSketchPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
 {
     Q_UNUSED(image);

@@ -99,7 +99,7 @@ int KisSprayShapeOption::shape() const
 }
 
 
-void KisSprayShapeOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisSprayShapeOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     setting->setProperty(SPRAYSHAPE_ENABLED, isChecked());
     setting->setProperty(SPRAYSHAPE_SHAPE, shape());
@@ -111,7 +111,7 @@ void KisSprayShapeOption::writeOptionSetting(KisPropertiesConfiguration* setting
 }
 
 
-void KisSprayShapeOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisSprayShapeOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     // in 2.2 there is not shape enabled so true by default
     setChecked(setting->getBool(SPRAYSHAPE_ENABLED, true));

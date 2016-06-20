@@ -163,47 +163,12 @@ class Q_DECL_HIDDEN KisMainWindow::Private
 public:
     Private(KisMainWindow *parent)
         : q(parent)
-        , viewManager(0)
-        , firstTime(true)
-        , windowSizeDirty(false)
-        , readOnly(false)
-        , isImporting(false)
-        , isExporting(false)
-        , noCleanup(false)
-        , showDocumentInfo(0)
-        , saveAction(0)
-        , saveActionAs(0)
-//        , printAction(0)
-//        , printActionPreview(0)
-        , exportPdf(0)
-        , closeAll(0)
-//        , reloadFile(0)
-        , importFile(0)
-        , exportFile(0)
-        , undo(0)
-        , redo(0)
-        , newWindow(0)
-        , close(0)
-        , mdiCascade(0)
-        , mdiTile(0)
-        , mdiNextWindow(0)
-        , mdiPreviousWindow(0)
-        , toggleDockers(0)
-        , toggleDockerTitleBars(0)
         , dockWidgetMenu(new KActionMenu(i18nc("@action:inmenu", "&Dockers"), parent))
         , windowMenu(new KActionMenu(i18nc("@action:inmenu", "&Window"), parent))
         , documentMenu(new KActionMenu(i18nc("@action:inmenu", "New &View"), parent))
-        , helpMenu(0)
-        , recentFiles(0)
-        , toolOptionsDocker(0)
-        , deferredClosingEvent(0)
-        , themeManager(0)
         , mdiArea(new QMdiArea(parent))
-        , activeSubWindow(0)
         , windowMapper(new QSignalMapper(parent))
         , documentMapper(new QSignalMapper(parent))
-        , lastExportSpecialOutputFlag(0)
-        , geometryInitialized(false)
     {
     }
 
@@ -211,8 +176,8 @@ public:
         qDeleteAll(toolbarList);
     }
 
-    KisMainWindow *q;
-    KisViewManager *viewManager;
+    KisMainWindow *q {0};
+    KisViewManager *viewManager {0};
 
     QPointer<KisView> activeView;
 
@@ -222,35 +187,35 @@ public:
 
     QList<QAction *> toolbarList;
 
-    bool firstTime;
-    bool windowSizeDirty;
-    bool readOnly;
-    bool isImporting;
-    bool isExporting;
-    bool noCleanup;
+    bool firstTime {true};
+    bool windowSizeDirty {false};
+    bool readOnly {false};
+    bool isImporting {false};
+    bool isExporting {false};
+    bool noCleanup {false};
 
-    KisAction *showDocumentInfo;
-    KisAction *saveAction;
-    KisAction *saveActionAs;
+    KisAction *showDocumentInfo {0};
+    KisAction *saveAction {0};
+    KisAction *saveActionAs {0};
 //    KisAction *printAction;
 //    KisAction *printActionPreview;
-    KisAction *exportPdf;
-    KisAction *importAnimation;
-    KisAction *exportAnimation;
-    KisAction *closeAll;
+    KisAction *exportPdf {0};
+    KisAction *importAnimation {0};
+    KisAction *exportAnimation {0};
+    KisAction *closeAll {0};
 //    KisAction *reloadFile;
-    KisAction *importFile;
-    KisAction *exportFile;
-    KisAction *undo;
-    KisAction *redo;
-    KisAction *newWindow;
-    KisAction *close;
-    KisAction *mdiCascade;
-    KisAction *mdiTile;
-    KisAction *mdiNextWindow;
-    KisAction *mdiPreviousWindow;
-    KisAction *toggleDockers;
-    KisAction *toggleDockerTitleBars;
+    KisAction *importFile {0};
+    KisAction *exportFile {0};
+    KisAction *undo {0};
+    KisAction *redo {0};
+    KisAction *newWindow {0};
+    KisAction *close {0};
+    KisAction *mdiCascade {0};
+    KisAction *mdiTile {0};
+    KisAction *mdiNextWindow {0};
+    KisAction *mdiPreviousWindow {0};
+    KisAction *toggleDockers {0};
+    KisAction *toggleDockerTitleBars {0};
 
     KisAction *expandingSpacers[2];
 
@@ -258,30 +223,30 @@ public:
     KActionMenu *windowMenu;
     KActionMenu *documentMenu;
 
-    KHelpMenu *helpMenu;
+    KHelpMenu *helpMenu  {0};
 
-    KRecentFilesAction *recentFiles;
+    KRecentFilesAction *recentFiles {0};
 
     QUrl lastExportUrl;
 
     QMap<QString, QDockWidget *> dockWidgetsMap;
     QMap<QDockWidget *, bool> dockWidgetVisibilityMap;
     QByteArray dockerStateBeforeHiding;
-    KoToolDocker *toolOptionsDocker;
+    KoToolDocker *toolOptionsDocker {0};
 
-    QCloseEvent *deferredClosingEvent;
+    QCloseEvent *deferredClosingEvent {0};
 
-    Digikam::ThemeManager *themeManager;
+    Digikam::ThemeManager *themeManager {0};
 
     QMdiArea *mdiArea;
-    QMdiSubWindow *activeSubWindow;
+    QMdiSubWindow *activeSubWindow  {0};
     QSignalMapper *windowMapper;
     QSignalMapper *documentMapper;
 
     QByteArray lastExportedFormat;
-    int lastExportSpecialOutputFlag;
+    int lastExportSpecialOutputFlag  {0};
     QScopedPointer<KisSignalCompressorWithParam<int> > tabSwitchCompressor;
-    bool geometryInitialized;
+    bool geometryInitialized  {false};
     QMutex savingEntryMutex;
 
     KisActionManager * actionManager() {

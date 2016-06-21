@@ -445,11 +445,6 @@ void KoCanvasControllerWidget::zoomTo(const QRect &viewRect)
     zoomBy(viewRect.center(), scale);
 }
 
-void KoCanvasControllerWidget::setToolOptionWidgets(const QList<QPointer<QWidget> >&widgetMap)
-{
-    emit toolOptionWidgetsChanged(widgetMap);
-}
-
 void KoCanvasControllerWidget::updateDocumentSize(const QSize &sz, bool recalculateCenter)
 {
     // Don't update if the document-size didn't changed to prevent infinite loops and unneeded updates.

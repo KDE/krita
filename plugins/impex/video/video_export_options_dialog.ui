@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>VideoExportOptionsDialog</class>
- <widget class="QDialog" name="VideoExportOptionsDialog">
+ <widget class="QWidget" name="VideoExportOptionsDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -9,9 +9,6 @@
     <width>505</width>
     <height>333</height>
    </rect>
-  </property>
-  <property name="windowTitle">
-   <string>Dialog</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,1,0">
    <item>

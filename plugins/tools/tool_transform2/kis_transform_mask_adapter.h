@@ -37,7 +37,7 @@ public:
 
     void transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst) const;
 
-    const ToolTransformArgs& savedArgs() const;
+    const ToolTransformArgs& transformArgs() const;
 
     QString id() const;
     void toXML(QDomElement *e) const;

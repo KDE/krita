@@ -651,7 +651,7 @@ bool KisToolTransform::tryInitTransformModeFromNode(KisNodeSP node)
             dynamic_cast<KisTransformMaskAdapter*>(savedParams.data());
 
         if (adapter) {
-            m_currentArgs = adapter->savedArgs();
+            m_currentArgs = adapter->transformArgs();
             initGuiAfterTransformMode();
             result = true;
         }

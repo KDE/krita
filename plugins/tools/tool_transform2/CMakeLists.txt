@@ -23,6 +23,7 @@ set(kritatooltransform_SOURCES
     kis_free_transform_strategy_gsl_helpers.cpp
     kis_perspective_transform_strategy.cpp
     kis_transform_utils.cpp
+    kis_modify_transform_mask_command.cpp
     strokes/transform_stroke_strategy.cpp
     )
 

@@ -47,33 +47,6 @@ static const PrecisionValues precisionLevels[] = {
     {eps,         0, eps,  eps}
 };
 
-struct KisDabCache::SavedDabParameters {
-    KoColor color;
-    qreal angle;
-    int width;
-    int height;
-    qreal subPixelX;
-    qreal subPixelY;
-    qreal softnessFactor;
-    int index;
-    MirrorProperties mirrorProperties;
-
-    bool compare(const SavedDabParameters &rhs, int precisionLevel) const {
-        const PrecisionValues &prec = precisionLevels[precisionLevel];
-
-        return color == rhs.color &&
-               qAbs(angle - rhs.angle) <= prec.angle &&
-               qAbs(width - rhs.width) <= (int)(prec.sizeFrac * width) &&
-               qAbs(height - rhs.height) <= (int)(prec.sizeFrac * height) &&
-               qAbs(subPixelX - rhs.subPixelX) <= prec.subPixel &&
-               qAbs(subPixelY - rhs.subPixelY) <= prec.subPixel &&
-               qAbs(softnessFactor - rhs.softnessFactor) <= prec.softnessFactor &&
-               index == rhs.index &&
-               mirrorProperties.horizontalMirror == rhs.mirrorProperties.horizontalMirror &&
-               mirrorProperties.verticalMirror == rhs.mirrorProperties.verticalMirror;
-    }
-};
-
 struct KisDabCache::Private {
 
     Private(KisBrushSP brush)
@@ -82,11 +55,8 @@ struct KisDabCache::Private {
           sharpnessOption(0),
           textureOption(0),
           precisionOption(0),
-          subPixelPrecisionDisabled(false),
-          cachedDabParameters(new SavedDabParameters)
+          subPixelPrecisionDisabled(false)
     {}
-    KisFixedPaintDeviceSP dab;
-    KisFixedPaintDeviceSP dabOriginal;
 
     KisBrushSP brush;
     KisPaintDeviceSP colorSourceDevice;
@@ -96,8 +66,6 @@ struct KisDabCache::Private {
     KisTextureProperties *textureOption;
     KisPrecisionOption *precisionOption;
     bool subPixelPrecisionDisabled;
-
-    SavedDabParameters *cachedDabParameters;
 };
 
 
@@ -109,7 +77,6 @@ KisDabCache::KisDabCache(KisBrushSP brush)
 
 KisDabCache::~KisDabCache()
 {
-    delete m_d->cachedDabParameters;
     delete m_d;
 }
 
@@ -136,30 +103,6 @@ void KisDabCache::setPrecisionOption(KisPrecisionOption *option)
 void KisDabCache::disableSubpixelPrecision()
 {
     m_d->subPixelPrecisionDisabled = true;
-}
-
-inline KisDabCache::SavedDabParameters
-KisDabCache::getDabParameters(const KoColor& color,
-                              double scaleX, double scaleY,
-                              double angle,
-                              const KisPaintInformation& info,
-                              double subPixelX, double subPixelY,
-                              qreal softnessFactor,
-                              MirrorProperties mirrorProperties)
-{
-    SavedDabParameters params;
-
-    params.color = color;
-    params.angle = angle;
-    params.width = m_d->brush->maskWidth(scaleX, angle, subPixelX, subPixelY, info);
-    params.height = m_d->brush->maskHeight(scaleY, angle, subPixelX, subPixelY, info);
-    params.subPixelX = subPixelX;
-    params.subPixelY = subPixelY;
-    params.softnessFactor = softnessFactor;
-    params.index = m_d->brush->brushIndex(info);
-    params.mirrorProperties = mirrorProperties;
-
-    return params;
 }
 
 KisFixedPaintDeviceSP KisDabCache::fetchDab(const KoColorSpace *cs,
@@ -196,12 +139,6 @@ KisFixedPaintDeviceSP KisDabCache::fetchDab(const KoColorSpace *cs,
                           dstDabRect);
 }
 
-bool KisDabCache::needSeparateOriginal()
-{
-    return (m_d->textureOption && m_d->textureOption->m_enabled) ||
-           (m_d->sharpnessOption && m_d->sharpnessOption->isChecked());
-}
-
 struct KisDabCache::DabPosition {
     DabPosition(const QRect &_rect,
                 const QPointF &_subPixel,
@@ -215,41 +152,6 @@ struct KisDabCache::DabPosition {
     QPointF subPixel;
     qreal realAngle;
 };
-
-inline
-QRect KisDabCache::correctDabRectWhenFetchedFromCache(const QRect &dabRect,
-        const QSize &realDabSize)
-{
-    int diffX = (realDabSize.width() - dabRect.width()) / 2;
-    int diffY = (realDabSize.height() - dabRect.height()) / 2;
-
-    return QRect(dabRect.x() - diffX, dabRect.y() - diffY,
-                 realDabSize.width() , realDabSize.height());
-}
-
-inline
-KisFixedPaintDeviceSP KisDabCache::tryFetchFromCache(const SavedDabParameters &params,
-        const KisPaintInformation& info,
-        QRect *dstDabRect)
-{
-    int precisionLevel = m_d->precisionOption ? m_d->precisionOption->precisionLevel() - 1 : 3;
-
-    if (!params.compare(*m_d->cachedDabParameters, precisionLevel)) {
-        return 0;
-    }
-
-    if (needSeparateOriginal()) {
-        *m_d->dab = *m_d->dabOriginal;
-        *dstDabRect = correctDabRectWhenFetchedFromCache(*dstDabRect, m_d->dab->bounds().size());
-        postProcessDab(m_d->dab, dstDabRect->topLeft(), info);
-    }
-    else {
-        *dstDabRect = correctDabRectWhenFetchedFromCache(*dstDabRect, m_d->dab->bounds().size());
-    }
-
-    m_d->brush->notifyCachedDabPainted(info);
-    return m_d->dab;
-}
 
 qreal positiveFraction(qreal x) {
     qint32 unused = 0;
@@ -344,39 +246,15 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
 
     *dstDabRect = position.rect;
 
-    bool cachingIsPossible = !colorSource || colorSource->isUniformColor();
     KoColor paintColor = colorSource && colorSource->isUniformColor() ?
                          colorSource->uniformColor() : color;
 
-    SavedDabParameters newParams = getDabParameters(paintColor,
-                                   scaleX, scaleY,
-                                   position.realAngle, info,
-                                   position.subPixel.x(),
-                                   position.subPixel.y(),
-                                   softnessFactor,
-                                   mirrorProperties);
-
-    if (!m_d->dab || !(*m_d->dab->colorSpace() == *cs)) {
-        m_d->dab = new KisFixedPaintDevice(cs);
-    }
-    else if (cachingIsPossible) {
-        KisFixedPaintDeviceSP cachedDab =
-            tryFetchFromCache(newParams, info, dstDabRect);
-
-        if (cachedDab) return cachedDab;
-    }
+    KisFixedPaintDeviceSP dab = new KisFixedPaintDevice(cs);
 
     if (m_d->brush->brushType() == IMAGE || m_d->brush->brushType() == PIPE_IMAGE) {
-        m_d->dab = m_d->brush->paintDevice(cs, scaleX, position.realAngle, info,
+        dab = m_d->brush->paintDevice(cs, scaleX, position.realAngle, info,
                                            position.subPixel.x(),
                                            position.subPixel.y());
-    }
-    else if (cachingIsPossible) {
-        *m_d->cachedDabParameters = newParams;
-        m_d->brush->mask(m_d->dab, paintColor, scaleX, scaleY, position.realAngle,
-                         info,
-                         position.subPixel.x(), position.subPixel.y(),
-                         softnessFactor);
     }
     else {
         if (!m_d->colorSourceDevice || !(*cs == *m_d->colorSourceDevice->colorSpace())) {
@@ -390,28 +268,20 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
         colorSource->colorize(m_d->colorSourceDevice, maskRect, info.pos().toPoint());
         delete m_d->colorSourceDevice->convertTo(cs);
 
-        m_d->brush->mask(m_d->dab, m_d->colorSourceDevice, scaleX, scaleY, position.realAngle,
+        m_d->brush->mask(dab, m_d->colorSourceDevice, scaleX, scaleY, position.realAngle,
                          info,
                          position.subPixel.x(), position.subPixel.y(),
                          softnessFactor);
     }
 
     if (!mirrorProperties.isEmpty()) {
-        m_d->dab->mirror(mirrorProperties.horizontalMirror,
+        dab->mirror(mirrorProperties.horizontalMirror,
                          mirrorProperties.verticalMirror);
     }
 
-    if (needSeparateOriginal()) {
-        if (!m_d->dabOriginal || !(*cs == *m_d->dabOriginal->colorSpace())) {
-            m_d->dabOriginal = new KisFixedPaintDevice(cs);
-        }
+    postProcessDab(dab, position.rect.topLeft(), info);
 
-        *m_d->dabOriginal = *m_d->dab;
-    }
-
-    postProcessDab(m_d->dab, position.rect.topLeft(), info);
-
-    return m_d->dab;
+    return dab;
 }
 
 void KisDabCache::postProcessDab(KisFixedPaintDeviceSP dab,

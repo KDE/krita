@@ -1,4 +1,6 @@
 /*
+ *  Copyright (c) 2016 Jouni Pentikäinen <joupent@gmail.com>
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -14,32 +16,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __MODIFY_TRANFORM_MASK_COMMAND_H
-#define __MODIFY_TRANFORM_MASK_COMMAND_H
+#ifndef TEST_ANIMATED_TRANSFORM_PARAMETERS_H
+#define TEST_ANIMATED_TRANSFORM_PARAMETERS_H
 
-#include "kundo2command.h"
-#include "kis_types.h"
-#include "kritatooltransform_export.h"
-#include "KoID.h"
+#include <QtTest>
 
-class KisAnimatedTransformMaskParameters;
+class KisAnimatedTransformParametersTest : public QObject
+{
+    Q_OBJECT
 
-class KRITATOOLTRANSFORM_EXPORT KisModifyTransformMaskCommand : public KUndo2Command {
-public:
-    KisModifyTransformMaskCommand(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params);
+private Q_SLOTS:
 
-    void redo();
-    void undo();
-
-private:
-    void updateMask(bool isHidden);
-    void modifyAnimatedMask();
-    template<class T> T *getChannel(KoID id);
-
-private:
-    KisTransformMaskSP m_mask;
-    KisTransformMaskParamsInterfaceSP m_params;
-    KisTransformMaskParamsInterfaceSP m_oldParams;
+    void testTransformKeyframing();
 };
 
 #endif
+

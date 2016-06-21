@@ -28,6 +28,9 @@
 
 const KoID KisKeyframeChannel::Content = KoID("content", ki18n("Content"));
 const KoID KisKeyframeChannel::Opacity = KoID("opacity", ki18n("Opacity"));
+const KoID KisKeyframeChannel::TransformArguments = KoID("transform_arguments", ki18n("Transform"));
+const KoID KisKeyframeChannel::TransformPositionX = KoID("transform_pos_x", ki18n("X position"));
+const KoID KisKeyframeChannel::TransformPositionY = KoID("transform_pos_y", ki18n("Y position"));
 
 struct KisKeyframeChannel::Private
 {

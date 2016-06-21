@@ -23,6 +23,7 @@
 
 #include "tool_transform_args.h"
 #include "kis_transform_utils.h"
+#include "kis_animated_transform_parameters.h"
 
 #include "kis_node.h"
 
@@ -104,6 +105,24 @@ QRect KisTransformMaskAdapter::nonAffineChangeRect(const QRect &rc)
 QRect KisTransformMaskAdapter::nonAffineNeedRect(const QRect &rc, const QRect &srcBounds)
 {
     return KisTransformUtils::needRect(transformArgs(), rc, srcBounds);
+}
+
+KisKeyframeChannel *KisTransformMaskAdapter::getKeyframeChannel(const QString&, KisDefaultBoundsBaseSP)
+{
+    return 0;
+}
+
+KisTransformMaskParamsInterfaceSP KisTransformMaskAdapter::enableAnimation()
+{
+    return toQShared(new KisAnimatedTransformMaskParameters(this));
+}
+
+void KisTransformMaskAdapter::clearChangedFlag()
+{}
+
+bool KisTransformMaskAdapter::hasChanged() const
+{
+    return false;
 }
 
 #include "kis_transform_mask_params_factory_registry.h"

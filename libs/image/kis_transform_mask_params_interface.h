@@ -21,12 +21,14 @@
 
 #include "kritaimage_export.h"
 #include "kis_types.h"
+#include "kis_default_bounds_base.h"
 
 #include <QScopedPointer>
 
 
 class QTransform;
 class QDomElement;
+class KisKeyframeChannel;
 
 class KRITAIMAGE_EXPORT KisTransformMaskParamsInterface
 {
@@ -46,6 +48,11 @@ public:
 
     virtual QRect nonAffineChangeRect(const QRect &rc) = 0;
     virtual QRect nonAffineNeedRect(const QRect &rc, const QRect &srcBounds) = 0;
+
+    virtual KisKeyframeChannel *getKeyframeChannel(const QString &id, KisDefaultBoundsBaseSP defaultBounds) = 0;
+    virtual KisTransformMaskParamsInterfaceSP enableAnimation() = 0;
+    virtual void clearChangedFlag() = 0;
+    virtual bool hasChanged() const = 0;
 };
 
 
@@ -77,6 +84,11 @@ public:
 
     QRect nonAffineChangeRect(const QRect &rc);
     QRect nonAffineNeedRect(const QRect &rc, const QRect &srcBounds);
+
+    KisKeyframeChannel *getKeyframeChannel(const QString &id, KisDefaultBoundsBaseSP defaultBounds);
+    KisTransformMaskParamsInterfaceSP enableAnimation();
+    void clearChangedFlag();
+    bool hasChanged() const;
 
 private:
     struct Private;

@@ -41,6 +41,9 @@ public:
 
     static const KoID Content;
     static const KoID Opacity;
+    static const KoID TransformArguments;
+    static const KoID TransformPositionX;
+    static const KoID TransformPositionY;
 
 public:
     KisKeyframeChannel(const KoID& id, KisDefaultBoundsBaseSP defaultBounds);

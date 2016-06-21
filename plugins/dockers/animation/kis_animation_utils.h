@@ -61,7 +61,9 @@ namespace KisAnimationUtils
     extern const QString removeLayerActionName;
 
     extern const QString addOpacityKeyframeActionName;
+    extern const QString addTransformKeyframeActionName;
     extern const QString removeOpacityKeyframeActionName;
+    extern const QString removeTransformKeyframeActionName;
 };
 
 #endif /* __KIS_ANIMATION_UTILS_H */

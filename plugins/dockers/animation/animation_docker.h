@@ -60,6 +60,9 @@ private Q_SLOTS:
     void slotAddOpacityKeyframe();
     void slotDeleteOpacityKeyframe();
 
+    void slotAddTransformKeyframe();
+    void slotDeleteTransformKeyframe();
+
     void slotUIRangeChanged();
     void slotUIFramerateChanged();
 
@@ -103,8 +106,10 @@ private:
 
     QMenu *m_newKeyframeMenu;
     KisAction *m_addOpacityKeyframeAction;
+    KisAction *m_addTransformKeyframeAction;
     QMenu *m_deleteKeyframeMenu;
     KisAction *m_deleteOpacityKeyframeAction;
+    KisAction *m_deleteTransformKeyframeAction;
 
     KisMainWindow *m_mainWindow;
 

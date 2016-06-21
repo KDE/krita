@@ -147,6 +147,24 @@ QRect KisDumbTransformMaskParams::nonAffineNeedRect(const QRect &rc, const QRect
     return rc;
 }
 
+KisKeyframeChannel *KisDumbTransformMaskParams::getKeyframeChannel(const QString&, KisDefaultBoundsBaseSP)
+{
+    return 0;
+}
+
+KisTransformMaskParamsInterfaceSP KisDumbTransformMaskParams::enableAnimation()
+{
+    return KisTransformMaskParamsInterfaceSP();
+}
+
+void KisDumbTransformMaskParams::clearChangedFlag()
+{}
+
+bool KisDumbTransformMaskParams::hasChanged() const
+{
+    return false;
+}
+
 QTransform KisDumbTransformMaskParams::testingGetTransform() const
 {
     return m_d->transform;

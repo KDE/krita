@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2016 Jouni Pentikäinen <joupent@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,47 +16,43 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_TRANSFORM_MASK_ADAPTER_H
-#define __KIS_TRANSFORM_MASK_ADAPTER_H
 
-#include <QScopedPointer>
-#include "kis_transform_mask_params_interface.h"
+#ifndef __KIS_ANIMATED_TRANSFORM_MASK_PARAMETERS_H
+#define __KIS_ANIMATED_TRANSFORM_MASK_PARAMETERS_H
+
+#include "kis_transform_mask_adapter.h"
 #include "kritatooltransform_export.h"
 
-class ToolTransformArgs;
+class KisKeyframeChannel;
 
-
-class KRITATOOLTRANSFORM_EXPORT KisTransformMaskAdapter : public KisTransformMaskParamsInterface
+class KRITATOOLTRANSFORM_EXPORT KisAnimatedTransformMaskParameters : public KisTransformMaskAdapter
 {
 public:
-    KisTransformMaskAdapter(const ToolTransformArgs &args);
-    ~KisTransformMaskAdapter();
+    KisAnimatedTransformMaskParameters();
+    KisAnimatedTransformMaskParameters(const KisTransformMaskAdapter *staticTransform);
+    ~KisAnimatedTransformMaskParameters();
 
-    QTransform finalAffineTransform() const;
-    bool isAffine() const;
-    bool isHidden() const;
-
-    void transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst) const;
-
-    virtual const ToolTransformArgs& transformArgs() const;
+    const ToolTransformArgs& transformArgs() const;
 
     QString id() const;
     void toXML(QDomElement *e) const;
     static KisTransformMaskParamsInterfaceSP fromXML(const QDomElement &e);
 
-    virtual void translate(const QPointF &offset);
-
-    QRect nonAffineChangeRect(const QRect &rc);
-    QRect nonAffineNeedRect(const QRect &rc, const QRect &srcBounds);
+    void translate(const QPointF &offset);
 
     KisKeyframeChannel *getKeyframeChannel(const QString &id, KisDefaultBoundsBaseSP defaultBounds);
     KisTransformMaskParamsInterfaceSP enableAnimation();
+
+    bool isHidden() const;
+    void setHidden(bool hidden);
+
     void clearChangedFlag();
     bool hasChanged() const;
 
+    
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_TRANSFORM_MASK_ADAPTER_H */
+#endif

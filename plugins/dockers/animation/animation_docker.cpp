@@ -95,7 +95,7 @@ AnimationDocker::AnimationDocker()
     m_animationWidget->btnPlay->setDefaultAction(m_playPauseAction);
 
     m_addBlankFrameAction = new KisAction(KisAnimationUtils::addFrameActionName, m_animationWidget->btnAddKeyframe);
-    m_addBlankFrameAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
+    m_addBlankFrameAction->setActivationFlags(KisAction::ACTIVE_NODE);
     m_animationWidget->btnAddKeyframe->setDefaultAction(m_addBlankFrameAction);
 
     m_addDuplicateFrameAction = new KisAction(KisAnimationUtils::duplicateFrameActionName, m_animationWidget->btnAddDuplicateFrame);
@@ -103,7 +103,7 @@ AnimationDocker::AnimationDocker()
     m_animationWidget->btnAddDuplicateFrame->setDefaultAction(m_addDuplicateFrameAction);
 
     m_deleteKeyframeAction = new KisAction(KisAnimationUtils::removeFrameActionName, m_animationWidget->btnDeleteKeyframe);
-    m_deleteKeyframeAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
+    m_deleteKeyframeAction->setActivationFlags(KisAction::ACTIVE_NODE);
     m_animationWidget->btnDeleteKeyframe->setDefaultAction(m_deleteKeyframeAction);
 
     m_newKeyframeMenu = new QMenu(this);
@@ -116,6 +116,9 @@ AnimationDocker::AnimationDocker()
 
     m_addOpacityKeyframeAction = new KisAction(KisAnimationUtils::addOpacityKeyframeActionName);
     m_deleteOpacityKeyframeAction = new KisAction(KisAnimationUtils::removeOpacityKeyframeActionName);
+
+    m_addTransformKeyframeAction = new KisAction(KisAnimationUtils::addTransformKeyframeActionName);
+    m_deleteTransformKeyframeAction = new KisAction(KisAnimationUtils::removeTransformKeyframeActionName);
 
     {
         KisImageConfig cfg;
@@ -159,6 +162,9 @@ AnimationDocker::AnimationDocker()
 
     connect(m_addOpacityKeyframeAction, SIGNAL(triggered(bool)), this, SLOT(slotAddOpacityKeyframe()));
     connect(m_deleteOpacityKeyframeAction, SIGNAL(triggered(bool)), this, SLOT(slotDeleteOpacityKeyframe()));
+
+    connect(m_addTransformKeyframeAction, SIGNAL(triggered(bool)), this, SLOT(slotAddTransformKeyframe()));
+    connect(m_deleteTransformKeyframeAction, SIGNAL(triggered(bool)), this, SLOT(slotDeleteTransformKeyframe()));
 
     m_animationWidget->btnOnionSkinOptions->setToolTip(i18n("Onion Skins"));
     connect(m_animationWidget->btnOnionSkinOptions, SIGNAL(clicked()), this, SLOT(slotOnionSkinOptions()));
@@ -278,6 +284,16 @@ void AnimationDocker::slotAddOpacityKeyframe()
 void AnimationDocker::slotDeleteOpacityKeyframe()
 {
     deleteKeyframe(KisKeyframeChannel::Opacity.id());
+}
+
+void AnimationDocker::slotAddTransformKeyframe()
+{
+    addKeyframe(KisKeyframeChannel::TransformArguments.id(), false);
+}
+
+void AnimationDocker::slotDeleteTransformKeyframe()
+{
+    deleteKeyframe(KisKeyframeChannel::TransformArguments.id());
 }
 
 void AnimationDocker::slotUIRangeChanged()
@@ -585,7 +601,7 @@ void AnimationDocker::slotCurrentNodeChanged(KisNodeSP node)
     m_deleteKeyframeMenu->clear();
 
     if (!node.isNull()) {
-        if (node->inherits("KisLayer") || node->inherits("KisMask") || node->inherits("KisSelectionBasedLayer")) {
+        if (node->inherits("KisLayer") || node->inherits("KisFilterMask") || node->inherits("KisTransparencyMask") || node->inherits("KisSelectionBasedLayer")) {
             isNodeAnimatable = true;
             m_newKeyframeMenu->addAction(m_addBlankFrameAction);
             m_deleteKeyframeMenu->addAction(m_deleteKeyframeAction);
@@ -595,6 +611,12 @@ void AnimationDocker::slotCurrentNodeChanged(KisNodeSP node)
             isNodeAnimatable = true;
             m_newKeyframeMenu->addAction(m_addOpacityKeyframeAction);
             m_deleteKeyframeMenu->addAction(m_deleteOpacityKeyframeAction);
+        }
+
+        if (node->inherits("KisTransformMask")) {
+            isNodeAnimatable = true;
+            m_newKeyframeMenu->addAction(m_addTransformKeyframeAction);
+            m_deleteKeyframeMenu->addAction(m_deleteTransformKeyframeAction);
         }
     }
 

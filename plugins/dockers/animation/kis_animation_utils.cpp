@@ -44,7 +44,9 @@ namespace KisAnimationUtils {
     const QString removeLayerActionName = i18n("Remove Layer");
 
     const QString addOpacityKeyframeActionName = i18n("Add opacity keyframe");
+    const QString addTransformKeyframeActionName = i18n("Add transform keyframe");
     const QString removeOpacityKeyframeActionName = i18n("Remove opacity keyframe");
+    const QString removeTransformKeyframeActionName = i18n("Remove transform keyframe");
 
     bool createKeyframeLazy(KisImageSP image, KisNodeSP node, const QString &channelId, int time, bool copy) {
         KisKeyframeChannel *channel = node->getKeyframeChannel(channelId);

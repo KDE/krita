@@ -331,7 +331,7 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect,
                         if (!proofingSpace){
                             qDebug()<<"Proofing space is incorrect";
                         }
-                        tileInfo->proofTo(dstCS, proofingSpace, m_proofingConfig->intent, m_proofingConfig->conversionFlags);
+                        tileInfo->proofTo(dstCS, proofingSpace, m_renderingIntent, m_proofingConfig->intent, m_proofingConfig->conversionFlags, m_proofingConfig->warningColor);
                     } else {
                         tileInfo->convertTo(dstCS, m_renderingIntent, m_conversionFlags);
                     }

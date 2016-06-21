@@ -71,6 +71,7 @@ KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoMixColorsOp
     d->proofingSpace = "";
     d->softProofing = false;
     d->gamutCheck = false;
+    d->gamutWarning = 0;
     d->proofingTransform = 0;
     d->deletability = NotOwnedByRegistry;
 }
@@ -441,13 +442,15 @@ bool KoColorSpace::convertPixelsTo(const quint8 * src,
     }
     return true;
 }
-bool KoColorSpace::proofPixelsTo(const quint8 * src,
-                                   quint8 * dst,
-                                   const KoColorSpace * dstColorSpace,
-                                   const KoColorSpace * proofingSpace,
+bool KoColorSpace::proofPixelsTo(const quint8 *src,
+                                   quint8 *dst,
+                                   const KoColorSpace *dstColorSpace,
+                                   const KoColorSpace *proofingSpace,
                                    quint32 numPixels,
                                    KoColorConversionTransformation::Intent renderingIntent,
-                                   KoColorConversionTransformation::ConversionFlags conversionFlags) const
+                                   KoColorConversionTransformation::Intent proofingIntent,
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags,
+                                   quint8 *gamutWarning) const
 {
     /*if (*this == *dstColorSpace) {
         if (src != dst) {
@@ -464,8 +467,9 @@ bool KoColorSpace::proofPixelsTo(const quint8 * src,
     if (!d->iccEngine) return false;
 
     if (d->proofingSpace!=proofingSpace->profile()->name()+dstColorSpace->profile()->name() || d->softProofing!=conversionFlags.testFlag(KoColorConversionTransformation::SoftProofing) || d->gamutCheck!=conversionFlags.testFlag(KoColorConversionTransformation::GamutCheck)) {
-        d->proofingTransform = d->iccEngine->createColorProofingTransformation(this, dstColorSpace, proofingSpace, renderingIntent, conversionFlags);
+        d->proofingTransform = d->iccEngine->createColorProofingTransformation(this, dstColorSpace, proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning);
         d->proofingSpace = proofingSpace->profile()->name()+dstColorSpace->profile()->name();
+        d->gamutWarning = gamutWarning;
         d->softProofing = conversionFlags.testFlag(KoColorConversionTransformation::SoftProofing);
         d->gamutCheck = conversionFlags.testFlag(KoColorConversionTransformation::GamutCheck);
     }

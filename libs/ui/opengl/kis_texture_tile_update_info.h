@@ -211,7 +211,9 @@ public:
 
     void proofTo(const KoColorSpace* dstCS, const KoColorSpace* proofingSpace,
                    KoColorConversionTransformation::Intent renderingIntent,
-                   KoColorConversionTransformation::ConversionFlags conversionFlags)
+                   KoColorConversionTransformation::Intent proofingIntent,
+                   KoColorConversionTransformation::ConversionFlags conversionFlags,
+                   KoColor gamutWarning)
     {
         if (dstCS == m_patchColorSpace && conversionFlags == KoColorConversionTransformation::Empty) return;
 
@@ -220,7 +222,7 @@ public:
             const quint32 conversionCacheLength = numPixels * dstCS->pixelSize();
 
             m_conversionCache.ensureNotSmaller(conversionCacheLength);
-            m_patchColorSpace->proofPixelsTo(m_patchPixels.data(), m_conversionCache.data(), dstCS, proofingSpace, numPixels, renderingIntent, conversionFlags);
+            m_patchColorSpace->proofPixelsTo(m_patchPixels.data(), m_conversionCache.data(), dstCS, proofingSpace, numPixels, renderingIntent,proofingIntent, conversionFlags, gamutWarning.data());
 
             m_patchColorSpace = dstCS;
             m_conversionCache.swap(m_patchPixels);

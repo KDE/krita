@@ -38,7 +38,9 @@ public:
                                             const KoColorSpace *dstCs,
                                             const KoColorSpace *proofingSpace,
                                             Intent renderingIntent,
-                                            ConversionFlags conversionFlags);
+                                            Intent proofingIntent,
+                                            ConversionFlags conversionFlags,
+                                            quint8 *gamutWarning);
     virtual ~KoColorProofingConversionTransformation();
 
 public:
@@ -51,6 +53,8 @@ public:
 
 private:
 
+    Intent m_proofingIntent;
+    quint8 *m_gamutWarning;
     const KoColorSpace *m_proofingSpace;
 };
 

@@ -47,13 +47,17 @@ public:
                                                                        const KoColorSpace* dstColorSpace,
                                                                        const KoColorSpace* proofingSpace,
                                                                        KoColorProofingConversionTransformation::Intent renderingIntent,
-                                                                       KoColorProofingConversionTransformation::ConversionFlags conversionFlags) const
+                                                                       KoColorProofingConversionTransformation::Intent proofingIntent,
+                                                                       KoColorProofingConversionTransformation::ConversionFlags conversionFlags,
+                                                                       quint8 *gamutWarning) const
     {
         Q_UNUSED(srcColorSpace);
         Q_UNUSED(dstColorSpace);
         Q_UNUSED(proofingSpace);
         Q_UNUSED(renderingIntent);
+        Q_UNUSED(proofingIntent);
         Q_UNUSED(conversionFlags);
+        Q_UNUSED(gamutWarning);
         qFatal("createColorProofinTransform undefined.");
         return 0;
     }

@@ -26,10 +26,14 @@ KoColorProofingConversionTransformation::KoColorProofingConversionTransformation
                                                                  const KoColorSpace* dstCs,
                                                                  const KoColorSpace* proofingSpace,
                                                                  Intent renderingIntent,
-                                                                 ConversionFlags conversionFlags)
+                                                                 Intent proofingIntent,
+                                                                 ConversionFlags conversionFlags,
+                                                                 quint8 *gamutWarning)
     : KoColorConversionTransformation(srcCs, dstCs, renderingIntent, conversionFlags)
 {
     Q_ASSERT(proofingSpace);
+    m_proofingIntent = proofingIntent;
+    m_gamutWarning = gamutWarning;
     m_proofingSpace = proofingSpace;
 }
 

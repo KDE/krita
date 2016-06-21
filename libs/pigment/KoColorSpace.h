@@ -376,11 +376,13 @@ public:
      * @brief proofPixelsTo
      * @param src
      * @param dst
-     * @param dstColorSpace
-     * @param proofingSpace
-     * @param numPixels
-     * @param renderingIntent
-     * @param conversionFlags
+     * @param dstColorSpace the colorspace to which we go to.
+     * @param proofingSpace the proofing space.
+     * @param numPixels the amount of pixels.
+     * @param renderingIntent the rendering intent used for rendering.
+     * @param proofingIntent the intent used for proofing.
+     * @param conversionFlags the conversion flags.
+     * @param gamutWarning the data() of a KoColor.
      * @return
      */
     virtual bool proofPixelsTo(const quint8 * src,
@@ -388,7 +390,9 @@ public:
                                  const KoColorSpace * proofingSpace,
                                  quint32 numPixels,
                                  KoColorConversionTransformation::Intent renderingIntent,
-                                 KoColorConversionTransformation::ConversionFlags conversionFlags) const;
+                                 KoColorConversionTransformation::Intent proofingIntent,
+                                 KoColorConversionTransformation::ConversionFlags conversionFlags,
+                                 quint8 *gamutWarning) const;
 
 //============================== Manipulation functions ==========================//
 

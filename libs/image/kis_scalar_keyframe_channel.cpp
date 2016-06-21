@@ -34,6 +34,11 @@ struct KisScalarKeyframe : public KisKeyframe
     qreal value;
 };
 
+
+KisScalarKeyframeChannel::AddKeyframeCommand::AddKeyframeCommand(KisScalarKeyframeChannel *channel, int time, qreal value, KUndo2Command *parentCommand)
+    : KisReplaceKeyframeCommand(channel, time, channel->createKeyframe(time, value, parentCommand), parentCommand)
+{}
+
 struct KisScalarKeyframeChannel::Private
 {
 public:
@@ -167,7 +172,9 @@ qreal findCubicCurveParameter(int time0, qreal delta0, qreal delta1, int time1, 
 qreal KisScalarKeyframeChannel::interpolatedValue(int time) const
 {
     KisKeyframeSP activeKey = activeKeyframeAt(time);
-    if (activeKey.isNull()) return qQNaN();
+    if (activeKey.isNull()) {
+        return qQNaN();
+    }
 
     if (activeKey->interpolationMode() == KisKeyframe::Constant) return scalarValue(activeKey);
 
@@ -215,6 +222,11 @@ qreal KisScalarKeyframeChannel::currentValue() const
 KisKeyframeSP KisScalarKeyframeChannel::createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand)
 {
     qreal value = (copySrc.isNull() ? 0 : scalarValue(copySrc));
+    return createKeyframe(time, value, parentCommand);
+}
+
+KisKeyframeSP KisScalarKeyframeChannel::createKeyframe(int time, qreal value, KUndo2Command *parentCommand)
+{
     KisScalarKeyframe *keyframe = new KisScalarKeyframe(this, time, value);
 
     keyframe->setInterpolationMode(m_d->defaultInterpolation);

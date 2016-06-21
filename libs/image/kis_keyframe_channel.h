@@ -21,6 +21,7 @@
 
 #include <QVariant>
 #include <QDomElement>
+#include <kundo2command.h>
 
 #include "kis_types.h"
 #include "KoID.h"
@@ -105,6 +106,8 @@ public:
     virtual QDomElement toXML(QDomDocument doc, const QString &layerFilename);
     virtual void loadXML(const QDomElement &channelNode);
 
+    int currentTime() const;
+
 Q_SIGNALS:
     void sigKeyframeAboutToBeAdded(KisKeyframe *keyframe);
     void sigKeyframeAdded(KisKeyframe *keyframe);
@@ -130,16 +133,16 @@ protected:
     virtual KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode) = 0;
     virtual void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) = 0;
 
-    int currentTime() const;
 
 private:
+    KisKeyframeSP replaceKeyframeAt(int time, KisKeyframeSP newKeyframe);
     void insertKeyframeLogical(KisKeyframeSP keyframe);
-    void deleteKeyframeLogical(KisKeyframeSP keyframe);
+    void removeKeyframeLogical(KisKeyframeSP keyframe);
     bool deleteKeyframeImpl(KisKeyframeSP keyframe, KUndo2Command *parentCommand, bool recreate);
     void moveKeyframeImpl(KisKeyframeSP keyframe, int newTime);
 
-    struct InsertFrameCommand;
-    struct MoveFrameCommand;
+    friend class KisMoveFrameCommand;
+    friend class KisReplaceKeyframeCommand;
 
 private:
     KisKeyframeSP insertKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand);

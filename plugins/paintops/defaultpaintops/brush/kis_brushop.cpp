@@ -153,10 +153,7 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
     }
 
     painter()->bltFixed(dabRect.topLeft(), dab, dab->bounds());
-
-    painter()->renderMirrorMaskSafe(dabRect,
-                                    dab,
-                                    !m_dabCache->needSeparateOriginal());
+    painter()->renderMirrorMask(dabRect, dab);
     painter()->setOpacity(origOpacity);
 
     return effectiveSpacing(scale, rotation,

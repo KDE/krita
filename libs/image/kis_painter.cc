@@ -2663,28 +2663,6 @@ void KisPainter::setColorConversionFlags(KoColorConversionTransformation::Conver
     d->conversionFlags = conversionFlags;
 }
 
-void KisPainter::renderMirrorMaskSafe(QRect rc, KisFixedPaintDeviceSP dab, bool preserveDab)
-{
-    if (!d->mirrorHorizontally && !d->mirrorVertically) return;
-
-    KisFixedPaintDeviceSP dabToProcess = dab;
-    if (preserveDab) {
-        dabToProcess = new KisFixedPaintDevice(*dab);
-    }
-    renderMirrorMask(rc, dabToProcess);
-}
-
-void KisPainter::renderMirrorMaskSafe(QRect rc, KisPaintDeviceSP dab, int sx, int sy, KisFixedPaintDeviceSP mask, bool preserveMask)
-{
-    if (!d->mirrorHorizontally && !d->mirrorVertically) return;
-
-    KisFixedPaintDeviceSP maskToProcess = mask;
-    if (preserveMask) {
-        maskToProcess = new KisFixedPaintDevice(*mask);
-    }
-    renderMirrorMask(rc, dab, sx, sy, maskToProcess);
-}
-
 void KisPainter::renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab)
 {
     int x = rc.topLeft().x();

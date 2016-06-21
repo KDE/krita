@@ -140,7 +140,7 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
                              dabRect.x(), dabRect.y(),
                              dabRect.width(), dabRect.height());
 
-    painter()->renderMirrorMaskSafe(dstRect, m_tmpDevice, 0, 0, dab, false);
+    painter()->renderMirrorMask(dstRect, m_tmpDevice, 0, 0, dab);
 
     return effectiveSpacing(scale, rotation);
 }

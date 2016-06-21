@@ -372,6 +372,8 @@ public:
      * then these set of methods provide way to render the devices mirrored
      * according the axesCenter vertically or horizontally or both.
      *
+     * WARNING: These functions modify the mask and dab.
+     *
      * @param rc rectangle area covered by dab
      * @param dab this device will be mirrored in-place, it means that it will be changed
      */
@@ -379,29 +381,6 @@ public:
     void renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab, KisFixedPaintDeviceSP mask);
     void renderMirrorMask(QRect rc, KisPaintDeviceSP dab);
     void renderMirrorMask(QRect rc, KisPaintDeviceSP dab, int sx, int sy, KisFixedPaintDeviceSP mask);
-
-    /**
-     * Convenience method for renderMirrorMask(), allows to choose whether
-     * we need to preserve out dab or do the transformations in-place.
-     *
-     * @param rc rectangle area covered by dab
-     * @param dab the device to render
-     * @param preserveDab states whether a temporary device should be
-     *                    created to do the transformations
-     */
-    void renderMirrorMaskSafe(QRect rc, KisFixedPaintDeviceSP dab, bool preserveDab);
-
-    /**
-     * Convenience method for renderMirrorMask(), allows to choose whether
-     * we need to preserve our fixed mask or do the transformations in-place.
-     *
-     * @param rc rectangle area covered by dab
-     * @param dab the device to render
-     * @param mask mask to use for rendering
-     * @param preserveMask states whether a temporary device should be
-     *                    created to do the transformations
-     */
-    void renderMirrorMaskSafe(QRect rc, KisPaintDeviceSP dab, int sx, int sy, KisFixedPaintDeviceSP mask, bool preserveMask);
 
     /**
      * A complex method that re-renders a dab on an \p rc area.

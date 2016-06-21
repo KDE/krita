@@ -116,6 +116,7 @@ public:
     KisProofingConfiguration *proofingConfig = 0;
     bool softProofing = false;
     bool gamutCheck = false;
+    bool proofingConfigUpdated = false;
 
     KisPopupPalette *popupPalette = 0;
     KisDisplayColorConverter displayColorConverter;
@@ -574,6 +575,7 @@ void KisCanvas2::setProofingOptions(bool softProof, bool gamutCheck)
     qDebug()<<"setting softproofing in canvas: "<<softProof <<", "<<gamutCheck;
     qDebug()<<conversionFlags.testFlag(KoColorConversionTransformation::SoftProofing);
     qDebug()<<conversionFlags.testFlag(KoColorConversionTransformation::GamutCheck);
+    m_d->proofingConfigUpdated = true;
     startUpdateInPatches(this->image()->bounds());
 
 }
@@ -593,6 +595,16 @@ void KisCanvas2::slotGamutCheck(bool gamutCheck)
 void KisCanvas2::slotChangeProofingConfig()
 {
     setProofingOptions(m_d->softProofing, m_d->gamutCheck);
+}
+
+void KisCanvas2::setProofingConfigUpdated(bool updated)
+{
+    m_d->proofingConfigUpdated = updated;
+}
+
+bool KisCanvas2::proofingConfigUpdated()
+{
+    return m_d->proofingConfigUpdated;
 }
 
 KisProofingConfiguration *KisCanvas2::proofingConfiguration() const

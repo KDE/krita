@@ -59,6 +59,8 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
     , m_useOcio(false)
     , m_initialized(false)
     , m_proofingConfig(0)
+    , m_proofingTransform(0)
+    , m_createNewProofingTransform(true)
 {
     KisConfig cfg;
     m_renderingIntent = (KoColorConversionTransformation::Intent)cfg.monitorRenderIntent();
@@ -324,14 +326,16 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect,
             if (tileInfo->valid()) {
                 tileInfo->retrieveData(m_image, channelFlags, m_onlyOneChannelSelected, m_selectedChannelIndex);
 
+                //create transform
+                if (m_createNewProofingTransform) {
+                    const KoColorSpace *proofingSpace = KoColorSpaceRegistry::instance()->colorSpace(m_proofingConfig->proofingModel,m_proofingConfig->proofingDepth,m_proofingConfig->proofingProfile);
+                    m_proofingTransform = tileInfo->generateProofingTransform(dstCS, proofingSpace, m_renderingIntent, m_proofingConfig->intent, m_proofingConfig->conversionFlags, m_proofingConfig->warningColor);
+                    m_createNewProofingTransform = false;
+                }
+
                 if (convertColorSpace) {
-                    if (m_proofingConfig && m_proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::SoftProofing)) {
-                        //qDebug()<<"model: "<<m_proofingConfig->proofingModel<<", depth: "<<m_proofingConfig->proofingDepth<<", profile: "<<m_proofingConfig->proofingProfile;
-                        const KoColorSpace *proofingSpace = KoColorSpaceRegistry::instance()->colorSpace(m_proofingConfig->proofingModel,m_proofingConfig->proofingDepth,m_proofingConfig->proofingProfile);
-                        if (!proofingSpace){
-                            qDebug()<<"Proofing space is incorrect";
-                        }
-                        tileInfo->proofTo(dstCS, proofingSpace, m_renderingIntent, m_proofingConfig->intent, m_proofingConfig->conversionFlags, m_proofingConfig->warningColor);
+                    if (m_proofingConfig && m_proofingTransform && m_proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::SoftProofing)) {
+                        tileInfo->proofTo(dstCS, m_proofingConfig->conversionFlags, m_proofingTransform);
                     } else {
                         tileInfo->convertTo(dstCS, m_renderingIntent, m_conversionFlags);
                     }
@@ -461,6 +465,8 @@ void KisOpenGLImageTextures::setChannelFlags(const QBitArray &channelFlags)
 void KisOpenGLImageTextures::setProofingConfig(KisProofingConfiguration *proofingConfig)
 {
     m_proofingConfig = proofingConfig;
+    qDebug()<<"set";
+    m_createNewProofingTransform = true;
 }
 
 void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)

@@ -209,11 +209,9 @@ public:
         }
     }
 
-    void proofTo(const KoColorSpace* dstCS, const KoColorSpace* proofingSpace,
-                   KoColorConversionTransformation::Intent renderingIntent,
-                   KoColorConversionTransformation::Intent proofingIntent,
+    void proofTo(const KoColorSpace* dstCS,
                    KoColorConversionTransformation::ConversionFlags conversionFlags,
-                   KoColor gamutWarning)
+                   KoColorConversionTransformation *proofingTransform)
     {
         if (dstCS == m_patchColorSpace && conversionFlags == KoColorConversionTransformation::Empty) return;
 
@@ -222,12 +220,21 @@ public:
             const quint32 conversionCacheLength = numPixels * dstCS->pixelSize();
 
             m_conversionCache.ensureNotSmaller(conversionCacheLength);
-            m_patchColorSpace->proofPixelsTo(m_patchPixels.data(), m_conversionCache.data(), dstCS, proofingSpace, numPixels, renderingIntent,proofingIntent, conversionFlags, gamutWarning.data());
+            m_patchColorSpace->proofPixelsTo(m_patchPixels.data(), m_conversionCache.data(), numPixels, proofingTransform);
 
             m_patchColorSpace = dstCS;
             m_conversionCache.swap(m_patchPixels);
             m_patchPixelsLength = conversionCacheLength;
         }
+    }
+
+    KoColorConversionTransformation *generateProofingTransform(const KoColorSpace* dstCS, const KoColorSpace* proofingSpace,
+                                                       KoColorConversionTransformation::Intent renderingIntent,
+                                                       KoColorConversionTransformation::Intent proofingIntent,
+                                                       KoColorConversionTransformation::ConversionFlags conversionFlags,
+                                                       KoColor gamutWarning)
+    {
+        return m_patchColorSpace->createProofingTransform(dstCS, proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning.data());
     }
 
     inline quint8* data() const {

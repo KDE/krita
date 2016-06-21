@@ -68,11 +68,6 @@ KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoMixColorsOp
     d->colorants = QVector <qreal> (0);
     d->lumaCoefficients = QVector <qreal> (0);
     d->iccEngine = 0;
-    d->proofingSpace = "";
-    d->softProofing = false;
-    d->gamutCheck = false;
-    d->gamutWarning = 0;
-    d->proofingTransform = 0;
     d->deletability = NotOwnedByRegistry;
 }
 
@@ -96,7 +91,6 @@ KoColorSpace::~KoColorSpace()
     delete d->transfoFromRGBA16;
     delete d->transfoToLABA16;
     delete d->transfoFromLABA16;
-    delete d->proofingTransform;
     delete d;
 }
 
@@ -442,39 +436,24 @@ bool KoColorSpace::convertPixelsTo(const quint8 * src,
     }
     return true;
 }
-bool KoColorSpace::proofPixelsTo(const quint8 *src,
-                                   quint8 *dst,
-                                   const KoColorSpace *dstColorSpace,
-                                   const KoColorSpace *proofingSpace,
-                                   quint32 numPixels,
-                                   KoColorConversionTransformation::Intent renderingIntent,
-                                   KoColorConversionTransformation::Intent proofingIntent,
-                                   KoColorConversionTransformation::ConversionFlags conversionFlags,
-                                   quint8 *gamutWarning) const
+
+KoColorConversionTransformation * KoColorSpace::createProofingTransform(const KoColorSpace *dstColorSpace, const KoColorSpace *proofingSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::Intent proofingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags, quint8 *gamutWarning) const
 {
-    /*if (*this == *dstColorSpace) {
-        if (src != dst) {
-            memcpy(dst, src, numPixels * sizeof(quint8) * pixelSize());
-        }
-        return true;
-    }*/
-    // Only the icc engine can do this kind of stuff
-    //Can we cache this, maybe???
     if (!d->iccEngine) {
         d->iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
         qDebug() << ">>>>>>>>>>>>>>>>>>>> we got a proofing engine";
     }
     if (!d->iccEngine) return false;
 
-    if (d->proofingSpace!=proofingSpace->profile()->name()+dstColorSpace->profile()->name() || d->softProofing!=conversionFlags.testFlag(KoColorConversionTransformation::SoftProofing) || d->gamutCheck!=conversionFlags.testFlag(KoColorConversionTransformation::GamutCheck)) {
-        d->proofingTransform = d->iccEngine->createColorProofingTransformation(this, dstColorSpace, proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning);
-        d->proofingSpace = proofingSpace->profile()->name()+dstColorSpace->profile()->name();
-        d->gamutWarning = gamutWarning;
-        d->softProofing = conversionFlags.testFlag(KoColorConversionTransformation::SoftProofing);
-        d->gamutCheck = conversionFlags.testFlag(KoColorConversionTransformation::GamutCheck);
-    }
-    //Q_UNUSED(transform);
-    d->proofingTransform->transform(src, dst, numPixels);
+    return d->iccEngine->createColorProofingTransformation(this, dstColorSpace, proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning);
+}
+
+bool KoColorSpace::proofPixelsTo(const quint8 *src,
+                                 quint8 *dst,
+                                 quint32 numPixels,
+                                 KoColorConversionTransformation *proofingTransform) const
+{
+    proofingTransform->transform(src, dst, numPixels);
 
     //the transform is deleted in the destructor.
     return true;

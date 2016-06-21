@@ -48,10 +48,6 @@ struct Q_DECL_HIDDEN KoColorSpace::Private {
     QVector <qreal> lumaCoefficients;
 
     KoColorSpaceEngine *iccEngine;
-    QString proofingSpace;
-    bool softProofing;
-    bool gamutCheck;
-    KoColorConversionTransformation *proofingTransform;
 
     Deletability deletability;
 };

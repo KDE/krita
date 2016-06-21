@@ -94,6 +94,7 @@ public:
 
     KisDisplayFilter* displayFilter;
     KisOpenGL::FilterMode filterMode;
+    bool proofingConfigIsUpdated=false;
 
     GLsync glSyncObject{0};
 
@@ -789,7 +790,10 @@ void KisOpenGLCanvas2::finishResizingImage(qint32 w, qint32 h)
 KisUpdateInfoSP KisOpenGLCanvas2::startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags)
 {
     d->openGLImageTextures->setChannelFlags(channelFlags);
-    d->openGLImageTextures->setProofingConfig(canvas()->proofingConfiguration());
+    if (canvas()->proofingConfigUpdated()) {
+        d->openGLImageTextures->setProofingConfig(canvas()->proofingConfiguration());
+        canvas()->setProofingConfigUpdated(false);
+    }
     return d->openGLImageTextures->updateCache(rc);
 }
 

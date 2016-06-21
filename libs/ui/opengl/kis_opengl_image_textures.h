@@ -28,6 +28,7 @@
 #include "canvas/kis_update_info.h"
 #include "opengl/kis_texture_tile.h"
 #include "KisProofingConfiguration.h"
+#include <KoColorProofingConversionTransformation.h>
 
 class KisOpenGLImageTextures;
 class QOpenGLFunctions;
@@ -161,7 +162,10 @@ private:
     const KoColorProfile *m_monitorProfile;
     KoColorConversionTransformation::Intent m_renderingIntent;
     KoColorConversionTransformation::ConversionFlags m_conversionFlags;
+
     KisProofingConfiguration *m_proofingConfig;
+    KoColorConversionTransformation *m_proofingTransform;
+    bool m_createNewProofingTransform;
 
     /**
      * If the destination color space coincides with the one of the image,

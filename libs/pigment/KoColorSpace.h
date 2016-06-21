@@ -372,6 +372,12 @@ public:
                                  KoColorConversionTransformation::Intent renderingIntent,
                                  KoColorConversionTransformation::ConversionFlags conversionFlags) const;
 
+    virtual KoColorConversionTransformation *createProofingTransform(const KoColorSpace * dstColorSpace,
+                                                             const KoColorSpace * proofingSpace,
+                                                             KoColorConversionTransformation::Intent renderingIntent,
+                                                             KoColorConversionTransformation::Intent proofingIntent,
+                                                             KoColorConversionTransformation::ConversionFlags conversionFlags,
+                                                             quint8 *gamutWarning) const;
     /**
      * @brief proofPixelsTo
      * @param src
@@ -386,13 +392,9 @@ public:
      * @return
      */
     virtual bool proofPixelsTo(const quint8 * src,
-                                 quint8 * dst, const KoColorSpace * dstColorSpace,
-                                 const KoColorSpace * proofingSpace,
-                                 quint32 numPixels,
-                                 KoColorConversionTransformation::Intent renderingIntent,
-                                 KoColorConversionTransformation::Intent proofingIntent,
-                                 KoColorConversionTransformation::ConversionFlags conversionFlags,
-                                 quint8 *gamutWarning) const;
+                               quint8 * dst,
+                               quint32 numPixels,
+                               KoColorConversionTransformation *proofingTransform) const;
 
 //============================== Manipulation functions ==========================//
 

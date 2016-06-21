@@ -1597,6 +1597,12 @@ KisImageAnimationInterface* KisImage::animationInterface() const
     return m_d->animationInterface;
 }
 
+void KisImage::setProofingConfiguration(KisProofingConfiguration *proofingConfig)
+{
+    m_d->proofingConfig = proofingConfig;
+    emit sigProofingConfigChanged();
+}
+
 KisProofingConfiguration *KisImage::proofingConfiguration() const
 {
     if (!m_d->proofingConfig) {

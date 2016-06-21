@@ -186,7 +186,6 @@ void KisCanvas2::setup()
     connect(kritaShapeController, SIGNAL(currentLayerChanged(const KoShapeLayer*)),
             globalShapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 
-
     connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDoCanvasUpdate()));
 }
 
@@ -459,6 +458,7 @@ void KisCanvas2::initializeImage()
 
     connect(image, SIGNAL(sigImageUpdated(QRect)), SLOT(startUpdateCanvasProjection(QRect)), Qt::DirectConnection);
     connect(this, SIGNAL(sigCanvasCacheUpdated()), SLOT(updateCanvasProjection()));
+    connect(image, SIGNAL(sigProofingConfigChanged()), SLOT(slotChangeProofingConfig()));
     connect(image, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), SLOT(startResizingImage()), Qt::DirectConnection);
     connect(this, SIGNAL(sigContinueResizeImage(qint32,qint32)), SLOT(finishResizingImage(qint32,qint32)));
 
@@ -587,6 +587,11 @@ void KisCanvas2::slotSoftProofing(bool softProofing)
 void KisCanvas2::slotGamutCheck(bool gamutCheck)
 {
     m_d->gamutCheck = gamutCheck;
+    setProofingOptions(m_d->softProofing, m_d->gamutCheck);
+}
+
+void KisCanvas2::slotChangeProofingConfig()
+{
     setProofingOptions(m_d->softProofing, m_d->gamutCheck);
 }
 

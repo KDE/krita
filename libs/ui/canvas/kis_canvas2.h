@@ -200,6 +200,7 @@ public Q_SLOTS:
     bool yAxisMirrored() const;
     void slotSoftProofing(bool softProofing);
     void slotGamutCheck(bool gamutCheck);
+    void slotChangeProofingConfig();
 
     void channelSelectionChanged();
 

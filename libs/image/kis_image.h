@@ -564,8 +564,14 @@ public:
     KisImageAnimationInterface *animationInterface() const;
 
     /**
+     * @brief setProofingConfiguration, this sets the image's proofing configuration, and signals
+     * the proofingConfiguration has changed.
+     * @param proofingConfig - the kis proofing config that will be used instead.
+     */
+    void setProofingConfiguration(KisProofingConfiguration *proofingConfig);
+    /**
      * @brief proofingConfiguration
-     * @return
+     * @return the proofing configuration of the image.
      */
     KisProofingConfiguration *proofingConfiguration() const;
 
@@ -714,6 +720,12 @@ Q_SIGNALS:
      *
      */
     void sigNodeCollapsedChanged();
+
+    /**
+     * Emitted when the proofing configuration of the image is being changed.
+     *
+     */
+    void sigProofingConfigChanged();
 
 public Q_SLOTS:
     KisCompositeProgressProxy* compositeProgressProxy();

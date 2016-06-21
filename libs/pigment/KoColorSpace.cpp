@@ -463,9 +463,9 @@ bool KoColorSpace::proofPixelsTo(const quint8 * src,
     }
     if (!d->iccEngine) return false;
 
-    if (d->proofingSpace!=proofingSpace->name()+dstColorSpace->name() || d->softProofing!=conversionFlags.testFlag(KoColorConversionTransformation::SoftProofing) || d->gamutCheck!=conversionFlags.testFlag(KoColorConversionTransformation::GamutCheck)) {
+    if (d->proofingSpace!=proofingSpace->profile()->name()+dstColorSpace->profile()->name() || d->softProofing!=conversionFlags.testFlag(KoColorConversionTransformation::SoftProofing) || d->gamutCheck!=conversionFlags.testFlag(KoColorConversionTransformation::GamutCheck)) {
         d->proofingTransform = d->iccEngine->createColorProofingTransformation(this, dstColorSpace, proofingSpace, renderingIntent, conversionFlags);
-        d->proofingSpace = proofingSpace->name()+dstColorSpace->name();
+        d->proofingSpace = proofingSpace->profile()->name()+dstColorSpace->profile()->name();
         d->softProofing = conversionFlags.testFlag(KoColorConversionTransformation::SoftProofing);
         d->gamutCheck = conversionFlags.testFlag(KoColorConversionTransformation::GamutCheck);
     }

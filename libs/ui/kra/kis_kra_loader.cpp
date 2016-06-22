@@ -302,7 +302,7 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
             }
 
             if(e.tagName()== PROOFINGWARNINGCOLOR) {
-                qDebug()<<"Warning color found but can't be loaded because the loading code is incomplete, fixme!"
+                qDebug()<<"Warning color found but can't be loaded because the loading code is incomplete, fixme!";
                 //how do I convert a koxmlelement to a qdomelement???
                 //QDomElement eq = child.toElement();
                 //QString depth ="U8";

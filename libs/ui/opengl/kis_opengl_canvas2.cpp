@@ -251,7 +251,7 @@ void KisOpenGLCanvas2::initializeGL()
     d->buffers[0].create();
     d->buffers[0].setUsagePattern(QOpenGLBuffer::StaticDraw);
     d->buffers[1].create();
-    d->buffers[2].setUsagePattern(QOpenGLBuffer::StaticDraw);
+    d->buffers[1].setUsagePattern(QOpenGLBuffer::StaticDraw);
     d->buffers[2].create();
     d->buffers[2].setUsagePattern(QOpenGLBuffer::StreamDraw);
 
@@ -452,7 +452,7 @@ void KisOpenGLCanvas2::drawCheckers()
 
     rectToTexCoords(d->texCoords, textureRect);
     d->buffers[1].bind();
-    d->buffers[2].write(0, d->texCoords, 2 * 6 * sizeof(float));
+    d->buffers[1].write(0, d->texCoords, 2 * 6 * sizeof(float));
 
     // render checkers
     glActiveTexture(GL_TEXTURE0);

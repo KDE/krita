@@ -294,22 +294,23 @@ void KisOpenGLCanvas2::paintGL()
     }
     d->glSyncObject = Sync::getSync();
 
+    qDebug() << "DRAWING DECORATIONS";
     QPainter gc(this);
     renderDecorations(&gc);
-    QPen pen;
-    pen.setWidth(10);
-    pen.setBrush(Qt::green);
-
-    pen.setJoinStyle(Qt::RoundJoin);
-    gc.setPen(pen);
-    gc.drawRect(100, 100, 100, 100);
-
-    pen.setJoinStyle(Qt::BevelJoin);
-    gc.setPen(pen);
-    gc.drawRect(210, 100, 100, 100);
-
-    QBrush brush(Qt::red);
-    gc.fillRect(320, 100, 100, 100, brush);
+    // QPen pen;
+    // pen.setWidth(10);
+    // pen.setBrush(Qt::green);
+    //
+    // pen.setJoinStyle(Qt::RoundJoin);
+    // gc.setPen(pen);
+    // gc.drawRect(100, 100, 100, 100);
+    //
+    // pen.setJoinStyle(Qt::BevelJoin);
+    // gc.setPen(pen);
+    // gc.drawRect(210, 100, 100, 100);
+    //
+    // QBrush brush(Qt::red);
+    // gc.fillRect(320, 100, 100, 100, brush);
     gc.end();
 
     if (!OPENGL_SUCCESS) {
@@ -339,7 +340,6 @@ QOpenGLShaderProgram *KisOpenGLCanvas2::getCursorShader()
 
 void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
 {
-
     QOpenGLShaderProgram *cursorShader = getCursorShader();
     cursorShader->bind();
 
@@ -367,28 +367,32 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
         ptr_glLogicOp(GL_XOR);
     }
 
-    // setup the array of vertices
-    QVector<QVector3D> vertices;
+    // Paint the tool outline
+    d->buffers[2].bind();
+
+    // Convert every disjointed subpath to a polygon and draw that polygon
     QList<QPolygonF> subPathPolygons = path.toSubpathPolygons();
-    for (int i=0; i<subPathPolygons.size(); i++) {
+    for (int i = 0; i < subPathPolygons.size(); i++) {
         const QPolygonF& polygon = subPathPolygons.at(i);
-        for (int j=0; j < polygon.count(); j++) {
+
+        QVector<QVector3D> vertices;
+        vertices.resize(polygon.count());
+        for (int j = 0; j < polygon.count(); j++) {
             QPointF p = polygon.at(j);
-            vertices << QVector3D(p.x(), p.y(), 0.f);
+            vertices[j].setX(p.x());
+            vertices[j].setY(p.y());
         }
 
-        d->buffers[2].bind();
         d->buffers[2].allocate(vertices.constData(), 3 * vertices.size() * sizeof(float));
 
         glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
-
-        vertices.clear();
     }
+
+    d->buffers[2].release();
 
     glDisable(GL_COLOR_LOGIC_OP);
 
     cursorShader->release();
-
 }
 
 bool KisOpenGLCanvas2::isBusy() const

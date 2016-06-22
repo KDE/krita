@@ -254,13 +254,13 @@ void QOpenGLPaintDevice::setDevicePixelRatio(qreal devicePixelRatio)
 
 int QOpenGLPaintDevice::metric(QPaintDevice::PaintDeviceMetric metric) const
 {
-    void* buffer = malloc(3 * 4);
-    int symcount = backtrace(&buffer, 3);
-    printf("Symcount: %d\n", symcount);
-    char** symbols = backtrace_symbols(&buffer, 3);
-    printf("buffer : %s\n", symbols[0]);
-    printf("buffer : %s\n", symbols[1]);
-    printf("buffer : %s\n", symbols[2]);
+    // void* buffer = malloc(3 * 4);
+    // int symcount = backtrace(&buffer, 3);
+    // printf("Symcount: %d\n", symcount);
+    // char** symbols = backtrace_symbols(&buffer, 3);
+    // printf("buffer : %s\n", symbols[0]);
+    // printf("buffer : %s\n", symbols[1]);
+    // printf("buffer : %s\n", symbols[2]);
 
     qDebug() << "Metric: " << metric;
     switch (metric) {

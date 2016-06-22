@@ -335,6 +335,10 @@ bool KisKraLoadVisitor::visit(KisTransformMask *mask)
             }
 
             mask->setTransformParams(params);
+
+            loadNodeKeyframes(mask);
+            params->clearChangedFlag();
+
             return true;
         }
     }

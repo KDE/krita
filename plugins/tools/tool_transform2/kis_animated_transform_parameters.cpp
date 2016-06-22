@@ -173,3 +173,13 @@ bool KisAnimatedTransformMaskParameters::hasChanged() const
     bool valid = m_d->validRange.contains(currentTime);
     return !valid;
 }
+
+#include "kis_transform_mask_params_factory_registry.h"
+
+struct AnimatedTransformParamsRegistrar {
+    AnimatedTransformParamsRegistrar() {
+        KisTransformMaskParamsFactory f(KisAnimatedTransformMaskParameters::fromXML);
+        KisTransformMaskParamsFactoryRegistry::instance()->addFactory("animatedtransformparams", f);
+    }
+};
+static AnimatedTransformParamsRegistrar __animatedTransformParamsRegistrar;

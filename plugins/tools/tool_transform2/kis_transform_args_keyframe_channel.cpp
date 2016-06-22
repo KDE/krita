@@ -82,11 +82,19 @@ QRect KisTransformArgsKeyframeChannel::affectedRect(KisKeyframeSP key)
 
 KisKeyframeSP KisTransformArgsKeyframeChannel::loadKeyframe(const QDomElement &keyframeNode)
 {
-    // TODO
-    return KisKeyframeSP(0);
+    ToolTransformArgs args;
+    args.fromXML(keyframeNode);
+
+    int time = keyframeNode.attribute("time").toUInt();
+    KisTransformArgsKeyframe *keyframe = new KisTransformArgsKeyframe(this, time, args);
+
+    return toQShared(keyframe);
 }
 
 void KisTransformArgsKeyframeChannel::saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename)
 {
-    // TODO
+    KisTransformArgsKeyframe *key = dynamic_cast<KisTransformArgsKeyframe*>(keyframe.data());
+    KIS_ASSERT_RECOVER_RETURN(key);
+
+    key->args.toXML(&keyframeElement);
 }

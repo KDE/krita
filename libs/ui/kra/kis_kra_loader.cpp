@@ -75,6 +75,7 @@
 #include "kis_time_range.h"
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
+#include "KisProofingConfiguration.h"
 
 /*
 
@@ -263,6 +264,21 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
                 return KisImageWSP(0);
             }
         }
+        qDebug()<<"start loading proofing data";
+        KisProofingConfiguration *proofingConfig = new KisProofingConfiguration();
+        qDebug()<<"start loading the name";
+        if (!(attr = element.attribute(PROOFINGPROFILENAME)).isNull()) {
+            proofingConfig->proofingProfile = attr;
+        }
+        if (!(attr = element.attribute(PROOFINGMODEL)).isNull()) {
+            proofingConfig->proofingModel = attr;
+        }
+        if (!(attr = element.attribute(PROOFINGDEPTH)).isNull()) {
+            proofingConfig->proofingDepth = attr;
+        }
+        if (!(attr = element.attribute(PROOFINGINTENT)).isNull()) {
+            proofingConfig->intent = (KoColorConversionTransformation::Intent) KisDomUtils::toInt(attr);
+        }
 
         if (m_d->document) {
             image = new KisImage(m_d->document->createUndoStore(), width, height, cs, name);
@@ -272,6 +288,7 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
         }
         image->setResolution(xres, yres);
         loadNodes(element, image, const_cast<KisGroupLayer*>(image->rootLayer().data()));
+
 
         KoXmlNode child;
         for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
@@ -284,10 +301,20 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
                 }
             }
 
+            if(e.tagName()== PROOFINGWARNINGCOLOR) {
+                if (e.hasAttribute("ColorData")) {
+                    QByteArray colorData = QByteArray::fromBase64(e.attribute("ColorData").toLatin1());
+                    KoColor color((const quint8*)colorData.data(), image->colorSpace());
+                    proofingConfig->warningColor = color;
+                }
+            }
+
             if (e.tagName().toLower() == "animation") {
                 loadAnimationMetadata(e, image);
             }
         }
+
+        image->setProofingConfiguration(proofingConfig);
 
         for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
             KoXmlElement e = child.toElement();

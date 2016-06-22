@@ -109,6 +109,12 @@ const QString ACTIVE = "active";
 const QString LAYER_STYLE_UUID = "layerstyle";
 const QString PASS_THROUGH_MODE = "passthrough";
 const QString KEYFRAME_FILE = "keyframes";
+const QString PROOFINGPROFILENAME = "proofing-profile-name";
+const QString PROOFINGMODEL = "proofing-model";
+const QString PROOFINGDEPTH = "proofing-depth";
+const QString PROOFINGINTENT = "proofing-intent";
+const QString PROOFINGWARNINGCOLOR ="ProofingWarningColor";
+const QString ICCPROOFINGPROFILE ="icc-proofing-profile";
 }
 
 

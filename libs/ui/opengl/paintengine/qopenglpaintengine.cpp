@@ -762,7 +762,7 @@ void QOpenGL2PaintEngineExPrivate::cleanupVectorPath(QPaintEngineEx *engine, voi
 void QOpenGL2PaintEngineExPrivate::fill(const QVectorPath& path)
 {
     transferMode(BrushDrawingMode);
-    qDebug() << "QOpenGL2PaintEngineExPrivate::fill";
+
     if (snapToPixelGrid) {
         snapToPixelGrid = false;
         matrixDirty = true;
@@ -1238,13 +1238,9 @@ qDebug() << "CALLING PAINTENGINE::COMPOSITE()";
 
     setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, staticVertexCoordinateArray);
 
-    funcs.glDrawArrays(GL_TRIANGLE_FAN, 0, 8 / 2);
+    funcs.glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
     vbo.release();
-    /////////////////////
-
-    //setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, staticVertexCoordinateArray);
-    //funcs.glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
 // Draws the vertex array as a set of <vertexArrayStops.size()> triangle fans.
@@ -1282,12 +1278,13 @@ QOpenGL2PaintEngineEx::~QOpenGL2PaintEngineEx()
 void QOpenGL2PaintEngineEx::fill(const QVectorPath &path, const QBrush &brush)
 {
     Q_D(QOpenGL2PaintEngineEx);
-
+qDebug() << "Entering QOpenGL2PaintEngineEx::fill";
     if (qbrush_style(brush) == Qt::NoBrush)
         return;
     ensureActive();
     d->setBrush(brush);
     d->fill(path);
+qDebug() << "Exiting QOpenGL2PaintEngineEx::fill";
 }
 
 Q_GUI_EXPORT bool qt_scaleForTransform(const QTransform &transform, qreal *scale); // qtransform.cpp
@@ -1296,7 +1293,7 @@ Q_GUI_EXPORT bool qt_scaleForTransform(const QTransform &transform, qreal *scale
 void QOpenGL2PaintEngineEx::stroke(const QVectorPath &path, const QPen &pen)
 {
     Q_D(QOpenGL2PaintEngineEx);
-    qDebug() << "Entering QOpenGL2PaintEngineEx::stroke";
+qDebug() << "Entering QOpenGL2PaintEngineEx::stroke";
     const QBrush &penBrush = qpen_brush(pen);
     if (qpen_style(pen) == Qt::NoPen || qbrush_style(penBrush) == Qt::NoBrush)
         return;
@@ -1310,7 +1307,7 @@ void QOpenGL2PaintEngineEx::stroke(const QVectorPath &path, const QPen &pen)
     ensureActive();
     d->setBrush(penBrush);
     d->stroke(path, pen);
-    qDebug() << "Exiting QOpenGL2PaintEngineEx::stroke with error: " << d->funcs.glGetError();
+qDebug() << "Exiting QOpenGL2PaintEngineEx::stroke with error: " << d->funcs.glGetError();
 }
 
 void QOpenGL2PaintEngineExPrivate::stroke(const QVectorPath &path, const QPen &pen)

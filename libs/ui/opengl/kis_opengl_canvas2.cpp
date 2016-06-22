@@ -293,18 +293,21 @@ void KisOpenGLCanvas2::paintGL()
     d->glSyncObject = Sync::getSync();
 
     QPainter gc(this);
-    //renderDecorations(&gc);
+    renderDecorations(&gc);
     QPen pen;
     pen.setWidth(10);
     pen.setBrush(Qt::green);
 
     pen.setJoinStyle(Qt::RoundJoin);
     gc.setPen(pen);
-    gc.drawRect(200, 200, 100, 100);
+    gc.drawRect(100, 100, 100, 100);
 
     pen.setJoinStyle(Qt::BevelJoin);
     gc.setPen(pen);
-    gc.drawRect(400, 200, 100, 100);
+    gc.drawRect(210, 100, 100, 100);
+
+    QBrush brush(Qt::red);
+    gc.fillRect(320, 100, 100, 100, brush);
     gc.end();
 
     if (!OPENGL_SUCCESS) {

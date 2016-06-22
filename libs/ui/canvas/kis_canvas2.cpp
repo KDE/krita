@@ -741,11 +741,11 @@ void KisCanvas2::slotSetDisplayProfile(const KoColorProfile *monitorProfile)
 
     m_d->displayColorConverter.setMonitorProfile(monitorProfile);
 
-    KisImageWSP image = this->image();
-
-    image->barrierLock();
-
-    m_d->canvasWidget->setDisplayProfile(&m_d->displayColorConverter);
+    {
+        KisImageSP image = this->image();
+        KisImageBarrierLocker l(image);
+        m_d->canvasWidget->setDisplayProfile(&m_d->displayColorConverter);
+    }
 
     refetchDataFromImage();
 }

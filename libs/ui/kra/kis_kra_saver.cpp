@@ -296,8 +296,9 @@ void KisKraSaver::saveWarningColor(QDomDocument& doc, QDomElement& element, KisI
     if (image->proofingConfiguration()) {
         QDomElement e = doc.createElement(PROOFINGWARNINGCOLOR);
         KoColor color = image->proofingConfiguration()->warningColor;
-        QByteArray colorData = QByteArray::fromRawData((const char*)color.data(), color.colorSpace()->pixelSize());
-        e.setAttribute("ColorData", QString(colorData.toBase64()));
+        color.toXML(doc, e);
+        //QByteArray colorData = QByteArray::fromRawData((const char*)color.data(), color.colorSpace()->pixelSize());
+        //e.setAttribute("ColorData", QString(colorData.toBase64()));
         element.appendChild(e);
     }
 }

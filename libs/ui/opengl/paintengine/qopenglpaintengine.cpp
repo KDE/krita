@@ -1355,26 +1355,15 @@ void QOpenGL2PaintEngineExPrivate::stroke(const QVectorPath &path, const QPen &p
         funcs.glEnableVertexAttribArray(QT_VERTEX_COORDS_ATTR);
 
         vbo.bind();
-        // float[] vertices = {
-        //
-        // }
-        // for (int i = 0; i < stroker.vertexCount(); i++) {
-        //     qDebug() << stroker.vertices()[i];
-        // }
-
         vbo.allocate(stroker.vertices(), stroker.vertexCount() * sizeof(float));
-
         setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, stroker.vertices());
-
         funcs.glDrawArrays(GL_TRIANGLE_STRIP, 0, stroker.vertexCount() / 2);
-
         vbo.release();
 
 //         QBrush b(Qt::green);
 //         d->setBrush(&b);
 //         d->prepareForDraw(true);
 //         glDrawArrays(GL_LINE_STRIP, 0, d->stroker.vertexCount() / 2);
-//exit(1);
     } else {
         qreal width = qpen_widthf(pen) / 2;
         if (width == 0)

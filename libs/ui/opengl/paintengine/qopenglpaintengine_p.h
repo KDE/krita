@@ -341,7 +341,7 @@ void QOpenGL2PaintEngineExPrivate::setVertexAttributePointer(unsigned int arrayI
 
     vertexAttribPointers[arrayIndex] = pointer;
     if (arrayIndex == QT_OPACITY_ATTR)
-        funcs.glVertexAttribPointer(arrayIndex, 1, GL_FLOAT, GL_FALSE, 0, pointer);
+        funcs.glVertexAttribPointer(arrayIndex, 1, GL_FLOAT, GL_FALSE, 0, 0);
     else
         funcs.glVertexAttribPointer(arrayIndex, 2, GL_FLOAT, GL_FALSE, 0, 0);
 }

@@ -4,7 +4,12 @@ message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 
 cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
-set(MIN_QT_VERSION 5.4.0)
+if (WIN32)
+    set(MIN_QT_VERSION 5.6.0)
+else()
+    set(MIN_QT_VERSION 5.4.0)
+endif()
+
 set(MIN_FRAMEWORKS_VERSION 5.7.0)
 
 if (POLICY CMP0002)

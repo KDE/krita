@@ -358,6 +358,9 @@ void KisViewManager::setCurrentView(KisView *view)
 
     }
 
+    d->softProof->setChecked(view->softProofing());
+    d->gamutCheck->setChecked(view->gamutCheck());
+
     QPointer<KisView>imageView = qobject_cast<KisView*>(view);
 
     if (imageView) {
@@ -387,8 +390,8 @@ void KisViewManager::setCurrentView(KisView *view)
         d->viewConnections.addUniqueConnection(d->zoomIn, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomIn()));
         d->viewConnections.addUniqueConnection(d->zoomOut, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomOut()));
 
-        d->viewConnections.addUniqueConnection(d->softProof, SIGNAL(toggled(bool)), d->currentImageView->canvasBase(), SLOT(slotSoftProofing(bool)) );
-        d->viewConnections.addUniqueConnection(d->gamutCheck, SIGNAL(toggled(bool)), d->currentImageView->canvasBase(), SLOT(slotGamutCheck(bool)) );
+        d->viewConnections.addUniqueConnection(d->softProof, SIGNAL(toggled(bool)), view, SLOT(slotSoftProofing(bool)) );
+        d->viewConnections.addUniqueConnection(d->gamutCheck, SIGNAL(toggled(bool)), view, SLOT(slotGamutCheck(bool)) );
 
         imageView->zoomManager()->setShowRulers(d->showRulersAction->isChecked());
         imageView->zoomManager()->setRulersTrackMouse(d->rulersTrackMouseAction->isChecked());

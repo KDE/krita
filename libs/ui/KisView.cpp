@@ -147,8 +147,8 @@ public:
     QPointer<KisFloatingMessage> savedFloatingMessage;
     KisSignalCompressor floatingMessageCompressor;
 
-    bool softProofing;
-    bool gamutCheck;
+    bool softProofing = false;
+    bool gamutCheck = false;
 
     // Hmm sorry for polluting the private class with such a big inner class.
     // At the beginning it was a little struct :)
@@ -808,6 +808,45 @@ KisSelectionSP KisView::selection()
     return 0;
 }
 
+void KisView::slotSoftProofing(bool softProofing)
+{
+    d->softProofing = softProofing;
+    QString message;
+    if (softProofing){
+        message = i18n("Softproofing turned on.");
+    } else {
+        message = i18n("Softproofing turned off.");
+    }
+    viewManager()->showFloatingMessage(message,QIcon());
+    canvasBase()->slotSoftProofing(softProofing);
+}
+
+void KisView::slotGamutCheck(bool gamutCheck)
+{
+    d->gamutCheck = gamutCheck;
+    QString message;
+    if (gamutCheck){
+        message = i18n("Gamut alarms turned on.");
+        if (!d->softProofing){
+            message += "\n "+i18n("But softproofing is still off.");
+        }
+    } else {
+        message = i18n("Gamut alarms turned off.");
+    }
+    viewManager()->showFloatingMessage(message,QIcon());
+    canvasBase()->slotGamutCheck(gamutCheck);
+}
+
+bool KisView::softProofing()
+{
+    return d->softProofing;
+}
+
+bool KisView::gamutCheck()
+{
+    return d->gamutCheck;
+}
+
 void KisView::slotLoadingFinished()
 {
     if (!document()) return;
@@ -883,9 +922,4 @@ void KisView::slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &
     resetImageSizeAndScroll(true, oldStillPoint, newStillPoint);
     zoomManager()->updateImageBoundsSnapping();
     zoomManager()->updateGUI();
-}
-
-void KisView::setProofingOptions(bool softProofing, bool gamutCheck)
-{
-    canvasBase()->setProofingOptions(softProofing, gamutCheck);
 }

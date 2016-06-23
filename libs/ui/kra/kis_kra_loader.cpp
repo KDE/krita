@@ -362,6 +362,25 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
             }
         }
     }
+    //load the embed proofing profile, it only needs to be loaded into Krita, not assigned.
+    location = external ? QString() : uri;
+    location += m_d->imageName + ICC_PROOFING_PATH;
+    if (store->hasFile(location)) {
+        if (store->open(location)) {
+            QByteArray proofingData;
+            proofingData.resize(store->size());
+            bool proofingProfileRes = (store->read(proofingData.data(), store->size())>-1);
+            store->close();
+            if (proofingProfileRes)
+            {
+                const KoColorProfile *proofingProfile = KoColorSpaceRegistry::instance()->createColorProfile(image->proofingConfiguration()->proofingModel, image->proofingConfiguration()->proofingDepth, proofingData);
+                if (proofingProfile->valid()){
+                    KoColorSpaceRegistry::instance()->addProfile(proofingProfile);
+                }
+            }
+        }
+    }
+
 
     // Load the layers data: if there is a profile associated with a layer it will be set now.
     KisKraLoadVisitor visitor(image, store, m_d->layerFilenames, m_d->imageName, m_d->syntaxVersion);

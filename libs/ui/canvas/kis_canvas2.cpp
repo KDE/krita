@@ -560,12 +560,12 @@ void KisCanvas2::setProofingOptions(bool softProof, bool gamutCheck)
     }
     KoColorConversionTransformation::ConversionFlags conversionFlags = m_d->proofingConfig->conversionFlags;
 
-    if (softProof) {
+    if (softProof && this->image()->colorSpace()->colorDepthId().id().contains("U")) {
         conversionFlags |= KoColorConversionTransformation::SoftProofing;
     } else {
         conversionFlags = conversionFlags &  ~KoColorConversionTransformation::SoftProofing;
     }
-    if (gamutCheck) {
+    if (gamutCheck && this->image()->colorSpace()->colorDepthId().id().contains("U")) {
         conversionFlags |= KoColorConversionTransformation::GamutCheck;
     } else {
         conversionFlags = conversionFlags & ~KoColorConversionTransformation::GamutCheck;

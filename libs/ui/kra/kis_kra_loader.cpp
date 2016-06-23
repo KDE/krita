@@ -29,6 +29,7 @@
 
 #include <KoStore.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorSpaceEngine.h>
 #include <KoColorProfile.h>
 #include <KoDocumentInfo.h>
 #include <KoFileDialog.h>
@@ -375,6 +376,10 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
             {
                 const KoColorProfile *proofingProfile = KoColorSpaceRegistry::instance()->createColorProfile(image->proofingConfiguration()->proofingModel, image->proofingConfiguration()->proofingDepth, proofingData);
                 if (proofingProfile->valid()){
+
+                    //if (KoColorSpaceEngineRegistry::instance()->get("icc")) {
+                    //    KoColorSpaceEngineRegistry::instance()->get("icc")->addProfile(proofingProfile->fileName());
+                    //}
                     KoColorSpaceRegistry::instance()->addProfile(proofingProfile);
                 }
             }

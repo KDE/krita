@@ -26,49 +26,43 @@
 #include <QHBoxLayout>
 
 
-KisDynamicSensorFuzzy::KisDynamicSensorFuzzy()
-    : KisDynamicSensor(FUZZY)
+KisDynamicSensorFuzzy::KisDynamicSensorFuzzy(bool fuzzyPerStroke)
+    : KisDynamicSensor(fuzzyPerStroke ? FUZZY_PER_STROKE : FUZZY_PER_DAB),
+      m_fuzzyPerStroke(fuzzyPerStroke),
+      m_isInitialized(false),
+      m_savedValue(0.0)
 {
+}
+
+void KisDynamicSensorFuzzy::reset()
+{
+    m_isInitialized = false;
 }
 
 bool KisDynamicSensorFuzzy::isAdditive() const
 {
-    return m_rotationModeEnabled;
+    return true;
 }
 
-void KisDynamicSensorFuzzy::setRotationModeEnabled(int state)
+qreal KisDynamicSensorFuzzy::value(const KisPaintInformation &info)
 {
-    m_rotationModeEnabled = state;
-}
+    if (m_fuzzyPerStroke && m_isInitialized) {
+        return m_savedValue;
+    }
 
-qreal KisDynamicSensorFuzzy::value(const KisPaintInformation &info) {
-
-    qreal result = !m_rotationModeEnabled ? 1.0 : 0.0;
+    qreal result = 0.0;
 
     if (!info.isHoveringMode()) {
         result = info.randomSource()->generateNormalized();
+        result = 2.0 * result - 1.0;
 
-        if (m_rotationModeEnabled) {
-            result = 2.0 * result - 1.0;
-        }
+        m_isInitialized = true;
+        m_savedValue = result;
     }
 
     return result;
 }
 
-void KisDynamicSensorFuzzy::toXML(QDomDocument &doc, QDomElement &e) const
-{
-    KisDynamicSensor::toXML(doc, e);
-    e.setAttribute("rotationModeEnabled", m_rotationModeEnabled);
-
-}
-
-void KisDynamicSensorFuzzy::fromXML(const QDomElement &e)
-{
-    KisDynamicSensor::fromXML(e);
-    m_rotationModeEnabled = e.attribute("rotationModeEnabled", "0").toInt();
-
-}
 bool KisDynamicSensorFuzzy::dependsOnCanvasRotation() const
 {
     return false;

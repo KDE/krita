@@ -37,22 +37,13 @@ double KisPressureRotationOption::apply(const KisPaintInformation & info) const
 {
     if (!isChecked()) return m_defaultAngle;
 
-    bool dependsOnViewportTransformations = false;
-    Q_FOREACH (const KisDynamicSensorSP s, activeSensors()) {
-        if (s->dependsOnCanvasRotation()) {
-            dependsOnViewportTransformations = true;
-            break;
-        }
+    qreal value = computeRotationLikeValue(info, m_defaultAngle);
+
+    if (m_canvasAxisXMirrored == m_canvasAxisYMirrored) {
+        value = 1.0 - value;
     }
 
-    qreal baseAngle = dependsOnViewportTransformations ? m_defaultAngle : 0;
-    qreal rotationCoeff =
-        dependsOnViewportTransformations ||
-        m_canvasAxisXMirrored == m_canvasAxisYMirrored ?
-        1.0 - computeValue(info) :
-        0.5 + computeValue(info);
-
-    return fmod(rotationCoeff * 2.0 * M_PI + baseAngle, 2.0 * M_PI);
+    return normalizeAngle(value * M_PI);
  }
 
 void KisPressureRotationOption::readOptionSetting(const KisPropertiesConfiguration* setting)
@@ -62,11 +53,6 @@ void KisPressureRotationOption::readOptionSetting(const KisPropertiesConfigurati
 
     m_canvasAxisXMirrored = setting->getBool("runtimeCanvasMirroredX", false);
     m_canvasAxisYMirrored = setting->getBool("runtimeCanvasMirroredY", false);
-
-    KisDynamicSensorFuzzy *s = dynamic_cast<KisDynamicSensorFuzzy*>(sensor(FUZZY, true).data());
-    if (s) {
-        s->setRotationModeEnabled(true);
-    }
 }
 
 void KisPressureRotationOption::applyFanCornersInfo(KisPaintOp *op)

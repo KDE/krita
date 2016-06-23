@@ -32,6 +32,5 @@ KisPressureFlowOption::KisPressureFlowOption()
 double KisPressureFlowOption::apply(const KisPaintInformation & info) const
 {
     if (!isChecked()) return 1.0;
-    return computeValue(info);
+    return computeSizeLikeValue(info);
 }
- 

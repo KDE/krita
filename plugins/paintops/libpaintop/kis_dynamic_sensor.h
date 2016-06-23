@@ -37,7 +37,8 @@
 class QWidget;
 class KisPaintInformation;
 
-const KoID FuzzyId("fuzzy", ki18n("Fuzzy")); ///< generate a random number
+const KoID FuzzyPerDabId("fuzzy", ki18n("Fuzzy Dab")); ///< generate a random number
+const KoID FuzzyPerStrokeId("fuzzystroke", ki18n("Fuzzy Stroke")); ///< generate a random number
 const KoID SpeedId("speed", ki18n("Speed")); ///< generate a number depending on the speed of the cursor
 const KoID FadeId("fade", ki18n("Fade")); ///< generate a number that increase every time you call it (e.g. per dab)
 const KoID DistanceId("distance", ki18n("Distance")); ///< generate a number that increase with distance
@@ -66,7 +67,8 @@ class KisDynamicSensor;
 typedef KisSharedPtr<KisDynamicSensor> KisDynamicSensorSP;
 
 enum DynamicSensorType {
-    FUZZY,
+    FUZZY_PER_DAB,
+    FUZZY_PER_STROKE,
     SPEED,
     FADE,
     DISTANCE,
@@ -175,6 +177,7 @@ public:
     virtual bool dependsOnCanvasRotation() const;
 
     virtual bool isAdditive() const;
+    virtual bool isAbsoluteRotation() const;
 
     inline DynamicSensorType sensorType() const { return m_type; }
 
@@ -183,6 +186,16 @@ public:
      * @return the currently set length or -1 if not relevant
      */
     int length() { return m_length; }
+
+
+public:
+    static inline qreal scalingToAdditive(qreal x) {
+        return -1.0 + 2.0 * x;
+    }
+
+    static inline qreal additiveToScaling(qreal x) {
+        return 0.5 * (1.0 + x);
+    }
 
 protected:
 

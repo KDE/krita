@@ -69,21 +69,8 @@ KisSelectionOptions::KisSelectionOptions(KisCanvas2 * /*canvas*/)
 
     connect(m_mode, SIGNAL(buttonClicked(int)), this, SIGNAL(modeChanged(int)));
     connect(m_action, SIGNAL(buttonClicked(int)), this, SIGNAL(actionChanged(int)));
+    connect(m_mode, SIGNAL(buttonClicked(int)), this, SLOT(hideActionsForSelectionMode(int)));
 
-    //hide action buttons and antialiasing, if shape selection is active (actions currently don't work on shape selection)
-    connect(m_page->shape, SIGNAL(clicked()), m_page->lblAction, SLOT(hide()));
-    connect(m_page->shape, SIGNAL(clicked()), m_page->add,       SLOT(hide()));
-    connect(m_page->shape, SIGNAL(clicked()), m_page->subtract,  SLOT(hide()));
-    connect(m_page->shape, SIGNAL(clicked()), m_page->replace,   SLOT(hide()));
-    connect(m_page->shape, SIGNAL(clicked()), m_page->intersect, SLOT(hide()));
-    connect(m_page->shape, SIGNAL(clicked()), m_page->chkAntiAliasing, SLOT(hide()));
-
-    connect(m_page->pixel, SIGNAL(clicked()), m_page->lblAction, SLOT(show()));
-    connect(m_page->pixel, SIGNAL(clicked()), m_page->add,       SLOT(show()));
-    connect(m_page->pixel, SIGNAL(clicked()), m_page->subtract,  SLOT(show()));
-    connect(m_page->pixel, SIGNAL(clicked()), m_page->replace,   SLOT(show()));
-    connect(m_page->pixel, SIGNAL(clicked()), m_page->intersect, SLOT(show()));
-    connect(m_page->pixel, SIGNAL(clicked()), m_page->chkAntiAliasing, SLOT(show()));
 }
 
 KisSelectionOptions::~KisSelectionOptions()
@@ -99,6 +86,25 @@ void KisSelectionOptions::setAction(int action) {
     QAbstractButton* button = m_action->button(action);
     Q_ASSERT(button);
     if(button) button->setChecked(true);
+}
+
+void KisSelectionOptions::setMode(int mode) {
+    QAbstractButton* button = m_mode->button(mode);
+    Q_ASSERT(button);
+    if(button) button->setChecked(true);
+    hideActionsForSelectionMode(mode);
+}
+
+//hide action buttons and antialiasing, if shape selection is active (actions currently don't work on shape selection)
+void KisSelectionOptions::hideActionsForSelectionMode(int mode) {
+    bool isPixelSelection = (mode == (int)PIXEL_SELECTION);
+
+    m_page->lblAction->setVisible(isPixelSelection);
+    m_page->add->setVisible(isPixelSelection);
+    m_page->subtract->setVisible(isPixelSelection);
+    m_page->replace->setVisible(isPixelSelection);
+    m_page->intersect->setVisible(isPixelSelection);
+    m_page->chkAntiAliasing->setVisible(isPixelSelection);
 }
 
 bool KisSelectionOptions::antiAliasSelection()

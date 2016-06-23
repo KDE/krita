@@ -20,12 +20,12 @@
 
 #include <QKeyEvent>
 #include "kis_selection_options.h"
-
+#include "kis_canvas2.h"
+#include "kisViewManager.h"
+#include "kis_canvas_resource_provider.h"
 
 KisSelectionToolConfigWidgetHelper::KisSelectionToolConfigWidgetHelper(const QString &windowTitle)
     : m_optionsWidget(0),
-      m_selectionAction(SELECTION_REPLACE),
-      m_selectionMode(PIXEL_SELECTION),
       m_windowTitle(windowTitle)
 {
 }
@@ -35,9 +35,15 @@ void KisSelectionToolConfigWidgetHelper::createOptionWidget(KisCanvas2 *canvas, 
     m_optionsWidget = new KisSelectionOptions(canvas);
     Q_CHECK_PTR(m_optionsWidget);
 
+    // slotCanvasResourceChanged... yuck
+    m_resourceProvider = canvas->viewManager()->resourceProvider();
+    // connect(m_resourceProvider->resourceManager(), &KisCanvasResourceManager::canvasResourceChanged,
+    //         this, KisSelectionToolConfigWidgetHelper::slotCanvasResourceChanged);
+
     m_optionsWidget->setObjectName(toolId + "option widget");
     m_optionsWidget->setWindowTitle(m_windowTitle);
-    m_optionsWidget->setAction(m_selectionAction);
+    m_optionsWidget->setAction(selectionAction());
+    m_optionsWidget->setMode(selectionMode());
 
     // See https://bugs.kde.org/show_bug.cgi?id=316896
     QWidget *specialSpacer = new QWidget(m_optionsWidget);
@@ -45,8 +51,14 @@ void KisSelectionToolConfigWidgetHelper::createOptionWidget(KisCanvas2 *canvas, 
     specialSpacer->setFixedSize(0, 0);
     m_optionsWidget->layout()->addWidget(specialSpacer);
 
-    connect(m_optionsWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
-    connect(m_optionsWidget, SIGNAL(modeChanged(int)), this, SLOT(slotSetSelectionMode(int)));
+    connect(m_optionsWidget, &KisSelectionOptions::actionChanged,
+            this, &KisSelectionToolConfigWidgetHelper::slotWidgetActionChanged);
+    connect(m_optionsWidget, &KisSelectionOptions::modeChanged,
+            this, &KisSelectionToolConfigWidgetHelper::slotWidgetModeChanged);
+    connect(m_resourceProvider, &KisCanvasResourceProvider::sigSelectionActionChanged,
+            this, &KisSelectionToolConfigWidgetHelper::slotGlobalActionChanged);
+    connect(m_resourceProvider, &KisCanvasResourceProvider::sigSelectionModeChanged,
+            this, &KisSelectionToolConfigWidgetHelper::slotGlobalModeChanged);
 
     m_optionsWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     m_optionsWidget->adjustSize();
@@ -59,27 +71,41 @@ KisSelectionOptions* KisSelectionToolConfigWidgetHelper::optionWidget() const
 
 SelectionMode KisSelectionToolConfigWidgetHelper::selectionMode() const
 {
-    return m_selectionMode;
+    return (SelectionMode)m_resourceProvider->selectionMode();
 }
 
 SelectionAction KisSelectionToolConfigWidgetHelper::selectionAction() const
 {
-    return m_selectionAction;
+    return (SelectionAction)m_resourceProvider->selectionAction();
 }
 
-void KisSelectionToolConfigWidgetHelper::slotSetAction(int action)
+void KisSelectionToolConfigWidgetHelper::slotWidgetActionChanged(int action)
 {
-    if (action >= SELECTION_REPLACE && action <= SELECTION_INTERSECT && m_selectionAction != action) {
-        m_selectionAction = (SelectionAction)action;
+    if (action >= SELECTION_REPLACE && action <= SELECTION_INTERSECT) {
         m_optionsWidget->setAction(action);
+        m_resourceProvider->setSelectionAction(action);
         emit selectionActionChanged(action);
     }
 }
 
-void KisSelectionToolConfigWidgetHelper::slotSetSelectionMode(int mode)
+void KisSelectionToolConfigWidgetHelper::slotWidgetModeChanged(int mode)
 {
-    m_selectionMode = (SelectionMode)mode;
+    m_optionsWidget->setMode(mode);
+    m_resourceProvider->setSelectionMode(mode);
+    emit selectionModeChanged(mode);
 }
+
+void KisSelectionToolConfigWidgetHelper::slotGlobalActionChanged(int action)
+{
+    m_optionsWidget->setAction(action);
+}
+
+void KisSelectionToolConfigWidgetHelper::slotGlobalModeChanged(int mode)
+{
+    m_optionsWidget->setMode(mode);
+}
+
+
 
 bool KisSelectionToolConfigWidgetHelper::processKeyPressEvent(QKeyEvent *event)
 {
@@ -87,16 +113,16 @@ bool KisSelectionToolConfigWidgetHelper::processKeyPressEvent(QKeyEvent *event)
 
     switch(event->key()) {
     case Qt::Key_A:
-        slotSetAction(SELECTION_ADD);
+        slotWidgetActionChanged(SELECTION_ADD);
         break;
     case Qt::Key_S:
-        slotSetAction(SELECTION_SUBTRACT);
+        slotWidgetActionChanged(SELECTION_SUBTRACT);
         break;
     case Qt::Key_R:
-        slotSetAction(SELECTION_REPLACE);
+        slotWidgetActionChanged(SELECTION_REPLACE);
         break;
     case Qt::Key_T:
-        slotSetAction(SELECTION_INTERSECT);
+        slotWidgetActionChanged(SELECTION_INTERSECT);
         break;
     default:
         event->ignore();

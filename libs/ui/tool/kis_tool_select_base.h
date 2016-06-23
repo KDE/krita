@@ -208,15 +208,9 @@ public:
            newSelectionAction <= SELECTION_INTERSECT &&
            m_selectionAction != newSelectionAction)
         {
-            if(m_widgetHelper.optionWidget())
-            {
-                m_widgetHelper.slotSetAction(newSelectionAction);
-            }
             m_selectionAction = (SelectionAction)newSelectionAction;
-            emit selectionActionChanged();
         }
     }
-
 
 protected:
     using BaseClass::canvas;

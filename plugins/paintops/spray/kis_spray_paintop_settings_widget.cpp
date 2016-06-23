@@ -48,7 +48,7 @@ KisSprayPaintOpSettingsWidget:: KisSprayPaintOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisSprayShapeDynamicsOption(), i18n("Shape dynamics"));
     addPaintOpOption(new KisColorOption(), i18n("Color options"));
 
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("0°"), i18n("360°")), i18n("Rotation"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")), i18n("Rotation"));
     addPaintOpOption(new KisAirbrushOption(), i18n("Airbrush"));
     addPaintOpOption(new KisPaintActionTypeOption(), i18n("Painting Mode"));
 }

@@ -69,6 +69,11 @@ bool KisDynamicSensorDrawingAngle::dependsOnCanvasRotation() const
     return false;
 }
 
+bool KisDynamicSensorDrawingAngle::isAbsoluteRotation() const
+{
+    return true;
+}
+
 void KisDynamicSensorDrawingAngle::updateGUI()
 {
     const bool fanEnabled = !m_chkLockedMode->isChecked();

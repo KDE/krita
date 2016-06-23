@@ -1050,7 +1050,7 @@ void KisViewManager::switchCanvasOnly(bool toggled)
             action->setChecked(!toggled);
         }
     }
-#ifndef Q_OS_WIN
+
     if (cfg.hideTitlebarFullscreen() && !cfg.fullscreenMode()) {
         if(toggled) {
             main->setWindowState( main->windowState() | Qt::WindowFullScreen);
@@ -1058,7 +1058,7 @@ void KisViewManager::switchCanvasOnly(bool toggled)
             main->setWindowState( main->windowState() & ~Qt::WindowFullScreen);
         }
     }
-#endif
+
     if (cfg.hideMenuFullscreen()) {
         if (!toggled) {
             if (main->menuBar()->dynamicPropertyNames().contains("wasvisible")) {

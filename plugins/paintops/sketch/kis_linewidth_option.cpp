@@ -26,8 +26,6 @@ KisLineWidthOption::KisLineWidthOption()
 
 double KisLineWidthOption::apply(const KisPaintInformation & info, double lineWidth) const
 {
-    if (!isChecked()) {
-        return lineWidth;
-    }
-    return computeValue(info) * lineWidth;
+    if (!isChecked()) return lineWidth;
+    return computeSizeLikeValue(info) * lineWidth;
 }

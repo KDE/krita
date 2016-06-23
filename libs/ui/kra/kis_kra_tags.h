@@ -116,6 +116,8 @@ const QString PROOFINGDEPTH = "proofing-depth";
 const QString PROOFINGINTENT = "proofing-intent";
 const QString PROOFINGWARNINGCOLOR ="ProofingWarningColor";
 const QString ICCPROOFINGPROFILE ="icc-proofing-profile";
+const QString CANVASPROJECTIONCOLOR = "ProjectionBackgroundColor";
+const QString COLORBYTEDATA = "ColorData";
 }
 
 

@@ -294,10 +294,10 @@ QStringList KisKraSaver::errorMessages() const
 
 void KisKraSaver::saveBackgroundColor(QDomDocument& doc, QDomElement& element, KisImageWSP image)
 {
-    QDomElement e = doc.createElement("ProjectionBackgroundColor");
+    QDomElement e = doc.createElement(CANVASPROJECTIONCOLOR);
     KoColor color = image->defaultProjectionColor();
     QByteArray colorData = QByteArray::fromRawData((const char*)color.data(), color.colorSpace()->pixelSize());
-    e.setAttribute("ColorData", QString(colorData.toBase64()));
+    e.setAttribute(COLORBYTEDATA, QString(colorData.toBase64()));
     element.appendChild(e);
 }
 

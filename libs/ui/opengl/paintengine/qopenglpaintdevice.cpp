@@ -254,15 +254,6 @@ void QOpenGLPaintDevice::setDevicePixelRatio(qreal devicePixelRatio)
 
 int QOpenGLPaintDevice::metric(QPaintDevice::PaintDeviceMetric metric) const
 {
-    // void* buffer = malloc(3 * 4);
-    // int symcount = backtrace(&buffer, 3);
-    // printf("Symcount: %d\n", symcount);
-    // char** symbols = backtrace_symbols(&buffer, 3);
-    // printf("buffer : %s\n", symbols[0]);
-    // printf("buffer : %s\n", symbols[1]);
-    // printf("buffer : %s\n", symbols[2]);
-
-    qDebug() << "Metric: " << metric;
     switch (metric) {
     case PdmWidth:
         return d_ptr->size.width();
@@ -284,10 +275,10 @@ int QOpenGLPaintDevice::metric(QPaintDevice::PaintDeviceMetric metric) const
         return qRound(d_ptr->dpmx * 0.0254);
     case PdmPhysicalDpiY:
         return qRound(d_ptr->dpmy * 0.0254);
-//    case PdmDevicePixelRatio:
-//        return d_ptr->devicePixelRatio;
-//    case PdmDevicePixelRatioScaled:
-//        return d_ptr->devicePixelRatio * QPaintDevice::devicePixelRatioFScale();
+    case PdmDevicePixelRatio:
+        return d_ptr->devicePixelRatio;
+    case PdmDevicePixelRatioScaled:
+        return d_ptr->devicePixelRatio * QPaintDevice::devicePixelRatioFScale();
 
     default:
         qWarning("QOpenGLPaintDevice::metric() - metric %d not known", metric);

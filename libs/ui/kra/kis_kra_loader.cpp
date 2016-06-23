@@ -76,6 +76,7 @@
 #include "kis_time_range.h"
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
+#include "kis_image_config.h"
 #include "KisProofingConfiguration.h"
 
 /*
@@ -265,7 +266,8 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
                 return KisImageWSP(0);
             }
         }
-        KisProofingConfiguration *proofingConfig = new KisProofingConfiguration();
+        KisImageConfig cfgImage;
+        KisProofingConfiguration *proofingConfig = cfgImage.defaultProofingconfiguration();
         if (!(attr = element.attribute(PROOFINGPROFILENAME)).isNull()) {
             proofingConfig->proofingProfile = attr;
         }

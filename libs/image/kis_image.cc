@@ -1606,7 +1606,8 @@ void KisImage::setProofingConfiguration(KisProofingConfiguration *proofingConfig
 KisProofingConfiguration *KisImage::proofingConfiguration() const
 {
     if (!m_d->proofingConfig) {
-        m_d->proofingConfig = new KisProofingConfiguration();
+        KisImageConfig cfg;
+        m_d->proofingConfig = cfg.defaultProofingconfiguration();
     }
     return m_d->proofingConfig;
 }

@@ -556,7 +556,8 @@ void KisCanvas2::setProofingOptions(bool softProof, bool gamutCheck)
     m_d->proofingConfig = this->image()->proofingConfiguration();
     if (!m_d->proofingConfig) {
         qDebug()<<"Canvas: No proofing config found, generating one.";
-        m_d->proofingConfig = new KisProofingConfiguration();
+        KisImageConfig cfg;
+        m_d->proofingConfig = cfg.defaultProofingconfiguration();
     }
     KoColorConversionTransformation::ConversionFlags conversionFlags = m_d->proofingConfig->conversionFlags;
 
@@ -610,7 +611,8 @@ KisProofingConfiguration *KisCanvas2::proofingConfiguration() const
         m_d->proofingConfig = this->image()->proofingConfiguration();
         if (!m_d->proofingConfig) {
             qDebug()<<"Canvas: No proofing config found, generating one.";
-            m_d->proofingConfig = new KisProofingConfiguration();
+            KisImageConfig cfg;
+            m_d->proofingConfig = cfg.defaultProofingconfiguration();
         }
     }
     return m_d->proofingConfig;

@@ -197,9 +197,9 @@
    <item row="1" column="0">
     <widget class="QTabWidget" name="grpColorM">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
-     <widget class="QWidget" name="grpMode" native="true">
+     <widget class="QWidget" name="grpMode">
       <attribute name="title">
        <string>Image Color Space</string>
       </attribute>
@@ -237,14 +237,14 @@
        <item row="2" column="1">
         <widget class="QLabel" name="label_4">
          <property name="text">
-          <string>Gamut Alarm:</string>
+          <string>Gamut Warning:</string>
          </property>
         </widget>
        </item>
        <item row="2" column="0">
         <widget class="QCheckBox" name="ckbBlackPointComp">
          <property name="text">
-          <string>BlackPoint Compenstation</string>
+          <string>Black Point Compenstation</string>
          </property>
         </widget>
        </item>
@@ -257,7 +257,7 @@
           <item row="1" column="1">
            <widget class="QComboBox" name="cmbIntent">
             <property name="currentIndex">
-             <number>2</number>
+             <number>0</number>
             </property>
             <item>
              <property name="text">
@@ -271,12 +271,12 @@
             </item>
             <item>
              <property name="text">
-              <string>Absolute Colorimetric</string>
+              <string>Saturation</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Saturation</string>
+              <string>Absolute Colorimetric</string>
              </property>
             </item>
            </widget>

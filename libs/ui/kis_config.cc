@@ -33,6 +33,7 @@
 
 #include <KisDocument.h>
 
+#include <KoColor.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>

@@ -302,12 +302,11 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
             }
 
             if(e.tagName()== PROOFINGWARNINGCOLOR) {
-                qDebug()<<"Warning color found but can't be loaded because the loading code is incomplete, fixme!";
-                //how do I convert a koxmlelement to a qdomelement???
-                //QDomElement eq = child.toElement();
-                //QString depth ="U8";
-                //proofingConfig->warningColor = KoColor::fromXML(eq, depth, QHash<QString, QString>());
-
+                QDomDocument dom;
+                KoXml::asQDomElement(dom, e);
+                QDomElement eq = dom.firstChildElement();
+                proofingConfig->warningColor = KoColor::fromXML(eq.firstChildElement(), Integer8BitsColorDepthID.id(), QHash<QString, QString>());
+                qDebug()<<KoColor::toQString(proofingConfig->warningColor);
             }
 
             if (e.tagName().toLower() == "animation") {

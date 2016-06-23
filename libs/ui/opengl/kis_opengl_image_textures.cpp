@@ -51,6 +51,9 @@ KisOpenGLImageTextures::ImageTexturesMap KisOpenGLImageTextures::imageTexturesMa
 KisOpenGLImageTextures::KisOpenGLImageTextures()
     : m_image(0)
     , m_monitorProfile(0)
+    , m_proofingConfig(0)
+    , m_proofingTransform(0)
+    , m_createNewProofingTransform(true)
     , m_tilesDestinationColorSpace(0)
     , m_internalColorManagementActive(true)
     , m_checkerTexture(0)
@@ -58,9 +61,6 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
     , m_allChannelsSelected(true)
     , m_useOcio(false)
     , m_initialized(false)
-    , m_proofingConfig(0)
-    , m_proofingTransform(0)
-    , m_createNewProofingTransform(true)
 {
     KisConfig cfg;
     m_renderingIntent = (KoColorConversionTransformation::Intent)cfg.monitorRenderIntent();
@@ -79,7 +79,10 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
     , m_monitorProfile(monitorProfile)
     , m_renderingIntent(renderingIntent)
     , m_conversionFlags(conversionFlags)
+    , m_proofingConfig(0)
+    , m_proofingTransform(0)
     , m_tilesDestinationColorSpace(0)
+    , m_createNewProofingTransform(true)
     , m_internalColorManagementActive(true)
     , m_checkerTexture(0)
     , m_glFuncs(0)
@@ -465,7 +468,6 @@ void KisOpenGLImageTextures::setChannelFlags(const QBitArray &channelFlags)
 void KisOpenGLImageTextures::setProofingConfig(KisProofingConfiguration *proofingConfig)
 {
     m_proofingConfig = proofingConfig;
-    qDebug()<<"set";
     m_createNewProofingTransform = true;
 }
 

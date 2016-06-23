@@ -441,7 +441,6 @@ KoColorConversionTransformation * KoColorSpace::createProofingTransform(const Ko
 {
     if (!d->iccEngine) {
         d->iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
-        qDebug() << ">>>>>>>>>>>>>>>>>>>> we got a proofing engine";
     }
     if (!d->iccEngine) return false;
 

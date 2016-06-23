@@ -128,11 +128,6 @@ public:
         alarm[2] = (cmsUInt16Number)gamutWarning[0]*256;
         cmsSetAlarmCodes(alarm);
 
-        qDebug()<<"Test gamut check";
-        qDebug()<<conversionFlags.testFlag(KoColorConversionTransformation::GamutCheck);
-        qDebug()<<conversionFlags.testFlag(KoColorConversionTransformation::SoftProofing);
-        qDebug()<<alarm[0]<<", "<< alarm[1]<<", "<< alarm[2];
-
         m_transform = cmsCreateProofingTransform(srcProfile->lcmsProfile(),
                                                  srcColorSpaceType,
                                                  dstProfile->lcmsProfile(),

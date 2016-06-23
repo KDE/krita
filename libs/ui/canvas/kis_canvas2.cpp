@@ -565,16 +565,13 @@ void KisCanvas2::setProofingOptions(bool softProof, bool gamutCheck)
     } else {
         conversionFlags = conversionFlags &  ~KoColorConversionTransformation::SoftProofing;
     }
-    if (gamutCheck && this->image()->colorSpace()->colorDepthId().id().contains("U")) {
+    if (gamutCheck && softProof && this->image()->colorSpace()->colorDepthId().id().contains("U")) {
         conversionFlags |= KoColorConversionTransformation::GamutCheck;
     } else {
         conversionFlags = conversionFlags & ~KoColorConversionTransformation::GamutCheck;
     }
     m_d->proofingConfig->conversionFlags = conversionFlags;
 
-    qDebug()<<"setting softproofing in canvas: "<<softProof <<", "<<gamutCheck;
-    qDebug()<<conversionFlags.testFlag(KoColorConversionTransformation::SoftProofing);
-    qDebug()<<conversionFlags.testFlag(KoColorConversionTransformation::GamutCheck);
     m_d->proofingConfigUpdated = true;
     startUpdateInPatches(this->image()->bounds());
 
@@ -610,8 +607,11 @@ bool KisCanvas2::proofingConfigUpdated()
 KisProofingConfiguration *KisCanvas2::proofingConfiguration() const
 {
     if (!m_d->proofingConfig) {
-        qDebug()<<"No proofing config found, generating one";
-        m_d->proofingConfig = new KisProofingConfiguration();
+        m_d->proofingConfig = this->image()->proofingConfiguration();
+        if (!m_d->proofingConfig) {
+            qDebug()<<"Canvas: No proofing config found, generating one.";
+            m_d->proofingConfig = new KisProofingConfiguration();
+        }
     }
     return m_d->proofingConfig;
 }

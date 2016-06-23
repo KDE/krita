@@ -1606,7 +1606,6 @@ void KisImage::setProofingConfiguration(KisProofingConfiguration *proofingConfig
 KisProofingConfiguration *KisImage::proofingConfiguration() const
 {
     if (!m_d->proofingConfig) {
-        qDebug()<<"Image: No proofing config found, generating one.";
         m_d->proofingConfig = new KisProofingConfiguration();
     }
     return m_d->proofingConfig;

@@ -265,9 +265,7 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
                 return KisImageWSP(0);
             }
         }
-        qDebug()<<"start loading proofing data";
         KisProofingConfiguration *proofingConfig = new KisProofingConfiguration();
-        qDebug()<<"start loading the name";
         if (!(attr = element.attribute(PROOFINGPROFILENAME)).isNull()) {
             proofingConfig->proofingProfile = attr;
         }
@@ -307,7 +305,6 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
                 KoXml::asQDomElement(dom, e);
                 QDomElement eq = dom.firstChildElement();
                 proofingConfig->warningColor = KoColor::fromXML(eq.firstChildElement(), Integer8BitsColorDepthID.id(), QHash<QString, QString>());
-                qDebug()<<KoColor::toQString(proofingConfig->warningColor);
             }
 
             if (e.tagName().toLower() == "animation") {

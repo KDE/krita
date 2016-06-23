@@ -613,7 +613,7 @@ public:
      */
     KisPaintOp* paintOp() const;
 
-    void setMirrorInformation(const QPointF &axesCenter, bool mirrorHorizontaly, bool mirrorVerticaly);
+    void setMirrorInformation(const QPointF &axesCenter, bool mirrorHorizontally, bool mirrorVertically);
 
     /**
      * copy the mirror information to other painter

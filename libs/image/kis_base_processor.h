@@ -47,7 +47,7 @@ class KisConfigWidget;
  * pixels.
  *
  * in-out processing is typically filtering: @see KisFilter.
- * out-only processing is typiccaly generating: @see KisGenerator.
+ * out-only processing is typically generating: @see KisGenerator.
  *
  * Information about the area that needs to be processed is contained
  * @see KisProcessingInformation and @see KisConstProcessingInformation.

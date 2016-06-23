@@ -33,6 +33,11 @@ class KisPostExecutionUndoAdapter;
 class KisRecordedPaintAction;
 class KoPattern;
 
+/**
+ * @brief The KisResourcesSnapshot class takes a snapshot of the various resources
+ * like colors and settings used at the begin of a stroke or a recording so subsequent
+ * changes don't impact the running stroke.
+ */
 class KRITAUI_EXPORT KisResourcesSnapshot : public KisShared
 {
 public:

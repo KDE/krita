@@ -232,6 +232,7 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
         }
     }
 
+    //This'll embed the profile used for proofing into the kra file.
     if (image->proofingConfiguration()) {
         const KoColorProfile *proofingProfile = KoColorSpaceRegistry::instance()->profileByName(image->proofingConfiguration()->proofingProfile);
         if (proofingProfile && proofingProfile->valid()) {
@@ -240,6 +241,15 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
                 annotation = new KisAnnotation(ICCPROOFINGPROFILE, proofingProfile->name(), proofingProfile->rawData());
             }
         }
+        if (annotation) {
+            location = external ? QString() : uri;
+            location += m_d->imageName + ICC_PROOFING_PATH;
+            if (store->open(location)) {
+                store->write(annotation->annotation());
+                store->close();
+            }
+        }
+
     }
 
     {

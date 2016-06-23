@@ -45,27 +45,38 @@
  *
  * Certain tools also use modifier keys to alter their behavior, e.g. forcing square proportions with the rectangle tool.
  * The template enables the following rules for forwarding keys:
- * 1) Any modifier keys held *when the tool is first activated* will determine the new selection method.
- * 2) If the underlying tool *does not take modifier keys*, pressing modifier keys in the middle of a stroke will change the selection method.  This applies to the lasso tool and polygon tool.
- * 3) If the underlying tool *takes modifier keys,* they will always be forwarded to the underlying tool, and it is not possible to change the selection method in the middle of a stroke.
+
+ * 1) Any modifier keys held *when the tool is first activated* will determine
+ * the new selection method. This is recorded in m_selectionActionAlternate. A
+ * value of m_selectionActionAlternate = SELECTION_DEFAULT means no modifier was
+ * being pressed when the tool was activated.
+ *
+ * 2) If the underlying tool *does not take modifier keys*, pressing modifier
+ * keys in the middle of a stroke will change the selection method. This is
+ * recorded in m_selectionAction. A value of SELECTION_DEFAULT means no modifier
+ * is being pressed. Applies to the lasso tool and polygon tool.
+ *
+ * 3) If the underlying tool *takes modifier keys,* they will always be
+ * forwarded to the underlying tool, and it is not possible to change the
+ * selection method in the middle of a stroke.
  */
 
 template <class BaseClass>
-    class SelectionActionHandler : public BaseClass
+class KisToolSelectBase : public BaseClass
 {
 
 public:
 
-    SelectionActionHandler(KoCanvasBase* canvas, const QString toolName)
+    KisToolSelectBase(KoCanvasBase* canvas, const QString toolName)
         :BaseClass(canvas),
          m_widgetHelper(toolName),
          m_selectionAction(SELECTION_DEFAULT),
          m_selectionActionAlternate(SELECTION_DEFAULT)
     {
-      KisSelectionModifierMapper::instance();
+        KisSelectionModifierMapper::instance();
     }
 
-    SelectionActionHandler(KoCanvasBase* canvas, const QCursor cursor, const QString toolName)
+    KisToolSelectBase(KoCanvasBase* canvas, const QCursor cursor, const QString toolName)
         :BaseClass(canvas, cursor),
          m_widgetHelper(toolName),
          m_selectionAction(SELECTION_DEFAULT),
@@ -73,7 +84,7 @@ public:
     {
     }
 
-    SelectionActionHandler(KoCanvasBase* canvas, QCursor cursor, QString toolName, KisTool *delegateTool)
+    KisToolSelectBase(KoCanvasBase* canvas, QCursor cursor, QString toolName, KisTool *delegateTool)
         :BaseClass(canvas, cursor, delegateTool),
          m_widgetHelper(toolName),
          m_selectionAction(SELECTION_DEFAULT),
@@ -117,7 +128,7 @@ public:
 
     SelectionAction alternateSelectionAction() const
     {
-      return m_selectionActionAlternate;
+        return m_selectionActionAlternate;
     }
 
     KisSelectionOptions* selectionOptionWidget()
@@ -128,7 +139,7 @@ public:
     virtual void setAlternateSelectionAction(SelectionAction action)
     {
         m_selectionActionAlternate = action;
-  dbgKrita << "Changing to selection action" << m_selectionActionAlternate;
+        dbgKrita << "Changing to selection action" << m_selectionActionAlternate;
     }
 
     void activateAlternateAction(KisTool::AlternateAction action)
@@ -163,9 +174,9 @@ public:
         keysAtStart = event->modifiers();
 
         setAlternateSelectionAction(KisSelectionModifierMapper::map(keysAtStart));
-  if (alternateSelectionAction() != SELECTION_DEFAULT) {
-    BaseClass::listenToModifiers(false);
-  }
+        if (alternateSelectionAction() != SELECTION_DEFAULT) {
+            BaseClass::listenToModifiers(false);
+        }
         BaseClass::beginPrimaryAction(event);
     }
 
@@ -173,7 +184,7 @@ public:
     {
         //If modifier keys have changed, tell the base tool it can start capturing modifiers
         if ((keysAtStart != event->modifiers()) && !BaseClass::listeningToModifiers()) {
-                BaseClass::listenToModifiers(true);
+            BaseClass::listenToModifiers(true);
         }
 
         //Always defer to the base class if it signals it is capturing modifier keys
@@ -190,6 +201,22 @@ public:
         BaseClass::endPrimaryAction(event);
     }
 
+    void changeSelectionAction(int newSelectionAction)
+    {
+        // Simple sanity check
+        if(newSelectionAction >= SELECTION_REPLACE &&
+           newSelectionAction <= SELECTION_INTERSECT &&
+           m_selectionAction != newSelectionAction)
+        {
+            if(m_widgetHelper.optionWidget())
+            {
+                m_widgetHelper.slotSetAction(newSelectionAction);
+            }
+            m_selectionAction = (SelectionAction)newSelectionAction;
+            emit selectionActionChanged();
+        }
+    }
+
 
 protected:
     using BaseClass::canvas;
@@ -199,10 +226,11 @@ protected:
 
 private:
     Qt::KeyboardModifiers keysAtStart;
+
 };
 
 
-typedef SelectionActionHandler<KisTool> KisToolSelectBase;
+typedef KisToolSelectBase<KisTool> KisToolSelect;
 
 
 #endif // KISTOOLSELECTBASE_H

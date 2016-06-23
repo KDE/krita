@@ -385,6 +385,8 @@ bool KisFreeTransformStrategy::beginPrimaryAction(const QPointF &pt)
 
 void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bool specialModifierActive)
 {
+    // Note: "specialModifierActive" just tells us if the shift key is being pressed
+
     switch (m_d->function) {
     case MOVE: {
         QPointF diff = mousePos - m_d->clickPos;
@@ -421,9 +423,18 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bo
         qreal a1 = atan2(clickMouseImagePos.y(), clickMouseImagePos.x());
         qreal a2 = atan2(mouseImagePos.y(), mouseImagePos.x());
 
-        double theta = -a1 + a2;
+        qreal theta = a2 - a1;
 
-        m_d->currentArgs.setAZ(normalizeAngle(m_d->clickArgs.aZ() + theta));
+        // Snap with shift key
+        if (specialModifierActive) {
+            const qreal snapAngle = M_PI_4 / 6.0; // fifteen degrees
+            qint32 thetaIndex = static_cast<qint32>((theta / snapAngle) + 0.5);
+            m_d->currentArgs.setAZ(normalizeAngle(thetaIndex * snapAngle));
+        }
+
+        else {
+            m_d->currentArgs.setAZ(normalizeAngle(m_d->clickArgs.aZ() + theta));
+        }
 
         KisTransformUtils::MatricesPack m(m_d->currentArgs);
         QTransform t = m.finalTransform();

@@ -115,7 +115,6 @@ private:
     KisImageWSP m_image;
     KisNodeSP m_node;
     KisProcessingApplicator::ProcessingFlags m_flags;
-    bool m_finalUpdate;
 };
 
 class EmitImageSignalsCommand : public KisCommandUtils::FlipFlopCommand
@@ -156,7 +155,6 @@ private:
 private:
     KisImageWSP m_image;
     KisImageSignalVector m_emitSignals;
-    bool m_finalUpdate;
 };
 
 

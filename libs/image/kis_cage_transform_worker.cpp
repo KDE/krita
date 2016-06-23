@@ -242,13 +242,15 @@ int KisCageTransformWorker::Private::
 tryGetValidIndex(const QPoint &cellPt)
 {
     int index = -1;
-
-    return
-        cellPt.x() >= 0 &&
+    if (cellPt.x() >= 0 &&
         cellPt.y() >= 0 &&
         cellPt.x() < gridSize.width() - 1 &&
-        cellPt.y() < gridSize.height() - 1 &&
-        (index = allToValidPointsMap[GridIterationTools::pointToIndex(cellPt, gridSize)]) >= 0, index;
+        cellPt.y() < gridSize.height() - 1) {
+
+        index = allToValidPointsMap[GridIterationTools::pointToIndex(cellPt, gridSize)];
+    }
+
+    return index;
 }
 
 

@@ -21,7 +21,7 @@
 #include <QKeyEvent>
 #include "kis_selection_options.h"
 #include "kis_canvas2.h"
-#include "kisViewManager.h"
+#include "KisViewManager.h"
 #include "kis_canvas_resource_provider.h"
 
 KisSelectionToolConfigWidgetHelper::KisSelectionToolConfigWidgetHelper(const QString &windowTitle)

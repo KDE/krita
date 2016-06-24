@@ -133,10 +133,9 @@ void TimelineNodeListKeeper::slotUpdateDummyContent(QObject *_dummy)
 
 void TimelineNodeListKeeper::Private::tryConnectDummy(KisNodeDummy *dummy)
 {
-    KisKeyframeChannel *content =
-        dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    QList<KisKeyframeChannel*> channels = dummy->node()->keyframeChannels();
 
-    if (!content) {
+    if (channels.isEmpty()) {
         if (connectionsSet.contains(dummy)) {
             connectionsSet.remove(dummy);
         }
@@ -146,15 +145,16 @@ void TimelineNodeListKeeper::Private::tryConnectDummy(KisNodeDummy *dummy)
 
     if (connectionsSet.contains(dummy)) return;
 
-    connect(content, SIGNAL(sigKeyframeAdded(KisKeyframe*)),
-            &dummiesUpdateMapper, SLOT(map()));
-    connect(content, SIGNAL(sigKeyframeAboutToBeRemoved(KisKeyframe*)),
-            &dummiesUpdateMapper, SLOT(map()));
-    connect(content, SIGNAL(sigKeyframeMoved(KisKeyframe*, int)),
-            &dummiesUpdateMapper, SLOT(map()));
+    Q_FOREACH(KisKeyframeChannel *channel, channels) {
+        connect(channel, SIGNAL(sigKeyframeAdded(KisKeyframe*)),
+                &dummiesUpdateMapper, SLOT(map()));
+        connect(channel, SIGNAL(sigKeyframeAboutToBeRemoved(KisKeyframe*)),
+                &dummiesUpdateMapper, SLOT(map()));
+        connect(channel, SIGNAL(sigKeyframeMoved(KisKeyframe*, int)),
+                &dummiesUpdateMapper, SLOT(map()));
 
-
-    dummiesUpdateMapper.setMapping(content, (QObject*)dummy);
+        dummiesUpdateMapper.setMapping(channel, (QObject*)dummy);
+    }
     connectionsSet.insert(dummy);
 }
 
@@ -162,17 +162,19 @@ void TimelineNodeListKeeper::Private::disconnectDummy(KisNodeDummy *dummy)
 {
     if (!connectionsSet.contains(dummy)) return;
 
-    KisKeyframeChannel *content =
-        dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    QList<KisKeyframeChannel*> channels = dummy->node()->keyframeChannels();
 
-    if (!content) {
+    if (channels.isEmpty()) {
         if (connectionsSet.contains(dummy)) {
             connectionsSet.remove(dummy);
         }
         return;
     }
 
-    content->disconnect(&dummiesUpdateMapper);
+    Q_FOREACH(KisKeyframeChannel *channel, channels) {
+        channel->disconnect(&dummiesUpdateMapper);
+    }
+
     connectionsSet.remove(dummy);
 }
 

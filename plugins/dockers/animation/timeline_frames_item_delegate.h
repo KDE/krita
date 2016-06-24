@@ -29,6 +29,7 @@ public:
     ~TimelineFramesItemDelegate();
 
     static void paintActiveFrameSelector(QPainter *painter, const QRect &rc, bool isCurrentFrame);
+    static void paintSpecialKeyframeIndicator(QPainter *painter, const QModelIndex &index, const QRect &rc);
     static void drawBackground(QPainter *painter, const QModelIndex &index, const QRect &rc);
     void drawFocus(QPainter *painter,
                    const QStyleOptionViewItem &option,

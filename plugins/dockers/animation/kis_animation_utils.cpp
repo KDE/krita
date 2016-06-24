@@ -172,39 +172,33 @@ namespace KisAnimationUtils {
         for (int i = 0; i < srcFrames.size(); i++) {
             const int srcTime = srcFrames[i].time;
             KisNodeSP srcNode = srcFrames[i].node;
+            KisKeyframeChannel *srcChannel = srcNode->getKeyframeChannel(srcFrames[i].channel);
 
             const int dstTime = dstFrames[i].time;
             KisNodeSP dstNode = dstFrames[i].node;
+            KisKeyframeChannel *dstChannel = dstNode->getKeyframeChannel(dstFrames[i].channel, true);
 
             if (srcNode == dstNode) {
-                KisKeyframeChannel *content =
-                    srcNode->getKeyframeChannel(KisKeyframeChannel::Content.id());
+                if (!srcChannel) continue;
 
-                if (!content) continue;
-
-                KisKeyframeSP srcKeyframe = content->keyframeAt(srcTime);
+                KisKeyframeSP srcKeyframe = srcChannel->keyframeAt(srcTime);
                 if (srcKeyframe) {
                     if (copy) {
-                        content->copyKeyframe(srcKeyframe, dstTime, cmd.data());
+                        srcChannel->copyKeyframe(srcKeyframe, dstTime, cmd.data());
                     } else {
-                        content->moveKeyframe(srcKeyframe, dstTime, cmd.data());
+                        srcChannel->moveKeyframe(srcKeyframe, dstTime, cmd.data());
                     }
                 }
             } else {
-                KisKeyframeChannel *srcContent =
-                    srcNode->getKeyframeChannel(KisKeyframeChannel::Content.id());
-                KisKeyframeChannel *dstContent =
-                    dstNode->getKeyframeChannel(KisKeyframeChannel::Content.id());
+                if (!srcChannel|| !dstChannel) continue;
 
-                if (!srcContent || !dstContent) continue;
-
-                KisKeyframeSP srcKeyframe = srcContent->keyframeAt(srcTime);
+                KisKeyframeSP srcKeyframe = srcChannel->keyframeAt(srcTime);
                 if (!srcKeyframe) continue;
 
-                dstContent->copyExternalKeyframe(srcContent, srcTime, dstTime, cmd.data());
+                dstChannel->copyExternalKeyframe(srcChannel, srcTime, dstTime, cmd.data());
 
                 if (!copy) {
-                    srcContent->deleteKeyframe(srcKeyframe, cmd.data());
+                    srcChannel->deleteKeyframe(srcKeyframe, cmd.data());
                 }
             }
 

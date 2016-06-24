@@ -68,6 +68,38 @@ void TimelineFramesItemDelegate::paintActiveFrameSelector(QPainter *painter, con
     }
 }
 
+void TimelineFramesItemDelegate::paintSpecialKeyframeIndicator(QPainter *painter, const QModelIndex &index, const QRect &rc)
+{
+    bool active = index.data(TimelineFramesModel::ActiveLayerRole).toBool();
+    bool framePresent = index.data(TimelineFramesModel::FrameExistsRole).toBool();
+    bool editable = index.data(TimelineFramesModel::FrameEditableRole).toBool();
+
+    QColor color = TimelineColorScheme::instance()->frameColor(!framePresent, active);
+
+    if (!editable && color.alpha() > 0) {
+        const int l = color.lightness();
+        color = QColor(l, l, l);
+    }
+
+    QPen oldPen = painter->pen();
+    QBrush oldBrush(painter->brush());
+
+    painter->setPen(QPen(color, 0));
+    painter->setBrush(color);
+
+    QPointF center = rc.center();
+    QPointF points[4] = {
+        QPointF(center.x() + 4, center.y()   ),
+        QPointF(center.x()    , center.y() - 4),
+        QPointF(center.x() - 4, center.y()   ),
+        QPointF(center.x()    , center.y() + 4)
+    };
+    painter->drawConvexPolygon(points, 4);
+
+    painter->setBrush(oldBrush);
+    painter->setPen(oldPen);
+}
+
 void TimelineFramesItemDelegate::drawBackground(QPainter *painter, const QModelIndex &index, const QRect &rc)
 {
     bool active = index.data(TimelineFramesModel::ActiveLayerRole).toBool();
@@ -129,6 +161,11 @@ void TimelineFramesItemDelegate::paint(QPainter *painter,
     }
 
     drawFocus(painter, option, option.rect);
+
+    bool specialKeys = index.data(TimelineFramesModel::SpecialKeyframeExists).toBool();
+    if (specialKeys) {
+        paintSpecialKeyframeIndicator(painter, index, option.rect);
+    }
 
     bool active = index.data(TimelineFramesModel::ActiveFrameRole).toBool();
     bool layerIsCurrent = index.data(TimelineFramesModel::ActiveLayerRole).toBool();

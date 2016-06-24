@@ -716,7 +716,8 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
             model()->setData(index, true, TimelineFramesModel::ActiveFrameRole);
             setCurrentIndex(index);
 
-            if (model()->data(index, TimelineFramesModel::FrameExistsRole).toBool()) {
+            if (model()->data(index, TimelineFramesModel::FrameExistsRole).toBool() ||
+                model()->data(index, TimelineFramesModel::SpecialKeyframeExists).toBool()) {
                 m_d->frameEditingMenu->exec(event->globalPos());
             } else {
                 m_d->frameCreationMenu->exec(event->globalPos());

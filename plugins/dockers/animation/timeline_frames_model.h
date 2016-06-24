@@ -87,6 +87,7 @@ public:
         ActiveLayerRole = Qt::UserRole + 101,
         ActiveFrameRole,
         FrameExistsRole,
+        SpecialKeyframeExists,
         FrameCachedRole,
         TimelinePropertiesRole,
         OtherLayersRole,

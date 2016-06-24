@@ -109,13 +109,22 @@ struct TimelineFramesModel::Private
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return false;
 
-        KisKeyframeChannel *content =
-            dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        return (primaryChannel && primaryChannel->keyframeAt(column));
+    }
 
-        if (!content) return false;
+    bool specialKeyframeExists(int row, int column) {
+        KisNodeDummy *dummy = converter->dummyFromRow(row);
+        if (!dummy) return false;
 
-        KisKeyframeSP frame = content->keyframeAt(column);
-        return frame;
+        QList<KisKeyframeChannel *> channels = dummy->node()->keyframeChannels();
+
+        Q_FOREACH(KisKeyframeChannel *channel, channels) {
+            if (channel->id() != KisKeyframeChannel::Content.id() && channel->keyframeAt(column)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     int baseNumFrames() const {
@@ -383,6 +392,9 @@ QVariant TimelineFramesModel::data(const QModelIndex &index, int role) const
     }
     case FrameExistsRole: {
         return m_d->frameExists(index.row(), index.column());
+    }
+    case SpecialKeyframeExists: {
+        return m_d->specialKeyframeExists(index.row(), index.column());
     }
     case Qt::DisplayRole: {
         return QVariant();
@@ -655,8 +667,13 @@ bool TimelineFramesModel::offsetFrames(QVector<QPoint> srcIndexes, const QPoint 
         KisNodeDummy *dstDummy = m_d->converter->dummyFromRow(dstRow);
         if (!srcDummy || !dstDummy) continue;
 
-        srcFrameItems << KisAnimationUtils::FrameItem(srcDummy->node(), KisKeyframeChannel::Content.id(), srcColumn);
-        dstFrameItems << KisAnimationUtils::FrameItem(dstDummy->node(), KisKeyframeChannel::Content.id(), dstColumn);
+        QList<KisKeyframeChannel *> channels = srcDummy->node()->keyframeChannels();
+        Q_FOREACH(KisKeyframeChannel *channel, channels) {
+            if (channel->keyframeAt(srcColumn)) {
+                srcFrameItems << KisAnimationUtils::FrameItem(srcDummy->node(), channel->id(), srcColumn);
+                dstFrameItems << KisAnimationUtils::FrameItem(dstDummy->node(), channel->id(), dstColumn);
+            }
+        }
 
         if (!copyFrames) {
             updateIndexes << index(srcRow, srcColumn);
@@ -718,7 +735,7 @@ Qt::ItemFlags TimelineFramesModel::flags(const QModelIndex &index) const
     Qt::ItemFlags flags = ModelWithExternalNotifications::flags(index);
     if (!index.isValid()) return flags;
 
-    if (m_d->frameExists(index.row(), index.column())) {
+    if (m_d->frameExists(index.row(), index.column()) || m_d->specialKeyframeExists(index.row(), index.column())) {
         if (data(index, FrameEditableRole).toBool()) {
             flags |= Qt::ItemIsDragEnabled;
         }
@@ -810,7 +827,14 @@ bool TimelineFramesModel::removeFrames(const QModelIndexList &indexes)
         KisNodeDummy *dummy = m_d->converter->dummyFromRow(index.row());
         if (!dummy) continue;
 
-        frameItems << KisAnimationUtils::FrameItem(dummy->node(), KisKeyframeChannel::Content.id(), index.column());
+        int time = index.column();
+
+        QList<KisKeyframeChannel*> channels = dummy->node()->keyframeChannels();
+        Q_FOREACH(KisKeyframeChannel *channel, channels) {
+            if (channel->keyframeAt(time)) {
+                frameItems << KisAnimationUtils::FrameItem(dummy->node(), channel->id(), index.column());
+            }
+        }
     }
 
     if (frameItems.isEmpty()) return false;

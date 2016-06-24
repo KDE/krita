@@ -103,9 +103,10 @@ public:
                                                 Intent renderingIntent,
                                                 Intent proofingIntent,
                                                 ConversionFlags conversionFlags,
-                                                quint8 *gamutWarning
+                                                quint8 *gamutWarning,
+                                                double adaptationState
                                                 )
-        : KoColorProofingConversionTransformation(srcCs, dstCs, proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning)
+        : KoColorProofingConversionTransformation(srcCs, dstCs, proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning, adaptationState)
         , m_transform(0)
     {
         Q_ASSERT(srcCs);
@@ -127,6 +128,7 @@ public:
         alarm[1] = (cmsUInt16Number)gamutWarning[1]*256;
         alarm[2] = (cmsUInt16Number)gamutWarning[0]*256;
         cmsSetAlarmCodes(alarm);
+        cmsSetAdaptationState(adaptationState);
 
         m_transform = cmsCreateProofingTransform(srcProfile->lcmsProfile(),
                                                  srcColorSpaceType,
@@ -136,6 +138,7 @@ public:
                                                  renderingIntent,
                                                  proofingIntent,
                                                  conversionFlags);
+        cmsSetAdaptationState(1);
 
         Q_ASSERT(m_transform);
     }
@@ -153,6 +156,7 @@ public:
 
         qint32 srcPixelSize = srcColorSpace()->pixelSize();
         qint32 dstPixelSize = dstColorSpace()->pixelSize();
+        //cmsSetAdaptationState(0);
 
         cmsDoTransform(m_transform, const_cast<quint8 *>(src), dst, numPixels);
         // Lcms does nothing to the destination alpha channel so we must convert that manually.
@@ -164,6 +168,7 @@ public:
             dst += dstPixelSize;
             numPixels--;
         }
+        //cmsSetAdaptationState(1);
 
     }
 private:
@@ -242,7 +247,8 @@ KoColorProofingConversionTransformation *IccColorSpaceEngine::createColorProofin
                                                                                                 KoColorConversionTransformation::Intent renderingIntent,
                                                                                                 KoColorConversionTransformation::Intent proofingIntent,
                                                                                                 KoColorConversionTransformation::ConversionFlags conversionFlags,
-                                                                                                quint8 *gamutWarning) const
+                                                                                                quint8 *gamutWarning,
+                                                                                                double adaptationState) const
 {
     Q_ASSERT(srcColorSpace);
     Q_ASSERT(dstColorSpace);
@@ -250,7 +256,8 @@ KoColorProofingConversionTransformation *IccColorSpaceEngine::createColorProofin
     return new KoLcmsColorProofingConversionTransformation(
                 srcColorSpace, computeColorSpaceType(srcColorSpace),
                 dynamic_cast<const IccColorProfile *>(srcColorSpace->profile())->asLcms(), dstColorSpace, computeColorSpaceType(dstColorSpace),
-                dynamic_cast<const IccColorProfile *>(dstColorSpace->profile())->asLcms(), proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning
+                dynamic_cast<const IccColorProfile *>(dstColorSpace->profile())->asLcms(), proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning,
+                adaptationState
                 );
 }
 

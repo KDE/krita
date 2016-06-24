@@ -18,13 +18,15 @@ struct KisProofingConfiguration {
                                  warningColor(KoColor()),
                                  proofingProfile("Chemical proof"),
                                  proofingModel("CMYKA"),
-                                 proofingDepth("U8"){}
+                                 proofingDepth("U8"),
+                                 adaptationState(1.0){}
     KoColorConversionTransformation::Intent intent;
     KoColorConversionTransformation::ConversionFlags conversionFlags;
     KoColor warningColor;
     QString proofingProfile;
     QString proofingModel;
     QString proofingDepth;
+    double adaptationState;
 
 };
 

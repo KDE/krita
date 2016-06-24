@@ -437,14 +437,14 @@ bool KoColorSpace::convertPixelsTo(const quint8 * src,
     return true;
 }
 
-KoColorConversionTransformation * KoColorSpace::createProofingTransform(const KoColorSpace *dstColorSpace, const KoColorSpace *proofingSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::Intent proofingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags, quint8 *gamutWarning) const
+KoColorConversionTransformation * KoColorSpace::createProofingTransform(const KoColorSpace *dstColorSpace, const KoColorSpace *proofingSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::Intent proofingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags, quint8 *gamutWarning, double adaptationState) const
 {
     if (!d->iccEngine) {
         d->iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
     }
     if (!d->iccEngine) return 0;
 
-    return d->iccEngine->createColorProofingTransformation(this, dstColorSpace, proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning);
+    return d->iccEngine->createColorProofingTransformation(this, dstColorSpace, proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning, adaptationState);
 }
 
 bool KoColorSpace::proofPixelsTo(const quint8 *src,

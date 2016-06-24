@@ -281,6 +281,10 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
             proofingConfig->intent = (KoColorConversionTransformation::Intent) KisDomUtils::toInt(attr);
         }
 
+        if (!(attr = element.attribute(PROOFINGADAPTATIONSTATE)).isNull()) {
+            proofingConfig->adaptationState = KisDomUtils::toDouble(attr);
+        }
+
         if (m_d->document) {
             image = new KisImage(m_d->document->createUndoStore(), width, height, cs, name);
         }

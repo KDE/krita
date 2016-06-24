@@ -49,7 +49,8 @@ public:
                                                                        KoColorProofingConversionTransformation::Intent renderingIntent,
                                                                        KoColorProofingConversionTransformation::Intent proofingIntent,
                                                                        KoColorProofingConversionTransformation::ConversionFlags conversionFlags,
-                                                                       quint8 *gamutWarning) const
+                                                                       quint8 *gamutWarning,
+                                                                       double adaptationState) const
     {
         Q_UNUSED(srcColorSpace);
         Q_UNUSED(dstColorSpace);
@@ -58,6 +59,7 @@ public:
         Q_UNUSED(proofingIntent);
         Q_UNUSED(conversionFlags);
         Q_UNUSED(gamutWarning);
+        Q_UNUSED(adaptationState);
         qFatal("createColorProofinTransform undefined.");
         return 0;
     }

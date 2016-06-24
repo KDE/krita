@@ -344,6 +344,9 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_gamutWarning->setToolTip(i18n("Set default color used for out of Gamut Warning"));
     m_gamutWarning->setCurrentColor(proofingConfig->warningColor);
     m_page->gamutAlarm->setDefaultAction(m_gamutWarning);
+    m_page->sldAdaptationState->setMaximum(20);
+    m_page->sldAdaptationState->setMinimum(0);
+    m_page->sldAdaptationState->setValue((int)proofingConfig->adaptationState*20);
 
     const KoColorSpace *proofingSpace =  KoColorSpaceRegistry::instance()->colorSpace(proofingConfig->proofingModel,proofingConfig->proofingDepth,proofingConfig->proofingProfile);
     m_page->proofingSpaceSelector->setCurrentColorSpace(proofingSpace);
@@ -446,6 +449,7 @@ void ColorSettingsTab::setDefault()
     m_page->proofingSpaceSelector->setCurrentColorSpace(proofingSpace);
     m_page->cmbProofingIntent->setCurrentIndex((int)proofingConfig->intent);
     m_page->ckbProofBlackPoint->setChecked(proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation));
+    m_page->sldAdaptationState->setValue(0);
 
     m_gamutWarning->setCurrentColor(proofingConfig->warningColor);
 
@@ -987,7 +991,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setWorkingColorSpace(dialog->m_colorSettings->m_page->cmbWorkingColorSpace->currentItem().id());
 
         KisImageConfig cfgImage;
-        cfgImage.setDefaultProofingConfig(dialog->m_colorSettings->m_page->proofingSpaceSelector->currentColorSpace(), dialog->m_colorSettings->m_page->cmbProofingIntent->currentIndex(), dialog->m_colorSettings->m_page->ckbProofBlackPoint->isChecked(), dialog->m_colorSettings->m_gamutWarning->currentKoColor());
+        cfgImage.setDefaultProofingConfig(dialog->m_colorSettings->m_page->proofingSpaceSelector->currentColorSpace(), dialog->m_colorSettings->m_page->cmbProofingIntent->currentIndex(), dialog->m_colorSettings->m_page->ckbProofBlackPoint->isChecked(), dialog->m_colorSettings->m_gamutWarning->currentKoColor(), (double)dialog->m_colorSettings->m_page->sldAdaptationState->value()/20);
         cfg.setUseBlackPointCompensation(dialog->m_colorSettings->m_page->chkBlackpoint->isChecked());
         cfg.setAllowLCMSOptimization(dialog->m_colorSettings->m_page->chkAllowLCMSOptimization->isChecked());
         cfg.setPasteBehaviour(dialog->m_colorSettings->m_pasteBehaviourGroup.checkedId());

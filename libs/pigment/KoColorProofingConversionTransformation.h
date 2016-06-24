@@ -40,7 +40,8 @@ public:
                                             Intent renderingIntent,
                                             Intent proofingIntent,
                                             ConversionFlags conversionFlags,
-                                            quint8 *gamutWarning);
+                                            quint8 *gamutWarning,
+                                            double adaptationState);
     virtual ~KoColorProofingConversionTransformation();
 
 public:
@@ -55,6 +56,7 @@ private:
 
     Intent m_proofingIntent;
     quint8 *m_gamutWarning;
+    double m_adaptationState;
     const KoColorSpace *m_proofingSpace;
 };
 

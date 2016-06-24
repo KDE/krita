@@ -377,7 +377,7 @@ public:
                                                              KoColorConversionTransformation::Intent renderingIntent,
                                                              KoColorConversionTransformation::Intent proofingIntent,
                                                              KoColorConversionTransformation::ConversionFlags conversionFlags,
-                                                             quint8 *gamutWarning) const;
+                                                             quint8 *gamutWarning, double adaptationState) const;
     /**
      * @brief proofPixelsTo
      * @param src
@@ -389,6 +389,7 @@ public:
      * @param proofingIntent the intent used for proofing.
      * @param conversionFlags the conversion flags.
      * @param gamutWarning the data() of a KoColor.
+     * @param adaptationState the state of adaptation, only affects absolute colorimetric.
      * @return
      */
     virtual bool proofPixelsTo(const quint8 * src,

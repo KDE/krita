@@ -232,9 +232,10 @@ public:
                                                        KoColorConversionTransformation::Intent renderingIntent,
                                                        KoColorConversionTransformation::Intent proofingIntent,
                                                        KoColorConversionTransformation::ConversionFlags conversionFlags,
-                                                       KoColor gamutWarning)
+                                                       KoColor gamutWarning,
+                                                       double adaptationState)
     {
-        return m_patchColorSpace->createProofingTransform(dstCS, proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning.data());
+        return m_patchColorSpace->createProofingTransform(dstCS, proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning.data(), adaptationState);
     }
 
     inline quint8* data() const {

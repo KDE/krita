@@ -95,6 +95,9 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
     m_gamutWarning->setCurrentColor(m_proofingConfig->warningColor);
     m_gamutWarning->setToolTip(i18n("Set color used for warning"));
     m_page->gamutAlarm->setDefaultAction(m_gamutWarning);
+    m_page->sldAdaptationState->setMaximum(20);
+    m_page->sldAdaptationState->setMinimum(0);
+    m_page->sldAdaptationState->setValue((int)m_proofingConfig->adaptationState*20);
 
     KisSignalCompressor *softProofConfigCompressor = new KisSignalCompressor(500, KisSignalCompressor::POSTPONE,this);
 
@@ -102,6 +105,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
     connect(m_page->proofSpaceSelector, SIGNAL(colorSpaceChanged(const KoColorSpace*)), softProofConfigCompressor, SLOT(start()));
     connect(m_page->cmbIntent, SIGNAL(currentIndexChanged(int)), softProofConfigCompressor, SLOT(start()));
     connect(m_page->ckbBlackPointComp, SIGNAL(stateChanged(int)), softProofConfigCompressor, SLOT(start()));
+    connect(m_page->sldAdaptationState, SIGNAL(valueChanged(int)), softProofConfigCompressor, SLOT(start()));
 
     connect(softProofConfigCompressor, SIGNAL(timeout()), this, SLOT(setProofingConfig()));
 
@@ -150,7 +154,7 @@ void KisDlgImageProperties::setProofingConfig()
     m_proofingConfig->proofingModel = m_page->proofSpaceSelector->currentColorSpace()->colorModelId().id();
     m_proofingConfig->proofingDepth = "U8";//default to this
     m_proofingConfig->warningColor = m_gamutWarning->currentKoColor();
-
+    m_proofingConfig->adaptationState = (double)m_page->sldAdaptationState->value()/20.0;
     qDebug()<<"set proofing config in properties: "<<m_proofingConfig->proofingProfile;
     m_image->setProofingConfiguration(m_proofingConfig);
 }

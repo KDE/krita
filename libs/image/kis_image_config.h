@@ -103,7 +103,7 @@ public:
     void setShowAdditionalOnionSkinsSettings(bool value);
 
     KisProofingConfiguration *defaultProofingconfiguration();
-    void setDefaultProofingConfig(const KoColorSpace *proofingSpace, int proofingIntent, bool blackPointCompensation, KoColor warningColor);
+    void setDefaultProofingConfig(const KoColorSpace *proofingSpace, int proofingIntent, bool blackPointCompensation, KoColor warningColor, double adaptationState);
 
 
 private:

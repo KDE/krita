@@ -37,7 +37,7 @@ public:
             const KoColorSpace *dstColorSpace,
             const KoColorSpace *proofingSpace,
             KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::Intent proofingIntent,
-            KoColorConversionTransformation::ConversionFlags conversionFlags, quint8 *gamutWarning) const;
+            KoColorConversionTransformation::ConversionFlags conversionFlags, quint8 *gamutWarning, double adaptationState) const;
     quint32 computeColorSpaceType(const KoColorSpace *cs) const;
 private:
     struct Private;

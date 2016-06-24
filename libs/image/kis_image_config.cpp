@@ -403,7 +403,7 @@ KisProofingConfiguration *KisImageConfig::defaultProofingconfiguration()
     proofingConfig->proofingProfile = m_config.readEntry("defaultProofingProfileName", "Chemical proof");
     proofingConfig->proofingModel = m_config.readEntry("defaultProofingProfileModel", "CMYKA");
     proofingConfig->proofingDepth = m_config.readEntry("defaultProofingProfileDepth", "U8");
-    proofingConfig->intent = (KoColorConversionTransformation::Intent)m_config.readEntry("defaultProofingProfileIntent", 4);
+    proofingConfig->intent = (KoColorConversionTransformation::Intent)m_config.readEntry("defaultProofingProfileIntent", 3);
     if (m_config.readEntry("defaultProofingBlackpointCompensation", true)) {
         proofingConfig->conversionFlags  |= KoColorConversionTransformation::ConversionFlag::BlackpointCompensation;
     } else {
@@ -414,10 +414,11 @@ KisProofingConfiguration *KisImageConfig::defaultProofingconfiguration()
     KoColor col;
     col.fromQColor(def);
     proofingConfig->warningColor = col;
+    proofingConfig->adaptationState = (double)m_config.readEntry("defaultProofingAdaptationState", 1.0);
     return proofingConfig;
 }
 
-void KisImageConfig::setDefaultProofingConfig(const KoColorSpace *proofingSpace, int proofingIntent, bool blackPointCompensation, KoColor warningColor)
+void KisImageConfig::setDefaultProofingConfig(const KoColorSpace *proofingSpace, int proofingIntent, bool blackPointCompensation, KoColor warningColor, double adaptationState)
 {
     m_config.writeEntry("defaultProofingProfileName", proofingSpace->profile()->name());
     m_config.writeEntry("defaultProofingProfileModel", proofingSpace->colorModelId().id());
@@ -427,4 +428,5 @@ void KisImageConfig::setDefaultProofingConfig(const KoColorSpace *proofingSpace,
     QColor c;
     warningColor.toQColor(&c);
     m_config.writeEntry("defaultProofingGamutwarning", c);
+    m_config.writeEntry("defaultProofingAdaptationState",adaptationState);
 }

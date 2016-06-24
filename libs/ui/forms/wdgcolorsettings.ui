@@ -237,12 +237,12 @@
         </item>
         <item>
          <property name="text">
-          <string>Absolute Colorimetric</string>
+          <string>Saturation</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Saturation</string>
+          <string>Absolute Colorimetric</string>
          </property>
         </item>
        </widget>

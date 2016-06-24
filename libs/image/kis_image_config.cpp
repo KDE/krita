@@ -22,6 +22,7 @@
 
 #include <KoConfig.h>
 #include <KoColorProfile.h>
+#include <KoColorSpaceRegistry.h>
 #include <KoColorConversionTransformation.h>
 
 #include "kis_debug.h"
@@ -411,8 +412,9 @@ KisProofingConfiguration *KisImageConfig::defaultProofingconfiguration()
     }
     QColor def;
     def =  m_config.readEntry("defaultProofingGamutwarning", QColor(Qt::gray));
-    KoColor col;
+    KoColor col(KoColorSpaceRegistry::instance()->rgb8());
     col.fromQColor(def);
+    col.setOpacity(1.0);
     proofingConfig->warningColor = col;
     proofingConfig->adaptationState = (double)m_config.readEntry("defaultProofingAdaptationState", 1.0);
     return proofingConfig;

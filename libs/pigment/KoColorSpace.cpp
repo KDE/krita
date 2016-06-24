@@ -442,7 +442,7 @@ KoColorConversionTransformation * KoColorSpace::createProofingTransform(const Ko
     if (!d->iccEngine) {
         d->iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
     }
-    if (!d->iccEngine) return false;
+    if (!d->iccEngine) return 0;
 
     return d->iccEngine->createColorProofingTransformation(this, dstColorSpace, proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning);
 }

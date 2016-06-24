@@ -54,7 +54,9 @@ struct MoveNodeStruct {
           newParent(_parent),
           newAbove(_above),
           oldParent(_node->parent()),
-          oldAbove(_node->prevSibling())
+          oldAbove(_node->prevSibling()),
+          suppressNewParentRefresh(false),
+          suppressOldParentRefresh(false)
     {
     }
 
@@ -87,7 +89,7 @@ struct MoveNodeStruct {
     }
 
     void doRedoUpdates() {
-        if (oldParent) {
+        if (oldParent && !suppressOldParentRefresh) {
             image->refreshGraphAsync(oldParent);
         }
 
@@ -97,12 +99,22 @@ struct MoveNodeStruct {
     }
 
     void doUndoUpdates() {
-        if (newParent) {
+        if (newParent && !suppressNewParentRefresh) {
             image->refreshGraphAsync(newParent);
         }
 
         if (oldParent && oldParent != newParent) {
             node->setDirty(image->bounds());
+        }
+    }
+
+    void resolveParentCollisions(MoveNodeStruct *rhs) const {
+        if (rhs->newParent == newParent) {
+            rhs->suppressNewParentRefresh = true;
+        }
+
+        if (rhs->oldParent == oldParent) {
+            rhs->suppressOldParentRefresh = true;
         }
     }
 
@@ -113,6 +125,8 @@ struct MoveNodeStruct {
 
     KisNodeSP oldParent;
     KisNodeSP oldAbove;
+    bool suppressNewParentRefresh;
+    bool suppressOldParentRefresh;
 };
 
 typedef QSharedPointer<MoveNodeStruct> MoveNodeStructSP;
@@ -149,6 +163,13 @@ private:
             bool result = hash->value(moveStruct->node)->tryMerge(*moveStruct);
             KIS_ASSERT_RECOVER_NOOP(result);
         } else {
+            MovedNodesHash::const_iterator it = hash->constBegin();
+            MovedNodesHash::const_iterator end = hash->constEnd();
+
+            for (; it != end; ++it) {
+                it.value()->resolveParentCollisions(moveStruct.data());
+            }
+
             hash->insert(moveStruct->node, moveStruct);
         }
     }

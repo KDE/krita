@@ -81,6 +81,7 @@
 #include "kis_painting_assistants_decoration.h"
 
 #include "kis_canvas_updates_compressor.h"
+#include <QDebug>
 
 class Q_DECL_HIDDEN KisCanvas2::KisCanvas2Private
 {
@@ -594,9 +595,11 @@ void KisCanvas2::slotDoCanvasUpdate()
     }
 
     if (m_d->savedUpdateRect.isEmpty()) {
+        qDebug() << "UPDATING";
         m_d->canvasWidget->widget()->update();
         emit updateCanvasRequested(m_d->canvasWidget->widget()->rect());
     } else {
+        qDebug() << "UPDATING2";
         emit updateCanvasRequested(m_d->savedUpdateRect);
         m_d->canvasWidget->widget()->update(m_d->savedUpdateRect);
     }
@@ -611,6 +614,7 @@ void KisCanvas2::updateCanvasWidgetImpl(const QRect &rc)
         m_d->savedUpdateRect |= rc;
     }
     m_d->updateSignalCompressor.start();
+    qDebug() << "STARTED COMPRESSOR";
 }
 
 void KisCanvas2::updateCanvas()

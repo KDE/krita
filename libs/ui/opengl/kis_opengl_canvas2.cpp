@@ -300,7 +300,7 @@ void KisOpenGLCanvas2::paintGL()
     }
     d->glSyncObject = Sync::getSync();
 
-    qDebug() << "DRAWING DECORATIONS";
+    qDebug() << "DRAWING DECORATIONS UPD";
     QPainter gc(this);
     renderDecorations(&gc);
     // QPen pen;

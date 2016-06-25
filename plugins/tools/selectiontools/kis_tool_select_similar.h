@@ -30,11 +30,9 @@
 /*
  * Tool to select colors by pointing at a color on the image.
  */
-class KisToolSelectSimilar: public KisToolSelectBase
+class KisToolSelectSimilar: public KisToolSelect
 {
     Q_OBJECT
-    Q_PROPERTY(int selectionAction READ selectionAction WRITE setSelectionAction NOTIFY selectionActionChanged)
-    Q_SIGNALS: void selectionActionChanged();
 
 public:
     KisToolSelectSimilar(KoCanvasBase * canvas);
@@ -45,8 +43,8 @@ public:
 
     public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    void setSelectionAction(int newSelectionAction);
     void slotSetFuzziness(int);
+    void setSelectionAction(int);
 
 protected:
     using KisToolSelectBase::m_widgetHelper;
@@ -61,7 +59,8 @@ class KisToolSelectSimilarFactory : public KoToolFactoryBase
 {
 public:
     KisToolSelectSimilarFactory()
-            : KoToolFactoryBase("KisToolSelectSimilar") {
+        : KoToolFactoryBase("KisToolSelectSimilar")
+    {
         setToolTip(i18n("Similar Color Selection Tool"));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

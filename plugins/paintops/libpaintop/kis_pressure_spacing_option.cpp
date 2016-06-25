@@ -32,10 +32,8 @@ KisPressureSpacingOption::KisPressureSpacingOption()
 
 double KisPressureSpacingOption::apply(const KisPaintInformation & info) const
 {
-    if (!isChecked())
-        return 1.0;
-
-    return computeValue(info);
+    if (!isChecked()) return 1.0;
+    return computeSizeLikeValue(info);
 }
 
 void KisPressureSpacingOption::setIsotropicSpacing(bool isotropic)

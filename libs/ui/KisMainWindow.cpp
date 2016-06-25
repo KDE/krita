@@ -137,6 +137,9 @@
 
 #include <mutex>
 
+#ifdef Q_OS_WIN
+  #include <QtPlatformHeaders/QWindowsWindowFunctions>
+#endif
 
 class ToolDockerFactory : public KoDockFactoryBase
 {
@@ -316,6 +319,7 @@ KisMainWindow::KisMainWindow()
     if (d->toolOptionsDocker) {
         dockwidgetActions[d->toolOptionsDocker->toggleViewAction()->text()] = d->toolOptionsDocker->toggleViewAction();
     }
+    connect(KoToolManager::instance(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), this, SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
 
     Q_FOREACH (QString title, dockwidgetActions.keys()) {
         d->dockWidgetMenu->addAction(dockwidgetActions[title]);
@@ -459,6 +463,11 @@ KisMainWindow::KisMainWindow()
     d->viewManager->updateGUI();
     d->viewManager->updateIcons();
 
+#ifdef Q_OS_WIN
+    auto w = qApp->activeWindow();
+    if (w) QWindowsWindowFunctions::setHasBorderInFullScreen(w->windowHandle(), true);
+#endif
+
     QTimer::singleShot(1000, this, SLOT(checkSanity()));
 
     {
@@ -469,6 +478,9 @@ KisMainWindow::KisMainWindow()
         d->tabSwitchCompressor.reset(
             new KisSignalCompressorWithParam<int>(500, callback, KisSignalCompressor::FIRST_INACTIVE));
     }
+
+
+
 }
 
 void KisMainWindow::setNoCleanup(bool noCleanup)
@@ -1743,9 +1755,6 @@ void KisMainWindow::slotToolbarToggled(bool toggle)
 void KisMainWindow::viewFullscreen(bool fullScreen)
 {
     KisConfig cfg;
-#ifdef Q_OS_WIN
-    cfg.setFullscreenMode(false);
-#else
     cfg.setFullscreenMode(fullScreen);
 
     if (fullScreen) {
@@ -1753,7 +1762,6 @@ void KisMainWindow::viewFullscreen(bool fullScreen)
     } else {
         setWindowState(windowState() & ~Qt::WindowFullScreen);   // reset
     }
-#endif
 }
 
 void KisMainWindow::slotProgress(int value)
@@ -2281,9 +2289,8 @@ void KisMainWindow::createActions()
     actionManager->createStandardAction(KStandardAction::Open, this, SLOT(slotFileOpen()));
     actionManager->createStandardAction(KStandardAction::Quit, this, SLOT(slotFileQuit()));
     actionManager->createStandardAction(KStandardAction::ConfigureToolbars, this, SLOT(slotConfigureToolbars()));
-#ifndef Q_OS_WIN
     actionManager->createStandardAction(KStandardAction::FullScreen, this, SLOT(viewFullscreen(bool)));
-#endif
+
     d->recentFiles = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(QUrl)), actionCollection());
     connect(d->recentFiles, SIGNAL(recentListCleared()), this, SLOT(saveRecentFiles()));
     KSharedConfigPtr configPtr =  KSharedConfig::openConfig();

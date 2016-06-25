@@ -77,7 +77,9 @@ MirrorProperties KisPressureMirrorOption::apply(const KisPaintInformation& info)
     bool coordinateSystemFlipped = false;
 
     if (isChecked() && (m_enableHorizontalMirror || m_enableVerticalMirror)) {
-        qreal sensorResult = computeValue(info);
+
+        qreal sensorResult = computeSizeLikeValue(info);
+
         bool result = (sensorResult >= 0.5);
 
         mirrorXIncrement += result && m_enableHorizontalMirror;

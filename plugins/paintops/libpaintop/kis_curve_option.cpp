@@ -222,7 +222,8 @@ KisDynamicSensorSP KisCurveOption::sensor(DynamicSensorType sensorType, bool act
 
 bool KisCurveOption::isRandom() const
 {
-    return (bool) sensor(FUZZY, true);
+    return bool(sensor(FUZZY_PER_DAB, true)) ||
+        bool(sensor(FUZZY_PER_STROKE, true));
 }
 
 bool KisCurveOption::isCurveUsed() const
@@ -326,49 +327,49 @@ void KisCurveOption::setValue(qreal value)
     m_value = qBound(m_minValue, value, m_maxValue);
 }
 
-double KisCurveOption::computeValue(const KisPaintInformation& info) const
+KisCurveOption::ValueComponents KisCurveOption::computeValueComponents(const KisPaintInformation& info) const
 {
-    if (!m_useCurve) {
-        if (m_separateCurveValue) {
-            return 1.0;
-        }
-        else {
-            return m_value;
-        }
-    }
-    else {
-        qreal t = 1.0;
+    ValueComponents components;
 
+    if (m_useCurve) {
         QVector<KisDynamicSensorSP> additiveSensors;
 
         Q_FOREACH (KisDynamicSensorSP s, m_sensorMap.values()) {
             if (s->isActive()) {
-                if (!s->isAdditive()) {
-                    t *= s->parameter(info);
+                if (s->isAdditive()) {
+                    components.additive += s->parameter(info);
+                    components.hasAdditive = true;
+                } else if (s->isAbsoluteRotation()) {
+                    components.absoluteOffset = s->parameter(info);
+                    components.hasAbsoluteOffset =true;
                 } else {
-                    // additive sensors should be
-                    // processed in the end
-                    additiveSensors.append(s);
+                    components.scaling *= s->parameter(info);
+                    components.hasScaling = true;
                 }
             }
         }
-
-        // add up addivite sensors to the result
-        Q_FOREACH (KisDynamicSensorSP s, additiveSensors) {
-            qreal t0 = t;
-            Q_UNUSED(t0)
-            qreal v = s->parameter(info);
-
-            t = fmod(t + v, 1.0);
-        }
-
-        if (m_separateCurveValue) {
-            return t;
-        }
-        else {
-            return m_minValue + (m_value - m_minValue) * t;
-        }
     }
+
+    if (!m_separateCurveValue) {
+        components.constant = m_value;
+    }
+
+    components.minSizeLikeValue = m_minValue;
+    components.maxSizeLikeValue = m_maxValue;
+
+    return components;
+}
+
+qreal KisCurveOption::computeSizeLikeValue(const KisPaintInformation& info) const
+{
+    const ValueComponents components = computeValueComponents(info);
+    return components.sizeLikeValue();
+}
+
+qreal KisCurveOption::computeRotationLikeValue(const KisPaintInformation& info, qreal baseValue) const
+{
+    const ValueComponents components = computeValueComponents(info);
+    return components.rotationLikeValue(baseValue);
 }
 
 QList<KisDynamicSensorSP> KisCurveOption::sensors()

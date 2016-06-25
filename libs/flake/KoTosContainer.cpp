@@ -225,7 +225,7 @@ void KoTosContainer::setTextAlignment(Qt::Alignment alignment)
     bf.setAlignment(alignment & Qt::AlignHorizontal_Mask);
 
     QTextCursor cursor(shapeData->document());
-    cursor.setPosition(QTextCursor::End, QTextCursor::KeepAnchor);
+    cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
     cursor.mergeBlockFormat(bf);
 
     d->alignment = alignment;

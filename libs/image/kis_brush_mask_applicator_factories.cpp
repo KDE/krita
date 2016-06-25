@@ -29,17 +29,17 @@
 template<>
 template<>
 MaskApplicatorFactory<KisMaskGenerator, KisBrushMaskScalarApplicator>::ReturnType
-MaskApplicatorFactory<KisMaskGenerator, KisBrushMaskScalarApplicator>::create<VC_IMPL>(ParamType maskGenerator)
+MaskApplicatorFactory<KisMaskGenerator, KisBrushMaskScalarApplicator>::create<Vc::CurrentImplementation::current()>(ParamType maskGenerator)
 {
-    return new KisBrushMaskScalarApplicator<KisMaskGenerator,VC_IMPL>(maskGenerator);
+    return new KisBrushMaskScalarApplicator<KisMaskGenerator,Vc::CurrentImplementation::current()>(maskGenerator);
 }
 
 template<>
 template<>
 MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator>::ReturnType
-MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator>::create<VC_IMPL>(ParamType maskGenerator)
+MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator>::create<Vc::CurrentImplementation::current()>(ParamType maskGenerator)
 {
-    return new KisBrushMaskVectorApplicator<KisCircleMaskGenerator,VC_IMPL>(maskGenerator);
+    return new KisBrushMaskVectorApplicator<KisCircleMaskGenerator,Vc::CurrentImplementation::current()>(maskGenerator);
 }
 
 #if defined HAVE_VC
@@ -57,10 +57,11 @@ struct KisCircleMaskGenerator::FastRowProcessor
 };
 
 template<> void KisCircleMaskGenerator::
-FastRowProcessor::process<VC_IMPL>(float* buffer, int width, float y, float cosa, float sina,
+FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, int width, float y, float cosa, float sina,
                                    float centerX, float centerY)
 {
     const bool useSmoothing = d->copyOfAntialiasEdges;
+    const bool noFading = d->noFading;
 
     float y_ = y - centerY;
     float sinay_ = sina * y_;
@@ -68,9 +69,9 @@ FastRowProcessor::process<VC_IMPL>(float* buffer, int width, float y, float cosa
 
     float* bufferPointer = buffer;
 
-    Vc::float_v currentIndices(Vc::int_v::IndexesFromZero());
+    Vc::float_v currentIndices = Vc::float_v::IndexesFromZero();
 
-    Vc::float_v increment((float)Vc::float_v::Size);
+    Vc::float_v increment((float)Vc::float_v::size());
     Vc::float_v vCenterX(centerX);
 
     Vc::float_v vCosa(cosa);
@@ -84,9 +85,9 @@ FastRowProcessor::process<VC_IMPL>(float* buffer, int width, float y, float cosa
     Vc::float_v vTransformedFadeX(d->transformedFadeX);
     Vc::float_v vTransformedFadeY(d->transformedFadeY);
 
-    Vc::float_v vOne(1.0f);
+    Vc::float_v vOne(Vc::One);
 
-    for (int i=0; i < width; i+= Vc::float_v::Size){
+    for (int i=0; i < width; i+= Vc::float_v::size()){
 
         Vc::float_v x_ = currentIndices - vCenterX;
 
@@ -94,25 +95,42 @@ FastRowProcessor::process<VC_IMPL>(float* buffer, int width, float y, float cosa
         Vc::float_v yr = x_ * vSina + vCosaY_;
 
         Vc::float_v n = pow2(xr * vXCoeff) + pow2(yr * vYCoeff);
+        Vc::float_m outsideMask = n > vOne;
 
-        if (useSmoothing) {
-            xr = Vc::abs(xr) + vOne;
-            yr = Vc::abs(yr) + vOne;
+        if (!outsideMask.isFull()) {
+
+            if (noFading) {
+                Vc::float_v vFade(Vc::Zero);
+                vFade(outsideMask) = vOne;
+                vFade.store(bufferPointer, Vc::Aligned);
+            } else {
+                if (useSmoothing) {
+                    xr = Vc::abs(xr) + vOne;
+                    yr = Vc::abs(yr) + vOne;
+                }
+
+                Vc::float_v vNormFade = pow2(xr * vTransformedFadeX) + pow2(yr * vTransformedFadeY);
+
+                //255 * n * (normeFade - 1) / (normeFade - n)
+                Vc::float_v vFade = n * (vNormFade - vOne) / (vNormFade - n);
+
+                // Mask in the inner circe of the mask
+                Vc::float_m mask = vNormFade < vOne;
+                vFade.setZero(mask);
+
+                // Mask out the outer circe of the mask
+                vFade(outsideMask) = vOne;
+
+                vFade.store(bufferPointer, Vc::Aligned);
+            }
+        } else {
+            // Mask out everything outside the circle
+            vOne.store(bufferPointer, Vc::Aligned);
         }
 
-        Vc::float_v vNormFade = pow2(xr * vTransformedFadeX) + pow2(yr * vTransformedFadeY);
-
-        //255 * n * (normeFade - 1) / (normeFade - n)
-        Vc::float_v vFade = n * (vNormFade - vOne) / (vNormFade - n);
-        // Mask out the inner circe of the mask
-        Vc::float_m mask = vNormFade < vOne;
-        vFade.setZero(mask);
-        vFade = Vc::min(vFade, vOne);
-
-        vFade.store(bufferPointer);
         currentIndices = currentIndices + increment;
 
-        bufferPointer += Vc::float_v::Size;
+        bufferPointer += Vc::float_v::size();
     }
 }
 

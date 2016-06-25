@@ -61,17 +61,25 @@ class KisPerspectiveTransformStrategy;
 
 /**
  * Transform tool
- * The tool offers two different modes : Free Transform and Warp
- * - Free Transform mode allows the user to translate, scale, shear, rotate
- * and apply a perspective transformation to a selection or the whole
- * canvas.
- * - Warp mode allows the user to warp the selection of the canvas
- * by grabbing and moving control points placed on the image.
- *   The user can either work with default control points, like a grid
- *   whose density can be modified, or place the control points manually.
- * The modifications made on the selected pixels are applied only when
- * the user clicks the Apply button : the semi-transparent image displayed
- * until the user click that button is only a preview.
+ * This tool offers several modes.
+ * - Free Transform mode allows the user to translate, scale, shear, rotate and
+ *   apply a perspective transformation to a selection or the whole canvas.
+ * - Warp mode allows the user to warp the selection of the canvas by grabbing
+ *   and moving control points placed on the image. The user can either work
+ *   with default control points, like a grid whose density can be modified, or
+ *   place the control points manually. The modifications made on the selected
+ *   pixels are applied only when the user clicks the Apply button : the
+ *   semi-transparent image displayed until the user click that button is only a
+ *   preview.
+ * - Cage transform is similar to warp transform with control points exactly
+ *   placed on the outer boundary. The user draws a boundary polygon, the
+ *   vertices of which become control points.
+ * - Perspective transform applies a two-point perspective transformation. The
+ *   user can manipulate the corners of the selection. If the vanishing points
+ *   of the resulting quadrilateral are on screen, the user can manipulate those
+ *   as well.
+ * - Liquify transform transforms the selection by painting motions, as if the
+ *   user were fingerpainting.
  */
 class KisToolTransform : public KisTool
 {

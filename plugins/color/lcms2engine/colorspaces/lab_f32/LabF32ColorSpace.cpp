@@ -79,7 +79,7 @@ void LabF32ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
     p->alpha = 1.0;
 }
 
-void LabF32ColorSpace::toHSY(QVector <double> channelValues, qreal *hue, qreal *sat, qreal *luma) const
+void LabF32ColorSpace::toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const
 {
     LabToLCH(channelValues[0],channelValues[1],channelValues[2], luma, sat, hue);
 }
@@ -91,7 +91,7 @@ QVector <double> LabF32ColorSpace::fromHSY(qreal *hue, qreal *sat, qreal *luma) 
     channelValues[3]=1.0;
     return channelValues;
 }
-void LabF32ColorSpace::toYUV(QVector <double> channelValues, qreal *y, qreal *u, qreal *v) const
+void LabF32ColorSpace::toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const
 {
     *y =channelValues[0];
     *u=channelValues[1];

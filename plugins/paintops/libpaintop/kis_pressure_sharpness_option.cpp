@@ -59,7 +59,7 @@ void KisPressureSharpnessOption::apply(const KisPaintInformation &info, const QP
         KisPaintOp::splitCoordinate(pt.y(), &y, &yFraction);
     }
     else {
-        qreal processedSharpnes = computeValue(info); //qBound<qreal>(0.0, (computeValue(info) * 2), 1.0);
+        qreal processedSharpnes = computeSizeLikeValue(info);
 
         if (processedSharpnes == 1.0) {
             // pen

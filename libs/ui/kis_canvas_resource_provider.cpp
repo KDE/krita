@@ -401,6 +401,60 @@ bool KisCanvasResourceProvider::mirrorVertical() const
     return m_resourceManager->resource(MirrorVertical).toBool();
 }
 
+void KisCanvasResourceProvider::setMirrorHorizontalLock(bool isLocked)
+{
+    m_resourceManager->setResource(MirrorHorizontalLock, isLocked);
+    emit mirrorModeChanged();
+}
+
+bool KisCanvasResourceProvider::mirrorHorizontalLock() {
+     return m_resourceManager->resource(MirrorHorizontalLock).toBool();
+}
+
+void KisCanvasResourceProvider::setMirrorVerticalLock(bool isLocked)
+{
+    m_resourceManager->setResource(MirrorVerticalLock, isLocked);
+    emit mirrorModeChanged();
+}
+
+
+
+bool KisCanvasResourceProvider::mirrorVerticalHideDecorations() {
+     return m_resourceManager->resource(MirrorVerticalHideDecorations).toBool();
+}
+
+void KisCanvasResourceProvider::setMirrorVerticalHideDecorations(bool hide)
+{
+    m_resourceManager->setResource(MirrorVerticalHideDecorations, hide);
+    emit mirrorModeChanged();
+}
+
+
+bool KisCanvasResourceProvider::mirrorHorizontalHideDecorations() {
+     return m_resourceManager->resource(MirrorHorizontalHideDecorations).toBool();
+}
+
+void KisCanvasResourceProvider::setMirrorHorizontalHideDecorations(bool hide)
+{
+    m_resourceManager->setResource(MirrorHorizontalHideDecorations, hide);
+    emit mirrorModeChanged();
+}
+
+
+bool KisCanvasResourceProvider::mirrorVerticalLock() {
+     return m_resourceManager->resource(MirrorVerticalLock).toBool();
+}
+
+void KisCanvasResourceProvider::mirrorVerticalMoveCanvasToCenter() {
+     emit moveMirrorVerticalCenter();
+}
+
+void KisCanvasResourceProvider::mirrorHorizontalMoveCanvasToCenter() {
+     emit moveMirrorHorizontalCenter();
+}
+
+
+
 void KisCanvasResourceProvider::setOpacity(qreal opacity)
 {
     m_resourceManager->setResource(Opacity, opacity);
@@ -410,6 +464,29 @@ qreal KisCanvasResourceProvider::opacity() const
 {
     return m_resourceManager->resource(Opacity).toReal();
 }
+
+void KisCanvasResourceProvider::setSelectionAction(int action)
+{
+    m_resourceManager->setResource(SelectionAction, action);
+    emit sigSelectionActionChanged(action);
+}
+
+int KisCanvasResourceProvider::selectionAction()
+{
+    return m_resourceManager->resource(SelectionAction).toInt();
+}
+
+void KisCanvasResourceProvider::setSelectionMode(int mode)
+{
+    m_resourceManager->setResource(SelectionMode, mode);
+    emit sigSelectionModeChanged(mode);
+}
+
+int KisCanvasResourceProvider::selectionMode()
+{
+    return m_resourceManager->resource(SelectionMode).toInt();
+}
+
 
 void KisCanvasResourceProvider::setGlobalAlphaLock(bool lock)
 {

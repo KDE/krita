@@ -320,7 +320,7 @@ void KisTemplateCreateDia::slotOk() {
     // don't overwrite the hidden template file with a new non-hidden one
     if (!ignore) {
         if (!QFile::copy(d->m_filePath, dest)) {
-            qWarning(QString("Could not copy %1 to %2.").arg(d->m_filePath).arg(dest).toUtf8());
+            qWarning() << QString("Could not copy %1 to %2.").arg(d->m_filePath).arg(dest).toUtf8();
         }
 
         // save the picture as icon

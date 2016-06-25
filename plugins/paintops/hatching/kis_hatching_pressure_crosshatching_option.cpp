@@ -32,5 +32,5 @@ KisHatchingPressureCrosshatchingOption::KisHatchingPressureCrosshatchingOption()
 double KisHatchingPressureCrosshatchingOption::apply(const KisPaintInformation & info) const
 {
     if (!isChecked()) return 0.5;
-    return computeValue(info);
+    return computeSizeLikeValue(info);
 }

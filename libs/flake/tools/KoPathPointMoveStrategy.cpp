@@ -27,6 +27,7 @@
 #include "KoPathToolSelection.h"
 #include "KoSnapGuide.h"
 #include "KoCanvasBase.h"
+#include "kis_global.h"
 
 KoPathPointMoveStrategy::KoPathPointMoveStrategy(KoPathTool *tool, const QPointF &pos)
     : KoInteractionStrategy(*(new KoInteractionStrategyPrivate(tool))),
@@ -46,11 +47,9 @@ void KoPathPointMoveStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::
     m_tool->canvas()->updateCanvas(m_tool->canvas()->snapGuide()->boundingRect());
     QPointF move = newPosition - m_originalPosition;
 
-    if (modifiers & Qt::ControlModifier) { // limit change to one direction only.
-        if (qAbs(move.x()) > qAbs(move.y()))
-            move.setY(0);
-        else
-            move.setX(0);
+    if (modifiers & Qt::ShiftModifier) {
+        // Limit change to one direction only
+        move = snapToClosestAxis(move);
     }
 
     KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());

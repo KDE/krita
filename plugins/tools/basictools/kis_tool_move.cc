@@ -240,39 +240,32 @@ void KisToolMove::endPrimaryAction(KoPointerEvent *event)
 
 void KisToolMove::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    if (action == PickFgNode) {
+    // Ctrl+Right click toggles between moving current layer and moving layer w/ content
+    if (action == PickFgNode || action == PickBgImage) {
         MoveToolMode mode = moveToolMode();
 
-        if (mode == MoveSelectedLayer || mode == MoveGroup) {
+        if (mode == MoveSelectedLayer) {
             mode = MoveFirstLayer;
         } else if (mode == MoveFirstLayer) {
             mode = MoveSelectedLayer;
         }
 
         startAction(event, mode);
-    } else if (action == PickFgImage) {
-        startAction(event, MoveGroup);
     } else {
-        KisTool::beginAlternateAction(event, action);
+        startAction(event, MoveGroup);
     }
 }
 
 void KisToolMove::continueAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    if (action == PickFgNode || action == PickFgImage) {
-        continueAction(event);
-    } else {
-        KisTool::continueAlternateAction(event, action);
-    }
+    Q_UNUSED(action)
+    continueAction(event);
 }
 
 void KisToolMove::endAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    if (action == PickFgNode || action == PickFgImage) {
-        endAction(event);
-    } else {
-        KisTool::endAlternateAction(event, action);
-    }
+    Q_UNUSED(action)
+    endAction(event);
 }
 
 void KisToolMove::startAction(KoPointerEvent *event, MoveToolMode mode)
@@ -378,13 +371,18 @@ bool KisToolMove::moveInProgress() const
 
 QPoint KisToolMove::applyModifiers(Qt::KeyboardModifiers modifiers, QPoint pos)
 {
-    QPoint adjustedPos = pos;
-    if (modifiers & Qt::AltModifier || modifiers & Qt::ControlModifier) {
+    QPoint move = pos - m_dragStart;
 
-        if (qAbs(pos.x() - m_dragStart.x()) > qAbs(pos.y() - m_dragStart.y()))
-            adjustedPos.setY(m_dragStart.y());
-        else
-            adjustedPos.setX(m_dragStart.x());
+    // Snap to axis
+    if (modifiers & Qt::ShiftModifier) {
+        move = snapToClosestAxis(move);
     }
-    return adjustedPos;
+
+    // "Precision mode" - scale down movement by 1/5
+    if (modifiers & Qt::AltModifier) {
+        const qreal SCALE_FACTOR = .2;
+        move = SCALE_FACTOR * move;
+    }
+
+    return m_dragStart + move;
 }

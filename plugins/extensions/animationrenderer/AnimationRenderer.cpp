@@ -36,10 +36,12 @@ AnimaterionRenderer::AnimaterionRenderer(QObject *parent, const QVariantList &)
 {
     // Shows the big dialog
     KisAction *action = createAction("render_animation");
+    action->setActivationFlags(KisAction::IMAGE_HAS_ANIMATION);
     connect(action,  SIGNAL(triggered()), this, SLOT(slotRenderAnimation()));
 
     // Re-renders the image sequence as defined in the last render
     action = createAction("render_image_sequence_again");
+    action->setActivationFlags(KisAction::IMAGE_HAS_ANIMATION);
     connect(action,  SIGNAL(triggered()), this, SLOT(slotRenderSequenceAgain()));
 }
 

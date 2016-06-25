@@ -162,6 +162,7 @@ KisTemplateCreateDia::KisTemplateCreateDia(const QString &templatesResourcePath,
 
     d->m_defaultTemplate = new QCheckBox( i18n("Use the new template as default"), mainwidget );
     d->m_defaultTemplate->setChecked( true );
+    d->m_defaultTemplate->setVisible( false );
     d->m_defaultTemplate->setToolTip(i18n("Use the new template every time Krita starts"));
     rightbox->addWidget( d->m_defaultTemplate );
 

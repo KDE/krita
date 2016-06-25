@@ -33,6 +33,7 @@
 #include <kis_image.h>
 #include <kis_image_animation_interface.h>
 #include <kis_time_range.h>
+#include <KisImportExportManager.h>
 
 DlgAnimaterionRenderer::DlgAnimaterionRenderer(KisImageWSP image, QWidget *parent)
     : KoDialog(parent)
@@ -45,6 +46,7 @@ DlgAnimaterionRenderer::DlgAnimaterionRenderer(KisImageWSP image, QWidget *paren
     m_page = new WdgAnimaterionRenderer(this);
     m_page->layout()->setMargin(0);
     m_page->dirRequester->setMode(KoFileDialog::OpenDirectory);
+    m_page->dirRequester->setFileName(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
 
     m_page->intStart->setMinimum(image->animationInterface()->fullClipRange().start());
     m_page->intStart->setMaximum(image->animationInterface()->fullClipRange().end());
@@ -53,6 +55,20 @@ DlgAnimaterionRenderer::DlgAnimaterionRenderer(KisImageWSP image, QWidget *paren
     m_page->intEnd->setMinimum(image->animationInterface()->fullClipRange().start());
     m_page->intEnd->setMaximum(image->animationInterface()->fullClipRange().end());
     m_page->intEnd->setValue(image->animationInterface()->playbackRange().end());
+
+    QStringList mimes = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
+    mimes.sort();
+    Q_FOREACH(const QString &mime, mimes) {
+        QString description = KisMimeDatabase::descriptionForMimeType(mime);
+        if (description.isEmpty()) {
+            description = mime;
+        }
+        m_page->cmbMimetype->addItem(description, mime);
+        if (mime == "image/png") {
+            m_page->cmbMimetype->setCurrentIndex(m_page->cmbMimetype->count() - 1);
+        }
+
+    }
 
     setMainWidget(m_page);
     resize(m_page->sizeHint());
@@ -91,6 +107,7 @@ DlgAnimaterionRenderer::DlgAnimaterionRenderer(KisImageWSP image, QWidget *paren
     }
 
     connect(m_page->cmbRenderType, SIGNAL(activated(int)), this, SLOT(selectRenderType(int)));
+    connect(m_page->grpRender, SIGNAL(toggled(bool)), this, SLOT(toggleSequenceType(bool)));
 }
 
 DlgAnimaterionRenderer::~DlgAnimaterionRenderer()
@@ -118,9 +135,14 @@ void DlgAnimaterionRenderer::setSequenceConfiguration(KisPropertiesConfiguration
     m_page->sequenceStart->setValue(cfg->getInt("sequence_start", m_image->animationInterface()->playbackRange().start()));
 }
 
+bool DlgAnimaterionRenderer::renderToVideo() const
+{
+    return m_page->grpRender->isChecked();
+}
+
 KisPropertiesConfigurationSP DlgAnimaterionRenderer::getVideoConfiguration() const
 {
-    if (!m_page->grpRenderOptions->isChecked()) {
+    if (!m_page->grpRender->isChecked()) {
         return 0;
     }
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
@@ -136,7 +158,7 @@ void DlgAnimaterionRenderer::setVideoConfiguration(KisPropertiesConfigurationSP 
 
 KisPropertiesConfigurationSP DlgAnimaterionRenderer::getencoderConfiguration() const
 {
-    if (!m_page->grpRenderOptions->isChecked()) {
+    if (!m_page->grpRender->isChecked()) {
         return 0;
     }
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
@@ -160,4 +182,15 @@ void DlgAnimaterionRenderer::selectRenderType(int renderType)
     //    if (m_configWidgets[renterType]) {
     //        m_configWidgets[renderType]->setVisible(true);
     //    }
+}
+
+void DlgAnimaterionRenderer::toggleSequenceType(bool toggle)
+{
+    m_page->cmbMimetype->setEnabled(!toggle);
+    for (int i = 0; i < m_page->cmbMimetype->count(); ++i) {
+        if (m_page->cmbMimetype->itemData(i).toString() == "image/png") {
+            m_page->cmbMimetype->setCurrentIndex(i);
+            break;
+        }
+    }
 }

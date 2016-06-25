@@ -53,6 +53,8 @@ public:
     KisPropertiesConfigurationSP getSequenceConfiguration() const;
     void setSequenceConfiguration(KisPropertiesConfigurationSP  cfg) const;
 
+    bool renderToVideo() const;
+
     KisPropertiesConfigurationSP getVideoConfiguration() const;
     void setVideoConfiguration(KisPropertiesConfigurationSP cfg) const;
 
@@ -62,6 +64,7 @@ public:
 private Q_SLOTS:
 
     void selectRenderType(int renderType);
+    void toggleSequenceType(bool toggle);
 
 private:
 
@@ -69,7 +72,6 @@ private:
     WdgAnimaterionRenderer *m_page;
     QList<QSharedPointer<KisImportExportFilter>> m_filters;
     QList<QWidget> m_configWidgets;
-
 };
 
 #endif // DLG_ANIMATIONRENDERERIMAGE

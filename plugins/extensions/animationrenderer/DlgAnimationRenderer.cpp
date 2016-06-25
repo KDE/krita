@@ -18,6 +18,7 @@
 
 #include "DlgAnimationRenderer.h"
 
+#include <QStandardPaths>
 #include <QPluginLoader>
 #include <QJsonObject>
 
@@ -29,9 +30,13 @@
 #include <KisMimeDatabase.h>
 #include <KoJsonTrader.h>
 #include <KisImportExportFilter.h>
+#include <kis_image.h>
+#include <kis_image_animation_interface.h>
+#include <kis_time_range.h>
 
-DlgAnimaterionRenderer::DlgAnimaterionRenderer(QWidget *parent)
+DlgAnimaterionRenderer::DlgAnimaterionRenderer(KisImageWSP image, QWidget *parent)
     : KoDialog(parent)
+    , m_image(image)
 {
     setCaption(i18n("Render Animation"));
     setButtons(Ok | Cancel);
@@ -40,6 +45,15 @@ DlgAnimaterionRenderer::DlgAnimaterionRenderer(QWidget *parent)
     m_page = new WdgAnimaterionRenderer(this);
     m_page->layout()->setMargin(0);
     m_page->dirRequester->setMode(KoFileDialog::OpenDirectory);
+
+    m_page->intStart->setMinimum(image->animationInterface()->fullClipRange().start());
+    m_page->intStart->setMaximum(image->animationInterface()->fullClipRange().end());
+    m_page->intStart->setValue(image->animationInterface()->playbackRange().start());
+
+    m_page->intEnd->setMinimum(image->animationInterface()->fullClipRange().start());
+    m_page->intEnd->setMaximum(image->animationInterface()->fullClipRange().end());
+    m_page->intEnd->setValue(image->animationInterface()->playbackRange().end());
+
     setMainWidget(m_page);
     resize(m_page->sizeHint());
 
@@ -95,6 +109,15 @@ KisPropertiesConfigurationSP DlgAnimaterionRenderer::getSequenceConfiguration() 
     return cfg;
 }
 
+void DlgAnimaterionRenderer::setSequenceConfiguration(KisPropertiesConfigurationSP cfg) const
+{
+    m_page->txtBasename->setText(cfg->getString("basename", "frame"));
+    m_page->dirRequester->setFileName(cfg->getString("directory", QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)));
+    m_page->intStart->setValue(cfg->getInt("first_frame", m_image->animationInterface()->playbackRange().start()));
+    m_page->intEnd->setValue(cfg->getInt("last_frame", m_image->animationInterface()->playbackRange().end()));
+    m_page->sequenceStart->setValue(cfg->getInt("sequence_start", m_image->animationInterface()->playbackRange().start()));
+}
+
 KisPropertiesConfigurationSP DlgAnimaterionRenderer::getVideoConfiguration() const
 {
     if (!m_page->grpRenderOptions->isChecked()) {
@@ -106,6 +129,11 @@ KisPropertiesConfigurationSP DlgAnimaterionRenderer::getVideoConfiguration() con
     return cfg;
 }
 
+void DlgAnimaterionRenderer::setVideoConfiguration(KisPropertiesConfigurationSP cfg) const
+{
+
+}
+
 KisPropertiesConfigurationSP DlgAnimaterionRenderer::getencoderConfiguration() const
 {
     if (!m_page->grpRenderOptions->isChecked()) {
@@ -113,6 +141,11 @@ KisPropertiesConfigurationSP DlgAnimaterionRenderer::getencoderConfiguration() c
     }
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
     return cfg;
+}
+
+void DlgAnimaterionRenderer::getencoderConfiguration(KisPropertiesConfigurationSP cfg) const
+{
+
 }
 
 void DlgAnimaterionRenderer::selectRenderType(int renderType)

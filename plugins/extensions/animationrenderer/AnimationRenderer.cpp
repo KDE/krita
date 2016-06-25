@@ -26,13 +26,15 @@
 #include <kis_node_manager.h>
 #include <kis_image_manager.h>
 #include <kis_action.h>
+#include <kis_image_animation_interface.h>
 #include <kis_properties_configuration.h>
 #include "DlgAnimationRenderer.h"
+
 
 K_PLUGIN_FACTORY_WITH_JSON(AnimaterionRendererFactory, "kritaanimationrenderer.json", registerPlugin<AnimaterionRenderer>();)
 
 AnimaterionRenderer::AnimaterionRenderer(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent)
+    : KisViewPlugin(parent)
 {
     // Shows the big dialog
     KisAction *action = createAction("render_animation");
@@ -53,8 +55,9 @@ void AnimaterionRenderer::slotRenderAnimation()
 {
     KisImageWSP image = m_view->image();
     if (!image) return;
+    if (!image->animationInterface()->hasAnimation()) return;
 
-    DlgAnimaterionRenderer dlgAnimaterionRenderer(m_view->mainWindow());
+    DlgAnimaterionRenderer dlgAnimaterionRenderer(image, m_view->mainWindow());
 
     dlgAnimaterionRenderer.setCaption(i18n("Render Animation"));
 

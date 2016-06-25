@@ -33,7 +33,11 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLineEdit" name="txtBasename"/>
+         <widget class="QLineEdit" name="txtBasename">
+          <property name="text">
+           <string>frame</string>
+          </property>
+         </widget>
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_2">
@@ -75,7 +79,7 @@
         <item row="4" column="0">
          <widget class="QLabel" name="label_5">
           <property name="text">
-           <string>Sequence starts with:</string>
+           <string>Naming sequence starts with:</string>
           </property>
          </widget>
         </item>

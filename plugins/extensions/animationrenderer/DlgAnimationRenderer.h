@@ -24,7 +24,7 @@
 #include "ui_wdg_animationrenderer.h"
 
 #include <QSharedPointer>
-
+#include <kis_types.h>
 
 class KisImportExportFilter;
 
@@ -47,12 +47,17 @@ class DlgAnimaterionRenderer: public KoDialog
 
 public:
 
-    DlgAnimaterionRenderer(QWidget *parent = 0);
+    DlgAnimaterionRenderer(KisImageWSP image, QWidget *parent = 0);
     ~DlgAnimaterionRenderer();
 
     KisPropertiesConfigurationSP getSequenceConfiguration() const;
+    void setSequenceConfiguration(KisPropertiesConfigurationSP  cfg) const;
+
     KisPropertiesConfigurationSP getVideoConfiguration() const;
+    void setVideoConfiguration(KisPropertiesConfigurationSP cfg) const;
+
     KisPropertiesConfigurationSP getencoderConfiguration() const;
+    void getencoderConfiguration(KisPropertiesConfigurationSP cfg) const;
 
 private Q_SLOTS:
 
@@ -60,9 +65,11 @@ private Q_SLOTS:
 
 private:
 
+    KisImageWSP m_image;
     WdgAnimaterionRenderer *m_page;
     QList<QSharedPointer<KisImportExportFilter>> m_filters;
     QList<QWidget> m_configWidgets;
+
 };
 
 #endif // DLG_ANIMATIONRENDERERIMAGE

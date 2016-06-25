@@ -37,7 +37,7 @@
 #include <KoColorModelStandardIds.h>
 #include <KoIntegerMaths.h>
 #include <KoMixColorsOp.h>
-
+#include <KoUpdater.h>
 
 #include "kis_image.h"
 #include "kis_random_sub_accessor.h"
@@ -64,6 +64,8 @@
 #include "kis_paint_device_data.h"
 #include "kis_paint_device_frames_interface.h"
 
+#include "kis_transform_worker.h"
+#include "kis_filter_strategy.h"
 
 struct KisPaintDevice::Private
 {
@@ -1396,7 +1398,19 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint3
     return image;
 }
 
-KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, QRect rect) const
+inline bool moveBy(KisSequentialConstIterator& iter, int numPixels )
+{
+    int pos = 0;
+    while(pos<numPixels){
+        int step = std::min(iter.nConseqPixels(), numPixels-pos);
+        if(!iter.nextPixels(step))
+            return false;
+        pos+=step;
+    }
+    return true;
+}
+
+KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, QRect rect, qreal oversample) const
 {
     KisPaintDeviceSP thumbnail = new KisPaintDevice(colorSpace());
 
@@ -1404,6 +1418,12 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, QRect
     int srcX0, srcY0;
     QRect e = rect.isValid() ? rect : extent();
     e.getRect(&srcX0, &srcY0, &srcWidth, &srcHeight);
+
+    oversample = qMax( oversample, 1. );
+    h *= oversample;
+    w *= oversample;
+
+    qint32 hstart = h;
 
     if (w > srcWidth) {
         w = srcWidth;
@@ -1419,6 +1439,8 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, QRect
     else if (srcHeight > srcWidth)
         w = qint32(double(srcWidth) / srcHeight * h);
 
+    oversample *= (qreal)h / hstart; //readjusting oversample ratio, given that we had to readjust thumbnail size
+
     const qint32 pixelSize = this->pixelSize();
 
     KisRandomConstAccessorSP iter = createRandomConstAccessorNG(0, 0);
@@ -1433,20 +1455,27 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, QRect
             memcpy(dstIter->rawData(), iter->rawDataConst(), pixelSize);
         }
     }
-    return thumbnail;
 
+    if( oversample!=1. ){
+        QPointer<KoUpdater> updater = new KoDummyUpdater();
+        KisTransformWorker worker(thumbnail, 1/oversample, 1/oversample, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                                  updater, KisFilterStrategyRegistry::instance()->value("Bilinear"));
+        worker.run();
+    }
+
+    return thumbnail;
 }
 
-QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, QRect rect, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
+QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, QRect rect, qreal oversample, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
-    KisPaintDeviceSP dev = createThumbnailDevice(w, h, rect);
+    KisPaintDeviceSP dev = createThumbnailDevice(w, h, rect, oversample);
     QImage thumbnail = dev->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile(), 0, 0, w, h, renderingIntent, conversionFlags);
     return thumbnail;
 }
 
-QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
+QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, qreal oversample, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
-    return m_d->cache()->createThumbnail(w, h, renderingIntent, conversionFlags);
+    return m_d->cache()->createThumbnail(w, h, oversample, renderingIntent, conversionFlags);
 }
 
 KisHLineIteratorSP KisPaintDevice::createHLineIteratorNG(qint32 x, qint32 y, qint32 w)

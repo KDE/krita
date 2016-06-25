@@ -110,7 +110,10 @@ void OverviewWidget::startUpdateCanvasProjection()
     if (isVisible() && previewSize.isValid()) {
         QImage img =
             image->projection()->
-            createThumbnail(previewSize.width(), previewSize.height(), image->bounds());
+            createThumbnail(previewSize.width(), previewSize.height(), image->bounds(), /*oversample=*/ 2,
+                            KoColorConversionTransformation::internalRenderingIntent(),
+                            KoColorConversionTransformation::internalConversionFlags()
+                            );
 
         m_pixmap = QPixmap::fromImage(img);
     }

@@ -526,7 +526,7 @@ public:
      * @param rect: only this rect will be used for the thumbnail
      *
      */
-    KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, QRect rect = QRect()) const;
+    KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, QRect rect = QRect(), qreal oversample=1.) const;
 
     /**
      * Creates a thumbnail of the paint device, retaining the aspect ratio.
@@ -536,15 +536,16 @@ public:
      * @param maxw: maximum width
      * @param maxh: maximum height
      * @param rect: only this rect will be used for the thumbnail
+     * @param oversample: ratio used for antialiasing
      */
-    QImage createThumbnail(qint32 maxw, qint32 maxh, QRect rect,
+    QImage createThumbnail(qint32 maxw, qint32 maxh, QRect rect, qreal oversample=1,
                                    KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
                                    KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags());
 
     /**
      * Cached version of createThumbnail(qint32 maxw, qint32 maxh, const KisSelection *selection, QRect rect)
      */
-    QImage createThumbnail(qint32 maxw, qint32 maxh,
+    QImage createThumbnail(qint32 maxw, qint32 maxh, qreal oversample=1,
                                    KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
                                    KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags());
 

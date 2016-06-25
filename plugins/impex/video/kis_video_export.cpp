@@ -30,7 +30,7 @@
 #include <KisImportExportManager.h>
 #include <KisFilterChain.h>
 #include <KoColorSpaceConstants.h>
-
+#include <KoDialog.h>
 #include "KisPart.h"
 #include <KisDocument.h>
 #include <kis_image.h>
@@ -57,6 +57,7 @@ KisVideoExport::~KisVideoExport()
 KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     Q_UNUSED(to);
+    Q_UNUSED(configuration);
 
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
@@ -74,65 +75,74 @@ KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray
     const QFileInfo fileInfo(filename);
     const QString suffix = fileInfo.suffix().toLower();
 
-//    VideoExportOptionsDialog::CodecIndex codecIndex = VideoExportOptionsDialog::CODEC_H264;
+    VideoExportOptionsDialog::CodecIndex codecIndex = VideoExportOptionsDialog::CODEC_H264;
 
-//    if (suffix == "mkv" || suffix == "mp4") {
-//        codecIndex = VideoExportOptionsDialog::CODEC_H264;
-//        askForOptions = true;
-//    } else if (suffix == "ogv") {
-//        codecIndex = VideoExportOptionsDialog::CODEC_THEORA;
-//        askForOptions = true;
-//    }
+    if (suffix == "mkv" || suffix == "mp4") {
+        codecIndex = VideoExportOptionsDialog::CODEC_H264;
+        askForOptions = true;
+    } else if (suffix == "ogv") {
+        codecIndex = VideoExportOptionsDialog::CODEC_THEORA;
+        askForOptions = true;
+    }
 
-//    QStringList additionalOptionsList;
+    QStringList additionalOptionsList;
 
-//    askForOptions &=
-//        !qApp->applicationName().toLower().contains("test") &
-//        !getBatchMode();
+    askForOptions &=
+        !qApp->applicationName().toLower().contains("test") &
+        !getBatchMode();
 
-//    if (askForOptions) {
-//        KisCursorOverrideHijacker badGuy;
+    if (askForOptions) {
+        KisCursorOverrideHijacker badGuy;
 
-//        VideoExportOptionsDialog dlg;
-//        dlg.setCodec(codecIndex);
+        KoDialog kdb(0);
+        kdb.setCaption(i18n("Video Export Options"));
+        kdb.setModal(true);
+        kdb.setButtons(KoDialog::Ok | KoDialog::Cancel);
 
-//        if (dlg.exec() == QDialog::Accepted) {
-//            additionalOptionsList = dlg.customUserOptions();
-//        } else {
-//            return KisImportExportFilter::UserCancelled;
-//        }
-//    }
+        VideoExportOptionsDialog dlg;
+        dlg.setCodec(codecIndex);
 
-//    VideoSaver kpc(input, getBatchMode());
+        kdb.setMainWidget(&dlg);
 
-//    if (!kpc.hasFFMpeg()) {
-//        const QString warningMessage =
-//            i18n("Couldn not find \'ffmpeg\' binary. Saving to video formats is impossible.");
+        if (kdb.exec() == QDialog::Accepted) {
+            additionalOptionsList = dlg.customUserOptions();
+        } else {
+            return KisImportExportFilter::UserCancelled;
+        }
+    }
 
-//        if (askForOptions) {
-//            QMessageBox::critical(KisPart::instance()->currentMainwindow(),
-//                                  i18n("Video Export Error"),
-//                                  warningMessage);
-//        } else {
-//            qWarning() << "WARNING:" << warningMessage;
-//        }
+    VideoSaver kpc(input, getBatchMode());
 
-//        return KisImportExportFilter::UsageError;
-//    }
+    if (!kpc.hasFFMpeg()) {
+        const QString warningMessage =
+            i18n("Couldn not find \'ffmpeg\' binary. Saving to video formats is impossible.");
 
-//    KisImageBuilder_Result res = kpc.encode(filename, additionalOptionsList);
+        if (askForOptions) {
+            QMessageBox::critical(KisPart::instance()->currentMainwindow(),
+                                  i18n("Video Export Error"),
+                                  warningMessage);
+        } else {
+            qWarning() << "WARNING:" << warningMessage;
+        }
 
-//    if (res == KisImageBuilder_RESULT_OK) {
-//        return KisImportExportFilter::OK;
-//    } else if (res == KisImageBuilder_RESULT_CANCEL) {
-//        return KisImportExportFilter::ProgressCancelled;
-//    }
+        return KisImportExportFilter::UsageError;
+    }
+
+    KisImageBuilder_Result res = kpc.encode(filename, additionalOptionsList);
+
+    if (res == KisImageBuilder_RESULT_OK) {
+        return KisImportExportFilter::OK;
+    } else if (res == KisImageBuilder_RESULT_CANCEL) {
+        return KisImportExportFilter::ProgressCancelled;
+    }
 
     return KisImportExportFilter::InternalError;
 }
 
 KisPropertiesConfigurationSP KisVideoExport::defaultConfiguration(const QByteArray &from, const QByteArray &to) const
 {
+    Q_UNUSED(from);
+    Q_UNUSED(to);
     KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
 
     cfg->setProperty("h264PresetIndex", 5);
@@ -145,8 +155,10 @@ KisPropertiesConfigurationSP KisVideoExport::defaultConfiguration(const QByteArr
     return cfg;
 }
 
-KisConfigWidget *KisVideoExport::createConfigurationWidget(QWidget *parent, const QByteArray &, const QByteArray &) const
+KisConfigWidget *KisVideoExport::createConfigurationWidget(QWidget *parent, const QByteArray &from, const QByteArray &to) const
 {
+    Q_UNUSED(from);
+    Q_UNUSED(to);
     return new VideoExportOptionsDialog(parent);
 }
 

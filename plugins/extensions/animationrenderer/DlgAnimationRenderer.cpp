@@ -31,7 +31,7 @@
 #include <KisImportExportFilter.h>
 
 DlgAnimaterionRenderer::DlgAnimaterionRenderer(QWidget *parent)
-        : KoDialog(parent)
+    : KoDialog(parent)
 {
     setCaption(i18n("Render Animation"));
     setButtons(Ok | Cancel);
@@ -39,7 +39,7 @@ DlgAnimaterionRenderer::DlgAnimaterionRenderer(QWidget *parent)
 
     m_page = new WdgAnimaterionRenderer(this);
     m_page->layout()->setMargin(0);
-
+    m_page->dirRequester->setMode(KoFileDialog::OpenDirectory);
     setMainWidget(m_page);
     resize(m_page->sizeHint());
 
@@ -69,8 +69,8 @@ DlgAnimaterionRenderer::DlgAnimaterionRenderer(QWidget *parent)
             }
 
             m_filters.append(filter);
-//            m_configWidgets.append(filter->createConfigurationWidget(m_page->grpRenderOptions));
-//            m_configWidgets.last()->setVisible(false);
+            //            m_configWidgets.append(filter->createConfigurationWidget(m_page->grpRenderOptions));
+            //            m_configWidgets.last()->setVisible(false);
 
             m_page->cmbRenderType->addItem(KisMimeDatabase::descriptionForMimeType(mimetype));
         }
@@ -117,14 +117,14 @@ KisPropertiesConfigurationSP DlgAnimaterionRenderer::getencoderConfiguration() c
 
 void DlgAnimaterionRenderer::selectRenderType(int renderType)
 {
-//    if (renderType >= m_configWidgets->size) return;
+    //    if (renderType >= m_configWidgets->size) return;
 
-//    Q_FOREACH(QWidget *w, m_configWidgets) {
-//        if (w) {
-//            w->setVisible(false);
-//        }
-//    }
-//    if (m_configWidgets[renterType]) {
-//        m_configWidgets[renderType]->setVisible(true);
-//    }
+    //    Q_FOREACH(QWidget *w, m_configWidgets) {
+    //        if (w) {
+    //            w->setVisible(false);
+    //        }
+    //    }
+    //    if (m_configWidgets[renterType]) {
+    //        m_configWidgets[renderType]->setVisible(true);
+    //    }
 }

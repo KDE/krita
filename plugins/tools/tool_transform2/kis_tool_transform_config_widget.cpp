@@ -128,12 +128,15 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     aXBox->setSuffix(QChar(Qt::Key_degree));
     aYBox->setSuffix(QChar(Qt::Key_degree));
     aZBox->setSuffix(QChar(Qt::Key_degree));
-    aXBox->setRange(0.0, 360.0, 0);
-    aYBox->setRange(0.0, 360.0, 0);
-    aZBox->setRange(0.0, 360.0, 0);
+    aXBox->setRange(0.0, 360.0, 2);
+    aYBox->setRange(0.0, 360.0, 2);
+    aZBox->setRange(0.0, 360.0, 2);
     aXBox->setValue(0.0);
     aYBox->setValue(0.0);
     aZBox->setValue(0.0);
+    aXBox->setSingleStep(1.0);
+    aYBox->setSingleStep(1.0);
+    aZBox->setSingleStep(1.0);
 
 
 

@@ -58,9 +58,13 @@ AnimaterionRenderer::~AnimaterionRenderer()
 void AnimaterionRenderer::slotRenderAnimation()
 {
     KisImageWSP image = m_view->image();
-    KisDocument *doc = m_view->document();
+
     if (!image) return;
     if (!image->animationInterface()->hasAnimation()) return;
+
+    KisDocument *doc = m_view->document();
+    doc->setFileProgressProxy();
+    doc->setFileProgressUpdater(i18n("Export frames"));
 
     DlgAnimaterionRenderer dlgAnimaterionRenderer(image, m_view->mainWindow());
 
@@ -87,14 +91,23 @@ void AnimaterionRenderer::slotRenderAnimation()
         bool success = exporter.exportAnimation();
         Q_ASSERT(success);
     }
+
+    doc->clearFileProgressUpdater();
+    doc->clearFileProgressProxy();
+
 }
 
 void AnimaterionRenderer::slotRenderSequenceAgain()
 {
     KisImageWSP image = m_view->image();
-    KisDocument *doc = m_view->document();
+
     if (!image) return;
     if (!image->animationInterface()->hasAnimation()) return;
+
+    KisDocument *doc = m_view->document();
+    doc->setFileProgressProxy();
+    doc->setFileProgressUpdater(i18n("Export frames"));
+
     KisConfig kisConfig;
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
     cfg->fromXML(kisConfig.exportConfiguration("IMAGESEQUENCE"));
@@ -106,6 +119,10 @@ void AnimaterionRenderer::slotRenderSequenceAgain()
     KisAnimationExportSaver exporter(doc, baseFileName, cfg->getInt("first_frame"), cfg->getInt("last_frame"), cfg->getInt("sequence_start"));
     bool success = exporter.exportAnimation();
     Q_ASSERT(success);
+
+    doc->clearFileProgressUpdater();
+    doc->clearFileProgressProxy();
+
 }
 
 #include "AnimationRenderer.moc"

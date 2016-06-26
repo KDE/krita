@@ -204,7 +204,6 @@ public:
 //    KisAction *printActionPreview;
     KisAction *exportPdf {0};
     KisAction *importAnimation {0};
-    KisAction *exportAnimation {0};
     KisAction *closeAll {0};
 //    KisAction *reloadFile;
     KisAction *importFile {0};
@@ -1683,29 +1682,6 @@ void KisMainWindow::importAnimation()
     }
 }
 
-void KisMainWindow::exportAnimation()
-{
-    if (!activeView()) return;
-
-    KisDocument *document = activeView()->document();
-    if (!document) return;
-
-    document->setFileProgressProxy();
-    document->setFileProgressUpdater(i18n("Export frames"));
-    KisAnimationExporterUI exporter(this);
-    KisImportExportFilter::ConversionStatus status = exporter.exportSequence(document);
-    document->clearFileProgressUpdater();
-    document->clearFileProgressProxy();
-
-    if (status != KisImportExportFilter::OK && status != KisImportExportFilter::InternalError) {
-        QString msg = KisImportExportFilter::conversionStatusString(status);
-
-        if (!msg.isEmpty())
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not finish export animation:\n%1", msg));
-    }
-    activeView()->canvasBase()->refetchDataFromImage();
-}
-
 void KisMainWindow::slotConfigureToolbars()
 {
     KConfigGroup group =  KSharedConfig::openConfig()->group("krita");
@@ -2320,10 +2296,6 @@ void KisMainWindow::createActions()
     d->importAnimation  = actionManager->createAction("file_import_animation");
     d->importAnimation->setActivationFlags(KisAction::IMAGE_HAS_ANIMATION);
     connect(d->importAnimation, SIGNAL(triggered()), this, SLOT(importAnimation()));
-
-    d->exportAnimation  = actionManager->createAction("file_export_animation");
-    d->exportAnimation->setActivationFlags(KisAction::IMAGE_HAS_ANIMATION);
-    connect(d->exportAnimation, SIGNAL(triggered()), this, SLOT(exportAnimation()));
 
     d->closeAll = actionManager->createAction("file_close_all");
     connect(d->closeAll, SIGNAL(triggered()), this, SLOT(slotFileCloseAll()));

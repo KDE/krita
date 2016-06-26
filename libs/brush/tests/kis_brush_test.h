@@ -35,7 +35,6 @@ private Q_SLOTS:
 
     void testImageGeneration();
 
-    void benchmarkPyramidCreation();
     void benchmarkScaling();
     void benchmarkRotation();
 

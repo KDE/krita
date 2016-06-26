@@ -476,7 +476,6 @@ void KisGbrBrush::makeMaskImage()
     setHasColor(false);
     setUseColorAsMask(false);
     resetBoundary();
-    clearBrushPyramid();
 }
 
 KisBrush* KisGbrBrush::clone() const
@@ -508,7 +507,6 @@ void KisGbrBrush::setUseColorAsMask(bool useColorAsMask)
     if (useColorAsMask != d->useColorAsMask) {
         d->useColorAsMask = useColorAsMask;
         resetBoundary();
-        clearBrushPyramid();
     }
 }
 bool KisGbrBrush::useColorAsMask() const

@@ -324,15 +324,7 @@ void KisBrushChooser::slotActivatedBrush(KoResource * resource)
     KisBrush* brush = dynamic_cast<KisBrush*>(resource);
 
     if (m_brush != brush) {
-        if (m_brush) {
-            m_brush->clearBrushPyramid();
-        }
-
         m_brush = brush;
-
-        if (m_brush) {
-            m_brush->prepareBrushPyramid();
-        }
     }
 }
 

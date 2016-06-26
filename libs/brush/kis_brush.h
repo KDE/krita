@@ -315,9 +315,6 @@ public:
     virtual void setAngle(qreal _angle);
     qreal angle() const;
 
-    void prepareBrushPyramid() const;
-    void clearBrushPyramid();
-
     virtual void lodLimitations(KisPaintopLodLimitations *l) const;
 
     virtual KisBrush* clone() const = 0;

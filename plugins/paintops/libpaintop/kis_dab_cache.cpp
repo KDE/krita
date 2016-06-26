@@ -205,13 +205,11 @@ KisDabCache::calculateDabRect(const QPointF &cursorPoint,
 
     if (mirrorProperties.horizontalMirror) {
         subPixelX = positiveFraction(-(cursorPoint.x() + hotSpot.x()));
-        width = m_d->brush->maskWidth(scaleX, angle, subPixelX, subPixelY, info);
         x = qRound(cursorPoint.x() + subPixelX + hotSpot.x()) - width;
     }
 
     if (mirrorProperties.verticalMirror) {
         subPixelY = positiveFraction(-(cursorPoint.y() + hotSpot.y()));
-        height = m_d->brush->maskHeight(scaleY, angle, subPixelX, subPixelY, info);
         y = qRound(cursorPoint.y() + subPixelY + hotSpot.y()) - height;
     }
 

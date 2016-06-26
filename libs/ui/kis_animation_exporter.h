@@ -28,6 +28,9 @@
 
 class KisDocument;
 
+/**
+ * @brief The KisAnimationExporterUI class
+ */
 class KRITAUI_EXPORT KisAnimationExporterUI : public QObject
 {
     Q_OBJECT
@@ -35,7 +38,7 @@ class KRITAUI_EXPORT KisAnimationExporterUI : public QObject
 public:
 
     KisAnimationExporterUI(QWidget *parent);
-    ~KisAnimationExporterUI();
+    virtual ~KisAnimationExporterUI();
     KisImportExportFilter::ConversionStatus exportSequence(KisDocument *document);
 
 private:
@@ -43,6 +46,9 @@ private:
     QScopedPointer<Private> m_d;
 };
 
+/**
+ * @brief The KisAnimationExporter class
+ */
 class KRITAUI_EXPORT KisAnimationExporter : public QObject
 {
     Q_OBJECT
@@ -71,11 +77,14 @@ private:
     QScopedPointer<Private> m_d;
 };
 
+/**
+ * @brief The KisAnimationExportSaver class
+ */
 class KRITAUI_EXPORT KisAnimationExportSaver : public QObject
 {
     Q_OBJECT
 public:
-    KisAnimationExportSaver(KisDocument *document, const QString &baseFilename, int fromTime, int toTime);
+    KisAnimationExportSaver(KisDocument *document, const QString &baseFilename, int fromTime, int toTime, int sequenceNumberingOffset = 0);
     ~KisAnimationExportSaver();
 
     KisImportExportFilter::ConversionStatus exportAnimation();

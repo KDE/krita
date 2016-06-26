@@ -232,13 +232,14 @@ void KisAnimationExporter::frameReadyToSave()
 
 struct KisAnimationExportSaver::Private
 {
-    Private(KisDocument *document, int fromTime, int toTime)
-        : document(document),
-          image(document->image()),
-          firstFrame(fromTime),
-          lastFrame(toTime),
-          tmpDoc(KisPart::instance()->createDocument()),
-          exporter(document, fromTime, toTime)
+    Private(KisDocument *document, int fromTime, int toTime, int _sequenceNumberingOffset)
+        : document(document)
+        , image(document->image())
+        , firstFrame(fromTime)
+        , lastFrame(toTime)
+        , sequenceNumberingOffset(_sequenceNumberingOffset)
+        , tmpDoc(KisPart::instance()->createDocument())
+        , exporter(document, fromTime, toTime)
     {
         tmpDoc->setAutoSave(0);
 
@@ -263,6 +264,7 @@ struct KisAnimationExportSaver::Private
     KisImageWSP image;
     int firstFrame;
     int lastFrame;
+    int sequenceNumberingOffset;
 
     QScopedPointer<KisDocument> tmpDoc;
     KisImageSP tmpImage;
@@ -274,8 +276,8 @@ struct KisAnimationExportSaver::Private
     QString filenameSuffix;
 };
 
-KisAnimationExportSaver::KisAnimationExportSaver(KisDocument *document, const QString &baseFilename, int fromTime, int toTime)
-    : m_d(new Private(document, fromTime, toTime))
+KisAnimationExportSaver::KisAnimationExportSaver(KisDocument *document, const QString &baseFilename, int fromTime, int toTime, int sequenceNumberingOffset)
+    : m_d(new Private(document, fromTime, toTime, sequenceNumberingOffset))
 {
     int baseLength = baseFilename.lastIndexOf(".");
     if (baseLength > -1) {
@@ -307,8 +309,8 @@ KisImportExportFilter::ConversionStatus KisAnimationExportSaver::saveFrameCallba
     KisImportExportFilter::ConversionStatus status =
         KisImportExportFilter::OK;
 
-    QString frameNumber = QString("%1").arg(time, 4, 10, QChar('0'));
-    QString filename = m_d->filenamePrefix + frameNumber + m_d->filenameSuffix;
+    QString frameNumber = QString("%1").arg(time + m_d->sequenceNumberingOffset, 4, 10, QChar('0'));
+    QString filename = m_d->filenamePrefix + frameNumber    + m_d->filenameSuffix;
 
     QRect rc = m_d->image->bounds();
     KisPainter::copyAreaOptimized(rc.topLeft(), frame, m_d->tmpDevice, rc);

@@ -29,7 +29,10 @@
 #include <kis_image_animation_interface.h>
 #include <kis_properties_configuration.h>
 #include "DlgAnimationRenderer.h"
-
+#include <kis_config.h>
+#include <kis_animation_exporter.h>
+#include <KisDocument.h>
+#include <KisMimeDatabase.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(AnimaterionRendererFactory, "kritaanimationrenderer.json", registerPlugin<AnimaterionRenderer>();)
 
@@ -54,6 +57,7 @@ AnimaterionRenderer::~AnimaterionRenderer()
 void AnimaterionRenderer::slotRenderAnimation()
 {
     KisImageWSP image = m_view->image();
+    KisDocument *doc = m_view->document();
     if (!image) return;
     if (!image->animationInterface()->hasAnimation()) return;
 
@@ -62,8 +66,17 @@ void AnimaterionRenderer::slotRenderAnimation()
     dlgAnimaterionRenderer.setCaption(i18n("Render Animation"));
 
     if (dlgAnimaterionRenderer.exec() == QDialog::Accepted) {
-
-
+        KisPropertiesConfigurationSP sequencecfg = dlgAnimaterionRenderer.getSequenceConfiguration();
+        KisConfig kisConfig;
+        kisConfig.setExportConfiguration("IMAGESEQUENCE", *sequencecfg.data());
+        QString mimetype = sequencecfg->getString("mimetype");
+        QString extension = KisMimeDatabase::suffixesForMimeType(mimetype).first();
+        QString baseFileName = QString("%1/%2.%3").arg(sequencecfg->getString("directory"))
+                .arg(sequencecfg->getString("basename"))
+                .arg(extension);
+        KisAnimationExportSaver exporter(doc, baseFileName, sequencecfg->getInt("first_frame"), sequencecfg->getInt("last_frame"), sequencecfg->getInt("sequence_start"));
+        bool success = exporter.exportAnimation();
+        Q_ASSERT(success);
     }
 }
 

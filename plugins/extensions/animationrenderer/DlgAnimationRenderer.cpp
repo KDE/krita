@@ -123,6 +123,7 @@ KisPropertiesConfigurationSP DlgAnimaterionRenderer::getSequenceConfiguration() 
     cfg->setProperty("first_frame", m_page->intStart->value());
     cfg->setProperty("last_frame", m_page->intEnd->value());
     cfg->setProperty("sequence_start", m_page->sequenceStart->value());
+    cfg->setProperty("mimetype", m_page->cmbMimetype->currentData().toString());
     return cfg;
 }
 

@@ -33,6 +33,7 @@
 #include <kis_animation_exporter.h>
 #include <KisDocument.h>
 #include <KisMimeDatabase.h>
+#include <kis_time_range.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(AnimaterionRendererFactory, "kritaanimationrenderer.json", registerPlugin<AnimaterionRenderer>();)
 
@@ -68,7 +69,11 @@ void AnimaterionRenderer::slotRenderAnimation()
     KisConfig kisConfig;
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
     cfg->fromXML(kisConfig.exportConfiguration("IMAGESEQUENCE"));
+    // Override the saved start/end with the ones from the image in case of using gui.
+    cfg->setProperty("first_frame", image->animationInterface()->playbackRange().start());
+    cfg->setProperty("last_frame", image->animationInterface()->playbackRange().end());
     dlgAnimaterionRenderer.setSequenceConfiguration(cfg);
+
 
     if (dlgAnimaterionRenderer.exec() == QDialog::Accepted) {
         KisPropertiesConfigurationSP sequencecfg = dlgAnimaterionRenderer.getSequenceConfiguration();
@@ -86,7 +91,21 @@ void AnimaterionRenderer::slotRenderAnimation()
 
 void AnimaterionRenderer::slotRenderSequenceAgain()
 {
-
+    KisImageWSP image = m_view->image();
+    KisDocument *doc = m_view->document();
+    if (!image) return;
+    if (!image->animationInterface()->hasAnimation()) return;
+    KisConfig kisConfig;
+    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    cfg->fromXML(kisConfig.exportConfiguration("IMAGESEQUENCE"));
+    QString mimetype = cfg->getString("mimetype");
+    QString extension = KisMimeDatabase::suffixesForMimeType(mimetype).first();
+    QString baseFileName = QString("%1/%2.%3").arg(cfg->getString("directory"))
+            .arg(cfg->getString("basename"))
+            .arg(extension);
+    KisAnimationExportSaver exporter(doc, baseFileName, cfg->getInt("first_frame"), cfg->getInt("last_frame"), cfg->getInt("sequence_start"));
+    bool success = exporter.exportAnimation();
+    Q_ASSERT(success);
 }
 
 #include "AnimationRenderer.moc"

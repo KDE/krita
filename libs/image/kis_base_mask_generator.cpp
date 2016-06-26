@@ -241,7 +241,7 @@ qreal KisMaskGenerator::effectiveSrcHeight() const
      * don't take spikes into account, they will be generated from
      * this data.
      */
-    return d->diameter * d->ratio * d->scaleX;
+    return d->diameter * d->ratio * d->scaleY;
 }
 
 qreal KisMaskGenerator::diameter() const

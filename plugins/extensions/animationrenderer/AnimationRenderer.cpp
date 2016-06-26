@@ -65,9 +65,13 @@ void AnimaterionRenderer::slotRenderAnimation()
 
     dlgAnimaterionRenderer.setCaption(i18n("Render Animation"));
 
+    KisConfig kisConfig;
+    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    cfg->fromXML(kisConfig.exportConfiguration("IMAGESEQUENCE"));
+    dlgAnimaterionRenderer.setSequenceConfiguration(cfg);
+
     if (dlgAnimaterionRenderer.exec() == QDialog::Accepted) {
         KisPropertiesConfigurationSP sequencecfg = dlgAnimaterionRenderer.getSequenceConfiguration();
-        KisConfig kisConfig;
         kisConfig.setExportConfiguration("IMAGESEQUENCE", *sequencecfg.data());
         QString mimetype = sequencecfg->getString("mimetype");
         QString extension = KisMimeDatabase::suffixesForMimeType(mimetype).first();

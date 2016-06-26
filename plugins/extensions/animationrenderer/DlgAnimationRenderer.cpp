@@ -134,6 +134,13 @@ void DlgAnimaterionRenderer::setSequenceConfiguration(KisPropertiesConfiguration
     m_page->intStart->setValue(cfg->getInt("first_frame", m_image->animationInterface()->playbackRange().start()));
     m_page->intEnd->setValue(cfg->getInt("last_frame", m_image->animationInterface()->playbackRange().end()));
     m_page->sequenceStart->setValue(cfg->getInt("sequence_start", m_image->animationInterface()->playbackRange().start()));
+    QString mimetype = cfg->getString("mimetype");
+    for (int i = 0; i < m_page->cmbMimetype->count(); ++i) {
+        if (m_page->cmbMimetype->itemData(i).toString() == mimetype) {
+            m_page->cmbMimetype->setCurrentIndex(i);
+            break;
+        }
+    }
 }
 
 bool DlgAnimaterionRenderer::renderToVideo() const

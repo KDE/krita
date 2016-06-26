@@ -107,10 +107,6 @@ private:
             qreal softnessFactor,
             QRect *dstDabRect);
 
-    void postProcessDab(KisFixedPaintDeviceSP dab,
-                        const QPoint &dabTopLeft,
-                        const KisPaintInformation& info);
-
 private:
 
     struct Private;

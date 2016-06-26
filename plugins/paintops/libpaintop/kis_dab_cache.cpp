@@ -279,20 +279,12 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
                          mirrorProperties.verticalMirror);
     }
 
-    postProcessDab(dab, position.rect.topLeft(), info);
-
-    return dab;
-}
-
-void KisDabCache::postProcessDab(KisFixedPaintDeviceSP dab,
-                                 const QPoint &dabTopLeft,
-                                 const KisPaintInformation& info)
-{
     if (m_d->sharpnessOption) {
         m_d->sharpnessOption->applyThreshold(dab);
     }
 
     if (m_d->textureOption) {
-        m_d->textureOption->apply(dab, dabTopLeft, info);
+        m_d->textureOption->apply(dab, position.rect.topLeft(), info);
     }
+    return dab;
 }

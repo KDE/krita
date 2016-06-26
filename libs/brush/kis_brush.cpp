@@ -521,27 +521,18 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
             }
         }
 
-        if (hasColor) {
-            const quint8 *src = maskPointer;
-            quint8 *dst = alphaArray;
-            for (int x = 0; x < maskWidth; x++) {
-                const QRgb *c = reinterpret_cast<const QRgb*>(src);
-
+        const quint8 *src = maskPointer;
+        quint8 *dst = alphaArray;
+        for (int x = 0; x < maskWidth; x++) {
+            const QRgb *c = reinterpret_cast<const QRgb*>(src);
+            if (hasColor) {
                 *dst = KoColorSpaceMaths<quint8>::multiply(255 - qGray(*c), qAlpha(*c));
-                src += 4;
-                dst++;
             }
-        }
-        else {
-            const quint8 *src = maskPointer;
-            quint8 *dst = alphaArray;
-            for (int x = 0; x < maskWidth; x++) {
-                const QRgb *c = reinterpret_cast<const QRgb*>(src);
-
+            else {
                 *dst = KoColorSpaceMaths<quint8>::multiply(255 - *src, qAlpha(*c));
-                src += 4;
-                dst++;
             }
+            src += 4;
+            dst++;
         }
 
         cs->applyAlphaU8Mask(rowPointer, alphaArray, maskWidth);

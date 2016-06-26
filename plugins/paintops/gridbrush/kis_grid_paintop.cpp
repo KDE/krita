@@ -229,7 +229,6 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
 
     QRect rc = m_dab->extent();
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
-    painter()->renderMirrorMask(rc, m_dab);
 
 #ifdef BENCHMARK
     int msec = time.elapsed();

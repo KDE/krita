@@ -377,10 +377,6 @@ public:
      * @param rc rectangle area covered by dab
      * @param dab this device will be mirrored in-place, it means that it will be changed
      */
-    void renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab);
-    void renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab, KisFixedPaintDeviceSP mask);
-    void renderMirrorMask(QRect rc, KisPaintDeviceSP dab);
-    void renderMirrorMask(QRect rc, KisPaintDeviceSP dab, int sx, int sy, KisFixedPaintDeviceSP mask);
 
     /**
      * A complex method that re-renders a dab on an \p rc area.

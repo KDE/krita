@@ -124,7 +124,6 @@ KisSpacingInformation KisSprayPaintOp::paintAt(const KisPaintInformation& info)
 
     QRect rc = m_dab->extent();
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
-    painter()->renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
 
     return KisSpacingInformation(m_spacing * additionalScale);

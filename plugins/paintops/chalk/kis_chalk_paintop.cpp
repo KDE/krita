@@ -85,7 +85,6 @@ KisSpacingInformation KisChalkPaintOp::paintAt(const KisPaintInformation& info)
     QRect rc = m_dab->extent();
 
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
-    painter()->renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
     return KisSpacingInformation(1.0);
 }

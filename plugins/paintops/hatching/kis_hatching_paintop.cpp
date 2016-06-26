@@ -177,7 +177,6 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
 
     // The most important line, the one that paints to the screen.
     painter()->bitBltWithFixedSelection(x, y, m_hatchedDab, maskDab, sw, sh);
-    painter()->renderMirrorMask(QRect(QPoint(x, y), QSize(sw, sh)), m_hatchedDab, 0, 0, maskDab);
     painter()->setOpacity(origOpacity);
 
     return effectiveSpacing(scale, 0.0);

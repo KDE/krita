@@ -134,6 +134,5 @@ void KisHairyPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintIn
     //QRect rc = m_dab->exactBounds();
     QRect rc = m_dab->extent();
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
-    painter()->renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
 }

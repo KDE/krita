@@ -74,7 +74,6 @@ void KisCurvePaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintIn
 
     quint8 origOpacity = m_opacityOption.apply(painter(), pi2);
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
-    painter()->renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
 }
 

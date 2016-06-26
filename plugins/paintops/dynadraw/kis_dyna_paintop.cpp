@@ -101,7 +101,6 @@ void KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInf
     QRect rc = m_dab->extent();
 
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
-    painter()->renderMirrorMask(rc, m_dab);
 }
 
 KisSpacingInformation KisDynaPaintOp::paintAt(const KisPaintInformation& info)

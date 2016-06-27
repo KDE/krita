@@ -78,7 +78,6 @@ void AnimaterionRenderer::slotRenderAnimation()
     cfg->setProperty("last_frame", image->animationInterface()->playbackRange().end());
     dlgAnimaterionRenderer.setSequenceConfiguration(cfg);
 
-
     if (dlgAnimaterionRenderer.exec() == QDialog::Accepted) {
         KisPropertiesConfigurationSP sequencecfg = dlgAnimaterionRenderer.getSequenceConfiguration();
         kisConfig.setExportConfiguration("IMAGESEQUENCE", *sequencecfg.data());

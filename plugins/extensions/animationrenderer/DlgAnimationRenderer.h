@@ -55,6 +55,8 @@ public:
     KisPropertiesConfigurationSP getSequenceConfiguration() const;
     void setSequenceConfiguration(KisPropertiesConfigurationSP  cfg);
 
+    KisPropertiesConfigurationSP getFrameExportConfiguration() const;
+
     bool renderToVideo() const;
 
     KisPropertiesConfigurationSP getVideoConfiguration() const;
@@ -76,7 +78,7 @@ private:
     QList<QSharedPointer<KisImportExportFilter>> m_filters;
     QList<QWidget> m_configWidgets;
     QHBoxLayout *m_sequenceConfigLayout;
-    KisConfigWidget *m_sequenceConfigWidget;
+    KisConfigWidget *m_frameExportConfigurationWidget;
 };
 
 #endif // DLG_ANIMATIONRENDERERIMAGE

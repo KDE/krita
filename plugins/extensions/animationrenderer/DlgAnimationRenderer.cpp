@@ -41,7 +41,7 @@
 DlgAnimaterionRenderer::DlgAnimaterionRenderer(KisImageWSP image, QWidget *parent)
     : KoDialog(parent)
     , m_image(image)
-    , m_sequenceConfigWidget(0)
+    , m_frameExportConfigurationWidget(0)
 {
     setCaption(i18n("Render Animation"));
     setButtons(Ok | Cancel);
@@ -153,6 +153,14 @@ void DlgAnimaterionRenderer::setSequenceConfiguration(KisPropertiesConfiguration
     }
 }
 
+KisPropertiesConfigurationSP DlgAnimaterionRenderer::getFrameExportConfiguration() const
+{
+    if (m_frameExportConfigurationWidget) {
+        return m_frameExportConfigurationWidget->configuration();
+    }
+    return 0;
+}
+
 bool DlgAnimaterionRenderer::renderToVideo() const
 {
     return m_page->grpRender->isChecked();
@@ -217,10 +225,10 @@ void DlgAnimaterionRenderer::sequenceMimeTypeSelected(int index)
 {
     qDebug() << ">>>>" << m_page->cmbMimetype->currentText() << m_page->cmbMimetype->currentIndex() << index;
 
-    if (m_sequenceConfigWidget) {
-        m_sequenceConfigLayout->removeWidget(m_sequenceConfigWidget);
-        delete m_sequenceConfigWidget;
-        m_sequenceConfigWidget = 0;
+    if (m_frameExportConfigurationWidget) {
+        m_sequenceConfigLayout->removeWidget(m_frameExportConfigurationWidget);
+        delete m_frameExportConfigurationWidget;
+        m_frameExportConfigurationWidget = 0;
     }
     QString mimetype = m_page->cmbMimetype->itemData(index).toString();
     KoJsonTrader trader;
@@ -248,13 +256,13 @@ void DlgAnimaterionRenderer::sequenceMimeTypeSelected(int index)
                 continue;
             }
 
-            m_sequenceConfigWidget = filter->createConfigurationWidget(m_page->grpExportOptions, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());
-            qDebug() << ">>>>" << loader->fileName() << mimetype << "has widget:" << m_sequenceConfigWidget;
-            if (m_sequenceConfigWidget) {
-                m_sequenceConfigLayout->addWidget(m_sequenceConfigWidget);
+            m_frameExportConfigurationWidget = filter->createConfigurationWidget(m_page->grpExportOptions, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());
+            qDebug() << ">>>>" << loader->fileName() << mimetype << "has widget:" << m_frameExportConfigurationWidget;
+            if (m_frameExportConfigurationWidget) {
+                m_sequenceConfigLayout->addWidget(m_frameExportConfigurationWidget);
                 // XXX: Use the saved config here?
-                m_sequenceConfigWidget->setConfiguration(filter->defaultConfiguration());
-                m_sequenceConfigWidget->show();
+                m_frameExportConfigurationWidget->setConfiguration(filter->defaultConfiguration());
+                m_frameExportConfigurationWidget->show();
                 resize(sizeHint());
             }
 

@@ -112,9 +112,17 @@ public:
      * @brief defaultConfiguration defines the default settings for the given import export filter
      * @param from The mimetype of the source file/document
      * @param to The mimetype of the destination file/document
-     * @return a serializable KisPropertiesConfiguration object gthat
+     * @return a serializable KisPropertiesConfiguration object
      */
     virtual KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const;
+
+    /**
+     * @brief lastSavedConfiguration return the last saved configuration for this filter
+     * @param from The mimetype of the source file/document
+     * @param to The mimetype of the destination file/document
+     * @return a serializable KisPropertiesConfiguration object
+     */
+    virtual KisPropertiesConfigurationSP lastSavedConfiguration(const QByteArray &from = "", const QByteArray &to = "") const;
 
     /**
      * @brief createConfigurationWidget creates a widget that can be used to define the settings for a given import/export filter

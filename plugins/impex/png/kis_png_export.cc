@@ -125,14 +125,13 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
 
         KisConfigWidget *wdg = createConfigurationWidget(kdb, from, to);
 
-        QString filterConfig = KisConfig().exportConfiguration("PNG");
         // If a configuration object was passed to the convert method, we use that, otherwise we load from the settings
         KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
         if (configuration) {
             cfg->fromXML(configuration->toXML());
         }
         else {
-            cfg->fromXML(filterConfig);
+            cfg = lastSavedConfiguration(from, to);
         }
 
         cfg->setProperty("ColorModelID", cs->colorModelId().id());
@@ -218,6 +217,14 @@ KisPropertiesConfigurationSP KisPNGExport::defaultConfiguration(const QByteArray
     cfg->setProperty("saveSRGBProfile", false);
     cfg->setProperty("forceSRGB", true);
 
+    return cfg;
+}
+
+KisPropertiesConfigurationSP KisPNGExport::lastSavedConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
+{
+    QString filterConfig = KisConfig().exportConfiguration("PNG");
+    KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
+    cfg->fromXML(filterConfig);
     return cfg;
 }
 

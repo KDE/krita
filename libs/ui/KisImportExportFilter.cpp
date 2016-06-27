@@ -159,7 +159,6 @@ KisPropertiesConfigurationSP KisImportExportFilter::defaultConfiguration(const Q
 
 KisConfigWidget *KisImportExportFilter::createConfigurationWidget(QWidget *, const QByteArray &from, const QByteArray &to) const
 {
-    qDebug() << "KisImportExportFilter::createConfigurationWidget()";
     return 0;
 }
 

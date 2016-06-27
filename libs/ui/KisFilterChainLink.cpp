@@ -28,12 +28,7 @@ Boston, MA 02110-1301, USA.
 
 namespace
 {
-    const char *const SIGNAL_PREFIX = "commSignal";
-    const int SIGNAL_PREFIX_LEN = 10;
-    const char *const SLOT_PREFIX = "commSlot";
-    const int SLOT_PREFIX_LEN = 8;
-
-    KoUpdater *createUpdater(KisFilterChain *chain)
+    KoUpdater *createUpdater(KisFilterChainSP chain)
     {
         QPointer<KoUpdater> updater = 0;
         Q_ASSERT(chain);
@@ -50,7 +45,7 @@ namespace
 
 namespace CalligraFilter {
 
-    ChainLink::ChainLink(KisFilterChain *chain, KisFilterEntrySP filterEntry,
+    ChainLink::ChainLink(KisFilterChainSP chain, KisFilterEntrySP filterEntry,
                          const QByteArray& from, const QByteArray& to)
         : m_chain(chain)
         , m_filterEntry(filterEntry)

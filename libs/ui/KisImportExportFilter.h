@@ -27,12 +27,13 @@ Boston, MA 02110-1301, USA.
 #include <QString>
 #include <QSharedPointer>
 #include <kis_properties_configuration.h>
-#include "kritaui_export.h"
+#include <kis_types.h>
 
-class KisFilterChain;
 class KoUpdater;
 class KisDocument;
 class KisConfigWidget;
+
+#include "kritaui_export.h"
 
 
 /**
@@ -61,9 +62,6 @@ class KRITAUI_EXPORT KisImportExportFilter : public QObject
 {
     Q_OBJECT
 
-    friend class KisFilterEntry;  // needed for the filter chain pointer :(
-    friend class KisFilterChain;
-
 public:
     /**
      * This enum is used to signal the return state of your filter.
@@ -83,6 +81,13 @@ public:
                           };
 
     virtual ~KisImportExportFilter();
+
+    /**
+     * @brief setChain set the chain information on the filter. The chain information
+     * lets the filter know what document it's working on. The filter will not delete
+     * @param chain the actual filter chain
+     */
+    void setChain(KisFilterChainSP chain);
 
     /**
      * The filter chain calls this method to perform the actual conversion.
@@ -158,14 +163,7 @@ protected:
     bool getBatchMode() const;
 
 private:
-    /**
-     * Use this pointer to access all information about input/output
-     * during the conversion. @em Don't use it in the constructor -
-     * it's invalid while constructing the object!
-     */
-    KisFilterChain *m_chain;
 
-private:
     KisImportExportFilter(const KisImportExportFilter& rhs);
     KisImportExportFilter& operator=(const KisImportExportFilter& rhs);
 

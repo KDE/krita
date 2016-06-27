@@ -36,38 +36,45 @@ public:
     Private()
         : updater(0)
     {}
+
+    /**
+     * Use this pointer to access all information about input/output
+     * during the conversion. @em Don't use it in the constructor -
+     * it's invalid while constructing the object!
+     */
+    KisFilterChainSP chain;
+
 };
 
 KisImportExportFilter::KisImportExportFilter(QObject *parent)
     : QObject(parent)
-    , m_chain(0)
     , d(new Private)
 {
 }
 
 KisDocument *KisImportExportFilter::inputDocument() const
 {
-    return m_chain->inputDocument();
+    return d->chain->inputDocument();
 }
 
 KisDocument *KisImportExportFilter::outputDocument() const
 {
-    return m_chain->outputDocument();
+    return d->chain->outputDocument();
 }
 
 QString KisImportExportFilter::inputFile() const
 {
-    return m_chain->inputFile();
+    return d->chain->inputFile();
 }
 
 QString KisImportExportFilter::outputFile() const
 {
-    return m_chain->outputFile();
+    return d->chain->outputFile();
 }
 
 bool KisImportExportFilter::getBatchMode() const
 {
-    return m_chain->manager()->getBatchMode();
+    return d->chain->manager()->getBatchMode();
 }
 
 KisImportExportFilter::~KisImportExportFilter()
@@ -75,6 +82,11 @@ KisImportExportFilter::~KisImportExportFilter()
     Q_ASSERT(d->updater);
     if (d->updater) d->updater->setProgress(100);
     delete d;
+}
+
+void KisImportExportFilter::setChain(KisFilterChainSP chain)
+{
+    d->chain = chain;
 }
 
 QString KisImportExportFilter::conversionStatusString(ConversionStatus status)

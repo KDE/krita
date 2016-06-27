@@ -25,13 +25,13 @@ Boston, MA 02110-1301, USA.
 #include <QStringList>
 
 #include <KoStoreDevice.h>
+#include "kis_shared_ptr.h"
 
-#include "KisImportExportFilter.h"
 #include "KisFilterEntry.h"
+#include "KisImportExportFilter.h"
 #include "KisFilterChainLinkList.h"
 
 #include "kis_shared.h"
-#include "kis_shared_ptr.h"
 
 #include "kritaui_export.h"
 
@@ -56,13 +56,9 @@ namespace CalligraFilter
  */
 class KRITAUI_EXPORT KisFilterChain : public KisShared
 {
-    // Only Calligra::Graph is allowed to construct instances and
-    // add chain links.
-    friend class Graph;
-    friend class KisImportExportManager;
-
 public:
 
+    explicit KisFilterChain(const KisImportExportManager *manager);
     virtual ~KisFilterChain();
 
     /**
@@ -124,18 +120,18 @@ private:
 
     friend class CalligraFilter::Graph;
 
-    explicit KisFilterChain(const KisImportExportManager* manager);
-
     void prependChainLink(KisFilterEntrySP filterEntry, const QByteArray& from, const QByteArray& to);
 
     // These methods are friends of KisFilterManager and provide access
     // to a private part of its API. As I don't want to include
     // koFilterManager.h in this header the direction is "int" here.
+
+    friend class KisImportExportManager;
+
     QString filterManagerImportFile() const;
     QString filterManagerExportFile() const;
     KisDocument* filterManagerKisDocument() const;
     int filterManagerDirection() const;
-
 
     // Helper methods which keep track of all the temp files and documents,
     // and properly delete them as soon as they are not
@@ -180,7 +176,5 @@ private:
     class Private;
     Private * const d;
 };
-
-typedef KisSharedPtr<KisFilterChain> KisFilterChainSP;
 
 #endif // __KO_FILTER_CHAIN_H__

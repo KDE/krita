@@ -223,6 +223,7 @@ KisPropertiesConfigurationSP KisPNGExport::defaultConfiguration(const QByteArray
 
 KisConfigWidget *KisPNGExport::createConfigurationWidget(QWidget *parent, const QByteArray &, const QByteArray &) const
 {
+    qDebug() << "KisPNGExport::createConfigurationWidget()";
     return new KisWdgOptionsPNG(parent);
 }
 

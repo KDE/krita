@@ -34,10 +34,14 @@
 #include <kis_image_animation_interface.h>
 #include <kis_time_range.h>
 #include <KisImportExportManager.h>
+#include <kis_config_widget.h>
+#include <KisDocument.h>
+#include <QHBoxLayout>
 
 DlgAnimaterionRenderer::DlgAnimaterionRenderer(KisImageWSP image, QWidget *parent)
     : KoDialog(parent)
     , m_image(image)
+    , m_sequenceConfigWidget(0)
 {
     setCaption(i18n("Render Animation"));
     setButtons(Ok | Cancel);
@@ -55,6 +59,8 @@ DlgAnimaterionRenderer::DlgAnimaterionRenderer(KisImageWSP image, QWidget *paren
     m_page->intEnd->setMinimum(image->animationInterface()->fullClipRange().start());
     m_page->intEnd->setMaximum(image->animationInterface()->fullClipRange().end());
     m_page->intEnd->setValue(image->animationInterface()->playbackRange().end());
+
+    m_sequenceConfigLayout = new QHBoxLayout(m_page->grpExportOptions);
 
     QStringList mimes = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
     mimes.sort();
@@ -107,7 +113,10 @@ DlgAnimaterionRenderer::DlgAnimaterionRenderer(KisImageWSP image, QWidget *paren
     }
 
     connect(m_page->cmbRenderType, SIGNAL(activated(int)), this, SLOT(selectRenderType(int)));
+    selectRenderType(m_page->cmbRenderType->currentIndex());
     connect(m_page->grpRender, SIGNAL(toggled(bool)), this, SLOT(toggleSequenceType(bool)));
+    connect(m_page->cmbMimetype, SIGNAL(activated(int)), this, SLOT(sequenceMimeTypeSelected(int)));
+    sequenceMimeTypeSelected(m_page->cmbMimetype->currentIndex());
 }
 
 DlgAnimaterionRenderer::~DlgAnimaterionRenderer()
@@ -127,7 +136,7 @@ KisPropertiesConfigurationSP DlgAnimaterionRenderer::getSequenceConfiguration() 
     return cfg;
 }
 
-void DlgAnimaterionRenderer::setSequenceConfiguration(KisPropertiesConfigurationSP cfg) const
+void DlgAnimaterionRenderer::setSequenceConfiguration(KisPropertiesConfigurationSP cfg)
 {
     m_page->txtBasename->setText(cfg->getString("basename", "frame"));
     m_page->dirRequester->setFileName(cfg->getString("directory", QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)));
@@ -138,6 +147,7 @@ void DlgAnimaterionRenderer::setSequenceConfiguration(KisPropertiesConfiguration
     for (int i = 0; i < m_page->cmbMimetype->count(); ++i) {
         if (m_page->cmbMimetype->itemData(i).toString() == mimetype) {
             m_page->cmbMimetype->setCurrentIndex(i);
+            sequenceMimeTypeSelected(i);
             break;
         }
     }
@@ -159,7 +169,7 @@ KisPropertiesConfigurationSP DlgAnimaterionRenderer::getVideoConfiguration() con
     return cfg;
 }
 
-void DlgAnimaterionRenderer::setVideoConfiguration(KisPropertiesConfigurationSP cfg) const
+void DlgAnimaterionRenderer::setVideoConfiguration(KisPropertiesConfigurationSP cfg)
 {
 
 }
@@ -173,7 +183,7 @@ KisPropertiesConfigurationSP DlgAnimaterionRenderer::getencoderConfiguration() c
     return cfg;
 }
 
-void DlgAnimaterionRenderer::getencoderConfiguration(KisPropertiesConfigurationSP cfg) const
+void DlgAnimaterionRenderer::getencoderConfiguration(KisPropertiesConfigurationSP cfg)
 {
 
 }
@@ -201,4 +211,56 @@ void DlgAnimaterionRenderer::toggleSequenceType(bool toggle)
             break;
         }
     }
+}
+
+void DlgAnimaterionRenderer::sequenceMimeTypeSelected(int index)
+{
+    qDebug() << ">>>>" << m_page->cmbMimetype->currentText() << m_page->cmbMimetype->currentIndex() << index;
+
+    if (m_sequenceConfigWidget) {
+        m_sequenceConfigLayout->removeWidget(m_sequenceConfigWidget);
+        delete m_sequenceConfigWidget;
+        m_sequenceConfigWidget = 0;
+    }
+    QString mimetype = m_page->cmbMimetype->itemData(index).toString();
+    KoJsonTrader trader;
+    QList<QPluginLoader *>list = trader.query("Krita/FileFilter", "");
+    Q_FOREACH(QPluginLoader *loader, list) {
+        QJsonObject json = loader->metaData().value("MetaData").toObject();
+        if (json.value("X-KDE-Export").toString().split(",").contains(mimetype)) {
+
+            KLibFactory *factory = qobject_cast<KLibFactory *>(loader->instance());
+
+            if (!factory) {
+                warnUI << loader->errorString();
+                continue;
+            }
+
+            QObject* obj = factory->create<KisImportExportFilter>(0);
+            if (!obj || !obj->inherits("KisImportExportFilter")) {
+                delete obj;
+                continue;
+            }
+
+            KisImportExportFilter *filter(static_cast<KisImportExportFilter*>(obj));
+            if (!filter) {
+                delete obj;
+                continue;
+            }
+
+            m_sequenceConfigWidget = filter->createConfigurationWidget(m_page->grpExportOptions, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());
+            qDebug() << ">>>>" << loader->fileName() << mimetype << "has widget:" << m_sequenceConfigWidget;
+            if (m_sequenceConfigWidget) {
+                m_sequenceConfigLayout->addWidget(m_sequenceConfigWidget);
+                // XXX: Use the saved config here?
+                m_sequenceConfigWidget->setConfiguration(filter->defaultConfiguration());
+                m_sequenceConfigWidget->show();
+                resize(sizeHint());
+            }
+
+            delete filter;
+            break;
+        }
+    }
+
 }

@@ -27,6 +27,8 @@
 #include <kis_types.h>
 
 class KisImportExportFilter;
+class KisConfigWidget;
+class QHBoxLayout;
 
 class WdgAnimaterionRenderer : public QWidget, public Ui::WdgAnimaterionRenderer
 {
@@ -51,20 +53,21 @@ public:
     ~DlgAnimaterionRenderer();
 
     KisPropertiesConfigurationSP getSequenceConfiguration() const;
-    void setSequenceConfiguration(KisPropertiesConfigurationSP  cfg) const;
+    void setSequenceConfiguration(KisPropertiesConfigurationSP  cfg);
 
     bool renderToVideo() const;
 
     KisPropertiesConfigurationSP getVideoConfiguration() const;
-    void setVideoConfiguration(KisPropertiesConfigurationSP cfg) const;
+    void setVideoConfiguration(KisPropertiesConfigurationSP cfg);
 
     KisPropertiesConfigurationSP getencoderConfiguration() const;
-    void getencoderConfiguration(KisPropertiesConfigurationSP cfg) const;
+    void getencoderConfiguration(KisPropertiesConfigurationSP cfg);
 
 private Q_SLOTS:
 
     void selectRenderType(int renderType);
     void toggleSequenceType(bool toggle);
+    void sequenceMimeTypeSelected(int index);
 
 private:
 
@@ -72,6 +75,8 @@ private:
     WdgAnimaterionRenderer *m_page;
     QList<QSharedPointer<KisImportExportFilter>> m_filters;
     QList<QWidget> m_configWidgets;
+    QHBoxLayout *m_sequenceConfigLayout;
+    KisConfigWidget *m_sequenceConfigWidget;
 };
 
 #endif // DLG_ANIMATIONRENDERERIMAGE

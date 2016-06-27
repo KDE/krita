@@ -114,7 +114,7 @@ public:
      * @param to The mimetype of the destination file/document
      * @return a serializable KisPropertiesConfiguration object gthat
      */
-    KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const;
+    virtual KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const;
 
     /**
      * @brief createConfigurationWidget creates a widget that can be used to define the settings for a given import/export filter
@@ -124,7 +124,7 @@ public:
      *
      * @return the widget
      */
-    KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from = "", const QByteArray& to = "") const;
+    virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from = "", const QByteArray& to = "") const;
 
 
 Q_SIGNALS:

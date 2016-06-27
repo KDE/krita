@@ -37,6 +37,7 @@
 #include <kis_config_widget.h>
 #include <KisDocument.h>
 #include <QHBoxLayout>
+#include <KisImportExportFilter.h>
 
 DlgAnimaterionRenderer::DlgAnimaterionRenderer(KisImageWSP image, QWidget *parent)
     : KoDialog(parent)
@@ -231,44 +232,17 @@ void DlgAnimaterionRenderer::sequenceMimeTypeSelected(int index)
         m_frameExportConfigurationWidget = 0;
     }
     QString mimetype = m_page->cmbMimetype->itemData(index).toString();
-    KoJsonTrader trader;
-    QList<QPluginLoader *>list = trader.query("Krita/FileFilter", "");
-    Q_FOREACH(QPluginLoader *loader, list) {
-        QJsonObject json = loader->metaData().value("MetaData").toObject();
-        if (json.value("X-KDE-Export").toString().split(",").contains(mimetype)) {
-
-            KLibFactory *factory = qobject_cast<KLibFactory *>(loader->instance());
-
-            if (!factory) {
-                warnUI << loader->errorString();
-                continue;
-            }
-
-            QObject* obj = factory->create<KisImportExportFilter>(0);
-            if (!obj || !obj->inherits("KisImportExportFilter")) {
-                delete obj;
-                continue;
-            }
-
-            KisImportExportFilter *filter(static_cast<KisImportExportFilter*>(obj));
-            if (!filter) {
-                delete obj;
-                continue;
-            }
-
-            m_frameExportConfigurationWidget = filter->createConfigurationWidget(m_page->grpExportOptions, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());
-            qDebug() << ">>>>" << loader->fileName() << mimetype << "has widget:" << m_frameExportConfigurationWidget;
-            if (m_frameExportConfigurationWidget) {
-                m_sequenceConfigLayout->addWidget(m_frameExportConfigurationWidget);
-                // XXX: Use the saved config here?
-                m_frameExportConfigurationWidget->setConfiguration(filter->defaultConfiguration());
-                m_frameExportConfigurationWidget->show();
-                resize(sizeHint());
-            }
-
-            delete filter;
-            break;
+    KisImportExportFilter *filter = KisImportExportManager::filterForMimeType(mimetype, KisImportExportManager::Export);
+    if (filter) {
+        m_frameExportConfigurationWidget = filter->createConfigurationWidget(m_page->grpExportOptions, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());
+        if (m_frameExportConfigurationWidget) {
+            m_sequenceConfigLayout->addWidget(m_frameExportConfigurationWidget);
+            // XXX: Use the saved config here?
+            m_frameExportConfigurationWidget->setConfiguration(filter->defaultConfiguration());
+            m_frameExportConfigurationWidget->show();
+            resize(sizeHint());
         }
+        delete filter;
     }
-
 }
+

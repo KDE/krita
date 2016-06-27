@@ -28,6 +28,7 @@ Boston, MA 02110-1301, USA.
 #include <QUrl>
 
 #include "KisFilterGraph.h"
+#include "KisImportExportFilter.h"
 
 #include "kritaui_export.h"
 class KisFilterChain;
@@ -112,6 +113,15 @@ public:
      */
     static QStringList mimeFilter(Direction direction);
 
+    /**
+     * @brief filterForMimeType loads the relevant import/export plugin and returns it. The caller
+     * is responsible for deleting it!
+     * @param mimetype the mimetype we want to import/export. If there's more than one plugin, the one
+     * with the highest weight as defined in the json description will be taken
+     * @param direction import or export
+     * @return a pointer to the filter plugin or 0 if none could be found
+     */
+    static KisImportExportFilter *filterForMimeType(const QString &mimetype, Direction direction);
 
     /**
      * Set the filter manager is batch mode (no dialog shown)

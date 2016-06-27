@@ -31,9 +31,11 @@ Boston, MA 02110-1301, USA.
 #include <QPluginLoader>
 #include <QFileInfo>
 #include <QMessageBox>
+#include <QJsonObject>
 
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
+#include <kpluginfactory.h>
 
 #include "KoProgressUpdater.h"
 #include "KoJsonTrader.h"
@@ -256,6 +258,45 @@ QStringList KisImportExportManager::mimeFilter(Direction direction)
         return m_exportMimeTypes;
     }
     return QStringList();
+}
+
+KisImportExportFilter *KisImportExportManager::filterForMimeType(const QString &mimetype, KisImportExportManager::Direction direction)
+{
+    int weight = 0;
+    KisImportExportFilter *filter = 0;
+    KoJsonTrader trader;
+    QList<QPluginLoader *>list = trader.query("Krita/FileFilter", "");
+    Q_FOREACH(QPluginLoader *loader, list) {
+        QJsonObject json = loader->metaData().value("MetaData").toObject();
+        if (json.value("X-KDE-Export").toString().split(",").contains(mimetype)) {
+
+            KLibFactory *factory = qobject_cast<KLibFactory *>(loader->instance());
+
+            if (!factory) {
+                warnUI << loader->errorString();
+                continue;
+            }
+
+            QObject* obj = factory->create<KisImportExportFilter>(0);
+            if (!obj || !obj->inherits("KisImportExportFilter")) {
+                delete obj;
+                continue;
+            }
+
+            KisImportExportFilter *f = static_cast<KisImportExportFilter*>(obj);
+            if (!f) {
+                delete obj;
+                continue;
+            }
+
+            int w = json.value("X-KDE-Weight").toInt();
+            if (w > weight) {
+                filter = f;
+                weight = w;
+            }
+        }
+    }
+    return filter;
 }
 
 void KisImportExportManager::importErrorHelper(const QString& mimeType, const bool suppressDialog)

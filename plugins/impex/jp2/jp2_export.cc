@@ -116,15 +116,13 @@ KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& fro
         if (kdb.exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }
+        cfg = wdg->configuration();
+        KisConfig().setExportConfiguration("JP2", *cfg.data());
     }
-
-    cfg = wdg->configuration();
 
     JP2ConvertOptions options;
     options.numberresolution = cfg->getInt("number_resolutions");
     options.rate = cfg->getInt("quality");
-
-    KisConfig().setExportConfiguration("JP2", *cfg.data());
 
     // the image must be locked at the higher levels
     KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());

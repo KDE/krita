@@ -86,10 +86,6 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
         return KisImportExportFilter::NotImplemented;
 
 
-    KoDialog* kdb = new KoDialog(0);
-    kdb->setCaption(i18n("PNG Export Options"));
-    kdb->setModal(false);
-    kdb->setButtons(KoDialog::Ok | KoDialog::Cancel);
 
     KisImageWSP image = input->image();
 
@@ -113,6 +109,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
 
     KisPNGOptions options;
     bool isThereAlpha = false;
+    KisPropertiesConfigurationSP cfg = defaultConfiguration();
     do {
         if (cs->opacityU8(it.oldRawData()) != OPACITY_OPAQUE_U8) {
             isThereAlpha = true;
@@ -122,11 +119,13 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
 
     if (!qApp->applicationName().toLower().contains("test")) {
 
-
-        KisConfigWidget *wdg = createConfigurationWidget(kdb, from, to);
+        KoDialog kdb;
+        kdb.setCaption(i18n("PNG Export Options"));
+        kdb.setButtons(KoDialog::Ok | KoDialog::Cancel);
+        KisConfigWidget *wdg = createConfigurationWidget(&kdb, from, to);
+        kdb.setMainWidget(wdg);
 
         // If a configuration object was passed to the convert method, we use that, otherwise we load from the settings
-        KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
         if (configuration) {
             cfg->fromXML(configuration->toXML());
         }
@@ -142,43 +141,26 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
         cfg->setProperty("isThereAlpha", isThereAlpha);
         wdg->setConfiguration(cfg);
 
-        kdb->setMainWidget(wdg);
         QApplication::restoreOverrideCursor();
         if (hasVisibleWidgets()) {
             if (!getBatchMode()) {
-                if (kdb->exec() == QDialog::Rejected) {
+                if (kdb.exec() == QDialog::Rejected) {
                     return KisImportExportFilter::UserCancelled;
                 }
+                cfg = wdg->configuration();
+                KisConfig().setExportConfiguration("PNG", *cfg.data());
+
             }
         }
-
-        cfg = wdg->configuration();
-
-        if (!configuration) {
-            KisConfig().setExportConfiguration("PNG", *cfg.data());
-        }
-
-        options.alpha = cfg->getBool("alpha", true);
-        options.interlace = cfg->getBool("interlaced", false);
-        options.compression = cfg->getInt("compression", 0);
-        options.tryToSaveAsIndexed = cfg->getBool("indexed", false);
-        options.transparencyFillColor = cfg->getColor("transparencyFillColor").toQColor();
-        options.saveSRGBProfile = cfg->getBool("saveSRGBProfile", false);
-        options.forceSRGB = cfg->getBool("forceSRGB", true);
-
-    }
-    else {
-        options.alpha = true;
-        options.interlace = false;
-        options.compression = 9;
-        options.tryToSaveAsIndexed = false;
-        options.transparencyFillColor = QColor(0,0,0);
-        options.saveSRGBProfile = false;
-        options.forceSRGB = false;
-
     }
 
-    delete kdb;
+    options.alpha = cfg->getBool("alpha", true);
+    options.interlace = cfg->getBool("interlaced", false);
+    options.compression = cfg->getInt("compression", 0);
+    options.tryToSaveAsIndexed = cfg->getBool("indexed", false);
+    options.transparencyFillColor = cfg->getColor("transparencyFillColor").toQColor();
+    options.saveSRGBProfile = cfg->getBool("saveSRGBProfile", false);
+    options.forceSRGB = cfg->getBool("forceSRGB", true);
 
     KisPNGConverter kpc(input);
 

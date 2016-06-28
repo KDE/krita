@@ -23,6 +23,24 @@
 #include <QVariant>
 
 #include <KisImportExportFilter.h>
+#include <kis_config_widget.h>
+#include "ui_kis_wdg_options_jpeg.h"
+#include <metadata/kis_meta_data_store.h>
+#include <metadata/kis_meta_data_filter_registry_model.h>
+
+
+class KisWdgOptionsJPEG : public KisConfigWidget, public Ui::WdgOptionsJPEG
+{
+    Q_OBJECT
+
+public:
+    KisWdgOptionsJPEG(QWidget *parent);
+    void setConfiguration(const KisPropertiesConfigurationSP  cfg);
+    KisPropertiesConfigurationSP configuration() const;
+private:
+    KisMetaData::FilterRegistryModel m_filterRegistryModel;
+};
+
 
 class KisJPEGExport : public KisImportExportFilter
 {

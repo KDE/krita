@@ -103,11 +103,11 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
         return KisImportExportFilter::WrongFormat;
     }
 
-    KoDialog* kdb = new KoDialog(0);
-    kdb->setWindowTitle(i18n("HeightMap Export Options"));
-    kdb->setButtons(KoDialog::Ok | KoDialog::Cancel);
-    KisConfigWidget *wdg = createConfigurationWidget(kdb, from, to);
-    kdb->setMainWidget(wdg);
+    KoDialog kdb;
+    kdb.setWindowTitle(i18n("HeightMap Export Options"));
+    kdb.setButtons(KoDialog::Ok | KoDialog::Cancel);
+    KisConfigWidget *wdg = createConfigurationWidget(&kdb, from, to);
+    kdb.setMainWidget(wdg);
 
     QApplication::restoreOverrideCursor();
 
@@ -123,7 +123,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
     wdg->setConfiguration(cfg);
 
     if (!getBatchMode()) {
-        if (kdb->exec() == QDialog::Rejected) {
+        if (kdb.exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }
     }

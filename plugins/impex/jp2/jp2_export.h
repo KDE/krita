@@ -22,6 +22,26 @@
 #include <QVariant>
 
 #include <KisImportExportFilter.h>
+#include <kis_config_widget.h>
+#include "ui_kis_wdg_options_jp2.h"
+
+
+class KisWdgOptionsJP2: public KisConfigWidget, public Ui::WdgOptionsJP2
+{
+    Q_OBJECT
+
+public:
+    KisWdgOptionsJP2(QWidget *parent)
+        : KisConfigWidget(parent)
+    {
+        setupUi(this);
+    }
+
+    void setConfiguration(const KisPropertiesConfigurationSP  cfg);
+    KisPropertiesConfigurationSP configuration() const;
+};
+
+
 
 class jp2Export : public KisImportExportFilter
 {

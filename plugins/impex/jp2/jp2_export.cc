@@ -72,7 +72,7 @@ KisPropertiesConfigurationSP jp2Export::lastSavedConfiguration(const QByteArray 
 
 KisConfigWidget *jp2Export::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &/*to*/) const
 {
-    return 0;
+    return new KisWdgOptionsJP2(parent);
 }
 
 KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
@@ -93,37 +93,38 @@ KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& fro
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    KoDialog* kdb = new KoDialog(0);
-    kdb->setWindowTitle(i18n("JPEG 2000 Export Options"));
-    kdb->setButtons(KoDialog::Ok | KoDialog::Cancel);
+    KoDialog kdb;
+    kdb.setWindowTitle(i18n("JPEG 2000 Export Options"));
+    kdb.setButtons(KoDialog::Ok | KoDialog::Cancel);
+    KisConfigWidget *wdg = createConfigurationWidget(&kdb, from, to);
+    kdb.setMainWidget(wdg);
+    kdb.resize(kdb.minimumSize());
 
-    Ui::WdgOptionsJP2 optionsJP2;
+    // If a configuration object was passed to the convert method, we use that, otherwise we load from the settings
+    KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
+    if (configuration) {
+        cfg->fromXML(configuration->toXML());
+    }
+    else {
+        cfg = lastSavedConfiguration(from, to);
+    }
+    wdg->setConfiguration(cfg);
 
-    QWidget* wdg = new QWidget(kdb);
-    optionsJP2.setupUi(wdg);
-
-    KisPropertiesConfigurationSP cfg = lastSavedConfiguration();
-
-    optionsJP2.numberResolutions->setValue(cfg->getInt("number_resolutions", 6));
-    optionsJP2.qualityLevel->setValue(cfg->getInt("quality", 100));
-
-    kdb->setMainWidget(wdg);
     QApplication::restoreOverrideCursor();
 
     if (!getBatchMode()) {
-        if (kdb->exec() == QDialog::Rejected) {
+        if (kdb.exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }
     }
 
+    cfg = wdg->configuration();
+
     JP2ConvertOptions options;
-    options.numberresolution = optionsJP2.numberResolutions->value();
-    cfg->setProperty("number_resolutions", options.numberresolution);
-    options.rate = optionsJP2.qualityLevel->value();
-    cfg->setProperty("quality", options.rate);
+    options.numberresolution = cfg->getInt("number_resolutions");
+    options.rate = cfg->getInt("quality");
 
     KisConfig().setExportConfiguration("JP2", *cfg.data());
-
 
     // the image must be locked at the higher levels
     KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
@@ -142,5 +143,20 @@ KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& fro
     return KisImportExportFilter::InternalError;
 }
 
-#include <jp2_export.moc>
 
+void KisWdgOptionsJP2::setConfiguration(const KisPropertiesConfigurationSP cfg)
+{
+    numberResolutions->setValue(cfg->getInt("number_resolutions", 6));
+    qualityLevel->setValue(cfg->getInt("quality", 100));
+}
+
+KisPropertiesConfigurationSP KisWdgOptionsJP2::configuration() const
+{
+    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    cfg->setProperty("number_resolutions", numberResolutions->value());
+    cfg->setProperty("quality", qualityLevel->value());
+    return cfg;
+
+}
+
+#include <jp2_export.moc>

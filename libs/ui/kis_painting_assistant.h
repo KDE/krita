@@ -145,7 +145,7 @@ protected:
 private:
     struct Private;
     Private* const d;
-    
+
 };
 
 /**
@@ -169,7 +169,7 @@ class KRITAUI_EXPORT KisPaintingAssistantFactoryRegistry : public KoGenericRegis
     ~KisPaintingAssistantFactoryRegistry();
 
     static KisPaintingAssistantFactoryRegistry* instance();
-  
+
 };
 
 #endif

@@ -93,7 +93,7 @@ QOpenGL2PaintEngineExPrivate::~QOpenGL2PaintEngineExPrivate()
 {
     delete shaderManager;
 
-    vbo.destroy();
+    vertexVBO.destroy();
     vao.destroy();
 
     while (pathCaches.size()) {
@@ -588,7 +588,17 @@ void QOpenGL2PaintEngineExPrivate::drawTexture(const QOpenGLRect& dest, const QO
     setCoords(staticVertexCoordinateArray, dest);
     setCoords(staticTextureCoordinateArray, srcTextureRect);
 
+    setVertexAttribArrayEnabled(QT_VERTEX_COORDS_ATTR, true);
+    setVertexAttribArrayEnabled(QT_TEXTURE_COORDS_ATTR, true);
+    vertexVBO.bind();
+    vertexVBO.allocate(staticVertexCoordinateArray, 8 * sizeof(float));
+    funcs.glVertexAttribPointer(QT_VERTEX_COORDS_ATTR, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    textureVBO.bind();
+    textureVBO.allocate(staticTextureCoordinateArray, 8 * sizeof(float));
+    funcs.glVertexAttribPointer(QT_TEXTURE_COORDS_ATTR, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
     funcs.glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+    textureVBO.release();
 }
 
 void QOpenGL2PaintEngineEx::beginNativePainting()
@@ -1086,7 +1096,6 @@ void QOpenGL2PaintEngineExPrivate::fillStencilWithVertexArray(const float *data,
         setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, data);
         funcs.glDrawArrays(GL_TRIANGLE_STRIP, 0, count);
 #else
-
         funcs.glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
         if (q->state()->clipTestEnabled) {
             funcs.glStencilFunc(GL_LEQUAL, q->state()->currentClip | GL_STENCIL_HIGH_BIT,
@@ -1094,8 +1103,12 @@ void QOpenGL2PaintEngineExPrivate::fillStencilWithVertexArray(const float *data,
         } else {
             funcs.glStencilFunc(GL_ALWAYS, GL_STENCIL_HIGH_BIT, 0xff);
         }
+
+        vertexVBO.bind();
+        vertexVBO.allocate(data, count * 2 * sizeof(float));
         setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, data);
         funcs.glDrawArrays(GL_TRIANGLE_STRIP, 0, count);
+        vertexVBO.release();
 #endif
     }
 
@@ -1222,25 +1235,15 @@ bool QOpenGL2PaintEngineExPrivate::prepareForDraw(bool srcPixelsAreOpaque)
 }
 
 void QOpenGL2PaintEngineExPrivate::composite(const QOpenGLRect& boundingRect)
-{
+{qDebug() << "Entering QOpenGL2PaintEngineExPrivate::composite with error: " << funcs.glGetError();
     setCoords(staticVertexCoordinateArray, boundingRect);
 
-qDebug() << "CALLING PAINTENGINE::COMPOSITE()";
-    funcs.glEnableVertexAttribArray(GL_VERTEX_ARRAY_BINDING);
-
-    vbo.bind();
-
-    for (int i = 0; i < 8; i++) {
-        qDebug() << staticVertexCoordinateArray[i];
-    }
-
-    vbo.allocate(staticVertexCoordinateArray, 8 * sizeof(float));
-
+    vertexVBO.bind();
+    vertexVBO.allocate(staticVertexCoordinateArray, 8 * sizeof(float));
     setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, staticVertexCoordinateArray);
-
     funcs.glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-
-    vbo.release();
+    vertexVBO.release();
+qDebug() << "Exiting QOpenGL2PaintEngineExPrivate::composite with error: " << funcs.glGetError();
 }
 
 // Draws the vertex array as a set of <vertexArrayStops.size()> triangle fans.
@@ -1248,19 +1251,18 @@ void QOpenGL2PaintEngineExPrivate::drawVertexArrays(const float *data, int *stop
                                                 GLenum primitive)
 {
     // Now setup the pointer to the vertex array:
+    vertexVBO.bind();
+    vertexVBO.allocate(data, (stops[stopCount-1] * 2) * sizeof(float));
     setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, data);
 
     int previousStop = 0;
-    for (int i=0; i<stopCount; ++i) {
+    for (int i = 0; i < stopCount; ++i) {
         int stop = stops[i];
-/*
-        qDebug("Drawing triangle fan for vertecies %d -> %d:", previousStop, stop-1);
-        for (int i=previousStop; i<stop; ++i)
-            qDebug("   %02d: [%.2f, %.2f]", i, vertexArray.data()[i].x, vertexArray.data()[i].y);
-*/
+
         funcs.glDrawArrays(primitive, previousStop, stop - previousStop);
         previousStop = stop;
     }
+    vertexVBO.release();
 }
 
 /////////////////////////////////// Public Methods //////////////////////////////////////////
@@ -1278,13 +1280,13 @@ QOpenGL2PaintEngineEx::~QOpenGL2PaintEngineEx()
 void QOpenGL2PaintEngineEx::fill(const QVectorPath &path, const QBrush &brush)
 {
     Q_D(QOpenGL2PaintEngineEx);
-qDebug() << "Entering QOpenGL2PaintEngineEx::fill";
+qDebug() << "Entering QOpenGL2PaintEngineEx::fill with error: " << d->funcs.glGetError();
     if (qbrush_style(brush) == Qt::NoBrush)
         return;
     ensureActive();
     d->setBrush(brush);
     d->fill(path);
-qDebug() << "Exiting QOpenGL2PaintEngineEx::fill";
+qDebug() << "Exiting QOpenGL2PaintEngineEx::fill with error: " << d->funcs.glGetError();
 }
 
 Q_GUI_EXPORT bool qt_scaleForTransform(const QTransform &transform, qreal *scale); // qtransform.cpp
@@ -1293,7 +1295,7 @@ Q_GUI_EXPORT bool qt_scaleForTransform(const QTransform &transform, qreal *scale
 void QOpenGL2PaintEngineEx::stroke(const QVectorPath &path, const QPen &pen)
 {
     Q_D(QOpenGL2PaintEngineEx);
-qDebug() << "Entering QOpenGL2PaintEngineEx::stroke";
+qDebug() << "Entering QOpenGL2PaintEngineEx::stroke with error: " << d->funcs.glGetError();
     const QBrush &penBrush = qpen_brush(pen);
     if (qpen_style(pen) == Qt::NoPen || qbrush_style(penBrush) == Qt::NoBrush)
         return;
@@ -1349,21 +1351,15 @@ void QOpenGL2PaintEngineExPrivate::stroke(const QVectorPath &path, const QPen &p
 
     if (!stroker.vertexCount())
         return;
-
+    funcs.glEnableVertexAttribArray(QT_VERTEX_COORDS_ATTR);
     if (opaque) {
         prepareForDraw(opaque);
-        funcs.glEnableVertexAttribArray(QT_VERTEX_COORDS_ATTR);
 
-        vbo.bind();
-        vbo.allocate(stroker.vertices(), stroker.vertexCount() * sizeof(float));
+        vertexVBO.bind();
+        vertexVBO.allocate(stroker.vertices(), stroker.vertexCount() * sizeof(float));
         setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, stroker.vertices());
         funcs.glDrawArrays(GL_TRIANGLE_STRIP, 0, stroker.vertexCount() / 2);
-        vbo.release();
-
-//         QBrush b(Qt::green);
-//         d->setBrush(&b);
-//         d->prepareForDraw(true);
-//         glDrawArrays(GL_LINE_STRIP, 0, d->stroker.vertexCount() / 2);
+        vertexVBO.release();
     } else {
         qreal width = qpen_widthf(pen) / 2;
         if (width == 0)
@@ -2125,13 +2121,19 @@ bool QOpenGL2PaintEngineEx::begin(QPaintDevice *pdev)
 
     qDebug() << "BEGIN:: We are currently using engine VAO: " << d->vao.objectId();
 
-    if (!d->vbo.isCreated()) {
-        d->vbo.create();
-        d->vbo.setUsagePattern(QOpenGLBuffer::StaticDraw);
-        qDebug() << "BEGIN:: We generate a new VBO for the engine: " << d->vbo.bufferId();
+    if (!d->vertexVBO.isCreated()) {
+        d->vertexVBO.create();
+        d->vertexVBO.setUsagePattern(QOpenGLBuffer::StreamDraw);
+        qDebug() << "BEGIN:: We generate a new vertex VBO for the engine: " << d->vertexVBO.bufferId();
+    }
+    if (!d->textureVBO.isCreated()) {
+        d->textureVBO.create();
+        d->textureVBO.setUsagePattern(QOpenGLBuffer::StreamDraw);
+        qDebug() << "BEGIN:: We generate a new texture VBO for the engine: " << d->textureVBO.bufferId();
     }
 
-    qDebug() << "BEGIN:: We are using engine VBO: " << d->vbo.bufferId();
+    qDebug() << "BEGIN:: We are using vertex VBO: " << d->vertexVBO.bufferId();
+    qDebug() << "BEGIN:: We are using texture VBO: " << d->textureVBO.bufferId();
 
     for (int i = 0; i < QT_GL_VERTEX_ARRAY_TRACKED_COUNT; ++i)
         d->vertexAttributeArraysEnabledState[i] = false;
@@ -2188,8 +2190,6 @@ bool QOpenGL2PaintEngineEx::end()
     d->transferMode(BrushDrawingMode);
 
     ctx->d_func()->active_engine = 0;
-
-    //d->vbo.destroy();
 
     d->resetGLState();
 

@@ -109,9 +109,9 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
         if (kdb.exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }
+        cfg = wdg->configuration();
+        KisConfig().setExportConfiguration("EXR", *cfg.data());
     }
-    cfg = wdg->configuration();
-    KisConfig().setExportConfiguration("EXR", *cfg.data());
 
     QString filename = outputFile();
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;

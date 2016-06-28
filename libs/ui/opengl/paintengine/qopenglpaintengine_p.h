@@ -191,7 +191,8 @@ public:
             inverseScale(1),
             lastTextureUnitUsed(QT_UNKNOWN_TEXTURE_UNIT),
             vao(0),
-            vbo(QOpenGLBuffer::VertexBuffer)
+            vertexVBO(QOpenGLBuffer::VertexBuffer),
+            textureVBO(QOpenGLBuffer::VertexBuffer)
     { }
 
     ~QOpenGL2PaintEngineExPrivate();
@@ -304,7 +305,8 @@ public:
     GLfloat staticTextureCoordinateArray[8];
 
     QOpenGLVertexArrayObject vao;
-    QOpenGLBuffer vbo;
+    QOpenGLBuffer vertexVBO;
+    QOpenGLBuffer textureVBO;
 
     bool snapToPixelGrid;
     bool nativePaintingActive;

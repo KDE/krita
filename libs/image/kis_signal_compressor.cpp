@@ -19,7 +19,6 @@
 #include "kis_signal_compressor.h"
 
 #include <QTimer>
-#include <QDebug>
 
 
 KisSignalCompressor::KisSignalCompressor()
@@ -56,15 +55,13 @@ void KisSignalCompressor::start()
     case POSTPONE:
         m_timer->start();
         break;
-    case FIRST_ACTIVE_POSTPONE_NEXT: qDebug() << "POSTPONE FALLTHROUGH";
+    case FIRST_ACTIVE_POSTPONE_NEXT:
     case FIRST_ACTIVE:
         if (!m_timer->isActive()) {
-            qDebug() << "TIMER NOT ACTIVE";
             m_gotSignals = false;
             m_timer->start();
             emit timeout();
         } else {
-            qDebug() << "TIMER IS ACTIVE";
             m_gotSignals = true;
             if (m_mode == FIRST_ACTIVE_POSTPONE_NEXT) {
                 m_timer->start();
@@ -89,7 +86,6 @@ void KisSignalCompressor::slotTimerExpired()
     Q_ASSERT(m_mode != UNDEFINED);
     if (m_mode != FIRST_ACTIVE || m_gotSignals) {
         m_gotSignals = false;
-        qDebug() << "TIME OUT";
         emit timeout();
     }
 }

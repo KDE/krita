@@ -576,13 +576,12 @@ void KisRulerAssistantTool::mouseMoveEvent(KoPointerEvent *event)
 
 void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 {
-
     QPixmap iconDelete = KisIconUtils::loadIcon("dialog-cancel").pixmap(16, 16);
     QPixmap iconSnapOn = KisIconUtils::loadIcon("visible").pixmap(16, 16);
     QPixmap iconSnapOff = KisIconUtils::loadIcon("novisible").pixmap(16, 16);
     QPixmap iconMove = KisIconUtils::loadIcon("transform-move").pixmap(32, 32);
     QColor handlesColor(0, 0, 0, 125);
-
+    
     if (m_newAssistant) {
         m_newAssistant->drawAssistant(_gc, QRectF(QPointF(0, 0), QSizeF(m_canvas->image()->size())), m_canvas->coordinatesConverter(), false,m_canvas, true, false);
         Q_FOREACH (const KisPaintingAssistantHandleSP handle, m_newAssistant->handles()) {
@@ -594,7 +593,7 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
 
     // TODO: too  many Q_FOREACH loops going through all assistants. Condense this to one to be a little more performant
 
-    // render handles for the asssistant
+    // Draw corner and middle perspective nodes
     Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
         Q_FOREACH (const KisPaintingAssistantHandleSP handle, m_handles) {
             QRectF ellipse(_converter.documentToView(*handle) -  QPointF(6, 6), QSizeF(12, 12));
@@ -625,9 +624,8 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
         }
     }
 
-
-
     Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
+        // Draw middle perspective handles
         if(assistant->id()=="perspective") {
             assistant->findHandleLocation();
             QPointF topMiddle, bottomMiddle, rightMiddle, leftMiddle;
@@ -663,7 +661,7 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
         }
     }
 
-
+    // Draw the assistant widget
     Q_FOREACH (const KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
 
 
@@ -690,7 +688,6 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
         _gc.setPen(stroke);
         _gc.fillPath(bgPath, backgroundColor);
         _gc.drawPath(bgPath);
-
 
         QPainterPath movePath;  // render circle behind by move helper
         _gc.setPen(stroke);

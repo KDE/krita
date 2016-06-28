@@ -269,6 +269,8 @@ void PerspectiveAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter
     if (assistantVisible==false) {
         return;
     }
+
+    
     gc.setTransform(converter->documentToWidgetTransform());
     QPolygonF poly;
     QTransform transform;

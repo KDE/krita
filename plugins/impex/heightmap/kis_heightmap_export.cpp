@@ -126,12 +126,11 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
         if (kdb.exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }
+        cfg = wdg->configuration();
+        KisConfig().setExportConfiguration("HeightMap", *cfg.data());
     }
-    cfg = wdg->configuration();
 
     QDataStream::ByteOrder bo = cfg->getInt("endianness", 0) ? QDataStream::BigEndian : QDataStream::LittleEndian;
-
-    KisConfig().setExportConfiguration("HeightMap", *cfg.data());
 
     bool downscale = false;
     if (to == "image/x-r8" && image->colorSpace()->colorDepthId() == Integer16BitsColorDepthID) {

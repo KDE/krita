@@ -43,8 +43,7 @@
 #include <kis_config.h>
 #include <kis_iterator_ng.h>
 #include <kis_random_accessor_ng.h>
-
-#include "ui_kis_wdg_options_heightmap.h"
+#include <kis_config_widget.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(KisHeightMapExportFactory, "krita_heightmap_export.json", registerPlugin<KisHeightMapExport>();)
 
@@ -73,7 +72,7 @@ KisPropertiesConfigurationSP KisHeightMapExport::lastSavedConfiguration(const QB
 
 KisConfigWidget *KisHeightMapExport::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &/*to*/) const
 {
-    return 0;
+    return new KisWdgOptionsHeightmap(parent);
 }
 
 KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
@@ -107,42 +106,31 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
     KoDialog* kdb = new KoDialog(0);
     kdb->setWindowTitle(i18n("HeightMap Export Options"));
     kdb->setButtons(KoDialog::Ok | KoDialog::Cancel);
-
-    Ui::WdgOptionsHeightMap optionsHeightMap;
-
-    QWidget* wdg = new QWidget(kdb);
-    optionsHeightMap.setupUi(wdg);
-
+    KisConfigWidget *wdg = createConfigurationWidget(kdb, from, to);
     kdb->setMainWidget(wdg);
+
     QApplication::restoreOverrideCursor();
 
-    KisPropertiesConfigurationSP cfg = lastSavedConfiguration();
-
-    optionsHeightMap.intSize->setValue(image->width());
-
-    int endianness = cfg->getInt("endianness", 0);
-    QDataStream::ByteOrder bo = QDataStream::LittleEndian;
-    optionsHeightMap.radioPC->setChecked(true);
-
-    if (endianness == 0) {
-        bo = QDataStream::BigEndian;
-        optionsHeightMap.radioMac->setChecked(true);
+    // If a configuration object was passed to the convert method, we use that, otherwise we load from the settings
+    KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
+    if (configuration) {
+        cfg->fromXML(configuration->toXML());
     }
+    else {
+        cfg = lastSavedConfiguration(from, to);
+    }
+    cfg->setProperty("width", image->width());
+    wdg->setConfiguration(cfg);
 
     if (!getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }
     }
+    cfg = wdg->configuration();
 
-    if (optionsHeightMap.radioMac->isChecked()) {
-        cfg->setProperty("endianness", 0);
-        bo = QDataStream::BigEndian;
-    }
-    else {
-        cfg->setProperty("endianness", 1);
-        bo = QDataStream::LittleEndian;
-    }
+    QDataStream::ByteOrder bo = cfg->getInt("endianness", 0) ? QDataStream::BigEndian : QDataStream::LittleEndian;
+
     KisConfig().setExportConfiguration("HeightMap", *cfg.data());
 
     bool downscale = false;
@@ -181,6 +169,26 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
 
     f.close();
     return KisImportExportFilter::OK;
+}
+
+
+void KisWdgOptionsHeightmap::setConfiguration(const KisPropertiesConfigurationSP cfg)
+{
+    intSize->setValue(cfg->getInt("width"));
+    int endianness = cfg->getInt("endianness", 0);
+    radioMac->setChecked(endianness == 0);
+}
+
+KisPropertiesConfigurationSP KisWdgOptionsHeightmap::configuration() const
+{
+    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    if (radioMac->isChecked()) {
+        cfg->setProperty("endianness", 0);
+    }
+    else {
+        cfg->setProperty("endianness", 1);
+    }
+    return cfg;
 }
 
 #include "kis_heightmap_export.moc"

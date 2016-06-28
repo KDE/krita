@@ -87,12 +87,12 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
     KisImageWSP image = input->image();
     Q_CHECK_PTR(image);
 
-    KoDialog dialog;
-    dialog.setWindowTitle(i18n("OpenEXR Export Options"));
-    dialog.setButtons(KoDialog::Ok | KoDialog::Cancel);
-    KisConfigWidget *wdg = createConfigurationWidget(&dialog, from, to);
-    dialog.setMainWidget(wdg);
-    dialog.resize(dialog.minimumSize());
+    KoDialog kdb;
+    kdb.setWindowTitle(i18n("OpenEXR Export Options"));
+    kdb.setButtons(KoDialog::Ok | KoDialog::Cancel);
+    KisConfigWidget *wdg = createConfigurationWidget(&kdb, from, to);
+    kdb.setMainWidget(wdg);
+    kdb.resize(kdb.minimumSize());
 
     // If a configuration object was passed to the convert method, we use that, otherwise we load from the settings
     KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
@@ -106,7 +106,7 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
 
     if (!getBatchMode() ) {
         QApplication::restoreOverrideCursor();
-        if (dialog.exec() == QDialog::Rejected) {
+        if (kdb.exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }
     }

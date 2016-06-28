@@ -34,7 +34,6 @@
 #include <kis_properties_configuration.h>
 #include <kis_config.h>
 
-#include "ui_kis_wdg_options_ppm.h"
 #include <qendian.h>
 #include <KoColorSpaceTraits.h>
 #include <KoColorSpaceRegistry.h>
@@ -151,32 +150,33 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& 
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    KoDialog* kdb = new KoDialog(0);
-    kdb->setWindowTitle(i18n("PPM Export Options"));
-    kdb->setButtons(KoDialog::Ok | KoDialog::Cancel);
-
-    Ui::WdgOptionsPPM optionsPPM;
-
-    QWidget* wdg = new QWidget(kdb);
-    optionsPPM.setupUi(wdg);
-
-    kdb->setMainWidget(wdg);
+    KoDialog kdb;
+    kdb.setWindowTitle(i18n("PPM Export Options"));
+    kdb.setButtons(KoDialog::Ok | KoDialog::Cancel);
+    KisConfigWidget *wdg = createConfigurationWidget(&kdb, from, to);
+    kdb.setMainWidget(wdg);
     QApplication::restoreOverrideCursor();
 
-    KisPropertiesConfigurationSP cfg = lastSavedConfiguration(from, to);
-
-    optionsPPM.type->setCurrentIndex(cfg->getInt("type", 0));
+    // If a configuration object was passed to the convert method, we use that, otherwise we load from the settings
+    KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
+    if (configuration) {
+        cfg->fromXML(configuration->toXML());
+    }
+    else {
+        cfg = lastSavedConfiguration(from, to);
+    }
+    wdg->setConfiguration(cfg);
 
     if (!getBatchMode()) {
-        if (kdb->exec() == QDialog::Rejected) {
+        if (kdb.exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }
+        cfg = wdg->configuration();
+        KisConfig().setExportConfiguration("PPM", *cfg.data());
     }
 
     bool rgb = (to == "image/x-portable-pixmap");
-    bool binary = optionsPPM.type->currentIndex() == 0;
-    cfg->setProperty("type", optionsPPM.type->currentIndex());
-    KisConfig().setExportConfiguration("PPM", *cfg.data());
+    bool binary = (cfg->getInt("type") == 0);
 
     bool bitmap = (to == "image/x-portable-bitmap");
 
@@ -298,7 +298,21 @@ KisPropertiesConfigurationSP KisPPMExport::lastSavedConfiguration(const QByteArr
 
 KisConfigWidget *KisPPMExport::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &/*to*/) const
 {
-    return 0;
+    return new KisWdgOptionsPPM(parent);
 }
 
+
+void KisWdgOptionsPPM::setConfiguration(const KisPropertiesConfigurationSP cfg)
+{
+    cmbType->setCurrentIndex(cfg->getInt("type", 0));
+}
+
+KisPropertiesConfigurationSP KisWdgOptionsPPM::configuration() const
+{
+    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    cfg->setProperty("type", cmbType->currentIndex());
+    return cfg;
+
+}
 #include "kis_ppm_export.moc"
+

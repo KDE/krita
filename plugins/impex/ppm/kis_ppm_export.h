@@ -22,6 +22,25 @@
 #include <QVariant>
 
 #include <KisImportExportFilter.h>
+#include <kis_config_widget.h>
+#include "ui_kis_wdg_options_ppm.h"
+
+class KisWdgOptionsPPM : public KisConfigWidget, public Ui::WdgOptionsPPM
+{
+    Q_OBJECT
+
+public:
+    KisWdgOptionsPPM(QWidget *parent)
+        : KisConfigWidget(parent)
+    {
+        setupUi(this);
+    }
+
+    void setConfiguration(const KisPropertiesConfigurationSP  cfg);
+    KisPropertiesConfigurationSP configuration() const;
+};
+
+
 
 class KisPPMExport : public KisImportExportFilter
 {

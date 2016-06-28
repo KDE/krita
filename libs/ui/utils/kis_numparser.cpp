@@ -25,6 +25,8 @@
 #include <QStringList>
 #include <QVariant>
 
+#include <iostream>
+
 using namespace std;
 
 const QVector<char> opLevel1 = {'+', '-'};
@@ -94,116 +96,124 @@ int parseIntegerMathExpr(QString const& expr, bool* noProblem)
 //intermediate functions
 
 /*!
- * \brief cutLevel1 cut an expression into many subparts using the level1 operations (+-) outside of parenthesis as separator. Return some results by reference.
- * \param expr The expression to cut.
- * \param readyToTreat A reference to a string list to hold the subparts.
- * \param op A list of operations stored as char ('+' and '-') and returned by reference.
+ * \brief extractSubExprLevel1 extract from an expression the part of an expression that need to be treated recursivly before computing level 1 operations (+, -).
+ * \param expr The expression to treat, the part returned will be removed.
+ * \param nextOp This reference, in case of sucess, will hold the first level operation identified as separator ('+' or '-')
  * \param noProblem A reference to a bool, set to true if there was no problem, false otherwise.
- *
- * The function won't cut the expression if the + or - operation is nested within parenthesis. The subexpression in the parenthesis will be treated recursivly later on.
+ * \return The first part of the expression that doesn't contain first level operations not nested within parenthesis.
  */
-inline void cutLevel1(QString const& expr, QStringList & readyToTreat, QVector<char> & op, bool & noProblem)
-{
+inline QString extractSubExprLevel1(QString & expr, char & nextOp, bool & noProblem){
 
-        readyToTreat.clear();
-        op.clear();
+	QString ret;
 
-        int subCount = 0;
-        int lastPos = 0;
+	int subCount = 0;
 
-        bool lastMetIsNumber = false;
+	bool lastMetIsNumber = false;
 
-        for(int i = 0; i < expr.size(); i++){
+	for(int i = 0; i < expr.size(); i++){
 
-				if (expr.at(i) == '(') {
-                        subCount++;
-                }
+		if (expr.at(i) == '(') {
+				subCount++;
+		}
 
-				if (expr.at(i) == ')') {
-                        subCount--;
-                }
+		if (expr.at(i) == ')') {
+				subCount--;
+		}
 
-				if (subCount < 0) {
-                        noProblem = false;
-                        return;
-                }
+		if (subCount < 0) {
+				noProblem = false;
+				return ret;
+		}
 
-                if( (expr.at(i) == '+' || expr.at(i) == '-') &&
-								subCount == 0) {
+		if(i == expr.size()-1 && subCount == 0){
+			ret = expr;
+			expr.clear();
+			break;
+		}
 
-						if (expr.at(i) == '-' &&
-										i < expr.size()-1) {
+		if( (expr.at(i) == '+' || expr.at(i) == '-') &&
+						subCount == 0) {
 
-                                bool cond = !expr.at(i+1).isSpace();
+				if (expr.at(i) == '-' &&
+								i < expr.size()-1) {
 
-								if (cond && !lastMetIsNumber) {
-                                        continue;
-                                }
+						bool cond = !expr.at(i+1).isSpace();
 
-                        }
+						if (cond && !lastMetIsNumber) {
+								continue;
+						}
 
-                        readyToTreat.push_back(expr.mid(lastPos, i-lastPos).trimmed());
-                        lastPos = i+1;
-                        op.push_back(expr.at(i).toLatin1());
+				}
 
-                }
+				ret = expr.mid(0, i).trimmed();
+				nextOp = expr.at(i).toLatin1();
+				expr = expr.mid(i+1);
+				break;
 
-				if (expr.at(i).isDigit()) {
-                        lastMetIsNumber = true;
-				} else if (expr.at(i) != '.' &&
-								  !expr.at(i).isSpace()) {
-                        lastMetIsNumber = false;
-                }
-        }
+		}
 
-        readyToTreat.push_back(expr.mid(lastPos).trimmed());
+		if (expr.at(i).isDigit()) {
+				lastMetIsNumber = true;
+		} else if (expr.at(i) != '.' &&
+						  !expr.at(i).isSpace()) {
+				lastMetIsNumber = false;
+		}
 
+	}
+
+	noProblem = true;
+	return ret;
 }
 
+
 /*!
- * \brief cutLeve2 cut an expression into many subparts using the level2 operations (* and /) outside of parenthesis as separator. Return some results by reference.
- * \param expr The expression to cut.
- * \param readyToTreat A reference to a string list to hold the subparts.
- * \param op A list of operations stored as char ('*' and '/') and returned by reference.
+ * \brief extractSubExprLevel2 extract from an expression the part of an expression that need to be treated recursivly before computing level 2 operations (*, /).
+ * \param expr The expression to treat, the part returned will be removed.
+ * \param nextOp This reference, in case of sucess, will hold the first level operation identified as separator ('*' or '/')
  * \param noProblem A reference to a bool, set to true if there was no problem, false otherwise.
- *
- * The function won't cut the expression if the * or / operation is nested within parenthesis. The subexpression in the parenthesis will be treated recursivly later on.
+ * \return The first part of the expression that doesn't contain second level operations not nested within parenthesis.
  */
-inline void cutLevel2(QString const& expr, QStringList & readyToTreat, QVector<char> & op, bool & noProblem)
-{
+inline QString extractSubExprLevel2(QString & expr, char & nextOp, bool & noProblem){
 
-        readyToTreat.clear();
-        op.clear();
+	QString ret;
 
-        int subCount = 0;
-        int lastPos = 0;
+	int subCount = 0;
 
-		for (int i = 0; i < expr.size(); i++) {
+	for(int i = 0; i < expr.size(); i++){
 
-				if (expr.at(i) == '(') {
-                        subCount++;
-                }
+		if (expr.at(i) == '(') {
+				subCount++;
+		}
 
-				if (expr.at(i) == ')') {
-                        subCount--;
-                }
+		if (expr.at(i) == ')') {
+				subCount--;
+		}
 
-				if (subCount < 0) {
-                        noProblem = false;
-                        return;
-                }
+		if (subCount < 0) {
+				noProblem = false;
+				return ret;
+		}
 
-				if ( (expr.at(i) == '*' || expr.at(i) == '/') &&
-								subCount == 0) {
+		if(i == expr.size()-1 && subCount == 0){
+			ret = expr;
+			expr.clear();
+			break;
+		}
 
-                        readyToTreat.push_back(expr.mid(lastPos, i-lastPos).trimmed());
-                        lastPos = i+1;
-                        op.push_back(expr.at(i).toLatin1());
+		if( (expr.at(i) == '*' || expr.at(i) == '/') &&
+						subCount == 0) {
 
-                }
-        }
+				ret = expr.mid(0, i).trimmed();
+				nextOp = expr.at(i).toLatin1();
+				expr = expr.mid(i+1);
+				break;
 
-        readyToTreat.push_back(expr.mid(lastPos).trimmed());
+		}
+
+	}
+
+	noProblem = true;
+	return ret;
 }
 
 /*!
@@ -217,42 +227,30 @@ double treatLevel1(const QString &expr, bool & noProblem)
 
         noProblem = true;
 
-        QStringList readyToTreat;
-        QVector<char> op;
+		QString exprDestructable = expr;
 
-        cutLevel1(expr, readyToTreat, op, noProblem);
-		if (!noProblem) {
-                return 0.0;
-        }
+		char nextOp = '+';
+		double result = 0.0;
 
-		if (readyToTreat.contains("")) {
-                noProblem = false;
-                return 0.0;
-        }
+		while (!exprDestructable.isEmpty()) {
 
-		if (op.size() != readyToTreat.size()-1) {
-                noProblem = false;
-                return 0.0;
-        }
+			double sign = (nextOp == '-') ? -1 : 1;
+			QString part = extractSubExprLevel1(exprDestructable, nextOp, noProblem);
 
-        double result = 0.0;
+			if (!noProblem) {
+				return 0.0;
+			}
 
-		for (int i = 0; i < readyToTreat.size(); i++) {
+			if (sign > 0) {
+				result += treatLevel2(part, noProblem);
+			} else {
+				result -= treatLevel2(part, noProblem);
+			}
 
-				if (i == 0) {
-                        result += treatLevel2(readyToTreat[i], noProblem);
-                } else {
-						if (op[i-1] == '+') {
-                                result += treatLevel2(readyToTreat[i], noProblem);
-						} else if (op[i-1] == '-') {
-                                result -= treatLevel2(readyToTreat[i], noProblem);
-                        }
-                }
-
-				if (noProblem == false) {
-                        return 0.0;
-                }
-        }
+			if(!noProblem){
+				return 0.0;
+			}
+		}
 
         return result;
 
@@ -271,45 +269,34 @@ double treatLevel2(QString const& expr, bool & noProblem)
 
         noProblem = true;
 
-        QStringList readyToTreat;
-        QVector<char> op;
+		QString exprDestructable = expr;
 
-        cutLevel2(expr, readyToTreat, op, noProblem);
-		if (!noProblem) {
-                return 0.0;
-        }
+		char nextOp = '*';
 
-		if (readyToTreat.contains("")) {
-                noProblem = false;
-                return 0.0;
-        }
+		QString part = extractSubExprLevel2(exprDestructable, nextOp, noProblem);
 
-		if (op.size() != readyToTreat.size()-1) {
-                noProblem = false;
-                return 0.0;
-        }
+		double result = treatLevel3(part, noProblem);
 
-        double result = 0.0;
+		while (!exprDestructable.isEmpty()) {
 
-		for (int i = 0; i < readyToTreat.size(); i++) {
+			if (!noProblem) {
+				return 0.0;
+			}
 
-				if (i == 0) {
-                        result += treatLevel3(readyToTreat[i], noProblem);
-                } else {
-						if (op[i-1] == '*') {
-                                result *= treatLevel3(readyToTreat[i], noProblem);
-						} else if(op[i-1] == '/') {
-                                //may become infinity or NAN.
-                                result /= treatLevel3(readyToTreat[i], noProblem);
-                        }
-                }
+			part = extractSubExprLevel2(exprDestructable, nextOp, noProblem);
 
-				if (noProblem == false) {
-                        return 0.0;
-                }
-        }
+			if (!noProblem) {
+				return 0.0;
+			}
 
-        return result;
+			if (nextOp == '*') {
+				result *= treatLevel3(part, noProblem);
+			} else {
+				result /= treatLevel3(part, noProblem);
+			}
+		}
+
+		return result;
 }
 
 /*!
@@ -346,14 +333,16 @@ double treatLevel3(const QString &expr, bool & noProblem)
                 }
         }
 
-		if (indexCount > 1) {
+		if (indexCount > 1 || indexPower + 1 >= expr.size()) {
                 noProblem = false;
                 return 0.0;
         }
 
 		if (indexPower > -1) {
 
-                QStringList subExprs = expr.split('^');
+				QStringList subExprs;
+				subExprs << expr.mid(0,indexPower);
+				subExprs << expr.mid(indexPower+1);
 
                 bool noProb1 = true;
                 bool noProb2 = true;
@@ -452,46 +441,34 @@ double treatFuncs(QString const& expr, bool & noProblem)
 double treatLevel1Int(QString const& expr, bool & noProblem)
 {
 
-        noProblem = true;
+	noProblem = true;
 
-        QStringList readyToTreat;
-        QVector<char> op;
+	QString exprDestructable = expr;
 
-        cutLevel1(expr, readyToTreat, op, noProblem);
-		if (!noProblem) {
-                return 0.0;
-        }
+	char nextOp = '+';
+	double result = 0.0;
 
-		if (readyToTreat.contains("")) {
-                noProblem = false;
-                return 0;
-        }
+	while (!exprDestructable.isEmpty()) {
 
-		if (op.size() != readyToTreat.size()-1) {
-                noProblem = false;
-                return 0;
-        }
+		double sign = (nextOp == '-') ? -1 : 1;
+		QString part = extractSubExprLevel1(exprDestructable, nextOp, noProblem);
 
-		double result = 0;
+		if( !noProblem) {
+			return 0.0;
+		}
 
-		for (int i = 0; i < readyToTreat.size(); i++) {
+		if (sign > 0) {
+			result += treatLevel2Int(part, noProblem);
+		} else {
+			result -= treatLevel2Int(part, noProblem);
+		}
 
-				if (i == 0) {
-                        result += treatLevel2Int(readyToTreat[i], noProblem);
-                } else {
-						if (op[i-1] == '+') {
-                                result += treatLevel2Int(readyToTreat[i], noProblem);
-						} else if(op[i-1] == '-') {
-                                result -= treatLevel2Int(readyToTreat[i], noProblem);
-                        }
-                }
+		if(!noProblem){
+			return 0.0;
+		}
+	}
 
-				if (noProblem == false) {
-                        return 0;
-                }
-        }
-
-        return result;
+	return result;
 
 }
 
@@ -506,54 +483,44 @@ double treatLevel1Int(QString const& expr, bool & noProblem)
 double treatLevel2Int(const QString &expr, bool &noProblem)
 {
 
-        noProblem = true;
+	noProblem = true;
 
-        QStringList readyToTreat;
-        QVector<char> op;
+	QString exprDestructable = expr;
 
-        cutLevel2(expr, readyToTreat, op, noProblem);
+	char nextOp = '*';
+
+	QString part = extractSubExprLevel2(exprDestructable, nextOp, noProblem);
+
+	double result = treatLevel3(part, noProblem);
+
+	while (!exprDestructable.isEmpty()) {
+
 		if (!noProblem) {
-                return 0.0;
-        }
+			return 0.0;
+		}
 
-		if (readyToTreat.contains("")) {
-                noProblem = false;
-                return 0;
-        }
+		part = extractSubExprLevel2(exprDestructable, nextOp, noProblem);
 
-		if (op.size() != readyToTreat.size()-1) {
-                noProblem = false;
-                return 0;
-        }
+		if (!noProblem) {
+			return 0.0;
+		}
 
-		double result = 0;
+		if (nextOp == '*') {
+			result *= treatFuncsInt(part, noProblem);
+		} else {
 
-		for (int i = 0; i < readyToTreat.size(); i++) {
+			double val = treatFuncsInt(part, noProblem);
 
-				if (i == 0) {
-                        result += treatFuncsInt(readyToTreat[i], noProblem);
-                } else {
-						if (op[i-1] == '*') {
-                                result *= treatFuncsInt(readyToTreat[i], noProblem);
-						} else if(op[i-1] == '/') {
-                                int value = treatFuncsInt(readyToTreat[i], noProblem);
+			if(std::isinf(result/val) || std::isnan(result/val)){
+				noProblem = false;
+				return 0.0;
+			}
 
-                                //int int airthmetic it's impossible to divide by 0.
-								if (value == 0) {
-                                        noProblem = false;
-                                        return 0;
-                                }
+			result /= val;
+		}
+	}
 
-                                result /= value;
-                        }
-                }
-
-				if (noProblem == false) {
-                        return 0;
-                }
-        }
-
-        return result;
+	return result;
 
 }
 

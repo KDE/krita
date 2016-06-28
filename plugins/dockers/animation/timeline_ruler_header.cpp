@@ -55,6 +55,9 @@ TimelineRulerHeader::TimelineRulerHeader(QWidget *parent)
     : QHeaderView(Qt::Horizontal, parent),
       m_d(new Private)
 {
+    setSectionResizeMode(QHeaderView::Fixed);
+    setDefaultSectionSize(18);
+
     m_d->columnEditingMenu = new QMenu(this);
     m_d->insertLeftAction = m_d->columnEditingMenu->addAction("Insert 1 Left", this, SLOT(slotInsertColumnLeft()));
     m_d->insertRightAction = m_d->columnEditingMenu->addAction("Insert 1 Right", this, SLOT(slotInsertColumnRight()));

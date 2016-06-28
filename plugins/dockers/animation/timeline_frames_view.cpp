@@ -129,10 +129,6 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     setDefaultDropAction(Qt::MoveAction);
 
     m_d->horizontalRuler = new TimelineRulerHeader(this);
-
-    m_d->horizontalRuler->setSectionResizeMode(QHeaderView::Fixed);
-
-    m_d->horizontalRuler->setDefaultSectionSize(18);
     this->setHorizontalHeader(m_d->horizontalRuler);
 
     m_d->layersHeader = new TimelineLayersHeader(this);

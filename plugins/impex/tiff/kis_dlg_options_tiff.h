@@ -33,6 +33,7 @@ class KisDlgOptionsTIFF : public KoDialog
 public:
     KisDlgOptionsTIFF(QWidget *parent = 0);
     ~KisDlgOptionsTIFF();
+
 public Q_SLOTS:
     void activated(int index);
     void flattenToggled(bool);

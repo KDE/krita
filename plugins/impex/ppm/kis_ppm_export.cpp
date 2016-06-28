@@ -163,11 +163,9 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& 
     kdb->setMainWidget(wdg);
     QApplication::restoreOverrideCursor();
 
-    QString filterConfig = KisConfig().exportConfiguration("PPM");
-    KisPropertiesConfiguration cfg;
-    cfg.fromXML(filterConfig);
+    KisPropertiesConfigurationSP cfg = lastSavedConfiguration(from, to);
 
-    optionsPPM.type->setCurrentIndex(cfg.getInt("type", 0));
+    optionsPPM.type->setCurrentIndex(cfg->getInt("type", 0));
 
     if (!getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {
@@ -177,8 +175,8 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& 
 
     bool rgb = (to == "image/x-portable-pixmap");
     bool binary = optionsPPM.type->currentIndex() == 0;
-    cfg.setProperty("type", optionsPPM.type->currentIndex());
-    KisConfig().setExportConfiguration("PPM", cfg);
+    cfg->setProperty("type", optionsPPM.type->currentIndex());
+    KisConfig().setExportConfiguration("PPM", *cfg.data());
 
     bool bitmap = (to == "image/x-portable-bitmap");
 
@@ -281,6 +279,26 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& 
     delete flow;
     fp.close();
     return KisImportExportFilter::OK;
+}
+
+KisPropertiesConfigurationSP KisPPMExport::defaultConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
+{
+    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    cfg->setProperty("type", 0);
+    return cfg;
+}
+
+KisPropertiesConfigurationSP KisPPMExport::lastSavedConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
+{
+    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    QString filterConfig = KisConfig().exportConfiguration("PPM");
+    cfg->fromXML(filterConfig);
+    return cfg;
+}
+
+KisConfigWidget *KisPPMExport::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &/*to*/) const
+{
+    return 0;
 }
 
 #include "kis_ppm_export.moc"

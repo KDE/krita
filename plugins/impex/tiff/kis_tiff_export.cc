@@ -36,7 +36,7 @@
 #include <kis_image.h>
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
-
+#include <kis_config.h>
 
 #include "kis_tiff_converter.h"
 #include "kis_dlg_options_tiff.h"
@@ -121,6 +121,35 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray&
 
     dbgFile << " Result =" << res;
     return KisImportExportFilter::InternalError;
+}
+
+KisPropertiesConfigurationSP KisTIFFExport::defaultConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
+{
+    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    cfg->setProperty("compressiontype", 0);
+    cfg->setProperty("predictor", 0);
+    cfg->setProperty("alpha", true);
+    cfg->setProperty("flatten", true);
+    cfg->setProperty("quality", 80);
+    cfg->setProperty("deflate", 6);
+    cfg->setProperty("faxmode", 0);
+    cfg->setProperty("pixarlog", 6);
+    cfg->setProperty("saveProfile", true);
+
+    return cfg;
+}
+
+KisPropertiesConfigurationSP KisTIFFExport::lastSavedConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
+{
+    QString filterConfig = KisConfig().exportConfiguration("TIFF");
+    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    cfg->fromXML(filterConfig);
+    return cfg;
+}
+
+KisConfigWidget *KisTIFFExport::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &/*to*/) const
+{
+    return 0;
 }
 
 #include <kis_tiff_export.moc>

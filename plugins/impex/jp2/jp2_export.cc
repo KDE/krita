@@ -54,6 +54,27 @@ jp2Export::~jp2Export()
 {
 }
 
+KisPropertiesConfigurationSP jp2Export::defaultConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
+{
+    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    cfg->setProperty("number_resolutions", 6);
+    cfg->setProperty("quality", 100);
+    return cfg;
+}
+
+KisPropertiesConfigurationSP jp2Export::lastSavedConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
+{
+    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    QString filterConfig = KisConfig().exportConfiguration("JP2");
+    cfg->fromXML(filterConfig);
+    return cfg;
+}
+
+KisConfigWidget *jp2Export::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &/*to*/) const
+{
+    return 0;
+}
+
 KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     dbgFile << "JP2 export! From:" << from << ", To:" << to << "";
@@ -81,11 +102,10 @@ KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& fro
     QWidget* wdg = new QWidget(kdb);
     optionsJP2.setupUi(wdg);
 
-    QString filterConfig = KisConfig().exportConfiguration("JP2");
-    KisPropertiesConfiguration cfg;
-    cfg.fromXML(filterConfig);
-    optionsJP2.numberResolutions->setValue(cfg.getInt("number_resolutions", 6));
-    optionsJP2.qualityLevel->setValue(cfg.getInt("quality", 100));
+    KisPropertiesConfigurationSP cfg = lastSavedConfiguration();
+
+    optionsJP2.numberResolutions->setValue(cfg->getInt("number_resolutions", 6));
+    optionsJP2.qualityLevel->setValue(cfg->getInt("quality", 100));
 
     kdb->setMainWidget(wdg);
     QApplication::restoreOverrideCursor();
@@ -98,11 +118,11 @@ KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& fro
 
     JP2ConvertOptions options;
     options.numberresolution = optionsJP2.numberResolutions->value();
-    cfg.setProperty("number_resolutions", options.numberresolution);
+    cfg->setProperty("number_resolutions", options.numberresolution);
     options.rate = optionsJP2.qualityLevel->value();
-    cfg.setProperty("quality", options.rate);
+    cfg->setProperty("quality", options.rate);
 
-    KisConfig().setExportConfiguration("JP2", cfg);
+    KisConfig().setExportConfiguration("JP2", *cfg.data());
 
 
     // the image must be locked at the higher levels

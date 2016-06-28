@@ -55,6 +55,26 @@ exrExport::~exrExport()
 {
 }
 
+KisPropertiesConfigurationSP exrExport::defaultConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
+{
+    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    cfg->setProperty("flatten", false);
+    return cfg;
+}
+
+KisPropertiesConfigurationSP exrExport::lastSavedConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
+{
+    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    QString filterConfig = KisConfig().exportConfiguration("EXR");
+    cfg->fromXML(filterConfig);
+    return cfg;
+}
+
+KisConfigWidget *exrExport::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &/*to*/) const
+{
+    return 0;
+}
+
 KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByteArray& to, KisPropertiesConfigurationSP configuration)
 {
     dbgFile << "EXR export! From:" << from << ", To:" << to << "";
@@ -77,11 +97,9 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
     dialog.setMainWidget(page);
     dialog.resize(dialog.minimumSize());
 
-    QString filterConfig = KisConfig().exportConfiguration("EXR");
-    KisPropertiesConfiguration cfg;
-    cfg.fromXML(filterConfig);
+    KisPropertiesConfigurationSP cfg = lastSavedConfiguration(from, to);
 
-    widget.flatten->setChecked(cfg.getBool("flatten", false));
+    widget.flatten->setChecked(cfg->getBool("flatten", false));
 
     if (!getBatchMode() ) {
         QApplication::restoreOverrideCursor();
@@ -90,8 +108,8 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
         }
     }
 
-    cfg.setProperty("flatten", widget.flatten->isChecked());
-    KisConfig().setExportConfiguration("EXR", cfg);
+    cfg->setProperty("flatten", widget.flatten->isChecked());
+    KisConfig().setExportConfiguration("EXR", *cfg.data());
 
     QString filename = outputFile();
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;

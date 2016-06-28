@@ -64,6 +64,7 @@ public:
     const char *inputColorSpaceName;
     const char *displayDevice;
     const char *view;
+    const char *look;
     OCIO_CHANNEL_SWIZZLE swizzle;
     float exposure;
     float gamma;

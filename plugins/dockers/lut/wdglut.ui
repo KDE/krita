@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>WdgLut</class>
  <widget class="QWidget" name="WdgLut">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>357</width>
+    <height>286</height>
+   </rect>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1">
    <property name="spacing">
     <number>0</number>
@@ -88,7 +96,7 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="0">
+        <item row="7" column="0">
          <widget class="QLabel" name="label_5">
           <property name="text">
            <string>Components:</string>
@@ -121,7 +129,7 @@
           </property>
          </widget>
         </item>
-        <item row="7" column="0">
+        <item row="8" column="0">
          <widget class="QLabel" name="label_7">
           <property name="text">
            <string>Exposure:</string>
@@ -147,8 +155,8 @@
           </property>
          </widget>
         </item>
-        <item row="7" column="1">
-         <widget class="KisDoubleWidget" name="m_exposureDoubleWidget">
+        <item row="8" column="1">
+         <widget class="KisDoubleWidget" name="m_exposureDoubleWidget" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -232,7 +240,7 @@
           </item>
          </layout>
         </item>
-        <item row="6" column="1">
+        <item row="7" column="1">
          <widget class="SqueezedComboBox" name="m_cmbComponents">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -242,8 +250,8 @@
           </property>
          </widget>
         </item>
-        <item row="8" column="1">
-         <widget class="KisDoubleWidget" name="m_gammaDoubleWidget">
+        <item row="9" column="1">
+         <widget class="KisDoubleWidget" name="m_gammaDoubleWidget" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -252,7 +260,7 @@
           </property>
          </widget>
         </item>
-        <item row="8" column="0">
+        <item row="9" column="0">
          <widget class="QLabel" name="label_8">
           <property name="text">
            <string>Gamma:</string>
@@ -310,6 +318,23 @@
           </item>
          </widget>
         </item>
+        <item row="6" column="0">
+         <widget class="QLabel" name="m_lblLook">
+          <property name="text">
+           <string>Look:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="1">
+         <widget class="SqueezedComboBox" name="m_cmbLook">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
       <item>
@@ -327,6 +352,12 @@
          <spacer name="horizontalSpacer">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
           </property>
          </spacer>
         </item>

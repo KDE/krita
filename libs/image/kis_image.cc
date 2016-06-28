@@ -38,6 +38,7 @@
 #include "KoColor.h"
 #include "KoColorProfile.h"
 #include <KoCompositeOpRegistry.h>
+#include "KisProofingConfiguration.h"
 
 #include "recorder/kis_action_recorder.h"
 #include "kis_adjustment_layer.h"
@@ -145,6 +146,7 @@ public:
     double yres = 1.0;
 
     const KoColorSpace * colorSpace;
+    KisProofingConfiguration *proofingConfig = 0;
 
     KisSelectionSP deselectedGlobalSelection;
     KisGroupLayerSP rootLayer; // The layers are contained in here
@@ -1593,4 +1595,19 @@ void KisImage::notifyNodeCollpasedChanged()
 KisImageAnimationInterface* KisImage::animationInterface() const
 {
     return m_d->animationInterface;
+}
+
+void KisImage::setProofingConfiguration(KisProofingConfiguration *proofingConfig)
+{
+    m_d->proofingConfig = proofingConfig;
+    emit sigProofingConfigChanged();
+}
+
+KisProofingConfiguration *KisImage::proofingConfiguration() const
+{
+    if (!m_d->proofingConfig) {
+        KisImageConfig cfg;
+        m_d->proofingConfig = cfg.defaultProofingconfiguration();
+    }
+    return m_d->proofingConfig;
 }

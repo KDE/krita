@@ -92,21 +92,13 @@ void __KisToolSelectPolygonalLocal::finishPolyline(const QVector<QPointF> &point
 
 
 KisToolSelectPolygonal::KisToolSelectPolygonal(KoCanvasBase *canvas):
-    SelectionActionHandler<__KisToolSelectPolygonalLocal>(canvas, i18n("Polygonal Selection"))
+    KisToolSelectBase<__KisToolSelectPolygonalLocal>(canvas, i18n("Polygonal Selection"))
 {
-    connect(&m_widgetHelper, SIGNAL(selectionActionChanged(int)), this, SLOT(setSelectionAction(int)));
+    connect(&m_widgetHelper, &KisSelectionToolConfigWidgetHelper::selectionActionChanged,
+            this, &KisToolSelectPolygonal::setSelectionAction);
 }
 
-void KisToolSelectPolygonal::setSelectionAction(int newSelectionAction)
+void KisToolSelectPolygonal::setSelectionAction(int action)
 {
-    if(newSelectionAction >= SELECTION_REPLACE && newSelectionAction <= SELECTION_INTERSECT && m_selectionAction != newSelectionAction)
-    {
-        if(m_widgetHelper.optionWidget())
-        {
-            m_widgetHelper.slotSetAction(newSelectionAction);
-        }
-        m_selectionAction = (SelectionAction)newSelectionAction;
-        emit selectionActionChanged();
-    }
+    changeSelectionAction(action);
 }
-

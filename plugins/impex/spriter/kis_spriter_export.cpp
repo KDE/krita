@@ -73,7 +73,7 @@ bool KisSpriterExport::savePaintDevice(KisPaintDeviceSP dev, const QString &file
 
     QDir d = fi.absoluteDir();
     d.mkpath(d.path());
-    QRect rc = dev->exactBounds();
+    QRect rc = m_image->bounds().intersected(dev->exactBounds());
 
     if (!KisPNGConverter::isColorSpaceSupported(dev->colorSpace())) {
         dev = new KisPaintDevice(*dev.data());
@@ -124,7 +124,7 @@ void KisSpriterExport::parseFolder(KisGroupLayerSP parentGroup, const QString &f
     child = parentGroup->lastChild();
     while (child) {
         if (child->visible() && !child->inherits("KisGroupLayer") && !child->inherits("KisMask")) {
-            QRectF rc(child->exactBounds());
+            QRectF rc = m_image->bounds().intersected(child->exactBounds());
             QString layerBaseName = child->name().split(" ").first();
             SpriterFile file;
             file.id = fileId++;
@@ -168,7 +168,7 @@ Bone *KisSpriterExport::parseBone(const Bone *parent, KisGroupLayerSP groupLayer
     bone->name = groupBaseName;
 
     if (m_boneLayer) {
-        QRectF rc(m_boneLayer->exactBounds());
+        QRectF rc = m_image->bounds().intersected(m_boneLayer->exactBounds());
 
         qreal xmin = rc.left();
         qreal ymin = rc.top();

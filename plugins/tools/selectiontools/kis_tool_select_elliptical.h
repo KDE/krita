@@ -49,27 +49,23 @@ private:
 
 
 
-typedef SelectionActionHandler<__KisToolSelectEllipticalLocal> KisToolSelectEllipticalTemplate;
+typedef KisToolSelectBase<__KisToolSelectEllipticalLocal> KisToolSelectEllipticalTemplate;
 
 class KisToolSelectElliptical : public KisToolSelectEllipticalTemplate
 {
     Q_OBJECT
-    Q_PROPERTY(int selectionAction READ selectionAction WRITE setSelectionAction NOTIFY selectionActionChanged)
 public:
     KisToolSelectElliptical(KoCanvasBase* canvas);
-
-    Q_SIGNALS: void selectionActionChanged();
-    public Q_SLOTS:
-    void setSelectionAction(int newSelectionAction);
-
-
+public Q_SLOTS:
+    void setSelectionAction(int);
 };
 
 class KisToolSelectEllipticalFactory : public KoToolFactoryBase
 {
 public:
     KisToolSelectEllipticalFactory()
-            : KoToolFactoryBase("KisToolSelectElliptical") {
+        : KoToolFactoryBase("KisToolSelectElliptical")
+    {
         setToolTip(i18n("Elliptical Selection Tool"));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

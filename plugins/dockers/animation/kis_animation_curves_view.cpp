@@ -42,6 +42,9 @@ KisAnimationCurvesView::KisAnimationCurvesView(QWidget *parent)
     m_d->horizontalHeader = new TimelineRulerHeader(this);
     m_d->verticalHeader = new KisAnimationCurvesValueRuler(this);
     m_d->itemDelegate = new KisAnimationCurvesKeyframeDelegate(m_d->horizontalHeader, m_d->verticalHeader, this);
+
+    setSelectionMode(QAbstractItemView::ExtendedSelection);
+
 }
 
 KisAnimationCurvesView::~KisAnimationCurvesView()
@@ -61,8 +64,7 @@ void KisAnimationCurvesView::setModel(QAbstractItemModel *model)
 
 QRect KisAnimationCurvesView::visualRect(const QModelIndex &index) const
 {
-    // TODO
-    return QRect();
+    return m_d->itemDelegate->itemRect(index);
 }
 
 void KisAnimationCurvesView::scrollTo(const QModelIndex &index, QAbstractItemView::ScrollHint hint)
@@ -72,7 +74,21 @@ void KisAnimationCurvesView::scrollTo(const QModelIndex &index, QAbstractItemVie
 
 QModelIndex KisAnimationCurvesView::indexAt(const QPoint &point) const
 {
-    // TODO
+    int time = m_d->horizontalHeader->logicalIndexAt(point.x());
+
+    int rows = model()->rowCount();
+    for (int row=0; row < rows; row++) {
+        QModelIndex index = model()->index(row, time);
+
+        if (index.data(KisTimeBasedItemModel::SpecialKeyframeExists).toBool()) {
+            QRect nodePos = m_d->itemDelegate->itemRect(index);
+
+            if (nodePos.contains(point)) {
+                return index;
+            }
+        }
+    }
+
     return QModelIndex();
 }
 
@@ -86,16 +102,19 @@ void KisAnimationCurvesView::paintEvent(QPaintEvent *e)
     int firstFrame = m_d->horizontalHeader->visualIndexAt(r.left());
     int lastFrame = m_d->horizontalHeader->visualIndexAt(r.right());
 
-    paintCurves(painter, lastFrame, firstFrame);
+    paintCurves(painter, firstFrame, lastFrame);
     paintKeyframes(painter, firstFrame, lastFrame);
 }
 
-void KisAnimationCurvesView::paintCurves(QPainter &painter, int lastFrame, int firstFrame)
+void KisAnimationCurvesView::paintCurves(QPainter &painter, int firstFrame, int lastFrame)
 {
+    // Make sure we draw lines crossing the edges of the refreshed rect
+    firstFrame = qMax(0, firstFrame -1);
+    lastFrame = lastFrame + 1;
+
     int channels = model()->rowCount();
     for (int channel = 0; channel < channels; channel++) {
-        int previousX;
-        int previousY;
+        QPointF previousNodePos;
 
         QModelIndex index0 = model()->index(channel, 0);
         QColor color = index0.data(KisAnimationCurvesModel::CurveColorRole).value<QColor>();
@@ -103,20 +122,13 @@ void KisAnimationCurvesView::paintCurves(QPainter &painter, int lastFrame, int f
 
         for (int time = firstFrame; time <= lastFrame; time++) {
             QModelIndex index = model()->index(channel, time);
-            qreal value = index.data(KisAnimationCurvesModel::ScalarValueRole).toReal();
-
-            int logicalSection = m_d->horizontalHeader->logicalIndex(time);
-            int x = m_d->horizontalHeader->sectionViewportPosition(logicalSection)
-                    + (m_d->horizontalHeader->sectionSize(logicalSection) / 2);
-
-            int y = m_d->verticalHeader->mapValueToView(value);
+            QPointF nodePos = m_d->itemDelegate->nodeCenter(index);
 
             if (time > firstFrame) {
-                painter.drawLine(previousX, previousY, x, y);
+                painter.drawLine(previousNodePos, nodePos);
             }
 
-            previousX = x;
-            previousY = y;
+            previousNodePos = nodePos;
         }
     }
 }
@@ -131,6 +143,11 @@ void KisAnimationCurvesView::paintKeyframes(QPainter &painter, int firstFrame, i
 
             if (keyframeExists) {
                 QStyleOptionViewItem opt;
+
+                if (selectionModel()->isSelected(index)) {
+                    opt.state = QStyle::State_Selected;
+                }
+
                 m_d->itemDelegate->paint(&painter, opt, index);
             }
         }
@@ -161,13 +178,38 @@ bool KisAnimationCurvesView::isIndexHidden(const QModelIndex &index) const
 
 void KisAnimationCurvesView::setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command)
 {
-    // TODO
+    int timeFrom = m_d->horizontalHeader->logicalIndexAt(rect.left());
+    int timeTo = m_d->horizontalHeader->logicalIndexAt(rect.right());
+
+    QItemSelection selection;
+
+    int rows = model()->rowCount();
+    for (int row=0; row < rows; row++) {
+        for (int time = timeFrom; time <= timeTo; time++) {
+            QModelIndex index = model()->index(row, time);
+
+            if (index.data(KisTimeBasedItemModel::SpecialKeyframeExists).toBool()) {
+                QRect itemRect = m_d->itemDelegate->itemRect(index);
+
+                if (itemRect.intersects(rect)) {
+                    selection.select(index, index);
+                }
+            }
+        }
+    }
+
+    selectionModel()->select(selection, command);
 }
 
 QRegion KisAnimationCurvesView::visualRegionForSelection(const QItemSelection &selection) const
 {
-    // TODO
-    return QRegion();
+    QRegion region;
+
+    Q_FOREACH(QModelIndex index, selection.indexes()) {
+        region += m_d->itemDelegate->visualRect(index);
+    }
+
+    return region;
 }
 
 void KisAnimationCurvesView::updateGeometries()

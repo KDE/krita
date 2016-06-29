@@ -35,9 +35,15 @@ public:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
+    QPointF nodeCenter(const QModelIndex index) const;
+    QRect itemRect(const QModelIndex index) const;
+    QRect visualRect(const QModelIndex index) const;
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
+
+    void paintHandle(QPainter *painter, QPointF nodePos, QPointF tangent) const;
 };
 
 #endif

@@ -60,7 +60,7 @@ private:
     struct Private;
     const QScopedPointer<Private> m_d;
 
-    void paintCurves(QPainter &painter, int lastFrame, int firstFrame);
+    void paintCurves(QPainter &painter, int firstFrame, int lastFrame);
     void paintKeyframes(QPainter &painter, int firstFrame, int lastFrame);
 };
 

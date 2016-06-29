@@ -26,6 +26,7 @@
 #include "kis_signal_auto_connection.h"
 #include "KisViewManager.h"
 #include "kis_node_manager.h"
+#include "kis_animation_frame_cache.h"
 #include "klocalizedstring.h"
 
 struct KisAnimationCurveDocker::Private
@@ -68,6 +69,10 @@ void KisAnimationCurveDocker::setCanvas(KoCanvasBase * canvas)
     setEnabled(m_d->canvas != 0);
 
     if(m_d->canvas) {
+        m_d->model->setImage(m_d->canvas->image());
+        m_d->model->setFrameCache(m_d->canvas->frameCache());
+        m_d->model->setAnimationPlayer(m_d->canvas->animationPlayer());
+
         m_d->canvasConnections.addConnection(
             m_d->canvas->viewManager()->nodeManager(), SIGNAL(sigNodeActivated(KisNodeSP)),
             m_d->model, SLOT(slotCurrentNodeChanged(KisNodeSP))

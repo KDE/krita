@@ -13,6 +13,7 @@ set(KRITA_ANIMATIONDOCKER_SOURCES
     timeline_layers_header.cpp
     timeline_ruler_header.cpp
 
+    kis_time_based_item_model.cpp
     timeline_frames_model.cpp
     timeline_frames_view.cpp
     timeline_frames_item_delegate.cpp

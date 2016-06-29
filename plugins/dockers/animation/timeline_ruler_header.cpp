@@ -27,7 +27,7 @@
 
 #include <klocalizedstring.h>
 
-#include "timeline_frames_model.h"
+#include "kis_time_based_item_model.h"
 #include "timeline_color_scheme.h"
 
 #include "kis_debug.h"
@@ -44,7 +44,7 @@ struct TimelineRulerHeader::Private
     QAction *removeAction;
     QAction *clearAction;
 
-    TimelineFramesModel *model;
+    KisTimeBasedItemModel *model;
     int lastPressSectionIndex;
 
     int calcSpanWidth(const int sectionWidth);
@@ -282,10 +282,10 @@ void TimelineRulerHeader::paintSection1(QPainter *painter, const QRect &rect, in
         QBrush fillColor = TimelineColorScheme::instance()->headerEmpty();
 
         QVariant activeValue = model()->headerData(logicalIndex, orientation(),
-                                                   TimelineFramesModel::ActiveFrameRole);
+                                                   KisTimeBasedItemModel::ActiveFrameRole);
 
         QVariant cachedValue = model()->headerData(logicalIndex, orientation(),
-                                                   TimelineFramesModel::FrameCachedRole);
+                                                   KisTimeBasedItemModel::FrameCachedRole);
 
         if (activeValue.isValid() && activeValue.toBool()) {
             fillColor = TimelineColorScheme::instance()->headerActive();
@@ -330,7 +330,7 @@ void TimelineRulerHeader::updateMinimumSize()
 
 void TimelineRulerHeader::setModel(QAbstractItemModel *model)
 {
-    TimelineFramesModel *framesModel = qobject_cast<TimelineFramesModel*>(model);
+    KisTimeBasedItemModel *framesModel = qobject_cast<KisTimeBasedItemModel*>(model);
     m_d->model = framesModel;
 
     QHeaderView::setModel(model);
@@ -365,7 +365,7 @@ void TimelineRulerHeader::mousePressEvent(QMouseEvent *e)
 
         if (e->button() == Qt::RightButton) {
             if (numSelectedColumns <= 1) {
-                model()->setHeaderData(logical, orientation(), true, TimelineFramesModel::ActiveFrameRole);
+                model()->setHeaderData(logical, orientation(), true, KisTimeBasedItemModel::ActiveFrameRole);
             }
 
             m_d->insertLeftAction->setText(i18n("Insert %1 left", numSelectedColumns));
@@ -378,7 +378,7 @@ void TimelineRulerHeader::mousePressEvent(QMouseEvent *e)
 
         } else if (e->button() == Qt::LeftButton) {
             m_d->lastPressSectionIndex = logical;
-            model()->setHeaderData(logical, orientation(), true, TimelineFramesModel::ActiveFrameRole);
+            model()->setHeaderData(logical, orientation(), true, KisTimeBasedItemModel::ActiveFrameRole);
         }
     }
 
@@ -391,7 +391,7 @@ void TimelineRulerHeader::mouseMoveEvent(QMouseEvent *e)
     if (logical != -1) {
         if (e->buttons() & Qt::LeftButton) {
             m_d->model->setScrubState(true);
-            model()->setHeaderData(logical, orientation(), true, TimelineFramesModel::ActiveFrameRole);
+            model()->setHeaderData(logical, orientation(), true, KisTimeBasedItemModel::ActiveFrameRole);
 
             if (m_d->lastPressSectionIndex >= 0 &&
                 logical != m_d->lastPressSectionIndex &&
@@ -428,7 +428,7 @@ QVector<QPoint> TimelineRulerHeader::Private::prepareFramesSlab(int startCol, in
 
     for (int i = 0; i < numRows; i++) {
         for (int j = startCol; j <= endCol; j++) {
-            const bool exists = model->data(model->index(i, j), TimelineFramesModel::FrameExistsRole).toBool();
+            const bool exists = model->data(model->index(i, j), KisTimeBasedItemModel::FrameExistsRole).toBool();
             if (exists) {
                 frames << QPoint(j, i);
             }

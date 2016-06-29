@@ -51,6 +51,12 @@ void KisAnimationCurvesView::setModel(QAbstractItemModel *model)
 {
     QAbstractItemView::setModel(model);
     m_d->horizontalHeader->setModel(model);
+
+    connect(model, &QAbstractItemModel::dataChanged,
+            this, &KisAnimationCurvesView::slotDataChanged);
+
+    connect(model, &QAbstractItemModel::headerDataChanged,
+            this, &KisAnimationCurvesView::slotHeaderDataChanged);
 }
 
 QRect KisAnimationCurvesView::visualRect(const QModelIndex &index) const
@@ -121,7 +127,7 @@ void KisAnimationCurvesView::paintKeyframes(QPainter &painter, int firstFrame, i
     for (int channel = 0; channel < channels; channel++) {
         for (int time=firstFrame; time <= lastFrame; time++) {
             QModelIndex index = model()->index(channel, time);
-            bool keyframeExists = model()->data(index, KisAnimationCurvesModel::KeyframeExistsRole).toReal();
+            bool keyframeExists = model()->data(index, KisAnimationCurvesModel::SpecialKeyframeExists).toReal();
 
             if (keyframeExists) {
                 QStyleOptionViewItem opt;
@@ -178,4 +184,14 @@ void KisAnimationCurvesView::updateGeometries()
     m_d->verticalHeader->setGeometry(0, topMargin, leftMargin, viewRect.height());
 
     QAbstractItemView::updateGeometries();
+}
+
+void KisAnimationCurvesView::slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
+{
+    update();
+}
+
+void KisAnimationCurvesView::slotHeaderDataChanged(Qt::Orientation orientation, int first, int last)
+{
+    update();
 }

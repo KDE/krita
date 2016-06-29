@@ -23,9 +23,10 @@
 #include <QIcon>
 #include <QAbstractItemModel>
 
+#include "kis_time_based_item_model.h"
 #include "kis_types.h"
 
-class KisAnimationCurvesModel : public QAbstractTableModel
+class KisAnimationCurvesModel : public KisTimeBasedItemModel
 {
     Q_OBJECT
 public:
@@ -35,16 +36,16 @@ public:
     bool hasConnectionToCanvas() const;
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role);
+
+    bool removeFrames(const QModelIndexList &indexes);
+    bool offsetFrames(QVector<QPoint> srcIndexes, const QPoint &offset, bool copyFrames);
 
     enum ItemDataRole
     {
-        KeyframeExistsRole = Qt::UserRole + 101,
-        ScalarValueRole,
+        ScalarValueRole = KisTimeBasedItemModel::UserRole + 101,
         InterpolationModeRole,
         LeftTangentRole,
         RightTangentRole,

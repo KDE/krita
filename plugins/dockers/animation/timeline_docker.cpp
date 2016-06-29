@@ -104,6 +104,8 @@ void TimelineDocker::setCanvas(KoCanvasBase * canvas)
         KisDocument *doc = static_cast<KisDocument*>(m_d->canvas->imageView()->document());
         KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(doc->shapeController());
         m_d->model->setDummiesFacade(kritaShapeController, m_d->canvas->image());
+
+        m_d->model->setImage(m_d->canvas->image());
         m_d->model->setFrameCache(m_d->canvas->frameCache());
         m_d->model->setAnimationPlayer(m_d->canvas->animationPlayer());
 

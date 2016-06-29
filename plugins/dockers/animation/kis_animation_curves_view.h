@@ -51,6 +51,11 @@ protected:
 protected Q_SLOTS:
     void updateGeometries();
 
+private Q_SLOTS:
+
+    void slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+    void slotHeaderDataChanged(Qt::Orientation orientation, int first, int last);
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

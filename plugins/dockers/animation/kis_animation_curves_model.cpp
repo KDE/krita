@@ -40,7 +40,8 @@ struct KisAnimationCurvesModel::Private
 };
 
 KisAnimationCurvesModel::KisAnimationCurvesModel(QObject *parent)
-    : m_d(new Private())
+    : KisTimeBasedItemModel(parent)
+    , m_d(new Private())
 {}
 
 KisAnimationCurvesModel::~KisAnimationCurvesModel()
@@ -51,58 +52,46 @@ int KisAnimationCurvesModel::rowCount(const QModelIndex &parent) const
     return m_d->channels.size();
 }
 
-int KisAnimationCurvesModel::columnCount(const QModelIndex &parent) const
-{
-    // TODO
-    return 100;
-}
-
 QVariant KisAnimationCurvesModel::data(const QModelIndex &index, int role) const
 {
     KisKeyframeChannel *channel = m_d->getChannelAt(index);
-
     KisScalarKeyframeChannel *scalarChannel = dynamic_cast<KisScalarKeyframeChannel*>(channel);
-    if (!channel) return QVariant();
 
-    int time = index.column();
-    KisKeyframeSP keyframe = channel->keyframeAt(time);
+    if (scalarChannel) {
+        int time = index.column();
+        KisKeyframeSP keyframe = channel->keyframeAt(time);
 
-    switch (role) {
-    case KeyframeExistsRole:
-        return !keyframe.isNull();
-    case ScalarValueRole:
-        return (!scalarChannel) ? QVariant() : scalarChannel->interpolatedValue(time);
-    case LeftTangentRole:
-        return (keyframe.isNull()) ? QVariant() : keyframe->leftTangent();
-    case RightTangentRole:
-        return (keyframe.isNull()) ? QVariant() : keyframe->rightTangent();
-    case InterpolationModeRole:
-        return (keyframe.isNull()) ? QVariant() : keyframe->interpolationMode();
-    case CurveColorRole:
-        return QColor(Qt::red);
-    default:
-        break;
+        switch (role) {
+        case SpecialKeyframeExists:
+            return !keyframe.isNull();
+        case ScalarValueRole:
+            return (!scalarChannel) ? QVariant() : scalarChannel->interpolatedValue(time);
+        case LeftTangentRole:
+            return (keyframe.isNull()) ? QVariant() : keyframe->leftTangent();
+        case RightTangentRole:
+            return (keyframe.isNull()) ? QVariant() : keyframe->rightTangent();
+        case InterpolationModeRole:
+            return (keyframe.isNull()) ? QVariant() : keyframe->interpolationMode();
+        case CurveColorRole:
+            return QColor(Qt::red);
+        default:
+            break;
+        }
     }
 
-    return QVariant();
+    return KisTimeBasedItemModel::data(index, role);
 }
 
 bool KisAnimationCurvesModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     // TODO
-    return false;
+    return KisTimeBasedItemModel::setData(index, value, role);
 }
 
 QVariant KisAnimationCurvesModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     // TODO
-    return QVariant();
-}
-
-bool KisAnimationCurvesModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
-{
-    // TODO
-    return false;
+    return KisTimeBasedItemModel::headerData(section, orientation, role);
 }
 
 void KisAnimationCurvesModel::slotCurrentNodeChanged(KisNodeSP node)
@@ -110,4 +99,16 @@ void KisAnimationCurvesModel::slotCurrentNodeChanged(KisNodeSP node)
     beginResetModel();
     m_d->channels = node->keyframeChannels();
     endResetModel();
+}
+
+bool KisAnimationCurvesModel::removeFrames(const QModelIndexList &indexes)
+{
+    // TODO
+    return false;
+}
+
+bool KisAnimationCurvesModel::offsetFrames(QVector<QPoint> srcIndexes, const QPoint &offset, bool copyFrames)
+{
+    // TODO
+    return false;
 }

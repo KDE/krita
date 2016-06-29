@@ -36,11 +36,13 @@
 #include "kis_transform_worker.h"
 
 
+
 #include <cmath>
 
 #define SAVE_OUTPUT
-const int THUMBNAIL_WIDTH = 640;
-const int THUMBNAIL_HEIGHT = 640;
+
+const int THUMBNAIL_WIDTH = 64;
+const int THUMBNAIL_HEIGHT = 64;
 const int IMAGE_WIDTH = 8000;
 const int IMAGE_HEIGHT = 6000;
 const int OVERSAMPLE = 4;
@@ -98,6 +100,7 @@ void KisThumbnailBenchmark::benchmarkCreateThumbnailCached()
         image = m_dev->createThumbnail(THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT, 2. );
     }
 }
+
 
 void KisThumbnailBenchmark::benchmarkCreateThumbnailHiQ()
 {

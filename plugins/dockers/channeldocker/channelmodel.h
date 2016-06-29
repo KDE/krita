@@ -19,10 +19,11 @@
 #define CHANNELMODEL_H
 
 #include <QModelIndex>
+#include <QSize>
+#include <kis_types.h>
 
 class KoColorSpace;
-
-#include <kis_types.h>
+class KisCanvas2;
 
 class ChannelModel : public QAbstractTableModel
 {
@@ -30,7 +31,7 @@ class ChannelModel : public QAbstractTableModel
 public:
     ChannelModel(QObject* parent = 0);
     virtual ~ChannelModel();
-    
+
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -38,13 +39,27 @@ public:
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
 
+    //set maximum size of the thumbnail image. This should be set based on screen resolution, etc.
+    virtual void setThumbnailSizeLimit(QSize size);
+
 public Q_SLOTS:
-    void slotLayerActivated(KisLayerSP layer);
+    void slotSetCanvas(KisCanvas2* canvas);
     void slotColorSpaceChanged(const KoColorSpace *colorSpace);
+    void updateData(KisCanvas2 *canvas);
+    void rowActivated(const QModelIndex &index);
+
 Q_SIGNALS:
     void channelFlagsChanged();
+
 private:
-    KisLayerWSP m_currentLayer;
+    void updateThumbnails();
+
+private:
+    KisCanvas2* m_canvas;
+    QVector<QImage> m_thumbnails;
+    QSize m_thumbnailSizeLimit;
+    int m_oversampleRatio;
 };
+
 
 #endif // CHANNELMODEL_H

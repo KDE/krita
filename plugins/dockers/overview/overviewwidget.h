@@ -22,10 +22,33 @@
 
 #include <QWidget>
 #include <QPixmap>
+#include <QMutex>
+#include "kis_idle_watcher.h"
+#include "kis_simple_stroke_strategy.h"
 
 class KisCanvas2;
 class KisSignalCompressor;
 class KoCanvasBase;
+
+class OverviewThumbnailStrokeStrategy : public KisSimpleStrokeStrategy
+{
+public:
+    OverviewThumbnailStrokeStrategy(KisImageWSP image, QSize thumbnailSize);
+    ~OverviewThumbnailStrokeStrategy();
+
+    static QList<KisStrokeJobData*> createJobsData(KisImageWSP image);
+
+private:
+    void initStrokeCallback();
+    void doStrokeCallback(KisStrokeJobData *data);
+    void finishStrokeCallback();
+    void cancelStrokeCallback();
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
+    QSize m_thumbnailSize;
+};
 
 class OverviewWidget : public QWidget
 {
@@ -41,6 +64,7 @@ public:
 
 public Q_SLOTS:
     void startUpdateCanvasProjection();
+    void generateThumbnail();
 
 protected:
     void resizeEvent(QResizeEvent *event);
@@ -51,7 +75,7 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent* event);
     virtual void mouseReleaseEvent(QMouseEvent* event);
     virtual void wheelEvent(QWheelEvent* event);
-    
+
 private:
     QSize calculatePreviewSize();
     QPointF previewOrigin();
@@ -66,7 +90,13 @@ private:
     QPointF m_lastPos;
 
     QColor m_outlineColor;
+    KisIdleWatcher m_imageIdleWatcher;
+    bool m_thumbnailNeedsUpdate;
+    //OverviewThumbnailStrokeStrategy* m_overviewStrategy;
+    KisStrokeId strokeId;
+    QMutex mutex;
 };
+
 
 
 #endif /* OVERVIEWWIDGET_H */

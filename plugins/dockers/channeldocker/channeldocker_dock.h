@@ -24,6 +24,7 @@
 class ChannelModel;
 class QTableView;
 class KisCanvas2;
+class KisSignalCompressor;
 
 class ChannelDockerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
@@ -32,7 +33,13 @@ public:
     QString observerName() { return "ChannelDockerDock"; }
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas() { m_canvas = 0; setEnabled(false);}
+
+public Q_SLOTS:
+    virtual void startUpdateCanvasProjection();
+
 private:
+
+    KisSignalCompressor *m_compressor;
     KisCanvas2 *m_canvas;
     QTableView *m_channelTable;
     ChannelModel *m_model;

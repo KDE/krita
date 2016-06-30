@@ -84,6 +84,19 @@ KisImportExportFilter::ConversionStatus KisAnimationExporterUI::exportSequence(K
 
 struct KisAnimationExporter::Private
 {
+    Private(KisDocument *document, int fromTime, int toTime)
+        : document(document)
+        , image(document->image())
+        , firstFrame(fromTime)
+        , lastFrame(toTime)
+        , currentFrame(-1)
+        , batchMode(document->fileBatchMode())
+        , isCancelled(false)
+        , status(KisImportExportFilter::OK)
+        , tmpDevice(new KisPaintDevice(image->colorSpace()))
+    {
+    }
+
     KisDocument *document;
     KisImageWSP image;
 
@@ -100,18 +113,8 @@ struct KisAnimationExporter::Private
 
     KisPaintDeviceSP tmpDevice;
 
-    Private(KisDocument *document, int fromTime, int toTime)
-        : document(document),
-          image(document->image()),
-          firstFrame(fromTime),
-          lastFrame(toTime),
-          currentFrame(-1),
-          batchMode(document->fileBatchMode()),
-          isCancelled(false),
-          status(KisImportExportFilter::OK),
-          tmpDevice(new KisPaintDevice(image->colorSpace()))
-    {
-    }
+    KisPropertiesConfigurationSP exportConfiguration;
+
 };
 
 KisAnimationExporter::KisAnimationExporter(KisDocument *document, int fromTime, int toTime)
@@ -126,6 +129,11 @@ KisAnimationExporter::KisAnimationExporter(KisDocument *document, int fromTime, 
 
 KisAnimationExporter::~KisAnimationExporter()
 {
+}
+
+void KisAnimationExporter::setExportConfiguration(KisPropertiesConfigurationSP exportConfiguration)
+{
+    m_d->exportConfiguration = exportConfiguration;
 }
 
 void KisAnimationExporter::setSaveFrameCallback(SaveFrameCallback func)
@@ -159,6 +167,7 @@ KisImportExportFilter::ConversionStatus KisAnimationExporter::exportAnimation()
      *             nasty.
      */
     KisImageLockHijacker badGuy(m_d->image);
+    Q_UNUSED(badGuy);
 
     KIS_ASSERT_RECOVER(!m_d->image->locked()) { return KisImportExportFilter::InternalError; }
 
@@ -213,7 +222,7 @@ void KisAnimationExporter::frameReadyToSave()
         KisImportExportFilter::OK;
     int time = m_d->currentFrame;
 
-    result = m_d->saveFrameCallback(time, m_d->tmpDevice);
+    result = m_d->saveFrameCallback(time, m_d->tmpDevice, m_d->exportConfiguration);
 
     if (!m_d->batchMode) {
         emit m_d->document->sigProgress((time - m_d->firstFrame) * 100 /
@@ -293,19 +302,20 @@ KisAnimationExportSaver::KisAnimationExportSaver(KisDocument *document, const QS
     m_d->tmpDoc->setFileBatchMode(true);
 
     using namespace std::placeholders; // For _1 placeholder
-    m_d->exporter.setSaveFrameCallback(std::bind(&KisAnimationExportSaver::saveFrameCallback, this, _1, _2));
+    m_d->exporter.setSaveFrameCallback(std::bind(&KisAnimationExportSaver::saveFrameCallback, this, _1, _2, _3));
 }
 
 KisAnimationExportSaver::~KisAnimationExportSaver()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisAnimationExportSaver::exportAnimation()
+KisImportExportFilter::ConversionStatus KisAnimationExportSaver::exportAnimation(KisPropertiesConfigurationSP cfg)
 {
+    m_d->exporter.setExportConfiguration(cfg);
     return m_d->exporter.exportAnimation();
 }
 
-KisImportExportFilter::ConversionStatus KisAnimationExportSaver::saveFrameCallback(int time, KisPaintDeviceSP frame)
+KisImportExportFilter::ConversionStatus KisAnimationExportSaver::saveFrameCallback(int time, KisPaintDeviceSP frame, KisPropertiesConfigurationSP exportConfiguration)
 {
     KisImportExportFilter::ConversionStatus status =
         KisImportExportFilter::OK;

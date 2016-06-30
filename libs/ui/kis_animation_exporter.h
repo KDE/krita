@@ -53,11 +53,12 @@ class KRITAUI_EXPORT KisAnimationExporter : public QObject
 {
     Q_OBJECT
 public:
-    typedef std::function<KisImportExportFilter::ConversionStatus (int , KisPaintDeviceSP)> SaveFrameCallback;
+    typedef std::function<KisImportExportFilter::ConversionStatus (int , KisPaintDeviceSP, KisPropertiesConfigurationSP)> SaveFrameCallback;
 public:
     KisAnimationExporter(KisDocument *document, int fromTime, int toTime);
     ~KisAnimationExporter();
 
+    void setExportConfiguration(KisPropertiesConfigurationSP exportConfiguration);
     KisImportExportFilter::ConversionStatus exportAnimation();
 
     void setSaveFrameCallback(SaveFrameCallback func);
@@ -87,12 +88,12 @@ public:
     KisAnimationExportSaver(KisDocument *document, const QString &baseFilename, int fromTime, int toTime, int sequenceNumberingOffset = 0);
     ~KisAnimationExportSaver();
 
-    KisImportExportFilter::ConversionStatus exportAnimation();
+    KisImportExportFilter::ConversionStatus exportAnimation(KisPropertiesConfigurationSP cfg = 0);
 
     QString savedFilesMask() const;
 
 private:
-    KisImportExportFilter::ConversionStatus saveFrameCallback(int time, KisPaintDeviceSP frame);
+    KisImportExportFilter::ConversionStatus saveFrameCallback(int time, KisPaintDeviceSP frame, KisPropertiesConfigurationSP exportConfiguration = 0);
 
 private:
     struct Private;

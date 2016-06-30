@@ -88,7 +88,7 @@ void AnimaterionRenderer::slotRenderAnimation()
                 .arg(sequencecfg->getString("basename"))
                 .arg(extension);
         KisAnimationExportSaver exporter(doc, baseFileName, sequencecfg->getInt("first_frame"), sequencecfg->getInt("last_frame"), sequencecfg->getInt("sequence_start"));
-        bool success = exporter.exportAnimation();
+        bool success = exporter.exportAnimation(dlgAnimaterionRenderer.getFrameExportConfiguration());
         Q_ASSERT(success);
     }
 

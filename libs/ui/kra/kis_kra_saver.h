@@ -47,6 +47,7 @@ public:
 
 private:
     void saveBackgroundColor(QDomDocument& doc, QDomElement& element, KisImageWSP image);
+    void saveWarningColor(QDomDocument& doc, QDomElement& element, KisImageWSP image);
     void saveCompositions(QDomDocument& doc, QDomElement& element, KisImageWSP image);
     bool saveAssistants(KoStore *store,QString uri, bool external);
     bool saveAssistantsList(QDomDocument& doc, QDomElement& element);

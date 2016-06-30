@@ -51,6 +51,9 @@ KisOpenGLImageTextures::ImageTexturesMap KisOpenGLImageTextures::imageTexturesMa
 KisOpenGLImageTextures::KisOpenGLImageTextures()
     : m_image(0)
     , m_monitorProfile(0)
+    , m_proofingConfig(0)
+    , m_proofingTransform(0)
+    , m_createNewProofingTransform(true)
     , m_tilesDestinationColorSpace(0)
     , m_internalColorManagementActive(true)
     , m_checkerTexture(0)
@@ -65,7 +68,6 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
     m_conversionFlags = KoColorConversionTransformation::HighQuality;
     if (cfg.useBlackPointCompensation()) m_conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
     if (!cfg.allowLCMSOptimization()) m_conversionFlags |= KoColorConversionTransformation::NoOptimization;
-
     m_useOcio = cfg.useOcio();
 }
 
@@ -77,7 +79,10 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
     , m_monitorProfile(monitorProfile)
     , m_renderingIntent(renderingIntent)
     , m_conversionFlags(conversionFlags)
+    , m_proofingConfig(0)
+    , m_proofingTransform(0)
     , m_tilesDestinationColorSpace(0)
+    , m_createNewProofingTransform(true)
     , m_internalColorManagementActive(true)
     , m_checkerTexture(0)
     , m_glFuncs(0)
@@ -324,8 +329,19 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect,
             if (tileInfo->valid()) {
                 tileInfo->retrieveData(m_image, channelFlags, m_onlyOneChannelSelected, m_selectedChannelIndex);
 
+                //create transform
+                if (m_createNewProofingTransform) {
+                    const KoColorSpace *proofingSpace = KoColorSpaceRegistry::instance()->colorSpace(m_proofingConfig->proofingModel,m_proofingConfig->proofingDepth,m_proofingConfig->proofingProfile);
+                    m_proofingTransform = tileInfo->generateProofingTransform(dstCS, proofingSpace, m_renderingIntent, m_proofingConfig->intent, m_proofingConfig->conversionFlags, m_proofingConfig->warningColor, m_proofingConfig->adaptationState);
+                    m_createNewProofingTransform = false;
+                }
+
                 if (convertColorSpace) {
-                    tileInfo->convertTo(dstCS, m_renderingIntent, m_conversionFlags);
+                    if (m_proofingConfig && m_proofingTransform && m_proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::SoftProofing)) {
+                        tileInfo->proofTo(dstCS, m_proofingConfig->conversionFlags, m_proofingTransform);
+                    } else {
+                        tileInfo->convertTo(dstCS, m_renderingIntent, m_conversionFlags);
+                    }
                 }
 
                 info->tileList.append(tileInfo);
@@ -447,6 +463,12 @@ void KisOpenGLImageTextures::setChannelFlags(const QBitArray &channelFlags)
     }
     m_allChannelsSelected = (selectedChannels == m_channelFlags.size());
     m_onlyOneChannelSelected = (selectedChannels == 1);
+}
+
+void KisOpenGLImageTextures::setProofingConfig(KisProofingConfiguration *proofingConfig)
+{
+    m_proofingConfig = proofingConfig;
+    m_createNewProofingTransform = true;
 }
 
 void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)

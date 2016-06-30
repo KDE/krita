@@ -32,10 +32,10 @@
 
 
 KisToolSelectPath::KisToolSelectPath(KoCanvasBase * canvas)
-    : SelectionActionHandler<KisDelegatedSelectPathWrapper>(canvas,
-                                                            KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6),
-                                                            i18n("Select path"),
-                                                            (KisTool*) (new __KisToolSelectPathLocalTool(canvas, this)))
+    : KisToolSelectBase<KisDelegatedSelectPathWrapper>(canvas,
+                                                       KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6),
+                                                       i18n("Select path"),
+                                                       (KisTool*) (new __KisToolSelectPathLocalTool(canvas, this)))
 {
 }
 
@@ -88,7 +88,7 @@ void KisToolSelectPath::setAlternateSelectionAction(SelectionAction action)
 {
     // We will turn off the ability to change the selection in the middle of drawing a path.
     if (!m_localTool->listeningToModifiers()) {
-        SelectionActionHandler<KisDelegatedSelectPathWrapper>::setAlternateSelectionAction(action);
+        KisToolSelectBase<KisDelegatedSelectPathWrapper>::setAlternateSelectionAction(action);
     }
 }
 

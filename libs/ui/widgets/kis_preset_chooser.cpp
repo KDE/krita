@@ -37,6 +37,7 @@
 #include <KoResourceModel.h>
 #include <KoResourceServerAdapter.h>
 #include <KoResourceItemChooserSync.h>
+#include "KoResourceItemView.h"
 
 #include <brushengine/kis_paintop_settings.h>
 #include <brushengine/kis_paintop_preset.h>
@@ -242,6 +243,8 @@ void KisPresetChooser::updateViewSettings()
     } else if (m_mode == STRIP) {
         m_chooser->setSynced(false);
         m_chooser->setRowCount(1);
+        m_chooser->itemView()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        m_chooser->itemView()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         // An offset of 7 keeps the cell exactly square, TODO: use constants, not hardcoded numbers
         m_chooser->setColumnWidth(m_chooser->viewSize().height() - 7);
         m_delegate->setShowText(false);

@@ -94,6 +94,7 @@ public:
 
     KisDisplayFilter* displayFilter;
     KisOpenGL::FilterMode filterMode;
+    bool proofingConfigIsUpdated=false;
 
     GLsync glSyncObject{0};
 
@@ -238,6 +239,7 @@ void KisOpenGLCanvas2::initializeGL()
     initializeOpenGLFunctions();
 
     KisConfig cfg;
+    d->openGLImageTextures->setProofingConfig(canvas()->proofingConfiguration());
     d->openGLImageTextures->initGL(context()->functions());
     d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
     initializeCheckerShader();
@@ -841,6 +843,10 @@ void KisOpenGLCanvas2::finishResizingImage(qint32 w, qint32 h)
 KisUpdateInfoSP KisOpenGLCanvas2::startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags)
 {
     d->openGLImageTextures->setChannelFlags(channelFlags);
+    if (canvas()->proofingConfigUpdated()) {
+        d->openGLImageTextures->setProofingConfig(canvas()->proofingConfiguration());
+        canvas()->setProofingConfigUpdated(false);
+    }
     return d->openGLImageTextures->updateCache(rc);
 }
 

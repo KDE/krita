@@ -74,6 +74,9 @@
 #include "opengl/kis_opengl.h"
 #include "kis_fps_decoration.h"
 
+#include "KoColorConversionTransformation.h"
+#include "KisProofingConfiguration.h"
+
 #include <kis_favorite_resource_manager.h>
 #include <kis_popup_palette.h>
 
@@ -110,6 +113,10 @@ public:
     QRect savedUpdateRect;
 
     QBitArray channelFlags;
+    KisProofingConfiguration *proofingConfig = 0;
+    bool softProofing = false;
+    bool gamutCheck = false;
+    bool proofingConfigUpdated = false;
 
     KisPopupPalette *popupPalette = 0;
     KisDisplayColorConverter displayColorConverter;
@@ -180,7 +187,6 @@ void KisCanvas2::setup()
             globalShapeManager(), SIGNAL(selectionContentChanged()));
     connect(kritaShapeController, SIGNAL(currentLayerChanged(const KoShapeLayer*)),
             globalShapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)));
-
 
     connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDoCanvasUpdate()));
 }
@@ -454,6 +460,7 @@ void KisCanvas2::initializeImage()
 
     connect(image, SIGNAL(sigImageUpdated(QRect)), SLOT(startUpdateCanvasProjection(QRect)), Qt::DirectConnection);
     connect(this, SIGNAL(sigCanvasCacheUpdated()), SLOT(updateCanvasProjection()));
+    connect(image, SIGNAL(sigProofingConfigChanged()), SLOT(slotChangeProofingConfig()));
     connect(image, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), SLOT(startResizingImage()), Qt::DirectConnection);
     connect(this, SIGNAL(sigContinueResizeImage(qint32,qint32)), SLOT(finishResizingImage(qint32,qint32)));
 
@@ -543,6 +550,73 @@ KisExposureGammaCorrectionInterface* KisCanvas2::exposureGammaCorrectionInterfac
     return displayFilter ?
         displayFilter->correctionInterface() :
         KisDumbExposureGammaCorrectionInterface::instance();
+}
+
+void KisCanvas2::setProofingOptions(bool softProof, bool gamutCheck)
+{
+    m_d->proofingConfig = this->image()->proofingConfiguration();
+    if (!m_d->proofingConfig) {
+        qDebug()<<"Canvas: No proofing config found, generating one.";
+        KisImageConfig cfg;
+        m_d->proofingConfig = cfg.defaultProofingconfiguration();
+    }
+    KoColorConversionTransformation::ConversionFlags conversionFlags = m_d->proofingConfig->conversionFlags;
+
+    if (softProof && this->image()->colorSpace()->colorDepthId().id().contains("U")) {
+        conversionFlags |= KoColorConversionTransformation::SoftProofing;
+    } else {
+        conversionFlags = conversionFlags &  ~KoColorConversionTransformation::SoftProofing;
+    }
+    if (gamutCheck && softProof && this->image()->colorSpace()->colorDepthId().id().contains("U")) {
+        conversionFlags |= KoColorConversionTransformation::GamutCheck;
+    } else {
+        conversionFlags = conversionFlags & ~KoColorConversionTransformation::GamutCheck;
+    }
+    m_d->proofingConfig->conversionFlags = conversionFlags;
+
+    m_d->proofingConfigUpdated = true;
+    startUpdateInPatches(this->image()->bounds());
+
+}
+
+void KisCanvas2::slotSoftProofing(bool softProofing)
+{
+    m_d->softProofing = softProofing;
+    setProofingOptions(m_d->softProofing, m_d->gamutCheck);
+}
+
+void KisCanvas2::slotGamutCheck(bool gamutCheck)
+{
+    m_d->gamutCheck = gamutCheck;
+    setProofingOptions(m_d->softProofing, m_d->gamutCheck);
+}
+
+void KisCanvas2::slotChangeProofingConfig()
+{
+    setProofingOptions(m_d->softProofing, m_d->gamutCheck);
+}
+
+void KisCanvas2::setProofingConfigUpdated(bool updated)
+{
+    m_d->proofingConfigUpdated = updated;
+}
+
+bool KisCanvas2::proofingConfigUpdated()
+{
+    return m_d->proofingConfigUpdated;
+}
+
+KisProofingConfiguration *KisCanvas2::proofingConfiguration() const
+{
+    if (!m_d->proofingConfig) {
+        m_d->proofingConfig = this->image()->proofingConfiguration();
+        if (!m_d->proofingConfig) {
+            qDebug()<<"Canvas: No proofing config found, generating one.";
+            KisImageConfig cfg;
+            m_d->proofingConfig = cfg.defaultProofingconfiguration();
+        }
+    }
+    return m_d->proofingConfig;
 }
 
 void KisCanvas2::startResizingImage()
@@ -742,11 +816,11 @@ void KisCanvas2::slotSetDisplayProfile(const KoColorProfile *monitorProfile)
 
     m_d->displayColorConverter.setMonitorProfile(monitorProfile);
 
-    KisImageWSP image = this->image();
-
-    image->barrierLock();
-
-    m_d->canvasWidget->setDisplayProfile(&m_d->displayColorConverter);
+    {
+        KisImageSP image = this->image();
+        KisImageBarrierLocker l(image);
+        m_d->canvasWidget->setDisplayProfile(&m_d->displayColorConverter);
+    }
 
     refetchDataFromImage();
 }

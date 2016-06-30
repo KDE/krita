@@ -55,6 +55,7 @@
 #include "kis_dom_utils.h"
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
+#include "KisProofingConfiguration.h"
 
 
 using namespace KRA;
@@ -102,6 +103,12 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageWSP image)
     }
     imageElement.setAttribute(X_RESOLUTION, KisDomUtils::toString(image->xRes()*72.0));
     imageElement.setAttribute(Y_RESOLUTION, KisDomUtils::toString(image->yRes()*72.0));
+    //now the proofing options:
+    imageElement.setAttribute(PROOFINGPROFILENAME, KisDomUtils::toString(image->proofingConfiguration()->proofingProfile));
+    imageElement.setAttribute(PROOFINGMODEL, KisDomUtils::toString(image->proofingConfiguration()->proofingModel));
+    imageElement.setAttribute(PROOFINGDEPTH, KisDomUtils::toString(image->proofingConfiguration()->proofingDepth));
+    imageElement.setAttribute(PROOFINGINTENT, KisDomUtils::toString(image->proofingConfiguration()->intent));
+    imageElement.setAttribute(PROOFINGADAPTATIONSTATE, KisDomUtils::toString(image->proofingConfiguration()->adaptationState));
 
     quint32 count = 1; // We don't save the root layer, but it does count
     KisSaveXmlVisitor visitor(doc, imageElement, count, m_d->doc->url().toLocalFile(), true);
@@ -114,6 +121,7 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageWSP image)
     m_d->keyframeFilenames = visitor.keyframeFileNames();
 
     saveBackgroundColor(doc, imageElement, image);
+    saveWarningColor(doc, imageElement, image);
     saveCompositions(doc, imageElement, image);
     saveAssistantsList(doc,imageElement);
     saveGrid(doc,imageElement);
@@ -225,6 +233,26 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
         }
     }
 
+    //This'll embed the profile used for proofing into the kra file.
+    if (image->proofingConfiguration()) {
+        const KoColorProfile *proofingProfile = KoColorSpaceRegistry::instance()->profileByName(image->proofingConfiguration()->proofingProfile);
+        if (proofingProfile && proofingProfile->valid()) {
+            QByteArray proofingProfileRaw = proofingProfile->rawData();
+            if (!proofingProfileRaw.isEmpty()) {
+                annotation = new KisAnnotation(ICCPROOFINGPROFILE, proofingProfile->name(), proofingProfile->rawData());
+            }
+        }
+        if (annotation) {
+            location = external ? QString() : uri;
+            location += m_d->imageName + ICC_PROOFING_PATH;
+            if (store->open(location)) {
+                store->write(annotation->annotation());
+                store->close();
+            }
+        }
+
+    }
+
     {
         KisPSDLayerStyleCollectionResource collection("not-nexists.asl");
         KIS_ASSERT_RECOVER_NOOP(!collection.valid());
@@ -267,11 +295,23 @@ QStringList KisKraSaver::errorMessages() const
 
 void KisKraSaver::saveBackgroundColor(QDomDocument& doc, QDomElement& element, KisImageWSP image)
 {
-    QDomElement e = doc.createElement("ProjectionBackgroundColor");
+    QDomElement e = doc.createElement(CANVASPROJECTIONCOLOR);
     KoColor color = image->defaultProjectionColor();
     QByteArray colorData = QByteArray::fromRawData((const char*)color.data(), color.colorSpace()->pixelSize());
-    e.setAttribute("ColorData", QString(colorData.toBase64()));
+    e.setAttribute(COLORBYTEDATA, QString(colorData.toBase64()));
     element.appendChild(e);
+}
+
+void KisKraSaver::saveWarningColor(QDomDocument& doc, QDomElement& element, KisImageWSP image)
+{
+    if (image->proofingConfiguration()) {
+        QDomElement e = doc.createElement(PROOFINGWARNINGCOLOR);
+        KoColor color = image->proofingConfiguration()->warningColor;
+        color.toXML(doc, e);
+        //QByteArray colorData = QByteArray::fromRawData((const char*)color.data(), color.colorSpace()->pixelSize());
+        //e.setAttribute("ColorData", QString(colorData.toBase64()));
+        element.appendChild(e);
+    }
 }
 
 void KisKraSaver::saveCompositions(QDomDocument& doc, QDomElement& element, KisImageWSP image)

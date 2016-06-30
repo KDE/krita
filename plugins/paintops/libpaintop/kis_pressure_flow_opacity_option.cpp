@@ -67,7 +67,7 @@ qreal KisFlowOpacityOption::getStaticOpacity() const
 
 qreal KisFlowOpacityOption::getDynamicOpacity(const KisPaintInformation& info) const
 {
-    return computeValue(info);
+    return computeSizeLikeValue(info);
 }
 
 void KisFlowOpacityOption::setFlow(qreal flow)

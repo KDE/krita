@@ -27,10 +27,10 @@ KisPressureHSVOption* KisPressureHSVOption::createHueOption() {
 QString KisPressureHSVOption::hueMinLabel()
 {
     // xgettext: no-c-format
-    QString activeColorMsg = i18n("(50% is active color)");
+    QString activeColorMsg = i18n("(0° is active color)");
     QString br("<br />");
-    QString fullPercent = i18n("100%");
-    QString zeroPercent = i18n("0%");
+    QString fullPercent = i18n("+180°");
+    QString zeroPercent = i18n("-180°");
 
     return QString(zeroPercent + br + i18n("CCW hue") + br + activeColorMsg);
 }
@@ -38,10 +38,10 @@ QString KisPressureHSVOption::hueMinLabel()
 QString KisPressureHSVOption::huemaxLabel()
 {
     // xgettext: no-c-format
-    QString activeColorMsg = i18n("(50% is active color)");
+    QString activeColorMsg = i18n("(0° is active color)");
     QString br("<br />");
-    QString fullPercent = i18n("100%");
-    QString zeroPercent = i18n("0%");
+    QString fullPercent = i18n("+180°");
+    QString zeroPercent = i18n("-180°");
 
     return QString(fullPercent + br + i18n("CW hue"));
 }
@@ -55,8 +55,8 @@ QString KisPressureHSVOption::saturationMinLabel()
     // xgettext: no-c-format
     QString activeColorMsg = i18n("(50% is active color)");
     QString br("<br />");
-    QString fullPercent = i18n("100%");
-    QString zeroPercent = i18n("0%");
+    QString fullPercent = i18n("+100%");
+    QString zeroPercent = i18n("-100%");
 
     return QString(zeroPercent + br + i18n("Less saturation ") + br + activeColorMsg);
 
@@ -67,8 +67,8 @@ QString KisPressureHSVOption::saturationmaxLabel()
     // xgettext: no-c-format
     QString activeColorMsg = i18n("(50% is active color)");
     QString br("<br />");
-    QString fullPercent = i18n("100%");
-    QString zeroPercent = i18n("0%");
+    QString fullPercent = i18n("+100%");
+    QString zeroPercent = i18n("-100%");
 
     return QString(fullPercent + br + i18n("More saturation"));
 }
@@ -82,8 +82,8 @@ QString KisPressureHSVOption::valueMinLabel()
     // xgettext: no-c-format
     QString activeColorMsg = i18n("(50% is active color)");
     QString br("<br />");
-    QString fullPercent = i18n("100%");
-    QString zeroPercent = i18n("0%");
+    QString fullPercent = i18n("+100%");
+    QString zeroPercent = i18n("-100%");
 
     return QString(zeroPercent + br + i18n("Lower value ") + br + activeColorMsg);
 
@@ -94,8 +94,8 @@ QString KisPressureHSVOption::valuemaxLabel()
     // xgettext: no-c-format
     QString activeColorMsg = i18n("(50% is active color)");
     QString br("<br />");
-    QString fullPercent = i18n("100%");
-    QString zeroPercent = i18n("0%");
+    QString fullPercent = i18n("+100%");
+    QString zeroPercent = i18n("-100%");
 
     return QString(fullPercent + br + i18n("Higher value"));
 
@@ -106,7 +106,6 @@ struct KisPressureHSVOption::Private
 {
     QString parameterName;
     int paramId;
-    double min, max;
 };
 
 KisPressureHSVOption::KisPressureHSVOption(const QString& parameterName)
@@ -115,8 +114,6 @@ KisPressureHSVOption::KisPressureHSVOption(const QString& parameterName)
 {
     d->parameterName = parameterName;
     d->paramId = -1;
-    d->min = -1;
-    d->max = 1;
 }
 
 KisPressureHSVOption::~KisPressureHSVOption()
@@ -135,11 +132,9 @@ void KisPressureHSVOption::apply(KoColorTransformation* transfo, const KisPaintI
         d->paramId = transfo->parameterId(d->parameterName);
     }
 
+    qreal value = computeRotationLikeValue(info, 0);
 
-
-    double v = computeValue(info) * (d->max - d->min) + d->min;
-
-    transfo->setParameter(d->paramId, v);
+    transfo->setParameter(d->paramId, value);
     transfo->setParameter(3, 0); //sets the type to HSV.
     transfo->setParameter(4, false); //sets the colorize to false.
 }

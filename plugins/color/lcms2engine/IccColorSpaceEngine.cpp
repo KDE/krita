@@ -48,7 +48,7 @@ public:
                 || srcCs->colorDepthId() == Integer16BitsColorDepthID) {
 
             if ((srcProfile->name().contains(QLatin1String("linear"), Qt::CaseInsensitive) ||
-                    dstProfile->name().contains(QLatin1String("linear"), Qt::CaseInsensitive)) &&
+                 dstProfile->name().contains(QLatin1String("linear"), Qt::CaseInsensitive)) &&
                     !conversionFlags.testFlag(KoColorConversionTransformation::NoOptimization)) {
                 conversionFlags |= KoColorConversionTransformation::NoOptimization;
             }
@@ -79,7 +79,6 @@ public:
         qint32 dstPixelSize = dstColorSpace()->pixelSize();
 
         cmsDoTransform(m_transform, const_cast<quint8 *>(src), dst, numPixels);
-
         // Lcms does nothing to the destination alpha channel so we must convert that manually.
         while (numPixels > 0) {
             qreal alpha = srcColorSpace()->opacityF(src);
@@ -89,6 +88,87 @@ public:
             dst += dstPixelSize;
             numPixels--;
         }
+
+    }
+private:
+    mutable cmsHTRANSFORM m_transform;
+};
+
+class KoLcmsColorProofingConversionTransformation : public KoColorProofingConversionTransformation
+{
+public:
+    KoLcmsColorProofingConversionTransformation(const KoColorSpace *srcCs, quint32 srcColorSpaceType, LcmsColorProfileContainer *srcProfile,
+                                                const KoColorSpace *dstCs, quint32 dstColorSpaceType, LcmsColorProfileContainer *dstProfile,
+                                                const KoColorSpace *proofingSpace,
+                                                Intent renderingIntent,
+                                                Intent proofingIntent,
+                                                ConversionFlags conversionFlags,
+                                                quint8 *gamutWarning,
+                                                double adaptationState
+                                                )
+        : KoColorProofingConversionTransformation(srcCs, dstCs, proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning, adaptationState)
+        , m_transform(0)
+    {
+        Q_ASSERT(srcCs);
+        Q_ASSERT(dstCs);
+        Q_ASSERT(renderingIntent < 4);
+
+        if (srcCs->colorDepthId() == Integer8BitsColorDepthID
+                || srcCs->colorDepthId() == Integer16BitsColorDepthID) {
+
+            if ((srcProfile->name().contains(QLatin1String("linear"), Qt::CaseInsensitive) ||
+                 dstProfile->name().contains(QLatin1String("linear"), Qt::CaseInsensitive)) &&
+                    !conversionFlags.testFlag(KoColorConversionTransformation::NoOptimization)) {
+                conversionFlags |= KoColorConversionTransformation::NoOptimization;
+            }
+        }
+
+        quint16 alarm[cmsMAXCHANNELS];//this seems to be bgr???
+        alarm[0] = (cmsUInt16Number)gamutWarning[2]*256;
+        alarm[1] = (cmsUInt16Number)gamutWarning[1]*256;
+        alarm[2] = (cmsUInt16Number)gamutWarning[0]*256;
+        cmsSetAlarmCodes(alarm);
+        cmsSetAdaptationState(adaptationState);
+
+        m_transform = cmsCreateProofingTransform(srcProfile->lcmsProfile(),
+                                                 srcColorSpaceType,
+                                                 dstProfile->lcmsProfile(),
+                                                 dstColorSpaceType,
+                                                 dynamic_cast<const IccColorProfile *>(proofingSpace->profile())->asLcms()->lcmsProfile(),
+                                                 renderingIntent,
+                                                 proofingIntent,
+                                                 conversionFlags);
+        cmsSetAdaptationState(1);
+
+        Q_ASSERT(m_transform);
+    }
+
+    ~KoLcmsColorProofingConversionTransformation()
+    {
+        cmsDeleteTransform(m_transform);
+    }
+
+public:
+
+    virtual void transform(const quint8 *src, quint8 *dst, qint32 numPixels) const
+    {
+        Q_ASSERT(m_transform);
+
+        qint32 srcPixelSize = srcColorSpace()->pixelSize();
+        qint32 dstPixelSize = dstColorSpace()->pixelSize();
+        //cmsSetAdaptationState(0);
+
+        cmsDoTransform(m_transform, const_cast<quint8 *>(src), dst, numPixels);
+        // Lcms does nothing to the destination alpha channel so we must convert that manually.
+        while (numPixels > 0) {
+            qreal alpha = srcColorSpace()->opacityF(src);
+            dstColorSpace()->setOpacity(dst, alpha, 1);
+
+            src += srcPixelSize;
+            dst += dstPixelSize;
+            numPixels--;
+        }
+        //cmsSetAdaptationState(1);
 
     }
 private:
@@ -148,19 +228,39 @@ void IccColorSpaceEngine::removeProfile(const QString &filename)
 }
 
 KoColorConversionTransformation *IccColorSpaceEngine::createColorTransformation(const KoColorSpace *srcColorSpace,
-        const KoColorSpace *dstColorSpace,
-        KoColorConversionTransformation::Intent renderingIntent,
-        KoColorConversionTransformation::ConversionFlags conversionFlags) const
+                                                                                const KoColorSpace *dstColorSpace,
+                                                                                KoColorConversionTransformation::Intent renderingIntent,
+                                                                                KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
     Q_ASSERT(srcColorSpace);
     Q_ASSERT(dstColorSpace);
 
     return new KoLcmsColorConversionTransformation(
-               srcColorSpace, computeColorSpaceType(srcColorSpace),
-               dynamic_cast<const IccColorProfile *>(srcColorSpace->profile())->asLcms(), dstColorSpace, computeColorSpaceType(dstColorSpace),
-               dynamic_cast<const IccColorProfile *>(dstColorSpace->profile())->asLcms(), renderingIntent, conversionFlags);
+                srcColorSpace, computeColorSpaceType(srcColorSpace),
+                dynamic_cast<const IccColorProfile *>(srcColorSpace->profile())->asLcms(), dstColorSpace, computeColorSpaceType(dstColorSpace),
+                dynamic_cast<const IccColorProfile *>(dstColorSpace->profile())->asLcms(), renderingIntent, conversionFlags);
 
 }
+KoColorProofingConversionTransformation *IccColorSpaceEngine::createColorProofingTransformation(const KoColorSpace *srcColorSpace,
+                                                                                                const KoColorSpace *dstColorSpace,
+                                                                                                const KoColorSpace *proofingSpace,
+                                                                                                KoColorConversionTransformation::Intent renderingIntent,
+                                                                                                KoColorConversionTransformation::Intent proofingIntent,
+                                                                                                KoColorConversionTransformation::ConversionFlags conversionFlags,
+                                                                                                quint8 *gamutWarning,
+                                                                                                double adaptationState) const
+{
+    Q_ASSERT(srcColorSpace);
+    Q_ASSERT(dstColorSpace);
+
+    return new KoLcmsColorProofingConversionTransformation(
+                srcColorSpace, computeColorSpaceType(srcColorSpace),
+                dynamic_cast<const IccColorProfile *>(srcColorSpace->profile())->asLcms(), dstColorSpace, computeColorSpaceType(dstColorSpace),
+                dynamic_cast<const IccColorProfile *>(dstColorSpace->profile())->asLcms(), proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning,
+                adaptationState
+                );
+}
+
 quint32 IccColorSpaceEngine::computeColorSpaceType(const KoColorSpace *cs) const
 {
     Q_ASSERT(cs);

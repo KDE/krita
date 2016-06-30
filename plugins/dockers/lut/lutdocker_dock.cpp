@@ -164,6 +164,7 @@ LutDockerDock::LutDockerDock()
     connect(m_cmbInputColorSpace, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
     connect(m_cmbDisplayDevice, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
     connect(m_cmbView, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
+    connect(m_cmbLook, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
     connect(m_cmbComponents, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
 
     m_draggingSlider = false;
@@ -357,6 +358,8 @@ void LutDockerDock::enableControls()
     m_cmbDisplayDevice->setEnabled(ocioEnabled && externalColorManagementEnabled);
     m_lblView->setEnabled(ocioEnabled && externalColorManagementEnabled);
     m_cmbView->setEnabled(ocioEnabled && externalColorManagementEnabled);
+    m_lblLook->setEnabled(ocioEnabled && externalColorManagementEnabled);
+    m_cmbLook->setEnabled(ocioEnabled && externalColorManagementEnabled);
 
     bool enableConfigPath = m_colorManagement->currentIndex() == (int) KisConfig::OCIO_CONFIG;
 
@@ -379,6 +382,7 @@ void LutDockerDock::updateDisplaySettings()
         m_displayFilter->inputColorSpaceName = m_ocioConfig->getColorSpaceNameByIndex(m_cmbInputColorSpace->currentIndex());
         m_displayFilter->displayDevice = m_ocioConfig->getDisplay(m_cmbDisplayDevice->currentIndex());
         m_displayFilter->view = m_ocioConfig->getView(m_displayFilter->displayDevice, m_cmbView->currentIndex());
+        m_displayFilter->look = m_ocioConfig->getLookNameByIndex(m_cmbLook->currentIndex());
         m_displayFilter->gamma = m_gammaDoubleWidget->value();
         m_displayFilter->exposure = m_exposureDoubleWidget->value();
         m_displayFilter->swizzle = (OCIO_CHANNEL_SWIZZLE)m_cmbComponents->currentIndex();
@@ -531,6 +535,16 @@ void LutDockerDock::refillControls()
     }
 
     refillViewCombobox();
+
+    {
+        KisSignalsBlocker LookComboLocker(m_cmbLook);
+        m_cmbLook->clear();
+        int numLooks = m_ocioConfig->getNumLooks();
+        for (int k = 0; k < numLooks; k++) {
+           m_cmbLook->addSqueezedItem(QString::fromUtf8(m_ocioConfig->getLookNameByIndex(k)));
+        }
+        m_cmbLook->addSqueezedItem(i18nc("Item to indicate no look transform being selected","None"));
+    }
     updateDisplaySettings();
 }
 

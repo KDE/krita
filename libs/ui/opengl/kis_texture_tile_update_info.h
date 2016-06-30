@@ -209,6 +209,35 @@ public:
         }
     }
 
+    void proofTo(const KoColorSpace* dstCS,
+                   KoColorConversionTransformation::ConversionFlags conversionFlags,
+                   KoColorConversionTransformation *proofingTransform)
+    {
+        if (dstCS == m_patchColorSpace && conversionFlags == KoColorConversionTransformation::Empty) return;
+
+        if (m_patchRect.isValid()) {
+            const qint32 numPixels = m_patchRect.width() * m_patchRect.height();
+            const quint32 conversionCacheLength = numPixels * dstCS->pixelSize();
+
+            m_conversionCache.ensureNotSmaller(conversionCacheLength);
+            m_patchColorSpace->proofPixelsTo(m_patchPixels.data(), m_conversionCache.data(), numPixels, proofingTransform);
+
+            m_patchColorSpace = dstCS;
+            m_conversionCache.swap(m_patchPixels);
+            m_patchPixelsLength = conversionCacheLength;
+        }
+    }
+
+    KoColorConversionTransformation *generateProofingTransform(const KoColorSpace* dstCS, const KoColorSpace* proofingSpace,
+                                                       KoColorConversionTransformation::Intent renderingIntent,
+                                                       KoColorConversionTransformation::Intent proofingIntent,
+                                                       KoColorConversionTransformation::ConversionFlags conversionFlags,
+                                                       KoColor gamutWarning,
+                                                       double adaptationState)
+    {
+        return m_patchColorSpace->createProofingTransform(dstCS, proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning.data(), adaptationState);
+    }
+
     inline quint8* data() const {
         return m_patchPixels.data();
     }

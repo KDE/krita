@@ -33,7 +33,7 @@ class QString;
 /**
  * A factory for KoShape objects. This factory differs from the public KoShapeFactorBase
  * class that this class really creates the shape; it's the plugin entry point for the
- * actualy shape plugins.
+ * actually shape plugins.
  */
 class KRITAFLAKE_EXPORT KoDeferredShapeFactoryBase : public QObject
 {

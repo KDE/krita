@@ -19,7 +19,7 @@
 #define KIS_DLG_IMAGE_PROPERTIES_H_
 
 #include <KoDialog.h>
-
+#include "KisProofingConfiguration.h"
 #include <kis_types.h>
 #include "ui_wdgimageproperties.h"
 
@@ -53,11 +53,14 @@ private Q_SLOTS:
 
     void setAnnotation(const QString& type);
     void setCurrentColor();
+    void setProofingConfig();
 private:
 
     WdgImageProperties * m_page;
     KisImageWSP m_image;
     KoColorPopupAction *m_defaultColorAction;
+    KoColorPopupAction *m_gamutWarning;
+    KisProofingConfiguration *m_proofingConfig;
 };
 
 

@@ -109,6 +109,7 @@ public:
      */
     KisDocument* outputDocument();
 
+    KisPropertiesConfigurationSP filterManagerExportConfiguration() const;
 
     /// returns the amount of filters this chain contains representing the weight
     int weight() const;

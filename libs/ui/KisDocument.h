@@ -31,6 +31,7 @@
 #include <KoDocumentBase.h>
 #include <kundo2stack.h>
 
+#include <kis_properties_configuration.h>
 #include <kis_types.h>
 #include <kis_painting_assistant.h>
 #include <kis_debug.h>
@@ -132,7 +133,7 @@ public:
      *       from an ordinary Save operation (in any reimplementation of
      *       saveFile()) call isExporting().
      */
-    bool exportDocument(const QUrl &url);
+    bool exportDocument(const QUrl &url, KisPropertiesConfigurationSP exportConfiguration = 0);
 
     /**
      * @brief Sets whether the document can be edited or is read only.
@@ -631,7 +632,7 @@ private:
      *  Applies a filter if necessary, and calls saveNativeFormat in any case
      *  You should not have to reimplement, except for very special cases.
      */
-    bool saveFile();
+    bool saveFile(KisPropertiesConfigurationSP exportConfiguration = 0);
 
     /**
      *  Overload this function if you have to load additional files
@@ -692,11 +693,11 @@ public:
 
     bool closeUrl(bool promptToSave = true);
 
-    bool saveAs( const QUrl &url );
+    bool saveAs(const QUrl &url, KisPropertiesConfigurationSP exportConfigration = 0);
 
 public Q_SLOTS:
 
-    bool save();
+    bool save(KisPropertiesConfigurationSP exportConfiguration = 0);
     bool waitSaveComplete();
 
 Q_SIGNALS:

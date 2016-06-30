@@ -164,7 +164,7 @@ QString KisImportExportManager::importDocument(const QString& location,
     return QString();
 }
 
-KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(const QString& location, QByteArray& mimeType)
+KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(const QString& location, QByteArray& mimeType, KisPropertiesConfigurationSP exportConfiguration)
 {
     bool userCancelled = false;
 
@@ -172,6 +172,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(c
     // file manager and to the correct URL if we have an embedded manager)
     m_direction = Export; // vital information!
     m_exportFileName = location;
+    m_exportConfiguration = exportConfiguration;
 
     KisFilterChainSP chain;
 

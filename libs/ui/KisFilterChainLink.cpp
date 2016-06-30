@@ -79,7 +79,7 @@ namespace CalligraFilter {
             m_filter->setUpdater(m_updater);
         }
 
-        KisImportExportFilter::ConversionStatus status = m_filter->convert(m_from, m_to, 0);
+        KisImportExportFilter::ConversionStatus status = m_filter->convert(m_from, m_to, m_chain->filterManagerExportConfiguration());
         delete m_filter;
         m_filter = 0;
         if (m_updater) {

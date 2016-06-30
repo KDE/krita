@@ -101,7 +101,7 @@ public:
      * and when the method returns @p mimeType contains this mimetype.
      * Oh, well, export is a C++ keyword ;)
      */
-    KisImportExportFilter::ConversionStatus exportDocument(const QString& location, QByteArray& mimeType);
+    KisImportExportFilter::ConversionStatus exportDocument(const QString& location, QByteArray& mimeType, KisPropertiesConfigurationSP exportConfiguration = 0);
 
     ///@name Static API
     //@{
@@ -148,20 +148,33 @@ private:
     // just forward calls to the methods here. Should be
     // pretty safe.
     friend QString KisFilterChain::filterManagerImportFile() const;
-    QString importFile() const {
+    QString importFile() const
+    {
         return m_importFileName;
     }
+
     friend QString KisFilterChain::filterManagerExportFile() const;
-    QString exportFile() const {
+    QString exportFile() const
+    {
         return m_exportFileName;
     }
+
     friend KisDocument *KisFilterChain::filterManagerKisDocument() const;
-    KisDocument *document() const {
+    KisDocument *document() const
+    {
         return m_document;
     }
+
     friend int KisFilterChain::filterManagerDirection() const;
-    int direction() const {
+    int direction() const
+    {
         return static_cast<int>(m_direction);
+    }
+
+    friend KisPropertiesConfigurationSP KisFilterChain::filterManagerExportConfiguration() const;
+    KisPropertiesConfigurationSP exportConfiguration() const
+    {
+        return m_exportConfiguration;
     }
 
     // Private API
@@ -178,6 +191,7 @@ private:
     QString m_exportFileName;
     CalligraFilter::Graph m_graph;
     Direction m_direction;
+    KisPropertiesConfigurationSP m_exportConfiguration;
 
     /// A static cache for the availability checks of filters
     static QStringList m_importMimeTypes;

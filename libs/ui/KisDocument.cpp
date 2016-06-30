@@ -601,7 +601,7 @@ bool KisDocument::reload()
     return false;
 }
 
-bool KisDocument::exportDocument(const QUrl &_url)
+bool KisDocument::exportDocument(const QUrl &_url, KisPropertiesConfigurationSP exportConfiguration)
 {
     bool ret;
 
@@ -622,7 +622,7 @@ bool KisDocument::exportDocument(const QUrl &_url)
     QByteArray oldMimeType = mimeType();
 
     // save...
-    ret = saveAs(_url);
+    ret = saveAs(_url, exportConfiguration);
 
 
     //
@@ -649,7 +649,7 @@ bool KisDocument::exportDocument(const QUrl &_url)
     return ret;
 }
 
-bool KisDocument::saveFile()
+bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
 {
     dbgUI << "doc=" << url().url();
 
@@ -681,7 +681,7 @@ bool KisDocument::saveFile()
 
         Private::SafeSavingLocker locker(d);
         if (locker.successfullyLocked()) {
-            status = d->filterManager->exportDocument(localFilePath(), outputMimeType);
+            status = d->filterManager->exportDocument(localFilePath(), outputMimeType, exportConfiguration);
         } else {
             status = KisImportExportFilter::UsageError;
         }
@@ -2096,7 +2096,7 @@ bool KisDocument::closeUrl(bool promptToSave)
 }
 
 
-bool KisDocument::saveAs(const QUrl &kurl)
+bool KisDocument::saveAs(const QUrl &kurl, KisPropertiesConfigurationSP exportConfiguration)
 {
     if (!kurl.isValid())
     {
@@ -2108,7 +2108,7 @@ bool KisDocument::saveAs(const QUrl &kurl)
     d->m_originalFilePath = d->m_file;
     d->m_url = kurl; // Store where to upload in saveToURL
     d->prepareSaving();
-    bool result = save(); // Save local file and upload local file
+    bool result = save(exportConfiguration); // Save local file and upload local file
     if (!result) {
         d->m_url = d->m_originalURL;
         d->m_file = d->m_originalFilePath;
@@ -2123,7 +2123,7 @@ bool KisDocument::saveAs(const QUrl &kurl)
 
 
 
-bool KisDocument::save()
+bool KisDocument::save(KisPropertiesConfigurationSP exportConfiguration)
 {
     d->m_saveOk = false;
     if ( d->m_file.isEmpty() ) { // document was created empty
@@ -2135,7 +2135,7 @@ bool KisDocument::save()
     d->document->setFileProgressProxy();
     d->document->setUrl(url());
 
-    bool ok = d->document->saveFile();
+    bool ok = d->document->saveFile(exportConfiguration);
 
     d->document->clearFileProgressProxy();
 

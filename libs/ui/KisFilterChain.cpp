@@ -194,6 +194,11 @@ KisDocument* KisFilterChain::outputDocument()
     return m_outputDocument;
 }
 
+KisPropertiesConfigurationSP KisFilterChain::filterManagerExportConfiguration() const
+{
+    return m_manager->exportConfiguration();
+}
+
 void KisFilterChain::prependChainLink(KisFilterEntrySP filterEntry, const QByteArray& from, const QByteArray& to)
 {
     m_chainLinks.prepend(new ChainLink(this, filterEntry, from, to));

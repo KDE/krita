@@ -75,7 +75,7 @@ private:
 
     KisImageWSP m_image;
     WdgAnimaterionRenderer *m_page;
-    QList<QSharedPointer<KisImportExportFilter>> m_filters;
+    QList<QSharedPointer<KisImportExportFilter>> m_renderFilters;
     QList<QWidget> m_configWidgets;
     QHBoxLayout *m_sequenceConfigLayout;
     KisConfigWidget *m_frameExportConfigurationWidget;

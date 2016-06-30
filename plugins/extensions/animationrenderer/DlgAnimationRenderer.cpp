@@ -105,7 +105,7 @@ DlgAnimaterionRenderer::DlgAnimaterionRenderer(KisImageWSP image, QWidget *paren
                 continue;
             }
 
-            m_filters.append(filter);
+            m_renderFilters.append(filter);
             //            m_configWidgets.append(filter->createConfigurationWidget(m_page->grpRenderOptions));
             //            m_configWidgets.last()->setVisible(false);
 

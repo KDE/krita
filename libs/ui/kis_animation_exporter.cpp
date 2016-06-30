@@ -279,6 +279,7 @@ struct KisAnimationExportSaver::Private
 KisAnimationExportSaver::KisAnimationExportSaver(KisDocument *document, const QString &baseFilename, int fromTime, int toTime, int sequenceNumberingOffset)
     : m_d(new Private(document, fromTime, toTime, sequenceNumberingOffset))
 {
+    qDebug() << "Rendering" << baseFilename << "from" << fromTime << "to" << toTime << "start" << sequenceNumberingOffset;
     int baseLength = baseFilename.lastIndexOf(".");
     if (baseLength > -1) {
         m_d->filenamePrefix = baseFilename.left(baseLength);

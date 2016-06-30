@@ -122,6 +122,8 @@ DlgAnimaterionRenderer::DlgAnimaterionRenderer(KisImageWSP image, QWidget *paren
 
 DlgAnimaterionRenderer::~DlgAnimaterionRenderer()
 {
+    m_frameExportConfigurationWidget->setParent(0);
+    m_frameExportConfigurationWidget->deleteLater();
     delete m_page;
 }
 
@@ -227,6 +229,7 @@ void DlgAnimaterionRenderer::sequenceMimeTypeSelected(int index)
     if (m_frameExportConfigurationWidget) {
         m_sequenceConfigLayout->removeWidget(m_frameExportConfigurationWidget);
         m_frameExportConfigurationWidget->hide();
+        m_frameExportConfigurationWidget->setParent(0);
         m_frameExportConfigurationWidget = 0;
     }
     QString mimetype = m_page->cmbMimetype->itemData(index).toString();

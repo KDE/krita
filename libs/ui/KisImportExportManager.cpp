@@ -262,14 +262,14 @@ QStringList KisImportExportManager::mimeFilter(Direction direction)
 
 KisImportExportFilter *KisImportExportManager::filterForMimeType(const QString &mimetype, KisImportExportManager::Direction direction)
 {
-    int weight = 0;
+    int weight = -1;
     KisImportExportFilter *filter = 0;
     KoJsonTrader trader;
     QList<QPluginLoader *>list = trader.query("Krita/FileFilter", "");
     Q_FOREACH(QPluginLoader *loader, list) {
         QJsonObject json = loader->metaData().value("MetaData").toObject();
-        if (json.value("X-KDE-Export").toString().split(",").contains(mimetype)) {
-
+        QString directionKey = direction == Export ? "X-KDE-Export" : "X-KDE-Import";
+        if (json.value(directionKey).toString().split(",").contains(mimetype)) {
             KLibFactory *factory = qobject_cast<KLibFactory *>(loader->instance());
 
             if (!factory) {
@@ -291,11 +291,14 @@ KisImportExportFilter *KisImportExportManager::filterForMimeType(const QString &
 
             int w = json.value("X-KDE-Weight").toInt();
             if (w > weight) {
+                delete filter;
                 filter = f;
+                f->setObjectName(loader->fileName());
                 weight = w;
             }
         }
     }
+    qDeleteAll(list);
     return filter;
 }
 

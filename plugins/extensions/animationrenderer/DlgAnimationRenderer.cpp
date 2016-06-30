@@ -112,7 +112,7 @@ DlgAnimaterionRenderer::DlgAnimaterionRenderer(KisImageWSP image, QWidget *paren
             m_page->cmbRenderType->addItem(KisMimeDatabase::descriptionForMimeType(mimetype));
         }
     }
-
+    qDeleteAll(list);
     connect(m_page->cmbRenderType, SIGNAL(activated(int)), this, SLOT(selectRenderType(int)));
     selectRenderType(m_page->cmbRenderType->currentIndex());
     connect(m_page->grpRender, SIGNAL(toggled(bool)), this, SLOT(toggleSequenceType(bool)));
@@ -224,11 +224,9 @@ void DlgAnimaterionRenderer::toggleSequenceType(bool toggle)
 
 void DlgAnimaterionRenderer::sequenceMimeTypeSelected(int index)
 {
-    qDebug() << ">>>>" << m_page->cmbMimetype->currentText() << m_page->cmbMimetype->currentIndex() << index;
-
     if (m_frameExportConfigurationWidget) {
         m_sequenceConfigLayout->removeWidget(m_frameExportConfigurationWidget);
-        delete m_frameExportConfigurationWidget;
+        m_frameExportConfigurationWidget->hide();
         m_frameExportConfigurationWidget = 0;
     }
     QString mimetype = m_page->cmbMimetype->itemData(index).toString();
@@ -241,6 +239,9 @@ void DlgAnimaterionRenderer::sequenceMimeTypeSelected(int index)
             m_frameExportConfigurationWidget->setConfiguration(filter->defaultConfiguration());
             m_frameExportConfigurationWidget->show();
             resize(sizeHint());
+        }
+        else {
+            m_frameExportConfigurationWidget = 0;
         }
         delete filter;
     }

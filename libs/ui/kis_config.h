@@ -479,7 +479,6 @@ public:
     QString customFFMpegPath(bool defaultValue = false) const;
     void setCustomFFMpegPath(const QString &value) const;
 
-
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

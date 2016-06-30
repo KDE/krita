@@ -36,6 +36,7 @@
 #include "KoMixColorsOp.h"
 #include "KoConvolutionOp.h"
 #include "KoCompositeOpRegistry.h"
+#include "KoColorSpaceEngine.h"
 
 #include <QThreadStorage>
 #include <QByteArray>
@@ -66,6 +67,7 @@ KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoMixColorsOp
     d->TRCXYY = QPolygonF();
     d->colorants = QVector <qreal> (0);
     d->lumaCoefficients = QVector <qreal> (0);
+    d->iccEngine = 0;
     d->deletability = NotOwnedByRegistry;
 }
 
@@ -119,7 +121,7 @@ QPolygonF KoColorSpace::gamutXYY() const
         if ((colorModelId().id()=="CMYKA" || colorModelId().id()=="LABA") && colorDepthId().id()=="F32") {
             //boundaries for cmyka/laba have trouble getting the max values for Float, and are pretty awkward in general.
             max = this->channels()[0]->getUIMax();
-            
+
         }
         int samples = 5;//amount of samples in our color space.
         QString name = KoColorSpaceRegistry::instance()->colorSpaceFactory("XYZAF32")->defaultProfile();
@@ -175,7 +177,7 @@ QPolygonF KoColorSpace::gamutXYY() const
                         }
                     }
                 }
-                
+
             }
         }
         delete[] data;
@@ -230,7 +232,7 @@ QPolygonF KoColorSpace::estimatedTRCXYY() const
                 for (int j=0; j<5; j++){
                     channelValuesF.fill(0.0);
                     channelValuesF[i] = ((max/4)*(j));
-                    
+
                     fromNormalisedChannelsValue(data, channelValuesF);
 
                     convertPixelsTo(data, data2, xyzColorSpace, 1, KoColorConversionTransformation::IntentAbsoluteColorimetric,         KoColorConversionTransformation::adjustmentConversionFlags());
@@ -435,6 +437,26 @@ bool KoColorSpace::convertPixelsTo(const quint8 * src,
     return true;
 }
 
+KoColorConversionTransformation * KoColorSpace::createProofingTransform(const KoColorSpace *dstColorSpace, const KoColorSpace *proofingSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::Intent proofingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags, quint8 *gamutWarning, double adaptationState) const
+{
+    if (!d->iccEngine) {
+        d->iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
+    }
+    if (!d->iccEngine) return 0;
+
+    return d->iccEngine->createColorProofingTransformation(this, dstColorSpace, proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning, adaptationState);
+}
+
+bool KoColorSpace::proofPixelsTo(const quint8 *src,
+                                 quint8 *dst,
+                                 quint32 numPixels,
+                                 KoColorConversionTransformation *proofingTransform) const
+{
+    proofingTransform->transform(src, dst, numPixels);
+
+    //the transform is deleted in the destructor.
+    return true;
+}
 
 void KoColorSpace::bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::ParameterInfo& params, const KoCompositeOp* op,
                           KoColorConversionTransformation::Intent renderingIntent,

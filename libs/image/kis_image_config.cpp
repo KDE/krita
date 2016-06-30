@@ -21,6 +21,9 @@
 #include <ksharedconfig.h>
 
 #include <KoConfig.h>
+#include <KoColorProfile.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoColorConversionTransformation.h>
 
 #include "kis_debug.h"
 
@@ -393,4 +396,39 @@ bool KisImageConfig::showAdditionalOnionSkinsSettings(bool requestDefault) const
 void KisImageConfig::setShowAdditionalOnionSkinsSettings(bool value)
 {
     m_config.writeEntry("showAdditionalOnionSkinsSettings", value);
+}
+
+KisProofingConfiguration *KisImageConfig::defaultProofingconfiguration()
+{
+    KisProofingConfiguration *proofingConfig= new KisProofingConfiguration();
+    proofingConfig->proofingProfile = m_config.readEntry("defaultProofingProfileName", "Chemical proof");
+    proofingConfig->proofingModel = m_config.readEntry("defaultProofingProfileModel", "CMYKA");
+    proofingConfig->proofingDepth = m_config.readEntry("defaultProofingProfileDepth", "U8");
+    proofingConfig->intent = (KoColorConversionTransformation::Intent)m_config.readEntry("defaultProofingProfileIntent", 3);
+    if (m_config.readEntry("defaultProofingBlackpointCompensation", true)) {
+        proofingConfig->conversionFlags  |= KoColorConversionTransformation::ConversionFlag::BlackpointCompensation;
+    } else {
+                proofingConfig->conversionFlags  = proofingConfig->conversionFlags & ~KoColorConversionTransformation::ConversionFlag::BlackpointCompensation;
+    }
+    QColor def;
+    def =  m_config.readEntry("defaultProofingGamutwarning", QColor(Qt::gray));
+    KoColor col(KoColorSpaceRegistry::instance()->rgb8());
+    col.fromQColor(def);
+    col.setOpacity(1.0);
+    proofingConfig->warningColor = col;
+    proofingConfig->adaptationState = (double)m_config.readEntry("defaultProofingAdaptationState", 1.0);
+    return proofingConfig;
+}
+
+void KisImageConfig::setDefaultProofingConfig(const KoColorSpace *proofingSpace, int proofingIntent, bool blackPointCompensation, KoColor warningColor, double adaptationState)
+{
+    m_config.writeEntry("defaultProofingProfileName", proofingSpace->profile()->name());
+    m_config.writeEntry("defaultProofingProfileModel", proofingSpace->colorModelId().id());
+    m_config.writeEntry("defaultProofingProfileDepth", proofingSpace->colorDepthId().id());
+    m_config.writeEntry("defaultProofingProfileIntent", proofingIntent);
+    m_config.writeEntry("defaultProofingBlackpointCompensation", blackPointCompensation);
+    QColor c;
+    warningColor.toQColor(&c);
+    m_config.writeEntry("defaultProofingGamutwarning", c);
+    m_config.writeEntry("defaultProofingAdaptationState",adaptationState);
 }

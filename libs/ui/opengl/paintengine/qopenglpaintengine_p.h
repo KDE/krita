@@ -221,7 +221,7 @@ public:
     void drawCachedGlyphs(QFontEngine::GlyphFormat glyphFormat, QStaticTextItem *staticTextItem);
 
     // Calls glVertexAttributePointer if the pointer has changed
-    inline void setVertexAttributePointer(unsigned int arrayIndex, const GLfloat *pointer);
+    inline void setVertexAttributePointer(unsigned int arrayIndex, const GLfloat *data, const GLuint size);
 
     // draws whatever is in the vertex array:
     void drawVertexArrays(const float *data, int *stops, int stopCount, GLenum primitive);
@@ -333,15 +333,23 @@ public:
     const GLfloat *vertexAttribPointers[3];
 };
 
-void QOpenGL2PaintEngineExPrivate::setVertexAttributePointer(unsigned int arrayIndex, const GLfloat *pointer)
+void QOpenGL2PaintEngineExPrivate::setVertexAttributePointer(unsigned int arrayIndex, const GLfloat *data, const GLuint size)
 {
     Q_ASSERT(arrayIndex < 3);
 
-    if (pointer == vertexAttribPointers[arrayIndex]) {
-        return;
-    }
+    // if (data == vertexAttribPointers[arrayIndex]) {
+    //     return;
+    // }
 
-    vertexAttribPointers[arrayIndex] = pointer;
+    if (arrayIndex == QT_VERTEX_COORDS_ATTR) {
+        vertexVBO.bind();
+        vertexVBO.allocate(data, size * sizeof(float));
+    }
+    if (arrayIndex == QT_TEXTURE_COORDS_ATTR) {
+        textureVBO.bind();
+        textureVBO.allocate(data, size * sizeof(float));
+    }
+    vertexAttribPointers[arrayIndex] = data;
     if (arrayIndex == QT_OPACITY_ATTR)
         funcs.glVertexAttribPointer(arrayIndex, 1, GL_FLOAT, GL_FALSE, 0, 0);
     else

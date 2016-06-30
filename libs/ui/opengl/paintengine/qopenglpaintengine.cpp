@@ -590,15 +590,11 @@ void QOpenGL2PaintEngineExPrivate::drawTexture(const QOpenGLRect& dest, const QO
 
     setVertexAttribArrayEnabled(QT_VERTEX_COORDS_ATTR, true);
     setVertexAttribArrayEnabled(QT_TEXTURE_COORDS_ATTR, true);
-    vertexVBO.bind();
-    vertexVBO.allocate(staticVertexCoordinateArray, 8 * sizeof(float));
-    funcs.glVertexAttribPointer(QT_VERTEX_COORDS_ATTR, 2, GL_FLOAT, GL_FALSE, 0, 0);
-    textureVBO.bind();
-    textureVBO.allocate(staticTextureCoordinateArray, 8 * sizeof(float));
-    funcs.glVertexAttribPointer(QT_TEXTURE_COORDS_ATTR, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+    setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, staticVertexCoordinateArray, 8);
+    setVertexAttributePointer(QT_TEXTURE_COORDS_ATTR, staticTextureCoordinateArray, 8);
 
     funcs.glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-    textureVBO.release();
 }
 
 void QOpenGL2PaintEngineEx::beginNativePainting()
@@ -717,16 +713,16 @@ void QOpenGL2PaintEngineExPrivate::transferMode(EngineMode newMode)
     }
 
     if (newMode == ImageDrawingMode) {
-        setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, staticVertexCoordinateArray);
-        setVertexAttributePointer(QT_TEXTURE_COORDS_ATTR, staticTextureCoordinateArray);
+        setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, staticVertexCoordinateArray, 8);
+        setVertexAttributePointer(QT_TEXTURE_COORDS_ATTR, staticTextureCoordinateArray, 8);
     }
-
+    // FIXME probably shouldn't be 8
     if (newMode == ImageArrayDrawingMode || newMode == ImageOpacityArrayDrawingMode) {
-        setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, (GLfloat*)vertexCoordinateArray.data());
-        setVertexAttributePointer(QT_TEXTURE_COORDS_ATTR, (GLfloat*)textureCoordinateArray.data());
+        setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, (GLfloat*)vertexCoordinateArray.data(), 8);
+        setVertexAttributePointer(QT_TEXTURE_COORDS_ATTR, (GLfloat*)textureCoordinateArray.data(), 8);
 
         if (newMode == ImageOpacityArrayDrawingMode)
-            setVertexAttributePointer(QT_OPACITY_ATTR, (GLfloat*)opacityArray.data());
+            setVertexAttributePointer(QT_OPACITY_ATTR, (GLfloat*)opacityArray.data(), 8);
     }
 
     // This needs to change when we implement high-quality anti-aliasing...
@@ -845,9 +841,9 @@ void QOpenGL2PaintEngineExPrivate::fill(const QVectorPath& path)
             prepareForDraw(currentBrush.isOpaque());
 #ifdef QT_OPENGL_CACHE_AS_VBOS
             funcs.glBindBuffer(GL_ARRAY_BUFFER, cache->vbo);
-            setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, 0);
+            //setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, 0);
 #else
-            setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, cache->vertices);
+            setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, cache->vertices, 0); // FIXME Nim shouldn't be 0
 #endif
             funcs.glDrawArrays(cache->primitiveType, 0, cache->vertexCount);
 
@@ -941,7 +937,7 @@ void QOpenGL2PaintEngineExPrivate::fill(const QVectorPath& path)
 #ifdef QT_OPENGL_CACHE_AS_VBOS
             funcs.glBindBuffer(GL_ARRAY_BUFFER, cache->vbo);
             funcs.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cache->ibo);
-            setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, 0);
+            //setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, 0);
             if (cache->indexType == QVertexIndexVector::UnsignedInt)
                 funcs.glDrawElements(cache->primitiveType, cache->indexCount, GL_UNSIGNED_INT, 0);
             else
@@ -949,7 +945,7 @@ void QOpenGL2PaintEngineExPrivate::fill(const QVectorPath& path)
             funcs.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
             funcs.glBindBuffer(GL_ARRAY_BUFFER, 0);
 #else
-            setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, cache->vertices);
+            setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, cache->vertices, 0); // FIXME Nim shouldn't be 0
             if (cache->indexType == QVertexIndexVector::UnsignedInt)
                 funcs.glDrawElements(cache->primitiveType, cache->indexCount, GL_UNSIGNED_INT, (qint32 *)cache->indices);
             else
@@ -978,7 +974,7 @@ void QOpenGL2PaintEngineExPrivate::fill(const QVectorPath& path)
                         vertices[i] = float(inverseScale * polys.vertices.at(i));
 
                     prepareForDraw(currentBrush.isOpaque());
-                    setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, vertices.constData());
+                    setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, vertices.constData(), 0); // FIXME Nim shouldn't be 0
                     if (funcs.hasOpenGLExtension(QOpenGLExtensions::ElementIndexUint))
                         funcs.glDrawElements(GL_TRIANGLES, polys.indices.size(), GL_UNSIGNED_INT, polys.indices.data());
                     else
@@ -1104,11 +1100,8 @@ void QOpenGL2PaintEngineExPrivate::fillStencilWithVertexArray(const float *data,
             funcs.glStencilFunc(GL_ALWAYS, GL_STENCIL_HIGH_BIT, 0xff);
         }
 
-        vertexVBO.bind();
-        vertexVBO.allocate(data, count * 2 * sizeof(float));
-        setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, data);
+        setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, data, count * 2);
         funcs.glDrawArrays(GL_TRIANGLE_STRIP, 0, count);
-        vertexVBO.release();
 #endif
     }
 
@@ -1238,11 +1231,11 @@ void QOpenGL2PaintEngineExPrivate::composite(const QOpenGLRect& boundingRect)
 {qDebug() << "Entering QOpenGL2PaintEngineExPrivate::composite with error: " << funcs.glGetError();
     setCoords(staticVertexCoordinateArray, boundingRect);
 
-    vertexVBO.bind();
-    vertexVBO.allocate(staticVertexCoordinateArray, 8 * sizeof(float));
-    setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, staticVertexCoordinateArray);
+GLint vbo = 0;
+funcs.glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &vbo);
+qDebug() << "BEGIN:: We are using vertex VBO: " << vbo;
+    setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, staticVertexCoordinateArray, 8);
     funcs.glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-    vertexVBO.release();
 qDebug() << "Exiting QOpenGL2PaintEngineExPrivate::composite with error: " << funcs.glGetError();
 }
 
@@ -1251,9 +1244,7 @@ void QOpenGL2PaintEngineExPrivate::drawVertexArrays(const float *data, int *stop
                                                 GLenum primitive)
 {
     // Now setup the pointer to the vertex array:
-    vertexVBO.bind();
-    vertexVBO.allocate(data, (stops[stopCount-1] * 2) * sizeof(float));
-    setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, data);
+    setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, data, stops[stopCount-1] * 2);
 
     int previousStop = 0;
     for (int i = 0; i < stopCount; ++i) {
@@ -1262,7 +1253,6 @@ void QOpenGL2PaintEngineExPrivate::drawVertexArrays(const float *data, int *stop
         funcs.glDrawArrays(primitive, previousStop, stop - previousStop);
         previousStop = stop;
     }
-    vertexVBO.release();
 }
 
 /////////////////////////////////// Public Methods //////////////////////////////////////////
@@ -1355,11 +1345,8 @@ void QOpenGL2PaintEngineExPrivate::stroke(const QVectorPath &path, const QPen &p
     if (opaque) {
         prepareForDraw(opaque);
 
-        vertexVBO.bind();
-        vertexVBO.allocate(stroker.vertices(), stroker.vertexCount() * sizeof(float));
-        setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, stroker.vertices());
+        setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, stroker.vertices(), stroker.vertexCount());
         funcs.glDrawArrays(GL_TRIANGLE_STRIP, 0, stroker.vertexCount() / 2);
-        vertexVBO.release();
     } else {
         qreal width = qpen_widthf(pen) / 2;
         if (width == 0)
@@ -1868,8 +1855,8 @@ void QOpenGL2PaintEngineExPrivate::drawCachedGlyphs(QFontEngine::GlyphFormat gly
     }
 
     if (glyphFormat != QFontEngine::Format_ARGB || recreateVertexArrays) {
-        setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, (GLfloat*)vertexCoordinates->data());
-        setVertexAttributePointer(QT_TEXTURE_COORDS_ATTR, (GLfloat*)textureCoordinates->data());
+        setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, (GLfloat*)vertexCoordinates->data(), 0); // FIXME Nim shouldn't be 0
+        setVertexAttributePointer(QT_TEXTURE_COORDS_ATTR, (GLfloat*)textureCoordinates->data(), 0); // FIXME Nim shouldn't be 0
     }
 
     if (!snapToPixelGrid) {
@@ -2132,6 +2119,9 @@ bool QOpenGL2PaintEngineEx::begin(QPaintDevice *pdev)
         qDebug() << "BEGIN:: We generate a new texture VBO for the engine: " << d->textureVBO.bufferId();
     }
 
+    d->vertexVBO.bind();
+    d->textureVBO.bind();
+
     qDebug() << "BEGIN:: We are using vertex VBO: " << d->vertexVBO.bufferId();
     qDebug() << "BEGIN:: We are using texture VBO: " << d->textureVBO.bufferId();
 
@@ -2216,6 +2206,7 @@ void QOpenGL2PaintEngineEx::ensureActive()
     Q_D(QOpenGL2PaintEngineEx);
     QOpenGLContext *ctx = d->ctx;
     d->vao.bind();
+
     if (isActive() && ctx->d_func()->active_engine != this) {
         ctx->d_func()->active_engine = this;
         d->needsSync = true;

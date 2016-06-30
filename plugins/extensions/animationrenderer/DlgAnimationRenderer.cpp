@@ -238,8 +238,7 @@ void DlgAnimaterionRenderer::sequenceMimeTypeSelected(int index)
         m_frameExportConfigurationWidget = filter->createConfigurationWidget(m_page->grpExportOptions, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());
         if (m_frameExportConfigurationWidget) {
             m_sequenceConfigLayout->addWidget(m_frameExportConfigurationWidget);
-            // XXX: Use the saved config here?
-            m_frameExportConfigurationWidget->setConfiguration(filter->defaultConfiguration());
+            m_frameExportConfigurationWidget->setConfiguration(filter->lastSavedConfiguration());
             m_frameExportConfigurationWidget->show();
             resize(sizeHint());
         }

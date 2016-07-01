@@ -283,13 +283,14 @@ double treatLevel2(QString const& expr, bool & noProblem)
 				return 0.0;
 			}
 
+			bool needToMultiply = (nextOp == '*');
 			part = extractSubExprLevel2(exprDestructable, nextOp, noProblem);
 
 			if (!noProblem) {
 				return 0.0;
 			}
 
-			if (nextOp == '*') {
+			if (needToMultiply) {
 				result *= treatLevel3(part, noProblem);
 			} else {
 				result /= treatLevel3(part, noProblem);
@@ -491,7 +492,7 @@ double treatLevel2Int(const QString &expr, bool &noProblem)
 
 	QString part = extractSubExprLevel2(exprDestructable, nextOp, noProblem);
 
-	double result = treatLevel3(part, noProblem);
+	double result = treatFuncsInt(part, noProblem);
 
 	while (!exprDestructable.isEmpty()) {
 
@@ -499,13 +500,14 @@ double treatLevel2Int(const QString &expr, bool &noProblem)
 			return 0.0;
 		}
 
+		bool needToMultiply = (nextOp == '*');
 		part = extractSubExprLevel2(exprDestructable, nextOp, noProblem);
 
 		if (!noProblem) {
 			return 0.0;
 		}
 
-		if (nextOp == '*') {
+		if (needToMultiply) {
 			result *= treatFuncsInt(part, noProblem);
 		} else {
 

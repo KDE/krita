@@ -73,7 +73,24 @@ double KisDoubleParseSpinBox::valueFromText(const QString & text) const
 
 	bool ok;
 
-	double ret = KisNumericParser::parseSimpleMathExpr(text, &ok);
+	double ret;
+
+	if ( (suffix().isEmpty() || !text.endsWith(suffix())) &&
+		 (prefix().isEmpty() || !text.startsWith(prefix())) ) {
+		ret = KisNumericParser::parseSimpleMathExpr(text, &ok);
+	} else {
+		QString expr = text;
+
+		if (text.endsWith(suffix())) {
+			expr.remove(text.size()-suffix().size(), suffix().size());
+		}
+
+		if(text.startsWith(prefix())){
+			expr.remove(0, prefix().size());
+		}
+
+		ret = KisNumericParser::parseSimpleMathExpr(expr, &ok);
+	}
 
 	if(isnan(ret) || isinf(ret)){
 		ok = false;

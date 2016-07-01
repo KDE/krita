@@ -20,6 +20,7 @@
 #define KISPARSESPINBOXESTEST_H
 
 #include <QObject>
+#include <QStringList>
 
 class KisParseSpinBoxesTest : public QObject
 {
@@ -32,8 +33,17 @@ private Q_SLOTS:
 
 	void testDoubleParseNormal();
 	void testDoubleParseProblem();
+	void testDoubleParseWithSuffix();
+	void testDoubleParseWithPrefix();
 	void testIntParseNormal();
 	void testIntParseProblem();
+	void testIntParseWithSuffix();
+	void testIntParseWithPrefix();
+
+private:
+
+	const static QStringList doubleExprs;
+	const static QStringList intExprs;
 };
 
 #endif // KISPARSESPINBOXESTEST_H

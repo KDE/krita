@@ -98,7 +98,8 @@ void KisSimpleMathParserTest::testIntComputation()
 					  "7 + 2 - 5",
 					  "4/3",
 					  "12/3",
-					  "4*3"};
+					  "4*3",
+					  "581*2/3"};
 
 	QVector<int> expected = {1,
 							 2 + 3,
@@ -108,7 +109,8 @@ void KisSimpleMathParserTest::testIntComputation()
 							 7 + 2 - 5,
 							 qRound(4.0/3.0),
 							 qRound(12.0/3.0),
-							 4*3};
+							 4*3,
+							 581*2/3};
 
 	for (int i = 0; i < expected.size(); i++) {
 

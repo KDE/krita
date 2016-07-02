@@ -76,8 +76,11 @@ int KisIntParseSpinBox::valueFromText(const QString & text) const
 
 	if ( (suffix().isEmpty() || !text.endsWith(suffix())) &&
 		 (prefix().isEmpty() || !text.startsWith(prefix())) ) {
+
 		val = KisNumericParser::parseIntegerMathExpr(text, &ok);
+
 	} else {
+
 		QString expr = text;
 
 		if (text.endsWith(suffix())) {
@@ -88,7 +91,10 @@ int KisIntParseSpinBox::valueFromText(const QString & text) const
 			expr.remove(0, prefix().size());
 		}
 
+		*_lastExprParsed = expr;
+
 		val = KisNumericParser::parseIntegerMathExpr(expr, &ok);
+
 	}
 
 	if (text.trimmed().isEmpty()) { //an empty text is considered valid in this case.

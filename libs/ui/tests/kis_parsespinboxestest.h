@@ -43,7 +43,9 @@ private Q_SLOTS:
 private:
 
 	const static QStringList doubleExprs;
+	const static QStringList doubleWrongExprs;
 	const static QStringList intExprs;
+	const static QStringList intWrongExprs;
 };
 
 #endif // KISPARSESPINBOXESTEST_H

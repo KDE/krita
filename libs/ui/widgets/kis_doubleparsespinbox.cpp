@@ -24,6 +24,7 @@
 #include <QPixmap>
 #include <QIcon>
 #include <QFile>
+#include <QLineEdit>
 
 KisDoubleParseSpinBox::KisDoubleParseSpinBox(QWidget *parent) :
 	QDoubleSpinBox(parent),
@@ -55,6 +56,9 @@ KisDoubleParseSpinBox::KisDoubleParseSpinBox(QWidget *parent) :
 	_warningIcon->setStyleSheet("background:transparent;");
 	_warningIcon->move(1, 1);
 	_warningIcon->setVisible(false);
+
+	_isOldPaletteSaved = false;
+	_areOldMarginsSaved = false;
 
 }
 
@@ -164,9 +168,32 @@ void KisDoubleParseSpinBox::setValue(double value)
 
 void KisDoubleParseSpinBox::setErrorStyle()
 {
+
 	if (!_isLastValid) {
-		setStyleSheet("Background: red; color: white; padding-left: 18px;");
-		_warningIcon->move(-14, size().height()/2 - 16/2);
+		//setStyleSheet(_oldStyleSheet + "Background: red; color: white; padding-left: 18px;");
+
+		if (!_isOldPaletteSaved) {
+			_oldPalette = palette();
+		}
+		_isOldPaletteSaved = true;
+
+		QPalette nP = _oldPalette;
+		nP.setColor(QPalette::Background, Qt::red);
+		nP.setColor(QPalette::Base, Qt::red);
+		nP.setColor(QPalette::Text, Qt::white);
+		setPalette(nP);
+
+		if (!_areOldMarginsSaved) {
+			_oldMargins = lineEdit()->textMargins();
+		}
+		_areOldMarginsSaved = true;
+
+		QMargins newMargins = _oldMargins;
+		newMargins.setLeft( newMargins.left() + height() - 4 );
+		lineEdit()->setTextMargins(newMargins);
+
+		_warningIcon->resize(height()-2, height()-2);
+		_warningIcon->move(_oldMargins.left()+5, 1);
 		_warningIcon->setVisible(true);
 	}
 }
@@ -175,7 +202,14 @@ void KisDoubleParseSpinBox::clearErrorStyle()
 {
 	if (_isLastValid) {
 		_warningIcon->setVisible(false);
-		setStyleSheet("");
+
+		//setStyleSheet("");
+
+		setPalette(_oldPalette);
+		_isOldPaletteSaved = false;
+
+		lineEdit()->setTextMargins(_oldMargins);
+		_areOldMarginsSaved = false;
 	}
 }
 void KisDoubleParseSpinBox::clearError()

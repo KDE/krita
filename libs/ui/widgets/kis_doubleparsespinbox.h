@@ -71,6 +71,12 @@ protected:
 		mutable double _oldValue;
 
 		QLabel* _warningIcon;
+
+		QPalette _oldPalette;
+		bool _isOldPaletteSaved;
+
+		QMargins _oldMargins;
+		bool _areOldMarginsSaved;
 };
 
 #endif // KISDOUBLEPARSESPINBOX_H

@@ -71,6 +71,12 @@ protected:
 		mutable int _oldVal; //store the last correctly evaluated value.
 
 		QLabel* _warningIcon;
+
+		QPalette _oldPalette;
+		bool _isOldPaletteSaved;
+
+		QMargins _oldMargins;
+		bool _areOldMarginsSaved;
 };
 
 #endif // KISINTPARSESPINBOX_H

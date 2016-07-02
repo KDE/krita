@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>269</width>
+    <width>271</width>
     <height>394</height>
    </rect>
   </property>
@@ -23,7 +23,7 @@
          <string>Move the layer that you have currently selected in the layerbox with its masks. Shortcut: ctrl-click.</string>
         </property>
         <property name="text">
-         <string>Move current layer</string>
+         <string>&amp;Move current layer</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -36,7 +36,7 @@
          <string>Move the first layer with visible content at the place where you click. This will also select that layer in the layerbox.</string>
         </property>
         <property name="text">
-         <string>Move layer with content</string>
+         <string>Mo&amp;ve layer with content</string>
         </property>
         <property name="checked">
          <bool>false</bool>
@@ -49,7 +49,7 @@
          <string>Move the group containing the first layer that contains visible content. Shortcut: ctrl-shift-click.</string>
         </property>
         <property name="text">
-         <string>Move the whole group</string>
+         <string>Move &amp;the whole group</string>
         </property>
        </widget>
       </item>
@@ -57,13 +57,16 @@
     </widget>
    </item>
    <item row="1" column="0">
+    <widget class="QWidget" name="SpecialSpacer" native="true"/>
+   </item>
+   <item row="2" column="0">
     <widget class="QGroupBox" name="grpMoveStep">
      <property name="title">
       <string>Shortcut Move Distance</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="0" column="0">
-       <widget class="QDoubleSpinBox" name="spinMoveStep">
+       <widget class="KisDoubleParseSpinBox" name="spinMoveStep">
         <property name="toolTip">
          <string>Number of pixels to move after move shortcut keypress.</string>
         </property>
@@ -82,7 +85,7 @@
        <widget class="QComboBox" name="cmbUnit"/>
       </item>
       <item row="1" column="0">
-       <widget class="QDoubleSpinBox" name="spinMoveScale">
+       <widget class="KisDoubleParseSpinBox" name="spinMoveScale">
         <property name="toolTip">
          <string>When holding shift, move keyboard shortcuts scale up by this amount.</string>
         </property>
@@ -107,7 +110,7 @@
      </layout>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item row="3" column="0">
     <widget class="QCheckBox" name="chkShowCoordinates">
      <property name="toolTip">
       <string>Show coordinates on canvas</string>
@@ -117,7 +120,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item row="4" column="0">
     <widget class="QGroupBox" name="moveGroup">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -176,7 +179,7 @@
            <enum>Qt::LeftToRight</enum>
           </property>
           <property name="text">
-           <string>x:</string>
+           <string>&amp;x:</string>
           </property>
           <property name="buddy">
            <cstring>translateXBox</cstring>
@@ -184,7 +187,7 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QSpinBox" name="translateXBox">
+         <widget class="KisIntParseSpinBox" name="translateXBox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -200,7 +203,7 @@
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QSpinBox" name="translateYBox">
+         <widget class="KisIntParseSpinBox" name="translateYBox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -224,7 +227,7 @@
            <string>Vertical Translation</string>
           </property>
           <property name="text">
-           <string>y:</string>
+           <string>&amp;y:</string>
           </property>
           <property name="buddy">
            <cstring>translateYBox</cstring>
@@ -236,11 +239,23 @@
      </layout>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item row="5" column="0">
     <widget class="QWidget" name="SpecialSpacer" native="true"/>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisDoubleParseSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_doubleparsespinbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_intparsespinbox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

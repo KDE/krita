@@ -59,7 +59,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="radius">
+      <widget class="KisIntParseSpinBox" name="radius">
        <property name="suffix">
         <string> px</string>
        </property>
@@ -155,6 +155,11 @@
    <class>SqueezedComboBox</class>
    <extends>QComboBox</extends>
    <header>squeezedcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_intparsespinbox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

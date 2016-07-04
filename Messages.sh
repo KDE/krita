@@ -21,7 +21,7 @@ perl extracti18n.pl > i18ndata
 # None of the placeholder strings inside will be seen by users.
 krita_xgettext krita.pot i18ndata rc.cpp \
                   `find . -name \*.cc -o -name \*.h  -o -name \*.cpp | \
-                  grep -v '/tests/' | grep -v './sdk/templates'` | grep -v './krita/crashreporter/'`
+                  grep -v '/tests/' | grep -v './sdk/templates' | grep -v './krita/crashreporter/'`
 
 # Clean up
 rm -f i18ndata rc.cpp

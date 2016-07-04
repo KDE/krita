@@ -37,7 +37,7 @@ int main( int argc, char **argv )
     QString kritaVersion(KRITA_VERSION_STRING);
     QString version;
 
-    KLocalizedString::setApplicationDomain( "crashhandler" );
+    KLocalizedString::setApplicationDomain( "kritacrashhandler" );
 
 #ifdef KRITA_GIT_SHA1_STRING
     QString gitVersion(KRITA_GIT_SHA1_STRING);

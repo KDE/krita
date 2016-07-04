@@ -66,9 +66,9 @@ void AnimaterionRenderer::slotRenderAnimation()
     doc->setFileProgressProxy();
     doc->setFileProgressUpdater(i18n("Export frames"));
 
-    DlgAnimaterionRenderer dlgAnimaterionRenderer(image, m_view->mainWindow());
+    DlgAnimationRenderer dlgAnimationRenderer(image, m_view->mainWindow());
 
-    dlgAnimaterionRenderer.setCaption(i18n("Render Animation"));
+    dlgAnimationRenderer.setCaption(i18n("Render Animation"));
 
     KisConfig kisConfig;
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
@@ -76,20 +76,38 @@ void AnimaterionRenderer::slotRenderAnimation()
     // Override the saved start/end with the ones from the image in case of using gui.
     cfg->setProperty("first_frame", image->animationInterface()->playbackRange().start());
     cfg->setProperty("last_frame", image->animationInterface()->playbackRange().end());
-    dlgAnimaterionRenderer.setSequenceConfiguration(cfg);
+    dlgAnimationRenderer.setSequenceConfiguration(cfg);
 
-    if (dlgAnimaterionRenderer.exec() == QDialog::Accepted) {
-        KisPropertiesConfigurationSP sequencecfg = dlgAnimaterionRenderer.getSequenceConfiguration();
-        qDebug() << sequencecfg->toXML();
-        kisConfig.setExportConfiguration("IMAGESEQUENCE", *sequencecfg.data());
-        QString mimetype = sequencecfg->getString("mimetype");
+    cfg->clearProperties();
+    cfg->fromXML(kisConfig.exportConfiguration("ANIMATION_RENDERER"));
+    dlgAnimationRenderer.setVideoConfiguration(cfg);
+
+    cfg->clearProperties();
+    cfg->fromXML(kisConfig.exportConfiguration("FFMPEG_CONFIG"));
+    dlgAnimationRenderer.setEncoderConfiguration(cfg);
+
+
+    if (dlgAnimationRenderer.exec() == QDialog::Accepted) {
+        KisPropertiesConfigurationSP sequenceConfig = dlgAnimationRenderer.getSequenceConfiguration();
+        qDebug() << sequenceConfig->toXML();
+        kisConfig.setExportConfiguration("IMAGESEQUENCE", *sequenceConfig.data());
+        QString mimetype = sequenceConfig->getString("mimetype");
         QString extension = KisMimeDatabase::suffixesForMimeType(mimetype).first();
-        QString baseFileName = QString("%1/%2.%3").arg(sequencecfg->getString("directory"))
-                .arg(sequencecfg->getString("basename"))
+        QString baseFileName = QString("%1/%2.%3").arg(sequenceConfig->getString("directory"))
+                .arg(sequenceConfig->getString("basename"))
                 .arg(extension);
-        KisAnimationExportSaver exporter(doc, baseFileName, sequencecfg->getInt("first_frame"), sequencecfg->getInt("last_frame"), sequencecfg->getInt("sequence_start"));
-        bool success = exporter.exportAnimation(dlgAnimaterionRenderer.getFrameExportConfiguration());
+
+        KisAnimationExportSaver exporter(doc, baseFileName, sequenceConfig->getInt("first_frame"), sequenceConfig->getInt("last_frame"), sequenceConfig->getInt("sequence_start"));
+        bool success = exporter.exportAnimation(dlgAnimationRenderer.getFrameExportConfiguration());
         Q_ASSERT(success);
+
+        KisPropertiesConfigurationSP videoConfig = dlgAnimationRenderer.getVideoConfiguration();
+        if (videoConfig) {
+            kisConfig.setExportConfiguration("ANIMATION_RENDERER", *videoConfig.data());
+
+            KisPropertiesConfigurationSP encoderConfig = dlgAnimationRenderer.getEncoderConfiguration();
+            kisConfig.setExportConfiguration("FFMPEG_CONFIG", *encoderConfig.data());
+        }
     }
 
     doc->clearFileProgressUpdater();

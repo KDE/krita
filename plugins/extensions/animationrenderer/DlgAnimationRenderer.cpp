@@ -39,10 +39,9 @@
 #include <QHBoxLayout>
 #include <KisImportExportFilter.h>
 
-DlgAnimaterionRenderer::DlgAnimaterionRenderer(KisImageWSP image, QWidget *parent)
+DlgAnimationRenderer::DlgAnimationRenderer(KisImageWSP image, QWidget *parent)
     : KoDialog(parent)
     , m_image(image)
-    , m_frameExportConfigurationWidget(0)
 {
     setCaption(i18n("Render Animation"));
     setButtons(Ok | Cancel);
@@ -62,6 +61,7 @@ DlgAnimaterionRenderer::DlgAnimaterionRenderer(KisImageWSP image, QWidget *paren
     m_page->intEnd->setValue(image->animationInterface()->playbackRange().end());
 
     m_sequenceConfigLayout = new QHBoxLayout(m_page->grpExportOptions);
+    m_encoderConfigLayout = new QHBoxLayout(m_page->grpRenderOptions);
 
     QStringList mimes = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
     mimes.sort();
@@ -84,32 +84,32 @@ DlgAnimaterionRenderer::DlgAnimaterionRenderer(KisImageWSP image, QWidget *paren
     QList<QPluginLoader *>list = trader.query("Krita/AnimationExporter", "");
     Q_FOREACH(QPluginLoader *loader, list) {
         QJsonObject json = loader->metaData().value("MetaData").toObject();
-        Q_FOREACH(const QString &mimetype, json.value("X-KDE-Export").toString().split(",")) {
+        Q_FOREACH(const QString &mime, json.value("X-KDE-Export").toString().split(",")) {
 
             KLibFactory *factory = qobject_cast<KLibFactory *>(loader->instance());
-
             if (!factory) {
                 warnUI << loader->errorString();
                 continue;
             }
 
-            QObject* obj = factory->create<KisImportExportFilter>(parent);
+            QObject* obj = factory->create<KisImportExportFilter>(0);
             if (!obj || !obj->inherits("KisImportExportFilter")) {
                 delete obj;
                 continue;
             }
 
-            QSharedPointer<KisImportExportFilter> filter(static_cast<KisImportExportFilter*>(obj));
+            QSharedPointer<KisImportExportFilter>filter(static_cast<KisImportExportFilter*>(obj));
             if (!filter) {
                 delete obj;
                 continue;
             }
 
             m_renderFilters.append(filter);
-            //            m_configWidgets.append(filter->createConfigurationWidget(m_page->grpRenderOptions));
-            //            m_configWidgets.last()->setVisible(false);
-
-            m_page->cmbRenderType->addItem(KisMimeDatabase::descriptionForMimeType(mimetype));
+            QString description = KisMimeDatabase::descriptionForMimeType(mime);
+            if (description.isEmpty()) {
+                description = mime;
+            }
+            m_page->cmbRenderType->addItem(description, mime);
         }
     }
     qDeleteAll(list);
@@ -120,14 +120,18 @@ DlgAnimaterionRenderer::DlgAnimaterionRenderer(KisImageWSP image, QWidget *paren
     sequenceMimeTypeSelected(m_page->cmbMimetype->currentIndex());
 }
 
-DlgAnimaterionRenderer::~DlgAnimaterionRenderer()
+DlgAnimationRenderer::~DlgAnimationRenderer()
 {
-    m_frameExportConfigurationWidget->setParent(0);
-    m_frameExportConfigurationWidget->deleteLater();
+    m_encoderConfigWidget->setParent(0);
+    m_encoderConfigWidget->deleteLater();
+    m_frameExportConfigWidget->setParent(0);
+    m_frameExportConfigWidget->deleteLater();
+
     delete m_page;
+
 }
 
-KisPropertiesConfigurationSP DlgAnimaterionRenderer::getSequenceConfiguration() const
+KisPropertiesConfigurationSP DlgAnimationRenderer::getSequenceConfiguration() const
 {
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
     cfg->setProperty("basename", m_page->txtBasename->text());
@@ -139,7 +143,7 @@ KisPropertiesConfigurationSP DlgAnimaterionRenderer::getSequenceConfiguration() 
     return cfg;
 }
 
-void DlgAnimaterionRenderer::setSequenceConfiguration(KisPropertiesConfigurationSP cfg)
+void DlgAnimationRenderer::setSequenceConfiguration(KisPropertiesConfigurationSP cfg)
 {
     m_page->txtBasename->setText(cfg->getString("basename", "frame"));
     m_page->dirRequester->setFileName(cfg->getString("directory", QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)));
@@ -156,20 +160,20 @@ void DlgAnimaterionRenderer::setSequenceConfiguration(KisPropertiesConfiguration
     }
 }
 
-KisPropertiesConfigurationSP DlgAnimaterionRenderer::getFrameExportConfiguration() const
+KisPropertiesConfigurationSP DlgAnimationRenderer::getFrameExportConfiguration() const
 {
-    if (m_frameExportConfigurationWidget) {
-        return m_frameExportConfigurationWidget->configuration();
+    if (m_frameExportConfigWidget) {
+        return m_frameExportConfigWidget->configuration();
     }
     return 0;
 }
 
-bool DlgAnimaterionRenderer::renderToVideo() const
+bool DlgAnimationRenderer::renderToVideo() const
 {
     return m_page->grpRender->isChecked();
 }
 
-KisPropertiesConfigurationSP DlgAnimaterionRenderer::getVideoConfiguration() const
+KisPropertiesConfigurationSP DlgAnimationRenderer::getVideoConfiguration() const
 {
     if (!m_page->grpRender->isChecked()) {
         return 0;
@@ -180,12 +184,12 @@ KisPropertiesConfigurationSP DlgAnimaterionRenderer::getVideoConfiguration() con
     return cfg;
 }
 
-void DlgAnimaterionRenderer::setVideoConfiguration(KisPropertiesConfigurationSP cfg)
+void DlgAnimationRenderer::setVideoConfiguration(KisPropertiesConfigurationSP cfg)
 {
 
 }
 
-KisPropertiesConfigurationSP DlgAnimaterionRenderer::getencoderConfiguration() const
+KisPropertiesConfigurationSP DlgAnimationRenderer::getEncoderConfiguration() const
 {
     if (!m_page->grpRender->isChecked()) {
         return 0;
@@ -194,26 +198,43 @@ KisPropertiesConfigurationSP DlgAnimaterionRenderer::getencoderConfiguration() c
     return cfg;
 }
 
-void DlgAnimaterionRenderer::getencoderConfiguration(KisPropertiesConfigurationSP cfg)
+void DlgAnimationRenderer::setEncoderConfiguration(KisPropertiesConfigurationSP cfg)
 {
 
 }
 
-void DlgAnimaterionRenderer::selectRenderType(int renderType)
+void DlgAnimationRenderer::selectRenderType(int index)
 {
-    //    if (renderType >= m_configWidgets->size) return;
+    if (m_encoderConfigWidget) {
+        m_encoderConfigLayout->removeWidget(m_encoderConfigWidget);
+        m_encoderConfigWidget->hide();
+        m_encoderConfigWidget->setParent(0);
+        m_encoderConfigWidget->deleteLater();
+        m_encoderConfigWidget = 0;
+    }
 
-    //    Q_FOREACH(QWidget *w, m_configWidgets) {
-    //        if (w) {
-    //            w->setVisible(false);
-    //        }
-    //    }
-    //    if (m_configWidgets[renterType]) {
-    //        m_configWidgets[renderType]->setVisible(true);
-    //    }
+    if (index >= m_renderFilters.size()) return;
+
+    QSharedPointer<KisImportExportFilter> filter = m_renderFilters[index];
+    QString mimetype = m_page->cmbMimetype->itemData(index).toString();
+
+    qDebug() << ">>>>>>>>>" << mimetype;
+
+    if (filter) {
+        m_encoderConfigWidget = filter->createConfigurationWidget(m_page->grpExportOptions, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());
+        if (m_encoderConfigWidget) {
+            m_encoderConfigLayout->addWidget(m_encoderConfigWidget);
+            m_encoderConfigWidget->setConfiguration(filter->lastSavedConfiguration());
+            m_encoderConfigWidget->show();
+            resize(sizeHint());
+        }
+        else {
+            m_encoderConfigWidget = 0;
+        }
+    }
 }
 
-void DlgAnimaterionRenderer::toggleSequenceType(bool toggle)
+void DlgAnimationRenderer::toggleSequenceType(bool toggle)
 {
     m_page->cmbMimetype->setEnabled(!toggle);
     for (int i = 0; i < m_page->cmbMimetype->count(); ++i) {
@@ -224,26 +245,27 @@ void DlgAnimaterionRenderer::toggleSequenceType(bool toggle)
     }
 }
 
-void DlgAnimaterionRenderer::sequenceMimeTypeSelected(int index)
+void DlgAnimationRenderer::sequenceMimeTypeSelected(int index)
 {
-    if (m_frameExportConfigurationWidget) {
-        m_sequenceConfigLayout->removeWidget(m_frameExportConfigurationWidget);
-        m_frameExportConfigurationWidget->hide();
-        m_frameExportConfigurationWidget->setParent(0);
-        m_frameExportConfigurationWidget = 0;
+    if (m_frameExportConfigWidget) {
+        m_sequenceConfigLayout->removeWidget(m_frameExportConfigWidget);
+        m_frameExportConfigWidget->hide();
+        m_frameExportConfigWidget->setParent(0);
+        m_frameExportConfigWidget->deleteLater();
+        m_frameExportConfigWidget = 0;
     }
     QString mimetype = m_page->cmbMimetype->itemData(index).toString();
     KisImportExportFilter *filter = KisImportExportManager::filterForMimeType(mimetype, KisImportExportManager::Export);
     if (filter) {
-        m_frameExportConfigurationWidget = filter->createConfigurationWidget(m_page->grpExportOptions, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());
-        if (m_frameExportConfigurationWidget) {
-            m_sequenceConfigLayout->addWidget(m_frameExportConfigurationWidget);
-            m_frameExportConfigurationWidget->setConfiguration(filter->lastSavedConfiguration());
-            m_frameExportConfigurationWidget->show();
+        m_frameExportConfigWidget = filter->createConfigurationWidget(m_page->grpExportOptions, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());
+        if (m_frameExportConfigWidget) {
+            m_sequenceConfigLayout->addWidget(m_frameExportConfigWidget);
+            m_frameExportConfigWidget->setConfiguration(filter->lastSavedConfiguration());
+            m_frameExportConfigWidget->show();
             resize(sizeHint());
         }
         else {
-            m_frameExportConfigurationWidget = 0;
+            m_frameExportConfigWidget = 0;
         }
         delete filter;
     }

@@ -42,15 +42,15 @@ public:
     }
 };
 
-class DlgAnimaterionRenderer: public KoDialog
+class DlgAnimationRenderer: public KoDialog
 {
 
     Q_OBJECT
 
 public:
 
-    DlgAnimaterionRenderer(KisImageWSP image, QWidget *parent = 0);
-    ~DlgAnimaterionRenderer();
+    DlgAnimationRenderer(KisImageWSP image, QWidget *parent = 0);
+    ~DlgAnimationRenderer();
 
     KisPropertiesConfigurationSP getSequenceConfiguration() const;
     void setSequenceConfiguration(KisPropertiesConfigurationSP  cfg);
@@ -62,8 +62,8 @@ public:
     KisPropertiesConfigurationSP getVideoConfiguration() const;
     void setVideoConfiguration(KisPropertiesConfigurationSP cfg);
 
-    KisPropertiesConfigurationSP getencoderConfiguration() const;
-    void getencoderConfiguration(KisPropertiesConfigurationSP cfg);
+    KisPropertiesConfigurationSP getEncoderConfiguration() const;
+    void setEncoderConfiguration(KisPropertiesConfigurationSP cfg);
 
 private Q_SLOTS:
 
@@ -76,9 +76,10 @@ private:
     KisImageWSP m_image;
     WdgAnimaterionRenderer *m_page;
     QList<QSharedPointer<KisImportExportFilter>> m_renderFilters;
-    QList<QWidget> m_configWidgets;
+    QHBoxLayout *m_encoderConfigLayout;
+    KisConfigWidget *m_encoderConfigWidget {0};
     QHBoxLayout *m_sequenceConfigLayout;
-    KisConfigWidget *m_frameExportConfigurationWidget;
+    KisConfigWidget *m_frameExportConfigWidget {0};
 };
 
 #endif // DLG_ANIMATIONRENDERERIMAGE

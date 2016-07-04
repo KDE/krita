@@ -105,9 +105,14 @@ QColor TimelineColorScheme::frameColor(bool present, bool active) const
     return color;
 }
 
-QColor TimelineColorScheme::onionSkinsSliderColor() const
+QColor TimelineColorScheme::onionSkinsSliderEnabledColor() const
 {
     return m_d->baseColor;
+}
+
+QColor TimelineColorScheme::onionSkinsSliderDisabledColor() const
+{
+    return qApp->palette().color(QPalette::Disabled, QPalette::HighlightedText);
 }
 
 QColor TimelineColorScheme::onionSkinsButtonColor() const

@@ -99,7 +99,7 @@ void KisEqualizerButton::paintEvent(QPaintEvent *event)
 
     {
         QColor fillColor = TimelineColorScheme::instance()->onionSkinsButtonColor();
-        QColor frameColor = TimelineColorScheme::instance()-> onionSkinsSliderColor();
+        QColor frameColor = TimelineColorScheme::instance()-> onionSkinsSliderEnabledColor();
 
         if (isChecked() || hasFocus() || m_d->isHovering) {
             p.setPen(hasFocus() || m_d->isHovering ? frameColor : Qt::transparent);

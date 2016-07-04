@@ -40,6 +40,7 @@ public:
     QSize minimumSizeHint() const;
 
     void setRightmost(bool value);
+    void setToggleState(bool value);
 
 private:
     struct Private;

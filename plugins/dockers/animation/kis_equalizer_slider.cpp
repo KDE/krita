@@ -32,10 +32,11 @@
 
 struct KisEqualizerSlider::Private
 {
-    Private(KisEqualizerSlider *_q) : q(_q), isRightmost(false) {}
+    Private(KisEqualizerSlider *_q) : q(_q), isRightmost(false), toggleState(true) {}
 
     KisEqualizerSlider *q;
     bool isRightmost;
+    bool toggleState;
 
 
     QRect boundingRect() const;
@@ -60,6 +61,13 @@ KisEqualizerSlider::~KisEqualizerSlider()
 void KisEqualizerSlider::setRightmost(bool value)
 {
     m_d->isRightmost = value;
+}
+
+void KisEqualizerSlider::setToggleState(bool value)
+{
+    m_d->toggleState = value;
+    update();
+
 }
 
 QRect KisEqualizerSlider::Private::boundingRect() const
@@ -171,7 +179,11 @@ void KisEqualizerSlider::paintEvent(QPaintEvent *event)
         sliderRect.adjust(0, sliderRect.height() - sliderPos, 0, 0);
 
         p.setPen(Qt::transparent);
-        p.setBrush(TimelineColorScheme::instance()->onionSkinsSliderColor());
+
+        QColor color = m_d->toggleState ?
+                    TimelineColorScheme::instance()->onionSkinsSliderEnabledColor() :
+                    TimelineColorScheme::instance()->onionSkinsSliderDisabledColor();
+        p.setBrush(color);
 
         p.drawRect(sliderRect);
     }

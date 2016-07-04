@@ -54,14 +54,19 @@ KisPropertiesConfiguration::KisPropertiesConfiguration(const KisPropertiesConfig
 {
 }
 
-void KisPropertiesConfiguration::fromXML(const QString & s)
+bool KisPropertiesConfiguration::fromXML(const QString & xml, bool clear)
 {
-    clearProperties();
+    if (clear) {
+        clearProperties();
+    }
 
     QDomDocument doc;
-    doc.setContent(s);
-    QDomElement e = doc.documentElement();
-    fromXML(e);
+    bool retval = doc.setContent(xml);
+    if (retval) {
+        QDomElement e = doc.documentElement();
+        fromXML(e);
+    }
+    return retval;
 }
 
 void KisPropertiesConfiguration::fromXML(const QDomElement& e)

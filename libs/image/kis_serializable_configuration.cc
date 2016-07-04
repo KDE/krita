@@ -31,12 +31,15 @@ KisSerializableConfiguration::KisSerializableConfiguration(const KisSerializable
 {
 }
 
-void KisSerializableConfiguration::fromXML(const QString & s)
+bool KisSerializableConfiguration::fromXML(const QString &s, bool)
 {
     QDomDocument doc;
-    doc.setContent(s);
-    QDomElement e = doc.documentElement();
-    fromXML(e);
+    bool rv = doc.setContent(s);
+    if (rv) {
+        QDomElement e = doc.documentElement();
+        fromXML(e);
+    }
+    return rv;
 }
 
 QString KisSerializableConfiguration::toXML() const

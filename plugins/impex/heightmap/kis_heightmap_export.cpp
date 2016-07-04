@@ -62,11 +62,11 @@ KisPropertiesConfigurationSP KisHeightMapExport::defaultConfiguration(const QByt
     return cfg;
 }
 
-KisPropertiesConfigurationSP KisHeightMapExport::lastSavedConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
+KisPropertiesConfigurationSP KisHeightMapExport::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
 {
-    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
     QString filterConfig = KisConfig().exportConfiguration("HeightMap");
-    cfg->fromXML(filterConfig);
+    cfg->fromXML(filterConfig, false);
     return cfg;
 }
 

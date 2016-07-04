@@ -288,11 +288,11 @@ KisPropertiesConfigurationSP KisPPMExport::defaultConfiguration(const QByteArray
     return cfg;
 }
 
-KisPropertiesConfigurationSP KisPPMExport::lastSavedConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
+KisPropertiesConfigurationSP KisPPMExport::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
 {
-    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
     QString filterConfig = KisConfig().exportConfiguration("PPM");
-    cfg->fromXML(filterConfig);
+    cfg->fromXML(filterConfig, false);
     return cfg;
 }
 

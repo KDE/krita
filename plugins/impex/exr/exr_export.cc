@@ -61,11 +61,11 @@ KisPropertiesConfigurationSP exrExport::defaultConfiguration(const QByteArray &/
     return cfg;
 }
 
-KisPropertiesConfigurationSP exrExport::lastSavedConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
+KisPropertiesConfigurationSP exrExport::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
 {
-    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
     QString filterConfig = KisConfig().exportConfiguration("EXR");
-    cfg->fromXML(filterConfig);
+    cfg->fromXML(filterConfig, false);
     return cfg;
 }
 

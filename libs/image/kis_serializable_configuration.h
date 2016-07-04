@@ -44,7 +44,7 @@ public:
     /**
      * Fill the object from the XML encoded representation in s.
      */
-    virtual void fromXML(const QString&);
+    virtual bool fromXML(const QString&, bool);
 
     /**
      * Fill the object from the XML encoded representation in s.

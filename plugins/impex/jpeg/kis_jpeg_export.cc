@@ -185,11 +185,11 @@ KisPropertiesConfigurationSP KisJPEGExport::defaultConfiguration(const QByteArra
     return cfg;
 }
 
-KisPropertiesConfigurationSP KisJPEGExport::lastSavedConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
+KisPropertiesConfigurationSP KisJPEGExport::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
 {
-    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
     QString filterConfig = KisConfig().exportConfiguration("JPEG");
-    cfg->fromXML(filterConfig);
+    cfg->fromXML(filterConfig, false);
     return cfg;
 }
 

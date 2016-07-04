@@ -107,8 +107,7 @@ VideoExportOptionsDialog::VideoExportOptionsDialog(QWidget *parent) :
     ui->intBitrate->setValue(5000);
     ui->intBitrate->setSuffix(i18nc("kilo-bits-per-second, video bitrate suffix", "kbps"));
 
-    connect(ui->cmbCodec, SIGNAL(currentIndexChanged(int)),
-            ui->stackedWidget, SLOT(setCurrentIndex(int)));
+    connect(ui->cmbCodec, SIGNAL(currentIndexChanged(int)), ui->stackedWidget, SLOT(setCurrentIndex(int)));
 
     ui->cmbCodec->setCurrentIndex(0);
     ui->cmbCodec->setEnabled(false);
@@ -194,6 +193,12 @@ void VideoExportOptionsDialog::setConfiguration(const KisPropertiesConfiguration
     m_d->defaultTune = cfg->getInt("h264TuneIndex", 1);
     m_d->defaultBitrate = cfg->getInt("TheoraBitrate", 5000);
     m_d->defaultCustomLine = cfg->getString("CustomLineValue", "");
+    if (cfg->hasProperty("CodecIndex")) {
+        setCodec((VideoExportOptionsDialog::CodecIndex)cfg->getInt("CodecIndex"));
+    }
+    else {
+        ui->cmbCodec->setEnabled(false);
+    }
 }
 
 QStringList VideoExportOptionsDialog::generateCustomLine() const
@@ -204,6 +209,7 @@ QStringList VideoExportOptionsDialog::generateCustomLine() const
         options << "-crf" << QString::number(ui->intConstantRateFactor->value());
 
         const int presetIndex = ui->cmbPreset->currentIndex();
+        qDebug() << "presetIndex" << presetIndex << m_d->presets;
         options << "-preset" << m_d->presets[presetIndex].id();
 
         const int profileIndex = ui->cmbProfile->currentIndex();

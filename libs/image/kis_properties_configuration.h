@@ -61,11 +61,17 @@ public:
     /**
      * Fill the properties  configuration object from the XML encoded representation in s.
      * This function use the "Legacy" style XML of the 1.x .kra file format.
+     * @param xml the string that will be parsed as xml
+     * @param clear if true, the properties map will be emptied.
+     * @return true is the xml document could be parsed
      */
-    virtual void fromXML(const QString&);
+    virtual bool fromXML(const QString& xml, bool clear = true);
+
     /**
      * Fill the properties  configuration object from the XML encoded representation in s.
      * This function use the "Legacy" style XML  of the 1.x .kra file format.
+     *
+     * Note: the existing properties will not be cleared
      */
     virtual void fromXML(const QDomElement&);
 

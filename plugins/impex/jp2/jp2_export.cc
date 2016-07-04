@@ -62,11 +62,11 @@ KisPropertiesConfigurationSP jp2Export::defaultConfiguration(const QByteArray &/
     return cfg;
 }
 
-KisPropertiesConfigurationSP jp2Export::lastSavedConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
+KisPropertiesConfigurationSP jp2Export::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
 {
-    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
     QString filterConfig = KisConfig().exportConfiguration("JP2");
-    cfg->fromXML(filterConfig);
+    cfg->fromXML(filterConfig, false);
     return cfg;
 }
 

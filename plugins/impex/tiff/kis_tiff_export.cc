@@ -151,11 +151,11 @@ KisPropertiesConfigurationSP KisTIFFExport::defaultConfiguration(const QByteArra
     return cfg;
 }
 
-KisPropertiesConfigurationSP KisTIFFExport::lastSavedConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
+KisPropertiesConfigurationSP KisTIFFExport::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
 {
     QString filterConfig = KisConfig().exportConfiguration("TIFF");
-    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
-    cfg->fromXML(filterConfig);
+    KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
+    cfg->fromXML(filterConfig, false);
     return cfg;
 }
 

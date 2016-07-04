@@ -142,8 +142,7 @@ KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray
 KisPropertiesConfigurationSP KisVideoExport::defaultConfiguration(const QByteArray &from, const QByteArray &to) const
 {
     Q_UNUSED(from);
-    Q_UNUSED(to);
-    KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
+     KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
 
     cfg->setProperty("h264PresetIndex", 5);
     cfg->setProperty("h264ConstantRateFactor", 23);
@@ -152,14 +151,24 @@ KisPropertiesConfigurationSP KisVideoExport::defaultConfiguration(const QByteArr
     cfg->setProperty("TheoraBitrate", 5000);
     cfg->setProperty("CustomLineValue", "");
 
+    if (to == "video/ogg") {
+        cfg->setProperty("CodecIndex", VideoExportOptionsDialog::CODEC_THEORA);
+    }
+    else if (to == "video/x-matroska" || to == "video/mp4") {
+        cfg->setProperty("CodecIndex", VideoExportOptionsDialog::CODEC_H264);
+    }
+
     return cfg;
 }
 
 KisConfigWidget *KisVideoExport::createConfigurationWidget(QWidget *parent, const QByteArray &from, const QByteArray &to) const
 {
     Q_UNUSED(from);
-    Q_UNUSED(to);
-    return new VideoExportOptionsDialog(parent);
+    KisConfigWidget *w;
+    if (to != "image/gif") {
+        w = new VideoExportOptionsDialog(parent);
+    }
+    return w;
 }
 
 #include "kis_video_export.moc"

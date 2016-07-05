@@ -114,6 +114,13 @@
 #endif
 
 
+struct KisImageSPStaticRegistrar {
+    KisImageSPStaticRegistrar() {
+        qRegisterMetaType<KisImageSP>("KisImageSP");
+    }
+};
+static KisImageSPStaticRegistrar __imageSPRegistrar;
+
 class KisImage::KisImagePrivate
 {
 public:

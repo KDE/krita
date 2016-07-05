@@ -43,6 +43,7 @@ public:
     qreal interpolatedValue(int time) const;
     qreal currentValue() const;
 
+    static QPointF interpolate(QPointF point1, QPointF rightTangent, QPointF leftTangent, QPointF point2, qreal t);
 protected:
     KisKeyframeSP createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand);
     KisKeyframeSP createKeyframe(int time, qreal value, KUndo2Command *parentCommand);

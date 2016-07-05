@@ -36,6 +36,9 @@ public:
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
     QPointF nodeCenter(const QModelIndex index) const;
+    QPointF leftHandle(const QModelIndex index) const;
+    QPointF rightHandle(const QModelIndex index) const;
+
     QRect itemRect(const QModelIndex index) const;
     QRect visualRect(const QModelIndex index) const;
 

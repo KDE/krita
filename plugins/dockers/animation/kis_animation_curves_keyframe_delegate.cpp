@@ -62,8 +62,8 @@ void KisAnimationCurvesKeyframeDelegate::paint(QPainter *painter, const QStyleOp
     painter->drawEllipse(center, NODE_RENDER_RADIUS, NODE_RENDER_RADIUS);
 
     if (selected) {
-        QPointF leftTangent = index.data(KisAnimationCurvesModel::LeftTangentRole).toPointF();
-        QPointF rightTangent = index.data(KisAnimationCurvesModel::RightTangentRole).toPointF();
+        QPointF leftTangent = leftHandle(index);
+        QPointF rightTangent = rightHandle(index);
 
         painter->setPen(QPen(color, 1));
         painter->setBrush(bgColor);
@@ -90,6 +90,26 @@ QPointF KisAnimationCurvesKeyframeDelegate::nodeCenter(const QModelIndex index) 
     return QPointF(x, y);
 }
 
+QPointF KisAnimationCurvesKeyframeDelegate::leftHandle(const QModelIndex index) const
+{
+    QPointF tangent = index.data(KisAnimationCurvesModel::LeftTangentRole).toPointF();
+
+    float x = tangent.x() * m_d->horizontalRuler->defaultSectionSize();
+    float y = tangent.y() * m_d->verticalRuler->scaleFactor();
+
+    return QPointF(x, y);
+}
+
+QPointF KisAnimationCurvesKeyframeDelegate::rightHandle(const QModelIndex index) const
+{
+    QPointF tangent = index.data(KisAnimationCurvesModel::RightTangentRole).toPointF();
+
+    float x = tangent.x() * m_d->horizontalRuler->defaultSectionSize();
+    float y = tangent.y() * m_d->verticalRuler->scaleFactor();
+
+    return QPointF(x, y);
+}
+
 void KisAnimationCurvesKeyframeDelegate::paintHandle(QPainter *painter, QPointF nodePos, QPointF tangent) const
 {
     QPointF handlePos = nodePos + tangent;
@@ -108,8 +128,8 @@ QRect KisAnimationCurvesKeyframeDelegate::itemRect(const QModelIndex index) cons
 QRect KisAnimationCurvesKeyframeDelegate::visualRect(const QModelIndex index) const
 {
     QPointF center = nodeCenter(index);
-    QPointF leftHandle = center + index.data(KisAnimationCurvesModel::LeftTangentRole).toPointF();
-    QPointF rightHandle = center + index.data(KisAnimationCurvesModel::RightTangentRole).toPointF();
+    QPointF leftHandle = center + leftHandle(index);
+    QPointF rightHandle = center + rightHandle(index);
 
     int minX = qMin(center.x(), leftHandle.x()) - NODE_RENDER_RADIUS;
     int maxX = qMax(center.x(), rightHandle.x()) + NODE_RENDER_RADIUS;

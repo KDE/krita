@@ -49,7 +49,9 @@ public:
         InterpolationModeRole,
         LeftTangentRole,
         RightTangentRole,
-        CurveColorRole
+        CurveColorRole,
+        PreviousKeyframeTime,
+        NextKeyframeTime
     };
 
 public Q_SLOTS:

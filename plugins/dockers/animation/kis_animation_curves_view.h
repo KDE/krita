@@ -61,7 +61,10 @@ private:
     const QScopedPointer<Private> m_d;
 
     void paintCurves(QPainter &painter, int firstFrame, int lastFrame);
+    void paintCurve(int channel, int firstFrame, int lastFrame, QPainter &painter);
+    void paintCurveSegment(QPainter &painter, QPointF pos1, QPointF rightTangent, QPointF leftTangent, QPointF pos2);
     void paintKeyframes(QPainter &painter, int firstFrame, int lastFrame);
+    QModelIndex firstKeyframeIndexForRange(int channel, int firstFrame, int LastFrame);
 };
 
 #endif

@@ -74,6 +74,20 @@ QVariant KisAnimationCurvesModel::data(const QModelIndex &index, int role) const
             return (keyframe.isNull()) ? QVariant() : keyframe->interpolationMode();
         case CurveColorRole:
             return QColor(Qt::red);
+        case PreviousKeyframeTime:
+        {
+            if (keyframe.isNull()) return QVariant();
+            KisKeyframeSP previous = channel->previousKeyframe(keyframe);
+            if (previous.isNull()) return QVariant();
+            return previous->time();
+        }
+        case NextKeyframeTime:
+        {
+            if (keyframe.isNull()) return QVariant();
+            KisKeyframeSP next = channel->nextKeyframe(keyframe);
+            if (next.isNull()) return QVariant();
+            return next->time();
+        }
         default:
             break;
         }

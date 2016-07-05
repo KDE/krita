@@ -21,6 +21,7 @@
 #include "timeline_ruler_header.h"
 #include "kis_animation_curves_value_ruler.h"
 #include "kis_animation_curves_keyframe_delegate.h"
+#include "kis_scalar_keyframe_channel.h"
 
 #include <QPaintEvent>
 #include <qpainter.h>
@@ -108,28 +109,53 @@ void KisAnimationCurvesView::paintEvent(QPaintEvent *e)
 
 void KisAnimationCurvesView::paintCurves(QPainter &painter, int firstFrame, int lastFrame)
 {
-    // Make sure we draw lines crossing the edges of the refreshed rect
-    firstFrame = qMax(0, firstFrame -1);
-    lastFrame = lastFrame + 1;
-
     int channels = model()->rowCount();
     for (int channel = 0; channel < channels; channel++) {
-        QPointF previousNodePos;
-
         QModelIndex index0 = model()->index(channel, 0);
         QColor color = index0.data(KisAnimationCurvesModel::CurveColorRole).value<QColor>();
         painter.setPen(QPen(color, 1));
 
-        for (int time = firstFrame; time <= lastFrame; time++) {
-            QModelIndex index = model()->index(channel, time);
-            QPointF nodePos = m_d->itemDelegate->nodeCenter(index);
+        paintCurve(channel, firstFrame, lastFrame, painter);
+    }
+}
 
-            if (time > firstFrame) {
-                painter.drawLine(previousNodePos, nodePos);
-            }
+void KisAnimationCurvesView::paintCurve(int channel, int firstFrame, int lastFrame, QPainter &painter)
+{
+    QModelIndex index = firstKeyframeIndexForRange(channel, firstFrame, lastFrame);
+    if (!index.isValid()) return;
 
-            previousNodePos = nodePos;
+    QPointF previousKeyPos = m_d->itemDelegate->nodeCenter(index);
+    QPointF rightTangent = m_d->itemDelegate->rightHandle(index);
+
+    while(index.column() <= lastFrame) {
+        QVariant next = index.data(KisAnimationCurvesModel::NextKeyframeTime);
+        if (!next.isValid()) return;
+        index = model()->index(channel, next.toInt());
+
+        QPointF nextKeyPos = m_d->itemDelegate->nodeCenter(index);
+        QPointF leftTangent = m_d->itemDelegate->leftHandle(index);
+
+        paintCurveSegment(painter, previousKeyPos, rightTangent, leftTangent, nextKeyPos);
+
+        previousKeyPos = nextKeyPos;
+        rightTangent = m_d->itemDelegate->rightHandle(index);
+    }
+}
+
+void KisAnimationCurvesView::paintCurveSegment(QPainter &painter, QPointF pos1, QPointF rightTangent, QPointF leftTangent, QPointF pos2) {
+    const int steps = 16;
+    QPointF previousPos;
+
+    for (int step = 0; step <= steps; step++) {
+        qreal t = 1.0 * step / steps;
+
+        QPointF nextPos = KisScalarKeyframeChannel::interpolate(pos1, rightTangent, leftTangent, pos2, t);
+
+        if (step > 0) {
+            painter.drawLine(previousPos, nextPos);
         }
+
+        previousPos = nextPos;
     }
 }
 
@@ -152,6 +178,29 @@ void KisAnimationCurvesView::paintKeyframes(QPainter &painter, int firstFrame, i
             }
         }
     }
+}
+
+QModelIndex KisAnimationCurvesView::firstKeyframeIndexForRange(int channel, int firstFrame, int LastFrame)
+{
+    QModelIndex index = model()->index(channel, firstFrame);
+
+    if (!index.data(KisAnimationCurvesModel::SpecialKeyframeExists).toBool()) {
+        QVariant previous = index.data(KisAnimationCurvesModel::PreviousKeyframeTime);
+
+        if (previous.isValid()) {
+            index = model()->index(channel, previous.toInt());
+        } else {
+            QVariant next = index.data(KisAnimationCurvesModel::NextKeyframeTime);
+            if (!next.isValid()) {
+                index = QModelIndex();
+            }
+
+            index = model()->index(channel, next.toInt());
+        }
+    }
+
+    if (index.column() > LastFrame) return QModelIndex();
+    return index;
 }
 
 QModelIndex KisAnimationCurvesView::moveCursor(QAbstractItemView::CursorAction cursorAction, Qt::KeyboardModifiers modifiers)

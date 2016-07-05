@@ -146,6 +146,34 @@ qreal cubicBezier(qreal p0, qreal delta1, qreal delta2, qreal p3, qreal t) {
     return c*c*c * p0 + 3*c*c*t * p1 + 3*c*t*t * p2 + t*t*t * p3;
 }
 
+void normalizeTangents(const QPointF point1, QPointF &rightTangent, QPointF &leftTangent, const QPointF point2)
+{
+    // To ensure that the curve is monotonic wrt time,
+    // check that control points lie between the endpoints.
+    // If not, force them into range by scaling down the tangents
+
+    float interval = point2.x() - point1.x();
+    if (rightTangent.x() < 0) rightTangent *= 0;
+    if (leftTangent.x() > 0) leftTangent *= 0;
+
+    if (rightTangent.x() > interval) {
+        rightTangent *= interval / rightTangent.x();
+    }
+    if (leftTangent.x() < -interval) {
+        leftTangent *= interval / -leftTangent.x();
+    }
+}
+
+QPointF KisScalarKeyframeChannel::interpolate(QPointF point1, QPointF rightTangent, QPointF leftTangent, QPointF point2, qreal t)
+{
+    normalizeTangents(point1, rightTangent, leftTangent, point2);
+
+    qreal x = cubicBezier(point1.x(), rightTangent.x(), leftTangent.x(), point2.x(), t);
+    qreal y = cubicBezier(point1.y(), rightTangent.y(), leftTangent.y(), point2.y(), t);
+
+    return QPointF(x,y);
+}
+
 qreal findCubicCurveParameter(int time0, qreal delta0, qreal delta1, int time1, int time)
 {
     if (time == time0) return 0.0;
@@ -181,32 +209,15 @@ qreal KisScalarKeyframeChannel::interpolatedValue(int time) const
     KisKeyframeSP nextKey = nextKeyframe(activeKey);
     if (nextKey.isNull()) return scalarValue(activeKey);
 
-    int time0 = activeKey->time();
-    int time1 = nextKey->time();
-    int interval = time1 - time0;
-
-    qreal value0 = scalarValue(activeKey);
-    qreal value1 = scalarValue(nextKey);
+    QPointF point0 = QPointF(activeKey->time(), scalarValue(activeKey));
+    QPointF point1 = QPointF(nextKey->time(), scalarValue(nextKey));
 
     QPointF tangent0 = activeKey->rightTangent();
     QPointF tangent1 = nextKey->leftTangent();
 
-    // To ensure that the curve is monotonic wrt time,
-    // check that control points lie between the endpoints.
-    // If not, force them into range by scaling down the tangents
-
-    if (tangent0.x() < 0) tangent0 = QPointF(0,0);
-    if (tangent1.x() > 0) tangent1 = QPointF(0,0);
-
-    if (tangent0.x() > interval) {
-        tangent0 = tangent0 * (interval / tangent0.x());
-    }
-    if (tangent1.x() < -interval) {
-        tangent1 = tangent1 * (interval / -tangent1.x());
-    }
-
-    qreal t = findCubicCurveParameter(time0, tangent0.x(), tangent1.x(), time1, time);
-    qreal res = cubicBezier(value0, tangent0.y(), tangent1.y(), value1, t);
+    normalizeTangents(point0, tangent0, tangent1, point1);
+    qreal t = findCubicCurveParameter(point0.x(), tangent0.x(), tangent1.x(), point1.x(), time);
+    qreal res = interpolate(point0, tangent0, tangent1, point1, t).y();
 
     if (res > m_d->maxValue) return m_d->maxValue;
     if (res < m_d->minValue) return m_d->minValue;

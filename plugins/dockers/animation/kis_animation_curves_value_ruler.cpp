@@ -41,6 +41,11 @@ KisAnimationCurvesValueRuler::KisAnimationCurvesValueRuler(QWidget *parent)
 KisAnimationCurvesValueRuler::~KisAnimationCurvesValueRuler()
 {}
 
+float KisAnimationCurvesValueRuler::scaleFactor() const
+{
+    return -m_d->scale;
+}
+
 float KisAnimationCurvesValueRuler::mapValueToView(float value) const
 {
     return m_d->offset - m_d->scale * value;

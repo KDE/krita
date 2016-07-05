@@ -29,6 +29,7 @@ public:
     KisAnimationCurvesValueRuler(QWidget *parent);
     ~KisAnimationCurvesValueRuler();
 
+    float scaleFactor() const;
     float mapValueToView(float value) const;
     float mapViewToValue(float y) const;
 

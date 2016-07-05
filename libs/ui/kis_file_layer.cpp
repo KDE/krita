@@ -43,7 +43,7 @@ KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QSt
      */
     m_paintDevice = new KisPaintDevice(image->colorSpace());
 
-    connect(&m_loader, SIGNAL(loadingFinished(KisImageSP)), SLOT(slotLoadingFinished(KisImageSP)));
+    connect(&m_loader, SIGNAL(loadingFinished(KisPaintDeviceSP,int,int)), SLOT(slotLoadingFinished(KisPaintDeviceSP,int,int)));
 
     QFileInfo fi(path());
     if (fi.exists()) {
@@ -67,7 +67,7 @@ KisFileLayer::KisFileLayer(const KisFileLayer &rhs)
 
     m_paintDevice = new KisPaintDevice(rhs.image()->colorSpace());
 
-    connect(&m_loader, SIGNAL(loadingFinished(KisImageSP)), SLOT(slotLoadingFinished(KisImageSP)));
+    connect(&m_loader, SIGNAL(loadingFinished(KisPaintDeviceSP,int,int)), SLOT(slotLoadingFinished(KisPaintDeviceSP,int,int)));
     m_loader.setPath(path());
     m_loader.reloadImage();
 }
@@ -133,27 +133,29 @@ KisFileLayer::ScalingMethod KisFileLayer::scalingMethod() const
     return m_scalingMethod;
 }
 
-void KisFileLayer::slotLoadingFinished(KisImageSP importedImage)
+void KisFileLayer::slotLoadingFinished(KisPaintDeviceSP projection, int xRes, int yRes)
 {
     qint32 oldX = x();
     qint32 oldY = y();
 
-    m_paintDevice->makeCloneFrom(importedImage->projection(), importedImage->projection()->extent());
+    m_paintDevice->makeCloneFrom(projection, projection->extent());
     m_paintDevice->setDefaultBounds(new KisDefaultBounds(image()));
 
-    if (m_scalingMethod == ToImagePPI && (image()->xRes() != importedImage->xRes()
-                                          || image()->yRes() != importedImage->yRes())) {
-        qreal xscale = image()->xRes() / importedImage->xRes();
-        qreal yscale = image()->yRes() / importedImage->yRes();
+    QSize size = projection->exactBounds().size();
+
+    if (m_scalingMethod == ToImagePPI && (image()->xRes() != xRes
+                                          || image()->yRes() != yRes)) {
+        qreal xscale = image()->xRes() / xRes;
+        qreal yscale = image()->yRes() / yRes;
 
         KisTransformWorker worker(m_paintDevice, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get("Bicubic"));
         worker.run();
     }
     else if (m_scalingMethod == ToImageSize) {
-        QSize sz = importedImage->size();
+        QSize sz = size;
         sz.scale(image()->size(), Qt::KeepAspectRatio);
-        qreal xscale =  (qreal)sz.width() / (qreal)importedImage->width();
-        qreal yscale = (qreal)sz.height() / (qreal)importedImage->height();
+        qreal xscale =  (qreal)sz.width() / (qreal)size.width();
+        qreal yscale = (qreal)sz.height() / (qreal)size.height();
 
         KisTransformWorker worker(m_paintDevice, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get("Bicubic"));
         worker.run();

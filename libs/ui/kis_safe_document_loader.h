@@ -41,7 +41,7 @@ private Q_SLOTS:
     void delayedLoadStart();
 
 Q_SIGNALS:
-    void loadingFinished(KisImageSP image);
+    void loadingFinished(KisPaintDeviceSP paintDevice, int xRes, int yRes);
 
 private:
     struct Private;

@@ -69,7 +69,7 @@ public:
     KUndo2Command* transform(const QTransform &transform);
 
 public Q_SLOTS:
-    void slotLoadingFinished(KisImageSP importedImage);
+    void slotLoadingFinished(KisPaintDeviceSP projection, int xRes, int yRes);
 
 private:
     QString m_basePath;

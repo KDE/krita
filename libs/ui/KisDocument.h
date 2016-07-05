@@ -53,7 +53,7 @@ class KoDocumentInfo;
 class KoProgressUpdater;
 class KoProgressProxy;
 class KoDocumentInfoDlg;
-
+class KisImportExportManager;
 class KisUndoStore;
 class KisPaintingAssistant;
 class KisPart;
@@ -535,6 +535,12 @@ public:
      */
     KUndo2Stack *undoStack();
 
+
+    /**
+     * @brief importExportManager gives access to the internal import/export manager
+     * @return the document's import/export manager
+     */
+    KisImportExportManager *importExportManager() const;
 
 public Q_SLOTS:
 

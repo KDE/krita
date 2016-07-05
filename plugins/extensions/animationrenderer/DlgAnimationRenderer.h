@@ -65,6 +65,8 @@ public:
     KisPropertiesConfigurationSP getEncoderConfiguration() const;
     void setEncoderConfiguration(KisPropertiesConfigurationSP cfg);
 
+    QSharedPointer<KisImportExportFilter> encoderFilter() const;
+
 private Q_SLOTS:
 
     void selectRenderType(int renderType);

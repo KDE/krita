@@ -105,6 +105,7 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisImageWSP image, QWidget *parent)
             }
 
             m_renderFilters.append(filter);
+
             QString description = KisMimeDatabase::descriptionForMimeType(mime);
             if (description.isEmpty()) {
                 description = mime;
@@ -186,7 +187,6 @@ KisPropertiesConfigurationSP DlgAnimationRenderer::getVideoConfiguration() const
 
 void DlgAnimationRenderer::setVideoConfiguration(KisPropertiesConfigurationSP cfg)
 {
-
 }
 
 KisPropertiesConfigurationSP DlgAnimationRenderer::getEncoderConfiguration() const
@@ -195,12 +195,22 @@ KisPropertiesConfigurationSP DlgAnimationRenderer::getEncoderConfiguration() con
         return 0;
     }
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+
+    cfg->setProperty("mimetype", m_page->cmbRenderType->currentData().toString());
     return cfg;
 }
 
 void DlgAnimationRenderer::setEncoderConfiguration(KisPropertiesConfigurationSP cfg)
 {
 
+}
+
+QSharedPointer<KisImportExportFilter> DlgAnimationRenderer::encoderFilter() const
+{
+    if (m_page->cmbRenderType->currentIndex() < m_renderFilters.size()) {
+        return m_renderFilters[m_page->cmbRenderType->currentIndex()];
+    }
+    return 0;
 }
 
 void DlgAnimationRenderer::selectRenderType(int index)

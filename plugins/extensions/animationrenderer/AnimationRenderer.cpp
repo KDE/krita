@@ -107,6 +107,12 @@ void AnimaterionRenderer::slotRenderAnimation()
 
             KisPropertiesConfigurationSP encoderConfig = dlgAnimationRenderer.getEncoderConfiguration();
             kisConfig.setExportConfiguration("FFMPEG_CONFIG", *encoderConfig.data());
+
+            QSharedPointer<KisImportExportFilter> encoder = dlgAnimationRenderer.encoderFilter();
+            KisFilterChainSP chain(new KisFilterChain(doc->importExportManager()));
+            encoder->setChain(chain);
+            encoder->convert(KisDocument::nativeFormatMimeType(), encoderConfig->getString("mimetype").toLatin1(), encoderConfig);
+
         }
     }
 

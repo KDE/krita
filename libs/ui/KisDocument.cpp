@@ -241,7 +241,7 @@ public:
         docInfo(0),
         progressUpdater(0),
         progressProxy(0),
-        filterManager(0),
+        importExportManager(0),
         specialOutputFlag(0),   // default is native format
         isImporting(false),
         isExporting(false),
@@ -291,7 +291,7 @@ public:
 
     KoUnit unit;
 
-    KisImportExportManager *filterManager; // The filter-manager to use when loading/saving [for the options]
+    KisImportExportManager *importExportManager; // The filter-manager to use when loading/saving [for the options]
 
     QByteArray mimeType; // The actual mimetype of the document
     QByteArray outputMimeType; // The mimetype to use when saving
@@ -495,8 +495,8 @@ KisDocument::KisDocument()
     d->undoStack->setParent(this);
 
     d->isEmpty = true;
-    d->filterManager = new KisImportExportManager(this);
-    d->filterManager->setProgresUpdater(d->progressUpdater);
+    d->importExportManager = new KisImportExportManager(this);
+    d->importExportManager->setProgresUpdater(d->progressUpdater);
 
     connect(&d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
     setAutoSave(defaultAutoSave());
@@ -540,7 +540,7 @@ KisDocument::~KisDocument()
     d->autoSaveTimer.disconnect(this);
     d->autoSaveTimer.stop();
 
-    delete d->filterManager;
+    delete d->importExportManager;
 
     // Despite being QObject they needs to be deleted before the image
     delete d->shapeController;
@@ -681,7 +681,7 @@ bool KisDocument::saveFile(KisPropertiesConfigurationSP exportConfiguration)
 
         Private::SafeSavingLocker locker(d);
         if (locker.successfullyLocked()) {
-            status = d->filterManager->exportDocument(localFilePath(), outputMimeType, exportConfiguration);
+            status = d->importExportManager->exportDocument(localFilePath(), outputMimeType, exportConfiguration);
         } else {
             status = KisImportExportFilter::UsageError;
         }
@@ -793,12 +793,12 @@ void KisDocument::setConfirmNonNativeSave(const bool exporting, const bool on)
 
 bool KisDocument::fileBatchMode() const
 {
-    return d->filterManager->getBatchMode();
+    return d->importExportManager->getBatchMode();
 }
 
 void KisDocument::setFileBatchMode(const bool batchMode)
 {
-    d->filterManager->setBatchMode(batchMode);
+    d->importExportManager->setBatchMode(batchMode);
 }
 
 bool KisDocument::isImporting() const
@@ -1209,7 +1209,7 @@ bool KisDocument::openFile()
     if (!isNativeFormat(typeName.toLatin1())) {
         KisImportExportFilter::ConversionStatus status;
 
-        importedFile = d->filterManager->importDocument(localFilePath(), typeName, status);
+        importedFile = d->importExportManager->importDocument(localFilePath(), typeName, status);
         if (status != KisImportExportFilter::OK) {
             QApplication::restoreOverrideCursor();
 
@@ -1977,6 +1977,11 @@ KUndo2Stack *KisDocument::undoStack()
     return d->undoStack;
 }
 
+KisImportExportManager *KisDocument::importExportManager() const
+{
+    return d->importExportManager;
+}
+
 void KisDocument::addCommand(KUndo2Command *command)
 {
     if (command)
@@ -2364,12 +2369,12 @@ void KisDocument::prepareForImport()
 
 void KisDocument::setFileProgressUpdater(const QString &text)
 {
-    d->suppressProgress = d->filterManager->getBatchMode();
+    d->suppressProgress = d->importExportManager->getBatchMode();
 
     if (!d->suppressProgress) {
         d->progressUpdater = new KoProgressUpdater(d->progressProxy, KoProgressUpdater::Unthreaded);
         d->progressUpdater->start(100, text);
-        d->filterManager->setProgresUpdater(d->progressUpdater);
+        d->importExportManager->setProgresUpdater(d->progressUpdater);
 
         connect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
         connect(KisPart::instance()->currentMainwindow(), SIGNAL(sigProgressCanceled()), this, SIGNAL(sigProgressCanceled()));
@@ -2382,14 +2387,14 @@ void KisDocument::clearFileProgressUpdater()
         disconnect(KisPart::instance()->currentMainwindow(), SIGNAL(sigProgressCanceled()), this, SIGNAL(sigProgressCanceled()));
         disconnect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
         delete d->progressUpdater;
-        d->filterManager->setProgresUpdater(0);
+        d->importExportManager->setProgresUpdater(0);
         d->progressUpdater = 0;
     }
 }
 
 void KisDocument::setFileProgressProxy()
 {
-    if (!d->progressProxy && !d->filterManager->getBatchMode()) {
+    if (!d->progressProxy && !d->importExportManager->getBatchMode()) {
         d->fileProgressProxy = progressProxy();
     } else {
         d->fileProgressProxy = 0;

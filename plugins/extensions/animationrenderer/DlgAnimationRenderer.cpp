@@ -216,9 +216,7 @@ void DlgAnimationRenderer::selectRenderType(int index)
     if (index >= m_renderFilters.size()) return;
 
     QSharedPointer<KisImportExportFilter> filter = m_renderFilters[index];
-    QString mimetype = m_page->cmbMimetype->itemData(index).toString();
-
-    qDebug() << ">>>>>>>>>" << mimetype;
+    QString mimetype = m_page->cmbRenderType->itemData(index).toString();
 
     if (filter) {
         m_encoderConfigWidget = filter->createConfigurationWidget(m_page->grpExportOptions, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());

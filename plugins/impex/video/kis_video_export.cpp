@@ -88,8 +88,8 @@ KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray
     QStringList additionalOptionsList;
 
     askForOptions &=
-        !qApp->applicationName().toLower().contains("test") &
-        !getBatchMode();
+            !qApp->applicationName().toLower().contains("test") &
+            !getBatchMode();
 
     if (askForOptions) {
         KisCursorOverrideHijacker badGuy;
@@ -115,7 +115,7 @@ KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray
 
     if (!kpc.hasFFMpeg()) {
         const QString warningMessage =
-            i18n("Couldn not find \'ffmpeg\' binary. Saving to video formats is impossible.");
+                i18n("Couldn not find \'ffmpeg\' binary. Saving to video formats is impossible.");
 
         if (askForOptions) {
             QMessageBox::critical(KisPart::instance()->currentMainwindow(),
@@ -142,7 +142,8 @@ KisImportExportFilter::ConversionStatus KisVideoExport::convert(const QByteArray
 KisPropertiesConfigurationSP KisVideoExport::defaultConfiguration(const QByteArray &from, const QByteArray &to) const
 {
     Q_UNUSED(from);
-     KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
+
+    KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
 
     cfg->setProperty("h264PresetIndex", 5);
     cfg->setProperty("h264ConstantRateFactor", 23);
@@ -164,7 +165,7 @@ KisPropertiesConfigurationSP KisVideoExport::defaultConfiguration(const QByteArr
 KisConfigWidget *KisVideoExport::createConfigurationWidget(QWidget *parent, const QByteArray &from, const QByteArray &to) const
 {
     Q_UNUSED(from);
-    KisConfigWidget *w;
+    KisConfigWidget *w = 0;
     if (to != "image/gif") {
         w = new VideoExportOptionsDialog(parent);
     }

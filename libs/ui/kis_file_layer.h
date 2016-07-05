@@ -58,7 +58,7 @@ public:
     QString path() const;
 
     ScalingMethod scalingMethod() const;
-    
+
     KisNodeSP clone() const;
     bool allowAsChild(KisNodeSP) const;
 
@@ -76,7 +76,7 @@ private:
     QString m_filename;
     ScalingMethod m_scalingMethod;
 
-    KisPaintDeviceSP m_image;
+    KisPaintDeviceSP m_paintDevice;
     KisSafeDocumentLoader m_loader;
 };
 

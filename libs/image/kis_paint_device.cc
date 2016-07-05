@@ -65,6 +65,15 @@
 #include "kis_paint_device_frames_interface.h"
 
 
+struct KisPaintDeviceSPStaticRegistrar {
+    KisPaintDeviceSPStaticRegistrar() {
+        qRegisterMetaType<KisPaintDeviceSP>("KisPaintDeviceSP");
+    }
+};
+static KisPaintDeviceSPStaticRegistrar __registrar;
+
+
+
 struct KisPaintDevice::Private
 {
     /**

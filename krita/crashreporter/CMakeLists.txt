@@ -1,4 +1,10 @@
-include_directories(${CMAKE_SOURCE_DIR}/krita/ui)
+remove_definitions(
+  -DTRANSLATION_DOMAIN=\"krita\"
+)
+add_definitions(
+  -DTRANSLATION_DOMAIN=\"kritacrashhandler\"
+)
+
 set(crashhandler_SRCS main.cpp mainwindow.cpp)
 ki18n_wrap_ui(crashhandler_SRCS wdg_crash_reporter.ui)
 add_executable(crashhandler ${crashhandler_SRCS})

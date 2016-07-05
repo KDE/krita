@@ -2448,6 +2448,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="convert_group_to_animated">
+      <icon></icon>
+      <text>Convert group to &amp;animated layer</text>
+      <whatsThis></whatsThis>
+      <toolTip>Convert child layers into animation frames</toolTip>
+      <iconText>Convert child layers into animation frames</iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="import_layer_from_file">
       <icon></icon>
       <text>I&amp;mport Layer...</text>

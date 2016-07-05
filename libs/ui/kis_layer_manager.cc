@@ -95,6 +95,7 @@
 #include "kis_action.h"
 #include "kis_action_manager.h"
 #include "KisPart.h"
+#include "kis_raster_keyframe_channel.h"
 
 #include "kis_signal_compressor_with_param.h"
 #include "kis_abstract_projection_plane.h"
@@ -173,6 +174,9 @@ void KisLayerManager::setup(KisActionManager* actionManager)
 
     m_groupLayersSave = actionManager->createAction("save_groups_as_images");
     connect(m_groupLayersSave, SIGNAL(triggered()), this, SLOT(saveGroupLayers()));
+
+    m_convertGroupAnimated = actionManager->createAction("convert_group_to_animated");
+    connect(m_convertGroupAnimated, SIGNAL(triggered()), this, SLOT(convertGroupToAnimated()));
 
     m_imageResizeToLayer = actionManager->createAction("resizeimagetolayer");
     connect(m_imageResizeToLayer, SIGNAL(triggered()), this, SLOT(imageResizeToActiveLayer()));
@@ -391,6 +395,32 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
     m_commandsAdapter->removeNode(source);
     m_commandsAdapter->endMacro();
 
+}
+
+void KisLayerManager::convertGroupToAnimated()
+{
+    KisGroupLayerSP group = dynamic_cast<KisGroupLayer*>(activeLayer().data());
+    if (group.isNull()) return;
+
+    KisPaintLayerSP animatedLayer = new KisPaintLayer(m_view->image(), group->name(), OPACITY_OPAQUE_U8);
+    animatedLayer->enableAnimation();
+    KisRasterKeyframeChannel *contentChannel = dynamic_cast<KisRasterKeyframeChannel*>(
+            animatedLayer->getKeyframeChannel(KisKeyframeChannel::Content.id()));
+    KIS_ASSERT_RECOVER_RETURN(contentChannel);
+
+    KisNodeSP child = group->firstChild();
+    int time = 0;
+    while (child) {
+        contentChannel->importFrame(time, child->projection(), NULL);
+        time++;
+
+        child = child->nextSibling();
+    }
+
+    m_commandsAdapter->beginMacro(kundo2_i18n("Convert to an animated layer"));
+    m_commandsAdapter->addNode(animatedLayer, group->parent(), group);
+    m_commandsAdapter->removeNode(group);
+    m_commandsAdapter->endMacro();
 }
 
 void KisLayerManager::adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, KisNodeSP &parent, KisNodeSP &above)

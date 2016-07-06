@@ -1,31 +1,37 @@
 /****************************************************************************
 **
-** Copyright (C) 2015 The Qt Company Ltd.
-** Contact: http://www.qt.io/licensing/
+** Copyright (C) 2016 The Qt Company Ltd.
+** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of the QtGui module of the Qt Toolkit.
 **
-** $QT_BEGIN_LICENSE:LGPL21$
+** $QT_BEGIN_LICENSE:LGPL$
 ** Commercial License Usage
 ** Licensees holding valid commercial Qt licenses may use this file in
 ** accordance with the commercial license agreement provided with the
 ** Software or, alternatively, in accordance with the terms contained in
 ** a written agreement between you and The Qt Company. For licensing terms
-** and conditions see http://www.qt.io/terms-conditions. For further
-** information use the contact form at http://www.qt.io/contact-us.
+** and conditions see https://www.qt.io/terms-conditions. For further
+** information use the contact form at https://www.qt.io/contact-us.
 **
 ** GNU Lesser General Public License Usage
 ** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 or version 3 as published by the Free
-** Software Foundation and appearing in the file LICENSE.LGPLv21 and
-** LICENSE.LGPLv3 included in the packaging of this file. Please review the
-** following information to ensure the GNU Lesser General Public License
-** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
-** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+** General Public License version 3 as published by the Free Software
+** Foundation and appearing in the file LICENSE.LGPL3 included in the
+** packaging of this file. Please review the following information to
+** ensure the GNU Lesser General Public License version 3 requirements
+** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
 **
-** As a special exception, The Qt Company gives you certain additional
-** rights. These rights are described in The Qt Company LGPL Exception
-** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 2.0 or (at your option) the GNU General
+** Public license version 3 or any later version approved by the KDE Free
+** Qt Foundation. The licenses are as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
+** included in the packaging of this file. Please review the following
+** information to ensure the GNU General Public License requirements will
+** be met: https://www.gnu.org/licenses/gpl-2.0.html and
+** https://www.gnu.org/licenses/gpl-3.0.html.
 **
 ** $QT_END_LICENSE$
 **
@@ -175,6 +181,94 @@ void QOpenGLTextureGlyphCache::setupVertexAttribs()
     m_buffer.release();
 }
 
+static void load_glyph_image_to_texture(QOpenGLContext *ctx,
+                                        QImage &img,
+                                        GLuint texture,
+                                        int tx, int ty)
+{
+    QOpenGLFunctions *funcs = ctx->functions();
+
+    const int imgWidth = img.width();
+    const int imgHeight = img.height();
+
+    if (img.format() == QImage::Format_Mono) {
+        img = img.convertToFormat(QImage::Format_Grayscale8);
+    } else if (img.depth() == 32) {
+        if (img.format() == QImage::Format_RGB32
+            // We need to make the alpha component equal to the average of the RGB values.
+            // This is needed when drawing sub-pixel antialiased text on translucent targets.
+#if Q_BYTE_ORDER == Q_BIG_ENDIAN
+            || img.format() == QImage::Format_ARGB32_Premultiplied
+#else
+            || (img.format() == QImage::Format_ARGB32_Premultiplied
+                && ctx->isOpenGLES())
+#endif
+            ) {
+            for (int y = 0; y < imgHeight; ++y) {
+                QRgb *src = (QRgb *) img.scanLine(y);
+                for (int x = 0; x < imgWidth; ++x) {
+                    int r = qRed(src[x]);
+                    int g = qGreen(src[x]);
+                    int b = qBlue(src[x]);
+                    int avg;
+                    if (img.format() == QImage::Format_RGB32)
+                        avg = (r + g + b + 1) / 3; // "+1" for rounding.
+                    else // Format_ARGB_Premultiplied
+                        avg = qAlpha(src[x]);
+
+                    src[x] = qRgba(r, g, b, avg);
+                    // swizzle the bits to accommodate for the GL_RGBA upload.
+#if Q_BYTE_ORDER != Q_BIG_ENDIAN
+                    if (ctx->isOpenGLES())
+#endif
+                        src[x] = ARGB2RGBA(src[x]);
+                }
+            }
+        }
+    }
+
+    funcs->glBindTexture(GL_TEXTURE_2D, texture);
+    if (img.depth() == 32) {
+#ifdef QT_OPENGL_ES_2
+        GLenum fmt = GL_RGBA;
+#else
+        GLenum fmt = ctx->isOpenGLES() ? GL_RGBA : GL_BGRA;
+#endif // QT_OPENGL_ES_2
+
+#if Q_BYTE_ORDER == Q_BIG_ENDIAN
+        fmt = GL_RGBA;
+#endif
+        funcs->glTexSubImage2D(GL_TEXTURE_2D, 0, tx, ty, imgWidth, imgHeight, fmt, GL_UNSIGNED_BYTE, img.constBits());
+    } else {
+        // The scanlines in image are 32-bit aligned, even for mono or 8-bit formats. This
+        // is good because it matches the default of 4 bytes for GL_UNPACK_ALIGNMENT.
+#if !defined(QT_OPENGL_ES_2)
+        const GLenum format = isCoreProfile() ? GL_RED : GL_ALPHA;
+#else
+        const GLenum format = GL_ALPHA;
+#endif
+        funcs->glTexSubImage2D(GL_TEXTURE_2D, 0, tx, ty, imgWidth, imgHeight, format, GL_UNSIGNED_BYTE, img.constBits());
+    }
+}
+
+static void load_glyph_image_region_to_texture(QOpenGLContext *ctx,
+                                               const QImage &srcImg,
+                                               int x, int y,
+                                               int w, int h,
+                                               GLuint texture,
+                                               int tx, int ty)
+{
+    Q_ASSERT(x + w <= srcImg.width() && y + h <= srcImg.height());
+
+    QImage img;
+    if (x != 0 || y != 0 || w != srcImg.width() || h != srcImg.height())
+        img = srcImg.copy(x, y, w, h);
+    else
+        img = srcImg;
+
+    load_glyph_image_to_texture(ctx, img, texture, tx, ty);
+}
+
 void QOpenGLTextureGlyphCache::resizeTextureData(int width, int height)
 {
     QOpenGLContext *ctx = QOpenGLContext::currentContext();
@@ -201,9 +295,8 @@ void QOpenGLTextureGlyphCache::resizeTextureData(int width, int height)
 
     if (ctx->d_func()->workaround_brokenFBOReadBack) {
         QImageTextureGlyphCache::resizeTextureData(width, height);
-        Q_ASSERT(image().depth() == 8);
-        funcs->glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, oldHeight, GL_ALPHA, GL_UNSIGNED_BYTE, image().constBits());
-        funcs->glDeleteTextures(1, &oldTexture);
+        load_glyph_image_region_to_texture(ctx, image(), 0, 0, qMin(oldWidth, width), qMin(oldHeight, height),
+                                           m_textureResource->m_texture, 0, 0);
         return;
     }
 
@@ -287,8 +380,8 @@ void QOpenGLTextureGlyphCache::resizeTextureData(int width, int height)
         blitProgram = m_blitProgram;
 
     } else {
-        //pex->setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, m_vertexCoordinateArray); // FIXME Nim
-        //pex->setVertexAttributePointer(QT_TEXTURE_COORDS_ATTR, m_textureCoordinateArray); // FIXME Nim
+        pex->setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, m_vertexCoordinateArray, 8);
+        pex->setVertexAttributePointer(QT_TEXTURE_COORDS_ATTR, m_textureCoordinateArray, 8);
 
         pex->shaderManager->useBlitProgram();
         blitProgram = pex->shaderManager->blitProgram();
@@ -330,88 +423,14 @@ void QOpenGLTextureGlyphCache::fillTexture(const Coord &c, glyph_t glyph, QFixed
         return;
     }
 
-    QOpenGLFunctions *funcs = ctx->functions();
     if (ctx->d_func()->workaround_brokenFBOReadBack) {
         QImageTextureGlyphCache::fillTexture(c, glyph, subPixelPosition);
-
-        funcs->glBindTexture(GL_TEXTURE_2D, m_textureResource->m_texture);
-        const QImage &texture = image();
-        const uchar *bits = texture.constBits();
-        bits += c.y * texture.bytesPerLine() + c.x;
-        for (int i=0; i<c.h; ++i) {
-            funcs->glTexSubImage2D(GL_TEXTURE_2D, 0, c.x, c.y + i, c.w, 1, GL_ALPHA, GL_UNSIGNED_BYTE, bits);
-            bits += texture.bytesPerLine();
-        }
+        load_glyph_image_region_to_texture(ctx, image(), c.x, c.y, c.w, c.h, m_textureResource->m_texture, c.x, c.y);
         return;
     }
 
     QImage mask = textureMapForGlyph(glyph, subPixelPosition);
-    const int maskWidth = mask.width();
-    const int maskHeight = mask.height();
-
-    if (mask.format() == QImage::Format_Mono) {
-        mask = mask.convertToFormat(QImage::Format_Indexed8);
-        for (int y = 0; y < maskHeight; ++y) {
-            uchar *src = (uchar *) mask.scanLine(y);
-            for (int x = 0; x < maskWidth; ++x)
-                src[x] = -src[x]; // convert 0 and 1 into 0 and 255
-        }
-    } else if (mask.depth() == 32) {
-        if (mask.format() == QImage::Format_RGB32
-            // We need to make the alpha component equal to the average of the RGB values.
-            // This is needed when drawing sub-pixel antialiased text on translucent targets.
-#if Q_BYTE_ORDER == Q_BIG_ENDIAN
-            || mask.format() == QImage::Format_ARGB32_Premultiplied
-#else
-            || (mask.format() == QImage::Format_ARGB32_Premultiplied
-                && ctx->isOpenGLES())
-#endif
-            ) {
-            for (int y = 0; y < maskHeight; ++y) {
-                QRgb *src = (QRgb *) mask.scanLine(y);
-                for (int x = 0; x < maskWidth; ++x) {
-                    int r = qRed(src[x]);
-                    int g = qGreen(src[x]);
-                    int b = qBlue(src[x]);
-                    int avg;
-                    if (mask.format() == QImage::Format_RGB32)
-                        avg = (r + g + b + 1) / 3; // "+1" for rounding.
-                    else // Format_ARGB_Premultiplied
-                        avg = qAlpha(src[x]);
-
-                    src[x] = qRgba(r, g, b, avg);
-                    // swizzle the bits to accommodate for the GL_RGBA upload.
-#if Q_BYTE_ORDER != Q_BIG_ENDIAN
-                    if (ctx->isOpenGLES())
-#endif
-                        src[x] = ARGB2RGBA(src[x]);
-                }
-            }
-        }
-    }
-
-    funcs->glBindTexture(GL_TEXTURE_2D, m_textureResource->m_texture);
-    if (mask.depth() == 32) {
-#ifdef QT_OPENGL_ES_2
-        GLenum fmt = GL_RGBA;
-#else
-        GLenum fmt = ctx->isOpenGLES() ? GL_RGBA : GL_BGRA;
-#endif // QT_OPENGL_ES_2
-
-#if Q_BYTE_ORDER == Q_BIG_ENDIAN
-        fmt = GL_RGBA;
-#endif
-        funcs->glTexSubImage2D(GL_TEXTURE_2D, 0, c.x, c.y, maskWidth, maskHeight, fmt, GL_UNSIGNED_BYTE, mask.bits());
-    } else {
-        // The scanlines in mask are 32-bit aligned, even for mono or 8-bit formats. This
-        // is good because it matches the default of 4 bytes for GL_UNPACK_ALIGNMENT.
-#if !defined(QT_OPENGL_ES_2)
-        const GLenum format = isCoreProfile() ? GL_RED : GL_ALPHA;
-#else
-        const GLenum format = GL_ALPHA;
-#endif
-        funcs->glTexSubImage2D(GL_TEXTURE_2D, 0, c.x, c.y, maskWidth, maskHeight, format, GL_UNSIGNED_BYTE, mask.bits());
-    }
+    load_glyph_image_to_texture(ctx, mask, m_textureResource->m_texture, c.x, c.y);
 }
 
 int QOpenGLTextureGlyphCache::glyphPadding() const

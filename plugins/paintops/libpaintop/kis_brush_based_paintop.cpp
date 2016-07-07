@@ -120,15 +120,27 @@ KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal 
     return effectiveSpacing(metric.width(), metric.height(), 1.0, false, rotation);
 }
 
-KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal rotation, const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const {
+KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(
+    qreal scale, qreal rotation,
+    const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const
+{
+    return effectiveSpacing(scale, scale, rotation, spacingOption, pi);
+}
+
+KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(
+    qreal scaleX, qreal scaleY, qreal rotation,
+    const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const
+{
     qreal extraSpacingScale = 1.0;
     if (spacingOption.isChecked()) {
         extraSpacingScale = spacingOption.apply(pi);
     }
 
     // we parse dab rotation separately, so don't count it
-    QSizeF metric = m_brush->characteristicSize(scale, scale, 0);
-    return effectiveSpacing(metric.width(), metric.height(), extraSpacingScale, spacingOption.isotropicSpacing(), rotation);
+    QSizeF metric = m_brush->characteristicSize(scaleX, scaleY, 0);
+    return effectiveSpacing(
+        metric.width(), metric.height(),
+        extraSpacingScale, spacingOption.isotropicSpacing(), rotation);
 }
 
 inline qreal KisBrushBasedPaintOp::calcAutoSpacing(qreal value, qreal coeff)

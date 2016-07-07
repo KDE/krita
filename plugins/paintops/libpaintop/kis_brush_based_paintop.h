@@ -67,7 +67,14 @@ public:
     bool checkSizeTooSmall(qreal scale);
 
     KisSpacingInformation effectiveSpacing(qreal scale, qreal rotation) const;
-    KisSpacingInformation effectiveSpacing(qreal scale, qreal rotation, const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const;
+    KisSpacingInformation effectiveSpacing(
+        qreal scale, qreal rotation,
+        const KisPressureSpacingOption &spacingOption,
+        const KisPaintInformation &pi) const;
+    KisSpacingInformation effectiveSpacing(
+        qreal scaleX, qreal scaleY, qreal rotation,
+        const KisPressureSpacingOption &spacingOption,
+        const KisPaintInformation &pi) const;
 
     ///Reimplemented, false if brush is 0
     virtual bool canPaint() const;

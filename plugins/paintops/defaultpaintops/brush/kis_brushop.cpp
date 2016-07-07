@@ -157,8 +157,7 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
     painter()->bltFixed(dabRect.topLeft(), dab, dab->bounds());
     painter()->setOpacity(origOpacity);
 
-    return effectiveSpacing(scale, rotation,
-                            m_spacingOption, info);
+    return effectiveSpacing(scale, scale*ratio, rotation, m_spacingOption, info);
 }
 
 void KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance)

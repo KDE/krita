@@ -234,7 +234,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
     }
 
     DabPosition position = calculateDabRect(cursorPoint,
-                                            scale, scale * ratio,
+                                            scale, scale,
                                             initialAngle,
                                             info,
                                             mirrorProperties);

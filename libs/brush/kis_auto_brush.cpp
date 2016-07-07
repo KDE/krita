@@ -205,7 +205,10 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
 
     // mask dimension methods already includes KisBrush::angle()
     int dstWidth = maskWidth(scaleX, angle, subPixelX, subPixelY, info);
-    int dstHeight = maskHeight(scaleY, angle, subPixelX, subPixelY, info);
+
+    /* Height and width both use scaleX here, since it's difficult to predict
+     * the actual with when there are more than 2 spikes. */
+    int dstHeight = maskHeight(scaleX, angle, subPixelX, subPixelY, info);
     QPointF hotSpot = this->hotSpot(scaleX, scaleY, angle, info);
 
     // mask size and hotSpot function take the KisBrush rotation into account

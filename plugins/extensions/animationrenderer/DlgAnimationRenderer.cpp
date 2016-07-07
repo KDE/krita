@@ -210,7 +210,7 @@ QSharedPointer<KisImportExportFilter> DlgAnimationRenderer::encoderFilter() cons
     if (m_page->cmbRenderType->currentIndex() < m_renderFilters.size()) {
         return m_renderFilters[m_page->cmbRenderType->currentIndex()];
     }
-    return 0;
+    return QSharedPointer<KisImportExportFilter>(0);
 }
 
 void DlgAnimationRenderer::selectRenderType(int index)

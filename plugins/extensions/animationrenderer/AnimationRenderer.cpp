@@ -34,6 +34,7 @@
 #include <KisDocument.h>
 #include <KisMimeDatabase.h>
 #include <kis_time_range.h>
+#include <KisFilterChain.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(AnimaterionRendererFactory, "kritaanimationrenderer.json", registerPlugin<AnimaterionRenderer>();)
 

@@ -97,6 +97,8 @@ void KisToolMove::resetCursorStyle()
 
 bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
 {
+    if (!currentNode()->isEditable()) return false;
+
     KisNodeSP node;
     KisNodeList nodes;
     KisImageSP image = this->image();
@@ -171,6 +173,7 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
 void KisToolMove::moveDiscrete(MoveDirection direction, bool big)
 {
     if (mode() == KisTool::PAINT_MODE) return;  // Don't interact with dragging
+    if (!currentNode()->isEditable()) return; // Don't move invisible nodes
 
     if (startStrokeImpl(MoveSelectedLayer, 0)) {
         setMode(KisTool::PAINT_MODE);

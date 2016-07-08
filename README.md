@@ -5,7 +5,7 @@ Krita is a free and open source digital painting application. It is for artists 
 If you are reading this on Github, be aware that this is just a mirror. Our real
 code repository is provided by KDE:  https://phabricator.kde.org/diffusion/KRITA/
 
-This repository contains the current, Qt5-based, development version of Krita. The Krita 2.9 repository is located from KDE: https://phabricator.kde.org/diffusion/CALLIGRA/
+This repository contains the current, Qt5-based, development version of Krita 3. Krita 3.0 has been released and development on Krita 2.9 has stopped.  Krita 2.9 was part of Calligra: https://phabricator.kde.org/diffusion/CALLIGRA/
 
 ![Picture] (https://krita.org/wp-content/uploads/2016/04/krita-30-screenshot.jpg)
 
@@ -14,9 +14,9 @@ This repository contains the current, Qt5-based, development version of Krita. T
 https://docs.krita.org/Category:User_Manual
 
 ### Development Notes and Build Instructions
-If you're building on Windows you'll need to build some third-party dependencies first. You should look at the README in the 3rdparty folder for directions. There is some additional build instructions on the KDE community site.
+If you're building on Windows or OSX you'll need to build some third-party dependencies first. You should look at the README in the 3rdparty folder for directions. 
 
-https://community.kde.org/Krita
+If you're building on Linux, please follow David Revoy's Cat Guide: http://www.davidrevoy.com/article193/guide-building-krita-on-linux-for-cats
 
 ### Bugs and Wishes
 

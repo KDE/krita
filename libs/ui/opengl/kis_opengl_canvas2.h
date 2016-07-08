@@ -68,6 +68,7 @@ public:
     void initializeDisplayShader();
     void renderCanvasGL();
     void renderDecorations(QPainter *painter);
+    void renderTests(QPainter *painter);
     void paintToolOutline(const QPainterPath &path);
 
     bool needsFpsDebugging() const;

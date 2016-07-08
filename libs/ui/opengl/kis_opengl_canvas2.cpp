@@ -43,6 +43,8 @@
 #include <QOpenGLBuffer>
 #include <QMessageBox>
 
+#include <KoResourcePaths.h>
+
 #define NEAR_VAL -1000.0
 #define FAR_VAL 1000.0
 
@@ -302,21 +304,8 @@ void KisOpenGLCanvas2::paintGL()
 
     qDebug() << "DRAWING DECORATIONS";
     QPainter gc(this);
-    renderDecorations(&gc);
-    // QPen pen;
-    // pen.setWidth(10);
-    // pen.setBrush(Qt::green);
-    //
-    // pen.setJoinStyle(Qt::RoundJoin);
-    // gc.setPen(pen);
-    // gc.drawRect(100, 100, 100, 100);
-    //
-    // pen.setJoinStyle(Qt::BevelJoin);
-    // gc.setPen(pen);
-    // gc.drawRect(210, 100, 100, 100);
-    //
-    // QBrush brush(Qt::red);
-    // gc.fillRect(320, 100, 100, 100, brush);
+    //renderDecorations(&gc);
+    renderTests(&gc);
     gc.end();
 
     if (!OPENGL_SUCCESS) {
@@ -811,6 +800,123 @@ void KisOpenGLCanvas2::renderCanvasGL()
     drawCheckers();
     drawImage();
     d->quadVAO.release();
+}
+
+void KisOpenGLCanvas2::renderTests(QPainter *gc)
+{
+    QPen pen;
+    pen.setWidth(10);
+    pen.setJoinStyle(Qt::RoundJoin);
+    gc->setPen(pen);
+
+    //gc->drawRect(100, 100, 100, 100);
+
+    //pen.setJoinStyle(Qt::BevelJoin);
+    //gc->setPen(pen);
+    //gc->drawRect(210, 100, 100, 100);
+
+    //QBrush brush(Qt::red);
+    //gc->fillRect(320, 100, 100, 100, brush);
+
+    // Draw Arc
+    pen.setBrush(QColor(255, 0, 0)); gc->setPen(pen);
+    QRectF arcRect(10.0, 20.0, 80.0, 60.0);
+    int arcStartAngle = 30 * 16;
+    int arcSpanAngle = 120 * 16;
+    gc->drawArc(arcRect, arcStartAngle, arcSpanAngle);
+
+    // Draw Chord
+    pen.setBrush(QColor(255, 50, 0)); gc->setPen(pen);
+    gc->drawChord(100, 20, 100, 100, 30 * 16, 120 * 16);
+
+    // Draw Convex Polygon
+    pen.setBrush(QColor(255, 100, 0)); gc->setPen(pen);
+    const QPointF points[4] = {
+        QPointF(210.0, 80.0),
+        QPointF(220.0, 10.0),
+        QPointF(280.0, 30.0),
+        QPointF(290.0, 70.0)
+    };
+    gc->drawConvexPolygon(points, 4);
+
+    // Draw Ellipse
+    pen.setBrush(QColor(255, 150, 0)); gc->setPen(pen);
+    gc->drawEllipse(300, 0, 100, 100);
+
+    // Draw Image
+    QRectF target(410.0, 20.0, 80.0, 80.0);
+    QRectF source(0.0, 0.0, 512.0, 512.0);
+    QString filename = KoResourcePaths::findResource("ko_patterns", "22_texture-reptile.png");
+    QImage image(filename);
+    gc->drawImage(target, image, source);
+
+    // Draw Line
+    pen.setBrush(QColor(255, 200, 0)); gc->setPen(pen);
+    gc->drawLine(500, 0, 600, 100);
+
+    // Draw Lines
+    pen.setBrush(QColor(255, 255, 0)); gc->setPen(pen);
+    const QPointF linePoints[4] = {
+        QPointF(600.0, 0.0),
+        QPointF(700.0, 100.0),
+        QPointF(650.0, 0.0),
+        QPointF(600.0, 100.0)
+    };
+    gc->drawLines(linePoints, 2);
+
+    // Draw Path
+    pen.setBrush(QColor(200, 255, 0)); gc->setPen(pen);
+    QPainterPath path;
+    path.moveTo(20, 180);
+    path.lineTo(20, 130);
+    path.cubicTo(80, 100, 50, 150, 80, 180);
+    gc->drawPath(path);
+
+    // TODO drawPicture?
+
+    // Draw Pie
+    pen.setBrush(QColor(150, 255, 0)); gc->setPen(pen);
+    QRectF pieRect(110.0, 120.0, 80.0, 60.0);
+    int pieStartAngle = 30 * 16;
+    int pieSpanAngle = 120 * 16;
+    gc->drawPie(pieRect, pieStartAngle, pieSpanAngle);
+
+    // TODO drawPixmap?
+
+    // TODO drawPixmapFragments?
+
+    // Draw Point
+    pen.setBrush(QColor(100, 255, 0)); gc->setPen(pen);
+    gc->drawPoint(250, 150);
+
+    // Draw Points
+    pen.setBrush(QColor(50, 255, 0)); gc->setPen(pen);
+    const QPointF pointPoints[4] = {
+        QPointF(320.0, 120.0),
+        QPointF(380.0, 120.0),
+        QPointF(320.0, 180.0),
+        QPointF(380.0, 180.0)
+    };
+    gc->drawPoints(pointPoints, 4);
+
+    // Draw Polygon
+    pen.setBrush(QColor(0, 255, 0)); gc->setPen(pen);
+    const QPointF polyPoints[4] = {
+        QPointF(420.0, 120.0),
+        QPointF(420.0, 180.0),
+        QPointF(480.0, 180.0),
+        QPointF(480.0, 120.0)
+    };
+    gc->drawPolygon(polyPoints, 4);
+
+    // Draw Polyline
+    pen.setBrush(QColor(0, 255, 50)); gc->setPen(pen);
+    const QPointF polyLinePoints[3] = {
+        QPointF(510.0, 180.0),
+        QPointF(520.0, 110.0),
+        QPointF(580.0, 130.0),
+    };
+    gc->drawPolyline(polyLinePoints, 3);
 }
 
 void KisOpenGLCanvas2::renderDecorations(QPainter *painter)

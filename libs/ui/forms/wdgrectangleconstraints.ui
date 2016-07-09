@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>218</width>
+    <width>230</width>
     <height>149</height>
    </rect>
   </property>
@@ -83,7 +83,7 @@
       </widget>
      </item>
      <item row="1" column="2">
-      <widget class="QSpinBox" name="intHeight">
+      <widget class="KisIntParseSpinBox" name="intHeight">
        <property name="toolTip">
         <string>Height</string>
        </property>
@@ -106,7 +106,7 @@
       </widget>
      </item>
      <item row="2" column="2">
-      <widget class="QDoubleSpinBox" name="doubleRatio">
+      <widget class="KisDoubleParseSpinBox" name="doubleRatio">
        <property name="toolTip">
         <string>Aspect ratio</string>
        </property>
@@ -119,7 +119,7 @@
       </widget>
      </item>
      <item row="0" column="2">
-      <widget class="QSpinBox" name="intWidth">
+      <widget class="KisIntParseSpinBox" name="intWidth">
        <property name="toolTip">
         <string>Width</string>
        </property>
@@ -181,6 +181,18 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_intparsespinbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleParseSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_doubleparsespinbox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

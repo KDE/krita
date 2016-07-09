@@ -32,7 +32,7 @@
     </layout>
    </item>
    <item>
-    <widget class="KisGradientSliderWidget" name="gradientSlider">
+    <widget class="KisGradientSliderWidget" name="gradientSlider" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -134,7 +134,7 @@
       </widget>
      </item>
      <item row="1" column="2">
-      <widget class="QSpinBox" name="intNumInputLeftOpacity">
+      <widget class="KisIntParseSpinBox" name="intNumInputLeftOpacity">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -212,14 +212,14 @@
        <property name="focusPolicy">
         <enum>Qt::ClickFocus</enum>
        </property>
-       <property name="color">
+       <property name="color" stdset="0">
         <color>
          <red>255</red>
          <green>255</green>
          <blue>255</blue>
         </color>
        </property>
-       <property name="defaultColor">
+       <property name="defaultColor" stdset="0">
         <color>
          <red>255</red>
          <green>255</green>
@@ -229,7 +229,7 @@
       </widget>
      </item>
      <item row="2" column="2">
-      <widget class="QSpinBox" name="intNumInputRightOpacity">
+      <widget class="KisIntParseSpinBox" name="intNumInputRightOpacity">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Ignored">
          <horstretch>0</horstretch>
@@ -262,7 +262,16 @@
    </item>
    <item>
     <layout class="QHBoxLayout">
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <item>
@@ -359,6 +368,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_intparsespinbox.h</header>
+  </customwidget>
   <customwidget>
    <class>KColorButton</class>
    <extends>QPushButton</extends>

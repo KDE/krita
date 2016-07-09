@@ -19,7 +19,7 @@
 
 #ifndef OVERVIEWWIDGET_H
 #define OVERVIEWWIDGET_H
-
+#include <QObject>
 #include <QWidget>
 #include <QPixmap>
 #include <QMutex>
@@ -30,13 +30,14 @@ class KisCanvas2;
 class KisSignalCompressor;
 class KoCanvasBase;
 
-class OverviewThumbnailStrokeStrategy : public KisSimpleStrokeStrategy
+class OverviewThumbnailStrokeStrategy : public QObject, public KisSimpleStrokeStrategy
 {
+    Q_OBJECT
 public:
-    OverviewThumbnailStrokeStrategy(KisImageWSP image, QSize thumbnailSize);
+    OverviewThumbnailStrokeStrategy(KisImageWSP image);
     ~OverviewThumbnailStrokeStrategy();
 
-    static QList<KisStrokeJobData*> createJobsData(KisImageWSP image);
+    static QList<KisStrokeJobData*> createJobsData(KisPaintDeviceSP dev, KisPaintDeviceSP thumbDev, const QSize &thumbnailSize);
 
 private:
     void initStrokeCallback();
@@ -44,10 +45,15 @@ private:
     void finishStrokeCallback();
     void cancelStrokeCallback();
 
+Q_SIGNALS:
+    //Emitted when thumbnail is updated and overviewImage is fully generated.
+    void thumbnailUpdated(QImage pixmap);
+
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
-    QSize m_thumbnailSize;
+    QMutex m_thumbnailMergeMutex;
 };
 
 class OverviewWidget : public QWidget
@@ -65,6 +71,7 @@ public:
 public Q_SLOTS:
     void startUpdateCanvasProjection();
     void generateThumbnail();
+    void updateThumbnail(QImage pixmap);
 
 protected:
     void resizeEvent(QResizeEvent *event);
@@ -92,7 +99,6 @@ private:
     QColor m_outlineColor;
     KisIdleWatcher m_imageIdleWatcher;
     bool m_thumbnailNeedsUpdate;
-    //OverviewThumbnailStrokeStrategy* m_overviewStrategy;
     KisStrokeId strokeId;
     QMutex mutex;
 };

@@ -526,7 +526,7 @@ public:
      * @param rect: only this rect will be used for the thumbnail
      *
      */
-    KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, QRect rect = QRect(), qreal oversample=1.) const;
+    KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, QRect rect = QRect(), qreal oversample=1., QRect outputRect=QRect()) const;
 
     /**
      * Creates a thumbnail of the paint device, retaining the aspect ratio.

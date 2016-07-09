@@ -1409,13 +1409,18 @@ inline bool moveBy(KisSequentialConstIterator& iter, int numPixels )
     }
     return true;
 }
-
-KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, QRect rect, qreal oversample) const
+#include <QThread>
+KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, QRect rect, qreal oversample, QRect outputRect) const
 {
+    qDebug() << QTime::currentTime() << "###+0 " << __FUNCTION__ << __LINE__<< " " << QThread::currentThreadId();
+
     KisPaintDeviceSP thumbnail = new KisPaintDevice(colorSpace());
+
+    qDebug() << QTime::currentTime() << "###+1 " << __FUNCTION__ << __LINE__<< " " << QThread::currentThreadId();
 
     int srcWidth, srcHeight;
     int srcX0, srcY0;
+    QRect outRect;
     QRect e = rect.isValid() ? rect : extent();
     e.getRect(&srcX0, &srcY0, &srcWidth, &srcHeight);
 
@@ -1441,20 +1446,29 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, QRect
 
     oversample *= (qreal)h / hstart; //readjusting oversample ratio, given that we had to readjust thumbnail size
 
+    outRect = QRect(0,0,w,h);
+
+    if( !outputRect.isNull() ){
+        outputRect = QRect( oversample * outputRect.topLeft(), oversample* outputRect.bottomRight()); //compensating output rectangle for oversampling
+        outRect= outRect.intersected(outputRect);
+    }
+
     const qint32 pixelSize = this->pixelSize();
+    qDebug() << QTime::currentTime() << "###+2 " << __FUNCTION__ << __LINE__<< " " << QThread::currentThreadId();
 
     KisRandomConstAccessorSP iter = createRandomConstAccessorNG(0, 0);
     KisRandomAccessorSP dstIter = thumbnail->createRandomAccessorNG(0, 0);
 
-    for (qint32 y = 0; y < h; ++y) {
+    for (qint32 y = outRect.y(); y < outRect.y()+outRect.height(); ++y) {
         qint32 iY = srcY0 + (y * srcHeight) / h;
-        for (qint32 x = 0; x < w; ++x) {
+        for (qint32 x = outRect.x(); x < outRect.x()+outRect.width(); ++x) {
             qint32 iX = srcX0 + (x * srcWidth) / w;
             iter->moveTo(iX, iY);
             dstIter->moveTo(x,  y);
             memcpy(dstIter->rawData(), iter->rawDataConst(), pixelSize);
         }
     }
+    qDebug() << QTime::currentTime() << "###+3 " << __FUNCTION__ << __LINE__<< "\t" << " " << QThread::currentThreadId();
 
     if( oversample!=1. ){
         QPointer<KoUpdater> updater = new KoDummyUpdater();
@@ -1462,6 +1476,7 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, QRect
                                   updater, KisFilterStrategyRegistry::instance()->value("Bilinear"));
         worker.run();
     }
+    qDebug() << QTime::currentTime() << "###+4 " << __FUNCTION__ << __LINE__<< "\t" << " " << QThread::currentThreadId();
 
     return thumbnail;
 }

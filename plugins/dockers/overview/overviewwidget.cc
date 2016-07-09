@@ -35,38 +35,45 @@
 #include <kis_config.h>
 #include "kis_idle_watcher.h"
 #include "krita_utils.h"
+#include "kis_painter.h"
 
-struct OverviewThumbnailStrokeStrategy::Private
-{
-    KisImageWSP image;
-    //QHash<KisPaintDeviceSP, KisPaintDevice::LodDataStruct*> dataObjects;
+struct OverviewThumbnailStrokeStrategy::Private {
 
-    ~Private() {
-        //qDeleteAll(dataObjects);
-        //dataObjects.clear();
-    }
-
-    class InitData : public KisStrokeJobData {
+    class InitData : public KisStrokeJobData
+    {
     public:
         InitData(KisPaintDeviceSP _device)
             : KisStrokeJobData(SEQUENTIAL),
               device(_device)
-            {}
+        {}
 
         KisPaintDeviceSP device;
     };
 
-    class ProcessData : public KisStrokeJobData {
+    class ProcessData : public KisStrokeJobData
+    {
     public:
-        ProcessData(KisImageWSP _image, const QRect &_rect)
+        ProcessData(KisPaintDeviceSP _dev, KisPaintDeviceSP _thumbDev, const QSize& _thumbnailSize, const QRect &_rect)
             : KisStrokeJobData(CONCURRENT),
-              image(_image), rect(_rect)
-            {}
+              dev(_dev), thumbDev(_thumbDev), thumbnailSize(_thumbnailSize), rect(_rect)
+        {}
 
-        KisImageWSP image;
+        KisPaintDeviceSP dev;
+        KisPaintDeviceSP thumbDev;
+        QSize thumbnailSize;
         QRect rect;
     };
-
+    class FinishProcessing : public KisStrokeJobData
+    {
+    public:
+        FinishProcessing(KisPaintDeviceSP _thumbDev, const QSize& _thumbnailSize)
+            : KisStrokeJobData(SEQUENTIAL),
+              thumbDev(_thumbDev),
+              thumbnailSize(_thumbnailSize)
+        {}
+        KisPaintDeviceSP thumbDev;
+        QSize thumbnailSize;
+    };
 };
 
 OverviewWidget::OverviewWidget(QWidget * parent)
@@ -99,15 +106,15 @@ void OverviewWidget::setCanvas(KoCanvasBase * canvas)
     if (m_canvas) {
 
         m_imageIdleWatcher.setTrackedImage(m_canvas->image());
-//        m_imageIdleConnection.reset(
-//            new KisSignalAutoConnection(&m_imageIdleWatcher, SIGNAL(startedIdleMode()),
-//                                        this, SLOT(generateThumbnail())));
-        connect(&m_imageIdleWatcher,&KisIdleWatcher::startedIdleMode, this,&OverviewWidget::generateThumbnail);
+
+        connect(&m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this, &OverviewWidget::generateThumbnail);
 
         connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), m_compressor, SLOT(start()), Qt::UniqueConnection);
         connect(m_canvas->image(), SIGNAL(sigSizeChanged(QPointF, QPointF)), m_compressor, SLOT(start()), Qt::UniqueConnection);
         connect(m_canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(update()), Qt::UniqueConnection);
         m_compressor->start();
+        m_thumbnailNeedsUpdate=true;
+        generateThumbnail();
     }
 }
 
@@ -233,44 +240,41 @@ void OverviewWidget::generateThumbnail()
     if (m_canvas && m_thumbnailNeedsUpdate) {
         KisImageSP image = m_canvas->image();
 
-        if(!strokeId.isNull()){
+        if (!strokeId.isNull()) {
             image->cancelStroke(strokeId);
             image->waitForDone();
         }
 
-        OverviewThumbnailStrokeStrategy* stroke = new OverviewThumbnailStrokeStrategy(image, calculatePreviewSize());
-        qDebug() << __FUNCTION__ << 1;
+        OverviewThumbnailStrokeStrategy* stroke = new OverviewThumbnailStrokeStrategy(image);
+        connect(stroke, SIGNAL(thumbnailUpdated(QImage)), this, SLOT(updateThumbnail(QImage)));
+
         strokeId = image->startStroke(stroke);
-        qDebug() << __FUNCTION__ << 2;
-        QList<KisStrokeJobData*> jobs = OverviewThumbnailStrokeStrategy::createJobsData(image);
+        KisPaintDeviceSP dev = image->projection();
+        KisPaintDeviceSP thumbDev = new KisPaintDevice(dev->colorSpace());
+
+        //creating a special stroke that computes thumbnail image in small chunks that can be quickly interrupted
+        //if user starts painting
+        QList<KisStrokeJobData*> jobs = OverviewThumbnailStrokeStrategy::createJobsData(dev, thumbDev, calculatePreviewSize());
 
         Q_FOREACH (KisStrokeJobData *jd, jobs) {
-            image->addJob(strokeId,jd);
-            qDebug() << __FUNCTION__ << jd;
+            image->addJob(strokeId, jd);
         }
-        qDebug() << __FUNCTION__ << 3;
         image->endStroke(strokeId);
-        qDebug() << __FUNCTION__ << 4;
-//        QSize previewSize = calculatePreviewSize();
-
-//        if (isVisible() && previewSize.isValid()) {
-//            QImage img =
-//                image->projection()->
-//                createThumbnail(previewSize.width(), previewSize.height(), image->bounds(), /*oversample=*/ 2,
-//                                KoColorConversionTransformation::internalRenderingIntent(),
-//                                KoColorConversionTransformation::internalConversionFlags()
-//                               );
-
-//            m_pixmap = QPixmap::fromImage(img);
-//        }
-//        update();
         m_thumbnailNeedsUpdate = false;
     }
+}
+
+void OverviewWidget::updateThumbnail(QImage pixmap)
+{
+    qDebug() << QTime::currentTime() << "+  " << __FUNCTION__;
+    m_pixmap = QPixmap::fromImage(pixmap);
+    update();
 }
 
 
 void OverviewWidget::paintEvent(QPaintEvent* event)
 {
+    qDebug() << QTime::currentTime() << "+  " << __FUNCTION__ ;
     QWidget::paintEvent(event);
 
     if (m_canvas) {
@@ -296,12 +300,12 @@ void OverviewWidget::paintEvent(QPaintEvent* event)
     }
 }
 
-OverviewThumbnailStrokeStrategy::OverviewThumbnailStrokeStrategy(KisImageWSP image, QSize thumbnailSize)
-    : KisSimpleStrokeStrategy("OverviewThumbnail"), m_thumbnailSize(thumbnailSize)
+OverviewThumbnailStrokeStrategy::OverviewThumbnailStrokeStrategy(KisImageWSP image)
+    : KisSimpleStrokeStrategy("OverviewThumbnail")
 {
     enableJob(KisSimpleStrokeStrategy::JOB_INIT, true, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
-    enableJob(KisSimpleStrokeStrategy::JOB_FINISH);
+    //enableJob(KisSimpleStrokeStrategy::JOB_FINISH);
     enableJob(KisSimpleStrokeStrategy::JOB_CANCEL, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
 
     setRequestsOtherStrokesToEnd(false);
@@ -309,13 +313,15 @@ OverviewThumbnailStrokeStrategy::OverviewThumbnailStrokeStrategy(KisImageWSP ima
     setCanForgetAboutMe(true);
 }
 
-QList<KisStrokeJobData *> OverviewThumbnailStrokeStrategy::createJobsData(KisImageWSP image)
+QList<KisStrokeJobData *> OverviewThumbnailStrokeStrategy::createJobsData(KisPaintDeviceSP dev, KisPaintDeviceSP thumbDev, const QSize& thumbnailSize)
 {
-    QVector<QRect> rects = KritaUtils::splitRectIntoPatches(m_thumbnailSize, QSize(32,32));
+    QVector<QRect> rects = KritaUtils::splitRectIntoPatches(QRect(QPoint(0, 0), thumbnailSize), QSize(64, 64));
     QList<KisStrokeJobData*> jobsData;
     Q_FOREACH (const QRect &rc, rects) {
-        jobsData << new OverviewThumbnailStrokeStrategy::Private::ProcessData(image, rc);
+        jobsData << new OverviewThumbnailStrokeStrategy::Private::ProcessData(dev, thumbDev, thumbnailSize, rc);
     }
+    jobsData << new OverviewThumbnailStrokeStrategy::Private::FinishProcessing(thumbDev, thumbnailSize);
+
     return jobsData;
 }
 
@@ -330,10 +336,37 @@ void OverviewThumbnailStrokeStrategy::initStrokeCallback()
     qDebug() << __FUNCTION__;
 }
 #include <QThread>
+
 void OverviewThumbnailStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
-    Private::ProcessData *d = dynamic_cast<Private::ProcessData*>(data);
-    qDebug() << "+  " << __FUNCTION__ << " " << d->rect;
+    Private::ProcessData *d_pd = dynamic_cast<Private::ProcessData*>(data);
+    if (d_pd) {
+        qDebug() << QTime::currentTime() << "+0  " << __FUNCTION__ << " " << d_pd->rect << " " << QThread::currentThreadId();
+        KisPaintDeviceSP thumbnailTile = d_pd->dev->createThumbnailDevice(d_pd->thumbnailSize.width(), d_pd->thumbnailSize.height(), QRect(), 2, d_pd->rect);
+        qDebug() << QTime::currentTime() << "+1  " << __FUNCTION__ << " " << d_pd->rect<< " " << QThread::currentThreadId();
+        {
+            QMutexLocker locker(&m_thumbnailMergeMutex);
+            qDebug() << QTime::currentTime() << "+2  " << __FUNCTION__ << " " << d_pd->rect<< " " << QThread::currentThreadId();
+            KisPainter gc(d_pd->thumbDev);
+            qDebug() << QTime::currentTime() << "+3  " << __FUNCTION__ << " " << d_pd->rect<< " " << QThread::currentThreadId();
+
+            gc.bitBlt(QPoint(d_pd->rect.x(), d_pd->rect.y()), thumbnailTile, d_pd->rect);
+        }
+        qDebug() << QTime::currentTime() << "--  " << __FUNCTION__ << " " << d_pd->rect<< " " << QThread::currentThreadId();
+
+        return;
+    }
+
+
+    Private::FinishProcessing *d_fp = dynamic_cast<Private::FinishProcessing*>(data);
+    if (d_fp) {
+        qDebug() << QTime::currentTime() << "+  " << __FUNCTION__ << " " << "FinishProcessing";
+        QImage overviewImage;
+        overviewImage = d_fp->thumbDev->convertToQImage(d_fp->thumbDev->colorSpace()->profile());
+        emit thumbnailUpdated(overviewImage);
+        qDebug() << QTime::currentTime() << "--  " << __FUNCTION__ << " " << "FinishProcessing";
+        return;
+    }
 }
 
 void OverviewThumbnailStrokeStrategy::finishStrokeCallback()
@@ -345,4 +378,3 @@ void OverviewThumbnailStrokeStrategy::cancelStrokeCallback()
 {
     qDebug() << __FUNCTION__;
 }
-

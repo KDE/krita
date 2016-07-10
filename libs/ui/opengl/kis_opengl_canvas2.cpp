@@ -44,6 +44,7 @@
 #include <QMessageBox>
 
 #include <KoResourcePaths.h>
+#include <QOpenGLTimerQuery>
 
 #define NEAR_VAL -1000.0
 #define FAR_VAL 1000.0
@@ -804,6 +805,10 @@ void KisOpenGLCanvas2::renderCanvasGL()
 
 void KisOpenGLCanvas2::renderTests(QPainter *gc)
 {
+    QOpenGLTimerQuery timer;
+    timer.create();
+    timer.begin();
+
     QPen pen;
     pen.setWidth(10);
     pen.setJoinStyle(Qt::RoundJoin);
@@ -917,6 +922,9 @@ void KisOpenGLCanvas2::renderTests(QPainter *gc)
         QPointF(580.0, 130.0),
     };
     gc->drawPolyline(polyLinePoints, 3);
+
+    timer.end();
+    qDebug() << "Rendering took" << timer.waitForResult() << "microseconds";
 }
 
 void KisOpenGLCanvas2::renderDecorations(QPainter *painter)

@@ -440,6 +440,43 @@ void KisBrush::mask(KisFixedPaintDeviceSP dst, const KisPaintDeviceSP src, doubl
     generateMaskAndApplyMaskOrCreateDab(dst, &pdci, scaleX, scaleY, angle, info, subPixelX, subPixelY, softnessFactor);
 }
 
+QImage KisBrush::transformBrushTip(const QImage& image,
+    qreal scaleX, qreal scaleY, qreal rotate, 
+    qreal subPixelX, qreal subPixelY)
+{
+    QImage ret(
+        image.width()  + (subPixelX == 0.0 ? 0 : 1),
+        image.height() + (subPixelY == 0.0 ? 0 : 1),
+        QImage::Format_ARGB32);
+    ret.fill(0);
+
+    QTransform transform;
+    transform.scale(scaleX, scaleY)
+             .rotate(rotate)
+             .translate(subPixelX, subPixelY);
+
+    /**
+     * QPainter has one more bug: when a QTransform is TxTranslate, it
+     * does wrong sampling (probably, Nearest Neighbour) even though
+     * we tell it directly that we need SmoothPixmapTransform.
+     *
+     * So here is a workaround: we set a negligible scale to convince
+     * Qt we use a non-only-translating transform.
+     */
+    while (transform.type() == QTransform::TxTranslate) {
+        const qreal scale = transform.m11();
+        const qreal fakeScale = scale - 10 * std::numeric_limits<qreal>::epsilon();
+        transform *= QTransform::fromScale(fakeScale, fakeScale);
+    }
+
+    QPainter painter(&ret);
+    painter.setTransform(transform);
+    painter.setRenderHints(QPainter::SmoothPixmapTransform);
+    painter.drawImage(QPointF(), image);
+    painter.end();
+
+    return std::move(ret);
+}
 
 void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
         ColoringInformation* coloringInformation,
@@ -455,9 +492,8 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
     scaleX *= d->scale;
     scaleY *= d->scale;
 
-    QImage outputImage = brushTipImage().transformed(
-        QTransform().scale(scaleX, scaleY)
-                    .rotate(angle));
+    QImage outputImage = transformBrushTip(brushTipImage(),
+        scaleX, scaleY, angle, subPixelX, subPixelY);
 
     qint32 maskWidth = outputImage.width();
     qint32 maskHeight = outputImage.height();
@@ -531,9 +567,8 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
     angle  = normalizeAngle(angle + d->angle);
     scale *= d->scale;
 
-    QImage outputImage = brushTipImage().transformed(
-        QTransform().scale(scale, scale)
-                    .rotate(angle));
+    QImage outputImage = transformBrushTip(brushTipImage(),
+        scale, scale, angle, subPixelX, subPixelY);
 
     KisFixedPaintDeviceSP dab = new KisFixedPaintDevice(colorSpace);
     Q_CHECK_PTR(dab);

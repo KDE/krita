@@ -32,6 +32,9 @@
 #include <kis_fixed_paint_device.h>
 #include "kis_qimage_pyramid.h"
 
+#include <iostream>
+#include <iomanip>
+
 void KisBrushTest::testMaskGenerationNoColor()
 {
     KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "brush.gbr");
@@ -276,6 +279,21 @@ void KisBrushTest::testPyramidLevelRounding()
     baseLevel = pyramid.findNearestLevel(0.25 + 1e-7, &baseScale);
     QCOMPARE(baseScale, 0.25);
     QCOMPARE(baseLevel, 5);
+}
+
+void KisBrushTest::testBrushTipTransform_subPixelSmoothing()
+{
+    QImage original(10, 10, QImage::Format_ARGB32);
+    original.fill(0);
+    original.setPixel(5, 5, 0xffffffff);
+
+    auto const transformed = KisBrush::transformBrushTip(
+        original, 1.0, 1.0, 0.0, 0.5, 0.5);
+
+    QVERIFY(qAlpha(transformed.pixel(5, 5)) >= 0xff / 4); 
+    QVERIFY(qAlpha(transformed.pixel(5, 6)) >= 0xff / 4); 
+    QVERIFY(qAlpha(transformed.pixel(6, 5)) >= 0xff / 4); 
+    QVERIFY(qAlpha(transformed.pixel(6, 6)) >= 0xff / 4); 
 }
 
 // see comment in KisQImagePyramid::appendPyramidLevel

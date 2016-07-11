@@ -42,6 +42,7 @@ private Q_SLOTS:
     void testPyramidLevelRounding();
 
     void testQPainterTransformationBorder();
+    void testBrushTipTransform_subPixelSmoothing();
 };
 
 #endif

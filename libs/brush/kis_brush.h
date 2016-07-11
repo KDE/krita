@@ -118,6 +118,10 @@ public:
     KisBrush();
     KisBrush(const QString& filename);
 
+    static QImage transformBrushTip(const QImage& image,
+        qreal scaleX, qreal scaleY, qreal rotate,
+        qreal subPixelX, qreal subPixelY);
+
     virtual ~KisBrush();
 
     virtual bool load() {

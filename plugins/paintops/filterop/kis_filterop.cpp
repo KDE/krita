@@ -107,7 +107,7 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
     QRect dstRect;
     KisFixedPaintDeviceSP dab =
         m_dabCache->fetchDab(cs, color, info.pos(),
-                             scale, scale, rotation,
+                             scale, 1.0, rotation,
                              info, 1.0,
                              &dstRect);
 

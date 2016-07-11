@@ -108,15 +108,14 @@ void KisDabCache::disableSubpixelPrecision()
 KisFixedPaintDeviceSP KisDabCache::fetchDab(const KoColorSpace *cs,
         const KisColorSource *colorSource,
         const QPointF &cursorPoint,
-        double scaleX, double scaleY,
-        double angle,
+        double scale, double ratio, double angle,
         const KisPaintInformation& info,
         qreal softnessFactor,
         QRect *dstDabRect)
 {
     return fetchDabCommon(cs, colorSource, KoColor(),
                           cursorPoint,
-                          scaleX, scaleY, angle,
+                          scale, ratio, angle,
                           info,
                           softnessFactor,
                           dstDabRect);
@@ -125,15 +124,14 @@ KisFixedPaintDeviceSP KisDabCache::fetchDab(const KoColorSpace *cs,
 KisFixedPaintDeviceSP KisDabCache::fetchDab(const KoColorSpace *cs,
         const KoColor& color,
         const QPointF &cursorPoint,
-        double scaleX, double scaleY,
-        double angle,
+        double scale, double ratio, double angle,
         const KisPaintInformation& info,
         qreal softnessFactor,
         QRect *dstDabRect)
 {
     return fetchDabCommon(cs, 0, color,
                           cursorPoint,
-                          scaleX, scaleY, angle,
+                          scale, ratio, angle,
                           info,
                           softnessFactor,
                           dstDabRect);
@@ -223,8 +221,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
         const KisColorSource *colorSource,
         const KoColor& color,
         const QPointF &cursorPoint,
-        double scaleX, double scaleY,
-        double initialAngle,
+        double scale, double ratio, double initialAngle,
         const KisPaintInformation& info,
         qreal softnessFactor,
         QRect *dstDabRect)
@@ -237,7 +234,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
     }
 
     DabPosition position = calculateDabRect(cursorPoint,
-                                            scaleX, scaleY,
+                                            scale, scale * ratio,
                                             initialAngle,
                                             info,
                                             mirrorProperties);
@@ -250,7 +247,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
     KisFixedPaintDeviceSP dab = new KisFixedPaintDevice(cs);
 
     if (m_d->brush->brushType() == IMAGE || m_d->brush->brushType() == PIPE_IMAGE) {
-        dab = m_d->brush->paintDevice(cs, scaleX, position.realAngle, info,
+        dab = m_d->brush->paintDevice(cs, scale, position.realAngle, info,
                                            position.subPixel.x(),
                                            position.subPixel.y());
     }
@@ -266,7 +263,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
         colorSource->colorize(m_d->colorSourceDevice, maskRect, info.pos().toPoint());
         delete m_d->colorSourceDevice->convertTo(cs);
 
-        m_d->brush->mask(dab, m_d->colorSourceDevice, scaleX, scaleY, position.realAngle,
+        m_d->brush->mask(dab, m_d->colorSourceDevice, scale, scale * ratio, position.realAngle,
                          info,
                          position.subPixel.x(), position.subPixel.y(),
                          softnessFactor);

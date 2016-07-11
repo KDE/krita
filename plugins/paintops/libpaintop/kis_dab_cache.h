@@ -71,8 +71,7 @@ public:
     KisFixedPaintDeviceSP fetchDab(const KoColorSpace *cs,
                                    const KisColorSource *colorSource,
                                    const QPointF &cursorPoint,
-                                   double scaleX, double scaleY,
-                                   double angle,
+                                   double scale, double ratio, double angle,
                                    const KisPaintInformation& info,
                                    qreal softnessFactor,
                                    QRect *dstDabRect);
@@ -80,8 +79,7 @@ public:
     KisFixedPaintDeviceSP fetchDab(const KoColorSpace *cs,
                                    const KoColor& color,
                                    const QPointF &cursorPoint,
-                                   double scaleX, double scaleY,
-                                   double angle,
+                                   double scale, double ratio, double angle,
                                    const KisPaintInformation& info,
                                    qreal softnessFactor,
                                    QRect *dstDabRect);
@@ -101,8 +99,7 @@ private:
             const KisColorSource *colorSource,
             const KoColor& color,
             const QPointF &cursorPoint,
-            double scaleX, double scaleY,
-            double angle,
+            double scale, double ratio, double angle,
             const KisPaintInformation& info,
             qreal softnessFactor,
             QRect *dstDabRect);

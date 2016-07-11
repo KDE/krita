@@ -137,7 +137,7 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
 
     m_maskDab =
         m_dabCache->fetchDab(rgbColorSpace, color, cursorPos,
-                             scale, scale, rotation,
+                             scale, 1.0, rotation,
                              info, m_softnessOption.apply(info),
                              &m_dstDabRect);
 

@@ -132,7 +132,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
     QRect dstRect;
     KisFixedPaintDeviceSP dab =
         m_dabCache->fetchDab(cs, color, info.pos(),
-                             scale, scale, 0.0,
+                             scale, 1.0, 0.0,
                              info, 1.0,
                              &dstRect);
 

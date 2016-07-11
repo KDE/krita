@@ -141,7 +141,7 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
     KisFixedPaintDeviceSP dab = m_dabCache->fetchDab(device->compositionSourceColorSpace(),
                                 m_colorSource,
                                 cursorPos,
-                                scale, scale,
+                                scale, 1.0,
                                 rotation,
                                 info,
                                 m_softnessOption.apply(info),

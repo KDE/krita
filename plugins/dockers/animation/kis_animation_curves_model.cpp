@@ -76,15 +76,26 @@ QVariant KisAnimationCurvesModel::data(const QModelIndex &index, int role) const
             return QColor(Qt::red);
         case PreviousKeyframeTime:
         {
-            if (keyframe.isNull()) return QVariant();
-            KisKeyframeSP previous = channel->previousKeyframe(keyframe);
+            KisKeyframeSP active = channel->activeKeyframeAt(time);
+            if (active.isNull()) return QVariant();
+            if (active->time() < time) {
+                return active->time();
+            }
+            KisKeyframeSP previous = channel->previousKeyframe(active);
             if (previous.isNull()) return QVariant();
             return previous->time();
         }
         case NextKeyframeTime:
         {
-            if (keyframe.isNull()) return QVariant();
-            KisKeyframeSP next = channel->nextKeyframe(keyframe);
+            KisKeyframeSP active = channel->activeKeyframeAt(time);
+            if (active.isNull()) {
+                KisKeyframeSP first = channel->firstKeyframe();
+                if (!first.isNull() && first->time() > time) {
+                    return first->time();
+                }
+                return QVariant();
+            }
+            KisKeyframeSP next = channel->nextKeyframe(active);
             if (next.isNull()) return QVariant();
             return next->time();
         }

@@ -272,7 +272,7 @@ KisKeyframeSP KisKeyframeChannel::currentlyActiveKeyframe() const
 
 KisKeyframeSP KisKeyframeChannel::firstKeyframe() const
 {
-    return keyframeAt(0);
+    return m_d->keys.first();
 }
 
 KisKeyframeSP KisKeyframeChannel::nextKeyframe(KisKeyframeSP keyframe) const

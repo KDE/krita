@@ -48,6 +48,10 @@ protected:
     void setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command);
     QRegion visualRegionForSelection(const QItemSelection &selection) const;
 
+    void mousePressEvent(QMouseEvent *);
+    void mouseMoveEvent(QMouseEvent *);
+    void mouseReleaseEvent(QMouseEvent *);
+
 protected Q_SLOTS:
     void updateGeometries();
 
@@ -64,7 +68,7 @@ private:
     void paintCurve(int channel, int firstFrame, int lastFrame, QPainter &painter);
     void paintCurveSegment(QPainter &painter, QPointF pos1, QPointF rightTangent, QPointF leftTangent, QPointF pos2);
     void paintKeyframes(QPainter &painter, int firstFrame, int lastFrame);
-    QModelIndex firstKeyframeIndexForRange(int channel, int firstFrame, int LastFrame);
+    QModelIndex findNextKeyframeIndex(int channel, int time, int selectionOffset, bool backward);
 };
 
 #endif

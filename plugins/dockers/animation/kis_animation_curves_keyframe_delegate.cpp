@@ -34,6 +34,7 @@ struct KisAnimationCurvesKeyframeDelegate::Private
     {}
     const TimelineRulerHeader *horizontalRuler;
     const KisAnimationCurvesValueRuler *verticalRuler;
+    QPointF selectionOffset;
 };
 
 KisAnimationCurvesKeyframeDelegate::KisAnimationCurvesKeyframeDelegate(const TimelineRulerHeader *horizontalRuler, const KisAnimationCurvesValueRuler *verticalRuler, QObject *parent)
@@ -47,7 +48,7 @@ KisAnimationCurvesKeyframeDelegate::~KisAnimationCurvesKeyframeDelegate()
 void KisAnimationCurvesKeyframeDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     bool selected = option.state & QStyle::State_Selected;
-    QPointF center = nodeCenter(index);
+    QPointF center = nodeCenter(index, selected);
 
     QColor color;
     QColor bgColor = qApp->palette().color(QPalette::Window);
@@ -78,7 +79,7 @@ QSize KisAnimationCurvesKeyframeDelegate::sizeHint(const QStyleOptionViewItem &o
     return QSize(2*NODE_UI_RADIUS, 2*NODE_UI_RADIUS);
 }
 
-QPointF KisAnimationCurvesKeyframeDelegate::nodeCenter(const QModelIndex index) const
+QPointF KisAnimationCurvesKeyframeDelegate::nodeCenter(const QModelIndex index, bool selected) const
 {
     int section = m_d->horizontalRuler->logicalIndex(index.column());
     int x = m_d->horizontalRuler->sectionViewportPosition(section)
@@ -87,7 +88,9 @@ QPointF KisAnimationCurvesKeyframeDelegate::nodeCenter(const QModelIndex index) 
     float value = index.data(KisAnimationCurvesModel::ScalarValueRole).toReal();
     float y = m_d->verticalRuler->mapValueToView(value);
 
-    return QPointF(x, y);
+    QPointF center = QPointF(x, y);
+    if (selected) center += m_d->selectionOffset;
+    return center;
 }
 
 QPointF KisAnimationCurvesKeyframeDelegate::leftHandle(const QModelIndex index) const
@@ -110,6 +113,11 @@ QPointF KisAnimationCurvesKeyframeDelegate::rightHandle(const QModelIndex index)
     return QPointF(x, y);
 }
 
+void KisAnimationCurvesKeyframeDelegate::setSelectedItemVisualOffset(QPointF offset)
+{
+    m_d->selectionOffset = offset;
+}
+
 void KisAnimationCurvesKeyframeDelegate::paintHandle(QPainter *painter, QPointF nodePos, QPointF tangent) const
 {
     QPointF handlePos = nodePos + tangent;
@@ -120,22 +128,22 @@ void KisAnimationCurvesKeyframeDelegate::paintHandle(QPainter *painter, QPointF 
 
 QRect KisAnimationCurvesKeyframeDelegate::itemRect(const QModelIndex index) const
 {
-    QPointF center = nodeCenter(index);
+    QPointF center = nodeCenter(index, false);
 
     return QRect(center.x() - NODE_UI_RADIUS, center.y() - NODE_UI_RADIUS, 2*NODE_UI_RADIUS, 2*NODE_UI_RADIUS);
 }
 
 QRect KisAnimationCurvesKeyframeDelegate::visualRect(const QModelIndex index) const
 {
-    QPointF center = nodeCenter(index);
-    QPointF leftHandle = center + leftHandle(index);
-    QPointF rightHandle = center + rightHandle(index);
+    QPointF center = nodeCenter(index, false);
+    QPointF leftHandlePos = center + leftHandle(index);
+    QPointF rightHandlePos = center + rightHandle(index);
 
-    int minX = qMin(center.x(), leftHandle.x()) - NODE_RENDER_RADIUS;
-    int maxX = qMax(center.x(), rightHandle.x()) + NODE_RENDER_RADIUS;
+    int minX = qMin(center.x(), leftHandlePos.x()) - NODE_RENDER_RADIUS;
+    int maxX = qMax(center.x(), rightHandlePos.x()) + NODE_RENDER_RADIUS;
 
-    int minY = qMin(center.y(), qMin(leftHandle.y(), rightHandle.y())) - NODE_RENDER_RADIUS;
-    int maxY = qMax(center.y(), qMax(leftHandle.y(), rightHandle.y())) + NODE_RENDER_RADIUS;
+    int minY = qMin(center.y(), qMin(leftHandlePos.y(), rightHandlePos.y())) - NODE_RENDER_RADIUS;
+    int maxY = qMax(center.y(), qMax(leftHandlePos.y(), rightHandlePos.y())) + NODE_RENDER_RADIUS;
 
     return QRect(QPoint(minX, minY), QPoint(maxX, maxY));
 }

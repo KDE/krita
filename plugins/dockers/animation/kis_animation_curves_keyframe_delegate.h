@@ -35,9 +35,10 @@ public:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
-    QPointF nodeCenter(const QModelIndex index) const;
+    QPointF nodeCenter(const QModelIndex index, bool selected) const;
     QPointF leftHandle(const QModelIndex index) const;
     QPointF rightHandle(const QModelIndex index) const;
+    void setSelectedItemVisualOffset(QPointF offset);
 
     QRect itemRect(const QModelIndex index) const;
     QRect visualRect(const QModelIndex index) const;

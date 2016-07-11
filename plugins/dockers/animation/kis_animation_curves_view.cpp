@@ -24,16 +24,23 @@
 #include "kis_scalar_keyframe_channel.h"
 
 #include <QPaintEvent>
+#include <QMouseEvent>
+#include <QApplication>
 #include <qpainter.h>
 
 struct KisAnimationCurvesView::Private
 {
     Private()
+        : isDragging(false)
     {}
 
     TimelineRulerHeader *horizontalHeader;
     KisAnimationCurvesValueRuler *verticalHeader;
     KisAnimationCurvesKeyframeDelegate *itemDelegate;
+
+    bool isDragging;
+    QPoint dragStart;
+    QPoint dragOffset;
 };
 
 KisAnimationCurvesView::KisAnimationCurvesView(QWidget *parent)
@@ -121,18 +128,23 @@ void KisAnimationCurvesView::paintCurves(QPainter &painter, int firstFrame, int 
 
 void KisAnimationCurvesView::paintCurve(int channel, int firstFrame, int lastFrame, QPainter &painter)
 {
-    QModelIndex index = firstKeyframeIndexForRange(channel, firstFrame, lastFrame);
+    int selectionOffset = m_d->isDragging ? (m_d->dragOffset.x() / m_d->horizontalHeader->defaultSectionSize()) : 0;
+
+    QModelIndex index = findNextKeyframeIndex(channel, firstFrame+1, selectionOffset, true);
+    if (!index.isValid()) {
+        index = findNextKeyframeIndex(channel, firstFrame, selectionOffset, false);
+    }
     if (!index.isValid()) return;
 
-    QPointF previousKeyPos = m_d->itemDelegate->nodeCenter(index);
+    QPointF previousKeyPos = m_d->itemDelegate->nodeCenter(index, selectionModel()->isSelected(index));
     QPointF rightTangent = m_d->itemDelegate->rightHandle(index);
 
     while(index.column() <= lastFrame) {
-        QVariant next = index.data(KisAnimationCurvesModel::NextKeyframeTime);
-        if (!next.isValid()) return;
-        index = model()->index(channel, next.toInt());
+        int currentIndexTime = (m_d->isDragging && selectionModel()->isSelected(index)) ? index.column() + selectionOffset : index.column();
+        index = findNextKeyframeIndex(channel, currentIndexTime, selectionOffset, false);
+        if (!index.isValid()) return;
 
-        QPointF nextKeyPos = m_d->itemDelegate->nodeCenter(index);
+        QPointF nextKeyPos = m_d->itemDelegate->nodeCenter(index, selectionModel()->isSelected(index));
         QPointF leftTangent = m_d->itemDelegate->leftHandle(index);
 
         paintCurveSegment(painter, previousKeyPos, rightTangent, leftTangent, nextKeyPos);
@@ -180,27 +192,43 @@ void KisAnimationCurvesView::paintKeyframes(QPainter &painter, int firstFrame, i
     }
 }
 
-QModelIndex KisAnimationCurvesView::firstKeyframeIndexForRange(int channel, int firstFrame, int LastFrame)
+QModelIndex KisAnimationCurvesView::findNextKeyframeIndex(int channel, int time, int selectionOffset, bool backward)
 {
-    QModelIndex index = model()->index(channel, firstFrame);
+    KisAnimationCurvesModel::ItemDataRole role =
+            backward ? KisAnimationCurvesModel::PreviousKeyframeTime : KisAnimationCurvesModel::NextKeyframeTime;
+    QModelIndex currentIndex = model()->index(channel, time);
 
-    if (!index.data(KisAnimationCurvesModel::SpecialKeyframeExists).toBool()) {
-        QVariant previous = index.data(KisAnimationCurvesModel::PreviousKeyframeTime);
+    if (!selectionOffset) {
+        QVariant next = currentIndex.data(role);
+        return (next.isValid()) ? model()->index(channel, next.toInt()) : QModelIndex();
+    } else {
+        // Find the next unselected index
+        QModelIndex nextIndex = currentIndex;
+        do {
+            QVariant next = nextIndex.data(role);
+            nextIndex = (next.isValid()) ? model()->index(channel, next.toInt()) : QModelIndex();
+        } while(nextIndex.isValid() && selectionModel()->isSelected(nextIndex));
 
-        if (previous.isValid()) {
-            index = model()->index(channel, previous.toInt());
-        } else {
-            QVariant next = index.data(KisAnimationCurvesModel::NextKeyframeTime);
-            if (!next.isValid()) {
-                index = QModelIndex();
+        // Find the next selected index, accounting for D&D offset
+        QModelIndex draggedIndex = model()->index(channel, qMax(0, time - selectionOffset));
+        do {
+            QVariant next = draggedIndex.data(role);
+            draggedIndex = (next.isValid()) ? model()->index(channel, next.toInt()) : QModelIndex();
+        } while(draggedIndex.isValid() && !selectionModel()->isSelected(draggedIndex));
+
+        // Choose the earlier of the two
+        if (draggedIndex.isValid() && nextIndex.isValid()) {
+            if (draggedIndex.column() + selectionOffset <= nextIndex.column()) {
+                return draggedIndex;
+            } else {
+                return nextIndex;
             }
-
-            index = model()->index(channel, next.toInt());
+        } else if (draggedIndex.isValid()) {
+            return draggedIndex;
+        } else {
+            return nextIndex;
         }
     }
-
-    if (index.column() > LastFrame) return QModelIndex();
-    return index;
 }
 
 QModelIndex KisAnimationCurvesView::moveCursor(QAbstractItemView::CursorAction cursorAction, Qt::KeyboardModifiers modifiers)
@@ -261,6 +289,51 @@ QRegion KisAnimationCurvesView::visualRegionForSelection(const QItemSelection &s
     return region;
 }
 
+void KisAnimationCurvesView::mousePressEvent(QMouseEvent *e)
+{
+    if (e->button() == Qt::LeftButton) {
+        m_d->dragStart = e->pos();
+    }
+
+    QAbstractItemView::mousePressEvent(e);
+}
+
+void KisAnimationCurvesView::mouseMoveEvent(QMouseEvent *e)
+{
+    if (e->buttons() & Qt::LeftButton) {
+        if (!m_d->isDragging && selectionModel()->hasSelection()) {
+            if ((e->pos() - m_d->dragStart).manhattanLength() > QApplication::startDragDistance()) {
+                m_d->isDragging = true;
+            }
+        }
+
+        if (m_d->isDragging) {
+            m_d->dragOffset = e->pos() - m_d->dragStart;
+            m_d->itemDelegate->setSelectedItemVisualOffset(m_d->dragOffset);
+            viewport()->update();
+            return;
+        }
+    }
+
+    QAbstractItemView::mouseMoveEvent(e);
+}
+
+void KisAnimationCurvesView::mouseReleaseEvent(QMouseEvent *e)
+{
+    if (e->button() == Qt::LeftButton) {
+        if (m_d->isDragging) {
+
+            // TODO: move and update the keyframes
+
+            m_d->isDragging = false;
+            m_d->itemDelegate->setSelectedItemVisualOffset(QPointF());
+            viewport()->update();
+        }
+    }
+
+    QAbstractItemView::mouseReleaseEvent(e);
+}
+
 void KisAnimationCurvesView::updateGeometries()
 {
     int topMargin = qMax(m_d->horizontalHeader->minimumHeight(),
@@ -279,10 +352,10 @@ void KisAnimationCurvesView::updateGeometries()
 
 void KisAnimationCurvesView::slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
-    update();
+    viewport()->update();
 }
 
 void KisAnimationCurvesView::slotHeaderDataChanged(Qt::Orientation orientation, int first, int last)
 {
-    update();
+    viewport()->update();
 }

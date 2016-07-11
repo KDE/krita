@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>333</width>
-    <height>86</height>
+    <width>364</width>
+    <height>89</height>
    </rect>
   </property>
   <layout class="QGridLayout">
    <item row="1" column="2">
-    <widget class="QSpinBox" name="spbWidth">
+    <widget class="KisIntParseSpinBox" name="spbWidth">
      <property name="minimum">
       <number>1</number>
      </property>
@@ -25,7 +25,7 @@
     </widget>
    </item>
    <item row="1" column="2">
-    <widget class="QDoubleSpinBox" name="spbWidthDouble">
+    <widget class="KisDoubleParseSpinBox" name="spbWidthDouble">
      <property name="decimals">
       <number>4</number>
      </property>
@@ -119,6 +119,18 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_intparsespinbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleParseSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_doubleparsespinbox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

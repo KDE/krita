@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>302</width>
-    <height>86</height>
+    <width>327</width>
+    <height>89</height>
    </rect>
   </property>
   <layout class="QGridLayout">
@@ -57,7 +57,7 @@
     </spacer>
    </item>
    <item row="1" column="2">
-    <widget class="QSpinBox" name="spbGrowValue">
+    <widget class="KisIntParseSpinBox" name="spbGrowValue">
      <property name="minimum">
       <number>1</number>
      </property>
@@ -70,7 +70,7 @@
     </widget>
    </item>
    <item row="1" column="2">
-    <widget class="QDoubleSpinBox" name="spbGrowValueDouble">
+    <widget class="KisDoubleParseSpinBox" name="spbGrowValueDouble">
      <property name="decimals">
       <number>4</number>
      </property>
@@ -119,6 +119,18 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_intparsespinbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleParseSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_doubleparsespinbox.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>spbGrowValue</tabstop>
   <tabstop>spbGrowValueDouble</tabstop>

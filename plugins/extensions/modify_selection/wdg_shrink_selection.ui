@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>308</width>
-    <height>113</height>
+    <width>334</width>
+    <height>117</height>
    </rect>
   </property>
   <layout class="QGridLayout">
@@ -31,7 +31,7 @@
     </spacer>
    </item>
    <item row="1" column="2">
-    <widget class="QSpinBox" name="spbShrinkValue">
+    <widget class="KisIntParseSpinBox" name="spbShrinkValue">
      <property name="minimum">
       <number>1</number>
      </property>
@@ -44,7 +44,7 @@
     </widget>
    </item>
    <item row="1" column="2">
-    <widget class="QDoubleSpinBox" name="spbShrinkValueDouble">
+    <widget class="KisDoubleParseSpinBox" name="spbShrinkValueDouble">
      <property name="decimals">
       <number>4</number>
      </property>
@@ -129,6 +129,18 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_intparsespinbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleParseSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_doubleparsespinbox.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>spbShrinkValue</tabstop>
   <tabstop>spbShrinkValueDouble</tabstop>

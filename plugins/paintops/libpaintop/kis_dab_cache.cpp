@@ -247,7 +247,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
     KisFixedPaintDeviceSP dab = new KisFixedPaintDevice(cs);
 
     if (m_d->brush->brushType() == IMAGE || m_d->brush->brushType() == PIPE_IMAGE) {
-        dab = m_d->brush->paintDevice(cs, scale, position.realAngle, info,
+        dab = m_d->brush->paintDevice(cs, scale, ratio, position.realAngle, info,
                                            position.subPixel.x(),
                                            position.subPixel.y());
     }

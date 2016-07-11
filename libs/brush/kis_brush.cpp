@@ -559,7 +559,7 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
 }
 
 KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
-        double scale, double angle,
+        double scale, double ratio, double angle,
         const KisPaintInformation& info,
         double subPixelX, double subPixelY) const
 {
@@ -569,7 +569,7 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
     scale *= d->scale;
 
     QImage outputImage = transformBrushTip(brushTipImage(),
-        scale, scale, angle, subPixelX, subPixelY);
+        scale, scale * ratio, angle, subPixelX, subPixelY);
 
     KisFixedPaintDeviceSP dab = new KisFixedPaintDevice(colorSpace);
     Q_CHECK_PTR(dab);
@@ -589,7 +589,8 @@ void KisBrush::generateBoundary() const
     KisFixedPaintDeviceSP dev;
 
     if (brushType() == IMAGE || brushType() == PIPE_IMAGE) {
-        dev = paintDevice(KoColorSpaceRegistry::instance()->rgb8(), 1.0 / scale(), -angle(), KisPaintInformation());
+        dev = paintDevice(KoColorSpaceRegistry::instance()->rgb8(),
+            1.0 / scale(), 1.0 / scale(), -angle(), KisPaintInformation());
     }
     else {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();

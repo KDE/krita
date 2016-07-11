@@ -193,7 +193,7 @@ void KisBrushTest::testImageGeneration()
             QString("brush_%1_sc_%2_rot_%3_sub_%4")
             .arg(i).arg(scale).arg(rotation).arg(subPixelX);
 
-        dab = brush->paintDevice(cs, scale, rotation, info, subPixelX);
+        dab = brush->paintDevice(cs, scale, 1.0, rotation, info, subPixelX);
 
         /**
          * Compare first 10 images. Others are tested for asserts only
@@ -217,7 +217,7 @@ void KisBrushTest::benchmarkScaling()
     KisFixedPaintDeviceSP dab;
 
     QBENCHMARK {
-        dab = brush->paintDevice(cs, qreal(qrand()) / RAND_MAX * 2.0, 0.0, info);
+        dab = brush->paintDevice(cs, qreal(qrand()) / RAND_MAX * 2.0, 1.0, 0.0, info);
         //dab->convertToQImage(0).save(QString("dab_%1_new_smooth.png").arg(i++));
     }
 }
@@ -234,7 +234,7 @@ void KisBrushTest::benchmarkRotation()
     KisFixedPaintDeviceSP dab;
 
     QBENCHMARK {
-        dab = brush->paintDevice(cs, 1.0, qreal(qrand()) / RAND_MAX * 2 * M_PI, info);
+        dab = brush->paintDevice(cs, 1.0, 1.0, qreal(qrand()) / RAND_MAX * 2 * M_PI, info);
     }
 }
 

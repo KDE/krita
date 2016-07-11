@@ -71,7 +71,7 @@ public:
      * @return the next image in the pipe.
     */
     virtual KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
-            double scale, double angle,
+            double scale, double ratio, double angle,
             const KisPaintInformation& info,
             double subPixelX = 0, double subPixelY = 0) const;
 

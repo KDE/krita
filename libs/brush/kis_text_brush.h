@@ -44,7 +44,9 @@ public:
             const KisPaintInformation& info,
             double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
-    KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const;
+    KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
+        double scale, double ratio, double angle,
+        const KisPaintInformation& info, double subPixelX, double subPixelY) const;
 
     bool load() {
         return false;

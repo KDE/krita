@@ -117,15 +117,15 @@ public:
     }
 
     KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
-                                      double scale, double angle,
+                                      double scale, double ratio, double angle,
                                       const KisPaintInformation& info,
                                       double subPixelX, double subPixelY) {
 
         BrushType *brush = currentBrush(info);
         if (!brush) return 0;
 
-
-        KisFixedPaintDeviceSP device = brush->paintDevice(colorSpace, scale, angle, info, subPixelX, subPixelY);
+        KisFixedPaintDeviceSP device = brush->paintDevice(
+            colorSpace, scale, ratio,  angle, info, subPixelX, subPixelY);
         updateBrushIndexes(info);
         return device;
     }

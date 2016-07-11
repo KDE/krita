@@ -355,6 +355,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                     m_brush->brushType() == PIPE_IMAGE) {
                 m_fixedDab = m_brush->paintDevice(m_fixedDab->colorSpace(),
                                                   particleScale * additionalScale,
+                                                  1.0,
                                                   -rotationZ, info, xFraction, yFraction);
 
                 if (m_colorProperties->useRandomHSV && m_transfo) {

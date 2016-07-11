@@ -372,9 +372,12 @@ QVector<KisGbrBrush *> KisImagePipeBrush::brushes() const
     return m_d->brushesPipe.brushes();
 }
 
-KisFixedPaintDeviceSP KisImagePipeBrush::paintDevice(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const
+KisFixedPaintDeviceSP KisImagePipeBrush::paintDevice(const KoColorSpace * colorSpace,
+    double scale, double ratio, double angle,
+    const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
-    return m_d->brushesPipe.paintDevice(colorSpace, scale, angle, info, subPixelX, subPixelY);
+    return m_d->brushesPipe.paintDevice(
+        colorSpace, scale, ratio, angle, info, subPixelX, subPixelY);
 }
 
 enumBrushType KisImagePipeBrush::brushType() const

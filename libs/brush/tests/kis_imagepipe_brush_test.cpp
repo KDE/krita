@@ -82,7 +82,7 @@ inline void KisImagePipeBrushTest::checkConsistency(KisImagePipeBrush *brush)
     int maskHeight = brush->maskHeight(realScale, realAngle, subPixelX, subPixelY, info);
 
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisFixedPaintDeviceSP dev = brush->testingGetCurrentBrush(info)->paintDevice(cs, realScale, realAngle, info, subPixelX, subPixelY);
+    KisFixedPaintDeviceSP dev = brush->testingGetCurrentBrush(info)->paintDevice(cs, realScale, 1.0, realAngle, info, subPixelX, subPixelY);
 
     QCOMPARE(maskWidth, dev->bounds().width());
     QCOMPARE(maskHeight, dev->bounds().height());
@@ -218,7 +218,7 @@ void KisImagePipeBrushTest::testColoredDabWash()
 
     const QVector<KisGbrBrush*> gbrs = brush->brushes();
 
-    KisFixedPaintDeviceSP dab = gbrs.at(0)->paintDevice(cs, 2.0, 0.0, info);
+    KisFixedPaintDeviceSP dab = gbrs.at(0)->paintDevice(cs, 2.0, 1.0, 0.0, info);
     painter.bltFixed(0, 0, dab, 0, 0, dab->bounds().width(), dab->bounds().height());
     painter.bltFixed(80, 60, dab, 0, 0, dab->bounds().width(), dab->bounds().height());
 

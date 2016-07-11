@@ -43,7 +43,7 @@ public:
 public:
 
     virtual KisFixedPaintDeviceSP paintDevice(const KoColorSpace*,
-            double, double,
+            double, double, double,
             const KisPaintInformation&,
             double = 0, double = 0) const {
         return 0; // The autobrush does NOT support images!

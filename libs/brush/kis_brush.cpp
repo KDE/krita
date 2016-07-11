@@ -471,7 +471,8 @@ QImage KisBrush::transformBrushTip(const QImage& image,
 
     QPainter painter(&ret);
     painter.setTransform(transform);
-    painter.setRenderHints(QPainter::SmoothPixmapTransform);
+    painter.setRenderHints(QPainter::SmoothPixmapTransform
+                         | QPainter::Antialiasing);
     painter.drawImage(QPointF(), image);
     painter.end();
 

@@ -307,6 +307,22 @@ void KisBrushTest::testBrushTipTransform_subPixelSmoothing()
     QVERIFY(qAlpha(transformed.pixel(6, 6)) >= 0xff / 4); 
 }
 
+void KisBrushTest::testBrushTipTransform_rotatesFromEdgeSmoothly()
+{
+    QImage original(10, 10, QImage::Format_ARGB32);
+    original.fill(0);
+
+    {
+        QPainter painter(&original);
+        painter.fillRect(QRect(0, 0, 10, 3), Qt::black);
+    }
+
+    auto const transformed = KisBrush::transformBrushTip(
+        original, 1.0, 1.0, 1.0, 0.0, 0.0);
+    QVERIFY(qAlpha(transformed.pixel(9, 0)) != 0xff);
+}
+
+
 // see comment in KisQImagePyramid::appendPyramidLevel
 void KisBrushTest::testQPainterTransformationBorder()
 {

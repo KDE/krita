@@ -43,6 +43,7 @@ private Q_SLOTS:
 
     void testQPainterTransformationBorder();
     void testBrushTipTransform_subPixelSmoothing();
+    void testBrushTipTransform_rotatesFromEdgeSmoothly();
 };
 
 #endif

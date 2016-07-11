@@ -35,6 +35,17 @@
 #include <iostream>
 #include <iomanip>
 
+
+static void debugPrintImage(QImage const& image)
+{
+    for (int i = 0; i < image.height(); i++) {
+        for (int j = 0; j < image.width(); j++) {
+            std::cerr << std::setw(5) << std::hex << qAlpha(image.pixel(i , j));
+        }
+        std::cerr << '\n';
+    }
+}
+
 void KisBrushTest::testMaskGenerationNoColor()
 {
     KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "brush.gbr");

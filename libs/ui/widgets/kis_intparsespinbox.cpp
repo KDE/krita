@@ -170,6 +170,10 @@ void KisIntParseSpinBox::setValue(int val)
 		clearError();
 	}
 
+	if(val == _oldVal && hasFocus()){ //avoid to reset the button when it set the value of something that will recall this slot.
+		return;
+	}
+
 	QSpinBox::setValue(val);
 }
 

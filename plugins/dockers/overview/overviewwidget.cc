@@ -36,6 +36,12 @@
 #include "kis_idle_watcher.h"
 #include "krita_utils.h"
 #include "kis_painter.h"
+#include <KoUpdater.h>
+#include "kis_transform_worker.h"
+#include "kis_filter_strategy.h"
+
+const float oversample = 2.;
+const int thumbnailTileDim = 128;
 
 struct OverviewThumbnailStrokeStrategy::Private {
 
@@ -55,24 +61,22 @@ struct OverviewThumbnailStrokeStrategy::Private {
     public:
         ProcessData(KisPaintDeviceSP _dev, KisPaintDeviceSP _thumbDev, const QSize& _thumbnailSize, const QRect &_rect)
             : KisStrokeJobData(CONCURRENT),
-              dev(_dev), thumbDev(_thumbDev), thumbnailSize(_thumbnailSize), rect(_rect)
+              dev(_dev), thumbDev(_thumbDev), thumbnailSize(_thumbnailSize), tileRect(_rect)
         {}
 
         KisPaintDeviceSP dev;
         KisPaintDeviceSP thumbDev;
         QSize thumbnailSize;
-        QRect rect;
+        QRect tileRect;
     };
     class FinishProcessing : public KisStrokeJobData
     {
     public:
-        FinishProcessing(KisPaintDeviceSP _thumbDev, const QSize& _thumbnailSize)
+        FinishProcessing(KisPaintDeviceSP _thumbDev)
             : KisStrokeJobData(SEQUENTIAL),
-              thumbDev(_thumbDev),
-              thumbnailSize(_thumbnailSize)
+              thumbDev(_thumbDev)
         {}
         KisPaintDeviceSP thumbDev;
-        QSize thumbnailSize;
     };
 };
 
@@ -315,44 +319,69 @@ OverviewThumbnailStrokeStrategy::OverviewThumbnailStrokeStrategy(KisImageWSP ima
 
 QList<KisStrokeJobData *> OverviewThumbnailStrokeStrategy::createJobsData(KisPaintDeviceSP dev, KisPaintDeviceSP thumbDev, const QSize& thumbnailSize)
 {
-    QVector<QRect> rects = KritaUtils::splitRectIntoPatches(QRect(QPoint(0, 0), thumbnailSize), QSize(64, 64));
+    QVector<QRect> tileRects = KritaUtils::splitRectIntoPatches(QRect(QPoint(0, 0), oversample*thumbnailSize), QSize(thumbnailTileDim, thumbnailTileDim));
     QList<KisStrokeJobData*> jobsData;
-    Q_FOREACH (const QRect &rc, rects) {
-        jobsData << new OverviewThumbnailStrokeStrategy::Private::ProcessData(dev, thumbDev, thumbnailSize, rc);
+    Q_FOREACH (const QRect &tileRectangle, tileRects) {
+        int w = oversample*thumbnailSize.width();
+        int h = oversample*thumbnailSize.height();
+        int srcWidth, srcHeight;
+        int srcX0, srcY0;
+        QRect e = dev->extent();
+
+        e.getRect(&srcX0, &srcY0, &srcWidth, &srcHeight);
+
+        if (w > srcWidth) {
+            w = srcWidth;
+            h = qint32(double(srcWidth) / w * h);
+        }
+        if (h > srcHeight) {
+            h = srcHeight;
+            w = qint32(double(srcHeight) / h * w);
+        }
+
+        if (srcWidth > srcHeight)
+            h = qint32(double(srcHeight) / srcWidth * w);
+        else if (srcHeight > srcWidth)
+            w = qint32(double(srcWidth) / srcHeight * h);
+
+        jobsData << new OverviewThumbnailStrokeStrategy::Private::ProcessData(dev, thumbDev, QSize(w,h), tileRectangle);
     }
-    jobsData << new OverviewThumbnailStrokeStrategy::Private::FinishProcessing(thumbDev, thumbnailSize);
+    jobsData << new OverviewThumbnailStrokeStrategy::Private::FinishProcessing(thumbDev);
 
     return jobsData;
 }
 
 OverviewThumbnailStrokeStrategy::~OverviewThumbnailStrokeStrategy()
 {
-    qDebug() << __FUNCTION__ << " " << this;
 }
 
 
 void OverviewThumbnailStrokeStrategy::initStrokeCallback()
 {
-    qDebug() << __FUNCTION__;
 }
+
 #include <QThread>
 
 void OverviewThumbnailStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
     Private::ProcessData *d_pd = dynamic_cast<Private::ProcessData*>(data);
     if (d_pd) {
-        qDebug() << QTime::currentTime() << "+0  " << __FUNCTION__ << " " << d_pd->rect << " " << QThread::currentThreadId();
-        KisPaintDeviceSP thumbnailTile = d_pd->dev->createThumbnailDevice(d_pd->thumbnailSize.width(), d_pd->thumbnailSize.height(), QRect(), 2, d_pd->rect);
-        qDebug() << QTime::currentTime() << "+1  " << __FUNCTION__ << " " << d_pd->rect<< " " << QThread::currentThreadId();
+        QTime t;
+        t.start();
+
+        //we aren't going to use oversample capability of createThumbnailDevice because it recomputes exact bounds for each small patch, which is
+        //slow. We'll handle scaling separately.
+        KisPaintDeviceSP thumbnailTile = d_pd->dev->createThumbnailDeviceOversampled(d_pd->thumbnailSize.width(),d_pd->thumbnailSize.height(), 1, QRect(), d_pd->tileRect);
+        qDebug() << QTime::currentTime() << "+1  " << __FUNCTION__ << " " << d_pd->tileRect<< " " << QThread::currentThreadId() << " " << t.elapsed();
         {
             QMutexLocker locker(&m_thumbnailMergeMutex);
-            qDebug() << QTime::currentTime() << "+2  " << __FUNCTION__ << " " << d_pd->rect<< " " << QThread::currentThreadId();
+            qDebug() << QTime::currentTime() << "+2  " << __FUNCTION__ << " " << d_pd->tileRect<< " " << QThread::currentThreadId()<< " " << t.elapsed();
             KisPainter gc(d_pd->thumbDev);
-            qDebug() << QTime::currentTime() << "+3  " << __FUNCTION__ << " " << d_pd->rect<< " " << QThread::currentThreadId();
+            qDebug() << QTime::currentTime() << "+3  " << __FUNCTION__ << " " << d_pd->tileRect<< " " << QThread::currentThreadId()<< " " << t.elapsed();
 
-            gc.bitBlt(QPoint(d_pd->rect.x(), d_pd->rect.y()), thumbnailTile, d_pd->rect);
+            gc.bitBlt(QPoint(d_pd->tileRect.x(), d_pd->tileRect.y()), thumbnailTile, d_pd->tileRect);
         }
-        qDebug() << QTime::currentTime() << "--  " << __FUNCTION__ << " " << d_pd->rect<< " " << QThread::currentThreadId();
+        qDebug() << QTime::currentTime() << "--  " << __FUNCTION__ << " " << d_pd->tileRect<< " " << QThread::currentThreadId()<< " " << t.elapsed();
 
         return;
     }
@@ -360,21 +389,28 @@ void OverviewThumbnailStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
     Private::FinishProcessing *d_fp = dynamic_cast<Private::FinishProcessing*>(data);
     if (d_fp) {
-        qDebug() << QTime::currentTime() << "+  " << __FUNCTION__ << " " << "FinishProcessing";
+        QTime t;
+        t.start();
+        qDebug() << QTime::currentTime() << "+  " << __FUNCTION__ << ":" << __LINE__ << " " << "FinishProcessing" << " " << t.elapsed();
         QImage overviewImage;
+
+        QPointer<KoUpdater> updater = new KoDummyUpdater();
+        KisTransformWorker worker(d_fp->thumbDev, 1/oversample, 1/oversample, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                                  updater, KisFilterStrategyRegistry::instance()->value("Bilinear"));
+        worker.run();
+        qDebug() << QTime::currentTime() << "+  " << __FUNCTION__ << ":" << __LINE__ << " " << "FinishProcessing"<< " " << t.elapsed();
+
         overviewImage = d_fp->thumbDev->convertToQImage(d_fp->thumbDev->colorSpace()->profile());
         emit thumbnailUpdated(overviewImage);
-        qDebug() << QTime::currentTime() << "--  " << __FUNCTION__ << " " << "FinishProcessing";
+        qDebug() << QTime::currentTime() << "--  " << __FUNCTION__ << ":" << __LINE__ << " " << "FinishProcessing"<< " " << t.elapsed();
         return;
     }
 }
 
 void OverviewThumbnailStrokeStrategy::finishStrokeCallback()
 {
-    qDebug() << __FUNCTION__;
 }
 
 void OverviewThumbnailStrokeStrategy::cancelStrokeCallback()
 {
-    qDebug() << __FUNCTION__;
 }

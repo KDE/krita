@@ -40,6 +40,8 @@ public:
     qreal scalarValue(const KisKeyframeSP keyframe) const;
     void setScalarValue(KisKeyframeSP keyframe, qreal value, KUndo2Command *parentCommand = 0);
 
+    void setInterpolationTangents(KisKeyframeSP keyframe, QPointF leftTangent, QPointF rightTangent, KUndo2Command *parentCommand = 0);
+
     qreal interpolatedValue(int time) const;
     qreal currentValue() const;
 
@@ -58,6 +60,7 @@ protected:
 
 private:
     void setScalarValueImpl(KisKeyframeSP keyframe, qreal value);
+    void setTangentsImpl(KisKeyframeSP keyframe, QPointF leftTangent, QPointF rightTangent);
 
     struct Private;
     QScopedPointer<Private> m_d;

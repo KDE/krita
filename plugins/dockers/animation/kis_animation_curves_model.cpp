@@ -112,7 +112,30 @@ QVariant KisAnimationCurvesModel::data(const QModelIndex &index, int role) const
 
 bool KisAnimationCurvesModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    // TODO
+    KisKeyframeChannel *channel = m_d->getChannelAt(index);
+    KisScalarKeyframeChannel *scalarChannel = dynamic_cast<KisScalarKeyframeChannel*>(channel);
+
+    switch (role) {
+    case LeftTangentRole:
+    case RightTangentRole:
+    {
+        KisKeyframeSP keyframe = channel->keyframeAt(index.column());
+        if (keyframe) {
+            QPointF leftTangent = (role == LeftTangentRole ? value.toPointF() : keyframe->leftTangent());
+            QPointF rightTangent = (role == RightTangentRole ? value.toPointF() : keyframe->rightTangent());
+
+            KUndo2Command *command = new KUndo2Command(kundo2_i18n("Adjust tangent"));
+            scalarChannel->setInterpolationTangents(keyframe, leftTangent, rightTangent, command);
+            image()->postExecutionUndoAdapter()->addCommand(toQShared(command));
+
+            return true;
+        }
+    }
+        break;
+    default:
+        break;
+    }
+
     return KisTimeBasedItemModel::setData(index, value, role);
 }
 

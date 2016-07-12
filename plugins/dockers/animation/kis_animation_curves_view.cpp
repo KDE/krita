@@ -31,14 +31,17 @@
 struct KisAnimationCurvesView::Private
 {
     Private()
-        : isDragging(false)
+        : isDraggingKeyframe(false),
+          isAdjustingHandle(false)
     {}
 
     TimelineRulerHeader *horizontalHeader;
     KisAnimationCurvesValueRuler *verticalHeader;
     KisAnimationCurvesKeyframeDelegate *itemDelegate;
 
-    bool isDragging;
+    bool isDraggingKeyframe;
+    bool isAdjustingHandle;
+    int adjustedHandle; // 0 = left, 1 = right
     QPoint dragStart;
     QPoint dragOffset;
 };
@@ -107,8 +110,8 @@ void KisAnimationCurvesView::paintEvent(QPaintEvent *e)
     QRect r = e->rect();
     r.translate(dirtyRegionOffset());
 
-    int firstFrame = m_d->horizontalHeader->visualIndexAt(r.left());
-    int lastFrame = m_d->horizontalHeader->visualIndexAt(r.right());
+    int firstFrame = m_d->horizontalHeader->logicalIndexAt(r.left());
+    int lastFrame = m_d->horizontalHeader->logicalIndexAt(r.right());
 
     paintCurves(painter, firstFrame, lastFrame);
     paintKeyframes(painter, firstFrame, lastFrame);
@@ -128,7 +131,7 @@ void KisAnimationCurvesView::paintCurves(QPainter &painter, int firstFrame, int 
 
 void KisAnimationCurvesView::paintCurve(int channel, int firstFrame, int lastFrame, QPainter &painter)
 {
-    int selectionOffset = m_d->isDragging ? (m_d->dragOffset.x() / m_d->horizontalHeader->defaultSectionSize()) : 0;
+    int selectionOffset = m_d->isDraggingKeyframe ? (m_d->dragOffset.x() / m_d->horizontalHeader->defaultSectionSize()) : 0;
 
     QModelIndex index = findNextKeyframeIndex(channel, firstFrame+1, selectionOffset, true);
     if (!index.isValid()) {
@@ -137,20 +140,21 @@ void KisAnimationCurvesView::paintCurve(int channel, int firstFrame, int lastFra
     if (!index.isValid()) return;
 
     QPointF previousKeyPos = m_d->itemDelegate->nodeCenter(index, selectionModel()->isSelected(index));
-    QPointF rightTangent = m_d->itemDelegate->rightHandle(index);
+    QPointF rightTangent = m_d->itemDelegate->rightHandle(index, index == currentIndex());
 
     while(index.column() <= lastFrame) {
-        int currentIndexTime = (m_d->isDragging && selectionModel()->isSelected(index)) ? index.column() + selectionOffset : index.column();
-        index = findNextKeyframeIndex(channel, currentIndexTime, selectionOffset, false);
+        int time = (m_d->isDraggingKeyframe && selectionModel()->isSelected(index)) ? index.column() + selectionOffset : index.column();
+        index = findNextKeyframeIndex(channel, time, selectionOffset, false);
         if (!index.isValid()) return;
 
+        bool active = (index == currentIndex());
         QPointF nextKeyPos = m_d->itemDelegate->nodeCenter(index, selectionModel()->isSelected(index));
-        QPointF leftTangent = m_d->itemDelegate->leftHandle(index);
+        QPointF leftTangent = m_d->itemDelegate->leftHandle(index, active);
 
         paintCurveSegment(painter, previousKeyPos, rightTangent, leftTangent, nextKeyPos);
 
         previousKeyPos = nextKeyPos;
-        rightTangent = m_d->itemDelegate->rightHandle(index);
+        rightTangent = m_d->itemDelegate->rightHandle(index, active);
     }
 }
 
@@ -183,7 +187,11 @@ void KisAnimationCurvesView::paintKeyframes(QPainter &painter, int firstFrame, i
                 QStyleOptionViewItem opt;
 
                 if (selectionModel()->isSelected(index)) {
-                    opt.state = QStyle::State_Selected;
+                    opt.state |= QStyle::State_Selected;
+                }
+
+                if (index == selectionModel()->currentIndex()) {
+                    opt.state |= QStyle::State_HasFocus;
                 }
 
                 m_d->itemDelegate->paint(&painter, opt, index);
@@ -293,6 +301,24 @@ void KisAnimationCurvesView::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton) {
         m_d->dragStart = e->pos();
+
+        Q_FOREACH(QModelIndex index, selectedIndexes()) {
+            QPointF center = m_d->itemDelegate->nodeCenter(index, false);
+            QPointF leftHandle = center + m_d->itemDelegate->leftHandle(index, false);
+            QPointF rightHandle = center + m_d->itemDelegate->rightHandle(index, false);
+
+            if ((e->localPos() - leftHandle).manhattanLength() < 8) {
+                m_d->isAdjustingHandle = true;
+                m_d->adjustedHandle = 0;
+                setCurrentIndex(index);
+                return;
+            } else if ((e->localPos() - rightHandle).manhattanLength() < 8) {
+                m_d->isAdjustingHandle = true;
+                m_d->adjustedHandle = 1;
+                setCurrentIndex(index);
+                return;
+            }
+        }
     }
 
     QAbstractItemView::mousePressEvent(e);
@@ -301,17 +327,20 @@ void KisAnimationCurvesView::mousePressEvent(QMouseEvent *e)
 void KisAnimationCurvesView::mouseMoveEvent(QMouseEvent *e)
 {
     if (e->buttons() & Qt::LeftButton) {
-        if (!m_d->isDragging && selectionModel()->hasSelection()) {
-            if ((e->pos() - m_d->dragStart).manhattanLength() > QApplication::startDragDistance()) {
-                m_d->isDragging = true;
-            }
-        }
+        m_d->dragOffset = e->pos() - m_d->dragStart;
 
-        if (m_d->isDragging) {
-            m_d->dragOffset = e->pos() - m_d->dragStart;
+        if (m_d->isAdjustingHandle) {
+            m_d->itemDelegate->setHandleAdjustment(m_d->dragOffset, m_d->adjustedHandle);
+            viewport()->update();
+            return;
+        } else if (m_d->isDraggingKeyframe) {
             m_d->itemDelegate->setSelectedItemVisualOffset(m_d->dragOffset);
             viewport()->update();
             return;
+        } else if (selectionModel()->hasSelection()) {
+            if ((e->pos() - m_d->dragStart).manhattanLength() > QApplication::startDragDistance()) {
+                m_d->isDraggingKeyframe = true;
+            }
         }
     }
 
@@ -321,7 +350,7 @@ void KisAnimationCurvesView::mouseMoveEvent(QMouseEvent *e)
 void KisAnimationCurvesView::mouseReleaseEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton) {
-        if (m_d->isDragging) {
+        if (m_d->isDraggingKeyframe) {
             QModelIndexList indexes = selectedIndexes();
             int timeOffset = m_d->dragOffset.x() / m_d->horizontalHeader->defaultSectionSize();
             qreal valueOffset = m_d->dragOffset.y() / m_d->verticalHeader->scaleFactor();
@@ -329,9 +358,19 @@ void KisAnimationCurvesView::mouseReleaseEvent(QMouseEvent *e)
             KisAnimationCurvesModel *curvesModel = dynamic_cast<KisAnimationCurvesModel*>(model());
             curvesModel->adjustKeyframes(indexes, timeOffset, valueOffset);
 
-            m_d->isDragging = false;
+            m_d->isDraggingKeyframe = false;
             m_d->itemDelegate->setSelectedItemVisualOffset(QPointF());
             viewport()->update();
+        } else if (m_d->isAdjustingHandle) {
+            QModelIndex index = currentIndex();
+            KisAnimationCurvesModel::ItemDataRole role = (m_d->adjustedHandle == 0) ?
+                        KisAnimationCurvesModel::LeftTangentRole : KisAnimationCurvesModel::RightTangentRole;
+
+            QPointF adjustedTangent = m_d->itemDelegate->adjustedTangent(index, m_d->adjustedHandle);
+            model()->setData(index, adjustedTangent, role);
+
+            m_d->isAdjustingHandle = false;
+            m_d->itemDelegate->setHandleAdjustment(QPointF(), m_d->adjustedHandle);
         }
     }
 

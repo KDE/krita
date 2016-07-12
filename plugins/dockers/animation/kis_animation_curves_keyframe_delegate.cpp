@@ -35,6 +35,8 @@ struct KisAnimationCurvesKeyframeDelegate::Private
     const TimelineRulerHeader *horizontalRuler;
     const KisAnimationCurvesValueRuler *verticalRuler;
     QPointF selectionOffset;
+    QPointF leftHandleOffset;
+    QPointF rightHandleOffset;
 };
 
 KisAnimationCurvesKeyframeDelegate::KisAnimationCurvesKeyframeDelegate(const TimelineRulerHeader *horizontalRuler, const KisAnimationCurvesValueRuler *verticalRuler, QObject *parent)
@@ -48,6 +50,7 @@ KisAnimationCurvesKeyframeDelegate::~KisAnimationCurvesKeyframeDelegate()
 void KisAnimationCurvesKeyframeDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     bool selected = option.state & QStyle::State_Selected;
+    bool active = option.state & QStyle::State_HasFocus;
     QPointF center = nodeCenter(index, selected);
 
     QColor color;
@@ -63,8 +66,8 @@ void KisAnimationCurvesKeyframeDelegate::paint(QPainter *painter, const QStyleOp
     painter->drawEllipse(center, NODE_RENDER_RADIUS, NODE_RENDER_RADIUS);
 
     if (selected) {
-        QPointF leftTangent = leftHandle(index);
-        QPointF rightTangent = rightHandle(index);
+        QPointF leftTangent = leftHandle(index, active);
+        QPointF rightTangent = rightHandle(index, active);
 
         painter->setPen(QPen(color, 1));
         painter->setBrush(bgColor);
@@ -93,29 +96,52 @@ QPointF KisAnimationCurvesKeyframeDelegate::nodeCenter(const QModelIndex index, 
     return center;
 }
 
-QPointF KisAnimationCurvesKeyframeDelegate::leftHandle(const QModelIndex index) const
+QPointF KisAnimationCurvesKeyframeDelegate::leftHandle(const QModelIndex index, bool active) const
 {
     QPointF tangent = index.data(KisAnimationCurvesModel::LeftTangentRole).toPointF();
 
     float x = tangent.x() * m_d->horizontalRuler->defaultSectionSize();
     float y = tangent.y() * m_d->verticalRuler->scaleFactor();
 
-    return QPointF(x, y);
+    QPointF handlePos = QPointF(x, y);
+    if (active) handlePos += m_d->leftHandleOffset;
+    return handlePos;
 }
 
-QPointF KisAnimationCurvesKeyframeDelegate::rightHandle(const QModelIndex index) const
+QPointF KisAnimationCurvesKeyframeDelegate::rightHandle(const QModelIndex index, bool active) const
 {
     QPointF tangent = index.data(KisAnimationCurvesModel::RightTangentRole).toPointF();
 
     float x = tangent.x() * m_d->horizontalRuler->defaultSectionSize();
     float y = tangent.y() * m_d->verticalRuler->scaleFactor();
 
-    return QPointF(x, y);
+    QPointF handlePos = QPointF(x, y);
+    if (active) handlePos += m_d->rightHandleOffset;
+    return handlePos;
 }
 
 void KisAnimationCurvesKeyframeDelegate::setSelectedItemVisualOffset(QPointF offset)
 {
     m_d->selectionOffset = offset;
+}
+
+void KisAnimationCurvesKeyframeDelegate::setHandleAdjustment(QPointF offset, int handle)
+{
+    if (handle == 0) {
+        m_d->leftHandleOffset = offset;
+    } else {
+        m_d->rightHandleOffset = offset;
+    }
+}
+
+QPointF KisAnimationCurvesKeyframeDelegate::adjustedTangent(const QModelIndex &index, int handle) const
+{
+    QPointF handlePos = (handle == 0) ? leftHandle(index, true) : rightHandle(index, true);
+
+    qreal x = handlePos.x() / m_d->horizontalRuler->defaultSectionSize();
+    qreal y = handlePos.y() / m_d->verticalRuler->scaleFactor();
+
+    return QPointF(x, y);
 }
 
 void KisAnimationCurvesKeyframeDelegate::paintHandle(QPainter *painter, QPointF nodePos, QPointF tangent) const
@@ -136,8 +162,8 @@ QRect KisAnimationCurvesKeyframeDelegate::itemRect(const QModelIndex index) cons
 QRect KisAnimationCurvesKeyframeDelegate::visualRect(const QModelIndex index) const
 {
     QPointF center = nodeCenter(index, false);
-    QPointF leftHandlePos = center + leftHandle(index);
-    QPointF rightHandlePos = center + rightHandle(index);
+    QPointF leftHandlePos = center + leftHandle(index, false);
+    QPointF rightHandlePos = center + rightHandle(index, false);
 
     int minX = qMin(center.x(), leftHandlePos.x()) - NODE_RENDER_RADIUS;
     int maxX = qMax(center.x(), rightHandlePos.x()) + NODE_RENDER_RADIUS;

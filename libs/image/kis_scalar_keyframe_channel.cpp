@@ -53,6 +53,7 @@ public:
     KisKeyframe::InterpolationMode defaultInterpolation;
 
     struct SetValueCommand;
+    struct SetTangentsCommand;
 };
 
 KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID &id, qreal minValue, qreal maxValue, KisDefaultBoundsBaseSP defaultBounds, KisKeyframe::InterpolationMode defaultInterpolation)
@@ -112,6 +113,38 @@ private:
     qreal m_newValue;
 };
 
+struct KisScalarKeyframeChannel::Private::SetTangentsCommand : public KUndo2Command
+{
+    SetTangentsCommand(KisScalarKeyframeChannel *channel, KisKeyframeSP keyframe,
+                       QPointF oldLeftTangent, QPointF oldRightTangent,
+                       QPointF newLeftTangent, QPointF newRightTangent,
+                       KUndo2Command *parentCommand)
+        : KUndo2Command(parentCommand),
+          m_channel(channel),
+          m_keyframe(keyframe),
+          m_oldLeftTangent(oldLeftTangent),
+          m_oldRightTangent(oldRightTangent),
+          m_newLeftTangent(newLeftTangent),
+          m_newRightTangent(newRightTangent)
+    {
+    }
+
+    void redo() {
+        m_channel->setTangentsImpl(m_keyframe, m_newLeftTangent, m_newRightTangent);
+    }
+
+    void undo() {
+        m_channel->setTangentsImpl(m_keyframe, m_oldLeftTangent, m_oldRightTangent);
+    }
+
+private:
+    KisScalarKeyframeChannel *m_channel;
+    KisKeyframeSP m_keyframe;
+    QPointF m_oldLeftTangent;
+    QPointF m_oldRightTangent;
+    QPointF m_newLeftTangent;
+    QPointF m_newRightTangent;
+};
 void KisScalarKeyframeChannel::setScalarValueImpl(KisKeyframeSP keyframe, qreal value)
 {
     KisScalarKeyframe *key = dynamic_cast<KisScalarKeyframe*>(keyframe.data());
@@ -137,6 +170,30 @@ void KisScalarKeyframeChannel::setScalarValue(KisKeyframeSP keyframe, qreal valu
     KUndo2Command *cmd = new Private::SetValueCommand(this, keyframe, oldValue, value, parentCommand);
     cmd->redo();
 }
+
+void KisScalarKeyframeChannel::setInterpolationTangents(KisKeyframeSP keyframe, QPointF leftTangent, QPointF rightTangent, KUndo2Command *parentCommand)
+{
+    QScopedPointer<KUndo2Command> tempCommand;
+    if (!parentCommand) {
+        tempCommand.reset(new KUndo2Command());
+        parentCommand = tempCommand.data();
+    }
+
+    QPointF oldLeftTangent = keyframe->leftTangent();
+    QPointF oldRightTangent = keyframe->rightTangent();
+
+    KUndo2Command *cmd = new Private::SetTangentsCommand(this, keyframe, oldLeftTangent, oldRightTangent, leftTangent, rightTangent, parentCommand);
+    cmd->redo();
+}
+
+void KisScalarKeyframeChannel::setTangentsImpl(KisKeyframeSP keyframe, QPointF leftTangent, QPointF rightTangent)
+{
+    keyframe->setInterpolationTangents(leftTangent, rightTangent);
+
+    QRect rect = affectedRect(keyframe);
+    KisTimeRange range = affectedFrames(keyframe->time());
+
+    requestUpdate(range, rect);}
 
 qreal cubicBezier(qreal p0, qreal delta1, qreal delta2, qreal p3, qreal t) {
     qreal p1 = p0 + delta1;

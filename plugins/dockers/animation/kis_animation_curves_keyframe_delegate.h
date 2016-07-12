@@ -36,9 +36,11 @@ public:
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
     QPointF nodeCenter(const QModelIndex index, bool selected) const;
-    QPointF leftHandle(const QModelIndex index) const;
-    QPointF rightHandle(const QModelIndex index) const;
+    QPointF leftHandle(const QModelIndex index, bool active) const;
+    QPointF rightHandle(const QModelIndex index, bool active) const;
     void setSelectedItemVisualOffset(QPointF offset);
+    void setHandleAdjustment(QPointF offset, int handle);
+    QPointF adjustedTangent(const QModelIndex &index, int handle) const;
 
     QRect itemRect(const QModelIndex index) const;
     QRect visualRect(const QModelIndex index) const;

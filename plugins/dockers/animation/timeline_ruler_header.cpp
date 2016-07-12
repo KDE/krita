@@ -48,7 +48,7 @@ struct TimelineRulerHeader::Private
     int lastPressSectionIndex;
 
     int calcSpanWidth(const int sectionWidth);
-    QVector<QPoint> prepareFramesSlab(int startCol, int endCol);
+    QModelIndexList prepareFramesSlab(int startCol, int endCol);
 };
 
 TimelineRulerHeader::TimelineRulerHeader(QWidget *parent)
@@ -420,17 +420,18 @@ void TimelineRulerHeader::mouseReleaseEvent(QMouseEvent *e)
     QHeaderView::mouseReleaseEvent(e);
 }
 
-QVector<QPoint> TimelineRulerHeader::Private::prepareFramesSlab(int startCol, int endCol)
+QModelIndexList TimelineRulerHeader::Private::prepareFramesSlab(int startCol, int endCol)
 {
-    QVector<QPoint> frames;
+    QModelIndexList frames;
 
     const int numRows = model->rowCount();
 
     for (int i = 0; i < numRows; i++) {
         for (int j = startCol; j <= endCol; j++) {
-            const bool exists = model->data(model->index(i, j), KisTimeBasedItemModel::FrameExistsRole).toBool();
+            QModelIndex index = model->index(i, j);
+            const bool exists = model->data(index, KisTimeBasedItemModel::FrameExistsRole).toBool();
             if (exists) {
-                frames << QPoint(j, i);
+                frames << index;
             }
         }
     }
@@ -444,7 +445,7 @@ void TimelineRulerHeader::slotInsertColumnLeft()
     int leftmostCol = 0, rightmostCol = 0;
     int numColumns = getColumnCount(selectedIndexes, &leftmostCol, &rightmostCol);
 
-    QVector<QPoint> movingFrames = m_d->prepareFramesSlab(leftmostCol, m_d->model->columnCount() - 1);
+    QModelIndexList movingFrames = m_d->prepareFramesSlab(leftmostCol, m_d->model->columnCount() - 1);
     m_d->model->offsetFrames(movingFrames, QPoint(numColumns, 0), false);
 }
 
@@ -454,7 +455,7 @@ void TimelineRulerHeader::slotInsertColumnRight()
     int leftmostCol = 0, rightmostCol = 0;
     int numColumns = getColumnCount(selectedIndexes, &leftmostCol, &rightmostCol);
 
-    QVector<QPoint> movingFrames = m_d->prepareFramesSlab(rightmostCol + 1, m_d->model->columnCount() - 1);
+    QModelIndexList movingFrames = m_d->prepareFramesSlab(rightmostCol + 1, m_d->model->columnCount() - 1);
     m_d->model->offsetFrames(movingFrames, QPoint(numColumns, 0), false);
 }
 
@@ -464,20 +465,11 @@ void TimelineRulerHeader::slotClearColumns(bool removeColumns)
     int leftmostCol = 0, rightmostCol = 0;
     int numColumns = getColumnCount(selectedIndexes, &leftmostCol, &rightmostCol);
 
-    QVector<QPoint> movingFrames = m_d->prepareFramesSlab(leftmostCol, rightmostCol);
-
-    QModelIndexList framesToRemove;
-    Q_FOREACH (const QPoint &pt, movingFrames) {
-        QModelIndex index = m_d->model->index(pt.y(), pt.x());
-        if (index.isValid()) {
-            framesToRemove << index;
-        }
-    }
-
-    m_d->model->removeFrames(framesToRemove);
+    QModelIndexList movingFrames = m_d->prepareFramesSlab(leftmostCol, rightmostCol);
+    m_d->model->removeFrames(movingFrames);
 
     if (removeColumns) {
-        QVector<QPoint> movingFrames = m_d->prepareFramesSlab(rightmostCol + 1, m_d->model->columnCount() - 1);
+        QModelIndexList movingFrames = m_d->prepareFramesSlab(rightmostCol + 1, m_d->model->columnCount() - 1);
         m_d->model->offsetFrames(movingFrames, QPoint(-numColumns, 0), false);
     }
 }

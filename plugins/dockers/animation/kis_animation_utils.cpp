@@ -135,10 +135,10 @@ namespace KisAnimationUtils {
         {
         }
 
-        bool operator()(const QPoint &lhs, const QPoint &rhs) {
+        bool operator()(const QModelIndex &lhs, const QModelIndex &rhs) {
             return
-                m_columnCoeff * lhs.x() + m_rowCoeff * lhs.y() <
-                m_columnCoeff * rhs.x() + m_rowCoeff * rhs.y();
+                m_columnCoeff * lhs.column() + m_rowCoeff * lhs.row() <
+                m_columnCoeff * rhs.column() + m_rowCoeff * rhs.row();
         }
 
     private:
@@ -146,7 +146,7 @@ namespace KisAnimationUtils {
         int m_rowCoeff;
     };
 
-    void sortPointsForSafeMove(QVector<QPoint> *points, const QPoint &offset)
+    void sortPointsForSafeMove(QModelIndexList *points, const QPoint &offset)
     {
         qSort(points->begin(), points->end(), LessOperator(offset));
     }
@@ -154,7 +154,8 @@ namespace KisAnimationUtils {
     bool moveKeyframes(KisImageSP image,
                        const FrameItemList &srcFrames,
                        const FrameItemList &dstFrames,
-                       bool copy) {
+                       bool copy,
+                       KUndo2Command *parentCommand) {
 
         if (srcFrames.size() != dstFrames.size()) return false;
 
@@ -167,7 +168,8 @@ namespace KisAnimationUtils {
                                            srcFrames.size()) :
                               kundo2_i18np("Copy Keyframe",
                                            "Copy %1 Keyframes",
-                                           srcFrames.size()))); // lisp-lovers present ;)
+                                           srcFrames.size()),
+                              parentCommand));
 
         for (int i = 0; i < srcFrames.size(); i++) {
             const int srcTime = srcFrames[i].time;
@@ -205,7 +207,9 @@ namespace KisAnimationUtils {
             result = true;
         }
 
-        if (result) {
+        if (parentCommand) {
+            cmd.take();
+        } else if (result) {
             image->postExecutionUndoAdapter()->addCommand(toQShared(cmd.take()));
         }
 

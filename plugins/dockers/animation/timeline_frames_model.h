@@ -51,7 +51,6 @@ public:
     bool createFrame(const QModelIndex &dstIndex);
     bool copyFrame(const QModelIndex &dstIndex);
     bool removeFrames(const QModelIndexList &indexes);
-    bool offsetFrames(QVector<QPoint> srcIndexes, const QPoint &offset, bool copyFrames);
 
     void setLastClickedIndex(const QModelIndex &index);
 
@@ -98,6 +97,10 @@ public:
      *       be deleted automatically later
      */
     void setNodeManipulationInterface(NodeManipulationInterface *iface);
+
+protected:
+    KisNodeSP nodeAt(QModelIndex index) const;
+    QList<KisKeyframeChannel*> channelsAt(QModelIndex index) const;
 
 private Q_SLOTS:
     void slotDummyChanged(KisNodeDummy *dummy);

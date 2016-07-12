@@ -20,6 +20,7 @@
 #define _KIS_TIME_BASED_ITEM_MODEL_H
 
 #include <QAbstractTableModel>
+#include <QList>
 
 #include "kritaanimationdocker_export.h"
 
@@ -27,6 +28,7 @@
 
 class KisTimeRange;
 class KisAnimationPlayer;
+class KisKeyframeChannel;
 
 class KRITAANIMATIONDOCKER_EXPORT KisTimeBasedItemModel : public QAbstractTableModel
 {
@@ -50,7 +52,7 @@ public:
     virtual bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role);
 
     virtual bool removeFrames(const QModelIndexList &indexes) = 0;
-    virtual bool offsetFrames(QVector<QPoint> srcIndexes, const QPoint &offset, bool copyFrames) = 0;
+    bool offsetFrames(QModelIndexList srcIndexes, const QPoint &offset, bool copyFrames, KUndo2Command *parentCommand=0);
 
     void setScrubState(bool active);
     void scrubTo(int time, bool preview);
@@ -68,6 +70,11 @@ public:
         FramesPerSecondRole,
         UserRole
     };
+
+protected:
+    virtual KisNodeSP nodeAt(QModelIndex index) const = 0;
+    virtual QList<KisKeyframeChannel*> channelsAt(QModelIndex index) const = 0;
+    KisImageWSP image() const;
 
 private Q_SLOTS:
         void slotFramerateChanged();

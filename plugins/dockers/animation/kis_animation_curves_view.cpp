@@ -322,8 +322,12 @@ void KisAnimationCurvesView::mouseReleaseEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton) {
         if (m_d->isDragging) {
+            QModelIndexList indexes = selectedIndexes();
+            int timeOffset = m_d->dragOffset.x() / m_d->horizontalHeader->defaultSectionSize();
+            qreal valueOffset = m_d->dragOffset.y() / m_d->verticalHeader->scaleFactor();
 
-            // TODO: move and update the keyframes
+            KisAnimationCurvesModel *curvesModel = dynamic_cast<KisAnimationCurvesModel*>(model());
+            curvesModel->adjustKeyframes(indexes, timeOffset, valueOffset);
 
             m_d->isDragging = false;
             m_d->itemDelegate->setSelectedItemVisualOffset(QPointF());

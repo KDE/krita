@@ -175,6 +175,17 @@ void TimelineFramesModel::setNodeManipulationInterface(NodeManipulationInterface
     m_d->nodeInterface.reset(iface);
 }
 
+KisNodeSP TimelineFramesModel::nodeAt(QModelIndex index) const
+{
+    return m_d->converter->dummyFromRow(index.row())->node();
+}
+
+QList<KisKeyframeChannel *> TimelineFramesModel::channelsAt(QModelIndex index) const
+{
+    KisNodeDummy *srcDummy = m_d->converter->dummyFromRow(index.row());
+    return srcDummy->node()->keyframeChannels();
+}
+
 void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageSP image)
 {
     KisDummiesFacadeBase *oldDummiesFacade = m_d->dummiesFacade;
@@ -469,56 +480,6 @@ bool TimelineFramesModel::canDropFrameData(const QMimeData */*data*/, const QMod
     return true;
 }
 
-bool TimelineFramesModel::offsetFrames(QVector<QPoint> srcIndexes, const QPoint &offset, bool copyFrames)
-{
-    bool result = false;
-    if (srcIndexes.isEmpty()) return result;
-    if (offset.isNull()) return result;
-
-    KisAnimationUtils::sortPointsForSafeMove(&srcIndexes, offset);
-
-    KisAnimationUtils::FrameItemList srcFrameItems;
-    KisAnimationUtils::FrameItemList dstFrameItems;
-    QModelIndexList updateIndexes;
-
-    Q_FOREACH (const QPoint &point, srcIndexes) {
-        int srcRow = point.y();
-        int srcColumn = point.x();
-
-        int dstRow = point.y() + offset.y();
-        int dstColumn = point.x() + offset.x();
-
-        KisNodeDummy *srcDummy = m_d->converter->dummyFromRow(srcRow);
-        KisNodeDummy *dstDummy = m_d->converter->dummyFromRow(dstRow);
-        if (!srcDummy || !dstDummy) continue;
-
-        QList<KisKeyframeChannel *> channels = srcDummy->node()->keyframeChannels();
-        Q_FOREACH(KisKeyframeChannel *channel, channels) {
-            if (channel->keyframeAt(srcColumn)) {
-                srcFrameItems << KisAnimationUtils::FrameItem(srcDummy->node(), channel->id(), srcColumn);
-                dstFrameItems << KisAnimationUtils::FrameItem(dstDummy->node(), channel->id(), dstColumn);
-            }
-        }
-
-        if (!copyFrames) {
-            updateIndexes << index(srcRow, srcColumn);
-        }
-
-        updateIndexes << index(dstRow, dstColumn);
-    }
-
-    result = KisAnimationUtils::moveKeyframes(m_d->image,
-                                              srcFrameItems,
-                                              dstFrameItems,
-                                              copyFrames);
-
-    Q_FOREACH (const QModelIndex &index, updateIndexes) {
-        emit dataChanged(index, index);
-    }
-
-    return result;
-}
-
 bool TimelineFramesModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
 {
     Q_UNUSED(row);
@@ -538,7 +499,7 @@ bool TimelineFramesModel::dropMimeData(const QMimeData *data, Qt::DropAction act
     int size, baseRow, baseColumn;
     stream >> size >> baseRow >> baseColumn;
 
-    QVector<QPoint> srcIndexes;
+    QModelIndexList srcIndexes;
 
     for (int i = 0; i < size; i++) {
         int relRow, relColumn;
@@ -547,7 +508,7 @@ bool TimelineFramesModel::dropMimeData(const QMimeData *data, Qt::DropAction act
         int srcRow = baseRow + relRow;
         int srcColumn = baseColumn + relColumn;
 
-        srcIndexes << QPoint(srcColumn, srcRow);
+        srcIndexes << index(srcRow, srcColumn);
     }
 
     const QPoint offset(parent.column() - baseColumn, parent.row() - baseRow);

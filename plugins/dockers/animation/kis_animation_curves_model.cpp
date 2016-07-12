@@ -20,9 +20,12 @@
 
 #include <QAbstractItemModel>
 
+#include "kis_global.h"
+#include "kis_image.h"
 #include "kis_node.h"
 #include "kis_keyframe_channel.h"
 #include "kis_scalar_keyframe_channel.h"
+#include "kis_post_execution_undo_adapter.h"
 
 struct KisAnimationCurvesModel::Private
 {
@@ -132,8 +135,39 @@ bool KisAnimationCurvesModel::removeFrames(const QModelIndexList &indexes)
     return false;
 }
 
-bool KisAnimationCurvesModel::offsetFrames(QVector<QPoint> srcIndexes, const QPoint &offset, bool copyFrames)
+bool KisAnimationCurvesModel::adjustKeyframes(const QModelIndexList &indexes, int timeOffset, qreal valueOffset)
 {
-    // TODO
-    return false;
+    KUndo2Command *command = new KUndo2Command(
+        kundo2_i18np("Adjust Keyframe",
+                     "Adjust %1 Keyframes",
+                     indexes.size()));
+
+    bool ok = offsetFrames(indexes, QPoint(timeOffset, 0), false, command);
+    if (!ok) return false;
+
+    Q_FOREACH(QModelIndex oldIndex, indexes) {
+        KisKeyframeChannel *channel = m_d->getChannelAt(oldIndex);
+        KIS_ASSERT_RECOVER_RETURN_VALUE(channel, false);
+
+        KisKeyframeSP keyframe = channel->keyframeAt(oldIndex.column() + timeOffset);
+        KIS_ASSERT_RECOVER_RETURN_VALUE(!keyframe.isNull(), false);
+
+        qreal currentValue = channel->scalarValue(keyframe);
+        channel->setScalarValue(keyframe, currentValue + valueOffset, command);
+    };
+
+    image()->postExecutionUndoAdapter()->addCommand(toQShared(command));
+
+    return true;
+}
+
+KisNodeSP KisAnimationCurvesModel::nodeAt(QModelIndex index) const
+{
+    return KisNodeSP(m_d->getChannelAt(index)->node());
+}
+
+QList<KisKeyframeChannel *> KisAnimationCurvesModel::channelsAt(QModelIndex index) const
+{
+    QList<KisKeyframeChannel*> list({m_d->getChannelAt(index)});
+    return list;
 }

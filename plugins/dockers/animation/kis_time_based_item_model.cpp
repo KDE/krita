@@ -27,6 +27,8 @@
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
 #include "kis_time_range.h"
+#include "kis_animation_utils.h"
+#include "kis_keyframe_channel.h"
 
 struct KisTimeBasedItemModel::Private
 {
@@ -249,6 +251,54 @@ bool KisTimeBasedItemModel::setHeaderData(int section, Qt::Orientation orientati
     return false;
 }
 
+bool KisTimeBasedItemModel::offsetFrames(QModelIndexList srcIndexes, const QPoint &offset, bool copyFrames, KUndo2Command *parentCommand)
+{
+    bool result = false;
+    if (srcIndexes.isEmpty()) return result;
+    if (offset.isNull()) return result;
+
+    KisAnimationUtils::sortPointsForSafeMove(&srcIndexes, offset);
+
+    KisAnimationUtils::FrameItemList srcFrameItems;
+    KisAnimationUtils::FrameItemList dstFrameItems;
+    QModelIndexList updateIndexes;
+
+    Q_FOREACH (const QModelIndex &srcIndex, srcIndexes) {
+        QModelIndex dstIndex = index(
+                srcIndex.row() + offset.y(),
+                srcIndex.column() + offset.x());
+
+        KisNodeSP srcNode = nodeAt(srcIndex);
+        KisNodeSP dstNode = nodeAt(dstIndex);
+
+        QList<KisKeyframeChannel*> channels = channelsAt(srcIndex);
+        Q_FOREACH(KisKeyframeChannel *channel, channels) {
+            if (channel->keyframeAt(srcIndex.column())) {
+                srcFrameItems << KisAnimationUtils::FrameItem(srcNode, channel->id(), srcIndex.column());
+                dstFrameItems << KisAnimationUtils::FrameItem(dstNode, channel->id(), dstIndex.column());
+            }
+        }
+
+        if (!copyFrames) {
+            updateIndexes << srcIndex;
+        }
+
+        updateIndexes << dstIndex;
+    }
+
+    result = KisAnimationUtils::moveKeyframes(m_d->image,
+                                              srcFrameItems,
+                                              dstFrameItems,
+                                              copyFrames,
+                                              parentCommand);
+
+    Q_FOREACH (const QModelIndex &index, updateIndexes) {
+        emit dataChanged(index, index);
+    }
+
+    return result;
+}
+
 void KisTimeBasedItemModel::slotInternalScrubPreviewRequested(int time)
 {
     if (m_d->animationPlayer && !m_d->animationPlayer->isPlaying()) {
@@ -340,4 +390,9 @@ void KisTimeBasedItemModel::setPlaybackRange(const KisTimeRange &range)
 bool KisTimeBasedItemModel::isPlaybackActive() const
 {
     return m_d->animationPlayer && m_d->animationPlayer->isPlaying();
+}
+
+KisImageWSP KisTimeBasedItemModel::image() const
+{
+    return m_d->image;
 }

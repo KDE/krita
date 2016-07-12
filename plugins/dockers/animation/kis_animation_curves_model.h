@@ -41,7 +41,7 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
     bool removeFrames(const QModelIndexList &indexes);
-    bool offsetFrames(QVector<QPoint> srcIndexes, const QPoint &offset, bool copyFrames);
+    bool adjustKeyframes(const QModelIndexList &indexes, int timeOffset, qreal valueOffset);
 
     enum ItemDataRole
     {
@@ -53,6 +53,10 @@ public:
         PreviousKeyframeTime,
         NextKeyframeTime
     };
+
+protected:
+    KisNodeSP nodeAt(QModelIndex index) const;
+    QList<KisKeyframeChannel *> channelsAt(QModelIndex index) const;
 
 public Q_SLOTS:
     void slotCurrentNodeChanged(KisNodeSP node);

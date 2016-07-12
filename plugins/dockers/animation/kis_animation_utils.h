@@ -21,6 +21,7 @@
 
 #include "kis_types.h"
 
+#include <QModelIndexList>
 
 namespace KisAnimationUtils
 {
@@ -40,11 +41,12 @@ namespace KisAnimationUtils
     bool removeKeyframes(KisImageSP image, const FrameItemList &frames);
     bool removeKeyframe(KisImageSP image, KisNodeSP node, const QString &channel, int time);
 
-    void sortPointsForSafeMove(QVector<QPoint> *points, const QPoint &offset);
+    void sortPointsForSafeMove(QModelIndexList *points, const QPoint &offset);
     bool moveKeyframes(KisImageSP image,
                        const FrameItemList &srcFrames,
                        const FrameItemList &dstFrames,
-                       bool copy = false);
+                       bool copy = false,
+                       KUndo2Command *parentCommand = 0);
     bool moveKeyframe(KisImageSP image, KisNodeSP node, const QString &channel, int srcTime, int dstTime);
 
 

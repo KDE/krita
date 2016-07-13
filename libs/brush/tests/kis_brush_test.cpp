@@ -256,42 +256,6 @@ void KisBrushTest::benchmarkMaskScaling()
     }
 }
 
-void KisBrushTest::testPyramidLevelRounding()
-{
-    QSize imageSize(41, 41);
-    QImage image(imageSize, QImage::Format_ARGB32);
-    image.fill(0);
-
-    KisQImagePyramid pyramid(image);
-
-    qreal baseScale;
-    int baseLevel;
-
-    baseLevel = pyramid.findNearestLevel(1.0, &baseScale);
-    QCOMPARE(baseScale, 1.0);
-    QCOMPARE(baseLevel, 3);
-
-    baseLevel = pyramid.findNearestLevel(2.0, &baseScale);
-    QCOMPARE(baseScale, 2.0);
-    QCOMPARE(baseLevel, 2);
-
-    baseLevel = pyramid.findNearestLevel(4.0, &baseScale);
-    QCOMPARE(baseScale, 4.0);
-    QCOMPARE(baseLevel, 1);
-
-    baseLevel = pyramid.findNearestLevel(0.5, &baseScale);
-    QCOMPARE(baseScale, 0.5);
-    QCOMPARE(baseLevel, 4);
-
-    baseLevel = pyramid.findNearestLevel(0.25, &baseScale);
-    QCOMPARE(baseScale, 0.25);
-    QCOMPARE(baseLevel, 5);
-
-    baseLevel = pyramid.findNearestLevel(0.25 + 1e-7, &baseScale);
-    QCOMPARE(baseScale, 0.25);
-    QCOMPARE(baseLevel, 5);
-}
-
 void KisBrushTest::testBrushTipTransform_subPixelSmoothing()
 {
     QImage original(10, 10, QImage::Format_ARGB32);
@@ -320,55 +284,6 @@ void KisBrushTest::testBrushTipTransform_rotatesFromEdgeSmoothly()
     auto const transformed = KisBrush::transformBrushTip(
         original, 1.0, 1.0, 1.0, 0.0, 0.0);
     QVERIFY(qAlpha(transformed.pixel(9, 0)) != 0xff);
-}
-
-
-// see comment in KisQImagePyramid::appendPyramidLevel
-void KisBrushTest::testQPainterTransformationBorder()
-{
-    QImage image1(10, 10, QImage::Format_ARGB32);
-    QImage image2(12, 12, QImage::Format_ARGB32);
-
-    image1.fill(0);
-    image2.fill(0);
-
-    {
-        QPainter gc(&image1);
-        gc.fillRect(QRect(0, 0, 10, 10), Qt::black);
-    }
-
-    {
-        QPainter gc(&image2);
-        gc.fillRect(QRect(1, 1, 10, 10), Qt::black);
-    }
-
-    image1.save("src1.png");
-    image2.save("src2.png");
-
-    {
-        QImage canvas(100, 100, QImage::Format_ARGB32);
-        canvas.fill(0);
-        QPainter gc(&canvas);
-        QTransform transform;
-        transform.rotate(15);
-        gc.setTransform(transform);
-        gc.setRenderHints(QPainter::SmoothPixmapTransform);
-        gc.drawImage(QPointF(50, 50), image1);
-        gc.end();
-        canvas.save("canvas1.png");
-    }
-    {
-        QImage canvas(100, 100, QImage::Format_ARGB32);
-        canvas.fill(0);
-        QPainter gc(&canvas);
-        QTransform transform;
-        transform.rotate(15);
-        gc.setTransform(transform);
-        gc.setRenderHints(QPainter::SmoothPixmapTransform);
-        gc.drawImage(QPointF(50, 50), image2);
-        gc.end();
-        canvas.save("canvas2.png");
-    }
 }
 
 QTEST_MAIN(KisBrushTest)

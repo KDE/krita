@@ -27,23 +27,12 @@
 class BRUSH_EXPORT KisQImagePyramid
 {
 public:
-    KisQImagePyramid(const QImage &baseImage);
-    ~KisQImagePyramid();
-
     static QSize imageSize(const QSize &originalSize,
                            qreal scale, qreal rotation,
                            qreal subPixelX, qreal subPixelY);
 
     static QSizeF characteristicSize(const QSize &originalSize,
                                      qreal scale, qreal rotation);
-
-    QImage createImage(qreal scale, qreal rotation,
-                       qreal subPixelX, qreal subPixelY) const;
-
-private:
-    friend class KisBrushTest;
-    int findNearestLevel(qreal scale, qreal *baseScale) const;
-    void appendPyramidLevel(const QImage &image);
 
     static void calculateParams(qreal scale, qreal rotation,
                                 qreal subPixelX, qreal subPixelY,
@@ -55,20 +44,6 @@ private:
                                 const QSize &originalSize,
                                 qreal baseScale, const QSize &baseSize,
                                 QTransform *outputTransform, QSize *outputSize);
-
-private:
-    QSize m_originalSize;
-    qreal m_baseScale;
-
-    struct PyramidLevel {
-        PyramidLevel() {}
-        PyramidLevel(QImage _image, QSize _size) : image(_image), size(_size) {}
-
-        QImage image;
-        QSize size;
-    };
-
-    QVector<PyramidLevel> m_levels;
 };
 
 #endif /* __KIS_QIMAGE_PYRAMID_H */

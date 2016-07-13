@@ -37,11 +37,8 @@ private Q_SLOTS:
 
     void benchmarkScaling();
     void benchmarkRotation();
-
     void benchmarkMaskScaling();
-    void testPyramidLevelRounding();
 
-    void testQPainterTransformationBorder();
     void testBrushTipTransform_subPixelSmoothing();
     void testBrushTipTransform_rotatesFromEdgeSmoothly();
 };

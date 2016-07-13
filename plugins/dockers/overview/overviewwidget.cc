@@ -39,6 +39,7 @@
 #include <KoUpdater.h>
 #include "kis_transform_worker.h"
 #include "kis_filter_strategy.h"
+#include <KoColorSpaceRegistry.h>
 
 const float oversample = 2.;
 const int thumbnailTileDim = 128;
@@ -400,7 +401,7 @@ void OverviewThumbnailStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         worker.run();
         qDebug() << QTime::currentTime() << "+  " << __FUNCTION__ << ":" << __LINE__ << " " << "FinishProcessing"<< " " << t.elapsed();
 
-        overviewImage = d_fp->thumbDev->convertToQImage(d_fp->thumbDev->colorSpace()->profile());
+        overviewImage = d_fp->thumbDev->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile());
         emit thumbnailUpdated(overviewImage);
         qDebug() << QTime::currentTime() << "--  " << __FUNCTION__ << ":" << __LINE__ << " " << "FinishProcessing"<< " " << t.elapsed();
         return;

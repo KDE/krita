@@ -45,7 +45,7 @@ public:
     virtual KisFixedPaintDeviceSP paintDevice(const KoColorSpace*,
             double, double,
             const KisPaintInformation&,
-            double = 0, double = 0) const {
+            double = 0, double = 0) const Q_DECL_OVERRIDE {
         return 0; // The autobrush does NOT support images!
     }
 
@@ -54,7 +54,7 @@ public:
             double scaleX, double scaleY, double angle,
             const KisPaintInformation& info,
             double subPixelX = 0, double subPixelY = 0,
-            qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
+            qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const Q_DECL_OVERRIDE;
 
     virtual QPainterPath outline() const;
 

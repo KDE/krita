@@ -37,13 +37,13 @@ public:
     static void calculateParams(qreal scale, qreal rotation,
                                 qreal subPixelX, qreal subPixelY,
                                 const QSize &originalSize,
-                                QTransform *outputTransform, QSize *outputSize);
+                                QSize *outputSize);
 
     static void calculateParams(qreal scale, qreal rotation,
                                 qreal subPixelX, qreal subPixelY,
                                 const QSize &originalSize,
                                 qreal baseScale, const QSize &baseSize,
-                                QTransform *outputTransform, QSize *outputSize);
+                                QSize *outputSize);
 };
 
 #endif /* __KIS_QIMAGE_PYRAMID_H */

@@ -72,19 +72,19 @@ QTransform baseBrushTransform(qreal scaleX, qreal scaleY,
 void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
                                        qreal subPixelX, qreal subPixelY,
                                        const QSize &originalSize,
-                                       QTransform *outputTransform, QSize *outputSize)
+                                       QSize *outputSize)
 {
     calculateParams(scale, rotation,
                     subPixelX, subPixelY,
                     originalSize, 1.0, originalSize,
-                    outputTransform, outputSize);
+                    outputSize);
 }
 
 void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
                                        qreal subPixelX, qreal subPixelY,
                                        const QSize &originalSize,
                                        qreal baseScale, const QSize &baseSize,
-                                       QTransform *outputTransform, QSize *outputSize)
+                                       QSize *outputSize)
 {
     Q_UNUSED(baseScale);
 
@@ -94,20 +94,6 @@ void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
                            rotation,
                            subPixelX, subPixelY,
                            originalBounds);
-
-    qreal realBaseScaleX = qreal(baseSize.width()) / originalSize.width();
-    qreal realBaseScaleY = qreal(baseSize.height()) / originalSize.height();
-
-    qreal scaleX = scale / realBaseScaleX;
-    qreal scaleY = scale / realBaseScaleY;
-
-    QRectF baseBounds = QRectF(QPointF(), baseSize);
-
-    QTransform transform =
-        baseBrushTransform(scaleX, scaleY,
-                           rotation,
-                           subPixelX, subPixelY,
-                           baseBounds);
 
     QRect expectedDstRect = roundRect(originalTransform.mapRect(originalBounds));
 #if 0 // Only enable when debugging; users shouldn't see this warning
@@ -131,7 +117,6 @@ void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
     width = qMax(1, width);
     height = qMax(1, height);
 
-    *outputTransform = transform;
     *outputSize = QSize(width, height);
 }
 
@@ -139,12 +124,10 @@ QSize KisQImagePyramid::imageSize(const QSize &originalSize,
                                   qreal scale, qreal rotation,
                                   qreal subPixelX, qreal subPixelY)
 {
-    QTransform transform;
     QSize dstSize;
 
     calculateParams(scale, rotation, subPixelX, subPixelY,
-                    originalSize,
-                    &transform, &dstSize);
+                    originalSize, &dstSize);
 
     return dstSize;
 }

@@ -94,6 +94,7 @@ KoColorTransformation* KisLevelFilter::createTransformation(const KoColorSpace* 
 KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP dev)
         : KisConfigWidget(parent)
 {
+    Q_ASSERT(dev);
     m_page.setupUi(this);
 
     m_page.ingradient->enableGamma(true);

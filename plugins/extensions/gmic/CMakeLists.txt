@@ -59,7 +59,7 @@ if(FFTW3_FOUND)
     message("G'Mic: using FFTW3")
     add_definitions(-Dcimg_use_fftw3 )
     add_definitions(-Dcimg_use_fftw3_singlethread )
-    include_directories(SYSTEM ${FFTW3_INCLUDE_DIR})
+    include_directories(${FFTW3_INCLUDE_DIR})
 endif()
 
 # PNG

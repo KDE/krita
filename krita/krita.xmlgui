@@ -182,6 +182,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
         <Action name="convert_to_transparency_mask"/>
         <Action name="convert_to_filter_mask"/>
         <Action name="convert_to_selection_mask"/>
+        <Action name="convert_group_to_animated"/>
       </Menu>
       <Separator/>
       <Menu name="LayerSelect">

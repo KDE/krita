@@ -34,6 +34,7 @@ struct KisEqualizerColumn::Private
     KisEqualizerButton *stateButton;
     KisEqualizerSlider *mainSlider;
     int id;
+    bool forceDisabled;
 };
 
 
@@ -53,6 +54,8 @@ KisEqualizerColumn::KisEqualizerColumn(QWidget *parent, int id, const QString &t
     m_d->mainSlider->setRange(0, 100);
     m_d->mainSlider->setSingleStep(5);
     m_d->mainSlider->setPageStep(10);
+
+    m_d->forceDisabled = false;
 
     QVBoxLayout *vbox = new QVBoxLayout(this);
 
@@ -85,17 +88,18 @@ void KisEqualizerColumn::slotSliderChanged(int value)
 {
     KisSignalsBlocker b(m_d->stateButton);
     m_d->stateButton->setChecked(value > 0);
+    updateState();
 
     emit sigColumnChanged(m_d->id, m_d->stateButton->isChecked(), m_d->mainSlider->value());
-
 }
 
 void KisEqualizerColumn::slotButtonChanged(bool value)
 {
     Q_UNUSED(value);
     emit sigColumnChanged(m_d->id, m_d->stateButton->isChecked(), m_d->mainSlider->value());
-}
 
+    updateState();
+}
 
 int KisEqualizerColumn::value() const
 {
@@ -117,4 +121,14 @@ void KisEqualizerColumn::setState(bool value)
     m_d->stateButton->setChecked(value);
 }
 
+void KisEqualizerColumn::setForceDisabled(bool value)
+{
+    m_d->forceDisabled = value;
+    updateState();
+}
 
+void KisEqualizerColumn::updateState()
+{
+    bool showEnabled = m_d->stateButton->isChecked() && !m_d->forceDisabled;
+    m_d->mainSlider->setToggleState(showEnabled);
+}

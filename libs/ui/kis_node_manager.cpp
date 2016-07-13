@@ -315,6 +315,8 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
     CONVERT_NODE_ACTION("convert_to_transparency_mask", "KisTransparencyMask");
 
+    CONVERT_NODE_ACTION("convert_to_animated", "animated");
+
     connect(&m_d->nodeConversionSignalMapper, SIGNAL(mapped(const QString &)),
             this, SLOT(convertNode(const QString &)));
 

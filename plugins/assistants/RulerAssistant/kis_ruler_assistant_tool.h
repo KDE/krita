@@ -59,7 +59,6 @@ private:
     void outlineOn(KisPaintingAssistantSP assistant);
     void outlineOff(KisPaintingAssistantSP assistant);
     bool mouseNear(const QPointF& mousep, const QPointF& point);
-    QPointF straightLine(QPointF point, QPointF compare);
     KisPaintingAssistantHandleSP nodeNearPoint(KisPaintingAssistantSP grid, QPointF point);
     QPointF snapToGuide(KoPointerEvent *e, const QPointF &offset, bool useModifiers);
     QPointF snapToGuide(const QPointF& pt, const QPointF &offset);
@@ -84,7 +83,8 @@ protected:
     KisPaintingAssistantHandleSP m_handleCombine;
     KisPaintingAssistantSP m_assistantDrag;
     KisPaintingAssistantSP m_newAssistant;
-    QPointF m_mousePosition;
+    QPointF m_cursorStart;
+    QPointF m_currentAdjustment;
     Ui::AssistantsToolOptions m_options;
     QWidget* m_optionsWidget;
     QPointF m_dragStart;

@@ -329,6 +329,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     action = new QWidgetAction(this);
     view->actionCollection()->addAction("composite_actions", action);
+    action->setText(i18n("Brush composite"));
     action->setDefaultWidget(compositeActions);
 
     action = new QWidgetAction(this);

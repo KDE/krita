@@ -233,7 +233,7 @@ KisKeyframeSP KisRasterKeyframeChannel::loadKeyframe(const QDomElement &keyframe
         keys().remove(keyframe->time());
 
         keyframe->setTime(time);
-        m_d->paintDevice->move(offset);
+        m_d->paintDevice->framesInterface()->setFrameOffset(keyframe->value(), offset);
     } else {
         KUndo2Command tempCommand;
         int frameId = m_d->paintDevice->framesInterface()->createFrame(false, 0, offset, &tempCommand);

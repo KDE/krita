@@ -45,7 +45,8 @@ public:
 
     QColor frameColor(bool present, bool active)const ;
 
-    QColor onionSkinsSliderColor() const;
+    QColor onionSkinsSliderEnabledColor() const;
+    QColor onionSkinsSliderDisabledColor() const;
     QColor onionSkinsButtonColor() const;
 
     QFont getOnionSkinsFont(const QString &maxString, const QSize &availableSize) const;

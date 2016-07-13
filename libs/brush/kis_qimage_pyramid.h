@@ -38,12 +38,6 @@ public:
                                 qreal subPixelX, qreal subPixelY,
                                 const QSize &originalSize,
                                 QSize *outputSize);
-
-    static void calculateParams(qreal scale, qreal rotation,
-                                qreal subPixelX, qreal subPixelY,
-                                const QSize &originalSize,
-                                qreal baseScale, const QSize &baseSize,
-                                QSize *outputSize);
 };
 
 #endif /* __KIS_QIMAGE_PYRAMID_H */

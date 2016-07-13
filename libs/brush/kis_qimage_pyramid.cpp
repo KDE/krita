@@ -74,20 +74,6 @@ void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
                                        const QSize &originalSize,
                                        QSize *outputSize)
 {
-    calculateParams(scale, rotation,
-                    subPixelX, subPixelY,
-                    originalSize, 1.0, originalSize,
-                    outputSize);
-}
-
-void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
-                                       qreal subPixelX, qreal subPixelY,
-                                       const QSize &originalSize,
-                                       qreal baseScale, const QSize &baseSize,
-                                       QSize *outputSize)
-{
-    Q_UNUSED(baseScale);
-
     QRectF originalBounds = QRectF(QPointF(), originalSize);
     QTransform originalTransform =
         baseBrushTransform(scale, scale,
@@ -96,7 +82,6 @@ void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
                            originalBounds);
 
     QRect expectedDstRect = roundRect(originalTransform.mapRect(originalBounds));
-
     KIS_ASSERT_RECOVER_NOOP(expectedDstRect.x() >= 0);
     KIS_ASSERT_RECOVER_NOOP(expectedDstRect.y() >= 0);
 

@@ -33,11 +33,6 @@ public:
 
     static QSizeF characteristicSize(const QSize &originalSize,
                                      qreal scale, qreal rotation);
-
-    static void calculateParams(qreal scale, qreal rotation,
-                                qreal subPixelX, qreal subPixelY,
-                                const QSize &originalSize,
-                                QSize *outputSize);
 };
 
 #endif /* __KIS_QIMAGE_PYRAMID_H */

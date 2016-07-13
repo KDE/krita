@@ -69,10 +69,9 @@ QTransform baseBrushTransform(qreal scaleX, qreal scaleY,
            QTransform::fromTranslate(subPixelX, subPixelY);
 }
 
-void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
-                                       qreal subPixelX, qreal subPixelY,
-                                       const QSize &originalSize,
-                                       QSize *outputSize)
+QSize KisQImagePyramid::imageSize(const QSize &originalSize,
+                                  qreal scale, qreal rotation,
+                                  qreal subPixelX, qreal subPixelY)
 {
     QRectF originalBounds = QRectF(QPointF(), originalSize);
     QTransform originalTransform =
@@ -93,19 +92,7 @@ void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
     width = qMax(1, width);
     height = qMax(1, height);
 
-    *outputSize = QSize(width, height);
-}
-
-QSize KisQImagePyramid::imageSize(const QSize &originalSize,
-                                  qreal scale, qreal rotation,
-                                  qreal subPixelX, qreal subPixelY)
-{
-    QSize dstSize;
-
-    calculateParams(scale, rotation, subPixelX, subPixelY,
-                    originalSize, &dstSize);
-
-    return dstSize;
+    return QSize(width, height);
 }
 
 QSizeF KisQImagePyramid::characteristicSize(const QSize &originalSize,

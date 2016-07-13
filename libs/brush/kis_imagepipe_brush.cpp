@@ -360,11 +360,12 @@ void KisImagePipeBrush::notifyCachedDabPainted(const KisPaintInformation& info)
 }
 
 void KisImagePipeBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
-        double scaleX, double scaleY, double angle, const KisPaintInformation& info,
+        KisDabShape const& shape,
+        const KisPaintInformation& info,
         double subPixelX , double subPixelY,
         qreal softnessFactor) const
 {
-    m_d->brushesPipe.generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, scaleX, scaleY, angle, info, subPixelX, subPixelY, softnessFactor);
+    m_d->brushesPipe.generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, shape, info, subPixelX, subPixelY, softnessFactor);
 }
 
 QVector<KisGbrBrush *> KisImagePipeBrush::brushes() const
@@ -372,9 +373,12 @@ QVector<KisGbrBrush *> KisImagePipeBrush::brushes() const
     return m_d->brushesPipe.brushes();
 }
 
-KisFixedPaintDeviceSP KisImagePipeBrush::paintDevice(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const
+KisFixedPaintDeviceSP KisImagePipeBrush::paintDevice(
+    const KoColorSpace * colorSpace,
+    KisDabShape const& shape,
+    const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
-    return m_d->brushesPipe.paintDevice(colorSpace, scale, angle, info, subPixelX, subPixelY);
+    return m_d->brushesPipe.paintDevice(colorSpace, shape, info, subPixelX, subPixelY);
 }
 
 enumBrushType KisImagePipeBrush::brushType() const
@@ -427,14 +431,14 @@ quint32 KisImagePipeBrush::brushIndex(const KisPaintInformation& info) const
     return m_d->brushesPipe.brushIndex(info);
 }
 
-qint32 KisImagePipeBrush::maskWidth(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) const
+qint32 KisImagePipeBrush::maskWidth(KisDabShape const& shape, double subPixelX, double subPixelY, const KisPaintInformation& info) const
 {
-    return m_d->brushesPipe.maskWidth(scale, angle, subPixelX, subPixelY, info);
+    return m_d->brushesPipe.maskWidth(shape, subPixelX, subPixelY, info);
 }
 
-qint32 KisImagePipeBrush::maskHeight(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) const
+qint32 KisImagePipeBrush::maskHeight(KisDabShape const& shape, double subPixelX, double subPixelY, const KisPaintInformation& info) const
 {
-    return m_d->brushesPipe.maskHeight(scale, angle, subPixelX, subPixelY, info);
+    return m_d->brushesPipe.maskHeight(shape, subPixelX, subPixelY, info);
 }
 
 void KisImagePipeBrush::setAngle(qreal _angle)

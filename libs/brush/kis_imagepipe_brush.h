@@ -71,7 +71,7 @@ public:
      * @return the next image in the pipe.
     */
     virtual KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
-            double scale, double angle,
+            KisDabShape const&,
             const KisPaintInformation& info,
             double subPixelX = 0, double subPixelY = 0) const Q_DECL_OVERRIDE;
 
@@ -94,14 +94,14 @@ public:
     void setSpacing(double _spacing);
 
     quint32 brushIndex(const KisPaintInformation& info) const;
-    qint32 maskWidth(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) const Q_DECL_OVERRIDE;
-    qint32 maskHeight(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) const Q_DECL_OVERRIDE;
+    qint32 maskWidth(KisDabShape const&, double subPixelX, double subPixelY, const KisPaintInformation& info) const Q_DECL_OVERRIDE;
+    qint32 maskHeight(KisDabShape const&, double subPixelX, double subPixelY, const KisPaintInformation& info) const Q_DECL_OVERRIDE;
 
     void notifyStrokeStarted();
     void notifyCachedDabPainted(const KisPaintInformation& info);
 
     void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
-            double scaleX, double scaleY, double angle,
+            KisDabShape const&,
             const KisPaintInformation& info,
             double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const Q_DECL_OVERRIDE;
 

@@ -118,10 +118,11 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
     qreal rotation = m_rotationOption.apply(info);
 
 
+    KisDabShape shape(scale, 1.0, rotation);
     QPointF cursorPos =
         m_scatterOption.apply(info,
-                              brush->maskWidth(scale, rotation, 0, 0, info),
-                              brush->maskHeight(scale, rotation, 0, 0, info));
+                              brush->maskWidth(shape, 0, 0, info),
+                              brush->maskHeight(shape, 0, 0, info));
 
     quint8 origOpacity = painter()->opacity();
 
@@ -141,8 +142,7 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
     KisFixedPaintDeviceSP dab = m_dabCache->fetchDab(device->compositionSourceColorSpace(),
                                 m_colorSource,
                                 cursorPos,
-                                scale, scale,
-                                rotation,
+                                shape,
                                 info,
                                 m_softnessOption.apply(info),
                                 &dabRect);

@@ -218,8 +218,10 @@ bool KisAnimationCurvesModel::adjustKeyframes(const QModelIndexList &indexes, in
                      "Adjust %1 Keyframes",
                      indexes.size()));
 
-    bool ok = offsetFrames(indexes, QPoint(timeOffset, 0), false, command);
-    if (!ok) return false;
+    if (timeOffset != 0) {
+        bool ok = offsetFrames(indexes, QPoint(timeOffset, 0), false, command);
+        if (!ok) return false;
+    }
 
     Q_FOREACH(QModelIndex oldIndex, indexes) {
         KisScalarKeyframeChannel *channel = m_d->getCurveAt(oldIndex)->channel();

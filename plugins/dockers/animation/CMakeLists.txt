@@ -37,6 +37,8 @@ set(KRITA_ANIMATIONDOCKER_SOURCES
     kis_animation_curves_view.cpp
     kis_animation_curves_value_ruler.cpp
     kis_animation_curves_keyframe_delegate.cpp
+    kis_animation_curve_channel_list_model.cpp
+    kis_animation_curve_channel_list_delegate.cpp
 )
 
 ki18n_wrap_ui(KRITA_ANIMATIONDOCKER_SOURCES

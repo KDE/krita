@@ -16,9 +16,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <QTreeView>
+#include <QSplitter>
+
 #include "kis_animation_curve_docker.h"
 #include "kis_animation_curves_model.h"
 #include "kis_animation_curves_view.h"
+#include "kis_animation_curve_channel_list_model.h"
+#include "kis_animation_curve_channel_list_delegate.h"
 
 #include "KisDocument.h"
 #include "kis_canvas2.h"
@@ -32,14 +37,24 @@
 struct KisAnimationCurveDocker::Private
 {
     Private(QWidget *parent)
-        : model(new KisAnimationCurvesModel(parent)),
-          view(new KisAnimationCurvesView(parent))
+        : curvesModel(new KisAnimationCurvesModel(parent))
+        , curvesView(new KisAnimationCurvesView(parent))
+        , channelListView(new QTreeView(parent))
     {
-        view->setModel(model);
+        channelListModel = new KisAnimationCurveChannelListModel(curvesModel, parent);
+        curvesView->setModel(curvesModel);
+        channelListView->setModel(channelListModel);
+
+        KisAnimationCurveChannelListDelegate *listDelegate = new KisAnimationCurveChannelListDelegate(channelListView);
+        channelListView->setItemDelegate(listDelegate);
+        channelListView->setHeaderHidden(true);
     }
 
-    KisAnimationCurvesModel *model;
-    KisAnimationCurvesView *view;
+    KisAnimationCurvesModel *curvesModel;
+    KisAnimationCurvesView *curvesView;
+
+    KisAnimationCurveChannelListModel *channelListModel;
+    QTreeView *channelListView;
 
     QPointer<KisCanvas2> canvas;
 
@@ -50,7 +65,16 @@ KisAnimationCurveDocker::KisAnimationCurveDocker()
     : QDockWidget(i18n("Animation curves"))
     , m_d(new Private(this))
 {
-    setWidget(m_d->view);
+    QSplitter *splitter = new QSplitter(this);
+
+    splitter->addWidget(m_d->channelListView);
+    splitter->addWidget(m_d->curvesView);
+    splitter->setStretchFactor(0, 1);
+    splitter->setStretchFactor(1, 4);
+    setWidget(splitter);
+
+    connect(m_d->channelListModel, &KisAnimationCurveChannelListModel::rowsInserted,
+            this, &KisAnimationCurveDocker::slotListRowsInserted);
 }
 
 KisAnimationCurveDocker::~KisAnimationCurveDocker()
@@ -69,16 +93,20 @@ void KisAnimationCurveDocker::setCanvas(KoCanvasBase * canvas)
     setEnabled(m_d->canvas != 0);
 
     if(m_d->canvas) {
-        m_d->model->setImage(m_d->canvas->image());
-        m_d->model->setFrameCache(m_d->canvas->frameCache());
-        m_d->model->setAnimationPlayer(m_d->canvas->animationPlayer());
+        KisDocument *doc = static_cast<KisDocument*>(m_d->canvas->imageView()->document());
+        KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(doc->shapeController());
+        m_d->channelListModel->setDummiesFacade(kritaShapeController);
+
+        m_d->curvesModel->setImage(m_d->canvas->image());
+        m_d->curvesModel->setFrameCache(m_d->canvas->frameCache());
+        m_d->curvesModel->setAnimationPlayer(m_d->canvas->animationPlayer());
 
         m_d->canvasConnections.addConnection(
-            m_d->canvas->viewManager()->nodeManager(), SIGNAL(sigNodeActivated(KisNodeSP)),
-            m_d->model, SLOT(slotCurrentNodeChanged(KisNodeSP))
+            m_d->canvas->viewManager()->nodeManager(), SIGNAL(sigUiNeedChangeSelectedNodes(KisNodeList)),
+            m_d->channelListModel, SLOT(selectedNodesChanged(KisNodeList))
         );
 
-        m_d->model->slotCurrentNodeChanged(m_d->canvas->viewManager()->activeNode());
+        m_d->channelListModel->selectedNodesChanged(m_d->canvas->viewManager()->nodeManager()->selectedNodes());
     }
 }
 
@@ -90,4 +118,14 @@ void KisAnimationCurveDocker::unsetCanvas()
 void KisAnimationCurveDocker::setMainWindow(KisViewManager *kisview)
 {
 
+}
+
+void KisAnimationCurveDocker::slotListRowsInserted(const QModelIndex &parentIndex, int first, int last)
+{
+    // Auto-expand nodes on the tree
+
+    for (int r=first; r<=last; r++) {
+        QModelIndex index = m_d->channelListModel->index(r, 0, parentIndex);
+        m_d->channelListView->expand(index);
+    }
 }

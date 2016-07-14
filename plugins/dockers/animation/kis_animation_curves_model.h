@@ -26,6 +26,22 @@
 #include "kis_time_based_item_model.h"
 #include "kis_types.h"
 
+class KisScalarKeyframeChannel;
+
+class KisAnimationCurve {
+public:
+    KisAnimationCurve(KisScalarKeyframeChannel *channel, QColor color);
+    KisScalarKeyframeChannel *channel() const;
+    QColor color() const;
+
+    void setVisible(bool visible);
+    bool visible() const;
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
+};
+
 class KisAnimationCurvesModel : public KisTimeBasedItemModel
 {
     Q_OBJECT
@@ -34,6 +50,10 @@ public:
     ~KisAnimationCurvesModel();
 
     bool hasConnectionToCanvas() const;
+
+    KisAnimationCurve *addCurve(KisScalarKeyframeChannel *channel);
+    void removeCurve(KisAnimationCurve *curve);
+    void setCurveVisible(KisAnimationCurve *curve, bool visible);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;
@@ -50,6 +70,7 @@ public:
         LeftTangentRole,
         RightTangentRole,
         CurveColorRole,
+        CurveVisibleRole,
         PreviousKeyframeTime,
         NextKeyframeTime
     };
@@ -57,9 +78,6 @@ public:
 protected:
     KisNodeSP nodeAt(QModelIndex index) const;
     QList<KisKeyframeChannel *> channelsAt(QModelIndex index) const;
-
-public Q_SLOTS:
-    void slotCurrentNodeChanged(KisNodeSP node);
 
 private:
     struct Private;

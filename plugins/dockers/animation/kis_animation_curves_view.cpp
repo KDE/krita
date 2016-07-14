@@ -66,6 +66,12 @@ void KisAnimationCurvesView::setModel(QAbstractItemModel *model)
     QAbstractItemView::setModel(model);
     m_d->horizontalHeader->setModel(model);
 
+    connect(model, &QAbstractItemModel::rowsInserted,
+            this, &KisAnimationCurvesView::slotRowsChanged);
+
+    connect(model, &QAbstractItemModel::rowsRemoved,
+            this, &KisAnimationCurvesView::slotRowsChanged);
+
     connect(model, &QAbstractItemModel::dataChanged,
             this, &KisAnimationCurvesView::slotDataChanged);
 
@@ -122,10 +128,13 @@ void KisAnimationCurvesView::paintCurves(QPainter &painter, int firstFrame, int 
     int channels = model()->rowCount();
     for (int channel = 0; channel < channels; channel++) {
         QModelIndex index0 = model()->index(channel, 0);
-        QColor color = index0.data(KisAnimationCurvesModel::CurveColorRole).value<QColor>();
-        painter.setPen(QPen(color, 1));
 
-        paintCurve(channel, firstFrame, lastFrame, painter);
+        if (!isIndexHidden(index0)) {
+            QColor color = index0.data(KisAnimationCurvesModel::CurveColorRole).value<QColor>();
+            painter.setPen(QPen(color, 1));
+
+            paintCurve(channel, firstFrame, lastFrame, painter);
+        }
     }
 }
 
@@ -183,7 +192,7 @@ void KisAnimationCurvesView::paintKeyframes(QPainter &painter, int firstFrame, i
             QModelIndex index = model()->index(channel, time);
             bool keyframeExists = model()->data(index, KisAnimationCurvesModel::SpecialKeyframeExists).toReal();
 
-            if (keyframeExists) {
+            if (keyframeExists && !isIndexHidden(index)) {
                 QStyleOptionViewItem opt;
 
                 if (selectionModel()->isSelected(index)) {
@@ -257,8 +266,7 @@ int KisAnimationCurvesView::verticalOffset() const
 
 bool KisAnimationCurvesView::isIndexHidden(const QModelIndex &index) const
 {
-    // TODO
-    return false;
+    return !index.data(KisAnimationCurvesModel::CurveVisibleRole).toBool();
 }
 
 void KisAnimationCurvesView::setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command)
@@ -391,6 +399,15 @@ void KisAnimationCurvesView::updateGeometries()
     m_d->verticalHeader->setGeometry(0, topMargin, leftMargin, viewRect.height());
 
     QAbstractItemView::updateGeometries();
+}
+
+void KisAnimationCurvesView::slotRowsChanged(const QModelIndex &parentIndex, int first, int last)
+{
+    Q_UNUSED(parentIndex);
+    Q_UNUSED(first);
+    Q_UNUSED(last);
+
+    viewport()->update();
 }
 
 void KisAnimationCurvesView::slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)

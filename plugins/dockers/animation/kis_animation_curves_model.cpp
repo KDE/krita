@@ -27,18 +27,73 @@
 #include "kis_scalar_keyframe_channel.h"
 #include "kis_post_execution_undo_adapter.h"
 
+struct KisAnimationCurve::Private
+{
+    Private(KisScalarKeyframeChannel *channel, QColor color)
+        : channel(channel)
+        , color(color)
+        , visible(true)
+    {}
+
+    KisScalarKeyframeChannel *channel;
+    QColor color;
+    bool visible;
+};
+
+KisAnimationCurve::KisAnimationCurve(KisScalarKeyframeChannel *channel, QColor color)
+    : m_d(new Private(channel, color))
+{}
+
+KisScalarKeyframeChannel *KisAnimationCurve::channel() const
+{
+    return m_d->channel;
+}
+
+QColor KisAnimationCurve::color() const
+{
+    return m_d->color;
+}
+
+void KisAnimationCurve::setVisible(bool visible)
+{
+    m_d->visible = visible;
+}
+
+bool KisAnimationCurve::visible() const
+{
+    return m_d->visible;
+}
+
 struct KisAnimationCurvesModel::Private
 {
-    QList<KisKeyframeChannel*> channels;
+    QList<KisAnimationCurve*> curves;
+    int nextColorHue;
 
-    KisKeyframeChannel * getChannelAt(const QModelIndex& index) {
+    Private()
+        : nextColorHue(0)
+    {}
+
+    KisAnimationCurve * getCurveAt(const QModelIndex& index) {
         int row = index.row();
 
-        if (row < 0 || row >= channels.size()) {
+        if (row < 0 || row >= curves.size()) {
             return 0;
         }
 
-        return channels.at(row);
+        return curves.at(row);
+    }
+
+    int rowForCurve(KisAnimationCurve *curve) {
+        return curves.indexOf(curve);
+    }
+
+    QColor chooseNextColor() {
+        if (curves.isEmpty()) nextColorHue = 0;
+
+        QColor color = QColor::fromHsv(nextColorHue, 255, 255);
+        nextColorHue += 94; // Value chosen experimentally for providing distinct colors
+        nextColorHue = nextColorHue & 0xff;
+        return color;
     }
 };
 
@@ -48,19 +103,23 @@ KisAnimationCurvesModel::KisAnimationCurvesModel(QObject *parent)
 {}
 
 KisAnimationCurvesModel::~KisAnimationCurvesModel()
-{}
+{
+    qDeleteAll(m_d->curves);
+}
 
 int KisAnimationCurvesModel::rowCount(const QModelIndex &parent) const
 {
-    return m_d->channels.size();
+    Q_UNUSED(parent);
+    return m_d->curves.size();
 }
 
 QVariant KisAnimationCurvesModel::data(const QModelIndex &index, int role) const
 {
-    KisKeyframeChannel *channel = m_d->getChannelAt(index);
-    KisScalarKeyframeChannel *scalarChannel = dynamic_cast<KisScalarKeyframeChannel*>(channel);
+    KisAnimationCurve *curve = m_d->getCurveAt(index);
 
-    if (scalarChannel) {
+    if (curve) {
+        KisScalarKeyframeChannel *channel = curve->channel();
+
         int time = index.column();
         KisKeyframeSP keyframe = channel->keyframeAt(time);
 
@@ -68,7 +127,7 @@ QVariant KisAnimationCurvesModel::data(const QModelIndex &index, int role) const
         case SpecialKeyframeExists:
             return !keyframe.isNull();
         case ScalarValueRole:
-            return (!scalarChannel) ? QVariant() : scalarChannel->interpolatedValue(time);
+            return channel->interpolatedValue(time);
         case LeftTangentRole:
             return (keyframe.isNull()) ? QVariant() : keyframe->leftTangent();
         case RightTangentRole:
@@ -76,7 +135,9 @@ QVariant KisAnimationCurvesModel::data(const QModelIndex &index, int role) const
         case InterpolationModeRole:
             return (keyframe.isNull()) ? QVariant() : keyframe->interpolationMode();
         case CurveColorRole:
-            return QColor(Qt::red);
+            return curve->color();
+        case CurveVisibleRole:
+            return curve->visible();
         case PreviousKeyframeTime:
         {
             KisKeyframeSP active = channel->activeKeyframeAt(time);
@@ -112,8 +173,7 @@ QVariant KisAnimationCurvesModel::data(const QModelIndex &index, int role) const
 
 bool KisAnimationCurvesModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    KisKeyframeChannel *channel = m_d->getChannelAt(index);
-    KisScalarKeyframeChannel *scalarChannel = dynamic_cast<KisScalarKeyframeChannel*>(channel);
+    KisScalarKeyframeChannel *channel = m_d->getCurveAt(index)->channel();
 
     switch (role) {
     case LeftTangentRole:
@@ -125,7 +185,7 @@ bool KisAnimationCurvesModel::setData(const QModelIndex &index, const QVariant &
             QPointF rightTangent = (role == RightTangentRole ? value.toPointF() : keyframe->rightTangent());
 
             KUndo2Command *command = new KUndo2Command(kundo2_i18n("Adjust tangent"));
-            scalarChannel->setInterpolationTangents(keyframe, leftTangent, rightTangent, command);
+            channel->setInterpolationTangents(keyframe, leftTangent, rightTangent, command);
             image()->postExecutionUndoAdapter()->addCommand(toQShared(command));
 
             return true;
@@ -145,13 +205,6 @@ QVariant KisAnimationCurvesModel::headerData(int section, Qt::Orientation orient
     return KisTimeBasedItemModel::headerData(section, orientation, role);
 }
 
-void KisAnimationCurvesModel::slotCurrentNodeChanged(KisNodeSP node)
-{
-    beginResetModel();
-    m_d->channels = node->keyframeChannels();
-    endResetModel();
-}
-
 bool KisAnimationCurvesModel::removeFrames(const QModelIndexList &indexes)
 {
     // TODO
@@ -169,7 +222,7 @@ bool KisAnimationCurvesModel::adjustKeyframes(const QModelIndexList &indexes, in
     if (!ok) return false;
 
     Q_FOREACH(QModelIndex oldIndex, indexes) {
-        KisKeyframeChannel *channel = m_d->getChannelAt(oldIndex);
+        KisScalarKeyframeChannel *channel = m_d->getCurveAt(oldIndex)->channel();
         KIS_ASSERT_RECOVER_RETURN_VALUE(channel, false);
 
         KisKeyframeSP keyframe = channel->keyframeAt(oldIndex.column() + timeOffset);
@@ -184,13 +237,47 @@ bool KisAnimationCurvesModel::adjustKeyframes(const QModelIndexList &indexes, in
     return true;
 }
 
+KisAnimationCurve *KisAnimationCurvesModel::addCurve(KisScalarKeyframeChannel *channel)
+{
+    beginInsertRows(QModelIndex(), m_d->curves.size(), m_d->curves.size());
+
+    KisAnimationCurve *curve = new KisAnimationCurve(channel, m_d->chooseNextColor());
+    m_d->curves.append(curve);
+
+    endInsertRows();
+
+    return curve;
+}
+
+void KisAnimationCurvesModel::removeCurve(KisAnimationCurve *curve)
+{
+    int index = m_d->curves.indexOf(curve);
+    if (index < 0) return;
+
+    beginRemoveRows(QModelIndex(), index, index);
+
+    m_d->curves.removeAt(index);
+    delete curve;
+
+    endRemoveRows();
+}
+
+void KisAnimationCurvesModel::setCurveVisible(KisAnimationCurve *curve, bool visible)
+{
+    curve->setVisible(visible);
+
+    int row = m_d->rowForCurve(curve);
+    emit dataChanged(index(row, 0), index(row, columnCount()));
+}
+
 KisNodeSP KisAnimationCurvesModel::nodeAt(QModelIndex index) const
 {
-    return KisNodeSP(m_d->getChannelAt(index)->node());
+    return KisNodeSP(m_d->getCurveAt(index)->channel()->node());
 }
 
 QList<KisKeyframeChannel *> KisAnimationCurvesModel::channelsAt(QModelIndex index) const
 {
-    QList<KisKeyframeChannel*> list({m_d->getChannelAt(index)});
+    KisKeyframeChannel *channel = m_d->getCurveAt(index)->channel();
+    QList<KisKeyframeChannel*> list({channel});
     return list;
 }

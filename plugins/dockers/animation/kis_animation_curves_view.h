@@ -56,7 +56,7 @@ protected Q_SLOTS:
     void updateGeometries();
 
 private Q_SLOTS:
-
+    void slotRowsChanged(const QModelIndex &parentIndex, int first, int last);
     void slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
     void slotHeaderDataChanged(Qt::Orientation orientation, int first, int last);
 

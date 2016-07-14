@@ -16,35 +16,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_ANIMATION_CURVE_DOCKER_H_
-#define _KIS_ANIMATION_CURVE_DOCKER_H_
+#ifndef _KIS_ANIMATION_CURVE_CHANNEL_LIST_DELEGATE_H
+#define _KIS_ANIMATION_CURVE_CHANNEL_LIST_DELEGATE_H
 
-#include <QDockWidget>
-#include <kis_mainwindow_observer.h>
-#include <QScopedPointer>
+#include <qstyleditemdelegate.h>
 
-class KisCanvas2;
-class KisAction;
-
-class KisAnimationCurveDocker : public QDockWidget, public KisMainwindowObserver
+class KisAnimationCurveChannelListDelegate : public QStyledItemDelegate
 {
-    Q_OBJECT
 public:
-    KisAnimationCurveDocker();
-    ~KisAnimationCurveDocker();
+    KisAnimationCurveChannelListDelegate(QObject *parent);
 
-    QString observerName() { return "AnimationCurveDocker"; }
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
-    void setMainWindow(KisViewManager *kisview);
-
-private Q_SLOTS:
-    void slotListRowsInserted(const QModelIndex &parentIndex, int first, int last);
-
-private:
-    struct Private;
-    const QScopedPointer<Private> m_d;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index);
 };
-
 
 #endif

@@ -1491,6 +1491,12 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, QRect
     int srcWidth, srcHeight;
     int srcX0, srcY0;
     QRect e = rect.isValid() ? rect : extent();
+
+    //can't create thumbnail for an empty device, e.g. layer thumbnail for empty image
+    if( e.isEmpty() || !e.isValid()){
+        return new KisPaintDevice(colorSpace());
+    }
+
     e.getRect(&srcX0, &srcY0, &srcWidth, &srcHeight);
 
     if (w > srcWidth) {
@@ -1522,7 +1528,13 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDeviceOversampled(qint32 w, qint
     int srcWidth, srcHeight;
     int srcX0, srcY0;
     QRect outRect;
-    QRect e = rect.isValid() ? rect : extent();
+    QRect e = (rect.isValid() && !rect.isNull()) ? rect : extent();
+
+    //can't create thumbnail for an empty device, e.g. layer thumbnail for empty image
+    if( e.isEmpty() || !e.isValid()){
+        return new KisPaintDevice(colorSpace());
+    }
+
     e.getRect(&srcX0, &srcY0, &srcWidth, &srcHeight);
 
     float oversampleAdjusted = qMax(oversample, 1.);

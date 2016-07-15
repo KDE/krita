@@ -159,7 +159,6 @@ QTransform OverviewWidget::imageToPreviewTransform()
 
 void OverviewWidget::startUpdateCanvasProjection()
 {
-    qDebug() << "startUpdateCanvasProjection called";
     if (!m_canvas) return;
 
     m_thumbnailNeedsUpdate = true;
@@ -271,7 +270,6 @@ void OverviewWidget::generateThumbnail()
 
 void OverviewWidget::updateThumbnail(QImage pixmap)
 {
-    qDebug() << QTime::currentTime() << "+  " << __FUNCTION__;
     m_pixmap = QPixmap::fromImage(pixmap);
     update();
 }
@@ -279,7 +277,6 @@ void OverviewWidget::updateThumbnail(QImage pixmap)
 
 void OverviewWidget::paintEvent(QPaintEvent* event)
 {
-    qDebug() << QTime::currentTime() << "+  " << __FUNCTION__ ;
     QWidget::paintEvent(event);
 
     if (m_canvas) {
@@ -308,6 +305,7 @@ void OverviewWidget::paintEvent(QPaintEvent* event)
 OverviewThumbnailStrokeStrategy::OverviewThumbnailStrokeStrategy(KisImageWSP image)
     : KisSimpleStrokeStrategy("OverviewThumbnail")
 {
+    Q_UNUSED(image);
     enableJob(KisSimpleStrokeStrategy::JOB_INIT, true, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
     //enableJob(KisSimpleStrokeStrategy::JOB_FINISH);
@@ -367,43 +365,29 @@ void OverviewThumbnailStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
     Private::ProcessData *d_pd = dynamic_cast<Private::ProcessData*>(data);
     if (d_pd) {
-        QTime t;
-        t.start();
-
         //we aren't going to use oversample capability of createThumbnailDevice because it recomputes exact bounds for each small patch, which is
         //slow. We'll handle scaling separately.
         KisPaintDeviceSP thumbnailTile = d_pd->dev->createThumbnailDeviceOversampled(d_pd->thumbnailSize.width(),d_pd->thumbnailSize.height(), 1, QRect(), d_pd->tileRect);
-        qDebug() << QTime::currentTime() << "+1  " << __FUNCTION__ << " " << d_pd->tileRect<< " " << QThread::currentThreadId() << " " << t.elapsed();
         {
             QMutexLocker locker(&m_thumbnailMergeMutex);
-            qDebug() << QTime::currentTime() << "+2  " << __FUNCTION__ << " " << d_pd->tileRect<< " " << QThread::currentThreadId()<< " " << t.elapsed();
             KisPainter gc(d_pd->thumbDev);
-            qDebug() << QTime::currentTime() << "+3  " << __FUNCTION__ << " " << d_pd->tileRect<< " " << QThread::currentThreadId()<< " " << t.elapsed();
-
             gc.bitBlt(QPoint(d_pd->tileRect.x(), d_pd->tileRect.y()), thumbnailTile, d_pd->tileRect);
         }
-        qDebug() << QTime::currentTime() << "--  " << __FUNCTION__ << " " << d_pd->tileRect<< " " << QThread::currentThreadId()<< " " << t.elapsed();
-
         return;
     }
 
 
     Private::FinishProcessing *d_fp = dynamic_cast<Private::FinishProcessing*>(data);
     if (d_fp) {
-        QTime t;
-        t.start();
-        qDebug() << QTime::currentTime() << "+  " << __FUNCTION__ << ":" << __LINE__ << " " << "FinishProcessing" << " " << t.elapsed();
         QImage overviewImage;
 
         QPointer<KoUpdater> updater = new KoDummyUpdater();
         KisTransformWorker worker(d_fp->thumbDev, 1/oversample, 1/oversample, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                                   updater, KisFilterStrategyRegistry::instance()->value("Bilinear"));
         worker.run();
-        qDebug() << QTime::currentTime() << "+  " << __FUNCTION__ << ":" << __LINE__ << " " << "FinishProcessing"<< " " << t.elapsed();
 
         overviewImage = d_fp->thumbDev->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile());
         emit thumbnailUpdated(overviewImage);
-        qDebug() << QTime::currentTime() << "--  " << __FUNCTION__ << ":" << __LINE__ << " " << "FinishProcessing"<< " " << t.elapsed();
         return;
     }
 }

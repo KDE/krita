@@ -1557,7 +1557,7 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDeviceOversampled(qint32 w, qint
     else if (srcHeight > srcWidth)
         w = qint32(double(srcWidth) / srcHeight * h);
 
-    oversampleAdjusted *= (qreal)h / hstart; //readjusting oversample ratio, given that we had to adjust thumbnail size
+    oversampleAdjusted *= (hstart>0)?((qreal)h / hstart) : 1.; //readjusting oversample ratio, given that we had to adjust thumbnail size
 
     outRect = QRect(0, 0, w, h);
 

@@ -2,8 +2,8 @@ SET(PREFIX_ext_libxml2 "${EXTPREFIX}" )
 if (MSVC)
     ExternalProject_Add( ext_libxml2
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL http://files.kde.org/krita/build/dependencies/libxml2-2.8.0.tar.gz
-        URL_MD5 c62106f02ee00b6437f0fb9d370c1093
+        URL http://files.kde.org/krita/build/dependencies/libxml2-sources-2.9.3.tar.gz
+        URL_MD5 817ee2f5297e9763097074575903682d
 
         INSTALL_DIR ${PREFIX_ext_libxml2}
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/libxml2-2.8.0-20110105.diff
@@ -16,8 +16,8 @@ if (MSVC)
 else (MSVC)
     ExternalProject_Add( ext_libxml2
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL http://files.kde.org/krita/build/dependencies/libxml2-2.8.0.tar.gz
-            URL_MD5 c62106f02ee00b6437f0fb9d370c1093
+            URL http://files.kde.org/krita/build/dependencies/libxml2-sources-2.9.3.tar.gz
+            URL_MD5 817ee2f5297e9763097074575903682d
 
             INSTALL_DIR ${PREFIX_ext_libxml2}
             CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_libxml2}   ${GLOBAL_AUTOMAKE_PROFILE}

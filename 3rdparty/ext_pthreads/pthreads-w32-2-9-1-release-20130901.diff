@@ -1,6 +1,6 @@
-diff -Nru pthreads-w32-2-8-0-release.orig/CMakeLists.txt pthreads-w32-2-8-0-release/CMakeLists.txt
---- pthreads-w32-2-8-0-release.orig/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
-+++ pthreads-w32-2-8-0-release/CMakeLists.txt	2011-07-29 13:36:02.199191000 +0200
+diff -Nru -x '*~' pthreads-w32-2-9-1-release.orig/CMakeLists.txt pthreads-w32-2-9-1-release/CMakeLists.txt
+--- pthreads-w32-2-9-1-release.orig/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ pthreads-w32-2-9-1-release/CMakeLists.txt	2013-09-01 13:00:26.055970400 +0200
 @@ -0,0 +1,224 @@
 +project(pthreads)
 +
@@ -8,7 +8,7 @@ diff -Nru pthreads-w32-2-8-0-release.orig/CMakeLists.txt pthreads-w32-2-8-0-rele
 +
 +option(BUILD_STATIC "build pthreads as a static library" OFF)
 +option(BUILD_INLINED "build pthreads as with inlined functions" ON)
-+option(BUILD_TESTS "build test executables for pthreads" OFF)
++option(BUILD_TESTS "build test executables for pthreads" ON)
 +
 +if(BUILD_TESTS)
 +    enable_testing()
@@ -226,11 +226,11 @@ diff -Nru pthreads-w32-2-8-0-release.orig/CMakeLists.txt pthreads-w32-2-8-0-rele
 +                         ARCHIVE DESTINATION lib)
 +
 +install(FILES ${pthreads_HDRS} DESTINATION include)
-\ No newline at end of file
-diff -Nru pthreads-w32-2-8-0-release.orig/config.h pthreads-w32-2-8-0-release/config.h
---- pthreads-w32-2-8-0-release.orig/config.h	2005-04-25 04:18:00.000000000 +0200
-+++ pthreads-w32-2-8-0-release/config.h	1970-01-01 01:00:00.000000000 +0100
-@@ -1,134 +0,0 @@
+\ Kein Zeilenumbruch am Dateiende.
+diff -Nru -x '*~' pthreads-w32-2-9-1-release.orig/config.h pthreads-w32-2-9-1-release/config.h
+--- pthreads-w32-2-9-1-release.orig/config.h	2011-05-30 02:31:00.000000000 +0200
++++ pthreads-w32-2-9-1-release/config.h	1970-01-01 01:00:00.000000000 +0100
+@@ -1,153 +0,0 @@
 -/* config.h  */
 -
 -#ifndef PTW32_CONFIG_H
@@ -279,11 +279,25 @@ diff -Nru pthreads-w32-2-8-0-release.orig/config.h pthreads-w32-2-8-0-release/co
 -/* Do we know about type mode_t? */
 -#undef HAVE_MODE_T
 -
+-/* 
+- * Define if GCC has atomic builtins, i.e. __sync_* intrinsics
+- * __sync_lock_* is implemented in mingw32 gcc 4.5.2 at least
+- * so this define does not turn those on or off. If you get an
+- * error from __sync_lock* then consider upgrading your gcc.
+- */
+-#undef HAVE_GCC_ATOMIC_BUILTINS
+-
 -/* Define if you have the timespec struct */
 -#undef HAVE_STRUCT_TIMESPEC
 -
 -/* Define if you don't have the GetProcessAffinityMask() */
 -#undef NEED_PROCESS_AFFINITY_MASK
+-
+-/* Define if your version of Windows TLSGetValue() clears WSALastError
+- * and calling SetLastError() isn't enough restore it. You'll also need to
+- * link against wsock32.lib (or libwsock32.a for MinGW).
+- */
+-#undef RETAIN_WSALASTERROR
 -
 -/*
 -# ----------------------------------------------------------------------
@@ -327,37 +341,42 @@ diff -Nru pthreads-w32-2-8-0-release.orig/config.h pthreads-w32-2-8-0-release/co
 - * If you find that these are incorrect or incomplete please report it
 - * to the pthreads-win32 maintainer. Thanks.
 - *********************************************************************/
--#ifdef WINCE
+-#if defined(WINCE)
 -#define NEED_DUPLICATEHANDLE
 -#define NEED_CREATETHREAD
 -#define NEED_ERRNO
 -#define NEED_CALLOC
 -#define NEED_FTIME
--//#define NEED_SEM
+-/* #define NEED_SEM */
 -#define NEED_UNICODE_CONSTS
 -#define NEED_PROCESS_AFFINITY_MASK
+-/* This may not be needed */
+-#define RETAIN_WSALASTERROR
 -#endif
 -
--#ifdef _UWIN
+-#if defined(_UWIN)
 -#define HAVE_MODE_T
 -#define HAVE_STRUCT_TIMESPEC
 -#endif
 -
--#ifdef __GNUC__
+-#if defined(__GNUC__)
 -#define HAVE_C_INLINE
 -#endif
 -
--#ifdef __MINGW32__
+-#if defined(__MINGW64__)
+-#define HAVE_MODE_T
+-#define HAVE_STRUCT_TIMESPEC
+-#elif defined(__MINGW32__)
 -#define HAVE_MODE_T
 -#endif
 -
--#ifdef __BORLANDC__
+-#if defined(__BORLANDC__)
 -#endif
 -
--#ifdef __WATCOMC__
+-#if defined(__WATCOMC__)
 -#endif
 -
--#ifdef __DMC__
+-#if defined(__DMC__)
 -#define HAVE_SIGNAL_H
 -#define HAVE_C_INLINE
 -#endif
@@ -365,10 +384,10 @@ diff -Nru pthreads-w32-2-8-0-release.orig/config.h pthreads-w32-2-8-0-release/co
 -
 -
 -#endif
-diff -Nru pthreads-w32-2-8-0-release.orig/config.h.cmake pthreads-w32-2-8-0-release/config.h.cmake
---- pthreads-w32-2-8-0-release.orig/config.h.cmake	1970-01-01 01:00:00.000000000 +0100
-+++ pthreads-w32-2-8-0-release/config.h.cmake	2011-07-29 13:30:02.140596800 +0200
-@@ -0,0 +1,134 @@
+diff -Nru -x '*~' pthreads-w32-2-9-1-release.orig/config.h.cmake pthreads-w32-2-9-1-release/config.h.cmake
+--- pthreads-w32-2-9-1-release.orig/config.h.cmake	1970-01-01 01:00:00.000000000 +0100
++++ pthreads-w32-2-9-1-release/config.h.cmake	2013-09-01 13:19:57.134952300 +0200
+@@ -0,0 +1,148 @@
 +/* config.h  */
 +
 +#ifndef PTW32_CONFIG_H
@@ -417,11 +436,25 @@ diff -Nru pthreads-w32-2-8-0-release.orig/config.h.cmake pthreads-w32-2-8-0-rele
 +/* Do we know about type mode_t? */
 +#undef HAVE_MODE_T
 +
++/*
++ * Define if GCC has atomic builtins, i.e. __sync_* intrinsics
++ * __sync_lock_* is implemented in mingw32 gcc 4.5.2 at least
++ * so this define does not turn those on or off. If you get an
++ * error from __sync_lock* then consider upgrading your gcc.
++ */
++#undef HAVE_GCC_ATOMIC_BUILTINS
++
 +/* Define if you have the timespec struct */
 +#cmakedefine HAVE_STRUCT_TIMESPEC
 +
 +/* Define if you don't have the GetProcessAffinityMask() */
 +#undef NEED_PROCESS_AFFINITY_MASK
++
++/* Define if your version of Windows TLSGetValue() clears WSALastError
++ * and calling SetLastError() isn't enough restore it. You'll also need to
++ * link against wsock32.lib (or libwsock32.a for MinGW).
++ */
++#undef RETAIN_WSALASTERROR
 +
 +/*
 +# ----------------------------------------------------------------------
@@ -503,9 +536,9 @@ diff -Nru pthreads-w32-2-8-0-release.orig/config.h.cmake pthreads-w32-2-8-0-rele
 +
 +
 +#endif
-diff -Nru pthreads-w32-2-8-0-release.orig/ConfigureChecks.cmake pthreads-w32-2-8-0-release/ConfigureChecks.cmake
---- pthreads-w32-2-8-0-release.orig/ConfigureChecks.cmake	1970-01-01 01:00:00.000000000 +0100
-+++ pthreads-w32-2-8-0-release/ConfigureChecks.cmake	2011-07-29 13:35:12.121326700 +0200
+diff -Nru -x '*~' pthreads-w32-2-9-1-release.orig/ConfigureChecks.cmake pthreads-w32-2-9-1-release/ConfigureChecks.cmake
+--- pthreads-w32-2-9-1-release.orig/ConfigureChecks.cmake	1970-01-01 01:00:00.000000000 +0100
++++ pthreads-w32-2-9-1-release/ConfigureChecks.cmake	2013-09-01 13:39:02.982491000 +0200
 @@ -0,0 +1,16 @@
 +# Configure checks for the config.h
 +
@@ -519,13 +552,13 @@ diff -Nru pthreads-w32-2-8-0-release.orig/ConfigureChecks.cmake pthreads-w32-2-8
 +SET(CMAKE_EXTRA_INCLUDE_FILES)
 +
 +
-+add_definitions(-DHAVE_CONFIG_H)
++add_definitions(-DHAVE_PTW32_CONFIG_H)
 +
 +configure_file(config.h.cmake ${CMAKE_SOURCE_DIR}/config.h)
 +
-diff -Nru pthreads-w32-2-8-0-release.orig/create.c pthreads-w32-2-8-0-release/create.c
---- pthreads-w32-2-8-0-release.orig/create.c	2005-05-06 09:31:31.000000000 +0200
-+++ pthreads-w32-2-8-0-release/create.c	2011-07-29 13:23:37.214580300 +0200
+diff -Nru -x '*~' pthreads-w32-2-9-1-release.orig/create.c pthreads-w32-2-9-1-release/create.c
+--- pthreads-w32-2-9-1-release.orig/create.c	2012-03-18 06:11:43.000000000 +0100
++++ pthreads-w32-2-9-1-release/create.c	2013-09-01 13:00:26.086972100 +0200
 @@ -94,6 +94,11 @@
    int priority;
    pthread_t self;
@@ -538,10 +571,10 @@ diff -Nru pthreads-w32-2-8-0-release.orig/create.c pthreads-w32-2-8-0-release/cr
    /*
     * Before doing anything, check that tid can be stored through
     * without invoking a memory protection error (segfault).
-diff -Nru pthreads-w32-2-8-0-release.orig/implement.h pthreads-w32-2-8-0-release/implement.h
---- pthreads-w32-2-8-0-release.orig/implement.h	2005-06-03 10:36:27.000000000 +0200
-+++ pthreads-w32-2-8-0-release/implement.h	2011-07-29 13:23:37.224580900 +0200
-@@ -56,6 +56,7 @@
+diff -Nru -x '*~' pthreads-w32-2-9-1-release.orig/implement.h pthreads-w32-2-9-1-release/implement.h
+--- pthreads-w32-2-9-1-release.orig/implement.h	2012-03-18 06:11:43.000000000 +0100
++++ pthreads-w32-2-9-1-release/implement.h	2013-09-01 13:00:26.098972800 +0200
+@@ -55,6 +55,7 @@
   * note: ETIMEDOUT is correctly defined in winsock.h
   */
  #include <winsock.h>
@@ -549,7 +582,7 @@ diff -Nru pthreads-w32-2-8-0-release.orig/implement.h pthreads-w32-2-8-0-release
  
  /*
   * In case ETIMEDOUT hasn't been defined above somehow.
-@@ -75,6 +76,8 @@
+@@ -78,6 +79,8 @@
  /* use local include files during development */
  #include "semaphore.h"
  #include "sched.h"

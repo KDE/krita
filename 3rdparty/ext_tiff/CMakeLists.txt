@@ -16,8 +16,8 @@ ExternalProject_Add( ext_tiff
 else (MSVC)
 ExternalProject_Add( ext_tiff
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-	URL http://files.kde.org/krita/build/dependencies/tiff-4.0.3.tar.gz
-	URL_MD5 051c1068e6a0627f461948c365290410
+	URL http://files.kde.org/krita/build/dependencies/tiff-4.0.6.tar.gz
+	URL_MD5 d1d2e940dea0b5ad435f21f03d96dd72
 
     CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_tiff}  ${GLOBAL_AUTOMAKE_PROFILE}
     BUILD_COMMAND make

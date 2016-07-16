@@ -38,7 +38,7 @@ else()
                 -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity \
                 -skip qtenginio -skip qtgraphicaleffects -skip qtlocation -skip qtmultimedia \
                 -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets \
-                -skip qtwebview \
+                -skip qtwebview -skp qtxmlpatterns \
                 -prefix ${EXTPREFIX_qt} "
         BUILD_COMMAND make
         INSTALL_COMMAND make install

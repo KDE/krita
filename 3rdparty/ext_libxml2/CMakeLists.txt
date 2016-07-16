@@ -20,7 +20,7 @@ else (MSVC)
             URL_MD5 817ee2f5297e9763097074575903682d
 
             INSTALL_DIR ${PREFIX_ext_libxml2}
-            CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_libxml2}   ${GLOBAL_AUTOMAKE_PROFILE}
+            CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_libxml2}   ${GLOBAL_AUTOMAKE_PROFILE} --with-python-install-dir=${PREFIX_ext_libxml2}
             BUILD_COMMAND make
             INSTALL_COMMAND make install
 

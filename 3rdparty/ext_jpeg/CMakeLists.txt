@@ -14,7 +14,7 @@ ExternalProject_Add( ext_jpeg
 else()
 ExternalProject_Add( ext_jpeg
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://files.kde.org/krita/build/dependencieslibjpeg-turbo-1.5.0.tar.gz
+    URL http://files.kde.org/krita/build/dependencies/libjpeg-turbo-1.5.0.tar.gz
     URL_MD5 3fc5d9b6a8bce96161659ae7a9939257
   
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_jpeg}  ${GLOBAL_AUTOMAKE_PROFILE} --without-simd

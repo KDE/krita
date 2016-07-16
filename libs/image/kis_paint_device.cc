@@ -1464,7 +1464,6 @@ inline bool moveBy(KisSequentialConstIterator& iter, int numPixels)
     }
     return true;
 }
-#include <QThread>
 
 static KisPaintDeviceSP createThumbnailDeviceInternal(const KisPaintDevice* srcDev, qint32 srcX0, qint32 srcY0, qint32 srcWidth, qint32 srcHeight, qint32 w, qint32 h, QRect outputRect)
 {
@@ -1523,11 +1522,11 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, QRect
     return thumbnail;
 }
 
-KisPaintDeviceSP KisPaintDevice::createThumbnailDeviceOversampled(qint32 w, qint32 h, qreal oversample, QRect rect,  QRect outputRect) const
+KisPaintDeviceSP KisPaintDevice::createThumbnailDeviceOversampled(qint32 w, qint32 h, qreal oversample, QRect rect,  QRect outputTileRect) const
 {
     int srcWidth, srcHeight;
     int srcX0, srcY0;
-    QRect outRect;
+    QRect outputRect;
     QRect e = (rect.isValid() && !rect.isNull()) ? rect : extent();
 
     //can't create thumbnail for an empty device, e.g. layer thumbnail for empty image
@@ -1559,12 +1558,12 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDeviceOversampled(qint32 w, qint
 
     oversampleAdjusted *= (hstart>0)?((qreal)h / hstart) : 1.; //readjusting oversample ratio, given that we had to adjust thumbnail size
 
-    outRect = QRect(0, 0, w, h);
+    outputRect = QRect(0, 0, w, h);
 
-    if (!outputRect.isValid()) {
+    if (outputTileRect.isValid()) {
         //compensating output rectangle for oversampling
-        outputRect = QRect(oversampleAdjusted * outputRect.topLeft(), oversampleAdjusted * outputRect.bottomRight());
-        outRect = outRect.intersected(outputRect);
+        outputTileRect = QRect(oversampleAdjusted * outputTileRect.topLeft(), oversampleAdjusted * outputTileRect.bottomRight());
+        outputRect = outputRect.intersected(outputTileRect);
     }
 
     KisPaintDeviceSP thumbnail = createThumbnailDeviceInternal(this, srcX0, srcY0, srcWidth, srcHeight, w, h, outputRect);

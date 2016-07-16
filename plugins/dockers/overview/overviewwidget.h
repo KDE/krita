@@ -66,7 +66,10 @@ public:
     virtual ~OverviewWidget();
 
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; }   
+    virtual void unsetCanvas()
+    {
+        m_canvas = 0;
+    }
 
 public Q_SLOTS:
     void startUpdateCanvasProjection();
@@ -77,7 +80,7 @@ protected:
     void resizeEvent(QResizeEvent *event);
     void showEvent(QShowEvent *event);
     void paintEvent(QPaintEvent *event);
-    
+
     virtual void mousePressEvent(QMouseEvent* event);
     virtual void mouseMoveEvent(QMouseEvent* event);
     virtual void mouseReleaseEvent(QMouseEvent* event);
@@ -88,7 +91,7 @@ private:
     QPointF previewOrigin();
     QTransform imageToPreviewTransform();
     QPolygonF previewPolygon();
-    
+
     KisSignalCompressor *m_compressor;
     QPixmap m_pixmap;
     KisCanvas2 *m_canvas;

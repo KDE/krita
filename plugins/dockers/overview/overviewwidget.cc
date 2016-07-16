@@ -109,7 +109,6 @@ void OverviewWidget::setCanvas(KoCanvasBase * canvas)
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
 
     if (m_canvas) {
-
         m_imageIdleWatcher.setTrackedImage(m_canvas->image());
 
         connect(&m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this, &OverviewWidget::generateThumbnail);
@@ -118,7 +117,7 @@ void OverviewWidget::setCanvas(KoCanvasBase * canvas)
         connect(m_canvas->image(), SIGNAL(sigSizeChanged(QPointF, QPointF)), m_compressor, SLOT(start()), Qt::UniqueConnection);
         connect(m_canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(update()), Qt::UniqueConnection);
         m_compressor->start();
-        m_thumbnailNeedsUpdate=true;
+        m_thumbnailNeedsUpdate = true;
         generateThumbnail();
     }
 }
@@ -241,7 +240,7 @@ void OverviewWidget::wheelEvent(QWheelEvent* event)
 void OverviewWidget::generateThumbnail()
 {
     QMutexLocker locker(&mutex);
-    if (m_canvas && m_thumbnailNeedsUpdate) {
+    if (m_canvas && m_thumbnailNeedsUpdate) { //this happens in gui thread, so we don't need a mutex to protect m_thumbnailNeedsUpdate
         KisImageSP image = m_canvas->image();
 
         if (!strokeId.isNull()) {
@@ -318,9 +317,9 @@ OverviewThumbnailStrokeStrategy::OverviewThumbnailStrokeStrategy(KisImageWSP ima
 
 QList<KisStrokeJobData *> OverviewThumbnailStrokeStrategy::createJobsData(KisPaintDeviceSP dev, KisPaintDeviceSP thumbDev, const QSize& thumbnailSize)
 {
-    QSize thumbnailOversampledSize = oversample*thumbnailSize;
+    QSize thumbnailOversampledSize = oversample * thumbnailSize;
     QRect imageRect = dev->extent();
-    if( (thumbnailOversampledSize.width()>imageRect.width()) || (thumbnailOversampledSize.height()>imageRect.height())){
+    if ((thumbnailOversampledSize.width() > imageRect.width()) || (thumbnailOversampledSize.height() > imageRect.height())) {
         thumbnailOversampledSize.scale(imageRect.size(), Qt::KeepAspectRatio);
     }
 
@@ -352,7 +351,7 @@ void OverviewThumbnailStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     if (d_pd) {
         //we aren't going to use oversample capability of createThumbnailDevice because it recomputes exact bounds for each small patch, which is
         //slow. We'll handle scaling separately.
-        KisPaintDeviceSP thumbnailTile = d_pd->dev->createThumbnailDeviceOversampled(d_pd->thumbnailSize.width(),d_pd->thumbnailSize.height(), 1, QRect(), d_pd->tileRect);
+        KisPaintDeviceSP thumbnailTile = d_pd->dev->createThumbnailDeviceOversampled(d_pd->thumbnailSize.width(), d_pd->thumbnailSize.height(), 1, QRect(), d_pd->tileRect);
         {
             QMutexLocker locker(&m_thumbnailMergeMutex);
             KisPainter gc(d_pd->thumbDev);
@@ -367,7 +366,7 @@ void OverviewThumbnailStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         QImage overviewImage;
 
         QPointer<KoUpdater> updater = new KoDummyUpdater();
-        KisTransformWorker worker(d_fp->thumbDev, 1/oversample, 1/oversample, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        KisTransformWorker worker(d_fp->thumbDev, 1 / oversample, 1 / oversample, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                                   updater, KisFilterStrategyRegistry::instance()->value("Bilinear"));
         worker.run();
 

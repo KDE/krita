@@ -1487,20 +1487,20 @@ static KisPaintDeviceSP createThumbnailDeviceInternal(const KisPaintDevice* srcD
 
 KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, QRect rect, QRect outputRect) const
 {
-    QSize thumbnailSize(w,h);
+    QSize thumbnailSize(w, h);
 
     int srcWidth, srcHeight;
     int srcX0, srcY0;
     QRect imageRect = rect.isValid() ? rect : extent();
 
     //can't create thumbnail for an empty device, e.g. layer thumbnail for empty image
-    if( imageRect.isEmpty() || !imageRect.isValid()){
+    if (imageRect.isEmpty() || !imageRect.isValid()) {
         return new KisPaintDevice(colorSpace());
     }
 
     imageRect.getRect(&srcX0, &srcY0, &srcWidth, &srcHeight);
 
-    if( (thumbnailSize.width()>imageRect.width()) || (thumbnailSize.height()>imageRect.height())){
+    if ((thumbnailSize.width() > imageRect.width()) || (thumbnailSize.height() > imageRect.height())) {
         thumbnailSize.scale(imageRect.size(), Qt::KeepAspectRatio);
     }
 
@@ -1509,32 +1509,32 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, QRect
     }
 
     KisPaintDeviceSP thumbnail = createThumbnailDeviceInternal(this, imageRect.x(), imageRect.y(), imageRect.width(), imageRect.height(),
-                                                               thumbnailSize.width(), thumbnailSize.height(), outputRect);
+                                 thumbnailSize.width(), thumbnailSize.height(), outputRect);
 
     return thumbnail;
 }
 
 KisPaintDeviceSP KisPaintDevice::createThumbnailDeviceOversampled(qint32 w, qint32 h, qreal oversample, QRect rect,  QRect outputTileRect) const
 {
-    QSize thumbnailSize(w,h);
+    QSize thumbnailSize(w, h);
     qreal oversampleAdjusted = qMax(oversample, 1.);
-    QSize thumbnailOversampledSize = oversampleAdjusted*thumbnailSize;
+    QSize thumbnailOversampledSize = oversampleAdjusted * thumbnailSize;
 
     QRect outputRect;
     QRect imageRect = (rect.isValid() && !rect.isNull()) ? rect : extent();
 
     //can't create thumbnail for an empty device, e.g. layer thumbnail for empty image
-    if( imageRect.isEmpty() || !imageRect.isValid()){
+    if (imageRect.isEmpty() || !imageRect.isValid()) {
         return new KisPaintDevice(colorSpace());
     }
 
     qint32 hstart = thumbnailOversampledSize.height();
 
-    if( (thumbnailOversampledSize.width()>imageRect.width()) || (thumbnailOversampledSize.height()>imageRect.height())){
+    if ((thumbnailOversampledSize.width() > imageRect.width()) || (thumbnailOversampledSize.height() > imageRect.height())) {
         thumbnailOversampledSize.scale(imageRect.size(), Qt::KeepAspectRatio);
     }
 
-    oversampleAdjusted *= (hstart>0)?((qreal)thumbnailOversampledSize.height() / hstart) : 1.; //readjusting oversample ratio, given that we had to adjust thumbnail size
+    oversampleAdjusted *= (hstart > 0) ? ((qreal)thumbnailOversampledSize.height() / hstart) : 1.; //readjusting oversample ratio, given that we had to adjust thumbnail size
 
     outputRect = QRect(0, 0, w, h);
 
@@ -1545,7 +1545,7 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDeviceOversampled(qint32 w, qint
     }
 
     KisPaintDeviceSP thumbnail = createThumbnailDeviceInternal(this, imageRect.x(), imageRect.y(), imageRect.width(), imageRect.height(),
-                                                               thumbnailOversampledSize.width(), thumbnailOversampledSize.height(), outputRect);
+                                 thumbnailOversampledSize.width(), thumbnailOversampledSize.height(), outputRect);
 
     if (oversample != 1. && oversampleAdjusted != 1.) {
         QPointer<KoUpdater> updater = new KoDummyUpdater();

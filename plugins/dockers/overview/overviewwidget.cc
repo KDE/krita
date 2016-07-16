@@ -41,7 +41,7 @@
 #include "kis_filter_strategy.h"
 #include <KoColorSpaceRegistry.h>
 
-const float oversample = 2.;
+const qreal oversample = 2.;
 const int thumbnailTileDim = 128;
 
 struct OverviewThumbnailStrokeStrategy::Private {
@@ -125,7 +125,7 @@ void OverviewWidget::setCanvas(KoCanvasBase * canvas)
 
 QSize OverviewWidget::calculatePreviewSize()
 {
-    QSize imageSize(m_canvas->image()->bounds().size());
+    QSize imageSize(m_canvas->image()->projection()->extent().size());
     imageSize.scale(size(), Qt::KeepAspectRatio);
     return imageSize;
 }
@@ -318,32 +318,17 @@ OverviewThumbnailStrokeStrategy::OverviewThumbnailStrokeStrategy(KisImageWSP ima
 
 QList<KisStrokeJobData *> OverviewThumbnailStrokeStrategy::createJobsData(KisPaintDeviceSP dev, KisPaintDeviceSP thumbDev, const QSize& thumbnailSize)
 {
-    QVector<QRect> tileRects = KritaUtils::splitRectIntoPatches(QRect(QPoint(0, 0), oversample*thumbnailSize), QSize(thumbnailTileDim, thumbnailTileDim));
+    QSize thumbnailOversampledSize = oversample*thumbnailSize;
+    QRect imageRect = dev->extent();
+    if( (thumbnailOversampledSize.width()>imageRect.width()) || (thumbnailOversampledSize.height()>imageRect.height())){
+        thumbnailOversampledSize.scale(imageRect.size(), Qt::KeepAspectRatio);
+    }
+
+    QVector<QRect> tileRects = KritaUtils::splitRectIntoPatches(QRect(QPoint(0, 0), thumbnailOversampledSize), QSize(thumbnailTileDim, thumbnailTileDim));
     QList<KisStrokeJobData*> jobsData;
+
     Q_FOREACH (const QRect &tileRectangle, tileRects) {
-        int w = oversample*thumbnailSize.width();
-        int h = oversample*thumbnailSize.height();
-        int srcWidth, srcHeight;
-        int srcX0, srcY0;
-        QRect e = dev->extent();
-
-        e.getRect(&srcX0, &srcY0, &srcWidth, &srcHeight);
-
-        if (w > srcWidth) {
-            w = srcWidth;
-            h = qint32(double(srcWidth) / w * h);
-        }
-        if (h > srcHeight) {
-            h = srcHeight;
-            w = qint32(double(srcHeight) / h * w);
-        }
-
-        if (srcWidth > srcHeight)
-            h = qint32(double(srcHeight) / srcWidth * w);
-        else if (srcHeight > srcWidth)
-            w = qint32(double(srcWidth) / srcHeight * h);
-
-        jobsData << new OverviewThumbnailStrokeStrategy::Private::ProcessData(dev, thumbDev, QSize(w,h), tileRectangle);
+        jobsData << new OverviewThumbnailStrokeStrategy::Private::ProcessData(dev, thumbDev, thumbnailOversampledSize, tileRectangle);
     }
     jobsData << new OverviewThumbnailStrokeStrategy::Private::FinishProcessing(thumbDev);
 

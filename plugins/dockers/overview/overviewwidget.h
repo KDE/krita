@@ -92,7 +92,6 @@ private:
     QTransform imageToPreviewTransform();
     QPolygonF previewPolygon();
 
-    KisSignalCompressor *m_compressor;
     QPixmap m_pixmap;
     KisCanvas2 *m_canvas;
 

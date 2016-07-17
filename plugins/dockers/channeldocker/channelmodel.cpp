@@ -30,7 +30,7 @@
 
 ChannelModel::ChannelModel(QObject* parent):
     QAbstractTableModel(parent),
-    m_canvas(nullptr), m_oversampleRatio(4)
+    m_canvas(nullptr), m_oversampleRatio(2)
 {
     setThumbnailSizeLimit(QSize(64, 64));
 }
@@ -209,15 +209,15 @@ void ChannelModel::updateThumbnails(void)
 {
 
     if (m_canvas && m_canvas->image()) {
-        auto canvas_image = m_canvas->image();
-        auto cs = canvas_image->colorSpace();
-        auto channelCount = cs->channelCount();
+        KisImageSP canvas_image = m_canvas->image();
+        const KoColorSpace* cs = canvas_image->colorSpace();
+        quint32 channelCount = cs->channelCount();
 
-        KisPaintDeviceSP dev = canvas_image->projection();
+        KisPaintDeviceSP dev = canvas_image->projection();        
+        KisPaintDeviceSP thumbnailDev = dev->createThumbnailDeviceOversampled(m_thumbnailSizeLimit.width(), m_thumbnailSizeLimit.height(),
+                                                                              m_oversampleRatio);
 
-        float ratio = std::min((float)m_thumbnailSizeLimit.width() / canvas_image->width(), (float)m_thumbnailSizeLimit.height() / canvas_image->height());
-        QSize thumbnailSize = ratio * canvas_image->size();
-        QSize thumbnailSizeOversample = m_oversampleRatio * thumbnailSize;
+        QSize thumbnailSizeOversample = thumbnailDev->extent().size();
 
         m_thumbnails.resize(channelCount);
 
@@ -228,10 +228,7 @@ void ChannelModel::updateThumbnails(void)
             *(image_cache_iterator++) = img.bits();
         }
 
-        //This is a simple anti-aliasing method.
-        //step 1 - nearest neighbor interpolation to 4x the thumbnail size. This is inaccurate, but fast.
-        auto thumbnailDev = dev->createThumbnailDevice(thumbnailSizeOversample.width(), thumbnailSizeOversample.height());
-        KisSequentialConstIterator it(thumbnailDev, QRect(0, 0, thumbnailSizeOversample.width(), thumbnailSizeOversample.height()));
+        KisSequentialConstIterator it(thumbnailDev, thumbnailDev->extent());
 
         do {
             const quint8* pixel = it.rawDataConst();
@@ -239,13 +236,6 @@ void ChannelModel::updateThumbnails(void)
                 *(image_cache[i]++) = cs->scaleToU8(pixel, i);
             }
         } while (it.nextPixel());
-
-        //step 2. Smooth downsampling to the final thumbnail size. Slower, but the image is small at this time.
-        for (auto &img : m_thumbnails) {
-            //for better quality we apply smooth transformation
-            //speed is not an issue, because thumbnail image has been decimated and is small.
-            img = img.scaled(thumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        }
     }
 }
 

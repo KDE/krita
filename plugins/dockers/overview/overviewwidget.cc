@@ -83,14 +83,12 @@ struct OverviewThumbnailStrokeStrategy::Private {
 
 OverviewWidget::OverviewWidget(QWidget * parent)
     : QWidget(parent)
-    , m_compressor(new KisSignalCompressor(500, KisSignalCompressor::POSTPONE, this))
     , m_canvas(0)
     , m_dragging(false)
     , m_imageIdleWatcher(500)
     , m_thumbnailNeedsUpdate(true)
 {
     setMouseTracking(true);
-    connect(m_compressor, SIGNAL(timeout()), SLOT(startUpdateCanvasProjection()));
     KisConfig cfg;
     QRgb c = cfg.readEntry("OverviewWidgetColor", 0xFF454C);
     m_outlineColor = QColor(c);
@@ -113,10 +111,10 @@ void OverviewWidget::setCanvas(KoCanvasBase * canvas)
 
         connect(&m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this, &OverviewWidget::generateThumbnail);
 
-        connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), m_compressor, SLOT(start()), Qt::UniqueConnection);
-        connect(m_canvas->image(), SIGNAL(sigSizeChanged(QPointF, QPointF)), m_compressor, SLOT(start()), Qt::UniqueConnection);
+        connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)),SLOT(startUpdateCanvasProjection()));
+        connect(m_canvas->image(), SIGNAL(sigSizeChanged(QPointF, QPointF)),SLOT(startUpdateCanvasProjection()));
+
         connect(m_canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(update()), Qt::UniqueConnection);
-        m_compressor->start();
         m_thumbnailNeedsUpdate = true;
         generateThumbnail();
     }
@@ -161,8 +159,6 @@ void OverviewWidget::startUpdateCanvasProjection()
     if (!m_canvas) return;
 
     m_thumbnailNeedsUpdate = true;
-
-    update();
 }
 
 void OverviewWidget::showEvent(QShowEvent *event)
@@ -181,7 +177,7 @@ void OverviewWidget::resizeEvent(QResizeEvent *event)
             QSize newSize = calculatePreviewSize();
             m_pixmap = m_pixmap.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
-        m_compressor->start();
+        m_thumbnailNeedsUpdate=true;
     }
 }
 

@@ -31,7 +31,6 @@ class ChannelDockerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     ChannelDockerDock();
-    ~ChannelDockerDock();
 
     QString observerName() { return "ChannelDockerDock"; }
     virtual void setCanvas(KoCanvasBase *canvas);

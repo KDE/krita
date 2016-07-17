@@ -38,7 +38,7 @@
 
 ChannelDockerDock::ChannelDockerDock( ) :
     QDockWidget(i18n("Channels")),
-    m_imageIdleWatcher(new KisIdleWatcher(500)),
+    m_imageIdleWatcher(new KisIdleWatcher(500, this)),
     m_compressor(new KisSignalCompressor(500, KisSignalCompressor::POSTPONE, this)),
     m_canvas(0), m_needsUpdate(true)
 {
@@ -56,11 +56,6 @@ ChannelDockerDock::ChannelDockerDock( ) :
     connect(m_channelTable,&QTableView::activated, m_model, &ChannelModel::rowActivated);
 
     connect(m_compressor, SIGNAL(timeout()),SLOT(startUpdateCanvasProjection()));
-}
-
-ChannelDockerDock::~ChannelDockerDock()
-{
-    delete m_imageIdleWatcher;
 }
 
 void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)

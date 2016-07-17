@@ -241,7 +241,7 @@ void OverviewWidget::wheelEvent(QWheelEvent* event)
 
 void OverviewWidget::generateThumbnail()
 {
-     QSize previewSize = calculatePreviewSize();
+    QSize previewSize = calculatePreviewSize();
     if (isVisible() && previewSize.isValid()) {
         QMutexLocker locker(&mutex);
         if (m_canvas && m_thumbnailNeedsUpdate) { //this happens in gui thread, so we don't need a mutex to protect m_thumbnailNeedsUpdate

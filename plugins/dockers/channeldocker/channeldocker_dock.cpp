@@ -34,11 +34,13 @@
 #include <kis_paint_device.h>
 #include "kis_signal_compressor.h"
 #include <KisView.h>
+#include <kis_idle_watcher.h>
 
 ChannelDockerDock::ChannelDockerDock( ) :
     QDockWidget(i18n("Channels")),
+    m_imageIdleWatcher(new KisIdleWatcher(500)),
     m_compressor(new KisSignalCompressor(500, KisSignalCompressor::POSTPONE, this)),
-    m_canvas(0)
+    m_canvas(0), m_needsUpdate(true)
 {
     m_channelTable = new QTableView(this);
     m_model = new ChannelModel(this);
@@ -54,6 +56,11 @@ ChannelDockerDock::ChannelDockerDock( ) :
     connect(m_channelTable,&QTableView::activated, m_model, &ChannelModel::rowActivated);
 
     connect(m_compressor, SIGNAL(timeout()),SLOT(startUpdateCanvasProjection()));
+}
+
+ChannelDockerDock::~ChannelDockerDock()
+{
+    delete m_imageIdleWatcher;
 }
 
 void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
@@ -77,28 +84,36 @@ void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
     if ( m_canvas && m_canvas->image() ) {
         KisPaintDeviceSP dev = m_canvas->image()->projection();
 
+        m_imageIdleWatcher->setTrackedImage(m_canvas->image());
+        connect(m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this, &ChannelDockerDock::updateChannelTable);
+
         connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), m_compressor, SLOT(start()), Qt::UniqueConnection);
         connect(dev, SIGNAL(colorSpaceChanged(const KoColorSpace*)), m_model, SLOT(slotColorSpaceChanged(const KoColorSpace*)));
         connect(dev, SIGNAL(colorSpaceChanged(const KoColorSpace*)), m_canvas, SLOT(channelSelectionChanged()));
         connect(m_model, SIGNAL(channelFlagsChanged()), m_canvas, SLOT(channelSelectionChanged()));
-
-        m_compressor->start();
+        m_needsUpdate=true;
+        updateChannelTable();
     }
 
 }
 
 void ChannelDockerDock::startUpdateCanvasProjection()
 {
-    if (m_canvas && m_canvas->image()){
+    m_needsUpdate = true;
+}
+
+void ChannelDockerDock::updateChannelTable()
+{
+    if (isVisible() && m_needsUpdate && m_canvas && m_canvas->image()){
         if( m_canvas->image()->currentLevelOfDetail() !=0 ){
             m_compressor->start();
-            qDebug() << "Wrong LOD";
             return;
         }
 
         m_model->updateData(m_canvas);
         m_channelTable->resizeRowsToContents();
         m_channelTable->resizeColumnsToContents();
+        m_needsUpdate=false;
     }
 }
 

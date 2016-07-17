@@ -23,6 +23,7 @@
 #include <kis_debug.h>
 
 #include <boost/pool/singleton_pool.hpp>
+#include "kis_tile_data_store_iterators.h"
 
 // BPP == bytes per pixel
 #define TILE_SIZE_4BPP (4 * __TILE_DATA_WIDTH * __TILE_DATA_HEIGHT)
@@ -155,11 +156,73 @@ void KisTileData::freeData(quint8* ptr, const qint32 pixelSize)
 
 void KisTileData::releaseInternalPools()
 {
-    if (!KisTileDataStore::instance()->numTiles() &&
-        !KisTileDataStore::instance()->numTilesInMemory()) {
+    const int maxMigratedTiles = 100;
 
-        BoostPool4BPP::purge_memory();
-        BoostPool8BPP::purge_memory();
+    if (KisTileDataStore::instance()->numTilesInMemory() < maxMigratedTiles) {
+
+        QVector<KisTileData*> dataObjects;
+        QVector<QByteArray> memoryChunks;
+        bool failedToLock = false;
+
+        KisTileDataStoreIterator *iter = KisTileDataStore::instance()->beginIteration();
+
+        while(iter->hasNext()) {
+            KisTileData *item = iter->next();
+
+            // first release all the clones
+            KisTileData *clone = 0;
+            while(item->m_clonesStack.pop(clone)) {
+                delete clone;
+            }
+
+            // check if the tile data has actually been pooled
+            if (item->m_pixelSize != 4 &&
+                item->m_pixelSize != 8) {
+
+                continue;
+            }
+
+            // check if the tile has been swapped out
+            if (item->m_data) {
+                const bool locked = item->m_swapLock.tryLockForWrite();
+                if (!locked) {
+                    failedToLock = true;
+                    break;
+                }
+
+                const int chunkSize = item->m_pixelSize * WIDTH * HEIGHT;
+                dataObjects << item;
+                memoryChunks << QByteArray((const char*)item->m_data, chunkSize);
+            }
+
+        }
+
+        if (!failedToLock) {
+            // purge the pools memory
+            BoostPool4BPP::purge_memory();
+            BoostPool8BPP::purge_memory();
+
+            auto it = dataObjects.begin();
+            auto chunkIt = memoryChunks.constBegin();
+
+            for (; it != dataObjects.end(); ++it, ++chunkIt) {
+                KisTileData *item = *it;
+                const int chunkSize = item->m_pixelSize * WIDTH * HEIGHT;
+
+                item->m_data = allocateData(item->m_pixelSize);
+                memcpy(item->m_data, chunkIt->data(), chunkSize);
+
+                item->m_swapLock.unlock();
+            }
+        } else {
+            Q_FOREACH (KisTileData *item, dataObjects) {
+                item->m_swapLock.unlock();
+            }
+
+            warnKrita << "WARNING: Failed to lock the tiles while trying to release the pooled memory";
+        }
+
+        KisTileDataStore::instance()->endIteration(iter);
 
 #ifdef DEBUG_POOL_RELEASE
         dbgKrita << "After purging unused memory:";
@@ -170,10 +233,10 @@ void KisTileData::releaseInternalPools()
         (void)system(command);
 #endif /* DEBUG_POOL_RELEASE */
 
+    } else {
+        dbgKrita << "DEBUG: releasing of the pooled memory has been cancelled:"
+                 << "there are still"
+                 << KisTileDataStore::instance()->numTilesInMemory()
+                 << "tiles in memory";
     }
-//    else {
-//        warnKrita << "WARNING: trying to purge pool memory while there are used tiles present!";
-//        warnKrita << "         The memory will *NOT* be returned to the system, though it will";
-//        warnKrita << "         be reused by Krita internally. Please report to developers!";
-//    }
 }

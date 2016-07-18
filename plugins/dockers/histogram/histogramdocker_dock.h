@@ -27,6 +27,7 @@ class KisCanvas2;
 class KisHistogramView;
 class KisIdleWatcher;
 class KoHistogramProducer;
+class HistogramDockerWidget;
 
 class HistogramDockerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
@@ -45,9 +46,8 @@ public Q_SLOTS:
 private:
     QVBoxLayout *m_layout;
     KisIdleWatcher *m_imageIdleWatcher;
-    KisHistogramView *m_histogramWidget;
+    HistogramDockerWidget *m_histogramWidget;
     KisCanvas2 *m_canvas;
-    KoHistogramProducer *m_producer;
     bool m_needsUpdate;
 };
 

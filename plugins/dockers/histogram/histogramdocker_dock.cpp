@@ -27,17 +27,19 @@
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_idle_watcher.h"
-#include "kis_histogram_view.h"
+#include "histogramdockerwidget.h"
 
 HistogramDockerDock::HistogramDockerDock( )
     : QDockWidget(i18n("Histogram")),
       m_imageIdleWatcher( new KisIdleWatcher(500, this)),
-      m_canvas(0), m_producer(nullptr), m_needsUpdate(true)
+      m_canvas(0), m_needsUpdate(true)
 {
     QWidget *page = new QWidget(this);
     m_layout = new QVBoxLayout(page);
 
-    m_histogramWidget = new KisHistogramView(this);
+    //m_histogramWidget = new KisHistogramView(this);
+    m_histogramWidget = new HistogramDockerWidget(this);
+
     m_histogramWidget->setMinimumHeight(50);
     //m_histogramWidget->setSmoothHistogram(true);
     m_layout->addWidget(m_histogramWidget, 1);
@@ -57,20 +59,19 @@ void HistogramDockerDock::setCanvas(KoCanvasBase * canvas)
         m_canvas->disconnectCanvasObserver(this);
         m_canvas->image()->disconnect(this);
     }
+
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    if (m_canvas && m_canvas->imageView() && m_canvas->imageView()->image() ) {
+    if (m_canvas) {
 
         KisPaintDeviceSP dev = m_canvas->image()->projection();
-        const KoColorSpace* cs = m_canvas->image()->colorSpace();
-
-        QList<QString> producers = KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(cs,true);
-        m_producer = KoHistogramProducerFactoryRegistry::instance()->get(producers.at(0))->generate();
-        m_histogramWidget->setPaintDevice( dev, m_producer, m_canvas->image()->bounds() );
+        m_histogramWidget->setPaintDevice( dev );
 
         m_imageIdleWatcher->setTrackedImage(m_canvas->image());
+
         connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), this, SLOT(startUpdateCanvasProjection()), Qt::UniqueConnection);
         connect(m_canvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), this, SLOT(sigColorSpaceChanged(const KoColorSpace*)), Qt::UniqueConnection);
         m_needsUpdate = true;
+        updateHistogram();
     }
 }
 
@@ -78,6 +79,7 @@ void HistogramDockerDock::unsetCanvas()
 {
     setEnabled(false);
     m_canvas = 0;
+    m_needsUpdate = false;
 }
 
 void HistogramDockerDock::startUpdateCanvasProjection()
@@ -89,15 +91,15 @@ void HistogramDockerDock::startUpdateCanvasProjection()
 
 void HistogramDockerDock::sigColorSpaceChanged(const KoColorSpace *cs)
 {
-    QList<QString> producers = KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(cs,true);
-    m_producer = KoHistogramProducerFactoryRegistry::instance()->get(producers.at(0))->generate();
-    m_histogramWidget->setProducer(m_producer);
+    if( isVisible() ){
+        m_needsUpdate = true;
+    }
 }
 
 void HistogramDockerDock::updateHistogram()
 {
-    if( m_needsUpdate ){
-        m_histogramWidget->startUpdateCanvasProjection();
+    if( isVisible() && m_needsUpdate ){
+        m_histogramWidget->updateHistogram();
         m_needsUpdate = false;
     }
 }

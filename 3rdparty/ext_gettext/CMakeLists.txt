@@ -21,7 +21,7 @@ ExternalProject_Add( ext_gettext
     URL_MD5 3e7ed1ac886b9b1a4e23e71113da6358
 	
 	INSTALL_DIR ${PREFIX_ext_gettext}
-	CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_gettext} --disable-java   ${GLOBAL_AUTOMAKE_PROFILE}
+	CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_gettext} --disable-java   ${GLOBAL_AUTOMAKE_PROFILE} --disable-native-java 
         BUILD_COMMAND make
         INSTALL_COMMAND make install
 

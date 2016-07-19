@@ -476,15 +476,11 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
     Q_UNUSED(info_);
     Q_UNUSED(softnessFactor);
 
-    qreal angle   = normalizeAngle(shape.rotation() + d->angle);
-    qreal scaleX = shape.scaleX() * d->scale;
-    qreal scaleY = shape.scaleY() * d->scale;
-
-    double scale = 0.5 * (scaleX + scaleY);
-
     prepareBrushPyramid();
-    QImage outputImage = d->brushPyramid->createImage(
-        KisDabShape(scale, shape.ratio(), -angle), subPixelX, subPixelY);
+    QImage outputImage = d->brushPyramid->createImage(KisDabShape(
+            shape.scale() * d->scale, shape.ratio(),
+            -normalizeAngle(shape.rotation() + d->angle)),
+        subPixelX, subPixelY);
 
     qint32 maskWidth = outputImage.width();
     qint32 maskHeight = outputImage.height();

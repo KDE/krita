@@ -163,8 +163,7 @@ void KisQImagePyramid::calculateParams(KisDabShape shape,
 
     QRectF originalBounds = QRectF(QPointF(), originalSize);
     QTransform originalTransform =
-        baseBrushTransform(KisDabShape(shape.scale(), 1.0, shape.rotation()),
-                           subPixelX, subPixelY,
+        baseBrushTransform(shape, subPixelX, subPixelY,
                            originalBounds);
 
     qreal realBaseScaleX = qreal(baseSize.width()) / originalSize.width();

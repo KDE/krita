@@ -116,6 +116,7 @@ void KisAutoBrushTest::testDabSize()
     dabSizeHelper(a, "2x, 45d",   KisDabShape(2.0, 1.0, 0.25 * M_PI),   22, 22);
     dabSizeHelper(a, "0.5x, 45d", KisDabShape(0.5, 1.0, 0.25 * M_PI),    6, 6);
     dabSizeHelper(a, "0.5x, 45d", KisDabShape(0.5, 1.0, 0.25 * M_PI),    6, 6);
+    dabSizeHelper(a, "0.5y",      KisDabShape(1.0, 0.5, 0.0),           10, 3);
 }
 
 //#define SAVE_OUTPUT_IMAGES

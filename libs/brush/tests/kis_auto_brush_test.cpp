@@ -91,32 +91,31 @@ void KisAutoBrushTest::testMaskGeneration()
 
 }
 
-void KisAutoBrushTest::testSizeRotation()
+static void dabSizeHelper(KisBrushSP const& brush,
+    QString const& name, KisDabShape const& shape, int expectedWidth, int expectedHeight)
 {
-    {
-        KisCircleMaskGenerator* circle = new KisCircleMaskGenerator(10, 0.5, 1.0, 1.0, 2, false);
-        KisBrushSP a = new KisAutoBrush(circle, 0.0, 0.0);
-        QCOMPARE(a->width(), 10);
-        QCOMPARE(a->height(), 5);
-        QCOMPARE(a->maskWidth(KisDabShape(), 0.0, 0.0, KisPaintInformation()), 10);
-        QCOMPARE(a->maskHeight(KisDabShape(), 0.0, 0.0, KisPaintInformation()), 5);
-        QCOMPARE(a->maskWidth(KisDabShape(2.0, 1.0, 0.0), 0.0, 0.0, KisPaintInformation()), 20);
-        QCOMPARE(a->maskHeight(KisDabShape(2.0, 1.0, 0.0), 0.0, 0.0, KisPaintInformation()), 10);
-        QCOMPARE(a->maskWidth(KisDabShape(0.5, 1.0, 0.0), 0.0, 0.0, KisPaintInformation()), 5);
-        QCOMPARE(a->maskHeight(KisDabShape(0.5, 1.0, 0.0), 0.0, 0.0, KisPaintInformation()), 3);
-        QCOMPARE(a->maskWidth(KisDabShape(1.0, 1.0, M_PI), 0.0, 0.0, KisPaintInformation()), 10);
-        QCOMPARE(a->maskHeight(KisDabShape(1.0, 1.0, M_PI), 0.0, 0.0, KisPaintInformation()), 5);
-        QCOMPARE(a->maskWidth(KisDabShape(1.0, 1.0, M_PI_2), 0.0, 0.0, KisPaintInformation()), 6); // ceil-rule
-        QCOMPARE(a->maskHeight(KisDabShape(1.0, 1.0,  M_PI_2), 0.0, 0.0, KisPaintInformation()), 10);
-        QCOMPARE(a->maskWidth(KisDabShape(1.0, 1.0, -M_PI_2), 0.0, 0.0, KisPaintInformation()), 6); // ceil rule
-        QCOMPARE(a->maskHeight(KisDabShape(1.0, 1.0, -M_PI_2), 0.0, 0.0, KisPaintInformation()), 11);  // ceil rule
-        QCOMPARE(a->maskWidth(KisDabShape(1.0, 1.0, 0.25 * M_PI), 0.0, 0.0, KisPaintInformation()), 11);
-        QCOMPARE(a->maskHeight(KisDabShape(1.0, 1.0, 0.25 * M_PI), 0.0, 0.0, KisPaintInformation()), 11);
-        QCOMPARE(a->maskWidth(KisDabShape(2.0, 1.0, 0.25 * M_PI), 0.0, 0.0, KisPaintInformation()), 22); // ceil rule
-        QCOMPARE(a->maskHeight(KisDabShape(2.0, 1.0, 0.25 * M_PI), 0.0, 0.0, KisPaintInformation()), 22); // ceil rule
-        QCOMPARE(a->maskWidth(KisDabShape(0.5, 1.0, 0.25 * M_PI), 0.0, 0.0, KisPaintInformation()), 6);  // ceil rule
-        QCOMPARE(a->maskHeight(KisDabShape(0.5, 1.0, 0.25 * M_PI), 0.0, 0.0, KisPaintInformation()), 6);  // ceil rule
-    }
+    qDebug() << name;
+    QCOMPARE(brush->maskWidth(shape, 0.0, 0.0, KisPaintInformation()), expectedWidth);
+    QCOMPARE(brush->maskHeight(shape, 0.0, 0.0, KisPaintInformation()), expectedHeight);
+}
+
+void KisAutoBrushTest::testDabSize()
+{
+    KisCircleMaskGenerator* circle = new KisCircleMaskGenerator(10, 0.5, 1.0, 1.0, 2, false);
+    KisBrushSP a = new KisAutoBrush(circle, 0.0, 0.0);
+    QCOMPARE(a->width(), 10);
+    QCOMPARE(a->height(), 5);
+
+    dabSizeHelper(a, "Identity",  KisDabShape(),                        10,  5);
+    dabSizeHelper(a, "Double",    KisDabShape(2.0, 1.0, 0.0),           20, 10);
+    dabSizeHelper(a, "Halve",     KisDabShape(0.5, 1.0, 0.0),            5,  3);
+    dabSizeHelper(a, "180 deg",   KisDabShape(1.0, 1.0, M_PI),          10,  5);
+    dabSizeHelper(a, "90 deg",    KisDabShape(1.0, 1.0, M_PI_2),         6, 10); // ceil rule
+    dabSizeHelper(a, "-90 deg",   KisDabShape(1.0, 1.0, -M_PI_2),        6, 11); // ceil rule
+    dabSizeHelper(a, "45 deg",    KisDabShape(1.0, 1.0, 0.25 * M_PI),   11, 11);
+    dabSizeHelper(a, "2x, 45d",   KisDabShape(2.0, 1.0, 0.25 * M_PI),   22, 22);
+    dabSizeHelper(a, "0.5x, 45d", KisDabShape(0.5, 1.0, 0.25 * M_PI),    6, 6);
+    dabSizeHelper(a, "0.5x, 45d", KisDabShape(0.5, 1.0, 0.25 * M_PI),    6, 6);
 }
 
 //#define SAVE_OUTPUT_IMAGES

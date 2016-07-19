@@ -8,8 +8,8 @@ if (MSVC)
 ExternalProject_Add(
     ext_ocio
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://files.kde.org/krita/build/dependencies/imageworks-OpenColorIO-v1.0.8-0-g19ed2e3.zip
-    URL_MD5 084584fb45d2979048e7acc2f10c756b
+    URL http://files.kde.org/krita/build/dependencies/OpenColorIO-master.zip
+    URL_MD5 7065faa41103ed27f5ea9b01b9e14c91
 
     INSTALL_DIR ${EXTPREFIX_ocio}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_ocio} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DOCIO_BUILD_APPS=OFF -DOCIO_BUILD_TRUELIGHT=OFF -DOCIO_BUILD_NUKE=OFF -DOCIO_BUILD_DOCS=OFF -DOCIO_BUILD_TESTS=OFF -DOCIO_BUILD_PYGLUE=OFF -DOCIO_BUILD_STATIC_JNIGLUE=OFF 
@@ -22,8 +22,8 @@ else()
 ExternalProject_Add(
     ext_ocio
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://files.kde.org/krita/build/dependencies/imageworks-OpenColorIO-v1.0.8-0-g19ed2e3.tar.gz
-    URL_MD5 9838f5f1cf624a3d1253241f22e2179a
+    URL http://files.kde.org/krita/build/dependencies/OpenColorIO-master.zip
+    URL_MD5 7065faa41103ed27f5ea9b01b9e14c91
 
     INSTALL_DIR ${EXTPREFIX_ocio}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_ocio} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DOCIO_BUILD_APPS=OFF -DOCIO_BUILD_TRUELIGHT=OFF -DOCIO_BUILD_NUKE=OFF -DOCIO_BUILD_DOCS=OFF -DOCIO_BUILD_TESTS=OFF -DOCIO_BUILD_PYGLUE=OFF -DOCIO_BUILD_STATIC_JNIGLUE=OFF

@@ -48,6 +48,16 @@ struct Q_DECL_HIDDEN KisGaussRectangleMaskGenerator::Private
     {
     }
 
+    Private(const Private &rhs)
+        : xfade(rhs.xfade),
+        yfade(rhs.yfade),
+        halfWidth(rhs.halfWidth),
+        halfHeight(rhs.halfHeight),
+        alphafactor(rhs.alphafactor),
+        fadeMaker(rhs.fadeMaker, *this)
+    {
+    }
+
     qreal xfade, yfade;
     qreal halfWidth, halfHeight;
     qreal alphafactor;
@@ -61,6 +71,17 @@ KisGaussRectangleMaskGenerator::KisGaussRectangleMaskGenerator(qreal diameter, q
     : KisMaskGenerator(diameter, ratio, fh, fv, spikes, antialiasEdges, RECTANGLE, GaussId), d(new Private(antialiasEdges))
 {
     setScale(1.0, 1.0);
+}
+
+KisGaussRectangleMaskGenerator::KisGaussRectangleMaskGenerator(const KisGaussRectangleMaskGenerator &rhs)
+    : KisMaskGenerator(rhs),
+      d(new Private(*rhs.d))
+{
+}
+
+KisMaskGenerator* KisGaussRectangleMaskGenerator::clone() const
+{
+    return new KisGaussRectangleMaskGenerator(*this);
 }
 
 void KisGaussRectangleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
@@ -83,7 +104,6 @@ void KisGaussRectangleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
 
 KisGaussRectangleMaskGenerator::~KisGaussRectangleMaskGenerator()
 {
-    delete d;
 }
 
 inline quint8 KisGaussRectangleMaskGenerator::Private::value(qreal xr, qreal yr) const

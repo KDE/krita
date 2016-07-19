@@ -34,6 +34,7 @@ KisStrokeStrategyUndoCommandBased(const KUndo2MagicString &name,
     m_initCommand(initCommand),
     m_finishCommand(finishCommand),
     m_undoAdapter(undoAdapter),
+    m_macroId(-1),
     m_macroCommand(0)
 {
     enableJob(KisSimpleStrokeStrategy::JOB_INIT);
@@ -151,9 +152,19 @@ void KisStrokeStrategyUndoCommandBased::setCommandExtraData(KUndo2CommandExtraDa
     m_commandExtraData.reset(data);
 }
 
+void KisStrokeStrategyUndoCommandBased::setMacroId(int value)
+{
+    m_macroId = value;
+}
+
 void KisStrokeStrategyUndoCommandBased::postProcessToplevelCommand(KUndo2Command *command)
 {
     if (m_commandExtraData) {
         command->setExtraData(m_commandExtraData.take());
+    }
+
+    KisSavedMacroCommand *savedCommand = dynamic_cast<KisSavedMacroCommand*>(command);
+    if (savedCommand) {
+        savedCommand->setMacroId(m_macroId);
     }
 }

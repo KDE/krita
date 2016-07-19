@@ -35,6 +35,7 @@ struct Q_DECL_HIDDEN KisQueuesProgressUpdater::Private
 
     QMutex mutex;
     QTimer timer;
+    QTimer startDelayTimer;
 
     int queueSizeMetric;
     int initialQueueSizeMetric;
@@ -45,6 +46,7 @@ struct Q_DECL_HIDDEN KisQueuesProgressUpdater::Private
     bool tickingRequested;
 
     static const int TIMER_INTERVAL = 500;
+    static const int PROGRESS_DELAY = 1000;
 };
 
 
@@ -59,6 +61,12 @@ KisQueuesProgressUpdater::KisQueuesProgressUpdater(KoProgressProxy *progressProx
     connect(this, SIGNAL(sigStartTicking()), SLOT(startTicking()), Qt::QueuedConnection);
     connect(this, SIGNAL(sigStopTicking()), SLOT(stopTicking()), Qt::QueuedConnection);
     connect(&m_d->timer, SIGNAL(timeout()), SLOT(timerTicked()));
+
+    m_d->startDelayTimer.setInterval(Private::PROGRESS_DELAY);
+    m_d->startDelayTimer.setSingleShot(true);
+
+    connect(&m_d->startDelayTimer, SIGNAL(timeout()), &m_d->timer, SLOT(start()));
+    connect(&m_d->startDelayTimer, SIGNAL(timeout()), SLOT(timerTicked()));
 }
 
 KisQueuesProgressUpdater::~KisQueuesProgressUpdater()
@@ -101,12 +109,12 @@ void KisQueuesProgressUpdater::hide()
 
 void KisQueuesProgressUpdater::startTicking()
 {
-    m_d->timer.start();
-    timerTicked();
+    m_d->startDelayTimer.start();
 }
 
 void KisQueuesProgressUpdater::stopTicking()
 {
+    m_d->startDelayTimer.stop();
     m_d->timer.stop();
     timerTicked();
 }

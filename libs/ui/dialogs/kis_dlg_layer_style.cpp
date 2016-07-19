@@ -260,10 +260,9 @@ void KisDlgLayerStyle::slotLoadStyle()
 {
     QString filename; // default value?
 
-    KoFileDialog dialog(this, KoFileDialog::OpenFile, "krita/layerstyle");
+    KoFileDialog dialog(this, KoFileDialog::OpenFile, "layerstyle");
     dialog.setCaption(i18n("Select ASL file"));
-    //dialog.setDefaultDir(QDir::cleanPath(filename));
-    dialog.setNameFilter(i18n("Layer style library (*.asl)"));
+    dialog.setMimeTypeFilters(QStringList() << "application/x-photoshop-style-library", "application/x-photoshop-style-library");
     filename = dialog.filename();
 
     m_stylesSelector->loadCollection(filename);
@@ -274,10 +273,9 @@ void KisDlgLayerStyle::slotSaveStyle()
 {
     QString filename; // default value?
 
-    KoFileDialog dialog(this, KoFileDialog::SaveFile, "krita/layerstyle");
+    KoFileDialog dialog(this, KoFileDialog::SaveFile, "layerstyle");
     dialog.setCaption(i18n("Select ASL file"));
-    //dialog.setDefaultDir(QDir::cleanPath(filename));
-    dialog.setNameFilter(i18n("Layer style configuration (*.asl)"));
+    dialog.setMimeTypeFilters(QStringList() << "application/x-photoshop-style-library", "application/x-photoshop-style-library");
     filename = dialog.filename();
 
     QScopedPointer<KisPSDLayerStyleCollectionResource> collection(
@@ -825,8 +823,9 @@ DropShadow::DropShadow(Mode mode, QWidget *parent)
     ui.intOpacity->setRange(0, 100);
     ui.intOpacity->setSuffix(i18n(" %"));
 
-    ui.intDistance->setRange(0, 30000);
+    ui.intDistance->setRange(0, 500);
     ui.intDistance->setSuffix(i18n(" px"));
+    ui.intDistance->setExponentRatio(3.0);
 
     ui.intSpread->setRange(0, 100);
     ui.intSpread->setSuffix(i18n(" %"));
@@ -863,7 +862,7 @@ DropShadow::DropShadow(Mode mode, QWidget *parent)
     if (m_mode == InnerShadowMode) {
         ui.chkLayerKnocksOutDropShadow->setVisible(false);
         ui.grpMain->setTitle(i18n("Inner Shadow"));
-        ui.lblSpread->setText(i18n("Choke"));
+        ui.lblSpread->setText(i18n("Choke:"));
     }
 }
 
@@ -1082,7 +1081,7 @@ InnerGlow::InnerGlow(Mode mode, KisCanvasResourceProvider *resourceProvider, QWi
     ui.intSize->setRange(0, 250);
     ui.intSize->setSuffix(i18n(" px"));
 
-    ui.intRange->setRange(0, 100);
+    ui.intRange->setRange(1, 100);
     ui.intRange->setSuffix(i18n(" %"));
 
     ui.intJitter->setRange(0, 100);
@@ -1110,7 +1109,7 @@ InnerGlow::InnerGlow(Mode mode, KisCanvasResourceProvider *resourceProvider, QWi
     if (m_mode == OuterGlowMode) {
         ui.cmbSource->hide();
         ui.lblSource->hide();
-        ui.lblChoke->setText(i18nc("layer styles parameter", "Spread"));
+        ui.lblChoke->setText(i18nc("layer styles parameter", "Spread:"));
     }
 
 }

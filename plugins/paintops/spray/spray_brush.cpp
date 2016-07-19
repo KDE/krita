@@ -64,6 +64,21 @@ SprayBrush::~SprayBrush()
     delete m_rand;
 }
 
+void SprayBrush::setProperties(KisSprayProperties * properties,
+                               KisColorProperties * colorProperties,
+                               KisShapeProperties * shapeProperties,
+                               KisShapeDynamicsProperties * shapeDynamicsProperties,
+                               KisBrushSP brush)
+{
+    m_properties = properties;
+    m_colorProperties = colorProperties;
+    m_shapeProperties = shapeProperties;
+    m_shapeDynamicsProperties = shapeDynamicsProperties;
+    m_brush = brush;
+    if (m_brush) {
+        m_brush->notifyStrokeStarted();
+    }
+}
 
 qreal SprayBrush::rotationAngle(KisRandomSourceSP randomSource)
 {
@@ -250,8 +265,8 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             m_painter->setPaintColor(m_inkColor);
         }
 
-        qreal jitteredWidth = qMax(qreal(1.0), m_shapeProperties->width * particleScale * additionalScale);
-        qreal jitteredHeight = qMax(qreal(1.0), m_shapeProperties->height * particleScale * additionalScale);
+        qreal jitteredWidth = qMax(1.0 * additionalScale, m_shapeProperties->width * particleScale * additionalScale);
+        qreal jitteredHeight = qMax(1.0 * additionalScale, m_shapeProperties->height * particleScale * additionalScale);
 
         if (m_shapeProperties->enabled){
         switch (m_shapeProperties->shape){
@@ -259,10 +274,10 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             case 0:
             {
                 if (m_shapeProperties->width == m_shapeProperties->height){
-                    paintCircle(m_painter, nx + x, ny + y, qRound(jitteredWidth * 0.5));
+                    paintCircle(m_painter, nx + x, ny + y, jitteredWidth * 0.5);
                 }
                 else {
-                    paintEllipse(m_painter, nx + x, ny + y, qRound(jitteredWidth * 0.5) , qRound(jitteredHeight * 0.5), rotationZ);
+                    paintEllipse(m_painter, nx + x, ny + y, jitteredWidth * 0.5 , jitteredHeight * 0.5, rotationZ);
                 }
                 break;
             }
@@ -290,6 +305,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
                     QTransform m;
                     m.rotate(rad2deg(rotationZ));
+                    m.scale(additionalScale, additionalScale);
 
                     if (m_shapeDynamicsProperties->randomSize) {
                         m.scale(particleScale, particleScale);
@@ -320,7 +336,9 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             // Auto-brush
         }
         else {
-            QPointF hotSpot = m_brush->hotSpot(particleScale, particleScale, -rotationZ, info);
+            QPointF hotSpot = m_brush->hotSpot(particleScale * additionalScale,
+                                               particleScale * additionalScale,
+                                               -rotationZ, info);
             QPointF pos(nx + x, ny + y);
             QPointF pt = pos - hotSpot;
 
@@ -335,7 +353,9 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             //KisFixedPaintDeviceSP dab;
             if (m_brush->brushType() == IMAGE ||
                     m_brush->brushType() == PIPE_IMAGE) {
-                m_fixedDab = m_brush->paintDevice(m_fixedDab->colorSpace(), particleScale, -rotationZ, info, xFraction, yFraction);
+                m_fixedDab = m_brush->paintDevice(m_fixedDab->colorSpace(),
+                                                  particleScale * additionalScale,
+                                                  -rotationZ, info, xFraction, yFraction);
 
                 if (m_colorProperties->useRandomHSV && m_transfo) {
                     quint8 * dabPointer = m_fixedDab->data();
@@ -345,7 +365,10 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
             }
             else {
-                m_brush->mask(m_fixedDab, m_inkColor, particleScale, particleScale, -rotationZ, info, xFraction, yFraction);
+                m_brush->mask(m_fixedDab, m_inkColor,
+                              particleScale * additionalScale,
+                              particleScale * additionalScale,
+                              -rotationZ, info, xFraction, yFraction);
             }
             m_painter->bltFixed(QPoint(ix, iy), m_fixedDab, m_fixedDab->bounds());
         }
@@ -396,82 +419,33 @@ void SprayBrush::paintParticle(KisRandomAccessorSP &writeAccessor, const KoColor
     memcpy(writeAccessor->rawData(), pcolor.data(), m_dabPixelSize);
 }
 
-void SprayBrush::paintCircle(KisPainter* painter, qreal x, qreal y, int radius)
+void SprayBrush::paintCircle(KisPainter* painter, qreal x, qreal y, qreal radius)
 {
     QPainterPath path;
-    // TODO: leaving this here, in the future we might want to spray regular polygons (hexagon, octagon, etc.)
-    /*int steps = 12;
-    qreal cx, cy;
-
-    qreal length = 2.0 * M_PI;
-    qreal step = 1.0 / steps;
-    path.moveTo(radius + x, y);
-    for (int i = 1; i < steps; i++) {
-        cx = cos(i * step * length);
-        cy = sin(i * step * length);
-
-        cx *= radius;
-        cy *= radius;
-
-        cx += x;
-        cy += y;
-
-        path.lineTo(cx, cy);
-    }
-    path.closeSubpath();*/
     path.addEllipse(QPointF(x,y),radius,radius);
     painter->fillPainterPath(path);
 }
 
 
-void SprayBrush::paintEllipse(KisPainter* painter, qreal x, qreal y, int a, int b, qreal angle, int steps)
+void SprayBrush::paintEllipse(KisPainter* painter, qreal x, qreal y, qreal a, qreal b, qreal angle)
 {
     QPainterPath path;
-    qreal beta = angle;
-    qreal sinbeta = sin(beta);
-    qreal cosbeta = cos(beta);
-
-    path.moveTo(x + a * cosbeta, y + a * sinbeta);
-    qreal step = 360.0 / steps;
-    for (int i = step; i < 360; i += step) {
-        qreal alpha = i * (M_PI / 180) ;
-        qreal sinalpha = sin(alpha);
-        qreal cosalpha = cos(alpha);
-
-        qreal X = x + (a * cosalpha * cosbeta - b * sinalpha * sinbeta);
-        qreal Y = y + (a * cosalpha * sinbeta + b * sinalpha * cosbeta);
-
-        path.lineTo(X, Y);
-    }
-    path.closeSubpath();
+    path.addEllipse(QPointF(), a, b);
+    QTransform t;
+    t.translate(x, y);
+    t.rotateRadians(angle);
+    path = t.map(path);
     painter->fillPainterPath(path);
 }
 
-void SprayBrush::paintRectangle(KisPainter* painter, qreal x, qreal y, int width, int height, qreal angle)
+void SprayBrush::paintRectangle(KisPainter* painter, qreal x, qreal y, qreal width, qreal height, qreal angle)
 {
     QPainterPath path;
-    QTransform transform;
-
-    qreal halfWidth = width * 0.5;
-    qreal halfHeight = height * 0.5;
-    qreal tx, ty;
-
-
-    transform.reset();
-    transform.rotateRadians(angle);
-    // top left
-    transform.map(- halfWidth,  - halfHeight, &tx, &ty);
-    path.moveTo(QPointF(tx + x, ty + y));
-    // top right
-    transform.map(+ halfWidth,  - halfHeight, &tx, &ty);
-    path.lineTo(QPointF(tx + x, ty + y));
-    // bottom right
-    transform.map(+ halfWidth,  + halfHeight, &tx, &ty);
-    path.lineTo(QPointF(tx + x, ty + y));
-    // botom left
-    transform.map(- halfWidth,  + halfHeight, &tx, &ty);
-    path.lineTo(QPointF(tx + x, ty + y));
-    path.closeSubpath();
+    path.addRect(QRectF(-0.5 * width, -0.5 * height, width, height));
+    QTransform t;
+    t.translate(x, y);
+    t.rotateRadians(angle);
+    path = t.map(path);
     painter->fillPainterPath(path);
 }
 

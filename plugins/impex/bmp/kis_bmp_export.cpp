@@ -23,7 +23,7 @@
 #include <QSlider>
 
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 #include <QApplication>
 
 #include <KisFilterChain.h>
@@ -47,8 +47,8 @@ KisImportExportFilter::ConversionStatus KisBMPExport::convert(const QByteArray& 
 {
     dbgFile << "BMP export! From:" << from << ", To:" << to << "";
 
-    KisDocument *input = m_chain->inputDocument();
-    QString filename = m_chain->outputFile();
+    KisDocument *input = inputDocument();
+    QString filename = outputFile();
 
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;
@@ -58,17 +58,11 @@ KisImportExportFilter::ConversionStatus KisBMPExport::convert(const QByteArray& 
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    QUrl url = QUrl::fromLocalFile(filename);
-
-    qApp->processEvents(); // For vector layers to be updated
-    input->image()->waitForDone();
-
     QRect rc = input->image()->bounds();
-    input->image()->refreshGraph();
-    input->image()->lock();
+    // the image must be locked at the higher levels
+    KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
     QImage image = input->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
-    input->image()->unlock();
-    image.save(url.toLocalFile());
+    image.save(filename);
     return KisImportExportFilter::OK;
 }
 

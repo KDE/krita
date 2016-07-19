@@ -411,5 +411,23 @@ void KisUpdateSchedulerTest::testTimeMonitor()
     KisUpdateTimeMonitor::instance()->endStrokeMeasure();
 }
 
+void KisUpdateSchedulerTest::testLodSync()
+{
+    KisImageSP image = buildTestingImage();
+    QRect imageRect = image->bounds();
+    KisNodeSP rootLayer = image->root();
+    KisNodeSP paintLayer1 = rootLayer->firstChild();
+
+    QCOMPARE(paintLayer1->name(), QString("paint1"));
+
+
+    image->setLevelOfDetailBlocked(false);
+    image->setDesiredLevelOfDetail(2);
+
+    image->explicitRegenerateLevelOfDetail();
+
+    image->waitForDone();
+}
+
 QTEST_MAIN(KisUpdateSchedulerTest)
 

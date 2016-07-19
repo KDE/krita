@@ -147,7 +147,8 @@ KisOpenPane::KisOpenPane(QWidget *parent, const QStringList& mimeFilter, const Q
     connect(d->m_sectionList, SIGNAL(itemActivated(QTreeWidgetItem*, int)),
             this, SLOT(itemClicked(QTreeWidgetItem*)));
    
-   connect(d->cancelButton,SIGNAL(clicked()),this,SLOT(close()));
+   connect(d->cancelButton, SIGNAL(clicked()), this, SLOT(close()));
+   connect(d->cancelButton, SIGNAL(clicked()), this, SLOT(deleteLater()));
 
     initTemplates(templatesResourcePath);
 
@@ -178,8 +179,7 @@ KisOpenPane::KisOpenPane(QWidget *parent, const QStringList& mimeFilter, const Q
 
 KisOpenPane::~KisOpenPane()
 {
-    if (!d->m_sectionList->selectedItems().isEmpty())
-    {
+    if (!d->m_sectionList->selectedItems().isEmpty()) {
         KoSectionListItem* item = dynamic_cast<KoSectionListItem*>(d->m_sectionList->selectedItems().first());
 
         if (item) {
@@ -204,7 +204,6 @@ void KisOpenPane::openFileDialog()
                           ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
                           : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
     dialog.setMimeTypeFilters(m_mimeFilter);
-    dialog.setHideNameFilterDetailsOption();
     Q_FOREACH (const QString &filename, dialog.filenames()) {
         emit openExistingFile(QUrl::fromUserInput(filename));
     }
@@ -212,8 +211,6 @@ void KisOpenPane::openFileDialog()
 
 void KisOpenPane::initTemplates(const QString& templatesResourcePath)
 {
-    qDebug() << "initTemplates();" << templatesResourcePath;
-
     QTreeWidgetItem* selectItem = 0;
     QTreeWidgetItem* firstItem = 0;
     const int templateOffset = 1000;
@@ -231,7 +228,7 @@ void KisOpenPane::initTemplates(const QString& templatesResourcePath)
             }
 
             KisTemplatesPane* pane = new KisTemplatesPane(this, group->name(),
-                                                        group, templateTree.defaultTemplate());
+                                                          group, templateTree.defaultTemplate());
             connect(pane, SIGNAL(openUrl(const QUrl&)), this, SIGNAL(openTemplate(const QUrl&)));
             connect(pane, SIGNAL(alwaysUseChanged(KisTemplatesPane*, const QString&)),
                     this, SIGNAL(alwaysUseChanged(KisTemplatesPane*, const QString&)));

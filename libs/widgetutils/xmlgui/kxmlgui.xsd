@@ -91,8 +91,8 @@
             <xsd:documentation>
                 
                 Specifies an entry index for merging application defined actions into
-                those with positions fixed by the style guide and ui_standards.rc. This
-                tag should not be used anywhere except ui_standards.rc.
+                those with positions fixed by the style guide and ui_standards.xmlgui. This
+                tag should not be used anywhere except ui_standards.xmlgui.
                 
             </xsd:documentation>
         </xsd:annotation>
@@ -147,7 +147,7 @@
                     merging e.g. a part, it matches the name of a DefineGroup in the
                     mainwindow's rc file.
                     - append: this is used to control the placement of the action during
-                    the merging with ui_standards.rc. This is mapped to MergeLocal tags
+                    the merging with ui_standards.xmlgui. This is mapped to MergeLocal tags
                     there.  Note that this feature is currently only available for the
                     mainwindow, not for parts/plugins.  
                     - text, whatsThis, toolTip, iconText, shortcut, icon, priority: all those are
@@ -244,9 +244,9 @@
             <xsd:attribute name="append" type="identifier" use="optional" />
             <xsd:attribute name="group" type="identifier" use="optional" />
             <xsd:attribute name="icon" type="xsd:string" use="optional" />
-            <!-- noMerge: if true, the standard menu layout from ui_standards.rc won't be used. -->
+            <!-- noMerge: if true, the standard menu layout from ui_standards.xmlgui won't be used. -->
             <xsd:attribute name="noMerge" type="xsd:boolean" use="optional" />
-            <!-- deleted: if true, the menu will not be created, even if ui_standards.rc mentions it -->
+            <!-- deleted: if true, the menu will not be created, even if ui_standards.xmlgui mentions it -->
             <xsd:attribute name="deleted" type="xsd:boolean" use="optional" />
         </xsd:complexType>
     </xsd:element>
@@ -332,7 +332,7 @@
                         <xsd:choice maxOccurs="unbounded" >
                             <xsd:element name="text" type="caption" />
                             <xsd:element ref="Action" minOccurs="0" maxOccurs="unbounded" />
-			    <!-- Should 0 ActionS really be allowed? konqueror.rc does it.. -->
+			    <!-- Should 0 ActionS really be allowed? konqueror.xmlgui does it.. -->
                             <xsd:element ref="Separator" minOccurs="0" maxOccurs="unbounded" />
                             <xsd:element ref="ActionList" minOccurs="0" maxOccurs="unbounded" />
                             <xsd:element ref="Merge" minOccurs="0" />
@@ -382,9 +382,9 @@
                         <xsd:attribute name="newline" use="optional" default="false" type="xsd:boolean" />
                         <xsd:attribute name="hidden" use="optional" default="false" type="xsd:boolean"/>
                         <xsd:attribute name="noEdit" use="optional" default="false" type="xsd:boolean"/>
-                        <!-- noMerge: if true, the standard toolbar layout from ui_standards.rc won't be used. -->
+                        <!-- noMerge: if true, the standard toolbar layout from ui_standards.xmlgui won't be used. -->
                         <xsd:attribute name="noMerge" type="xsd:boolean" use="optional" />
-                        <!-- deleted: if true, the toolbar will not be created, even if ui_standards.rc mentions it -->
+                        <!-- deleted: if true, the toolbar will not be created, even if ui_standards.xmlgui mentions it -->
                         <xsd:attribute name="deleted" type="xsd:boolean" use="optional" />
                     </xsd:complexType>
                 </xsd:element>

@@ -19,7 +19,7 @@
 
 #include <klocalizedstring.h>
 #include "kis_layer.h"
-#include "commands/kis_layer_commands.h"
+#include "commands/kis_layer_command.h"
 
 KisLayerCommand::KisLayerCommand(const KUndo2MagicString& name, KisLayerSP layer) :
         KUndo2Command(name), m_layer(layer)

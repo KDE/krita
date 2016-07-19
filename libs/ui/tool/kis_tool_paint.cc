@@ -74,12 +74,15 @@
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_action_manager.h>
 #include <kis_action.h>
+#include "strokes/kis_color_picker_stroke_strategy.h"
+
 
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     : KisTool(canvas, cursor),
       m_showColorPreview(false),
       m_colorPreviewShowComparePlate(false),
-      m_colorPickerDelayTimer()
+      m_colorPickerDelayTimer(),
+      m_isOutlineEnabled(true)
 {
     m_specialHoverModifier = false;
     m_optionsWidgetLayout = 0;
@@ -128,6 +131,12 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
 
     m_colorPickerDelayTimer.setSingleShot(true);
     connect(&m_colorPickerDelayTimer, SIGNAL(timeout()), this, SLOT(activatePickColorDelayed()));
+
+    using namespace std::placeholders; // For _1 placeholder
+    std::function<void(PickingJob)> callback =
+        std::bind(&KisToolPaint::addPickerJob, this, _1);
+    m_colorPickingCompressor.reset(
+        new PickingCompressor(100, callback, KisSignalCompressor::FIRST_ACTIVE));
 }
 
 
@@ -318,13 +327,16 @@ void KisToolPaint::activatePickColorDelayed()
 
 }
 
+bool KisToolPaint::isPickingAction(AlternateAction action) {
+    return action == PickFgNode ||
+        action == PickBgNode ||
+        action == PickFgImage ||
+        action == PickBgImage;
+}
+
 void KisToolPaint::deactivateAlternateAction(AlternateAction action)
 {
-    if (action != PickFgNode &&
-        action != PickBgNode &&
-        action != PickFgImage &&
-        action != PickBgImage) {
-
+    if (!isPickingAction(action)) {
         KisTool::deactivateAlternateAction(action);
         return;
     }
@@ -336,31 +348,64 @@ void KisToolPaint::deactivateAlternateAction(AlternateAction action)
     deactivatePickColor(action);
 }
 
+void KisToolPaint::addPickerJob(const PickingJob &pickingJob)
+{
+    /**
+     * The actual picking is delayed by a compressor, so we can get this
+     * event when the stroke is already closed
+     */
+    if (!m_pickerStrokeId) return;
+
+    KIS_ASSERT_RECOVER_RETURN(isPickingAction(pickingJob.action));
+
+    const QPoint imagePoint = image()->documentToIntPixel(pickingJob.documentPixel);
+    const bool fromCurrentNode = pickingJob.action == PickFgNode || pickingJob.action == PickBgNode;
+    m_pickingResource = colorPreviewResourceId(pickingJob.action);
+
+    KisPaintDeviceSP device = fromCurrentNode ?
+        currentNode()->projection() : image()->projection();
+
+    image()->addJob(m_pickerStrokeId,
+                    new KisColorPickerStrokeStrategy::Data(device, imagePoint));
+}
+
 void KisToolPaint::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    if (pickColor(event->point, action)) {
+    if (isPickingAction(action)) {
+        KIS_ASSERT_RECOVER_RETURN(!m_pickerStrokeId);
         setMode(SECONDARY_PAINT_MODE);
+
+        KisColorPickerStrokeStrategy *strategy = new KisColorPickerStrokeStrategy();
+        connect(strategy, &KisColorPickerStrokeStrategy::sigColorUpdated,
+                this, &KisToolPaint::slotColorPickingFinished);
+
+        m_pickerStrokeId = image()->startStroke(strategy);
+        m_colorPickingCompressor->start(PickingJob(event->point, action));
         requestUpdateOutline(event->point, event);
     } else {
         KisTool::beginAlternateAction(event, action);
     }
-
 }
 
 void KisToolPaint::continueAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    if (!pickColor(event->point, action)) {
-        KisTool::continueAlternateAction(event, action);
-    } else {
+    if (isPickingAction(action)) {
+        KIS_ASSERT_RECOVER_RETURN(m_pickerStrokeId);
+        m_colorPickingCompressor->start(PickingJob(event->point, action));
         requestUpdateOutline(event->point, event);
+    } else {
+        KisTool::continueAlternateAction(event, action);
     }
 }
 
 void KisToolPaint::endAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    if (pickColor(event->point, action)) {
-        setMode(KisTool::HOVER_MODE);
+    if (isPickingAction(action)) {
+        KIS_ASSERT_RECOVER_RETURN(m_pickerStrokeId);
+        image()->endStroke(m_pickerStrokeId);
+        m_pickerStrokeId.clear();
         requestUpdateOutline(event->point, event);
+        setMode(HOVER_MODE);
     } else {
         KisTool::endAlternateAction(event, action);
     }
@@ -375,41 +420,20 @@ int KisToolPaint::colorPreviewResourceId(AlternateAction action)
     return resource;
 }
 
-bool KisToolPaint::pickColor(const QPointF &documentPixel,
-                             AlternateAction action)
+void KisToolPaint::slotColorPickingFinished(const KoColor &color)
 {
-    if (action != PickFgNode &&
-        action != PickBgNode &&
-        action != PickFgImage &&
-        action != PickBgImage) {
+    canvas()->resourceManager()->setResource(m_pickingResource, color);
 
-        return false;
-    }
+    if (!m_showColorPreview) return;
 
-    bool fromCurrentNode = action == PickFgNode || action == PickBgNode;
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KIS_ASSERT_RECOVER_RETURN(kisCanvas);
+    QColor previewColor = kisCanvas->displayColorConverter()->toQColor(color);
 
-    int resource = colorPreviewResourceId(action);
-
-    KisPaintDeviceSP device = fromCurrentNode ?
-        currentNode()->projection() : image()->projection();
-
-    QPoint imagePoint = image()->documentToIntPixel(documentPixel);
-
-    KoColor color;
-    QColor previewColor;
-
-    if (KisToolUtils::pickWrapped(device, imagePoint, &color, image())) {
-        canvas()->resourceManager()->setResource(resource, color);
-
-        KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-        KIS_ASSERT_RECOVER(kisCanvas) { return true; }
-        previewColor = kisCanvas->displayColorConverter()->toQColor(color);
-    }
-
-    m_colorPreviewCurrentColor = previewColor;
     m_colorPreviewShowComparePlate = true;
+    m_colorPreviewCurrentColor = previewColor;
 
-    return true;
+    requestUpdateOutline(m_outlineDocPoint, 0);
 }
 
 void KisToolPaint::mousePressEvent(KoPointerEvent *event)
@@ -623,7 +647,7 @@ void KisToolPaint::increaseBrushSize()
     std::vector<int>::iterator result =
         std::upper_bound(m_standardBrushSizes.begin(),
                          m_standardBrushSizes.end(),
-                         (int)paintopSize);
+                         qRound(paintopSize));
 
     int newValue = result != m_standardBrushSizes.end() ? *result : m_standardBrushSizes.back();
 

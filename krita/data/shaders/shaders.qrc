@@ -12,5 +12,7 @@
         <file>radial_gradient.frag</file>
         <file>simple_texture.frag</file>
         <file>square_gradient.frag</file>
+        <file>matrix_transform_legacy.vert</file>
+        <file>simple_texture_legacy.frag</file>
     </qresource>
 </RCC>

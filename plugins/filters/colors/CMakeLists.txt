@@ -11,4 +11,4 @@ ki18n_wrap_ui(kritaextensioncolorsfilters_SOURCES
 
 add_library(kritaextensioncolorsfilters MODULE ${kritaextensioncolorsfilters_SOURCES})
 target_link_libraries(kritaextensioncolorsfilters kritaui)
-install(TARGETS kritaextensioncolorsfilters  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritaextensioncolorsfilters  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

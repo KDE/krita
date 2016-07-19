@@ -2,9 +2,9 @@ project (krita-and-all-its-deps)
 
 #
 # Build all dependencies for Krita and finally Krita itself.
-# Parameters: EXTERNALS_DOWNLOAD_DIR place to download all packagfes
+# Parameters: EXTERNALS_DOWNLOAD_DIR place to download all packages
 #             INSTALL_ROOT place to install everything to
-#             WIN64_BUILD=TRUE/FALSE Whether it's a win64 build: false is default
+#             MXE_TOOLCHAIN: the toolchain file to cross-compile using MXE
 # 
 # Example usage: cmake ..\kritadeposx -DEXTERNALS_DOWNLOAD_DIR=/dev2/d -DINSTALL_ROOT=/dev2/i -DWIN64_BUILD=TRUE  -DBOOST_LIBRARYDIR=/dev2/i/lib   -G "Visual Studio 11 Win64"
 
@@ -53,19 +53,20 @@ if (MSVC)
 endif()
 
 if (MSYS)
-        set(GLOBAL_PROFILE ${GLOBAL_PROFILE} -DCMAKE_TOOLCHAIN_FILE=/data/mxe/mxe/usr/i686-w64-mingw32/share/cmake/mxe-conf.cmake 
+	set(PATCH_COMMAND patch)
+    set(GLOBAL_PROFILE ${GLOBAL_PROFILE} 
+                           -DCMAKE_TOOLCHAIN_FILE=${MXE_TOOLCHAIN}
                            -DCMAKE_FIND_PREFIX_PATH=${CMAKE_PREFIX_PATH}
                            -DCMAKE_SYSTEM_INCLUDE_PATH=${CMAKE_PREFIX_PATH}/include
                            -DCMAKE_INCLUDE_PATH=${CMAKE_PREFIX_PATH}/include 
                            -DCMAKE_LIBRARY_PATH=${CMAKE_PREFIX_PATH}/lib
                            -DZLIB_ROOT=${CMAKE_PREFIX_PATH}
-        )
-        set(GLOBAL_AUTOMAKE_PROFILE  --host=i686-pc-mingw32 )
-
+    )
+    set(GLOBAL_AUTOMAKE_PROFILE  --host=i686-pc-mingw32 )
 endif() 
 
 if (APPLE)
-    set(GLOBAL_PROFILE ${GLOBAL_PROFILE} -DCMAKE_MACOSX_RPATH=ON)
+    set(GLOBAL_PROFILE ${GLOBAL_PROFILE} -DCMAKE_MACOSX_RPATH=ON -DKDE_SKIP_RPATH_SETTINGS=ON -DBUILD_WITH_INSTALL_RPATH=ON -DAPPLE_SUPPRESS_X11_WARNING=ON)
     set(PATCH_COMMAND patch)
 endif ()
 
@@ -110,3 +111,6 @@ add_subdirectory( ext_qt )
 add_subdirectory( ext_poppler )
 add_subdirectory( ext_libraw )
 add_subdirectory( ext_frameworks )
+if (MSVC)
+    add_subdirectory( google-breakpad )
+endif()

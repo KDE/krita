@@ -24,7 +24,7 @@
 #include "kis_image_patch.h"
 #include "kis_shared.h"
 #include "kritaui_export.h"
-#include <KoConfig.h> // for HAVE_OPENGL
+#include "opengl/kis_texture_tile_update_info.h"
 
 #include "kis_ui_types.h"
 
@@ -36,12 +36,11 @@ public:
 
     virtual QRect dirtyViewportRect();
     virtual QRect dirtyImageRect() const = 0;
+    virtual int levelOfDetail() const = 0;
 };
 
 Q_DECLARE_METATYPE(KisUpdateInfoSP)
 
-#ifdef HAVE_OPENGL
-#include "opengl/kis_texture_tile_update_info.h"
 
 struct ConversionOptions {
     ConversionOptions() : m_needsConversion(false) {}
@@ -76,15 +75,19 @@ public:
     QRect dirtyImageRect() const;
 
     void assignDirtyImageRect(const QRect &rect);
+    void assignLevelOfDetail(int lod);
 
     bool needsConversion() const;
     void convertColorSpace();
 
+    int levelOfDetail() const;
+
 private:
     QRect m_dirtyImageRect;
     ConversionOptions m_options;
+    int m_levelOfDetail;
 };
-#endif /* HAVE_OPENGL */
+
 
 class KisPPUpdateInfo : public KisUpdateInfo
 {
@@ -96,6 +99,7 @@ public:
 
     QRect dirtyViewportRect();
     QRect dirtyImageRect() const;
+    int levelOfDetail() const;
 
     /**
      * The rect that was reported by KisImage as dirty

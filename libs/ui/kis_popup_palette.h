@@ -104,7 +104,7 @@ private:
 
     const KoColorDisplayRendererInterface *m_displayRenderer;
 
-    KisSignalCompressor *m_colorChangeCompressor;
+    QScopedPointer<KisSignalCompressor> m_colorChangeCompressor;
     KisBrushHud *m_brushHud;
     KisRoundHudButton *m_settingsButton;
     KisRoundHudButton *m_brushHudButton;

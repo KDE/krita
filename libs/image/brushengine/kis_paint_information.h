@@ -149,6 +149,13 @@ public:
     qreal drawingAngle() const;
 
     /**
+     * Lock current drawing angle for the rest of the stroke. If some
+     * value has already been locked, \p alpha shown the coefficient
+     * with which the new velue should be blended in.
+     */
+    void lockCurrentDrawingAngle(qreal alpha) const;
+
+    /**
      * Current brush direction vector computed from the cursor movement
      *
      * WARNING: this method is available *only* inside paintAt() call,

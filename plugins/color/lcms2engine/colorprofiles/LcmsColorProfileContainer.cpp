@@ -52,7 +52,6 @@ public:
     bool hasColorants;
     bool hasTRC;
     bool adaptedFromD50;
-    cmsNAMEDCOLORLIST *namedColorList;
     cmsCIEXYZ mediaWhitePoint;
     cmsCIExyY whitePoint;
     cmsCIEXYZTRIPLE colorants;
@@ -451,7 +450,10 @@ void LcmsColorProfileContainer::LinearizeFloatValue(QVector <double> & Value) co
             TRCtriplet.fill(cmsEvalToneCurveFloat(d->grayTRC, Value[0]));
         }
     }
-    Value = TRCtriplet;
+
+    Value[0] = TRCtriplet[0];
+    Value[1] = TRCtriplet[1];
+    Value[2] = TRCtriplet[2];
 }
 
 void LcmsColorProfileContainer::DelinearizeFloatValue(QVector <double> & Value) const
@@ -483,7 +485,9 @@ void LcmsColorProfileContainer::DelinearizeFloatValue(QVector <double> & Value) 
         }
     }
 
-    Value = TRCtriplet;
+    Value[0] = TRCtriplet[0];
+    Value[1] = TRCtriplet[1];
+    Value[2] = TRCtriplet[2];
 }
 
 void LcmsColorProfileContainer::LinearizeFloatValueFast(QVector <double> & Value) const

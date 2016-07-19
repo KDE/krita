@@ -196,10 +196,19 @@ public:
      */
     QString paintOpCompositeOp() const;
 
+    void setEraserMode(bool value);
+    bool eraserMode() const;
+
+    qreal savedEraserSize() const;
+    void setSavedEraserSize(qreal value);
+    qreal savedBrushSize() const;
+    void setSavedBrushSize(qreal value);
+
+    QString effectivePaintOpCompositeOp() const;
+
     void setPreset(KisPaintOpPresetWSP preset);
 
     KisPaintOpPresetWSP preset() const;
-
 
     /**
      * @return filename of the 3D brush model, empty if no brush is set

@@ -189,6 +189,7 @@ protected:
     void setUseSelectionInProjection(bool value) const;
 
 public Q_SLOTS:
+    void slotImageSizeChanged();
 
     /**
      * gets this layer. Overriddes function in

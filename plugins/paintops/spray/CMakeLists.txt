@@ -16,7 +16,7 @@ add_library(kritaspraypaintop MODULE ${kritaspraypaintop_SOURCES})
 
 target_link_libraries(kritaspraypaintop kritalibpaintop)
 
-install(TARGETS kritaspraypaintop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritaspraypaintop  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

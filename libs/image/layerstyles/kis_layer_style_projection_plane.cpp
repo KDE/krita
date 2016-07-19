@@ -180,23 +180,26 @@ void KisLayerStyleProjectionPlane::apply(KisPainter *painter, const QRect &rect)
     }
 }
 
-void KisLayerStyleProjectionPlane::syncLodCache()
+KisPaintDeviceList KisLayerStyleProjectionPlane::getLodCapableDevices() const
 {
+    KisPaintDeviceList list;
     KisAbstractProjectionPlaneSP sourcePlane = m_d->sourceProjectionPlane.toStrongRef();
 
     if (m_d->style->isEnabled()) {
         Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->stylesBefore) {
-            plane->syncLodCache();
+            list << plane->getLodCapableDevices();
         }
 
-        sourcePlane->syncLodCache();
+        list << sourcePlane->getLodCapableDevices();
 
         Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->stylesAfter) {
-            plane->syncLodCache();
+            list << plane->getLodCapableDevices();
         }
     } else {
-        sourcePlane->syncLodCache();
+        list << sourcePlane->getLodCapableDevices();
     }
+
+    return list;
 }
 
 QRect KisLayerStyleProjectionPlane::needRect(const QRect &rect, KisLayer::PositionToFilthy pos) const

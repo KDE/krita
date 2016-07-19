@@ -43,7 +43,7 @@ QByteArray KoMD5Generator::generateHash(const QByteArray &array)
     return array;
 }
 
-QByteArray KoMD5Generator::generateHash(QString filename)
+QByteArray KoMD5Generator::generateHash(const QString &filename)
 {
     QByteArray result;
 

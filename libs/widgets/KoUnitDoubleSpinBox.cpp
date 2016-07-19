@@ -26,13 +26,7 @@
 #include <WidgetsDebug.h>
 
 #include <klocalizedstring.h>
-
-#ifdef Q_OS_WIN
-#include <float.h>
-#ifndef __MINGW32__
-#define isnan _isnan
-#endif
-#endif
+#include <qnumeric.h>
 
 // #define DEBUG_VALIDATOR
 // #define DEBUG_VALUEFROMTEXT
@@ -101,7 +95,7 @@ QValidator::State KoUnitDoubleSpinBox::validate(QString &input, int &pos) const
 
     const double value = valueFromText( number );
     double newVal = 0.0;
-    if (!isnan(value)) {
+    if (!qIsNaN(value)) {
         bool ok;
         const KoUnit unit = KoUnit::fromSymbol(unitName, &ok);
         if ( ok )

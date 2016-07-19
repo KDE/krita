@@ -15,6 +15,7 @@ set(kritaflake_SRCS
     KoFlake.cpp
     KoCanvasBase.cpp
     KoResourceManager_p.cpp
+    KoDerivedResourceConverter.cpp
     KoCanvasResourceManager.cpp
     KoDocumentResourceManager.cpp
     KoCanvasObserverBase.cpp
@@ -218,7 +219,7 @@ target_link_libraries(kritaflake kritapigment kritawidgetutils kritaodf kritaund
 target_link_libraries(kritaflake LINK_INTERFACE_LIBRARIES kritapigment kritawidgetutils kritaodf kritaundo2 KF5::WidgetsAddons )
 
 set_target_properties(kritaflake PROPERTIES
-    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 
 install(TARGETS kritaflake  ${INSTALL_TARGETS_DEFAULT_ARGS})

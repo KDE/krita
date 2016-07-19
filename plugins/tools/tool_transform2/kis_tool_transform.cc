@@ -259,7 +259,7 @@ void KisToolTransform::beginActionImpl(KoPointerEvent *event, bool usePrimaryAct
     }
 
     if (!m_strokeData.strokeId()) {
-        startStroke(m_currentArgs.mode());
+        startStroke(m_currentArgs.mode(), false);
     } else {
         bool result = false;
 
@@ -798,7 +798,7 @@ void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShap
         m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, currentNode());
     }
 
-    startStroke(ToolTransformArgs::FREE_TRANSFORM);
+    startStroke(ToolTransformArgs::FREE_TRANSFORM, false);
 }
 
 void KisToolTransform::deactivate()
@@ -825,7 +825,7 @@ void KisToolTransform::requestStrokeCancellation()
     cancelStroke();
 }
 
-void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
+void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool forceReset)
 {
     Q_ASSERT(!m_strokeData.strokeId());
 
@@ -856,7 +856,11 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
     }
 
     ToolTransformArgs fetchedArgs;
-    bool fetchedFromCommand = tryFetchArgsFromCommandAndUndo(&fetchedArgs, mode, currentNode);
+    bool fetchedFromCommand = false;
+
+    if (!forceReset) {
+        fetchedFromCommand = tryFetchArgsFromCommandAndUndo(&fetchedArgs, mode, currentNode);
+    }
 
     if (m_optionsWidget) {
         m_workRecursively = m_optionsWidget->workRecursively() ||
@@ -896,10 +900,10 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
     initThumbnailImage(previewDevice);
     updateSelectionPath();
 
-    if (fetchedFromCommand) {
+    if (!forceReset && fetchedFromCommand) {
         m_currentArgs = fetchedArgs;
         initGuiAfterTransformMode();
-    } else if (!tryInitTransformModeFromNode(currentNode)) {
+    } else if (forceReset || !tryInitTransformModeFromNode(currentNode)) {
         initTransformMode(mode);
     }
 
@@ -1096,7 +1100,20 @@ void KisToolTransform::slotResetTransform()
     if (m_currentArgs.continuedTransform()) {
         ToolTransformArgs::TransformMode savedMode = m_currentArgs.mode();
 
-        if (m_currentArgs.continuedTransform()->mode() == savedMode) {
+        /**
+         * Our reset transform button can be used for two purposes:
+         *
+         * 1) Reset current transform to the initial one, which was
+         *    loaded from the previous user action.
+         *
+         * 2) Reset transform frame to infinity when the frame is unchanged
+         */
+
+        const bool transformDiffers = !m_currentArgs.continuedTransform()->isSameMode(m_currentArgs);
+
+        if (transformDiffers &&
+            m_currentArgs.continuedTransform()->mode() == savedMode) {
+
             m_currentArgs.restoreContinuedState();
             initGuiAfterTransformMode();
             slotEditingFinished();
@@ -1104,7 +1121,7 @@ void KisToolTransform::slotResetTransform()
         } else {
             cancelStroke();
             image()->waitForDone();
-            startStroke(savedMode);
+            startStroke(savedMode, true);
 
             KIS_ASSERT_RECOVER_NOOP(!m_currentArgs.continuedTransform());
         }
@@ -1121,7 +1138,7 @@ void KisToolTransform::slotRestartTransform()
     ToolTransformArgs savedArgs(m_currentArgs);
     cancelStroke();
     image()->waitForDone();
-    startStroke(savedArgs.mode());
+    startStroke(savedArgs.mode(), true);
 }
 
 void KisToolTransform::slotEditingFinished()

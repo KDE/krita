@@ -56,25 +56,27 @@ KisPaintOpSettingsWidget::KisPaintOpSettingsWidget(QWidget * parent)
         , m_d(new Private())
 {
     setObjectName("KisPaintOpPresetsWidget");
-    
+
     m_d->model       = new KisPaintOpOptionListModel(this);
     m_d->optionsList = new KisCategorizedListView(false, this);
     m_d->optionsList->setModel(m_d->model);
-    m_d->optionsList->setItemDelegate(new KisCategorizedItemDelegate(false, m_d->optionsList));
-    m_d->optionsList->setFixedWidth(128);
-    
-    QSizePolicy policy =  QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-    policy.setHorizontalStretch(0);
+    m_d->optionsList->setItemDelegate(new KisCategorizedItemDelegate(m_d->optionsList));
+    m_d->optionsList->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
+    m_d->optionsList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    QSizePolicy policy =  QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     m_d->optionsList->setSizePolicy(policy);
 
     m_d->optionsStack = new QStackedWidget(this);
     policy = QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    policy.setHorizontalStretch(3);
     m_d->optionsStack->setSizePolicy(policy);
-    
+
     QHBoxLayout* layout = new QHBoxLayout(this);
     layout->addWidget(m_d->optionsList);
     layout->addWidget(m_d->optionsStack);
+
+    layout->setStretch(0, 0);
+    layout->setStretch(1, 1);
 
     m_saveLockedOption = false;
 
@@ -176,7 +178,7 @@ void KisPaintOpSettingsWidget::changePage(const QModelIndex& index)
     QPalette palette;
     palette.setColor(QPalette::Base, QColor(255,200,200));
     palette.setColor(QPalette::Text, Qt::black);
-    
+
     if(m_d->model->entryAt(info, index)) {
         m_d->optionsStack->setCurrentIndex(info.index);
     }

@@ -77,6 +77,7 @@ enum {
 QWindowsTabletSupport *QTAB = 0;
 static QPointer<QWidget> targetWindow = 0; //< Window receiving last tablet event
 static QPointer<QWidget> qt_tablet_target = 0; //< Widget receiving last tablet event
+static bool dialogOpen = false;  //< KisTabletSupportWin is not a Q_OBJECT and can't accept dialog signals
 
 HWND createDummyWindow(const QString &className, const wchar_t *windowName, WNDPROC wndProc)
 {
@@ -110,23 +111,23 @@ HWND createDummyWindow(const QString &className, const wchar_t *windowName, WNDP
 
 void printContext(const LOGCONTEXT &lc)
 {
-    dbgInput << "# Getting current context data:";
-    dbgInput << ppVar(lc.lcName);
-    dbgInput << ppVar(lc.lcDevice);
-    dbgInput << ppVar(lc.lcInOrgX);
-    dbgInput << ppVar(lc.lcInOrgY);
-    dbgInput << ppVar(lc.lcInExtX);
-    dbgInput << ppVar(lc.lcInExtY);
-    dbgInput << ppVar(lc.lcOutOrgX);
-    dbgInput << ppVar(lc.lcOutOrgY);
-    dbgInput << ppVar(lc.lcOutExtX);
-    dbgInput << ppVar(lc.lcOutExtY);
-    dbgInput << ppVar(lc.lcSysOrgX);
-    dbgInput << ppVar(lc.lcSysOrgY);
-    dbgInput << ppVar(lc.lcSysExtX);
-    dbgInput << ppVar(lc.lcSysExtY);
+    dbgTablet << "# Getting current context data:";
+    dbgTablet << ppVar(lc.lcName);
+    dbgTablet << ppVar(lc.lcDevice);
+    dbgTablet << ppVar(lc.lcInOrgX);
+    dbgTablet << ppVar(lc.lcInOrgY);
+    dbgTablet << ppVar(lc.lcInExtX);
+    dbgTablet << ppVar(lc.lcInExtY);
+    dbgTablet << ppVar(lc.lcOutOrgX);
+    dbgTablet << ppVar(lc.lcOutOrgY);
+    dbgTablet << ppVar(lc.lcOutExtX);
+    dbgTablet << ppVar(lc.lcOutExtY);
+    dbgTablet << ppVar(lc.lcSysOrgX);
+    dbgTablet << ppVar(lc.lcSysOrgY);
+    dbgTablet << ppVar(lc.lcSysExtX);
+    dbgTablet << ppVar(lc.lcSysExtY);
 
-    dbgInput << "Qt Desktop Geometry" << QApplication::desktop()->geometry();
+    dbgTablet << "Qt Desktop Geometry" << QApplication::desktop()->geometry();
 }
 
 
@@ -218,7 +219,7 @@ static void handleTabletEvent(QWidget *windowWidget, const QPointF &local, const
 
 
     if ((type == QEvent::TabletRelease || buttons == Qt::NoButton) && (qt_tablet_target != 0)) {
-        dbgInput << "releasing tablet target" << qt_tablet_target;
+        dbgTablet << "releasing tablet target" << qt_tablet_target;
         qt_tablet_target = 0;
     }
 
@@ -233,11 +234,11 @@ static void handleTabletEvent(QWidget *windowWidget, const QPointF &local, const
 
 
         if (ev.isAccepted()) {
-            // dbgInput << "Tablet event" << type << "accepted" << "by target widget" << finalDestination;
+            // dbgTablet << "Tablet event" << type << "accepted" << "by target widget" << finalDestination;
         }
         else {
             // Turn off eventEater send a synthetic mouse event.
-            // dbgInput << "Tablet event" << type << "rejected; sending mouse event to" << finalDestination;
+            // dbgTablet << "Tablet event" << type << "rejected; sending mouse event to" << finalDestination;
             qt_tablet_target = 0;
 
             // We shouldn't ever get a widget accepting a tablet event from this
@@ -294,9 +295,35 @@ struct DefaultButtonsConverter
                  * Qt::NoButton here.
                  */
                 if (convertedButton == Qt::NoButton) {
-                    *button = Qt::NoButton;
-                    *buttons = Qt::NoButton;
-                    break;
+
+                    /**
+                     * Sometimes the driver-handled sortcuts are just
+                     * keyboard modifiers, so ideally we should handle
+                     * them as well. The problem is that we cannot
+                     * know if the shortcut was a pan/zoom action or a
+                     * shortcut. So here we use a "hackish" approash.
+                     * We just check if any modifier has been pressed
+                     * and, if so, pass the button to Krita. Of
+                     * course, if the driver uses some really complex
+                     * shortcuts like "Shift + stylus btn" to generate
+                     * some recorded shortcut, it will not work. But I
+                     * guess it will be ok for th emost of the
+                     * usecases.
+                     *
+                     * WARNING: this hack will *not* work if you bind
+                     *          any non-modifier key to the stylus
+                     *          button, e.g. Space.
+                     */
+
+                    const Qt::KeyboardModifiers keyboardModifiers = QApplication::queryKeyboardModifiers();
+
+                    if (KisTabletDebugger::instance()->shouldEatDriverShortcuts() ||
+                        keyboardModifiers == Qt::NoModifier) {
+
+                        *button = Qt::NoButton;
+                        *buttons = Qt::NoButton;
+                        break;
+                    }
                 }
             }
         }
@@ -444,7 +471,11 @@ QWindowsTabletSupport *QWindowsTabletSupport::create()
     LOGCONTEXT lcMine;
     // build our context from the default context
     QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEFSYSCTX, 0, &lcMine);
-    // Go for the raw coordinates, the tablet event will return good stuff
+    // Go for the raw coordinates, the tablet event will return good stuff. The
+    // defaults for lcOut rectangle are the desktop dimensions in pixels, which
+    // means Wintab will do lossy rounding. Instead we specify this trivial
+    // scaling for the output context, then do the scaling ourselves later to
+    // obtain higher resolution coordinates.
     lcMine.lcOptions |= CXO_MESSAGES | CXO_CSRMESSAGES;
     lcMine.lcPktData = lcMine.lcMoveMask = PACKETDATA;
     lcMine.lcPktMode = PacketMode;
@@ -454,7 +485,7 @@ QWindowsTabletSupport *QWindowsTabletSupport::create()
     lcMine.lcOutExtY = -lcMine.lcInExtY;
     const HCTX context = QWindowsTabletSupport::m_winTab32DLL.wTOpen(window, &lcMine, true);
     if (!context) {
-        dbgInput << __FUNCTION__ << "Unable to open tablet.";
+        dbgTablet << __FUNCTION__ << "Unable to open tablet.";
         DestroyWindow(window);
         return 0;
     }
@@ -470,7 +501,7 @@ QWindowsTabletSupport *QWindowsTabletSupport::create()
             } // cannot restore old size
         } // cannot set
     } // mismatch
-    dbgInput << "Opened tablet context " << context << " on window "
+    dbgTablet << "Opened tablet context " << context << " on window "
              <<  window << "changed packet queue size " << currentQueueSize
              << "->" <<  TabletPacketQSize;
     return new QWindowsTabletSupport(window, context);
@@ -516,7 +547,7 @@ void QWindowsTabletSupport::notifyActivate()
     // Cooperate with other tablet applications, but when we get focus, I want to use the tablet.
     const bool result = QWindowsTabletSupport::m_winTab32DLL.wTEnable(m_context, true)
                         && QWindowsTabletSupport::m_winTab32DLL.wTOverlap(m_context, true);
-    dbgInput << __FUNCTION__ << result;
+    dbgTablet << __FUNCTION__ << result;
 }
 
 static inline int indexOfDevice(const QVector<QWindowsTabletDeviceData> &devices, qint64 uniqueId)
@@ -600,12 +631,43 @@ QWindowsTabletDeviceData QWindowsTabletSupport::tabletInit(const quint64 uniqueI
     result.maxTanPressure = int(axis.axMax);
 
     LOGCONTEXT defaultLc;
+
     /* get default region */
     QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEFCONTEXT, 0, &defaultLc);
     result.maxX = int(defaultLc.lcInExtX) - int(defaultLc.lcInOrgX);
     result.maxY = int(defaultLc.lcInExtY) - int(defaultLc.lcInOrgY);
     result.maxZ = int(defaultLc.lcInExtZ) - int(defaultLc.lcInOrgZ);
     result.currentDevice = deviceType(cursorType);
+
+    // Define a rectangle representing the whole screen as seen by Wintab.
+    QRect qtDesktopRect = QApplication::desktop()->geometry();
+    QRect wintabDesktopRect(defaultLc.lcSysOrgX, defaultLc.lcSysOrgY,
+                            defaultLc.lcSysExtX, defaultLc.lcSysExtY);
+    qDebug() << ppVar(qtDesktopRect);
+    qDebug() << ppVar(wintabDesktopRect);
+
+    // Show screen choice dialog
+    {
+        KisScreenSizeChoiceDialog dlg(0,
+                                      wintabDesktopRect,
+                                      qtDesktopRect);
+
+        KisExtendedModifiersMapper mapper;
+        KisExtendedModifiersMapper::ExtendedModifiers modifiers =
+            mapper.queryExtendedModifiers();
+
+        if (modifiers.contains(Qt::Key_Shift) ||
+            (!dlg.canUseDefaultSettings() &&
+             qtDesktopRect != wintabDesktopRect)) {
+
+            dialogOpen = true;
+            dlg.exec();
+        }
+
+        result.virtualDesktopArea = dlg.screenRect();
+        dialogOpen = false;
+    }
+
     return result;
 };
 
@@ -625,7 +687,7 @@ bool QWindowsTabletSupport::translateTabletProximityEvent(WPARAM /* wParam */, L
     };
 
     if (!LOWORD(lParam)) {
-        // dbgInput << "leave proximity for device #" << m_currentDevice;
+        // dbgTablet << "leave proximity for device #" << m_currentDevice;
         sendProximityEvent(QEvent::TabletLeaveProximity);
         return true;
     }
@@ -634,25 +696,23 @@ bool QWindowsTabletSupport::translateTabletProximityEvent(WPARAM /* wParam */, L
     if (!totalPacks)
         return false;
     UINT pkCursor = proximityBuffer[0].pkCursor;
-    UINT physicalCursorId;
-    QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_CURSORS + pkCursor, CSR_PHYSID, &physicalCursorId);
-    UINT cursorType;
-    QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_CURSORS + pkCursor, CSR_TYPE, &cursorType);
-    const qint64 uniqueId = (qint64(cursorType & DeviceIdMask) << 32L) | qint64(physicalCursorId);
     // initializing and updating the cursor should be done in response to
     // WT_CSRCHANGE. We do it in WT_PROXIMITY because some wintab never send
     // the event WT_CSRCHANGE even if asked with CXO_CSRMESSAGES
-    tabletUpdateCursor(uniqueId, cursorType, pkCursor);
-    // dbgInput << "enter proximity for device #" << m_currentDevice << m_devices.at(m_currentDevice);
+    tabletUpdateCursor(pkCursor);
+    // dbgTablet << "enter proximity for device #" << m_currentDevice << m_devices.at(m_currentDevice);
+
     sendProximityEvent(QEvent::TabletEnterProximity);
     return true;
 }
+
+
 
 bool QWindowsTabletSupport::translateTabletPacketEvent()
 {
     static PACKET localPacketBuf[TabletPacketQSize];  // our own tablet packet queue.
     const int packetCount = QWindowsTabletSupport::m_winTab32DLL.wTPacketsGet(m_context, TabletPacketQSize, &localPacketBuf);
-    if (!packetCount || m_currentDevice < 0)
+    if (!packetCount || m_currentDevice < 0 || dialogOpen)
         return false;
 
     // In contrast to Qt, these will not be "const" during our loop.
@@ -677,12 +737,10 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
     //    in which case we snap the position to the mouse position.
     // It seems there is no way to find out the mode programmatically, the LOGCONTEXT orgX/Y/Ext
     // area is always the virtual desktop.
-    const QPlatformScreen *platformScreen = qApp->primaryScreen()->handle();
-    const qreal dpr = qApp->primaryScreen()->devicePixelRatio();
-
-    QRect virtualDesktopArea = platformScreen->geometry();
-    Q_FOREACH(auto s, platformScreen->virtualSiblings()) {
-        virtualDesktopArea |= s->geometry();
+    static qreal dpr = 1.0;
+    auto activeWindow = qApp->activeWindow();
+    if (activeWindow) {
+        dpr = activeWindow->devicePixelRatio();
     }
 
 
@@ -715,7 +773,8 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
 
         // This code is to delay the tablet data one cycle to sync with the mouse location.
         QPointF globalPosF = m_oldGlobalPosF / dpr; // Convert from "native" to "device independent pixels."
-        m_oldGlobalPosF = tabletData.scaleCoordinates(packet.pkX, packet.pkY, virtualDesktopArea);
+        m_oldGlobalPosF = tabletData.scaleCoordinates(packet.pkX, packet.pkY,
+                                                      tabletData.virtualDesktopArea);
 
         QPoint globalPos = globalPosF.toPoint();
 
@@ -766,7 +825,7 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
 
         // This is adds *a lot* of noise to the output log
         if (false) {
-            dbgInput
+            dbgTablet
                 << "Packet #" << (i+1) << '/' << packetCount << "button:" << packet.pkButtons
                 << globalPosF << z << "to:" << w << localPos << "(packet" << packet.pkX
                 << packet.pkY << ") dev:" << currentDevice << "pointer:"
@@ -788,18 +847,13 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
          */
         if (isSurfacePro3 && (packet.pkCursor != currentPkCursor)) {
 
-            dbgInput << "Got an inline tool switch.";
+            dbgTablet << "Got an inline tool switch.";
             // Send tablet release event.
             sendTabletEvent(QTabletEvent::TabletRelease);
 
             // Read the new cursor info.
             UINT pkCursor = packet.pkCursor;
-            UINT physicalCursorId;
-            QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_CURSORS + pkCursor, CSR_PHYSID, &physicalCursorId);
-            UINT cursorType;
-            QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_CURSORS + pkCursor, CSR_TYPE, &cursorType);
-            const qint64 uniqueId = (qint64(cursorType & DeviceIdMask) << 32L) | qint64(physicalCursorId);
-            tabletUpdateCursor(uniqueId, cursorType, pkCursor);
+            tabletUpdateCursor(pkCursor);
 
             // Update the local loop variables.
             tabletData = m_devices.at(m_currentDevice);
@@ -819,31 +873,75 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
 
 
 
-void QWindowsTabletSupport::tabletUpdateCursor(const quint64 uniqueId,
-                                               const UINT cursorType,
-                                               const int pkCursor)
+void QWindowsTabletSupport::tabletUpdateCursor(const int pkCursor)
 {
+    UINT physicalCursorId;
+    QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_CURSORS + pkCursor, CSR_PHYSID, &physicalCursorId);
+    UINT cursorType;
+    QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_CURSORS + pkCursor, CSR_TYPE, &cursorType);
+    const qint64 uniqueId = (qint64(cursorType & DeviceIdMask) << 32L) | qint64(physicalCursorId);
+
     m_currentDevice = indexOfDevice(m_devices, uniqueId);
     if (m_currentDevice < 0) {
         m_currentDevice = m_devices.size();
         m_devices.push_back(tabletInit(uniqueId, cursorType));
+
+        // Note: ideally we might check this button map for changes every
+        // update. However there seems to be an issue with Wintab altering the
+        // button map when the user right-clicks in Krita while another
+        // application has focus. This forces Krita to load button settings only
+        // once, when the tablet is first detected.
+        //
+        // See https://bugs.kde.org/show_bug.cgi?id=359561
+        BYTE logicalButtons[32];
+        memset(logicalButtons, 0, 32);
+        m_winTab32DLL.wTInfo(WTI_CURSORS + pkCursor, CSR_SYSBTNMAP, &logicalButtons);
+        m_devices[m_currentDevice].buttonsMap[0x1] = logicalButtons[0];
+        m_devices[m_currentDevice].buttonsMap[0x2] = logicalButtons[1];
+        m_devices[m_currentDevice].buttonsMap[0x4] = logicalButtons[2];
     }
     m_devices[m_currentDevice].currentPointerType = pointerType(pkCursor);
     currentPkCursor = pkCursor;
 
-    BYTE logicalButtons[32];
-    memset(logicalButtons, 0, 32);
-    m_winTab32DLL.wTInfo(WTI_CURSORS + pkCursor, CSR_SYSBTNMAP, &logicalButtons);
-    m_devices[m_currentDevice].buttonsMap[0x1] = logicalButtons[0];
-    m_devices[m_currentDevice].buttonsMap[0x2] = logicalButtons[1];
-    m_devices[m_currentDevice].buttonsMap[0x4] = logicalButtons[2];
-
     // Check tablet name to enable Surface Pro 3 workaround.
 #ifdef UNICODE
     if (!isSurfacePro3) {
-        UINT nameLength = QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEVICES, DVC_NAME, 0);
+        /**
+         * Some really "nice" tablet drivers don't know that trhey are
+         * supposed to return their name length when the buffer is
+         * null and they try to write into it effectively causing a
+         * suicide. So we cannot rely on it :(
+         *
+         * We workaround it by just allocating a big array and hoping
+         * for the best.
+         *
+         * Failing tablets:
+         *   - Adesso Cybertablet M14
+         *   - Peritab-302
+         *   - Trust Tablet TB7300
+         *   - VisTablet Realm Pro
+         *   - Aiptek 14000u (latest driver: v5.03, 2013-10-21)
+         *   - Genius G-Pen F350
+         *   - Genius G-Pen 560 (supported on win7 only)
+         */
+
+        // we cannot use the correct api :(
+        // UINT nameLength = QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEVICES, DVC_NAME, 0);
+
+        // 1024 chars should be enough for everyone! (c)
+        UINT nameLength = 1024;
+
         TCHAR* dvcName = new TCHAR[nameLength + 1];
-        QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEVICES, DVC_NAME, dvcName);
+        memset(dvcName, 0, sizeof(TCHAR) * nameLength);
+        UINT writtenBytes = QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEVICES, DVC_NAME, dvcName);
+
+        if (writtenBytes > sizeof(TCHAR) * nameLength) {
+            qWarning() << "WINTAB WARNING: tablet name is too long!" << writtenBytes;
+
+            // avoid crash when trying to read it
+            dvcName[nameLength - 1] = (TCHAR)0;
+        }
+
         QString qDvcName = QString::fromWCharArray((const wchar_t*)dvcName);
         dbgInput << "DVC_NAME =" << qDvcName;
         // Name changed between older and newer Surface Pro 3 drivers

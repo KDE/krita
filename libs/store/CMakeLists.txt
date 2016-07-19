@@ -17,7 +17,7 @@ generate_export_header(kritastore BASE_NAME kritastore)
 target_link_libraries(kritastore kritaversion Qt5::Xml Qt5::Gui KF5::Archive)
 
 set_target_properties(kritastore PROPERTIES
-    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 install(TARGETS kritastore ${INSTALL_TARGETS_DEFAULT_ARGS} )
 

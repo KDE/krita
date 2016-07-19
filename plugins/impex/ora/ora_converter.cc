@@ -19,7 +19,7 @@
 
 #include <QApplication>
 
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KoStore.h>
 #include <KoStoreDevice.h>
@@ -44,21 +44,14 @@ OraConverter::~OraConverter()
 {
 }
 
-KisImageBuilder_Result OraConverter::buildImage(const QUrl &uri)
+KisImageBuilder_Result OraConverter::buildImage(const QString &filename)
 {
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
-
-    if (!uri.isLocalFile()) {
-        return KisImageBuilder_RESULT_NOT_EXIST;
-    }
-
-    KoStore* store = KoStore::createStore(uri, KoStore::Read, "image/openraster", KoStore::Zip);
+    KoStore* store = KoStore::createStore(filename, KoStore::Read, "image/openraster", KoStore::Zip);
     if (!store) {
         delete store;
         return KisImageBuilder_RESULT_FAILURE;
     }
-    
+
     OraLoadContext olc(store);
     KisOpenRasterStackLoadVisitor orslv(m_doc->createUndoStore(), &olc);
     orslv.loadImage();
@@ -79,21 +72,15 @@ vKisNodeSP OraConverter::activeNodes()
     return m_activeNodes;
 }
 
-KisImageBuilder_Result OraConverter::buildFile(const QUrl &uri, KisImageWSP image, vKisNodeSP activeNodes)
+KisImageBuilder_Result OraConverter::buildFile(const QString &filename, KisImageWSP image, vKisNodeSP activeNodes)
 {
 
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
-
-    if (!uri.isLocalFile())
-        return KisImageBuilder_RESULT_NOT_LOCAL;
-
     // Open file for writing
-    KoStore* store = KoStore::createStore(uri, KoStore::Write, "image/openraster", KoStore::Zip);
+    KoStore* store = KoStore::createStore(filename, KoStore::Write, "image/openraster", KoStore::Zip);
     if (!store) {
         return KisImageBuilder_RESULT_FAILURE;
     }
-    
+
     OraSaveContext osc(store);
     KisOpenRasterStackSaveVisitor orssv(&osc, activeNodes);
 

@@ -58,6 +58,7 @@ private Q_SLOTS:
     void updateSensorCurveLabels(KisDynamicSensorSP sensor);
     void updateCurve(KisDynamicSensorSP sensor);
     void updateValues();
+    void updateLabelsOfCurrentSensor();
     void disableWidgets(bool disable);
 
 private:

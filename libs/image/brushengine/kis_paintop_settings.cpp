@@ -76,7 +76,7 @@ struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
 KisPaintOpSettings::KisPaintOpSettings()
     : d(new Private)
 {
-    d->preset = NULL;
+    d->preset = 0;
 }
 
 KisPaintOpSettings::~KisPaintOpSettings()
@@ -195,6 +195,44 @@ QString KisPaintOpSettings::paintOpCompositeOp() const
 {
     return getString("CompositeOp", COMPOSITE_OVER);
 }
+
+void KisPaintOpSettings::setEraserMode(bool value)
+{
+    setProperty("EraserMode", value);
+}
+
+bool KisPaintOpSettings::eraserMode() const
+{
+    return getBool("EraserMode", false);
+}
+
+QString KisPaintOpSettings::effectivePaintOpCompositeOp() const
+{
+    return !eraserMode() ? paintOpCompositeOp() : COMPOSITE_ERASE;
+}
+
+qreal KisPaintOpSettings::savedEraserSize() const
+{
+    return getDouble("SavedEraserSize", 0.0);
+}
+
+void KisPaintOpSettings::setSavedEraserSize(qreal value)
+{
+    setProperty("SavedEraserSize", value);
+    setPropertyNotSaved("SavedEraserSize");
+}
+
+qreal KisPaintOpSettings::savedBrushSize() const
+{
+    return getDouble("SavedBrushSize", 0.0);
+}
+
+void KisPaintOpSettings::setSavedBrushSize(qreal value)
+{
+    setProperty("SavedBrushSize", value);
+    setPropertyNotSaved("SavedBrushSize");
+}
+
 
 QString KisPaintOpSettings::modelName() const
 {

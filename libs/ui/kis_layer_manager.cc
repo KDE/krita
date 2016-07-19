@@ -32,7 +32,7 @@
 #include <QMessageBox>
 #include <QUrl>
 
-#include <kis_url_requester.h>
+#include <kis_file_name_requester.h>
 #include <kis_icon.h>
 #include <KisImportExportManager.h>
 #include <KisDocument.h>
@@ -63,8 +63,7 @@
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_merge_strategy_registry.h>
 #include <kis_psd_layer_style.h>
-#include <QMimeDatabase>
-#include <QMimeType>
+#include <KisMimeDatabase.h>
 
 #include "KisImportExportManager.h"
 #include "kis_config.h"
@@ -80,7 +79,7 @@
 #include "kis_node_visitor.h"
 #include "kis_paint_layer.h"
 #include "commands/kis_image_commands.h"
-#include "commands/kis_layer_commands.h"
+#include "commands/kis_layer_command.h"
 #include "commands/kis_node_commands.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_selection_manager.h"
@@ -96,145 +95,16 @@
 #include "kis_action.h"
 #include "kis_action_manager.h"
 #include "KisPart.h"
+#include "kis_raster_keyframe_channel.h"
 
 #include "kis_signal_compressor_with_param.h"
 #include "kis_abstract_projection_plane.h"
 #include "commands_new/kis_set_layer_style_command.h"
 #include "kis_post_execution_undo_adapter.h"
 #include "kis_selection_mask.h"
+#include "kis_layer_utils.h"
 
-
-class KisSaveGroupVisitor : public KisNodeVisitor
-{
-public:
-    KisSaveGroupVisitor(KisImageWSP image,
-                        bool saveInvisible,
-                        bool saveTopLevelOnly,
-                        const QUrl &url,
-                        const QString &baseName,
-                        const QString &extension,
-                        const QString &mimeFilter)
-        : m_image(image)
-        , m_saveInvisible(saveInvisible)
-        , m_saveTopLevelOnly(saveTopLevelOnly)
-        , m_url(url)
-        , m_baseName(baseName)
-        , m_extension(extension)
-        , m_mimeFilter(mimeFilter)
-    {
-    }
-
-    virtual ~KisSaveGroupVisitor()
-    {
-    }
-
-public:
-
-    bool visit(KisNode* ) {
-        return true;
-    }
-
-    bool visit(KisPaintLayer *) {
-        return true;
-    }
-
-    bool visit(KisAdjustmentLayer *) {
-        return true;
-    }
-
-
-    bool visit(KisExternalLayer *) {
-        return true;
-    }
-
-
-    bool visit(KisCloneLayer *) {
-        return true;
-    }
-
-
-    bool visit(KisFilterMask *) {
-        return true;
-    }
-
-    bool visit(KisTransformMask *) {
-        return true;
-    }
-
-    bool visit(KisTransparencyMask *) {
-        return true;
-    }
-
-    bool visit(KisGeneratorLayer * ) {
-        return true;
-    }
-
-    bool visit(KisSelectionMask* ) {
-        return true;
-    }
-
-    bool visit(KisGroupLayer *layer)
-    {
-        if (layer == m_image->rootLayer()) {
-            KisLayerSP child = dynamic_cast<KisLayer*>(layer->firstChild().data());
-            while (child) {
-                child->accept(*this);
-                child = dynamic_cast<KisLayer*>(child->nextSibling().data());
-            }
-
-        }
-        else if (layer->visible() || m_saveInvisible) {
-
-            QRect r = m_image->bounds();
-
-            KisDocument *d = KisPart::instance()->createDocument();
-
-            d->prepareForImport();
-
-            KisImageWSP dst = new KisImage(d->createUndoStore(), r.width(), r.height(), m_image->colorSpace(), layer->name());
-            dst->setResolution(m_image->xRes(), m_image->yRes());
-            d->setCurrentImage(dst);
-            KisPaintLayer* paintLayer = new KisPaintLayer(dst, "projection", layer->opacity());
-            KisPainter gc(paintLayer->paintDevice());
-            gc.bitBlt(QPoint(0, 0), layer->projection(), r);
-            dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
-
-            dst->refreshGraph();
-
-            d->setOutputMimeType(m_mimeFilter.toLatin1());
-            d->setSaveInBatchMode(true);
-
-
-            QUrl url = m_url;
-
-            url = url.adjusted(QUrl::RemoveFilename);
-            url.setPath(url.path() + m_baseName + '_' + layer->name().replace(' ', '_') + '.' + m_extension);
-
-            d->exportDocument(url);
-
-            if (!m_saveTopLevelOnly) {
-                KisGroupLayerSP child = dynamic_cast<KisGroupLayer*>(layer->firstChild().data());
-                while (child) {
-                    child->accept(*this);
-                    child = dynamic_cast<KisGroupLayer*>(child->nextSibling().data());
-                }
-            }
-            delete d;
-        }
-
-        return true;
-    }
-
-private:
-
-    KisImageWSP m_image;
-    bool m_saveInvisible;
-    bool m_saveTopLevelOnly;
-    QUrl m_url;
-    QString m_baseName;
-    QString m_extension;
-    QString m_mimeFilter;
-};
+#include "KisSaveGroupVisitor.h"
 
 KisLayerManager::KisLayerManager(KisViewManager * view)
     : m_view(view)
@@ -304,6 +174,9 @@ void KisLayerManager::setup(KisActionManager* actionManager)
 
     m_groupLayersSave = actionManager->createAction("save_groups_as_images");
     connect(m_groupLayersSave, SIGNAL(triggered()), this, SLOT(saveGroupLayers()));
+
+    m_convertGroupAnimated = actionManager->createAction("convert_group_to_animated");
+    connect(m_convertGroupAnimated, SIGNAL(triggered()), this, SLOT(convertGroupToAnimated()));
 
     m_imageResizeToLayer = actionManager->createAction("resizeimagetolayer");
     connect(m_imageResizeToLayer, SIGNAL(triggered()), this, SLOT(imageResizeToActiveLayer()));
@@ -476,6 +349,14 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
     KisImageWSP image = m_view->image();
     if (!image) return;
 
+
+    KisLayer *srcLayer = dynamic_cast<KisLayer*>(source.data());
+    if (srcLayer) {
+        image->flattenLayer(srcLayer);
+        return;
+    }
+
+
     KisPaintDeviceSP srcDevice =
         source->paintDevice() ? source->projection() : source->original();
 
@@ -516,6 +397,32 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
 
 }
 
+void KisLayerManager::convertGroupToAnimated()
+{
+    KisGroupLayerSP group = dynamic_cast<KisGroupLayer*>(activeLayer().data());
+    if (group.isNull()) return;
+
+    KisPaintLayerSP animatedLayer = new KisPaintLayer(m_view->image(), group->name(), OPACITY_OPAQUE_U8);
+    animatedLayer->enableAnimation();
+    KisRasterKeyframeChannel *contentChannel = dynamic_cast<KisRasterKeyframeChannel*>(
+            animatedLayer->getKeyframeChannel(KisKeyframeChannel::Content.id()));
+    KIS_ASSERT_RECOVER_RETURN(contentChannel);
+
+    KisNodeSP child = group->firstChild();
+    int time = 0;
+    while (child) {
+        contentChannel->importFrame(time, child->projection(), NULL);
+        time++;
+
+        child = child->nextSibling();
+    }
+
+    m_commandsAdapter->beginMacro(kundo2_i18n("Convert to an animated layer"));
+    m_commandsAdapter->addNode(animatedLayer, group->parent(), group);
+    m_commandsAdapter->removeNode(group);
+    m_commandsAdapter->endMacro();
+}
+
 void KisLayerManager::adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, KisNodeSP &parent, KisNodeSP &above)
 {
     Q_ASSERT(activeNode);
@@ -545,18 +452,17 @@ void KisLayerManager::addLayerCommon(KisNodeSP activeNode, KisLayerSP layer, boo
     KisNodeSP above;
     adjustLayerPosition(layer, activeNode, parent, above);
 
-    m_commandsAdapter->addNode(layer, parent, above, updateImage, updateImage);
-}
 
-KisLayerSP KisLayerManager::constructDefaultLayer()
-{
-    KisImageWSP image = m_view->image();
-    return new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace());
+    KisGroupLayer *group = dynamic_cast<KisGroupLayer*>(parent.data());
+    const bool parentForceUpdate = group && !group->projectionIsValid();
+    updateImage |= parentForceUpdate;
+
+    m_commandsAdapter->addNode(layer, parent, above, updateImage, updateImage);
 }
 
 KisLayerSP KisLayerManager::addLayer(KisNodeSP activeNode)
 {
-    KisLayerSP layer = constructDefaultLayer();
+    KisLayerSP layer = KisLayerUtils::constructDefaultLayer(m_view->image());
     addLayerCommon(activeNode, layer, false);
 
     return layer;
@@ -789,17 +695,20 @@ void KisLayerManager::layersUpdated()
 
 void KisLayerManager::saveGroupLayers()
 {
-    QStringList listMimeFilter = KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export);
+    QStringList listMimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
 
     KoDialog dlg;
     QWidget *page = new QWidget(&dlg);
     dlg.setMainWidget(page);
     QBoxLayout *layout = new QVBoxLayout(page);
 
-    KisUrlRequester *urlRequester = new KisUrlRequester(page);
-    urlRequester->setStartDir(QFileInfo(m_view->document()->url().toLocalFile()).absolutePath());
+    KisFileNameRequester *urlRequester = new KisFileNameRequester(page);
+    urlRequester->setMode(KoFileDialog::SaveFile);
+    if (m_view->document()->url().isLocalFile()) {
+        urlRequester->setStartDir(QFileInfo(m_view->document()->url().toLocalFile()).absolutePath());
+    }
     urlRequester->setMimeTypeFilters(listMimeFilter);
-    urlRequester->setUrl(m_view->document()->url());
+    urlRequester->setFileName(m_view->document()->url().toLocalFile());
     layout->addWidget(urlRequester);
 
     QCheckBox *chkInvisible = new QCheckBox(i18n("Convert Invisible Groups"), page);
@@ -811,24 +720,23 @@ void KisLayerManager::saveGroupLayers()
 
     if (!dlg.exec()) return;
 
-    // selectedUrl()( does not return the expuected result. So, build up the QUrl the more complicated way
-    //return m_fileWidget->selectedUrl();
-    QUrl url = urlRequester->url();
-    QFileInfo f(url.toLocalFile());
+    QString path = urlRequester->fileName();
 
-    QMimeDatabase db;
-    QMimeType mime = db.mimeTypeForUrl(urlRequester->url());
-    QString mimefilter = mime.name();
-    QString extension = db.suffixForFileName(urlRequester->url().toLocalFile());
+    if (path.isEmpty()) return;
+
+    QFileInfo f(path);
+
+    QString mimeType= KisMimeDatabase::mimeTypeForFile(f.fileName());
+    if (mimeType.isEmpty()) {
+        mimeType = "image/png";
+    }
+    QString extension = KisMimeDatabase::suffixesForMimeType(mimeType).first();
     QString basename = f.baseName();
-
-    if (url.isEmpty())
-        return;
 
     KisImageWSP image = m_view->image();
     if (!image) return;
 
-    KisSaveGroupVisitor v(image, chkInvisible->isChecked(), chkDepth->isChecked(), url, basename, extension, mimefilter);
+    KisSaveGroupVisitor v(image, chkInvisible->isChecked(), chkDepth->isChecked(), f.absolutePath(), basename, extension, mimeType);
     image->rootLayer()->accept(v);
 
 }

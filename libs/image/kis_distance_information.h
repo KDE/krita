@@ -111,6 +111,14 @@ public:
      */
     bool isStarted() const;
 
+    bool hasLockedDrawingAngle() const;
+    qreal lockedDrawingAngle() const;
+    void setLockedDrawingAngle(qreal angle);
+
+    qreal scalarDistanceApprox() const;
+
+    void overrideLastValues(const QPointF &lastPosition, qreal lastTime);
+
 private:
     qreal getNextPointPositionIsotropic(const QPointF &start,
                                         const QPointF &end);

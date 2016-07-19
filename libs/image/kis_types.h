@@ -162,6 +162,11 @@ typedef vKisAnnotationSP::const_iterator vKisAnnotationSP_cit;
 
 class KisAnimationFrameCache;
 typedef KisSharedPtr<KisAnimationFrameCache> KisAnimationFrameCacheSP;
+typedef KisWeakSharedPtr<KisAnimationFrameCache> KisAnimationFrameCacheWSP;
+
+class KisPaintingAssistant;
+typedef QSharedPointer<KisPaintingAssistant> KisPaintingAssistantSP;
+typedef QWeakPointer<KisPaintingAssistant> KisPaintingAssistantWSP;
 
 // Repeat iterators
 class KisHLineIterator2;
@@ -226,6 +231,8 @@ typedef QSharedPointer<KUndo2Command> KUndo2CommandSP;
 
 typedef QList<KisNodeSP> KisNodeList;
 typedef QSharedPointer<KisNodeList> KisNodeListSP;
+
+typedef QList<KisPaintDeviceSP> KisPaintDeviceList;
 
 class KisStroke;
 typedef QSharedPointer<KisStroke> KisStrokeSP;

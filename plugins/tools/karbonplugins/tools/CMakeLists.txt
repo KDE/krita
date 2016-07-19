@@ -46,5 +46,5 @@ add_library(krita_karbontools MODULE ${karbon_tools_SOURCES})
 
 target_link_libraries(krita_karbontools kritawidgets KF5::Completion)
 
-install(TARGETS krita_karbontools DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS krita_karbontools DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

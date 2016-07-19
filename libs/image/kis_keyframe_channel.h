@@ -63,6 +63,12 @@ public:
     KisKeyframeSP previousKeyframe(KisKeyframeSP keyframe) const;
     KisKeyframeSP lastKeyframe() const;
 
+    /**
+     * Calculates a pseudo-unique keyframes hash. The hash changes
+     * every time any frame is added/removed/moved
+     */
+    int framesHash() const;
+
     QSet<int> allKeyframeIds() const;
     /**
      * Get the set of frames affected by any changes to the value

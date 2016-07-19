@@ -139,7 +139,7 @@ static const char kis_x11_atomnames[] = {
     // Aiptek drivers (e.g. Hyperpen 12000U) reports non-standard type string
     "Stylus\0"
 
-    // UGTABLET TABLET G5 9x6    
+    // UGTABLET TABLET G5 9x6
      "WizardPen Tablet\0"
 
 };
@@ -194,7 +194,7 @@ void QTabletDeviceData::SavedAxesData::tryFetchAxesMapping(XDevice *dev)
     if (result == Success && propertyType > 0) {
 
         if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
-            dbgKrita << "# Building tablet axes remapping table:";
+            dbgTablet << "# Building tablet axes remapping table:";
         }
 
         QVector<AxesIndexes> axesMap(nitems, Unused);
@@ -220,8 +220,8 @@ void QTabletDeviceData::SavedAxesData::tryFetchAxesMapping(XDevice *dev)
             axesMap[axisIndex] = mappedIndex;
 
             if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
-                dbgKrita << XGetAtomName(KIS_X11->display, currentAxisName)
-                         << axisIndex << "->" << mappedIndex;
+                dbgTablet << XGetAtomName(KIS_X11->display, currentAxisName)
+                          << axisIndex << "->" << mappedIndex;
             }
         }
 
@@ -409,9 +409,9 @@ void kis_x11_init_tablet()
                 }
 
                 if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
-                    dbgKrita << "###################################";
-                    dbgKrita << "# Adding a tablet device:" << devs->name;
-                    dbgKrita << "Device Type:" << KisTabletDebugger::tabletDeviceToString(deviceType);
+                    dbgTablet << "###################################";
+                    dbgTablet << "# Adding a tablet device:" << devs->name;
+                    dbgTablet << "Device Type:" << KisTabletDebugger::tabletDeviceToString(deviceType);
                 }
 
                 device_data.savedAxesData.tryFetchAxesMapping(dev);
@@ -439,13 +439,13 @@ void kis_x11_init_tablet()
                         device_data.maxRotation = a[5].max_value;
 
                         if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
-                            dbgKrita << "# Axes limits data";
-                            dbgKrita << "X:       " << device_data.minX << device_data.maxX;
-                            dbgKrita << "Y:       " << device_data.minY << device_data.maxY;
-                            dbgKrita << "Z:       " << device_data.minZ << device_data.maxZ;
-                            dbgKrita << "Pressure:" << device_data.minPressure << device_data.maxPressure;
-                            dbgKrita << "Rotation:" << device_data.minRotation << device_data.maxRotation;
-                            dbgKrita << "T. Pres: " << device_data.minTanPressure << device_data.maxTanPressure;
+                            dbgTablet << "# Axes limits data";
+                            dbgTablet << "X:       " << device_data.minX << device_data.maxX;
+                            dbgTablet << "Y:       " << device_data.minY << device_data.maxY;
+                            dbgTablet << "Z:       " << device_data.minZ << device_data.maxZ;
+                            dbgTablet << "Pressure:" << device_data.minPressure << device_data.maxPressure;
+                            dbgTablet << "Rotation:" << device_data.minRotation << device_data.maxRotation;
+                            dbgTablet << "T. Pres: " << device_data.minTanPressure << device_data.maxTanPressure;
                         }
 
 #endif

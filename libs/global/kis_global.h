@@ -21,15 +21,11 @@
 
 #include <limits.h>
 
-#include <calligraversion.h>
-
 #include <KoConfig.h>
 #include "kis_assert.h"
 
 #include <QPoint>
 #include <QPointF>
-
-#define KRITA_VERSION CALLIGRA_VERSION
 
 const quint8 quint8_MAX = UCHAR_MAX;
 const quint16 quint16_MAX = 65535;
@@ -145,6 +141,16 @@ inline qreal incrementInDirection(qreal a, qreal inc, qreal direction) {
     return d1 < d2 ? b1 : b2;
 }
 
+template<typename PointType>
+inline PointType snapToClosestAxis(PointType P) {
+    if (qAbs(P.x()) < qAbs(P.y())) {
+        P.setX(0);
+    } else {
+        P.setY(0);
+    }
+    return P;
+}
+
 template<typename T>
 inline T pow2(const T& x) {
     return x * x;
@@ -235,6 +241,42 @@ template <class T>
 inline QSharedPointer<T> toQShared(T* ptr) {
     return QSharedPointer<T>(ptr);
 }
+
+template <class A, template <class C> class List>
+List<QSharedPointer<A>> listToQShared(const List<A*> list) {
+    List<QSharedPointer<A>> newList;
+    Q_FOREACH(A* value, list) {
+        newList.append(toQShared(value));
+    }
+    return newList;
+}
+
+/**
+ * A special wrapper object that converts Qt-style mutexes and locks
+ * into an object that supports Std's (and Boost's) "Lockable"
+ * concept. Basically, it converts tryLock() into try_lock() to comply
+ * with the syntax.
+ */
+
+template <class T>
+struct StdLockableWrapper {
+    StdLockableWrapper(T *lock) : m_lock(lock) {}
+
+    void lock() {
+        m_lock->lock();
+    }
+
+    bool try_lock() {
+        return m_lock->tryLock();
+    }
+
+    void unlock() {
+        m_lock->unlock();
+    }
+
+private:
+    T *m_lock;
+};
 
 #endif // KISGLOBAL_H_
 

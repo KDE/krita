@@ -32,19 +32,22 @@
 #include <kis_types.h>
 #include <KoPointerEvent.h>
 
+#include "opengl/kis_opengl.h"
+
 #include "kis_ui_types.h"
 #include "kis_coordinates_converter.h"
+#include "kis_canvas_decoration.h"
+#include "kis_painting_assistants_decoration.h"
 
 class KoToolProxy;
 class KoColorProfile;
 
-class KisCanvasDecoration;
+
 class KisViewManager;
 class KisFavoriteResourceManager;
 class KisDisplayFilter;
 class KisDisplayColorConverter;
 struct KisExposureGammaCorrectionInterface;
-class KisPaintingAssistantsDecoration;
 class KisView;
 class KisInputManager;
 class KisAnimationPlayer;
@@ -71,7 +74,7 @@ public:
      * @param viewConverter the viewconverter for converting between
      *                       window and document coordinates.
      */
-    KisCanvas2(KisCoordinatesConverter* coordConverter, KoCanvasResourceManager *resourceManager, KisView *view, KoShapeBasedDocumentBase* sc);
+    KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, KisView *view, KoShapeBasedDocumentBase *sc);
 
     virtual ~KisCanvas2();
 
@@ -81,7 +84,9 @@ public:
 
 public: // KoCanvasBase implementation
 
-    bool canvasIsOpenGL();
+    bool canvasIsOpenGL() const;
+
+    KisOpenGL::FilterMode openGLFilterMode() const;
 
     void gridSize(QPointF *offset, QSizeF *spacing) const;
 
@@ -143,7 +148,7 @@ public: // KoCanvasBase implementation
      */
     KisInputManager* globalInputManager() const;
 
-    KisPaintingAssistantsDecoration* paintingAssistantsDecoration() const;
+    KisPaintingAssistantsDecorationSP paintingAssistantsDecoration() const;
 
 
 public: // KisCanvas2 methods
@@ -153,20 +158,35 @@ public: // KisCanvas2 methods
     QPointer<KisView> imageView() const;
 
     /// @return true if the canvas image should be displayed in vertically mirrored mode
-    void addDecoration(KisCanvasDecoration* deco);
-    KisCanvasDecoration* decoration(const QString& id) const;
+    void addDecoration(KisCanvasDecorationSP deco);
+    KisCanvasDecorationSP decoration(const QString& id) const;
 
     void setDisplayFilter(KisDisplayFilter *displayFilter);
     KisDisplayFilter *displayFilter() const;
 
-    KisDisplayColorConverter* displayColorConverter() const;
+    KisDisplayColorConverter *displayColorConverter() const;
     KisExposureGammaCorrectionInterface* exposureGammaCorrectionInterface() const;
+    /**
+     * @brief setProofingOptions
+     * set the options for softproofing, without affecting the proofing options as stored inside the image.
+     */
+    void setProofingOptions(bool softProof, bool gamutCheck);
+    KisProofingConfiguration *proofingConfiguration() const;
+    /**
+     * @brief setProofingConfigUpdated This function is to set whether the proofing config is updated,
+     * this is needed for determining whether or not to generate a new proofing transform.
+     * @param updated whether it's updated. Just set it to false in normal usage.
+     */
+    void setProofingConfigUpdated(bool updated);
+    /**
+     * @brief proofingConfigUpdated ask the canvas whether or not it updated the proofing config.
+     * @return whether or not the proofing config is updated, if so, a new proofing transform needs to be made
+     * in KisOpenGL canvas.
+     */bool proofingConfigUpdated();
 
     void setCursor(const QCursor &cursor);
-#ifdef HAVE_OPENGL
     KisAnimationFrameCacheSP frameCache() const;
     KisAnimationPlayer *animationPlayer() const;
-#endif
     void refetchDataFromImage();
 
 Q_SIGNALS:
@@ -193,6 +213,9 @@ public Q_SLOTS:
     /// Bools indicating canvasmirroring.
     bool xAxisMirrored() const;
     bool yAxisMirrored() const;
+    void slotSoftProofing(bool softProofing);
+    void slotGamutCheck(bool gamutCheck);
+    void slotChangeProofingConfig();
 
     void channelSelectionChanged();
 

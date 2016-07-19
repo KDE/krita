@@ -29,6 +29,7 @@
 
 #include <KoStore.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorSpaceEngine.h>
 #include <KoColorProfile.h>
 #include <KoDocumentInfo.h>
 #include <KoFileDialog.h>
@@ -75,6 +76,8 @@
 #include "kis_time_range.h"
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
+#include "kis_image_config.h"
+#include "KisProofingConfiguration.h"
 
 /*
 
@@ -124,7 +127,7 @@ public:
     int syntaxVersion; // version of the fileformat we are loading
     vKisNodeSP selectedNodes; // the nodes that were active when saving the document.
     QMap<QString, QString> assistantsFilenames;
-    QList<KisPaintingAssistant*> assistants;
+    QList<KisPaintingAssistantSP> assistants;
     QMap<KisNode*, QString> keyframeFilenames;
     QStringList errorMessages;
 };
@@ -206,28 +209,31 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
             m_d->errorMessages << i18n("Image does not specify a width.");
             return KisImageWSP(0);
         }
-        width = attr.toInt();
+        width = KisDomUtils::toInt(attr);
 
         if ((attr = element.attribute(HEIGHT)).isNull()) {
             m_d->errorMessages << i18n("Image does not specify a height.");
             return KisImageWSP(0);
         }
 
-        height = attr.toInt();
+        height = KisDomUtils::toInt(attr);
 
         m_d->imageComment = element.attribute(DESCRIPTION);
 
         xres = 100.0 / 72.0;
         if (!(attr = element.attribute(X_RESOLUTION)).isNull()) {
-            if (attr.toDouble() > 1.0) {
-                xres = attr.toDouble() / 72.0;
+            qreal value = KisDomUtils::toDouble(attr);
+
+            if (value > 1.0) {
+                xres = value / 72.0;
             }
         }
 
         yres = 100.0 / 72.0;
         if (!(attr = element.attribute(Y_RESOLUTION)).isNull()) {
-            if (attr.toDouble() > 1.0) {
-                yres = attr.toDouble() / 72.0;
+            qreal value = KisDomUtils::toDouble(attr);
+            if (value > 1.0) {
+                yres = value / 72.0;
             }
         }
 
@@ -260,6 +266,24 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
                 return KisImageWSP(0);
             }
         }
+        KisImageConfig cfgImage;
+        KisProofingConfiguration *proofingConfig = cfgImage.defaultProofingconfiguration();
+        if (!(attr = element.attribute(PROOFINGPROFILENAME)).isNull()) {
+            proofingConfig->proofingProfile = attr;
+        }
+        if (!(attr = element.attribute(PROOFINGMODEL)).isNull()) {
+            proofingConfig->proofingModel = attr;
+        }
+        if (!(attr = element.attribute(PROOFINGDEPTH)).isNull()) {
+            proofingConfig->proofingDepth = attr;
+        }
+        if (!(attr = element.attribute(PROOFINGINTENT)).isNull()) {
+            proofingConfig->intent = (KoColorConversionTransformation::Intent) KisDomUtils::toInt(attr);
+        }
+
+        if (!(attr = element.attribute(PROOFINGADAPTATIONSTATE)).isNull()) {
+            proofingConfig->adaptationState = KisDomUtils::toDouble(attr);
+        }
 
         if (m_d->document) {
             image = new KisImage(m_d->document->createUndoStore(), width, height, cs, name);
@@ -270,21 +294,31 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
         image->setResolution(xres, yres);
         loadNodes(element, image, const_cast<KisGroupLayer*>(image->rootLayer().data()));
 
+
         KoXmlNode child;
         for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
             KoXmlElement e = child.toElement();
-            if(e.tagName() == "ProjectionBackgroundColor") {
-                if (e.hasAttribute("ColorData")) {
+            if(e.tagName() == CANVASPROJECTIONCOLOR) {
+                if (e.hasAttribute(COLORBYTEDATA)) {
                     QByteArray colorData = QByteArray::fromBase64(e.attribute("ColorData").toLatin1());
                     KoColor color((const quint8*)colorData.data(), image->colorSpace());
                     image->setDefaultProjectionColor(color);
                 }
             }
 
+            if(e.tagName()== PROOFINGWARNINGCOLOR) {
+                QDomDocument dom;
+                KoXml::asQDomElement(dom, e);
+                QDomElement eq = dom.firstChildElement();
+                proofingConfig->warningColor = KoColor::fromXML(eq.firstChildElement(), Integer8BitsColorDepthID.id(), QHash<QString, QString>());
+            }
+
             if (e.tagName().toLower() == "animation") {
                 loadAnimationMetadata(e, image);
             }
         }
+
+        image->setProofingConfiguration(proofingConfig);
 
         for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
             KoXmlElement e = child.toElement();
@@ -332,6 +366,29 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
             }
         }
     }
+    //load the embed proofing profile, it only needs to be loaded into Krita, not assigned.
+    location = external ? QString() : uri;
+    location += m_d->imageName + ICC_PROOFING_PATH;
+    if (store->hasFile(location)) {
+        if (store->open(location)) {
+            QByteArray proofingData;
+            proofingData.resize(store->size());
+            bool proofingProfileRes = (store->read(proofingData.data(), store->size())>-1);
+            store->close();
+            if (proofingProfileRes)
+            {
+                const KoColorProfile *proofingProfile = KoColorSpaceRegistry::instance()->createColorProfile(image->proofingConfiguration()->proofingModel, image->proofingConfiguration()->proofingDepth, proofingData);
+                if (proofingProfile->valid()){
+
+                    //if (KoColorSpaceEngineRegistry::instance()->get("icc")) {
+                    //    KoColorSpaceEngineRegistry::instance()->get("icc")->addProfile(proofingProfile->fileName());
+                    //}
+                    KoColorSpaceRegistry::instance()->addProfile(proofingProfile);
+                }
+            }
+        }
+    }
+
 
     // Load the layers data: if there is a profile associated with a layer it will be set now.
     KisKraLoadVisitor visitor(image, store, m_d->layerFilenames, m_d->imageName, m_d->syntaxVersion);
@@ -464,7 +521,7 @@ vKisNodeSP KisKraLoader::selectedNodes() const
     return m_d->selectedNodes;
 }
 
-QList<KisPaintingAssistant *> KisKraLoader::assistants() const
+QList<KisPaintingAssistantSP> KisKraLoader::assistants() const
 {
     return m_d->assistants;
 }
@@ -491,7 +548,7 @@ void KisKraLoader::loadAssistants(KoStore *store, const QString &uri, bool exter
             assistant->loadXml(store, handleMap, file_path);
             //If an assistant has too few handles than it should according to it's own setup, just don't load it//
             if (assistant->handles().size()==assistant->numHandles()){
-                m_d->assistants.append(assistant);
+                m_d->assistants.append(toQShared(assistant));
             }
         }
         loadedAssistant++;
@@ -791,7 +848,7 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageWSP i
         if (result == QMessageBox::Yes) {
 
             KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
-            dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
+            dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
             dialog.setDefaultDir(basePath);
             QString url = dialog.filename();
 

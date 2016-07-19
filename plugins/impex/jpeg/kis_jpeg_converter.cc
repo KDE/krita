@@ -41,7 +41,7 @@ extern "C" {
 #include <QMessageBox>
 
 #include <klocalizedstring.h>
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KoDocumentInfo.h>
 #include <KoColorSpace.h>
@@ -83,6 +83,16 @@ const QByteArray photoshopIptc_((char*)&photoshopIptc, 2);
 namespace
 {
 
+void jpegErrorExit ( j_common_ptr cinfo )
+{
+    char jpegLastErrorMsg[JMSG_LENGTH_MAX];
+    /* Create the message */
+    ( *( cinfo->err->format_message ) ) ( cinfo, jpegLastErrorMsg );
+
+    /* Jump to the setjmp point */
+    throw std::runtime_error( jpegLastErrorMsg ); // or your preffered exception ...
+}
+
 J_COLOR_SPACE getColorTypeforColorSpace(const KoColorSpace * cs)
 {
     if (KoID(cs->id()) == KoID("GRAYA") || cs->id() == "GRAYAU16" || cs->id() == "GRAYA16") {
@@ -112,10 +122,22 @@ QString getColorSpaceModelForColorType(J_COLOR_SPACE color_type)
 
 }
 
+struct KisJPEGConverter::Private
+{
+    Private(KisDocument *doc, bool batchMode)
+        : doc(doc),
+          stop(false),
+          batchMode(batchMode)
+    {}
+
+    KisImageSP image;
+    KisDocument *doc;
+    bool stop;
+    bool batchMode;
+};
+
 KisJPEGConverter::KisJPEGConverter(KisDocument *doc, bool batchMode)
-    : m_doc(doc)
-    , m_stop(false)
-    , m_batchMode(batchMode)
+    : m_d(new Private(doc, batchMode))
 {
 }
 
@@ -123,331 +145,328 @@ KisJPEGConverter::~KisJPEGConverter()
 {
 }
 
-KisImageBuilder_Result KisJPEGConverter::decode(const QUrl &uri)
+KisImageBuilder_Result KisJPEGConverter::decode(const QString &filename)
 {
     struct jpeg_decompress_struct cinfo;
     struct jpeg_error_mgr jerr;
 
     cinfo.err = jpeg_std_error(&jerr);
-    jpeg_create_decompress(&cinfo);
+    jerr.error_exit = jpegErrorExit;
 
-    Q_ASSERT(uri.isLocalFile());
-
-    // open the file
-    QFile file(uri.toLocalFile());
-    if (!file.exists()) {
-        return (KisImageBuilder_RESULT_NOT_EXIST);
-    }
-    if (!file.open(QIODevice::ReadOnly)) {
-        return (KisImageBuilder_RESULT_BAD_FETCH);
-    }
-
-    KisJPEGSource::setSource(&cinfo, &file);
-
-    jpeg_save_markers(&cinfo, JPEG_COM, 0xFFFF);
-    /* Save APP0..APP15 markers */
-    for (int m = 0; m < 16; m++)
-        jpeg_save_markers(&cinfo, JPEG_APP0 + m, 0xFFFF);
-
-
-//     setup_read_icc_profile(&cinfo);
-    // read header
-    jpeg_read_header(&cinfo, (boolean)true);
-
-    // start reading
-    jpeg_start_decompress(&cinfo);
-
-    // Get the colorspace
-    QString modelId = getColorSpaceModelForColorType(cinfo.out_color_space);
-    if (modelId.isEmpty()) {
-        dbgFile << "unsupported colorspace :" << cinfo.out_color_space;
-        jpeg_destroy_decompress(&cinfo);
-        return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
-    }
-    uchar* profile_data;
-    uint profile_len;
-    const KoColorProfile* profile = 0;
-    QByteArray profile_rawdata;
-    if (read_icc_profile(&cinfo, &profile_data, &profile_len)) {
-        profile_rawdata.resize(profile_len);
-        memcpy(profile_rawdata.data(), profile_data, profile_len);
-        cmsHPROFILE hProfile = cmsOpenProfileFromMem(profile_data, profile_len);
-
-        if (hProfile != (cmsHPROFILE) NULL) {
-            profile = KoColorSpaceRegistry::instance()->createColorProfile(modelId, Integer8BitsColorDepthID.id(), profile_rawdata);
-            Q_CHECK_PTR(profile);
-            dbgFile <<"profile name:" << profile->name() <<" product information:" << profile->info();
-            if (!profile->isSuitableForOutput()) {
-                dbgFile << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile"; // TODO: in ko2 popup a selection menu to inform the user
-            }
+    try {
+        jpeg_create_decompress(&cinfo);
+        // open the file
+        QFile file(filename);
+        if (!file.exists()) {
+            return (KisImageBuilder_RESULT_NOT_EXIST);
         }
-    }
-
-    // Check that the profile is used by the color space
-    if (profile && !KoColorSpaceRegistry::instance()->colorSpaceFactory(
-        KoColorSpaceRegistry::instance()->colorSpaceId(
-      modelId, Integer8BitsColorDepthID.id()))->profileIsCompatible(profile)) {
-        warnFile << "The profile " << profile->name() << " is not compatible with the color space model " << modelId;
-        profile = 0;
-    }
-
-    // Retrieve a pointer to the colorspace
-    const KoColorSpace* cs;
-    if (profile && profile->isSuitableForOutput()) {
-        dbgFile << "image has embedded profile:" << profile -> name() << "";
-        cs = KoColorSpaceRegistry::instance()->colorSpace(modelId, Integer8BitsColorDepthID.id(), profile);
-    } else
-        cs = KoColorSpaceRegistry::instance()->colorSpace(modelId, Integer8BitsColorDepthID.id(), "");
-
-    if (cs == 0) {
-        dbgFile << "unknown colorspace";
-        jpeg_destroy_decompress(&cinfo);
-        return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
-    }
-    // TODO fixit
-    // Create the cmsTransform if needed
-
-    KoColorTransformation* transform = 0;
-    if (profile && !profile->isSuitableForOutput()) {
-        transform = KoColorSpaceRegistry::instance()->colorSpace(modelId, Integer8BitsColorDepthID.id(), profile)->createColorConverter(cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
-    }
-    // Apparently an invalid transform was created from the profile. See bug https://bugs.kde.org/show_bug.cgi?id=255451.
-    // After 2.3: warn the user!
-    if (transform && !transform->isValid()) {
-        delete transform;
-        transform = 0;
-    }
-
-    // Creating the KisImageWSP
-    if (! m_image) {
-        m_image = new KisImage(m_doc->createUndoStore(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
-        Q_CHECK_PTR(m_image);
-    }
-
-    // Set resolution
-    double xres = 72, yres = 72;
-    if (cinfo.density_unit == 1) {
-        xres = cinfo.X_density;
-        yres = cinfo.Y_density;
-    } else if (cinfo.density_unit == 2) {
-        xres = cinfo.X_density * 2.54;
-        yres = cinfo.Y_density * 2.54;
-    }
-    if (xres < 72) {
-        xres = 72;
-    }
-    if (yres < 72) {
-        yres = 72;
-    }
-    m_image->setResolution(POINT_TO_INCH(xres), POINT_TO_INCH(yres));   // It is the "invert" macro because we convert from pointer-per-inchs to points
-
-    // Create layer
-    KisPaintLayerSP layer = KisPaintLayerSP(new KisPaintLayer(m_image.data(), m_image -> nextLayerName(), quint8_MAX));
-
-    // Read data
-    JSAMPROW row_pointer = new JSAMPLE[cinfo.image_width*cinfo.num_components];
-
-    for (; cinfo.output_scanline < cinfo.image_height;) {
-        KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, cinfo.output_scanline, cinfo.image_width);
-        jpeg_read_scanlines(&cinfo, &row_pointer, 1);
-        quint8 *src = row_pointer;
-        switch (cinfo.out_color_space) {
-        case JCS_GRAYSCALE:
-            do {
-                quint8 *d = it->rawData();
-                d[0] = *(src++);
-                if (transform) transform->transform(d, d, 1);
-                d[1] = quint8_MAX;
-
-            } while (it->nextPixel());
-            break;
-        case JCS_RGB:
-            do {
-                quint8 *d = it->rawData();
-                d[2] = *(src++);
-                d[1] = *(src++);
-                d[0] = *(src++);
-                if (transform) transform->transform(d, d, 1);
-                d[3] = quint8_MAX;
-
-            } while (it->nextPixel());
-            break;
-        case JCS_CMYK:
-            do {
-                quint8 *d = it->rawData();
-                d[0] = quint8_MAX - *(src++);
-                d[1] = quint8_MAX - *(src++);
-                d[2] = quint8_MAX - *(src++);
-                d[3] = quint8_MAX - *(src++);
-                if (transform) transform->transform(d, d, 1);
-                d[4] = quint8_MAX;
-
-            } while (it->nextPixel());
-            break;
-        default:
-            return KisImageBuilder_RESULT_UNSUPPORTED;
-        }
-    }
-
-    m_image->addNode(KisNodeSP(layer.data()), m_image->rootLayer().data());
-
-    // Read exif information
-
-    dbgFile << "Looking for exif information";
-
-    for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != NULL; marker = marker->next) {
-        dbgFile << "Marker is" << marker->marker;
-        if (marker->marker != (JOCTET)(JPEG_APP0 + 1)
-                || marker->data_length < 14) {
-            continue; /* Exif data is in an APP1 marker of at least 14 octets */
+        if (!file.open(QIODevice::ReadOnly)) {
+            return (KisImageBuilder_RESULT_BAD_FETCH);
         }
 
-        if (GETJOCTET(marker->data[0]) != (JOCTET) 0x45 ||
-                GETJOCTET(marker->data[1]) != (JOCTET) 0x78 ||
-                GETJOCTET(marker->data[2]) != (JOCTET) 0x69 ||
-                GETJOCTET(marker->data[3]) != (JOCTET) 0x66 ||
-                GETJOCTET(marker->data[4]) != (JOCTET) 0x00 ||
-                GETJOCTET(marker->data[5]) != (JOCTET) 0x00)
-            continue; /* no Exif header */
-        dbgFile << "Found exif information of length :" << marker->data_length;
-        KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
-        Q_ASSERT(exifIO);
-        QByteArray byteArray((const char*)marker->data + 6, marker->data_length - 6);
-        QBuffer buf(&byteArray);
-        exifIO->loadFrom(layer->metaData(), &buf);
-        // Interpret orientation tag
-        if (layer->metaData()->containsEntry("http://ns.adobe.com/tiff/1.0/", "Orientation")) {
-            KisMetaData::Entry& entry = layer->metaData()->getEntry("http://ns.adobe.com/tiff/1.0/", "Orientation");
-            if (entry.value().type() == KisMetaData::Value::Variant) {
-                switch (entry.value().asVariant().toInt()) {
-                case 2:
-                    KisTransformWorker::mirrorY(layer->paintDevice());
-                    break;
-                case 3:
-                    image()->rotateImage(M_PI);
-                    break;
-                case 4:
-                    KisTransformWorker::mirrorX(layer->paintDevice());
-                    break;
-                case 5:
-                    image()->rotateImage(M_PI / 2);
-                    KisTransformWorker::mirrorY(layer->paintDevice());
-                    break;
-                case 6:
-                    image()->rotateImage(M_PI / 2);
-                    break;
-                case 7:
-                    image()->rotateImage(M_PI / 2);
-                    KisTransformWorker::mirrorX(layer->paintDevice());
-                    break;
-                case 8:
-                    image()->rotateImage(-M_PI / 2 + M_PI*2);
-                    break;
-                default:
-                    break;
+        KisJPEGSource::setSource(&cinfo, &file);
+
+        jpeg_save_markers(&cinfo, JPEG_COM, 0xFFFF);
+        /* Save APP0..APP15 markers */
+        for (int m = 0; m < 16; m++)
+            jpeg_save_markers(&cinfo, JPEG_APP0 + m, 0xFFFF);
+
+
+        //     setup_read_icc_profile(&cinfo);
+        // read header
+        jpeg_read_header(&cinfo, (boolean)true);
+
+        // start reading
+        jpeg_start_decompress(&cinfo);
+
+        // Get the colorspace
+        QString modelId = getColorSpaceModelForColorType(cinfo.out_color_space);
+        if (modelId.isEmpty()) {
+            dbgFile << "unsupported colorspace :" << cinfo.out_color_space;
+            jpeg_destroy_decompress(&cinfo);
+            return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+        }
+        uchar* profile_data;
+        uint profile_len;
+        const KoColorProfile* profile = 0;
+        QByteArray profile_rawdata;
+        if (read_icc_profile(&cinfo, &profile_data, &profile_len)) {
+            profile_rawdata.resize(profile_len);
+            memcpy(profile_rawdata.data(), profile_data, profile_len);
+            cmsHPROFILE hProfile = cmsOpenProfileFromMem(profile_data, profile_len);
+
+            if (hProfile != (cmsHPROFILE) 0) {
+                profile = KoColorSpaceRegistry::instance()->createColorProfile(modelId, Integer8BitsColorDepthID.id(), profile_rawdata);
+                Q_CHECK_PTR(profile);
+                dbgFile <<"profile name:" << profile->name() <<" product information:" << profile->info();
+                if (!profile->isSuitableForOutput()) {
+                    dbgFile << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile"; // TODO: in ko2 popup a selection menu to inform the user
                 }
             }
-            entry.value().setVariant(1);
         }
-        break;
-    }
 
-    dbgFile << "Looking for IPTC information";
-
-    for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != NULL; marker = marker->next) {
-        dbgFile << "Marker is" << marker->marker;
-        if (marker->marker != (JOCTET)(JPEG_APP0 + 13) ||  marker->data_length < 14) {
-            continue; /* IPTC data is in an APP13 marker of at least 16 octets */
+        // Check that the profile is used by the color space
+        if (profile && !KoColorSpaceRegistry::instance()->colorSpaceFactory(
+                    KoColorSpaceRegistry::instance()->colorSpaceId(
+                        modelId, Integer8BitsColorDepthID.id()))->profileIsCompatible(profile)) {
+            warnFile << "The profile " << profile->name() << " is not compatible with the color space model " << modelId;
+            profile = 0;
         }
-        if (memcmp(marker->data, photoshopMarker, 14) != 0) {
-            for (int i = 0; i < 14; i++) {
-                dbgFile << (int)(*(marker->data + i)) << "" << (int)(photoshopMarker[i]);
+
+        // Retrieve a pointer to the colorspace
+        const KoColorSpace* cs;
+        if (profile && profile->isSuitableForOutput()) {
+            dbgFile << "image has embedded profile:" << profile -> name() << "";
+            cs = KoColorSpaceRegistry::instance()->colorSpace(modelId, Integer8BitsColorDepthID.id(), profile);
+        } else
+            cs = KoColorSpaceRegistry::instance()->colorSpace(modelId, Integer8BitsColorDepthID.id(), "");
+
+        if (cs == 0) {
+            dbgFile << "unknown colorspace";
+            jpeg_destroy_decompress(&cinfo);
+            return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+        }
+        // TODO fixit
+        // Create the cmsTransform if needed
+
+        KoColorTransformation* transform = 0;
+        if (profile && !profile->isSuitableForOutput()) {
+            transform = KoColorSpaceRegistry::instance()->colorSpace(modelId, Integer8BitsColorDepthID.id(), profile)->createColorConverter(cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+        }
+        // Apparently an invalid transform was created from the profile. See bug https://bugs.kde.org/show_bug.cgi?id=255451.
+        // After 2.3: warn the user!
+        if (transform && !transform->isValid()) {
+            delete transform;
+            transform = 0;
+        }
+
+        // Creating the KisImageSP
+        if (!m_d->image) {
+            m_d->image = new KisImage(m_d->doc->createUndoStore(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
+            Q_CHECK_PTR(m_d->image);
+        }
+
+        // Set resolution
+        double xres = 72, yres = 72;
+        if (cinfo.density_unit == 1) {
+            xres = cinfo.X_density;
+            yres = cinfo.Y_density;
+        } else if (cinfo.density_unit == 2) {
+            xres = cinfo.X_density * 2.54;
+            yres = cinfo.Y_density * 2.54;
+        }
+        if (xres < 72) {
+            xres = 72;
+        }
+        if (yres < 72) {
+            yres = 72;
+        }
+        m_d->image->setResolution(POINT_TO_INCH(xres), POINT_TO_INCH(yres));   // It is the "invert" macro because we convert from pointer-per-inchs to points
+
+        // Create layer
+        KisPaintLayerSP layer = KisPaintLayerSP(new KisPaintLayer(m_d->image.data(), m_d->image -> nextLayerName(), quint8_MAX));
+
+        // Read data
+        JSAMPROW row_pointer = new JSAMPLE[cinfo.image_width*cinfo.num_components];
+
+        for (; cinfo.output_scanline < cinfo.image_height;) {
+            KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, cinfo.output_scanline, cinfo.image_width);
+            jpeg_read_scanlines(&cinfo, &row_pointer, 1);
+            quint8 *src = row_pointer;
+            switch (cinfo.out_color_space) {
+            case JCS_GRAYSCALE:
+                do {
+                    quint8 *d = it->rawData();
+                    d[0] = *(src++);
+                    if (transform) transform->transform(d, d, 1);
+                    d[1] = quint8_MAX;
+
+                } while (it->nextPixel());
+                break;
+            case JCS_RGB:
+                do {
+                    quint8 *d = it->rawData();
+                    d[2] = *(src++);
+                    d[1] = *(src++);
+                    d[0] = *(src++);
+                    if (transform) transform->transform(d, d, 1);
+                    d[3] = quint8_MAX;
+
+                } while (it->nextPixel());
+                break;
+            case JCS_CMYK:
+                do {
+                    quint8 *d = it->rawData();
+                    d[0] = quint8_MAX - *(src++);
+                    d[1] = quint8_MAX - *(src++);
+                    d[2] = quint8_MAX - *(src++);
+                    d[3] = quint8_MAX - *(src++);
+                    if (transform) transform->transform(d, d, 1);
+                    d[4] = quint8_MAX;
+
+                } while (it->nextPixel());
+                break;
+            default:
+                return KisImageBuilder_RESULT_UNSUPPORTED;
             }
-            dbgFile << "No photoshop marker";
-            continue; /* No IPTC Header */
         }
 
-        dbgFile << "Found Photoshop information of length :" << marker->data_length;
-        KisMetaData::IOBackend* iptcIO = KisMetaData::IOBackendRegistry::instance()->value("iptc");
-        Q_ASSERT(iptcIO);
-        const Exiv2::byte *record = 0;
-        uint32_t sizeIptc = 0;
-        uint32_t sizeHdr = 0;
-        // Find actual Iptc data within the APP13 segment
-        if (!Exiv2::Photoshop::locateIptcIrb((Exiv2::byte*)(marker->data + 14),
-                                             marker->data_length - 14, &record, &sizeHdr, &sizeIptc)) {
-            if (sizeIptc) {
-                // Decode the IPTC data
-                QByteArray byteArray((const char*)(record + sizeHdr), sizeIptc);
-                iptcIO->loadFrom(layer->metaData(), new QBuffer(&byteArray));
-            } else {
-                dbgFile << "IPTC Not found in Photoshop marker";
+        m_d->image->addNode(KisNodeSP(layer.data()), m_d->image->rootLayer().data());
+
+        // Read exif information
+
+        dbgFile << "Looking for exif information";
+
+        for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != 0; marker = marker->next) {
+            dbgFile << "Marker is" << marker->marker;
+            if (marker->marker != (JOCTET)(JPEG_APP0 + 1)
+                    || marker->data_length < 14) {
+                continue; /* Exif data is in an APP1 marker of at least 14 octets */
+            }
+
+            if (GETJOCTET(marker->data[0]) != (JOCTET) 0x45 ||
+                    GETJOCTET(marker->data[1]) != (JOCTET) 0x78 ||
+                    GETJOCTET(marker->data[2]) != (JOCTET) 0x69 ||
+                    GETJOCTET(marker->data[3]) != (JOCTET) 0x66 ||
+                    GETJOCTET(marker->data[4]) != (JOCTET) 0x00 ||
+                    GETJOCTET(marker->data[5]) != (JOCTET) 0x00)
+                continue; /* no Exif header */
+            dbgFile << "Found exif information of length :" << marker->data_length;
+            KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
+            Q_ASSERT(exifIO);
+            QByteArray byteArray((const char*)marker->data + 6, marker->data_length - 6);
+            QBuffer buf(&byteArray);
+            exifIO->loadFrom(layer->metaData(), &buf);
+            // Interpret orientation tag
+            if (layer->metaData()->containsEntry("http://ns.adobe.com/tiff/1.0/", "Orientation")) {
+                KisMetaData::Entry& entry = layer->metaData()->getEntry("http://ns.adobe.com/tiff/1.0/", "Orientation");
+                if (entry.value().type() == KisMetaData::Value::Variant) {
+                    switch (entry.value().asVariant().toInt()) {
+                    case 2:
+                        KisTransformWorker::mirrorY(layer->paintDevice());
+                        break;
+                    case 3:
+                        image()->rotateImage(M_PI);
+                        break;
+                    case 4:
+                        KisTransformWorker::mirrorX(layer->paintDevice());
+                        break;
+                    case 5:
+                        image()->rotateImage(M_PI / 2);
+                        KisTransformWorker::mirrorY(layer->paintDevice());
+                        break;
+                    case 6:
+                        image()->rotateImage(M_PI / 2);
+                        break;
+                    case 7:
+                        image()->rotateImage(M_PI / 2);
+                        KisTransformWorker::mirrorX(layer->paintDevice());
+                        break;
+                    case 8:
+                        image()->rotateImage(-M_PI / 2 + M_PI*2);
+                        break;
+                    default:
+                        break;
+                    }
+                }
+                entry.value().setVariant(1);
+            }
+            break;
+        }
+
+        dbgFile << "Looking for IPTC information";
+
+        for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != 0; marker = marker->next) {
+            dbgFile << "Marker is" << marker->marker;
+            if (marker->marker != (JOCTET)(JPEG_APP0 + 13) ||  marker->data_length < 14) {
+                continue; /* IPTC data is in an APP13 marker of at least 16 octets */
+            }
+            if (memcmp(marker->data, photoshopMarker, 14) != 0) {
+                for (int i = 0; i < 14; i++) {
+                    dbgFile << (int)(*(marker->data + i)) << "" << (int)(photoshopMarker[i]);
+                }
+                dbgFile << "No photoshop marker";
+                continue; /* No IPTC Header */
+            }
+
+            dbgFile << "Found Photoshop information of length :" << marker->data_length;
+            KisMetaData::IOBackend* iptcIO = KisMetaData::IOBackendRegistry::instance()->value("iptc");
+            Q_ASSERT(iptcIO);
+            const Exiv2::byte *record = 0;
+            uint32_t sizeIptc = 0;
+            uint32_t sizeHdr = 0;
+            // Find actual Iptc data within the APP13 segment
+            if (!Exiv2::Photoshop::locateIptcIrb((Exiv2::byte*)(marker->data + 14),
+                                                 marker->data_length - 14, &record, &sizeHdr, &sizeIptc)) {
+                if (sizeIptc) {
+                    // Decode the IPTC data
+                    QByteArray byteArray((const char*)(record + sizeHdr), sizeIptc);
+                    iptcIO->loadFrom(layer->metaData(), new QBuffer(&byteArray));
+                } else {
+                    dbgFile << "IPTC Not found in Photoshop marker";
+                }
+            }
+            break;
+        }
+
+        dbgFile << "Looking for XMP information";
+
+        for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != 0; marker = marker->next) {
+            dbgFile << "Marker is" << marker->marker;
+            if (marker->marker != (JOCTET)(JPEG_APP0 + 1) || marker->data_length < 31) {
+                continue; /* XMP data is in an APP1 marker of at least 31 octets */
+            }
+            if (memcmp(marker->data, xmpMarker, 29) != 0) {
+                dbgFile << "Not XMP marker";
+                continue; /* No xmp Header */
+            }
+            dbgFile << "Found XMP Marker of length " << marker->data_length;
+            QByteArray byteArray((const char*)marker->data + 29, marker->data_length - 29);
+            KisMetaData::IOBackend* xmpIO = KisMetaData::IOBackendRegistry::instance()->value("xmp");
+            Q_ASSERT(xmpIO);
+            xmpIO->loadFrom(layer->metaData(), new QBuffer(&byteArray));
+            break;
+        }
+
+        // Dump loaded metadata
+        layer->metaData()->debugDump();
+
+        // Check whether the metadata has resolution info, too...
+        if (cinfo.density_unit == 0 && layer->metaData()->containsEntry("tiff:XResolution") && layer->metaData()->containsEntry("tiff:YResolution")) {
+            double xres = layer->metaData()->getEntry("tiff:XResolution").value().asDouble();
+            double yres = layer->metaData()->getEntry("tiff:YResolution").value().asDouble();
+            if (xres != 0 && yres != 0) {
+                m_d->image->setResolution(POINT_TO_INCH(xres), POINT_TO_INCH(yres));   // It is the "invert" macro because we convert from pointer-per-inchs to points
             }
         }
-        break;
+
+        // Finish decompression
+        jpeg_finish_decompress(&cinfo);
+        jpeg_destroy_decompress(&cinfo);
+        delete [] row_pointer;
+        return KisImageBuilder_RESULT_OK;
     }
-
-    dbgFile << "Looking for XMP information";
-
-    for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != NULL; marker = marker->next) {
-        dbgFile << "Marker is" << marker->marker;
-        if (marker->marker != (JOCTET)(JPEG_APP0 + 1) || marker->data_length < 31) {
-            continue; /* XMP data is in an APP1 marker of at least 31 octets */
-        }
-        if (memcmp(marker->data, xmpMarker, 29) != 0) {
-            dbgFile << "Not XMP marker";
-            continue; /* No xmp Header */
-        }
-        dbgFile << "Found XMP Marker of length " << marker->data_length;
-        QByteArray byteArray((const char*)marker->data + 29, marker->data_length - 29);
-        KisMetaData::IOBackend* xmpIO = KisMetaData::IOBackendRegistry::instance()->value("xmp");
-        Q_ASSERT(xmpIO);
-        xmpIO->loadFrom(layer->metaData(), new QBuffer(&byteArray));
-        break;
+    catch( std::runtime_error &e) {
+        jpeg_destroy_decompress(&cinfo);
+        return KisImageBuilder_RESULT_FAILURE;
     }
-
-    // Dump loaded metadata
-    layer->metaData()->debugDump();
-
-    // Check whether the metadata has resolution info, too...
-    if (cinfo.density_unit == 0 && layer->metaData()->containsEntry("tiff:XResolution") && layer->metaData()->containsEntry("tiff:YResolution")) {
-        double xres = layer->metaData()->getEntry("tiff:XResolution").value().asDouble();
-        double yres = layer->metaData()->getEntry("tiff:YResolution").value().asDouble();
-        if (xres != 0 && yres != 0) {
-            m_image->setResolution(POINT_TO_INCH(xres), POINT_TO_INCH(yres));   // It is the "invert" macro because we convert from pointer-per-inchs to points
-        }
-    }
-
-    // Finish decompression
-    jpeg_finish_decompress(&cinfo);
-    jpeg_destroy_decompress(&cinfo);
-    delete [] row_pointer;
-    return KisImageBuilder_RESULT_OK;
 }
 
 
 
-KisImageBuilder_Result KisJPEGConverter::buildImage(const QUrl &uri)
+KisImageBuilder_Result KisJPEGConverter::buildImage(const QString &filename)
 {
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
-
-
-    if (!uri.isLocalFile()) {
-        return KisImageBuilder_RESULT_NOT_EXIST;
-    }
-    return decode(uri);
-
+    return decode(filename);
 }
 
 
-KisImageWSP KisJPEGConverter::image()
+KisImageSP KisJPEGConverter::image()
 {
-    return m_image;
+    return m_d->image;
 }
 
 
-KisImageBuilder_Result KisJPEGConverter::buildFile(const QUrl &uri, KisPaintLayerSP layer, vKisAnnotationSP_it /*annotationsStart*/, vKisAnnotationSP_it /*annotationsEnd*/, KisJPEGOptions options, KisMetaData::Store* metaData)
+KisImageBuilder_Result KisJPEGConverter::buildFile(const QString &filename, KisPaintLayerSP layer, vKisAnnotationSP_it /*annotationsStart*/, vKisAnnotationSP_it /*annotationsEnd*/, KisJPEGOptions options, KisMetaData::Store* metaData)
 {
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
@@ -456,21 +475,15 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const QUrl &uri, KisPaintLaye
     if (!image)
         return KisImageBuilder_RESULT_EMPTY;
 
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
-
-    if (!uri.isLocalFile())
-        return KisImageBuilder_RESULT_NOT_LOCAL;
-
     const KoColorSpace * cs = layer->colorSpace();
     J_COLOR_SPACE color_type = getColorTypeforColorSpace(cs);
 
-    if (!m_batchMode && cs->colorDepthId() != Integer8BitsColorDepthID) {
+    if (!m_d->batchMode && cs->colorDepthId() != Integer8BitsColorDepthID) {
         QMessageBox::information(0, i18nc("@title:window", "Krita"), i18n("Warning: JPEG only supports 8 bits per channel. Your image uses: %1. Krita will save your image as 8 bits per channel.", cs->name()));
     }
 
     if (color_type == JCS_UNKNOWN) {
-        if (!m_batchMode) {
+        if (!m_d->batchMode) {
             QMessageBox::information(0, i18nc("@title:window", "Krita"), i18n("Cannot export images in %1.\nWill save as RGB.", cs->name()));
         }
         KUndo2Command *tmp = layer->paintDevice()->convertTo(KoColorSpaceRegistry::instance()->rgb8(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
@@ -489,7 +502,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const QUrl &uri, KisPaintLaye
 
 
     // Open file for writing
-    QFile file(uri.toLocalFile());
+    QFile file(filename);
     if (!file.open(QIODevice::WriteOnly)) {
         return (KisImageBuilder_RESULT_FAILURE);
     }
@@ -536,7 +549,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const QUrl &uri, KisPaintLaye
         cinfo.comp_info[2].v_samp_factor = 1;
 
     }
-    break;
+        break;
     case 1: {
         cinfo.comp_info[0].h_samp_factor = 2;
         cinfo.comp_info[0].v_samp_factor = 1;
@@ -545,7 +558,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const QUrl &uri, KisPaintLaye
         cinfo.comp_info[2].h_samp_factor = 1;
         cinfo.comp_info[2].v_samp_factor = 1;
     }
-    break;
+        break;
     case 2: {
         cinfo.comp_info[0].h_samp_factor = 1;
         cinfo.comp_info[0].v_samp_factor = 2;
@@ -554,7 +567,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const QUrl &uri, KisPaintLaye
         cinfo.comp_info[2].h_samp_factor = 1;
         cinfo.comp_info[2].v_samp_factor = 1;
     }
-    break;
+        break;
     case 3: {
         cinfo.comp_info[0].h_samp_factor = 1;
         cinfo.comp_info[0].v_samp_factor = 1;
@@ -563,7 +576,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const QUrl &uri, KisPaintLaye
         cinfo.comp_info[2].h_samp_factor = 1;
         cinfo.comp_info[2].v_samp_factor = 1;
     }
-    break;
+        break;
     }
 
     // Save resolution
@@ -737,7 +750,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const QUrl &uri, KisPaintLaye
 
 void KisJPEGConverter::cancel()
 {
-    m_stop = true;
+    m_d->stop = true;
 }
 
 

@@ -18,16 +18,18 @@
 
 #include "opengl/kis_opengl.h"
 
-#ifdef HAVE_OPENGL
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
-#endif
 
 #include <QApplication>
 #include <QDir>
 #include <QFile>
 #include <QDesktopServices>
 #include <QMessageBox>
+#include <QWindow>
+#include <QOpenGLFunctions_3_2_Core>
+#include <QOpenGLFunctions_3_2_Compatibility>
+#include <QOpenGLFunctions_2_1>
 
 #include <klocalizedstring.h>
 
@@ -36,50 +38,58 @@
 
 namespace
 {
-#ifdef HAVE_OPENGL
-#endif
+    bool initialized = false;
     bool NeedsFenceWorkaround = false;
-    int glVersion = 0;
+    int glMajorVersion = 0;
+    int glMinorVersion = 0;
+    bool supportsDeprecatedFunctions = false;
+
     QString Renderer;
 }
 
-
 void KisOpenGL::initialize()
 {
-#ifdef HAVE_OPENGL
-    dbgUI << "OpenGL: initializing";
+    if (initialized) return;
 
-    KisConfig cfg;
+    setDefaultFormat();
 
-    QSurfaceFormat format;
-    format.setProfile(QSurfaceFormat::CompatibilityProfile);
-    format.setOptions(QSurfaceFormat::DeprecatedFunctions);
-    format.setDepthBufferSize(24);
-    format.setStencilBufferSize(8);
-    format.setVersion(3, 2);
-    // if (cfg.disableDoubleBuffering()) {
-    if (false) {
-        format.setSwapBehavior(QSurfaceFormat::SingleBuffer);
-    }
-    else {
-        format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
-    }
-    format.setSwapInterval(0); // Disable vertical refresh syncing
-    QSurfaceFormat::setDefaultFormat(format);
+    // we need a QSurface active to get our GL functions from the context
+    QWindow  surface;
+    surface.setSurfaceType( QSurface::OpenGLSurface );
+    surface.create();
 
-#endif
+    QOpenGLContext context;
+    context.create();
+    context.makeCurrent( &surface );
+
+    QOpenGLFunctions  *funcs = context.functions();
+    funcs->initializeOpenGLFunctions();
+
+    qDebug() << "OpenGL Info";
+    qDebug() << "  Vendor: " << reinterpret_cast<const char *>(funcs->glGetString(GL_VENDOR));
+    qDebug() << "  Renderer: " << reinterpret_cast<const char *>(funcs->glGetString(GL_RENDERER));
+    qDebug() << "  Version: " << reinterpret_cast<const char *>(funcs->glGetString(GL_VERSION));
+    qDebug() << "  Shading language: " << reinterpret_cast<const char *>(funcs->glGetString(GL_SHADING_LANGUAGE_VERSION));
+    qDebug() << "  Requested format: " << QSurfaceFormat::defaultFormat();
+    qDebug() << "  Current format:   " << context.format();
+
+    glMajorVersion = context.format().majorVersion();
+    glMinorVersion = context.format().minorVersion();
+    supportsDeprecatedFunctions = (context.format().options() & QSurfaceFormat::DeprecatedFunctions);
+
+    initialized = true;
 }
 
-int KisOpenGL::initializeContext(QOpenGLContext* s) {
-#ifdef HAVE_OPENGL
-    KisConfig cfg;
+void KisOpenGL::initializeContext(QOpenGLContext *ctx)
+{
+    initialize();
+
     dbgUI << "OpenGL: Opening new context";
 
     // Double check we were given the version we requested
-    QSurfaceFormat format = s->format();
-    glVersion = 100 * format.majorVersion() + format.minorVersion();
-
-    QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
+    QSurfaceFormat format = ctx->format();
+    QOpenGLFunctions *f = ctx->functions();
+    f->initializeOpenGLFunctions();
 
 #ifndef GL_RENDERER
 #  define GL_RENDERER 0x1F01
@@ -87,7 +97,6 @@ int KisOpenGL::initializeContext(QOpenGLContext* s) {
     Renderer = QString((const char*)f->glGetString(GL_RENDERER));
 
     QFile log(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-opengl.txt");
-    dbgUI << "Writing OpenGL log to" << log.fileName();
     log.open(QFile::WriteOnly);
     QString vendor((const char*)f->glGetString(GL_VENDOR));
     log.write(vendor.toLatin1());
@@ -96,41 +105,61 @@ int KisOpenGL::initializeContext(QOpenGLContext* s) {
     log.write(", ");
     QString version((const char*)f->glGetString(GL_VERSION));
     log.write(version.toLatin1());
+    log.close();
 
     // Check if we have a bugged driver that needs fence workaround
     bool isOnX11 = false;
 #ifdef HAVE_X11
     isOnX11 = true;
 #endif
-
+    KisConfig cfg;
     if ((isOnX11 && Renderer.startsWith("AMD")) || cfg.forceOpenGLFenceWorkaround()) {
         NeedsFenceWorkaround = true;
     }
-#else
-    Q_UNUSED(s);
-    NeedsFenceWorkaround = false;
-#endif
-    return glVersion;
+}
+
+bool KisOpenGL::supportsGLSL13()
+{
+    initialize();
+    return glMajorVersion >= 3 && supportsDeprecatedFunctions;
 }
 
 bool KisOpenGL::supportsFenceSync()
 {
-    // return glVersion > 302;
-    return true;
+    initialize();
+    return glMajorVersion >= 3;
 }
 
 bool KisOpenGL::needsFenceWorkaround()
 {
+    initialize();
     return NeedsFenceWorkaround;
 }
 
-QString KisOpenGL::renderer()
+void KisOpenGL::setDefaultFormat()
 {
-    return Renderer;
+    QSurfaceFormat format;
+#ifdef Q_OS_MAC
+//    format.setProfile(QSurfaceFormat::CoreProfile);
+//    format.setOptions(QSurfaceFormat::DeprecatedFunctions);
+    format.setVersion(2, 1);
+#else
+    format.setProfile(QSurfaceFormat::CompatibilityProfile);
+    format.setOptions(QSurfaceFormat::DeprecatedFunctions);
+    format.setVersion(3, 0);
+#endif
+    format.setDepthBufferSize(24);
+    format.setStencilBufferSize(8);
+    format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
+    KisConfig cfg;
+    if (cfg.disableVSync()) {
+        format.setSwapInterval(0); // Disable vertical refresh syncing
+    }
+    QSurfaceFormat::setDefaultFormat(format);
 }
 
 bool KisOpenGL::hasOpenGL()
 {
-    // QT5TODO: figure out runtime whether we have opengl...
-    return true;
+    return ((glMajorVersion * 100 + glMinorVersion) >= 201);
+    //return (glMajorVersion >= 3 && supportsDeprecatedFunctions);
 }

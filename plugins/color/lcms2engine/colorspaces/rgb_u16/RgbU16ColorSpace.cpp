@@ -25,6 +25,7 @@
 
 #include "compositeops/KoCompositeOps.h"
 #include "compositeops/RgbCompositeOps.h"
+#include "kis_dom_utils.h"
 
 RgbU16ColorSpace::RgbU16ColorSpace(const QString &name, KoColorProfile *p) :
     LcmsColorSpace<KoBgrU16Traits>(colorSpaceId(), name, TYPE_BGRA_16, cmsSigRgbData, p)
@@ -60,9 +61,9 @@ void RgbU16ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomEl
 {
     const KoBgrU16Traits::Pixel *p = reinterpret_cast<const KoBgrU16Traits::Pixel *>(pixel);
     QDomElement labElt = doc.createElement("RGB");
-    labElt.setAttribute("r", KoColorSpaceMaths< KoBgrU16Traits::channels_type, qreal>::scaleToA(p->red));
-    labElt.setAttribute("g", KoColorSpaceMaths< KoBgrU16Traits::channels_type, qreal>::scaleToA(p->green));
-    labElt.setAttribute("b", KoColorSpaceMaths< KoBgrU16Traits::channels_type, qreal>::scaleToA(p->blue));
+    labElt.setAttribute("r", KisDomUtils::toString(KoColorSpaceMaths< KoBgrU16Traits::channels_type, qreal>::scaleToA(p->red)));
+    labElt.setAttribute("g", KisDomUtils::toString(KoColorSpaceMaths< KoBgrU16Traits::channels_type, qreal>::scaleToA(p->green)));
+    labElt.setAttribute("b", KisDomUtils::toString(KoColorSpaceMaths< KoBgrU16Traits::channels_type, qreal>::scaleToA(p->blue)));
     labElt.setAttribute("space", profile()->name());
     colorElt.appendChild(labElt);
 }
@@ -70,13 +71,13 @@ void RgbU16ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomEl
 void RgbU16ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
     KoBgrU16Traits::Pixel *p = reinterpret_cast<KoBgrU16Traits::Pixel *>(pixel);
-    p->red = KoColorSpaceMaths< qreal, KoBgrU16Traits::channels_type >::scaleToA(elt.attribute("r").toDouble());
-    p->green = KoColorSpaceMaths< qreal, KoBgrU16Traits::channels_type >::scaleToA(elt.attribute("g").toDouble());
-    p->blue = KoColorSpaceMaths< qreal, KoBgrU16Traits::channels_type >::scaleToA(elt.attribute("b").toDouble());
+    p->red = KoColorSpaceMaths< qreal, KoBgrU16Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("r")));
+    p->green = KoColorSpaceMaths< qreal, KoBgrU16Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("g")));
+    p->blue = KoColorSpaceMaths< qreal, KoBgrU16Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("b")));
     p->alpha = KoColorSpaceMathsTraits<quint16>::max;
 }
 
-void RgbU16ColorSpace::toHSY(QVector <double> channelValues, qreal *hue, qreal *sat, qreal *luma) const
+void RgbU16ColorSpace::toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const
 {
     RGBToHSY(channelValues[0],channelValues[1],channelValues[2], hue, sat, luma, lumaCoefficients()[0], lumaCoefficients()[1], lumaCoefficients()[2]);
 }
@@ -89,7 +90,7 @@ QVector <double> RgbU16ColorSpace::fromHSY(qreal *hue, qreal *sat, qreal *luma) 
     return channelValues;
 }
 
-void RgbU16ColorSpace::toYUV(QVector <double> channelValues, qreal *y, qreal *u, qreal *v) const
+void RgbU16ColorSpace::toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const
 {
 
     

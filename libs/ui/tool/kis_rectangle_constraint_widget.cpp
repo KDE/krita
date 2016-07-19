@@ -25,14 +25,13 @@ KisRectangleConstraintWidget::KisRectangleConstraintWidget(QWidget *parent, KisT
     
     setupUi(this);
     
-    chkHeight->setIcon(KisIconUtils::loadIcon("height_icon"));
-    chkWidth->setIcon(KisIconUtils::loadIcon("width_icon"));
-    chkRatio->setIcon(KisIconUtils::loadIcon("ratio_icon"));
-    
-    connect(chkWidth, SIGNAL(toggled(bool)), this, SLOT(inputsChanged(void)));
-    connect(chkHeight, SIGNAL(toggled(bool)), this, SLOT(inputsChanged(void)));
-    connect(chkRatio, SIGNAL(toggled(bool)), this, SLOT(inputsChanged(void)));
-    
+    lockWidthButton->setIcon(KisIconUtils::loadIcon("layer-locked"));
+    lockHeightButton->setIcon(KisIconUtils::loadIcon("layer-locked"));
+    lockRatioButton->setIcon(KisIconUtils::loadIcon("layer-locked"));
+    connect(lockWidthButton, SIGNAL(toggled(bool)), this, SLOT(inputsChanged(void)));
+    connect(lockHeightButton, SIGNAL(toggled(bool)), this, SLOT(inputsChanged(void)));
+    connect(lockRatioButton, SIGNAL(toggled(bool)), this, SLOT(inputsChanged(void)));
+
     connect(intWidth,  SIGNAL(valueChanged(int)), this, SLOT(inputsChanged(void)));
     connect(intHeight, SIGNAL(valueChanged(int)), this, SLOT(inputsChanged(void)));
     connect(doubleRatio, SIGNAL(valueChanged(double)), this, SLOT(inputsChanged(void)));
@@ -44,9 +43,9 @@ KisRectangleConstraintWidget::KisRectangleConstraintWidget(QWidget *parent, KisT
 void KisRectangleConstraintWidget::inputsChanged() 
 {
     emit constraintsChanged(
-        chkRatio->isChecked(), 
-        chkWidth->isChecked(),
-        chkHeight->isChecked(),
+        lockRatioButton->isChecked(),
+        lockWidthButton->isChecked(),
+        lockHeightButton->isChecked(),
         doubleRatio->value(), 
         intWidth->value(), 
         intHeight->value()
@@ -59,10 +58,10 @@ void KisRectangleConstraintWidget::rectangleChanged(const QRectF &rect)
     intHeight->blockSignals(true);
     doubleRatio->blockSignals(true);
     
-    if (!chkWidth->isChecked()) intWidth->setValue(rect.width());
-    if (!chkHeight->isChecked()) intHeight->setValue(rect.height());
+    if (!lockWidthButton->isChecked()) intWidth->setValue(rect.width());
+    if (!lockHeightButton->isChecked()) intHeight->setValue(rect.height());
 
-    if (!chkRatio->isChecked() && !(rect.width() == 0 && rect.height() == 0)) {
+    if (!lockRatioButton->isChecked() && !(rect.width() == 0 && rect.height() == 0)) {
         doubleRatio->setValue(fabs(rect.width()) / fabs(rect.height()));
     }
   

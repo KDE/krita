@@ -22,7 +22,7 @@
 #include <QMessageBox>
 
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 #include <QApplication>
 
 #include <KisImportExportManager.h>
@@ -79,15 +79,15 @@ KisImportExportFilter::ConversionStatus psdExport::convert(const QByteArray& fro
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    KisDocument *input = m_chain->inputDocument();
-    QString filename = m_chain->outputFile();
+    KisDocument *input = inputDocument();
+    QString filename = outputFile();
 
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;
 
 
     if (input->image()->width() > 30000 || input->image()->height() > 30000) {
-        if (!m_chain->manager()->getBatchMode()) {
+        if (!getBatchMode()) {
             QMessageBox::critical(0,
                                   i18nc("@title:window", "Photoshop Export Error"),
                                   i18n("Unable to save to the Photoshop format.\n"
@@ -98,7 +98,7 @@ KisImportExportFilter::ConversionStatus psdExport::convert(const QByteArray& fro
 
 
     if (!checkHomogenity(input->image()->rootLayer(), input->image()->colorSpace())) {
-        if (!m_chain->manager()->getBatchMode()) {
+        if (!getBatchMode()) {
             QMessageBox::critical(0,
                                   i18nc("@title:window", "Photoshop Export Error"),
                                   i18n("Unable to save to the Photoshop format.\n"
@@ -107,17 +107,12 @@ KisImportExportFilter::ConversionStatus psdExport::convert(const QByteArray& fro
         return KisImportExportFilter::InvalidFormat;
     }
 
-    qApp->processEvents(); // For vector layers to be updated
-    input->image()->waitForDone();
-
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
-
-    QUrl url = QUrl::fromLocalFile(filename);
 
     PSDSaver kpc(input);
     KisImageBuilder_Result res;
 
-    if ((res = kpc.buildFile(url)) == KisImageBuilder_RESULT_OK) {
+    if ((res = kpc.buildFile(filename)) == KisImageBuilder_RESULT_OK) {
         dbgFile <<"success !";
         return KisImportExportFilter::OK;
     }

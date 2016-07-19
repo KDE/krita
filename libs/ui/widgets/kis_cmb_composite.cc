@@ -36,7 +36,7 @@ KisCompositeOpListWidget::KisCompositeOpListWidget(QWidget* parent):
     m_model(new KisSortedCompositeOpListModel(this))
 {
     setModel(m_model);
-    setItemDelegate(new KisCategorizedItemDelegate(true, this));
+    setItemDelegate(new KisCategorizedItemDelegate(this));
 }
 
 KisCompositeOpListWidget::~KisCompositeOpListWidget()
@@ -71,7 +71,7 @@ KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
 
     setModel(m_model);
     setView(m_view);
-    setItemDelegate(new KisCategorizedItemDelegate(true, this));
+    setItemDelegate(new KisCategorizedItemDelegate(this));
 
     connect(m_view, SIGNAL(sigCategoryToggled(const QModelIndex&, bool)), SLOT(slotCategoryToggled(const QModelIndex&, bool)));
     connect(m_view, SIGNAL(sigEntryChecked(const QModelIndex&)), SLOT(slotEntryChecked(const QModelIndex&)));

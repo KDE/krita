@@ -28,11 +28,6 @@ KisToolCropConfigWidget::KisToolCropConfigWidget(QWidget* parent, KisToolCrop* c
     , m_cropTool(cropTool)
 {
     setupUi(this);
-    boolHeight->setIcon(KisIconUtils::loadIcon("height_icon"));
-    boolWidth->setIcon(KisIconUtils::loadIcon("width_icon"));
-    boolRatio->setIcon(KisIconUtils::loadIcon("ratio_icon"));
-    label_horizPos->setPixmap(KisIconUtils::loadIcon("offset_horizontal").pixmap(16, 16));
-    label_vertiPos->setPixmap(KisIconUtils::loadIcon("offset_vertical").pixmap(16, 16));
 
     // update the UI based off data from crop tool
     intHeight->setValue(m_cropTool->cropHeight());
@@ -41,15 +36,32 @@ KisToolCropConfigWidget::KisToolCropConfigWidget(QWidget* parent, KisToolCrop* c
     intWidth->setValue(m_cropTool->cropWidth());
     intX->setValue(m_cropTool->cropX());
     intY->setValue(m_cropTool->cropY());
-    boolHeight->setChecked(m_cropTool->forceHeight());
-    boolRatio->setChecked(m_cropTool->forceRatio());
-    boolWidth->setChecked(m_cropTool->forceWidth());
     doubleRatio->setValue(m_cropTool->ratio());
     cmbDecor->setCurrentIndex(m_cropTool->decoration());
     boolGrow->setChecked(m_cropTool->allowGrow());
     boolCenter->setChecked(m_cropTool->growCenter());
 
+    lockRatioButton->setChecked(m_cropTool->forceRatio());
+    lockRatioButton->setIcon(KisIconUtils::loadIcon("layer-locked"));
+
+    lockHeightButton->setChecked(m_cropTool->forceHeight());
+    lockHeightButton->setIcon(KisIconUtils::loadIcon("layer-locked"));
+    lockWidthButton->setChecked(m_cropTool->forceWidth());
+    lockWidthButton->setIcon(KisIconUtils::loadIcon("layer-locked"));
+
+
     KisAcyclicSignalConnector *connector;
+    connector = new KisAcyclicSignalConnector(this);
+    connector->connectForwardBool(lockRatioButton, SIGNAL(toggled(bool)), this, SIGNAL(forceRatioChanged(bool)));
+    connector->connectBackwardBool(cropTool, SIGNAL(forceRatioChanged(bool)), lockRatioButton, SLOT(setChecked(bool)));
+
+    connector = new KisAcyclicSignalConnector(this);
+    connector->connectForwardBool(lockHeightButton, SIGNAL(toggled(bool)), this, SIGNAL(forceHeightChanged(bool)));
+    connector->connectBackwardBool(cropTool, SIGNAL(forceHeightChanged(bool)), lockHeightButton, SLOT(setChecked(bool)));
+
+    connector = new KisAcyclicSignalConnector(this);
+    connector->connectForwardBool(lockWidthButton, SIGNAL(toggled(bool)), this, SIGNAL(forceWidthChanged(bool)));
+    connector->connectBackwardBool(cropTool, SIGNAL(forceWidthChanged(bool)), lockWidthButton, SLOT(setChecked(bool)));
 
     connector = new KisAcyclicSignalConnector(this);
     connector->connectForwardDouble(doubleRatio, SIGNAL(valueChanged(double)), this, SIGNAL(ratioChanged(double)));
@@ -70,18 +82,6 @@ KisToolCropConfigWidget::KisToolCropConfigWidget(QWidget* parent, KisToolCrop* c
     connector = new KisAcyclicSignalConnector(this);
     connector->connectForwardInt(intY, SIGNAL(valueChanged(int)), this, SIGNAL(cropYChanged(int)));
     connector->connectBackwardInt(cropTool, SIGNAL(cropYChanged(int)), intY, SLOT(setValue(int)));
-
-    connector = new KisAcyclicSignalConnector(this);
-    connector->connectForwardBool(boolHeight, SIGNAL(toggled(bool)), this, SIGNAL(forceHeightChanged(bool)));
-    connector->connectBackwardBool(cropTool, SIGNAL(forceHeightChanged(bool)), boolHeight, SLOT(setChecked(bool)));
-
-    connector = new KisAcyclicSignalConnector(this);
-    connector->connectForwardBool(boolWidth, SIGNAL(toggled(bool)), this, SIGNAL(forceWidthChanged(bool)));
-    connector->connectBackwardBool(cropTool, SIGNAL(forceWidthChanged(bool)), boolWidth, SLOT(setChecked(bool)));
-
-    connector = new KisAcyclicSignalConnector(this);
-    connector->connectForwardBool(boolRatio, SIGNAL(toggled(bool)), this, SIGNAL(forceRatioChanged(bool)));
-    connector->connectBackwardBool(cropTool, SIGNAL(forceRatioChanged(bool)), boolRatio, SLOT(setChecked(bool)));
 
     connector = new KisAcyclicSignalConnector(this);
     connector->connectForwardInt(cmbType, SIGNAL(currentIndexChanged(int)), this, SIGNAL(cropTypeChanged(int)));

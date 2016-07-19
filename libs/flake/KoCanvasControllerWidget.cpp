@@ -43,11 +43,7 @@
 #include <QTimer>
 #include <QPointer>
 
-#include <KoConfig.h> // for HAVE_OPENGL
-
-#ifdef HAVE_OPENGL
 #include <QOpenGLWidget>
-#endif
 
 #include <math.h>
 
@@ -64,17 +60,8 @@ void KoCanvasControllerWidget::Private::setDocumentOffset()
     QWidget *canvasWidget = canvas->canvasWidget();
 
     if (canvasWidget) {
-        bool isCanvasOpenGL = false;
-        QWidget *canvasWidget = canvas->canvasWidget();
-        if (canvasWidget) {
-#ifdef HAVE_OPENGL
-            if (qobject_cast<QOpenGLWidget*>(canvasWidget) != 0) {
-                isCanvasOpenGL = true;
-            }
-#endif
-        }
-
-        if (!isCanvasOpenGL) {
+        // If it isn't an OpenGL canvas
+        if (qobject_cast<QOpenGLWidget*>(canvasWidget) == 0) {
             QPoint diff = q->documentOffset() - pt;
             if (q->canvasMode() == Spreadsheet && canvasWidget->layoutDirection() == Qt::RightToLeft) {
                 canvasWidget->scroll(-diff.x(), diff.y());
@@ -456,11 +443,6 @@ void KoCanvasControllerWidget::zoomTo(const QRect &viewRect)
         scale = 1.0 * viewport()->width() / viewRect.width();
 
     zoomBy(viewRect.center(), scale);
-}
-
-void KoCanvasControllerWidget::setToolOptionWidgets(const QList<QPointer<QWidget> >&widgetMap)
-{
-    emit toolOptionWidgetsChanged(widgetMap);
 }
 
 void KoCanvasControllerWidget::updateDocumentSize(const QSize &sz, bool recalculateCenter)

@@ -44,6 +44,6 @@ target_include_directories(kritavectorimage
 target_link_libraries(kritavectorimage  KF5::I18n Qt5::Gui Qt5::PrintSupport)
 
 set_target_properties(kritavectorimage PROPERTIES
-    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 install(TARGETS kritavectorimage ${INSTALL_TARGETS_DEFAULT_ARGS} )

@@ -27,6 +27,11 @@
 #include <QPen>
 #include <QPainter>
 
+#include <boost/accumulators/accumulators.hpp>
+#include <boost/accumulators/statistics/stats.hpp>
+#include <boost/accumulators/statistics/min.hpp>
+#include <boost/accumulators/statistics/max.hpp>
+#include "kis_algebra_2d.h"
 
 #include <KoColorSpaceRegistry.h>
 
@@ -68,6 +73,108 @@ namespace KritaUtils
         }
 
         return patches;
+    }
+
+    QVector<QRect> splitRegionIntoPatches(const QRegion &region, const QSize &patchSize)
+    {
+        QVector<QRect> patches;
+
+        Q_FOREACH (const QRect rect, region.rects()) {
+            patches << KritaUtils::splitRectIntoPatches(rect, patchSize);
+        }
+
+        return patches;
+    }
+
+    template <class Rect, class Point>
+    QVector<Point> sampleRectWithPoints(const Rect &rect)
+    {
+        QVector<Point> points;
+
+        Point m1 = 0.5 * (rect.topLeft() + rect.topRight());
+        Point m2 = 0.5 * (rect.bottomLeft() + rect.bottomRight());
+
+        points << rect.topLeft();
+        points << m1;
+        points << rect.topRight();
+
+        points << 0.5 * (rect.topLeft() + rect.bottomLeft());
+        points << 0.5 * (m1 + m2);
+        points << 0.5 * (rect.topRight() + rect.bottomRight());
+
+        points << rect.bottomLeft();
+        points << m2;
+        points << rect.bottomRight();
+
+        return points;
+    }
+
+    QVector<QPoint> sampleRectWithPoints(const QRect &rect)
+    {
+        return sampleRectWithPoints<QRect, QPoint>(rect);
+    }
+
+    QVector<QPointF> sampleRectWithPoints(const QRectF &rect)
+    {
+        return sampleRectWithPoints<QRectF, QPointF>(rect);
+    }
+
+
+    template <class Rect, class Point, bool alignPixels>
+    Rect approximateRectFromPointsImpl(const QVector<Point> &points)
+    {
+        using namespace boost::accumulators;
+        accumulator_set<qreal, stats<tag::min, tag::max > > accX;
+        accumulator_set<qreal, stats<tag::min, tag::max > > accY;
+
+        Q_FOREACH (const Point &pt, points) {
+            accX(pt.x());
+            accY(pt.y());
+        }
+
+        Rect resultRect;
+
+        if (alignPixels) {
+            resultRect.setCoords(std::floor(min(accX)), std::floor(min(accY)),
+                                 std::ceil(max(accX)), std::ceil(max(accY)));
+        } else {
+            resultRect.setCoords(min(accX), min(accY),
+                                 max(accX), max(accY));
+        }
+
+        return resultRect;
+    }
+
+    QRect approximateRectFromPoints(const QVector<QPoint> &points)
+    {
+        return approximateRectFromPointsImpl<QRect, QPoint, true>(points);
+    }
+
+    QRectF approximateRectFromPoints(const QVector<QPointF> &points)
+    {
+        return approximateRectFromPointsImpl<QRectF, QPointF, false>(points);
+    }
+
+    QRect approximateRectWithPointTransform(const QRect &rect, std::function<QPointF(QPointF)> func)
+    {
+        QVector<QPoint> points = KritaUtils::sampleRectWithPoints(rect);
+
+        using namespace boost::accumulators;
+        accumulator_set<qreal, stats<tag::min, tag::max > > accX;
+        accumulator_set<qreal, stats<tag::min, tag::max > > accY;
+
+        Q_FOREACH (const QPoint &pt, points) {
+            QPointF dstPt = func(pt);
+
+            accX(dstPt.x());
+            accY(dstPt.y());
+        }
+
+        QRect resultRect;
+        resultRect.setCoords(std::floor(min(accX)), std::floor(min(accY)),
+                             std::ceil(max(accX)), std::ceil(max(accY)));
+
+        return resultRect;
     }
 
     bool checkInTriangle(const QRectF &rect,
@@ -284,36 +391,18 @@ namespace KritaUtils
                 continue;
             }
 
-            QList<QPainterPath>::iterator it = resultList.begin();
-            QList<QPainterPath>::iterator end = resultList.end();
-            QList<QPainterPath>::iterator savedIt = end;
+            QPainterPath mergedPath = testPath;
 
-            bool wasMerged = false;
-
-            while (it != end) {
-                bool skipIncrement = false;
-
+            for (auto it = resultList.begin(); it != resultList.end(); /*noop*/) {
                 if (it->intersects(testPath)) {
-                    if (savedIt == end) {
-                        it->addPath(testPath);
-                        savedIt = it;
-                    } else {
-                        savedIt->addPath(*it);
-                        it = resultList.erase(it);
-                        skipIncrement = true;
-                    }
-
-                    wasMerged = true;
-                }
-
-                if (!skipIncrement) {
+                    mergedPath.addPath(*it);
+                    it = resultList.erase(it);
+                } else {
                     ++it;
                 }
             }
 
-            if (!wasMerged) {
-                resultList.append(testPath);
-            }
+            resultList.append(mergedPath);
         }
 
         return resultList;
@@ -378,11 +467,13 @@ namespace KritaUtils
         return newNode;
     }
 
-    void renderExactRect(QPainter *p, const QRect &rc) {
+    void renderExactRect(QPainter *p, const QRect &rc)
+    {
         p->drawRect(rc.adjusted(0,0,-1,-1));
     }
 
-    void renderExactRect(QPainter *p, const QRect &rc, const QPen &pen) {
+    void renderExactRect(QPainter *p, const QRect &rc, const QPen &pen)
+    {
         QPen oldPen = p->pen();
         p->setPen(pen);
         renderExactRect(p, rc);

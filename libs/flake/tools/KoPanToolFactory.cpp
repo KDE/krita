@@ -30,7 +30,7 @@ KoPanToolFactory::KoPanToolFactory()
     setToolTip(i18n("Pan"));
     setToolType(navigationToolType());
     setPriority(5);
-    setIconName(koIconNameCStr("hand"));
+    setIconName(koIconNameCStr("tool_pan"));
     setActivationShapeId("flake/always");
 }
 

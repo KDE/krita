@@ -39,6 +39,7 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41011();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41012();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41013();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41014();
+extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41015();
 
 #define dbgResources qCDebug(_30009)
 #define dbgKrita qCDebug(_41000)
@@ -56,9 +57,10 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41014();
 #define dbgInput qCDebug(_41012)
 #define dbgAction qCDebug(_41013)
 #define dbgTablet qCDebug(_41014)
+#define dbgOpenGL qCDebug(_41015)
 
 // Defined in Qt 5.6
-/*
+#if QT_VERSION >= 0x050600
 #define infoResources qCInfo(_30009)
 #define infoKrita qCInfo(_41000)
 #define infoImage qCInfo(_41001)
@@ -74,7 +76,9 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41014();
 #define infoScript qCInfo(_41011)
 #define infoInput qCInfo(_41012)
 #define infoAction qCDebug(_41013)
-*/
+#define infoTablet qCDebug(_41014)
+#define infoOpenGL qCDebug(_41015)
+#endif
 
 #define warnResources qCWarning(_30009)
 #define warnKrita qCWarning(_41000)
@@ -91,6 +95,8 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41014();
 #define warnScript qCWarning(_41011)
 #define warnInput qCWarning(_41012)
 #define warnAction qCDebug(_41013)
+#define warnTablet qCDebug(_41014)
+#define warnOpenGL qCDebug(_41015)
 
 #define errResources qCCritical(_30009)
 #define errKrita qCCritical(_41000)
@@ -107,6 +113,8 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41014();
 #define errScript qCCritical(_41011)
 #define errInput qCCritical(_41012)
 #define errAction qCDebug(_41013)
+#define errTablet qCDebug(_41014)
+#define errOpenGL qCDebug(_41015)
 
 // Qt does not yet define qCFatal (TODO: this is an oversight, submit a patch upstream)
 /*
@@ -138,7 +146,7 @@ KRITAGLOBAL_EXPORT QString kisBacktrace();
  *
  * Use this macro to display in the output stream the name of a variable followed by its value.
  */
-#define ppVar( var ) #var << "=" << var
+#define ppVar( var ) #var << "=" << (var)
 
 #  ifndef QT_NO_DEBUG
 #    undef Q_ASSERT

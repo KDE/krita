@@ -1,8 +1,6 @@
 add_subdirectory(brush/tests)
 
 include_directories(brush)
-include_directories(pen)
-include_directories(eraser)
 include_directories(duplicate)
 
 
@@ -22,7 +20,7 @@ add_library(kritadefaultpaintops MODULE ${kritadefaultpaintops_SOURCES})
 
 target_link_libraries(kritadefaultpaintops kritalibpaintop)
 
-install(TARGETS kritadefaultpaintops  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritadefaultpaintops  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( FILES
     krita-paintbrush.png
     krita-eraser.png

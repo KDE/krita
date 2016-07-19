@@ -50,7 +50,7 @@ public:
     };
 
 public:
-    KoCompositeColorTransformation(Mode mode);
+    explicit KoCompositeColorTransformation(Mode mode);
     ~KoCompositeColorTransformation();
 
     void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const;

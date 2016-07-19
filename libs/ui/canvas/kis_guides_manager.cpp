@@ -37,7 +37,8 @@
 #include "kis_snap_line_strategy.h"
 #include "kis_change_guides_command.h"
 #include "kis_snap_config.h"
-
+#include "kis_coordinates_converter.h"
+#include  "kis_canvas2.h"
 
 struct KisGuidesManager::Private
 {
@@ -307,7 +308,7 @@ void KisGuidesManager::setView(QPointer<KisView> view)
     m_d->view = view;
 
     if (m_d->view) {
-        KisGuidesDecoration* decoration = qobject_cast<KisGuidesDecoration*>(m_d->view->canvasBase()->decoration(GUIDES_DECORATION_ID));
+        KisGuidesDecoration* decoration = qobject_cast<KisGuidesDecoration*>(m_d->view->canvasBase()->decoration(GUIDES_DECORATION_ID).data());
         if (!decoration) {
             decoration = new KisGuidesDecoration(m_d->view);
             m_d->view->canvasBase()->addDecoration(decoration);
@@ -483,6 +484,7 @@ bool KisGuidesManager::Private::mouseMoveHandler(const QPointF &docPos, Qt::Keyb
 
 bool KisGuidesManager::Private::mouseReleaseHandler(const QPointF &docPos)
 {
+    bool result = false;
     KisCanvas2 *canvas = view->canvasBase();
     const KisCoordinatesConverter *converter = canvas->coordinatesConverter();
 
@@ -494,6 +496,14 @@ bool KisGuidesManager::Private::mouseReleaseHandler(const QPointF &docPos)
         if (!workRect.contains(docPos)) {
             deleteGuide(currentGuide);
             q->setGuidesConfigImpl(guidesConfig);
+
+            /**
+             * When we delete a guide, it might happen that we are
+             * delting the last guide. Therefore we should eat the
+             * corresponding event so that the event filter would stop
+             * the filter processing.
+             */
+            result = true;
         }
 
         currentGuide = invalidGuide;
@@ -507,7 +517,7 @@ bool KisGuidesManager::Private::mouseReleaseHandler(const QPointF &docPos)
         updateSnappingStatus(guidesConfig);
     }
 
-    return updateCursor(docPos);
+    return updateCursor(docPos) | result;
 }
 
 QPointF KisGuidesManager::Private::getDocPointFromEvent(QEvent *event)

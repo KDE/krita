@@ -76,7 +76,7 @@ void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
     QImage thumbnail = brush->image();
 
     if (thumbnail.height() > itemRect.height() || thumbnail.width() > itemRect.width()) {
-        thumbnail = thumbnail.scaled(itemRect.size() , Qt::KeepAspectRatio);
+        thumbnail = thumbnail.scaled(itemRect.size() , Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 
     painter->save();

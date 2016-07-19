@@ -45,7 +45,7 @@ public:
             QShortcutEvent *se = static_cast<QShortcutEvent *>(event);
             if (se->isAmbiguous()) {
                 KMessageBox::information(
-                    Q_NULLPTR,  // No widget to be seen around here
+                    0,  // No widget to be seen around here
                     i18n("The key sequence '%1' is ambiguous. Use 'Configure Shortcuts'\n"
                          "from the 'Settings' menu to solve the ambiguity.\n"
                          "No action will be triggered.",

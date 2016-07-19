@@ -127,8 +127,9 @@ QByteArray KisColord::deviceProfile(const QString &id, int p)
             break;
         }
     }
-    if (dev->profiles.size() > 0) {
-        if (dev) {
+
+    if (dev) {
+        if (dev->profiles.size() > 0) {
             if (dev->profiles.size() < p) {
                 profile = dev->profiles[p];
             }
@@ -136,16 +137,16 @@ QByteArray KisColord::deviceProfile(const QString &id, int p)
                 profile = dev->profiles[0];
             }
         }
-    }
 
-    if (profile) {
-        //dbgKrita << "profile filename" << profile->filename;
-        QFile f(profile->filename);
-        if (f.open(QFile::ReadOnly)) {
-            ba = f.readAll();
-        }
-        else {
-            dbgKrita << "Could not load profile" << profile->title << profile->filename;
+        if (profile) {
+            //dbgKrita << "profile filename" << profile->filename;
+            QFile f(profile->filename);
+            if (f.open(QFile::ReadOnly)) {
+                ba = f.readAll();
+            }
+            else {
+                dbgKrita << "Could not load profile" << profile->title << profile->filename;
+            }
         }
     }
 

@@ -61,9 +61,9 @@ public:
 
     void setDesiredLevelOfDetail(int lod);
     void explicitRegenerateLevelOfDetail();
-    void setLod0ToNStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
-    void setSuspendUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
-    void setResumeUpdatesStrokeStrategyFactory(const KisStrokeStrategyFactory &factory);
+    void setLod0ToNStrokeStrategyFactory(const KisLodSyncStrokeStrategyFactory &factory);
+    void setSuspendUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyFactory &factory);
+    void setResumeUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyFactory &factory);
 
     /**
      * Notifies the queue, that someone else (neither strokes nor the

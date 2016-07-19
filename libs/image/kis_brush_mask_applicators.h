@@ -110,8 +110,8 @@ void KisBrushMaskVectorApplicator<MaskGenerator, _impl>::processVector(const QRe
 
     // We need to calculate with a multiple of the width of the simd register
     int alignOffset = 0;
-    if (width % Vc::float_v::Size != 0) {
-        alignOffset = Vc::float_v::Size - (width % Vc::float_v::Size);
+    if (width % Vc::float_v::size() != 0) {
+        alignOffset = Vc::float_v::size() - (width % Vc::float_v::size());
     }
     int simdWidth = width + alignOffset;
 

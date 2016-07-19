@@ -24,6 +24,7 @@
 #include <QWriteLocker>
 #include <QPainterPath>
 #include <QRect>
+#include <QCoreApplication>
 
 #include <KoProperties.h>
 
@@ -185,6 +186,7 @@ KisNode::KisNode()
 {
     m_d->parent = 0;
     m_d->graphListener = 0;
+    moveToThread(qApp->thread());
 }
 
 KisNode::KisNode(const KisNode & rhs)
@@ -193,6 +195,7 @@ KisNode::KisNode(const KisNode & rhs)
 {
     m_d->parent = 0;
     m_d->graphListener = 0;
+    moveToThread(qApp->thread());
 
     // NOTE: the nodes are not supposed to be added/removed while
     // creation of another node, so we do *no* locking here!
@@ -211,11 +214,12 @@ KisNode::KisNode(const KisNode & rhs)
 KisNode::~KisNode()
 {
     if (m_d->busyProgressIndicator) {
-        m_d->busyProgressIndicator->endUpdatesBeforeDestroying();
+        m_d->busyProgressIndicator->prepareDestroying();
         m_d->busyProgressIndicator->deleteLater();
     }
 
     if (m_d->nodeProgressProxy) {
+        m_d->nodeProgressProxy->prepareDestroying();
         m_d->nodeProgressProxy->deleteLater();
     }
 
@@ -482,6 +486,24 @@ QList<KisNodeSP> KisNode::childNodes(const QStringList & nodeTypes, const KoProp
     return nodes;
 }
 
+KisNodeSP KisNode::findChildByName(const QString &name)
+{
+    KisNodeSP child = firstChild();
+    while (child) {
+        if (child->name() == name) {
+            return child;
+        }
+        if (child->childCount() > 0) {
+            KisNodeSP grandChild = child->findChildByName(name);
+            if (grandChild) {
+                return grandChild;
+            }
+        }
+        child = child->nextSibling();
+    }
+    return 0;
+}
+
 bool KisNode::add(KisNodeSP newNode, KisNodeSP aboveThis)
 {
     Q_ASSERT(newNode);
@@ -580,6 +602,9 @@ void KisNode::createNodeProgressProxy()
     if (!m_d->nodeProgressProxy) {
         m_d->nodeProgressProxy = new KisNodeProgressProxy(this);
         m_d->busyProgressIndicator = new KisBusyProgressIndicator(m_d->nodeProgressProxy);
+
+        m_d->nodeProgressProxy->moveToThread(this->thread());
+        m_d->busyProgressIndicator->moveToThread(this->thread());
     }
 }
 
@@ -623,17 +648,24 @@ void KisNode::requestTimeSwitch(int time)
 
 void KisNode::syncLodCache()
 {
+    // noop. everything is done by getLodCapableDevices()
+}
+
+KisPaintDeviceList KisNode::getLodCapableDevices() const
+{
+    KisPaintDeviceList list;
+
     KisPaintDeviceSP device = paintDevice();
     if (device) {
-        QRegion dirtyRegion = device->syncLodCache(device->defaultBounds()->currentLevelOfDetail());
-        Q_UNUSED(dirtyRegion);
+        list << device;
     }
 
     KisPaintDeviceSP originalDevice = original();
     if (originalDevice && originalDevice != device) {
-        QRegion dirtyRegion = originalDevice->syncLodCache(originalDevice->defaultBounds()->currentLevelOfDetail());
-        Q_UNUSED(dirtyRegion);
+        list << originalDevice;
     }
 
-    projectionPlane()->syncLodCache();
+    list << projectionPlane()->getLodCapableDevices();
+
+    return list;
 }

@@ -142,15 +142,16 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         */
         m_dabCache->disableSubpixelPrecision();
     }
-    
+#if 0
     //if precision
     KoColor colorSpaceChanger = painter()->paintColor();
     const KoColorSpace* preciseColorSpace = colorSpaceChanger.colorSpace();
-    /*if (colorSpaceChanger.colorSpace()->colorDepthId().id() == "U8") {
+    if (colorSpaceChanger.colorSpace()->colorDepthId().id() == "U8") {
 	preciseColorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceChanger.colorSpace()->colorModelId().id(), "U16", colorSpaceChanger.profile() );
         colorSpaceChanger.convertTo(preciseColorSpace);
     }
-    painter()->setPaintColor(colorSpaceChanger);*/
+    painter()->setPaintColor(colorSpaceChanger);
+#endif
 
     // get the scaling factor calculated by the size option
     qreal scale    = m_sizeOption.apply(info);
@@ -159,8 +160,6 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
 
-    setCurrentScale(scale);
-    setCurrentRotation(rotation);
 
     QPointF scatteredPos =
         m_scatterOption.apply(info,

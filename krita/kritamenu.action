@@ -28,20 +28,21 @@
     </Action>
     <Action name="file_open_recent">
       <icon>document-open-recent</icon>
-      <text>Save Incremental &amp;Backup</text>
+      <text>Open &amp;Recent</text>
       <whatsThis></whatsThis>
-      <toolTip>Save Incremental Backup</toolTip>
-      <iconText>Save Incremental Backup</iconText>
+      <toolTip>Open a document which was recently opened</toolTip>
+      <iconText>Open Recent</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut>F4</shortcut>
+      <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="file_save">
       <icon>document-save</icon>
+      <text>&amp;Save</text>
       <whatsThis></whatsThis>
-      <toolTip>Save as .krita-6301-document_0-autosave.kra</toolTip>
+      <toolTip>Save</toolTip>
       <iconText>Save</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
@@ -63,13 +64,13 @@
     </Action>
     <Action name="file_reload_file">
       <icon></icon>
-      <text>Save Incremental &amp;Backup</text>
+      <text>Reload</text>
       <whatsThis></whatsThis>
-      <toolTip>Save Incremental Backup</toolTip>
-      <iconText>Save Incremental Backup</iconText>
+      <toolTip>Reload</toolTip>
+      <iconText>Reload</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut>F4</shortcut>
+      <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -439,6 +440,44 @@
     </Action>
   </Actions>
 
+  <Actions category="Window">
+    <text>Window</text>
+    <Action name="view_newwindow">
+      <icon>window-new</icon>
+      <text>&amp;New Window</text>
+      <whatsThis></whatsThis>
+      <toolTip>New Window</toolTip>
+      <iconText>New Window</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="windows_next">
+      <icon></icon>
+      <text>N&amp;ext</text>
+      <whatsThis></whatsThis>
+      <toolTip>Next</toolTip>
+      <iconText>Next</iconText>
+      <activationFlags>10</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="windows_previous">
+      <icon></icon>
+      <text>Previous</text>
+      <whatsThis></whatsThis>
+      <toolTip>Previous</toolTip>
+      <iconText>Previous</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+  </Actions>
+
   <Actions category="View">
     <text>View</text>
     <Action name="view_show_canvas_only">
@@ -486,6 +525,26 @@
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Shift+L</shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="softProof">
+      <icon></icon>
+      <text>Soft Proofing</text>
+      <whatsThis></whatsThis>
+      <toolTip>Turns on Soft Proofing</toolTip>
+      <iconText>Turns on Soft Proofing</iconText>
+      <shortcut>Ctrl+Y</shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="gamutCheck">
+      <icon></icon>
+      <text>Out of Gamut Warnings</text>
+      <whatsThis></whatsThis>
+      <toolTip>Turns on warnings for colors out of proofed gamut, needs soft proofing to be turned on.</toolTip>
+      <iconText>Turns on warnings for colors out of proofed gamut, needs soft proofing to be turned on.</iconText>
+      <shortcut>Ctrl+Shift+Y</shortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -637,7 +696,7 @@
       <whatsThis></whatsThis>
       <toolTip>Show or hide the status bar</toolTip>
       <iconText>Show Status Bar</iconText>
-      <activationFlags>1</activationFlags>
+      <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
       <isCheckable>true</isCheckable>
@@ -851,7 +910,7 @@
     </Action>
     <Action name="resizeimagetoselection">
       <icon></icon>
-      <text>Trim to Selection</text>
+      <text>Trim to S&amp;election</text>
       <whatsThis></whatsThis>
       <toolTip>Trim to Selection</toolTip>
       <iconText>Trim to Selection</iconText>
@@ -887,10 +946,10 @@
     </Action>
     <Action name="rotateImageCCW90">
       <icon>object-rotate-left</icon>
-      <text>Rotate Image &amp;90° to the Right</text>
+      <text>Rotate Image &amp;90° to the Left</text>
       <whatsThis></whatsThis>
-      <toolTip>Rotate Image 90° to the Right</toolTip>
-      <iconText>Rotate Image 90° to the Right</iconText>
+      <toolTip>Rotate Image 90° to the Left</toolTip>
+      <iconText>Rotate Image 90° to the Left</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
@@ -1357,14 +1416,40 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="options_configure_toolbars">
+  </Actions>
+
+  <Actions category="Settings">
+    <text>Settings</text>
+    <Action name="options_configure">
       <icon>configure</icon>
-      <text>Configure Tool&amp;bars...</text>
+      <text>&amp;Configure Krita...</text>
       <whatsThis></whatsThis>
-      <toolTip>Configure Toolbars</toolTip>
-      <iconText>Configure Toolbars</iconText>
+      <toolTip>Configure Krita</toolTip>
+      <iconText>Configure Krita</iconText>
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="manage_bundles">
+      <icon></icon>
+      <text>&amp;Manage Resources...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Manage Resources</toolTip>
+      <iconText>Manage Resources</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="switch_application_language">
+      <icon>preferences-desktop-locale</icon>
+      <text>Switch Application &amp;Language...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Switch Application Language</toolTip>
+      <iconText>Switch Application Language</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
@@ -1391,6 +1476,18 @@
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
       <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="options_configure_toolbars">
+      <icon>configure</icon>
+      <text>Configure Tool&amp;bars...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Configure Toolbars</toolTip>
+      <iconText>Configure Toolbars</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="settings_dockers_menu">
@@ -1431,40 +1528,6 @@
       <iconText>Configure Shortcuts</iconText>
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="options_configure">
-      <icon>configure</icon>
-      <text>&amp;Configure Krita...</text>
-      <whatsThis></whatsThis>
-      <toolTip>Configure Krita</toolTip>
-      <iconText>Configure Krita</iconText>
-      <activationFlags>0</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="manage_bundles">
-      <icon></icon>
-      <text>&amp;Manage Resources...</text>
-      <whatsThis></whatsThis>
-      <toolTip>Manage Resources</toolTip>
-      <iconText>Manage Resources</iconText>
-      <activationFlags>0</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="switch_application_language">
-      <icon>preferences-desktop-locale</icon>
-      <text>Switch Application &amp;Language...</text>
-      <whatsThis></whatsThis>
-      <toolTip>Switch Application Language</toolTip>
-      <iconText>Switch Application Language</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>

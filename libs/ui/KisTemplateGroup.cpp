@@ -83,7 +83,7 @@ bool KisTemplateGroup::add(KisTemplate *t, bool force, bool touch)
 KisTemplate *KisTemplateGroup::find(const QString &name) const
 {
     QList<KisTemplate*>::const_iterator it = m_templates.begin();
-    KisTemplate* ret = NULL;
+    KisTemplate* ret = 0;
 
     while (it != m_templates.end()) {
         if ((*it)->name() == name) {

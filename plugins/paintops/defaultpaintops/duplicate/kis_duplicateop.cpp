@@ -125,7 +125,6 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
     qreal scale = m_sizeOption.apply(info);
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
 
-    setCurrentScale(scale);
 
     static const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
     static KoColor color(Qt::black, cs);
@@ -253,7 +252,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
             } while (err > 0.00001 && iter < 100);
         }
 
-        // Finaly multiply
+        // Finally multiply
         KisHLineIteratorSP tmpIt2 = m_srcdev->createHLineIteratorNG(0, 0, healSW);
         matrixIt = &matrix[0];
         for (int j = 0; j < healSH; j++) {

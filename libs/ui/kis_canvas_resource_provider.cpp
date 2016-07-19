@@ -340,14 +340,24 @@ void KisCanvasResourceProvider::slotCanvasResourceChanged(int key, const QVarian
 
 void KisCanvasResourceProvider::setCurrentCompositeOp(const QString& compositeOp)
 {
-    QVariant v;
-    v.setValue(compositeOp);
-    m_resourceManager->setResource(CurrentCompositeOp, v);
+    m_resourceManager->setResource(CurrentCompositeOp,
+                                   QVariant::fromValue(compositeOp));
 }
 
 QString KisCanvasResourceProvider::currentCompositeOp() const
 {
     return m_resourceManager->resource(CurrentCompositeOp).value<QString>();
+}
+
+bool KisCanvasResourceProvider::eraserMode() const
+{
+    return m_resourceManager->resource(EraserMode).toBool();
+}
+
+void KisCanvasResourceProvider::setEraserMode(bool value)
+{
+    m_resourceManager->setResource(EraserMode,
+                                   QVariant::fromValue(value));
 }
 
 void KisCanvasResourceProvider::slotPainting()
@@ -405,6 +415,60 @@ bool KisCanvasResourceProvider::mirrorVertical() const
     return m_resourceManager->resource(MirrorVertical).toBool();
 }
 
+void KisCanvasResourceProvider::setMirrorHorizontalLock(bool isLocked)
+{
+    m_resourceManager->setResource(MirrorHorizontalLock, isLocked);
+    emit mirrorModeChanged();
+}
+
+bool KisCanvasResourceProvider::mirrorHorizontalLock() {
+     return m_resourceManager->resource(MirrorHorizontalLock).toBool();
+}
+
+void KisCanvasResourceProvider::setMirrorVerticalLock(bool isLocked)
+{
+    m_resourceManager->setResource(MirrorVerticalLock, isLocked);
+    emit mirrorModeChanged();
+}
+
+
+
+bool KisCanvasResourceProvider::mirrorVerticalHideDecorations() {
+     return m_resourceManager->resource(MirrorVerticalHideDecorations).toBool();
+}
+
+void KisCanvasResourceProvider::setMirrorVerticalHideDecorations(bool hide)
+{
+    m_resourceManager->setResource(MirrorVerticalHideDecorations, hide);
+    emit mirrorModeChanged();
+}
+
+
+bool KisCanvasResourceProvider::mirrorHorizontalHideDecorations() {
+     return m_resourceManager->resource(MirrorHorizontalHideDecorations).toBool();
+}
+
+void KisCanvasResourceProvider::setMirrorHorizontalHideDecorations(bool hide)
+{
+    m_resourceManager->setResource(MirrorHorizontalHideDecorations, hide);
+    emit mirrorModeChanged();
+}
+
+
+bool KisCanvasResourceProvider::mirrorVerticalLock() {
+     return m_resourceManager->resource(MirrorVerticalLock).toBool();
+}
+
+void KisCanvasResourceProvider::mirrorVerticalMoveCanvasToCenter() {
+     emit moveMirrorVerticalCenter();
+}
+
+void KisCanvasResourceProvider::mirrorHorizontalMoveCanvasToCenter() {
+     emit moveMirrorHorizontalCenter();
+}
+
+
+
 void KisCanvasResourceProvider::setOpacity(qreal opacity)
 {
     m_resourceManager->setResource(Opacity, opacity);
@@ -412,8 +476,31 @@ void KisCanvasResourceProvider::setOpacity(qreal opacity)
 
 qreal KisCanvasResourceProvider::opacity() const
 {
-    return m_resourceManager->resource(Opacity).toDouble();
+    return m_resourceManager->resource(Opacity).toReal();
 }
+
+void KisCanvasResourceProvider::setSelectionAction(int action)
+{
+    m_resourceManager->setResource(SelectionAction, action);
+    emit sigSelectionActionChanged(action);
+}
+
+int KisCanvasResourceProvider::selectionAction()
+{
+    return m_resourceManager->resource(SelectionAction).toInt();
+}
+
+void KisCanvasResourceProvider::setSelectionMode(int mode)
+{
+    m_resourceManager->setResource(SelectionMode, mode);
+    emit sigSelectionModeChanged(mode);
+}
+
+int KisCanvasResourceProvider::selectionMode()
+{
+    return m_resourceManager->resource(SelectionMode).toInt();
+}
+
 
 void KisCanvasResourceProvider::setGlobalAlphaLock(bool lock)
 {

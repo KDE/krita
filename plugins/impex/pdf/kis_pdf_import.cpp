@@ -27,6 +27,7 @@
 #include <QImage>
 #include <QRadioButton>
 #include <QApplication>
+#include <QFileInfo>
 
 // KDE's headers
 #include <kis_debug.h>
@@ -34,7 +35,7 @@
 #include <KoDialog.h>
 #include <kpluginfactory.h>
 #include <kpassworddialog.h>
-#include <QUrl>
+#include <QFileInfo>
 
 // calligra's headers
 #include <KisFilterChain.h>
@@ -66,20 +67,18 @@ KisPDFImport::~KisPDFImport()
 
 KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const QByteArray&)
 {
-    QString filename = m_chain->inputFile();
+    QString filename = inputFile();
     dbgFile << "Importing using PDFImport!" << filename;
 
-    if (filename.isEmpty())
-        return KisImportExportFilter::FileNotFound;
-
-
-    QUrl url(filename);
-
-    if (!url.isLocalFile()) {
+    if (filename.isEmpty()) {
         return KisImportExportFilter::FileNotFound;
     }
 
-    Poppler::Document* pdoc = Poppler::Document::load(url.toLocalFile());
+    QFileInfo fi(filename);
+    if (!fi.exists()) {
+        return KisImportExportFilter::FileNotFound;
+    }
+    Poppler::Document* pdoc = Poppler::Document::load(filename);
 
     if (!pdoc) {
         return KisPDFImport::InvalidFormat;
@@ -118,7 +117,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
     }
 
     // Init kis's doc
-    KisDocument * doc = m_chain->outputDocument();
+    KisDocument * doc = outputDocument();
     if (!doc) {
         delete pdoc;
         delete kdb;
@@ -135,7 +134,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
 
     // create a layer
     QList<int> pages = wdg->pages();
-    QPointer<KoUpdater> loadUpdater =  m_chain->outputDocument()->progressUpdater()->startSubtask(1, "load");
+    QPointer<KoUpdater> loadUpdater =  outputDocument()->progressUpdater()->startSubtask(1, "load");
     loadUpdater->setRange(0, pages.count());
     for (QList<int>::const_iterator it = pages.constBegin(); it != pages.constEnd(); ++it) {
         KisPaintLayer* layer = new KisPaintLayer(image.data(),

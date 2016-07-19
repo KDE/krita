@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>222</width>
-    <height>230</height>
+    <width>230</width>
+    <height>200</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,16 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -32,32 +41,28 @@
        </property>
        <item>
         <layout class="QGridLayout" name="gridLayout">
-         <property name="spacing">
-          <number>0</number>
+         <property name="leftMargin">
+          <number>5</number>
          </property>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_horizPos">
+         <property name="topMargin">
+          <number>5</number>
+         </property>
+         <property name="rightMargin">
+          <number>5</number>
+         </property>
+         <property name="bottomMargin">
+          <number>5</number>
+         </property>
+         <property name="spacing">
+          <number>5</number>
+         </property>
+         <item row="2" column="1">
+          <widget class="QCheckBox" name="boolCenter">
            <property name="toolTip">
-            <string>Horizontal Position</string>
+            <string>Resize keeping center fixed</string>
            </property>
            <property name="text">
-            <string/>
-           </property>
-           <property name="buddy">
-            <cstring>intX</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QSpinBox" name="intX">
-           <property name="toolTip">
-            <string>Horizontal Position</string>
-           </property>
-           <property name="suffix">
-            <string> px</string>
-           </property>
-           <property name="maximum">
-            <number>30000</number>
+            <string>Center</string>
            </property>
           </widget>
          </item>
@@ -67,15 +72,65 @@
             <string>Vertical Position</string>
            </property>
            <property name="text">
-            <string/>
+            <string>Y:</string>
            </property>
            <property name="buddy">
             <cstring>intY</cstring>
            </property>
           </widget>
          </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_horizPos">
+           <property name="toolTip">
+            <string>Horizontal Position</string>
+           </property>
+           <property name="text">
+            <string>X:</string>
+           </property>
+           <property name="buddy">
+            <cstring>intX</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QSpinBox" name="intX">
+           <property name="minimumSize">
+            <size>
+             <width>60</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Horizontal Position</string>
+           </property>
+           <property name="suffix">
+            <string> px</string>
+           </property>
+           <property name="maximum">
+            <number>30000</number>
+           </property>
+          </widget>
+         </item>
          <item row="1" column="1">
           <widget class="QSpinBox" name="intY">
+           <property name="minimumSize">
+            <size>
+             <width>60</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="toolTip">
             <string>Vertical Position</string>
            </property>
@@ -87,27 +142,17 @@
            </property>
           </widget>
          </item>
+         <item row="3" column="1">
+          <widget class="QCheckBox" name="boolGrow">
+           <property name="toolTip">
+            <string>Allow growing the image by dragging outside bounds of the image</string>
+           </property>
+           <property name="text">
+            <string>Grow</string>
+           </property>
+          </widget>
+         </item>
         </layout>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="boolCenter">
-         <property name="toolTip">
-          <string>Resize keeping center fixed</string>
-         </property>
-         <property name="text">
-          <string>Center</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="boolGrow">
-         <property name="toolTip">
-          <string>Allow growing the image by dragging outside bounds of the image</string>
-         </property>
-         <property name="text">
-          <string>Grow</string>
-         </property>
-        </widget>
        </item>
        <item>
         <spacer name="verticalSpacer">
@@ -139,44 +184,61 @@
      </item>
      <item>
       <layout class="QGridLayout" name="gridLayout_2">
-       <property name="spacing">
-        <number>0</number>
+       <property name="leftMargin">
+        <number>5</number>
        </property>
-       <item row="0" column="0">
-        <widget class="QCheckBox" name="boolWidth">
+       <property name="topMargin">
+        <number>5</number>
+       </property>
+       <property name="rightMargin">
+        <number>5</number>
+       </property>
+       <property name="bottomMargin">
+        <number>5</number>
+       </property>
+       <property name="spacing">
+        <number>5</number>
+       </property>
+       <item row="3" column="2">
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLabel" name="heightLabel">
          <property name="toolTip">
-          <string>Will keep the width of the crop constant</string>
+          <string>Height</string>
          </property>
          <property name="text">
-          <string/>
+          <string>H:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QSpinBox" name="intWidth">
-         <property name="toolTip">
-          <string>Width</string>
-         </property>
-         <property name="suffix">
-          <string> px</string>
-         </property>
-         <property name="maximum">
-          <number>30000</number>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QCheckBox" name="boolHeight">
-         <property name="toolTip">
-          <string>Will keep the height of the crop constant</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
+       <item row="1" column="4">
         <widget class="QSpinBox" name="intHeight">
+         <property name="minimumSize">
+          <size>
+           <width>60</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
          <property name="toolTip">
           <string>Height</string>
          </property>
@@ -188,8 +250,45 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item row="0" column="4">
+        <widget class="QSpinBox" name="intWidth">
+         <property name="minimumSize">
+          <size>
+           <width>60</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Width</string>
+         </property>
+         <property name="suffix">
+          <string> px</string>
+         </property>
+         <property name="maximum">
+          <number>30000</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="4">
         <widget class="QDoubleSpinBox" name="doubleRatio">
+         <property name="minimumSize">
+          <size>
+           <width>60</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
          <property name="toolTip">
           <string>Ratio</string>
          </property>
@@ -198,13 +297,68 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QCheckBox" name="boolRatio">
+       <item row="2" column="2">
+        <widget class="QLabel" name="aspectLabel">
+         <property name="text">
+          <string>Ratio:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QLabel" name="widthLabel">
          <property name="toolTip">
-          <string>Will keep the ratio constant</string>
+          <string>Width</string>
+         </property>
+         <property name="text">
+          <string>W:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="5">
+        <widget class="QPushButton" name="lockWidthButton">
+         <property name="toolTip">
+          <string>Lock the width</string>
          </property>
          <property name="text">
           <string/>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="5">
+        <widget class="QPushButton" name="lockHeightButton">
+         <property name="toolTip">
+          <string>Lock the height</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="5">
+        <widget class="QPushButton" name="lockRatioButton">
+         <property name="toolTip">
+          <string>Lock the aspect ratio</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -214,10 +368,19 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout_3">
-     <property name="margin">
+     <property name="leftMargin">
+      <number>5</number>
+     </property>
+     <property name="topMargin">
       <number>0</number>
      </property>
-     <item row="0" column="1">
+     <property name="rightMargin">
+      <number>5</number>
+     </property>
+     <property name="bottomMargin">
+      <number>5</number>
+     </property>
+     <item row="2" column="1">
       <widget class="QComboBox" name="cmbType">
        <property name="currentIndex">
         <number>1</number>
@@ -234,14 +397,14 @@
        </item>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item row="4" column="1">
       <widget class="QPushButton" name="bnCrop">
        <property name="text">
         <string>&amp;Crop</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
+     <item row="2" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
         <string>Applies to:</string>
@@ -251,17 +414,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Decoration:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
+     <item row="3" column="1">
       <widget class="QComboBox" name="cmbDecor">
        <item>
         <property name="text">
@@ -290,7 +443,17 @@
        </item>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Decoration:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
       <spacer name="verticalSpacer_2">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -306,7 +469,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QWidget" name="SpecialSpacer"/>
+    <widget class="QWidget" name="SpecialSpacer" native="true"/>
    </item>
   </layout>
  </widget>

@@ -33,6 +33,7 @@ class KisLockedProperties
 public:
     KisLockedProperties();
     KisLockedProperties(KisPropertiesConfiguration *p);
+    ~KisLockedProperties();
 
     /**Whenever any setting is made locked**/
     void addToLockedProperties(KisPropertiesConfiguration *p);

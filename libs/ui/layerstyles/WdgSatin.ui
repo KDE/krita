@@ -60,7 +60,7 @@
          <item row="1" column="0">
           <widget class="QLabel" name="label_14">
            <property name="text">
-            <string>&amp;Opacity</string>
+            <string>&amp;Opacity:</string>
            </property>
            <property name="buddy">
             <cstring>intOpacity</cstring>
@@ -68,7 +68,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="KisSliderSpinBox" name="intOpacity">
+          <widget class="KisSliderSpinBox" name="intOpacity" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
              <horstretch>0</horstretch>
@@ -95,7 +95,7 @@
          <item row="3" column="0">
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>&amp;Angle</string>
+            <string>&amp;Angle:</string>
            </property>
            <property name="buddy">
             <cstring>dialAngle</cstring>
@@ -135,7 +135,7 @@
          <item row="4" column="0">
           <widget class="QLabel" name="label_2">
            <property name="text">
-            <string>&amp;Distance</string>
+            <string>&amp;Distance:</string>
            </property>
            <property name="buddy">
             <cstring>intDistance</cstring>
@@ -143,7 +143,7 @@
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="KisSliderSpinBox" name="intDistance">
+          <widget class="KisSliderSpinBox" name="intDistance" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -155,7 +155,7 @@
          <item row="5" column="0">
           <widget class="QLabel" name="label_4">
            <property name="text">
-            <string>&amp;Size</string>
+            <string>&amp;Size:</string>
            </property>
            <property name="buddy">
             <cstring>intSize</cstring>
@@ -163,7 +163,7 @@
           </widget>
          </item>
          <item row="5" column="1">
-          <widget class="KisSliderSpinBox" name="intSize">
+          <widget class="KisSliderSpinBox" name="intSize" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -175,12 +175,12 @@
          <item row="6" column="0">
           <widget class="QLabel" name="label_6">
            <property name="text">
-            <string>Contour</string>
+            <string>Contour:</string>
            </property>
           </widget>
          </item>
          <item row="6" column="1">
-          <widget class="KisCmbContour" name="cmbContour"/>
+          <widget class="KisCmbContour" name="cmbContour" native="true"/>
          </item>
          <item row="7" column="1">
           <widget class="QCheckBox" name="chkAntiAliased">
@@ -250,16 +250,17 @@
    <class>KColorButton</class>
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>KisCompositeOpComboBox</class>
    <extends>QComboBox</extends>
-   <header>kis_cmb_composite.h</header>
+   <header location="global">kis_cmb_composite.h</header>
   </customwidget>
   <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
-   <header>kis_slider_spin_box.h</header>
+   <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

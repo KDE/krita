@@ -20,6 +20,7 @@
 
 bool KisCanvasUpdatesCompressor::putUpdateInfo(KisUpdateInfoSP info)
 {
+    const int levelOfDetail = info->levelOfDetail();
     const QRect newUpdateRect = info->dirtyImageRect();
     if (newUpdateRect.isEmpty()) return false;
 
@@ -28,7 +29,9 @@ bool KisCanvasUpdatesCompressor::putUpdateInfo(KisUpdateInfoSP info)
 
     UpdateInfoList::iterator it = m_updatesList.begin();
     while (it != m_updatesList.end()) {
-        if (newUpdateRect.contains((*it)->dirtyImageRect())) {
+        if (levelOfDetail == (*it)->levelOfDetail() &&
+            newUpdateRect.contains((*it)->dirtyImageRect())) {
+
             if (info) {
                 *it = info;
                 info = 0;

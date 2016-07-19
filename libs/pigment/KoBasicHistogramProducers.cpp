@@ -114,35 +114,35 @@ QString KoBasicU8HistogramProducer::positionToString(qreal pos) const
 
 void KoBasicU8HistogramProducer::addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *cs)
 {
-    qint32 pSize = cs->pixelSize();
+    quint32 dstPixelSize = m_colorSpace->pixelSize();
+    quint8 *dstPixels = new quint8[nPixels * dstPixelSize];
+    cs->convertPixelsTo(pixels, dstPixels, m_colorSpace, nPixels, KoColorConversionTransformation::IntentAbsoluteColorimetric, KoColorConversionTransformation::Empty);
 
     if (selectionMask) {
+        quint8 *dst = dstPixels;
         while (nPixels > 0) {
-            if (!(m_skipUnselected && *selectionMask == 0) || (m_skipTransparent && cs->opacityU8(pixels) == OPACITY_TRANSPARENT_U8)) {
+            if (!(m_skipTransparent && cs->opacityU8(pixels) == OPACITY_TRANSPARENT_U8)) {
 
-                for (int i = 0; i < m_channels; i++) {
-                    m_bins[i][pixels[i]]++;
+                for (int i = 0; i < (int)m_colorSpace->channelCount(); i++) {
+                    m_bins[i][m_colorSpace->scaleToU8(dst,i)]++;
                 }
                 m_count++;
-
             }
-
-            pixels += pSize;
+            dst += dstPixelSize;
             selectionMask++;
             nPixels--;
         }
     } else {
+        quint8 *dst = dstPixels;
         while (nPixels > 0) {
             if (!(m_skipTransparent && cs->opacityU8(pixels) == OPACITY_TRANSPARENT_U8)) {
 
-                for (int i = 0; i < m_channels; i++) {
-                    m_bins[i][pixels[i]]++;
+                for (int i = 0; i < (int)m_colorSpace->channelCount(); i++) {
+                    m_bins[i][m_colorSpace->scaleToU8(dst,i)]++;
                 }
                 m_count++;
-
             }
-
-            pixels += pSize;
+            dst += dstPixelSize;
             nPixels--;
         }
     }
@@ -173,14 +173,18 @@ void KoBasicU16HistogramProducer::addRegionToBin(const quint8 * pixels, const qu
     quint16 to = from + width;
     qreal factor = 255.0 / width;
 
-    qint32 pSize = cs->pixelSize();
+    quint32 dstPixelSize = m_colorSpace->pixelSize();
+    quint8 *dstPixels = new quint8[nPixels * dstPixelSize];
+    cs->convertPixelsTo(pixels, dstPixels, m_colorSpace, nPixels, KoColorConversionTransformation::IntentAbsoluteColorimetric, KoColorConversionTransformation::Empty);
+    quint8 *dst = dstPixels;
+    QVector<float> channels(m_colorSpace->channelCount());
 
     if (selectionMask) {
-        const quint16* pixel = reinterpret_cast<const quint16*>(pixels);
         while (nPixels > 0) {
             if (!((m_skipUnselected && *selectionMask == 0) || (m_skipTransparent && cs->opacityU8(pixels) == OPACITY_TRANSPARENT_U8))) {
-                for (int i = 0; i < m_channels; i++) {
-                    quint16 value = pixel[i];
+                m_colorSpace->normalisedChannelsValue(dst,channels);
+                for (int i = 0; i < (int)m_colorSpace->channelCount(); i++) {
+                    quint16 value = channels[i]*UINT16_MAX;
                     if (value > to)
                         m_outRight[i]++;
                     else if (value < from)
@@ -190,17 +194,17 @@ void KoBasicU16HistogramProducer::addRegionToBin(const quint8 * pixels, const qu
                 }
                 m_count++;
             }
-            pixels += pSize;
+            dst += dstPixelSize;
             selectionMask++;
             nPixels--;
         }
     } else {
         while (nPixels > 0) {
-            const quint16* pixel = reinterpret_cast<const quint16*>(pixels);
-
             if (!(m_skipTransparent && cs->opacityU8(pixels) == OPACITY_TRANSPARENT_U8)) {
-                for (int i = 0; i < m_channels; i++) {
-                    quint16 value = pixel[i];
+                m_colorSpace->normalisedChannelsValue(dst,channels);
+                for (int i = 0; i < (int)m_colorSpace->channelCount(); i++) {
+                    quint16 value = channels[i]*UINT16_MAX;
+
                     if (value > to)
                         m_outRight[i]++;
                     else if (value < from)
@@ -210,9 +214,8 @@ void KoBasicU16HistogramProducer::addRegionToBin(const quint8 * pixels, const qu
                 }
                 m_count++;
             }
-            pixels += pSize;
+            dst += dstPixelSize;
             nPixels--;
-
         }
     }
 }
@@ -242,15 +245,18 @@ void KoBasicF32HistogramProducer::addRegionToBin(const quint8 * pixels, const qu
     float to = from + width;
     float factor = 255.0 / width;
 
-    qint32 pSize = cs->pixelSize();
+    quint32 dstPixelSize = m_colorSpace->pixelSize();
+    quint8 *dstPixels = new quint8[nPixels * dstPixelSize];
+    cs->convertPixelsTo(pixels, dstPixels, m_colorSpace, nPixels, KoColorConversionTransformation::IntentAbsoluteColorimetric, KoColorConversionTransformation::Empty);
+    quint8 *dst = dstPixels;
+    QVector<float> channels(m_colorSpace->channelCount());
 
     if (selectionMask) {
         while (nPixels > 0) {
-
-            const float* pixel = reinterpret_cast<const float*>(pixels);
             if (!((m_skipUnselected && *selectionMask == 0) || (m_skipTransparent && cs->opacityU8(pixels) == OPACITY_TRANSPARENT_U8))) {
-                for (int i = 0; i < m_channels; i++) {
-                    float value = pixel[i];
+                m_colorSpace->normalisedChannelsValue(dst,channels);
+                for (int i = 0; i < (int)m_colorSpace->channelCount(); i++) {
+                    float value = channels[i];
                     if (value > to)
                         m_outRight[i]++;
                     else if (value < from)
@@ -260,19 +266,17 @@ void KoBasicF32HistogramProducer::addRegionToBin(const quint8 * pixels, const qu
                 }
                 m_count++;
             }
-
-            pixels += pSize;
+            dst += dstPixelSize;
             selectionMask++;
             nPixels--;
 
         }
     } else {
         while (nPixels > 0) {
-
-            const float* pixel = reinterpret_cast<const float*>(pixels);
             if (!(m_skipTransparent && cs->opacityU8(pixels) == OPACITY_TRANSPARENT_U8)) {
-                for (int i = 0; i < m_channels; i++) {
-                    float value = pixel[i];
+                m_colorSpace->normalisedChannelsValue(dst,channels);
+                for (int i = 0; i < (int)m_colorSpace->channelCount(); i++) {
+                    float value = channels[i];
                     if (value > to)
                         m_outRight[i]++;
                     else if (value < from)
@@ -282,8 +286,7 @@ void KoBasicF32HistogramProducer::addRegionToBin(const quint8 * pixels, const qu
                 }
                 m_count++;
             }
-
-            pixels += pSize;
+            dst += dstPixelSize;
             nPixels--;
 
         }
@@ -317,13 +320,18 @@ void KoBasicF16HalfHistogramProducer::addRegionToBin(const quint8 * pixels, cons
     float to = from + width;
     float factor = 255.0 / width;
 
-    qint32 pSize = cs->pixelSize();
+    quint32 dstPixelSize = m_colorSpace->pixelSize();
+    quint8 *dstPixels = new quint8[nPixels * dstPixelSize];
+    cs->convertPixelsTo(pixels, dstPixels, m_colorSpace, nPixels, KoColorConversionTransformation::IntentAbsoluteColorimetric, KoColorConversionTransformation::Empty);
+    quint8 *dst = dstPixels;
+    QVector<float> channels(m_colorSpace->channelCount());
+
     if (selectionMask) {
         while (nPixels > 0) {
-            const half* pixel = reinterpret_cast<const half*>(pixels);
             if (!((m_skipUnselected  && *selectionMask == 0) || (m_skipTransparent && cs->opacityU8(pixels) == OPACITY_TRANSPARENT_U8))) {
-                for (int i = 0; i < m_channels; i++) {
-                    float value = pixel[i];
+                m_colorSpace->normalisedChannelsValue(dst,channels);
+                for (int i = 0; i < (int)m_colorSpace->channelCount(); i++) {
+                    float value = channels[i];
                     if (value > to)
                         m_outRight[i]++;
                     else if (value < from)
@@ -333,16 +341,16 @@ void KoBasicF16HalfHistogramProducer::addRegionToBin(const quint8 * pixels, cons
                 }
                 m_count++;
             }
-            pixels += pSize;
+            dst += dstPixelSize;
             selectionMask++;
             nPixels--;
         }
     } else {
         while (nPixels > 0) {
-            const half* pixel = reinterpret_cast<const half*>(pixels);
             if (!(m_skipTransparent && cs->opacityU8(pixels) == OPACITY_TRANSPARENT_U8)) {
-                for (int i = 0; i < m_channels; i++) {
-                    float value = pixel[i];
+                m_colorSpace->normalisedChannelsValue(dst,channels);
+                for (int i = 0; i < (int)m_colorSpace->channelCount(); i++) {
+                    float value = channels[i];
                     if (value > to)
                         m_outRight[i]++;
                     else if (value < from)
@@ -352,7 +360,7 @@ void KoBasicF16HalfHistogramProducer::addRegionToBin(const quint8 * pixels, cons
                 }
                 m_count++;
             }
-            pixels += pSize;
+            dst += dstPixelSize;
             nPixels--;
         }
     }

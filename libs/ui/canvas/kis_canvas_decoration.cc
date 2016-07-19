@@ -17,7 +17,7 @@
  */
 
 #include "kis_canvas_decoration.h"
-
+#include "kis_canvas2.h"
 #include "kis_debug.h"
 
 struct KisCanvasDecoration::Private {
@@ -55,7 +55,7 @@ void KisCanvasDecoration::setVisible(bool v)
 {
     d->visible = v;
     if (d->view &&
-        d->view->canvasBase()) {
+            d->view->canvasBase()) {
 
         d->view->canvasBase()->updateCanvas();
     }
@@ -75,9 +75,10 @@ void KisCanvasDecoration::paint(QPainter& gc, const QRectF& updateArea, const Ki
 {
     if (!canvas) {
         dbgFile<<"canvas does not exist:"<<canvas;
-        }
-    if (visible())
+    }
+    if (visible()) {
         drawDecoration(gc, updateArea, converter,canvas);
+    }
 }
 
 

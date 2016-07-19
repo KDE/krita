@@ -1,8 +1,8 @@
-if (NOT WIN32 AND NOT APPLE)
+if (NOT APPLE)
     add_subdirectory(tests)
 endif ()
 
-include_directories(${Boost_INCLUDE_DIRS})
+include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 set(kritadefaulttools_SOURCES
     default_tools.cc
@@ -34,7 +34,7 @@ generate_export_header(kritadefaulttools BASE_NAME kritadefaulttools)
 target_link_libraries(kritadefaulttools kritaui kritabasicflakes)
 target_link_libraries(kritadefaulttools ${Boost_SYSTEM_LIBRARY})
 
-install(TARGETS kritadefaulttools  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritadefaulttools  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

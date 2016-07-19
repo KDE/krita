@@ -25,7 +25,7 @@
 
 #include <KoDialog.h>
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KisFilterChain.h>
 #include <KoColorSpaceConstants.h>
@@ -62,7 +62,7 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    KisDocument *input = m_chain->inputDocument();
+    KisDocument *input = inputDocument();
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;
     KisImageWSP image = input->image();
@@ -83,44 +83,37 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
 
     widget.flatten->setChecked(cfg.getBool("flatten", false));
 
-    if (!m_chain->manager()->getBatchMode() ) {
+    if (!getBatchMode() ) {
         QApplication::restoreOverrideCursor();
         if (dialog.exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }
     }
-    else {
-        qApp->processEvents(); // For vector layers to be updated
-    }
-    image->waitForDone();
 
     cfg.setProperty("flatten", widget.flatten->isChecked());
     KisConfig().setExportConfiguration("EXR", cfg);
 
-    QString filename = m_chain->outputFile();
+    QString filename = outputFile();
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    QUrl url = QUrl::fromLocalFile(filename);
-
-    exrConverter kpc(input, !m_chain->manager()->getBatchMode());
+    exrConverter kpc(input, !getBatchMode());
 
     KisImageBuilder_Result res;
 
     if (widget.flatten->isChecked()) {
-        image->refreshGraph();
-        image->lock();
+        // the image must be locked at the higher levels
+        KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
+
         KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
         KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
-        image->unlock();
 
-        res = kpc.buildFile(url, l);
+        res = kpc.buildFile(filename, l);
     }
     else {
-        image->lock();
+        // the image must be locked at the higher levels
+        KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
 
-        res = kpc.buildFile(url, image->rootLayer());
-        image->unlock();
-
+        res = kpc.buildFile(filename, image->rootLayer());
     }
 
     dbgFile << " Result =" << res;

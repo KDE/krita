@@ -103,4 +103,83 @@ void KisMaskGeneratorTest::testSquareSerialisation()
     delete cmg2;
 }
 
+#include "kis_random_source.h"
+
+void testCopyCtor(KisMaskGenerator *gen1)
+{
+    QScopedPointer<KisMaskGenerator> gen2(gen1->clone());
+
+    const int halfWidth = gen1->width() / 2;
+    const int halfHeight = gen1->height() / 2;
+    const int numSamples = qMax(100.0, 0.1 * gen1->width() * gen1->height());
+
+    KisRandomSource random;
+    for (int i = 0; i < numSamples; i++) {
+        const int x = random.generate(-halfWidth, halfWidth);
+        const int y = random.generate(-halfHeight, halfHeight);
+
+        const quint8 v1 = gen1->valueAt(x, y);
+        const quint8 v2 = gen2->valueAt(x, y);
+
+        if (v1 != v2) {
+            qDebug()  << ppVar(i) << ppVar(x) << ppVar(y) << ppVar(v2)  << ppVar(v1);
+        }
+
+        QCOMPARE(v2, v1);
+    }
+}
+
+void KisMaskGeneratorTest::testCopyCtorCircle()
+{
+    KisCircleMaskGenerator gen(50.0 * rand() / RAND_MAX, rand() / RAND_MAX, rand() / RAND_MAX, rand() / RAND_MAX, 4, true);
+    testCopyCtor(&gen);
+}
+
+void KisMaskGeneratorTest::testCopyCtorRect()
+{
+    KisRectangleMaskGenerator gen(50.0 * rand() / RAND_MAX, rand() / RAND_MAX, rand() / RAND_MAX, rand() / RAND_MAX, 4, true);
+    testCopyCtor(&gen);
+}
+
+#include "kis_cubic_curve.h"
+
+void KisMaskGeneratorTest::testCopyCtorCurveCircle()
+{
+    KisCurveCircleMaskGenerator gen(50, 0.8,
+                                    0.75, 0.85,
+                                    2,
+                                    KisCubicCurve(), // linear
+                                    true);
+    testCopyCtor(&gen);
+}
+
+void KisMaskGeneratorTest::testCopyCtorCurveRect()
+{
+    KisCurveRectangleMaskGenerator gen(50, 0.8,
+                                       0.75, 0.85,
+                                       2,
+                                       KisCubicCurve(), // linear
+                                       true);
+    testCopyCtor(&gen);
+}
+
+void KisMaskGeneratorTest::testCopyCtorGaussCircle()
+{
+    KisGaussCircleMaskGenerator gen(50, 0.8,
+                                    0.75, 0.85,
+                                    2,
+                                    true);
+    testCopyCtor(&gen);
+}
+
+void KisMaskGeneratorTest::testCopyCtorGaussRect()
+{
+    KisGaussRectangleMaskGenerator gen(50, 0.8,
+                                       0.75, 0.85,
+                                       2,
+                                       true);
+    testCopyCtor(&gen);
+}
+
+
 QTEST_MAIN(KisMaskGeneratorTest)

@@ -34,6 +34,6 @@ target_link_libraries(kritatextlayout kritatext)
 target_link_libraries(kritatextlayout LINK_INTERFACE_LIBRARIES kritatext)
 
 set_target_properties(kritatextlayout PROPERTIES
-   VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+   VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 install(TARGETS kritatextlayout  ${INSTALL_TARGETS_DEFAULT_ARGS})

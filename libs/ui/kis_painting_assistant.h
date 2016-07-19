@@ -25,7 +25,6 @@
 #include <QFile>
 #include <QObject>
 
-#include <KisDocument.h>
 #include <kritaui_export.h>
 #include <kis_shared.h>
 

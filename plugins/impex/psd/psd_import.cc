@@ -18,7 +18,7 @@
 #include "psd_import.h"
 
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KisFilterChain.h>
 
@@ -44,27 +44,24 @@ KisImportExportFilter::ConversionStatus psdImport::convert(const QByteArray&, co
     if (to != "application/x-krita")
         return KisImportExportFilter::BadMimeType;
 
-    KisDocument * doc = m_chain->outputDocument();
+    KisDocument * doc = outputDocument();
 
     if (!doc)
         return KisImportExportFilter::NoDocumentCreated;
 
-    QString filename = m_chain->inputFile();
+    QString filename = inputFile();
 
     doc->prepareForImport();
 
     if (!filename.isEmpty()) {
 
-        QUrl url = QUrl::fromLocalFile(filename);
-
-        if (url.isEmpty()) {
-            qDebug() << "url is empty" << filename << url;
+        if (!QFileInfo(filename).exists()) {
             return KisImportExportFilter::FileNotFound;
         }
 
         PSDLoader ib(doc);
 
-        KisImageBuilder_Result result = ib.buildImage(url);
+        KisImageBuilder_Result result = ib.buildImage(filename);
 
         switch (result) {
         case KisImageBuilder_RESULT_UNSUPPORTED:

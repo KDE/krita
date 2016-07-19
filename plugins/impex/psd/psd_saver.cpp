@@ -23,7 +23,7 @@
 #include <KoCompositeOp.h>
 #include <KoUnit.h>
 
-#include <QUrl>
+#include <QFileInfo>
 
 #include <kis_annotation.h>
 #include <kis_types.h>
@@ -126,19 +126,13 @@ bool checkIfHasTransparency(KisPaintDeviceSP dev)
     return false;
 }
 
-KisImageBuilder_Result PSDSaver::buildFile(const QUrl &uri)
+KisImageBuilder_Result PSDSaver::buildFile(const QString &filename)
 {
     if (!m_image)
         return KisImageBuilder_RESULT_EMPTY;
 
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
-
-    if (!uri.isLocalFile())
-        return KisImageBuilder_RESULT_NOT_LOCAL;
-
     // Open file for writing
-    QFile f(uri.toLocalFile());
+    QFile f(filename);
     if (!f.open(QIODevice::WriteOnly)) {
         return KisImageBuilder_RESULT_NOT_LOCAL;
     }

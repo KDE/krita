@@ -298,7 +298,7 @@ KisMetaData::Value cfaPatternExifToKMD(const Exiv2::Value::AutoPtr value, Exiv2:
         index++;
     }
     cfaPatternStructure["Values"] = KisMetaData::Value(values, KisMetaData::Value::OrderedArray);
-    dbgFile << "CFAPattern " << ppVar(columns) << " " << ppVar(rows) << ppVar(values.size() << ppVar(dvalue->count()));
+    dbgFile << "CFAPattern " << ppVar(columns) << " " << ppVar(rows) << ppVar(values.size()) << ppVar(dvalue->count());
     return KisMetaData::Value(cfaPatternStructure);
 }
 

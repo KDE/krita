@@ -143,8 +143,8 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& 
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    KisDocument *input = m_chain->inputDocument();
-    QString filename = m_chain->outputFile();
+    KisDocument *input = inputDocument();
+    QString filename = outputFile();
 
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;
@@ -169,16 +169,11 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& 
 
     optionsPPM.type->setCurrentIndex(cfg.getInt("type", 0));
 
-    if (!m_chain->manager()->getBatchMode()) {
+    if (!getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }
     }
-    else {
-        qApp->processEvents(); // For vector layers to be updated
-    }
-    input->image()->waitForDone();
-
 
     bool rgb = (to == "image/x-portable-pixmap");
     bool binary = optionsPPM.type->currentIndex() == 0;
@@ -189,10 +184,9 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& 
 
     KisImageWSP image = input->image();
     Q_CHECK_PTR(image);
-    image->refreshGraph();
-    image->lock();
+    // the image must be locked at the higher levels
+    KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
-    image->unlock();
 
     // Test color space
     if (((rgb && (pd->colorSpace()->id() != "RGBA" && pd->colorSpace()->id() != "RGBA16"))

@@ -31,7 +31,6 @@
 #include "kis_touch_shortcut.h"
 #include "kis_input_profile_manager.h"
 
-
 /**
  * This hungry class EventEater encapsulates event masking logic.
  *
@@ -71,6 +70,8 @@ static bool isMouseEventType(QEvent::Type t)
 
 bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* event )
 {
+    Q_UNUSED(target)
+
     auto debugEvent = [&]() {
         if (KisTabletDebugger::instance()->debugEnabled()) {
             QString pre = QString("[BLOCKED]");
@@ -79,6 +80,7 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
         }
     };
 
+    Qt::MouseEventSource source = static_cast<QMouseEvent*>(event)->source();
     if (peckish && event->type() == QEvent::MouseButtonPress
         // Drop one mouse press following tabletPress or touchBegin
         && (static_cast<QMouseEvent*>(event)->button() == Qt::LeftButton)) {
@@ -86,10 +88,16 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
         debugEvent();
         return true;
     } else if (isMouseEventType(event->type()) &&
-               (hungry || (eatSyntheticEvents && static_cast<QMouseEvent*>(event)->source() != 0))) {
-        // Drop mouse events if enabled or event was synthetic & synthetic events are disabled
-        debugEvent();
-        return true;
+               (hungry || (eatSyntheticEvents && source != 0))) {
+#ifdef Q_OS_MAC
+        if (eatSyntheticEvents && source != 2) {
+#endif
+            // Drop mouse events if enabled or event was synthetic & synthetic events are disabled
+            debugEvent();
+            return true;
+#ifdef Q_OS_MAC
+        }
+#endif
     }
     return false; // All clear - let this one through!
 }
@@ -98,7 +106,7 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
 void KisInputManager::Private::EventEater::activate()
 {
     if (!hungry && (KisTabletDebugger::instance()->debugEnabled()))
-        dbgTablet << "Start ignoring mouse events.";
+        qDebug() << "Start ignoring mouse events.";
     hungry = true;
 }
 
@@ -111,10 +119,10 @@ void KisInputManager::Private::EventEater::deactivate()
 
 void KisInputManager::Private::EventEater::eatOneMousePress()
 {
-#if defined(Q_OS_WIN)
+// #if defined(Q_OS_WIN)
     // Enable on other platforms if getting full-pressure splotches
     peckish = true;
-#endif
+// #endif
 }
 
 bool KisInputManager::Private::ignoringQtCursorEvents()
@@ -130,6 +138,7 @@ void KisInputManager::Private::maskSyntheticEvents(bool value)
 KisInputManager::Private::Private(KisInputManager *qq)
     : q(qq)
     , moveEventCompressor(10 /* ms */, KisSignalCompressor::FIRST_ACTIVE)
+    , priorityEventFilterSeqNo(0)
     , canvasSwitcher(this, qq)
 {
     KisConfig cfg;
@@ -140,12 +149,24 @@ KisInputManager::Private::Private(KisInputManager *qq)
     testingCompressBrushEvents = cfg.testingCompressBrushEvents();
 }
 
+static const int InputWidgetsThreshold = 2000;
+static const int OtherWidgetsThreshold = 400;
 
 KisInputManager::Private::CanvasSwitcher::CanvasSwitcher(Private *_d, QObject *p)
     : QObject(p),
       d(_d),
-      eatOneMouseStroke(false)
+      eatOneMouseStroke(false),
+      focusSwitchThreshold(InputWidgetsThreshold)
 {
+}
+
+void KisInputManager::Private::CanvasSwitcher::setupFocusThreshold(QObject* object)
+{
+    QWidget *widget = qobject_cast<QWidget*>(object);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(widget);
+
+    thresholdConnections.clear();
+    thresholdConnections.addConnection(&focusSwitchThreshold, SIGNAL(timeout()), widget, SLOT(setFocus()));
 }
 
 void KisInputManager::Private::CanvasSwitcher::addCanvas(KisCanvas2 *canvas)
@@ -156,6 +177,9 @@ void KisInputManager::Private::CanvasSwitcher::addCanvas(KisCanvas2 *canvas)
         canvasResolver.insert(canvasWidget, canvas);
         d->q->setupAsEventFilter(canvasWidget);
         canvasWidget->installEventFilter(this);
+
+        setupFocusThreshold(canvasWidget);
+        focusSwitchThreshold.setEnabled(false);
 
         d->canvas = canvas;
         d->toolProxy = dynamic_cast<KisToolProxy*>(canvas->toolProxy());
@@ -177,15 +201,40 @@ void KisInputManager::Private::CanvasSwitcher::removeCanvas(KisCanvas2 *canvas)
     widget->removeEventFilter(this);
 }
 
+bool isInputWidget(QWidget *w)
+{
+    if (!w) return false;
+
+
+    QList<QLatin1String> types;
+    types << QLatin1String("QAbstractSlider");
+    types << QLatin1String("QAbstractSpinBox");
+    types << QLatin1String("QLineEdit");
+    types << QLatin1String("QTextEdit");
+    types << QLatin1String("QPlainTextEdit");
+    types << QLatin1String("QComboBox");
+    types << QLatin1String("QKeySequenceEdit");
+
+    Q_FOREACH (const QLatin1String &type, types) {
+        if (w->inherits(type.data())) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 bool KisInputManager::Private::CanvasSwitcher::eventFilter(QObject* object, QEvent* event )
 {
     if (canvasResolver.contains(object)) {
         switch (event->type()) {
         case QEvent::FocusIn: {
             QFocusEvent *fevent = static_cast<QFocusEvent*>(event);
-            eatOneMouseStroke = 2 * (fevent->reason() == Qt::MouseFocusReason);
-
             KisCanvas2 *canvas = canvasResolver.value(object);
+            if (canvas != d->canvas) {
+                eatOneMouseStroke = 2 * (fevent->reason() == Qt::MouseFocusReason);
+            }
+
             d->canvas = canvas;
             d->toolProxy = dynamic_cast<KisToolProxy*>(canvas->toolProxy());
 
@@ -194,11 +243,24 @@ bool KisInputManager::Private::CanvasSwitcher::eventFilter(QObject* object, QEve
             object->removeEventFilter(this);
             object->installEventFilter(this);
 
+            setupFocusThreshold(object);
+            focusSwitchThreshold.setEnabled(false);
+
             QEvent event(QEvent::Enter);
             d->q->eventFilter(object, &event);
             break;
         }
-
+        case QEvent::FocusOut: {
+            focusSwitchThreshold.setEnabled(true);
+            break;
+        }
+        case QEvent::Enter: {
+            break;
+        }
+        case QEvent::Leave: {
+            focusSwitchThreshold.stop();
+            break;
+        }
         case QEvent::Wheel: {
             QWidget *widget = static_cast<QWidget*>(object);
             widget->setFocus();
@@ -208,15 +270,33 @@ bool KisInputManager::Private::CanvasSwitcher::eventFilter(QObject* object, QEve
         case QEvent::MouseButtonRelease:
         case QEvent::TabletPress:
         case QEvent::TabletRelease:
+            focusSwitchThreshold.forceDone();
+
             if (eatOneMouseStroke) {
                 eatOneMouseStroke--;
                 return true;
             }
             break;
         case QEvent::MouseButtonDblClick:
+            focusSwitchThreshold.forceDone();
             if (eatOneMouseStroke) {
                 return true;
             }
+            break;
+        case QEvent::MouseMove:
+        case QEvent::TabletMove: {
+
+            QWidget *widget = static_cast<QWidget*>(object);
+
+            if (!widget->hasFocus()) {
+                const int delay =
+                    isInputWidget(QApplication::focusWidget()) ?
+                    InputWidgetsThreshold : OtherWidgetsThreshold;
+
+                focusSwitchThreshold.setDelayThreshold(delay);
+                focusSwitchThreshold.start();
+            }
+        }
             break;
         default:
             break;
@@ -278,6 +358,9 @@ void KisInputManager::Private::addStrokeShortcut(KisAbstractInputAction* action,
     if (buttonList.size() > 0) {
         strokeShortcut->setButtons(QSet<Qt::Key>::fromList(modifiers), QSet<Qt::MouseButton>::fromList(buttonList));
         matcher.addShortcut(strokeShortcut);
+    }
+    else {
+        delete strokeShortcut;
     }
 }
 
@@ -421,17 +504,15 @@ void KisInputManager::Private::eatOneMousePress()
     eventEater.eatOneMousePress();
 }
 
-bool KisInputManager::Private::handleCompressedTabletEvent(QObject *object, QTabletEvent *tevent)
+bool KisInputManager::Private::handleCompressedTabletEvent(QEvent *event)
 {
-    if(object == 0) return false;
-
     bool retval = false;
 
-    retval = q->eventFilter(object, tevent);
-
-    if (!retval && !tevent->isAccepted()) {
-        dbgInput << "Rejected a compressed tablet event.";
+    if (!matcher.pointerMoved(event)) {
+        toolProxy->forwardHoverEvent(event);
     }
+    retval = true;
+    event->setAccepted(true);
 
     return retval;
 }

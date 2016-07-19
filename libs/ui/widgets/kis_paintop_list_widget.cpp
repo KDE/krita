@@ -35,7 +35,7 @@ KisPaintOpListWidget::KisPaintOpListWidget(QWidget* parent, const char* name):
     connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(slotOpActivated(QModelIndex)));
 
     setModel(m_model);
-    setItemDelegate(new KisCategorizedItemDelegate(false, this));
+    setItemDelegate(new KisCategorizedItemDelegate(this));
 }
 
 KisPaintOpListWidget::~KisPaintOpListWidget()

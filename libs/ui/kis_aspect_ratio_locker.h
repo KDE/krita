@@ -41,6 +41,10 @@ private Q_SLOTS:
     void slotSpinTwoChanged();
     void slotAspectButtonChanged();
 
+Q_SIGNALS:
+    void sliderValueChanged();
+    void aspectButtonChanged();
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

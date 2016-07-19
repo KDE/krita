@@ -56,7 +56,7 @@ qreal KisDynamicSensorTime::value(const KisPaintInformation&  pi)
             m_time = m_length;
         }
     }
-    return 1.0 - m_time / qreal(m_length);
+    return m_time / qreal(m_length);
 }
 
 void KisDynamicSensorTime::reset()

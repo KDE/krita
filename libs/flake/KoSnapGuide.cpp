@@ -92,8 +92,6 @@ KoShape *KoSnapGuide::editedShape() const
 
 void KoSnapGuide::enableSnapStrategy(Strategy type, bool value)
 {
-    if ((d->usedStrategies & type) ==  value) return;
-
     if (value) {
         d->usedStrategies |= type;
     } else {
@@ -127,10 +125,7 @@ bool KoSnapGuide::addCustomSnapStrategy(KoSnapStrategy *customStrategy)
 
 void KoSnapGuide::overrideSnapStrategy(Strategy type, KoSnapStrategy *strategy)
 {
-    Private::StrategiesList::iterator it = d->strategies.begin();
-    Private::StrategiesList::iterator end = d->strategies.end();
-
-    while (it != end) {
+    for (auto it = d->strategies.begin(); it != d->strategies.end(); /*noop*/) {
         if ((*it)->type() == type) {
             if (strategy) {
                 *it = toQShared(strategy);
@@ -192,9 +187,6 @@ QPointF KoSnapGuide::snap(const QPointF &mousePosition, Qt::KeyboardModifiers mo
     foreach (Private::KoSnapStrategySP strategy, d->strategies) {
         if (d->usedStrategies & strategy->type() ||
             strategy->type() == GridSnapping ||
-            strategy->type() == GuideLineSnapping ||
-            strategy->type() == DocumentBoundsSnapping ||
-            strategy->type() == DocumentCenterSnapping ||
             strategy->type() == CustomSnapping) {
 
             if (! strategy->snap(mousePosition, &proxy, maxSnapDistance))

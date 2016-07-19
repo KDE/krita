@@ -32,8 +32,8 @@ public:
     KoHashGeneratorProvider();
     ~KoHashGeneratorProvider();
 
-    KoHashGenerator *getGenerator(QString algorithm);
-    void setGenerator(QString algorithm, KoHashGenerator *generator);
+    KoHashGenerator *getGenerator(const QString &algorithm);
+    void setGenerator(const QString &algorithm, KoHashGenerator *generator);
     static KoHashGeneratorProvider *instance();
 private:
     static KoHashGeneratorProvider *instance_var;

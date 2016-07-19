@@ -26,7 +26,7 @@
 
 #include <QMap>
 
-const KoID KisKeyframeChannel::Content = KoID("content", i18n("Content"));
+const KoID KisKeyframeChannel::Content = KoID("content", ki18n("Content"));
 
 struct KisKeyframeChannel::Private
 {
@@ -278,6 +278,21 @@ KisKeyframeSP KisKeyframeChannel::lastKeyframe() const
     return (m_d->keys.end()-1).value();
 }
 
+int KisKeyframeChannel::framesHash() const
+{
+    KeyframesMap::const_iterator it = m_d->keys.constBegin();
+    KeyframesMap::const_iterator end = m_d->keys.constEnd();
+
+    int hash = 0;
+
+    while (it != end) {
+        hash += it.key();
+        ++it;
+    }
+
+    return hash;
+}
+
 QSet<int> KisKeyframeChannel::allKeyframeIds() const
 {
     QSet<int> frames;
@@ -484,5 +499,3 @@ void KisKeyframeChannel::requestUpdate(const KisTimeRange &range, const QRect &r
         m_d->node->invalidateFrames(range, rect);
     }
 }
-
-#include "kis_keyframe_channel.moc"

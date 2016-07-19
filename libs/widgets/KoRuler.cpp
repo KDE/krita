@@ -141,6 +141,9 @@ QRectF HorizontalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPain
     activeRangeRectangle.setHeight(rectangle.height() - 2);
 
     painter.setPen(d->ruler->palette().color(QPalette::Mid));
+
+
+    painter.fillRect(rectangle,d->ruler->palette().color(QPalette::AlternateBase)); // make background slightly different so it is easier to see
     painter.drawRect(rectangle);
 
     if(d->effectiveActiveRangeStart() != d->effectiveActiveRangeEnd())
@@ -457,6 +460,8 @@ QRectF VerticalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPainte
         d->viewConverter->documentToViewY(d->effectiveActiveRangeEnd()) + d->offset));
 
     painter.setPen(d->ruler->palette().color(QPalette::Mid));
+
+    painter.fillRect(rectangle,d->ruler->palette().color(QPalette::AlternateBase));
     painter.drawRect(rectangle);
 
     if(d->effectiveActiveRangeStart() != d->effectiveActiveRangeEnd())

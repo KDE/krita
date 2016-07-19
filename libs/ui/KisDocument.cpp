@@ -21,8 +21,7 @@
 #include "KisMainWindow.h" // XXX: remove
 #include <QMessageBox> // XXX: remove
 
-#include <QMimeDatabase>
-#include <QMimeType>
+#include <KisMimeDatabase.h>
 
 #include <KoCanvasBase.h>
 #include <KoColor.h>
@@ -113,6 +112,8 @@
 #include "kis_async_action_feedback.h"
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
+#include "kis_image_barrier_lock_adapter.h"
+#include <mutex>
 
 
 static const char CURRENT_DTD_VERSION[] = "2.0";
@@ -246,8 +247,7 @@ public:
         isExporting(false),
         password(QString()),
         modifiedAfterAutosave(false),
-        autosaving(false),
-        shouldCheckAutoSaveFile(true),
+        isAutosaving(false),
         autoErrorHandlingEnabled(true),
         backupFile(true),
         backupPath(QString()),
@@ -266,7 +266,9 @@ public:
         nserver(0),
         macroNestDepth(0),
         imageIdleWatcher(2000 /*ms*/),
-        kraLoader(0)
+        kraLoader(0),
+        suppressProgress(false),
+        fileProgressProxy(0)
     {
         if (QLocale().measurementSystem() == QLocale::ImperialSystem) {
             unit = KoUnit::Inch;
@@ -305,8 +307,7 @@ public:
     QString lastErrorMessage; // see openFile()
     int autoSaveDelay; // in seconds, 0 to disable.
     bool modifiedAfterAutosave;
-    bool autosaving;
-    bool shouldCheckAutoSaveFile; // usually true
+    bool isAutosaving;
     bool autoErrorHandlingEnabled; // usually true
     bool backupFile;
     QString backupPath;
@@ -332,6 +333,7 @@ public:
     QUrl m_url; // Remote (or local) url - the one displayed to the user.
     QString m_file; // Local file - the only one the part implementation should deal with.
     QEventLoop m_eventLoop;
+    QMutex savingMutex;
 
     bool modified;
     bool readwrite;
@@ -355,27 +357,19 @@ public:
     KisKraLoader* kraLoader;
     KisKraSaver* kraSaver;
 
-    QList<KisPaintingAssistant*> assistants;
+    bool suppressProgress;
+    KoProgressProxy* fileProgressProxy;
+
+    QList<KisPaintingAssistantSP> assistants;
     KisGridConfig gridConfig;
 
     bool openFile() {
-        DocumentProgressProxy *progressProxy = 0;
-        if (!document->progressProxy()) {
-            KisMainWindow *mainWindow = 0;
-            if (KisPart::instance()->mainWindows().count() > 0) {
-                mainWindow = KisPart::instance()->mainWindows()[0];
-            }
-            progressProxy = new DocumentProgressProxy(mainWindow);
-            document->setProgressProxy(progressProxy);
-        }
+        document->setFileProgressProxy();
         document->setUrl(m_url);
 
         bool ok = document->openFile();
 
-        if (progressProxy) {
-            document->setProgressProxy(0);
-            delete progressProxy;
-        }
+        document->clearFileProgressProxy();
         return ok;
     }
 
@@ -386,12 +380,9 @@ public:
         if (mimeType.isEmpty()) {
             // get the mimetype of the file
             // using findByUrl() to avoid another string -> url conversion
-            QMimeDatabase db;
-            QMimeType mime = db.mimeTypeForFile(m_url.toLocalFile());
-            if (mime.isValid()) {
-                mimeType = mime.name().toLocal8Bit();
-                m_bAutoDetectedMime = true;
-            }
+            QString mime = KisMimeDatabase::mimeTypeForFile(m_url.toLocalFile());
+            mimeType = mime.toLocal8Bit();
+            m_bAutoDetectedMime = true;
         }
         const bool ret = openFile();
         if (ret) {
@@ -429,6 +420,72 @@ public:
                             image.data(), SLOT(explicitRegenerateLevelOfDetail())));
         }
     }
+
+    class SafeSavingLocker;
+};
+
+class KisDocument::Private::SafeSavingLocker {
+public:
+    SafeSavingLocker(KisDocument::Private *_d)
+        : d(_d),
+          m_locked(false),
+          m_imageLock(d->image, true),
+          m_savingLock(&d->savingMutex)
+    {
+        const int realAutoSaveInterval = KisConfig().autoSaveInterval();
+        const int emergencyAutoSaveInterval = 10; // sec
+
+        /**
+         * Initial try to lock both objects. Locking the image guards
+         * us from any image composition threads running in the
+         * background, while savingMutex guards us from entering the
+         * saving code twice by autosave and main threads.
+         *
+         * Since we are trying to lock multiple objects, so we should
+         * do it in a safe manner.
+         */
+        m_locked = std::try_lock(m_imageLock, m_savingLock) < 0;
+
+        if (!m_locked) {
+            if (d->isAutosaving) {
+                d->disregardAutosaveFailure = true;
+                if (realAutoSaveInterval) {
+                    d->document->setAutoSave(emergencyAutoSaveInterval);
+                }
+            } else {
+                d->image->requestStrokeEnd();
+                QApplication::processEvents();
+
+                // one more try...
+                m_locked = std::try_lock(m_imageLock, m_savingLock) < 0;
+            }
+        }
+
+        if (m_locked) {
+            d->disregardAutosaveFailure = false;
+        }
+    }
+
+    ~SafeSavingLocker() {
+         if (m_locked) {
+             m_imageLock.unlock();
+             m_savingLock.unlock();
+
+             const int realAutoSaveInterval = KisConfig().autoSaveInterval();
+             d->document->setAutoSave(realAutoSaveInterval);
+         }
+     }
+
+    bool successfullyLocked() const {
+        return m_locked;
+    }
+
+private:
+    KisDocument::Private *d;
+    bool m_locked;
+
+    KisImageBarrierLockAdapter m_imageLock;
+    StdLockableWrapper<QMutex> m_savingLock;
 };
 
 KisDocument::KisDocument()
@@ -492,9 +549,33 @@ KisDocument::~KisDocument()
 
     if (d->image) {
         d->image->notifyAboutToBeDeleted();
+
+        /**
+         * WARNING: We should wait for all the internal image jobs to
+         * finish before entering KisImage's destructor. The problem is,
+         * while execution of KisImage::~KisImage, all the weak shared
+         * pointers pointing to the image enter an inconsistent
+         * state(!). The shared counter is already zero and destruction
+         * has started, but the weak reference doesn't know about it,
+         * because KisShared::~KisShared hasn't been executed yet. So all
+         * the threads running in background and having weak pointers will
+         * enter the KisImage's destructor as well.
+         */
+
+        d->image->requestStrokeCancellation();
+        d->image->waitForDone();
     }
+
+    // clear undo commands that can still point to the image
+    d->undoStack->clear();
+
+    KisImageWSP sanityCheckPointer = d->image;
+
     // The following line trigger the deletion of the image
     d->image.clear();
+
+    // check if the image has actually been deleted
+    KIS_ASSERT_RECOVER_NOOP(!sanityCheckPointer.isValid());
 
     delete d;
 }
@@ -591,18 +672,20 @@ bool KisDocument::saveFile()
 
     bool ret = false;
     bool suppressErrorDialog = false;
+    KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
 
-    // create the main progress monitoring object for loading, this can
-    // contain subtasks for filtering and loading
-    d->progressUpdater = new KoProgressUpdater(d->progressProxy, KoProgressUpdater::Unthreaded);
-    d->progressUpdater->start(100, i18n("Saving Document"));
-    d->filterManager->setProgresUpdater(d->progressUpdater);
+    setFileProgressUpdater(i18n("Saving Document"));
 
     if (!isNativeFormat(outputMimeType)) {
         dbgUI << "Saving to format" << outputMimeType << "in" << localFilePath();
-        // Not native format : save using export filter
-        d->filterManager->setProgresUpdater(d->progressUpdater);
-        KisImportExportFilter::ConversionStatus status = d->filterManager->exportDocument(localFilePath(), outputMimeType);
+
+        Private::SafeSavingLocker locker(d);
+        if (locker.successfullyLocked()) {
+            status = d->filterManager->exportDocument(localFilePath(), outputMimeType);
+        } else {
+            status = KisImportExportFilter::UsageError;
+        }
+
         ret = status == KisImportExportFilter::OK;
         suppressErrorDialog = (status == KisImportExportFilter::UserCancelled || status == KisImportExportFilter::BadConversionGraph);
         dbgFile << "Export status was" << status;
@@ -614,24 +697,29 @@ bool KisDocument::saveFile()
 
 
     if (ret) {
-        QPointer<KoUpdater> updater = d->progressUpdater->startSubtask(1, "clear undo stack");
-        updater->setProgress(0);
-        d->undoStack->setClean();
-        updater->setProgress(100);
-
+        if (!d->suppressProgress) {
+            QPointer<KoUpdater> updater = d->progressUpdater->startSubtask(1, "clear undo stack");
+            updater->setProgress(0);
+            d->undoStack->setClean();
+            updater->setProgress(100);
+        } else {
+            d->undoStack->setClean();
+        }
         removeAutoSaveFiles();
         // Restart the autosave timer
         // (we don't want to autosave again 2 seconds after a real save)
         setAutoSave(d->autoSaveDelay);
     }
-
-    delete d->progressUpdater;
-    d->filterManager->setProgresUpdater(0);
-    d->progressUpdater = 0;
+    clearFileProgressUpdater();
 
     QApplication::restoreOverrideCursor();
     if (!ret) {
         if (!suppressErrorDialog) {
+
+            if (errorMessage().isEmpty()) {
+                setErrorMessage(KisImportExportFilter::conversionStatusString(status));
+            }
+
             if (errorMessage().isEmpty()) {
                 QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not save\n%1", localFilePath()));
             } else if (errorMessage() != "USER_CANCELED") {
@@ -703,12 +791,12 @@ void KisDocument::setConfirmNonNativeSave(const bool exporting, const bool on)
     d->confirmNonNativeSave [ exporting ? 1 : 0] = on;
 }
 
-bool KisDocument::saveInBatchMode() const
+bool KisDocument::fileBatchMode() const
 {
     return d->filterManager->getBatchMode();
 }
 
-void KisDocument::setSaveInBatchMode(const bool batchMode)
+void KisDocument::setFileBatchMode(const bool batchMode)
 {
     d->filterManager->setBatchMode(batchMode);
 }
@@ -721,11 +809,6 @@ bool KisDocument::isImporting() const
 bool KisDocument::isExporting() const
 {
     return d->isExporting;
-}
-
-void KisDocument::setCheckAutoSaveFile(bool b)
-{
-    d->shouldCheckAutoSaveFile = b;
 }
 
 void KisDocument::setAutoErrorHandlingEnabled(bool b)
@@ -748,14 +831,14 @@ void KisDocument::slotAutoSave()
         } else {
             connect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
             emit statusBarMessage(i18n("Autosaving..."));
-            d->autosaving = true;
+            d->isAutosaving = true;
             bool ret = saveNativeFormat(autoSaveFile(localFilePath()));
             setModified(true);
             if (ret) {
                 d->modifiedAfterAutosave = false;
                 d->autoSaveTimer.stop(); // until the next change
             }
-            d->autosaving = false;
+            d->isAutosaving = false;
             emit clearStatusBarMessage();
             disconnect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
             if (!ret && !d->disregardAutosaveFailure) {
@@ -797,26 +880,8 @@ bool KisDocument::isModified() const
 
 bool KisDocument::saveNativeFormat(const QString & file)
 {
-    const int realAutoSaveInterval = KisConfig().autoSaveInterval();
-    const int emergencyAutoSaveInterval = 10; // sec
-
-    if (!d->image->tryBarrierLock()) {
-        if (isAutosaving()) {
-            setDisregardAutosaveFailure(true);
-            if (realAutoSaveInterval) {
-                setAutoSave(emergencyAutoSaveInterval);
-            }
-            return false;
-        } else {
-            d->image->requestStrokeEnd();
-            QApplication::processEvents();
-            if (!d->image->tryBarrierLock()) {
-                return false;
-            }
-        }
-    }
-
-    setDisregardAutosaveFailure(false);
+    Private::SafeSavingLocker locker(d);
+    if (!locker.successfullyLocked()) return false;
 
     d->lastErrorMessage.clear();
     //dbgUI <<"Saving to store";
@@ -848,22 +913,18 @@ bool KisDocument::saveNativeFormat(const QString & file)
     if (store->bad()) {
         d->lastErrorMessage = i18n("Could not create the file for saving");   // more details needed?
         delete store;
-        d->image->unlock();
-        setAutoSave(realAutoSaveInterval);
-
         return false;
     }
 
-    d->image->unlock();
-    setAutoSave(realAutoSaveInterval);
+    bool result = false;
 
-
-    if (!isAutosaving()) {
+    if (!d->isAutosaving) {
         KisAsyncActionFeedback f(i18n("Saving document..."), 0);
-        return f.runAction(std::bind(&KisDocument::saveNativeFormatCalligra, this, store));
+        result = f.runAction(std::bind(&KisDocument::saveNativeFormatCalligra, this, store));
+    } else {
+        result = saveNativeFormatCalligra(store);
     }
-
-    return saveNativeFormatCalligra(store);
+    return result;
 }
 
 bool KisDocument::saveNativeFormatCalligra(KoStore *store)
@@ -894,7 +955,7 @@ bool KisDocument::saveNativeFormatCalligra(KoStore *store)
         (void)store->close();
     }
 
-    if (!isAutosaving()) {
+    if (!d->isAutosaving) {
         if (store->open("preview.png")) {
             // ### TODO: missing error checking (The partition could be full!)
             savePreview(store);
@@ -926,49 +987,6 @@ bool KisDocument::saveToStream(QIODevice *dev)
     if (nwritten != (int)s.size())
         warnUI << "wrote " << nwritten << "- expected" <<  s.size();
     return nwritten == (int)s.size();
-}
-
-QString KisDocument::checkImageMimeTypes(const QString &mimeType, const QUrl &url) const
-{
-    if (!url.isLocalFile()) return mimeType;
-
-    if (url.toLocalFile().endsWith(".kpp")) return "image/png";
-
-    QStringList imageMimeTypes;
-    imageMimeTypes << "image/jpeg"
-                   << "image/x-psd" << "image/photoshop" << "image/x-photoshop" << "image/x-vnd.adobe.photoshop" << "image/vnd.adobe.photoshop"
-                   << "image/x-portable-pixmap" << "image/x-portable-graymap" << "image/x-portable-bitmap"
-                   << "application/pdf"
-                   << "image/x-exr"
-                   << "image/x-xcf"
-                   << "image/x-eps"
-                   << "image/png"
-                   << "image/bmp" << "image/x-xpixmap" << "image/gif" << "image/x-xbitmap"
-                   << "image/tiff"
-                   << "image/x-gimp-brush" << "image/x-gimp-brush-animated"
-                   << "image/jp2";
-
-    if (!imageMimeTypes.contains(mimeType)) return mimeType;
-
-    QFile f(url.toLocalFile());
-    if (!f.open(QIODevice::ReadOnly)) {
-        warnKrita << "Could not open file to check the mimetype" << url;
-    }
-    QByteArray ba = f.read(qMin(f.size(), (qint64)512)); // should be enough for images
-    QMimeDatabase db;
-    QMimeType mime = db.mimeTypeForData(ba);
-    f.close();
-
-    if (!mime.isValid()) {
-        return mimeType;
-    }
-
-    // Checking the content failed as well, so let's fall back on the extension again
-    if (mime.name() == "application/octet-stream") {
-        return mimeType;
-    }
-
-    return mime.name();
 }
 
 // Called for embedded documents
@@ -1034,12 +1052,7 @@ QString KisDocument::autoSaveFile(const QString & path) const
     QString retval;
 
     // Using the extension allows to avoid relying on the mime magic when opening
-    QMimeDatabase db;
-    QMimeType mime = db.mimeTypeForName(nativeFormatMimeType());
-    if (!mime.isValid()) {
-        qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", nativeFormatMimeType().constData());
-    }
-    const QString extension = QLatin1Char('.') + mime.preferredSuffix();
+    const QString extension (".kra");
 
     if (path.isEmpty()) {
         // Never saved?
@@ -1057,11 +1070,6 @@ QString KisDocument::autoSaveFile(const QString & path) const
         retval = QString("%1%2.%3-autosave%4").arg(dir).arg(QDir::separator()).arg(filename).arg(extension);
     }
     return retval;
-}
-
-void KisDocument::setDisregardAutosaveFailure(bool disregardFailure)
-{
-    d->disregardAutosaveFailure = disregardFailure;
 }
 
 bool KisDocument::importDocument(const QUrl &_url)
@@ -1106,10 +1114,12 @@ bool KisDocument::openUrl(const QUrl &_url, KisDocument::OpenUrlFlags flags)
     QUrl url(_url);
     bool autosaveOpened = false;
     d->isLoading = true;
-    if (url.isLocalFile() && d->shouldCheckAutoSaveFile) {
+    if (url.isLocalFile() && !fileBatchMode()) {
         QString file = url.toLocalFile();
         QString asf = autoSaveFile(file);
         if (QFile::exists(asf)) {
+            KisApplication *kisApp = static_cast<KisApplication*>(qApp);
+            kisApp->hideSplashScreen();
             //dbgUI <<"asf=" << asf;
             // ## TODO compare timestamps ?
             int res = QMessageBox::warning(0,
@@ -1167,56 +1177,34 @@ bool KisDocument::openFile()
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     d->specialOutputFlag = 0;
-    QByteArray _native_format = nativeFormatMimeType();
 
-    QUrl u = QUrl::fromLocalFile(localFilePath());
+    QString filename = localFilePath();
     QString typeName = mimeType();
 
     if (typeName.isEmpty()) {
-        QMimeDatabase db;
-        typeName = db.mimeTypeForFile(u.path()).name();
+        typeName = KisMimeDatabase::mimeTypeForFile(filename);
     }
 
-    // for images, always check content.
-    typeName = checkImageMimeTypes(typeName, u);
-
-    //dbgUI << "mimetypes 4:" << typeName;
+    //qDebug() << "mimetypes 4:" << typeName;
 
     // Allow to open backup files, don't keep the mimetype application/x-trash.
     if (typeName == "application/x-trash") {
-        QString path = u.path();
-        QMimeDatabase db;
-        QMimeType mime = db.mimeTypeForName(typeName);
-        const QStringList patterns = mime.isValid() ? mime.globPatterns() : QStringList();
-        // Find the extension that makes it a backup file, and remove it
-        for (QStringList::ConstIterator it = patterns.begin(); it != patterns.end(); ++it) {
-            QString ext = *it;
-            if (!ext.isEmpty() && ext[0] == '*') {
-                ext.remove(0, 1);
-                if (path.endsWith(ext)) {
-                    path.chop(ext.length());
-                    break;
-                }
+        QString path = filename;
+        while (path.length() > 0) {
+            path.chop(1);
+            typeName = KisMimeDatabase::mimeTypeForFile(path);
+            //qDebug() << "\t" << path << typeName;
+            if (!typeName.isEmpty()) {
+                break;
             }
         }
-        typeName = db.mimeTypeForFile(path, QMimeDatabase::MatchExtension).name();
-    }
-
-    // Special case for flat XML files (e.g. using directory store)
-    if (u.fileName() == "maindoc.xml" || u.fileName() == "content.xml" || typeName == "inode/directory") {
-        typeName = _native_format; // Hmm, what if it's from another app? ### Check mimetype
-        d->specialOutputFlag = SaveAsDirectoryStore;
-        dbgUI << "loading" << u.fileName() << ", using directory store for" << localFilePath() << "; typeName=" << typeName;
+        //qDebug() << "chopped" << filename  << "to" << path << "Was trash, is" << typeName;
     }
     dbgUI << localFilePath() << "type:" << typeName;
 
     QString importedFile = localFilePath();
 
-    // create the main progress monitoring object for loading, this can
-    // contain subtasks for filtering and loading
-    d->progressUpdater = new KoProgressUpdater(d->progressProxy, KoProgressUpdater::Unthreaded);
-    d->progressUpdater->start(100, i18n("Opening Document"));
-    d->filterManager->setProgresUpdater(d->progressUpdater);
+    setFileProgressUpdater(i18n("Opening Document"));
 
     if (!isNativeFormat(typeName.toLatin1())) {
         KisImportExportFilter::ConversionStatus status;
@@ -1225,83 +1213,18 @@ bool KisDocument::openFile()
         if (status != KisImportExportFilter::OK) {
             QApplication::restoreOverrideCursor();
 
-            QString msg;
-            switch (status) {
-            case KisImportExportFilter::OK: break;
-
-            case KisImportExportFilter::FilterCreationError:
-                msg = i18n("Could not create the filter plugin"); break;
-
-            case KisImportExportFilter::CreationError:
-                msg = i18n("Could not create the output document"); break;
-
-            case KisImportExportFilter::FileNotFound:
-                msg = i18n("File not found"); break;
-
-            case KisImportExportFilter::StorageCreationError:
-                msg = i18n("Cannot create storage"); break;
-
-            case KisImportExportFilter::BadMimeType:
-                msg = i18n("Bad MIME type"); break;
-
-            case KisImportExportFilter::EmbeddedDocError:
-                msg = i18n("Error in embedded document"); break;
-
-            case KisImportExportFilter::WrongFormat:
-                msg = i18n("Format not recognized"); break;
-
-            case KisImportExportFilter::NotImplemented:
-                msg = i18n("Not implemented"); break;
-
-            case KisImportExportFilter::ParsingError:
-                msg = i18n("Parsing error"); break;
-
-            case KisImportExportFilter::PasswordProtected:
-                msg = i18n("Document is password protected"); break;
-
-            case KisImportExportFilter::InvalidFormat:
-                msg = i18n("Invalid file format"); break;
-
-            case KisImportExportFilter::InternalError:
-            case KisImportExportFilter::UnexpectedEOF:
-            case KisImportExportFilter::UnexpectedOpcode:
-            case KisImportExportFilter::StupidError: // ?? what is this ??
-            case KisImportExportFilter::UsageError:
-                msg = i18n("Internal error"); break;
-
-            case KisImportExportFilter::OutOfMemory:
-                msg = i18n("Out of memory"); break;
-
-            case KisImportExportFilter::FilterEntryNull:
-                msg = i18n("Empty Filter Plugin"); break;
-
-            case KisImportExportFilter::NoDocumentCreated:
-                msg = i18n("Trying to load into the wrong kind of document"); break;
-
-            case KisImportExportFilter::DownloadFailed:
-                msg = i18n("Failed to download remote file"); break;
-
-            case KisImportExportFilter::UserCancelled:
-            case KisImportExportFilter::BadConversionGraph:
-                // intentionally we do not prompt the error message here
-                break;
-
-            default: msg = i18n("Unknown error"); break;
-            }
+            QString msg = KisImportExportFilter::conversionStatusString(status);
 
             if (d->autoErrorHandlingEnabled && !msg.isEmpty()) {
                 QString errorMsg(i18n("Could not open %2.\nReason: %1.\n%3", msg, prettyPathOrUrl(), errorMessage()));
                 QMessageBox::critical(0, i18nc("@title:window", "Krita"), errorMsg);
             }
-
             d->isLoading = false;
-            delete d->progressUpdater;
-            d->filterManager->setProgresUpdater(0);
-            d->progressUpdater = 0;
-            return false;
+            clearFileProgressUpdater();
+           return false;
         }
         d->isEmpty = false;
-        dbgUI << "importedFile" << importedFile << "status:" << static_cast<int>(status);
+        //qDebug() << "importedFile" << importedFile << "status:" << static_cast<int>(status);
     }
 
     QApplication::restoreOverrideCursor();
@@ -1349,15 +1272,16 @@ bool KisDocument::openFile()
         emit sigLoadingFinished();
     }
 
-    QPointer<KoUpdater> updater = d->progressUpdater->startSubtask(1, "clear undo stack");
-    updater->setProgress(0);
-    undoStack()->clear();
-    updater->setProgress(100);
+    if (!d->suppressProgress && d->progressUpdater) {
+        QPointer<KoUpdater> updater = d->progressUpdater->startSubtask(1, "clear undo stack");
+        updater->setProgress(0);
+        undoStack()->clear();
+        updater->setProgress(100);
 
-    delete d->progressUpdater;
-    d->filterManager->setProgresUpdater(0);
-    d->progressUpdater = 0;
-
+        clearFileProgressUpdater();
+    } else {
+        undoStack()->clear();
+    }
     d->isLoading = false;
 
     return ok;
@@ -1663,7 +1587,7 @@ void KisDocument::setModified(bool mod)
         updateEditingTime(false);
     }
 
-    if (isAutosaving())   // ignore setModified calls due to autosaving
+    if (d->isAutosaving)   // ignore setModified calls due to autosaving
         return;
 
     if ( !d->readwrite && d->modified ) {
@@ -1795,7 +1719,7 @@ bool KisDocument::completeLoading(KoStore* store)
 bool KisDocument::completeSaving(KoStore* store)
 {
     d->kraSaver->saveKeyframes(store, url().url(), isStoredExtern());
-    d->kraSaver->saveBinaryData(store, d->image, url().url(), isStoredExtern(), isAutosaving());
+    d->kraSaver->saveBinaryData(store, d->image, url().url(), isStoredExtern(), d->isAutosaving);
     bool retval = true;
     if (!d->kraSaver->errorMessages().isEmpty()) {
         setErrorMessage(d->kraSaver->errorMessages().join(".\n"));
@@ -1840,9 +1764,7 @@ bool KisDocument::loadXML(const KoXmlDocument& doc, KoStore *store)
 
     KoXmlElement root;
     KoXmlNode node;
-    KisImageWSP image;
-
-    init();
+    KisImageSP image;
 
     if (doc.doctype().name() != "DOC") {
         setErrorMessage(i18n("The format is not supported or the file is corrupted"));
@@ -1949,11 +1871,6 @@ void KisDocument::showLoadingErrorDialog()
     else if (errorMessage() != "USER_CANCELED") {
         QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not open %1\nReason: %2", localFilePath(), errorMessage()));
     }
-}
-
-bool KisDocument::isAutosaving() const
-{
-    return d->autosaving;
 }
 
 bool KisDocument::isLoading() const
@@ -2179,7 +2096,7 @@ bool KisDocument::closeUrl(bool promptToSave)
 }
 
 
-bool KisDocument::saveAs( const QUrl &kurl )
+bool KisDocument::saveAs(const QUrl &kurl)
 {
     if (!kurl.isValid())
     {
@@ -2215,23 +2132,12 @@ bool KisDocument::save()
 
     updateEditingTime(true);
 
-    DocumentProgressProxy *progressProxy = 0;
-    if (!d->document->progressProxy()) {
-        KisMainWindow *mainWindow = 0;
-        if (KisPart::instance()->mainwindowCount() > 0) {
-            mainWindow = KisPart::instance()->mainWindows()[0];
-        }
-        progressProxy = new DocumentProgressProxy(mainWindow);
-        d->document->setProgressProxy(progressProxy);
-    }
+    d->document->setFileProgressProxy();
     d->document->setUrl(url());
 
     bool ok = d->document->saveFile();
 
-    if (progressProxy) {
-        d->document->setProgressProxy(0);
-        delete progressProxy;
-    }
+    d->document->clearFileProgressProxy();
 
     if (ok) {
         return saveToUrl();
@@ -2337,8 +2243,6 @@ bool KisDocument::newImage(const QString& name,
 {
     Q_ASSERT(cs);
 
-    init();
-
     KisConfig cfg;
 
     KisImageSP image;
@@ -2360,7 +2264,7 @@ bool KisDocument::newImage(const QString& name,
     if (name != i18n("Unnamed") && !name.isEmpty()) {
         setUrl(QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) + '/' + name + ".kra"));
     }
-    documentInfo()->setAboutInfo("comments", description);
+    documentInfo()->setAboutInfo("abstract", description);
 
     layer = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, cs);
     Q_CHECK_PTR(layer);
@@ -2429,21 +2333,14 @@ vKisNodeSP KisDocument::activeNodes() const
     return nodes;
 }
 
-QList<KisPaintingAssistant*> KisDocument::assistants()
-{
-    QList<KisPaintingAssistant*> assistants;
-    Q_FOREACH (KisView *view, KisPart::instance()->views()) {
-        if (view && view->document() == this) {
-            KisPaintingAssistantsDecoration* assistantsDecoration = view->canvasBase()->paintingAssistantsDecoration();
-            assistants.append(assistantsDecoration->assistants());
-        }
-    }
-    return assistants;
-}
-
-QList<KisPaintingAssistant *> KisDocument::preLoadedAssistants()
+QList<KisPaintingAssistantSP> KisDocument::assistants() const
 {
     return d->assistants;
+}
+
+void KisDocument::setAssistants(const QList<KisPaintingAssistantSP> value)
+{
+    d->assistants = value;
 }
 
 void KisDocument::setPreActivatedNode(KisNodeSP activatedNode)
@@ -2458,8 +2355,53 @@ KisNodeSP KisDocument::preActivatedNode() const
 
 void KisDocument::prepareForImport()
 {
-    if (d->nserver == 0) {
-        init();
+    /* TODO: remove this function? I kept it because it might be useful for
+     * other kind of preparing, but currently it was checking on d->nserver
+     * being null and then calling init() if it was, but the document is always
+     * initialized in the constructor (and init() does other things too).
+     * Moreover, nserver cannot be nulled by some external call.*/
+}
+
+void KisDocument::setFileProgressUpdater(const QString &text)
+{
+    d->suppressProgress = d->filterManager->getBatchMode();
+
+    if (!d->suppressProgress) {
+        d->progressUpdater = new KoProgressUpdater(d->progressProxy, KoProgressUpdater::Unthreaded);
+        d->progressUpdater->start(100, text);
+        d->filterManager->setProgresUpdater(d->progressUpdater);
+
+        connect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
+        connect(KisPart::instance()->currentMainwindow(), SIGNAL(sigProgressCanceled()), this, SIGNAL(sigProgressCanceled()));
+    }
+}
+
+void KisDocument::clearFileProgressUpdater()
+{
+    if (!d->suppressProgress && d->progressUpdater) {
+        disconnect(KisPart::instance()->currentMainwindow(), SIGNAL(sigProgressCanceled()), this, SIGNAL(sigProgressCanceled()));
+        disconnect(this, SIGNAL(sigProgress(int)), KisPart::instance()->currentMainwindow(), SLOT(slotProgress(int)));
+        delete d->progressUpdater;
+        d->filterManager->setProgresUpdater(0);
+        d->progressUpdater = 0;
+    }
+}
+
+void KisDocument::setFileProgressProxy()
+{
+    if (!d->progressProxy && !d->filterManager->getBatchMode()) {
+        d->fileProgressProxy = progressProxy();
+    } else {
+        d->fileProgressProxy = 0;
+    }
+}
+
+void KisDocument::clearFileProgressProxy()
+{
+    if (d->fileProgressProxy) {
+        setProgressProxy(0);
+        delete d->fileProgressProxy;
+        d->fileProgressProxy = 0;
     }
 }
 
@@ -2469,9 +2411,9 @@ KisImageWSP KisDocument::image() const
 }
 
 
-void KisDocument::setCurrentImage(KisImageWSP image)
+void KisDocument::setCurrentImage(KisImageSP image)
 {
-    if (!image || !image.isValid()) return;
+    if (!image) return;
 
     if (d->image) {
         // Disconnect existing sig/slot connections
@@ -2504,3 +2446,7 @@ KisUndoStore* KisDocument::createUndoStore()
     return new KisDocumentUndoStore(this);
 }
 
+bool KisDocument::isAutosaving() const
+{
+    return d->isAutosaving;
+}

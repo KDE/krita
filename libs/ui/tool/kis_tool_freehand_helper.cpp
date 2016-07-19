@@ -35,6 +35,8 @@
 #include <brushengine/kis_paintop_utils.h>
 
 #include "kis_update_time_monitor.h"
+#include "kis_stabilized_events_sampler.h"
+#include "kis_config.h"
 
 
 #include <math.h>
@@ -75,8 +77,8 @@ struct KisToolFreehandHelper::Private
 
     // Stabilizer data
     QQueue<KisPaintInformation> stabilizerDeque;
-    KisPaintInformation stabilizerLastPaintInfo;
     QTimer stabilizerPollTimer;
+    KisStabilizedEventsSampler stabilizedSampler;
 
     int canvasRotation;
     bool canvasMirroredH;
@@ -140,10 +142,25 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
          * When LoD mode is active it may happen that the helper has
          * already started a stroke, but it painted noting, because
          * all the work is being calculated by the scaled-down LodN
-         * stroke. So we check it there is at least something has been
-         * painted with this distance information object.
+         * stroke. So at first we try to fetch the data from the lodN
+         * stroke ("buddy") and then check if there is at least
+         * something has been painted with this distance information
+         * object.
          */
-        if (m_d->painterInfos.first()->dragDistance->isStarted()) {
+        KisDistanceInformation *buddyDistance =
+            m_d->painterInfos.first()->buddyDragDistance();
+
+        if (buddyDistance) {
+            /**
+             * Tiny hack alert: here we fetch the distance information
+             * directly from the LodN stroke. Ideally, we should
+             * upscale its data, but here we just override it with our
+             * local copy of the coordinates.
+             */
+            distanceInfo = *buddyDistance;
+            distanceInfo.overrideLastValues(m_d->lastOutlinePos.pushThroughHistory(savedCursorPos), 0);
+
+        } else if (m_d->painterInfos.first()->dragDistance->isStarted()) {
             distanceInfo = *m_d->painterInfos.first()->dragDistance;
         }
     }
@@ -501,7 +518,7 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
     }
 
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::STABILIZER) {
-        m_d->stabilizerLastPaintInfo = info;
+        m_d->stabilizedSampler.addEvent(info);
     } else {
         m_d->previousPaintInformation = info;
     }
@@ -586,11 +603,13 @@ void KisToolFreehandHelper::stabilizerStart(KisPaintInformation firstPaintInfo)
     for (int i = sampleSize; i > 0; i--) {
         m_d->stabilizerDeque.enqueue(firstPaintInfo);
     }
-    m_d->stabilizerLastPaintInfo = firstPaintInfo;
 
-    // Poll and draw each millisecond
-    m_d->stabilizerPollTimer.setInterval(1);
+    // Poll and draw regularly
+    KisConfig cfg;
+    m_d->stabilizerPollTimer.setInterval(cfg.stabilizerSampleSize());
     m_d->stabilizerPollTimer.start();
+
+    m_d->stabilizedSampler.clear();
 }
 
 KisPaintInformation
@@ -631,41 +650,51 @@ KisToolFreehandHelper::Private::getStabilizedPaintInfo(const QQueue<KisPaintInfo
 
 void KisToolFreehandHelper::stabilizerPollAndPaint()
 {
-    KisPaintInformation newInfo =
-        m_d->getStabilizedPaintInfo(m_d->stabilizerDeque, m_d->stabilizerLastPaintInfo);
+    KisStabilizedEventsSampler::iterator it;
+    KisStabilizedEventsSampler::iterator end;
+    std::tie(it, end) = m_d->stabilizedSampler.range();
 
-    bool canPaint = true;
+    for (; it != end; ++it) {
+        KisPaintInformation sampledInfo = *it;
 
-    if (m_d->smoothingOptions->useDelayDistance()) {
-        const qreal R = m_d->smoothingOptions->delayDistance() /
-            m_d->resources->effectiveZoom();
+        bool canPaint = true;
 
-        QPointF diff = m_d->stabilizerLastPaintInfo.pos() - m_d->previousPaintInformation.pos();
-        qreal dx = sqrt(pow2(diff.x()) + pow2(diff.y()));
+        if (m_d->smoothingOptions->useDelayDistance()) {
+            const qreal R = m_d->smoothingOptions->delayDistance() /
+                    m_d->resources->effectiveZoom();
 
-        canPaint = dx > R;
-    }
+            QPointF diff = sampledInfo.pos() - m_d->previousPaintInformation.pos();
+            qreal dx = sqrt(pow2(diff.x()) + pow2(diff.y()));
 
-    if (canPaint) {
-        paintLine(m_d->previousPaintInformation, newInfo);
-        m_d->previousPaintInformation = newInfo;
+            canPaint = dx > R;
+        }
 
-        // Push the new entry through the queue
-        m_d->stabilizerDeque.dequeue();
-        m_d->stabilizerDeque.enqueue(m_d->stabilizerLastPaintInfo);
+        if (canPaint) {
+            KisPaintInformation newInfo =
+                    m_d->getStabilizedPaintInfo(m_d->stabilizerDeque, sampledInfo);
 
-        emit requestExplicitUpdateOutline();
+            paintLine(m_d->previousPaintInformation, newInfo);
+            m_d->previousPaintInformation = newInfo;
 
-    } else if (m_d->stabilizerDeque.head().pos() != m_d->previousPaintInformation.pos()) {
+            // Push the new entry through the queue
+            m_d->stabilizerDeque.dequeue();
+            m_d->stabilizerDeque.enqueue(sampledInfo);
 
-        QQueue<KisPaintInformation>::iterator it = m_d->stabilizerDeque.begin();
-        QQueue<KisPaintInformation>::iterator end = m_d->stabilizerDeque.end();
 
-        while (it != end) {
-            *it = m_d->previousPaintInformation;
-            ++it;
+            emit requestExplicitUpdateOutline();
+        } else if (m_d->stabilizerDeque.head().pos() != m_d->previousPaintInformation.pos()) {
+
+            QQueue<KisPaintInformation>::iterator it = m_d->stabilizerDeque.begin();
+            QQueue<KisPaintInformation>::iterator end = m_d->stabilizerDeque.end();
+
+            while (it != end) {
+                *it = m_d->previousPaintInformation;
+                ++it;
+            }
         }
     }
+
+    m_d->stabilizedSampler.clear();
 }
 
 void KisToolFreehandHelper::stabilizerEnd()

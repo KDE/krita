@@ -22,7 +22,7 @@
 #include <kpluginfactory.h>
 
 #include <QDebug>
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KisFilterChain.h>
 #include <KisImportExportManager.h>
@@ -49,25 +49,20 @@ KisImportExportFilter::ConversionStatus KisCSVImport::convert(const QByteArray&,
     if (to != "application/x-krita")
         return KisImportExportFilter::BadMimeType;
 
-    KisDocument * doc = m_chain->outputDocument();
+    KisDocument * doc = outputDocument();
 
     if (!doc)
         return KisImportExportFilter::NoDocumentCreated;
 
-    QString filename = m_chain->inputFile();
+    QString filename = inputFile();
 
     doc -> prepareForImport();
 
-    if (!filename.isEmpty()) {
+    if (!filename.isEmpty() && QFileInfo(filename).exists()) {
 
-        QUrl url = QUrl::fromLocalFile(filename);
+        CSVLoader ib(doc, getBatchMode());
 
-        if (url.isEmpty())
-            return KisImportExportFilter::FileNotFound;
-
-        CSVLoader ib(doc);
-
-        KisImageBuilder_Result result = ib.buildAnimation(url,filename);
+        KisImageBuilder_Result result = ib.buildAnimation(filename);
 
         switch (result) {
         case KisImageBuilder_RESULT_UNSUPPORTED:
@@ -84,6 +79,8 @@ KisImportExportFilter::ConversionStatus KisCSVImport::convert(const QByteArray&,
             return KisImportExportFilter::ParsingError;
         case KisImageBuilder_RESULT_FAILURE:
             return KisImportExportFilter::InternalError;
+        case KisImageBuilder_RESULT_CANCEL:
+            return KisImportExportFilter::ProgressCancelled;
         case KisImageBuilder_RESULT_OK:
             doc -> setCurrentImage( ib.image());
             return KisImportExportFilter::OK;

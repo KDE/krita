@@ -27,7 +27,8 @@
 #include <kactioncollection.h>
 #include <QAction>
 
-#include "canvas/kis_mirror_axis.h"
+#include "kis_canvas2.h"
+#include "kis_mirror_axis.h"
 
 KisMirrorManager::KisMirrorManager(KisViewManager* view) : QObject(view)
     , m_imageView(0)
@@ -81,7 +82,7 @@ void KisMirrorManager::updateAction()
 KisMirrorAxis* KisMirrorManager::decoration()
 {
     if (m_imageView && m_imageView->canvasBase()) {
-        return dynamic_cast<KisMirrorAxis*>(m_imageView->canvasBase()->decoration("mirror_axis"));
+        return dynamic_cast<KisMirrorAxis*>(m_imageView->canvasBase()->decoration("mirror_axis").data());
     }
     return 0;
 }

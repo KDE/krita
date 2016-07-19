@@ -17,7 +17,7 @@ add_library(kritahairypaintop MODULE ${kritahairypaintop_SOURCES})
 
 target_link_libraries(kritahairypaintop kritalibpaintop)
 
-install(TARGETS kritahairypaintop  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritahairypaintop  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( FILES
     krita-sumi.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
 

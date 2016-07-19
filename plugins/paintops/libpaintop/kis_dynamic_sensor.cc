@@ -85,8 +85,11 @@ KisDynamicSensorSP KisDynamicSensor::id2Sensor(const KoID& id)
     else if (id.id() == TimeId.id()) {
         return new KisDynamicSensorTime();
     }
-    else if (id.id() == FuzzyId.id()) {
-        return new KisDynamicSensorFuzzy();
+    else if (id.id() == FuzzyPerDabId.id()) {
+        return new KisDynamicSensorFuzzy(false);
+    }
+    else if (id.id() == FuzzyPerStrokeId.id()) {
+        return new KisDynamicSensorFuzzy(true);
     }
     else if (id.id() == FadeId.id()) {
         return new KisDynamicSensorFade();
@@ -136,8 +139,11 @@ DynamicSensorType KisDynamicSensor::id2Type(const KoID &id)
     else if (id.id() == TimeId.id()) {
         return TIME;
     }
-    else if (id.id() == FuzzyId.id()) {
-        return FUZZY;
+    else if (id.id() == FuzzyPerDabId.id()) {
+        return FUZZY_PER_DAB;
+    }
+    else if (id.id() == FuzzyPerStrokeId.id()) {
+        return FUZZY_PER_STROKE;
     }
     else if (id.id() == FadeId.id()) {
         return FADE;
@@ -154,8 +160,10 @@ DynamicSensorType KisDynamicSensor::id2Type(const KoID &id)
 KisDynamicSensorSP KisDynamicSensor::type2Sensor(DynamicSensorType sensorType)
 {
     switch (sensorType) {
-    case FUZZY:
-        return new KisDynamicSensorFuzzy();
+    case FUZZY_PER_DAB:
+        return new KisDynamicSensorFuzzy(false);
+    case FUZZY_PER_STROKE:
+        return new KisDynamicSensorFuzzy(true);
     case SPEED:
         return new KisDynamicSensorSpeed();
     case FADE:
@@ -192,7 +200,8 @@ KisDynamicSensorSP KisDynamicSensor::type2Sensor(DynamicSensorType sensorType)
 QString KisDynamicSensor::minimumLabel(DynamicSensorType sensorType)
 {
     switch (sensorType) {
-    case FUZZY:
+    case FUZZY_PER_DAB:
+    case FUZZY_PER_STROKE:
         return QString();
     case FADE:
         return i18n("0");
@@ -229,7 +238,8 @@ QString KisDynamicSensor::minimumLabel(DynamicSensorType sensorType)
 QString KisDynamicSensor::maximumLabel(DynamicSensorType sensorType, int max)
 {
     switch (sensorType) {
-    case FUZZY:
+    case FUZZY_PER_DAB:
+    case FUZZY_PER_STROKE:
         return QString();
     case FADE:
         if (max < 0)
@@ -306,7 +316,8 @@ QList<KoID> KisDynamicSensor::sensorsIds()
         << RotationId
         << DistanceId
         << TimeId
-        << FuzzyId
+        << FuzzyPerDabId
+        << FuzzyPerStrokeId
         << FadeId
         << PerspectiveId
         << TangentialPressureId;
@@ -329,7 +340,8 @@ QList<DynamicSensorType> KisDynamicSensor::sensorsTypes()
             << ROTATION
             << DISTANCE
             << TIME
-            << FUZZY
+            << FUZZY_PER_DAB
+            << FUZZY_PER_STROKE
             << FADE
             << PERSPECTIVE
             << TANGENTIAL_PRESSURE;
@@ -339,8 +351,10 @@ QList<DynamicSensorType> KisDynamicSensor::sensorsTypes()
 QString KisDynamicSensor::id(DynamicSensorType sensorType)
 {
     switch (sensorType) {
-    case FUZZY:
+    case FUZZY_PER_DAB:
         return "fuzzy";
+    case FUZZY_PER_STROKE:
+        return "fuzzystroke";
     case FADE:
         return "fade";
     case DISTANCE:
@@ -402,11 +416,15 @@ void KisDynamicSensor::fromXML(const QDomElement& e)
 
 qreal KisDynamicSensor::parameter(const KisPaintInformation& info)
 {
-    qreal val = value(info);
+    const qreal val = value(info);
     if (m_customCurve) {
-        int offset = qRound(256.0 * qAbs(val));
+        qreal scaledVal = isAdditive() ? additiveToScaling(val) : val;
+
+        int offset = qRound(256.0 * qAbs(scaledVal));
         qreal newValue =  m_curve.floatTransfer(257)[qBound(0, offset, 256)];
-        return KisAlgebra2D::copysign(newValue, val);
+        scaledVal = KisAlgebra2D::copysign(newValue, scaledVal);
+
+        return isAdditive() ? scalingToAdditive(scaledVal) : scaledVal;
     }
     else {
         return val;
@@ -440,6 +458,11 @@ bool KisDynamicSensor::dependsOnCanvasRotation() const
 }
 
 bool KisDynamicSensor::isAdditive() const
+{
+    return false;
+}
+
+bool KisDynamicSensor::isAbsoluteRotation() const
 {
     return false;
 }

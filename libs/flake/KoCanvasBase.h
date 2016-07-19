@@ -27,7 +27,6 @@
 
 #include "kritaflake_export.h"
 
-class QGraphicsObject;
 class KUndo2Command;
 
 class KoUnit;
@@ -71,7 +70,7 @@ public:
     /**
      * @return true if opengl can be used directly on the canvas
      */
-    virtual bool canvasIsOpenGL() { return false; }
+    virtual bool canvasIsOpenGL() const { return false; }
 
     /**
      * retrieve the grid size setting.
@@ -149,16 +148,6 @@ public:
      * Return the widget that will be added to the scrollArea.
      */
     virtual const QWidget *canvasWidget() const = 0;
-
-    /**
-     * Return the widget that will be added to the scrollArea.
-     */
-    virtual QGraphicsObject *canvasItem() { return 0; }
-
-    /**
-     * Return the widget that will be added to the scrollArea.
-     */
-    virtual const QGraphicsObject *canvasItem() const{ return 0; }
 
     /**
      * Return the unit of the current document for initialization of the widgets created

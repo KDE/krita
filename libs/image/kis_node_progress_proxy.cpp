@@ -51,7 +51,8 @@ struct Q_DECL_HIDDEN KisNodeProgressProxy::Private {
     }
 };
 
-KisNodeProgressProxy::KisNodeProgressProxy(KisNode* _node) : d(new Private)
+KisNodeProgressProxy::KisNodeProgressProxy(KisNode* _node)
+    : d(new Private)
 {
     d->node = _node;
 }
@@ -61,10 +62,11 @@ KisNodeProgressProxy::~KisNodeProgressProxy()
     delete d;
 }
 
-const KisNodeSP KisNodeProgressProxy::node() const
+void KisNodeProgressProxy::prepareDestroying()
 {
-    return d->node;
+    d->node = 0;
 }
+
 
 int KisNodeProgressProxy::maximum() const
 {
@@ -78,7 +80,6 @@ int KisNodeProgressProxy::percentage() const
 
 void KisNodeProgressProxy::setValue(int _value)
 {
-    //QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     d->value = _value;
     if (d->node && d->computePercentage()) {
         emit(percentageChanged(d->percentage, d->node));

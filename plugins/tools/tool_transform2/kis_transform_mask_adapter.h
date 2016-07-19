@@ -45,6 +45,9 @@ public:
 
     void translate(const QPointF &offset);
 
+    QRect nonAffineChangeRect(const QRect &rc);
+    QRect nonAffineNeedRect(const QRect &rc, const QRect &srcBounds);
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

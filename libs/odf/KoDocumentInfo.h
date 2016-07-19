@@ -144,7 +144,7 @@ private:
 
     /**
      * Set information about the author
-     * This sets what is actualy saved to file. The public method setAuthorInfo() can be used to set
+     * This sets what is actually saved to file. The public method setAuthorInfo() can be used to set
      * values that overide what is fetched from the author profile. During saveParameters() author
      * profile and any overrides is combined resulting in calls to this method.
      * @param info the kind of information to set

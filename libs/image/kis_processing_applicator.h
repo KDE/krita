@@ -46,7 +46,8 @@ public:
                             ProcessingFlags flags = NONE,
                             KisImageSignalVector emitSignals = KisImageSignalVector(),
                             const KUndo2MagicString &name = KUndo2MagicString(),
-                            KUndo2CommandExtraData *extraData = 0);
+                            KUndo2CommandExtraData *extraData = 0,
+                            int macroId = -1);
 
     ~KisProcessingApplicator();
 

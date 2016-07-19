@@ -9,6 +9,9 @@ endif ()
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/qtlockedfile
     ${EXIV2_INCLUDE_DIR}
+)
+
+include_directories(SYSTEM
     ${EIGEN3_INCLUDE_DIR}
     ${OCIO_INCLUDE_DIR}
     ${Boost_INCLUDE_DIRS}
@@ -84,6 +87,7 @@ set(kritaui_LIB_SRCS
     kis_bookmarked_configurations_model.cc
     kis_bookmarked_filter_configurations_model.cc
     kis_canvas_resource_provider.cpp
+    kis_derived_resources.cpp
     kis_categories_mapper.cpp
     kis_categorized_list_model.cpp
     kis_categorized_item_delegate.cpp
@@ -94,6 +98,7 @@ set(kritaui_LIB_SRCS
     kis_composite_ops_model.cc
     kis_paint_ops_model.cpp
     kis_cursor.cc
+    kis_cursor_cache.cpp
     kis_custom_pattern.cc
     kis_file_layer.cpp
     kis_safe_document_loader.cpp
@@ -156,7 +161,6 @@ set(kritaui_LIB_SRCS
     opengl/kis_opengl_canvas_debugger.cpp
     opengl/kis_opengl_image_textures.cpp
     opengl/kis_texture_tile.cpp
-    opengl/kis_texture_tile_update_info.cpp
     kis_fps_decoration.cpp
     ora/kis_open_raster_stack_load_visitor.cpp
     ora/kis_open_raster_stack_save_visitor.cpp
@@ -180,6 +184,7 @@ set(kritaui_LIB_SRCS
     tool/kis_tool_freehand.cc
     tool/kis_speed_smoother.cpp
     tool/kis_painting_information_builder.cpp
+    tool/kis_stabilized_events_sampler.cpp
     tool/kis_tool_freehand_helper.cpp
     tool/kis_tool_multihand_helper.cpp
     tool/kis_figure_painting_tool_helper.cpp
@@ -195,6 +200,7 @@ set(kritaui_LIB_SRCS
     tool/strokes/freehand_stroke.cpp
     tool/strokes/kis_painter_based_stroke_strategy.cpp
     tool/strokes/kis_filter_stroke_strategy.cpp
+    tool/strokes/kis_color_picker_stroke_strategy.cpp
     widgets/kis_cmb_composite.cc
     widgets/kis_cmb_contour.cpp
     widgets/kis_cmb_gradient.cpp
@@ -230,7 +236,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_scratch_pad.cpp
     widgets/kis_scratch_pad_event_filter.cpp
     widgets/kis_preset_selector_strip.cpp
-    widgets/kis_tree_view_popup.cc
     widgets/kis_slider_spin_box.cpp
     widgets/kis_size_group.cpp
     widgets/kis_size_group_p.cpp
@@ -302,7 +307,6 @@ set(kritaui_LIB_SRCS
     KisAutoSaveRecoveryDialog.cpp
     KisDetailsPane.cpp
     KisDocument.cpp
-    KisDocumentEntry.cpp
     KisNodeDelegate.cpp
     kis_node_view_visibility_delegate.cpp
     KisNodeToolTip.cpp
@@ -316,7 +320,6 @@ set(kritaui_LIB_SRCS
     KisFilterEntry.cpp
     KisFilterGraph.cpp
     KisImportExportManager.cpp
-    KisImportExportManager_p.cpp
     KisFilterVertex.cpp
     KisMainWindow.cpp
     KisOpenPane.cpp
@@ -349,11 +352,12 @@ set(kritaui_LIB_SRCS
     KisApplicationArguments.cpp
 
     KisNetworkAccessManager.cpp
-    KisWelcomeScreen.cpp
     KisMultiFeedRSSModel.cpp
+    KisRemoteFileFetcher.cpp
 
     KisPaletteModel.cpp
     KisColorsetChooser.cpp
+    KisSaveGroupVisitor.cpp
 )
 
 if(WIN32)
@@ -369,7 +373,6 @@ if(WIN32)
         )
       include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 endif()
-if (HAVE_OPENGL)
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
         kis_animation_frame_cache.cpp
@@ -378,7 +381,6 @@ if (HAVE_OPENGL)
         kis_animation_exporter.cpp
         kis_animation_importer.cpp
     )
-endif()
 
 if(UNIX)
     set(kritaui_LIB_SRCS
@@ -397,8 +399,6 @@ if(UNIX)
             )
     endif()
 endif()
-
-kde_enable_exceptions()
 
 if(WIN32)
     #ki18n_wrap_ui(
@@ -501,15 +501,11 @@ if(APPLE)
 endif ()
 
 
-if(HAVE_OPENEXR)
-    target_link_libraries(kritaui ${OPENEXR_LIBRARIES})
-endif()
+target_link_libraries(kritaui ${OPENEXR_LIBRARIES})
 
-if(HAVE_OPENGL)
-    # Add VSync disable workaround
-    if(NOT WIN32 AND NOT APPLE)
-      target_link_libraries(kritaui ${CMAKE_DL_LIBS} Qt5::X11Extras)
-    endif()
+# Add VSync disable workaround
+if(NOT WIN32 AND NOT APPLE)
+    target_link_libraries(kritaui ${CMAKE_DL_LIBS} Qt5::X11Extras)
 endif()
 
 if(X11_FOUND)
@@ -529,7 +525,7 @@ target_include_directories(kritaui
 )
 
 set_target_properties(kritaui
-    PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    PROPERTIES VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 install(TARGETS kritaui  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

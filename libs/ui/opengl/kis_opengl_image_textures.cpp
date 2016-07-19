@@ -18,7 +18,6 @@
 
 #include "opengl/kis_opengl_image_textures.h"
 
-#ifdef HAVE_OPENGL
 #include <QOpenGLFunctions>
 #include <QOpenGLContext>
 
@@ -52,6 +51,9 @@ KisOpenGLImageTextures::ImageTexturesMap KisOpenGLImageTextures::imageTexturesMa
 KisOpenGLImageTextures::KisOpenGLImageTextures()
     : m_image(0)
     , m_monitorProfile(0)
+    , m_proofingConfig(0)
+    , m_proofingTransform(0)
+    , m_createNewProofingTransform(true)
     , m_tilesDestinationColorSpace(0)
     , m_internalColorManagementActive(true)
     , m_checkerTexture(0)
@@ -66,7 +68,6 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
     m_conversionFlags = KoColorConversionTransformation::HighQuality;
     if (cfg.useBlackPointCompensation()) m_conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
     if (!cfg.allowLCMSOptimization()) m_conversionFlags |= KoColorConversionTransformation::NoOptimization;
-
     m_useOcio = cfg.useOcio();
 }
 
@@ -78,6 +79,9 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
     , m_monitorProfile(monitorProfile)
     , m_renderingIntent(renderingIntent)
     , m_conversionFlags(conversionFlags)
+    , m_proofingConfig(0)
+    , m_proofingTransform(0)
+    , m_createNewProofingTransform(true)
     , m_tilesDestinationColorSpace(0)
     , m_internalColorManagementActive(true)
     , m_checkerTexture(0)
@@ -89,7 +93,8 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
     Q_ASSERT(renderingIntent < 4);
 }
 
-void KisOpenGLImageTextures::initGL(QOpenGLFunctions *f) {
+void KisOpenGLImageTextures::initGL(QOpenGLFunctions *f)
+{
     if (f) {
         m_glFuncs = f;
     } else {
@@ -97,6 +102,12 @@ void KisOpenGLImageTextures::initGL(QOpenGLFunctions *f) {
     }
 
     getTextureSize(&m_texturesInfo);
+
+    // we use local static object for creating pools shared among
+    // different images
+    static KisTextureTileInfoPoolRegistry s_poolRegistry;
+    m_infoChunksPool = s_poolRegistry.getPool(m_texturesInfo.width, m_texturesInfo.height);
+
     m_glFuncs->glGenTextures(1, &m_checkerTexture);
     createImageTextureTiles();
 
@@ -143,7 +154,8 @@ KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP im
                                                                   KoColorConversionTransformation::Intent renderingIntent,
                                                                   KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
-    if (imageCanShareTextures()) {
+    // Disabled until we figure out why we're deleting the shared textures on closing the second view on a single image
+    if (false && imageCanShareTextures()) {
         ImageTexturesMap::iterator it = imageTexturesMap.find(image);
 
         if (it != imageTexturesMap.end()) {
@@ -174,10 +186,15 @@ QRect KisOpenGLImageTextures::calculateTileRect(int col, int row) const
 
 void KisOpenGLImageTextures::createImageTextureTiles()
 {
-    KisConfig cfg;
 
     destroyImageTextureTiles();
     updateTextureFormat();
+
+    if (!m_tilesDestinationColorSpace) {
+        qDebug() << "No destination colorspace!!!!";
+        return;
+    }
+
 
     m_storedImageBounds = m_image->bounds();
     const int lastCol = xToCol(m_image->width());
@@ -190,7 +207,7 @@ void KisOpenGLImageTextures::createImageTextureTiles()
     QByteArray emptyTileData((m_texturesInfo.width) * (m_texturesInfo.height) * pixelSize, 0);
 
     KisConfig config;
-    KisTextureTile::FilterMode mode = (KisTextureTile::FilterMode)config.openGLFilteringMode();
+    KisOpenGL::FilterMode mode = (KisOpenGL::FilterMode)config.openGLFilteringMode();
 
     QOpenGLContext *ctx = QOpenGLContext::currentContext();
     if (ctx) {
@@ -205,12 +222,12 @@ void KisOpenGLImageTextures::createImageTextureTiles()
                 QRect tileRect = calculateTileRect(col, row);
 
                 KisTextureTile *tile = new KisTextureTile(tileRect,
-                                                        &m_texturesInfo,
-                                                        emptyTileData,
-                                                        mode,
-                                                        cfg.useOpenGLTextureBuffer(),
-                                                        cfg.numMipmapLevels(),
-                                                        f);
+                                                          &m_texturesInfo,
+                                                          emptyTileData,
+                                                          mode,
+                                                          config.useOpenGLTextureBuffer(),
+                                                          config.numMipmapLevels(),
+                                                          f);
                 m_textureTiles.append(tile);
             }
         }
@@ -222,7 +239,7 @@ void KisOpenGLImageTextures::createImageTextureTiles()
 
 void KisOpenGLImageTextures::destroyImageTextureTiles()
 {
-    if(m_textureTiles.isEmpty()) return;
+    if (m_textureTiles.isEmpty()) return;
 
     Q_FOREACH (KisTextureTile *tile, m_textureTiles) {
         delete tile;
@@ -305,21 +322,33 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect,
             const QRect tileTextureRect = stretchRect(tileRect, m_texturesInfo.border);
 
             QRect alignedTileTextureRect = levelOfDetail ?
-                KisLodTransform::alignedRect(tileTextureRect, levelOfDetail) :
-                tileTextureRect;
+                        KisLodTransform::alignedRect(tileTextureRect, levelOfDetail) :
+                        tileTextureRect;
 
             KisTextureTileUpdateInfoSP tileInfo(
-                new KisTextureTileUpdateInfo(col, row,
-                                             alignedTileTextureRect,
-                                             alignedUpdateRect,
-                                             alignedBounds,
-                                             levelOfDetail));
+                        new KisTextureTileUpdateInfo(col, row,
+                                                     alignedTileTextureRect,
+                                                     alignedUpdateRect,
+                                                     alignedBounds,
+                                                     levelOfDetail,
+                                                     m_infoChunksPool));
             // Don't update empty tiles
             if (tileInfo->valid()) {
                 tileInfo->retrieveData(m_image, channelFlags, m_onlyOneChannelSelected, m_selectedChannelIndex);
 
+                //create transform
+                if (m_createNewProofingTransform) {
+                    const KoColorSpace *proofingSpace = KoColorSpaceRegistry::instance()->colorSpace(m_proofingConfig->proofingModel,m_proofingConfig->proofingDepth,m_proofingConfig->proofingProfile);
+                    m_proofingTransform = tileInfo->generateProofingTransform(dstCS, proofingSpace, m_renderingIntent, m_proofingConfig->intent, m_proofingConfig->conversionFlags, m_proofingConfig->warningColor, m_proofingConfig->adaptationState);
+                    m_createNewProofingTransform = false;
+                }
+
                 if (convertColorSpace) {
-                    tileInfo->convertTo(dstCS, m_renderingIntent, m_conversionFlags);
+                    if (m_proofingConfig && m_proofingTransform && m_proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::SoftProofing)) {
+                        tileInfo->proofTo(dstCS, m_proofingConfig->conversionFlags, m_proofingTransform);
+                    } else {
+                        tileInfo->convertTo(dstCS, m_renderingIntent, m_conversionFlags);
+                    }
                 }
 
                 info->tileList.append(tileInfo);
@@ -331,6 +360,7 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect,
     }
 
     info->assignDirtyImageRect(rect);
+    info->assignLevelOfDetail(levelOfDetail);
     return info;
 }
 
@@ -374,7 +404,7 @@ void KisOpenGLImageTextures::generateCheckerTexture(const QImage &checkImage)
             img = checkImage.scaled(BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE);
         }
         f->glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE,
-                    0, GL_BGRA, GL_UNSIGNED_BYTE, img.constBits());
+                        0, GL_BGRA, GL_UNSIGNED_BYTE, img.constBits());
     }
     else {
         dbgUI << "OpenGL: Tried to generate checker texture before OpenGL was initialized.";
@@ -442,6 +472,12 @@ void KisOpenGLImageTextures::setChannelFlags(const QBitArray &channelFlags)
     m_onlyOneChannelSelected = (selectedChannels == 1);
 }
 
+void KisOpenGLImageTextures::setProofingConfig(KisProofingConfiguration *proofingConfig)
+{
+    m_proofingConfig = proofingConfig;
+    m_createNewProofingTransform = true;
+}
+
 void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)
 {
     KisConfig cfg;
@@ -474,7 +510,6 @@ bool KisOpenGLImageTextures::internalColorManagementActive() const
 bool KisOpenGLImageTextures::setInternalColorManagementActive(bool value)
 {
     bool needsFinalRegeneration = m_internalColorManagementActive != value;
-
 
     if (needsFinalRegeneration) {
         m_internalColorManagementActive = value;
@@ -565,7 +600,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
     }
 
     if (!m_internalColorManagementActive &&
-        colorModelId != destinationColorModelId) {
+            colorModelId != destinationColorModelId) {
 
         KisConfig cfg;
         KisConfig::OcioColorManagementMode cm = cfg.ocioColorManagementMode();
@@ -590,9 +625,9 @@ void KisOpenGLImageTextures::updateTextureFormat()
     }
 
     const KoColorProfile *profile =
-        m_internalColorManagementActive ||
-        colorModelId != destinationColorModelId ?
-        m_monitorProfile : m_image->colorSpace()->profile();
+            m_internalColorManagementActive ||
+            colorModelId != destinationColorModelId ?
+                m_monitorProfile : m_image->colorSpace()->profile();
 
     /**
      * TODO: add an optimization so that the tile->convertTo() method
@@ -600,11 +635,8 @@ void KisOpenGLImageTextures::updateTextureFormat()
      */
 
     m_tilesDestinationColorSpace =
-        KoColorSpaceRegistry::instance()->colorSpace(destinationColorModelId.id(),
-                                                     destinationColorDepthId.id(),
-                                                     profile);
+            KoColorSpaceRegistry::instance()->colorSpace(destinationColorModelId.id(),
+                                                         destinationColorDepthId.id(),
+                                                         profile);
 }
-
-
-#endif // HAVE_OPENGL
 

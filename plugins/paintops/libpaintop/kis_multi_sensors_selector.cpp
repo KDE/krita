@@ -63,6 +63,10 @@ void KisMultiSensorsSelector::setCurveOption(KisCurveOption *curveOption)
 void KisMultiSensorsSelector::setCurrent(KisDynamicSensorSP _sensor)
 {
     d->form.sensorsList->setCurrentIndex(d->model->sensorIndex(_sensor)); // make sure the first element is selected
+
+    // HACK ALERT: make sure the signal is delivered to us. Without this line it isn't.
+    sensorActivated(d->model->sensorIndex(_sensor));
+
     KisDynamicSensorSP sensor = currentHighlighted();
     if (!sensor) {
         sensor = d->model->getSensor(d->model->index(0, 0));

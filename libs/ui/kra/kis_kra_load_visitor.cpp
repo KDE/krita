@@ -179,6 +179,10 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
 
 bool KisKraLoadVisitor::visit(KisGroupLayer *layer)
 {
+    if (!(*layer->colorSpace() == *m_image->colorSpace())) {
+        layer->resetCache(m_image->colorSpace());
+    }
+
     if (!loadMetaData(layer)) {
         return false;
     }

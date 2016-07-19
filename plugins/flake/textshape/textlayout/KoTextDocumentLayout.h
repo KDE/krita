@@ -221,7 +221,7 @@ public:
 
     /**
      * Remove the root-areas \p rootArea from the list of \a rootAreas() .
-     * \param rootArea root-area to remove. If NULL then all root-areas are removed.
+     * \param rootArea root-area to remove. If 0 then all root-areas are removed.
      */
     void removeRootArea(KoTextLayoutRootArea *rootArea = 0);
 

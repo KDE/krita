@@ -97,7 +97,7 @@ const auto defaultActionTypes = KisShortcutsEditor::WidgetAction \
                                 | KisShortcutsEditor::WindowAction  \
                                 | KisShortcutsEditor::ApplicationAction;
 
-class KRITAWIDGETUTILS_EXPORT KisShortcutsDialog : public QDialog
+class KRITAWIDGETUTILS_EXPORT KisShortcutsDialog : public QWidget
 {
     Q_OBJECT
 
@@ -105,9 +105,10 @@ public:
     /**
      * Constructs a KisShortcutsDialog. Mostly UI boilerplate.
      *
-     * @p parent is parent widget. Set @p allowLetterShortcuts to false if
-     * unmodified alphanumeric keys ('A', '1', etc.) are not permissible
-     * shortcuts.
+     * @param allowLetterShortcuts set to KisShortcutsEditor::LetterShortcutsDisallowed if unmodified alphanumeric
+     *  keys ('A', '1', etc.) are not permissible shortcuts.
+     *
+     * @param parent the parent widget to attach to
      *
      * There is some legacy support for global (i.e. desktop-wide) shortucts
      * that should probably be removed.
@@ -132,19 +133,14 @@ public:
      */
     QList<KActionCollection *> actionCollections() const;
 
-    /**
-     * Run the dialog. If @p saveSettings is true, save any modifications to the
-     * actioncollections with a call to writeSettings().
-     *
-     *
-     * FIXME should there be a setSaveSettings method? When is this f'n called?
-     */
-    bool configure(bool saveSettings = true);
-
     /** @see QWidget::sizeHint() */
     QSize sizeHint() const Q_DECL_OVERRIDE;
 
 
+    /**
+     *  Called when the "OK" button in the main configuration page is pressed.
+     */
+    void save();
 
     /**
      * Import shortcut scheme file from @p path
@@ -166,34 +162,9 @@ public:
      */
     void saveCustomShortcuts(const QString &path) const;
 
-    /**
-     * Pops up a modal (blocking) dialog for configuring key settings. The new
-     * shortcut settings will become active if the user presses OK.
-     *
-     * @param collection the KActionCollection to configure
-     * @param allowLetterShortcuts set to KisShortcutsEditor::LetterShortcutsDisallowed if unmodified alphanumeric
-     *  keys ('A', '1', etc.) are not permissible shortcuts.
-     * @param parent the parent widget to attach to
-     * @param bSaveSettings if true, the settings will also be saved back
-     * by calling writeSettings() on the action collections that were added.
-     *
-     * @return Accept if the dialog was closed with OK, Reject otherwise.
-     */
-    static int configure(KActionCollection *collection,
-                         KisShortcutsEditor::LetterShortcuts allowLetterShortcuts \
-                         = KisShortcutsEditor::LetterShortcutsAllowed,
-                         QWidget *parent = 0,
-                         bool bSaveSettings = true);
-
 public Q_SLOTS:
-    ///@reimp
-    void accept() Q_DECL_OVERRIDE;
 
     void allDefault();
-
-Q_SIGNALS:
-    ///emitted after OK is clicked and settings are saved
-    void saved();
 
 private:
     Q_PRIVATE_SLOT(d, void changeShortcutScheme(const QString &))

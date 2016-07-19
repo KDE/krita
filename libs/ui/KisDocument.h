@@ -149,23 +149,14 @@ public:
      * delivers.
      * This comes from the X-KDE-NativeMimeType key in the .desktop file.
      */
-    QByteArray nativeFormatMimeType() const { return KIS_MIME_TYPE; }
-
-    /**
-     * Returns the OASIS OpenDocument mimetype of the document, if supported
-     * This comes from the X-KDE-NativeOasisMimeType key in the
-     * desktop file
-     *
-     * @return the oasis mimetype or, if it hasn't one, the nativeformatmimetype.
-     */
-    virtual QByteArray nativeOasisMimeType() const  { return ""; }
+    static QByteArray nativeFormatMimeType() { return KIS_MIME_TYPE; }
 
     /// Checks whether a given mimetype can be handled natively.
     bool isNativeFormat(const QByteArray& mimetype) const;
 
     /// Returns a list of the mimetypes considered "native", i.e. which can
     /// be saved by KisDocument without a filter, in *addition* to the main one
-    QStringList extraNativeMimeTypes() const { return QStringList() << KIS_MIME_TYPE; }
+    static QStringList extraNativeMimeTypes() { return QStringList() << KIS_MIME_TYPE; }
 
 
     /// Enum values used by specialOutputFlag - note that it's a bitfield for supportedSpecialFormats
@@ -226,14 +217,14 @@ public:
 
 
     /**
-     * @return true if saving/exporting should inhibit the option dialog
+     * @return true if file operations should inhibit the option dialog
      */
-    bool saveInBatchMode() const;
+    bool fileBatchMode() const;
 
     /**
-     * @param batchMode if true, do not show the option dialog when saving or exporting.
+     * @param batchMode if true, do not show the option dialog for file operations.
      */
-    void setSaveInBatchMode(const bool batchMode);
+    void setFileBatchMode(const bool batchMode);
 
     /**
      * Sets the error message to be shown to the user (use i18n()!)
@@ -372,19 +363,6 @@ public:
      * @param delay in seconds, 0 to disable
      */
     void setAutoSave(int delay);
-
-    /**
-     * Checks whether the document is currently in the process of autosaving
-     */
-    bool isAutosaving() const;
-
-    /**
-     * Set whether the next openUrl call should check for an auto-saved file
-     * and offer to open it. This is usually true, but can be turned off
-     * (e.g. for the preview module). This only checks for names auto-saved
-     * files, unnamed auto-saved files are only checked on KisApplication startup.
-     */
-    void setCheckAutoSaveFile(bool b);
 
     /**
      * Set whether the next openUrl call should show error message boxes in case
@@ -556,6 +534,7 @@ public:
      */
     KUndo2Stack *undoStack();
 
+
 public Q_SLOTS:
 
     /**
@@ -592,6 +571,12 @@ Q_SIGNALS:
     void sigProgress(int value);
 
     /**
+     * Progress cancel button pressed
+     * This is emitted by KisDocument
+     */
+    void sigProgressCanceled();
+
+    /**
      * Emitted e.g. at the beginning of a save operation
      * This is emitted by KisDocument and used by KisView to display a statusbar message
      */
@@ -619,6 +604,7 @@ Q_SIGNALS:
 private:
 
     friend class KisPart;
+    friend class SafeSavingLocker;
 
     /**
      * Generate a name for the document.
@@ -626,7 +612,6 @@ private:
     QString newObjectName();
 
     QString autoSaveFile(const QString & path) const;
-    void setDisregardAutosaveFailure(bool disregardFailure);
 
     /**
      *  Loads a document
@@ -686,6 +671,12 @@ private:
      *  otherwise, File --> Export will not work properly.
      */
     bool isExporting() const;
+
+    /**
+     * Legacy method from KoDocumentBase. Don't use it anywhere
+     * outside KisDocument!
+     */
+    bool isAutosaving() const;
 
 public:
 
@@ -755,9 +746,29 @@ public:
     void prepareForImport();
 
     /**
+     * Adds progressproxy for file operations
+     */
+    void setFileProgressProxy();
+
+    /**
+     * Clears progressproxy for file operations
+     */
+    void clearFileProgressProxy();
+
+    /**
+     * Adds progressupdater for file operations
+     */
+    void setFileProgressUpdater(const QString &text);
+
+    /**
+     * Clears progressupdater for file operations
+     */
+    void clearFileProgressUpdater();
+
+    /**
      * Set the current image to the specified image and turn undo on.
      */
-    void setCurrentImage(KisImageWSP image);
+    void setCurrentImage(KisImageSP image);
 
     KisUndoStore* createUndoStore();
 
@@ -784,24 +795,14 @@ public:
      */
     KisNodeSP preActivatedNode() const;
 
-    /**
-      *@return a list of all the assistants in all current views
-      */
-    QList<KisPaintingAssistant *> assistants();
-
-    /**
-     * @return a list of assistants loaded from a document
-     */
-    QList<KisPaintingAssistant *> preLoadedAssistants();
-
+    QList<KisPaintingAssistantSP> assistants() const;
+    void setAssistants(const QList<KisPaintingAssistantSP> value);
 
 private:
 
     void init();
 
     bool saveToStream(QIODevice *dev);
-
-    QString checkImageMimeTypes(const QString &mimeType, const QUrl &url) const;
 
     bool loadNativeFormatFromStoreInternal(KoStore *store);
 

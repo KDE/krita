@@ -35,6 +35,16 @@ public:
     {
     }
 
+    KisAntialiasingFadeMaker1D(const KisAntialiasingFadeMaker1D &rhs, const BaseFade &baseFade)
+        : m_radius(rhs.m_radius),
+          m_fadeStartValue(rhs.m_fadeStartValue),
+          m_antialiasingFadeStart(rhs.m_antialiasingFadeStart),
+          m_antialiasingFadeCoeff(rhs.m_antialiasingFadeCoeff),
+          m_enableAntialiasing(rhs.m_enableAntialiasing),
+          m_baseFade(baseFade)
+    {
+    }
+
     void setSquareNormCoeffs(qreal xcoeff, qreal ycoeff) {
         m_radius = 1.0;
 
@@ -94,6 +104,18 @@ public:
           m_xFadeCoeff(0),
           m_yFadeCoeff(0),
           m_enableAntialiasing(enableAntialiasing),
+          m_baseFade(baseFade)
+    {
+    }
+
+    KisAntialiasingFadeMaker2D(const KisAntialiasingFadeMaker2D &rhs, const BaseFade &baseFade)
+        : m_xLimit(rhs.m_xLimit),
+          m_yLimit(rhs.m_yLimit),
+          m_xFadeLimitStart(rhs.m_xFadeLimitStart),
+          m_yFadeLimitStart(rhs.m_yFadeLimitStart),
+          m_xFadeCoeff(rhs.m_xFadeCoeff),
+          m_yFadeCoeff(rhs.m_yFadeCoeff),
+          m_enableAntialiasing(rhs.m_enableAntialiasing),
           m_baseFade(baseFade)
     {
     }

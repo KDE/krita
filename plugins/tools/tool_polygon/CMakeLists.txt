@@ -8,7 +8,7 @@ add_library(kritatoolpolygon MODULE ${kritatoolpolygon_SOURCES})
 
 target_link_libraries(kritatoolpolygon kritaui)
 
-install(TARGETS kritatoolpolygon  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritatoolpolygon  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 install( FILES
     KisToolPolygon.action

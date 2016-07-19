@@ -50,40 +50,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="windows_next">
-      <icon></icon>
-      <text>N&amp;ext</text>
-      <whatsThis></whatsThis>
-      <toolTip>Next</toolTip>
-      <iconText>Next</iconText>
-      <activationFlags>10</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="windows_previous">
-      <icon></icon>
-      <text>Previous</text>
-      <whatsThis></whatsThis>
-      <toolTip>Previous</toolTip>
-      <iconText>Previous</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="view_newwindow">
-      <icon>window-new</icon>
-      <text>&amp;New Window</text>
-      <whatsThis></whatsThis>
-      <toolTip>New Window</toolTip>
-      <iconText>New Window</iconText>
-      <activationFlags>0</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="import_resources">
       <icon></icon>
       <text>Import Resources or Bundles...</text>
@@ -175,7 +141,7 @@
       <whatsThis></whatsThis>
       <toolTip>Show Tool Options</toolTip>
       <iconText>Show Tool Options</iconText>
-      <shortcut></shortcut>
+      <shortcut>\</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -185,7 +151,7 @@
       <whatsThis></whatsThis>
       <toolTip>Show Brush Editor</toolTip>
       <iconText>Show Brush Editor</iconText>
-      <shortcut>i</shortcut>
+      <shortcut>F5</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -195,7 +161,7 @@
       <whatsThis></whatsThis>
       <toolTip>Show Brush Presets</toolTip>
       <iconText>Show Brush Presets</iconText>
-      <shortcut></shortcut>
+      <shortcut>F6</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -391,10 +357,10 @@
     </Action>
     <Action name="hmirror_action">
       <icon>symmetry-horizontal</icon>
-      <text>Set horizontal mirror mode</text>
+      <text>Horizontal Mirror Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Set horizontal mirror mode</toolTip>
-      <iconText>Set horizontal mirror mode</iconText>
+      <toolTip>Horizontal Mirror Tool</toolTip>
+      <iconText>Horizontal Mirror Tool</iconText>
       <activationFlags>10000</activationFlags>
       <shortcut></shortcut>
       <isCheckable>true</isCheckable>
@@ -402,10 +368,10 @@
     </Action>
     <Action name="vmirror_action">
       <icon>symmetry-vertical</icon>
-      <text>Set vertical mirror mode</text>
+      <text>Vertical Mirror Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Set vertical mirror mode</toolTip>
-      <iconText>Set vertical mirror mode</iconText>
+      <toolTip>Vertical Mirror Tool</toolTip>
+      <iconText>Vertical Mirror Tool</iconText>
       <activationFlags>10000</activationFlags>
       <shortcut></shortcut>
       <isCheckable>true</isCheckable>
@@ -427,7 +393,7 @@
       <icon></icon>
       <text>&amp;Invert Selection</text>
       <whatsThis></whatsThis>
-      <toolTip>foo</toolTip>
+      <toolTip>Invert current selection</toolTip>
       <iconText>Invert Selection</iconText>
       <activationFlags>10000000000</activationFlags>
       <activationConditions>100</activationConditions>
@@ -2476,6 +2442,18 @@
       <whatsThis></whatsThis>
       <toolTip>Save Group Layers</toolTip>
       <iconText>Save Group Layers</iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="convert_group_to_animated">
+      <icon></icon>
+      <text>Convert group to &amp;animated layer</text>
+      <whatsThis></whatsThis>
+      <toolTip>Convert child layers into animation frames</toolTip>
+      <iconText>Convert child layers into animation frames</iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>

@@ -24,7 +24,7 @@
 
 #include <KoDialog.h>
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 #include <QApplication>
 
 #include <KisFilterChain.h>
@@ -50,8 +50,8 @@ KisImportExportFilter::ConversionStatus KisTGAExport::convert(const QByteArray& 
 {
     dbgFile << "TGA export! From:" << from << ", To:" << to << "";
 
-    KisDocument *input = m_chain->inputDocument();
-    QString filename = m_chain->outputFile();
+    KisDocument *input = inputDocument();
+    QString filename = outputFile();
 
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;
@@ -61,14 +61,11 @@ KisImportExportFilter::ConversionStatus KisTGAExport::convert(const QByteArray& 
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    qApp->processEvents(); // For vector layers to be updated
-    input->image()->waitForDone();
+    // the image must be locked at the higher levels
+    KIS_SAFE_ASSERT_RECOVER_NOOP(input->image()->locked());
 
     QRect rc = input->image()->bounds();
-    input->image()->refreshGraph();
-    input->image()->lock();
     QImage image = input->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
-    input->image()->unlock();
 
     QFile f(filename);
     f.open(QIODevice::WriteOnly);

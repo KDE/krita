@@ -177,7 +177,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KisUrlRequester" name="imageUrl">
+      <widget class="KisFileNameRequester" name="imageUrl">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -205,9 +205,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisUrlRequester</class>
+   <class>KisFileNameRequester</class>
    <extends>QWidget</extends>
-   <header location="global">kis_url_requester.h</header>
+   <header location="global">kis_file_name_requester.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

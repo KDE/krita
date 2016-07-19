@@ -104,7 +104,7 @@ KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoCo
     , m_colorChangeCompressor(new KisSignalCompressor(50, KisSignalCompressor::POSTPONE))
     , m_brushHud(0)
 {
-    
+
     const int borderWidth = 3;
     m_triangleColorSelector  = new PopupColorTriangle(displayRenderer, this);
     m_triangleColorSelector->move(widgetSize/2-colorInnerRadius+borderWidth, widgetSize/2-colorInnerRadius+borderWidth);
@@ -117,8 +117,8 @@ KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoCo
     //setAttribute(Qt::WA_TranslucentBackground, true);
 
     connect(m_triangleColorSelector, SIGNAL(realColorChanged(KoColor)),
-            m_colorChangeCompressor, SLOT(start()));
-    connect(m_colorChangeCompressor, SIGNAL(timeout()),
+            m_colorChangeCompressor.data(), SLOT(start()));
+    connect(m_colorChangeCompressor.data(), SIGNAL(timeout()),
             SLOT(slotEmitColorChanged()));
 
     connect(m_resourceManager, SIGNAL(sigChangeFGColorSelector(KoColor)),
@@ -308,9 +308,9 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
+    painter.setRenderHint(QPainter::SmoothPixmapTransform);
+
     painter.translate(width() / 2, height() / 2);
-
-
 
     //painting background color
     QPainterPath bgColor;
@@ -324,7 +324,6 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     painter.fillPath(fgColor, m_displayRenderer->toQColor(m_triangleColorSelector->realColor()));
     painter.drawPath(fgColor);
 
-
     // create an ellipse for the background that is slightly
     // smaller than the clipping mask. This will prevent aliasing
     QPainterPath backgroundContainer;
@@ -332,10 +331,6 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
                                     colorOuterRadius*2, colorOuterRadius*2 );
     painter.fillPath(backgroundContainer,palette().brush(QPalette::Window));
     painter.drawPath(backgroundContainer);
-
-
-
-
 
     //painting favorite brushes
     QList<QImage> images(m_resourceManager->favoritePresetImages());
@@ -346,22 +341,21 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
         painter.save();
 
         path = pathFromPresetIndex(pos);
-        
-        if(pos < images.size())
-        {
+
+        if (pos < images.size()) {
             painter.setClipPath(path);
 
             QRect bounds = path.boundingRect().toAlignedRect();
-            painter.drawImage(bounds.topLeft() , images.at(pos).scaled(bounds.size() , Qt::KeepAspectRatioByExpanding));
+            painter.drawImage(bounds.topLeft() , images.at(pos).scaled(bounds.size() , Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation));
         }
         else {
-            painter.fillPath(path, palette().brush(QPalette::Window));     
+            painter.fillPath(path, palette().brush(QPalette::Window));
         }
         QPen pen = painter.pen();
         pen.setWidth(3);
         painter.setPen(pen);
         painter.drawPath(path);
-        
+
         painter.restore();
     }
     if (hoveredPreset() > -1) {
@@ -426,6 +420,19 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
             painter.rotate(selectedColor() * -1 * rotationAngle);
         }
     }
+
+    // //painting configure background, then icon
+    // QPainterPath configureContainer;
+    // int side = qMin(width(), height());
+
+
+    // configureContainer.addEllipse( side / 2 - 38 , side / 2 - 38 , 35 , 35 );
+    // painter.fillPath(configureContainer,palette().brush(QPalette::Window));
+    // painter.drawPath(configureContainer);
+
+
+    // QPixmap settingIcon = KisIconUtils::loadIcon("configure").pixmap(QSize(22,22));
+    // painter.drawPixmap(side / 2 - 40 + 9, side / 2 - 40 + 9, settingIcon);
 }
 
 QPainterPath KisPopupPalette::drawDonutPathFull(int x, int y, int inner_radius, int outer_radius)
@@ -584,7 +591,7 @@ QPainterPath KisPopupPalette::pathFromPresetIndex(int index)
     qreal angle = index * angleLength;
 
     qreal r = colorOuterRadius * sin(angleLength/2) / ( 1 - sin(angleLength/2));
-    
+
     QPainterPath path;
     path.addEllipse((colorOuterRadius+r) * cos(angle)-r, -(colorOuterRadius+r) * sin(angle)-r, 2*r, 2*r);
     path.closeSubpath();

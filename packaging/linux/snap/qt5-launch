@@ -1,0 +1,77 @@
+#!/bin/bash
+
+if [ "$SNAP_ARCH" == "amd64" ]; then
+  ARCH='x86_64-linux-gnu'
+elif [ "$SNAP_ARCH" == "armhf" ]; then
+  ARCH="arm-linux-gnueabihf"
+else
+  ARCH="$SNAP_ARCH-linux-gnu"
+fi
+
+export LD_LIBRARY_PATH=$SNAP/usr/lib/$ARCH:$LD_LIBRARY_PATH
+
+# XKB config
+export XKB_CONFIG_ROOT=$SNAP/usr/share/X11/xkb
+
+# Mesa Libs
+export LD_LIBRARY_PATH=$SNAP/usr/lib/$ARCH/mesa:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$SNAP/usr/lib/$ARCH/mesa-egl:$LD_LIBRARY_PATH
+
+# XDG Config
+export XDG_CONFIG_DIRS=$SNAP/etc:$XDG_CONFIG_DIRS
+
+# Note: this doesn't seem to work, QML's LocalStorage either ignores
+# or fails to use $SNAP_USER_DATA if defined here
+export XDG_DATA_DIRS=$SNAP/usr/share:$XDG_DATA_DIRS
+
+# Font Config
+export FONTCONFIG_PATH=$SNAP/etc/fonts/config.d
+export FONTCONFIG_FILE=$SNAP/etc/fonts/fonts.conf
+
+# Tell libGL where to find the drivers
+export LIBGL_DRIVERS_PATH=$SNAP/usr/lib/$ARCH/dri
+
+# Necessary for the SDK to find the translations directory
+export APP_DIR=$SNAP
+
+# Set XDG_DATA_HOME to local path, dependent on snap version
+export XDG_DATA_HOME=$SNAP_USER_DATA/.local-$SNAP_VERSION/share
+export XDG_DATA_DIRS=$XDG_DATA_HOME:$XDG_DATA_DIRS
+mkdir -p $XDG_DATA_HOME
+
+# Set cache folder to local path, dependent on snap version
+export XDG_CACHE_HOME=$SNAP_USER_DATA/.cache-$SNAP_VERSION
+mkdir -p $XDG_CACHE_HOME
+
+# Not good, needed for fontconfig and themes
+ln -sf $SNAP/usr/share/{fontconfig,fonts,fonts-*,themes} $XDG_DATA_HOME
+
+# Qt Platform to Mir
+export QTCHOOSER_NO_GLOBAL_DIR=1
+export QT_SELECT=snappy-qt5
+
+# Qt Libs
+export LD_LIBRARY_PATH=$SNAP/usr/lib/$ARCH/qt5/libs:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$SNAP/usr/lib/$ARCH/pulseaudio:$LD_LIBRARY_PATH
+
+# Qt Modules
+export QT_PLUGIN_PATH=$SNAP/usr/lib/$ARCH/qt5/plugins
+export QML2_IMPORT_PATH=$QML2_IMPORT_PATH:$SNAP/usr/lib/$ARCH/qt5/qml
+export QML2_IMPORT_PATH=$QML2_IMPORT_PATH:$SNAP/lib/$ARCH
+
+# Removes Qt warning: Could not find a location
+# of the system Compose files
+export QTCOMPOSE=$SNAP/usr/share/X11/locale
+
+export DESKTOP_SESSION=ubuntu
+export XDG_SESSION_DESKTOP=ubuntu
+export XDG_CURRENT_DESKTOP=kde
+export QT_QPA_PLATFORMTHEME=appmenu-qt5
+export QT_XKB_CONFIG_ROOT=/usr/share/X11/xkb
+
+# ensure that our HW/opengl libs are before the snap specific libs
+export LD_LIBRARY_PATH=$SNAP_LIBRARY_PATH:$LD_LIBRARY_PATH
+
+cd $SNAP
+exec "$@"
+

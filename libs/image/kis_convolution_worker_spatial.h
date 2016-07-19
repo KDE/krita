@@ -253,7 +253,8 @@ public:
     inline void limitValue(qreal *value, qreal lowBound, qreal highBound) {
         if (*value > highBound) {
             *value = highBound;
-        } else if (*value < lowBound){
+        } else if (!(*value >= lowBound)) {  // value < lowBound or value == NaN
+            // IEEE compliant comparisons with NaN are always false
             *value = lowBound;
         }
     }

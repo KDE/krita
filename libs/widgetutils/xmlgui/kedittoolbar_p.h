@@ -167,7 +167,7 @@ public:
      * Loads the toolbar configuration into the widget. Should be called before being shown.
      *
      * @param resourceFile the name (absolute or relative) of your application's UI
-     * resource file.  If it is left blank, then the resource file: share/apps/appname/appnameui.rc
+     * resource file.  If it is left blank, then the resource file: share/apps/appname/appnameui.xmlgui
      * is used.  This is the same resource file that is used by the
      * default createGUI function in KMainWindow so you're usually
      * pretty safe in leaving it blank.
@@ -217,9 +217,8 @@ public:
      * filename will be the one specified in the constructor.. or the
      * made up one if the filename was NULL.
      *
-     * @return The status of whether or not the save succeeded.
      */
-    bool save();
+    void save();
 
     /**
      * Remove and readd all KMXLGUIClients to update the GUI

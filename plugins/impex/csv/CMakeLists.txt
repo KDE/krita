@@ -1,8 +1,7 @@
 add_subdirectory(tests)
 
-include_directories( 
-${CMAKE_SOURCE_DIR}/krita/image/metadata 
-${Boost_INCLUDE_DIRS}
+include_directories(SYSTEM
+    ${Boost_INCLUDE_DIRS}
 )
 
 # import
@@ -18,7 +17,7 @@ add_library(kritacsvimport MODULE ${kritacsvimport_SOURCES})
 
 target_link_libraries(kritacsvimport kritaui )
 
-install(TARGETS kritacsvimport DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritacsvimport DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 # export
 
@@ -32,6 +31,6 @@ add_library(kritacsvexport MODULE ${kritacsvexport_SOURCES})
 
 target_link_libraries(kritacsvexport kritaui )
 
-install(TARGETS kritacsvexport  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritacsvexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 install( PROGRAMS  krita_csv.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

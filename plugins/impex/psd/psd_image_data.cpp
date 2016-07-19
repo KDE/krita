@@ -17,7 +17,7 @@
 
 #include <psd_image_data.h>
 
-#include <netinet/in.h> // htonl
+#include <QtEndian>
 
 #include <QFile>
 #include <kis_debug.h>

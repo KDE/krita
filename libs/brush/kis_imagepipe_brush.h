@@ -86,7 +86,7 @@ public:
 
     virtual void makeMaskImage();
 
-    virtual KisImagePipeBrush* clone() const;
+    virtual KisBrush* clone() const;
 
     virtual QString defaultFileExtension() const;
     void setAngle(qreal _angle);

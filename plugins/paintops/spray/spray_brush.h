@@ -49,13 +49,7 @@ public:
                        KisColorProperties * colorProperties,
                        KisShapeProperties * shapeProperties,
                        KisShapeDynamicsProperties * shapeDynamicsProperties,
-                       KisBrushSP brush) {
-        m_properties = properties;
-        m_colorProperties = colorProperties;
-        m_shapeProperties = shapeProperties;
-        m_shapeDynamicsProperties = shapeDynamicsProperties;
-        m_brush = brush;
-    }
+                       KisBrushSP brush);
 
     void setFixedDab(KisFixedPaintDeviceSP dab);
 
@@ -86,9 +80,9 @@ private:
     qreal rotationAngle(KisRandomSourceSP randomSource);
     /// Paints Wu Particle
     void paintParticle(KisRandomAccessorSP &writeAccessor, const KoColor &color, qreal rx, qreal ry);
-    void paintCircle(KisPainter * painter, qreal x, qreal y, int radius);
-    void paintEllipse(KisPainter * painter, qreal x, qreal y, int a, int b, qreal angle, int steps = 128);
-    void paintRectangle(KisPainter * painter, qreal x, qreal y, int width, int height, qreal angle);
+    void paintCircle(KisPainter * painter, qreal x, qreal y, qreal radius);
+    void paintEllipse(KisPainter * painter, qreal x, qreal y, qreal a, qreal b, qreal angle);
+    void paintRectangle(KisPainter * painter, qreal x, qreal y, qreal width, qreal height, qreal angle);
 
     void paintOutline(KisPaintDeviceSP dev, const KoColor& painterColor, qreal posX, qreal posY, qreal radius);
 

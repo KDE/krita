@@ -487,6 +487,19 @@ void KisAbstractSliderSpinBox::wheelEvent(QWheelEvent *e)
     e->accept();
 }
 
+void KisAbstractSliderSpinBox::commitEnteredValue()
+{
+    Q_D(KisAbstractSliderSpinBox);
+
+    QLocale locale;
+    bool ok = false;
+
+    qreal value = locale.toDouble(d->edit->text(), &ok) * d->factor;
+    if (ok) {
+        setInternalValue(value);
+    }
+}
+
 bool KisAbstractSliderSpinBox::eventFilter(QObject* recv, QEvent* e)
 {
     Q_D(KisAbstractSliderSpinBox);
@@ -496,11 +509,13 @@ bool KisAbstractSliderSpinBox::eventFilter(QObject* recv, QEvent* e)
 
         switch (keyEvent->key()) {
         case Qt::Key_Enter:
-        case Qt::Key_Return:
-            setInternalValue(d->edit->text().toDouble()*d->factor);
+        case Qt::Key_Return: {
+            commitEnteredValue();
             hideEdit();
             return true;
+        }
         case Qt::Key_Escape:
+            d->edit->setText(valueString());
             hideEdit();
             return true;
         default:
@@ -742,9 +757,9 @@ void KisAbstractSliderSpinBox::contextMenuEvent(QContextMenuEvent* event)
 
 void KisAbstractSliderSpinBox::editLostFocus()
 {
-    // only hide on focus lost, if editing is finished that will be handled in eventFilter
     Q_D(KisAbstractSliderSpinBox);
     if (!d->edit->hasFocus()) {
+        commitEnteredValue();
         hideEdit();
     }
 }
@@ -827,7 +842,9 @@ void KisSliderSpinBox::setValue(int value)
 QString KisSliderSpinBox::valueString() const
 {
     const Q_D(KisSliderSpinBox);
-    return QString::number(d->value, 'f', d->validator->decimals());
+
+    QLocale locale;
+    return locale.toString((qreal)d->value, 'f', d->validator->decimals());
 }
 
 void KisSliderSpinBox::setSingleStep(int value)
@@ -940,7 +957,9 @@ void KisDoubleSliderSpinBox::setSingleStep(qreal value)
 QString KisDoubleSliderSpinBox::valueString() const
 {
     const Q_D(KisAbstractSliderSpinBox);
-    return QString::number((qreal)d->value / d->factor, 'f', d->validator->decimals());
+
+    QLocale locale;
+    return locale.toString((qreal)d->value / d->factor, 'f', d->validator->decimals());
 }
 
 void KisDoubleSliderSpinBox::setInternalValue(int _value, bool blockUpdateSignal)

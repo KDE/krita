@@ -98,7 +98,7 @@ void KisToolFill::beginPrimaryAction(KoPointerEvent *event)
 
     setMode(KisTool::PAINT_MODE);
 
-    m_startPos = convertToPixelCoord(event).toPoint();
+    m_startPos = convertToIntPixelCoord(event);
 }
 
 void KisToolFill::endPrimaryAction(KoPointerEvent *event)

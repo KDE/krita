@@ -21,6 +21,10 @@
 
 #include "kis_types.h"
 #include "kritaui_export.h"
+#include <KisImportExportFilter.h>
+
+#include <functional>
+
 
 class KisDocument;
 
@@ -32,11 +36,7 @@ public:
 
     KisAnimationExporterUI(QWidget *parent);
     ~KisAnimationExporterUI();
-    void exportSequence(KisDocument *document);
-
-private Q_SLOTS:
-    void progress(int currentFrame);
-    void cancel();
+    KisImportExportFilter::ConversionStatus exportSequence(KisDocument *document);
 
 private:
     struct Private;
@@ -46,27 +46,48 @@ private:
 class KRITAUI_EXPORT KisAnimationExporter : public QObject
 {
     Q_OBJECT
-
 public:
-    KisAnimationExporter(KisDocument *document, const QString &baseFilename, int fromTime, int toTime);
+    typedef std::function<KisImportExportFilter::ConversionStatus (int , KisPaintDeviceSP)> SaveFrameCallback;
+public:
+    KisAnimationExporter(KisDocument *document, int fromTime, int toTime);
     ~KisAnimationExporter();
 
-    void startExport();
-    void stopExport();
+    KisImportExportFilter::ConversionStatus exportAnimation();
+
+    void setSaveFrameCallback(SaveFrameCallback func);
 
 Q_SIGNALS:
-    void sigExportProgress(int currentFrame);
-
     // Internal, used for getting back to main thread
     void sigFrameReadyToSave();
+    void sigFinished();
 
 private Q_SLOTS:
     void frameReadyToCopy(int time);
     void frameReadyToSave();
+    void cancel();
 
 private:
     struct Private;
     QScopedPointer<Private> m_d;
+};
+
+class KRITAUI_EXPORT KisAnimationExportSaver : public QObject
+{
+    Q_OBJECT
+public:
+    KisAnimationExportSaver(KisDocument *document, const QString &baseFilename, int fromTime, int toTime);
+    ~KisAnimationExportSaver();
+
+    KisImportExportFilter::ConversionStatus exportAnimation();
+
+    QString savedFilesMask() const;
+
+private:
+    KisImportExportFilter::ConversionStatus saveFrameCallback(int time, KisPaintDeviceSP frame);
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
 

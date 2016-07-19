@@ -79,6 +79,8 @@ void KisColorSourceOption::readOptionSetting(const KisPropertiesConfiguration* s
 
 KisColorSource* KisColorSourceOption::createColorSource(const KisPainter* _painter) const
 {
+    Q_ASSERT(_painter);
+
     switch (d->type) {
     case PLAIN:
         return new KisPlainColorSource(_painter->backgroundColor(), _painter->paintColor());
@@ -89,14 +91,14 @@ KisColorSource* KisColorSourceOption::createColorSource(const KisPainter* _paint
     case TOTAL_RANDOM:
         return new KisTotalRandomColorSource();
     case PATTERN: {
-        if (_painter && _painter->pattern()) {
+        if (_painter->pattern()) {
             KisPaintDevice* dev = new KisPaintDevice(_painter->paintColor().colorSpace(), _painter->pattern()->name());
             dev->convertFromQImage(_painter->pattern()->pattern(), 0);
             return new KoPatternColorSource(dev, _painter->pattern()->width(), _painter->pattern()->height(), false);
         }
     }
     case PATTERN_LOCKED: {
-        if (_painter && _painter->pattern()) {
+        if (_painter->pattern()) {
             KisPaintDevice* dev = new KisPaintDevice(_painter->paintColor().colorSpace(), _painter->pattern()->name());
             dev->convertFromQImage(_painter->pattern()->pattern(), 0);
             return new KoPatternColorSource(dev, _painter->pattern()->width(), _painter->pattern()->height(), true);

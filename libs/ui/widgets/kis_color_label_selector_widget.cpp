@@ -232,8 +232,12 @@ void drawToolButton(QWidget *widget, const QRect &rc, State state, const QColor 
         break;
     };
 
+
     if (opt.state & (QStyle::State_Sunken | QStyle::State_On | QStyle::State_Raised)) {
-        p.drawPrimitive(QStyle::PE_PanelButtonTool, opt);
+
+        const QRect borderRect = kisGrowRect(rc, 1);
+        p.setPen(QPen(opt.palette.text().color(), 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+        p.drawRect(borderRect);
     }
 
     const int offset = qMax(1, rc.height() / 10);
@@ -247,9 +251,11 @@ void drawToolButton(QWidget *widget, const QRect &rc, State state, const QColor 
 
         p.fillRect(colorBlobRect, fillColor);
     } else {
+
+        // draw an X for no color for the first item
         QRect crossRect = kisGrowRect(colorBlobRect, -offset);
 
-        QColor shade = opt.palette.dark().color();
+        QColor shade = opt.palette.text().color();
         p.setPen(QPen(shade, 2));
         p.drawLine(crossRect.topLeft(), crossRect.bottomRight());
         p.drawLine(crossRect.bottomLeft(), crossRect.topRight());

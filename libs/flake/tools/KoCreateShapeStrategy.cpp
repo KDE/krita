@@ -119,9 +119,6 @@ void KoCreateShapeStrategy::paint(QPainter &painter, const KoViewConverter &conv
         matrix.scale(xscale, yscale);
         painter.translate(paintRect.left(), paintRect.top());
 
-        if (painter.hasClipping())
-            paintRect = paintRect.intersect(painter.clipRegion().boundingRect());
-
         painter.setTransform(matrix, true);
         painter.drawPath(m_outline);
         painter.restore();

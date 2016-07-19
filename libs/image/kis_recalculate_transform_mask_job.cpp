@@ -22,6 +22,7 @@
 #include "kis_debug.h"
 #include "kis_layer.h"
 #include "kis_image.h"
+#include "kis_abstract_projection_plane.h"
 
 
 KisRecalculateTransformMaskJob::KisRecalculateTransformMaskJob(KisTransformMaskSP mask)
@@ -57,7 +58,14 @@ void KisRecalculateTransformMaskJob::run()
     KisImageSP image = layer->image();
     Q_ASSERT(image);
 
-    image->requestProjectionUpdateNoFilthy(layer, layer->extent(), image->bounds());
+    /**
+     * When we call requestProjectionUpdateNoFilthy() on a layer,
+     * its masks' change rect is not counted, because it is considered
+     * to be N_ABOVE_FILTHY. Therefore, we should expand the dirty
+     * rect manually to get the correct update
+     */
+    QRect updateRect = layer->projectionPlane()->changeRect(layer->extent(), KisLayer::N_FILTHY);
+    image->requestProjectionUpdateNoFilthy(layer, updateRect, image->bounds());
 }
 
 int KisRecalculateTransformMaskJob::levelOfDetail() const

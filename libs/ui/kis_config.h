@@ -160,9 +160,6 @@ public:
     bool useOpenGLTextureBuffer(bool defaultValue = false) const;
     void setUseOpenGLTextureBuffer(bool useBuffer);
 
-    bool disableDoubleBuffering(bool defaultValue = false) const;
-    void setDisableDoubleBuffering(bool disableDoubleBuffering);
-
     bool disableVSync(bool defaultValue = false) const;
     void setDisableVSync(bool disableVSync);
 
@@ -288,6 +285,9 @@ public:
     bool showDockerTitleBars(bool defaultValue = false) const;
     void setShowDockerTitleBars(const bool value) const;
 
+    bool showStatusBar(bool defaultValue = false) const;
+    void setShowStatusBar(const bool value) const;
+
     bool hideMenuFullscreen(bool defaultValue = false) const;
     void setHideMenuFullscreen(const bool value) const;
 
@@ -385,7 +385,7 @@ public:
 
     BackgroundStyle defaultBackgroundStyle(bool defaultValue = false) const;
     void setDefaultBackgroundStyle(BackgroundStyle value);
-    
+
     int lineSmoothingType(bool defaultValue = false) const;
     void setLineSmoothingType(int value);
 
@@ -422,6 +422,8 @@ public:
     bool testingAcceptCompressedTabletEvents(bool defaultValue = false) const;
     void setTestingAcceptCompressedTabletEvents(bool value);
 
+    bool shouldEatDriverShortcuts(bool defaultValue = false) const;
+
     bool testingCompressBrushEvents(bool defaultValue = false) const;
     void setTestingCompressBrushEvents(bool value);
 
@@ -432,7 +434,7 @@ public:
     void setUseDirtyPresets(bool value);
 
     bool useEraserBrushSize(bool defaultValue = false) const;
-    void setUseEraserBrushSize(bool value);    
+    void setUseEraserBrushSize(bool value);
 
     QColor getMDIBackgroundColor(bool defaultValue = false) const;
     void setMDIBackgroundColor(const QColor & v) const;
@@ -467,6 +469,15 @@ public:
 
     bool switchSelectionCtrlAlt(bool defaultValue = false) const;
     void setSwitchSelectionCtrlAlt(bool value);
+
+    bool convertToImageColorspaceOnImport(bool defaultValue = false) const;
+    void setConvertToImageColorspaceOnImport(bool value);
+
+    int stabilizerSampleSize(bool defaultValue = false) const;
+    void setStabilizerSampleSize(int value);
+
+    QString customFFMpegPath(bool defaultValue = false) const;
+    void setCustomFFMpegPath(const QString &value) const;
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

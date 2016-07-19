@@ -50,21 +50,21 @@ QString readDoubleAsString(QIODevice *device) {
     double value = 0.0;
     SAFE_READ_EX(device, value);
 
-    return KisDomUtils::Private::numberToString(value);
+    return KisDomUtils::toString(value);
 }
 
 QString readIntAsString(QIODevice *device) {
     quint32 value = 0.0;
     SAFE_READ_EX(device, value);
 
-    return KisDomUtils::Private::numberToString(value);
+    return KisDomUtils::toString(value);
 }
 
 QString readBoolAsString(QIODevice *device) {
     quint8 value = 0.0;
     SAFE_READ_EX(device, value);
 
-    return KisDomUtils::Private::numberToString(value);
+    return KisDomUtils::toString(value);
 }
 
 /**
@@ -119,8 +119,8 @@ void appendPointXMLNode(const QString &key, const QPointF &pt, QDomElement *pare
     el.setAttribute("classId", "CrPt");
     el.setAttribute("name", "");
 
-    appendDoubleXMLNode("Hrzn", KisDomUtils::Private::numberToString(pt.x()), &el, doc);
-    appendDoubleXMLNode("Vrtc", KisDomUtils::Private::numberToString(pt.x()), &el, doc);
+    appendDoubleXMLNode("Hrzn", KisDomUtils::toString(pt.x()), &el, doc);
+    appendDoubleXMLNode("Vrtc", KisDomUtils::toString(pt.x()), &el, doc);
 }
 
 /**

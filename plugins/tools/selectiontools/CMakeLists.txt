@@ -16,7 +16,7 @@ add_library(kritaselectiontools MODULE ${kritaselectiontools_SOURCES})
 
 target_link_libraries(kritaselectiontools kritaui kritabasicflakes)
 
-install(TARGETS kritaselectiontools  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritaselectiontools  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 install( FILES
         KisToolSelectPolygonal.action

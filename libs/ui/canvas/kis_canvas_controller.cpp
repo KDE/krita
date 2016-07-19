@@ -178,7 +178,7 @@ void KisCanvasController::Private::showMirrorStateOnCanvas()
 
 void KisCanvasController::mirrorCanvas(bool enable)
 {
-    KisCanvasDecoration *decorator = dynamic_cast<KisCanvas2*>(this->canvas())->decoration("mirror_axis");
+    KisCanvasDecorationSP decorator = dynamic_cast<KisCanvas2*>(this->canvas())->decoration("mirror_axis");
     KIS_ASSERT_RECOVER_RETURN(decorator);
     decorator->setVisible(enable);
 
@@ -258,12 +258,33 @@ void KisCanvasController::slotToggleLevelOfDetailMode(bool value)
 
     kritaCanvas->setLodAllowedInCanvas(value);
 
-    int result = levelOfDetailMode();
+    bool result = levelOfDetailMode();
 
-    m_d->view->viewManager()->showFloatingMessage(
-        i18n("Instant Preview Mode: %1", result ?
-             i18n("ON") : i18n("OFF")),
-             QIcon(), 500, KisFloatingMessage::Low);
+    if (!value || result) {
+        m_d->view->viewManager()->showFloatingMessage(
+            i18n("Instant Preview Mode: %1", result ?
+                 i18n("ON") : i18n("OFF")),
+            QIcon(), 500, KisFloatingMessage::Low);
+    } else {
+        QString reason;
+
+        if (!kritaCanvas->canvasIsOpenGL()) {
+            reason = i18n("Instant Preview is only supported with OpenGL activated");
+        }
+        else if (kritaCanvas->openGLFilterMode() == KisOpenGL::BilinearFilterMode ||
+                   kritaCanvas->openGLFilterMode() == KisOpenGL::NearestFilterMode) {
+            QString filteringMode =
+                kritaCanvas->openGLFilterMode() == KisOpenGL::BilinearFilterMode ?
+                i18n("Bilinear") : i18n("Nearest Neighbour");
+            reason = i18n("Instant Preview is supported\n in Trilinear or High Quality filtering modes.\nCurrent mode is %1", filteringMode);
+        }
+
+        m_d->view->viewManager()->showFloatingMessage(
+            i18n("Failed activating Instant Preview mode!\n\n%1", reason),
+            QIcon(), 5000, KisFloatingMessage::Low);
+    }
+
+
 }
 
 bool KisCanvasController::levelOfDetailMode() const

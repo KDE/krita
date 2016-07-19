@@ -742,9 +742,24 @@ QRect KisLayer::changeRect(const QRect &rect, PositionToFilthy pos) const
     changeRect = incomingChangeRect(changeRect);
 
     if(pos == KisNode::N_FILTHY) {
+        QRect projectionToBeUpdated = projection()->exactBoundsAmortized() & changeRect;
+
         bool changeRectVaries;
         changeRect = outgoingChangeRect(changeRect);
         changeRect = masksChangeRect(effectMasks(), changeRect, changeRectVaries);
+
+        /**
+         * If the projection contains some dirty areas we should also
+         * add them to the change rect, because they might have
+         * changed. E.g. when a visibility of the mask has chnaged
+         * while the parent layer was invinisble.
+         */
+
+        if (!projectionToBeUpdated.isEmpty() &&
+            !changeRect.contains(projectionToBeUpdated)) {
+
+            changeRect |= projectionToBeUpdated;
+        }
     }
 
     // TODO: string comparizon: optimize!

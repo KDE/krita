@@ -100,7 +100,7 @@ Q_LOGGING_CATEGORY(_41011, "krita.scripting")
 Q_LOGGING_CATEGORY(_41012, "krita.input")
 Q_LOGGING_CATEGORY(_41013, "krita.action")
 Q_LOGGING_CATEGORY(_41014, "krita.tabletlog")
-
+Q_LOGGING_CATEGORY(_41015, "krita.opengl")
 
 
 QString __methodName(const char *_prettyFunction)

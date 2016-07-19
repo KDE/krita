@@ -118,7 +118,7 @@ void KisAslXmlWriter::writeDouble(const QString &key, double value)
     }
 
     el.setAttribute("type", "Double");
-    el.setAttribute("value", KisDomUtils::Private::numberToString(value));
+    el.setAttribute("value", KisDomUtils::toString(value));
 
     m_d->currentElement.appendChild(el);
 }
@@ -132,7 +132,7 @@ void KisAslXmlWriter::writeInteger(const QString &key, int value)
     }
 
     el.setAttribute("type", "Integer");
-    el.setAttribute("value", KisDomUtils::Private::numberToString(value));
+    el.setAttribute("value", KisDomUtils::toString(value));
 
     m_d->currentElement.appendChild(el);
 }
@@ -162,7 +162,7 @@ void KisAslXmlWriter::writeUnitFloat(const QString &key, const QString &unit, do
 
     el.setAttribute("type", "UnitFloat");
     el.setAttribute("unit", unit);
-    el.setAttribute("value", KisDomUtils::Private::numberToString(value));
+    el.setAttribute("value", KisDomUtils::toString(value));
 
     m_d->currentElement.appendChild(el);
 }
@@ -190,7 +190,7 @@ void KisAslXmlWriter::writeBoolean(const QString &key, bool value)
     }
 
     el.setAttribute("type", "Boolean");
-    el.setAttribute("value", KisDomUtils::Private::numberToString(value));
+    el.setAttribute("value", KisDomUtils::toString(value));
 
     m_d->currentElement.appendChild(el);
 }

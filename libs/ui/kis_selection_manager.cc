@@ -38,7 +38,6 @@
 #include "KoIntegerMaths.h"
 #include <KisDocument.h>
 #include <KisMainWindow.h>
-#include <KisDocumentEntry.h>
 #include <KoViewConverter.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
@@ -215,7 +214,7 @@ void KisSelectionManager::setView(QPointer<KisView>imageView)
 
         KoSelection *selection = m_imageView->canvasBase()->globalShapeManager()->selection();
         selection->disconnect(this, SLOT(shapeSelectionChanged()));
-        KisSelectionDecoration *decoration = qobject_cast<KisSelectionDecoration*>(m_imageView->canvasBase()->decoration("selection"));
+        KisSelectionDecoration *decoration = qobject_cast<KisSelectionDecoration*>(m_imageView->canvasBase()->decoration("selection").data());
         if (decoration) {
             disconnect(SIGNAL(currentSelectionChanged()), decoration);
         }
@@ -229,7 +228,7 @@ void KisSelectionManager::setView(QPointer<KisView>imageView)
         Q_ASSERT(selection);
         connect(selection, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 
-        KisSelectionDecoration* decoration = qobject_cast<KisSelectionDecoration*>(m_imageView->canvasBase()->decoration("selection"));
+        KisSelectionDecoration* decoration = qobject_cast<KisSelectionDecoration*>(m_imageView->canvasBase()->decoration("selection").data());
         if (!decoration) {
             decoration = new KisSelectionDecoration(m_imageView);
             decoration->setVisible(true);

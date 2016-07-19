@@ -79,7 +79,11 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 *canvas, KisCoordinatesConverter
     setAttribute(Qt::WA_InputMethodEnabled, true);
     setAttribute(Qt::WA_StaticContents);
     setAttribute(Qt::WA_OpaquePaintEvent);
-
+#ifdef Q_OS_MAC
+    setAttribute(Qt::WA_AcceptTouchEvents, false);
+#else
+    setAttribute(Qt::WA_AcceptTouchEvents, true);
+#endif
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     slotConfigChanged();
 }

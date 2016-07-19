@@ -84,7 +84,7 @@
     </Action>
     <Action name="pathsegment-curve">
       <iconText>Segment to Curve</iconText>
-      <shortcut>C</shortcut>
+      <shortcut>Shift+C</shortcut>
       <toolTip>Segment to Curve</toolTip>
       <icon>pathsegment-curve</icon>
       <whatsThis></whatsThis>

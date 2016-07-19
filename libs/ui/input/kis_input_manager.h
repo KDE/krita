@@ -116,6 +116,10 @@ private Q_SLOTS:
     void slotCompressedMoveEvent();
 
 private:
+    template <class Event>
+        bool compressMoveEventCommon(Event *event);
+
+private:
     class Private;
     Private* const d;
 };

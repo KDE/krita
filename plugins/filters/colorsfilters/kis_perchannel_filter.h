@@ -89,6 +89,8 @@ public:
 
     virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
 
+    virtual bool needsTransparentPixels(const KisFilterConfiguration *config, const KoColorSpace *cs) const;
+
     static inline KoID id() {
         return KoID("perchannel", i18n("Color Adjustment"));
     }

@@ -31,7 +31,7 @@ KisMD5Generator::~KisMD5Generator()
 
 }
 
-QByteArray KisMD5Generator::generateHash(QString filename)
+QByteArray KisMD5Generator::generateHash(const QString &filename)
 {
     QByteArray ba;
     if(filename.startsWith("bundle://")) {

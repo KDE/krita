@@ -127,6 +127,8 @@ public:
 
     void updateNode(const QModelIndex &index);
 
+    QRect originalVisualRect(const QModelIndex &index) const;
+
 protected:
     QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index,
                                                          const QEvent *event) const;

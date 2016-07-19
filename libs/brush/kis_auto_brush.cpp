@@ -56,17 +56,28 @@ inline double drand48()
 #endif
 
 struct KisAutoBrush::Private {
-    KisMaskGenerator* shape;
+    Private()
+        : randomness(0), density(1.0), idealThreadCountCached(1) {}
+
+    Private(const Private &rhs)
+        : shape(rhs.shape->clone()),
+          randomness(rhs.randomness),
+          density(rhs.density),
+          idealThreadCountCached(rhs.idealThreadCountCached)
+    {
+    }
+
+    QScopedPointer<KisMaskGenerator> shape;
     qreal randomness;
     qreal density;
     int idealThreadCountCached;
 };
 
 KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, qreal density)
-    : KisBrush()
-    , d(new Private)
+    : KisBrush(),
+      d(new Private)
 {
-    d->shape = as;
+    d->shape.reset(as);
     d->randomness = randomness;
     d->density = density;
     d->idealThreadCountCached = QThread::idealThreadCount();
@@ -86,8 +97,17 @@ KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, 
 
 KisAutoBrush::~KisAutoBrush()
 {
-    delete d->shape;
-    delete d;
+}
+
+KisAutoBrush::KisAutoBrush(const KisAutoBrush& rhs)
+    : KisBrush(rhs),
+      d(new Private(*rhs.d))
+{
+}
+
+KisBrush* KisAutoBrush::clone() const
+{
+    return new KisAutoBrush(*this);
 }
 
 inline void fillPixelOptimized_4bytes(quint8 *color, quint8 *buf, int size)
@@ -312,7 +332,7 @@ QImage KisAutoBrush::createBrushPreview()
 
 const KisMaskGenerator* KisAutoBrush::maskGenerator() const
 {
-    return d->shape;
+    return d->shape.data();
 }
 
 qreal KisAutoBrush::density() const

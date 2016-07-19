@@ -23,12 +23,14 @@
 #include "kritapigment_export.h"
 
 #include <KoColorConversionTransformation.h>
+#include <KoColorProofingConversionTransformation.h>
 
 class KRITAPIGMENT_EXPORT KoColorConversionTransformationAbstractFactory
 {
 public:
     KoColorConversionTransformationAbstractFactory() {}
     virtual ~KoColorConversionTransformationAbstractFactory() {}
+
     /**
      * Creates a color transformation between the source color space and the destination
      * color space.
@@ -40,6 +42,27 @@ public:
                                                                        const KoColorSpace* dstColorSpace,
                                                                        KoColorConversionTransformation::Intent renderingIntent,
                                                                        KoColorConversionTransformation::ConversionFlags conversionFlags) const = 0;
+
+    virtual KoColorProofingConversionTransformation* createColorProofingTransformation(const KoColorSpace* srcColorSpace,
+                                                                       const KoColorSpace* dstColorSpace,
+                                                                       const KoColorSpace* proofingSpace,
+                                                                       KoColorProofingConversionTransformation::Intent renderingIntent,
+                                                                       KoColorProofingConversionTransformation::Intent proofingIntent,
+                                                                       KoColorProofingConversionTransformation::ConversionFlags conversionFlags,
+                                                                       quint8 *gamutWarning,
+                                                                       double adaptationState) const
+    {
+        Q_UNUSED(srcColorSpace);
+        Q_UNUSED(dstColorSpace);
+        Q_UNUSED(proofingSpace);
+        Q_UNUSED(renderingIntent);
+        Q_UNUSED(proofingIntent);
+        Q_UNUSED(conversionFlags);
+        Q_UNUSED(gamutWarning);
+        Q_UNUSED(adaptationState);
+        qFatal("createColorProofinTransform undefined.");
+        return 0;
+    }
 };
 
 #endif

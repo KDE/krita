@@ -29,9 +29,14 @@ public:
     KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP image, bool suspend);
     ~KisSuspendProjectionUpdatesStrokeStrategy();
 
+    static QList<KisStrokeJobData*> createSuspendJobsData(KisImageWSP image);
+    static QList<KisStrokeJobData*> createResumeJobsData(KisImageWSP image);
+
 private:
-    void finishStrokeCallback();
+    void doStrokeCallback(KisStrokeJobData *data);
     void cancelStrokeCallback();
+
+    void resumeAndIssueUpdates(bool dropUpdates);
 
 private:
     struct Private;

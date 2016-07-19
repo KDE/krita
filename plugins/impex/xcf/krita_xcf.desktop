@@ -68,7 +68,5 @@ Type=Application
 NoDisplay=true
 StartupNotify=true
 Terminal=false
-X-KDE-ServiceTypes=Calligra/Application
-X-Calligra-DefaultMimeTypes=image/x-xcf
 X-KDE-SubstituteUID=false
 X-KDE-Username=

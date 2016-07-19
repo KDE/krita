@@ -170,12 +170,14 @@ public:
         Alternate_NONE = 10000
     };
 
+    // Technically users are allowed to configure this, but nobody ever would do that.
+    // So these can basically be thought of as aliases to ctrl+click, etc.
     enum AlternateAction {
-        ChangeSize = AlternateChangeSize,
-        PickFgNode = AlternatePickFgNode,
-        PickBgNode = AlternatePickBgNode,
-        PickFgImage = AlternatePickFgImage,
-        PickBgImage = AlternatePickBgImage,
+        ChangeSize = AlternateChangeSize, // Default: Shift+Left click
+        PickFgNode = AlternatePickFgNode, // Default: Ctrl+Alt+Left click
+        PickBgNode = AlternatePickBgNode, // Default: Ctrl+Alt+Right click
+        PickFgImage = AlternatePickFgImage, // Default: Ctrl+Left click
+        PickBgImage = AlternatePickBgImage, // Default: Ctrl+Right click
         Secondary = AlternateSecondary,
         Third = AlternateThird,
         Fourth = AlternateFourth,
@@ -286,6 +288,7 @@ protected:
     KoPattern* currentPattern();
     KoAbstractGradient *currentGradient();
     KisNodeSP currentNode();
+    KisNodeList selectedNodes() const;
     KoColor currentFgColor();
     KoColor currentBgColor();
     KisPaintOpPresetSP currentPaintOpPreset();

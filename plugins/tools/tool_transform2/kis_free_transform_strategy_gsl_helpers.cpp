@@ -100,7 +100,7 @@ namespace GSL
     {
         const gsl_multimin_fminimizer_type *T =
             gsl_multimin_fminimizer_nmsimplex2;
-        gsl_multimin_fminimizer *s = NULL;
+        gsl_multimin_fminimizer *s = 0;
         gsl_vector *ss, *x;
         gsl_multimin_function minex_func;
 
@@ -221,7 +221,7 @@ namespace GSL
     {
         const gsl_multimin_fminimizer_type *T =
             gsl_multimin_fminimizer_nmsimplex2;
-        gsl_multimin_fminimizer *s = NULL;
+        gsl_multimin_fminimizer *s = 0;
         gsl_vector *ss, *x;
         gsl_multimin_function minex_func;
 

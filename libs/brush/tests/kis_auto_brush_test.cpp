@@ -171,6 +171,26 @@ void KisAutoBrushTest::testCopyMasking()
 #endif
 }
 
+void KisAutoBrushTest::testClone()
+{
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
+    KisCircleMaskGenerator* circle = new KisCircleMaskGenerator(10, 0.7, 0.85, 0.5, 2, true);
+    KisBrushSP brush = new KisAutoBrush(circle, 0.5, 0.0);
+
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5);
+
+    KisFixedPaintDeviceSP fdev1 = new KisFixedPaintDevice(cs);
+    brush->mask(fdev1, KoColor(Qt::black, cs), 0.8, 0.8, 8.0, info);
+    QImage res1 = fdev1->convertToQImage(0);
+
+    KisBrushSP clone = brush->clone();
+
+    KisFixedPaintDeviceSP fdev2 = new KisFixedPaintDevice(cs);
+    clone->mask(fdev2, KoColor(Qt::black, cs), 0.8, 0.8, 8.0, info);
+    QImage res2 = fdev2->convertToQImage(0);
+
+    QCOMPARE(res1, res2);
+}
 
 QTEST_MAIN(KisAutoBrushTest)

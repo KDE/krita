@@ -157,6 +157,7 @@ struct KisSavedMacroCommand::Private
     };
 
     QVector<SavedCommand> commands;
+    int macroId = -1;
 };
 
 KisSavedMacroCommand::KisSavedMacroCommand(const KUndo2MagicString &name,
@@ -169,6 +170,63 @@ KisSavedMacroCommand::KisSavedMacroCommand(const KUndo2MagicString &name,
 KisSavedMacroCommand::~KisSavedMacroCommand()
 {
     delete m_d;
+}
+
+void KisSavedMacroCommand::setMacroId(int value)
+{
+    m_d->macroId = value;
+}
+
+int KisSavedMacroCommand::id() const
+{
+    return m_d->macroId;
+}
+
+bool KisSavedMacroCommand::mergeWith(const KUndo2Command* command)
+{
+    const KisSavedMacroCommand *other =
+        dynamic_cast<const KisSavedMacroCommand*>(command);
+
+    if (other && other->id() != id()) return false;
+
+    QVector<Private::SavedCommand> &otherCommands = other->m_d->commands;
+
+    if (m_d->commands.size() != otherCommands.size()) return false;
+
+    auto it = m_d->commands.constBegin();
+    auto end = m_d->commands.constEnd();
+
+    auto otherIt = otherCommands.constBegin();
+    auto otherEnd = otherCommands.constEnd();
+
+    bool sameCommands = true;
+    while (it != end && otherIt != otherEnd) {
+        if (it->command->id() != otherIt->command->id() ||
+            it->sequentiality != otherIt->sequentiality ||
+            it->exclusivity != otherIt->exclusivity) {
+
+            sameCommands = false;
+            break;
+        }
+        ++it;
+        ++otherIt;
+    }
+
+    if (!sameCommands) return false;
+
+    it = m_d->commands.constBegin();
+    otherIt = otherCommands.constBegin();
+
+    while (it != end && otherIt != otherEnd) {
+        if (it->command->id() != -1) {
+            bool result = it->command->mergeWith(otherIt->command.data());
+            KIS_ASSERT_RECOVER(result) { return false; }
+        }
+        ++it;
+        ++otherIt;
+    }
+
+    return true;
 }
 
 void KisSavedMacroCommand::addCommand(KUndo2CommandSP command,

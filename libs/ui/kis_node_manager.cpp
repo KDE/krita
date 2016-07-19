@@ -50,8 +50,7 @@
 #include <kis_image.h>
 #include <kis_painter.h>
 #include <kis_paint_layer.h>
-#include <QMimeDatabase>
-#include <QMimeType>
+#include <KisMimeDatabase.h>
 
 #include "KisPart.h"
 #include "canvas/kis_canvas2.h"
@@ -316,6 +315,8 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
     CONVERT_NODE_ACTION("convert_to_transparency_mask", "KisTransparencyMask");
 
+    CONVERT_NODE_ACTION("convert_to_animated", "animated");
+
     connect(&m_d->nodeConversionSignalMapper, SIGNAL(mapped(const QString &)),
             this, SLOT(convertNode(const QString &)));
 
@@ -506,11 +507,6 @@ void KisNodeManager::createNode(const QString & nodeType, bool quiet, KisPaintDe
         m_d->layerManager.addFileLayer(activeNode);
     }
 
-}
-
-KisLayerSP KisNodeManager::constructDefaultLayer()
-{
-    return m_d->layerManager.constructDefaultLayer();
 }
 
 KisLayerSP KisNodeManager::createPaintLayer()
@@ -741,7 +737,7 @@ KisNodeJugglerCompressed* KisNodeManager::Private::lazyGetJuggler(const KUndo2Ma
         (nodeJuggler &&
          !nodeJuggler->canMergeAction(actionName))) {
 
-        nodeJuggler = new KisNodeJugglerCompressed(actionName, image, q, 1000);
+        nodeJuggler = new KisNodeJugglerCompressed(actionName, image, q, 750);
         nodeJuggler->setAutoDelete(true);
     }
 
@@ -923,10 +919,10 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
                                                 qreal yRes,
                                                 quint8 opacity)
 {
-    KoFileDialog dialog(view->mainWindow(), KoFileDialog::SaveFile, "krita/savenodeasimage");
+    KoFileDialog dialog(view->mainWindow(), KoFileDialog::SaveFile, "savenodeasimage");
     dialog.setCaption(i18n("Export \"%1\"", defaultName));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export));
+    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Export));
     QString filename = dialog.filename();
 
     if (filename.isEmpty()) return;
@@ -935,9 +931,7 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
 
     if (url.isEmpty()) return;
 
-QMimeDatabase db;
-    QMimeType mime = db.mimeTypeForUrl(url);
-    QString mimefilter = mime.name();
+    QString mimefilter = KisMimeDatabase::mimeTypeForFile(filename);;
 
     QScopedPointer<KisDocument> d(KisPart::instance()->createDocument());
     d->prepareForImport();
@@ -1156,9 +1150,6 @@ void KisNodeManager::createQuickGroupImpl(KisNodeJugglerCompressed *juggler,
     KisNodeSP active = activeNode();
     if (!active) return;
 
-    KisNodeSP parent = active->parent();
-    KisNodeSP aboveThis = active;
-
     KisImageSP image = m_d->view->image();
     QString groupName = !overrideGroupName.isEmpty() ? overrideGroupName : image->nextLayerName();
     KisGroupLayerSP group = new KisGroupLayer(image.data(), groupName, OPACITY_OPAQUE_U8);
@@ -1168,6 +1159,14 @@ void KisNodeManager::createQuickGroupImpl(KisNodeJugglerCompressed *juggler,
 
     KisNodeList nodes2;
     nodes2 = KisLayerUtils::sortMergableNodes(image->root(), selectedNodes());
+    KisLayerUtils::filterMergableNodes(nodes2);
+
+    if (KisLayerUtils::checkIsChildOf(active, nodes2)) {
+        active = nodes2.first();
+    }
+
+    KisNodeSP parent = active->parent();
+    KisNodeSP aboveThis = active;
 
     juggler->addNode(nodes1, parent, aboveThis);
     juggler->moveNode(nodes2, group, 0);

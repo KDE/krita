@@ -100,6 +100,8 @@ private:
     void cancelStroke();
     QPoint applyModifiers(Qt::KeyboardModifiers modifiers, QPoint pos);
 
+    bool startStrokeImpl(MoveToolMode mode, const QPoint *pos);
+
 private Q_SLOTS:
     void endStroke();
 
@@ -107,13 +109,13 @@ private:
 
     MoveToolOptionsWidget* m_optionsWidget;
 
-    QPoint m_dragStart;
-    QPoint m_accumulatedOffset;
+    QPoint m_dragStart; ///< Point where current cursor dragging began
+    QPoint m_accumulatedOffset; ///< Total offset including multiple clicks, up/down/left/right keys, etc. added together
 
     KisStrokeId m_strokeId;
 
     bool m_moveInProgress;
-    KisNodeSP m_currentlyProcessingNode;
+    KisNodeList m_currentlyProcessingNodes;
 
     int m_resolution;
 };

@@ -43,6 +43,9 @@ public:
     virtual void toXML(QDomElement *e) const = 0;
 
     virtual void translate(const QPointF &offset) = 0;
+
+    virtual QRect nonAffineChangeRect(const QRect &rc) = 0;
+    virtual QRect nonAffineNeedRect(const QRect &rc, const QRect &srcBounds) = 0;
 };
 
 
@@ -71,6 +74,9 @@ public:
     // for tesing purposes only
     QTransform testingGetTransform() const;
     void testingSetTransform(const QTransform &t);
+
+    QRect nonAffineChangeRect(const QRect &rc);
+    QRect nonAffineNeedRect(const QRect &rc, const QRect &srcBounds);
 
 private:
     struct Private;

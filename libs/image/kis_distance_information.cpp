@@ -30,7 +30,10 @@
 
 struct Q_DECL_HIDDEN KisDistanceInformation::Private {
     Private() : lastDabInfoValid(false),
-                lastPaintInfoValid(false) {}
+        lastPaintInfoValid(false),
+        lockedDrawingAngle(0.0),
+        hasLockedDrawingAngle(false),
+        totalDistance(0.0) {}
 
     QPointF distance;
     KisSpacingInformation spacing;
@@ -41,6 +44,10 @@ struct Q_DECL_HIDDEN KisDistanceInformation::Private {
     KisPaintInformation lastPaintInformation;
     qreal lastAngle;
     bool lastPaintInfoValid;
+
+    qreal lockedDrawingAngle;
+    bool hasLockedDrawingAngle;
+    qreal totalDistance;
 };
 
 KisDistanceInformation::KisDistanceInformation()
@@ -80,6 +87,14 @@ KisDistanceInformation& KisDistanceInformation::operator=(const KisDistanceInfor
 {
     *m_d = *rhs.m_d;
     return *this;
+}
+
+void KisDistanceInformation::overrideLastValues(const QPointF &lastPosition, qreal lastTime)
+{
+    m_d->lastPosition = lastPosition;
+    m_d->lastTime = lastTime;
+
+    m_d->lastDabInfoValid = true;
 }
 
 KisDistanceInformation::~KisDistanceInformation()
@@ -130,6 +145,8 @@ bool KisDistanceInformation::isStarted() const
 void KisDistanceInformation::registerPaintedDab(const KisPaintInformation &info,
                                                 const KisSpacingInformation &spacing)
 {
+    m_d->totalDistance += KisAlgebra2D::norm(info.pos() - m_d->lastPosition);
+
     m_d->lastAngle = info.drawingAngleSafe(*this);
     m_d->lastPaintInformation = info;
     m_d->lastPaintInfoValid = true;
@@ -226,4 +243,25 @@ qreal KisDistanceInformation::getNextPointPositionAnisotropic(const QPointF &sta
     }
 
     return t;
+}
+
+bool KisDistanceInformation::hasLockedDrawingAngle() const
+{
+    return m_d->hasLockedDrawingAngle;
+}
+
+qreal KisDistanceInformation::lockedDrawingAngle() const
+{
+    return m_d->lockedDrawingAngle;
+}
+
+void KisDistanceInformation::setLockedDrawingAngle(qreal angle)
+{
+    m_d->hasLockedDrawingAngle = true;
+    m_d->lockedDrawingAngle = angle;
+}
+
+qreal KisDistanceInformation::scalarDistanceApprox() const
+{
+    return m_d->totalDistance;
 }

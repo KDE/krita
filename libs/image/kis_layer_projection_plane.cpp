@@ -96,13 +96,9 @@ void KisLayerProjectionPlane::apply(KisPainter *painter, const QRect &rect)
     painter->bitBlt(needRect.topLeft(), device, needRect);
 }
 
-void KisLayerProjectionPlane::syncLodCache()
+KisPaintDeviceList KisLayerProjectionPlane::getLodCapableDevices() const
 {
-    if (m_d->layer->projection() != m_d->layer->original()) {
-        KisPaintDeviceSP device = m_d->layer->projection();
-        QRegion dirtyRegion = device->syncLodCache(device->defaultBounds()->currentLevelOfDetail());
-        Q_UNUSED(dirtyRegion);
-    }
+    return KisPaintDeviceList() << m_d->layer->projection();
 }
 
 QRect KisLayerProjectionPlane::needRect(const QRect &rect, KisLayer::PositionToFilthy pos) const

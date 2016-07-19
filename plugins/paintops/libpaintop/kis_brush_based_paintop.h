@@ -79,6 +79,8 @@ public:
 
 private:
     KisSpacingInformation effectiveSpacing(qreal dabWidth, qreal dabHeight, qreal extraScale, bool isotropicSpacing, qreal rotation) const;
+    QPointF calcAutoSpacing(const QPointF &pt, qreal coeff) const;
+    static inline qreal calcAutoSpacing(qreal value, qreal coeff);
 
 protected: // XXX: make private!
 

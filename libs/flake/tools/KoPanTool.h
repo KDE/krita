@@ -56,6 +56,9 @@ public:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     /// reimplemented method
     virtual void customMoveEvent(KoPointerEvent *event);
+    /// reimplemented method
+    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+
 
     /// set the canvasController this tool works on.
     void setCanvasController(KoCanvasController *controller) {

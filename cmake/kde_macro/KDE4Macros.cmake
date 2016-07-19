@@ -347,6 +347,76 @@ macro (KDE4_ADD_UNIT_TEST _test_NAME)
 endmacro (KDE4_ADD_UNIT_TEST)
 
 
+#
+# The samme as KDE4_ADD_UNIT_TEST, but it doesn't add the test. It's built,
+# you can run it, but it won't make the buildbot sad.
+#
+macro (KDE4_ADD_BROKEN_UNIT_TEST _test_NAME)
+    set(_srcList ${ARGN})
+    set(_targetName ${_test_NAME})
+    if( ${ARGV1} STREQUAL "TESTNAME" )
+        set(_targetName ${ARGV2})
+        list(REMOVE_AT _srcList 0 1)
+    endif( ${ARGV1} STREQUAL "TESTNAME" )
+
+    set(_nogui)
+    list(GET _srcList 0 first_PARAM)
+    if( ${first_PARAM} STREQUAL "NOGUI" )
+        set(_nogui "NOGUI")
+    endif( ${first_PARAM} STREQUAL "NOGUI" )
+
+    kde4_add_executable( ${_test_NAME} TEST ${_srcList} )
+    
+        if(NOT KDE4_TEST_OUTPUT)
+        set(KDE4_TEST_OUTPUT plaintext)
+    endif(NOT KDE4_TEST_OUTPUT)
+    set(KDE4_TEST_OUTPUT ${KDE4_TEST_OUTPUT} CACHE STRING "The output to generate when running the QTest unit tests")
+
+    set(using_qtest "")
+    foreach(_filename ${_srcList})
+        if(NOT using_qtest)
+            if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${_filename}")
+                file(READ ${_filename} file_CONTENT)
+                string(REGEX MATCH "QTEST_(KDE)?MAIN" using_qtest "${file_CONTENT}")
+            endif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${_filename}")
+        endif(NOT using_qtest)
+    endforeach(_filename)
+
+    get_target_property( loc ${_test_NAME} LOCATION )
+    if(WIN32)
+      if(MSVC_IDE)
+        STRING(REGEX REPLACE "\\$\\(.*\\)" "\${CTEST_CONFIGURATION_TYPE}" loc "${loc}")
+      endif()
+      # .bat because of rpath handling
+      set(_executable "${loc}.bat")
+    else(WIN32)
+      if (Q_WS_MAC AND NOT _nogui)
+        set(_executable ${EXECUTABLE_OUTPUT_PATH}/${_test_NAME}.app/Contents/MacOS/${_test_NAME})
+      else (Q_WS_MAC AND NOT _nogui)
+        # .shell because of rpath handling
+        set(_executable "${loc}.shell")
+      endif (Q_WS_MAC AND NOT _nogui)
+    endif(WIN32)
+
+    # Carefully not add the test!
+
+    if (NOT MSVC_IDE)   #not needed for the ide
+        # if the tests are EXCLUDE_FROM_ALL, add a target "buildtests" to build all tests
+        if (NOT KDE4_BUILD_TESTS)
+           get_directory_property(_buildtestsAdded BUILDTESTS_ADDED)
+           if(NOT _buildtestsAdded)
+              add_custom_target(buildtests)
+              set_directory_properties(PROPERTIES BUILDTESTS_ADDED TRUE)
+           endif(NOT _buildtestsAdded)
+           add_dependencies(buildtests ${_test_NAME})
+        endif (NOT KDE4_BUILD_TESTS)
+    endif (NOT MSVC_IDE)
+
+    
+    MESSAGE(" * Unittest " ${_test_NAME} " is broken!")
+endmacro (KDE4_ADD_BROKEN_UNIT_TEST)
+
+
 # add a  manifest file to executables.
 #
 # There is a henn-egg problem when a target runtime part is renamed using

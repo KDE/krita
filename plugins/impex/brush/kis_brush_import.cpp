@@ -25,7 +25,7 @@
 #include <QApplication>
 
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -61,7 +61,7 @@ KisImportExportFilter::ConversionStatus KisBrushImport::convert(const QByteArray
     if (to != "application/x-krita")
         return KisImportExportFilter::BadMimeType;
 
-    QString filename = m_chain->inputFile();
+    QString filename = inputFile();
 
     if (!filename.isEmpty()) {
 
@@ -93,7 +93,7 @@ KisImportExportFilter::ConversionStatus KisBrushImport::convert(const QByteArray
             return KisImportExportFilter::InvalidFormat;
         }
 
-        KisDocument * doc = m_chain->outputDocument();
+        KisDocument * doc = outputDocument();
 
         if (!doc) {
             delete brush;

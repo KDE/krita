@@ -21,7 +21,7 @@
 #include <QIODevice>
 
 #include "psd_utils.h"
-#include <netinet/in.h> // htonl
+#include <QtEndian>
 
 struct Header {
     char signature[4];    // 8PBS
@@ -56,17 +56,17 @@ bool PSDHeader::read(QIODevice* device)
 
     signature = QString(header.signature);
     memcpy(&version, header.version, 2);
-    version = ntohs(version);
+    version = qFromBigEndian(version);
     memcpy(&nChannels, header.nChannels, 2);
-    nChannels = ntohs(nChannels);
+    nChannels = qFromBigEndian(nChannels);
     memcpy(&height, header.height, 4);
-    height = ntohl(height);
+    height = qFromBigEndian(height);
     memcpy(&width, header.width, 4);
-    width = ntohl(width);
+    width = qFromBigEndian(width);
     memcpy(&channelDepth, header.channelDepth, 2);
-    channelDepth = ntohs(channelDepth);
+    channelDepth = qFromBigEndian(channelDepth);
     memcpy(&colormode, header.colormode, 2);
-    colormode = (psd_color_mode)ntohs((quint16)colormode);
+    colormode = (psd_color_mode)qFromBigEndian((quint16)colormode);
 
     return valid();
 }

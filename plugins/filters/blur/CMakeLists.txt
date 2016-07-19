@@ -19,4 +19,4 @@ ki18n_wrap_ui(kritablurfilter_SOURCES
 
 add_library(kritablurfilter MODULE ${kritablurfilter_SOURCES})
 target_link_libraries(kritablurfilter kritaui)
-install(TARGETS kritablurfilter  DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS kritablurfilter  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

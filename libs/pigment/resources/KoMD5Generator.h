@@ -28,7 +28,7 @@ class KRITAPIGMENT_EXPORT KoMD5Generator : public KoHashGenerator
 public:
     KoMD5Generator();
     virtual ~KoMD5Generator();
-    virtual QByteArray generateHash(QString filename);
+    virtual QByteArray generateHash(const QString &filename);
     virtual QByteArray generateHash(const QByteArray &array);
 };
 

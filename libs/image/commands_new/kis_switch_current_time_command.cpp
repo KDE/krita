@@ -51,7 +51,7 @@ bool KisSwitchCurrentTimeCommand::mergeWith(const KUndo2Command* command)
         return false;
     }
 
-    m_oldTime = other->m_oldTime;
+    m_newTime = other->m_newTime;
     return true;
 }
 

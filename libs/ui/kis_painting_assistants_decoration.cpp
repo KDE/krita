@@ -26,28 +26,29 @@
 #include <kactioncollection.h>
 #include <ktoggleaction.h>
 #include "kis_debug.h"
+#include "KisDocument.h"
 
 #include <QPainter>
 
 struct KisPaintingAssistantsDecoration::Private {
-    Private() : assistantVisible(false),
-                outlineVisible(false),
-                snapOnlyOneAssistant(true),
-                firstAssistant(0),
-                aFirstStroke(false){}
+    Private()
+        : assistantVisible(false)
+        , outlineVisible(false)
+        , snapOnlyOneAssistant(true)
+        , firstAssistant(0)
+        , aFirstStroke(false)
+    {}
 
-
-    QList<KisPaintingAssistant*> assistants;
     bool assistantVisible;
     bool outlineVisible;
     bool snapOnlyOneAssistant;
-    KisPaintingAssistant* firstAssistant;
+    KisPaintingAssistantSP firstAssistant;
     bool aFirstStroke;
 };
 
 KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(QPointer<KisView> parent) :
-        KisCanvasDecoration("paintingAssistantsDecoration", parent),
-        d(new Private)
+    KisCanvasDecoration("paintingAssistantsDecoration", parent),
+    d(new Private)
 {
     setAssistantVisible(true);
     setOutlineVisible(true);
@@ -56,49 +57,58 @@ KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(QPointer<KisVie
 
 KisPaintingAssistantsDecoration::~KisPaintingAssistantsDecoration()
 {
-    qDeleteAll(d->assistants.begin(), d->assistants.end());
     delete d;
 }
 
-void KisPaintingAssistantsDecoration::addAssistant(KisPaintingAssistant* assistant)
+void KisPaintingAssistantsDecoration::addAssistant(KisPaintingAssistantSP assistant)
 {
-    if (d->assistants.contains(assistant)) return;
-    d->assistants.push_back(assistant);
+    QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
+    if (assistants.contains(assistant)) return;
+
+    assistants.append(assistant);
+
+    view()->document()->setAssistants(assistants);
     emit assistantChanged();
 }
 
-void KisPaintingAssistantsDecoration::removeAssistant(KisPaintingAssistant* assistant)
+void KisPaintingAssistantsDecoration::removeAssistant(KisPaintingAssistantSP assistant)
 {
-    delete assistant;
-    d->assistants.removeAll(assistant);
-    emit assistantChanged();
+    QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
+    KIS_ASSERT_RECOVER_NOOP(assistants.contains(assistant));
+
+    if (assistants.removeAll(assistant)) {
+        view()->document()->setAssistants(assistants);
+        emit assistantChanged();
+    }
 }
 
 void KisPaintingAssistantsDecoration::removeAll()
 {
-    Q_FOREACH (KisPaintingAssistant* assistant, d->assistants) {
-        delete assistant;
-    }
-    d->assistants.clear();
+    QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
+    assistants.clear();
+    view()->document()->setAssistants(assistants);
+
     emit assistantChanged();
 }
 
 QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, const QPointF& strokeBegin)
 {
-    if (d->assistants.empty()) return point;
-    if (d->assistants.count() == 1) {
-        if(d->assistants.first()->snapping()==true){
-        QPointF newpoint = d->assistants.first()->adjustPosition(point, strokeBegin);
-        // check for NaN
-        if (newpoint.x() != newpoint.x()) return point;
-        return newpoint;
+    QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
+
+    if (assistants.empty()) return point;
+    if (assistants.count() == 1) {
+        if(assistants.first()->snapping()==true){
+            QPointF newpoint = assistants.first()->adjustPosition(point, strokeBegin);
+            // check for NaN
+            if (newpoint.x() != newpoint.x()) return point;
+            return newpoint;
         }
     }
     QPointF best = point;
     double distance = DBL_MAX;
     //the following tries to find the closest point to stroke-begin. It checks all assistants for the closest point//
     if(!d->snapOnlyOneAssistant){
-        Q_FOREACH (KisPaintingAssistant* assistant, d->assistants) {
+        Q_FOREACH (KisPaintingAssistantSP assistant, assistants) {
             if(assistant->snapping()==true){//this checks if the assistant in question has it's snapping boolean turned on//
                 QPointF pt = assistant->adjustPosition(point, strokeBegin);
                 if (pt.x() != pt.x()) continue;
@@ -110,7 +120,7 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
             }
         }
     } else if (d->aFirstStroke==false) {
-        Q_FOREACH (KisPaintingAssistant* assistant, d->assistants) {
+        Q_FOREACH (KisPaintingAssistantSP assistant, assistants) {
             if(assistant->snapping()==true){//this checks if the assistant in question has it's snapping boolean turned on//
                 QPointF pt = assistant->adjustPosition(point, strokeBegin);
                 if (pt.x() != pt.x()) continue;
@@ -130,38 +140,43 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
     }
     //this is here to be compatible with the movement in the perspective tool.
     qreal dx = point.x() - strokeBegin.x(), dy = point.y() - strokeBegin.y();
-        if (dx * dx + dy * dy >= 4.0) {
-            // allow some movement before snapping
-            d->aFirstStroke=true;
-        }
+    if (dx * dx + dy * dy >= 4.0) {
+        // allow some movement before snapping
+        d->aFirstStroke=true;
+    }
     return best;
 }
 
 void KisPaintingAssistantsDecoration::endStroke()
 {
+    QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
+
     d->aFirstStroke=false;
-    Q_FOREACH (KisPaintingAssistant* assistant, d->assistants) {
+    Q_FOREACH (KisPaintingAssistantSP assistant, assistants) {
         assistant->endStroke();
     }
 }
 
 void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas)
-{   
+{
     if (!canvas) {
         dbgFile<<"canvas does not exist in painting assistant decoration, you may have passed arguments incorrectly:"<<canvas;
-    }    
-    
-    Q_FOREACH (KisPaintingAssistant* assistant, d->assistants) {
-            assistant->drawAssistant(gc, updateRect, converter, true, canvas, assistantVisibility(), outlineVisibility());
     }
-    
+
+    QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
+
+    Q_FOREACH (KisPaintingAssistantSP assistant, assistants) {
+        assistant->drawAssistant(gc, updateRect, converter, true, canvas, assistantVisibility(), outlineVisibility());
+    }
 }
 //drawPreview//
 
 QList<KisPaintingAssistantHandleSP> KisPaintingAssistantsDecoration::handles()
 {
+    QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
+
     QList<KisPaintingAssistantHandleSP> hs;
-    Q_FOREACH (KisPaintingAssistant* assistant, d->assistants) {
+    Q_FOREACH (KisPaintingAssistantSP assistant, assistants) {
         Q_FOREACH (const KisPaintingAssistantHandleSP handle, assistant->handles()) {
             if (!hs.contains(handle)) {
                 hs.push_back(handle);
@@ -176,9 +191,10 @@ QList<KisPaintingAssistantHandleSP> KisPaintingAssistantsDecoration::handles()
     return hs;
 }
 
-QList<KisPaintingAssistant*> KisPaintingAssistantsDecoration::assistants()
+QList<KisPaintingAssistantSP> KisPaintingAssistantsDecoration::assistants()
 {
-    return d->assistants;
+    QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
+    return assistants;
 }
 
 void KisPaintingAssistantsDecoration::setAssistantVisible(bool set)
@@ -206,8 +222,10 @@ bool KisPaintingAssistantsDecoration::outlineVisibility()
 }
 void KisPaintingAssistantsDecoration::uncache()
 {
-     Q_FOREACH (KisPaintingAssistant* assistant, d->assistants) {
-            assistant->uncache();
+    QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
+
+    Q_FOREACH (KisPaintingAssistantSP assistant, assistants) {
+        assistant->uncache();
     }
 }
 void KisPaintingAssistantsDecoration::toggleAssistantVisible()

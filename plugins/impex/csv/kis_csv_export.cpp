@@ -24,7 +24,7 @@
 #include <QMessageBox>
 
 #include <kpluginfactory.h>
-#include <QUrl>
+#include <QFileInfo>
 #include <QApplication>
 
 #include <KisImportExportManager.h>
@@ -71,14 +71,14 @@ KisImportExportFilter::ConversionStatus KisCSVExport::convert(const QByteArray& 
     if (from != "application/x-krita")
         return KisImportExportFilter::NotImplemented;
 
-    KisDocument* input = m_chain->inputDocument();
-    QString filename = m_chain->outputFile();
+    KisDocument* input = inputDocument();
+    QString filename = outputFile();
 
     if (!input)
         return KisImportExportFilter::NoDocumentCreated;
 
     if (!checkHomogenity(input->image()->rootLayer())) {
-        if (!m_chain->manager()->getBatchMode()) {
+        if (!getBatchMode()) {
             QMessageBox::critical(0,
                                   i18nc("@title:window", "CSV Export Error"),
                                   i18n("Unable to save to the CSV format.\n"
@@ -86,21 +86,21 @@ KisImportExportFilter::ConversionStatus KisCSVExport::convert(const QByteArray& 
         }
         return KisImportExportFilter::InvalidFormat;
     }
-    qApp->processEvents(); // For vector layers to be updated
-    input->image()->waitForDone();
 
     if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
 
-    QUrl url = QUrl::fromLocalFile(filename);
-
-    CSVSaver kpc(input);
+    CSVSaver kpc(input, getBatchMode());
     KisImageBuilder_Result res;
 
-    if ((res = kpc.buildAnimation(url, filename)) == KisImageBuilder_RESULT_OK) {
+    if ((res = kpc.buildAnimation(filename)) == KisImageBuilder_RESULT_OK) {
         dbgFile <<"success !";
         return KisImportExportFilter::OK;
     }
     dbgFile <<" Result =" << res;
+
+    if (res == KisImageBuilder_RESULT_CANCEL)
+        return KisImportExportFilter::ProgressCancelled;
+
     return KisImportExportFilter::InternalError;
 }
 

@@ -34,4 +34,4 @@ qt5_add_resources(defaulttools_SRCS defaulttools.qrc)
 
 add_library(krita_flaketools MODULE ${defaulttools_SRCS})
 target_link_libraries(krita_flaketools kritaflake kritawidgets)
-install(TARGETS krita_flaketools DESTINATION ${CALLIGRA_PLUGIN_INSTALL_DIR})
+install(TARGETS krita_flaketools DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

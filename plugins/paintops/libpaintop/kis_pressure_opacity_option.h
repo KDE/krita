@@ -40,10 +40,6 @@ public:
      * of the painter.
      */
     quint8 apply(KisPainter* painter, const KisPaintInformation& info) const;
-    \
-    quint8 getOpacityU8(const KisPaintInformation& info) {
-        return quint8(qRound(getOpacityf(info) * 255.0));
-    }
 
     qreal  getOpacityf(const KisPaintInformation& info);
 

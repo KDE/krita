@@ -84,6 +84,9 @@ public:
 
     void translate(const QPointF &offset);
 
+    QRect approxChangeRect(const QRect &rc);
+    QRect approxNeedRect(const QRect &rc, const QRect &fullBounds);
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

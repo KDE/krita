@@ -31,6 +31,9 @@
 #include "kis_tool_proxy.h"
 #include "kis_signal_compressor.h"
 #include "input/kis_tablet_debugger.h"
+#include "kis_timed_signal_threshold.h"
+#include "kis_signal_auto_connection.h"
+
 
 class KisToolInvocationAction;
 
@@ -47,7 +50,7 @@ public:
     bool processUnhandledEvent(QEvent *event);
     void setupActions();
     void saveTouchEvent( QTouchEvent* event );
-    bool handleCompressedTabletEvent(QObject *object, QTabletEvent *tevent);
+    bool handleCompressedTabletEvent(QEvent *event);
 
     KisInputManager *q;
 
@@ -67,7 +70,7 @@ public:
 
     QObject *eventsReceiver = 0;
     KisSignalCompressor moveEventCompressor;
-    QScopedPointer<QTabletEvent> compressedMoveEvent;
+    QScopedPointer<QEvent> compressedMoveEvent;
     bool testingAcceptCompressedTabletEvents = false;
     bool testingCompressBrushEvents = false;
 
@@ -75,6 +78,7 @@ public:
     typedef QPair<int, QPointer<QObject> > PriorityPair;
     typedef QList<PriorityPair> PriorityList;
     PriorityList priorityEventFilter;
+    int priorityEventFilterSeqNo;
 
     void blockMouseEvents();
     void allowMouseEvents();
@@ -108,9 +112,14 @@ public:
         bool eventFilter(QObject* object, QEvent* event );
 
     private:
+        void setupFocusThreshold(QObject *object);
+
+    private:
         KisInputManager::Private *d;
         QMap<QObject*, KisCanvas2*> canvasResolver;
         int eatOneMouseStroke;
+        KisTimedSignalThreshold focusSwitchThreshold;
+        KisSignalAutoConnectionsStore thresholdConnections;
     };
     CanvasSwitcher canvasSwitcher;
 
@@ -132,6 +141,5 @@ public:
     };
     EventEater eventEater;
 
-    bool focusOnEnter = true;
     bool containsPointer = true;
 };

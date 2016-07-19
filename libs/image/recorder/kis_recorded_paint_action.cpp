@@ -41,7 +41,7 @@
 #include "kis_layer.h"
 #include "kis_play_info.h"
 #include "kis_node_query_path.h"
-
+#include <kis_dom_utils.h>
 // Recorder
 #include "kis_recorded_action_factory_registry.h"
 #include "kis_recorded_action_load_context.h"
@@ -51,6 +51,7 @@
 #include <filter/kis_filter_configuration.h>
 #include <generator/kis_generator_registry.h>
 #include <generator/kis_generator.h>
+
 
 struct Q_DECL_HIDDEN KisRecordedPaintAction::Private {
     KisPaintOpPresetSP paintOpPreset;
@@ -120,7 +121,7 @@ void KisRecordedPaintAction::toXML(QDomDocument& doc, QDomElement& elt, KisRecor
     elt.appendChild(backgroundColorElt);
 
     // Opacity
-    elt.setAttribute("opacity", d->opacity);
+    elt.setAttribute("opacity", KisDomUtils::toString(d->opacity));
 
     // paintIncremental
     elt.setAttribute("paintIncremental", d->paintIncremental);
@@ -306,11 +307,8 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info, KoUpd
         painter2.setOpacity(d->opacity * 255);
 
         QVector<QRect> dirtyRects = painter->takeDirtyRegion();
-        QVector<QRect>::iterator it = dirtyRects.begin();
-        QVector<QRect>::iterator end = dirtyRects.end();
-        while (it != end) {
-            painter2.bitBlt(it->topLeft(), target, *it);
-            ++it;
+        Q_FOREACH (const QRect &rc, dirtyRects) {
+            painter2.bitBlt(rc.topLeft(), target, rc);
         }
 
         node->setDirty(painter2.takeDirtyRegion());
@@ -451,12 +449,12 @@ KoColor KisRecordedPaintActionFactory::colorFromXML(const QDomElement& elt, cons
 
 qreal KisRecordedPaintActionFactory::opacityFromXML(const QDomElement& elt)
 {
-    return elt.attribute("opacity", "1.0").toDouble();
+    return KisDomUtils::toDouble(elt.attribute("opacity", "1.0"));
 }
 
 bool KisRecordedPaintActionFactory::paintIncrementalFromXML(const QDomElement& elt)
 {
-    return elt.attribute("paintIncremental", "1").toInt();
+    return KisDomUtils::toInt(elt.attribute("paintIncremental", "1"));
 }
 
 QString KisRecordedPaintActionFactory::compositeOpFromXML(const QDomElement& elt)

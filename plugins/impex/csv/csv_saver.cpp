@@ -22,14 +22,13 @@
 #include <QDebug>
 #include <QApplication>
 
-#include <QUrl>
+#include <QFileInfo>
 #include <QFile>
 #include <QDir>
 #include <QVector>
 #include <QIODevice>
 #include <QRect>
-#include <QMimeDatabase>
-#include <QProgressDialog>
+#include <KisMimeDatabase.h>
 
 #include <KisPart.h>
 #include <KisDocument.h>
@@ -39,7 +38,6 @@
 
 #include <kis_annotation.h>
 #include <kis_types.h>
-#include <KisDocument.h>
 
 #include <kis_debug.h>
 #include <kis_image.h>
@@ -53,9 +51,10 @@
 
 #include "csv_layer_record.h"
 
-CSVSaver::CSVSaver(KisDocument *doc)
+CSVSaver::CSVSaver(KisDocument *doc, bool batchMode)
     : m_image(doc->image())
     , m_doc(doc)
+    , m_batchMode(batchMode)
     , m_stop(false)
 {
 }
@@ -69,7 +68,7 @@ KisImageWSP CSVSaver::image()
     return m_image;
 }
 
-KisImageBuilder_Result CSVSaver::encode(const QUrl &uri,const QString &filename)
+KisImageBuilder_Result CSVSaver::encode(const QString &filename)
 {
     int idx;
     int start, end;
@@ -81,7 +80,7 @@ KisImageBuilder_Result CSVSaver::encode(const QUrl &uri,const QString &filename)
     KisImageAnimationInterface *animation = m_image->animationInterface();
 
     //open the csv file for writing
-    QFile f(uri.toLocalFile());
+    QFile f(filename);
     if (!f.open(QIODevice::WriteOnly)) {
         return KisImageBuilder_RESULT_NOT_LOCAL;
     }
@@ -107,7 +106,6 @@ KisImageBuilder_Result CSVSaver::encode(const QUrl &uri,const QString &filename)
     //according to the QT docs, the slash is a universal directory separator
     path.append("/");
 
-    m_image->lock();
     node = m_image->rootLayer()->firstChild();
 
     //TODO: correct handling of the layer tree.
@@ -152,10 +150,14 @@ KisImageBuilder_Result CSVSaver::encode(const QUrl &uri,const QString &filename)
         end = start;
 
         for (idx = 0; idx < layers.size(); idx++) {
-            keyframe = layers.at(idx)->channel->lastKeyframe();
+            KisRasterKeyframeChannel *channel = layers.at(idx)->channel;
 
-            if ( (!keyframe.isNull()) && (keyframe->time() > end) )
-                end = keyframe->time();
+            if (channel) {
+                keyframe = channel->lastKeyframe();
+
+                if ( (!keyframe.isNull()) && (keyframe->time() > end) )
+                    end = keyframe->time();
+            }
         }
     }
 
@@ -165,21 +167,19 @@ KisImageBuilder_Result CSVSaver::encode(const QUrl &uri,const QString &filename)
 
     KisImageBuilder_Result retval= KisImageBuilder_RESULT_OK;
 
-    QProgressDialog progress(i18n("Exporting CSV..."), i18n("Cancel"),
-                             start, end, KisPart::instance()->currentMainwindow(), 0);
-
-    progress.setWindowModality(Qt::ApplicationModal);
-    progress.setMinimumDuration(1000);
-    progress.setValue(start);
-
+    if (!m_batchMode) {
+        emit m_doc->statusBarMessage(i18n("Saving CSV file..."));
+        emit m_doc->sigProgress(0);
+        connect(m_doc, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
+    }
     int frame = start;
     int step = 0;
 
     do {
         qApp->processEvents();
 
-        if (progress.wasCanceled()) {
-            retval = KisImageBuilder_RESULT_FAILURE;
+        if (m_stop) {
+            retval = KisImageBuilder_RESULT_CANCEL;
             break;
         }
 
@@ -280,7 +280,6 @@ KisImageBuilder_Result CSVSaver::encode(const QUrl &uri,const QString &filename)
             break;
 
         default :    //frames
-            progress.setValue(frame);
 
             if (frame > end) {
                 if (f.write("\r\n") < 0)
@@ -289,6 +288,7 @@ KisImageBuilder_Result CSVSaver::encode(const QUrl &uri,const QString &filename)
                 step = 8;
                 break;
             }
+
             ba = QString("\r\n#%1").arg(frame, 5, 10, QChar('0')).toUtf8();
             if (f.write(ba.data()) < 0) {
                 retval = KisImageBuilder_RESULT_FAILURE;
@@ -297,9 +297,24 @@ KisImageBuilder_Result CSVSaver::encode(const QUrl &uri,const QString &filename)
 
             for (idx = 0; idx < layers.size(); idx++) {
                 CSVLayerRecord *layer = layers.at(idx);
-                keyframe = layer->channel->keyframeAt(frame);
+                KisRasterKeyframeChannel *channel = layer->channel;
 
-                if (!keyframe.isNull()) {
+                if (channel) {
+                    if (frame == start) {
+                        keyframe = channel->activeKeyframeAt(frame);
+                    } else {
+                        keyframe = channel->keyframeAt(frame);
+                    }
+                } else {
+                    keyframe.clear(); // without animation
+                }
+
+                if ( !keyframe.isNull() || (frame == start) ) {
+
+                    if (!m_batchMode) {
+                        emit m_doc->sigProgress(((frame - start) * layers.size() + idx) * 100 /
+                                                ((end - start) * layers.size()));
+                    }
                     retval = getLayer(layer, exportDoc.data(), keyframe, path, frame, idx);
 
                     if (retval != KisImageBuilder_RESULT_OK)
@@ -320,10 +335,14 @@ KisImageBuilder_Result CSVSaver::encode(const QUrl &uri,const QString &filename)
         step++;
     } while((retval == KisImageBuilder_RESULT_OK) && (step < 8));
 
-    m_image->unlock();
-
     qDeleteAll(layers);
     f.close();
+
+    if (!m_batchMode) {
+        disconnect(m_doc, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
+        emit m_doc->sigProgress(100);
+        emit m_doc->clearStatusBarMessage();
+    }
     QApplication::restoreOverrideCursor();
     return retval;
 }
@@ -368,7 +387,11 @@ KisImageBuilder_Result CSVSaver::getLayer(CSVLayerRecord* layer, KisDocument* ex
     KisImageWSP image = exportDoc->image();
     KisPaintDeviceSP device = image->rootLayer()->firstChild()->projection();
 
-    layer->channel->fetchFrame(keyframe, device);
+    if (!keyframe.isNull()) {
+        layer->channel->fetchFrame(keyframe, device);
+    } else {
+        device->makeCloneFrom(layer->layer->projection(),image->bounds()); // without animation
+    }
     QRect bounds = device->exactBounds();
 
     if (bounds.isEmpty()) {
@@ -410,17 +433,19 @@ KisImageBuilder_Result CSVSaver::getLayer(CSVLayerRecord* layer, KisDocument* ex
 
     KisPNGConverter kpc(exportDoc);
 
-    return kpc.buildFile( QUrl::fromLocalFile(filename), image->bounds(),
-                          image->xRes(), image->yRes(), device,
-                          image->beginAnnotations(), image->endAnnotations(),
-                          options, (KisMetaData::Store* )0 );
+    KisImageBuilder_Result result = kpc.buildFile(filename, image->bounds(),
+                                                  image->xRes(), image->yRes(), device,
+                                                  image->beginAnnotations(), image->endAnnotations(),
+                                                  options, (KisMetaData::Store* )0 );
+
+    return result;
 }
 
 void CSVSaver::createTempImage(KisDocument* exportDoc)
 {
     exportDoc->setAutoSave(0);
     exportDoc->setOutputMimeType("image/png");
-    exportDoc->setSaveInBatchMode(true);
+    exportDoc->setFileBatchMode(true);
 
     KisImageWSP exportImage = new KisImage(exportDoc->createUndoStore(),
                                            m_image->width(), m_image->height(), m_image->colorSpace(),
@@ -434,16 +459,14 @@ void CSVSaver::createTempImage(KisDocument* exportDoc)
 }
 
 
-KisImageBuilder_Result CSVSaver::buildAnimation(const QUrl &uri,const QString &filename)
+KisImageBuilder_Result CSVSaver::buildAnimation(const QString &filename)
 {
     if (!m_image)
         return KisImageBuilder_RESULT_EMPTY;
+    return encode(filename);
+}
 
-    if (uri.isEmpty())
-        return KisImageBuilder_RESULT_NO_URI;
-
-    if (!uri.isLocalFile())
-        return KisImageBuilder_RESULT_NOT_EXIST;
-
-    return encode(uri, filename);
+void CSVSaver::cancel()
+{
+    m_stop = true;
 }

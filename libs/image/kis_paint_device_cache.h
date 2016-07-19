@@ -20,6 +20,7 @@
 #define __KIS_PAINT_DEVICE_CACHE_H
 
 #include "kis_lock_free_cache.h"
+#include <QElapsedTimer>
 
 
 class KisPaintDeviceCache
@@ -54,6 +55,23 @@ public:
 
     QRect exactBounds() {
         return m_exactBoundsCache.getValue();
+    }
+
+    QRect exactBoundsAmortized() {
+        QRect bounds;
+        bool result = m_exactBoundsCache.tryGetValue(bounds);
+
+        if (!result) {
+            /**
+             * The calculation of the exact bounds might be too slow
+             * in some special cases, e.g. for an empty canvas of 7k
+             * by 6k.  So we just always return extent, when the exact
+             * bounds is not available.
+             */
+            bounds = m_paintDevice->extent();
+        }
+
+        return bounds;
     }
 
     QRect nonDefaultPixelArea() {

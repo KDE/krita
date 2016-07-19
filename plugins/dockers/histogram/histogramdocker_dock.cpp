@@ -29,9 +29,9 @@
 #include "kis_idle_watcher.h"
 #include "histogramdockerwidget.h"
 
-HistogramDockerDock::HistogramDockerDock( )
+HistogramDockerDock::HistogramDockerDock()
     : QDockWidget(i18n("Histogram")),
-      m_imageIdleWatcher( new KisIdleWatcher(500, this)),
+      m_imageIdleWatcher(new KisIdleWatcher(500, this)),
       m_canvas(0), m_needsUpdate(true)
 {
     QWidget *page = new QWidget(this);
@@ -50,7 +50,7 @@ HistogramDockerDock::HistogramDockerDock( )
 
 void HistogramDockerDock::setCanvas(KoCanvasBase * canvas)
 {
-    if(m_canvas == canvas)
+    if (m_canvas == canvas)
         return;
 
     setEnabled(canvas != 0);
@@ -64,7 +64,7 @@ void HistogramDockerDock::setCanvas(KoCanvasBase * canvas)
     if (m_canvas) {
 
         KisPaintDeviceSP dev = m_canvas->image()->projection();
-        m_histogramWidget->setPaintDevice( dev );
+        m_histogramWidget->setPaintDevice(dev, m_canvas->image()->bounds());
 
         m_imageIdleWatcher->setTrackedImage(m_canvas->image());
 
@@ -84,23 +84,22 @@ void HistogramDockerDock::unsetCanvas()
 
 void HistogramDockerDock::startUpdateCanvasProjection()
 {
-    if( isVisible() ){
+    if (isVisible()) {
         m_needsUpdate = true;
     }
 }
 
 void HistogramDockerDock::sigColorSpaceChanged(const KoColorSpace *cs)
 {
-    if( isVisible() ){
+    if (isVisible()) {
         m_needsUpdate = true;
     }
 }
 
 void HistogramDockerDock::updateHistogram()
 {
-    if( isVisible() && m_needsUpdate ){
+    if (isVisible() && m_needsUpdate) {
         m_histogramWidget->updateHistogram();
         m_needsUpdate = false;
     }
 }
-

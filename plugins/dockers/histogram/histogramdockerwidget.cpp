@@ -41,27 +41,24 @@ HistogramDockerWidget::~HistogramDockerWidget()
 
 }
 
-void HistogramDockerWidget::setPaintDevice(KisPaintDeviceSP dev)
+void HistogramDockerWidget::setPaintDevice(KisPaintDeviceSP dev, const QRect& bounds)
 {
     m_paintDevice = dev;
+    m_bounds = bounds;
 }
 
 void HistogramDockerWidget::updateHistogram()
 {
-    QTime t;
-    t.start();
-
     if (!m_paintDevice.isNull()) {
         KisPaintDeviceSP m_devClone = new KisPaintDevice(m_paintDevice->colorSpace());
 
-        m_devClone->makeCloneFrom(m_paintDevice, m_paintDevice->exactBounds());
+        m_devClone->makeCloneFrom(m_paintDevice, m_bounds);
 
-        HistogramComputationThread *workerThread = new HistogramComputationThread(m_devClone);
+        HistogramComputationThread *workerThread = new HistogramComputationThread(m_devClone, m_bounds);
         connect(workerThread, &HistogramComputationThread::resultReady, this, &HistogramDockerWidget::receiveNewHistogram);
         connect(workerThread, &HistogramComputationThread::finished, workerThread, &QObject::deleteLater);
         workerThread->start();
     }
-    qDebug() << QTime::currentTime() << "+  " << __FUNCTION__ << ":" << __LINE__ << " " << "updateHistogram" << " " << t.elapsed();
 }
 
 void HistogramDockerWidget::receiveNewHistogram(HistVector *histogramData)
@@ -72,7 +69,7 @@ void HistogramDockerWidget::receiveNewHistogram(HistVector *histogramData)
 
 void HistogramDockerWidget::paintEvent(QPaintEvent *event)
 {
-    if( !m_histogramData.isEmpty() ){
+    if( !m_histogramData.empty() ){
         int nBins = m_histogramData.at(0).size();
 
         QLabel::paintEvent(event);
@@ -91,7 +88,7 @@ void HistogramDockerWidget::paintEvent(QPaintEvent *event)
         //find the most populous bin in the histogram to scale it properly
         for (int chan = 0; chan < channels.size(); chan++) {
             if( channels.at(chan)->channelType() != KoChannelInfo::ALPHA ){
-                unsigned int max = *std::max_element(m_histogramData.at(chan).constBegin(),m_histogramData.at(chan).constEnd());
+                unsigned int max = *std::max_element(m_histogramData.at(chan).begin(),m_histogramData.at(chan).end());
                 highest = std::max(max,highest);
             }
         }
@@ -113,7 +110,7 @@ void HistogramDockerWidget::paintEvent(QPaintEvent *event)
                     QPainterPath path;
                     path.moveTo(QPointF(-1,highest));
                     for (qint32 i = 0; i < nBins; ++i) {
-                        float v = highest-m_histogramData.at(chan).at(i);
+                        float v = highest-m_histogramData[chan][i];
                         path.lineTo(QPointF(i,v));
 
                     }
@@ -125,7 +122,7 @@ void HistogramDockerWidget::paintEvent(QPaintEvent *event)
                     pen.setWidth(1);
                     painter.setPen(pen);
                     for (qint32 i = 0; i < nBins; ++i) {
-                        float v = highest-m_histogramData.at(chan).at(i);
+                        float v = highest-m_histogramData[chan][i];
                         painter.drawLine(QPointF(i,highest),QPointF(i,v));
                     }
                 }
@@ -136,27 +133,36 @@ void HistogramDockerWidget::paintEvent(QPaintEvent *event)
 
 void HistogramComputationThread::run()
 {
-    QTime t;
-    t.start();
-
     const KoColorSpace *cs = m_dev->colorSpace();
     quint32 channelCount = m_dev->channelCount();
+    quint32 pixelSize = m_dev->pixelSize();
 
-    //allocate space for the data
+    quint32 imageSize = m_bounds.width()*m_bounds.height();
+    quint32 nSkip = 1+ (imageSize >> 20); //for speed use about 1M pixels for computing histograms
+
+    //allocate space for the histogram data
     bins.resize((int)channelCount);
     for (auto &bin : bins) {
         bin.resize(std::numeric_limits<quint8>::max()+1);
     }
 
     KisSequentialConstIterator it(m_dev, m_dev->exactBounds());
-    do {
-        const quint8* pixel = it.rawDataConst();
-        for (int i = 0; i < (int)channelCount; ++i) {
-            ++(bins[i][cs->scaleToU8(pixel, i)]);
-        }
-    } while (it.nextPixel());
+    int i;
+    quint32 toSkip = nSkip;
 
-    qDebug() << QTime::currentTime() << "+  " << __FUNCTION__ << ":" << __LINE__ << " " << "run" << " " << t.elapsed();
+    do {
+        i = it.nConseqPixels();
+        const quint8* pixel = it.rawDataConst();
+        for( int k =0; k<i; ++k){
+            if( --toSkip == 0 ){
+                for (int chan = 0; chan < (int)channelCount; ++chan) {
+                    bins[chan][cs->scaleToU8(pixel, chan)]++;
+                }
+                toSkip = nSkip;
+            }
+            pixel+=pixelSize;
+        }
+    } while (it.nextPixels(i));
 
     emit resultReady(&bins);
 }

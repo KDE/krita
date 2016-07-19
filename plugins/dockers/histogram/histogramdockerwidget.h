@@ -24,15 +24,16 @@
 #include <QLabel>
 #include <QThread>
 #include "kis_types.h"
+#include <vector>
 
-typedef QVector<QVector<quint32> > HistVector;
+typedef std::vector<std::vector<quint32> > HistVector; //Don't use QVector here - it's too slow for this purpose
 
 
 class HistogramComputationThread : public QThread
 {
     Q_OBJECT
 public:
-    HistogramComputationThread(KisPaintDeviceSP _dev) : m_dev(_dev)
+    HistogramComputationThread(KisPaintDeviceSP _dev, const QRect& _bounds) : m_dev(_dev), m_bounds(_bounds)
     {}
 
     void run() Q_DECL_OVERRIDE;
@@ -42,6 +43,7 @@ Q_SIGNALS:
 
 private:
     KisPaintDeviceSP m_dev;
+    QRect m_bounds;
     HistVector bins;
 };
 
@@ -53,7 +55,7 @@ class HistogramDockerWidget : public QLabel
 public:
     HistogramDockerWidget(QWidget *parent = 0, const char *name = 0, Qt::WindowFlags f = 0);
     ~HistogramDockerWidget();
-    void setPaintDevice( KisPaintDeviceSP dev );
+    void setPaintDevice(KisPaintDeviceSP dev, const QRect &bounds );
     void paintEvent(QPaintEvent *event);
 
 public Q_SLOTS:
@@ -63,7 +65,7 @@ public Q_SLOTS:
 private:
     KisPaintDeviceSP m_paintDevice;
     HistVector m_histogramData;
-
+    QRect m_bounds;
 };
 
 #endif // HISTOGRAMDOCKERWIDGET_H

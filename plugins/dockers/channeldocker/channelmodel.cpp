@@ -215,7 +215,7 @@ void ChannelModel::updateThumbnails(void)
 
         KisPaintDeviceSP dev = canvas_image->projection();        
         KisPaintDeviceSP thumbnailDev = dev->createThumbnailDeviceOversampled(m_thumbnailSizeLimit.width(), m_thumbnailSizeLimit.height(),
-                                                                              m_oversampleRatio);
+                                                                              m_oversampleRatio, canvas_image->bounds());
 
         QSize thumbnailSizeOversample = thumbnailDev->extent().size();
 

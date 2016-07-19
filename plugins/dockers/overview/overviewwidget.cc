@@ -122,7 +122,7 @@ void OverviewWidget::setCanvas(KoCanvasBase * canvas)
 
 QSize OverviewWidget::calculatePreviewSize()
 {
-    QSize imageSize(m_canvas->image()->projection()->extent().size());
+    QSize imageSize(m_canvas->image()->bounds().size());
     imageSize.scale(size(), Qt::KeepAspectRatio);
     return imageSize;
 }
@@ -257,7 +257,7 @@ void OverviewWidget::generateThumbnail()
 
             //creating a special stroke that computes thumbnail image in small chunks that can be quickly interrupted
             //if user starts painting
-            QList<KisStrokeJobData*> jobs = OverviewThumbnailStrokeStrategy::createJobsData(dev, thumbDev, previewSize);
+            QList<KisStrokeJobData*> jobs = OverviewThumbnailStrokeStrategy::createJobsData(dev, image->bounds(), thumbDev, previewSize);
 
             Q_FOREACH (KisStrokeJobData *jd, jobs) {
                 image->addJob(strokeId, jd);
@@ -303,9 +303,8 @@ void OverviewWidget::paintEvent(QPaintEvent* event)
 }
 
 OverviewThumbnailStrokeStrategy::OverviewThumbnailStrokeStrategy(KisImageWSP image)
-    : KisSimpleStrokeStrategy("OverviewThumbnail")
+    : KisSimpleStrokeStrategy("OverviewThumbnail"), m_image(image)
 {
-    Q_UNUSED(image);
     enableJob(KisSimpleStrokeStrategy::JOB_INIT, true, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
     //enableJob(KisSimpleStrokeStrategy::JOB_FINISH);
@@ -316,10 +315,10 @@ OverviewThumbnailStrokeStrategy::OverviewThumbnailStrokeStrategy(KisImageWSP ima
     setCanForgetAboutMe(true);
 }
 
-QList<KisStrokeJobData *> OverviewThumbnailStrokeStrategy::createJobsData(KisPaintDeviceSP dev, KisPaintDeviceSP thumbDev, const QSize& thumbnailSize)
+QList<KisStrokeJobData *> OverviewThumbnailStrokeStrategy::createJobsData(KisPaintDeviceSP dev, const QRect& imageRect, KisPaintDeviceSP thumbDev, const QSize& thumbnailSize)
 {
     QSize thumbnailOversampledSize = oversample * thumbnailSize;
-    QRect imageRect = dev->extent();
+
     if ((thumbnailOversampledSize.width() > imageRect.width()) || (thumbnailOversampledSize.height() > imageRect.height())) {
         thumbnailOversampledSize.scale(imageRect.size(), Qt::KeepAspectRatio);
     }
@@ -352,7 +351,7 @@ void OverviewThumbnailStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     if (d_pd) {
         //we aren't going to use oversample capability of createThumbnailDevice because it recomputes exact bounds for each small patch, which is
         //slow. We'll handle scaling separately.
-        KisPaintDeviceSP thumbnailTile = d_pd->dev->createThumbnailDeviceOversampled(d_pd->thumbnailSize.width(), d_pd->thumbnailSize.height(), 1, QRect(), d_pd->tileRect);
+        KisPaintDeviceSP thumbnailTile = d_pd->dev->createThumbnailDeviceOversampled(d_pd->thumbnailSize.width(), d_pd->thumbnailSize.height(), 1, m_image->bounds(), d_pd->tileRect);
         {
             QMutexLocker locker(&m_thumbnailMergeMutex);
             KisPainter gc(d_pd->thumbDev);

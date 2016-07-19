@@ -37,7 +37,7 @@ public:
     OverviewThumbnailStrokeStrategy(KisImageWSP image);
     ~OverviewThumbnailStrokeStrategy();
 
-    static QList<KisStrokeJobData*> createJobsData(KisPaintDeviceSP dev, KisPaintDeviceSP thumbDev, const QSize &thumbnailSize);
+    static QList<KisStrokeJobData*> createJobsData(KisPaintDeviceSP dev, const QRect& imageRect, KisPaintDeviceSP thumbDev, const QSize &thumbnailSize);
 
 private:
     void initStrokeCallback();
@@ -54,6 +54,7 @@ private:
     struct Private;
     const QScopedPointer<Private> m_d;
     QMutex m_thumbnailMergeMutex;
+    KisImageSP m_image;
 };
 
 class OverviewWidget : public QWidget

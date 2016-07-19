@@ -285,9 +285,7 @@ void KisTiledDataManager::purge(const QRect& area)
     QList<KisTileSP> tilesToDelete;
     {
         const qint32 tileDataSize = KisTileData::HEIGHT * KisTileData::WIDTH * pixelSize();
-        KisTileData *tileData = m_hashTable->defaultTileData();
-        tileData->blockSwapping();
-        const quint8 *defaultData = tileData->data();
+        const quint8 *defaultData = m_hashTable->defaultTileData()->data();
 
         KisTileHashTableIterator iter(m_hashTable);
         KisTileSP tile;
@@ -302,8 +300,6 @@ void KisTiledDataManager::purge(const QRect& area)
             }
             ++iter;
         }
-
-        tileData->unblockSwapping();
     }
     Q_FOREACH (KisTileSP tile, tilesToDelete) {
         m_hashTable->deleteTile(tile);

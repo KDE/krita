@@ -70,11 +70,6 @@ public Q_SLOTS:
     void slotSetAY(qreal value);
     void slotSetAZ(qreal value);
 
-    void slotFlipX();
-    void slotFlipY();
-    void slotRotateCW();
-    void slotRotateCCW();
-
     void slotSetWarpAlpha(qreal value);
     void slotSetWarpDensity(int value);
 

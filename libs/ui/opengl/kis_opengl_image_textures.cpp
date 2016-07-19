@@ -81,8 +81,8 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
     , m_conversionFlags(conversionFlags)
     , m_proofingConfig(0)
     , m_proofingTransform(0)
-    , m_createNewProofingTransform(true)
     , m_tilesDestinationColorSpace(0)
+    , m_createNewProofingTransform(true)
     , m_internalColorManagementActive(true)
     , m_checkerTexture(0)
     , m_glFuncs(0)
@@ -102,12 +102,6 @@ void KisOpenGLImageTextures::initGL(QOpenGLFunctions *f)
     }
 
     getTextureSize(&m_texturesInfo);
-
-    // we use local static object for creating pools shared among
-    // different images
-    static KisTextureTileInfoPoolRegistry s_poolRegistry;
-    m_infoChunksPool = s_poolRegistry.getPool(m_texturesInfo.width, m_texturesInfo.height);
-
     m_glFuncs->glGenTextures(1, &m_checkerTexture);
     createImageTextureTiles();
 
@@ -330,8 +324,7 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect,
                                                      alignedTileTextureRect,
                                                      alignedUpdateRect,
                                                      alignedBounds,
-                                                     levelOfDetail,
-                                                     m_infoChunksPool));
+                                                     levelOfDetail));
             // Don't update empty tiles
             if (tileInfo->valid()) {
                 tileInfo->retrieveData(m_image, channelFlags, m_onlyOneChannelSelected, m_selectedChannelIndex);

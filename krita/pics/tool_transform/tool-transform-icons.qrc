@@ -14,10 +14,6 @@
         <file>dark_transform_icons_warp.png</file>
         <file>dark_transform_icons_penPressure.png</file>
         <file>dark_krita_tool_transform_recursive.png</file>
-        <file>dark_transform_icons_mirror_x.svg</file>
-        <file>dark_transform_icons_mirror_y.svg</file>
-        <file>dark_transform_icons_rotate_cw.svg</file>
-        <file>dark_transform_icons_rotate_ccw.svg</file>
 
         <file>light_transform_icons_cage.png</file>
         <file>light_transform_icons_liquify_erase.png</file>
@@ -32,9 +28,6 @@
         <file>light_transform_icons_warp.png</file>
         <file>light_transform_icons_penPressure.png</file>
         <file>light_krita_tool_transform_recursive.png</file>
-        <file>light_transform_icons_mirror_x.svg</file>
-        <file>light_transform_icons_mirror_y.svg</file>
-        <file>light_transform_icons_rotate_cw.svg</file>
-        <file>light_transform_icons_rotate_ccw.svg</file>
+
     </qresource>
 </RCC>

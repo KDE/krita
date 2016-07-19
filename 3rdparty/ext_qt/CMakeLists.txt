@@ -30,16 +30,9 @@ else()
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL https://download.qt.io/official_releases/qt/5.6/5.6.1-1/single/qt-everywhere-opensource-src-5.6.1-1.tar.xz
         URL_MD5 f44fd4fcae71087f90d9c68e9d8be449
+        PATCH_COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/macdeploy-qt.diff
         INSTALL_DIR ${EXTPREFIX_qt}
-        CONFIGURE_COMMAND "<SOURCE_DIR>/configure -confirm-license  -opensource -nomake examples \
-                -no-openssl \
-                -no-compile-examples -qt-freetype -qt-harfbuzz -opengl desktop \
-                -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg 
-                -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity \
-                -skip qtenginio -skip qtgraphicaleffects -skip qtlocation -skip qtmultimedia \
-                -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets \
-                -skip qtwebview -skp qtxmlpatterns \
-                -prefix ${EXTPREFIX_qt} "
+        CONFIGURE_COMMAND <SOURCE_DIR>/configure -confirm-license  -opensource -nomake examples -no-openssl -no-compile-examples -qt-freetype -qt-harfbuzz -opengl desktop -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtenginio -skip qtgraphicaleffects -skip qtlocation -skip qtmultimedia -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtxmlpatterns -prefix ${EXTPREFIX_qt} 
         BUILD_COMMAND make
         INSTALL_COMMAND make install
         UPDATE_COMMAND ""

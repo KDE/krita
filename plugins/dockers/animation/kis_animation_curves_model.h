@@ -79,6 +79,9 @@ protected:
     KisNodeSP nodeAt(QModelIndex index) const;
     QList<KisKeyframeChannel *> channelsAt(QModelIndex index) const;
 
+private Q_SLOTS:
+    void slotKeyframeChanged(KisKeyframe *keyframe);
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

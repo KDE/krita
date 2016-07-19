@@ -87,6 +87,14 @@ struct KisAnimationCurvesModel::Private
         return curves.indexOf(curve);
     }
 
+    int rowForChannel(KisKeyframeChannel *channel) {
+        for (int row = 0; row < curves.count(); row++) {
+            if (curves.at(row)->channel() == channel) return row;
+        }
+
+        return -1;
+    }
+
     QColor chooseNextColor() {
         if (curves.isEmpty()) nextColorHue = 0;
 
@@ -248,6 +256,18 @@ KisAnimationCurve *KisAnimationCurvesModel::addCurve(KisScalarKeyframeChannel *c
 
     endInsertRows();
 
+    connect(channel, &KisScalarKeyframeChannel::sigKeyframeAdded,
+            this, &KisAnimationCurvesModel::slotKeyframeChanged);
+
+    connect(channel, &KisScalarKeyframeChannel::sigKeyframeMoved,
+            this, &KisAnimationCurvesModel::slotKeyframeChanged);
+
+    connect(channel, &KisScalarKeyframeChannel::sigKeyframeRemoved,
+            this, &KisAnimationCurvesModel::slotKeyframeChanged);
+
+    connect(channel, &KisScalarKeyframeChannel::sigKeyframeChanged,
+            this, &KisAnimationCurvesModel::slotKeyframeChanged);
+
     return curve;
 }
 
@@ -255,6 +275,8 @@ void KisAnimationCurvesModel::removeCurve(KisAnimationCurve *curve)
 {
     int index = m_d->curves.indexOf(curve);
     if (index < 0) return;
+
+    curve->channel()->disconnect(this);
 
     beginRemoveRows(QModelIndex(), index, index);
 
@@ -282,4 +304,11 @@ QList<KisKeyframeChannel *> KisAnimationCurvesModel::channelsAt(QModelIndex inde
     KisKeyframeChannel *channel = m_d->getCurveAt(index)->channel();
     QList<KisKeyframeChannel*> list({channel});
     return list;
+}
+
+void KisAnimationCurvesModel::slotKeyframeChanged(KisKeyframe *keyframe)
+{
+    int row = m_d->rowForChannel(keyframe->channel());
+    QModelIndex changedIndex = index(row, keyframe->time());
+    emit dataChanged(changedIndex, changedIndex);
 }

@@ -559,6 +559,9 @@ Q_SIGNALS:
      * This signal is emitted when the node is locked or unlocked with \ref setSystemLocked.
      */
     void systemLockingChanged(bool);
+
+    void keyframeChannelAdded(KisKeyframeChannel *channel);
+
 private:
 
     struct Private;

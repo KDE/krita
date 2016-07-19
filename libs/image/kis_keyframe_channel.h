@@ -118,6 +118,7 @@ Q_SIGNALS:
     void sigKeyframeRemoved(KisKeyframe *keyframe);
     void sigKeyframeAboutToBeMoved(KisKeyframe *keyframe, int toTime);
     void sigKeyframeMoved(KisKeyframe *keyframe, int fromTime);
+    void sigKeyframeChanged(KisKeyframe *keyframe);
 
 protected:
     typedef QMap<int, KisKeyframeSP> KeyframesMap;

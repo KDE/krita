@@ -156,6 +156,8 @@ void KisScalarKeyframeChannel::setScalarValueImpl(KisKeyframeSP keyframe, qreal 
     KisTimeRange range = affectedFrames(keyframe->time());
 
     requestUpdate(range, rect);
+
+    emit sigKeyframeChanged(key);
 }
 
 void KisScalarKeyframeChannel::setScalarValue(KisKeyframeSP keyframe, qreal value, KUndo2Command *parentCommand)
@@ -193,7 +195,10 @@ void KisScalarKeyframeChannel::setTangentsImpl(KisKeyframeSP keyframe, QPointF l
     QRect rect = affectedRect(keyframe);
     KisTimeRange range = affectedFrames(keyframe->time());
 
-    requestUpdate(range, rect);}
+    requestUpdate(range, rect);
+
+    emit sigKeyframeChanged(keyframe.data());
+}
 
 qreal cubicBezier(qreal p0, qreal delta1, qreal delta2, qreal p3, qreal t) {
     qreal p1 = p0 + delta1;

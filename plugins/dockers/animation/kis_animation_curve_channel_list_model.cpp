@@ -58,6 +58,15 @@ struct KisAnimationCurveChannelListModel::Private
 
         return -1;
     }
+
+    void addCurveForChannel(NodeListItem *nodeItem, KisKeyframeChannel *channel) {
+        KisScalarKeyframeChannel *scalarChannel = dynamic_cast<KisScalarKeyframeChannel*>(channel);
+
+        if (scalarChannel) {
+            KisAnimationCurve *curve = curvesModel->addCurve(scalarChannel);
+            nodeItem->curves.append(curve);
+        }
+    }
 };
 
 KisAnimationCurveChannelListModel::KisAnimationCurveChannelListModel(KisAnimationCurvesModel *curvesModel, QObject *parent)
@@ -90,6 +99,7 @@ void KisAnimationCurveChannelListModel::selectedNodesChanged(const KisNodeList &
                 m_d->curvesModel->removeCurve(curve);
             }
 
+            item->dummy->node()->disconnect(this);
             delete item;
         }
     }
@@ -106,17 +116,31 @@ void KisAnimationCurveChannelListModel::selectedNodesChanged(const KisNodeList &
             m_d->items.append(item);
 
             Q_FOREACH(KisKeyframeChannel *channel, dummy->node()->keyframeChannels()) {
-                KisScalarKeyframeChannel *scalarChannel = dynamic_cast<KisScalarKeyframeChannel*>(channel);
-
-                if (scalarChannel) {
-                    KisAnimationCurve *curve = m_d->curvesModel->addCurve(scalarChannel);
-                    item->curves.append(curve);
-                }
+                m_d->addCurveForChannel(item, channel);
             }
+
+            connect(node.data(), &KisNode::keyframeChannelAdded,
+                    this, &KisAnimationCurveChannelListModel::keyframeChannelAddedToNode);
 
             endInsertRows();
         }
     }
+}
+
+void KisAnimationCurveChannelListModel::keyframeChannelAddedToNode(KisKeyframeChannel *channel)
+{
+    KisNodeDummy *dummy = m_d->dummiesFacade->dummyForNode(KisNodeSP(channel->node()));
+    int row = m_d->rowForDummy(dummy);
+    KIS_ASSERT_RECOVER_RETURN(row >= 0);
+
+    NodeListItem *item = m_d->itemForRow(row);
+
+    int newCurveRow = item->curves.count();
+    beginInsertRows(index(row, 0, QModelIndex()), newCurveRow, newCurveRow);
+
+    m_d->addCurveForChannel(item, channel);
+
+    endInsertRows();
 }
 
 QModelIndex KisAnimationCurveChannelListModel::index(int row, int column, const QModelIndex &parent) const

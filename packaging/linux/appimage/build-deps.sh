@@ -43,8 +43,8 @@ yum -y update
 yum -y install wget tar bzip2 git libtool which fuse fuse-devel libpng-devel automake libtool mesa-libEGL cppunit-devel cmake glibc-headers libstdc++-devel gcc-c++ freetype-devel fontconfig-devel libxml2-devel libstdc++-devel libXrender-devel patch xcb-util-keysyms-devel libXi-devel mesa-libGL-devel libxcb libxcb-devel xcb-util xcb-util-devel
 
 # Newer compiler than what comes with CentOS 6
-yum install centos-release-scl-rh
-yum install devtoolset-3-gcc devtoolset-3-gcc-c++
+yum -y install centos-release-scl-rh
+yum -y install devtoolset-3-gcc devtoolset-3-gcc-c++
 scl enable devtoolset-3 bash
 
 # Make sure we build from the /, parts of this script depends on that. We also need to run as root...

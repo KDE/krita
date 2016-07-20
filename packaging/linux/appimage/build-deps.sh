@@ -45,7 +45,7 @@ yum -y install wget tar bzip2 git libtool which fuse fuse-devel libpng-devel aut
 # Newer compiler than what comes with CentOS 6
 yum -y install centos-release-scl-rh
 yum -y install devtoolset-3-gcc devtoolset-3-gcc-c++
-scl enable devtoolset-3 bash
+. /opt/rh/devtoolset-3/enable
 
 # Make sure we build from the /, parts of this script depends on that. We also need to run as root...
 cd  /

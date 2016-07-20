@@ -31,7 +31,7 @@
 
 
 HistogramDockerWidget::HistogramDockerWidget(QWidget *parent, const char *name, Qt::WindowFlags f)
-    : QLabel(parent, f), m_paintDevice(nullptr)
+    : QLabel(parent, f), m_paintDevice(nullptr), m_smoothHistogram(true)
 {
     setObjectName(name);
 }
@@ -88,7 +88,14 @@ void HistogramDockerWidget::paintEvent(QPaintEvent *event)
         //find the most populous bin in the histogram to scale it properly
         for (int chan = 0; chan < channels.size(); chan++) {
             if( channels.at(chan)->channelType() != KoChannelInfo::ALPHA ){
-                unsigned int max = *std::max_element(m_histogramData.at(chan).begin(),m_histogramData.at(chan).end());
+                std::vector<quint32> histogramTemp = m_histogramData.at(chan);
+                //use 95th percentile, rather than max for better visual appearance
+                int nthPercentile = 2*histogramTemp.size()/100;
+                //unsigned int max = *std::max_element(m_histogramData.at(chan).begin(),m_histogramData.at(chan).end());
+                std::nth_element(histogramTemp.begin(),
+                                 histogramTemp.begin()+nthPercentile, histogramTemp.end(), std::greater<int>());
+                unsigned int max = *(histogramTemp.begin()+nthPercentile);
+
                 highest = std::max(max,highest);
             }
         }
@@ -106,11 +113,11 @@ void HistogramDockerWidget::paintEvent(QPaintEvent *event)
                 pen.setWidth(0);
                 painter.setPen(pen);
 
-                if (0){
+                if (m_smoothHistogram){
                     QPainterPath path;
                     path.moveTo(QPointF(-1,highest));
                     for (qint32 i = 0; i < nBins; ++i) {
-                        float v = highest-m_histogramData[chan][i];
+                        float v = std::max((float)highest-m_histogramData[chan][i],0.f);
                         path.lineTo(QPointF(i,v));
 
                     }
@@ -122,7 +129,7 @@ void HistogramDockerWidget::paintEvent(QPaintEvent *event)
                     pen.setWidth(1);
                     painter.setPen(pen);
                     for (qint32 i = 0; i < nBins; ++i) {
-                        float v = highest-m_histogramData[chan][i];
+                        float v = std::max((float)highest-m_histogramData[chan][i],0.f);
                         painter.drawLine(QPointF(i,highest),QPointF(i,v));
                     }
                 }

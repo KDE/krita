@@ -66,6 +66,7 @@ private:
     KisPaintDeviceSP m_paintDevice;
     HistVector m_histogramData;
     QRect m_bounds;
+    bool m_smoothHistogram;
 };
 
 #endif // HISTOGRAMDOCKERWIDGET_H

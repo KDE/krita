@@ -71,8 +71,7 @@ public:
 
 private Q_SLOTS:
 
-    void switchType(int index);
-    void switchColorize(bool toggle);
+    void configureSliderLimitsAndLabels();
 };
 
 #endif

@@ -1272,7 +1272,7 @@ bool KisDocument::openFile()
         emit sigLoadingFinished();
     }
 
-    if (!d->suppressProgress) {
+    if (!d->suppressProgress && d->progressUpdater) {
         QPointer<KoUpdater> updater = d->progressUpdater->startSubtask(1, "clear undo stack");
         updater->setProgress(0);
         undoStack()->clear();

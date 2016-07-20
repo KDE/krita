@@ -163,7 +163,6 @@ set(kritaui_LIB_SRCS
     opengl/kis_opengl_canvas_debugger.cpp
     opengl/kis_opengl_image_textures.cpp
     opengl/kis_texture_tile.cpp
-    opengl/kis_texture_tile_update_info.cpp
     kis_fps_decoration.cpp
     ora/kis_open_raster_stack_load_visitor.cpp
     ora/kis_open_raster_stack_save_visitor.cpp

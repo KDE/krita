@@ -542,8 +542,8 @@
       <icon></icon>
       <text>Out of Gamut Warnings</text>
       <whatsThis></whatsThis>
-      <toolTip>Turns on warnings for colors our of proofed gamut, needs soft proofing to be turned on.</toolTip>
-      <iconText>Turns on warnings for colors our of proofed gamut, needs soft proofing to be turned on.</iconText>
+      <toolTip>Turns on warnings for colors out of proofed gamut, needs soft proofing to be turned on.</toolTip>
+      <iconText>Turns on warnings for colors out of proofed gamut, needs soft proofing to be turned on.</iconText>
       <shortcut>Ctrl+Shift+Y</shortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>

@@ -209,7 +209,7 @@
       <item row="5" column="2" colspan="2">
        <widget class="QCheckBox" name="ckbProofBlackPoint">
         <property name="text">
-         <string>Back Point Compensation</string>
+         <string>Black Point Compensation</string>
         </property>
        </widget>
       </item>

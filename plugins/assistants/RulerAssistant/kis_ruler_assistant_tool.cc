@@ -233,10 +233,11 @@ void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
                 return;
             }
             m_snapIsRadial = false;
-        } else if (m_handleDrag && assistant->handles().size()>1 && (assistant->id() == "ruler" ||
-                                    assistant->id() == "parallel ruler" ||
-                                    assistant->id() == "infinite ruler" ||
-                                    assistant->id() == "spline")){
+        }
+        else if (m_handleDrag && assistant->handles().size()>1 && (assistant->id() == "ruler" ||
+                                                                   assistant->id() == "parallel ruler" ||
+                                                                   assistant->id() == "infinite ruler" ||
+                                                                   assistant->id() == "spline")){
             if (m_handleDrag == assistant->handles()[0]) {
                 m_dragStart = *assistant->handles()[1];
             } else if (m_handleDrag == assistant->handles()[1]) {
@@ -300,7 +301,8 @@ void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
 
         if (moveRect.contains(mousePos)) {
             m_assistantDrag = assistant;
-            m_mousePosition = event->point;
+            m_cursorStart = event->point;
+            m_currentAdjustment = QPointF();
             m_internalMode = MODE_EDITING;
             return;
         }
@@ -359,7 +361,8 @@ void KisRulerAssistantTool::continuePrimaryAction(KoPointerEvent *event)
             dragRadius.setLength(m_radius.length());
             *m_handleDrag = dragRadius.p2();
         } else if (event->modifiers() == Qt::ShiftModifier ) {
-            *m_handleDrag = straightLine(event->point, m_dragStart);
+            QPointF move = snapToClosestAxis(event->point - m_dragStart);
+            *m_handleDrag = m_dragStart + move;
         } else {
             *m_handleDrag = snapToGuide(event, QPointF(), false);
         }
@@ -380,18 +383,19 @@ void KisRulerAssistantTool::continuePrimaryAction(KoPointerEvent *event)
         }
         m_canvas->updateCanvas();
     } else if (m_assistantDrag) {
-        QPointF adjust = snapToGuide(event, QPointF(), false) - m_mousePosition;
+        QPointF newAdjustment = snapToGuide(event, QPointF(), false) - m_cursorStart;
+        if (event->modifiers() == Qt::ShiftModifier ) {
+            newAdjustment = snapToClosestAxis(newAdjustment);
+        }
         Q_FOREACH (KisPaintingAssistantHandleSP handle, m_assistantDrag->handles()) {
-            *handle += adjust;
-
+            *handle += (newAdjustment - m_currentAdjustment);
         }
         if (m_assistantDrag->id()== "vanishing point"){
             Q_FOREACH (KisPaintingAssistantHandleSP handle, m_assistantDrag->sideHandles()) {
-                *handle += adjust;
-
+                *handle += (newAdjustment - m_currentAdjustment);
             }
         }
-        m_mousePosition = snapToGuide(event, QPointF(), false);
+        m_currentAdjustment = newAdjustment;
         m_canvas->updateCanvas();
 
     } else {
@@ -568,22 +572,6 @@ void KisRulerAssistantTool::mouseMoveEvent(KoPointerEvent *event)
         m_selectedNode2.data()->operator = (QPointF(m_selectedNode2.data()->x(),m_selectedNode2.data()->y()) + translate);
         m_canvas->updateCanvas();
     }
-}
-
-QPointF KisRulerAssistantTool::straightLine(QPointF point, QPointF compare)
-{
-    QPointF comparison = point - compare;
-    QPointF result;
-
-    if (fabs(comparison.x()) > fabs(comparison.y())) {
-        result.setX(point.x());
-        result.setY(compare.y());
-    } else {
-        result.setX(compare.x());
-        result.setY(point.y());
-    }
-
-    return result;
 }
 
 void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)

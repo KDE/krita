@@ -86,7 +86,7 @@ bool KisDefaultBounds::externalFrameActive() const
 
 struct Q_DECL_HIDDEN KisSelectionDefaultBounds::Private
 {
-    KisPaintDeviceSP parentDevice;
+    KisPaintDeviceWSP parentDevice;
 };
 
 KisSelectionDefaultBounds::KisSelectionDefaultBounds(KisPaintDeviceSP parentDevice, KisImageWSP image)

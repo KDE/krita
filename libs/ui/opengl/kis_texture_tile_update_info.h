@@ -36,6 +36,16 @@ class KisTextureTileUpdateInfo;
 typedef QSharedPointer<KisTextureTileUpdateInfo> KisTextureTileUpdateInfoSP;
 typedef QVector<KisTextureTileUpdateInfoSP> KisTextureTileUpdateInfoSPList;
 
+/**
+ * A buffer object for temporary data needed during the update process.
+ *
+ * - the buffer is allocated from the common pool to avoid memory
+ *   fragmentation
+ *
+ * - the buffer's lifetime defines the lifetime of the allocated chunk
+ *   of memory, so you don't have to thing about free'ing the memory
+ */
+
 class DataBuffer
 {
 public:

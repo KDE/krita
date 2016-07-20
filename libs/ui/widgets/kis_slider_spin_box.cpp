@@ -36,6 +36,8 @@
 #include "KisPart.h"
 #include "input/kis_input_manager.h"
 
+#include "kis_numparser.h"
+
 class KisAbstractSliderSpinBoxPrivate {
 public:
     enum Style {
@@ -64,6 +66,7 @@ public:
     QSpinBox* dummySpinBox;
     Style style;
     bool blockUpdateSignalOnDrag;
+	bool parseInt;
 };
 
 KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractSliderSpinBoxPrivate* _d)
@@ -91,8 +94,8 @@ KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractS
 
     connect(d->edit, SIGNAL(editingFinished()), this, SLOT(editLostFocus()));
 
-    d->validator = new QDoubleValidator(d->edit);
-    d->edit->setValidator(d->validator);
+	d->validator = new QDoubleValidator(d->edit);
+	//d->edit->setValidator(d->validator);
 
     d->value = 0;
     d->minimum = 0;
@@ -103,6 +106,8 @@ KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractS
     d->slowFactor = 0.1;
     d->shiftMode = false;
     d->blockUpdateSignalOnDrag = false;
+
+	d->parseInt = false;
 
     setExponentRatio(1.0);
 
@@ -491,10 +496,18 @@ void KisAbstractSliderSpinBox::commitEnteredValue()
 {
     Q_D(KisAbstractSliderSpinBox);
 
-    QLocale locale;
+	//QLocale locale;
     bool ok = false;
 
-    qreal value = locale.toDouble(d->edit->text(), &ok) * d->factor;
+	//qreal value = locale.toDouble(d->edit->text(), &ok) * d->factor;
+	qreal value;
+
+	if (d->parseInt) {
+		value = KisNumericParser::parseIntegerMathExpr(d->edit->text(), &ok) * d->factor;
+	} else {
+		value = KisNumericParser::parseSimpleMathExpr(d->edit->text(), &ok) * d->factor;
+	}
+
     if (ok) {
         setInternalValue(value);
     }
@@ -774,6 +787,10 @@ class KisSliderSpinBoxPrivate : public KisAbstractSliderSpinBoxPrivate {
 
 KisSliderSpinBox::KisSliderSpinBox(QWidget* parent) : KisAbstractSliderSpinBox(parent, new KisSliderSpinBoxPrivate)
 {
+	Q_D(KisSliderSpinBox);
+
+	d->parseInt = true;
+
     setRange(0,99);
 }
 
@@ -787,7 +804,7 @@ void KisSliderSpinBox::setRange(int minimum, int maximum)
     d->minimum = minimum;
     d->maximum = maximum;
     d->fastSliderStep = (maximum-minimum+1)/20;
-    d->validator->setRange(minimum, maximum, 0);
+	d->validator->setRange(minimum, maximum, 0);
     update();
 }
 
@@ -873,6 +890,8 @@ class KisDoubleSliderSpinBoxPrivate : public KisAbstractSliderSpinBoxPrivate {
 
 KisDoubleSliderSpinBox::KisDoubleSliderSpinBox(QWidget* parent) : KisAbstractSliderSpinBox(parent, new KisDoubleSliderSpinBoxPrivate)
 {
+	Q_D(KisDoubleSliderSpinBox);
+	d->parseInt = false;
 }
 
 KisDoubleSliderSpinBox::~KisDoubleSliderSpinBox()

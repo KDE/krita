@@ -239,6 +239,15 @@ AppImageKit/AppImageAssistant.AppDir/package /krita.appdir/ /out/$APPIMAGE
 
 chmod a+rwx /out/$APPIMAGE # So that we can edit the AppImage outside of the Docker container
 
+# Source functions
+wget -q https://github.com/probonopd/AppImages/raw/master/functions.sh
+-O ./functions.sh
+. ./functions.sh
+
+# Install desktopintegration in usr/bin/krita.wrapper -- feel free to edit it
+cd Krita.AppDir/
+get_desktopintegration krita
+
 cd /krita.appdir
 mv AppRun krita
 cd /

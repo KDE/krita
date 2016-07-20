@@ -43,8 +43,9 @@ yum -y update
 yum -y install wget tar bzip2 git libtool which fuse fuse-devel libpng-devel automake libtool mesa-libEGL cppunit-devel cmake glibc-headers libstdc++-devel gcc-c++ freetype-devel fontconfig-devel libxml2-devel libstdc++-devel libXrender-devel patch xcb-util-keysyms-devel libXi-devel mesa-libGL-devel libxcb libxcb-devel xcb-util xcb-util-devel
 
 # Newer compiler than what comes with CentOS 6
-wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
-yum -y install devtoolset-2-gcc devtoolset-2-gcc-c++ devtoolset-2-binutils
+yum install centos-release-scl-rh
+yum install devtoolset-3-gcc devtoolset-3-gcc-c++
+scl enable devtoolset-3 bash
 
 # Make sure we build from the /, parts of this script depends on that. We also need to run as root...
 cd  /
@@ -58,12 +59,6 @@ cd /AppImageKit/
 git_pull_rebase_helper
 ./build.sh
 cd /
-
-
-# Workaround for:
-# /usr/lib/librevenge-stream-0.0.so: undefined reference to `std::__detail::_List_node_base::_M_hook(std::__detail::_List_node_base*)'
-# Use the new compiler
-. /opt/rh/devtoolset-2/enable
 
 
 # Workaround for: On CentOS 6, .pc files in /usr/lib/pkgconfig are not recognized

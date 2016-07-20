@@ -17,8 +17,8 @@ ExternalProject_Add(
 else (MSVC)
 ExternalProject_Add( ext_gettext
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://files.kde.org/krita/build/dependencies/gettext-0.19.8.tar.xz
-    URL_MD5 3e7ed1ac886b9b1a4e23e71113da6358
+    URL http://files.kde.org/krita/build/dependencies/gettext-0.19.8.tar.gz
+    URL_MD5 e4fffc004f21596becd1055cf36be31d
 	
 	INSTALL_DIR ${PREFIX_ext_gettext}
 	CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_gettext} --disable-java   ${GLOBAL_AUTOMAKE_PROFILE} --disable-native-java 

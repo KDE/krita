@@ -1,8 +1,8 @@
 SET(PREFIX_ext_poppler "${EXTPREFIX}" )
 ExternalProject_Add( ext_poppler
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-	URL http://files.kde.org/krita/build/dependencies/poppler-0.45.0.tar.xz
-	URL_MD5 a66e8c3cf6dab91dab5ba90d362c6063
+	URL http://files.kde.org/krita/build/dependencies/poppler-0.45.0.tar.gz
+	URL_MD5 02a81a20e24849feb1a2af4db1aca865
 	
 	INSTALL_DIR ${PREFIX_ext_poppler}
 	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_poppler} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DBUILD_GTK_TESTS=OFF -DBUILD_QT5_TESTS=FALSE -BUILD_CPP_TESTS=FALSE  -DENABLE_UTILS=FALSE -DENABLE_GLIB=FALSE 

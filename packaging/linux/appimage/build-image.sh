@@ -193,7 +193,7 @@ sed -i -e 's|././/share/X11/|/usr/share/X11/|g' ./usr/lib/libQt5XcbQpa.so.5
 rm -f ./usr/lib/libdbus-1.so.3 || true
 
 cp ../AppImageKit/AppRun .
-cp ./usr/share/applications/krita.desktop krita.desktop
+cp ./usr/share/applications/org.kde.krita.desktop krita.desktop
 cp /krita/krita/pics/app/64-apps-calligrakrita.png calligrakrita.png
 
 #

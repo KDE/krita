@@ -27,7 +27,7 @@ cd b
 
 x86_64-w64-mingw32.shared-cmake ../krita/3rdparty/ -DEXTERNALS_DOWNLOAD_DIR=$BUILDROOT/d -DINSTALL_ROOT=$BUILDROOT/mxe/usr/x86_64-w64-mingw32.shared -DMXE_TOOLCHAIN=${BUILDROOT}/mxe/usr/x86_64-w64-mingw32.shared/share/cmake/mxe-conf.cmake
 
-x86_64-w64-mingw32.shared-cmake  --build . --target ext_kwindowsystem
+x86_64-w64-mingw32.shared-cmake  --build . --target ext_kcrash
 x86_64-w64-mingw32.shared-cmake  --build . --target ext_poppler
 
 # You might want to build gsl and vc 0.75 manually

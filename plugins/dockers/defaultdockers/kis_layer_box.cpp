@@ -364,7 +364,7 @@ void KisLayerBox::unsetCanvas()
         m_newLayerMenu->clear();
     }
 
-    m_nodeModel->setDummiesFacade(0, 0, 0, 0, 0);
+    m_filteringModel->unsetDummiesFacade();
     disconnect(m_image, 0, this, 0);
     disconnect(m_nodeManager, 0, this, 0);
     disconnect(m_nodeModel, 0, m_nodeManager, 0);

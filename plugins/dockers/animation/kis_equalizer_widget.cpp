@@ -67,6 +67,7 @@ KisEqualizerWidget::KisEqualizerWidget(int maxDistance, QWidget *parent)
     }
 
     connect(&m_d->updateCompressor, SIGNAL(timeout()), SIGNAL(sigConfigChanged()));
+    connect(m_d->columns[0], SIGNAL(sigColumnChanged(int,bool,int)), this, SLOT(slotMasterColumnChanged(int, bool, int)));
 
     setLayout(layout);
 }
@@ -140,5 +141,13 @@ void KisEqualizerWidget::mouseMoveEvent(QMouseEvent *ev)
                           ev->buttons(),
                           ev->modifiers() & ~Qt::ShiftModifier);
         qApp->sendEvent(w, &newEv);
+    }
+}
+
+void KisEqualizerWidget::slotMasterColumnChanged(int, bool state, int)
+{
+    for (int i = 1; i <= m_d->maxDistance; i++) {
+        m_d->columns[i]->setForceDisabled(!state);
+        m_d->columns[-i]->setForceDisabled(!state);
     }
 }

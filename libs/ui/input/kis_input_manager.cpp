@@ -406,6 +406,9 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         stop_ignore_cursor_events();
         break;
     case QEvent::TabletRelease: {
+#ifdef Q_OS_MAC
+        stop_ignore_cursor_events();
+#endif
         // break_if_touch_blocked_press_events();
         d->debugEvent<QTabletEvent, false>(event);
 

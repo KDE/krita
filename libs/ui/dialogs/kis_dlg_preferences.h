@@ -25,6 +25,7 @@
 #include <QWidget>
 
 #include <kpagedialog.h>
+#include "KoColorPopupAction.h"
 
 #include "kis_global.h"
 
@@ -149,13 +150,13 @@ public:
 private Q_SLOTS:
 
     void refillMonitorProfiles(const KoID & s);
-    void refillPrintProfiles(const KoID & s);
     void installProfile();
     void toggleAllowMonitorProfileSelection(bool useSystemProfile);
 
 public:
     void setDefault();
     WdgColorSettings  *m_page;
+    KoColorPopupAction *m_gamutWarning;
     QButtonGroup m_pasteBehaviourGroup;
     QList<QLabel*> m_monitorProfileLabels;
     QList<SqueezedComboBox*> m_monitorProfileWidgets;

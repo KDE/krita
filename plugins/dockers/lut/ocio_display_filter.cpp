@@ -39,6 +39,7 @@ OcioDisplayFilter::OcioDisplayFilter(KisExposureGammaCorrectionInterface *interf
     , inputColorSpaceName(0)
     , displayDevice(0)
     , view(0)
+    , look(0)
     , swizzle(RGBA)
     , m_interface(interface)
     , m_lut3dTexID(0)
@@ -124,11 +125,39 @@ void OcioDisplayFilter::updateProcessor()
     if (!inputColorSpaceName) {
         inputColorSpaceName = config->getColorSpaceNameByIndex(0);
     }
+    if (!look) {
+	look = config->getLookNameByIndex(0);
+    }
+
+    if (!displayDevice || !view || !inputColorSpaceName) {
+        return;
+    }
 
     OCIO::DisplayTransformRcPtr transform = OCIO::DisplayTransform::Create();
     transform->setInputColorSpaceName(inputColorSpaceName);
     transform->setDisplay(displayDevice);
     transform->setView(view);
+
+    /**
+     * Look support:
+     * As the OCIO docs will tell you, looks are a aesthetic transform that is
+     * added onto the mix.
+     * A view+display can have it's own assigned Look, or list of looks, and these
+     * can be overriden optionally.
+     * What the OCIO docs won't tell you is that a display transform won't use the
+     * looks attached to it unless "skipColorSpaceConversions" is false...
+     * I have no idea what "skipColorSpaceConversions" is beyond what it says on the
+     * tin. It is not mentioned in the documentation anywhere. Or on the website.
+     * Or how to set it. Or unset it. Why it is apparantly set true to begin with.
+     * Only that, apparantly, this was done with non-color data in mind...
+     *
+     * Until there's clear documentation on how to use this feature, I am afraid the
+     * override is all we can offer.
+     */
+    if (config->getLook(look)) {
+       transform->setLooksOverride(look);
+       transform->setLooksOverrideEnabled(true);
+    }
 
     OCIO::GroupTransformRcPtr approximateTransform = OCIO::GroupTransform::Create();
 

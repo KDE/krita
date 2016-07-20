@@ -208,6 +208,8 @@ public:
     KisAction *zoomTo100pct;
     KisAction *zoomIn;
     KisAction *zoomOut;
+    KisAction *softProof;
+    KisAction *gamutCheck;
 
     KisSelectionManager selectionManager;
     KisGuidesManager guidesManager;
@@ -356,6 +358,9 @@ void KisViewManager::setCurrentView(KisView *view)
 
     }
 
+    d->softProof->setChecked(view->softProofing());
+    d->gamutCheck->setChecked(view->gamutCheck());
+
     QPointer<KisView>imageView = qobject_cast<KisView*>(view);
 
     if (imageView) {
@@ -383,6 +388,9 @@ void KisViewManager::setCurrentView(KisView *view)
         d->viewConnections.addUniqueConnection(d->zoomTo100pct, SIGNAL(triggered()), imageView->zoomManager(), SLOT(zoomTo100()));
         d->viewConnections.addUniqueConnection(d->zoomIn, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomIn()));
         d->viewConnections.addUniqueConnection(d->zoomOut, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomOut()));
+
+        d->viewConnections.addUniqueConnection(d->softProof, SIGNAL(toggled(bool)), view, SLOT(slotSoftProofing(bool)) );
+        d->viewConnections.addUniqueConnection(d->gamutCheck, SIGNAL(toggled(bool)), view, SLOT(slotGamutCheck(bool)) );
 
         imageView->zoomManager()->setShowRulers(d->showRulersAction->isChecked());
         imageView->zoomManager()->setRulersTrackMouse(d->rulersTrackMouseAction->isChecked());
@@ -602,6 +610,8 @@ void KisViewManager::createActions()
     d->resetCanvasRotation = actionManager()->createAction("reset_canvas_rotation");
     d->wrapAroundAction    = actionManager()->createAction("wrap_around_mode");
     d->levelOfDetailAction = actionManager()->createAction("level_of_detail_mode");
+    d->softProof           = actionManager()->createAction("softProof");
+    d->gamutCheck          = actionManager()->createAction("gamutCheck");
 
     KisAction *tAction = actionManager()->createAction("showStatusBar");
     tAction->setChecked(cfg.showStatusBar());

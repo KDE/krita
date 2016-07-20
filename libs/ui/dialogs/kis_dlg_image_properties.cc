@@ -33,7 +33,9 @@
 
 #include <KoColorSpace.h>
 #include "KoColorProfile.h"
+#include "KoColorSpaceRegistry.h"
 #include "KoColor.h"
+#include "KoColorConversionTransformation.h"
 #include "KoColorPopupAction.h"
 #include "kis_icon_utils.h"
 #include "KoID.h"
@@ -66,9 +68,9 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
 
     m_page->lblResolutionValue->setText(QLocale().toString(image->xRes()*72, 2)); // XXX: separate values for x & y?
 
+    //Set the canvas projection color:
     m_defaultColorAction = new KoColorPopupAction(this);
     m_defaultColorAction->setCurrentColor(m_image->defaultProjectionColor());
-    m_defaultColorAction->setIcon(KisIconUtils::loadIcon("format-stroke-color"));
     m_defaultColorAction->setToolTip(i18n("Change the background color of the image"));
     m_page->bnBackgroundColor->setDefaultAction(m_defaultColorAction);
 
@@ -78,8 +80,36 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
 
     connect(m_defaultColorAction, SIGNAL(colorChanged(const KoColor&)), this, SLOT(setCurrentColor()));
 
+    //Set the color space
     m_page->colorSpaceSelector->setCurrentColorSpace(image->colorSpace());
 
+    //set the proofing space
+    m_proofingConfig = m_image->proofingConfiguration();
+    m_page->proofSpaceSelector->setCurrentColorSpace(KoColorSpaceRegistry::instance()->colorSpace(m_proofingConfig->proofingModel, m_proofingConfig->proofingDepth,m_proofingConfig->proofingProfile));
+
+    m_page->cmbIntent->setCurrentIndex((int)m_proofingConfig->intent);
+
+    m_page->ckbBlackPointComp->setChecked(m_proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation));
+
+    m_gamutWarning = new KoColorPopupAction(this);
+    m_gamutWarning->setCurrentColor(m_proofingConfig->warningColor);
+    m_gamutWarning->setToolTip(i18n("Set color used for warning"));
+    m_page->gamutAlarm->setDefaultAction(m_gamutWarning);
+    m_page->sldAdaptationState->setMaximum(20);
+    m_page->sldAdaptationState->setMinimum(0);
+    m_page->sldAdaptationState->setValue((int)m_proofingConfig->adaptationState*20);
+
+    KisSignalCompressor *softProofConfigCompressor = new KisSignalCompressor(500, KisSignalCompressor::POSTPONE,this);
+
+    connect(m_gamutWarning, SIGNAL(colorChanged(KoColor)), softProofConfigCompressor, SLOT(start()));
+    connect(m_page->proofSpaceSelector, SIGNAL(colorSpaceChanged(const KoColorSpace*)), softProofConfigCompressor, SLOT(start()));
+    connect(m_page->cmbIntent, SIGNAL(currentIndexChanged(int)), softProofConfigCompressor, SLOT(start()));
+    connect(m_page->ckbBlackPointComp, SIGNAL(stateChanged(int)), softProofConfigCompressor, SLOT(start()));
+    connect(m_page->sldAdaptationState, SIGNAL(valueChanged(int)), softProofConfigCompressor, SLOT(start()));
+
+    connect(softProofConfigCompressor, SIGNAL(timeout()), this, SLOT(setProofingConfig()));
+
+    //annotations
     vKisAnnotationSP_it beginIt = image->beginAnnotations();
     vKisAnnotationSP_it endIt = image->endAnnotations();
 
@@ -113,6 +143,20 @@ const KoColorSpace * KisDlgImageProperties::colorSpace()
 void KisDlgImageProperties::setCurrentColor()
 {
     KisLayerUtils::changeImageDefaultProjectionColor(m_image, m_defaultColorAction->currentKoColor());
+}
+
+void KisDlgImageProperties::setProofingConfig()
+{
+    m_proofingConfig->conversionFlags = KoColorConversionTransformation::HighQuality;
+    if (m_page->ckbBlackPointComp) m_proofingConfig->conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
+    m_proofingConfig->intent = (KoColorConversionTransformation::Intent)m_page->cmbIntent->currentIndex();
+    m_proofingConfig->proofingProfile = m_page->proofSpaceSelector->currentColorSpace()->profile()->name();
+    m_proofingConfig->proofingModel = m_page->proofSpaceSelector->currentColorSpace()->colorModelId().id();
+    m_proofingConfig->proofingDepth = "U8";//default to this
+    m_proofingConfig->warningColor = m_gamutWarning->currentKoColor();
+    m_proofingConfig->adaptationState = (double)m_page->sldAdaptationState->value()/20.0;
+    qDebug()<<"set proofing config in properties: "<<m_proofingConfig->proofingProfile;
+    m_image->setProofingConfiguration(m_proofingConfig);
 }
 
 void KisDlgImageProperties::setAnnotation(const QString &type)

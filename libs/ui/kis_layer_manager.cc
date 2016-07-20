@@ -95,6 +95,7 @@
 #include "kis_action.h"
 #include "kis_action_manager.h"
 #include "KisPart.h"
+#include "kis_raster_keyframe_channel.h"
 
 #include "kis_signal_compressor_with_param.h"
 #include "kis_abstract_projection_plane.h"
@@ -173,6 +174,9 @@ void KisLayerManager::setup(KisActionManager* actionManager)
 
     m_groupLayersSave = actionManager->createAction("save_groups_as_images");
     connect(m_groupLayersSave, SIGNAL(triggered()), this, SLOT(saveGroupLayers()));
+
+    m_convertGroupAnimated = actionManager->createAction("convert_group_to_animated");
+    connect(m_convertGroupAnimated, SIGNAL(triggered()), this, SLOT(convertGroupToAnimated()));
 
     m_imageResizeToLayer = actionManager->createAction("resizeimagetolayer");
     connect(m_imageResizeToLayer, SIGNAL(triggered()), this, SLOT(imageResizeToActiveLayer()));
@@ -391,6 +395,32 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
     m_commandsAdapter->removeNode(source);
     m_commandsAdapter->endMacro();
 
+}
+
+void KisLayerManager::convertGroupToAnimated()
+{
+    KisGroupLayerSP group = dynamic_cast<KisGroupLayer*>(activeLayer().data());
+    if (group.isNull()) return;
+
+    KisPaintLayerSP animatedLayer = new KisPaintLayer(m_view->image(), group->name(), OPACITY_OPAQUE_U8);
+    animatedLayer->enableAnimation();
+    KisRasterKeyframeChannel *contentChannel = dynamic_cast<KisRasterKeyframeChannel*>(
+            animatedLayer->getKeyframeChannel(KisKeyframeChannel::Content.id()));
+    KIS_ASSERT_RECOVER_RETURN(contentChannel);
+
+    KisNodeSP child = group->firstChild();
+    int time = 0;
+    while (child) {
+        contentChannel->importFrame(time, child->projection(), NULL);
+        time++;
+
+        child = child->nextSibling();
+    }
+
+    m_commandsAdapter->beginMacro(kundo2_i18n("Convert to an animated layer"));
+    m_commandsAdapter->addNode(animatedLayer, group->parent(), group);
+    m_commandsAdapter->removeNode(group);
+    m_commandsAdapter->endMacro();
 }
 
 void KisLayerManager::adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, KisNodeSP &parent, KisNodeSP &above)
@@ -673,8 +703,10 @@ void KisLayerManager::saveGroupLayers()
     QBoxLayout *layout = new QVBoxLayout(page);
 
     KisFileNameRequester *urlRequester = new KisFileNameRequester(page);
-    urlRequester->setMode(KoFileDialog::OpenDirectory);
-    urlRequester->setStartDir(QFileInfo(m_view->document()->url().toLocalFile()).absolutePath());
+    urlRequester->setMode(KoFileDialog::SaveFile);
+    if (m_view->document()->url().isLocalFile()) {
+        urlRequester->setStartDir(QFileInfo(m_view->document()->url().toLocalFile()).absolutePath());
+    }
     urlRequester->setMimeTypeFilters(listMimeFilter);
     urlRequester->setFileName(m_view->document()->url().toLocalFile());
     layout->addWidget(urlRequester);
@@ -688,20 +720,23 @@ void KisLayerManager::saveGroupLayers()
 
     if (!dlg.exec()) return;
 
-    // selectedUrl()( does not return the expected result. So, build up the QUrl the more complicated way
-    //return m_fileWidget->selectedUrl();
     QString path = urlRequester->fileName();
+
     if (path.isEmpty()) return;
 
     QFileInfo f(path);
+
     QString mimeType= KisMimeDatabase::mimeTypeForFile(f.fileName());
+    if (mimeType.isEmpty()) {
+        mimeType = "image/png";
+    }
     QString extension = KisMimeDatabase::suffixesForMimeType(mimeType).first();
     QString basename = f.baseName();
 
     KisImageWSP image = m_view->image();
     if (!image) return;
 
-    KisSaveGroupVisitor v(image, chkInvisible->isChecked(), chkDepth->isChecked(), QUrl(path), basename, extension, mimeType);
+    KisSaveGroupVisitor v(image, chkInvisible->isChecked(), chkDepth->isChecked(), f.absolutePath(), basename, extension, mimeType);
     image->rootLayer()->accept(v);
 
 }

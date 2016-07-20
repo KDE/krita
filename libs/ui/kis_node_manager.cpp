@@ -315,6 +315,8 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
     CONVERT_NODE_ACTION("convert_to_transparency_mask", "KisTransparencyMask");
 
+    CONVERT_NODE_ACTION("convert_to_animated", "animated");
+
     connect(&m_d->nodeConversionSignalMapper, SIGNAL(mapped(const QString &)),
             this, SLOT(convertNode(const QString &)));
 
@@ -816,6 +818,10 @@ void KisNodeManager::activateNextNode()
 
     KisNodeSP node = activeNode->nextSibling();
 
+    while (node && node->childCount() > 0 && node->isEditable()) {
+           node = node->firstChild();
+    }
+
     if (!node && activeNode->parent() && activeNode->parent()->parent()) {
         node = activeNode->parent();
     }
@@ -834,10 +840,18 @@ void KisNodeManager::activatePreviousNode()
     KisNodeSP activeNode = this->activeNode();
     if (!activeNode) return;
 
-    KisNodeSP node = activeNode->prevSibling();
+    KisNodeSP node;
 
-    if (!node && activeNode->parent()) {
+    if (activeNode->childCount() > 0 && activeNode->isEditable()) {
+        node = activeNode->lastChild();
+    }
+    else {
+        node = activeNode->prevSibling();
+    }
+
+    while (!node && activeNode->parent()) {
         node = activeNode->parent()->prevSibling();
+        activeNode = activeNode->parent();
     }
 
     while(node && checkForGlobalSelection(node)) {

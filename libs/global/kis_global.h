@@ -141,6 +141,16 @@ inline qreal incrementInDirection(qreal a, qreal inc, qreal direction) {
     return d1 < d2 ? b1 : b2;
 }
 
+template<typename PointType>
+inline PointType snapToClosestAxis(PointType P) {
+    if (qAbs(P.x()) < qAbs(P.y())) {
+        P.setX(0);
+    } else {
+        P.setY(0);
+    }
+    return P;
+}
+
 template<typename T>
 inline T pow2(const T& x) {
     return x * x;

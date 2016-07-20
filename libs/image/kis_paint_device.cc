@@ -67,7 +67,18 @@
 #include "kis_transform_worker.h"
 #include "kis_filter_strategy.h"
 
-struct KisPaintDevice::Private {
+
+struct KisPaintDeviceSPStaticRegistrar {
+    KisPaintDeviceSPStaticRegistrar() {
+        qRegisterMetaType<KisPaintDeviceSP>("KisPaintDeviceSP");
+    }
+};
+static KisPaintDeviceSPStaticRegistrar __registrar;
+
+
+
+struct KisPaintDevice::Private
+{
     /**
      * Used when the paint device is loading to ensure no lod/animation
      * interferes the process.

@@ -80,6 +80,7 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
         }
     };
 
+    Qt::MouseEventSource source = static_cast<QMouseEvent*>(event)->source();
     if (peckish && event->type() == QEvent::MouseButtonPress
         // Drop one mouse press following tabletPress or touchBegin
         && (static_cast<QMouseEvent*>(event)->button() == Qt::LeftButton)) {
@@ -87,10 +88,16 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
         debugEvent();
         return true;
     } else if (isMouseEventType(event->type()) &&
-               (hungry || (eatSyntheticEvents && static_cast<QMouseEvent*>(event)->source() != 0))) {
-        // Drop mouse events if enabled or event was synthetic & synthetic events are disabled
-        debugEvent();
-        return true;
+               (hungry || (eatSyntheticEvents && source != 0))) {
+#ifdef Q_OS_MAC
+        if (eatSyntheticEvents && source != 2) {
+#endif
+            // Drop mouse events if enabled or event was synthetic & synthetic events are disabled
+            debugEvent();
+            return true;
+#ifdef Q_OS_MAC
+        }
+#endif
     }
     return false; // All clear - let this one through!
 }

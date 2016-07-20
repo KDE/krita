@@ -83,9 +83,9 @@ endif()
 
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(KRITA_VERSION_STRING "3.1 Alpha")
+set(KRITA_VERSION_STRING "3.0.1 Alpha")
 set(KRITA_STABLE_VERSION_MAJOR 3) # 3 for 3.x, 4 for 4.x, etc.
-set(KRITA_STABLE_VERSION_MINOR 1) # 0 for 3.0, 1 for 3.1, etc.
+set(KRITA_STABLE_VERSION_MINOR 0) # 0 for 3.0, 1 for 3.1, etc.
 set(KRITA_VERSION_RELEASE 89)     # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
 set(KRITA_ALPHA 1) # uncomment only for Alpha
 #set(KRITA_BETA 1) # uncomment only for Beta
@@ -324,6 +324,7 @@ add_definitions(
 #
 if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS_KRITADEVS "-O3 -g" CACHE STRING "" FORCE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fext-numeric-literals")
 endif()
 
 if(UNIX)

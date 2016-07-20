@@ -192,6 +192,16 @@ public:
     KisNodeSP currentNode() const;
     KisLayerSP currentLayer() const;
     KisMaskSP currentMask() const;
+    /**
+     * @brief softProofing
+     * @return whether or not we're softproofing in this view.
+     */
+    bool softProofing();
+    /**
+     * @brief gamutCheck
+     * @return whether or not we're using gamut warnings in this view.
+     */
+    bool gamutCheck();
 
     /// Convenience method to get at the active selection (the
     /// selection of the current layer, or, if that does not exist,
@@ -216,6 +226,16 @@ public Q_SLOTS:
      * @todo rename to something more generic
      */
     void slotClearStatusText();
+    /**
+     * @brief slotSoftProofing set whether or not we're softproofing in this view.
+     * Will be setting the same in the canvas belonging to the view.
+     */
+    void slotSoftProofing(bool softProofing);
+    /**
+     * @brief slotGamutCheck set whether or not we're gamutchecking in this view.
+     * Will be setting the same in the vans belonging to the view.
+     */
+    void slotGamutCheck(bool gamutCheck);
 
     bool queryClose();
 
@@ -253,6 +273,7 @@ public Q_SLOTS:
     void slotSavingFinished();
     void slotImageResolutionChanged();
     void slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
+
 
 private:
 

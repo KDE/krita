@@ -49,7 +49,7 @@ ln -sf /usr/share/pkgconfig /usr/lib/pkgconfig
 
 # A krita build layout looks like this:
 # krita/ -- the source directory
-# krita/3rdparty -- the cmake definitions for the dependencies
+# krita/3rdparty -- the cmake3 definitions for the dependencies
 # d -- downloads of the dependencies from files.kde.org
 # b -- build directory for the dependencies
 # krita_build -- build directory for krita itself
@@ -74,7 +74,7 @@ cd /
 
 mkdir -p /krita_build
 cd /krita_build
-cmake ../krita \
+cmake3 ../krita \
     -DCMAKE_INSTALL_PREFIX:PATH=/krita.appdir/usr \
     -DDEFINE_NO_DEPRECATED=1 \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \

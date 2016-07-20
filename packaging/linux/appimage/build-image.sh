@@ -162,7 +162,7 @@ rm -f usr/lib/libxcb.so.1
 
 # We don't bundle the developer stuff
 rm -rf usr/include || true
-rm -rf usr/lib/cmake || true
+rm -rf usr/lib/cmake3 || true
 rm -rf usr/lib/pkgconfig || true
 rm -rf usr/share/ECM/ || true
 rm -rf usr/share/gettext || true

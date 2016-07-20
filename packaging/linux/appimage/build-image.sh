@@ -217,10 +217,9 @@ APP=krita
 
 VER=$(grep "#define KRITA_VERSION_STRING" krita_build/libs/version/kritaversion.h | cut -d '"' -f 2)
 cd krita
-BRANCH=$( git branch | cut -d ' ' -f 2)
 REVISION=$(git rev-parse --short HEAD)
 cd ..
-VERSION=$VER-$BRANCH-$REVISION
+VERSION=$VER-$REVISION
 VERSION="$(sed s/\ /-/g <<<$VERSION)"
 echo $VERSION
 

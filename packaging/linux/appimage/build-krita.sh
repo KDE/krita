@@ -37,7 +37,7 @@ git_pull_rebase_helper()
 }
 
 # Use the new compiler
-. /opt/rh/devtoolset-2/enable
+. /opt/rh/devtoolset-3/enable
 
 
 # Workaround for: On CentOS 6, .pc files in /usr/lib/pkgconfig are not recognized

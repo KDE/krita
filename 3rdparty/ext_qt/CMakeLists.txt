@@ -43,8 +43,8 @@ else()
         ExternalProject_Add(
             ext_qt
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://download.qt.io/official_releases/qt/5.6/5.6.1-1/single/qt-everywhere-opensource-src-5.6.1-1.tar.xz
-            URL_MD5 f44fd4fcae71087f90d9c68e9d8be449
+            URL https://download.qt.io/official_releases/qt/5.6/5.6.1-1/single/qt-everywhere-opensource-src-5.6.1-1.tar.gz
+            URL_MD5 8fdec6d657bc370bd3183d8fe8e9c47a
             PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qt-no-motion-compression.diff
             INSTALL_DIR ${EXTPREFIX_qt}
             CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_qt} -opensource -confirm-license -nomake examples -no-sql-sqlite -no-openssl -no-qml-debug -no-mtdev  -no-journald  -no-syslog -no-nis  -no-cups -no-tslib -no-directfb -no-linuxfb -no-libproxy -no-pch -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg  -qt-harfbuzz -qt-freetype -qt-xcb -qt-xkbcommon-x11 -optimized-qmake -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtenginio -skip qtgraphicaleffects -skip qtlocation -skip qtmultimedia -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview 

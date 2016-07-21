@@ -1,0 +1,9 @@
+{
+    "Id": "Remote control Plugin",
+    "Type": "Service",
+    "X-KDE-Library": "kritaremotecontrol",
+    "X-KDE-ServiceTypes": [
+        "Krita/ViewPlugin"
+    ],
+    "X-Krita-Version": "28"
+}

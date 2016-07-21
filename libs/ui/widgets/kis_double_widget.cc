@@ -26,6 +26,8 @@
 #include <QHBoxLayout>
 #include <QDoubleSpinBox>
 
+#include "kis_doubleparsespinbox.h"
+
 KisDoubleWidget::KisDoubleWidget(QWidget* parent, const char* name)
         : QWidget(parent)
 {
@@ -46,7 +48,7 @@ KisDoubleWidget::~KisDoubleWidget()
 
 void KisDoubleWidget::init(double min, double max)
 {
-    m_spinBox = new QDoubleSpinBox(this);
+	m_spinBox = new KisDoubleParseSpinBox(this);
     m_spinBox->setMinimum(min);
     m_spinBox->setMaximum(max);
     m_spinBox->setSingleStep(0.05);

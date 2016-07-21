@@ -63,7 +63,7 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QSpinBox" name="intHSpacing">
+            <widget class="KisIntParseSpinBox" name="intHSpacing">
              <property name="suffix">
               <string> px</string>
              </property>
@@ -86,7 +86,7 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QSpinBox" name="intVSpacing">
+            <widget class="KisIntParseSpinBox" name="intVSpacing">
              <property name="suffix">
               <string> px</string>
              </property>
@@ -118,7 +118,7 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QSpinBox" name="intSubdivision">
+          <widget class="KisIntParseSpinBox" name="intSubdivision">
            <property name="minimum">
             <number>1</number>
            </property>
@@ -155,7 +155,7 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QSpinBox" name="intXOffset">
+          <widget class="KisIntParseSpinBox" name="intXOffset">
            <property name="suffix">
             <string> px</string>
            </property>
@@ -175,7 +175,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QSpinBox" name="intYOffset">
+          <widget class="KisIntParseSpinBox" name="intYOffset">
            <property name="suffix">
             <string> px</string>
            </property>
@@ -472,20 +472,26 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KoAspectButton</class>
+   <extends>QWidget</extends>
+   <header>KoAspectButton.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_intparsespinbox.h</header>
+  </customwidget>
+  <customwidget>
    <class>KColorButton</class>
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KoAspectButton</class>
-   <extends>QWidget</extends>
-   <header>KoAspectButton.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -48,3 +48,42 @@ double KisPaintopControlObject::brushSize()
   
     return m_view->resourceProvider()->currentPreset()->settings()->paintOpSize().width();
 }
+
+double KisPaintopControlObject::flow()
+{
+    if(!m_view || !m_view->resourceProvider()) {
+        return 0.0;
+    }
+
+    return m_view->resourceProvider()->currentPreset()->settings()->paintOpFlow();
+}
+
+void KisPaintopControlObject::setFlow(double flow)
+{
+    if(!m_view || !m_view->resourceProvider()) {
+        return;
+    }
+
+    m_view->resourceProvider()->currentPreset()->settings()->setPaintOpFlow(flow);
+}
+
+double KisPaintopControlObject::opacity()
+{
+    if(!m_view || !m_view->resourceProvider()) {
+        return 0.0;
+    }
+
+    return m_view->resourceProvider()->currentPreset()->settings()->paintOpOpacity();
+}
+
+void KisPaintopControlObject::setOpacity(double opacity)
+{
+    if(!m_view || !m_view->resourceProvider()) {
+        return;
+    }
+
+    m_view->resourceProvider()->currentPreset()->settings()->setPaintOpOpacity(opacity);
+}
+
+
+

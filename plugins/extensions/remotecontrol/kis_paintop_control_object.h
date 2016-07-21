@@ -31,9 +31,17 @@ public:
     explicit KisPaintopControlObject(KisViewManager* view, QObject *parent = 0);
 
     Q_PROPERTY(double brushSize READ brushSize WRITE setBrushSize)
+    Q_PROPERTY(double opacity READ opacity WRITE setOpacity)
+    Q_PROPERTY(double flow READ flow WRITE setFlow)
 
-    void setBrushSize(double flow);
+    void setBrushSize(double size);
     double brushSize();
+
+    void setOpacity(double opacity);
+    double opacity();
+
+    void setFlow(double flow);
+    double flow();
 
 private:
     KisViewManager* m_view;

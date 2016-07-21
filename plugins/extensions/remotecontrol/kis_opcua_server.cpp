@@ -84,7 +84,6 @@ static UA_StatusCode writeVariable(void *handle, const UA_NodeId nodeid,
         return UA_STATUSCODE_BADUNEXPECTEDERROR;
     }
     QPair<QObject*, int> property = m_variableMap[id];
-    qDebug() << property.second;
 
     QObject* object = property.first;
     QMetaProperty prop = object->metaObject()->property(property.second);
@@ -164,8 +163,6 @@ void KisOpcUaServer::run()
                                                                       UA_NODEID_NUMERIC(1, objectIndex),
                                                                       UA_NODEID_NUMERIC(0, UA_NS0ID_ORGANIZES),
                                                                       variableNodeName, UA_NODEID_NULL, attr, dataSource, NULL);
-
-            qDebug() << QString("%1").arg(retval, 0, 16);;
         }
         objectIndex++;
     }

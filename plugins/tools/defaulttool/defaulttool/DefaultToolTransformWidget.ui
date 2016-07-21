@@ -44,7 +44,7 @@
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="KoUnitDoubleSpinBox" name="shearXSpinBox">
+    <widget class="KisDoubleParseUnitSpinBox" name="shearXSpinBox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
        <horstretch>2</horstretch>
@@ -70,7 +70,7 @@
     </widget>
    </item>
    <item row="2" column="0">
-    <widget class="KoUnitDoubleSpinBox" name="shearYSpinBox">
+    <widget class="KisDoubleParseUnitSpinBox" name="shearYSpinBox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
        <horstretch>2</horstretch>
@@ -201,9 +201,9 @@
    <header>kis_doubleparsespinbox.h</header>
   </customwidget>
   <customwidget>
-   <class>KoUnitDoubleSpinBox</class>
+   <class>KisDoubleParseUnitSpinBox</class>
    <extends>QDoubleSpinBox</extends>
-   <header>KoUnitDoubleSpinBox.h</header>
+   <header>kis_doubleparseunitspinbox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

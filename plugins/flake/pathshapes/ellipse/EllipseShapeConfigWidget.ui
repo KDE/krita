@@ -1,75 +1,76 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>EllipseShapeConfigWidget</class>
- <widget class="QWidget" name="EllipseShapeConfigWidget" >
-  <property name="geometry" >
+ <widget class="QWidget" name="EllipseShapeConfigWidget">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>187</width>
+    <width>188</width>
     <height>173</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Ellipse Shape</string>
   </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="0" >
-    <widget class="QLabel" name="label_3" >
-     <property name="text" >
+  <layout class="QGridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
       <string>Type:</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1" >
-    <widget class="QComboBox" name="ellipseType" />
+   <item row="0" column="1">
+    <widget class="QComboBox" name="ellipseType"/>
    </item>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="label" >
-     <property name="text" >
+   <item row="1" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
       <string>Start angle:</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="1" >
-    <widget class="QDoubleSpinBox" name="startAngle" >
-     <property name="alignment" >
+   <item row="1" column="1">
+    <widget class="KisDoubleParseSpinBox" name="startAngle">
+     <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
-     <property name="suffix" >
+     <property name="suffix">
       <string>°</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="0" >
-    <widget class="QLabel" name="label_2" >
-     <property name="text" >
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
       <string>End angle:</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="1" >
-    <widget class="QDoubleSpinBox" name="endAngle" >
-     <property name="alignment" >
+   <item row="2" column="1">
+    <widget class="KisDoubleParseSpinBox" name="endAngle">
+     <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
-     <property name="suffix" >
+     <property name="suffix">
       <string>°</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="2" >
-    <widget class="QPushButton" name="closeEllipse" >
-     <property name="text" >
+   <item row="3" column="0" colspan="2">
+    <widget class="QPushButton" name="closeEllipse">
+     <property name="text">
       <string>Close ellipse</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="0" >
+   <item row="4" column="0">
     <spacer>
-     <property name="orientation" >
+     <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
        <height>40</height>
@@ -79,6 +80,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisDoubleParseSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_doubleparsespinbox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

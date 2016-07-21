@@ -110,6 +110,16 @@ KisBrush* KisAutoBrush::clone() const
     return new KisAutoBrush(*this);
 }
 
+qint32 KisAutoBrush::maskHeight(
+    KisDabShape const& shape, qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const
+{
+    Q_UNUSED(info);
+    /* It's difficult to predict the mask height when exaclty when there are
+     * more than 2 spikes, so we return an upperbound instead. */
+    return KisBrush::maskHeight(KisDabShape(shape.scale(), 1.0, shape.rotation()),
+                                       subPixelX, subPixelY, info);
+}
+
 inline void fillPixelOptimized_4bytes(quint8 *color, quint8 *buf, int size)
 {
     /**

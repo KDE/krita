@@ -13,9 +13,7 @@ set(kritawidgets_LIB_SRCS
     KoTagFilterWidget.cpp
     KoResourceTaggingManager.cpp
     KoResourceItemChooserContextMenu.cpp
-    KoAspectButton.cpp
-    KoPageLayoutDialog.cpp
-    KoPageLayoutWidget.cpp
+	KoAspectButton.cpp
     KoPagePreviewWidget.cpp
     KoPositionSelector.cpp
     KoSliderCombo.cpp
@@ -36,10 +34,8 @@ set(kritawidgets_LIB_SRCS
     KoDualColorButton.cpp
     KoEditColorSetDialog.cpp
     KoTriangleColorSelector.cpp
-    KoResourcePopupAction.cpp
-    KoStrokeConfigWidget.cpp
-    KoFillConfigWidget.cpp
-    KoShadowConfigWidget.cpp
+	KoResourcePopupAction.cpp
+	KoFillConfigWidget.cpp
     KoIconToolTip.cpp
     KoResourceItemChooser.cpp
     KoResourceItemChooserSync.cpp
@@ -56,10 +52,7 @@ set(kritawidgets_LIB_SRCS
     KoResourceServerProvider.cpp
     KoLineStyleSelector.cpp
     KoLineStyleItemDelegate.cpp
-    KoLineStyleModel.cpp
-    KoMarkerModel.cpp
-    KoMarkerItemDelegate.cpp
-    KoMarkerSelector.cpp
+	KoLineStyleModel.cpp
     KoDockWidgetTitleBar.cpp
     KoDockWidgetTitleBarButton.cpp
     KoResourceFiltering.cpp
@@ -84,9 +77,7 @@ ki18n_wrap_ui( kritawidgets_LIB_SRCS
     KoConfigAuthorPage.ui
     koDocumentInfoAboutWidget.ui
     koDocumentInfoAuthorWidget.ui
-    KoEditColorSet.ui
-    KoPageLayoutWidget.ui
-    KoShadowConfigWidget.ui
+	KoEditColorSet.ui
     wdg_file_name_requester.ui
 )
 

@@ -1192,6 +1192,11 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
 {
     d->mdiArea->closeAllSubWindows();
 
+    QAction *action= d->viewManager->actionCollection()->action("view_show_canvas_only");
+
+    if ((action) && (action->isChecked())) {
+        action->setChecked(false);
+    }
     KConfigGroup cfg( KSharedConfig::openConfig(), "MainWindow");
     cfg.writeEntry("ko_geometry", saveGeometry().toBase64());
     cfg.writeEntry("ko_windowstate", saveState().toBase64());

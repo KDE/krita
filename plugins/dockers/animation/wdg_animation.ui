@@ -61,7 +61,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QSpinBox" name="spinFromFrame">
+        <widget class="KisIntParseSpinBox" name="spinFromFrame">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -81,7 +81,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QSpinBox" name="spinToFrame">
+        <widget class="KisIntParseSpinBox" name="spinToFrame">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -479,7 +479,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QDoubleSpinBox" name="doublePlaySpeed">
+        <widget class="KisDoubleParseSpinBox" name="doublePlaySpeed">
          <property name="minimum">
           <double>0.100000000000000</double>
          </property>
@@ -502,7 +502,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QSpinBox" name="intFramerate">
+        <widget class="KisIntParseSpinBox" name="intFramerate">
          <property name="minimum">
           <number>1</number>
          </property>
@@ -514,6 +514,18 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_intparsespinbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleParseSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_doubleparsespinbox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

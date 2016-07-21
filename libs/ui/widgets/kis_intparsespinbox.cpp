@@ -166,12 +166,12 @@ void KisIntParseSpinBox::stepBy(int steps)
 void KisIntParseSpinBox::setValue(int val)
 {
 
-	if (!hasFocus()) {
-		clearError();
-	}
-
 	if(val == _oldVal && hasFocus()){ //avoid to reset the button when it set the value of something that will recall this slot.
 		return;
+	}
+
+	if (!hasFocus()) {
+		clearError();
 	}
 
 	QSpinBox::setValue(val);

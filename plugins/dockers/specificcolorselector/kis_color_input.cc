@@ -41,6 +41,9 @@
 #include <KoColorSlider.h>
 #include <KoColorSpace.h>
 
+#include "kis_doubleparsespinbox.h"
+#include "kis_intparsespinbox.h"
+
 KisColorInput::KisColorInput(QWidget* parent, const KoChannelInfo* channelInfo, KoColor* color, KoColorDisplayRendererInterface *displayRenderer) : QWidget(parent), m_channelInfo(channelInfo), m_color(color), m_displayRenderer(displayRenderer)
 {
 }
@@ -121,7 +124,7 @@ void KisIntegerColorInput::update()
 
 QWidget* KisIntegerColorInput::createInput()
 {
-    m_intNumInput = new QSpinBox(this);
+	m_intNumInput = new KisIntParseSpinBox(this);
     m_intNumInput->setMinimum(0);
     m_colorSlider->setMaximum(0);
     switch (m_channelInfo->channelValueType()) {
@@ -171,7 +174,7 @@ void KisFloatColorInput::setValue(double v)
 
 QWidget* KisFloatColorInput::createInput()
 {
-    m_dblNumInput = new QDoubleSpinBox(this);
+	m_dblNumInput = new KisDoubleParseSpinBox(this);
     m_dblNumInput->setMinimum(0);
     m_dblNumInput->setMaximum(1.0);
     connect(m_colorSlider, SIGNAL(valueChanged(int)), this, SLOT(sliderChanged(int)));

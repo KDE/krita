@@ -28,6 +28,7 @@
 
 class QHBoxLayout;
 class QDoubleSpinBox;
+class KisDoubleParseSpinBox;
 
 class KRITAUI_EXPORT KisDoubleWidget : public QWidget
 {
@@ -70,7 +71,7 @@ private:
 protected:
     QHBoxLayout* m_layout;
     QSlider* m_slider;
-    QDoubleSpinBox *m_spinBox;
+	KisDoubleParseSpinBox *m_spinBox;
 };
 
 #endif // KIS_DOUBLE_WIDGET_H

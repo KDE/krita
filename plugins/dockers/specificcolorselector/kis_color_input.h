@@ -25,6 +25,7 @@ class KoColor;
 class QWidget;
 class QSpinBox;
 class QDoubleSpinBox;
+class KisIntParseSpinBox;
 class KoColorSlider;
 class QLineEdit;
 #include "KoColorDisplayRendererInterface.h"
@@ -58,7 +59,7 @@ public Q_SLOTS:
     void setValue(int);
     void update();
 private:
-    QSpinBox* m_intNumInput;
+	KisIntParseSpinBox* m_intNumInput;
 };
 
 

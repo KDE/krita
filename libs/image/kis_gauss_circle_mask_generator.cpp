@@ -92,6 +92,7 @@ KisMaskGenerator* KisGaussCircleMaskGenerator::clone() const
 void KisGaussCircleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
 {
     KisMaskGenerator::setScale(scaleX, scaleY);
+    d->ycoef = scaleX / (scaleY * ratio());
 
     d->distfactor = M_SQRT_2 * 12500.0 / (6761.0 * d->fade * effectiveSrcWidth() / 2.0);
     d->fadeMaker.setRadius(0.5 * effectiveSrcWidth());

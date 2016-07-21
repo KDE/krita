@@ -250,6 +250,13 @@ set(kritaui_LIB_SRCS
     widgets/kis_doubleparsespinbox.cpp
 	widgets/kis_doubleparseunitspinbox.cpp
     widgets/kis_intparsespinbox.cpp
+	widgets/KoPageLayoutWidget.cpp
+	widgets/KoPageLayoutDialog.cpp
+	widgets/KoShadowConfigWidget.cpp
+	widgets/KoStrokeConfigWidget.cpp
+	widgets/KoMarkerSelector.cpp
+	widgets/KoMarkerModel.cpp
+	widgets/KoMarkerItemDelegate.cpp
     input/kis_input_manager.cpp
     input/kis_input_manager_p.cpp
     input/kis_extended_modifiers_mapper.cpp
@@ -453,6 +460,8 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgimportimagesequence.ui
     forms/KisDetailsPaneBase.ui
     forms/KisOpenPaneBase.ui
+	forms/KoPageLayoutWidget.ui
+	forms/KoShadowConfigWidget.ui
     dialogs/kis_delayed_save_dialog.ui
     input/config/kis_input_configuration_page.ui
     input/config/kis_edit_profiles_dialog.ui
@@ -477,6 +486,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
 
     wdgsplash.ui
     input/wintab/kis_screen_size_choice_dialog.ui
+
 )
 
 

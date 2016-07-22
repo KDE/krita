@@ -452,20 +452,7 @@ void KisNodeManager::slotTryFinishIsolatedMode()
     KisNodeSP isolatedRootNode = m_d->view->image()->isolatedModeRoot();
     if (!isolatedRootNode) return;
 
-    bool belongsToIsolatedGroup = false;
-
-    KisNodeSP node = this->activeNode();
-    while(node) {
-        if (node == isolatedRootNode) {
-            belongsToIsolatedGroup = true;
-            break;
-        }
-        node = node->parent();
-    }
-
-    if (!belongsToIsolatedGroup) {
-        m_d->view->image()->stopIsolatedMode();
-    }
+    this->toggleIsolateMode(true);
 }
 
 void KisNodeManager::createNode(const QString & nodeType, bool quiet, KisPaintDeviceSP copyFrom)
